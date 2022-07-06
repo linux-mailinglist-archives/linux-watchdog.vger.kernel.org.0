@@ -2,113 +2,121 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DDC9568FD6
-	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Jul 2022 18:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE042569052
+	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Jul 2022 19:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234574AbiGFQya (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 6 Jul 2022 12:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48508 "EHLO
+        id S231175AbiGFRJ0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 6 Jul 2022 13:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234489AbiGFQy2 (ORCPT
+        with ESMTP id S229757AbiGFRJ0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 6 Jul 2022 12:54:28 -0400
-Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F29528E20;
-        Wed,  6 Jul 2022 09:54:26 -0700 (PDT)
-Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 6686B1C8119A;
-        Thu,  7 Jul 2022 00:54:20 +0800 (CST)
-Received: from NTHCCAS03.nuvoton.com (10.1.20.28) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Thu, 7 Jul 2022
- 00:54:20 +0800
-Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS03.nuvoton.com
- (10.1.20.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1847.3; Thu, 7 Jul 2022
- 00:54:19 +0800
-Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
- Transport; Thu, 7 Jul 2022 00:54:19 +0800
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id D9EA263A58; Wed,  6 Jul 2022 19:54:17 +0300 (IDT)
-From:   Tomer Maimon <tmaimon77@gmail.com>
-To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
-        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
-        <gregkh@linuxfoundation.org>, <daniel.lezcano@linaro.org>,
-        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
-        <arnd@arndb.de>, <olof@lixom.net>, <jirislaby@kernel.org>,
-        <shawnguo@kernel.org>, <bjorn.andersson@linaro.org>,
-        <geert+renesas@glider.be>, <marcel.ziswiler@toradex.com>,
-        <vkoul@kernel.org>, <biju.das.jz@bp.renesas.com>,
-        <nobuhiro1.iwamatsu@toshiba.co.jp>, <robert.hancock@calian.com>,
-        <j.neuschaefer@gmx.net>, <lkundrak@v3.sk>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v7 16/16] arm64: defconfig: Add Nuvoton NPCM family support
-Date:   Wed, 6 Jul 2022 19:54:06 +0300
-Message-ID: <20220706165406.117349-17-tmaimon77@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220706165406.117349-1-tmaimon77@gmail.com>
-References: <20220706165406.117349-1-tmaimon77@gmail.com>
+        Wed, 6 Jul 2022 13:09:26 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341461EC44
+        for <linux-watchdog@vger.kernel.org>; Wed,  6 Jul 2022 10:09:24 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id r81-20020a1c4454000000b003a0297a61ddso11975043wma.2
+        for <linux-watchdog@vger.kernel.org>; Wed, 06 Jul 2022 10:09:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=5LUOM8ZYJNqDNXNRkK8SW6v1KeODGn/t/tSrSeB93Hg=;
+        b=FWxQ9w9QQNjX8fhNNM4ShlZTIrizS+PKUFTG21pr1iRgQ7Vf64He23QLE9Bp6vZC9d
+         QZu2/gYfSpYUu+IGln2mRJLyYTBfq/2oQnalM/9l2402od6QikiGfzuLSKyyHtUvM0ND
+         H8c1Ve5FE8EFWb3V5w4SgEjotxtGfnYtzZH/0u8do8Ur8T0RcZirfEQuMgVoNg6hEjJl
+         IFvuFdAFs7G+vCfMwzF+R9e5ptnM53k9g6vDUW9c9MrHQ6945QoFT/IiVHoXUxXm909V
+         DfjWv/xGi1nJsBJDn0frsfD/P79LZl9yDkDVyV2rDWgVln6fVNSHmzJB+nvuFcX8uCDE
+         vGYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=5LUOM8ZYJNqDNXNRkK8SW6v1KeODGn/t/tSrSeB93Hg=;
+        b=i3uoiSXfkDGA/AZPYwNWqxa/r9ei3uVdUa0iy2OSL1t3pLdOdftgHBLCyIsB9XSdSi
+         WmLz9NCLmZEg8odvhGtWT0rKJDLLaVMlIFJw9Ii059WO/1wLIfMl0KokP4JuGbvyWak4
+         4uQ8uLgg+k1mBW3h4fEb/ygdYkmnEr0zkxuaTO4e6Nqni10YM/e5E3Xl+nb8w0zGIC6t
+         iwM37tuV85a1ryGKzbNAl4kPw1PDBj/qMZUrIfXfDgxtGb/riCn0xGfxZJ4KaYq2rGAN
+         2py6oL7RZJK/5581B9y8c9e2krre4NuG8x2leT7deDUZ/UxTNWxPkesR/M1XhiuHnjNI
+         YgyQ==
+X-Gm-Message-State: AJIora8QYIxKnkAc49VEKtIBc08QJP9G4jp/nJps3aDQ3ceX7UIJISvH
+        vZrioP9t2bBfXk/Xm40EDdu7xg==
+X-Google-Smtp-Source: AGRyM1tDs+r809drkm9fTo8mDedQDX5NO3elMnVmkCGdj1wZQpsTYCLXuaPJsjJ/fdV04pS7uHNxFg==
+X-Received: by 2002:a05:600c:1e14:b0:3a0:2bba:4b2e with SMTP id ay20-20020a05600c1e1400b003a02bba4b2emr42964111wmb.196.1657127362770;
+        Wed, 06 Jul 2022 10:09:22 -0700 (PDT)
+Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.gmail.com with ESMTPSA id m16-20020adfe950000000b0021d70a871cbsm5605291wrn.32.2022.07.06.10.09.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Jul 2022 10:09:22 -0700 (PDT)
+References: <20220705142444.17063-1-pboos@baylibre.com>
+ <f756b2d5-56e7-6e52-2739-eca4bb33508b@baylibre.com>
+ <1jmtdnwd7y.fsf@starbuckisacylon.baylibre.com>
+ <20220706124139.GB492220@roeck-us.net>
+ <1j8rp6z720.fsf@starbuckisacylon.baylibre.com>
+ <20220706164325.GA776177@roeck-us.net>
+User-agent: mu4e 1.8.3; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Philippe Boos <pboos@baylibre.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] watchdog: meson: keep running if already active
+Date:   Wed, 06 Jul 2022 19:00:39 +0200
+In-reply-to: <20220706164325.GA776177@roeck-us.net>
+Message-ID: <1j4jzuyxq8.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Enable basic drivers for NPCM8XX booting up support: Architecture, Clock,
-and WD.
 
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+On Wed 06 Jul 2022 at 09:43, Guenter Roeck <linux@roeck-us.net> wrote:
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 7d1105343bc2..c4a237a84efa 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -49,6 +49,7 @@ CONFIG_ARCH_MEDIATEK=y
- CONFIG_ARCH_MESON=y
- CONFIG_ARCH_MVEBU=y
- CONFIG_ARCH_MXC=y
-+CONFIG_ARCH_NPCM=y
- CONFIG_ARCH_QCOM=y
- CONFIG_ARCH_RENESAS=y
- CONFIG_ARCH_ROCKCHIP=y
-@@ -627,6 +628,7 @@ CONFIG_RENESAS_RZG2LWDT=y
- CONFIG_UNIPHIER_WATCHDOG=y
- CONFIG_PM8916_WATCHDOG=m
- CONFIG_BCM2835_WDT=y
-+CONFIG_NPCM7XX_WATCHDOG=y
- CONFIG_MFD_ALTERA_SYSMGR=y
- CONFIG_MFD_BD9571MWV=y
- CONFIG_MFD_AXP20X_I2C=y
-@@ -1021,6 +1023,7 @@ CONFIG_COMMON_CLK_FSL_SAI=y
- CONFIG_COMMON_CLK_S2MPS11=y
- CONFIG_COMMON_CLK_PWM=y
- CONFIG_COMMON_CLK_VC5=y
-+CONFIG_COMMON_CLK_NPCM8XX=y
- CONFIG_COMMON_CLK_BD718XX=m
- CONFIG_CLK_RASPBERRYPI=m
- CONFIG_CLK_IMX8MM=y
--- 
-2.33.0
+> On Wed, Jul 06, 2022 at 03:24:27PM +0200, Jerome Brunet wrote:
+>> 
+> [ ... ]
+>
+>> 
+>> No worries. That being said, I have gone over 
+>> 
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst
+>> 
+>> It just says that Reviewed-by sent on the list should be collected for
+>> the following version. Nothing against adding the tag if the job has
+>> been done, on or off list. Same goes for Suggested-by, Tested-by, etc.
+>> 
+>> If I missed something or it is non-written rule, please let me know.
+>
+> Your interpretation is quite a strict one. I don't think there is a rule
+> that states that tags not sent to a list must not be collected.
+>
+> Anyway, I would have called it common sense, especially since it does
+> happen that someone accidentally hits "reply" instead of "reply all"
+> and replies end up not being sent to the list. If you expect me to dig
+> through e-mail headers to determine if you meant your tags to be published
+> or not, sorry, that won't happen. Do not send me e-mails with any tags
+> unless you accept that they may be published.
+>
+> Guenter
 
+Exactly. Not expecting anything. I'm 100% aligned with you.
+Maybe this is where is misunderstanding is.
+
+The Reviewed-by was there when Philippe sent his mail.
+I was meant to be there and taken. Plain and simple.
+No other expectation whatsoever.
+
+I'm not asking for the tag to dropped, quite the opposite actually.
