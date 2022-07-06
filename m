@@ -2,57 +2,61 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA72E568883
-	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Jul 2022 14:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 405E85689EE
+	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Jul 2022 15:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232385AbiGFMlm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 6 Jul 2022 08:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
+        id S231347AbiGFNr5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 6 Jul 2022 09:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiGFMlm (ORCPT
+        with ESMTP id S229716AbiGFNr4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 6 Jul 2022 08:41:42 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4F5252AA;
-        Wed,  6 Jul 2022 05:41:41 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 145so13907562pga.12;
-        Wed, 06 Jul 2022 05:41:41 -0700 (PDT)
+        Wed, 6 Jul 2022 09:47:56 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10E71EC40
+        for <linux-watchdog@vger.kernel.org>; Wed,  6 Jul 2022 06:47:54 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id t17-20020a1c7711000000b003a0434b0af7so9041656wmi.0
+        for <linux-watchdog@vger.kernel.org>; Wed, 06 Jul 2022 06:47:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XSmJd1bpU0glTVAxiyaH+IAuqRCtmm6vBt6ZWeEWSjI=;
-        b=QRp7RubZClq6VYpat3y7q7HgKvGpPDnUrXiBo2fA8t1m9ENWJlkgWy6suTgQ073Qm5
-         vZOSKTR+bf5nqBaQW3a0NAT00pXGvyykNnKassuTkserwnZbMs3ObFyQS/DkwSWpAZJH
-         +0zw+b2uu38SFluU6AF274EECmeD/mw0Z3i85z7wzsoGBQKFMfT//07c2ZYATEoJ1XLA
-         4pBHjaHT8HCtVri77+gDja7aQzhkxxnS3i5bOqVRQASpBDLtbEEJxbod77G6jzH5fn4K
-         MhhPi3DG33KpOM1Mi8iG2d4mSW62cokXWNi0WQl3bsn5CWFrRmMXyMu2QQr4JJa26uEB
-         8cxg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=oUwD/AXk3hn18jg9g8hVaPoJbhZdU+eC6asfRcw/JZ8=;
+        b=OV6NQ+wPRl2SEbWwcpJRPhyEuZ8cg8yTsJqgVyKnZOK2UthzIAwcDwB3+WLL18sjlb
+         /C16E768PD8WDWQUV6iOuuogcZaJTm3BQQsDxPgatCYJKd+jgAHy1Tif+KBTazTMIlG/
+         kxGvrZ0Tvh2dHNnjY8fuDHaK5o5kkwzA5t881UFs5Y/G0C1qj/QbDh/lehUdLme1OnUm
+         YpZ2RKUuGtPpgDS7hss+aISwdPO9egSp90BXGcvs1tYhm0cVrJ80C2ATmvjFYErITX1w
+         ajhAeUc+2+ukI2+7/Coim6NfRFcDUpiexL3hP8VSfhXG28L4D0jNDHs4VXRANYAZ2PQm
+         L6MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=XSmJd1bpU0glTVAxiyaH+IAuqRCtmm6vBt6ZWeEWSjI=;
-        b=iz8vZrTPDQPaLRhBs/FEiRHQ+FWrZlwgOU6FuRHk9Ml2DcS3CObixZD9eFWp3D614n
-         WeGPpTfxKn442B6FwAOCYTAq+bjX7ppPJsH95Bv4QOfJNqzMZqu4nRPTvJk1pSilEfPS
-         yOS+qXxsSjTZjy8GbmAYFkrZLRjX75P7ZbDyfdsNbYl8ELr7r0h5v90Lq2cDwYgVYNaT
-         auVd6a/tintCKQs2B/HaR56CIEpu/ZkCR6w823dv1Cjvrd9eglhV/eVOwez4KAheLoC/
-         9Yd+EhYFOWXfE83X4M34/Nb0NclHCACI2ykTyMooR5a4WiOxtJd0YjmE9UQKfr09nodf
-         YkeA==
-X-Gm-Message-State: AJIora+qNsK64ZmQfvVRP89rcZ9En1qP479PI7gPydTcYieC+e9WtVTd
-        xSl9fFAx6m8ZsiPrgbgoFo4=
-X-Google-Smtp-Source: AGRyM1uq149T+UXOfXySCa+9sRr+0vARPC9zynC8iC6s8O2zbU7cQlw3n/jsJ2VkbAOuz/BbF5u+2A==
-X-Received: by 2002:a63:d94a:0:b0:412:6e04:dc26 with SMTP id e10-20020a63d94a000000b004126e04dc26mr8800555pgj.539.1657111301178;
-        Wed, 06 Jul 2022 05:41:41 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y18-20020a17090322d200b0016bdc98730bsm7829564plg.151.2022.07.06.05.41.40
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=oUwD/AXk3hn18jg9g8hVaPoJbhZdU+eC6asfRcw/JZ8=;
+        b=ZRGOaKi84o5I90MHua4sQ7/rYYWuiq+CIeElo4rCkE2HAs/Ry15YoHe0Rs1Eyz/zax
+         NO/kosBoK3USY5deQRWB7kGSzDH0k1Sjp6MMaHqggoQmkn8iKxaWzoBbVeFYzo7b8KlJ
+         pha9hY5slTIjt7sXbT7TS6TcEMTI6t1Hm5ayEDkhz3xc0lnJgdAeDWDJ5ZoBjN6W/l4c
+         qA/LPxbwMl14X+EuONy48QmWsnpe0CkzzxwSG0NZ+YHcrqPNI35dW/wAFSxAuy6m2D81
+         wCt3mX8UjWT7cYtS1xAwOMr2VfkUHQs7MRVpYmepMrrovOSz9WQk4NY8NezzP+uXquQK
+         2TNA==
+X-Gm-Message-State: AJIora9K2Ck+pyy6VVDZ6tEzn2eVrsSqUVsOWa1d305O/uPO91mI7zJf
+        CNhhOvDOFWqCbrgg0fk23v9xQA==
+X-Google-Smtp-Source: AGRyM1uUD5fUICbLUxi3NjNN7CjKDLK0xdLSPc5G0890T3qq/ARu1rv+irGhKla3vDPUN0DyFqatKQ==
+X-Received: by 2002:a7b:c413:0:b0:3a1:8f03:29d0 with SMTP id k19-20020a7bc413000000b003a18f0329d0mr29344119wmi.160.1657115273408;
+        Wed, 06 Jul 2022 06:47:53 -0700 (PDT)
+Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.gmail.com with ESMTPSA id v192-20020a1cacc9000000b003975c7058bfsm26068541wme.12.2022.07.06.06.47.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 05:41:40 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 6 Jul 2022 05:41:39 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jerome Brunet <jbrunet@baylibre.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Wed, 06 Jul 2022 06:47:53 -0700 (PDT)
+References: <20220705142444.17063-1-pboos@baylibre.com>
+ <f756b2d5-56e7-6e52-2739-eca4bb33508b@baylibre.com>
+ <1jmtdnwd7y.fsf@starbuckisacylon.baylibre.com>
+ <20220706124139.GB492220@roeck-us.net>
+User-agent: mu4e 1.8.3; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Philippe Boos <pboos@baylibre.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Kevin Hilman <khilman@baylibre.com>,
@@ -61,59 +65,82 @@ Cc:     Neil Armstrong <narmstrong@baylibre.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v1] watchdog: meson: keep running if already active
-Message-ID: <20220706124139.GB492220@roeck-us.net>
-References: <20220705142444.17063-1-pboos@baylibre.com>
- <f756b2d5-56e7-6e52-2739-eca4bb33508b@baylibre.com>
- <1jmtdnwd7y.fsf@starbuckisacylon.baylibre.com>
+Date:   Wed, 06 Jul 2022 15:24:27 +0200
+In-reply-to: <20220706124139.GB492220@roeck-us.net>
+Message-ID: <1j8rp6z720.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1jmtdnwd7y.fsf@starbuckisacylon.baylibre.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 09:29:35PM +0200, Jerome Brunet wrote:
-> 
-> On Tue 05 Jul 2022 at 16:39, Neil Armstrong <narmstrong@baylibre.com> wrote:
-> 
-> > Hi,
-> >
-> > On 05/07/2022 16:24, Philippe Boos wrote:
-> >> If the watchdog is already running (e.g.: started by bootloader) then
-> >> the kernel driver should keep the watchdog active but the amlogic driver
-> >> turns it off.
-> >> Let the driver fix the clock rate then restart the watchdog if it was
-> >> previously active.
-> >> Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
-> >
-> > Please drop this review tag since it was done off-list
-> 
-> Indeed a review was done off-list.
-> 
-> Reviewed-by says a review has been done. I was not aware this applied to
-> public reviews only. I probably missed that, would you mind pointing me
-> to that rule please ?
-> 
 
-Public or not doesn't really matter. However, you can only apply a
-Reviewed-by: tag (or any tag, really) if you explicitly received one.
-The exchange seems to suggest that you did not receive that tag.
-Please never add any tags on your own.
+On Wed 06 Jul 2022 at 05:41, Guenter Roeck <linux@roeck-us.net> wrote:
 
-On the other side, if the reviewer did send a Reviewed-by: tag off list,
-I would kindly ask the reviewer to not do that in the future to avoid
-misunderstandings. If you don't want your Reviewed-by: tag attached to
-a patch, don't send one. Not everyone will even realize that you sent
-your tag off-list, and no one can be expected to know that you didn't
-really mean it when you sent your tag.
+> On Tue, Jul 05, 2022 at 09:29:35PM +0200, Jerome Brunet wrote:
+>> 
+>> On Tue 05 Jul 2022 at 16:39, Neil Armstrong <narmstrong@baylibre.com> wrote:
+>> 
+>> > Hi,
+>> >
+>> > On 05/07/2022 16:24, Philippe Boos wrote:
+>> >> If the watchdog is already running (e.g.: started by bootloader) then
+>> >> the kernel driver should keep the watchdog active but the amlogic driver
+>> >> turns it off.
+>> >> Let the driver fix the clock rate then restart the watchdog if it was
+>> >> previously active.
+>> >> Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
+>> >
+>> > Please drop this review tag since it was done off-list
+>> 
+>> Indeed a review was done off-list.
+>> 
+>> Reviewed-by says a review has been done. I was not aware this applied to
+>> public reviews only. I probably missed that, would you mind pointing me
+>> to that rule please ?
+>> 
+>
+> Public or not doesn't really matter. However, you can only apply a
+> Reviewed-by: tag (or any tag, really) if you explicitly received one.
+> The exchange seems to suggest that you did not receive that tag.
 
-Thanks,
-Guenter
+Philippe did receive that Reviewed-by. I gave it to him.
+Doing his first public patches, he first requested a review off-list to
+try to get things right and not bother people too much (so much for that :/)
+
+> Please never add any tags on your own.
+
+He did not.
+
+>
+> On the other side, if the reviewer did send a Reviewed-by: tag off list,
+> I would kindly ask the reviewer to not do that in the future to avoid
+> misunderstandings.
+
+No worries. That being said, I have gone over 
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst
+
+It just says that Reviewed-by sent on the list should be collected for
+the following version. Nothing against adding the tag if the job has
+been done, on or off list. Same goes for Suggested-by, Tested-by, etc.
+
+If I missed something or it is non-written rule, please let me know.
+
+> If you don't want your Reviewed-by: tag attached to
+> a patch, don't send one. Not everyone will even realize that you sent
+> your tag off-list, and no one can be expected to know that you didn't
+> really mean it when you sent your tag.
+
+I do want Philippe to add it. I would not have given it the first place
+if it was not the case.
+
+>
+> Thanks,
+> Guenter
+
