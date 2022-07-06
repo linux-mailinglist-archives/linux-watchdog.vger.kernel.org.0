@@ -2,107 +2,109 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37674568C3F
-	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Jul 2022 17:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8591568F77
+	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Jul 2022 18:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbiGFPHc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 6 Jul 2022 11:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
+        id S232606AbiGFQnd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 6 Jul 2022 12:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233748AbiGFPHa (ORCPT
+        with ESMTP id S234076AbiGFQn3 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 6 Jul 2022 11:07:30 -0400
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6748418390;
-        Wed,  6 Jul 2022 08:07:29 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id z191so14254075iof.6;
-        Wed, 06 Jul 2022 08:07:29 -0700 (PDT)
+        Wed, 6 Jul 2022 12:43:29 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3431582D;
+        Wed,  6 Jul 2022 09:43:28 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id o31-20020a17090a0a2200b001ef7bd037bbso11004071pjo.0;
+        Wed, 06 Jul 2022 09:43:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oraZyyvVir1700yNQVzrP9Zwaxp7xrxcJj7xCrbOwKY=;
+        b=EfJh9o7U1fzaM7uW6JPnPBco1gx5afL8OEXdBvSEwnnQzDqzqN65FghE6rrrlQ2L3+
+         p+Dpmz5ngc/Ntn6shHZm/lOtJEfedW0os2igAWzQR37X8hcZ2mpJBjSIEM3Su+YB8ggR
+         NDR6nWv0pqQxrt/gpcDp1CBhiKkQBpST2EnW8i2hECHMUd4yb0oekQ+A+59+p5DdB2M9
+         HRQyC99nu2wVuQp0CuL9qk4b4mz7oaFl42gUL2z5dA/gG7QCBZAdFPVfviLOe3u5zMes
+         BeLQ9rQRBPQIIhcx2FvpZHMjFgb8pW+fn5nHqQaVW52Ua25EzRK5osDhv2Z9NxlJUe5s
+         3hpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=I+N5AebuQqH0jlQLRd239QoK9Ox33sEr2sOU9qmAdeI=;
-        b=XCnztQaDgc/sNAitwWmgRKjOmHoJ17a8DU7mosO8cYyuO5/yKDdIOzY80Tc45zxiZB
-         3eCFiP1CW8oeTSgYuJDxM3CqINWb9wA4kQUNPOu8jupxUpQjrW6O1AydeUfTmLcCvmUJ
-         BsTGIsqLt0raL05IUFiXNWLrVqBk3QlRd960EX4Ba2NCwSqQwYobILeaB5gJO2gflbqf
-         BkhsyymuRPI6ff8ol3wQpx8y8tM4BcG0seEtbQZd6AGJJppao0xxS5EYW8DGSyS+iJ8x
-         nW3QeSEF37MtTjWGU10jzUn8vWM7ckI7twku820jtbHEGvHFxNFmOjl2vPZKqAyp7mXV
-         vwXQ==
-X-Gm-Message-State: AJIora/Lbs5ZQ7qZ2YOHXdu+5B+l/NDhRpsj8YzdgmsKuXkmRQWcnGP/
-        VLIfqyznZrLDLNzpxJgffFL5mzPrWg==
-X-Google-Smtp-Source: AGRyM1u/v+SlHrKVZCbVrdRrUDL35cvfBUpgBdQqM1X6lZXvh4bPTZSzxIS4OlVZ6WnVzumcugqeVw==
-X-Received: by 2002:a02:aa1a:0:b0:331:9183:9136 with SMTP id r26-20020a02aa1a000000b0033191839136mr24435755jam.242.1657120048487;
-        Wed, 06 Jul 2022 08:07:28 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id k1-20020a926f01000000b002dbee570531sm5683827ilc.18.2022.07.06.08.07.27
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=oraZyyvVir1700yNQVzrP9Zwaxp7xrxcJj7xCrbOwKY=;
+        b=MEEBikBkpo/f5XHbxDtHFaap+Za40g3nU+o+ICTzPeQiC3DFo07YtBipR9Uhr5jGBL
+         G9zilPRBoq9OFzwfC5ZF1ll3WV/fndl6mcwUKT6tIhjA6tuAYl8Ki95JTXd8qxbHPBM8
+         Ojo8thCgohFB4PdgsULVKGvz3GJH188mm5NCA1pEAiED1DZemwx4b29fPKcg5AV4RXjn
+         As/wr2dbYncCX8p/mVR4pvvumlr4IHnIQnpsJ3CbkBM2U6pkxTyAz1/IXNK3DNGLI2Dp
+         5hJStcwA+YQOfg2vN4bKXLD8H9i0PbRvQ5OWFSX1G6fVNpeKeCsnlHMY1a0q4hCLL1jr
+         rYZA==
+X-Gm-Message-State: AJIora8SD1bV3cTJa0mBHxxsUkhM7tWJ4Vrc5kxoj3nBoq4UL4sG7mn7
+        e2IZjRqsadF/YWbtPNq9IBU=
+X-Google-Smtp-Source: AGRyM1skinJBZte4Q+yq3FR+y6tbCuPsShkOzB4+jvtzpcNoq/exAfYvBFN41bB15wIBO1q8dnwGig==
+X-Received: by 2002:a17:90b:38c4:b0:1ef:84e0:90f5 with SMTP id nn4-20020a17090b38c400b001ef84e090f5mr23618932pjb.149.1657125808122;
+        Wed, 06 Jul 2022 09:43:28 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x67-20020a628646000000b005252ab25363sm25121974pfd.206.2022.07.06.09.43.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 08:07:28 -0700 (PDT)
-Received: (nullmailer pid 48246 invoked by uid 1000);
-        Wed, 06 Jul 2022 15:07:26 -0000
-Date:   Wed, 6 Jul 2022 09:07:26 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: watchdog: max63xx: Add GPIO binding
-Message-ID: <20220706150726.GA40600-robh@kernel.org>
-References: <20220705001023.14660-1-pali@kernel.org>
+        Wed, 06 Jul 2022 09:43:26 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 6 Jul 2022 09:43:25 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Jerome Brunet <jbrunet@baylibre.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Philippe Boos <pboos@baylibre.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] watchdog: meson: keep running if already active
+Message-ID: <20220706164325.GA776177@roeck-us.net>
+References: <20220705142444.17063-1-pboos@baylibre.com>
+ <f756b2d5-56e7-6e52-2739-eca4bb33508b@baylibre.com>
+ <1jmtdnwd7y.fsf@starbuckisacylon.baylibre.com>
+ <20220706124139.GB492220@roeck-us.net>
+ <1j8rp6z720.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220705001023.14660-1-pali@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1j8rp6z720.fsf@starbuckisacylon.baylibre.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 02:10:22AM +0200, Pali Rohár wrote:
-> GPIO is optional and used for WDI logic.
+On Wed, Jul 06, 2022 at 03:24:27PM +0200, Jerome Brunet wrote:
 > 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
-> Changes in v3:
-> * Extend description
-> ---
->  Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+[ ... ]
+
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> index ab9641e845db..a0cf9e6c371d 100644
-> --- a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
-> @@ -27,6 +27,10 @@ properties:
->      description: This is a 1-byte memory-mapped address
->      maxItems: 1
->  
-> +  gpios:
-
-As I said before, add a name prefix: wdi-gpios
-
-> +    description: Optional GPIO used for controlling WDI (watchdog input) when WDI bit is not mapped to memory
-
-Wrap lines at 80 unless wrapping at 100 provides some benefit.
-
-yamllint is set to 110 because I don't want to fix everyone's line wrap, 
-not because that's the standard.
-
-
-> +    maxItems: 1
-> +
->  required:
->    - compatible
->    - reg
-> -- 
-> 2.20.1
+> No worries. That being said, I have gone over 
 > 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst
 > 
+> It just says that Reviewed-by sent on the list should be collected for
+> the following version. Nothing against adding the tag if the job has
+> been done, on or off list. Same goes for Suggested-by, Tested-by, etc.
+> 
+> If I missed something or it is non-written rule, please let me know.
+
+Your interpretation is quite a strict one. I don't think there is a rule
+that states that tags not sent to a list must not be collected.
+
+Anyway, I would have called it common sense, especially since it does
+happen that someone accidentally hits "reply" instead of "reply all"
+and replies end up not being sent to the list. If you expect me to dig
+through e-mail headers to determine if you meant your tags to be published
+or not, sorry, that won't happen. Do not send me e-mails with any tags
+unless you accept that they may be published.
+
+Guenter
