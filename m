@@ -2,175 +2,157 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3B856A2CF
-	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Jul 2022 14:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7470F56A4E2
+	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Jul 2022 16:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235802AbiGGMv6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 7 Jul 2022 08:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
+        id S235706AbiGGODI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 7 Jul 2022 10:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235746AbiGGMvq (ORCPT
+        with ESMTP id S235106AbiGGODC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 7 Jul 2022 08:51:46 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70082.outbound.protection.outlook.com [40.107.7.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C074B2C669;
-        Thu,  7 Jul 2022 05:51:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iBGKGmFtcx+wCX4Zj++ZPZIQrm/4BlaQaZd8BfJAdq0yMKKXrn03Bh47fIeBQeK0diigLLlXkosjcfzf+JTVZRSCzOADTBM1L0Fo6zMaV3Y6+PXbrDKJuYtkkvpJuuNQe5OLHVslPklz8Zmx8xY9lR/k2p1/4TP7wRAiYsEBrxcGASIQfpN9NICFDhljwJDQVEvJqsDiYHo7qXiDefSdiK13F2VkZezzuKODt3uLmmZ7rOO/4rENaNp0pMZ9tpbQGFyEta7yHu9+Tls3PFogaYBmDwWBnRhpDP35DEaBxkcCfFYcIgn5AgVcL9rzgImOizwjO5QmhFp30Cd7VzUwsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p6Qz8bG7EFeGQxxcGEl3M3BGepTij70D5bkS9ZS3Hks=;
- b=beB1aTpV8Fc6DZVQX8MpUDpsyNCxxgOL9QNRLYXP2Zh+rSmzHD9X46BLABIFK/hGKEtPCP2qA7q/HDQvzypFk377P1VQrtCFQnqK7AWYpdO1kdJ0aQDGPbiY2D+VzPP+c87GvcrmpIbIeus0g8Y6CHHbBelK1PNkf1Ruo3U12tO8HXBjv4t5N3ucEnE6CsxBl41fkv1Va9nQlUDvfjSPgpOHbhQcacMj5/MszQIij5mg6U8MbKrsaSdPRuO5PmWCb4NsVWd13kq9sJ3DEMrRi/3HfNIP7KYeLeaRd6SnjTDg8MVyf1eSVLY7v2WppVB1UlydhzM6WzkHQ6bu4rtn1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p6Qz8bG7EFeGQxxcGEl3M3BGepTij70D5bkS9ZS3Hks=;
- b=ViDBNLWmmUtn8Jk1FHc/I/tflhRnj9f5XKU+SH98Cw30fcfWB/xGaol5Njzc/2TDBXIIWecEcL9DguwmD9KkecHRVoXRJWnquSa/Pjv0kjYYSAWwuglErXzmH37o7aqAqY28PbZicywDT9zsih0/WIOwCHp+DBGUF2ljQLqiBpc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
- by DU0PR04MB9276.eurprd04.prod.outlook.com (2603:10a6:10:357::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5417.15; Thu, 7 Jul
- 2022 12:51:37 +0000
-Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
- ([fe80::6546:3ee1:5e6c:278f]) by VI1PR04MB5005.eurprd04.prod.outlook.com
- ([fe80::6546:3ee1:5e6c:278f%5]) with mapi id 15.20.5417.016; Thu, 7 Jul 2022
- 12:51:37 +0000
-From:   "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
-        Shijie Qin <shijie.qin@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Viorel Suman <viorel.suman@oss.nxp.com>
-Subject: [PATCH v8 15/15] arm64: dts: freescale: imx8qxp: Fix the keys node name
-Date:   Thu,  7 Jul 2022 15:50:22 +0300
-Message-Id: <20220707125022.1156498-16-viorel.suman@oss.nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220707125022.1156498-1-viorel.suman@oss.nxp.com>
-References: <20220707125022.1156498-1-viorel.suman@oss.nxp.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM9P192CA0026.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:20b:21d::31) To VI1PR04MB5005.eurprd04.prod.outlook.com
- (2603:10a6:803:57::30)
+        Thu, 7 Jul 2022 10:03:02 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB9A2408D;
+        Thu,  7 Jul 2022 07:03:01 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id g126so5153510pfb.3;
+        Thu, 07 Jul 2022 07:03:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=afbiyF16Fd4Ewaaf3EKKCpvpR7aHAsNAQp7K3TuQXs4=;
+        b=EzpeppBfdoHkOWruUNAYNHzOi8S5lBuVkWR/uarc/O7MDVJ2qM1NUNdy3hxzZeKinw
+         1f6tPe15AftcBiSP1Sugt5jiQpAKlLcyz+gPyHgHTvK6IkiuSg6SYHkmzqBCpGaHkm3K
+         GirawtqITR+EFkG0pF8QxPm0bxzk97EH7JYJxQXFRi4d1kRfsZVOuxKRapjByLByJ3DF
+         qAVqAZfaAfJT+F8T/W2rPtPmXy6/uaYwejGaDWQ5Frl3XCXwsQlqWF67lU3BIXdseGBS
+         CTJ5pH+oR76s++4uNTCxHCZwHNyWF4xdxY3ay2k5fQlKGRbstnEbIjnAVDZkl7wMQgN9
+         oSpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=afbiyF16Fd4Ewaaf3EKKCpvpR7aHAsNAQp7K3TuQXs4=;
+        b=z/OhwksyOp469scWVs4PaYhNC01pXiyHvOwOAPTqy+pvH2sZnN6XRZ28vSAujPutvg
+         AQGgZhLZ6b3oc+7LSlfFt5U0/C+XJmECqeCtvLa4OnsKYoIxPft0iiHX4dtUOUVVNUB7
+         o72nh0ELJf3U9b+yyqEedzG2zEcK016yJwvgjxBOYlp6WuNXVcI+F2+gmAIiXH9GEXmI
+         e0vcR+88sWEl5sqYG3UvOQtrtLFGVXKrKxZQO0pdrK7dgKYQvLkQtqOvnIUOjXNMCnTL
+         ZOSG6KMdU1kw0QUexsBYdIFk/iqmwXqSO9SNDDktXRZnojoCdRBSKzl/F4iaHlhna0VS
+         T/iA==
+X-Gm-Message-State: AJIora+ocuIwxhLJzHhnnSu+WxjiLc3tnw/dFIKUzzDFT6j9ccAbwr5i
+        VaOjjRnKKhvxqeBmGOblA/WrVTwMxpHjaNmP
+X-Google-Smtp-Source: AGRyM1uGEg1zRLKU3mt/8yK/HfEqKFBdv1eoQpzxhqHLW6DjIp1gLh6JEsU/RWRdBfoHFypH/TfaNQ==
+X-Received: by 2002:a17:90b:4c8f:b0:1ec:cdd0:41b7 with SMTP id my15-20020a17090b4c8f00b001eccdd041b7mr5420238pjb.119.1657202580508;
+        Thu, 07 Jul 2022 07:03:00 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k127-20020a632485000000b004148cbdd4e5sm1215293pgk.57.2022.07.07.07.02.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jul 2022 07:02:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 7 Jul 2022 07:02:58 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        virtualization@lists.linux-foundation.org,
+        usbb2k-api-dev@nongnu.org, tipc-discussion@lists.sourceforge.net,
+        target-devel@vger.kernel.org, sound-open-firmware@alsa-project.org,
+        samba-technical@lists.samba.org, rds-devel@oss.oracle.com,
+        patches@opensource.cirrus.com, osmocom-net-gprs@lists.osmocom.org,
+        openipmi-developer@lists.sourceforge.net, nvdimm@lists.linux.dev,
+        ntb@lists.linux.dev, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, mjpeg-users@lists.sourceforge.net,
+        megaraidlinux.pdl@broadcom.com, linuxppc-dev@lists.ozlabs.org,
+        linux1394-devel@lists.sourceforge.net, linux-x25@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-sctp@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-raid@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-parport@lists.infradead.org,
+        linux-parisc@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-nfc@lists.01.org, linux-mtd@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-cxl@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-bcache@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linaro-mm-sig@lists.linaro.org,
+        legousb-devel@lists.sourceforge.net, kvm@vger.kernel.org,
+        keyrings@vger.kernel.org, isdn4linux@listserv.isdn4linux.de,
+        iommu@lists.linux.dev, iommu@lists.linux-foundation.org,
+        intel-wired-lan@lists.osuosl.org, greybus-dev@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, dm-devel@redhat.com,
+        devicetree@vger.kernel.org, dev@openvswitch.org,
+        dccp@vger.kernel.org, damon@lists.linux.dev,
+        coreteam@netfilter.org, cgroups@vger.kernel.org,
+        ceph-devel@vger.kernel.org, ath11k@lists.infradead.org,
+        apparmor@lists.ubuntu.com, amd-gfx@lists.freedesktop.org,
+        alsa-devel@alsa-project.org,
+        accessrunner-general@lists.sourceforge.net
+Subject: Re: [linux-next:master] BUILD REGRESSION
+ 088b9c375534d905a4d337c78db3b3bfbb52c4a0
+Message-ID: <20220707140258.GA3492673@roeck-us.net>
+References: <62c683a2.g1VSVt6BrQC6ZzOz%lkp@intel.com>
+ <YsaUgfPbOg7WuBuB@kroah.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a881357a-de8b-491b-6d1a-08da60176e10
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9276:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7JyF/r8mBGD3UG5iS7cD5+kx41V2ABvjTLs+THMSeTRiOAZ2x83BXM4z75nmGa08o5zZGFWVRJhVDppQDj7z1q7J8dtl4zv5HTqZ+rFlWTyFFeew9fdtCGs4JJfHJLwBzafb7b1o15t61qvMTu2zMO2JWJj0J7ZW/FKOkkzRtf0cpws2wGwxP1J4fbcGkGLNGb5PAy2qS//tfcqe9s7LBWlP8YoXfvgShR3ky8Ds0mMfRbxKdxF43BJbRXxw3S0I0LqGp+VlnFtJCUaVFGAnJWiCTuBaXD2++hyTBFm2Z5+9aqe1K4oXwcV4EJ68qlM4jYY+M9Ka09X16uzrjUrO6Q89hdbSUbXuBsdk29WiGS121D6xpcHDspmDcXVuA6qQp1x2DvUzwxE9ZXzIECa0EvOUcNHHNPAGUDpcCaAefbu9Cpb9Vcf8vF5gig24sFdEMAcs7mO2a4eaZ685oVxMhPUwULGHalD2tNg7rrXuoeTJKSAyDyUguMHc38719jE/tl0BRIKmoeUo3x681hwRQKV2zZZ8HsjRglcdJVma5L9z4emVmzC+mMCXlMzekXRx3mGOkrsP2TLkJieDCPqqwCZb2b7uJv3qjljkDwpuMtHJsWU2fz8uJKNFSCm4M1OjREKCCdJ5ISpPuhmuhDOWyurxj62b4l3+Dz4j7J+AB5lX27wUl12HqbUoXXUjJDIMg4LnaP3nyYo5Iw5h7ZTS8GNNsxFNdjQduVi3cfohSC1aHjq3tWOBqD8+4fFjJO6+RkSMQwckcw1rAL5jf1meiSYQdsdQ2pdECsJzAkDHCNP3FPfQTZVstA+Au5m1DnNt2YwZKARXDh542yf3q+7jhWg+WgxL0l1356HSaqzXs6c=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(136003)(366004)(376002)(39860400002)(921005)(5660300002)(7406005)(4744005)(7416002)(8936002)(8676002)(66476007)(66946007)(83380400001)(6512007)(86362001)(316002)(26005)(2616005)(4326008)(186003)(1076003)(38350700002)(6666004)(478600001)(6486002)(38100700002)(52116002)(66556008)(6506007)(110136005)(2906002)(41300700001)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?yUjvcfan5aRO4fQa4jKhR1bY+sEIo/Gq4UAZWdZqF+y3pUlkZ5diTRa6Di?=
- =?iso-8859-1?Q?WyZF035BkypsVzXajZ0faZskcin+b7jcKct0IjExFRjzZX6IOrt0e6m01Z?=
- =?iso-8859-1?Q?OX0nREjwAk9JMhg0p7pSUNf84L21E+zu5cLoZwg9uaEHMwmIYHnjhv4eC5?=
- =?iso-8859-1?Q?Y0sivKbe4MKq0bDT8bU8vsOiWWlCF7wLY7dlzPA+AHwEq34FkFQQXavN5Y?=
- =?iso-8859-1?Q?R+3/ER5qLkDAa8xfQv1v8oYVXbyoxn0BfTECQFx5dmFe1rNftMAwtsbzmg?=
- =?iso-8859-1?Q?+EMS/N0zt4AFyUhazSrBV7xZQg0znZW4II7sl8q3xTNFlyWDtCC19T7Xgu?=
- =?iso-8859-1?Q?DpXRcmoGfY5CuOJbqKY6GnzuZrTBZhdrzFtw4eM5nmccw6i1NDKY5f6Yor?=
- =?iso-8859-1?Q?QeGpt7tgf5lSNP8hE1y7mSPDQcjaTv45dyPTArIqhO18npB2+fzvRO63mR?=
- =?iso-8859-1?Q?lA/luN1ctcZHwiqQLuew7Xi5bnSHGIdRJE1/KzbRYNudPrx9Yb4GfO2vfZ?=
- =?iso-8859-1?Q?RTxf4PbIWqC5k6WRp9J8dL1nlTGIO/m4VhTj17vLeQGYEnUBbLO4GnJRFG?=
- =?iso-8859-1?Q?IBiBd5EM8uu8sY5fVnxgCTPOefQ1QX3R65XzxttLJbK0NqHwHRM/6HENdp?=
- =?iso-8859-1?Q?egxCuCTaS/ireU0KMe0YABE3IP5YpwmFuUqDI4ntywnAAggueZEs+FUXCN?=
- =?iso-8859-1?Q?brW+f+td/SZpN/HMKRa8eKGyqFulskne1RFuvvf5lMvQOdnYvpVabKq1+v?=
- =?iso-8859-1?Q?OaulwZmpKmxnBpNc5h6t8/CVxhAr33gllpCISmd9H57aH0z85QVYxrEooF?=
- =?iso-8859-1?Q?6X9YuU1dJzKzSIQRuXiEM24RV92n+sR0EhdBEgGWXjsWLi10jKWM4jxuW6?=
- =?iso-8859-1?Q?ItFBEywF18Av1MjqrIUOT/jFGhAr73quJRdGU/ETeOPzL0L+nNXFEoxs0E?=
- =?iso-8859-1?Q?OMSxhqLhx0e2GU8BFBcc9jkIXUWuWZ42UlTvC1QKnw3amAiPgHluavIb1P?=
- =?iso-8859-1?Q?AL7rONWiR+wqUS2H0DxIc9v76yjcA/TnTdva/YC6H0hTrKp3sEGqJ7hNGL?=
- =?iso-8859-1?Q?jxxKQBIBpvQKpnGrIzwDOAxG+GPePIjRPtxAhBVGcPTmH7bFdvWiusdNQx?=
- =?iso-8859-1?Q?2Q+fUI4GnUj+rQYAI9PiEp19vO4+qDyfQm+ZmT7lYN19hgMCydU2qzHhj2?=
- =?iso-8859-1?Q?0+abE1udnJzb7+n/lRjfaU+OYqyJJe5O05HsOHZlca97b8xdN55KUJiNcm?=
- =?iso-8859-1?Q?h3rGfAIiUHc8s+sD62IjC/Vsjqb7tLn0xK8BYtFpMXGtBPTxDDqOz/VAXA?=
- =?iso-8859-1?Q?+7JNDxqpNr6LJqU5AzyXCInYBeUKlncNHto+xGhLdS3cOxMT8cpI2o2r1W?=
- =?iso-8859-1?Q?PQ1Q+d7DERXboiEVjYJbl4miTmQ2wHE0qqc71Vtz5j7qyLVS+BW/7Y7I40?=
- =?iso-8859-1?Q?bMQ8tV/lGW4hP9YFVTeep//I7TLA8cK3Pd63pWObnlNKI8c+Q1E1rFjCYh?=
- =?iso-8859-1?Q?o45bT7IDnogOUn2HzyKfE5pzKn3f0g95ZcqGAFal18uMnMvwtHw4ifxCKV?=
- =?iso-8859-1?Q?CCJCFY+39AOlvKV968eAkG07BkhRilfhCXYP/CRmb3pP03XgNBt6GopUZy?=
- =?iso-8859-1?Q?Uru2M4Hq8tc5JYGDMgADmkJTf/yqliEuPo?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a881357a-de8b-491b-6d1a-08da60176e10
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2022 12:51:37.5149
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6CvDYsfe6GbllYjKYrXThp6HjGwhNzKvhGEG9aWRqyL2rWIfHRY7hPZ9Wgf8urdaoQhNyOespHbYUaTXJZMhQQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR04MB9276
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YsaUgfPbOg7WuBuB@kroah.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Abel Vesa <abel.vesa@nxp.com>
+On Thu, Jul 07, 2022 at 10:08:33AM +0200, Greg KH wrote:
 
-The proper name is 'keys', not 'scu-keys'.
+[ ... ]
+> > 
+> > Unverified Error/Warning (likely false positive, please contact us if interested):
+> > 
+> > arch/x86/events/core.c:2114 init_hw_perf_events() warn: missing error code 'err'
+> > drivers/android/binder.c:1481:19-23: ERROR: from is NULL but dereferenced.
+> > drivers/android/binder.c:2920:29-33: ERROR: target_thread is NULL but dereferenced.
+> > drivers/android/binder.c:353:25-35: ERROR: node -> proc is NULL but dereferenced.
+> > drivers/android/binder.c:4888:16-20: ERROR: t is NULL but dereferenced.
+> > drivers/base/regmap/regmap.c:1996:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
+> > drivers/char/random.c:869:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
+> > drivers/firmware/arm_scmi/clock.c:394:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
+> > drivers/firmware/arm_scmi/powercap.c:376:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
+> > drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/vega10_powertune.c:1214:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
+> > drivers/gpu/drm/amd/display/dc/os_types.h: drm/drm_print.h is included more than once.
+> > drivers/gpu/drm/bridge/ite-it66121.c:1398:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
+> > drivers/greybus/operation.c:617:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
+> 
+> <snip>
+> 
+> When the compiler crashes, why are you blaming all of these different
+> mailing lists?  Perhaps you need to fix your compiler :)
+> 
 
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8qxp.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+To be fair, it says above "likely false positive, please contact us
+if interested". Also, the 32-bit build errors _are_ real, and the NULL
+dereferences in the binder driver are at the very least suspicious.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-index ddcc0131b861..f4ea18bb95ab 100644
---- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-@@ -230,7 +230,7 @@ ocotp: ocotp {
- 			#size-cells = <1>;
- 		};
- 
--		scu_key: scu-key {
-+		scu_key: keys {
- 			compatible = "fsl,imx8qxp-sc-key", "fsl,imx-sc-key";
- 			linux,keycodes = <KEY_POWER>;
- 			status = "disabled";
--- 
-2.25.1
-
+Guenter
