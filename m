@@ -2,194 +2,149 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C48F8569DDE
-	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Jul 2022 10:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A64EF569E3A
+	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Jul 2022 11:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235322AbiGGIpT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 7 Jul 2022 04:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59360 "EHLO
+        id S234797AbiGGJBY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 7 Jul 2022 05:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232615AbiGGIpJ (ORCPT
+        with ESMTP id S230222AbiGGJBX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 7 Jul 2022 04:45:09 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563D813F9F;
-        Thu,  7 Jul 2022 01:45:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657183508; x=1688719508;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=edbKoKalbvq90CBmxogPesuIiDjl8rwJ49B+zZvetjQ=;
-  b=BfVKisWKCdx8CvBHxqsYg7j9cXv26yoQXE72HrhvrsHZACMcDf+Q4QeE
-   iezKOt76usGXV+kbwaKO7ucB7IaYA4gBUybR0oLB4xyC1Vm4hlMy3Mfqh
-   9orF/TMUfYsnaA4siDN3OfNN2ZHi8li2Tg62mdzzqPrFaDG0JJbV+DRPP
-   iwpbPp2cvvpvUZ62IKMOCHbcsc96XaEccZnOxR3WRawWvB7mbC3jKctJN
-   8CAuCUDBdHrDFmaFdIMnnGGbzhA6JCPGgQiHYVbqMyi9DeZgOTiWpgxom
-   oJhCT3UL+2okh6qNBEUcmQZZmIof0uguLdB3ImckLr4T46d5mInnCBOBg
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10400"; a="345659129"
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="345659129"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 01:45:06 -0700
-X-IronPort-AV: E=Sophos;i="5.92,252,1650956400"; 
-   d="scan'208";a="651047273"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.31.6]) ([10.255.31.6])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 01:44:45 -0700
-Subject: Re: [linux-next:master] BUILD REGRESSION
- 088b9c375534d905a4d337c78db3b3bfbb52c4a0
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        kernel test robot <lkp@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        virtualization@lists.linux-foundation.org,
-        usbb2k-api-dev@nongnu.org, tipc-discussion@lists.sourceforge.net,
-        target-devel@vger.kernel.org, sound-open-firmware@alsa-project.org,
-        samba-technical@lists.samba.org, rds-devel@oss.oracle.com,
-        patches@opensource.cirrus.com, osmocom-net-gprs@lists.osmocom.org,
-        openipmi-developer@lists.sourceforge.net, nvdimm@lists.linux.dev,
-        ntb@lists.linux.dev, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, mjpeg-users@lists.sourceforge.net,
-        megaraidlinux.pdl@broadcom.com, linuxppc-dev@lists.ozlabs.org,
-        linux1394-devel@lists.sourceforge.net, linux-x25@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-unionfs@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-        linux-sctp@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-raid@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-parport@lists.infradead.org,
-        linux-parisc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-nfc@lists.01.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-mm@kvack.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-cxl@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-bcache@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linaro-mm-sig@lists.linaro.org,
-        legousb-devel@lists.sourceforge.net, kvm@vger.kernel.org,
-        keyrings@vger.kernel.org, isdn4linux@listserv.isdn4linux.de,
-        iommu@lists.linux.dev, iommu@lists.linux-foundation.org,
-        intel-wired-lan@lists.osuosl.org, greybus-dev@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, dm-devel@redhat.com,
-        devicetree@vger.kernel.org, dev@openvswitch.org,
-        dccp@vger.kernel.org, damon@lists.linux.dev,
-        coreteam@netfilter.org, cgroups@vger.kernel.org,
-        ceph-devel@vger.kernel.org, ath11k@lists.infradead.org,
-        apparmor@lists.ubuntu.com, amd-gfx@lists.freedesktop.org,
-        alsa-devel@alsa-project.org,
-        accessrunner-general@lists.sourceforge.net
-References: <62c683a2.g1VSVt6BrQC6ZzOz%lkp@intel.com>
- <YsaUgfPbOg7WuBuB@kroah.com>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <c86816fd-aaba-01a9-5def-44868f0a46c9@intel.com>
-Date:   Thu, 7 Jul 2022 16:44:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        Thu, 7 Jul 2022 05:01:23 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FA327CFB
+        for <linux-watchdog@vger.kernel.org>; Thu,  7 Jul 2022 02:01:22 -0700 (PDT)
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 27BCC3F1F2
+        for <linux-watchdog@vger.kernel.org>; Thu,  7 Jul 2022 09:01:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1657184473;
+        bh=55AAHRfMP5z0IUkZTuebwtFacCNLfAvOIPIQMIi6oic=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=MNk+c3dTCYWOjbbGqFM7ojCHjJqYoO3PQvgtA9CzIHETMvtv95Fbek9SzPZg0Rzvp
+         t+tOvSaVpjkPNKEUMpoxCjTcIoNV//jhNatXUZt6DL+pcim24lLEmRGFhknatdD0AH
+         6GJxjT6XOfNZbk0t4sZQJOM2TdoVoMAC/EAcEFEnsVfZXNMEsZV1NaHj82CBZt0gtX
+         IA+9F3PzkwQXFuWBKkxkutjH254swUtRCUIR6b4NujBh4vY1J19DJNIAhdfQSnNSNv
+         wIMXNlHAdob+wI6DSXPpcczQHgjSx5Fh0/QOVrOujtrLGPZdfbFQafRRLmeMhWJm+L
+         ZXH9TETRaimEg==
+Received: by mail-ot1-f70.google.com with SMTP id v35-20020a056830092300b00616cce37d8aso7117170ott.1
+        for <linux-watchdog@vger.kernel.org>; Thu, 07 Jul 2022 02:01:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=55AAHRfMP5z0IUkZTuebwtFacCNLfAvOIPIQMIi6oic=;
+        b=P+1GlBFG0i33A7qawMUB0ytKYXveWP4F+Ct6rrkQo/fTXMxpxahIqdWuxldZ0fQNjl
+         +/hzqz/jD9jJI7B0ZkbLbkLYzmdd9VfGoug+w8qpwjtC2xpP8yDyIcOtJZh2Gq7NChr7
+         wYXYeBeMGB7T1dGJksy+lt2/XwMD0t8fp4NGpPxiEMEzjzv/AtypCYPKFUpgcHdZUz5b
+         /2Gd0vWohHjFPodbV0F2qTZPozmWh5dJhjD2xgqmBJ8HLk0XXoqFDYfaDNZdYnJ52tIa
+         aKosiSEclBbUdS1bVnRewq6JKtTXI/V5Dk15TvQaY7CkVpE1YxSFCcokVR8t//1+x2BC
+         1YMg==
+X-Gm-Message-State: AJIora8qbWT1/aILiB7TNCqYMTHvzvWoeWE2f1YL5LU3ymCokDnnn+x7
+        QdexnzkyB3Ef4K0VWv9iu0FIbzr7NOjsB0TsDA5CS6XDB7zg5kxF9NC+jri3CNl0sRDV9C/zGfk
+        EGh5xdYaPeZt45OEzFuyEvz4r5oFObfVUO6cNm83Y/FbVP04tZrRoJWj4iTP8
+X-Received: by 2002:a05:6808:4b:b0:335:2eb0:c226 with SMTP id v11-20020a056808004b00b003352eb0c226mr1737967oic.113.1657184471791;
+        Thu, 07 Jul 2022 02:01:11 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sryjf9FbNhutPSlBQG9SWsc/5cQTAqcodtViaOW6ZEW+K37gNZpeQm03kEBsuyqCctYa6xwRQo1LPLXWmwMxE=
+X-Received: by 2002:a05:6808:4b:b0:335:2eb0:c226 with SMTP id
+ v11-20020a056808004b00b003352eb0c226mr1737955oic.113.1657184471556; Thu, 07
+ Jul 2022 02:01:11 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YsaUgfPbOg7WuBuB@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20220629110626.2158127-1-isaac.true@canonical.com>
+ <20220629110626.2158127-2-isaac.true@canonical.com> <20220701171829.GA1149706-robh@kernel.org>
+ <0d045bb8-a519-39d4-17fa-123f90969bd9@roeck-us.net> <CALkPoPYKNxAeP6HM1cMh1zzW6jw4fktCp42b7+79Qf8DVJis-w@mail.gmail.com>
+ <20220705195614.GA2503171-robh@kernel.org>
+In-Reply-To: <20220705195614.GA2503171-robh@kernel.org>
+From:   Isaac True <isaac.true@canonical.com>
+Date:   Thu, 7 Jul 2022 11:00:45 +0200
+Message-ID: <CALkPoPY49PGNk84spUF3BesdZoUFpq++D1NYd_1ouT2Cv4wDYQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] watchdog: gpio: add configurable minimum interval
+To:     Rob Herring <robh@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, wim@linux-watchdog.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On Tue, 5 Jul 2022 at 21:56, Rob Herring <robh@kernel.org> wrote:
+>
+> On Mon, Jul 04, 2022 at 01:05:04PM +0200, Isaac True wrote:
+> > On Fri, 1 Jul 2022 at 19:48, Guenter Roeck <linux@roeck-us.net> wrote:
+> > >
+> > > On 7/1/22 10:18, Rob Herring wrote:
+> > > > On Wed, Jun 29, 2022 at 01:06:26PM +0200, Isaac True wrote:
+> > > >> Add the "min_hw_margin_ms" parameter to gpio_wdt devices, allowing a
+> > > >> minimum interval to be specified, stopping watchdog devices from being
+> > > >> fed too quickly if they require a certain interval between feeds.
+> > > >
+> > > > I assume there is some real platform with a real problem you are trying
+> > > > to solve? Details please.
+> > > >
+> > >
+> > > Agreed, this should be explained in more detail.
+> >
+> > Yes this is a real platform using a TI TPS3850 watchdog chip. With
+> > this chip you can configure a "window" which can detect early faults
+> > (i.e. too frequent) in addition to the standard watchdog features. I
+> > needed to add this minimum timeout to avoid watchdog resets in
+> > situations such as where first U-Boot and then the Linux kernel feed
+> > the watchdog with too short of an interval between them, or when
+> > systemd was configured to use the watchdog device and was feeding it
+> > too soon after taking over from the kernel.
+> >
+> > > > Can you just hardcode some min? Maybe 10% of the max or something. Is
+> > > > there a downside to a larger than necessary min?
+> > > >
+> > >
+> > > That would result in extra overhead in the watchdog core which would not
+> > > be required for all other hardware using this driver. I'd rather avoid that.
+> > >
+> >
+> > In the case of the TI TPS3850, the minimum timeout is configurable, so
+> > I didn't want to add a hard-coded value to the driver.
+> >
+> > > > Wouldn't be better to fix this without requiring a DT change and that
+> > > > could work on stable kernels if needed.
+> > > >
+> > >
+> > > Presumably that is some new hardware. Most of the watchdog drivers
+> > > needing this value can derive it from the compatible property. The
+> > > gpio watchdog driver is a bit different since it is supposed to work
+> > > on a variety of hardware using gpio pins for watchdog control.
+> > >
+> >
+> > Yes this is new hardware. This use case is also not very common as
+> > most watchdog chips don't have this window function or a minimum
+> > interval, at least in my experience, so I did not want to make it the
+> > default for everything.
+>
+> Okay. However the existing property you copied has 2 problems. It uses
+> underscores rather than hypens and doesn't use a standard unit suffix.
+> So 'min-hw-margin-ms'.
+>
+> Though maybe a new property instead:
+>
+> timeout-range-ms = <min max>;
+>
+> That's somewhat aligned to 'timeout-sec', and IMO, clearer meaning than
+> 'hw margin'.
+>
+> Rob
 
-
-On 7/7/2022 4:08 PM, Greg KH wrote:
-> On Thu, Jul 07, 2022 at 02:56:34PM +0800, kernel test robot wrote:
->> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
->> branch HEAD: 088b9c375534d905a4d337c78db3b3bfbb52c4a0  Add linux-next specific files for 20220706
->>
->> Error/Warning reports:
->>
->> https://lore.kernel.org/linux-doc/202207070644.x48XOOvs-lkp@intel.com
->>
->> Error/Warning: (recently discovered and may have been fixed)
->>
->> Documentation/arm/google/chromebook-boot-flow.rst: WARNING: document isn't included in any toctree
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1108): undefined reference to `__aeabi_ddiv'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1124): undefined reference to `__aeabi_ui2d'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1164): undefined reference to `__aeabi_dmul'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1170): undefined reference to `__aeabi_dadd'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1180): undefined reference to `__aeabi_dsub'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x1190): undefined reference to `__aeabi_d2uiz'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x162c): undefined reference to `__aeabi_d2iz'
->> arm-linux-gnueabi-ld: dc_dmub_srv.c:(.text+0x16b0): undefined reference to `__aeabi_i2d'
->> dc_dmub_srv.c:(.text+0x10f8): undefined reference to `__aeabi_ui2d'
->> dc_dmub_srv.c:(.text+0x464): undefined reference to `__floatunsidf'
->> dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x33c): undefined reference to `__floatunsidf'
->> drivers/pci/endpoint/functions/pci-epf-vntb.c:975:5: warning: no previous prototype for 'pci_read' [-Wmissing-prototypes]
->> drivers/pci/endpoint/functions/pci-epf-vntb.c:984:5: warning: no previous prototype for 'pci_write' [-Wmissing-prototypes]
->> drivers/vfio/vfio_iommu_type1.c:2141:35: warning: cast to smaller integer type 'enum iommu_cap' from 'void *' [-Wvoid-pointer-to-enum-cast]
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x34c): undefined reference to `__floatunsidf'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x378): undefined reference to `__divdf3'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x38c): undefined reference to `__muldf3'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x3a0): undefined reference to `__adddf3'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x3b4): undefined reference to `__subdf3'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x3d4): undefined reference to `__fixunsdfsi'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x750): undefined reference to `__fixdfsi'
->> mips-linux-ld: dc_dmub_srv.c:(.text.dc_dmub_setup_subvp_dmub_command+0x7c0): undefined reference to `__floatsidf'
->> powerpc-linux-ld: drivers/pci/endpoint/functions/pci-epf-vntb.c:174: undefined reference to `ntb_link_event'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x468): undefined reference to `__divdf3'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x46c): undefined reference to `__muldf3'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x470): undefined reference to `__adddf3'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x474): undefined reference to `__subdf3'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x478): undefined reference to `__fixunsdfsi'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x47c): undefined reference to `__fixdfsi'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x480): undefined reference to `__floatsidf'
->> xtensa-linux-ld: dc_dmub_srv.c:(.text+0x60c): undefined reference to `__floatunsidf'
->>
->> Unverified Error/Warning (likely false positive, please contact us if interested):
->>
->> arch/x86/events/core.c:2114 init_hw_perf_events() warn: missing error code 'err'
->> drivers/android/binder.c:1481:19-23: ERROR: from is NULL but dereferenced.
->> drivers/android/binder.c:2920:29-33: ERROR: target_thread is NULL but dereferenced.
->> drivers/android/binder.c:353:25-35: ERROR: node -> proc is NULL but dereferenced.
->> drivers/android/binder.c:4888:16-20: ERROR: t is NULL but dereferenced.
->> drivers/base/regmap/regmap.c:1996:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/char/random.c:869:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/firmware/arm_scmi/clock.c:394:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/firmware/arm_scmi/powercap.c:376:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/vega10_powertune.c:1214:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/gpu/drm/amd/display/dc/os_types.h: drm/drm_print.h is included more than once.
->> drivers/gpu/drm/bridge/ite-it66121.c:1398:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
->> drivers/greybus/operation.c:617:1: internal compiler error: in arc_ifcvt, at config/arc/arc.c:9637
-> 
-> <snip>
-> 
-> When the compiler crashes, why are you blaming all of these different
-> mailing lists?  Perhaps you need to fix your compiler :)
-> 
-> thanks,
-> 
-> greg k-h
-> 
-
-Hi Greg,
-
-Sorry for the inconvience, we'll fix it ASAP.
-
-Best Regards,
-Rong Chen
+I agree that both the original property name and the new one aren't
+great, but I didn't want to go changing the existing property for
+everyone.  I could definitely add a new "timeout-range-ms" property -
+should that be added in parallel to the original hw_margin_ms (i.e.
+you can use one or the other), or completely replace the original?
