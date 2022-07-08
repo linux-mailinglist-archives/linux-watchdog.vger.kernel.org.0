@@ -2,157 +2,136 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E80F556B8C3
-	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Jul 2022 13:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5258356B9CE
+	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Jul 2022 14:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237352AbiGHLob (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 8 Jul 2022 07:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
+        id S238261AbiGHMgO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 8 Jul 2022 08:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237210AbiGHLoa (ORCPT
+        with ESMTP id S238246AbiGHMgM (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 8 Jul 2022 07:44:30 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E727D1EF;
-        Fri,  8 Jul 2022 04:44:28 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id a15so23294194pfv.13;
-        Fri, 08 Jul 2022 04:44:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VPrRxa68FujbOyWIy+nbWKmDhFvpvdqmf349Td24hyY=;
-        b=WEsYsejYv/eOe/XvAvjN743Nd3qsu0ZtlRGueCuwPM/IygoqTI12LrJvxy4zO9lL3u
-         OloQijFEx9EjQM4oFd3xPNLYSlON3ytbLgnWMosygC6Ek8Szia4W8QX/ZkqDt9/zcXzU
-         Z3kqPx7nF4zIUlRBQsncXvdxx1OTlf2BMbxd5wFfRB70Xj99V9xV2dY2tB3/27DNAna5
-         IhrqAvKGOWPteVDBCv+vvYC9Fh/xVZhsSbV0hHZmXy3hPYRrJc+Vokt0GtTYTYn8Cwm/
-         X8OH+l8NhyuhydJSDkkvf1PSK9sWy+Dx7/sIxyx4DmR/Gs9w7AuWUrtYkIb+p0Ek2FJQ
-         KMZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=VPrRxa68FujbOyWIy+nbWKmDhFvpvdqmf349Td24hyY=;
-        b=BUXn2Lt0eTRKb+zchw0dsWVsrU+oZfYymXPPsbQUZ4PxKYjgXo08NTS+9MWRh7Im3y
-         qtHT3Qjll8kYaHw5fhGOWEWpaTR6oHy6ttbKEH+R9Z0D7JLV+F9ib9oMea9WjkYa69RZ
-         zboMBX7hcWiK7RPRMa3/PMPvkAJdiGI8fMxlvrEtDSQaTvmTelsGYlRkDlN/yEfHQi3W
-         GTGdcezPrSH8IUZfjO2wqH+O2hoc+V1QcqoWypLC/Z7GteMIQPoHcreh5Ng744FSg3xm
-         K9q5FAoyahuOiG8Mq63h3z42IoSh1sMaq70jBwZk+M9QOBoqHFJSoks5E2tY8NdM8gwQ
-         Ck2A==
-X-Gm-Message-State: AJIora/WkTmG2MO3ma6MsDSzMEUUjxr3Ld5rt+5qpy6x1GrYYx2k9mhy
-        6vZIs1MG476Xfy5TmpJhy1s=
-X-Google-Smtp-Source: AGRyM1tf3kmLSQJLfrcJN4WDoHVHwhoH/ShT7xyCk2GLhMD7iDPqJtdeLKao2b3TuvTuWxnDCm0peQ==
-X-Received: by 2002:a63:1a26:0:b0:412:434a:48fc with SMTP id a38-20020a631a26000000b00412434a48fcmr2915090pga.623.1657280668060;
-        Fri, 08 Jul 2022 04:44:28 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x3-20020aa78f03000000b005289de8abe2sm2503646pfr.85.2022.07.08.04.44.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Jul 2022 04:44:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 8 Jul 2022 04:44:25 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Isaac True <isaac.true@canonical.com>
-Cc:     Rob Herring <robh@kernel.org>, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, wim@linux-watchdog.org
-Subject: Re: [PATCH 2/2] watchdog: gpio: add configurable minimum interval
-Message-ID: <20220708114425.GA2164221@roeck-us.net>
-References: <20220629110626.2158127-1-isaac.true@canonical.com>
- <20220629110626.2158127-2-isaac.true@canonical.com>
- <20220701171829.GA1149706-robh@kernel.org>
- <0d045bb8-a519-39d4-17fa-123f90969bd9@roeck-us.net>
- <CALkPoPYKNxAeP6HM1cMh1zzW6jw4fktCp42b7+79Qf8DVJis-w@mail.gmail.com>
- <20220705195614.GA2503171-robh@kernel.org>
- <CALkPoPY49PGNk84spUF3BesdZoUFpq++D1NYd_1ouT2Cv4wDYQ@mail.gmail.com>
+        Fri, 8 Jul 2022 08:36:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237417C1A6;
+        Fri,  8 Jul 2022 05:36:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2D856271D;
+        Fri,  8 Jul 2022 12:36:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3DE9C341CB;
+        Fri,  8 Jul 2022 12:36:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657283771;
+        bh=hq0+B/dAKE6KAtx/w8/pzHOgIoBA3D5lqFzL4AAZuD0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oszWAku0C+PsBkcHAWimhkDNHJmcX4DGcNbiIuPC97mm+hQp3UNk68L+XMeRTGwyi
+         iRpcSXZKS/mWe/Q7AIGIujWDCIHszuz369g9mKkKm5lpdFtXwj4zD8oDnBvv59RRxa
+         h9EZsRzRFunJJa1pT+K1aIImOmqlGe3VmpTmnbthscUIY52de6/UAmcJ7g0H5+0Qcu
+         cgOhf5uWTsaaTskZUL1wOECszcwH1v4us+aJju3wULm3dkUgC85zccKr3gpnrA/JzG
+         i5Cce56flAuxGHq3aWpM0iKuGqjWZRk+qkHMf765TQurQHKnlY8I5GZPy8BFAnQS+v
+         4xvVp0DSbOyMg==
+Date:   Fri, 8 Jul 2022 20:35:59 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
+        Shijie Qin <shijie.qin@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v8 00/15] dt-bindings: arm: freescale: Switch fsl,scu
+ from txt to yaml
+Message-ID: <20220708083952.GV819983@dragon>
+References: <20220707125022.1156498-1-viorel.suman@oss.nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALkPoPY49PGNk84spUF3BesdZoUFpq++D1NYd_1ouT2Cv4wDYQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220707125022.1156498-1-viorel.suman@oss.nxp.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 11:00:45AM +0200, Isaac True wrote:
-> On Tue, 5 Jul 2022 at 21:56, Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Mon, Jul 04, 2022 at 01:05:04PM +0200, Isaac True wrote:
-> > > On Fri, 1 Jul 2022 at 19:48, Guenter Roeck <linux@roeck-us.net> wrote:
-> > > >
-> > > > On 7/1/22 10:18, Rob Herring wrote:
-> > > > > On Wed, Jun 29, 2022 at 01:06:26PM +0200, Isaac True wrote:
-> > > > >> Add the "min_hw_margin_ms" parameter to gpio_wdt devices, allowing a
-> > > > >> minimum interval to be specified, stopping watchdog devices from being
-> > > > >> fed too quickly if they require a certain interval between feeds.
-> > > > >
-> > > > > I assume there is some real platform with a real problem you are trying
-> > > > > to solve? Details please.
-> > > > >
-> > > >
-> > > > Agreed, this should be explained in more detail.
-> > >
-> > > Yes this is a real platform using a TI TPS3850 watchdog chip. With
-> > > this chip you can configure a "window" which can detect early faults
-> > > (i.e. too frequent) in addition to the standard watchdog features. I
-> > > needed to add this minimum timeout to avoid watchdog resets in
-> > > situations such as where first U-Boot and then the Linux kernel feed
-> > > the watchdog with too short of an interval between them, or when
-> > > systemd was configured to use the watchdog device and was feeding it
-> > > too soon after taking over from the kernel.
-> > >
-> > > > > Can you just hardcode some min? Maybe 10% of the max or something. Is
-> > > > > there a downside to a larger than necessary min?
-> > > > >
-> > > >
-> > > > That would result in extra overhead in the watchdog core which would not
-> > > > be required for all other hardware using this driver. I'd rather avoid that.
-> > > >
-> > >
-> > > In the case of the TI TPS3850, the minimum timeout is configurable, so
-> > > I didn't want to add a hard-coded value to the driver.
-> > >
-> > > > > Wouldn't be better to fix this without requiring a DT change and that
-> > > > > could work on stable kernels if needed.
-> > > > >
-> > > >
-> > > > Presumably that is some new hardware. Most of the watchdog drivers
-> > > > needing this value can derive it from the compatible property. The
-> > > > gpio watchdog driver is a bit different since it is supposed to work
-> > > > on a variety of hardware using gpio pins for watchdog control.
-> > > >
-> > >
-> > > Yes this is new hardware. This use case is also not very common as
-> > > most watchdog chips don't have this window function or a minimum
-> > > interval, at least in my experience, so I did not want to make it the
-> > > default for everything.
-> >
-> > Okay. However the existing property you copied has 2 problems. It uses
-> > underscores rather than hypens and doesn't use a standard unit suffix.
-> > So 'min-hw-margin-ms'.
-> >
-> > Though maybe a new property instead:
-> >
-> > timeout-range-ms = <min max>;
-> >
-> > That's somewhat aligned to 'timeout-sec', and IMO, clearer meaning than
-> > 'hw margin'.
-> >
-> > Rob
+On Thu, Jul 07, 2022 at 03:50:07PM +0300, Viorel Suman (OSS) wrote:
+> From: Viorel Suman <viorel.suman@nxp.com>
 > 
-> I agree that both the original property name and the new one aren't
-> great, but I didn't want to go changing the existing property for
-> everyone.  I could definitely add a new "timeout-range-ms" property -
-> should that be added in parallel to the original hw_margin_ms (i.e.
-> you can use one or the other), or completely replace the original?
+> Changes since v7: https://lore.kernel.org/lkml/20220704161541.943696-1-viorel.suman@oss.nxp.com/
+>   * added missing Reviewed-By: 
+>   * Defined "mboxes" and "mbox-names" sections in scu-key.yaml as schema.
+> 
+> Changes since v6: https://lore.kernel.org/lkml/20220629164414.301813-1-viorel.suman@oss.nxp.com/
+>   * The series updated so that each patch making the conversion removes
+>     the piece being converted, then finally the patch adding fsl,scu.yaml
+>     removes the last pieces, as suggested by Krzysztof Kozlowski.
+>   * Updated ocotp and system-controller node names in the existing DTS
+>     files
+> 
+> Changes since v5: https://lore.kernel.org/lkml/20220616164303.790379-1-viorel.suman@nxp.com/
+>   * Updated according to Krzysztof Kozlowski comments
+> 
+> Changes since v4: https://lore.kernel.org/lkml/20220615105834.743045-1-viorel.suman@nxp.com/
+>   * Missing SoB added
+> 
+> Changes since v3: https://lore.kernel.org/lkml/20220609143423.2839186-1-abel.vesa@nxp.com/
+>   * Examples included
+>   * Included Abel's patches fixing thermal zone, keys and power controller names.
+> 
+> Abel Vesa (12):
+>   dt-bindings: clk: imx: Add fsl,scu-clk yaml file
+>   dt-bindings: pinctrl: imx: Add fsl,scu-iomux yaml file
+>   dt-bindings: input: Add fsl,scu-key yaml file
+>   dt-bindings: nvmem: Add fsl,scu-ocotp yaml file
+>   dt-bindings: power: Add fsl,scu-pd yaml file
+>   dt-bindings: rtc: Add fsl,scu-rtc yaml file
+>   dt-bindings: thermal: Add fsl,scu-thermal yaml file
+>   dt-bindings: watchdog: Add fsl,scu-wdt yaml file
+>   dt-bindings: firmware: Add fsl,scu yaml file
+>   arm64: dts: freescale: imx8: Fix power controller name
+>   arm64: dts: freescale: imx8qxp: Add fallback compatible for clock
+>     controller
+>   arm64: dts: freescale: imx8qxp: Fix the keys node name
+> 
+> Viorel Suman (3):
+>   arm64: dts: freescale: imx8qxp: Remove unnecessary clock related
+>     entries
+>   arm64: dts: freescale: imx8qxp: Fix the ocotp node name
+>   arm64: dts: freescale: imx8: Fix the system-controller node name
 
-I wonder how that made it in in the first place. Embarrassed ...
-of course it wasn't reviewed by a DT maintainer. I'd suggest to mark
-the old property as deprecated (if that is possible) and define
-the new one.
+I'm preparing material for the next merge window, so just picked the
+series up.  If there is more outstanding review comments coming up,
+let's address them with follow-up changes.
 
-Guenter
+Shawn
