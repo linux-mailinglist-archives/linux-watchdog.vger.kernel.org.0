@@ -2,82 +2,97 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5258356B9CE
-	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Jul 2022 14:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7998F56BB15
+	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Jul 2022 15:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238261AbiGHMgO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 8 Jul 2022 08:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
+        id S237743AbiGHNpx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 8 Jul 2022 09:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238246AbiGHMgM (ORCPT
+        with ESMTP id S231905AbiGHNpw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 8 Jul 2022 08:36:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237417C1A6;
-        Fri,  8 Jul 2022 05:36:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2D856271D;
-        Fri,  8 Jul 2022 12:36:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3DE9C341CB;
-        Fri,  8 Jul 2022 12:36:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657283771;
-        bh=hq0+B/dAKE6KAtx/w8/pzHOgIoBA3D5lqFzL4AAZuD0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oszWAku0C+PsBkcHAWimhkDNHJmcX4DGcNbiIuPC97mm+hQp3UNk68L+XMeRTGwyi
-         iRpcSXZKS/mWe/Q7AIGIujWDCIHszuz369g9mKkKm5lpdFtXwj4zD8oDnBvv59RRxa
-         h9EZsRzRFunJJa1pT+K1aIImOmqlGe3VmpTmnbthscUIY52de6/UAmcJ7g0H5+0Qcu
-         cgOhf5uWTsaaTskZUL1wOECszcwH1v4us+aJju3wULm3dkUgC85zccKr3gpnrA/JzG
-         i5Cce56flAuxGHq3aWpM0iKuGqjWZRk+qkHMf765TQurQHKnlY8I5GZPy8BFAnQS+v
-         4xvVp0DSbOyMg==
-Date:   Fri, 8 Jul 2022 20:35:59 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        Fri, 8 Jul 2022 09:45:52 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28996237D7;
+        Fri,  8 Jul 2022 06:45:49 -0700 (PDT)
+Received: from mail-oo1-f42.google.com ([209.85.161.42]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1M5xDJ-1oCpNP0p1H-007Sud; Fri, 08 Jul 2022 15:45:48 +0200
+Received: by mail-oo1-f42.google.com with SMTP id n11-20020a4ad12b000000b00425b01c3326so4030431oor.8;
+        Fri, 08 Jul 2022 06:45:47 -0700 (PDT)
+X-Gm-Message-State: AJIora/NkYcFzv3biE/No2vIDOOovKULoW3sHuFORcS70u6rD/tcQxwD
+        WHvv0luOX90EwN8N1eFlEGwsMCDJ4RxlvhapwXE=
+X-Google-Smtp-Source: AGRyM1vy4rbxR1Ytn0Zk8NhNJ9KORyOPGe3ZQtW5xW3Of3raZdxBwA3+N0Uu+YK+RloM8boTybyN5UBcBgQVHJwdeE0=
+X-Received: by 2002:a5b:b47:0:b0:66e:3617:d262 with SMTP id
+ b7-20020a5b0b47000000b0066e3617d262mr3516820ybr.106.1657287935403; Fri, 08
+ Jul 2022 06:45:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220706165406.117349-1-tmaimon77@gmail.com> <CACPK8Xd0n5cpsCJ6guPzEj8JfXkz_ERzU3VdXW-Xx2QX8ssNKg@mail.gmail.com>
+In-Reply-To: <CACPK8Xd0n5cpsCJ6guPzEj8JfXkz_ERzU3VdXW-Xx2QX8ssNKg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 8 Jul 2022 15:45:18 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0Ojf1hm5Q2FJZEGLygku+qkPmKnKpBD8eAZPeRZtb=gw@mail.gmail.com>
+Message-ID: <CAK8P3a0Ojf1hm5Q2FJZEGLygku+qkPmKnKpBD8eAZPeRZtb=gw@mail.gmail.com>
+Subject: Re: [PATCH v7 00/16] Introduce Nuvoton Arbel NPCM8XX BMC SoC
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     Tomer Maimon <tmaimon77@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
-        Shijie Qin <shijie.qin@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v8 00/15] dt-bindings: arm: freescale: Switch fsl,scu
- from txt to yaml
-Message-ID: <20220708083952.GV819983@dragon>
-References: <20220707125022.1156498-1-viorel.suman@oss.nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220707125022.1156498-1-viorel.suman@oss.nxp.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Qin Jian <qinjian@cqplus1.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:p60fzRZH6lXRcjLjsToh4E1dS5TOvz9nhqrmXYCRlR7go2qMZu4
+ Al1+phUcp+UEblx0TNia+VpZ4BLL7cAU4JntVEikn1/mZJU/GX7vB8fMZJ7iYaOHyLuMz/x
+ v/4jUzEmJYh3evJyJWk9Nb3HgrSlCvNPxcdcM53ZGG5VL8b9T/dGJmue9B5B+swz3KBnBsO
+ O6lbHITMeKW9cQvi7Cr9w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WmPl8rkq1kE=:fiJt4rwFRraSb7IQg6gC+r
+ PUrDoHeJD6QSQo2lMYkl31KUSL18tnsEUT+YDsrrsO2g9pDzekoZz4QZMOlGIzs8ZJeyBPdBY
+ 2Ix5249rUjt9CMvN5pSIgea1jcOQz+xoJNGXjPyNEFbfVeo+GpTvD6LbTF94M6OB2zHV07tYs
+ XoXK9wU+gogG1nQuu6aveipUAZTWShwJmU/wWbB1W4ea672X4LM1VghzccWc5xZ3A7SbpWAqH
+ 89ck8OaNmH8ENc3ciAV8DVwd3/q9zXwSr1f747kLq4fY1SuTlLyqA9omhuNqLDFsBYcpeggOa
+ RXHv4U0Ks79Vz2sopK41/3bd2+9HjVolj40aCWfKx3na1bmT9an7BX4DtbDIt29+n4t+DVMLW
+ jv5XCpEqH3Y0wN5FQNR8MVutmkjXj5w0SWXpJvOCoBFl8Fu4O7SSu8mV0gCC0rdH7cTt3Vf5n
+ AlTYSAbD0GzmMll2foy9vwfIT3h/c6ypTV1jiZgCrmF0N32K49sQ6uPDTQ7Xx4JUwHlXvS7EM
+ e7l1iMD6l4Vnt52QvG9ZzNn9x/E8hsq9SVR93PrbE+iOhaZXKe2asQ+IDgATgh6lPFCopq9IW
+ z9I7yt2P3GfqPSO3k/IqnwFNnbZKXSGgZMi7s7W36YruHe3PYxZuHCjSdAiuEp14uDnb/eSfp
+ PolNTm7i+Bw29cRvlSwyeXbHPcQ1vVReVjjsJuuQskxRRXWPHDBIm8I1rUAMFEwfKIR1CH3c4
+ UhuEnPD88k1BbDVVHhKw4UQBHb0h3ujAdRi82WPFZQNHTpAboi4fpA587Zhlxr7/A0epC77mN
+ dBB7/FPuoSRda3v6xLht9mR2WepSSZcCL2r0ZYIryn3z01owlQu2skj8+BpcZOL6U9mA2+cjA
+ fmcQPV9DfAzIDexPD0mA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,53 +100,38 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Jul 07, 2022 at 03:50:07PM +0300, Viorel Suman (OSS) wrote:
-> From: Viorel Suman <viorel.suman@nxp.com>
-> 
-> Changes since v7: https://lore.kernel.org/lkml/20220704161541.943696-1-viorel.suman@oss.nxp.com/
->   * added missing Reviewed-By: 
->   * Defined "mboxes" and "mbox-names" sections in scu-key.yaml as schema.
-> 
-> Changes since v6: https://lore.kernel.org/lkml/20220629164414.301813-1-viorel.suman@oss.nxp.com/
->   * The series updated so that each patch making the conversion removes
->     the piece being converted, then finally the patch adding fsl,scu.yaml
->     removes the last pieces, as suggested by Krzysztof Kozlowski.
->   * Updated ocotp and system-controller node names in the existing DTS
->     files
-> 
-> Changes since v5: https://lore.kernel.org/lkml/20220616164303.790379-1-viorel.suman@nxp.com/
->   * Updated according to Krzysztof Kozlowski comments
-> 
-> Changes since v4: https://lore.kernel.org/lkml/20220615105834.743045-1-viorel.suman@nxp.com/
->   * Missing SoB added
-> 
-> Changes since v3: https://lore.kernel.org/lkml/20220609143423.2839186-1-abel.vesa@nxp.com/
->   * Examples included
->   * Included Abel's patches fixing thermal zone, keys and power controller names.
-> 
-> Abel Vesa (12):
->   dt-bindings: clk: imx: Add fsl,scu-clk yaml file
->   dt-bindings: pinctrl: imx: Add fsl,scu-iomux yaml file
->   dt-bindings: input: Add fsl,scu-key yaml file
->   dt-bindings: nvmem: Add fsl,scu-ocotp yaml file
->   dt-bindings: power: Add fsl,scu-pd yaml file
->   dt-bindings: rtc: Add fsl,scu-rtc yaml file
->   dt-bindings: thermal: Add fsl,scu-thermal yaml file
->   dt-bindings: watchdog: Add fsl,scu-wdt yaml file
->   dt-bindings: firmware: Add fsl,scu yaml file
->   arm64: dts: freescale: imx8: Fix power controller name
->   arm64: dts: freescale: imx8qxp: Add fallback compatible for clock
->     controller
->   arm64: dts: freescale: imx8qxp: Fix the keys node name
-> 
-> Viorel Suman (3):
->   arm64: dts: freescale: imx8qxp: Remove unnecessary clock related
->     entries
->   arm64: dts: freescale: imx8qxp: Fix the ocotp node name
->   arm64: dts: freescale: imx8: Fix the system-controller node name
+On Fri, Jul 8, 2022 at 8:50 AM Joel Stanley <joel@jms.id.au> wrote:
+>
+> Hi Arnd,
+>
+> On Wed, 6 Jul 2022 at 16:54, Tomer Maimon <tmaimon77@gmail.com> wrote:
+> >
+> > This patchset  adds initial support for the Nuvoton
+> > Arbel NPCM8XX Board Management controller (BMC) SoC family.
+>
+> Are you happy with a cross tree new soc branch for this series? If so
+> I can put them in a branch and get some build coverage before sending
+> them out.
+>
+> (I notice the clock and reset changes are waiting on acks still)
+>
 
-I'm preparing material for the next merge window, so just picked the
-series up.  If there is more outstanding review comments coming up,
-let's address them with follow-up changes.
+Hi Joel,
 
-Shawn
+Yes, I think we should merge the parts that are reviewed already, but I'd
+leave out the clk (4/16) and reset (9/16) patches in this case.
+
+Krzysztof has reviewed the binding changes, so I don't mind having
+the DT nodes added in the soc tree even if the two drivers are still
+missing.
+
+I would do the same thing for the sunplus SP7021 platform that
+Qin Jian has been posting, as this is also waiting for a final Ack
+on the clk driver.
+
+I would put both of the new platforms into a single branch in the
+SoC tree, separate from the usual dt/drivers/soc/defconfig
+branches. I was already planning to pick npcm8xx up myself,
+but if you can do a pull request, that would be even better.
+
+       Arnd
