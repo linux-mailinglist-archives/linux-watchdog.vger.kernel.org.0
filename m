@@ -2,66 +2,68 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A765702E4
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Jul 2022 14:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4BBC570AEB
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Jul 2022 21:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbiGKMly convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 11 Jul 2022 08:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
+        id S229715AbiGKTsZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 11 Jul 2022 15:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiGKMle (ORCPT
+        with ESMTP id S229437AbiGKTsY (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 11 Jul 2022 08:41:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B0827170
-        for <linux-watchdog@vger.kernel.org>; Mon, 11 Jul 2022 05:41:16 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1oAsiG-00071j-VM; Mon, 11 Jul 2022 14:40:33 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1oAsiE-000JPB-U5; Mon, 11 Jul 2022 14:40:30 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1oAsiD-000LJQ-Tn; Mon, 11 Jul 2022 14:40:29 +0200
-Message-ID: <ea6c23bf384900e46a523b0a2aab04b6d5c97310.camel@pengutronix.de>
-Subject: Re: [PATCH v8 09/16] reset: npcm: Add NPCM8XX support
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, gregkh@linuxfoundation.org,
-        daniel.lezcano@linaro.org, tglx@linutronix.de,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
-        bjorn.andersson@linaro.org, geert+renesas@glider.be,
-        marcel.ziswiler@toradex.com, vkoul@kernel.org,
-        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
-        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk
+        Mon, 11 Jul 2022 15:48:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1745509F;
+        Mon, 11 Jul 2022 12:48:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39EFAB81195;
+        Mon, 11 Jul 2022 19:48:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9F14C34115;
+        Mon, 11 Jul 2022 19:48:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657568901;
+        bh=Lxp2E8ekZg/0/qPQCqI9niN28BmOoqa+084t2OecaxQ=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=YxXD/mTjTqCaB+xAsUAsx5wPlZyTLA1JS2cWIDvH8zPMmp5WHHU47M3vosuOTGWPw
+         uNxWJ63ztw8V59ffzmkIyoBKSZX2JrfB2W86xG5zQDRaiyT4/gMmBNVrORIN+9G3xN
+         6ZjIi7Pgid+EMsffKAoxGvyEOGvDEOt6huxIQDUWFcueM+NmlaVHxZgzXBINFib5Eu
+         OZx1Om4AIdigCzUXyqwihik63qeY3U0zqugh38tx/nHCLZyF79zSLgae0glCzUklwW
+         n9w9PctF478M6weu4usG28B5GV0GbHoON8uf6q0mjrTOHbZ7oEvC680MwuSO47Dmff
+         DYGga0ZiAQT3Q==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220711123519.217219-4-tmaimon77@gmail.com>
+References: <20220711123519.217219-1-tmaimon77@gmail.com> <20220711123519.217219-4-tmaimon77@gmail.com>
+Subject: Re: [PATCH v8 03/16] dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
+From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Date:   Mon, 11 Jul 2022 14:40:29 +0200
-In-Reply-To: <20220711123519.217219-10-tmaimon77@gmail.com>
-References: <20220711123519.217219-1-tmaimon77@gmail.com>
-         <20220711123519.217219-10-tmaimon77@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
-MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        linux-arm-kernel@lists.infradead.org,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Tomer Maimon <tmaimon77@gmail.com>, arnd@arndb.de,
+        avifishman70@gmail.com, benjaminfair@google.com,
+        biju.das.jz@bp.renesas.com, bjorn.andersson@linaro.org,
+        catalin.marinas@arm.com, daniel.lezcano@linaro.org,
+        geert+renesas@glider.be, gregkh@linuxfoundation.org,
+        j.neuschaefer@gmx.net, jirislaby@kernel.org, joel@jms.id.au,
+        krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net,
+        lkundrak@v3.sk, marcel.ziswiler@toradex.com,
+        mturquette@baylibre.com, nobuhiro1.iwamatsu@toshiba.co.jp,
+        olof@lixom.net, p.zabel@pengutronix.de, robert.hancock@calian.com,
+        robh+dt@kernel.org, shawnguo@kernel.org, tali.perry1@gmail.com,
+        tglx@linutronix.de, venture@google.com, vkoul@kernel.org,
+        will@kernel.org, wim@linux-watchdog.org, yuenn@google.com
+Date:   Mon, 11 Jul 2022 12:48:18 -0700
+User-Agent: alot/0.10
+Message-Id: <20220711194820.D9F14C34115@smtp.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,17 +71,11 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mo, 2022-07-11 at 15:35 +0300, Tomer Maimon wrote:
-> Updated the NPCM reset driver to add support for Nuvoton BMC NPCM8XX SoC.
-> As part of adding NPCM8XX support:
-> - Add NPCM8XX specific compatible string.
-> - Add NPCM8XX USB reset.
-> - Add data to handle architecture-specific reset parameters.
-> - Some of the Reset Id and number of resets are different from NPCM7XX.
-> 
+Quoting Tomer Maimon (2022-07-11 05:35:06)
+> Add binding for the Arbel BMC NPCM8XX Clock controller.
+>=20
 > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
-
-regards
-Philipp
+Acked-by: Stephen Boyd <sboyd@kernel.org>
