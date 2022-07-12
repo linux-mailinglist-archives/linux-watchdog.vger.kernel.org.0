@@ -2,55 +2,65 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269895720BF
-	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Jul 2022 18:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD6C57229C
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Jul 2022 20:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234353AbiGLQZx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 12 Jul 2022 12:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
+        id S229590AbiGLS2h (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 12 Jul 2022 14:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233943AbiGLQZp (ORCPT
+        with ESMTP id S233584AbiGLS2f (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 12 Jul 2022 12:25:45 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834D7CB453;
-        Tue, 12 Jul 2022 09:25:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=EyUFDwm+MCF5o/jfmCwe0q+h8aIIfJ6Fh6QWFZidMRQ=; b=o7F7qm8JPqBXj5UYxBg1ZN3Oz+
-        6C8spyb8w8F+4P09llAiHI8Wuy0lpK087JBQEthXA1isE0s+SKnUBUcBhkVNTPO0aMwYgxSA3pdNi
-        CbVedOTzknDAgDJwtxaVuziPs9sWWkxmtQguv2Lh/DPSxzBMrnLpEj0DMNW5DXKnRw7LxDNGNEaSp
-        oXUH8yN7BNYsimD++6N+CwpgDrD5/IaXGSZhEy7RHl5ejZHcfgi4Mn3IAiedh5M06h6QUm4NGx4qX
-        q0vuQEzjtx4PKMb9PgsOc19SQsFznoZbdfvBdaeQ+99sDDlhUdjCKfiMpLaG0DdbvQdCtKkOLm7Pn
-        OZnZor1g==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBIha-00ClSx-5G; Tue, 12 Jul 2022 16:25:34 +0000
-Message-ID: <a646b2e9-e7a7-3d52-413e-4e2b8c48e383@infradead.org>
-Date:   Tue, 12 Jul 2022 09:25:32 -0700
+        Tue, 12 Jul 2022 14:28:35 -0400
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EDAC3A;
+        Tue, 12 Jul 2022 11:28:34 -0700 (PDT)
+Received: by mail-il1-f177.google.com with SMTP id k1so5374905ilu.1;
+        Tue, 12 Jul 2022 11:28:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=6W8B6L9eDM4m8/MJ0avbA+DgywTO7XdB8xPvfv0PlGg=;
+        b=1wbdy2i8SlMUxxaqW+Y+8EUofUwOygMa/V8td+FfunEA0+eaheWADD4YuDkEMZB02J
+         8CYyLE68aWyEAHpZc1cRjwju6jbtmbYZ9nTGz52hE70ItdssARk3G9sZE1wP/h1qZrp7
+         8497cNBh0uxmwCNl50I9crma197EVLIrKJ6wT5YwHQDo1ez4bQGVS4PSUIX/lqxeA7ng
+         eOMKTRTsOtD5NAtprk0TrUP0uxT/jR+FRGfSrk00Z9wAbvjQqSzE5iQySVTUP+rZALuy
+         VxWcNa0yPBRIBFZuGMCeJAl0vjRbgDdkZnvkCDEbValVA904X5Y3GF80I/bT9F0UHx52
+         /6vQ==
+X-Gm-Message-State: AJIora90/Gww1wAWGI23I9qpMFFcgLLumrgRKdWQ2l2kq66XJ9H0y9GE
+        t0HQpxtxmKEmmrj2HMi2wxTB+Jim4g==
+X-Google-Smtp-Source: AGRyM1tqayz6OkehiOObvstt1flcNF/02sFSRVCz/33Rytko2Q7ZxfWFu+sRlacCZZQZ5KGAvFw0Yw==
+X-Received: by 2002:a92:c242:0:b0:2dc:2df2:a3d1 with SMTP id k2-20020a92c242000000b002dc2df2a3d1mr13172826ilo.111.1657650513726;
+        Tue, 12 Jul 2022 11:28:33 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id o17-20020a92d4d1000000b002dbee570531sm3992059ilm.18.2022.07.12.11.28.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Jul 2022 11:28:33 -0700 (PDT)
+Received: (nullmailer pid 2143588 invoked by uid 1000);
+        Tue, 12 Jul 2022 18:28:32 -0000
+Date:   Tue, 12 Jul 2022 12:28:32 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kabel@kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: watchdog: max63xx: Add GPIO binding
+Message-ID: <20220712182832.GJ1823936-robh@kernel.org>
+References: <20220705001023.14660-1-pali@kernel.org>
+ <20220706150726.GA40600-robh@kernel.org>
+ <20220707122730.45jtopop5cj7beni@pali>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 4/4] pseries/mobility: set NMI watchdog factor during
- LPM
-Content-Language: en-US
-To:     Laurent Dufour <ldufour@linux.ibm.com>, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        wim@linux-watchdog.org, linux@roeck-us.net, nathanl@linux.ibm.com
-Cc:     haren@linux.vnet.ibm.com, hch@infradead.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-watchdog@vger.kernel.org
-References: <20220712143202.23144-1-ldufour@linux.ibm.com>
- <20220712143202.23144-5-ldufour@linux.ibm.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220712143202.23144-5-ldufour@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220707122730.45jtopop5cj7beni@pali>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,90 +68,49 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi--
-
-On 7/12/22 07:32, Laurent Dufour wrote:
-> During a LPM, while the memory transfer is in progress on the arrival side,
-> some latencies is generated when accessing not yet transferred pages on the
-
-                 are
-
-> arrival side. Thus, the NMI watchdog may be triggered too frequently, which
-> increases the risk to hit a NMI interrupt in a bad place in the kernel,
-
-                            an NMI
-
-> leading to a kernel panic.
+On Thu, Jul 07, 2022 at 02:27:30PM +0200, Pali Rohár wrote:
+> On Wednesday 06 July 2022 09:07:26 Rob Herring wrote:
+> > On Tue, Jul 05, 2022 at 02:10:22AM +0200, Pali Rohár wrote:
+> > > GPIO is optional and used for WDI logic.
+> > > 
+> > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > ---
+> > > Changes in v3:
+> > > * Extend description
+> > > ---
+> > >  Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> > > index ab9641e845db..a0cf9e6c371d 100644
+> > > --- a/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> > > +++ b/Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml
+> > > @@ -27,6 +27,10 @@ properties:
+> > >      description: This is a 1-byte memory-mapped address
+> > >      maxItems: 1
+> > >  
+> > > +  gpios:
+> > 
+> > As I said before, add a name prefix: wdi-gpios
 > 
-> Disabling the Hard Lockup Watchdog until the memory transfer could be a too
-> strong work around, some users would want this timeout to be eventually
-> triggered if the system is hanging even during LPM.
-> 
-> Introduce a new sysctl variable nmi_watchdog_factor. It allows to apply
-> a factor to the NMI watchdog timeout during a LPM. Just before the CPU are
+> So gpio with output direction should be really named that is input?
 
-                                              an LPM.            the CPU is
+Names are based on the pins they connect to, so yes. The flags cell will 
+make it clear it is a GPIO output.
 
-> stopped for the switchover sequence, the NMI watchdog timer is set to
->  watchdog_tresh + factor%
+> I really do not understand this kind of thinking and making every device
+> tree description totally illogical and inconsistent with all other.
 
-   watchdog_thresh
+I don't understand what you mean.
 
-> 
-> A value of 0 has no effect. The default value is 200, meaning that the NMI
-> watchdog is set to 30s during LPM (based on a 10s watchdog_tresh value).
+When there is a 2nd GPIO used for this binding, what do we call it? 
+'gpios' doesn't scale.
 
-                                                    watchdog_thresh
+> > > +    description: Optional GPIO used for controlling WDI (watchdog input) when WDI bit is not mapped to memory
 
-> Once the memory transfer is achieved, the factor is reset to 0.
-> 
-> Setting this value to a high number is like disabling the NMI watchdog
-> during a LPM.
+Look at it this way, why do I have to find and read the description here 
+to know what 'gpios' is for when instead, it can be self-describing when 
+I look at the datasheet and the DT to see this is the GPIO connection 
+to WDI signal.
 
-         an LPM.
-
-> 
-> Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
-> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
-> ---
->  Documentation/admin-guide/sysctl/kernel.rst | 12 ++++++
->  arch/powerpc/platforms/pseries/mobility.c   | 43 +++++++++++++++++++++
->  2 files changed, 55 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-> index ddccd1077462..0bb0b7f27e96 100644
-> --- a/Documentation/admin-guide/sysctl/kernel.rst
-> +++ b/Documentation/admin-guide/sysctl/kernel.rst
-> @@ -592,6 +592,18 @@ to the guest kernel command line (see
->  Documentation/admin-guide/kernel-parameters.rst).
->  
-
-This entire block should be in kernel-parameters.txt, not .rst,
-and it should be formatted like everything else in the .txt file.
-
->  
-> +nmi_watchdog_factor (PPC only)
-> +==================================
-> +
-> +Factor apply to to the NMI watchdog timeout (only when ``nmi_watchdog`` is
-
-   Factor to apply to the NMI
-
-> +set to 1). This factor represents the percentage added to
-> +``watchdog_thresh`` when calculating the NMI watchdog timeout during a
-
-                                                                 during an
-
-> +LPM. The soft lockup timeout is not impacted.
-> +
-> +A value of 0 means no change. The default value is 200 meaning the NMI
-> +watchdog is set to 30s (based on ``watchdog_thresh`` equal to 10).
-> +
-> +
->  numa_balancing
->  ==============
->  
-
-
--- 
-~Randy
+Rob
