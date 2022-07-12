@@ -2,56 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD429570F8C
-	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Jul 2022 03:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C9F570FA1
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Jul 2022 03:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232047AbiGLBdT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 11 Jul 2022 21:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
+        id S230219AbiGLBnB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 11 Jul 2022 21:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiGLBdQ (ORCPT
+        with ESMTP id S229707AbiGLBnA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 11 Jul 2022 21:33:16 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156238E1E2;
-        Mon, 11 Jul 2022 18:33:14 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id v21so3441845plo.0;
-        Mon, 11 Jul 2022 18:33:14 -0700 (PDT)
+        Mon, 11 Jul 2022 21:43:00 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1135B31239;
+        Mon, 11 Jul 2022 18:42:59 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 23so6262588pgc.8;
+        Mon, 11 Jul 2022 18:42:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:subject:to:cc:references:in-reply-to:mime-version
          :message-id:content-transfer-encoding;
-        bh=A7qUftFMsHtAgHz7tg5ybnJxuA39QPif4EqnUQa2+ls=;
-        b=ilWwUWRBr2jcKjIgdGL97r01HtkS3jZpsabezxx1tUPUQ7nwzkvbBQbHRnZjyQHG4a
-         MTQaJauz2iosj/AQx2pFgDEGzCjs6RZtqEpfF4gFACV0PkzxpUgLKQV0r7SkoOS8p+M6
-         dkt68QM01GF7GmRIGvuVT1L4E6RCx066fAv8uES+/UuTbIGmK31aN4iXmUm6tF5eQPB7
-         5cr+316tp2G1/YM/tLLU7xm2kSvI7d4CRF8fGbsy8L1SfQhezD8s3MKooY5XZQOW0peI
-         yfloIeERrassAa9MWw/8ENoGPGt/oQ0X2g97fHelcTTOEjUWFON4xU58FfyK6IAAdjiL
-         f9WA==
+        bh=efBjI108FNDgrH81mWfuEW+8lOWoiTSn59YlZxopuqo=;
+        b=S0/JcCbhklzJm37yA+X+xY4YciQKLZDOx18f5yXiSPq1kMGboCRhiToigj+Mvrzunm
+         mAfbLqPfOwBakJYmDJ83kMjo+cCxQUiU+0PZ/Vs6jRfHrJ2ll5aRu/NlNkENnE3Bp7oC
+         1uD+lvUh0kdlbOwL8/5BhB9OVRl7qkcdvIn2cnIl0VBzqnNHqX88QjvhrWM0M+jJYwbP
+         UiCvG60QWRRi50X46Oi1OrAK6lkfeoH6k0C1wRelddCBbXKUpzn1dNRPEi2jYqxwOC9P
+         eMAqB8tZzwVqMnqT8yc/kP9cBV5zVdQAWgDQqtzMFTZQtbiNkd9Zl6rl3dfxC9D/ysmi
+         Y5zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
          :mime-version:message-id:content-transfer-encoding;
-        bh=A7qUftFMsHtAgHz7tg5ybnJxuA39QPif4EqnUQa2+ls=;
-        b=72Nna69Q1F9i9Y+pLDgwAgiBigMG/O9ZX/rMwDjwftA5LlmWdfG4wtrmivOCHlJoYr
-         hPGJdj857P0yc3GbaAf/t2+TiX3q+YK3VlslBr80PsSnZljK5Wbz7WNcFM6wpv9iFcKH
-         6eYlLq9ibcsNHc1dKK2AUbhuF/wVn7BaQM4GgB+A8u6kzEJXSWCiwyAObe6kEX7vGba/
-         50M5uEX9l2rxOHFQWPzJlQkwBauRFLASEYIDARSuG6xTfymauM9ufpcuBLB/KNJ9kw1c
-         91CY6HM3LXh2Quy4UC5a+GDw3CCZMASgAnNPA8pQfQdCNaBhR9s7cSlCERpwadZjLPWc
-         YbnQ==
-X-Gm-Message-State: AJIora8xUXzFpHxD3GUhKlduPltZopHqa6QdVf5hppuZeoVesBugSOuD
-        eco87cROGZGRStT/lAabfdo=
-X-Google-Smtp-Source: AGRyM1vCis+SHHXbUUZKdGWzSbZvOUw5k1uVmPkRtryAVoujeVtXJWzlAcnGlKYgxE8ZNZyVCCoiVA==
-X-Received: by 2002:a17:902:ea09:b0:16c:3f7a:adf7 with SMTP id s9-20020a170902ea0900b0016c3f7aadf7mr11199465plg.103.1657589593546;
-        Mon, 11 Jul 2022 18:33:13 -0700 (PDT)
+        bh=efBjI108FNDgrH81mWfuEW+8lOWoiTSn59YlZxopuqo=;
+        b=GV/QcLb3caEV2IOnAt56Xkz2A5rV7x+Cs2w/OkE0bGNMqKXOOJ2xlSpyVfAOwKS4Dd
+         Qpl9ZYYLw4gm/2Qjr+VarDJl+QTewdj5RqxUi0guN833w+0bNLKN/qOX2FeDTOWrr3UH
+         y6bELoT/FKqoQoADwzna1pATCnrrWB9IGh3tuFavjXyd/K3EFDRzFJLgcq7z/qBGE5hV
+         cnW1aeids1pHXH8fPFcU9hnv5f90+bwSBNk6C5b+4jArSmEJUbpYhp4WRSkL7May8iNq
+         4igYLF+6iFNbKdX1gEJz+V8yr5VDIcXZz6COIOZgXsLAHUvyykOevUavSzlaZMBRkp9L
+         giHg==
+X-Gm-Message-State: AJIora/kaN9Jl2xv/iQRglWywrH08JiZvOsAPofMAnsaBgMmuLXIQIbd
+        +0Ny1QJRpEJ/J7qKlkk/TQk=
+X-Google-Smtp-Source: AGRyM1uIyDCldsts9kc/4nx1k4tXS/V3m+V4ip+typVuJlP8eqpmkGQF2/k95hww38sxRvIAXxI0xg==
+X-Received: by 2002:a05:6a00:1818:b0:52a:dabd:a232 with SMTP id y24-20020a056a00181800b0052adabda232mr4646574pfa.70.1657590178596;
+        Mon, 11 Jul 2022 18:42:58 -0700 (PDT)
 Received: from localhost (193-116-203-247.tpgi.com.au. [193.116.203.247])
-        by smtp.gmail.com with ESMTPSA id f8-20020a17090ab94800b001ef42b3c5besm5450818pjw.23.2022.07.11.18.33.12
+        by smtp.gmail.com with ESMTPSA id m12-20020a170902f64c00b0016bf9437766sm5346915plg.261.2022.07.11.18.42.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jul 2022 18:33:12 -0700 (PDT)
-Date:   Tue, 12 Jul 2022 11:33:07 +1000
+        Mon, 11 Jul 2022 18:42:57 -0700 (PDT)
+Date:   Tue, 12 Jul 2022 11:42:52 +1000
 From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v3 1/4] powerpc/mobility: wait for memory transfer to
- complete
+Subject: Re: [PATCH v3 3/4] powerpc/watchdog: introduce a NMI watchdog's
+ factor
 To:     benh@kernel.crashing.org, haren@linux.vnet.ibm.com,
         Laurent Dufour <ldufour@linux.ibm.com>, linux@roeck-us.net,
         mpe@ellerman.id.au, nathanl@linux.ibm.com, paulus@samba.org,
@@ -59,10 +59,10 @@ To:     benh@kernel.crashing.org, haren@linux.vnet.ibm.com,
 Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-watchdog@vger.kernel.org
 References: <20220627135347.32624-1-ldufour@linux.ibm.com>
-        <20220627135347.32624-2-ldufour@linux.ibm.com>
-In-Reply-To: <20220627135347.32624-2-ldufour@linux.ibm.com>
+        <20220627135347.32624-4-ldufour@linux.ibm.com>
+In-Reply-To: <20220627135347.32624-4-ldufour@linux.ibm.com>
 MIME-Version: 1.0
-Message-Id: <1657588908.mis26ebam4.astroid@bobo.none>
+Message-Id: <1657589870.vvurapsif3.astroid@bobo.none>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,100 +76,96 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 Excerpts from Laurent Dufour's message of June 27, 2022 11:53 pm:
-> In pseries_migration_partition(), loop until the memory transfer is
-> complete. This way the calling drmgr process will not exit earlier,
-> allowing callbacks to be run only once the migration is fully completed.
+> Introduce a factor which would apply to the NMI watchdog timeout.
 >=20
-> If reading the VASI state is done after the hypervisor has completed the
-> migration, the HCALL is returning H_PARAMETER. We can safely assume that
-> the memory transfer is achieved if this happens.
+> This factor is a percentage added to the watchdog_tresh value. The value =
+is
+> set under the watchdog_mutex protection and lockup_detector_reconfigure()
+> is called to recompute wd_panic_timeout_tb.
 >=20
-> This will also allow to manage the NMI watchdog state in the next commits=
-.
->=20
-> Reviewed-by: Nathan Lynch <nathanl@linux.ibm.com>
-> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
-> ---
->  arch/powerpc/platforms/pseries/mobility.c | 42 +++++++++++++++++++++--
->  1 file changed, 40 insertions(+), 2 deletions(-)
->=20
-> diff --git a/arch/powerpc/platforms/pseries/mobility.c b/arch/powerpc/pla=
-tforms/pseries/mobility.c
-> index 78f3f74c7056..907a779074d6 100644
-> --- a/arch/powerpc/platforms/pseries/mobility.c
-> +++ b/arch/powerpc/platforms/pseries/mobility.c
-> @@ -427,6 +427,43 @@ static int wait_for_vasi_session_suspending(u64 hand=
-le)
->  	return ret;
->  }
-> =20
-> +static void wait_for_vasi_session_completed(u64 handle)
-> +{
-> +	unsigned long state =3D 0;
-> +	int ret;
-> +
-> +	pr_info("waiting for memory transfert to complete...\n");
+> Once the factor is set, it remains until it is set back to 0, which means
+> no impact.
 
-                                            ^ extra t (also below)
-> +
-> +	/*
-> +	 * Wait for transition from H_VASI_RESUMED to H_VASI_COMPLETED.
-> +	 */
-> +	while (true) {
-> +		ret =3D poll_vasi_state(handle, &state);
-> +
-> +		/*
-> +		 * If the memory transfer is already complete and the migration
-> +		 * has been cleaned up by the hypervisor, H_PARAMETER is return,
-> +		 * which is translate in EINVAL by poll_vasi_state().
-> +		 */
-> +		if (ret =3D=3D -EINVAL || (!ret && state =3D=3D H_VASI_COMPLETED)) {
-> +			pr_info("memory transfert completed.\n");
-> +			break;
-> +		}
-> +
-> +		if (ret) {
-> +			pr_err("H_VASI_STATE return error (%d)\n", ret);
-> +			break;
-> +		}
-> +
-> +		if (state !=3D H_VASI_RESUMED) {
-> +			pr_err("unexpected H_VASI_STATE result %lu\n", state);
-> +			break;
-> +		}
-> +
-> +		msleep(500);
+Looks okay. We could worry about making it more generic or nicer if
+another user came along.
 
-Is 500 specified anywhere? Another caller uses 1000, and the other one=20
-uses some backoff interval starting at 1ms...
+Could you make the naming a bit more self documenting?=20
+watchdog_nmi_set_timeout_pct(), maybe? Does the wd really care
+that it is for LPM in particular?
 
-> +	}
-> +}
-> +
->  static void prod_single(unsigned int target_cpu)
->  {
->  	long hvrc;
-> @@ -673,9 +710,10 @@ static int pseries_migrate_partition(u64 handle)
->  	vas_migration_handler(VAS_SUSPEND);
-> =20
->  	ret =3D pseries_suspend(handle);
-> -	if (ret =3D=3D 0)
-> +	if (ret =3D=3D 0) {
->  		post_mobility_fixup();
-> -	else
-> +		wait_for_vasi_session_completed(handle);
+Variables and parameters could have a _pct suffix too.
 
-If this wasn't required until later patches, maybe a comment about why=20
-it's here? Could call it wait_for_migration() or similar too.
-
-Looks okay though from my basic reading of PAPR.
+Otherwise
 
 Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
 
-> +	} else
->  		pseries_cancel_migration(handle, ret);
+>=20
+> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+> ---
+>  arch/powerpc/include/asm/nmi.h |  2 ++
+>  arch/powerpc/kernel/watchdog.c | 21 ++++++++++++++++++++-
+>  2 files changed, 22 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/arch/powerpc/include/asm/nmi.h b/arch/powerpc/include/asm/nm=
+i.h
+> index ea0e487f87b1..7d6a8d9b0543 100644
+> --- a/arch/powerpc/include/asm/nmi.h
+> +++ b/arch/powerpc/include/asm/nmi.h
+> @@ -5,8 +5,10 @@
+>  #ifdef CONFIG_PPC_WATCHDOG
+>  extern void arch_touch_nmi_watchdog(void);
+>  long soft_nmi_interrupt(struct pt_regs *regs);
+> +void watchdog_nmi_set_lpm_factor(u64 factor);
+>  #else
+>  static inline void arch_touch_nmi_watchdog(void) {}
+> +static inline void watchdog_nmi_set_lpm_factor(u64 factor) {}
+>  #endif
 > =20
->  	vas_migration_handler(VAS_RESUME);
+>  #ifdef CONFIG_NMI_IPI
+> diff --git a/arch/powerpc/kernel/watchdog.c b/arch/powerpc/kernel/watchdo=
+g.c
+> index 7d28b9553654..80851b228f71 100644
+> --- a/arch/powerpc/kernel/watchdog.c
+> +++ b/arch/powerpc/kernel/watchdog.c
+> @@ -91,6 +91,10 @@ static cpumask_t wd_smp_cpus_pending;
+>  static cpumask_t wd_smp_cpus_stuck;
+>  static u64 wd_smp_last_reset_tb;
+> =20
+> +#ifdef CONFIG_PPC_PSERIES
+> +static u64 wd_factor;
+> +#endif
+> +
+>  /*
+>   * Try to take the exclusive watchdog action / NMI IPI / printing lock.
+>   * wd_smp_lock must be held. If this fails, we should return and wait
+> @@ -527,7 +531,13 @@ static int stop_watchdog_on_cpu(unsigned int cpu)
+> =20
+>  static void watchdog_calc_timeouts(void)
+>  {
+> -	wd_panic_timeout_tb =3D watchdog_thresh * ppc_tb_freq;
+> +	u64 threshold =3D watchdog_thresh;
+> +
+> +#ifdef CONFIG_PPC_PSERIES
+> +	threshold +=3D (READ_ONCE(wd_factor) * threshold) / 100;
+> +#endif
+> +
+> +	wd_panic_timeout_tb =3D threshold * ppc_tb_freq;
+> =20
+>  	/* Have the SMP detector trigger a bit later */
+>  	wd_smp_panic_timeout_tb =3D wd_panic_timeout_tb * 3 / 2;
+> @@ -570,3 +580,12 @@ int __init watchdog_nmi_probe(void)
+>  	}
+>  	return 0;
+>  }
+> +
+> +#ifdef CONFIG_PPC_PSERIES
+> +void watchdog_nmi_set_lpm_factor(u64 factor)
+> +{
+> +	pr_info("Set the NMI watchdog factor to %llu%%\n", factor);
+> +	WRITE_ONCE(wd_factor, factor);
+> +	lockup_detector_reconfigure();
+> +}
+> +#endif
 > --=20
 > 2.36.1
 >=20
