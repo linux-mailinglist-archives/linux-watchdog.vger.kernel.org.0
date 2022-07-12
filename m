@@ -2,125 +2,140 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6768571636
-	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Jul 2022 11:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7990A571CB1
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Jul 2022 16:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbiGLJzX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 12 Jul 2022 05:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
+        id S232948AbiGLOcj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 12 Jul 2022 10:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiGLJzW (ORCPT
+        with ESMTP id S231804AbiGLOcg (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 12 Jul 2022 05:55:22 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C2DAA814
-        for <linux-watchdog@vger.kernel.org>; Tue, 12 Jul 2022 02:55:20 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id z25so13070583lfr.2
-        for <linux-watchdog@vger.kernel.org>; Tue, 12 Jul 2022 02:55:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=axICpN3J/kMmaCf6S84TqGPCux368wms9PQ9I5oaU1Y=;
-        b=sgRn9iuPJDgWVdjaKv2jASetCuvgyB1fPCM+Uk+k1rQUY3idehVWK1F4ch8IyPAEL5
-         FLVBeM9+sq3kyoUucHx7vTTLeD+achPZeHZy3NRQrkkyVfNWc9F7WQWm+Oj2EuYQPdpz
-         YXxhCFWIt7xsMqneckUIjOBUTiPboVK1aOSBEj/wO+dTDnBnKSvtzuwMQk08jASq7gNo
-         9JD7RhZ8ken9hZb2xjtdeNiAvgrDcyErGBZ1dvLfdvb2636w+OTb7KBnEmJVvfILLFpA
-         +V+7xgf0gQlYirp33ZUZFPzMd/R7CdXvfPH9MK2WANEwqze1NZIyyqKWFx86eZNeXxcg
-         Q5dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=axICpN3J/kMmaCf6S84TqGPCux368wms9PQ9I5oaU1Y=;
-        b=lruFsWN3mmC0GDIg7b+m4yCRtLXxooowz/0pf09Wg5Z9CK5VGNhjeyVCYSb/wRoL2b
-         3ccokToCE1pTCm9eIFul+RowIM5w8PzbZjkW2PH2Q7URinv6BX6goIEmtlppIqRNpAcR
-         K8+JrG2PmyC6fggPOr7JKUbfMg2WpN2mFeywM/H1dIEnkaks4oMkWteMmPrzy/BLDazc
-         hOBXVVx7FfnDPqLKgzrrvbTJjxC28iFI559ykIFzGuGZCL68XWaNu17ZoMK/9Bk7wmmp
-         ZWtpqMnCkEqRr7z0eK8olLI3AcgmloDyhyxG8bx7nb/HKf6C7pPVHORFFtD7rFTrHlgU
-         5pyA==
-X-Gm-Message-State: AJIora9uKygfChvHFtRiYSXDFlacPfscygWbZ5F4Y0eU115Kz6lol7DD
-        KYMoQcatn1f7MlnIYDMxjvYjzw==
-X-Google-Smtp-Source: AGRyM1ssaxls1fUxMc6/WdaimSgtDYowXLkqFMFTIULBRqh8A9jBeagdf7UHpFRz2wr0G30u76TsUw==
-X-Received: by 2002:a05:6512:108d:b0:489:e640:df8c with SMTP id j13-20020a056512108d00b00489e640df8cmr4334829lfg.332.1657619718613;
-        Tue, 12 Jul 2022 02:55:18 -0700 (PDT)
-Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
-        by smtp.gmail.com with ESMTPSA id f28-20020a05651c03dc00b0025d40241c1dsm2354259ljp.6.2022.07.12.02.55.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Jul 2022 02:55:17 -0700 (PDT)
-Message-ID: <6f9d2ea8-1ffd-41d1-9441-00c2b35187ec@linaro.org>
-Date:   Tue, 12 Jul 2022 11:55:13 +0200
+        Tue, 12 Jul 2022 10:32:36 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62E524975;
+        Tue, 12 Jul 2022 07:32:35 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26CDma9B004466;
+        Tue, 12 Jul 2022 14:32:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=h1BR0t+GW1FabNOu8DeCdTYCLSEeOu2dr7VoXB7G/5k=;
+ b=RMtp6NltEQ/oJ0a/xnrieRN7TwVIZcaAKBNKbjqH/bZdn7kzuva5pHDTmLTCgvWEMNdA
+ D6dyAehOGALwubHc8XwMRCTShB6vRH1cWP419CLv5gZo75iif2dQVKc8al0gDD1bDG3R
+ Xdag0zrxGiJ7qbvDi88FzpbJE3j0wlT058N78ggCrO1ukmL1DMj5yyPUvsbUM1vWSMBw
+ GWcVtmv43umcPA1pT0UjQpKwQ2nZetgD1VfuzVQ7dSbPjYnYPKroftARKuTkFpw/5RTf
+ yqwrhMgEr0C0uqKEE+DdY7ivDnvCjiwnlAvDMxedBKSA9SBLtZHpmJc4AUUll8mgM6Lv 3Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9a5vs821-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 14:32:07 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26CDnTjF008428;
+        Tue, 12 Jul 2022 14:32:07 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3h9a5vs819-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 14:32:07 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26CELkKr027662;
+        Tue, 12 Jul 2022 14:32:05 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 3h8rrn17jq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Jul 2022 14:32:05 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26CEW3qX15335740
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Jul 2022 14:32:03 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2A28CA4054;
+        Tue, 12 Jul 2022 14:32:03 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9AFB5A405B;
+        Tue, 12 Jul 2022 14:32:02 +0000 (GMT)
+Received: from pomme.tlslab.ibm.com (unknown [9.101.4.33])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Jul 2022 14:32:02 +0000 (GMT)
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+To:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        wim@linux-watchdog.org, linux@roeck-us.net, nathanl@linux.ibm.com
+Cc:     haren@linux.vnet.ibm.com, hch@infradead.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH v4 0/4] Extending NMI watchdog during LPM
+Date:   Tue, 12 Jul 2022 16:31:58 +0200
+Message-Id: <20220712143202.23144-1-ldufour@linux.ibm.com>
+X-Mailer: git-send-email 2.37.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: N7AHu3hsE37M-VEPRTo0ViCcX-XjZ2s4
+X-Proofpoint-GUID: PeLenaXmoPxOwkOxTHIgyjFrY_3D_XvQ
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 09/15] dt-bindings: firmware: Add fsl,scu yaml file
-Content-Language: en-US
-To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Viorel Suman <viorel.suman@nxp.com>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
-        Shijie Qin <shijie.qin@nxp.com>, Ming Qian <ming.qian@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20220707125022.1156498-1-viorel.suman@oss.nxp.com>
- <20220707125022.1156498-10-viorel.suman@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220707125022.1156498-10-viorel.suman@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-12_08,2022-07-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 spamscore=0 bulkscore=0 clxscore=1015 suspectscore=0
+ mlxlogscore=938 priorityscore=1501 phishscore=0 adultscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207120055
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 07/07/2022 14:50, Viorel Suman (OSS) wrote:
-> From: Abel Vesa <abel.vesa@nxp.com>
-> 
-> In order to replace the fsl,scu txt file from bindings/arm/freescale,
-> we need to split it between the right subsystems. This patch adds the
-> fsl,scu.yaml in the firmware bindings folder. This one is only for
-> the main SCU node. The old txt file will be removed only after all
-> the child nodes have been properly switch to yaml.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+When a partition is transferred, once it arrives at the destination node,
+the partition is active but much of its memory must be transferred from the
+start node.
 
+It depends on the activity in the partition, but the more CPU the partition
+has, the more memory to be transferred is likely to be. This causes latency
+when accessing pages that need to be transferred, and often, for large
+partitions, it triggers the NMI watchdog.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The NMI watchdog causes the CPU stack to dump where it appears to be
+stuck. In this case, it does not bring much information since it can happen
+during any memory access of the kernel.
 
+In addition, the NMI interrupt mechanism is not secure and can generate a
+dump system in the event that the interruption is taken while MSR[RI]=0.
 
-Best regards,
-Krzysztof
+Depending on the LPAR size and load, it may be interesting to extend the
+NMI watchdog timer during the LPM.
+
+That's configurable through sysctl with the new introduced variable
+(specific to powerpc) nmi_watchdog_factor. This value represents the
+percentage added to watchdog_tresh to set the NMI watchdog timeout during a
+LPM.
+
+Changes in v4 (no functional changes in this version):
+ - Patch 1/4 :fix typo and add a comment in pseries_migrate_partition()
+ - Patch 3/4: rename new variables and functions as Nick requested.
+ - Patch 4/4: rename the called new function
+
+v2:
+https://lore.kernel.org/linuxppc-dev/121217bb-6a34-8ccb-9819-f82806d6f47c@linux.ibm.com/
+
+Laurent Dufour (4):
+  powerpc/mobility: wait for memory transfer to complete
+  watchdog: export lockup_detector_reconfigure
+  powerpc/watchdog: introduce a NMI watchdog's factor
+  pseries/mobility: set NMI watchdog factor during LPM
+
+ Documentation/admin-guide/sysctl/kernel.rst | 12 +++
+ arch/powerpc/include/asm/nmi.h              |  2 +
+ arch/powerpc/kernel/watchdog.c              | 21 ++++-
+ arch/powerpc/platforms/pseries/mobility.c   | 91 ++++++++++++++++++++-
+ include/linux/nmi.h                         |  2 +
+ kernel/watchdog.c                           | 21 +++--
+ 6 files changed, 141 insertions(+), 8 deletions(-)
+
+-- 
+2.37.0
+
