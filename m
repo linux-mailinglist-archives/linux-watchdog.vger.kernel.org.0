@@ -2,123 +2,142 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD2557390B
-	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Jul 2022 16:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29976573A83
+	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Jul 2022 17:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiGMOmo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 13 Jul 2022 10:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S229753AbiGMPtZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 13 Jul 2022 11:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbiGMOmn (ORCPT
+        with ESMTP id S236963AbiGMPtW (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 13 Jul 2022 10:42:43 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9810232ECE;
-        Wed, 13 Jul 2022 07:42:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=68ViflEzlXDx+7TKBapr6Ak8Jvjo25dHgw/5Ff89KiA=; b=HaOk0QSze3GgDOQtZ2NA1ChzrB
-        usRgqoTT6zsaUHt8WwxG5NjIR/C3QKzIvOK8QiwZV49eD3cKcM7pshfOyxDFZNMJeyx+1uiE1u1BA
-        igLOsmbFzYzVF5usNyifn9hftgG908/stYIT7ZbwHLL0GeHjXupvFUkBk7ICROmWcAw8zjYp1tXhA
-        uDcu1qQYoaf0rleXhptUIFl8LKxfKeSPSritkl1naMbWV5AjZ6UwrMCaZe4ju+8EIJ97aUanDeFrN
-        SqiNIZhfvbl7jBpBlurF8NVlxua+/AcW0sGs2XFfR0dk5APgiJSXgRHedNwzikoyi1xuiwgU5zat5
-        6Hm6vLOw==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oBdZQ-004coL-AJ; Wed, 13 Jul 2022 14:42:32 +0000
-Message-ID: <c2e80ab1-2c28-2963-9c5a-c7cff6b3450c@infradead.org>
-Date:   Wed, 13 Jul 2022 07:42:31 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 4/4] pseries/mobility: set NMI watchdog factor during
- LPM
-Content-Language: en-US
-To:     Laurent Dufour <ldufour@linux.ibm.com>, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        wim@linux-watchdog.org, linux@roeck-us.net, nathanl@linux.ibm.com
+        Wed, 13 Jul 2022 11:49:22 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8306921278;
+        Wed, 13 Jul 2022 08:49:14 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26DFAs6B020872;
+        Wed, 13 Jul 2022 15:48:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=8Wtv2Y2VDCXvSiMs1ltGIZdqOrW6KsqABRXv3kKfOdI=;
+ b=R3BBrbthYXM1X5PpDorFb3wGrY7bpg6iFkVA6WRFR1JCJ9kgSUQMzCt7xogjlTVQSVod
+ NTpjtqPnNrQ0jis8x8ObjCQKNAIaNbozvInIMcdUoZSnpEY0/6f2v0071ZW2hHnZ1F4j
+ jZwHCYcJzcmi+Y0q2msJyMgU9uGYX6yWTmK8Ltbdp1VtdGGbnuKnOBcoEk61uOxL5si6
+ dhsikJtWPEvvgU6rO8ibkmWzRKRt4ajCAxaawjGoPHtx9/bl4fhvPn0K4wJKSQi6cjhP
+ ITe2meoLWsIGl/bOGwtnL9ppsTUadzruhjTtRK93KHEPMUh4gTObH/x7Bgh1ese/B0/f ug== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ha02xt5v1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 15:48:51 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26DFB0dt021637;
+        Wed, 13 Jul 2022 15:48:51 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3ha02xt5u5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 15:48:50 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26DFOB3I012348;
+        Wed, 13 Jul 2022 15:48:49 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06fra.de.ibm.com with ESMTP id 3h8ncngwqa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Jul 2022 15:48:48 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26DFlUHT16056742
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Jul 2022 15:47:31 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DAE45AE04D;
+        Wed, 13 Jul 2022 15:47:30 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 644BBAE045;
+        Wed, 13 Jul 2022 15:47:30 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.145.2.121])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 13 Jul 2022 15:47:30 +0000 (GMT)
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+To:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        wim@linux-watchdog.org, linux@roeck-us.net, nathanl@linux.ibm.com,
+        rdunlap@infradead.org
 Cc:     haren@linux.vnet.ibm.com, hch@infradead.org,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-watchdog@vger.kernel.org
-References: <20220712143202.23144-1-ldufour@linux.ibm.com>
- <20220712143202.23144-5-ldufour@linux.ibm.com>
- <a646b2e9-e7a7-3d52-413e-4e2b8c48e383@infradead.org>
- <d78f65a7-67bb-b5f3-007b-fca5a9f98a69@linux.ibm.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <d78f65a7-67bb-b5f3-007b-fca5a9f98a69@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: [PATCH v5 0/4] Extending NMI watchdog during LPM
+Date:   Wed, 13 Jul 2022 17:47:25 +0200
+Message-Id: <20220713154729.80789-1-ldufour@linux.ibm.com>
+X-Mailer: git-send-email 2.37.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: oSgccMwIG4ltZLGGkNxZPOsA0Fsy0VW6
+X-Proofpoint-ORIG-GUID: 4Smr9flRzGEVClPhms9PKy8xXpfy8KZR
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-13_05,2022-07-13_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 mlxscore=0 priorityscore=1501 adultscore=0 phishscore=0
+ bulkscore=0 clxscore=1015 spamscore=0 mlxlogscore=999 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2207130063
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+When a partition is transferred, once it arrives at the destination node,
+the partition is active but much of its memory must be transferred from the
+start node.
 
-On 7/13/22 03:56, Laurent Dufour wrote:
-> Le 12/07/2022 à 18:25, Randy Dunlap a écrit :
->> Hi--
->>
->> On 7/12/22 07:32, Laurent Dufour wrote:
+It depends on the activity in the partition, but the more CPU the partition
+has, the more memory to be transferred is likely to be. This causes latency
+when accessing pages that need to be transferred, and often, for large
+partitions, it triggers the NMI watchdog.
 
->>>
->>> Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
->>> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
->>> ---
->>>  Documentation/admin-guide/sysctl/kernel.rst | 12 ++++++
->>>  arch/powerpc/platforms/pseries/mobility.c   | 43 +++++++++++++++++++++
->>>  2 files changed, 55 insertions(+)
->>>
->>> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
->>> index ddccd1077462..0bb0b7f27e96 100644
->>> --- a/Documentation/admin-guide/sysctl/kernel.rst
->>> +++ b/Documentation/admin-guide/sysctl/kernel.rst
->>> @@ -592,6 +592,18 @@ to the guest kernel command line (see
->>>  Documentation/admin-guide/kernel-parameters.rst).
->>>  
->>
->> This entire block should be in kernel-parameters.txt, not .rst,
->> and it should be formatted like everything else in the .txt file.
+The NMI watchdog causes the CPU stack to dump where it appears to be
+stuck. In this case, it does not bring much information since it can happen
+during any memory access of the kernel.
 
-My apologies. I misread the file name.
-I don't see a problem with this part of the patch or its location.
+In addition, the NMI interrupt mechanism is not secure and can generate a
+dump system in the event that the interruption is taken while MSR[RI]=0.
 
-> Thanks for reviewing this patch.
-> 
-> I'll apply your requests in the next version.
-> 
-> However, regarding the change in kernel-parameters.txt, I'm confused. The
-> newly introduced parameter is only exposed through sysctl. Not as a kernel
-> boot option. In that case, should it be mentioned in kernel-parameters.txt?
-> 
-> Documentation/process/4.Coding.rst says:
-> The file :ref:`Documentation/admin-guide/kernel-parameters.rst
-> <kernelparameters>` describes all of the kernel's boot-time parameters.
-> Any patch which adds new parameters should add the appropriate entries to
-> this file.
-> 
-> And Documentation/process/submit-checklist.rst says:
-> 16) All new kernel boot parameters are documented in
->     ``Documentation/admin-guide/kernel-parameters.rst``.
-> 
-> What are the rules about editing .txt or .rst files?
+Depending on the LPAR size and load, it may be interesting to extend the
+NMI watchdog timer during the LPM.
 
-Yeah, that's a little confusing.
-kernel-parameters.txt in included in kernel-parameters.rst when
-'make htmldocs' is run, so the produced output looks like it is from
-the .rst file.
+That's configurable through sysctl with the new introduced variable
+(specific to powerpc) nmi_watchdog_factor. This value represents the
+percentage added to watchdog_tresh to set the NMI watchdog timeout during a
+LPM.
 
-Kernel boot parameters should be added to the .txt file.
-The .rst file is just intro material.
+Changes in V5 (no functional changes in this version):
+Patch 4/4:
+ - fixing typos and grammar issues reported by Randy.
+ - Renaming sysctl value from nmi_watchdog_factor to nmi_wd_lpm_factor as
+   per Nick request
 
-Thanks.
+V4:
+https://lore.kernel.org/linuxppc-dev/20220712143202.23144-1-ldufour@linux.ibm.com/
+
+Laurent Dufour (4):
+  powerpc/mobility: wait for memory transfer to complete
+  watchdog: export lockup_detector_reconfigure
+  powerpc/watchdog: introduce a NMI watchdog's factor
+  pseries/mobility: set NMI watchdog factor during an LPM
+
+ Documentation/admin-guide/sysctl/kernel.rst | 12 +++
+ arch/powerpc/include/asm/nmi.h              |  2 +
+ arch/powerpc/kernel/watchdog.c              | 21 ++++-
+ arch/powerpc/platforms/pseries/mobility.c   | 91 ++++++++++++++++++++-
+ include/linux/nmi.h                         |  2 +
+ kernel/watchdog.c                           | 21 +++--
+ 6 files changed, 141 insertions(+), 8 deletions(-)
 
 -- 
-~Randy
+2.37.0
+
