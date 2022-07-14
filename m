@@ -2,106 +2,98 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BA7573F56
-	for <lists+linux-watchdog@lfdr.de>; Thu, 14 Jul 2022 00:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8259A57473B
+	for <lists+linux-watchdog@lfdr.de>; Thu, 14 Jul 2022 10:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbiGMWDN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 13 Jul 2022 18:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
+        id S237380AbiGNIiJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 14 Jul 2022 04:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236974AbiGMWDL (ORCPT
+        with ESMTP id S237386AbiGNIhQ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 13 Jul 2022 18:03:11 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0816F31218;
-        Wed, 13 Jul 2022 15:03:10 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id e16so161869pfm.11;
-        Wed, 13 Jul 2022 15:03:10 -0700 (PDT)
+        Thu, 14 Jul 2022 04:37:16 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEDE3DBEA
+        for <linux-watchdog@vger.kernel.org>; Thu, 14 Jul 2022 01:37:14 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id t25so1633036lfg.7
+        for <linux-watchdog@vger.kernel.org>; Thu, 14 Jul 2022 01:37:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2Nit9dg2fUOCAwhmRb3tYR/tqHtTiU+bduaXCgGuCVQ=;
-        b=TSNaU643bQ3VzBuxBfOvj895y403PdM2R8/cL24/oJdWe2suvLzsr35Tjwhnp3BA1T
-         BXOEc6NePxmbnjhWIHA7jiQqK6pSni5cW/yksqRiJjCUSng6IhW8nWmMZp6IQV5ubCw/
-         RZ4hhdcjsxnbzb9ZvJB9JCtYybqjiblb5B/89f5aS8jYY9ZNjjEhELFBY8A6BLLX/MOE
-         KfwEYVhmqRdi8AGxiDOc/ks7TgqdiwwCh7yfb9QRM9LrlQM4ODOto0iX7APoRRqjY1N3
-         MV6J/XeC6RvOR4+lY2u2G/x080uKOMzfkqWjD84dty1xT7CXw8noZSWwXE8l0KEJLx3g
-         VMCQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
+        b=eOKhIHPUU5qPTZbjyQcWfvRUY0zDAP8hnIUzGBjF2Jn5DfdNsbEWN2bt7ALPYmKFVp
+         Dxr1gDHkbIBW6Zt+nHPJYVynuk8AW0yQZ/Zbg6Hs/Db/0s9SnaRXX8dPxs4FUxGCTJqt
+         PUYZva9zdBfTCaw+ACjLsUUgRvbYiV1yKAF3EhOBh+YW55bYBsAw2vjNobpxCrdB648X
+         A9Vj0WSfJubet8viXTg/I9X1Zmn6KwP7YNCJiSogQMOb5VTL9XQBYGsxHSC28kklqMwQ
+         Xqm1mx/as6lOSd/UexvuUJPMkR0uIfSfLSUsGSd7SP6mXh7BeziDYVk18AfHAMhcFado
+         ZNLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=2Nit9dg2fUOCAwhmRb3tYR/tqHtTiU+bduaXCgGuCVQ=;
-        b=iIL3FfQv6KNqHsScaU9ZQM3soU+emV2ibFIgWwaD0VQ/+IEo+c2J4PLgTtVZJ/hZcG
-         2l2j5H/+Mh06dK/AiXoFiXgCC9YMYrmdkPp05VwtRTtXS1PamdnInacA1vFcHZCHY41x
-         4Rpk9tY2hRc499uvLA2L/sIQ3iEGLj9r9M1miXypPk0DFFG+igVnLUG/xQMqn/8MMt/U
-         fo4zqFR2/B8q70MwkYqA6xKSiMNZK20vc5+PuYEe4+0+ES4ITxEby4g8pqEkL710sS0K
-         A48/HRq3ykzt13rG/4afh/UEgB5iUU0hmihcD7NqCgLNP23l7I8aqfYyrlfg204GJd49
-         FC6g==
-X-Gm-Message-State: AJIora9P8TWZLBi2p+YGI7LR7ovNbVhw4imHcrwZHamWtnBDjjtH3Oxu
-        Bf9MNEddGjvbSECsh2RkAPY=
-X-Google-Smtp-Source: AGRyM1uBnZWlRfFdUjJ1bSSphxX4jqeWZTqtJdX2wjdedKPp6DU2LtWBORPm5srUmWrWmkayJ16E1w==
-X-Received: by 2002:a63:61d3:0:b0:416:15eb:dc43 with SMTP id v202-20020a6361d3000000b0041615ebdc43mr4586346pgb.241.1657749790484;
-        Wed, 13 Jul 2022 15:03:10 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id rv21-20020a17090b2c1500b001efb8804720sm25738pjb.46.2022.07.13.15.03.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 15:03:08 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 13 Jul 2022 15:03:06 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Luo Xueqin <luoxueqin66@gmail.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luo Xueqin <luoxueqin@kylinos.cn>
-Subject: Re: [RESEND PATCH v2] watchdog:Fix typo in comment
-Message-ID: <20220713220306.GA32544@roeck-us.net>
-References: <20220705153138.29657-1-luoxueqin66@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
+        b=ZUDR/Qeqe0lg4fRA1Fl/nAHzPzusLZh5l9MkVTLZuu0ldB68mCmeO4PYqdmx2pOt2z
+         wDo52oQJW4TmWgMT4mRriJLPUiY7tawaO1rzVRCMXOtMtKPcXI8gyjuVqdGaqQa0vLSV
+         AJgGH3US08pSMwWb19e52S5aJuP7vkCv4QFEzQGZ5ugz1l6/QxqpWgD9FfsDwJWaC4k8
+         Q9RYserhFp9vC8U6D50PhY4wC4wp4L+8vKTc8/eBpMyyTTAA2SGCL/CC4zIyovqjevGh
+         mP+ihUnilLT7U4Mj4QFxxKI79zVJRdl0kav5K4oHjxMjZedpVkqw5hj12DNb8q52TmXw
+         hbsw==
+X-Gm-Message-State: AJIora9snUwagzJW61XQn7hkcEtiv8KRVqjQb7HNlfrLuOzFtTri9wLe
+        bRV8xgAhvpJVbaPTVc7dUtyFYyy0PocnlRdkymg=
+X-Google-Smtp-Source: AGRyM1suH6kpL0bxxrdPqBdRw7fjg6QmbYsIJ5KtUWeYknhIH8CIkHpjEQ1bnLxbFcENJg0E8wYhVlYhJeESVTPizkI=
+X-Received: by 2002:a05:6512:12c8:b0:489:efbf:18d1 with SMTP id
+ p8-20020a05651212c800b00489efbf18d1mr4734610lfg.192.1657787832538; Thu, 14
+ Jul 2022 01:37:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220705153138.29657-1-luoxueqin66@gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a2e:9041:0:0:0:0:0 with HTTP; Thu, 14 Jul 2022 01:37:11
+ -0700 (PDT)
+Reply-To: abdwabbomaddahm@gmail.com
+From:   Abdwabbo Maddah <abdwabbomaddah746@gmail.com>
+Date:   Thu, 14 Jul 2022 09:37:11 +0100
+Message-ID: <CAFC-3icPrpmNqEMcqzAOFvzCPc-r5yv89mNAZ9SsCQvcOZ=+9g@mail.gmail.com>
+Subject: Get back to me... URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:133 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4785]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [abdwabbomaddah746[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [abdwabbomaddah746[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Jul 05, 2022 at 11:31:38PM +0800, Luo Xueqin wrote:
-> From: Luo Xueqin <luoxueqin@kylinos.cn>
-> 
-> Spelling mistake in comment.
-> 
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Luo Xueqin <luoxueqin@kylinos.cn>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
-> 
-> v2: add discoverers
-> 
->  drivers/watchdog/pc87413_wdt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/pc87413_wdt.c b/drivers/watchdog/pc87413_wdt.c
-> index 9f9a340427fc..c7f745caf203 100644
-> --- a/drivers/watchdog/pc87413_wdt.c
-> +++ b/drivers/watchdog/pc87413_wdt.c
-> @@ -442,7 +442,7 @@ static long pc87413_ioctl(struct file *file, unsigned int cmd,
->  	}
->  }
->  
-> -/* -- Notifier funtions -----------------------------------------*/
-> +/* -- Notifier functions -----------------------------------------*/
->  
->  /**
->   *	pc87413_notify_sys:
-> -- 
-> 2.25.1
-> 
+-- 
+Dear,
+I had sent you a mail but i don't think you received it that's why am
+writing you again.It is important you get back to me as soon as you
+can.
+Abd-Wabbo Maddah
