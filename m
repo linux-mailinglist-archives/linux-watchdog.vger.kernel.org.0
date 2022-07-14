@@ -2,91 +2,63 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E81574D2A
-	for <lists+linux-watchdog@lfdr.de>; Thu, 14 Jul 2022 14:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DDD574E66
+	for <lists+linux-watchdog@lfdr.de>; Thu, 14 Jul 2022 14:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239191AbiGNMLx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 14 Jul 2022 08:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49428 "EHLO
+        id S238204AbiGNMxa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 14 Jul 2022 08:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238354AbiGNMLj (ORCPT
+        with ESMTP id S239619AbiGNMx2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 14 Jul 2022 08:11:39 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBE01EEC8
-        for <linux-watchdog@vger.kernel.org>; Thu, 14 Jul 2022 05:10:53 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id f2so2290201wrr.6
-        for <linux-watchdog@vger.kernel.org>; Thu, 14 Jul 2022 05:10:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=y5Tg7l3XIXoLarUSKVZXEIQ6qB8NqY7J9uUJaMOQEX8=;
-        b=b/ypvXVyh+dDxJNobrL9DNZ1DoTaduf7JAcxjZ4FguVhuYGZjXPdNS5C3UDuBmE3JX
-         B5BVsODBbBg4sgftte7GAxhPHdvpFPAAGPql53cVq4Oee/IumsBM1qvYwyKDpGX9OFd9
-         OCghFn7ZZhG14Ro3ckNC3+/t82pvU1ECLnWquKP5LGO9Dffux4Jysc13mVFUjKiIQ7P4
-         7G9H4ojcn7vuZ9//k56Ucu3Js86jjVaMY3H8ckafZ7oYSFwTgQ9CKX71g7WJM9QhYS6a
-         dB0gF/WK12cO461nmCJn9BDxYvx9wI6OMw5AGJSj9PfJlzmyvfCtv3TyoYWlx3KBp1YG
-         0zig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=y5Tg7l3XIXoLarUSKVZXEIQ6qB8NqY7J9uUJaMOQEX8=;
-        b=vNX3zJMv9v4lJx0Z5qLC7F6za4WIXqdxnS4N8qtKe/wgBa88OLHlQHAOquO1AEoQ4v
-         9Hn6IQstXbEZUSmlDrzR0MSCSelgWj90ykEmXMF8Yc4ilOSqxzi+sNVI0NWGrFo0eqBl
-         WmvtsMjPAWuC/rrbLUhQ4PkniFEqxrE7IVLK6SbhZIZTT5N0/LMj2XxuIV1qu58CD7St
-         uCN/PsHR4b18TikQlNKBUPrl5zLvSAdCQcoXRPkkI6rux7h6X19ofrmeqp0dzfllH3cZ
-         h4kCoZNkEkww5CTSC+fHSwut2L51i5v+W+9fcU2QToatqmdwjwfUaa9J5fHOY0tSkjPb
-         o49w==
-X-Gm-Message-State: AJIora+U69L8tyKKg/QwKdii1LDUc2Po/oR6fExrQJy2DN2m07AV6THO
-        1khY2HV0wP7nPLHFMOpSGjvqrg==
-X-Google-Smtp-Source: AGRyM1v/MKz110s+XqlPHUIpr1tAlhGTb2EkTdhvuwwGbX91Jd/nkFrdVfYH/EhwzLayzDaDhecP8g==
-X-Received: by 2002:adf:f5c7:0:b0:21d:7f20:7508 with SMTP id k7-20020adff5c7000000b0021d7f207508mr7965566wrp.458.1657800652395;
-        Thu, 14 Jul 2022 05:10:52 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id m17-20020a05600c3b1100b003976fbfbf00sm2121158wms.30.2022.07.14.05.10.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 05:10:51 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 13:10:49 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Henning Schild <henning.schild@siemens.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
-Message-ID: <YtAHyZ5WHDRbgOZe@google.com>
-References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
- <YqBS8I62YBPFC9iS@google.com>
- <20220714112656.GB16407@duo.ucw.cz>
+        Thu, 14 Jul 2022 08:53:28 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52A04507F;
+        Thu, 14 Jul 2022 05:53:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1657803208; x=1689339208;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=K+xDiE/1lBZqmu71rpEeANOTvIpVh7FPxs9iynE1FnE=;
+  b=bwNplnP40+Cs/R8lW68HyU4VUERawSDKDBeqU2a1QA3cfPNNUuR51Gq4
+   F0w1eANxswlgzHQdPLJqbPewwmxm1NXaBv9SiZIkzvmmqipPeStksbnBS
+   +tMJKcdhCHlZEEeuRB6N7Mr7vojMrfKp2pAQWxPlLRtXqnoI6/MUmeaP0
+   ra1/IsVQChmOyYZ9+0tpwgfRSnrlNTGxt9U21D+xN7JSgOW7R7PEgbcpU
+   /JCSdHNQS9OorCXr0u1i1wIA/23L7wtEp9zJQyQTAxS8QkMaemtnHaJFj
+   Pc4yElQg3zVDuMf4iCsP6Sz4OF938/UNeevUTqV6edMSrJcf1Ka1du36P
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.92,271,1650956400"; 
+   d="scan'208";a="172116621"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jul 2022 05:53:28 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 14 Jul 2022 05:53:27 -0700
+Received: from ROB-ULT-M68701.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2375.17 via Frontend Transport; Thu, 14 Jul 2022 05:53:18 -0700
+From:   Sergiu Moga <sergiu.moga@microchip.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <claudiu.beznea@microchip.com>, <eugen.hristev@microchip.com>
+CC:     <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Sergiu Moga <sergiu.moga@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2] watchdog: dt-bindings: atmel,at91sam9-wdt: convert to json-schema
+Date:   Thu, 14 Jul 2022 15:51:24 +0300
+Message-ID: <20220714125122.144377-1-sergiu.moga@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220714112656.GB16407@duo.ucw.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,44 +66,212 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, 14 Jul 2022, Pavel Machek wrote:
+Convert at91sam9 WDT binding for Atmel/Microchip SoCs to json-schema
+format.
 
-> On Wed 2022-06-08 08:42:40, Lee Jones wrote:
-> > On Mon, 06 Jun 2022, Andy Shevchenko wrote:
-> > 
-> > > There are a few users that would like to utilize P2SB mechanism of hiding
-> > > and unhiding a device from the PCI configuration space.
-> > > 
-> > > Here is the series to consolidate p2sb handling code for existing users
-> > > and to provide a generic way for new comer(s).
-> > > 
-> > > It also includes a patch to enable GPIO controllers on Apollo Lake
-> > > when it's used with ABL bootloader w/o ACPI support.
-> > > 
-> > > The patch that brings the helper ("platform/x86/intel: Add Primary to
-> > > Sideband (P2SB) bridge support") has a commit message that sheds a light
-> > > on what the P2SB is and why this is needed.
-> > > 
-> > > I have tested this on Apollo Lake platform (I'm able to see SPI NOR and
-> > > since we have an ACPI device for GPIO I do not see any attempts to recreate
-> > > one).
-> > > 
-> > > The series is ready to be merged via MFD tree, but see below.
-> > > 
-> > > The series also includes updates for Simatic IPC drivers that partially
-> > > tagged by respective maintainers (the main question is if Pavel is okay
-> > > with the last three patches, since I believe Hans is okay with removing
-> > > some code under PDx86). Hence the first 8 patches can be merged right
-> > > away and the rest when Pavel does his review.
-> > 
-> > Can we just wait for Pavel's review, then merge them all at once?
-> 
-> 10,12: Acked-by: Pavel Machek <pavel@ucw.cz>
+Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
 
-Thanks Pavel.  I'll get that added.
+v1 -> v2:
+- move "allOf" under "required"
 
+ .../bindings/watchdog/atmel,at91sam9-wdt.yaml | 127 ++++++++++++++++++
+ .../bindings/watchdog/atmel-wdt.txt           |  51 -------
+ 2 files changed, 127 insertions(+), 51 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,at91sam9-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-wdt.txt
+
+diff --git a/Documentation/devicetree/bindings/watchdog/atmel,at91sam9-wdt.yaml b/Documentation/devicetree/bindings/watchdog/atmel,at91sam9-wdt.yaml
+new file mode 100644
+index 000000000000..ad27bc518670
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/atmel,at91sam9-wdt.yaml
+@@ -0,0 +1,127 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/atmel,at91sam9-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Atmel Watchdog Timers
++
++maintainers:
++  - Eugen Hristev <eugen.hristev@microchip.com>
++
++properties:
++  compatible:
++    const: atmel,at91sam9260-wdt
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  atmel,max-heartbeat-sec:
++    description:
++      Should contain the maximum heartbeat value in seconds. This value
++      should be less or equal to 16. It is used to compute the WDV field.
++    maximum: 16
++
++  atmel,min-heartbeat-sec:
++    description:
++      Should contain the minimum heartbeat value in seconds. This value
++      must be smaller than the max-heartbeat-sec value. It is used to
++      compute the WDD field.
++    maximum: 16
++
++  atmel,watchdog-type:
++    $ref: /schemas/types.yaml#/definitions/string
++    description: |
++      Should be hardware or software.
++    oneOf:
++      - description:
++          Hardware watchdog uses the at91 watchdog reset.
++        const: hardware
++      - description: |
++          Software watchdog uses the watchdog interrupt
++          to trigger a software reset.
++        const: software
++    default: hardware
++
++  atmel,reset-type:
++    $ref: /schemas/types.yaml#/definitions/string
++    description: |
++      Should be proc or all. This is valid only when using hardware watchdog.
++    oneOf:
++      - description:
++          Assert peripherals and processor reset signals.
++        const: all
++      - description:
++          Assert the processor reset signal.
++        const: proc
++    default: all
++
++  atmel,disable:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description:
++      Should be present if you want to stop the watchdog.
++
++  atmel,idle-halt:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: |
++      Should be present if you want to stop the watchdog when
++      entering idle state.
++      CAUTION: This property should be used with care, it actually makes the
++      watchdog not counting when the CPU is in idle state, therefore the
++      watchdog reset time depends on mean CPU usage and will not reset at all
++      if the CPU stops working while it is in idle state, which is probably
++      not what you want.
++
++  atmel,dbg-halt:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: |
++      Should be present if you want to stop the watchdog when
++      entering debug state.
++
++required:
++  - compatible
++  - reg
++  - clocks
++
++allOf:
++  - $ref: watchdog.yaml#
++  - if:
++      properties:
++        atmel,reset-type:
++          enum:
++            - all
++            - proc
++    then:
++      properties:
++        atmel,watchdog-type:
++          const: hardware
++
++dependencies:
++  atmel,reset-type: ['atmel,watchdog-type']
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    watchdog@fffffd40 {
++        compatible = "atmel,at91sam9260-wdt";
++        reg = <0xfffffd40 0x10>;
++        interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
++        clocks = <&clk32k>;
++        timeout-sec = <15>;
++        atmel,watchdog-type = "hardware";
++        atmel,reset-type = "all";
++        atmel,dbg-halt;
++        atmel,idle-halt;
++        atmel,max-heartbeat-sec = <16>;
++        atmel,min-heartbeat-sec = <0>;
++    };
+diff --git a/Documentation/devicetree/bindings/watchdog/atmel-wdt.txt b/Documentation/devicetree/bindings/watchdog/atmel-wdt.txt
+deleted file mode 100644
+index 711a880b3d3b..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/atmel-wdt.txt
++++ /dev/null
+@@ -1,51 +0,0 @@
+-* Atmel Watchdog Timers
+-
+-** at91sam9-wdt
+-
+-Required properties:
+-- compatible: must be "atmel,at91sam9260-wdt".
+-- reg: physical base address of the controller and length of memory mapped
+-  region.
+-- clocks: phandle to input clock.
+-
+-Optional properties:
+-- timeout-sec: contains the watchdog timeout in seconds.
+-- interrupts : Should contain WDT interrupt.
+-- atmel,max-heartbeat-sec : Should contain the maximum heartbeat value in
+-	seconds. This value should be less or equal to 16. It is used to
+-	compute the WDV field.
+-- atmel,min-heartbeat-sec : Should contain the minimum heartbeat value in
+-	seconds. This value must be smaller than the max-heartbeat-sec value.
+-	It is used to compute the WDD field.
+-- atmel,watchdog-type : Should be "hardware" or "software". Hardware watchdog
+-	use the at91 watchdog reset. Software watchdog use the watchdog
+-	interrupt to trigger a software reset.
+-- atmel,reset-type : Should be "proc" or "all".
+-	"all" : assert peripherals and processor reset signals
+-	"proc" : assert the processor reset signal
+-	This is valid only when using "hardware" watchdog.
+-- atmel,disable : Should be present if you want to disable the watchdog.
+-- atmel,idle-halt : Should be present if you want to stop the watchdog when
+-	entering idle state.
+-	CAUTION: This property should be used with care, it actually makes the
+-	watchdog not counting when the CPU is in idle state, therefore the
+-	watchdog reset time depends on mean CPU usage and will not reset at all
+-	if the CPU stop working while it is in idle state, which is probably
+-	not what you want.
+-- atmel,dbg-halt : Should be present if you want to stop the watchdog when
+-	entering debug state.
+-
+-Example:
+-	watchdog@fffffd40 {
+-		compatible = "atmel,at91sam9260-wdt";
+-		reg = <0xfffffd40 0x10>;
+-		interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
+-		clocks = <&clk32k>;
+-		timeout-sec = <15>;
+-		atmel,watchdog-type = "hardware";
+-		atmel,reset-type = "all";
+-		atmel,dbg-halt;
+-		atmel,idle-halt;
+-		atmel,max-heartbeat-sec = <16>;
+-		atmel,min-heartbeat-sec = <0>;
+-	};
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.25.1
+
