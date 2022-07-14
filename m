@@ -2,100 +2,75 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2162D574AB2
-	for <lists+linux-watchdog@lfdr.de>; Thu, 14 Jul 2022 12:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F723574AEB
+	for <lists+linux-watchdog@lfdr.de>; Thu, 14 Jul 2022 12:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238362AbiGNKek (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 14 Jul 2022 06:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
+        id S233712AbiGNKlJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 14 Jul 2022 06:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238361AbiGNKeh (ORCPT
+        with ESMTP id S231440AbiGNKlI (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 14 Jul 2022 06:34:37 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D1B4B4A7
-        for <linux-watchdog@vger.kernel.org>; Thu, 14 Jul 2022 03:34:35 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id be14-20020a05600c1e8e00b003a04a458c54so941200wmb.3
-        for <linux-watchdog@vger.kernel.org>; Thu, 14 Jul 2022 03:34:35 -0700 (PDT)
+        Thu, 14 Jul 2022 06:41:08 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56777BC0F
+        for <linux-watchdog@vger.kernel.org>; Thu, 14 Jul 2022 03:41:07 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id u15so1649257lji.10
+        for <linux-watchdog@vger.kernel.org>; Thu, 14 Jul 2022 03:41:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=W6txFljYfKmn6JSD3sjou2N7DJFkcDR6jeyYOHSyWrU=;
-        b=gvZ4kN1Ki6OChldKcT3MpnPrFEubJtUXdh8C24U5b24nOK5/h+IFIOOL4CSL0vw4tB
-         iVOziuWudewMTKVk3jRln6XJM9BdGVWQJpYrvPZoS0SRyNbLJDbnqmHX0OiTMC93EAOI
-         JcjhtEYjG85cPEi1tixKsAG20DrICDh0hKOQLzzsHeY4b0HCr55DYiwKJVRFDU7Kdu+O
-         mxNZJRlpNVvagt18yu/SJI6rr+Lj/fJT40FO71qf5KPgkWcpez7epwuyUNaFMA3yLK4j
-         Om94Y3m17NS1I+wO1+1v1Mu6M3C0Kq4jL6mLU3G2P9kcle0kBLSnLPUfLwZ0LLN/ruDR
-         duVw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=C8CvhNa0+ZVCQpOMfkAiiXSqKl0f4IhSMmX8m0rrST8=;
+        b=BQTmx9g7xNGdgaTGyEk7Z7os4c0w8530TS8aIQJM6Gs+qdKQSSg4esh3elB8d5Es/H
+         RGHpEvb2bBHUVT56CUZOVE07HwZ11gRWxrxMJnAeBZwYfZaymr51mMveqsdcDxeWsC2z
+         NLQvpNLu77VXRS1VVLPgkA6+1XhVye3oxSxLYyeFivXab06ieuXguZb/8yLPOV+OaFj8
+         FiBYhTZdUAEk77a7/ZkNo4ksPtyVwoaCh9avzkgeI9/YFufw00BUyasyjyI0XACYWDci
+         UPN7lPuf9syGA51vBdNpL+HMmnYYA9hTKr3CGCO0j9PVmIdDUHA6WRr5HXin8XDXQPJ9
+         sBQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=W6txFljYfKmn6JSD3sjou2N7DJFkcDR6jeyYOHSyWrU=;
-        b=pUipLjnHUDEPDY4v/rFJv4cMWFDupJljJAnZJFr/PMoHL8SQx5aVRjkNRNWUaQUmiV
-         QL0c9gn3Jl7ZUxmoECY0jF8ZO0JNYbsZ+SoMABhyRohfQdPOC1ZqU4J/1gxttRvb4Jvb
-         MiV/ibLlzT515+sSrcFIe/i988Vpe5PE3S+rCEVlFhvW+UtyUk+Yyxkjp42YSgEJucLA
-         TZ6VoNc4DY2RYkTcubYM9vhgq2TkMq/u1MhnBGwE4cceEy7dX6SGUccSxvC5rKHx5ViS
-         qrw9S320l4FNLNkBagnJog++feYkQ1OmzdGl6eT8NQkL6494zfkLaSWOxlRgaQdnqqTQ
-         eRNA==
-X-Gm-Message-State: AJIora/R28Z+ohJ90B6DbVCu+6G6eXDVL4dSoUu2djhy3Id97XDie/LK
-        onIsSGcH5/JEqtGmfLoKod7Pgw==
-X-Google-Smtp-Source: AGRyM1s4Lh53O5b+jj1CVhSlBTSYJOqKGj742dw9wSLaQ2htY7KgAPxfs1Ue9vLFbkz25LTPVtIDCQ==
-X-Received: by 2002:a05:600c:1908:b0:3a0:bfaa:38c with SMTP id j8-20020a05600c190800b003a0bfaa038cmr8428781wmq.130.1657794874579;
-        Thu, 14 Jul 2022 03:34:34 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id m9-20020a056000180900b0021d6a520ce9sm1094947wrh.47.2022.07.14.03.34.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 03:34:34 -0700 (PDT)
-Date:   Thu, 14 Jul 2022 11:34:31 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Henning Schild <henning.schild@siemens.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
-        Jean Delvare <jdelvare@suse.de>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-edac@vger.kernel.org, linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
-Message-ID: <Ys/xN+6P0DvMrDOC@google.com>
-References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
- <YqBS8I62YBPFC9iS@google.com>
- <CAHp75Ve9Lju8AEQd5huz1aYGg4sOu-ae7tTdyDWCXPCBR=wXbQ@mail.gmail.com>
- <YrGyWCaY+swYAYzH@smile.fi.intel.com>
- <YryAXlZqcr/liN7n@smile.fi.intel.com>
- <20220629191406.35965d5b@md1za8fc.ad001.siemens.net>
- <Ys71dyMdozGUAto0@smile.fi.intel.com>
- <20220713204827.0b290fd7@md1za8fc.ad001.siemens.net>
- <Ys/jz7HqhrxSCOnV@google.com>
- <Ys/ukP8dqnwUoou4@smile.fi.intel.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=C8CvhNa0+ZVCQpOMfkAiiXSqKl0f4IhSMmX8m0rrST8=;
+        b=HS2JR5DxNFtuiQTOeG6VWqVoI4YNgRHE/exszCSxFbfPh6tGlGv16mq5GKld0qVNKl
+         1nZSztjVPhnYGnArHmMcouuzBOljB2hHM5yaYMdeQggffHwvx/lGqWhpR013qGgH8wAh
+         EU1e5nwJcYZoZfwMGR0XgO6no8A+jy5wWVg2hxCSNdbfGtxkb5DwI/frLGbNK9K0a3Cv
+         tCTv8wG4aTnHoyNBe2dPjVqHQCegBoumhkRmXpPB4lxK3EfIjSA8oW9BLho5sdpwP384
+         UysxIIMHpdPKO46e7wwFecNKNJj4lqcEj5ExscgxKFpBBAhXQgmY7k6di371ucQLYSxN
+         MTIQ==
+X-Gm-Message-State: AJIora+uleVYdo4Am0Y/RLYL8Z3aCBhL3xPOsa1g0+PGifDwaOkkkENN
+        42MizMhKSVMB9zUMQ54xKs1AgQ==
+X-Google-Smtp-Source: AGRyM1uUgqu8jCuqmv6DYP9omOKmzkRlajVMY/Ho/tM0y/cmJS8OPaNxw2wv2XW7TCkhHeEplk4WlQ==
+X-Received: by 2002:a2e:9b0b:0:b0:25d:5ae6:4286 with SMTP id u11-20020a2e9b0b000000b0025d5ae64286mr4017670lji.148.1657795265748;
+        Thu, 14 Jul 2022 03:41:05 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id 3-20020ac25f03000000b00478fe3327aasm288132lfq.217.2022.07.14.03.41.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 03:41:05 -0700 (PDT)
+Message-ID: <df017bc8-3aa3-18e6-9632-94eb071afe68@linaro.org>
+Date:   Thu, 14 Jul 2022 12:41:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ys/ukP8dqnwUoou4@smile.fi.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] watchdog: dt-bindings: atmel,at91sam9-wdt: convert to
+ json-schema
+Content-Language: en-US
+To:     Sergiu Moga <sergiu.moga@microchip.com>, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        eugen.hristev@microchip.com
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220714101242.103521-1-sergiu.moga@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220714101242.103521-1-sergiu.moga@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -104,41 +79,52 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, 14 Jul 2022, Andy Shevchenko wrote:
-
-> On Thu, Jul 14, 2022 at 10:37:19AM +0100, Lee Jones wrote:
-> > On Wed, 13 Jul 2022, Henning Schild wrote:
-> > > Am Wed, 13 Jul 2022 19:40:23 +0300
-> > > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
+On 14/07/2022 12:12, Sergiu Moga wrote:
+> Convert at91sam9 WDT binding for Atmel/Microchip SoCs to Device Tree
+> Schema format.
 > 
-> ...
+> Signed-off-by: Sergiu Moga <sergiu.moga@microchip.com>
+> ---
+>  .../bindings/watchdog/atmel,at91sam9-wdt.yaml | 127 ++++++++++++++++++
+>  .../bindings/watchdog/atmel-wdt.txt           |  51 -------
+>  2 files changed, 127 insertions(+), 51 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,at91sam9-wdt.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-wdt.txt
 > 
-> > > And maybe there is a way/process to escalate to another maintainer.
-> > > Does anyone even know what is going on with Pavel? 
-> > 
-> > I'll take the hit.  He had his chance.
-> > 
-> > I'm happy to move forward with Andy's review.
-> 
-> Thank you, Lee, much appreciated!
-> The patches (9..12) have my SoB, I think it should be enough, but if you thinks
-> they need my Rb tag, I can reply to them with it.
+> diff --git a/Documentation/devicetree/bindings/watchdog/atmel,at91sam9-wdt.yaml b/Documentation/devicetree/bindings/watchdog/atmel,at91sam9-wdt.yaml
+> new file mode 100644
+> index 000000000000..b3f7cbe913a5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/atmel,at91sam9-wdt.yaml
+> @@ -0,0 +1,127 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) 2022 Microchip Technology, Inc. and its subsidiaries
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/atmel,at91sam9-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Atmel Watchdog Timers
+> +
+> +maintainers:
+> +  - Eugen Hristev <eugen.hristev@microchip.com>
+> +
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +  - if:
+> +      properties:
+> +        atmel,reset-type:
+> +          enum:
+> +            - all
+> +            - proc
+> +    then:
+> +      properties:
+> +        atmel,watchdog-type:
+> +          const: hardware
 
-That's okay.  I've applied them and they are currently in soak.
+Entire allOf in such case goes after "required:".
 
-> > (Side note: Seeing as Pavel hasn't been seen for 2 months, I'll also
-> >  follow-up on  the LED ML to offer to become temporary maintainer for a
-> >  bit)
-> 
-> This is good news as well, because I noticed there are a few series there stuck
-> as well.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Feel free to reply to object or in support:
-
-https://lore.kernel.org/all/Ys%2Fkruf8DE4ISo8M@google.com/
-
--- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Best regards,
+Krzysztof
