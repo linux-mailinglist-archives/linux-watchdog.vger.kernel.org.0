@@ -2,164 +2,201 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B364157717D
-	for <lists+linux-watchdog@lfdr.de>; Sat, 16 Jul 2022 23:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F22577534
+	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Jul 2022 11:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbiGPVHm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 16 Jul 2022 17:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
+        id S232662AbiGQJQc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 17 Jul 2022 05:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiGPVHm (ORCPT
+        with ESMTP id S232057AbiGQJQb (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 16 Jul 2022 17:07:42 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1920517073;
-        Sat, 16 Jul 2022 14:07:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658005661; x=1689541661;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5DwnM/iJM+O7it4IR8HPbw0em/nh8SdUF1KmWmnb4T4=;
-  b=LMz34OcM6tjYcLXxBChcECkpek8ITC6YCB0PxOvI8ApgzbV6QEM2WaLX
-   KptTDzrdeA/ZbxMkNCKzPSmeX/cZlxhgRLlJ/9MnU5+eWmQSPkREZDqSq
-   2jTrnOojUradZBz4vvsIf+JUFitnzYqDqceNe+mw7vGGPqF0NwLdZPnRf
-   6Zu4GEAZ7sLLkbRG80leeFAR/h2SaVaEcpa6WKLgkPZSNoCIUkUcjbZ9j
-   ufPd7876jhcL8YC9tfWSImbBTfK+BazqPtOjJ9mc/GjUqtrgteGheetKV
-   oULmDdY4p9D4eW5DacbI9gJEGD8UBGqOPAFvLtW6mI1foS5/96hAGacRn
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10410"; a="287150022"
-X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="287150022"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2022 14:07:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,277,1650956400"; 
-   d="scan'208";a="654778692"
-Received: from lkp-server02.sh.intel.com (HELO ff137eb26ff1) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Jul 2022 14:07:37 -0700
-Received: from kbuild by ff137eb26ff1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oCp0i-00029O-QP;
-        Sat, 16 Jul 2022 21:07:36 +0000
-Date:   Sun, 17 Jul 2022 05:07:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexey Klimov <klimov.linux@gmail.com>,
-        linux-watchdog@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, oneukum@suse.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, atishp@rivosinc.com,
-        atishp@atishpatra.org, yury.norov@gmail.com, aklimov@redhat.com,
-        atomlin@redhat.com, klimov.linux@gmail.com
-Subject: Re: [PATCH v4] watchdog: add driver for StreamLabs USB watchdog
- device
-Message-ID: <202207170459.ZyslrGcE-lkp@intel.com>
-References: <20220715234442.3910204-1-klimov.linux@gmail.com>
+        Sun, 17 Jul 2022 05:16:31 -0400
+Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17C4E15FC6;
+        Sun, 17 Jul 2022 02:16:28 -0700 (PDT)
+Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
+        by maillog.nuvoton.com (Postfix) with ESMTP id DD3AA1C8115D;
+        Sun, 17 Jul 2022 17:16:26 +0800 (CST)
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Sun, 17 Jul
+ 2022 17:16:26 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
+ (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
+ Transport; Sun, 17 Jul 2022 17:16:26 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+        id 3AB2763A23; Sun, 17 Jul 2022 12:16:25 +0300 (IDT)
+From:   Tomer Maimon <tmaimon77@gmail.com>
+To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
+        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
+        <gregkh@linuxfoundation.org>, <daniel.lezcano@linaro.org>,
+        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <arnd@arndb.de>, <olof@lixom.net>, <jirislaby@kernel.org>,
+        <shawnguo@kernel.org>, <bjorn.andersson@linaro.org>,
+        <geert+renesas@glider.be>, <marcel.ziswiler@toradex.com>,
+        <vkoul@kernel.org>, <biju.das.jz@bp.renesas.com>,
+        <nobuhiro1.iwamatsu@toshiba.co.jp>, <robert.hancock@calian.com>,
+        <j.neuschaefer@gmx.net>, <lkundrak@v3.sk>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v9 00/16] Introduce Nuvoton Arbel NPCM8XX BMC SoC
+Date:   Sun, 17 Jul 2022 12:15:53 +0300
+Message-ID: <20220717091609.122968-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220715234442.3910204-1-klimov.linux@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Alexey,
+This patchset  adds initial support for the Nuvoton 
+Arbel NPCM8XX Board Management controller (BMC) SoC family. 
 
-I love your patch! Perhaps something to improve:
+The Nuvoton Arbel NPCM8XX SoC is a fourth-generation BMC.
+The NPCM8XX computing subsystem comprises a quadcore ARM 
+Cortex A35 ARM-V8 architecture.
 
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v5.19-rc6 next-20220715]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This patchset adds minimal architecture and drivers such as:
+Clocksource, Clock, Reset, and WD.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexey-Klimov/watchdog-add-driver-for-StreamLabs-USB-watchdog-device/20220717-000621
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-config: arc-randconfig-s032-20220717 (https://download.01.org/0day-ci/archive/20220717/202207170459.ZyslrGcE-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/897fbad1d3a4917a703454a9f79728c6af44d0a4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alexey-Klimov/watchdog-add-driver-for-StreamLabs-USB-watchdog-device/20220717-000621
-        git checkout 897fbad1d3a4917a703454a9f79728c6af44d0a4
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash drivers/watchdog/
+Some of the Arbel NPCM8XX peripherals are based on Poleg NPCM7XX.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This patchset was tested on the Arbel NPCM8XX evaluation board.
 
+Addressed comments from:
+ - Stephen Boyd: https://www.spinics.net/lists/arm-kernel/msg996551.html
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/watchdog/streamlabs_wdt.c:70:23: sparse: sparse: restricted __le16 degrades to integer
->> drivers/watchdog/streamlabs_wdt.c:96:16: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short [usertype] @@     got restricted __le16 [usertype] @@
-   drivers/watchdog/streamlabs_wdt.c:96:16: sparse:     expected unsigned short [usertype]
-   drivers/watchdog/streamlabs_wdt.c:96:16: sparse:     got restricted __le16 [usertype]
-   drivers/watchdog/streamlabs_wdt.c:97:16: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short [usertype] @@     got restricted __le16 [usertype] @@
-   drivers/watchdog/streamlabs_wdt.c:97:16: sparse:     expected unsigned short [usertype]
-   drivers/watchdog/streamlabs_wdt.c:97:16: sparse:     got restricted __le16 [usertype]
-   drivers/watchdog/streamlabs_wdt.c:98:16: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short [usertype] @@     got restricted __le16 [usertype] @@
-   drivers/watchdog/streamlabs_wdt.c:98:16: sparse:     expected unsigned short [usertype]
-   drivers/watchdog/streamlabs_wdt.c:98:16: sparse:     got restricted __le16 [usertype]
+Changes since version 8:
+ - NPCM8XX clock driver
+	- Move configuration place.
+	- Add space before and aftre '{' '}'.
+	- Handle devm_of_clk_add_hw_provider function error.
 
-vim +70 drivers/watchdog/streamlabs_wdt.c
+Changes since version 7:
+ - NPCM8XX clock driver
+	- The clock and reset registers using the same memory region, 
+	  due to it the clock driver should claim the ioremap directly 
+	  without checking the memory region.
 
-    57	
-    58	static bool nowayout = WATCHDOG_NOWAYOUT;
-    59	module_param(nowayout, bool, 0);
-    60	MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-    61				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-    62	
-    63	/*
-    64	 * This function is used to check if watchdog actually changed
-    65	 * its state to disabled that is reported in first two bytes of response
-    66	 * message.
-    67	 */
-    68	static int usb_streamlabs_wdt_check_stop(u16 *buf)
-    69	{
-  > 70		if (buf[0] != cpu_to_le16(STREAMLABS_CMD_STOP))
-    71			return -EINVAL;
-    72	
-    73		return 0;
-    74	}
-    75	
-    76	static int usb_streamlabs_wdt_validate_response(u8 *buf)
-    77	{
-    78		/*
-    79		 * If watchdog device understood the command it will acknowledge
-    80		 * with values 1,2,3,4 at indexes 10, 11, 12, 13 in response message
-    81		 * when response treated as 8bit message.
-    82		 */
-    83		if (buf[10] != 1 || buf[11] != 2 || buf[12] != 3 || buf[13] != 4)
-    84			return -EPROTO;
-    85	
-    86		return 0;
-    87	}
-    88	
-    89	static void usb_streamlabs_wdt_prepare_buf(u16 *buf, u16 cmd,
-    90							unsigned long timeout_msec)
-    91	{
-    92		/*
-    93		 * remaining elements expected to be zero everytime during
-    94		 * communication
-    95		 */
-  > 96		buf[0] = cpu_to_le16(cmd);
-    97		buf[1] = cpu_to_le16(0x8000);
-    98		buf[3] = cpu_to_le16(timeout_msec);
-    99		buf[5] = 0x0;
-   100		buf[6] = 0x0;
-   101	}
-   102	
+Changes since version 6:
+ - NPCM reset driver
+	- Modify warning message.
+ - dt-bindings: serial: 8250: Add npcm845 compatible string patch accepted, due
+   to it the patch removed from the patchset.
+
+Changes since version 5:
+ - NPCM8XX clock driver
+	- Remove refclk if devm_of_clk_add_hw_provider function failed.
+ - NPCM8XX clock source driver
+	- Remove NPCM8XX TIMER_OF_DECLARE support, using the same as NPCM7XX.
+
+Changes since version 4:
+ - NPCM8XX clock driver
+	- Use the same quote in the dt-binding file.
+
+Changes since version 3:
+ - NPCM8XX clock driver
+	- Rename NPCM8xx clock dt-binding header file.
+	- Remove unused structures.
+	- Improve Handling the clocks registration.
+ - NPCM reset driver
+	- Add ref phandle to dt-binding.
+
+Changes since version 2:
+ - Remove NPCM8xx WDT compatible patch.
+ - Remove NPCM8xx UART compatible patch.
+ - NPCM8XX clock driver
+	- Add debug new line.
+	- Add 25M fixed rate clock.
+	- Remove unused clocks and clock name from dt-binding.
+ - NPCM reset driver
+	- Revert to npcm7xx dt-binding.
+	- Skip dt binding quotes.
+	- Adding DTS backward compatibility.
+	- Remove NPCM8xx binding include file.
+	- Warp commit message.
+- NPCM8XX device tree:
+	- Remove unused clock nodes (used in the clock driver)
+	- Modify gcr and rst node names.
+
+Changes since version 1:
+ - NPCM8XX clock driver
+	- Modify dt-binding.
+	- Remove unsed definition and include.
+	- Include alphabetically.
+	- Use clock devm.
+ - NPCM reset driver
+	- Modify dt-binding.
+	- Modify syscon name.
+	- Add syscon support to NPCM7XX dts reset node.
+	- use data structure.
+ - NPCM8XX device tree:
+	- Modify evb compatible name.
+	- Add NPCM7xx compatible.
+	- Remove disable nodes from the EVB DTS.
+
+Tomer Maimon (16):
+  dt-bindings: timer: npcm: Add npcm845 compatible string
+  dt-bindings: watchdog: npcm: Add npcm845 compatible string
+  dt-binding: clk: npcm845: Add binding for Nuvoton NPCM8XX Clock
+  clk: npcm8xx: add clock controller
+  dt-bindings: reset: npcm: add GCR syscon property
+  ARM: dts: nuvoton: add reset syscon property
+  reset: npcm: using syscon instead of device data
+  dt-bindings: reset: npcm: Add support for NPCM8XX
+  reset: npcm: Add NPCM8XX support
+  dt-bindings: arm: npcm: Add maintainer
+  dt-bindings: arm: npcm: Add nuvoton,npcm845 compatible string
+  dt-bindings: arm: npcm: Add nuvoton,npcm845 GCR compatible string
+  arm64: npcm: Add support for Nuvoton NPCM8XX BMC SoC
+  arm64: dts: nuvoton: Add initial NPCM8XX device tree
+  arm64: dts: nuvoton: Add initial NPCM845 EVB device tree
+  arm64: defconfig: Add Nuvoton NPCM family support
+
+ .../devicetree/bindings/arm/npcm/npcm.yaml    |   7 +
+ .../bindings/arm/npcm/nuvoton,gcr.yaml        |   2 +
+ .../bindings/clock/nuvoton,npcm845-clk.yaml   |  49 ++
+ .../bindings/reset/nuvoton,npcm750-reset.yaml |  10 +-
+ .../bindings/timer/nuvoton,npcm7xx-timer.yaml |   2 +
+ .../bindings/watchdog/nuvoton,npcm-wdt.txt    |   3 +-
+ MAINTAINERS                                   |   2 +
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |   1 +
+ arch/arm64/Kconfig.platforms                  |  11 +
+ arch/arm64/boot/dts/Makefile                  |   1 +
+ arch/arm64/boot/dts/nuvoton/Makefile          |   2 +
+ .../dts/nuvoton/nuvoton-common-npcm8xx.dtsi   | 170 +++++
+ .../boot/dts/nuvoton/nuvoton-npcm845-evb.dts  |  30 +
+ .../boot/dts/nuvoton/nuvoton-npcm845.dtsi     |  76 +++
+ arch/arm64/configs/defconfig                  |   3 +
+ drivers/clk/Kconfig                           |   6 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-npcm8xx.c                     | 610 ++++++++++++++++++
+ drivers/reset/reset-npcm.c                    | 207 +++++-
+ .../dt-bindings/clock/nuvoton,npcm845-clk.h   |  49 ++
+ 20 files changed, 1206 insertions(+), 36 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,npcm845-clk.yaml
+ create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-common-npcm8xx.dtsi
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845-evb.dts
+ create mode 100644 arch/arm64/boot/dts/nuvoton/nuvoton-npcm845.dtsi
+ create mode 100644 drivers/clk/clk-npcm8xx.c
+ create mode 100644 include/dt-bindings/clock/nuvoton,npcm845-clk.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.33.0
+
