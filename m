@@ -2,91 +2,84 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329B857DB1B
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Jul 2022 09:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F03DF57DF29
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Jul 2022 12:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234575AbiGVHQY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Jul 2022 03:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
+        id S236467AbiGVJiO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Jul 2022 05:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234577AbiGVHPV (ORCPT
+        with ESMTP id S236462AbiGVJhv (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Jul 2022 03:15:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C43B99643;
-        Fri, 22 Jul 2022 00:14:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E782662188;
-        Fri, 22 Jul 2022 07:14:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCFFAC341C7;
-        Fri, 22 Jul 2022 07:14:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658474076;
-        bh=69P75Uh9tSzboiEnDeDePBKG/ovLsyPxSOwg4CcKbQs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dquxBBUXTymrJ56KloIC8oQr43PApoKh8fqGRem/LXrDlcPQV23c+nQ9jmKbPCgax
-         NiFnFwcba6azEZo7HdBIoJp86AeKZCJe5KW1gc+AZ3bIoX61az7+9AWYsUdOxugpUv
-         z7Fyn+MG66/aJ0UrGmR4JezoigO5obPFHbOH9g1bonzKsanwuIqtRnSt87KqGohUg5
-         UFOjstoL5SvwY8otKrYWQp3CxnXgkOv2Lm02jARLn9JzzzhD4FOVNMtdNlV3mOtqOc
-         k6bgVf27WOHflCU0Pn6SELNR9eQkTZI8DgpB+sJwf1ZVE2Y7IxDcDV66M5XSdrlshG
-         6FHBmxHPwhv5w==
-Date:   Fri, 22 Jul 2022 09:14:31 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     williamsukatube@163.com
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        William Dean <williamsukatube@gmail.com>,
+        Fri, 22 Jul 2022 05:37:51 -0400
+Received: from m12-16.163.com (m12-16.163.com [220.181.12.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 032B79FE38;
+        Fri, 22 Jul 2022 02:26:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=bAwmZ
+        Pcw9Ip68eN1muAO0vCpAobhqxq1FA0dWqWMz4M=; b=S+PE6JNTOR4sI/+m4u8dZ
+        yzRbkx7r0sjunArheVbc6aJM2UPWAHQZuHzJZv6ikvOXds3fSWP6GRQtj1plSBCA
+        3AfH44Ek9G5Sd5fo9hUOI/FHRNRQLvF43adp0LEISRTCQcTHyzGo0TSpSyUm5L98
+        cvry8+AnEatg25l1oIZtnA=
+Received: from localhost.localdomain (unknown [123.58.221.99])
+        by smtp12 (Coremail) with SMTP id EMCowABXXZXwbNpiSfPbCw--.10S2;
+        Fri, 22 Jul 2022 17:25:11 +0800 (CST)
+From:   williamsukatube@163.com
+To:     wim@linux-watchdog.org, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     William Dean <williamsukatube@gmail.com>,
         Hacash Robot <hacashRobot@santino.com>
-Subject: Re: [PATCH] watchdog: armada_37xx_wdt: check the return value of
- devm_ioremap() in armada_37xx_wdt_probe()
-Message-ID: <20220722091431.1572e92c@dellmb>
-In-Reply-To: <20220722030938.2925156-1-williamsukatube@163.com>
-References: <20220722030938.2925156-1-williamsukatube@163.com>
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Subject: [PATCH] watchdog: f71808e_wdt: Add check for platform_driver_register
+Date:   Fri, 22 Jul 2022 17:25:03 +0800
+Message-Id: <20220722092503.2938544-1-williamsukatube@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EMCowABXXZXwbNpiSfPbCw--.10S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Jr4DCF47Gry3ZFyDur15urg_yoWDArc_ur
+        y7WF47urWkKF47KF15t3Wavw129F1rAFykuw4ktrWak3yxJFyUWr4DZF1jgw1kAr90vrWD
+        twn8Jr1Skry3GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU5XYFtUUUUU==
+X-Originating-IP: [123.58.221.99]
+X-CM-SenderInfo: xzlozx5dpv3yxdwxuvi6rwjhhfrp/xtbB6AdGg2BHJoY4tQABsh
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, 22 Jul 2022 11:09:38 +0800
-williamsukatube@163.com wrote:
+From: William Dean <williamsukatube@gmail.com>
 
-> From: William Dean <williamsukatube@gmail.com>
->=20
-> The function devm_ioremap() in armada_37xx_wdt_probe() can fail, so
-> its return value should be checked.
->=20
-> Fixes: 54e3d9b518c8a ("watchdog: Add support for Armada 37xx CPU watchdog=
-")
-> Reported-by: Hacash Robot <hacashRobot@santino.com>
-> Signed-off-by: William Dean <williamsukatube@gmail.com>
-> ---
->  drivers/watchdog/armada_37xx_wdt.c | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/drivers/watchdog/armada_37xx_wdt.c b/drivers/watchdog/armada=
-_37xx_wdt.c
-> index 1635f421ef2c..854b1cc723cb 100644
-> --- a/drivers/watchdog/armada_37xx_wdt.c
-> +++ b/drivers/watchdog/armada_37xx_wdt.c
-> @@ -274,6 +274,8 @@ static int armada_37xx_wdt_probe(struct platform_devi=
-ce *pdev)
->  	if (!res)
->  		return -ENODEV;
->  	dev->reg =3D devm_ioremap(&pdev->dev, res->start, resource_size(res));
-> +	if (!dev->reg)
-> +		return -ENOMEM;
-> =20
->  	/* init clock */
->  	dev->clk =3D devm_clk_get(&pdev->dev, NULL);
+As platform_driver_register() could fail, it should be better
+to deal with the return value in order to maintain the code
+consisitency.
 
-Reviewed-by: Marek Beh=C3=BAn <kabel@kernel.org>
+Fixes: 27e0fe00a5c61 ("watchdog: f71808e_wdt: refactor to platform device/driver pair")
+Reported-by: Hacash Robot <hacashRobot@santino.com>
+Signed-off-by: William Dean <williamsukatube@gmail.com>
+---
+ drivers/watchdog/f71808e_wdt.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/watchdog/f71808e_wdt.c b/drivers/watchdog/f71808e_wdt.c
+index 7f59c680de25..6a16d3d0bb1e 100644
+--- a/drivers/watchdog/f71808e_wdt.c
++++ b/drivers/watchdog/f71808e_wdt.c
+@@ -634,7 +634,9 @@ static int __init fintek_wdt_init(void)
+ 
+ 	pdata.type = ret;
+ 
+-	platform_driver_register(&fintek_wdt_driver);
++	ret = platform_driver_register(&fintek_wdt_driver);
++	if (ret)
++		return ret;
+ 
+ 	wdt_res.name = "superio port";
+ 	wdt_res.flags = IORESOURCE_IO;
+-- 
+2.25.1
+
