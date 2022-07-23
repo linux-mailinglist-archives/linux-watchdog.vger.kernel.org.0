@@ -2,103 +2,122 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22DBC57E376
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Jul 2022 17:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B1957EB9A
+	for <lists+linux-watchdog@lfdr.de>; Sat, 23 Jul 2022 05:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235574AbiGVPLb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Jul 2022 11:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
+        id S235192AbiGWDCd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Jul 2022 23:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235586AbiGVPL3 (ORCPT
+        with ESMTP id S229572AbiGWDCc (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Jul 2022 11:11:29 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7629748E;
-        Fri, 22 Jul 2022 08:11:29 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id pc13so4634305pjb.4;
-        Fri, 22 Jul 2022 08:11:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=j+3wVTvGNsgRtb3ownmTQT3YcIvi/kCzqEmckstv6z8=;
-        b=dPXmbvHRXT1HcA2mLdT8HfXyolOznSZ9ht8R/QXAzt1N4A+h3HLkA7qHEd1KcpZIR4
-         9w3MBpwzG+YUPnUeZEKMAEVy22v9xjeLR9qNXq9LLeCt53LfsUZWhCUidR0HjtHSdPov
-         5Ir+EGAHG693kyZffP39Cw6g0jnBXs1m/kL0AmMznYDXWwFStMDfyHMSj+hFUkSlYWFD
-         90Ck/REvw6sAjxjYXsccuFvUUCgQ8HKMAzVS+QL3Y1C86DMnPujDzRQBT31jppM6xtPE
-         y9y6251oNg7ugN/NmFxZkZZQfIbzdLhogxAWoEgvrYQZzbIRpS+G1QQHCGz8ztFfIM+V
-         N8ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=j+3wVTvGNsgRtb3ownmTQT3YcIvi/kCzqEmckstv6z8=;
-        b=uaDG0nAj5Urqqpum5+upcua5Tna2nhZadam2i1HNPmOsYMGYLReQ4g1Vs5FRB5BR1P
-         fPQNaJM6A4VkbksCDurN7tFksSjEoE58GVjuRXN5lvZOkml/NoiFY298RCQGbHc4+1ZN
-         GgJv8+trSU4hnZl5CeoEMCZjCXZgc2QsWxdJUMuqT8eLIkaOSs5HWWKW7SA0W0DJ5Cqi
-         eZ87VefiT6QE/NEV1PhIudzujBJdD0crDJDxGbrjljf+I1+NN06WV+vcvIwmucZzVzFv
-         U2sf9FQAdzMtfZZFV2EynnqytK7sU0Q2XPPKadQquh4OTXVNpRK1HnzMQLBh/+5OTS9p
-         LiqA==
-X-Gm-Message-State: AJIora96U2WyV5eNk0dJ7ckvsB+P860bV+MYjT2ropKDNiB+u79hoS00
-        xTqrxxxol55wyQgMjY5HVDyee5rtTe9mww==
-X-Google-Smtp-Source: AGRyM1upmoix8sELExi6juhAcvu8o2HpurcLMdmUy2ml1NhvQJK0PsJ1qgBljrcq0Lf0aNQeRORUcA==
-X-Received: by 2002:a17:902:a3cc:b0:16d:1af4:6359 with SMTP id q12-20020a170902a3cc00b0016d1af46359mr386477plb.56.1658502688796;
-        Fri, 22 Jul 2022 08:11:28 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z15-20020a17090abd8f00b001f21f7821e0sm3495531pjr.2.2022.07.22.08.11.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 08:11:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <231de7ae-a7b0-14f0-6778-91ad9cf4223f@roeck-us.net>
-Date:   Fri, 22 Jul 2022 08:11:26 -0700
+        Fri, 22 Jul 2022 23:02:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFADDECC;
+        Fri, 22 Jul 2022 20:02:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0CE0EB82B1E;
+        Sat, 23 Jul 2022 03:02:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E43CC341C6;
+        Sat, 23 Jul 2022 03:02:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658545346;
+        bh=RmHNidHcM6XnyksPN/PZ9Th3H+UhaPw4mbqV8BGr+lk=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=eu/SahGnm2hDYt+NNv6xEtT/DRemsy7UcVl/gxuxomUCXoPIbz5QwEzpuI3xmeDCz
+         6CvunG/RROezKcPISJH/AZKEfl5SA9kYZ2cAm8q9MYDhCFWJhnpEhB1LjdF5nWszvo
+         yxQ0h13kwPxBbjHoh9Qb4cPngEMrGcd8vfJT9cQ2BxmLzVqEXOjGCcaU3evhGVcTln
+         ozPywvOhwtK+zhKYTPA2I/JIH1oVMEIwqP8BXwi82kEdk2hgJcTXMdVmSXvzcxerr7
+         /5IotM9Y4VfFM3U5UH2+NHcLu0JYjN+Wqs3J2ch54DBiyzrtJ3KZpebnwAwHq6R/KY
+         l9JO+hwonW7yw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] watchdog: dw_wdt: Fix comment typo
-Content-Language: en-US
-To:     Jason Wang <wangborong@cdjrlc.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220716041951.34714-1-wangborong@cdjrlc.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220716041951.34714-1-wangborong@cdjrlc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAP6Zq1ju08GSjNnEG+zDUC8W6aQMJxd5He7QJxy9++hTy0Dc7A@mail.gmail.com>
+References: <20220711123519.217219-1-tmaimon77@gmail.com> <20220711123519.217219-5-tmaimon77@gmail.com> <20220711195544.70A30C34115@smtp.kernel.org> <CAP6Zq1ie_RgJ_9S3ftoVJ=eJHX1xR4_O_czKZghNPKVEFOzC8Q@mail.gmail.com> <20220718191454.5B5D3C341C0@smtp.kernel.org> <CAP6Zq1ju08GSjNnEG+zDUC8W6aQMJxd5He7QJxy9++hTy0Dc7A@mail.gmail.com>
+Subject: Re: [PATCH v8 04/16] clk: npcm8xx: add clock controller
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jonathan =?utf-8?q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Olof Johansson <olof@lixom.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Thomas G leixner <tglx@linutronix.de>,
+        Patrick Venture <venture@google.com>,
+        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Nancy Yuen <yuenn@google.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        SERIAL DRIVERS <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Date:   Fri, 22 Jul 2022 20:02:24 -0700
+User-Agent: alot/0.10
+Message-Id: <20220723030226.8E43CC341C6@smtp.kernel.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/15/22 21:19, Jason Wang wrote:
-> The double `have' is duplicated in the comment, remove one.
-> 
-> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+Quoting Tomer Maimon (2022-07-19 03:04:43)
+> On Mon, 18 Jul 2022 at 22:14, Stephen Boyd <sboyd@kernel.org> wrote:
+> >
+> >
+> > So the clk and reset driver should be the same driver, or one driver
+> > should register the other and use the auxiliary bus to express the
+> > relationship. That way we know that the drivers are tightly coupled and
+> > aren't going to stomp over each other.
+> I think it is very problematic to use the same driver for the reset
+> and the clocks also because The NPCM reset driver is an old driver
+> that was used also to the older NPCM BMC SoC so it will be problematic
+> to use the clock and reset driver in the same space.
+> indeed the reset and clocks are using the same memory region but they
+> are not using the same registers, is it not enough?
+> Please be aware that the NPCM reset driver is checking that it is
+> using the reset registers before calling I/O functions.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+To put it simply, platform device drivers should use platform device
+APIs. The platform device APIs hide the fact that the firmware is ACPI
+or DT or nothing at all. The usage of of_address_to_resource() is
+problematic.
 
-> ---
->   drivers/watchdog/dw_wdt.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
-> index cd578843277e..3208ce305335 100644
-> --- a/drivers/watchdog/dw_wdt.c
-> +++ b/drivers/watchdog/dw_wdt.c
-> @@ -218,7 +218,7 @@ static int dw_wdt_set_timeout(struct watchdog_device *wdd, unsigned int top_s)
->   
->   	/*
->   	 * Set the new value in the watchdog.  Some versions of dw_wdt
-> -	 * have have TOPINIT in the TIMEOUT_RANGE register (as per
-> +	 * have TOPINIT in the TIMEOUT_RANGE register (as per
->   	 * CP_WDT_DUAL_TOP in WDT_COMP_PARAMS_1).  On those we
->   	 * effectively get a pat of the watchdog right here.
->   	 */
+After converting that to platform APIs you'll get janitor style cleanups
+trying to convert to devm_platform_ioremap_resource(). We'll have to
+discuss this again when that happens, even if there's a comment in the
+code indicating we can't reserve the IO space because there's another
+driver. These problems have happened in the past, fun times!
 
+Furthermore, in DT, reg properties aren't supposed to overlap. When that
+happens it usually indicates the DT is being written to describe driver
+structure instead of the IP blocks that are delivered by the hardware
+engineer. In this case it sounds like a combined clk and reset IP block
+because they piled all the SoC glue stuff into a register range. Are
+there more features in this IO range?
