@@ -2,74 +2,76 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8853A5803A7
-	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Jul 2022 19:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6226B5806D4
+	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Jul 2022 23:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiGYRtw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 25 Jul 2022 13:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
+        id S237511AbiGYVdP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 25 Jul 2022 17:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbiGYRtw (ORCPT
+        with ESMTP id S237491AbiGYVdC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 25 Jul 2022 13:49:52 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17FEBF64
-        for <linux-watchdog@vger.kernel.org>; Mon, 25 Jul 2022 10:49:50 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id ku18so11195711pjb.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 25 Jul 2022 10:49:50 -0700 (PDT)
+        Mon, 25 Jul 2022 17:33:02 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA931255BA
+        for <linux-watchdog@vger.kernel.org>; Mon, 25 Jul 2022 14:30:31 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id s206so11495661pgs.3
+        for <linux-watchdog@vger.kernel.org>; Mon, 25 Jul 2022 14:30:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=cNG0bdB/LrMkd/JRV2S0Dl/cLBGOu5QRYjQryWwpiL0=;
-        b=Pn7+vwpXFQcPaBZ9YV58iaSK11dE+sZZOb7vn4EKVtQ1asJ4xvlwSo7UJDKuAL+57/
-         b+gKEQVovpwcqWgCPgDiOct1CCJkycKXYWDJCu8uAeRhCyTl4RyPPkWBt1u3yr7HCF46
-         lU7kB9qKdiDW2uab4t4b82Ym7mNo4ahLFAYmsR8WuDE93jpeIYzh6P3zXks2JiGs+WFW
-         tY3W6fhsSIQ245A4E5SEU4B6XaPNvCJol4xXAQaW4QJcsmIA+sbWOa5YVYjR/h+qXbue
-         gK+ow+dr+Nr6g1jh0YiSBE5jYJ2F45tJfCGbtG7f3JRILnaZeo1XYxjfmMBHEjh7zFhW
-         zibA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wLeFnHeL7vjlKLn8EGTK3JTliauPikeFfDHsD2Hn0tU=;
+        b=XTWzP+/My95HROYMjfb+t8+gWtkKCzB2NVlrMWvMvTAG2ddPIUNbbx/VGnQDLo5s83
+         0Q3+YubYnDC9NCpHwR5CNCdOPDeweLAO/wpX/lERQS6TBstdTnPj4PVNT7C09ODKv4dc
+         n7YR9CYi0ysDjG40GM5zhVmU+ZOB4CFTbWBdrf8rQyrCnGywIJjiD9IYGYz/0bac708j
+         IL+CLgwYFF58uI5Tb/pRW1nl7Jjn++YmCn91SOrxweBOwc8NBAr7I3JfRr9JyjTQbRDS
+         5bM8Cu/2f3aLm8O+8YhiSsF8+rMZcq0AM1LdnCSbuH4joKYQDzs0jg/LbDNMXuA9Lzwd
+         xM5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=cNG0bdB/LrMkd/JRV2S0Dl/cLBGOu5QRYjQryWwpiL0=;
-        b=Wz11ApIRNBSVR7NBT4/WipJMfJ+Cg70qywKHO878pxHJPntuzouIBBUfZbJtrXAEiL
-         dBAAT8Ao++H5G3LPEj/aavc1r5gtsKuHDUVaT3ffx7cMBaYWNhfPpqQBRC9LrCTLP8lW
-         PY3oHJydnQ4tHicfQ2H7aFIt4MiB9U1+PmTe1q5D3tDGzALLC2kxPvVLmpROId5OyHuz
-         m5lOorShAYFT5G8h9nLEe6U7oYOHyj5z3KGrw4VGI0a6S0tDuGDR/sonVm/BwF6CnKJG
-         f6UjhLdfLKncE1XIcKRZQNDAMRMhdufzoOFu6mXZbnkH/uE3sTzY5GE5dMc74B6p/nxq
-         4mNg==
-X-Gm-Message-State: AJIora/FxdXNbRX1/cHuzi7OmZe3YlKtpk6Cjz5lrL8NBFdc7fuJg/BG
-        h0dSvKGYYAj+BwD4hVKgmAr5d0DMiRpu2A==
-X-Google-Smtp-Source: AGRyM1u68Vf2peQNBckB/4QUoiXclRRT3fNth6CX7oMfiicBJNV/mO1i99j+Sh+Hc9Q7GT8ZTGBceQ==
-X-Received: by 2002:a17:902:e54d:b0:16d:6bd8:58cd with SMTP id n13-20020a170902e54d00b0016d6bd858cdmr7439339plf.66.1658771390247;
-        Mon, 25 Jul 2022 10:49:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ik18-20020a170902ab1200b0016d9a17c8e0sm95125plb.68.2022.07.25.10.49.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Jul 2022 10:49:48 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=wLeFnHeL7vjlKLn8EGTK3JTliauPikeFfDHsD2Hn0tU=;
+        b=bXMDKgnM56a5ox3+oE2Tu1UHTyqKCWfygXH4JcC9xDkGE/JW8kV1q6miaXG2RjSTee
+         91s40vZpJJ0dHU830xiRoSpe+TYjlIpDSsetcnXWxFG7BqeXFj7yfV5OdoTcYYUDmYWG
+         jz/rPq1z07SILt5jkPFR3SSNQ0/qR2Ykh7raTjWKmGaQhT/J+QHXM54PUFiMT2MXtnx4
+         xQ1dmJGP+rLXTRbZ+d1bbUmZF5URsN3FhLP/YlHkFzhH3UUOhV7/8VpXtdyLV+vbZEt0
+         kY3DWFXwpjKIEIgq/NCeLIikLyMWNl5fjPU/IIK+bE+VPp8TSN65BrlEZN6s41HY4O0A
+         GUgw==
+X-Gm-Message-State: AJIora+GEqH9FYCFV817PVfslbgwF96npuC4F2uLHrwG1Or40Cf+hKeD
+        2rZugexeTcbal2VEVxvc7uI=
+X-Google-Smtp-Source: AGRyM1tpYITPOSLmtnwiMWtXvd7QNjLwwbnlTkrM/UJTcSzE7nhET1ps5q26rjMX0UVHLKlKPFLCGA==
+X-Received: by 2002:a05:6a00:15c3:b0:52b:1675:6dfc with SMTP id o3-20020a056a0015c300b0052b16756dfcmr14849019pfu.52.1658784628335;
+        Mon, 25 Jul 2022 14:30:28 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s14-20020a17090a13ce00b001eee8998f2esm11555790pjf.17.2022.07.25.14.30.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Jul 2022 14:30:27 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ea6f9a9f-6849-4dc4-d2d3-29c72e7d9a8f@roeck-us.net>
-Date:   Mon, 25 Jul 2022 10:49:47 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     =?UTF-8?Q?David_M=c3=bcller_=28ELSOFT_AG=29?= <d.mueller@elsoft.ch>,
-        linux-watchdog@vger.kernel.org
-References: <20220722095104.74635-1-d.mueller@elsoft.ch>
- <a97d3153-3613-77d4-f0a0-5f51ad3b619b@roeck-us.net>
- <61171b89-29e7-6486-2259-cab51e18f550@elsoft.ch>
+Date:   Mon, 25 Jul 2022 14:30:26 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC] [PATCH] watchdog: Exar/MaxLinear XR28V38x driver
-In-Reply-To: <61171b89-29e7-6486-2259-cab51e18f550@elsoft.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+To:     Scott Cheloha <cheloha@linux.ibm.com>
+Cc:     MichaelEllerman <mpe@ellerman.id.au>,
+        linux-watchdog@vger.kernel.org, tzungbi@kernel.org,
+        brking@linux.ibm.com, nathanl@linux.ibm.com, aik@ozlabs.ru,
+        npiggin@gmail.com, vaishnavi@linux.ibm.com, wvoigt@us.ibm.com,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v3 4/4] watchdog/pseries-wdt: initial support for
+ H_WATCHDOG-based watchdog timers
+Message-ID: <20220725213026.GA1319556@roeck-us.net>
+References: <20220713202335.1217647-1-cheloha@linux.ibm.com>
+ <20220713202335.1217647-5-cheloha@linux.ibm.com>
+ <28eb0fd6-4c4e-17d5-0f89-73eb68b051fa@roeck-us.net>
+ <Yt7AvQjmYzUTYuVy@rascal-austin-ibm-com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yt7AvQjmYzUTYuVy@rascal-austin-ibm-com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,228 +79,35 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/25/22 07:24, David Müller (ELSOFT AG) wrote:
-> Hallo and thanks for your comments
+On Mon, Jul 25, 2022 at 11:11:41AM -0500, Scott Cheloha wrote:
+> On Wed, Jul 13, 2022 at 01:50:14PM -0700, Guenter Roeck wrote:
+> > On 7/13/22 13:23, Scott Cheloha wrote:
+> > > PAPR v2.12 defines a new hypercall, H_WATCHDOG.  The hypercall permits
+> > > guest control of one or more virtual watchdog timers.  The timers have
+> > > millisecond granularity.  The guest is terminated when a timer
+> > > expires.
+> > > 
+> > > This patch adds a watchdog driver for these timers, "pseries-wdt".
+> > > 
+> > > pseries_wdt_probe() currently assumes the existence of only one
+> > > platform device and always assigns it watchdogNumber 1.  If we ever
+> > > expose more than one timer to userspace we will need to devise a way
+> > > to assign a distinct watchdogNumber to each platform device at device
+> > > registration time.
+> > > 
+> > > Signed-off-by: Scott Cheloha <cheloha@linux.ibm.com>
+> > 
+> > Acked-by: Guenter Roeck <linux@roeck-us.net>
 > 
-> Guenter Roeck schrieb am 22.07.22 um 17:08:
->> On 7/22/22 02:51, David Müller wrote:
+> Guenter, Michael,
 > 
->>> +/* Includes */
->>
->> There are various pointless comments in this driver.
->> This is one of them.
+> Which tree is taking this series?
 > 
-> Ok, will fix.
-> 
->>> +/* WDT runtime registers */
->>> +#define WDT_CTRL    0x00
->>> +#define WDT_VAL        0x01
->>> +/* the millisec feature is not supported */
->>
->> And this is another one. Readers won't know that the unit to be written
->> into the chip includes two bits, not juust one, and that 00 reflects
->> a 10ms timeout units.
->>
->>> +#define WDT_UNITS_SEC    BIT(1)
->>> +#define WDT_UNITS_MIN    BIT(2)
->>
->> This is a bit misleading, since the two bits combined control the
->> interval. That should be explained. The comment above doesn't do this.
-> 
-> What do you purpose / is prefered?
-> 
-> #define WDT_UNITS_MS    0x0    /* not supported / used */
-> #define WDT_UNITS_SEC    0x2
-> #define WDT_UNITS_MIN   0x4
-> 
-> or
-> 
-> enum wdt_units {
->      WDT_UNITS_MS = 0,        /* not supported / used */
->      WDT_UNITS_SEC = 2,
->      WDT_UNITS_MIN = 4,
-> };
-> 
-> or something else?
-> 
-Either one. A comment would do as well. This is where a comment is useful.
+The series includes non-watchdog changes, so my expectation was that some
+other tree would take it.
 
->>> +/* Module parameters */
->>> +#define WATCHDOG_TIMEOUT 60        /* 60 sec default timeout */
->>> +static int timeout = WATCHDOG_TIMEOUT;    /* in seconds */
->>
->> Should be pre-initialized with 0 and the default should be set in struct
->> watchdog_device to reduce runtime conplexity.
-> 
-> Ok, will fix.
-> 
->>> +    /* read the MSB */
->>> +    val = exar_sio_read(config_port, reg);
->>> +
->>> +    /* read and merge in the LSB */
->>> +    val = (val << 8) | exar_sio_read(config_port, reg + 1);
->>> +
->> More pointless comments. Please limit comments to places
->> where they are useful.
-> 
-> Ok, will fix.
-> 
->>> +static void exar_wdt_disarm(const struct wdt_priv *priv)
->>> +{
->>> +    outb(0xFF, priv->rt_base + WDT_VAL);
->>> +    outb(0, priv->rt_base + WDT_VAL);
->>
->> The datasheet says that writing a non-0 value stops the watchdog,
->> but it doesn't explain what happens when writing 0 into the register.
->> This does warrant an explanation.
-> 
-> The datasheet is a little bit unclear about how to correctly stop the watchdog. In my tests with actual hardware, the sequence above worked.
-> But I will check again.
-> 
+Guenter
 
-Again, this is where a comment would be useful (eg explain that just writing 0xff
-is insufficient, and that writing 0 was found to be necessary to actually stop
-the watchdog reliably).
-
->>> +static int exar_wdt_set_timeout(struct watchdog_device *wdog, unsigned int t)
->>> +{
->>> +    struct wdt_priv *priv = watchdog_get_drvdata(wdog);
->>> +    unsigned char timeout_unit = WDT_UNITS_SEC;
->>> +
->>> +    if (watchdog_timeout_invalid(wdog, t))
->>> +        return -EINVAL;
->>> +
->> Unnecessary check; done by framework.
+> watchdog-next or PPC development?
 > 
-> Ok, will fix.
-> 
->>> +    /*
->>> +     * if new timeout is bigger then 255 seconds, change the
->>> +     * unit to minutes and round the timeout up to the next whole minute
->>> +     */
->>> +    if (t > 255) {
->>> +        timeout_unit = WDT_UNITS_MIN;
->>> +        t = DIV_ROUND_UP(t, 60);
->>> +    }
->>> +
->>> +    /* save for later use in exar_wdt_start() */
->>> +    priv->unit = timeout_unit;
->>
->> Using a bool for timeout_unit would make it easier for the compiler.
->>
->>> +    priv->timeout = t;
->>> +
->>> +    wdog->timeout = (timeout_unit == WDT_UNITS_MIN) ? t * 60 : t;
->>> +
->>
->> This doesn't update the watchdog registers when the watchdog is running.
->> This means that the watchdog may fire unexpectedly if the timeout is
->> changed from a small to a large value.
-> 
-> Is there a reason why the framework does not issue a stop(), update(), start() sequence when the timeout value is changed?
-
-The framework does not know what each individual watchdog needs.
-It is undesirable to stop the watchdog when changing the timeout,
-but some watchdogs need it.
-
->>> +    ret = exar_sio_enter(config_port, key);
->>> +    if (ret) {
->>> +        pr_info("config space unavailable\n (err: %d", ret);
->>
->> Please no such noise. Also, there is an unbalanced ( in the string.
-> 
-> Ok, will fix.
-> 
->>> +        return 0;
->>> +    }
->>> +
->>> +    vid = exar_sio_read16(config_port, EXAR_VID);
->>> +    did = exar_sio_read16(config_port, EXAR_DID);
->>> +
->>> +    /* check for the vendor and device IDs we currently know about */
->>> +    if (vid == 0x13A8 &&        /* vendor Exar/MaxLinar */
->>> +        (did == 0x0382 ||        /* UART XR28V382 */
->>> +         did == 0x0384)) {        /* UART XR28V384 */
->>
->> It might be useful to have defines for those values.
-> 
-> Ok, will fix.
-> 
->>> +        /* set LD config reg to WDT device (8) */
->>> +        exar_sio_write(config_port, EXAR_LDN, 8);
->>> +        /* is device active? */
->>> +        if (exar_sio_read(config_port, EXAR_ACT) == 0x01) {
->>> +            /* get the WDT runtime registers base address*/
->>> +            base = exar_sio_read16(config_port, EXAR_RTBASE);
->>> +
->>> +            /* set global WDT control to
->>> +             * assert WDTOUT / rearm by read
->>> +             */
->>
->> Please use standard multi-line comments.
-> 
-> Ok, will fix.
-> 
->>> +            exar_sio_write(config_port, EXAR_WDT, 0);
->>
->> The detect function should really not do this. Configuration and detection
->> should be separate functions.
-> 
-> Ok, will fix.
-> 
->>> +static int __init exar_wdt_probe(struct platform_device *pdev)
->>> +{
->>> +    struct device *dev = &pdev->dev;
->>> +    struct wdt_priv *priv;
->>> +    int ret, i, j;
->>> +    unsigned short did = 0, rt_base = 0;
->>> +
->>> +    /* search for the first active Exar WDT on all possible locations */
->>> +    for (i = 0; !did && (i < ARRAY_SIZE(sio_config_ports)); i++) {
->>> +        for (j = 0; !did && (j < ARRAY_SIZE(sio_enter_keys)); j++)
->>> +            did = exar_detect(sio_config_ports[i],
->>> +                      sio_enter_keys[j],
->>> +                      &rt_base);
->>> +    }
->>> +
->>> +    if (!did)
->>> +        return -ENODEV;
->>
->> This should really be done in the init function, and the init function should only instantiate the watchdog platform driver if a device was found.
-> 
-> Ok, will move the detection part to the init() function.
-> 
->> Also, this assumes either that only one supported device is in the system,
->> or that the watchdog is always connected to the first device. The init
->> function should really instantiate devices for each detected chip,
->> not just for the first one.
-> 
-> Yes, only one active Exar WDT device is supported.
-> Even if there are multiple Exar UART chips present in the system, it
-> doesn't make much sense to have more than one Exar WDT active and supported at a time IMHO.
-> 
-
-How do you know which one is the active one, ie the one connected to a reset pin ?
-Also, at least for my part, I often use more than one watchdog if multiple watchdogs
-are supported in the system. Your use case may not want/need it, but there may be
-other use cases.
-
->>> +    if (watchdog_timeout_invalid(&wdt_dev, timeout))
->>> +        /* invalid timeout specified, reset to default */
->>> +        timeout = WATCHDOG_TIMEOUT;
->>
->> It would be easier to just initialize .timeout in struct watchdog_device
->> and let watchdog_init_timeout() validate the configured value.
-> 
-> Ok, will fix.
-> 
->>> +    if (!devm_request_region(dev,
->>> +                 priv->rt_base + WDT_CTRL, 2, DRV_NAME)) {
->>> +        dev_err(dev, "failed to request region 0x%04x-0x%04x.\n",
->>> +            priv->rt_base + WDT_CTRL, priv->rt_base + WDT_VAL);
->>> +        return -EBUSY;
->>
->> This should be -ENOMEM.
-> 
-> Ok, will fix.
-
+> -Scott
