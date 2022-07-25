@@ -2,74 +2,135 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C1657FBBC
-	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Jul 2022 10:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D542257FEF8
+	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Jul 2022 14:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234201AbiGYIv4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 25 Jul 2022 04:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
+        id S234845AbiGYMZp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 25 Jul 2022 08:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234196AbiGYIvw (ORCPT
+        with ESMTP id S231722AbiGYMZp (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 25 Jul 2022 04:51:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E06F140C0;
-        Mon, 25 Jul 2022 01:51:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE32361214;
-        Mon, 25 Jul 2022 08:51:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDBC7C341CF;
-        Mon, 25 Jul 2022 08:51:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1658739108;
-        bh=PmutZiEng6MMXh9O1CX9eVOw0OqozW+N1qFKVKcmT2c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=y/4+yLSYUP+6YC7fwPcXNVSD91v96gKZaF7dCwly9h8Yurotuv+7vY7RO/+k72jf0
-         dHasYr2It6g7uB+xcqEYO0xJT/xq/D4vQMgZZFn3KGgZrVIEAk3oCh3qx5K9ahdp1o
-         Zq+qeQR33fe3iz0O6FeuQurRd99Cqqpj+yZVCBhQ=
-Date:   Mon, 25 Jul 2022 10:51:43 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Alexey Klimov <klimov.linux@gmail.com>
-Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, oneukum@suse.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, atishp@rivosinc.com,
-        atishp@atishpatra.org, yury.norov@gmail.com, aklimov@redhat.com,
-        atomlin@redhat.com
-Subject: Re: [PATCH v5] watchdog: add driver for StreamLabs USB watchdog
- device
-Message-ID: <Yt5Zn9cXDe9/F9RJ@kroah.com>
-References: <20220725030605.1808710-1-klimov.linux@gmail.com>
+        Mon, 25 Jul 2022 08:25:45 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346FAE089;
+        Mon, 25 Jul 2022 05:25:44 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26PCEp16024163;
+        Mon, 25 Jul 2022 12:25:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=+7hMN0q9bSC1Ax80dNPgUH6uvz9nFDik+dDQ/moFeyI=;
+ b=pXoNXmj6ASPxcc2MUMkLCeOmtnC/wUQXinKKGQi4VSEHQlDeY16Aeu1dTYz5L8juWAPd
+ dNiOq4fZ9m/rw7UAkoQGufY3wD8d47zO2s+CnIF7jjhzS5Xvc8oGQmxcHkMgddhSuIom
+ xO2hGddaCD+Eg183ogh0fCxCTNp9zuyfIvW9HQmfcp7sq2t7Tr3Czp70C8nOi2EukZcZ
+ xHKEQU88RILejBcui7SR/U/CecwadJD8RaaUIaaMaD22/+fNXl/2j4MTDjTwQsDOWDv+
+ +Ke23KWOLnZuZnW5ymGRd3HvagLjwOvAULfMejJ8wiUUnGrfzPUgN2YdAIujIMX4LKKC UQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hhu0m8bjj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 12:25:13 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26PCFl7W027830;
+        Mon, 25 Jul 2022 12:25:13 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hhu0m8bhf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 12:25:12 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26PCL3cF017397;
+        Mon, 25 Jul 2022 12:25:11 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3hg97tadw1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jul 2022 12:25:10 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26PCNB4A23200028
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 25 Jul 2022 12:23:12 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 83B7011C050;
+        Mon, 25 Jul 2022 12:25:08 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0DA8811C04C;
+        Mon, 25 Jul 2022 12:25:08 +0000 (GMT)
+Received: from [9.101.4.33] (unknown [9.101.4.33])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 25 Jul 2022 12:25:07 +0000 (GMT)
+Message-ID: <4e366d73-fb9f-bd83-abd0-c624a737a0cd@linux.ibm.com>
+Date:   Mon, 25 Jul 2022 14:25:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220725030605.1808710-1-klimov.linux@gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.3
+Subject: Re: [PATCH v5 4/4] pseries/mobility: set NMI watchdog factor during
+ an LPM
+To:     Randy Dunlap <rdunlap@infradead.org>, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        wim@linux-watchdog.org, linux@roeck-us.net, nathanl@linux.ibm.com
+Cc:     haren@linux.vnet.ibm.com, hch@infradead.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-watchdog@vger.kernel.org
+References: <20220713154729.80789-1-ldufour@linux.ibm.com>
+ <20220713154729.80789-5-ldufour@linux.ibm.com>
+ <e6232bb4-a8e5-8f33-e80e-06b1356565b7@infradead.org>
+Content-Language: fr
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <e6232bb4-a8e5-8f33-e80e-06b1356565b7@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: oaoX5aaD2obYHUM1BDYUNJcpyVzDgQkz
+X-Proofpoint-GUID: 1K3Wa8DBSonxvU57zc15TRRFAuGltn2H
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-07-25_09,2022-07-25_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0 suspectscore=0
+ adultscore=0 spamscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2206140000
+ definitions=main-2207250051
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 04:06:05AM +0100, Alexey Klimov wrote:
-> +static bool nowayout = WATCHDOG_NOWAYOUT;
-> +module_param(nowayout, bool, 0);
-> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-> +			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-> +
+Le 13/07/2022 à 22:17, Randy Dunlap a écrit :
+> Hi Laurent,
+> 
+> On 7/13/22 08:47, Laurent Dufour wrote:
+>> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+>> index ddccd1077462..d73faa619c15 100644
+>> --- a/Documentation/admin-guide/sysctl/kernel.rst
+>> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+>> @@ -592,6 +592,18 @@ to the guest kernel command line (see
+>>  Documentation/admin-guide/kernel-parameters.rst).
+>>  
+>>  
+>> +nmi_wd_lpm_factor (PPC only)
+>> +============================
+>> +
+>> +Factor apply to the NMI watchdog timeout (only when ``nmi_watchdog`` is
+> 
+>    Factor to apply to
 
-Meta-comment about watchdog drivers, this is per-driver, not per-device,
-which does not make sense for when these devices are on removable busses
-where you can have multiple ones.
+Thanks, Randy.
 
-I don't suggest changing this (as it follows the current style of other
-watchdog drivers), but perhaps a sysfs attribute for watchdog devices
-can do the same thing in the future so you can do this on a per-device
-basis.
+Michael, could you fix that when applying the series?
 
-Anyway, driver looks good to me, nice work!
+Cheers,
+Laurent
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> 
+>> +set to 1). This factor represents the percentage added to
+>> +``watchdog_thresh`` when calculating the NMI watchdog timeout during an
+>> +LPM. The soft lockup timeout is not impacted.
+>> +
+>> +A value of 0 means no change. The default value is 200 meaning the NMI
+>> +watchdog is set to 30s (based on ``watchdog_thresh`` equal to 10).
+> 
+
