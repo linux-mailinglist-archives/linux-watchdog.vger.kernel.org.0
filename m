@@ -2,528 +2,232 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE62157F86E
-	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Jul 2022 05:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09FDB57F924
+	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Jul 2022 07:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiGYDGh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 24 Jul 2022 23:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
+        id S230058AbiGYFy2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 25 Jul 2022 01:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiGYDGP (ORCPT
+        with ESMTP id S229989AbiGYFy1 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 24 Jul 2022 23:06:15 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F309E021;
-        Sun, 24 Jul 2022 20:06:13 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id c22so5988829wmr.2;
-        Sun, 24 Jul 2022 20:06:13 -0700 (PDT)
+        Mon, 25 Jul 2022 01:54:27 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D27FD3A
+        for <linux-watchdog@vger.kernel.org>; Sun, 24 Jul 2022 22:54:25 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id c13so2756439pla.6
+        for <linux-watchdog@vger.kernel.org>; Sun, 24 Jul 2022 22:54:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gOEP+E9vEvmvs8/MLAucoh0GM1fTWokr8r32cEEhGnA=;
-        b=mYDvNxeTMr71SJxS+KOy2KPcVem7hK81JydJ9AiYjPuhDVroBIThLG1ricE3gio0nI
-         W3ktsWbTeNGTSsAojvKBLqA6JR6EXXhOsL+/AuX4aLqncq9ZxlfQ67T+V2tle6CCmAXT
-         vbLfBVkaSDC+2RbdV2u3R8VxVkOQkUc4bxor4fMjFummgcPWvYarzGUTKmnIe7P0+cll
-         RyygBJYKwSPajEpI8WmUzkGnPNnnc3eGLTwy/7wTLkjVaTWzsSTkCCpPS6Igxv1+slur
-         Kgem9VasY1SvW9cc1bHZ8nIJw1T1zSAqi9LwMosyA6qeVxVq6jFGpGIRqi2Kj9F05qP6
-         8KCQ==
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version;
+        bh=5+ReAOzktUsFtx6AzqypXrLZ1EGP++PAobDO/Dgvz7w=;
+        b=dT4zW+VhCg3QCxjRy/WyJqHZ7hoeAkObLEpmH3gST3s2+6JvF0BIA8yg4B/5K9K59B
+         3NWzrdIUIL5uco64CouyNTUFG/BOiSWEypJVWfBKie07pYC//6VmS/Dmuk9xx+cfqttR
+         cv3V9laOZzNSVw3vY9wQR2HcJqod7g9+MZGyo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gOEP+E9vEvmvs8/MLAucoh0GM1fTWokr8r32cEEhGnA=;
-        b=qnVQA1hn7czJVi91MQoTIrB3uuJ9DThnXzELXXQaJXHSDScnD7Hg5CpsczoGt5mnYS
-         nUmE06nCm3tntDg0qQwiG0RJHRk/3tdA8AfGNW412iQuB3c6kUGA5fd4W9xKe9ubunIf
-         zlAG3V2RT5PIIShhlFgMLQjPfsGK4SjpRiiZ1W0XkWrwomiPLTWn3W00aFHgkWjmQk2I
-         Iie5k37zhzw4wuVmdTiaKzHAfEk/G6pwAXvcyCZdPg4dkV+phi9mX3V7nOPYx6KqUM+J
-         TmUhWrRs9v2MooiAiz8kPpP2CzyHbAwqx9OaRoKWGy7jPPZk7uqLrYaQorF/AXTbRd8g
-         idqQ==
-X-Gm-Message-State: AJIora9+HCKXzcpPNfA8cW6OPTg2yu7Rx27TzCh8DzawTI4Bys4e5xAp
-        5RLi7P5ZfTmhokUOyQSG858gXQ61jzvPyA==
-X-Google-Smtp-Source: AGRyM1tQqhrShSdxdB5nZ+zpWFy1pDSmnACwXGiN9SwTMwCM6ZhhCjfiyJE1Mx+x1BqGjMorF1EYKA==
-X-Received: by 2002:a05:600c:3ac7:b0:3a3:64c3:6ddf with SMTP id d7-20020a05600c3ac700b003a364c36ddfmr676407wms.105.1658718371634;
-        Sun, 24 Jul 2022 20:06:11 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:4b00:9414:100:70ae:aa59:3138:f63c])
-        by smtp.gmail.com with ESMTPSA id p10-20020adff20a000000b0021baf5e590dsm10523227wro.71.2022.07.24.20.06.10
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version;
+        bh=5+ReAOzktUsFtx6AzqypXrLZ1EGP++PAobDO/Dgvz7w=;
+        b=Br01GFyfxr+Q1t5WSAH95VMDKpcXWCZ5MOKvVIhLgRMq16vrSanEAfJibpEXbh5vWc
+         byjs+FgL7w9JqUVjdbBhyQeRqaOFDcxEuHE+YSiR4S0UjJYhUNMSrTgGxueF3m8AOmzL
+         fngU2+GdlXFpnjRFB9ISARiuCPB5roK4GcIiSkmSJxxZecEArvNugMdX8Cwu4/8rvak0
+         hBafBZSDe56uS4gFrDmto0ZnUgKLwgZRtrmdV9MNSOv19O0g8lV5Mr9bHIoDDMeDNS7I
+         z6/8CNaxjz1T0JvLyZ7kzgPVTvQUFTcX1DN3A69NNerKVUW8K+2qUstpUVKOp3GtUaEN
+         ufdw==
+X-Gm-Message-State: AJIora+U2N6XlOEOgWQeIfKbdQ4LKtpQVmT3RauEwCN6ijT2ETDPOLV9
+        JWQmVliGawqPfnbOxokuGfB2Ug==
+X-Google-Smtp-Source: AGRyM1sYoEZ6EitovP2LZqqKLNHsNoQWEvqJ3kkwyghWLj+uEC3yJB+BbvOcaAOHcpDpXh1LUQXtVw==
+X-Received: by 2002:a17:90b:1807:b0:1ef:8aa5:1158 with SMTP id lw7-20020a17090b180700b001ef8aa51158mr30666723pjb.163.1658728464761;
+        Sun, 24 Jul 2022 22:54:24 -0700 (PDT)
+Received: from ubuntu-22.localdomain ([192.19.222.250])
+        by smtp.gmail.com with ESMTPSA id m5-20020a170902bb8500b0016c4331e61csm8198910pls.137.2022.07.24.22.54.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Jul 2022 20:06:10 -0700 (PDT)
-From:   Alexey Klimov <klimov.linux@gmail.com>
-To:     linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, oneukum@suse.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        atishp@rivosinc.com, atishp@atishpatra.org, yury.norov@gmail.com,
-        aklimov@redhat.com, atomlin@redhat.com, klimov.linux@gmail.com
-Subject: [PATCH v5] watchdog: add driver for StreamLabs USB watchdog device
-Date:   Mon, 25 Jul 2022 04:06:05 +0100
-Message-Id: <20220725030605.1808710-1-klimov.linux@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Sun, 24 Jul 2022 22:54:23 -0700 (PDT)
+From:   William Zhang <william.zhang@broadcom.com>
+To:     Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     joel.peshkin@broadcom.com, f.fainelli@gmail.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        dan.beygelman@broadcom.com, anand.gore@broadcom.com,
+        kursad.oney@broadcom.com, rafal@milecki.pl,
+        krzysztof.kozlowski@linaro.org,
+        William Zhang <william.zhang@broadcom.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list),
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-i2c@vger.kernel.org (open list:I2C SUBSYSTEM HOST DRIVERS),
+        linux-mtd@lists.infradead.org (open list:MEMORY TECHNOLOGY DEVICES
+        (MTD)), netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
+        linux-pci@vger.kernel.org (open list:PCI NATIVE HOST BRIDGE AND
+        ENDPOINT DRIVERS),
+        linux-phy@lists.infradead.org (open list:GENERIC PHY FRAMEWORK),
+        linux-gpio@vger.kernel.org (open list:PIN CONTROL SUBSYSTEM),
+        linux-mips@vger.kernel.org (open list:BROADCOM BMIPS MIPS ARCHITECTURE),
+        linux-serial@vger.kernel.org (open list:SERIAL DRIVERS),
+        linux-watchdog@vger.kernel.org (open list:WATCHDOG DEVICE DRIVERS),
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH v2 0/9] arm64: bcmbca: Move BCM4908 SoC support under ARCH_BCMBCA
+Date:   Sun, 24 Jul 2022 22:53:53 -0700
+Message-Id: <20220725055402.6013-1-william.zhang@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000f289e705e49ad0f4"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Driver supports StreamLabs usb watchdog device. The device plugs
-into 9-pin usb header and connects to reset pins and reset button
-pins on desktop PC.
+--000000000000f289e705e49ad0f4
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-USB commands used to communicate with device were reverse
-engineered using usbmon.
+BCM4908 is one of the Broadcom Broadband origin WLAN Router/Access
+Pointer SoCs. It was originally added by Rafał before Broadcom started
+to upstream the support for broadband SoCs. All other ARM based Broadcom
+Broadband SoCs are now supported under arch ARCH_BCMBCA. This patch
+series migrate the BCM4908 support to ARCH_BCMBCA.
 
-Signed-off-by: Alexey Klimov <klimov.linux@gmail.com>
----
-Changes since v4:
-	-- added more comments;
-	-- added nowayout check in ->disconnect();
-	-- completely rework usb_streamlabs_wdt_cmd() ->
-                __usb_streamlabs_wdt_cmd() and functions
-		that handle validation of the response;
-	-- usb sending and receiving msgs are moved to separate
-		functions;
-        -- added soft_unbind=1 flag in usb_driver struct
-		to make it possible to send URBs in ->disconnect();
-        -- buffer is declared as __le16 now;
-        -- made checkpatch.pl --strict happy;
+Changes in v2:
+- Add Acked-by tag
+- Improve commit message with more details
+- Insert the 4908 generic compatible string in alphabetical order
 
-Previous version:
-https://lore.kernel.org/linux-watchdog/20220715234442.3910204-1-klimov.linux@gmail.com/
+William Zhang (9):
+  dt-bindings: arm64: bcmbca: Merge BCM4908 into BCMBCA
+  dt-bindings: arm64: bcmbca: Update BCM4908 description
+  arm64: dts: bcmbca: update BCM4908 board dts files
+  arm64: dts: Move BCM4908 dts to bcmbca folder
+  arm64: dts: Add BCM4908 generic board dts
+  arm64: bcmbca: Make BCM4908 drivers depend on ARCH_BCMBCA
+  arm64: bcmbca: Merge ARCH_BCM4908 to ARCH_BCMBCA
+  MAINTAINERS: Add BCM4908 maintainer to BCMBCA entry
+  arm64: defconfig: remove BCM4908
 
+ .../bindings/arm/bcm/brcm,bcm4908.yaml        | 42 -------------------
+ .../bindings/arm/bcm/brcm,bcmbca.yaml         | 25 +++++++++++
+ MAINTAINERS                                   |  1 +
+ arch/arm64/Kconfig.platforms                  | 10 +----
+ arch/arm64/boot/dts/broadcom/Makefile         |  1 -
+ arch/arm64/boot/dts/broadcom/bcm4908/Makefile |  5 ---
+ arch/arm64/boot/dts/broadcom/bcmbca/Makefile  |  5 +++
+ .../bcm4906-netgear-r8000p.dts                |  2 +-
+ .../bcm4906-tplink-archer-c2300-v1.dts        |  2 +-
+ .../broadcom/{bcm4908 => bcmbca}/bcm4906.dtsi |  0
+ .../bcm4908-asus-gt-ac5300.dts                |  2 +-
+ .../bcm4908-netgear-raxe500.dts               |  2 +-
+ .../broadcom/{bcm4908 => bcmbca}/bcm4908.dtsi |  0
+ .../boot/dts/broadcom/bcmbca/bcm94908.dts     | 30 +++++++++++++
+ arch/arm64/configs/defconfig                  |  1 -
+ drivers/i2c/busses/Kconfig                    |  4 +-
+ drivers/mtd/parsers/Kconfig                   |  6 +--
+ drivers/net/ethernet/broadcom/Kconfig         |  4 +-
+ drivers/pci/controller/Kconfig                |  2 +-
+ drivers/phy/broadcom/Kconfig                  |  4 +-
+ drivers/pinctrl/bcm/Kconfig                   |  4 +-
+ drivers/reset/Kconfig                         |  2 +-
+ drivers/soc/bcm/bcm63xx/Kconfig               |  4 +-
+ drivers/tty/serial/Kconfig                    |  4 +-
+ drivers/watchdog/Kconfig                      |  2 +-
+ 25 files changed, 84 insertions(+), 80 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/bcm/brcm,bcm4908.yaml
+ delete mode 100644 arch/arm64/boot/dts/broadcom/bcm4908/Makefile
+ rename arch/arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4906-netgear-r8000p.dts (96%)
+ rename arch/arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4906-tplink-archer-c2300-v1.dts (99%)
+ rename arch/arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4906.dtsi (100%)
+ rename arch/arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4908-asus-gt-ac5300.dts (97%)
+ rename arch/arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4908-netgear-raxe500.dts (89%)
+ rename arch/arm64/boot/dts/broadcom/{bcm4908 => bcmbca}/bcm4908.dtsi (100%)
+ create mode 100644 arch/arm64/boot/dts/broadcom/bcmbca/bcm94908.dts
 
- MAINTAINERS                       |   6 +
- drivers/watchdog/Kconfig          |  15 ++
- drivers/watchdog/Makefile         |   1 +
- drivers/watchdog/streamlabs_wdt.c | 360 ++++++++++++++++++++++++++++++
- 4 files changed, 382 insertions(+)
- create mode 100644 drivers/watchdog/streamlabs_wdt.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 64379c699903..fb31c1823043 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19190,6 +19190,12 @@ W:	http://www.stlinux.com
- F:	Documentation/networking/device_drivers/ethernet/stmicro/
- F:	drivers/net/ethernet/stmicro/stmmac/
- 
-+STREAMLABS USB WATCHDOG DRIVER
-+M:	Alexey Klimov <klimov.linux@gmail.com>
-+L:	linux-watchdog@vger.kernel.org
-+S:	Maintained
-+F:	drivers/watchdog/streamlabs_wdt.c
-+
- SUN3/3X
- M:	Sam Creasey <sammy@sammy.net>
- S:	Maintained
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 32fd37698932..64b7f947b196 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -2171,6 +2171,21 @@ config USBPCWATCHDOG
- 
- 	  Most people will say N.
- 
-+config USB_STREAMLABS_WATCHDOG
-+	tristate "StreamLabs USB watchdog driver"
-+	depends on USB
-+	help
-+	  This is the driver for the USB Watchdog dongle from StreamLabs.
-+	  If you correctly connect reset pins to motherboard Reset pin and
-+	  to Reset button then this device will simply watch your kernel to make
-+	  sure it doesn't freeze, and if it does, it reboots your computer
-+	  after a certain amount of time.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called streamlabs_wdt.
-+
-+	  Most people will say N. Say yes or M if you want to use such usb device.
-+
- config KEEMBAY_WATCHDOG
- 	tristate "Intel Keem Bay SoC non-secure watchdog"
- 	depends on ARCH_KEEMBAY || (ARM64 && COMPILE_TEST)
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index c324e9d820e9..2d601da9b5bd 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -33,6 +33,7 @@ obj-$(CONFIG_WDTPCI) += wdt_pci.o
- 
- # USB-based Watchdog Cards
- obj-$(CONFIG_USBPCWATCHDOG) += pcwd_usb.o
-+obj-$(CONFIG_USB_STREAMLABS_WATCHDOG) += streamlabs_wdt.o
- 
- # ALPHA Architecture
- 
-diff --git a/drivers/watchdog/streamlabs_wdt.c b/drivers/watchdog/streamlabs_wdt.c
-new file mode 100644
-index 000000000000..f1130fe5559c
---- /dev/null
-+++ b/drivers/watchdog/streamlabs_wdt.c
-@@ -0,0 +1,360 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * StreamLabs USB Watchdog driver
-+ *
-+ * Copyright (c) 2016-2017,2022 Alexey Klimov <klimov.linux@gmail.com>
-+ */
-+
-+#include <linux/errno.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+#include <linux/usb.h>
-+#include <linux/watchdog.h>
-+#include <asm/byteorder.h>
-+
-+/*
-+ * USB Watchdog device from Streamlabs:
-+ * https://www.stream-labs.com/products/devices/watch-dog/
-+ *
-+ * USB commands have been reverse engineered using usbmon.
-+ */
-+
-+#define DRIVER_AUTHOR "Alexey Klimov <klimov.linux@gmail.com>"
-+#define DRIVER_DESC "StreamLabs USB watchdog driver"
-+#define DRIVER_NAME "usb_streamlabs_wdt"
-+
-+MODULE_AUTHOR(DRIVER_AUTHOR);
-+MODULE_DESCRIPTION(DRIVER_DESC);
-+MODULE_LICENSE("GPL");
-+
-+#define USB_STREAMLABS_WATCHDOG_VENDOR	0x13c0
-+#define USB_STREAMLABS_WATCHDOG_PRODUCT	0x0011
-+
-+/*
-+ * one buffer is used for communication, however transmitted message is only
-+ * 32 bytes long
-+ */
-+#define BUFFER_TRANSFER_LENGTH	32
-+#define BUFFER_LENGTH		64
-+#define USB_TIMEOUT		350
-+
-+#define STREAMLABS_CMD_START	0xaacc
-+#define STREAMLABS_CMD_STOP	0xbbff
-+
-+/* timeout values are taken from windows program */
-+#define STREAMLABS_WDT_MIN_TIMEOUT	1
-+#define STREAMLABS_WDT_MAX_TIMEOUT	46
-+
-+struct streamlabs_wdt {
-+	struct watchdog_device wdt_dev;
-+	struct usb_interface *intf;
-+	/* Serialises usb communication with a device */
-+	struct mutex lock;
-+	__le16 *buffer;
-+};
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-+			__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
-+/* USB call wrappers to send and receive messages to/from the device. */
-+static int usb_streamlabs_send_msg(struct usb_device *usbdev, __le16 *buf)
-+{
-+	int retval;
-+	int size;
-+
-+	retval = usb_interrupt_msg(usbdev, usb_sndintpipe(usbdev, 0x02),
-+				   buf, BUFFER_TRANSFER_LENGTH,
-+				   &size, USB_TIMEOUT);
-+
-+	if (size != BUFFER_TRANSFER_LENGTH)
-+		return -EIO;
-+
-+	return retval;
-+}
-+
-+static int usb_streamlabs_get_msg(struct usb_device *usbdev, __le16 *buf)
-+{
-+	int retval;
-+	int size;
-+
-+	retval = usb_interrupt_msg(usbdev, usb_rcvintpipe(usbdev, 0x81),
-+				   buf, BUFFER_LENGTH,
-+				   &size, USB_TIMEOUT);
-+
-+	if (size != BUFFER_LENGTH)
-+		return -EIO;
-+
-+	return retval;
-+}
-+
-+/*
-+ * This function is used to check if watchdog timeout in the received buffer
-+ * matches the timeout passed from watchdog subsystem.
-+ */
-+static int usb_streamlabs_wdt_check_timeout(__le16 *buf, unsigned long timeout)
-+{
-+	if (buf[3] != cpu_to_le16(timeout))
-+		return -EPROTO;
-+
-+	return 0;
-+}
-+
-+static int usb_streamlabs_wdt_check_response(u8 *buf)
-+{
-+	/*
-+	 * If watchdog device understood the command it will acknowledge
-+	 * with values 1,2,3,4 at indexes 10, 11, 12, 13 in response message
-+	 * when response treated as 8bit message.
-+	 */
-+	if (buf[10] != 1 || buf[11] != 2 || buf[12] != 3 || buf[13] != 4)
-+		return -EPROTO;
-+
-+	return 0;
-+}
-+
-+/*
-+ * This function is used to check if watchdog command in the received buffer
-+ * matches the command passed to the device.
-+ */
-+static int usb_streamlabs_wdt_check_command(__le16 *buf, u16 cmd)
-+{
-+	if (buf[0] != cpu_to_le16(cmd))
-+		return -EPROTO;
-+
-+	return 0;
-+}
-+
-+static int usb_streamlabs_wdt_validate_response(__le16 *buf, u16 cmd,
-+						unsigned long timeout_msec)
-+{
-+	int retval;
-+
-+	retval = usb_streamlabs_wdt_check_response((u8 *)buf);
-+	if (retval)
-+		return retval;
-+
-+	retval = usb_streamlabs_wdt_check_command(buf, cmd);
-+	if (retval)
-+		return retval;
-+
-+	retval = usb_streamlabs_wdt_check_timeout(buf, timeout_msec);
-+	return retval;
-+}
-+
-+static void usb_streamlabs_wdt_prepare_buf(__le16 *buf, u16 cmd,
-+					   unsigned long timeout_msec)
-+{
-+	/*
-+	 * remaining elements expected to be zero everytime during
-+	 * communication
-+	 */
-+	buf[0] = cpu_to_le16(cmd);
-+	buf[1] = cpu_to_le16(0x8000);
-+	buf[3] = cpu_to_le16(timeout_msec);
-+	buf[5] = 0x0;
-+	buf[6] = 0x0;
-+}
-+
-+static int __usb_streamlabs_wdt_cmd(struct streamlabs_wdt *wdt, u16 cmd)
-+{
-+	struct usb_device *usbdev;
-+	unsigned long timeout_msec;
-+	/* how many times to re-try getting the state of the device */
-+	unsigned int retry_counter = 10;
-+	int retval;
-+
-+	if (unlikely(!wdt->intf))
-+		return -ENODEV;
-+
-+	usbdev = interface_to_usbdev(wdt->intf);
-+	timeout_msec = wdt->wdt_dev.timeout * MSEC_PER_SEC;
-+
-+	usb_streamlabs_wdt_prepare_buf(wdt->buffer, cmd, timeout_msec);
-+
-+	/* send command to watchdog */
-+	retval = usb_streamlabs_send_msg(usbdev, wdt->buffer);
-+	if (retval)
-+		return retval;
-+
-+	/*
-+	 * Transition from one state to another in this device
-+	 * doesn't happen immediately, especially stopping the device
-+	 * is not observed on the first reading of the response.
-+	 * Plus to avoid potentially stale response message in the device
-+	 * we keep reading the state of the device until we see:
-+	 * -- that device recognised the sent command;
-+	 * -- the received state (started or stopped) matches the state
-+	 * that was requested;
-+	 * -- the timeout passed matches the timeout value read from
-+	 * the device.
-+	 * Keep retrying 10 times and if watchdog device doesn't respond
-+	 * correctly as expected we bail out and return an error.
-+	 */
-+	do {
-+		retval = usb_streamlabs_get_msg(usbdev, wdt->buffer);
-+		if (retval)
-+			break;
-+
-+		retval = usb_streamlabs_wdt_validate_response(wdt->buffer, cmd,
-+							      timeout_msec);
-+	} while (retval && retry_counter--);
-+
-+	return retry_counter ? retval : -EIO;
-+}
-+
-+static int usb_streamlabs_wdt_cmd(struct streamlabs_wdt *streamlabs_wdt, u16 cmd)
-+{
-+	int retval;
-+
-+	mutex_lock(&streamlabs_wdt->lock);
-+	retval = __usb_streamlabs_wdt_cmd(streamlabs_wdt, cmd);
-+	mutex_unlock(&streamlabs_wdt->lock);
-+
-+	return retval;
-+}
-+
-+static int usb_streamlabs_wdt_start(struct watchdog_device *wdt_dev)
-+{
-+	struct streamlabs_wdt *streamlabs_wdt = watchdog_get_drvdata(wdt_dev);
-+
-+	return usb_streamlabs_wdt_cmd(streamlabs_wdt, STREAMLABS_CMD_START);
-+}
-+
-+static int usb_streamlabs_wdt_stop(struct watchdog_device *wdt_dev)
-+{
-+	struct streamlabs_wdt *streamlabs_wdt = watchdog_get_drvdata(wdt_dev);
-+
-+	return usb_streamlabs_wdt_cmd(streamlabs_wdt, STREAMLABS_CMD_STOP);
-+}
-+
-+static const struct watchdog_info streamlabs_wdt_ident = {
-+	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING,
-+	.identity	= DRIVER_NAME,
-+};
-+
-+static const struct watchdog_ops usb_streamlabs_wdt_ops = {
-+	.owner	= THIS_MODULE,
-+	.start	= usb_streamlabs_wdt_start,
-+	.stop	= usb_streamlabs_wdt_stop,
-+};
-+
-+static int usb_streamlabs_wdt_probe(struct usb_interface *intf,
-+				    const struct usb_device_id *id)
-+{
-+	struct usb_device *usbdev = interface_to_usbdev(intf);
-+	struct streamlabs_wdt *streamlabs_wdt;
-+	int retval;
-+
-+	/*
-+	 * USB IDs of this device appear to be weird/unregistered. Hence, do
-+	 * an additional check on product and manufacturer.
-+	 * If there is similar device in the field with same values then
-+	 * there is stop command in probe() below that checks if the device
-+	 * behaves as a watchdog.
-+	 */
-+	if (!usbdev->product || !usbdev->manufacturer ||
-+	    strncmp(usbdev->product, "USBkit", 6) ||
-+	    strncmp(usbdev->manufacturer, "STREAM LABS", 11))
-+		return -ENODEV;
-+
-+	streamlabs_wdt = devm_kzalloc(&intf->dev, sizeof(struct streamlabs_wdt),
-+				      GFP_KERNEL);
-+	if (!streamlabs_wdt)
-+		return -ENOMEM;
-+
-+	streamlabs_wdt->buffer = devm_kzalloc(&intf->dev, BUFFER_LENGTH,
-+					      GFP_KERNEL);
-+	if (!streamlabs_wdt->buffer)
-+		return -ENOMEM;
-+
-+	mutex_init(&streamlabs_wdt->lock);
-+
-+	streamlabs_wdt->wdt_dev.info = &streamlabs_wdt_ident;
-+	streamlabs_wdt->wdt_dev.ops = &usb_streamlabs_wdt_ops;
-+	streamlabs_wdt->wdt_dev.timeout = STREAMLABS_WDT_MAX_TIMEOUT;
-+	streamlabs_wdt->wdt_dev.max_timeout = STREAMLABS_WDT_MAX_TIMEOUT;
-+	streamlabs_wdt->wdt_dev.min_timeout = STREAMLABS_WDT_MIN_TIMEOUT;
-+	streamlabs_wdt->wdt_dev.parent = &intf->dev;
-+
-+	streamlabs_wdt->intf = intf;
-+	usb_set_intfdata(intf, &streamlabs_wdt->wdt_dev);
-+	watchdog_set_drvdata(&streamlabs_wdt->wdt_dev, streamlabs_wdt);
-+	watchdog_set_nowayout(&streamlabs_wdt->wdt_dev, nowayout);
-+
-+	retval = usb_streamlabs_wdt_stop(&streamlabs_wdt->wdt_dev);
-+	if (retval)
-+		return -ENODEV;
-+
-+	retval = devm_watchdog_register_device(&intf->dev,
-+					       &streamlabs_wdt->wdt_dev);
-+	if (retval) {
-+		dev_err(&intf->dev, "failed to register watchdog device\n");
-+		return retval;
-+	}
-+
-+	dev_info(&intf->dev, "StreamLabs USB watchdog driver loaded.\n");
-+	return 0;
-+}
-+
-+static int usb_streamlabs_wdt_suspend(struct usb_interface *intf,
-+				      pm_message_t message)
-+{
-+	struct streamlabs_wdt *streamlabs_wdt = usb_get_intfdata(intf);
-+
-+	if (watchdog_active(&streamlabs_wdt->wdt_dev))
-+		return usb_streamlabs_wdt_stop(&streamlabs_wdt->wdt_dev);
-+
-+	return 0;
-+}
-+
-+static int usb_streamlabs_wdt_resume(struct usb_interface *intf)
-+{
-+	struct streamlabs_wdt *streamlabs_wdt = usb_get_intfdata(intf);
-+
-+	if (watchdog_active(&streamlabs_wdt->wdt_dev))
-+		return usb_streamlabs_wdt_start(&streamlabs_wdt->wdt_dev);
-+
-+	return 0;
-+}
-+
-+static void usb_streamlabs_wdt_disconnect(struct usb_interface *intf)
-+{
-+	struct streamlabs_wdt *streamlabs_wdt = usb_get_intfdata(intf);
-+
-+	mutex_lock(&streamlabs_wdt->lock);
-+	/*
-+	 * If disconnect happens via sysfs or on rmmod, then try to stop
-+	 * the watchdog. In case of physical detachment of the device this call
-+	 * will fail but we continue.
-+	 */
-+	if (!nowayout)
-+		__usb_streamlabs_wdt_cmd(streamlabs_wdt, STREAMLABS_CMD_STOP);
-+	/* Stop sending (new) messages to the device */
-+	streamlabs_wdt->intf = NULL;
-+	mutex_unlock(&streamlabs_wdt->lock);
-+}
-+
-+static const struct usb_device_id usb_streamlabs_wdt_device_table[] = {
-+	{ USB_DEVICE(USB_STREAMLABS_WATCHDOG_VENDOR, USB_STREAMLABS_WATCHDOG_PRODUCT) },
-+	{ }	/* Terminating entry */
-+};
-+
-+MODULE_DEVICE_TABLE(usb, usb_streamlabs_wdt_device_table);
-+
-+static struct usb_driver usb_streamlabs_wdt_driver = {
-+	.name		= DRIVER_NAME,
-+	.probe		= usb_streamlabs_wdt_probe,
-+	.disconnect	= usb_streamlabs_wdt_disconnect,
-+	.suspend	= usb_streamlabs_wdt_suspend,
-+	.resume		= usb_streamlabs_wdt_resume,
-+	.reset_resume	= usb_streamlabs_wdt_resume,
-+	.id_table	= usb_streamlabs_wdt_device_table,
-+	.soft_unbind	= 1,
-+};
-+
-+module_usb_driver(usb_streamlabs_wdt_driver);
 -- 
-2.36.1
+2.34.1
 
+
+--000000000000f289e705e49ad0f4
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+TltlrAeBKRJ1M9O/DY5v7L1Yrs//7XIRg/d2ZPAOSGBQzFYjYTFWwNBiR1s1zP0m2y56DPbS5gwj
+fqAN/I4PJHIvTh3zUgHXNKadYoYRiPHXfaTWO9UhzysOpQIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUohM5GmNlGWe5wpzDxzIy
++EgzbRswDQYJKoZIhvcNAQELBQADggEBACKu9JSQAYTlmC+JTniO/C/UcXGonATI/muBjWTxtkHc
+abZtz0uwzzrRrpV+mbHLGVFFeRbXSLvcEzqHp8VomXifEZlfsE9LajSehzaqhd+np+tmUPz1RlI/
+ibZ7vW+1VF18lfoL+wHs2H0fsG6JfoqZldEWYXASXnUrs0iTLgXxvwaQj69cSMuzfFm1X5kWqWCP
+W0KkR8025J0L5L4yXfkSO6psD/k4VcTsMJHLN4RfMuaXIT6EM0cNO6h3GypyTuPf1N1X+F6WQPKb
+1u+rvdML63P9fX7e7mwwGt5klRnf8aK2VU7mIdYCcrFHaKDTW3fkG6kIgrE1wWSgiZYL400xggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw28eX6TfvsbNfu
+SIMwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILer9jQuHf6pVnxUr9zSbV3iIn1S
+jXq18F3fWWJ+K/4QMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDcyNTA1NTQyNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQAyXp/SrqjOvFbUtGATlB9CAN4BZxm2xl17vgYK6ySlmQUE
+eAcGfcstrmfEFhBqfuyKiCvF1eue7ZwVaBKg1dsyxbk7JssWlaGY9f4Qobst6gWwAndIX4q88SZq
+ggKvMZYHAM0ZGUHhVzF9UJ6dVPLrCspfq9OAPh/gFNgr/WQCl50zZmfTljEFBeAUCeh4u4smBrLF
+pmhFVdjEf8tkHhifbNlac8b4lRKpALlN9IrsnMsFroXE6wT+CgHzay99Ox0SiWNgXFFTFw6nYxhZ
+nEcU5AN/LFvi+Abt4mcim5ZcQHNJ/im/wZERDyAAoZrI+BgFeXwEm0kGWyPlXWl/makd
+--000000000000f289e705e49ad0f4--
