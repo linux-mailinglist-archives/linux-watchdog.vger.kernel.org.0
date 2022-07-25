@@ -2,122 +2,152 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E267580279
-	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Jul 2022 18:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764C258037B
+	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Jul 2022 19:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiGYQML (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 25 Jul 2022 12:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
+        id S236384AbiGYRXc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 25 Jul 2022 13:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235742AbiGYQMK (ORCPT
+        with ESMTP id S234713AbiGYRXa (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 25 Jul 2022 12:12:10 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AF1DFB2
-        for <linux-watchdog@vger.kernel.org>; Mon, 25 Jul 2022 09:12:09 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26PG9S8F028278;
-        Mon, 25 Jul 2022 16:11:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=VEyXKsLKkNRouMWUVwi/lwM5zyAUu5jFyXE4yvmUVg4=;
- b=p4mC6ISK63UhtWOy328GRCW/XKXETz3gPP9OEPdqBfBvPiCuA1BrLbHgS7kXtten01cc
- JYjXpQQ+pPbUOslT5xBKeC6Goc1cp3311UR+fqXWoc0s7X8Jj9FE6apx8eXSFxSPnRzW
- ZcjUsPA4L1GTzAHamBkYrQ7NYbpyi3U/YdsUYgraPBGvM2RPtSuB8mE5v2fUNUcCd0nG
- 9x0wPzSJJEFfg4eQX2/u/2IGjYDeYU5kXgTLJ6lKvxPzdv2on5hNbopCJhl8Ne+qosEG
- E/G2QQhwYb/XfOgv7ria72Ogt83ZSFW0l8XwkrEhY5PzfRj4SxzMcniHuUZhscbHBSPk hg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hhx588ve5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Jul 2022 16:11:44 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 26PG9TPx028476;
-        Mon, 25 Jul 2022 16:11:43 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hhx588vcx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Jul 2022 16:11:43 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 26PG54Qq007332;
-        Mon, 25 Jul 2022 16:11:42 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma01dal.us.ibm.com with ESMTP id 3hg98rrrr7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Jul 2022 16:11:42 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 26PGBfZF64094482
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Jul 2022 16:11:41 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 966F5112063;
-        Mon, 25 Jul 2022 16:11:41 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 713F3112061;
-        Mon, 25 Jul 2022 16:11:41 +0000 (GMT)
-Received: from localhost (unknown [9.41.178.126])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 25 Jul 2022 16:11:41 +0000 (GMT)
-Date:   Mon, 25 Jul 2022 11:11:41 -0500
-From:   Scott Cheloha <cheloha@linux.ibm.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        MichaelEllerman <mpe@ellerman.id.au>
-Cc:     linux-watchdog@vger.kernel.org, tzungbi@kernel.org,
-        brking@linux.ibm.com, nathanl@linux.ibm.com, aik@ozlabs.ru,
-        npiggin@gmail.com, vaishnavi@linux.ibm.com, wvoigt@us.ibm.com,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v3 4/4] watchdog/pseries-wdt: initial support for
- H_WATCHDOG-based watchdog timers
-Message-ID: <Yt7AvQjmYzUTYuVy@rascal-austin-ibm-com>
-References: <20220713202335.1217647-1-cheloha@linux.ibm.com>
- <20220713202335.1217647-5-cheloha@linux.ibm.com>
- <28eb0fd6-4c4e-17d5-0f89-73eb68b051fa@roeck-us.net>
+        Mon, 25 Jul 2022 13:23:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA82214D18;
+        Mon, 25 Jul 2022 10:23:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 465B0B81023;
+        Mon, 25 Jul 2022 17:23:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D523DC341C6;
+        Mon, 25 Jul 2022 17:23:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658769802;
+        bh=fchiwXgbBdTjI1tnnwCi+jTVEwh6cgK0qLJkFVlCACE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UqKK0uJQDwEvh2Vi54J+93uJuKGLM7IAOnAOwLCMCuksblRTIRvEgXkjLeUwqPW4N
+         5AlvtwsxU8J+i6CNRj/GwiuTygIy05ACwDSzeTQ+zvHZZeFsgMNuaEmyOq9f2QGPgo
+         jzadUidSTOzLEpy1Nhq2yX1MX85TEzM+PBpLT4HGtOXqtYBeAfqJkxRmMvfjDsm9aI
+         K/31R1brUtwHQtk8FOCFFXUBR+qLE9ofcMp7SDDnxR0K3xBtPT9c3I7y/tmztyWRFy
+         F7zgU4j4dUOu+92AJ19L5FXRwcSmVR2o1dhXqEDJi9+Ppq0vOBeD2FIAOdLMZ4hn+j
+         Y3FxR5pnKkL0w==
+Date:   Mon, 25 Jul 2022 19:23:14 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        joel.peshkin@broadcom.com, f.fainelli@gmail.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        dan.beygelman@broadcom.com, anand.gore@broadcom.com,
+        kursad.oney@broadcom.com, rafal@milecki.pl,
+        krzysztof.kozlowski@linaro.org, Guenter Roeck <linux@roeck-us.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MEMORY TECHNOLOGY DEVICES (MTD)" 
+        <linux-mtd@lists.infradead.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        "open list:PIN CONTROL SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
+        <linux-mips@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>
+Subject: Re: [PATCH v2 6/9] arm64: bcmbca: Make BCM4908 drivers depend on
+ ARCH_BCMBCA
+Message-ID: <Yt7RgsTA/1TmMcbU@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        joel.peshkin@broadcom.com, f.fainelli@gmail.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        dan.beygelman@broadcom.com, anand.gore@broadcom.com,
+        kursad.oney@broadcom.com, rafal@milecki.pl,
+        krzysztof.kozlowski@linaro.org, Guenter Roeck <linux@roeck-us.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MEMORY TECHNOLOGY DEVICES (MTD)" <linux-mtd@lists.infradead.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" <linux-pci@vger.kernel.org>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        "open list:PIN CONTROL SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" <linux-mips@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>
+References: <20220725055402.6013-1-william.zhang@broadcom.com>
+ <20220725055402.6013-7-william.zhang@broadcom.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="cDMN9LvOKh7YHFAv"
 Content-Disposition: inline
-In-Reply-To: <28eb0fd6-4c4e-17d5-0f89-73eb68b051fa@roeck-us.net>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: COQ3pD9I0UPFyKru2zaYuYKHtw1cCm--
-X-Proofpoint-ORIG-GUID: lR_QCgAaIZoq2vdUyUj0xSFMOk4v0YKM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-25_11,2022-07-25_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- spamscore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0
- suspectscore=0 priorityscore=1501 clxscore=1015 adultscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2207250066
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220725055402.6013-7-william.zhang@broadcom.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 01:50:14PM -0700, Guenter Roeck wrote:
-> On 7/13/22 13:23, Scott Cheloha wrote:
-> > PAPR v2.12 defines a new hypercall, H_WATCHDOG.  The hypercall permits
-> > guest control of one or more virtual watchdog timers.  The timers have
-> > millisecond granularity.  The guest is terminated when a timer
-> > expires.
-> > 
-> > This patch adds a watchdog driver for these timers, "pseries-wdt".
-> > 
-> > pseries_wdt_probe() currently assumes the existence of only one
-> > platform device and always assigns it watchdogNumber 1.  If we ever
-> > expose more than one timer to userspace we will need to devise a way
-> > to assign a distinct watchdogNumber to each platform device at device
-> > registration time.
-> > 
-> > Signed-off-by: Scott Cheloha <cheloha@linux.ibm.com>
-> 
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-Guenter, Michael,
+--cDMN9LvOKh7YHFAv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Which tree is taking this series?
+On Sun, Jul 24, 2022 at 10:53:59PM -0700, William Zhang wrote:
+> With Broadcom Broadband arch ARCH_BCMBCA supported in the kernel, this
+> patch series migrate the ARCH_BCM4908 symbol to ARCH_BCMBCA. Hence
+> replace ARCH_BCM4908 with ARCH_BCMBCA in subsystem Kconfig files.
+>=20
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> Acked-by: Guenter Roeck <linux@roeck-us.net> (for watchdog)
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com> (for drivers/pci)
+>=20
 
-watchdog-next or PPC development?
+Acked-by: Wolfram Sang <wsa@kernel.org> (for i2c)
 
--Scott
+
+--cDMN9LvOKh7YHFAv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmLe0X0ACgkQFA3kzBSg
+KbYqKBAAh7tkSiVNXcYCzGYcFhSLUkuioAtbrLXR6vkeUJ6qMvd2WkG15238Ti4s
+KlFKMBOWT2L+reNiojNZlZ2QMc/U1f/itwXDlViRuwpHBsITqGK+vGE1DH8eiCFP
+A5cPFVTh/jXJwGPQmXVzmZ8+opgeBbDg/KJI4PlX0I7KtNhdeArtlCf1EXBZiiOi
+QePGA9J4JahuNyjo33zq5Xv1OtyaPFe6hFRtCKR4tsGIHtrJlRtDy/x0Av2hj4fz
+m5tju8M/szl7hFyO15x9gg98xif+hTcgOS1H01D29vK74y7iZ61ExKGZ4/4eHz23
+3DWL6bANwKiE0CHnJzS9TLPTBrZdv3FHjCATrzJPaVs1VloRBuF86Bo7RFl6Zoi8
+fX0j3twBJ8ZqMPEVE4Cw4zHZ2gbAMcQwupF5TTwkPoFrObQJ0Zgx9HrRhTK8HxlO
+SiHSdGUJ8LaQq/oZL1OrPJOYVOknOJCWtqfoksGRee+zAjK3muZSEqaJxOjiTawv
+xYXDrpbKTEpL+WiEAIvXB4ViWm4YFU7SyDLhizLDRxYQsX2SM1i+phxe/aF98VOb
+6CyTctT+bwk/4XZRk3AXLAQq5/haStsr0mf//sUaiJxbdutgWlnnztwHvtZX4hdJ
+6h2BPcjqESC3cUfMFPT44QPaa+XZ0YlkTZWyRUP4b+bJNgn2TII=
+=c2vg
+-----END PGP SIGNATURE-----
+
+--cDMN9LvOKh7YHFAv--
