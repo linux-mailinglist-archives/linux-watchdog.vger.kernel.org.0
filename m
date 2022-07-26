@@ -2,76 +2,70 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6226B5806D4
-	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Jul 2022 23:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681F25808B5
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Jul 2022 02:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237511AbiGYVdP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 25 Jul 2022 17:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        id S230492AbiGZAWK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 25 Jul 2022 20:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237491AbiGYVdC (ORCPT
+        with ESMTP id S229970AbiGZAWK (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 25 Jul 2022 17:33:02 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA931255BA
-        for <linux-watchdog@vger.kernel.org>; Mon, 25 Jul 2022 14:30:31 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id s206so11495661pgs.3
-        for <linux-watchdog@vger.kernel.org>; Mon, 25 Jul 2022 14:30:31 -0700 (PDT)
+        Mon, 25 Jul 2022 20:22:10 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A9725E8E;
+        Mon, 25 Jul 2022 17:22:06 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id d17so18328109lfa.12;
+        Mon, 25 Jul 2022 17:22:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wLeFnHeL7vjlKLn8EGTK3JTliauPikeFfDHsD2Hn0tU=;
-        b=XTWzP+/My95HROYMjfb+t8+gWtkKCzB2NVlrMWvMvTAG2ddPIUNbbx/VGnQDLo5s83
-         0Q3+YubYnDC9NCpHwR5CNCdOPDeweLAO/wpX/lERQS6TBstdTnPj4PVNT7C09ODKv4dc
-         n7YR9CYi0ysDjG40GM5zhVmU+ZOB4CFTbWBdrf8rQyrCnGywIJjiD9IYGYz/0bac708j
-         IL+CLgwYFF58uI5Tb/pRW1nl7Jjn++YmCn91SOrxweBOwc8NBAr7I3JfRr9JyjTQbRDS
-         5bM8Cu/2f3aLm8O+8YhiSsF8+rMZcq0AM1LdnCSbuH4joKYQDzs0jg/LbDNMXuA9Lzwd
-         xM5g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EaYNG2aQ0oiTpHSnTbpApj7mEaMN9HPDBkq1B1/AltU=;
+        b=fyXzC1OSbVNMehWpe0sazaYp8HJ9WnM4fHxHbHAtxJzpvcDWFqfZ104p8EuOG5bQxk
+         v2yVEcP9P9YCQma9nNg4WDvYtC+cA8Ff4SSUWyib88GyVtmQ0suu8Ninm6qZp22AOP4p
+         AjJcleU5M8WhVeICiCP7OtN9TC7LtViPG+zqEcMnoiqH/GcQ8pZk7JOOCV+uXjGReP3I
+         tIMPHzOPRjQDjVfzGt+F3gBugF15BaAXGgajRqqCEA9tHevF71C8qBl6080u79EaCPa2
+         N82NMj2KlNKoeHdt1KHpD3fdggQ945TzJxCYlzTiRF/EsLgfQKX0O3IfZDLmI28Urdm3
+         Js/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=wLeFnHeL7vjlKLn8EGTK3JTliauPikeFfDHsD2Hn0tU=;
-        b=bXMDKgnM56a5ox3+oE2Tu1UHTyqKCWfygXH4JcC9xDkGE/JW8kV1q6miaXG2RjSTee
-         91s40vZpJJ0dHU830xiRoSpe+TYjlIpDSsetcnXWxFG7BqeXFj7yfV5OdoTcYYUDmYWG
-         jz/rPq1z07SILt5jkPFR3SSNQ0/qR2Ykh7raTjWKmGaQhT/J+QHXM54PUFiMT2MXtnx4
-         xQ1dmJGP+rLXTRbZ+d1bbUmZF5URsN3FhLP/YlHkFzhH3UUOhV7/8VpXtdyLV+vbZEt0
-         kY3DWFXwpjKIEIgq/NCeLIikLyMWNl5fjPU/IIK+bE+VPp8TSN65BrlEZN6s41HY4O0A
-         GUgw==
-X-Gm-Message-State: AJIora+GEqH9FYCFV817PVfslbgwF96npuC4F2uLHrwG1Or40Cf+hKeD
-        2rZugexeTcbal2VEVxvc7uI=
-X-Google-Smtp-Source: AGRyM1tpYITPOSLmtnwiMWtXvd7QNjLwwbnlTkrM/UJTcSzE7nhET1ps5q26rjMX0UVHLKlKPFLCGA==
-X-Received: by 2002:a05:6a00:15c3:b0:52b:1675:6dfc with SMTP id o3-20020a056a0015c300b0052b16756dfcmr14849019pfu.52.1658784628335;
-        Mon, 25 Jul 2022 14:30:28 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s14-20020a17090a13ce00b001eee8998f2esm11555790pjf.17.2022.07.25.14.30.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 14:30:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 25 Jul 2022 14:30:26 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Scott Cheloha <cheloha@linux.ibm.com>
-Cc:     MichaelEllerman <mpe@ellerman.id.au>,
-        linux-watchdog@vger.kernel.org, tzungbi@kernel.org,
-        brking@linux.ibm.com, nathanl@linux.ibm.com, aik@ozlabs.ru,
-        npiggin@gmail.com, vaishnavi@linux.ibm.com, wvoigt@us.ibm.com,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v3 4/4] watchdog/pseries-wdt: initial support for
- H_WATCHDOG-based watchdog timers
-Message-ID: <20220725213026.GA1319556@roeck-us.net>
-References: <20220713202335.1217647-1-cheloha@linux.ibm.com>
- <20220713202335.1217647-5-cheloha@linux.ibm.com>
- <28eb0fd6-4c4e-17d5-0f89-73eb68b051fa@roeck-us.net>
- <Yt7AvQjmYzUTYuVy@rascal-austin-ibm-com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EaYNG2aQ0oiTpHSnTbpApj7mEaMN9HPDBkq1B1/AltU=;
+        b=EYmEyli5vqU0TRZGSAjcHpQU6NW2nvvS/ceF7sQtDCE8dbajHUziG8lIZ66VCVYSg6
+         Xy41EzS19t/caA3S72VKyCLcwkm8zypqHd2x9Uekao66CUutXW4y5odXlc1rV/nEA4y2
+         3Mw89Kx5xqpVqzvfjV3+Eg0asa7fz+ZPGC0Uho/7H4pgjUfgbGDpo3jrIhrFlp2rr/YE
+         ie7bV720vkg47MPoJ2YEnuDxI0MD4jdqZeQb/M1AK+mHLuRiJNbw84VgqZBYM96+9wJr
+         qMvKKjTokBuT4zfp0x692GbOeAQb/ju3mza6gCUga+eTAHHKgOcHmGy8HaA8FH4dfZLP
+         dRig==
+X-Gm-Message-State: AJIora8H/v5YO5F1s7PgH6ifqkkxkBgurmNILGJBlMRyEiWMN4KQlxYa
+        eWCbY9/8t4+6n2ucrRqA9mQmXImHA9yYbDhOiAM=
+X-Google-Smtp-Source: AGRyM1vaNr9ZbK2sLsRtcCiLtDkFXowpSziaiSMqGPZJcdNe25N3DBBuJ44EmmTa3hIyseewUpfKl74ZcPaXOdTx6+s=
+X-Received: by 2002:a05:6512:10c9:b0:48a:9fd6:8527 with SMTP id
+ k9-20020a05651210c900b0048a9fd68527mr289049lfg.384.1658794923344; Mon, 25 Jul
+ 2022 17:22:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yt7AvQjmYzUTYuVy@rascal-austin-ibm-com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20220725030605.1808710-1-klimov.linux@gmail.com> <Yt5Zn9cXDe9/F9RJ@kroah.com>
+In-Reply-To: <Yt5Zn9cXDe9/F9RJ@kroah.com>
+From:   Alexey Klimov <klimov.linux@gmail.com>
+Date:   Tue, 26 Jul 2022 01:21:52 +0100
+Message-ID: <CALW4P+Kd_XdvzGfA=Cmtu0c=kEHfhp2pph2Wh0Sa8Fm8GxDRTA@mail.gmail.com>
+Subject: Re: [PATCH v5] watchdog: add driver for StreamLabs USB watchdog device
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Oliver Neukum <oneukum@suse.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        atishp@rivosinc.com, atishp@atishpatra.org,
+        Yury Norov <yury.norov@gmail.com>,
+        Alexey Klimov <aklimov@redhat.com>,
+        Aaron Tomlin <atomlin@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,35 +73,21 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 11:11:41AM -0500, Scott Cheloha wrote:
-> On Wed, Jul 13, 2022 at 01:50:14PM -0700, Guenter Roeck wrote:
-> > On 7/13/22 13:23, Scott Cheloha wrote:
-> > > PAPR v2.12 defines a new hypercall, H_WATCHDOG.  The hypercall permits
-> > > guest control of one or more virtual watchdog timers.  The timers have
-> > > millisecond granularity.  The guest is terminated when a timer
-> > > expires.
-> > > 
-> > > This patch adds a watchdog driver for these timers, "pseries-wdt".
-> > > 
-> > > pseries_wdt_probe() currently assumes the existence of only one
-> > > platform device and always assigns it watchdogNumber 1.  If we ever
-> > > expose more than one timer to userspace we will need to devise a way
-> > > to assign a distinct watchdogNumber to each platform device at device
-> > > registration time.
-> > > 
-> > > Signed-off-by: Scott Cheloha <cheloha@linux.ibm.com>
-> > 
-> > Acked-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> Guenter, Michael,
-> 
-> Which tree is taking this series?
-> 
-The series includes non-watchdog changes, so my expectation was that some
-other tree would take it.
+On Mon, Jul 25, 2022 at 9:51 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Jul 25, 2022 at 04:06:05AM +0100, Alexey Klimov wrote:
 
-Guenter
+[..]
 
-> watchdog-next or PPC development?
-> 
-> -Scott
+> Anyway, driver looks good to me, nice work!
+>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Thanks, Greg. If you don't mind I'll use your tag in next version
+after making changes suggested by Guenter since there will be no
+significant functional changes. If code will change a lot, then the
+process (Documentation/process/submitting-patches.rst) will require me
+to drop the tag.
+
+Best regards,
+Alexey
