@@ -2,146 +2,86 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01DB580F2F
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Jul 2022 10:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C72580F70
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Jul 2022 10:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238577AbiGZIh4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Jul 2022 04:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
+        id S230339AbiGZI4m (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Jul 2022 04:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238566AbiGZIh4 (ORCPT
+        with ESMTP id S229746AbiGZI4l (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 Jul 2022 04:37:56 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491C02A70B;
-        Tue, 26 Jul 2022 01:37:55 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Tue, 26 Jul 2022 04:56:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAE7B4AD;
+        Tue, 26 Jul 2022 01:56:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4C9B56601B15;
-        Tue, 26 Jul 2022 09:37:53 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1658824673;
-        bh=0hpTpMu1PlsmFVxK/jUIe3xEx9/IlTDGkldyO8mPlWw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WE6vLudeCO1T//X5ucDe+PsHvpbMiHR+a7knzIQXw8lisYxk40D3fY1zycQZp2yIP
-         zhqKqDR2/HKQsYJa03BOZ5B5og6aLy7h31ZiMc3vlULLEPWdfL7BmAsB6ype+uc0ZA
-         Clu9OYgisWCgymKoHX1nTUIYtx9288MtXSECy1mJYLfHY+khj3f0dA+U8egZjjCTPh
-         S9FklaS6ju4XZXVIC6dU+91WarMuUD8vL5HLmWXtiAzOc5CDbS2LZ82kZXBFtPqr4B
-         iLe9J+XmOwouJrqI6tS8wDDBP2LBCvKwG5HWC14EJIniikOg2jEGWq453LQpIgYSRE
-         KyhNHChf32Hxw==
-Message-ID: <91613700-3335-7499-1b48-3d88edd9da36@collabora.com>
-Date:   Tue, 26 Jul 2022 10:37:50 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] watchdog: mtk_wdt: Move mt6589-wdt fallback compatible to
- end of list
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C7B0B8128F;
+        Tue, 26 Jul 2022 08:56:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 091A2C341C0;
+        Tue, 26 Jul 2022 08:56:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658825798;
+        bh=SMBADMV9je+BEusk6Ogun7zma2H0hMl2CeFThJT1Avg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BfnT7ng5u3yHSC1GNkZJ0TbbZQA6+U2ayCPn7p9JRsZSiNVG0cjeOkKlu8fi0DZdp
+         cw+CBCodKycpuwzIJCuqDeW0GX2O/iUn3EmrF4tuCL9BuCICiBK6ksB24QDmXkjrb1
+         LNFs85uEQ5640j6wvjFRMteOHdGpgpS18q2TfqEX3q3/4rp+cn5DSnhsGOBoYVuB0n
+         lwjBnQoVyoWp4FyQ8rlO9XSf75WmpO7PqfzLRsEFxN3LKuQCzla6cdiSaYIRO5b5Vb
+         kd9xChigezw9X1JQccpNEYKj7R9H3QBrLqkqbZNXWZnUaAVTakyRkbB8b1syXIY3jT
+         KtXmCkYl8SM8g==
+Received: by pali.im (Postfix)
+        id AA6F282D; Tue, 26 Jul 2022 10:56:34 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220726062057.320342-1-wenst@chromium.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220726062057.320342-1-wenst@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] watchdog: armada_37xx_wdt: Fix .set_timeout callback
+Date:   Tue, 26 Jul 2022 10:56:12 +0200
+Message-Id: <20220726085612.10672-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Il 26/07/22 08:20, Chen-Yu Tsai ha scritto:
-> The watchdog facility in the MediaTek SoCs are all the same, but the
-> hardware block also contains a reset controller, which differs in the
-> number of resets used between different SoCs. This difference is
-> supported with of_device_get_match_data() supplying the number of reset
-> lines for the newer compatible strings. The original mt6589-wdt only
-> covers the watchdog facility.
-> 
-> of_device_is_compatible(), and by extension of_device_get_match_data(),
-> works by going through the given list of compatible strings sequentially,
-> and checks if any of the device node's compatible strings match.
-> 
-> To avoid early matching on the "mediatek,mt6589-wdt" fallback compatible,
-> which only provides watchdog functionality and no reset controller, move
-> the fallback entry to the end of the list, so that other, more specific
-> compatible strings have a chance at getting matched.
-> 
-> Fixes: c254e103082b ("watchdog: mtk_wdt: mt8183: Add reset controller")
-> Fixes: adc318a34066 ("watchdog: mt8192: add wdt support")
-> Fixes: 8c6b5ea6ac68 ("watchdog: mediatek: mt8195: add wdt support")
-> Fixes: 4dbabc4d9e8c ("watchdog: mediatek: mt8186: add wdt support")
-> Fixes: 711a5b25bac9 ("watchdog: mtk_wdt: mt7986: Add toprgu reset controller support")
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+ioctl(WDIOC_SETTIMEOUT) calls .set_timeout and .ping callbacks and it is
+expected that it changes current watchdog timeout.
 
-Uhm, I don't think that this is an issue?
+armada_37xx_wdt's .ping callback just reping counter 0 and does not touch
+counter 1 used for timeout. So it is needed to set counter 1 to the new
+value in .set_timeout callback to ensure ioctl(WDIOC_SETTIMEOUT)
+functionality. Fix it.
 
-Ordering precedence is given to the list that you specify in devicetree, that's why
-"the second one" is a fallback, meaning: ("impossible" example below)
+Fixes: 54e3d9b518c8 ("watchdog: Add support for Armada 37xx CPU watchdog")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+---
+ drivers/watchdog/armada_37xx_wdt.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-compatible = "mediatek,mt8195-wdt", "mediatek,mt8183-wdt", "mediatek,mt6589-wdt";
-
-This gets walked as per the order in which you wrote the compatibles, so:
-* Check match for mt8195-wdt, does not exist?
-  * Check match for mt8183-wdt, exists!
-  * Put everything into dev->of_node (having mediatek,mt8183-wdt only!)
-
-__of_device_is_compatible() gets dev->of_node and compares that to all of the
-possible matches.
-
-struct device_node for this device hence does *not* contain any of the other
-compatibles that we specified in devicetree, so it does *not* contain any of
-"mediatek,mt8195-wdt", or "mediatek,mt6589-wdt", because we have previously
-successfully matches 8183.
-
-I don't think that I've misinterpreted this flow, but if I have, let's pull
-in devicetree people and check with them?
-
-Cheers,
-Angelo
-
-> ---
-> 
-> This change complements the removal of the fallback compatible from the
-> bindings and DTSI files [1].
-> 
-> [1] https://lore.kernel.org/linux-mediatek/20220721014845.19044-1-allen-kh.cheng@mediatek.com/
-> 
->   drivers/watchdog/mtk_wdt.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-> index e97787536792..3d5a239b93ba 100644
-> --- a/drivers/watchdog/mtk_wdt.c
-> +++ b/drivers/watchdog/mtk_wdt.c
-> @@ -425,12 +425,13 @@ static int mtk_wdt_resume(struct device *dev)
->   
->   static const struct of_device_id mtk_wdt_dt_ids[] = {
->   	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
-> -	{ .compatible = "mediatek,mt6589-wdt" },
->   	{ .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
->   	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
->   	{ .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
->   	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
->   	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
-> +	/* Fallback compatible string must be last entry */
-> +	{ .compatible = "mediatek,mt6589-wdt" },
->   	{ /* sentinel */ }
->   };
->   MODULE_DEVICE_TABLE(of, mtk_wdt_dt_ids);
-
-
+diff --git a/drivers/watchdog/armada_37xx_wdt.c b/drivers/watchdog/armada_37xx_wdt.c
+index 1635f421ef2c..b84cba94b135 100644
+--- a/drivers/watchdog/armada_37xx_wdt.c
++++ b/drivers/watchdog/armada_37xx_wdt.c
+@@ -179,6 +179,8 @@ static int armada_37xx_wdt_set_timeout(struct watchdog_device *wdt,
+ 	dev->timeout = (u64)dev->clk_rate * timeout;
+ 	do_div(dev->timeout, CNTR_CTRL_PRESCALE_MIN);
+ 
++	set_counter_value(dev, CNTR_ID_WDOG, dev->timeout);
++
+ 	return 0;
+ }
+ 
 -- 
+2.20.1
+
