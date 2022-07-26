@@ -2,96 +2,146 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB95580F00
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Jul 2022 10:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A01DB580F2F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Jul 2022 10:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238554AbiGZI3X convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Jul 2022 04:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
+        id S238577AbiGZIh4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Jul 2022 04:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238575AbiGZI3O (ORCPT
+        with ESMTP id S238566AbiGZIh4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 Jul 2022 04:29:14 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498FD3057F
-        for <linux-watchdog@vger.kernel.org>; Tue, 26 Jul 2022 01:29:04 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1oGFvQ-0006c7-GN; Tue, 26 Jul 2022 10:28:20 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1oGFvJ-003HT4-4w; Tue, 26 Jul 2022 10:28:13 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1oGFvI-0003CM-92; Tue, 26 Jul 2022 10:28:12 +0200
-Message-ID: <55668d62aad8feedb7fa78f410f4f71ecfce8c98.camel@pengutronix.de>
-Subject: Re: [PATCH v2 6/9] arm64: bcmbca: Make BCM4908 drivers depend on
- ARCH_BCMBCA
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     joel.peshkin@broadcom.com, f.fainelli@gmail.com,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        dan.beygelman@broadcom.com, anand.gore@broadcom.com,
-        kursad.oney@broadcom.com, rafal@milecki.pl,
-        krzysztof.kozlowski@linaro.org, Guenter Roeck <linux@roeck-us.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MEMORY TECHNOLOGY DEVICES (MTD)" 
-        <linux-mtd@lists.infradead.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
-        <linux-pci@vger.kernel.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        "open list:PIN CONTROL SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
-        <linux-mips@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>
-Date:   Tue, 26 Jul 2022 10:28:12 +0200
-In-Reply-To: <20220725055402.6013-7-william.zhang@broadcom.com>
-References: <20220725055402.6013-1-william.zhang@broadcom.com>
-         <20220725055402.6013-7-william.zhang@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Tue, 26 Jul 2022 04:37:56 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491C02A70B;
+        Tue, 26 Jul 2022 01:37:55 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4C9B56601B15;
+        Tue, 26 Jul 2022 09:37:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1658824673;
+        bh=0hpTpMu1PlsmFVxK/jUIe3xEx9/IlTDGkldyO8mPlWw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WE6vLudeCO1T//X5ucDe+PsHvpbMiHR+a7knzIQXw8lisYxk40D3fY1zycQZp2yIP
+         zhqKqDR2/HKQsYJa03BOZ5B5og6aLy7h31ZiMc3vlULLEPWdfL7BmAsB6ype+uc0ZA
+         Clu9OYgisWCgymKoHX1nTUIYtx9288MtXSECy1mJYLfHY+khj3f0dA+U8egZjjCTPh
+         S9FklaS6ju4XZXVIC6dU+91WarMuUD8vL5HLmWXtiAzOc5CDbS2LZ82kZXBFtPqr4B
+         iLe9J+XmOwouJrqI6tS8wDDBP2LBCvKwG5HWC14EJIniikOg2jEGWq453LQpIgYSRE
+         KyhNHChf32Hxw==
+Message-ID: <91613700-3335-7499-1b48-3d88edd9da36@collabora.com>
+Date:   Tue, 26 Jul 2022 10:37:50 +0200
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] watchdog: mtk_wdt: Move mt6589-wdt fallback compatible to
+ end of list
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220726062057.320342-1-wenst@chromium.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220726062057.320342-1-wenst@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On So, 2022-07-24 at 22:53 -0700, William Zhang wrote:
-> With Broadcom Broadband arch ARCH_BCMBCA supported in the kernel, this
-> patch series migrate the ARCH_BCM4908 symbol to ARCH_BCMBCA. Hence
-> replace ARCH_BCM4908 with ARCH_BCMBCA in subsystem Kconfig files.
+Il 26/07/22 08:20, Chen-Yu Tsai ha scritto:
+> The watchdog facility in the MediaTek SoCs are all the same, but the
+> hardware block also contains a reset controller, which differs in the
+> number of resets used between different SoCs. This difference is
+> supported with of_device_get_match_data() supplying the number of reset
+> lines for the newer compatible strings. The original mt6589-wdt only
+> covers the watchdog facility.
 > 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> Acked-by: Guenter Roeck <linux@roeck-us.net> (for watchdog)
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com> (for drivers/pci)
+> of_device_is_compatible(), and by extension of_device_get_match_data(),
+> works by going through the given list of compatible strings sequentially,
+> and checks if any of the device node's compatible strings match.
+> 
+> To avoid early matching on the "mediatek,mt6589-wdt" fallback compatible,
+> which only provides watchdog functionality and no reset controller, move
+> the fallback entry to the end of the list, so that other, more specific
+> compatible strings have a chance at getting matched.
+> 
+> Fixes: c254e103082b ("watchdog: mtk_wdt: mt8183: Add reset controller")
+> Fixes: adc318a34066 ("watchdog: mt8192: add wdt support")
+> Fixes: 8c6b5ea6ac68 ("watchdog: mediatek: mt8195: add wdt support")
+> Fixes: 4dbabc4d9e8c ("watchdog: mediatek: mt8186: add wdt support")
+> Fixes: 711a5b25bac9 ("watchdog: mtk_wdt: mt7986: Add toprgu reset controller support")
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 
-Acked-by: Philipp Zabel <p.zabel@pengutronix.de> (for reset)
+Uhm, I don't think that this is an issue?
 
-regards
-Philipp
+Ordering precedence is given to the list that you specify in devicetree, that's why
+"the second one" is a fallback, meaning: ("impossible" example below)
+
+compatible = "mediatek,mt8195-wdt", "mediatek,mt8183-wdt", "mediatek,mt6589-wdt";
+
+This gets walked as per the order in which you wrote the compatibles, so:
+* Check match for mt8195-wdt, does not exist?
+  * Check match for mt8183-wdt, exists!
+  * Put everything into dev->of_node (having mediatek,mt8183-wdt only!)
+
+__of_device_is_compatible() gets dev->of_node and compares that to all of the
+possible matches.
+
+struct device_node for this device hence does *not* contain any of the other
+compatibles that we specified in devicetree, so it does *not* contain any of
+"mediatek,mt8195-wdt", or "mediatek,mt6589-wdt", because we have previously
+successfully matches 8183.
+
+I don't think that I've misinterpreted this flow, but if I have, let's pull
+in devicetree people and check with them?
+
+Cheers,
+Angelo
+
+> ---
+> 
+> This change complements the removal of the fallback compatible from the
+> bindings and DTSI files [1].
+> 
+> [1] https://lore.kernel.org/linux-mediatek/20220721014845.19044-1-allen-kh.cheng@mediatek.com/
+> 
+>   drivers/watchdog/mtk_wdt.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+> index e97787536792..3d5a239b93ba 100644
+> --- a/drivers/watchdog/mtk_wdt.c
+> +++ b/drivers/watchdog/mtk_wdt.c
+> @@ -425,12 +425,13 @@ static int mtk_wdt_resume(struct device *dev)
+>   
+>   static const struct of_device_id mtk_wdt_dt_ids[] = {
+>   	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
+> -	{ .compatible = "mediatek,mt6589-wdt" },
+>   	{ .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
+>   	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
+>   	{ .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
+>   	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
+>   	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
+> +	/* Fallback compatible string must be last entry */
+> +	{ .compatible = "mediatek,mt6589-wdt" },
+>   	{ /* sentinel */ }
+>   };
+>   MODULE_DEVICE_TABLE(of, mtk_wdt_dt_ids);
+
+
+-- 
