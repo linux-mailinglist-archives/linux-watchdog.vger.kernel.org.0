@@ -2,86 +2,125 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D18FC58295C
-	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Jul 2022 17:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B53584676
+	for <lists+linux-watchdog@lfdr.de>; Thu, 28 Jul 2022 21:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233466AbiG0PNl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 27 Jul 2022 11:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
+        id S233270AbiG1TWW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 28 Jul 2022 15:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233349AbiG0PNj (ORCPT
+        with ESMTP id S229570AbiG1TWU (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 27 Jul 2022 11:13:39 -0400
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4025D2FFEE;
-        Wed, 27 Jul 2022 08:13:39 -0700 (PDT)
-Received: by mail-io1-f41.google.com with SMTP id 125so13766836iou.6;
-        Wed, 27 Jul 2022 08:13:39 -0700 (PDT)
+        Thu, 28 Jul 2022 15:22:20 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DBA1A05E;
+        Thu, 28 Jul 2022 12:22:19 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 6so2256476pgb.13;
+        Thu, 28 Jul 2022 12:22:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=EFOAo/QdtEPRv+rmfrGIwUMKLAu+6hzcQDL1f3TAQNM=;
+        b=lB+pWhhlv93nZ1uF9MlIOnX5O59BjNqfBlzyuwaJ9IcEqZIikDytWL8FxK9mRR7bGC
+         CP0N3vcVC4GRQyBqp/aXDsHM+Rp/kL+AcBtbGgawHiyB0n2SQ/S9YTLhVKYgLJzYvnfa
+         DRgHjFYGggf4djkLYGpyCKIAfFc4nCcIoEjsFfGVMZ1/sB2/Jgb8jz20AGsMwpQd4Rhb
+         5lHHgqgPkKGl66JAg/+e1Wkvj9UiHeRANwaOr3+bwehcQ5WJ52Rwi+bf7sjW1dQxqAEB
+         0wInCPsCu9FBE5kiqsjVn81pQZUQnEayOJ4Rp+zGMKxlzT+3V1MGecumxQBkOPnllvzK
+         p+iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ljprftnMg4GohtjzDyzVYKO0P1DGlNuwtq9vwy5essI=;
-        b=CJosuv2ATaGzNrrIjutb6XrTos0bqsX6diCmFavlnOAUTJuLKzer0gvy8rL3Bnv7ro
-         WY+AA1TRRsRM0sSGpvsFBVry/E30Xa7cRGGtA292pqdAsweFEEsBXwiWJ3JBzoiOWTo3
-         Dx0PokqqyTv4I4ihhcQnc82fZEqSN6ArZA+BUIpvwTC3XGqquAJk+TYyISBTOIv5gasb
-         U3IKyCZd4yWHHlZsMqWHEW1YHq1AFpM9G28kwFf7h/VjR8naVMIlBoEDpQkXWSlMDo7p
-         C/Ncw3kFojH4xZlHFmwn/RKGIxZVzl9SzLfKTH20iGf4QyyOh0pY5+0cEBNkdgPPO2h1
-         NrpQ==
-X-Gm-Message-State: AJIora8rvTxaYRz37qksqZrUUzQxgc2/jR+bU2CjB2ynekXJNJD87w3a
-        MrP2gomZoW29eL78pdrZGg==
-X-Google-Smtp-Source: AGRyM1uoMW1AUFT45NWyxyQDxKKEFxSdJ+kYSch+/vP4GJl6ZFseEZ7qwEnfiqDoyTaNwhqoLTC9qA==
-X-Received: by 2002:a05:6602:2c8f:b0:67c:308a:ce26 with SMTP id i15-20020a0566022c8f00b0067c308ace26mr7641753iow.94.1658934818345;
-        Wed, 27 Jul 2022 08:13:38 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id o22-20020a0566022e1600b0067bd7f5f964sm8557429iow.7.2022.07.27.08.13.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Jul 2022 08:13:37 -0700 (PDT)
-Received: (nullmailer pid 2680133 invoked by uid 1000);
-        Wed, 27 Jul 2022 15:13:34 -0000
-Date:   Wed, 27 Jul 2022 09:13:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-watchdog@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-pm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH 2/2] dt-bindings: watchdog: qcom,pm8916-wdt: convert to
- dtschema
-Message-ID: <20220727151334.GA2680005-robh@kernel.org>
-References: <20220726120215.101868-1-krzysztof.kozlowski@linaro.org>
- <20220726120215.101868-3-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=EFOAo/QdtEPRv+rmfrGIwUMKLAu+6hzcQDL1f3TAQNM=;
+        b=irglV27uulHB7xGlavq7wJq+OWG1Pi6Aw9k9FKOFJIio3ETkwpBw5qFVt7bbmNwKOw
+         TH/ON1/OYg+Us/xaO0vhBaIxyfbP7BpbGTIAL0qZTDHb2xBEeUj7E40VDt7T5T52W0Vy
+         u+tbtfA9XkbkCiL5nWaXAIoyzmwAtdDWPl+xvQrlHOB1cjN+xVaRxVoMpW9iw3oP5bDx
+         0UZvB2cVuzafW0Uuf6UxC5LKRROo/pujw6NV4LKVFu4dz4WJMfxIqezIrV2g24OVcstg
+         9U2NPvkEQmS/YHSetnMDgOGEZ1juTFEhSBCYR9VGI1DyWjZ+EgkFYiiEg6ItedX4RV1G
+         aOhA==
+X-Gm-Message-State: AJIora8+ABlM6yjJXM2FAwHDWGyDzeLeYqPgJAiXgl2znlIaaqu8Dml8
+        juVaIkI+9S2i0adDs/H8kY0=
+X-Google-Smtp-Source: AGRyM1tj9cuz/W4LAd9BMq4WIOZkxkrW2UJLCS/AeNw+AhegYlhfdsgfmykyQIPR9LbFViQAWRDZ3w==
+X-Received: by 2002:a63:ce0f:0:b0:41a:f0ee:c28e with SMTP id y15-20020a63ce0f000000b0041af0eec28emr190116pgf.43.1659036138925;
+        Thu, 28 Jul 2022 12:22:18 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id m8-20020a654c88000000b0040cfb5151fcsm1282985pgt.74.2022.07.28.12.22.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 12:22:18 -0700 (PDT)
+Message-ID: <db9560c1-7fc7-405e-bee1-3827a943b712@gmail.com>
+Date:   Thu, 28 Jul 2022 12:22:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220726120215.101868-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 6/9] arm64: bcmbca: Make BCM4908 drivers depend on
+ ARCH_BCMBCA
+Content-Language: en-US
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        William Zhang <william.zhang@broadcom.com>
+Cc:     Linux ARM List <linux-arm-kernel@lists.infradead.org>,
+        joel.peshkin@broadcom.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        dan.beygelman@broadcom.com, anand.gore@broadcom.com,
+        kursad.oney@broadcom.com, krzysztof.kozlowski@linaro.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20220725055402.6013-1-william.zhang@broadcom.com>
+ <20220725055402.6013-7-william.zhang@broadcom.com>
+ <63797827553783061a0ad5e897ed6538@milecki.pl>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <63797827553783061a0ad5e897ed6538@milecki.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, 26 Jul 2022 14:02:15 +0200, Krzysztof Kozlowski wrote:
-> Convert the Qualcomm PM8916 watchdog timer controller bindings to DT
-> schema and include them in parent device schema.
+On 7/27/22 05:31, Rafał Miłecki wrote:
+> On 2022-07-25 07:53, William Zhang wrote:
+>> With Broadcom Broadband arch ARCH_BCMBCA supported in the kernel, this
+>> patch series migrate the ARCH_BCM4908 symbol to ARCH_BCMBCA. Hence
+>> replace ARCH_BCM4908 with ARCH_BCMBCA in subsystem Kconfig files.
+>>
+>> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+>> Acked-by: Guenter Roeck <linux@roeck-us.net> (for watchdog)
+>> Acked-by: Bjorn Helgaas <bhelgaas@google.com> (for drivers/pci)
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/power/reset/qcom,pon.yaml        |  4 ++
->  .../bindings/watchdog/qcom,pm8916-wdt.txt     | 28 ----------
->  .../bindings/watchdog/qcom,pm8916-wdt.yaml    | 51 +++++++++++++++++++
->  3 files changed, 55 insertions(+), 28 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.yaml
+> I still think it may be a bad idea for all below drivers. Please see my
+> previous e-mail:
+> Re: [RESEND PATCH 6/9] arm64: bcmbca: Make BCM4908 drivers depend on ARCH_BCMBCA
+> https://lore.kernel.org/linux-arm-kernel/eee8c85652e6dac69420a876d03f67c4@milecki.pl/
 > 
+> I think we should:
+> 1. Keep ARCH_BCM4908 for 4908 specific drivers (e.g. mtd, pinctrl, net)
+> 2. Use ARCH_BCMBCA for more generic drivers (e.g. I2C, PCI,serial, WD)
 
-Applied, thanks!
+IMHO here is no point in keeping an ARCH_BCM4908 anymore when the whole point of the patch series is to do a broad conversion of ARCH_BCM4908 into ARCH_BCMBCA. Even if some of the drivers are considered or thought to be 4908-specific, this is not going to be an issue in practice because there ought to be appropriate compatible strings such that even if you built a 4908-specific driver into a generic ARCH_BCMCA kernel, the actual probing would only happen on 4908.
+
+Now let us flip it the other way round, let's say we keep ARCH_BCM4908 as a sub-arch of ARCH_BCMBCA, then this sets a precedent for adding more and more of those ARCH_BCM4906, ARCH_BCM4912 etc. etc to future kernels under the same reasons that we might want to gate certain drivers to certain sub-arches. But what good does that do?
+
+At some point we got to make it simple for the users, and the simplest way is to have ARCH_BCMBCA only and let DT dictate the device specific probing.
+-- 
+Florian
