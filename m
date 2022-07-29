@@ -2,37 +2,38 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6AD585085
-	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Jul 2022 15:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09BDA585081
+	for <lists+linux-watchdog@lfdr.de>; Fri, 29 Jul 2022 15:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236461AbiG2NLN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 29 Jul 2022 09:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
+        id S236313AbiG2NLM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 29 Jul 2022 09:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236576AbiG2NKy (ORCPT
+        with ESMTP id S236618AbiG2NK4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 29 Jul 2022 09:10:54 -0400
+        Fri, 29 Jul 2022 09:10:56 -0400
 Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14C073ED5B
-        for <linux-watchdog@vger.kernel.org>; Fri, 29 Jul 2022 06:10:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568EA3B961;
+        Fri, 29 Jul 2022 06:10:55 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LvSYv2GSLz4x1h;
-        Fri, 29 Jul 2022 23:10:43 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LvSZ55wVyz4x1Y;
+        Fri, 29 Jul 2022 23:10:53 +1000 (AEST)
 From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     linux-watchdog@vger.kernel.org,
-        Scott Cheloha <cheloha@linux.ibm.com>
-Cc:     mpe@ellerman.id.au, vaishnavi@linux.ibm.com, linux@roeck-us.net,
-        npiggin@gmail.com, tzungbi@kernel.org, nathanl@linux.ibm.com,
-        linuxppc-dev@lists.ozlabs.org, wvoigt@us.ibm.com, aik@ozlabs.ru,
-        brking@linux.ibm.com
-In-Reply-To: <20220713202335.1217647-1-cheloha@linux.ibm.com>
-References: <20220713202335.1217647-1-cheloha@linux.ibm.com>
-Subject: Re: [PATCH v3 0/4] pseries-wdt: initial support for H_WATCHDOG-based watchdog timers
-Message-Id: <165909971888.253830.15454249099878371474.b4-ty@ellerman.id.au>
-Date:   Fri, 29 Jul 2022 23:01:58 +1000
+To:     mpe@ellerman.id.au, wim@linux-watchdog.org, linux@roeck-us.net,
+        npiggin@gmail.com, nathanl@linux.ibm.com,
+        christophe.leroy@csgroup.eu,
+        Laurent Dufour <ldufour@linux.ibm.com>, rdunlap@infradead.org
+Cc:     haren@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org,
+        hch@infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+In-Reply-To: <20220713154729.80789-1-ldufour@linux.ibm.com>
+References: <20220713154729.80789-1-ldufour@linux.ibm.com>
+Subject: Re: [PATCH v5 0/4] Extending NMI watchdog during LPM
+Message-Id: <165909973609.253830.7930031213898440605.b4-ty@ellerman.id.au>
+Date:   Fri, 29 Jul 2022 23:02:16 +1000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -44,25 +45,27 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, 13 Jul 2022 15:23:31 -0500, Scott Cheloha wrote:
-> PAPR v2.12 defines a new hypercall, H_WATCHDOG.  This patch series
-> adds support for this hypercall to powerpc/pseries kernels and
-> introduces a new watchdog driver, "pseries-wdt", for the virtual
-> timers exposed by the hypercall.
+On Wed, 13 Jul 2022 17:47:25 +0200, Laurent Dufour wrote:
+> When a partition is transferred, once it arrives at the destination node,
+> the partition is active but much of its memory must be transferred from the
+> start node.
 > 
-> This series is preceded by the following:
+> It depends on the activity in the partition, but the more CPU the partition
+> has, the more memory to be transferred is likely to be. This causes latency
+> when accessing pages that need to be transferred, and often, for large
+> partitions, it triggers the NMI watchdog.
 > 
 > [...]
 
 Applied to powerpc/next.
 
-[1/4] powerpc/pseries: hvcall.h: add H_WATCHDOG opcode, H_NOOP return code
-      https://git.kernel.org/powerpc/c/c6b2bd262b33aa2451f52aec2190131d1762945a
-[2/4] powerpc/pseries: add FW_FEATURE_WATCHDOG flag
-      https://git.kernel.org/powerpc/c/1621563ec62ff143c7b817dd5eab0884cdfaf89d
-[3/4] powerpc/pseries: register pseries-wdt device with platform bus
-      https://git.kernel.org/powerpc/c/578030bfe117060bf86c81aaa7b3faead4589810
-[4/4] watchdog/pseries-wdt: initial support for H_WATCHDOG-based watchdog timers
-      https://git.kernel.org/powerpc/c/69472ffa6575e3a1c1e3324dd06395af0f63eb71
+[1/4] powerpc/mobility: wait for memory transfer to complete
+      https://git.kernel.org/powerpc/c/882c0d1704cf61df13f01933269202d51e74b9f3
+[2/4] watchdog: export lockup_detector_reconfigure
+      https://git.kernel.org/powerpc/c/7c56a8733d0a2a4be2438a7512566e5ce552fccf
+[3/4] powerpc/watchdog: introduce a NMI watchdog's factor
+      https://git.kernel.org/powerpc/c/f5e74e836097d1004077390717d4bd95d4a2c27a
+[4/4] pseries/mobility: set NMI watchdog factor during an LPM
+      https://git.kernel.org/powerpc/c/118b1366930c8c833b8b36abef657f40d4e26610
 
 cheers
