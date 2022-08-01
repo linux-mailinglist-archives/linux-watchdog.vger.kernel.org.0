@@ -2,139 +2,173 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA6B5866CC
-	for <lists+linux-watchdog@lfdr.de>; Mon,  1 Aug 2022 11:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0885866DE
+	for <lists+linux-watchdog@lfdr.de>; Mon,  1 Aug 2022 11:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiHAJWu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 1 Aug 2022 05:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
+        id S229861AbiHAJcI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 1 Aug 2022 05:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiHAJWt (ORCPT
+        with ESMTP id S229809AbiHAJcH (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 1 Aug 2022 05:22:49 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850CC2B251
-        for <linux-watchdog@vger.kernel.org>; Mon,  1 Aug 2022 02:22:47 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id j7so13330138wrh.3
-        for <linux-watchdog@vger.kernel.org>; Mon, 01 Aug 2022 02:22:47 -0700 (PDT)
+        Mon, 1 Aug 2022 05:32:07 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF58431DDF
+        for <linux-watchdog@vger.kernel.org>; Mon,  1 Aug 2022 02:32:05 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id rq15so13223021ejc.10
+        for <linux-watchdog@vger.kernel.org>; Mon, 01 Aug 2022 02:32:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=NGyhhBpF08caSp9ryVolnpYSv07YhtzN63176RAsoRU=;
-        b=l/30398qzN7b2NPQpN3AbWdp4u5F62TY0f7bHO8KhDH6oUYCSXYZZFAgib548IFdVB
-         sMAN+0tkDOuMrFmM7txJL4GxCcuOUZwEuv8DW0u+5+GYCI6RSENGwHswISFRdzrwNB8v
-         EivuaoqHpIGLGhFvzeNIKxHpJ+ef9YkRqFw5ZTOQEFXlphPCmUxHP+K0PVx/llU3aXMI
-         YuhkNe87ad5XUhKJRtwJy4l/RQaPjOE1Tl0B8p9l7J+mnHP3XRpMGBLP45AYSLK5udRD
-         P/9uGyfKaYLMMxHfiuX0ZigIe7Z/8Wm8qgkmoAPfOhbbTVFh556IUwOYrk+2YKGmU3SQ
-         Ek2g==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=JMy4E/ztvPyPIu2vFaZUutGsl9gWHvzFeEWtkrfXhHg=;
+        b=KKaQB9R7YLuhLCPfTDSlB6M/w4RrAhDZ2rcdgkcsDMHqvyX3kU6X3L9d1TnagMbbIV
+         ZM6xBUZDE3dh34XnGVuV2Op4V0/BWPL0DUUOrFs7hczKCkQqXlziqk9a9RDt80oMwv8S
+         gwu0sM6/wCsL/LPNRVp3yN0LpLd1JPnvfxJDk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=NGyhhBpF08caSp9ryVolnpYSv07YhtzN63176RAsoRU=;
-        b=bCPmT4Aztzq8KOrDt7sjg/BcNnfTEclDSZ0aq8RLOismiJtxzmuipj4bkr3+7QTyUk
-         2lONyGXzkpL6XHSBk4gGDAucWfzhilFUuvcR0SPtibmlixYyfbjoj3h/M17eDd11Dnlf
-         cAat0nJvdNYxGKizfvZT7i7Yo8n3iCbkekeg8TIzWtnrvFo6TK63u9jhVYqUDEOkPttD
-         l6nzQsrPRW2d7JPFzrCGGJebcOsydyBsEhRlR1mOilLLZZMWcdZEduTJ7T/MhaPCjUUZ
-         KAOfAVhneAROLyW6iZcLSUhyyXBhjoghqoiotTOyTKDchwf3cBGYEPvT7vMg0F+5GVjj
-         sL3A==
-X-Gm-Message-State: ACgBeo1SAIBTUMLT7iibh+zjCXeeox11gXwgvVWdiAjDljSgaKqXwMjc
-        QhdO50g7ZEYrdo7DiSqAc2eT1Q==
-X-Google-Smtp-Source: AA6agR6mnS/kyqOIglz+91cHGdVqd9XYyn4LrVlZGvLKmhDtkndnSHB3h76n4PACAFQZ+hYVLrOHxQ==
-X-Received: by 2002:a5d:4f09:0:b0:21e:cc31:50b6 with SMTP id c9-20020a5d4f09000000b0021ecc3150b6mr9186504wru.124.1659345766067;
-        Mon, 01 Aug 2022 02:22:46 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id q17-20020a05600c2e5100b003a3186fa559sm13504028wmf.29.2022.08.01.02.22.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 02:22:45 -0700 (PDT)
-From:   Philippe Boos <pboos@baylibre.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Philippe Boos <pboos@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-watchdog@vger.kernel.org (open list:WATCHDOG DEVICE DRIVERS),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Amlogic Meson
-        SoC support),
-        linux-amlogic@lists.infradead.org (open list:ARM/Amlogic Meson SoC
-        support), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2] watchdog: meson: keep running if already active
-Date:   Mon,  1 Aug 2022 11:21:50 +0200
-Message-Id: <20220801092150.4449-1-pboos@baylibre.com>
-X-Mailer: git-send-email 2.20.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=JMy4E/ztvPyPIu2vFaZUutGsl9gWHvzFeEWtkrfXhHg=;
+        b=Om95SB3EPcbdMUdGVH/0CYaB8AYPSbeu7BjhXpeoXbnW9T7S1puK4vzilt/vJxH/Dj
+         yCS0ZEeyYC3a23GuCkW7+XVypi9PZo1fHC5EaFITtvwc7daCMUuKb57ktQlSPyuWmg7e
+         sOcvxaezxOdXm4GcD9FW49evChZjYtXVMNkTys0CY406N6A4rlz7GGM7HpIVESzDj8Pn
+         Vdc+Hwf1N9mvBwZpna0CNBKaR5d5iGbCOsvOK9GhabBZOmaynDWCPAbdQfOBbaPheJfY
+         eAPO8oK1p1PttYs9qDfaDzudFoXDp4DOofeae/uYGDlEwcdBY4kb8IRPneWraOw2C20r
+         GQag==
+X-Gm-Message-State: ACgBeo0sCTxH1/Cbgc/fij8VF+TQxq/pxek82HjJjtpWQtNMH2KAy1LW
+        onDg2iUKfTvCPLGFz6/afCyMPDw4Suk3MAJWqJg4tA==
+X-Google-Smtp-Source: AA6agR6K7PNaBZMXrL5ffNGGYhxQCNyw8wdKgDHTFzPYoCNydGawG8GjwGXlsjSkYiU1D/UICwVQXLdlijnebaXEKvs=
+X-Received: by 2002:a17:907:7b8e:b0:730:7295:fdfd with SMTP id
+ ne14-20020a1709077b8e00b007307295fdfdmr4363438ejc.152.1659346324534; Mon, 01
+ Aug 2022 02:32:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220726062057.320342-1-wenst@chromium.org> <91613700-3335-7499-1b48-3d88edd9da36@collabora.com>
+ <fc64285e-30c7-44b1-e264-839944105185@roeck-us.net>
+In-Reply-To: <fc64285e-30c7-44b1-e264-839944105185@roeck-us.net>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 1 Aug 2022 17:31:53 +0800
+Message-ID: <CAGXv+5EHYJBTvXxB-HdqVDzSNU7bqHRSBxKfonVm_p5jjYyMSQ@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: mtk_wdt: Move mt6589-wdt fallback compatible to
+ end of list
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-If the watchdog is already running (e.g.: started by bootloader) then
-the kernel driver should keep the watchdog active but the amlogic driver
-turns it off.
+On Tue, Jul 26, 2022 at 9:25 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 7/26/22 01:37, AngeloGioacchino Del Regno wrote:
+> > Il 26/07/22 08:20, Chen-Yu Tsai ha scritto:
+> >> The watchdog facility in the MediaTek SoCs are all the same, but the
+> >> hardware block also contains a reset controller, which differs in the
+> >> number of resets used between different SoCs. This difference is
+> >> supported with of_device_get_match_data() supplying the number of reset
+> >> lines for the newer compatible strings. The original mt6589-wdt only
+> >> covers the watchdog facility.
+> >>
+> >> of_device_is_compatible(), and by extension of_device_get_match_data(),
+> >> works by going through the given list of compatible strings sequentially,
+> >> and checks if any of the device node's compatible strings match.
+> >>
+> >> To avoid early matching on the "mediatek,mt6589-wdt" fallback compatible,
+> >> which only provides watchdog functionality and no reset controller, move
+> >> the fallback entry to the end of the list, so that other, more specific
+> >> compatible strings have a chance at getting matched.
+> >>
+> >> Fixes: c254e103082b ("watchdog: mtk_wdt: mt8183: Add reset controller")
+> >> Fixes: adc318a34066 ("watchdog: mt8192: add wdt support")
+> >> Fixes: 8c6b5ea6ac68 ("watchdog: mediatek: mt8195: add wdt support")
+> >> Fixes: 4dbabc4d9e8c ("watchdog: mediatek: mt8186: add wdt support")
+> >> Fixes: 711a5b25bac9 ("watchdog: mtk_wdt: mt7986: Add toprgu reset controller support")
+> >> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> >
+> > Uhm, I don't think that this is an issue?
+> >
+> > Ordering precedence is given to the list that you specify in devicetree, that's why
+> > "the second one" is a fallback, meaning: ("impossible" example below)
+> >
+> > compatible = "mediatek,mt8195-wdt", "mediatek,mt8183-wdt", "mediatek,mt6589-wdt";
+> >
+> > This gets walked as per the order in which you wrote the compatibles, so:
+> > * Check match for mt8195-wdt, does not exist?
+> >   * Check match for mt8183-wdt, exists!
+> >   * Put everything into dev->of_node (having mediatek,mt8183-wdt only!)
+> >
+> > __of_device_is_compatible() gets dev->of_node and compares that to all of the
+> > possible matches.
+> >
+> > struct device_node for this device hence does *not* contain any of the other
+> > compatibles that we specified in devicetree, so it does *not* contain any of
+> > "mediatek,mt8195-wdt", or "mediatek,mt6589-wdt", because we have previously
+> > successfully matches 8183.
+> >
+> > I don't think that I've misinterpreted this flow, but if I have, let's pull
+> > in devicetree people and check with them?
+> >
+>
+> I don't see the problem either. The fallback needs to be listed last in the
+> compatible property. If it isn't, having it last in struct of_device_id
+> won't help either.
 
-Let the driver fix the clock rate if already active because we do not
-know the previous timebase value. To avoid unintentional resetting we
-temporarily set it to its maximum value.
+I was probably reading something that wasn't there in the watchdog patch
+series I mentioned. I've replied over there. Please ignore this one for
+now.
 
-Then keep the enable bit if is was previously active.
+ChenYu
 
-Signed-off-by: Philippe Boos <pboos@baylibre.com>
----
- drivers/watchdog/meson_gxbb_wdt.c | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
-index 5a9ca10fbcfa..8be8fd9e5637 100644
---- a/drivers/watchdog/meson_gxbb_wdt.c
-+++ b/drivers/watchdog/meson_gxbb_wdt.c
-@@ -146,6 +146,7 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct meson_gxbb_wdt *data;
- 	int ret;
-+	u32 ctrl_reg;
- 
- 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
-@@ -177,13 +178,26 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
- 	data->wdt_dev.timeout = DEFAULT_TIMEOUT;
- 	watchdog_set_drvdata(&data->wdt_dev, data);
- 
-+	ctrl_reg = readl(data->reg_base + GXBB_WDT_CTRL_REG) &
-+				GXBB_WDT_CTRL_EN;
-+
-+	if (ctrl_reg) {
-+		/* Watchdog is running - keep it running but extend timeout
-+		 * to the maximum while setting the timebase
-+		 */
-+		set_bit(WDOG_HW_RUNNING, &data->wdt_dev.status);
-+		meson_gxbb_wdt_set_timeout(&data->wdt_dev,
-+				GXBB_WDT_TCNT_SETUP_MASK / 1000);
-+	}
-+
- 	/* Setup with 1ms timebase */
--	writel(((clk_get_rate(data->clk) / 1000) & GXBB_WDT_CTRL_DIV_MASK) |
--		GXBB_WDT_CTRL_EE_RESET |
--		GXBB_WDT_CTRL_CLK_EN |
--		GXBB_WDT_CTRL_CLKDIV_EN,
--		data->reg_base + GXBB_WDT_CTRL_REG);
-+	ctrl_reg |= ((clk_get_rate(data->clk) / 1000) &
-+			GXBB_WDT_CTRL_DIV_MASK) |
-+			GXBB_WDT_CTRL_EE_RESET |
-+			GXBB_WDT_CTRL_CLK_EN |
-+			GXBB_WDT_CTRL_CLKDIV_EN;
- 
-+	writel(ctrl_reg, data->reg_base + GXBB_WDT_CTRL_REG);
- 	meson_gxbb_wdt_set_timeout(&data->wdt_dev, data->wdt_dev.timeout);
- 
- 	watchdog_stop_on_reboot(&data->wdt_dev);
--- 
-2.20.1
-
+> > Cheers,
+> > Angelo
+> >
+> >> ---
+> >>
+> >> This change complements the removal of the fallback compatible from the
+> >> bindings and DTSI files [1].
+> >>
+>
+> If the fallback isn't listed in the dtsi files, it won't match at all,
+> no matter where it is located in struct of_device_id.
+>
+> Guenter
+>
+> >> [1] https://lore.kernel.org/linux-mediatek/20220721014845.19044-1-allen-kh.cheng@mediatek.com/
+> >>
+> >>   drivers/watchdog/mtk_wdt.c | 3 ++-
+> >>   1 file changed, 2 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+> >> index e97787536792..3d5a239b93ba 100644
+> >> --- a/drivers/watchdog/mtk_wdt.c
+> >> +++ b/drivers/watchdog/mtk_wdt.c
+> >> @@ -425,12 +425,13 @@ static int mtk_wdt_resume(struct device *dev)
+> >>   static const struct of_device_id mtk_wdt_dt_ids[] = {
+> >>       { .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
+> >> -    { .compatible = "mediatek,mt6589-wdt" },
+> >>       { .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
+> >>       { .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
+> >>       { .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
+> >>       { .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
+> >>       { .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
+> >> +    /* Fallback compatible string must be last entry */
+> >> +    { .compatible = "mediatek,mt6589-wdt" },
+> >>       { /* sentinel */ }
+> >>   };
+> >>   MODULE_DEVICE_TABLE(of, mtk_wdt_dt_ids);
+> >
+> >
+>
