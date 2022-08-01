@@ -2,168 +2,522 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E0A586710
-	for <lists+linux-watchdog@lfdr.de>; Mon,  1 Aug 2022 11:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D03586C9C
+	for <lists+linux-watchdog@lfdr.de>; Mon,  1 Aug 2022 16:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbiHAJr2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 1 Aug 2022 05:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
+        id S232353AbiHAOJ6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 1 Aug 2022 10:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiHAJrX (ORCPT
+        with ESMTP id S229943AbiHAOJ4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 1 Aug 2022 05:47:23 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2084.outbound.protection.outlook.com [40.107.21.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66ACF3C15B;
-        Mon,  1 Aug 2022 02:47:21 -0700 (PDT)
+        Mon, 1 Aug 2022 10:09:56 -0400
+Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10048.outbound.protection.outlook.com [40.107.1.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5978422503;
+        Mon,  1 Aug 2022 07:09:54 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dAGRnagukm8X7YHTqCIM52BxXh9l+C/axc+K+QWx7hsgLeM+G+LpwY+Y2YytRKGXaompix2kQxwO6Abp7u0nbyBLH7TSrGfeOdeXHitt91yUsNhHdP0IXnI1GRnoGyfuwKaS39wTfSTdoT2sjt7zzDaw51v+V26KIvbQCcM08S/KFN/FMHslq4mPkWIcPSXfwgAGgbdummQo7byVK6KeZAGsGylE7FkBKNWHrD5dwnWbrMQqHbRL1uCXIBryM39jBbNH34IrTJy1iFBDLTFuX/9e0hg6GRwyBl26z+ahKcOpo4HbdPWFUFmgUj1uxVx0PSe1Vy6faBgvQ0fWx6b2cA==
+ b=L9eY19nqnkuKvoRoQFFDxSUIwafynOntrasLT99vl+OPma6CRv6bJvT36NhhNyYPD29XNXgUjrJvl9oke8cWOpbeGVa8IUQCcD6rvr8CwkSAAR80lloiMpNiaR//siylExxNnLvhfVQNXblFtbuIApn90M1HZU7NUCWk1jHBKB6IQUYtV0mBrE440NPIOVqn+lpkaSQwIz6G8vv1+bWEGq2/fPI1o+SrPFtujzk70sEBvyDp51Bs4mVnwDCUSjCWvc6o4i6Pw6UGThXo3AZHdnJgZyKFqB2MyzGlFamqyNent4LP3QbKWV4yUil9BS8xP5Ymyp2pFTsRozPBiTulKQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9uIDGKa/pbS/jGbd7sabN8g0ZqVBxREletBa2RXfcLE=;
- b=WIL0WdsOIRWDLAntvkDJEqY9h0L5amdFfx+GboP9iVgqpFEiXHXKuQtADX2L3Q2z1jD0VYTI0ImsSvOR5ZpFe7o0OI1QWFv+PY5H2kOhFnyGfO2iczaIESa6gRtAaZHQLMiNl2B0XFWSJNCvKKxA1d4DWjqOAcDCgJg8IUs75231H7G5LmUOXMNRf0Mwjb4fVl5rGNBIVwePjrjafIzp6lKvcKaw+ab8drwppk8XicADExu8MYwz9Rcz0MMeFls93nSqLrDfhtAQY/vyQfTH21GkCpFNj6z3ui4YkJbC/QshRFTG4HvqxhRjKiz4yv/4Y+LpoNwTRL7O7Q/Xvhl7Ww==
+ bh=6lO2ti0xrXuiUpEgghWxqTJun3FuMKD4J0qbpuUs7wU=;
+ b=G3z1M+OTXAJdxJ+G78gIiLFPq855cnMBvHgyn7aHHPVoSPvJdt0EDikSIAz5RFxrgtkmD/LjTOfqwNkLQiLZuBVn0s/nyG6Om8fcfC03lTeP9i7pM9oxVqRcs8XCkqLkWycY9DxAKfY1ztAUJ+rQgZj+P1mUlhpFWMAzlvnieNgRPr9xJBerPiix7W1vfQg3qin5hxq0RclOUXGBDh+laI4JW1VZzhcMmzcf3kP4+3ZMV0JOW6vXImo8H3BbbLqb9qi5Ae4+NMS16ZFrNY0jkzprM0EZ7Yb9FIh/AKGwDwijbJS7dXGizAA033P8yRo7/8IfE5wDUnRH02ywGGORew==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9uIDGKa/pbS/jGbd7sabN8g0ZqVBxREletBa2RXfcLE=;
- b=gDsfIK9DNCgOkyJvXtQa9BuAH0kV43qjm1pENlNZhyRPIGxOgcU6J3v0tx+uIUtkS25UCRUF2zTubQBL0xa97dROPRR4Vr5/my0Bcy0uPPN5wx10Q6E8gdY+SBS/3xC6GQ8glhUguyTPB0C+3ml+WfETkbp2Vkz7lJXu9mH9Xooew2YFClNFyH1ZCulvOcVjiGpnwiUDLyx/9tMV9usdpBwoHhYb3ErSWUCYfdbdhwEI2koa2OxnOhgL13PCF7xvPASFGxqbTc41C3y9jCEzKnV/zw7aet1WCeEUytLTEHg3Wb6DPVnPV0D3I/zg0fuPK64yPI2GDa6JZIb14SpngA==
+ bh=6lO2ti0xrXuiUpEgghWxqTJun3FuMKD4J0qbpuUs7wU=;
+ b=Mv7wisxXC5kXialBBWxzpS9eeOkKZhG483oLhTGdAT76ZxYyad0EA0p/gSI7SL88mZu4S1uudRsvTBTr37AT3LKw5S21ocM5QybuEEaBmPMCQgtHoNyr2X24n/U/0CiXmnR+sn3gFaTLFiTYkRLawNfZHIqc/jPBI1CxHYlLUaWhatTCf7IBK+zCHD8AXCP2XsuShWzQOY5RBdq/1CVTFzImMx3QAFTwMAoYNUjYFRVaPK4xlTYcbxBJJiojqqjyIaUsBLk8gKpdxnTUVjQj/XupPjkwxeBEkPtJM0KxQBLXyUMcymr/M64eBVs2Njuutk0GkSQ7jmj/dy76eFebOg==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16) by VI1PR04MB5808.eurprd04.prod.outlook.com
- (2603:10a6:803:e4::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.16; Mon, 1 Aug
- 2022 09:47:18 +0000
-Received: from VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::9cc6:7688:607e:a3b6]) by VI1PR0401MB2526.eurprd04.prod.outlook.com
- ([fe80::9cc6:7688:607e:a3b6%8]) with mapi id 15.20.5482.016; Mon, 1 Aug 2022
- 09:47:17 +0000
-Message-ID: <ca54c865-bc5c-ce8e-4ec1-9a3ac4130fa9@suse.com>
-Date:   Mon, 1 Aug 2022 11:47:13 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5] watchdog: add driver for StreamLabs USB watchdog
- device
-Content-Language: en-US
-To:     Alexey Klimov <klimov.linux@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
+ by DU0PR10MB6020.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:3b0::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.12; Mon, 1 Aug
+ 2022 14:09:51 +0000
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::75ee:d5d2:6b1d:150b]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::75ee:d5d2:6b1d:150b%3]) with mapi id 15.20.5482.012; Mon, 1 Aug 2022
+ 14:09:51 +0000
+Date:   Mon, 1 Aug 2022 16:09:48 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        atishp@rivosinc.com, atishp@atishpatra.org,
-        Yury Norov <yury.norov@gmail.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Aaron Tomlin <atomlin@redhat.com>
-References: <20220725030605.1808710-1-klimov.linux@gmail.com>
- <Yt5Zn9cXDe9/F9RJ@kroah.com>
- <CALW4P+Kd_XdvzGfA=Cmtu0c=kEHfhp2pph2Wh0Sa8Fm8GxDRTA@mail.gmail.com>
- <7770401d-fe3d-bda4-a2e2-55cd004a2d07@suse.com>
- <CALW4P++5ahRdK6WvghPgpPcTuoJyezU_=s6MG2nn4OBRWZYGXQ@mail.gmail.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <CALW4P++5ahRdK6WvghPgpPcTuoJyezU_=s6MG2nn4OBRWZYGXQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH v6 12/12] leds: simatic-ipc-leds-gpio: add GPIO version
+ of Siemens driver
+Message-ID: <20220801160948.1bb59da2@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20220606164138.66535-13-andriy.shevchenko@linux.intel.com>
+References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
+        <20220606164138.66535-13-andriy.shevchenko@linux.intel.com>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS9PR06CA0740.eurprd06.prod.outlook.com
- (2603:10a6:20b:487::18) To VI1PR0401MB2526.eurprd04.prod.outlook.com
- (2603:10a6:800:58::16)
+X-ClientProxiedBy: FR3P281CA0128.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:94::10) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:269::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 29ef242a-68ca-4b8c-9527-08da73a2d23e
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5808:EE_
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Office365-Filtering-Correlation-Id: 517d2377-81ec-4d5c-ca82-08da73c78029
+X-MS-TrafficTypeDiagnostic: DU0PR10MB6020:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6J3GXLgv0HhfLbu0pJMMeIojnII8Ph2N+rvadtOouFKjNJqzBjNZzQfTTckRs5l4N2T7QVJ9O45YXxb5aVd+43e5Dm1xjuoZ5CP+zDCxAi0mVF7sI3Y6ojpHAPgEq1tlbB0Qxu5T5vCaFSctVDsEUDMVegjUDhSltazsnYffRIf+MxzNwuc6bQzAF7w2v9pGhs4NEy1b15MXLQU8RzsvjobUQqRFzULRGmNSTDk0ai2tnDD4jHhsrEawLdiwG1NsHEFIcov2RmTJESI2fp9EY9J/02llxhXBGGj+IQku/sGZiLOFIslGUWUay0NhQ5ZBlB3ePNJQ/Kaa56AvLaEQM35yObndTd/RHJAvDaCo7DYNTWm3vyKuD5SYZT47Lm4xTFf8vKfwrpX9NXcNuatC5e79CfLv31OnxdEWH6UWcy8UcyvVQWWBqKC94Dz0hz4JAgprxaUA5N1zCxc43TgRu7hP1s6xakbZvZxbPNaavMAIcN1ebX284ldibl9MWpHyhsvFcSkq5DUsBb/29nTTNByNxMFfJBqs0QWxZjJNPT+XSoxQzn/qEhfmaY0VIW74ssLHwmlGUu9RLfQGRZN1gkcSPmGehBKvdApILwzMhXri8wPcO80vajaLPtPYmEZF05GmDnp316sD4A0uTTxQAGLvZIDOHwwmLX01YTHXxtKfCvYe5fLJP7t5/PvfU/HO4vS6KLrtIMs5yHIvILCNNQAqQT7yoe8X6iaJ6+wbJA/04YsCdrbmYQOBfc5XOxYyGXF6/iqanqjtwgODveBA7bhNqAQJAuzNL5vXnWHLcDOgxsXEoi7LmpBZoHFckeFD
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2526.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(136003)(366004)(39850400004)(346002)(376002)(36756003)(110136005)(54906003)(31686004)(316002)(38100700002)(8676002)(4326008)(66556008)(41300700001)(6666004)(66946007)(6512007)(6486002)(83380400001)(66476007)(478600001)(2616005)(186003)(8936002)(7416002)(5660300002)(4744005)(6506007)(86362001)(53546011)(31696002)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 45eXAGW/MvtIHRMyNQrEu9oOJOiA3kDbXD4KLYSXSArWtmkdL/J2VjkA2nMGjEvSFVb5zKx6FOZNyenk0UNgBMovjfyKYQi/GxI7ClTNPgO4TQpXLsBvU0+4m0yBivtvtdSlZu9MSs0ukYqRuHq4BN56Vre6I5Vvm5Eiy9XFc/bpSTJIXrTjScrp7X+PNNbcFiaHKyeD2rmbcStEfLYwt8LFK73h/5BIP3elr3YhIlpUj3LbExHDINUOgmYip8ZRRRXmMXIUnAk6WOp7q1FuyblkpEn49tW9gAE7qUQQIppS13rmpWWdVl347FFCnZeoEcmaDmCCTcCCaY8FkCoJqJjIW+jasqlwbcWKz7Msic08WRfkHdLjMIxnuQ3H3HNc8A8K6syIVGTRD0IYtEEBfJ/YuNmhzhx/46UTjh/aYSI0YYufp1nNvPlh7xuHSoRKLJ35Ouyu/iRVROpWYT2pR826MG8txSuwBe2cmOaAsEetfGU2EZuM7YLqgKIjdXBxZW5TkjCpW8Nixqd6MY/lT9IP4+rEUEImbZ191q2+hS+F4eC3K0NBwgjKgepNCrVqJ8FAWQffunJmHN1Bw5vbg6KtZraSF3tvy7Xi/KPTYwle3Isk/RDsvdmEh3zxZRkv/iKzfxOsM2y+QJubcBryh2BrISIBjW/1g4DO3ZvUaiX547rn8ndZdJ66YTuiMLJ0R6fi4udyxdIh7hcXDO4IfrQYRug8DUUJbQEuICqaeobMq3G25Ojn9j0CI0YusDor
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(346002)(366004)(376002)(39860400002)(6666004)(6486002)(41300700001)(478600001)(26005)(6506007)(6512007)(9686003)(83380400001)(1076003)(44832011)(8936002)(5660300002)(30864003)(186003)(7416002)(316002)(6916009)(54906003)(66476007)(66946007)(66556008)(4326008)(8676002)(2906002)(38100700002)(82960400001)(86362001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M2ZIVituZUEzM0F2Smh4ZkpwSFBvOU1Qdm1KclREajFwNzdIeUxwL1MyMkhh?=
- =?utf-8?B?V2xza3R6RDhOTWdUcEJ6WEU3ZWZENW1jcWhMajdiSXZqeFRMSWNRUzVWZVlu?=
- =?utf-8?B?d1EvZGF2MmRmWDVIcXA1bzVtRzRYTEZoRDZGY3BYMmMwVUNOZUJJNm5LUXhZ?=
- =?utf-8?B?K1NFSTB0czVOaG9pYXh5QjBPRlpXREtIdUErRzRzQkVPVnIzbks1UHFZcVJU?=
- =?utf-8?B?UDlBNUhlaHl4TGJCRHNwanBJc0Q1MGFGTks1dExWc0s2OUlpOERMNlY1eGYv?=
- =?utf-8?B?WVhXcmNPbmhta1B2MUloMXJyZFlvS3RSZmVJT2hWNWplaitDZnF1V3VMc0Nx?=
- =?utf-8?B?cit0d2pqS1JrR3lua3ZCYWFJa2JUUXVEL2k4NWRHdG8ySENkSUQ4cldPdHBp?=
- =?utf-8?B?SlhEbjBhUllwTFF1anRJVTlDUzBsQlNGTlVJS1M3VE5BbGhsamJnemE5eXl6?=
- =?utf-8?B?TFpuK0FHZExXN0NNM2hLcEdZR2JjaXRmaVhick53ZUNCdVd4TC8rK1E0WWM0?=
- =?utf-8?B?L2FkZytZL1NHU215Um0yQUEzeHJQd1UyL2IzeGJkVTFvc3oxZXZuWXZ0V2Fu?=
- =?utf-8?B?NFZoKy8zUElxelFTSUpORUUybTNaNDhtNjdlMWRsUElTTVRCYiszUHVnNW1j?=
- =?utf-8?B?czdlS05OaGxkNzJsTlp6eEF0c3I4LzRlTStseDBpVDFQa1YreFljUXIwdzlE?=
- =?utf-8?B?TDNsTTZGVnVlcVN1cWs2Nng5Q1RzTkg5bUxuWnhyMnVkcUkyK2dvcjJFM1BS?=
- =?utf-8?B?RW02OGN0aVRiUEtTQjJNall6ajJ1Mm5lVzUxMk5qZE9aNUtQblpaeXJta0pL?=
- =?utf-8?B?VjMwNXRuV3d1cmZ5dGkwTktnYXJ1TWlLeVhaSEFMdEFLYmFSekRJRXRmbkov?=
- =?utf-8?B?Y1ZTNlRGTjdtQ0t1UjY4Mm10RXZmTnhGMlJSUE1icFZOMklLUEM4dkxaU3hC?=
- =?utf-8?B?Yi9FMGhpY0FCWjlFNmNFbjR5TllhS1BRVFhkb09rdkxoTTVUZ3hPZFdkSXBH?=
- =?utf-8?B?N05xOE1rK0xCRGZTTm1vTzBxVVBXTHU1dStoaDlza3VsMHkwdXJUNjVBbiti?=
- =?utf-8?B?TUxCZkN3TGpTL1NEa3BXNVFHbm43SDFjUWRzTlIwSlZaL1lYa0k5MDd1KytN?=
- =?utf-8?B?bHhCKzFJT2dtMWt5RW5KaVFMck4vckVzMWNkWUdRYXRQUE1kMkpqRDhKZmtG?=
- =?utf-8?B?cVh4WDNOWHl1aUw1anU0cU80WFhDV21oQWgxRVhHVXhYYlNJZW5RMWtmZG5G?=
- =?utf-8?B?YThoNFpHZ3Iza0lnTFF6N2I0ekwzdjF4aWdaNitmd0JoQVpwRk9KMDR5eE00?=
- =?utf-8?B?dVlZNmk0d2xVb2xOWUEzd2sxYW16TTQ5bTArUHZhcEFhcE0yNURyMWRybGJa?=
- =?utf-8?B?Zm5EWXkrbFhtc3NSQit6L3IwbThCYzc1VVJsdXJiWlpOTWVKQnBwNjk1aGJN?=
- =?utf-8?B?WGFqUTlvV1F3VENmanIwS0Y3QW9TenZwSmNXeThVbHRlQXVDNURVTVdYUFZa?=
- =?utf-8?B?MmR6NnN5WGdHTEJTS2RGUXZGVlMwTTF2V0ZHb1VYOWxLeVBnM1FzRFkxazA2?=
- =?utf-8?B?M1c2MlNOREU3RC8zME05RlVra1Q1Q0VGdkZZQjNlVk40S1VEbGg5aitFb1Vz?=
- =?utf-8?B?ci9XSzlRVk01L0YweHI5REFzVkxWek5VbXN2aEkyazZESnozM1ZJUkdpTExY?=
- =?utf-8?B?eHRpUlRLOVpDbWtxclpPdXduM3VQVmpFdytwRHFvK3NPalBkWEx1akV4d1la?=
- =?utf-8?B?a3dMQWdpUDFJYlgxTDF3Y0FVVUljRHoxWWZEZ0VKOUtEUVlLMFNmY0F1Q1lj?=
- =?utf-8?B?YVp5dnlwOEV6WHBnZEoza3NjY0g1aEQvYU5qSTBna0taQ3BMdmJOTWcwUUF0?=
- =?utf-8?B?anBTK2VWOENEa0h6bFdRZkptMFZGSU1hT0hHTEExNjY5Q05JTVIxZlJVM1hL?=
- =?utf-8?B?emh0dUFEZWhWaFJRN01IUlduYzZuVlBsSDZmUHYvNEpPZjNiMENBdHQxSk1a?=
- =?utf-8?B?SEJiZ3FkdDRwUS9Wd0RReGtqQ1h4Sm5GL3VyNFNnSHdlWDNNWnE5MndXdkhh?=
- =?utf-8?B?TWVIeDhqeWI5YjFRamc5cytyTFVqaGpVakduaFlKM21kZXlIUEVQT0hNNGY5?=
- =?utf-8?B?QU0vRTJKM2ZPVjVGYjUrRXRTRHFsYlhuc0pFdEtRVVBXM3ZvVm03dUx1YmlF?=
- =?utf-8?Q?4uWttxv4WGaoP9Rr0uf4Iw2lh7os8BA+39Pgx5aIxe1m?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 29ef242a-68ca-4b8c-9527-08da73a2d23e
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2526.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rM3b8P6/VM9tNeL1b0Ny8BkSm/eWZmGzX7jPx2XJhKjF/zvWgGF+S6hpwP75?=
+ =?us-ascii?Q?iImUA1YQ0n3jjm89DMEZ+JmQrkdglQ7zFSQ87uTSBKHAZLOI7Iblr9Oqv792?=
+ =?us-ascii?Q?+OLZY6h0BP1t116+tPIIpXhudXq1hjOD0hEXME2mcDVJPzf29kwEDN0BpDbo?=
+ =?us-ascii?Q?Af9WIm7CG3QRduZThcWYgpvYiktLLkM4S8dklv4xoM2msWILfCA010GT26Gx?=
+ =?us-ascii?Q?NIrv2abxOv8X2Too6kKriick83iXZ6usVgJ16TWfFLXiP3TGLqQ86MSpEK4g?=
+ =?us-ascii?Q?Z+t4xuuPhU+qruW28xHm9r0Udb0HTRc6hXAhs/J5/hBgpevXA2sF8nNAyvOA?=
+ =?us-ascii?Q?/ZtC2WTQ0NX6v9WKbAQEpr7QWxXOkbRydZtA7Y0V9g0RTV6wqzzo2ngvwO61?=
+ =?us-ascii?Q?l5g5JBSjYgsthVKZgpjz5D8RBUQ1PyURar4ToeRNHlgcb0gQxAnv59/6tCW2?=
+ =?us-ascii?Q?n8hp5/UxLP+NU58rkmzPK/POY5ZrRIM2W40QU0Yq3IH+q7s8RavHKAIa7V64?=
+ =?us-ascii?Q?zhYtap2DScttFxj65Z6M5rALY6JcLbQLbZVU7K8ewZpAosdcwhoU/wY/a4WQ?=
+ =?us-ascii?Q?fzheAWNpw96irIJSU8rllQwJl0LrqpVIRwm8d/rpSgucfu/WLrb5+3clBUpd?=
+ =?us-ascii?Q?vZjFpzLFlTG6gZuvOnXZqPmcj409hJ534sbpK/iVXPWnhMBa8Y/BNfALGZnv?=
+ =?us-ascii?Q?RRiJ9vLHHqNkLY8fTKKXBoUYMKk5/4et23zaKi+MhBVYzNf2zKIKXEtMzHbU?=
+ =?us-ascii?Q?2AMwJli60yyyoiwwANI5TxcQQdd9y+kjBeEX7GWWv6YbBU1UBZxJQc03nmI2?=
+ =?us-ascii?Q?dKZ/rmYNwqBhytHQarA1uGQG9zriu6fIJP2ZpWZUc5/T0e2cRY9ZxioTfYfe?=
+ =?us-ascii?Q?yjndinDy1bV+Sbqr8ozFPFQia5i006GgoMN0m2ZTuzpi2M5prWHN9P16igPs?=
+ =?us-ascii?Q?cP+A5b5oSHw+Y2HJX7fWTkg5G3l+ms6ndPbSSvT0iYQsau4fdQ0S/hHLoQOU?=
+ =?us-ascii?Q?2k5XM9twKSFzP+j07zNljUBcw183KAttJUu2hRubi8xZdgPGdT+ALwgthYw+?=
+ =?us-ascii?Q?egrQnOhyviZ2oUe2WTQc767/IuGmoYx49h6I6UL9kQuoo8NAzdUs/VBrQzOG?=
+ =?us-ascii?Q?hK+Z+XOkxf97IwfMRBmifXSSOLoy+zrPPY5Pr06uyLGuPij6HBFs7GLY+pNH?=
+ =?us-ascii?Q?Rk2jtg0wZiqcJ2rk4MFWILnSq6/rXk0ENHe5DlF7jiOzbTVSqvBaxUwg/crY?=
+ =?us-ascii?Q?/sN27UxWBkNp39FYFrDMo8cHS2qLGU0nG2QfzgMqAYH91OSGUWz7vO+xdxQp?=
+ =?us-ascii?Q?egmurVNCct3YWpt9o8IICQ2OjD6oRPKIbKfFWrNUOtRrDqNGpxP6X83yXFgY?=
+ =?us-ascii?Q?0esfWMfimazgix0hJ47WQXUza3jWR7oh/hwLbHeQtbuazHniyMy/pwh1ZI4j?=
+ =?us-ascii?Q?frBTQOSJzsxj+S0NzqxhMazHOuJRVN6EcvAGHDykVUhT6SKSczi0qCa9D8zN?=
+ =?us-ascii?Q?XMwMhQo/6Z88RzrtG8zIDXAd67hK2rDl8VjjNJ72BUA851dqecEpnAa/c7pS?=
+ =?us-ascii?Q?x184jdRkTw4nD4EVVIoW/z3NeAS4s1YcvaJqhbqzrjYu9vfgkR0fdfw+uhUM?=
+ =?us-ascii?Q?lg=3D=3D?=
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 517d2377-81ec-4d5c-ca82-08da73c78029
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Aug 2022 09:47:17.7590
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Aug 2022 14:09:51.3973
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ST7n3qFW9C6T1dUgbqZb2kDxQOJxncqk7XG4I0Xk2Tg3IUFcOIxnuk9V00AdYLRvafOcdYF3+QnrXOJ8dvzN1Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5808
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2op8EbdR/0TilD9AQf0idMmO93i96vLy2DyjDIewPeqdrgWG+eqLlysomCocS2RxbAXEZYciE5TaAY5ZxlScZoAJK+IRktm8tt8cpysGjoQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR10MB6020
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Am Mon,  6 Jun 2022 19:41:38 +0300
+schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
 
-
-On 31.07.22 04:34, Alexey Klimov wrote:
-> On Tue, Jul 26, 2022 at 8:48 AM Oliver Neukum <oneukum@suse.com> wrote:
-
-> You're right. Upon reset the watchdog is disabled even if it was active before.
-> Adding empty ->pre_reset() and ->post_reset() helps to avoid that, but
-> looking at Documentation and other drivers it seems that I need to do:
-> in pre_reset():
-> mutex_lock() to block any other I/O to the usb device;
-> __usb_streamlabs_wdt_cmd(STOP) to stop the watchdog;
-> and do not unlock the mutex;
+> From: Henning Schild <henning.schild@siemens.com>
 > 
-> in post_reset():
-> if (watchdog_active())
->         __usb_streamlabs_wdt_cmd(START);
-> mutex_unlock() to allow other's I/O to the usb deivce.
+> On Apollo Lake the pinctrl drivers will now come up without ACPI. Use
+> that instead of open coding it.
+> Create a new driver for that which can later be filled with more GPIO
+> based models, and which has different dependencies.
 > 
-> Seems right?
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/leds/simple/Kconfig                 |   7 +-
+>  drivers/leds/simple/Makefile                |   1 +
+>  drivers/leds/simple/simatic-ipc-leds-gpio.c | 105
+> ++++++++++++++++++++ drivers/leds/simple/simatic-ipc-leds.c      |
+> 80 +-------------- drivers/platform/x86/simatic-ipc.c          |   5
+> +- 5 files changed, 117 insertions(+), 81 deletions(-)
+>  create mode 100644 drivers/leds/simple/simatic-ipc-leds-gpio.c
+> 
+> diff --git a/drivers/leds/simple/Kconfig b/drivers/leds/simple/Kconfig
+> index bbf8cff3c3f6..fd2b8225d926 100644
+> --- a/drivers/leds/simple/Kconfig
+> +++ b/drivers/leds/simple/Kconfig
+> @@ -1,12 +1,11 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  config LEDS_SIEMENS_SIMATIC_IPC
+>  	tristate "LED driver for Siemens Simatic IPCs"
+> -	depends on LEDS_CLASS
+> +	depends on LEDS_GPIO
+>  	depends on SIEMENS_SIMATIC_IPC
+> -	select P2SB
+>  	help
+>  	  This option enables support for the LEDs of several
+> Industrial PCs from Siemens.
+>  
+> -	  To compile this driver as a module, choose M here: the
+> module
+> -	  will be called simatic-ipc-leds.
+> +	  To compile this driver as a module, choose M here: the
+> modules
+> +	  will be called simatic-ipc-leds and simatic-ipc-leds-gpio.
+> diff --git a/drivers/leds/simple/Makefile
+> b/drivers/leds/simple/Makefile index 8481f1e9e360..1c7ef5e1324b 100644
+> --- a/drivers/leds/simple/Makefile
+> +++ b/drivers/leds/simple/Makefile
+> @@ -1,2 +1,3 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)	+= simatic-ipc-leds.o
+> +obj-$(CONFIG_LEDS_SIEMENS_SIMATIC_IPC)	+=
+> simatic-ipc-leds-gpio.o diff --git
+> a/drivers/leds/simple/simatic-ipc-leds-gpio.c
+> b/drivers/leds/simple/simatic-ipc-leds-gpio.c new file mode 100644
+> index 000000000000..4c9e663a90ba --- /dev/null
+> +++ b/drivers/leds/simple/simatic-ipc-leds-gpio.c
+> @@ -0,0 +1,105 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Siemens SIMATIC IPC driver for GPIO based LEDs
+> + *
+> + * Copyright (c) Siemens AG, 2022
+> + *
+> + * Authors:
+> + *  Henning Schild <henning.schild@siemens.com>
+> + */
+> +
+> +#include <linux/gpio/machine.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/leds.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +
+> +static struct gpiod_lookup_table simatic_ipc_led_gpio_table = {
+> +	.dev_id = "leds-gpio",
+> +	.table = {
+> +		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 51, NULL, 0,
+> GPIO_ACTIVE_LOW),
+> +		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 52, NULL, 1,
+> GPIO_ACTIVE_LOW),
+> +		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 53, NULL, 2,
+> GPIO_ACTIVE_LOW),
+> +		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 57, NULL, 3,
+> GPIO_ACTIVE_LOW),
+> +		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 58, NULL, 4,
+> GPIO_ACTIVE_LOW),
+> +		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 60, NULL, 5,
+> GPIO_ACTIVE_LOW),
+> +		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 56, NULL, 6,
+> GPIO_ACTIVE_LOW),
+> +		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 59, NULL, 7,
+> GPIO_ACTIVE_HIGH),
+> +	},
+> +};
+> +
+> +static const struct gpio_led simatic_ipc_gpio_leds[] = {
+> +	{ .name = "green:" LED_FUNCTION_STATUS "-3" },
+> +	{ .name = "red:" LED_FUNCTION_STATUS "-1" },
+> +	{ .name = "green:" LED_FUNCTION_STATUS "-1" },
+> +	{ .name = "red:" LED_FUNCTION_STATUS "-2" },
+> +	{ .name = "green:" LED_FUNCTION_STATUS "-2" },
+> +	{ .name = "red:" LED_FUNCTION_STATUS "-3" },
+> +};
+> +
+> +static const struct gpio_led_platform_data
+> simatic_ipc_gpio_leds_pdata = {
+> +	.num_leds	= ARRAY_SIZE(simatic_ipc_gpio_leds),
+> +	.leds		= simatic_ipc_gpio_leds,
+> +};
+> +
+> +static struct platform_device *simatic_leds_pdev;
+> +
+> +static int simatic_ipc_leds_gpio_remove(struct platform_device *pdev)
+> +{
+> +	gpiod_remove_lookup_table(&simatic_ipc_led_gpio_table);
+> +	platform_device_unregister(simatic_leds_pdev);
+> +
+> +	return 0;
+> +}
+> +
+> +static int simatic_ipc_leds_gpio_probe(struct platform_device *pdev)
+> +{
+> +	struct gpio_desc *gpiod;
+> +	int err;
+> +
+> +	gpiod_add_lookup_table(&simatic_ipc_led_gpio_table);
+> +	simatic_leds_pdev = platform_device_register_resndata(NULL,
+> +		"leds-gpio", PLATFORM_DEVID_NONE, NULL, 0,
+> +		&simatic_ipc_gpio_leds_pdata,
+> +		sizeof(simatic_ipc_gpio_leds_pdata));
 
-Hi,
+If those GPIOs can not be found that leads to a pretty severe
+logging/polling endless loop.
 
-I suppose if you make reenabling the watchdog conditional,
-you may just as well do the same for disabling it.
+...
+[   34.017017] leds-gpio leds-gpio: Skipping unavailable LED gpio 0 (red:status-2)
+[   34.017038] leds-gpio leds-gpio: cannot find GPIO chip apollolake-pinctrl.0, deferring
+[   34.017158] leds-gpio leds-gpio: Skipping unavailable LED gpio 0 (red:status-2)
+[   34.017161] leds-gpio leds-gpio: cannot find GPIO chip apollolake-pinctrl.0, deferring
+[   34.017163] leds-gpio leds-gpio: Skipping unavailable LED gpio 0 (green:status-2)
+[   34.017166] leds-gpio leds-gpio: cannot find GPIO chip apollolake-pinctrl.0, deferring
+[   34.017168] leds-gpio leds-gpio: Skipping unavailable LED gpio 0 (red:status-3)
+[   34.017179] leds-gpio leds-gpio: cannot find GPIO chip apollolake-pinctrl.0, deferring
+[   34.017275] leds-gpio leds-gpio: cannot find GPIO chip apollolake-pinctrl.0, deferring
+[   34.017279] leds-gpio leds-gpio: Skipping unavailable LED gpio 0 (green:status-3)
+... 
 
-	Regards
-		Oliver
+This can be seen when the kernel is build without
+CONFIG_PINCTRL_BROXTON. Can anyone please give advise on how to proceed
+here.
+
+I could do something like i proposed in "[PATCH 3/4] leds:
+simatic-ipc-leds-gpio: add new model 227G".
+
+if (!IS_ENABLED(CONFIG_PINCTRL_BROXTON)) return -ENO...
+
+before registering the platform device.
+
+An alternative could be to try and handle that -EPROBE_DEFER but that
+might be hard because it might well fail a couple of times before
+eventually that gpio driver is up, so i think i will send an update
+implementing that !IS_ENABLED.
+
+Ideally the gpio subsystem or leds-gpio would break that
+polling/printing loop for me, or make sure it would not happen in the
+first place.
+
+regards,
+Henning
+
+> +	if (IS_ERR(simatic_leds_pdev)) {
+> +		err = PTR_ERR(simatic_leds_pdev);
+> +		goto out;
+> +	}
+> +
+> +	/* PM_BIOS_BOOT_N */
+> +	gpiod = gpiod_get_index(&simatic_leds_pdev->dev, NULL, 6,
+> GPIOD_OUT_LOW);
+> +	if (IS_ERR(gpiod)) {
+> +		err = PTR_ERR(gpiod);
+> +		goto out;
+> +	}
+> +	gpiod_put(gpiod);
+> +
+> +	/* PM_WDT_OUT */
+> +	gpiod = gpiod_get_index(&simatic_leds_pdev->dev, NULL, 7,
+> GPIOD_OUT_LOW);
+> +	if (IS_ERR(gpiod)) {
+> +		err = PTR_ERR(gpiod);
+> +		goto out;
+> +	}
+> +	gpiod_put(gpiod);
+> +
+> +	return 0;
+> +out:
+> +	simatic_ipc_leds_gpio_remove(pdev);
+> +
+> +	return err;
+> +}
+> +
+> +static struct platform_driver simatic_ipc_led_gpio_driver = {
+> +	.probe = simatic_ipc_leds_gpio_probe,
+> +	.remove = simatic_ipc_leds_gpio_remove,
+> +	.driver = {
+> +		.name = KBUILD_MODNAME,
+> +	}
+> +};
+> +module_platform_driver(simatic_ipc_led_gpio_driver);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_ALIAS("platform:" KBUILD_MODNAME);
+> +MODULE_SOFTDEP("pre: platform:leds-gpio");
+> +MODULE_AUTHOR("Henning Schild <henning.schild@siemens.com>");
+> diff --git a/drivers/leds/simple/simatic-ipc-leds.c
+> b/drivers/leds/simple/simatic-ipc-leds.c index
+> 2e7597c143d8..4894c228c165 100644 ---
+> a/drivers/leds/simple/simatic-ipc-leds.c +++
+> b/drivers/leds/simple/simatic-ipc-leds.c @@ -15,7 +15,6 @@
+>  #include <linux/leds.h>
+>  #include <linux/module.h>
+>  #include <linux/pci.h>
+> -#include <linux/platform_data/x86/p2sb.h>
+>  #include <linux/platform_data/x86/simatic-ipc-base.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/sizes.h>
+> @@ -24,7 +23,7 @@
+>  #define SIMATIC_IPC_LED_PORT_BASE	0x404E
+>  
+>  struct simatic_ipc_led {
+> -	unsigned int value; /* mask for io and offset for mem */
+> +	unsigned int value; /* mask for io */
+>  	char *name;
+>  	struct led_classdev cdev;
+>  };
+> @@ -39,21 +38,6 @@ static struct simatic_ipc_led
+> simatic_ipc_leds_io[] = { { }
+>  };
+>  
+> -/* the actual start will be discovered with p2sb, 0 is a placeholder
+> */ -static struct resource simatic_ipc_led_mem_res =
+> DEFINE_RES_MEM_NAMED(0, 0, KBUILD_MODNAME); -
+> -static void __iomem *simatic_ipc_led_memory;
+> -
+> -static struct simatic_ipc_led simatic_ipc_leds_mem[] = {
+> -	{0x500 + 0x1A0, "red:" LED_FUNCTION_STATUS "-1"},
+> -	{0x500 + 0x1A8, "green:" LED_FUNCTION_STATUS "-1"},
+> -	{0x500 + 0x1C8, "red:" LED_FUNCTION_STATUS "-2"},
+> -	{0x500 + 0x1D0, "green:" LED_FUNCTION_STATUS "-2"},
+> -	{0x500 + 0x1E0, "red:" LED_FUNCTION_STATUS "-3"},
+> -	{0x500 + 0x198, "green:" LED_FUNCTION_STATUS "-3"},
+> -	{ }
+> -};
+> -
+>  static struct resource simatic_ipc_led_io_res =
+>  	DEFINE_RES_IO_NAMED(SIMATIC_IPC_LED_PORT_BASE, SZ_2,
+> KBUILD_MODNAME); 
+> @@ -89,28 +73,6 @@ static enum led_brightness
+> simatic_ipc_led_get_io(struct led_classdev *led_cd) return
+> inw(SIMATIC_IPC_LED_PORT_BASE) & led->value ? LED_OFF :
+> led_cd->max_brightness; } 
+> -static void simatic_ipc_led_set_mem(struct led_classdev *led_cd,
+> -				    enum led_brightness brightness)
+> -{
+> -	struct simatic_ipc_led *led = cdev_to_led(led_cd);
+> -	void __iomem *reg = simatic_ipc_led_memory + led->value;
+> -	u32 val;
+> -
+> -	val = readl(reg);
+> -	val = (val & ~1) | (brightness == LED_OFF);
+> -	writel(val, reg);
+> -}
+> -
+> -static enum led_brightness simatic_ipc_led_get_mem(struct
+> led_classdev *led_cd) -{
+> -	struct simatic_ipc_led *led = cdev_to_led(led_cd);
+> -	void __iomem *reg = simatic_ipc_led_memory + led->value;
+> -	u32 val;
+> -
+> -	val = readl(reg);
+> -	return (val & 1) ? LED_OFF : led_cd->max_brightness;
+> -}
+> -
+>  static int simatic_ipc_leds_probe(struct platform_device *pdev)
+>  {
+>  	const struct simatic_ipc_platform *plat =
+> pdev->dev.platform_data; @@ -118,9 +80,7 @@ static int
+> simatic_ipc_leds_probe(struct platform_device *pdev) struct
+> simatic_ipc_led *ipcled; struct led_classdev *cdev;
+>  	struct resource *res;
+> -	void __iomem *reg;
+> -	int err, type;
+> -	u32 val;
+> +	int err;
+>  
+>  	switch (plat->devmode) {
+>  	case SIMATIC_IPC_DEVICE_227D:
+> @@ -135,51 +95,19 @@ static int simatic_ipc_leds_probe(struct
+> platform_device *pdev) }
+>  			ipcled = simatic_ipc_leds_io;
+>  		}
+> -		type = IORESOURCE_IO;
+>  		if (!devm_request_region(dev, res->start,
+> resource_size(res), KBUILD_MODNAME)) { dev_err(dev, "Unable to
+> register IO resource at %pR\n", res); return -EBUSY;
+>  		}
+>  		break;
+> -	case SIMATIC_IPC_DEVICE_127E:
+> -		res = &simatic_ipc_led_mem_res;
+> -		ipcled = simatic_ipc_leds_mem;
+> -		type = IORESOURCE_MEM;
+> -
+> -		err = p2sb_bar(NULL, 0, res);
+> -		if (err)
+> -			return err;
+> -
+> -		/* do the final address calculation */
+> -		res->start = res->start + (0xC5 << 16);
+> -		res->end = res->start + SZ_4K - 1;
+> -
+> -		simatic_ipc_led_memory = devm_ioremap_resource(dev,
+> res);
+> -		if (IS_ERR(simatic_ipc_led_memory))
+> -			return PTR_ERR(simatic_ipc_led_memory);
+> -
+> -		/* initialize power/watchdog LED */
+> -		reg = simatic_ipc_led_memory + 0x500 + 0x1D8; /*
+> PM_WDT_OUT */
+> -		val = readl(reg);
+> -		writel(val & ~1, reg);
+> -
+> -		reg = simatic_ipc_led_memory + 0x500 + 0x1C0; /*
+> PM_BIOS_BOOT_N */
+> -		val = readl(reg);
+> -		writel(val | 1, reg);
+> -		break;
+>  	default:
+>  		return -ENODEV;
+>  	}
+>  
+>  	while (ipcled->value) {
+>  		cdev = &ipcled->cdev;
+> -		if (type == IORESOURCE_MEM) {
+> -			cdev->brightness_set =
+> simatic_ipc_led_set_mem;
+> -			cdev->brightness_get =
+> simatic_ipc_led_get_mem;
+> -		} else {
+> -			cdev->brightness_set =
+> simatic_ipc_led_set_io;
+> -			cdev->brightness_get =
+> simatic_ipc_led_get_io;
+> -		}
+> +		cdev->brightness_set = simatic_ipc_led_set_io;
+> +		cdev->brightness_get = simatic_ipc_led_get_io;
+>  		cdev->max_brightness = LED_ON;
+>  		cdev->name = ipcled->name;
+>  
+> diff --git a/drivers/platform/x86/simatic-ipc.c
+> b/drivers/platform/x86/simatic-ipc.c index 26c35e1660cb..ca3647b751d5
+> 100644 --- a/drivers/platform/x86/simatic-ipc.c
+> +++ b/drivers/platform/x86/simatic-ipc.c
+> @@ -51,6 +51,7 @@ static int register_platform_devices(u32 station_id)
+>  {
+>  	u8 ledmode = SIMATIC_IPC_DEVICE_NONE;
+>  	u8 wdtmode = SIMATIC_IPC_DEVICE_NONE;
+> +	char *pdevname = KBUILD_MODNAME "_leds";
+>  	int i;
+>  
+>  	platform_data.devmode = SIMATIC_IPC_DEVICE_NONE;
+> @@ -64,10 +65,12 @@ static int register_platform_devices(u32
+> station_id) }
+>  
+>  	if (ledmode != SIMATIC_IPC_DEVICE_NONE) {
+> +		if (ledmode == SIMATIC_IPC_DEVICE_127E)
+> +			pdevname = KBUILD_MODNAME "_leds_gpio";
+>  		platform_data.devmode = ledmode;
+>  		ipc_led_platform_device =
+>  			platform_device_register_data(NULL,
+> -				KBUILD_MODNAME "_leds",
+> PLATFORM_DEVID_NONE,
+> +				pdevname, PLATFORM_DEVID_NONE,
+>  				&platform_data,
+>  				sizeof(struct simatic_ipc_platform));
+>  		if (IS_ERR(ipc_led_platform_device))
 
