@@ -2,74 +2,73 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ADC1586332
-	for <lists+linux-watchdog@lfdr.de>; Mon,  1 Aug 2022 06:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA6B5866CC
+	for <lists+linux-watchdog@lfdr.de>; Mon,  1 Aug 2022 11:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiHAEAr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 1 Aug 2022 00:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
+        id S229892AbiHAJWu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 1 Aug 2022 05:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiHAEAp (ORCPT
+        with ESMTP id S229732AbiHAJWt (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 1 Aug 2022 00:00:45 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF561B1F0;
-        Sun, 31 Jul 2022 21:00:43 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id u3so12649495lfl.3;
-        Sun, 31 Jul 2022 21:00:43 -0700 (PDT)
+        Mon, 1 Aug 2022 05:22:49 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850CC2B251
+        for <linux-watchdog@vger.kernel.org>; Mon,  1 Aug 2022 02:22:47 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id j7so13330138wrh.3
+        for <linux-watchdog@vger.kernel.org>; Mon, 01 Aug 2022 02:22:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=n9CkTzrmV50rz/zYav9x+RF/pPnwcqb7p6AKMW3GDVE=;
-        b=bYLg1gqyddQb/fdJtaz6CifAlxNtwd60RjS3APsY8uavHzjSp6HUjWINovZZBfbyqO
-         vGZU4d3HuQDSF49FkDG9kXlS3DMv5dqV6sl86fT4MrFwPO1P6JYW2QyXt0NKWurueYqd
-         FziDt1wWzmUAmCx+qE2hKM6th5NnKTNAl9Cn7QXkRMGVdn6ldEThi/opanrtq5yVXBPC
-         +kBCSngHe1b4AxfYQtfZvLwC4mKAKwQHJwQ+JOwb4kBICPxpKCKJIBKey09tv64ovDcZ
-         LkKD0XsTVtrA3CTcQeFPTZw45EarLdOpZzTACndcNOKk1ZI9X2oZfr9T8Sk/EnCThEVL
-         GWhA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=NGyhhBpF08caSp9ryVolnpYSv07YhtzN63176RAsoRU=;
+        b=l/30398qzN7b2NPQpN3AbWdp4u5F62TY0f7bHO8KhDH6oUYCSXYZZFAgib548IFdVB
+         sMAN+0tkDOuMrFmM7txJL4GxCcuOUZwEuv8DW0u+5+GYCI6RSENGwHswISFRdzrwNB8v
+         EivuaoqHpIGLGhFvzeNIKxHpJ+ef9YkRqFw5ZTOQEFXlphPCmUxHP+K0PVx/llU3aXMI
+         YuhkNe87ad5XUhKJRtwJy4l/RQaPjOE1Tl0B8p9l7J+mnHP3XRpMGBLP45AYSLK5udRD
+         P/9uGyfKaYLMMxHfiuX0ZigIe7Z/8Wm8qgkmoAPfOhbbTVFh556IUwOYrk+2YKGmU3SQ
+         Ek2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=n9CkTzrmV50rz/zYav9x+RF/pPnwcqb7p6AKMW3GDVE=;
-        b=cBDQX7Y6UO8IfuFIGahIwnFgdoQN+NKgmVoklcDYn7pgHbJU86Epj9zfZQ7e+1hcbb
-         v1/tscJ1H/ulEz/lDlGmfChNRnj3MExR4PgRRozxpaeRzcVDG1werxpqYzWazewUI9tz
-         H/VKDbj7n0qTfeqTcsNHfkNRxXhHlaEfhGWR1UNTewVUzpYMOxk4LISC71PxlZNRydsj
-         lQuZBwxO+MyrLUP1J4pxmiU1D/arWxvoS3C3bAp6KoOqIv60Q4owTAofSMJ2ZzOBiIyF
-         1g15Icl9PqGQXvWtJSnqSjyVDfUw/oaZC0wGmc2bEAqLSl43Ep8R2FnJ/6sUiCn3XSpt
-         pvHQ==
-X-Gm-Message-State: ACgBeo0EH7Au5t76kdad3PmY2AdTuIsrpMrmVAH9Hz+KMathRzCBI2Mr
-        XfxCxjsXzX384FbImeHwhl7Qe/0pHNrbW5FXikU=
-X-Google-Smtp-Source: AGRyM1ucrIu40q63iE3W2g1r6fsomMMm1BVU7gCAY/74Pyu/8YsE8j95gMs/4Q1fxQpDsCAEJHsZMMCXZ5A3PBHgfu4=
-X-Received: by 2002:a05:6512:10c1:b0:48a:b8cb:ef2d with SMTP id
- k1-20020a05651210c100b0048ab8cbef2dmr4811968lfg.384.1659326442204; Sun, 31
- Jul 2022 21:00:42 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=NGyhhBpF08caSp9ryVolnpYSv07YhtzN63176RAsoRU=;
+        b=bCPmT4Aztzq8KOrDt7sjg/BcNnfTEclDSZ0aq8RLOismiJtxzmuipj4bkr3+7QTyUk
+         2lONyGXzkpL6XHSBk4gGDAucWfzhilFUuvcR0SPtibmlixYyfbjoj3h/M17eDd11Dnlf
+         cAat0nJvdNYxGKizfvZT7i7Yo8n3iCbkekeg8TIzWtnrvFo6TK63u9jhVYqUDEOkPttD
+         l6nzQsrPRW2d7JPFzrCGGJebcOsydyBsEhRlR1mOilLLZZMWcdZEduTJ7T/MhaPCjUUZ
+         KAOfAVhneAROLyW6iZcLSUhyyXBhjoghqoiotTOyTKDchwf3cBGYEPvT7vMg0F+5GVjj
+         sL3A==
+X-Gm-Message-State: ACgBeo1SAIBTUMLT7iibh+zjCXeeox11gXwgvVWdiAjDljSgaKqXwMjc
+        QhdO50g7ZEYrdo7DiSqAc2eT1Q==
+X-Google-Smtp-Source: AA6agR6mnS/kyqOIglz+91cHGdVqd9XYyn4LrVlZGvLKmhDtkndnSHB3h76n4PACAFQZ+hYVLrOHxQ==
+X-Received: by 2002:a5d:4f09:0:b0:21e:cc31:50b6 with SMTP id c9-20020a5d4f09000000b0021ecc3150b6mr9186504wru.124.1659345766067;
+        Mon, 01 Aug 2022 02:22:46 -0700 (PDT)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id q17-20020a05600c2e5100b003a3186fa559sm13504028wmf.29.2022.08.01.02.22.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 02:22:45 -0700 (PDT)
+From:   Philippe Boos <pboos@baylibre.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Philippe Boos <pboos@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-watchdog@vger.kernel.org (open list:WATCHDOG DEVICE DRIVERS),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Amlogic Meson
+        SoC support),
+        linux-amlogic@lists.infradead.org (open list:ARM/Amlogic Meson SoC
+        support), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] watchdog: meson: keep running if already active
+Date:   Mon,  1 Aug 2022 11:21:50 +0200
+Message-Id: <20220801092150.4449-1-pboos@baylibre.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220725030605.1808710-1-klimov.linux@gmail.com>
- <Yt5Zn9cXDe9/F9RJ@kroah.com> <CALW4P+Kd_XdvzGfA=Cmtu0c=kEHfhp2pph2Wh0Sa8Fm8GxDRTA@mail.gmail.com>
- <7770401d-fe3d-bda4-a2e2-55cd004a2d07@suse.com> <CALW4P++5ahRdK6WvghPgpPcTuoJyezU_=s6MG2nn4OBRWZYGXQ@mail.gmail.com>
- <20220731082055.GA4008925@roeck-us.net> <YuaO5Gx84zonjq7X@rowland.harvard.edu>
-In-Reply-To: <YuaO5Gx84zonjq7X@rowland.harvard.edu>
-From:   Alexey Klimov <klimov.linux@gmail.com>
-Date:   Mon, 1 Aug 2022 05:00:30 +0100
-Message-ID: <CALW4P+JiHWMchE+bq1UMTaW78YXo42_069vcimjE=och=7havg@mail.gmail.com>
-Subject: Re: [PATCH v5] watchdog: add driver for StreamLabs USB watchdog device
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Oliver Neukum <oneukum@suse.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        atishp@rivosinc.com, atishp@atishpatra.org,
-        Yury Norov <yury.norov@gmail.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Aaron Tomlin <atomlin@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,71 +76,65 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Alan,
+If the watchdog is already running (e.g.: started by bootloader) then
+the kernel driver should keep the watchdog active but the amlogic driver
+turns it off.
 
-Thank you for your responses here and in another email thread.
+Let the driver fix the clock rate if already active because we do not
+know the previous timebase value. To avoid unintentional resetting we
+temporarily set it to its maximum value.
 
-On Sun, Jul 31, 2022 at 3:17 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Sun, Jul 31, 2022 at 01:20:55AM -0700, Guenter Roeck wrote:
-> > On Sun, Jul 31, 2022 at 03:34:16AM +0100, Alexey Klimov wrote:
-> > > On Tue, Jul 26, 2022 at 8:48 AM Oliver Neukum <oneukum@suse.com> wrote:
-> > > >
-> > > > On 26.07.22 02:21, Alexey Klimov wrote:
-> > > > > On Mon, Jul 25, 2022 at 9:51 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > > >>
-> > > > >> On Mon, Jul 25, 2022 at 04:06:05AM +0100, Alexey Klimov wrote:
-> > > > >
-> > > > > [..]
-> > > > >
-> > > > >> Anyway, driver looks good to me, nice work!
-> > > > >>
-> > > > >> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > >
-> > > > > Thanks, Greg. If you don't mind I'll use your tag in next version
-> > > > > after making changes suggested by Guenter since there will be no
-> > > > > significant functional changes. If code will change a lot, then the
-> > > > > process (Documentation/process/submitting-patches.rst) will require me
-> > > > > to drop the tag.
-> > > >
-> > > > Hi,
-> > > >
-> > > > while thinking about this a question arose. How does this
-> > > > device react to a USB reset? A watchdog that can be disabled
-> > > > by a simple reset does not like very reliable to me.
-> > > > Do you need to implement pre/post_reset() ?
-> > >
-> > > You're right. Upon reset the watchdog is disabled even if it was active before.
-> > > Adding empty ->pre_reset() and ->post_reset() helps to avoid that, but
-> > > looking at Documentation and other drivers it seems that I need to do:
-> > > in pre_reset():
-> > > mutex_lock() to block any other I/O to the usb device;
-> > > __usb_streamlabs_wdt_cmd(STOP) to stop the watchdog;
-> > > and do not unlock the mutex;
-> > >
-> > > in post_reset():
-> > > if (watchdog_active())
-> > >         __usb_streamlabs_wdt_cmd(START);
-> > > mutex_unlock() to allow other's I/O to the usb deivce.
-> > >
-> > > Seems right?
-> > >
-> > Not necessarily. Is other code doing something similar ?
-> > Using a mutex like this creates the risk for hung tasks.
->
-> Are mutexes intended to be used in situations where one function
-> acquires the lock, then returns, and then a different function releases
-> the lock?  I'm not sure about this.
->
-> Perhaps a good old semaphore would be more appropriate.  But it's clear
-> that I/O to the device does need to be mutually exclusive with resets,
-> one way or another.
+Then keep the enable bit if is was previously active.
 
-Thanks for the idea, I'll look into implementing this.
-Also, just to let you know there are a lot of drivers who do mutex
-lock in pre_reset and mutex release in post_reset.
-And there is 16-years old commit 47104b0dd32cec467574822b0dc3517b3de3f0ad
-Maybe usb skeleton driver could be updated as well.
+Signed-off-by: Philippe Boos <pboos@baylibre.com>
+---
+ drivers/watchdog/meson_gxbb_wdt.c | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
 
-Best regards,
-Alexey
+diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
+index 5a9ca10fbcfa..8be8fd9e5637 100644
+--- a/drivers/watchdog/meson_gxbb_wdt.c
++++ b/drivers/watchdog/meson_gxbb_wdt.c
+@@ -146,6 +146,7 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct meson_gxbb_wdt *data;
+ 	int ret;
++	u32 ctrl_reg;
+ 
+ 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+@@ -177,13 +178,26 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+ 	data->wdt_dev.timeout = DEFAULT_TIMEOUT;
+ 	watchdog_set_drvdata(&data->wdt_dev, data);
+ 
++	ctrl_reg = readl(data->reg_base + GXBB_WDT_CTRL_REG) &
++				GXBB_WDT_CTRL_EN;
++
++	if (ctrl_reg) {
++		/* Watchdog is running - keep it running but extend timeout
++		 * to the maximum while setting the timebase
++		 */
++		set_bit(WDOG_HW_RUNNING, &data->wdt_dev.status);
++		meson_gxbb_wdt_set_timeout(&data->wdt_dev,
++				GXBB_WDT_TCNT_SETUP_MASK / 1000);
++	}
++
+ 	/* Setup with 1ms timebase */
+-	writel(((clk_get_rate(data->clk) / 1000) & GXBB_WDT_CTRL_DIV_MASK) |
+-		GXBB_WDT_CTRL_EE_RESET |
+-		GXBB_WDT_CTRL_CLK_EN |
+-		GXBB_WDT_CTRL_CLKDIV_EN,
+-		data->reg_base + GXBB_WDT_CTRL_REG);
++	ctrl_reg |= ((clk_get_rate(data->clk) / 1000) &
++			GXBB_WDT_CTRL_DIV_MASK) |
++			GXBB_WDT_CTRL_EE_RESET |
++			GXBB_WDT_CTRL_CLK_EN |
++			GXBB_WDT_CTRL_CLKDIV_EN;
+ 
++	writel(ctrl_reg, data->reg_base + GXBB_WDT_CTRL_REG);
+ 	meson_gxbb_wdt_set_timeout(&data->wdt_dev, data->wdt_dev.timeout);
+ 
+ 	watchdog_stop_on_reboot(&data->wdt_dev);
+-- 
+2.20.1
+
