@@ -2,61 +2,43 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C80589D2D
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Aug 2022 16:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1325358A1AE
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Aug 2022 22:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239600AbiHDOBp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 4 Aug 2022 10:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
+        id S234721AbiHDUF4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 4 Aug 2022 16:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235162AbiHDOBo (ORCPT
+        with ESMTP id S234772AbiHDUFy (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 4 Aug 2022 10:01:44 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF20E1C128;
-        Thu,  4 Aug 2022 07:01:43 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id a9so18139695lfm.12;
-        Thu, 04 Aug 2022 07:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=JaMe6j4fYY9HfpaAc4kq+NXQn/JQWze+bei2ZzmND0I=;
-        b=QSKMyIcYM/epVOjE3xPWm4g7Fax7lyHTwJQV6QgjlHcsv/cO9qjGpwNheGqSJgDhfx
-         emrqTQFK2mDSQ4NpoATQJCLyuB2zWwcio2s5WMthC2HEW4OqjfATYWffLDBA8Z5QtKkZ
-         EdrQwKuI1Rigsooo83kdn/f1PCIPbrD2BeU9N0Ide6iYB/yq/yopo5SIbE4Bzvo2NpxE
-         8pavzD0D8zzoVWA1GgymHDDf+Lv4icd/sdUYt/dTojG8d5rqwxgNhQtDboOQP+0F3yy1
-         vW6yfJMOZl/AXpGWD0W9//zTRIQ+q+NfA0h4Ybvt7EaW+eLXglfH6Vb3cto0ZC1/rGyw
-         T/MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=JaMe6j4fYY9HfpaAc4kq+NXQn/JQWze+bei2ZzmND0I=;
-        b=U4EhkMyn/NpqG3NKFpACQtE5Usb5SPIK/ICMSr4meFQxUuAA/p9R8Lgsf+vTF0Pbok
-         q3F2P4uZbep8NP14lCW2EOx/Jc/PafM4bPdIcuNde1+Ub8UgAhm4pNvQJnYWcKJiQQ1J
-         8EzTSwgrq7GAHxe1PBnyc/EcAXZjoQ+4Opb7EmH3mumf067gSl0ylCFrT+kVNBdWhAsX
-         hCqKaskt7hu8xOfbEex38hgBXWWf+UJWIjhQwIx8/EhcmxoFsS3YcQvZrf8g0IjOub2J
-         J2O9r/sJpjpe1yxWe01cn59Cp9NC7WKQfqUJn54TsiwOjjDMkLluxuxADciaT9nKNaMa
-         U00g==
-X-Gm-Message-State: ACgBeo0O6nFMuwWooNnrPrAq7SvBrHzoJKQIOKPIsLz5Ad/6UK2uLJw+
-        FsCsPa8KKauXlmYUxX66+52QdlzHCJgHFlJhMVw=
-X-Google-Smtp-Source: AA6agR65paGn+KC3Fe8XeawVhkTkP00otnvSfxoWcwCf52HbrAmRlzdXLDzIJw4f2/h6gbNdmVYU9iaaEEjx63FHNO4=
-X-Received: by 2002:a05:6512:692:b0:48a:f5fb:188c with SMTP id
- t18-20020a056512069200b0048af5fb188cmr816276lfe.111.1659621702117; Thu, 04
- Aug 2022 07:01:42 -0700 (PDT)
+        Thu, 4 Aug 2022 16:05:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532889FE2;
+        Thu,  4 Aug 2022 13:05:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DF1B1B82726;
+        Thu,  4 Aug 2022 20:05:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60512C433C1;
+        Thu,  4 Aug 2022 20:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659643549;
+        bh=DR5dO2HhWSe0IcUJOiD/fg0ANKhZCMxKZk0PtAJCVIE=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=ASDi46ygtgSS3Hd63mUk69Ip0+B6d8iPklvvrBFp7dK1MDB9txrTrDce8RR7Om83f
+         VOtLQyfHm6vN+Jvl9dDxzsbJO7477LdDd1dhWchfqUt5pZ5w54r8qbrgm1uIln/zjO
+         1efVbVUaCoKX9s32agmUMURLeCnPKuhjMQOeWjjanJJnVcG4t/JCt/32kr34hi9OK3
+         GT0HZCbtDIn7WdhtQx2ETZiInLZKja3l9iXYW/X/va3cayacLrdkSKO7RBkVKfS4fc
+         U9IgMn9zPNjxUM/P46K3k+ET9Q7mcqR632iBzdYXWfvK5w+7PEc/U2GPiWOPRY7+HM
+         JWWCCDLkUTP2A==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220711123519.217219-1-tmaimon77@gmail.com> <20220711123519.217219-5-tmaimon77@gmail.com>
- <20220711195544.70A30C34115@smtp.kernel.org> <CAP6Zq1ie_RgJ_9S3ftoVJ=eJHX1xR4_O_czKZghNPKVEFOzC8Q@mail.gmail.com>
- <20220718191454.5B5D3C341C0@smtp.kernel.org> <CAP6Zq1ju08GSjNnEG+zDUC8W6aQMJxd5He7QJxy9++hTy0Dc7A@mail.gmail.com>
- <20220723030226.8E43CC341C6@smtp.kernel.org> <CAP6Zq1gUvMFG9BNObVNLpVgbMRpV7e--HFxknP8kvL4nGk8Hsw@mail.gmail.com>
- <20220729225603.12528C433D6@smtp.kernel.org>
-In-Reply-To: <20220729225603.12528C433D6@smtp.kernel.org>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Thu, 4 Aug 2022 17:01:30 +0300
-Message-ID: <CAP6Zq1hOxG+2X-qTbvPkrVHQ5zf04GO21m1n328Jiqgzns2CMA@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAP6Zq1hOxG+2X-qTbvPkrVHQ5zf04GO21m1n328Jiqgzns2CMA@mail.gmail.com>
+References: <20220711123519.217219-1-tmaimon77@gmail.com> <20220711123519.217219-5-tmaimon77@gmail.com> <20220711195544.70A30C34115@smtp.kernel.org> <CAP6Zq1ie_RgJ_9S3ftoVJ=eJHX1xR4_O_czKZghNPKVEFOzC8Q@mail.gmail.com> <20220718191454.5B5D3C341C0@smtp.kernel.org> <CAP6Zq1ju08GSjNnEG+zDUC8W6aQMJxd5He7QJxy9++hTy0Dc7A@mail.gmail.com> <20220723030226.8E43CC341C6@smtp.kernel.org> <CAP6Zq1gUvMFG9BNObVNLpVgbMRpV7e--HFxknP8kvL4nGk8Hsw@mail.gmail.com> <20220729225603.12528C433D6@smtp.kernel.org> <CAP6Zq1hOxG+2X-qTbvPkrVHQ5zf04GO21m1n328Jiqgzns2CMA@mail.gmail.com>
 Subject: Re: [PATCH v8 04/16] clk: npcm8xx: add clock controller
-To:     Stephen Boyd <sboyd@kernel.org>
+From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         Avi Fishman <avifishman70@gmail.com>,
         Benjamin Fair <benjaminfair@google.com>,
@@ -66,7 +48,7 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Greg KH <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Jonathan =?utf-8?q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
         Jiri Slaby <jirislaby@kernel.org>,
         Joel Stanley <joel@jms.id.au>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -92,47 +74,44 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         SERIAL DRIVERS <linux-serial@vger.kernel.org>,
         LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Date:   Thu, 04 Aug 2022 13:05:47 -0700
+User-Agent: alot/0.10
+Message-Id: <20220804200549.60512C433C1@smtp.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, 30 Jul 2022 at 01:56, Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Tomer Maimon (2022-07-24 02:06:54)
-> > On Sat, 23 Jul 2022 at 06:02, Stephen Boyd <sboyd@kernel.org> wrote:
-> > > Furthermore, in DT, reg properties aren't supposed to overlap. When that
-> > > happens it usually indicates the DT is being written to describe driver
-> > > structure instead of the IP blocks that are delivered by the hardware
-> > > engineer. In this case it sounds like a combined clk and reset IP block
-> > > because they piled all the SoC glue stuff into a register range. Are
-> > > there more features in this IO range?
+Quoting Tomer Maimon (2022-08-04 07:01:30)
+> On Sat, 30 Jul 2022 at 01:56, Stephen Boyd <sboyd@kernel.org> wrote:
 > >
-> > No, this range only combined the reset and clock together, but it
-> > combined in a way that we cannot split it to two or even three
-> > different registers...
->
-> Because it is jumbled in some range?
-Yes.
->
+> > Because it is jumbled in some range?
+> Yes.
 > >
-> > I do see a way to combine the clock and the reset driver, the NPCM
-> > reset driver is serving other NPCM BMC's.
-> > Should we use regmap to handle the clock registers instead of ioremap?
->
-> Sure? Using regmap or not looks like a parallel discussion. How does it
-> help use platform APIs?
-I mean to use regmap API instead of platform API for handing the clock
-and reset registers.
-the regmap API gives only one user access to R/W (lock).
-I will be happy to get more suggestions, on how should we solve this situation.
+> > >
+> > > I do see a way to combine the clock and the reset driver, the NPCM
+> > > reset driver is serving other NPCM BMC's.
+> > > Should we use regmap to handle the clock registers instead of ioremap?
+> >
+> > Sure? Using regmap or not looks like a parallel discussion. How does it
+> > help use platform APIs?
+> I mean to use regmap API instead of platform API for handing the clock
+> and reset registers.
+> the regmap API gives only one user access to R/W (lock).
+> I will be happy to get more suggestions, on how should we solve this situ=
+ation.
+>=20
 
-Thanks,
+Using platform APIs means using platform_*() functions, not of_*()
+functions, which are open-firmware/DT related. Regmap can be used to
+operate on registers mapped as __iomem, which is different from platform
+APIs.
 
-Tomer
+Is having a lock even necessary? Do the reset and clk controls live
+within a shared register where we would need to prevent one driver from
+accessing that register at the same time as the other?
