@@ -2,116 +2,162 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1325358A1AE
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Aug 2022 22:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5563558B257
+	for <lists+linux-watchdog@lfdr.de>; Sat,  6 Aug 2022 00:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234721AbiHDUF4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 4 Aug 2022 16:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
+        id S241811AbiHEWHS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 5 Aug 2022 18:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234772AbiHDUFy (ORCPT
+        with ESMTP id S241779AbiHEWHL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 4 Aug 2022 16:05:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532889FE2;
-        Thu,  4 Aug 2022 13:05:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 5 Aug 2022 18:07:11 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ECB12768;
+        Fri,  5 Aug 2022 15:07:09 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF1B1B82726;
-        Thu,  4 Aug 2022 20:05:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60512C433C1;
-        Thu,  4 Aug 2022 20:05:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659643549;
-        bh=DR5dO2HhWSe0IcUJOiD/fg0ANKhZCMxKZk0PtAJCVIE=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=ASDi46ygtgSS3Hd63mUk69Ip0+B6d8iPklvvrBFp7dK1MDB9txrTrDce8RR7Om83f
-         VOtLQyfHm6vN+Jvl9dDxzsbJO7477LdDd1dhWchfqUt5pZ5w54r8qbrgm1uIln/zjO
-         1efVbVUaCoKX9s32agmUMURLeCnPKuhjMQOeWjjanJJnVcG4t/JCt/32kr34hi9OK3
-         GT0HZCbtDIn7WdhtQx2ETZiInLZKja3l9iXYW/X/va3cayacLrdkSKO7RBkVKfS4fc
-         U9IgMn9zPNjxUM/P46K3k+ET9Q7mcqR632iBzdYXWfvK5w+7PEc/U2GPiWOPRY7+HM
-         JWWCCDLkUTP2A==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAP6Zq1hOxG+2X-qTbvPkrVHQ5zf04GO21m1n328Jiqgzns2CMA@mail.gmail.com>
-References: <20220711123519.217219-1-tmaimon77@gmail.com> <20220711123519.217219-5-tmaimon77@gmail.com> <20220711195544.70A30C34115@smtp.kernel.org> <CAP6Zq1ie_RgJ_9S3ftoVJ=eJHX1xR4_O_czKZghNPKVEFOzC8Q@mail.gmail.com> <20220718191454.5B5D3C341C0@smtp.kernel.org> <CAP6Zq1ju08GSjNnEG+zDUC8W6aQMJxd5He7QJxy9++hTy0Dc7A@mail.gmail.com> <20220723030226.8E43CC341C6@smtp.kernel.org> <CAP6Zq1gUvMFG9BNObVNLpVgbMRpV7e--HFxknP8kvL4nGk8Hsw@mail.gmail.com> <20220729225603.12528C433D6@smtp.kernel.org> <CAP6Zq1hOxG+2X-qTbvPkrVHQ5zf04GO21m1n328Jiqgzns2CMA@mail.gmail.com>
-Subject: Re: [PATCH v8 04/16] clk: npcm8xx: add clock controller
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jonathan =?utf-8?q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 376CD34598;
+        Fri,  5 Aug 2022 22:07:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1659737228; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Sqb3DDDY6ymKLXpHg1cCPpNN3i1H+Y7M1+qegvCFOI4=;
+        b=owGONwNjkyDx95TgILNkWKR92IRHXPrKWLIhdBa33xZ7TGd9cttWU2pHqMucrGfdqiwmvG
+        8FSURQp08XTNUmacDqe4wD8rgn3el5kbpnWUiLnTx0ASDUtt3iIGEQdqkntaJnh3w1+s7h
+        M+lL/WvbZOiC5Ioi887IJHtx8AZs5Sc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1659737228;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Sqb3DDDY6ymKLXpHg1cCPpNN3i1H+Y7M1+qegvCFOI4=;
+        b=n18gR4H902usgtITEMeNsF+ybYEfNiX6guWgSObTz7JeMISB3AutF5cvF615lSNyXRsJ3w
+        VbSd4lIZz1b7cJDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ECB5613A9C;
+        Fri,  5 Aug 2022 22:07:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RmgHOIuU7WLtUgAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Fri, 05 Aug 2022 22:07:07 +0000
+Date:   Sat, 6 Aug 2022 00:07:06 +0200
+From:   Jean Delvare <jdelvare@suse.de>
+To:     linux-watchdog@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Olof Johansson <olof@lixom.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Thomas G leixner <tglx@linutronix.de>,
-        Patrick Venture <venture@google.com>,
-        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Nancy Yuen <yuenn@google.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        SERIAL DRIVERS <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Date:   Thu, 04 Aug 2022 13:05:47 -0700
-User-Agent: alot/0.10
-Message-Id: <20220804200549.60512C433C1@smtp.kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH] watchdog: wdat_wdt: Set the min and max timeout values
+ properly
+Message-ID: <20220806000706.3eeafc9c@endymion.delvare>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Quoting Tomer Maimon (2022-08-04 07:01:30)
-> On Sat, 30 Jul 2022 at 01:56, Stephen Boyd <sboyd@kernel.org> wrote:
-> >
-> > Because it is jumbled in some range?
-> Yes.
-> >
-> > >
-> > > I do see a way to combine the clock and the reset driver, the NPCM
-> > > reset driver is serving other NPCM BMC's.
-> > > Should we use regmap to handle the clock registers instead of ioremap?
-> >
-> > Sure? Using regmap or not looks like a parallel discussion. How does it
-> > help use platform APIs?
-> I mean to use regmap API instead of platform API for handing the clock
-> and reset registers.
-> the regmap API gives only one user access to R/W (lock).
-> I will be happy to get more suggestions, on how should we solve this situ=
-ation.
->=20
+The wdat_wdt driver is misusing the min_hw_heartbeat_ms field. This
+field should only be used when the hardware watchdog device should not
+be pinged more frequently than a specific period. The ACPI WDAT
+"Minimum Count" field, on the other hand, specifies the minimum
+timeout value that can be set. This corresponds to the min_timeout
+field in Linux's watchdog infrastructure.
 
-Using platform APIs means using platform_*() functions, not of_*()
-functions, which are open-firmware/DT related. Regmap can be used to
-operate on registers mapped as __iomem, which is different from platform
-APIs.
+Setting min_hw_heartbeat_ms instead can cause pings to the hardware
+to be delayed when there is no reason for that, eventually leading to
+unexpected firing of the watchdog timer (and thus unexpected reboot).
 
-Is having a lock even necessary? Do the reset and clk controls live
-within a shared register where we would need to prevent one driver from
-accessing that register at the same time as the other?
+I'm also changing max_hw_heartbeat_ms to max_timeout for symmetry,
+although the use of this one isn't fundamentally wrong, but there is
+also no reason to enable the software-driven ping mechanism for the
+wdat_wdt driver.
+
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Fixes: 058dfc767008 ("ACPI / watchdog: Add support for WDAT hardware watchdog")
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc! Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+Untested, as I have no supported hardware at hand.
+
+Note to the watchdog subsystem maintainers: I must say I find the
+whole thing pretty confusing.
+
+First of all, the name symmetry between min_hw_heartbeat_ms and
+max_hw_heartbeat_ms, while these properties are completely unrelated,
+is heavily misleading. max_hw_heartbeat_ms is really max_hw_timeout
+and should be renamed to that IMHO, if we keep it at all.
+
+Secondly, the coexistence of max_timeout and max_hw_heartbeat_ms is
+also making the code pretty hard to understand and get right.
+Historically, max_timeout was already supposed to be the maximum
+hardware timeout value. I don't understand why a new field with that
+meaning was introduced, subsequently changing the original meaning of
+max_timeout to become a software-only limit... but only if
+max_hw_heartbeat_ms is set.
+
+To be honest, I'm not sold to the idea of a software-emulated
+maximum timeout value above what the hardware can do, but if doing
+that makes sense in certain situations, then I believe it should be
+implemented as a boolean flag (named emulate_large_timeout, for
+example) to complement max_timeout instead of a separate time value.
+Is there a reason I'm missing, why it was not done that way?
+
+Currently, a comment in watchdog.h claims that max_timeout is ignored
+when max_hw_heartbeat_ms is set. However in watchdog_dev.c, sysfs
+attribute max_timeout is created unconditionally, and
+max_hw_heartbeat_ms doesn't have a sysfs attribute. So userspace has
+no way to know if max_timeout is the hardware limit, or whether
+software emulation will kick in for a specified timeout value. Also,
+there is no complaint if both max_hw_heartbeat_ms and max_timeout
+are set.
+
+ drivers/watchdog/wdat_wdt.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+--- linux-5.18.orig/drivers/watchdog/wdat_wdt.c	2022-07-27 07:32:33.336928967 +0200
++++ linux-5.18/drivers/watchdog/wdat_wdt.c	2022-08-05 19:49:19.607793835 +0200
+@@ -342,8 +342,8 @@ static int wdat_wdt_probe(struct platfor
+ 		return -EINVAL;
+ 
+ 	wdat->period = tbl->timer_period;
+-	wdat->wdd.min_hw_heartbeat_ms = wdat->period * tbl->min_count;
+-	wdat->wdd.max_hw_heartbeat_ms = wdat->period * tbl->max_count;
++	wdat->wdd.min_timeout = DIV_ROUND_UP(wdat->period * tbl->min_count, 1000);
++	wdat->wdd.max_timeout = wdat->period * tbl->max_count / 1000;
+ 	wdat->stopped_in_sleep = tbl->flags & ACPI_WDAT_STOPPED;
+ 	wdat->wdd.info = &wdat_wdt_info;
+ 	wdat->wdd.ops = &wdat_wdt_ops;
+@@ -450,8 +450,8 @@ static int wdat_wdt_probe(struct platfor
+ 	 * watchdog properly after it has opened the device. In some cases
+ 	 * the BIOS default is too short and causes immediate reboot.
+ 	 */
+-	if (timeout * 1000 < wdat->wdd.min_hw_heartbeat_ms ||
+-	    timeout * 1000 > wdat->wdd.max_hw_heartbeat_ms) {
++	if (timeout < wdat->min_timeout ||
++	    timeout > wdat->max_timeout) {
+ 		dev_warn(dev, "Invalid timeout %d given, using %d\n",
+ 			 timeout, WDAT_DEFAULT_TIMEOUT);
+ 		timeout = WDAT_DEFAULT_TIMEOUT;
+
+
+-- 
+Jean Delvare
+SUSE L3 Support
