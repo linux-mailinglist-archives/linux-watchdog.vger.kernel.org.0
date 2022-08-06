@@ -2,69 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5563558B257
-	for <lists+linux-watchdog@lfdr.de>; Sat,  6 Aug 2022 00:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8235858B3FA
+	for <lists+linux-watchdog@lfdr.de>; Sat,  6 Aug 2022 08:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241811AbiHEWHS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 5 Aug 2022 18:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57700 "EHLO
+        id S230189AbiHFGBb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 6 Aug 2022 02:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241779AbiHEWHL (ORCPT
+        with ESMTP id S229773AbiHFGBa (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 5 Aug 2022 18:07:11 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ECB12768;
-        Fri,  5 Aug 2022 15:07:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 376CD34598;
-        Fri,  5 Aug 2022 22:07:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1659737228; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Sqb3DDDY6ymKLXpHg1cCPpNN3i1H+Y7M1+qegvCFOI4=;
-        b=owGONwNjkyDx95TgILNkWKR92IRHXPrKWLIhdBa33xZ7TGd9cttWU2pHqMucrGfdqiwmvG
-        8FSURQp08XTNUmacDqe4wD8rgn3el5kbpnWUiLnTx0ASDUtt3iIGEQdqkntaJnh3w1+s7h
-        M+lL/WvbZOiC5Ioi887IJHtx8AZs5Sc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1659737228;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Sqb3DDDY6ymKLXpHg1cCPpNN3i1H+Y7M1+qegvCFOI4=;
-        b=n18gR4H902usgtITEMeNsF+ybYEfNiX6guWgSObTz7JeMISB3AutF5cvF615lSNyXRsJ3w
-        VbSd4lIZz1b7cJDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ECB5613A9C;
-        Fri,  5 Aug 2022 22:07:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id RmgHOIuU7WLtUgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Fri, 05 Aug 2022 22:07:07 +0000
-Date:   Sat, 6 Aug 2022 00:07:06 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     linux-watchdog@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Sat, 6 Aug 2022 02:01:30 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF1412ADA;
+        Fri,  5 Aug 2022 23:01:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1659765687; x=1691301687;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U/SwseuymD6gqKnxn8AIA5OHSAkfqCq30LwXPcgnVr0=;
+  b=UD6JeEYgK8JulKX9f+B+M1QAnoibwa2zqqjM86yYq7clu88yLlsEE9Ky
+   PaVipmKlLLKHNyJwuobV22ztx3TCeOjFs+Q2CUDW/TPFD11WmiGK0xdci
+   3bB37ff43E6u0whxXy28Sz6LKNiBHpDgYscb0prBehZ1nytj2n3G9XqSl
+   UujcVACttCciYoBCjZF1P0mtTTbOEibz1sjv1VEI1gkpO3Mf9wXijiAYs
+   P64rmQF0uBRLO+tISN0u79zQI6edZTQVNV++PpIw820tMCOUnHLSs0Gym
+   1vkXObZ5UaYzL2glxiUpVT1LfQQR6PIg/rIHh2QuwYqubJCYcCGSjzdQD
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10430"; a="290351812"
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="290351812"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 23:01:27 -0700
+X-IronPort-AV: E=Sophos;i="5.93,217,1654585200"; 
+   d="scan'208";a="663266524"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2022 23:01:24 -0700
+Received: by lahna (sSMTP sendmail emulation); Sat, 06 Aug 2022 09:01:22 +0300
+Date:   Sat, 6 Aug 2022 09:01:22 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-watchdog@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH] watchdog: wdat_wdt: Set the min and max timeout values
+Subject: Re: [PATCH] watchdog: wdat_wdt: Set the min and max timeout values
  properly
-Message-ID: <20220806000706.3eeafc9c@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+Message-ID: <Yu4DssMsVUP2Oee7@lahna>
+References: <20220806000706.3eeafc9c@endymion.delvare>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220806000706.3eeafc9c@endymion.delvare>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,92 +65,27 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The wdat_wdt driver is misusing the min_hw_heartbeat_ms field. This
-field should only be used when the hardware watchdog device should not
-be pinged more frequently than a specific period. The ACPI WDAT
-"Minimum Count" field, on the other hand, specifies the minimum
-timeout value that can be set. This corresponds to the min_timeout
-field in Linux's watchdog infrastructure.
+On Sat, Aug 06, 2022 at 12:07:06AM +0200, Jean Delvare wrote:
+> The wdat_wdt driver is misusing the min_hw_heartbeat_ms field. This
+> field should only be used when the hardware watchdog device should not
+> be pinged more frequently than a specific period. The ACPI WDAT
+> "Minimum Count" field, on the other hand, specifies the minimum
+> timeout value that can be set. This corresponds to the min_timeout
+> field in Linux's watchdog infrastructure.
+> 
+> Setting min_hw_heartbeat_ms instead can cause pings to the hardware
+> to be delayed when there is no reason for that, eventually leading to
+> unexpected firing of the watchdog timer (and thus unexpected reboot).
+> 
+> I'm also changing max_hw_heartbeat_ms to max_timeout for symmetry,
+> although the use of this one isn't fundamentally wrong, but there is
+> also no reason to enable the software-driven ping mechanism for the
+> wdat_wdt driver.
+> 
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> Fixes: 058dfc767008 ("ACPI / watchdog: Add support for WDAT hardware watchdog")
+> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc! Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Setting min_hw_heartbeat_ms instead can cause pings to the hardware
-to be delayed when there is no reason for that, eventually leading to
-unexpected firing of the watchdog timer (and thus unexpected reboot).
-
-I'm also changing max_hw_heartbeat_ms to max_timeout for symmetry,
-although the use of this one isn't fundamentally wrong, but there is
-also no reason to enable the software-driven ping mechanism for the
-wdat_wdt driver.
-
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Fixes: 058dfc767008 ("ACPI / watchdog: Add support for WDAT hardware watchdog")
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc! Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-Untested, as I have no supported hardware at hand.
-
-Note to the watchdog subsystem maintainers: I must say I find the
-whole thing pretty confusing.
-
-First of all, the name symmetry between min_hw_heartbeat_ms and
-max_hw_heartbeat_ms, while these properties are completely unrelated,
-is heavily misleading. max_hw_heartbeat_ms is really max_hw_timeout
-and should be renamed to that IMHO, if we keep it at all.
-
-Secondly, the coexistence of max_timeout and max_hw_heartbeat_ms is
-also making the code pretty hard to understand and get right.
-Historically, max_timeout was already supposed to be the maximum
-hardware timeout value. I don't understand why a new field with that
-meaning was introduced, subsequently changing the original meaning of
-max_timeout to become a software-only limit... but only if
-max_hw_heartbeat_ms is set.
-
-To be honest, I'm not sold to the idea of a software-emulated
-maximum timeout value above what the hardware can do, but if doing
-that makes sense in certain situations, then I believe it should be
-implemented as a boolean flag (named emulate_large_timeout, for
-example) to complement max_timeout instead of a separate time value.
-Is there a reason I'm missing, why it was not done that way?
-
-Currently, a comment in watchdog.h claims that max_timeout is ignored
-when max_hw_heartbeat_ms is set. However in watchdog_dev.c, sysfs
-attribute max_timeout is created unconditionally, and
-max_hw_heartbeat_ms doesn't have a sysfs attribute. So userspace has
-no way to know if max_timeout is the hardware limit, or whether
-software emulation will kick in for a specified timeout value. Also,
-there is no complaint if both max_hw_heartbeat_ms and max_timeout
-are set.
-
- drivers/watchdog/wdat_wdt.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
---- linux-5.18.orig/drivers/watchdog/wdat_wdt.c	2022-07-27 07:32:33.336928967 +0200
-+++ linux-5.18/drivers/watchdog/wdat_wdt.c	2022-08-05 19:49:19.607793835 +0200
-@@ -342,8 +342,8 @@ static int wdat_wdt_probe(struct platfor
- 		return -EINVAL;
- 
- 	wdat->period = tbl->timer_period;
--	wdat->wdd.min_hw_heartbeat_ms = wdat->period * tbl->min_count;
--	wdat->wdd.max_hw_heartbeat_ms = wdat->period * tbl->max_count;
-+	wdat->wdd.min_timeout = DIV_ROUND_UP(wdat->period * tbl->min_count, 1000);
-+	wdat->wdd.max_timeout = wdat->period * tbl->max_count / 1000;
- 	wdat->stopped_in_sleep = tbl->flags & ACPI_WDAT_STOPPED;
- 	wdat->wdd.info = &wdat_wdt_info;
- 	wdat->wdd.ops = &wdat_wdt_ops;
-@@ -450,8 +450,8 @@ static int wdat_wdt_probe(struct platfor
- 	 * watchdog properly after it has opened the device. In some cases
- 	 * the BIOS default is too short and causes immediate reboot.
- 	 */
--	if (timeout * 1000 < wdat->wdd.min_hw_heartbeat_ms ||
--	    timeout * 1000 > wdat->wdd.max_hw_heartbeat_ms) {
-+	if (timeout < wdat->min_timeout ||
-+	    timeout > wdat->max_timeout) {
- 		dev_warn(dev, "Invalid timeout %d given, using %d\n",
- 			 timeout, WDAT_DEFAULT_TIMEOUT);
- 		timeout = WDAT_DEFAULT_TIMEOUT;
-
-
--- 
-Jean Delvare
-SUSE L3 Support
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
