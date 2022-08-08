@@ -2,153 +2,149 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7756F58C807
-	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Aug 2022 13:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5E058C86D
+	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Aug 2022 14:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232582AbiHHL7B (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 8 Aug 2022 07:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
+        id S237945AbiHHMhT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 8 Aug 2022 08:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232294AbiHHL7A (ORCPT
+        with ESMTP id S232981AbiHHMhS (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 8 Aug 2022 07:59:00 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D407825C7;
-        Mon,  8 Aug 2022 04:58:59 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id t22so8574445pjy.1;
-        Mon, 08 Aug 2022 04:58:59 -0700 (PDT)
+        Mon, 8 Aug 2022 08:37:18 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56086AE60;
+        Mon,  8 Aug 2022 05:37:17 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id r14so9677838ljp.2;
+        Mon, 08 Aug 2022 05:37:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=45zF6wFzN206raoW09X+vEo3k3IpyXxBW6ekbRawA1Y=;
-        b=Xzbv9UFANA1nX9nbeNbq7CReZK+z0sy8IJcwuMrQ12aNYVwKrpfaHhAgJ+9Gn6eXys
-         HctwQJPPSkJiA5uiIl/v3MdijO0d5fmHVaxfUMm3qNjtMlp6NEtNM7HbRPiLBYRVDW9M
-         LT4TBbf2f+oQmyxGc1cr2AczZZ442WDTpbkfxi4lWBIAS4Z95CQMYOsIIayDf7BOdNzV
-         AlLL/v7PTWDYhmnJ1Pj8G/aCNXF8yvATcdfYw/fZTFnzq3H8UC/3/RYgF3UihytBMG08
-         jkDCWfZ049XtYEMMoyd4xfJ5jCBtKgo2jpArhNSc4Lm85842D4p5jJ4NPZQf6QZqZOLY
-         FRvw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=/MHU6eLy/HH6PnrXo470+5XMlsFXh1eKam/uKQ3OWjc=;
+        b=HkQQdjli/MeTyeCv25A1kZqw2Jlhf/xncGOTm1Zf1lUG9Z9b3QQZoMgcxLY8SXqGXE
+         FbUvss9tHtCdiJV/n3LVpTLfJAwkbFceRlTNVsuFFqwqvLEocIRfXn+6eHTD9i/lv8T3
+         AnOoK1232oW+myjAPuIicLPqwRNFEHJIx1bdCFKS4xpDT6d0xWea7WDxj/USi8Wd1+no
+         xigweofxVveM5eV3qF8JPM8cdd0a8VacQXZFCCn4CDIyd81IpzNLPtm7L0gnkXfiLLFL
+         bAwhanXLSZIIj4+JsEXC2i3SnkPFHZJMrGGT9JRFV1hsBZQwxMqjvxaRPJ+SKrJKqWLp
+         Z5dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=45zF6wFzN206raoW09X+vEo3k3IpyXxBW6ekbRawA1Y=;
-        b=6lDV/QxzRSnDGz7VDqdNRkp3O/ezYJCz0M+U8E1EbQdYMM8tiKTj/aPZrjU6k0UjBX
-         wMwqtFzuepeWpZ1U9GCMVEM08SXDp3VoFHJ2vQqLuFXTJCWRxoEvNviLmuXXGfvNJPf2
-         iTZRxY1c5ls/Ma1HXSfrfXvkFqSUaSjQfyWeK/WUsAB7exVqrHwxi4gKgVMtD9Ec0VOC
-         sNF7/fJuWpoNsU+rmqo36gDWnhTYE4y2aRCHtSdBYCl3EeCV3OudahUcdrFHIjNQlhXz
-         ptbj6rLHbvm4THmtU5VmDbEmUSUskSNGx57ZFyG9sMvNgQ3caC2d/isTwXBCt7rjvhLo
-         /AhA==
-X-Gm-Message-State: ACgBeo3bdh3F7RGcPGgpecTUd56xQZ3nA53c4DsVLOpIcvVYzd29yNdh
-        ue1W6uMdWPcZDfq0q4eoR6A=
-X-Google-Smtp-Source: AA6agR4TOhoorhEezH7+HGtDNevbEABb5dRbZHifApvFkLvUdS9VD2eZClFF7q6j2TufSSkYjEWcsg==
-X-Received: by 2002:a17:902:9005:b0:16c:f62c:4376 with SMTP id a5-20020a170902900500b0016cf62c4376mr18404036plp.87.1659959939385;
-        Mon, 08 Aug 2022 04:58:59 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f4-20020a170902ce8400b0016cd74dae66sm8748344plg.28.2022.08.08.04.58.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 04:58:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7ab495dd-4b3e-46e8-6db0-1dd20860043f@roeck-us.net>
-Date:   Mon, 8 Aug 2022 04:58:56 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=/MHU6eLy/HH6PnrXo470+5XMlsFXh1eKam/uKQ3OWjc=;
+        b=zQcN9ipzQWAvQ3kSgzHLnldQDrqP/pk998pBY5znEJO0y7B6sRzKfYt1ntytXJcAOF
+         ngLIiFO0gYLO+6aU/FfoRB4j3AG8YBdw8WqnUxEKhqGQQzr0mLmnnBfdfJUirfWKvLpJ
+         JGTXUxh9JBiprwCw5PFRFkCxc6J7IB6g3HZw6AxDssE2cgWLgx9uzTRK5bO8aD2LIbXT
+         jnMemHMcgVYAUQ3bztUjHL7i9ak17qbVU/QoW5I5SxW7uAUPA2Dy5bbW4VxEgXbGeswB
+         qevqlGHxynWwx5v+A06NQ8ZSO4H8EYDpVYTdgqUtQsW4zqhSwYYyJb7RsQFNDxt5Oni+
+         t/8w==
+X-Gm-Message-State: ACgBeo2hOgdbWODeMRXvDeYH1ximzOCC1TpwghwX+/byFo+n/rD4Tsma
+        Ouv5QgvJrzGQEGjp39qRzTHdTCmEFkzl3SBSkTI=
+X-Google-Smtp-Source: AA6agR4P6+xqLLUlvUc10ZcbpYNlFzVZlJtwU0GcE5Si/ptz/l8bCeFHrGn1AoXJnqEDX06IAjMPe59mA03TWafJAHM=
+X-Received: by 2002:a05:651c:2d0:b0:25e:6c94:59d5 with SMTP id
+ f16-20020a05651c02d000b0025e6c9459d5mr6055592ljo.488.1659962235606; Mon, 08
+ Aug 2022 05:37:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] watchdog: meson: keep running if already active
-Content-Language: en-US
-To:     Philippe Boos <pboos@baylibre.com>,
+References: <20220711123519.217219-1-tmaimon77@gmail.com> <20220711123519.217219-5-tmaimon77@gmail.com>
+ <20220711195544.70A30C34115@smtp.kernel.org> <CAP6Zq1ie_RgJ_9S3ftoVJ=eJHX1xR4_O_czKZghNPKVEFOzC8Q@mail.gmail.com>
+ <20220718191454.5B5D3C341C0@smtp.kernel.org> <CAP6Zq1ju08GSjNnEG+zDUC8W6aQMJxd5He7QJxy9++hTy0Dc7A@mail.gmail.com>
+ <20220723030226.8E43CC341C6@smtp.kernel.org> <CAP6Zq1gUvMFG9BNObVNLpVgbMRpV7e--HFxknP8kvL4nGk8Hsw@mail.gmail.com>
+ <20220729225603.12528C433D6@smtp.kernel.org> <CAP6Zq1hOxG+2X-qTbvPkrVHQ5zf04GO21m1n328Jiqgzns2CMA@mail.gmail.com>
+ <20220804200549.60512C433C1@smtp.kernel.org>
+In-Reply-To: <20220804200549.60512C433C1@smtp.kernel.org>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Mon, 8 Aug 2022 15:37:04 +0300
+Message-ID: <CAP6Zq1j2r9df0CpT7pi32JuVLQBDjt7cCK7LmDJehtufG8M4-Q@mail.gmail.com>
+Subject: Re: [PATCH v8 04/16] clk: npcm8xx: add clock controller
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Olof Johansson <olof@lixom.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Thomas G leixner <tglx@linutronix.de>,
+        Patrick Venture <venture@google.com>,
+        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
-        "moderated list:ARM/Amlogic Meson SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson SoC support" 
-        <linux-amlogic@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220801092150.4449-1-pboos@baylibre.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220801092150.4449-1-pboos@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Nancy Yuen <yuenn@google.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        SERIAL DRIVERS <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/1/22 02:21, Philippe Boos wrote:
-> If the watchdog is already running (e.g.: started by bootloader) then
-> the kernel driver should keep the watchdog active but the amlogic driver
-> turns it off.
-> 
-> Let the driver fix the clock rate if already active because we do not
-> know the previous timebase value. To avoid unintentional resetting we
-> temporarily set it to its maximum value.
-> 
-> Then keep the enable bit if is was previously active.
-> 
-> Signed-off-by: Philippe Boos <pboos@baylibre.com>
+Hi Stephen,
 
-What changed since v1 ?
+Thanks for your reply.
 
-Guenter
+On Thu, 4 Aug 2022 at 23:05, Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Tomer Maimon (2022-08-04 07:01:30)
+> > On Sat, 30 Jul 2022 at 01:56, Stephen Boyd <sboyd@kernel.org> wrote:
+> > >
+> > > Because it is jumbled in some range?
+> > Yes.
+> > >
+> > > >
+> > > > I do see a way to combine the clock and the reset driver, the NPCM
+> > > > reset driver is serving other NPCM BMC's.
+> > > > Should we use regmap to handle the clock registers instead of ioremap?
+> > >
+> > > Sure? Using regmap or not looks like a parallel discussion. How does it
+> > > help use platform APIs?
+> > I mean to use regmap API instead of platform API for handing the clock
+> > and reset registers.
+> > the regmap API gives only one user access to R/W (lock).
+> > I will be happy to get more suggestions, on how should we solve this situation.
+> >
+>
+> Using platform APIs means using platform_*() functions, not of_*()
+> functions, which are open-firmware/DT related. Regmap can be used to
+> operate on registers mapped as __iomem, which is different from platform
+> APIs.
+I will use platform_get_resource() and devm_ioremap_resource()
+functions in the next version.
 
-> ---
->   drivers/watchdog/meson_gxbb_wdt.c | 24 +++++++++++++++++++-----
->   1 file changed, 19 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
-> index 5a9ca10fbcfa..8be8fd9e5637 100644
-> --- a/drivers/watchdog/meson_gxbb_wdt.c
-> +++ b/drivers/watchdog/meson_gxbb_wdt.c
-> @@ -146,6 +146,7 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
->   	struct device *dev = &pdev->dev;
->   	struct meson_gxbb_wdt *data;
->   	int ret;
-> +	u32 ctrl_reg;
->   
->   	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
->   	if (!data)
-> @@ -177,13 +178,26 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
->   	data->wdt_dev.timeout = DEFAULT_TIMEOUT;
->   	watchdog_set_drvdata(&data->wdt_dev, data);
->   
-> +	ctrl_reg = readl(data->reg_base + GXBB_WDT_CTRL_REG) &
-> +				GXBB_WDT_CTRL_EN;
-> +
-> +	if (ctrl_reg) {
-> +		/* Watchdog is running - keep it running but extend timeout
-> +		 * to the maximum while setting the timebase
-> +		 */
-> +		set_bit(WDOG_HW_RUNNING, &data->wdt_dev.status);
-> +		meson_gxbb_wdt_set_timeout(&data->wdt_dev,
-> +				GXBB_WDT_TCNT_SETUP_MASK / 1000);
-> +	}
-> +
->   	/* Setup with 1ms timebase */
-> -	writel(((clk_get_rate(data->clk) / 1000) & GXBB_WDT_CTRL_DIV_MASK) |
-> -		GXBB_WDT_CTRL_EE_RESET |
-> -		GXBB_WDT_CTRL_CLK_EN |
-> -		GXBB_WDT_CTRL_CLKDIV_EN,
-> -		data->reg_base + GXBB_WDT_CTRL_REG);
-> +	ctrl_reg |= ((clk_get_rate(data->clk) / 1000) &
-> +			GXBB_WDT_CTRL_DIV_MASK) |
-> +			GXBB_WDT_CTRL_EE_RESET |
-> +			GXBB_WDT_CTRL_CLK_EN |
-> +			GXBB_WDT_CTRL_CLKDIV_EN;
->   
-> +	writel(ctrl_reg, data->reg_base + GXBB_WDT_CTRL_REG);
->   	meson_gxbb_wdt_set_timeout(&data->wdt_dev, data->wdt_dev.timeout);
->   
->   	watchdog_stop_on_reboot(&data->wdt_dev);
+>
+> Is having a lock even necessary? Do the reset and clk controls live
+You are right,  lock use is not necessary.
+> within a shared register where we would need to prevent one driver from
+> accessing that register at the same time as the other?
+reset and clk drivers are living fine with shared registers, we don't
+need to handle the register access between the clk and the reset
+drivers.
 
+Best regards,
+
+Tomer
