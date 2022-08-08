@@ -2,71 +2,77 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B508058C7BC
-	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Aug 2022 13:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7756F58C807
+	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Aug 2022 13:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242921AbiHHLmf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 8 Aug 2022 07:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
+        id S232582AbiHHL7B (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 8 Aug 2022 07:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235999AbiHHLmc (ORCPT
+        with ESMTP id S232294AbiHHL7A (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 8 Aug 2022 07:42:32 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0968413E1C;
-        Mon,  8 Aug 2022 04:42:31 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id pm17so8521404pjb.3;
-        Mon, 08 Aug 2022 04:42:30 -0700 (PDT)
+        Mon, 8 Aug 2022 07:59:00 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D407825C7;
+        Mon,  8 Aug 2022 04:58:59 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id t22so8574445pjy.1;
+        Mon, 08 Aug 2022 04:58:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc;
-        bh=CAXKPBRSJJZxpgL9F9euR0RzRYxIEFUL7AVsfCxiNjo=;
-        b=ZbcB/evA4vMyAmaWpXUugtaUUwaR6AfnVy1iOdCqFQUawXBJ5H84pN+tdAlDUALx1M
-         ygtK6alLmDc8jXUlOlpsiznL9UpWmggLuXmkhBk5jlIBKiN38y0v4TcspciIfNle+7JR
-         yJiHosnFFaVlglGGzdfcvfBascHG5WxT7zG/QkqMlEz2O/o1ekdvbHk2zNEiTAFese/v
-         7aWeMEr8RXCiMWez3FoQI62lqLl39Bqq9/O2tOM+ScL//D9ck4Kc5CDtzay+ehx1VVXe
-         WTdFsEwHv/5fLa1aFxTPHMNWajkVTwddkceVQ6dfZSKEoRbz70gU3ZwwWtk59RTQEy/P
-         1rzw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc;
+        bh=45zF6wFzN206raoW09X+vEo3k3IpyXxBW6ekbRawA1Y=;
+        b=Xzbv9UFANA1nX9nbeNbq7CReZK+z0sy8IJcwuMrQ12aNYVwKrpfaHhAgJ+9Gn6eXys
+         HctwQJPPSkJiA5uiIl/v3MdijO0d5fmHVaxfUMm3qNjtMlp6NEtNM7HbRPiLBYRVDW9M
+         LT4TBbf2f+oQmyxGc1cr2AczZZ442WDTpbkfxi4lWBIAS4Z95CQMYOsIIayDf7BOdNzV
+         AlLL/v7PTWDYhmnJ1Pj8G/aCNXF8yvATcdfYw/fZTFnzq3H8UC/3/RYgF3UihytBMG08
+         jkDCWfZ049XtYEMMoyd4xfJ5jCBtKgo2jpArhNSc4Lm85842D4p5jJ4NPZQf6QZqZOLY
+         FRvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc;
-        bh=CAXKPBRSJJZxpgL9F9euR0RzRYxIEFUL7AVsfCxiNjo=;
-        b=faXsI8FMY2EbyDcU9vxkC6UrImiWppDBSDLgbSN7QW3SI6JG1py3YBSiPafZsRkL7M
-         L1J3Z72zE0sTzTX/rBZy/SGHOi8w3FgTsMhSD71ANgwL7dMA5wGTbXN+QqSPJVPeLkWJ
-         BpSObRvl8LAex7eWTv6tQ9BY9zlhK5fBEINpdj1msIae9bT/0lUZVtcPMFYDY0qldJeO
-         5OK532rqRsX5IcBrJjf/cRZrLKrmfmtgsht9ldvPTfdHERZnALwsUz7gI61aDnKaDp2Q
-         VO6nQBCqWwpVlWpocf28w7jOjmVrCd6LHiUMTO0kKv2gQzHcbyOMG+gkOM7Zg+2sgCKS
-         oUKw==
-X-Gm-Message-State: ACgBeo3Rqn0nedUrguN8rjXkVpsev2mOLSuWjLbnuQ7LAX6AgQzl+nv+
-        GAz3wgkHWGyl7xyEiQcmHQo=
-X-Google-Smtp-Source: AA6agR461YZz+qq+U8tX/kImBoQQOfYiOnTotTXC/c3cOqNmIIQJ8Rw5xMSDVfbSNxNzTFHU92Xdsw==
-X-Received: by 2002:a17:903:1103:b0:16c:9a6e:d54 with SMTP id n3-20020a170903110300b0016c9a6e0d54mr18040260plh.131.1659958950485;
-        Mon, 08 Aug 2022 04:42:30 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc;
+        bh=45zF6wFzN206raoW09X+vEo3k3IpyXxBW6ekbRawA1Y=;
+        b=6lDV/QxzRSnDGz7VDqdNRkp3O/ezYJCz0M+U8E1EbQdYMM8tiKTj/aPZrjU6k0UjBX
+         wMwqtFzuepeWpZ1U9GCMVEM08SXDp3VoFHJ2vQqLuFXTJCWRxoEvNviLmuXXGfvNJPf2
+         iTZRxY1c5ls/Ma1HXSfrfXvkFqSUaSjQfyWeK/WUsAB7exVqrHwxi4gKgVMtD9Ec0VOC
+         sNF7/fJuWpoNsU+rmqo36gDWnhTYE4y2aRCHtSdBYCl3EeCV3OudahUcdrFHIjNQlhXz
+         ptbj6rLHbvm4THmtU5VmDbEmUSUskSNGx57ZFyG9sMvNgQ3caC2d/isTwXBCt7rjvhLo
+         /AhA==
+X-Gm-Message-State: ACgBeo3bdh3F7RGcPGgpecTUd56xQZ3nA53c4DsVLOpIcvVYzd29yNdh
+        ue1W6uMdWPcZDfq0q4eoR6A=
+X-Google-Smtp-Source: AA6agR4TOhoorhEezH7+HGtDNevbEABb5dRbZHifApvFkLvUdS9VD2eZClFF7q6j2TufSSkYjEWcsg==
+X-Received: by 2002:a17:902:9005:b0:16c:f62c:4376 with SMTP id a5-20020a170902900500b0016cf62c4376mr18404036plp.87.1659959939385;
+        Mon, 08 Aug 2022 04:58:59 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id iz4-20020a170902ef8400b0016d9b101413sm8434265plb.200.2022.08.08.04.42.28
+        by smtp.gmail.com with ESMTPSA id f4-20020a170902ce8400b0016cd74dae66sm8748344plg.28.2022.08.08.04.58.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 04:42:29 -0700 (PDT)
+        Mon, 08 Aug 2022 04:58:58 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6bcb786f-1aa0-2fd6-50eb-e1db8ce70ebe@roeck-us.net>
-Date:   Mon, 8 Aug 2022 04:42:27 -0700
+Message-ID: <7ab495dd-4b3e-46e8-6db0-1dd20860043f@roeck-us.net>
+Date:   Mon, 8 Aug 2022 04:58:56 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
+Subject: Re: [PATCH v2] watchdog: meson: keep running if already active
 Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.de>, linux-watchdog@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-References: <20220806081524.5636461a@endymion.delvare>
+To:     Philippe Boos <pboos@baylibre.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
+        "moderated list:ARM/Amlogic Meson SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Amlogic Meson SoC support" 
+        <linux-amlogic@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220801092150.4449-1-pboos@baylibre.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2] watchdog: wdat_wdt: Set the min and max timeout values
- properly
-In-Reply-To: <20220806081524.5636461a@endymion.delvare>
+In-Reply-To: <20220801092150.4449-1-pboos@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,70 +86,69 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/5/22 23:15, Jean Delvare wrote:
-> The wdat_wdt driver is misusing the min_hw_heartbeat_ms field. This
-> field should only be used when the hardware watchdog device should not
-> be pinged more frequently than a specific period. The ACPI WDAT
-> "Minimum Count" field, on the other hand, specifies the minimum
-> timeout value that can be set. This corresponds to the min_timeout
-> field in Linux's watchdog infrastructure.
+On 8/1/22 02:21, Philippe Boos wrote:
+> If the watchdog is already running (e.g.: started by bootloader) then
+> the kernel driver should keep the watchdog active but the amlogic driver
+> turns it off.
 > 
-> Setting min_hw_heartbeat_ms instead can cause pings to the hardware
-> to be delayed when there is no reason for that, eventually leading to
-> unexpected firing of the watchdog timer (and thus unexpected reboot).
+> Let the driver fix the clock rate if already active because we do not
+> know the previous timebase value. To avoid unintentional resetting we
+> temporarily set it to its maximum value.
 > 
-> I'm also changing max_hw_heartbeat_ms to max_timeout for symmetry,
-> although the use of this one isn't fundamentally wrong, but there is
-> also no reason to enable the software-driven ping mechanism for the
-> wdat_wdt driver.
+> Then keep the enable bit if is was previously active.
 > 
+> Signed-off-by: Philippe Boos <pboos@baylibre.com>
 
-I dislike this part because it changes behavior and is unrelated to
-the problem at hand, but I assume Mike knows the actual hardware limits
-and understands the implications (ie that there is indeed no need to
-enable the software-driven ping mechanism).
+What changed since v1 ?
 
-> Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> Fixes: 058dfc767008 ("ACPI / watchdog: Add support for WDAT hardware watchdog")
-> Reviewed-by! Mika Westerberg <mika.westerberg@linux.intel.com>
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Guenter
 
 > ---
-> Changes since v1:
->   * Fix a stupid typo which broke the build. Apparently I shouldn't be
->     sending out patches after midnight, sorry.
+>   drivers/watchdog/meson_gxbb_wdt.c | 24 +++++++++++++++++++-----
+>   1 file changed, 19 insertions(+), 5 deletions(-)
 > 
->   drivers/watchdog/wdat_wdt.c |    8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> --- linux-5.18.orig/drivers/watchdog/wdat_wdt.c	2022-07-27 07:32:33.336928967 +0200
-> +++ linux-5.18/drivers/watchdog/wdat_wdt.c	2022-08-06 08:09:49.235935543 +0200
-> @@ -342,8 +342,8 @@ static int wdat_wdt_probe(struct platfor
->   		return -EINVAL;
+> diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
+> index 5a9ca10fbcfa..8be8fd9e5637 100644
+> --- a/drivers/watchdog/meson_gxbb_wdt.c
+> +++ b/drivers/watchdog/meson_gxbb_wdt.c
+> @@ -146,6 +146,7 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+>   	struct device *dev = &pdev->dev;
+>   	struct meson_gxbb_wdt *data;
+>   	int ret;
+> +	u32 ctrl_reg;
 >   
->   	wdat->period = tbl->timer_period;
-> -	wdat->wdd.min_hw_heartbeat_ms = wdat->period * tbl->min_count;
-> -	wdat->wdd.max_hw_heartbeat_ms = wdat->period * tbl->max_count;
-> +	wdat->wdd.min_timeout = DIV_ROUND_UP(wdat->period * tbl->min_count, 1000);
-> +	wdat->wdd.max_timeout = wdat->period * tbl->max_count / 1000;
->   	wdat->stopped_in_sleep = tbl->flags & ACPI_WDAT_STOPPED;
->   	wdat->wdd.info = &wdat_wdt_info;
->   	wdat->wdd.ops = &wdat_wdt_ops;
-> @@ -450,8 +450,8 @@ static int wdat_wdt_probe(struct platfor
->   	 * watchdog properly after it has opened the device. In some cases
->   	 * the BIOS default is too short and causes immediate reboot.
->   	 */
-> -	if (timeout * 1000 < wdat->wdd.min_hw_heartbeat_ms ||
-> -	    timeout * 1000 > wdat->wdd.max_hw_heartbeat_ms) {
-> +	if (timeout < wdat->wdd.min_timeout ||
-> +	    timeout > wdat->wdd.max_timeout) {
->   		dev_warn(dev, "Invalid timeout %d given, using %d\n",
->   			 timeout, WDAT_DEFAULT_TIMEOUT);
->   		timeout = WDAT_DEFAULT_TIMEOUT;
-> 
-> 
+>   	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>   	if (!data)
+> @@ -177,13 +178,26 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+>   	data->wdt_dev.timeout = DEFAULT_TIMEOUT;
+>   	watchdog_set_drvdata(&data->wdt_dev, data);
+>   
+> +	ctrl_reg = readl(data->reg_base + GXBB_WDT_CTRL_REG) &
+> +				GXBB_WDT_CTRL_EN;
+> +
+> +	if (ctrl_reg) {
+> +		/* Watchdog is running - keep it running but extend timeout
+> +		 * to the maximum while setting the timebase
+> +		 */
+> +		set_bit(WDOG_HW_RUNNING, &data->wdt_dev.status);
+> +		meson_gxbb_wdt_set_timeout(&data->wdt_dev,
+> +				GXBB_WDT_TCNT_SETUP_MASK / 1000);
+> +	}
+> +
+>   	/* Setup with 1ms timebase */
+> -	writel(((clk_get_rate(data->clk) / 1000) & GXBB_WDT_CTRL_DIV_MASK) |
+> -		GXBB_WDT_CTRL_EE_RESET |
+> -		GXBB_WDT_CTRL_CLK_EN |
+> -		GXBB_WDT_CTRL_CLKDIV_EN,
+> -		data->reg_base + GXBB_WDT_CTRL_REG);
+> +	ctrl_reg |= ((clk_get_rate(data->clk) / 1000) &
+> +			GXBB_WDT_CTRL_DIV_MASK) |
+> +			GXBB_WDT_CTRL_EE_RESET |
+> +			GXBB_WDT_CTRL_CLK_EN |
+> +			GXBB_WDT_CTRL_CLKDIV_EN;
+>   
+> +	writel(ctrl_reg, data->reg_base + GXBB_WDT_CTRL_REG);
+>   	meson_gxbb_wdt_set_timeout(&data->wdt_dev, data->wdt_dev.timeout);
+>   
+>   	watchdog_stop_on_reboot(&data->wdt_dev);
 
