@@ -2,39 +2,39 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF86D58CB67
-	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Aug 2022 17:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 198D658CB77
+	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Aug 2022 17:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237683AbiHHPkP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 8 Aug 2022 11:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
+        id S243271AbiHHPpO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 8 Aug 2022 11:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243061AbiHHPkJ (ORCPT
+        with ESMTP id S238062AbiHHPpN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 8 Aug 2022 11:40:09 -0400
+        Mon, 8 Aug 2022 11:45:13 -0400
 Received: from bg5.exmail.qq.com (unknown [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E35F14D2A;
-        Mon,  8 Aug 2022 08:40:08 -0700 (PDT)
-X-QQ-mid: bizesmtp83t1659973203tgapgwly
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5FA1E8;
+        Mon,  8 Aug 2022 08:45:09 -0700 (PDT)
+X-QQ-mid: bizesmtp69t1659973505t2w49uas
 Received: from localhost.localdomain ( [182.148.14.53])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 08 Aug 2022 23:39:57 +0800 (CST)
+        id ; Mon, 08 Aug 2022 23:44:58 +0800 (CST)
 X-QQ-SSF: 0100000000200050B000B00A0000000
-X-QQ-FEAT: oxgq2YVMtX/GHD/05992BC82PK3kkLB9bc+DuY2NKRmsZ7cEiCCPqiQa+PH9y
-        LWsrFYjZV6eyoa62qErH/+8RSUIQREmIvaYAkqmHUb7ExGXXHXNtVBv7lTvdsM0YjfhHYhA
-        HSSqUTINAR2NOcr/TJmAQ4wV0Y7T9dx3gBVqpVhf50pOvFvAol0bIKZkxhrMpN0Qp9r1FPw
-        krpZU3AZfiT4It7/VbeEA4PUdFfaghm2ODESaX3w4UCVrKAN4ksmD4fIlRGwRexQ8umELnP
-        Xbz0Yunu39U0IW9hSg1mzFZKLXjhUs2hLmJ5Ow4xQ7YWCOPYzQ/UIeRPneJnAV7oYFWKrWI
-        jkrLtiErKif8EB/LAOC9kiBlqbTChsqIMUCAAO5kjwCyobN+fg1SUL4YOMG27ZqyeAdPliV
-        sX8x+7pedVU=
+X-QQ-FEAT: mRz6/7wsmIhlzHKj0YPyARWgDoZt8mu1HzJB+5kNjN9Ou3AYISo7wgJWT1MdI
+        Wcl8IuhSuTsWf0QjurwFBjPrX5Ijlraq9DQ4oI4Bz4XURd4ddaXrRhrNURQX2zyotdkIvij
+        JMYI9PJl70AXkfKMVw0ogD1YRLEqP0umjtSqNFFxx0QCQy82sv8HSwecwVPhh/YFeu1fp91
+        HO4Wq4Zz7Sm3R4GcpyrrcrwskJK3XBaZ2Oe2ZQd5nXEgvvyfZTxHfMZzefVb4f+ae71Ltvk
+        kLaau2XQXtVOKfJpUirAFHANHMCxVJuKWmoiz6rQ0mjuuF7a18+StTb6cMGwFO3RCuGcwoJ
+        ZmYts4Vas/fsHX+ms4QMwuSMSWQ0QF2p60WrUEVmvkcvYe0YEtM4jUMcB957mCA+LQmFXeC
+        dN05ITftGVE=
 X-QQ-GoodBg: 0
 From:   shaomin Deng <dengshaomin@cdjrlc.com>
 To:     wim@linux-watchdog.org, linux@roeck-us.net
 Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
         shaomin Deng <dengshaomin@cdjrlc.com>
-Subject: [PATCH] watchdog: Remove redundant word in comments
-Date:   Mon,  8 Aug 2022 11:39:56 -0400
-Message-Id: <20220808153956.8374-1-dengshaomin@cdjrlc.com>
+Subject: [PATCH] watchdog: Fix typo in comments
+Date:   Mon,  8 Aug 2022 11:44:57 -0400
+Message-Id: <20220808154457.9879-1-dengshaomin@cdjrlc.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -49,26 +49,26 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-There is a rebundant word "we" in comments, so remove it.
+Delete the repeated word "we" in comments.
 
 Signed-off-by: shaomin Deng <dengshaomin@cdjrlc.com>
 ---
- drivers/watchdog/eurotechwdt.c | 2 +-
+ drivers/watchdog/pc87413_wdt.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/eurotechwdt.c b/drivers/watchdog/eurotechwdt.c
-index ce682942662c..e26609ad4c17 100644
---- a/drivers/watchdog/eurotechwdt.c
-+++ b/drivers/watchdog/eurotechwdt.c
-@@ -192,7 +192,7 @@ static void eurwdt_ping(void)
-  * @ppos: pointer to the position to write. No seeks allowed
+diff --git a/drivers/watchdog/pc87413_wdt.c b/drivers/watchdog/pc87413_wdt.c
+index 9f9a340427fc..14f37b3b903f 100644
+--- a/drivers/watchdog/pc87413_wdt.c
++++ b/drivers/watchdog/pc87413_wdt.c
+@@ -333,7 +333,7 @@ static int pc87413_status(void)
+  *	@ppos: pointer to the position to write. No seeks allowed
   *
-  * A write to a watchdog device is defined as a keepalive signal. Any
-- * write of data will do, as we we don't define content meaning.
-+ * write of data will do, as we don't define content meaning.
+  *	A write to a watchdog device is defined as a keepalive signal. Any
+- *	write of data will do, as we we don't define content meaning.
++ *	write of data will do, as we don't define content meaning.
   */
  
- static ssize_t eurwdt_write(struct file *file, const char __user *buf,
+ static ssize_t pc87413_write(struct file *file, const char __user *data,
 -- 
 2.35.1
 
