@@ -2,161 +2,107 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C5A58C904
-	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Aug 2022 15:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9565858C978
+	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Aug 2022 15:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbiHHNIX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 8 Aug 2022 09:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
+        id S237695AbiHHNbA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 8 Aug 2022 09:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiHHNIX (ORCPT
+        with ESMTP id S243341AbiHHNaw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 8 Aug 2022 09:08:23 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F785FC3;
-        Mon,  8 Aug 2022 06:08:21 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id v2so3953756lfi.6;
-        Mon, 08 Aug 2022 06:08:21 -0700 (PDT)
+        Mon, 8 Aug 2022 09:30:52 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56682C70;
+        Mon,  8 Aug 2022 06:30:51 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id y141so8093222pfb.7;
+        Mon, 08 Aug 2022 06:30:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=kuwKOcuHMSa3dQs4wZk02jLSCcVnoSCO8BTxrJsZ3Y4=;
-        b=IYwHZ8LA2fZ7gErBWUeZRWrXrXcZ6uS3hcMeDarJm6ToovrHlgcqqP/eWdXpacp202
-         xwIn6d7/Luovgbo/HgFzReARSGvhONTCDx3JdOr1llSLDhQvdWzfS1mN9sl34zCdZJNd
-         1DsRdBdoDF92Eradj/s/i375nOTe+T1T7Ep8I2/DuzbVE16Hxdl/6cIyXh02/TY/roNi
-         W/zIpQ6rXCnZTLS+TJPf7acziyb2sJboIX+OLKAvLwFm5y6kABAFEV2ync5FcUqoMnIa
-         kW9ueMp78HO9crFMJURQp9Zi7SAyTfOTP0Rqk41mQXUhVvc/gy/Z+cgBDOe27t6VLZM8
-         N+rQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=/cwKw1oXK2BAcUZBUF1HGlwJN39sE5gD8XqZTYnWCZg=;
+        b=O8HGM/CeMJZUbrN9QYtc5puFOw69OoCjnsj+YVQ3CZSGm0Fvwt26dd/DtxV4JvMrCG
+         /EUEYfVm/fdmqjEi6aC2yslfCFN+QT+UGVRt6dDw3dQypyDHuyw7zDb7wpwqoJTeOqV+
+         f1qgrvRtmW9gFk12p0PwxEywL5rKRUKR9BS1O3dczs9/7rUAShXHEG3m3YedQnXkv7QD
+         wILcO3RdeZ3WeuGFMzXYOah/pmYH1cUTJtlqDDjkmHcnC7clnoBqFStbOLAIOXT2bhqG
+         pU7o0HXjqRQLubWcm0kTag9lPTJa1uKUc9m6GaKUaJu6zuB/1PpcDJeE5VXgfxzKUu+2
+         S5aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=kuwKOcuHMSa3dQs4wZk02jLSCcVnoSCO8BTxrJsZ3Y4=;
-        b=FmtHphtqTPjVu33qb9c921RBQChXSsn/7LaG47eH4tZb9Rr5PUvAGrl9uHmlzdxQeJ
-         ok5/dGhGH6zBTgK9vpVyDAG+YpKAZFE49FEmasJq7sXWWTvPlXkmEa8tLgIx/qgpke9i
-         YcQhiAhqMpWOcLfAjCwEaPrxw42bEzTiy7W90Srhg4HzIxUdfqot7ffFs//Lsv9VfqYQ
-         FURJpSxVBsRq60ka0ysdxsYE5kM+MuKQ8lLPfZ4iLL5jLbN7I/9Ctw43CIQoGusENWB3
-         MCyJkcdn66FRLF2mefltlJeTVKJLXIsDoFVohJJBaflqffTT64LlnFlWsDToH+J6bPGh
-         GgvA==
-X-Gm-Message-State: ACgBeo27Su7+SjptgJdQb5t9yxO3s8q4HGnMX5WaM6X2y1swVNKR72jG
-        pzQTJz9Mw/6HxU+LwJ6Ev5TfUw/72sllrusMDlg=
-X-Google-Smtp-Source: AA6agR7S/N6SzCu6WvUjst8DGTx8TkblKLEFyaeVt8VBRNP4uVQsWXwmfnx40tW0I14GvvaFNjJgxmSK42sdlLgTy00=
-X-Received: by 2002:a05:6512:168b:b0:48a:9f4a:9d37 with SMTP id
- bu11-20020a056512168b00b0048a9f4a9d37mr6462916lfb.576.1659964100152; Mon, 08
- Aug 2022 06:08:20 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=/cwKw1oXK2BAcUZBUF1HGlwJN39sE5gD8XqZTYnWCZg=;
+        b=a2jYIhsk7Oc3PCuO6s/bAXfuXmNbgpNxvaKVe8oTx9QmYLAUfUC2GnoqEAhjfTrSMe
+         5GbaGTgsadm+dH6u8ngRldSxdLbKtC1Z1/GNrtazPd/N2P0cmmk+0EURl9SzPuFvmtg9
+         jNW8NK5V3h1vUsEuzqzDhLs7aaIZNYO5/nKUJWu1hjTv1N1chRzc6WCY6VDS0N/CBNbo
+         9COXCSiGnMNIgx9qjf0SxMZ0666i21Gq333TPJfZ5I+xQkTgT+6EpBmt1UejsZt9VYV2
+         8mlYLgTEelIFt8KHgb1efAXD8LC1J+B9oHDNgb4VZnZfmTjq4BpXFqreCvpu2lGqFQES
+         qStA==
+X-Gm-Message-State: ACgBeo0bECyGNVyDWbukrIBNfnIoAbDKWycJfQnCZuO2gAhmhpXqI6Ir
+        to3qVwyi3Pzuii1c+J+SRwg=
+X-Google-Smtp-Source: AA6agR5leQTGI3Gn3ICBtJwZcaOBSYYMxYgXEWbc/mQAjoNsb13pkDAcSWetVYSPKlW/WcBvsNVI5A==
+X-Received: by 2002:a65:604f:0:b0:41a:77fe:2bbe with SMTP id a15-20020a65604f000000b0041a77fe2bbemr15196528pgp.242.1659965450820;
+        Mon, 08 Aug 2022 06:30:50 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bg22-20020a17090b0d9600b001f10c959aa2sm8104487pjb.42.2022.08.08.06.30.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Aug 2022 06:30:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 8 Aug 2022 06:30:46 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     sunliming <sunliming@kylinos.cn>
+Cc:     wim@linux-watchdog.org, arnd@arndb.de,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kelulanainsley@gmail.com, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] watchdog: sa1100: make variable sa1100dog_driver static
+Message-ID: <20220808133046.GA2347272@roeck-us.net>
+References: <20220802020819.1226454-1-sunliming@kylinos.cn>
 MIME-Version: 1.0
-References: <20220711123519.217219-1-tmaimon77@gmail.com> <20220711123519.217219-5-tmaimon77@gmail.com>
- <20220711195544.70A30C34115@smtp.kernel.org> <CAP6Zq1ie_RgJ_9S3ftoVJ=eJHX1xR4_O_czKZghNPKVEFOzC8Q@mail.gmail.com>
- <20220718191454.5B5D3C341C0@smtp.kernel.org> <CAP6Zq1ju08GSjNnEG+zDUC8W6aQMJxd5He7QJxy9++hTy0Dc7A@mail.gmail.com>
- <20220723030226.8E43CC341C6@smtp.kernel.org> <CAP6Zq1gUvMFG9BNObVNLpVgbMRpV7e--HFxknP8kvL4nGk8Hsw@mail.gmail.com>
- <20220729225603.12528C433D6@smtp.kernel.org> <CAP6Zq1hOxG+2X-qTbvPkrVHQ5zf04GO21m1n328Jiqgzns2CMA@mail.gmail.com>
- <20220804200549.60512C433C1@smtp.kernel.org> <CAP6Zq1j2r9df0CpT7pi32JuVLQBDjt7cCK7LmDJehtufG8M4-Q@mail.gmail.com>
-In-Reply-To: <CAP6Zq1j2r9df0CpT7pi32JuVLQBDjt7cCK7LmDJehtufG8M4-Q@mail.gmail.com>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Mon, 8 Aug 2022 16:08:08 +0300
-Message-ID: <CAP6Zq1ib==k_E3XaS2bZB3m=yn0B_3hL2XuaHe1UiyM670snoA@mail.gmail.com>
-Subject: Re: [PATCH v8 04/16] clk: npcm8xx: add clock controller
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Olof Johansson <olof@lixom.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Thomas G leixner <tglx@linutronix.de>,
-        Patrick Venture <venture@google.com>,
-        Vinod Koul <vkoul@kernel.org>, Will Deacon <will@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Nancy Yuen <yuenn@google.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        SERIAL DRIVERS <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220802020819.1226454-1-sunliming@kylinos.cn>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Stephen,
+On Tue, Aug 02, 2022 at 10:08:19AM +0800, sunliming wrote:
+> This symbol is not used outside of sa1100_wdt.c, so marks it static.
+> 
+> Fixes the following warning:
+> 
+> >> drivers/watchdog/sa1100_wdt.c:241:24: sparse: sparse: symbol 'sa1100dog_driver'
+> was not declared. Should it be static?
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
 
-Sorry, just to make it clear.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-On Mon, 8 Aug 2022 at 15:37, Tomer Maimon <tmaimon77@gmail.com> wrote:
->
-> Hi Stephen,
->
-> Thanks for your reply.
->
-> On Thu, 4 Aug 2022 at 23:05, Stephen Boyd <sboyd@kernel.org> wrote:
-> >
-> > Quoting Tomer Maimon (2022-08-04 07:01:30)
-> > > On Sat, 30 Jul 2022 at 01:56, Stephen Boyd <sboyd@kernel.org> wrote:
-> > > >
-> > > > Because it is jumbled in some range?
-> > > Yes.
-> > > >
-> > > > >
-> > > > > I do see a way to combine the clock and the reset driver, the NPCM
-> > > > > reset driver is serving other NPCM BMC's.
-> > > > > Should we use regmap to handle the clock registers instead of ioremap?
-> > > >
-> > > > Sure? Using regmap or not looks like a parallel discussion. How does it
-> > > > help use platform APIs?
-> > > I mean to use regmap API instead of platform API for handing the clock
-> > > and reset registers.
-> > > the regmap API gives only one user access to R/W (lock).
-> > > I will be happy to get more suggestions, on how should we solve this situation.
-> > >
-> >
-> > Using platform APIs means using platform_*() functions, not of_*()
-> > functions, which are open-firmware/DT related. Regmap can be used to
-> > operate on registers mapped as __iomem, which is different from platform
-> > APIs.
-> I will use platform_get_resource() and devm_ioremap_resource()
-> functions in the next version.
-I will use platform_get_resource() and ioremap() function next
-veriosn, is it fine?
->
-> >
-> > Is having a lock even necessary? Do the reset and clk controls live
-> You are right,  lock use is not necessary.
-> > within a shared register where we would need to prevent one driver from
-> > accessing that register at the same time as the other?
-> reset and clk drivers are living fine with shared registers, we don't
-> need to handle the register access between the clk and the reset
-> drivers.
->
-> Best regards,
->
-> Tomer
-
-Best regards,
-
-Tomer
+> ---
+>  drivers/watchdog/sa1100_wdt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/sa1100_wdt.c b/drivers/watchdog/sa1100_wdt.c
+> index 2d0a06a158a8..82ac5d19f519 100644
+> --- a/drivers/watchdog/sa1100_wdt.c
+> +++ b/drivers/watchdog/sa1100_wdt.c
+> @@ -238,7 +238,7 @@ static int sa1100dog_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -struct platform_driver sa1100dog_driver = {
+> +static struct platform_driver sa1100dog_driver = {
+>  	.driver.name = "sa1100_wdt",
+>  	.probe	  = sa1100dog_probe,
+>  	.remove	  = sa1100dog_remove,
+> -- 
+> 2.25.1
+> 
