@@ -2,105 +2,168 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF2A58CBB5
-	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Aug 2022 17:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21FF558CE2B
+	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Aug 2022 21:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243686AbiHHP7H (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 8 Aug 2022 11:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
+        id S236334AbiHHTAA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 8 Aug 2022 15:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243674AbiHHP7F (ORCPT
+        with ESMTP id S236313AbiHHTAA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 8 Aug 2022 11:59:05 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9769DB1DD;
-        Mon,  8 Aug 2022 08:59:04 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id o3so8943686ple.5;
-        Mon, 08 Aug 2022 08:59:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=NSzsSRoA3x7V34Qf7YygjvmGdHbbkY5XG2e9FxtKRAE=;
-        b=jI8e+uPapEGqAUy1JgeqBqOYo63Oo5xJOI7LrTqRx2Ew1gsG+G6C9SS/sBFfToV0mM
-         EmlYpmJpoph+iXIGgxNvde9PNyLCarB4smt2lvhH6Vy77uasb1SqgNynFr3TjuBjKvJY
-         zOC5cKpRwdSoW36YeTO8A3PvfogtGzG4HVQvjArObQnYv2t2nmbH6CkBEO8Xp8UFT/Kl
-         LoULlfG5vlYec387nr8PY6/nb90BUtISfY5ZHv/DbIlOyIN1TMyhoIYwfCOUuWbQjgLI
-         HnKgy5TUvOACIEbD4JtI0E1gQ5SvWHWTtGEH7glVWHY1Y1cE8Dw7Kp6NzfzhZb3+qqlI
-         Rvzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=NSzsSRoA3x7V34Qf7YygjvmGdHbbkY5XG2e9FxtKRAE=;
-        b=Yc1LgFFHdA2MYt8yR569FHqte4k40SwpuE5vlYpL1qqHPnGptqetu7zmMoe6XbiJCl
-         UbixrZ2EVtuI6gVTJgbpvn+kqMQx+4SgJ5uF7FgVQZypzmribYqFwSnOx9hvqNRqH9Je
-         nByF2mRSGHwwwCOgsMJrBzMyc2SCwxKY1kqWUA4kOKKezSIxY4+Bv6b1fPAxcrOsDHWQ
-         WFm1uAYZmRLq0wtkYHhLXyPKhcUZk1UufBSGUjw3l+i5BNDvDrn96jiIAauE1Kau+ixp
-         CuDG3a587zQPCt+MC1jaJ4HalxC9VGsemUEL1ykhKW/1iEN2UU9tfAC3QKArVxMlnzID
-         bevA==
-X-Gm-Message-State: ACgBeo11xix6rlQSnM4lejbhTiZVl/RqhacRnUqD+L5h2JoGHPHL4mGK
-        yw6CGafXUb4TptbQJmt2t6z+L7//rOM=
-X-Google-Smtp-Source: AA6agR6APHb10/imTPvDpI/LuSPi5sY18vx1Tjq0hxCnQNv0tkLpx7v9XkHOUGb5Y00RC43XEagHgg==
-X-Received: by 2002:a17:902:7007:b0:170:8d35:bafd with SMTP id y7-20020a170902700700b001708d35bafdmr10930280plk.51.1659974344106;
-        Mon, 08 Aug 2022 08:59:04 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id nn16-20020a17090b38d000b001efa35356besm11104120pjb.28.2022.08.08.08.59.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 08:59:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <120935c3-441b-eea4-4626-a3e322fef1dc@roeck-us.net>
-Date:   Mon, 8 Aug 2022 08:59:02 -0700
+        Mon, 8 Aug 2022 15:00:00 -0400
+X-Greylist: delayed 468 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 08 Aug 2022 11:59:58 PDT
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54C261834C;
+        Mon,  8 Aug 2022 11:59:58 -0700 (PDT)
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id 3EA5C409F8; Mon,  8 Aug 2022 19:12:16 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 3EA5C409F8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1659978736;
+        bh=KCx0IvLfZfun9tgRq6MimD6dvHCdYmSX9rsZgPoZ8JQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dP+GnXWlOOorguuSoB2v5TwJXPk5G8hW1h4X0wne3NwexQB61mY9BdVvPv8GB4txW
+         HPPNQahRZnlQRD6jmaHYXK9nC7Tj7y6qlaOQzeEQzKQ8cTpWiqQ0Eha9Ae/fmzuuxS
+         mYnxTbp6tcpKFYJcNkfRVneKqw433skwR4pkM+R0=
+Date:   Mon, 8 Aug 2022 19:12:16 +0200
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Bing Fan <tombinfan@tencent.com>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Luo Xueqin <luoxueqin@kylinos.cn>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh@kernel.org>,
+        Rohit Agarwal <quic_rohiagar@quicinc.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        William Dean <williamsukatube@gmail.com>
+Subject: [GIT PULL REQUEST] watchdog - v5.20 release cycle.
+Message-ID: <20220808171216.GA19810@www.linux-watchdog.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] watchdog: Fix typo in comments
-Content-Language: en-US
-To:     shaomin Deng <dengshaomin@cdjrlc.com>, wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220808154457.9879-1-dengshaomin@cdjrlc.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220808154457.9879-1-dengshaomin@cdjrlc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.20 (2009-12-10)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/8/22 08:44, shaomin Deng wrote:
-> Delete the repeated word "we" in comments.
-> 
-> Signed-off-by: shaomin Deng <dengshaomin@cdjrlc.com>
+Hi Linus,
 
-Please at least use a proper subject indicating the affected driver if you really
-have to make those cosmetic changes.
+Please pull following watchdog changes for the v5.20 release cycle.
 
-Guenter
+This series contains:
+* add RTL9310 support
+* sp805_wdt: add arm cmsdk apb wdt support
+* Remove #ifdef guards for PM related functions for several watchdog device drivers
+* pm8916_wdt reboot improvements
+* Several other fixes and improvements
 
-> ---
->   drivers/watchdog/pc87413_wdt.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/pc87413_wdt.c b/drivers/watchdog/pc87413_wdt.c
-> index 9f9a340427fc..14f37b3b903f 100644
-> --- a/drivers/watchdog/pc87413_wdt.c
-> +++ b/drivers/watchdog/pc87413_wdt.c
-> @@ -333,7 +333,7 @@ static int pc87413_status(void)
->    *	@ppos: pointer to the position to write. No seeks allowed
->    *
->    *	A write to a watchdog device is defined as a keepalive signal. Any
-> - *	write of data will do, as we we don't define content meaning.
-> + *	write of data will do, as we don't define content meaning.
->    */
->   
->   static ssize_t pc87413_write(struct file *file, const char __user *data,
+The output from git request-pull:
+----------------------------------------------------------------
+The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
+
+  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
+
+are available in the git repository at:
+
+  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-5.20-rc1
+
+for you to fetch changes up to 2d27e52841092e5831dd41f313028c668d816eb0:
+
+  watchdog: armada_37xx_wdt: check the return value of devm_ioremap() in armada_37xx_wdt_probe() (2022-07-23 14:26:42 +0200)
+
+----------------------------------------------------------------
+linux-watchdog 5.20-rc1 tag
+
+----------------------------------------------------------------
+Abel Vesa (1):
+      dt-bindings: watchdog: Add fsl,scu-wdt yaml file
+
+Bing Fan (1):
+      watchdog: sp805_wdt: add arm cmsdk apb wdt support
+
+Jason Wang (2):
+      watchdog: Fix comment typo
+      watchdog: dw_wdt: Fix comment typo
+
+Jean Delvare (1):
+      watchdog: sp5100_tco: Fix a memory leak of EFCH MMIO resource
+
+Jiasheng Jiang (1):
+      watchdog: f71808e_wdt: Add check for platform_driver_register
+
+Luca Ceresoli (1):
+      watchdog: max77620: update Luca Ceresoli's e-mail address
+
+Luo Xueqin (1):
+      watchdog:Fix typo in comment
+
+Paul Cercueil (8):
+      watchdog: bcm7038_wdt: Remove #ifdef guards for PM related functions
+      watchdog: dw_wdt: Remove #ifdef guards for PM related functions
+      watchdog: mtk_wdt: Remove #ifdef guards for PM related functions
+      watchdog: s3c2410_wdt: Remove #ifdef guards for PM related functions
+      watchdog: sama5d4_wdt: Remove #ifdef guards for PM related functions
+      watchdog: st_lpc_wdt: Remove #ifdef guards for PM related functions
+      watchdog: tegra_wdt: Remove #ifdef guards for PM related functions
+      watchdog: wdat_wdt: Remove #ifdef guards for PM related functions
+
+Rob Herring (1):
+      dt-bindings: watchdog: faraday: Fix typo in example 'timeout-sec' property
+
+Rohit Agarwal (1):
+      dt-bindings: watchdog: Add binding for Qcom SDX65
+
+Sander Vanheule (2):
+      dt-bindings: watchdog: realtek,otto-wdt: add RTL9310
+      watchdog: realtek-otto: add RTL9310 support
+
+Stephan Gerhold (3):
+      watchdog: pm8916_wdt: Avoid read of write-only PET register
+      watchdog: pm8916_wdt: Report reboot reason
+      watchdog: pm8916_wdt: Handle watchdog enabled by bootloader
+
+William Dean (1):
+      watchdog: armada_37xx_wdt: check the return value of devm_ioremap() in armada_37xx_wdt_probe()
+
+ .../devicetree/bindings/arm/freescale/fsl,scu.txt  | 15 --------
+ .../bindings/watchdog/faraday,ftwdt010.yaml        |  2 +-
+ .../devicetree/bindings/watchdog/qcom-wdt.yaml     |  1 +
+ .../bindings/watchdog/realtek,otto-wdt.yaml        |  1 +
+ drivers/watchdog/armada_37xx_wdt.c                 |  2 ++
+ drivers/watchdog/bcm7038_wdt.c                     |  8 ++---
+ drivers/watchdog/booke_wdt.c                       |  2 +-
+ drivers/watchdog/dw_wdt.c                          |  8 ++---
+ drivers/watchdog/f71808e_wdt.c                     |  4 ++-
+ drivers/watchdog/max77620_wdt.c                    |  4 +--
+ drivers/watchdog/mtk_wdt.c                         | 10 ++----
+ drivers/watchdog/pc87413_wdt.c                     |  2 +-
+ drivers/watchdog/pm8916_wdt.c                      | 41 +++++++++++++++++++---
+ drivers/watchdog/realtek_otto_wdt.c                |  1 +
+ drivers/watchdog/s3c2410_wdt.c                     |  9 ++---
+ drivers/watchdog/sama5d4_wdt.c                     |  8 ++---
+ drivers/watchdog/sp5100_tco.c                      |  1 +
+ drivers/watchdog/sp805_wdt.c                       |  5 +++
+ drivers/watchdog/st_lpc_wdt.c                      |  9 ++---
+ drivers/watchdog/tegra_wdt.c                       | 14 +++-----
+ drivers/watchdog/wdat_wdt.c                        |  7 ++--
+ 21 files changed, 81 insertions(+), 73 deletions(-)
+----------------------------------------------------------------
+
+Kind regards,
+Wim.
 
