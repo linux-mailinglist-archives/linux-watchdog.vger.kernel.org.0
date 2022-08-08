@@ -2,67 +2,67 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F5D58CB8C
-	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Aug 2022 17:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF2A58CBB5
+	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Aug 2022 17:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235458AbiHHPtH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 8 Aug 2022 11:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
+        id S243686AbiHHP7H (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 8 Aug 2022 11:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243580AbiHHPtE (ORCPT
+        with ESMTP id S243674AbiHHP7F (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 8 Aug 2022 11:49:04 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A3F15701;
-        Mon,  8 Aug 2022 08:49:04 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id d7so8883946pgc.13;
-        Mon, 08 Aug 2022 08:49:04 -0700 (PDT)
+        Mon, 8 Aug 2022 11:59:05 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9769DB1DD;
+        Mon,  8 Aug 2022 08:59:04 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id o3so8943686ple.5;
+        Mon, 08 Aug 2022 08:59:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc;
-        bh=+NP/N0HwgYcfN4UPczUY+PGLtARnpcj8slx8KQukuLI=;
-        b=Tep/Z/+BFJQew58xNEyUtktTIRZIk/HwrGRV8ANywkcnFgO9VKF217y6DMiB01z9G7
-         o5WamWmzZUU6MDQxm5BrOoPSFuLRslCtDNxCEibAIi6Jxko4ZEGiNhv86oBQX767fnxd
-         Igd2k/nm3Y6o4lNsFjOxxUR2b6HaNRm3AeIcwALU/oUEhEn44458rwOfhE6gJGWP/DZx
-         Q7DqJt6wQPMS/I3tY9rxnjfxq2YD6dzgOBJm+nC61SV4N3dAIdN9nAsXf/ElHDZBjdrh
-         beUFx4Ub3oldHN4++fvSb3oTqCt2vHU2yQ+gTl9NRRjm4ngGmKK7sbuuu0WEMrq4NjLr
-         GB+g==
+        bh=NSzsSRoA3x7V34Qf7YygjvmGdHbbkY5XG2e9FxtKRAE=;
+        b=jI8e+uPapEGqAUy1JgeqBqOYo63Oo5xJOI7LrTqRx2Ew1gsG+G6C9SS/sBFfToV0mM
+         EmlYpmJpoph+iXIGgxNvde9PNyLCarB4smt2lvhH6Vy77uasb1SqgNynFr3TjuBjKvJY
+         zOC5cKpRwdSoW36YeTO8A3PvfogtGzG4HVQvjArObQnYv2t2nmbH6CkBEO8Xp8UFT/Kl
+         LoULlfG5vlYec387nr8PY6/nb90BUtISfY5ZHv/DbIlOyIN1TMyhoIYwfCOUuWbQjgLI
+         HnKgy5TUvOACIEbD4JtI0E1gQ5SvWHWTtGEH7glVWHY1Y1cE8Dw7Kp6NzfzhZb3+qqlI
+         Rvzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc;
-        bh=+NP/N0HwgYcfN4UPczUY+PGLtARnpcj8slx8KQukuLI=;
-        b=0GV8kF9jBDmvbop25CaIzdY1TBVlm9vBSeFcbCY+jDqbbMl9P0I+BGRo5Typ10VNf6
-         vEaJXw/tYj+lMdJwVmBmbvz5cVBGVWcIS33R7fWGp+558HmOqb9zWh86CHFZvHd6rMMV
-         12aGFVQ/PBBkK/HQv1QDNWj7L46WPZIu/BonmplI0uNQTEzi8a3cYkbJJXYfwKrkYJL1
-         9jFVqzKCmM+OlKoqM1QMZz+J3iXMaDhOy6U8tr4+s4BbXWm1gDJ8OmRneL0cg1KyU8W/
-         CDT/khrGAo9VrTUO96o2m7WK5zX8/OvI3whxUZJ+MZHP0R2gi7Kv1ACeEW5eNQHZXi7m
-         zI7Q==
-X-Gm-Message-State: ACgBeo3/fRatEG3SWBA5pxAvFU87fGfvfBN2/E6hfpTlEadUoIxp2m2n
-        6MOc7jSv7ISzPdK8iWrjmr0=
-X-Google-Smtp-Source: AA6agR7M/RDbrjBh3l4F2fsZrE2NDUtRkmRoJ2pWCjualnC33PiKbuaQG3wg+QxKonMWpCkV7enQog==
-X-Received: by 2002:a05:6a00:4393:b0:52f:3603:e62f with SMTP id bt19-20020a056a00439300b0052f3603e62fmr6109095pfb.23.1659973743771;
-        Mon, 08 Aug 2022 08:49:03 -0700 (PDT)
+        bh=NSzsSRoA3x7V34Qf7YygjvmGdHbbkY5XG2e9FxtKRAE=;
+        b=Yc1LgFFHdA2MYt8yR569FHqte4k40SwpuE5vlYpL1qqHPnGptqetu7zmMoe6XbiJCl
+         UbixrZ2EVtuI6gVTJgbpvn+kqMQx+4SgJ5uF7FgVQZypzmribYqFwSnOx9hvqNRqH9Je
+         nByF2mRSGHwwwCOgsMJrBzMyc2SCwxKY1kqWUA4kOKKezSIxY4+Bv6b1fPAxcrOsDHWQ
+         WFm1uAYZmRLq0wtkYHhLXyPKhcUZk1UufBSGUjw3l+i5BNDvDrn96jiIAauE1Kau+ixp
+         CuDG3a587zQPCt+MC1jaJ4HalxC9VGsemUEL1ykhKW/1iEN2UU9tfAC3QKArVxMlnzID
+         bevA==
+X-Gm-Message-State: ACgBeo11xix6rlQSnM4lejbhTiZVl/RqhacRnUqD+L5h2JoGHPHL4mGK
+        yw6CGafXUb4TptbQJmt2t6z+L7//rOM=
+X-Google-Smtp-Source: AA6agR6APHb10/imTPvDpI/LuSPi5sY18vx1Tjq0hxCnQNv0tkLpx7v9XkHOUGb5Y00RC43XEagHgg==
+X-Received: by 2002:a17:902:7007:b0:170:8d35:bafd with SMTP id y7-20020a170902700700b001708d35bafdmr10930280plk.51.1659974344106;
+        Mon, 08 Aug 2022 08:59:04 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 6-20020a621506000000b0052d24402e52sm8793676pfv.79.2022.08.08.08.49.02
+        by smtp.gmail.com with ESMTPSA id nn16-20020a17090b38d000b001efa35356besm11104120pjb.28.2022.08.08.08.59.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 08:49:02 -0700 (PDT)
+        Mon, 08 Aug 2022 08:59:03 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <965b4295-6b39-cd77-ab76-47102ab5046e@roeck-us.net>
-Date:   Mon, 8 Aug 2022 08:49:01 -0700
+Message-ID: <120935c3-441b-eea4-4626-a3e322fef1dc@roeck-us.net>
+Date:   Mon, 8 Aug 2022 08:59:02 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH] watchdog: Remove redundant word in comments
+Subject: Re: [PATCH] watchdog: Fix typo in comments
 Content-Language: en-US
 To:     shaomin Deng <dengshaomin@cdjrlc.com>, wim@linux-watchdog.org
 Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220808153956.8374-1-dengshaomin@cdjrlc.com>
+References: <20220808154457.9879-1-dengshaomin@cdjrlc.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220808153956.8374-1-dengshaomin@cdjrlc.com>
+In-Reply-To: <20220808154457.9879-1-dengshaomin@cdjrlc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,34 +76,31 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/8/22 08:39, shaomin Deng wrote:
-> There is a rebundant word "we" in comments, so remove it.
+On 8/8/22 08:44, shaomin Deng wrote:
+> Delete the repeated word "we" in comments.
 > 
 > Signed-off-by: shaomin Deng <dengshaomin@cdjrlc.com>
 
-I really wish there was a rule against such cosmetic changes. People
-don't realize how much maintainer time is involved in reviewing and
-applying that stuff.
+Please at least use a proper subject indicating the affected driver if you really
+have to make those cosmetic changes.
 
-Oh well.
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Guenter
 
 > ---
->   drivers/watchdog/eurotechwdt.c | 2 +-
+>   drivers/watchdog/pc87413_wdt.c | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/watchdog/eurotechwdt.c b/drivers/watchdog/eurotechwdt.c
-> index ce682942662c..e26609ad4c17 100644
-> --- a/drivers/watchdog/eurotechwdt.c
-> +++ b/drivers/watchdog/eurotechwdt.c
-> @@ -192,7 +192,7 @@ static void eurwdt_ping(void)
->    * @ppos: pointer to the position to write. No seeks allowed
+> diff --git a/drivers/watchdog/pc87413_wdt.c b/drivers/watchdog/pc87413_wdt.c
+> index 9f9a340427fc..14f37b3b903f 100644
+> --- a/drivers/watchdog/pc87413_wdt.c
+> +++ b/drivers/watchdog/pc87413_wdt.c
+> @@ -333,7 +333,7 @@ static int pc87413_status(void)
+>    *	@ppos: pointer to the position to write. No seeks allowed
 >    *
->    * A write to a watchdog device is defined as a keepalive signal. Any
-> - * write of data will do, as we we don't define content meaning.
-> + * write of data will do, as we don't define content meaning.
+>    *	A write to a watchdog device is defined as a keepalive signal. Any
+> - *	write of data will do, as we we don't define content meaning.
+> + *	write of data will do, as we don't define content meaning.
 >    */
 >   
->   static ssize_t eurwdt_write(struct file *file, const char __user *buf,
+>   static ssize_t pc87413_write(struct file *file, const char __user *data,
 
