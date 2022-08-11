@@ -2,161 +2,108 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6B658FE01
-	for <lists+linux-watchdog@lfdr.de>; Thu, 11 Aug 2022 16:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7DD58FEA2
+	for <lists+linux-watchdog@lfdr.de>; Thu, 11 Aug 2022 16:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235589AbiHKOEa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 11 Aug 2022 10:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
+        id S235335AbiHKO4U (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 11 Aug 2022 10:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235503AbiHKOEN (ORCPT
+        with ESMTP id S233756AbiHKO4S (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 11 Aug 2022 10:04:13 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87FE8B980
-        for <linux-watchdog@vger.kernel.org>; Thu, 11 Aug 2022 07:03:57 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id r1-20020a05600c35c100b003a326685e7cso2723263wmq.1
-        for <linux-watchdog@vger.kernel.org>; Thu, 11 Aug 2022 07:03:57 -0700 (PDT)
+        Thu, 11 Aug 2022 10:56:18 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC941A39B;
+        Thu, 11 Aug 2022 07:56:17 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so5368668pjl.0;
+        Thu, 11 Aug 2022 07:56:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=dpQfYCCq/+drn5iVB9ooRHyxDLZEMRfg+qD3Ah/XRwI=;
-        b=LBukdHOxshC0eaPZwrYKpBhE3oNPQ77xKDjHTNorwbx/w5cFBhWAnv2mo6uTvrRyNT
-         iOvaTwAMQjpD9IWFXFd2uz9Er8W3n+A9izVgLOdj4RHOyhT3b12zaHkyC6p7ReSMqdYx
-         R3fGzrbg5CLcJBBfmABnkcRWIy0/pI1JQiRr0DmJlD6terq7tTjA7RuCkoVKb8D3Tt6f
-         VQWQo7P5pn1n6RLW9IisY2nYEdCapwjnrGsLfxZZGnH4UXTEkBoMM+aqpSq9uEhjuA79
-         u/psj55al7DaMkCVvS2zBngOIjNfWkzFfljxO50DRE+jgVOkA7yamf/MpqYF/cbXLyTW
-         rUDA==
+         :sender:from:to:cc;
+        bh=DFNIMFu05tsw3j5rRzMSQ0WodN3OTGaRJRy12XpVg+A=;
+        b=it451sscft1eHt3M5wQgmfK0jVQQ0quYcQZA6dVqf80zeqgw7nxBNi5Vschc3nB56M
+         8kLISTV+shF8w924y9/rNV8L5ypL3fogAOkDghYwHh4QmftEn6kd5rKYJMAIXLQgKm5r
+         /eocvujdb74djrflxicK5dEsd4prMcLclha/PQVhfTgjJ6r/twk+tDYIFDhX4VmAjYbA
+         9QRr3hi1neiZWFyoB4JxU9LraXuifgLGpPoiKeayouSGi4EvK5fGyicTYgMcnj8TnP4u
+         qoQnsMb2+JmtAx6j1diUfMpqDs2JgBQoYodj8LgHzjgqRRgUu07e+kwKAwO+DYGk1zd5
+         I3mQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=dpQfYCCq/+drn5iVB9ooRHyxDLZEMRfg+qD3Ah/XRwI=;
-        b=3b+QSkKTtE0ibd9KiLjO+NMTT53DoEw0DTBe7e7swxjxeO+XiFMw/CG/VWD0Fxo3aX
-         U2UAXuIN2M+8l+LHGUMH4keLLPJYFhA5M7QoRjiXImqbPc2UdpDcrn2AQ0FmgKW9hy2s
-         HJ79uulzHViSz2s9sJ7ZQ0c8pfD7jEeqATR1eXCggfFV9IhO7zCiM0X3kB/Sf2pelv5u
-         hHExsMPw2zazlGxzEdkJVWxprTMNuGXfHSUosWwoc/0+6gKRvAKAsobGNGT69mcUzUQL
-         EFKVTNWaugyMhQMf1fgnZi8b6R5bKkIljp/VQigaXMycq31uUarN8VuroyD+XsUac1o5
-         Hrdg==
-X-Gm-Message-State: ACgBeo3BRdUyXUcwGs8YbspkKSCvsMMbwJaCyr2bV9GUCJRhT0GNpjAc
-        VgnM/M98hcUEF5ahigGMFWuR0Q==
-X-Google-Smtp-Source: AA6agR5/Q13zQywSqGjb6atTMN6zwLk7aEPRPv2fr1R6J2efULxfFSt02cN0hmFriJS62o4D6adq1Q==
-X-Received: by 2002:a05:600c:3b02:b0:3a5:2460:f059 with SMTP id m2-20020a05600c3b0200b003a52460f059mr5879198wms.129.1660226635702;
-        Thu, 11 Aug 2022 07:03:55 -0700 (PDT)
-Received: from [10.1.3.77] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id b12-20020a5d4b8c000000b002206203ed3dsm18938330wrt.29.2022.08.11.07.03.54
+         :sender:x-gm-message-state:from:to:cc;
+        bh=DFNIMFu05tsw3j5rRzMSQ0WodN3OTGaRJRy12XpVg+A=;
+        b=6HqmysDD6lZd9HwReqpONbjsgieOHHvwsGIhUl/pWlqnq+nMdA0+quM9BZDvobNODU
+         a/RPef+4igL+5C9RMMIv58TOaiA7H9Pfmj6rfXo0l2AHRt8zWWLlHRrDprws2vyf62YU
+         x2JDY+9btmcQSuMEPZFeuA+h1zLEi1//27fJQZQsBiVNlzHAHcCc0lCmkJWo/qgWZKH2
+         JSqpaWTc/9/kSsmXk2wKTcHb9p74i7WoFCEZ6IwErrKLp01rdnHxX6xFJ3f+xSXnJERZ
+         tnP3ypw2FypNBzVACSdk76ByBvCinl4LQ1hRobOrtF+3B+EPmTfbgxC+LqRFBV4yMxK1
+         DVxg==
+X-Gm-Message-State: ACgBeo3RDMiOesLlmHP+cWubGjyhek/t/U0AGtEkiW2HlPiO+go8eme5
+        Wt5Qe/wtB8QUL6sObm4AYFs=
+X-Google-Smtp-Source: AA6agR7Ry48Zx98bFth0jHSAduY/6Ick8JcGjweQle7VcLcmC14gNBM1N1Msp6mhkTPpeMtJQFewPQ==
+X-Received: by 2002:a17:90a:2b42:b0:1f4:fc9a:be32 with SMTP id y2-20020a17090a2b4200b001f4fc9abe32mr9044867pjc.221.1660229777325;
+        Thu, 11 Aug 2022 07:56:17 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 194-20020a6216cb000000b005286124df03sm4160555pfw.87.2022.08.11.07.56.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 07:03:55 -0700 (PDT)
-Message-ID: <51d8767e-f73c-6045-871f-88b4df098cb2@baylibre.com>
-Date:   Thu, 11 Aug 2022 16:03:53 +0200
+        Thu, 11 Aug 2022 07:56:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <58e5401d-262f-a931-cd7d-93a3eefc395e@roeck-us.net>
+Date:   Thu, 11 Aug 2022 07:56:13 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] watchdog: meson: keep running if already active
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] watchdog: ftwdt010_wdt: fix test for platform_get_irq()
+ failure
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
-        "moderated list:ARM/Amlogic Meson SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson SoC support" 
-        <linux-amlogic@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220801092150.4449-1-pboos@baylibre.com>
- <7ab495dd-4b3e-46e8-6db0-1dd20860043f@roeck-us.net>
-From:   Philippe Boos <pboos@baylibre.com>
-In-Reply-To: <7ab495dd-4b3e-46e8-6db0-1dd20860043f@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-watchdog@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <YvTgRk/ABp62/hNA@kili>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <YvTgRk/ABp62/hNA@kili>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/8/22 13:58, Guenter Roeck wrote:
-> On 8/1/22 02:21, Philippe Boos wrote:
->> If the watchdog is already running (e.g.: started by bootloader) then
->> the kernel driver should keep the watchdog active but the amlogic driver
->> turns it off.
->>
->> Let the driver fix the clock rate if already active because we do not
->> know the previous timebase value. To avoid unintentional resetting we
->> temporarily set it to its maximum value.
->>
->> Then keep the enable bit if is was previously active.
->>
->> Signed-off-by: Philippe Boos <pboos@baylibre.com>
+On 8/11/22 03:56, Dan Carpenter wrote:
+> This code assumes that platform_get_irq() function returns zero on
+> failure.  In fact, platform_get_irq() never returns zero.  It returns
+> negative error codes or positive non-zero values on success.
 > 
-> What changed since v1 ?
-In v1, we read watchdog's enable bit before writing its config register,
-then we write the register, this will always stop the watchdog. If it
-was previously active we restart it. So, in v1, if the kernel crashes
-just before the watchdog restarts it will be stuck forever.
+> Fixes: eca10ae6000d ("watchdog: add driver for Cortina Gemini watchdog")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-In v2, we read watchdog's enable bit before writing its config register,
-if it is already active we keep the enable bit when writing the
-register.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Regards,
-
-Philippe Boos
+> ---
+>   drivers/watchdog/ftwdt010_wdt.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Guenter
-> 
->> ---
->>   drivers/watchdog/meson_gxbb_wdt.c | 24 +++++++++++++++++++-----
->>   1 file changed, 19 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
->> index 5a9ca10fbcfa..8be8fd9e5637 100644
->> --- a/drivers/watchdog/meson_gxbb_wdt.c
->> +++ b/drivers/watchdog/meson_gxbb_wdt.c
->> @@ -146,6 +146,7 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
->>       struct device *dev = &pdev->dev;
->>       struct meson_gxbb_wdt *data;
->>       int ret;
->> +    u32 ctrl_reg;
->>         data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
->>       if (!data)
->> @@ -177,13 +178,26 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
->>       data->wdt_dev.timeout = DEFAULT_TIMEOUT;
->>       watchdog_set_drvdata(&data->wdt_dev, data);
->>   +    ctrl_reg = readl(data->reg_base + GXBB_WDT_CTRL_REG) &
->> +                GXBB_WDT_CTRL_EN;
->> +
->> +    if (ctrl_reg) {
->> +        /* Watchdog is running - keep it running but extend timeout
->> +         * to the maximum while setting the timebase
->> +         */
->> +        set_bit(WDOG_HW_RUNNING, &data->wdt_dev.status);
->> +        meson_gxbb_wdt_set_timeout(&data->wdt_dev,
->> +                GXBB_WDT_TCNT_SETUP_MASK / 1000);
->> +    }
->> +
->>       /* Setup with 1ms timebase */
->> -    writel(((clk_get_rate(data->clk) / 1000) & GXBB_WDT_CTRL_DIV_MASK) |
->> -        GXBB_WDT_CTRL_EE_RESET |
->> -        GXBB_WDT_CTRL_CLK_EN |
->> -        GXBB_WDT_CTRL_CLKDIV_EN,
->> -        data->reg_base + GXBB_WDT_CTRL_REG);
->> +    ctrl_reg |= ((clk_get_rate(data->clk) / 1000) &
->> +            GXBB_WDT_CTRL_DIV_MASK) |
->> +            GXBB_WDT_CTRL_EE_RESET |
->> +            GXBB_WDT_CTRL_CLK_EN |
->> +            GXBB_WDT_CTRL_CLKDIV_EN;
->>   +    writel(ctrl_reg, data->reg_base + GXBB_WDT_CTRL_REG);
->>       meson_gxbb_wdt_set_timeout(&data->wdt_dev, data->wdt_dev.timeout);
->>         watchdog_stop_on_reboot(&data->wdt_dev);
-> 
+> diff --git a/drivers/watchdog/ftwdt010_wdt.c b/drivers/watchdog/ftwdt010_wdt.c
+> index 21dcc7765688..02112fc264bd 100644
+> --- a/drivers/watchdog/ftwdt010_wdt.c
+> +++ b/drivers/watchdog/ftwdt010_wdt.c
+> @@ -156,7 +156,7 @@ static int ftwdt010_wdt_probe(struct platform_device *pdev)
+>   	}
+>   
+>   	irq = platform_get_irq(pdev, 0);
+> -	if (irq) {
+> +	if (irq > 0) {
+>   		ret = devm_request_irq(dev, irq, ftwdt010_wdt_interrupt, 0,
+>   				       "watchdog bark", gwdt);
+>   		if (ret)
 
