@@ -2,120 +2,141 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1320C5933AE
-	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Aug 2022 18:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 406025953C6
+	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Aug 2022 09:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232902AbiHOQ6B (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 15 Aug 2022 12:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
+        id S232037AbiHPH2n (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 16 Aug 2022 03:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232889AbiHOQ5m (ORCPT
+        with ESMTP id S232093AbiHPH2N (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 15 Aug 2022 12:57:42 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7FB275C1;
-        Mon, 15 Aug 2022 09:57:41 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id b7so5761627qvq.2;
-        Mon, 15 Aug 2022 09:57:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=dT9Pg0cgomgnI0kkqHjm6eb1hxEl1p1LNNw04+pYAiw=;
-        b=UAbnyBq77vyYNRVvJhwDaocodBZTdW/rY26aTPJ3tUoVcG8kLbkvDeuHoCDVazGTqp
-         U3sWT1HisJNc/seNXOnderJHWURJq9o4MgfiwPF0JBbdfW64WPTclAeuu4L0OJZbxuLR
-         TcysGwk8ohcgr0uCvm6OGzo6qR8haErFewbD2I0+n3DaZN4NDE5GhwIJaJ5iAKsS7YjB
-         J67OCySu8M6iaLP6QU0K9qUMuaaQNz53rc7Mc+kihyUpk4ZXKxciQTtZMWWmzwdTR1iK
-         ylcJ2kUbrNKv0MWTDSbr31gytziDJYbVssAOt0Ez9SBA8elvqQr5y6onp0bOpYZVWs0k
-         Af3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=dT9Pg0cgomgnI0kkqHjm6eb1hxEl1p1LNNw04+pYAiw=;
-        b=0YCUM/sxNd+XW1rz+aOEJFmU57WhC3pLKbfffXI+n+rlWZk/W6rfXokcDwTazXcrcX
-         GrAtRd2P5GGgLddw68da9ChN+9CKbg1BHAPEvRJgHQ0VFe1HiWEDPLDTwsFykjTDCLGL
-         HEji4/S47365BacyPSsIxbr5Irak2OkclqzoQy766AlbS/7tp0H4h7WUQbXZy5IIR8y2
-         KvPEU6TP3pLZ+bbYB/IY4zj0rHl+qBjvYvDZgl2uszYsiKn5QRqvTf+1d+KuDvs/1vzH
-         ulKQQjHs1HFVDk3PXBkMr/05Pr/cyRbqeG60jBRrIhZDtP+XIoPVZeFDjuXvWjcII6gR
-         tIRQ==
-X-Gm-Message-State: ACgBeo3DUcLc2Ozbkn9bG7AbqpJLfbvrnk3QCoU3BpvkIr4IkcAdHZAk
-        yFGtlHJ5BxNJWxby0g1qYnw=
-X-Google-Smtp-Source: AA6agR5+e4ITrllG9Zdjcav/qnQ/K77ki/+NPhNuFZ+FfibDMeCZLlBPNoSOkBpDKq1B9dRdFkv1qQ==
-X-Received: by 2002:a05:6214:62a:b0:476:858d:b2c8 with SMTP id a10-20020a056214062a00b00476858db2c8mr13917327qvx.65.1660582660417;
-        Mon, 15 Aug 2022 09:57:40 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id f8-20020ac84648000000b0033e51aea00esm8459756qto.25.2022.08.15.09.57.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Aug 2022 09:57:39 -0700 (PDT)
-Message-ID: <584ebb0e-2d55-348f-18f7-a555c3a359b9@gmail.com>
-Date:   Mon, 15 Aug 2022 09:57:30 -0700
+        Tue, 16 Aug 2022 03:28:13 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2062b.outbound.protection.outlook.com [IPv6:2a01:111:f400:7d00::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78218384635;
+        Mon, 15 Aug 2022 21:38:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Og98N8rZ9ZzAw4Z0HoZ6228nZjCQd32MqNR5/Tgit8J5GYhBq+ztpFeUCNe908pH/Hpe1mDACaZoes5scvY0dy7s5SoHTuLJR1AOGmL57U2bW0OnpdMOrgwq0F8q98IiSH4NjWmkGtWGKcuuJejEpaxL/eiFeFhSCFqT0lZMSyLcTEW/mmaYot4COFtk+nZWWRslPEwKVfjrtCdKWUdAVS61Yjf3COK1NE6B1hjhErWOPvROgwmCDM4qtlWHuhTkoVd9LGCVwUzXe5DM1J3yWtVCOAyqmTCBeQ+ig1WBs2T3tq42X2phBaza6TQbfKLskBr2KhP7dRA8vRKBo40/uw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Iy54CTR9mAV0idWsKdj/dYNIpkKAR16Oyj4Cr4kSiDI=;
+ b=c7bIpVhQTciWZ9AlMEh9/b/u72xxSEWMd8YDdUnJGX97JLOMuf6W4D/SS3LIrVpYoyBbfMxqmMj/ymSXj7pz8s1DXvuUk1hfz9msX0BZkCPb92IGWtDN0aEi2xdKxBSuD3G4GdB8nQSn4bf28qZ7EPvm+mOYWsHmZSP08EQW/hBBIK7+mONbQoq6MbYjHggEV0ofmA2pK3epyqbLpKwdaimGJlXr1ywPOkcyGiUriUETLRvTWSC2sBGk9h2+OwmEZbDDP+26pj+SomuezNzwVzRrT12F/9Rsy1J6VKr1ebtXdvM+YotLZZcKfq4/HPRmJEP0aWu/6Q3X/K3VkIto4A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Iy54CTR9mAV0idWsKdj/dYNIpkKAR16Oyj4Cr4kSiDI=;
+ b=lnAobDIFu+MnwdGZe8pMM+HJMZp4BDPfswNOD9bjeMAnJQ1zgGDDRIJaQ6arWtNQ8QVlI/nU6yGpwxH1w8g8s5Xf3MEFxwlwbFVuVRr1hGqH2sdTI+MazFvQrK1HxiXoBPIDnHzdcYv5o+yz4jV647dd0WBez5GtHP/HvwapxxE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from AM6PR04MB6053.eurprd04.prod.outlook.com (2603:10a6:20b:b9::10)
+ by DB8PR04MB7036.eurprd04.prod.outlook.com (2603:10a6:10:12f::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.28; Tue, 16 Aug
+ 2022 04:38:08 +0000
+Received: from AM6PR04MB6053.eurprd04.prod.outlook.com
+ ([fe80::6cd5:f11c:4e5c:d79c]) by AM6PR04MB6053.eurprd04.prod.outlook.com
+ ([fe80::6cd5:f11c:4e5c:d79c%3]) with mapi id 15.20.5525.011; Tue, 16 Aug 2022
+ 04:38:08 +0000
+From:   "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] watchdog: imx7ulp_wdt: update i.MX7ULP WDOG timer driver
+Date:   Tue, 16 Aug 2022 12:36:36 +0800
+Message-Id: <20220816043643.26569-1-alice.guo@oss.nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0015.apcprd02.prod.outlook.com
+ (2603:1096:3:17::27) To AM6PR04MB6053.eurprd04.prod.outlook.com
+ (2603:10a6:20b:b9::10)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 6/9] arm64: bcmbca: Make BCM4908 drivers depend on
- ARCH_BCMBCA
-Content-Language: en-US
-To:     William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
-        f.fainelli@gmail.com, krzysztof.kozlowski@linaro.org,
-        rafal@milecki.pl, Guenter Roeck <linux@roeck-us.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MEMORY TECHNOLOGY DEVICES (MTD)" 
-        <linux-mtd@lists.infradead.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
-        <linux-pci@vger.kernel.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        "open list:PIN CONTROL SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:BROADCOM BMIPS MIPS ARCHITECTURE" 
-        <linux-mips@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>
-References: <20220803175455.47638-1-william.zhang@broadcom.com>
- <20220803175455.47638-7-william.zhang@broadcom.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220803175455.47638-7-william.zhang@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d69241b1-a11a-4a89-0ba4-08da7f411dde
+X-MS-TrafficTypeDiagnostic: DB8PR04MB7036:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 72w5oWvHhl5b6Qx8KjL4LZh3sOsnBZsMd+YhbQb1FBWylhrmmc+7SrRFnMwVSqdfwA0m9eOlTfN3AN6LsPOWvWzxgLAwJQ0UCJdpCzu+fNEyMlNJ9bB42wX3tHkWhcmPxw+yoMLmuVIeu/3fvuWXhyJ90Er9spBX9lqxToFHhyzP1zF7CkveoEoX/RghggbB++4Kc5bJFd0+Cuk+yg/M1wHo8vDMq7IY+jmb9JayzRzG9POIyQEwsY4U5Vn1s+VrwWJGHNyA4LnWaLsJoi4OQO5vUpg5FQ4CMa3BQJOmn4XYW+SHV/8yDaWs9dZpFeYyDAumZUKdAdxL7fNKTWTeyi96AnSDp/XuJjT2omWgWIHUVg5jzAnCGb/TVzoK/dbG0SoNWpN2GySz4qcRQ1gYps4aq/4TSxxa5Vhs89E0vuyg4MpJgMfbhDtLUgoyFdhRn30EWhwaCyiofCaAooAd+S5WwZgpGOJ8394BbYsKjTprwr50+EAPH/XmEahlswCF+jQDU30p6FV90yaBIiw5z+4u+8G7cg0LSIjZVqA845v3SDsJPz3XQECyPELSAWVssR2kP3OHBgfiVUgejTGEBxuLVBdqaVJrHD7JooE+fNKgBMYZkQqbH+Zrkpvxb5V6hCrw6QyBk3bsCA7X4NKPgHuqKCr6FIOZmWArfksYtyw8OZ0NKMA4QkATRrxMyQ0bw74mkjSNwKPbsayHUNDLrch+yywaOuJz8fRPfhmZs2X4T8wGpB2IdJ+qMk3pUFPOlvTmn+XFuIoDCRy3C2H8mfm2kjQr90vv2NlzoFga2q6Hgn925NoupoW2XVkqk0ej
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(366004)(396003)(39860400002)(376002)(136003)(83380400001)(38350700002)(86362001)(38100700002)(4326008)(8676002)(66556008)(66946007)(66476007)(316002)(2906002)(8936002)(5660300002)(6512007)(6506007)(4744005)(26005)(15650500001)(1076003)(41300700001)(2616005)(186003)(52116002)(6666004)(6486002)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rz4VrT77G0aYwwL9OdS6hw8uzenW3aCZK8u8x+OFFM1/g+HUdMcTfhAEww2n?=
+ =?us-ascii?Q?0fBvDI7D8Vskjt7YcdEpU153SOF7VVGzUSQ+Vcf8pHa/Brwaep2cUY2zqqhg?=
+ =?us-ascii?Q?yOaI5HLMQTvxGuHXJifB6LPcD0AvYu+kdKfIqEISUstMnuzQ2x7qwX+7AsQG?=
+ =?us-ascii?Q?KVqrDVfW6jdh8Jf668x4nWpp6+VtMA8s8jSrQdE248KN7WpW2ZuhUt2+1fGZ?=
+ =?us-ascii?Q?j9hImiSia4zGpixNXiUG+y8FIdRZEXw7ugIXxm6tLObbsbSOeu2dpgeh9/jk?=
+ =?us-ascii?Q?LPK2I1cjM9E/ZfmT60wthITVPAqKLA80dvGK2R7ceB7ijjxSyhUzMVnBuPjh?=
+ =?us-ascii?Q?0TEqH0yRJ0rewU7my5rz7cOELpAvfVzvRAGpKa5p5LG1Cuwer7w3eiq1DbCQ?=
+ =?us-ascii?Q?TBc9+RmgwzsSdWrQT9PUQqbd1qq7kXn7sbQUXl/2q9FWKvSafuLWhFTJRara?=
+ =?us-ascii?Q?yyqkF//xaE9UzgVvFUS83t2CgAROqO3NVSOXW3gfLIrA34a5OJ1OxQrKErSI?=
+ =?us-ascii?Q?Q+O/DeJnt7vQAShyFuCkr0dTWCWXZQreXITMJUkSuO7BOCbQA5bVrbn1HesK?=
+ =?us-ascii?Q?tPeGZKOJK8eRfrGKFtcNZ7mDsBRYFMVXtgxRSi7PCZWxo08zUteh/39w0cNv?=
+ =?us-ascii?Q?da5YAoAKBvy85EIIrRxbWwdn0ZiKDHXME88WMtWJ4OhzdWJ8VshzPy9nIJwu?=
+ =?us-ascii?Q?5/snMFcjTGOSDXR1x4QYe0lACr/FAo0w6i3EemF4HcoWy1AYscMkfnOozMrd?=
+ =?us-ascii?Q?hDcqQcKOgLlH5aboO2OD4C6hb/uzzJcsnYLxdZlsNoV+z0Pfajh7AJjBWb5D?=
+ =?us-ascii?Q?7DR5dRPYdW+4evYzLQOuTj2viZCfVjHXm3lWb2DCWHwQiW+1hH5Ndsmx/K9j?=
+ =?us-ascii?Q?zZjvjtYjaPrBpfNFG11sGYGyTzxE6Xh0lJ2V8BeJYGdIV0Vz1bi4KNjUA/0y?=
+ =?us-ascii?Q?PfDvaFHW/pAhQk07yRejXk8sNUTyzF65V1nzaSY+K1GVmZ+akTe93JVKoqaD?=
+ =?us-ascii?Q?uvyegttOI/nFXIwuVgxRiISgZai8eOkfSprdg4saKuEFttw+MIvNkgVj6n4U?=
+ =?us-ascii?Q?6Snr9ShDWWD1jCCCCpoQgN3P6QW8eZgJrSCXUxeD7buULzbsyJWn0vB+k1FU?=
+ =?us-ascii?Q?yTkUQvhdwMrBGdPJLe8J6xNTzSyR1tAWG8NYZN7k33dDVTTkMYG992WhhVVR?=
+ =?us-ascii?Q?asAQ9vhRYoTvIR1utqbBdBGALz58GmYjNhPnohy1xwK//6lfmdRAFW3NFLR1?=
+ =?us-ascii?Q?a/qtWUYwO8qQIvykXi8AV1CE+nL6tP2uo7fsBA0v0CIENlH6OGRgjj2xA3IM?=
+ =?us-ascii?Q?JJeFuUOykP3+IqNtngbVTmZZ/Jbzvr/WQI+2uK1/4hyvk4RGEuR++OxraDbc?=
+ =?us-ascii?Q?/K9SQp14E6boxo1DkRirRXw+cvGwHduq6n62c5oJl67jk2Nqh+Uq2F74X13z?=
+ =?us-ascii?Q?Rnqt9leXvb4gppccjJkVwWrWpvMdIb/vhOt/6lmg38EA6NNtKdJqwPPYj5UD?=
+ =?us-ascii?Q?k6e4drefS/HXnw+oPFr7E4sSV09xFMgWynoIAzeTFZCXFu40ueQnc0/4JT5D?=
+ =?us-ascii?Q?ahWEhraf3FQxB52H5LTXEr6RQ5UbhFs5hL1SqwKQ?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d69241b1-a11a-4a89-0ba4-08da7f411dde
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6053.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 04:38:08.2195
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UAPTxtTgPbRKSOCf5roYpwHr5sRLbXB0o9n41+osLEp5vFAj/u4pxQCzd4jbaXkeJ3kJM2O1tsagViEJ2jNk/A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7036
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/3/22 10:54, William Zhang wrote:
-> With Broadcom Broadband arch ARCH_BCMBCA supported in the kernel, this
-> patch series migrate the ARCH_BCM4908 symbol to ARCH_BCMBCA. Hence
-> replace ARCH_BCM4908 with ARCH_BCMBCA in subsystem Kconfig files.
-> 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> Acked-by: Guenter Roeck <linux@roeck-us.net> (for watchdog)
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com> (for drivers/pci)
-> Acked-by: Wolfram Sang <wsa@kernel.org> (for i2c)
-> Acked-by: Philipp Zabel <p.zabel@pengutronix.de> (for reset)
+From: Alice Guo <alice.guo@nxp.com>
 
-Applied to https://github.com/Broadcom/stblinux/commits/drivers/next, 
-thanks!
+Alice Guo (1):
+  watchdog: imx93: add watchdog timer on imx93
+
+Anson Huang (1):
+  watchdog: imx7ulp: Move suspend/resume to noirq phase
+
+Jacky Bai (1):
+  watchdog: imx7ulp: Add explict memory barrier for unlock sequence
+
+Jason Liu (1):
+  watchdog: imx7ulp_wdt: init wdog when it was active
+
+Ye Li (3):
+  watchdog: imx7ulp_wdt: Check CMD32EN in wdog init
+  watchdog: imx7ulp_wdt: Fix RCS timeout issue
+  watchdog: imx7ulp_wdt: Handle wdog reconfigure failure
+
+ drivers/watchdog/imx7ulp_wdt.c | 212 ++++++++++++++++++++++++++-------
+ 1 file changed, 168 insertions(+), 44 deletions(-)
+
 -- 
-Florian
+2.17.1
+
