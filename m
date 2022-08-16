@@ -2,39 +2,38 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C422E595C31
-	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Aug 2022 14:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9F3595C3B
+	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Aug 2022 14:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234961AbiHPMrA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 16 Aug 2022 08:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39980 "EHLO
+        id S230096AbiHPMru (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 16 Aug 2022 08:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235348AbiHPMqk (ORCPT
+        with ESMTP id S230001AbiHPMrZ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 16 Aug 2022 08:46:40 -0400
+        Tue, 16 Aug 2022 08:47:25 -0400
 Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91CE77E92;
-        Tue, 16 Aug 2022 05:45:11 -0700 (PDT)
-X-QQ-mid: bizesmtp90t1660653907t6nq4iup
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61ED4B07DE;
+        Tue, 16 Aug 2022 05:46:06 -0700 (PDT)
+X-QQ-mid: bizesmtp84t1660653961tmmppklh
 Received: from localhost.localdomain ( [182.148.12.144])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 16 Aug 2022 20:45:06 +0800 (CST)
+        id ; Tue, 16 Aug 2022 20:46:00 +0800 (CST)
 X-QQ-SSF: 01000000002000B0D000B00A0000000
-X-QQ-FEAT: ILHsT53NKPiZ5/pcX6hNp/tyyZ8jwvYvGq6P+ZkOmWNdzn1RgNxQxdovUMg5v
-        OKNihxqMtehl5/vXWuZuSkYUJEVgL4tSZ4excTvgppmy0Br41j7nYI0RAt0SbW8e8rQ08xa
-        1xlN6EuYqblb2zjzOnsy9E9uvX/4MIYvOYtRG3C6Y0C8vzwjSusHHbsGnZLNo1F7s84nF5n
-        akUWLe9ljgW7p2aTpHzCA8cSVaPGV0muXMxpucpOydZryQcavHnEAHffE8t3gvQY+HuH/OZ
-        ymJHSaslxS/DI3f0To1eg90jMJs5C0A6GOrD6SeFkaKoVFVORE1RwgveFFMgw3Rd/SBKs0W
-        eG1V6WvfKhhbS/aT+p0Z/iozeuVmNW69ciFe0HjNN8Cpb3cUESLA5MScVYNpM/nB5Yf3VGv
-        vu1FryvZVPE=
+X-QQ-FEAT: LE7C6P2vL8R/Zo2ENKZ0zlbt+dkX4D8P+kCdlSz0cerNSWvn9msUgRptDim/K
+        aH6wFKMnVMPD9yPaifaz/1ga7Kw4iXK5KiwuJlHiRWv00OmWFZOhO8HAuebEappyztTUs7l
+        Df+zsUJtESt/x4qOwm1Bq0nlHd0IuIPuK0WtZ3FPlRxUqwGVS0ixwojhcx4qzA69Qs8tIHF
+        KHHzTNGK9toVxZ/v+upAjWm/u2EmOu5pEX+JiyHDIjFBb0jL2OS38dBl2FI1CDXGLkZn1UF
+        rYMH3WtXuGyFnA75QtmfPMzciDwCn59fIZZ96X8gPHB+g7YL7TQ0cV57DGBMCEa/NR2yV2x
+        YmFD0ahl1OQgMJ0LoN3ySK0KPxkdu4snKkHz1RwH/iNkJUe/HTKFRtj19btirDVe1bAm8v8
 X-QQ-GoodBg: 0
 From:   Jilin Yuan <yuanjilin@cdjrlc.com>
 To:     wim@linux-watchdog.org, linux@roeck-us.net
 Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jilin Yuan <yuanjilin@cdjrlc.com>
 Subject: [PATCH] drivers/watchdog: fix repeated words in comments
-Date:   Tue, 16 Aug 2022 20:44:58 +0800
-Message-Id: <20220816124458.16843-1-yuanjilin@cdjrlc.com>
+Date:   Tue, 16 Aug 2022 20:45:53 +0800
+Message-Id: <20220816124553.17561-1-yuanjilin@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -49,41 +48,26 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
- Delete the redundant word 'we'.
- Delete the redundant word 'have'.
+ Delete the redundant word 'and'.
 
 Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- drivers/watchdog/dw_wdt.c      | 2 +-
- drivers/watchdog/eurotechwdt.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/watchdog/booke_wdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
-index cd578843277e..3208ce305335 100644
---- a/drivers/watchdog/dw_wdt.c
-+++ b/drivers/watchdog/dw_wdt.c
-@@ -218,7 +218,7 @@ static int dw_wdt_set_timeout(struct watchdog_device *wdd, unsigned int top_s)
- 
- 	/*
- 	 * Set the new value in the watchdog.  Some versions of dw_wdt
--	 * have have TOPINIT in the TIMEOUT_RANGE register (as per
-+	 * have TOPINIT in the TIMEOUT_RANGE register (as per
- 	 * CP_WDT_DUAL_TOP in WDT_COMP_PARAMS_1).  On those we
- 	 * effectively get a pat of the watchdog right here.
- 	 */
-diff --git a/drivers/watchdog/eurotechwdt.c b/drivers/watchdog/eurotechwdt.c
-index ce682942662c..e26609ad4c17 100644
---- a/drivers/watchdog/eurotechwdt.c
-+++ b/drivers/watchdog/eurotechwdt.c
-@@ -192,7 +192,7 @@ static void eurwdt_ping(void)
-  * @ppos: pointer to the position to write. No seeks allowed
-  *
-  * A write to a watchdog device is defined as a keepalive signal. Any
-- * write of data will do, as we we don't define content meaning.
-+ * write of data will do, as we don't define content meaning.
+diff --git a/drivers/watchdog/booke_wdt.c b/drivers/watchdog/booke_wdt.c
+index 5e4dc1a0f2c6..75da5cd02615 100644
+--- a/drivers/watchdog/booke_wdt.c
++++ b/drivers/watchdog/booke_wdt.c
+@@ -74,7 +74,7 @@ static unsigned long long period_to_sec(unsigned int period)
+ /*
+  * This procedure will find the highest period which will give a timeout
+  * greater than the one required. e.g. for a bus speed of 66666666 and
+- * and a parameter of 2 secs, then this procedure will return a value of 38.
++ * a parameter of 2 secs, then this procedure will return a value of 38.
   */
- 
- static ssize_t eurwdt_write(struct file *file, const char __user *buf,
+ static unsigned int sec_to_period(unsigned int secs)
+ {
 -- 
 2.36.1
 
