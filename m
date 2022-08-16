@@ -2,65 +2,99 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C69975954D7
-	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Aug 2022 10:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A2B5954C2
+	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Aug 2022 10:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbiHPISw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 16 Aug 2022 04:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        id S232260AbiHPIOM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 16 Aug 2022 04:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbiHPISL (ORCPT
+        with ESMTP id S232258AbiHPINm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:18:11 -0400
-X-Greylist: delayed 100978 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 15 Aug 2022 23:09:04 PDT
-Received: from ctr727567.novalocal (unknown [103.159.51.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8938C03D
-        for <linux-watchdog@vger.kernel.org>; Mon, 15 Aug 2022 23:09:03 -0700 (PDT)
-Received: from mixterfos by ctr727567.novalocal with local (Exim 4.94.2)
-        (envelope-from <mixterfos@mixterfos.vn>)
-        id 1oNPMc-00D5zh-MT
-        for linux-watchdog@vger.kernel.org; Mon, 15 Aug 2022 08:57:58 +0700
-To:     linux-watchdog@vger.kernel.org
-Subject: =?us-ascii?Q?Framework_Roadthemes_"Apple:_$72,000_per_day_on?=  =?us-ascii?Q?_investments"?=
-X-PHP-Originating-Script: 1005:PHPMailer.php
-Date:   Mon, 15 Aug 2022 01:57:58 +0000
-From:   Framework Roadthemes <wordpress@192.168.1.209>
-Reply-To: demo@roadthemes.com
-Message-ID: <7GbOMIKeVvrQTBBSgScspu1Gly5SEVuewburrwgGXI@mixterfos.vn>
-X-Mailer: PHPMailer 6.4.0 (https://github.com/PHPMailer/PHPMailer)
+        Tue, 16 Aug 2022 04:13:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3313EC68
+        for <linux-watchdog@vger.kernel.org>; Mon, 15 Aug 2022 23:23:48 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oNpzA-0008La-5A; Tue, 16 Aug 2022 08:23:32 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oNpz8-0007Um-9l; Tue, 16 Aug 2022 08:23:30 +0200
+Date:   Tue, 16 Aug 2022 08:23:30 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, kernel@pengutronix.de,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 2/7] watchdog: imx7ulp: Add explict memory barrier for
+ unlock sequence
+Message-ID: <20220816062330.z2fvurteg337krw2@pengutronix.de>
+References: <20220816043643.26569-1-alice.guo@oss.nxp.com>
+ <20220816043643.26569-3-alice.guo@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Authenticated-Id: mixterfos
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DATE_IN_PAST_24_48,
-        HEADER_FROM_DIFFERENT_DOMAINS,LOTS_OF_MONEY,RCVD_IN_VALIDITY_RPBL,
-        RDNS_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_PH_SURBL
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.6 URIBL_PH_SURBL Contains an URL listed in the PH SURBL blocklist
-        *      [URIs: carynconacher.com]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [103.159.51.103 listed in bl.score.senderscore.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 HEADER_FROM_DIFFERENT_DOMAINS From and EnvelopeFrom 2nd level
-        *      mail domains are different
-        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
-        *  1.3 DATE_IN_PAST_24_48 Date: is 24 to 48 hours before Received:
-        *      date
-        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816043643.26569-3-alice.guo@oss.nxp.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Message Body:
-$72,000 per day on cryptocurrency http://breitbart-news.carynconacher.com/bild-news-4310
+On 22-08-16, Alice Guo (OSS) wrote:
+> From: Jacky Bai <ping.bai@nxp.com>
+> 
+> Add explict memory barrier for the wdog unlock sequence.
 
--- 
-This e-mail was sent from a contact form on Roadthemes(http://demo.roadthemes.com/digitech)
+Did you inspected any failures? It's not enough to say what you did, you
+need to specify the why as well.
 
+Regards,
+  Marco
+
+
+> 
+> Suggested-by: Ye Li <ye.li@nxp.com>
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+> Signed-off-by: Alice Guo <alice.guo@nxp.com>
+> Reviewed-by: Ye Li <ye.li@nxp.com>
+> ---
+>  drivers/watchdog/imx7ulp_wdt.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/watchdog/imx7ulp_wdt.c b/drivers/watchdog/imx7ulp_wdt.c
+> index 014f497ea0dc..b8ac0cb04d2f 100644
+> --- a/drivers/watchdog/imx7ulp_wdt.c
+> +++ b/drivers/watchdog/imx7ulp_wdt.c
+> @@ -179,9 +179,13 @@ static int imx7ulp_wdt_init(void __iomem *base, unsigned int timeout)
+>  	int ret;
+>  
+>  	local_irq_disable();
+> +
+> +	mb();
+>  	/* unlock the wdog for reconfiguration */
+>  	writel_relaxed(UNLOCK_SEQ0, base + WDOG_CNT);
+>  	writel_relaxed(UNLOCK_SEQ1, base + WDOG_CNT);
+> +	mb();
+> +
+>  	ret = imx7ulp_wdt_wait(base, WDOG_CS_ULK);
+>  	if (ret)
+>  		goto init_out;
+> -- 
+> 2.17.1
+> 
+> 
+> 
