@@ -2,115 +2,70 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F28595FA6
-	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Aug 2022 17:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D06FD596AFB
+	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Aug 2022 10:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236108AbiHPPy6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 16 Aug 2022 11:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
+        id S234556AbiHQIJj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 17 Aug 2022 04:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236133AbiHPPym (ORCPT
+        with ESMTP id S234581AbiHQIJe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 16 Aug 2022 11:54:42 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9209F7676;
-        Tue, 16 Aug 2022 08:51:02 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id pm17so10088046pjb.3;
-        Tue, 16 Aug 2022 08:51:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=dZzIcHBxE3lkefRICNpDvJxqV+9R54fIIT6t9/ak+2g=;
-        b=F9EtWNSJnp3vj+vG9H74zj9nGRgtw4oOq7NorgJzh8QnbjOeJKFbmQGWQtuTmwYDP7
-         shQStJZWjcuCb47Q3LSfHo3wzDBB+Mmhp57SPYmrtWOqKZ/8LwBI/+JqdOoWotjux7YB
-         Z/jurLogBucIQ71kg3fTWTsiygQI2CQeKV5vy03DwzkzjRUn0tBrCVR+YtrUWIpeVXFv
-         MdYy8lW1g5cka/3FickSLmhGpVWsMXNNlmQqT0gRdOp8Jm9fiX0uVYQ8wjJlTsNeTBb+
-         BaI/FShBA8t7BtyFGVKzI/1hNt2wrYkxOQSCRVeuZTy7kdM9WPr6acHkxMYVXh67Wzby
-         hOCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=dZzIcHBxE3lkefRICNpDvJxqV+9R54fIIT6t9/ak+2g=;
-        b=zugUfIYhv/WGG5PJnKd66M0a1/1jY05lBH3MfU1gUDlxA6SiIImxduJ1LrIqkc6Fgx
-         evuyvGqa0v2Rn/T+ie0TIoqYjt0wUXMoAvLG+qWW0EfzQm3cv93TSRPIgEtG6ukKIjv6
-         aEmdEs3/Ubi+IFGG+oOtD68A7BIc632nDbOb6g0CwQWnVnzZeD6bTMJ/oj0ppIneU7qW
-         d46dIWGVsVBnZjXn5RnJlXJHjvxn9MULGxj7DODpjQqbuYeVdkLAfNnkLF4V6yv7b1JD
-         ovN+tTCvtagQ6iVQCRituxrtkBpkzSePQejWiv9QubXYHOYJfVPc8BDeeK7fjKI0Fgar
-         fyBw==
-X-Gm-Message-State: ACgBeo0RStnJhLeVYMv2cG2kkOECC3piWDekvZ46oSb9gaffGLf3uKaH
-        GXGyWSbxniRdlg0i4JS+YBnRqGi5/ps=
-X-Google-Smtp-Source: AA6agR5l+XM0sK4Q0oxVQSNnOgUdpHQnFaqBzV/ZDNmPbroRtygwjQ7CNdj4aCNlZBleiapWX0H6Vg==
-X-Received: by 2002:a17:902:f70a:b0:170:c5e7:874c with SMTP id h10-20020a170902f70a00b00170c5e7874cmr22252821plo.109.1660665062013;
-        Tue, 16 Aug 2022 08:51:02 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 128-20020a621886000000b0052d200c8040sm8595567pfy.211.2022.08.16.08.51.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Aug 2022 08:51:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 16 Aug 2022 08:50:59 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers/watchdog: fix repeated words in comments
-Message-ID: <20220816155059.GA3310237@roeck-us.net>
-References: <20220816124126.14298-1-yuanjilin@cdjrlc.com>
+        Wed, 17 Aug 2022 04:09:34 -0400
+X-Greylist: delayed 511 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 17 Aug 2022 01:09:30 PDT
+Received: from mail.fadrush.pl (mail.fadrush.pl [54.37.225.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90779CED
+        for <linux-watchdog@vger.kernel.org>; Wed, 17 Aug 2022 01:09:30 -0700 (PDT)
+Received: by mail.fadrush.pl (Postfix, from userid 1002)
+        id DB37522E16; Wed, 17 Aug 2022 08:00:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fadrush.pl; s=mail;
+        t=1660723257; bh=bD6j9gIFU6CLTaCGl0Ow9oeIxtirvTfMeNZSfLEZQ+I=;
+        h=Date:From:To:Subject:From;
+        b=AKjzO4q+eUaYpjReBT4Q8s/lWVdd6sklOcmyIXEe6DvIGmZ9lOl812LOROnYv28hy
+         O0jPcZglFQVuIznSopFnjr/YRgJto37nNB3CuTMGeNBV6y94nrHKyTEOJwVxIxKSSg
+         jzWY7I8UBV3vJYddzsHW0CzbMQe7NjozKlTRBvveB8OP3k6+jrngRqJHCVvPkM3MxN
+         GwGcGLOZWv5rvVXppRiU4poR2FupypETnGWSkYXq7KMiIb/NFF96pp2tWDpn+D0GP4
+         8deLWxkvGS/44ArRcXYw/v029CjHqdKCnTe5pAHLK+D9jhs+TR3l2L7eH91GNNyYtL
+         JPkQR+S4J6w3g==
+Received: by mail.fadrush.pl for <linux-watchdog@vger.kernel.org>; Wed, 17 Aug 2022 08:00:09 GMT
+Message-ID: <20220817064500-0.1.12.8bql.0.38j321eh5a@fadrush.pl>
+Date:   Wed, 17 Aug 2022 08:00:09 GMT
+From:   "Jakub Olejniczak" <jakub.olejniczak@fadrush.pl>
+To:     <linux-watchdog@vger.kernel.org>
+Subject: =?UTF-8?Q?Zwi=C4=99kszenie_p=C5=82ynno=C5=9Bci_finansowej?=
+X-Mailer: mail.fadrush.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816124126.14298-1-yuanjilin@cdjrlc.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 08:41:26PM +0800, Jilin Yuan wrote:
->  Delete the redundant word 'we'.
->  Delete the redundant word 'set'.
-> 
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+Dzie=C5=84 dobry,
 
-I am going to ignore all those patches simply because the subject does
-not mention the affected driver (but does mention the unnecessary
-"drivers"). Really, and I have said that before, if you really have
-to submit those cosmetic patches, at least do it right.
+kontaktuj=C4=99 si=C4=99 z Pa=C5=84stwem, poniewa=C5=BC chcia=C5=82bym za=
+proponowa=C4=87 wygodne rozwi=C4=85zanie, kt=C3=B3re umo=C5=BCliwi Pa=C5=84=
+stwa firmie stabilny rozw=C3=B3j.=20
 
-Guenter
+Konkurencyjne otoczenie wymaga ci=C4=85g=C5=82ego ulepszania i poszerzeni=
+a oferty, co z kolei wi=C4=85=C5=BCe si=C4=99 z konieczno=C5=9Bci=C4=85 i=
+nwestowania. Brak odpowiedniego kapita=C5=82u powa=C5=BCnie ogranicza tem=
+po rozwoju firmy.
 
-> ---
->  drivers/watchdog/wdt_pci.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/watchdog/wdt_pci.c b/drivers/watchdog/wdt_pci.c
-> index d5e56b601351..a5fed7ea0243 100644
-> --- a/drivers/watchdog/wdt_pci.c
-> +++ b/drivers/watchdog/wdt_pci.c
-> @@ -347,7 +347,7 @@ static irqreturn_t wdtpci_interrupt(int irq, void *dev_id)
->   *	@ppos: pointer to the position to write. No seeks allowed
->   *
->   *	A write to a watchdog device is defined as a keepalive signal. Any
-> - *	write of data will do, as we we don't define content meaning.
-> + *	write of data will do, as we don't define content meaning.
->   */
->  
->  static ssize_t wdtpci_write(struct file *file, const char __user *buf,
-> @@ -443,7 +443,7 @@ static long wdtpci_ioctl(struct file *file, unsigned int cmd,
->   *	open and on opening we load the counters. Counter zero is a 100Hz
->   *	cascade, into counter 1 which downcounts to reboot. When the counter
->   *	triggers counter 2 downcounts the length of the reset pulse which
-> - *	set set to be as long as possible.
-> + *	set to be as long as possible.
->   */
->  
->  static int wdtpci_open(struct inode *inode, struct file *file)
-> -- 
-> 2.36.1
-> 
+Od wielu lat z powodzeniem pomagam firmom w uzyskaniu najlepszej formy fi=
+nansowania z banku oraz UE. Mam sta=C5=82ych Klient=C3=B3w, kt=C3=B3rzy n=
+adal ch=C4=99tnie korzystaj=C4=85 z moich us=C5=82ug, a tak=C5=BCe poleca=
+j=C4=85 je innym.
+
+Czy chcieliby Pa=C5=84stwo skorzysta=C4=87 z pomocy wykwalifikowanego i d=
+o=C5=9Bwiadczonego doradcy finansowego?
+
+
+Pozdrawiam
+Jakub Olejniczak
