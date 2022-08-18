@@ -2,223 +2,243 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AC859867E
-	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Aug 2022 16:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3255986E0
+	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Aug 2022 17:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343733AbiHROwf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 18 Aug 2022 10:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
+        id S1344008AbiHRPG4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 18 Aug 2022 11:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343708AbiHROwe (ORCPT
+        with ESMTP id S1344150AbiHRPGy (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 18 Aug 2022 10:52:34 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2079.outbound.protection.outlook.com [40.107.102.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A36BC831;
-        Thu, 18 Aug 2022 07:52:32 -0700 (PDT)
+        Thu, 18 Aug 2022 11:06:54 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2080.outbound.protection.outlook.com [40.107.212.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF6877554;
+        Thu, 18 Aug 2022 08:06:52 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Roi7654wtdjZEZNE9bFPaM+p/2QbBwJdr3RSnDS9OL6CeLbYFiD35ewYMZ+U88I6RccHyqcR3ptMmOvTZjk5EAts0dXfQEBDOG/3qtsiGeAftZqO8v+UHmiJvJyHzI5ecF9cpfeWq4vxG7hyPHOq/Vm3C9+izWrj5sFUkhELws06hBXNF1No3HuC0u7RL+WDCNGCKlzQgQvHyjj2C3fC7fAk/2h6KZh2NV9G4jWxNRDRix19pXfoapbJ7TfpekBQ3Gz9zaMcbBAyk1WGoXL8NjYmqOTn4VyyYvqy655yyOFIs32kv8XD8SudjtLUUJYD+Ju8aU8bFSrdpi2I/FKLZg==
+ b=Q8rmfXkfOI+vgbShaeok3R65bLFiqjXcEgkvLSieu0kmbqcevg4/7h68QBGLw/cQcHtRJLNFITD9iNMdYCSMYDhtO8BH6SFJKlwlFcvYIUrACb6KsJlXDDx/fyo5RgIVbX3XN7Lg9sout3r/o3rZGzU00CWlrk7pN+r1kncf+AB/7C7O760cYDIDS6rl58iaiMq+oyNWm8cpTwHaVEbs2cUnTzleShoIrq24+H0PBsTiwlRvywkzl22a6y+VL33UjnDx35wvElAPU5HSFISUg2sHE5wQGAPwgpJxS5GuNJNWDD4FK7naTKqIRbn3TCZO8mHhbR+QMkvw4GVHOyvMuA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JLWlPdwS9JwXBtNYTWDXHvH3O4J8+x+puuVXpbalsv8=;
- b=WrFx3gd0IdD0nJbeP3Ni2YqITISr57Rf4bOhHl4qsGa+KZ/ryb7n6hQQoYiSU/0DNcpJcrsQoNdKwowKnHKjbJZb42+WjkV6fvpcaeZTxYN+mof1988lOsh/+NNgPAHz8nEe3SSoTFeLZsYsLleD4ItHUUJI9dBN++dmk0uY8WU22+fMAOUQ383W4OPuTF/5Xh1wMg2BFuh+8KDo1PAPRPgbc+hkJr8cfGXaJqTKlXBOsXLUOzsRNAppxl6aCOYbxml0RaH/itntjcdyzhQIwInyO+zbnoYuMQnzI7YUzuBp6D2FlbSuVQJDu+qsgA74l2U/mVUVu6D7DrzjzJ1AXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=tg4DJCjOA/zkWLnbAoEaUxIQxBhEHzCCNXce2UuRXeo=;
+ b=Xrp/LVKftjR9CJLwZkE+BOVTwgnBP3amNHbwfWUftdtQpyJteb/JHYNQPSQ+hGnuecc0Il0PckWiJ/n7IpAi6y83xhGrap0Go+7Hhs68JZ9kKddvPczYaMJxxIjz2kjPh7y/ooXrA/Ix9ZYWplp7jo0I404H2Pr8RR+9qu9yum5lWeiDfPo84N/CdKFAQox8Bdx+HNYhJGv/q9q2xWbWlRXhDhba9zb2M4KGw6fxrBao2CVeRUUknm8d+4rZapJ3lJ+Njul8zL6N9h3AwiOyNpLzW/U+cuSREqCY89erBNNIoE4PG+zK/+h5YGtYAYejIl4viQhXHCuI0tUx4ytEUQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JLWlPdwS9JwXBtNYTWDXHvH3O4J8+x+puuVXpbalsv8=;
- b=k5DTGOKSDdxoyU4APcU0hZ3WCUuhgWwHXds1o8/F39+tOm7/71N9+lF9SLt2Vz8UNCADjBStiv0PZMXz717yDB8LoC6wzRUbXCUfguhNJTHRsBRRBPiu1Q08jYnDDEWXPdGx0OpYHlTO9c4phtMZrk5k67NTICULOAMrB4E02sc=
-Received: from BY5PR12MB4033.namprd12.prod.outlook.com (2603:10b6:a03:213::22)
- by DM6PR12MB4369.namprd12.prod.outlook.com (2603:10b6:5:2a1::9) with
+ bh=tg4DJCjOA/zkWLnbAoEaUxIQxBhEHzCCNXce2UuRXeo=;
+ b=Ua9BQaoY+kcTYQ48inbXXMPDXVZMFWQb1nBUlJGMZimAYfNYMVoPfyQzCOL6yn/SuBbNWaq8gQ851HNeonXOKsF957Y2X0PvAOKwiHvqsVUctg+sLGwrXGOiij3GIw7XQlnE1Udojh/1iw9wDlvKJOo62g1iiFA4KTQOvGe7Etg=
+Received: from BN9PR03CA0177.namprd03.prod.outlook.com (2603:10b6:408:f4::32)
+ by CY4PR02MB2678.namprd02.prod.outlook.com (2603:10b6:903:124::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Thu, 18 Aug
- 2022 14:52:29 +0000
-Received: from BY5PR12MB4033.namprd12.prod.outlook.com
- ([fe80::ed39:947f:6d95:63fd]) by BY5PR12MB4033.namprd12.prod.outlook.com
- ([fe80::ed39:947f:6d95:63fd%4]) with mapi id 15.20.5525.011; Thu, 18 Aug 2022
- 14:52:29 +0000
-From:   "Neeli, Srinivas" <srinivas.neeli@amd.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "shubhrajyoti.datta@xilinx.com" <shubhrajyoti.datta@xilinx.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Thu, 18 Aug
+ 2022 15:06:48 +0000
+Received: from BN1NAM02FT049.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:f4:cafe::bc) by BN9PR03CA0177.outlook.office365.com
+ (2603:10b6:408:f4::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.18 via Frontend
+ Transport; Thu, 18 Aug 2022 15:06:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT049.mail.protection.outlook.com (10.13.2.89) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5546.15 via Frontend Transport; Thu, 18 Aug 2022 15:06:47 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 18 Aug 2022 08:06:42 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Thu, 18 Aug 2022 08:06:42 -0700
+Envelope-to: git@xilinx.com,
+ linux@roeck-us.net,
+ krzysztof.kozlowski+dt@linaro.org,
+ wim@linux-watchdog.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org,
+ linux-watchdog@vger.kernel.org,
+ git@amd.com
+Received: from [172.23.66.193] (port=45740 helo=xhdsneeli40u.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <srinivas.neeli@xilinx.com>)
+        id 1oOh6X-0001z5-Rw; Thu, 18 Aug 2022 08:06:42 -0700
+From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
+To:     <linux@roeck-us.net>, <krzysztof.kozlowski+dt@linaro.org>,
+        <wim@linux-watchdog.org>, <michal.simek@xilinx.com>,
+        <shubhrajyoti.datta@xilinx.com>, <srinivas.neeli@xilinx.com>
+CC:     <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "git@xilinx.com" <git@xilinx.com>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "sgoud@xilinx.com" <sgoud@xilinx.com>,
+        <devicetree@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <git@xilinx.com>, <git@amd.com>,
         Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Subject: RE: [PATCH] dt-bindings: Convert Xilinx watchdog bindings to
- json-schema
-Thread-Topic: [PATCH] dt-bindings: Convert Xilinx watchdog bindings to
- json-schema
-Thread-Index: AQHYsv/2CVH3Hn4sqECP9+/6z78ynq20qc6AgAARxVA=
-Date:   Thu, 18 Aug 2022 14:52:29 +0000
-Message-ID: <BY5PR12MB40338603CB399B516C1F2FCC936D9@BY5PR12MB4033.namprd12.prod.outlook.com>
-References: <20220818124207.61313-1-srinivas.neeli@xilinx.com>
- <7f8305ee-d706-a5a3-0691-1aa296a65125@linaro.org>
-In-Reply-To: <7f8305ee-d706-a5a3-0691-1aa296a65125@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 37c60e5e-4e51-4b8a-8e42-08da8129461a
-x-ms-traffictypediagnostic: DM6PR12MB4369:EE_
-x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2KSpLmzhidXRXC6SAn4ZBDjq6LITLWWNsotDj/nWjSj5BNjF7uHVEy8cjoqZq1IU4UkniHvmzmVAlEDOE72ypUtu0IpgW9uBM2O6FXAjFmmLwWjn+hiFKRUBSorAYi4vgwNwGvdARQKkb+pGhPUqJpykXOBxoVpM9aTL7pYSTYbquTWP/T8sjt5rqQ6oXf8MQfp7Y/JMTiRqh/grkYZqMYhlodAJjO/rykQhJ1pkXtffZxF+U0ZLnWMaEi8I5nZa89egXIdyiZNumr9Ba1BKCn4AawoUiNU/igM4t/fmvXiIvGfQy6rvDgBfDtAOBVVb1/lcNSTzGjNE/1L8sxXDtQzcBYRb/jStU0DJKci5I+rFmE8nAGN2eDZCiB7hFCeXJd/45KEwAHmtp+sI0Id9ZRpHDr4ivcm5j5xWpKXvuFEI8mZpRiX2xhweGV6cOAyJEnDdmmJ6h6SPGa/s41zq8WsmEgA7j9uOzZnFx6OqbbgVSesJVxqCujZUPH4NA5CHBg+meQYYWFHQdtdrJszNxKahGCL181v6jSS/1VfLR73JmN7+lfErGzfd9yDKpP4xT1Lbng1oPIhvUGkG0buYNqDCD5GDy4SxeqmM/VUxcrdrx7nCbGj1KmbjPrcfTMaQw7EGqHMJ4aBIVEtL7V9THOfllpQ+Xu9oGgnguBEDIi4JQobVa7vsLgCOsyoBtBXAFNCQUM7FCN/k4WEtrrBmIacRqzW3AdFL2ZVxr3UL2VyrGS6YMJ6H0cmxbL3HOZjSPraUSs3VD4YwOIEHWUJX+Ip2sp+OrZwyRBm6ce44BRiU5hHX+r+eH4bjJB4ftbkgDN8gbBNDyqwXzL18ay5BUQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4033.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(136003)(376002)(396003)(366004)(316002)(2906002)(71200400001)(76116006)(8676002)(66946007)(38070700005)(66556008)(107886003)(66476007)(66446008)(38100700002)(64756008)(54906003)(86362001)(110136005)(122000001)(4326008)(55016003)(5660300002)(52536014)(8936002)(478600001)(83380400001)(966005)(26005)(9686003)(41300700001)(33656002)(186003)(53546011)(7696005)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aGNTMDZoNzRnR2lWOFVoSnA5cVBhOGlGTCsrWHVIRmZVNysrNmJKTU8zQlVI?=
- =?utf-8?B?QmJKRHhZU1NWVTVYTWVveXY0b2hRN08vaGg3bkNVdUZ2SWdDOUlIUThacFBr?=
- =?utf-8?B?aEtiMGVaMVBFeDhoWldlTEt3dEg4S1RhUHV4Z0VNK1VoWHk2ZWxjK1hmMFVU?=
- =?utf-8?B?RW5ud3NVaDg3OFB0TTFVYzlzeXJVaDJ1YTBHRS9tbTJ2OFFPeUxWdDVDVk90?=
- =?utf-8?B?UC85ODNuaWo3djlmemdabHByKzlUS1VXQzVVR1VzZ2NWc3NFc3FRNWpxYkFY?=
- =?utf-8?B?SHF2ZzdpWEZiNmFSSzdMak1KVHFuaTBBMnViZTVnWnZGbFZ6OVdldC9NSmdm?=
- =?utf-8?B?RkZQZ2NXaVhYZU1TQncySVpUaWNkRi95NHd5THQ0YTEzWlhwem5Kd0JZVFlG?=
- =?utf-8?B?bWxJc2FGeDlvZzA3dFN1TExVY2M4c1FHZDBxVDUraWxDMyt1MXRTdkpRSkVz?=
- =?utf-8?B?aW9LeVNRV3JhVUVUWUVLeENYaWtTaXkrYkdXb3g3QzZ4R1JyVjhKeGxqVnFB?=
- =?utf-8?B?cEh5NElvblQ0Q21IK3p2QzVHZHZOdCtiMDhlMVZ0MmZuem5VS2FyT1A5R0pr?=
- =?utf-8?B?ZGU1MkREc0VjS2hrek9jTlVFSjVUR1JHcDdFZTVmaEdxRElwTFZ0SWd6bXZP?=
- =?utf-8?B?aDV1dHZHUnFuWVdpUjNOT1QrNVN3bFFFUm8vSTF4aEc5VVByZXRORjQxUXg3?=
- =?utf-8?B?Nnk3eWEvd3JiMk82emdsQzNmTWcvY1hPTnNQa0x5ZUdQNElENzY5WFcrSkxF?=
- =?utf-8?B?bm90S00yV054bmQzaVMxdjRReTRrWnNJbTlQWDUwZUcya1ZFVUhXRzlGRW93?=
- =?utf-8?B?VkJSU2VsVlF3RENabFB2eHUzK3J0WGNYYVJ0VTdudjZNME5Eb1d5em54NzM5?=
- =?utf-8?B?cFNjaC91ak95dXNjdklYbGVLUXhsRTcybDUyZjJ0S3dTUHdCK2pvOXgvZXpP?=
- =?utf-8?B?MXplRG4wZWk5UjlrMmZ3d3c3N24zeDgxN092Z3lwdEt1cDNrQUQvS0Q5aFdF?=
- =?utf-8?B?SmprN1lSNUFTaDF2VkVlNEp0YTdoZm81WDM5VW05RWRKL0JpMFhyQWp2QW14?=
- =?utf-8?B?dGgwSGxTcUxCMzRZS2dHSk83WEk1TkllOWNHcUp1Znp4MTZPWFBISEFkV0Fy?=
- =?utf-8?B?bXF1U3pKWGxYRnpKekszMytOVnZLZ3BITXBRRFUzdkxtRi9xeWJkZEpsdTdy?=
- =?utf-8?B?aDdEZEozdU5kZ3ZHSHJhY05ENFBTWjZENS8yeFpMeWFCakhKNzZxNXhzTGhR?=
- =?utf-8?B?SnVIREVtVzAxWG1zUGM0VkZBZjhQSDI0SjBIdkJXT2RPRm9mcjNkS2ZoMmJU?=
- =?utf-8?B?eWxpVkZwbStCZSswWGJXZUNES2VyU1FyU09uZnFIODNod0c4dm1KR1F5Z0dm?=
- =?utf-8?B?RjRSRGQzclNTQUkvM1ZaRkFaR0YrVnMzTktpNHN3OFZFbCtQVVkvb0p6eCtt?=
- =?utf-8?B?azZOWUxHOWlrbW81K0JCV2huMGZaY0t1c1N1dHpTL3RFc1crQWJQZ3cyVDE3?=
- =?utf-8?B?T2ZwNlhmT2RIYmZkREFFQnVWdDcvSEtXTkNIWGFVNHVtd3ZSRkVoUHFEb0hU?=
- =?utf-8?B?SWRKWE8wVER3RXY0anpzb2VSYStTcGJLTUFHUkFkQmFSV2srbUJKZmdKWmpl?=
- =?utf-8?B?OEgrSlFQTXVzOGdSMmU3c1Q3RFZxdi9WZmNlZDFSLy9uNG1mTHJaV1ZOUlNC?=
- =?utf-8?B?TUZDZ3B3MVVNNjBDaGo5a005OU11WTM3Qzd6VW9VNVJ2VnBTSGNBR3RsU2J2?=
- =?utf-8?B?Nm1JajE4UTRFMXhaNXhyWHM4Mm8vTWkwdFFneWt0eDJYclkxbVZ0WmlINzdk?=
- =?utf-8?B?RWU3K3o2eFhXNWxrb0xWdTJ0M3dpTXVxbTZmNVhlcitrQXpwR3BrdTdpbkdF?=
- =?utf-8?B?elRnY3FtN1NPdHA1aFdEOHVXZi9KOGgwM1ljR3dZSTBTRkJ6S25MSzBUT0RB?=
- =?utf-8?B?SG9jcTg1Zy9oNVlLTHRrZkM4UDRPeG1EYXFJY3pQK24rUjFsaGF3WVlDSDVM?=
- =?utf-8?B?RXBqM1RBTFpiWG5Zb0MvWXRyWHUzQ2p5Vjg1UFk0dmpLMmhmV1ZTbGhURGRn?=
- =?utf-8?B?Y3pNdHZBcFZWSTRMU3U4cG5meVRtMUUxK1Rxbjh6enZIWnpsbG5ReXVmWmpH?=
- =?utf-8?Q?6fHM=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Subject: [PATCH V2] dt-bindings: watchdog: Convert Xilinx watchdog bindings to json-schema
+Date:   Thu, 18 Aug 2022 20:36:37 +0530
+Message-ID: <20220818150637.815-1-srinivas.neeli@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4033.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37c60e5e-4e51-4b8a-8e42-08da8129461a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Aug 2022 14:52:29.5973
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1e474de7-9bec-4382-271d-08da812b45d1
+X-MS-TrafficTypeDiagnostic: CY4PR02MB2678:EE_
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: D/cjwekRlnHeOAJpJ13aEynpOYODjL6fBUeIqfLD1XPu8f/oxMdnVeWNJielzOsj8RzsJC8G11ePQAWVEi67RuG0/jiQJAsZO8mFNvbZziGO3IW9gDiwm7dstX4I5hcU+Nyz+G1M2hYXNvgD6fmpWwIGLe9CFcsHZLymfMdzEJYG9d+MoHRR0tSDpWr377RsXSP7kjkt6MiOqUn5BPWmgiS4LNAr9KhCYXeL8vLg4FEx+rI1I+eCL7bN3aVhPPskPJK1fI0YXkSoxRVUMpwLaSULDsWdSX9HsjbT3xWy2uSlPFjOdt7LvXTL4BcSApGOT1GOxxePL46p81B0ypEkLyX0hx1BR9dMIiprg/xIqvZF1RjAaeygBHVHAgvGtp9UipzKFPXrbuR5uRd3Q2L6omeJSmqmybfmhBEBHlrL1uUOrD9uKL7glLfrOnJSvo34KLAzfcQzImhVn0tQhGXKUJP7vSij3MHRD9xJFGR6H8Z66p8P+zj/R0h9tTw6ogRNUvVoUEYMxSZBaYG+0bgCGfcCz1EFRi3Xn67539MlxYaLCTue2TY+F551qt2agLuwH70/sOctrSnDPJb5K7JEILRgIi8Y4O1Z894nJEuiS0fQNEigmdlHkpJUSK2mkshSRkHBl1wCl3pNTI+gEOIglMIiLWwvrD0VijKJQoqVyy0syB3nm2sXIHwe30PztEfkWvN2RO5vzI8Ks48kP2l6jinkm77Q6CLoLOifB2DbeP12jX05dx66t2Lxn3zwzGDyWkRaPhGToBA4mH5g306D1jY5Zc05HCsAzBLnHfCq3r2lKaJwdLVVtTQ4epywUU8LKG8Q8cypjvLNhRXDuI9yaQ==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(346002)(39860400002)(136003)(40470700004)(46966006)(36840700001)(6666004)(7696005)(478600001)(966005)(26005)(41300700001)(83380400001)(36860700001)(186003)(336012)(426003)(1076003)(2616005)(47076005)(107886003)(44832011)(2906002)(8936002)(5660300002)(9786002)(40460700003)(82310400005)(40480700001)(54906003)(110136005)(316002)(70206006)(70586007)(4326008)(8676002)(7049001)(7636003)(356005)(82740400003)(36756003)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2022 15:06:47.9852
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hqU3H44kNCh22Elzk3ZwGGMYVfu1OVhHho6Eqq5gGl9rPWfAHCxKQIRQOMySTufY
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4369
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e474de7-9bec-4382-271d-08da812b45d1
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT049.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR02MB2678
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-SGksDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS3J6eXN6dG9mIEtv
-emxvd3NraSA8a3J6eXN6dG9mLmtvemxvd3NraUBsaW5hcm8ub3JnPg0KPiBTZW50OiBUaHVyc2Rh
-eSwgQXVndXN0IDE4LCAyMDIyIDc6MDkgUE0NCj4gVG86IFNyaW5pdmFzIE5lZWxpIDxzcmluaXZh
-cy5uZWVsaUB4aWxpbnguY29tPjsgbGludXhAcm9lY2stdXMubmV0Ow0KPiBrcnp5c3p0b2Yua296
-bG93c2tpK2R0QGxpbmFyby5vcmc7IHdpbUBsaW51eC13YXRjaGRvZy5vcmc7DQo+IG1pY2hhbC5z
-aW1la0B4aWxpbnguY29tOyBzaHViaHJhanlvdGkuZGF0dGFAeGlsaW54LmNvbQ0KPiBDYzogbGlu
-dXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRl
-YWQub3JnOw0KPiBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsgbGludXgtd2F0Y2hkb2dAdmdl
-ci5rZXJuZWwub3JnOw0KPiBnaXRAeGlsaW54LmNvbTsgZ2l0IChBTUQtWGlsaW54KSA8Z2l0QGFt
-ZC5jb20+OyBzZ291ZEB4aWxpbnguY29tOyBSYWRoZXkNCj4gU2h5YW0gUGFuZGV5IDxyYWRoZXku
-c2h5YW0ucGFuZGV5QHhpbGlueC5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIGR0LWJpbmRp
-bmdzOiBDb252ZXJ0IFhpbGlueCB3YXRjaGRvZyBiaW5kaW5ncyB0byBqc29uLQ0KPiBzY2hlbWEN
-Cj4gDQo+IE9uIDE4LzA4LzIwMjIgMTU6NDIsIFNyaW5pdmFzIE5lZWxpIHdyb3RlOg0KPiA+IENv
-bnZlcnQgWGlsaW54IHdhdGNoZG9nIGJpbmRpbmdzIHRvIERUIHNjaGVtYSBmb3JtYXQgdXNpbmcg
-anNvbi1zY2hlbWENCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFNodWJocmFqeW90aSBEYXR0YSA8
-c2h1YmhyYWp5b3RpLmRhdHRhQHhpbGlueC5jb20+DQo+ID4gU2lnbmVkLW9mZi1ieTogUmFkaGV5
-IFNoeWFtIFBhbmRleSA8cmFkaGV5LnNoeWFtLnBhbmRleUB4aWxpbnguY29tPg0KPiANCj4gVXNl
-IHN1YmplY3QgcGVyZml4ZXMgbWF0Y2hpbmcgdGhlIHN1YnN5c3RlbSAoZ2l0IGxvZyAtLW9uZWxp
-bmUgLS0gLi4uKS4NCldpbGwgdXBkYXRlIGluIHYyLg0KDQo+IA0KPiANCj4gPiBkaWZmIC0tZ2l0
-DQo+ID4gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cveGxueCx4
-cHMtdGltZWJhc2UueWFtbA0KPiA+IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
-L3dhdGNoZG9nL3hsbngseHBzLXRpbWViYXNlLnlhbWwNCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0
-NA0KPiA+IGluZGV4IDAwMDAwMDAwMDAwMC4uZmQyZTNmMmRmNTRjDQo+ID4gLS0tIC9kZXYvbnVs
-bA0KPiA+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy93YXRjaGRvZy94
-bG54LHhwcy0NCj4gdGltZWJhc2UueWFtDQo+ID4gKysrIGwNCj4gDQo+IHhsbngseHBzLXRpbWVi
-YXNlLXdkdC55YW1sDQo+IChuYW1lIHNob3VsZCBiZSBtYXRjaGluZyBjb21wYXRpYmxlcykNCk9r
-LCBXaWxsIHVwZGF0ZSBpbiBWMi4NCg0KPiANCj4gPiBAQCAtMCwwICsxLDcxIEBADQo+ID4gKyMg
-U1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAtb3ItbGF0ZXIgT1IgQlNELTItQ2xhdXNl
-ICVZQU1MIDEuMg0KPiA+ICstLS0NCj4gPiArJGlkOiBodHRwOi8vZGV2aWNldHJlZS5vcmcvc2No
-ZW1hcy93YXRjaGRvZy94bG54LHhwcy10aW1lYmFzZS55YW1sIw0KPiA+ICskc2NoZW1hOiBodHRw
-Oi8vZGV2aWNldHJlZS5vcmcvbWV0YS1zY2hlbWFzL2NvcmUueWFtbCMNCj4gPiArDQo+ID4gK3Rp
-dGxlOiBYaWxpbnggQVhJL1BMQiBzb2Z0Y29yZSBhbmQgd2luZG93IFdhdGNoZG9nIFRpbWVyDQo+
-ID4gKw0KPiA+ICthbGxPZjoNCj4gPiArICAtICRyZWY6ICJ3YXRjaGRvZy55YW1sIyINCj4gDQo+
-IE5vIG5lZWQgZm9yIHF1b3Rlcy4gUHV0IHRoZSBhbGxPZiBqdXN0IGFib3ZlICJwcm9wZXJ0aWVz
-Ii4NCk9rLCB3aWxsIHVwZGF0ZSBpbiBWMi4NCg0KPiANCj4gPiArDQo+ID4gK21haW50YWluZXJz
-Og0KPiA+ICsgIC0gU2h1YmhyYWp5b3RpIERhdHRhIDxzaHViaHJhanlvdGkuZGF0dGFAeGlsaW54
-LmNvbT4NCj4gPiArICAtIFNyaW5pdmFzIE5lZWxpIDxzcmluaXZhcy5uZWVsaUB4aWxpbnguY29t
-Pg0KPiA+ICsNCj4gPiArZGVzY3JpcHRpb246DQo+ID4gKyAgVGhlIFRpbWViYXNlIHdhdGNoZG9n
-IHRpbWVyKFdEVCkgaXMgYSBmcmVlLXJ1bm5pbmcgMzIgYml0IGNvdW50ZXIuDQo+ID4gKyAgV0RU
-IHVzZXMgYSBkdWFsLWV4cGlyYXRpb24gYXJjaGl0ZWN0dXJlLiBBZnRlciBvbmUgZXhwaXJhdGlv
-biBvZg0KPiA+ICsgIHRoZSB0aW1lb3V0IGludGVydmFsLCBhbiBpbnRlcnJ1cHQgaXMgZ2VuZXJh
-dGVkIGFuZCB0aGUgV0RUIHN0YXRlDQo+ID4gKyAgYml0IGlzIHNldCB0byBvbmUgaW4gdGhlIHN0
-YXR1cyByZWdpc3Rlci4gSWYgdGhlIHN0YXRlIGJpdCBpcyBub3QNCj4gPiArICBjbGVhcmVkIChi
-eSB3cml0aW5nIGEgb25lIHRvIHRoZSBzdGF0ZSBiaXQpIGJlZm9yZSB0aGUgbmV4dA0KPiA+ICsg
-IGV4cGlyYXRpb24gb2YgdGhlIHRpbWVvdXQgaW50ZXJ2YWwsIGEgV0RUIHJlc2V0IGlzIGdlbmVy
-YXRlZC4NCj4gPiArDQo+ID4gK3Byb3BlcnRpZXM6DQo+ID4gKyAgY29tcGF0aWJsZToNCj4gPiAr
-ICAgIG9uZU9mOg0KPiANCj4gVGhlcmUgaXMgbm8gb3RoZXIgb3B0aW9uLCBzbyBubyBuZWVkIGZv
-ciBvbmVPZi4NCj4gDQo+ID4gKyAgICAgIC0gaXRlbXM6DQo+IA0KPiBZb3UgZG8gbm90IGhhdmUg
-aXRlbXMsIGp1c3Qgb25lIGl0ZW0uIERyb3AgaXRlbXMgYXMgd2VsbC4NCk9rLCB3aWxsIHVwZGF0
-ZSBpbiBWMi4NCg0KPiANCj4gPiArICAgICAgICAgIC0gZW51bToNCj4gPiArICAgICAgICAgICAg
-ICAtIHhsbngseHBzLXRpbWViYXNlLXdkdC0xLjAxLmENCj4gPiArICAgICAgICAgICAgICAtIHhs
-bngseHBzLXRpbWViYXNlLXdkdC0xLjAwLmENCj4gPiArDQo+ID4gKyAgcmVnOg0KPiA+ICsgICAg
-bWF4SXRlbXM6IDENCj4gPiArDQo+ID4gKyAgY2xvY2tzOg0KPiA+ICsgICAgbWluSXRlbXM6IDEN
-Cj4gDQo+IGluc3RlYWQgbWF4SXRlbXMNCk9rLCB3aWxsIHVwZGF0ZSBpbiBWMi4NCg0KPiANCj4g
-PiArDQo+ID4gKyAgY2xvY2stZnJlcXVlbmN5Og0KPiA+ICsgICAgJHJlZjogL3NjaGVtYXMvdHlw
-ZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyDQo+IA0KPiBObyBuZWVkIGZvciByZWYuIFRoaXMg
-aXMgYSBzdGFuZGFyZCBwcm9wZXJ0eS4NCk9rLCB3aWxsIHVwZGF0ZSBpbiBWMi4NCj4gDQo+ID4g
-KyAgICBkZXNjcmlwdGlvbjogRnJlcXVlbmN5IG9mIGNsb2NrIGluIEh6DQo+IA0KPiBXb3VsZCBi
-ZSB1c2VmdWwgdG8gYWRkIGNvbnN0cmFpbnRzIChtaW5pbXVtL21heGltdW0gYW5kIGRlZmF1bHQp
-LCBidXQNCj4gdGhhdCdzIG5vdCBhIGJpZyBkZWFsLg0KDQpUaGVyZSBpcyBubyBsaW1pdCB0byBt
-aW5pbXVtIGFuZCBtYXhpbXVtIHZhbHVlcy4gU28gbm90IGFkZGluZyBjb25zdHJhaW50cy4NCj4g
-DQo+ID4gKw0KPiA+ICsgIHhsbngsd2R0LWludGVydmFsOg0KPiA+ICsgICAgJHJlZjogL3NjaGVt
-YXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDMyDQo+ID4gKyAgICBkZXNjcmlwdGlvbjog
-V2F0Y2hkb2cgdGltZW91dCBpbnRlcnZhbA0KPiA+ICsgICAgbWluaW11bTogOA0KPiA+ICsgICAg
-bWF4aW11bTogMzINCj4gPiArDQo+ID4gKyAgeGxueCx3ZHQtZW5hYmxlLW9uY2U6DQo+ID4gKyAg
-ICAkcmVmOiAvc2NoZW1hcy90eXBlcy55YW1sIy9kZWZpbml0aW9ucy91aW50MzINCj4gPiArICAg
-IGVudW06IFswLCAxXQ0KPiA+ICsgICAgZGVzY3JpcHRpb246IElmIHdhdGNoZG9nIGlzIGNvbmZp
-Z3VyZWQgYXMgZW5hYmxlIG9uY2UsDQo+ID4gKyAgICAgICAgICAgICAgICAgdGhlbiB0aGUgd2F0
-Y2hkb2cgY2Fubm90IGJlIGRpc2FibGVkIGFmdGVyDQo+ID4gKyAgICAgICAgICAgICAgICAgaXQg
-aGFzIGJlZW4gZW5hYmxlZC4NCj4gPiArDQo+ID4gK3JlcXVpcmVkOg0KPiA+ICsgIC0gY29tcGF0
-aWJsZQ0KPiA+ICsgIC0gcmVnDQo+ID4gKw0KPiA+ICt1bmV2YWx1YXRlZFByb3BlcnRpZXM6IGZh
-bHNlDQo+ID4gKw0KPiA+ICtleGFtcGxlczoNCj4gPiArICAtIHwNCj4gPiArICAgIHdhdGNoZG9n
-QDQwMTAwMDAwIHsNCj4gPiArICAgICAgY29tcGF0aWJsZSA9ICJ4bG54LHhwcy10aW1lYmFzZS13
-ZHQtMS4wMC5hIjsNCj4gPiArICAgICAgcmVnID0gPDB4NDAxMDAwMDAgMHgxMDAwPjsNCj4gPiAr
-ICAgICAgY2xvY2stZnJlcXVlbmN5ID0gPDUwMDAwMDAwPjsNCj4gPiArICAgICAgY2xvY2tzID0g
-PCZjbGtjIDE1PjsNCj4gPiArICAgICAgeGxueCx3ZHQtZW5hYmxlLW9uY2UgPSA8MHgwPjsNCj4g
-PiArICAgICAgeGxueCx3ZHQtaW50ZXJ2YWwgPSA8MHgxYj47DQo+ID4gKyAgICB9IDsNCj4gDQo+
-IE5vIG5lZWQgZm9yIHNwYWNlIGFmdGVyICc7Jw0KT2ssIHdpbGwgdXBkYXRlIGluIFYyLg0KDQpU
-aGFua3MNCk5lZWxpIFNyaW5pdmFzDQo+IA0KPiANCj4gDQo+IEJlc3QgcmVnYXJkcywNCj4gS3J6
-eXN6dG9mDQo=
+Convert Xilinx watchdog bindings to DT schema format using json-schema
+
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
+---
+Changes in V2:
+- Updated file name with compatible.
+- Added subsystem name in subject prefix.
+- Address minior comments.
+---
+ .../bindings/watchdog/of-xilinx-wdt.txt       | 26 -------
+ .../watchdog/xlnx,xps-timebase-wdt.yaml       | 68 +++++++++++++++++++
+ 2 files changed, 68 insertions(+), 26 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
+
+diff --git a/Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt b/Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
+deleted file mode 100644
+index c6ae9c9d5e3e..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
++++ /dev/null
+@@ -1,26 +0,0 @@
+-Xilinx AXI/PLB soft-core watchdog Device Tree Bindings
+----------------------------------------------------------
+-
+-Required properties:
+-- compatible		: Should be "xlnx,xps-timebase-wdt-1.00.a" or
+-			  "xlnx,xps-timebase-wdt-1.01.a".
+-- reg			: Physical base address and size
+-
+-Optional properties:
+-- clocks		: Input clock specifier. Refer to common clock
+-			  bindings.
+-- clock-frequency	: Frequency of clock in Hz
+-- xlnx,wdt-enable-once	: 0 - Watchdog can be restarted
+-			  1 - Watchdog can be enabled just once
+-- xlnx,wdt-interval	: Watchdog timeout interval in 2^<val> clock cycles,
+-			  <val> is integer from 8 to 31.
+-
+-Example:
+-axi-timebase-wdt@40100000 {
+-	clock-frequency = <50000000>;
+-	compatible = "xlnx,xps-timebase-wdt-1.00.a";
+-	clocks = <&clkc 15>;
+-	reg = <0x40100000 0x10000>;
+-	xlnx,wdt-enable-once = <0x0>;
+-	xlnx,wdt-interval = <0x1b>;
+-} ;
+diff --git a/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml b/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
+new file mode 100644
+index 000000000000..493a1c954707
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
+@@ -0,0 +1,68 @@
++# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/xlnx,xps-timebase-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Xilinx AXI/PLB softcore and window Watchdog Timer
++
++maintainers:
++  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
++  - Srinivas Neeli <srinivas.neeli@xilinx.com>
++
++description:
++  The Timebase watchdog timer(WDT) is a free-running 32 bit counter.
++  WDT uses a dual-expiration architecture. After one expiration of
++  the timeout interval, an interrupt is generated and the WDT state
++  bit is set to one in the status register. If the state bit is not
++  cleared (by writing a one to the state bit) before the next
++  expiration of the timeout interval, a WDT reset is generated.
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    enum:
++      - xlnx,xps-timebase-wdt-1.01.a
++      - xlnx,xps-timebase-wdt-1.00.a
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-frequency:
++    description: Frequency of clock in Hz
++
++  xlnx,wdt-interval:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Watchdog timeout interval
++    minimum: 8
++    maximum: 32
++
++  xlnx,wdt-enable-once:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0, 1]
++    description: If watchdog is configured as enable once,
++                 then the watchdog cannot be disabled after
++                 it has been enabled.
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    watchdog@40100000 {
++      compatible = "xlnx,xps-timebase-wdt-1.00.a";
++      reg = <0x40100000 0x1000>;
++      clock-frequency = <50000000>;
++      clocks = <&clkc 15>;
++      xlnx,wdt-enable-once = <0x0>;
++      xlnx,wdt-interval = <0x1b>;
++    };
++...
+-- 
+2.17.1
+
