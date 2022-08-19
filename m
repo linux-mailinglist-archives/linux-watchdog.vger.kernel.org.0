@@ -2,123 +2,94 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8562F599B4B
-	for <lists+linux-watchdog@lfdr.de>; Fri, 19 Aug 2022 13:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EAB9599BEA
+	for <lists+linux-watchdog@lfdr.de>; Fri, 19 Aug 2022 14:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347592AbiHSLoz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 19 Aug 2022 07:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
+        id S1348513AbiHSMXx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 19 Aug 2022 08:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347719AbiHSLoy (ORCPT
+        with ESMTP id S1348481AbiHSMXs (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 19 Aug 2022 07:44:54 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07706C2763;
-        Fri, 19 Aug 2022 04:44:52 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id w138so1478167pfc.10;
-        Fri, 19 Aug 2022 04:44:52 -0700 (PDT)
+        Fri, 19 Aug 2022 08:23:48 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730A9647C8
+        for <linux-watchdog@vger.kernel.org>; Fri, 19 Aug 2022 05:23:47 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id t5so654085lfk.3
+        for <linux-watchdog@vger.kernel.org>; Fri, 19 Aug 2022 05:23:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=UCWqtLC1yYug912P/xJZXTJO6IcyX8bpF1RM7XJlaA4=;
-        b=LBXZTKaoBUH+ULwwdTRqW7STUr819eXN+/NMdPNxP+5tEbdZ6FxlaikH6UCkpr72XN
-         dXX0LxEt5egGP1IXKhQc84rS+ZgQHD+ve58/pw7tsfdQwf0BAozP+jWQjvfG8QvE8oDK
-         +wkS0I1D4u//cpAXd06OVcrRleAS0TXi2042Fgmmx5oF71mncxDjNy/8Ff7oSzrDvrx5
-         liSSJQAn80C4GdCiNuBYVVzjSpIf5af5RoueihAyt/AHUJbBltK7D5HEKBIBBMCb5mwk
-         RjKZE/7nNP/3xb9sQ+vz778brQVkboSN5YVQAd12n40WZMxnvOSvIdqq6FHzsyLvM3hh
-         2duw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=tt9vafUX/Kn5vikUIbARAwpRfz7CA43/+P3+92uSot0=;
+        b=ApWpfItnlRqio9CZwo1CuFAyGsKPkHFVV1c6A/YqKCXugKI7cS4vk1FjDUEE3bzT/L
+         6EA5jinRfEP6QplG1pZwdMaHdcVhGJO8H7p2qI1Iecu/eYZaO33/x+WrnQjJfUrJofW+
+         q4LS5GUUDUX7i5GDcwpQ+D/Pm+brEu7XJZLyEsUkdy6c64YknzEVuRc5sRvUDoYm2FqA
+         Slv54YG9VR1SwpEamtPbd7xSkhzVQX86SIVHlkEOYO7q9enLsH0yyFcH5YUBPs0nYq+J
+         zw9cpx78Jo4+vgGzCEMEYkTQuvz/jWd2ZGjPEB3XYC4+0Aenoed4na39IU8sAVUupV1T
+         /scw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=UCWqtLC1yYug912P/xJZXTJO6IcyX8bpF1RM7XJlaA4=;
-        b=lABxLsCES1j6MkX4vZFiDw9gxC/M+np2c6Slace2etii78bBXgVxav19EvThaAJ70f
-         Qt5DsV/596rrwUCZXdQ2rsDH7oEBAhNM3VeYHfEUdmy7Tf61uY9LLYwnIYlMnuWTAd/n
-         MdrYVB63zKOwUFmHBQja3P5NHfZcwuo2uH3fzrgJq5V7AWMxyJBSiXu7b7h7yM1UcQQH
-         ofLKo/Xphj3uZ5dVoS12HMuIFCGwP23awmwkEHyxQP+ehA0PaS9HbwCxUbfX4N4rsTg/
-         tP58wwJRI6eilu4Y8plag3QG2RPxD3d6bVsnpvWFcpgzme58CdrvW4QlCCqYObwdkviG
-         N7Ww==
-X-Gm-Message-State: ACgBeo0MgHKkQu5UYUyt+X4TPw0j1UoYwLZDyHZyyf/qAAwge3cnJ097
-        8oLRvFZqWT5HxDf1lqSuVlwkQwTd3U8=
-X-Google-Smtp-Source: AA6agR7CbiVFbWALuy4dvNt5DjW422IoGaxOs/+ufjJr9mtOmCjJQ90/G+ZsrjghuJAhrL0WMIqN0A==
-X-Received: by 2002:a65:6d1a:0:b0:3fb:2109:7b87 with SMTP id bf26-20020a656d1a000000b003fb21097b87mr5869447pgb.127.1660909491496;
-        Fri, 19 Aug 2022 04:44:51 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q62-20020a17090a1b4400b001f4cc17b451sm5030849pjq.5.2022.08.19.04.44.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Aug 2022 04:44:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 19 Aug 2022 04:44:49 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-Cc:     wim@linux-watchdog.org, joel@jms.id.au, andrew@aj.id.au,
-        BMC-SW@aspeedtech.com, linux-watchdog@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, Bonnie_Lo@wiwynn.com
-Subject: Re: [PATCH] watchdog: aspeed_wdt: Reorder output signal register
- configuration
-Message-ID: <20220819114449.GF3106213@roeck-us.net>
-References: <20220819094905.1962513-1-chin-ting_kuo@aspeedtech.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=tt9vafUX/Kn5vikUIbARAwpRfz7CA43/+P3+92uSot0=;
+        b=lErVAFrxrBnw2nFMP5vkAVk05aPBKGHYZQoOccwGk7WgFsBUzyDAsJg/TXwp/KRDLb
+         KkeFwr1Tk/nxVM5DNMzWdRxV0I8MuHk9pfUFwzKyNMds1EKV4zrZn11IWXQpxBzRT7yb
+         61slX+Fxa4Vq14LTgx3T1MetYKD/Cvxr2JeJxupKD1uQCS46LTrm8YmTyujSB1osgEa6
+         NyWaX+Fi12xl6F09PjYOyQ+Dmqsb+xD4v3s/TW3/W6F+kgk/nbCclP8NPkTv83DjD8TV
+         QRa7b9D6AqxddqqiNMcQQnfzpEcNOgvmfKskLDq4/Oi5FS0nXUliP4dPmyWT/MPJyFXB
+         7bvQ==
+X-Gm-Message-State: ACgBeo3H5mwDhcRejfraz7NlcdsSmkwFcb+A7h47RuzRqK+Eah9IQFXF
+        9FIK4L+hQ9LITeNmLuzPD/UoEg==
+X-Google-Smtp-Source: AA6agR724hPGMuqzxa4iHquLkj8X1MDjSPxyCIi6V06lezxwkIY/NdprGJx4gKyBDS2/D0grhecSQQ==
+X-Received: by 2002:a19:490b:0:b0:48a:f60f:aaaa with SMTP id w11-20020a19490b000000b0048af60faaaamr2215074lfa.364.1660911825664;
+        Fri, 19 Aug 2022 05:23:45 -0700 (PDT)
+Received: from ?IPV6:2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5? (d1xw6v77xrs23np8r6z-4.rev.dnainternet.fi. [2001:14bb:ac:e5a8:ef73:73ed:75b3:8ed5])
+        by smtp.gmail.com with ESMTPSA id e13-20020a05651236cd00b0048b0062a14fsm620530lfs.144.2022.08.19.05.23.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Aug 2022 05:23:45 -0700 (PDT)
+Message-ID: <a6b516f2-2b9d-e5cf-7f25-a204ab854b05@linaro.org>
+Date:   Fri, 19 Aug 2022 15:23:43 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819094905.1962513-1-chin-ting_kuo@aspeedtech.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH V2] dt-bindings: watchdog: Convert Xilinx watchdog
+ bindings to json-schema
+Content-Language: en-US
+To:     Srinivas Neeli <srinivas.neeli@xilinx.com>, linux@roeck-us.net,
+        krzysztof.kozlowski+dt@linaro.org, wim@linux-watchdog.org,
+        michal.simek@xilinx.com, shubhrajyoti.datta@xilinx.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        git@xilinx.com, git@amd.com,
+        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+References: <20220818150637.815-1-srinivas.neeli@xilinx.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220818150637.815-1-srinivas.neeli@xilinx.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 05:49:05PM +0800, Chin-Ting Kuo wrote:
-> If the output driving type is push-pull mode, the output
-> polarity should be selected in advance. Otherwise, an unexpected
-> value will be output at the moment of changing to push-pull mode.
-> Thus, output polarity, WDT18[31], must be configured before
-> changing driving type, WDT18[30].
+On 18/08/2022 18:06, Srinivas Neeli wrote:
+> Convert Xilinx watchdog bindings to DT schema format using json-schema
 > 
-> Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> ---
->  drivers/watchdog/aspeed_wdt.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
-> index 436571b6fc79..a03e4ff812a2 100644
-> --- a/drivers/watchdog/aspeed_wdt.c
-> +++ b/drivers/watchdog/aspeed_wdt.c
-> @@ -325,18 +325,18 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
->  		u32 reg = readl(wdt->base + WDT_RESET_WIDTH);
->  
->  		reg &= config->ext_pulse_width_mask;
-> -		if (of_property_read_bool(np, "aspeed,ext-push-pull"))
-> -			reg |= WDT_PUSH_PULL_MAGIC;
-> +		if (of_property_read_bool(np, "aspeed,ext-active-high"))
-> +			reg |= WDT_ACTIVE_HIGH_MAGIC;
->  		else
-> -			reg |= WDT_OPEN_DRAIN_MAGIC;
-> +			reg |= WDT_ACTIVE_LOW_MAGIC;
->  
->  		writel(reg, wdt->base + WDT_RESET_WIDTH);
->  
->  		reg &= config->ext_pulse_width_mask;
-> -		if (of_property_read_bool(np, "aspeed,ext-active-high"))
-> -			reg |= WDT_ACTIVE_HIGH_MAGIC;
-> +		if (of_property_read_bool(np, "aspeed,ext-push-pull"))
-> +			reg |= WDT_PUSH_PULL_MAGIC;
->  		else
-> -			reg |= WDT_ACTIVE_LOW_MAGIC;
-> +			reg |= WDT_OPEN_DRAIN_MAGIC;
->  
->  		writel(reg, wdt->base + WDT_RESET_WIDTH);
->  	}
-> -- 
-> 2.25.1
-> 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof
