@@ -2,66 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD9359E749
-	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Aug 2022 18:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C63B59E92E
+	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Aug 2022 19:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238336AbiHWQbl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 23 Aug 2022 12:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
+        id S230325AbiHWRTG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 23 Aug 2022 13:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244928AbiHWQac (ORCPT
+        with ESMTP id S233595AbiHWRSl (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 23 Aug 2022 12:30:32 -0400
+        Tue, 23 Aug 2022 13:18:41 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B533F183B7;
-        Tue, 23 Aug 2022 06:00:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703001175DD;
+        Tue, 23 Aug 2022 06:47:17 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 42F3022AF8;
-        Tue, 23 Aug 2022 13:00:06 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 27835336D1;
+        Tue, 23 Aug 2022 13:47:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1661259606; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1661262436; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SeCJBSVqOhAGWvX3rLkYeyZ0F7kVhjopz07El5TE35g=;
-        b=dTe0UjB0yIX4nY3F+zS/45UC/LYnMpG/bzHrG777J0GXX56UWfZAqtaLxrKBZ2xZdAipyW
-        OPwm+hEPTUlKGJUqf8a4in/v5bPEpPl8WUIIRUKXyB2b/2b788rVR/9rQjKNxYy5GEyoo4
-        /qNFOoaTCBO3rgspBD74zkUFwuM71pM=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4fpc7DDr1cBcY0zp8LDLF5xyNGxLDQvc9n2jefed/40=;
+        b=gMmMz33YhNuP4+oZY66Y1T6EiVIn8JzM1/WhcH0ryNzzYAoc7ZwsdOipjBEkgwhFJb0pA9
+        2HcOVNC02ke1bTqW4asQMRCeWrvHsOpvPF1DTd+r80/zSQfdqamA7mQYP9UHBTJplifamL
+        ehSoEQn2Niv6E7Dhuwdnj0m6sC4wnjk=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1661259606;
+        s=susede2_ed25519; t=1661262436;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SeCJBSVqOhAGWvX3rLkYeyZ0F7kVhjopz07El5TE35g=;
-        b=1RnAL5TU+0iluQFJM11wgDO7i6gMipFzGf7G919num4t1EGMDljjFIXBOzonsjjpaw63iF
-        z8jiEIzW0hE9SyAQ==
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4fpc7DDr1cBcY0zp8LDLF5xyNGxLDQvc9n2jefed/40=;
+        b=NEhfsqR3We1uxi6BxQn6ghoeGPC14lmwm9Jo8Rn1QmEKt9J9SdZmRf+H+BiEF7IbpJC5jP
+        Bgh/jIWF83VTOtAw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D5A2D13A89;
-        Tue, 23 Aug 2022 13:00:05 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DF00A13A89;
+        Tue, 23 Aug 2022 13:47:15 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id upyNMlXPBGMBVgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 23 Aug 2022 13:00:05 +0000
-Date:   Tue, 23 Aug 2022 15:00:03 +0200
+        id 03mGNGPaBGPrbQAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Tue, 23 Aug 2022 13:47:15 +0000
+Date:   Tue, 23 Aug 2022 15:47:13 +0200
 From:   Jean Delvare <jdelvare@suse.de>
 To:     linux-watchdog@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Liu Xinpeng <liuxp11@chinatelecom.cn>
-Subject: Re: [PATCH v2] watchdog: wdat_wdt: Set the min and max timeout
- values properly
-Message-ID: <20220823150003.6199b8fd@endymion.delvare>
-In-Reply-To: <20220806081524.5636461a@endymion.delvare>
-References: <20220806081524.5636461a@endymion.delvare>
+Subject: [PATCH v3] watchdog: wdat_wdt: Set the min and max timeout values
+ properly
+Message-ID: <20220823154713.023ee771@endymion.delvare>
 Organization: SUSE Linux
 X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
@@ -77,49 +73,63 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi all,
+The wdat_wdt driver is misusing the min_hw_heartbeat_ms field. This
+field should only be used when the hardware watchdog device should not
+be pinged more frequently than a specific period. The ACPI WDAT
+"Minimum Count" field, on the other hand, specifies the minimum
+timeout value that can be set. This corresponds to the min_timeout
+field in Linux's watchdog infrastructure.
 
-On Sat, 6 Aug 2022 08:15:24 +0200, Jean Delvare wrote:
-> The wdat_wdt driver is misusing the min_hw_heartbeat_ms field. This
-> field should only be used when the hardware watchdog device should not
-> be pinged more frequently than a specific period. The ACPI WDAT
-> "Minimum Count" field, on the other hand, specifies the minimum
-> timeout value that can be set. This corresponds to the min_timeout
-> field in Linux's watchdog infrastructure.
-> 
-> Setting min_hw_heartbeat_ms instead can cause pings to the hardware
-> to be delayed when there is no reason for that, eventually leading to
-> unexpected firing of the watchdog timer (and thus unexpected reboot).
-> (...)
+Setting min_hw_heartbeat_ms instead can cause pings to the hardware
+to be delayed when there is no reason for that, eventually leading to
+unexpected firing of the watchdog timer (and thus unexpected reboot).
 
-This patch no longer applies as it conflicts with:
+Since commit 6d72c7ac9fbe ("watchdog: wdat_wdt: Using the existing
+function to check parameter timeout"), min_timeout is being set too,
+but to the arbitrary value of 1 second, which doesn't make sense and
+allows setting timeout values lower that the ACPI WDAT "Minimum
+Count" field.
 
-commit 6d72c7ac9fbe26a77800676507da980436b40b2f
-Author: Liu Xinpeng
-Date:   Tue Apr 26 22:53:28 2022 +0800
+I'm also changing max_hw_heartbeat_ms to max_timeout for symmetry,
+although the use of this one isn't fundamentally wrong, but there is
+also no reason to enable the software-driven ping mechanism for the
+wdat_wdt driver.
 
-which made it into kernel v5.19.
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Fixes: 058dfc767008 ("ACPI / watchdog: Add support for WDAT hardware watchdog")
+Fixes: 6d72c7ac9fbe ("watchdog: wdat_wdt: Using the existing function to check parameter timeout")
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: Liu Xinpeng <liuxp11@chinatelecom.cn>
+---
+Changes since v2:
+ * Rebased on top of v5.19.
+Changes since v1:
+ * Fix a stupid typo which broke the build.
 
-Having reviewed the commit mentioned above, I must say I'm skeptical. I
-can't see how setting min_timeout to 1 arbitrarily has been considered
-a good thing. This allows setting timeout values lower than the ACPI
-WDAT "Minimum Count" field, while presumably the hardware does not
-support such short timeouts.
+Mika, Guenter, I chose to preserve your respective Reviewed-by tags, as
+the end result is essentially similar to the previous iteration of the
+patch. Feel free to complain if you disagree.
 
-Furthermore, calling watchdog_timeout_invalid() to validate the timeout
-value is a good idea in principle, however, given that min_timeout is
-now 1 and max_hw_heartbeat_ms is defined, the function is no longer
-checking much.
+ drivers/watchdog/wdat_wdt.c |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-My understanding is that the original code was checking the right
-limits (from the WDAT table's perspective) using the wrong fields (from
-the watchdog core's perspective). This fix from Liu is not really fixing
-the problem (min_hw_heartbeat_ms and max_hw_heartbeat_ms are still set,
-which enables watchdog core facilities that the driver doesn't need
-IMHO) and is adding a new problem (the timeout limits defined in the
-ACPI WDAT table are no longer checked).
-
-I will rebase my patch on top and address both problems.
+--- linux-5.19.orig/drivers/watchdog/wdat_wdt.c	2022-07-31 23:03:01.000000000 +0200
++++ linux-5.19/drivers/watchdog/wdat_wdt.c	2022-08-23 15:01:12.106398116 +0200
+@@ -342,9 +342,8 @@ static int wdat_wdt_probe(struct platfor
+ 		return -EINVAL;
+ 
+ 	wdat->period = tbl->timer_period;
+-	wdat->wdd.min_hw_heartbeat_ms = wdat->period * tbl->min_count;
+-	wdat->wdd.max_hw_heartbeat_ms = wdat->period * tbl->max_count;
+-	wdat->wdd.min_timeout = 1;
++	wdat->wdd.min_timeout = DIV_ROUND_UP(wdat->period * tbl->min_count, 1000);
++	wdat->wdd.max_timeout = wdat->period * tbl->max_count / 1000;
+ 	wdat->stopped_in_sleep = tbl->flags & ACPI_WDAT_STOPPED;
+ 	wdat->wdd.info = &wdat_wdt_info;
+ 	wdat->wdd.ops = &wdat_wdt_ops;
 
 -- 
 Jean Delvare
