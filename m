@@ -2,108 +2,109 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78ACD59FE3B
-	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Aug 2022 17:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF5C59FE3E
+	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Aug 2022 17:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239519AbiHXPZT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 24 Aug 2022 11:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51820 "EHLO
+        id S237702AbiHXP0D (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 24 Aug 2022 11:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239516AbiHXPZD (ORCPT
+        with ESMTP id S236041AbiHXP0C (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:25:03 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60089.outbound.protection.outlook.com [40.107.6.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C7D9837E;
-        Wed, 24 Aug 2022 08:25:02 -0700 (PDT)
+        Wed, 24 Aug 2022 11:26:02 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80058.outbound.protection.outlook.com [40.107.8.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E1E7FFB2;
+        Wed, 24 Aug 2022 08:26:01 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PtgK0YF1O7Jsbp2ej+DI4Qj9Q3ocLw2azemJGEDrA2mXCohvNb868anSMtOg/92MWSAIgGimnkGyC0Nlqi7B7i9+1JCu7jbPBayBj1ykvpjW47tsBMmpQ9PVUhWroY12RPK7Ho18Ldl3o9ucmwiFKNm96vNjRmNeW1meBdvm4M37LAqaWp4JaD1hB7qYRmDIaTOCJpvWd+lN1ryqZgTSHPfAj61hBMvovj35OtAetJzl2tthkuFLFNd8jDHr7/AgLsbX/ulSjZCJz74ymhhl58J8JbrD+lvNamNuj5oAwy/ojThdbc8yETVjEdZpEY3Yu4Y4t/MYNIxzdpEk8qtz4w==
+ b=WGz+YxcKGreYheeCzxVoCbRBHwgVlYIliRahYOrCyP0kJcb0t81aKWBLEUGqakcJuC1jt/pa0BCQpCOdUuPj3jdP8xtV1gt/BPoyrimbGh4rg/CUNzxC9WfWAPI/BIGx2/TRTYz2i8Hqcupbu3riMKuzKaSvHWdx+PQQRqaPhXIQAou3LMYB/8+Q1BSdq9J6bgO2g5Ba1qy3DGf02cNKcGs62l2EuRQEiQCPvzT49JedARRNa8/H0OxxEKdsIzje6m/lkntf6WUaxTag4i55dK54m/PuTPxYBhN+dSL4INNUy7WZNDYVJkpQPPHN8fRU0wObJ4nSAutYf55Brnae/A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PI28A4FrPeOP9dqo7iEHeN5Xaz0ogKEewQ8CZW2bDy8=;
- b=R649zuY0U1QjteLIzFO6Hei+mu15PG+3GfLZhr/s0DBdpIlf+TS7lNQ8TH8BcTjfqiH8BlAfxPE07WZ5gePoPpHMeCNByOeP4aEP5153MYOAXSrKWWtpH6H2NQ0KAWDp7z7ylcS9ud90Usks+9fMKgqnqXOD1YpdAOZj7rbY5PIESf8n05zZv1jl/zI7A7UXTIN0oTguFBdCgUx7zYjVvTDzbdmO9coeh7oZZjMYg+1BYSYp9QSDkMMhF6zR5Ludb1wbK1hEnI8g8+J1d2nrfAdtajLKn98QWiGobF0hgfQUZ7uudZOhWayoCBUyjJZnXDHcq2ttEGm248/slNIprA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 194.138.21.75) smtp.rcpttodomain=linux-watchdog.org
- smtp.mailfrom=siemens.com; dmarc=fail (p=none sp=none pct=100) action=none
- header.from=siemens.com; dkim=none (message not signed); arc=none
+ bh=NtMntCKAD+tObCLo8GINfRNE7kx/IfsLKPY3RiWlOZA=;
+ b=ZA0wdcVfcfZFWjvDPn1PQg9EGQG11579+oFEo4CEpkFvirkjIi6PiM0UoAbY7uusWFCNsL44FR7P4V+TyGfOS7zrHw7kwtiEtuByPjDEIGkpmKGehEAiBgmGssGjqQRP0aj8aptG48WxqeoZcGXIoehc7DKCCgM6oWjtZn9alL/AvWr0jiMB3OFCNTplKB+y1nlGdS3K05m2YhNZqTagtPyePi7PtI7aa0hAeQI5QtZVPFaSM0h6sObLvSy29mT7TCBQIzhg9nVCu0Flz1JMWwyGShLuLun8kHHmBU9+t1MvywqABMqmZnDS/Zpfv6EimhrsFFTvUgfb9QAsKhsOaw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PI28A4FrPeOP9dqo7iEHeN5Xaz0ogKEewQ8CZW2bDy8=;
- b=S+8AQlCegdKzrCnHIO4T4c60/7ar7YeWHfAJ/ekw4Ot1wI2sbX2XAaHWmySjIlKwtQUBdlBitznLqqd/ICPgpbr2+ZUBaeDlbEUl9QMJ3S67OQ+xlZbv5O+3xdRq7AMStMa97SHV+bn9knrNZwA6SApQL6CfZDL/2W2nq9aVD5nYTdy5iHj7EmEWSF3x/00nzVJeDoTA2vHbdSjs6mS3Gm2u+lRNElXcnHjMwoB8Bm9qTlIUJH4xbe+1muoNWjE3cTPwVJqPC2wnPjC4qe0JUNpKCBEx2sHZv6cmqcM3DeSI5NslacF3Ob5K3/RuaiugrmDAagOaFhkmMR+8UXNmKg==
-Received: from FR3P281CA0165.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:a2::10)
- by AS4PR10MB5576.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:4cf::18) with
+ bh=NtMntCKAD+tObCLo8GINfRNE7kx/IfsLKPY3RiWlOZA=;
+ b=FO0R4P2I3H5TzMn+abqz7nStDJEHlQeaoV8WpK3Lbm5000XKmRGO+aS9Rqw+TeTYYsAcuaZXFqFZaws97Ew2m4DXkLHZt/PGRuTIv04dOSDhBBBUMWQ9rm2rwBSQD24AafTMJV3JW1Y+LSx7vltBLGu+U9iKZaznj9zBGurOqyfZhGwiLvi8sNIuNqxE6alBwLFd8nKR/7tPrVjSwriyGAluENqQdAPoIpb3crFwZ/oKMUyNP0dTSoWhII3za+0zpR7rLYsI9TMVUTZ3LiTJMeIK/QUgqOICl5KMQy6FqKRso+vADGMdglj5j2b9yAfqE2ge8TcI+W2RbMq3oLKJ8g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
+ by PA4PR10MB5634.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 24 Aug
- 2022 15:24:59 +0000
-Received: from VE1EUR01FT073.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:d10:a2:cafe::b6) by FR3P281CA0165.outlook.office365.com
- (2603:10a6:d10:a2::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15 via Frontend
- Transport; Wed, 24 Aug 2022 15:24:59 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 194.138.21.75)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=siemens.com;
-Received-SPF: Fail (protection.outlook.com: domain of siemens.com does not
- designate 194.138.21.75 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.75; helo=hybrid.siemens.com;
-Received: from hybrid.siemens.com (194.138.21.75) by
- VE1EUR01FT073.mail.protection.outlook.com (10.152.3.38) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5566.15 via Frontend Transport; Wed, 24 Aug 2022 15:24:59 +0000
-Received: from DEMCHDC89XA.ad011.siemens.net (139.25.226.103) by
- DEMCHDC8VRA.ad011.siemens.net (194.138.21.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.9; Wed, 24 Aug 2022 17:24:58 +0200
-Received: from md1za8fc.ad001.siemens.net (139.25.0.80) by
- DEMCHDC89XA.ad011.siemens.net (139.25.226.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.9; Wed, 24 Aug 2022 17:24:58 +0200
+ 2022 15:25:58 +0000
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::75ee:d5d2:6b1d:150b]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::75ee:d5d2:6b1d:150b%3]) with mapi id 15.20.5546.022; Wed, 24 Aug 2022
+ 15:25:58 +0000
+Date:   Wed, 24 Aug 2022 17:25:56 +0200
 From:   Henning Schild <henning.schild@siemens.com>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Henning Schild <henning.schild@siemens.com>
-Subject: [PATCH v2] watchdog: w83627hf_wdt: add bootstatus support
-Date:   Wed, 24 Aug 2022 17:24:48 +0200
-Message-ID: <20220824152448.7736-1-henning.schild@siemens.com>
-X-Mailer: git-send-email 2.35.1
+Subject: Re: [PATCH v2] watchdog: w83627hf_wdt: add bootstatus support
+Message-ID: <20220824172556.245f2579@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20220824152448.7736-1-henning.schild@siemens.com>
+References: <20220824152448.7736-1-henning.schild@siemens.com>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR3P281CA0157.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a2::13) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:269::8)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [139.25.0.80]
-X-ClientProxiedBy: DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) To
- DEMCHDC89XA.ad011.siemens.net (139.25.226.103)
-X-TM-AS-Product-Ver: SMEX-14.0.0.3080-8.6.1018-26680.007
-X-TM-AS-Result: No-10--9.833600-8.000000
-X-TMASE-MatchedRID: k5wM/XNuONYqFSncf8X1z/6cU5Ag0q/uACdiu6hUOTkrT6V6InEuV3qL
-        r3o+NE+IB2QWi8BF5SiKW8BvXyLiE1OPRqTK0eJu09kDLefQujqGFN7r+9GAixo8wYJxWb0OjX0
-        BChis2L2eEPi9wVyFrl8vPNhBIHcIKFlUUoQgfyuAMuqetGVetsgO3bswsOnS3QfwsVk0UbuGrP
-        nef/I+esTZHiN20dwX/gKBLX9WFbKCN8k+5Dteqs09lNSVgfSqVuGAHHweLts=
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--9.833600-8.000000
-X-TMASE-Version: SMEX-14.0.0.3080-8.6.1018-26680.007
-X-TM-SNTS-SMTP: 028F728188360FE64F2DDD1BD65EB077DE3CA1ACCFD2E48DEF974D170D6445212000:8
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7c82e0d6-d8b6-44a3-48db-08da85e4ceae
-X-MS-TrafficTypeDiagnostic: AS4PR10MB5576:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6bfd065b-54ff-40b7-40d1-08da85e4f207
+X-MS-TrafficTypeDiagnostic: PA4PR10MB5634:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ogaXYwMeJ0wDdjJSBBikJXeTKX3B4pVvcMCYcE7s+dhLPgo9R5ghWAVjc7jbnpnUuHtZad7DkAwOlEhzF27c7jJCwH1c1YIbTwiEkkUp829hya3SHGV7D3LwfjLiQwByFcoAHEcouQEVtbn9VNMh44f/EvAaGizHZfv1cnhb4oNQafSHrREPmdhzv8oCRqLRH7nMcaSr4H2p5hpzkkOVvQQ40S/kfvJO1HNCB9PvcLibu11/cJHW3bh65nFk9FgSeXGGCWMXHWGAYz/qiPnjgQ8dDJwlB6L5I+Fy5/bYZ3Ff/GZA/KJa8+Grz9YDIBp+sUoLPW05GX5Q6C2Nh8qaClcrD8bGPjXJI6Hl+XaVDZNIeeJSvpgYAvwvJX/1iQ4J6jVm39tcslS2FDwZH7ynEa/U30fwRJjt8byO2cJura5wk/1Z+FT6zK7x2j0lQeal0DPM0zyp9hYcpIFiRlObTGWGaGvWoQOcsoh9GSLkNZinGlGPkUDOXk8ggc9IQEy6QI8LQiH9yqCwpFEGLpa+jK1x8+RANCL6ZZsfi+bu6UHcDZkqZ0ZM2WzCEc3FfpXEIHmv3EMXd4QXf+6RodgbgiDBd4kshLHOG1RVaBuDNePGN5F2wDHRrZLaDr7uSibvOUcHLEc8Vm4jfwycP0EBdeiPaPzL7hkivkM4tTCHVpyIPg3vT2SOZlcAEeGAvto+oH10LWYzuRl4V0rysjajusPxrhjkLyJJIF0p9SjCGHs+mv8DA5XXMfAU1JO2V0etkBXpaRIFETjJex1XzljPr90UYJJd/XvV8Qjx637afyVp2rZy0VSQZ1ciNnLs1GIjZ0Go+FATGvPfhLXAysrEszIP53zoY27Fmd1nuTgupDI=
-X-Forefront-Antispam-Report: CIP:194.138.21.75;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(136003)(376002)(39860400002)(46966006)(40470700004)(36840700001)(40480700001)(2616005)(956004)(82740400003)(36756003)(83380400001)(5660300002)(47076005)(478600001)(356005)(44832011)(82960400001)(316002)(40460700003)(81166007)(110136005)(2906002)(6666004)(26005)(4326008)(70206006)(8676002)(336012)(16526019)(82310400005)(70586007)(41300700001)(1076003)(186003)(107886003)(8936002)(34020700004)(36860700001)(86362001)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 8xr1xz3jmWH3/1hLNeFlkVFCP/Xe+iqxnKOKyw7y8DHCu2SfDgvf8zsM7FInLAFAkkL0ZwipNkgC09NM4SBSTNgX8tjQRUgbmxyepkhXbaIFHtslJGVBwm1VBVtg2KhgXw8UnPk7aZnfwMXrRR/uWB5R3J9fMKHgC1UX0b+E9f2yiPWPo/kYr4bvIXUvUwvqfCh4JpaArHq/enp7fe9HJin9FQEicHKhdVTOJM7CR92wWhXPk8VFAGOUMJ/kTbdUS+SK8PzfkCyJnkb/QgXCcJH0OcKoq5Pu1RW6Nel2LycBMNOexRJUhCLOLRsfMcC/fnUyw0LJ5nmEXMvyVOI8KorozNMQaA7eO/YEINGwcxj9SoCR5F0xhgowfkVT3+vjWafmi53NF0XKLmOYZNC/AAuh6VNWOkyNMmlvrHteFKahTHWx17Qjn8pj9KV7kO9btF2qDnVgnwgMkb0wVjxN/trzqtMXeRSMQ53QuJkoPLDlPGLxDNjYIv0Bzg6F7kDNzbCZau3UcFzwDIMlMEBCnh5GGUKvYOqukiZcBPD1uzcWc4Vc0E2+4gKVnJcx1WvZTF0ixR0EJtwFKFOiumnVnH2HkgBaKKOahg3HAb4PCER9pYq9wVOlyV3NX+G6ylTH2iIacN3eHl1+6yvSmQPxBJib+bTW1n3UC4FMnUIqiwXCDead5/ZF723x/9MA8dqQf1biF57CagSmPvwIQzD+UyK68m+vE++smHfAjfa7384n00OF+ahxImcckYF5ia+5
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(366004)(396003)(346002)(136003)(1076003)(186003)(44832011)(110136005)(316002)(9686003)(6512007)(26005)(2906002)(83380400001)(6506007)(86362001)(82960400001)(8936002)(41300700001)(5660300002)(8676002)(6486002)(38100700002)(66556008)(66476007)(66946007)(478600001)(2101003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PPGkxbo6D/OFWVbnplEgrzB7HLGmwoSWc/OTDUkSouuHRHp1eRxTqwokRIeV?=
+ =?us-ascii?Q?7b3TR8ExdpQaN3ZYYbRYUBg3AMCv2S70tfOP3i/59cviNeiEDRb6qIjxw+tX?=
+ =?us-ascii?Q?0d6nw6y1JaEsF2ql6NL5zfy5vGwRVz2hBaoxjVQ1by95xzbiR03seXy1EDGq?=
+ =?us-ascii?Q?srYmq+eYyIrwjCJ90oqPEixpAB66j40uLS7Z0Ym4JwtM41YNYoYsgBPh4WiB?=
+ =?us-ascii?Q?MDJ565TaGrjS3eu7iJ3/VCMOixgobS6gT3MveZ3ThOCW7tqIWQ2JswVNahFg?=
+ =?us-ascii?Q?PjqKzdDUq0FerhX3LiQpDqD8EprHIhWFgLTNc0/iyE+ohheKB7aaUPPlQeX3?=
+ =?us-ascii?Q?0YvrU45dodnhMXCYkIjq2I3/pfSAFnv2hX5kJWl0usivg2TVfMo+bQLtKpDv?=
+ =?us-ascii?Q?124oPgrWXG+mr51TOvRCOYqjDpSuFIiQcUPsnOGX0kYB1JjlR/F/qG3WF8va?=
+ =?us-ascii?Q?jdbHG5PG5tFN2VUuidrNAKu/rvH8KjvMRXRKV4+qBQbLImhAUMhIXp1S8Lmn?=
+ =?us-ascii?Q?H5wVpdto+rnnyI6NoEe7tj6gqK0GWOTClm9nnHrS4CoHw0qjpoXA6oM1k+pg?=
+ =?us-ascii?Q?CGKHHoMS5EF2b5l9YZYH0oyqz7AVS1yeCArN0uP9+II7G5nmXjoFOj5/Xu8Q?=
+ =?us-ascii?Q?oEcNBvwHkKAvZW6r0obhjeUtpQcng2Z1gbH7g2hUjWOcilkLsRzDqnDUK0S5?=
+ =?us-ascii?Q?nAjO30YbfYL43FIzNTKjHQByEM/R+OD63TeO5TEy+ZahBqBNGjEY/NrSkORY?=
+ =?us-ascii?Q?Nt11sbmkB9TsJjbClpo1/PMMd2wuNZEUbSShSmBCq+9aTDBj8CwuqRuRoapq?=
+ =?us-ascii?Q?0J4aakm4Q8aeIVb/qoK7aMr/lL6RF9An6GRBERWz9MtFxN6evtvhoqhoHR1/?=
+ =?us-ascii?Q?p9yIAN9Eo6YEVNeCcw2FUSrLoAzav9UCpXen/GRIS1a9jaTCbIR4OrChhMwq?=
+ =?us-ascii?Q?vQxVkTEC1vSI94PT0HxgE21y2F7rQeRHG9xe+FoEqSR79ZpQk6GSDxDuzqE6?=
+ =?us-ascii?Q?Ew3/xx8WRL12xdRq4M9pGUihIaKvhrJxhKg2cWMTeTEu7l+Rnr29kFHtiCJy?=
+ =?us-ascii?Q?Cb4cz+CqFQF0PvegRqXeMWQb4PW/xcxJnuHa64yi1Be2st8i1/w5E+Znokig?=
+ =?us-ascii?Q?GthB5pZubupAoajltGrLE6cwaguLD1BtuJoPmit0iFQi0eeif+D7QupFFoNB?=
+ =?us-ascii?Q?Z3eOfaSdvvC5NfVhVDMKVDnpQVx4s+abexnZ+YhOd7A7ijccqW6tRbZXhoyH?=
+ =?us-ascii?Q?hSGJ3X59NHlrSI2TJCVsPj0PgFXV4M9Fupi2NYr7FekCxkBHwDG7/2U0927u?=
+ =?us-ascii?Q?t6dlJa863xA/rxMq1coNh9euWOELYZbBa44HtS4qidwkinoDCEMntkQLT3nC?=
+ =?us-ascii?Q?17S7xx0KFHsLiRY+D/sZQPT17MKqSUa4iTDym5Qte1ZHcDqGNXuaPxUMR/4Y?=
+ =?us-ascii?Q?rxBuVI9Qp7HUzvbee0+W2RO1FyHFpnSov4miP6emy4FGlQc+qlM+K13SJyk1?=
+ =?us-ascii?Q?S0zYybO2FiGUy61yQHik+Akph+ZJABAlgwEIfczXBfQY6fGlQoNOstbi/XXH?=
+ =?us-ascii?Q?osj9j3CNTXtICLvzJV3Tr9mUKbT2D9fggzy92lW0ONfupKoQBRa5OllSHyRq?=
+ =?us-ascii?Q?ng=3D=3D?=
 X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 15:24:59.2443
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6bfd065b-54ff-40b7-40d1-08da85e4f207
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 15:25:58.6883
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c82e0d6-d8b6-44a3-48db-08da85e4ceae
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.75];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT073.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR10MB5576
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6pUGK3+/iIfwsDum0jO6STt/Hy/nGaaiOTTFj1qEFMCVIF4/3bvnk1wPT+P7GvbpASFJ9JoiDQRXW9XcZpBgcgY+MoeF7leoi9xoiEqNXm8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR10MB5634
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -115,46 +116,56 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The status bit in the status and control register can tell us whether
-the last reboot was caused by the watchdog. Make sure to take that into
-the bootstatus before clearing it.
+Diff to v1:
+ - fixed typo in commit message
+ - add Reviewed-by tag
+ - make sure it still applies
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Henning Schild <henning.schild@siemens.com>
----
- drivers/watchdog/w83627hf_wdt.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+Henning
 
-diff --git a/drivers/watchdog/w83627hf_wdt.c b/drivers/watchdog/w83627hf_wdt.c
-index 56a4a4030ca9..bc33b63c5a5d 100644
---- a/drivers/watchdog/w83627hf_wdt.c
-+++ b/drivers/watchdog/w83627hf_wdt.c
-@@ -113,6 +113,10 @@ MODULE_PARM_DESC(early_disable, "Disable watchdog at boot time (default=0)");
- #define W836X7HF_WDT_CSR	0xf7
- #define NCT6102D_WDT_CSR	0xf2
- 
-+#define WDT_CSR_STATUS		0x10
-+#define WDT_CSR_KBD		0x40
-+#define WDT_CSR_MOUSE		0x80
-+
- static void superio_outb(int reg, int val)
- {
- 	outb(reg, WDT_EFER);
-@@ -244,8 +248,12 @@ static int w83627hf_init(struct watchdog_device *wdog, enum chips chip)
- 	t = superio_inb(cr_wdt_control) & ~0x0C;
- 	superio_outb(cr_wdt_control, t);
- 
--	/* reset trigger, disable keyboard & mouse turning off watchdog */
--	t = superio_inb(cr_wdt_csr) & ~0xD0;
-+	t = superio_inb(cr_wdt_csr);
-+	if (t & WDT_CSR_STATUS)
-+		wdog->bootstatus |= WDIOF_CARDRESET;
-+
-+	/* reset status, disable keyboard & mouse turning off watchdog */
-+	t &= ~(WDT_CSR_STATUS | WDT_CSR_KBD | WDT_CSR_MOUSE);
- 	superio_outb(cr_wdt_csr, t);
- 
- 	superio_exit();
--- 
-2.35.1
+Am Wed, 24 Aug 2022 17:24:48 +0200
+schrieb Henning Schild <henning.schild@siemens.com>:
+
+> The status bit in the status and control register can tell us whether
+> the last reboot was caused by the watchdog. Make sure to take that
+> into the bootstatus before clearing it.
+> 
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> ---
+>  drivers/watchdog/w83627hf_wdt.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/w83627hf_wdt.c
+> b/drivers/watchdog/w83627hf_wdt.c index 56a4a4030ca9..bc33b63c5a5d
+> 100644 --- a/drivers/watchdog/w83627hf_wdt.c
+> +++ b/drivers/watchdog/w83627hf_wdt.c
+> @@ -113,6 +113,10 @@ MODULE_PARM_DESC(early_disable, "Disable
+> watchdog at boot time (default=0)"); #define W836X7HF_WDT_CSR
+> 0xf7 #define NCT6102D_WDT_CSR	0xf2
+>  
+> +#define WDT_CSR_STATUS		0x10
+> +#define WDT_CSR_KBD		0x40
+> +#define WDT_CSR_MOUSE		0x80
+> +
+>  static void superio_outb(int reg, int val)
+>  {
+>  	outb(reg, WDT_EFER);
+> @@ -244,8 +248,12 @@ static int w83627hf_init(struct watchdog_device
+> *wdog, enum chips chip) t = superio_inb(cr_wdt_control) & ~0x0C;
+>  	superio_outb(cr_wdt_control, t);
+>  
+> -	/* reset trigger, disable keyboard & mouse turning off
+> watchdog */
+> -	t = superio_inb(cr_wdt_csr) & ~0xD0;
+> +	t = superio_inb(cr_wdt_csr);
+> +	if (t & WDT_CSR_STATUS)
+> +		wdog->bootstatus |= WDIOF_CARDRESET;
+> +
+> +	/* reset status, disable keyboard & mouse turning off
+> watchdog */
+> +	t &= ~(WDT_CSR_STATUS | WDT_CSR_KBD | WDT_CSR_MOUSE);
+>  	superio_outb(cr_wdt_csr, t);
+>  
+>  	superio_exit();
 
