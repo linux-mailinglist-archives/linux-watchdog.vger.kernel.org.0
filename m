@@ -2,195 +2,291 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7DA459F12C
-	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Aug 2022 03:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD22959F395
+	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Aug 2022 08:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbiHXB4f (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 23 Aug 2022 21:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
+        id S234984AbiHXGYh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 24 Aug 2022 02:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiHXB4e (ORCPT
+        with ESMTP id S234971AbiHXGYf (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 23 Aug 2022 21:56:34 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2097.outbound.protection.outlook.com [40.107.255.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9145E6566C;
-        Tue, 23 Aug 2022 18:56:29 -0700 (PDT)
+        Wed, 24 Aug 2022 02:24:35 -0400
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50057.outbound.protection.outlook.com [40.107.5.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57287DF73;
+        Tue, 23 Aug 2022 23:24:33 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZTtT4ZLsMzwub+rsO4GJTdefySXS6tF/1Lse0bJYaCTxz37zLyA8NW7YNlUV1E0mIddJSXA5KdLxQgqHmX5mW2Z3CG9mbGdDlC7qAFoFPL1nQ1/IXag1NiRTsX1FdPOqZTQ/vxFzvC8NnVTh6AQfyMjVcqIJJiCWJ541WagLzIxpn0kWMD9DDdy4hAuSr3QZ5qtYGupma4LuseOyXmtW8JdegTfqm7VdvunaQs1fDqyqfoXSjZnVtEXySx7donkF6LQRhVoh3ViYi14eWl/VrVEI17NomTsdqkzOt0JDSGRwLzwNpJL5eXEtbDYDE6XBfzR1NqWOz00vdnZ7kRYPNg==
+ b=YhG6o+XnMWCHxHtRxUBFuEFTQEA6mYIXRiVIzpJwjzdGpzrCJTxAsS0K3FtOjgahQpe+30guybv2t+6lF+upqJOIWZBoiJlbdD7/1p1GlXaaXBXVNMbwjbB/dO/zK2ricI9BTFAZvfsTlnlz509xCVAz1D3H18XHORMY15F50VpJM0KicII21mFEBwTu/YD1cRWNkN8QpF/nPgS6x7hjRg8HnsuRQ2MLEKZZemzilj/vg9PNyM7FWWnZfHVV5H5zFWdqtukj3Z8iJX5dJQEQTFzeD9yVm3I8LK0BPnfaUvirsz2P6vGhQVA2Iknar7+NrGoDOERiVnVIvoHynI3h+w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kYLsUqAq+c2J2dbl57tkaK/tCRP/H755lFR6EGXsFsc=;
- b=NyDsfX5dDKyr00tZ6uE3vLjKwendkGHG/BRD91wlok1eH3cr8Efdq2S6joui5wLpyhFzQ6GK5TPJK2Nl6MWVxa7C61/uLghKohRY8jnqaHb2qT6UnDo0kIeqCvbQ8OXi6LAIVe5zx/X/DStFVkqRYNcFl2dyerD+AsmX3uPCN4bVoyBgPjAR7bbzthdM4/xxMJcC1DMS/kO6D7rMIq/COTZ3qdS667/+QwXamayGdJe0F2lVqShF+MvQejE7hJAtWZ0z1/gPXFCApYTQnVUa+plgwDzXN+90/fwE8x5d+z+ds0USiBXLCcXHr2A7SVxTey/ECDBiNBOuEklrmUK77w==
+ bh=7XfqlKSqb47d4Aly9B1w/kMaSOSdk+xJ9l1ygizbZfI=;
+ b=ALFDM044FcFpMSn0IcuWeJWO68z5RO53UmRI63v5n6m2g2pSSr3Fot5wLrlv4hgkC2D8uAJfjxZhu0ilcrun6GhXNiVcUawHZ6pGGRaYGEoPfb3/s9F6iWMPFVZejwOrtC9tbK7h5/KpW1+dkC8Y7CWk/QoCpTbKQmN4DkYRrRhvPjwG2PSTBrOOokxPyXZIDn/kYQCPwiiTgB4JZkm/Hi7dDLBcWWCLfUlK6UK2BZYDa+ZQj7bYhrUYQJf2TZ0IaIk8A6399ymSuD8fWVJVNmGmHoxa0wOVnXZGCE9VI0fu51nM/W1LvGnk/V4ys3UGNJTqP12jgzEFOZcNh1D8lg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kYLsUqAq+c2J2dbl57tkaK/tCRP/H755lFR6EGXsFsc=;
- b=u3cuV9xG8pGsnBmtNuF6ClmiYzIj6t8Up08XaBfWbMi9fsL+uP5AmJibFEdYkxcBsA1BD+cxbMnTfPhtG2qZycc+X+04Rzf8zBJ+RqCLO6mQeWZd7wv9SByUtTmCj1xKyE8pmFcDrULXFbo/9dktVlRN3diE+13VBu2vhbUHk/cucI8zS+fvfizRi1V6P8BVLPauc+0uNRJTPVi7oPzh8Cdl7lYtA0Ef8BKQS5icyLoKmQQGbfmdj51s7jM07h+w5wcy8PJgzuAw0Uc0Smqe16iJ2SorFcUl2+d41D73R6yFculjQCQlUem9EKh2ys4YFQBq3i/Qje4K7OZE1k5IbA==
-Received: from HK0PR06MB2786.apcprd06.prod.outlook.com (2603:1096:203:5b::22)
- by TY2PR06MB3230.apcprd06.prod.outlook.com (2603:1096:404:9a::22) with
+ bh=7XfqlKSqb47d4Aly9B1w/kMaSOSdk+xJ9l1ygizbZfI=;
+ b=eT/SBBHSRMQ6B3DF5LVPVa/5K4giSl30NcKBKOlam9UBaPn+lV+Nt73uXHgIchAKMLWDmBsYTgH+MwpSj8QhQm0zBdrIwmRBdkCIDNQJA1wYn+WujRJnkAsXBhj6OIihjp+j9eiXyh21ewBtATLQZBuPlPSGTn7RGGnzQWNvRtc=
+Received: from AM6PR04MB6053.eurprd04.prod.outlook.com (2603:10a6:20b:b9::10)
+ by DU2PR04MB9194.eurprd04.prod.outlook.com (2603:10a6:10:2f9::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.19; Wed, 24 Aug
- 2022 01:56:24 +0000
-Received: from HK0PR06MB2786.apcprd06.prod.outlook.com
- ([fe80::ce1:d9ac:e036:3e5a]) by HK0PR06MB2786.apcprd06.prod.outlook.com
- ([fe80::ce1:d9ac:e036:3e5a%4]) with mapi id 15.20.5546.024; Wed, 24 Aug 2022
- 01:56:24 +0000
-From:   Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-To:     Joel Stanley <joel@jms.id.au>
-CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        BMC-SW <BMC-SW@aspeedtech.com>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.14; Wed, 24 Aug
+ 2022 06:24:29 +0000
+Received: from AM6PR04MB6053.eurprd04.prod.outlook.com
+ ([fe80::6cd5:f11c:4e5c:d79c]) by AM6PR04MB6053.eurprd04.prod.outlook.com
+ ([fe80::6cd5:f11c:4e5c:d79c%3]) with mapi id 15.20.5546.022; Wed, 24 Aug 2022
+ 06:24:29 +0000
+From:   "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Marco Felsch <m.felsch@pengutronix.de>
+CC:     "Alice Guo (OSS)" <alice.guo@oss.nxp.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "Bonnie_Lo@wiwynn.com" <Bonnie_Lo@wiwynn.com>
-Subject: RE: [PATCH] watchdog: aspeed_wdt: Reorder output signal register
- configuration
-Thread-Topic: [PATCH] watchdog: aspeed_wdt: Reorder output signal register
- configuration
-Thread-Index: AQHYs7Dzzu8nHfKi6kCIg7p/4YhId629Pm+AgAASFzA=
-Date:   Wed, 24 Aug 2022 01:56:24 +0000
-Message-ID: <HK0PR06MB2786179F8469AFB8C0337009B2739@HK0PR06MB2786.apcprd06.prod.outlook.com>
-References: <20220819094905.1962513-1-chin-ting_kuo@aspeedtech.com>
- <CACPK8XfeocBz6phbYyuHHMmZhisw5kGr3QpkdWv3LocvAN=WsA@mail.gmail.com>
-In-Reply-To: <CACPK8XfeocBz6phbYyuHHMmZhisw5kGr3QpkdWv3LocvAN=WsA@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Subject: RE: [PATCH 2/7] watchdog: imx7ulp: Add explict memory barrier for
+ unlock sequence
+Thread-Topic: [PATCH 2/7] watchdog: imx7ulp: Add explict memory barrier for
+ unlock sequence
+Thread-Index: AQHYsSoBdxZHPlON40a5XuD6jrx4qK2xDxMAgAmF+ACAAAMHAIAAZZiAgAEFDYCAADtTgIAAMAWAgAErGXA=
+Date:   Wed, 24 Aug 2022 06:24:28 +0000
+Message-ID: <AM6PR04MB60535EC5B774004AF996BDA5E2739@AM6PR04MB6053.eurprd04.prod.outlook.com>
+References: <20220816043643.26569-1-alice.guo@oss.nxp.com>
+ <20220816043643.26569-3-alice.guo@oss.nxp.com>
+ <20220816062330.z2fvurteg337krw2@pengutronix.de>
+ <AM6PR04MB60537292F559EC012F0EB510E2719@AM6PR04MB6053.eurprd04.prod.outlook.com>
+ <20220822080010.ecdphpm3i26cco5f@pengutronix.de>
+ <20220822140347.GA4087281@roeck-us.net>
+ <AM6PR04MB6053E26CB59410EBCC2C93AEE2709@AM6PR04MB6053.eurprd04.prod.outlook.com>
+ <20220823091027.ezyxkn64asajvjom@pengutronix.de>
+ <20220823120219.GA203169@roeck-us.net>
+In-Reply-To: <20220823120219.GA203169@roeck-us.net>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+x-ms-exchange-messagesentrepresentingtype: 1
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: fcfda9c2-38ec-4bf0-a9c8-08da8573d960
-x-ms-traffictypediagnostic: TY2PR06MB3230:EE_
+x-ms-office365-filtering-correlation-id: 518d908a-8bc7-4c59-06fe-08da85994cbc
+x-ms-traffictypediagnostic: DU2PR04MB9194:EE_
+x-ms-exchange-sharedmailbox-routingagent-processed: True
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BS1Nwoh7QU+RhSri6lN203AIA+JusWYThHW76A9mH55+Lpp4zxf7v0uyKqzrkMr4uA3WQHe0emJzUwzQIN7WYFe7vkykRvNBsf4IwO/URfdr0kTLtAn4BAbwp0V9P5dGnEVddY+2glzq454Cxl25N4nQpSf/81jraEV9mUZDmotH76o9Nv332pBvieoNqa9oxor1jPY6IXLYQWcNw11eB93OtP/TRGzFWqw4Na3IjtaKouaT2QS8hWsf9+0gWoG14ynxFjUMgkINSxLbFNx6IrITXuV9d43X9irC6MsvTUuRY7PjxpfKqZ2Vwb0bIXA6pKdzwyfSLDwHI9gOCGNtFW6a6WqaRMJtq1Ieyq+uyP5MXjS6SHCTih2KFlt+H6eODjVrZ5oUHxQj1FTBgO8RA5xzeyLiPCFGuHL4pH3OVfodkjXBiqwtMiWv1t6HjVL8CY0ltRu1fOICz7NaltkryKhhkG1HGI3onRILOTwD8+fafp4R1qxtWRViiCneQEEdN7DG2sENX3IaeLWlfeMJhqoTJPbQvWxnns8YH3/rqaNiB+uQE8PUh6/XgoMXiAFmIA3X0I6KV1ed9l2Zv0iYzA+0IOmkwqGq6aKYGB/6QxT0rHQH4FrFsJThpblsv6adUY6caKIwST+ekmY5Ays7YfsO+F/mHPu/Yp4d7cWqJh0Gw3QUjpnkTVj7nF+7p59CNv2X/0ljOTGfUJYr46xdzarA9J6BasQTuAXnCFDiOMpvy5/VePUIkETbDr4fybYoKI1Qzm9j0o09Trvyk+HFZA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB2786.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39840400004)(376002)(136003)(366004)(396003)(346002)(8936002)(66476007)(316002)(54906003)(52536014)(2906002)(66446008)(4326008)(76116006)(66556008)(66946007)(64756008)(6916009)(55016003)(9686003)(26005)(41300700001)(53546011)(33656002)(5660300002)(7696005)(8676002)(478600001)(71200400001)(6506007)(122000001)(38100700002)(38070700005)(83380400001)(186003)(86362001);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: 3F//NB5araybfza8eSpW1+8OpRAsvxjvh2weCY2usIAY6ZCc+yBZB+TaDrFID+xF8P/1djyXV/V/lYadMMezZBqKogwnN+Lk3NX/tspojGN4xKS4Hyz3Zt48kOW9FLTmtzOnsU20xkFgFXqU2wu39rkRwC3m21yzk88fMzUDVFahx2Bi1Aae7LuZZ+hQ4U1lAXcG8PH0mtHUDNcfTtG+n8RVMteFqNlx8ERctPzWbU2ozNrBmUbhh0g/bq69ojxy02TFdkMLlpeswxC8UTBj/7HpFBgIInRT3nYEoRpd+Gz4RDkktzc1rjU8suP0ZXhWzZqMILbzvaLTXYn9f3D0DIilE1w84Z+Zka+afP58f9pT70rwqOL7AOjhakfCFS428r6xdIAX0x5VJWUMXAa0piI1nMlhVlkovtnho1yaXAi2K9pXPQcQGQo55+D1L9XRYQZUsz7nYtG4vHIUnD1QnuR8fh1cgbXA8yd2bDhmA9QB3CLjxPLoAsw4iO2riahT7be9vNScR1d1PuxENtdtGm73H+PW7Uf2yiZhrvBtid0A0dQKXE6hHD1HAb4jMNXPhmCyVGqG96VG4+qm3mrc27la9JqbWYcDjJQuGetDJTlg0mdvuueIftDxkXYRDngcf9SNcffMbrWXXh/Hd5Pgr2ZLDB+TO/P35h52if2oBB9LhkWU19wEYChbxFZJbV10bZdkPcrkDnUjaQ7kxPMcDPOTKI7+y/5vHU++0oLDXHPsspJm7Zb5Rdp43Qxx56wlK/V080O0gJWd14uM1MW9dw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(136003)(376002)(39860400002)(346002)(66946007)(66556008)(76116006)(64756008)(66476007)(122000001)(4326008)(66446008)(110136005)(8676002)(86362001)(33656002)(38100700002)(38070700005)(478600001)(9686003)(26005)(53546011)(7696005)(8936002)(83380400001)(186003)(6506007)(71200400001)(41300700001)(55016003)(5660300002)(54906003)(316002)(2906002)(7416002)(52536014);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c2tyUlJEUGxsa0NMV1B0RUc0TFRSRGRKQS92MkZzN2JPeFNxSDZkOUJGbm53?=
- =?utf-8?B?WVZJbjJPQ3lwcC83aWpxQk9CRkpKbmxvUndVMVY4R3RTUHFVZ0xFdURGUDdJ?=
- =?utf-8?B?cm5ObVRKdlRDNDRFTU9heEEvalRXQVV6RUcvQVdIMnZNanVlQUVwRTUxcnVn?=
- =?utf-8?B?OWN1RUh2bTFSMWxaeEVDbGswU0wzTUw1SFhzNW8xR2pRNklTN0FVNlIrSm5j?=
- =?utf-8?B?UDlGTnExVDRKY3J1SytVaVJVL00yazJxUHNPQ3Rzc0pvdTRqa2dJWXZZWVdh?=
- =?utf-8?B?VGtNYnlGSjhvS1BWOVBhY3hpb1NVTlRvTGZQUzdOTk52MEpiYnR3bGk1OC9X?=
- =?utf-8?B?UXlkSFk1eVpndGRXT0oyR1pPaExMSDZ1ZDZhVkVKNVBvT0VnTjF2cGJ3R0Qy?=
- =?utf-8?B?b21KVHBOR1RCMWtKQ2Nscm9wRDFKeXdyWDJKazBCYmE0Y3F6NlM0RFhTU2sy?=
- =?utf-8?B?dVRaOUxTdE5NMEt5a1RQMVJmZEF2SW15QTJJaWFxM2c5VXgrbjNpRWNMQjM4?=
- =?utf-8?B?ZEp5bzRxaFAwbmVlcno1WWxLNGJZaW9LTDA3Y213NkJxOSt4Q2E2Q1ZWWlZN?=
- =?utf-8?B?b3FJK3dDQ2ZubVF6TnpkSTIvc2orN1RzS1BwcWNmMFczZ3UzS1lKdi9IREVn?=
- =?utf-8?B?c1JraCttajN1VndjM2xRVnYyQVBUVW5oalpGSTFSemlQUkF5OHgwM1dIa2Zj?=
- =?utf-8?B?eTBpbGRoaG1OQ1lEQW03TG5UeWxTSXNnZXhPalQzQTR4NlZDV3BsMkRCVTg2?=
- =?utf-8?B?Z0V4WnRDdjNNeUM0aDZtUStseHFYMHNOajNTaXVyQUxyZnhXSGlhMzRLbzhY?=
- =?utf-8?B?eWoxNFQ0WkpDdTd4YWRVUngwRjE1Q3IzMWc1WTVtTnFDS2ZPeDhZa0F6c3Ru?=
- =?utf-8?B?MU01MWxtVGEvV2dLRmZIRXF2UjdTRXJhZEtmL2lIRHAxR1RneEVXa3BXY3Rq?=
- =?utf-8?B?MFJQVjg5ZHdCY05Qc2hmMWkrQnNtSkNHWVJyOUpOZlpkb1hOU2k5WUZ2R2Mx?=
- =?utf-8?B?TjF0b0JXMnhENHpnVE1wNEZMWXZtdHFqVDVxZHBzdUFsdWNVSHNnUDZUZ3Vt?=
- =?utf-8?B?SHZqTVVTL3hrdDUwS2NTMjZKU2dpUGtmeHN6M1ZVTjI4MWxUZElhR1ROQWtt?=
- =?utf-8?B?b3g3WGUzaGlKL0RaOGUwWVN1N05rZG9NSStNUDcvSmxPS09tekJldHd4ZjMr?=
- =?utf-8?B?ZWVDeS9USW1SekZNbUZrQXg1L1RKVFFKQ0pHenlxTDBNLzVnQkRPeTJ2WXZI?=
- =?utf-8?B?T3h0V0RYdW8ya1hVbVlZbVAyeS96Q05meFdkc2NINzd2UmYvQ3VobXhFVUdW?=
- =?utf-8?B?RURqQlkycTc0QzJnUHZNVng2ZGNjYUI1L2VXbXlwbHlWN2wxQ095VWhyZkt4?=
- =?utf-8?B?ZWpCK2lUU2FyU0MzT0ZYTi9OYmlsZjlNRGpSZzcybm1Hbmc3ZmJodlI4M2tP?=
- =?utf-8?B?WllWWHhzR1BGR0pSTlZTUFM0THRUWFl2YWIxdHRtTE8xN0xxalhxRW8zS1B2?=
- =?utf-8?B?ZTkwaHVUVUVZaG5WM3NXYzQwK09KQmNsNEJtcEhYWHRvZGM5TzVTaEtKc2Zt?=
- =?utf-8?B?cFEwMDZYcmxSRDdoSmswd1dFcDBHbW5xdGdKY0lGVU5SRnREL0dQS0U1Vkt1?=
- =?utf-8?B?ZXBLb2JJb3NTYnNQNDR2Mld0akxNVHZMU3FNNW9Mczd1MURjeHNza1d2Wi9o?=
- =?utf-8?B?b05qNHFDRjBhN2lMaDlKcVNrTm9ML0EweWgxUld6dkNSMVhKeUc1UENFMU5m?=
- =?utf-8?B?L2hlZmxHUWp1ZTVXTHdyNUp0L3FCaTlTOHZ2bWFhNThhNmVtWTRDeThHM1I5?=
- =?utf-8?B?QTlrbWhySG9mazlTa1FPTXVoa0w5QlFHaDl0eSsyc2pFeGxQQ0YyZStXMzN5?=
- =?utf-8?B?aXhrNVBOS1JRRlFVazNmVXFZUW5ZS0VQSEpiY002cmR2ZXNaUnp6OHBrTEc0?=
- =?utf-8?B?WVZYV1RUWGMvY2R0N2pFclAzL1g5b0hrWDBmeXBVbDFsQWVRUTMvV05MNy95?=
- =?utf-8?B?U0dPSXAyRmgyNE11VDNhaTNXM0FhdVhxRzN0OEpsY2J4NVMyYzJLS05rYXJ4?=
- =?utf-8?B?LzNKN1ZnMlE0TlBCY3FKU2dkQUkwd2cwRHNtL0pidi9iVUNCTVFFZ2phRXpI?=
- =?utf-8?B?UkJ1N3RwUGg1aU5UM1lLeFpYUjU4VmNnTXViaWlSakJDOXhGT1ZvVlUwTGw4?=
- =?utf-8?B?UFE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?bvumYSn6I2f58wq393a8plx3+PbTqScjkgHU4MEsw6Zyy29ag+BFB8aWAYin?=
+ =?us-ascii?Q?+nCp7alt+SCdmHbfpMSFtF/A+4wkUjvR6Nvw3GfvNQzRIP2ay63pAMB1ibjr?=
+ =?us-ascii?Q?NunzR35hM4P96yHLTS0r1VrfsNo7WpiCzP1+ciWZYhxwRBdNiqtBa1haj7MP?=
+ =?us-ascii?Q?dTrExWyKpbus14G04zIRQSFRRIwVvxMuw9tYKVCHZHYBVpQSmqZQKLQOFISt?=
+ =?us-ascii?Q?qlQyGAFB0zB9iVRyHVAIuKMpiEibJrLOAwCkqEgPO6tcW1a4ywUwb4cZkt+L?=
+ =?us-ascii?Q?mRliVs7kceAsPbVnIhbiFrubhjj8tmaQHXTsQqSic414fu9vN5MFG3s0gtmO?=
+ =?us-ascii?Q?oKfsAdJD9VG4bsc5GRF0ygSSXrzHpFoAW7FufxVWbe+zwDUzlTkuemyPb1Y/?=
+ =?us-ascii?Q?WHIXZMy1h1SBxz2K5PAolrw2m/+JjN33318UED6qRt3zTJE9nhmayeIwd/YP?=
+ =?us-ascii?Q?2l+n8Zw899EA0FYhPiHJ8P/dOuF8P273+jrjmpy8LjStEEdxb01eHyJ1o/zo?=
+ =?us-ascii?Q?FvqDvy+ZcD0xmK5qJ0Alcc+JZOkwhjPd2dvYPC4Uy3045QU1wiflXjVG8diX?=
+ =?us-ascii?Q?Cz6VDrP92HT7zG2NgTJueGRGypEGdnS2SO6K3vn5lAklmAN6Hf7OOfmOQMV1?=
+ =?us-ascii?Q?ksfppEsJdXnEQbU3nnBTnY4a3udQouYysjRoo/MAiGraFhCnsTbdIeyepBvj?=
+ =?us-ascii?Q?HQgHHHTqh1NeUoSeYdTCFdqUgDN2Me79TNzmw/LP3EMTM8nrkNfyliJQJIvU?=
+ =?us-ascii?Q?x3jFhOkzseRORpfZusNi23yw6tJGn6bqA76P9rwdWdcIGnmYGk3gWLIGq6aY?=
+ =?us-ascii?Q?JuQUQHCYRfy5ZRy+r9P/9uFNaPpM3CAMMljwgF6rUfD0HSW/n/8fSavoV4zw?=
+ =?us-ascii?Q?lMIqqSmzFPNJZXdF5XZ8F/+XOn+Q0GCqjqB9MiSL32TZpcBqS0hughIrpGec?=
+ =?us-ascii?Q?DOwfX1m0w4+UfzNZVLaUzp4QQ8QNIRzvnP2S8+8hDxOghnkQojTyNitDokVj?=
+ =?us-ascii?Q?HCuZYzuFFFcQR+E7lz3N0+by52XJU1fqFUByfpeR84v0AA45mITyg/L9bsOB?=
+ =?us-ascii?Q?cj5qXyjWb4TDGSxEGoa7EWVWiAxZHSdJBqDxxJ8oVR7qQpJ9eFFWNRbxvQEo?=
+ =?us-ascii?Q?a/EHZsKYJr7oRape2F/AuZuUdy6czmGXEPoFHVf5UoXV77NVBv3AWYMzgeiG?=
+ =?us-ascii?Q?mHaMFuLfeMGUMmN/dcPA6EHgg2ZD+Yx6kcfuhW6BMuirCKWSepuf2hI/bPnW?=
+ =?us-ascii?Q?Wqo2ud3DLOJ7uyLDif9VkuK4xRcQoIMgKBsKArieASEstuln0C+g4GRp7gCS?=
+ =?us-ascii?Q?d8Mbz2mIDijCAhTZKA6GBwA4Shil6CMwMaElrnZKa9UABD4wjIUtUdbocDrJ?=
+ =?us-ascii?Q?4bYkdzvJo+Qu2GxE8u9sXBVxYj40GCE02jH5QmbPfwj7VKOa7445CLx70bKE?=
+ =?us-ascii?Q?HDbHrMFeCo16htkGletGNE8l5NIzsnePt/5+7O8ht2I8qQpFihXe/tGYD+ru?=
+ =?us-ascii?Q?/yxzrhrecSQmzuaYv2xehIWvwpQWj+wZGaYNRgcS2e9RUZ6i6REQYKfMMcSY?=
+ =?us-ascii?Q?fSLoJBOZbj1zRcHmXmNlruFcYpkBMFiWk4jvG527?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
+X-OriginatorOrg: oss.nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB2786.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fcfda9c2-38ec-4bf0-a9c8-08da8573d960
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2022 01:56:24.0914
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6053.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 518d908a-8bc7-4c59-06fe-08da85994cbc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2022 06:24:28.9603
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +/qnyt4jJfcTyk2FVXeHMTx7elDuMvYQ8py+6X1gm4c4B0pAEw3SK5NBSDHCI+sxowt9N8o86XF6t8d19a5QX/OObxdmwX4FREGp3RBxqkc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR06MB3230
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: ORLGevc8vZvRoieTHAkkgzDgTN4zOwzCNxN6zZTfK/ni6sTDRMbSzkz261TlBD3p4sEqCDMpd5Cio9SRYLlnaQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9194
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-SGkgSm9lbCwNCg0KVGhhbmtzIGZvciB0aGUgcmV2aWV3Lg0KDQo+IC0tLS0tT3JpZ2luYWwgTWVz
-c2FnZS0tLS0tDQo+IEZyb206IEpvZWwgU3RhbmxleSA8am9lbEBqbXMuaWQuYXU+DQo+IFNlbnQ6
-IFdlZG5lc2RheSwgQXVndXN0IDI0LCAyMDIyIDg6NDYgQU0NCj4gVG86IENoaW4tVGluZyBLdW8g
-PGNoaW4tdGluZ19rdW9AYXNwZWVkdGVjaC5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIHdh
-dGNoZG9nOiBhc3BlZWRfd2R0OiBSZW9yZGVyIG91dHB1dCBzaWduYWwgcmVnaXN0ZXINCj4gY29u
-ZmlndXJhdGlvbg0KPiANCj4gT24gRnJpLCAxOSBBdWcgMjAyMiBhdCAwOTo0OSwgQ2hpbi1UaW5n
-IEt1byA8Y2hpbi10aW5nX2t1b0Bhc3BlZWR0ZWNoLmNvbT4NCj4gd3JvdGU6DQo+ID4NCj4gPiBJ
-ZiB0aGUgb3V0cHV0IGRyaXZpbmcgdHlwZSBpcyBwdXNoLXB1bGwgbW9kZSwgdGhlIG91dHB1dCBw
-b2xhcml0eQ0KPiA+IHNob3VsZCBiZSBzZWxlY3RlZCBpbiBhZHZhbmNlLiBPdGhlcndpc2UsIGFu
-IHVuZXhwZWN0ZWQgdmFsdWUgd2lsbCBiZQ0KPiA+IG91dHB1dCBhdCB0aGUgbW9tZW50IG9mIGNo
-YW5naW5nIHRvIHB1c2gtcHVsbCBtb2RlLg0KPiA+IFRodXMsIG91dHB1dCBwb2xhcml0eSwgV0RU
-MThbMzFdLCBtdXN0IGJlIGNvbmZpZ3VyZWQgYmVmb3JlIGNoYW5naW5nDQo+ID4gZHJpdmluZyB0
-eXBlLCBXRFQxOFszMF0uDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBDaGluLVRpbmcgS3VvIDxj
-aGluLXRpbmdfa3VvQGFzcGVlZHRlY2guY29tPg0KPiANCj4gVGhhbmtzIENoaW4tVGluZy4NCj4g
-DQo+IEZpeGVzOiAwMTJjMDQ2MDFmOWQgKCJ3YXRjaGRvZzogYXNwZWVkOiBTdXBwb3J0IGNvbmZp
-Z3VyYXRpb24gb2YgZXh0ZXJuYWwNCj4gc2lnbmFsIHByb3BlcnRpZXMiKQ0KPiBSZXZpZXdlZC1i
-eTogSm9lbCBTdGFubGV5IDxqb2VsQGptcy5pZC5hdT4NCj4gDQo+IEkgd29uZGVyIGlmIGFueSBv
-ZiB0aGVzZSBtYWNoaW5lcyBoaXQgdGhlIGJ1ZzoNCj4NCg0KVW5leHBlY3RlZCBvdXRwdXQgcGlu
-IHZhbHVlIG1heSBub3QgYWx3YXlzIGFwcGVhciBhdCB0aGUgbW9tZW50IG9mIGNoYW5naW5nIGRy
-aXZpbmcgdHlwZS4NCkl0IGRlcGVuZHMgb24gdGhlIG91dHB1dCBzdGF0dXMgb2YgdGhhdCBwaW4g
-YXQgdGhhdCB0aW1lLg0KQnV0LCB3aXRoIHRoaXMgcGF0Y2gsIHRoZSBvdXRwdXQgcGluIHZhbHVl
-IGNhbiBiZSBjb25maXJtZWQuDQoNCg0KQ2hpbi1UaW5nDQoNCj4gJCBnaXQgZ3JlcCAtbCBhc3Bl
-ZWQsZXh0LXB1c2gtcHVsbCBhcmNoL2FybS9ib290L2R0cy8NCj4gYXJjaC9hcm0vYm9vdC9kdHMv
-YXNwZWVkLWJtYy1pYm0tZXZlcmVzdC5kdHMNCj4gYXJjaC9hcm0vYm9vdC9kdHMvYXNwZWVkLWJt
-Yy1pYm0tcmFpbmllci5kdHMNCj4gYXJjaC9hcm0vYm9vdC9kdHMvYXNwZWVkLWJtYy1pbnNwdXIt
-ZnA1MjgwZzIuZHRzDQo+IGFyY2gvYXJtL2Jvb3QvZHRzL2FzcGVlZC1ibWMtb3BwLW1paGF3ay5k
-dHMNCj4gYXJjaC9hcm0vYm9vdC9kdHMvYXNwZWVkLWJtYy1vcHAtbW93Z2xpLmR0cw0KPiBhcmNo
-L2FybS9ib290L2R0cy9hc3BlZWQtYm1jLW9wcC1zd2lmdC5kdHMNCj4gYXJjaC9hcm0vYm9vdC9k
-dHMvYXNwZWVkLWJtYy1vcHAtdGFjb21hLmR0cw0KPiBhcmNoL2FybS9ib290L2R0cy9hc3BlZWQt
-Ym1jLW9wcC13aXRoZXJzcG9vbi5kdHMNCj4gDQo+IA0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL3dh
-dGNoZG9nL2FzcGVlZF93ZHQuYyB8IDEyICsrKysrKy0tLS0tLQ0KPiA+ICAxIGZpbGUgY2hhbmdl
-ZCwgNiBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBh
-L2RyaXZlcnMvd2F0Y2hkb2cvYXNwZWVkX3dkdC5jDQo+ID4gYi9kcml2ZXJzL3dhdGNoZG9nL2Fz
-cGVlZF93ZHQuYyBpbmRleCA0MzY1NzFiNmZjNzkuLmEwM2U0ZmY4MTJhMg0KPiA+IDEwMDY0NA0K
-PiA+IC0tLSBhL2RyaXZlcnMvd2F0Y2hkb2cvYXNwZWVkX3dkdC5jDQo+ID4gKysrIGIvZHJpdmVy
-cy93YXRjaGRvZy9hc3BlZWRfd2R0LmMNCj4gPiBAQCAtMzI1LDE4ICszMjUsMTggQEAgc3RhdGlj
-IGludCBhc3BlZWRfd2R0X3Byb2JlKHN0cnVjdA0KPiBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+
-ID4gICAgICAgICAgICAgICAgIHUzMiByZWcgPSByZWFkbCh3ZHQtPmJhc2UgKyBXRFRfUkVTRVRf
-V0lEVEgpOw0KPiA+DQo+ID4gICAgICAgICAgICAgICAgIHJlZyAmPSBjb25maWctPmV4dF9wdWxz
-ZV93aWR0aF9tYXNrOw0KPiA+IC0gICAgICAgICAgICAgICBpZiAob2ZfcHJvcGVydHlfcmVhZF9i
-b29sKG5wLCAiYXNwZWVkLGV4dC1wdXNoLXB1bGwiKSkNCj4gPiAtICAgICAgICAgICAgICAgICAg
-ICAgICByZWcgfD0gV0RUX1BVU0hfUFVMTF9NQUdJQzsNCj4gPiArICAgICAgICAgICAgICAgaWYg
-KG9mX3Byb3BlcnR5X3JlYWRfYm9vbChucCwgImFzcGVlZCxleHQtYWN0aXZlLWhpZ2giKSkNCj4g
-PiArICAgICAgICAgICAgICAgICAgICAgICByZWcgfD0gV0RUX0FDVElWRV9ISUdIX01BR0lDOw0K
-PiA+ICAgICAgICAgICAgICAgICBlbHNlDQo+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgcmVn
-IHw9IFdEVF9PUEVOX0RSQUlOX01BR0lDOw0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIHJl
-ZyB8PSBXRFRfQUNUSVZFX0xPV19NQUdJQzsNCj4gPg0KPiA+ICAgICAgICAgICAgICAgICB3cml0
-ZWwocmVnLCB3ZHQtPmJhc2UgKyBXRFRfUkVTRVRfV0lEVEgpOw0KPiA+DQo+ID4gICAgICAgICAg
-ICAgICAgIHJlZyAmPSBjb25maWctPmV4dF9wdWxzZV93aWR0aF9tYXNrOw0KPiA+IC0gICAgICAg
-ICAgICAgICBpZiAob2ZfcHJvcGVydHlfcmVhZF9ib29sKG5wLCAiYXNwZWVkLGV4dC1hY3RpdmUt
-aGlnaCIpKQ0KPiA+IC0gICAgICAgICAgICAgICAgICAgICAgIHJlZyB8PSBXRFRfQUNUSVZFX0hJ
-R0hfTUFHSUM7DQo+ID4gKyAgICAgICAgICAgICAgIGlmIChvZl9wcm9wZXJ0eV9yZWFkX2Jvb2wo
-bnAsICJhc3BlZWQsZXh0LXB1c2gtcHVsbCIpKQ0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAg
-IHJlZyB8PSBXRFRfUFVTSF9QVUxMX01BR0lDOw0KPiA+ICAgICAgICAgICAgICAgICBlbHNlDQo+
-ID4gLSAgICAgICAgICAgICAgICAgICAgICAgcmVnIHw9IFdEVF9BQ1RJVkVfTE9XX01BR0lDOw0K
-PiA+ICsgICAgICAgICAgICAgICAgICAgICAgIHJlZyB8PSBXRFRfT1BFTl9EUkFJTl9NQUdJQzsN
-Cj4gPg0KPiA+ICAgICAgICAgICAgICAgICB3cml0ZWwocmVnLCB3ZHQtPmJhc2UgKyBXRFRfUkVT
-RVRfV0lEVEgpOw0KPiA+ICAgICAgICAgfQ0KPiA+IC0tDQo+ID4gMi4yNS4xDQo+ID4NCg==
+
+
+> -----Original Message-----
+> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+> Sent: Tuesday, August 23, 2022 8:02 PM
+> To: Marco Felsch <m.felsch@pengutronix.de>
+> Cc: Alice Guo (OSS) <alice.guo@oss.nxp.com>; wim@linux-watchdog.org;
+> shawnguo@kernel.org; s.hauer@pengutronix.de; festevam@gmail.com;
+> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
+> dl-linux-imx <linux-imx@nxp.com>; kernel@pengutronix.de;
+> linux-watchdog@vger.kernel.org
+> Subject: Re: [PATCH 2/7] watchdog: imx7ulp: Add explict memory barrier fo=
+r
+> unlock sequence
+>=20
+> On Tue, Aug 23, 2022 at 11:10:27AM +0200, Marco Felsch wrote:
+> > On 22-08-23, Alice Guo (OSS) wrote:
+> > >
+> > >
+> > > > -----Original Message-----
+> > > > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+> > > > Sent: Monday, August 22, 2022 10:04 PM
+> > > > To: Marco Felsch <m.felsch@pengutronix.de>
+> > > > Cc: Alice Guo (OSS) <alice.guo@oss.nxp.com>;
+> > > > wim@linux-watchdog.org; shawnguo@kernel.org;
+> > > > s.hauer@pengutronix.de; festevam@gmail.com;
+> > > > linux-arm-kernel@lists.infradead.org;
+> > > > linux-kernel@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>;
+> > > > kernel@pengutronix.de; linux-watchdog@vger.kernel.org
+> > > > Subject: Re: [PATCH 2/7] watchdog: imx7ulp: Add explict memory
+> > > > barrier for unlock sequence
+> > > >
+> > > > On Mon, Aug 22, 2022 at 10:00:10AM +0200, Marco Felsch wrote:
+> > > > > On 22-08-22, Alice Guo (OSS) wrote:
+> > > > > > > -----Original Message-----
+> > > > > > > From: Marco Felsch <m.felsch@pengutronix.de>
+> > > > > > > Sent: Tuesday, August 16, 2022 2:24 PM
+> > > > > > > To: Alice Guo (OSS) <alice.guo@oss.nxp.com>
+> > > > > > > Cc: wim@linux-watchdog.org; linux@roeck-us.net;
+> > > > > > > shawnguo@kernel.org; s.hauer@pengutronix.de;
+> > > > > > > festevam@gmail.com; linux-arm-kernel@lists.infradead.org;
+> > > > > > > linux-kernel@vger.kernel.org; dl-linux-imx
+> > > > > > > <linux-imx@nxp.com>; kernel@pengutronix.de;
+> > > > > > > linux-watchdog@vger.kernel.org
+> > > > > > > Subject: Re: [PATCH 2/7] watchdog: imx7ulp: Add explict
+> > > > > > > memory barrier for unlock sequence
+> > > > > > >
+> > > > > > > On 22-08-16, Alice Guo (OSS) wrote:
+> > > > > > > > From: Jacky Bai <ping.bai@nxp.com>
+> > > > > > > >
+> > > > > > > > Add explict memory barrier for the wdog unlock sequence.
+> > > > > > >
+> > > > > > > Did you inspected any failures? It's not enough to say what
+> > > > > > > you did, you need to specify the why as well.
+> > > > > > >
+> > > > > > > Regards,
+> > > > > > >   Marco
+> > > > > >
+> > > > > > Hi,
+> > > > > >
+> > > > > > Two 16-bit writes of unlocking the Watchdog should be
+> > > > > > completed within a
+> > > > certain time. The first mb() is used to ensure that previous
+> > > > instructions are completed.
+> > > > > > The second mb() is used to ensure that the unlock sequence
+> > > > > > cannot be
+> > > > affected by subsequent instructions. The reason will be added in
+> > > > the commit log of v2.
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > I know what memory barriers are. My question was, did you see
+> > > > > any issues? Since the driver is used mainline and no one reported
+> issues.
+> > > > >
+> > > > > Also just don't use the *_relaxed() versions is more common,
+> > > > > than adding
+> > > > > mb() calls around *_relaxed() versions.
+> > > > >
+> > > >
+> > > > Agreed with both. The series is a bit short in explaining _why_
+> > > > the changes are made.
+> > > >
+> > > > Guenter
+> > > >
+> > > > > Regards,
+> > > > >   Marco
+> > > > >
+> > > > > >
+> > >
+> > > Hi Guenter and Marco,
+> > >
+> > > 1. did you see any issues?
+> > > This WDOG Timer first appeared in i.MX7ULP, no one report issues
+> > > probably because few people use i.MX7ULP. This issue was found when
+> > > we did a stress test on it. When we reconfigure the WDOG Timer,
+> > > there is a certain probability that it reset. The reason for the
+> > > error is that when WDOG_CS[CMD32EN] is 0, the unlock sequence is two
+> > > 16-bit writes (0xC520, 0xD928) to the CNT register within 16 bus
+> > > clocks, and improper unlock sequence causes the WDOG to reset.
+> > > Adding mb() is to guarantee that two 16-bit writes are finished withi=
+n 16
+> bus clocks.
+> >
+> > After this explanation the whole imx7ulp_wdt_init() seems a bit buggy
+> > because writel_relaxed() as well as writel() are 32bit access functions=
+.
+> > So the very first thing to do is to enable the 32-bit mode.
+> >
+> Agreed. This is much better than having extra code to deal with both 16-b=
+it
+> and 32-bit access.
+>=20
+> > Also this is a explanation worth to be added to the commit message ;)
+> >
+>=20
+> Definitely. Also, the use of mb(), if it should indeed be needed, would h=
+ave to
+> be explained in a code comment.
+>=20
+> Thanks,
+> Guenter
+
+Hi Marco and Guenter,
+
+Thank you for your comments. I plan to enable support for 32-bit unlock com=
+mand write words in bootloader. In this way, there is no need to distinguis=
+h whether the unlock command is a 32-bit command or a 16-bit command in dri=
+ver.
+
+Best Regards,
+Alice Guo
+
+> > > 2. Also just don't use the *_relaxed() versions is more common, than
+> > > adding mb() calls around *_relaxed() versions.  Memory barriers
+> > > cannot be added between two 16-bit writes. I do not know the reason.
+> >
+> > As written above, writel() as well as writel_relaxed() are not 16-bit
+> > access functions.
+> >
+> > So to me it looks as you need first to ensure that 32-bit access mode
+> > is enabled. After that you can write drop the to writel_relaxed()
+> > functions and instead just write:
+> >
+> >    writel(UNLOCK, wdt->base + WDOG_CNT);
+> >
+> > Also why do we need to unlock the watchdog during imx7ulp_wdt_init()?
+> > This is handled just fine during imx7ulp_wdt_enable() and during
+> > imx7ulp_wdt_set_timeout(). So just drop those relaxed writes and
+> > everything should be fine.
+> >
+> > Regards,
+> >   Marco
