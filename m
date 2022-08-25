@@ -2,170 +2,213 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF5C59FE3E
-	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Aug 2022 17:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A735A0ABA
+	for <lists+linux-watchdog@lfdr.de>; Thu, 25 Aug 2022 09:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237702AbiHXP0D (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 24 Aug 2022 11:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S238935AbiHYHur (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 25 Aug 2022 03:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236041AbiHXP0C (ORCPT
+        with ESMTP id S238833AbiHYHuo (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 24 Aug 2022 11:26:02 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80058.outbound.protection.outlook.com [40.107.8.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E1E7FFB2;
-        Wed, 24 Aug 2022 08:26:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WGz+YxcKGreYheeCzxVoCbRBHwgVlYIliRahYOrCyP0kJcb0t81aKWBLEUGqakcJuC1jt/pa0BCQpCOdUuPj3jdP8xtV1gt/BPoyrimbGh4rg/CUNzxC9WfWAPI/BIGx2/TRTYz2i8Hqcupbu3riMKuzKaSvHWdx+PQQRqaPhXIQAou3LMYB/8+Q1BSdq9J6bgO2g5Ba1qy3DGf02cNKcGs62l2EuRQEiQCPvzT49JedARRNa8/H0OxxEKdsIzje6m/lkntf6WUaxTag4i55dK54m/PuTPxYBhN+dSL4INNUy7WZNDYVJkpQPPHN8fRU0wObJ4nSAutYf55Brnae/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NtMntCKAD+tObCLo8GINfRNE7kx/IfsLKPY3RiWlOZA=;
- b=ZA0wdcVfcfZFWjvDPn1PQg9EGQG11579+oFEo4CEpkFvirkjIi6PiM0UoAbY7uusWFCNsL44FR7P4V+TyGfOS7zrHw7kwtiEtuByPjDEIGkpmKGehEAiBgmGssGjqQRP0aj8aptG48WxqeoZcGXIoehc7DKCCgM6oWjtZn9alL/AvWr0jiMB3OFCNTplKB+y1nlGdS3K05m2YhNZqTagtPyePi7PtI7aa0hAeQI5QtZVPFaSM0h6sObLvSy29mT7TCBQIzhg9nVCu0Flz1JMWwyGShLuLun8kHHmBU9+t1MvywqABMqmZnDS/Zpfv6EimhrsFFTvUgfb9QAsKhsOaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NtMntCKAD+tObCLo8GINfRNE7kx/IfsLKPY3RiWlOZA=;
- b=FO0R4P2I3H5TzMn+abqz7nStDJEHlQeaoV8WpK3Lbm5000XKmRGO+aS9Rqw+TeTYYsAcuaZXFqFZaws97Ew2m4DXkLHZt/PGRuTIv04dOSDhBBBUMWQ9rm2rwBSQD24AafTMJV3JW1Y+LSx7vltBLGu+U9iKZaznj9zBGurOqyfZhGwiLvi8sNIuNqxE6alBwLFd8nKR/7tPrVjSwriyGAluENqQdAPoIpb3crFwZ/oKMUyNP0dTSoWhII3za+0zpR7rLYsI9TMVUTZ3LiTJMeIK/QUgqOICl5KMQy6FqKRso+vADGMdglj5j2b9yAfqE2ge8TcI+W2RbMq3oLKJ8g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
- by PA4PR10MB5634.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:263::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 24 Aug
- 2022 15:25:58 +0000
-Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::75ee:d5d2:6b1d:150b]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::75ee:d5d2:6b1d:150b%3]) with mapi id 15.20.5546.022; Wed, 24 Aug 2022
- 15:25:58 +0000
-Date:   Wed, 24 Aug 2022 17:25:56 +0200
-From:   Henning Schild <henning.schild@siemens.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] watchdog: w83627hf_wdt: add bootstatus support
-Message-ID: <20220824172556.245f2579@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20220824152448.7736-1-henning.schild@siemens.com>
-References: <20220824152448.7736-1-henning.schild@siemens.com>
-X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0157.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a2::13) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:102:269::8)
+        Thu, 25 Aug 2022 03:50:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3850D959A
+        for <linux-watchdog@vger.kernel.org>; Thu, 25 Aug 2022 00:50:42 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oR7d4-0006ig-ST; Thu, 25 Aug 2022 09:50:18 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oR7d2-0001hc-OE; Thu, 25 Aug 2022 09:50:16 +0200
+Date:   Thu, 25 Aug 2022 09:50:16 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Subject: Re: [PATCH 2/7] watchdog: imx7ulp: Add explict memory barrier for
+ unlock sequence
+Message-ID: <20220825075016.rhwvlfl6xv2ibro3@pengutronix.de>
+References: <20220822080010.ecdphpm3i26cco5f@pengutronix.de>
+ <20220822140347.GA4087281@roeck-us.net>
+ <AM6PR04MB6053E26CB59410EBCC2C93AEE2709@AM6PR04MB6053.eurprd04.prod.outlook.com>
+ <20220823091027.ezyxkn64asajvjom@pengutronix.de>
+ <20220823120219.GA203169@roeck-us.net>
+ <AM6PR04MB60535EC5B774004AF996BDA5E2739@AM6PR04MB6053.eurprd04.prod.outlook.com>
+ <20220824080338.humjny4fabhmx3z7@pengutronix.de>
+ <AM6PR04MB6053D8E0A9AD24757095BFB5E2739@AM6PR04MB6053.eurprd04.prod.outlook.com>
+ <20220824090622.ubbuf4doyul7d42r@pengutronix.de>
+ <AM6PR04MB605317170101019C75BA9290E2739@AM6PR04MB6053.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6bfd065b-54ff-40b7-40d1-08da85e4f207
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5634:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8xr1xz3jmWH3/1hLNeFlkVFCP/Xe+iqxnKOKyw7y8DHCu2SfDgvf8zsM7FInLAFAkkL0ZwipNkgC09NM4SBSTNgX8tjQRUgbmxyepkhXbaIFHtslJGVBwm1VBVtg2KhgXw8UnPk7aZnfwMXrRR/uWB5R3J9fMKHgC1UX0b+E9f2yiPWPo/kYr4bvIXUvUwvqfCh4JpaArHq/enp7fe9HJin9FQEicHKhdVTOJM7CR92wWhXPk8VFAGOUMJ/kTbdUS+SK8PzfkCyJnkb/QgXCcJH0OcKoq5Pu1RW6Nel2LycBMNOexRJUhCLOLRsfMcC/fnUyw0LJ5nmEXMvyVOI8KorozNMQaA7eO/YEINGwcxj9SoCR5F0xhgowfkVT3+vjWafmi53NF0XKLmOYZNC/AAuh6VNWOkyNMmlvrHteFKahTHWx17Qjn8pj9KV7kO9btF2qDnVgnwgMkb0wVjxN/trzqtMXeRSMQ53QuJkoPLDlPGLxDNjYIv0Bzg6F7kDNzbCZau3UcFzwDIMlMEBCnh5GGUKvYOqukiZcBPD1uzcWc4Vc0E2+4gKVnJcx1WvZTF0ixR0EJtwFKFOiumnVnH2HkgBaKKOahg3HAb4PCER9pYq9wVOlyV3NX+G6ylTH2iIacN3eHl1+6yvSmQPxBJib+bTW1n3UC4FMnUIqiwXCDead5/ZF723x/9MA8dqQf1biF57CagSmPvwIQzD+UyK68m+vE++smHfAjfa7384n00OF+ahxImcckYF5ia+5
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(366004)(396003)(346002)(136003)(1076003)(186003)(44832011)(110136005)(316002)(9686003)(6512007)(26005)(2906002)(83380400001)(6506007)(86362001)(82960400001)(8936002)(41300700001)(5660300002)(8676002)(6486002)(38100700002)(66556008)(66476007)(66946007)(478600001)(2101003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PPGkxbo6D/OFWVbnplEgrzB7HLGmwoSWc/OTDUkSouuHRHp1eRxTqwokRIeV?=
- =?us-ascii?Q?7b3TR8ExdpQaN3ZYYbRYUBg3AMCv2S70tfOP3i/59cviNeiEDRb6qIjxw+tX?=
- =?us-ascii?Q?0d6nw6y1JaEsF2ql6NL5zfy5vGwRVz2hBaoxjVQ1by95xzbiR03seXy1EDGq?=
- =?us-ascii?Q?srYmq+eYyIrwjCJ90oqPEixpAB66j40uLS7Z0Ym4JwtM41YNYoYsgBPh4WiB?=
- =?us-ascii?Q?MDJ565TaGrjS3eu7iJ3/VCMOixgobS6gT3MveZ3ThOCW7tqIWQ2JswVNahFg?=
- =?us-ascii?Q?PjqKzdDUq0FerhX3LiQpDqD8EprHIhWFgLTNc0/iyE+ohheKB7aaUPPlQeX3?=
- =?us-ascii?Q?0YvrU45dodnhMXCYkIjq2I3/pfSAFnv2hX5kJWl0usivg2TVfMo+bQLtKpDv?=
- =?us-ascii?Q?124oPgrWXG+mr51TOvRCOYqjDpSuFIiQcUPsnOGX0kYB1JjlR/F/qG3WF8va?=
- =?us-ascii?Q?jdbHG5PG5tFN2VUuidrNAKu/rvH8KjvMRXRKV4+qBQbLImhAUMhIXp1S8Lmn?=
- =?us-ascii?Q?H5wVpdto+rnnyI6NoEe7tj6gqK0GWOTClm9nnHrS4CoHw0qjpoXA6oM1k+pg?=
- =?us-ascii?Q?CGKHHoMS5EF2b5l9YZYH0oyqz7AVS1yeCArN0uP9+II7G5nmXjoFOj5/Xu8Q?=
- =?us-ascii?Q?oEcNBvwHkKAvZW6r0obhjeUtpQcng2Z1gbH7g2hUjWOcilkLsRzDqnDUK0S5?=
- =?us-ascii?Q?nAjO30YbfYL43FIzNTKjHQByEM/R+OD63TeO5TEy+ZahBqBNGjEY/NrSkORY?=
- =?us-ascii?Q?Nt11sbmkB9TsJjbClpo1/PMMd2wuNZEUbSShSmBCq+9aTDBj8CwuqRuRoapq?=
- =?us-ascii?Q?0J4aakm4Q8aeIVb/qoK7aMr/lL6RF9An6GRBERWz9MtFxN6evtvhoqhoHR1/?=
- =?us-ascii?Q?p9yIAN9Eo6YEVNeCcw2FUSrLoAzav9UCpXen/GRIS1a9jaTCbIR4OrChhMwq?=
- =?us-ascii?Q?vQxVkTEC1vSI94PT0HxgE21y2F7rQeRHG9xe+FoEqSR79ZpQk6GSDxDuzqE6?=
- =?us-ascii?Q?Ew3/xx8WRL12xdRq4M9pGUihIaKvhrJxhKg2cWMTeTEu7l+Rnr29kFHtiCJy?=
- =?us-ascii?Q?Cb4cz+CqFQF0PvegRqXeMWQb4PW/xcxJnuHa64yi1Be2st8i1/w5E+Znokig?=
- =?us-ascii?Q?GthB5pZubupAoajltGrLE6cwaguLD1BtuJoPmit0iFQi0eeif+D7QupFFoNB?=
- =?us-ascii?Q?Z3eOfaSdvvC5NfVhVDMKVDnpQVx4s+abexnZ+YhOd7A7ijccqW6tRbZXhoyH?=
- =?us-ascii?Q?hSGJ3X59NHlrSI2TJCVsPj0PgFXV4M9Fupi2NYr7FekCxkBHwDG7/2U0927u?=
- =?us-ascii?Q?t6dlJa863xA/rxMq1coNh9euWOELYZbBa44HtS4qidwkinoDCEMntkQLT3nC?=
- =?us-ascii?Q?17S7xx0KFHsLiRY+D/sZQPT17MKqSUa4iTDym5Qte1ZHcDqGNXuaPxUMR/4Y?=
- =?us-ascii?Q?rxBuVI9Qp7HUzvbee0+W2RO1FyHFpnSov4miP6emy4FGlQc+qlM+K13SJyk1?=
- =?us-ascii?Q?S0zYybO2FiGUy61yQHik+Akph+ZJABAlgwEIfczXBfQY6fGlQoNOstbi/XXH?=
- =?us-ascii?Q?osj9j3CNTXtICLvzJV3Tr9mUKbT2D9fggzy92lW0ONfupKoQBRa5OllSHyRq?=
- =?us-ascii?Q?ng=3D=3D?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6bfd065b-54ff-40b7-40d1-08da85e4f207
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2022 15:25:58.6883
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6pUGK3+/iIfwsDum0jO6STt/Hy/nGaaiOTTFj1qEFMCVIF4/3bvnk1wPT+P7GvbpASFJ9JoiDQRXW9XcZpBgcgY+MoeF7leoi9xoiEqNXm8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR10MB5634
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM6PR04MB605317170101019C75BA9290E2739@AM6PR04MB6053.eurprd04.prod.outlook.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Diff to v1:
- - fixed typo in commit message
- - add Reviewed-by tag
- - make sure it still applies
-
-Henning
-
-Am Wed, 24 Aug 2022 17:24:48 +0200
-schrieb Henning Schild <henning.schild@siemens.com>:
-
-> The status bit in the status and control register can tell us whether
-> the last reboot was caused by the watchdog. Make sure to take that
-> into the bootstatus before clearing it.
+On 22-08-24, Alice Guo (OSS) wrote:
 > 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> ---
->  drivers/watchdog/w83627hf_wdt.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+> > -----Original Message-----
+> > From: Marco Felsch <m.felsch@pengutronix.de>
+> > Sent: Wednesday, August 24, 2022 5:06 PM
+> > To: Alice Guo (OSS) <alice.guo@oss.nxp.com>
+> > Cc: Guenter Roeck <linux@roeck-us.net>; wim@linux-watchdog.org;
+> > shawnguo@kernel.org; s.hauer@pengutronix.de; festevam@gmail.com;
+> > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
+> > dl-linux-imx <linux-imx@nxp.com>; kernel@pengutronix.de;
+> > linux-watchdog@vger.kernel.org
+> > Subject: Re: [PATCH 2/7] watchdog: imx7ulp: Add explict memory barrier for
+> > unlock sequence
+> > 
+> > Hi Alice,
+> > 
+> > On 22-08-24, Alice Guo (OSS) wrote:
+> > > > -----Original Message-----
+> > > > From: Marco Felsch <m.felsch@pengutronix.de>
+> > > > Sent: Wednesday, August 24, 2022 4:04 PM
+> > > > To: Alice Guo (OSS) <alice.guo@oss.nxp.com>
+> > > > Cc: Guenter Roeck <linux@roeck-us.net>; wim@linux-watchdog.org;
+> > > > shawnguo@kernel.org; s.hauer@pengutronix.de; festevam@gmail.com;
+> > > > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
+> > > > dl-linux-imx <linux-imx@nxp.com>; kernel@pengutronix.de;
+> > > > linux-watchdog@vger.kernel.org
+> > > > Subject: Re: [PATCH 2/7] watchdog: imx7ulp: Add explict memory
+> > > > barrier for unlock sequence
+> > > >
+> > > > Hi Alice,
+> > > >
+> > > > On 22-08-24, Alice Guo (OSS) wrote:
+> > > >
+> > > > ...
+> > > >
+> > > > > > > > Hi Guenter and Marco,
+> > > > > > > >
+> > > > > > > > 1. did you see any issues?
+> > > > > > > > This WDOG Timer first appeared in i.MX7ULP, no one report
+> > > > > > > > issues probably because few people use i.MX7ULP. This issue
+> > > > > > > > was found when we did a stress test on it. When we
+> > > > > > > > reconfigure the WDOG Timer, there is a certain probability
+> > > > > > > > that it reset. The reason for the error is that when
+> > > > > > > > WDOG_CS[CMD32EN] is 0, the unlock sequence is two 16-bit
+> > > > > > > > writes (0xC520, 0xD928) to the CNT register within 16 bus
+> > > > > > > > clocks, and improper unlock sequence causes the
+> > > > WDOG to reset.
+> > > > > > > > Adding mb() is to guarantee that two 16-bit writes are
+> > > > > > > > finished within 16
+> > > > > > bus clocks.
+> > > > > > >
+> > > > > > > After this explanation the whole imx7ulp_wdt_init() seems a
+> > > > > > > bit buggy because writel_relaxed() as well as writel() are
+> > > > > > > 32bit access
+> > > > functions.
+> > > > > > > So the very first thing to do is to enable the 32-bit mode.
+> > > > > > >
+> > > > > > Agreed. This is much better than having extra code to deal with
+> > > > > > both 16-bit and 32-bit access.
+> > > > > >
+> > > > > > > Also this is a explanation worth to be added to the commit
+> > > > > > > message
+> > > > > > > ;)
+> > > > > > >
+> > > > > >
+> > > > > > Definitely. Also, the use of mb(), if it should indeed be
+> > > > > > needed, would have to be explained in a code comment.
+> > > > > >
+> > > > > > Thanks,
+> > > > > > Guenter
+> > > > >
+> > > > > Hi Marco and Guenter,
+> > > > >
+> > > > > Thank you for your comments. I plan to enable support for 32-bit
+> > > > > unlock command write words in bootloader. In this way, there is no
+> > > > > need to distinguish whether the unlock command is a 32-bit command
+> > > > > or a 16-bit command in driver.
+> > > >
+> > > > Please don't move this into the bootloader, enabling it within the
+> > > > init seq. is just fine. If you move it into the bootloader then you
+> > > > can't ensure that the bit is set since there are plenty of bootloaders out
+> > there.
+> > > >
+> > > > As I said, just drop the "16bit" unlock sequence from the init
+> > > > function because the unlock is handled just fine in all the watchdog_ops.
+> > > >
+> > > > Regards,
+> > > >   Marco
+> > >
+> > > Hi Marco,
+> > >
+> > > Sorry, I did not tell you that all watchdog control bits, timeout
+> > > value, and window value cannot be set until the watchdog is unlocked.
+> > 
+> > You don't have to according the RM:
+> > 8<----------------------------------------------------------------------
+> > 59.5.2 Disable Watchdog after Reset
+> > 
+> > All of watchdog registers are unlocked by reset. Therefore, unlock sequence is
+> > unnecessary, but it needs to write all of watchdog registers to make the new
+> > configuration take effect. The code snippet below shows an example of
+> > disabling watchdog after reset.
+> > 8<----------------------------------------------------------------------
+> > 
+> > also the RM tells us:
+> > 8<----------------------------------------------------------------------
+> > 59.4.3.1 Configuring the Watchdog Once
+> > 
+> > The new configuration takes effect only after all registers except CNT are
+> > written after reset. Otherwise, the WDOG uses the reset values by default. If
+> > window mode is not used (CS[WIN] is 0), writing to WIN is not required to
+> > make the new configuration take effect.
+> > 8<----------------------------------------------------------------------
+> > 
+> > > Support for 32-bit unlock command write words in enabled in
+> > > imx7ulp_wdt_init now.
+> > 
+> > So.. after reading the IMX7ULP RM, which was not my intention, I found out
+> > that most of the WDOG_CS regiter bits are write-once bits. This means if you
+> > didn't set it within the bootloader you still in case "59.4.3.1".
+> > 
+> > So the imx7ulp_wdt_init() function just needs to check if the
+> > WDOG_CS_UPDATE bit was set. If it is not the case, then you need to write the
+> > WDOG_CS register as currently done. If the bit is set, than you need know that
+> > the bootloader did the job for you and you can exit
+> > imx7ulp_wdt_init() early. In both cases the unlock is not required.
+> > 
+> > Can you please check/test if this is working for you?
+> > 
+> > Regards,
+> >   Marco
+> > 
 > 
-> diff --git a/drivers/watchdog/w83627hf_wdt.c
-> b/drivers/watchdog/w83627hf_wdt.c index 56a4a4030ca9..bc33b63c5a5d
-> 100644 --- a/drivers/watchdog/w83627hf_wdt.c
-> +++ b/drivers/watchdog/w83627hf_wdt.c
-> @@ -113,6 +113,10 @@ MODULE_PARM_DESC(early_disable, "Disable
-> watchdog at boot time (default=0)"); #define W836X7HF_WDT_CSR
-> 0xf7 #define NCT6102D_WDT_CSR	0xf2
->  
-> +#define WDT_CSR_STATUS		0x10
-> +#define WDT_CSR_KBD		0x40
-> +#define WDT_CSR_MOUSE		0x80
-> +
->  static void superio_outb(int reg, int val)
->  {
->  	outb(reg, WDT_EFER);
-> @@ -244,8 +248,12 @@ static int w83627hf_init(struct watchdog_device
-> *wdog, enum chips chip) t = superio_inb(cr_wdt_control) & ~0x0C;
->  	superio_outb(cr_wdt_control, t);
->  
-> -	/* reset trigger, disable keyboard & mouse turning off
-> watchdog */
-> -	t = superio_inb(cr_wdt_csr) & ~0xD0;
-> +	t = superio_inb(cr_wdt_csr);
-> +	if (t & WDT_CSR_STATUS)
-> +		wdog->bootstatus |= WDIOF_CARDRESET;
-> +
-> +	/* reset status, disable keyboard & mouse turning off
-> watchdog */
-> +	t &= ~(WDT_CSR_STATUS | WDT_CSR_KBD | WDT_CSR_MOUSE);
->  	superio_outb(cr_wdt_csr, t);
->  
->  	superio_exit();
+> Hi Marco,
+> 
+> Rom code has already configured the WDOG once, so we cannot use "
+> Configuring the Watchdog Once".
 
+What? How does the ROM code configure the WDOG? Also this would be worth a
+comment within the code. Also still assume that this "16bit unlock" seq.
+is useless since you writing 32bit anyway.
+
+Regards,
+  Marco
