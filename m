@@ -2,60 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF4C5A2E1E
-	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Aug 2022 20:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC745A2E50
+	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Aug 2022 20:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343808AbiHZSSL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 26 Aug 2022 14:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53938 "EHLO
+        id S1344321AbiHZSTx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 26 Aug 2022 14:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344928AbiHZSSJ (ORCPT
+        with ESMTP id S1344539AbiHZSTv (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 26 Aug 2022 14:18:09 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C05E3425
-        for <linux-watchdog@vger.kernel.org>; Fri, 26 Aug 2022 11:18:07 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-11e86b7379dso1788477fac.10
-        for <linux-watchdog@vger.kernel.org>; Fri, 26 Aug 2022 11:18:07 -0700 (PDT)
+        Fri, 26 Aug 2022 14:19:51 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C996325F5
+        for <linux-watchdog@vger.kernel.org>; Fri, 26 Aug 2022 11:19:48 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id l23so2359976lji.1
+        for <linux-watchdog@vger.kernel.org>; Fri, 26 Aug 2022 11:19:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=hrW2PNYESNfPMgii30MLtVkxKp8vSG1HVzfZYiK3QVU=;
-        b=nttxs6B5hS0jXoCJdnF1J6WWR7P7nGiMTRRbQXEgvwrSsLs5Zm19d71M9/zSqJp7p8
-         I3mHkMPctqwlqYH4t7hBh8gB8fbYbSps39PkbU49pJ5eGix/oTJ4Iz0PVum6V3ibGNwl
-         sOKTMDaB+KJ4r+Oz9SayGuiVwtzDvZGIFdiaUqNSuwOWWaKORlEQW746dBNnF9G96okT
-         Mw5KKIN3bQE97DVh+wpFcY5RD2l6su1/1esob/Z5g2FmIZYX1BJBSOxwCUe8hdBiJWS5
-         WCosZ81tfa2o/Fy12dtDDpSGl/nvV7rqjNXDkbw8pVFiCgH8wpatbBRpEuly7t+JlhHx
-         Jidg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=E7bH/uBod3gEArFjBjyqSYswhiWTZ0KzaOc9MDcuJqM=;
+        b=W5GGbXhSCCBtbAs+kGwHZ+Le6XC6v1AK39FMzbQpykV1FIS5meiviAM20WXXudoSfI
+         4/HFTNKyo6u8f9D/cOd/4nLnE7mMiutO6p/+fKfNTGR5BcWzpJnJuaFUXiA6+/2Kdh9q
+         cliiWFUkuppGuRcsPVu8OxGjEDvMD7F+l5NcqXN4uV/ivI7KIG6YUnpaUiRCCIF8QzI/
+         K5eAGpyquqGoPJ4hCyv3n9fJJOq05hoxG+ISoBNCrEpxz/4asxdMNb63tqEfaWYbxE2J
+         5aLkULFBrQ41Xu/XKx4PH/C9QzUxS/md1xffwNNKsEpzcCBtv67TEgz87OEwnOs9Rafs
+         +ETg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=hrW2PNYESNfPMgii30MLtVkxKp8vSG1HVzfZYiK3QVU=;
-        b=tn7btshW8p9jwSuDwhmZUjV3qphZDS06QSXTScg57iGOZxZZQZiXa4cOd+otn9OrrK
-         WuMuYMBduYe/93atfgyYryCiQsvvshcXUmljjvb+jj+vpfDI4xxRNAQPl32WyDOm5vJK
-         PQlAHBdbN4FXqMgrHTBqOBEZrTj4xFLwcMZF0Gd/tUJu+9fmpd5dFEoALF+uePloQ2oY
-         dMRzXulJKo2p8Qf6zGez6FUfe7Cre5qf6DrSar4fbuuLzio02AKqZhck7yEKi5rRrKVN
-         DU+v7vK6NtN7VD+379dx4ohi5R52ofwVmIfXM7a1ZgVl6SVoaKacv7jtD/476axidMBT
-         r/Kg==
-X-Gm-Message-State: ACgBeo0aKyWvDeeXIn91tWXR1U3mn5caA9DK+T49/hgyVw7wZo/xW/hY
-        GhFDVVxeqcx43JNyvWoaz2rvjLs7/KsBQ1KvaKzS81n+5aLJaw==
-X-Google-Smtp-Source: AA6agR5mvLQhm392tpz+uT+qeMewNP6ZKQI7CYqJjrrKbBujGbl4Yz/0zFZN12fNOmcOrbsXe0yrHjhqN36D9OmZixY=
-X-Received: by 2002:a05:6870:8984:b0:10d:d981:151f with SMTP id
- f4-20020a056870898400b0010dd981151fmr2396968oaq.212.1661537887104; Fri, 26
- Aug 2022 11:18:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220826135638.3751835-1-saproj@gmail.com> <20220826161235.GA2900848@roeck-us.net>
- <CABikg9y+BQT=MWQtkMRbM3P2JBLDrKUXeiSDiki3A_RNMSbXHQ@mail.gmail.com> <20220826173050.GA2906093@roeck-us.net>
-In-Reply-To: <20220826173050.GA2906093@roeck-us.net>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=E7bH/uBod3gEArFjBjyqSYswhiWTZ0KzaOc9MDcuJqM=;
+        b=QMtgodF6A5E9/s0F7R6l0xgKii1iBeRXQoZDJEvVvZgRWfRdy/HZxp6+TBobAor+CC
+         t/7Cnyhi1Fx7dAeZwni3Ukt6I3UJWHOJxYsupkFZ37C1zIjGM96tI4wnFU7VHK8cAlUl
+         CQzx8Q+y4Ybu9oAntDqmEliSXmZ13U7pHMpIarBcOFpsSODZzIeun4hCx4nTuJptGKkA
+         6s+rUgO9v7pWpU7lmmjWJT9hY6YUhHlqOgRBbepLVRcwDFu8u16v2QP2Vcje/qGfSKJ2
+         0+L5566PkOUUtV4LHXeMtc2B3mPC20vYednsLv1VNnWJol1CJ9id093W/Yj/FvjQ8cBg
+         dxAw==
+X-Gm-Message-State: ACgBeo07YocJ50v/JfCfuTTcDa7rGuY8iWsh/r8pECi4Y6ynLK5aVFSQ
+        eNUzTzbS8Z4QLyWzptt9wyce6Uhu10abNw==
+X-Google-Smtp-Source: AA6agR71kWWSlb1W3bwiorWB16vmDq4sfcTPlM0888XkWyF6Lo5VGMB5fSZvMNvVigxrK3eUiQ4s/g==
+X-Received: by 2002:a2e:a370:0:b0:25e:502a:5308 with SMTP id i16-20020a2ea370000000b0025e502a5308mr2565290ljn.282.1661537987022;
+        Fri, 26 Aug 2022 11:19:47 -0700 (PDT)
+Received: from saproj-Latitude-5501.yandex.net ([2a02:6b8:0:40c:577c:85a1:14b0:31a8])
+        by smtp.gmail.com with ESMTPSA id e14-20020a05651c038e00b00261e8e4e381sm541594ljp.2.2022.08.26.11.19.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Aug 2022 11:19:46 -0700 (PDT)
 From:   Sergei Antonov <saproj@gmail.com>
-Date:   Fri, 26 Aug 2022 21:17:56 +0300
-Message-ID: <CABikg9zNLDez84kqsdc4Eo3v-UBoG-LoPOcwLPE1Jt57vGvVXQ@mail.gmail.com>
-Subject: Re: [PATCH] watchdog: ftwdt010_wdt: add _restart() function
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org
-Content-Type: text/plain; charset="UTF-8"
+To:     linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
+        Sergei Antonov <saproj@gmail.com>
+Subject: [PATCH] watchdog: ftwdt010_wdt: implement _restart() function
+Date:   Fri, 26 Aug 2022 21:19:21 +0300
+Message-Id: <20220826181921.3899603-1-saproj@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -66,42 +68,74 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, 26 Aug 2022 at 20:30, Guenter Roeck <linux@roeck-us.net> wrote:
-> > > > +static int ftwdt010_wdt_restart(struct watchdog_device *wdd,
-> > > > +                             unsigned long action, void *data)
-> > > > +{
-> > > > +     wdd->timeout = 0;
-> > > > +     return ftwdt010_wdt_start(wdd);
-> > >
-> > > While technically correct, this crates the impression that
-> > > ftwdt010_wdt_start() might return an error - which it never does.
-> > > Given that, I would prefer
-> > >         ftwdt010_wdt_start(wdd);
-> > >         return 0;
-> >
-> > Why loose the return value? My code lets it propagate. It is
-> > potentially non-zero.
-> >
-> No, it never is. Look at the code. That is the whole point.
+Implement ftwdt010_wdt_restart(). It enables watchdog with timeout = 0
+and disabled IRQ. Since it needs code similar to ftwdt010_wdt_start(),
+add a new function ftwdt010_enable() and move common code there.
 
-Of course I looked at ftwdt010_wdt_start() and saw it always returning
-0. By "potentially" I meant it returning errors too in the future.
+Signed-off-by: Sergei Antonov <saproj@gmail.com>
+---
+ drivers/watchdog/ftwdt010_wdt.c | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
 
-> > > Also, did you make sure that interrupt support does not interfer with
-> > > restart ? We don't want to get an interrupt when the watchdog fires due
-> > > to a call to the restart handler.
-> >
-> > No, I did not test watchdog interrupt on my hardware (don't' know yet
-> > how to set it up correctly). I only tested that restart restarts the
-> > hardware as expected.
-> > Now that I think of it, it may be more precise to do
-> > gwdt->has_irq = false;
-> > before calling ftwdt010_wdt_start()
-> > So that WDCR_WDINTR flag will not be set and the chip will not trigger
-> > an interrupt.
->
-> In that case I'd rather see a separate function which is called from both
-> ftwdt010_wdt_start() and the restart function and has timeout and the interrupt
-> flag as parameters. That would also address the never-happening error return.
+diff --git a/drivers/watchdog/ftwdt010_wdt.c b/drivers/watchdog/ftwdt010_wdt.c
+index 21dcc7765688..0a5bbfd2823f 100644
+--- a/drivers/watchdog/ftwdt010_wdt.c
++++ b/drivers/watchdog/ftwdt010_wdt.c
+@@ -47,21 +47,28 @@ struct ftwdt010_wdt *to_ftwdt010_wdt(struct watchdog_device *wdd)
+ 	return container_of(wdd, struct ftwdt010_wdt, wdd);
+ }
+ 
+-static int ftwdt010_wdt_start(struct watchdog_device *wdd)
++static void ftwdt010_enable(struct ftwdt010_wdt *gwdt,
++			    unsigned int timeout,
++			    bool need_irq)
+ {
+-	struct ftwdt010_wdt *gwdt = to_ftwdt010_wdt(wdd);
+ 	u32 enable;
+ 
+-	writel(wdd->timeout * WDT_CLOCK, gwdt->base + FTWDT010_WDLOAD);
++	writel(timeout * WDT_CLOCK, gwdt->base + FTWDT010_WDLOAD);
+ 	writel(WDRESTART_MAGIC, gwdt->base + FTWDT010_WDRESTART);
+ 	/* set clock before enabling */
+ 	enable = WDCR_CLOCK_5MHZ | WDCR_SYS_RST;
+ 	writel(enable, gwdt->base + FTWDT010_WDCR);
+-	if (gwdt->has_irq)
++	if (need_irq)
+ 		enable |= WDCR_WDINTR;
+ 	enable |= WDCR_ENABLE;
+ 	writel(enable, gwdt->base + FTWDT010_WDCR);
++}
+ 
++static int ftwdt010_wdt_start(struct watchdog_device *wdd)
++{
++	struct ftwdt010_wdt *gwdt = to_ftwdt010_wdt(wdd);
++
++	ftwdt010_enable(gwdt, wdd->timeout, gwdt->has_irq);
+ 	return 0;
+ }
+ 
+@@ -93,6 +100,13 @@ static int ftwdt010_wdt_set_timeout(struct watchdog_device *wdd,
+ 	return 0;
+ }
+ 
++static int ftwdt010_wdt_restart(struct watchdog_device *wdd,
++				unsigned long action, void *data)
++{
++	ftwdt010_enable(to_ftwdt010_wdt(wdd), 0, false);
++	return 0;
++}
++
+ static irqreturn_t ftwdt010_wdt_interrupt(int irq, void *data)
+ {
+ 	struct ftwdt010_wdt *gwdt = data;
+@@ -107,6 +121,7 @@ static const struct watchdog_ops ftwdt010_wdt_ops = {
+ 	.stop		= ftwdt010_wdt_stop,
+ 	.ping		= ftwdt010_wdt_ping,
+ 	.set_timeout	= ftwdt010_wdt_set_timeout,
++	.restart	= ftwdt010_wdt_restart,
+ 	.owner		= THIS_MODULE,
+ };
+ 
+-- 
+2.34.1
 
-OK. Submitting a new patch.
