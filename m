@@ -2,62 +2,59 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 550A05A3819
-	for <lists+linux-watchdog@lfdr.de>; Sat, 27 Aug 2022 16:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E2735A381B
+	for <lists+linux-watchdog@lfdr.de>; Sat, 27 Aug 2022 16:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233373AbiH0OYU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 27 Aug 2022 10:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
+        id S233346AbiH0OZ7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 27 Aug 2022 10:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbiH0OYT (ORCPT
+        with ESMTP id S231708AbiH0OZ5 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 27 Aug 2022 10:24:19 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B506732EEB
-        for <linux-watchdog@vger.kernel.org>; Sat, 27 Aug 2022 07:24:18 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id n24so4018584ljc.13
-        for <linux-watchdog@vger.kernel.org>; Sat, 27 Aug 2022 07:24:18 -0700 (PDT)
+        Sat, 27 Aug 2022 10:25:57 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5885275EA
+        for <linux-watchdog@vger.kernel.org>; Sat, 27 Aug 2022 07:25:56 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-11dca1c9c01so5568045fac.2
+        for <linux-watchdog@vger.kernel.org>; Sat, 27 Aug 2022 07:25:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=HbdXU7dzIwy7ZvY124oLhnsZyjXer1TmfSb8KrfKrFE=;
-        b=SFF9ubXZmlFRUsGpdhM7KBqVRuGFX4XPu8u4cql+Dlqk1QCAEVXgFwD7nhDzv79ZHO
-         RQcJJ34oYFtPNRtN52BWNvVVzITa4OuPoCUzy0Q182jkRa8T4hcbOffYv78SJmVNJda8
-         I59tFF5a6UZYmFaDYwnA5uFDs5ps9oOOHiSJa7C2rtQEJZidF+wttekhES5ABCLAPci6
-         5qsV/EkXn7O/sPWh1f/FD6cInfNPo8gD1E8VhxKukGbJ0qCuVoCqH8llMl0dLpfLdVk0
-         mMg3byW1NzTMGRwAuYV2OEZZFO7UwbQK1bxZkEaot1EhciRtQ9+eY2CSZwxiVfc8FxbR
-         JO8Q==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=68B0sNoP4V0SiB5PRV/vbtMt8lZeZ1c9jy9H+7Dqg8g=;
+        b=Sy1llnSUiS8Rvf4Ab2TmvkdPGT0JUp2ahomnMXtls2VDlJp1nM7qUNe+u5lEqw8Fyk
+         r6/PvOEMKbOKaaZXTpaWSNylW75qSh8l7Ux4UB4wvGvUAowldwDgc3nzw21FvWQF5OmM
+         syOR+RbMCaFtNEwBRQpWZctfpKJxEFBkxafxgsBCw75KkJ/Iy3ybFGhEEwxQ1vsJvsTB
+         LsE8wRgD5VJi5rJEKm/o5RdpPqVcvoQnbzNJzcKiXIzb6rNu1xeeIL52TVGQNH+zCJjo
+         bfNhwN2iz6ChG5Pj93wfewwE25lAg/Et8cOVjx1P96sspVdUe1Xi/H8jtzn/3um8PtBw
+         q6BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=HbdXU7dzIwy7ZvY124oLhnsZyjXer1TmfSb8KrfKrFE=;
-        b=tK9XaqwJOZt6nZzNIw/m+Mc3wxcl4O4O1BJY+P1E8bxZbdu3mjIyaf1X9ouE7/q6e0
-         HmAzeUyMvl6pLrBTmhXKxdIcupqYdU2pnWJDtmrJnvb4/+TOFmXmU0/I4AAupyo9uxsm
-         RWCbMurBYTkHxDCkHYfjsMi5Wh/vBuxHQMrGyqS3KcUmg1OU8SuvJdoruBY2EEpAt5Tn
-         Lhn+ix6zjD8z7FD/XmPdMYBjiYgrKz6MikFj9s/qyb5iWnh4Ut08otq2DkCKant/nWm/
-         YyWE80UlVtnfgTUq/wSEiXPs5mRpHAZCEJ/bUyNOlVF3ug7X9aeldT9050+gaxDuUdWY
-         QEoQ==
-X-Gm-Message-State: ACgBeo26dw4kHaYIHJ+b9OrCUfVpxDpAO0liuBrXF7+X8vRw870Bpr5u
-        ZJ1lDWtjhwMHcA+BefRL8oPagCd0eIaPIQ==
-X-Google-Smtp-Source: AA6agR7G46LEaDtTtAtEOaIAbXKrvTHmMoOhYfj4gJ8n9GRzmPpJ9gzjQ835NMMiaERbT+bhhVF1Ew==
-X-Received: by 2002:a05:651c:2102:b0:25a:42ee:49ae with SMTP id a2-20020a05651c210200b0025a42ee49aemr3456381ljq.200.1661610257012;
-        Sat, 27 Aug 2022 07:24:17 -0700 (PDT)
-Received: from saproj-Latitude-5501.yandex.net ([2a02:6b8:0:40c:577c:85a1:14b0:31a8])
-        by smtp.gmail.com with ESMTPSA id w20-20020a05651234d400b0048b0099f40fsm676538lfr.216.2022.08.27.07.24.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Aug 2022 07:24:16 -0700 (PDT)
-From:   Sergei Antonov <saproj@gmail.com>
-To:     linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
-        Sergei Antonov <saproj@gmail.com>
-Subject: [PATCH v2] watchdog: ftwdt010_wdt: implement _restart() function
-Date:   Sat, 27 Aug 2022 17:24:14 +0300
-Message-Id: <20220827142414.4017751-1-saproj@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=68B0sNoP4V0SiB5PRV/vbtMt8lZeZ1c9jy9H+7Dqg8g=;
+        b=jUls5NHAVTHWaGulv07RLcQMznp9u2fVZzBjUQAb+oNp5swEWxEezAn9Y8OguUzsA4
+         18yj+D6AR6aUchWx2Pa1OzbBaFZzImVGLALOL/RtV48eWS9pdZlYqUKzLSJuyj27T107
+         FJNDWhFpaWOhMCiuMbes2MLUcemwT432idbS7qzqH8fCGDVW4JMGcrC0QoBCV1O1LOdk
+         YY52eJ1KTHr6s7SpNgUlHQWl1sGTdPvYn31lQ70C/m0gV8stkpXM6hsMkXzQrsS7jt+B
+         WbSHzGEZlKeIPlRem7oeVuTuCPJmo+R9oCppNkzYASd6fNbLlfCWL0kto0qhV/1fs7YT
+         KjeA==
+X-Gm-Message-State: ACgBeo3ZUi7Ho9c1O/KsTY4s1aoaycfyuwkIWhxWDNTBDoZW1nJRtBsF
+        6xM04eR+c5I6C/TN1w0YIH7mFcqmLyn2kc5SORJYL5O40P8=
+X-Google-Smtp-Source: AA6agR5GLPxu78pxS/zXZpmiPrH99wgTbjg1PyE1Y+qF7LxhuIQ649l8qHhoa5acBzcHCcTmFi7nVSkq3/unCO9GzCE=
+X-Received: by 2002:a05:6870:210b:b0:101:cb62:8ccc with SMTP id
+ f11-20020a056870210b00b00101cb628cccmr4152851oae.26.1661610356204; Sat, 27
+ Aug 2022 07:25:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220826181921.3899603-1-saproj@gmail.com> <20220826205343.GA2909643@roeck-us.net>
+In-Reply-To: <20220826205343.GA2909643@roeck-us.net>
+From:   Sergei Antonov <saproj@gmail.com>
+Date:   Sat, 27 Aug 2022 17:25:44 +0300
+Message-ID: <CABikg9w6Pvr225ehS4E_hyBwRHPBdv-WpZUSiJoWjzczY5rB5A@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: ftwdt010_wdt: implement _restart() function
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -68,79 +65,15 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Implement ftwdt010_wdt_restart(). It enables watchdog with timeout = 0
-and disabled IRQ. Since it needs code similar to ftwdt010_wdt_start(),
-add a new function ftwdt010_enable() and move common code there.
+On Fri, 26 Aug 2022 at 23:53, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Fri, Aug 26, 2022 at 09:19:21PM +0300, Sergei Antonov wrote:
+> > Implement ftwdt010_wdt_restart(). It enables watchdog with timeout = 0
+> > and disabled IRQ. Since it needs code similar to ftwdt010_wdt_start(),
+> > add a new function ftwdt010_enable() and move common code there.
+> >
+> > Signed-off-by: Sergei Antonov <saproj@gmail.com>
+>
+> v2 ? Change log ?
 
-v1 -> v2:
-Do not let IRQ trigger when restarting.
-Add a helper function ftwdt010_enable().
-
-Suggested-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Sergei Antonov <saproj@gmail.com>
----
- drivers/watchdog/ftwdt010_wdt.c | 23 +++++++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/watchdog/ftwdt010_wdt.c b/drivers/watchdog/ftwdt010_wdt.c
-index 21dcc7765688..0a5bbfd2823f 100644
---- a/drivers/watchdog/ftwdt010_wdt.c
-+++ b/drivers/watchdog/ftwdt010_wdt.c
-@@ -47,21 +47,28 @@ struct ftwdt010_wdt *to_ftwdt010_wdt(struct watchdog_device *wdd)
- 	return container_of(wdd, struct ftwdt010_wdt, wdd);
- }
- 
--static int ftwdt010_wdt_start(struct watchdog_device *wdd)
-+static void ftwdt010_enable(struct ftwdt010_wdt *gwdt,
-+			    unsigned int timeout,
-+			    bool need_irq)
- {
--	struct ftwdt010_wdt *gwdt = to_ftwdt010_wdt(wdd);
- 	u32 enable;
- 
--	writel(wdd->timeout * WDT_CLOCK, gwdt->base + FTWDT010_WDLOAD);
-+	writel(timeout * WDT_CLOCK, gwdt->base + FTWDT010_WDLOAD);
- 	writel(WDRESTART_MAGIC, gwdt->base + FTWDT010_WDRESTART);
- 	/* set clock before enabling */
- 	enable = WDCR_CLOCK_5MHZ | WDCR_SYS_RST;
- 	writel(enable, gwdt->base + FTWDT010_WDCR);
--	if (gwdt->has_irq)
-+	if (need_irq)
- 		enable |= WDCR_WDINTR;
- 	enable |= WDCR_ENABLE;
- 	writel(enable, gwdt->base + FTWDT010_WDCR);
-+}
- 
-+static int ftwdt010_wdt_start(struct watchdog_device *wdd)
-+{
-+	struct ftwdt010_wdt *gwdt = to_ftwdt010_wdt(wdd);
-+
-+	ftwdt010_enable(gwdt, wdd->timeout, gwdt->has_irq);
- 	return 0;
- }
- 
-@@ -93,6 +100,13 @@ static int ftwdt010_wdt_set_timeout(struct watchdog_device *wdd,
- 	return 0;
- }
- 
-+static int ftwdt010_wdt_restart(struct watchdog_device *wdd,
-+				unsigned long action, void *data)
-+{
-+	ftwdt010_enable(to_ftwdt010_wdt(wdd), 0, false);
-+	return 0;
-+}
-+
- static irqreturn_t ftwdt010_wdt_interrupt(int irq, void *data)
- {
- 	struct ftwdt010_wdt *gwdt = data;
-@@ -107,6 +121,7 @@ static const struct watchdog_ops ftwdt010_wdt_ops = {
- 	.stop		= ftwdt010_wdt_stop,
- 	.ping		= ftwdt010_wdt_ping,
- 	.set_timeout	= ftwdt010_wdt_set_timeout,
-+	.restart	= ftwdt010_wdt_restart,
- 	.owner		= THIS_MODULE,
- };
- 
--- 
-2.34.1
-
+OK. Just sent a patch with the same code, but v2 and updated description.
