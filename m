@@ -2,126 +2,110 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC305A500F
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Aug 2022 17:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E405A513B
+	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Aug 2022 18:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiH2PTg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 Aug 2022 11:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
+        id S229583AbiH2QP3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 29 Aug 2022 12:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiH2PTf (ORCPT
+        with ESMTP id S229379AbiH2QP2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 Aug 2022 11:19:35 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE52085AB3;
-        Mon, 29 Aug 2022 08:19:34 -0700 (PDT)
-Received: from pps.filterd (m0134421.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27TF2fsC030426;
-        Mon, 29 Aug 2022 15:19:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : mime-version : content-type
- : in-reply-to; s=pps0720; bh=oJZ8Pnogvl2PqjImYIZJUg0Yb1Tp7C+OILy5IpO3q1Q=;
- b=Jtj7XNQ8UKZzT4qqNpKZHwJAcfyjM1bfJJvM9K6kk5qPBNa/hQh1tRK2j+jv3mjp21Le
- 8JxmxA1y+L4GMg6yhr98SJPhi6F8TNDm0e11gqzEYv0XtGry8maRvmDaFl1iZ1ki2Cl7
- Slb3hxgwI0wfBuGBGc7qrnQTJxTag0Uxizhk8udpASJ/jBMT6iAQtml6s6m644zaqmQd
- we6AURZMEsZA5bi50IOA+hsdz06HpANHJcgX7ejxxBkpMnK9udkANNJNrn1DDQPZ8Ywi
- A3zAp9WEVG/7dxqc14eNUMh5CwOZYt7kmSNb7AKx2p+lMoLvnNoVl4+EEVi34A4/fov0 ZQ== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3j8yj6gbpt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Aug 2022 15:19:16 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 3CEE5D286;
-        Mon, 29 Aug 2022 15:19:16 +0000 (UTC)
-Received: from perchik (unknown [16.231.227.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 830DB8080ED;
-        Mon, 29 Aug 2022 15:19:15 +0000 (UTC)
-Date:   Mon, 29 Aug 2022 09:19:13 -0600
-From:   Jerry Hoemann <jerry.hoemann@hpe.com>
-To:     linux@roeck-us.net, wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] watchdog/hpwdt: Enable hpwdt for ARM64 platforms
-Message-ID: <20220828223508.GG30332@perchik>
-Reply-To: Jerry.Hoemann@hpe.com
-References: <20220820202821.1263837-1-jerry.hoemann@hpe.com>
+        Mon, 29 Aug 2022 12:15:28 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F1432BB7;
+        Mon, 29 Aug 2022 09:15:26 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id v5so2255154plo.9;
+        Mon, 29 Aug 2022 09:15:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc;
+        bh=uy4pLblRdQQDS3wAjiWuybD807qoihM26VKA21jhnKA=;
+        b=H51WnfbYaarSmSDLLj1PUjpfIeWe+w2tPOvhrFUCIE+V+UVeCg2GufAJXaawSpYToL
+         ZOt0hOj0TDFOfHSqAht22+Fbiqg5MnNU7sRFi/UKM9Gxbtwbd6ZdH4WIFl9kYPN6mmsh
+         u2tRU9Co/14A21yCrkXOSMwkJJq8xlJSX8Qv+BdAuOj1Un7+ki/2wrMsrSz2IcuTdSIR
+         rlH7cMJPSh7J684JC20xqPe6w7PwGb2wpnrl+zspViqcrvPiXc8srE5S2iwcAIFJHdIA
+         fTZI0ukk8ebA6PT4E85CtE8As2KF41PwwDV/fFRhvFgmmDtRrpxQh02Jnn570cDHEDDy
+         451g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc;
+        bh=uy4pLblRdQQDS3wAjiWuybD807qoihM26VKA21jhnKA=;
+        b=7kN6eDneaTqgZd5LUZJDntS0lBWgOH/xVLLKPJ/wL+2r0+i+/0F+ZyIdrEJvVED6Uf
+         Qp22CuxQ63QSGybmpx58aB2Ac1HfZbbxdNai5b8bPkynJltbI4CNKS+bAf/zdIJV5ZD2
+         YWWyqof/jThmuJ7ju+aA5Yndl1vaHTkligI0V3juyHpvYzgglfJtpVARnf5gauzJ45h2
+         NNwgi/oNJT4TTIe4O4rtFnfT8Fo4YN1xJrWDOYuiwM1U8yJNfZ8p3Apcb9LhLTsVt9JK
+         t/SaLezPa/pVUSSRG+jNF+5T3wU03hEpHjrsznrQ5czPz8b03XpM4tCMki853S+SAvO6
+         IgwA==
+X-Gm-Message-State: ACgBeo0csBXdfI6xPF+E1/mudR/PNqiziGLz9mG07Gi2NdOVsfXRf4Jd
+        LeFa0ixc0S5cjWVvdVDROmw=
+X-Google-Smtp-Source: AA6agR59toqoIdzgGXXc4iiWobVsn1cLhEY8TedcT7inFuxzm1KVsfl2LUZKWdi0N3FM8oMrC75jkA==
+X-Received: by 2002:a17:90b:388f:b0:1f5:7748:9667 with SMTP id mu15-20020a17090b388f00b001f577489667mr19514821pjb.158.1661789726312;
+        Mon, 29 Aug 2022 09:15:26 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id mh3-20020a17090b4ac300b001fdb6ef8e2esm3076064pjb.10.2022.08.29.09.15.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 09:15:25 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <41c4e85d-2468-e23b-4270-0cc39c3c75d5@roeck-us.net>
+Date:   Mon, 29 Aug 2022 09:15:24 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220820202821.1263837-1-jerry.hoemann@hpe.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Proofpoint-ORIG-GUID: hMBgF01IZHMfZWHYSviH0oTtGQq3p6wX
-X-Proofpoint-GUID: hMBgF01IZHMfZWHYSviH0oTtGQq3p6wX
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-29_07,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0
- mlxscore=0 spamscore=0 mlxlogscore=896 suspectscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208290071
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/2] watchdog/hpwdt: Include nmi.h only if
+ CONFIG_HPWDT_NMI_DECODING
+Content-Language: en-US
+To:     Jerry Hoemann <jerry.hoemann@hpe.com>, wim@linux-watchdog.org
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220820202821.1263837-1-jerry.hoemann@hpe.com>
+ <20220820202821.1263837-2-jerry.hoemann@hpe.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220820202821.1263837-2-jerry.hoemann@hpe.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Aug 20, 2022 at 02:28:19PM -0600, Jerry Hoemann wrote:
-> Enable hpwdt for the rl300, an ARM64 based platform.
+On 8/20/22 13:28, Jerry Hoemann wrote:
+> Fixes: d48b0e173715 ("x86, nmi, drivers: Fix nmi splitup build bug")
 > 
+> Arm64 does not support NMI and has no <asm/nmi.h>.
+> 
+> Include <asm/nmi.h> only if CONFIG_HPWDT_NMI_DECODING is defined to
+> avoid build failure on non-existent header file on Arm64.
+> 
+> Signed-off-by: Jerry Hoemann <jerry.hoemann@hpe.com>
 
-Guenter,
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Did you have any questions/comments on version 2 of the patch series?
+> ---
+>   drivers/watchdog/hpwdt.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/watchdog/hpwdt.c b/drivers/watchdog/hpwdt.c
+> index a5006a58e0db..f79f932bca14 100644
+> --- a/drivers/watchdog/hpwdt.c
+> +++ b/drivers/watchdog/hpwdt.c
+> @@ -20,7 +20,9 @@
+>   #include <linux/pci_ids.h>
+>   #include <linux/types.h>
+>   #include <linux/watchdog.h>
+> +#ifdef CONFIG_HPWDT_NMI_DECODING
+>   #include <asm/nmi.h>
+> +#endif
+>   #include <linux/crash_dump.h>
+>   
+>   #define HPWDT_VERSION			"2.0.4"
 
-Thanks
-
-Jerry
-
-> 
-> Patch 1: watchdog/hpwdt.c: Include nmi.h only if CONFIG_HPWDT_NMI_DECODING
-> 
-> ARM64 does not support NMI and does not have <asm/nmi.h>.  Include
-> nmi.h only if CONFIG_HPWDT_NMI_DECODING is defined.
-> 
-> Patch 2: watchdog/Kconfig:  Allow hpwdt.c to be built for ARM64.
-> 
-> Allow hpwdt.c to be built for (ARM64 || X86) as this part of hwpdt doesn't
-> use NMI.
-> 
-> Make HPWDT_NMI_DECODING dependent upon X86 as NMI handlers are specific
-> to X86 platforms.
-> 
-> 
-> == Changes for v2 ==
-> Update patch documentation.
-> 
-> 
-> 
-> 
-> Jerry Hoemann (2):
->   watchdog/hpwdt: Include nmi.h only if CONFIG_HPWDT_NMI_DECODING
->   watchdog: Enable HP_WATCHDOG for ARM64 systems.
-> 
->  drivers/watchdog/Kconfig | 4 ++--
->  drivers/watchdog/hpwdt.c | 2 ++
->  2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> -- 
-> 2.37.1
-
--- 
-
------------------------------------------------------------------------------
-Jerry Hoemann                  Software Engineer   Hewlett Packard Enterprise
------------------------------------------------------------------------------
