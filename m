@@ -2,113 +2,82 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA815A514D
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Aug 2022 18:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 865655A82A6
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Aug 2022 18:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbiH2QQJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 Aug 2022 12:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
+        id S231788AbiHaQEJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 31 Aug 2022 12:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbiH2QPx (ORCPT
+        with ESMTP id S232113AbiHaQDo (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 Aug 2022 12:15:53 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50C86BD7D;
-        Mon, 29 Aug 2022 09:15:48 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 202so8109856pgc.8;
-        Mon, 29 Aug 2022 09:15:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=g0kw5xZnZw7q+3ffQUpIQkZqCeOEYk4EXLB4t2SfoOo=;
-        b=KoZq++r5Al1IE642Kn8OHluF6t0LVR2jzSy+IxDcqTMJJXnOWTXgysnx1yG7/Ist5O
-         D+wesfr8SnPIujDL/U29ZjknlRlfAXVfIKjRGl1knwLncJzNKwIuUdTPF38xfksvpozp
-         7LIG3BQX5DpN1HdGQn+0wW7t/5AgOO/0SvuLy3pjenLNCgYUsYMkzzcgUXhnshXPAUt7
-         Q0Iw8Sg531kjadbThFESQWYRvrW09fkxa/YJPOQ1taXad+64/zVgYTIm6nJIZneAP/pX
-         QzHhz5LibboNYLwckSS1iKOzfAmeyErDm4cEp0zqHbUf2C3CsL/LFHW4rhpAU+P8zO14
-         ZwFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=g0kw5xZnZw7q+3ffQUpIQkZqCeOEYk4EXLB4t2SfoOo=;
-        b=VmCks0NP4vRGZvE9Re+rPFVgP57dw6HeAkJjuu9W4a5Ypz0NHa6yHnG5gmv7KTL/rU
-         npntBrZfE53I11NpK+jgeZhu+Cwp5Dc/Mx8U3h0zVfL3ktCj7DizcfUEs0ecxlQUUgz7
-         6PTtBUyh77kurM4c3cRx8IddO1nRsvJmH+3MPhUD0H2Ht1y3ttvY4c8evIkqt/TjTJD1
-         sPnptF+70igo/xYrRN+tmQoChEDA1/dniHXaAhv1A4da0dnv6qdRFXnPCttiFsBBQFz2
-         OYAOoiCXVDZxWFcipPGeY8lXOEeEpu4ZtRW6TW7yOxQ4/2RZlw/xOmuw4DRfjtasZdfH
-         nEVg==
-X-Gm-Message-State: ACgBeo2E+d+xkDzAiBlLMvrM3+0RYWVvT2Y9KpmO1qZ4xrua/trNVSTJ
-        8gQN2ylQEUmp4P37DqKXxn7S6vWJQ/0k+A==
-X-Google-Smtp-Source: AA6agR7XHQ7d2f9pmuh5EJ73k4GdRHVcJa6qm4yCOJ8HAZRIaAHPWYVOGGecRZ3peEQglvDoazMFmQ==
-X-Received: by 2002:a05:6a00:1947:b0:536:6730:7d33 with SMTP id s7-20020a056a00194700b0053667307d33mr17300259pfk.10.1661789747637;
-        Mon, 29 Aug 2022 09:15:47 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x3-20020a17090a46c300b001fa80cde150sm6835833pjg.20.2022.08.29.09.15.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 09:15:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <dd3be720-2e7e-b390-f304-12344d65ce88@roeck-us.net>
-Date:   Mon, 29 Aug 2022 09:15:45 -0700
+        Wed, 31 Aug 2022 12:03:44 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3598D8E12
+        for <linux-watchdog@vger.kernel.org>; Wed, 31 Aug 2022 09:03:40 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1661961815tvynxjub
+Received: from localhost.localdomain ( [182.148.13.26])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 01 Sep 2022 00:03:30 +0800 (CST)
+X-QQ-SSF: 01000000000000B0C000000A0000000
+X-QQ-FEAT: An8j/rhzjdFxuOWO3HxIiU2s838Ojo+XHQhkynQPsBcgmA/FTKEF4ys/fP8Td
+        MeiigkrzNLMF3RaF2uTYQ7Ew3dceNOvEiayKdmiDsxyccWvJb2KJTlkKFnton6lrFjzjYEo
+        iH2hSLgomUAFkhhOK0wf35+HQ7pqpdrBlv+gYnxcg5wEWjU+G5ZZi90ezZ6qUHejzTvTj7L
+        MPqLjdK+DRZqfHl8Zhdh/YYQHybc2rm0xsWR2pIE7cZsemxg1fFT+Xz5JFiRwPNbB5CLkHg
+        GNd9jzJY12R7KkKx11XHs90XQtoqK8mjzmzksIHPCKSjHISaDM6vBHqy7TJnj/zzAA2kFXA
+        kNVK//7Ypg4XtBy7pw=
+X-QQ-GoodBg: 0
+From:   Shaomin Deng <dengshaomin@cdjrlc.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org
+Cc:     Shaomin Deng <dengshaomin@cdjrlc.com>
+Subject: [PATCH] watchdog: Fix comments typo
+Date:   Wed, 31 Aug 2022 12:03:29 -0400
+Message-Id: <20220831160329.6066-1-dengshaomin@cdjrlc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/2] watchdog: Enable HP_WATCHDOG for ARM64 systems.
-Content-Language: en-US
-To:     Jerry Hoemann <jerry.hoemann@hpe.com>, wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220820202821.1263837-1-jerry.hoemann@hpe.com>
- <20220820202821.1263837-3-jerry.hoemann@hpe.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220820202821.1263837-3-jerry.hoemann@hpe.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
+        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        *      [43.155.67.158 listed in zen.spamhaus.org]
+        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/20/22 13:28, Jerry Hoemann wrote:
-> Enable HP_WATCHDOG for ARM64 systems.
-> HPWDT_NMI_DECODING requires X86 as NMI handlers are X86 specific.
-> 
-> Signed-off-by: Jerry Hoemann <jerry.hoemann@hpe.com>
+Delete the repeated word "we" in comments.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
+---
+ drivers/watchdog/w83977f_wdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->   drivers/watchdog/Kconfig | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 9295492d24f7..cd643e50681e 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1315,7 +1315,7 @@ config IT87_WDT
->   config HP_WATCHDOG
->   	tristate "HP ProLiant iLO2+ Hardware Watchdog Timer"
->   	select WATCHDOG_CORE
-> -	depends on X86 && PCI
-> +	depends on (ARM64 || X86) && PCI
->   	help
->   	  A software monitoring watchdog and NMI handling driver. This driver
->   	  will detect lockups and provide a stack trace. This is a driver that
-> @@ -1325,7 +1325,7 @@ config HP_WATCHDOG
->   
->   config HPWDT_NMI_DECODING
->   	bool "NMI support for the HP ProLiant iLO2+ Hardware Watchdog Timer"
-> -	depends on HP_WATCHDOG
-> +	depends on X86 && HP_WATCHDOG
->   	default y
->   	help
->   	  Enables the NMI handler for the watchdog pretimeout NMI and the iLO
+diff --git a/drivers/watchdog/w83977f_wdt.c b/drivers/watchdog/w83977f_wdt.c
+index fd64ae77780a..31bf21ceaf48 100644
+--- a/drivers/watchdog/w83977f_wdt.c
++++ b/drivers/watchdog/w83977f_wdt.c
+@@ -321,7 +321,7 @@ static int wdt_release(struct inode *inode, struct file *file)
+  *      @ppos: pointer to the position to write. No seeks allowed
+  *
+  *      A write to a watchdog device is defined as a keepalive signal. Any
+- *      write of data will do, as we we don't define content meaning.
++ *      write of data will do, as we don't define content meaning.
+  */
+ 
+ static ssize_t wdt_write(struct file *file, const char __user *buf,
+-- 
+2.35.1
 
