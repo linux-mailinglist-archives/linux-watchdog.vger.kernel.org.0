@@ -2,44 +2,65 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0FCF5ACC58
-	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Sep 2022 09:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012025ACF51
+	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Sep 2022 11:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236365AbiIEHW5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 5 Sep 2022 03:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
+        id S237142AbiIEJzk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 5 Sep 2022 05:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236417AbiIEHW2 (ORCPT
+        with ESMTP id S236507AbiIEJzd (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 5 Sep 2022 03:22:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084B247B84;
-        Mon,  5 Sep 2022 00:19:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85BE561133;
-        Mon,  5 Sep 2022 07:19:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0A82C433C1;
-        Mon,  5 Sep 2022 07:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662362344;
-        bh=19nxD2OgHF2QVoth2PFq3CxZH5zVFIqpZyEzuI/YHbw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A5IVl+JOjFxfodqmnjA5/iplAcU9jdP05wWuvEqZCUxiPZuyoNor7xgxpbYXB6NVK
-         7DcajL5+Q4Jwv4XR1AvPOAXkUgrwSH/Ov7HM3KXUEl/b4BKQG5MdZ5GTO8igdjjVEV
-         HR2BrWQ7cSeUZcnhf0SNpLKhbJC0AEjYvFObLKGjaI4ohnPRXMXtOd+2eSUbXERAnn
-         Wt+aJ6+72CZQwxjMiKfr0QzSL2qh96wXclEVsX5h4ma+908Zyb6OVtZsD0AEGTokvq
-         Z4gsx2A9lpZW+2kJWomwEZtX41BXuoB9ZUs+w+vRDjrWEAYqK9IYV1wftZ4A4k/PEn
-         RnEC8ylDHE6IA==
-Received: by pali.im (Postfix)
-        id 32DB27D7; Mon,  5 Sep 2022 09:19:02 +0200 (CEST)
-Date:   Mon, 5 Sep 2022 09:19:02 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Mon, 5 Sep 2022 05:55:33 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F981A382;
+        Mon,  5 Sep 2022 02:55:30 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id u18so70073lfo.8;
+        Mon, 05 Sep 2022 02:55:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=m6bwvWKIYsYkkQiw6WkHW3VenkfYyqcqiN7fetf2fKA=;
+        b=IHLIbQ5vHZQVIyqqjxII8xfEjM3Q6fZoeMqDFdIiU0vsFp6oi7h0IwMdNfx1vPlnFp
+         ZPEemHQtgtDg6DfHplUdQ9jQ9sLqz7D7QN4FLqbsDi3rJNDxpjjlWDcgUMOkA9w2Tjs9
+         x9VWcOV0/2DW1Hg36LsG6DteksM93YpJyP0rfadAndCJKb/yY4pF55KE51FqNTxioDRe
+         KBJzVpsAFs2k6LKzsnJmjaNF0PAQrTJoMhIKZekTRu34MSjNFM9c+GyRzLjBHe1ybOQZ
+         eLbeL6kyIXJDXmENmbtGhQKPn5KPfZrIYSXNEMQPhMhg5ikHY+XI6LCK0LoPM/K1/Mnt
+         uzTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=m6bwvWKIYsYkkQiw6WkHW3VenkfYyqcqiN7fetf2fKA=;
+        b=cJrmN5TdpSC1CJYECbMh8tYQ/51oAUhyt56FCocDx7wHZm4UuvgJaB0OGIaGB7mCr9
+         omAVQS9KfmTxvGUG9xOZXuzV5cBzm96NdJMXsfIdmJKwAYX2/MI85eWMPVcgQ4m4oJXy
+         ajaXZ6WElwp2597281DyPaPgTtkd50VNnG4zie1FauXjbdYrp4GahIJLinLSYQZPxgBP
+         7QX9bLb0qPSKhrghi0PQ0uv4RqrWiq/K2rpJSelw9dqzY6tycgq0ItaOFzIPdcg7GNJ3
+         JyyXpBynEPf3cGUieOAaxcBfkpZf/wB4PyJEM2bJWLrubWTT+3rIicWoPaxF/6lMfOOV
+         YAFg==
+X-Gm-Message-State: ACgBeo2LVTDJ/UTWF9xQJvwxW3YlSIfFNtuLkhb9HqtzekCc8MAeEpIC
+        K3Ek23H6BuNej8F/hrYV60M=
+X-Google-Smtp-Source: AA6agR4gwPt5aivllJzzHsjCuIDbWlzFIp6/PHCkmSvNiw6IUsaZdTaionvGINkVRjZdKCtkzi3jFA==
+X-Received: by 2002:a19:6b16:0:b0:48c:e218:7c51 with SMTP id d22-20020a196b16000000b0048ce2187c51mr15164353lfa.681.1662371728951;
+        Mon, 05 Sep 2022 02:55:28 -0700 (PDT)
+Received: from [172.16.194.135] ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id v27-20020ac258fb000000b0048b13d0b896sm1141980lfo.141.2022.09.05.02.55.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 02:55:28 -0700 (PDT)
+Message-ID: <4a536310-3f79-d248-dc48-5cdbd640e04a@gmail.com>
+Date:   Mon, 5 Sep 2022 12:55:26 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1 08/11] regulator: bd71815: switch to using
+ devm_fwnode_gpiod_get()
+Content-Language: en-US
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
         Lorenzo Pieralisi <lpieralisi@kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -50,7 +71,7 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Felipe Balbi <balbi@kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
@@ -65,67 +86,64 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Rob Herring <robh@kernel.org>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Bjorn Helgaas <bhelgaas@google.com>,
-        linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 01/11] PCI: tegra: switch to using
- devm_fwnode_gpiod_get
-Message-ID: <20220905071902.fv4uozrsttk3mosu@pali>
 References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-1-b29adfb27a6c@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-1-b29adfb27a6c@gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20220903-gpiod_get_from_of_node-remove-v1-8-b29adfb27a6c@gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-8-b29adfb27a6c@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sunday 04 September 2022 23:30:53 Dmitry Torokhov wrote:
-> I would like to limit (or maybe even remove) use of
-> [devm_]gpiod_get_from_of_node in drivers so that gpiolib can be cleaned
-> a bit, so let's switch to the generic device property API. It may even
-> help with handling secondary fwnodes when gpiolib is taught to handle
-> gpios described by swnodes.
+On 9/5/22 09:31, Dmitry Torokhov wrote:
+> I would like to stop exporting OF-specific devm_gpiod_get_from_of_node()
+> so that gpiolib can be cleaned a bit, so let's switch to the generic
+> fwnode property API.
 > 
 > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> 
-> diff --git a/drivers/pci/controller/pci-tegra.c b/drivers/pci/controller/pci-tegra.c
-> index 8e323e93be91..929f9363e94b 100644
-> --- a/drivers/pci/controller/pci-tegra.c
-> +++ b/drivers/pci/controller/pci-tegra.c
-> @@ -2202,10 +2202,11 @@ static int tegra_pcie_parse_dt(struct tegra_pcie *pcie)
->  		 * and in this case fall back to using AFI per port register
->  		 * to toggle PERST# SFIO line.
->  		 */
-> -		rp->reset_gpio = devm_gpiod_get_from_of_node(dev, port,
-> -							     "reset-gpios", 0,
-> -							     GPIOD_OUT_LOW,
-> -							     label);
-> +		rp->reset_gpio = devm_fwnode_gpiod_get(dev,
-> +						       of_fwnode_handle(port),
-> +						       "reset",
-> +						       GPIOD_OUT_LOW,
-> +						       label);
 
-Why in pci-aardvark.c for PERST# reset-gpio you have used
-devm_gpiod_get_optional() and here in pci-tegra.c you have used
-devm_fwnode_gpiod_get()? I think that PERST# logic is same in both
-drivers.
+Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
->  		if (IS_ERR(rp->reset_gpio)) {
->  			if (PTR_ERR(rp->reset_gpio) == -ENOENT) {
->  				rp->reset_gpio = NULL;
 > 
-> -- 
-> b4 0.10.0-dev-fc921
+> diff --git a/drivers/regulator/bd71815-regulator.c b/drivers/regulator/bd71815-regulator.c
+> index acaa6607898e..c2b8b8be7824 100644
+> --- a/drivers/regulator/bd71815-regulator.c
+> +++ b/drivers/regulator/bd71815-regulator.c
+> @@ -571,11 +571,10 @@ static int bd7181x_probe(struct platform_device *pdev)
+>   		dev_err(&pdev->dev, "No parent regmap\n");
+>   		return -ENODEV;
+>   	}
+> -	ldo4_en = devm_gpiod_get_from_of_node(&pdev->dev,
+> -					      pdev->dev.parent->of_node,
+> -						 "rohm,vsel-gpios", 0,
+> -						 GPIOD_ASIS, "ldo4-en");
+>   
+> +	ldo4_en = devm_fwnode_gpiod_get(&pdev->dev,
+> +					dev_fwnode(pdev->dev.parent),
+> +					"rohm,vsel", GPIOD_ASIS, "ldo4-en");
+>   	if (IS_ERR(ldo4_en)) {
+>   		ret = PTR_ERR(ldo4_en);
+>   		if (ret != -ENOENT)
+> 
+
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
