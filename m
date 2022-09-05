@@ -2,73 +2,78 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8C45AD3C4
-	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Sep 2022 15:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 947BE5AD5F1
+	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Sep 2022 17:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237646AbiIENXt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 5 Sep 2022 09:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S238683AbiIEPOA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 5 Sep 2022 11:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237774AbiIENXn (ORCPT
+        with ESMTP id S238414AbiIEPN6 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 5 Sep 2022 09:23:43 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0C043E6C;
-        Mon,  5 Sep 2022 06:23:42 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id a10so6256336qkl.13;
-        Mon, 05 Sep 2022 06:23:42 -0700 (PDT)
+        Mon, 5 Sep 2022 11:13:58 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E597664;
+        Mon,  5 Sep 2022 08:13:55 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id c2so8787376plo.3;
+        Mon, 05 Sep 2022 08:13:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=xqnaWRmSxWCHIXi5Qlq2gni2AdAVZeps2ahh12VkulY=;
-        b=nOletpYDW/GRPvkaWSlAC0rzt34URfVHbiUKwVMsxFl09VUwy8XOqhWqRsptamq/Dg
-         II+253/l3T6DgJP066py1bWTdICT2vRCXvzy2Ur+pO4VC493+7Sqn84yvDmlJFGAVdYl
-         5PZSVDMi1QDxBMQa2pV/FSXYTAwvX/lFVcFPmgHoO3U8MnbkwA9h7jonAO1nFwBsGmoW
-         q5f2ZglIOVt/xEgJLA6EBKdc3gOuFnoMDDVILIKTeoTg7qTOPypEYwVwaO1cq1N6YfbI
-         me+dt6lOnpM5B3FzI09ooPbgjOvgXIow30OcLwUv/NaL/eE7AkZh0zMQ2HIMHBfa4q7S
-         WwgA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date;
+        bh=BaV7TSh2pF8riJo3FYVJlB4Fd0IV89ZBF58eyTHpzCY=;
+        b=hkkpU5LscmWAGSEo3MfEtadx9VW4xDHJEup50A1r2cVLlq4cuETMEDvzQMWJ+25cub
+         uKJeKBqoA/7oOn5M03KfF2SrWzMp8y/6jxlU6IOGtXhf5NBV25gS8epBm0aJ0S2QGuaI
+         RjUYEWJv07AS8q77FSCkemAnzO0cF5SSPIB8vUM+JQ9+01vDbgKIvCwDLFJ0pxGW/o9D
+         wfMCMCN77OXaTjmH8xcwvQmxfsPP25DPJzASvB1sg54cKUVgwF0SrI+mVebrCUQXQcEH
+         UD6AosLEX29RH6M8jzXceVG7LBfIA3BiQKPCSDkkI0IwATFYFoPoughaGzGm0KCEERIH
+         sz6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=xqnaWRmSxWCHIXi5Qlq2gni2AdAVZeps2ahh12VkulY=;
-        b=jqQdg8BxLosraqQCfd9lNYRj44R8VGOYDLtQkmJNyGTN8C81d2BO20UqvTzU0j0DYw
-         BAvksOa1oZjPRPIRA0sMTE3lnFJn4W76aeFW0sjQjGBpVNc6kENdK8cQwt0XTjjXhOcg
-         8n5iw7mkFHa9+CWmh36xGFjnXZqL94zHzcOYOd8XnyZaQmk99bZkXe0Rrn6+kZjTZBvC
-         fDKp18Cr9zomFfwHfuXOsIximcIF9ivWpfT32vyyn8JMzrIpZ4e5l/+mm8xnA989rTJV
-         sPjGWdI1ACS4MLN9SUCQcVdVvz26obXpPILihd3g2tiVFTWHYyV9AwQDdQAduLvS7CB/
-         vNwg==
-X-Gm-Message-State: ACgBeo07YvOXT2oBdHAvPvRlA1VRBDOTiB4LAt5/lj3sVstnukwhjeaq
-        4yEwJtBNPotuAkXmBQlNv4STLWjSTV98ZECDKn4=
-X-Google-Smtp-Source: AA6agR5sttgUX/02ygd4oRH8E7CwuO10nDnWttnl6PSpdnCic7gOwb1KDafibQkxIBgdBbgVXC2AwvPX08spe4Hyycw=
-X-Received: by 2002:a05:620a:288a:b0:6b8:fcfe:db02 with SMTP id
- j10-20020a05620a288a00b006b8fcfedb02mr33223900qkp.504.1662384221554; Mon, 05
- Sep 2022 06:23:41 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=BaV7TSh2pF8riJo3FYVJlB4Fd0IV89ZBF58eyTHpzCY=;
+        b=aJuGClc5tsjvscvnXjLkITqG7kkRJKt0VYNN4nqudjk8DVvHZzg4x3tbSk83CUttlc
+         Tu7sqHtw//lwqErYKL0WZ3vrKcGa1mddPu2VbpgMNpmwiWFw2vcYJ8vTJefX5n65+hhc
+         ZvsKIl1w+wZwkDredb5vdHhXLWUBewrUZHYSFWH2Del4ShJSmvLLLv8aAHn69LvOJ+kG
+         QspDNpbDkqNTJ3/xqzY2trU9Upz7S78y3vSTivt89btLgnyg6yxSILsFrMFH3xoSfKql
+         FUI7U8OX+rnyS1UC/AmWo0YMD6yU3g27qI/vom/gezR6JD5Yl1glpyA60Rt0JC2FuTY0
+         0PRg==
+X-Gm-Message-State: ACgBeo2cpgXXYUWGipEzw/Lk26jegq+zhZmBLHSTifyMgkXebA1Q+MzK
+        Z3auTeBbDRF9AedLJFFJmd0=
+X-Google-Smtp-Source: AA6agR759HBK1+PQYcZT7IJSAKYI4KNMvzd+GSuzCkEXpLGsOPIUySqoQ8VGjyqne3MH/nAfFroOyA==
+X-Received: by 2002:a17:90b:164f:b0:1f5:4ced:ed81 with SMTP id il15-20020a17090b164f00b001f54ceded81mr19722762pjb.122.1662390835165;
+        Mon, 05 Sep 2022 08:13:55 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u15-20020a170903124f00b00176ba091cd3sm1684281plh.196.2022.09.05.08.13.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Sep 2022 08:13:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <75e60144-9fa2-d6ba-bc92-edd23f7e7189@roeck-us.net>
+Date:   Mon, 5 Sep 2022 08:13:39 -0700
 MIME-Version: 1.0
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-9-b29adfb27a6c@gmail.com>
- <CAHp75VeA+oVPmsEOg+y0cvRcTU5qA+Y+9=Byp0C982EB7SAArQ@mail.gmail.com> <0fa0c09f-c801-a0c7-1f6e-b6cc8b45d961@gmail.com>
-In-Reply-To: <0fa0c09f-c801-a0c7-1f6e-b6cc8b45d961@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 5 Sep 2022 16:23:05 +0300
-Message-ID: <CAHp75Vek1WOyEdkfCgrcH2FL6GA5gTtxXaV5Qy9aJMCQ3qGxyg@mail.gmail.com>
-Subject: Re: [PATCH v1 09/11] regulator: bd9576: switch to using devm_fwnode_gpiod_get()
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 10/11] watchdog: bd9576_wdt: switch to using
+ devm_fwnode_gpiod_get()
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
         Lorenzo Pieralisi <lpieralisi@kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Felipe Balbi <balbi@kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
@@ -83,7 +88,7 @@ Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Rob Herring <robh@kernel.org>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
         LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
         USB <linux-usb@vger.kernel.org>,
         "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
@@ -94,42 +99,90 @@ Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         dri-devel <dri-devel@lists.freedesktop.org>,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
+ <20220903-gpiod_get_from_of_node-remove-v1-10-b29adfb27a6c@gmail.com>
+ <CAHp75Vd35EOy=mP25=9fmYfqQnbafgotHw1fxk-TdGk6Oc8g8Q@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAHp75Vd35EOy=mP25=9fmYfqQnbafgotHw1fxk-TdGk6Oc8g8Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 4:19 PM Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> On 9/5/22 13:40, Andy Shevchenko wrote:
-> > On Mon, Sep 5, 2022 at 9:33 AM Dmitry Torokhov
-> > <dmitry.torokhov@gmail.com> wrote:
+On 9/5/22 04:09, Andy Shevchenko wrote:
+> On Mon, Sep 5, 2022 at 9:33 AM Dmitry Torokhov
+> <dmitry.torokhov@gmail.com> wrote:
+>>
+>> I would like to stop exporting OF-specific devm_gpiod_get_from_of_node()
+>> so that gpiolib can be cleaned a bit, so let's switch to the generic
+>> fwnode property API.
+>>
+>> While at it switch the rest of the calls to read properties in
+> 
+> it, switch
+> 
+>> bd9576_wdt_probe() to the generic device property API as well.
+> 
+> ...
+> 
+>>          struct device *dev = &pdev->dev;
+> 
+> struct device *parent = dev->parent;
+> 
+> can make your code slightly neater.
+> 
+> ...
+> 
+>> +       count = device_property_count_u32(dev->parent, "rohm,hw-timeout-ms");
+>> +       if (count < 0 && count != -EINVAL)
+>> +               return count;
+>> +
+>> +       if (count > 0) {
+> 
+>> +               if (count > ARRAY_SIZE(hw_margin))
+>> +                       return -EINVAL;
+> 
+> Why double check? You may move it out of the (count > 0).
+> 
 
-...
+Two checks will always be needed, so I don't entirely see
+how that would be better.
 
-> >> +       vout_mode = device_property_read_bool(pdev->dev.parent,
-> >> +                                             "rohm,vout1-en-low");
-> >
-> > They all using parent device and you may make code neater by adding
-> >
-> >    struct device *parent = pdev->dev.parent;
->
-> This is a matter of personal preference. I prefer seeing
-> pdev->dev.parent - as it is more obvious (to me) what the 'pdev' is than
-> what 'parent' would be.
->
-> I'd use the local variable only when it shortens at least one of the
-> lines so that we avoid splitting it. After that being said - I'm not
-> going to argue over this change either if one who is improving the
-> driver wants to use the "helper" variable here.
+> ...
+> 
+>> -       if (ret == 1)
+>> -               hw_margin_max = hw_margin[0];
+> 
+>> +               ret = device_property_read_u32_array(dev->parent,
+>> +                                                    "rohm,hw-timeout-ms",
+>> +                                                    hw_margin, count);
+>> +               if (ret < 0)
+>> +                       return ret;
+> 
+> So, only this needs the count > 0 check since below already has it implicitly.
+> 
+Sorry, I don't understand this comment.
 
-And I believe the quoted one is exactly the case of what you are saying above.
+Guenter
 
--- 
-With Best Regards,
-Andy Shevchenko
+>> -       if (ret == 2) {
+>> -               hw_margin_max = hw_margin[1];
+>> -               hw_margin_min = hw_margin[0];
+>> +               if (count == 1)
+>> +                       hw_margin_max = hw_margin[0];
+>> +
+>> +               if (count == 2) {
+>> +                       hw_margin_max = hw_margin[1];
+>> +                       hw_margin_min = hw_margin[0];
+>> +               }
+>>          }
+> 
+
