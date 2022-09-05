@@ -2,62 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0C15AD9FA
-	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Sep 2022 21:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC695ADA7E
+	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Sep 2022 23:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbiIET4M (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 5 Sep 2022 15:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
+        id S231913AbiIEVDy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 5 Sep 2022 17:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbiIET4K (ORCPT
+        with ESMTP id S229842AbiIEVDx (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 5 Sep 2022 15:56:10 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D240C5C9E4;
-        Mon,  5 Sep 2022 12:56:07 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id u189so39493vsb.4;
-        Mon, 05 Sep 2022 12:56:07 -0700 (PDT)
+        Mon, 5 Sep 2022 17:03:53 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8791E65647
+        for <linux-watchdog@vger.kernel.org>; Mon,  5 Sep 2022 14:03:51 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id nc14so19177944ejc.4
+        for <linux-watchdog@vger.kernel.org>; Mon, 05 Sep 2022 14:03:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=TxtKuUqRxkHzFdFIsdOfwVRYln8Ru/gjD+KQXu9iPWk=;
-        b=oOTNddka/G5MmOs10MprjSwOych3GIj7p+oXSDb0g7K+MumOQ7dZI9fvJZbh5v/ZDF
-         DkO1HuuP77CxrZ+nX3N/Lzhn/vUJoUctJFw7B5StarCr4bF9V9vn6OWirRi6MzdQqj30
-         RSw/5Gc1rkcPkllIbByQHmgIVNflrb//j8OILQCPlm+kfxjDVj7A+Lyb1H1czT3F4/xi
-         bz15Ht8yFZoqUyi30wGVEJqKiyzB6caNlhd6ZUpR1ANYxl8eNvELSRuii9PJ3S+s4ley
-         Rp+HaIIqJfxdvV1TQotcVRJ+vu/DyoG1JpVG2rEiNSh0BPI5uNW/2ybVsLc3YOQ/Kl+P
-         cZ2w==
+        bh=hoFfvxrcWLiLIIghJLr7YqFR/bl7ppCzpkpzcFf25Ks=;
+        b=RJtkdpcWwDCjdU//f+NiUTQJO5kz/J/LQ4Oeb8FsER0ooLc9TUWAVJHwh16h0rFR6k
+         jDNxcAT6fUKAWlYXkDzi9PRVLGCFhao6TAvvqUzCLnc6J1JgrkOg//ZWPBTqZXz06MLe
+         g/E79BtcrSCZXcou4vgp2IFBghrcFJpfeHS130JLJDTFGdRTjjJVv3m8lMFyySNYfbdn
+         zyHSJi+z2sGr74Gs8Ferhg3qHw1Rm2Rd7LpNg2QiPU+rsqNYeELsa2ObuGU9YVxZktXI
+         +EIJDXEMJp+8DP7PW/zCtw+WHI1pL0md9UYJvdO9U0CdYO9jo7gVaKjIjDEh/+/hHVoD
+         fvlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=TxtKuUqRxkHzFdFIsdOfwVRYln8Ru/gjD+KQXu9iPWk=;
-        b=WCNvLWtUi9w+FeNCZsflRjF0ID4ugtaZ1mWZ96XyT+k5DHV9Hzxmk66CzHhReHP2xQ
-         gslr33mwb7MnynctUuRUVY/jIMPLXnp93aWP5tTFcZb8OHtFoFbykjmaugXEN2xsWeyy
-         ZU/TD1wLGg1a9h1BIGDWIBZhBT5CLt4dhiuT3/LBIYM+a/9f1LQcBPB1SSidHhyB7gGd
-         pOFpzHYLve6Ytr1/ezGFJ83KdKu0QaEPT4lJFxUBsQPKxGJbkfnysEiYxzyryBzy3hIM
-         BQEvVqIlDIgwMLi+vyGnbcM5vKDFUra+ni0bSC3iaYNGyNtALLHIyDynNqerXiLdd72U
-         Sj/w==
-X-Gm-Message-State: ACgBeo2+3fYXbaK1o8VmPejQWJZuEquxkNw60FOJRn2x0oCmU4yMt6vv
-        PyTMiF1bcNjwSyUPCSQPnLSnxTverdHKRhcUQT4=
-X-Google-Smtp-Source: AA6agR40buubTfPsstG80DF+s22ldT4F+qiWGt4P8UBWfLfejzg6ynm6XI4ScnPvxtGB0Oeq1Upf5TBcnrM6rSa5o+Y=
-X-Received: by 2002:a67:e058:0:b0:390:e62d:8976 with SMTP id
- n24-20020a67e058000000b00390e62d8976mr11716363vsl.31.1662407766752; Mon, 05
- Sep 2022 12:56:06 -0700 (PDT)
+        bh=hoFfvxrcWLiLIIghJLr7YqFR/bl7ppCzpkpzcFf25Ks=;
+        b=mA6Y1dWZuX5f6mdIUhfgIJhr69cGwAJMFR5VcosM7afiyQYV5SbqOy1+L7ZbBK5BHs
+         oRueFtBsyKOMlx7WpeeQ/TCyKHRjJ63tK35gk/WOsxfNn1c/gWwYkY+G0RZoEoz5CPCz
+         26wRp/Fizp7mW46ch1dVvqCcd3ojA2zGr8K2DwN02RsBN9176Z3vmfdRPDQ9H7C/XP8Y
+         qzzfTHdouQ+WGpjWnimXyyWaydNEwv9d9TY/zn1CmdzmUFzP35HSEbROF/0yE3QQc/ga
+         E/lpQiMWrCHGlkcznZ6Tr+Pldl7pSjUeVEf7v2pO4pzbhb9zb+RdqHvORjTIpF03IkiS
+         pB1A==
+X-Gm-Message-State: ACgBeo2BgV/NtrFxvtBO0adnbWUsQ9Tcr6vyHyivlKfA/fetDdMZkjwo
+        rtzJ9mLIITu0GTvDId3vg2TihRjHJw5txUqErqoVeg==
+X-Google-Smtp-Source: AA6agR4GWSThcRe2jCNjPhluqCCYiE882sQv//p+YmHWCdk54XKDzjUOkiYoAS2W+owpznoWxs2VPch3w1ZAdKXk+5E=
+X-Received: by 2002:a17:907:7242:b0:741:770b:dfc6 with SMTP id
+ ds2-20020a170907724200b00741770bdfc6mr28207413ejc.203.1662411830025; Mon, 05
+ Sep 2022 14:03:50 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-4-b29adfb27a6c@gmail.com>
- <CAHp75VdMr7wru-2hD1HH3OS5JTNdzt6VRqB6OFoCp2JkiuiTjw@mail.gmail.com>
- <YxZQj8bwJCx5rqDv@google.com> <CAHp75VdHJS4YgrTK15OuY5sxodxKObUtzturL+YPXFQ3_wpxig@mail.gmail.com>
- <YxZTS3Nl1YaMGoBC@google.com>
-In-Reply-To: <YxZTS3Nl1YaMGoBC@google.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 5 Sep 2022 22:55:30 +0300
-Message-ID: <CAHp75VeNajcf-Y6xvDDVwZijg6U53ggg1HQox1AZ74=wRut+1Q@mail.gmail.com>
-Subject: Re: [PATCH v1 04/11] usb: phy: tegra: switch to using devm_gpiod_get()
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
+ <20220903-gpiod_get_from_of_node-remove-v1-2-b29adfb27a6c@gmail.com>
+ <CAHp75Vc4yfh0JcY0B-vNawHTay5QNuhd7GAm86QZZZvUnQaMzQ@mail.gmail.com> <YxZP/exeVD7DQ5Hx@google.com>
+In-Reply-To: <YxZP/exeVD7DQ5Hx@google.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 5 Sep 2022 23:03:38 +0200
+Message-ID: <CACRpkda0iUTV=71eQf5_FdKWLe3Bu=U+Zny9_uJJL=5xXtnrnQ@mail.gmail.com>
+Subject: Re: [PATCH v1 02/11] drm/tegra: switch to using devm_fwnode_gpiod_get
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Matti Vaittinen <mazziesaccount@gmail.com>,
         Lorenzo Pieralisi <lpieralisi@kernel.org>,
@@ -67,7 +67,6 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
         Felipe Balbi <balbi@kernel.org>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
@@ -98,55 +97,45 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 10:51 PM Dmitry Torokhov
+On Mon, Sep 5, 2022 at 9:37 PM Dmitry Torokhov
 <dmitry.torokhov@gmail.com> wrote:
-> On Mon, Sep 05, 2022 at 10:41:40PM +0300, Andy Shevchenko wrote:
-> > On Mon, Sep 5, 2022 at 10:40 PM Dmitry Torokhov
+> On Mon, Sep 05, 2022 at 01:57:01PM +0300, Andy Shevchenko wrote:
+> > On Mon, Sep 5, 2022 at 9:32 AM Dmitry Torokhov
 > > <dmitry.torokhov@gmail.com> wrote:
-> > > On Mon, Sep 05, 2022 at 01:59:44PM +0300, Andy Shevchenko wrote:
-> > > > On Mon, Sep 5, 2022 at 9:32 AM Dmitry Torokhov
-> > > > <dmitry.torokhov@gmail.com> wrote:
-
-...
-
-> > > > > -               gpiod = devm_gpiod_get_from_of_node(&pdev->dev, np,
-> > > > > -                                                   "nvidia,phy-reset-gpio",
-> > > > > -                                                   0, GPIOD_OUT_HIGH,
-> > > > > -                                                   "ulpi_phy_reset_b");
-> > > > > +               gpiod = devm_gpiod_get(&pdev->dev, "nvidia,phy-reset",
-> > > > > +                                      GPIOD_OUT_HIGH);
-> > > > >                 err = PTR_ERR_OR_ZERO(gpiod);
-> > > >
-> > > > What does _OR_ZERO mean now?
 > > >
-> > > This converts a pointer to an error code if a pointer represents
-> > > ERR_PTR() encoded error, or 0 to indicate success.
+> > > I would like to limit (or maybe even remove) use of
+> > > [devm_]gpiod_get_from_of_node in drivers so that gpiolib can be cleaned
+> > > a bit, so let's switch to the generic device property API.
 > >
-> > Yes, I know that. My point is, how is it useful now (or even before)?
-> > I mean that devm_gpio_get() never returns NULL, right?
+> > > It may even
+> > > help with handling secondary fwnodes when gpiolib is taught to handle
+> > > gpios described by swnodes.
+> >
+> > I would remove this sentence from all commit messages since it's a
+> > debatable thing and might even not happen, so the above is a pure
+> > speculation.
 >
-> What does returning NULL have to do with anything.
+> I have the patches. Granted, I had them since '19 ;) but I'm rebasing
+> them and going to push them. I need them to convert bunch of input
+> drivers away from platform data.
 
-It has to do with a dead code. If defm_gpiod_get() does not return
-NULL, then why do we even bother to check?
+That's good news!
 
-> It converts a pointer
-> to a "classic" return code, with negative errors and 0 on success.
->
-> It allows to not use multiple IS_ERR/PTR_ERR in the code (I'd need 1
-> IS_ERR and 2 PTR_ERR, one in dev_err() and another to return).
+Are you referring to this patch set mentioned in a discussion
+from 2017 thru 2020?
+https://lore.kernel.org/linux-input/20200826161222.GA1665100@dtor-ws/
 
-I don't see how this is relevant.
+I put aside GPIO descriptor conversion for input devices (keys, buttons)
+in board files anticipating a swnode mechanism.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Yours,
+Linus Walleij
