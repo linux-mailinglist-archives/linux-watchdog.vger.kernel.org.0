@@ -2,36 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC525AE829
-	for <lists+linux-watchdog@lfdr.de>; Tue,  6 Sep 2022 14:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00FE45AF999
+	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Sep 2022 04:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239993AbiIFMbM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 6 Sep 2022 08:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
+        id S229682AbiIGCBG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 6 Sep 2022 22:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239968AbiIFMaz (ORCPT
+        with ESMTP id S229616AbiIGCBD (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 6 Sep 2022 08:30:55 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E144E275C2;
-        Tue,  6 Sep 2022 05:27:46 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="296579839"
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="296579839"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:27:45 -0700
-X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
-   d="scan'208";a="565074197"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2022 05:27:36 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy.shevchenko@gmail.com>)
-        id 1oVXfv-00975d-2X;
-        Tue, 06 Sep 2022 15:27:31 +0300
-Date:   Tue, 6 Sep 2022 15:27:31 +0300
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+        Tue, 6 Sep 2022 22:01:03 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06641844E8;
+        Tue,  6 Sep 2022 19:01:03 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id o4so13082556pjp.4;
+        Tue, 06 Sep 2022 19:01:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=YaCijregOqOjgcZeIED7JVmldRewR4dEphbJlxDQblY=;
+        b=S9pRunUxPC7r0e1w9yj0o8783wojVpjNhKP8jsT71wWMuWPsfUFzdJz0TJMPpqTsPB
+         M+Ae8ANyYrV4Sep3x0VbDc+EnMue4OoEN8RpFTpOjPkluJnGT2cqlVh1JYNiO5h/tDGK
+         RGVJLwVuP7GISwNRAdT5OiqdenVIGFNKEJzKBNq2q1BXIKHlp8tWKx0fxbOK8GA6DZwQ
+         TZfa9JbPfMPcxWCYQlbaTpn5opve5VlejEuuBRLWTpxblG8WQDMhb5np+dyWJJ6kAEEW
+         rXWcB3V4lQHvMssIFHI0kdZjP9pomfXdXnH1i/sJC8kJC91PlHbGOcBl6u1/CPq1k3ff
+         5tAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=YaCijregOqOjgcZeIED7JVmldRewR4dEphbJlxDQblY=;
+        b=WxDUq3Zq8X3Rgc4b4WifMHhrdfV384FmuJ8jN1TY9qpsynBbpON8npbKBu1EmbSBow
+         hRx7vF9EuhuALd3eriMzTB3F9jkXpXKOprButVLbX4LgKneL69guYPbWVGvB/IjE+uBk
+         hVBZPmPKjaJ2DrOgeT7bTzNTyroF0NiKXbiF1hliemI+monJP86TTYjCftE7d1d7FOm+
+         r+lyCyXZecBvF93+c/rOatz0vVxdWNVLQ1iyOqR1rhG+q5cYLPv1FfwReqxZ+KjIGSqP
+         CYb1w2B5crTaIM2jWuDTlGKR+8/go/hbm3HcuyfOuubDuJp2e0DeyPvuPz02B2rRGaxj
+         k29Q==
+X-Gm-Message-State: ACgBeo1ymCE4OcJOM8zKViDHs1TKM80vVmLyO4oYaKmb9XkOvarpPem6
+        C2Vm3DhnjAKpDX+pnlnY0iw=
+X-Google-Smtp-Source: AA6agR4W7OfcLFzEOrvTrf5AWbvTtcvq1nW6dbnnaSOnulUmzjwEL9HxLO3xrl5g0PyDmCwuPzMlMg==
+X-Received: by 2002:a17:90b:3ec7:b0:1fa:cdc1:f66 with SMTP id rm7-20020a17090b3ec700b001facdc10f66mr28531683pjb.167.1662516062292;
+        Tue, 06 Sep 2022 19:01:02 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:abc4:5d24:5a73:a96b])
+        by smtp.gmail.com with ESMTPSA id a206-20020a621ad7000000b00537d74f58cbsm2322985pfa.69.2022.09.06.19.00.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Sep 2022 19:01:01 -0700 (PDT)
+Date:   Tue, 6 Sep 2022 19:00:57 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         Mark Brown <broonie@kernel.org>,
         Matti Vaittinen <mazziesaccount@gmail.com>,
@@ -70,83 +90,60 @@ Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         dri-devel <dri-devel@lists.freedesktop.org>,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v1 04/11] usb: phy: tegra: switch to using
- devm_gpiod_get()
-Message-ID: <Yxc8s8IfzElm/mjS@smile.fi.intel.com>
+Subject: Re: [PATCH v1 10/11] watchdog: bd9576_wdt: switch to using
+ devm_fwnode_gpiod_get()
+Message-ID: <Yxf7WTFG7xEh2Gv6@google.com>
 References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
- <20220903-gpiod_get_from_of_node-remove-v1-4-b29adfb27a6c@gmail.com>
- <CAHp75VdMr7wru-2hD1HH3OS5JTNdzt6VRqB6OFoCp2JkiuiTjw@mail.gmail.com>
- <YxZQj8bwJCx5rqDv@google.com>
- <CAHp75VdHJS4YgrTK15OuY5sxodxKObUtzturL+YPXFQ3_wpxig@mail.gmail.com>
- <YxZTS3Nl1YaMGoBC@google.com>
- <CAHp75VeNajcf-Y6xvDDVwZijg6U53ggg1HQox1AZ74=wRut+1Q@mail.gmail.com>
- <4a0d089d-6ac6-b92e-6ac7-3d3de0144b4b@roeck-us.net>
+ <20220903-gpiod_get_from_of_node-remove-v1-10-b29adfb27a6c@gmail.com>
+ <CAHp75Vd35EOy=mP25=9fmYfqQnbafgotHw1fxk-TdGk6Oc8g8Q@mail.gmail.com>
+ <75e60144-9fa2-d6ba-bc92-edd23f7e7189@roeck-us.net>
+ <CAHp75VcisCTYoRp-=713YKtwi7BQyPKGiUhF4DkpfAFtvDXCiQ@mail.gmail.com>
+ <c696b9bf-d0ce-1c6a-0ee3-939b180891be@roeck-us.net>
+ <YxZSUlCPEE9o/s4G@google.com>
+ <73749107-35aa-0720-1a30-02a90c0540fa@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4a0d089d-6ac6-b92e-6ac7-3d3de0144b4b@roeck-us.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <73749107-35aa-0720-1a30-02a90c0540fa@roeck-us.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 03:07:48PM -0700, Guenter Roeck wrote:
-> On 9/5/22 12:55, Andy Shevchenko wrote:
-> > On Mon, Sep 5, 2022 at 10:51 PM Dmitry Torokhov
-> > <dmitry.torokhov@gmail.com> wrote:
-> > > On Mon, Sep 05, 2022 at 10:41:40PM +0300, Andy Shevchenko wrote:
-> > > > On Mon, Sep 5, 2022 at 10:40 PM Dmitry Torokhov
-> > > > <dmitry.torokhov@gmail.com> wrote:
-> > > > > On Mon, Sep 05, 2022 at 01:59:44PM +0300, Andy Shevchenko wrote:
-> > > > > > On Mon, Sep 5, 2022 at 9:32 AM Dmitry Torokhov
-> > > > > > <dmitry.torokhov@gmail.com> wrote:
-
-...
-
-> > > > > > > +               gpiod = devm_gpiod_get(&pdev->dev, "nvidia,phy-reset",
-> > > > > > > +                                      GPIOD_OUT_HIGH);
-> > > > > > >                  err = PTR_ERR_OR_ZERO(gpiod);
-> > > > > > 
-> > > > > > What does _OR_ZERO mean now?
-> > > > > 
-> > > > > This converts a pointer to an error code if a pointer represents
-> > > > > ERR_PTR() encoded error, or 0 to indicate success.
-> > > > 
-> > > > Yes, I know that. My point is, how is it useful now (or even before)?
-> > > > I mean that devm_gpio_get() never returns NULL, right?
-> > > 
-> > > What does returning NULL have to do with anything.
+On Mon, Sep 05, 2022 at 03:09:05PM -0700, Guenter Roeck wrote:
+> On 9/5/22 12:47, Dmitry Torokhov wrote:
+> [ ... ]
+> > > We know that count is either 1 or 2 here, so strictly speaking
+> > > 	if (count == 1) {
+> > > 	} else {
+> > > 	}
+> > > would be sufficient. On the other side, that depends on ARRAY_SIZE() being
+> > > exactly 2, so
+> > > 	if (count == 1) {
+> > > 	} else if (count == 2) {
+> > > 	}
+> > > would also make sense. Either way is fine with me. I'll leave it up
+> > > to Dmitry to decide what he wants to do.
 > > 
-> > It has to do with a dead code. If defm_gpiod_get() does not return
-> > NULL, then why do we even bother to check?
-> 
-> PTR_ERR_OR_ZERO() converts into an error code (if the pointer is an
-> ERR_PTR) or 0 if it is a real pointer. Its purpose is not to convert
-> NULL into 0, its purpose is to convert a pointer either into an error
-> code or 0. That is what is done here, and it is done all over the place
-> in the kernel. I don't see your problem with it. Care to explain ?
-> 
-> > > It converts a pointer
-> > > to a "classic" return code, with negative errors and 0 on success.
-> > > 
-> > > It allows to not use multiple IS_ERR/PTR_ERR in the code (I'd need 1
-> > > IS_ERR and 2 PTR_ERR, one in dev_err() and another to return).
+> > My goal is to drop usage of devm_gpiod_get_from_of_node(), beyond that I
+> > do not have strong preferences either way really. It is probing code, so
+> > performance is not critical, but I'm obviously satisfied with how the
+> > code looks now, or I would not have sent it.
 > > 
-> > I don't see how this is relevant.
 > 
-> You lost me. Really, please explain your problem with PTR_ERR_OR_ZERO().
+> Good point.
+> 
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-I don't know what I was thinking about... You, guys, are right, sorry for
-my noise.
+Guenter, individual patches are going through maintainer's trees, will
+you take this one?
+
+Thanks.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Dmitry
