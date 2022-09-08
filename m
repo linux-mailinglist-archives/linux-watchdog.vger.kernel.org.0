@@ -2,160 +2,107 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974CD5B2523
-	for <lists+linux-watchdog@lfdr.de>; Thu,  8 Sep 2022 19:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309105B256E
+	for <lists+linux-watchdog@lfdr.de>; Thu,  8 Sep 2022 20:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbiIHRto (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 8 Sep 2022 13:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
+        id S229742AbiIHSPC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 8 Sep 2022 14:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbiIHRtm (ORCPT
+        with ESMTP id S231398AbiIHSO6 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 8 Sep 2022 13:49:42 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB3C19014;
-        Thu,  8 Sep 2022 10:49:35 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id 65so8450564pfx.0;
-        Thu, 08 Sep 2022 10:49:35 -0700 (PDT)
+        Thu, 8 Sep 2022 14:14:58 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D0024963
+        for <linux-watchdog@vger.kernel.org>; Thu,  8 Sep 2022 11:14:56 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id m17-20020a7bce11000000b003a5bedec07bso2403328wmc.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 08 Sep 2022 11:14:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=6tvs4ayRExWvRUyu07Fc3dE/Ryea2CBbaJjmdbcY3zQ=;
-        b=N9miSMEMgSmCGbHiQdE2LfUCX1ihj9UQdDXy4wUwvgQqAgT6c89By9B32Yr7ks4QW/
-         kQ3r/GzhvTa+Qg8BbYzGl6AyHpJC846e6qN6kwPlHLifQDD2x4FUCdTpgvksa6uWVXcD
-         hqNSr6yBzrXOpZ+L4PDO2vHgKyP9tpNtRpC0Hz/Q72HoumSKIVl0V1wYsTwRdY9xI42q
-         VodiYMH0Gr7pg5pHaGd77fxN8sKYs6l3AOENeIXSIhU/uMbUuw829uxlnSnNtndJsT7b
-         Aozkj+v0mARSnpsxipaFS3n/8JN/9DFfgycFsbUcAFTWHvb2qlaGj3EGU36VsVJcMwSm
-         J6UA==
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date;
+        bh=HH6zS8LbY0yCvFJ/ANUVrGBEoPAwnW+ESl7L8PwRUvk=;
+        b=hl1e5cRyHUD1UWaTfj5oiP7KwVxXuzFjPuhfQpG7ExvZWTGM4TNPU9NuBx+t4EcAAj
+         3O574+DPT/y3c4TdnqOMThKHzbnHluN6EmuOt2fwjd9mMzv2cxeJG0bRjEHdgftkEkgv
+         ya96SALY98sE5hl/RXbxrykl6XWqqlZSZogFtWRcdUFd5A6HUs3EtUJTyKNHiCnhSMBg
+         hPjaUdYTX6GKzXKYPjw/0L3n0idspwPhuMnLlSdiuT1ZmZJodRttVW67ZD6s5vkFpKLt
+         XT1zWFE9qV6v21OKtR9wSXnjSjj5BDQnJIP94hLuyIYMh0N3jnDd6Vn2tGyw6dTmxhJ0
+         JPNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=6tvs4ayRExWvRUyu07Fc3dE/Ryea2CBbaJjmdbcY3zQ=;
-        b=XJumLrWSRotl32LB0dne57GZ30vrfIj818lWA1JKc4uhROHvROC77nKP8SsDke36qu
-         psD9+rzAG3jom9pi83kBlUUc5JiQxWa3TweB6Su91JaKwTqCHi3ZtbvklIRGcS0JdJuA
-         V+Sv2SA2qPEuA+pmAkJZpXqRPsXo+sjBMYS9706/1+WZbLerw7WBMxSMjedbJi9BbIIj
-         JsvdlncGHA5RF9kAOQAEdoPISqLHI9DvpXLthEQMsQV6sLncZemkVrI9vypqNWWNFPnP
-         vyYhvy6SibD6T1T6T/ZEB1DgkMtOQwlLE714xjFOCZWPRoIn6oxCSmRDmqiTxEQLTely
-         zYXw==
-X-Gm-Message-State: ACgBeo37nmweAf0LArC+UidGvALRgdWN3bYcs4If4HQZ2DvBQi6C8njz
-        d+6XJBnkyZWl6o87qyCyIamClMCg3S4wJg==
-X-Google-Smtp-Source: AA6agR4rP0sq0eTqJnNeFCoLicuac5FawsgASHi+dty/arH6J/GnQ6Y3EXP1Dq4hyzo0M3jlr3GItQ==
-X-Received: by 2002:a63:4519:0:b0:434:ae87:ca5b with SMTP id s25-20020a634519000000b00434ae87ca5bmr8796465pga.194.1662659375463;
-        Thu, 08 Sep 2022 10:49:35 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g11-20020a17090a300b00b002005c3d4d4fsm2032943pjb.19.2022.09.08.10.49.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Sep 2022 10:49:33 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <35ed4d8c-21c3-fd1f-bbab-fa826c33adab@roeck-us.net>
-Date:   Thu, 8 Sep 2022 10:49:31 -0700
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=HH6zS8LbY0yCvFJ/ANUVrGBEoPAwnW+ESl7L8PwRUvk=;
+        b=MMu7vmej9S5cSmKnjGBwElEJMGD3g1oE4KYP6NMC16metUJZpmVYMJOnrb1jSvPM+I
+         Lxtmy0hWhDYLABsySSKduCAY0QnwSBOfwUoGLWiV9hsDGTEC8YipbWdYZ65WW/K8FsUY
+         XqF8AV+JABeb1YFu8s+DPHCGRau0R6bSTv4dEp87ZRwLifzHMo19LvNYjKCJ+q5GRKPA
+         bZDEYnMwbIztwHowIO0UJUCWoaQ5EJGTT5+yI9hnzgRouHp5IwjAFjmmJ7HAq1cF3ufQ
+         BT7vcaJO2ZCBin9+lNUcCJ5D5/SZ/cR80TQcz0LVyw9gKtnMo4d/W9wgkRDm92ZNqent
+         izmA==
+X-Gm-Message-State: ACgBeo1C3WKsHTR7sWPQYF+Lacwc6VGZw/TE20czwlHpEOu6yoweQ06o
+        KrYeWKkVIREAiAHHYjc1QYvvA3fQGX5lSrFn0lXtMMmXUe0=
+X-Google-Smtp-Source: AA6agR5QMLfX8HHGYg4D3mBLb65PhLIlRNUwXCZB+8WeAGnF9j/4QJFrwu7E35+NwJR+2gyXp4NNQPdRvflvn8X7XFY=
+X-Received: by 2002:a05:600c:4e4b:b0:3a5:d36e:8349 with SMTP id
+ e11-20020a05600c4e4b00b003a5d36e8349mr3226805wmq.44.1662660894464; Thu, 08
+ Sep 2022 11:14:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 13/19] watchdog: booke_wdt: Replace PPC_FSL_BOOK3E by
- PPC_E500
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org
-References: <4e7e6259e5af0e0e171f19ee1f85ab5b2553723f.1662658653.git.christophe.leroy@csgroup.eu>
- <015ac5217fd0f061e98df9cf98bce515855f2bc3.1662658653.git.christophe.leroy@csgroup.eu>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <015ac5217fd0f061e98df9cf98bce515855f2bc3.1662658653.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:adf:ffc9:0:0:0:0:0 with HTTP; Thu, 8 Sep 2022 11:14:54 -0700 (PDT)
+Reply-To: proctorjulius@yahoo.com
+From:   Julius Proctor <walkerjessica335@gmail.com>
+Date:   Thu, 8 Sep 2022 18:14:54 +0000
+Message-ID: <CAG5ZJ158sg6xoGH=R6wjDPCxBjPy6RdPMiqzpN8hemmTkLeeTg@mail.gmail.com>
+Subject: =?UTF-8?Q?Gr=C3=BC=C3=9Fe=21_Ich_warte_auf_Antwort=2E?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:32d listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [walkerjessica335[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [walkerjessica335[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 9/8/22 10:37, Christophe Leroy wrote:
-> CONFIG_PPC_FSL_BOOK3E is redundant with CONFIG_PPC_E500.
-> 
-> Replace it so that CONFIG_PPC_FSL_BOOK3E can be removed later.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-watchdog@vger.kernel.org
+Guten Tag
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Ich bin Julius Proctor, Anwalt der Anwaltskanzlei Proctor. Ich habe
+Sie bez=C3=BCglich des Nachlasses des verstorbenen Dr. Edwin in H=C3=B6he v=
+on
+8,5 Millionen Dollar kontaktiert, der auf Ihr Konto zur=C3=BCckgef=C3=BChrt
+werden soll. Dar=C3=BCber hinaus m=C3=B6chte ich, dass Sie bei dieser
+Transaktion vertraulich antworten.
 
-> ---
->   drivers/watchdog/Kconfig     | 8 ++++----
->   drivers/watchdog/booke_wdt.c | 8 ++++----
->   2 files changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 9295492d24f7..b7c03c600567 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1935,10 +1935,10 @@ config BOOKE_WDT
->   config BOOKE_WDT_DEFAULT_TIMEOUT
->   	int "PowerPC Book-E Watchdog Timer Default Timeout"
->   	depends on BOOKE_WDT
-> -	default 38 if PPC_FSL_BOOK3E
-> -	range 0 63 if PPC_FSL_BOOK3E
-> -	default 3 if !PPC_FSL_BOOK3E
-> -	range 0 3 if !PPC_FSL_BOOK3E
-> +	default 38 if PPC_E500
-> +	range 0 63 if PPC_E500
-> +	default 3 if !PPC_E500
-> +	range 0 3 if !PPC_E500
->   	help
->   	  Select the default watchdog timer period to be used by the PowerPC
->   	  Book-E watchdog driver.  A watchdog "event" occurs when the bit
-> diff --git a/drivers/watchdog/booke_wdt.c b/drivers/watchdog/booke_wdt.c
-> index 75da5cd02615..932a03f4436a 100644
-> --- a/drivers/watchdog/booke_wdt.c
-> +++ b/drivers/watchdog/booke_wdt.c
-> @@ -27,7 +27,7 @@
->    */
->   
->   
-> -#ifdef	CONFIG_PPC_FSL_BOOK3E
-> +#ifdef	CONFIG_PPC_E500
->   #define WDTP(x)		((((x)&0x3)<<30)|(((x)&0x3c)<<15))
->   #define WDTP_MASK	(WDTP(0x3f))
->   #else
-> @@ -45,7 +45,7 @@ MODULE_PARM_DESC(nowayout,
->   		"Watchdog cannot be stopped once started (default="
->   				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
->   
-> -#ifdef CONFIG_PPC_FSL_BOOK3E
-> +#ifdef CONFIG_PPC_E500
->   
->   /* For the specified period, determine the number of seconds
->    * corresponding to the reset time.  There will be a watchdog
-> @@ -88,7 +88,7 @@ static unsigned int sec_to_period(unsigned int secs)
->   
->   #define MAX_WDT_TIMEOUT		period_to_sec(1)
->   
-> -#else /* CONFIG_PPC_FSL_BOOK3E */
-> +#else /* CONFIG_PPC_E500 */
->   
->   static unsigned long long period_to_sec(unsigned int period)
->   {
-> @@ -102,7 +102,7 @@ static unsigned int sec_to_period(unsigned int secs)
->   
->   #define MAX_WDT_TIMEOUT		3	/* from Kconfig */
->   
-> -#endif /* !CONFIG_PPC_FSL_BOOK3E */
-> +#endif /* !CONFIG_PPC_E500 */
->   
->   static void __booke_wdt_set(void *data)
->   {
-
+Julius Proctor
