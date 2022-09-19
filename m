@@ -2,145 +2,88 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C335BCC39
-	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Sep 2022 14:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F63B5BCCD1
+	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Sep 2022 15:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiISMyq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 19 Sep 2022 08:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
+        id S230437AbiISNTW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 19 Sep 2022 09:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbiISMyn (ORCPT
+        with ESMTP id S230441AbiISNTQ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 19 Sep 2022 08:54:43 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5EAA18D;
-        Mon, 19 Sep 2022 05:54:36 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d82so27981807pfd.10;
-        Mon, 19 Sep 2022 05:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date;
-        bh=Tmpc5VmdBuLNmo/f3Keo3zjOhIaec8wRWgy0Dh7g4Xc=;
-        b=IA1ULq2eITg3H242o0ceTuR+29XaGcATRGaKSuDc8T6b1OAXgPKHFsoE/F8qKLaEbj
-         LHKF72D1D4D6AtFv3+T5yxrnjf3sZcQcoypvrSojyA0T41EVh3zsb7QO3PD14E7mOEzy
-         cMj3HF1NpkzPiR5DWW3kjUKSDXWSbPb8KrU1d1daapDHlWrvM3bOMGFGCTx+nX9Mjuq5
-         EFuRxKx/dWnBpQkKI0ovXtWn4cekG1ViBEbHBQdWSzZH+kDAZMOqyozq0ejQU4kNanzC
-         JMdcnwOZ/rjbHytSrgKjQZFqpN/c5u521Tm4UFl3JUUUjRctDQfgiqtuX6/XIrevCd0h
-         KOPg==
+        Mon, 19 Sep 2022 09:19:16 -0400
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD1C2B258;
+        Mon, 19 Sep 2022 06:19:13 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id h3so25419732lja.1;
+        Mon, 19 Sep 2022 06:19:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Tmpc5VmdBuLNmo/f3Keo3zjOhIaec8wRWgy0Dh7g4Xc=;
-        b=VJ9NOlXeimGLQTBfEL0BKY0/p3walSrGNbO1DT197D39iouAu2n1TgZeND5GYD/uc1
-         73AM3e5kcAtPHLooJamBnMDBIJVhh66daLieivhpYNBczxN5boPtMMQ7gpffiRTwdsAC
-         KYO5l9LpwVwtuIgxWPefJjHOCSns119/SuqHuDV3vO3ked84Vq43mhYPGcasMSJQ/54z
-         bWDITB0g5KFsjEddxHur53tQ11VmHSayoe8XpGUhgapW2/MH7jAFzAsVMr70s6rrelEX
-         pdUzI4OUU6GNW5Xf1e9i+znUE6Qa8o2uEuaNTDZxS0BJOXUhY4OFcRtjSDy72rbb2L+t
-         0R0Q==
-X-Gm-Message-State: ACrzQf1ErKdXkYa+s/pU2YnvL3M8og665fbeaZYyjTWih2ROXGola/NZ
-        5xw2Jpvg31jfCQbIykKhTrifHOAqnADqeA==
-X-Google-Smtp-Source: AMsMyM5n8v4bAl9gCQfKXo/bFnEfAhrhcNlccrkoIujrz8tigtnIa/6BRh7KaefuUdNnAfjVvrwJaQ==
-X-Received: by 2002:a63:594c:0:b0:438:f2ce:8780 with SMTP id j12-20020a63594c000000b00438f2ce8780mr15582233pgm.285.1663592076255;
-        Mon, 19 Sep 2022 05:54:36 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c206-20020a621cd7000000b00536431c6ae0sm20195289pfc.101.2022.09.19.05.54.34
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=CIXTFCzxjkeVwrqu3MxeoXf6dgZFRbn9vUeaJo1l6Us=;
+        b=vfj7qDNHUBa7qO7sFx93dLQ/q0h2IRmAOn9WStbzCTV4hGzOhKb9HkNBu6mMZwfmQw
+         t0FlRzaU4hEtFKvRkrhTum2lxVlg4e3GGCrTHNIIPYQXJj2kkFgCiNWFOQ/vuOQ0anjW
+         027w/MRzKsdHmPsVCYolpXd+Kg4sRMdq99ELFGUur937ZoGgLWhG314ABNozmB5NdsZ5
+         u1Ooy1LZvZXAC3oFm9IcS14Y36svtJHsevOJ044u4qltZDq6dp8eb5q5qZshIjH4HPbw
+         b5OcA3k7wDWyz3mBAaf9lYFJOKCRjUvgFr/WZaPotp47ZVwGB1xBz4ALa4qLixJzFTaq
+         XwEQ==
+X-Gm-Message-State: ACrzQf3LsW3BaQM1JW9N/9Fud9AhBjkniKX4/IWDNDWRUXQBXQUXsV3p
+        b+OP2g8rHuZO1VeLutSjfLiWUIiJcyfO2A==
+X-Google-Smtp-Source: AMsMyM7cAAGQsl8uVRWFFu3aaDbh6kXayYRKRyhHiNXGMM8GOJ4ojzPhB7p6Z0LPioupUgDlFDwMFg==
+X-Received: by 2002:a2e:bf11:0:b0:261:9343:fb2 with SMTP id c17-20020a2ebf11000000b0026193430fb2mr5424827ljr.47.1663593551557;
+        Mon, 19 Sep 2022 06:19:11 -0700 (PDT)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
+        by smtp.gmail.com with ESMTPSA id 15-20020ac2568f000000b0048b0696d0b1sm5198273lfr.90.2022.09.19.06.19.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 05:54:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5ee31cd1-76af-dae7-0902-3808a2696754@roeck-us.net>
-Date:   Mon, 19 Sep 2022 05:54:33 -0700
+        Mon, 19 Sep 2022 06:19:11 -0700 (PDT)
+Received: by mail-lf1-f43.google.com with SMTP id u18so46878528lfo.8;
+        Mon, 19 Sep 2022 06:19:10 -0700 (PDT)
+X-Received: by 2002:a05:6512:3b8a:b0:499:ac9a:425b with SMTP id
+ g10-20020a0565123b8a00b00499ac9a425bmr5883584lfv.301.1663593550016; Mon, 19
+ Sep 2022 06:19:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     linux-watchdog@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-References: <20220806000706.3eeafc9c@endymion.delvare>
- <5a1c9872-52b5-1f96-6931-801185b03fd4@roeck-us.net>
- <20220919113335.18cebc74@endymion.delvare>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] watchdog: wdat_wdt: Set the min and max timeout values
- properly
-In-Reply-To: <20220919113335.18cebc74@endymion.delvare>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+References: <20220918140829.443722-1-git@vladimir.panteleev.md>
+ <aabb7c21-9a80-696e-6a38-29de57e025ba@roeck-us.net> <CAHhfkvw_U_uF1UFcLTBUsw=_YoM_7pi3tw3KCovTT6PZTnH0ig@mail.gmail.com>
+ <736d150c-03fe-ce39-a42e-b9b62f40a937@roeck-us.net>
+In-Reply-To: <736d150c-03fe-ce39-a42e-b9b62f40a937@roeck-us.net>
+From:   Vladimir Panteleev <git@vladimir.panteleev.md>
+Date:   Mon, 19 Sep 2022 13:18:53 +0000
+X-Gmail-Original-Message-ID: <CAHhfkvxf5P0KYQpzjAxBbEmYtK+YRs5P1QD+28=9FLZfn_awyA@mail.gmail.com>
+Message-ID: <CAHhfkvxf5P0KYQpzjAxBbEmYtK+YRs5P1QD+28=9FLZfn_awyA@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: sp5100_tco: Add "action" module parameter
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 9/19/22 02:33, Jean Delvare wrote:
-> Hi Guenter,
-> 
-> A few questions from an old discussion:
-> 
-> On Mon, 8 Aug 2022 04:36:42 -0700, Guenter Roeck wrote:
->> On 8/5/22 15:07, Jean Delvare wrote:
->>> To be honest, I'm not sold to the idea of a software-emulated
->>> maximum timeout value above what the hardware can do, but if doing
->>> that makes sense in certain situations, then I believe it should be
->>> implemented as a boolean flag (named emulate_large_timeout, for
->>> example) to complement max_timeout instead of a separate time value.
->>> Is there a reason I'm missing, why it was not done that way?
->>
->> There are watchdogs with very low maximum timeout values, sometimes less than
->> 3 seconds. gpio-wdt is one example - some have a maximum value of 2.5 seconds.
->> rzn1_wd is even more extreme with a maximum of 1 second. With such low values,
->> accuracy is important, second-based limits are insufficient, and there is an
->> actual need for software timeout handling on top of hardware.
-> 
-> Out of curiosity, what prevents user-space itself from pinging
-> /dev/watchdog every 0.5 second? I assume hardware using such watchdog
-> devices is "special" and would be running finely tuned user-space, so
-> the process pinging /dev/watchdog could be given higher priority or
-> even real-time status to ensure it runs without delays. Is that not
-> sufficient?
-> 
+Hi Guenter,
 
-It took us forever to get the in-kernel support stable, using the right timers
-and making sure that the kernel actually executes the code fast enough. Maybe
-that would work nowadays from a userspace process with the right permissions,
-but I would not trust it. Then there is watchdog support in, for example,
-systemd. I would not want to force users to run systemd as high priority
-real-time process just to make an odd watchdog work. I also would not want to
-tell people that they must not use the systemd watchdog timer to make their
-watchdog work.
+On Mon, 19 Sept 2022 at 12:29, Guenter Roeck <linux@roeck-us.net> wrote:
+> I am not getting into define name editing wars. The define is named as
+> it is. There is never a good reason to rename it. If I'd accept your
+> change, someone else might come tomorrow and want it renamed to
+> "SP5100_WDT_ACTION_POWEROFF" because setting the bit to 1 causes
+> the system to power off.
 
-Also, there is no guarantee that the odd hardware with the weird watchdog hardware
-is actually always used in an application where such a fast timeout is needed or
-even wanted.
+Ah, sorry - this is one of my first attempts at contributing to the
+kernel, and as such I of course fully defer to you. In case I was
+misunderstood, I was just trying to explain my line of reasoning at
+the time, which is what I thought you asked for in your previous
+message. Thank you for the explanation, I was not aware of the high
+cost of renaming defines.
 
-On top of that, the code in the kernel also now supports "ping until opened"
-for systems where the watchdog is already running when the system boots.
+I will send a V2 if this is all?
 
-Overall, I don't think it would be a good idea to revert the in-kernel support
-of pinging watchdogs.
-
->> At the same time, there is actually a need to make timeouts milli-second based
->> instead of second-based, for uses such as medical devices where timeouts need
->> to be short and accurate. The only reason for not implementing this is that
->> the proposals I have seen so far (including mine) were too messy for my liking,
->> and I never had the time to clean it up. Reverting milli-second support would
->> be the completely wrong direction.
-> 
-> I might look into this at some point (for example as a SUSE Hackweek
-> project). Did you post your work somewhere? I'd like to take a look.
-> 
-There was one submission from someone else if I recall correctly, but mine never
-got to the point where it was submittable.
-
-Guenter
+Thank you for your time :)
+Best regards,
+- Vladimir
