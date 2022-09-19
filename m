@@ -2,102 +2,145 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2150C5BCD27
-	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Sep 2022 15:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C83EA5BD350
+	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Sep 2022 19:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiISN2Z (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 19 Sep 2022 09:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
+        id S231163AbiISRIc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 19 Sep 2022 13:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbiISN1u (ORCPT
+        with ESMTP id S231127AbiISRIH (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 19 Sep 2022 09:27:50 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DD62F648;
-        Mon, 19 Sep 2022 06:27:33 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id s14-20020a17090a6e4e00b0020057c70943so7182040pjm.1;
-        Mon, 19 Sep 2022 06:27:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=mkCH4OzN8g5w9NU3RvtGIK1KLmjjbkv0z31pyt5VQ+U=;
-        b=ic6BZzN79DENl3Ss/xkTywrdtJVj3Z5/lUZKEYwtYa56HmZrdQtpcLrjdbJqGv7hcK
-         DdD9oq4PXqMOcZFEvSkdpFy4BHM44AkxnwbVXv52E26eQEs3Mc7DLfObBV6235Qh27sy
-         5U73mBy9ihbbW1XrK4u2U/tiisfFqQLzZITxGIcFRi6YYjg5Gf+tc8cc4SMvo8Y8GIZe
-         1PK7qdF4t4flwv7ux4d/YBoe9H9SvLx4W7s2ju87ZQlPvW6v+BE9X+ytUrB8v5cm+psa
-         PRAJH75bKdwCXv3Cigbxx3qD+7ft6qjHLCbr4Wg8DA4EIA7SumFVnl/LhV7tp+Fy0bBq
-         QupQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=mkCH4OzN8g5w9NU3RvtGIK1KLmjjbkv0z31pyt5VQ+U=;
-        b=TbQjvDIQw5rjfHCdZbJCYRgVUnGgZRzAqYasjYbLDYSBu3BtyCYuPP8ya4E6LNKdEE
-         FmnYYJUSjOH7i1aOayAyHpn2xT83hBpz8jn2eHro7BEaL8Yf+OH00fICmQkjj1paLiLe
-         cx7sE1IH3aofL2iY+tP4IvtoL9g5rQxsaows9qwH94HpeyentK5fXUebsSD3JfYkq+sa
-         BL8ObxziyXNFbNA2wg/EXqpM1l1P4DCqRwHhfcXVkZDCEs+HJycXlMRNi5bVkBNP1D9S
-         61PvH6c2glueRpM+J3WM3s6U93Jij4Kl9FvodH69hhhI3SlTSFLM0X44ohxG7ZqNAW8r
-         OEDw==
-X-Gm-Message-State: ACrzQf1WJlYm79/iVy81L2AERgNlaunlTfzSpURIyPj3jqvG6aD7tCgz
-        xC1xwcT900bLJU+fcRJCBvl5qRvCvo/+7g==
-X-Google-Smtp-Source: AMsMyM70l0UaCXymcy79gKINZcCJtyklQX+Kjs+aSUjY3KMkxMjt0UtG1NEie5fSwYiNiSn8WwOmSA==
-X-Received: by 2002:a17:90b:1d87:b0:200:b6e1:7e9f with SMTP id pf7-20020a17090b1d8700b00200b6e17e9fmr20246816pjb.235.1663594052844;
-        Mon, 19 Sep 2022 06:27:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id mw5-20020a17090b4d0500b002004a2eab5bsm6630417pjb.14.2022.09.19.06.27.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 06:27:32 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 19 Sep 2022 06:27:31 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Vladimir Panteleev <git@vladimir.panteleev.md>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: sp5100_tco: Add "action" module parameter
-Message-ID: <20220919132731.GA3547700@roeck-us.net>
-References: <20220918140829.443722-1-git@vladimir.panteleev.md>
- <aabb7c21-9a80-696e-6a38-29de57e025ba@roeck-us.net>
- <CAHhfkvw_U_uF1UFcLTBUsw=_YoM_7pi3tw3KCovTT6PZTnH0ig@mail.gmail.com>
- <736d150c-03fe-ce39-a42e-b9b62f40a937@roeck-us.net>
- <CAHhfkvxf5P0KYQpzjAxBbEmYtK+YRs5P1QD+28=9FLZfn_awyA@mail.gmail.com>
+        Mon, 19 Sep 2022 13:08:07 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AB940565;
+        Mon, 19 Sep 2022 10:06:00 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4MWWF8374gz9slB;
+        Mon, 19 Sep 2022 19:02:20 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id yxruzLMCp3SA; Mon, 19 Sep 2022 19:02:20 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4MWWDr647kz9slF;
+        Mon, 19 Sep 2022 19:02:04 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id B50288B76E;
+        Mon, 19 Sep 2022 19:02:04 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id sXNi4wYvt_GZ; Mon, 19 Sep 2022 19:02:04 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.8])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4BBE58B770;
+        Mon, 19 Sep 2022 19:02:04 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 28JH1xIM1549629
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 19 Sep 2022 19:01:59 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 28JH1wlT1549627;
+        Mon, 19 Sep 2022 19:01:58 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH v2 13/19] watchdog: booke_wdt: Replace PPC_FSL_BOOK3E by PPC_E500
+Date:   Mon, 19 Sep 2022 19:01:37 +0200
+Message-Id: <01a9132d51d3d8d9c74576d3da4d9d1fa5a88bde.1663606876.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <828f6a64eeb51ce9abfa1d4e84c521a02fecebb8.1663606875.git.christophe.leroy@csgroup.eu>
+References: <828f6a64eeb51ce9abfa1d4e84c521a02fecebb8.1663606875.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHhfkvxf5P0KYQpzjAxBbEmYtK+YRs5P1QD+28=9FLZfn_awyA@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1663606899; l=2397; s=20211009; h=from:subject:message-id; bh=PyTJa8Piekhf+SO+h17YPQ6Dhr2fe9f5muCSXgILORw=; b=/WRRsEVoYhxgCSA8ALhVXRUDZ7eaLtTmjVSWaur8VV1a7V7BDLuxzdmbxH0DBeeXN/nBAwnmy8+/ betygx+YDgsvBtLrkAwStVuwcrbHX1u+p5AzfBSuPmRkysBvIJFh
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 01:18:53PM +0000, Vladimir Panteleev wrote:
-> Hi Guenter,
-> 
-> On Mon, 19 Sept 2022 at 12:29, Guenter Roeck <linux@roeck-us.net> wrote:
-> > I am not getting into define name editing wars. The define is named as
-> > it is. There is never a good reason to rename it. If I'd accept your
-> > change, someone else might come tomorrow and want it renamed to
-> > "SP5100_WDT_ACTION_POWEROFF" because setting the bit to 1 causes
-> > the system to power off.
-> 
-> Ah, sorry - this is one of my first attempts at contributing to the
-> kernel, and as such I of course fully defer to you. In case I was
-> misunderstood, I was just trying to explain my line of reasoning at
-> the time, which is what I thought you asked for in your previous
-> message. Thank you for the explanation, I was not aware of the high
-> cost of renaming defines.
-> 
-> I will send a V2 if this is all?
-> 
+CONFIG_PPC_FSL_BOOK3E is redundant with CONFIG_PPC_E500.
 
-Sounds good.
+Replace it so that CONFIG_PPC_FSL_BOOK3E can be removed later.
 
-Thanks,
-Guenter
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-watchdog@vger.kernel.org
+---
+ drivers/watchdog/Kconfig     | 8 ++++----
+ drivers/watchdog/booke_wdt.c | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index 9295492d24f7..b7c03c600567 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -1935,10 +1935,10 @@ config BOOKE_WDT
+ config BOOKE_WDT_DEFAULT_TIMEOUT
+ 	int "PowerPC Book-E Watchdog Timer Default Timeout"
+ 	depends on BOOKE_WDT
+-	default 38 if PPC_FSL_BOOK3E
+-	range 0 63 if PPC_FSL_BOOK3E
+-	default 3 if !PPC_FSL_BOOK3E
+-	range 0 3 if !PPC_FSL_BOOK3E
++	default 38 if PPC_E500
++	range 0 63 if PPC_E500
++	default 3 if !PPC_E500
++	range 0 3 if !PPC_E500
+ 	help
+ 	  Select the default watchdog timer period to be used by the PowerPC
+ 	  Book-E watchdog driver.  A watchdog "event" occurs when the bit
+diff --git a/drivers/watchdog/booke_wdt.c b/drivers/watchdog/booke_wdt.c
+index 75da5cd02615..932a03f4436a 100644
+--- a/drivers/watchdog/booke_wdt.c
++++ b/drivers/watchdog/booke_wdt.c
+@@ -27,7 +27,7 @@
+  */
+ 
+ 
+-#ifdef	CONFIG_PPC_FSL_BOOK3E
++#ifdef	CONFIG_PPC_E500
+ #define WDTP(x)		((((x)&0x3)<<30)|(((x)&0x3c)<<15))
+ #define WDTP_MASK	(WDTP(0x3f))
+ #else
+@@ -45,7 +45,7 @@ MODULE_PARM_DESC(nowayout,
+ 		"Watchdog cannot be stopped once started (default="
+ 				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+ 
+-#ifdef CONFIG_PPC_FSL_BOOK3E
++#ifdef CONFIG_PPC_E500
+ 
+ /* For the specified period, determine the number of seconds
+  * corresponding to the reset time.  There will be a watchdog
+@@ -88,7 +88,7 @@ static unsigned int sec_to_period(unsigned int secs)
+ 
+ #define MAX_WDT_TIMEOUT		period_to_sec(1)
+ 
+-#else /* CONFIG_PPC_FSL_BOOK3E */
++#else /* CONFIG_PPC_E500 */
+ 
+ static unsigned long long period_to_sec(unsigned int period)
+ {
+@@ -102,7 +102,7 @@ static unsigned int sec_to_period(unsigned int secs)
+ 
+ #define MAX_WDT_TIMEOUT		3	/* from Kconfig */
+ 
+-#endif /* !CONFIG_PPC_FSL_BOOK3E */
++#endif /* !CONFIG_PPC_E500 */
+ 
+ static void __booke_wdt_set(void *data)
+ {
+-- 
+2.37.1
+
