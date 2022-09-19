@@ -2,72 +2,74 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C295BB5DA
-	for <lists+linux-watchdog@lfdr.de>; Sat, 17 Sep 2022 05:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0823D5BC1FC
+	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Sep 2022 06:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbiIQDP3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 16 Sep 2022 23:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
+        id S229558AbiISERo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 19 Sep 2022 00:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiIQDP2 (ORCPT
+        with ESMTP id S229541AbiISERn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 16 Sep 2022 23:15:28 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997BA8F961;
-        Fri, 16 Sep 2022 20:15:26 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id d15so17106623qka.9;
-        Fri, 16 Sep 2022 20:15:26 -0700 (PDT)
+        Mon, 19 Sep 2022 00:17:43 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7525111C1B;
+        Sun, 18 Sep 2022 21:17:39 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso4926624pjd.4;
+        Sun, 18 Sep 2022 21:17:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=XUfzBzZuWyfF9wBV/OL25Z4oquzs51QmhKLoNSr3k1c=;
-        b=PT59GgzURMS7drzwFEyVo7lPwaUbOGziEHXgRQ75ZczkEy+6JvTvw6yeycoMHEYEVP
-         ySjiN2Eww4G9tZPd+HQ9Vl7OcK1+00VzqBXPTJsQ6yD3ltGMiF1KtcH4uD9VHYvtdXNN
-         oeuosiiWwOyiywNcLwhxg3b+j6WPA2Xl2/8QZsTULeRQYYCW1rbcFw1ZIQPEZaqNbjwm
-         IQ3gJr3TN/USqaWjdDHx5+W9YpOT0H6VezlWfjSIL5hR0+fTZNg8/qoDr9fNtVCVOHy3
-         CKj3ll94O1CCIDH4titHm9yxGYEIrI7WMX0ghgjoGFSW5qKQVM0I13fSrfQBCFi7OQPC
-         +Lpw==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date;
+        bh=xvBYQEJlnutmzsBa+QOcpxvGoRXQhVpejHGJpeAOxkU=;
+        b=dU4n/EvFzEBPci2Ddrpy6TiF6zQh2Mtp+oHWXb405CNEATK+AOXtBuYIYd/tMNpqWn
+         M2/PuG1jVEkdMXjaAl9ttTfYpQblWAnfyJ+RHTeH6fxMtzjXCrJWQTU6G4oo0KICfMjA
+         8qw5+NePeMXT2MFHSnX1ZD50Qe37syd73WFMg0QbBbefgOHEo+nTkWu6on+F4Fnj3rH4
+         qzFUVWQ10eI3/iX8eDnD7UavFGFiV5qiRexYwwBEfaguyJQEl7hAlrU+gqV5ck8bW1PR
+         XZSK6dznG2kiu/SkU4MIQdNV05EqPamXVetY5ZL101uPyqjjMoFVMDLrpk/QRf1y5kK8
+         YCCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=XUfzBzZuWyfF9wBV/OL25Z4oquzs51QmhKLoNSr3k1c=;
-        b=gh0etR16LadcJ3ow6aSwk6s3zx3dbvoFiHiZH5wYIMAXjzk7AT56sKcNfiU7yKVnNB
-         ZyMF/R2w2FB1RuELul/DnvsFn+ed17lCpFxWJBbmY537rjZgJk4zq/M+0dRI98wtrvhe
-         ek0i2V7XHpZVsHWMxC8KUrj5+FPRrBS6c69c9j/ZvxZEt0mKga46hSp1z1v//e5wr691
-         pIyowVtx3qvFYzCwjMgA6hailewxeAd840HUhGOY0ngbEoLiGLuHUxrOfEHNP+Wtaomg
-         Sf1HVvAfsLMH5FZi0/AJE5taqIpxJ+kcTzfe26Qir43wnXFrJg7em8qv3peM4u75XeI+
-         ELkg==
-X-Gm-Message-State: ACrzQf1PYJX6nEcO+LRw1ovR2jpM52lhZ2yeiYSVTxTSua1bzbcHrDoh
-        WkN2ez/P77KjG14E8AQBUk0=
-X-Google-Smtp-Source: AMsMyM550wELvKwBpS842nqt2Ta6446CQl7asd4w6TozPsTUlROqtB8ANnyOI5Wi1YZvB3M+4mssFw==
-X-Received: by 2002:a37:f71c:0:b0:6ce:e3f7:4438 with SMTP id q28-20020a37f71c000000b006cee3f74438mr128978qkj.453.1663384525649;
-        Fri, 16 Sep 2022 20:15:25 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:4b00:9414:100:7d9f:4703:e9c:52c])
-        by smtp.gmail.com with ESMTPSA id m12-20020ac866cc000000b0035bbc29b3c9sm6335008qtp.60.2022.09.16.20.15.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 20:15:24 -0700 (PDT)
-From:   Alexey Klimov <klimov.linux@gmail.com>
-To:     linux@roeck-us.net, wim@linux-watchdog.org
-Cc:     linux-watchdog@vger.kernel.org, gregkh@linuxfoundation.org,
-        oneukum@suse.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, atishp@rivosinc.com,
-        atishp@atishpatra.org, yury.norov@gmail.com, aklimov@redhat.com,
-        atomlin@redhat.com, stern@rowland.harvard.edu,
-        klimov.linux@gmail.com
-Subject: Re: [PATCH v6] watchdog: add driver for StreamLabs USB watchdog device
-Date:   Sat, 17 Sep 2022 04:15:02 +0100
-Message-Id: <20220917031502.372319-1-klimov.linux@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220917030534.363192-1-klimov.linux@gmail.com>
-References: <20220917030534.363192-1-klimov.linux@gmail.com>
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=xvBYQEJlnutmzsBa+QOcpxvGoRXQhVpejHGJpeAOxkU=;
+        b=RKiYp+lTa55Oe6xCcxRo8TpJ3yYliwPor/GdttgyDXcuPcR2ah0G3ZxAzEbpPUedGj
+         gPpcX9Rew8PUtUHY7+jOAEKSiHC4T3t8ahi2pxAoxdcchL0QaJWPIRkfGjtXQHJAjxJd
+         lSc+tFpul2jNb+jPjFD1b3BiLctpKI+7tKUj8WlcMzm0xh5sTqDYTFTwhb+eG2niq6eE
+         oKp5g+FR9g3fmfy3pdPL4rsga2LF4gGU5ElToWGqGKnWrNAs4Ph2WujFz897ud0NXADR
+         ABTst+fypabEmGw7LtuJBu7gBEq7bv42BvBmSz7XwvJKZS9vO4/NCBnNPaJdMGS/Uyvr
+         lN2Q==
+X-Gm-Message-State: ACrzQf37NIGCZPaAQMLnGVUqu9RV0TXHhk9AideoJ2/SC64VIPeuZiPw
+        GriDb/QqZYZKl0lWUwnGj5H62+DseL4FNw==
+X-Google-Smtp-Source: AMsMyM59wmTasauLFeA6g9m6IOJ9i5Ww/m2Mg1qGQzdrp0Ek0GINmeCUDLbNvt9Phr0W+EYGHE2K3g==
+X-Received: by 2002:a17:903:2104:b0:176:a9ef:418b with SMTP id o4-20020a170903210400b00176a9ef418bmr11132625ple.134.1663561058922;
+        Sun, 18 Sep 2022 21:17:38 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d8-20020a631d08000000b00434feb1841dsm17335626pgd.66.2022.09.18.21.17.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Sep 2022 21:17:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <aabb7c21-9a80-696e-6a38-29de57e025ba@roeck-us.net>
+Date:   Sun, 18 Sep 2022 21:17:36 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Vladimir Panteleev <git@vladimir.panteleev.md>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220918140829.443722-1-git@vladimir.panteleev.md>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] watchdog: sp5100_tco: Add "action" module parameter
+In-Reply-To: <20220918140829.443722-1-git@vladimir.panteleev.md>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,132 +77,69 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Wim/Guenter,
+On 9/18/22 07:08, Vladimir Panteleev wrote:
+> Allow configuring the "action" bit, as documented in [1].
+> 
+> Previously, the only action supported by this module was to reset the
+> system (0).  It can now be configured to power off (1) instead.
+> 
+> [1]: https://www.amd.com/system/files/TechDocs/44413.pdf
+> 
+> Signed-off-by: Vladimir Panteleev <git@vladimir.panteleev.md>
+> ---
+>   drivers/watchdog/sp5100_tco.c | 13 +++++++++++--
+>   drivers/watchdog/sp5100_tco.h |  2 +-
+>   2 files changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
+> index ae54dd33e233..802f12e8fd76 100644
+> --- a/drivers/watchdog/sp5100_tco.c
+> +++ b/drivers/watchdog/sp5100_tco.c
+> @@ -65,6 +65,12 @@ static struct pci_dev *sp5100_tco_pci;
+>   
+>   /* module parameters */
+>   
+> +#define WATCHDOG_ACTION 0
+> +static bool action = WATCHDOG_ACTION;
+> +module_param(action, bool, 0444);
+> +MODULE_PARM_DESC(action, "Action taken when watchdog expires, 0 to reset, 1 to poweroff (default="
+> +		 __MODULE_STRING(WATCHDOG_ACTION) ")");
+> +
 
-For me it seems that there could be a potential race condition. I have to rely
-on watchdog_active(&streamlabs_wdt->wdt_dev) function which tests the WDOG_ACTIVE
-bit in struct watchdog_device->status member.
-The watchdog_dev changes the state of the device with ->start() or ->ping() and
-->stop() methods and updates the WDOG_ACTIVE accordingly.
-In {pre,post}_reset methods here I have to change the state of the device from
-running to stopped and back to running conditionally, however WDOG_ACTIVE bit
-could be updated in between these callbacks execution or starting/stopping
-the device can race.
-For instance, I see the potential dangerous race like this:
+Other module parameters are not visible. I do not see the benefit of
+having this one visible.
 
-	CPUX					CPUY
+>   #define WATCHDOG_HEARTBEAT 60	/* 60 sec default heartbeat. */
+>   static int heartbeat = WATCHDOG_HEARTBEAT;  /* in seconds */
+>   module_param(heartbeat, int, 0);
+> @@ -297,8 +303,11 @@ static int sp5100_tco_timer_init(struct sp5100_tco *tco)
+>   	if (val & SP5100_WDT_FIRED)
+>   		wdd->bootstatus = WDIOF_CARDRESET;
+>   
+> -	/* Set watchdog action to reset the system */
+> -	val &= ~SP5100_WDT_ACTION_RESET;
+> +	/* Set watchdog action */
+> +	if (action)
+> +		val |= SP5100_WDT_ACTION;
+> +	else
+> +		val &= ~SP5100_WDT_ACTION;
+>   	writel(val, SP5100_WDT_CONTROL(tco->tcobase));
+>   
+>   	/* Set a reasonable heartbeat before we stop the timer */
+> diff --git a/drivers/watchdog/sp5100_tco.h b/drivers/watchdog/sp5100_tco.h
+> index 6a0986d2c94b..9752ab2b0130 100644
+> --- a/drivers/watchdog/sp5100_tco.h
+> +++ b/drivers/watchdog/sp5100_tco.h
+> @@ -18,7 +18,7 @@
+>   
+>   #define SP5100_WDT_START_STOP_BIT	BIT(0)
+>   #define SP5100_WDT_FIRED		BIT(1)
+> -#define SP5100_WDT_ACTION_RESET		BIT(2)
+> +#define SP5100_WDT_ACTION		BIT(2)
 
-	..				watchdog_stop() {
-	..					if (wdd->ops->stop) {
-							...
-							err = wdd->ops->stop(wdd)
-						}
-usb_streamlabs_wdt_pre_reset() {
-	if (watchdog_active())
-		stop_command();			/* WDOG_ACTIVE bit is still set
-	...					 here indicating that watchdog is
-}						 started, but ->stop() has already
-						 finished */
-	...
-usb_streamlabs_wdt_post_reset() {
-	if (watchdog_active())
-		start_command();
-}
-	...					/* WDOG_ACTIVE is updated here */
-						clear_bit(WDOG_ACTIVE, &wdd->status);
-					}
+I do not see the point of renaming this define.
 
-As a result, the watchdog subsystem "thinks" that watchdog is not active and should
-not be pinged. However, the driver observed using watchdog_active() that watchdog
-was active during {pre,post}_reset and restarted the device which will lead to
-unexpected reset. It is very unlikely race to happen but consequence is fatal.
-In other words, there are two independent paths leading to driver changing
-the state of the watchdog device and one path relies on status that can be changed
-by another path.
+>   #define SP5100_WDT_DISABLED		BIT(3)
+>   #define SP5100_WDT_TRIGGER_BIT		BIT(7)
+>   
 
-Thinking about that I see the following approaches:
-
-1. Introduce a variable in struct streamlabs_wdt that tracks the state of the
-watchdog device itself and checking/updating the state of a device happens under
-semaphore lock.
-Obviously, this "internal" to the driver state variable should be used in
-{pre,post}_reset. In case there will be other drivers (say, USB ones) they also
-need to implement this.
-
-or
-
-2. The updates to wdd->status should happen under wd_data->lock.
-Currently, it is mutex-based. The acquiring and releasing the lock could be
-exported for the drivers to use. The mutex lock probably should be switched
-to a binary semaphore for that.
-
-In such case, in pre_reset() for example, I would need to do:
-static int pre_reset()
-{
-	lock_wdd();
-	acquire_internal_driver_lock();
-	
-	if (watchdog_active())
-		stop_command();
-}
-
-static int post_reset()
-{
-
-	if (watchdog_active())
-		start_command();
-
-	release_internal_driver_lock();
-	unlock_wdd();
-}
-
-There should be an order that we have to acquire subsystem wdd lock first, then
-internal driver lock. Otherwise there could be deadlocks.
-
-This could be done if you think it's more wiser move.
-
-or
-
-3. The {pre,post}_reset callbacks should execute watchdog_dev.c subsystem functions
-(not sure which functions exactly). Eventually, it will look similar to what is
-described in the previous point with respect to locks order.
-I meant something like this:
-
-static int pre_reset()
-{
-	watchdog_dev_pre_reset_prepare();
-}
-
-static int post_reset()
-{
-	watchdog_dev_post_reset_done();
-}
-
-In watchdog_dev.c:
-void watchdog_dev_pre_reset_prepare()
-{
-	mutex_lock(&wd_data->lock);	<-- should be changed to semaphore too?
-
-	watchdog_stop(wdd);		<-- without updating WDOG_ACTIVE bit?
-					 or there should be a way to indicate
-					 to watchdog_dev_post_reset_done() if
-					 watchdog should be started or not
-}
-
-void watchdog_dev_post_reset_done()
-{
-	if (watchdog_active())
-		watchdog_start(wdd);
-
-        mutex_unlock(&wd_data->lock);
-}
-
-I didn't really thought about point 3 yet. For me personally the point 2 seems
-the like right way to go but you have more experience with that. The exported
-locks could be re-used by other drivers if needed in future.
-In case of point 1 each USB driver should deal with {pre,post}_reset by themselves.
-
-Any thoughts?
-
-Thanks,
-Alexey
