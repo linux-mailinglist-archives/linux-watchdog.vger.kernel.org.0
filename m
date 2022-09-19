@@ -2,91 +2,118 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF23A5BC2A3
-	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Sep 2022 07:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94AA45BC56D
+	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Sep 2022 11:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiISF6t (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 19 Sep 2022 01:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39322 "EHLO
+        id S229945AbiISJdm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 19 Sep 2022 05:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiISF6s (ORCPT
+        with ESMTP id S230182AbiISJdk (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 19 Sep 2022 01:58:48 -0400
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0732214D0F;
-        Sun, 18 Sep 2022 22:58:46 -0700 (PDT)
-Received: by mail-lf1-f46.google.com with SMTP id w8so45233949lft.12;
-        Sun, 18 Sep 2022 22:58:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ni02zw4irR7547wvk8ueICRHE7W6ZrXNiuACEEPrD9w=;
-        b=RfKsAyYU/tXl0cY5pUB14f2kRYHTJ8MKNajNVaT5gJWej1ukhUhjmxWeQziY0upxLJ
-         Fe8jiKQJyKMp9mZ7Xm3CcZgXBjvzSPyt6PVSxKFxOeyR7ZXaZiHZhw2bXu3DGkcHcf9K
-         xnP30f39cq+V6M8tiwWswPhTYCtATe4vZa7SZVm5yncaUbuGqedY7W40cMoURUmdjnX7
-         w13Kn6SLyWfMq85pW+/D7vkbZXt5GLala3yu9JJ/Yg6PvqFWjvjeoJ6tqZFTG84dTuaS
-         9f04twogCMglgMTVNLhPTpobdkmWmpAJLi7N2lt0iNYxfOJxIk00Z5wSYs7fjBV5aCfF
-         w8uw==
-X-Gm-Message-State: ACrzQf04el+cd+/5EbGTGzrQQ2TurPfdcnL/Mhyewb28oSZxmWgcXL90
-        pRAPdzMmTrixenQSXcoz89EjzdHkP/mjWm0e
-X-Google-Smtp-Source: AMsMyM4b6hO0q1BA4gr2BUdFxFV8w5MekpEo+ZipfzaVkhynQA0y7FA+9O3clhvi9QOzWkeRYcLslQ==
-X-Received: by 2002:a05:6512:3e23:b0:498:fbf1:c480 with SMTP id i35-20020a0565123e2300b00498fbf1c480mr6092633lfv.473.1663567124204;
-        Sun, 18 Sep 2022 22:58:44 -0700 (PDT)
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
-        by smtp.gmail.com with ESMTPSA id be33-20020a05651c172100b0026c12b9b329sm3866008ljb.70.2022.09.18.22.58.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Sep 2022 22:58:43 -0700 (PDT)
-Received: by mail-lf1-f52.google.com with SMTP id f9so44524796lfr.3;
-        Sun, 18 Sep 2022 22:58:42 -0700 (PDT)
-X-Received: by 2002:a05:6512:3b0b:b0:49a:d44b:428 with SMTP id
- f11-20020a0565123b0b00b0049ad44b0428mr6045590lfv.0.1663567122742; Sun, 18 Sep
- 2022 22:58:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220918140829.443722-1-git@vladimir.panteleev.md> <aabb7c21-9a80-696e-6a38-29de57e025ba@roeck-us.net>
-In-Reply-To: <aabb7c21-9a80-696e-6a38-29de57e025ba@roeck-us.net>
-From:   Vladimir Panteleev <git@vladimir.panteleev.md>
-Date:   Mon, 19 Sep 2022 05:58:26 +0000
-X-Gmail-Original-Message-ID: <CAHhfkvw_U_uF1UFcLTBUsw=_YoM_7pi3tw3KCovTT6PZTnH0ig@mail.gmail.com>
-Message-ID: <CAHhfkvw_U_uF1UFcLTBUsw=_YoM_7pi3tw3KCovTT6PZTnH0ig@mail.gmail.com>
-Subject: Re: [PATCH] watchdog: sp5100_tco: Add "action" module parameter
+        Mon, 19 Sep 2022 05:33:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45716140A2;
+        Mon, 19 Sep 2022 02:33:39 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8BA85221FF;
+        Mon, 19 Sep 2022 09:33:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1663580017; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=u1foqMVRLKucwhtU+4p7jj4OsS55xsQDfzr/9xoTDYE=;
+        b=gDbIHBDDhT4dTZ5EDxs5haLrHLhypRHT9cJX6mG2DGFPTdF/1lIDNOFq7Uwa4P7/6Lxag2
+        BeshCW9tdTMzclCyJziQfPa6kxIiOSJxdgl1HVcfaKPDy7SQOlLyU6vUTr3H0kxNEJZTXM
+        gJm3IKIaqwM5W3oryS4w9K1v7YlM1Xk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1663580017;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=u1foqMVRLKucwhtU+4p7jj4OsS55xsQDfzr/9xoTDYE=;
+        b=HcGBeK0UFDjAEx3ddw+nM913QDDSytveuYV5Q/qd+/9ucCYraBMF7Sz405vTYuElc9geiY
+        WDbrBOyglC1S0vBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5376C13ABD;
+        Mon, 19 Sep 2022 09:33:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ALfOEXE3KGOdWAAAMHmgww
+        (envelope-from <jdelvare@suse.de>); Mon, 19 Sep 2022 09:33:37 +0000
+Date:   Mon, 19 Sep 2022 11:33:35 +0200
+From:   Jean Delvare <jdelvare@suse.de>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Cc:     linux-watchdog@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH] watchdog: wdat_wdt: Set the min and max timeout values
+ properly
+Message-ID: <20220919113335.18cebc74@endymion.delvare>
+In-Reply-To: <5a1c9872-52b5-1f96-6931-801185b03fd4@roeck-us.net>
+References: <20220806000706.3eeafc9c@endymion.delvare>
+        <5a1c9872-52b5-1f96-6931-801185b03fd4@roeck-us.net>
+Organization: SUSE Linux
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, 19 Sept 2022 at 04:17, Guenter Roeck <linux@roeck-us.net> wrote:
+Hi Guenter,
+
+A few questions from an old discussion:
+
+On Mon, 8 Aug 2022 04:36:42 -0700, Guenter Roeck wrote:
+> On 8/5/22 15:07, Jean Delvare wrote:
+> > To be honest, I'm not sold to the idea of a software-emulated
+> > maximum timeout value above what the hardware can do, but if doing
+> > that makes sense in certain situations, then I believe it should be
+> > implemented as a boolean flag (named emulate_large_timeout, for
+> > example) to complement max_timeout instead of a separate time value.
+> > Is there a reason I'm missing, why it was not done that way?
 >
-> On 9/18/22 07:08, Vladimir Panteleev wrote:
-> > +MODULE_PARM_DESC(action, "Action taken when watchdog expires, 0 to reset, 1 to poweroff (default="
-> > +              __MODULE_STRING(WATCHDOG_ACTION) ")");
-> > +
->
-> Other module parameters are not visible. I do not see the benefit of
-> having this one visible.
+> There are watchdogs with very low maximum timeout values, sometimes less than
+> 3 seconds. gpio-wdt is one example - some have a maximum value of 2.5 seconds.
+> rzn1_wd is even more extreme with a maximum of 1 second. With such low values,
+> accuracy is important, second-based limits are insufficient, and there is an
+> actual need for software timeout handling on top of hardware.
 
-My bad
+Out of curiosity, what prevents user-space itself from pinging
+/dev/watchdog every 0.5 second? I assume hardware using such watchdog
+devices is "special" and would be running finely tuned user-space, so
+the process pinging /dev/watchdog could be given higher priority or
+even real-time status to ensure it runs without delays. Is that not
+sufficient?
 
-> > -#define SP5100_WDT_ACTION_RESET              BIT(2)
-> > +#define SP5100_WDT_ACTION            BIT(2)
->
-> I do not see the point of renaming this define.
+> At the same time, there is actually a need to make timeouts milli-second based
+> instead of second-based, for uses such as medical devices where timeouts need
+> to be short and accurate. The only reason for not implementing this is that
+> the proposals I have seen so far (including mine) were too messy for my liking,
+> and I never had the time to clean it up. Reverting milli-second support would
+> be the completely wrong direction.
 
-The bit is just called "action" ("WatchDogAction") in the technical
-documentation. I figure that the original author chose to name the
-define "ACTION_RESET" instead of just "ACTION" because the original
-implementation only ever cleared this bit, therefore only setting the
-action to "reset". Now that this is no longer true, calling it simply
-"action" to match the spec seemed more appropriate. What do you think?
+I might look into this at some point (for example as a SUSE Hackweek
+project). Did you post your work somewhere? I'd like to take a look.
 
-Thanks!
-- Vladimir
+Thanks,
+-- 
+Jean Delvare
+SUSE L3 Support
