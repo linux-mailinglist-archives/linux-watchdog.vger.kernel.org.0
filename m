@@ -2,70 +2,74 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 496465BCBCC
-	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Sep 2022 14:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C335BCC39
+	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Sep 2022 14:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbiISM3I (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 19 Sep 2022 08:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
+        id S230131AbiISMyq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 19 Sep 2022 08:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiISM3G (ORCPT
+        with ESMTP id S230233AbiISMyn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 19 Sep 2022 08:29:06 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45E515FF4;
-        Mon, 19 Sep 2022 05:29:05 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id q62-20020a17090a17c400b00202a3497516so5920157pja.1;
-        Mon, 19 Sep 2022 05:29:05 -0700 (PDT)
+        Mon, 19 Sep 2022 08:54:43 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB5EAA18D;
+        Mon, 19 Sep 2022 05:54:36 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d82so27981807pfd.10;
+        Mon, 19 Sep 2022 05:54:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=5lZfP2/VsvN9MXnxi1e3GKXZZbt08KE6itWQYdXqrnk=;
-        b=XblivpqPz0a2yhRuPxuyfov0aIp0Lk1wVfd/BrS24xfa453oFJiBgWt6xroc69xYu7
-         YpTsOF46ocPMEXFNjC9bsVMfVHxVmhmFw5NvSSEKM2ald7iRerC4PVbmptWFxPTNnGkP
-         rseWIBPX2hRfDLygXeRIQCfDRBRdcA1m+S8GEPjBCBYd0izUDBdtxsLqJLXSuhk+F/VE
-         XmvU1hl9v5whoyks2pRv5ovq4jTclziFa5aRueB/x2DJktCpYM1SBT9fpfKoLao0RR/O
-         MYqFlqGzCWyYrChE6elNcDGyODPCSykHmhyeVkokwnnXrQc0XFyH8AIb0kzHYfXDRFMI
-         NOJw==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date;
+        bh=Tmpc5VmdBuLNmo/f3Keo3zjOhIaec8wRWgy0Dh7g4Xc=;
+        b=IA1ULq2eITg3H242o0ceTuR+29XaGcATRGaKSuDc8T6b1OAXgPKHFsoE/F8qKLaEbj
+         LHKF72D1D4D6AtFv3+T5yxrnjf3sZcQcoypvrSojyA0T41EVh3zsb7QO3PD14E7mOEzy
+         cMj3HF1NpkzPiR5DWW3kjUKSDXWSbPb8KrU1d1daapDHlWrvM3bOMGFGCTx+nX9Mjuq5
+         EFuRxKx/dWnBpQkKI0ovXtWn4cekG1ViBEbHBQdWSzZH+kDAZMOqyozq0ejQU4kNanzC
+         JMdcnwOZ/rjbHytSrgKjQZFqpN/c5u521Tm4UFl3JUUUjRctDQfgiqtuX6/XIrevCd0h
+         KOPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=5lZfP2/VsvN9MXnxi1e3GKXZZbt08KE6itWQYdXqrnk=;
-        b=nn67Q1yF3bgjRh1zg8bbYE/0uAx9mdm7mufl/4mys/RNR1dRWVw7waj/1cEijvWUUs
-         A0tvWrksPKPY7rnlJZz3/1bzyaM5csvqm8sJqma8WhPhmU7W/4vINwPNbOvQ5NPnRdVh
-         H2kMdqw6s83qr5YHKM7D3IiZASBkPIKEB0t1VRC9whicNuSkcP6Pah0PLsZqiiYLrDJU
-         qqNmjQQoentJ0knmVwFYyvK2YjDSMyn3wvz+JpWelshDcxQzKs4uV8wNrZm7Kpm6ZrbV
-         8eHgAP7wMLrOjXawGfk+kX0PRThZsABTUCGxzJlOc4IhV4zX6Y1e93RXk98I21LgV2U9
-         jXcg==
-X-Gm-Message-State: ACrzQf0acHfthWv9nztMHRFsWhLJMV8fZOcMXwB0YsNtlxJvg+IR2uJc
-        7l+Kf/rmIPavKFFSCTpYox9605+zuyX7WA==
-X-Google-Smtp-Source: AMsMyM5iPb0PtbrYCNaGx7HiXijbZT3wK+boyV5lviw+qWu8YtxsYrrymsXDqqB1uzYvPknSkmWwzg==
-X-Received: by 2002:a17:90a:1786:b0:202:856e:29bf with SMTP id q6-20020a17090a178600b00202856e29bfmr19357014pja.134.1663590545099;
-        Mon, 19 Sep 2022 05:29:05 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Tmpc5VmdBuLNmo/f3Keo3zjOhIaec8wRWgy0Dh7g4Xc=;
+        b=VJ9NOlXeimGLQTBfEL0BKY0/p3walSrGNbO1DT197D39iouAu2n1TgZeND5GYD/uc1
+         73AM3e5kcAtPHLooJamBnMDBIJVhh66daLieivhpYNBczxN5boPtMMQ7gpffiRTwdsAC
+         KYO5l9LpwVwtuIgxWPefJjHOCSns119/SuqHuDV3vO3ked84Vq43mhYPGcasMSJQ/54z
+         bWDITB0g5KFsjEddxHur53tQ11VmHSayoe8XpGUhgapW2/MH7jAFzAsVMr70s6rrelEX
+         pdUzI4OUU6GNW5Xf1e9i+znUE6Qa8o2uEuaNTDZxS0BJOXUhY4OFcRtjSDy72rbb2L+t
+         0R0Q==
+X-Gm-Message-State: ACrzQf1ErKdXkYa+s/pU2YnvL3M8og665fbeaZYyjTWih2ROXGola/NZ
+        5xw2Jpvg31jfCQbIykKhTrifHOAqnADqeA==
+X-Google-Smtp-Source: AMsMyM5n8v4bAl9gCQfKXo/bFnEfAhrhcNlccrkoIujrz8tigtnIa/6BRh7KaefuUdNnAfjVvrwJaQ==
+X-Received: by 2002:a63:594c:0:b0:438:f2ce:8780 with SMTP id j12-20020a63594c000000b00438f2ce8780mr15582233pgm.285.1663592076255;
+        Mon, 19 Sep 2022 05:54:36 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s2-20020a170902ea0200b001753cb9893csm20045307plg.187.2022.09.19.05.29.03
+        by smtp.gmail.com with ESMTPSA id c206-20020a621cd7000000b00536431c6ae0sm20195289pfc.101.2022.09.19.05.54.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Sep 2022 05:29:03 -0700 (PDT)
+        Mon, 19 Sep 2022 05:54:35 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <736d150c-03fe-ce39-a42e-b9b62f40a937@roeck-us.net>
-Date:   Mon, 19 Sep 2022 05:29:02 -0700
+Message-ID: <5ee31cd1-76af-dae7-0902-3808a2696754@roeck-us.net>
+Date:   Mon, 19 Sep 2022 05:54:33 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH] watchdog: sp5100_tco: Add "action" module parameter
 Content-Language: en-US
-To:     Vladimir Panteleev <git@vladimir.panteleev.md>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220918140829.443722-1-git@vladimir.panteleev.md>
- <aabb7c21-9a80-696e-6a38-29de57e025ba@roeck-us.net>
- <CAHhfkvw_U_uF1UFcLTBUsw=_YoM_7pi3tw3KCovTT6PZTnH0ig@mail.gmail.com>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-watchdog@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+References: <20220806000706.3eeafc9c@endymion.delvare>
+ <5a1c9872-52b5-1f96-6931-801185b03fd4@roeck-us.net>
+ <20220919113335.18cebc74@endymion.delvare>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAHhfkvw_U_uF1UFcLTBUsw=_YoM_7pi3tw3KCovTT6PZTnH0ig@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: wdat_wdt: Set the min and max timeout values
+ properly
+In-Reply-To: <20220919113335.18cebc74@endymion.delvare>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,38 +83,64 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 9/18/22 22:58, Vladimir Panteleev wrote:
-> On Mon, 19 Sept 2022 at 04:17, Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On 9/18/22 07:08, Vladimir Panteleev wrote:
->>> +MODULE_PARM_DESC(action, "Action taken when watchdog expires, 0 to reset, 1 to poweroff (default="
->>> +              __MODULE_STRING(WATCHDOG_ACTION) ")");
->>> +
->>
->> Other module parameters are not visible. I do not see the benefit of
->> having this one visible.
+On 9/19/22 02:33, Jean Delvare wrote:
+> Hi Guenter,
 > 
-> My bad
+> A few questions from an old discussion:
 > 
->>> -#define SP5100_WDT_ACTION_RESET              BIT(2)
->>> +#define SP5100_WDT_ACTION            BIT(2)
+> On Mon, 8 Aug 2022 04:36:42 -0700, Guenter Roeck wrote:
+>> On 8/5/22 15:07, Jean Delvare wrote:
+>>> To be honest, I'm not sold to the idea of a software-emulated
+>>> maximum timeout value above what the hardware can do, but if doing
+>>> that makes sense in certain situations, then I believe it should be
+>>> implemented as a boolean flag (named emulate_large_timeout, for
+>>> example) to complement max_timeout instead of a separate time value.
+>>> Is there a reason I'm missing, why it was not done that way?
 >>
->> I do not see the point of renaming this define.
+>> There are watchdogs with very low maximum timeout values, sometimes less than
+>> 3 seconds. gpio-wdt is one example - some have a maximum value of 2.5 seconds.
+>> rzn1_wd is even more extreme with a maximum of 1 second. With such low values,
+>> accuracy is important, second-based limits are insufficient, and there is an
+>> actual need for software timeout handling on top of hardware.
 > 
-> The bit is just called "action" ("WatchDogAction") in the technical
-> documentation. I figure that the original author chose to name the
-> define "ACTION_RESET" instead of just "ACTION" because the original
-> implementation only ever cleared this bit, therefore only setting the
-> action to "reset". Now that this is no longer true, calling it simply
-> "action" to match the spec seemed more appropriate. What do you think?
+> Out of curiosity, what prevents user-space itself from pinging
+> /dev/watchdog every 0.5 second? I assume hardware using such watchdog
+> devices is "special" and would be running finely tuned user-space, so
+> the process pinging /dev/watchdog could be given higher priority or
+> even real-time status to ensure it runs without delays. Is that not
+> sufficient?
 > 
 
-I am not getting into define name editing wars. The define is named as
-it is. There is never a good reason to rename it. If I'd accept your
-change, someone else might come tomorrow and want it renamed to
-"SP5100_WDT_ACTION_POWEROFF" because setting the bit to 1 causes
-the system to power off.
+It took us forever to get the in-kernel support stable, using the right timers
+and making sure that the kernel actually executes the code fast enough. Maybe
+that would work nowadays from a userspace process with the right permissions,
+but I would not trust it. Then there is watchdog support in, for example,
+systemd. I would not want to force users to run systemd as high priority
+real-time process just to make an odd watchdog work. I also would not want to
+tell people that they must not use the systemd watchdog timer to make their
+watchdog work.
 
-No, I am not getting into that.
+Also, there is no guarantee that the odd hardware with the weird watchdog hardware
+is actually always used in an application where such a fast timeout is needed or
+even wanted.
+
+On top of that, the code in the kernel also now supports "ping until opened"
+for systems where the watchdog is already running when the system boots.
+
+Overall, I don't think it would be a good idea to revert the in-kernel support
+of pinging watchdogs.
+
+>> At the same time, there is actually a need to make timeouts milli-second based
+>> instead of second-based, for uses such as medical devices where timeouts need
+>> to be short and accurate. The only reason for not implementing this is that
+>> the proposals I have seen so far (including mine) were too messy for my liking,
+>> and I never had the time to clean it up. Reverting milli-second support would
+>> be the completely wrong direction.
+> 
+> I might look into this at some point (for example as a SUSE Hackweek
+> project). Did you post your work somewhere? I'd like to take a look.
+> 
+There was one submission from someone else if I recall correctly, but mine never
+got to the point where it was submittable.
 
 Guenter
