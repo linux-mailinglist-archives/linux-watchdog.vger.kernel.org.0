@@ -2,97 +2,102 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781E25BE03F
-	for <lists+linux-watchdog@lfdr.de>; Tue, 20 Sep 2022 10:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C294F5BE1EA
+	for <lists+linux-watchdog@lfdr.de>; Tue, 20 Sep 2022 11:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbiITIeY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 20 Sep 2022 04:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
+        id S230037AbiITJ3P (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 20 Sep 2022 05:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiITIdw (ORCPT
+        with ESMTP id S229695AbiITJ3N (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 20 Sep 2022 04:33:52 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA05A65B1;
-        Tue, 20 Sep 2022 01:33:49 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 93B0A40008;
-        Tue, 20 Sep 2022 08:33:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1663662828;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WdCBW02Fmd3bjrCh+OZZwzQ5M+jFgiJ3BIAxKxcGchY=;
-        b=Fkc2Mq4Ojmk6fA3bxJPKaJn0WLqyjQT/npMoIhSfZX76aXLoThMbC516XCfnOeiiBamxGC
-        ef/U8lKG8CzN7Q96xUd4LtMIeVblPti2tyyEKtMf32UNp7AfXZFnOGAg+k1ZQGwJQykmDA
-        fPkMuJPLuC8phFSfGeS17s7hENly3KI6ctjaChfKwb4CKjQrsUOoc0MDXBqqdVTbOhXDoh
-        3wV2R5IcM/BB7UthrsqKmOzknjS7VAp0uOkeJv2MDKwd/JfIjmk/eBV1Xgz128d0vrXrJ+
-        HCs5k8j2cnkQ3Ho73v081g4gSg/IgirZsYsb+6cipakSlYrU6szR8RzXypbq3Q==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?utf-8?q?Krzysztof_Wilc?= =?utf-8?q?zy=C5=84ski?= <kw@linux.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Airlie <airlied@linux.ie>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1 03/11] mtd: rawnand: stm32_fmc2: switch to using devm_fwnode_gpiod_get()
-Date:   Tue, 20 Sep 2022 10:33:42 +0200
-Message-Id: <20220920083342.601039-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To:  <20220903-gpiod_get_from_of_node-remove-v1-3-b29adfb27a6c@gmail.com>
-References: 
+        Tue, 20 Sep 2022 05:29:13 -0400
+X-Greylist: delayed 155969 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 20 Sep 2022 02:29:09 PDT
+Received: from home.thecybershadow.net (tunnel258969-pt.tunnel.tserv1.bud1.ipv6.he.net [IPv6:2001:470:1f1a:172::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D642D6B174;
+        Tue, 20 Sep 2022 02:29:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=home.thecybershadow.net; s=home; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=QpkkQ4WyftxxHWS4ArtYNAZoBCGANNfQssOOdKoio5E=; b=yMH1LLnzMU0hvSaHHwGZWqn4cT
+        GWixLgYiaKD7u5H8UwyfT+zR6HqWwgrI3y7/9eCwUJD2QVav8xBUc4sS+bDzBGscZH9OCmCl3o+bU
+        2UnP7WNQa1ote39LeYSPdWpOxk9OcF71LPx0QzSAoz/UbOfQOPyuHCnFRvy9VR66ZuqA=;
+Received: from vladimir by home.thecybershadow.net with local (Exim 4.96)
+        (envelope-from <vladimir@home.thecybershadow.net>)
+        id 1oaZYw-0002ER-1a;
+        Tue, 20 Sep 2022 09:29:06 +0000
+From:   Vladimir Panteleev <git@vladimir.panteleev.md>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Vladimir Panteleev <git@vladimir.panteleev.md>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] watchdog: sp5100_tco: Add "action" module parameter
+Date:   Tue, 20 Sep 2022 09:27:21 +0000
+Message-Id: <20220920092721.7686-1-git@vladimir.panteleev.md>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'130bd3cdb880c444005e173485124a7bbf3df9b2'
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Sender:  <vladimir@home.thecybershadow.net>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, 2022-09-05 at 06:30:55 UTC, Dmitry Torokhov wrote:
-> I would like to stop exporting OF-specific devm_gpiod_get_from_of_node()
-> so that gpiolib can be cleaned a bit, so let's switch to the generic
-> fwnode property API.
-> 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Allow configuring the "action" bit, as documented in [1].
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
+Previously, the only action supported by this module was to reset the
+system (0).  It can now be configured to power off (1) instead.
 
-Miquel
+[1]: https://www.amd.com/system/files/TechDocs/44413.pdf
+
+Signed-off-by: Vladimir Panteleev <git@vladimir.panteleev.md>
+---
+
+Changes since v1:
+ - Drop the rename of the SP5100_WDT_ACTION_RESET define
+ - Make the new parameter not visible in sysfs for consistency
+
+ drivers/watchdog/sp5100_tco.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
+index ae54dd33e233..fb426b7d81da 100644
+--- a/drivers/watchdog/sp5100_tco.c
++++ b/drivers/watchdog/sp5100_tco.c
+@@ -65,6 +65,12 @@ static struct pci_dev *sp5100_tco_pci;
+ 
+ /* module parameters */
+ 
++#define WATCHDOG_ACTION 0
++static bool action = WATCHDOG_ACTION;
++module_param(action, bool, 0);
++MODULE_PARM_DESC(action, "Action taken when watchdog expires, 0 to reset, 1 to poweroff (default="
++		 __MODULE_STRING(WATCHDOG_ACTION) ")");
++
+ #define WATCHDOG_HEARTBEAT 60	/* 60 sec default heartbeat. */
+ static int heartbeat = WATCHDOG_HEARTBEAT;  /* in seconds */
+ module_param(heartbeat, int, 0);
+@@ -297,8 +303,11 @@ static int sp5100_tco_timer_init(struct sp5100_tco *tco)
+ 	if (val & SP5100_WDT_FIRED)
+ 		wdd->bootstatus = WDIOF_CARDRESET;
+ 
+-	/* Set watchdog action to reset the system */
+-	val &= ~SP5100_WDT_ACTION_RESET;
++	/* Set watchdog action */
++	if (action)
++		val |= SP5100_WDT_ACTION_RESET;
++	else
++		val &= ~SP5100_WDT_ACTION_RESET;
+ 	writel(val, SP5100_WDT_CONTROL(tco->tcobase));
+ 
+ 	/* Set a reasonable heartbeat before we stop the timer */
+-- 
+2.37.3
+
