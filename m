@@ -2,110 +2,162 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D7B5E69D0
-	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Sep 2022 19:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350295E69EA
+	for <lists+linux-watchdog@lfdr.de>; Thu, 22 Sep 2022 19:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbiIVRnr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 22 Sep 2022 13:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
+        id S231896AbiIVRva (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 22 Sep 2022 13:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiIVRnq (ORCPT
+        with ESMTP id S229575AbiIVRv3 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 22 Sep 2022 13:43:46 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FDCF9601;
-        Thu, 22 Sep 2022 10:43:44 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id e5so10036033pfl.2;
-        Thu, 22 Sep 2022 10:43:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=ordY5gRXnsxz2Grt9o3T/Ssy795W6cMK2+g6m4UINGc=;
-        b=D/CowdKVlkdURR9jr5hiqBMx9qntg+Cd9XXshoDJu1IJBXx13segL/ggzkXfgyFPlH
-         dxjAtvkwubANu5eqedOG5gPQKej4NqmZKn4E0mdvvukIhHr4xNw8ABIGrae6a8PLH4yQ
-         wiJTMnkCaoQy13OGAhMe7mJE5bRHCt0RT4OHMQYbuenYsa0R4rssSAD5NX90vhTrW+5l
-         rftaL/TVJvNMoGji9R/RCN0j11uCt6TxqyXlKJ3B1YqEci4AmHBCN42pCbvPw+h3S3kX
-         HJ1H0G+J2S3Lr7NM36SW/F/363Jh4MyCIW1zMocc41idXYco5ndPfJNYJ5N0FKBqMlke
-         ZESQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=ordY5gRXnsxz2Grt9o3T/Ssy795W6cMK2+g6m4UINGc=;
-        b=2obyph0vHC64ZVjwPz/G4e0qK2HQIzwaoAvhFRrDpEqERWDJsoLAG6z01W1hRhHQZR
-         h5JzflhbLkSWuntHiID9s6B/BKmMOxQPtdnWZ/f1It4irLlwRPcXJeddjv2Go1qUvqhL
-         xeTBRujKtXd32W0QC98R0rCMmuU/Yn+D8YoMtfyAWJmP7uYsGBtzl+Qjt5AyszXds8dQ
-         lR/aJt5+nkBpeUcEvjSX4p3uXWmsYMkpkcDw6b8oy/lftzehs/KN5ceduK7NQajtZG91
-         F66lI3yXxx4VrLYtw8yorIBypl5UMoaOrRsJcMppTqGFiU7lVhNyy6jjB0U5WUiVD+af
-         /CXQ==
-X-Gm-Message-State: ACrzQf2Y9Eafy0AvIwY64BhZd4JYAkdf9uvubFIKfdwKyCrtz15VnnMd
-        Q6Xc3tevbmUmutDjow24+kIlBm78QcJZpQ==
-X-Google-Smtp-Source: AMsMyM4nqKeK8kOGxKQtrGSq8shZRgTMJ68F1NQjNiCIRvh792Uhi6MbOONj9A/HYBqeMcDwltLsmQ==
-X-Received: by 2002:a63:4243:0:b0:439:2031:be87 with SMTP id p64-20020a634243000000b004392031be87mr4039421pga.592.1663868623690;
-        Thu, 22 Sep 2022 10:43:43 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g130-20020a625288000000b0053e2b61b714sm4734008pfb.114.2022.09.22.10.43.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Sep 2022 10:43:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <791dc5e2-4de3-1eb9-8de2-4f2904335756@roeck-us.net>
-Date:   Thu, 22 Sep 2022 10:43:41 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] watchdog: sp5100_tco: Add "action" module parameter
-Content-Language: en-US
-To:     rwright@hpe.com, Vladimir Panteleev <git@vladimir.panteleev.md>
+        Thu, 22 Sep 2022 13:51:29 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303A2FB30C;
+        Thu, 22 Sep 2022 10:51:28 -0700 (PDT)
+Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28MHH6s9009383;
+        Thu, 22 Sep 2022 17:51:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : content-type : in-reply-to
+ : mime-version; s=pps0720;
+ bh=smw1462YN3LrGliNxAn9TigYSB/ChoFvoG0lOoq9cFw=;
+ b=BFdhQXevSO69p93dkCVmYu6cLRjJpLDQZJ8FE02FqJr1wQS8tYoCoYLpOY7wnCN0mRpl
+ iY/EEpgydI2vbb4VuyoMomm2LFqlLQZQsxRLC1u+m4p10EVJ5nnyCc4bPpMqYgWGpgfr
+ FIiGiFaTM3tKC7z9rXi4hujg/FQL6UNjl7OBS/kLBCWuB7e4IojVFeEHCuFPk6yk7upV
+ LgyJwJTX7JTQWsx7M0gGd5na5RmZ4RzAKN8tSx9SzKYSEfa4HtKX1HDnoYBIHfuW7/T0
+ WT2V/sQRvr/aeW8w5XEFNZPucovxiUGfO0quwl/sROIWWDtJ+0kJaVTJIohzWY8ofolQ Yw== 
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3jrru7tkxr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Sep 2022 17:51:13 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id 1785CD242;
+        Thu, 22 Sep 2022 17:51:13 +0000 (UTC)
+Received: from perchik (unknown [16.231.227.36])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 7F7E580A427;
+        Thu, 22 Sep 2022 17:51:12 +0000 (UTC)
+Date:   Thu, 22 Sep 2022 11:51:11 -0600
+From:   Jerry Hoemann <jerry.hoemann@hpe.com>
+To:     Vladimir Panteleev <git@vladimir.panteleev.md>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] watchdog: sp5100_tco: Add "action" module parameter
+Message-ID: <20220922175110.GC960@perchik>
+Reply-To: Jerry.Hoemann@hpe.com
 References: <20220920092721.7686-1-git@vladimir.panteleev.md>
- <20220922173635.GJ18783@rfwz62>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220922173635.GJ18783@rfwz62>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920092721.7686-1-git@vladimir.panteleev.md>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-GUID: lRjHXCPMFidZwGzAdh7gky0Td7-XxK9H
+X-Proofpoint-ORIG-GUID: lRjHXCPMFidZwGzAdh7gky0Td7-XxK9H
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-22_12,2022-09-22_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
+ lowpriorityscore=0 mlxlogscore=999 suspectscore=0 priorityscore=1501
+ spamscore=0 impostorscore=0 mlxscore=0 bulkscore=0 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209220118
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 9/22/22 10:36, rwright@hpe.com wrote:
-> On Tue, Sep 20, 2022 at 09:27:21AM +0000, Vladimir Panteleev wrote:
->> Allow configuring the "action" bit, as documented in [1].
->>
->> Previously, the only action supported by this module was to reset the
->> system (0).  It can now be configured to power off (1) instead.
->>
->> [1]: https://www.amd.com/system/files/TechDocs/44413.pdf
+On Tue, Sep 20, 2022 at 09:27:21AM +0000, Vladimir Panteleev wrote:
+> Allow configuring the "action" bit, as documented in [1].
 > 
-> The referenced AMD document 44413 is over 10 years old, and I'm
-> concerned when I try to line that document up against the newer versions
-> that are implemented in AMD's EPYC processors, that the bit being
-> manipulated as SP5100_WDT_ACTION_RESET is effectively reserved in the
-> newer references, for example:
+> Previously, the only action supported by this module was to reset the
+> system (0).  It can now be configured to power off (1) instead.
 > 
->     https://www.amd.com/system/files/TechDocs/55772-A1-PUB.zip
+> [1]: https://www.amd.com/system/files/TechDocs/44413.pdf
 > 
-> Is Core::X86::Msr::CpuWdtCfg in the newer document is the same as
-> WatchDogControl in the cited 44413.pdf? If so, then I would point out
-> that bit 2 is now included in what is called, CpuWdtTimeBase where
-> values 2-3H are reserved,  meaning bit 2 effectively must be zero.
+> Signed-off-by: Vladimir Panteleev <git@vladimir.panteleev.md>
+> ---
 > 
+> Changes since v1:
+>  - Drop the rename of the SP5100_WDT_ACTION_RESET define
+>  - Make the new parameter not visible in sysfs for consistency
+> 
+>  drivers/watchdog/sp5100_tco.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
+> index ae54dd33e233..fb426b7d81da 100644
+> --- a/drivers/watchdog/sp5100_tco.c
+> +++ b/drivers/watchdog/sp5100_tco.c
+> @@ -65,6 +65,12 @@ static struct pci_dev *sp5100_tco_pci;
+>  
+>  /* module parameters */
+>  
+> +#define WATCHDOG_ACTION 0
+> +static bool action = WATCHDOG_ACTION;
+> +module_param(action, bool, 0);
+> +MODULE_PARM_DESC(action, "Action taken when watchdog expires, 0 to reset, 1 to poweroff (default="
+> +		 __MODULE_STRING(WATCHDOG_ACTION) ")");
+> +
+>  #define WATCHDOG_HEARTBEAT 60	/* 60 sec default heartbeat. */
+>  static int heartbeat = WATCHDOG_HEARTBEAT;  /* in seconds */
+>  module_param(heartbeat, int, 0);
+> @@ -297,8 +303,11 @@ static int sp5100_tco_timer_init(struct sp5100_tco *tco)
+>  	if (val & SP5100_WDT_FIRED)
+>  		wdd->bootstatus = WDIOF_CARDRESET;
+>  
+> -	/* Set watchdog action to reset the system */
+> -	val &= ~SP5100_WDT_ACTION_RESET;
+> +	/* Set watchdog action */
+> +	if (action)
+> +		val |= SP5100_WDT_ACTION_RESET;
+> +	else
+> +		val &= ~SP5100_WDT_ACTION_RESET;
+>  	writel(val, SP5100_WDT_CONTROL(tco->tcobase));
+>  
+>  	/* Set a reasonable heartbeat before we stop the timer */
+> -- 
+> 2.37.3
 
-I think those may be different watchdogs. Chapter 9.2.6 ("Watchdog
-Timer (WDT) Registers") in 55772-A1-PUB still lists bit 2 of the
-control register as:
+Looking at other WDT,  I see at least three  that have an "action"
+parameter.  These appear to have inconsistent semantics with each 
+other and this patch.
 
-WatchdogAction. Read-write. Reset: 0. 0=System reset. 1=System power off. This bit determines the action to
-be taken when the watchdog timer expires. The bit is only valid when the watchdog is enabled.
+Is there something we could to create more uniformity with module
+level parameters like these?
 
-Guenter
+
+Examples:
+
+machzwd.c:
+MODULE_PARM_DESC(action, "after watchdog resets, generate: "
+                                "0 = RESET(*)  1 = SMI  2 = NMI  3 = SCI");
+
+pseries-wdt.c
+static const unsigned long pseries_wdt_action[] = {
+        [0] = PSERIES_WDTF_ACTION_HARD_POWEROFF,
+	[1] = PSERIES_WDTF_ACTION_HARD_RESTART,
+	[2] = PSERIES_WDTF_ACTION_DUMP_RESTART,
+
+sbsa_gwdt.c
+MODULE_PARM_DESC(action, "after watchdog gets WS0 interrupt, do: "
+                 "0 = skip(*)  1 = panic");
+
+
+-- 
+
+-----------------------------------------------------------------------------
+Jerry Hoemann                  Software Engineer   Hewlett Packard Enterprise
+-----------------------------------------------------------------------------
