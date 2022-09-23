@@ -2,229 +2,99 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF77B5E74D6
-	for <lists+linux-watchdog@lfdr.de>; Fri, 23 Sep 2022 09:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDAE25E755D
+	for <lists+linux-watchdog@lfdr.de>; Fri, 23 Sep 2022 10:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiIWH2C (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 23 Sep 2022 03:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
+        id S230349AbiIWICV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 23 Sep 2022 04:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiIWH17 (ORCPT
+        with ESMTP id S231160AbiIWICN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 23 Sep 2022 03:27:59 -0400
-Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442FC12A4BB
-        for <linux-watchdog@vger.kernel.org>; Fri, 23 Sep 2022 00:27:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=fysP4kJY4fWd7RSeiA8CQcBRw6PrT+4bka0YkXSBeiU=; b=FLUjHMFWruBhDEaGkinBZ+PJXF
-        7TLuwx+ZB7/osT5ZMlyV182b78dUC1w1+BvO+cUilImQDidBSj9XG1B2t0CAh6QHnMqkzwhQ5WrOs
-        d+ZtchgUh9r9NM3oM20GMnQxe/6mbeC5M7Rgebk4MBwWvyGpSTNpZuhi1RbDr19DSn1KrW/LC9tGS
-        IFL73gQdZ/TiFQmGpINuSajQ8cqimUnaS+iPdli4XAlSCEBo7RCw06bk3ip0sDM1JDN7lkJqSUjoE
-        +aujiNu8Yw7mc0n/lNSLJG+je+KRF97BsGkpwjMi9DIXaXGg9rN4moTD12NaBN9zyQ7uEyvw1/YY5
-        30nCB63Q==;
-Received: from [89.212.21.243] (port=50442 helo=[192.168.69.85])
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <andrej.picej@norik.com>)
-        id 1obd67-009sSc-Kd;
-        Fri, 23 Sep 2022 09:27:50 +0200
-Message-ID: <a761d821-6beb-e4d7-b0c1-37178b3bacc2@norik.com>
-Date:   Fri, 23 Sep 2022 09:27:50 +0200
+        Fri, 23 Sep 2022 04:02:13 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A013212AECD
+        for <linux-watchdog@vger.kernel.org>; Fri, 23 Sep 2022 01:02:10 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id 63so16121123ybq.4
+        for <linux-watchdog@vger.kernel.org>; Fri, 23 Sep 2022 01:02:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=/fuJxEvQ8hWJBVA+YQn5WV9w4flp3A4j0tI4rSSd1Ck=;
+        b=cfIxv64ssPCAsFkiNHHMFgdJK+aS3ek+iLqUHDY6WnbjhiOIdSnQ44wWRghl+HhmM+
+         ZgInIkmqqBXRmr0iLX3qhhwZFhR/JPfzleN6mm2nw1mLuOcoAzAHWkBFiHwZ7tqjMZgF
+         PsKRUIHjUUQqGprd2uONY74u1xE5BTvss8qSBbNp7Z+Aq70BRE20eriiNGYVyBXq+Hsq
+         b5rkcgTekY6IxWT4nPGAarRMzqwaFzSMb85FKRftobSoeGzks+ft+jlIfNWEogJG+3AZ
+         NOSobbcfUtAgxZtAvcYwJWnSzI9bh6dTNyppITL3cUvgwoUGwW3iGN9w6X1aRyfg5wnI
+         lcKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=/fuJxEvQ8hWJBVA+YQn5WV9w4flp3A4j0tI4rSSd1Ck=;
+        b=KkqhWU+HKMpllJbqa9nPkPvtRBFpNiQh3leTY0TlhoftX7N8+FI+JcjbjFQvEo7Mds
+         CSVLfOeta4x5DWo8mfwKLtkOOUmJtW5QbDtDMBK23Pi/yVvRhJHhSkW43ePs1As+Hyvl
+         0WIkTwzI6HxXbMxYV42yuIPVHKmssUV3Oh/btslYHGECu8HxDNQyke3SbOw1BMujhoh0
+         gYEjGMJCkvMeo194KSkV8J0OQ4I6iIY9Vul2xCgZ6RmfprlmtA9zUN2084JSHVulftjk
+         JY9oTlS7E8rJEEr+8vmRFCErIErMAnAYhVz9Fi2+B3wDLth1s00BSFoj19IdxzFqJgi6
+         ph7Q==
+X-Gm-Message-State: ACrzQf12IYUeOD7P2dMmGtIqpkm0rxkEt3SRyVOR9Ab96vNOLPu+IyWJ
+        V6WGh++JfbOxR1qiXfGKO+CWPJIlEn3EufWPglc=
+X-Google-Smtp-Source: AMsMyM4xZCf+qxLt2Ywm13M7JqasT1TK3BugpgoPjyQSFw4MK8Zlc9YURZmRkEz6rKorJr4UyEvKaVmMnfEZ87d4MnU=
+X-Received: by 2002:a25:2f12:0:b0:6b3:e5e4:aeeb with SMTP id
+ v18-20020a252f12000000b006b3e5e4aeebmr7800323ybv.22.1663920129070; Fri, 23
+ Sep 2022 01:02:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH 0/1] Suspending i.MX watchdog in WAIT mode
-Content-Language: en-GB
-To:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com
-References: <20220921124647.1521667-1-andrej.picej@norik.com>
- <5823717b-0288-a679-824d-5a26dec5a606@roeck-us.net>
- <325585e9-3d50-eee2-4443-5509dde6da90@norik.com>
- <72fb8f04-52d1-af99-dfff-4a53ee3d3440@roeck-us.net>
-From:   Andrej Picej <andrej.picej@norik.com>
-In-Reply-To: <72fb8f04-52d1-af99-dfff-4a53ee3d3440@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
-X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a25:3256:0:0:0:0:0 with HTTP; Fri, 23 Sep 2022 01:02:08
+ -0700 (PDT)
+Reply-To: seybasaniel@gmail.com
+From:   Seyba Daniel <bellomouse33@gmail.com>
+Date:   Fri, 23 Sep 2022 10:02:08 +0200
+Message-ID: <CAC0qSW7sc6GUJtHgf3r23GFt653_aZzwewRn531NjpkWamAU7A@mail.gmail.com>
+Subject: HELLO,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.2 required=5.0 tests=BAYES_95,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b41 listed in]
+        [list.dnswl.org]
+        *  3.0 BAYES_95 BODY: Bayes spam probability is 95 to 99%
+        *      [score: 0.9757]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [bellomouse33[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [bellomouse33[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 22. 09. 22 16:56, Guenter Roeck wrote:
-> On 9/22/22 00:17, Andrej Picej wrote:
->> Hi Guenter,
->>
->> On 21. 09. 22 16:18, Guenter Roeck wrote:
->>> On 9/21/22 05:46, Andrej Picej wrote:
->>>> Hi all,
->>>>
->>>> we are using i.MX6UL with its watchdog WDOG1 and kernel 5.15.62. It was
->>>> discovered that the watchdog triggers reset when the device is put into
->>>> 'Suspend-To-Idle' (WAIT) state.
->>>>
->>>
->>> Is that equivalent to "suspend" from Linux perspective, or some other
->>> mode ? How does the device get into this state ?
->>
->> I think WAIT mode maps to System idle mode in linux [1].
->>
-> 
-> Sorry, I am not going to read that entire manual.
-> 
+I urgently seek your service to represent me in investing in
+your region / country and you will be rewarded for your service without
+affecting your present job with very little time invested in it, which you will
+be communicated in details upon response.
 
-Perfectly understandable, you are busy guys, basically in chapter 21.1.1 
-it is written:
-"System idle maps to WAIT mode."
+My dearest regards
 
->> Sorry don't quite understand your second question.
->> Do you mean how we trigger this state?
->> We trigger this state with:
->>  >     imx6ul-dev:~# echo freeze > /sys/power/state
->>
-> 
-> So it is not "suspend" ? I am not sure if it is appropriate to stop
-> the watchdog timer in this situation. Normally it is only stopped
-> in suspend mode.
-> 
-
-Well suspend/resume functions are still called when entering this 
-"freeze" mode, but watchdog can not be disabled by software or pinged in 
-this mode, that's why our idea is to set this bit.
-
-Basically, that was my main question. Is it appropriate to stop watchdog 
-in this situation? I guess not. Probably it is not meant to enter this 
-mode for longer period of time.
-
-> Also, how does this interact or interfere with the suspend/resume code
-> in the driver, and does it behave the same for all chips supported by
-> the driver ? For example, in the current code, i.MX7D is handled
-> differently. What compatible entry are you using anyway ? There is none
-> for i.MX6UL. Did you make sure that the same bit doesn't mean something
-> else for other chips ?
-> 
-
-I don't think it interact/interferes with suspend/resume code in any way 
-since mx2+ watchdog is not stoppable during runtime. Not sure if 
-watchdogs on other devices behave the same, sorry.
-
-i.MX6UL devices use "fsl,imx6ul-wdt", "fsl,imx21-wdt" for compatible 
-entry. I checked control registers with other supported devices by this 
-driver:
-
-- fsl,imx25-wdt (same behaviour -> WDW)
-- fsl,imx27-wdt (bit is reserved)
-- fsl,imx31-wdt (bit is reserved)
-- fsl,imx35-wdt (same behaviour -> WDW)
-- fsl,imx50-wdt (same behaviour -> WDW)
-- fsl,imx51-wdt (same behaviour -> WDW)
-- fsl,imx53-wdt (same behaviour -> WDW)
-- fsl,imx6q-wdt (same behaviour -> WDW)
-- fsl,imx6sl-wdt (same behaviour -> WDW)
-- fsl,imx6sll-wdt (same behaviour -> WDW)
-- fsl,imx6sx-wdt (same behaviour -> WDW)
-- fsl,imx6ul-wdt (same behaviour -> WDW)
-- fsl,imx7d-wdt (same behaviour -> WDW)
-- fsl,imx8mm-wdt (same behaviour -> WDW)
-- fsl,imx8mn-wdt (same behaviour -> WDW)
-- fsl,imx8mp-wdt (same behaviour -> WDW)
-- fsl,imx8mq-wdt (same behaviour -> WDW)
-- fsl,ls1012a-wdt (bit is reserved)
-- fsl,ls1043a-wdt (bit is reserved)
-- fsl,vf610-wdt (same behaviour -> WDW)
-- fsl,imx21-wdt (reserved)
-
-Looking at this table WDW is not really i.MX6UL specific. It is strange 
-that more people don't experience this problem. I guess using "freeze" 
-mode is not very common, which is understandable, since other low power 
-modes are more energy efficient.
-
-Anyway, if some people are using this "feature" of watchdog for WAIT 
-mode supervision, setting this bit would break their use. I just wanted 
-to get your opinion on this, which I got.
-
-Andrej
-
-> Thanks,
-> Guenter
-> 
->> If you mean what is done prior to entering this state?
->> The device enters WAIT mode when CLPCR bit is set to WAIT. The device
->> enters WAIT mode by gating the CPU clock, all other clocks can be gated
->> by programming CGR bits in WAIT mode.
->>
->> [1] i.MX Linux Reference Manual, Rev. 0, 07/2016
->>
->> Andrej
->>
->>>
->>> Guenter
->>>
->>>> i.MX6UL watchdog has a WDW (Watchdog Disable for Wait) bit in WCR
->>>> (Watchdog Control Register) which can put the watchdog in suspend when
->>>> the device is put to WAIT mode. Similarly, WDZST bit is already set in
->>>> imx2_wdt driver by default, which suspends the watchdog in STOP and 
->>>> DOZE
->>>> modes.
->>>>
->>>> This RFC patch suspends watchdog when the device is in WAIT mode, which
->>>> fixes our problem. During development, we noticed some reports where
->>>> setting WDW bit caused inconsistent timeout events or inability of
->>>> watchdog to reset the board. We didn't have these problems but I am
->>>> curious if there is a case where device is put into WAIT mode and
->>>> watchdog should be enabled?
->>>>
->>>> Maybe for cases where watchdog is used for WAIT mode supervision? So
->>>> basically to reset the system if device doesn't exit WAIT mode on its
->>>> own?
->>>>
->>>> The problem can be recreated with:
->>>>
->>>>     imx6ul-dev:~# echo freeze > /sys/power/state
->>>>     [  101.093336] PM: suspend entry (s2idle)
->>>>     [  101.097785] Filesystems sync: 0.000 seconds
->>>>     [  101.122295] Freezing user space processes ... (elapsed 0.001 
->>>> seconds) done.
->>>>     [  101.130637] OOM killer disabled.
->>>>     [  101.133998] Freezing remaining freezable tasks ... (elapsed 
->>>> 0.001 seconds) done.
->>>>     [  101.142941] printk: Suspending console(s) (use 
->>>> no_console_suspend to debug)
->>>>     ...
->>>> Device resets after watchdog timeout expires! ~105s
->>>>
->>>> Thank you for your feedback.
->>>>
->>>> Best regards,
->>>> Andrej
->>>>
->>>> Andrej Picej (1):
->>>>    watchdog: imx2_wdg: suspend watchdog in WAIT mode
->>>>
->>>>   drivers/watchdog/imx2_wdt.c | 3 +++
->>>>   1 file changed, 3 insertions(+)
->>>>
->>>
->>
-> 
-
+Seyba Daniel
