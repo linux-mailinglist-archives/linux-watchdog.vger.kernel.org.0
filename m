@@ -2,71 +2,75 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3115E93A5
-	for <lists+linux-watchdog@lfdr.de>; Sun, 25 Sep 2022 16:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 403335E93A9
+	for <lists+linux-watchdog@lfdr.de>; Sun, 25 Sep 2022 16:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiIYOgt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 25 Sep 2022 10:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
+        id S230168AbiIYOlQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 25 Sep 2022 10:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiIYOgr (ORCPT
+        with ESMTP id S229589AbiIYOlP (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 25 Sep 2022 10:36:47 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C2C2C11D;
-        Sun, 25 Sep 2022 07:36:46 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so4558119pjk.2;
-        Sun, 25 Sep 2022 07:36:46 -0700 (PDT)
+        Sun, 25 Sep 2022 10:41:15 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470B01143;
+        Sun, 25 Sep 2022 07:41:14 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id d64-20020a17090a6f4600b00202ce056566so10170258pjk.4;
+        Sun, 25 Sep 2022 07:41:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=/1pQsiroV35+hQZdkG1ejzo3V+b10OOhO7nXhZ1i6TA=;
-        b=L7kdF+Cc3zxrcMWuwHLUJxyjSek3kETxz+SxFXZlYc/JDwXSJA23VDwP0JernxRicQ
-         L2PbJDc5U6vyDZv4p3Jhk7SgbdOwQIiiQ7S4dmq9vy+iBEGPt4WYhUqiGmrsVQ8H/atq
-         QBiH04Un8dojeI+fkMfOzbqWL6A5ww1wKPJE4Z3CFVwbEwgUevhYk6G7hB6OZpII2/+3
-         fbfGCzXO4/mmQqJ6rYrMMAg4+2g8Dn3r8dU25LgkQhFp0bpQYQBqwUw+YfC/k++6OYcw
-         XT2cr6nLD9YItuH9HvFJ6XfoTmADXXv3BEtzqhQ9spmv7aqM+cST5Ex9mAIiSDzK1CLD
-         vTPg==
+        bh=sigKRfSkAiO2kFqtIbx47IrV5wj83Mq/lBVxt9nCwyE=;
+        b=UVKTidEKCVgkXPQ/bQz7C46knVD2p2JS/O8CEb4bZ9ELHkpmgXxfxYRMoorGhnwnJH
+         w90QnvwBnysIPhGDX04NN7PYqMuOOGBUSeBEz/UKxcB2WVawEYS8mx0WKvC7twAoqHYx
+         eZqhhdI/ZcffaBP+a4xHySFIodaXuHxXzCVXNJJGju6j+WQf8ZtI2fdPQqfVGv6HFdHQ
+         WxxrtMbnkId9tJUicXiS2eypLlSv0JFZoGYvJ1zuDuvTt+Pn5nKWi0NWVD1B5f5r9Bnn
+         1608QFR5yjgbnmoWguM+FoAafjg5QL/SK17SodFDfwncFqQdkM+o2zfecxfnb99Mmjxx
+         JtRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=/1pQsiroV35+hQZdkG1ejzo3V+b10OOhO7nXhZ1i6TA=;
-        b=7zDDt6ET9+yM7KX2OCDIitoOaGBE5KfB5d1A1tlmzCbcQ5gdhVgDUHke7yuNkAFPNL
-         zpvupFQ7527uu2/3qGZHoXD968c9+LBcjqPhWp58QdpeLB991np1QWi63lHNzugkYLBp
-         IoyYSeSyiubk2Rnsnz2khXiZ4Atvgh6q6qvEPQrboYszyr3rfswKL+NTVssTqXRsIj8i
-         mRJ56Y8LT4OOVbs/NDkRBbOOoFbhyL89914yg3DZljc+TToM/JFdrhMPWjnOzlYMM9rm
-         Wfd4v/jX7fBOORsfA4B/UoG9yXUlM0BgVPpV71GOfC6h5AaR4/s/xOfe+fGtlORrJbKQ
-         Lsdg==
-X-Gm-Message-State: ACrzQf0KZFzcFnmOFW+Mk3lZUCQvF57ebldEj+rqsjz7j+ynMcx5YGbt
-        OUaPj2E7OSTADd7M2CGNUyk=
-X-Google-Smtp-Source: AMsMyM4zEYaVLn00bDKQcUz1SjgekG1k7Zs5sjRiFKbPNcDAMS2r4MvSxQRncgEGxl+tqsZNdBvNLQ==
-X-Received: by 2002:a17:90b:1905:b0:202:cbf9:cd76 with SMTP id mp5-20020a17090b190500b00202cbf9cd76mr20557787pjb.171.1664116605782;
-        Sun, 25 Sep 2022 07:36:45 -0700 (PDT)
+        bh=sigKRfSkAiO2kFqtIbx47IrV5wj83Mq/lBVxt9nCwyE=;
+        b=vxexQWF75ENYDU1QiiVS2hjAbbOgwhYaEAKdCuU5evfDk111daBMkyjajkbFAWVQms
+         0+ECn8L1l/lFbZfmCGgsT3ynCVxPXx2WE7S8Gc71fK9xFkkqVpKb8TJUIlSBwDhKQ5mu
+         llmqqHY13x4J+4VG7ngf2k8m/6NoVRstl1PFwsSK/lYuX+0JVm7iRCt0FEGLT9/TcZWp
+         B0uhrDVFy3fGCqFrax4LkRPdu7ZdnkE/Arq/Cr72Tr5W6ShO0BlmAqX5QbK1YUPaxa/u
+         Agj6A3i6N+uwLjvwrocxn4l08mvtPV1YFpzomH9/rv593g8XkhMQxNyqQQJGpQXirUHB
+         3FHw==
+X-Gm-Message-State: ACrzQf21YQ9uId3GddIUFF0ATZ4kMns4nr2zO95mQT0eMdW5lftm82R2
+        n3BPCq52t578FWPQUOvILNk=
+X-Google-Smtp-Source: AMsMyM6FsjUUkVLQNxFxDrcrwBHZIep3P2qbOnjpucj/XJI3yYJo/Qt6ak+kiROpkzc6HBsMv5yElA==
+X-Received: by 2002:a17:90b:350b:b0:202:8495:6275 with SMTP id ls11-20020a17090b350b00b0020284956275mr32415257pjb.216.1664116873726;
+        Sun, 25 Sep 2022 07:41:13 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k7-20020aa79727000000b005484d133127sm9970933pfg.129.2022.09.25.07.36.44
+        by smtp.gmail.com with ESMTPSA id c79-20020a624e52000000b00553b37c7736sm9089286pfb.25.2022.09.25.07.41.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 07:36:44 -0700 (PDT)
+        Sun, 25 Sep 2022 07:41:12 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 25 Sep 2022 07:36:43 -0700
+Date:   Sun, 25 Sep 2022 07:41:11 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Srinivas Neeli <srinivas.neeli@xilinx.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, wim@linux-watchdog.org,
-        michal.simek@xilinx.com, shubhrajyoti.datta@xilinx.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        git@xilinx.com, git@amd.com,
-        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Subject: Re: [PATCH V2] dt-bindings: watchdog: Convert Xilinx watchdog
- bindings to json-schema
-Message-ID: <20220925143643.GA1752768@roeck-us.net>
-References: <20220818150637.815-1-srinivas.neeli@xilinx.com>
+To:     Phil Edworthy <phil.edworthy@renesas.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v4 1/2] dt-bindings: watchdog: renesas,wdt: Add r9a09g011
+ (RZ/V2M) support
+Message-ID: <20220925144111.GA1753424@roeck-us.net>
+References: <20220823093233.8577-1-phil.edworthy@renesas.com>
+ <20220823093233.8577-2-phil.edworthy@renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220818150637.815-1-srinivas.neeli@xilinx.com>
+In-Reply-To: <20220823093233.8577-2-phil.edworthy@renesas.com>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -78,131 +82,154 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 08:36:37PM +0530, Srinivas Neeli wrote:
-> Convert Xilinx watchdog bindings to DT schema format using json-schema
+On Tue, Aug 23, 2022 at 10:32:32AM +0100, Phil Edworthy wrote:
+> Add the documentation for the r9a09g011 SoC, but in doing so also
+> reorganise the doc to make it easier to read.
+> Additionally, make the binding require an interrupt to be specified.
+> Whilst the driver does not need an interrupt, all of the SoCs that use
+> this binding actually provide one.
 > 
-> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Phil Edworthy <phil.edworthy@renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
-> Changes in V2:
-> - Updated file name with compatible.
-> - Added subsystem name in subject prefix.
-> - Address minior comments.
+> v4:
+>  - No change
+> v3:
+>  - Add check for too many interrupts or clocks
+> v2:
+>  - Added minItems for interrupt-names and clock-names
 > ---
->  .../bindings/watchdog/of-xilinx-wdt.txt       | 26 -------
->  .../watchdog/xlnx,xps-timebase-wdt.yaml       | 68 +++++++++++++++++++
->  2 files changed, 68 insertions(+), 26 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
+>  .../bindings/watchdog/renesas,wdt.yaml        | 73 +++++++++++++------
+>  1 file changed, 52 insertions(+), 21 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt b/Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
-> deleted file mode 100644
-> index c6ae9c9d5e3e..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
-> +++ /dev/null
-> @@ -1,26 +0,0 @@
-> -Xilinx AXI/PLB soft-core watchdog Device Tree Bindings
-> ----------------------------------------------------------
+> diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> index a8d7dde5271b..0f5675d695d6 100644
+> --- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> @@ -31,6 +31,11 @@ properties:
+>                - renesas,r9a07g054-wdt    # RZ/V2L
+>            - const: renesas,rzg2l-wdt
+>  
+> +      - items:
+> +          - enum:
+> +              - renesas,r9a09g011-wdt    # RZ/V2M
+> +          - const: renesas,rzv2m-wdt     # RZ/V2M
+> +
+>        - items:
+>            - enum:
+>                - renesas,r8a7742-wdt      # RZ/G1H
+> @@ -70,13 +75,29 @@ properties:
+>    reg:
+>      maxItems: 1
+>  
+> -  interrupts: true
 > -
-> -Required properties:
-> -- compatible		: Should be "xlnx,xps-timebase-wdt-1.00.a" or
-> -			  "xlnx,xps-timebase-wdt-1.01.a".
-> -- reg			: Physical base address and size
+> -  interrupt-names: true
 > -
-> -Optional properties:
-> -- clocks		: Input clock specifier. Refer to common clock
-> -			  bindings.
-> -- clock-frequency	: Frequency of clock in Hz
-> -- xlnx,wdt-enable-once	: 0 - Watchdog can be restarted
-> -			  1 - Watchdog can be enabled just once
-> -- xlnx,wdt-interval	: Watchdog timeout interval in 2^<val> clock cycles,
-> -			  <val> is integer from 8 to 31.
+> -  clocks: true
 > -
-> -Example:
-> -axi-timebase-wdt@40100000 {
-> -	clock-frequency = <50000000>;
-> -	compatible = "xlnx,xps-timebase-wdt-1.00.a";
-> -	clocks = <&clkc 15>;
-> -	reg = <0x40100000 0x10000>;
-> -	xlnx,wdt-enable-once = <0x0>;
-> -	xlnx,wdt-interval = <0x1b>;
-> -} ;
-> diff --git a/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml b/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
-> new file mode 100644
-> index 000000000000..493a1c954707
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
-> @@ -0,0 +1,68 @@
-> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/xlnx,xps-timebase-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> -  clock-names: true
+> +  interrupts:
+> +    minItems: 1
+> +    items:
+> +      - description: Timeout
+> +      - description: Parity error
 > +
-> +title: Xilinx AXI/PLB softcore and window Watchdog Timer
-> +
-> +maintainers:
-> +  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> +  - Srinivas Neeli <srinivas.neeli@xilinx.com>
-> +
-> +description:
-> +  The Timebase watchdog timer(WDT) is a free-running 32 bit counter.
-> +  WDT uses a dual-expiration architecture. After one expiration of
-> +  the timeout interval, an interrupt is generated and the WDT state
-> +  bit is set to one in the status register. If the state bit is not
-> +  cleared (by writing a one to the state bit) before the next
-> +  expiration of the timeout interval, a WDT reset is generated.
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - xlnx,xps-timebase-wdt-1.01.a
-> +      - xlnx,xps-timebase-wdt-1.00.a
-> +
-> +  reg:
-> +    maxItems: 1
+> +  interrupt-names:
+> +    minItems: 1
+> +    items:
+> +      - const: wdt
+> +      - const: perrout
 > +
 > +  clocks:
-> +    maxItems: 1
+> +    minItems: 1
+> +    items:
+> +      - description: Register access clock
+> +      - description: Main clock
 > +
-> +  clock-frequency:
-> +    description: Frequency of clock in Hz
+> +  clock-names:
+> +    minItems: 1
+> +    items:
+> +      - const: pclk
+> +      - const: oscclk
+>  
+>    power-domains:
+>      maxItems: 1
+> @@ -89,6 +110,7 @@ properties:
+>  required:
+>    - compatible
+>    - reg
+> +  - interrupts
+>    - clocks
+>  
+>  allOf:
+> @@ -113,31 +135,38 @@ allOf:
+>            contains:
+>              enum:
+>                - renesas,rzg2l-wdt
+> +              - renesas,rzv2m-wdt
+>      then:
+>        properties:
+> -        interrupts:
+> -          maxItems: 2
+> -        interrupt-names:
+> -          items:
+> -            - const: wdt
+> -            - const: perrout
+>          clocks:
+> -          items:
+> -            - description: Register access clock
+> -            - description: Main clock
+> +          minItems: 2
+>          clock-names:
+> -          items:
+> -            - const: pclk
+> -            - const: oscclk
+> +          minItems: 2
+>        required:
+>          - clock-names
+> +    else:
+> +      properties:
+> +        clocks:
+> +          maxItems: 1
 > +
-> +  xlnx,wdt-interval:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Watchdog timeout interval
-> +    minimum: 8
-> +    maximum: 32
-> +
-> +  xlnx,wdt-enable-once:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [0, 1]
-> +    description: If watchdog is configured as enable once,
-> +                 then the watchdog cannot be disabled after
-> +                 it has been enabled.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    watchdog@40100000 {
-> +      compatible = "xlnx,xps-timebase-wdt-1.00.a";
-> +      reg = <0x40100000 0x1000>;
-> +      clock-frequency = <50000000>;
-> +      clocks = <&clkc 15>;
-> +      xlnx,wdt-enable-once = <0x0>;
-> +      xlnx,wdt-interval = <0x1b>;
-> +    };
-> +...
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - renesas,rzg2l-wdt
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          minItems: 2
+> +        interrupt-names:
+> +          minItems: 2
+> +      required:
+>          - interrupt-names
+>      else:
+>        properties:
+>          interrupts:
+>            maxItems: 1
+> -        clocks:
+> -          maxItems: 1
+>  
+>  additionalProperties: false
+>  
+> @@ -145,9 +174,11 @@ examples:
+>    - |
+>      #include <dt-bindings/clock/r8a7795-cpg-mssr.h>
+>      #include <dt-bindings/power/r8a7795-sysc.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>      wdt0: watchdog@e6020000 {
+>              compatible = "renesas,r8a7795-wdt", "renesas,rcar-gen3-wdt";
+>              reg = <0xe6020000 0x0c>;
+> +            interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+>              clocks = <&cpg CPG_MOD 402>;
+>              power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
+>              resets = <&cpg 402>;
