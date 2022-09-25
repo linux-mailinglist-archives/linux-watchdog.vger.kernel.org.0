@@ -2,71 +2,71 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225145E939C
-	for <lists+linux-watchdog@lfdr.de>; Sun, 25 Sep 2022 16:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3115E93A5
+	for <lists+linux-watchdog@lfdr.de>; Sun, 25 Sep 2022 16:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232081AbiIYOaC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 25 Sep 2022 10:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
+        id S229589AbiIYOgt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 25 Sep 2022 10:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbiIYOaA (ORCPT
+        with ESMTP id S229539AbiIYOgr (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 25 Sep 2022 10:30:00 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1C51263B;
-        Sun, 25 Sep 2022 07:29:58 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id c24so4142599plo.3;
-        Sun, 25 Sep 2022 07:29:58 -0700 (PDT)
+        Sun, 25 Sep 2022 10:36:47 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C2C2C11D;
+        Sun, 25 Sep 2022 07:36:46 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id g1-20020a17090a708100b00203c1c66ae3so4558119pjk.2;
+        Sun, 25 Sep 2022 07:36:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=S+RG48s6FUDV6ht8+uEPounXKq0zz4a5qSA3BCzY9/s=;
-        b=Z8oM4e5yvwolyodjE+2ZaOJU4oCx5kRhyeK5mpQ1IRZJBOnl3Q9nvI/hIMHQutd9fK
-         JelLd1nqilb/oodLNB/BysY9917uylXLTjnpG8Qz+NcxwMUkLnH37P0GW3RgKNES2gsK
-         hCaeFjL6Z75c4QybcZDg0FWqddBhztKA8xY3eQ6Fb58etHejHyuSVkVaXvUYVR+JJ2X/
-         e+aJOCnTYBd0y5aSmzcIgADK6DW0bSBCLTFAIsQFc54FnYxQ9Yz9wc4Y03FSlTqGjuQ2
-         7UxiEZ/T1uzwqIFV04PUWYGPZZrZIPaEaPi/qeqfTmi8fcOJVY+lyt34CCYSUknPtIyu
-         yAcQ==
+        bh=/1pQsiroV35+hQZdkG1ejzo3V+b10OOhO7nXhZ1i6TA=;
+        b=L7kdF+Cc3zxrcMWuwHLUJxyjSek3kETxz+SxFXZlYc/JDwXSJA23VDwP0JernxRicQ
+         L2PbJDc5U6vyDZv4p3Jhk7SgbdOwQIiiQ7S4dmq9vy+iBEGPt4WYhUqiGmrsVQ8H/atq
+         QBiH04Un8dojeI+fkMfOzbqWL6A5ww1wKPJE4Z3CFVwbEwgUevhYk6G7hB6OZpII2/+3
+         fbfGCzXO4/mmQqJ6rYrMMAg4+2g8Dn3r8dU25LgkQhFp0bpQYQBqwUw+YfC/k++6OYcw
+         XT2cr6nLD9YItuH9HvFJ6XfoTmADXXv3BEtzqhQ9spmv7aqM+cST5Ex9mAIiSDzK1CLD
+         vTPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=S+RG48s6FUDV6ht8+uEPounXKq0zz4a5qSA3BCzY9/s=;
-        b=sOnjC8gXgfN78aeRLHh9/jnUj2cjpOIZwcMdN1tOMq48b1Jb+W0Pl0nYOGY2gATG30
-         QqQDcY5ZM9sMPH/uyooSrx5+avJrrFz40GJ4KuP6Z1qDm9NCmKmpaNc7ah4itlv9tJFQ
-         qTqTF1CwL81rww3qs263EVO8v4iaj2VO9MimZQDLNPU+fl5vuTEs/qTUleU/Rn+liiL0
-         J/uUbHX7rwk+6hQHxjHpbS6Kz6SUP7nvyYsmm7HrcE/GsAw4iGfUf39tlE8wPDE5vin8
-         qpWzzSzg9mS15XOyvPNmFl8DszxJtA8cLt8Rfy0bmWVirMWXFbqUmOlb1WvW/VZYJoN9
-         noRw==
-X-Gm-Message-State: ACrzQf1bkozum+kvPnnNq+ViRWTHDaAN81hps/nBUkHracp6b/e9UyMn
-        hJNgfnY2C0aGon7k8jbE3LA=
-X-Google-Smtp-Source: AMsMyM4jnAWWNhRBQGingmImuc9rZoK/O2f6RUTBMEtjTKbkR7ytzXKfiOzEpFgwZLz0Z2TGrxXOPg==
-X-Received: by 2002:a17:902:d484:b0:178:1b69:1488 with SMTP id c4-20020a170902d48400b001781b691488mr17594111plg.156.1664116197924;
-        Sun, 25 Sep 2022 07:29:57 -0700 (PDT)
+        bh=/1pQsiroV35+hQZdkG1ejzo3V+b10OOhO7nXhZ1i6TA=;
+        b=7zDDt6ET9+yM7KX2OCDIitoOaGBE5KfB5d1A1tlmzCbcQ5gdhVgDUHke7yuNkAFPNL
+         zpvupFQ7527uu2/3qGZHoXD968c9+LBcjqPhWp58QdpeLB991np1QWi63lHNzugkYLBp
+         IoyYSeSyiubk2Rnsnz2khXiZ4Atvgh6q6qvEPQrboYszyr3rfswKL+NTVssTqXRsIj8i
+         mRJ56Y8LT4OOVbs/NDkRBbOOoFbhyL89914yg3DZljc+TToM/JFdrhMPWjnOzlYMM9rm
+         Wfd4v/jX7fBOORsfA4B/UoG9yXUlM0BgVPpV71GOfC6h5AaR4/s/xOfe+fGtlORrJbKQ
+         Lsdg==
+X-Gm-Message-State: ACrzQf0KZFzcFnmOFW+Mk3lZUCQvF57ebldEj+rqsjz7j+ynMcx5YGbt
+        OUaPj2E7OSTADd7M2CGNUyk=
+X-Google-Smtp-Source: AMsMyM4zEYaVLn00bDKQcUz1SjgekG1k7Zs5sjRiFKbPNcDAMS2r4MvSxQRncgEGxl+tqsZNdBvNLQ==
+X-Received: by 2002:a17:90b:1905:b0:202:cbf9:cd76 with SMTP id mp5-20020a17090b190500b00202cbf9cd76mr20557787pjb.171.1664116605782;
+        Sun, 25 Sep 2022 07:36:45 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z10-20020a1709027e8a00b00176dee43e0dsm9300538pla.285.2022.09.25.07.29.55
+        by smtp.gmail.com with ESMTPSA id k7-20020aa79727000000b005484d133127sm9970933pfg.129.2022.09.25.07.36.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 07:29:56 -0700 (PDT)
+        Sun, 25 Sep 2022 07:36:44 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 25 Sep 2022 07:29:54 -0700
+Date:   Sun, 25 Sep 2022 07:36:43 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, yuji2.ishikawa@toshiba.co.jp,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v3] dt-bindings: watchdog: toshiba,visconti-wdt: Update
- the common clock properties
-Message-ID: <20220925142954.GA1752068@roeck-us.net>
-References: <20220525004605.2128727-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+To:     Srinivas Neeli <srinivas.neeli@xilinx.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, wim@linux-watchdog.org,
+        michal.simek@xilinx.com, shubhrajyoti.datta@xilinx.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        git@xilinx.com, git@amd.com,
+        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Subject: Re: [PATCH V2] dt-bindings: watchdog: Convert Xilinx watchdog
+ bindings to json-schema
+Message-ID: <20220925143643.GA1752768@roeck-us.net>
+References: <20220818150637.815-1-srinivas.neeli@xilinx.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220525004605.2128727-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+In-Reply-To: <20220818150637.815-1-srinivas.neeli@xilinx.com>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -78,50 +78,131 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, May 25, 2022 at 09:46:05AM +0900, Nobuhiro Iwamatsu wrote:
-> The clock for this driver switched to the common clock controller driver.
-> Therefore, update common clock properties for watchdog in the binding document.
-> And this matched this example with the actual dts.
+On Thu, Aug 18, 2022 at 08:36:37PM +0530, Srinivas Neeli wrote:
+> Convert Xilinx watchdog bindings to DT schema format using json-schema
 > 
-> Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
+> Changes in V2:
+> - Updated file name with compatible.
+> - Added subsystem name in subject prefix.
+> - Address minior comments.
+> ---
+>  .../bindings/watchdog/of-xilinx-wdt.txt       | 26 -------
+>  .../watchdog/xlnx,xps-timebase-wdt.yaml       | 68 +++++++++++++++++++
+>  2 files changed, 68 insertions(+), 26 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
 > 
->  v3: doesn't remove timeout-sec.
->  v2: send to linux-watchdog.
-> 
->  .../bindings/watchdog/toshiba,visconti-wdt.yaml      | 12 ++++--------
->  1 file changed, 4 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
-> index 690e19ce4b87..eba083822d1f 100644
-> --- a/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
-> @@ -35,20 +35,16 @@ additionalProperties: false
->  
->  examples:
->    - |
-> +    #include <dt-bindings/clock/toshiba,tmpv770x.h>
-> +
->      soc {
->          #address-cells = <2>;
->          #size-cells = <2>;
->  
-> -        wdt_clk: wdt-clk {
-> -            compatible = "fixed-clock";
-> -            clock-frequency = <150000000>;
-> -            #clock-cells = <0>;
-> -        };
+> diff --git a/Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt b/Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
+> deleted file mode 100644
+> index c6ae9c9d5e3e..000000000000
+> --- a/Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
+> +++ /dev/null
+> @@ -1,26 +0,0 @@
+> -Xilinx AXI/PLB soft-core watchdog Device Tree Bindings
+> ----------------------------------------------------------
 > -
-> -        watchdog@28330000 {
-> +        wdt: watchdog@28330000 {
->              compatible = "toshiba,visconti-wdt";
->              reg = <0 0x28330000 0 0x1000>;
-> -            clocks = <&wdt_clk>;
->              timeout-sec = <20>;
-> +            clocks = <&pismu TMPV770X_CLK_WDTCLK>;
->          };
->      };
+> -Required properties:
+> -- compatible		: Should be "xlnx,xps-timebase-wdt-1.00.a" or
+> -			  "xlnx,xps-timebase-wdt-1.01.a".
+> -- reg			: Physical base address and size
+> -
+> -Optional properties:
+> -- clocks		: Input clock specifier. Refer to common clock
+> -			  bindings.
+> -- clock-frequency	: Frequency of clock in Hz
+> -- xlnx,wdt-enable-once	: 0 - Watchdog can be restarted
+> -			  1 - Watchdog can be enabled just once
+> -- xlnx,wdt-interval	: Watchdog timeout interval in 2^<val> clock cycles,
+> -			  <val> is integer from 8 to 31.
+> -
+> -Example:
+> -axi-timebase-wdt@40100000 {
+> -	clock-frequency = <50000000>;
+> -	compatible = "xlnx,xps-timebase-wdt-1.00.a";
+> -	clocks = <&clkc 15>;
+> -	reg = <0x40100000 0x10000>;
+> -	xlnx,wdt-enable-once = <0x0>;
+> -	xlnx,wdt-interval = <0x1b>;
+> -} ;
+> diff --git a/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml b/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
+> new file mode 100644
+> index 000000000000..493a1c954707
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/xlnx,xps-timebase-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx AXI/PLB softcore and window Watchdog Timer
+> +
+> +maintainers:
+> +  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> +  - Srinivas Neeli <srinivas.neeli@xilinx.com>
+> +
+> +description:
+> +  The Timebase watchdog timer(WDT) is a free-running 32 bit counter.
+> +  WDT uses a dual-expiration architecture. After one expiration of
+> +  the timeout interval, an interrupt is generated and the WDT state
+> +  bit is set to one in the status register. If the state bit is not
+> +  cleared (by writing a one to the state bit) before the next
+> +  expiration of the timeout interval, a WDT reset is generated.
+> +
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - xlnx,xps-timebase-wdt-1.01.a
+> +      - xlnx,xps-timebase-wdt-1.00.a
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-frequency:
+> +    description: Frequency of clock in Hz
+> +
+> +  xlnx,wdt-interval:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Watchdog timeout interval
+> +    minimum: 8
+> +    maximum: 32
+> +
+> +  xlnx,wdt-enable-once:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 1]
+> +    description: If watchdog is configured as enable once,
+> +                 then the watchdog cannot be disabled after
+> +                 it has been enabled.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    watchdog@40100000 {
+> +      compatible = "xlnx,xps-timebase-wdt-1.00.a";
+> +      reg = <0x40100000 0x1000>;
+> +      clock-frequency = <50000000>;
+> +      clocks = <&clkc 15>;
+> +      xlnx,wdt-enable-once = <0x0>;
+> +      xlnx,wdt-interval = <0x1b>;
+> +    };
+> +...
