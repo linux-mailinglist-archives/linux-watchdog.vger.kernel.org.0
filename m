@@ -2,92 +2,126 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E285E8B95
-	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Sep 2022 12:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 225145E939C
+	for <lists+linux-watchdog@lfdr.de>; Sun, 25 Sep 2022 16:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiIXKvv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 24 Sep 2022 06:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
+        id S232081AbiIYOaC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 25 Sep 2022 10:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233342AbiIXKvu (ORCPT
+        with ESMTP id S230411AbiIYOaA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 24 Sep 2022 06:51:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880E4248DC;
-        Sat, 24 Sep 2022 03:51:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D2D260C07;
-        Sat, 24 Sep 2022 10:51:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57490C433C1;
-        Sat, 24 Sep 2022 10:51:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664016708;
-        bh=fJw46oiVDsrdRUBDbHBnpknkTEoz2vA2Oe6A+Tlnjhk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=atP3qtEXWF7U0jZKg8roHJOnr5mgJ+ewNB562GRr67Wd7dns9IN42+x2ZzETWkozY
-         ZklGsW3HNtp5QuzmXHQiGeTK2iZ0ywknqm7O9ebdIr5K5JI8jn1YWRhmVu133XJwsB
-         Njzkt2oCP27oE/PDsZemtuT18FFhY8Q78njbrbxgB141gVVoGUVt8lJPLzdviwuJ31
-         BBflbYJ/sy6zJ4Mey/x4CR7uFn3drs3XD5byCtjtdk1ROJKNqVb/YDzAPKFH6auZOJ
-         rZtW1MQKaA/ZgATf98wqD5jIl+wfyQLNN8Z//9QZlH3kX6a+iy25hnyxRM2YDXYQq5
-         Isa9jSo1kn3IA==
-Received: by pali.im (Postfix)
-        id EDE888A2; Sat, 24 Sep 2022 12:51:45 +0200 (CEST)
-Date:   Sat, 24 Sep 2022 12:51:45 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: armada_37xx_wdt: Fix .set_timeout callback
-Message-ID: <20220924105145.spzn32xvz6mvyksi@pali>
-References: <20220726085612.10672-1-pali@kernel.org>
+        Sun, 25 Sep 2022 10:30:00 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1C51263B;
+        Sun, 25 Sep 2022 07:29:58 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id c24so4142599plo.3;
+        Sun, 25 Sep 2022 07:29:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=S+RG48s6FUDV6ht8+uEPounXKq0zz4a5qSA3BCzY9/s=;
+        b=Z8oM4e5yvwolyodjE+2ZaOJU4oCx5kRhyeK5mpQ1IRZJBOnl3Q9nvI/hIMHQutd9fK
+         JelLd1nqilb/oodLNB/BysY9917uylXLTjnpG8Qz+NcxwMUkLnH37P0GW3RgKNES2gsK
+         hCaeFjL6Z75c4QybcZDg0FWqddBhztKA8xY3eQ6Fb58etHejHyuSVkVaXvUYVR+JJ2X/
+         e+aJOCnTYBd0y5aSmzcIgADK6DW0bSBCLTFAIsQFc54FnYxQ9Yz9wc4Y03FSlTqGjuQ2
+         7UxiEZ/T1uzwqIFV04PUWYGPZZrZIPaEaPi/qeqfTmi8fcOJVY+lyt34CCYSUknPtIyu
+         yAcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=S+RG48s6FUDV6ht8+uEPounXKq0zz4a5qSA3BCzY9/s=;
+        b=sOnjC8gXgfN78aeRLHh9/jnUj2cjpOIZwcMdN1tOMq48b1Jb+W0Pl0nYOGY2gATG30
+         QqQDcY5ZM9sMPH/uyooSrx5+avJrrFz40GJ4KuP6Z1qDm9NCmKmpaNc7ah4itlv9tJFQ
+         qTqTF1CwL81rww3qs263EVO8v4iaj2VO9MimZQDLNPU+fl5vuTEs/qTUleU/Rn+liiL0
+         J/uUbHX7rwk+6hQHxjHpbS6Kz6SUP7nvyYsmm7HrcE/GsAw4iGfUf39tlE8wPDE5vin8
+         qpWzzSzg9mS15XOyvPNmFl8DszxJtA8cLt8Rfy0bmWVirMWXFbqUmOlb1WvW/VZYJoN9
+         noRw==
+X-Gm-Message-State: ACrzQf1bkozum+kvPnnNq+ViRWTHDaAN81hps/nBUkHracp6b/e9UyMn
+        hJNgfnY2C0aGon7k8jbE3LA=
+X-Google-Smtp-Source: AMsMyM4jnAWWNhRBQGingmImuc9rZoK/O2f6RUTBMEtjTKbkR7ytzXKfiOzEpFgwZLz0Z2TGrxXOPg==
+X-Received: by 2002:a17:902:d484:b0:178:1b69:1488 with SMTP id c4-20020a170902d48400b001781b691488mr17594111plg.156.1664116197924;
+        Sun, 25 Sep 2022 07:29:57 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z10-20020a1709027e8a00b00176dee43e0dsm9300538pla.285.2022.09.25.07.29.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Sep 2022 07:29:56 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 25 Sep 2022 07:29:54 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, yuji2.ishikawa@toshiba.co.jp,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3] dt-bindings: watchdog: toshiba,visconti-wdt: Update
+ the common clock properties
+Message-ID: <20220925142954.GA1752068@roeck-us.net>
+References: <20220525004605.2128727-1-nobuhiro1.iwamatsu@toshiba.co.jp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220726085612.10672-1-pali@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220525004605.2128727-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-PING?
+On Wed, May 25, 2022 at 09:46:05AM +0900, Nobuhiro Iwamatsu wrote:
+> The clock for this driver switched to the common clock controller driver.
+> Therefore, update common clock properties for watchdog in the binding document.
+> And this matched this example with the actual dts.
+> 
+> Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-On Tuesday 26 July 2022 10:56:12 Pali Rohár wrote:
-> ioctl(WDIOC_SETTIMEOUT) calls .set_timeout and .ping callbacks and it is
-> expected that it changes current watchdog timeout.
-> 
-> armada_37xx_wdt's .ping callback just reping counter 0 and does not touch
-> counter 1 used for timeout. So it is needed to set counter 1 to the new
-> value in .set_timeout callback to ensure ioctl(WDIOC_SETTIMEOUT)
-> functionality. Fix it.
-> 
-> Fixes: 54e3d9b518c8 ("watchdog: Add support for Armada 37xx CPU watchdog")
-> Signed-off-by: Pali Rohár <pali@kernel.org>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  drivers/watchdog/armada_37xx_wdt.c | 2 ++
->  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/watchdog/armada_37xx_wdt.c b/drivers/watchdog/armada_37xx_wdt.c
-> index 1635f421ef2c..b84cba94b135 100644
-> --- a/drivers/watchdog/armada_37xx_wdt.c
-> +++ b/drivers/watchdog/armada_37xx_wdt.c
-> @@ -179,6 +179,8 @@ static int armada_37xx_wdt_set_timeout(struct watchdog_device *wdt,
->  	dev->timeout = (u64)dev->clk_rate * timeout;
->  	do_div(dev->timeout, CNTR_CTRL_PRESCALE_MIN);
+>  v3: doesn't remove timeout-sec.
+>  v2: send to linux-watchdog.
+> 
+>  .../bindings/watchdog/toshiba,visconti-wdt.yaml      | 12 ++++--------
+>  1 file changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
+> index 690e19ce4b87..eba083822d1f 100644
+> --- a/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
+> @@ -35,20 +35,16 @@ additionalProperties: false
 >  
-> +	set_counter_value(dev, CNTR_ID_WDOG, dev->timeout);
+>  examples:
+>    - |
+> +    #include <dt-bindings/clock/toshiba,tmpv770x.h>
 > +
->  	return 0;
->  }
+>      soc {
+>          #address-cells = <2>;
+>          #size-cells = <2>;
 >  
-> -- 
-> 2.20.1
-> 
+> -        wdt_clk: wdt-clk {
+> -            compatible = "fixed-clock";
+> -            clock-frequency = <150000000>;
+> -            #clock-cells = <0>;
+> -        };
+> -
+> -        watchdog@28330000 {
+> +        wdt: watchdog@28330000 {
+>              compatible = "toshiba,visconti-wdt";
+>              reg = <0 0x28330000 0 0x1000>;
+> -            clocks = <&wdt_clk>;
+>              timeout-sec = <20>;
+> +            clocks = <&pismu TMPV770X_CLK_WDTCLK>;
+>          };
+>      };
