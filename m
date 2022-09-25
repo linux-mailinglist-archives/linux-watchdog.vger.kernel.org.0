@@ -2,70 +2,66 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94D15E9504
-	for <lists+linux-watchdog@lfdr.de>; Sun, 25 Sep 2022 19:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96E65E95BF
+	for <lists+linux-watchdog@lfdr.de>; Sun, 25 Sep 2022 21:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233274AbiIYRjA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 25 Sep 2022 13:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
+        id S231218AbiIYTyr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 25 Sep 2022 15:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233137AbiIYRis (ORCPT
+        with ESMTP id S232814AbiIYTyq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 25 Sep 2022 13:38:48 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF7C2F3A7;
-        Sun, 25 Sep 2022 10:38:43 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id iw17so4381715plb.0;
-        Sun, 25 Sep 2022 10:38:43 -0700 (PDT)
+        Sun, 25 Sep 2022 15:54:46 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F07FCE36;
+        Sun, 25 Sep 2022 12:54:42 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id bh13so4839662pgb.4;
+        Sun, 25 Sep 2022 12:54:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=Nv52lVrXeDJdkgqgOmgaRHFK3xM6rgSOdfECS4uQI1I=;
-        b=LKG50ohmntp9p6406DyZWy11GyuszLdoPgDfeNIp0dV9Ai897gz3OBjOeFLFWmN9Sx
-         1pxDx1yZHqFsYqQ96erqwLtHCLhCcDo04geaSNYv0PVfeCHpHgepnRu0Q38LNC+zz4ss
-         NkJWA0qg/6Fm4qpQ2MwPScwC49zFRuz/1iAWolZiMQKxQzqF8IXWbAL4U535usb/Iz7a
-         xRasSiZQLMnCojoUi5/Q3ezdnz0icM+V9BkoOUG2drKgZU9xB4jIUJVD5K7mQvsDJnKc
-         P+iLHQMtbiVnbufQIA+I9MBz6QKswqspX3xDQ3zkttguOcz4o/55VOT2wribUJTR37YL
-         +G9g==
+        bh=RBrB8yKxA1oLqH3CfKSVzANSRP3M8PN3gfVC1DFu3kE=;
+        b=Om6u+NaLOZJvLuAcZasCyQl+UcoDCXdblYHodbs26NDeiulNPkV5dABKv8jo5uvc7/
+         5J3dm6zM3hRghZl+n9KXz0guMT+AwBcWf/masJqlT97oXCKW5qk6D0y7ScdiG5I8HbSx
+         NQB+pwlcZnt6u3nHBTE4nCi8wPcHm/CzbkkxDvOMtHP4JuZ9ztb0EDQN3yWn9hAK/hqU
+         ak6LzOC0jR58rd37tzew2TIoSbsh5tykddW3xLJj0MLQpu7oHHQ4qVRnC6s4OGhklsyo
+         E8EIa3hclZevxkI6U4oGIvVG8o21gkz03Yh0YCIk6QnGeulbq9Dv1XpC/lp9Li2IRzTk
+         ho8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=Nv52lVrXeDJdkgqgOmgaRHFK3xM6rgSOdfECS4uQI1I=;
-        b=3UaIYHdvFaMnl0X4WujaBFpAcBOGcs92004g1eLobrqPwD8dAPk4uODLTHXe5aFhuH
-         HtKiw2VvxQGQ09VbyOEFpdGHxzbBpAQYd5dhui93pBF2ebAI8IK0wSufGx4WPchaa2wb
-         DaZXXZvCXZYFR4TWnhLpmAtyMx0nwraZcWwqRITAlYAt6IkbrrBD67jdvWl9dKvxaiST
-         WbHYaJG16biFT2USmvVK9GMHoTBCPOGLywU2dQhpOSgHE0MwZ+3UeBLAcm+Dowka7Zea
-         fuOorTk3pzbuGLeHz/lmJQzE8yrj4npP6zKOePN64CqZvtI1uPRFPwLeYywJsqJTOmig
-         EsfA==
-X-Gm-Message-State: ACrzQf3864Y9z3xoMDg34rOXm0y4kBH5LBBZWdQGE6lr8iqMWWHxqTYl
-        ZMNf+TVzq1ycHhlAKxZMGoU=
-X-Google-Smtp-Source: AMsMyM6Q2ux3B3uVB9EZ+N6h622GnhzQpaMCYICu2+MEQ1XYAAHZ0KXQ1hIqTauy+adFxlvw/Djodw==
-X-Received: by 2002:a17:903:54:b0:176:cdf8:b791 with SMTP id l20-20020a170903005400b00176cdf8b791mr17267372pla.24.1664127523123;
-        Sun, 25 Sep 2022 10:38:43 -0700 (PDT)
+        bh=RBrB8yKxA1oLqH3CfKSVzANSRP3M8PN3gfVC1DFu3kE=;
+        b=oKVIz4YTnoy0Efn8rVR6QSlRC8tppd1zQ5Jg/zAQQbAHuxkrj0libnNuI/Wb+OlRDD
+         x9MEiE+J8yfRvo3flQONbtjXxRaIPWPrR1xiIOJZ+LFP/JVpV2mFeGmcCHRro2hjHnVR
+         qNqOYj/z+sacHvieODkn+Al0E85CBXr1U0AofSjtQ2Jln/LDqzPhsT6bjVQy2bzAhirl
+         9Oxh2j4VgqE37KAmrvFxeU1hoqBpQzr1XPPTJma4lW1bwj2ArAKKk48ICXKlAc7y/Y8t
+         2UhjTvaJTsSVXAQwTZtr3ZBR2kFAfmaDXk0w1gz3HEylKLqZ095Vxyw3emRaENbnINB0
+         QN5A==
+X-Gm-Message-State: ACrzQf2Bxi8Vh15MkD1Q1ZkBUF5YgvD0ZLAiN2Sn5+MSwZylq+YZR/mY
+        Q8xiqTiliQRqtLboameZZm+482wVaWt2Hw==
+X-Google-Smtp-Source: AMsMyM5XqmmjHwu6hU1zTDKqvVgOweYXdcxq5OIBeNZ8uaYYzlRNI1U9v+2sg2xk0y5clRW7bnonRw==
+X-Received: by 2002:a63:8b4b:0:b0:43c:afc0:b72a with SMTP id j72-20020a638b4b000000b0043cafc0b72amr2484031pge.50.1664135682461;
+        Sun, 25 Sep 2022 12:54:42 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e23-20020a635017000000b00438b79c7049sm9055326pgb.42.2022.09.25.10.38.42
+        by smtp.gmail.com with ESMTPSA id h15-20020a056a00000f00b0052d4b0d0c74sm10318459pfk.70.2022.09.25.12.54.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 10:38:42 -0700 (PDT)
+        Sun, 25 Sep 2022 12:54:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 25 Sep 2022 10:38:41 -0700
+Date:   Sun, 25 Sep 2022 12:54:40 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
-Cc:     m.felsch@pengutronix.de, wim@linux-watchdog.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 7/7] watchdog: imx93: add watchdog timer on imx93
-Message-ID: <20220925173841.GG1763764@roeck-us.net>
-References: <20220825083256.14565-1-alice.guo@oss.nxp.com>
- <20220825083256.14565-8-alice.guo@oss.nxp.com>
+To:     Vladimir Panteleev <git@vladimir.panteleev.md>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] watchdog: sp5100_tco: Add "action" module parameter
+Message-ID: <20220925195440.GB546491@roeck-us.net>
+References: <20220920092721.7686-1-git@vladimir.panteleev.md>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220825083256.14565-8-alice.guo@oss.nxp.com>
+In-Reply-To: <20220920092721.7686-1-git@vladimir.panteleev.md>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -77,125 +73,58 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 04:32:56PM +0800, Alice Guo (OSS) wrote:
-> From: Alice Guo <alice.guo@nxp.com>
+On Tue, Sep 20, 2022 at 09:27:21AM +0000, Vladimir Panteleev wrote:
+> Allow configuring the "action" bit, as documented in [1].
 > 
-> The WDOG clocks are sourced from lpo_clk, and lpo_clk is the fixed
-> 32KHz. TOVAL contains the 16-bit value used to set the timeout period of
-> the watchdog. When the timeout period exceeds 2 seconds, the value
-> written to the TOVAL register is larger than 16-bit can represent.
-> Enabling watchdog prescaler can solve this problem.
+> Previously, the only action supported by this module was to reset the
+> system (0).  It can now be configured to power off (1) instead.
 > 
-> Two points need to be aware of:
-> 1. watchdog prescaler enables a fixed 256 pre-scaling of watchdog
-> counter reference clock
-> 2. reconfiguration takes about 55ms on imx93
+> [1]: https://www.amd.com/system/files/TechDocs/44413.pdf
 > 
-> Reviewed-by: Jacky Bai <ping.bai@nxp.com>
-> Signed-off-by: Alice Guo <alice.guo@nxp.com>
+> Signed-off-by: Vladimir Panteleev <git@vladimir.panteleev.md>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
 > 
-> Changes for v2:
->  - none
+> Changes since v1:
+>  - Drop the rename of the SP5100_WDT_ACTION_RESET define
+>  - Make the new parameter not visible in sysfs for consistency
 > 
->  drivers/watchdog/imx7ulp_wdt.c | 33 ++++++++++++++++++++++++++++-----
->  1 file changed, 28 insertions(+), 5 deletions(-)
+>  drivers/watchdog/sp5100_tco.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/watchdog/imx7ulp_wdt.c b/drivers/watchdog/imx7ulp_wdt.c
-> index dee02c2a52c9..2897902090b3 100644
-> --- a/drivers/watchdog/imx7ulp_wdt.c
-> +++ b/drivers/watchdog/imx7ulp_wdt.c
-> @@ -9,6 +9,7 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> +#include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/reboot.h>
->  #include <linux/watchdog.h>
-> @@ -52,11 +53,17 @@ module_param(nowayout, bool, 0000);
->  MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
->  		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
+> index ae54dd33e233..fb426b7d81da 100644
+> --- a/drivers/watchdog/sp5100_tco.c
+> +++ b/drivers/watchdog/sp5100_tco.c
+> @@ -65,6 +65,12 @@ static struct pci_dev *sp5100_tco_pci;
 >  
-> +struct imx_wdt_hw_feature {
-> +	bool prescaler_enable;
-> +	u32 wdog_clock_rate;
-> +};
+>  /* module parameters */
+>  
+> +#define WATCHDOG_ACTION 0
+> +static bool action = WATCHDOG_ACTION;
+> +module_param(action, bool, 0);
+> +MODULE_PARM_DESC(action, "Action taken when watchdog expires, 0 to reset, 1 to poweroff (default="
+> +		 __MODULE_STRING(WATCHDOG_ACTION) ")");
 > +
->  struct imx7ulp_wdt_device {
->  	struct watchdog_device wdd;
->  	void __iomem *base;
->  	struct clk *clk;
->  	bool post_rcs_wait;
-> +	const struct imx_wdt_hw_feature *hw;
->  };
+>  #define WATCHDOG_HEARTBEAT 60	/* 60 sec default heartbeat. */
+>  static int heartbeat = WATCHDOG_HEARTBEAT;  /* in seconds */
+>  module_param(heartbeat, int, 0);
+> @@ -297,8 +303,11 @@ static int sp5100_tco_timer_init(struct sp5100_tco *tco)
+>  	if (val & SP5100_WDT_FIRED)
+>  		wdd->bootstatus = WDIOF_CARDRESET;
 >  
->  static int imx7ulp_wdt_wait_ulk(void __iomem *base)
-> @@ -179,7 +186,7 @@ static int imx7ulp_wdt_set_timeout(struct watchdog_device *wdog,
->  				   unsigned int timeout)
->  {
->  	struct imx7ulp_wdt_device *wdt = watchdog_get_drvdata(wdog);
-> -	u32 toval = WDOG_CLOCK_RATE * timeout;
-> +	u32 toval = wdt->hw->wdog_clock_rate * timeout;
->  	u32 val;
->  	int ret;
->  	u32 loop = RETRY_MAX;
-> @@ -276,6 +283,9 @@ static int imx7ulp_wdt_init(struct imx7ulp_wdt_device *wdt, unsigned int timeout
->  	int ret;
->  	u32 loop = RETRY_MAX;
+> -	/* Set watchdog action to reset the system */
+> -	val &= ~SP5100_WDT_ACTION_RESET;
+> +	/* Set watchdog action */
+> +	if (action)
+> +		val |= SP5100_WDT_ACTION_RESET;
+> +	else
+> +		val &= ~SP5100_WDT_ACTION_RESET;
+>  	writel(val, SP5100_WDT_CONTROL(tco->tcobase));
 >  
-> +	if (wdt->hw->prescaler_enable)
-> +		val |= WDOG_CS_PRES;
-> +
->  	do {
->  		ret = _imx7ulp_wdt_init(wdt, timeout, val);
->  		toval = readl(wdt->base + WDOG_TOVAL);
-> @@ -346,7 +356,9 @@ static int imx7ulp_wdt_probe(struct platform_device *pdev)
->  	watchdog_stop_on_reboot(wdog);
->  	watchdog_stop_on_unregister(wdog);
->  	watchdog_set_drvdata(wdog, imx7ulp_wdt);
-> -	ret = imx7ulp_wdt_init(imx7ulp_wdt, wdog->timeout * WDOG_CLOCK_RATE);
-> +
-> +	imx7ulp_wdt->hw = of_device_get_match_data(dev);
-> +	ret = imx7ulp_wdt_init(imx7ulp_wdt, wdog->timeout * imx7ulp_wdt->hw->wdog_clock_rate);
->  	if (ret)
->  		return ret;
->  
-> @@ -368,7 +380,7 @@ static int __maybe_unused imx7ulp_wdt_suspend_noirq(struct device *dev)
->  static int __maybe_unused imx7ulp_wdt_resume_noirq(struct device *dev)
->  {
->  	struct imx7ulp_wdt_device *imx7ulp_wdt = dev_get_drvdata(dev);
-> -	u32 timeout = imx7ulp_wdt->wdd.timeout * WDOG_CLOCK_RATE;
-> +	u32 timeout = imx7ulp_wdt->wdd.timeout * imx7ulp_wdt->hw->wdog_clock_rate;
->  	int ret;
->  
->  	ret = clk_prepare_enable(imx7ulp_wdt->clk);
-> @@ -389,9 +401,20 @@ static const struct dev_pm_ops imx7ulp_wdt_pm_ops = {
->  				      imx7ulp_wdt_resume_noirq)
->  };
->  
-> +static const struct imx_wdt_hw_feature imx7ulp_wdt_hw = {
-> +	.prescaler_enable = false,
-> +	.wdog_clock_rate = 1000,
-> +};
-> +
-> +static const struct imx_wdt_hw_feature imx93_wdt_hw = {
-> +	.prescaler_enable = true,
-> +	.wdog_clock_rate = 125,
-> +};
-> +
->  static const struct of_device_id imx7ulp_wdt_dt_ids[] = {
-> -	{ .compatible = "fsl,imx8ulp-wdt", },
-> -	{ .compatible = "fsl,imx7ulp-wdt", },
-> +	{ .compatible = "fsl,imx8ulp-wdt", .data = &imx7ulp_wdt_hw, },
-> +	{ .compatible = "fsl,imx7ulp-wdt", .data = &imx7ulp_wdt_hw, },
-> +	{ .compatible = "fsl,imx93-wdt", .data = &imx93_wdt_hw, },
->  	{ /* sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(of, imx7ulp_wdt_dt_ids);
+>  	/* Set a reasonable heartbeat before we stop the timer */
 > -- 
-> 2.17.1
+> 2.37.3
 > 
