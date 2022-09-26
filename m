@@ -2,129 +2,229 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96E65E95BF
-	for <lists+linux-watchdog@lfdr.de>; Sun, 25 Sep 2022 21:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F685E9A8A
+	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Sep 2022 09:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbiIYTyr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 25 Sep 2022 15:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
+        id S233713AbiIZHgx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 26 Sep 2022 03:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232814AbiIYTyq (ORCPT
+        with ESMTP id S233279AbiIZHgw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 25 Sep 2022 15:54:46 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F07FCE36;
-        Sun, 25 Sep 2022 12:54:42 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id bh13so4839662pgb.4;
-        Sun, 25 Sep 2022 12:54:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=RBrB8yKxA1oLqH3CfKSVzANSRP3M8PN3gfVC1DFu3kE=;
-        b=Om6u+NaLOZJvLuAcZasCyQl+UcoDCXdblYHodbs26NDeiulNPkV5dABKv8jo5uvc7/
-         5J3dm6zM3hRghZl+n9KXz0guMT+AwBcWf/masJqlT97oXCKW5qk6D0y7ScdiG5I8HbSx
-         NQB+pwlcZnt6u3nHBTE4nCi8wPcHm/CzbkkxDvOMtHP4JuZ9ztb0EDQN3yWn9hAK/hqU
-         ak6LzOC0jR58rd37tzew2TIoSbsh5tykddW3xLJj0MLQpu7oHHQ4qVRnC6s4OGhklsyo
-         E8EIa3hclZevxkI6U4oGIvVG8o21gkz03Yh0YCIk6QnGeulbq9Dv1XpC/lp9Li2IRzTk
-         ho8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=RBrB8yKxA1oLqH3CfKSVzANSRP3M8PN3gfVC1DFu3kE=;
-        b=oKVIz4YTnoy0Efn8rVR6QSlRC8tppd1zQ5Jg/zAQQbAHuxkrj0libnNuI/Wb+OlRDD
-         x9MEiE+J8yfRvo3flQONbtjXxRaIPWPrR1xiIOJZ+LFP/JVpV2mFeGmcCHRro2hjHnVR
-         qNqOYj/z+sacHvieODkn+Al0E85CBXr1U0AofSjtQ2Jln/LDqzPhsT6bjVQy2bzAhirl
-         9Oxh2j4VgqE37KAmrvFxeU1hoqBpQzr1XPPTJma4lW1bwj2ArAKKk48ICXKlAc7y/Y8t
-         2UhjTvaJTsSVXAQwTZtr3ZBR2kFAfmaDXk0w1gz3HEylKLqZ095Vxyw3emRaENbnINB0
-         QN5A==
-X-Gm-Message-State: ACrzQf2Bxi8Vh15MkD1Q1ZkBUF5YgvD0ZLAiN2Sn5+MSwZylq+YZR/mY
-        Q8xiqTiliQRqtLboameZZm+482wVaWt2Hw==
-X-Google-Smtp-Source: AMsMyM5XqmmjHwu6hU1zTDKqvVgOweYXdcxq5OIBeNZ8uaYYzlRNI1U9v+2sg2xk0y5clRW7bnonRw==
-X-Received: by 2002:a63:8b4b:0:b0:43c:afc0:b72a with SMTP id j72-20020a638b4b000000b0043cafc0b72amr2484031pge.50.1664135682461;
-        Sun, 25 Sep 2022 12:54:42 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h15-20020a056a00000f00b0052d4b0d0c74sm10318459pfk.70.2022.09.25.12.54.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Sep 2022 12:54:41 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 25 Sep 2022 12:54:40 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Vladimir Panteleev <git@vladimir.panteleev.md>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] watchdog: sp5100_tco: Add "action" module parameter
-Message-ID: <20220925195440.GB546491@roeck-us.net>
-References: <20220920092721.7686-1-git@vladimir.panteleev.md>
+        Mon, 26 Sep 2022 03:36:52 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3608327FF0
+        for <linux-watchdog@vger.kernel.org>; Mon, 26 Sep 2022 00:36:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=LP9a0azb9Q56GjYXzJIKr4iPTQjJW/vqyVtIt7F8RzY=; b=eAjQFKL6L/fFCB8kyz+zG3fuys
+        wUhY3RQZ3MJIrEmKC3KgM779hfG/rA+cQdxnXWKY1kDR0+gW3fZIF7F8pzKQO1JgfYKBHqOpEqX93
+        ivwR+TzRt1bNaJmf8/bxt1i82hVHh93+0nbZvSSkHzhw2smf2Fwn/ug71H78/E1cm9ZWNwy5VWmMp
+        MqMLq3fSl5eVVAdHPmLs+7iVuaCXqM6WwTOThkTo0WGzPxohsAFIwby/XoXNyKH79zC8LRsEDEhAB
+        EvadmGdpWTh8kYxoZ4mGyqmpDphdylVHHSKhCzfav0yBSlSCnBqVnxfsk7W7tKQrxnpyng9FE00sv
+        lLcG3HOg==;
+Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:50528 helo=[192.168.69.85])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1ocifK-00BuMk-JD;
+        Mon, 26 Sep 2022 09:36:42 +0200
+Message-ID: <7662f5dd-2acb-6b05-cbba-8a03dab5244d@norik.com>
+Date:   Mon, 26 Sep 2022 09:36:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220920092721.7686-1-git@vladimir.panteleev.md>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH 0/1] Suspending i.MX watchdog in WAIT mode
+Content-Language: en-GB
+To:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com
+References: <20220921124647.1521667-1-andrej.picej@norik.com>
+ <5823717b-0288-a679-824d-5a26dec5a606@roeck-us.net>
+ <325585e9-3d50-eee2-4443-5509dde6da90@norik.com>
+ <72fb8f04-52d1-af99-dfff-4a53ee3d3440@roeck-us.net>
+ <a761d821-6beb-e4d7-b0c1-37178b3bacc2@norik.com>
+ <5ce53d5a-532f-0d56-9a5a-c95c7c7b170b@roeck-us.net>
+From:   Andrej Picej <andrej.picej@norik.com>
+In-Reply-To: <5ce53d5a-532f-0d56-9a5a-c95c7c7b170b@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 09:27:21AM +0000, Vladimir Panteleev wrote:
-> Allow configuring the "action" bit, as documented in [1].
-> 
-> Previously, the only action supported by this module was to reset the
-> system (0).  It can now be configured to power off (1) instead.
-> 
-> [1]: https://www.amd.com/system/files/TechDocs/44413.pdf
-> 
-> Signed-off-by: Vladimir Panteleev <git@vladimir.panteleev.md>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> ---
+On 23. 09. 22 15:48, Guenter Roeck wrote:
+> On 9/23/22 00:27, Andrej Picej wrote:
+>> On 22. 09. 22 16:56, Guenter Roeck wrote:
+>>> On 9/22/22 00:17, Andrej Picej wrote:
+>>>> Hi Guenter,
+>>>>
+>>>> On 21. 09. 22 16:18, Guenter Roeck wrote:
+>>>>> On 9/21/22 05:46, Andrej Picej wrote:
+>>>>>> Hi all,
+>>>>>>
+>>>>>> we are using i.MX6UL with its watchdog WDOG1 and kernel 5.15.62. 
+>>>>>> It was
+>>>>>> discovered that the watchdog triggers reset when the device is put 
+>>>>>> into
+>>>>>> 'Suspend-To-Idle' (WAIT) state.
+>>>>>>
+>>>>>
+>>>>> Is that equivalent to "suspend" from Linux perspective, or some other
+>>>>> mode ? How does the device get into this state ?
+>>>>
+>>>> I think WAIT mode maps to System idle mode in linux [1].
+>>>>
+>>>
+>>> Sorry, I am not going to read that entire manual.
+>>>
+>>
+>> Perfectly understandable, you are busy guys, basically in chapter 
+>> 21.1.1 it is written:
+>> "System idle maps to WAIT mode."
+>>
+>>>> Sorry don't quite understand your second question.
+>>>> Do you mean how we trigger this state?
+>>>> We trigger this state with:
+>>>>  >     imx6ul-dev:~# echo freeze > /sys/power/state
+>>>>
+>>>
+>>> So it is not "suspend" ? I am not sure if it is appropriate to stop
+>>> the watchdog timer in this situation. Normally it is only stopped
+>>> in suspend mode.
+>>>
+>>
+>> Well suspend/resume functions are still called when entering this 
+>> "freeze" mode, but watchdog can not be disabled by software or pinged 
+>> in this mode, that's why our idea is to set this bit.
+>>
+>> Basically, that was my main question. Is it appropriate to stop 
+>> watchdog in this situation? I guess not. Probably it is not meant to 
+>> enter this mode for longer period of time.
+>>
+>>> Also, how does this interact or interfere with the suspend/resume code
+>>> in the driver, and does it behave the same for all chips supported by
+>>> the driver ? For example, in the current code, i.MX7D is handled
+>>> differently. What compatible entry are you using anyway ? There is none
+>>> for i.MX6UL. Did you make sure that the same bit doesn't mean something
+>>> else for other chips ?
+>>>
+>>
+>> I don't think it interact/interferes with suspend/resume code in any 
+>> way since mx2+ watchdog is not stoppable during runtime. Not sure if 
+>> watchdogs on other devices behave the same, sorry.
+>>
+>> i.MX6UL devices use "fsl,imx6ul-wdt", "fsl,imx21-wdt" for compatible 
+>> entry. I checked control registers with other supported devices by 
+>> this driver:
+>>
+>> - fsl,imx25-wdt (same behaviour -> WDW)
+>> - fsl,imx27-wdt (bit is reserved)
+>> - fsl,imx31-wdt (bit is reserved)
+>> - fsl,imx35-wdt (same behaviour -> WDW)
+>> - fsl,imx50-wdt (same behaviour -> WDW)
+>> - fsl,imx51-wdt (same behaviour -> WDW)
+>> - fsl,imx53-wdt (same behaviour -> WDW)
+>> - fsl,imx6q-wdt (same behaviour -> WDW)
+>> - fsl,imx6sl-wdt (same behaviour -> WDW)
+>> - fsl,imx6sll-wdt (same behaviour -> WDW)
+>> - fsl,imx6sx-wdt (same behaviour -> WDW)
+>> - fsl,imx6ul-wdt (same behaviour -> WDW)
+>> - fsl,imx7d-wdt (same behaviour -> WDW)
+>> - fsl,imx8mm-wdt (same behaviour -> WDW)
+>> - fsl,imx8mn-wdt (same behaviour -> WDW)
+>> - fsl,imx8mp-wdt (same behaviour -> WDW)
+>> - fsl,imx8mq-wdt (same behaviour -> WDW)
+>> - fsl,ls1012a-wdt (bit is reserved)
+>> - fsl,ls1043a-wdt (bit is reserved)
+>> - fsl,vf610-wdt (same behaviour -> WDW)
+>> - fsl,imx21-wdt (reserved)
+>>
 > 
-> Changes since v1:
->  - Drop the rename of the SP5100_WDT_ACTION_RESET define
->  - Make the new parameter not visible in sysfs for consistency
+> And then there is fsl,imx7ulp-wdt which has its own driver.
 > 
->  drivers/watchdog/sp5100_tco.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
+>> Looking at this table WDW is not really i.MX6UL specific. It is 
+>> strange that more people don't experience this problem. I guess using 
+>> "freeze" mode is not very common, which is understandable, since other 
+>> low power modes are more energy efficient.
+>>  > Anyway, if some people are using this "feature" of watchdog for 
+>> WAIT mode supervision, setting this bit would break their use. I just 
+>> wanted to get your opinion on this, which I got.
+>>
 > 
-> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
-> index ae54dd33e233..fb426b7d81da 100644
-> --- a/drivers/watchdog/sp5100_tco.c
-> +++ b/drivers/watchdog/sp5100_tco.c
-> @@ -65,6 +65,12 @@ static struct pci_dev *sp5100_tco_pci;
->  
->  /* module parameters */
->  
-> +#define WATCHDOG_ACTION 0
-> +static bool action = WATCHDOG_ACTION;
-> +module_param(action, bool, 0);
-> +MODULE_PARM_DESC(action, "Action taken when watchdog expires, 0 to reset, 1 to poweroff (default="
-> +		 __MODULE_STRING(WATCHDOG_ACTION) ")");
-> +
->  #define WATCHDOG_HEARTBEAT 60	/* 60 sec default heartbeat. */
->  static int heartbeat = WATCHDOG_HEARTBEAT;  /* in seconds */
->  module_param(heartbeat, int, 0);
-> @@ -297,8 +303,11 @@ static int sp5100_tco_timer_init(struct sp5100_tco *tco)
->  	if (val & SP5100_WDT_FIRED)
->  		wdd->bootstatus = WDIOF_CARDRESET;
->  
-> -	/* Set watchdog action to reset the system */
-> -	val &= ~SP5100_WDT_ACTION_RESET;
-> +	/* Set watchdog action */
-> +	if (action)
-> +		val |= SP5100_WDT_ACTION_RESET;
-> +	else
-> +		val &= ~SP5100_WDT_ACTION_RESET;
->  	writel(val, SP5100_WDT_CONTROL(tco->tcobase));
->  
->  	/* Set a reasonable heartbeat before we stop the timer */
-> -- 
-> 2.37.3
+> Oh, no, you are just giving up too early.
+
+Well I'm not really sure if it is worth the struggle. But if you insist, 
+I'll dig a bit deeper :).
+
 > 
+> Other watchdogs do get stopped in suspend. That is why the suspend function
+> exists and is used in watchdog drivers in the first place. Yes, 
+> fsl,imx21-wdt
+> can not handle that, but that doesn't mean that others can't either. The
+> current workaround for fsl,imx21-wdt is to set the timeout to the maximum
+> and to stop the watchdog timer clock. You say that the suspend function is
+> called, so the watchdog clock _should_ be stopped. However, it looks like
+> that is not the case. Can you try to figure out the reason ?
+
+Ok, so a quick look at clocks used in watchdog reveals an interesting 
+find. The watchdog uses two clocks:
+- low-frequency reference clock (ipg_clk_32k) for its counter and 
+control operation and
+- peripheral bus clock for register read/write operations.
+
+ From reference manual:
+> Low frequency (32.768 kHz) clock that continues to run in low-power
+> mode. It is assumed that the Clock Controller will provide this clock signal
+> synchronized to ipg_clk in the normal mode, and switch to a non-
+> synchronized signal in low-power mode when the ipg_clk is off.
+
+In suspend function we are stopping wdog1_clk which is child of ipg_clk. 
+This low-frequency reference clock is left running, which means that 
+watchdog counter keeps running. The problem is that ipg_clk_32k is meant 
+to be running in low-power mode, that's why this clock can not be gated 
+off (no gating register).
+
+> 
+> Either case, I think it would be worthwhile exploring if the WDW bit can
+> be used on the CPUs supporting it to stop the watchdog in suspend mode.
+> How does your sysytem behave if put into suspend ? Does the watchdog still
+> reset it ? How is the watchdog clock configured ?
+
+If the system is put into suspend mode, the watchdog is suspended, due 
+to WDZST bit, which similar to WDW bit suspends the watchdog in 
+low-power modes (STOP and DOZE). If this WDZST bit is NOT set, the 
+watchdog triggers when system is put into "Suspend-to-RAM" and 
+"Standby/Power-On Suspend".
+
+I had a look at some of other devices watchdogs this driver supports and 
+it looks like i.MX6, i.MX8, i.MX7 and i.MX5x have this low-frequency 
+reference clock in common.
+
+Andrej
+
+> 
+> Thanks,
+> Guenter
