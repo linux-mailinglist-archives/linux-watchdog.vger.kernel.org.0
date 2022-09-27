@@ -2,71 +2,81 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C4B5EBD2E
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Sep 2022 10:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4F85EC02B
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Sep 2022 12:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbiI0IYd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 27 Sep 2022 04:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
+        id S231536AbiI0Kzj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 27 Sep 2022 06:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbiI0IYc (ORCPT
+        with ESMTP id S231420AbiI0Kzi (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 27 Sep 2022 04:24:32 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57073B248E;
-        Tue, 27 Sep 2022 01:24:29 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id w22-20020a056830061600b006546deda3f9so5934528oti.4;
-        Tue, 27 Sep 2022 01:24:29 -0700 (PDT)
+        Tue, 27 Sep 2022 06:55:38 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5388D1408E;
+        Tue, 27 Sep 2022 03:55:37 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id u59-20020a17090a51c100b00205d3c44162so2023839pjh.2;
+        Tue, 27 Sep 2022 03:55:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=gQ+wC3gDGV3yuaRddBzFSqfasdF4aPIO41dI/GPBHP0=;
-        b=f1JxDVnXxsZi9PYT3F3kM+EVQHsVqccvhRg+nven8l+zIOUwN6genHxiKz0kl2VkH0
-         n1q2wz5JGSFZovqkk7Wbbt/TnF2Vd3+Ugm/FpH+WVpH9RCtpRvloK2nlo3QOpXjWwOKP
-         JnNjIqvuSxekdKc3a3DARoYSkdo/qgDTGtPAL5H/RzzjUOM+YA1dsmCakLWHs66kO/ra
-         ATpuJpA+KFrh7tMP/7KUf9nJ/d2ZSv0JaQ+HUtFl3+DK1jupnUTfDqrKcin1o/GS9+iB
-         kvPCHk7bghtJUi8CAzS9IJNR2qHxRTAuh1pw99qSIiTquazsSUuu2k6LEwvsKyDA54jo
-         sYcQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date;
+        bh=ZmmRG6YrZ8hXcye3u5h381H4Djt0FAmwEpe9Y1+zhM0=;
+        b=U1u1CvnPZ8uVG534OU/ZOMVlJ5uXseG4UXgCMJt1zuWy4ew3W22D0mYanJ146fF/3M
+         Qw39QdCLOXr6hYtZ765c3MHzRGY0KF0fTU8bxqdOZxyVbj+TdfD6Z5YLDsU5R2mZkUpl
+         0u6koXreVCQaqFG1YQu7iE3DiwhfQxDFVLiyz0CNZru69NnK/nIB4USCGRFR0HHoW2cl
+         PuFjAwBip41LMz1BCNKQ82C35k5e90Iy6uKsz7npF8MFWGPiOaOtm+jHcJFa/dRSCV55
+         zvUn3WKP7LWkGbeeOvr+pNWdqhwNj3mAS9a+rtfBCiDpQ27wQixdX4L971GKxc1bFOuP
+         /e1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=gQ+wC3gDGV3yuaRddBzFSqfasdF4aPIO41dI/GPBHP0=;
-        b=jJYFolay1ER8qCiFCWWIqm00brcmsZXEco9UEggIpVAzAGwmBi3XMjKT1pReaLfa1j
-         2P9/OI9zamzwTQ1iPaxhz1gN1Fh4ncdonlTPcbX0Yp9r174Q8U6K1X+iRIRrwdz6sFT4
-         C9LmVdMpV4fs8P/pJSUo5oDEyHP4GSL2a46vRgwDzSVe+TdDnj7UC63M4d4RVMWyKu3x
-         d8sCyFxvPonhCzmb+qh8ZpufVjqFQgKnrcIBXFPdhMIl7sPG1LoudWUL2G3dMLeXjlaL
-         hjQeVy6QdLw34/PqNHNtIo/BZOxX8xp3wQZRO8QyYTYSzH5JrLhkNbQBGB039ZlZHFkC
-         /oJg==
-X-Gm-Message-State: ACrzQf0ssNdlSyJ/YVoxmDft62oL2UWyXq6uZz4NIURARtV2q0+FRz1d
-        lbeVRQTQyor6ILTiNY+dk7rf+Q9CSrGsE96NzI8=
-X-Google-Smtp-Source: AMsMyM59clMaaD9rBZgKpedRbCzWNYmvRcTCevA4HPUI6z4ozlznlTp38zuFMk9oysvJ5O9bvU2nrRhGFl6MWVjj3DE=
-X-Received: by 2002:a05:6830:150e:b0:655:bc7d:1e5d with SMTP id
- k14-20020a056830150e00b00655bc7d1e5dmr11648947otp.272.1664267068174; Tue, 27
- Sep 2022 01:24:28 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZmmRG6YrZ8hXcye3u5h381H4Djt0FAmwEpe9Y1+zhM0=;
+        b=Q+6C0dt9bk2NsntF9czBiRlFadlwscC3CWSReMxts5zeL5CZ0mWrKKn1qqi+knj93P
+         dbhKk0wn9oSz1llZlMyhDZMISSLcUopfoCa6rDgC880SObfugWDR3PL9Qv/QSor/GEPz
+         0lcrh67NNpio1A5NYbo558jl3WWmR+tbgOrbSI7TKryG10+yfg2k5YW2Qd/AIp4G7zDJ
+         ZNEIz2HtDdBxBTR9s3gWczLRquL6Wdb4Zixvxb+MFlpZ6Nr7HJkWme3LrQcd8ea+x1AQ
+         u2CFVhJhKvR1spl4Tru2NAMEOOiTnerDzZVNKZ4pt2r9kDY82PZCnGmj3mUaXFmWMTXb
+         l0zg==
+X-Gm-Message-State: ACrzQf2szVNQlmje/R0q3NDaCicXlOUFW/86mvfSPrGOfS73b94mejzC
+        1ApNyMslj9s/WU0rcnSv7qk=
+X-Google-Smtp-Source: AMsMyM4vcP/N7bKJubPwbDWnQCwhIR+2O9kSQCkO5h1QunWWNhyPjWEbWS68EqXMAFlkgZG2Dkukgw==
+X-Received: by 2002:a17:90b:350d:b0:202:ff91:a0bd with SMTP id ls13-20020a17090b350d00b00202ff91a0bdmr3971878pjb.46.1664276136771;
+        Tue, 27 Sep 2022 03:55:36 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170903234a00b00177e5d83d3dsm1220916plh.170.2022.09.27.03.55.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Sep 2022 03:55:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b308e474-505d-0e53-ff13-fc53f1afa46b@roeck-us.net>
+Date:   Tue, 27 Sep 2022 03:55:32 -0700
 MIME-Version: 1.0
-References: <20220926162549.805108-1-sergio.paracuellos@gmail.com> <20220926211508.GA682626@roeck-us.net>
-In-Reply-To: <20220926211508.GA682626@roeck-us.net>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Tue, 27 Sep 2022 10:24:16 +0200
-Message-ID: <CAMhs-H-j34cfv1rJ=fUKhQrZ5FwSJezZFnw=esh4MPNw+zNUNA@mail.gmail.com>
-Subject: Re: [PATCH RESEND v2] dt-bindings: watchdog: migrate mt7621 text
- bindings to YAML
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-watchdog@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        wim@linux-watchdog.org, Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/4] watchdog: twl4030_wdt: add missing of.h include
+Content-Language: en-US
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-iio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220927052217.2784593-1-dmitry.torokhov@gmail.com>
+ <20220927052217.2784593-2-dmitry.torokhov@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220927052217.2784593-2-dmitry.torokhov@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,101 +84,30 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 11:16 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Mon, Sep 26, 2022 at 06:25:49PM +0200, Sergio Paracuellos wrote:
-> > Soc Mt7621 Watchdog bindings used text format, so migrate them to YAML.
-> >
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
->
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+On 9/26/22 22:22, Dmitry Torokhov wrote:
+> The driver is using of_device_id and therefore needs to include
+> of.h header. We used to get this definition indirectly via inclusion
+> of matrix_keypad.h from twl.h, but we are cleaning up matrix_keypad.h
+> from unnecessary includes.
+> 
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-Thanks, Guenter!
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Rob, I don't know why this patch is not in devicetree patchwork list...
+> ---
+>   drivers/watchdog/twl4030_wdt.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/watchdog/twl4030_wdt.c b/drivers/watchdog/twl4030_wdt.c
+> index 355e428c0b99..e715ac1369a0 100644
+> --- a/drivers/watchdog/twl4030_wdt.c
+> +++ b/drivers/watchdog/twl4030_wdt.c
+> @@ -9,6 +9,7 @@
+>   #include <linux/types.h>
+>   #include <linux/slab.h>
+>   #include <linux/kernel.h>
+> +#include <linux/of.h>
+>   #include <linux/watchdog.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/mfd/twl.h>
 
-Please let me know if you want me to resend this again.
-
-Thanks,
-   Sergio Paracuellos
-
->
-> > ---
-> > Changes in v2 RESEND:
-> > - Resent sending also to watchdog maintainers.
-> >
-> > Changes in v2:
-> >  - Rebase onto last kernel version.
-> >  - Add Krzysztof Reviewed-by tag.=C2=BA
-> >
-> >  .../watchdog/mediatek,mt7621-wdt.yaml         | 33 +++++++++++++++++++
-> >  .../bindings/watchdog/mt7621-wdt.txt          | 12 -------
-> >  2 files changed, 33 insertions(+), 12 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/watchdog/mediatek=
-,mt7621-wdt.yaml
-> >  delete mode 100644 Documentation/devicetree/bindings/watchdog/mt7621-w=
-dt.txt
-> >
-> > diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mt7621=
--wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.=
-yaml
-> > new file mode 100644
-> > index 000000000000..b2b17fdf4e39
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.ya=
-ml
-> > @@ -0,0 +1,33 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/watchdog/mediatek,mt7621-wdt.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Ralink Watchdog Timers
-> > +
-> > +maintainers:
-> > +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > +
-> > +allOf:
-> > +  - $ref: watchdog.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: mediatek,mt7621-wdt
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    watchdog@100 {
-> > +      compatible =3D "mediatek,mt7621-wdt";
-> > +      reg =3D <0x100 0x100>;
-> > +    };
-> > diff --git a/Documentation/devicetree/bindings/watchdog/mt7621-wdt.txt =
-b/Documentation/devicetree/bindings/watchdog/mt7621-wdt.txt
-> > deleted file mode 100644
-> > index c15ef0ef609f..000000000000
-> > --- a/Documentation/devicetree/bindings/watchdog/mt7621-wdt.txt
-> > +++ /dev/null
-> > @@ -1,12 +0,0 @@
-> > -Ralink Watchdog Timers
-> > -
-> > -Required properties:
-> > -- compatible: must be "mediatek,mt7621-wdt"
-> > -- reg: physical base address of the controller and length of the regis=
-ter range
-> > -
-> > -Example:
-> > -
-> > -     watchdog@100 {
-> > -             compatible =3D "mediatek,mt7621-wdt";
-> > -             reg =3D <0x100 0x10>;
-> > -     };
