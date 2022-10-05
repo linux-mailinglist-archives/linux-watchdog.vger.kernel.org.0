@@ -2,45 +2,65 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DC15F55BA
-	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Oct 2022 15:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2325F5861
+	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Oct 2022 18:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiJENmX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 5 Oct 2022 09:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
+        id S229927AbiJEQem (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 5 Oct 2022 12:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiJENmW (ORCPT
+        with ESMTP id S230429AbiJEQeW (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 5 Oct 2022 09:42:22 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4005F91;
-        Wed,  5 Oct 2022 06:42:21 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7F5F666022BE;
-        Wed,  5 Oct 2022 14:42:19 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664977340;
-        bh=1Unni2kNmqjyicp5VGIMbg5//S+Jnj6DePPOdKiqYXc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fAGZk0RXIyvrco0hs7O+hE9ht56KacBs5hdhIIpZoXY/7fymvFsxd458StfTrLN6f
-         IpXMKp1yWj3s+J5cTQ1GI98YGy5Yvtzb6jCIgJgqRDRfAs9WorYrAeDCR+c3TfjirF
-         xNn/BnVQEgX7g+AuziDURgE0US0pH9h/l4afAB0ba8qzKV6VaJ3qL9/LAaUxcgqdo/
-         Hp2ow0NOfvAcdpX7ekj0+VFynLBMCGbD638UaLzj1DfFv/ajgE1/TAWyBpBENnVp6f
-         sMHhP/aNwlS4dtQTyoqH+npJAR4LB1mMGnCvhwbo5Ajv6Yc5iVd12hDn10ue1WHaeW
-         8CQDR39Ge2Y1w==
-Message-ID: <36ca5e72-db5d-65f6-db2c-1f0066842d18@collabora.com>
-Date:   Wed, 5 Oct 2022 15:42:16 +0200
+        Wed, 5 Oct 2022 12:34:22 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A727EFC6
+        for <linux-watchdog@vger.kernel.org>; Wed,  5 Oct 2022 09:33:59 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 10so26350839lfy.5
+        for <linux-watchdog@vger.kernel.org>; Wed, 05 Oct 2022 09:33:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=fsDytsrXABRiHHLdkomit3W/4SQyAKiKJzv17uaMpSE=;
+        b=f79WZ1CmFqHwvH+p6fcw9MAZwCeE4Y0jytRrvpG5oNagbKEN/cGNhxlPfDTgAilmIL
+         LRJwD/J5nWGLRSi7njSfd3FVREwQ5CEX8IOzVdF8u0kyJJ57IRIkLXOTvPecNi3A9V9c
+         Tz6NWbOT3Cj04sVi1gyeZRh0uso8A2pmY0qHVA+8lFrgZB7eBS4xucXwtn0L7zGYI9fF
+         C8gxBR7Zms4ORtGFCduxQONtzzsoZa2j+6tbzxtCyXlvoRLjKxFUjNKeC8uYEs2nSqUA
+         WNq3lUsL8gxqYu3m7vVS+ON5miMOz0ikYD84TvhHaFFINKRHkJrfywUbvmNlradLvDPa
+         qE/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=fsDytsrXABRiHHLdkomit3W/4SQyAKiKJzv17uaMpSE=;
+        b=2VkFF403v8Nl+cqAGskeIxUpjo1g1d8ngq6gtbT/s3R3zBlMHsQLlwX17OWY9aHZR5
+         YH80gtmpX215ye9IfyVNLY32EoJ2MSKMMACF5smk1tc/omJT5hmLmfihFpkwAVim4iiL
+         XRAnBdF7TyJxObJLP7ffQS99TZhap5UZcqN61DKKVh9NpWKlGGLGEsNJ7APwbTbv2AX3
+         fMkkt9XIeSozclwW9dhuYNeaPpN9XrU/1Qus+782+byWV7uXO2CTZufvoV5RvWAe16eU
+         Ckslh5DG1NkiPxWeE2ZW+Tk6XAg4xquK1becLcyglA7635Gg8+NyxNvgJsuN7eXq355g
+         wUjg==
+X-Gm-Message-State: ACrzQf0vqiZWdsu/5PT5TB+r8AKoZS5nOp5adHj8B2bM4/sU7Msli8w9
+        s8nobqSMbS4F9i8Fkwegik6aTQ==
+X-Google-Smtp-Source: AMsMyM6R1rJ0EDep0X30zwEZyQnjfv12SmZCyEK74LSEbsUR/NHwNWRbzWm06v352s5lwPYFNRhPig==
+X-Received: by 2002:a05:6512:6d4:b0:4a2:5045:db6a with SMTP id u20-20020a05651206d400b004a25045db6amr249061lff.199.1664987630856;
+        Wed, 05 Oct 2022 09:33:50 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id k16-20020a05651210d000b0048cf43c3a85sm2388561lfg.238.2022.10.05.09.33.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Oct 2022 09:33:50 -0700 (PDT)
+Message-ID: <1f3ebf6f-117f-62a7-8e02-3e8a3bcf7e9f@linaro.org>
+Date:   Wed, 5 Oct 2022 18:33:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
+ Thunderbird/102.3.1
 Subject: Re: [PATCH 3/5] dt-bindings: watchdog: mediatek: Convert mtk-wdt to
  json-schema
-To:     Rob Herring <robh@kernel.org>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, wim@linux-watchdog.org
+Cc:     linux@roeck-us.net, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
         allen-kh.cheng@mediatek.com, seiya.wang@mediatek.com,
         tinghan.shen@mediatek.com, linux-watchdog@vger.kernel.org,
@@ -48,111 +68,29 @@ Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20221005113517.70628-1-angelogioacchino.delregno@collabora.com>
  <20221005113517.70628-4-angelogioacchino.delregno@collabora.com>
- <20221005133848.GA3278938-robh@kernel.org>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221005133848.GA3278938-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221005113517.70628-4-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Il 05/10/22 15:38, Rob Herring ha scritto:
-> On Wed, Oct 05, 2022 at 01:35:15PM +0200, AngeloGioacchino Del Regno wrote:
->> Convert the MediaTek watchdog bindings to schema.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   .../bindings/watchdog/mediatek,mtk-wdt.yaml   | 80 +++++++++++++++++++
->>   .../devicetree/bindings/watchdog/mtk-wdt.txt  | 42 ----------
->>   2 files changed, 80 insertions(+), 42 deletions(-)
->>   create mode 100644 Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
->>   delete mode 100644 Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
->>
->> diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
->> new file mode 100644
->> index 000000000000..f43b5af92d40
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
->> @@ -0,0 +1,80 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/watchdog/mediatek,mtk-wdt.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: MediaTek SoCs Watchdog timer
->> +
->> +maintainers:
->> +  - Matthias Brugger <matthias.bgg@gmail.com>
->> +
->> +description:
->> +  The watchdog supports a pre-timeout interrupt that fires
->> +  timeout-sec/2 before the expiry.
->> +
->> +allOf:
->> +  - $ref: watchdog.yaml#
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
->> +      - items:
->> +          - enum:
->> +              - mediatek,mt2712-wdt
->> +              - mediatek,mt6589-wdt
->> +              - mediatek,mt7986-wdt
->> +              - mediatek,mt8183-wdt
->> +              - mediatek,mt8186-wdt
->> +              - mediatek,mt8192-wdt
->> +              - mediatek,mt8195-wdt
+On 05/10/2022 13:35, AngeloGioacchino Del Regno wrote:
+> Convert the MediaTek watchdog bindings to schema.
 > 
-> The original binding only had 4 without a fallback. It's fine to add or
-> change, but note the changes in the commit msg. Are all of these really
-> each unique and not the same?
-> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Ok I will note the changes in the commit for v2. And... yes, they're really
-each unique and not the same, as these are exposing a reset controller of
-their own (as well with different platform data in the driver).
+There is already work in progress:
 
-> 
->> +      - items:
->> +          - enum:
->> +              - mediatek,mt2701-wdt
->> +              - mediatek,mt6582-wdt
->> +              - mediatek,mt6797-wdt
->> +              - mediatek,mt7622-wdt
->> +              - mediatek,mt7623-wdt
->> +              - mediatek,mt7629-wdt
->> +              - mediatek,mt8516-wdt
->> +          - const: mediatek,mt6589-wdt
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    items:
->> +      - description: Watchdog pre-timeout (bark) interrupt
->> +
->> +  mediatek,disable-extrst:
->> +    description: Disable sending output reset signal
->> +    type: boolean
->> +
->> +  timeout-sec: true
-> 
-> Drop this and use 'unevaluatedProperties'.
-> 
+https://lore.kernel.org/all/20220422121017.23920-3-allen-kh.cheng@mediatek.com/
 
-Noted. Will do for v2.
-
-Thanks!
-Angelo
-
+Best regards,
+Krzysztof
 
