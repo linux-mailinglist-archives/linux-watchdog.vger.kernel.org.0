@@ -2,97 +2,130 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1664A5F4C38
-	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Oct 2022 00:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D90C55F5040
+	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Oct 2022 09:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiJDWvq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 4 Oct 2022 18:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
+        id S229484AbiJEHTx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 5 Oct 2022 03:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiJDWvq (ORCPT
+        with ESMTP id S229450AbiJEHTw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 4 Oct 2022 18:51:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA546F251;
-        Tue,  4 Oct 2022 15:51:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5893614CD;
-        Tue,  4 Oct 2022 22:51:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B011C433D6;
-        Tue,  4 Oct 2022 22:51:43 +0000 (UTC)
-Date:   Tue, 4 Oct 2022 18:51:46 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, kernel@pengutronix.de,
-        Ingo Molnar <mingo@redhat.com>, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Wed, 5 Oct 2022 03:19:52 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895D61054D
+        for <linux-watchdog@vger.kernel.org>; Wed,  5 Oct 2022 00:19:51 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ofyh3-0001Rh-T0; Wed, 05 Oct 2022 09:19:49 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ofyh2-004iJ7-GG; Wed, 05 Oct 2022 09:19:47 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ofyh0-005hw8-4a; Wed, 05 Oct 2022 09:19:46 +0200
+Date:   Wed, 5 Oct 2022 09:19:46 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>, kernel@pengutronix.de,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
 Subject: Re: [PATCH v2] watchdog: Add tracing events for the most usual
  watchdog events
-Message-ID: <20221004185146.5d4419ba@gandalf.local.home>
-In-Reply-To: <20221004091950.3419662-1-u.kleine-koenig@pengutronix.de>
+Message-ID: <20221005071946.blttrgv2s5amnrrj@pengutronix.de>
 References: <20221004091950.3419662-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+ <20221004185146.5d4419ba@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="onluzhifnupekgas"
+Content-Disposition: inline
+In-Reply-To: <20221004185146.5d4419ba@gandalf.local.home>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue,  4 Oct 2022 11:19:49 +0200
-Uwe Kleine-König <u.kleine-koenig@pengutronix.de> wrote:
 
-> +DEFINE_EVENT(watchdog_template, watchdog_start,
-> +	TP_PROTO(struct watchdog_device *wdd, int err),
-> +	TP_ARGS(wdd, err));
-> +
-> +TRACE_EVENT(watchdog_set_timeout,
-> +
-> +	TP_PROTO(struct watchdog_device *wdd, unsigned int timeout, int err),
-> +
-> +	TP_ARGS(wdd, timeout, err),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(int, id)
-> +		__field(unsigned int, timeout)
-> +		__field(int, err)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->id = wdd->id;
-> +		__entry->timeout = timeout;
-> +		__entry->err = err;
-> +	),
-> +
-> +	TP_printk("watchdog%d timeout=%u err=%d", __entry->id, __entry->timeout, __entry->err)
-> +);
+--onluzhifnupekgas
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Nit, but I would probably put the above TRACE_EVENT() below the two
-DEFINE_EVENT()s below. That way we have all the DEFINE_EVENT()s for a
-specific DECLARE_EVENT_CLASS() together. Otherwise people may get confused.
+On Tue, Oct 04, 2022 at 06:51:46PM -0400, Steven Rostedt wrote:
+> On Tue,  4 Oct 2022 11:19:49 +0200
+> Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de> wrote:
+>=20
+> > +DEFINE_EVENT(watchdog_template, watchdog_start,
+> > +	TP_PROTO(struct watchdog_device *wdd, int err),
+> > +	TP_ARGS(wdd, err));
+> > +
+> > +TRACE_EVENT(watchdog_set_timeout,
+> > +
+> > +	TP_PROTO(struct watchdog_device *wdd, unsigned int timeout, int err),
+> > +
+> > +	TP_ARGS(wdd, timeout, err),
+> > +
+> > +	TP_STRUCT__entry(
+> > +		__field(int, id)
+> > +		__field(unsigned int, timeout)
+> > +		__field(int, err)
+> > +	),
+> > +
+> > +	TP_fast_assign(
+> > +		__entry->id =3D wdd->id;
+> > +		__entry->timeout =3D timeout;
+> > +		__entry->err =3D err;
+> > +	),
+> > +
+> > +	TP_printk("watchdog%d timeout=3D%u err=3D%d", __entry->id, __entry->t=
+imeout, __entry->err)
+> > +);
+>=20
+> Nit, but I would probably put the above TRACE_EVENT() below the two
+> DEFINE_EVENT()s below. That way we have all the DEFINE_EVENT()s for a
+> specific DECLARE_EVENT_CLASS() together. Otherwise people may get confuse=
+d.
 
--- Steve
+I thought about that, too. The argument for the order I chose is that
+having start at the start and stop at the end is also intuitive.
 
+But I don't care much and would let the watchdog guys decide what they
+prefer.
 
+@Wim+Guenter: Feel free to reorder at application time or ask for a v3
+if this v2 doesn't fit your preference.
 
-> +
-> +DEFINE_EVENT(watchdog_template, watchdog_ping,
-> +	TP_PROTO(struct watchdog_device *wdd, int err),
-> +	TP_ARGS(wdd, err));
-> +
-> +DEFINE_EVENT(watchdog_template, watchdog_stop,
-> +	TP_PROTO(struct watchdog_device *wdd, int err),
-> +	TP_ARGS(wdd, err));
-> +
-> +#endif /* !defined(_TRACE_WATCHDOG_H) || defined(TRACE_HEADER_MULTI_READ) */
-> +
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--onluzhifnupekgas
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmM9MA8ACgkQwfwUeK3K
+7AmGmggAhu24SwVndLMAH9hud/53KpV/1cjHvZTeu26vCFlSb3CyyZ6YZ1IWPWBA
++4udQ4iYxhu/6vSxjHaZHMEuFQWcDw2JbWiMcntgwrO8F3OEmu4JByV8EzYENfrD
+g15qyeVPh8li/hIamDL6t2p7wUsa3WeA4TIJvwC71aSnP3f6GuaUMrEjU6DRgb5J
+4f5gyShTNY1CUhiZ1fv3N2E2BvAxDMgm5WJBvjgismmg++HoRopRtPJD9sNKPspX
+K4yq4RUPXDtq/VFncKrUZAuBgSd9XN1YNnUwBZFFW79/qrpevyWMDy58JDjpE29C
+Sv4gqDyNvSuCeWy+Dp8D5YhxkMNRMg==
+=mPaQ
+-----END PGP SIGNATURE-----
+
+--onluzhifnupekgas--
