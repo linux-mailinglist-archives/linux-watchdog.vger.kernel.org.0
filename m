@@ -2,93 +2,128 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0075F6300
-	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Oct 2022 10:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F1D5F6D64
+	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Oct 2022 20:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbiJFIpV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 6 Oct 2022 04:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
+        id S229505AbiJFSQB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 6 Oct 2022 14:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbiJFIpR (ORCPT
+        with ESMTP id S230250AbiJFSQA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 6 Oct 2022 04:45:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354DF691AA;
-        Thu,  6 Oct 2022 01:45:14 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 23E9A66022F7;
-        Thu,  6 Oct 2022 09:45:12 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1665045912;
-        bh=X4/9IulhjHFVhHll60QNhPFZXwjRhXzzVppJJbuC0Mw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=H+2hXAwApRg3zxPc75Ezq4zsjll4PaFp0DmD8qPRFbmEiG/gALZkX9iJMVWra1f0E
-         09XQ4GvzzO9gjTiVswhhN/tmNVmwdGaPGKDeDl8IcLgrdzABiRRdT2EvK0FxTrqLzH
-         cNozNpttxZfM2s3kerR5TrZq9JTb7cADv0Nx/ywRiLpMI7Er6u9y7ilYu99u8HLTaB
-         0GkfwWTWc/HA/68mUq6hlUljbBMLIpbDYKkr79/2ziM5fGiJ4F4hh6TVg+YYNdpNM8
-         Z2xcskijPZrI9XQeunAP1m88gszPYaeXPfWPFKvkwY50Pe+fBYWenZ45Ciug19ULG1
-         ef7nDyi7ImgRw==
-Message-ID: <d9977d0a-95dc-fa66-f48d-cff2968d34d3@collabora.com>
-Date:   Thu, 6 Oct 2022 10:45:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 3/5] dt-bindings: watchdog: mediatek: Convert mtk-wdt to
- json-schema
-Content-Language: en-US
-To:     =?UTF-8?B?QWxsZW4tS0ggQ2hlbmcgKOeoi+WGoOWLsyk=?= 
-        <Allen-KH.Cheng@mediatek.com>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>
-Cc:     "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        =?UTF-8?B?U2VpeWEgV2FuZyAo546L6L+65ZCbKQ==?= 
-        <seiya.wang@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        =?UTF-8?B?VGluZ0hhbiBTaGVuICjmsojlu7fnv7Ap?= 
-        <TingHan.Shen@mediatek.com>
-References: <20221005113517.70628-1-angelogioacchino.delregno@collabora.com>
- <20221005113517.70628-4-angelogioacchino.delregno@collabora.com>
- <1f3ebf6f-117f-62a7-8e02-3e8a3bcf7e9f@linaro.org>
- <56aadffa-82be-f8ff-03d3-2a880b50ef49@collabora.com>
- <6b19843bf0fc6084552f8c71c9a16da21017f99d.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
+        Thu, 6 Oct 2022 14:16:00 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137C915E0EB;
+        Thu,  6 Oct 2022 11:15:57 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id l4so2426157plb.8;
+        Thu, 06 Oct 2022 11:15:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=INuwAkmrXHqnSNjAnlxKdqABDBx0o7c8IwuxVAwc7ks=;
+        b=DJ1zlZzwwZ3npaG7z4VyIw6AXG5DKyK43lDsBwzClOf1w79t3Qn3/E/1iidGT5YaAX
+         oRHFN4DWlUuNbOt/9rcuHh21i98fpXO9eqR0bVdeF5g6kQKlfLWYk/lH6hrw+Lwg834d
+         Q9yjllg6CuB0s5kaoQF1RR4mXcLc6m72Pq00CRY2nvFJpS+/CnY2mLjeYXg9J+gZDnzg
+         wziIrRf8yg+JZxMyQvnZQrs85lCd/dNXPBLeO/z3aIt50z4alkQGIUdyJQoLLQMmRIbk
+         Q9MewppXq5UU9Q0gR5HeMzlm3LDdWDvkN6uPtMgncsS+w9DXH347yMLAFREDFjCttk+z
+         JKJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=INuwAkmrXHqnSNjAnlxKdqABDBx0o7c8IwuxVAwc7ks=;
+        b=T3eAftga/l8B7YV7K4s2+LlOB+Rc6RiMz4ATbnCwTw2QODo9a/EG1mGVfCU3nDxQDY
+         50KuR5QG04vYPhdTM8psewnj1PIg5uKhbyz1ZnjKjt7dzCaV+cxIRTKjTbGRT5sXGCH3
+         mOlbrOZaeZDQbn82hBqKHxEzp51fhaohy2I5fzn7PIkCSDB2HmW3B3v0265gwZSH2hIL
+         HSAHweKDGd2CbWcdMcG/QP9LyLVZhXw9iXG3LVecTzQ0mV2d91Z8CdNYOpteZstwDoBa
+         E646Oo1CKj4v4R9UtWMmPQrfA4Rtuyfw7zcm4LhYnv8P3Uydr1aKpN3JHAW1YXtDzfDx
+         l0Ww==
+X-Gm-Message-State: ACrzQf3pipYauRcrCvpMtPF0w/lBaf8o6PB1Pe+kqfyQtUlXGyca5hWt
+        MGVfJ9DIzy4jwK8yr9PFvJQ=
+X-Google-Smtp-Source: AMsMyM6c64HgA/XQXZ3v7axjSYazhpsFlm79JcdUGoueQB46M8UKKFfOXW67AIijeqJSBFg6kzqueA==
+X-Received: by 2002:a17:903:32ce:b0:17f:75dd:de88 with SMTP id i14-20020a17090332ce00b0017f75ddde88mr1091980plr.5.1665080157064;
+        Thu, 06 Oct 2022 11:15:57 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d19-20020a631d53000000b00440507bb7fcsm54117pgm.31.2022.10.06.11.15.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Oct 2022 11:15:55 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 6 Oct 2022 11:15:54 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <6b19843bf0fc6084552f8c71c9a16da21017f99d.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        allen-kh.cheng@mediatek.com, seiya.wang@mediatek.com,
+        tinghan.shen@mediatek.com, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/5] watchdog: mtk_wdt: Add support for MT6795 Helio X10
+ watchdog and toprgu
+Message-ID: <20221006181554.GA762091@roeck-us.net>
+References: <20221005113517.70628-1-angelogioacchino.delregno@collabora.com>
+ <20221005113517.70628-6-angelogioacchino.delregno@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221005113517.70628-6-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Il 06/10/22 10:43, Allen-KH Cheng (程冠勳) ha scritto:
-> Hi Angelo,
+On Wed, Oct 05, 2022 at 01:35:17PM +0200, AngeloGioacchino Del Regno wrote:
+> Add support for the toprgu reset controller and watchdog for the
+> MediaTek MT6795 SoC.
 > 
-> I can send a new version with this series.
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  drivers/watchdog/mtk_wdt.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> Thanks for help convert schema.
+> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+> index e97787536792..5fa42b7d4b4d 100644
+> --- a/drivers/watchdog/mtk_wdt.c
+> +++ b/drivers/watchdog/mtk_wdt.c
+> @@ -10,6 +10,7 @@
+>   */
+>  
+>  #include <dt-bindings/reset/mt2712-resets.h>
+> +#include <dt-bindings/reset/mediatek,mt6795-resets.h>
+>  #include <dt-bindings/reset/mt7986-resets.h>
+>  #include <dt-bindings/reset/mt8183-resets.h>
+>  #include <dt-bindings/reset/mt8186-resets.h>
+> @@ -78,6 +79,10 @@ static const struct mtk_wdt_data mt2712_data = {
+>  	.toprgu_sw_rst_num = MT2712_TOPRGU_SW_RST_NUM,
+>  };
+>  
+> +static const struct mtk_wdt_data mt6795_data = {
+> +	.toprgu_sw_rst_num = MT6795_TOPRGU_SW_RST_NUM,
+> +};
+> +
+>  static const struct mtk_wdt_data mt7986_data = {
+>  	.toprgu_sw_rst_num = MT7986_TOPRGU_SW_RST_NUM,
+>  };
+> @@ -426,6 +431,7 @@ static int mtk_wdt_resume(struct device *dev)
+>  static const struct of_device_id mtk_wdt_dt_ids[] = {
+>  	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
+>  	{ .compatible = "mediatek,mt6589-wdt" },
+> +	{ .compatible = "mediatek,mt6795-wdt", .data = &mt6795_data },
+>  	{ .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
+>  	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
+>  	{ .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
+> -- 
+> 2.37.2
 > 
-
-That's perfect! I will wait for your new version then.
-
-Thank you!
-Angelo
-
