@@ -2,128 +2,166 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F1D5F6D64
-	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Oct 2022 20:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3698D5F7A9F
+	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Oct 2022 17:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbiJFSQB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 6 Oct 2022 14:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
+        id S229703AbiJGPgO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 7 Oct 2022 11:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbiJFSQA (ORCPT
+        with ESMTP id S229538AbiJGPgN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 6 Oct 2022 14:16:00 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137C915E0EB;
-        Thu,  6 Oct 2022 11:15:57 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id l4so2426157plb.8;
-        Thu, 06 Oct 2022 11:15:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=INuwAkmrXHqnSNjAnlxKdqABDBx0o7c8IwuxVAwc7ks=;
-        b=DJ1zlZzwwZ3npaG7z4VyIw6AXG5DKyK43lDsBwzClOf1w79t3Qn3/E/1iidGT5YaAX
-         oRHFN4DWlUuNbOt/9rcuHh21i98fpXO9eqR0bVdeF5g6kQKlfLWYk/lH6hrw+Lwg834d
-         Q9yjllg6CuB0s5kaoQF1RR4mXcLc6m72Pq00CRY2nvFJpS+/CnY2mLjeYXg9J+gZDnzg
-         wziIrRf8yg+JZxMyQvnZQrs85lCd/dNXPBLeO/z3aIt50z4alkQGIUdyJQoLLQMmRIbk
-         Q9MewppXq5UU9Q0gR5HeMzlm3LDdWDvkN6uPtMgncsS+w9DXH347yMLAFREDFjCttk+z
-         JKJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=INuwAkmrXHqnSNjAnlxKdqABDBx0o7c8IwuxVAwc7ks=;
-        b=T3eAftga/l8B7YV7K4s2+LlOB+Rc6RiMz4ATbnCwTw2QODo9a/EG1mGVfCU3nDxQDY
-         50KuR5QG04vYPhdTM8psewnj1PIg5uKhbyz1ZnjKjt7dzCaV+cxIRTKjTbGRT5sXGCH3
-         mOlbrOZaeZDQbn82hBqKHxEzp51fhaohy2I5fzn7PIkCSDB2HmW3B3v0265gwZSH2hIL
-         HSAHweKDGd2CbWcdMcG/QP9LyLVZhXw9iXG3LVecTzQ0mV2d91Z8CdNYOpteZstwDoBa
-         E646Oo1CKj4v4R9UtWMmPQrfA4Rtuyfw7zcm4LhYnv8P3Uydr1aKpN3JHAW1YXtDzfDx
-         l0Ww==
-X-Gm-Message-State: ACrzQf3pipYauRcrCvpMtPF0w/lBaf8o6PB1Pe+kqfyQtUlXGyca5hWt
-        MGVfJ9DIzy4jwK8yr9PFvJQ=
-X-Google-Smtp-Source: AMsMyM6c64HgA/XQXZ3v7axjSYazhpsFlm79JcdUGoueQB46M8UKKFfOXW67AIijeqJSBFg6kzqueA==
-X-Received: by 2002:a17:903:32ce:b0:17f:75dd:de88 with SMTP id i14-20020a17090332ce00b0017f75ddde88mr1091980plr.5.1665080157064;
-        Thu, 06 Oct 2022 11:15:57 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d19-20020a631d53000000b00440507bb7fcsm54117pgm.31.2022.10.06.11.15.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 11:15:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 6 Oct 2022 11:15:54 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        allen-kh.cheng@mediatek.com, seiya.wang@mediatek.com,
-        tinghan.shen@mediatek.com, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] watchdog: mtk_wdt: Add support for MT6795 Helio X10
- watchdog and toprgu
-Message-ID: <20221006181554.GA762091@roeck-us.net>
-References: <20221005113517.70628-1-angelogioacchino.delregno@collabora.com>
- <20221005113517.70628-6-angelogioacchino.delregno@collabora.com>
+        Fri, 7 Oct 2022 11:36:13 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70075.outbound.protection.outlook.com [40.107.7.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D564BCB93;
+        Fri,  7 Oct 2022 08:36:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IO81BhfNUnQMbThqwyGwlk5o5UBtUfCcNbgq4TLAk093vm2JKt2+FYLqlGXTy9wdrQrGl9A3ivhtqi38+YizPXMUz1SnVQcUDHO8Ep4dD25CFfaiD6+Ad3CCFoF+89m2mbz3kgHkIC0gZkLnPMDUCvJL+RAcgJGhwjE34TzYlr1MA6euibDjsVqnRmVUES+dRcfeq1mwU0AfwvNXmY/0Boq6R5HMScQRP6L2oOLSHyaggithVmeV2wt7WlNLcfdIcMpPF9jPDcGbHhtj72yccVY9DjSxppl/MVw4pF0vMi+6KiSSmIISuqs0Rb0RpdA695F1j26trlBVm8I+byzo5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RKQeO4kGYAHZsdOOYzppribBeKQUhkrn3bqaMe0cNIM=;
+ b=ayt47weFT5tJ+6xYLAG02ym+xR/2q9o1SNxlqkE4EdrHdGLTfCWV2NOescqmZcO+8crF0bt0ccZaPKnlG/13tupZVxLXiVdhRJrFSIxJaOhpyecuLnwG4oEXj5zxoJF/g1t0qVydURYIjgM6UsHj7DCPTKI6Pg5rnb3e+Q0LQ61QdWV+ai7CnaPGldUGpLIxxtmIlUA5xHDttklr6/Dn83vMQ+AuJnEsyxjtV6swdJPewAaVjBm5Tit7yfi8fCSHRLtKBZ+nA3gaZc6GtAZA2jL/rtcFC0Yavw3Ag9lzJEayrVmi4bY4xB59yAm0ng9ARXuLycQqffj8vNWzab+fRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RKQeO4kGYAHZsdOOYzppribBeKQUhkrn3bqaMe0cNIM=;
+ b=c81Dp4GKBxLWuDxa2AR8ngrXbaB1AKB5itkBMpVbqDFP1M8sLSE/ZD9qjN6spK/b1hLyL1RlB789lumDGeyWryogWbO4oS04hYQWBHuGxUIJELqDbb/zFXqneRpwbjMGZsq91g63Eqrfov7C5Xk4B8NaUG0VYdBPMvs2nbbZ4s3z2KMnOO5DgsnmpeAdnbdkQnPh+7eOXuy6H77q76vaUUHDMaSMP8IDDu/zxzbDB/quRFr6oVUMvpkSCyqNiQt2pTuTruC1z3SmjNM7m7cREZe2LvT5GjR+A9ZWwjOyMudxD7xuaUcYlCYWzsSr1hx2NDvrDOPUuGGDQq+rPB7u0w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from DB9PR10MB5762.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:2ed::13)
+ by AS1PR10MB5554.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:475::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Fri, 7 Oct
+ 2022 15:36:09 +0000
+Received: from DB9PR10MB5762.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::c40a:ec9f:8396:f514]) by DB9PR10MB5762.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::c40a:ec9f:8396:f514%4]) with mapi id 15.20.5676.031; Fri, 7 Oct 2022
+ 15:36:09 +0000
+Date:   Fri, 7 Oct 2022 17:36:07 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] watchdog: w83627hf_wdt: add bootstatus support
+Message-ID: <20221007173607.5c15c18f@md1za8fc.ad001.siemens.net>
+In-Reply-To: <20220824152448.7736-1-henning.schild@siemens.com>
+References: <20220824152448.7736-1-henning.schild@siemens.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM6P194CA0009.EURP194.PROD.OUTLOOK.COM
+ (2603:10a6:209:90::22) To DB9PR10MB5762.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:10:2ed::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221005113517.70628-6-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR10MB5762:EE_|AS1PR10MB5554:EE_
+X-MS-Office365-Filtering-Correlation-Id: 95d1bf3f-2aef-48db-74a8-08daa879a843
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WRxSn4VPTwYf3YIpbiRX2xabfELjgfMlhSNAKqMnId6eJ65dqIwAmc3lKVFGYnB/mkHXkRI+m8vw2H6RG9/PNVXPz6E5w+mGTQk8Q/dN8icde62wXG5wYF6vmeIpIQRv4b80mk8IfF9G4l6eZpmqoRSHpq4gE/be3ZYEZjUMmscd6GqN9u+PrcYfoeFRUm0WWNAnLke36BqLWDCPf587PtIoScC5qTMdBm/8/5zAWwv7EV94TAfgQQNwv6+CFfiven8TO1Hzd6Ah/KdxhCMTxUp8LiLaAEem9RI2nrYeTaYqJmZwah82p0VEbyPFV1iqLDhBh7NtI4DjutOD5e7U5c6d++BXgudE51uXBLgqxFfaCGU747UaoUhjJLpCgZxscvbUEf8+po672KS0ESC7/M8c8Bb52mIBjX5Iiw92W2IscUFF1Su9eoBVjLwLBa1Jj9TFNaZG90k7KABv2rT5bKSUzt5rosvbtpzErt77Z9gPtqh8Rre3IlS/H+vzkhEn0IVAt0T1TKXTn5FTOCyb1cfEfdcgCvBEiOnJXOcAq83CrPZZ52J6tTrPzQ0jCRvtXzy7JRyiEltT8GnMZxNPBNqNJWEFTB8X2n6Q/jNMwVzRPCh5V9PsVyQ2wQr7gF7rNzXU6mPhrvnXqMAgG9NReEUS63beGh8aNDuPXD7+lG44oVs7uWR2ysn/Zl67xtxrrdJNz1ZWCIdYAotpyvraBMT9BnlivC8a6A/pcPmGYSqpoWEEnbGa0nvRTkDamJyb
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB5762.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(366004)(346002)(39860400002)(136003)(451199015)(41300700001)(44832011)(5660300002)(2906002)(8936002)(6506007)(186003)(1076003)(316002)(66946007)(66476007)(9686003)(66556008)(8676002)(82960400001)(38100700002)(110136005)(83380400001)(6486002)(26005)(6512007)(478600001)(86362001)(2101003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KybOlkbLEKrL9RR844rKlug0MQL62ORQ+hLCVvUrYrT+1Y/P9F7e0IIZ4hcF?=
+ =?us-ascii?Q?rECXQKTuqQk6jBPnVyldy8y49UsVCU7b8FXnlnxBywuiOCV4lY1TW4TNuDbF?=
+ =?us-ascii?Q?KFKRqNxr0yELR9OEvi4lTcvbq8i3WHiHbGTg7zRwTeubFDtyvgHMVrvt/UnB?=
+ =?us-ascii?Q?mNOyeJ689kY4ONH9QSgj4Iqgtkw6Lp51s7BAJexwtnhQ6Z8qlt0v4pnH45ZE?=
+ =?us-ascii?Q?2w28Z5g7qwDsFnIt2IdRfzWcfYB3X9z1rJQmooxC5gvea7+cZIaf06TZdEmE?=
+ =?us-ascii?Q?k5o4Uot95InuRTEN1wf/jMJoI7JuP3U0PVEM6x8eEA3SGiA4TDS3bJgyZ7ps?=
+ =?us-ascii?Q?FDF0qYLtOmdMgDL3QPt5+3UWzXHQlovMwZSUsqP0kSVN3+T8k+Y9PHqqlWXT?=
+ =?us-ascii?Q?DpZaAqqJoDF+1QxAzFPOEmOQUTPVDhYYbpTp5sSLTMlF/nVFs2FQBbQfpsvB?=
+ =?us-ascii?Q?wIRcSwR82S3NJ0lP7C4RC2eebc4Dz4Zci3ZNZfxt8Fexo7ztiNA9JUGfW1Zb?=
+ =?us-ascii?Q?t831mep72Rv2tGfsRTK+hrkQeq11IJFNo0VFPgMGQ3dmEXWCgF4xC4AsxjpR?=
+ =?us-ascii?Q?MilCso8PKxgVq5m3ts0V2TAxE0ygRz6koBanJ16xs56GYKRKYamVVBW/dTQB?=
+ =?us-ascii?Q?uV0D9IlJb8H2LCWzjTfBjNbSzIUX8OCb+n5+znPgvsyIhHwTiHHTYBbnM4Ea?=
+ =?us-ascii?Q?3dHhhryezeb3OjeykH8MGeKXUtVl20AJiSiApH2QxJ1umlxCaQcyhWULEv01?=
+ =?us-ascii?Q?bLlpp8F9jm1X7HB0shNKGid1Fs44omHDVbKdBo9EScV/tcdmnArEeaf9BOpw?=
+ =?us-ascii?Q?kZxXQsSPekfwfoX9/j+XG/zYTK+eNBcIZ79iQEF6ZVl9+8UgLihM7gZNBpt5?=
+ =?us-ascii?Q?u0gYBXfvKcdtApqWGpwH+6AqppX5ULRmLBNhpkg4Yy+8fZg9y7M4AF10DlFH?=
+ =?us-ascii?Q?QXGKMBpO+bmpDPu/iUjeWqFfmjCv/BMy3y1TshwRx/CwRgx6+ci4MGPAvpsh?=
+ =?us-ascii?Q?JGwL79gWHj3gmRyYUqQ+u7eWuvmH0jir8mtIDbGJWFPF7w5+dglk9x7IaSji?=
+ =?us-ascii?Q?6oIOZhv0iWKfcOdd9q/jxZJ4uNhHZ0YOTkhIH1ZXk7Whb1azBwFT05URoLy1?=
+ =?us-ascii?Q?whyXoAYhHnUZAde7/O5F6IPcnnuHN/PfT6gE+Y+p44HSlJqxmq/qiHXmSeag?=
+ =?us-ascii?Q?NNk6s/J4XgSWh79Pg6VFYV1/RrDKKqUjNMdrlntEXsO09bbmRBUgHoQz2ik8?=
+ =?us-ascii?Q?HXu+kUEX/jxfDwc//VeKW7quM6E+9G4v5klBp5FgpC1iRAb0/ipdbHlSqLMY?=
+ =?us-ascii?Q?3OSygA1DyjOu6zp5Uc5xMT55JVf8cJm0jx1ZEIP7wMVTMRkZJ/tDVQI1Ss+r?=
+ =?us-ascii?Q?NS9ONXHuvhoH1YlF3lfBd8ADW7p/XX0raReohTU5gsO1PuHp+dH+9g5NhCC8?=
+ =?us-ascii?Q?3N6WIRevnejaKLk4Veg1RkiD905pe2j8lB3HaK6dPq97msSz7iX2m4n5lblB?=
+ =?us-ascii?Q?X8ekeWKnijMAyZV6jz+iGIt+n67581VFF7Y+edpswyjS2BrAQTI7ltGqljWg?=
+ =?us-ascii?Q?QijuxXlgSJzEGQIQKiOSpbSbwjaLKKrtN7ViMYmdcwn/oJzmbRPWac+qBpP3?=
+ =?us-ascii?Q?IA=3D=3D?=
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95d1bf3f-2aef-48db-74a8-08daa879a843
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB5762.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2022 15:36:09.4786
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: V3E2VA6Y5VL5gn+7g7SlUpeQ/B0WGTJ5L/VT3cTMVxBZCTJAJoVdQ5YyEDcydDRGVFEuXKe8XCS77Ha/DoqaBVLfCLft/vlh45eh/JFTeqs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR10MB5554
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Oct 05, 2022 at 01:35:17PM +0200, AngeloGioacchino Del Regno wrote:
-> Add support for the toprgu reset controller and watchdog for the
-> MediaTek MT6795 SoC.
+Ping.
+
+Henning
+
+Am Wed, 24 Aug 2022 17:24:48 +0200
+schrieb Henning Schild <henning.schild@siemens.com>:
+
+> The status bit in the status and control register can tell us whether
+> the last reboot was caused by the watchdog. Make sure to take that
+> into the bootstatus before clearing it.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
 > ---
->  drivers/watchdog/mtk_wdt.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  drivers/watchdog/w83627hf_wdt.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-> index e97787536792..5fa42b7d4b4d 100644
-> --- a/drivers/watchdog/mtk_wdt.c
-> +++ b/drivers/watchdog/mtk_wdt.c
-> @@ -10,6 +10,7 @@
->   */
+> diff --git a/drivers/watchdog/w83627hf_wdt.c
+> b/drivers/watchdog/w83627hf_wdt.c index 56a4a4030ca9..bc33b63c5a5d
+> 100644 --- a/drivers/watchdog/w83627hf_wdt.c
+> +++ b/drivers/watchdog/w83627hf_wdt.c
+> @@ -113,6 +113,10 @@ MODULE_PARM_DESC(early_disable, "Disable
+> watchdog at boot time (default=0)"); #define W836X7HF_WDT_CSR
+> 0xf7 #define NCT6102D_WDT_CSR	0xf2
 >  
->  #include <dt-bindings/reset/mt2712-resets.h>
-> +#include <dt-bindings/reset/mediatek,mt6795-resets.h>
->  #include <dt-bindings/reset/mt7986-resets.h>
->  #include <dt-bindings/reset/mt8183-resets.h>
->  #include <dt-bindings/reset/mt8186-resets.h>
-> @@ -78,6 +79,10 @@ static const struct mtk_wdt_data mt2712_data = {
->  	.toprgu_sw_rst_num = MT2712_TOPRGU_SW_RST_NUM,
->  };
->  
-> +static const struct mtk_wdt_data mt6795_data = {
-> +	.toprgu_sw_rst_num = MT6795_TOPRGU_SW_RST_NUM,
-> +};
+> +#define WDT_CSR_STATUS		0x10
+> +#define WDT_CSR_KBD		0x40
+> +#define WDT_CSR_MOUSE		0x80
 > +
->  static const struct mtk_wdt_data mt7986_data = {
->  	.toprgu_sw_rst_num = MT7986_TOPRGU_SW_RST_NUM,
->  };
-> @@ -426,6 +431,7 @@ static int mtk_wdt_resume(struct device *dev)
->  static const struct of_device_id mtk_wdt_dt_ids[] = {
->  	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
->  	{ .compatible = "mediatek,mt6589-wdt" },
-> +	{ .compatible = "mediatek,mt6795-wdt", .data = &mt6795_data },
->  	{ .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
->  	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
->  	{ .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
-> -- 
-> 2.37.2
-> 
+>  static void superio_outb(int reg, int val)
+>  {
+>  	outb(reg, WDT_EFER);
+> @@ -244,8 +248,12 @@ static int w83627hf_init(struct watchdog_device
+> *wdog, enum chips chip) t = superio_inb(cr_wdt_control) & ~0x0C;
+>  	superio_outb(cr_wdt_control, t);
+>  
+> -	/* reset trigger, disable keyboard & mouse turning off
+> watchdog */
+> -	t = superio_inb(cr_wdt_csr) & ~0xD0;
+> +	t = superio_inb(cr_wdt_csr);
+> +	if (t & WDT_CSR_STATUS)
+> +		wdog->bootstatus |= WDIOF_CARDRESET;
+> +
+> +	/* reset status, disable keyboard & mouse turning off
+> watchdog */
+> +	t &= ~(WDT_CSR_STATUS | WDT_CSR_KBD | WDT_CSR_MOUSE);
+>  	superio_outb(cr_wdt_csr, t);
+>  
+>  	superio_exit();
+
