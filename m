@@ -2,250 +2,333 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 400A15FC34F
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Oct 2022 11:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD17A5FC376
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Oct 2022 12:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiJLJxp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 Oct 2022 05:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
+        id S229514AbiJLKIm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 12 Oct 2022 06:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiJLJxn (ORCPT
+        with ESMTP id S229590AbiJLKIj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 Oct 2022 05:53:43 -0400
-X-Greylist: delayed 900 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Oct 2022 02:53:41 PDT
-Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8278A927A;
-        Wed, 12 Oct 2022 02:53:41 -0700 (PDT)
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-        id C282C40A1C; Wed, 12 Oct 2022 09:42:50 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org C282C40A1C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-        s=odk20180602; t=1665560570;
-        bh=3CL07NqiCoTUdPjP8GITxfi66uIGtJb4mARn+p4us6g=;
-        h=Date:From:To:Cc:Subject:From;
-        b=iv06WrZ7aWBmMpjkt0Ce4Jpw2IUFjkAmvhYyQIi4TeB00UPZPPQoXW8dsiSLbtlDl
-         UDia+47NbDiu4tXdl239wYhWBtw9oJoIg8Rv1euh8m8OCqueWFTZILuUDbOK3W3LYs
-         JGqpo7BJLmb9mTy2Ovwf1NOnIyBU8+E0ZieOATX0=
-Date:   Wed, 12 Oct 2022 09:42:50 +0200
-From:   Wim Van Sebroeck <wim@linux-watchdog.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alice Guo <alice.guo@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>, Bo Liu <liubo03@inspur.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        David =?iso-8859-1?Q?M=FCller?= <d.mueller@elsoft.ch>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Henning Schild <henning.schild@siemens.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Jason Liu <jason.hui.liu@nxp.com>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Jerry Hoemann <jerry.hoemann@hpe.com>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Philippe Boos <pboos@baylibre.com>,
-        Sergei Antonov <saproj@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Sergiu Moga <sergiu.moga@microchip.com>,
-        shaomin Deng <dengshaomin@cdjrlc.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        sunliming <sunliming@kylinos.cn>,
-        Thanh Quan <thanh.quan.xn@renesas.com>,
-        Vladimir Panteleev <git@vladimir.panteleev.md>,
-        Ye Li <ye.li@nxp.com>, ye xingchen <ye.xingchen@zte.com.cn>
-Subject: [GIT PULL REQUEST] watchdog - v6.1 release cycle.
-Message-ID: <20221012074250.GA19731@www.linux-watchdog.org>
+        Wed, 12 Oct 2022 06:08:39 -0400
+X-Greylist: delayed 431 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 12 Oct 2022 03:08:34 PDT
+Received: from kastnerfamily.de (kastnerfamily.de [85.214.209.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBC9BB073
+        for <linux-watchdog@vger.kernel.org>; Wed, 12 Oct 2022 03:08:34 -0700 (PDT)
+Received: from EIS-S230 (p4fd65cc2.dip0.t-ipconnect.de [79.214.92.194])
+        by kastnerfamily.de (Postfix) with ESMTPSA id E9914202D6B
+        for <linux-watchdog@vger.kernel.org>; Wed, 12 Oct 2022 12:01:20 +0200 (CEST)
+Date:   Wed, 12 Oct 2022 12:01:19 +0200
+From:   Thomas Kastner <thomas.kastner@advantech.com>
+To:     linux-watchdog@vger.kernel.org
+Subject: [PATCH] Added 'advantech_ec_wdt' watchdog driver
+Message-ID: <Y0aQbw8TPpdp569v@EIS-S230>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.5.20 (2009-12-10)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Linus,
+This patch adds the 'advantech_ec_wdt' kernel module which provides
+WDT support for Advantech platforms with ITE based Embedded Controller.
 
-Please pull following watchdog changes for the v6.1 release cycle.
+Signed-off-by: Thomas Kastner <thomas.kastner@advantech.com>
+---
+ drivers/watchdog/Kconfig            |   7 +
+ drivers/watchdog/Makefile           |   1 +
+ drivers/watchdog/advantech_ec_wdt.c | 247 ++++++++++++++++++++++++++++
+ 3 files changed, 255 insertions(+)
+ create mode 100644 drivers/watchdog/advantech_ec_wdt.c
 
-This series contains:
-* Add watchdog driver for Exar/MaxLinear XR28V38x
-* Add support for exynosautov9 SoC
-* Add support for Renesas R-Car V5H (R8A779G0) and RZ/V2M (r9a09g011) SoC
-* Add support for imx93
-* And several other fixes and improvements
-
-(Note: the patch for "watchdog: Add tracing events for the most usual watchdog events" is something that I want to add before 6.1-rc2 if possible).
-
-The output from git request-pull:
-----------------------------------------------------------------
-The following changes since commit b90cb1053190353cc30f0fef0ef1f378ccc063c5:
-
-  Linux 6.0-rc3 (2022-08-28 15:05:29 -0700)
-
-are available in the git repository at:
-
-  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.1-rc1
-
-for you to fetch changes up to 099d387ebbcd70c6adc906ab5b66ef639c09dede:
-
-  watchdog: twl4030_wdt: add missing mod_devicetable.h include (2022-10-07 11:03:25 +0200)
-
-----------------------------------------------------------------
-linux-watchdog 6.1-rc1 tag
-
-----------------------------------------------------------------
-Alice Guo (1):
-      watchdog: imx93: add watchdog timer on imx93
-
-Anson Huang (1):
-      watchdog: imx7ulp: Move suspend/resume to noirq phase
-
-Bo Liu (1):
-      watchdog: Check dev_set_name() return value
-
-Chanho Park (2):
-      dt-bindings: watchdog: add exynosautov9 compatible
-      watchdog: s3c2410_wdt: support exynosautov9 watchdog
-
-Chin-Ting Kuo (1):
-      watchdog: aspeed_wdt: Reorder output signal register configuration
-
-Dan Carpenter (1):
-      watchdog: ftwdt010_wdt: fix test for platform_get_irq() failure
-
-David Müller (1):
-      watchdog: Exar/MaxLinear XR28V38x driver
-
-Dmitry Torokhov (2):
-      watchdog: bd9576_wdt: switch to using devm_fwnode_gpiod_get()
-      watchdog: twl4030_wdt: add missing mod_devicetable.h include
-
-Henning Schild (1):
-      watchdog: w83627hf_wdt: add bootstatus support
-
-Jacky Bai (1):
-      watchdog: imx7ulp: Add explict memory barrier for unlock sequence
-
-Jason Liu (1):
-      watchdog: imx7ulp_wdt: init wdog when it was active
-
-Jason Wang (1):
-      watchdog: w83977f_wdt: Fix comment typo
-
-Jean Delvare (1):
-      watchdog: wdat_wdt: Set the min and max timeout values properly
-
-Jerry Hoemann (2):
-      watchdog/hpwdt: Include nmi.h only if CONFIG_HPWDT_NMI_DECODING
-      watchdog/hpwdt: Enable HP_WATCHDOG for ARM64 systems.
-
-Johan Jonker (1):
-      dt-bindings: watchdog: rockchip: add rockchip,rk3128-wdt
-
-Jonathan Neuschäfer (1):
-      watchdog: npcm: Enable clock if provided
-
-Nobuhiro Iwamatsu (1):
-      dt-bindings: watchdog: toshiba,visconti-wdt: Update the common clock properties
-
-Pali Rohár (1):
-      watchdog: armada_37xx_wdt: Fix .set_timeout callback
-
-Phil Edworthy (2):
-      dt-bindings: watchdog: renesas,wdt: Add r9a09g011 (RZ/V2M) support
-      watchdog: rzg2l_wdt: Add rzv2m support
-
-Philippe Boos (1):
-      watchdog: meson: keep running if already active
-
-Sergei Antonov (1):
-      watchdog: ftwdt010_wdt: implement _restart() function
-
-Sergio Paracuellos (1):
-      dt-bindings: watchdog: migrate mt7621 text bindings to YAML
-
-Sergiu Moga (1):
-      watchdog: dt-bindings: atmel,at91sam9-wdt: convert to json-schema
-
-Srinivas Neeli (1):
-      dt-bindings: watchdog: Convert Xilinx watchdog bindings to json-schema
-
-Thanh Quan (1):
-      dt-bindings: watchdog: renesas-wdt: Add r8a779g0 support
-
-Vladimir Panteleev (1):
-      watchdog: sp5100_tco: Add "action" module parameter
-
-Ye Li (3):
-      watchdog: imx7ulp_wdt: Check CMD32EN in wdog init
-      watchdog: imx7ulp_wdt: Fix RCS timeout issue
-      watchdog: imx7ulp_wdt: Handle wdog reconfigure failure
-
-shaomin Deng (1):
-      watchdog: eurotechwdt: Remove redundant word in comments
-
-sunliming (1):
-      watchdog: sa1100: make variable sa1100dog_driver static
-
-ye xingchen (1):
-      watchdog: rti-wdt:using the pm_runtime_resume_and_get to simplify the code
-
- .../bindings/watchdog/atmel,at91sam9-wdt.yaml      | 127 ++++++
- .../devicetree/bindings/watchdog/atmel-wdt.txt     |  51 ---
- .../bindings/watchdog/mediatek,mt7621-wdt.yaml     |  33 ++
- .../devicetree/bindings/watchdog/mt7621-wdt.txt    |  12 -
- .../devicetree/bindings/watchdog/of-xilinx-wdt.txt |  26 --
- .../devicetree/bindings/watchdog/renesas,wdt.yaml  |  74 +++-
- .../devicetree/bindings/watchdog/samsung-wdt.yaml  |   3 +
- .../devicetree/bindings/watchdog/snps,dw-wdt.yaml  |   1 +
- .../bindings/watchdog/toshiba,visconti-wdt.yaml    |  12 +-
- .../bindings/watchdog/xlnx,xps-timebase-wdt.yaml   |  68 ++++
- drivers/watchdog/Kconfig                           |  15 +-
- drivers/watchdog/Makefile                          |   1 +
- drivers/watchdog/armada_37xx_wdt.c                 |   2 +
- drivers/watchdog/aspeed_wdt.c                      |  12 +-
- drivers/watchdog/bd9576_wdt.c                      |  51 ++-
- drivers/watchdog/eurotechwdt.c                     |   2 +-
- drivers/watchdog/exar_wdt.c                        | 427 +++++++++++++++++++++
- drivers/watchdog/ftwdt010_wdt.c                    |  25 +-
- drivers/watchdog/hpwdt.c                           |   2 +
- drivers/watchdog/imx7ulp_wdt.c                     | 212 +++++++---
- drivers/watchdog/meson_gxbb_wdt.c                  |  24 +-
- drivers/watchdog/npcm_wdt.c                        |  16 +
- drivers/watchdog/rti_wdt.c                         |   3 +-
- drivers/watchdog/rzg2l_wdt.c                       |  39 +-
- drivers/watchdog/s3c2410_wdt.c                     |  41 +-
- drivers/watchdog/sa1100_wdt.c                      |   2 +-
- drivers/watchdog/sp5100_tco.c                      |  13 +-
- drivers/watchdog/twl4030_wdt.c                     |   1 +
- drivers/watchdog/w83627hf_wdt.c                    |  12 +-
- drivers/watchdog/w83977f_wdt.c                     |   2 +-
- drivers/watchdog/watchdog_dev.c                    |   6 +-
- drivers/watchdog/wdat_wdt.c                        |   5 +-
- 32 files changed, 1097 insertions(+), 223 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,at91sam9-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-wdt.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/mediatek,mt7621-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/mt7621-wdt.txt
- delete mode 100644 Documentation/devicetree/bindings/watchdog/of-xilinx-wdt.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
- create mode 100644 drivers/watchdog/exar_wdt.c
-----------------------------------------------------------------
-
-Kind regards,
-Wim.
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index 688922fc4edb..afe14f530291 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -1055,6 +1055,13 @@ config ADVANTECH_WDT
+ 	  feature. More information can be found at
+ 	  <https://www.advantech.com.tw/products/>
+ 
++config ADVANTECH_EC_WDT
++	tristate "Advantech Embedded Controller Watchdog Timer"
++	depends on X86
++	help
++	   	This driver supports Advantech products with ITE based Embedded Controller.
++ 		It does not support Advantech products with other ECs or without EC.
++
+ config ALIM1535_WDT
+ 	tristate "ALi M1535 PMU Watchdog Timer"
+ 	depends on X86 && PCI
+diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+index cdeb119e6e61..2768dc2348af 100644
+--- a/drivers/watchdog/Makefile
++++ b/drivers/watchdog/Makefile
+@@ -102,6 +102,7 @@ obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
+ # X86 (i386 + ia64 + x86_64) Architecture
+ obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
+ obj-$(CONFIG_ADVANTECH_WDT) += advantechwdt.o
++obj-$(CONFIG_ADVANTECH_EC_WDT) += advantech_ec_wdt.o
+ obj-$(CONFIG_ALIM1535_WDT) += alim1535_wdt.o
+ obj-$(CONFIG_ALIM7101_WDT) += alim7101_wdt.o
+ obj-$(CONFIG_EBC_C384_WDT) += ebc-c384_wdt.o
+diff --git a/drivers/watchdog/advantech_ec_wdt.c b/drivers/watchdog/advantech_ec_wdt.c
+new file mode 100644
+index 000000000000..f3babaa918f7
+--- /dev/null
++++ b/drivers/watchdog/advantech_ec_wdt.c
+@@ -0,0 +1,247 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ *	Advantech Embedded Controller Watchdog Driver
++ *
++ *	This driver supports Advantech products with ITE based Embedded Controller.
++ *	It does not support Advantech products with other ECs or without EC.
++ *
++ *	This software is provided "as is" without warranty of any kind.
++ *
++ *	Copyright (C) 2022 Advantech Europe B.V.
++ *	<thomas.kastner@advantech.com>
++ */
++
++#include <linux/delay.h>
++#include <linux/module.h>
++#include <linux/moduleparam.h>
++#include <linux/io.h>
++#include <linux/ioport.h>
++#include <linux/isa.h>
++#include <linux/kernel.h>
++#include <linux/types.h>
++#include <linux/watchdog.h>
++#include <linux/seq_file.h>
++#include <linux/uaccess.h>
++#include <linux/spinlock.h>
++
++#define DRIVER_NAME		"advantech_ec_wdt"
++
++/* EC IO region */
++#define BASE_ADDR		0x299
++#define ADDR_EXTENT		2
++
++/* EC interface definitions */
++#define EC_ADDR_CMD		0x29A
++#define EC_ADDR_DATA		0x299
++#define EC_CMD_EC_PROBE		0x30
++#define EC_CMD_COMM		0x89
++#define EC_CMD_WDT_START	0x28
++#define EC_CMD_WDT_STOP		0x29
++#define EC_CMD_WDT_RESET	0x2A
++#define EC_DAT_EN_DLY_H		0x58
++#define EC_DAT_EN_DLY_L		0x59
++#define EC_DAT_RST_DLY_H	0x5E
++#define EC_DAT_RST_DLY_L	0x5F
++#define EC_MAGIC		0x95
++
++/* module parameters */
++#define MIN_TIME		1
++#define MAX_TIME		6000 /* 100 minutes */
++#define DEFAULT_TIME		60
++
++static unsigned int timeout = DEFAULT_TIME;
++module_param(timeout, uint, 0);
++MODULE_PARM_DESC(timeout,
++	"Default Watchdog timer setting ("
++	__MODULE_STRING(DEFAULT_TIME) "s)."
++	"The range is from " __MODULE_STRING(MIN_TIME)
++	" to " __MODULE_STRING(MAX_TIME) ".");
++
++static int adv_ec_wdt_ping(struct watchdog_device *wdd)
++{
++	pr_debug("%s: Strobing watchdog\n", __func__);
++
++	/* reset watchdog */
++	outb(EC_CMD_WDT_RESET, EC_ADDR_CMD);
++	usleep_range(10000, 11000);
++	return 0;
++}
++
++static int adv_ec_wdt_set_timeout(struct watchdog_device *wdd, unsigned int t)
++{
++	unsigned int val;
++
++	/* scale time to EC 100 ms base */
++	val = t*10;
++
++	pr_debug("%s: Setting timeout value of %i\n", __func__, val);
++	/* reset enable delay, just in case it was set by BIOS etc. */
++	outb(EC_CMD_COMM, EC_ADDR_CMD);
++	usleep_range(10000, 11000);
++	outb(EC_DAT_EN_DLY_H, EC_ADDR_DATA);
++	usleep_range(10000, 11000);
++	outb(0, EC_ADDR_DATA);
++	usleep_range(10000, 11000);
++
++	outb(EC_CMD_COMM, EC_ADDR_CMD);
++	usleep_range(10000, 11000);
++	outb(EC_DAT_EN_DLY_L, EC_ADDR_DATA);
++	usleep_range(10000, 11000);
++	outb(0, EC_ADDR_DATA);
++	usleep_range(10000, 11000);
++
++	/* set reset delay */
++	outb(EC_CMD_COMM, EC_ADDR_CMD);
++	usleep_range(10000, 11000);
++	outb(EC_DAT_RST_DLY_H, EC_ADDR_DATA);
++	usleep_range(10000, 11000);
++	outb((val >> 8), EC_ADDR_DATA);
++	usleep_range(10000, 11000);
++
++	outb(EC_CMD_COMM, EC_ADDR_CMD);
++	usleep_range(10000, 11000);
++	outb(EC_DAT_RST_DLY_L, EC_ADDR_DATA);
++	usleep_range(10000, 11000);
++	outb((val & 0xFF), EC_ADDR_DATA);
++	usleep_range(10000, 11000);
++
++	wdd->timeout = t;
++	return 0;
++}
++
++
++static int adv_ec_probe(void)
++{
++	unsigned int val;
++
++	/* Check for magic byte */
++	outb(EC_CMD_EC_PROBE, EC_ADDR_CMD);
++	usleep_range(10000, 11000);
++	val = inb(EC_ADDR_DATA);
++
++	pr_debug("%s: probe result: %02X\n", __func__, val);
++
++	if (val == EC_MAGIC)
++		return 0;
++	else
++		return -ENODEV;
++}
++
++
++static int adv_ec_wdt_start(struct watchdog_device *wdd)
++{
++	adv_ec_wdt_set_timeout(wdd, wdd->timeout);
++
++	pr_debug("%s: Enabling watchdog timer\n", __func__);
++
++	/* Enable the watchdog timer */
++	outb(EC_CMD_WDT_START, EC_ADDR_CMD);
++	usleep_range(10000, 11000);
++
++	return 0;
++}
++
++static int adv_ec_wdt_stop(struct watchdog_device *wdd)
++{
++	pr_debug("%s: Disabling watchdog timer\n", __func__);
++
++	/* Disable the watchdog timer */
++	outb(EC_CMD_WDT_STOP, EC_ADDR_CMD);
++	usleep_range(10000, 11000);
++
++	return 0;
++}
++
++static const struct watchdog_info adv_ec_wdt_info = {
++	.identity =	DRIVER_NAME,
++	.options =	WDIOF_SETTIMEOUT |
++			WDIOF_MAGICCLOSE |
++			WDIOF_KEEPALIVEPING,
++};
++
++static const struct watchdog_ops adv_ec_wdt_ops = {
++	.owner =	THIS_MODULE,
++	.start =	adv_ec_wdt_start,
++	.stop =		adv_ec_wdt_stop,
++	.ping =		adv_ec_wdt_ping,
++	.set_timeout =	adv_ec_wdt_set_timeout,
++};
++
++static struct watchdog_device adv_ec_wdt_dev = {
++	.info =		&adv_ec_wdt_info,
++	.ops =		&adv_ec_wdt_ops,
++	.min_timeout =	MIN_TIME,
++	.max_timeout =	MAX_TIME,
++};
++
++static int adv_ec_wdt_probe(struct device *dev, unsigned int id)
++{
++	int ret;
++
++	if (!devm_request_region(dev, BASE_ADDR, ADDR_EXTENT, dev_name(dev))) {
++		dev_err(dev, "Unable to lock port addresses (0x%X-0x%X)\n",
++			BASE_ADDR, BASE_ADDR + ADDR_EXTENT);
++		return -EBUSY;
++	}
++
++	/* probe for EC */
++	ret = adv_ec_probe();
++	if (ret) {
++		dev_err(dev, "Error: cannot detect Advantech EC\n");
++		return -ENODEV;
++	}
++
++	adv_ec_wdt_dev.timeout = timeout;
++
++	ret = devm_watchdog_register_device(dev, &adv_ec_wdt_dev);
++
++	return ret;
++}
++
++static void adv_ec_wdt_remove(struct device *dev, unsigned int id)
++{
++	/* stop the watchdog */
++	adv_ec_wdt_stop(NULL);
++
++	/* watchdog_unregister() and release_region() are called automatically */
++
++	return;
++}
++
++static struct isa_driver adv_ec_wdt_driver = {
++	.probe		= adv_ec_wdt_probe,
++	.remove		= adv_ec_wdt_remove,
++	.driver		= {
++	.name		= DRIVER_NAME,
++	},
++};
++
++
++static int __init adv_ec_wdt_init(void)
++{
++	/* Check boot parameters to verify that their initial values */
++	/* are in range. */
++	if ((timeout < MIN_TIME) ||
++	    (timeout > MAX_TIME)) {
++		pr_err("Watchdog timer: value of timeout %d (dec) "
++		  "is out of range from %d to %d (dec)\n",
++		  timeout, MIN_TIME, MAX_TIME);
++		return -EINVAL;
++	}
++
++	return isa_register_driver(&adv_ec_wdt_driver, 1);
++}
++
++static void __exit adv_ec_wdt_exit(void)
++{
++	isa_unregister_driver(&adv_ec_wdt_driver);
++}
++
++module_init(adv_ec_wdt_init);
++module_exit(adv_ec_wdt_exit);
++
++MODULE_AUTHOR("Thomas Kastner <thomas.kastne@advantech.com>");
++MODULE_DESCRIPTION("Advantech Embedded Controller Watchdog Device Driver");
++MODULE_LICENSE("GPL");
++MODULE_VERSION("20221012");
++MODULE_ALIAS("isa:" DRIVER_NAME);
+-- 
+2.34.1
 
