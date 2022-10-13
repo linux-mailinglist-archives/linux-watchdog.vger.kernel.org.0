@@ -2,72 +2,66 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9641F5FCA00
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Oct 2022 19:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBDD5FD75E
+	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Oct 2022 11:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiJLRnI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 Oct 2022 13:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
+        id S229552AbiJMJyt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 13 Oct 2022 05:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiJLRnH (ORCPT
+        with ESMTP id S229542AbiJMJys (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 Oct 2022 13:43:07 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BC8FBCE5
-        for <linux-watchdog@vger.kernel.org>; Wed, 12 Oct 2022 10:43:06 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id a5-20020a17090aa50500b002008eeb040eso3890510pjq.1
-        for <linux-watchdog@vger.kernel.org>; Wed, 12 Oct 2022 10:43:06 -0700 (PDT)
+        Thu, 13 Oct 2022 05:54:48 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7309411C11;
+        Thu, 13 Oct 2022 02:54:46 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id h10so1363881plb.2;
+        Thu, 13 Oct 2022 02:54:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zBnn0RhlQ+6DdSOoKO+sgebAz602h0F98qYUGINQ2QY=;
-        b=oL9oA17Rv3sYBNRUVzz9OWknoQeoLlIRgwcpj9nL+V7t5136uPmkEIIYJVy8nngPqi
-         XPQMWNxcW6HWKar7vvZtN+bkPhmRBGy9cQqhTqg1Er5nVV55oM3GOi1pa8HYjRmMqJCl
-         sSgEXUXMH+IlrQkxbzY0ufmp84KC0uww3qZVDQKUINMJADZ/FT+nZOJjRPPVlRryF7my
-         aCeXaYBEIsuFNAVW0YAr6HlJMD4hweGncj4xID95viT6YZpbaTh7J+o6lUcNZdgKZqYZ
-         yrmKCaiUNUBQrd3JJXAZZMQ+HTSC+sc0sBdMZ6bW+lI65N9O25hdUgOwHE6rIQlk//F1
-         5KRA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=o1yqNAVn037IZuwd1cSJvfpEqCBUbSaG0FfXXsU7E7k=;
+        b=PT2ZApPV9lhgRCbrO1+GjOlvi3zKlAmL75I1oIfVMJhVPIt3eDXMA3cmYi5oitz8e4
+         qWm/LUImy49JANTFUvqOAkEjrVI9PZeq16YUv4cLYEelgVjQgvuDl54scedzhblUJUPp
+         j/Iw8qQrLo0pY2Y9+kZBRQ/fg5A5f10msH+nvv12SowLmo7U1Z7VkqoX2KouMG7EMFPZ
+         ++1OD6DVsyNKGIN7xK07V02ig5AyndyXc7FaTad+OI/dDBuVFNileTxqWuYHatFUZCXF
+         DJDr31K7bYLk+HAMJvMYCSUChf/J6aoFJoRauCOCUKDrrC2M6ERuKlj6jEsGV8C06uFF
+         RqYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zBnn0RhlQ+6DdSOoKO+sgebAz602h0F98qYUGINQ2QY=;
-        b=QRZIVQd72jgmLaJvWUhE4coubMBGMZbYWo4PU1QT9CX5SFUpyDDTOFvdDP5wPQtx6X
-         bJmIqPYO2rOjsw/1YnpoJom4hlsQ7ZjIaynoo+RnPBddycl6WjreELcwO0H6/dGGCT+s
-         hlAMIumV4RvK+y/9Bn6jyVKWaXM2541GjOTNmBYUqJZjNZihS/6ko3m5G+3I/bkcNVuU
-         LkjltjF6WmhtheecsEqCzrrJ/3zobh8vXmdyrNR/yKpHCUl103iM/FaNTKowLNAuSzC1
-         82DiWMcBgREn5xnb8vdti4XABSGoSR15BIdJ4zV7d5n83B8dOkEFOFxgKcO8vZ1VEzRw
-         hPkg==
-X-Gm-Message-State: ACrzQf0dUS1xJXeuGmyTWT9K3JjqjGXmeS/W3gC4VZ7lLdKE8teV1qjm
-        STWV4anLSc6QcoTiKQ8Kv5LPTG3WKTTwTQ==
-X-Google-Smtp-Source: AMsMyM5t3l42P7kK41J8k8EXjAaZ4SyBVdaqQ1JW1baQGK0CvcBdSGZguLNZLgrLBx8s/5wwb351JQ==
-X-Received: by 2002:a17:903:22c1:b0:184:983f:11b2 with SMTP id y1-20020a17090322c100b00184983f11b2mr3725138plg.40.1665596585648;
-        Wed, 12 Oct 2022 10:43:05 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id je17-20020a170903265100b00174abcb02d6sm10812982plb.235.2022.10.12.10.43.04
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o1yqNAVn037IZuwd1cSJvfpEqCBUbSaG0FfXXsU7E7k=;
+        b=Pu/bVvsgs0yLKU4qm0u6IIo+ZtMC3599Za/5ZJnCXzAg9tlUDnJDhBM6j/oDTebPhY
+         3S0PSDuDG33pVc6tm1eZdDnhqwp3KXlm+2Cf65fJjd3eHYqdAQcTseAsrdjS7Rp1rMzN
+         RhlqR+/9vdu40bWSKCMkIs6cUu3tFVqUxFwf4x4fzL0O7cvP8gmraPIB6r+62gAO/7G2
+         2mpOaLvgoSE7NalIx8dAsV4nbyotbZUc2VtzM8Rylsiqj2chnFkhxhPFGoAFRT4o+IqO
+         VF4XSS2E7Sj9dKEmTuqElSgKBQjWOA+eSERBsjSl5wujTvhtWzofsG+xrHCIlqrCGfd4
+         DTAA==
+X-Gm-Message-State: ACrzQf13FjXflLv9O+wZYz7ionF5ny9/6eX0Oa1uutPhVK78zlfCkk5i
+        xWErvAc8FTpeP+3buGvKCzM=
+X-Google-Smtp-Source: AMsMyM5G5VmQzPETVse+/R1+X+z5v8zBeBRc11dFHxSAc8uARnm6u/iJBbwWvQj0Bzxj60rNWAUl8w==
+X-Received: by 2002:a17:90b:4a51:b0:20d:4ded:3c26 with SMTP id lb17-20020a17090b4a5100b0020d4ded3c26mr10063350pjb.23.1665654885937;
+        Thu, 13 Oct 2022 02:54:45 -0700 (PDT)
+Received: from localhost (ec2-3-6-129-254.ap-south-1.compute.amazonaws.com. [3.6.129.254])
+        by smtp.gmail.com with ESMTPSA id i19-20020a63cd13000000b004582e25a595sm11076472pgg.41.2022.10.13.02.54.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 10:43:04 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 12 Oct 2022 10:43:03 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Thomas.Kastner" <Thomas.Kastner@advantech.eu>
-Cc:     "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH] Added 'advantech_ec_wdt' watchdog driver
-Message-ID: <20221012174303.GA2995920@roeck-us.net>
-References: <Y0aQbw8TPpdp569v@EIS-S230>
- <20221012160939.GA2875718@roeck-us.net>
- <PSAPR02MB45334EDCB45CE1F40056A410F4229@PSAPR02MB4533.apcprd02.prod.outlook.com>
+        Thu, 13 Oct 2022 02:54:45 -0700 (PDT)
+From:   Manank Patel <pmanank200502@gmail.com>
+To:     linux@roeck-us.net
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manank Patel <pmanank200502@gmail.com>
+Subject: [PATCH] drivers: watchdog: exar_wdt.c fix use after free
+Date:   Thu, 13 Oct 2022 15:24:39 +0530
+Message-Id: <20221013095439.1425108-1-pmanank200502@gmail.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PSAPR02MB45334EDCB45CE1F40056A410F4229@PSAPR02MB4533.apcprd02.prod.outlook.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,107 +69,30 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 04:52:36PM +0000, Thomas.Kastner wrote:
-> Guenter, thank you for your detailed review. I will address the issues and resubmit. Comments below.
-> 
-> ...
-> > > +#include <linux/uaccess.h>
-> > > +#include <linux/spinlock.h>
-> > 
-> > Alphabetic include file order, please.
-> 
-> Copied from existing driver, will fix regardless.
-> 
+fix use after free by storing the result of PTR_ERR(n->pdev)
+to a local variable before returning.
 
-That is never an good or even acceptable argument. Old drivers will always
-have lots of oddities and don't typically use more recently introduced
-helper functions. Case in point: both watchdog_init_timeout() and
-watchdog_stop_on_unregister() were introduced after your example driver
-was added to the kernel.
+Signed-off-by: Manank Patel <pmanank200502@gmail.com>
+---
+ drivers/watchdog/exar_wdt.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Also, please check if all the include files are really needed. For example,
-I don't think <linux/uaccess.h> is needed.
+diff --git a/drivers/watchdog/exar_wdt.c b/drivers/watchdog/exar_wdt.c
+index 35058d8b21bc..7c61ff343271 100644
+--- a/drivers/watchdog/exar_wdt.c
++++ b/drivers/watchdog/exar_wdt.c
+@@ -355,8 +355,10 @@ static int __init exar_wdt_register(struct wdt_priv *priv, const int idx)
+ 						    &priv->wdt_res, 1,
+ 						    priv, sizeof(*priv));
+ 	if (IS_ERR(n->pdev)) {
++		int err = PTR_ERR(n->pdev);
++
+ 		kfree(n);
+-		return PTR_ERR(n->pdev);
++		return err;
+ 	}
+ 
+ 	list_add_tail(&n->list, &pdev_list);
+-- 
+2.38.0
 
-> > > +#define DEFAULT_TIME         60
-> > > +
-> > > +static unsigned int timeout = DEFAULT_TIME;
-> > 
-> > This should be set to 0. The default timeout should be set
-> > in struct watchdog_device.
->  
-> Copied from existing driver, will fix regardless.
-> 
-> > > +     /* reset watchdog */
-> > > +     outb(EC_CMD_WDT_RESET, EC_ADDR_CMD);
-> > > +     usleep_range(10000, 11000);
-> > 
-> > Is this really needed ? If so, write an accessor function.
-> > It would be preferred to have that accessor function wait
-> > before accesses (cache the time of the last access and wait
-> > if not enough time has expired). This would prevent unnecessary
-> > wait operations in places like this one, where only a single
-> > access happens.
-> 
-> Good point. Unfortunately the delay between individual accesses is required. 
-> My reasoning here was that the watchdog reset function typically is called in many-second intervals only, so the potentially unnecessary wait therefore would be negligible and not justify the overhead of an accessor function.
-> 
-
-The problem is not the overhead in the code, but code pollution.
-The argument should be that the code is not called often, thus
-using an accessor function is cleaner and its runtime overhead
-is negligible. Also, if that _was_ a concern, one could always
-declare the accessor function as "static inline".
-
-The the same time, forcing userspace to wait for 10ms for no good
-reason is never a good idea, and "it is not called that often" is
-not a valid argument. Add a thousand "not called that often" pieces
-of code to the kernel, and userspace won't do anything but wait
-for nothing.
-
-Thanks,
-Guenter
-
-> > > +     val = t*10;
-> > 
-> > Space before and after '*'. Please run checkpatch; that should tell you.
-> 
-> I did, but either the script missed this or I did. Will fix.
-> 
-> > > +static struct watchdog_device adv_ec_wdt_dev = {
-> > > +     .info =         &adv_ec_wdt_info,
-> > > +     .ops =          &adv_ec_wdt_ops,
-> > > +     .min_timeout =  MIN_TIME,
-> > > +     .max_timeout =  MAX_TIME,
-> > 
-> > .timeout should be set to the default timeout.
->  
-> Copied from existing driver, will fix regardless.
->  
-> > > +static void adv_ec_wdt_remove(struct device *dev, unsigned int id)
-> > > +{
-> > > +     /* stop the watchdog */
-> > > +     adv_ec_wdt_stop(NULL);
-> > 
-> > Call watchdog_stop_on_unregister() before registering the watchdog
-> > instead. Also, again, the comment doesn't add value.
-> > 
-> > > +
-> > > +     /* watchdog_unregister() and release_region() are called automatically
-> > */
-> > 
-> > Also unnecessary (implied with devm_). And you don't actually
-> > need a remove function when using watchdog_stop_on_unregister().
-> 
-> Thanks for pointing this out, I had missed that this function & feature exist. 
-> 
-> > > +             pr_err("Watchdog timer: value of timeout %d (dec) "
-> > > +               "is out of range from %d to %d (dec)\n",
-> > > +               timeout, MIN_TIME, MAX_TIME);
-> > > +             return -EINVAL;
-> > 
-> > This does not belong here. The probe function should call
-> > watchdog_init_timeout() to set and validate the timeout module
-> > parameter, and keep the default (instead of failing) if it is
-> > out of range.
-> 
-> Copied from existing driver, will fix regardless.
