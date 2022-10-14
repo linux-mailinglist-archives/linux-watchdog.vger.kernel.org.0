@@ -2,69 +2,74 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC6B5FF26E
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Oct 2022 18:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3465FF277
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Oct 2022 18:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiJNQoc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 14 Oct 2022 12:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54872 "EHLO
+        id S230183AbiJNQqj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 14 Oct 2022 12:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbiJNQob (ORCPT
+        with ESMTP id S229885AbiJNQqj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 14 Oct 2022 12:44:31 -0400
+        Fri, 14 Oct 2022 12:46:39 -0400
 Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051171BE938;
-        Fri, 14 Oct 2022 09:44:31 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id b5so4765235pgb.6;
-        Fri, 14 Oct 2022 09:44:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F28211E46B;
+        Fri, 14 Oct 2022 09:46:38 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id s196so3476707pgs.3;
+        Fri, 14 Oct 2022 09:46:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RIneIIyv2q1QhRu+3OHZL3JM2gZoB+5mtMOcLTE6H5o=;
-        b=BwSyffdZ7ppvkQKzkjX8ZuUEorSmxftn6JIbU9av3L4VS2Qx0gsN0ypL0HY2iVxktw
-         vPLrgnsCv8xNaRWh0e52rFevY26OEa0UVXJGBukKkCoF56SvFkQdHHi59C/NiaLSPoTR
-         ZRlfq1Am8o/iICbjCknzpDXBsoPEfTSyFNK9sUqX3GLgUr6nazM/f7mnMGANTUIwTeQS
-         q3wz/A1OgHaFEPTZahmaUDv/Et8gW3vd2EHkVwFQwGaEU/gHOFjylAI/cIZZjYbMFHwN
-         2sY0VWK4+IdzYHUpLzdp1caf9KDLafKM/Jk7ANhCXH1sw2TWS9NQGwIo6JlP//tS1zOk
-         r2HA==
+        bh=Lz9w4iTtt8VD0pnGuSpcxv01lLWgKdls9jQI3u/cJVU=;
+        b=YQRZg7ylX38gOy7LKdvCrTSm9oFdeFDGd0Xij4RxwzL0ecgSKg40kNAmatIs5yfwZV
+         nXbrs3sM02YGmZ6jHV+/15BP98e45vDRYl/sM+3MLvYjhmFlJA6pOKaZFrh7j+8beANm
+         yHnwlj0XohANnG2Lb1Rxxou9IHa/nzJtN6LlbN1gSOipa+scrRhw920tiwlsDlleqIN5
+         vwZGuWjjpHgLS9DZ70Nmm/4czGT2KCJCSW/3pskeC5P55uAD+e2cfgLuCLAQwZu6oj7F
+         RBiJdfRzwFRauSB52rp37qhnppNpTcnPWxBeCTjxD2c37bY0rT2f+b/FPdHb3L/f1rw0
+         nTfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RIneIIyv2q1QhRu+3OHZL3JM2gZoB+5mtMOcLTE6H5o=;
-        b=McFE31RGOOJrit6EiVycFpSV1ZnrGY/Tmg3g1tDHOy06v0QVl+Jk7OOXfRJ3D1Fx24
-         OAmJuSKKO5ilwBmSVx3bFz18THnIl29xwlPq2SuDQmc2PI9xt6DYRTnlgnFm1MZWFKZO
-         kYRyx7cfKEzm3I4yd+rKYdioj0GIDwPnae0g5/rITJgrjqgOkA1Bp106INfHFu0zSKu8
-         OcbqGDdu7pXUmH98bk/ojSU1OwnHzfZDNN7YnW5sNRQFFPdbqmw+DR6q46UwzB+46mTC
-         H4zK41fSpIsBpr4rXysrsLmNqbOZ05ia24VnVTfR0zEA0DliIoAa2GjINQlIzcv7RWJG
-         +t+Q==
-X-Gm-Message-State: ACrzQf3d3Z1L4QPI2MVlUFH9pd4wmZfLG6vStf5iLVv4Ubr4L3f2Gqsj
-        9loSkKR7Ge3J//uD9Bp5AWE=
-X-Google-Smtp-Source: AMsMyM4zlhvmOb981pIpU8iL5h6g94L0kwQftqJ4fjE7+cBBW14QWUC73V+KUBNWwo3Z+f4NVMFQbw==
-X-Received: by 2002:a05:6a00:2402:b0:52c:81cf:8df2 with SMTP id z2-20020a056a00240200b0052c81cf8df2mr5995331pfh.40.1665765870304;
-        Fri, 14 Oct 2022 09:44:30 -0700 (PDT)
+        bh=Lz9w4iTtt8VD0pnGuSpcxv01lLWgKdls9jQI3u/cJVU=;
+        b=kYLgYG2JbQFCUaLLHantBmGt2DAyXvMydQ+VpLJYKBPdnwqEtVPS1NHUZGvEoCNOl6
+         tT6G4i2hfsOU4SkU/8E4b/7O78Lzka5WCAqALdPP95TsH11buMOfctB5aYfd0y/TKPf6
+         BkNw9BWs2LDxNipj78lYqkW5RDmAegxrWyJwpNk9piEabABBgM1C+XkhHJUyM8yQjzr/
+         YEyZRuquGy7yzMw/hQfy/kLoxScbew9uS40T5H64RgJaEGeWJUqdc3krknpCYi28W2Qs
+         Diq7z/mxpxu7NVOVGrfSZx5N6n7op1S+OHb/O45nrsIB4G3tduNc3yCgCR01XD6ktSFP
+         zqGQ==
+X-Gm-Message-State: ACrzQf3vyYWdUwiLim1d/xYRckaYM6CNzTF8XZhmRnUmz6SFpwZ1G0Ra
+        drUR/TjCR/ZP66epbAAVGg8=
+X-Google-Smtp-Source: AMsMyM6QVHntIHzZcjcTu7mS9KR6yMVgRd9YU9txRkHoQcGcebgSfqyGhkXCfRnTkqBoEAjG+nZdIA==
+X-Received: by 2002:a63:1917:0:b0:43c:1471:52b7 with SMTP id z23-20020a631917000000b0043c147152b7mr5295980pgl.522.1665765998174;
+        Fri, 14 Oct 2022 09:46:38 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o2-20020a170902d4c200b001708c4ebbaesm1845054plg.309.2022.10.14.09.44.29
+        by smtp.gmail.com with ESMTPSA id d8-20020a170902cec800b0017f7b6e970esm1976920plg.146.2022.10.14.09.46.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 09:44:29 -0700 (PDT)
+        Fri, 14 Oct 2022 09:46:37 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 14 Oct 2022 09:44:28 -0700
+Date:   Fri, 14 Oct 2022 09:46:37 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jiangshan Yi <13667453960@163.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: Re: [PATCH] watchdog: sp805_wdt: fix spelling typo in comment
-Message-ID: <20221014164428.GA105432@roeck-us.net>
-References: <20221009083944.2988237-1-13667453960@163.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        allen-kh.cheng@mediatek.com, seiya.wang@mediatek.com,
+        tinghan.shen@mediatek.com, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/5] dt-bindings: watchdog: mediatek,mtk-wdt: Add
+ compatible for MT6795
+Message-ID: <20221014164637.GA150807@roeck-us.net>
+References: <20221005113517.70628-1-angelogioacchino.delregno@collabora.com>
+ <20221005113517.70628-5-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221009083944.2988237-1-13667453960@163.com>
+In-Reply-To: <20221005113517.70628-5-angelogioacchino.delregno@collabora.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -76,30 +81,27 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 04:39:44PM +0800, Jiangshan Yi wrote:
-> From: Jiangshan Yi <yijiangshan@kylinos.cn>
+On Wed, Oct 05, 2022 at 01:35:16PM +0200, AngeloGioacchino Del Regno wrote:
+> Add the mediatek,mt6795-wdt compatible.
 > 
-> Fix spelling typo in comment.
-> 
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/sp805_wdt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wdt.c
-> index 78ba36689eec..2756ed54ca3d 100644
-> --- a/drivers/watchdog/sp805_wdt.c
-> +++ b/drivers/watchdog/sp805_wdt.c
-> @@ -88,7 +88,7 @@ static bool wdt_is_running(struct watchdog_device *wdd)
->  	return (wdtcontrol & ENABLE_MASK) == ENABLE_MASK;
->  }
->  
-> -/* This routine finds load value that will reset system in required timout */
-> +/* This routine finds load value that will reset system in required timeout */
->  static int wdt_setload(struct watchdog_device *wdd, unsigned int timeout)
->  {
->  	struct sp805_wdt *wdt = watchdog_get_drvdata(wdd);
+> diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+> index f43b5af92d40..54dfe7941d53 100644
+> --- a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+> @@ -23,6 +23,7 @@ properties:
+>            - enum:
+>                - mediatek,mt2712-wdt
+>                - mediatek,mt6589-wdt
+> +              - mediatek,mt6795-wdt
+>                - mediatek,mt7986-wdt
+>                - mediatek,mt8183-wdt
+>                - mediatek,mt8186-wdt
