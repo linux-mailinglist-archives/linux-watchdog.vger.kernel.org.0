@@ -2,121 +2,306 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FC1600FFD
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Oct 2022 15:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5A3602494
+	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Oct 2022 08:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiJQNMf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 17 Oct 2022 09:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S229824AbiJRGif (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 18 Oct 2022 02:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbiJQNMe (ORCPT
+        with ESMTP id S229828AbiJRGi2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 17 Oct 2022 09:12:34 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3102CDE9
-        for <linux-watchdog@vger.kernel.org>; Mon, 17 Oct 2022 06:12:25 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id p127so11367492oih.9
-        for <linux-watchdog@vger.kernel.org>; Mon, 17 Oct 2022 06:12:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=15gaj/hiuDmQH6upG5SfHv7x3HIT6b34tqYQGCcQSmU=;
-        b=pGdcfDE8aEm0w/uAOZ6yi9OIhmu+CqdZh9mMDQwk2qEch1FAt3h+7vvkn6mzP0nmqX
-         yhtQQh+FxhSCu/s9KNX2sKjOq7Mu6usuVnsUg4V2ZXoMEuFkwW7bwzzvmFgTkV/6yRJ7
-         i9K5GCqmnjMyGbUwfOcT20AmOwcOb73aAiZBLFd/HB1WuQnEukDsBQ0RFF2iSi/Wi+e4
-         3VzZSrKcai2TAELpP6Se8dLjG+3S1xDFPyOgxieNFDQqX8uNgrS7IU6vu7+UYmq/T2eJ
-         f2Yp+zqWs4V0ay+MH1YDhBcKHhhiCL3MwDK716l0qM6LlCfwtZ9AFRmRGWuTHJtwogwm
-         zfPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=15gaj/hiuDmQH6upG5SfHv7x3HIT6b34tqYQGCcQSmU=;
-        b=WzbyRMsvpOxnf4nwsGdmQjfqpA5FFYvWy51CIdcYTQQ1xnXA829ngIkGHarN178Vcf
-         bNX1rUYkIyUFK0aFLr+ySFnp9prfxD2J2RT4B02U8kMpi2I8N03bMGNvJ9X6ZrTo8K+Y
-         1PhvGQDdfWwjSqdXnNo9SMY/wNFns+m2do8c6so0d7H9Co7UhkSb26Qg/VmuaFL+5n9L
-         OUBdSaT1m6FjjyKE/p16W62V75L5IECfsWGOiyd4MrhgQNjh/wMMHPNAZJHxkjNH8233
-         TWQzMQBZAv5fDt73nX3Qjxjm2icw+M1WN/bChPGSG6Mhdvb7UxREmrornBZcHEDev1iZ
-         dLbg==
-X-Gm-Message-State: ACrzQf1k2Ds1acLXbGRNCAPfPhqvZR8+ulODSfHBjb8R9zdeG2p0x/pT
-        xQpwC4FcTA9XuluM3DVFS4EWx8B+bu8=
-X-Google-Smtp-Source: AMsMyM6xYkqaE8ZPHaSx38ZBszdVqlYZuT8ISrwGwic88NO/VgKCHRTkD3Zww9J9bva5DoohXlvpuA==
-X-Received: by 2002:aca:1e15:0:b0:353:f508:f9e0 with SMTP id m21-20020aca1e15000000b00353f508f9e0mr13302178oic.290.1666012335044;
-        Mon, 17 Oct 2022 06:12:15 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i184-20020acab8c1000000b0035028730c90sm4308347oif.1.2022.10.17.06.12.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 06:12:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <42d72266-c983-d0a1-8254-daff97de58ee@roeck-us.net>
-Date:   Mon, 17 Oct 2022 06:12:13 -0700
+        Tue, 18 Oct 2022 02:38:28 -0400
+Received: from kastnerfamily.de (kastnerfamily.de [85.214.209.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F887A8368
+        for <linux-watchdog@vger.kernel.org>; Mon, 17 Oct 2022 23:38:23 -0700 (PDT)
+Received: from EIS-S230 (p4fd65cc2.dip0.t-ipconnect.de [79.214.92.194])
+        by kastnerfamily.de (Postfix) with ESMTPSA id 1C2AC20070E
+        for <linux-watchdog@vger.kernel.org>; Tue, 18 Oct 2022 08:38:21 +0200 (CEST)
+Date:   Tue, 18 Oct 2022 08:38:19 +0200
+From:   Thomas Kastner <thomas.kastner@advantech.com>
+To:     linux-watchdog@vger.kernel.org
+Subject: [PATCH v3 20221018] Add Advantech EC watchdog driver
+Message-ID: <Y05J2xczXYn8GUoJ@EIS-S230>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] drivers: watchdog: advantech_ec_wdt.c Add Advantech EC
- watchdog driver
-Content-Language: en-US
-To:     Thomas Kastner <code@kastnerfamily.de>
-Cc:     Thomas Kastner <thomas.kastner@advantech.com>,
-        linux-watchdog@vger.kernel.org
-References: <Y00S08UV7g6ZSm9J@EIS-S230>
- <2ce281ff-264f-006f-00ec-7596fa7d855f@roeck-us.net>
- <Y01Ty4bo6TuaXj6x@EIS-S230>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <Y01Ty4bo6TuaXj6x@EIS-S230>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 10/17/22 06:08, Thomas Kastner wrote:
-> On Mon, Oct 17, 2022 at 05:24:07AM -0700, Guenter Roeck wrote:
->>
->> Please drop "drivers:" and the driver name from the subject,
->> version your patches, and provide change logs.
->>
->> Also, please fix the following problems reported by checkpatch.
-> 
-> Thanks for your patience.
-> 
-> Can you please confirm the version of checkpatch or any parameters used?
-> 
-> I'm using v0.32 which seems to be the latest in GKH's staging tree as
-> well as Linus' mainline. It has just given me the quoted string warning,
-> but not the others as below- although of course those are valid.
-> Just trying to get to the same result...
-> 
-> No questions on the other items, Will implement the changes and provide
-> a versioned v3 with change notes later.
-> 
+This patch adds the 'advantech_ec_wdt' kernel module which provides
+WDT support for Advantech platforms with ITE based Embedded Controller.
 
-CHECK is only reported if checkpatch.pl --strict is used.
+Signed-off-by: Thomas Kastner <thomas.kastner@advantech.com>
+---
 
-Guenter
+v3:
+- removed author email and disclaimer in file header
+- changed EC_ADDR_DATA/CMD to be based on EC_BASE_ADDR instead of fixed
+- fixed checkpatch.pl reported issues
+  long line preferred over "quoted strings split across lines" due to grep
 
->>
->> CHECK: Alignment should match open parenthesis
->> #144: FILE: drivers/watchdog/advantech_ec_wdt.c:55:
->> +MODULE_PARM_DESC(timeout,
->> +	"Default Watchdog timer setting ("
->>
->> WARNING: quoted string split across lines
->> #146: FILE: drivers/watchdog/advantech_ec_wdt.c:57:
->> +	__MODULE_STRING(DEFAULT_TIME) "s)."
->> +	"The range is from " __MODULE_STRING(MIN_TIME)
->>
->> CHECK: Please don't use multiple blank lines
->> #270: FILE: drivers/watchdog/advantech_ec_wdt.c:181:
+v2:	
+- added accessor function for EC IO access to remove unnecessary waits
+- moved EC probe to adv_ec_wdt_init()
+- implemented cosmetic changes found in the code review
+- removed debug output and unnecessary error messages
+	
+v1:
+- initial version
+
+ drivers/watchdog/Kconfig            |   7 +
+ drivers/watchdog/Makefile           |   1 +
+ drivers/watchdog/advantech_ec_wdt.c | 205 ++++++++++++++++++++++++++++
+ 3 files changed, 213 insertions(+)
+ create mode 100644 drivers/watchdog/advantech_ec_wdt.c
+
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index 688922fc4edb..a990016f791c 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -1055,6 +1055,13 @@ config ADVANTECH_WDT
+ 	  feature. More information can be found at
+ 	  <https://www.advantech.com.tw/products/>
+ 
++config ADVANTECH_EC_WDT
++	tristate "Advantech Embedded Controller Watchdog Timer"
++	depends on X86
++	help
++		This driver supports Advantech products with ITE based Embedded Controller.
++		It does not support Advantech products with other ECs or without EC.
++
+ config ALIM1535_WDT
+ 	tristate "ALi M1535 PMU Watchdog Timer"
+ 	depends on X86 && PCI
+diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+index cdeb119e6e61..2768dc2348af 100644
+--- a/drivers/watchdog/Makefile
++++ b/drivers/watchdog/Makefile
+@@ -102,6 +102,7 @@ obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
+ # X86 (i386 + ia64 + x86_64) Architecture
+ obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
+ obj-$(CONFIG_ADVANTECH_WDT) += advantechwdt.o
++obj-$(CONFIG_ADVANTECH_EC_WDT) += advantech_ec_wdt.o
+ obj-$(CONFIG_ALIM1535_WDT) += alim1535_wdt.o
+ obj-$(CONFIG_ALIM7101_WDT) += alim7101_wdt.o
+ obj-$(CONFIG_EBC_C384_WDT) += ebc-c384_wdt.o
+diff --git a/drivers/watchdog/advantech_ec_wdt.c b/drivers/watchdog/advantech_ec_wdt.c
+new file mode 100644
+index 000000000000..d6dfc1347ca5
+--- /dev/null
++++ b/drivers/watchdog/advantech_ec_wdt.c
+@@ -0,0 +1,205 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ *	Advantech Embedded Controller Watchdog Driver
++ *
++ *	This driver supports Advantech products with ITE based Embedded Controller.
++ *	It does not support Advantech products with other ECs or without EC.
++ *
++ *	Copyright (C) 2022 Advantech Europe B.V.
++ */
++
++#include <linux/delay.h>
++#include <linux/io.h>
++#include <linux/isa.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/moduleparam.h>
++#include <linux/watchdog.h>
++
++#define DRIVER_NAME		"advantech_ec_wdt"
++
++/* EC IO region */
++#define EC_BASE_ADDR		0x299
++#define EC_ADDR_EXTENT		2
++
++/* EC minimum IO access delay in ms */
++#define EC_MIN_DELAY		10
++
++/* EC interface definitions */
++#define EC_ADDR_CMD		(EC_BASE_ADDR + 1)
++#define EC_ADDR_DATA		EC_BASE_ADDR
++#define EC_CMD_EC_PROBE	0x30
++#define EC_CMD_COMM		0x89
++#define EC_CMD_WDT_START	0x28
++#define EC_CMD_WDT_STOP	0x29
++#define EC_CMD_WDT_RESET	0x2A
++#define EC_DAT_EN_DLY_H	0x58
++#define EC_DAT_EN_DLY_L	0x59
++#define EC_DAT_RST_DLY_H	0x5E
++#define EC_DAT_RST_DLY_L	0x5F
++#define EC_MAGIC		0x95
++
++/* module parameters */
++#define MIN_TIME		1
++#define MAX_TIME		6000 /* 100 minutes */
++#define DEFAULT_TIME		60
++
++static unsigned int timeout;
++static ktime_t ec_timestamp;
++
++module_param(timeout, uint, 0);
++MODULE_PARM_DESC(timeout,
++		 "Default Watchdog timer setting (" __MODULE_STRING(DEFAULT_TIME) "s). The range is from " __MODULE_STRING(MIN_TIME) " to " __MODULE_STRING(MAX_TIME) ".");
++
++static void adv_ec_wdt_timing_gate(void)
++{
++	ktime_t time_cur, time_delta;
++
++	/* ensure minimum delay between IO accesses*/
++	time_cur = ktime_get();
++	time_delta = ktime_to_ms(ktime_sub(time_cur, ec_timestamp));
++	if (time_delta < EC_MIN_DELAY) {
++		time_delta = EC_MIN_DELAY - time_delta;
++		usleep_range(time_delta * 1000, (time_delta + 1) * 1000);
++	}
++	ec_timestamp = ktime_get();
++}
++
++static void adv_ec_wdt_outb(unsigned char value, unsigned short port)
++{
++	adv_ec_wdt_timing_gate();
++	outb(value, port);
++}
++
++static unsigned char adv_ec_wdt_inb(unsigned short port)
++{
++	adv_ec_wdt_timing_gate();
++	return inb(port);
++}
++
++static int adv_ec_wdt_ping(struct watchdog_device *wdd)
++{
++	adv_ec_wdt_outb(EC_CMD_WDT_RESET, EC_ADDR_CMD);
++	return 0;
++}
++
++static int adv_ec_wdt_set_timeout(struct watchdog_device *wdd, unsigned int t)
++{
++	unsigned int val;
++
++	/* scale time to EC 100 ms base */
++	val = t * 10;
++
++	/* reset enable delay, just in case it was set by BIOS etc. */
++	adv_ec_wdt_outb(EC_CMD_COMM, EC_ADDR_CMD);
++	adv_ec_wdt_outb(EC_DAT_EN_DLY_H, EC_ADDR_DATA);
++	adv_ec_wdt_outb(0, EC_ADDR_DATA);
++
++	adv_ec_wdt_outb(EC_CMD_COMM, EC_ADDR_CMD);
++	adv_ec_wdt_outb(EC_DAT_EN_DLY_L, EC_ADDR_DATA);
++	adv_ec_wdt_outb(0, EC_ADDR_DATA);
++
++	/* set reset delay */
++	adv_ec_wdt_outb(EC_CMD_COMM, EC_ADDR_CMD);
++	adv_ec_wdt_outb(EC_DAT_RST_DLY_H, EC_ADDR_DATA);
++	adv_ec_wdt_outb(val >> 8, EC_ADDR_DATA);
++
++	adv_ec_wdt_outb(EC_CMD_COMM, EC_ADDR_CMD);
++	adv_ec_wdt_outb(EC_DAT_RST_DLY_L, EC_ADDR_DATA);
++	adv_ec_wdt_outb(val & 0xFF, EC_ADDR_DATA);
++
++	wdd->timeout = t;
++	return 0;
++}
++
++static int adv_ec_wdt_start(struct watchdog_device *wdd)
++{
++	adv_ec_wdt_set_timeout(wdd, wdd->timeout);
++	adv_ec_wdt_outb(EC_CMD_WDT_START, EC_ADDR_CMD);
++
++	return 0;
++}
++
++static int adv_ec_wdt_stop(struct watchdog_device *wdd)
++{
++	adv_ec_wdt_outb(EC_CMD_WDT_STOP, EC_ADDR_CMD);
++
++	return 0;
++}
++
++static const struct watchdog_info adv_ec_wdt_info = {
++	.identity =	DRIVER_NAME,
++	.options =	WDIOF_SETTIMEOUT |
++			WDIOF_MAGICCLOSE |
++			WDIOF_KEEPALIVEPING,
++};
++
++static const struct watchdog_ops adv_ec_wdt_ops = {
++	.owner =	THIS_MODULE,
++	.start =	adv_ec_wdt_start,
++	.stop =		adv_ec_wdt_stop,
++	.ping =		adv_ec_wdt_ping,
++	.set_timeout =	adv_ec_wdt_set_timeout,
++};
++
++static struct watchdog_device adv_ec_wdt_dev = {
++	.info =		&adv_ec_wdt_info,
++	.ops =		&adv_ec_wdt_ops,
++	.min_timeout =	MIN_TIME,
++	.max_timeout =	MAX_TIME,
++	.timeout =	DEFAULT_TIME,
++};
++
++static int adv_ec_wdt_probe(struct device *dev, unsigned int id)
++{
++	if (!devm_request_region(dev, EC_BASE_ADDR, EC_ADDR_EXTENT, dev_name(dev))) {
++		dev_err(dev, "Unable to lock port addresses (0x%X-0x%X)\n",
++			EC_BASE_ADDR, EC_BASE_ADDR + EC_ADDR_EXTENT);
++		return -EBUSY;
++	}
++
++	watchdog_init_timeout(&adv_ec_wdt_dev, timeout, dev);
++	watchdog_stop_on_reboot(&adv_ec_wdt_dev);
++	watchdog_stop_on_unregister(&adv_ec_wdt_dev);
++
++	return devm_watchdog_register_device(dev, &adv_ec_wdt_dev);
++}
++
++static struct isa_driver adv_ec_wdt_driver = {
++	.probe		= adv_ec_wdt_probe,
++	.driver		= {
++	.name		= DRIVER_NAME,
++	},
++};
++
++static int __init adv_ec_wdt_init(void)
++{
++	unsigned int val;
++
++	/* quick probe for EC */
++	if (!request_region(EC_BASE_ADDR, EC_ADDR_EXTENT, DRIVER_NAME))
++		return -EBUSY;
++
++	adv_ec_wdt_outb(EC_CMD_EC_PROBE, EC_ADDR_CMD);
++	val = adv_ec_wdt_inb(EC_ADDR_DATA);
++	release_region(EC_BASE_ADDR, EC_ADDR_EXTENT);
++
++	if (val != EC_MAGIC)
++		return -ENODEV;
++
++	return isa_register_driver(&adv_ec_wdt_driver, 1);
++}
++
++static void __exit adv_ec_wdt_exit(void)
++{
++	isa_unregister_driver(&adv_ec_wdt_driver);
++}
++
++module_init(adv_ec_wdt_init);
++module_exit(adv_ec_wdt_exit);
++
++MODULE_AUTHOR("Thomas Kastner <thomas.kastne@advantech.com>");
++MODULE_DESCRIPTION("Advantech Embedded Controller Watchdog Device Driver");
++MODULE_LICENSE("GPL");
++MODULE_VERSION("20221018");
++MODULE_ALIAS("isa:" DRIVER_NAME);
+-- 
+2.34.1
 
