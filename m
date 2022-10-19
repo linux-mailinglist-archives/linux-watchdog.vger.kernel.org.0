@@ -2,67 +2,82 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 830B260457C
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Oct 2022 14:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 345026046B1
+	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Oct 2022 15:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbiJSMih (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 19 Oct 2022 08:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51842 "EHLO
+        id S231708AbiJSNSH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 19 Oct 2022 09:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbiJSMiH (ORCPT
+        with ESMTP id S231793AbiJSNRl (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 19 Oct 2022 08:38:07 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BA11D0D46;
-        Wed, 19 Oct 2022 05:18:38 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id cl1so16634322pjb.1;
-        Wed, 19 Oct 2022 05:18:38 -0700 (PDT)
+        Wed, 19 Oct 2022 09:17:41 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F3EFFFB0;
+        Wed, 19 Oct 2022 06:03:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4UfKB24CuAxAVPOItr5Q5TcZjPxYaIsgbWsletLKpPk=;
-        b=Glc3hntbf7+X4oSfg4Kt2hXTpwzHboRzXWIRZLJwz4UZOJFiv4lIYoTZGv1xIvZZvY
-         vh0Uk4oXT88oCeBoN1bX6kcHeJ0o8SEPL89G/C0AdufsHZMkrWCybXu55IsjadpH7PHF
-         8TpiG3HEun4eTaZu3OUvfy+1+ur0oiCCttNcZmtTRIKZ7hruHJPbeOs0oEBn6YhKiaiO
-         P6rXlGULIid+5i8S/NUo/wg21QOA9URUvlqfLbPm56opXGxgkEX5tm0iDNcFJSgetw6q
-         puRVpsliBuPPrc05ECqf3no2BfTIycsDovb8w5KAs6JR60t7z8xihzpgZiAfl4w6ixFw
-         gJ4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4UfKB24CuAxAVPOItr5Q5TcZjPxYaIsgbWsletLKpPk=;
-        b=kHhGeQQI2k/RqOFcUOYqSzGNvTBskGk8bVuuLbaPipNvqpdZeIb2mxCPgL5EjGVcD4
-         +Ezs/SVNXMSq+yRY6aJReNnkmbYF+EWiwnEXe8XA2NFm5Rs2Q6axFmjnAd11+5Yc1eLx
-         /5KEET05mOXp19S3t28udTiHZ56J7MRBJRr2KWlrmiXKzYg0Zitb5yJSmtbS50qmcDEA
-         8G2XkPRU0qE/XTaTGHNHr56Er2tjYi/SC6ZozhowG7ffkg6gwnORxKFnJCZLOlRuDCpy
-         D/ntde0y/8qkPc9PUdnPZJpVPRgWl010MOfYireUIm2ffnmg7kgz21JNngDcWbRwAOqP
-         vLcg==
-X-Gm-Message-State: ACrzQf1g8nkAkfS59RAHjb0Kx1BDs8Y5kCcROvSwQNpvDqysuuWmbrIl
-        4jNBeHEnn6bfJDlQnHTic7g/X7vHBWj9XCU4xhc=
-X-Google-Smtp-Source: AMsMyM6TKCzZvl3GD8vsawCX4Gt1qWFWL9hwNUxw9F0URCBmpYuIu/BTt25IwHFdfqFKzFZiI76GmTJ5ocEI69dvzFk=
-X-Received: by 2002:a17:902:d2cf:b0:17f:7b65:862f with SMTP id
- n15-20020a170902d2cf00b0017f7b65862fmr8131289plc.168.1666181791980; Wed, 19
- Oct 2022 05:16:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221019111714.1953262-1-andrej.picej@norik.com>
-In-Reply-To: <20221019111714.1953262-1-andrej.picej@norik.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Wed, 19 Oct 2022 09:16:23 -0300
-Message-ID: <CAOMZO5Detga+MSrzb4ZjkPsaoat-rD9bv9235V9A+OG1Fy+L8g@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Suspending i.MX watchdog in WAIT mode
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1666184603; x=1697720603;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OpHeyrfs5g5Rgp1Z7VMRy13RBDkqqg8QwJgqAbh3w0E=;
+  b=NjOTsM/5IP1DgSK7sxkeLYiDNN9jEAxbJAbcjBAmcZ9Kb06pRjEpnwOP
+   48nrauicTeY6fd3U8Ax2aDTvU8I3m/jNySnDU9dyTKG248uWU+7Eq/QsX
+   YM/Qtu12fC3Gqf8YXaIkjXGEC8dHHvHxEo1duCPy11sP8aplhLE7DEdra
+   wjuzULClSkLHXmEFMJfX3Ip2SbDKIB2umhIk4+MwCIaCsOBL3MANfH+ip
+   JEGtb4FD+fFv81CcNaSg2PNKn+wWbv4zagLM0P945o4uVKj4IK46sbA6V
+   qDKTFSAuklMeXvYpPtx7lgsek8g6L4eINN08ahLSZOentHnfwO5cGmUew
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,196,1661810400"; 
+   d="scan'208";a="26846560"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 19 Oct 2022 15:00:42 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 19 Oct 2022 15:00:42 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 19 Oct 2022 15:00:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1666184442; x=1697720442;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=OpHeyrfs5g5Rgp1Z7VMRy13RBDkqqg8QwJgqAbh3w0E=;
+  b=VwgAES2gYLWF6vpZ+a6pbo7fM/qmhoQ9cdUxEw0Ia0ZphGOmko/jSADj
+   FO1U3JgYNy3g6Iw6J1vfH/Aq6AvYzAqo7EM0ye+qqJTdh4j5UIrj1YSnV
+   K9MABzo7UH89+Lp4rLxToKvjifabR2wAmBhiSBTKO3XyDeIJDSu7FRM6f
+   zDe6dpH7IPIzN0/roIKybmn1Vb04UIi0g3i/eP4qGuRODhNYe4XMwMcAI
+   F+t835MZaez8GhjyAYRPsqKf2JxlGtzCXyn/2bJrEZc4V+dOMrjTSbpk/
+   h0gYiyUSNygjubKEm7PWICNdF9yh0n4aJtv+d7HxbGuNOuXzcAjUOBtO6
+   A==;
+X-IronPort-AV: E=Sophos;i="5.95,196,1661810400"; 
+   d="scan'208";a="26846559"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 19 Oct 2022 15:00:42 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id D5F49280056;
+        Wed, 19 Oct 2022 15:00:41 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
 To:     Andrej Picej <andrej.picej@norik.com>
-Cc:     linux-watchdog@vger.kernel.org, shawnguo@kernel.org,
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
         linux@roeck-us.net, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-imx@nxp.com, kernel@pengutronix.de, s.hauer@pengutronix.de,
-        wim@linux-watchdog.org, robh+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        linux-imx@nxp.com, festevam@gmail.com, kernel@pengutronix.de,
+        s.hauer@pengutronix.de, wim@linux-watchdog.org, robh+dt@kernel.org
+Subject: Re: [PATCH 2/3] dt-bindings: watchdog: fsl-imx: document suspend in wait mode
+Date:   Wed, 19 Oct 2022 15:00:39 +0200
+Message-ID: <7508670.GXAFRqVoOG@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20221019111714.1953262-3-andrej.picej@norik.com>
+References: <20221019111714.1953262-1-andrej.picej@norik.com> <20221019111714.1953262-3-andrej.picej@norik.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,28 +85,37 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Andrej,
+Hello Andrej,
 
-On Wed, Oct 19, 2022 at 8:17 AM Andrej Picej <andrej.picej@norik.com> wrote:
->
-> The i.MX6 watchdog can't be stopped once started. This means that
-> special hardware suspend needs to be configured when the device enters
-> low-power modes.
-> Usually i.MX devices have two bits which deal with this:
-> - WDZST bit disables the timer in "deeper" low power modes and
-> - WDW bit disables the timer in "WAIT" mode which corresponds with
-> Linux's "freeze" low-power mode.
->
-> WDZST bit support is already in place since 1a9c5efa576e ("watchdog: imx2_wdt: disable watchdog timer during low power mode").
-> WDW bit is not common for all imx2-wdt supported devices, therefore use
-> a new device-tree property "fsl,suspend-in-wait" which suspends the
-> watchdog in "WAIT" mode.
->
-> Andrej Picej (3):
->   watchdog: imx2_wdg: suspend watchdog in WAIT mode
->   dt-bindings: watchdog: fsl-imx: document suspend in wait mode
->   ARM: dts: imx6ul/ull: suspend i.MX6UL watchdog in wait mode
+Am Mittwoch, 19. Oktober 2022, 13:17:13 CEST schrieb Andrej Picej:
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+> ---
+>  Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml index
+> fb7695515be1..01b3e04e7e65 100644
+> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> @@ -55,6 +55,11 @@ properties:
+>        If present, the watchdog device is configured to assert its
+>        external reset (WDOG_B) instead of issuing a software reset.
+> 
+> +  fsl,suspend-in-wait:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: |
+> +      If present, the watchdog device is suspended in WAIT mode.
+> +
+>  required:
+>    - compatible
+>    - interrupts
 
-For the series:
+What is the condition the watchdog is suspended in WAIT mode? Is this specific 
+to SoC or platform or something else?
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Best regards,
+Alexander
+
+
+
