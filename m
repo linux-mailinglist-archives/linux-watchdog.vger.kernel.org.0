@@ -2,105 +2,128 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F403606873
-	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Oct 2022 20:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B006068CB
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Oct 2022 21:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbiJTSvg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 20 Oct 2022 14:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
+        id S229608AbiJTTXF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 20 Oct 2022 15:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiJTSve (ORCPT
+        with ESMTP id S229556AbiJTTXE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 20 Oct 2022 14:51:34 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70B6156256;
-        Thu, 20 Oct 2022 11:51:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666291856; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
+        Thu, 20 Oct 2022 15:23:04 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEEC1F8101;
+        Thu, 20 Oct 2022 12:23:03 -0700 (PDT)
+Received: from t60.musicnaut.iki.fi (85-76-8-144-nat.elisa-mobile.fi [85.76.8.144])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: aaro.koskinen)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 204E9200C5;
+        Thu, 20 Oct 2022 22:23:00 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1666293780;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=mQZXeiJoM7b+oCY4wSe+cuIVpnUFu+3jGMCQghIgiAE=;
-        b=KSZlzIwZ7zv1BtHDprWFJCCjVtX4LG3si1Q25EIAcmMdewXUHIeQr8V34Pk0vndAl3QbKZ
-        sQLsF8O/cDlz6G5XYNv0t4kVmyJuowLOOHpRguseqO/vJY+nbcXW+xRq3S4W58bfCpGGCs
-        E2/FZlre0GIYViQn5b6BNTPxLPLCnzg=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 4/4] watchdog: kempld: Remove #ifdef guards for PM related functions
-Date:   Thu, 20 Oct 2022 19:50:47 +0100
-Message-Id: <20221020185047.1001522-5-paul@crapouillou.net>
-In-Reply-To: <20221020185047.1001522-1-paul@crapouillou.net>
+        bh=PNxYWZtqhQJ3EBnB8jz3JWPqixt8xcwZe2p6tpEoE8Y=;
+        b=EmkHLYuM9bMA98DxeONON4fIcT90tau9h2WSMOQJOlTiCoOvC2edtD/TvifBE0LdU4FaIQ
+        xUXuj4mqFY+1rTI9OTXtplS5m6WLUcw2TMOVP4qtcmFckDRXvV845GkfqslVVsLM+e3xyF
+        +Yd9pF3j9Ko7OWtoGOOsw26o7pNr8oY=
+Date:   Thu, 20 Oct 2022 22:22:58 +0300
+From:   Aaro Koskinen <aaro.koskinen@iki.fi>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] watchdog: omap: Remove #ifdef guards for PM related
+ functions
+Message-ID: <20221020192258.GA3019@t60.musicnaut.iki.fi>
 References: <20221020185047.1001522-1-paul@crapouillou.net>
+ <20221020185047.1001522-4-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221020185047.1001522-4-paul@crapouillou.net>
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=aaro.koskinen smtp.mailfrom=aaro.koskinen@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1666293780; a=rsa-sha256; cv=none;
+        b=d9CzQI/102zmHVRTy51I4xghMb00z3jR9v6tK95ShM9/rN9iqzhDohMFNDex46pXOdw/HO
+        O5xZOkQJYrd6LvY0gi6ebsCQqSJy4ja7aVE7YcA34irwNWO1khNa7mxXR6aLxeyjR2kt2v
+        it2/g11MZFA+G+Wf/vijRS7atoCj74s=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1666293780;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PNxYWZtqhQJ3EBnB8jz3JWPqixt8xcwZe2p6tpEoE8Y=;
+        b=pZjHRPy6zdJ3wKa+yTHk+9CRs5ayFGBPqpgZR1//On2OJ2y1Vjsb/k50SpEqCZXx2A8VCC
+        4wKtjcsAp4wMOSnEC7xEsGvbOgufQxK3JVt/8NN3SKf/Wew1oCROTSJv8/e06+SliHr/kA
+        cJw5LDwhiwOa7N1ugNazSrwksPJ92LA=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Use the pm_ptr() macro to handle the .suspend/.resume callbacks.
+On Thu, Oct 20, 2022 at 07:50:46PM +0100, Paul Cercueil wrote:
+> Use the pm_ptr() macro to handle the .suspend/.resume callbacks.
+> 
+> This macro allows the suspend and resume functions to be automatically
+> dropped by the compiler when CONFIG_SUSPEND is disabled, without having
+> to use #ifdef guards. Not using #ifdef guards means that the code is
+> always compiled independently of any Kconfig option, and thanks to that
+> bugs and regressions are easier to catch.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-This macro allows the suspend and resume functions to be automatically
-dropped by the compiler when CONFIG_SUSPEND is disabled, without having
-to use #ifdef guards. Not using #ifdef guards means that the code is
-always compiled independently of any Kconfig option, and thanks to that
-bugs and regressions are easier to catch.
+Acked-by: Aaro Koskinen <aaro.koskinen@iki.fi>
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/watchdog/kempld_wdt.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/watchdog/kempld_wdt.c b/drivers/watchdog/kempld_wdt.c
-index 40bd518ed873..e6c7a2906680 100644
---- a/drivers/watchdog/kempld_wdt.c
-+++ b/drivers/watchdog/kempld_wdt.c
-@@ -75,9 +75,7 @@ struct kempld_wdt_data {
- 	struct watchdog_device		wdd;
- 	unsigned int			pretimeout;
- 	struct kempld_wdt_stage		stage[KEMPLD_WDT_MAX_STAGES];
--#ifdef CONFIG_PM
- 	u8				pm_status_store;
--#endif
- };
- 
- #define DEFAULT_TIMEOUT		30 /* seconds */
-@@ -495,7 +493,6 @@ static int kempld_wdt_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
--#ifdef CONFIG_PM
- /* Disable watchdog if it is active during suspend */
- static int kempld_wdt_suspend(struct platform_device *pdev,
- 				pm_message_t message)
-@@ -531,18 +528,14 @@ static int kempld_wdt_resume(struct platform_device *pdev)
- 	else
- 		return kempld_wdt_stop(wdd);
- }
--#else
--#define kempld_wdt_suspend	NULL
--#define kempld_wdt_resume	NULL
--#endif
- 
- static struct platform_driver kempld_wdt_driver = {
- 	.driver		= {
- 		.name	= "kempld-wdt",
- 	},
- 	.probe		= kempld_wdt_probe,
--	.suspend	= kempld_wdt_suspend,
--	.resume		= kempld_wdt_resume,
-+	.suspend	= pm_ptr(kempld_wdt_suspend),
-+	.resume		= pm_ptr(kempld_wdt_resume),
- };
- 
- module_platform_driver(kempld_wdt_driver);
--- 
-2.35.1
-
+> ---
+>  drivers/watchdog/omap_wdt.c | 11 ++---------
+>  1 file changed, 2 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/watchdog/omap_wdt.c b/drivers/watchdog/omap_wdt.c
+> index 74d785b2b478..e75aa86f63cb 100644
+> --- a/drivers/watchdog/omap_wdt.c
+> +++ b/drivers/watchdog/omap_wdt.c
+> @@ -316,8 +316,6 @@ static int omap_wdt_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -#ifdef	CONFIG_PM
+> -
+>  /* REVISIT ... not clear this is the best way to handle system suspend; and
+>   * it's very inappropriate for selective device suspend (e.g. suspending this
+>   * through sysfs rather than by stopping the watchdog daemon).  Also, this
+> @@ -353,11 +351,6 @@ static int omap_wdt_resume(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -#else
+> -#define	omap_wdt_suspend	NULL
+> -#define	omap_wdt_resume		NULL
+> -#endif
+> -
+>  static const struct of_device_id omap_wdt_of_match[] = {
+>  	{ .compatible = "ti,omap3-wdt", },
+>  	{},
+> @@ -368,8 +361,8 @@ static struct platform_driver omap_wdt_driver = {
+>  	.probe		= omap_wdt_probe,
+>  	.remove		= omap_wdt_remove,
+>  	.shutdown	= omap_wdt_shutdown,
+> -	.suspend	= omap_wdt_suspend,
+> -	.resume		= omap_wdt_resume,
+> +	.suspend	= pm_ptr(omap_wdt_suspend),
+> +	.resume		= pm_ptr(omap_wdt_resume),
+>  	.driver		= {
+>  		.name	= "omap_wdt",
+>  		.of_match_table = omap_wdt_of_match,
+> -- 
+> 2.35.1
+> 
