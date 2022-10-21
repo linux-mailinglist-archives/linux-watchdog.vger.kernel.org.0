@@ -2,140 +2,222 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD00606AEF
-	for <lists+linux-watchdog@lfdr.de>; Fri, 21 Oct 2022 00:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4C2606FAC
+	for <lists+linux-watchdog@lfdr.de>; Fri, 21 Oct 2022 07:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiJTWAh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 20 Oct 2022 18:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42708 "EHLO
+        id S229974AbiJUF4Y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 21 Oct 2022 01:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiJTWAe (ORCPT
+        with ESMTP id S229925AbiJUF4R (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 20 Oct 2022 18:00:34 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828CC110B2D;
-        Thu, 20 Oct 2022 15:00:31 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-13af2d12469so1231414fac.13;
-        Thu, 20 Oct 2022 15:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VOAmf6LMMzFHHFyiTHvOQ6ROsuoWD0GGZVua/cd2o40=;
-        b=B4KqYc2mv+RbpdPMtvqHy8+rA10bS0giGabR5xTKZuTPhRhmafJGmENMZXNYMA9xZb
-         s0KCzll9kgG2KMZcPUk91nJexwZF5/H9gIPpyrmCletvr91HnDC1VYiBFhyRnmy3+gY1
-         lofO5PPd8jsGK1p9B2Ls2oo4SyIEO/BV5v54Z934nxL1t1+irulUisARVx9JkNmjMtJq
-         1znBdnGP1ar0qWpMWYU/QrDwKzWlOse9rA2f0oMjXZgpJTMiDxgxXPnAjS9LWQTroBv0
-         81OQSJ+kgc/hDR5LIdrRNQ5x2bOE+g0R4PGCJh4VTPTCqV5roALsiEmpXlVRWSZLdPbC
-         jrOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VOAmf6LMMzFHHFyiTHvOQ6ROsuoWD0GGZVua/cd2o40=;
-        b=Zl0HBGz+VB1/QHiX3m671sDoPOg/Cmc5xs2Qjjgy4V0KqboWa3CAvaJMQbrvfYRFWh
-         mEHE20AB5sFcSyDKa9qv4Fchn8K0xhQiu69IUGkPiAZelo8Oo34Fqx6KvAJ//e/4gNJQ
-         VUT1AvU0ep/20dJkk0jUbJm3xaKFyZ2XP+Bjnr9cefH8gN5lLyftFQtfhXQXMQA/0bUt
-         vutApGZFTsfCqP4v5t2B9RHJmnACy2Rix6dkCBAZX8NC+HmXtzEGzeJ5B1FSaMb65vUj
-         qZgs7s4s23P5+GTCTojjzPTMebGOtvZm4Mz+6x8phlTT60FwiuE/zD/lSe3tzxSfbbl2
-         YCMQ==
-X-Gm-Message-State: ACrzQf1sBrXZm3gexO8JnsFxBYHt1QcpnZ4IxRFEAAEvmok1vEp6yD4Z
-        B77sMo2hEmuqEyKV76RDVUQ=
-X-Google-Smtp-Source: AMsMyM5ep75R4Y+KYb34yU+as//zw7oUEUnGn7n3/9oF7uhoadLDyjBFhT/7JdD1Vp+UVCYuRVMp+A==
-X-Received: by 2002:a05:6870:c147:b0:136:90c4:ee84 with SMTP id g7-20020a056870c14700b0013690c4ee84mr10385807oad.295.1666303231308;
-        Thu, 20 Oct 2022 15:00:31 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e25-20020aca1319000000b00342eade43d4sm443013oii.13.2022.10.20.15.00.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 15:00:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 20 Oct 2022 15:00:29 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] watchdog: kempld: Remove #ifdef guards for PM
- related functions
-Message-ID: <20221020220029.GD4035307@roeck-us.net>
-References: <20221020185047.1001522-1-paul@crapouillou.net>
- <20221020185047.1001522-5-paul@crapouillou.net>
+        Fri, 21 Oct 2022 01:56:17 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679EE1AA251;
+        Thu, 20 Oct 2022 22:56:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=WwEOW9UNLcS8nsd2aSBapizmkmLE2U0qOFg8vtqEoZ8=; b=VJq0lyXROIw370sXXxOb2+ndrM
+        Q6InkMEwLQpheSIM3aMq1x21KB4a7Qj2y95I9cv3+mHSXrytEirbRjFl6K49M//vt19imi9HYpbgT
+        OY/NSMDI1nAlw1ghC4seVj+9LKTDcnSjYisvTK+5E8xqjf7lhP5pbYl7QIay/BzVzk+inf1diLpan
+        Bel+4mm2ceThmkOFChV/q3vk3S3lP6wKCR9X8oKwz0XeEyansJF8L0Vty9IemBx2rxvDCbACygR9t
+        /WVjuYQylchiKwfL4kbraCfqbMRhp4sM9qH6gNSKB6NqbYuShthHWCV0pgY06+MESr5Dl0E0zYx4/
+        y1yWJMuw==;
+Received: from [89.212.21.243] (port=52262 helo=[192.168.69.85])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1oll0h-0012oZ-VJ;
+        Fri, 21 Oct 2022 07:56:07 +0200
+Message-ID: <ceb604bf-9773-d617-18e7-8f1400fd2cf9@norik.com>
+Date:   Fri, 21 Oct 2022 07:56:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020185047.1001522-5-paul@crapouillou.net>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 2/3] dt-bindings: watchdog: fsl-imx: document suspend in
+ wait mode
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
+        linux@roeck-us.net, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-imx@nxp.com, festevam@gmail.com,
+        kernel@pengutronix.de, s.hauer@pengutronix.de,
+        wim@linux-watchdog.org, robh+dt@kernel.org
+References: <20221019111714.1953262-1-andrej.picej@norik.com>
+ <ea6893f6-be39-697c-4493-7f1c0ed6708d@linaro.org>
+ <143f1466-e34a-254d-4e6e-fefa17ad1390@norik.com>
+ <24401572.EfDdHjke4D@steina-w>
+ <1a3a1c8c-8baf-ef70-9e5b-e817bb14cfad@norik.com>
+ <f8435311-42fa-4858-4623-8088d644f6c6@linaro.org>
+From:   Andrej Picej <andrej.picej@norik.com>
+In-Reply-To: <f8435311-42fa-4858-4623-8088d644f6c6@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 07:50:47PM +0100, Paul Cercueil wrote:
-> Use the pm_ptr() macro to handle the .suspend/.resume callbacks.
-> 
-> This macro allows the suspend and resume functions to be automatically
-> dropped by the compiler when CONFIG_SUSPEND is disabled, without having
-> to use #ifdef guards. Not using #ifdef guards means that the code is
-> always compiled independently of any Kconfig option, and thanks to that
-> bugs and regressions are easier to catch.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> ---
->  drivers/watchdog/kempld_wdt.c | 11 ++---------
->  1 file changed, 2 insertions(+), 9 deletions(-)
+On 20. 10. 22 20:23, Krzysztof Kozlowski wrote:
+> On 20/10/2022 09:05, Andrej Picej wrote:
+>>
+>>
+>> On 20. 10. 22 14:41, Alexander Stein wrote:
+>>> Am Donnerstag, 20. Oktober 2022, 14:36:10 CEST schrieb Andrej Picej:
+>>>> On 20. 10. 22 14:18, Krzysztof Kozlowski wrote:
+>>>>> On 20/10/2022 02:23, Andrej Picej wrote:
+>>>>>> Hi Alexander and Krzysztof,
+>>>>>>
+>>>>>> hope I can reply to both questions here.
+>>>>>>
+>>>>>> On 19. 10. 22 17:51, Krzysztof Kozlowski wrote:
+>>>>>>> On 19/10/2022 09:00, Alexander Stein wrote:
+>>>>>>>> Hello Andrej,
+>>>>>>>
+>>>>>>>> Am Mittwoch, 19. Oktober 2022, 13:17:13 CEST schrieb Andrej Picej:
+>>>>>>> Missing commit msg.
+>>>>>>>
+>>>>>>>>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+>>>>>>>>> ---
+>>>>>>>>>
+>>>>>>>>>      Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml | 5
+>>>>>>>>>      +++++
+>>>>>>>>>      1 file changed, 5 insertions(+)
+>>>>>>>>>
+>>>>>>>>> diff --git
+>>>>>>>>> a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+>>>>>>>>> b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml index
+>>>>>>>>> fb7695515be1..01b3e04e7e65 100644
+>>>>>>>>> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+>>>>>>>>> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+>>>>>>>>>
+>>>>>>>>> @@ -55,6 +55,11 @@ properties:
+>>>>>>>>>            If present, the watchdog device is configured to assert its
+>>>>>>>>>            external reset (WDOG_B) instead of issuing a software reset.
+>>>>>>>>>
+>>>>>>>>> +  fsl,suspend-in-wait:
+>>>>>>>>> +    $ref: /schemas/types.yaml#/definitions/flag
+>>>>>>>>> +    description: |
+>>>>>>>>> +      If present, the watchdog device is suspended in WAIT mode.
+>>>>>>>>> +
+>>>>>>>>>
+>>>>>>>>>      required:
+>>>>>>>>>        - compatible
+>>>>>>>>>        - interrupts
+>>>>>>>>
+>>>>>>>> What is the condition the watchdog is suspended in WAIT mode? Is this
+>>>>>>>> specific to SoC or platform or something else?
+>>>>>>
+>>>>>> Sorry, what exactly do you mean by condition?
+>>>>>
+>>>>> Ugh, I also cannot parse it now...
+>>>
+>>> Sorry, Krzysztof already asked the right question: When does one want to
+>>> enable/disable this feature?
+>>>
+>>>>>> When the property
+>>>>>> "fsl,suspend-in-wait" is set the watchdog is suspended in WAIT mode, so
+>>>>>> this is defined by the user. Didn't want to apply it for all the
+>>>>>> supported machines since there could be devices which depend on watchdog
+>>>>>> triggering in WAIT mode. We stumbled on this problem on imx6 devices,
+>>>>>> but the same bit (with the same description) is found on imx25, imx35,
+>>>>>> imx50/51/53, imx7 and imx8.
+>>>>>
+>>>>> I meant, what is expected to happen if you do not enable this bit and
+>>>>> watchdog triggers in WAIT mode? IOW, why someone might want to enable or
+>>>>> disable this property?
+>>>>
+>>>> If this is not enabled and you put the device into the Suspend-to-idle
+>>>> mode the device resets after 128 seconds. If not, the device can be left
+>>>> in that state for infinite time. I'm guessing you want me to better
+>>>> explain the property in device tree docs right?
+>>>> I can do that in v2.
+>>>>
+>>>>>>> And what happens else? When it is not suspended in WAIT mode?
+>>>>>>
+>>>>>> When you put the device in "freeze"/"Suspend-To-Idle" low-power mode the
+>>>>>> watchdog keeps running and triggers a reset after 128 seconds. So the
+>>>>>> maximum length the device can stay in this mode is limited to 128
+>>>>>> seconds.
+>>>>>
+>>>>> And who wakes up the system before 128 seconds? IOW is there a use case
+>>>>> of not enabling this property?
+>>>>
+>>>> Well I can think of one, system can be woken up by some other interrupt.
+>>>> Like RTC which triggers interrupt (for example every 10s). So if this
+>>>> property is left disabled the watchdog can handle errors where other
+>>>> wakeup sources don't trigger interrupt or if the system is unable to
+>>>> wake from low-power state. In that case the watchdog will do a hard
+>>>> reset of the device.
+>>>>
+>>>> But I'm not really sure if anybody uses this, just wanted to make sure
+>>>> that we keep the default behaviour as it is, since this driver is used
+>>>> by many devices and for quite some time.
+>>>
+>>> This sounds more like (application) configuration. If so this should not be
+>>> configured in device tree, IMHO.
+>>>
+>>
+>> Do you have an idea where should it be configured? Just keep in mind
+>> that this can not be configured at runtime, since this is write-once bit
+>> so any configuration changes regarding this functionality can not be done.
+>>
+>> Basically if I can sum up the problem:
+>>
+>> Without this property enabled, the WDW bit is left unset:
+>> $ echo freeze > /sys/power/state
+>> #device enters Suspend-to-idle, watchdog is left running and the device
+>> resets after 128 seconds in this state
 > 
-> diff --git a/drivers/watchdog/kempld_wdt.c b/drivers/watchdog/kempld_wdt.c
-> index 40bd518ed873..e6c7a2906680 100644
-> --- a/drivers/watchdog/kempld_wdt.c
-> +++ b/drivers/watchdog/kempld_wdt.c
-> @@ -75,9 +75,7 @@ struct kempld_wdt_data {
->  	struct watchdog_device		wdd;
->  	unsigned int			pretimeout;
->  	struct kempld_wdt_stage		stage[KEMPLD_WDT_MAX_STAGES];
-> -#ifdef CONFIG_PM
->  	u8				pm_status_store;
-> -#endif
->  };
->  
->  #define DEFAULT_TIMEOUT		30 /* seconds */
-> @@ -495,7 +493,6 @@ static int kempld_wdt_probe(struct platform_device *pdev)
->  	return 0;
->  }
->  
-> -#ifdef CONFIG_PM
->  /* Disable watchdog if it is active during suspend */
->  static int kempld_wdt_suspend(struct platform_device *pdev,
->  				pm_message_t message)
-> @@ -531,18 +528,14 @@ static int kempld_wdt_resume(struct platform_device *pdev)
->  	else
->  		return kempld_wdt_stop(wdd);
->  }
-> -#else
-> -#define kempld_wdt_suspend	NULL
-> -#define kempld_wdt_resume	NULL
-> -#endif
->  
->  static struct platform_driver kempld_wdt_driver = {
->  	.driver		= {
->  		.name	= "kempld-wdt",
->  	},
->  	.probe		= kempld_wdt_probe,
-> -	.suspend	= kempld_wdt_suspend,
-> -	.resume		= kempld_wdt_resume,
-> +	.suspend	= pm_ptr(kempld_wdt_suspend),
-> +	.resume		= pm_ptr(kempld_wdt_resume),
->  };
->  
->  module_platform_driver(kempld_wdt_driver);
-> -- 
-> 2.35.1
+> I still wonder (and still did not receive) about such use case. When
+> would you like to have such behavior?
 > 
+
+Is this not a valid one?:
+>>>>> Well I can think of one, system can be woken up by some other interrupt.
+>>>>> Like RTC which triggers interrupt (for example every 10s). So if this
+>>>>> property is left disabled the watchdog can handle errors where other
+>>>>> wakeup sources don't trigger interrupt or if the system is unable to
+>>>>> wake from low-power state. In that case the watchdog will do a hard
+>>>>> reset of the device.
+>>>>>
+>>>>> But I'm not really sure if anybody uses this, just wanted to make sure
+>>>>> that we keep the default behaviour as it is, since this driver is used
+>>>>> by many devices and for quite some time.
+
+Basically watchdog acting as a supervisor for suspend states.
+
+>>
+>> With this property set, the WDW bit is set at watchdog initialization:
+>> $ echo freeze > /sys/power/state
+>> #device enters Suspend-to-idle, watchdog is suspended and the device can
+>> be left in this state until some other wakeup source triggers interrupt.
+> 
+> Assuming there is such use case, for keeping watchdog running even
+> though system sleeps (and cannot poke watchdog), it's fine.
+> 
+
+Best regards,
+Andrej
