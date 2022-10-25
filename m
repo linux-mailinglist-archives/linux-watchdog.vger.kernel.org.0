@@ -2,195 +2,120 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1C660CCE5
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Oct 2022 15:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9325760CDDB
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Oct 2022 15:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232694AbiJYNDn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 25 Oct 2022 09:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
+        id S231831AbiJYNtB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 25 Oct 2022 09:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiJYNDL (ORCPT
+        with ESMTP id S231693AbiJYNtA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 25 Oct 2022 09:03:11 -0400
-Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFC4DBE68;
-        Tue, 25 Oct 2022 06:01:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=IevFOjm1jG20XuMQioGWhi3yG2tjhE/B9gkbzFk4dC4=; b=ZxA4KToyOCJ46HayGSwvEQULkG
-        rj7wNvfcIBjPqlENft6SrsfV2VjS91PpmLnDR3vyXxdzcBVxv81JI7OqT4MpMcQCPfCKj1BUxfDCY
-        5ZU5RRWjJG4SaHWwIeRTWd7EStXtIfU8Elxq3gm57YEeaJGVpIrpIs7J1kFbiiNjaDCDESTN1CT7l
-        OAFG/WZ30ZnK16rQ7Tqz8FmmsA55Pl8MdcAsM0EcpaSbbZrRaTWY5pefGC0OKoK678vsfZWamYE7T
-        U3sK9DILJRbHWEwUDwfxLkLzVJsKNKfilwMdUku3wPPIlG82eivEIESfkScnT0JH30c7D2caOnjL8
-        5FT+fR7A==;
-Received: from [89.212.21.243] (port=39850 helo=[192.168.69.85])
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <andrej.picej@norik.com>)
-        id 1onJYO-007IqY-Ry;
-        Tue, 25 Oct 2022 15:01:12 +0200
-Message-ID: <a4d3aa78-709a-3aca-c9ff-2a8aedeeb197@norik.com>
-Date:   Tue, 25 Oct 2022 15:01:17 +0200
+        Tue, 25 Oct 2022 09:49:00 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32778188590
+        for <linux-watchdog@vger.kernel.org>; Tue, 25 Oct 2022 06:49:00 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id o2so8025788qkk.10
+        for <linux-watchdog@vger.kernel.org>; Tue, 25 Oct 2022 06:49:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VpMsl6jm+Q7wCngrxA8V9e6lKIjDRsrhMdY0rEbcY7k=;
+        b=U25Lit/LeZq5grDHi3qdKXiEeX7SVegjsBdlFQVNI8Y/+CIItKiDh/VkZYmlMZhCcj
+         wrhzatMIAIUCQBMENZQJ1PTw4YWCloorh2VrLys91yDQf5I6xnvCdRMK5smFHchImufk
+         95NBA1uQDv1buxBEzMJ0rnCSFJ1nLAxGg4SGrUFhmn8W1dHNVI93vCwfz6owyWZ6uEPJ
+         P8etiuR77cLMRq9F+uhi2LFGN9PG1swq6k7Mh65wvvAbRsOWUeMJ2ZZi7fWK3v7APd9C
+         DkM/x6h8zI7lp0fj+9G27S+GiXnqRElbUUsm4lhmzM32HTO2g1yXMFub8uD56uM7nB2C
+         Cmcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VpMsl6jm+Q7wCngrxA8V9e6lKIjDRsrhMdY0rEbcY7k=;
+        b=EricL7j/8wFl1gDb6qHW67dHbuL0yHmsAbDObQKJWTBu2vSyFmccnKgmrWQxvbV/ZF
+         VJoaYb3G3WLHWcznB+MhyVHxFKWcA+lKqxub8IuB2a/jne3n/UMnIoYdYTBrjXREv57B
+         qxJCuTbxRTdypJ3tPKNPB2miQlbUnbynDHFMjSd3ik0CUe0z1ZMQi3zHFCND6gDhhZ5M
+         c7TISMYt0pX+cbBa+zrH9WBXHLLcISDTqvktfMDkiLbJuOOWodgk1yvzlf8UBtwGmIlp
+         iWDO4Fuh3jZVi28lyU0nCK03WB3j+2W9bCfgf+drrT6zz9Q3F01EwwhNuLUPb5162l8J
+         +OGA==
+X-Gm-Message-State: ACrzQf2iCRQCrOSbZzv5/DNReC5rnWjoqf6FpCB42ihhYiV46iqr7gjI
+        aeYepjhX+12Yqlgtf660oLztQg==
+X-Google-Smtp-Source: AMsMyM46KU+z6yR+3aORkIfcWMzu0fiRjDj+ptUTf2IKXwGOYGCiiSoLHuVOkQ6CBKhP+B9aesllxg==
+X-Received: by 2002:ae9:e718:0:b0:6ee:8335:4191 with SMTP id m24-20020ae9e718000000b006ee83354191mr26880375qka.83.1666705739392;
+        Tue, 25 Oct 2022 06:48:59 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id w27-20020a05620a0e9b00b006f16148fa96sm2045473qkm.91.2022.10.25.06.48.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 06:48:58 -0700 (PDT)
+Message-ID: <ca484809-07e4-44ca-0ab3-26947bda7fa8@linaro.org>
+Date:   Tue, 25 Oct 2022 09:48:57 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 1/3] watchdog: imx2_wdg: suspend watchdog in WAIT mode
-Content-Language: en-GB
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        kernel@pengutronix.de, Anson.Huang@nxp.com, festevam@gmail.com,
-        s.hauer@pengutronix.de, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, linux-imx@nxp.com,
-        krzysztof.kozlowski+dt@linaro.org, wim@linux-watchdog.org,
-        shawnguo@kernel.org, linux@roeck-us.net
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 2/3] dt-bindings: watchdog: fsl-imx: document suspend
+ in wait mode
+Content-Language: en-US
+To:     Andrej Picej <andrej.picej@norik.com>,
+        linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, Anson.Huang@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20221025072533.2980154-1-andrej.picej@norik.com>
- <20221025072533.2980154-2-andrej.picej@norik.com>
- <20221025122723.yl5vax7y33ueo2p5@pengutronix.de>
-From:   Andrej Picej <andrej.picej@norik.com>
-In-Reply-To: <20221025122723.yl5vax7y33ueo2p5@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20221025072533.2980154-3-andrej.picej@norik.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221025072533.2980154-3-andrej.picej@norik.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
-X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Marco,
-
-On 25. 10. 22 14:27, Marco Felsch wrote:
-> On 22-10-25, Andrej Picej wrote:
->> Putting device into the "Suspend-To-Idle" mode causes watchdog to
->> trigger and reset the board after set watchdog timeout period elapses.
->>
->> Introduce new device-tree property "fsl,suspend-in-wait" which suspends
->> watchdog in WAIT mode. This is done by setting WDW bit in WCR
->> (Watchdog Control Register) Watchdog operation is restored after exiting
->> WAIT mode as expected. WAIT mode coresponds with Linux's
->> "Suspend-To-Idle".
->>
->> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
->> Reviewed-by: Fabio Estevam <festevam@gmail.com>
->> ---
->> Changes in v2:
->>   - validate the property with compatible string, as this functionality
->>     is not supported by all devices.
->> ---
->>   drivers/watchdog/imx2_wdt.c | 37 +++++++++++++++++++++++++++++++++++++
->>   1 file changed, 37 insertions(+)
->>
->> diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
->> index d0c5d47ddede..dd9866c6f1e5 100644
->> --- a/drivers/watchdog/imx2_wdt.c
->> +++ b/drivers/watchdog/imx2_wdt.c
->> @@ -35,6 +35,7 @@
->>   
->>   #define IMX2_WDT_WCR		0x00		/* Control Register */
->>   #define IMX2_WDT_WCR_WT		(0xFF << 8)	/* -> Watchdog Timeout Field */
->> +#define IMX2_WDT_WCR_WDW	BIT(7)		/* -> Watchdog disable for WAIT */
->>   #define IMX2_WDT_WCR_WDA	BIT(5)		/* -> External Reset WDOG_B */
->>   #define IMX2_WDT_WCR_SRS	BIT(4)		/* -> Software Reset Signal */
->>   #define IMX2_WDT_WCR_WRE	BIT(3)		/* -> WDOG Reset Enable */
->> @@ -67,6 +68,27 @@ struct imx2_wdt_device {
->>   	bool ext_reset;
->>   	bool clk_is_on;
->>   	bool no_ping;
->> +	bool sleep_wait;
->> +};
->> +
->> +static const char * const wdw_boards[] __initconst = {
->> +	"fsl,imx25-wdt",
->> +	"fsl,imx35-wdt",
->> +	"fsl,imx50-wdt",
->> +	"fsl,imx51-wdt",
->> +	"fsl,imx53-wdt",
->> +	"fsl,imx6q-wdt",
->> +	"fsl,imx6sl-wdt",
->> +	"fsl,imx6sll-wdt",
->> +	"fsl,imx6sx-wdt",
->> +	"fsl,imx6ul-wdt",
->> +	"fsl,imx7d-wdt",
->> +	"fsl,imx8mm-wdt",
->> +	"fsl,imx8mn-wdt",
->> +	"fsl,imx8mp-wdt",
->> +	"fsl,imx8mq-wdt",
->> +	"fsl,vf610-wdt",
->> +	NULL
->>   };
+On 25/10/2022 03:25, Andrej Picej wrote:
+> Property "fsl,suspend-in-wait" suspends watchdog in "WAIT" mode which
+> corresponds to Linux's Suspend-to-Idle S0 mode. If this property is not
+> set and the device is put into Suspend-to-Idle mode, the watchdog
+> triggers a reset after 128 seconds.
 > 
-> For such things we have the data pointer within the struct of_device_id.
-Ok, that might clear it up a bit. Thanks.
-
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+> ---
+> Changes in v2:
+>  - add a commit message,
+>  - add a list of devices which support this functionality
+> ---
+>  .../bindings/watchdog/fsl-imx-wdt.yaml        | 22 +++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 > 
->>   
->>   static bool nowayout = WATCHDOG_NOWAYOUT;
->> @@ -129,6 +151,9 @@ static inline void imx2_wdt_setup(struct watchdog_device *wdog)
->>   
->>   	/* Suspend timer in low power mode, write once-only */
->>   	val |= IMX2_WDT_WCR_WDZST;
->> +	/* Suspend timer in low power WAIT mode, write once-only */
->> +	if (wdev->sleep_wait)
->> +		val |= IMX2_WDT_WCR_WDW;
->>   	/* Strip the old watchdog Time-Out value */
->>   	val &= ~IMX2_WDT_WCR_WT;
->>   	/* Generate internal chip-level reset if WDOG times out */
->> @@ -313,6 +338,18 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
->>   
->>   	wdev->ext_reset = of_property_read_bool(dev->of_node,
->>   						"fsl,ext-reset-output");
->> +
->> +	if (of_property_read_bool(dev->of_node, "fsl,suspend-in-wait"))
-> 
-> Why do we need this special property? If the device has problems when
-> "freeze" is used as suspend mode and this is fixed by this special bit
-> then we should enable it if the device supports it.
+> diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> index fb7695515be1..9289de97859b 100644
+> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> @@ -55,6 +55,28 @@ properties:
+>        If present, the watchdog device is configured to assert its
+>        external reset (WDOG_B) instead of issuing a software reset.
+>  
+> +  fsl,suspend-in-wait:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: |
+> +      If present, the watchdog device is suspended in WAIT mode
+> +      (Suspend-to-Idle). Only supported on following devices:
+> +        - "fsl,imx25-wdt",
 
-That was our initial plan and it would be the easiest to do. But since 
-it looks like nobody experienced this problem so far, we are somehow 
-reluctant to set it by default. What if someone is relying on this 
-feature to reset the device if the device is not waken up from "freeze" 
-by some other interrupt source?
+You need to define such allow/disallow in allOf:if:then, instead. Like
+example-schema is doing for foo-supply, just disallow it for some types
+or use "if: not: ..."
 
 Best regards,
-Andrej
-> 
-> Regards,
->    Marco
-> 
-> 
->> +		if (of_device_compatible_match(dev->of_node, wdw_boards))
->> +			wdev->sleep_wait = 1;
->> +		else {
->> +			dev_warn(dev, "Warning: Suspending watchdog during " \
->> +				"WAIT mode is not supported for this device.\n");
->> +			wdev->sleep_wait = 0;
->> +		}
->> +	else
->> +		wdev->sleep_wait = 0;
->> +
->>   	/*
->>   	 * The i.MX7D doesn't support low power mode, so we need to ping the watchdog
->>   	 * during suspend.
->> -- 
->> 2.25.1
->>
->>
->>
+Krzysztof
+
