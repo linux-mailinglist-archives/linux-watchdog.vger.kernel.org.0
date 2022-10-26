@@ -2,81 +2,81 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9334460E2EE
-	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Oct 2022 16:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6654060E46F
+	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Oct 2022 17:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiJZOMS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 26 Oct 2022 10:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
+        id S234527AbiJZP1E (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 26 Oct 2022 11:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233722AbiJZOMQ (ORCPT
+        with ESMTP id S234562AbiJZP0y (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:12:16 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEF1107A97
-        for <linux-watchdog@vger.kernel.org>; Wed, 26 Oct 2022 07:12:15 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id w29so2838333qtv.9
-        for <linux-watchdog@vger.kernel.org>; Wed, 26 Oct 2022 07:12:15 -0700 (PDT)
+        Wed, 26 Oct 2022 11:26:54 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CE6FAA45;
+        Wed, 26 Oct 2022 08:26:48 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id d26-20020a05683018fa00b0066ab705617aso691285otf.13;
+        Wed, 26 Oct 2022 08:26:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pGbHuCEYdpPdrNmRy3KRJXWEMPpe/Yl4yYbiL7G5pI4=;
-        b=aI3SgU/o1B2M/H6X1N1ybICwefhQuyMnMU+xDhAda4rQ9GF9Hn7lTutEP2dSljFwDm
-         LNGUaLiXZkIFCetzK0stTLFVY5xkl+5x4+O2aE1xzGKzPEnjThfdaH5mdD8wRlGQF3Ar
-         zdLQGyIpYGveQVdB3InsYbQgbhjDfjY9o6Op7+cXJ8NDgmla2LaU4k/EJ8GfvJ1Kvdjp
-         kNzeeCsxiTkNZoTXEydWORLk54L2rnVam0Iv3Cm8mkk8TevcoUuWl8R1ODrD4aoAa/Bz
-         BgtAulbiOtieEdpBIEDG1iZQdBLcOsEXG7Rc1H1V+bRFaL3Tct4sayaA68UEvuJbRN/M
-         lTqQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rETPEk1QmQkLedue9Aq10b8Dr7LRzg0Ndi5czbR2hBM=;
+        b=B54fnVfPIbpKgzqs0UjFdW9Dwxh0Wp9I9IRyxLfsKmP0Mp73HqbzpGVooDNWoZgeoT
+         6cIfWt2pIJfaj0DDk5q306TAGKrPs9Fxa+L/PJNvzuFZq9NAXocoYQ7GgX2lxwFV1xxo
+         8n/J+XcXsQUuwuYp0vpQWNvjN2396K0QfnRIkW5Zf7n8HQ3jOhGThDRCt8BXFvIMwbtX
+         gn9I6hft/vhUM5XaUwAFKLs76MNsXFntXHzM/w2ZprifyvGHMqp9MW5KmoyulztQ/0pX
+         4OVxLlOilLlj7Kgy1S9rTWhLppX5qxiKxoBQvcA4bg4xqxsTmfSglXMAEgYGUbuEJWhI
+         j6KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pGbHuCEYdpPdrNmRy3KRJXWEMPpe/Yl4yYbiL7G5pI4=;
-        b=1CIX98KJOXRP1CQEZ9H8k99myyCWVgmzPfF9yX1rhEj6zzNAbaStmmc7GLmIT8mU6y
-         bLuNPUIcL9baLhtqb7HwVtk0uc0VMrVtnu37Vcce27CBekDYdb6uRg9RvmtmxKWg2W1x
-         66UDd3hgLbSZmD7DeGl6WdF1PmrBJA0QToIpcLU1dJ9EM8lVymSfr4UgjlLfjh1FslxC
-         dHpArWhdcfJLFmJb+EkaXDpCfGo0LRub0xR0RyHbbcbrJ8xz7wxu/C/pct+f2JwuecIr
-         FEz3yynmNSgrPU69ovRpXSk2/qQ1sYi05KjQFJ8dAhljLH0U0ilGoh7XDhuDXuq5winW
-         +X5g==
-X-Gm-Message-State: ACrzQf2jyyjRd8b+WCZt+64IxyjFRlyHxmXzc737cPVQipOyUp0XEy4g
-        go81GJ0RDmKrrDnTikn6yLZLxg==
-X-Google-Smtp-Source: AMsMyM7b/EkQh+RWqeoLHn2b9Hjxnnpl67n8IyVDCyNP1zMzoVmRnoUDP8KhxgY6DseThPc6o+7mNA==
-X-Received: by 2002:ac8:5cc6:0:b0:3a4:e3a6:5dd5 with SMTP id s6-20020ac85cc6000000b003a4e3a65dd5mr5599860qta.468.1666793535009;
-        Wed, 26 Oct 2022 07:12:15 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id de30-20020a05620a371e00b006e99290e83fsm2417302qkb.107.2022.10.26.07.12.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 07:12:14 -0700 (PDT)
-Message-ID: <91e83eeb-24b5-4602-c132-c23a2fb5d756@linaro.org>
-Date:   Wed, 26 Oct 2022 10:12:12 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rETPEk1QmQkLedue9Aq10b8Dr7LRzg0Ndi5czbR2hBM=;
+        b=Sd0XTe6I5JJcmQqqJG6/dMJchRoE1ycXNZCwCEH1hEEaZzgCqJ609gttAPeAvAHLx4
+         WAJuYbO3xKZ+Yvfp/9zmU8dEOEeUt6kZNeCa0Sk/WGjoGvMAV+dZS/5INTEX5EK82gVK
+         HWvnLc7l2NQM6DIO99i0Nys675VDVfWt2p8bEnYV7U6qRYEIL/4QqIob3YRTn7idtj2X
+         WkdsLYjvpVKijUqTr+mTlXP0P4RLTc8v24XhUArufGMGzusj7QUF060nUcGB7t6uMj7J
+         DG0dqlORyCAIn2mAAoglgMVtoLS3onh4plnBf7fwlCj5g8Id/Q2T1W9BH2eMkUg1RuxF
+         NMeg==
+X-Gm-Message-State: ACrzQf3eRf7OPWVGw+6YUv4Uaoo9h95Njwldi/qWZ50a0tS7rbdHhCmu
+        mWzuYhCvmZefXVRZrn6zw+k=
+X-Google-Smtp-Source: AMsMyM48086VLKArZW0qg/GJXwajJeYDYn0Mw0euDn179MpRlshE5OrXRRv/dWeDXWc6cWBR3Sbhyg==
+X-Received: by 2002:a05:6830:603:b0:661:b07c:bf24 with SMTP id w3-20020a056830060300b00661b07cbf24mr22137103oti.208.1666798007507;
+        Wed, 26 Oct 2022 08:26:47 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id fo27-20020a0568709a1b00b0013b0b19100fsm3218662oab.32.2022.10.26.08.26.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 08:26:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 26 Oct 2022 08:26:45 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Runyang Chen <Runyang.Chen@mediatek.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        nfraprado@collabora.com, angelogioacchino.delregno@collabora.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [RESEND v3 1/3] dt-bindings: watchdog: Add compatible for
+ MediaTek MT8188
+Message-ID: <20221026152645.GA2946818@roeck-us.net>
+References: <20221026063327.20037-1-Runyang.Chen@mediatek.com>
+ <20221026063327.20037-2-Runyang.Chen@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 2/3] dt-bindings: watchdog: fsl-imx: document suspend
- in wait mode
-Content-Language: en-US
-To:     Andrej Picej <andrej.picej@norik.com>,
-        linux-watchdog@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, Anson.Huang@nxp.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221025072533.2980154-1-andrej.picej@norik.com>
- <20221025072533.2980154-3-andrej.picej@norik.com>
- <ca484809-07e4-44ca-0ab3-26947bda7fa8@linaro.org>
- <a600b0e3-19ab-47df-4315-48b8554cb12f@norik.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a600b0e3-19ab-47df-4315-48b8554cb12f@norik.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026063327.20037-2-Runyang.Chen@mediatek.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,87 +84,44 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 26/10/2022 02:38, Andrej Picej wrote:
-> On 25. 10. 22 15:48, Krzysztof Kozlowski wrote:
->> On 25/10/2022 03:25, Andrej Picej wrote:
->>> Property "fsl,suspend-in-wait" suspends watchdog in "WAIT" mode which
->>> corresponds to Linux's Suspend-to-Idle S0 mode. If this property is not
->>> set and the device is put into Suspend-to-Idle mode, the watchdog
->>> triggers a reset after 128 seconds.
->>>
->>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
->>> Reviewed-by: Fabio Estevam <festevam@gmail.com>
->>> ---
->>> Changes in v2:
->>>   - add a commit message,
->>>   - add a list of devices which support this functionality
->>> ---
->>>   .../bindings/watchdog/fsl-imx-wdt.yaml        | 22 +++++++++++++++++++
->>>   1 file changed, 22 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
->>> index fb7695515be1..9289de97859b 100644
->>> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
->>> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
->>> @@ -55,6 +55,28 @@ properties:
->>>         If present, the watchdog device is configured to assert its
->>>         external reset (WDOG_B) instead of issuing a software reset.
->>>   
->>> +  fsl,suspend-in-wait:
->>> +    $ref: /schemas/types.yaml#/definitions/flag
->>> +    description: |
->>> +      If present, the watchdog device is suspended in WAIT mode
->>> +      (Suspend-to-Idle). Only supported on following devices:
->>> +        - "fsl,imx25-wdt",
->>
->> You need to define such allow/disallow in allOf:if:then, instead. Like
->> example-schema is doing for foo-supply, just disallow it for some types
->> or use "if: not: ..."
+On Wed, Oct 26, 2022 at 02:33:25PM +0800, Runyang Chen wrote:
+> From: Runyang Chen <runyang.chen@mediatek.com>
 > 
-> Sorry missed that. So something like that should be added?:
+> Add dt-binding documentation of watchdog for MediaTek MT8188 Soc
 > 
->> allOf:
->>   - if:
->>       not:
->>         properties:
->>           compatible:
->>             contains:
->>               enum:
->>                 - fsl,imx25-wdt
->>                 - fsl,imx35-wdt
->>                 - fsl,imx50-wdt
->>                 - fsl,imx51-wdt
->>                 - fsl,imx53-wdt
->>                 - fsl,imx6q-wdt
->>                 - fsl,imx6sl-wdt
->>                 - fsl,imx6sll-wdt
->>                 - fsl,imx6sx-wdt
->>                 - fsl,imx6ul-wdt
->>                 - fsl,imx7d-wdt
->>                 - fsl,imx8mm-wdt
->>                 - fsl,imx8mn-wdt
->>                 - fsl,imx8mp-wdt
->>                 - fsl,imx8mq-wdt
->>                 - fsl,vf610-wdt
+> Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Yes.
+This conflicts with the ongoing yaml conversion of this file
+which is still not accepted.
 
->>     then:
->>       properties:
->>         fsl,suspend-in-wait: false
+https://patchwork.kernel.org/project/linux-watchdog/patch/20221005113517.70628-4-angelogioacchino.delregno@collabora.com/
+
+Nevertheless, I'll apply this series to my watchdog-next branch
+and assume that it will be included in the next version of the
+yaml conversion patch.
+
+For my and Wim's reference:
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+Thanks,
+Guenter
+
+> ---
+>  Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> And I'm assuming I can then remove the supported devices list from 
-> property description.
-
-Yes.
-
-> 
-> Are you fine with this, so we don't have to split the compatible list 
-> like Alexander suggested? Basically we have the same list of WDW 
-> supported devices in the driver.
-
-I don't know to what you refer.
-
-Best regards,
-Krzysztof
-
+> diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> index 762c62e428ef..b900c85d4560 100644
+> --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> @@ -17,6 +17,7 @@ Required properties:
+>  	"mediatek,mt7986-wdt", "mediatek,mt6589-wdt": for MT7986
+>  	"mediatek,mt8183-wdt": for MT8183
+>  	"mediatek,mt8186-wdt", "mediatek,mt6589-wdt": for MT8186
+> +	"mediatek,mt8188-wdt", "mediatek,mt6589-wdt": for MT8188
+>  	"mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
+>  	"mediatek,mt8192-wdt": for MT8192
+>  	"mediatek,mt8195-wdt", "mediatek,mt6589-wdt": for MT8195
