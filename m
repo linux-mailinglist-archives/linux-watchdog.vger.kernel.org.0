@@ -2,60 +2,57 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A08C660DB6F
-	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Oct 2022 08:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8F060DBA5
+	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Oct 2022 08:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232823AbiJZGil (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 26 Oct 2022 02:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34310 "EHLO
+        id S233018AbiJZG7U (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 26 Oct 2022 02:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiJZGik (ORCPT
+        with ESMTP id S230134AbiJZG7T (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 26 Oct 2022 02:38:40 -0400
+        Wed, 26 Oct 2022 02:59:19 -0400
 Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88CB978BE1;
-        Tue, 25 Oct 2022 23:38:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF4672FD8;
+        Tue, 25 Oct 2022 23:59:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
         s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
         References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
         Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=02WNvwWbhiZXAK+Og8doakRElfSqkd+xgpF6EcyVeOM=; b=nQR6d81So8H6ulfbWo6w7/62Tt
-        9UIBku5apau5ZsllmmiPChLLKmg2pxmQU7Vwh0mDmmUvSJUruAs3oH6tGup7hPM3fIhPm7ElGJSFm
-        loIwEsEpau1Z2sXlifkO1uBXoexL/1tlUscOzRH2Gn2OogFyejupy6hRPw+s10Jb+yD57lFuRPH4v
-        rA/pw9R0qwNgRz98kheULOFiOl9FBZ09Cryy8CdLdEaoB9anCmzRj7CFfBqYEByudVfjQMIbKECdx
-        wzpuzuFb3voX7p/rU8XrEeYSx+LTx5Wwq/dXdAqdTRlkGqTfvarMCLZbkxdXzAR7Y7BsjnUp1hBIJ
-        MQWXxddQ==;
-Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:46054 helo=[192.168.69.85])
+        bh=dFkSfUaqcKDadnSdg6pAVIh7mRl2EJ6mB3zhqhRUTc0=; b=L9znhq3yWHiSTT5cSBNrHsQJWu
+        s1SmVYFHFJ68pwuSQAb3FzZin6TELDoVt1sNv2ri95AXxo9EDm0f/m20+K2itl+VvgJgOLoi8qw4z
+        gBrlnhdW1JR+ulCEjx15qy9a8i7IzdyQkPa4CD0a432PjuYRgwjeGWgoc0mBnhwOb2JIqp89Qkgcs
+        UINtNuZu34vfg+IUTgNgg/x2iU6eU9xmKBSq9WUFYKXx1aMZKhIZbxEdJ3Ns3tOmU5Fy1GhEyMLfG
+        XN6AGC1LoIAaZscte5tkujUWaV1+c9DFa2QPmyQG9D6wmR3tXupdDdK9xUcAwtEIVGMcujgCRAweq
+        mv25GlNA==;
+Received: from [89.212.21.243] (port=59376 helo=[192.168.69.85])
         by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.95)
         (envelope-from <andrej.picej@norik.com>)
-        id 1ona3S-00C9YI-Mx;
-        Wed, 26 Oct 2022 08:38:31 +0200
-Message-ID: <a600b0e3-19ab-47df-4315-48b8554cb12f@norik.com>
-Date:   Wed, 26 Oct 2022 08:38:32 +0200
+        id 1onaNT-00CD8z-VC;
+        Wed, 26 Oct 2022 08:59:13 +0200
+Message-ID: <1badfe10-7f5f-9197-6d10-e34a586046df@norik.com>
+Date:   Wed, 26 Oct 2022 08:59:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH v2 2/3] dt-bindings: watchdog: fsl-imx: document suspend
- in wait mode
+Subject: Re: [PATCH v2 1/3] watchdog: imx2_wdg: suspend watchdog in WAIT mode
 Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-watchdog@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+To:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
         s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
         linux-imx@nxp.com, Anson.Huang@nxp.com, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20221025072533.2980154-1-andrej.picej@norik.com>
- <20221025072533.2980154-3-andrej.picej@norik.com>
- <ca484809-07e4-44ca-0ab3-26947bda7fa8@linaro.org>
+ <20221025072533.2980154-2-andrej.picej@norik.com>
+ <bea41e17-0269-d88e-fd22-ad5c5a4b8dac@roeck-us.net>
 From:   Andrej Picej <andrej.picej@norik.com>
-In-Reply-To: <ca484809-07e4-44ca-0ab3-26947bda7fa8@linaro.org>
+In-Reply-To: <bea41e17-0269-d88e-fd22-ad5c5a4b8dac@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - cpanel.siel.si
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -75,77 +72,155 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 25. 10. 22 15:48, Krzysztof Kozlowski wrote:
-> On 25/10/2022 03:25, Andrej Picej wrote:
->> Property "fsl,suspend-in-wait" suspends watchdog in "WAIT" mode which
->> corresponds to Linux's Suspend-to-Idle S0 mode. If this property is not
->> set and the device is put into Suspend-to-Idle mode, the watchdog
->> triggers a reset after 128 seconds.
+
+
+On 25. 10. 22 16:21, Guenter Roeck wrote:
+> On 10/25/22 00:25, Andrej Picej wrote:
+>> Putting device into the "Suspend-To-Idle" mode causes watchdog to
+>> trigger and reset the board after set watchdog timeout period elapses.
+>>
+> 
+> s/reset/resets/
+> 
+>> Introduce new device-tree property "fsl,suspend-in-wait" which suspends
+>> watchdog in WAIT mode. This is done by setting WDW bit in WCR
+>> (Watchdog Control Register) Watchdog operation is restored after exiting
+> 
+> '.' after ')' missing ?
+> 
+>> WAIT mode as expected. WAIT mode coresponds with Linux's
+> 
+> s/coresponds/corresponds/
+> 
+Will fix this in v3, thank you.
+
+>> "Suspend-To-Idle".
 >>
 >> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
 >> Reviewed-by: Fabio Estevam <festevam@gmail.com>
 >> ---
 >> Changes in v2:
->>   - add a commit message,
->>   - add a list of devices which support this functionality
+>>   - validate the property with compatible string, as this functionality
+>>     is not supported by all devices.
 >> ---
->>   .../bindings/watchdog/fsl-imx-wdt.yaml        | 22 +++++++++++++++++++
->>   1 file changed, 22 insertions(+)
+>>   drivers/watchdog/imx2_wdt.c | 37 +++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 37 insertions(+)
 >>
->> diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
->> index fb7695515be1..9289de97859b 100644
->> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
->> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
->> @@ -55,6 +55,28 @@ properties:
->>         If present, the watchdog device is configured to assert its
->>         external reset (WDOG_B) instead of issuing a software reset.
->>   
->> +  fsl,suspend-in-wait:
->> +    $ref: /schemas/types.yaml#/definitions/flag
->> +    description: |
->> +      If present, the watchdog device is suspended in WAIT mode
->> +      (Suspend-to-Idle). Only supported on following devices:
->> +        - "fsl,imx25-wdt",
+>> diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+>> index d0c5d47ddede..dd9866c6f1e5 100644
+>> --- a/drivers/watchdog/imx2_wdt.c
+>> +++ b/drivers/watchdog/imx2_wdt.c
+>> @@ -35,6 +35,7 @@
+>>   #define IMX2_WDT_WCR        0x00        /* Control Register */
+>>   #define IMX2_WDT_WCR_WT        (0xFF << 8)    /* -> Watchdog Timeout 
+>> Field */
+>> +#define IMX2_WDT_WCR_WDW    BIT(7)        /* -> Watchdog disable for 
+>> WAIT */
+>>   #define IMX2_WDT_WCR_WDA    BIT(5)        /* -> External Reset 
+>> WDOG_B */
+>>   #define IMX2_WDT_WCR_SRS    BIT(4)        /* -> Software Reset 
+>> Signal */
+>>   #define IMX2_WDT_WCR_WRE    BIT(3)        /* -> WDOG Reset Enable */
+>> @@ -67,6 +68,27 @@ struct imx2_wdt_device {
+>>       bool ext_reset;
+>>       bool clk_is_on;
+>>       bool no_ping;
+>> +    bool sleep_wait;
+>> +};
+>> +
+>> +static const char * const wdw_boards[] __initconst = {
+>> +    "fsl,imx25-wdt",
+>> +    "fsl,imx35-wdt",
+>> +    "fsl,imx50-wdt",
+>> +    "fsl,imx51-wdt",
+>> +    "fsl,imx53-wdt",
+>> +    "fsl,imx6q-wdt",
+>> +    "fsl,imx6sl-wdt",
+>> +    "fsl,imx6sll-wdt",
+>> +    "fsl,imx6sx-wdt",
+>> +    "fsl,imx6ul-wdt",
+>> +    "fsl,imx7d-wdt",
+>> +    "fsl,imx8mm-wdt",
+>> +    "fsl,imx8mn-wdt",
+>> +    "fsl,imx8mp-wdt",
+>> +    "fsl,imx8mq-wdt",
+>> +    "fsl,vf610-wdt",
+>> +    NULL
+>>   };
+>>   static bool nowayout = WATCHDOG_NOWAYOUT;
+>> @@ -129,6 +151,9 @@ static inline void imx2_wdt_setup(struct 
+>> watchdog_device *wdog)
+>>       /* Suspend timer in low power mode, write once-only */
+>>       val |= IMX2_WDT_WCR_WDZST;
+>> +    /* Suspend timer in low power WAIT mode, write once-only */
+>> +    if (wdev->sleep_wait)
+>> +        val |= IMX2_WDT_WCR_WDW;
+>>       /* Strip the old watchdog Time-Out value */
+>>       val &= ~IMX2_WDT_WCR_WT;
+>>       /* Generate internal chip-level reset if WDOG times out */
+>> @@ -313,6 +338,18 @@ static int __init imx2_wdt_probe(struct 
+>> platform_device *pdev)
+>>       wdev->ext_reset = of_property_read_bool(dev->of_node,
+>>                           "fsl,ext-reset-output");
+>> +
+>> +    if (of_property_read_bool(dev->of_node, "fsl,suspend-in-wait"))
+>> +        if (of_device_compatible_match(dev->of_node, wdw_boards))
+>> +            wdev->sleep_wait = 1;
 > 
-> You need to define such allow/disallow in allOf:if:then, instead. Like
-> example-schema is doing for foo-supply, just disallow it for some types
-> or use "if: not: ..."
+> Since sleep_wait is bool:
+>              wdev->sleep_wait = true;
+> 
+>> +        else {
+>> +            dev_warn(dev, "Warning: Suspending watchdog during " \
+>> +                "WAIT mode is not supported for this device.\n");
+> 
+> Do not split strings. "Warning:" is redundant. Please handle the error 
+> first.
+> 
+>> +            wdev->sleep_wait = 0;
+> 
+> Unnecessary; false by default. Also, this should fail and return -EINVAL.
+> Devicetree files should be correct, and warning messages tend to be 
+> ignored.
+> 
+>> +        }
+> 
+> All branches of if/else need to wither use {} or no {}.
+> 
+>> +    else
+>> +        wdev->sleep_wait = 0;
+>> +
+> Unnecessary.
+> 
+> I would suggest to replace the above code with something like
+> 
+>      if (of_property_read_bool(dev->of_node, "fsl,suspend-in-wait")) {
+>          if (!of_device_compatible_match(dev->of_node, wdw_boards)) {
+>              dev_err(dev, "Suspending watchdog in WAIT mode is not 
+> supported for this device\n");
+>              return -EINVAL;
+>          }
+>          wdev->sleep_wait = true;
+>      }
 
-Sorry missed that. So something like that should be added?:
+OK, this look cleaner, will use this, thanks.
 
-> allOf:
->   - if:
->       not:
->         properties:
->           compatible:
->             contains:
->               enum:
->                 - fsl,imx25-wdt
->                 - fsl,imx35-wdt
->                 - fsl,imx50-wdt
->                 - fsl,imx51-wdt
->                 - fsl,imx53-wdt
->                 - fsl,imx6q-wdt
->                 - fsl,imx6sl-wdt
->                 - fsl,imx6sll-wdt
->                 - fsl,imx6sx-wdt
->                 - fsl,imx6ul-wdt
->                 - fsl,imx7d-wdt
->                 - fsl,imx8mm-wdt
->                 - fsl,imx8mn-wdt
->                 - fsl,imx8mp-wdt
->                 - fsl,imx8mq-wdt
->                 - fsl,vf610-wdt
->     then:
->       properties:
->         fsl,suspend-in-wait: false
+> 
+>>       /*
+>>        * The i.MX7D doesn't support low power mode, so we need to ping 
+>> the watchdog
+>>        * during suspend.
+> 
+> I still wonder how that interacts with fsl,suspend-in-wait, but since we 
+> have a
+> property for that we can leave that for someone else to find out. Maybe 
+> add a
+> comment explaining that interaction with "fsl,suspend-in-wait" is unknown.
+I'm assuming that i.MX7D doesn't enter any of low-power modes including 
+WAIT mode. If this is the case the watchdog wouldn't get disabled.
 
-And I'm assuming I can then remove the supported devices list from 
-property description.
+Anyway, I will add a short comment regarding the unknown behaviour of 
+this property with i.MX7D device.
 
-Are you fine with this, so we don't have to split the compatible list 
-like Alexander suggested? Basically we have the same list of WDW 
-supported devices in the driver.
-
-Thank you for your review,
+Best regards,
 Andrej
