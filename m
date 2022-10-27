@@ -2,106 +2,154 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB07E60F944
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Oct 2022 15:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A15760F977
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Oct 2022 15:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236221AbiJ0Nic (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 27 Oct 2022 09:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
+        id S236285AbiJ0Nmv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 27 Oct 2022 09:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236203AbiJ0Nia (ORCPT
+        with ESMTP id S236290AbiJ0Nmt (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 27 Oct 2022 09:38:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E454B181488;
-        Thu, 27 Oct 2022 06:38:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A036B82633;
-        Thu, 27 Oct 2022 13:38:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 722B2C433C1;
-        Thu, 27 Oct 2022 13:38:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666877907;
-        bh=pllUkLfz45ydi2Wi6jpPnGPo9M25t+6/Kw3UeVHzGdQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XA5Ckkqd0MKG04G1je+NRuX1YlckWLju0xK3x3oUFbwBzEWP6CCfNDpPs4an9dpok
-         zTBWBixFCPVT6QiWgG06RRjmUVE+7QhKtLZW6B7yG60cj4z+DP30OQiyW+scbCLjhc
-         /E23kdKoDTQanhEvTGk+kVSkBlzowin0Wcf+oPMRuHMB4/tpgnkvmmiqqPZ4NF0Vcq
-         p942/XBiczoyTBgTKPBfe9CjdC6F5DbIXfIVQwcdzJ4ryHBrcqdU5Jp1Lva0Po2bTn
-         L/okQRXRP0jU38kGSHQZ8g9LmY5hxfULdWp2a9lD5utiwTnV0uXe3TVXFuRzmMBt6V
-         TjROlYhclurRw==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Richard Weinberger <richard@nod.at>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: (subset) [PATCH v1 00/11] Get rid of [devm_]gpiod_get_from_of_node() public APIs
-Date:   Thu, 27 Oct 2022 15:38:11 +0200
-Message-Id: <166687787352.847482.10005684512699510391.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
-References: <20220903-gpiod_get_from_of_node-remove-v1-0-b29adfb27a6c@gmail.com>
+        Thu, 27 Oct 2022 09:42:49 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E9D182C4B;
+        Thu, 27 Oct 2022 06:42:43 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id v7-20020a4aa507000000b00496e843fdfeso108112ook.7;
+        Thu, 27 Oct 2022 06:42:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=z6W8iPhtqNf0mlij4m5bW+fazzgVgRRAtBqf6PWEhmg=;
+        b=T4OyztRjkpORsyc3m5+KYfpXaAJEx7dS55/YZXVf9GhcGyFP+YGJnNpI5/yS/Bj7Vx
+         +82dq+DUeQ1JPamgSMrUVUxIk4c5nON0uo7en8POpZqjmy6v1GqqZ0QxyZo/y9yHugwX
+         vqUp71h7Wg17x1YzoKhJOHch8CQ83+GJWdKqS6adEVhEROvj2WHe6J7OYhmdy7tK3mEi
+         NPiQsQET/BMbEqWSCSDQzvbrexnvv0b2CPvaZ2ORf2lxUJXt+XTaNdAZBMBwUsy4LfiX
+         fH4hSPrZxjfMnrc0Y9rShmeyY+n5/vTznqZ+vR5bo0z5tCYOLefgr9efIdZUUp9NxSo9
+         k/NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z6W8iPhtqNf0mlij4m5bW+fazzgVgRRAtBqf6PWEhmg=;
+        b=6Yq2zoPD3Icjs0zbPBAJFV1otHE4YZY0pZNxc4Bjs3npRyucmBix0LAPbtMKxkHwqN
+         jwylHKnheD9xBcHnFMxB2hhZVNUztRN5boHvjI+wk2Wsm2DIJ4zZ10uiL46VHKvbAdoI
+         3/2tiWSDmqzNUhjwqQodjVgZosfFDhfLCIxWopA5mhVKKwcc/Z7RD85tKru4WA2R6pbG
+         Q1WDCjUU8SBWwPBDubun2vHdGuLUg/vpYiftisocYZTP8oljANml/i5osev57ubOfONx
+         vz6Kz0AIBo3Sr+nYLgRJcbc/5S3y0Gr9SFznJ9W+M6TPlEhOzBIrrAdVzrAhRrXUTkyT
+         OVvQ==
+X-Gm-Message-State: ACrzQf3ynD97Qu7DLMN3SSCFdKZaEWgjy0qSFdLiavLn0l7JIz+qQ8TS
+        uXVuWjZRpck1pYt0NgjOtXmzBDkq5l8=
+X-Google-Smtp-Source: AMsMyM6EsoWqLXxFY7D9adCQffkMzr6fGzXbjKo4AM7L8cWrbHc1r7MM6v3VW2G2whThY1OxFNquog==
+X-Received: by 2002:a4a:9c2:0:b0:481:134b:fb50 with SMTP id 185-20020a4a09c2000000b00481134bfb50mr12475812ooa.90.1666878162684;
+        Thu, 27 Oct 2022 06:42:42 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id cv17-20020a056870c69100b0010c727a3c79sm545230oab.26.2022.10.27.06.42.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 06:42:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <e6035c60-29b7-a03e-29cd-77c37f5375e6@roeck-us.net>
+Date:   Thu, 27 Oct 2022 06:42:40 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [RESEND v3 1/3] dt-bindings: watchdog: Add compatible for
+ MediaTek MT8188
+Content-Language: en-US
+To:     =?UTF-8?B?QWxsZW4tS0ggQ2hlbmcgKOeoi+WGoOWLsyk=?= 
+        <Allen-KH.Cheng@mediatek.com>,
+        =?UTF-8?B?UnVueWFuZyBDaGVuICjpmYjmtqbmtIsp?= 
+        <Runyang.Chen@mediatek.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "nfraprado@collabora.com" <nfraprado@collabora.com>
+References: <20221026063327.20037-1-Runyang.Chen@mediatek.com>
+ <20221026063327.20037-2-Runyang.Chen@mediatek.com>
+ <20221026152645.GA2946818@roeck-us.net>
+ <e889728c-13e9-37f8-4d1a-e31332a39498@collabora.com>
+ <5abd63240a7890895a6de26a52fc24086f1c8ddb.camel@mediatek.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <5abd63240a7890895a6de26a52fc24086f1c8ddb.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sun, 4 Sep 2022 23:30:52 -0700, Dmitry Torokhov wrote:
-> I would like to stop exporting OF-specific [devm_]gpiod_get_from_of_node()
-> so that gpiolib can be cleaned a bit. We can do that by switching drivers
-> to use generic fwnode API ([devm_]fwnode_gpiod_get()). By doing so we open
-> the door to augmenting device tree and ACPI information through secondary
-> software properties (once we teach gpiolib how to handle those).
+On 10/27/22 01:56, Allen-KH Cheng (程冠勳) wrote:
+> On Thu, 2022-10-27 at 09:54 +0200, AngeloGioacchino Del Regno wrote:
+>> Il 26/10/22 17:26, Guenter Roeck ha scritto:
+>> > On Wed, Oct 26, 2022 at 02:33:25PM +0800, Runyang Chen wrote:
+>> > > From: Runyang Chen <runyang.chen@mediatek.com>
+>> > > 
+>> > > Add dt-binding documentation of watchdog for MediaTek MT8188 Soc
+>> > > 
+>> > > Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
+>> > > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> > > Reviewed-by: AngeloGioacchino Del Regno <
+>> > > angelogioacchino.delregno@collabora.com>
+>> > 
+>> > This conflicts with the ongoing yaml conversion of this file
+>> > which is still not accepted.
+>> > 
+>> > 
+> https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-watchdog/patch/20221005113517.70628-4-angelogioacchino.delregno@collabora.com/__;!!CTRNKA9wMg0ARbw!zT39OehD4gnyDKPYwMbLdeyGI_oNOfvWa4HIrcooL3Ax8O7-N-BjXBZAolsCOuLb39fJ7Q$
+>> >  
+>> > 
+>> > Nevertheless, I'll apply this series to my watchdog-next branch
+>> > and assume that it will be included in the next version of the
+>> > yaml conversion patch.
+>> > 
+>> > For my and Wim's reference:
+>> > 
+>> > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>> > 
+>> > Thanks,
+>> > Guenter
+>> > 
+>> 
+>> Adding Allen to the Cc's to make him aware of that, as he took over
+>> the
+>> mtk-wdt yaml conversion.
 > 
-> I hope that relevant maintainers will take patches through their trees and
-> then we could merge the last one some time after -rc1.
+> Hi Guenter,
 > 
-> [...]
+> I can send the following version of yaml conversion[1] for conflicts
+> after you apply this series. Thanks.
+> 
+> [1]
+> 
+> https://patchwork.kernel.org/project/linux-mediatek/patch/20221007093437.12228-6-allen-kh.cheng@mediatek.com/
+>
 
-Applied to pci/tegra, thanks!
+You did not copy the watchdog mailing list with this patch, causing it to get lost
+from my queue (even though I had a look at it). If there were other watchdog related
+patches in this version of the series, they got lost as well.
 
-[01/11] PCI: tegra: switch to using devm_fwnode_gpiod_get
-        https://git.kernel.org/lpieralisi/pci/c/16e3f4077965
+Guenter
 
-Thanks,
-Lorenzo
