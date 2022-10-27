@@ -2,143 +2,179 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678C960E475
-	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Oct 2022 17:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2974560F10A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Oct 2022 09:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234546AbiJZP2Q (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 26 Oct 2022 11:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
+        id S233553AbiJ0HRH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 27 Oct 2022 03:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234392AbiJZP2P (ORCPT
+        with ESMTP id S234100AbiJ0HRG (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 26 Oct 2022 11:28:15 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1107012FFB3;
-        Wed, 26 Oct 2022 08:28:15 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id t10so2133589oib.5;
-        Wed, 26 Oct 2022 08:28:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I52e8ODL6d9B8EPRm/dUTW74AdI5aoJaumLitDlvZ6A=;
-        b=TCGJaytyonLlG2s5MM7nkXzRTgnxXVr1fxSlda8NdtOcRVTRJckOVfxRUHKlfXidbT
-         7CSYB8u306NsZbY4mYYjkHaL066sPa6ac1eD3nR6wMs5IMBYWpJxV26Kzn+hfPMoxsTV
-         Br8IAnWzHfl9MrSgx4QBy97vTK1WesetQ822j63wX8WZN72hT1u2el/9RGVF7Y2+N94y
-         lxDv63Wej2BexvlYzJi/f0yetJzOWzfeAAXX1+9NUmcyt4e7iiay5OIhvrWvx4+EK2gu
-         3OmvBuGZoHmwnA0Jg8G/9sHGK8s86YVlauEZERPCKmClwjM25uxn7ssldZxSA/GyaaP4
-         ZPjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I52e8ODL6d9B8EPRm/dUTW74AdI5aoJaumLitDlvZ6A=;
-        b=FeiT2mRLvLcW/rzOMzfEUxOp4zuIJG1wM6HWT9oNpi8fYied003Xa7txduSb/6m9mO
-         nEp27301zto3n45Bl2itr3/ucXSxdu7OyXWGbBK0dxKp6BuXlTCCc+4OHbeCM1incTzM
-         XOqLTIM2HRgKytV1GkPVM4GWFTQmSmJva0gMPp36unRxngkCT082N1ZplCZQJOGnemp7
-         1SbWZ+gGV1kCTkiseD79c706wPzl4wjIImHNpi1qyxs/L5OE/baDcnglYpyua8I6cFts
-         3nU71Z+6eyy4YHu+vCfch9YyuE5fNywQkvMuFOMhEmt28YKvZIOTj85z/7OvkZWmR5VP
-         Ze6A==
-X-Gm-Message-State: ACrzQf0qub60j30vp3kVnXRk+WQtX+VmeflkXtHG5BzYeUpvr5ooibdc
-        2G7bqmDy3BiwOV/Tk0hTjMg=
-X-Google-Smtp-Source: AMsMyM6mMHxk11uO0qF4YLsns5seilyn+6912mbQNgsFsprQcpvhyji6wOCpNbMuTzELpP8eQSt1dw==
-X-Received: by 2002:a54:4404:0:b0:354:4ac7:45ac with SMTP id k4-20020a544404000000b003544ac745acmr2168239oiw.133.1666798094325;
-        Wed, 26 Oct 2022 08:28:14 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d3-20020a0568301b6300b00661a3f4113bsm2240634ote.64.2022.10.26.08.28.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 08:28:13 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 26 Oct 2022 08:28:13 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Runyang Chen <Runyang.Chen@mediatek.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        nfraprado@collabora.com, angelogioacchino.delregno@collabora.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [RESEND v3 2/3] dt-bindings: reset: mt8188: add toprgu
- reset-controller header file
-Message-ID: <20221026152813.GA2971664@roeck-us.net>
-References: <20221026063327.20037-1-Runyang.Chen@mediatek.com>
- <20221026063327.20037-3-Runyang.Chen@mediatek.com>
+        Thu, 27 Oct 2022 03:17:06 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF22F86FBC;
+        Thu, 27 Oct 2022 00:17:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=0S6rJiuhX8jNXI0rbgaAdCOGhsxaVNHZlzXhEJsPRHk=; b=VA6GdLu0uh+/tqe7+tLJIUzK6h
+        MSzZK1GfYQh4DIuYWKAcPjU1VrdFOmkEa+yMEt+FVtifayp3gNcIecnDudnukj0JAosXut90+ql5u
+        zqJkO+VdyyArKVfpkvmVae/NEXcO1o/lRoVfQF2vLzGvxG/GjjMZi5g0qhGbvqpqa+88JybWVqz69
+        y/7IxmtvqKSezNnIGpRSCTa6Crha+mFK34zuZCjUAWzfc8OndnMXUE+vngSAf8BsBCdOihnBAkd0v
+        tBtb34AU+OKFdUGlVTR//ysLDLk78an07EkiC0cAcjF2og/TmLPZ9+di7NE1hPGYfOX+PQp2X/GCv
+        3oCxHjlw==;
+Received: from [89.212.21.243] (port=48966 helo=[192.168.69.85])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1onx8E-0011CT-M0;
+        Thu, 27 Oct 2022 09:16:58 +0200
+Message-ID: <3909608a-9725-5bfa-a9ac-ca7546479dc2@norik.com>
+Date:   Thu, 27 Oct 2022 09:16:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026063327.20037-3-Runyang.Chen@mediatek.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 2/3] dt-bindings: watchdog: fsl-imx: document suspend
+ in wait mode
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-watchdog@vger.kernel.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221025072533.2980154-1-andrej.picej@norik.com>
+ <20221025072533.2980154-3-andrej.picej@norik.com>
+ <ca484809-07e4-44ca-0ab3-26947bda7fa8@linaro.org>
+ <a600b0e3-19ab-47df-4315-48b8554cb12f@norik.com>
+ <91e83eeb-24b5-4602-c132-c23a2fb5d756@linaro.org>
+From:   Andrej Picej <andrej.picej@norik.com>
+In-Reply-To: <91e83eeb-24b5-4602-c132-c23a2fb5d756@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 02:33:26PM +0800, Runyang Chen wrote:
-> From: Runyang Chen <runyang.chen@mediatek.com>
+On 26. 10. 22 16:12, Krzysztof Kozlowski wrote:
+> On 26/10/2022 02:38, Andrej Picej wrote:
+>> On 25. 10. 22 15:48, Krzysztof Kozlowski wrote:
+>>> On 25/10/2022 03:25, Andrej Picej wrote:
+>>>> Property "fsl,suspend-in-wait" suspends watchdog in "WAIT" mode which
+>>>> corresponds to Linux's Suspend-to-Idle S0 mode. If this property is not
+>>>> set and the device is put into Suspend-to-Idle mode, the watchdog
+>>>> triggers a reset after 128 seconds.
+>>>>
+>>>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+>>>> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+>>>> ---
+>>>> Changes in v2:
+>>>>    - add a commit message,
+>>>>    - add a list of devices which support this functionality
+>>>> ---
+>>>>    .../bindings/watchdog/fsl-imx-wdt.yaml        | 22 +++++++++++++++++++
+>>>>    1 file changed, 22 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+>>>> index fb7695515be1..9289de97859b 100644
+>>>> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+>>>> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+>>>> @@ -55,6 +55,28 @@ properties:
+>>>>          If present, the watchdog device is configured to assert its
+>>>>          external reset (WDOG_B) instead of issuing a software reset.
+>>>>    
+>>>> +  fsl,suspend-in-wait:
+>>>> +    $ref: /schemas/types.yaml#/definitions/flag
+>>>> +    description: |
+>>>> +      If present, the watchdog device is suspended in WAIT mode
+>>>> +      (Suspend-to-Idle). Only supported on following devices:
+>>>> +        - "fsl,imx25-wdt",
+>>>
+>>> You need to define such allow/disallow in allOf:if:then, instead. Like
+>>> example-schema is doing for foo-supply, just disallow it for some types
+>>> or use "if: not: ..."
+>>
+>> Sorry missed that. So something like that should be added?:
+>>
+>>> allOf:
+>>>    - if:
+>>>        not:
+>>>          properties:
+>>>            compatible:
+>>>              contains:
+>>>                enum:
+>>>                  - fsl,imx25-wdt
+>>>                  - fsl,imx35-wdt
+>>>                  - fsl,imx50-wdt
+>>>                  - fsl,imx51-wdt
+>>>                  - fsl,imx53-wdt
+>>>                  - fsl,imx6q-wdt
+>>>                  - fsl,imx6sl-wdt
+>>>                  - fsl,imx6sll-wdt
+>>>                  - fsl,imx6sx-wdt
+>>>                  - fsl,imx6ul-wdt
+>>>                  - fsl,imx7d-wdt
+>>>                  - fsl,imx8mm-wdt
+>>>                  - fsl,imx8mn-wdt
+>>>                  - fsl,imx8mp-wdt
+>>>                  - fsl,imx8mq-wdt
+>>>                  - fsl,vf610-wdt
 > 
-> Add toprgu reset-controller header file for MT8188
+> Yes.
 > 
-> Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>      then:
+>>>        properties:
+>>>          fsl,suspend-in-wait: false
+>>
+>> And I'm assuming I can then remove the supported devices list from
+>> property description.
+> 
+> Yes.
+> 
+>>
+>> Are you fine with this, so we don't have to split the compatible list
+>> like Alexander suggested? Basically we have the same list of WDW
+>> supported devices in the driver.
+> 
+> I don't know to what you refer.
+> 
+I'm referring to this comment by Alexander Stein: 
+(https://lore.kernel.org/all/13126397.uLZWGnKmhe@steina-w/)
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->  include/dt-bindings/reset/mt8188-resets.h | 36 +++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->  create mode 100644 include/dt-bindings/reset/mt8188-resets.h
+> So the models listed in Documentation/devicetree/bindings/watchdog/fsl-imx-
+> wdt.yaml not supporting this feature are
+> * fsl,imx21-wdt
+> * fsl,imx27-wdt
+> * fsl,imx31-wdt
+> * fsl,ls1012a-wdt
+> * fsl,ls1043a-wdt
+> ?
 > 
-> diff --git a/include/dt-bindings/reset/mt8188-resets.h b/include/dt-bindings/reset/mt8188-resets.h
-> new file mode 100644
-> index 000000000000..377cdfda82a9
-> --- /dev/null
-> +++ b/include/dt-bindings/reset/mt8188-resets.h
-> @@ -0,0 +1,36 @@
-> +/* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)*/
-> +/*
-> + * Copyright (c) 2022 MediaTek Inc.
-> + * Author: Runyang Chen <runyang.chen@mediatek.com>
-> + */
-> +
-> +#ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8188
-> +#define _DT_BINDINGS_RESET_CONTROLLER_MT8188
-> +
-> +#define MT8188_TOPRGU_CONN_MCU_SW_RST          0
-> +#define MT8188_TOPRGU_INFRA_GRST_SW_RST        1
-> +#define MT8188_TOPRGU_IPU0_SW_RST              2
-> +#define MT8188_TOPRGU_IPU1_SW_RST              3
-> +#define MT8188_TOPRGU_IPU2_SW_RST              4
-> +#define MT8188_TOPRGU_AUD_ASRC_SW_RST          5
-> +#define MT8188_TOPRGU_INFRA_SW_RST             6
-> +#define MT8188_TOPRGU_MMSYS_SW_RST             7
-> +#define MT8188_TOPRGU_MFG_SW_RST               8
-> +#define MT8188_TOPRGU_VENC_SW_RST              9
-> +#define MT8188_TOPRGU_VDEC_SW_RST              10
-> +#define MT8188_TOPRGU_CAM_VCORE_SW_RST         11
-> +#define MT8188_TOPRGU_SCP_SW_RST               12
-> +#define MT8188_TOPRGU_APMIXEDSYS_SW_RST        13
-> +#define MT8188_TOPRGU_AUDIO_SW_RST             14
-> +#define MT8188_TOPRGU_CAMSYS_SW_RST            15
-> +#define MT8188_TOPRGU_MJC_SW_RST               16
-> +#define MT8188_TOPRGU_PERI_SW_RST              17
-> +#define MT8188_TOPRGU_PERI_AO_SW_RST           18
-> +#define MT8188_TOPRGU_PCIE_SW_RST              19
-> +#define MT8188_TOPRGU_ADSPSYS_SW_RST           21
-> +#define MT8188_TOPRGU_DPTX_SW_RST              22
-> +#define MT8188_TOPRGU_SPMI_MST_SW_RST          23
-> +
-> +#define MT8188_TOPRGU_SW_RST_NUM               24
-> +
-> +#endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8188 */
+> But all models are listed as compatible to fsl,imx21-wdt. So there is 
+> something wrong here. IMHO this sounds like the compatible list has to be 
+> split and updated. Depending on that this feature can be detected. Maintaining 
+> another list seems error prone to me.
+
+Best regards,
+Andrej.
