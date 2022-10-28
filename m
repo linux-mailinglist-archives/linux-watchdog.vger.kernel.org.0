@@ -2,67 +2,64 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C20610B91
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Oct 2022 09:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7465610C1B
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Oct 2022 10:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiJ1HuG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 28 Oct 2022 03:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
+        id S229668AbiJ1IWp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 28 Oct 2022 04:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiJ1HuF (ORCPT
+        with ESMTP id S229489AbiJ1IWp (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 28 Oct 2022 03:50:05 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3DB558CD;
-        Fri, 28 Oct 2022 00:50:04 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id p8so6935727lfu.11;
-        Fri, 28 Oct 2022 00:50:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JzApucCH/+hZ0NSjSIByv4uO01lC/jRamcHK2nza1G4=;
-        b=abGOI7RHWXO9MxRjGi1+vyUVAN3PF5JRkoV0aluuCTgUkPW4DD9fDuJFYdsknuT5Sq
-         1TjjHNEUO+EmXIlslhCcDq9mANft/gP1r+eHAeWM12eWjLKP1ZXRxWYMW2cOC5UYiDCy
-         HXaJoKWsUzDhdHHSOtmLlgbj2bXxHfkaofkrtJDCzWGJu9pJAAIMcjh9AUmb0zJWHs7V
-         9NaCD4WSSqedgpxk/VtMHV3OEINwrfhm5vTczApMDVzpqkdYlofnVfqSOfzPHRvf+XN4
-         iiDAbEaokOXvMOEnLymgVu5N05A25sOLeKL9L7jDQynQ/NExEE4n1/zlL+9cJKj8k6e0
-         ROCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JzApucCH/+hZ0NSjSIByv4uO01lC/jRamcHK2nza1G4=;
-        b=0zZ0t1Kpn4nCrDpPE7R3u/nMCyh72lEBMnm/RjIqvQoLFcWRH0p8fXpcRkKo0vMlQ4
-         aRx0Tmo7tjYFemspAXYXfqABVFVguXXPzxC0NE7yR6Aab4SOt280zTohFmQN9Yi1v5Zr
-         cts78KJ7Q5IX7C4yxERVa0QIpJoXz23udNutAeNEQwraOVc9xiiaFWW5Twqa5EquBD6I
-         TwjGiq0PNQ3lgyw5PB81OsX8YPnu7dLThTbbm+Iym/QxwaaEsksNqBvI0GseeMb8ps/N
-         VrEfO6vCpkRT6gOxNsUUApX57cCjNpTJ2+o8fQRz4ZQMKXcp/fCH3tXqdWgHunwJYfYp
-         4Z6g==
-X-Gm-Message-State: ACrzQf0cBH7mJME3JmTxwtHKKdmSh0mFBxIp4hVI7Kx99vsHKMXVu0Ul
-        E/BEgFX/l2y3LbH0kacaphY=
-X-Google-Smtp-Source: AMsMyM4541cTqT94evjudMNB20g+LXL/OK53ZeqSdt+A2bTJoIKgrIE9PLmZojJBM6GYNs4Tf/4W5g==
-X-Received: by 2002:a05:6512:3502:b0:496:8e:9307 with SMTP id h2-20020a056512350200b00496008e9307mr18721208lfs.504.1666943402586;
-        Fri, 28 Oct 2022 00:50:02 -0700 (PDT)
-Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id bk9-20020a05651c238900b0026befa96249sm539476ljb.8.2022.10.28.00.50.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 00:50:01 -0700 (PDT)
-From:   Marcus Folkesson <marcus.folkesson@gmail.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, Lee Jones <lee@kernel.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marcus Folkesson <marcus.folkesson@gmail.com>
-Subject: [PATCH] watchdog: rn5t618: add support for read out bootstatus
-Date:   Fri, 28 Oct 2022 09:50:19 +0200
-Message-Id: <20221028075019.2757812-1-marcus.folkesson@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Fri, 28 Oct 2022 04:22:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9450F1A0C04
+        for <linux-watchdog@vger.kernel.org>; Fri, 28 Oct 2022 01:21:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666945306;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=D+rz3k9DjRQVPhRruqU1p4DCvDVIlIuyQRij1wmQScA=;
+        b=IHxyGchi0v4P5bpge9XIIZD860YTAuHXmtmHHEG9ckJpub279/fum8xH9LDFwNmu+Vy9hC
+        OWmuwZgc2ztAdSJ0QWS26EbLesr8rNhMbKokw1b5rSrHPLzFF5ppzd4Biyz9IN59MPA9KX
+        9nXGRmSC81G/g/0kpg/gOHfR0gGYu2Q=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-480-7rWqRJE0Oeu0z6rYQMJdBw-1; Fri, 28 Oct 2022 04:21:44 -0400
+X-MC-Unique: 7rWqRJE0Oeu0z6rYQMJdBw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F126D1C07577;
+        Fri, 28 Oct 2022 08:21:43 +0000 (UTC)
+Received: from redhat.com (unknown [10.33.36.145])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 07DDC40C83DC;
+        Fri, 28 Oct 2022 08:21:42 +0000 (UTC)
+Date:   Fri, 28 Oct 2022 09:21:40 +0100
+From:   Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] watchdog: iTCO_wdt: Set NO_REBOOT if the watchdog is not
+ already running
+Message-ID: <Y1uRFBlW8lQVLrqh@redhat.com>
+Reply-To: Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>
+References: <20221028062750.45451-1-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221028062750.45451-1-mika.westerberg@linux.intel.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,65 +67,33 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The PMIC does store the power-off factor internally.
-Read it out and report it as bootstatus.
+On Fri, Oct 28, 2022 at 09:27:50AM +0300, Mika Westerberg wrote:
+> Daniel reported that the commit 1ae3e78c0820 ("watchdog: iTCO_wdt: No
+> need to stop the timer in probe") makes QEMU implementation of the iTCO
+> watchdog not to trigger reboot anymore when NO_REBOOT flag is initially
+> cleared using this option (in QEMU command line):
+> 
+>   -global ICH9-LPC.noreboot=false
+> 
+> The problem with the commit is that it left the unconditional setting of
+> NO_REBOOT that is not cleared anymore when the kernel keeps pinging the
+> watchdog (as opposed to the previous code that called iTCO_wdt_stop()
+> that cleared it).
+> 
+> Fix this so that we only set NO_REBOOT if the watchdog was not initially
+> running.
+> 
+> Fixes: 1ae3e78c0820 ("watchdog: iTCO_wdt: No need to stop the timer in probe")
+> Reported-by: Daniel P. Berrangé <berrange@redhat.com>
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
----
- drivers/watchdog/rn5t618_wdt.c | 12 ++++++++++++
- include/linux/mfd/rn5t618.h    |  9 +++++++++
- 2 files changed, 21 insertions(+)
+Tested-by: Daniel P. Berrangé <berrange@redhat.com>
+Reviewed-by: Daniel P. Berrangé <berrange@redhat.com>
 
-diff --git a/drivers/watchdog/rn5t618_wdt.c b/drivers/watchdog/rn5t618_wdt.c
-index 6e524c8e26a8..40d8ebd8c0ac 100644
---- a/drivers/watchdog/rn5t618_wdt.c
-+++ b/drivers/watchdog/rn5t618_wdt.c
-@@ -144,6 +144,8 @@ static int rn5t618_wdt_probe(struct platform_device *pdev)
- 	struct rn5t618 *rn5t618 = dev_get_drvdata(dev->parent);
- 	struct rn5t618_wdt *wdt;
- 	int min_timeout, max_timeout;
-+	int ret;
-+	unsigned int val;
- 
- 	wdt = devm_kzalloc(dev, sizeof(struct rn5t618_wdt), GFP_KERNEL);
- 	if (!wdt)
-@@ -160,6 +162,16 @@ static int rn5t618_wdt_probe(struct platform_device *pdev)
- 	wdt->wdt_dev.timeout = max_timeout;
- 	wdt->wdt_dev.parent = dev;
- 
-+	/* Read out previous power-off factor */
-+	ret = regmap_read(wdt->rn5t618->regmap, RN5T618_POFFHIS, &val);
-+	if (ret)
-+		return ret;
-+
-+	if (val & RN5T618_POFFHIS_VINDET)
-+		wdt->wdt_dev.bootstatus = WDIOF_POWERUNDER;
-+	else if (val & RN5T618_POFFHIS_WDG)
-+		wdt->wdt_dev.bootstatus = WDIOF_CARDRESET;
-+
- 	watchdog_set_drvdata(&wdt->wdt_dev, wdt);
- 	watchdog_init_timeout(&wdt->wdt_dev, timeout, dev);
- 	watchdog_set_nowayout(&wdt->wdt_dev, nowayout);
-diff --git a/include/linux/mfd/rn5t618.h b/include/linux/mfd/rn5t618.h
-index 8aa0bda1af4f..aacb6d51e99c 100644
---- a/include/linux/mfd/rn5t618.h
-+++ b/include/linux/mfd/rn5t618.h
-@@ -227,6 +227,15 @@
- #define RN5T618_WATCHDOG_WDOGTIM_S	0
- #define RN5T618_PWRIRQ_IR_WDOG		BIT(6)
- 
-+#define RN5T618_POFFHIS_PWRON		BIT(0)
-+#define RN5T618_POFFHIS_TSHUT		BIT(1)
-+#define RN5T618_POFFHIS_VINDET		BIT(2)
-+#define RN5T618_POFFHIS_IODET		BIT(3)
-+#define RN5T618_POFFHIS_CPU		BIT(4)
-+#define RN5T618_POFFHIS_WDG		BIT(5)
-+#define RN5T618_POFFHIS_DCLIM		BIT(6)
-+#define RN5T618_POFFHIS_N_OE		BIT(7)
-+
- enum {
- 	RN5T618_DCDC1,
- 	RN5T618_DCDC2,
+With regards,
+Daniel
 -- 
-2.37.1
+|: https://berrange.com      -o-    https://www.flickr.com/photos/dberrange :|
+|: https://libvirt.org         -o-            https://fstop138.berrange.com :|
+|: https://entangle-photo.org    -o-    https://www.instagram.com/dberrange :|
 
