@@ -2,78 +2,100 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5980A61524F
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Nov 2022 20:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD6D615392
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Nov 2022 21:54:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbiKATcO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 1 Nov 2022 15:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
+        id S229894AbiKAUyM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 1 Nov 2022 16:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiKATcL (ORCPT
+        with ESMTP id S229533AbiKAUyL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 1 Nov 2022 15:32:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904A112AEA;
-        Tue,  1 Nov 2022 12:32:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 470CEB81F5E;
-        Tue,  1 Nov 2022 19:32:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EDC3BC433D6;
-        Tue,  1 Nov 2022 19:32:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667331128;
-        bh=SqTpkEJDimDLK8JCkPSO5Of7KHU3i9/ujWgBTDi8Ym0=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=cOVV+0xTjfOJSF5q3foDxrY03mtFOiavKSFeXqSyNPljxLYY4wRPn1KRK0erbXzcH
-         zaXOKikkeP3Tc7zaTxuaoCds4A8c1jmpbRqE8XP+EdSk0kd+/8OXlHElgc0DnpkduH
-         rexFCAWWFgcuwmMiX212hZFfYGjX36cDnUWQUNFdExvUjk2V71bQxXHsvOV+QJg+Vb
-         Bqx0cdzQkZRLG5lgXhwAG1gwQ+xFdeU26E2ikxd9xBK56lg907pkmIWneTAdg1OtTP
-         r4pWy5YEz83fBYS4YyfTPuPFpXgiYBdBp5amcfsyt79qTaH/TMmL+mtKjwPJtCEuVu
-         7hBfHzQgFIbzQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DBF26E270D3;
-        Tue,  1 Nov 2022 19:32:07 +0000 (UTC)
-Subject: Re: [GIT PULL REQUEST] watchdog - v6.1 release cycle.
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221101081902.GA5794@www.linux-watchdog.org>
-References: <20221101081902.GA5794@www.linux-watchdog.org>
-X-PR-Tracked-List-Id: <linux-watchdog.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221101081902.GA5794@www.linux-watchdog.org>
-X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.1-rc4
-X-PR-Tracked-Commit-Id: 82ebbe65d781064cfb0a6a8af221a9cebcaaac9e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d79dcde0bc413efd35dd7eabe2d5eed34ec6deb0
-Message-Id: <166733112789.6375.9114607752098301144.pr-tracker-bot@kernel.org>
-Date:   Tue, 01 Nov 2022 19:32:07 +0000
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        Manank Patel <pmanank200502@gmail.com>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 1 Nov 2022 16:54:11 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D5D10579;
+        Tue,  1 Nov 2022 13:54:10 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A1KouXi002166;
+        Tue, 1 Nov 2022 20:53:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=n2s34LQyv0LHx7fXgxlmeU16+bMoGpAgw9+p/6CncvM=;
+ b=iyEQB6n+NCuqXe9ec0M75io+TJ/4MkRe42H6U/QObo3C+/aNMOt4ri1WktXK/Ky+AIaj
+ 55pzrwZTjkXsbYCJIGnVUiULRkPS8hhaWHsnbqP9I40JSOk625Fa3P1Z+wgkqioRfK75
+ qLkoy5QLdqWIBnABCWz5SyTwDQ3ytRNeO2tZzpDvMjO49eAGUsPPyNX5X0rEESXa/CjZ
+ iv2tZ8Xfz0L738rRuZQ6dhjzrRZbr/39GcRC2O+GiEz9Yc2WcCPMhNReSBHN7zT/e/vB
+ Wv6knytnB9Qjt12iRzW/iH2QkvorCxfFyGXhjL0xV1rdryXFojls6M/wNlKj3x7oMG/6 iA== 
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kjwjjm0vy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Nov 2022 20:53:44 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A1KolAu004373;
+        Tue, 1 Nov 2022 20:53:43 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma02dal.us.ibm.com with ESMTP id 3kgutabxq4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Nov 2022 20:53:43 +0000
+Received: from smtpav02.dal12v.mail.ibm.com ([9.208.128.128])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A1KrfYR41222430
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 1 Nov 2022 20:53:41 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 43D1B58051;
+        Tue,  1 Nov 2022 20:53:42 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4CE5D5805A;
+        Tue,  1 Nov 2022 20:53:41 +0000 (GMT)
+Received: from slate16.aus.stglabs.ibm.com (unknown [9.160.92.229])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  1 Nov 2022 20:53:41 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, joel@jms.id.au,
+        andrew@aj.id.au, linux-aspeed@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH v2 0/2] watchdog: aspeed: Add pre-timeout interrupt support
+Date:   Tue,  1 Nov 2022 15:53:36 -0500
+Message-Id: <20221101205338.577427-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: anovv7hUhdukI8PdpmiJ5Zc1erPNhdyi
+X-Proofpoint-GUID: anovv7hUhdukI8PdpmiJ5Zc1erPNhdyi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-01_10,2022-11-01_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=748
+ spamscore=0 bulkscore=0 priorityscore=1501 phishscore=0 clxscore=1015
+ malwarescore=0 lowpriorityscore=0 adultscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211010145
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The pull request you sent on Tue, 1 Nov 2022 09:19:02 +0100:
+Enable the core pre-timeout interrupt on AST2500 and AST2600.
 
-> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.1-rc4
+Changes since v1:
+ - Use watchdog core support for pre-timeout interrupt, rather than new
+   dts property
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d79dcde0bc413efd35dd7eabe2d5eed34ec6deb0
+Eddie James (2):
+  watchdog: aspeed: Enable pre-timeout interrupt
+  ARM: dts: aspeed: Setup watchdog pre-timeout interrupt
 
-Thank you!
+ arch/arm/boot/dts/aspeed-g5.dtsi |   3 +
+ arch/arm/boot/dts/aspeed-g6.dtsi |   4 ++
+ drivers/watchdog/aspeed_wdt.c    | 104 ++++++++++++++++++++++++++-----
+ 3 files changed, 95 insertions(+), 16 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.31.1
+
