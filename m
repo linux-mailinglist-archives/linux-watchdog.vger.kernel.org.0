@@ -2,86 +2,161 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED02A616DE6
-	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Nov 2022 20:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 451C4616DF2
+	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Nov 2022 20:45:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiKBTjY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 2 Nov 2022 15:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
+        id S230115AbiKBTpA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 2 Nov 2022 15:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiKBTjX (ORCPT
+        with ESMTP id S229534AbiKBTo7 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 2 Nov 2022 15:39:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C2010D9
-        for <linux-watchdog@vger.kernel.org>; Wed,  2 Nov 2022 12:39:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 2 Nov 2022 15:44:59 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30527E0C9;
+        Wed,  2 Nov 2022 12:44:58 -0700 (PDT)
+Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 202E961B8A
-        for <linux-watchdog@vger.kernel.org>; Wed,  2 Nov 2022 19:39:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 703B1C433B5
-        for <linux-watchdog@vger.kernel.org>; Wed,  2 Nov 2022 19:39:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667417961;
-        bh=NNN0UxMOd3dLeOmZXzsUy1+1lS2djFE0TgJhCEKuEhU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=n2hHu6216J08cpagBWQPxfpo9Q7QGAletwQ0p2PT5iF9+CUWgIXEhh+H0Xzb0T234
-         iQ8RwpyFqlvSEi1z/Oc+AHnVSTJpjENuWjCncqedr0sIDgRkyv2FUEknap9q8CMDoE
-         NW4psmXHHIq8RNyaX1G9equDHwGXobMFZcGx/B9jevLl1F77k1yYjgLVK+kSId6fx6
-         Hs7bOq6PqiAJTaAUrBi8B7T5ZABemBdfVrzGKLzJ9gMy3c2YCgKUW2Lv6L45f6huUp
-         CXaH9haymRhwHNjRlUp8mjumiTdGv+ZwPeXF1OJb/BbQMqLOaoH8r++p/Ol/gtAJRS
-         rzq/ECONEjSZw==
-Received: by mail-lf1-f54.google.com with SMTP id g7so29924222lfv.5
-        for <linux-watchdog@vger.kernel.org>; Wed, 02 Nov 2022 12:39:21 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1U+LH6iHENMjUrkjG7vDlA+sBjfWkPPnFSkpmQ2ifrGibDW2rC
-        dncPY+9P12p1XDyp7UVeuPWIgLF96pv6qPbmfg==
-X-Google-Smtp-Source: AMsMyM6vqJNld5Ek1wx9W5gww5PYP9GqQKRKrzSNWiGtOOIFHvIVA7DkenLbCTD3su6+f9jYWE2MFZ9oVMtfD5RZ4ew=
-X-Received: by 2002:a19:f24b:0:b0:4ab:cd12:d282 with SMTP id
- d11-20020a19f24b000000b004abcd12d282mr10270385lfk.74.1667417959382; Wed, 02
- Nov 2022 12:39:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221102192029.120917-1-marex@denx.de>
-In-Reply-To: <20221102192029.120917-1-marex@denx.de>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 2 Nov 2022 14:39:10 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+wfG08rsr7Gcx7MJs0-nbAwePzh2j2EzutVWNKWWaWpw@mail.gmail.com>
-Message-ID: <CAL_Jsq+wfG08rsr7Gcx7MJs0-nbAwePzh2j2EzutVWNKWWaWpw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: watchdog: gpio: Convert bindings to YAML
-To:     Marek Vasut <marex@denx.de>
-Cc:     linux-watchdog@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id AA2C385072;
+        Wed,  2 Nov 2022 20:44:56 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1667418296;
+        bh=KQ7SPCMB51dJ/SDQrgfQd7I0irSU0npFOfzmrtjSj9s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=J0uE51469gUM12NI6cFJa89HAAeecNA1IrEgK6P0PihizPQEZ3iy+BErEdBdXd5/7
+         PxogYYzYHEPXjkGZO0wd/ZUqO+nNOz3RuAVI3jzO6KXeoBCATli5eDizsdyyapWnXd
+         AQFup/oRQIowdzvUda3B/8hiuKTqt9hnpTs0PopH3pXZhXHfp94fVJep9sGBOf7uz7
+         ug+wMYjuyuLsjznKWcCd5Ui3jetf5ABPKLzK6ywnoZVkAAFIeDLtQmDvGfpCKef6jE
+         DwHqQJjBt0eE6CtKHev1F2Eue27FdaGcsSRSORfzsf/ktpMrzBz2iCKFz6pN2667jx
+         iunwrS5tj8nQg==
+From:   Marek Vasut <marex@denx.de>
+To:     devicetree@vger.kernel.org
+Cc:     linux-watchdog@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH RESEND] dt-bindings: watchdog: gpio: Convert bindings to YAML
+Date:   Wed,  2 Nov 2022 20:44:36 +0100
+Message-Id: <20221102194436.123316-1-marex@denx.de>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 2:20 PM Marek Vasut <marex@denx.de> wrote:
->
-> Convert the gpio-wdt bindings from text to YAML ones, to permit DT validation.
->
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> ---
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: linux-watchdog@vger.kernel.org
-> To: devicetree@vger.kernel.org
-> ---
-> NOTE: The Maintainer entry should likely be changed, although it seems
->       like this driver and its matching bindings are now unmaintained.
-> ---
->  .../devicetree/bindings/watchdog/gpio-wdt.txt | 28 ------------
->  .../bindings/watchdog/linux,wdt-gpio.yaml     | 44 +++++++++++++++++++
->  2 files changed, 44 insertions(+), 28 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
+Convert the gpio-wdt bindings from text to YAML ones, to permit DT validation.
 
-Looks fine, but please resend to the DT list.
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: linux-watchdog@vger.kernel.org
+To: devicetree@vger.kernel.org
+---
+NOTE: The Maintainer entry should likely be changed, although it seems
+      like this driver and its matching bindings are now unmaintained.
+---
+ .../devicetree/bindings/watchdog/gpio-wdt.txt | 28 ------------
+ .../bindings/watchdog/linux,wdt-gpio.yaml     | 44 +++++++++++++++++++
+ 2 files changed, 44 insertions(+), 28 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
 
-Rob
+diff --git a/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt b/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
+deleted file mode 100644
+index 198794963786b..0000000000000
+--- a/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
++++ /dev/null
+@@ -1,28 +0,0 @@
+-* GPIO-controlled Watchdog
+-
+-Required Properties:
+-- compatible: Should contain "linux,wdt-gpio".
+-- gpios: From common gpio binding; gpio connection to WDT reset pin.
+-- hw_algo: The algorithm used by the driver. Should be one of the
+-  following values:
+-  - toggle: Either a high-to-low or a low-to-high transition clears
+-    the WDT counter. The watchdog timer is disabled when GPIO is
+-    left floating or connected to a three-state buffer.
+-  - level: Low or high level starts counting WDT timeout,
+-    the opposite level disables the WDT. Active level is determined
+-    by the GPIO flags.
+-- hw_margin_ms: Maximum time to reset watchdog circuit (milliseconds).
+-
+-Optional Properties:
+-- always-running: If the watchdog timer cannot be disabled, add this flag to
+-  have the driver keep toggling the signal without a client. It will only cease
+-  to toggle the signal when the device is open and the timeout elapsed.
+-
+-Example:
+-	watchdog: watchdog {
+-		/* ADM706 */
+-		compatible = "linux,wdt-gpio";
+-		gpios = <&gpio3 9 GPIO_ACTIVE_LOW>;
+-		hw_algo = "toggle";
+-		hw_margin_ms = <1600>;
+-	};
+diff --git a/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml b/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
+new file mode 100644
+index 0000000000000..6b014d60c9471
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
+@@ -0,0 +1,44 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/linux,wdt-gpio.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: GPIO-controlled Watchdog
++
++maintainers:
++  - Marek Vasut <marex@denx.de>
++
++properties:
++  compatible:
++    const: linux,wdt-gpio
++
++  gpios:
++    description: gpio connection to WDT reset pin
++    maxItems: 1
++
++  hw_algo:
++    description: The algorithm used by the driver.
++    enum: [ level, toggle ]
++
++  hw_margin_ms:
++    description: Maximum time to reset watchdog circuit (milliseconds).
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++required:
++  - compatible
++
++allOf:
++  - $ref: "watchdog.yaml#"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    watchdog {
++        compatible = "linux,wdt-gpio";
++        gpios = <&gpio3 9 GPIO_ACTIVE_LOW>;
++        hw_algo = "toggle";
++        hw_margin_ms = <1600>;
++    };
+-- 
+2.35.1
+
