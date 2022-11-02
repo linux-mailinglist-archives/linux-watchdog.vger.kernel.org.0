@@ -2,74 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9FA616F4B
-	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Nov 2022 22:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A38CF616FC6
+	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Nov 2022 22:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbiKBVAi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 2 Nov 2022 17:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
+        id S230102AbiKBVaX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 2 Nov 2022 17:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbiKBVAh (ORCPT
+        with ESMTP id S229709AbiKBVaS (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 2 Nov 2022 17:00:37 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126A1DEB0;
-        Wed,  2 Nov 2022 14:00:36 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so10968266otu.7;
-        Wed, 02 Nov 2022 14:00:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2WXSgV6gSBWXpZYt5R9dSU2XRI96JBuHJqksyBnzBTo=;
-        b=JJAhyu9I9avCA18/elJljBaUZjEQ1AZLmiOifd0185Y3EK5HeaqP3S8tIt8gTFmmGA
-         pUPV11+zpMkm8yra868gdu+JPvay5L/Opwv9NVBz2bTgI31wiopDPuGVdDBOeOv79yeS
-         4wM2xoCUBswHSYlVSz0k6gih0dyDKp87PsHiT2VhdTtg84YFkXGF1EOFPpP8Y4ELfyVZ
-         RKc/OhQocTKutC17cYFdo5bsOWcjqpuibRaBoG6O8Hj8QFbePWHaTtJuU/i2cE9PfSfY
-         VPkhAfTwgP/OGt5nb9ZoCiysNro1ORT9McA5rRfRR9i9PAySfuTFBaiTO2OP2w2e75rt
-         q7Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2WXSgV6gSBWXpZYt5R9dSU2XRI96JBuHJqksyBnzBTo=;
-        b=gPE5x/Vn9Uw41jzhNwDcHEAzN74YyJmEMoT4ljgzUwINxaohk4g4OwuszPlWd7twZg
-         R3bqi4tIh5PKcD8DqjR3TwoXL2P79ISC7pv3qkpYxpim1CR3331rbt1KEyFbvqTTveNs
-         KEz9Q4Nuhl8TnM7MYAfnyrCFhec2HjoPED6ZZ8WT3WyxBeu/8QROF7b8Bu4IpL9VnVS/
-         57rUctjr70wwVqkc/KDPezfWrLJ+rnXW/EicGuX2avwhR1J38SqCbNvZp/E3I7lDQ3T0
-         GwrRJc7E61fMfDbP0MsN1Gk5Q5j2YgYO/xJnrzFLs5LKub63d0zJdA4vt3N7f3/DWDNZ
-         kXWA==
-X-Gm-Message-State: ACrzQf0fSJekDfcFABpfxeYhZFK5BpNRFvRDN/dIzCdcQN25nGHerqP3
-        v8i3X6bo1WE0z66PsdUj+ut/IXcYQlE=
-X-Google-Smtp-Source: AMsMyM7RqN8N0Q2iqpfM+uj7CGLUUNmPLN0Njp1cAr0gX8/yKSAoMNpTFaPaf9mD9I+AIPicd5Qs7g==
-X-Received: by 2002:a05:6830:237d:b0:66c:4535:fe9c with SMTP id r29-20020a056830237d00b0066c4535fe9cmr11399540oth.30.1667422835383;
-        Wed, 02 Nov 2022 14:00:35 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w15-20020a4a274f000000b004805c328971sm4775759oow.42.2022.11.02.14.00.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 14:00:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Nov 2022 14:00:33 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        joel@jms.id.au, andrew@aj.id.au, linux-aspeed@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] ARM: dts: aspeed: Setup watchdog pre-timeout
- interrupt
-Message-ID: <20221102210033.GA2090211@roeck-us.net>
-References: <20221101205338.577427-1-eajames@linux.ibm.com>
- <20221101205338.577427-3-eajames@linux.ibm.com>
+        Wed, 2 Nov 2022 17:30:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDE865EE;
+        Wed,  2 Nov 2022 14:30:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BDF861C35;
+        Wed,  2 Nov 2022 21:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADE2CC433C1;
+        Wed,  2 Nov 2022 21:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667424616;
+        bh=T3mJmhSAuT7wBGow+rimgDEfkaf+AtaXS+wjdVZAWpY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ugk8JScx/1xcMRGpQ6MuVKfbLOM9maaGPP7V8GwC4FjONW9jrgLtgcmKWJ7r118xH
+         JTNddBLr4SxSJf8kZkg1Q94gwAN4LIfcg1urR8x+8GdM1kgAhaaEp5jqwd8ZMtjOTu
+         ap1JaToLYpiNIrEcUTrKbV1jdjZBqbm2nkndLWiAikXNmSaE/zJ+BNhJxxg8Q9fz/p
+         1WeSXsOTnboVn4ujPEGOiXyyoyGKbMkpUgIhH7FI7+jKeK36rVQ2gExdVg/dIU3gTg
+         TIvhKBusGtwhrQ8bkdh1GeuaN2ZyRynzIKucKviOAyIBnnH+sOI+3iWjRiGcPGouFm
+         C22lcsJREaztw==
+Message-ID: <5cb7cad9-bd58-ad5b-0a0c-eb2f879663c4@kernel.org>
+Date:   Wed, 2 Nov 2022 17:30:14 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221101205338.577427-3-eajames@linux.ibm.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH RESEND] dt-bindings: watchdog: gpio: Convert bindings to
+ YAML
+Content-Language: en-US
+To:     Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org
+Cc:     linux-watchdog@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+References: <20221102194436.123316-1-marex@denx.de>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20221102194436.123316-1-marex@denx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,73 +59,114 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 03:53:38PM -0500, Eddie James wrote:
-> Specify the interrupt lines for the base SOCs that support it.
+On 02/11/2022 15:44, Marek Vasut wrote:
+> Convert the gpio-wdt bindings from text to YAML ones, to permit DT validation.
 > 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> ---
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> Cc: linux-watchdog@vger.kernel.org
+> To: devicetree@vger.kernel.org
+> ---
+> NOTE: The Maintainer entry should likely be changed, although it seems
+>       like this driver and its matching bindings are now unmaintained.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
+
+Even if driver does not have updated maintainers entry, generic rules apply.
+
 
 > ---
->  arch/arm/boot/dts/aspeed-g5.dtsi | 3 +++
->  arch/arm/boot/dts/aspeed-g6.dtsi | 4 ++++
->  2 files changed, 7 insertions(+)
+>  .../devicetree/bindings/watchdog/gpio-wdt.txt | 28 ------------
+>  .../bindings/watchdog/linux,wdt-gpio.yaml     | 44 +++++++++++++++++++
+>  2 files changed, 44 insertions(+), 28 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
 > 
-> diff --git a/arch/arm/boot/dts/aspeed-g5.dtsi b/arch/arm/boot/dts/aspeed-g5.dtsi
-> index 04f98d1dbb97..b4b98bf38e48 100644
-> --- a/arch/arm/boot/dts/aspeed-g5.dtsi
-> +++ b/arch/arm/boot/dts/aspeed-g5.dtsi
-> @@ -410,18 +410,21 @@ wdt1: watchdog@1e785000 {
->  				compatible = "aspeed,ast2500-wdt";
->  				reg = <0x1e785000 0x20>;
->  				clocks = <&syscon ASPEED_CLK_APB>;
-> +				interrupts = <27>;
->  			};
->  
->  			wdt2: watchdog@1e785020 {
->  				compatible = "aspeed,ast2500-wdt";
->  				reg = <0x1e785020 0x20>;
->  				clocks = <&syscon ASPEED_CLK_APB>;
-> +				interrupts = <27>;
->  			};
->  
->  			wdt3: watchdog@1e785040 {
->  				compatible = "aspeed,ast2500-wdt";
->  				reg = <0x1e785040 0x20>;
->  				clocks = <&syscon ASPEED_CLK_APB>;
-> +				interrupts = <27>;
->  				status = "disabled";
->  			};
->  
-> diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
-> index ebbcfe445d9c..d9379fd7b1c2 100644
-> --- a/arch/arm/boot/dts/aspeed-g6.dtsi
-> +++ b/arch/arm/boot/dts/aspeed-g6.dtsi
-> @@ -539,23 +539,27 @@ uart5: serial@1e784000 {
->  
->  			wdt1: watchdog@1e785000 {
->  				compatible = "aspeed,ast2600-wdt";
-> +				interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
->  				reg = <0x1e785000 0x40>;
->  			};
->  
->  			wdt2: watchdog@1e785040 {
->  				compatible = "aspeed,ast2600-wdt";
-> +				interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
->  				reg = <0x1e785040 0x40>;
->  				status = "disabled";
->  			};
->  
->  			wdt3: watchdog@1e785080 {
->  				compatible = "aspeed,ast2600-wdt";
-> +				interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
->  				reg = <0x1e785080 0x40>;
->  				status = "disabled";
->  			};
->  
->  			wdt4: watchdog@1e7850c0 {
->  				compatible = "aspeed,ast2600-wdt";
-> +				interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
->  				reg = <0x1e7850C0 0x40>;
->  				status = "disabled";
->  			};
+> diff --git a/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt b/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
+> deleted file mode 100644
+> index 198794963786b..0000000000000
+> --- a/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
+> +++ /dev/null
+> @@ -1,28 +0,0 @@
+> -* GPIO-controlled Watchdog
+> -
+> -Required Properties:
+> -- compatible: Should contain "linux,wdt-gpio".
+> -- gpios: From common gpio binding; gpio connection to WDT reset pin.
+> -- hw_algo: The algorithm used by the driver. Should be one of the
+> -  following values:
+> -  - toggle: Either a high-to-low or a low-to-high transition clears
+> -    the WDT counter. The watchdog timer is disabled when GPIO is
+> -    left floating or connected to a three-state buffer.
+> -  - level: Low or high level starts counting WDT timeout,
+> -    the opposite level disables the WDT. Active level is determined
+> -    by the GPIO flags.
+> -- hw_margin_ms: Maximum time to reset watchdog circuit (milliseconds).
+> -
+> -Optional Properties:
+> -- always-running: If the watchdog timer cannot be disabled, add this flag to
+> -  have the driver keep toggling the signal without a client. It will only cease
+> -  to toggle the signal when the device is open and the timeout elapsed.
+> -
+> -Example:
+> -	watchdog: watchdog {
+> -		/* ADM706 */
+> -		compatible = "linux,wdt-gpio";
+> -		gpios = <&gpio3 9 GPIO_ACTIVE_LOW>;
+> -		hw_algo = "toggle";
+> -		hw_margin_ms = <1600>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml b/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
+> new file mode 100644
+> index 0000000000000..6b014d60c9471
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
+> @@ -0,0 +1,44 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/linux,wdt-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: GPIO-controlled Watchdog
+> +
+> +maintainers:
+> +  - Marek Vasut <marex@denx.de>
+> +
+> +properties:
+> +  compatible:
+> +    const: linux,wdt-gpio
+> +
+> +  gpios:
+> +    description: gpio connection to WDT reset pin
+> +    maxItems: 1
+> +
+> +  hw_algo:
+> +    description: The algorithm used by the driver.
+> +    enum: [ level, toggle ]
+> +
+> +  hw_margin_ms:
+> +    description: Maximum time to reset watchdog circuit (milliseconds).
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +required:
+> +  - compatible
+
+Several other properties were required.
+
+> +
+> +allOf:
+> +  - $ref: "watchdog.yaml#"
+
+Drop quotes
+
+
+Best regards,
+Krzysztof
+
