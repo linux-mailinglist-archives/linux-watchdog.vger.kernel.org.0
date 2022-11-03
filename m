@@ -2,102 +2,122 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4EC7617A89
-	for <lists+linux-watchdog@lfdr.de>; Thu,  3 Nov 2022 11:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C79FD617CB3
+	for <lists+linux-watchdog@lfdr.de>; Thu,  3 Nov 2022 13:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbiKCKE3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 3 Nov 2022 06:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
+        id S231726AbiKCMgE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 3 Nov 2022 08:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiKCKE2 (ORCPT
+        with ESMTP id S231697AbiKCMfy (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 3 Nov 2022 06:04:28 -0400
-Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E31B1F0;
-        Thu,  3 Nov 2022 03:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=HL/7H+fZFpuFCnct+yiKKIoU0SNeD7m+YyJFOGqoENc=; b=CcrPiQK4f5PZRgeY78c3T/U/WR
-        ElZnDHm8q36yYziBlYFuYjhH1soN7aL5DLt2ydiqk+Y0vpdQd5/ekKV2eCHdmNz/ysffIGUQ+P2TM
-        R6vfLLa/D82RQlB+f+u1qo7O5adHCf0tHCO3BYrlDcqdfHKOFfcGaB2udsCs6M0DqIdwrVVQQqh87
-        Iko4e3JaqbyRr4PipF0Um+KYNE/UVQu6QR/krNk8HCTq0hVPqbNrIlonq3yQdUe7IEXLX1aAt1lf9
-        CKcYncV2XZdThWpvSOMYlGKSLmeGhSb4TpJ7rla7Ld56xrgSopGyzrDFw9lllK+StO2cgZ1/QlKA7
-        ztmtG5Iw==;
-Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:37996 helo=localhost.localdomain)
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <andrej.picej@norik.com>)
-        id 1oqX52-008HsM-LI;
-        Thu, 03 Nov 2022 11:04:20 +0100
-From:   Andrej Picej <andrej.picej@norik.com>
-To:     linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, Anson.Huang@nxp.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] ARM: dts: imx6ul/ull: suspend i.MX6UL watchdog in wait mode
-Date:   Thu,  3 Nov 2022 11:03:58 +0100
-Message-Id: <20221103100358.176099-4-andrej.picej@norik.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221103100358.176099-1-andrej.picej@norik.com>
-References: <20221103100358.176099-1-andrej.picej@norik.com>
+        Thu, 3 Nov 2022 08:35:54 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEC9BF44;
+        Thu,  3 Nov 2022 05:35:48 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-13b23e29e36so1928774fac.8;
+        Thu, 03 Nov 2022 05:35:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=swk/OiKVstVSBR4f7TzyH2j5DF+ZMxXZNAXmMO2doNA=;
+        b=fUMVw4qIj3sGC2ASzbHPuM/ccCzMOWxIlkwayQcIJYpJs/YVSNh4ueXOUiGMZ3eEqQ
+         Xi0vhAE0EBoTgPv4Vb7G/b0qetbcHEX2G/RbDPPrt5wIbn6cKp34KUI6mjgGkV1TUqsv
+         U7Wn2CCzm3HpT/Zx1iUK9FfKg+SafnuWemkBWgByY2eYaWX9WU5taUCtprjYXmOTxaRf
+         7QJrd0vmuMEJfvIKZ1avku6hdEvwnvrrUnoHFsQ+vxrcHCSNMaitobBlSE4K2s/X5GnE
+         eJX0OnKFspA1ldEpas9YYeLt6jF5TJNddeUpgcBKC+Sk0m2l4zjbG+5kgc//fGaN1Rkb
+         FDEA==
+X-Gm-Message-State: ACrzQf0s4H6pEtxq1lP3bx5TdwWhh5z5CtAgPg21mb9i+L4GIOZXLhGa
+        ijdRc/P56EP96dNaG8gyXA==
+X-Google-Smtp-Source: AMsMyM7nAh3H/bFuoxY/59xmkSmzwYtWN6o+qSWjjQyX+E9MsKFooWl0HjQVtzKHj5HYXpng3FnHDA==
+X-Received: by 2002:a05:6870:3409:b0:13b:5dee:40d with SMTP id g9-20020a056870340900b0013b5dee040dmr28382119oah.121.1667478947553;
+        Thu, 03 Nov 2022 05:35:47 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j15-20020a056808056f00b0035956747d07sm338238oig.17.2022.11.03.05.35.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 05:35:47 -0700 (PDT)
+Received: (nullmailer pid 2140214 invoked by uid 1000);
+        Thu, 03 Nov 2022 12:35:43 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
-X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Andrej Picej <andrej.picej@norik.com>
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, festevam@gmail.com,
+        linux-kernel@vger.kernel.org, s.hauer@pengutronix.de,
+        wim@linux-watchdog.org, linux@roeck-us.net, kernel@pengutronix.de,
+        Anson.Huang@nxp.com, linux-imx@nxp.com
+In-Reply-To: <20221103100358.176099-3-andrej.picej@norik.com>
+References: <20221103100358.176099-1-andrej.picej@norik.com>
+ <20221103100358.176099-3-andrej.picej@norik.com>
+Message-Id: <166747792333.2121983.3197860057328686578.robh@kernel.org>
+Subject: Re: [PATCH v3 2/3] dt-bindings: watchdog: fsl-imx: document suspend
+ in wait mode
+Date:   Thu, 03 Nov 2022 07:35:43 -0500
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-It was discovered that the watchdog triggers when the device is put into
-"Suspend-To-Idle"/"freeze" low-power mode. Setting WDW bit disables
-watchdog when the device is put into WAIT mode.
 
-Signed-off-by: Andrej Picej <andrej.picej@norik.com>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
----
-Changes in v3:
- - no changes
+On Thu, 03 Nov 2022 11:03:57 +0100, Andrej Picej wrote:
+> Property "fsl,suspend-in-wait" suspends watchdog in "WAIT" mode which
+> corresponds to Linux's Suspend-to-Idle S0 mode. If this property is not
+> set and the device is put into Suspend-to-Idle mode, the watchdog
+> triggers a reset after 128 seconds.
+> 
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+> ---
+> Changes in v3:
+>  - disallow the property for devices which don't support WDW bit
+>    functionality with .yaml DTS allOf:if:then scheme.
+> 
+> Changes in v2:
+>  - add a commit message,
+>  - add a list of devices which support this functionality
+> ---
+>  .../bindings/watchdog/fsl-imx-wdt.yaml        | 33 +++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+> 
 
-Changes in v2:
- - no changes
----
- arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi b/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi
-index 3cddc68917a0..5168ed0ffec3 100644
---- a/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi
-+++ b/arch/arm/boot/dts/imx6ul-phytec-phycore-som.dtsi
-@@ -102,6 +102,10 @@ &usdhc2 {
- 	status = "disabled";
- };
- 
-+&wdog1 {
-+	fsl,suspend-in-wait;
-+};
-+
- &iomuxc {
- 	pinctrl_enet1: enet1grp {
- 		fsl,pins = <
--- 
-2.25.1
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml:71:1: [error] duplication of key "allOf" in mapping (key-duplicates)
+
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.example.dts'
+Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml:71:1: found duplicate key "allOf" with value "[]" (original value: "[]")
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml:71:1: found duplicate key "allOf" with value "[]" (original value: "[]")
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml: ignoring, error parsing file
+make: *** [Makefile:1492: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
