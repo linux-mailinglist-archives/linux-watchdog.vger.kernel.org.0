@@ -2,57 +2,80 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC9AF61862C
-	for <lists+linux-watchdog@lfdr.de>; Thu,  3 Nov 2022 18:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE34618B83
+	for <lists+linux-watchdog@lfdr.de>; Thu,  3 Nov 2022 23:30:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbiKCR3J (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 3 Nov 2022 13:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48414 "EHLO
+        id S231603AbiKCW3z (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 3 Nov 2022 18:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbiKCR3I (ORCPT
+        with ESMTP id S231782AbiKCW3g (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:29:08 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F56B2656;
-        Thu,  3 Nov 2022 10:29:06 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 31510851B1;
-        Thu,  3 Nov 2022 18:29:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1667496544;
-        bh=IHl019jdqKfFbYSgm9Uj6kDK3KytkmDfYv+y4AZRbY4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eKomvAs3wsOyZrSCiuznaNeYwUV2ThjC82nUG057c8UWsv8K4KaQw/n/xVIOnsDxU
-         fJ+t+wF0sCFirWP13oghPg6djk/vT+wGuEQNRlYAweFTl++4mlGM/rCiqN60lv2/VC
-         ej4pRQTXpS3c9jZWeodi0WHqf4a+4sYGP8Qsv86JG+4831L0geJvDPG8GgPczDxrAR
-         8vMOIHdw+ZoOEiOA3S2QEqGFHqKImPrM19xymHcgtUicpjb/dviyKL/090irbmDsli
-         Ks7euUq5n+0RqImi10UyB+pF3I+3dLB8Hi5h8bmI95kJR2IPRegLJ7dnANU0Bskdpx
-         6P4JoLSLkta0A==
-Message-ID: <fb37c08b-dfd8-2ff0-0e52-0c06fd7381ef@denx.de>
-Date:   Thu, 3 Nov 2022 18:29:03 +0100
+        Thu, 3 Nov 2022 18:29:36 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8856221E15
+        for <linux-watchdog@vger.kernel.org>; Thu,  3 Nov 2022 15:29:31 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id a27so2141201qtw.10
+        for <linux-watchdog@vger.kernel.org>; Thu, 03 Nov 2022 15:29:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eFOxZ2L9iDjGlamIRVaj5OB4U9Nq9AIrRETK9Gxb0MA=;
+        b=C2eJ4D13TM4gLwfosSXDaBenjkpGC0gdp7gU+braX8AzYACLUeO79uW/5jmzeKf+14
+         nwhJAvcBoJa+rTt69U7m3x+8Bw0HcrXxnDdjmYU+axkiTdxSii8jWY+f+YGl6+A3JPTG
+         lRldrmhsL1SU4fFHaOHli3OX9yu0c1rMzJOlqotoPEZLw/AOBZcbwlSzakmABo6WD2Pp
+         21RR4y9gUJpzVWQyz2I+tRuX4eBdhDqXHl4AQbGDU+njCug9phCcVZCBCbGs2N9OaQ8U
+         LWrGTSFhuxz0sHZCDOKm7GLSl0AqyaB/qCWrm7abrpXA4Dx90H/GgqycZvXoa6kyY/TI
+         H2Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eFOxZ2L9iDjGlamIRVaj5OB4U9Nq9AIrRETK9Gxb0MA=;
+        b=lPgWgNKZe0Xm1IDi3VB11quzicwru279nfa3LazMt3xl4l/BJCJqmDlBD+hquoUsRQ
+         APc4icLqfTqXZdDkHZCIzuwHBvC2CFW6d/ml4cB3WPciRhABLcvbYEowE9Zc+i9GkuNv
+         vYiUSgDfH06hSQOJLx860MmAxRXVpp4JvudK1D/6iWcQgDd+WpsW+cNPDjnUAaQgf/2K
+         pzsuqdcc9wDXbftoVCof+kZBzR+/zIomnC9orSRA6BLZgIw4D4GSEJTh71Cuf4yflIXm
+         aGR9pNvUzudFLdnFTFi13xzSDy8I6HeLWfcnSjsPSHS3sFjrWm+cqVLR3+PsSU1UnIzD
+         UuUw==
+X-Gm-Message-State: ACrzQf063804yXJ6nQfRQ+oeuKOWrp8B9eKle3DBg7mwTPeP9avJqyjr
+        fWaRf/yv5rLLlpEyJKHeWE0hZA==
+X-Google-Smtp-Source: AMsMyM68M2Z8PFL9GK04hin6+rQ5xTzVtX5Wyu38D17D2UjoYrUpznFm6XdE1gdo7KfAjEIQ+ydNoA==
+X-Received: by 2002:ac8:6e86:0:b0:3a5:27f8:f3db with SMTP id c6-20020ac86e86000000b003a527f8f3dbmr18716646qtv.97.1667514570558;
+        Thu, 03 Nov 2022 15:29:30 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
+        by smtp.gmail.com with ESMTPSA id s9-20020a05620a29c900b006cec8001bf4sm1633961qkp.26.2022.11.03.15.29.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 15:29:29 -0700 (PDT)
+Message-ID: <d1061af4-cfd6-4c39-e23e-c18d6f2edeea@linaro.org>
+Date:   Thu, 3 Nov 2022 18:29:28 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2] dt-bindings: watchdog: gpio: Convert bindings to YAML
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v3 2/3] dt-bindings: watchdog: fsl-imx: document suspend
+ in wait mode
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-References: <20221103012205.GA2109899@roeck-us.net>
- <a7db27cb-bb50-ed13-f2b7-54a8f66b1b97@denx.de>
- <20221103172020.GA177861@roeck-us.net>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20221103172020.GA177861@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Rob Herring <robh@kernel.org>,
+        Andrej Picej <andrej.picej@norik.com>
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, festevam@gmail.com,
+        linux-kernel@vger.kernel.org, s.hauer@pengutronix.de,
+        wim@linux-watchdog.org, linux@roeck-us.net, kernel@pengutronix.de,
+        Anson.Huang@nxp.com, linux-imx@nxp.com
+References: <20221103100358.176099-1-andrej.picej@norik.com>
+ <20221103100358.176099-3-andrej.picej@norik.com>
+ <166747792333.2121983.3197860057328686578.robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <166747792333.2121983.3197860057328686578.robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,42 +83,44 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/3/22 18:20, Guenter Roeck wrote:
-> On Thu, Nov 03, 2022 at 05:31:12PM +0100, Marek Vasut wrote:
->> On 11/3/22 02:22, Guenter Roeck wrote:
->>> On Wed, Nov 02, 2022 at 11:05:30PM +0100, Marek Vasut wrote:
->>>> Convert the gpio-wdt bindings from text to YAML ones, to permit DT validation.
->>>>
->>>> Signed-off-by: Marek Vasut <marex@denx.de>
->>>> ---
->>>> Cc: Guenter Roeck <linux@roeck-us.net>
->>>> Cc: Rob Herring <robh+dt@kernel.org>
->>>> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
->>>> Cc: linux-watchdog@vger.kernel.org
->>>> To: devicetree@vger.kernel.org
->>>> ---
->>>> V2: - Add missing required: properties
->>>>       - Drop quotes around ref: referenced schema file name
->>>> ---
->>>> NOTE: The Maintainer entry should likely be changed, although it seems
->>>>         like this driver and its matching bindings are now unmaintained.
->>>
->>> I still can not parse this note. The MAINTAINERS entry for watchdog devices
->>> includes
->>>
->>> F:      Documentation/devicetree/bindings/watchdog/
->>> F:      drivers/watchdog/
->>>
->>> which should cover both the old and the new bindings as well as the driver.
->>>
->>> Please explain.
->>
->> I don't mind placing you and Wim into the yaml DT maintainer section if
->> that's OK with you ?
+On 03/11/2022 08:35, Rob Herring wrote:
 > 
-> Ah, you mean the _yaml_ Maintainer entry. Just add me; I can not make
-> the call for Wim.
+> On Thu, 03 Nov 2022 11:03:57 +0100, Andrej Picej wrote:
+>> Property "fsl,suspend-in-wait" suspends watchdog in "WAIT" mode which
+>> corresponds to Linux's Suspend-to-Idle S0 mode. If this property is not
+>> set and the device is put into Suspend-to-Idle mode, the watchdog
+>> triggers a reset after 128 seconds.
+>>
+>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+>> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+>> ---
+>> Changes in v3:
+>>  - disallow the property for devices which don't support WDW bit
+>>    functionality with .yaml DTS allOf:if:then scheme.
+>>
+>> Changes in v2:
+>>  - add a commit message,
+>>  - add a list of devices which support this functionality
+>> ---
+>>  .../bindings/watchdog/fsl-imx-wdt.yaml        | 33 +++++++++++++++++++
+>>  1 file changed, 33 insertions(+)
+>>
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> ./Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml:71:1: [error] duplication of key "allOf" in mapping (key-duplicates)
+> 
 
-Yes, that entry. That's what I was wondering about.
+You already have there allOf, so:
+1. Move the existing allOf *above* unevaluatedProperties:false (like in
+example-schema).
+2. Drop the quotes around 'watchdog.yaml', when moving.
+3. Add your pieces.
 
-I'll wait a bit before sending V3.
+All above in one commit.
+
+Best regards,
+Krzysztof
+
