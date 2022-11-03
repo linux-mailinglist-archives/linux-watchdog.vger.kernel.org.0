@@ -2,62 +2,63 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 120486173B3
-	for <lists+linux-watchdog@lfdr.de>; Thu,  3 Nov 2022 02:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC7D6173BB
+	for <lists+linux-watchdog@lfdr.de>; Thu,  3 Nov 2022 02:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiKCBWI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 2 Nov 2022 21:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
+        id S230012AbiKCB1i (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 2 Nov 2022 21:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbiKCBWH (ORCPT
+        with ESMTP id S229553AbiKCB1h (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 2 Nov 2022 21:22:07 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8ED12D25;
-        Wed,  2 Nov 2022 18:22:07 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so221275otu.7;
-        Wed, 02 Nov 2022 18:22:07 -0700 (PDT)
+        Wed, 2 Nov 2022 21:27:37 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A34B12D35;
+        Wed,  2 Nov 2022 18:27:37 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-13bd19c3b68so615237fac.7;
+        Wed, 02 Nov 2022 18:27:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=hxkCgXWIO7LAznOkM0RbaSzWUPqOnXMUvHbW2mwLf5A=;
-        b=Dwm3MRJj57OJLaaTswLhbIYvS3+5EEOOMibdkM2lvz/G3U13/fE6JdD8cJk1BSsvKS
-         vTHna1pPaillnc+s6tbMmFto+6lu3nvYythLJAYn8YHe6/fS8qbrV+7KMA54Y35SMDRo
-         4UW/7cxHMcPIHEuLesZqyfNBvk/mXad6DmoyKWWwDGkLrI2AUzeyyYueBOqoHEJSBa0a
-         zBC6NgfP8IVLx3lMsBNIQanv5tqg/OcJOl4N0zeZ2/LDS3DJUUciXMzlVR6FLrwMyP/Q
-         3ftnd798Lw7ypU6V3jq4LeCdla2HdZQpr34w9dCHJrYZtt2oLHo/grXfUhOlHPDZ4NW6
-         ELBg==
+        bh=lhguKZm5jAB5EIUo+yucCqXNy+ZxkwH9pcc4FM1ikf0=;
+        b=FQaxtMANFxwLPCXqqIUNJSq8p3LlPJ/h6+13H85RwW+Cj+vGtW9Dadf/fIM9WHjAfH
+         4eCUFD4MjOAARBjuba+u6FC83BB1VrzFS4h9Or/2EhIvq4IbXZ3JCu3vzbonInja/4wm
+         A21lPuqDp903NHVhbjp3qAIPGLWXvcLDLbyRCQSnYRXY1FjutXL4ESmKbpEWJZSZQPbh
+         B4OGTQ1K6MdOvR85jL55EfZnyXmNdyLSLXPKKFAq0G7M9dDcx5QkU5sqBf9qrgQYy+oO
+         zWjS9ZzEj2J/Zz4VTAxIN0zNTcea3i867VvTzrlphv48Zv1h8LMB1EC+vmZZWgovoUq9
+         Swbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hxkCgXWIO7LAznOkM0RbaSzWUPqOnXMUvHbW2mwLf5A=;
-        b=tSnzE7/+wZ/h1HaPiOssrRBW7TnleIzDM1rah2+PJTpljYcn/dfs3FJnrOUhwxNBdi
-         z6bStB7TLgZci51DTZ4rMvcqi5d7zJ1vbyAjw3wa8qXbFl0zewaTLDeh9Ox9GR+ayNVm
-         7OKo8khi8AhXAsCxCczoN/hKQBRNsPa4OWRJfggcNg1igutRhtaIPoMt8nVedsa5bScj
-         EqwA1+AlCDP9+gsVt6r+93f1JYxXU1IlGmV6GMmp4c9Kww2Mm7uPHxeBu8pHGrmBp/Re
-         ns84Wip3iBhTsQQq205rOB6TENEkC55U+t6gi120dWYv5GwXvK00CjQUeVlBdb0jiola
-         MEfQ==
-X-Gm-Message-State: ACrzQf3+NzGqwftnaRn5zs4+hN+ZzdUNUg6jcecf1v6szPrMNcwOtV2J
-        nXHeXvFlsejdNy1gAYWMM+ZG3m7w3rQ=
-X-Google-Smtp-Source: AMsMyM73mrLumHAm4ibKJBfgvncsVpEZuega4hEaal57+3JY7f7THNE5la4JgvMPi2WVNzdahgZ4wg==
-X-Received: by 2002:a9d:630d:0:b0:66c:506d:e560 with SMTP id q13-20020a9d630d000000b0066c506de560mr10634930otk.40.1667438526581;
-        Wed, 02 Nov 2022 18:22:06 -0700 (PDT)
+        bh=lhguKZm5jAB5EIUo+yucCqXNy+ZxkwH9pcc4FM1ikf0=;
+        b=qqwRfn0uJFtg/jBpAW4Q3DBpVrM+L0qlO7RgQpwfwke5sMEq5Ol1LBt13hFfnaRpAd
+         LyMhlfOqk2Fa3qWQdTAdF6/LFyIOk+pjYqZnMJ2x7I6Q1BKyyGutLiM2Sdh2l7ckbWU6
+         aRV69U+wvEtqz4NzQtBR9sBUlJzAwRUQP+k1ZKI1ysKh5nPPqhRqUBNAoQjXYosAMTPH
+         I7FPAtRpP1rBDQD3qi/BbdNjEGT77BLqOU0rsJLQ9vCA4A6pgfcG84vvOFAihmOCVh/w
+         DDZo8QZx3cmBks6jOTm0n5V77WkW9mKiEZGy2klDmoIqg5lFmesFikjVqxM3E/7qlRmX
+         qFiA==
+X-Gm-Message-State: ACrzQf1wXdjx6GXrBC/Ce4nQIENg6FgtIkmjKdG+Hw6PKjnaJazn9nFu
+        W9OwQFtSubdmPZwr3yXXbevU1WXS/wk=
+X-Google-Smtp-Source: AMsMyM6T2dv6EpLuKLqUbHnVAzTcQqBAda/fOk2f+fg597z0ZYDakkbfQ1tlzAW9sCCNVwr9P7+TCA==
+X-Received: by 2002:a05:6870:d584:b0:137:2c18:6864 with SMTP id u4-20020a056870d58400b001372c186864mr15744148oao.245.1667438856458;
+        Wed, 02 Nov 2022 18:27:36 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p5-20020a056870830500b0013b92b3ac64sm6777481oae.3.2022.11.02.18.22.05
+        by smtp.gmail.com with ESMTPSA id j29-20020a056870169d00b00127fbb7afffsm6841023oae.5.2022.11.02.18.27.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 18:22:06 -0700 (PDT)
+        Wed, 02 Nov 2022 18:27:36 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Nov 2022 18:22:05 -0700
+Date:   Wed, 2 Nov 2022 18:27:35 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Marek Vasut <marex@denx.de>
 Cc:     devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Subject: Re: [PATCH v2] dt-bindings: watchdog: gpio: Convert bindings to YAML
-Message-ID: <20221103012205.GA2109899@roeck-us.net>
+Message-ID: <20221103012735.GA2109982@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -89,14 +90,17 @@ On Wed, Nov 02, 2022 at 11:05:30PM +0100, Marek Vasut wrote:
 > NOTE: The Maintainer entry should likely be changed, although it seems
 >       like this driver and its matching bindings are now unmaintained.
 
-I still can not parse this note. The MAINTAINERS entry for watchdog devices
-includes
+Where do you get that Cc: list from anyway ? get_maintainer.pl on both the
+mainline kernel and on linux-next tells me
 
-F:      Documentation/devicetree/bindings/watchdog/
-F:      drivers/watchdog/
+Wim Van Sebroeck <wim@linux-watchdog.org> (maintainer:WATCHDOG DEVICE DRIVERS)
+Guenter Roeck <linux@roeck-us.net> (maintainer:WATCHDOG DEVICE DRIVERS)
+Rob Herring <robh+dt@kernel.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org> (maintainer:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+linux-watchdog@vger.kernel.org (open list:WATCHDOG DEVICE DRIVERS)
+devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS)
+linux-kernel@vger.kernel.org (open list)
 
-which should cover both the old and the new bindings as well as the driver.
-
-Please explain.
+Why don't you copy Krzysztof ?
 
 Guenter
