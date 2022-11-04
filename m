@@ -2,100 +2,111 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4A9618DF5
-	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Nov 2022 03:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4907619184
+	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Nov 2022 08:04:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiKDCHY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 3 Nov 2022 22:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
+        id S231491AbiKDHEL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 4 Nov 2022 03:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiKDCHS (ORCPT
+        with ESMTP id S229804AbiKDHEK (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 3 Nov 2022 22:07:18 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20BE1B9F9;
-        Thu,  3 Nov 2022 19:07:14 -0700 (PDT)
-X-UUID: f43e5c97af584134b1ce1870f58bc80f-20221104
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=dXN+0G2bPmNIyK+r4bcEn3c/POxfzNelk4tkp2tJDz0=;
-        b=uSOgQNDyvkXz68565LGtHrhFeG+LgGWtTTSxxlrP1+pdoSQ6YfzRIQBTVGnw4dZNBgGYdauTpHBJEhPaVAtmKrrm8WqDpRNFEH2B2KW3pv9koXN5d3yO7BFDyEJh5mCFiPe9cEXlOoEK7+s1mIE/OsxEjctJmhSz0OyJEIuas9Q=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:dbc5d13f-d90a-4b82-8b66-aca6f7e5428d,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:62cd327,CLOUDID:cffe8990-1a78-4832-bd08-74b1519dcfbf,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: f43e5c97af584134b1ce1870f58bc80f-20221104
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1000549573; Fri, 04 Nov 2022 10:07:08 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 4 Nov 2022 10:07:07 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 4 Nov 2022 10:07:07 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <nfraprado@collabora.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH v4 7/7] dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT8173
-Date:   Fri, 4 Nov 2022 10:07:01 +0800
-Message-ID: <20221104020701.24134-8-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20221104020701.24134-1-allen-kh.cheng@mediatek.com>
-References: <20221104020701.24134-1-allen-kh.cheng@mediatek.com>
+        Fri, 4 Nov 2022 03:04:10 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18DDB492;
+        Fri,  4 Nov 2022 00:04:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=sJk/uIhVMN6FJkJbBHcqgLnXIArLY/TP8/nafG2pa9k=; b=HCig3YIWU0vQa2605yKEgaRSbB
+        SkbMKOr7o+F5qiTTe1pOtR+hFEBHdq7ixx7jVu9gCYcwQ8usNbi1CM8puxXTtgEVYVPrDtlguJFiS
+        12SAv7o5zRgZS2FbCUqRrbTQ5GPAsn5TZhu03LGG51fZUx7PqczcxR7RrQxw1mKk0lXCU5MgTkPaI
+        7DhMKwlcMiPgucUjDzNO4wehrwVLnVJ6RTyRHXoKliIiaKCNlBcuNTxGU+GdYrdqAha2k8tFUkczB
+        OGeU67+DT/P0PwaXSKaMWQSkDDQlN+uxEWIMn4dql004J8BJafRN++ARWqXAxxqmSTPrK/a7uUHrt
+        qO1gqGzA==;
+Received: from [89.212.21.243] (port=40616 helo=localhost.localdomain)
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1oqqk7-00EcG2-7k;
+        Fri, 04 Nov 2022 08:04:02 +0100
+From:   Andrej Picej <andrej.picej@norik.com>
+To:     linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, Anson.Huang@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/3] Suspending i.MX watchdog in WAIT mode
+Date:   Fri,  4 Nov 2022 08:03:55 +0100
+Message-Id: <20221104070358.426657-1-andrej.picej@norik.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-MTK:  N
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Add the mediatek,mt8173-wdt compatible using mediatek,mt6589-wdt as
-fallback.
+The i.MX6 watchdog can't be stopped once started. Additionally, watchdog
+hardware configuration needs to be able to handle low-power modes of the
+SoC. For low-power modes, there are two configuration bits in the TRM:
+- WDZST bit disables the watchdog timer in "deeper" low power modes and
+- WDW bit disables the watchdog timer in "WAIT" mode
 
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Acked-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
- Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml | 1 +
- 1 file changed, 1 insertion(+)
+WDZST bit support is already in place since 1a9c5efa576e ("watchdog: imx2_wdt: disable watchdog timer during low power mode").
+On the other hand, handling of WDZST bit was omitted so far but now
+these patch series bring support for it.
 
-diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
-index d9d4aa7e27e3..58055a1aed92 100644
---- a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
-@@ -37,6 +37,7 @@ properties:
-               - mediatek,mt7622-wdt
-               - mediatek,mt7623-wdt
-               - mediatek,mt7629-wdt
-+              - mediatek,mt8173-wdt
-               - mediatek,mt8516-wdt
-           - const: mediatek,mt6589-wdt
- 
+SoC's "WAIT" low-power mode corresponds to Linux's freeze or
+Suspend-to-Idle (S0) mode which can be activated with:
+
+$ echo freeze > /sys/power/state
+
+Without these patches, board would be reset by the watchdog after
+timeout of 128 seconds since watchdog would not be stopped when SoC
+entered Suspend-to-Idle mode. With patches in place, boards using
+imx2-wdt are able to stay in Suspend-to-Idle mode indefinitely.
+
+Last but not least, WDW bit is not found on all imx2-wdt supported i.MX
+devices, therefore a new device-tree property "fsl,suspend-in-wait" has
+been introduced for this.
+
+Here is v1: https://lore.kernel.org/lkml/20221019111714.1953262-1-andrej.picej@norik.com/
+
+Here is v2: https://lore.kernel.org/all/20221025072533.2980154-1-andrej.picej@norik.com/#t
+
+Here is v3: https://lore.kernel.org/all/20221103100358.176099-1-andrej.picej@norik.com/
+
+Change log in the corresponding patches.
+
+Andrej Picej (3):
+  watchdog: imx2_wdg: suspend watchdog in WAIT mode
+  dt-bindings: watchdog: fsl-imx: document suspend in wait mode
+  ARM: dts: imx6ul/ull: suspend i.MX6UL watchdog in wait mode
+
+ .../bindings/watchdog/fsl-imx-wdt.yaml        | 37 ++++++++++++-
+ .../boot/dts/imx6ul-phytec-phycore-som.dtsi   |  4 ++
+ drivers/watchdog/imx2_wdt.c                   | 55 ++++++++++++++++++-
+ 3 files changed, 90 insertions(+), 6 deletions(-)
+
 -- 
-2.18.0
+2.25.1
 
