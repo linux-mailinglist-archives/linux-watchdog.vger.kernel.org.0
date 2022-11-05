@@ -2,74 +2,121 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEA961DA63
-	for <lists+linux-watchdog@lfdr.de>; Sat,  5 Nov 2022 13:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9FE361DAB3
+	for <lists+linux-watchdog@lfdr.de>; Sat,  5 Nov 2022 15:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiKEMkQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 5 Nov 2022 08:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40984 "EHLO
+        id S229581AbiKEOCP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 5 Nov 2022 10:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiKEMkA (ORCPT
+        with ESMTP id S229555AbiKEOCP (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 5 Nov 2022 08:40:00 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6202D17A96
-        for <linux-watchdog@vger.kernel.org>; Sat,  5 Nov 2022 05:39:59 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-13c2cfd1126so8204573fac.10
-        for <linux-watchdog@vger.kernel.org>; Sat, 05 Nov 2022 05:39:59 -0700 (PDT)
+        Sat, 5 Nov 2022 10:02:15 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9D220BE9;
+        Sat,  5 Nov 2022 07:02:13 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id n186so7928279oih.7;
+        Sat, 05 Nov 2022 07:02:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
-        b=mu8m7znM9duu/MEuox3wxE9uI+enJzfHDrHCiCJ0dxXEnbtqlugP30RV4pUA4LaD8D
-         DTqzL6R3iJdygnN0tebcl2jKMC1xnk2qmH9yHj5ZpYJsig0zgAkFbQEJMtQOsyMS9E9+
-         9mZsd+BXbCYizoNZILloIeJgVKBYQDDlfcxWmhtehgP0gShVz6QbysTuA73O0zNW89oN
-         M95vp9qd39mlLDduLYXTQkqHXtcuCB6sr4c0ysKpoCTw5s/vT8zmw06SHC/DLusZ9o66
-         sNkDbmLIhAcJBtA+VmbRSjB+l+4rXBDt3pKOG75zF9L+vjSBjo5n2zZjo+rRsufLH5jZ
-         6xmA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UWKQpWV4q18oUUAJI5y05A3Qk/YN9wzpbCG2obhLtyQ=;
+        b=WZJGW3l1z10C+6EY2Vpl9D/BE2rvprjerZP/fVm6a0Lfz3ce47j6rdLjoeBrk9zwRf
+         El2g06eggeoqBRt51CGxE8LjuJPD6nF1vLwBUE1Sr4qk0rglhlQb5+O9gkZ3NjMitZMH
+         llF0MvXfOmHyhZrTQ1wAfiN/uSQ8ltVsQbD2LAVwQA0KoEDtXxG/gSH/GXDGzzs/1DzF
+         GvCVUbfdpacxYILCrY9pLYW8WmQ+01h38IZmMBflXUGJsz0l0A8FqSJ6SSLZtcMO1VA0
+         UbF/HZHSQxUv5WsLLHjHNFveTeI5ZrzXCK1n0ayNArjcOwVN+jcJqEe2OP6aXq0OiS/g
+         cmJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
-        b=AL+9wMWgaipcdz8B/Cus6NZW2wSAY/oeOrcfYVVAM1MsyID/ggKF0t7nk9SrVLhnzM
-         1oU+NOXluvzAQNFVoErBEYCHBEEh3uFw6ZBuVDIl5molpP+4kBuxZAkrORTDSsQNBrmt
-         BrDW/noYKbR7xPNld+HmOb02UcezqwDy2ps6YsiubWDXt4cJV20U4CUHefhkJQxShKBJ
-         yxwRRfOytEwlWcE5Mxi5LYQEx6nAS/MpvHrLlbKFNf9y1B4SWhwXgVQluXX3lKD5OGAQ
-         91YHbt/q0w1xFgUawZkDoaeVWn2FSVEh+NmoQ0sRXgSyqf9W4z7WTEyjy2XmZaZfiDiU
-         zHlQ==
-X-Gm-Message-State: ACrzQf264PDCD/VyjX14Xcg4MislT3MFOcK2u4gkB3RxONfiwacam/RF
-        8fJbfJ8D0yMUF7z3xbAnUp4ooFxC7MkK/yOoakDgKT7+Zsg=
-X-Google-Smtp-Source: AMsMyM5GFe2gsiMaHXHXvp99K7JeNN2UuK6dELDyLpsoJjIUkQcn4q3aD74FbKEapmwctM2YF8x1D4LMLHeg4fM3LVk=
-X-Received: by 2002:a17:90b:4ac3:b0:213:3918:f276 with SMTP id
- mh3-20020a17090b4ac300b002133918f276mr57022678pjb.19.1667651987563; Sat, 05
- Nov 2022 05:39:47 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UWKQpWV4q18oUUAJI5y05A3Qk/YN9wzpbCG2obhLtyQ=;
+        b=qOMXauSZxjASkrZLyz13vfQGNT98T4Am7xxzg7/tS4MlwQ+40iGReqCKPhrgrf0D1G
+         hzYBGAEr7YUQDIkAZtppNAxCHePNViT8b3/yFbtmHGrlGdbB1BjZ2Q9qccBUxMUCu9K/
+         KJP9EAMMv6PkCm9YEcniHY4wWqAW2BdGku8xmXJKIpyN5paajRa+6ZEPRlt7isPB53G/
+         KQZEgR8PB9wD7wlS9gUrr1T50XOLb0iHNFRltwBjLe6G8YcriVIj5n9n90PdqfwTdAVu
+         aJF2mQM/LvDc45E42f4cgcw60qIY9we5x0MKORPrCvSaDBpu8ronnJjPq/5698JKksKm
+         8J9A==
+X-Gm-Message-State: ACrzQf2jmbpe9C+K1Lj8q/10FSUzrC3h83isf7pOoA2goBMgVpVmyq1X
+        LYB0W15YsZf/HyTusFqyiiO0M3zOgfc=
+X-Google-Smtp-Source: AMsMyM5RaWy/k+dJcmwEl4cIbvyShI1ptqjzBjNZBPpR17CbK3PAkFdqE/NSjFMUMWq60Wb4tRpZbA==
+X-Received: by 2002:a05:6808:2387:b0:354:e5a0:ec9d with SMTP id bp7-20020a056808238700b00354e5a0ec9dmr360773oib.202.1667656932512;
+        Sat, 05 Nov 2022 07:02:12 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 3-20020a4ae1a3000000b0048fb9b6dd70sm666953ooy.0.2022.11.05.07.02.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Nov 2022 07:02:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 5 Nov 2022 07:02:09 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
+Subject: Re: [PATCH] watchdog: Include <linux/kstrtox.h> when appropriate
+Message-ID: <20221105140209.GB1606271@roeck-us.net>
+References: <08fd5512e569558231247515c04c8596a1d11004.1667646547.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Received: by 2002:a05:7301:2e91:b0:83:922d:c616 with HTTP; Sat, 5 Nov 2022
- 05:39:47 -0700 (PDT)
-Reply-To: stefanopessia755@hotmail.com
-From:   Stefano Pessina <wamathaibenard@gmail.com>
-Date:   Sat, 5 Nov 2022 15:39:47 +0300
-Message-ID: <CAN7bvZKO8GxFn7CG_EtS_Of+AZ+KsuqTkq40Mq-yJDNrEHyakg@mail.gmail.com>
-Subject: Geldspende
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <08fd5512e569558231247515c04c8596a1d11004.1667646547.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
---=20
-Die Summe von 500.000,00 =E2=82=AC wurde Ihnen von STEFANO PESSINA gespende=
-t.
-Bitte kontaktieren Sie uns f=C3=BCr weitere Informationen =C3=BCber
-stefanopessia755@hotmail.com
+On Sat, Nov 05, 2022 at 12:09:34PM +0100, Christophe JAILLET wrote:
+> The kstrto<something>() functions have been moved from kernel.h to
+> kstrtox.h.
+> 
+> So, in order to eventually remove <linux/kernel.h> from <linux/watchdog.h>,
+> include the latter directly in the appropriate files.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  drivers/watchdog/aspeed_wdt.c   | 1 +
+>  drivers/watchdog/watchdog_dev.c | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
+> index 0cff2adfbfc9..10863d2ef924 100644
+> --- a/drivers/watchdog/aspeed_wdt.c
+> +++ b/drivers/watchdog/aspeed_wdt.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/delay.h>
+>  #include <linux/io.h>
+>  #include <linux/kernel.h>
+> +#include <linux/kstrtox.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+> index 55574ed42504..f31608f3e324 100644
+> --- a/drivers/watchdog/watchdog_dev.c
+> +++ b/drivers/watchdog/watchdog_dev.c
+> @@ -35,6 +35,7 @@
+>  #include <linux/init.h>		/* For __init/__exit/... */
+>  #include <linux/hrtimer.h>	/* For hrtimers */
+>  #include <linux/kernel.h>	/* For printk/panic/... */
+> +#include <linux/kstrtox.h>	/* For kstrto* */
+>  #include <linux/kthread.h>	/* For kthread_work */
+>  #include <linux/miscdevice.h>	/* For handling misc devices */
+>  #include <linux/module.h>	/* For module stuff/... */
+> -- 
+> 2.34.1
+> 
