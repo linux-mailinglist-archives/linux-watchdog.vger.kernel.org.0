@@ -2,129 +2,170 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA87B61F03F
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Nov 2022 11:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7389E61F833
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Nov 2022 17:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231518AbiKGKV5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 7 Nov 2022 05:21:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
+        id S231530AbiKGQDz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 7 Nov 2022 11:03:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231510AbiKGKVs (ORCPT
+        with ESMTP id S230434AbiKGQDz (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 7 Nov 2022 05:21:48 -0500
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC5B818B2F
-        for <linux-watchdog@vger.kernel.org>; Mon,  7 Nov 2022 02:21:25 -0800 (PST)
-Received: by mail-oi1-x243.google.com with SMTP id h132so3749954oif.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 07 Nov 2022 02:21:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
-        b=L9okY7Icb0Gf5ctoFsS3m7Ms6FyffuhIG/wumllqb99pGSDM0eKoVdXRomu4k2Vvje
-         vaAAA5b5CG4T9vL3DYzTbt6i7ilTYVRiZHeAf51qWroCKMi/06UV8twkwYbbvcb58b0c
-         O8aiXYIeKLPGKFxD8AeTNjdm9XiiwAwYXXYnxXnBzQtt4ZaPQYbu2mn3d4/wBF5dq0sI
-         fYgKey8dWac3TMQ3pm+aZLL8XgADS0c8wc9DQhJYDoGLimjkDspSigMMA/pe1/be4Mmf
-         FTMTprRtatoAeN10/4e16TIuQYPcJ6zZ7AsqjnUqg8Bde3BWUPkO4V20s/KjpolOjYbD
-         1dVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
-        b=r82XLEp1df4mWguH5Kg2uURV1nofMl+tbRLMzAEcfPQabTCJdFobs3Sj202Gn5w0eg
-         qBu5SMqlIMyHQaFAwgOEHJbdLF7OhMuaG2/ToPWh5iz0SnUZ2sb6E/fXKWw7U3s6ch/9
-         o4TWMAI0gAlmQ/MTOpPWcmnzHzYqta6WJRwTC61YNTkNTx2UJ4YM9OYnXTbaGx5QdpL3
-         eVfz1O6cxiZAQvDWDvMcBBqGR7U5ktjz/PrpOFStQ/e76mDJWI1OuOcfpgt+09hR5KwR
-         IRnTAZwKJfmrgCn2xJfDL+U9W5WtwU+48vGk2+ezpe79A5JwozxWqkrOVsx3o+3uH0Dd
-         3NYw==
-X-Gm-Message-State: ANoB5plWNX7GE/ROpY09gJny3oo4BLAXpMmRnPLK4JretCneMqAEBzBm
-        r/ULJA1ttfKA+mJUUEchJ0Z3syCz/B7xZ7E3QRHOVA+K8XQ=
-X-Google-Smtp-Source: AMsMyM4Z92xjGZXgCyg2wym9Bu3/u65n6EL2ZpWI9kWf7s8xWZden0QG/zdZVfFd3uCVmOfceIs+YigxV7lXSF4Af+Y=
-X-Received: by 2002:a17:90b:2393:b0:213:ecb2:2e04 with SMTP id
- mr19-20020a17090b239300b00213ecb22e04mr38944517pjb.100.1667816475223; Mon, 07
- Nov 2022 02:21:15 -0800 (PST)
+        Mon, 7 Nov 2022 11:03:55 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565E0646A;
+        Mon,  7 Nov 2022 08:03:53 -0800 (PST)
+Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id DF13E80705;
+        Mon,  7 Nov 2022 17:03:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1667837031;
+        bh=npYaDFsNI6WNDngxPTaMW7qxIj6XNWcAhE4z8/9Z3ns=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NoelKcAy/1BxHzRIlRmb3IzlavJyBdFLhfv3UnQ+X9fL2sIpPJ/AeuGrBmG6akLu1
+         Uo/Mf10Veby7mmr2mPBg8renR3LQ+HMzN0/nBkyZuyeWsC5afG6tWi4qaBPu2bAyA1
+         IEXuRR8jTUPeONfd9FmfHHD0l2h9WwTBn0OytW7M0Szn7L1igA5AF7Gt8Xyfr4bjMl
+         A3fPu+K0u+Sn9VrEAwMFOu90lYqbSUN5CLZFxzStiLBBMaBzVgQ7JfHJ/YQa8WbwU5
+         Fbi8mrt82roKMVorXRXqEFVRDyWNeu+5OTHrgSNy7ooyyOJeRQt5P1RxL6UOIuAU9l
+         G/1TpcFjaw55g==
+From:   Marek Vasut <marex@denx.de>
+To:     devicetree@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>, Rob Herring <robh@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH v3] dt-bindings: watchdog: gpio: Convert bindings to YAML
+Date:   Mon,  7 Nov 2022 17:03:38 +0100
+Message-Id: <20221107160338.27910-1-marex@denx.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Received: by 2002:a05:6a06:925:b0:587:19e0:c567 with HTTP; Mon, 7 Nov 2022
- 02:21:14 -0800 (PST)
-Reply-To: contact@ammico.it
-From:   =?UTF-8?Q?Mrs=2E_Monika_Everenov=C3=A1?= <977638ib@gmail.com>
-Date:   Mon, 7 Nov 2022 11:21:14 +0100
-Message-ID: <CAHAXD+Z_SoFK+TjW_6apBCCLtc_awXEjaqOdf77jdLRxxup3TA@mail.gmail.com>
-Subject: Re:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,FROM_STARTS_WITH_NUMS,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:243 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [977638ib[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hei ja miten voit?
-Nimeni on rouva Evereen, l=C3=A4het=C3=A4n t=C3=A4m=C3=A4n viestin suurella=
- toivolla
-v=C3=A4lit=C3=B6n vastaus, koska minun on teht=C3=A4v=C3=A4 uusi syd=C3=A4n=
-leikkaus
-t=C3=A4ll=C3=A4 hetkell=C3=A4 huonokuntoinen ja v=C3=A4h=C3=A4iset mahdolli=
-suudet selviyty=C3=A4.
-Mutta ennen kuin min=C3=A4
-Tee toinen vaarallinen operaatio, annan sen sinulle
-Minulla on 6 550 000 dollaria yhdysvaltalaisella pankkitilill=C3=A4
-sijoittamista, hallinnointia ja k=C3=A4ytt=C3=B6=C3=A4 varten
-voittoa hyv=C3=A4ntekev=C3=A4isyysprojektin toteuttamiseen. Tarkoitan saira=
-iden auttamista
-ja k=C3=B6yh=C3=A4t ovat viimeinen haluni maan p=C3=A4=C3=A4ll=C3=A4, sill=
-=C3=A4 minulla ei ole niit=C3=A4
-kenelt=C3=A4 perii rahaa.
-Vastaa minulle nopeasti
-terveisi=C3=A4
-Rouva Monika Evereen
-Florida, Amerikan Yhdysvallat
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-Hi and how are you?
-My name is Mrs. Evereen, I am sending this message with great hope for
-an immediate response, as I have to undergo heart reoperation in my
-current poor health with little chance of survival. But before I
-undertake the second dangerous operation, I will give you the
-$6,550,000 I have in my US bank account to invest well, manage and use
-the profits to run a charity project for me. I count helping the sick
-and the poor as my last wish on earth, because I have no one to
-inherit money from.
-Please give me a quick reply
-regards
-Mrs. Monika Evereen
-Florida, United States of America
+Convert the gpio-wdt bindings from text to YAML ones, to permit DT validation.
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: linux-watchdog@vger.kernel.org
+To: devicetree@vger.kernel.org
+---
+V2: - Add missing required: properties
+    - Drop quotes around ref: referenced schema file name
+V3: - Add Guenter as maintainer of the bindings
+    - Add RB from Rob
+---
+ .../devicetree/bindings/watchdog/gpio-wdt.txt | 28 -----------
+ .../bindings/watchdog/linux,wdt-gpio.yaml     | 47 +++++++++++++++++++
+ 2 files changed, 47 insertions(+), 28 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
+
+diff --git a/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt b/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
+deleted file mode 100644
+index 198794963786b..0000000000000
+--- a/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
++++ /dev/null
+@@ -1,28 +0,0 @@
+-* GPIO-controlled Watchdog
+-
+-Required Properties:
+-- compatible: Should contain "linux,wdt-gpio".
+-- gpios: From common gpio binding; gpio connection to WDT reset pin.
+-- hw_algo: The algorithm used by the driver. Should be one of the
+-  following values:
+-  - toggle: Either a high-to-low or a low-to-high transition clears
+-    the WDT counter. The watchdog timer is disabled when GPIO is
+-    left floating or connected to a three-state buffer.
+-  - level: Low or high level starts counting WDT timeout,
+-    the opposite level disables the WDT. Active level is determined
+-    by the GPIO flags.
+-- hw_margin_ms: Maximum time to reset watchdog circuit (milliseconds).
+-
+-Optional Properties:
+-- always-running: If the watchdog timer cannot be disabled, add this flag to
+-  have the driver keep toggling the signal without a client. It will only cease
+-  to toggle the signal when the device is open and the timeout elapsed.
+-
+-Example:
+-	watchdog: watchdog {
+-		/* ADM706 */
+-		compatible = "linux,wdt-gpio";
+-		gpios = <&gpio3 9 GPIO_ACTIVE_LOW>;
+-		hw_algo = "toggle";
+-		hw_margin_ms = <1600>;
+-	};
+diff --git a/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml b/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
+new file mode 100644
+index 0000000000000..c729c96a5dc75
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
+@@ -0,0 +1,47 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/linux,wdt-gpio.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: GPIO-controlled Watchdog
++
++maintainers:
++  - Guenter Roeck <linux@roeck-us.net>
++
++properties:
++  compatible:
++    const: linux,wdt-gpio
++
++  gpios:
++    description: gpio connection to WDT reset pin
++    maxItems: 1
++
++  hw_algo:
++    description: The algorithm used by the driver.
++    enum: [ level, toggle ]
++
++  hw_margin_ms:
++    description: Maximum time to reset watchdog circuit (milliseconds).
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++required:
++  - compatible
++  - gpios
++  - hw_algo
++  - hw_margin_ms
++
++allOf:
++  - $ref: watchdog.yaml#
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    watchdog {
++        compatible = "linux,wdt-gpio";
++        gpios = <&gpio3 9 GPIO_ACTIVE_LOW>;
++        hw_algo = "toggle";
++        hw_margin_ms = <1600>;
++    };
+-- 
+2.35.1
+
