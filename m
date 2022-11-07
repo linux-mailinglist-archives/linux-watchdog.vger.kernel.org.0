@@ -2,585 +2,191 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5677F61E2E4
-	for <lists+linux-watchdog@lfdr.de>; Sun,  6 Nov 2022 16:16:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B5C461E85B
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Nov 2022 02:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiKFPQn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 6 Nov 2022 10:16:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
+        id S230163AbiKGBkJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 6 Nov 2022 20:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbiKFPQm (ORCPT
+        with ESMTP id S229955AbiKGBkI (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 6 Nov 2022 10:16:42 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2061.outbound.protection.outlook.com [40.107.243.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77002BF5A;
-        Sun,  6 Nov 2022 07:16:40 -0800 (PST)
+        Sun, 6 Nov 2022 20:40:08 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B558265EE;
+        Sun,  6 Nov 2022 17:39:59 -0800 (PST)
+X-UUID: bb6a2e9e36fc423781d804cd5406c0ff-20221107
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=sioR3BODH4jrVJmVjPb6d9YhcYoqD7Qy5KT5Xc020aQ=;
+        b=jf27pLoLYHZ9YFOkEqZwrJEgKe6fexuDBME8Jl7m2SfLB+zqmqV1IA5LTOHOXRV8Q31lv/DGuEY0I7ZIgVNJbSTRmTPiolJo0k0+9xSViLZD66WRWPLaosh7MW4So8ybfi0CjC5IRb+ehByyag2xTFCgBJYoatExEF/FgEVfaGY=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:76299c3a-19cf-4886-a708-ec261a423ced,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:62cd327,CLOUDID:4c85d4f3-a19e-4b45-8bfe-6a73c93611e9,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: bb6a2e9e36fc423781d804cd5406c0ff-20221107
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1983407769; Mon, 07 Nov 2022 09:39:55 +0800
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 7 Nov 2022 09:39:54 +0800
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (172.21.101.239)
+ by mtkmbs10n1.mediatek.com (172.21.101.34) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Mon, 7 Nov 2022 09:39:53 +0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eYnEicsmSWcuQh58AKZTGvq+HAkLZOJ7PI2cBVo9CLbjocLXT6FwtzREF+4trT4Ms29FHNcjx4QHh+HUdXxXRXmqxVOyWepDC2zieKeAIlrdAiiaYPvl5A36iey/4ZfK/vwp3amEBzi6N7x4V6in/viEStK2qfhqG6ryrYmT4NoGFHFV3fQXXW9RDUS9sMN7e4wahk1sQIn1uy3CrD6fS60Q7BKNrpo+r3cqRKk2VE6x73QOOgRO2H+0OsdOIQw8tYl9YWumDM3CmyFzitSVbV9BceMQkQZ755xRXyUUeeJ44//xPgQql4HZnLDl68zcBZ/ipdAgll5Ex+1NGioAQQ==
+ b=OheZOQikScOaRG1nlXDCLk2yREa3VyToGPLVTUv5V/cGdoaQ9+9n+45lvIdu7cyOw+8s3VO5aYf2FY43vXiHIfdFQtC5pyziavJZ3IZ4LjfRv5H28UYkom95Fv85pwozQuuQePkPD0YQyDBzavylIj7R4RfgjqleZs630JTU7KiT2uDtCm+Q4pXs8siQadhhi0Ot6UYxsR+1msakiEymw2dLzo6+8CEc/wtnoytzQfkOb/TlwxVQzWu1MTOlmx7GTomGtnB/OtBpjYMVWf+6q8q6iSYjg2WCj1Ziw6Hk7nX9SPkwIDBIc/tQ6t5ySzQ2G8H15dCPGAiN8jSuPtkR8A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PlJ7icsU3OGTDZQ1HSQPld7xT6gLK9jSxIYEV3X7p7s=;
- b=FuZQdnmzvFjzmwWa17p4LFXrD1aO7YByS+0jFfYAnKurSGNTibnI+Gn1RHu8d5T1fedVsPPuRQC3KjVkLHy33fO/9vNR51SWjDoxN7qd9Ah3KBuXBuG+UAROaHV5578LzsnvEH/VfAmGgtMVROulsGYMqQYmCxZz/eGkd3T53mflhDKGAbT2Je8hozF0hwXdTwggmD0eEbmdpoIDZCwg8JIOE3a1njDlDWBkbxMO4eqNQkyoqJixm3+uLzIVuly2mbLx6U1wCe0NNuZ/OOFsGmoXijkMSAKibEzqEHXJc7Ti6pXlGgVBvnTWNA2GHDXEib6Nv954Md1kS1QxJDs8XA==
+ bh=sioR3BODH4jrVJmVjPb6d9YhcYoqD7Qy5KT5Xc020aQ=;
+ b=b8mAEp1ReDryG6MTHCxC3FZuqIihW8uzzhqWpi9+bFcjycS11or7L2E6koxdeo5zlDJKjZQ9WOCVgPDRMmMm8TYNpd4JctIaJbbQlZNMSMlzrZzriXd+AteemDElbE0JorUbJ6SnJ0jc4a2UOKtwJlR/gHLCSer5dFVuvQTIKiw4A/cYM415tcBwGGQxauEU7H7+SRXWdiucwvG4NEcyKC+vx+5nvVMcWl8G7HYabx1ce2ibcKUvFUD/BKyNAKV9Sr4eQ9ZYlQoO3jStf0zRlr2dm1lDdR1Pve6jYbMUN3vPK8l9E2TewS0lesCJ83PrEA21nwpw3aZ4BfzFEwTk5w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PlJ7icsU3OGTDZQ1HSQPld7xT6gLK9jSxIYEV3X7p7s=;
- b=nL5OIF0WSJO7P+YVzeo0P06bXwdahGeh3JrRx8zsFIbDNUHLMASA3f7tHCtjjrLvMxy6vzMlY3fRpoddm3byjcGYEfwqWoFTtqaoxPNIoAf+1d1yFTU26Em+Ni4GP8u9JN51xNfh9CbDOqWNuML1wrOqWgzaB/xecOLcC0o5wgQ=
-Received: from DM6PR12MB4044.namprd12.prod.outlook.com (2603:10b6:5:21d::17)
- by CY8PR12MB7634.namprd12.prod.outlook.com (2603:10b6:930:9d::16) with
+ bh=sioR3BODH4jrVJmVjPb6d9YhcYoqD7Qy5KT5Xc020aQ=;
+ b=Th4G2zNcc0UQCQBmIRmANlCVE+YrMP+EUjS64/7W9lcH5l6bZefU/H23W/M1BGWaXHV8zg69KyAqpRoseoaPWU448OBeO71ZBY7P6qog4m9yMdkx2jSUHOYdvK/fsdA7FK6WX4Uo3jsBdk/WNRaGfIcP8ZqzfGf0yaGGsH5nxTY=
+Received: from TYZPR03MB6919.apcprd03.prod.outlook.com (2603:1096:400:28c::9)
+ by SEYPR03MB6651.apcprd03.prod.outlook.com (2603:1096:101:81::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Sun, 6 Nov
- 2022 15:16:36 +0000
-Received: from DM6PR12MB4044.namprd12.prod.outlook.com
- ([fe80::a844:2258:ee96:f671]) by DM6PR12MB4044.namprd12.prod.outlook.com
- ([fe80::a844:2258:ee96:f671%8]) with mapi id 15.20.5791.025; Sun, 6 Nov 2022
- 15:16:34 +0000
-From:   "Neeli, Srinivas" <srinivas.neeli@amd.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.25; Mon, 7 Nov
+ 2022 01:39:51 +0000
+Received: from TYZPR03MB6919.apcprd03.prod.outlook.com
+ ([fe80::7e10:1fdf:c6f6:597e]) by TYZPR03MB6919.apcprd03.prod.outlook.com
+ ([fe80::7e10:1fdf:c6f6:597e%7]) with mapi id 15.20.5791.024; Mon, 7 Nov 2022
+ 01:39:51 +0000
+From:   =?utf-8?B?QWxsZW4tS0ggQ2hlbmcgKOeoi+WGoOWLsyk=?= 
+        <Allen-KH.Cheng@mediatek.com>
+To:     "nfraprado@collabora.com" <nfraprado@collabora.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
         "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "git (AMD-Xilinx)" <git@amd.com>
-Subject: RE: [PATCH 2/3] watchdog: xilinx_wwdt: Add Versal window watchdog
- support
-Thread-Topic: [PATCH 2/3] watchdog: xilinx_wwdt: Add Versal window watchdog
- support
-Thread-Index: AQHY0mDPx4RdhC+WcUWOcyuX5wtnOK37UmgAgA18EuCAJNRsgIAACp4AgASSIxA=
-Date:   Sun, 6 Nov 2022 15:16:34 +0000
-Message-ID: <DM6PR12MB4044C5194CC4C70A36E2F4F9933D9@DM6PR12MB4044.namprd12.prod.outlook.com>
-References: <20220927110257.41963-1-srinivas.neeli@amd.com>
- <20220927110257.41963-3-srinivas.neeli@amd.com>
- <20221002162528.GA2900147@roeck-us.net>
- <BY5PR12MB403335B81FB6DF09D65A08B593239@BY5PR12MB4033.namprd12.prod.outlook.com>
- <BY5PR12MB403330D43906BD6D617DB0DC93389@BY5PR12MB4033.namprd12.prod.outlook.com>
- <20221103172432.GB177861@roeck-us.net>
-In-Reply-To: <20221103172432.GB177861@roeck-us.net>
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH v4 4/7] arm64: dts: mediatek: mt8516: Fix the watchdog
+ node name
+Thread-Topic: [PATCH v4 4/7] arm64: dts: mediatek: mt8516: Fix the watchdog
+ node name
+Thread-Index: AQHY7/I2KJT3UOIXqkaZgAfT5yU62q4u1JiAgAPfKgA=
+Date:   Mon, 7 Nov 2022 01:39:51 +0000
+Message-ID: <f6aa2fe039226d3fc94d92df5e1913515e0e564e.camel@mediatek.com>
+References: <20221104020701.24134-1-allen-kh.cheng@mediatek.com>
+         <20221104020701.24134-5-allen-kh.cheng@mediatek.com>
+         <20221104143219.aiwfezso7r72yg7q@notapiano>
+In-Reply-To: <20221104143219.aiwfezso7r72yg7q@notapiano>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR12MB4044:EE_|CY8PR12MB7634:EE_
-x-ms-office365-filtering-correlation-id: 5e2fff2a-dd30-4237-957c-08dac009e46f
-x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-traffictypediagnostic: TYZPR03MB6919:EE_|SEYPR03MB6651:EE_
+x-ms-office365-filtering-correlation-id: f863d2ef-32cb-4d78-2e12-08dac060f68a
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 602qE0GPfXKVDnsU/x+33YG57jzhUbOHGJOZQjlP1ufEGdvr38s0XAe5KU3Qmco44f8HJ2ba5K68tdQ/eqhMmtb+oHvokAjDvPBZZYcj8QAWrf3p+Ds2btZf29myCKMKzuNE7C/vJWhcSjiMtm9doXZg6nFgH74451NIJehhvA69HuV/IUG8gMpcaOa0tG0/WnfA9Z6R+O3s1ONgTThXnA+if18Nv1azyEWRYfiRb+DoRajEv1+lgcS+1eJdGGVd0OPp1aiA0mvKYsvYtjJ064l6v8ux81AVsuhK5rIXgpDY/9PNHYo2s7fniptGU0K/8fvD3khfcUY0znZKAH7a+9npPE5BXJ6jxuKMECtHUbqkstViCb/WdQPO/x0wX7G/DjlzZ70RZawTxXxeLI1ntd7v48rMFmJBwn9FuamHlxY8TNOpO9FGCHFv9bwnKTJ/fR1xo630XQq0owcbXHIZTALUeeuWne0Reaw88+5rxrWUwmcFOFpwr6BSBegHOhTJc3qDZQ+TdisU2+ZRaAKtrggVFLXnv+aFdx/pGl69jAt8NuPlXl/LQqediagPTmFt8eJjYdKgrtpvq//62pbClmQZlvGeqQS3+DH3XnVH6Jq4tQPMXVa2Z3bE48otuJhI/sEXIvmHVrRyk9QuQWVFR6RGK7Zqhw5yfdDTDJBJEdy9JkIkvZ2959M5mXGKTZV5G0ZBjdTVq1+fUS7Jk/igo+ySRw56kCcL+9O7u0LVywofzJHwyfU9I+id0AJaVR46841MTBXkXr5kl88nbFg4bw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4044.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(346002)(396003)(136003)(376002)(451199015)(83380400001)(54906003)(6916009)(76116006)(4326008)(5660300002)(8676002)(33656002)(30864003)(66476007)(66556008)(186003)(64756008)(66946007)(66446008)(26005)(41300700001)(52536014)(8936002)(316002)(9686003)(6506007)(53546011)(38100700002)(7696005)(2906002)(55016003)(86362001)(38070700005)(478600001)(71200400001)(122000001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: 9YH0ONge4s4AxKeumhLwJ+/17ILDJqMdKLcBXJ8Px5+z8B4mNGO6+x0g6kVWZg/nxX+8+kWlwqpt0Ia6dzSGwSZy4IT6AAtWKc07yNKCR7ipfqiuQ1LPLfHdkp1t9gSvkMa3Qvu1urAuZtUhANt1YtljjUF//JbVdzpCeu/mnoNJrxHK5USDfwwrusPlqLZvTuFOnJbh8HyJlL5N8WA6PpOZXYrwj+vcAFOaeic4TYeIy0auyUfNbSN5lXxCxvodAyNkjCfYsp8SWcl/0/gfy2Anw/Ba+ZoM+dYHCxOmck+KA/wFd8mhQRG/j0snHK2Kad0m2JrRLx+tIw8vy56J2QygsdH9rcVzs52Gjs0tr98AQX7n8PxgJ4eaCyz6Gm3rEse9jxZ6s4WusZHVltA4myw3hRBXefV24++mWHSZl2dYP9qpC4VwIEdUdBYts3WOhKvjIzArzp7d8ZwozOIYAODrxUSOfoLhdy4G1VzRbGksCzlwrE/+oCN8uv2Uy1K+5vZaF3IGLUCUfHTTwBnw1SThP0zXeTwpNJk23I6ZjaX9xBH3+3se+PNf9jSPH8o12SunvLRyV6TjLM3aoMsk2GxwKNMO0zPsUVAsBxNXB0TDzcUFcVp9cni2oqGzWxb59NjsMR/TGSJU5Std1phTjO1aYf9AT3Oy8c4hpaF8bM808JhR7lkouMAhVZXwqZ+dZU+3TI10Kf4mQoSiLKLzTgl+mME2MkYCXrYTFz90/vzhulL//+yuQ3+kNcoyR3ez8b/c6FX8vbWGENN43llNig==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB6919.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(346002)(396003)(376002)(39860400002)(451199015)(66946007)(2906002)(5660300002)(478600001)(66556008)(7416002)(54906003)(64756008)(66446008)(66476007)(91956017)(8676002)(76116006)(316002)(6916009)(6486002)(41300700001)(71200400001)(8936002)(4326008)(36756003)(83380400001)(38070700005)(38100700002)(122000001)(6506007)(86362001)(186003)(66574015)(26005)(6512007)(2616005)(85182001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?45Agyd2ufSrF2xyuf/ayC51xkw/qLg0LwvVfQvFmAzmey9mVCM2fGfGn4HDJ?=
- =?us-ascii?Q?Z8Wtuxwm9EUA37jQhdQp3Pf4l5LTu1QZyKjw5eE0DzZ53QJtzIIM3lgcXHfx?=
- =?us-ascii?Q?TV0a6wDyhMWjCb2nuOXZjAFcVq1QusyiNrDoiIGEDg74yzRs4qz6itv0EBRK?=
- =?us-ascii?Q?DhGSSB2cGq2vDXojqeOdDkcrv87gDo0Oa4MXY6VnKYF7C/MR6ehaCPo24omY?=
- =?us-ascii?Q?gGVhss/DPe4MgHTt8xL3ALJ8Eqjj7jCjNgKCV4xbPv8ZjuSy/a6rruKqHDR8?=
- =?us-ascii?Q?jV361/zPIaYKz4rIjuPeQkhyFSb+sY3MDXu/KfjCoPZXo1A7bPt/BsNvOZ02?=
- =?us-ascii?Q?Tm1qMSB99XqXRgilQHDNAQr41o9rcYTS7HkzZ9nzXVtvOAnADPNtOLPwc971?=
- =?us-ascii?Q?uTdnnEl4R/S0JElqU3kirdjQLDQHcEbHCWErd3l6ny5wB+Nfk37eQJ6xAXMS?=
- =?us-ascii?Q?kh4mXacCpS9Wbu9I0BWVA5Gn2rvqlWZfqMYW7HrAsCDRTVURY7zKL/brCHRB?=
- =?us-ascii?Q?oqxICmPOnBES1GH51UE1Aet8z01CIocL3Nfy4sHc5L5gvL/tFVjqnJY9EO4w?=
- =?us-ascii?Q?E+PxoHYtWekNT9l3UZOx/caYlepM2ZFGTdLyYjs3wcDjFlRVLvKUNS02/oNh?=
- =?us-ascii?Q?4ngzd50vZ8Ai8pTdd0nSwp60UQKy5r5kfEUC7RNaanrWbKqeTG2cP6g7WS14?=
- =?us-ascii?Q?R4D6JZrF5ifTpCHf7Vlo7XuApIKtFXf7IYlDSPIQWk6rXfYAgK6TbrMDDLLo?=
- =?us-ascii?Q?3aaPIBXU2/+pWx279j6LK8YXc58qLHE1hfTp577QtKy1z5hhujYsDwT+FOdA?=
- =?us-ascii?Q?Cee9zBMlhC75oPQr1DoB2M5WTZbz2f6TFJ+49nqOzxme26UZ2Oq4/+jdHu0s?=
- =?us-ascii?Q?lT/1MQ5WKkzOaRAQIUbq5yEvznEK0Q6LRNCnCHjxewEZxGSmqqxroh4r+mwz?=
- =?us-ascii?Q?RqWxQZYFA9l0t/NU0J3amygrQ/up0s/b+W5HoOXgevlMxQSkFuojPzHFKztq?=
- =?us-ascii?Q?cLBZVQE09+HbzqiLVaXAvuwrDKUBQkkPZ3/jmQe39DnXZC1Gyay9BETKnEpk?=
- =?us-ascii?Q?qLHwYTf51/cyyoGJ/RSGiAs15Az1jl0rwATpaa7hy5AInDlgRZ2pxAv3TkZb?=
- =?us-ascii?Q?UV10zbuLDf9pNVynKb6cxSau1xvmEaVPWV/x0YEQj2RomqR3r8al67wBCfsh?=
- =?us-ascii?Q?fzMDu+qyfdcx9B+6PJj31s+SPjx2uf9Q8P+nEX3VVYgusMz+1qf2Ohoo3bM9?=
- =?us-ascii?Q?3lCLkP2Tx8bz37q+wahSw7kkvAhJ/qKyEay7iCPGsXV5A5vWa1fpvvdswaQe?=
- =?us-ascii?Q?ukr+uVVV+hr+1z2SlHCTuj0qEXWSuCEJM+CzAc5yumGzOE9iyCYIW95u6RRn?=
- =?us-ascii?Q?EJXz2biU2NXewXjCvrHhEBtn/j42vmgiI7R/MIpfyYNSm4sqFHxZ+0K8aRoj?=
- =?us-ascii?Q?gDhauFjAHt6a9Bb80WaH/31M/EpuLGhUPNa1Lcf7tzpmE3/bmji64iAmw1AK?=
- =?us-ascii?Q?bUC1JHrc0s8XBMxvr9XNluSfi51HMgBt05YUH3T3Rcd/K04Ph6YxMzSlv7CD?=
- =?us-ascii?Q?eDlVIVncuFH8Ek8peSo=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RWRPa01UeEM1aE5wUE1xRDM3OHBEMCt4ZUtLUHRXR2tTSmhkczFNdFRkTU9P?=
+ =?utf-8?B?NWtCalE1Q0JveGk1Sm9OQzFXUXBjV29XaTlXaEVtWW0rTC9zVGZUd3dNdWVk?=
+ =?utf-8?B?clRGWTBGK2krNkNoOXZqZlFWcS81T2t0VmpnaXN0Z1JjS25MY1F1RE13aEJD?=
+ =?utf-8?B?K3lvRVpic2RuTGJaUHp5LzdzWDUzUy9PVU9SSXc1bFR6WHAra2R4cDBTYWhz?=
+ =?utf-8?B?R0RsTytoY1IxVzJWWUZZUjVoRlk5R2hWQjk0S2hxam5Sc1JoWkE5TDVOaEEy?=
+ =?utf-8?B?djNvNW9ISTVWblVFQk5pRUVxUzJEemJoK0VjSTR1S2hISWJTQVJhVmFla3px?=
+ =?utf-8?B?NFBWaU94dE1jV1dFKzE1NG5PbVZDNzdDTHVIRmwvOFFzK24ycmQvam9Yb0dh?=
+ =?utf-8?B?VXN3alNJUGZBK3MveWxxOS9weDg0Zk9KSURDQ1lxcWtjblFqRmlWTElhWmVm?=
+ =?utf-8?B?UEFpdEtGVTNlTmZGbVZYOG5wUjM2NUluMFArM0YvT1U0VzNHRDNpaXpVOUxp?=
+ =?utf-8?B?dnR1MDJ3WHR2TjNpdFVUQnFPZWpGL3Z5aXBFbjBMQlRrV04ybDgrY2ZwR3hQ?=
+ =?utf-8?B?UDhGY2F2MWFvbXpUTGFXZWd6aHErdFZEbFRhUzQzUnZqaFc5cW5HNmJWS1Er?=
+ =?utf-8?B?WnVhQ1NZeTlUSTI3UHMyOHFCMW81Y1lFYXNkb3hsZlNjc3pRMlc2cWZZK3hR?=
+ =?utf-8?B?WHZ3SlFETld4bjhVN0JyWW1FS1ltU3pNNE5PS3l4VnlwUnNZd2tFTXYxWEZ4?=
+ =?utf-8?B?SlRVUzdJeGIwRnpEZ0FPMFVhMkcyYS81czFMcVY5R1JUeFdqYzM2R0NSaUJZ?=
+ =?utf-8?B?RC9SMEVvcFBFbnRSaitFcnBmVjBNdFNrZWs0NU52dGxsUWl5Vk4zRDZCeFox?=
+ =?utf-8?B?UkpoK3ErZ2dMcHBRZjRrWDNBUDZmblltSnNmNzVtbzYwenU1bkU0ZVlQYlZV?=
+ =?utf-8?B?VGdzMGRDREhIU3IvbEFJcEViTm9lK200N0ZEZzN2S210R1RSanFwc2lhd1k1?=
+ =?utf-8?B?TUp0OCtLSmc1QmJrZU1IVFBtZXZBUUVDUjYzRHE4clRkdmptLzNzVWhFck45?=
+ =?utf-8?B?Z3gxZk12M2dhYVRlSlF2QnNScGdUY2ZuR215NHdaYjlxd1cyZ3FFaGViS2dC?=
+ =?utf-8?B?MkQ0KzhIdzEveWFPS3gxazdITHByQjdDWUVwUUJwQ2M2aE1mM0QwUWNpN2JF?=
+ =?utf-8?B?ZUQzRWhUVjdxdkw2NnRXd05EL2QwQUY1WXRzMFpRR1VMMGZJUTRWbW9PVENU?=
+ =?utf-8?B?amVlWTVHSE1YZjZMcU53ZGZkNEM4LytlRCtZTEtoUTlYbHdGQjZQTDYxNEJV?=
+ =?utf-8?B?ekNmZUQ0Q3Q1aWxZR2JCWHFZZ3V4VFJkSTNXSlJYYXVOa3lBYXlEczhmYVNJ?=
+ =?utf-8?B?aE11Y1Zobjh5K2t2ZXJnbmFTWS8rK1o3Y0dLUFRPRDR2Z2w5WFAyd2Mrc0pD?=
+ =?utf-8?B?Q1p1UDFtZmNqemVDRTBCN1A5Q29HMG5mVDErczFXb1RXb2lEWHpFY055Rkgw?=
+ =?utf-8?B?Q2RiTG5nUVF5THFFRWs3UkdxWGxYUEZTZ2RtUmVXTDRaQmlrMlg2a0ZBNEZk?=
+ =?utf-8?B?NExjZ2NCNEtkemRza1lHUlc4RklSOEpBaVRFSjQ4ZGdxMUEwdUs2cy9scEQx?=
+ =?utf-8?B?S2s4cFlUOG1nYnRmNlJsQVBxSUNkSmcxSkh4V21KUmM4ODFWOE9ScEFXYVpi?=
+ =?utf-8?B?ZEwvSmlMNFA4Q2JwbFpDaWNLWjc1WE9GNk9OeFdRRXcvNGFkMkR0N3RlVS9y?=
+ =?utf-8?B?U2E0YjJoWm5uU2VjR0didUxvVC83Wnd6K0pJOEVYek56OTlRNnBJTFFzaEVG?=
+ =?utf-8?B?Wlhxems3ZDZMMTJ0NzJRdXdhbldnakkyaGhyMURxNy9pcFcxTS9pTWcwOXFm?=
+ =?utf-8?B?aDNxZzl4TUxRQldBNGptNVJXM1BDSmZmYjBkbHJHSURGZFNCR3R2QnMvOFZB?=
+ =?utf-8?B?c250QS9sdTExSVJ3c0Y2NUIxeXR2U0hDQnkwak84LzV0Z1dxZ1dyVHNEdFE2?=
+ =?utf-8?B?bWJnZGE3SHV0bnRWVVRLMS9PalFmOE4rSCtCSW9INGk2UTNSS3p0WnlFNEVh?=
+ =?utf-8?B?YUoyU1ExYlVDaDNDRHBYTUFsTFIwZ0crRjc4TEVrNGFiZld4bHpTOWROKzhY?=
+ =?utf-8?B?OFhYWHNEWG43cDBaL3VHVWZNY0dlTEprVFIwK3MyN0ZVNHZRNnFqVTRRUDhO?=
+ =?utf-8?Q?VyVJKxl3i6OsREgiHZvDpV4=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B5F6456913E7D5438D657DABBA81B830@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4044.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e2fff2a-dd30-4237-957c-08dac009e46f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Nov 2022 15:16:34.5634
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB6919.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f863d2ef-32cb-4d78-2e12-08dac060f68a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Nov 2022 01:39:51.1834
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bdAXX+0Q9L+LY0T9071Y6FOHE3XHlp2WqCUHWP9nCr2fIIGSENkTGS6PIBTs7cC+
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7634
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: mP004NfA1aa+00qzyt/fuVapRkfQ03FiUiT3q4vi1Pg15CAUq7rTkObAQgdhSZHJcGvPhm3lWeI9OH+2fX72Aj/y/wUp68qqhsB/drk3CIA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR03MB6651
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Guenter,
-
-> -----Original Message-----
-> From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-> Sent: Thursday, November 3, 2022 10:55 PM
-> To: Neeli, Srinivas <srinivas.neeli@amd.com>
-> Cc: wim@linux-watchdog.org; Datta, Shubhrajyoti
-> <shubhrajyoti.datta@amd.com>; Simek, Michal <michal.simek@amd.com>;
-> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org; linux-
-> kernel@vger.kernel.org; linux-watchdog@vger.kernel.org; linux-arm-
-> kernel@lists.infradead.org; devicetree@vger.kernel.org; git (AMD-Xilinx)
-> <git@amd.com>
-> Subject: Re: [PATCH 2/3] watchdog: xilinx_wwdt: Add Versal window
-> watchdog support
->=20
-> On Thu, Nov 03, 2022 at 04:51:14PM +0000, Neeli, Srinivas wrote:
-> > HI Guenter,
-> >
-> > > -----Original Message-----
-> > > From: Neeli, Srinivas <srinivas.neeli@amd.com>
-> > > Sent: Tuesday, October 11, 2022 11:57 AM
-> > > To: Guenter Roeck <linux@roeck-us.net>
-> > > Cc: wim@linux-watchdog.org; Datta, Shubhrajyoti
-> > > <shubhrajyoti.datta@amd.com>; Simek, Michal
-> <michal.simek@amd.com>;
-> > > robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org; linux-
-> > > kernel@vger.kernel.org; linux-watchdog@vger.kernel.org; linux-arm-
-> > > kernel@lists.infradead.org; devicetree@vger.kernel.org; git
-> > > (AMD-Xilinx) <git@amd.com>
-> > > Subject: RE: [PATCH 2/3] watchdog: xilinx_wwdt: Add Versal window
-> > > watchdog support
-> > >
-> > > Hi,
-> > >
-> > > > -----Original Message-----
-> > > > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter
-> Roeck
-> > > > Sent: Sunday, October 2, 2022 9:55 PM
-> > > > To: Neeli, Srinivas <srinivas.neeli@amd.com>
-> > > > Cc: wim@linux-watchdog.org; Datta, Shubhrajyoti
-> > > > <shubhrajyoti.datta@amd.com>; Simek, Michal
-> > > <michal.simek@amd.com>;
-> > > > robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org; linux-
-> > > > kernel@vger.kernel.org; linux-watchdog@vger.kernel.org; linux-arm-
-> > > > kernel@lists.infradead.org; devicetree@vger.kernel.org; git
-> > > > (AMD-Xilinx) <git@amd.com>
-> > > > Subject: Re: [PATCH 2/3] watchdog: xilinx_wwdt: Add Versal window
-> > > > watchdog support
-> > > >
-> > > > On Tue, Sep 27, 2022 at 04:32:56PM +0530, Srinivas Neeli wrote:
-> > > > > Versal watchdog driver uses window watchdog mode. Window
-> > > > > watchdog
-> > > > > timer(WWDT) contains closed(first) and open(second) window with
-> > > > > 32 bit width. Write to the watchdog timer within predefined
-> > > > > window periods of time. This means a period that is not too soon
-> > > > > and a period that is not too late. The WWDT has to be restarted
-> > > > > within the open window time. If software tries to restart WWDT
-> > > > > outside of the open window time period, it generates a reset.
-> > > > >
-> > > > > Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
-> > > > > ---
-> > > > >  drivers/watchdog/Kconfig       |  17 ++
-> > > > >  drivers/watchdog/Makefile      |   1 +
-> > > > >  drivers/watchdog/xilinx_wwdt.c | 286
-> > > > > +++++++++++++++++++++++++++++++++
-> > > > >  3 files changed, 304 insertions(+)  create mode 100644
-> > > > > drivers/watchdog/xilinx_wwdt.c
-> > > > >
-> > > > > diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> > > > > index
-> > > > > 688922fc4edb..9822e471b9f0 100644
-> > > > > --- a/drivers/watchdog/Kconfig
-> > > > > +++ b/drivers/watchdog/Kconfig
-> > > > > @@ -304,6 +304,23 @@ config XILINX_WATCHDOG
-> > > > >  	  To compile this driver as a module, choose M here: the
-> > > > >  	  module will be called of_xilinx_wdt.
-> > > > >
-> > > > > +config XILINX_WINDOW_WATCHDOG
-> > > > > +	tristate "Xilinx window watchdog timer"
-> > > > > +	depends on HAS_IOMEM
-> > > > > +	select WATCHDOG_CORE
-> > > > > +	help
-> > > > > +	  Window watchdog driver for the versal_wwdt ip core.
-> > > > > +	  Window watchdog timer(WWDT) contains closed(first) and
-> > > > > +	  open(second) window with 32 bit width. Write to the
-> watchdog
-> > > > > +	  timer within predefined window periods of time. This
-> means
-> > > > > +	  a period that is not too soon and a period that is not too
-> > > > > +	  late. The WWDT has to be restarted within the open
-> window time.
-> > > > > +	  If software tries to restart WWDT outside of the open
-> window
-> > > > > +	  time period, it generates a reset.
-> > > > > +
-> > > > > +	  To compile this driver as a module, choose M here: the
-> > > > > +	  module will be called xilinx_wwdt.
-> > > > > +
-> > > > >  config ZIIRAVE_WATCHDOG
-> > > > >  	tristate "Zodiac RAVE Watchdog Timer"
-> > > > >  	depends on I2C
-> > > > > diff --git a/drivers/watchdog/Makefile
-> > > > > b/drivers/watchdog/Makefile index cdeb119e6e61..4ff96c517407
-> > > > > 100644
-> > > > > --- a/drivers/watchdog/Makefile
-> > > > > +++ b/drivers/watchdog/Makefile
-> > > > > @@ -155,6 +155,7 @@ obj-$(CONFIG_M54xx_WATCHDOG) +=3D
-> > > > m54xx_wdt.o
-> > > > >
-> > > > >  # MicroBlaze Architecture
-> > > > >  obj-$(CONFIG_XILINX_WATCHDOG) +=3D of_xilinx_wdt.o
-> > > > > +obj-$(CONFIG_XILINX_WINDOW_WATCHDOG) +=3D xilinx_wwdt.o
-> > > > >
-> > > > >  # MIPS Architecture
-> > > > >  obj-$(CONFIG_ATH79_WDT) +=3D ath79_wdt.o diff --git
-> > > > > a/drivers/watchdog/xilinx_wwdt.c
-> > > > > b/drivers/watchdog/xilinx_wwdt.c new file mode 100644 index
-> > > > > 000000000000..2594a01c2764
-> > > > > --- /dev/null
-> > > > > +++ b/drivers/watchdog/xilinx_wwdt.c
-> > > > > @@ -0,0 +1,286 @@
-> > > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > > +/*
-> > > > > + * Window watchdog device driver for Xilinx Versal WWDT
-> > > > > + *
-> > > > > + * Copyright (C) 2022, Advanced Micro Devices, Inc.
-> > > > > + */
-> > > > > +
-> > > > > +#include <linux/clk.h>
-> > > > > +#include <linux/interrupt.h>
-> > > > > +#include <linux/io.h>
-> > > > > +#include <linux/ioport.h>
-> > > > > +#include <linux/module.h>
-> > > > > +#include <linux/of_device.h>
-> > > > > +#include <linux/of_address.h>
-> > > > > +#include <linux/watchdog.h>
-> > > > > +
-> > > > > +#define XWWDT_DEFAULT_TIMEOUT	40
-> > > > > +#define XWWDT_MIN_TIMEOUT	1
-> > > > > +#define XWWDT_MAX_TIMEOUT	42
-> > > > > +
-> > > > > +/* Register offsets for the WWDT device */
-> > > > > +#define XWWDT_MWR_OFFSET	0x00
-> > > > > +#define XWWDT_ESR_OFFSET	0x04
-> > > > > +#define XWWDT_FCR_OFFSET	0x08
-> > > > > +#define XWWDT_FWR_OFFSET	0x0c
-> > > > > +#define XWWDT_SWR_OFFSET	0x10
-> > > > > +
-> > > > > +/* Master Write Control Register Masks */
-> > > > > +#define XWWDT_MWR_MASK		BIT(0)
-> > > > > +
-> > > > > +/* Enable and Status Register Masks */
-> > > > > +#define XWWDT_ESR_WINT_MASK	BIT(16)
-> > > > > +#define XWWDT_ESR_WSW_MASK	BIT(8)
-> > > > > +#define XWWDT_ESR_WEN_MASK	BIT(0)
-> > > > > +
-> > > > > +#define XWWDT_PERCENT		50
-> > > > > +
-> > > > > +static int xwwdt_timeout;
-> > > > > +static int xclosed_window_percent;
-> > > > > +
-> > > > > +module_param(xwwdt_timeout, int, 0644);
-> > > > > +MODULE_PARM_DESC(xwwdt_timeout,
-> > > > > +		 "Watchdog time in seconds. (default=3D"
-> > > > > +		 __MODULE_STRING(XWWDT_DEFAULT_TIMEOUT)
-> ")");
-> > > >
-> > > > There is no reason to make this writeable. There are means to set
-> > > > the timeout in runtime. Those should be used.
-> > >
-> > > Accepted and will update in V2.
-> > > >
-> > > > > +module_param(xclosed_window_percent, int, 0644);
-> > > > > +MODULE_PARM_DESC(xclosed_window_percent,
-> > > > > +		 "Watchdog closed window percentage. (default=3D"
-> > > > > +		 __MODULE_STRING(XWWDT_PERCENT) ")");
-> > > >
-> > > > The above is problematic. This should really not be set during
-> > > > runtime, and the behavior is pretty much undefined if it is
-> > > > changed while the watchdog is running. It should really be set
-> > > > using devicetree and not be changed in the running system.
-> > >
-> > > Accepted and will update in V2.
-> > > >
-> > > > > +
-> > > > > +/**
-> > > > > + * struct xwwdt_device - Watchdog device structure
-> > > > > + * @base: base io address of WDT device
-> > > > > + * @spinlock: spinlock for IO register access
-> > > > > + * @xilinx_wwdt_wdd: watchdog device structure
-> > > > > + * @clk: struct clk * of a clock source
-> > > > > + * @freq: source clock frequency of WWDT  */ struct xwwdt_device=
- {
-> > > > > +	void __iomem *base;
-> > > > > +	spinlock_t spinlock; /* spinlock for register handling */
-> > > > > +	struct watchdog_device xilinx_wwdt_wdd;
-> > > > > +	struct clk *clk;
-> > > > > +	unsigned long	freq;
-> > > > > +};
-> > > > > +
-> > > > > +static bool is_wwdt_in_closed_window(struct watchdog_device
-> *wdd) {
-> > > > > +	struct xwwdt_device *xdev =3D watchdog_get_drvdata(wdd);
-> > > > > +	u32 csr, ret;
-> > > > > +
-> > > > > +	csr =3D ioread32(xdev->base + XWWDT_ESR_OFFSET);
-> > > > > +
-> > > > > +	ret =3D (csr & XWWDT_ESR_WEN_MASK) ? !(csr &
-> > > > XWWDT_ESR_WSW_MASK) ? 0 :
-> > > > > +1 : 1;
-> > > >
-> > > > This is confusing.
-> > > >
-> > > > 	return !(csr & XWWDT_ESR_WEN_MASK) || ((csr &
-> > > XWWDT_ESR_WSW_MASK);
-> > > >
-> > > > should do the same and would be easier to understand, though I am
-> > > > not sure if it is correct (making the point that the expression is
-> confusing).
-> > > >
-> > > Accepted and will update in V2.
-> > >
-> > > > > +
-> > > > > +	return ret;
-> > > > > +}
-> > > > > +
-> > > > > +static int xilinx_wwdt_start(struct watchdog_device *wdd) {
-> > > > > +	struct xwwdt_device *xdev =3D watchdog_get_drvdata(wdd);
-> > > > > +	struct watchdog_device *xilinx_wwdt_wdd =3D &xdev-
-> > > > >xilinx_wwdt_wdd;
-> > > > > +	u64 time_out, closed_timeout, open_timeout;
-> > > > > +	u32 control_status_reg;
-> > > > > +
-> > > > > +	/* Calculate timeout count */
-> > > > > +	time_out =3D xdev->freq * wdd->timeout;
-> > > > > +
-> > > > > +	if (xclosed_window_percent) {
-> > > > > +		closed_timeout =3D (time_out *
-> xclosed_window_percent) /
-> > > > 100;
-> > > > > +		open_timeout =3D time_out - closed_timeout;
-> > > > > +		wdd->min_hw_heartbeat_ms =3D
-> xclosed_window_percent *
-> > > > 10 * wdd->timeout;
-> > > > > +	} else {
-> > > > > +		/* Calculate 50% of timeout */
-> > > >
-> > > > Isn't that a bit random ?
-> > >
-> > > Versal Window watchdog IP supports below features.
-> > >  1)Start
-> > >  2)Stop
-> > >  3)Configure Timeout
-> > >  4)Refresh
-> > >
-> > > Planning to take closed window percentage from device tree parameter.
-> > > If the user hasn't passed the closed window percentage from the
-> > > device tree, by default, taking XWWDT_PERCENT value which is 50.
-> > >
-
-Does above explanation looks fine to you ?
-
-> > > >
-> > > > > +		time_out *=3D XWWDT_PERCENT;
-> > > > > +		time_out /=3D 100;
-> > > > > +		wdd->min_hw_heartbeat_ms =3D XWWDT_PERCENT *
-> 10 *
-> > > > wdd->timeout;
-> > > >
-> > > > min_hw_heartbeat_ms is supposed to be fixed after probe. Behavior
-> > > > of changing it when starting the watchdog is undefined. This will
-> > > > likely fail under some conditions.
-> > >
-> > > As I said in above comments versal watchdog IP supports
-> > > reconfiguration of timeout, so every restart we are updating
-> > > min_hw_heartbeat_ms based on timeout.
-> > >
-
-After stop we are reconfiguring the min_hw_heartbeat_ms, do you think still=
- it will fail ?.
-
-> > > >
-> > > > > +	}
-> > > > > +
-> > > > > +	spin_lock(&xdev->spinlock);
-> > > > > +
-> > > > > +	iowrite32(XWWDT_MWR_MASK, xdev->base +
-> > > > XWWDT_MWR_OFFSET);
-> > > > > +	iowrite32(~(u32)XWWDT_ESR_WEN_MASK, xdev->base +
-> > > > XWWDT_ESR_OFFSET);
-> > > > > +
-> > > > > +	if (xclosed_window_percent) {
-> > > > > +		iowrite32((u32)closed_timeout, xdev->base +
-> > > > XWWDT_FWR_OFFSET);
-> > > > > +		iowrite32((u32)open_timeout, xdev->base +
-> > > > XWWDT_SWR_OFFSET);
-> > > > > +	} else {
-> > > > > +		/* Configure closed and open windows with 50% of
-> timeout
-> > > > */
-> > > > > +		iowrite32((u32)time_out, xdev->base +
-> > > > XWWDT_FWR_OFFSET);
-> > > > > +		iowrite32((u32)time_out, xdev->base +
-> > > > XWWDT_SWR_OFFSET);
-> > > > > +	}
-> > > >
-> > > > This if/else should not be necessary by using appropriate
-> > > > calculations
-> > > above.
-> > > > Anyway, this is moot - as said above, changing min_hw_heartbeat_ms
-> > > > after probe is unexpected, and the code will have to be changed to
-> > > > use a fixed value for the window size. With that, all calculations
-> > > > can and should be done in the probe function.
-> > > >
-> > > > > +
-> > > > > +	/* Enable the window watchdog timer */
-> > > > > +	control_status_reg =3D ioread32(xdev->base +
-> XWWDT_ESR_OFFSET);
-> > > > > +	control_status_reg |=3D XWWDT_ESR_WEN_MASK;
-> > > > > +	iowrite32(control_status_reg, xdev->base +
-> XWWDT_ESR_OFFSET);
-> > > >
-> > > > Why is this enabled unconditionally ? I would assume that a user
-> > > > specifying a 0-percentage window size doesn't want it enabled.
-> > >
-> > > Plan to add a check for closed window percentage. If user tries to
-> > > configure 100% of closed window, driver configures XWWDT_PERCENT
-> value.
-> > > Configuring 100% of closed window not suggestible.
-> > >
-
-Do you have any feedback on above explanation ?.
-
-> > > >
-> > > > > +
-> > > > > +	spin_unlock(&xdev->spinlock);
-> > > > > +
-> > > > > +	dev_dbg(xilinx_wwdt_wdd->parent, "Watchdog Started!\n");
-> > > > > +
-> > > > > +	return 0;
-> > > > > +}
-> > > > > +
-> > > > > +static int xilinx_wwdt_keepalive(struct watchdog_device *wdd) {
-> > > > > +	struct xwwdt_device *xdev =3D watchdog_get_drvdata(wdd);
-> > > > > +	u32 control_status_reg;
-> > > > > +
-> > > > > +	spin_lock(&xdev->spinlock);
-> > > > > +
-> > > > > +	/* Enable write access control bit for the window watchdog
-> */
-> > > > > +	iowrite32(XWWDT_MWR_MASK, xdev->base +
-> > > > XWWDT_MWR_OFFSET);
-> > > > > +
-> > > > > +	/* Trigger restart kick to watchdog */
-> > > > > +	control_status_reg =3D ioread32(xdev->base +
-> XWWDT_ESR_OFFSET);
-> > > > > +	control_status_reg |=3D XWWDT_ESR_WSW_MASK;
-> > > > > +	iowrite32(control_status_reg, xdev->base +
-> XWWDT_ESR_OFFSET);
-> > > > > +
-> > > > > +	spin_unlock(&xdev->spinlock);
-> > > > > +
-> > > > > +	return 0;
-> > > > > +}
-> > > > > +
-> > > > > +static int xilinx_wwdt_set_timeout(struct watchdog_device *wdd,
-> > > > > +				   unsigned int new_time)
-> > > > > +{
-> > > > > +	struct xwwdt_device *xdev =3D watchdog_get_drvdata(wdd);
-> > > > > +	struct watchdog_device *xilinx_wwdt_wdd =3D &xdev-
-> > > > >xilinx_wwdt_wdd;
-> > > > > +
-> > > > > +	if (watchdog_active(xilinx_wwdt_wdd))
-> > > > > +		return -EPERM;
-> > > >
-> > > > Why ? This will be the most common case and means to change the
-> > > timeout.
-> > >
-> > > Versal Watchdog supports reconfiguration of timeout. If we try to
-> > > reconfigure timeout without stopping the watchdog, driver returns
-> > > error immediately. Reconfiguration of timeout, Stop and Refresh not
-> > > allowed in closed window.
-> > > User can trigger set timeout any point of time, So avoiding
-> > > reconfiguring the timeout feature using driver API if the watchdog is
-> active.
-> > >
-
-Please share your comments on this.
-
-> > > >
-> > > > > +
-> > > > > +	wdd->timeout =3D new_time;
-> > > > > +
-> > > > > +	return 0;
-> > > > > +}
-> > > > > +
-> > > > > +static int xilinx_wwdt_stop(struct watchdog_device *wdd) {
-> > > > > +	struct xwwdt_device *xdev =3D watchdog_get_drvdata(wdd);
-> > > > > +	struct watchdog_device *xilinx_wwdt_wdd =3D &xdev-
-> > > > >xilinx_wwdt_wdd;
-> > > > > +
-> > > > > +	if (watchdog_active(xilinx_wwdt_wdd)) {
-> > > > > +		if (!is_wwdt_in_closed_window(wdd)) {
-> > > > > +			dev_warn(xilinx_wwdt_wdd->parent, "timer
-> in
-> > > > closed window");
-> > > > > +			return -EPERM;
-> > > > > +		}
-> > > > > +	}
-> > > > > +
-> > > > > +	spin_lock(&xdev->spinlock);
-> > > > > +
-> > > > > +	iowrite32(XWWDT_MWR_MASK, xdev->base +
-> > > > XWWDT_MWR_OFFSET);
-> > > > > +
-> > > > > +	/* Disable the Window watchdog timer */
-> > > > > +	iowrite32(~(u32)XWWDT_ESR_WEN_MASK, xdev->base +
-> > > > XWWDT_ESR_OFFSET);
-> > > > > +
-> > > > > +	spin_unlock(&xdev->spinlock);
-> > > > > +
-> > > > > +	clk_disable(xdev->clk);
-> > > >
-> > > > This doesn't work. The start function doesn't enable the clock; it
-> > > > is enabled in the probe function. If you want to enable the clock
-> > > > dynamically, you'll have to enable it in the start function and
-> > > > make sure that it is stopped when unloading the driver (you can't
-> > > > use the devm function in this case). You'll also need to make sure
-> > > > that the unprepare function is called when unloading the driver.
-> > > >
-> > >
-> > > Accepted and will update in V2.
-> > >
-> > > Thanks
-> > > Neeli Srinivas
-> >
-> > Could you please let me know your thoughts on "one line comment
-> summary".
-> >
->=20
-> Sorry, I have no idea what you refer to. Searching for any of the words i=
-n
-> "one line comment summary" in this patch doesn't give me a hint either.
->=20
-> Guenter
-Sorry, it was mistake from my side. Please ignore it.
-I responded to all open questions, please suggest your comments.
-
-Thanks
-Neeli Srinivas
-
+SGkgTsOtY29sYXMsDQoNCk9uIEZyaSwgMjAyMi0xMS0wNCBhdCAxMDozMiAtMDQwMCwgTsOtY29s
+YXMgRi4gUi4gQS4gUHJhZG8gd3JvdGU6DQo+IE9uIEZyaSwgTm92IDA0LCAyMDIyIGF0IDEwOjA2
+OjU4QU0gKzA4MDAsIEFsbGVuLUtIIENoZW5nIHdyb3RlOg0KPiA+IFRoZSBwcm9wZXIgbmFtZSBp
+cyAnd2F0Y2hkb2cnLCBub3QgJ3RvcHJndScuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogQWxs
+ZW4tS0ggQ2hlbmcgPGFsbGVuLWtoLmNoZW5nQG1lZGlhdGVrLmNvbT4NCj4gPiBSZXZpZXdlZC1i
+eTogQW5nZWxvR2lvYWNjaGlubyBEZWwgUmVnbm8gPA0KPiA+IGFuZ2Vsb2dpb2FjY2hpbm8uZGVs
+cmVnbm9AY29sbGFib3JhLmNvbT4NCj4gPiBSZXZpZXdlZC1ieTogTsOtY29sYXMgRi4gUi4gQS4g
+UHJhZG8gPG5mcmFwcmFkb0Bjb2xsYWJvcmEuY29tPg0KPiA+IC0tLQ0KPiA+ICBhcmNoL2FybTY0
+L2Jvb3QvZHRzL21lZGlhdGVrL210ODUxNi5kdHNpIHwgMiArLQ0KPiA+ICAxIGZpbGUgY2hhbmdl
+ZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEv
+YXJjaC9hcm02NC9ib290L2R0cy9tZWRpYXRlay9tdDg1MTYuZHRzaQ0KPiA+IGIvYXJjaC9hcm02
+NC9ib290L2R0cy9tZWRpYXRlay9tdDg1MTYuZHRzaQ0KPiA+IGluZGV4IGQxYjY3YzgyZDc2MS4u
+ZmZmNTlkYzFiNGQ3IDEwMDY0NA0KPiA+IC0tLSBhL2FyY2gvYXJtNjQvYm9vdC9kdHMvbWVkaWF0
+ZWsvbXQ4NTE2LmR0c2kNCj4gPiArKysgYi9hcmNoL2FybTY0L2Jvb3QvZHRzL21lZGlhdGVrL210
+ODUxNi5kdHNpDQo+ID4gQEAgLTIwMiw3ICsyMDIsNyBAQA0KPiA+ICAJCQkjY2xvY2stY2VsbHMg
+PSA8MT47DQo+ID4gIAkJfTsNCj4gPiAgDQo+ID4gLQkJdG9wcmd1OiB0b3ByZ3VAMTAwMDcwMDAg
+ew0KPiA+ICsJCXRvcHJndTogd2F0Y2hkb2dAMTAwMDcwMDAgew0KPiANCj4gSSB0aGluayB5b3Ug
+bWlzc2VkIG15IGNvbW1lbnQgYWJvdXQgcmVuYW1pbmcgdGhlIGxhYmVsIGFzIHdlbGwgb24gdGhl
+DQo+IHByZXZpb3VzDQo+IHZlcnNpb24uDQo+IA0KDQpZZXAsIEkgbWF5IGhhdmUgbWlzdW5kZXJz
+dG9vZC4NCg0KSSB3aWxsIHJlbW92ZSB0aGUgbGFiZWwuDQoNClRoYW5rcywNCkFsbGVuDQoNCj4g
+PiAgCQkJY29tcGF0aWJsZSA9ICJtZWRpYXRlayxtdDg1MTYtd2R0IiwNCj4gPiAgCQkJCSAgICAg
+Im1lZGlhdGVrLG10NjU4OS13ZHQiOw0KPiA+ICAJCQlyZWcgPSA8MCAweDEwMDA3MDAwIDAgMHgx
+MDAwPjsNCj4gPiAtLSANCj4gPiAyLjE4LjANCj4gPiANCg==
