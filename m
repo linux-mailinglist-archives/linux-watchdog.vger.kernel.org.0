@@ -2,170 +2,125 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7389E61F833
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Nov 2022 17:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED97462076F
+	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Nov 2022 04:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbiKGQDz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 7 Nov 2022 11:03:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
+        id S232548AbiKHDcX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 7 Nov 2022 22:32:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbiKGQDz (ORCPT
+        with ESMTP id S232420AbiKHDcX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 7 Nov 2022 11:03:55 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565E0646A;
-        Mon,  7 Nov 2022 08:03:53 -0800 (PST)
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id DF13E80705;
-        Mon,  7 Nov 2022 17:03:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1667837031;
-        bh=npYaDFsNI6WNDngxPTaMW7qxIj6XNWcAhE4z8/9Z3ns=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NoelKcAy/1BxHzRIlRmb3IzlavJyBdFLhfv3UnQ+X9fL2sIpPJ/AeuGrBmG6akLu1
-         Uo/Mf10Veby7mmr2mPBg8renR3LQ+HMzN0/nBkyZuyeWsC5afG6tWi4qaBPu2bAyA1
-         IEXuRR8jTUPeONfd9FmfHHD0l2h9WwTBn0OytW7M0Szn7L1igA5AF7Gt8Xyfr4bjMl
-         A3fPu+K0u+Sn9VrEAwMFOu90lYqbSUN5CLZFxzStiLBBMaBzVgQ7JfHJ/YQa8WbwU5
-         Fbi8mrt82roKMVorXRXqEFVRDyWNeu+5OTHrgSNy7ooyyOJeRQt5P1RxL6UOIuAU9l
-         G/1TpcFjaw55g==
-From:   Marek Vasut <marex@denx.de>
-To:     devicetree@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>, Rob Herring <robh@kernel.org>,
+        Mon, 7 Nov 2022 22:32:23 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA352F38A;
+        Mon,  7 Nov 2022 19:32:17 -0800 (PST)
+X-UUID: 0b3ea02cc61b4424af1c643a5df55240-20221108
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=TmcwPpePh2o2R1cu1Xx4sjnrEBCskr0XJYevHgHULgE=;
+        b=HOx2k7zpiFz6XsI9Me1fAA+wMQ1Hcyph/F4xrzGuZEpNmr2J9TsfhBQo3IG4oUB6QBUJabxYO4qxMjG7xGXI2+ybop20sKkrc64svraKSlNC2xx/ujd8yGnPvNt3d9A5Cvh+7gCTZnYdJLQFaGsaIexHUKjU+OaUuPjVJQWDya8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:e284f838-81d3-4e13-94e0-49feedd0080f,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.12,REQID:e284f838-81d3-4e13-94e0-49feedd0080f,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:62cd327,CLOUDID:7c82bdeb-84ac-4628-a416-bc50d5503da6,B
+        ulkID:221108113212NCEHMIK6,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 0b3ea02cc61b4424af1c643a5df55240-20221108
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1294826594; Tue, 08 Nov 2022 11:32:12 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 8 Nov 2022 11:32:10 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Tue, 8 Nov 2022 11:32:10 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH v3] dt-bindings: watchdog: gpio: Convert bindings to YAML
-Date:   Mon,  7 Nov 2022 17:03:38 +0100
-Message-Id: <20221107160338.27910-1-marex@denx.de>
-X-Mailer: git-send-email 2.35.1
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <nfraprado@collabora.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH v5 0/7] MediaTek watchdog: Convert mtk-wdt.txt to dt-schema
+Date:   Tue, 8 Nov 2022 11:32:02 +0800
+Message-ID: <20221108033209.22751-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Convert the gpio-wdt bindings from text to YAML ones, to permit DT validation.
+Based on git/groeck/linux-staging.git, watchdog-next. 
+We use [1] and [2] as references to send a new series.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: linux-watchdog@vger.kernel.org
-To: devicetree@vger.kernel.org
----
-V2: - Add missing required: properties
-    - Drop quotes around ref: referenced schema file name
-V3: - Add Guenter as maintainer of the bindings
-    - Add RB from Rob
----
- .../devicetree/bindings/watchdog/gpio-wdt.txt | 28 -----------
- .../bindings/watchdog/linux,wdt-gpio.yaml     | 47 +++++++++++++++++++
- 2 files changed, 47 insertions(+), 28 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
+This series converts mtk-wdt.txt to dt-schema and contains
+- Fix watchdog compatibles for MT7986, MT8186, MT8188 and MT8195,
+- Fix the watchdog name of mt8516
+- Add mt6795 and MT8173 watchdog compatible
 
-diff --git a/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt b/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
-deleted file mode 100644
-index 198794963786b..0000000000000
---- a/Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
-+++ /dev/null
-@@ -1,28 +0,0 @@
--* GPIO-controlled Watchdog
--
--Required Properties:
--- compatible: Should contain "linux,wdt-gpio".
--- gpios: From common gpio binding; gpio connection to WDT reset pin.
--- hw_algo: The algorithm used by the driver. Should be one of the
--  following values:
--  - toggle: Either a high-to-low or a low-to-high transition clears
--    the WDT counter. The watchdog timer is disabled when GPIO is
--    left floating or connected to a three-state buffer.
--  - level: Low or high level starts counting WDT timeout,
--    the opposite level disables the WDT. Active level is determined
--    by the GPIO flags.
--- hw_margin_ms: Maximum time to reset watchdog circuit (milliseconds).
--
--Optional Properties:
--- always-running: If the watchdog timer cannot be disabled, add this flag to
--  have the driver keep toggling the signal without a client. It will only cease
--  to toggle the signal when the device is open and the timeout elapsed.
--
--Example:
--	watchdog: watchdog {
--		/* ADM706 */
--		compatible = "linux,wdt-gpio";
--		gpios = <&gpio3 9 GPIO_ACTIVE_LOW>;
--		hw_algo = "toggle";
--		hw_margin_ms = <1600>;
--	};
-diff --git a/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml b/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
-new file mode 100644
-index 0000000000000..c729c96a5dc75
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
-@@ -0,0 +1,47 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/linux,wdt-gpio.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: GPIO-controlled Watchdog
-+
-+maintainers:
-+  - Guenter Roeck <linux@roeck-us.net>
-+
-+properties:
-+  compatible:
-+    const: linux,wdt-gpio
-+
-+  gpios:
-+    description: gpio connection to WDT reset pin
-+    maxItems: 1
-+
-+  hw_algo:
-+    description: The algorithm used by the driver.
-+    enum: [ level, toggle ]
-+
-+  hw_margin_ms:
-+    description: Maximum time to reset watchdog circuit (milliseconds).
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+required:
-+  - compatible
-+  - gpios
-+  - hw_algo
-+  - hw_margin_ms
-+
-+allOf:
-+  - $ref: watchdog.yaml#
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    watchdog {
-+        compatible = "linux,wdt-gpio";
-+        gpios = <&gpio3 9 GPIO_ACTIVE_LOW>;
-+        hw_algo = "toggle";
-+        hw_margin_ms = <1600>;
-+    };
+Changes since v4:
+ - Drop label for watchdog node in mt8516
+
+Changes since v3:
+ - Drop label for watchdog example in yaml
+
+Changes since v2:
+ - Drop merged patch from series
+ - Rebase to watchdog-next (for mt8188)
+
+Changes since v1:
+ - Drop "items" for a single enum·
+
+Changes since [1]:
+  - Update the commit message with some details
+ - Drop "timeout-sec: true" and use unevaluatedProperties
+[1] https://lore.kernel.org/all/20221005113517.70628-1-angelogioacchino.delregno@collabora.com/
+[2] https://lore.kernel.org/all/20220422121017.23920-3-allen-kh.cheng@mediatek.com/
+
+Allen-KH Cheng (3):
+  arm64: dts: mediatek: mt7986: Fix watchdog compatible
+  arm64: dts: mediatek: mt8516: Fix the watchdog node name
+  dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT8173
+
+AngeloGioacchino Del Regno (4):
+  arm64: dts: mediatek: mt8186: Fix watchdog compatible
+  arm64: dts: mediatek: mt8195: Fix watchdog compatible
+  dt-bindings: watchdog: mediatek: Convert mtk-wdt to json-schema
+  dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT6795
+
+ .../bindings/watchdog/mediatek,mtk-wdt.yaml   | 80 +++++++++++++++++++
+ .../devicetree/bindings/watchdog/mtk-wdt.txt  | 43 ----------
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi     |  3 +-
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi      |  3 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  3 +-
+ arch/arm64/boot/dts/mediatek/mt8516.dtsi      |  2 +-
+ 6 files changed, 84 insertions(+), 50 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+
 -- 
-2.35.1
+2.18.0
 
