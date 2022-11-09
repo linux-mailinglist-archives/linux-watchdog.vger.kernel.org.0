@@ -2,98 +2,103 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 268E96216B5
-	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Nov 2022 15:32:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C7A62262E
+	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Nov 2022 10:04:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234255AbiKHObw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 8 Nov 2022 09:31:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
+        id S230210AbiKIJEY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 9 Nov 2022 04:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234257AbiKHObF (ORCPT
+        with ESMTP id S230212AbiKIJES (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:31:05 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1239101F1
-        for <linux-watchdog@vger.kernel.org>; Tue,  8 Nov 2022 06:31:04 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id b29so13930181pfp.13
-        for <linux-watchdog@vger.kernel.org>; Tue, 08 Nov 2022 06:31:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=plCZMl07mNxOy4FwEnJyPWecERqsJQyrHYHIsHPByWrtU1k24II845ABLvzsZ/utuV
-         xrfZ6D/e/ZRoyRjpbZ5oMDY9h9ndbu6gtWFiQs/CjHcVVSqci/vjYPMMyy1pnVJ69u5N
-         OM2Kwkcs/9db1KNzWi4t4Kki8xmdjDy37F969+9phg4q7Iutyq/zyteGqROU9T6wdO4n
-         lS/c2RFkn8H1h3UlswE5jNY6oMt5wQG8oq965L41J8fDh6fe1zek7KZifUk151Do70De
-         k9oKwcRkEhDvguAg4zcTYagV5rrGsvTLwyNtdWlzI5EY/CPrjAga8S7nNTzf3DHImH9S
-         a/jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=BIrvjs5Vwuqb9IWML5XuJ8JxypBAjD4NZ0lJ1rSsn87MoovSAfNLkcIczJ48FEzISn
-         OCapY5PLpHYfj1IgCtLLEYompru8KEMqEGu3bYn+XnSGe/l9iuEYj35vFwdVPIbX+QJJ
-         x3cKNqkSY4dM6Ft+LmWAaCTmDkf+7kxBT+VSoAliJyLj+u/E9B4HNVxWMu4Cy5NyQpLA
-         sYLBIFxBHyEFCjxB/AKPqPl8Ty2uRrwQuVFm47hQ77A0B/QGfJPnzdfrvXrP2Peb25Og
-         kOo68nmjRClGhd6lSAepXeSb3iLADbmhG4UjicoIHcwywC0/VlJzWnXmoxenLmPAhVnL
-         o4pQ==
-X-Gm-Message-State: ACrzQf3BZy73ni3TWNwYb/6wW1btexdlQU6SgtQW4Nwm4X7kt0nES6U9
-        UmdO3RqEyIdolc7jwoye1u7Upi2EDAV0fX1Aigk=
-X-Google-Smtp-Source: AMsMyM5cpw1VKvG8gEasOMmG4UhkblJY7gBReqfbYX80x9OXEWSZokzXOm90JDY4L5h3JbfU+3ckCU+QNWhG8SGrNVo=
-X-Received: by 2002:a05:6a00:1da6:b0:56c:318a:f8ab with SMTP id
- z38-20020a056a001da600b0056c318af8abmr56843835pfw.82.1667917864342; Tue, 08
- Nov 2022 06:31:04 -0800 (PST)
+        Wed, 9 Nov 2022 04:04:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9DE19C2D;
+        Wed,  9 Nov 2022 01:04:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2607B81D46;
+        Wed,  9 Nov 2022 09:04:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B212C433D7;
+        Wed,  9 Nov 2022 09:04:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667984655;
+        bh=dH7Ry1CIVTZgyI9KDAD7GwQOyjSCd95V0RbPoon0Nc4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aX27582WOVXNU1jj0FQfgLz8r3Yp9vvPY4KtxtEXh+a/GDU3sWTVgpeZfpqnW4tdk
+         KOrP4RnySArPB0V2V28mCiKe+K55D28CiZTS89Ip0pGDJRWR9wrJrJ4I1GPclPgmZa
+         JUjxjOPw+yA06lGWQcbEnstdabNQB3x0VKGsKa6wgtYWtx0EmSCeky7MKrUoHXdKq7
+         am7b1p9AnemOG9o/u96or6eQEu2BWfDnD1g3Opk8Dg+TEINLXc93XQBLBJkYVZmouO
+         CPOvHn0hi9wsPA+cd2/k3DsmbcqiDDOLRF54HAoHUjLzM1y+NzizH7lVpGV0ZvKotI
+         AgZW7YTKiy3QA==
+Message-ID: <5758c2af-c2c5-dfbe-c7d8-036bbdaf71c7@kernel.org>
+Date:   Wed, 9 Nov 2022 10:04:09 +0100
 MIME-Version: 1.0
-Received: by 2002:ac4:c8c2:0:b0:56a:d900:eb11 with HTTP; Tue, 8 Nov 2022
- 06:31:03 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidbraddy01@gmail.com>
-Date:   Tue, 8 Nov 2022 14:31:03 +0000
-Message-ID: <CAHGOU4PvdrNhE2KifzdPkFxZTCG5gy+23qf130PwnSmJcLRSew@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:429 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4794]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidbraddy01[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidbraddy01[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v5 5/7] dt-bindings: watchdog: mediatek: Convert mtk-wdt
+ to json-schema
+Content-Language: en-US
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     nfraprado@collabora.com, angelogioacchino.delregno@collabora.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20221108033209.22751-1-allen-kh.cheng@mediatek.com>
+ <20221108033209.22751-6-allen-kh.cheng@mediatek.com>
+ <585a9cbb-4df4-1c06-ecfa-3b9442f1a5e2@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <585a9cbb-4df4-1c06-ecfa-3b9442f1a5e2@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+On 08/11/2022 11:50, Matthias Brugger wrote:
+> 
+> 
+> On 08/11/2022 04:32, Allen-KH Cheng wrote:
+>> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>
+>> Convert the MediaTek watchdog bindings to schema.
+>>
+>> The original binding only had 4 without a fallback but there is a reset
+>> controller on the "mediatek,mt7986-wdt", "mediatek,mt8186-wdt",
+>> "mediatek,mt8188-wdt" and "mediatek,mt8195-wdt" Since there is no reset
+>> controller for the mt6589, we remove "mediatek,mt6589-wdt" as a
+>> fallback.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> Co-developed-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+>> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
+> As I'm put as the maintainer:
+> Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
+> 
+> Shall I take that through my tree or shall it go through the watchdog tree?
+> 
+
+In general, bindings should go via subsystem trees (so watchdog), just
+like drivers. However this got Guenter's review tag, so usually it means
+also an ack... Dunno... :)
+
+Best regards,
+Krzysztof
+
