@@ -2,97 +2,135 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E0C6281D8
-	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Nov 2022 15:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA21B6287E3
+	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Nov 2022 19:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236147AbiKNOC3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 14 Nov 2022 09:02:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
+        id S237878AbiKNSJX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 14 Nov 2022 13:09:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235636AbiKNOC2 (ORCPT
+        with ESMTP id S238212AbiKNSJT (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:02:28 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA9527B36;
-        Mon, 14 Nov 2022 06:02:26 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id c15so6759329qtw.8;
-        Mon, 14 Nov 2022 06:02:26 -0800 (PST)
+        Mon, 14 Nov 2022 13:09:19 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9A8DF55;
+        Mon, 14 Nov 2022 10:09:18 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id 5so8054993wmo.1;
+        Mon, 14 Nov 2022 10:09:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=izOCkbsm9IKKzQ3UFw4KGD8+VGBrn84t2S84ESpJtYY=;
+        b=IO6lxxcT/1ZMxCQLSut5/xGerOoJDNos6w+RcB8b9iIJ1px/CAUH1YTtayE/0KKviD
+         cZqKoJ+9B8XFMIfjbU2So3dJim8ABf2WWxgZBVcRJJuEDcjt9onD6+8ieQxKOiySG974
+         p03+dppDU7wmUTJ07ZzoyUTMhFyF7udjYYYD1eGJjZcm3PYFKleaHx5yTtduGIcwLrXg
+         wDgeI9WKoM5lEkT/zrz/jOCZ8bbx7m2Aoyjytp+Zn/RLQ2sqalB07zkAx5q/7XE2gYvQ
+         wrhzGXPwQfN0K4mAeccsrkZ9UM3p6978xUU/UgexKfE0jQXAG2UBfG0I7vXq5uNYo+1W
+         5H0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vdYjgMgXn6UMjwDeO+ZS8VMHPTpueegMscT499nSXN4=;
-        b=3IYzaInsr2qwQIwXw5X9IrpABBdyZAORkCRMP7F03uOzpMSG1LIRVtDs55cKC18mZr
-         /+vqbXa5Vis6j4ECEjoYV9DiekPeY7GlTEa1ayoScQV6TzgNxXPdNCG8BcZY8gYAzYN+
-         Rc+wcIBEqP6H/TXt/aJbANkTQ1K1WixdSR1/cltgW3QLe/4HULnMoaKPAuhcOeat5166
-         IP38qCGsEptEyiceyeALPxhnBnfTEhUPvM3ehhiqJe6kWBOCduWc67yvqDCYycoiuVCm
-         p0lUvfiYRN0W86lL/NvNBi2DxHS606qCjkEbLHLQUY0eRUlY9E2TWPkLZJgub5scCpYg
-         ikhw==
-X-Gm-Message-State: ANoB5pmxWXkeTpXKH8f3TayaoZSmDxr+7eFPbp1yJLGA88WqOSyFEuJO
-        2xUgyM99qZJzRkHRqWM+qrpzOkWhy7uqow==
-X-Google-Smtp-Source: AA0mqf6FNDmrZp3pR9/XxDfPRLrBd3E0AW5irg3fUTxUTbN40Ki+HVBkJBs1JktQFQ+AJXV1R4N4mA==
-X-Received: by 2002:ac8:7dc1:0:b0:3a5:211f:1f2c with SMTP id c1-20020ac87dc1000000b003a5211f1f2cmr12554206qte.241.1668434545332;
-        Mon, 14 Nov 2022 06:02:25 -0800 (PST)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id bk8-20020a05620a1a0800b006f9f3c0c63csm6511083qkb.32.2022.11.14.06.02.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 06:02:24 -0800 (PST)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-381662c78a9so26019027b3.7;
-        Mon, 14 Nov 2022 06:02:23 -0800 (PST)
-X-Received: by 2002:a81:4ed2:0:b0:370:202b:f085 with SMTP id
- c201-20020a814ed2000000b00370202bf085mr12749930ywb.502.1668434543693; Mon, 14
- Nov 2022 06:02:23 -0800 (PST)
-MIME-Version: 1.0
-References: <20221103223956.50575-1-fabrizio.castro.jz@renesas.com> <20221103223956.50575-4-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20221103223956.50575-4-fabrizio.castro.jz@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 14 Nov 2022 15:02:12 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWsiWsH_YwmZj6O+z08oxouNGbEp-h9fmS=gLNn=vZh3w@mail.gmail.com>
-Message-ID: <CAMuHMdWsiWsH_YwmZj6O+z08oxouNGbEp-h9fmS=gLNn=vZh3w@mail.gmail.com>
-Subject: Re: [PATCH 3/3] arm64: dts: renesas: v2mevk2: Enable watchdog
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        bh=izOCkbsm9IKKzQ3UFw4KGD8+VGBrn84t2S84ESpJtYY=;
+        b=kU76GsKgQIveVG4pL8PfbgAVcRjORBkdyxg9M0ssPSGkAZ5I+vTwgKe/t+eAOYPNV8
+         vHpNyIl0bsqiJlXYi4WeemzmEMug4tGcLx3EQHWkH7vNxAWggQAovaxXJ0IA0HkZoH7m
+         JfNFt3Jc17Y5Y5ayKGEnwwOuKYx/ouESYRna0UtP8Ng2kes8bBxyNmDme82tYvyj5qXi
+         kCJzqonqSqJhFBwNvhSwVU56mUminKLv1ABJrEQ21cZbduc0dnPgDVpj/XKRbopPnGPV
+         vXyruJ9++BFLskYtG4ei9Z3e83TLhSEF9TNtGvpavUP5jQUWVWS/it9qG4b3H7oETxCN
+         VFhw==
+X-Gm-Message-State: ANoB5pkbBs+5VoNRPe8qm3VymaJZG3cIa2U8h7xYZggRF/OU50A/c6IF
+        nWpE2/eLDWDZyqExJ33BH+s=
+X-Google-Smtp-Source: AA0mqf6eNLYPPDk1VLzVi1G2DqC0HaHhFvoJ1CX1fV+TbwWezgsqq2i4NCGCo1ODMJ0TX+g0DScR1w==
+X-Received: by 2002:a05:600c:348e:b0:3cf:e0ef:4508 with SMTP id a14-20020a05600c348e00b003cfe0ef4508mr2865356wmq.84.1668449357162;
+        Mon, 14 Nov 2022 10:09:17 -0800 (PST)
+Received: from prasmi.home ([2a00:23c8:2501:c701:ed66:fe24:8268:500])
+        by smtp.gmail.com with ESMTPSA id p33-20020a05600c1da100b003c71358a42dsm24380771wms.18.2022.11.14.10.09.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 10:09:15 -0800 (PST)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-watchdog@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we put the PM clocks
+Date:   Mon, 14 Nov 2022 18:08:43 +0000
+Message-Id: <20221114180843.1125308-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 11:47 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
-> Enable the watchdog so that we can reboot the system.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v6.2.
+On RZ/Five SoC it was observed that setting timeout (to say 1 sec)
+wouldn't reset the system. To fix this we make sure we issue a reset
+before putting the PM clocks to make sure the registers have been cleared.
 
-Gr{oetje,eeting}s,
+While at it re-used rzg2l_wdt_stop() in rzg2l_wdt_set_timeout() as
+we were calling the same functions here.
 
-                        Geert
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+Note,
+- This patch has been tested on RZ/G2L, RZ/V2M and RZ/Five.
+- My initial investigation showed adding the delay after pm_runtime_get_sync()
+  also fixed this issue.
+- Do I need add the fixes tag ? what should be the operation PUT->RESET/RESET->PUT?
+  in case we need the tag is:
+  Fixes: 4055ee81009e6 ("watchdog: rzg2l_wdt: Add set_timeout callback")
+---
+ drivers/watchdog/rzg2l_wdt.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
+index 00438ceed17a..d1271cc7750f 100644
+--- a/drivers/watchdog/rzg2l_wdt.c
++++ b/drivers/watchdog/rzg2l_wdt.c
+@@ -115,16 +115,14 @@ static int rzg2l_wdt_stop(struct watchdog_device *wdev)
+ {
+ 	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+ 
+-	pm_runtime_put(wdev->parent);
+ 	reset_control_reset(priv->rstc);
++	pm_runtime_put(wdev->parent);
+ 
+ 	return 0;
+ }
+ 
+ static int rzg2l_wdt_set_timeout(struct watchdog_device *wdev, unsigned int timeout)
+ {
+-	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+-
+ 	wdev->timeout = timeout;
+ 
+ 	/*
+@@ -132,8 +130,7 @@ static int rzg2l_wdt_set_timeout(struct watchdog_device *wdev, unsigned int time
+ 	 * register so that it is updated with new timeout values.
+ 	 */
+ 	if (watchdog_active(wdev)) {
+-		pm_runtime_put(wdev->parent);
+-		reset_control_reset(priv->rstc);
++		rzg2l_wdt_stop(wdev);
+ 		rzg2l_wdt_start(wdev);
+ 	}
+ 
+-- 
+2.25.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
