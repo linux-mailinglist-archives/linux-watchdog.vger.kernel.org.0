@@ -2,63 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CA5628A19
-	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Nov 2022 21:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCCB628A2F
+	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Nov 2022 21:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236724AbiKNUIm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 14 Nov 2022 15:08:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
+        id S236890AbiKNULi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 14 Nov 2022 15:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236559AbiKNUI1 (ORCPT
+        with ESMTP id S237446AbiKNULb (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:08:27 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260701108;
-        Mon, 14 Nov 2022 12:08:26 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id lf15so8454529qvb.9;
-        Mon, 14 Nov 2022 12:08:26 -0800 (PST)
+        Mon, 14 Nov 2022 15:11:31 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5DA1A236;
+        Mon, 14 Nov 2022 12:11:30 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id hh9so7493632qtb.13;
+        Mon, 14 Nov 2022 12:11:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RrPoR3x65T0grjDuHpR6Ul7miMhp6L7F3yAVPRrhNv8=;
-        b=fr/mo27KrUrwqsKRMpV3+g0YPGDR2l9bFhXDBxHx5L/f1gIHNohtIdL+L2VHWqkVkU
-         bxksXaRocsMd9WpplVFnxEtarhBxMj8Jjr7luJ827cwUOE52gxWoYwg7HfWDc7ptitB9
-         3xOnIMUdMf0/1HTwyd+4BUIrcx+F0BhBeBlrV/IGPV23tSrVmAupKxDJICAXg6dJcVg6
-         P8sidNA5JjK6LFmP2Owc1Y2whou0B8OdfqQ2cwksPo/uccwKsRsF+DVf9rTHzmAVpgos
-         z+VZHLcKAKdk0wEA5mybLMS+nX/H6Lhp7FSFrgs1b1BWBOtM3dWZSjwlkk9dFk9/Z9ZY
-         Z7TQ==
+        bh=xE0dAKpBGmBo+dBYwNKS7hwOOhYBUTGgAYlVMA/0mbo=;
+        b=ThjPT5EvDOWBr9mZ93WgcLDfbqyiAv7qXsCgX4Gg1S1TFJhZ1WX2HklyiZ592z62Bv
+         s5vRkhmso5rYIrvQZznEV+XZSDg4pM+jXmCdUejX7us2cfPsXhKSLMGF929Y/Z7n+vAT
+         cbZHqoK7JXlwrbluX8d39FJRwHcW5WU4Ynm/5eXdOHoyDXKzbnCHl1XoRcEzct4UCPLD
+         WxqRKwbL25i8Le7pTksgTRX44ibuuta5Ci/tzehz+Y//qp5luIWgmsaXeE+jw1woqUHe
+         3bkUqmP7XdCxklZOVFLIMzMGQ8zMywG/MO/dBFjEI9gPVMzmkNlzTsNKr6lVIcY03tFj
+         D4Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RrPoR3x65T0grjDuHpR6Ul7miMhp6L7F3yAVPRrhNv8=;
-        b=xbX3grwB8GkM9hUNAmUF65mK0JY4TZKgRkzvzXUk1Avet6h5/sUvabtnObbwkWYxN2
-         AGq1RdzzaGiQNh68y1/556ncZGR+cGOi70jUiK1PyXrfwNfJSGmIcONqTEFPgzxuXXr6
-         eUJKdASU2ErejK6fh7lMhoKnNKPK5jv03YXAAe9yeptH5F8ufW1ejHq99uqhkEgFIjwu
-         +iGvz13srNHLJgNyPgiSKNqGtR/KXlJrKcPo/VS//lJVH4P23J85bP/krfquMLsbECes
-         +I2HsPZF3qWVWz92bVP5sy6puUPdbeIgEjxGQYxt4CfCnUhXszMPyi/IGmPexsr8PW/1
-         N2EQ==
-X-Gm-Message-State: ANoB5plWpVkIAyZj7dJiQ8Y1mXgDevdSBbKFyz9wcmd2CiaerJCEYufR
-        A/yPAIMxNORJ1VvlKhiTHWull1G2/Lu8N+bbVX8+vkEbobA=
-X-Google-Smtp-Source: AA0mqf4QgHgx6KHxwHRyLfRUDwTF/J4/LGv++FRYLZf5oBNZ19qgB72jzHBdQGjjG4atzIN1qkl2o2GuxkfHbk1MY3I=
-X-Received: by 2002:a05:6214:3d97:b0:4b1:a359:c204 with SMTP id
- om23-20020a0562143d9700b004b1a359c204mr13917524qvb.64.1668456505288; Mon, 14
- Nov 2022 12:08:25 -0800 (PST)
+        bh=xE0dAKpBGmBo+dBYwNKS7hwOOhYBUTGgAYlVMA/0mbo=;
+        b=x1rRGmTo8xjQ3HYZobQr5nL7SAR+y8jGbPNJ43d1BYuqD7eB6BdCLigAnMdS6JKN0u
+         PcRbu6bPfkrssbLV3peLX3fKuC8SxL8T+OnhNDa07lAMJT01VTz5EKVutt8xsHwr19Eb
+         LKCzEb9sdM9lILnY1FevRm1B3ZEjtr7XV3ChQrZgtagUV2xziURLyVmueQ3esEeCwZoY
+         TLDVx7fSUyXsR6IyPdu4HXIGSV+HD1ldPt3349A7QtnI2+YqBjb6/XoIEUssPEC/c7+A
+         l0KE0IpBkd9bHN+clChG7UAG/BT6J/mPTMBQlJNH3qeQy0GEB2p1Wq5LjmM/8oki2mjt
+         RZFA==
+X-Gm-Message-State: ANoB5pk5wKm+NC8eHJ8LWMtXcHAG3D5mK2cSeR4O22rS90V4Aibuu26d
+        1S3fqry0aJ9He/xmk2+18Jm84Fxi56iaKy/55l0=
+X-Google-Smtp-Source: AA0mqf6agftU0LXb4mGusoE3Lvd4A4QQye3B8Mr4cMMKYc8ZKGxyACdrMpVm47bvuM8TEkMeK7ILwyt2yKk1RfqLrnE=
+X-Received: by 2002:ac8:13c3:0:b0:3a5:27b2:c1ce with SMTP id
+ i3-20020ac813c3000000b003a527b2c1cemr13626725qtj.458.1668456689530; Mon, 14
+ Nov 2022 12:11:29 -0800 (PST)
 MIME-Version: 1.0
 References: <20221114180843.1125308-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
  <OS0PR01MB5922DDCE24ED6F6DD44B4B3F86059@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CA+V-a8tRKxpq4LiDDKd98MW27X7DnMEUw0FoL=8MLXK11tD-ng@mail.gmail.com>
- <OS0PR01MB5922E8CB8DB680347BEB997C86059@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CA+V-a8u0X2isaMWkPhyteqPnKLKEwcR1K=TOarQQMFb8UcGLvQ@mail.gmail.com> <OS0PR01MB5922E8AC8C77B54A6572763B86059@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB5922E8AC8C77B54A6572763B86059@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <CAMuHMdUFsOktkVG0T9yGoVSKZ=JP1bdWnhpyQ5rKFt545JYnHg@mail.gmail.com>
+In-Reply-To: <CAMuHMdUFsOktkVG0T9yGoVSKZ=JP1bdWnhpyQ5rKFt545JYnHg@mail.gmail.com>
 From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 14 Nov 2022 20:07:57 +0000
-Message-ID: <CA+V-a8uSS69EpkVo1iBybdeFbZZJdsYaWkPBYxgC89MAqW4EjQ@mail.gmail.com>
+Date:   Mon, 14 Nov 2022 20:11:02 +0000
+Message-ID: <CA+V-a8v65ruNJYETXTMW0K56ODc0mAUdTLcs7SWCLy-gKSL4Ww@mail.gmail.com>
 Subject: Re: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we put the PM clocks
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -79,167 +78,60 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 7:59 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+Hi Geert,
+
+On Mon, Nov 14, 2022 at 7:03 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
+> Hi Biju,
 >
->
-> > -----Original Message-----
-> > From: Lad, Prabhakar <prabhakar.csengg@gmail.com>
-> > Sent: 14 November 2022 19:56
-> > To: Biju Das <biju.das.jz@bp.renesas.com>
-> > Cc: Geert Uytterhoeven <geert+renesas@glider.be>; Wim Van Sebroeck
-> > <wim@linux-watchdog.org>; Guenter Roeck <linux@roeck-us.net>; Philipp
-> > Zabel <p.zabel@pengutronix.de>; linux-watchdog@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; linux-renesas-soc@vger.kernel.org; Fabrizio
-> > Castro <fabrizio.castro.jz@renesas.com>; Prabhakar Mahadev Lad
-> > <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Subject: Re: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we put
-> > the PM clocks
+> On Mon, Nov 14, 2022 at 7:42 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > > -----Original Message-----
+> > > From: Prabhakar <prabhakar.csengg@gmail.com>
+> > > Sent: 14 November 2022 18:09
+> > > To: Geert Uytterhoeven <geert+renesas@glider.be>; Wim Van Sebroeck
+> > > <wim@linux-watchdog.org>; Guenter Roeck <linux@roeck-us.net>; Philipp Zabel
+> > > <p.zabel@pengutronix.de>; linux-watchdog@vger.kernel.org
+> > > Cc: linux-kernel@vger.kernel.org; linux-renesas-soc@vger.kernel.org;
+> > > Prabhakar <prabhakar.csengg@gmail.com>; Biju Das
+> > > <biju.das.jz@bp.renesas.com>; Fabrizio Castro
+> > > <fabrizio.castro.jz@renesas.com>; Prabhakar Mahadev Lad <prabhakar.mahadev-
+> > > lad.rj@bp.renesas.com>
+> > > Subject: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we put the PM
+> > > clocks
+> > >
+> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > On RZ/Five SoC it was observed that setting timeout (to say 1 sec) wouldn't
+> > > reset the system. To fix this we make sure we issue a reset before putting
+> > > the PM clocks to make sure the registers have been cleared.
+> > >
+> > > While at it re-used rzg2l_wdt_stop() in rzg2l_wdt_set_timeout() as we were
+> > > calling the same functions here.
+> > >
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > ---
+> > > Note,
+> > > - This patch has been tested on RZ/G2L, RZ/V2M and RZ/Five.
+> > > - My initial investigation showed adding the delay after
+> > > pm_runtime_get_sync()
+> > >   also fixed this issue.
+> > > - Do I need add the fixes tag ? what should be the operation PUT-
+> > > >RESET/RESET->PUT?
 > >
-> > On Mon, Nov 14, 2022 at 7:53 PM Biju Das <biju.das.jz@bp.renesas.com>
-> > wrote:
-> > >
-> > >
-> > >
-> > > > -----Original Message-----
-> > > > From: Lad, Prabhakar <prabhakar.csengg@gmail.com>
-> > > > Sent: 14 November 2022 19:46
-> > > > To: Biju Das <biju.das.jz@bp.renesas.com>
-> > > > Cc: Geert Uytterhoeven <geert+renesas@glider.be>; Wim Van Sebroeck
-> > > > <wim@linux-watchdog.org>; Guenter Roeck <linux@roeck-us.net>;
-> > > > Philipp Zabel <p.zabel@pengutronix.de>;
-> > > > linux-watchdog@vger.kernel.org; linux- kernel@vger.kernel.org;
-> > > > linux-renesas-soc@vger.kernel.org; Fabrizio Castro
-> > > > <fabrizio.castro.jz@renesas.com>; Prabhakar Mahadev Lad
-> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > Subject: Re: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we
-> > > > put the PM clocks
-> > > >
-> > > > HI Biju,
-> > > >
-> > > > Thank you for the review.
-> > > >
-> > > > On Mon, Nov 14, 2022 at 6:42 PM Biju Das
-> > > > <biju.das.jz@bp.renesas.com>
-> > > > wrote:
-> > > > >
-> > > > >
-> > > > >
-> > > > > > -----Original Message-----
-> > > > > > From: Prabhakar <prabhakar.csengg@gmail.com>
-> > > > > > Sent: 14 November 2022 18:09
-> > > > > > To: Geert Uytterhoeven <geert+renesas@glider.be>; Wim Van
-> > > > > > Sebroeck <wim@linux-watchdog.org>; Guenter Roeck
-> > > > > > <linux@roeck-us.net>; Philipp Zabel <p.zabel@pengutronix.de>;
-> > > > > > linux-watchdog@vger.kernel.org
-> > > > > > Cc: linux-kernel@vger.kernel.org; linux-renesas-
-> > > > soc@vger.kernel.org;
-> > > > > > Prabhakar <prabhakar.csengg@gmail.com>; Biju Das
-> > > > > > <biju.das.jz@bp.renesas.com>; Fabrizio Castro
-> > > > > > <fabrizio.castro.jz@renesas.com>; Prabhakar Mahadev Lad
-> > > > > > <prabhakar.mahadev- lad.rj@bp.renesas.com>
-> > > > > > Subject: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we
-> > > > > > put the PM clocks
-> > > > > >
-> > > > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > > >
-> > > > > > On RZ/Five SoC it was observed that setting timeout (to say 1
-> > > > > > sec) wouldn't reset the system. To fix this we make sure we
-> > > > > > issue a
-> > > > reset
-> > > > > > before putting the PM clocks to make sure the registers have
-> > > > > > been
-> > > > cleared.
-> > > > > >
-> > > > > > While at it re-used rzg2l_wdt_stop() in
-> > rzg2l_wdt_set_timeout()
-> > > > > > as we were calling the same functions here.
-> > > > > >
-> > > > > > Signed-off-by: Lad Prabhakar
-> > > > > > <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > > > ---
-> > > > > > Note,
-> > > > > > - This patch has been tested on RZ/G2L, RZ/V2M and RZ/Five.
-> > > > > > - My initial investigation showed adding the delay after
-> > > > > > pm_runtime_get_sync()
-> > > > > >   also fixed this issue.
-> > > > > > - Do I need add the fixes tag ? what should be the operation
-> > > > > > PUT-
-> > > > > > >RESET/RESET->PUT?
-> > > > >
-> > > > > It looks like timing issue, None of the previous devices are
-> > > > affected by this.
-> > > > >
-> > > > yep.
-> > > >
-> > > > > >   in case we need the tag is:
-> > > > > >   Fixes: 4055ee81009e6 ("watchdog: rzg2l_wdt: Add set_timeout
-> > > > > > callback")
-> > > > > > ---
-> > > > > >  drivers/watchdog/rzg2l_wdt.c | 7 ++-----
-> > > > > >  1 file changed, 2 insertions(+), 5 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/watchdog/rzg2l_wdt.c
-> > > > > > b/drivers/watchdog/rzg2l_wdt.c index
-> > 00438ceed17a..d1271cc7750f
-> > > > > > 100644
-> > > > > > --- a/drivers/watchdog/rzg2l_wdt.c
-> > > > > > +++ b/drivers/watchdog/rzg2l_wdt.c
-> > > > > > @@ -115,16 +115,14 @@ static int rzg2l_wdt_stop(struct
-> > > > > > watchdog_device *wdev) {
-> > > > > >       struct rzg2l_wdt_priv *priv =
-> > watchdog_get_drvdata(wdev);
-> > > > > >
-> > > > > > -     pm_runtime_put(wdev->parent);
-> > > > > >       reset_control_reset(priv->rstc);
-> > > > > > +     pm_runtime_put(wdev->parent);
-> > > > > >
-> > > > > >       return 0;
-> > > > > >  }
-> > > > > >
-> > > > > >  static int rzg2l_wdt_set_timeout(struct watchdog_device
-> > *wdev,
-> > > > > > unsigned int
-> > > > > > timeout)  {
-> > > > > > -     struct rzg2l_wdt_priv *priv =
-> > watchdog_get_drvdata(wdev);
-> > > > > > -
-> > > > > >       wdev->timeout = timeout;
-> > > > > >
-> > > > > >       /*
-> > > > > > @@ -132,8 +130,7 @@ static int rzg2l_wdt_set_timeout(struct
-> > > > > > watchdog_device *wdev, unsigned int time
-> > > > > >        * register so that it is updated with new timeout
-> > values.
-> > > > > >        */
-> > > > >
-> > > > >
-> > > > > Maybe update the comment above with new code change.
-> > > > >
-> > > >     /*
-> > > >      * If the watchdog is active, reset the module for updating
-> > the
-> > > > WDTSET
-> > > >      * register so that it is updated with new timeout values.
-> > > >      */
-> > > >
-> > > > The above existing comment holds good with this code change. If
-> > you
-> > > > prefer something else please let me know I'll update it
-> > accordingly.
-> > >
-> > > Maybe mention, The resetting of the module is done in wdt_stop
-> > function.
-> > >
-> >     /*
-> >      * If the watchdog is active, reset the module for updating the
-> > WDTSET
-> >      * register by calling rzg2l_wdt_stop() (which internally calls
-> > reset_control_reset() and pm_runtime_put()
+> > It looks like timing issue, None of the previous devices are affected by this.
 >
-> (which internally calls reset_control_reset() to reset the module)
+> To me it looks like the device must be clocked for the reset signal
+> to be propagated?
 >
-Sure will update that in v2.
+In the HW manual (7.4.3 Procedure for Activating Modules) it does
+state the below before applying the reset signal,
+
+Set up the clock control register for the clock signal connected to
+the target module to start the supply of the clock.
+Note that the PLL for the clock should be started before the clock if
+the PLL is stopped.
+
+So maybe I can add the fixes tag in v2.
 
 Cheers,
 Prabhakar
