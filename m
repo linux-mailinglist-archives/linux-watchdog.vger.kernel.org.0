@@ -2,55 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DCE6281C5
-	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Nov 2022 15:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB446281CF
+	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Nov 2022 15:00:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236205AbiKNOA1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 14 Nov 2022 09:00:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
+        id S234803AbiKNOAz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 14 Nov 2022 09:00:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiKNOAZ (ORCPT
+        with ESMTP id S229740AbiKNOAy (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:00:25 -0500
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064519FD6;
-        Mon, 14 Nov 2022 06:00:25 -0800 (PST)
-Received: by mail-qv1-f46.google.com with SMTP id x13so7794645qvn.6;
-        Mon, 14 Nov 2022 06:00:24 -0800 (PST)
+        Mon, 14 Nov 2022 09:00:54 -0500
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF43B84C;
+        Mon, 14 Nov 2022 06:00:54 -0800 (PST)
+Received: by mail-qk1-f172.google.com with SMTP id g10so7382901qkl.6;
+        Mon, 14 Nov 2022 06:00:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jgcb91s2dt67CNb/h/jC4e6cUIsKNgCDgXmKk0U/nWQ=;
-        b=hwEuzU5J8yikUD8aJRnMHJb0QP7apmleFcbSGAkONwiLwhoFarXI9lzXY90JHSDVdQ
-         1M2nQNaG6HydNU/kh/L1J//erwNMNHDysBhuuPcRcSV6MYQ41RHPm0cm+mH91Tvhlk2H
-         NN8tBSf2It8cGMwWchdsBHstuvMFam7eEjH2Er8XCg2V7ksahYHH7K/0rxErYfHOiuXS
-         tj6fu8nvJZh4l5tFrty6RIf5sqi1I13KaQ7/tdC/qdwgdPJqoSQKRfCip7471nMuTPwh
-         eYfZT8JI/WK6lMqZ3n0pp2YSYZJWWpDAKOseZQqugZXIjUgu/wpDCoOr+KPRA+zXD5Pa
-         23tg==
-X-Gm-Message-State: ANoB5pmAtByWgdzETmdxJc5WjZs7+9Io/NGHAtW49aOXjexG1jzUf1Ic
-        3MLQ4ZymBjG96xETRJxY33MmKkQjOHahYg==
-X-Google-Smtp-Source: AA0mqf7po8+D17d3cgqFPr/Jzw0wrIfeQpZXmYk1MeWxqSbJsQ2az3XIUyQPrfTrBLzNmK5LZANlSQ==
-X-Received: by 2002:a0c:fa0f:0:b0:4b4:7ac1:aa38 with SMTP id q15-20020a0cfa0f000000b004b47ac1aa38mr12632722qvn.84.1668434423609;
-        Mon, 14 Nov 2022 06:00:23 -0800 (PST)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id az17-20020a05620a171100b006f3e6933bacsm6387130qkb.113.2022.11.14.06.00.23
+        bh=1GhVSMgJR05/nAScHpCfHzFiRHojqTKjgS5bregNYrM=;
+        b=oZt6SNNR2JVdG0WUps+/5y0yRjlgcQcVZKKig3os2WuyzwJpLq8ADOZcHppiWx4jpa
+         7e+Ybh2x+jNAcgoRBGuScJpL4ADbNpK+4IC+cnas/PAr5bHtbY2nbb5b23VIYb4LKbXD
+         KmbL20ZLdVCzkmLAQPMz2eA3DGbWO4/iwWvjroz+AUuwutqoSuwFeUgdEHmyWoorUv9o
+         FnC/b0BG6+HZqgRD2mSTcoCLG/FZujZE9R+ApnJ8zHHALNWq00BCcfxXW8KMMo9sKPKI
+         nMt8hf3phMzhPQcy1PVD4MFsTo7iAiPY+MUjWmftIkC3sLN4YkAfqL6K0D27dfGQOqgv
+         08iA==
+X-Gm-Message-State: ANoB5pmCjzBqOlMKgB0YUKR1oKqr4PusbCd2z7iLnp8XIzZQruaEITDj
+        t71zLH9HRzl7C+DZS4jJByzobNfdC0PFjA==
+X-Google-Smtp-Source: AA0mqf7kyg2yt2du1i1VWRbXpFV/pAefSSBk0uDGh7E2+LrP0m9bTur8j7xD5IzrF8JQGJWVOp+Npg==
+X-Received: by 2002:a05:620a:459f:b0:6ba:e9c7:a54f with SMTP id bp31-20020a05620a459f00b006bae9c7a54fmr11338194qkb.218.1668434453036;
+        Mon, 14 Nov 2022 06:00:53 -0800 (PST)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id g11-20020ac87f4b000000b0039a9b55b829sm5738812qtk.29.2022.11.14.06.00.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 06:00:23 -0800 (PST)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-37063f855e5so106876007b3.3;
-        Mon, 14 Nov 2022 06:00:23 -0800 (PST)
-X-Received: by 2002:a81:a085:0:b0:37e:6806:a5f9 with SMTP id
- x127-20020a81a085000000b0037e6806a5f9mr7816378ywg.47.1668434409494; Mon, 14
- Nov 2022 06:00:09 -0800 (PST)
+        Mon, 14 Nov 2022 06:00:52 -0800 (PST)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-369426664f9so106705827b3.12;
+        Mon, 14 Nov 2022 06:00:52 -0800 (PST)
+X-Received: by 2002:a0d:f6c6:0:b0:373:5c0c:9b37 with SMTP id
+ g189-20020a0df6c6000000b003735c0c9b37mr12937943ywf.358.1668434452343; Mon, 14
+ Nov 2022 06:00:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20221103223956.50575-1-fabrizio.castro.jz@renesas.com> <20221103223956.50575-2-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20221103223956.50575-2-fabrizio.castro.jz@renesas.com>
+References: <20221103223956.50575-1-fabrizio.castro.jz@renesas.com> <20221103223956.50575-3-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20221103223956.50575-3-fabrizio.castro.jz@renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 14 Nov 2022 14:59:58 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUWbT6VArm9B56VE0yUYWCTm=3vMGrrONSv9cdsQQnhpg@mail.gmail.com>
-Message-ID: <CAMuHMdUWbT6VArm9B56VE0yUYWCTm=3vMGrrONSv9cdsQQnhpg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] watchdog: rzg2l_wdt: Fix reboot for RZ/V2M
+Date:   Mon, 14 Nov 2022 15:00:41 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV4XaXDMEUCar9i1mLxKcTHwDSE04EQAyUSQBG9S6V5KQ@mail.gmail.com>
+Message-ID: <CAMuHMdV4XaXDMEUCar9i1mLxKcTHwDSE04EQAyUSQBG9S6V5KQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] arm64: dts: renesas: r9a09g011: Add watchdog node
 To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -78,20 +78,16 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On Thu, Nov 3, 2022 at 11:40 PM Fabrizio Castro
 <fabrizio.castro.jz@renesas.com> wrote:
-> The setting for the RZ/V2M watchdog cannot be changed once
-> the watchdog has been enabled, unless the IP gets reset.
-> The current implementation of the restart callback assumes
-> that the watchdog is not enabled, but that's not always the
-> case, and it leads to longer than necessary reboot times if
-> the watchdog is already running.
+> The r9a09g011 (a.k.a. RZ/V2M) comes with two watchdog IPs,
+> but Linux is only allowed one.
 >
-> Always reset the RZ/V2M watchdog first, so that we can always
-> restart quickly.
+> Add a node for the watchdog allowed to Linux to the SoC
+> specific dtsi.
 >
-> Fixes: ec122fd94eeb ("watchdog: rzg2l_wdt: Add rzv2m support")
 > Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.2.
 
 Gr{oetje,eeting}s,
 
