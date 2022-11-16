@@ -2,26 +2,26 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A8F62B6ED
-	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Nov 2022 10:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB09A62B727
+	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Nov 2022 11:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232838AbiKPJxH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 16 Nov 2022 04:53:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
+        id S232283AbiKPKF1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 16 Nov 2022 05:05:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbiKPJxG (ORCPT
+        with ESMTP id S231847AbiKPKF0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 16 Nov 2022 04:53:06 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC47186FB;
-        Wed, 16 Nov 2022 01:53:05 -0800 (PST)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NByvQ6tXgzJnjC;
-        Wed, 16 Nov 2022 17:49:54 +0800 (CST)
+        Wed, 16 Nov 2022 05:05:26 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A5D8F;
+        Wed, 16 Nov 2022 02:05:25 -0800 (PST)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NBz8v1sn7zqSVQ;
+        Wed, 16 Nov 2022 18:01:35 +0800 (CST)
 Received: from huawei.com (10.67.175.83) by kwepemi500008.china.huawei.com
  (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 16 Nov
- 2022 17:53:02 +0800
+ 2022 18:05:22 +0800
 From:   ruanjinjie <ruanjinjie@huawei.com>
 To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
         <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
@@ -30,15 +30,15 @@ To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH v2] watchdog: at91sam9_wdt: use devm_request_irq to avoid missing free_irq() in error path
-Date:   Wed, 16 Nov 2022 17:49:50 +0800
-Message-ID: <20221116094950.3141943-1-ruanjinjie@huawei.com>
+Subject: [PATCH RESEND] watchdog: at91sam9_wdt: use devm_request_irq to avoid missing free_irq() in error path
+Date:   Wed, 16 Nov 2022 18:02:10 +0800
+Message-ID: <20221116100210.3144478-1-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.67.175.83]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
  kwepemi500008.china.huawei.com (7.221.188.139)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
