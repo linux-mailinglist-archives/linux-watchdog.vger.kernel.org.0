@@ -2,123 +2,128 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FAE1629AD6
-	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Nov 2022 14:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66EE762B08C
+	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Nov 2022 02:29:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiKONmR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 15 Nov 2022 08:42:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43918 "EHLO
+        id S231639AbiKPB3F (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 15 Nov 2022 20:29:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiKONmQ (ORCPT
+        with ESMTP id S229961AbiKPB3E (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:42:16 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039A813FA6;
-        Tue, 15 Nov 2022 05:42:16 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so13855805pjk.1;
-        Tue, 15 Nov 2022 05:42:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q24KX2057pThKailHphOfjZ+3umm1xp/JerUuUNakT4=;
-        b=H6qyXXfuORPButKx1DlsOyhRzLlNHomtiA2jsmTdIkaeHKMm5NTaL5ppqj73pRf95K
-         CmvBO6D+aHpO9xQ/nDntRFyOmmaeoGwnPIrvPnkGVlvOMADW8c5NkY2QL3aZKUf8MTl4
-         wSjzeB38FnMMf0goyKzdka9uQLLuZoggC6dupkPOAkl09pHpKjeguQhHEWJ1xr/NYcOC
-         bi9o1NFty7WsAUm7xjw+B6h/mgw47w5aV6Zn4HpYyQIhBnO5qILWlGFxO7jIL4DJsrAp
-         wI514g5uaiprB0fVhC8bULN96X/0jbgExQUzyXc8F2i86G/OTArwRs7VWcfAjHB16RrY
-         DjiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q24KX2057pThKailHphOfjZ+3umm1xp/JerUuUNakT4=;
-        b=yqEjYmOc4PV3ylDycWnID1eUoZwKs68Gti+4nrxgZBgkSh+kdMy6GqkT9DNUTGK7bd
-         Wo4mSqGYULtaz+0nSzU1xE7Ky4idi1YYM3mdyIanhEWYHv9sKr/MKS1L/ybDxi5JmCMA
-         /zb6vAtUAFJnPTCN09328t8iocVEsEjMb0u7i+n7krYWBDtr1MmSSWiPDcWlCDlkHfTb
-         hfweevtYi7FBxq63yTp+GEhpj19oCdfyJz1Dosv7Gy9oGx2Djbx3kwYyBbrd2+++PiAn
-         6jpoyNNEX8L1wqwTscCojGRxv+YlZrH1CLXGHMKV0JhYd+HkavfL6Fp+sgvNgBdTWSbx
-         Pe5Q==
-X-Gm-Message-State: ANoB5pnxlCOrkvAO95s0xjQS+NuPDryXeCUprrNsGInvRWqILqvfkuIw
-        ltikE3SrAiundpEMwVKHkcCPbICuciM=
-X-Google-Smtp-Source: AA0mqf60R/9MpoTfSGFM4O2rRKTX/bGNgCOssKA2u+wkXmEW2qcHg9fOQ13VvEjwrCvPJGb9Bf6j3Q==
-X-Received: by 2002:a17:902:f803:b0:188:602b:8259 with SMTP id ix3-20020a170902f80300b00188602b8259mr4044393plb.139.1668519735440;
-        Tue, 15 Nov 2022 05:42:15 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p4-20020a170902e74400b00186b55e3cd6sm9954797plf.133.2022.11.15.05.42.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 05:42:14 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 15 Nov 2022 05:42:13 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Li Hua <hucool.lihua@huawei.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, weiyongjun1@huawei.com,
-        yusongping@huawei.com
-Subject: Re: [PATCH] watchdog: pcwd_usb: Fix attempting to access
- uninitialized memory
-Message-ID: <20221115134213.GD4189373@roeck-us.net>
-References: <20221115083555.22928-1-hucool.lihua@huawei.com>
+        Tue, 15 Nov 2022 20:29:04 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A4ADEB7;
+        Tue, 15 Nov 2022 17:29:03 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NBlmt6qSQzHvrV;
+        Wed, 16 Nov 2022 09:28:30 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 09:29:01 +0800
+Received: from mdc.huawei.com (10.175.112.208) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 16 Nov 2022 09:29:00 +0800
+From:   Chen Jun <chenjun102@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <haokexin@gmail.com>
+CC:     <xuqiang36@huawei.com>
+Subject: [PATCH] watchdog: Fix kmemleak in watchdog_cdev_register
+Date:   Wed, 16 Nov 2022 01:27:14 +0000
+Message-ID: <20221116012714.102066-1-chenjun102@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221115083555.22928-1-hucool.lihua@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,WEIRD_QUOTING autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 04:35:55PM +0800, Li Hua wrote:
-> The stack variable msb and lsb may be used uninitialized in function
-> usb_pcwd_get_temperature and usb_pcwd_get_timeleft when usb card no response.
-> 
-> The build waring is:
-> drivers/watchdog/pcwd_usb.c:336:22: error: ‘lsb’ is used uninitialized in this function [-Werror=uninitialized]
->   *temperature = (lsb * 9 / 5) + 32;
->                   ~~~~^~~
-> drivers/watchdog/pcwd_usb.c:328:21: note: ‘lsb’ was declared here
->   unsigned char msb, lsb;
->                      ^~~
-> cc1: all warnings being treated as errors
-> scripts/Makefile.build:250: recipe for target 'drivers/watchdog/pcwd_usb.o' failed
-> make[3]: *** [drivers/watchdog/pcwd_usb.o] Error 1
-> 
-> Fixes: b7e04f8c61a4 ("mv watchdog tree under drivers")
-> Signed-off-by: Li Hua <hucool.lihua@huawei.com>
-> ---
->  drivers/watchdog/pcwd_usb.c | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/watchdog/pcwd_usb.c b/drivers/watchdog/pcwd_usb.c
-> index 1bdaf17c1d38..89b0b5d8a7e6 100644
-> --- a/drivers/watchdog/pcwd_usb.c
-> +++ b/drivers/watchdog/pcwd_usb.c
-> @@ -326,8 +326,13 @@ static int usb_pcwd_get_temperature(struct usb_pcwd_private *usb_pcwd,
->  							int *temperature)
->  {
->  	unsigned char msb, lsb;
-> +	int retval;
->  
-> -	usb_pcwd_send_command(usb_pcwd, CMD_READ_TEMP, &msb, &lsb);
-> +	retval = usb_pcwd_send_command(usb_pcwd, CMD_READ_TEMP, &msb, &lsb);
-> +	if (retval != 1) {
-> +		pr_err("Card did not acknowledge CMD_READ_TEMP\n");
-> +		return -1;
-> +	}
+kmemleak reports memory leaks in watchdog_dev_register, as follows:
+unreferenced object 0xffff888116233000 (size 2048):
+  comm ""modprobe"", pid 28147, jiffies 4353426116 (age 61.741s)
+  hex dump (first 32 bytes):
+    80 fa b9 05 81 88 ff ff 08 30 23 16 81 88 ff ff  .........0#.....
+    08 30 23 16 81 88 ff ff 00 00 00 00 00 00 00 00  .0#.............
+  backtrace:
+    [<000000007f001ffd>] __kmem_cache_alloc_node+0x157/0x220
+    [<000000006a389304>] kmalloc_trace+0x21/0x110
+    [<000000008d640eea>] watchdog_dev_register+0x4e/0x780 [watchdog]
+    [<0000000053c9f248>] __watchdog_register_device+0x4f0/0x680 [watchdog]
+    [<00000000b2979824>] watchdog_register_device+0xd2/0x110 [watchdog]
+    [<000000001f730178>] 0xffffffffc10880ae
+    [<000000007a1a8bcc>] do_one_initcall+0xcb/0x4d0
+    [<00000000b98be325>] do_init_module+0x1ca/0x5f0
+    [<0000000046d08e7c>] load_module+0x6133/0x70f0
+    ...
 
-That all isn't really worth the trouble. If anyone still has the hardware,
-the driver should be converted to use the watchdog subsystem and to return
-useful error codes where appropriate. For example, returning -EFAULT as
-response to errors from WDIOC_GETTIMELEFT or WDIOC_GETTEMP is just wrong.
-If you really want to do anything, just initialize lsb and msb with 0.
+unreferenced object 0xffff888105b9fa80 (size 16):
+  comm ""modprobe"", pid 28147, jiffies 4353426116 (age 61.741s)
+  hex dump (first 16 bytes):
+    77 61 74 63 68 64 6f 67 31 00 b9 05 81 88 ff ff  watchdog1.......
+  backtrace:
+    [<000000007f001ffd>] __kmem_cache_alloc_node+0x157/0x220
+    [<00000000486ab89b>] __kmalloc_node_track_caller+0x44/0x1b0
+    [<000000005a39aab0>] kvasprintf+0xb5/0x140
+    [<0000000024806f85>] kvasprintf_const+0x55/0x180
+    [<000000009276cb7f>] kobject_set_name_vargs+0x56/0x150
+    [<00000000a92e820b>] dev_set_name+0xab/0xe0
+    [<00000000cec812c6>] watchdog_dev_register+0x285/0x780 [watchdog]
+    [<0000000053c9f248>] __watchdog_register_device+0x4f0/0x680 [watchdog]
+    [<00000000b2979824>] watchdog_register_device+0xd2/0x110 [watchdog]
+    [<000000001f730178>] 0xffffffffc10880ae
+    [<000000007a1a8bcc>] do_one_initcall+0xcb/0x4d0
+    [<00000000b98be325>] do_init_module+0x1ca/0x5f0
+    [<0000000046d08e7c>] load_module+0x6133/0x70f0
+    ...
 
-Guenter
+The reason is that put_device is not be called if cdev_device_add fails
+and wdd->id != 0.
+
+watchdog_cdev_register
+  wd_data = kzalloc                             [1]
+  err = dev_set_name                            [2]
+  ..
+  err = cdev_device_add
+  if (err) {
+    if (wdd->id == 0) {  // wdd->id != 0
+      ..
+    }
+    return err;  // [1],[2] would be leaked
+
+To fix it, call put_device in all wdd->id cases.
+
+Fixes: 72139dfa2464 ("watchdog: Fix the race between the release of watchdog_core_data and cdev")
+Signed-off-by: Chen Jun <chenjun102@huawei.com>
+---
+ drivers/watchdog/watchdog_dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+index 55574ed42504..fdffa6859dde 100644
+--- a/drivers/watchdog/watchdog_dev.c
++++ b/drivers/watchdog/watchdog_dev.c
+@@ -1061,8 +1061,8 @@ static int watchdog_cdev_register(struct watchdog_device *wdd)
+ 		if (wdd->id == 0) {
+ 			misc_deregister(&watchdog_miscdev);
+ 			old_wd_data = NULL;
+-			put_device(&wd_data->dev);
+ 		}
++		put_device(&wd_data->dev);
+ 		return err;
+ 	}
+ 
+-- 
+2.17.1
+
