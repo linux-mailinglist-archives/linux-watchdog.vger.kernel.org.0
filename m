@@ -2,62 +2,61 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4B262F783
-	for <lists+linux-watchdog@lfdr.de>; Fri, 18 Nov 2022 15:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7D562F787
+	for <lists+linux-watchdog@lfdr.de>; Fri, 18 Nov 2022 15:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242459AbiKROeN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 18 Nov 2022 09:34:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34116 "EHLO
+        id S242463AbiKROeP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 18 Nov 2022 09:34:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242382AbiKROdr (ORCPT
+        with ESMTP id S242419AbiKROds (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 18 Nov 2022 09:33:47 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31F965E58
-        for <linux-watchdog@vger.kernel.org>; Fri, 18 Nov 2022 06:33:36 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id l39-20020a05600c1d2700b003cf93c8156dso4146705wms.4
-        for <linux-watchdog@vger.kernel.org>; Fri, 18 Nov 2022 06:33:36 -0800 (PST)
+        Fri, 18 Nov 2022 09:33:48 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4120651C2B
+        for <linux-watchdog@vger.kernel.org>; Fri, 18 Nov 2022 06:33:38 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id o7-20020a05600c510700b003cffc0b3374so3996878wms.0
+        for <linux-watchdog@vger.kernel.org>; Fri, 18 Nov 2022 06:33:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=os18iIH40bbHxRjQCRqddwrzdnwc6I4uEJqYH2KW3Ak=;
-        b=lJkfDmBKCzja3AXdIe++widX8f6gelPNh/0y1AaE6UoXgCvbnqGe4Q2GTBmMoezOA7
-         UwtxeNVmLjuKTePTBAJ6UYIs3erJSdky2WJ4mziNHtotJ4r8lZKLs5Cev/peAc9QyuFZ
-         g1bDFZ2LDOoXlpwAs6L90H1YxEh0n3juUQWASZn/xGaoT2GQZWyI6fKWcS12qvGMdoIY
-         bUNfweLRh1LDprvbOnwhIkJFJEBN77lDXVu/QZHK9IOBKKX06rTZHKsENp15XnM92fel
-         sSMouQOYt2KeZ9JANMrM/znKckpEa2swmbX37FCcHmLlfhTrIi9Y5D+VaO5h15QrXr78
-         0k9w==
+        bh=I8lUWDOeXjkH9UHmo38dtGs19w/rqs9Sy4VJSCBQlaI=;
+        b=oDWz/pVsf+cFAzOAOBv41AAAHEW5ljeCUEwzki0jVdZ1JNRLYDVZqUUxfbHny9q643
+         fO4ZpGeaHPCMjmBzrPADNC+gBiHTXx7m6eypZMNLgI27Ozc/hPzmnJKtuj7jyGu1effk
+         3H0eauS3fMm/TYNuSxfmDQ/DLUGxByrvAB1couqbfCMQOA39ujMBvf5e3W7Yxtz6qzj9
+         E1Qf3Ff9AT8I7Mr1E7zseEaF7WH75RqoMCMFUMCw2Tx5tKaSpOMneq3yhCrb/0OpRw/2
+         A1lhamyhxw/X19HDLcgQgqS27L4V3Cf+8/wuOdhrHgn6+txxa2lcydl91VSTbLk5Ip1r
+         3+OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=os18iIH40bbHxRjQCRqddwrzdnwc6I4uEJqYH2KW3Ak=;
-        b=B0RvzmFN8facTImOsgM4jDqmP6rA30Por0qIP6BP4INp2VtJwQFYopqLiuHIvoEX7O
-         JYObwLqCds2+R7gAF0O5oZtcBavVYaGrJdMZGW25XgzF4cEEBJoJZPbVCGFarM1s7DGs
-         6XAX1edlBMHT9o0yZg2uaCwUnb+XOl/305GVzSe9BDH+22L+E5b0dtVrQdhlz8/0S7AW
-         TF5+tHEn4ztJjP2MSFhYAi/jR3qSJNQ/8NZyKhEXf635+3unK0HSC2yayKC1YncsYxYN
-         7EwdkWt/HMRyxnEBbfJ8uckMCE94Do8sRZjUkUFKN8k1G8b1+BbzIWpQowpx0YNamteE
-         MurQ==
-X-Gm-Message-State: ANoB5pm+Fa+Jzmqk8AD+Sxu1hcz/pSlxBOa0g6xPxvIovmdOd0j7Se1V
-        EnZD6UyO3EsXtrjntI46kLxDSQ==
-X-Google-Smtp-Source: AA0mqf7X30WBLQ26Ln7KuaxzIEh5l7ZHE8X2TACFtKnF9q0ankWSiqWiouUvFBJBNOtLyJaem7IlQw==
-X-Received: by 2002:a05:600c:3110:b0:3cf:b07a:cd56 with SMTP id g16-20020a05600c311000b003cfb07acd56mr8325908wmo.143.1668782015225;
-        Fri, 18 Nov 2022 06:33:35 -0800 (PST)
+        bh=I8lUWDOeXjkH9UHmo38dtGs19w/rqs9Sy4VJSCBQlaI=;
+        b=cJAEcxhsJ72nQeF4d48q596uXAP0KjPz/tgN2InMh+vhWxtXolOv9WoQSYzlkgjBKw
+         drNriV4+xmAtdDTDz51JExUjbloaLrBSDCC94Ek0NMmjdoVUDjDo59unZLYL+JvifS2f
+         6mFSwHLNevi1hubLcDVjELjBF+kxJWgIIvm6qh2AlY5Jg0ecl1lsJInzauxD0dL19fEK
+         uJl8j4lWmFqhQpu/S9Hu9rgWARKQ2olMh6sa/RoFbfLSCWMr3GQPskNGugft+VVW/gCh
+         d5eePpAzYIowqZhUTM3rhX2xSrE/47hborbmm/6sN0EKDDtW8x1d3ZzjA1U08NdlDBC9
+         b/QQ==
+X-Gm-Message-State: ANoB5pmPh7xwNSfNK1kAMriOja+aq4RSS9gGhzI1jhIGRvknUVxhUNGJ
+        a5gZ6EzrqorCZNYxW88KiaZc/w==
+X-Google-Smtp-Source: AA0mqf58oHI/7To3+CZoBl7djIZXtAy//xIgmpt08lgvBcuLlZjN5W390xyBDOKkHM9CY2J0U3XElg==
+X-Received: by 2002:a7b:cd85:0:b0:3cf:931c:3cfa with SMTP id y5-20020a7bcd85000000b003cf931c3cfamr5085059wmj.203.1668782016660;
+        Fri, 18 Nov 2022 06:33:36 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id j21-20020a05600c1c1500b003cfb7c02542sm5436726wms.11.2022.11.18.06.33.33
+        by smtp.gmail.com with ESMTPSA id j21-20020a05600c1c1500b003cfb7c02542sm5436726wms.11.2022.11.18.06.33.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 06:33:34 -0800 (PST)
+        Fri, 18 Nov 2022 06:33:36 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 18 Nov 2022 15:33:29 +0100
-Subject: [PATCH 03/12] dt-bindings: nvmem: convert amlogic-meson-mx-efuse.txt to
- dt-schema
+Date:   Fri, 18 Nov 2022 15:33:30 +0100
+Subject: [PATCH 04/12] dt-bindings: watchdog: convert meson-wdt.txt to dt-schema
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20221117-b4-amlogic-bindings-convert-v1-3-3f025599b968@linaro.org>
+Message-Id: <20221117-b4-amlogic-bindings-convert-v1-4-3f025599b968@linaro.org>
 References: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org>
 In-Reply-To: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org>
 To:     Jakub Kicinski <kuba@kernel.org>,
@@ -102,112 +101,86 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Convert the Amlogic Meson6 eFuse bindings to dt-schema.
+Convert the Amlogic Meson6 SoCs Watchdog timer bindings to dt-schema.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- .../bindings/nvmem/amlogic,meson6-efuse.yaml       | 64 ++++++++++++++++++++++
- .../bindings/nvmem/amlogic-meson-mx-efuse.txt      | 22 --------
- 2 files changed, 64 insertions(+), 22 deletions(-)
+ .../bindings/watchdog/amlogic,meson6-wdt.yaml      | 39 ++++++++++++++++++++++
+ .../devicetree/bindings/watchdog/meson-wdt.txt     | 21 ------------
+ 2 files changed, 39 insertions(+), 21 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml b/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml
+diff --git a/Documentation/devicetree/bindings/watchdog/amlogic,meson6-wdt.yaml b/Documentation/devicetree/bindings/watchdog/amlogic,meson6-wdt.yaml
 new file mode 100644
-index 000000000000..232d68d7fbcb
+index 000000000000..4e33a5a9c23c
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml
-@@ -0,0 +1,64 @@
++++ b/Documentation/devicetree/bindings/watchdog/amlogic,meson6-wdt.yaml
+@@ -0,0 +1,39 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/nvmem/amlogic,meson6-efuse.yaml#
++$id: http://devicetree.org/schemas/watchdog/amlogic,meson6-wdt.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Amlogic Meson6 eFuse
++title: Amlogic Meson6 SoCs Watchdog timer
 +
 +maintainers:
 +  - Neil Armstrong <neil.armstrong@linaro.org>
 +  - Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 +
 +allOf:
-+  - $ref: nvmem.yaml#
++  - $ref: watchdog.yaml#
 +
 +properties:
 +  compatible:
 +    enum:
-+      - amlogic,meson6-efuse
-+      - amlogic,meson8-efuse
-+      - amlogic,meson8b-efuse
++      - amlogic,meson6-wdt
++      - amlogic,meson8-wdt
++      - amlogic,meson8b-wdt
++      - amlogic,meson8m2-wdt
 +
 +  reg:
 +    maxItems: 1
 +
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: core
-+
-+  secure-monitor:
-+    description: phandle to the secure-monitor node
-+
 +required:
 +  - compatible
 +  - reg
-+  - clocks
-+  - clock-names
 +
 +unevaluatedProperties: false
 +
 +examples:
 +  - |
-+    efuse: efuse@0 {
-+        compatible = "amlogic,meson6-efuse";
-+        reg = <0x0 0x2000>;
-+        clocks = <&clk_efuse>;
-+        clock-names = "core";
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+
-+        sn: sn@14 {
-+            reg = <0x14 0x10>;
-+        };
-+
-+        eth_mac: mac@34 {
-+            reg = <0x34 0x10>;
-+        };
-+
-+        bid: bid@46 {
-+            reg = <0x46 0x30>;
-+        };
++    wdt: watchdog@c1109900 {
++        compatible = "amlogic,meson6-wdt";
++        reg = <0xc1109900 0x8>;
++        timeout-sec = <10>;
 +    };
-diff --git a/Documentation/devicetree/bindings/nvmem/amlogic-meson-mx-efuse.txt b/Documentation/devicetree/bindings/nvmem/amlogic-meson-mx-efuse.txt
+diff --git a/Documentation/devicetree/bindings/watchdog/meson-wdt.txt b/Documentation/devicetree/bindings/watchdog/meson-wdt.txt
 deleted file mode 100644
-index a3c63954a1a4..000000000000
---- a/Documentation/devicetree/bindings/nvmem/amlogic-meson-mx-efuse.txt
+index 7588cc3971bf..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/meson-wdt.txt
 +++ /dev/null
-@@ -1,22 +0,0 @@
--Amlogic Meson6/Meson8/Meson8b efuse
+@@ -1,21 +0,0 @@
+-Meson SoCs Watchdog timer
 -
--Required Properties:
--- compatible: depending on the SoC this should be one of:
--	- "amlogic,meson6-efuse"
--	- "amlogic,meson8-efuse"
--	- "amlogic,meson8b-efuse"
--- reg: base address and size of the efuse registers
--- clocks: a reference to the efuse core gate clock
--- clock-names: must be "core"
+-Required properties:
 -
--All properties and sub-nodes as well as the consumer bindings
--defined in nvmem.txt in this directory are also supported.
+-- compatible : depending on the SoC this should be one of:
+-	"amlogic,meson6-wdt" on Meson6 SoCs
+-	"amlogic,meson8-wdt" and "amlogic,meson6-wdt" on Meson8 SoCs
+-	"amlogic,meson8b-wdt" on Meson8b SoCs
+-	"amlogic,meson8m2-wdt" and "amlogic,meson8b-wdt" on Meson8m2 SoCs
+-- reg : Specifies base physical address and size of the registers.
 -
+-Optional properties:
+-- timeout-sec: contains the watchdog timeout in seconds.
 -
 -Example:
--	efuse: nvmem@0 {
--		compatible = "amlogic,meson8-efuse";
--		reg = <0x0 0x2000>;
--		clocks = <&clkc CLKID_EFUSE>;
--		clock-names = "core";
--	};
+-
+-wdt: watchdog@c1109900 {
+-	compatible = "amlogic,meson6-wdt";
+-	reg = <0xc1109900 0x8>;
+-	timeout-sec = <10>;
+-};
 
 -- 
 b4 0.10.1
