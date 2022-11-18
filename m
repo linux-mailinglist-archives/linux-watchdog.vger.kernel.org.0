@@ -2,109 +2,97 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38C9E62FFC6
-	for <lists+linux-watchdog@lfdr.de>; Fri, 18 Nov 2022 23:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CF063032B
+	for <lists+linux-watchdog@lfdr.de>; Sat, 19 Nov 2022 00:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbiKRWJB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 18 Nov 2022 17:09:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S234268AbiKRXYv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 18 Nov 2022 18:24:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbiKRWIi (ORCPT
+        with ESMTP id S235462AbiKRXXX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 18 Nov 2022 17:08:38 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F38E00A;
-        Fri, 18 Nov 2022 14:08:36 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id d8so4398678qki.13;
-        Fri, 18 Nov 2022 14:08:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lcKcVBH7wK8BhvZwwW+6MGN+YNjp16mTIOHZ3TURRMY=;
-        b=DVEI7O12hJR7kEJybAwc+YqScVXn9LLLd6GLBfY+8tZMBnUzZVqbFPvP1NeuTHhT3Y
-         yaJdx7XPpVvoUkuESIVuqg7vgpqfgMnaOtXsnVC/LahYaOYgFHmhjeU0cORlbBHEsofr
-         elpe3G0wS/jpFYHxoKbYc6ojctyjGJiBogr9T6o4vgf1f/lGVJauYjhOZ8QwfCYFTODr
-         DvWLBJX32SGconmepJIv5f8pI28iew5n0lf+BRDxFeBEA6sukKKP3EysNKM8Jv+rdwFy
-         GVVZM8GEY0LG0pthfQ87kbgsogOCpsFe1twVFB37D4IzaV2vUILQG4Aqlw8PZKf/n7fU
-         V+gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lcKcVBH7wK8BhvZwwW+6MGN+YNjp16mTIOHZ3TURRMY=;
-        b=wjBjFlUbGwDskNzAZ/g8ZYL1ip1rXt5gk6I8y/KdQdqwglesFRsYG8NLP8mlnqQyOZ
-         O584eO53F5ngoRac7JrLD+ZQlkk3qvwlmpyOttjMqBtuAxmGnfqI7uAOHGMspyCwPDHN
-         3Sw9Lt5WYmzRlw4ZbnDh/4au/lTPkZcxKYJ/gbo2PYvS43naM0pO7+PYdhaZtwaAzB7u
-         nEXKywnzM8y3+OFTgMzrGrgxFH1TgNZmPyuy3JZ+57ogGv1Lm3n5ekOYwFPMnU9wIvQx
-         1HHamsUFeIcmzy7pVKBt9EucGquyhEc4Wem/XWP8QKqk3snZgPbUQ7Il0D+DOjrTFyL7
-         R4Zw==
-X-Gm-Message-State: ANoB5plWixsfNP4DidwpbYmS/LnVPZWftKhQ+2bjzqxkdX4oWEHkQV0T
-        VOQxAT+BokicZIffayWXlKKTMa7JP4E=
-X-Google-Smtp-Source: AA0mqf6ehzYeAS4E8lRLghHoj+vCUkTOs8uz0dSQaY6gzN/o992YMeO2hOEQhXs5mBylI2ImhU6RqQ==
-X-Received: by 2002:a37:9a15:0:b0:6fb:6221:18a3 with SMTP id c21-20020a379a15000000b006fb622118a3mr7801623qke.230.1668809316075;
-        Fri, 18 Nov 2022 14:08:36 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id az42-20020a05620a172a00b006cfaee39ccesm3181956qkb.114.2022.11.18.14.08.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 14:08:35 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 18 Nov 2022 14:08:34 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: Re: [PATCH] watchdog: dw_wdt: stop on reboot
-Message-ID: <20221118220834.GC685644@roeck-us.net>
-References: <20221118150809.102505-1-cosmin.tanislav@analog.com>
+        Fri, 18 Nov 2022 18:23:23 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9076F56D41
+        for <linux-watchdog@vger.kernel.org>; Fri, 18 Nov 2022 15:13:58 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owA9n-0005Ro-49; Fri, 18 Nov 2022 23:48:23 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owA9i-0058tW-Nt; Fri, 18 Nov 2022 23:48:19 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1owA9i-0000VY-Ju; Fri, 18 Nov 2022 23:48:18 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 596/606] watchdog: ziirave_wdt: Convert to i2c's .probe_new()
+Date:   Fri, 18 Nov 2022 23:45:30 +0100
+Message-Id: <20221118224540.619276-597-uwe@kleine-koenig.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221118150809.102505-1-cosmin.tanislav@analog.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 05:08:09PM +0200, Cosmin Tanislav wrote:
-> HW running watchdogs are just watchdogs that are enabled before the
-> Linux driver is probed, usually by the bootloader (eg. U-Boot).
-> 
-> When the system is shutting down, the mechanism for keeping a HW running
-> watchdog pinged is also stopped, but the watchdog itself is not stopped,
-> causing a reset, and preventing the system from being shut down.
-> 
-> Opt into stopping watchdogs on reboot.
-> 
-> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+The probe function doesn't make use of the i2c_device_id * parameter so it
+can be trivially converted.
 
-> ---
->  drivers/watchdog/dw_wdt.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/watchdog/dw_wdt.c b/drivers/watchdog/dw_wdt.c
-> index 52962e8d11a6..462f15bd5ffa 100644
-> --- a/drivers/watchdog/dw_wdt.c
-> +++ b/drivers/watchdog/dw_wdt.c
-> @@ -663,6 +663,7 @@ static int dw_wdt_drv_probe(struct platform_device *pdev)
->  	platform_set_drvdata(pdev, dw_wdt);
->  
->  	watchdog_set_restart_priority(wdd, 128);
-> +	watchdog_stop_on_reboot(wdd);
->  
->  	ret = watchdog_register_device(wdd);
->  	if (ret)
-> -- 
-> 2.38.1
-> 
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/watchdog/ziirave_wdt.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/watchdog/ziirave_wdt.c b/drivers/watchdog/ziirave_wdt.c
+index d0e88875443a..21ca08a694ee 100644
+--- a/drivers/watchdog/ziirave_wdt.c
++++ b/drivers/watchdog/ziirave_wdt.c
+@@ -593,8 +593,7 @@ static int ziirave_wdt_init_duration(struct i2c_client *client)
+ 					 reset_duration);
+ }
+ 
+-static int ziirave_wdt_probe(struct i2c_client *client,
+-			     const struct i2c_device_id *id)
++static int ziirave_wdt_probe(struct i2c_client *client)
+ {
+ 	int ret;
+ 	struct ziirave_wdt_data *w_priv;
+@@ -732,7 +731,7 @@ static struct i2c_driver ziirave_wdt_driver = {
+ 		.name = "ziirave_wdt",
+ 		.of_match_table = zrv_wdt_of_match,
+ 	},
+-	.probe = ziirave_wdt_probe,
++	.probe_new = ziirave_wdt_probe,
+ 	.remove = ziirave_wdt_remove,
+ 	.id_table = ziirave_wdt_id,
+ };
+-- 
+2.38.1
+
