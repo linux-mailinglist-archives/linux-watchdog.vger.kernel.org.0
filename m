@@ -2,126 +2,78 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776AF6323BC
-	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Nov 2022 14:33:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 432A8632604
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Nov 2022 15:36:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbiKUNdh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 21 Nov 2022 08:33:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
+        id S229996AbiKUOgp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 21 Nov 2022 09:36:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiKUNd1 (ORCPT
+        with ESMTP id S230086AbiKUOg3 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 21 Nov 2022 08:33:27 -0500
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0168784822;
-        Mon, 21 Nov 2022 05:33:26 -0800 (PST)
-Received: by mail-qk1-f175.google.com with SMTP id p18so7956362qkg.2;
-        Mon, 21 Nov 2022 05:33:25 -0800 (PST)
+        Mon, 21 Nov 2022 09:36:29 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D9EC78F3
+        for <linux-watchdog@vger.kernel.org>; Mon, 21 Nov 2022 06:36:17 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-3a3961f8659so23357677b3.2
+        for <linux-watchdog@vger.kernel.org>; Mon, 21 Nov 2022 06:36:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YzgGX4AwSt860hhHaRgKsA8hx2m0I67dk0IZRTCbtjk=;
+        b=ibjOL8GKIlYfStrDTd1SYVU7iDAbtLTmLVOHXwTtJ7rpEqZTaa8HxDSiXldOyskwZV
+         2x2fr3e4jaHNCNi8IrnlbicG+TFmN+jusNfea6xfodHs1hPll1htfHNWGvd+2MDd8JrT
+         i+IZrXoI+7/5vs244X+ISRvhejicYiNUAm0Tbbuf+aNLZuqPpmLYcBVZXXyVVQTsHnx9
+         E5lBwlpMzImWh7bYIC/kiDTu31FsY9+fX6gc80i0KUrkOiCygVUM3sgzYd8Y5TMQtn3S
+         8LXs1q7XQ4kwsN4jcOHyqUfPbCrDjhEzLKKcxZsLFaLoUzP4wYktkXqWtIWHgvVPsPDw
+         ziTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=W52hjy2XgXbLvoau/TZhYUdh0mFs9ky77EejBWrKJL0=;
-        b=MKBAflyqCUHtzPOOQZ6ifQuwGDxrXiqLha4B6jgtDirrkjwDpkFryHuD6F/dt8H0QI
-         /OIxYrlqSHJDdf035z2Khhf6Kryhq1gElZdNzSmWIBxdcJErG0ksH8kPf2cpKnjiGIly
-         jDZA5W2gtjqmoIEHcAdhqOYFTh1/kn8BF7eeKJcFk2VjJkIWVC5Ad5PmSNuuBGrnERyp
-         c80M43ypsnc9Em3IJzqGakMQC8lGEP87p4FVat1CCYUeyIGWTts6Q2ROcXfUuxpSE3AA
-         5Xqf4HHD5kcwg6YwWXUrJ1/eZxMVpT2w3M5TLvlivG1HOyJ8IFsM6fXzmDinFTgUttcU
-         Uqhg==
-X-Gm-Message-State: ANoB5plLQ5A+/+zT5/m1BgTpcb1kqSljtoUhzcMqioQs+/IM6aYOCLxV
-        8maqDHR5KaxgAEMGSgB6hUqsAxwHQez/9g==
-X-Google-Smtp-Source: AA0mqf5ztepVbKEErbeHzkEO/g8ATeu0M6TG2+WT51QBKFlvCWQFw94PLJ5lwReFzcLN831JtiNw6w==
-X-Received: by 2002:a05:620a:993:b0:6fa:172:c37d with SMTP id x19-20020a05620a099300b006fa0172c37dmr16277536qkx.92.1669037604910;
-        Mon, 21 Nov 2022 05:33:24 -0800 (PST)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id l21-20020a37f915000000b006fa7b5ea2d1sm8239937qkj.125.2022.11.21.05.33.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 05:33:23 -0800 (PST)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-36cbcda2157so113000447b3.11;
-        Mon, 21 Nov 2022 05:33:23 -0800 (PST)
-X-Received: by 2002:a81:4f4c:0:b0:357:66a5:bb25 with SMTP id
- d73-20020a814f4c000000b0035766a5bb25mr17212924ywb.383.1669037603130; Mon, 21
- Nov 2022 05:33:23 -0800 (PST)
+        bh=YzgGX4AwSt860hhHaRgKsA8hx2m0I67dk0IZRTCbtjk=;
+        b=drZWfvtwnu8pFi9Btjj78KwqpuJS36QK69PYAtVdS8grCr+HTC0bEFBm7blqQLc24n
+         s6P+qHDRzUQUX17Uf9fD0OZ49YdgZzVWBuEZTwjeref4m7Ta11wH2+DvxW6tUu7ISxFB
+         rhIESzqaB0+VyUywfKy3cYekpMuAYFEnxejmlLqv4rKRkO3n08oV+ELWGvjEo8Kg2sUS
+         6R3YHkqGbuGj5aq0ESLv3l+Z5VbFa0SH2WJYu3W/sp/3tp+fU5UsjlIOgcp3jyPnmhQW
+         dqB53IMTwY+Q8flcYZSPxDGW+usU72mJyksDT/ymvvhQDLnhw0O5Pi3yqqukAhvoBpuE
+         D13g==
+X-Gm-Message-State: ANoB5pkw6HruBjKWDR+kf7KfmIxGMS82IU26fdWkoeMNd1cbaJJJXuC+
+        j2pK5dJ+tqW/jigVvY74Je0Z7+jlIKTM4WtuV5Q=
+X-Google-Smtp-Source: AA0mqf6GqBzxXp3wQkoZoMIIFGNDzygSYw7CLJAUiwC3NgNZP22VqqOaaGsFzS5f6xMUwpFCQpsiWivq5o4qkkarpg0=
+X-Received: by 2002:a05:690c:b96:b0:35f:a643:f200 with SMTP id
+ ck22-20020a05690c0b9600b0035fa643f200mr17416298ywb.70.1669041376420; Mon, 21
+ Nov 2022 06:36:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org> <20221121110615.97962-8-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221121110615.97962-8-krzysztof.kozlowski@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 21 Nov 2022 14:33:11 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUtT3=F-3XLb604VUvKxNQBWK1y0rMnMn0kASKjQGw=3g@mail.gmail.com>
-Message-ID: <CAMuHMdUtT3=F-3XLb604VUvKxNQBWK1y0rMnMn0kASKjQGw=3g@mail.gmail.com>
-Subject: Re: [PATCH v2 7/9] dt-bindings: drop redundant part of title (beginning)
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Sender: hc987479@gmail.com
+Received: by 2002:a05:7010:8e1e:b0:313:94fd:3f07 with HTTP; Mon, 21 Nov 2022
+ 06:36:16 -0800 (PST)
+From:   Richard Wahl <richardwahlll17@gmail.com>
+Date:   Mon, 21 Nov 2022 14:36:16 +0000
+X-Google-Sender-Auth: _c-UPCnEObfhKaXBDGDhxtYfjVg
+Message-ID: <CAHfQ0GtrEPnyBG3j9AWigSOT33CU+Njx10Caw_fJxkQF1SjC0g@mail.gmail.com>
+Subject: =?UTF-8?Q?Sie_haben_eine_Spende_von_=E2=82=AC_1=2E200=2E000=2C00?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 12:09 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> The Devicetree bindings document does not have to say in the title that
-> it is a "Devicetree binding", but instead just describe the hardware.
->
-> Drop beginning "Devicetree bindings" in various forms:
->
->   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
->     -exec sed -i -e 's/^title: [dD]evice[ -]\?[tT]ree [bB]indings\? for \([tT]he \)\?\(.*\)$/title: \u\2/' {} \;
->
->   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
->     -exec sed -i -e 's/^title: [bB]indings\? for \([tT]he \)\?\(.*\)$/title: \u\2/' {} \;
->
->   find Documentation/devicetree/bindings/ -type f -name '*.yaml' \
->     -exec sed -i -e 's/^title: [dD][tT] [bB]indings\? for \([tT]he \)\?\(.*\)$/title: \u\2/' {} \;
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+--=20
+Hallo. Ihre E-Mail wurde f=C3=BCr eine Spende in einer bestimmten H=C3=B6he
+vergeben. Antworten Sie mit Ihrem Namen und Ihrer Adresse,
+Telefonnummer, um Ihnen dieses Geld zukommen zu lassen.
 
->  .../devicetree/bindings/interrupt-controller/renesas,irqc.yaml  | 2 +-
+ Ignorieren Sie diese Nachricht nicht, da sie direkt an Sie gerichtet ist.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Rigards
+Richard Wahl
