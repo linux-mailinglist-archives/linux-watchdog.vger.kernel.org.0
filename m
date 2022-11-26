@@ -2,128 +2,132 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4B56393A7
-	for <lists+linux-watchdog@lfdr.de>; Sat, 26 Nov 2022 04:21:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC016396E2
+	for <lists+linux-watchdog@lfdr.de>; Sat, 26 Nov 2022 16:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiKZDVq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 25 Nov 2022 22:21:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
+        id S229748AbiKZPoN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 26 Nov 2022 10:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiKZDVp (ORCPT
+        with ESMTP id S229521AbiKZPoI (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 25 Nov 2022 22:21:45 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B207D59FD3;
-        Fri, 25 Nov 2022 19:21:44 -0800 (PST)
-Date:   Sat, 26 Nov 2022 04:21:30 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1669432902;
-        bh=3gQNFPEkrfk8FvgThUUGBp+W3qYIQb/nNsoP6AUOaTY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iRgBqf6WTtWmYUYXJtCA6bvY96IGwztRM3DzYkHCgF4S2luXcpBwHU2IzbEX3C6qL
-         NK2DEKnF8pj/CeJEztiC2hs74UpC91vDgTENNfVIDu7D4zYcIkmEiJUA7oobqDxEtb
-         GmUfDvFDkOj8vxKyc7TE/XtoPgvLaOIq0UwZm888=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: Report firmware_version in sysfs
-Message-ID: <12d52741-4cf9-4c95-a8c7-f563e149da9a@t-8ch.de>
-References: <20221125222315.4925-1-linux@weissschuh.net>
- <da94449e-d250-1b44-0e72-f951b73b1946@roeck-us.net>
- <ddd1ea7b-0be7-4c16-a5ac-56516f955ef9@t-8ch.de>
- <7c38ad68-49cb-0f8a-18a4-fa78f0429bdd@roeck-us.net>
+        Sat, 26 Nov 2022 10:44:08 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E0EF7A;
+        Sat, 26 Nov 2022 07:44:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669477447; x=1701013447;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=TYZva1qhZaDDzx7ssD6565IlpCg24ayIFbcaC7tY8Tc=;
+  b=afaV5wieNPUjxu0caJC6JdakAXQOqaG+mJP11E9sBOfdvxW/FCdDmoSq
+   uszGkpjb5nf3De548PRwyr8tA0gjYkdzZijT5eCkTI9MaUL7wuDEK5FNd
+   DHxxEedinEuG50v1wryTy8tuS2GfxLpPE0gycyCpJAkwIvhrwC+gn8YZP
+   vqGEDAZKZz5uKM+4zWczaOB+RJUrHWVl1v9DiPG/G1MsaoSG/5NPhScuG
+   JcNKVf2MOUenZM/iTJdfierEPIRgcSWgA7CVeokYeMdRvPe3t3BpDN/xD
+   57LDEQ+dPBOukc9S9pF7aZDWoHCdzdL+VmK/32YN6VaBwDrOJGpoZ9vaZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="376747252"
+X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
+   d="scan'208";a="376747252"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2022 07:44:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="620587303"
+X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
+   d="scan'208";a="620587303"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 26 Nov 2022 07:43:54 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oyxLL-000Bco-1n;
+        Sat, 26 Nov 2022 17:43:51 +0200
+Date:   Sat, 26 Nov 2022 17:43:51 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
+        alsa-devel@alsa-project.org, linux-staging@lists.linux.dev,
+        linux-pwm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-i2c@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-leds@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-serial@vger.kernel.org, linux-input@vger.kernel.org,
+        Grant Likely <grant.likely@linaro.org>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-actions@lists.infradead.org, linux-gpio@vger.kernel.org,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        gregkh@linuxfoundation.org, linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Purism Kernel Team <kernel@puri.sm>,
+        patches@opensource.cirrus.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>, linux-crypto@vger.kernel.org,
+        kernel@pengutronix.de, netdev@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
+Message-ID: <Y4I0N3KpU/LSJYpd@smile.fi.intel.com>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221122185818.3740200d@jic23-huawei>
+ <20221122201654.5rdaisqho33buibj@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <7c38ad68-49cb-0f8a-18a4-fa78f0429bdd@roeck-us.net>
-Jabber-ID: thomas@t-8ch.de
-X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
-X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221122201654.5rdaisqho33buibj@pengutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2022-11-25 17:46-0800, Guenter Roeck wrote:
-> On 11/25/22 17:00, Thomas Weißschuh wrote:
->> On 2022-11-25 16:37-0800, Guenter Roeck wrote:
->>> On 11/25/22 14:23, Thomas Weißschuh wrote:
->>>> This synchronizes the information reported by ioctl and sysfs.
->>>> The mismatch is confusing because "wdctl" from util-linux uses the ioctl
->>>> when used with root privileges and sysfs without.
->>>> 
->>>> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
->>>> 
->>>> ---
->>>> 
->>>> Userspace implementation:
->>>> 
->>>> https://github.com/util-linux/util-linux/pull/1927
->>>> ---
->>>>    drivers/watchdog/watchdog_dev.c | 10 ++++++++++
->>>>    1 file changed, 10 insertions(+)
->>>> 
->>>> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
->>>> index 55574ed42504..88c76e27873c 100644
->>>> --- a/drivers/watchdog/watchdog_dev.c
->>>> +++ b/drivers/watchdog/watchdog_dev.c
->>>> @@ -555,6 +555,15 @@ static ssize_t identity_show(struct device *dev, struct device_attribute *attr,
->>>>    }
->>>>    static DEVICE_ATTR_RO(identity);
->>>> +static ssize_t firmware_version_show(struct device *dev, struct device_attribute *attr,
->>>> +				     char *buf)
->>>> +{
->>>> +	struct watchdog_device *wdd = dev_get_drvdata(dev);
->>>> +
->>>> +	return sysfs_emit(buf, "%d\n", wdd->info->firmware_version);
->>>> +}
->>>> +static DEVICE_ATTR_RO(firmware_version);
->>>> +
->>>>    static ssize_t state_show(struct device *dev, struct device_attribute *attr,
->>>>    				char *buf)
->>>>    {
->>>> @@ -618,6 +627,7 @@ static umode_t wdt_is_visible(struct kobject *kobj, struct attribute *attr,
->>>>    static struct attribute *wdt_attrs[] = {
->>>>    	&dev_attr_state.attr,
->>>>    	&dev_attr_identity.attr,
->>>> +	&dev_attr_firmware_version.attr,
->>>>    	&dev_attr_timeout.attr,
->>>>    	&dev_attr_min_timeout.attr,
->>>>    	&dev_attr_max_timeout.attr,
->>>> 
->>>> base-commit: 0b1dcc2cf55ae6523c6fbd0d741b3ac28c9f4536
->>> 
->>> I think this conflicts with drivers/watchdog/ziirave_wdt.c which generates its own
->>> firmnware_version attribute.
->> 
->> Indeed, thanks for the catch.
->> 
->> We probably can't change the attribute from ziirave_wdt, which is a bit
->> unfortunate as "firmware_version" would nicely match the name from
->> "struct watchdog_info".
->> 
->> How about "fw_version"?
->> 
+On Tue, Nov 22, 2022 at 09:16:54PM +0100, Uwe Kleine-K�nig wrote:
+> On Tue, Nov 22, 2022 at 06:58:18PM +0000, Jonathan Cameron wrote:
+
+> > Queued all of the below:
+> > with one tweaked as per your suggestion and the highlighted one dropped on basis
+> > I was already carrying the equivalent - as you pointed out.
+> > 
+> > I was already carrying the required dependency.
+> > 
+> > Includes the IIO ones in staging.
+> > 
+
+> > p.s. I perhaps foolishly did this in a highly manual way so as to
+> > also pick up Andy's RB.  So might have dropped one...
 > 
-> I don't have a better idea. Go for it.
+> You could have done:
+> 
+> 	H=$(git rev-parse @)
+> 	b4 am -P 49-190 20221118224540.619276-1-uwe@kleine-koenig.org
+> 	git am ...
+> 	git filter-branch -f --msg-filter "grep -v 'Signed-off-by: Jonathan'; echo 'Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>'; echo 'Signed-off-by: Jonathan Cameron <jic23@kernel.org>'" $H..
+> 
+> (untested, but you get the idea).
 
-Will do.
+That's, for example (just last from the history as is), how I usually do it
+(tested):
 
->> That would match the naming of sysfs attributes from a bunch of other
->> subsystems.
->> 
->> And obviously an addition to Documentation/ABI/testing/sysfs-class-watchdog is
->> also missing from the patch.
->> I'll add it in v2.
+ git filter-branch --msg-filter 'sed -e "/Signed-off-by: Andy Shevchenko/ a Tested-by: Daniel Scally <dan.scally@ideasonboard.com>"' -f HEAD~4..HEAD
 
-Can I put you or Wim as contact into the docs?
 
-It feels weird to have a random drive-by contributor listed there.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thomas
+
