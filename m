@@ -2,127 +2,113 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09513639EFA
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Nov 2022 02:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E8463A59E
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Nov 2022 11:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiK1BgQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 27 Nov 2022 20:36:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
+        id S229905AbiK1KED (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 28 Nov 2022 05:04:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiK1BgO (ORCPT
+        with ESMTP id S230124AbiK1KEC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 27 Nov 2022 20:36:14 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E52AE65;
-        Sun, 27 Nov 2022 17:36:13 -0800 (PST)
-Date:   Mon, 28 Nov 2022 02:36:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1669599371;
-        bh=sHHrSIsccnZzCKQNwO/lZGryhsA4szb1WczJqiHZqkg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fsKQSq71IfzOSi5PvZIhwEcax6W/22PqlvoSDt74GltlAEbM/VfLty1cJKELXlxL5
-         k+u7iPZiOyO/ocqv/4zEy3L6yaCNtdDaLAKngwvp/9bUBfPv3gDQOfU68XdcttQagS
-         cSKHVbJli7bGUhc/sii9ZQIVRHaVpGEoXPH0Xb9M=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] watchdog: core: don't reset KEEPALIVEPING through
- sysfs
-Message-ID: <63e88f05-0431-429b-8285-7dcd7e5782fe@t-8ch.de>
-References: <20221127154559.80899-1-linux@weissschuh.net>
- <6ee65abe-8620-956d-a4a2-4ec5ec6257a5@roeck-us.net>
+        Mon, 28 Nov 2022 05:04:02 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DEC1A079
+        for <linux-watchdog@vger.kernel.org>; Mon, 28 Nov 2022 02:04:01 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id io19so9645306plb.8
+        for <linux-watchdog@vger.kernel.org>; Mon, 28 Nov 2022 02:04:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/IW5LWVVRI9kkHa5NwPWDaXFbPj7S5Bv6GzAU5EdZjU=;
+        b=keSuQkLR1LuBponYgjAFjTjF8JyLLs5E6fzwQSoIquhMstq7nV3WLFgBsIYhttXACY
+         mq5u/vf9XjXqdqtlgCh/GzwcGx7qAiHiXsx43HWcvjX9uqXWnNzkW6FTnrqt57rodg3O
+         tYKLBh4iEU20FPK8678rDVGN7Ae/S/qyy94si2NFcXGDa1E+nC9CtkeIk/TzeY2N0rpN
+         vS7Cr9QuQK+aIiGwyscOGxzvqPRJ1os9DaRs7U9HvT05e3X7nrjevpLhBTFqTTBz5t3Q
+         XwLXzTN6vZciOFA416Qj2y4vgCjRcshY8sY2E5qqnzQQrKP4rIqjKbwa9pqoSYzTUWnl
+         4drg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/IW5LWVVRI9kkHa5NwPWDaXFbPj7S5Bv6GzAU5EdZjU=;
+        b=5peVgByMD5G4N5/TS8VMPM814kGOqaaLKRaKfM3Pr1UBtKfOXnkWWECGxajwwegn3s
+         1nH0YcKqsY0KPnkavx+eS7HhKHwN68fLuIuVOTMZ82t0L0tfpcZQ7PmI2Vapd+/rmtcZ
+         sbE8nQ3yxWyo4GhHocK0c1C8ud2NW+17AGrtPnLj6nDGVNDfnR0/7d5vmpv/vK42a1KX
+         SchSwDapY1Ohw3/J0N/kz5XwKSAFMzRrammpefoH7J5aHTIYqqFVa0L+Q5Q41okCiF/V
+         u6OHr7/DPvvavoW1HLtR4WVsjcr/Raobyj66aUJALclBep3z/Djrcj6ufpTEer5hYtaY
+         a2cg==
+X-Gm-Message-State: ANoB5pk2p5i8qleq7ebln9BMh92eB4HPBER9kGQ7IMeFfFtFv96DmzQT
+        qkC/51q/SJKRoPc0l+j0adKdrui0j4cnXt0BTvQO9A==
+X-Google-Smtp-Source: AA0mqf4Gp+pVhmwbvUZVt7ZQTkdaSastAOQgb0R9mo3rJRs7Clc2ULqM0v3qxeECp9HvfCvmWVzXF67UrXHYTI6k9xc=
+X-Received: by 2002:a17:902:8601:b0:189:7372:144c with SMTP id
+ f1-20020a170902860100b001897372144cmr11515722plo.106.1669629840651; Mon, 28
+ Nov 2022 02:04:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6ee65abe-8620-956d-a4a2-4ec5ec6257a5@roeck-us.net>
-Jabber-ID: thomas@t-8ch.de
-X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
-X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
+References: <20221125112904.48652-1-robert.marko@sartura.hr> <166950120854.13025.2614107746698757914.robh@kernel.org>
+In-Reply-To: <166950120854.13025.2614107746698757914.robh@kernel.org>
+From:   Robert Marko <robert.marko@sartura.hr>
+Date:   Mon, 28 Nov 2022 11:03:49 +0100
+Message-ID: <CA+HBbNEVbu4DEuazeR4MUGoBDvB==iHFQo=+yXDgs8R7E0C-Kg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: watchdog: Convert GPIO binding to json-schema
+To:     Rob Herring <robh@kernel.org>
+Cc:     luka.perkov@sartura.hr, linux-kernel@vger.kernel.org,
+        linux@roeck-us.net, devicetree@vger.kernel.org,
+        wim@linux-watchdog.org, robh+dt@kernel.org,
+        linux-watchdog@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2022-11-27 08:47-0800, Guenter Roeck wrote:
-> On 11/27/22 07:45, Thomas Weißschuh wrote:
->> Reading the watchdog status via ioctl(WDIOC_GETSTATUS) or sysfs will
->> reset the status bit KEEPALIVEPING.
->> 
->> This is done so an application can validate that the watchdog was pinged
->> since the last read of the status.
->> 
->> For the ioctl-based interface this is fine as only one application can
->> manage a watchdog interface at a time, so it can properly handle this
->> implicit state modification.
->> 
->> The sysfs "status" file however is world-readable. This means that the
->> watchdog state can be modified by any other unprivileged process on the
->> system.
->> 
->> As the sysfs interface can also not be used to set this bit, let's
->> remove the capability to clear it.
->> 
->> Fixes: 90b826f17a4e ("watchdog: Implement status function in watchdog core")
->> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
->> 
->> ---
->> 
->> I was not able to find an application (besides wdctl) that uses this
->> bit. But if applications are to use it, it should probably be reliable.
->> 
->> Other possible solutions I can think of:
->> * Only reset the bit when the file opened privileged
->> * Only reset the bit when the file opened writable
->> 
-> 
-> All suggested solutions would be changing the ABI, which would be problematic.
-> 
-> As you have proposed elsewhere, it is possible for applications to chose where
-> to get the status from: sysfs or ioctl. It may well be that there is some
-> application out there which uses the sysfs attribute to read the status
-> and the ioctl otherwise. That would be odd, but possible.
-> 
-> Also, I can not imagine a real world use except for maybe reading the status
-> bit using sysfs from one application and checking if the watchdog demon actually
-> pinged it as it should ... but that is exactly what you are trying to disable
-> here.
+On Sat, Nov 26, 2022 at 11:25 PM Rob Herring <robh@kernel.org> wrote:
+>
+>
+> On Fri, 25 Nov 2022 12:29:04 +0100, Robert Marko wrote:
+> > Convert the DT binding for GPIO WDT to JSON schema.
+> >
+> > Cc: luka.perkov@sartura.hr
+> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> > ---
+> >  .../devicetree/bindings/watchdog/gpio-wdt.txt | 28 ----------
+> >  .../bindings/watchdog/gpio-wdt.yaml           | 55 +++++++++++++++++++
+> >  2 files changed, 55 insertions(+), 28 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
+> >  create mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.yaml
+> >
+>
+> Running 'make dtbs_check' with the schema in this patch gives the
+> following warnings. Consider if they are expected or the schema is
+> incorrect. These may not be new warnings.
+>
+> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+> This will change in the future.
+>
+> Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221125112904.48652-1-robert.marko@sartura.hr
+>
+>
+> watchdog-gpio: Unevaluated properties are not allowed ('always-enabled' was unexpected)
+>         arch/arm64/boot/dts/freescale/imx8mm-data-modul-edm-sbc.dtb
 
-Good point.
 
-> Overall, this is probably the least valuable status bit. Any application should
-> know if it pinged the watchdog or not.
-> 
-> So: What real world problem have you observed that you are trying to solve ?
-> If there is no real observed problem, we should not entertain changing the ABI.
-> Actually, we can not change the ABI We would have to add another non-invasive
-> attribute that doesn't change the status when read. That should really be
-> worth the trouble.
+This is expected as always-enabled was not documented in TXT bindings
+nor the driver actually parses it,
+it is looking for always-running only.
 
-I have not observed a real problem, only weird behavior while working on wdctl.
-From this I figured that this could be a problem in case another, malicious or broken
-process accesses the state file and resets the status bit.
-
-To make you aware of this observation I sent the RFC patch.
-
-If you think it's not a problem worth fixing this patch can be dropped.
-
-> Guenter
-> 
->> Instead of using a status bit to check if the watchdog was pinged it
->> would probably be more robust to use a sequence counter or timestamp.
->> Especially as it seems more operations are being exposed over sysfs over
->> time.
->> 
->> I'm not sure it's worth it though.
->> ---
->>   Documentation/ABI/testing/sysfs-class-watchdog |  3 ++-
->>   drivers/watchdog/watchdog_dev.c                | 13 +++++++++----
->>   2 files changed, 11 insertions(+), 5 deletions(-)
->> 
->> [..]
+Regards,
+Robert
+-- 
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura Ltd.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
