@@ -2,137 +2,127 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925EB639E3F
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Nov 2022 00:42:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09513639EFA
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Nov 2022 02:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiK0XmI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 27 Nov 2022 18:42:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
+        id S229626AbiK1BgQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 27 Nov 2022 20:36:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiK0XmH (ORCPT
+        with ESMTP id S229475AbiK1BgO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 27 Nov 2022 18:42:07 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299BABCA4;
-        Sun, 27 Nov 2022 15:42:04 -0800 (PST)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 10D24240003;
-        Sun, 27 Nov 2022 23:42:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1669592523;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vr+0RXVT0QhN4P9EN7mtZrpAeJNmfR3sW3a2tBYH+zY=;
-        b=VJ8yTG47eVHgrCKk0a0PLYmFtgDwmiO66UH27wdkk6Pa6HQMWkpiETpjIPZbb/xpJrSSDT
-        95r+xqZHOHXqvHWEz8V2FE/d6TtsIjlNvtQY7tjOetcdgsP2heQZ041+rJD4U7Qw8gHtFl
-        +5LAOzGY/D45zyIRRb/IlCorsTF6uqdZrMLNFMfFAKf4AmtRkakdBpfm3jOXPmFPHmPegF
-        jsY267+Exm06COkQ3afJxRm44zIQoCtX1xoJUxpS07cNidzwBzaeMtUnxjJWAYZEL+r/a7
-        DaCjO18yF/tWdSH0xQU89Ne3SLlcVIesSdnCcaCZQ51zdnlZHfKsMeKLw+AJQQ==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Subject: Re: [PATCH 1/2] ARM: dts: armada-xp: add interrupts for watchdog
-In-Reply-To: <0308a842-efcb-d4a0-f17c-2b0bf12c9dfb@alliedtelesis.co.nz>
-References: <20220211003257.2037332-1-chris.packham@alliedtelesis.co.nz>
- <20220211003257.2037332-2-chris.packham@alliedtelesis.co.nz>
- <87o839jw4p.fsf@BL-laptop>
- <0308a842-efcb-d4a0-f17c-2b0bf12c9dfb@alliedtelesis.co.nz>
-Date:   Mon, 28 Nov 2022 00:42:01 +0100
-Message-ID: <87fse49d86.fsf@BL-laptop>
+        Sun, 27 Nov 2022 20:36:14 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E52AE65;
+        Sun, 27 Nov 2022 17:36:13 -0800 (PST)
+Date:   Mon, 28 Nov 2022 02:36:02 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1669599371;
+        bh=sHHrSIsccnZzCKQNwO/lZGryhsA4szb1WczJqiHZqkg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fsKQSq71IfzOSi5PvZIhwEcax6W/22PqlvoSDt74GltlAEbM/VfLty1cJKELXlxL5
+         k+u7iPZiOyO/ocqv/4zEy3L6yaCNtdDaLAKngwvp/9bUBfPv3gDQOfU68XdcttQagS
+         cSKHVbJli7bGUhc/sii9ZQIVRHaVpGEoXPH0Xb9M=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] watchdog: core: don't reset KEEPALIVEPING through
+ sysfs
+Message-ID: <63e88f05-0431-429b-8285-7dcd7e5782fe@t-8ch.de>
+References: <20221127154559.80899-1-linux@weissschuh.net>
+ <6ee65abe-8620-956d-a4a2-4ec5ec6257a5@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6ee65abe-8620-956d-a4a2-4ec5ec6257a5@roeck-us.net>
+Jabber-ID: thomas@t-8ch.de
+X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
+X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Chris Packham <Chris.Packham@alliedtelesis.co.nz> writes:
+On 2022-11-27 08:47-0800, Guenter Roeck wrote:
+> On 11/27/22 07:45, Thomas Weißschuh wrote:
+>> Reading the watchdog status via ioctl(WDIOC_GETSTATUS) or sysfs will
+>> reset the status bit KEEPALIVEPING.
+>> 
+>> This is done so an application can validate that the watchdog was pinged
+>> since the last read of the status.
+>> 
+>> For the ioctl-based interface this is fine as only one application can
+>> manage a watchdog interface at a time, so it can properly handle this
+>> implicit state modification.
+>> 
+>> The sysfs "status" file however is world-readable. This means that the
+>> watchdog state can be modified by any other unprivileged process on the
+>> system.
+>> 
+>> As the sysfs interface can also not be used to set this bit, let's
+>> remove the capability to clear it.
+>> 
+>> Fixes: 90b826f17a4e ("watchdog: Implement status function in watchdog core")
+>> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+>> 
+>> ---
+>> 
+>> I was not able to find an application (besides wdctl) that uses this
+>> bit. But if applications are to use it, it should probably be reliable.
+>> 
+>> Other possible solutions I can think of:
+>> * Only reset the bit when the file opened privileged
+>> * Only reset the bit when the file opened writable
+>> 
+> 
+> All suggested solutions would be changing the ABI, which would be problematic.
+> 
+> As you have proposed elsewhere, it is possible for applications to chose where
+> to get the status from: sysfs or ioctl. It may well be that there is some
+> application out there which uses the sysfs attribute to read the status
+> and the ioctl otherwise. That would be odd, but possible.
+> 
+> Also, I can not imagine a real world use except for maybe reading the status
+> bit using sysfs from one application and checking if the watchdog demon actually
+> pinged it as it should ... but that is exactly what you are trying to disable
+> here.
 
-> Hi Gregory,
->
-> On 15/02/22 04:39, Gregory CLEMENT wrote:
->> Hello Chris,
->>
->>> The first interrupt is for the regular watchdog timeout. Normally the
->>> RSTOUT line will trigger a reset before this interrupt fires but on
->>> systems with a non-standard reset it may still trigger.
->>>
->>> The second interrupt is for a timer1 which is used as a pre-timeout for
->>> the watchdog.
->>>
->>> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
->> Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
->>
->> To keep bisectability this patch should be merged after the driver
->> patch.
->>
->> Thanks,
->>
->> Gregory
->
-> The driver changes were merged a while back. Looks like your intention 
-> was for this to go in via the watchdog tree but that never happened. 
-> Could you take it through your tree now? Probably won't be until 6.2 now 
-> but that's fine.
+Good point.
 
+> Overall, this is probably the least valuable status bit. Any application should
+> know if it pinged the watchdog or not.
+> 
+> So: What real world problem have you observed that you are trying to solve ?
+> If there is no real observed problem, we should not entertain changing the ABI.
+> Actually, we can not change the ABI We would have to add another non-invasive
+> attribute that doesn't change the status when read. That should really be
+> worth the trouble.
 
-Applied on mvebu/dt64
+I have not observed a real problem, only weird behavior while working on wdctl.
+From this I figured that this could be a problem in case another, malicious or broken
+process accesses the state file and resets the status bit.
 
-Thanks and sorry for having missing the fact that it was not applied.
+To make you aware of this observation I sent the RFC patch.
 
-Gregory
+If you think it's not a problem worth fixing this patch can be dropped.
 
-
->
->>
->>> ---
->>>   arch/arm/boot/dts/armada-xp-98dx3236.dtsi | 1 +
->>>   arch/arm/boot/dts/armada-xp.dtsi          | 1 +
->>>   2 files changed, 2 insertions(+)
->>>
->>> diff --git a/arch/arm/boot/dts/armada-xp-98dx3236.dtsi b/arch/arm/boot/dts/armada-xp-98dx3236.dtsi
->>> index 38a052a0312d..0e561dfc0ca9 100644
->>> --- a/arch/arm/boot/dts/armada-xp-98dx3236.dtsi
->>> +++ b/arch/arm/boot/dts/armada-xp-98dx3236.dtsi
->>> @@ -286,6 +286,7 @@ &watchdog {
->>>   	compatible = "marvell,armada-xp-wdt";
->>>   	clocks = <&coreclk 2>, <&refclk>;
->>>   	clock-names = "nbclk", "fixed";
->>> +	interrupts = <93>, <38>;
->>>   };
->>>   
->>>   &cpurst {
->>> diff --git a/arch/arm/boot/dts/armada-xp.dtsi b/arch/arm/boot/dts/armada-xp.dtsi
->>> index 6c19984d668e..4297482da62f 100644
->>> --- a/arch/arm/boot/dts/armada-xp.dtsi
->>> +++ b/arch/arm/boot/dts/armada-xp.dtsi
->>> @@ -260,6 +260,7 @@ &watchdog {
->>>   	compatible = "marvell,armada-xp-wdt";
->>>   	clocks = <&coreclk 2>, <&refclk>;
->>>   	clock-names = "nbclk", "fixed";
->>> +	interrupts = <93>, <38>;
->>>   };
->>>   
->>>   &cpurst {
->>> -- 
->>> 2.35.1
->>>
-
--- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+> Guenter
+> 
+>> Instead of using a status bit to check if the watchdog was pinged it
+>> would probably be more robust to use a sequence counter or timestamp.
+>> Especially as it seems more operations are being exposed over sysfs over
+>> time.
+>> 
+>> I'm not sure it's worth it though.
+>> ---
+>>   Documentation/ABI/testing/sysfs-class-watchdog |  3 ++-
+>>   drivers/watchdog/watchdog_dev.c                | 13 +++++++++----
+>>   2 files changed, 11 insertions(+), 5 deletions(-)
+>> 
+>> [..]
