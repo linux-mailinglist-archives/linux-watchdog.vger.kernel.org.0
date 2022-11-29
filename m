@@ -2,113 +2,149 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E8463A59E
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Nov 2022 11:04:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0A563B93B
+	for <lists+linux-watchdog@lfdr.de>; Tue, 29 Nov 2022 05:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiK1KED (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 28 Nov 2022 05:04:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
+        id S235410AbiK2Exo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 28 Nov 2022 23:53:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiK1KEC (ORCPT
+        with ESMTP id S235422AbiK2Exc (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 28 Nov 2022 05:04:02 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DEC1A079
-        for <linux-watchdog@vger.kernel.org>; Mon, 28 Nov 2022 02:04:01 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id io19so9645306plb.8
-        for <linux-watchdog@vger.kernel.org>; Mon, 28 Nov 2022 02:04:01 -0800 (PST)
+        Mon, 28 Nov 2022 23:53:32 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AAB1BE8D;
+        Mon, 28 Nov 2022 20:53:30 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id v81so13998397oie.5;
+        Mon, 28 Nov 2022 20:53:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/IW5LWVVRI9kkHa5NwPWDaXFbPj7S5Bv6GzAU5EdZjU=;
-        b=keSuQkLR1LuBponYgjAFjTjF8JyLLs5E6fzwQSoIquhMstq7nV3WLFgBsIYhttXACY
-         mq5u/vf9XjXqdqtlgCh/GzwcGx7qAiHiXsx43HWcvjX9uqXWnNzkW6FTnrqt57rodg3O
-         tYKLBh4iEU20FPK8678rDVGN7Ae/S/qyy94si2NFcXGDa1E+nC9CtkeIk/TzeY2N0rpN
-         vS7Cr9QuQK+aIiGwyscOGxzvqPRJ1os9DaRs7U9HvT05e3X7nrjevpLhBTFqTTBz5t3Q
-         XwLXzTN6vZciOFA416Qj2y4vgCjRcshY8sY2E5qqnzQQrKP4rIqjKbwa9pqoSYzTUWnl
-         4drg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=whHpAD3OgAxM38NTZimfOlDm36mCTHAk+45ttz3B/SI=;
+        b=Zrf741GO1zpehoZPfJoNmwgz5emwxbE1uw8lS+3OT4eq45gLAsLY0KHJYuNasHevwh
+         DebzFcveNQ92gbguplGe6oLahRWKBB3wcQBwo9AbzpaIS+COrUnnJaExeiw90lpp8a+D
+         /kcLkTdTSPPUlqJm0JukSM+SoX4s8nmMqvJAoQKIDD/zltKJfFnDdsdJl4vrLhERTBOJ
+         Fhgcnrs6U7WNbwLVeh1XVmvr718E5UZYS97miStBl47l2YJoZiTFlRLZMViR4c4HJBZq
+         UEczDIMGcFsLEghwl4k0gAdwxxeEx9n2bTdvkQdg1zbKiXgO3Z75TIhQljCkFwlMTzBC
+         qnLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/IW5LWVVRI9kkHa5NwPWDaXFbPj7S5Bv6GzAU5EdZjU=;
-        b=5peVgByMD5G4N5/TS8VMPM814kGOqaaLKRaKfM3Pr1UBtKfOXnkWWECGxajwwegn3s
-         1nH0YcKqsY0KPnkavx+eS7HhKHwN68fLuIuVOTMZ82t0L0tfpcZQ7PmI2Vapd+/rmtcZ
-         sbE8nQ3yxWyo4GhHocK0c1C8ud2NW+17AGrtPnLj6nDGVNDfnR0/7d5vmpv/vK42a1KX
-         SchSwDapY1Ohw3/J0N/kz5XwKSAFMzRrammpefoH7J5aHTIYqqFVa0L+Q5Q41okCiF/V
-         u6OHr7/DPvvavoW1HLtR4WVsjcr/Raobyj66aUJALclBep3z/Djrcj6ufpTEer5hYtaY
-         a2cg==
-X-Gm-Message-State: ANoB5pk2p5i8qleq7ebln9BMh92eB4HPBER9kGQ7IMeFfFtFv96DmzQT
-        qkC/51q/SJKRoPc0l+j0adKdrui0j4cnXt0BTvQO9A==
-X-Google-Smtp-Source: AA0mqf4Gp+pVhmwbvUZVt7ZQTkdaSastAOQgb0R9mo3rJRs7Clc2ULqM0v3qxeECp9HvfCvmWVzXF67UrXHYTI6k9xc=
-X-Received: by 2002:a17:902:8601:b0:189:7372:144c with SMTP id
- f1-20020a170902860100b001897372144cmr11515722plo.106.1669629840651; Mon, 28
- Nov 2022 02:04:00 -0800 (PST)
+        bh=whHpAD3OgAxM38NTZimfOlDm36mCTHAk+45ttz3B/SI=;
+        b=034bsmLwcZXc2yVBI82XKHO4NQ6LetAuQZuyNMjURlE5X7fl7ehG5LAD0CC6176CwY
+         6fqCnohsKnduA0hNSwq+ikzyH76GG76QWeKjTxj9vNVLG1Lpm8PVabtdg4U+u8BM20gw
+         gRU8KOFOQeIoA/yEhE9H61utq/o8I8elFwqqlXFKjokHF4ui5QscLb49QALNXgCISvuP
+         9umVWp5MBPc4gyWnINGXNHiXWgC/leTI8P0D/mUoa0hsJ518BSqoMc4TMkgmNCtQzgQW
+         9a8eG3ATjwOiplz7q5SH/vQ5tXF8qsv935jFu7sp4lNQHhOdCcclzDW3D+yG1ZrANAAY
+         k5gA==
+X-Gm-Message-State: ANoB5pnQXMY2J4ywzkI3Gvn+Nj6DhK4RhBExxVQ7jUFSFSQr4TfpLjIc
+        WffywaAkH4ZCCQWWDrSHSxgs33zKR/o=
+X-Google-Smtp-Source: AA0mqf6g9n5aR+1CN5N311LT6YEZQVNDGGvqzGRo4/FGOfszpDHKoXSfOk6JsDgcQftZANMbV5LZTw==
+X-Received: by 2002:a05:6808:2012:b0:35b:bcb3:46f with SMTP id q18-20020a056808201200b0035bbcb3046fmr2697894oiw.86.1669697610292;
+        Mon, 28 Nov 2022 20:53:30 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t15-20020a9d774f000000b0066c495a651dsm5473516otl.38.2022.11.28.20.53.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 20:53:29 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <88eb9941-7bf4-3220-ff8a-7e9b3f4bb01b@roeck-us.net>
+Date:   Mon, 28 Nov 2022 20:53:27 -0800
 MIME-Version: 1.0
-References: <20221125112904.48652-1-robert.marko@sartura.hr> <166950120854.13025.2614107746698757914.robh@kernel.org>
-In-Reply-To: <166950120854.13025.2614107746698757914.robh@kernel.org>
-From:   Robert Marko <robert.marko@sartura.hr>
-Date:   Mon, 28 Nov 2022 11:03:49 +0100
-Message-ID: <CA+HBbNEVbu4DEuazeR4MUGoBDvB==iHFQo=+yXDgs8R7E0C-Kg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: watchdog: Convert GPIO binding to json-schema
-To:     Rob Herring <robh@kernel.org>
-Cc:     luka.perkov@sartura.hr, linux-kernel@vger.kernel.org,
-        linux@roeck-us.net, devicetree@vger.kernel.org,
-        wim@linux-watchdog.org, robh+dt@kernel.org,
-        linux-watchdog@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/2] watchdog: rzg2l_wdt: Issue a reset before we put the
+ PM clocks
+Content-Language: en-US
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+References: <20221117114907.138583-1-fabrizio.castro.jz@renesas.com>
+ <20221117114907.138583-2-fabrizio.castro.jz@renesas.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221117114907.138583-2-fabrizio.castro.jz@renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Nov 26, 2022 at 11:25 PM Rob Herring <robh@kernel.org> wrote:
->
->
-> On Fri, 25 Nov 2022 12:29:04 +0100, Robert Marko wrote:
-> > Convert the DT binding for GPIO WDT to JSON schema.
-> >
-> > Cc: luka.perkov@sartura.hr
-> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> > ---
-> >  .../devicetree/bindings/watchdog/gpio-wdt.txt | 28 ----------
-> >  .../bindings/watchdog/gpio-wdt.yaml           | 55 +++++++++++++++++++
-> >  2 files changed, 55 insertions(+), 28 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.txt
-> >  create mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.yaml
-> >
->
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
->
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
->
-> Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221125112904.48652-1-robert.marko@sartura.hr
->
->
-> watchdog-gpio: Unevaluated properties are not allowed ('always-enabled' was unexpected)
->         arch/arm64/boot/dts/freescale/imx8mm-data-modul-edm-sbc.dtb
+On 11/17/22 03:49, Fabrizio Castro wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> On RZ/Five SoC it was observed that setting timeout (to say 1 sec) wouldn't
+> reset the system.
+> 
+> The procedure described in the HW manual (Procedure for Activating Modules)
+> for activating the target module states we need to start supply of the
+> clock module before applying the reset signal. This patch makes sure we
+> follow the same procedure to clear the registers of the WDT module, fixing
+> the issues seen on RZ/Five SoC.
+> 
+> While at it re-used rzg2l_wdt_stop() in rzg2l_wdt_set_timeout() as it has
+> the same function calls.
+> 
+> Fixes: 4055ee81009e ("watchdog: rzg2l_wdt: Add set_timeout callback")
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-This is expected as always-enabled was not documented in TXT bindings
-nor the driver actually parses it,
-it is looking for always-running only.
+> ---
+>   drivers/watchdog/rzg2l_wdt.c | 10 ++++------
+>   1 file changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
+> index 974a4194a8fd..ceca42db0837 100644
+> --- a/drivers/watchdog/rzg2l_wdt.c
+> +++ b/drivers/watchdog/rzg2l_wdt.c
+> @@ -115,25 +115,23 @@ static int rzg2l_wdt_stop(struct watchdog_device *wdev)
+>   {
+>   	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+>   
+> -	pm_runtime_put(wdev->parent);
+>   	reset_control_reset(priv->rstc);
+> +	pm_runtime_put(wdev->parent);
+>   
+>   	return 0;
+>   }
+>   
+>   static int rzg2l_wdt_set_timeout(struct watchdog_device *wdev, unsigned int timeout)
+>   {
+> -	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> -
+>   	wdev->timeout = timeout;
+>   
+>   	/*
+>   	 * If the watchdog is active, reset the module for updating the WDTSET
+> -	 * register so that it is updated with new timeout values.
+> +	 * register by calling rzg2l_wdt_stop() (which internally calls reset_control_reset()
+> +	 * to reset the module) so that it is updated with new timeout values.
+>   	 */
+>   	if (watchdog_active(wdev)) {
+> -		pm_runtime_put(wdev->parent);
+> -		reset_control_reset(priv->rstc);
+> +		rzg2l_wdt_stop(wdev);
+>   		rzg2l_wdt_start(wdev);
+>   	}
+>   
 
-Regards,
-Robert
--- 
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura Ltd.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
