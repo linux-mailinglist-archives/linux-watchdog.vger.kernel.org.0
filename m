@@ -2,113 +2,78 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC2A642498
-	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Dec 2022 09:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD08642DCE
+	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Dec 2022 17:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbiLEIav (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 5 Dec 2022 03:30:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
+        id S232063AbiLEQu6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 5 Dec 2022 11:50:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbiLEIau (ORCPT
+        with ESMTP id S232827AbiLEQuR (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:30:50 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B8515FFE;
-        Mon,  5 Dec 2022 00:30:49 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 5EF9924E254;
-        Mon,  5 Dec 2022 16:30:47 +0800 (CST)
-Received: from EXMBX161.cuchost.com (172.16.6.71) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 5 Dec
- 2022 16:30:47 +0800
-Received: from [192.168.125.128] (113.72.146.33) by EXMBX161.cuchost.com
- (172.16.6.71) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 5 Dec
- 2022 16:30:46 +0800
-Message-ID: <8e75f250-7f1b-ba79-77c8-09ec801e9c05@starfivetech.com>
-Date:   Mon, 5 Dec 2022 16:27:31 +0800
+        Mon, 5 Dec 2022 11:50:17 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA172CE10
+        for <linux-watchdog@vger.kernel.org>; Mon,  5 Dec 2022 08:49:15 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso10538225wmo.1
+        for <linux-watchdog@vger.kernel.org>; Mon, 05 Dec 2022 08:49:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=Z2wBWagY9UnEZ+M5YPDdGkg6nVUsQfYS1BhjpcwGEao2GhG01+Mm/qvV+1fKOq1lbu
+         EFS78qR+UGfEwXQVt6IRXk6jTGT8mo+KAwwjj0fZxBmjE1jztugOoJP4/rka0x6XFhxu
+         W6iUCvsIDO6eHcdCHFvdIDlIVpJCsES5SD3xSnapoHClZmLcHlXbjXoeix+TX99ab7ry
+         BqOOHDFzUlmJeyU3OvUitATOsPkFA0DOczbi/Afsjm9NHI/YtApk72ny0qjFhFTXO+XP
+         yKXAtBeMHMlIwSKvmuRpEfOfWiK9b959mo8P7Fx64Ot+uHxQXUUrd10S+RG2s/yWLOX2
+         BSUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=SJ4TG/pot2tKtv9UyASzDO6fkSasX8YnYbLhrMhfmOr76glYFbitor84/fDMSXw6ai
+         EYvaOKDRRoUHP4QedjN80uFDdMVvAg0JnRcTXFixEfoUbXbGmdHl6kAVPtq+kZs8817w
+         ZFf71U6hlmaeKj2SUCJRLeUzfZbnsugLNXJJL2o8o+n/Vx8L671Ou19fMnQqP0cMs2BY
+         eS7MJdz4T3Qiep/286v/53nm2CD2nb60hC9OQdQjzqft8MZ46aK9sZatklqKm5LOmRps
+         l8I/JlubnvL03MhSm/9VuKSN6yR624TpsfI9d1t+QuGHgwPeTWEuInBJUmePCtGJdfuY
+         S0vw==
+X-Gm-Message-State: ANoB5plt1nthsOAIXRbQNb9hpvTXz7cXOw75p6MS/gULpSXCj9Y79u5V
+        1ECU2oBmWq9ATm8uhvcUUfLUhs1U0a/RobGlS8EDJkgjw0A=
+X-Google-Smtp-Source: AA0mqf6LlThRqxALxahU+d5CDCL5XgA0Iri4oQFEx6hETTBFBZxUw9iI5CXyM5b3WvWotoaM22oBvK+CwFtVO/zgxX4=
+X-Received: by 2002:a7b:c8d0:0:b0:3cf:ca91:7094 with SMTP id
+ f16-20020a7bc8d0000000b003cfca917094mr60628535wml.24.1670258943314; Mon, 05
+ Dec 2022 08:49:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v1 3/3] riscv: dts: starfive: jh7110: Add watchdog node
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        <linux-watchdog@vger.kernel.org>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-References: <20221202093943.149674-1-xingyu.wu@starfivetech.com>
- <20221202093943.149674-4-xingyu.wu@starfivetech.com>
- <66e66749-cc0f-f147-2648-03b52f95cca5@linaro.org>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <66e66749-cc0f-f147-2648-03b52f95cca5@linaro.org>
+Received: by 2002:a05:6000:5c1:0:0:0:0 with HTTP; Mon, 5 Dec 2022 08:49:02
+ -0800 (PST)
+Reply-To: phmanu14@hotmail.com
+From:   Philip Manul <zagbamdjala@gmail.com>
+Date:   Mon, 5 Dec 2022 08:49:02 -0800
+Message-ID: <CAPCnorG0wZz4L65xmUUzHEvxvuhrsq0nQnSPJqno3Ah89AhSwA@mail.gmail.com>
+Subject: REP:
+To:     in <in@proposal.net>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.146.33]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX161.cuchost.com
- (172.16.6.71)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2022/12/2 18:48, Krzysztof Kozlowski wrote:
-> On 02/12/2022 10:39, xingu.wu wrote:
->> From: Xingyu Wu <xingyu.wu@starfivetech.com>
->> 
->> This adds the watchdog node for the Starfive JH7110 SoC.
-> 
-> Do not use "This commit/patch".
-> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-
-Will drop 'This'.
-
-> 
->> 
->> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->> ---
->>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 14 ++++++++++++++
->>  1 file changed, 14 insertions(+)
->> 
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> index c22e8f1d2640..22f5a37d691e 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> @@ -433,5 +433,19 @@ uart5: serial@12020000 {
->>  			reg-shift = <2>;
->>  			status = "disabled";
->>  		};
->> +
->> +		wdog: watchdog@13070000 {
->> +			compatible = "starfive,jh7110-wdt";
->> +			reg = <0x0 0x13070000 0x0 0x10000>;
->> +			interrupts = <68>;
->> +			clocks = <&syscrg JH7110_SYSCLK_WDT_CORE>,
->> +				 <&syscrg JH7110_SYSCLK_WDT_APB>;
->> +			clock-names = "core_clk", "apb_clk";
->> +			resets = <&syscrg JH7110_SYSRST_WDT_APB>,
->> +				 <&syscrg JH7110_SYSRST_WDT_CORE>;
->> +			reset-names = "rst_apb", "rst_core";
->> +			timeout-sec = <15>;
->> +			status = "okay";
-> 
-> Why? okay is by default
-> 
-
-Will drop it.
-
-Best regards,
-Xingyu Wu
-
+--=20
+Guten tag,
+Mein Name ist Philip Manul. Ich bin von Beruf Rechtsanwalt. Ich habe
+einen verstorbenen Kunden, der zuf=C3=A4llig denselben Namen mit Ihnen
+teilt. Ich habe alle Papierdokumente in meinem Besitz. Ihr Verwandter,
+mein verstorbener Kunde, hat hier in meinem Land einen nicht
+beanspruchten Fonds zur=C3=BCckgelassen. Ich warte auf Ihre Antwort zum
+Verfahren.
+Philip Manul.
