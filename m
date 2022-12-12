@@ -2,237 +2,129 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 056D664A4E9
-	for <lists+linux-watchdog@lfdr.de>; Mon, 12 Dec 2022 17:36:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDA664A50A
+	for <lists+linux-watchdog@lfdr.de>; Mon, 12 Dec 2022 17:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232339AbiLLQfr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 12 Dec 2022 11:35:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39610 "EHLO
+        id S232770AbiLLQjH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 12 Dec 2022 11:39:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232194AbiLLQfp (ORCPT
+        with ESMTP id S232821AbiLLQih (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 12 Dec 2022 11:35:45 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7468DB6A
-        for <linux-watchdog@vger.kernel.org>; Mon, 12 Dec 2022 08:35:44 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id y25so292060lfa.9
-        for <linux-watchdog@vger.kernel.org>; Mon, 12 Dec 2022 08:35:44 -0800 (PST)
+        Mon, 12 Dec 2022 11:38:37 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C2214D0E
+        for <linux-watchdog@vger.kernel.org>; Mon, 12 Dec 2022 08:37:03 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id c66so13666955edf.5
+        for <linux-watchdog@vger.kernel.org>; Mon, 12 Dec 2022 08:37:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Z5YdFqvc4mvoUpjnEdg6UwW9ItZt44+OzF74arwCzxM=;
-        b=ta3FbO7eAitz9phNwFQsTIDDNTTY7yhEWS8RRtjq2+yKHaocAr3LuCL5Ab5XaLVwcL
-         NVB+CTo76h+Dxkd9gqxLtuHpDGHO9UiggO+i7WAKyNLP4UfYCJrO4GaGnLfyyMNH/Acf
-         KHXZ41jSMnPI2K8Qnc3TJ9HEEz175tu3FYPWq3/uC9knaS3VGzhCwhPenHWbuEQvnY/D
-         4eM6ZCNlCiyMBafAS/6Juj1ny23kRutmdgztSLI9HzmEBLESIUQ5CJdNqDUPpsPpe4Xl
-         83SZwjs039OX1oAGe+KUM/6iH++7ml/M1+VvXnQqsF6vDTF2uRwjHTCgr0zvysRhyNv4
-         +BZQ==
+        bh=lvYON1Uq6UT3Qph7OPPr0NH47G6rUYR8O1BO9MFwJow=;
+        b=lIFXcScE+1mmzH1SBNLfPzmU2yyZ22FDa7zo6/O0Bw9aIOxDeXxYkEVfus52JWuhda
+         4ouELocZnEhmnwFppolEYq4c3c7RHYAqD4pax4M3unQDLONiM/9+ejXSM9E2FE+Z0v02
+         plxbNMhSLCExfq6g58BwEJLatQLzpt/xLWOhKWfMwSgaHbhPuPfGnoShEU2Q/8V0GhBe
+         I8mO/6POKEHTvHhiQrSmT3i/DlcfyH1o4pAMtSuNXvNoHj+mOy3GKKCsRTSQGVPFd3Z7
+         AQYI0FN6wamo3RnZf0VXDCwVvMRjPWjYDkKYXDeP5o/vQIFIn9FanCQzU/XNFNQHrfWF
+         2geA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Z5YdFqvc4mvoUpjnEdg6UwW9ItZt44+OzF74arwCzxM=;
-        b=NAekyfNRDMWr9I9tNyMrSJIKsfn+TGwKRlijLuNNqGfWsPBkOPbwG1FUJ+Wql3Imqg
-         UnpIl01GC4TXMYYY+brZ0idSP+RczS0JDZyPSmmjEVhWOM2Z0VpuSbGJinbtPEtTsXGv
-         ltcqXHvUTsLqjrLmJIyp+97R+4c9EE5MgwIvoulmOHy2fXqaKvTtQWNfqXoYzH9oc/An
-         zmWMUZypxYF5aq72Jcf788J3V7s6af9ryq2A1BgwHFlGtkSnQddzFO4aoG2zAiMw3jYN
-         jqnCR0AHHxphyutKMrbKJM4dZzxSGMzURrdqHiYX07bGhcHBJ7/Y7Rx4TR8qSViitOdd
-         YBgQ==
-X-Gm-Message-State: ANoB5plkG/IW9lYoFUTsBydOR80NiItks5UcOaZtUcdiLDj3PWdv2/VU
-        vNbUcYjggbAR+CegWWgJahWkZg==
-X-Google-Smtp-Source: AA0mqf44jIvXTV5CtEU//Sp9GXDTVSUtJPBn0HWN1nqPi0vsJZ/SOQX+p/GnzP9eHMnZmqPFBrDvtw==
-X-Received: by 2002:a19:a41a:0:b0:4b5:8fee:1d71 with SMTP id q26-20020a19a41a000000b004b58fee1d71mr3660656lfc.64.1670862944027;
-        Mon, 12 Dec 2022 08:35:44 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v16-20020ac25b10000000b004acff58a951sm29209lfn.133.2022.12.12.08.35.42
+        bh=lvYON1Uq6UT3Qph7OPPr0NH47G6rUYR8O1BO9MFwJow=;
+        b=NxgmBPTlKe1KGzXvCFKmsAG4v+K4TDFY+H6exBJz8Z4AsOlcco0l6SPq4BJRx8ufor
+         ZwSLkbpgl+MIQhjvVzr+kJKT2wAff8kVcCG/M7nWLop+GqdhmPbCW++SEmIicQJseFiT
+         y/si2Q4hm0HjLcVtt6BAvX0PiOIxBhuX+VTNcZFIEN2nAG6KG5AOGiqFKKPGENvsLK3X
+         hrjcc9gl1Crgdo2dh3aO7gB3Ys+dO+RMp2tu97zj/P8SZFvFmtrBx+zduRtqfgUZUGIi
+         jrNllzsgivGqldYg90LZB4NiALO6GR6tckTBAkCxEGziFdjOHPjfuXDvhN/B7/B7g1zI
+         1Pmg==
+X-Gm-Message-State: ANoB5pniT2zDIOU7vqYQrszSEi5S+3i2ihdv4lsq2BhQGi6dYeCDgEHe
+        qV95vR7OYaZkwtyzaf6oudKb6A==
+X-Google-Smtp-Source: AA0mqf5ppTTyM6N0bPOAfBX//eKXVRPakyRimeYdkY/8NocUbAvjnOSiYLmQOcD2W7tmhBu2XO410g==
+X-Received: by 2002:a05:6402:702:b0:46f:68d0:76 with SMTP id w2-20020a056402070200b0046f68d00076mr10093614edx.34.1670863020790;
+        Mon, 12 Dec 2022 08:37:00 -0800 (PST)
+Received: from prec5560.. ([2001:bf7:830:a7a8:ff97:7d8d:1f2e:ffaa])
+        by smtp.gmail.com with ESMTPSA id m15-20020a50930f000000b00463597d2c25sm4051979eda.74.2022.12.12.08.36.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 08:35:43 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: [PATCH 06/12] dt-bindings: watchdog: qcom-wdt: merge MSM timer
-Date:   Mon, 12 Dec 2022 17:35:26 +0100
-Message-Id: <20221212163532.142533-6-krzysztof.kozlowski@linaro.org>
+        Mon, 12 Dec 2022 08:37:00 -0800 (PST)
+From:   Robert Foss <robert.foss@linaro.org>
+To:     Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Grant Likely <grant.likely@linaro.org>
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-actions@lists.infradead.org,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-crypto@vger.kernel.org, chrome-platform@lists.linux.dev,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-input@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-integrity@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-serial@vger.kernel.org, Purism Kernel Team <kernel@puri.sm>,
+        linux-staging@lists.linux.dev, alsa-devel@alsa-project.org,
+        linux-watchdog@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-mtd@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-pwm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-fbdev@vger.kernel.org
+Subject: Re: (subset) [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
+Date:   Mon, 12 Dec 2022 17:36:51 +0100
+Message-Id: <167086288411.3041259.17824406556561546642.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
-References: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Merge Qualcomm MSM timer bindings into watchdog, because the timer
-compatibles are already included here and the hardware is quite similar.
+On Fri, 18 Nov 2022 23:35:34 +0100, Uwe Kleine-König wrote:
+> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+> call-back type") from 2016 there is a "temporary" alternative probe
+> callback for i2c drivers.
+> 
+> This series completes all drivers to this new callback (unless I missed
+> something). It's based on current next/master.
+> A part of the patches depend on commit 662233731d66 ("i2c: core:
+> Introduce i2c_client_get_device_id helper function"), there is a branch that
+> you can pull into your tree to get it:
+> 
+> [...]
 
-While converting the MSM timer bindings, adjust clock-frequency
-property to take only one frequency, instead of two, because:
-1. DT schema does not allow to frequencies,
-2. The Linux timer driver reads only first frequency.
+Applied, thanks!
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/timer/qcom,msm-timer.txt         | 47 ------------------
- .../bindings/watchdog/qcom-wdt.yaml           | 49 +++++++++++++++++++
- 2 files changed, 49 insertions(+), 47 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+Repo: https://cgit.freedesktop.org/drm/drm-misc/
 
-diff --git a/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt b/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
-deleted file mode 100644
-index 5e10c345548f..000000000000
---- a/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
-+++ /dev/null
-@@ -1,47 +0,0 @@
--* MSM Timer
--
--Properties:
--
--- compatible : Should at least contain "qcom,msm-timer". More specific
--               properties specify which subsystem the timers are paired with.
--
--               "qcom,kpss-timer" - krait subsystem
--               "qcom,scss-timer" - scorpion subsystem
--
--- interrupts : Interrupts for the debug timer, the first general purpose
--               timer, and optionally a second general purpose timer, and
--               optionally as well, 2 watchdog interrupts, in that order.
--
--- reg : Specifies the base address of the timer registers.
--
--- clocks: Reference to the parent clocks, one per output clock. The parents
--          must appear in the same order as the clock names.
--
--- clock-names: The name of the clocks as free-form strings. They should be in
--               the same order as the clocks.
--
--- clock-frequency : The frequency of the debug timer and the general purpose
--                    timer(s) in Hz in that order.
--
--Optional:
--
--- cpu-offset : per-cpu offset used when the timer is accessed without the
--               CPU remapping facilities. The offset is
--               cpu-offset + (0x10000 * cpu-nr).
--
--Example:
--
--       timer@200a000 {
--               compatible = "qcom,scss-timer", "qcom,msm-timer";
--               interrupts = <1 1 0x301>,
--                            <1 2 0x301>,
--                            <1 3 0x301>,
--                            <1 4 0x301>,
--                            <1 5 0x301>;
--               reg = <0x0200a000 0x100>;
--               clock-frequency = <19200000>,
--                                 <32768>;
--               clocks = <&sleep_clk>;
--               clock-names = "sleep";
--               cpu-offset = <0x40000>;
--       };
-diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-index b7fc57f4800e..697caf1937cc 100644
---- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-@@ -10,6 +10,9 @@ maintainers:
-   - Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
- 
- properties:
-+  $nodename:
-+    pattern: "^(watchdog|timer)@[0-9a-f]+$"
-+
-   compatible:
-     oneOf:
-       - items:
-@@ -48,6 +51,20 @@ properties:
-   clocks:
-     maxItems: 1
- 
-+  clock-names:
-+    items:
-+      - const: sleep
-+
-+  clock-frequency:
-+    description:
-+      The frequency of the general purpose timer in Hz in that order.
-+
-+  cpu-offset:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      Per-CPU offset used when the timer is accessed without the CPU remapping
-+      facilities. The offset is cpu-offset + (0x10000 * cpu-nr).
-+
-   interrupts:
-     minItems: 1
-     maxItems: 5
-@@ -67,12 +84,27 @@ allOf:
-             const: qcom,kpss-wdt
-     then:
-       properties:
-+        clock-frequency: false
-+        cpu-offset: false
-         interrupts:
-           minItems: 1
-           items:
-             - description: Bark
-             - description: Bite
- 
-+    else:
-+      properties:
-+        interrupts:
-+          minItems: 3
-+          items:
-+            - description: Debug
-+            - description: First general purpose timer
-+            - description: Second general purpose timer
-+            - description: First watchdog
-+            - description: Second watchdog
-+      required:
-+        - clock-frequency
-+
- unevaluatedProperties: false
- 
- examples:
-@@ -86,3 +118,20 @@ examples:
-       interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
-       timeout-sec = <10>;
-     };
-+
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    watchdog@200a000 {
-+      compatible = "qcom,kpss-wdt-ipq8064", "qcom,kpss-timer", "qcom,msm-timer";
-+      interrupts = <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
-+                   <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
-+                   <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
-+                   <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
-+                   <GIC_PPI 5 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>;
-+      reg = <0x0200a000 0x100>;
-+      clock-frequency = <25000000>;
-+      clocks = <&sleep_clk>;
-+      clock-names = "sleep";
-+      cpu-offset = <0x80000>;
-+    };
--- 
-2.34.1
+
+[014/606] drm/bridge: adv7511: Convert to i2c's .probe_new()
+          commit: 1c546894ff82f8b7c070998c03f9b15a3499f326
+[028/606] drm/bridge: parade-ps8622: Convert to i2c's .probe_new()
+          commit: d6b522e9bbb0cca1aeae4ef6188800534794836f
+[035/606] drm/bridge: ti-sn65dsi83: Convert to i2c's .probe_new()
+          commit: 0f6548807fa77e87bbc37964c6b1ed9ba6e1155d
+
+
+
+rob
 
