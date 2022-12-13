@@ -2,84 +2,92 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C528364B8B9
-	for <lists+linux-watchdog@lfdr.de>; Tue, 13 Dec 2022 16:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8ECD64B904
+	for <lists+linux-watchdog@lfdr.de>; Tue, 13 Dec 2022 16:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236116AbiLMPl3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 13 Dec 2022 10:41:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39788 "EHLO
+        id S235427AbiLMP5b (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 13 Dec 2022 10:57:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235909AbiLMPl1 (ORCPT
+        with ESMTP id S234673AbiLMP53 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 13 Dec 2022 10:41:27 -0500
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0709CFD04;
-        Tue, 13 Dec 2022 07:41:27 -0800 (PST)
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-144bd860fdbso13071318fac.0;
-        Tue, 13 Dec 2022 07:41:26 -0800 (PST)
+        Tue, 13 Dec 2022 10:57:29 -0500
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEF91F61E;
+        Tue, 13 Dec 2022 07:57:26 -0800 (PST)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-143ffc8c2b2so13072558fac.2;
+        Tue, 13 Dec 2022 07:57:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SMZg5m2kkmC+J3c6NdCBMZTHPMMEoYm6FhJ/PsvVvOI=;
-        b=YE/ob5cQyXmFmqnu5vme5W4yopcMTrkX5uGXLZJdMuPlSC6RLM0r+C7XfkA1ZPlbWd
-         WU7VWc7Eq/kXfnXTQuJtAOkCCWlPuMv/deFBi2H65DzGrTgzreg/gYhVpGxsNDd4tLPh
-         IJd1/8rMCkjg9WMOZSU2BnWH1tZqwtGLA0XsGsks24+iyaLf9bZXN0OA6LcJbcXr4tjo
-         sC42pXZZSDsHVmgk02NTU93VBJHf5vMS05cHStuTgefcb1sg2HNFEIULXZWS8DSXs3LK
-         AWHwRTc0Mo8T0iKEH0OGuHx1gHkbjLVLvBuj5cwN8aGrAG+hITlvfy8++gGWPFJN3Y2G
-         aXeQ==
-X-Gm-Message-State: ANoB5pkrZDUDaQSCpfj50O3N5IgKx69f/kCn1DF3Hx4Qve3fR2PpxUU0
-        6cnHI1a1bs2zsjTF3V9zzg==
-X-Google-Smtp-Source: AA0mqf5pAu6L6NzuDrAbImuADylEbpTZYnNgBqq6NbglCSwQzMlRUfHMHKfWl3YisslKdA0lRgFr+Q==
-X-Received: by 2002:a05:6871:450c:b0:144:870e:5859 with SMTP id nj12-20020a056871450c00b00144870e5859mr10243145oab.57.1670946086171;
-        Tue, 13 Dec 2022 07:41:26 -0800 (PST)
+        bh=5/0ZaUd0WEu1InS6OXlcKOnl3jQcBGpJUNfyPLpGBMo=;
+        b=P/0g686pBWqVDGJjBGkR1OdUmI+BqIfi7LUGq+RI9gZfJVCCA0CBW0LtoycifUEidt
+         W5I+t6CiW2NMATqp0AChox/fPzTwdKqYYXcG7Ph8SNPk+Z3NFTWARmeNH9SauSVaelo8
+         BQ6SpJqdebbj0GwBxtAzkjvtPUIUobDZLsxtDa7LUT6frAIHQ6l5Qjy1mShn4k95I08z
+         Zj8ioiBheyyohRDdb3YMMfBu0H9nUeV2QxL3GJr17bVpQzPA0TDvXYEN9L2kMiV/J81i
+         uD0KDoG15HSgUtPUQ6t2jOQKF77dCokf4IKu13x0NBKYm+PCg1wQCmAuBgzmjhLryEwi
+         Qjtw==
+X-Gm-Message-State: ANoB5pmzeRP7ya9G5osZG5+uMXXeKIF2tVFTq3Ge6b0MXOJK3xyaLJxU
+        zrBEetv1dcA0Rzw/aKdC6g==
+X-Google-Smtp-Source: AA0mqf6zrg1ETDHNCsPI/wvimmyIqmVOxGMO3hbvItrj2UrTfNoRmS5KXMb8Y6TvVbKC2lIIb/3kHg==
+X-Received: by 2002:a05:6870:514d:b0:143:c900:521b with SMTP id z13-20020a056870514d00b00143c900521bmr9894704oak.0.1670947045989;
+        Tue, 13 Dec 2022 07:57:25 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n39-20020a056870972700b0013bc40b09dasm1569186oaq.17.2022.12.13.07.41.25
+        by smtp.gmail.com with ESMTPSA id r19-20020a056870439300b0014474019e50sm1553616oah.24.2022.12.13.07.57.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 07:41:25 -0800 (PST)
-Received: (nullmailer pid 1478210 invoked by uid 1000);
-        Tue, 13 Dec 2022 15:41:25 -0000
-Date:   Tue, 13 Dec 2022 09:41:25 -0600
+        Tue, 13 Dec 2022 07:57:25 -0800 (PST)
+Received: (nullmailer pid 1681578 invoked by uid 1000);
+        Tue, 13 Dec 2022 15:57:25 -0000
+Date:   Tue, 13 Dec 2022 09:57:25 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+Cc:     linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/12] dt-bindings: watchdog: qcom-wdt: allow interrupts
-Message-ID: <20221213154125.GB1426116-robh@kernel.org>
-References: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
- <20221212163532.142533-5-krzysztof.kozlowski@linaro.org>
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Subject: Re: [PATCH] dt-bindings: watchdog: allow "timer" as node name
+Message-ID: <167094704439.1681253.14474697830592674495.robh@kernel.org>
+References: <20221212174933.208900-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221212163532.142533-5-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221212174933.208900-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 05:35:25PM +0100, Krzysztof Kozlowski wrote:
-> Both of type of watchdogs described in the binding (the KPSS watchdog
-> and APSS WDT timer) have interrupts.  Allow interrupts and describe them
-> for KPSS watchdog to fix warnings like:
+
+On Mon, 12 Dec 2022 18:49:33 +0100, Krzysztof Kozlowski wrote:
+> On some SoCs the watchdog device is actually mixed with timer, e.g.
+> the qcom,msm-timer on older Qualcomm SoCs where this is actually one
+> hardware block responsible for both system timer and watchdog.
 > 
->   watchdog@17c10000: Unevaluated properties are not allowed ('interrupts' was unexpected)
+> Allow calling such device nodes as "timer".
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
 > ---
->  .../bindings/watchdog/qcom-wdt.yaml           | 24 ++++++++++++++++---
->  1 file changed, 21 insertions(+), 3 deletions(-)
+> 
+> See also:
+> https://lore.kernel.org/linux-arm-msm/20221212163532.142533-1-krzysztof.kozlowski@linaro.org/T/#t
+> 
+> which causes warnings:
+> 
+> qcom-msm8960-cdp.dtb: timer@200a000: $nodename:0: 'timer@200a000' does not match '^watchdog(@.*|-[0-9a-f])?$'
+>   From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> ---
+>  Documentation/devicetree/bindings/watchdog/watchdog.yaml | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
