@@ -2,92 +2,233 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8ECD64B904
-	for <lists+linux-watchdog@lfdr.de>; Tue, 13 Dec 2022 16:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8137E64B955
+	for <lists+linux-watchdog@lfdr.de>; Tue, 13 Dec 2022 17:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235427AbiLMP5b (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 13 Dec 2022 10:57:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
+        id S235670AbiLMQNU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 13 Dec 2022 11:13:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234673AbiLMP53 (ORCPT
+        with ESMTP id S235845AbiLMQNS (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 13 Dec 2022 10:57:29 -0500
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEF91F61E;
-        Tue, 13 Dec 2022 07:57:26 -0800 (PST)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-143ffc8c2b2so13072558fac.2;
-        Tue, 13 Dec 2022 07:57:26 -0800 (PST)
+        Tue, 13 Dec 2022 11:13:18 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38D41A050
+        for <linux-watchdog@vger.kernel.org>; Tue, 13 Dec 2022 08:13:16 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id g7so5714648lfv.5
+        for <linux-watchdog@vger.kernel.org>; Tue, 13 Dec 2022 08:13:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uTHFFzZQr0D0s/TddQwmyWpE56rA5HP2motUuyby9M0=;
+        b=ldysZifELvLGnjG6hYBNuNfpC+0HP54PjSah4EQ5n5X2+eeYz8u8jG0mPdZtK/eTmR
+         4HsyVpMnS4Hxfp4lQatvpvMxOYxa9trXrlZFOp3HHk+D8XAAvZ2XbUVu/5QGMMYO0hh9
+         5ga6z4Z6UG3fR2/sb9E2kVZMduFS7XzDYRwUj/Mc7TkkDQ3lf+r8Kb4ut27tEKvilYAp
+         xpD80fhJvPlX/ScsqY3h3oQAOEYlB95wUJi961h8q4dMSAXzoTCqBnrMK3Y72yKhQL93
+         gftJJvyhbUGZN37TsaSrpdiLbWALvHRXXn+DfJszgg4m2B3cZzlGaNxo4gFn1FiSLCaI
+         GqLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5/0ZaUd0WEu1InS6OXlcKOnl3jQcBGpJUNfyPLpGBMo=;
-        b=P/0g686pBWqVDGJjBGkR1OdUmI+BqIfi7LUGq+RI9gZfJVCCA0CBW0LtoycifUEidt
-         W5I+t6CiW2NMATqp0AChox/fPzTwdKqYYXcG7Ph8SNPk+Z3NFTWARmeNH9SauSVaelo8
-         BQ6SpJqdebbj0GwBxtAzkjvtPUIUobDZLsxtDa7LUT6frAIHQ6l5Qjy1mShn4k95I08z
-         Zj8ioiBheyyohRDdb3YMMfBu0H9nUeV2QxL3GJr17bVpQzPA0TDvXYEN9L2kMiV/J81i
-         uD0KDoG15HSgUtPUQ6t2jOQKF77dCokf4IKu13x0NBKYm+PCg1wQCmAuBgzmjhLryEwi
-         Qjtw==
-X-Gm-Message-State: ANoB5pmzeRP7ya9G5osZG5+uMXXeKIF2tVFTq3Ge6b0MXOJK3xyaLJxU
-        zrBEetv1dcA0Rzw/aKdC6g==
-X-Google-Smtp-Source: AA0mqf6zrg1ETDHNCsPI/wvimmyIqmVOxGMO3hbvItrj2UrTfNoRmS5KXMb8Y6TvVbKC2lIIb/3kHg==
-X-Received: by 2002:a05:6870:514d:b0:143:c900:521b with SMTP id z13-20020a056870514d00b00143c900521bmr9894704oak.0.1670947045989;
-        Tue, 13 Dec 2022 07:57:25 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r19-20020a056870439300b0014474019e50sm1553616oah.24.2022.12.13.07.57.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 07:57:25 -0800 (PST)
-Received: (nullmailer pid 1681578 invoked by uid 1000);
-        Tue, 13 Dec 2022 15:57:25 -0000
-Date:   Tue, 13 Dec 2022 09:57:25 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Subject: Re: [PATCH] dt-bindings: watchdog: allow "timer" as node name
-Message-ID: <167094704439.1681253.14474697830592674495.robh@kernel.org>
-References: <20221212174933.208900-1-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uTHFFzZQr0D0s/TddQwmyWpE56rA5HP2motUuyby9M0=;
+        b=bGmGS7ZshRTwlfxpepznQ4G6OSBGACFe51g30kHN71hBCZvuyvEEGl434z7AIm8E12
+         R31hqNHTQFcfGbWfHncnJTPozrMYZIIrKDGohWrqvy/xb1Im+l+7FdSkWHZ1Ka2t1Clk
+         cqkhNFsHlT824SrtXLQHPOFhtOManiIpC+npDa6aws3SZAx6sUI16u1Z4ibCYjuCZLmr
+         dY+e8vPTMzkocCX/PwXM5CP7kVyQijNbc8WtZA6CuvCnzkhRTyiNzuJSnKaBmX7VlFF7
+         6NZPaEBUlakThqChOpf3OPEaFbBcOS6FVy8uiTl0xCVKrFXP84M6SMs7sJeJL/TjfZWA
+         8h+A==
+X-Gm-Message-State: ANoB5pkQp/j9e4P90BWxCBvphs35f4To+NboA6zIQz6AJkA3HGgEiX2J
+        iCJ3aZzXzOaUXLMkJ4cwGbQX6zavEA9iIAVJ
+X-Google-Smtp-Source: AA0mqf56BC3tFEz26JjphXioBNUiiagbJ08QbY1qKzcbJQ8xTgAcKWEhWw0FXQonhqJWpolB6cPrcg==
+X-Received: by 2002:a05:6512:6d1:b0:4b1:8830:85e8 with SMTP id u17-20020a05651206d100b004b1883085e8mr6855783lff.26.1670947995148;
+        Tue, 13 Dec 2022 08:13:15 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a2-20020a2eb542000000b0026df5232c7fsm309641ljn.42.2022.12.13.08.13.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 08:13:14 -0800 (PST)
+Message-ID: <183329b4-b99c-862b-02fe-651e5f68707e@linaro.org>
+Date:   Tue, 13 Dec 2022 17:13:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221212174933.208900-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 06/12] dt-bindings: watchdog: qcom-wdt: merge MSM timer
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
+ <20221212163532.142533-6-krzysztof.kozlowski@linaro.org>
+ <20221213154049.GA1426116-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221213154049.GA1426116-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On 13/12/2022 16:40, Rob Herring wrote:
+> On Mon, Dec 12, 2022 at 05:35:26PM +0100, Krzysztof Kozlowski wrote:
+>> Merge Qualcomm MSM timer bindings into watchdog, because the timer
+>> compatibles are already included here and the hardware is quite similar.
+>>
+>> While converting the MSM timer bindings, adjust clock-frequency
+>> property to take only one frequency, instead of two, because:
+>> 1. DT schema does not allow to frequencies,
+>> 2. The Linux timer driver reads only first frequency.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  .../bindings/timer/qcom,msm-timer.txt         | 47 ------------------
+>>  .../bindings/watchdog/qcom-wdt.yaml           | 49 +++++++++++++++++++
+>>  2 files changed, 49 insertions(+), 47 deletions(-)
+>>  delete mode 100644 Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+>>
+>> diff --git a/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt b/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+>> deleted file mode 100644
+>> index 5e10c345548f..000000000000
+>> --- a/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+>> +++ /dev/null
+>> @@ -1,47 +0,0 @@
+>> -* MSM Timer
+>> -
+>> -Properties:
+>> -
+>> -- compatible : Should at least contain "qcom,msm-timer". More specific
+>> -               properties specify which subsystem the timers are paired with.
+>> -
+>> -               "qcom,kpss-timer" - krait subsystem
+>> -               "qcom,scss-timer" - scorpion subsystem
+>> -
+>> -- interrupts : Interrupts for the debug timer, the first general purpose
+>> -               timer, and optionally a second general purpose timer, and
+>> -               optionally as well, 2 watchdog interrupts, in that order.
+>> -
+>> -- reg : Specifies the base address of the timer registers.
+>> -
+>> -- clocks: Reference to the parent clocks, one per output clock. The parents
+>> -          must appear in the same order as the clock names.
+>> -
+>> -- clock-names: The name of the clocks as free-form strings. They should be in
+>> -               the same order as the clocks.
+>> -
+>> -- clock-frequency : The frequency of the debug timer and the general purpose
+>> -                    timer(s) in Hz in that order.
+>> -
+>> -Optional:
+>> -
+>> -- cpu-offset : per-cpu offset used when the timer is accessed without the
+>> -               CPU remapping facilities. The offset is
+>> -               cpu-offset + (0x10000 * cpu-nr).
+>> -
+>> -Example:
+>> -
+>> -       timer@200a000 {
+>> -               compatible = "qcom,scss-timer", "qcom,msm-timer";
+>> -               interrupts = <1 1 0x301>,
+>> -                            <1 2 0x301>,
+>> -                            <1 3 0x301>,
+>> -                            <1 4 0x301>,
+>> -                            <1 5 0x301>;
+>> -               reg = <0x0200a000 0x100>;
+>> -               clock-frequency = <19200000>,
+>> -                                 <32768>;
+>> -               clocks = <&sleep_clk>;
+>> -               clock-names = "sleep";
+>> -               cpu-offset = <0x40000>;
+>> -       };
+>> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>> index b7fc57f4800e..697caf1937cc 100644
+>> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+>> @@ -10,6 +10,9 @@ maintainers:
+>>    - Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+>>  
+>>  properties:
+>> +  $nodename:
+>> +    pattern: "^(watchdog|timer)@[0-9a-f]+$"
+>> +
+>>    compatible:
+>>      oneOf:
+>>        - items:
+>> @@ -48,6 +51,20 @@ properties:
+>>    clocks:
+>>      maxItems: 1
+>>  
+>> +  clock-names:
+>> +    items:
+>> +      - const: sleep
+>> +
+>> +  clock-frequency:
+>> +    description:
+>> +      The frequency of the general purpose timer in Hz in that order.
+> 
+> 'in that order'?
 
-On Mon, 12 Dec 2022 18:49:33 +0100, Krzysztof Kozlowski wrote:
-> On some SoCs the watchdog device is actually mixed with timer, e.g.
-> the qcom,msm-timer on older Qualcomm SoCs where this is actually one
-> hardware block responsible for both system timer and watchdog.
-> 
-> Allow calling such device nodes as "timer".
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> See also:
-> https://lore.kernel.org/linux-arm-msm/20221212163532.142533-1-krzysztof.kozlowski@linaro.org/T/#t
-> 
-> which causes warnings:
-> 
-> qcom-msm8960-cdp.dtb: timer@200a000: $nodename:0: 'timer@200a000' does not match '^watchdog(@.*|-[0-9a-f])?$'
->   From schema: Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> ---
->  Documentation/devicetree/bindings/watchdog/watchdog.yaml | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
+Left over, as I initial binding had here two frequencies. I'll remove it.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+>> +
+>> +  cpu-offset:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      Per-CPU offset used when the timer is accessed without the CPU remapping
+>> +      facilities. The offset is cpu-offset + (0x10000 * cpu-nr).
+>> +
+>>    interrupts:
+>>      minItems: 1
+>>      maxItems: 5
+>> @@ -67,12 +84,27 @@ allOf:
+>>              const: qcom,kpss-wdt
+>>      then:
+>>        properties:
+>> +        clock-frequency: false
+>> +        cpu-offset: false
+>>          interrupts:
+>>            minItems: 1
+>>            items:
+>>              - description: Bark
+>>              - description: Bite
+>>  
+>> +    else:
+>> +      properties:
+>> +        interrupts:
+>> +          minItems: 3
+>> +          items:
+>> +            - description: Debug
+>> +            - description: First general purpose timer
+>> +            - description: Second general purpose timer
+>> +            - description: First watchdog
+>> +            - description: Second watchdog
+> 
+> Okay, here they are. No need to set it to 2 then change to 5 in the 
+> series.
+
+My previous patch where you noticed the difference sets it to maxItems:5
+in top-level and only specific variant has two described interrupts.
+
+So if I understand your comment correctly, it is okay and I will just
+fix the clock-frequency description ("in that order").
+
+Best regards,
+Krzysztof
+
