@@ -2,167 +2,615 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35A964E9B7
-	for <lists+linux-watchdog@lfdr.de>; Fri, 16 Dec 2022 11:47:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D917364EF4C
+	for <lists+linux-watchdog@lfdr.de>; Fri, 16 Dec 2022 17:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiLPKrE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 16 Dec 2022 05:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S231590AbiLPQi2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 16 Dec 2022 11:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbiLPKqx (ORCPT
+        with ESMTP id S230219AbiLPQi0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 16 Dec 2022 05:46:53 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0651A22D;
-        Fri, 16 Dec 2022 02:46:47 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id l8-20020a056830054800b006705fd35eceso1113782otb.12;
-        Fri, 16 Dec 2022 02:46:47 -0800 (PST)
+        Fri, 16 Dec 2022 11:38:26 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B5033C26
+        for <linux-watchdog@vger.kernel.org>; Fri, 16 Dec 2022 08:38:23 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id h10so2693113ljk.11
+        for <linux-watchdog@vger.kernel.org>; Fri, 16 Dec 2022 08:38:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=oPlRWJtPy91L2Kb6SEIniDa6SrU81qnAi/g/vSFbNsQ=;
-        b=ME2uhQai/+euu8mQ4vyc/earfOT9jmZQmAZeXUs8hcziF9Fntemu6Y3+ksK5UJg4XS
-         mkZbMONyhEEI2y09byESqme/VJyPvVFh/TkR85wNIVhiXQWs0RSiW0AveqiiSVyk1gYb
-         PQU7EY1FINMqf9T8Pn+huelj75jafey/DLYs+wqEQ/oQy7Whc4rpwfo3SSiEGkMAq83s
-         Dusy3DvPNwE0GemyrLu8mXJaMopO8OaW3X4Vkqw0yltrWyPRAwOJxFYBIslY1FCyJaSz
-         ObwwqhxxcwaE/uXck8NzaIRzqHDazaVHHZZqGDZPC8mRrTY5m2ndnO5BNBYVDKih3r9h
-         BTrQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pqdOpEXZHaWOVII7e5NR7CG/WSTGTh2sWUQHKC9Si+0=;
+        b=iWskv9rM4EVJUCgBr0YyeySQZLvn6NO89HzqxKdYEeJlZx77YoPPj/t32gN0TPNmyg
+         zl2ZIJ7iz2xRsqVdR5srtoexyE2IQXXTIQlm1WipqYtQiA63rJCpU7Fqqi2cBqC5tqRi
+         /7AsCuVkoPqZ4JOzDi3GuRP6B5/4CbJ34BM9ANj0nkcLSX4qh9XUR11q+rLWld44pZZ5
+         3zkA8NZV/Leboat7dxirJMmcpi0Y5sQjxmU2sfWkvfZVv8AG7WEUQWOL5aWWd3bvqt+R
+         /JBykSwO4gxQvYgFS1oY9rSPhQO+wUutP+peSi/Ke0dc2L/kWVQSzNKZjClLZBcIMSga
+         Bp0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oPlRWJtPy91L2Kb6SEIniDa6SrU81qnAi/g/vSFbNsQ=;
-        b=FWgOfIbMSX9k8rENKq/qv4jf4T2Ca3wZ4Jga2gVPiiK3IODlNg2rh0XH5+lpXYBhQB
-         4ilzsUdrl0xuQFvmQSOyZttI4Gy1Mnm0z2MqBUKMTm+ecwHJnc9NWquF6VHfCwoWsYWb
-         Iaeytr4dqwTiLt4CcRjyMOP11GUT6N77BunCdkrS9B0AHg0zX6bybKDtiLg6wTBD46zl
-         EKtcTyVmGelu87SfmbQccH3BbDEvXnGP23KzwSegAGp4wFaejuAgSDUxdJPRZ//9yVdX
-         toauzeD8DS00QhrJr3N25pNHOEw1wYhazSSFs+pS2gqcYEhu9uDIGaB19FG0Z5HDZv70
-         3Yfg==
-X-Gm-Message-State: ANoB5plaV11HmDdKnXeP0tyHtBDgMROJyMcG4U2B/8SCCmu2y3kokdOY
-        nmJ5WvY/4sXDGusJ8eEkUJEJ4LEr+I0=
-X-Google-Smtp-Source: AA0mqf5IJlMBz37NI7a6lgVDCMdTBWv3aS78FXayzJ2k8xCRtqj1wzK616pZkEOh1agAh8rZ0+vh9Q==
-X-Received: by 2002:a05:6830:1b7b:b0:670:92b7:366b with SMTP id d27-20020a0568301b7b00b0067092b7366bmr10518929ote.2.1671187606803;
-        Fri, 16 Dec 2022 02:46:46 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v15-20020a05683018cf00b0066c3bbe927esm657493ote.21.2022.12.16.02.46.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 02:46:46 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <efe041a2-8d5b-f06a-73b8-3151b0a33004@roeck-us.net>
-Date:   Fri, 16 Dec 2022 02:46:44 -0800
+        bh=pqdOpEXZHaWOVII7e5NR7CG/WSTGTh2sWUQHKC9Si+0=;
+        b=KrDy/IHK4YJml01ArMxna5Rpdv70RhL0V5TnNPIy69FIfY4JG0zWkMsYdKuhwZQL0w
+         OImFD3nykDgHd/rMX7fIRYzL5Lg2TMltPhamQdNlhw/PPsjgcLuBGkqn7834rrv4IqwC
+         FH2v+Wum3cusTwjKejePjujyIVqsLViE+3DzkoHaS71LtIQHAXR50vgIfQ0+GE+rjxw8
+         BFqJLmCYg/5HgUypfN5cnP4FKFtSr7rkBWVnwvbnxqbVw9ZOxNeYxQ0dca2AMuLDpxBQ
+         xxJeJ1kTfP6jlOBLkvU1k+2SsLlU9btBh+aX4ryH4YZ3AIZA6gDN0B97zbDhvpDK2zHK
+         ERgg==
+X-Gm-Message-State: ANoB5pnoK5qxUxBYRSMC7jWK0rkv3Bfg+eWdVviOAJ50nfXivQL6lBkI
+        AK7VBuKI68zW8DTkUi93fl1Huw==
+X-Google-Smtp-Source: AA0mqf5CMgcLnJA80YnSK93GMwSaSXLIcob5zfFskzwQD8YdE5Kwodd6FSV20RR51opT40Uxp0MEIg==
+X-Received: by 2002:a05:651c:98d:b0:277:12c2:3398 with SMTP id b13-20020a05651c098d00b0027712c23398mr14602681ljq.0.1671208701247;
+        Fri, 16 Dec 2022 08:38:21 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id p10-20020a2eba0a000000b0026fc79fd67dsm193930lja.74.2022.12.16.08.38.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 08:38:20 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 0/9] dt-bindings: cleanup titles
+Date:   Fri, 16 Dec 2022 17:38:06 +0100
+Message-Id: <20221216163815.522628-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] watchdog: da9062: da9063: use unlocked xfer function in
- restart
-Content-Language: en-US
-To:     Primoz Fiser <primoz.fiser@norik.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     upstream@lists.phytec.de
-References: <20221216083645.2574077-1-primoz.fiser@norik.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20221216083645.2574077-1-primoz.fiser@norik.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 12/16/22 00:36, Primoz Fiser wrote:
-> Machine resets via da9062/da9063 PMICs are challenging since one needs
-> to use special i2c atomic transfers due to the fact interrupts are
-> disabled in such late system stages. This is the reason both PMICs don't
-> use regmap and have instead opted for i2c_smbus_write_byte_data() in
-> restart handlers.
-> 
-> However extensive testing revealed that even using atomic safe function
-> is not enough and occasional resets fail with error message "Failed to
-> shutdown (err =  -11)". This is due to the fact that function
-> i2c_smbus_write_byte_data() in turn calls __i2c_lock_bus_helper()
-> which might fail with -EAGAIN when bus lock is already taken and cannot
-> be released anymore.
-> 
-> Thus replace i2c_smbus_write_byte_data() with unlocked flavor of
-> i2c_smbus_xfer() function to avoid above dead-lock scenario. At this
-> system stage we don't care about proper locking anymore and only want
-> proper machine reset to be carried out.
-> 
-> Signed-off-by: Primoz Fiser <primoz.fiser@norik.com>
+Possible conflicts
+==================
+1. CONFLICT (content), choose this patchset:
+   Documentation/devicetree/bindings/clock/qcom,gcc.yaml
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+2. CONFLICT (modify/delete) - files not present in robh/linux.git:
+   Documentation/devicetree/bindings/net/bluetooth/bluetooth-controller.yaml
+   Documentation/devicetree/bindings/power/reset/restart-handler.yaml
+   Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+   Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
+   Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml
+   Documentation/devicetree/bindings/input/touchscreen/himax,hx83112b.yaml
+   Documentation/devicetree/bindings/mips/cpus.yaml
+   Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra234-nvdec.yaml
+   Documentation/devicetree/bindings/clock/qcom,dispcc-sc8280xp.yaml
 
-> ---
->   drivers/watchdog/da9062_wdt.c | 15 ++++++++++++---
->   drivers/watchdog/da9063_wdt.c | 15 ++++++++++++---
->   2 files changed, 24 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
-> index f02cbd530538..1ec33b4bd2f2 100644
-> --- a/drivers/watchdog/da9062_wdt.c
-> +++ b/drivers/watchdog/da9062_wdt.c
-> @@ -155,11 +155,20 @@ static int da9062_wdt_restart(struct watchdog_device *wdd, unsigned long action,
->   {
->   	struct da9062_watchdog *wdt = watchdog_get_drvdata(wdd);
->   	struct i2c_client *client = to_i2c_client(wdt->hw->dev);
-> +	union i2c_smbus_data msg;
->   	int ret;
->   
-> -	/* Don't use regmap because it is not atomic safe */
-> -	ret = i2c_smbus_write_byte_data(client, DA9062AA_CONTROL_F,
-> -					DA9062AA_SHUTDOWN_MASK);
-> +	/*
-> +	 * Don't use regmap because it is not atomic safe. Additionally, use
-> +	 * unlocked flavor of i2c_smbus_xfer to avoid scenario where i2c bus
-> +	 * might be previously locked by some process unable to release the
-> +	 * lock due to interrupts already being disabled at this late stage.
-> +	 */
-> +	msg.byte = DA9062AA_SHUTDOWN_MASK;
-> +	ret = __i2c_smbus_xfer(client->adapter, client->addr, client->flags,
-> +			I2C_SMBUS_WRITE, DA9062AA_CONTROL_F,
-> +			I2C_SMBUS_BYTE_DATA, &msg);
-> +
->   	if (ret < 0)
->   		dev_alert(wdt->hw->dev, "Failed to shutdown (err = %d)\n",
->   			  ret);
-> diff --git a/drivers/watchdog/da9063_wdt.c b/drivers/watchdog/da9063_wdt.c
-> index 09a4af4c58fc..684667469b10 100644
-> --- a/drivers/watchdog/da9063_wdt.c
-> +++ b/drivers/watchdog/da9063_wdt.c
-> @@ -174,11 +174,20 @@ static int da9063_wdt_restart(struct watchdog_device *wdd, unsigned long action,
->   {
->   	struct da9063 *da9063 = watchdog_get_drvdata(wdd);
->   	struct i2c_client *client = to_i2c_client(da9063->dev);
-> +	union i2c_smbus_data msg;
->   	int ret;
->   
-> -	/* Don't use regmap because it is not atomic safe */
-> -	ret = i2c_smbus_write_byte_data(client, DA9063_REG_CONTROL_F,
-> -					DA9063_SHUTDOWN);
-> +	/*
-> +	 * Don't use regmap because it is not atomic safe. Additionally, use
-> +	 * unlocked flavor of i2c_smbus_xfer to avoid scenario where i2c bus
-> +	 * might previously be locked by some process unable to release the
-> +	 * lock due to interrupts already being disabled at this late stage.
-> +	 */
-> +	msg.byte = DA9063_SHUTDOWN;
-> +	ret = __i2c_smbus_xfer(client->adapter, client->addr, client->flags,
-> +			I2C_SMBUS_WRITE, DA9063_REG_CONTROL_F,
-> +			I2C_SMBUS_BYTE_DATA, &msg);
-> +
->   	if (ret < 0)
->   		dev_alert(da9063->dev, "Failed to shutdown (err = %d)\n",
->   			  ret);
+Changes since v2
+================
+1. trailling => trailing.
+2. Add tags.
+3. Rebase on Linus' tree, mid-merge window: v6.1-12782-g71a7507afbc3
+4. Drop change to power/reset/restart-handler.yaml because it is not yet there.
+
+Changes since v1
+================
+1. "common parts" -> "Common Properties".
+2. Capitalize titles in other patches doing manual fixups.
+3. Drop change of quotes in common DMA bindings.
+4. Drop also "schema" from titles in few files.
+5. Add tags.
+
+Merging
+=======
+Intention is to regenerate the commits with commands at the end of merge
+window.  This should go then via Rob's tree.
+
+Description
+===========
+The Devicetree bindings document does not have to say in the title that it is a
+"Devicetree binding" or "schema', but instead just describe the hardware.  We
+have several of such patterns, so when people copy existing bindings into new
+ones, they make similar mistake.
+
+Goal is to get rid of cases:
+  git grep -h 'title: .*[bB]inding' Documentation/devicetree/bindings/
+  git grep -h 'title: .*[sS]chema' Documentation/devicetree/bindings/
+
+Clean this stuff with:
+1. Automated find+sed commands.
+
+Krzysztof Kozlowski (9):
+  dt-bindings: drop redundant part of title of shared bindings
+  dt-bindings: memory-controllers: ti,gpmc-child: drop redundant part of
+    title
+  dt-bindings: clock: st,stm32mp1-rcc: add proper title
+  dt-bindings: drop redundant part of title (end)
+  dt-bindings: drop redundant part of title (end, part two)
+  dt-bindings: drop redundant part of title (end, part three)
+  dt-bindings: drop redundant part of title (beginning)
+  dt-bindings: clock: drop redundant part of title
+  dt-bindings: drop redundant part of title (manual)
+
+ Documentation/devicetree/bindings/arm/bcm/bcm2835.yaml          | 2 +-
+ Documentation/devicetree/bindings/arm/bcm/brcm,bcm11351.yaml    | 2 +-
+ Documentation/devicetree/bindings/arm/bcm/brcm,bcm21664.yaml    | 2 +-
+ Documentation/devicetree/bindings/arm/bcm/brcm,bcm23550.yaml    | 2 +-
+ Documentation/devicetree/bindings/arm/bcm/brcm,bcm4708.yaml     | 2 +-
+ Documentation/devicetree/bindings/arm/bcm/brcm,bcmbca.yaml      | 2 +-
+ Documentation/devicetree/bindings/arm/bcm/brcm,cygnus.yaml      | 2 +-
+ Documentation/devicetree/bindings/arm/bcm/brcm,hr2.yaml         | 2 +-
+ Documentation/devicetree/bindings/arm/bcm/brcm,ns2.yaml         | 2 +-
+ Documentation/devicetree/bindings/arm/bcm/brcm,nsp.yaml         | 2 +-
+ Documentation/devicetree/bindings/arm/bcm/brcm,stingray.yaml    | 2 +-
+ Documentation/devicetree/bindings/arm/bcm/brcm,vulcan-soc.yaml  | 2 +-
+ Documentation/devicetree/bindings/arm/cci-control-port.yaml     | 2 +-
+ Documentation/devicetree/bindings/arm/cpus.yaml                 | 2 +-
+ .../devicetree/bindings/arm/firmware/linaro,optee-tz.yaml       | 2 +-
+ Documentation/devicetree/bindings/arm/hisilicon/hisilicon.yaml  | 2 +-
+ .../devicetree/bindings/arm/keystone/ti,k3-sci-common.yaml      | 2 +-
+ Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml      | 2 +-
+ Documentation/devicetree/bindings/arm/marvell/armada-7k-8k.yaml | 2 +-
+ Documentation/devicetree/bindings/arm/mrvl/mrvl.yaml            | 2 +-
+ Documentation/devicetree/bindings/arm/mstar/mstar.yaml          | 2 +-
+ Documentation/devicetree/bindings/arm/npcm/npcm.yaml            | 2 +-
+ Documentation/devicetree/bindings/arm/nxp/lpc32xx.yaml          | 2 +-
+ Documentation/devicetree/bindings/arm/socionext/milbeaut.yaml   | 2 +-
+ Documentation/devicetree/bindings/arm/socionext/uniphier.yaml   | 2 +-
+ Documentation/devicetree/bindings/arm/sp810.yaml                | 2 +-
+ Documentation/devicetree/bindings/arm/sprd/sprd.yaml            | 2 +-
+ Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml       | 2 +-
+ .../devicetree/bindings/arm/stm32/st,stm32-syscon.yaml          | 2 +-
+ Documentation/devicetree/bindings/arm/stm32/stm32.yaml          | 2 +-
+ .../bindings/arm/sunxi/allwinner,sun6i-a31-cpuconfig.yaml       | 2 +-
+ .../devicetree/bindings/arm/sunxi/allwinner,sun9i-a80-prcm.yaml | 2 +-
+ .../bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml         | 2 +-
+ .../devicetree/bindings/arm/tegra/nvidia,tegra194-cbb.yaml      | 2 +-
+ .../devicetree/bindings/arm/tegra/nvidia,tegra234-cbb.yaml      | 2 +-
+ Documentation/devicetree/bindings/arm/ti/k3.yaml                | 2 +-
+ Documentation/devicetree/bindings/arm/ti/ti,davinci.yaml        | 2 +-
+ Documentation/devicetree/bindings/arm/vexpress-config.yaml      | 2 +-
+ Documentation/devicetree/bindings/arm/vexpress-sysreg.yaml      | 2 +-
+ .../devicetree/bindings/ata/allwinner,sun4i-a10-ahci.yaml       | 2 +-
+ .../devicetree/bindings/ata/allwinner,sun8i-r40-ahci.yaml       | 2 +-
+ Documentation/devicetree/bindings/bus/ti-sysc.yaml              | 2 +-
+ Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml     | 2 +-
+ Documentation/devicetree/bindings/clock/calxeda.yaml            | 2 +-
+ Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml   | 2 +-
+ Documentation/devicetree/bindings/clock/fixed-clock.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/fixed-factor-clock.yaml | 2 +-
+ Documentation/devicetree/bindings/clock/fixed-mmio-clock.yaml   | 2 +-
+ Documentation/devicetree/bindings/clock/fsl,plldig.yaml         | 2 +-
+ Documentation/devicetree/bindings/clock/fsl,sai-clock.yaml      | 2 +-
+ Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/idt,versaclock5.yaml    | 2 +-
+ Documentation/devicetree/bindings/clock/imx1-clock.yaml         | 2 +-
+ Documentation/devicetree/bindings/clock/imx21-clock.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/imx23-clock.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/imx25-clock.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/imx27-clock.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/imx28-clock.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/imx31-clock.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/imx35-clock.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/imx5-clock.yaml         | 2 +-
+ Documentation/devicetree/bindings/clock/imx6q-clock.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/imx6sl-clock.yaml       | 2 +-
+ Documentation/devicetree/bindings/clock/imx6sll-clock.yaml      | 2 +-
+ Documentation/devicetree/bindings/clock/imx6sx-clock.yaml       | 2 +-
+ Documentation/devicetree/bindings/clock/imx6ul-clock.yaml       | 2 +-
+ Documentation/devicetree/bindings/clock/imx7d-clock.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/imx7ulp-pcc-clock.yaml  | 2 +-
+ Documentation/devicetree/bindings/clock/imx7ulp-scg-clock.yaml  | 2 +-
+ Documentation/devicetree/bindings/clock/imx8m-clock.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/imx8qxp-lpcg.yaml       | 2 +-
+ Documentation/devicetree/bindings/clock/imx8ulp-cgc-clock.yaml  | 2 +-
+ Documentation/devicetree/bindings/clock/imx8ulp-pcc-clock.yaml  | 2 +-
+ Documentation/devicetree/bindings/clock/imx93-clock.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/imxrt1050-clock.yaml    | 2 +-
+ Documentation/devicetree/bindings/clock/ingenic,cgu.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/intel,agilex.yaml       | 2 +-
+ Documentation/devicetree/bindings/clock/intel,cgu-lgm.yaml      | 2 +-
+ Documentation/devicetree/bindings/clock/intel,easic-n5x.yaml    | 2 +-
+ Documentation/devicetree/bindings/clock/intel,stratix10.yaml    | 2 +-
+ .../devicetree/bindings/clock/microchip,mpfs-clkcfg.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/milbeaut-clock.yaml     | 2 +-
+ .../devicetree/bindings/clock/nuvoton,npcm845-clk.yaml          | 2 +-
+ .../devicetree/bindings/clock/qcom,dispcc-sc8280xp.yaml         | 2 +-
+ Documentation/devicetree/bindings/clock/qcom,gcc.yaml           | 2 +-
+ Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/renesas,9series.yaml    | 2 +-
+ .../devicetree/bindings/clock/renesas,versaclock7.yaml          | 2 +-
+ .../devicetree/bindings/clock/rockchip,rk3568-cru.yaml          | 2 +-
+ Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml    | 2 +-
+ Documentation/devicetree/bindings/clock/ti,lmk04832.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/ti,sci-clk.yaml         | 2 +-
+ Documentation/devicetree/bindings/clock/ti/ti,clksel.yaml       | 2 +-
+ Documentation/devicetree/bindings/cpu/idle-states.yaml          | 2 +-
+ .../devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml        | 2 +-
+ .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml         | 2 +-
+ Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml      | 2 +-
+ Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml     | 2 +-
+ Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml     | 2 +-
+ Documentation/devicetree/bindings/display/arm,hdlcd.yaml        | 2 +-
+ Documentation/devicetree/bindings/display/arm,malidp.yaml       | 2 +-
+ Documentation/devicetree/bindings/display/bridge/anx6345.yaml   | 2 +-
+ .../devicetree/bindings/display/bridge/chrontel,ch7033.yaml     | 2 +-
+ .../devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml | 2 +-
+ .../devicetree/bindings/display/bridge/intel,keembay-dsi.yaml   | 2 +-
+ .../devicetree/bindings/display/bridge/ite,it6505.yaml          | 2 +-
+ .../devicetree/bindings/display/bridge/ite,it66121.yaml         | 2 +-
+ Documentation/devicetree/bindings/display/bridge/ps8640.yaml    | 2 +-
+ .../devicetree/bindings/display/bridge/toshiba,tc358767.yaml    | 2 +-
+ .../devicetree/bindings/display/bridge/toshiba,tc358775.yaml    | 2 +-
+ Documentation/devicetree/bindings/display/ingenic,ipu.yaml      | 2 +-
+ Documentation/devicetree/bindings/display/ingenic,lcd.yaml      | 2 +-
+ .../devicetree/bindings/display/intel,keembay-display.yaml      | 2 +-
+ .../devicetree/bindings/display/intel,keembay-msscam.yaml       | 2 +-
+ .../devicetree/bindings/display/mediatek/mediatek,cec.yaml      | 2 +-
+ .../devicetree/bindings/display/mediatek/mediatek,dsi.yaml      | 2 +-
+ .../devicetree/bindings/display/mediatek/mediatek,hdmi-ddc.yaml | 2 +-
+ .../devicetree/bindings/display/mediatek/mediatek,hdmi.yaml     | 2 +-
+ Documentation/devicetree/bindings/display/msm/gmu.yaml          | 2 +-
+ Documentation/devicetree/bindings/display/msm/gpu.yaml          | 2 +-
+ .../devicetree/bindings/display/panel/display-timings.yaml      | 2 +-
+ .../devicetree/bindings/display/panel/ilitek,ili9163.yaml       | 2 +-
+ .../devicetree/bindings/display/panel/olimex,lcd-olinuxino.yaml | 2 +-
+ Documentation/devicetree/bindings/display/panel/panel-lvds.yaml | 2 +-
+ .../devicetree/bindings/display/panel/panel-timing.yaml         | 2 +-
+ .../devicetree/bindings/display/panel/visionox,rm69299.yaml     | 2 +-
+ Documentation/devicetree/bindings/dma/dma-common.yaml           | 2 +-
+ Documentation/devicetree/bindings/dma/dma-controller.yaml       | 2 +-
+ Documentation/devicetree/bindings/dma/dma-router.yaml           | 2 +-
+ Documentation/devicetree/bindings/dma/ingenic,dma.yaml          | 2 +-
+ Documentation/devicetree/bindings/dma/st,stm32-dma.yaml         | 2 +-
+ Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml      | 2 +-
+ Documentation/devicetree/bindings/dma/st,stm32-mdma.yaml        | 2 +-
+ Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml          | 2 +-
+ Documentation/devicetree/bindings/dma/ti/k3-pktdma.yaml         | 2 +-
+ Documentation/devicetree/bindings/dma/ti/k3-udma.yaml           | 2 +-
+ .../devicetree/bindings/dma/xilinx/xlnx,zynqmp-dpdma.yaml       | 2 +-
+ Documentation/devicetree/bindings/edac/dmc-520.yaml             | 2 +-
+ Documentation/devicetree/bindings/eeprom/microchip,93lc46b.yaml | 2 +-
+ Documentation/devicetree/bindings/example-schema.yaml           | 2 +-
+ Documentation/devicetree/bindings/firmware/arm,scmi.yaml        | 2 +-
+ Documentation/devicetree/bindings/firmware/arm,scpi.yaml        | 2 +-
+ .../devicetree/bindings/firmware/qemu,fw-cfg-mmio.yaml          | 2 +-
+ Documentation/devicetree/bindings/gpio/gpio-tpic2810.yaml       | 2 +-
+ Documentation/devicetree/bindings/gpio/ti,omap-gpio.yaml        | 2 +-
+ Documentation/devicetree/bindings/gpu/brcm,bcm-v3d.yaml         | 2 +-
+ .../devicetree/bindings/gpu/host1x/nvidia,tegra210-nvdec.yaml   | 2 +-
+ .../devicetree/bindings/gpu/host1x/nvidia,tegra210-nvenc.yaml   | 2 +-
+ .../devicetree/bindings/gpu/host1x/nvidia,tegra210-nvjpg.yaml   | 2 +-
+ .../devicetree/bindings/gpu/host1x/nvidia,tegra234-nvdec.yaml   | 2 +-
+ Documentation/devicetree/bindings/gpu/vivante,gc.yaml           | 2 +-
+ .../devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml         | 2 +-
+ Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml    | 2 +-
+ Documentation/devicetree/bindings/i2c/i2c-gpio.yaml             | 2 +-
+ Documentation/devicetree/bindings/i2c/i2c-pxa.yaml              | 2 +-
+ Documentation/devicetree/bindings/i2c/ingenic,i2c.yaml          | 2 +-
+ Documentation/devicetree/bindings/i2c/st,nomadik-i2c.yaml       | 2 +-
+ Documentation/devicetree/bindings/i2c/ti,omap4-i2c.yaml         | 2 +-
+ Documentation/devicetree/bindings/i3c/i3c.yaml                  | 2 +-
+ Documentation/devicetree/bindings/iio/adc/adc.yaml              | 2 +-
+ .../devicetree/bindings/iio/adc/allwinner,sun8i-a33-ths.yaml    | 2 +-
+ Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml      | 2 +-
+ .../devicetree/bindings/iio/adc/motorola,cpcap-adc.yaml         | 2 +-
+ Documentation/devicetree/bindings/iio/adc/nxp,imx8qxp-adc.yaml  | 2 +-
+ Documentation/devicetree/bindings/iio/adc/nxp,lpc1850-adc.yaml  | 2 +-
+ .../devicetree/bindings/iio/adc/sigma-delta-modulator.yaml      | 2 +-
+ Documentation/devicetree/bindings/iio/adc/sprd,sc2720-adc.yaml  | 2 +-
+ Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml     | 2 +-
+ Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.yaml  | 2 +-
+ .../devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml        | 2 +-
+ Documentation/devicetree/bindings/iio/dac/nxp,lpc1850-dac.yaml  | 2 +-
+ Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml     | 2 +-
+ .../devicetree/bindings/iio/multiplexer/io-channel-mux.yaml     | 2 +-
+ Documentation/devicetree/bindings/input/fsl,scu-key.yaml        | 2 +-
+ Documentation/devicetree/bindings/input/gpio-keys.yaml          | 2 +-
+ Documentation/devicetree/bindings/input/input.yaml              | 2 +-
+ Documentation/devicetree/bindings/input/matrix-keymap.yaml      | 2 +-
+ Documentation/devicetree/bindings/input/microchip,cap11xx.yaml  | 2 +-
+ .../devicetree/bindings/input/pine64,pinephone-keyboard.yaml    | 2 +-
+ .../devicetree/bindings/input/touchscreen/chipone,icn8318.yaml  | 2 +-
+ .../bindings/input/touchscreen/cypress,cy8ctma140.yaml          | 2 +-
+ .../bindings/input/touchscreen/cypress,cy8ctma340.yaml          | 2 +-
+ .../devicetree/bindings/input/touchscreen/edt-ft5x06.yaml       | 2 +-
+ Documentation/devicetree/bindings/input/touchscreen/goodix.yaml | 2 +-
+ .../devicetree/bindings/input/touchscreen/himax,hx83112b.yaml   | 2 +-
+ .../devicetree/bindings/input/touchscreen/hycon,hy46xx.yaml     | 2 +-
+ .../devicetree/bindings/input/touchscreen/imagis,ist3038c.yaml  | 2 +-
+ .../devicetree/bindings/input/touchscreen/melfas,mms114.yaml    | 2 +-
+ .../devicetree/bindings/input/touchscreen/mstar,msg2638.yaml    | 2 +-
+ .../devicetree/bindings/input/touchscreen/pixcir,pixcir_ts.yaml | 2 +-
+ .../devicetree/bindings/input/touchscreen/silead,gsl1680.yaml   | 2 +-
+ .../devicetree/bindings/input/touchscreen/ti,tsc2005.yaml       | 2 +-
+ .../devicetree/bindings/input/touchscreen/touchscreen.yaml      | 2 +-
+ .../devicetree/bindings/input/touchscreen/zinitix,bt400.yaml    | 2 +-
+ .../devicetree/bindings/interrupt-controller/ingenic,intc.yaml  | 2 +-
+ .../devicetree/bindings/interrupt-controller/mrvl,intc.yaml     | 2 +-
+ .../bindings/interrupt-controller/nuvoton,wpcm450-aic.yaml      | 2 +-
+ .../bindings/interrupt-controller/realtek,rtl-intc.yaml         | 2 +-
+ .../devicetree/bindings/interrupt-controller/renesas,irqc.yaml  | 2 +-
+ Documentation/devicetree/bindings/ipmi/ipmi-ipmb.yaml           | 2 +-
+ Documentation/devicetree/bindings/ipmi/ipmi-smic.yaml           | 2 +-
+ .../devicetree/bindings/leds/backlight/gpio-backlight.yaml      | 2 +-
+ .../devicetree/bindings/leds/backlight/led-backlight.yaml       | 2 +-
+ .../devicetree/bindings/leds/backlight/pwm-backlight.yaml       | 2 +-
+ Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml | 2 +-
+ Documentation/devicetree/bindings/leds/issi,is31fl319x.yaml     | 2 +-
+ Documentation/devicetree/bindings/leds/register-bit-led.yaml    | 2 +-
+ Documentation/devicetree/bindings/leds/regulator-led.yaml       | 2 +-
+ .../devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml      | 2 +-
+ Documentation/devicetree/bindings/mailbox/sprd-mailbox.yaml     | 2 +-
+ Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml    | 2 +-
+ .../devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml      | 2 +-
+ .../devicetree/bindings/media/i2c/dongwoon,dw9768.yaml          | 2 +-
+ Documentation/devicetree/bindings/media/i2c/ov8856.yaml         | 2 +-
+ Documentation/devicetree/bindings/media/i2c/ovti,ov02a10.yaml   | 2 +-
+ Documentation/devicetree/bindings/media/i2c/ovti,ov5640.yaml    | 2 +-
+ Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml    | 2 +-
+ Documentation/devicetree/bindings/media/i2c/ovti,ov5648.yaml    | 2 +-
+ Documentation/devicetree/bindings/media/i2c/ovti,ov8865.yaml    | 2 +-
+ Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml   | 2 +-
+ Documentation/devicetree/bindings/media/marvell,mmp2-ccic.yaml  | 2 +-
+ Documentation/devicetree/bindings/media/renesas,ceu.yaml        | 2 +-
+ Documentation/devicetree/bindings/media/st,stm32-cec.yaml       | 2 +-
+ Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml      | 2 +-
+ Documentation/devicetree/bindings/media/st,stm32-dma2d.yaml     | 2 +-
+ .../devicetree/bindings/media/video-interface-devices.yaml      | 2 +-
+ Documentation/devicetree/bindings/media/video-interfaces.yaml   | 2 +-
+ .../bindings/memory-controllers/calxeda-ddr-ctrlr.yaml          | 2 +-
+ .../bindings/memory-controllers/ingenic,nemc-peripherals.yaml   | 2 +-
+ .../devicetree/bindings/memory-controllers/ingenic,nemc.yaml    | 2 +-
+ .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml          | 2 +-
+ .../devicetree/bindings/memory-controllers/ti,gpmc-child.yaml   | 2 +-
+ .../devicetree/bindings/memory-controllers/ti,gpmc.yaml         | 2 +-
+ Documentation/devicetree/bindings/mfd/actions,atc260x.yaml      | 2 +-
+ Documentation/devicetree/bindings/mfd/ene-kb3930.yaml           | 2 +-
+ Documentation/devicetree/bindings/mfd/ene-kb930.yaml            | 2 +-
+ Documentation/devicetree/bindings/mfd/fsl,imx8qxp-csr.yaml      | 2 +-
+ Documentation/devicetree/bindings/mfd/qcom,pm8008.yaml          | 2 +-
+ Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml    | 2 +-
+ Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml    | 2 +-
+ Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml    | 2 +-
+ Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml    | 2 +-
+ Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml     | 2 +-
+ Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml     | 2 +-
+ Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml      | 2 +-
+ Documentation/devicetree/bindings/mfd/st,stmfx.yaml             | 2 +-
+ Documentation/devicetree/bindings/mfd/st,stpmic1.yaml           | 2 +-
+ Documentation/devicetree/bindings/mips/cpus.yaml                | 2 +-
+ Documentation/devicetree/bindings/mips/ingenic/devices.yaml     | 2 +-
+ .../devicetree/bindings/mips/lantiq/lantiq,dma-xway.yaml        | 2 +-
+ Documentation/devicetree/bindings/mips/loongson/devices.yaml    | 2 +-
+ Documentation/devicetree/bindings/misc/olpc,xo1.75-ec.yaml      | 2 +-
+ Documentation/devicetree/bindings/mmc/arasan,sdhci.yaml         | 2 +-
+ Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml   | 2 +-
+ Documentation/devicetree/bindings/mmc/ingenic,mmc.yaml          | 2 +-
+ .../devicetree/bindings/mmc/microchip,dw-sparx5-sdhci.yaml      | 2 +-
+ Documentation/devicetree/bindings/mmc/mmc-controller.yaml       | 2 +-
+ Documentation/devicetree/bindings/mmc/mmc-pwrseq-emmc.yaml      | 2 +-
+ Documentation/devicetree/bindings/mmc/mmc-pwrseq-sd8787.yaml    | 2 +-
+ Documentation/devicetree/bindings/mmc/mmc-pwrseq-simple.yaml    | 2 +-
+ Documentation/devicetree/bindings/mmc/mtk-sd.yaml               | 2 +-
+ Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml            | 2 +-
+ Documentation/devicetree/bindings/mmc/snps,dwcmshc-sdhci.yaml   | 2 +-
+ Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml     | 2 +-
+ Documentation/devicetree/bindings/mtd/gpmi-nand.yaml            | 2 +-
+ Documentation/devicetree/bindings/mtd/ingenic,nand.yaml         | 2 +-
+ Documentation/devicetree/bindings/mtd/microchip,mchp48l640.yaml | 2 +-
+ Documentation/devicetree/bindings/mtd/mxc-nand.yaml             | 2 +-
+ Documentation/devicetree/bindings/mtd/nand-chip.yaml            | 2 +-
+ Documentation/devicetree/bindings/mtd/nand-controller.yaml      | 2 +-
+ .../devicetree/bindings/mtd/partitions/qcom,smem-part.yaml      | 2 +-
+ Documentation/devicetree/bindings/mtd/st,stm32-fmc2-nand.yaml   | 2 +-
+ Documentation/devicetree/bindings/mux/gpio-mux.yaml             | 2 +-
+ Documentation/devicetree/bindings/mux/mux-consumer.yaml         | 2 +-
+ Documentation/devicetree/bindings/mux/mux-controller.yaml       | 2 +-
+ Documentation/devicetree/bindings/mux/reg-mux.yaml              | 2 +-
+ Documentation/devicetree/bindings/net/asix,ax88178.yaml         | 2 +-
+ .../devicetree/bindings/net/bluetooth/bluetooth-controller.yaml | 2 +-
+ Documentation/devicetree/bindings/net/brcm,bcmgenet.yaml        | 2 +-
+ .../devicetree/bindings/net/can/allwinner,sun4i-a10-can.yaml    | 2 +-
+ Documentation/devicetree/bindings/net/can/bosch,c_can.yaml      | 2 +-
+ Documentation/devicetree/bindings/net/can/bosch,m_can.yaml      | 2 +-
+ Documentation/devicetree/bindings/net/can/can-controller.yaml   | 2 +-
+ Documentation/devicetree/bindings/net/can/can-transceiver.yaml  | 2 +-
+ Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml     | 2 +-
+ Documentation/devicetree/bindings/net/dsa/arrow,xrs700x.yaml    | 2 +-
+ Documentation/devicetree/bindings/net/dsa/dsa-port.yaml         | 2 +-
+ Documentation/devicetree/bindings/net/dsa/dsa.yaml              | 2 +-
+ .../devicetree/bindings/net/dsa/hirschmann,hellcreek.yaml       | 2 +-
+ .../devicetree/bindings/net/dsa/microchip,lan937x.yaml          | 2 +-
+ Documentation/devicetree/bindings/net/dsa/mscc,ocelot.yaml      | 2 +-
+ Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml      | 2 +-
+ Documentation/devicetree/bindings/net/engleder,tsnep.yaml       | 2 +-
+ Documentation/devicetree/bindings/net/ethernet-controller.yaml  | 2 +-
+ Documentation/devicetree/bindings/net/ethernet-phy.yaml         | 2 +-
+ Documentation/devicetree/bindings/net/fsl,qoriq-mc-dpmac.yaml   | 2 +-
+ Documentation/devicetree/bindings/net/ingenic,mac.yaml          | 2 +-
+ Documentation/devicetree/bindings/net/mctp-i2c-controller.yaml  | 2 +-
+ Documentation/devicetree/bindings/net/mdio.yaml                 | 2 +-
+ Documentation/devicetree/bindings/net/microchip,lan95xx.yaml    | 2 +-
+ Documentation/devicetree/bindings/net/wireless/esp,esp8089.yaml | 2 +-
+ Documentation/devicetree/bindings/net/wireless/ieee80211.yaml   | 2 +-
+ .../devicetree/bindings/net/wireless/mediatek,mt76.yaml         | 2 +-
+ .../devicetree/bindings/net/wireless/microchip,wilc1000.yaml    | 2 +-
+ Documentation/devicetree/bindings/net/wireless/qca,ath9k.yaml   | 2 +-
+ Documentation/devicetree/bindings/net/wireless/qcom,ath11k.yaml | 2 +-
+ Documentation/devicetree/bindings/net/wireless/silabs,wfx.yaml  | 2 +-
+ Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml      | 2 +-
+ .../devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml         | 2 +-
+ Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml        | 2 +-
+ Documentation/devicetree/bindings/nvmem/qcom,spmi-sdam.yaml     | 2 +-
+ .../devicetree/bindings/nvmem/socionext,uniphier-efuse.yaml     | 2 +-
+ Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml     | 2 +-
+ Documentation/devicetree/bindings/opp/opp-v1.yaml               | 2 +-
+ Documentation/devicetree/bindings/opp/opp-v2-base.yaml          | 2 +-
+ Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml      | 2 +-
+ Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml    | 2 +-
+ Documentation/devicetree/bindings/opp/opp-v2.yaml               | 2 +-
+ Documentation/devicetree/bindings/pci/pci-ep.yaml               | 2 +-
+ Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml         | 2 +-
+ Documentation/devicetree/bindings/phy/brcm,ns2-pcie-phy.yaml    | 2 +-
+ Documentation/devicetree/bindings/phy/calxeda-combophy.yaml     | 2 +-
+ Documentation/devicetree/bindings/phy/fsl,imx8mq-usb-phy.yaml   | 2 +-
+ Documentation/devicetree/bindings/phy/fsl,lynx-28g.yaml         | 2 +-
+ Documentation/devicetree/bindings/phy/ingenic,phy-usb.yaml      | 2 +-
+ .../devicetree/bindings/phy/intel,keembay-phy-usb.yaml          | 2 +-
+ .../devicetree/bindings/phy/intel,phy-thunderbay-emmc.yaml      | 2 +-
+ Documentation/devicetree/bindings/phy/marvell,mmp3-usb-phy.yaml | 2 +-
+ Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml     | 2 +-
+ Documentation/devicetree/bindings/phy/mediatek,hdmi-phy.yaml    | 2 +-
+ Documentation/devicetree/bindings/phy/mediatek,ufs-phy.yaml     | 2 +-
+ Documentation/devicetree/bindings/phy/phy-cadence-sierra.yaml   | 2 +-
+ Documentation/devicetree/bindings/phy/phy-cadence-torrent.yaml  | 2 +-
+ Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml    | 2 +-
+ Documentation/devicetree/bindings/phy/phy-tegra194-p2u.yaml     | 2 +-
+ Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml      | 2 +-
+ Documentation/devicetree/bindings/phy/ti,phy-am654-serdes.yaml  | 2 +-
+ Documentation/devicetree/bindings/phy/ti,phy-gmii-sel.yaml      | 2 +-
+ Documentation/devicetree/bindings/phy/transmit-amplitude.yaml   | 2 +-
+ Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml  | 2 +-
+ Documentation/devicetree/bindings/pinctrl/ingenic,pinctrl.yaml  | 2 +-
+ Documentation/devicetree/bindings/pinctrl/intel,lgm-io.yaml     | 2 +-
+ Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml      | 2 +-
+ Documentation/devicetree/bindings/pinctrl/pinmux-node.yaml      | 2 +-
+ Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml       | 2 +-
+ Documentation/devicetree/bindings/power/domain-idle-state.yaml  | 2 +-
+ Documentation/devicetree/bindings/power/fsl,scu-pd.yaml         | 2 +-
+ .../devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml      | 2 +-
+ Documentation/devicetree/bindings/power/supply/bq2415x.yaml     | 2 +-
+ Documentation/devicetree/bindings/power/supply/bq24190.yaml     | 2 +-
+ Documentation/devicetree/bindings/power/supply/bq24257.yaml     | 2 +-
+ Documentation/devicetree/bindings/power/supply/bq24735.yaml     | 2 +-
+ Documentation/devicetree/bindings/power/supply/bq25890.yaml     | 2 +-
+ .../devicetree/bindings/power/supply/dlg,da9150-charger.yaml    | 2 +-
+ .../devicetree/bindings/power/supply/dlg,da9150-fuel-gauge.yaml | 2 +-
+ .../devicetree/bindings/power/supply/ingenic,battery.yaml       | 2 +-
+ Documentation/devicetree/bindings/power/supply/isp1704.yaml     | 2 +-
+ .../devicetree/bindings/power/supply/lltc,lt3651-charger.yaml   | 2 +-
+ .../devicetree/bindings/power/supply/lltc,ltc294x.yaml          | 2 +-
+ .../devicetree/bindings/power/supply/maxim,ds2760.yaml          | 2 +-
+ .../devicetree/bindings/power/supply/maxim,max14656.yaml        | 2 +-
+ .../devicetree/bindings/power/supply/richtek,rt9455.yaml        | 2 +-
+ .../devicetree/bindings/power/supply/sc2731-charger.yaml        | 2 +-
+ Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml   | 2 +-
+ Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml   | 2 +-
+ Documentation/devicetree/bindings/pwm/microchip,corepwm.yaml    | 2 +-
+ Documentation/devicetree/bindings/regulator/pwm-regulator.yaml  | 2 +-
+ .../devicetree/bindings/regulator/st,stm32-booster.yaml         | 2 +-
+ .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml         | 2 +-
+ .../devicetree/bindings/remoteproc/amlogic,meson-mx-ao-arc.yaml | 2 +-
+ Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml | 2 +-
+ Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml   | 2 +-
+ Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml       | 2 +-
+ Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml     | 2 +-
+ Documentation/devicetree/bindings/remoteproc/qcom,pil-info.yaml | 2 +-
+ .../devicetree/bindings/remoteproc/renesas,rcar-rproc.yaml      | 2 +-
+ .../devicetree/bindings/remoteproc/st,stm32-rproc.yaml          | 2 +-
+ .../devicetree/bindings/reserved-memory/shared-dma-pool.yaml    | 2 +-
+ Documentation/devicetree/bindings/reset/ti,sci-reset.yaml       | 2 +-
+ Documentation/devicetree/bindings/reset/ti,tps380x-reset.yaml   | 2 +-
+ Documentation/devicetree/bindings/riscv/cpus.yaml               | 2 +-
+ Documentation/devicetree/bindings/rng/ingenic,rng.yaml          | 2 +-
+ Documentation/devicetree/bindings/rng/ingenic,trng.yaml         | 2 +-
+ Documentation/devicetree/bindings/rng/intel,ixp46x-rng.yaml     | 2 +-
+ .../devicetree/bindings/rng/silex-insight,ba431-rng.yaml        | 2 +-
+ Documentation/devicetree/bindings/rng/st,stm32-rng.yaml         | 2 +-
+ .../devicetree/bindings/rng/xiphera,xip8001b-trng.yaml          | 2 +-
+ Documentation/devicetree/bindings/rtc/epson,rx8900.yaml         | 2 +-
+ Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml          | 2 +-
+ Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml          | 2 +-
+ Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml     | 2 +-
+ Documentation/devicetree/bindings/rtc/rtc.yaml                  | 2 +-
+ Documentation/devicetree/bindings/rtc/sa1100-rtc.yaml           | 2 +-
+ Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml         | 2 +-
+ Documentation/devicetree/bindings/serial/8250.yaml              | 2 +-
+ Documentation/devicetree/bindings/serial/8250_omap.yaml         | 2 +-
+ Documentation/devicetree/bindings/serial/brcm,bcm7271-uart.yaml | 2 +-
+ Documentation/devicetree/bindings/serial/ingenic,uart.yaml      | 2 +-
+ Documentation/devicetree/bindings/serial/rs485.yaml             | 2 +-
+ Documentation/devicetree/bindings/serial/serial.yaml            | 2 +-
+ Documentation/devicetree/bindings/serial/st,stm32-uart.yaml     | 2 +-
+ Documentation/devicetree/bindings/serio/ps2-gpio.yaml           | 2 +-
+ Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml     | 2 +-
+ Documentation/devicetree/bindings/soc/qcom/qcom,aoss-qmp.yaml   | 2 +-
+ Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml        | 2 +-
+ Documentation/devicetree/bindings/soc/qcom/qcom,smem.yaml       | 2 +-
+ Documentation/devicetree/bindings/soc/qcom/qcom,spm.yaml        | 2 +-
+ Documentation/devicetree/bindings/soc/qcom/qcom-stats.yaml      | 2 +-
+ Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml   | 2 +-
+ Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml     | 2 +-
+ Documentation/devicetree/bindings/sound/audio-graph-port.yaml   | 2 +-
+ Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml     | 2 +-
+ Documentation/devicetree/bindings/sound/ingenic,aic.yaml        | 2 +-
+ Documentation/devicetree/bindings/sound/ingenic,codec.yaml      | 2 +-
+ Documentation/devicetree/bindings/sound/marvell,mmp-sspa.yaml   | 2 +-
+ Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml     | 2 +-
+ .../devicetree/bindings/sound/qcom,lpass-rx-macro.yaml          | 2 +-
+ .../devicetree/bindings/sound/qcom,lpass-tx-macro.yaml          | 2 +-
+ .../devicetree/bindings/sound/qcom,lpass-va-macro.yaml          | 2 +-
+ .../devicetree/bindings/sound/qcom,lpass-wsa-macro.yaml         | 2 +-
+ Documentation/devicetree/bindings/sound/qcom,q6apm-dai.yaml     | 2 +-
+ .../devicetree/bindings/sound/qcom,q6dsp-lpass-clocks.yaml      | 2 +-
+ .../devicetree/bindings/sound/qcom,q6dsp-lpass-ports.yaml       | 2 +-
+ Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml       | 2 +-
+ Documentation/devicetree/bindings/sound/qcom,wcd938x-sdw.yaml   | 2 +-
+ Documentation/devicetree/bindings/sound/qcom,wcd938x.yaml       | 2 +-
+ Documentation/devicetree/bindings/sound/qcom,wsa881x.yaml       | 2 +-
+ Documentation/devicetree/bindings/sound/qcom,wsa883x.yaml       | 2 +-
+ Documentation/devicetree/bindings/sound/realtek,rt1015p.yaml    | 2 +-
+ Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml    | 2 +-
+ Documentation/devicetree/bindings/sound/ti,src4xxx.yaml         | 2 +-
+ .../devicetree/bindings/soundwire/soundwire-controller.yaml     | 2 +-
+ Documentation/devicetree/bindings/spi/aspeed,ast2600-fmc.yaml   | 2 +-
+ Documentation/devicetree/bindings/spi/ingenic,spi.yaml          | 2 +-
+ Documentation/devicetree/bindings/spi/marvell,mmp2-ssp.yaml     | 2 +-
+ Documentation/devicetree/bindings/spi/omap-spi.yaml             | 2 +-
+ Documentation/devicetree/bindings/spi/spi-controller.yaml       | 2 +-
+ Documentation/devicetree/bindings/spi/spi-gpio.yaml             | 2 +-
+ Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml        | 2 +-
+ Documentation/devicetree/bindings/spi/st,stm32-spi.yaml         | 2 +-
+ Documentation/devicetree/bindings/thermal/fsl,scu-thermal.yaml  | 2 +-
+ Documentation/devicetree/bindings/thermal/imx-thermal.yaml      | 2 +-
+ Documentation/devicetree/bindings/thermal/imx8mm-thermal.yaml   | 2 +-
+ Documentation/devicetree/bindings/thermal/sprd-thermal.yaml     | 2 +-
+ Documentation/devicetree/bindings/thermal/st,stm32-thermal.yaml | 2 +-
+ .../devicetree/bindings/thermal/thermal-cooling-devices.yaml    | 2 +-
+ Documentation/devicetree/bindings/thermal/thermal-idle.yaml     | 2 +-
+ Documentation/devicetree/bindings/thermal/thermal-sensor.yaml   | 2 +-
+ Documentation/devicetree/bindings/thermal/thermal-zones.yaml    | 2 +-
+ Documentation/devicetree/bindings/thermal/ti,am654-thermal.yaml | 2 +-
+ Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml | 2 +-
+ Documentation/devicetree/bindings/timer/ingenic,sysost.yaml     | 2 +-
+ Documentation/devicetree/bindings/timer/ingenic,tcu.yaml        | 2 +-
+ Documentation/devicetree/bindings/timer/mrvl,mmp-timer.yaml     | 2 +-
+ Documentation/devicetree/bindings/timer/st,stm32-timer.yaml     | 2 +-
+ Documentation/devicetree/bindings/usb/analogix,anx7411.yaml     | 2 +-
+ Documentation/devicetree/bindings/usb/cdns,usb3.yaml            | 2 +-
+ Documentation/devicetree/bindings/usb/dwc2.yaml                 | 2 +-
+ Documentation/devicetree/bindings/usb/faraday,fotg210.yaml      | 2 +-
+ Documentation/devicetree/bindings/usb/ingenic,musb.yaml         | 2 +-
+ Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml  | 2 +-
+ Documentation/devicetree/bindings/usb/maxim,max33359.yaml       | 2 +-
+ Documentation/devicetree/bindings/usb/mediatek,mt6360-tcpc.yaml | 2 +-
+ Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml    | 2 +-
+ Documentation/devicetree/bindings/usb/nxp,isp1760.yaml          | 2 +-
+ Documentation/devicetree/bindings/usb/realtek,rts5411.yaml      | 2 +-
+ Documentation/devicetree/bindings/usb/richtek,rt1719.yaml       | 2 +-
+ Documentation/devicetree/bindings/usb/st,stusb160x.yaml         | 2 +-
+ Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml         | 2 +-
+ Documentation/devicetree/bindings/usb/ti,tps6598x.yaml          | 2 +-
+ Documentation/devicetree/bindings/usb/ti,usb8041.yaml           | 2 +-
+ Documentation/devicetree/bindings/usb/usb-device.yaml           | 2 +-
+ Documentation/devicetree/bindings/usb/willsemi,wusb3801.yaml    | 2 +-
+ Documentation/devicetree/bindings/virtio/virtio-device.yaml     | 2 +-
+ Documentation/devicetree/bindings/watchdog/fsl,scu-wdt.yaml     | 2 +-
+ Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml   | 2 +-
+ Documentation/devicetree/bindings/watchdog/watchdog.yaml        | 2 +-
+ 477 files changed, 477 insertions(+), 477 deletions(-)
+
+-- 
+2.34.1
 
