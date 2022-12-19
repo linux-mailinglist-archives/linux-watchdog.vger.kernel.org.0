@@ -2,94 +2,123 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF2E65096C
-	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Dec 2022 10:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90661650A4E
+	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Dec 2022 11:44:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbiLSJmr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 19 Dec 2022 04:42:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
+        id S231292AbiLSKos (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 19 Dec 2022 05:44:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbiLSJmq (ORCPT
+        with ESMTP id S231330AbiLSKor (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 19 Dec 2022 04:42:46 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A6095A2;
-        Mon, 19 Dec 2022 01:42:43 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 12C2C24E0D7;
-        Mon, 19 Dec 2022 17:42:42 +0800 (CST)
-Received: from EXMBX161.cuchost.com (172.16.6.71) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 19 Dec
- 2022 17:42:42 +0800
-Received: from localhost.localdomain (183.27.97.120) by EXMBX161.cuchost.com
- (172.16.6.71) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 19 Dec
- 2022 17:42:41 +0800
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>,
+        Mon, 19 Dec 2022 05:44:47 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6FEDAE
+        for <linux-watchdog@vger.kernel.org>; Mon, 19 Dec 2022 02:44:45 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id s25so8659584lji.2
+        for <linux-watchdog@vger.kernel.org>; Mon, 19 Dec 2022 02:44:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DmjevszxUCHQTpFoG42/dWmGvxvU2NY1rLLfgP/zAYQ=;
+        b=xk6bLMxZNZBEzQrCU6p5cVw1ASvxpJqWRDfaGf+X56qYU19GLYXZBYPM0lH4Yxf8JL
+         WdKiOqSDQVbRhc7Va39RDQC21wP+cBx2VqOQOWswUn3jMpH6qFZuBnYUjXn38HKk8Mfo
+         z+eTjr0UhVr28cJsXjBrQ62bysYvDCjyLqa0RrvJJN/zJkODjvVD0xm1g3dfibJAYGKq
+         dGBCrqZ4mKEfCZh9riBPZ2kg4JIFMnR6NbyB/A6FMessjnuiwmFM8wYC6ISbiJZIBH6D
+         98OYIoIHmcVxTkC4W6BjbTjrZUzt3X8yQwHimgmy0O0wzYXSBEZXGttM03jGeMJ1TOTG
+         ww0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DmjevszxUCHQTpFoG42/dWmGvxvU2NY1rLLfgP/zAYQ=;
+        b=I0lFtNNrGMNDDKWq/6K4KLPVe0kt/IYua2Oq+VfvJsXKlzUCcMPVK274HRCdMuQghc
+         mAHeC6TOTWdGUOlEzLg5f57ZySmAwzN9CSwymAqn81W7YC+eddi9ClP7/Yd2kdza/j+d
+         lKJl9uuvgxFjSFInpn7Fgs+22ftUB7GlPHNdHAVVCLVKviQ3tXKbxRT3c3kZ2RUNT3Wf
+         r16fT38K6qT1JIJ3maSK2FZrXePcAEp4OooO3hNZ+iaqg533sG8ti1PGo8dccEUJ0axW
+         SDPciA1RaKIREmiUC03ug2IFJiFK++yVJlf6M6m+nV9LoF2R44ug6mVBs9NKjx6umJxk
+         YxTA==
+X-Gm-Message-State: AFqh2koPzfYImQxl6v1k5I0mn3yrI6nzioTHMFsONUzJbd2mEdqKXoc2
+        bOAnTFeVZ+vPB6tKh8zM3pjyag==
+X-Google-Smtp-Source: AMrXdXs2ly9js0eSHV7X+rrGPhAfnPRWaalB/tSrvhSQbapLry3medMrQ2c5Xs+1XwcJCBV8NNeaIg==
+X-Received: by 2002:a05:651c:54f:b0:27f:66ec:b5d with SMTP id q15-20020a05651c054f00b0027f66ec0b5dmr3509135ljp.33.1671446683970;
+        Mon, 19 Dec 2022 02:44:43 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id f2-20020a2e3802000000b0027a099ad7efsm714252lja.35.2022.12.19.02.44.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Dec 2022 02:44:43 -0800 (PST)
+Message-ID: <c906603f-bf84-06d4-3e9c-bd4ab748591d@linaro.org>
+Date:   Mon, 19 Dec 2022 11:44:42 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: watchdog: Add watchdog for StarFive
+ JH7110
+Content-Language: en-US
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>,
         Samin Guo <samin.guo@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 3/3] riscv: dts: starfive: jh7110: Add watchdog node
-Date:   Mon, 19 Dec 2022 17:42:33 +0800
-Message-ID: <20221219094233.179153-4-xingyu.wu@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221219094233.179153-1-xingyu.wu@starfivetech.com>
+        linux-kernel@vger.kernel.org
 References: <20221219094233.179153-1-xingyu.wu@starfivetech.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [183.27.97.120]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX161.cuchost.com
- (172.16.6.71)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <20221219094233.179153-2-xingyu.wu@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221219094233.179153-2-xingyu.wu@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Add the watchdog node for the Starfive JH7110 SoC.
+On 19/12/2022 10:42, Xingyu Wu wrote:
+> Add bindings to describe the watchdog for the StarFive JH7110 SoC.
+> 
+> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> ---
+>  .../watchdog/starfive,jh7110-wdt.yaml         | 64 +++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/starfive,jh7110-wdt.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/starfive,jh7110-wdt.yaml b/Documentation/devicetree/bindings/watchdog/starfive,jh7110-wdt.yaml
+> new file mode 100644
+> index 000000000000..a7bfe0751928
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/starfive,jh7110-wdt.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/starfive,jh7110-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: StarFive Watchdog
+> +
+> +maintainers:
+> +  - Samin Guo <samin.guo@starfivetech.com>
+> +  - Xingyu Wu <xingyu.wu@starfivetech.com>
+> +
 
-Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
----
- arch/riscv/boot/dts/starfive/jh7110.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+You miss watchdog.yaml. I asked to drop the quotes (so the " character),
+not the $ref. Please keep the $ref: watchdog.yaml and use
+unevaluatedProperties at the end (instead of additionalProperties).
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-index c22e8f1d2640..cf981dce5bb9 100644
---- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-@@ -433,5 +433,16 @@ uart5: serial@12020000 {
- 			reg-shift = <2>;
- 			status = "disabled";
- 		};
-+
-+		wdog: watchdog@13070000 {
-+			compatible = "starfive,jh7110-wdt";
-+			reg = <0x0 0x13070000 0x0 0x10000>;
-+			clocks = <&syscrg JH7110_SYSCLK_WDT_APB>,
-+				 <&syscrg JH7110_SYSCLK_WDT_CORE>;
-+			clock-names = "apb", "core";
-+			resets = <&syscrg JH7110_SYSRST_WDT_APB>,
-+				 <&syscrg JH7110_SYSRST_WDT_CORE>;
-+			reset-names = "apb", "core";
-+		};
- 	};
- };
--- 
-2.25.1
+
+Best regards,
+Krzysztof
 
