@@ -2,41 +2,44 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC4F659AA3
-	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Dec 2022 17:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3528F659AAE
+	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Dec 2022 17:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiL3Qlt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 30 Dec 2022 11:41:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
+        id S231397AbiL3Qtw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 30 Dec 2022 11:49:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiL3Qls (ORCPT
+        with ESMTP id S231419AbiL3Qtw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 30 Dec 2022 11:41:48 -0500
-Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1A813D41
-        for <linux-watchdog@vger.kernel.org>; Fri, 30 Dec 2022 08:41:46 -0800 (PST)
+        Fri, 30 Dec 2022 11:49:52 -0500
+Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588D417882
+        for <linux-watchdog@vger.kernel.org>; Fri, 30 Dec 2022 08:49:51 -0800 (PST)
 Received: from pop-os.home ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id BIS0pfZvxl2VFBIS0pV5zo; Fri, 30 Dec 2022 17:41:45 +0100
+        id BIZopMPUH4s3dBIZop6r4L; Fri, 30 Dec 2022 17:49:49 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 30 Dec 2022 17:41:45 +0100
+X-ME-Date: Fri, 30 Dec 2022 17:49:49 +0100
 X-ME-IP: 86.243.100.34
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH] watchdog: rtd119x: Use devm_clk_get_enabled() helper
-Date:   Fri, 30 Dec 2022 17:41:31 +0100
-Message-Id: <14b521b821279bc5111dc80b55d0936c5767c737.1672418470.git.christophe.jaillet@wanadoo.fr>
+        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [PATCH] watchdog: qcom: Use devm_clk_get_enabled() helper
+Date:   Fri, 30 Dec 2022 17:49:47 +0100
+Message-Id: <7c2d5f3815949faf6d3a0237a7b5f272f00a7ae9.1672418969.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,50 +56,48 @@ with devm_add_action_or_reset().
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/watchdog/rtd119x_wdt.c | 16 +---------------
+ drivers/watchdog/qcom-wdt.c | 16 +---------------
  1 file changed, 1 insertion(+), 15 deletions(-)
 
-diff --git a/drivers/watchdog/rtd119x_wdt.c b/drivers/watchdog/rtd119x_wdt.c
-index 834b94ff3f90..95c8d7abce42 100644
---- a/drivers/watchdog/rtd119x_wdt.c
-+++ b/drivers/watchdog/rtd119x_wdt.c
-@@ -94,16 +94,10 @@ static const struct of_device_id rtd119x_wdt_dt_ids[] = {
- 	 { }
+diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
+index 0d2209c5eaca..d776474dcdf3 100644
+--- a/drivers/watchdog/qcom-wdt.c
++++ b/drivers/watchdog/qcom-wdt.c
+@@ -175,11 +175,6 @@ static const struct watchdog_info qcom_wdt_pt_info = {
+ 	.identity	= KBUILD_MODNAME,
  };
  
--static void rtd119x_clk_disable_unprepare(void *data)
+-static void qcom_clk_disable_unprepare(void *data)
 -{
 -	clk_disable_unprepare(data);
 -}
 -
- static int rtd119x_wdt_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct rtd119x_watchdog_device *data;
--	int ret;
+ static const struct qcom_wdt_match_data match_data_apcs_tmr = {
+ 	.offset = reg_offset_data_apcs_tmr,
+ 	.pretimeout = false,
+@@ -226,21 +221,12 @@ static int qcom_wdt_probe(struct platform_device *pdev)
+ 	if (IS_ERR(wdt->base))
+ 		return PTR_ERR(wdt->base);
  
- 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
-@@ -113,18 +107,10 @@ static int rtd119x_wdt_probe(struct platform_device *pdev)
- 	if (IS_ERR(data->base))
- 		return PTR_ERR(data->base);
+-	clk = devm_clk_get(dev, NULL);
++	clk = devm_clk_get_enabled(dev, NULL);
+ 	if (IS_ERR(clk)) {
+ 		dev_err(dev, "failed to get input clock\n");
+ 		return PTR_ERR(clk);
+ 	}
  
--	data->clk = devm_clk_get(dev, NULL);
-+	data->clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(data->clk))
- 		return PTR_ERR(data->clk);
- 
--	ret = clk_prepare_enable(data->clk);
--	if (ret)
+-	ret = clk_prepare_enable(clk);
+-	if (ret) {
+-		dev_err(dev, "failed to setup clock\n");
 -		return ret;
--	ret = devm_add_action_or_reset(dev, rtd119x_clk_disable_unprepare,
--				       data->clk);
+-	}
+-	ret = devm_add_action_or_reset(dev, qcom_clk_disable_unprepare, clk);
 -	if (ret)
 -		return ret;
 -
- 	data->wdt_dev.info = &rtd119x_wdt_info;
- 	data->wdt_dev.ops = &rtd119x_wdt_ops;
- 	data->wdt_dev.timeout = 120;
+ 	/*
+ 	 * We use the clock rate to calculate the max timeout, so ensure it's
+ 	 * not zero to avoid a divide-by-zero exception.
 -- 
 2.34.1
 
