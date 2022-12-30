@@ -2,26 +2,25 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C6C659A9F
-	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Dec 2022 17:36:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC4F659AA3
+	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Dec 2022 17:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235135AbiL3Qgw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 30 Dec 2022 11:36:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48064 "EHLO
+        id S229812AbiL3Qlt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 30 Dec 2022 11:41:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235232AbiL3QgZ (ORCPT
+        with ESMTP id S229530AbiL3Qls (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 30 Dec 2022 11:36:25 -0500
-X-Greylist: delayed 210 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Dec 2022 08:36:23 PST
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DC2F034
-        for <linux-watchdog@vger.kernel.org>; Fri, 30 Dec 2022 08:36:23 -0800 (PST)
+        Fri, 30 Dec 2022 11:41:48 -0500
+Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1A813D41
+        for <linux-watchdog@vger.kernel.org>; Fri, 30 Dec 2022 08:41:46 -0800 (PST)
 Received: from pop-os.home ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id BIMnp9TXhPNsNBIMnp4aaY; Fri, 30 Dec 2022 17:36:22 +0100
+        id BIS0pfZvxl2VFBIS0pV5zo; Fri, 30 Dec 2022 17:41:45 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 30 Dec 2022 17:36:22 +0100
+X-ME-Date: Fri, 30 Dec 2022 17:41:45 +0100
 X-ME-IP: 86.243.100.34
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -29,15 +28,15 @@ To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         linux-watchdog@vger.kernel.org
-Subject: [PATCH] watchdog: rzn1: Use devm_clk_get_enabled() helper
-Date:   Fri, 30 Dec 2022 17:36:20 +0100
-Message-Id: <b1f8b5453791035ad534bd5ed36b49798ff4d9b2.1672418166.git.christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] watchdog: rtd119x: Use devm_clk_get_enabled() helper
+Date:   Fri, 30 Dec 2022 17:41:31 +0100
+Message-Id: <14b521b821279bc5111dc80b55d0936c5767c737.1672418470.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -54,50 +53,50 @@ with devm_add_action_or_reset().
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/watchdog/rzn1_wdt.c | 18 +-----------------
- 1 file changed, 1 insertion(+), 17 deletions(-)
+ drivers/watchdog/rtd119x_wdt.c | 16 +---------------
+ 1 file changed, 1 insertion(+), 15 deletions(-)
 
-diff --git a/drivers/watchdog/rzn1_wdt.c b/drivers/watchdog/rzn1_wdt.c
-index 55ab384b9965..980c1717adb5 100644
---- a/drivers/watchdog/rzn1_wdt.c
-+++ b/drivers/watchdog/rzn1_wdt.c
-@@ -98,11 +98,6 @@ static const struct watchdog_ops rzn1_wdt_ops = {
- 	.ping = rzn1_wdt_ping,
+diff --git a/drivers/watchdog/rtd119x_wdt.c b/drivers/watchdog/rtd119x_wdt.c
+index 834b94ff3f90..95c8d7abce42 100644
+--- a/drivers/watchdog/rtd119x_wdt.c
++++ b/drivers/watchdog/rtd119x_wdt.c
+@@ -94,16 +94,10 @@ static const struct of_device_id rtd119x_wdt_dt_ids[] = {
+ 	 { }
  };
  
--static void rzn1_wdt_clk_disable_unprepare(void *data)
+-static void rtd119x_clk_disable_unprepare(void *data)
 -{
 -	clk_disable_unprepare(data);
 -}
 -
- static int rzn1_wdt_probe(struct platform_device *pdev)
+ static int rtd119x_wdt_probe(struct platform_device *pdev)
  {
  	struct device *dev = &pdev->dev;
-@@ -132,23 +127,12 @@ static int rzn1_wdt_probe(struct platform_device *pdev)
- 		return ret;
- 	}
+ 	struct rtd119x_watchdog_device *data;
+-	int ret;
  
--	clk = devm_clk_get(dev, NULL);
-+	clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(clk)) {
- 		dev_err(dev, "failed to get the clock\n");
- 		return PTR_ERR(clk);
- 	}
+ 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+@@ -113,18 +107,10 @@ static int rtd119x_wdt_probe(struct platform_device *pdev)
+ 	if (IS_ERR(data->base))
+ 		return PTR_ERR(data->base);
  
--	ret = clk_prepare_enable(clk);
--	if (ret) {
--		dev_err(dev, "failed to prepare/enable the clock\n");
+-	data->clk = devm_clk_get(dev, NULL);
++	data->clk = devm_clk_get_enabled(dev, NULL);
+ 	if (IS_ERR(data->clk))
+ 		return PTR_ERR(data->clk);
+ 
+-	ret = clk_prepare_enable(data->clk);
+-	if (ret)
 -		return ret;
--	}
--
--	ret = devm_add_action_or_reset(dev, rzn1_wdt_clk_disable_unprepare,
--				       clk);
+-	ret = devm_add_action_or_reset(dev, rtd119x_clk_disable_unprepare,
+-				       data->clk);
 -	if (ret)
 -		return ret;
 -
- 	clk_rate = clk_get_rate(clk);
- 	if (!clk_rate) {
- 		dev_err(dev, "failed to get the clock rate\n");
+ 	data->wdt_dev.info = &rtd119x_wdt_info;
+ 	data->wdt_dev.ops = &rtd119x_wdt_ops;
+ 	data->wdt_dev.timeout = 120;
 -- 
 2.34.1
 
