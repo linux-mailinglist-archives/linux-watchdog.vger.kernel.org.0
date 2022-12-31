@@ -2,37 +2,35 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD5565A43E
-	for <lists+linux-watchdog@lfdr.de>; Sat, 31 Dec 2022 13:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4B765A4D0
+	for <lists+linux-watchdog@lfdr.de>; Sat, 31 Dec 2022 15:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbiLaM54 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 31 Dec 2022 07:57:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
+        id S231693AbiLaOUh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 31 Dec 2022 09:20:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiLaM5z (ORCPT
+        with ESMTP id S231544AbiLaOUg (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 31 Dec 2022 07:57:55 -0500
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821C0DB6
-        for <linux-watchdog@vger.kernel.org>; Sat, 31 Dec 2022 04:57:54 -0800 (PST)
+        Sat, 31 Dec 2022 09:20:36 -0500
+Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FA5D2FF
+        for <linux-watchdog@vger.kernel.org>; Sat, 31 Dec 2022 06:20:34 -0800 (PST)
 Received: from pop-os.home ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id BbQup0AJWtht4BbQupzILR; Sat, 31 Dec 2022 13:57:53 +0100
+        id BcitpDw3rLrOWBcitp3DP1; Sat, 31 Dec 2022 15:20:32 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 31 Dec 2022 13:57:53 +0100
+X-ME-Date: Sat, 31 Dec 2022 15:20:32 +0100
 X-ME-IP: 86.243.100.34
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Michal Simek <michal.simek@xilinx.com>
+        Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2] watchdog: of_xilinx_wdt: Use devm_clk_get_enabled() helper
-Date:   Sat, 31 Dec 2022 13:57:49 +0100
-Message-Id: <2b041dc8230a4ed255051bb2d323da8a51a8d0be.1672491445.git.christophe.jaillet@wanadoo.fr>
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH] watchdog: pic32-dmt: Use devm_clk_get_enabled() helper
+Date:   Sat, 31 Dec 2022 15:20:29 +0100
+Message-Id: <f9a4dcfc6d31bd9c1417e2d97a40cc2c1dbc6f30.1672496405.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -55,55 +53,47 @@ with devm_add_action_or_reset().
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
-V2: remove xwdt_clk_disable_unprepare() as-well
+ drivers/watchdog/pic32-dmt.c | 15 +--------------
+ 1 file changed, 1 insertion(+), 14 deletions(-)
 
-Note that the order of operations is slightly modified by this patch. The
-clk is now prepare_enable()'ed before calling clk_get_rate().
----
- drivers/watchdog/of_xilinx_wdt.c | 16 +---------------
- 1 file changed, 1 insertion(+), 15 deletions(-)
-
-diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
-index 3318544366b8..2a079ca04aa3 100644
---- a/drivers/watchdog/of_xilinx_wdt.c
-+++ b/drivers/watchdog/of_xilinx_wdt.c
-@@ -154,11 +154,6 @@ static u32 xwdt_selftest(struct xwdt_device *xdev)
- 		return XWT_TIMER_FAILED;
- }
+diff --git a/drivers/watchdog/pic32-dmt.c b/drivers/watchdog/pic32-dmt.c
+index f43062b3c4c8..bc4ccddc75a3 100644
+--- a/drivers/watchdog/pic32-dmt.c
++++ b/drivers/watchdog/pic32-dmt.c
+@@ -164,11 +164,6 @@ static struct watchdog_device pic32_dmt_wdd = {
+ 	.ops		= &pic32_dmt_fops,
+ };
  
--static void xwdt_clk_disable_unprepare(void *data)
+-static void pic32_clk_disable_unprepare(void *data)
 -{
 -	clk_disable_unprepare(data);
 -}
 -
- static int xwdt_probe(struct platform_device *pdev)
+ static int pic32_dmt_probe(struct platform_device *pdev)
  {
  	struct device *dev = &pdev->dev;
-@@ -193,7 +188,7 @@ static int xwdt_probe(struct platform_device *pdev)
+@@ -184,20 +179,12 @@ static int pic32_dmt_probe(struct platform_device *pdev)
+ 	if (IS_ERR(dmt->regs))
+ 		return PTR_ERR(dmt->regs);
  
- 	watchdog_set_nowayout(xilinx_wdt_wdd, enable_once);
- 
--	xdev->clk = devm_clk_get(dev, NULL);
-+	xdev->clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(xdev->clk)) {
- 		if (PTR_ERR(xdev->clk) != -ENOENT)
- 			return PTR_ERR(xdev->clk);
-@@ -211,15 +206,6 @@ static int xwdt_probe(struct platform_device *pdev)
- 				 "The watchdog clock freq cannot be obtained\n");
- 	} else {
- 		pfreq = clk_get_rate(xdev->clk);
--		rc = clk_prepare_enable(xdev->clk);
--		if (rc) {
--			dev_err(dev, "unable to enable clock\n");
--			return rc;
--		}
--		rc = devm_add_action_or_reset(dev, xwdt_clk_disable_unprepare,
--					      xdev->clk);
--		if (rc)
--			return rc;
+-	dmt->clk = devm_clk_get(dev, NULL);
++	dmt->clk = devm_clk_get_enabled(dev, NULL);
+ 	if (IS_ERR(dmt->clk)) {
+ 		dev_err(dev, "clk not found\n");
+ 		return PTR_ERR(dmt->clk);
  	}
  
- 	/*
+-	ret = clk_prepare_enable(dmt->clk);
+-	if (ret)
+-		return ret;
+-	ret = devm_add_action_or_reset(dev, pic32_clk_disable_unprepare,
+-				       dmt->clk);
+-	if (ret)
+-		return ret;
+-
+ 	wdd->timeout = pic32_dmt_get_timeout_secs(dmt);
+ 	if (!wdd->timeout) {
+ 		dev_err(dev, "failed to read watchdog register timeout\n");
 -- 
 2.34.1
 
