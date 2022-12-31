@@ -2,25 +2,25 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D91765A331
-	for <lists+linux-watchdog@lfdr.de>; Sat, 31 Dec 2022 09:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8071065A380
+	for <lists+linux-watchdog@lfdr.de>; Sat, 31 Dec 2022 11:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbiLaIMd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 31 Dec 2022 03:12:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
+        id S231561AbiLaKhr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 31 Dec 2022 05:37:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiLaIMc (ORCPT
+        with ESMTP id S229757AbiLaKhp (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 31 Dec 2022 03:12:32 -0500
-Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F933BE32
-        for <linux-watchdog@vger.kernel.org>; Sat, 31 Dec 2022 00:12:31 -0800 (PST)
+        Sat, 31 Dec 2022 05:37:45 -0500
+Received: from smtp.smtpout.orange.fr (smtp-23.smtpout.orange.fr [80.12.242.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F9BB7D5
+        for <linux-watchdog@vger.kernel.org>; Sat, 31 Dec 2022 02:37:43 -0800 (PST)
 Received: from pop-os.home ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id BWyjpGbkfBicGBWyjpKZZ0; Sat, 31 Dec 2022 09:12:30 +0100
+        id BZFEpDf5DPNsNBZFEp5YB1; Sat, 31 Dec 2022 11:37:41 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 31 Dec 2022 09:12:30 +0100
+X-ME-Date: Sat, 31 Dec 2022 11:37:41 +0100
 X-ME-IP: 86.243.100.34
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -28,9 +28,9 @@ To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         linux-watchdog@vger.kernel.org
-Subject: [PATCH] watchdog: cadence: Use devm_clk_get_enabled() helper
-Date:   Sat, 31 Dec 2022 09:12:28 +0100
-Message-Id: <615c6c3c46c3ee8e3136725af0ab0b51e1298091.1672474336.git.christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] watchdog: davinci: Use devm_clk_get_enabled() helper
+Date:   Sat, 31 Dec 2022 11:37:39 +0100
+Message-Id: <6a4cf8e8b9d8f555c77395ba2ecadc205553774d.1672483046.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -53,48 +53,51 @@ with devm_add_action_or_reset().
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/watchdog/cadence_wdt.c | 17 +----------------
- 1 file changed, 1 insertion(+), 16 deletions(-)
+ drivers/watchdog/davinci_wdt.c | 18 +-----------------
+ 1 file changed, 1 insertion(+), 17 deletions(-)
 
-diff --git a/drivers/watchdog/cadence_wdt.c b/drivers/watchdog/cadence_wdt.c
-index bc99e9164930..23d41043863f 100644
---- a/drivers/watchdog/cadence_wdt.c
-+++ b/drivers/watchdog/cadence_wdt.c
-@@ -274,11 +274,6 @@ static const struct watchdog_ops cdns_wdt_ops = {
- 	.set_timeout = cdns_wdt_settimeout,
+diff --git a/drivers/watchdog/davinci_wdt.c b/drivers/watchdog/davinci_wdt.c
+index 584a56893b81..5f2184bda7b2 100644
+--- a/drivers/watchdog/davinci_wdt.c
++++ b/drivers/watchdog/davinci_wdt.c
+@@ -189,14 +189,8 @@ static const struct watchdog_ops davinci_wdt_ops = {
+ 	.restart	= davinci_wdt_restart,
  };
  
--static void cdns_clk_disable_unprepare(void *data)
+-static void davinci_clk_disable_unprepare(void *data)
 -{
 -	clk_disable_unprepare(data);
 -}
 -
- /************************Platform Operations*****************************/
- /**
-  * cdns_wdt_probe - Probe call for the device.
-@@ -333,21 +328,11 @@ static int cdns_wdt_probe(struct platform_device *pdev)
- 	watchdog_stop_on_reboot(cdns_wdt_device);
- 	watchdog_set_drvdata(cdns_wdt_device, wdt);
+ static int davinci_wdt_probe(struct platform_device *pdev)
+ {
+-	int ret = 0;
+ 	struct device *dev = &pdev->dev;
+ 	struct watchdog_device *wdd;
+ 	struct davinci_wdt_device *davinci_wdt;
+@@ -205,21 +199,11 @@ static int davinci_wdt_probe(struct platform_device *pdev)
+ 	if (!davinci_wdt)
+ 		return -ENOMEM;
  
--	wdt->clk = devm_clk_get(dev, NULL);
-+	wdt->clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(wdt->clk))
- 		return dev_err_probe(dev, PTR_ERR(wdt->clk),
- 				     "input clock not found\n");
+-	davinci_wdt->clk = devm_clk_get(dev, NULL);
++	davinci_wdt->clk = devm_clk_get_enabled(dev, NULL);
+ 	if (IS_ERR(davinci_wdt->clk))
+ 		return dev_err_probe(dev, PTR_ERR(davinci_wdt->clk),
+ 				     "failed to get clock node\n");
  
--	ret = clk_prepare_enable(wdt->clk);
+-	ret = clk_prepare_enable(davinci_wdt->clk);
 -	if (ret) {
--		dev_err(dev, "unable to enable clock\n");
+-		dev_err(dev, "failed to prepare clock\n");
 -		return ret;
 -	}
--	ret = devm_add_action_or_reset(dev, cdns_clk_disable_unprepare,
--				       wdt->clk);
+-	ret = devm_add_action_or_reset(dev, davinci_clk_disable_unprepare,
+-				       davinci_wdt->clk);
 -	if (ret)
 -		return ret;
 -
- 	clock_f = clk_get_rate(wdt->clk);
- 	if (clock_f <= CDNS_WDT_CLK_75MHZ) {
- 		wdt->prescaler = CDNS_WDT_PRESCALE_512;
+ 	platform_set_drvdata(pdev, davinci_wdt);
+ 
+ 	wdd			= &davinci_wdt->wdd;
 -- 
 2.34.1
 
