@@ -2,77 +2,75 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8D365A5D1
-	for <lists+linux-watchdog@lfdr.de>; Sat, 31 Dec 2022 17:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 260B265A647
+	for <lists+linux-watchdog@lfdr.de>; Sat, 31 Dec 2022 20:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbiLaQtg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 31 Dec 2022 11:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
+        id S232181AbiLaT23 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 31 Dec 2022 14:28:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiLaQtf (ORCPT
+        with ESMTP id S229595AbiLaT23 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 31 Dec 2022 11:49:35 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646C260D0;
-        Sat, 31 Dec 2022 08:49:34 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id ge16so21717112pjb.5;
-        Sat, 31 Dec 2022 08:49:34 -0800 (PST)
+        Sat, 31 Dec 2022 14:28:29 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A9F6548;
+        Sat, 31 Dec 2022 11:28:28 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1442977d77dso28280065fac.6;
+        Sat, 31 Dec 2022 11:28:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lYINHIBvIPZ94wkN7bsE5kBpRC6xDTJKXTDJN6EwWSY=;
-        b=i0IzArBut4mD0lhTFSAM1Ynf1jFhKRWz2I6Sx5gxV7E7HeCl3mLw2dW/Aogp2JwO0R
-         L+HamDLZNhHpDgVTW0sjNpmKGTuAxsKBHuFd4ZK5UjMNhsEMEUlOwI8BjtRTWE+uopty
-         A/0xF61G/iGRC16q+P/wcuvigq4T+6OdE2ztr1i/8qNGdMgT1/jcFFuq7ur6aaZAhCfK
-         3AVNcGjoyZfTz19p86sHVzRBrvGibWmVXCYzXBlGNzu6vkTMu5SeIU4Bbj99Fx3QaphH
-         A/97k6/jV91CbXcM51WQ3OJCGYowXCZF5a4BIlKqzihSVIP3AyBECYWO7UO1xxysSmIE
-         MwJQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AacQ+BIU1NHX+HGWy2UaEC3c651ZlmPMNCs6AfkyBMA=;
+        b=LqUva2Wm6OqLHlGRHfJtVRhZrWxYiPRL2PgvFyNsRS9LfPLwk4r+mb+eCVA1IbmWok
+         jSzNxXaWnbVuk8gW8xx6VR38r8sFGvl/gnEM9+DRzCYJpdvCbS1fo2kobZ6aTJy8E2sS
+         o7xTqo17U7F0tFcsN53l8V9+Jp0rNNUTtRbNvo51ySrqZhQIdLDLjZgO8Rpp8wvddf22
+         dDb+JwjVZAZx73vhLoPEDlgQkW/7KmSCttf58SjBSiW5WHhZ0t8dBKjjEvO/VGit2nIG
+         JU9cVvyR4VM9puBYZty1mqbjWLkxuZHB5MaXK0X3zM2NQy7/KaFSNOE9htsluCzrc/bs
+         Xeog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lYINHIBvIPZ94wkN7bsE5kBpRC6xDTJKXTDJN6EwWSY=;
-        b=bd3vIBdRRry/kmr2wgqpHzNJZ+B2jCWJH28lALnK/rXpTJmByPJxATHY3PBW36ouRC
-         qirYconEgvG7tijslyUirpJVujziLtPfg8kcrYBDat6rvGiH+EOvfQRTz7iKJQFh8ZL4
-         sqvWL008QQ5qZce+JAD3ywv1+b6yFPhW1rTVuYnIzRhPplEMeHBkGdpgmZC6pVuvi96Z
-         SRyASh7Zd5BjV3vg/xmBSH4g+UtAQVnrv1KfGKj25CqrK1qjtzpEyOLDouVAfc2lk5+l
-         aG69UVzLNGa0lWCwJTrbXpbvOCaGoC/VRQgLvIKe02ATlRr599UYqfgdqg6iV0nM9IjQ
-         jeag==
-X-Gm-Message-State: AFqh2kpOFwQrVzRJbHFxR5Pd6Yib8D50QqvA3vLZgeY+alzYyjiRlJq9
-        YaLmjduV1ockzTPOqIB3Ciw=
-X-Google-Smtp-Source: AMrXdXvjc3VeLMtvKzd//XfM5kf8MJjdzawdUxJY4jxOIcJUojdKvm+5gzALvXeM7Vbl3c2f5WjIQw==
-X-Received: by 2002:a17:902:bd01:b0:191:309a:826e with SMTP id p1-20020a170902bd0100b00191309a826emr39157292pls.15.1672505373841;
-        Sat, 31 Dec 2022 08:49:33 -0800 (PST)
-Received: from ?IPV6:2600:8802:b00:4a48:8541:7679:d795:745a? ([2600:8802:b00:4a48:8541:7679:d795:745a])
-        by smtp.gmail.com with ESMTPSA id cp12-20020a170902e78c00b00187022627d7sm17004956plb.36.2022.12.31.08.49.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 31 Dec 2022 08:49:32 -0800 (PST)
-Message-ID: <8aadec85-f941-430e-22c0-03012fb538d2@gmail.com>
-Date:   Sat, 31 Dec 2022 08:49:31 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] watchdog: bcm7038: Use devm_clk_get_enabled() helper
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AacQ+BIU1NHX+HGWy2UaEC3c651ZlmPMNCs6AfkyBMA=;
+        b=m8w/VK6ejU4cIoFiTZBHi4U7HmSlTuCCuhxWRnmBDVqnhviBpVqkVolXkorf+i/m7l
+         f8WSYv+R+VRsIuPNB/guhAjUFEj2ain7PyzyOjb5Tz9pOLA+eJl/P0bJR/USjmmb/1Ss
+         0r+SVNt6Jz7XtyeF2jhKekYd1dtaYhIT5Oy6YtvjprHEaTNFZmRlqUJ0Guku4JMGEsn0
+         ZEYoYYTqfytalZFv8+j6ZgvRZ7RfycP+vcO7vEZlvA+N4l74dwPVe7geG2sMXYnV9L1e
+         D4DrnS1Wxq4RkQ0wcQklt65JGgXXhukliYDSBaATdWJ9HMcqPeLo+xvTjjeDxhsn09PT
+         e67w==
+X-Gm-Message-State: AFqh2krnkBzf0gBBidZ5irglDbRMJvOZQTHPWm0FvxF2ipABvHVCAtfk
+        KDpgKRNeDeLuNDXSvASPLnEt1N4wXxY=
+X-Google-Smtp-Source: AMrXdXubNlFqmaDlYAzmKzsC5OUs7R1upuNYVGc/H7bns+wwN16DlMUT8Pojeg0Zofrpfj+0Y3fw2w==
+X-Received: by 2002:a05:6870:1b09:b0:144:c28c:f7da with SMTP id hl9-20020a0568701b0900b00144c28cf7damr17978434oab.39.1672514907251;
+        Sat, 31 Dec 2022 11:28:27 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y12-20020a4a9c0c000000b004a09df5a1dbsm9693998ooj.8.2022.12.31.11.28.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Dec 2022 11:28:26 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 31 Dec 2022 11:28:24 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <9c055911e9f557b7239000c8e6cfa0cc393a19e9.1672474203.git.christophe.jaillet@wanadoo.fr>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <9c055911e9f557b7239000c8e6cfa0cc393a19e9.1672474203.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] watchdog: apple: Use devm_clk_get_enabled() helper
+Message-ID: <20221231192824.GA3434944@roeck-us.net>
+References: <6f312af6160d1e10b616c9adbd1fd8f822db964d.1672473415.git.christophe.jaillet@wanadoo.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6f312af6160d1e10b616c9adbd1fd8f822db964d.1672473415.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,19 +78,68 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-
-
-On 12/31/2022 12:10 AM, Christophe JAILLET wrote:
+On Sat, Dec 31, 2022 at 08:57:22AM +0100, Christophe JAILLET wrote:
 > The devm_clk_get_enabled() helper:
->     - calls devm_clk_get()
->     - calls clk_prepare_enable() and registers what is needed in order to
->       call clk_disable_unprepare() when needed, as a managed resource.
+>    - calls devm_clk_get()
+>    - calls clk_prepare_enable() and registers what is needed in order to
+>      call clk_disable_unprepare() when needed, as a managed resource.
 > 
 > This simplifies the code and avoids the need of a dedicated function used
 > with devm_add_action_or_reset().
 > 
 > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  drivers/watchdog/apple_wdt.c | 18 +-----------------
+>  1 file changed, 1 insertion(+), 17 deletions(-)
+> 
+> diff --git a/drivers/watchdog/apple_wdt.c b/drivers/watchdog/apple_wdt.c
+> index 16aca21f13d6..eddeb0fede89 100644
+> --- a/drivers/watchdog/apple_wdt.c
+> +++ b/drivers/watchdog/apple_wdt.c
+> @@ -136,11 +136,6 @@ static int apple_wdt_restart(struct watchdog_device *wdd, unsigned long mode,
+>  	return 0;
+>  }
+>  
+> -static void apple_wdt_clk_disable_unprepare(void *data)
+> -{
+> -	clk_disable_unprepare(data);
+> -}
+> -
+>  static struct watchdog_ops apple_wdt_ops = {
+>  	.owner = THIS_MODULE,
+>  	.start = apple_wdt_start,
+> @@ -162,7 +157,6 @@ static int apple_wdt_probe(struct platform_device *pdev)
+>  	struct apple_wdt *wdt;
+>  	struct clk *clk;
+>  	u32 wdt_ctrl;
+> -	int ret;
+>  
+>  	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+>  	if (!wdt)
+> @@ -172,19 +166,9 @@ static int apple_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(wdt->regs))
+>  		return PTR_ERR(wdt->regs);
+>  
+> -	clk = devm_clk_get(dev, NULL);
+> +	clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(clk))
+>  		return PTR_ERR(clk);
+> -
+> -	ret = clk_prepare_enable(clk);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = devm_add_action_or_reset(dev, apple_wdt_clk_disable_unprepare,
+> -				       clk);
+> -	if (ret)
+> -		return ret;
+> -
+>  	wdt->clk_rate = clk_get_rate(clk);
+>  	if (!wdt->clk_rate)
+>  		return -EINVAL;
+> -- 
+> 2.34.1
+> 
