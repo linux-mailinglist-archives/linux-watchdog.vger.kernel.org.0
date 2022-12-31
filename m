@@ -2,42 +2,43 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2238C65A3B6
-	for <lists+linux-watchdog@lfdr.de>; Sat, 31 Dec 2022 12:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FAC65A3EA
+	for <lists+linux-watchdog@lfdr.de>; Sat, 31 Dec 2022 13:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235459AbiLaLOh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 31 Dec 2022 06:14:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46760 "EHLO
+        id S229638AbiLaM0S (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 31 Dec 2022 07:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbiLaLOg (ORCPT
+        with ESMTP id S229546AbiLaM0R (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 31 Dec 2022 06:14:36 -0500
-Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1346402
-        for <linux-watchdog@vger.kernel.org>; Sat, 31 Dec 2022 03:14:35 -0800 (PST)
+        Sat, 31 Dec 2022 07:26:17 -0500
+Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D9B262E
+        for <linux-watchdog@vger.kernel.org>; Sat, 31 Dec 2022 04:26:15 -0800 (PST)
 Received: from pop-os.home ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id BZoupLWNG8ao3BZovp4Bzp; Sat, 31 Dec 2022 12:14:33 +0100
+        id BawFpjtO2fxUsBawFpvF3E; Sat, 31 Dec 2022 13:26:13 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 31 Dec 2022 12:14:33 +0100
+X-ME-Date: Sat, 31 Dec 2022 13:26:13 +0100
 X-ME-IP: 86.243.100.34
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Keguang Zhang <keguang.zhang@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Vladimir Zapolskiy <vz@mleia.com>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-mips@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: [PATCH] watchdog: loongson1: Use devm_clk_get_enabled() helper
-Date:   Sat, 31 Dec 2022 12:14:30 +0100
-Message-Id: <624106aa86ef7e49f16b11b229528eabd63de8f7.1672485257.git.christophe.jaillet@wanadoo.fr>
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] watchdog: lpc18xx: Use devm_clk_get_enabled() helper
+Date:   Sat, 31 Dec 2022 13:26:09 +0100
+Message-Id: <d4c675190d3ddfbba5c354edb4274757f9117304.1672489554.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -54,54 +55,74 @@ with devm_add_action_or_reset().
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
-Note that I get a compilation error because <loongson1.h> is not found on
-my system (x86_64).
-So I think that a "depends on LOONG<something>" in missing in a KConfig
-file.
-
-Fixing it could help compilation farms build-bots.
+Note that the order of operations is slightly modified by this patch. The
+"reg" clk is now prepare_enable()'ed before clk_get("wdtclk").
 ---
- drivers/watchdog/loongson1_wdt.c | 17 +----------------
- 1 file changed, 1 insertion(+), 16 deletions(-)
+ drivers/watchdog/lpc18xx_wdt.c | 30 ++----------------------------
+ 1 file changed, 2 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
-index bb3d075c0633..c55656cfb403 100644
---- a/drivers/watchdog/loongson1_wdt.c
-+++ b/drivers/watchdog/loongson1_wdt.c
-@@ -79,11 +79,6 @@ static const struct watchdog_ops ls1x_wdt_ops = {
- 	.set_timeout = ls1x_wdt_set_timeout,
+diff --git a/drivers/watchdog/lpc18xx_wdt.c b/drivers/watchdog/lpc18xx_wdt.c
+index 60b6d74f267d..1b9b5f21a0df 100644
+--- a/drivers/watchdog/lpc18xx_wdt.c
++++ b/drivers/watchdog/lpc18xx_wdt.c
+@@ -197,16 +197,10 @@ static const struct watchdog_ops lpc18xx_wdt_ops = {
+ 	.restart        = lpc18xx_wdt_restart,
  };
  
--static void ls1x_clk_disable_unprepare(void *data)
+-static void lpc18xx_clk_disable_unprepare(void *data)
 -{
 -	clk_disable_unprepare(data);
 -}
 -
- static int ls1x_wdt_probe(struct platform_device *pdev)
+ static int lpc18xx_wdt_probe(struct platform_device *pdev)
  {
+ 	struct lpc18xx_wdt_dev *lpc18xx_wdt;
  	struct device *dev = &pdev->dev;
-@@ -100,20 +95,10 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
- 	if (IS_ERR(drvdata->base))
- 		return PTR_ERR(drvdata->base);
+-	int ret;
  
--	drvdata->clk = devm_clk_get(dev, pdev->name);
-+	drvdata->clk = devm_clk_get_enabled(dev, pdev->name);
- 	if (IS_ERR(drvdata->clk))
- 		return PTR_ERR(drvdata->clk);
+ 	lpc18xx_wdt = devm_kzalloc(dev, sizeof(*lpc18xx_wdt), GFP_KERNEL);
+ 	if (!lpc18xx_wdt)
+@@ -216,38 +210,18 @@ static int lpc18xx_wdt_probe(struct platform_device *pdev)
+ 	if (IS_ERR(lpc18xx_wdt->base))
+ 		return PTR_ERR(lpc18xx_wdt->base);
  
--	err = clk_prepare_enable(drvdata->clk);
--	if (err) {
--		dev_err(dev, "clk enable failed\n");
--		return err;
+-	lpc18xx_wdt->reg_clk = devm_clk_get(dev, "reg");
++	lpc18xx_wdt->reg_clk = devm_clk_get_enabled(dev, "reg");
+ 	if (IS_ERR(lpc18xx_wdt->reg_clk)) {
+ 		dev_err(dev, "failed to get the reg clock\n");
+ 		return PTR_ERR(lpc18xx_wdt->reg_clk);
+ 	}
+ 
+-	lpc18xx_wdt->wdt_clk = devm_clk_get(dev, "wdtclk");
++	lpc18xx_wdt->wdt_clk = devm_clk_get_enabled(dev, "wdtclk");
+ 	if (IS_ERR(lpc18xx_wdt->wdt_clk)) {
+ 		dev_err(dev, "failed to get the wdt clock\n");
+ 		return PTR_ERR(lpc18xx_wdt->wdt_clk);
+ 	}
+ 
+-	ret = clk_prepare_enable(lpc18xx_wdt->reg_clk);
+-	if (ret) {
+-		dev_err(dev, "could not prepare or enable sys clock\n");
+-		return ret;
 -	}
--	err = devm_add_action_or_reset(dev, ls1x_clk_disable_unprepare,
--				       drvdata->clk);
--	if (err)
--		return err;
+-	ret = devm_add_action_or_reset(dev, lpc18xx_clk_disable_unprepare,
+-				       lpc18xx_wdt->reg_clk);
+-	if (ret)
+-		return ret;
 -
- 	clk_rate = clk_get_rate(drvdata->clk);
- 	if (!clk_rate)
- 		return -EINVAL;
+-	ret = clk_prepare_enable(lpc18xx_wdt->wdt_clk);
+-	if (ret) {
+-		dev_err(dev, "could not prepare or enable wdt clock\n");
+-		return ret;
+-	}
+-	ret = devm_add_action_or_reset(dev, lpc18xx_clk_disable_unprepare,
+-				       lpc18xx_wdt->wdt_clk);
+-	if (ret)
+-		return ret;
+-
+ 	/* We use the clock rate to calculate timeouts */
+ 	lpc18xx_wdt->clk_rate = clk_get_rate(lpc18xx_wdt->wdt_clk);
+ 	if (lpc18xx_wdt->clk_rate == 0) {
 -- 
 2.34.1
 
