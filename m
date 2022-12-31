@@ -2,41 +2,47 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3818D65A39E
-	for <lists+linux-watchdog@lfdr.de>; Sat, 31 Dec 2022 11:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF13365A3A2
+	for <lists+linux-watchdog@lfdr.de>; Sat, 31 Dec 2022 12:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbiLaKxx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 31 Dec 2022 05:53:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43028 "EHLO
+        id S231784AbiLaLAC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 31 Dec 2022 06:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiLaKxj (ORCPT
+        with ESMTP id S231661AbiLaLAC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 31 Dec 2022 05:53:39 -0500
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7143E10C5
-        for <linux-watchdog@vger.kernel.org>; Sat, 31 Dec 2022 02:53:37 -0800 (PST)
+        Sat, 31 Dec 2022 06:00:02 -0500
+Received: from smtp.smtpout.orange.fr (smtp-30.smtpout.orange.fr [80.12.242.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C8965BD
+        for <linux-watchdog@vger.kernel.org>; Sat, 31 Dec 2022 03:00:01 -0800 (PST)
 Received: from pop-os.home ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id BZUdpDj8SPNsNBZUdp5ZNY; Sat, 31 Dec 2022 11:53:35 +0100
+        id BZaopo5C5STJGBZaop4F8P; Sat, 31 Dec 2022 11:59:59 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 31 Dec 2022 11:53:35 +0100
+X-ME-Date: Sat, 31 Dec 2022 11:59:59 +0100
 X-ME-IP: 86.243.100.34
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
+        Guenter Roeck <linux@roeck-us.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH] watchdog: imgpdc: Use devm_clk_get_enabled() helper
-Date:   Sat, 31 Dec 2022 11:53:34 +0100
-Message-Id: <1f8d1ce1e6a63c507a291aea624b1337326cc563.1672483996.git.christophe.jaillet@wanadoo.fr>
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] watchdog: imx7ulp: Use devm_clk_get_enabled() helper
+Date:   Sat, 31 Dec 2022 11:59:57 +0100
+Message-Id: <f23a2cf84958adca255b82fd688e7cee0461760f.1672484376.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,75 +59,49 @@ with devm_add_action_or_reset().
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
-Note that the order of operations is slightly modified by this patch. The
-"sys" clk is now prepare_enable()'ed before clk_get("wdt").
----
- drivers/watchdog/imgpdc_wdt.c | 31 +++----------------------------
- 1 file changed, 3 insertions(+), 28 deletions(-)
+ drivers/watchdog/imx7ulp_wdt.c | 15 +--------------
+ 1 file changed, 1 insertion(+), 14 deletions(-)
 
-diff --git a/drivers/watchdog/imgpdc_wdt.c b/drivers/watchdog/imgpdc_wdt.c
-index b57ff3787052..a55f801895d4 100644
---- a/drivers/watchdog/imgpdc_wdt.c
-+++ b/drivers/watchdog/imgpdc_wdt.c
-@@ -175,16 +175,11 @@ static const struct watchdog_ops pdc_wdt_ops = {
- 	.restart        = pdc_wdt_restart,
- };
+diff --git a/drivers/watchdog/imx7ulp_wdt.c b/drivers/watchdog/imx7ulp_wdt.c
+index 2897902090b3..7ca486794ba7 100644
+--- a/drivers/watchdog/imx7ulp_wdt.c
++++ b/drivers/watchdog/imx7ulp_wdt.c
+@@ -299,11 +299,6 @@ static int imx7ulp_wdt_init(struct imx7ulp_wdt_device *wdt, unsigned int timeout
+ 	return ret;
+ }
  
--static void pdc_clk_disable_unprepare(void *data)
+-static void imx7ulp_wdt_action(void *data)
 -{
 -	clk_disable_unprepare(data);
 -}
 -
- static int pdc_wdt_probe(struct platform_device *pdev)
+ static int imx7ulp_wdt_probe(struct platform_device *pdev)
  {
- 	struct device *dev = &pdev->dev;
- 	u64 div;
--	int ret, val;
-+	int val;
- 	unsigned long clk_rate;
- 	struct pdc_wdt_dev *pdc_wdt;
+ 	struct imx7ulp_wdt_device *imx7ulp_wdt;
+@@ -321,7 +316,7 @@ static int imx7ulp_wdt_probe(struct platform_device *pdev)
+ 	if (IS_ERR(imx7ulp_wdt->base))
+ 		return PTR_ERR(imx7ulp_wdt->base);
  
-@@ -196,38 +191,18 @@ static int pdc_wdt_probe(struct platform_device *pdev)
- 	if (IS_ERR(pdc_wdt->base))
- 		return PTR_ERR(pdc_wdt->base);
- 
--	pdc_wdt->sys_clk = devm_clk_get(dev, "sys");
-+	pdc_wdt->sys_clk = devm_clk_get_enabled(dev, "sys");
- 	if (IS_ERR(pdc_wdt->sys_clk)) {
- 		dev_err(dev, "failed to get the sys clock\n");
- 		return PTR_ERR(pdc_wdt->sys_clk);
+-	imx7ulp_wdt->clk = devm_clk_get(dev, NULL);
++	imx7ulp_wdt->clk = devm_clk_get_enabled(dev, NULL);
+ 	if (IS_ERR(imx7ulp_wdt->clk)) {
+ 		dev_err(dev, "Failed to get watchdog clock\n");
+ 		return PTR_ERR(imx7ulp_wdt->clk);
+@@ -336,14 +331,6 @@ static int imx7ulp_wdt_probe(struct platform_device *pdev)
+ 		dev_info(dev, "imx7ulp wdt probe\n");
  	}
  
--	pdc_wdt->wdt_clk = devm_clk_get(dev, "wdt");
-+	pdc_wdt->wdt_clk = devm_clk_get_enabled(dev, "wdt");
- 	if (IS_ERR(pdc_wdt->wdt_clk)) {
- 		dev_err(dev, "failed to get the wdt clock\n");
- 		return PTR_ERR(pdc_wdt->wdt_clk);
- 	}
- 
--	ret = clk_prepare_enable(pdc_wdt->sys_clk);
--	if (ret) {
--		dev_err(dev, "could not prepare or enable sys clock\n");
--		return ret;
--	}
--	ret = devm_add_action_or_reset(dev, pdc_clk_disable_unprepare,
--				       pdc_wdt->sys_clk);
+-	ret = clk_prepare_enable(imx7ulp_wdt->clk);
 -	if (ret)
 -		return ret;
 -
--	ret = clk_prepare_enable(pdc_wdt->wdt_clk);
--	if (ret) {
--		dev_err(dev, "could not prepare or enable wdt clock\n");
--		return ret;
--	}
--	ret = devm_add_action_or_reset(dev, pdc_clk_disable_unprepare,
--				       pdc_wdt->wdt_clk);
+-	ret = devm_add_action_or_reset(dev, imx7ulp_wdt_action, imx7ulp_wdt->clk);
 -	if (ret)
 -		return ret;
 -
- 	/* We use the clock rate to calculate the max timeout */
- 	clk_rate = clk_get_rate(pdc_wdt->wdt_clk);
- 	if (clk_rate == 0) {
+ 	wdog = &imx7ulp_wdt->wdd;
+ 	wdog->info = &imx7ulp_wdt_info;
+ 	wdog->ops = &imx7ulp_wdt_ops;
 -- 
 2.34.1
 
