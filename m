@@ -2,47 +2,43 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCAE265A3FC
-	for <lists+linux-watchdog@lfdr.de>; Sat, 31 Dec 2022 13:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A58D65A432
+	for <lists+linux-watchdog@lfdr.de>; Sat, 31 Dec 2022 13:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbiLaMfC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 31 Dec 2022 07:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58694 "EHLO
+        id S231970AbiLaMv3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 31 Dec 2022 07:51:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiLaMfB (ORCPT
+        with ESMTP id S231837AbiLaMv2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 31 Dec 2022 07:35:01 -0500
-Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF84634F
-        for <linux-watchdog@vger.kernel.org>; Sat, 31 Dec 2022 04:34:59 -0800 (PST)
+        Sat, 31 Dec 2022 07:51:28 -0500
+Received: from smtp.smtpout.orange.fr (smtp-23.smtpout.orange.fr [80.12.242.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF4B6458
+        for <linux-watchdog@vger.kernel.org>; Sat, 31 Dec 2022 04:51:26 -0800 (PST)
 Received: from pop-os.home ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id Bb4Yp03tAtht4Bb4YpzGXL; Sat, 31 Dec 2022 13:34:58 +0100
+        id BbKbp3t8uexdxBbKcp9m3w; Sat, 31 Dec 2022 13:51:25 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 31 Dec 2022 13:34:58 +0100
+X-ME-Date: Sat, 31 Dec 2022 13:51:25 +0100
 X-ME-IP: 86.243.100.34
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+        Michal Simek <michal.simek@xilinx.com>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org
-Subject: [PATCH] watchdog: meson_gxbb: Use devm_clk_get_enabled() helper
-Date:   Sat, 31 Dec 2022 13:34:44 +0100
-Message-Id: <6c5948373d309408095c1a098b7b4c491c5265f7.1672490071.git.christophe.jaillet@wanadoo.fr>
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] watchdog: of_xilinx_wdt: Use devm_clk_get_enabled() helper
+Date:   Sat, 31 Dec 2022 13:51:20 +0100
+Message-Id: <71551233b18f57037be9e75d2d6428534d7572d3.1672491065.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,50 +55,41 @@ with devm_add_action_or_reset().
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/watchdog/meson_gxbb_wdt.c | 16 +---------------
- 1 file changed, 1 insertion(+), 15 deletions(-)
+Note that the order of operations is slightly modified by this patch. The
+clk is now prepare_enable()'ed before calling clk_get_rate().
+---
+ drivers/watchdog/of_xilinx_wdt.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
-index 981a2f7c3bec..35d80cb39856 100644
---- a/drivers/watchdog/meson_gxbb_wdt.c
-+++ b/drivers/watchdog/meson_gxbb_wdt.c
-@@ -146,16 +146,10 @@ static const struct of_device_id meson_gxbb_wdt_dt_ids[] = {
- };
- MODULE_DEVICE_TABLE(of, meson_gxbb_wdt_dt_ids);
+diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
+index 3318544366b8..f184843380a3 100644
+--- a/drivers/watchdog/of_xilinx_wdt.c
++++ b/drivers/watchdog/of_xilinx_wdt.c
+@@ -193,7 +193,7 @@ static int xwdt_probe(struct platform_device *pdev)
  
--static void meson_clk_disable_unprepare(void *data)
--{
--	clk_disable_unprepare(data);
--}
--
- static int meson_gxbb_wdt_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct meson_gxbb_wdt *data;
--	int ret;
- 	u32 ctrl_reg;
+ 	watchdog_set_nowayout(xilinx_wdt_wdd, enable_once);
  
- 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-@@ -166,18 +160,10 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
- 	if (IS_ERR(data->reg_base))
- 		return PTR_ERR(data->reg_base);
+-	xdev->clk = devm_clk_get(dev, NULL);
++	xdev->clk = devm_clk_get_enabled(dev, NULL);
+ 	if (IS_ERR(xdev->clk)) {
+ 		if (PTR_ERR(xdev->clk) != -ENOENT)
+ 			return PTR_ERR(xdev->clk);
+@@ -211,15 +211,6 @@ static int xwdt_probe(struct platform_device *pdev)
+ 				 "The watchdog clock freq cannot be obtained\n");
+ 	} else {
+ 		pfreq = clk_get_rate(xdev->clk);
+-		rc = clk_prepare_enable(xdev->clk);
+-		if (rc) {
+-			dev_err(dev, "unable to enable clock\n");
+-			return rc;
+-		}
+-		rc = devm_add_action_or_reset(dev, xwdt_clk_disable_unprepare,
+-					      xdev->clk);
+-		if (rc)
+-			return rc;
+ 	}
  
--	data->clk = devm_clk_get(dev, NULL);
-+	data->clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(data->clk))
- 		return PTR_ERR(data->clk);
- 
--	ret = clk_prepare_enable(data->clk);
--	if (ret)
--		return ret;
--	ret = devm_add_action_or_reset(dev, meson_clk_disable_unprepare,
--				       data->clk);
--	if (ret)
--		return ret;
--
- 	platform_set_drvdata(pdev, data);
- 
- 	data->wdt_dev.parent = dev;
+ 	/*
 -- 
 2.34.1
 
