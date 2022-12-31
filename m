@@ -2,41 +2,42 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD6665A3AB
-	for <lists+linux-watchdog@lfdr.de>; Sat, 31 Dec 2022 12:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2238C65A3B6
+	for <lists+linux-watchdog@lfdr.de>; Sat, 31 Dec 2022 12:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbiLaLHd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 31 Dec 2022 06:07:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
+        id S235459AbiLaLOh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 31 Dec 2022 06:14:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231963AbiLaLHc (ORCPT
+        with ESMTP id S231753AbiLaLOg (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 31 Dec 2022 06:07:32 -0500
-Received: from smtp.smtpout.orange.fr (smtp-30.smtpout.orange.fr [80.12.242.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9287DF76
-        for <linux-watchdog@vger.kernel.org>; Sat, 31 Dec 2022 03:07:30 -0800 (PST)
+        Sat, 31 Dec 2022 06:14:36 -0500
+Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1346402
+        for <linux-watchdog@vger.kernel.org>; Sat, 31 Dec 2022 03:14:35 -0800 (PST)
 Received: from pop-os.home ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id BZi4pTIC3Rn9tBZi4pP7i0; Sat, 31 Dec 2022 12:07:29 +0100
+        id BZoupLWNG8ao3BZovp4Bzp; Sat, 31 Dec 2022 12:14:33 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 31 Dec 2022 12:07:29 +0100
+X-ME-Date: Sat, 31 Dec 2022 12:14:33 +0100
 X-ME-IP: 86.243.100.34
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+To:     Keguang Zhang <keguang.zhang@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH] watchdog: ixp4xx: Use devm_clk_get_enabled() helper
-Date:   Sat, 31 Dec 2022 12:07:27 +0100
-Message-Id: <5d04e453a4da5cfafb56695a17157fa3ea296511.1672484831.git.christophe.jaillet@wanadoo.fr>
+        linux-mips@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [PATCH] watchdog: loongson1: Use devm_clk_get_enabled() helper
+Date:   Sat, 31 Dec 2022 12:14:30 +0100
+Message-Id: <624106aa86ef7e49f16b11b229528eabd63de8f7.1672485257.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,52 +54,54 @@ with devm_add_action_or_reset().
 
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
-Note that I get a compilation error because read_cpuid_id() is not defined
-on my system (x86_64).
-So I think that a "depends on ARM<something>" in missing in a KConfig file.
+Note that I get a compilation error because <loongson1.h> is not found on
+my system (x86_64).
+So I think that a "depends on LOONG<something>" in missing in a KConfig
+file.
 
 Fixing it could help compilation farms build-bots.
 ---
- drivers/watchdog/ixp4xx_wdt.c | 18 +++---------------
- 1 file changed, 3 insertions(+), 15 deletions(-)
+ drivers/watchdog/loongson1_wdt.c | 17 +----------------
+ 1 file changed, 1 insertion(+), 16 deletions(-)
 
-diff --git a/drivers/watchdog/ixp4xx_wdt.c b/drivers/watchdog/ixp4xx_wdt.c
-index 281a48d9889f..607ce4b8df57 100644
---- a/drivers/watchdog/ixp4xx_wdt.c
-+++ b/drivers/watchdog/ixp4xx_wdt.c
-@@ -112,12 +112,6 @@ static const struct watchdog_info ixp4xx_wdt_info = {
- 	.identity = KBUILD_MODNAME,
+diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
+index bb3d075c0633..c55656cfb403 100644
+--- a/drivers/watchdog/loongson1_wdt.c
++++ b/drivers/watchdog/loongson1_wdt.c
+@@ -79,11 +79,6 @@ static const struct watchdog_ops ls1x_wdt_ops = {
+ 	.set_timeout = ls1x_wdt_set_timeout,
  };
  
--/* Devres-handled clock disablement */
--static void ixp4xx_clock_action(void *d)
+-static void ls1x_clk_disable_unprepare(void *data)
 -{
--	clk_disable_unprepare(d);
+-	clk_disable_unprepare(data);
 -}
 -
- static int ixp4xx_wdt_probe(struct platform_device *pdev)
+ static int ls1x_wdt_probe(struct platform_device *pdev)
  {
  	struct device *dev = &pdev->dev;
-@@ -139,16 +133,10 @@ static int ixp4xx_wdt_probe(struct platform_device *pdev)
- 	 * Retrieve rate from a fixed clock from the device tree if
- 	 * the parent has that, else use the default clock rate.
- 	 */
--	clk = devm_clk_get(dev->parent, NULL);
--	if (!IS_ERR(clk)) {
--		ret = clk_prepare_enable(clk);
--		if (ret)
--			return ret;
--		ret = devm_add_action_or_reset(dev, ixp4xx_clock_action, clk);
--		if (ret)
--			return ret;
-+	clk = devm_clk_get_enabled(dev->parent, NULL);
-+	if (!IS_ERR(clk))
- 		iwdt->rate = clk_get_rate(clk);
--	}
-+
- 	if (!iwdt->rate)
- 		iwdt->rate = IXP4XX_TIMER_FREQ;
+@@ -100,20 +95,10 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
+ 	if (IS_ERR(drvdata->base))
+ 		return PTR_ERR(drvdata->base);
  
+-	drvdata->clk = devm_clk_get(dev, pdev->name);
++	drvdata->clk = devm_clk_get_enabled(dev, pdev->name);
+ 	if (IS_ERR(drvdata->clk))
+ 		return PTR_ERR(drvdata->clk);
+ 
+-	err = clk_prepare_enable(drvdata->clk);
+-	if (err) {
+-		dev_err(dev, "clk enable failed\n");
+-		return err;
+-	}
+-	err = devm_add_action_or_reset(dev, ls1x_clk_disable_unprepare,
+-				       drvdata->clk);
+-	if (err)
+-		return err;
+-
+ 	clk_rate = clk_get_rate(drvdata->clk);
+ 	if (!clk_rate)
+ 		return -EINVAL;
 -- 
 2.34.1
 
