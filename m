@@ -2,151 +2,193 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D3965A822
-	for <lists+linux-watchdog@lfdr.de>; Sun,  1 Jan 2023 00:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 851B165A97F
+	for <lists+linux-watchdog@lfdr.de>; Sun,  1 Jan 2023 10:36:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235953AbiLaXRD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 31 Dec 2022 18:17:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
+        id S229766AbjAAJgG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 1 Jan 2023 04:36:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236017AbiLaXQo (ORCPT
+        with ESMTP id S229599AbjAAJgF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 31 Dec 2022 18:16:44 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946CCE0E;
-        Sat, 31 Dec 2022 15:16:43 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id m7-20020a9d73c7000000b00683e2f36c18so10160997otk.0;
-        Sat, 31 Dec 2022 15:16:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=titGmMACh08I+gZF78l7dxO0gfs6TqDOLGPsWxkWX8g=;
-        b=k/Wz7j9sDY3c115l7f970aJbRtl51jy4Jyxu9nkuoeY3sEwxEXnddhX5tzZB3ORW9H
-         20VusWZV/YeKD1SYYwMtzV6PJ4y3mUwicJEE3hnUhk53X812VUKWCO6eJZp4EMIP8Nar
-         PLnlPJmamVYNSEx4GOxi3gYxPJkGZeudr5aTH278CNsuku/5TuKcbk0YS547i15yoG4s
-         LBXRK8bKvWObWdgvPFpGxbQmnc62xcp0lDf9q95IpWkntf7EZWkdEQBoR4u3dQtVRkKX
-         WonsJkIJpWv4LTq2ZNYj1MyLTxAAlivIY5GgxPIt3pWlFWisKa11yUTFH6BQVwGC2RS8
-         t+kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=titGmMACh08I+gZF78l7dxO0gfs6TqDOLGPsWxkWX8g=;
-        b=OZJO32C61VoJ1eC92lfZT/8wR5WgOF3CBp9qD1fuyAvpOs49nf1T1qnBkZ6kGWBQsv
-         Zs+i5aOFweey5libyWQ81Zk9AUc0VHeBGi+xsv8v8St67VFXtD40R1Ys57XITA5raoeP
-         cdyBnIzRJdyHuTh7BlQyfRdpoolwxgsM5i3pAcN2YIRqUAwSFrbg0B2STyfuHOu+A+ci
-         yRVOObmYoUNzGXlZimJkW3tT/AB6e/fnS2+oOW4DI8bpX7pe+woUTK5834/r7h+pPcPx
-         s+g+2e3cwkzyyLDJv7RmT/A38e3PYoXCXfvGbwrQxWCoe/mT0ryhlXEtTEKoDx7aptBV
-         mnFw==
-X-Gm-Message-State: AFqh2kohZOoeBrLgkvJoFEfNJxVKtMT9cnNicmAR6EswLZr+iSfdWpCC
-        6cLZnWrwJ0rMpNnjpoRMqeJpwMBwz+o=
-X-Google-Smtp-Source: AMrXdXu7t+92LdYYcgmqdYqvvdYfXLEGD32C2N1JHFoDn4oE3AwRJOBTt5GFiCwa0hfxidETJINjgQ==
-X-Received: by 2002:a05:6830:410e:b0:670:69ac:f7fc with SMTP id w14-20020a056830410e00b0067069acf7fcmr27068704ott.25.1672528602963;
-        Sat, 31 Dec 2022 15:16:42 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x6-20020a056830244600b006705829996fsm11887465otr.56.2022.12.31.15.16.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 15:16:42 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 31 Dec 2022 15:16:41 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Keguang Zhang <keguang.zhang@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] watchdog: loongson1: Use devm_clk_get_enabled() helper
-Message-ID: <20221231231641.GE2706156@roeck-us.net>
-References: <624106aa86ef7e49f16b11b229528eabd63de8f7.1672485257.git.christophe.jaillet@wanadoo.fr>
+        Sun, 1 Jan 2023 04:36:05 -0500
+Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263EA273D
+        for <linux-watchdog@vger.kernel.org>; Sun,  1 Jan 2023 01:36:02 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id Bul5pYI66Rn9tBul5pQ6t3; Sun, 01 Jan 2023 10:36:00 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 01 Jan 2023 10:36:00 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <40718555-3c2e-f6b5-889a-0a1817ad39a0@wanadoo.fr>
+Date:   Sun, 1 Jan 2023 10:35:59 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <624106aa86ef7e49f16b11b229528eabd63de8f7.1672485257.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] watchdog: ixp4xx: Use devm_clk_get_enabled() helper
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+References: <5d04e453a4da5cfafb56695a17157fa3ea296511.1672484831.git.christophe.jaillet@wanadoo.fr>
+ <20221231231451.GD2706156@roeck-us.net>
+Content-Language: fr, en-US
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20221231231451.GD2706156@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,WEIRD_PORT autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 12:14:30PM +0100, Christophe JAILLET wrote:
-> The devm_clk_get_enabled() helper:
->    - calls devm_clk_get()
->    - calls clk_prepare_enable() and registers what is needed in order to
->      call clk_disable_unprepare() when needed, as a managed resource.
+Le 01/01/2023 à 00:14, Guenter Roeck a écrit :
+> On Sat, Dec 31, 2022 at 12:07:27PM +0100, Christophe JAILLET wrote:
+>> The devm_clk_get_enabled() helper:
+>>     - calls devm_clk_get()
+>>     - calls clk_prepare_enable() and registers what is needed in order to
+>>       call clk_disable_unprepare() when needed, as a managed resource.
+>>
+>> This simplifies the code and avoids the need of a dedicated function used
+>> with devm_add_action_or_reset().
+>>
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>> Note that I get a compilation error because read_cpuid_id() is not defined
+>> on my system (x86_64).
+>> So I think that a "depends on ARM<something>" in missing in a KConfig file.
 > 
-> This simplifies the code and avoids the need of a dedicated function used
-> with devm_add_action_or_reset().
+> It has
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> Note that I get a compilation error because <loongson1.h> is not found on
-> my system (x86_64).
-> So I think that a "depends on LOONG<something>" in missing in a KConfig
-> file.
+> 	depends on ARCH_IXP4XX
 > 
-> Fixing it could help compilation farms build-bots.
+> and CONFIG_IXP4XX_WATCHDOG is not set for me after "make allmodconfig".
 
-Why would
+Here is what  do.
 
-	depends on MACH_LOONGSON32
+make allmodconfig
+make -j8 drivers/watchdog/ixp4xx_wdt.o
 
-be insufficient ?
+And I get:
+   DESCEND objtool
+   CALL    scripts/checksyscalls.sh
+   CC      drivers/watchdog/ixp4xx_wdt.o
+drivers/watchdog/ixp4xx_wdt.c: In function ‘ixp4xx_wdt_probe’:
+drivers/watchdog/ixp4xx_wdt.c:122:15: error: implicit declaration of 
+function ‘read_cpuid_id’ [-Werror=implicit-function-declaration]
+   122 |         if (!(read_cpuid_id() & 0xf) && !cpu_is_ixp46x()) {
+       |               ^~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+make[3]: *** [scripts/Makefile.build:252 : 
+drivers/watchdog/ixp4xx_wdt.o] Erreur 1
+make[2]: *** [scripts/Makefile.build:504 : drivers/watchdog] Erreur 2
+make[1]: *** [scripts/Makefile.build:504 : drivers] Erreur 2
+make: *** [Makefile:2011 : .] Erreur 2
 
-Not reviewing the series further until this is resolved. It looks like
-I am missing something serious.
 
-Guenter
+I do agree with you that:
 
-> ---
->  drivers/watchdog/loongson1_wdt.c | 17 +----------------
->  1 file changed, 1 insertion(+), 16 deletions(-)
+    - Kconfig looks fine
+config IXP4XX_WATCHDOG
+	tristate "IXP4xx Watchdog"
+	depends on ARCH_IXP4XX
+
+   - Makefile looks fine
+obj-$(CONFIG_IXP4XX_WATCHDOG) += ixp4xx_wdt.o
+
+   - .config looks fine
+IXP4XX_WATCHDOG is NOT defined
+
+   - make drivers/watchdog/ looks fine
+No error and ixp4xx_wdt.o is NOT built.
+
+
+However, in the past (if I recollect correctly :) ), a "make 
+<something_that depends_on_a_config_variable_that_is_not_defined>" 
+returned an error stating that no rule existed to build the specified 
+target.
+
+I sometimes needed to tweak the Kconfig files to force some compilation 
+when I didn't have the right tool chain or configuration.
+It was maybe not the best practice, but it worked most of the time.
+
+
+Now, with the example above, such a compilation attempt is possible. It 
+is maybe normal (because of a change somewhere in the way the kernel is 
+built, because of an updated toolchain on my machine, ...)
+This is just fine for me, but looked really surprising.
+
+That is why I first thought that something was missing in a Kconfig file.
+
+
+So my comments are just a surprise to me to something that seems not to 
+behave the same as before.
+
+As far a just a 'make' works as expected, I won't dig further if this 
+behavior is expected or not.
+It should be a corner case anyway, and for my own use, I would even call 
+it a feature :) (i.e. it saves me some Kconfig modification to test things)
+
+CJ
+
 > 
-> diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
-> index bb3d075c0633..c55656cfb403 100644
-> --- a/drivers/watchdog/loongson1_wdt.c
-> +++ b/drivers/watchdog/loongson1_wdt.c
-> @@ -79,11 +79,6 @@ static const struct watchdog_ops ls1x_wdt_ops = {
->  	.set_timeout = ls1x_wdt_set_timeout,
->  };
->  
-> -static void ls1x_clk_disable_unprepare(void *data)
-> -{
-> -	clk_disable_unprepare(data);
-> -}
-> -
->  static int ls1x_wdt_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> @@ -100,20 +95,10 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
->  	if (IS_ERR(drvdata->base))
->  		return PTR_ERR(drvdata->base);
->  
-> -	drvdata->clk = devm_clk_get(dev, pdev->name);
-> +	drvdata->clk = devm_clk_get_enabled(dev, pdev->name);
->  	if (IS_ERR(drvdata->clk))
->  		return PTR_ERR(drvdata->clk);
->  
-> -	err = clk_prepare_enable(drvdata->clk);
-> -	if (err) {
-> -		dev_err(dev, "clk enable failed\n");
-> -		return err;
-> -	}
-> -	err = devm_add_action_or_reset(dev, ls1x_clk_disable_unprepare,
-> -				       drvdata->clk);
-> -	if (err)
-> -		return err;
-> -
->  	clk_rate = clk_get_rate(drvdata->clk);
->  	if (!clk_rate)
->  		return -EINVAL;
-> -- 
-> 2.34.1
+>>
+>> Fixing it could help compilation farms build-bots.
 > 
+> Mine doesn't see a problem, and I don't recall ever being alerted about
+> one. What am I missing ? Do you see a problem reported anywhere ?
+> 
+> Guenter
+> 
+>> ---
+>>   drivers/watchdog/ixp4xx_wdt.c | 18 +++---------------
+>>   1 file changed, 3 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/drivers/watchdog/ixp4xx_wdt.c b/drivers/watchdog/ixp4xx_wdt.c
+>> index 281a48d9889f..607ce4b8df57 100644
+>> --- a/drivers/watchdog/ixp4xx_wdt.c
+>> +++ b/drivers/watchdog/ixp4xx_wdt.c
+>> @@ -112,12 +112,6 @@ static const struct watchdog_info ixp4xx_wdt_info = {
+>>   	.identity = KBUILD_MODNAME,
+>>   };
+>>   
+>> -/* Devres-handled clock disablement */
+>> -static void ixp4xx_clock_action(void *d)
+>> -{
+>> -	clk_disable_unprepare(d);
+>> -}
+>> -
+>>   static int ixp4xx_wdt_probe(struct platform_device *pdev)
+>>   {
+>>   	struct device *dev = &pdev->dev;
+>> @@ -139,16 +133,10 @@ static int ixp4xx_wdt_probe(struct platform_device *pdev)
+>>   	 * Retrieve rate from a fixed clock from the device tree if
+>>   	 * the parent has that, else use the default clock rate.
+>>   	 */
+>> -	clk = devm_clk_get(dev->parent, NULL);
+>> -	if (!IS_ERR(clk)) {
+>> -		ret = clk_prepare_enable(clk);
+>> -		if (ret)
+>> -			return ret;
+>> -		ret = devm_add_action_or_reset(dev, ixp4xx_clock_action, clk);
+>> -		if (ret)
+>> -			return ret;
+>> +	clk = devm_clk_get_enabled(dev->parent, NULL);
+>> +	if (!IS_ERR(clk))
+>>   		iwdt->rate = clk_get_rate(clk);
+>> -	}
+>> +
+>>   	if (!iwdt->rate)
+>>   		iwdt->rate = IXP4XX_TIMER_FREQ;
+>>   
+>> -- 
+>> 2.34.1
+>>
+> 
+
