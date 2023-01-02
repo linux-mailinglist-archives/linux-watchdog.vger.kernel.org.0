@@ -2,78 +2,104 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AD465AB30
-	for <lists+linux-watchdog@lfdr.de>; Sun,  1 Jan 2023 20:31:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C3365B01C
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Jan 2023 11:56:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbjAATbY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 1 Jan 2023 14:31:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
+        id S232772AbjABK4r (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 2 Jan 2023 05:56:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjAATbX (ORCPT
+        with ESMTP id S232801AbjABK41 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 1 Jan 2023 14:31:23 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7C81D0;
-        Sun,  1 Jan 2023 11:31:21 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id r205so23507932oib.9;
-        Sun, 01 Jan 2023 11:31:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bUsoeI0t+F0M1VicIeLkR8DGI83Y71KjS4VXtx/g3NI=;
-        b=hts3Wm8n/WK1pYKdiL3FrX04vC+q8tQUpRqhXr0ztW4WB+usmv6ChqbjKkmO/76521
-         rj9/blMBQvHvvR4n/805KqvJD+6lodQeM9oJBT7q7ww0r19bbt9Lp63Xk6Db01dKFf1E
-         P4CaIWzc7c8kqAIU1Kvu0ZiCSZtkyNLOihAtaDM51iq5JdMS95V5qqSDPcMmmEfcaak2
-         mz4gEEq3HmLfZiogSR7UqeMm6d9WIUaAeTSe/azUc0OkS2v99ylnPd5pkk93zP4b7fjM
-         3BLMr974OisdvJ8bJHMZqcrxSbMlGMyKdKtpm/t6FncGTxzFoa4vFYo7vrHVdBc2vjWJ
-         xZDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bUsoeI0t+F0M1VicIeLkR8DGI83Y71KjS4VXtx/g3NI=;
-        b=l+AkB0NzlP+C5M3aF31MORSA/QlAIuqsoZMYpQNR9GJakaspqZhcYTe0uk/iqjdtGe
-         ZgW2101Cz9h4kopzYu2HE9uQh6rwm2qQODfyPR2tFs4nCkGK93yOcXeCPHlGk9+veeyk
-         0e8Z3zFqF3JqYnsqSryN/8lkHP4rBts0DbyDuF9/cwA+rYcnqMbUlsPzrQK45FdFihQl
-         SOkD1v3LlyhXGYzFPPxdB23a4YWwgXFPXZt0R7q/707UeQ2oJduiqiDY5H+CVulAFkhd
-         FSzeNaZVVc+VlKEnUlqToaqlbxR8hwibGgh+viOzBMNsPJOMcUnEUVvza7FJjPLx+S1p
-         4ASA==
-X-Gm-Message-State: AFqh2kqrLY9jqLMXGZ709SPOJyoTzyCkhupDHeXdtNohXXOVDOi2Uf80
-        uppDAsJ3X3POCIh15kPaf1TS61UJJqw=
-X-Google-Smtp-Source: AMrXdXvl4B0hCCQFzARIcVmNWlWCWYFsxyxu/AwNnyDzovJoD5nMsH8TMYWShFZ4ij7asuvXLhzewQ==
-X-Received: by 2002:a05:6808:107:b0:360:fce9:a7f7 with SMTP id b7-20020a056808010700b00360fce9a7f7mr16393660oie.45.1672601480721;
-        Sun, 01 Jan 2023 11:31:20 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e9-20020a544f09000000b0035aa617156bsm11392294oiy.17.2023.01.01.11.31.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Jan 2023 11:31:20 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 1 Jan 2023 11:31:18 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH] watchdog: ixp4xx: Use devm_clk_get_enabled() helper
-Message-ID: <20230101193118.GA2769955@roeck-us.net>
-References: <5d04e453a4da5cfafb56695a17157fa3ea296511.1672484831.git.christophe.jaillet@wanadoo.fr>
- <20221231231451.GD2706156@roeck-us.net>
- <40718555-3c2e-f6b5-889a-0a1817ad39a0@wanadoo.fr>
- <20230101150758.GA2736217@roeck-us.net>
- <401d3328-8da0-056b-8b32-d890bd5508b4@wanadoo.fr>
+        Mon, 2 Jan 2023 05:56:27 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2077.outbound.protection.outlook.com [40.107.243.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C61637D;
+        Mon,  2 Jan 2023 02:55:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iNsHiFzFBLf9SEmAsVEf7ayuQx7C5oQG4n4PLjxyikU93bmC/yldJd8ORzV916HlMpHeRvKO7m5UkYJu39DSHTNvqZ81lByXJzVyVDZSEV8gecGRIEw3nOT0Aawkhs0P37Fq3QBnfx8VzF2ecIv+tQb8MgV0vooMP4PnsU5hFjy/6eJeGOgunR7mxR2091tRAZ6LdtInPrqEiJQIlTIJx2i0M9wIYCMgHxoDwn+/gZxsbomtoSw4R+Buo1UjW/Oye/6FQPQH8PUqeQVGtcAGujgwOCxFn5pL+kyzdvk8xu2HFyXotJf2thBEzfIzB80msNnhj8cU+lUYSnNP108NxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BDhVrzEWdb8H8mxgsnWKpJJkP2MAKt/MlFvG67lP3xk=;
+ b=H11IpfTVW8Ec2XUiu9QbVtndad+F71XLkX33evp3Wwtq+YERusBQPZvbmulyeQaSVNVlUWu8rvTl3xQoIMPJ1rBDa9lb/IiCyCyh6916kLyRQlN2pBZ+4stN2JfOtnf7zDXrq1cP/3wYL8W/RooHy2n65uropsRk1hFaTBaUO0ibTvLL4phVPzJym2oT4VYUb1GpQnCUuPZ/TK3mUO40xhkj1H6/E1tsb0cKzisCl0LhuZW4bBVlqVXTJ0g+pC4O2htyQbx0LKPPPwFEveGm01w/kWbsw7UtFsikUW58sHcdQiu1D9CkKITqnahHokiUIAbi7emV8iXShjRjT0B5kA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=wanadoo.fr smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BDhVrzEWdb8H8mxgsnWKpJJkP2MAKt/MlFvG67lP3xk=;
+ b=OOHPINguCfO3yYlGlGlZXD6EzJVPTEmgobIg3uxByDuVeomI9pgs4KEqA1TWAH2/46vZ416Zs0H6XkhOUKKs52BO/IC/jac7QWlrFhaHYok4kTu25QGa43RP7TtGRNs3I3MbC8d64DVRP/NLNFlV0QCgK0DXy3ADKR8xgbnKbHM=
+Received: from DM6PR08CA0012.namprd08.prod.outlook.com (2603:10b6:5:80::25) by
+ CH0PR12MB5154.namprd12.prod.outlook.com (2603:10b6:610:b9::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5944.19; Mon, 2 Jan 2023 10:54:59 +0000
+Received: from CY4PEPF0000C96D.namprd02.prod.outlook.com
+ (2603:10b6:5:80:cafe::f5) by DM6PR08CA0012.outlook.office365.com
+ (2603:10b6:5:80::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5966.19 via Frontend
+ Transport; Mon, 2 Jan 2023 10:54:59 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000C96D.mail.protection.outlook.com (10.167.242.5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5944.8 via Frontend Transport; Mon, 2 Jan 2023 10:54:59 +0000
+Received: from [10.254.241.50] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 2 Jan
+ 2023 04:54:55 -0600
+Message-ID: <df5fcc0c-c690-f213-6bd4-57806ea6b67e@amd.com>
+Date:   Mon, 2 Jan 2023 11:54:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <401d3328-8da0-056b-8b32-d890bd5508b4@wanadoo.fr>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,WEIRD_PORT autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Michal Simek <michal.simek@xilinx.com>,
+        "Goud, Srinivas" <srinivas.goud@amd.com>,
+        "Neeli, Srinivas" <srinivas.neeli@amd.com>
+CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <2b041dc8230a4ed255051bb2d323da8a51a8d0be.1672491445.git.christophe.jaillet@wanadoo.fr>
+From:   Michal Simek <michal.simek@amd.com>
+Subject: Re: [PATCH v2] watchdog: of_xilinx_wdt: Use devm_clk_get_enabled()
+ helper
+In-Reply-To: <2b041dc8230a4ed255051bb2d323da8a51a8d0be.1672491445.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000C96D:EE_|CH0PR12MB5154:EE_
+X-MS-Office365-Filtering-Correlation-Id: cb53298b-01f7-4c05-801a-08daecafcadc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: h72XQ+RnohZIlh1DZcWiDyRHkdXn2fkx27wIvd2TztB1ZhOhvZYQVzBftEml1/figMyhI4EXQIwBDDlJmQD/2H189qYt1F6g/6qDL5TI1CfdpH4nuVVeeA4reN9vE7451alyXq/CZBmsyWL+ZIjeFrorHa6dR3XPd+w5mw3hRD/klSeIQIyVl1sylNJB+RBrc0xaOxWHaOf4oBeOGS0DBLAyohmzt/mILVVe43WfpFyW2FeL6iR+cEJAMlYhJvgHrLggP+5a51WvnZSWOgfGv1DRxvVfH4CE219P1QFAuusLWH4EEhtqeTYso37C3HekDakCy9C9+PmRTPmB2lrBUf0ewd4r+2gWvKRLMMySYudUeC92QfCjQ4Q2yx5Ajz2Wml6a9esgAcW1bwRDG5VDHFLcITjzBV7bOwKGGoyqMJ+Lnlz/vU2ScERfYyOX6zn+D0UUpF4YZScoX1W6Y6ET3donpcaBYhTHxGt7IMo6yb2xBaM24K1sptS7bxlF4os+gJKKCauQBi6diz+d49qH9PagzPN92N4RiX7Z+Ca7KrdDAZ2BdMc1LIwK6YaBztPNHcwvttMm6hvd3S5soR8SBqP3p/onR1QHedn+AVeGwZ7+Ahj4kV0iL7p7VNbXHEC+bF+NSIiFWtMcPOY2udBHFbyG+qfhu/R3HHFZCfU9GKR8HP7ZlIK12u5mxj9n8h/7tv6UHGr3vMit1x/FsLWPz9Sk50XY/tslAzRrLKajs7QWP7RAkzM7fZ99OvFHJlyNxl5d+7DCMdL2EEZwPIuozjDdRg8YMoDtWO3N+cExnus=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(346002)(396003)(376002)(451199015)(40470700004)(46966006)(36840700001)(70586007)(2616005)(70206006)(81166007)(8676002)(40460700003)(4326008)(36756003)(336012)(426003)(47076005)(41300700001)(6636002)(316002)(16576012)(54906003)(110136005)(356005)(2906002)(86362001)(31696002)(36860700001)(82310400005)(5660300002)(82740400003)(8936002)(40480700001)(83380400001)(478600001)(53546011)(44832011)(16526019)(186003)(26005)(6666004)(31686004)(22166006)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jan 2023 10:54:59.2132
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb53298b-01f7-4c05-801a-08daecafcadc
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C96D.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5154
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,104 +107,76 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sun, Jan 01, 2023 at 06:52:35PM +0100, Christophe JAILLET wrote:
-[ ... ]
-> > > 
-> > > Here is what  do.
-> > > 
-> > > make allmodconfig
-> > > make -j8 drivers/watchdog/ixp4xx_wdt.o
-> > > 
-> > > And I get:
-> > >    DESCEND objtool
-> > >    CALL    scripts/checksyscalls.sh
-> > >    CC      drivers/watchdog/ixp4xx_wdt.o
-> > > drivers/watchdog/ixp4xx_wdt.c: In function ‘ixp4xx_wdt_probe’:
-> > > drivers/watchdog/ixp4xx_wdt.c:122:15: error: implicit declaration of
-> > > function ‘read_cpuid_id’ [-Werror=implicit-function-declaration]
-> > >    122 |         if (!(read_cpuid_id() & 0xf) && !cpu_is_ixp46x()) {
-> > >        |               ^~~~~~~~~~~~~
-> > > cc1: all warnings being treated as errors
-> > > make[3]: *** [scripts/Makefile.build:252 : drivers/watchdog/ixp4xx_wdt.o]
-> > > Erreur 1
-> > > make[2]: *** [scripts/Makefile.build:504 : drivers/watchdog] Erreur 2
-> > > make[1]: *** [scripts/Makefile.build:504 : drivers] Erreur 2
-> > > make: *** [Makefile:2011 : .] Erreur 2
-> > > 
-> > > 
-> > > I do agree with you that:
-> > > 
-> > >     - Kconfig looks fine
-> > > config IXP4XX_WATCHDOG
-> > > 	tristate "IXP4xx Watchdog"
-> > > 	depends on ARCH_IXP4XX
-> > > 
-> > >    - Makefile looks fine
-> > > obj-$(CONFIG_IXP4XX_WATCHDOG) += ixp4xx_wdt.o
-> > > 
-> > >    - .config looks fine
-> > > IXP4XX_WATCHDOG is NOT defined
-> > > 
-> > >    - make drivers/watchdog/ looks fine
-> > > No error and ixp4xx_wdt.o is NOT built.
-> > > 
-> > > 
-> > > However, in the past (if I recollect correctly :) ), a "make <something_that
-> > > depends_on_a_config_variable_that_is_not_defined>" returned an error stating
-> > > that no rule existed to build the specified target.
-> > > 
-> > 
-> > This is not correct. It only applies if the target directory Makefile is
-> > excluded by the make flags, or possibly if the target file is a complex
-> > one build from various source files.
-> > 
-> > > I sometimes needed to tweak the Kconfig files to force some compilation when
-> > > I didn't have the right tool chain or configuration.
-> > > It was maybe not the best practice, but it worked most of the time.
-> > > 
-> > > 
-> > > Now, with the example above, such a compilation attempt is possible. It is
-> > > maybe normal (because of a change somewhere in the way the kernel is built,
-> > > because of an updated toolchain on my machine, ...)
-> > > This is just fine for me, but looked really surprising.
-> > > 
-> > > That is why I first thought that something was missing in a Kconfig file.
-> > > 
-> > > 
-> > > So my comments are just a surprise to me to something that seems not to
-> > > behave the same as before.
-> > > 
-> > I don't think anything changed. It always worked like that for me.
-> > I would suggest to go back to an older kernel and try it there.
-> > You'll see exactly the same error. Maybe you just never encountered
-> > a file like that.
+++
+
+On 12/31/22 13:57, Christophe JAILLET wrote:
+> The devm_clk_get_enabled() helper:
+>     - calls devm_clk_get()
+>     - calls clk_prepare_enable() and registers what is needed in order to
+>       call clk_disable_unprepare() when needed, as a managed resource.
 > 
-> git reset --hard next-20210111			(randomly chosen date)
-> make allmodconfig
-> make clean
-> make -j7 drivers/watchdog/ixp4xx_wdt.o		(too build most of the needed stuff
-> to build a kernel)
-> touch drivers/watchdog/ixp4xx_wdt.c
-> make -j7 drivers/watchdog/ixp4xx_wdt.o		(too build this file only)
+> This simplifies the code and avoids the need of a dedicated function used
+> with devm_add_action_or_reset().
 > 
->   DESCEND  objtool
->   CALL    scripts/atomic/check-atomics.sh
->   CALL    scripts/checksyscalls.sh
-> make[3]: *** Aucune règle pour fabriquer la cible «
-> drivers/watchdog/ixp4xx_wdt.o ». Arrêt.
-> make[2]: *** [scripts/Makefile.build:471 : __build] Erreur 2
-> make[1]: *** [scripts/Makefile.build:496 : drivers/watchdog] Erreur 2
-> make: *** [Makefile:1805 : drivers] Erreur 2
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> V2: remove xwdt_clk_disable_unprepare() as-well
+> 
+> Note that the order of operations is slightly modified by this patch. The
+> clk is now prepare_enable()'ed before calling clk_get_rate().
+> ---
+>   drivers/watchdog/of_xilinx_wdt.c | 16 +---------------
+>   1 file changed, 1 insertion(+), 15 deletions(-)
+> 
+> diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
+> index 3318544366b8..2a079ca04aa3 100644
+> --- a/drivers/watchdog/of_xilinx_wdt.c
+> +++ b/drivers/watchdog/of_xilinx_wdt.c
+> @@ -154,11 +154,6 @@ static u32 xwdt_selftest(struct xwdt_device *xdev)
+>                  return XWT_TIMER_FAILED;
+>   }
+> 
+> -static void xwdt_clk_disable_unprepare(void *data)
+> -{
+> -       clk_disable_unprepare(data);
+> -}
+> -
+>   static int xwdt_probe(struct platform_device *pdev)
+>   {
+>          struct device *dev = &pdev->dev;
+> @@ -193,7 +188,7 @@ static int xwdt_probe(struct platform_device *pdev)
+> 
+>          watchdog_set_nowayout(xilinx_wdt_wdd, enable_once);
+> 
+> -       xdev->clk = devm_clk_get(dev, NULL);
+> +       xdev->clk = devm_clk_get_enabled(dev, NULL);
+>          if (IS_ERR(xdev->clk)) {
+>                  if (PTR_ERR(xdev->clk) != -ENOENT)
+>                          return PTR_ERR(xdev->clk);
+> @@ -211,15 +206,6 @@ static int xwdt_probe(struct platform_device *pdev)
+>                                   "The watchdog clock freq cannot be obtained\n");
+>          } else {
+>                  pfreq = clk_get_rate(xdev->clk);
+> -               rc = clk_prepare_enable(xdev->clk);
+> -               if (rc) {
+> -                       dev_err(dev, "unable to enable clock\n");
+> -                       return rc;
+> -               }
+> -               rc = devm_add_action_or_reset(dev, xwdt_clk_disable_unprepare,
+> -                                             xdev->clk);
+> -               if (rc)
+> -                       return rc;
+>          }
+> 
+>          /*
+> --
+> 2.34.1
 > 
 
-Turns out the behavior preferred by you was introduced in v5.4 with
-commit 394053f4a4b3 ("kbuild: make single targets work more correctly")
-and undone with commit cc306abd19e8 ("kbuild: fix and refactor single
-target build") in v6.1. As for what is the expected behavior, I can't say.
-I for my part had not noticed that the behavior had changed between v5.4
-and v6.0.
+Srinivas: Please retest but it looks good to me.
 
-I would suggest to discuss details with Yamada-san.
+Acked-by: Michal Simek <michal.simek@amd.com>
 
 Thanks,
-Guenter
+Michal
+
