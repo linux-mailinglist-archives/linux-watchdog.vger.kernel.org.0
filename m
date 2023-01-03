@@ -2,70 +2,69 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D6465C8C3
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Jan 2023 22:16:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B756265C8C7
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Jan 2023 22:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238089AbjACVQA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 3 Jan 2023 16:16:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
+        id S238161AbjACVQZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 3 Jan 2023 16:16:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238100AbjACVP6 (ORCPT
+        with ESMTP id S235736AbjACVQX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 3 Jan 2023 16:15:58 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7774C1175;
-        Tue,  3 Jan 2023 13:15:57 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id e205so28100170oif.11;
-        Tue, 03 Jan 2023 13:15:57 -0800 (PST)
+        Tue, 3 Jan 2023 16:16:23 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85E31408A;
+        Tue,  3 Jan 2023 13:16:22 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id r2-20020a9d7cc2000000b006718a7f7fbaso19793564otn.2;
+        Tue, 03 Jan 2023 13:16:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Mmz5EfPJYW5sbHdfhkkJ4o6mpRbEVK07CuDfTq7KXi0=;
-        b=cJyWLibv8MJfrNfaMqRqG16/iN8+9MMEqxmct/lpHCLp68UfIcVOjCnaXMsswvJAcd
-         5AqatPt5+BmhHWx7+fXEMF7RLo5tfnu4XbjBLCXyrFvdYBkL7M4TaCtT0BwzTMsrul55
-         UYavV4fN3S+CW9K7XX3lfdpW5So4lMGhF9hlbFtw2KKIk/3T3CSONIN2051GKM9Cn3aw
-         oNRhgZ9ylVUr46hwnin8b+wrulS1mAC89wLqIDO9+8Sm38w05tF293LiCl1q3pMsbGNP
-         mRonneYSzKJi1J2tthDtp/yb1bqLXevQuvGYie5y55iBnhx9Bg+56m9Wug2AY/sE+q/+
-         l7hA==
+        bh=sJtaPRwwUCXKLamHYJ5ehkr68u6NOGdWwQtIIti8GjE=;
+        b=eBrb+IvPAHfFFmTLeQxDPVmeMW6j22h2Ll/7hMT8imAb7XOxGfrGTRVJ1V3sBZt5Zk
+         B91cicuXW5NTqJHHLEqKlOA5Q5ba5HlhdXJca3m3LO42BWCturfdD4AXgMpRO1/TKV79
+         /K3kCFzXLBw3bq8JNsgUkhQ7vgLXNRzY7VYL7zIw9QkwdAz1heBoQ30e4GOyjboUkR7z
+         67vU69FwZ1ZzmZ11hK93r82fVfcY/xXi0DJFSbR3g0JwvgP906sOq9WtRVmpyucLmR48
+         u9i/Mzs+DmWAP5tki5i/K4uT9s0Aiqivjt9JW5zt+0hjxLPSoyv0JZXgaf3VVD4N0r6K
+         M+xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Mmz5EfPJYW5sbHdfhkkJ4o6mpRbEVK07CuDfTq7KXi0=;
-        b=UNA5tcWxJ6yXGC34atDb7hG3UaXF7OCC99ydk3NkX7Ug0hDBtu7KDWce84U1cZehpV
-         RUgZmjOWMfdOwRBK62UzMCMd9rTxq9uV0JDCVol1/TwEDZ9XBE6AmBDKCU20nnmEMwyz
-         boDxKXrGFXWKntDwxUWaHir1wh7cUpsOAAQ3aQPfxHjU/btj+F+aBuxjqSN2CBsOBhIj
-         yY/0JhE0vTMCqSQvTLjb3W8xDlCCI6+ENW0x2X9WW+4WkCxOcv3zTk/JZRNBhZRSywdK
-         dl56sN2VVYhYDm/Yp3wI+4/Nxbt6aKUM1nSgwVbf9vJUHFV6cmjnKZAMiRoPhNcleOuN
-         wRcw==
-X-Gm-Message-State: AFqh2kptAGhRxC7kkH0OeCE3sLVMgu6WwV+aHjm2d0SWts5IK+SDHlJp
-        fvfWoVu3Y8/Io28rT0qVAaA=
-X-Google-Smtp-Source: AMrXdXv0O24ex5Bf3s7rX7ZZe3nTzmzmrWjpQND3/6KVh+iANKcVCEaICaR6y+hrfwX4VsQE43sy1A==
-X-Received: by 2002:a05:6808:601:b0:363:a766:e78d with SMTP id y1-20020a056808060100b00363a766e78dmr5195151oih.5.1672780556617;
-        Tue, 03 Jan 2023 13:15:56 -0800 (PST)
+        bh=sJtaPRwwUCXKLamHYJ5ehkr68u6NOGdWwQtIIti8GjE=;
+        b=bRMchH2BJcKdTUL1v9yj9y8J5SBpLtr+WhAAETNHJZhFsWcnjT5ysXNvwGgdFaOox7
+         S711a/qYeQcIHgdYIf2B43btQ6hm53q7djZqDlJxQb/b7tYDvRWb4CNJWW1vNnqK1JpI
+         zaQcTIYZnKrtwaQ+c1X2qgJGXlbBLWrY7LTgwz2+Rsz5cCQoxzUAsk/ugFZJAQaZXqjW
+         IGst3+g33vx7Xu75YVo5ozB7ErHcMQUJNxkifiUrl+vWHD84A5efDhT/pX9O8nkfLWhb
+         eRs/h+6XlH4osGJvzh/Rk4Lkt11gMY5NVueQH8sEojI0kw0Lo7VME4KiCgg3b8B4QmZO
+         Dd/Q==
+X-Gm-Message-State: AFqh2kqpAMgNfJ2lR7NRDS/Are/ZGhNpNsPjqjVsbVYVx2Eqp3EL3O2t
+        UppKBIZeAqes3zpbLYIqPY4=
+X-Google-Smtp-Source: AMrXdXvviuAsb+qMyuPnPjvI4wgV8XN/uqdNjb56Sif/64u1ATO0FPqUCA6UbYb3UWBgBNpCIxoEmQ==
+X-Received: by 2002:a05:6830:1399:b0:676:7425:528 with SMTP id d25-20020a056830139900b0067674250528mr20823512otq.0.1672780582067;
+        Tue, 03 Jan 2023 13:16:22 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e21-20020a9d0195000000b00670523bf1cfsm15623622ote.47.2023.01.03.13.15.55
+        by smtp.gmail.com with ESMTPSA id cc10-20020a05683061ca00b0067079fc1ac9sm15737500otb.44.2023.01.03.13.16.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 13:15:56 -0800 (PST)
+        Tue, 03 Jan 2023 13:16:21 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 3 Jan 2023 13:15:55 -0800
+Date:   Tue, 3 Jan 2023 13:16:20 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Vladimir Zapolskiy <vz@mleia.com>,
+Cc:     Sander Vanheule <sander@svanheule.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
         linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] watchdog: pnx4008: Use devm_clk_get_enabled() helper
-Message-ID: <20230103211555.GF212337@roeck-us.net>
-References: <61f4e39db4c88408ee0149580e9aa925b784bc93.1672496714.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] watchdog: realtek_otto: Use devm_clk_get_enabled() helper
+Message-ID: <20230103211620.GG212337@roeck-us.net>
+References: <5e4255782fbb43d1b4b5cd03bd12d7a184497134.1672498920.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <61f4e39db4c88408ee0149580e9aa925b784bc93.1672496714.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <5e4255782fbb43d1b4b5cd03bd12d7a184497134.1672498920.git.christophe.jaillet@wanadoo.fr>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -77,7 +76,7 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 03:25:31PM +0100, Christophe JAILLET wrote:
+On Sat, Dec 31, 2022 at 04:02:17PM +0100, Christophe JAILLET wrote:
 > The devm_clk_get_enabled() helper:
 >    - calls devm_clk_get()
 >    - calls clk_prepare_enable() and registers what is needed in order to
@@ -91,45 +90,43 @@ On Sat, Dec 31, 2022 at 03:25:31PM +0100, Christophe JAILLET wrote:
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/pnx4008_wdt.c | 15 +--------------
->  1 file changed, 1 insertion(+), 14 deletions(-)
+>  drivers/watchdog/realtek_otto_wdt.c | 17 ++---------------
+>  1 file changed, 2 insertions(+), 15 deletions(-)
 > 
-> diff --git a/drivers/watchdog/pnx4008_wdt.c b/drivers/watchdog/pnx4008_wdt.c
-> index e0ea133c1690..87a44a5675a1 100644
-> --- a/drivers/watchdog/pnx4008_wdt.c
-> +++ b/drivers/watchdog/pnx4008_wdt.c
-> @@ -179,11 +179,6 @@ static struct watchdog_device pnx4008_wdd = {
->  	.max_timeout = MAX_HEARTBEAT,
+> diff --git a/drivers/watchdog/realtek_otto_wdt.c b/drivers/watchdog/realtek_otto_wdt.c
+> index 2a5298c5e8e4..2c30ddd574c5 100644
+> --- a/drivers/watchdog/realtek_otto_wdt.c
+> +++ b/drivers/watchdog/realtek_otto_wdt.c
+> @@ -235,27 +235,14 @@ static const struct watchdog_info otto_wdt_info = {
+>  		WDIOF_PRETIMEOUT,
 >  };
 >  
-> -static void pnx4008_clk_disable_unprepare(void *data)
+> -static void otto_wdt_clock_action(void *data)
 > -{
 > -	clk_disable_unprepare(data);
 > -}
 > -
->  static int pnx4008_wdt_probe(struct platform_device *pdev)
+>  static int otto_wdt_probe_clk(struct otto_wdt_ctrl *ctrl)
 >  {
->  	struct device *dev = &pdev->dev;
-> @@ -195,18 +190,10 @@ static int pnx4008_wdt_probe(struct platform_device *pdev)
->  	if (IS_ERR(wdt_base))
->  		return PTR_ERR(wdt_base);
+> -	struct clk *clk = devm_clk_get(ctrl->dev, NULL);
+> -	int ret;
+> +	struct clk *clk;
 >  
-> -	wdt_clk = devm_clk_get(dev, NULL);
-> +	wdt_clk = devm_clk_get_enabled(dev, NULL);
->  	if (IS_ERR(wdt_clk))
->  		return PTR_ERR(wdt_clk);
+> +	clk = devm_clk_get_enabled(ctrl->dev, NULL);
+>  	if (IS_ERR(clk))
+>  		return dev_err_probe(ctrl->dev, PTR_ERR(clk), "Failed to get clock\n");
 >  
-> -	ret = clk_prepare_enable(wdt_clk);
+> -	ret = clk_prepare_enable(clk);
 > -	if (ret)
-> -		return ret;
-> -	ret = devm_add_action_or_reset(dev, pnx4008_clk_disable_unprepare,
-> -				       wdt_clk);
+> -		return dev_err_probe(ctrl->dev, ret, "Failed to enable clock\n");
+> -
+> -	ret = devm_add_action_or_reset(ctrl->dev, otto_wdt_clock_action, clk);
 > -	if (ret)
 > -		return ret;
 > -
->  	pnx4008_wdd.bootstatus = (readl(WDTIM_RES(wdt_base)) & WDOG_RESET) ?
->  			WDIOF_CARDRESET : 0;
->  	pnx4008_wdd.parent = dev;
+>  	ctrl->clk_rate_khz = clk_get_rate(clk) / 1000;
+>  	if (ctrl->clk_rate_khz == 0)
+>  		return dev_err_probe(ctrl->dev, -ENXIO, "Failed to get clock rate\n");
 > -- 
 > 2.34.1
 > 
