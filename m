@@ -2,74 +2,71 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B6665C8AC
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Jan 2023 22:13:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD1665C8B3
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Jan 2023 22:14:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233455AbjACVNw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 3 Jan 2023 16:13:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
+        id S234063AbjACVOy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 3 Jan 2023 16:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233841AbjACVNv (ORCPT
+        with ESMTP id S233962AbjACVOw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 3 Jan 2023 16:13:51 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F00614026;
-        Tue,  3 Jan 2023 13:13:50 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id s187so28090061oie.10;
-        Tue, 03 Jan 2023 13:13:50 -0800 (PST)
+        Tue, 3 Jan 2023 16:14:52 -0500
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D417E13F01;
+        Tue,  3 Jan 2023 13:14:51 -0800 (PST)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-15085b8a2f7so13457862fac.2;
+        Tue, 03 Jan 2023 13:14:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XE75YtvOdvDomo8uXrOVQKva/Jfq1iADNtB4zYNap7c=;
-        b=Lpowg12mxYqoiJ4BdljvIs/bARRrYXIOFjq+fs8Y/8lZbX4Vrm/ihZGZyXrwtTDRGt
-         4qarAynnfhSVeEb0jVrmjqG4XpQ+h/HGOyy9J9mlsjT01v+Kg3a6lWnk6Iu2cPUxh9mU
-         N+aFsvWoqJ3eezpDT9RQTS391H9EupZbcTGDqamdY2frrRyeDbl+KnGCTFpc25tBDD6+
-         dHnvlZYrv2+PTwYEVThC5180SsdwTPnuvgm/LYnlsIgpscPdfIUNimPQsM3RFZ0CHZzl
-         Nk2bo61/wgKPFM/6Bzlbhkb7AZUZACncwGR4hObH5YmghEVk5a+vMWgKOwG9L9TyP6ox
-         OOwQ==
+        bh=femL7aEqLe1KO5Vr9GNJqhZJWyR6cx2fYeM5OLgTsuY=;
+        b=a+qNPUoCiFTI1t0t7/oQ/1zIUg2os38eBdinlPOYgvGktqSj/xRIRR1L/YJkgJHUTg
+         HN6th49Q0wTtK9jBKcuNQriFmha9YSeveDUJ8Xvr+wI+fNpjTMWOMdEAjuxmfqhmX1PS
+         avL05JhreCFzboSqoqGarnCPO9+SOviab2KUbfPfpcQhImJgld/r6eKucWjWERtNOciD
+         PgGTxavWWWpSwnA7cUb2i5IrQ0gaal/8iwEZqCyunbZ64zh+bBfjXidOvbuk6wkBNy3s
+         baSRi3JdeIWscXdRcMkOcxbfPGIQjWmt0K/4iZ0GJQOpVQrFg508C8EuXsTFbj9nP+oX
+         lg9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XE75YtvOdvDomo8uXrOVQKva/Jfq1iADNtB4zYNap7c=;
-        b=kLKt/KdtYD6UyINq8TFh6gdzPpEZbjZ46avY6ptTf2SC3yWPRG2HD+dOFYAtbvmt12
-         qCBHxkANQ3gZ/s5uvkWdegRsxaZjFtrzctl/2nD1docE39KKyPfcV1WK/N03pE8fJB2m
-         QoAmws6Rn3T4cUE0ljuNo23zI46lng1GLbJFK9kqIhFefqVA2BGrFSC8E5HCUBhw2gi0
-         n7NFdiq910ncKA3JQmWixBfEjtmj9Lo+tWBILhuOlCESy++qvjeE+DrR9piYU5EUW9o6
-         RMc7dR+386qFUwfihnAWzbsCDXkIKBLRGGyYanBS1QRSMM1GojnFzWqUnZwDfC9AkZnz
-         55Xg==
-X-Gm-Message-State: AFqh2kokPrG1MgHslJIbuqCMLwilgMufQdBpmv2TLODlVFUSjgINCjZw
-        xCjY7qvW0gYyXinS5Xx7Mak=
-X-Google-Smtp-Source: AMrXdXvnKs27s2VbrRKfzPeMKbw05RGDjEKZXjegoX/C5hhIayzISy2/C4p1r+mZBK8lmDMr+nJaYQ==
-X-Received: by 2002:a05:6808:7c9:b0:35e:7748:5899 with SMTP id f9-20020a05680807c900b0035e77485899mr19383004oij.50.1672780429799;
-        Tue, 03 Jan 2023 13:13:49 -0800 (PST)
+        bh=femL7aEqLe1KO5Vr9GNJqhZJWyR6cx2fYeM5OLgTsuY=;
+        b=gGbOu/7SYuN3AhcrLHKD40CJD/udU8y9Hau8eIPhM2KSaVzVv8jJYQ2VNfq8nvS4wB
+         o9jgu233isXSH18vAMXr0f36kpdFnqtPh3gsCS9v0UP/3wngxdstNTUVSVjZgx2cGAEB
+         VI4yaBwXT8wTWgsX7sH1ZSNUWxEf64nZbB46papD5L6xVIzPIWrmPjBBIhgV9GQyYwrE
+         iQ1GTaNHjUSbAFAtKM6gbdaIv4CSFNp7Itln3lpi6ShiPan5Gx5f+KXIDn8dE2nB02jD
+         jN80Z0SmXCEGaSrLdruA0DQzv7IO9WPNSLWSTX/XfO/+F3lymjXNU1QTs2bOOHiN8igf
+         sSSg==
+X-Gm-Message-State: AFqh2krNmeOboGSs3gIqUxlXVFnedx3KUyNqPf8E368RObEqcY75euVb
+        e3pGPms09y9DfHf+ENobzdk2vP2VHt0=
+X-Google-Smtp-Source: AMrXdXsSfw9qlNGFbRdAuRTvWUEJIuKuk/H/4MtM0BfqKooruzNMvDIzuARcyneswQt9tDfY27KXYg==
+X-Received: by 2002:a05:6870:75cc:b0:150:ce00:7856 with SMTP id de12-20020a05687075cc00b00150ce007856mr2486195oab.12.1672780491181;
+        Tue, 03 Jan 2023 13:14:51 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s22-20020a0568080b1600b0035b439a4b81sm13513958oij.31.2023.01.03.13.13.49
+        by smtp.gmail.com with ESMTPSA id t123-20020a4a5481000000b00492f9f46aa4sm12619354ooa.36.2023.01.03.13.14.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 13:13:49 -0800 (PST)
+        Tue, 03 Jan 2023 13:14:50 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 3 Jan 2023 13:13:48 -0800
+Date:   Tue, 3 Jan 2023 13:14:49 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
         linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH] watchdog: meson_gxbb: Use devm_clk_get_enabled() helper
-Message-ID: <20230103211348.GB212337@roeck-us.net>
-References: <6c5948373d309408095c1a098b7b4c491c5265f7.1672490071.git.christophe.jaillet@wanadoo.fr>
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] watchdog: of_xilinx_wdt: Use devm_clk_get_enabled()
+ helper
+Message-ID: <20230103211449.GC212337@roeck-us.net>
+References: <2b041dc8230a4ed255051bb2d323da8a51a8d0be.1672491445.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6c5948373d309408095c1a098b7b4c491c5265f7.1672490071.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <2b041dc8230a4ed255051bb2d323da8a51a8d0be.1672491445.git.christophe.jaillet@wanadoo.fr>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -81,7 +78,7 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 01:34:44PM +0100, Christophe JAILLET wrote:
+On Sat, Dec 31, 2022 at 01:57:49PM +0100, Christophe JAILLET wrote:
 > The devm_clk_get_enabled() helper:
 >    - calls devm_clk_get()
 >    - calls clk_prepare_enable() and registers what is needed in order to
@@ -95,50 +92,55 @@ On Sat, Dec 31, 2022 at 01:34:44PM +0100, Christophe JAILLET wrote:
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/meson_gxbb_wdt.c | 16 +---------------
+> V2: remove xwdt_clk_disable_unprepare() as-well
+> 
+> Note that the order of operations is slightly modified by this patch. The
+> clk is now prepare_enable()'ed before calling clk_get_rate().
+> ---
+>  drivers/watchdog/of_xilinx_wdt.c | 16 +---------------
 >  1 file changed, 1 insertion(+), 15 deletions(-)
 > 
-> diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
-> index 981a2f7c3bec..35d80cb39856 100644
-> --- a/drivers/watchdog/meson_gxbb_wdt.c
-> +++ b/drivers/watchdog/meson_gxbb_wdt.c
-> @@ -146,16 +146,10 @@ static const struct of_device_id meson_gxbb_wdt_dt_ids[] = {
->  };
->  MODULE_DEVICE_TABLE(of, meson_gxbb_wdt_dt_ids);
+> diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
+> index 3318544366b8..2a079ca04aa3 100644
+> --- a/drivers/watchdog/of_xilinx_wdt.c
+> +++ b/drivers/watchdog/of_xilinx_wdt.c
+> @@ -154,11 +154,6 @@ static u32 xwdt_selftest(struct xwdt_device *xdev)
+>  		return XWT_TIMER_FAILED;
+>  }
 >  
-> -static void meson_clk_disable_unprepare(void *data)
+> -static void xwdt_clk_disable_unprepare(void *data)
 > -{
 > -	clk_disable_unprepare(data);
 > -}
 > -
->  static int meson_gxbb_wdt_probe(struct platform_device *pdev)
+>  static int xwdt_probe(struct platform_device *pdev)
 >  {
 >  	struct device *dev = &pdev->dev;
->  	struct meson_gxbb_wdt *data;
-> -	int ret;
->  	u32 ctrl_reg;
+> @@ -193,7 +188,7 @@ static int xwdt_probe(struct platform_device *pdev)
 >  
->  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> @@ -166,18 +160,10 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
->  	if (IS_ERR(data->reg_base))
->  		return PTR_ERR(data->reg_base);
+>  	watchdog_set_nowayout(xilinx_wdt_wdd, enable_once);
 >  
-> -	data->clk = devm_clk_get(dev, NULL);
-> +	data->clk = devm_clk_get_enabled(dev, NULL);
->  	if (IS_ERR(data->clk))
->  		return PTR_ERR(data->clk);
+> -	xdev->clk = devm_clk_get(dev, NULL);
+> +	xdev->clk = devm_clk_get_enabled(dev, NULL);
+>  	if (IS_ERR(xdev->clk)) {
+>  		if (PTR_ERR(xdev->clk) != -ENOENT)
+>  			return PTR_ERR(xdev->clk);
+> @@ -211,15 +206,6 @@ static int xwdt_probe(struct platform_device *pdev)
+>  				 "The watchdog clock freq cannot be obtained\n");
+>  	} else {
+>  		pfreq = clk_get_rate(xdev->clk);
+> -		rc = clk_prepare_enable(xdev->clk);
+> -		if (rc) {
+> -			dev_err(dev, "unable to enable clock\n");
+> -			return rc;
+> -		}
+> -		rc = devm_add_action_or_reset(dev, xwdt_clk_disable_unprepare,
+> -					      xdev->clk);
+> -		if (rc)
+> -			return rc;
+>  	}
 >  
-> -	ret = clk_prepare_enable(data->clk);
-> -	if (ret)
-> -		return ret;
-> -	ret = devm_add_action_or_reset(dev, meson_clk_disable_unprepare,
-> -				       data->clk);
-> -	if (ret)
-> -		return ret;
-> -
->  	platform_set_drvdata(pdev, data);
->  
->  	data->wdt_dev.parent = dev;
+>  	/*
 > -- 
 > 2.34.1
 > 
