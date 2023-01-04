@@ -2,89 +2,71 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F2665C8E4
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Jan 2023 22:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E42D65D370
+	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Jan 2023 13:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237815AbjACV1M (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 3 Jan 2023 16:27:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        id S229773AbjADMze (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 4 Jan 2023 07:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234115AbjACV1L (ORCPT
+        with ESMTP id S233296AbjADMzE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 3 Jan 2023 16:27:11 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CDC1AD;
-        Tue,  3 Jan 2023 13:27:10 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id l29so38705128edj.7;
-        Tue, 03 Jan 2023 13:27:10 -0800 (PST)
+        Wed, 4 Jan 2023 07:55:04 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AC01DF0B
+        for <linux-watchdog@vger.kernel.org>; Wed,  4 Jan 2023 04:54:53 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id p12so16234930qkm.0
+        for <linux-watchdog@vger.kernel.org>; Wed, 04 Jan 2023 04:54:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hI++6uIbF26Dv21ktmycrREOIYmnkQTNouNNFxSqlfs=;
-        b=qPrSO1WIAMiJ5FKOT9prYmL7H+27c9enK7XuCZQ7HivgXev8EZXQz6Duw/9LGFXYDR
-         cuc1iHeqJJl9FNULBQnqVye/l3ryzZDT+1OVA2zlT16WpaEPdp2OcSWPWPaRQyXEqY0a
-         qglCzpQm745f+Wk+aMLxzBHA+ch1UfUc9aDv9EyCtbDtenZ826WGAbTnG+Bz+/rQI+Ao
-         dS0bq03WlJmUsFIMqYb+p+8eMuD9604TcnsryhKKkly8y+luXWSMbaskrf2VzoeWFbNl
-         AR95IXWLK0Z54rPTZNzU1NAReSRHQH5Ke5iOJzn0QlAPSxqVqgBIplarraBlZm/7M91u
-         BmRA==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
+        b=BQfo1+41q2NZR57Q7BFlMODaOza2AgrRvUpAp3daCd4t1w84OEhFtXAM1g7CkVTr/y
+         mvXWkJvXCDM96Iy3cSf9E37Th3uZX5TzmwlIsHFzK3DAyLuSjJ8d3uR9drr/ahkzPGkt
+         iW+sw+gZOJCd7bumtfoM4UR2xOfXz6tdmGq2f+IJJhoSBazdofAm5Gs9PxuweXnk264c
+         knSGf1CtrqZScdeov1GoaGbl2sApMUXYjJGPCObPVA0UTlHx2t6+wdp4VOKHmsqLWM8X
+         lQt15zqigA6uJCG+q37n0r4mLK1MKtsniT1i9jhRA9qlN9E2Mf0sYN4W9Jd0n+39BoCK
+         yzWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hI++6uIbF26Dv21ktmycrREOIYmnkQTNouNNFxSqlfs=;
-        b=u2edPfnX89+qRrWhOrvnt60bSSVR1Nea0ovwFW1osEyNATPRxwVRb51j6/GtOlO/XV
-         yvq/ztbnlBLSDyU2ybjb4DcPgqxpRoHUNn6le9twgtGBek+s6pSvwFQHDiS50GbXq8g3
-         0qh/Hq4II1oVMBMuSRCQh25p9G7IMMu7M9I8ePClI/PkEjdO4+iQjIM4jczYtkUzf9x+
-         KWXC/ofgcf+BOCtWu/vJbptZPgnvuStgaDSRfhlSnXSMcakaYHzzNhpuJYBsOOxiMbNP
-         pDsuoRcV9YzciCPO+Q4Tm5mspb1r86iPaT+T2AJRIXte7a0i+SF8Re1ppywC0YbtTw4N
-         AqNA==
-X-Gm-Message-State: AFqh2kqRIeVUcBBJZVKepv+LX26sv2nwlqipikewc12GNAhr+tg+uTnD
-        y70mZ2DiEwm88NPMQfRQdfxAjkmuVNvLRo/tgYc87Q5c+rQ=
-X-Google-Smtp-Source: AMrXdXuJemt4sp88WTvGhdf+4KvtqJ5cbVdF/C+z4wNNbIlxAEEXB2Sy9U3/SYnwiNVv1ddufGwzbM4BmyLoDiCFIPg=
-X-Received: by 2002:a05:6402:120a:b0:462:2e27:3bf2 with SMTP id
- c10-20020a056402120a00b004622e273bf2mr4566144edw.13.1672781228785; Tue, 03
- Jan 2023 13:27:08 -0800 (PST)
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
+        b=0cGNeSVGe7kLEo7zvi/DSFCk13OKJ22+WacgL4hOdxgxPsJJB/g+AmgxJAF9WKx4ex
+         2/Zy38ujFWBKyBkYAqyFQEeHu8zeX3j4tlIqwTnTIeRqQGXlyj5fjaM/sZylUkBNywxz
+         LA6wKhaE6Lvxfy+rJy00sOFeWyhrmZNiSF+tc3HnZnS8yyAJ84TVCZq2aWj110h+Ihu9
+         5TNUrFNqqWbzVPrIsTU0RND9DvYtvjJ3+qxEo6XKee3Ozo6SryVktfAaTpPVuMOx9/qU
+         9L2fNgCK0irNtdQMvEPfuR8aeGFwWpBQMmQ06mtBEQnXVuxLI43L5iBNeNOvPmPaw0cb
+         1vcw==
+X-Gm-Message-State: AFqh2kq3zwt/2ncesvRxEo5E7Q45fYuUeXRDXZAB9II++4BCqZ6kqgic
+        QmOcDBMrpMmB+LvcUkjs0JbbwBwy1kul7LGkxjVDy8ivQ/U=
+X-Google-Smtp-Source: AMrXdXuKXTvNK0aSB9vnyjtdhrZfKmRzvU9Jw1W0zhcD7x19AMFVNgTh5oL+8ilZBOfTDf/bL64QVz1mYULxa/ftADs=
+X-Received: by 2002:ac8:568a:0:b0:3a9:688d:fad2 with SMTP id
+ h10-20020ac8568a000000b003a9688dfad2mr1976067qta.646.1672836882017; Wed, 04
+ Jan 2023 04:54:42 -0800 (PST)
 MIME-Version: 1.0
-References: <6c5948373d309408095c1a098b7b4c491c5265f7.1672490071.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <6c5948373d309408095c1a098b7b4c491c5265f7.1672490071.git.christophe.jaillet@wanadoo.fr>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Tue, 3 Jan 2023 22:26:57 +0100
-Message-ID: <CAFBinCAPY3s4w5MPvyP9Y8Ov_eKVWoMu8fJwvmbn6r_+Qg8iLQ@mail.gmail.com>
-Subject: Re: [PATCH] watchdog: meson_gxbb: Use devm_clk_get_enabled() helper
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org
+Received: by 2002:a05:6200:5d91:b0:4a5:78e9:2012 with HTTP; Wed, 4 Jan 2023
+ 04:54:41 -0800 (PST)
+Reply-To: Gregdenzell9@gmail.com
+From:   Greg Denzell <mzsophie@gmail.com>
+Date:   Wed, 4 Jan 2023 12:54:41 +0000
+Message-ID: <CAEoj5=ZpJ15GRz-U33Ocbu5-P3Va+3bNv3476+mmJJ52cwx7tA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 1:34 PM Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> The devm_clk_get_enabled() helper:
->    - calls devm_clk_get()
->    - calls clk_prepare_enable() and registers what is needed in order to
->      call clk_disable_unprepare() when needed, as a managed resource.
->
-> This simplifies the code and avoids the need of a dedicated function used
-> with devm_add_action_or_reset().
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Thank you for this patch! It's:
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Seasons Greetings!
+
+This will remind you again that I have not yet received your reply to
+my last message to you.
