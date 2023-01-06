@@ -2,71 +2,89 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E42D65D370
-	for <lists+linux-watchdog@lfdr.de>; Wed,  4 Jan 2023 13:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4048665FFCD
+	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Jan 2023 12:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjADMze (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 4 Jan 2023 07:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
+        id S229869AbjAFLyl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 6 Jan 2023 06:54:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233296AbjADMzE (ORCPT
+        with ESMTP id S229476AbjAFLyk (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 4 Jan 2023 07:55:04 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AC01DF0B
-        for <linux-watchdog@vger.kernel.org>; Wed,  4 Jan 2023 04:54:53 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id p12so16234930qkm.0
-        for <linux-watchdog@vger.kernel.org>; Wed, 04 Jan 2023 04:54:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
-        b=BQfo1+41q2NZR57Q7BFlMODaOza2AgrRvUpAp3daCd4t1w84OEhFtXAM1g7CkVTr/y
-         mvXWkJvXCDM96Iy3cSf9E37Th3uZX5TzmwlIsHFzK3DAyLuSjJ8d3uR9drr/ahkzPGkt
-         iW+sw+gZOJCd7bumtfoM4UR2xOfXz6tdmGq2f+IJJhoSBazdofAm5Gs9PxuweXnk264c
-         knSGf1CtrqZScdeov1GoaGbl2sApMUXYjJGPCObPVA0UTlHx2t6+wdp4VOKHmsqLWM8X
-         lQt15zqigA6uJCG+q37n0r4mLK1MKtsniT1i9jhRA9qlN9E2Mf0sYN4W9Jd0n+39BoCK
-         yzWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
-        b=0cGNeSVGe7kLEo7zvi/DSFCk13OKJ22+WacgL4hOdxgxPsJJB/g+AmgxJAF9WKx4ex
-         2/Zy38ujFWBKyBkYAqyFQEeHu8zeX3j4tlIqwTnTIeRqQGXlyj5fjaM/sZylUkBNywxz
-         LA6wKhaE6Lvxfy+rJy00sOFeWyhrmZNiSF+tc3HnZnS8yyAJ84TVCZq2aWj110h+Ihu9
-         5TNUrFNqqWbzVPrIsTU0RND9DvYtvjJ3+qxEo6XKee3Ozo6SryVktfAaTpPVuMOx9/qU
-         9L2fNgCK0irNtdQMvEPfuR8aeGFwWpBQMmQ06mtBEQnXVuxLI43L5iBNeNOvPmPaw0cb
-         1vcw==
-X-Gm-Message-State: AFqh2kq3zwt/2ncesvRxEo5E7Q45fYuUeXRDXZAB9II++4BCqZ6kqgic
-        QmOcDBMrpMmB+LvcUkjs0JbbwBwy1kul7LGkxjVDy8ivQ/U=
-X-Google-Smtp-Source: AMrXdXuKXTvNK0aSB9vnyjtdhrZfKmRzvU9Jw1W0zhcD7x19AMFVNgTh5oL+8ilZBOfTDf/bL64QVz1mYULxa/ftADs=
-X-Received: by 2002:ac8:568a:0:b0:3a9:688d:fad2 with SMTP id
- h10-20020ac8568a000000b003a9688dfad2mr1976067qta.646.1672836882017; Wed, 04
- Jan 2023 04:54:42 -0800 (PST)
+        Fri, 6 Jan 2023 06:54:40 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5B6718B7;
+        Fri,  6 Jan 2023 03:54:34 -0800 (PST)
+X-UUID: a4c5f7e2bd5b4cd194bd24e1be70a214-20230106
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Zz4lAG7Fv806LdEwYUd3QNWOhaOm63H4dynzSxg33Ss=;
+        b=cO7+jAs4+RjwTzL9KNJjqXDUSR1pScpa6slz38msabFw1LKIlIPv19L8U9dGqEGOthkLwVZIqJ9o3Vh8YrrD9AzIywdytAUxUj5BGLHltJ/IUBrcZ7y+5UhfCKE/db18bD5PgtLv0hTn8WwhT8ZgR4UBlp9lSQPxTm9IKLgWjXw=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.17,REQID:d7340043-b327-4932-a842-397f39ecf13a,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:543e81c,CLOUDID:c3fe788b-8530-4eff-9f77-222cf6e2895b,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
+X-CID-BVR: 0
+X-UUID: a4c5f7e2bd5b4cd194bd24e1be70a214-20230106
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 97020260; Fri, 06 Jan 2023 19:54:31 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 6 Jan 2023 19:54:30 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 6 Jan 2023 19:54:30 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-watchdog@vger.kernel.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH 0/2] mtk-wdt: Add reset-by-toprgu support
+Date:   Fri, 6 Jan 2023 19:53:24 +0800
+Message-ID: <20230106115326.15374-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Received: by 2002:a05:6200:5d91:b0:4a5:78e9:2012 with HTTP; Wed, 4 Jan 2023
- 04:54:41 -0800 (PST)
-Reply-To: Gregdenzell9@gmail.com
-From:   Greg Denzell <mzsophie@gmail.com>
-Date:   Wed, 4 Jan 2023 12:54:41 +0000
-Message-ID: <CAEoj5=ZpJ15GRz-U33Ocbu5-P3Va+3bNv3476+mmJJ52cwx7tA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Seasons Greetings!
+This series is based on next-20230106.
 
-This will remind you again that I have not yet received your reply to
-my last message to you.
+In some cases, we may need toprgu to reset the wdt counter after wdt
+resets.
+
+Provide a reset_by_toprgu parameter for configuration. We can disable
+or enable it by adding reset_by_toprgu in dts.
+
+Allen-KH Cheng (2):
+  dt-bindings: watchdog: mtk-wdt: Add reset-by-toprgu support
+  watchdog: mtk_wdt: Add reset_by_toprgu support
+
+ .../devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml     | 4 ++++
+ drivers/watchdog/mtk_wdt.c                                 | 7 +++++++
+ 2 files changed, 11 insertions(+)
+
+-- 
+2.18.0
+
