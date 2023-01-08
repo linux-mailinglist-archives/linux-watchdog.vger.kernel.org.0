@@ -2,112 +2,108 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA819660045
-	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Jan 2023 13:31:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD096614CE
+	for <lists+linux-watchdog@lfdr.de>; Sun,  8 Jan 2023 12:30:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjAFMbT (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 6 Jan 2023 07:31:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
+        id S234698AbjAHLaS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 8 Jan 2023 06:30:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232680AbjAFMbK (ORCPT
+        with ESMTP id S233444AbjAHLaJ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 6 Jan 2023 07:31:10 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642393D5D3
-        for <linux-watchdog@vger.kernel.org>; Fri,  6 Jan 2023 04:31:04 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id bk16so1122334wrb.11
-        for <linux-watchdog@vger.kernel.org>; Fri, 06 Jan 2023 04:31:04 -0800 (PST)
+        Sun, 8 Jan 2023 06:30:09 -0500
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6560CD2EE
+        for <linux-watchdog@vger.kernel.org>; Sun,  8 Jan 2023 03:30:00 -0800 (PST)
+Received: by mail-ed1-x543.google.com with SMTP id c34so8610674edf.0
+        for <linux-watchdog@vger.kernel.org>; Sun, 08 Jan 2023 03:30:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wnHmo4gFW6DvtXlbr5SoB1hjQ5uDPFdjubw1Z5KtC2M=;
-        b=SyOuejFSxAddEx+shYlQwcTE8G04Ie0QLwOcfTtk1fcSYKU57DghPuiddX16YGhce9
-         Jf6rRZx65PFSuprnTaAP7wFSVsNjF2xgV/GPVW0om+uC/iFnTdtl71azqr/+L/FwGGfZ
-         6lUcRJMtsyltsxpjCRoquGxTbXxpBdyebnizObey88eGiOhUU9bA2s9zhgE0QABSoe02
-         XgrmrXQc4lWTQr4nj3YDqIOjYfmB3Hl/aIde/y2vlmEmy7wUPUhGQ2UPAdD4Taobk120
-         hh+G39kDb9nYUgBX09M0kkJ1cbcV+HLFGge/242G8XwfsqQ5/HVnfhrExDt5F16026Xm
-         EH/g==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HcpM41K3Tg/Gq2Sy2fOw39ukTQf5X/VzmfsS+yU67xU=;
+        b=CBHoltcPCly7GiqaZisHIdHagk3j88LH6gwUStENc7TmK8kPc76KHKYcnJY6iDZZMK
+         zeZqsA1ff0w5XpZ+4glFWl1GyviVBRgntqmHO/VUY/3QAM/4BEqATrvB9QC5pUObgew4
+         RetoWbsbhE7vvZNjnWF1ntu6AKusNAqL9LcfNQoL746mMOo+IU62G6AnwXIE1R5hrOEj
+         dbBWRzUB2Prz7lzjeUBado8dQNU+NHa8UO7MHqA6YBhg8o5885TQyc+TTd+AHeQCxRmz
+         W39GCfWxEXJKc5WGkow93s6w0rATs6Z97vg48xEY6ODKjV47q0qZH8Od42jePCVz7O0s
+         3ihQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wnHmo4gFW6DvtXlbr5SoB1hjQ5uDPFdjubw1Z5KtC2M=;
-        b=TA1Tk11V3CC8qNbTA62HhJEht8BrroHrr5yuSe+x+8PDI9/Fmr0aaBOwUDS+ZaT/hO
-         LNGHBWQRgZtHlo3+L7NuasC7qyde3oqgYUElwRht8SiPlLMaqo6cxzlbZwb3f5j7y7aB
-         hTYSeH4vjAiuWemi/01Zjdg4QJ4mpja9YgfVPRmPes8rvC4kGqhDvrReui+HzOyV8MRy
-         bOT39XALvHlFc0LVXzznwMUxHN1amAd4jTcaxiftLNJ7uP0uK3RDk4jIzgYYR2UtCrgF
-         4uN/Hiph6725Voc4THVG0BbKnx1hvD2medd7PQ0mgof1/BTxhBM0YT9PIcQerky1Cqgi
-         xItA==
-X-Gm-Message-State: AFqh2koBvi2gvP3iSDT7lefKA7VdGgldU0z4QPMZ8pwpM/JdA6og0UL9
-        JB6ZnBFqEEHTHSB1A4N/kz0GLA==
-X-Google-Smtp-Source: AMrXdXt3yJJLsVYpxsoJeK59Bp5g4p+Gb5ffEsOTVk+TtXtTzeNSQgMnqWwvEuJxK7jQW4jwJ5cC3A==
-X-Received: by 2002:a05:6000:810:b0:29f:9832:ff96 with SMTP id bt16-20020a056000081000b0029f9832ff96mr9277769wrb.2.1673008262985;
-        Fri, 06 Jan 2023 04:31:02 -0800 (PST)
-Received: from [192.168.1.102] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q11-20020adf9dcb000000b00268aae5fb5bsm1115915wre.3.2023.01.06.04.30.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 04:31:02 -0800 (PST)
-Message-ID: <ba51e54c-8758-cbcb-bfdd-e8f2efbf905c@linaro.org>
-Date:   Fri, 6 Jan 2023 13:30:57 +0100
+        bh=HcpM41K3Tg/Gq2Sy2fOw39ukTQf5X/VzmfsS+yU67xU=;
+        b=2u53up1nMB7YXKHUsV2yopCxVz4ZY7L5NZzCIX5PhkNCWHvF/hwHBhcu430mS+gG1V
+         6vQPt++Y9cO4o0XSc8ChO34XlG3kGgkLQATMo8ybejAbzL8PclFwOcG+WPkel+D6Jbsf
+         JIUK3MjxlwPJ1jMz9Ryhm8mZxMubyr5KbSEZ0xkud6gLGlPZ686oT4N8t5RjNdPeVzGs
+         VoFeMCjTUG4RQlrfofMOXXpWWiCyZWAKoqisDmqcvNMqgCp1onubTrtY8i1rFXh0Xp8L
+         VmxLNIOOx6a5V6xiM99xhd57prHhabYf+0M6aYfxXiHTh0kvOQWbWNaA6vxrdBUkp5JE
+         CsBg==
+X-Gm-Message-State: AFqh2koo0pV4a+fRNfG/tWmtwdku8wXcDmXK0B18wEIIxVmt7ONPy77X
+        01CnWbeYr+JTcKIReZ7xVUWmgAU4bQCtKF0W6Lo=
+X-Google-Smtp-Source: AMrXdXutj5CXRYxZVz1GE2BcugsOWq5HiRWmZepwLQ+buZ49i5JcEFxYxazuCp1lN8B6N2AquQdaKFjZl2R0jiZqGNU=
+X-Received: by 2002:a05:6402:1614:b0:492:7e5f:2b59 with SMTP id
+ f20-20020a056402161400b004927e5f2b59mr1165239edv.414.1673177398844; Sun, 08
+ Jan 2023 03:29:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: mtk-wdt: Add reset-by-toprgu
- support
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-watchdog@vger.kernel.org
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230106115326.15374-1-allen-kh.cheng@mediatek.com>
- <20230106115326.15374-2-allen-kh.cheng@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230106115326.15374-2-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a17:906:eca7:b0:7c0:dfb2:c37b with HTTP; Sun, 8 Jan 2023
+ 03:29:58 -0800 (PST)
+Reply-To: muhammadabdulrahma999@gmail.com
+From:   muhammad <nnannacollins2019@gmail.com>
+Date:   Sun, 8 Jan 2023 03:29:58 -0800
+Message-ID: <CAPQqOC2UtyuwO9Yiww_0mKLH0x1zZsfAsvJyhsRFqDWmwN2eWw@mail.gmail.com>
+Subject: Re:Re:Inquiry about your products.!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_50,DEAR_SOMETHING,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:543 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5001]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [nnannacollins2019[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [nnannacollins2019[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [muhammadabdulrahma999[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 06/01/2023 12:53, Allen-KH Cheng wrote:
-> In some applications, the mtk-wdt requires the toprgu (TOP Reset
-> Generation Unit) to reset counter after wdt resets. Add optional
-> mediatek,reset-by-toprgu property to enable it.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> ---
->  .../devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml        | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
-> index b3605608410c..bf06dcd0c12c 100644
-> --- a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
-> @@ -52,6 +52,10 @@ properties:
->      description: Disable sending output reset signal
->      type: boolean
->  
-> +  mediatek,reset-by-toprgu:
-> +    description: Reset counter by toprgu
+Dear Sir/Madam,
 
-Do not copy the property name in description but actually describe it.
+An open Tender for the supply of your company products to (Doha,
+Qatar). Urgently furnish us in full details about the standard of your
+product. We will appreciate it more if you give us with Details:
+Specification and Catalogs or Price list via Email.To avoid making a
+wrong choice of products before placing an order for it.
 
-Also "toprgu" is a bit cryptic.
+Terms of payment:An upfront payment of 80% (T/T) will be made to your
+account for production,While 20% will be paid before shipment.
 
-Best regards,
-Krzysztof
-
+Thanks and Regards
