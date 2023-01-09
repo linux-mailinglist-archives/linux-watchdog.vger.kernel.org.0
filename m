@@ -2,152 +2,107 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61094662453
-	for <lists+linux-watchdog@lfdr.de>; Mon,  9 Jan 2023 12:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F01686625E3
+	for <lists+linux-watchdog@lfdr.de>; Mon,  9 Jan 2023 13:52:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234976AbjAILip (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 9 Jan 2023 06:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
+        id S233499AbjAIMw2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 9 Jan 2023 07:52:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234288AbjAILin (ORCPT
+        with ESMTP id S233660AbjAIMw0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 9 Jan 2023 06:38:43 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AD6B2C
-        for <linux-watchdog@vger.kernel.org>; Mon,  9 Jan 2023 03:38:41 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id ay40so6048651wmb.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 09 Jan 2023 03:38:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=uWRQwZU7Q5uXmRpQpJb8/BTaeDI/2pDdqBknaeuYMoc=;
-        b=y1NBPAWB/5QSk15IQF0sayDsBGK9DTwzo64Fwhce+Wv3f7tVbPw++Vm7KjFJ/ePuIH
-         alZSxq4wMtI3JYRZn3zmZrqmW5U+tcE/36mSZS+ao+PBouUNXkLt8uMAN3EDUZoM8y1Z
-         V38rcAlr6k9TL1waTrhaRP8dMZcyQgFxWY3TRRWCtw3tASJlyK9l3O/MWYqVGJgAknVC
-         jyzHq/yTgZ5C7OdYW+njoDU4LjZ+sYY1fS9XGuRSIkUPXzN3ekBZA31uKMfMGcdTnJze
-         j7zyR4Zp7HBcTCJS529n0Jvj5PuGWJpqpZXzP6IkeqqXkPlbC7aVB/jHNAVTFf8RXMND
-         S+Fw==
+        Mon, 9 Jan 2023 07:52:26 -0500
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B44CB41;
+        Mon,  9 Jan 2023 04:52:26 -0800 (PST)
+Received: by mail-qt1-f175.google.com with SMTP id i20so7619361qtw.9;
+        Mon, 09 Jan 2023 04:52:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uWRQwZU7Q5uXmRpQpJb8/BTaeDI/2pDdqBknaeuYMoc=;
-        b=SwWeD90SLX8xbjhJOwck3atHCCvImSvHHEgAwudz/902B4WbHFzBTXjQxjLHT9hX5Q
-         vAt8uvngqVe2bPE2oz7Cg2quYVkzaZIEN6VEbXmHADIVR1V0o1Ds8SJ5ak6ipMWUI8Au
-         jVEA8UOW8/kUePlrqQB4FemphUytjEvdqKpqIzQl58tjQCTzi1nkfiDU9/Z6mLEc6zoe
-         7zSQrGaD5fyhxhjhIg6zo9a0GzMHN2yiwqrdanjeLG/XgpAurJx9UoxpYRYnPOYMaOk+
-         L7QHPE0DGO1zpXKTFwzHgHJ2oI5Xy+tX2wuyEqeZ0myQUJfM1zaIQ3y03TyTF0eMPjYw
-         nWcA==
-X-Gm-Message-State: AFqh2kpSDZVVzLu1zp1QA70emfS1IDNugyM4RQCCosMX5qlrjXagUeB0
-        8BOXRReGZXoJvGayhww8+WRxVQ==
-X-Google-Smtp-Source: AMrXdXsgKZSO61ZWkew6Daa4r2uBx8Xe/DlWi/W5u/PDxgxQsVfDr2oBgtSbr4LJo3JD2nU14fQRlg==
-X-Received: by 2002:a05:600c:1f12:b0:3cf:8155:2adc with SMTP id bd18-20020a05600c1f1200b003cf81552adcmr47185923wmb.33.1673264319841;
-        Mon, 09 Jan 2023 03:38:39 -0800 (PST)
-Received: from [192.168.7.111] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id r126-20020a1c2b84000000b003d35c845cbbsm15439361wmr.21.2023.01.09.03.38.38
+        bh=k3NkQ2MoGKot6GyanlF01tIJyl/D3I3FmiwM87+ZRR0=;
+        b=qt0kXDAY6EZfmz2ZMrHCYCfwwy5OLWBLtKVQ4zCBW2WTE4SXsup8uswTK04SiCzj6e
+         qNmT70nhsJCeZSsbw+3c1QWbTiBF7R1t4amlhaq5L5ZxpBI1mNMuGZlJMohz0eqk9JJI
+         7OnouTce9H7hfVZPql91zAjNkP2Qzs2fdGsyXNT39MDS3Jwx/juDqYPRnyY3F++58J1G
+         Eqf+nVxX+Y++yXn5Mas7IB2z8I0FSUWrp8GCZgEPPFd0KPOy+jiJSv7kqh0H/fqBTvTG
+         wCB7tVw54iSmKcRmx/jmRNtn0UTKRMZBl9a4DJcK2nGlFm3Kv/VqdFP+a7rnIjC/uKpH
+         g7iA==
+X-Gm-Message-State: AFqh2krvH3xXUmiK/pUTd48WjBaCumHyMwS2T53OpWJmNEbOX3QN2R6h
+        aTIwnqoGzrJz1C4PqqhNEnfv+2DtFRMFuA==
+X-Google-Smtp-Source: AMrXdXuyCnvavHh1UZDI6wcy5FdKryQlGuC+Cjj6bJoqbHcaTN5kadVo4uNlRKdNurXUYeCwTpKeVw==
+X-Received: by 2002:ac8:41d5:0:b0:3ac:b93d:84b6 with SMTP id o21-20020ac841d5000000b003acb93d84b6mr6528446qtm.4.1673268745025;
+        Mon, 09 Jan 2023 04:52:25 -0800 (PST)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id y4-20020ac87c84000000b0039a55f78792sm4509544qtv.89.2023.01.09.04.52.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 03:38:39 -0800 (PST)
-Message-ID: <6c784b12-ea81-2ac9-ff99-e33f5c123483@linaro.org>
-Date:   Mon, 9 Jan 2023 12:38:37 +0100
+        Mon, 09 Jan 2023 04:52:24 -0800 (PST)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-4c7d35b37e2so54760177b3.2;
+        Mon, 09 Jan 2023 04:52:23 -0800 (PST)
+X-Received: by 2002:a81:17d5:0:b0:480:fa10:459e with SMTP id
+ 204-20020a8117d5000000b00480fa10459emr3677548ywx.283.1673268743712; Mon, 09
+ Jan 2023 04:52:23 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 03/12] dt-bindings: nvmem: convert
- amlogic-meson-mx-efuse.txt to dt-schema
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Eric Dumazet <edumazet@google.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
+References: <20221117114907.138583-1-fabrizio.castro.jz@renesas.com> <20221117114907.138583-2-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20221117114907.138583-2-fabrizio.castro.jz@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 9 Jan 2023 13:52:11 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUTjem_dYf1ycbGc6TGz28Jn7m_iSUmFJvOCWYcyCeaPg@mail.gmail.com>
+Message-ID: <CAMuHMdUTjem_dYf1ycbGc6TGz28Jn7m_iSUmFJvOCWYcyCeaPg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] watchdog: rzg2l_wdt: Issue a reset before we put the
+ PM clocks
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org
-References: <20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org>
- <20221117-b4-amlogic-bindings-convert-v1-3-3f025599b968@linaro.org>
- <CAFBinCANM=AOw1bbGCheFy20mqQ1ym_maK0C1sYpjceoNH-dNQ@mail.gmail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <CAFBinCANM=AOw1bbGCheFy20mqQ1ym_maK0C1sYpjceoNH-dNQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 26/11/2022 00:04, Martin Blumenstingl wrote:
-> Hi Neil,
-> 
-> thanks for your work on this!
-> 
-> On Fri, Nov 18, 2022 at 3:33 PM Neil Armstrong
-> <neil.armstrong@linaro.org> wrote:
-> [...]
->> +        #address-cells = <1>;
->> +        #size-cells = <1>;
->> +
->> +        sn: sn@14 {
->> +            reg = <0x14 0x10>;
->> +        };
->> +
->> +        eth_mac: mac@34 {
->> +            reg = <0x34 0x10>;
->> +        };
->> +
->> +        bid: bid@46 {
->> +            reg = <0x46 0x30>;
->> +        };
-> I assume you took these examples from the newer, GX eFuse?
-> Unfortunately on boards with these older SoCs the serial number and
-> MAC address are often not stored in the eFuse.
-> This is just an example, so I won't be sad if we keep them. To avoid
-> confusion I suggest switching to different examples:
->    ethernet_mac_address: mac@1b4 {
->      reg = <0x1b4 0x6>;
->    };
->    temperature_calib: calib@1f4 {
->       reg = <0x1f4 0x4>;
->    };
-> 
-> What do you think?
+On Thu, Nov 17, 2022 at 12:49 PM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> On RZ/Five SoC it was observed that setting timeout (to say 1 sec) wouldn't
+> reset the system.
+>
+> The procedure described in the HW manual (Procedure for Activating Modules)
+> for activating the target module states we need to start supply of the
+> clock module before applying the reset signal. This patch makes sure we
+> follow the same procedure to clear the registers of the WDT module, fixing
+> the issues seen on RZ/Five SoC.
+>
+> While at it re-used rzg2l_wdt_stop() in rzg2l_wdt_set_timeout() as it has
+> the same function calls.
+>
+> Fixes: 4055ee81009e ("watchdog: rzg2l_wdt: Add set_timeout callback")
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Sure switched to it !
+Gr{oetje,eeting}s,
 
-Neil
-> 
-> 
-> Best regards,
-> Martin
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
