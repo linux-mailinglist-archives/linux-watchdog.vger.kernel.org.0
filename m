@@ -2,61 +2,61 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDED663DC1
-	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Jan 2023 11:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1A9663DCD
+	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Jan 2023 11:16:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237838AbjAJKQh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 10 Jan 2023 05:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
+        id S237858AbjAJKQv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 10 Jan 2023 05:16:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238150AbjAJKQC (ORCPT
+        with ESMTP id S238015AbjAJKQY (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 10 Jan 2023 05:16:02 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30FAA449
-        for <linux-watchdog@vger.kernel.org>; Tue, 10 Jan 2023 02:16:00 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id v2so175335wrw.10
-        for <linux-watchdog@vger.kernel.org>; Tue, 10 Jan 2023 02:16:00 -0800 (PST)
+        Tue, 10 Jan 2023 05:16:24 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32EA3517F3
+        for <linux-watchdog@vger.kernel.org>; Tue, 10 Jan 2023 02:16:23 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id m8-20020a05600c3b0800b003d96f801c48so11408435wms.0
+        for <linux-watchdog@vger.kernel.org>; Tue, 10 Jan 2023 02:16:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=G6m47pJ/58Hq8p7TJbcNCm8zVbjrhNNs4P/gWK+tMI8=;
-        b=yHxzcr9U9WVUxu0CfdLJGsHZKmUX8EdHygpQCodC4TPZe7ChByni5EFoxjbKjG4CB9
-         zqm1FtO4AMCKyq0Il3XcCB98mSSF+UxQzFR6zKgo61CPkTeI/xURnN2+tqVOYw7NZo54
-         Vr4ovZm9fiTOSmhzRhi72hdQQD6PSFiFSwoVDDk5OGDB8l0r4f2PXxFLzF2MEcpb4eYt
-         drNtDkBsghZyLBosolfbkSZr+S60rgUftMeDRiaKG6SRnrk+mZC5Xh2ID1lnQmx60heD
-         bcNFTY2FGmCFiqqTxtnmQpx1XeujtQrzGmHje59EXXUQZpidvUvzlYTZpQPFaYrWdRD4
-         EkXQ==
+        bh=3L27Tq0zbzDL8sJQqF4D7IRFPQYRZAeU4qqoSPa895w=;
+        b=u+x71yWS7I4oEXf8ozRcyFMecHvQvUknvdG2mG0PJAu04pG9XXthULtoY1W0q94kCT
+         d7DlnxcZ3zXHjz3tCvR+V7R0vGgabFih7QQ0ZICKmNK25Xx2KCBWdHBglGa2TtcHvYCw
+         i1PHi3FscBHvdfF7v25N/FENMcx3/FGjIcJPuxqpp59Gwq+y/MyNXqKi9sWENqwmpXxK
+         3BgfTBvTCcEcYxPkKgaNIsrgcjekdnRmViT/flYASi8HCn7wPiReR5wTM6Y4C1n9IE+9
+         Lo/Ham7HrbuO9nRWnGB1VygmYL7yBAlKmKoLq0hm1fTGQcolWwK9CMshzO2w8/ekD6g2
+         shmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G6m47pJ/58Hq8p7TJbcNCm8zVbjrhNNs4P/gWK+tMI8=;
-        b=FzexaT5jsYpFw0zKAIdfE89gmBUYEc1Ar6WFPBrj4fNCqUBm51nz1NXKQcfD5PjeBr
-         2a+4X+upEwoFe/NyGoH+913b4PYjM2K7tgBIFT0dKKVc0SLwd9gaF9JzZeoCfPVj7+qO
-         PdWTIbxjhu/Re1IBaapgkmsjnh+AKuoIF5atehd/PWhILOUeFH51SYGRbFdPKQJGPYnw
-         zTgsAIN7FLpLJ0Chf0zqL23pPmDL+aYcCWNj4gbEV2ic8j+ETBnvefbkf9TXd3LAfUax
-         INddCQbNgOIsle8lETeZkQiXCSReuKRATG8g9eUQ92aQl2i8ZVQV+R7M0eCEPfPzO5z0
-         nkag==
-X-Gm-Message-State: AFqh2koz6KyJHEXZdcntfv9O2WT9huNObkg/94I6BcFsq6wl3/AO7AHy
-        +xpHFZ/28ZRKNm4B+HaDjhcUaQ==
-X-Google-Smtp-Source: AMrXdXungLocivNlI60dcFce730ob7mgkYD26Ohpn86HXP7EmMvFIO9LBoSeY/bYq+MnrHw4cCqeTQ==
-X-Received: by 2002:a5d:51cc:0:b0:29d:f817:42d4 with SMTP id n12-20020a5d51cc000000b0029df81742d4mr19057934wrv.19.1673345759433;
-        Tue, 10 Jan 2023 02:15:59 -0800 (PST)
+        bh=3L27Tq0zbzDL8sJQqF4D7IRFPQYRZAeU4qqoSPa895w=;
+        b=7BHKWdqCTziqou0fzJTF8KNayz7w7PhQ8ULFEC+AjDVj2rM8obOFU6yXJlVf2oCfKh
+         Q8zBQupg58UR4yKNUGg4BKoVfo+nAR/LNvOUSljWrVy0JgOF1yow0IBVv4T+L/Y5TUEQ
+         Ii/MiwxpiEnZMoHtiTWhuWT+WWrUVkVX2HvpDD9KPsQIqF4CePcBvfc7zCwgBXRlLRCG
+         QSi+8yc5xGm0BlvtkIiOb4i6/+3Yw6l6GxmfnrdceSJX/DfjXFaCzBx7x3yUxFmxs4x5
+         oLPKL999qorUx8eFo5vZSWZgAn5AKKT1kusARwKtgLMiKIzIANeK1rjUkMr0t58QMxn3
+         g2YA==
+X-Gm-Message-State: AFqh2kqmq8eR1VXbbR88roGvteNUyontnvEcOIODQmQvQaaMSfIPbmwY
+        nDpflDM02M4FHKQ8ee4NgYrBwA==
+X-Google-Smtp-Source: AMrXdXuMfssSJSDgb250kz9/lLtQ3vu6O7DHG+aAwgcWVuQ1GLx8a400gxZwi0nru+BFE3w6dTyBEQ==
+X-Received: by 2002:a1c:4c0e:0:b0:3d9:f836:3728 with SMTP id z14-20020a1c4c0e000000b003d9f8363728mr1386982wmf.11.1673345781647;
+        Tue, 10 Jan 2023 02:16:21 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id w10-20020a5d608a000000b0027cfd9463d7sm10822105wrt.110.2023.01.10.02.15.55
+        by smtp.gmail.com with ESMTPSA id l14-20020a05600c4f0e00b003d96c811d6dsm20468474wmq.30.2023.01.10.02.16.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 02:15:58 -0800 (PST)
-Message-ID: <5c59d432-3785-8eaa-af77-03fee09b5fd3@linaro.org>
-Date:   Tue, 10 Jan 2023 11:15:55 +0100
+        Tue, 10 Jan 2023 02:16:21 -0800 (PST)
+Message-ID: <39bf0a6f-6e43-c7e1-07c2-c5c5113c1e50@linaro.org>
+Date:   Tue, 10 Jan 2023 11:16:17 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v2 03/11] dt-bindings: nvmem: convert
- amlogic-meson-mx-efuse.txt to dt-schema
+Subject: Re: [PATCH v2 06/11] dt-bindings: power: amlogic,meson-gx-pwrc: mark
+ bindings as deprecated
 Content-Language: en-US
 To:     Neil Armstrong <neil.armstrong@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -89,9 +89,9 @@ Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
         netdev@vger.kernel.org
 References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
- <20221117-b4-amlogic-bindings-convert-v2-3-36ad050bb625@linaro.org>
+ <20221117-b4-amlogic-bindings-convert-v2-6-36ad050bb625@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221117-b4-amlogic-bindings-convert-v2-3-36ad050bb625@linaro.org>
+In-Reply-To: <20221117-b4-amlogic-bindings-convert-v2-6-36ad050bb625@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -105,63 +105,19 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 09/01/2023 13:53, Neil Armstrong wrote:
-> Convert the Amlogic Meson6 eFuse bindings to dt-schema.
+> The amlogic,meson-gx-pwrc-vpu compatible isn't used anymore since [1]
+> was merged in v5.8-rc1 and amlogic,meson-g12a-pwrc-vpu either since [2]
+> was merged in v5.3-rc1.
+> 
+> [1] commit 5273d6cacc06 ("arm64: dts: meson-gx: Switch to the meson-ee-pwrc bindings")
+> [2] commit f4f1c8d9ace7 ("arm64: dts: meson-g12: add Everything-Else power domain controller")
 > 
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->  .../bindings/nvmem/amlogic,meson6-efuse.yaml       | 60 ++++++++++++++++++++++
->  .../bindings/nvmem/amlogic-meson-mx-efuse.txt      | 22 --------
->  2 files changed, 60 insertions(+), 22 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml b/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml
-> new file mode 100644
-> index 000000000000..11cace95d18c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/nvmem/amlogic,meson6-efuse.yaml
-> @@ -0,0 +1,60 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/nvmem/amlogic,meson6-efuse.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic Meson6 eFuse
-> +
-> +maintainers:
-> +  - Neil Armstrong <neil.armstrong@linaro.org>
-> +  - Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> +
-> +allOf:
-> +  - $ref: nvmem.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - amlogic,meson6-efuse
-> +      - amlogic,meson8-efuse
-> +      - amlogic,meson8b-efuse
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: core
-> +
-> +  secure-monitor:
-> +    description: phandle to the secure-monitor node
+>  Documentation/devicetree/bindings/power/amlogic,meson-gx-pwrc.txt | 4 ++--
 
-Missing $ref
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +
 Best regards,
 Krzysztof
 
