@@ -2,76 +2,53 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD20B664FE7
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Jan 2023 00:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 710C4665356
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Jan 2023 06:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234010AbjAJXXd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 10 Jan 2023 18:23:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
+        id S235918AbjAKFTP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 Jan 2023 00:19:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234114AbjAJXX3 (ORCPT
+        with ESMTP id S231190AbjAKFSO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 10 Jan 2023 18:23:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED1463F5;
-        Tue, 10 Jan 2023 15:23:27 -0800 (PST)
+        Wed, 11 Jan 2023 00:18:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A43813E2C;
+        Tue, 10 Jan 2023 21:10:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D3C56194C;
-        Tue, 10 Jan 2023 23:23:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75CCCC433D2;
-        Tue, 10 Jan 2023 23:23:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D79B561A34;
+        Wed, 11 Jan 2023 05:10:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B770C433F2;
+        Wed, 11 Jan 2023 05:09:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673393006;
-        bh=KfSPuN+1QhbNUv5tw8QDzbsOpJukhbxBa7/tiSZA6YE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kmBayYB9RkU0+wQl/9jgcDnUFJ81UiubfLDDvtLmip6svd0iZ81Ae9ZOhNuunaz53
-         3+YDBMo3PYZkUs7PS7dCJKYagCO/5yWpIhjev9LaLijR1Sld+WLcGE/RfYOl5Mg9KC
-         9HdifMep/S3Amhq3h+Ed2IrgxEZCaC4JyGgLR36CldJ60HpvOU0qa19/oPMYFerWIu
-         qpWJ0rtAbxpY18prh4Ut8fRWlNQAZ2ISvfPniM8XDKtdWjPfQEcG3YIpPnqKZj3PgB
-         +j7daBrq1rgokCJ3+YLhtG9BQIxFuvvvg1HEltXvh+5uRv8CBvthbrqKQ0wQxv9WPq
-         Si2fNdrIaT1dQ==
-Date:   Tue, 10 Jan 2023 15:23:24 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 00/11] dt-bindings: first batch of dt-schema
- conversions for Amlogic Meson bindings
-Message-ID: <20230110152324.1e19974d@kernel.org>
-In-Reply-To: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
-References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
+        s=k20201202; t=1673413800;
+        bh=vj8NeQWO26h/43dw4uv0BM78Kwwf88YiNDQGsMktjtc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Wf+iuPIZnsiXo7wAg6+QsgwYwMcSLOyCUc5L1FB0p8QR5wx5lJrHIrUO0KREDVsZf
+         jpGTbC3IFcJC09TBoWRwiS6bjpKHSD0YANUxoL+kx2TYpTbQjJWTHoI9n47hjyoiqu
+         ozW9kunl5srsQY03bTlzCAroR2b8bKE5YU7gT7DWmIPvbQssbO0kRQ6ituSgXFZ2vv
+         BDshsIn0irastfikfV1mPwB/XUh8roaayu21g8c0EA3XXcgdHuTwHFr033l4SuVBfP
+         AkJb4EjPH0lHtyqCXSh9htR71igD956qfmT5NAGq8BYRHCbHwbJoUR7e+Sdiq6bCI9
+         NKVqaIKub/yzQ==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        wim@linux-watchdog.org, konrad.dybcio@linaro.org,
+        linux@roeck-us.net, agross@kernel.org,
+        saiprakash.ranjan@codeaurora.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: (subset) [PATCH 01/12] dt-bindings: watchdog: qcom-wdt: require fallback for IPQ4019
+Date:   Tue, 10 Jan 2023 23:09:25 -0600
+Message-Id: <167341377721.2246479.13455570899363041787.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
+References: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -81,9 +58,28 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, 09 Jan 2023 13:53:25 +0100 Neil Armstrong wrote:
-> - patch 12: added reviewed-by
-> - Link to v1: https://lore.kernel.org/r/20221117-b4-amlogic-bindings-convert-v1-0-3f025599b968@linaro.org
+On Mon, 12 Dec 2022 17:35:21 +0100, Krzysztof Kozlowski wrote:
+> The device specific compatibles ("qcom,kpss-wdt-ipq4019") should be
+> follwed by fallback "qcom,kpss-wdt", which is actually used by Linux
+> driver for binding.
+> 
+> 
 
-I'm guessing patch 12 is patch 11 in this posting.
-Should we take it via net-next? Looks acked & ready.
+Applied, thanks!
+
+[07/12] ARM: dts: qcom: reverse compatibles to match bindings
+        commit: 25da76a92f88b57331946e98f659b2626d512ea2
+[08/12] ARM: dts: qcom: apq8064: drop second clock frequency from timer
+        commit: 462671ab0472175b52a45b91abf140df3ecf7326
+[09/12] ARM: dts: qcom: ipq8064: drop second clock frequency from timer
+        commit: aa482e69cd3b3513d952eab71858534315b535bf
+[10/12] ARM: dts: qcom: mdm9615: drop second clock frequency from timer
+        commit: 501d1437d57604659a02378d712a8fc347f8ed84
+[11/12] ARM: dts: qcom: msm8960: drop second clock frequency from timer
+        commit: f630f8205c37579092b37cf216428a43a73e35b8
+[12/12] ARM: dts: qcom: msm8960: add qcom,kpss-wdt-mdm9615
+        commit: af657876c67062a07650cacf5f0b2c754d9f14d6
+
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
