@@ -2,123 +2,69 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D3C6662EA
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Jan 2023 19:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C595666CE3
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Jan 2023 09:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235307AbjAKSkY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 Jan 2023 13:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42504 "EHLO
+        id S239805AbjALIwP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 12 Jan 2023 03:52:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjAKSkW (ORCPT
+        with ESMTP id S236361AbjALIvj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 Jan 2023 13:40:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660CE1AD82;
-        Wed, 11 Jan 2023 10:40:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1960DB81CA4;
-        Wed, 11 Jan 2023 18:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 92F2BC433EF;
-        Wed, 11 Jan 2023 18:40:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673462418;
-        bh=ZEmryboLk5mj+5TUuTuCS6naNIRPhdyWhLOCWdpU+D0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=iSyIQ2yyoC3B0GBCDQJdd/AjVnQhPtqHCRIbEkSrrHdUq7RF962QX/zB0ITIfYfSA
-         3/D81YsFoplAuk07q+rs1ROy+hGaHCuTObSwnYmfwqifrJljRKGWDsoz836weNNaBo
-         GLiDiGuqi20c1B+V3/gbU/jYToaZNaxVHsO2SJoqO/g+pt2hlJVfs4yRYd7BquKLHK
-         W8sVu6wNviooo9e/w3eIH25eRm9LQVQdVsIfozC5UJQ6yZtvHf7HBHp7sWyPjsPLkg
-         drRe9DoPTVOOD655oQch1MEgH31f/rE7CuAFGxVIDiUEFzzr0TtWcqwswEQUzSoFCV
-         dpRICWt9nlOEw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6DDAFE4D025;
-        Wed, 11 Jan 2023 18:40:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 12 Jan 2023 03:51:39 -0500
+X-Greylist: delayed 1120 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Jan 2023 00:49:56 PST
+Received: from mail.glencoeaur.com (mail.glencoeaur.com [217.61.97.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDE7FEE
+        for <linux-watchdog@vger.kernel.org>; Thu, 12 Jan 2023 00:49:56 -0800 (PST)
+Received: by mail.glencoeaur.com (Postfix, from userid 1001)
+        id 8F3818214C; Thu, 12 Jan 2023 08:31:10 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=glencoeaur.com;
+        s=mail; t=1673512275;
+        bh=2S0GQFScndXkBEK4sqdoOhOYLqsB2sEH8Q5XQfVvKpo=;
+        h=Date:From:To:Subject:From;
+        b=QQUyudvEBSj9IJARKfptstWw0FeX1L6yQw9XXlTe012OElACQ3RzyBMMw1tV4vKe3
+         8jgCfqYOc8Mi8oQhG96kAuUId5oaF9LqowPUNYPCX+sTWPndjhAsiXO/OB4sWXwvUl
+         nSkTQXJ0gL184QE6v9FIC7HzIPC+WoiJ+Ff7j0jioy+67FP9qASzGN91z/29HOOpf3
+         C6iIQtsfFEsFb5DGWR3Z32FxF7C016xmSmHRFPJekJliqkduZmOglB4zfeOufgIu1b
+         B/1aIod3g+fYkIS8QAxcrww27QuVZFCK/0TeU95oKLPeFps0Sg7fKoQhsu3aEWhoDu
+         ivWHPMwJRe4og==
+Received: by mail.glencoeaur.com for <linux-watchdog@vger.kernel.org>; Thu, 12 Jan 2023 08:31:00 GMT
+Message-ID: <20230112074500-0.1.z.3f4y.0.8yzgc2efmq@glencoeaur.com>
+Date:   Thu, 12 Jan 2023 08:31:00 GMT
+From:   "Zbynek Spacek" <zbynek.spacek@glencoeaur.com>
+To:     <linux-watchdog@vger.kernel.org>
+Subject: Silikonmischungen
+X-Mailer: mail.glencoeaur.com
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 00/11] dt-bindings: first batch of dt-schema conversions
- for Amlogic Meson bindings
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167346241843.19883.15310921170918729898.git-patchwork-notify@kernel.org>
-Date:   Wed, 11 Jan 2023 18:40:18 +0000
-References: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
-In-Reply-To: <20221117-b4-amlogic-bindings-convert-v2-0-36ad050bb625@linaro.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com, srinivas.kandagatla@linaro.org,
-        wim@linux-watchdog.org, linux@roeck-us.net, mchehab@kernel.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        daniel.lezcano@linaro.org, tglx@linutronix.de, vkoul@kernel.org,
-        kishon@kernel.org, ulf.hansson@linaro.org, bhelgaas@google.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
-        netdev@vger.kernel.org, krzysztof.kozlowski@linaro.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hello:
+Good morning,
 
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+do you need intermediates for processing, plastics (e.g. rubber) or silic=
+one mixtures?
 
-On Mon, 09 Jan 2023 13:53:25 +0100 you wrote:
-> Batch conversion of the following bindings:
-> - meson_sm.txt
-> - amlogic-efuse.txt
-> - amlogic-meson-mx-efuse.txt
-> - meson-wdt.txt
-> - meson-ir.txt
-> - rtc-meson.txt
-> - amlogic,meson6-timer.txt
-> - meson-gxl-usb2-phy.txt
-> - amlogic,meson-gx.txt
-> - amlogic,meson-pcie.txt
-> - mdio-mux-meson-g12a.txt
-> 
-> [...]
+We provide a wide range of silicone rubbers with various properties, sili=
+cone mixtures from renowned manufacturers such as Wacker, Elastosil LR an=
+d dyes, stabilizers, primers and anti-adhesive additives.
 
-Here is the summary with links:
-  - [v2,01/11] dt-bindings: firmware: convert meson_sm.txt to dt-schema
-    (no matching commit)
-  - [v2,02/11] dt-bindings: nvmem: convert amlogic-efuse.txt to dt-schema
-    (no matching commit)
-  - [v2,03/11] dt-bindings: nvmem: convert amlogic-meson-mx-efuse.txt to dt-schema
-    (no matching commit)
-  - [v2,04/11] dt-bindings: watchdog: convert meson-wdt.txt to dt-schema
-    (no matching commit)
-  - [v2,05/11] dt-bindings: media: convert meson-ir.txt to dt-schema
-    (no matching commit)
-  - [v2,06/11] dt-bindings: power: amlogic,meson-gx-pwrc: mark bindings as deprecated
-    (no matching commit)
-  - [v2,07/11] dt-bindings: timer: convert timer/amlogic,meson6-timer.txt to dt-schema
-    (no matching commit)
-  - [v2,08/11] dt-bindings: phy: convert meson-gxl-usb2-phy.txt to dt-schema
-    (no matching commit)
-  - [v2,09/11] dt-bindings: mmc: convert amlogic,meson-gx.txt to dt-schema
-    (no matching commit)
-  - [v2,10/11] dt-bindings: PCI: convert amlogic,meson-pcie.txt to dt-schema
-    (no matching commit)
-  - [v2,11/11] dt-bindings: net: convert mdio-mux-meson-g12a.txt to dt-schema
-    https://git.kernel.org/netdev/net-next/c/82fc0f87cd2c
+We also produce technical silicone compounds with increased resistance to=
+ oils, resistant to high temperatures and water vapor, conductive and man=
+y more.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+We provide fast order fulfillment, timely deliveries and cost optimizatio=
+n.
+
+Can I introduce what we can offer you?
 
 
+Best regards
+Zbynek Spacek
