@@ -2,122 +2,110 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B242F6693B5
-	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Jan 2023 11:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C3C669433
+	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Jan 2023 11:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240960AbjAMKHH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 13 Jan 2023 05:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
+        id S240906AbjAMKd5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 13 Jan 2023 05:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239755AbjAMKG5 (ORCPT
+        with ESMTP id S240624AbjAMKdx (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 13 Jan 2023 05:06:57 -0500
-Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186DC34D65;
-        Fri, 13 Jan 2023 02:06:56 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.west.internal (Postfix) with ESMTP id 59F1E2B066ED;
-        Fri, 13 Jan 2023 05:06:53 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 13 Jan 2023 05:06:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1673604412; x=1673611612; bh=wiGd1poFqy
-        c19NDgfhWxoziS+5a2ezYepeVzBSacqw8=; b=jQa0HDmPBmL/FfJL+hgRmPsB40
-        Y3mC3xChdI36TABN4RG5b4ucaLsZc6+hC+19/zCIm4A4ie1QOoF7GdEwpLDXWLgg
-        YS7KkbMyef4z8Yilol0xjO/jcY2PDSzSOyaObnKUz9YejiKar9NRQ/48gMheN8SP
-        L9ydOdhClMFMN+laVtMxeJLlISQdpKBcfrhR3HNQLngArqhNZXfmj7B7QaV3Yjlc
-        q1pbz3p93X/orY60g/G7bg2Tiz9gOW8CeW5RhiSUeYXFN/oIPHXLd05ewSyQoczy
-        YcvZ76uBqZ6njLqUwdbbXb3on9pD3cxdKgfVZ0av7GSfMv1N46xG/nNSra4w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673604412; x=1673611612; bh=wiGd1poFqyc19NDgfhWxoziS+5a2
-        ezYepeVzBSacqw8=; b=T9tKOcHloTqEvCQgyITgoeWHiCG023yZCoHB8GCNjjun
-        JWtWHvJqinTMKxNzOHfWFkde1UNzFYeNjWL4OYuUevGP5ZiDtpX0SAgeRoVmsRqT
-        4s4imE9aYV/f9Pvbl/xyCzDnDswOyuD8ceeVeSEppPmXeTdO2UYN2NW+SPkjkx6z
-        7AGNecW4IwYIR8h6khoClacES7xN1wBX6oY0XpQ9E/MHHJqDRpFMe5RHSjqUpFHQ
-        972R/sDnO/VHBlJ/MZtdHhD4RBw3rwTM6MhJr5iT0G2mUNkzC1EVZ0kt797d6W2S
-        fBdJ8aBi3uu6VLi/i8mbcHwOUByNIvAxQvGBru7fCg==
-X-ME-Sender: <xms:Oy3BY2x8u8jGs5oav_hETNuy2fGaBGNB7nGV00CwtVI39ajIhtTDrA>
-    <xme:Oy3BYyQeI43uOCS5CK49RFBPrQXLvgoH7jyxA1EWEhaXS1U_GFSXnUcOsyByJ4HxX
-    7ebslCPuxwL7F72QUk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleekgddtkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:Oy3BY4WFmJ1Wzov0EgMi6qcJljjNqlgJoW7YxZYtni3we9ZcuZJC0Q>
-    <xmx:Oy3BY8jDZdOmomBzdPQYugeTKvRs2JAmwJR9qFQ78gYn6oU0QQd3og>
-    <xmx:Oy3BY4DQ3Zg11gEbb70JkOCpYbMnoYHqWtdB8svYNbX-CHCrZb2sRA>
-    <xmx:PC3BYzV0__Pe1Lv9Yq1qvCTC7InwXhC6SGzQNcMq4ULKQsDh2lBDrgxrUdU>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B041DB60086; Fri, 13 Jan 2023 05:06:51 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <d9c2f760-283b-483c-8512-fdd2c372f26c@app.fastmail.com>
-In-Reply-To: <CAMuHMdXYt4dNHUDsTnPa-RP+sdK=35nNa9xQzMChwK54qO44mA@mail.gmail.com>
-References: <20230113062339.1909087-1-hch@lst.de>
- <20230113062339.1909087-12-hch@lst.de>
- <CAMuHMdXYt4dNHUDsTnPa-RP+sdK=35nNa9xQzMChwK54qO44mA@mail.gmail.com>
-Date:   Fri, 13 Jan 2023 11:06:22 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Christoph Hellwig" <hch@lst.de>
-Cc:     "Yoshinori Sato" <ysato@users.sourceforge.jp>,
-        "Rich Felker" <dalias@libc.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "laurent.pinchart" <laurent.pinchart@ideasonboard.com>,
-        "Kieran Bingham" <kieran.bingham+renesas@ideasonboard.com>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
-        linux-mtd@lists.infradead.org, Netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Subject: Re: [PATCH 11/22] mtd/nand: remove sh_flctl
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 13 Jan 2023 05:33:53 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256203C0FD
+        for <linux-watchdog@vger.kernel.org>; Fri, 13 Jan 2023 02:33:51 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id vm8so51290193ejc.2
+        for <linux-watchdog@vger.kernel.org>; Fri, 13 Jan 2023 02:33:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Js8KsQH+h+iAVSbQ9296MVF2mSa5dc6jfF761QN1e94=;
+        b=iGIQxycAbahKKYvBZz3ihB35ujtQA02ND6oy6tq78LrCrpr0iX8dSkhwmdHimJsKFE
+         /OFrFnNXHlk+mPnojvtBg2bwgAtbv1x/GWDVct8+7My/l2JEN1blSQCOFk4tRMS9V9D6
+         iAL1K8xo13Eh3UW/XjbCZ0UNo5XpNP3ZggeOfv0r/PGkq8VyydjuKXoc7UZzPZI0utfx
+         5pa25XWT02NAS/JaovOXKE6WsBpYsodRyAxmUWkX9DAdObyYBMz5rB3erdpdMEXe/cXw
+         5VfZq+nQHs4UCCgoYI7daUq23qXEWviPUnY+dQLSslq0IhN57lWAsLGRh382VetbxylS
+         hvYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Js8KsQH+h+iAVSbQ9296MVF2mSa5dc6jfF761QN1e94=;
+        b=h7dwoSZIx5vIjyFq6QQ+gLQxKkUwAJvfasm7TQdZEbBVvha8KNeWqagB896ECcVlsD
+         UI16cvGeMXfD/HeebuUbgphG2CqLzY3tCKE4zvWA4SmqexS2QmVefr9lJE7YJ1ocKhLM
+         7LSPv62dSUlpKGnuDNYrnkkQkThnuKopvzed2h03xcrMchSGOV3gQ/rf/agTCjHi4/WN
+         ev8rWEKT5dTWOZ19A56Waqq3QBM03VRaCEohfKJh3V33nhW5jrBJ6fvPUTsSwHGHg4c0
+         HhExV6CZvujY3l9ARz44VTtiO4dVLPCpRxHdrvJVqCJPaapuoeardfvMKdYiJdeSvJRo
+         p2DQ==
+X-Gm-Message-State: AFqh2kpXMh+H0eI+IOWH+ETTIqAtsWA9dzQeejdIkOltbekuEP3BlCeX
+        7iGPw/kSJgKhdjHJQpoJFLh6lw==
+X-Google-Smtp-Source: AMrXdXvuBmodCCTsW8TeTuVTR5uFBVcpwZp3PyGF7Cp6QJa6E1CKqDCf5h0dsBJu9V/gKQwa4dYFzg==
+X-Received: by 2002:a17:906:d047:b0:7b9:62ab:dc3f with SMTP id bo7-20020a170906d04700b007b962abdc3fmr81117949ejb.1.1673606029704;
+        Fri, 13 Jan 2023 02:33:49 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id qw25-20020a1709066a1900b007ae1e528390sm8296926ejc.163.2023.01.13.02.33.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 02:33:49 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 0/7] watchdog: dt-bindings: rework/fix qcom-wdt
+Date:   Fri, 13 Jan 2023 11:33:39 +0100
+Message-Id: <20230113103346.29381-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Jan 13, 2023, at 09:30, Geert Uytterhoeven wrote:
-> On Fri, Jan 13, 2023 at 7:24 AM Christoph Hellwig <hch@lst.de> wrote:
->> Now that arch/sh is removed this driver is dead code.
->
-> FTR, this hardware block is also present on the ARM-based
-> SH-Mobile AG5 and R-Mobile A1 SoCs.
-> Again, no DT support.
+Hi,
 
-I would generally consider drivers dead when they have no DT support
-and no platform in the upstream kernel registering the corresponding
-device.
+Dependency:
+1. DT bindings are rebased on top of: https://lore.kernel.org/r/20221117105845.13644-2-konrad.dybcio@linaro.org
 
-If anyone still uses this driver on SH-Mobile or R-Mobile, they
-have clearly given up on upstreaming their patches by now, and
-they can carry the burden of maintaining the driver out of tree,
-or re-submit a working version.
+Chanegs since v1:
+1. Add tags
+2. Correct clock-frequency description
 
-    Arnd
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (7):
+  dt-bindings: watchdog: qcom-wdt: require fallback for IPQ4019
+  dt-bindings: watchdog: qcom-wdt: do not allow fallback alone
+  dt-bindings: watchdog: qcom-wdt: fix list of MSM timer compatibles
+  dt-bindings: watchdog: qcom-wdt: add qcom,kpss-wdt-mdm9615
+  dt-bindings: watchdog: qcom-wdt: allow interrupts
+  dt-bindings: watchdog: qcom-wdt: merge MSM timer
+  dt-bindings: watchdog: allow "timer" as node name
+
+ .../bindings/timer/qcom,msm-timer.txt         | 47 ----------
+ .../bindings/watchdog/qcom-wdt.yaml           | 94 +++++++++++++++++--
+ .../bindings/watchdog/watchdog.yaml           |  7 +-
+ 3 files changed, 90 insertions(+), 58 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+
+-- 
+2.34.1
+
