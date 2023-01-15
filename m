@@ -2,307 +2,134 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5296D66AD79
-	for <lists+linux-watchdog@lfdr.de>; Sat, 14 Jan 2023 20:47:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E96CE66AEEC
+	for <lists+linux-watchdog@lfdr.de>; Sun, 15 Jan 2023 01:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbjANTry (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 14 Jan 2023 14:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
+        id S230416AbjAOAna (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 14 Jan 2023 19:43:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbjANTrt (ORCPT
+        with ESMTP id S230404AbjAOAnY (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 14 Jan 2023 14:47:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA011A5C9;
-        Sat, 14 Jan 2023 11:47:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA52F60ADD;
-        Sat, 14 Jan 2023 19:47:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DA54C433D2;
-        Sat, 14 Jan 2023 19:47:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673725667;
-        bh=gMU2qV2VgM+YENiKJhH+abvn4ddBqKL0P0RzB5p/M9M=;
-        h=From:To:Cc:Subject:Date:From;
-        b=J80B8qRk5QOTG8JqtnwvGlTRxhA2TlX3aGgUGykutFA28xkS1L79HoIMWUQtYDCTj
-         dCd/689zlAuf5mMLONRyOIcLBGJAawuKZj0GNZM0DDyfIiv63g6cOGVUdPbGjzGOeK
-         43nrrY1DnPSIiCsMQ1mdGBgd09ZbU7hmOt/yvu59q2hP3l8M/NAyQ9o/F9B/CQK0on
-         fE3yWz8n685HzaXhQIOLWmaeEhVdi+exUo8YNDBbMl6cPP11Fb39GIRiU/kHrDNDvZ
-         HNsfKIJOXgJf6U3sjs1605a6/2LOgx2m45e2P4jaM8tXl63pcbaHE+AD8eIJbaVA1T
-         Q5DrM4P1UlMBg==
-From:   SeongJae Park <sj@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     SeongJae Park <sj@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Iwona Winiarska <iwona.winiarska@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-pci@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
-        openbmc@lists.ozlabs.org, alsa-devel@alsa-project.org,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH 1/2] Docs/subsystem-apis: Remove '[The ]Linux' prefixes from titles of listed documents
-Date:   Sat, 14 Jan 2023 19:47:40 +0000
-Message-Id: <20230114194741.115855-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Sat, 14 Jan 2023 19:43:24 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B32A27D
+        for <linux-watchdog@vger.kernel.org>; Sat, 14 Jan 2023 16:43:22 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id r205so20563205oib.9
+        for <linux-watchdog@vger.kernel.org>; Sat, 14 Jan 2023 16:43:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VA+b6ERucM0SVhgS+CxkVoqDPdylXXEER7Oavou/n5c=;
+        b=AWOVJoTRCZIzDDPEVrLicc1SKpwl7KTn8Ol48utvExDUblpnjljkkxvHgz5x7ZXre+
+         8m1djuSOUoerjvNlDkOsvOoru5Slmn51JdtG4yWzqApm65GcAawUt0a4970Ve8qE/PbE
+         WIpzUe/igEignY6RXJsMefYQMCJguWlv4sRLkistNu2yHDIEgQ5le/hWruMQxtCBR8qR
+         R0Xe1ZeaqdcCUIm6QnssL2hDeKkpiOJ4cANGy/HkgZiIyg5h2uIoq1Znienu3k+LNYC0
+         mG/pqdest+Z0kWbWIAyWD+qrcbh4pkalGKoAU1Y3Z3G0iffow+5qADIIMc/6gwB/2uWn
+         mYPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VA+b6ERucM0SVhgS+CxkVoqDPdylXXEER7Oavou/n5c=;
+        b=zcl2fRimUmIrl5CbfWavo7OIomnWGwrb30XJ+O6plLM2RvoKvVM3OIZEtNa9dCyQMe
+         4IaNkR0iin1cK9XLW+HJT2n2cg1seSYBG+7ZqtEaBZxv+Dos7+HOE47eEo8XxQ6iZaLv
+         1CqRAKymVeojgciM5kPQjW/s+0rYWllu3FoJ6hbRpOVuN/IWwVqWqbceInep7mYyZE5y
+         0TWWTW/Tv4WGQtvu1//OC0LG5Mu9el8DLG4wY5XfbUqzeO/h0Oy6TH7NVbzIHFv+3mnF
+         OxR2+iFT0iUq01MZ3LVIfLmLf2GyqoaxgyJRlA+h9/ikJDr7QKYd/5wtSO8w/oY37Wmh
+         +DXA==
+X-Gm-Message-State: AFqh2kq69lYVd390iQub8PYE37IaaIRGwZ8RNFx1abVLU7HJuZBTEkA6
+        VZtVAX8fYmAVsVSUsF90k8qjNw==
+X-Google-Smtp-Source: AMrXdXtmlbzCnjvw02a750r61CcJJIRVFXhgi7CC+Te697GM+nVvImU+iajKPZiIXIE5Si7tn9Lk3Q==
+X-Received: by 2002:aca:c189:0:b0:35a:6005:3dc5 with SMTP id r131-20020acac189000000b0035a60053dc5mr35396207oif.51.1673743401843;
+        Sat, 14 Jan 2023 16:43:21 -0800 (PST)
+Received: from [192.168.86.224] ([136.62.38.22])
+        by smtp.gmail.com with ESMTPSA id l10-20020a056808020a00b00360e46a1edasm10935583oie.22.2023.01.14.16.43.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 Jan 2023 16:43:21 -0800 (PST)
+Message-ID: <fe206345-9445-f1be-02c1-b3cc39a533ef@landley.net>
+Date:   Sat, 14 Jan 2023 18:55:31 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 02/22] usb: remove the dead USB_OHCI_SH option
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <20230113062339.1909087-3-hch@lst.de> <Y8EEbCP6PRMzWP5y@kroah.com>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <Y8EEbCP6PRMzWP5y@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Some documents that listed on subsystem-apis have 'Linux' or 'The Linux'
-title prefixes.  It's duplicated information, and makes finding the
-document of interest with human eyes not easy.  Remove the prefixes from
-the titles.
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- Documentation/PCI/index.rst        | 6 +++---
- Documentation/cpu-freq/index.rst   | 6 +++---
- Documentation/crypto/index.rst     | 6 +++---
- Documentation/driver-api/index.rst | 6 +++---
- Documentation/gpu/index.rst        | 6 +++---
- Documentation/hwmon/index.rst      | 6 +++---
- Documentation/input/index.rst      | 6 +++---
- Documentation/mm/index.rst         | 6 +++---
- Documentation/peci/index.rst       | 6 +++---
- Documentation/scheduler/index.rst  | 6 +++---
- Documentation/scsi/index.rst       | 6 +++---
- Documentation/sound/index.rst      | 6 +++---
- Documentation/virt/index.rst       | 6 +++---
- Documentation/watchdog/index.rst   | 6 +++---
- 14 files changed, 42 insertions(+), 42 deletions(-)
 
-diff --git a/Documentation/PCI/index.rst b/Documentation/PCI/index.rst
-index c17c87af1968..e73f84aebde3 100644
---- a/Documentation/PCI/index.rst
-+++ b/Documentation/PCI/index.rst
-@@ -1,8 +1,8 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--=======================
--Linux PCI Bus Subsystem
--=======================
-+=================
-+PCI Bus Subsystem
-+=================
- 
- .. toctree::
-    :maxdepth: 2
-diff --git a/Documentation/cpu-freq/index.rst b/Documentation/cpu-freq/index.rst
-index 2fe32dad562a..de25740651f7 100644
---- a/Documentation/cpu-freq/index.rst
-+++ b/Documentation/cpu-freq/index.rst
-@@ -1,8 +1,8 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--==============================================================================
--Linux CPUFreq - CPU frequency and voltage scaling code in the Linux(TM) kernel
--==============================================================================
-+========================================================================
-+CPUFreq - CPU frequency and voltage scaling code in the Linux(TM) kernel
-+========================================================================
- 
- Author: Dominik Brodowski  <linux@brodo.de>
- 
-diff --git a/Documentation/crypto/index.rst b/Documentation/crypto/index.rst
-index 21338fa92642..da5d5ad2bdf3 100644
---- a/Documentation/crypto/index.rst
-+++ b/Documentation/crypto/index.rst
-@@ -1,6 +1,6 @@
--=======================
--Linux Kernel Crypto API
--=======================
-+==========
-+Crypto API
-+==========
- 
- :Author: Stephan Mueller
- :Author: Marek Vasut
-diff --git a/Documentation/driver-api/index.rst b/Documentation/driver-api/index.rst
-index d3a58f77328e..b208e0dac3a0 100644
---- a/Documentation/driver-api/index.rst
-+++ b/Documentation/driver-api/index.rst
-@@ -1,6 +1,6 @@
--========================================
--The Linux driver implementer's API guide
--========================================
-+==============================
-+Driver implementer's API guide
-+==============================
- 
- The kernel offers a wide variety of interfaces to support the development
- of device drivers.  This document is an only somewhat organized collection
-diff --git a/Documentation/gpu/index.rst b/Documentation/gpu/index.rst
-index b99dede9a5b1..eee5996acf2c 100644
---- a/Documentation/gpu/index.rst
-+++ b/Documentation/gpu/index.rst
-@@ -1,6 +1,6 @@
--==================================
--Linux GPU Driver Developer's Guide
--==================================
-+============================
-+GPU Driver Developer's Guide
-+============================
- 
- .. toctree::
- 
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index fe2cc6b73634..c2b3c1a822dd 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -1,6 +1,6 @@
--=========================
--Linux Hardware Monitoring
--=========================
-+===================
-+Hardware Monitoring
-+===================
- 
- .. toctree::
-    :maxdepth: 1
-diff --git a/Documentation/input/index.rst b/Documentation/input/index.rst
-index 9888f5cbf6d5..35581cd18e91 100644
---- a/Documentation/input/index.rst
-+++ b/Documentation/input/index.rst
-@@ -1,6 +1,6 @@
--=============================
--The Linux Input Documentation
--=============================
-+===================
-+Input Documentation
-+===================
- 
- Contents:
- 
-diff --git a/Documentation/mm/index.rst b/Documentation/mm/index.rst
-index 4aa12b8be278..5a94a921ea40 100644
---- a/Documentation/mm/index.rst
-+++ b/Documentation/mm/index.rst
-@@ -1,6 +1,6 @@
--=====================================
--Linux Memory Management Documentation
--=====================================
-+===============================
-+Memory Management Documentation
-+===============================
- 
- Memory Management Guide
- =======================
-diff --git a/Documentation/peci/index.rst b/Documentation/peci/index.rst
-index 989de10416e7..930e75217c33 100644
---- a/Documentation/peci/index.rst
-+++ b/Documentation/peci/index.rst
-@@ -1,8 +1,8 @@
- .. SPDX-License-Identifier: GPL-2.0-only
- 
--====================
--Linux PECI Subsystem
--====================
-+==============
-+PECI Subsystem
-+==============
- 
- .. toctree::
- 
-diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
-index b430d856056a..1aac972a652f 100644
---- a/Documentation/scheduler/index.rst
-+++ b/Documentation/scheduler/index.rst
-@@ -1,6 +1,6 @@
--===============
--Linux Scheduler
--===============
-+=========
-+Scheduler
-+=========
- 
- .. toctree::
-     :maxdepth: 1
-diff --git a/Documentation/scsi/index.rst b/Documentation/scsi/index.rst
-index 7c5f5f8f614e..919f3edfe1bf 100644
---- a/Documentation/scsi/index.rst
-+++ b/Documentation/scsi/index.rst
-@@ -1,8 +1,8 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--====================
--Linux SCSI Subsystem
--====================
-+==============
-+SCSI Subsystem
-+==============
- 
- .. toctree::
-    :maxdepth: 1
-diff --git a/Documentation/sound/index.rst b/Documentation/sound/index.rst
-index 4d7d42acf6df..5abed5fc6485 100644
---- a/Documentation/sound/index.rst
-+++ b/Documentation/sound/index.rst
-@@ -1,6 +1,6 @@
--===================================
--Linux Sound Subsystem Documentation
--===================================
-+=============================
-+Sound Subsystem Documentation
-+=============================
- 
- .. toctree::
-    :maxdepth: 2
-diff --git a/Documentation/virt/index.rst b/Documentation/virt/index.rst
-index 56e003ff28ff..7fb55ae08598 100644
---- a/Documentation/virt/index.rst
-+++ b/Documentation/virt/index.rst
-@@ -1,8 +1,8 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--============================
--Linux Virtualization Support
--============================
-+======================
-+Virtualization Support
-+======================
- 
- .. toctree::
-    :maxdepth: 2
-diff --git a/Documentation/watchdog/index.rst b/Documentation/watchdog/index.rst
-index c177645081d8..4603f2511f58 100644
---- a/Documentation/watchdog/index.rst
-+++ b/Documentation/watchdog/index.rst
-@@ -1,8 +1,8 @@
- .. SPDX-License-Identifier: GPL-2.0
- 
--======================
--Linux Watchdog Support
--======================
-+================
-+Watchdog Support
-+================
- 
- .. toctree::
-     :maxdepth: 1
--- 
-2.25.1
+On 1/13/23 01:12, Greg Kroah-Hartman wrote:
+> On Fri, Jan 13, 2023 at 07:23:19AM +0100, Christoph Hellwig wrote:
+>> USB_OHCI_SH is a dummy option that never builds any code, remove it.
+>> 
+>> Signed-off-by: Christoph Hellwig <hch@lst.de>
+>> ---
+>>  drivers/usb/host/Kconfig | 11 -----------
+>>  1 file changed, 11 deletions(-)
+>> 
+>> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+>> index 8d799d23c476e1..ca5f657c092cf4 100644
+>> --- a/drivers/usb/host/Kconfig
+>> +++ b/drivers/usb/host/Kconfig
+>> @@ -548,17 +548,6 @@ config USB_OHCI_HCD_SSB
+>>  
+>>  	  If unsure, say N.
+>>  
+>> -config USB_OHCI_SH
+>> -	bool "OHCI support for SuperH USB controller (DEPRECATED)"
+>> -	depends on SUPERH || COMPILE_TEST
+>> -	select USB_OHCI_HCD_PLATFORM
+>> -	help
+>> -	  This option is deprecated now and the driver was removed, use
+>> -	  USB_OHCI_HCD_PLATFORM instead.
+>> -
+>> -	  Enables support for the on-chip OHCI controller on the SuperH.
+>> -	  If you use the PCI OHCI controller, this option is not necessary.
+>> -
+>>  config USB_OHCI_EXYNOS
+>>  	tristate "OHCI support for Samsung S5P/Exynos SoC Series"
+>>  	depends on ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
+>> -- 
+>> 2.39.0
+>> 
+> 
+> Do you want all of these to go through a single tree, or can they go
+> through the different driver subsystem trees?
 
+Neither please. Multiple people are objecting.
+
+Rob
