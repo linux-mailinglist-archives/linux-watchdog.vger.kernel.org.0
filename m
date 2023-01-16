@@ -2,128 +2,100 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5931D66BC3B
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Jan 2023 11:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28FD366BD77
+	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Jan 2023 13:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjAPKx0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 16 Jan 2023 05:53:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
+        id S229863AbjAPMGa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 16 Jan 2023 07:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbjAPKxV (ORCPT
+        with ESMTP id S229491AbjAPMG3 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 16 Jan 2023 05:53:21 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BD5196B2;
-        Mon, 16 Jan 2023 02:53:15 -0800 (PST)
-X-UUID: f74acf9c958b11ed945fc101203acc17-20230116
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=4G8Y0ViVJzXb6BsOeFBPQvk3DHX0QfUnX0ejt3ACyfU=;
-        b=kzEtSVn8Hu+INqkYtPtHDQ84mcUFru8ZQY4cxOv92Vqa6UWd0+OxRSpEFlYeHAbw0ZIeNiU8seI8zAokpPIEBbz1lSpH7zX6ct3IrOUZ7I+x9PqFEoFC4Y59a7FuUsYtUcSpFC0DpujVOqpVS5qRmYBo0xNX5FnFCmlIcgmC+pM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.18,REQID:07ba01da-45e7-47bd-b518-c0bbed90f295,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.18,REQID:07ba01da-45e7-47bd-b518-c0bbed90f295,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:3ca2d6b,CLOUDID:75a2c854-dd49-462e-a4be-2143a3ddc739,B
-        ulkID:2301161853114L1JMK7F,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
-        I:0,OSA:0
-X-CID-BVR: 0,NGT
-X-UUID: f74acf9c958b11ed945fc101203acc17-20230116
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 886985106; Mon, 16 Jan 2023 18:53:10 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 16 Jan 2023 18:53:08 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Mon, 16 Jan 2023 18:53:08 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mon, 16 Jan 2023 07:06:29 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8798C1ABFE;
+        Mon, 16 Jan 2023 04:06:28 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8AC37660035A;
+        Mon, 16 Jan 2023 12:06:26 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673870787;
+        bh=yHR1rnQBHPsnUcjrAlXmmewlqZnVelc/M9hoJD2YZ7s=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mP+c1p5kIStdMYgRCtoDoTqhh7t3qaDfuXmAWSjwVkevbm0kOJ4SGtk2BcD26TBvg
+         /woqsIieFDLYga48oaOaxH8BuWL5ptuDlmnPB9HMZKwqTnj33TNSRCHuKS/oF5xw5K
+         BG1ymj4QP65EyQK2lgoTtjxyAHRpTnUEFg4lb+5pBgekeIFUhEOR9KwkszHzwPenT6
+         vpdr/HkXleBJe7eO8feCeV+hWxa/FRTfk/HKiNHGp8XsaEbNLs+fTWi/mIE96ql9Rk
+         WzKdiZ5wZzEgpAMIei4y+qwjfEW8Uzb/U3D/FsltkICj2O8YVf93rrMcxHkz3WRjD3
+         K24BND5awdkTg==
+Message-ID: <366d06e5-11d7-7e1f-0ed6-4f370496d338@collabora.com>
+Date:   Mon, 16 Jan 2023 13:06:23 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: mtk-wdt: Add
+ reset-by-toprgu support
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        <linux-watchdog@vger.kernel.org>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH v2 2/2] watchdog: mtk_wdt: Add reset_by_toprgu support
-Date:   Mon, 16 Jan 2023 18:53:05 +0800
-Message-ID: <20230116105305.31818-3-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230116105305.31818-1-allen-kh.cheng@mediatek.com>
+        linux-watchdog@vger.kernel.org
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
 References: <20230116105305.31818-1-allen-kh.cheng@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+ <20230116105305.31818-2-allen-kh.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230116105305.31818-2-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-In some cases, the MediaTek watchdog requires the toprgu to reset
-timer after system resets.
+Il 16/01/23 11:53, Allen-KH Cheng ha scritto:
+> In some applications, the mtk-wdt requires the toprgu (TOP Reset
+> Generation Unit) to reset timer after system resets. Add optional
+> mediatek,reset-by-toprgu property to enable it.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> ---
+>   .../devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml      | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+> index b3605608410c..b4de6b134ce1 100644
+> --- a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+> @@ -52,6 +52,12 @@ properties:
+>       description: Disable sending output reset signal
+>       type: boolean
+>   
+> +  mediatek,reset-by-toprgu:
+> +    description: The top reset generate unit (toprgu) generates reset signals
 
-Provide a reset_by_toprgu parameter for configuration.
+TOPRGU = Top Reset Generation Unit
 
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
----
- drivers/watchdog/mtk_wdt.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Please fix the description...
 
-diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-index 3e6212591e69..a9c437598e7e 100644
---- a/drivers/watchdog/mtk_wdt.c
-+++ b/drivers/watchdog/mtk_wdt.c
-@@ -50,6 +50,7 @@
- #define WDT_MODE_IRQ_EN		(1 << 3)
- #define WDT_MODE_AUTO_START	(1 << 4)
- #define WDT_MODE_DUAL_EN	(1 << 6)
-+#define WDT_MODE_CNT_SEL	(1 << 8)
- #define WDT_MODE_KEY		0x22000000
- 
- #define WDT_SWRST		0x14
-@@ -70,6 +71,7 @@ struct mtk_wdt_dev {
- 	spinlock_t lock; /* protects WDT_SWSYSRST reg */
- 	struct reset_controller_dev rcdev;
- 	bool disable_wdt_extrst;
-+	bool reset_by_toprgu;
- };
- 
- struct mtk_wdt_data {
-@@ -279,6 +281,8 @@ static int mtk_wdt_start(struct watchdog_device *wdt_dev)
- 		reg &= ~(WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
- 	if (mtk_wdt->disable_wdt_extrst)
- 		reg &= ~WDT_MODE_EXRST_EN;
-+	if (mtk_wdt->reset_by_toprgu)
-+		reg |= WDT_MODE_CNT_SEL;
- 	reg |= (WDT_MODE_EN | WDT_MODE_KEY);
- 	iowrite32(reg, wdt_base + WDT_MODE);
- 
-@@ -408,6 +412,9 @@ static int mtk_wdt_probe(struct platform_device *pdev)
- 	mtk_wdt->disable_wdt_extrst =
- 		of_property_read_bool(dev->of_node, "mediatek,disable-extrst");
- 
-+	mtk_wdt->reset_by_toprgu =
-+		of_property_read_bool(dev->of_node, "mediatek,reset-by-toprgu");
-+
- 	return 0;
- }
- 
--- 
-2.18.0
+The Top Reset Generation Unit (TOPRGU) generate reset signals
+and distributes them to each IP. If present, the watchdog timer
+will be reset by TOPRGU once system resets.
+
+Apart from that:
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
