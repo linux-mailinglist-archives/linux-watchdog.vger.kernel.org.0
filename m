@@ -2,46 +2,59 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B41266C755
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Jan 2023 17:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8049E66C7E4
+	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Jan 2023 17:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233278AbjAPQ3x (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 16 Jan 2023 11:29:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47368 "EHLO
+        id S233329AbjAPQfd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 16 Jan 2023 11:35:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233199AbjAPQ3i (ORCPT
+        with ESMTP id S233340AbjAPQei (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 16 Jan 2023 11:29:38 -0500
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2126.outbound.protection.outlook.com [40.107.114.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EFF36FEB;
-        Mon, 16 Jan 2023 08:17:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jdqAmvzGePkrIZCHNj2BjIlYXl1LNDBqHKM5kPpzxOLXAtF6zsLYLHm0crb3mwfcWRSGplumoEZyrBaO8nlKgDvNteWCNCHl9qddyHg1L4qaH7Bm0ynXwaImVbiNkjzlZX9CmSIPYuVq7qGUVM5Y+aVQ1RyWbapnEoc38spW6T2rgy2XY/D8DWovu4ctXUX1jzhSs8ShWfEeBSTD1qtcJEF6bF6MmGL55v1z336EzUpoNBv/vU/evpbLXcmuKG021CaXFUshkHrv/M2W8rwsn1NhEq7JI+tSqfNsSnRPMBDDvjhZyBgIXIU2WecE0al27q1c69QvKzVoVtJKsPJQlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UkEIdmgSOYmwtOocNPmF6u+FtZDqFL7m0AmzAOniF4A=;
- b=danukc4PwqdTSnfRtTgQuR3junud5ngUnDbtedmlZ5gQ47o6+Rfk8grKhBMEexejK+RIMv4edPn//jIXAoUbDzXF92AmHeHkr3Q9HfSNOp8VGQjnsYo4oEPfpUEHBX5QqIdkvKYdAqOeTnJSGGElldElEp/+0WT+XbciSb56bNZXJOg5rUicKlDvUKB0xIQu5DFXMvjyLgbc3qx5DCpnXim28ybn8U5gprcqeu9pZKmmqUItrjznujzde0k8Vgp4+EzEsGAIG0i6vqHMgvlWqL5EfXmlkt9EHxIs211t/zFCctY/KeUDYpHUl4AB3YjAws16dYIoT6c5RHAUBqd6Fw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UkEIdmgSOYmwtOocNPmF6u+FtZDqFL7m0AmzAOniF4A=;
- b=PmVeA20mMqAPNTd+yd+9otMbNqrKgTGdmKOp9OYWl5XuWVa/vwsI6lhwlEX419UJPGkFeQFyvyE0oRPwB1avF2ImpAX736KpyfWjuKY8ixM//xDjjHV/XRkHpj3GR1V9N1WZ1m6pWmliBdFM4237u1bsdUPFeb5frZGs+Gn5TUw=
-Received: from TYWPR01MB8775.jpnprd01.prod.outlook.com (2603:1096:400:169::11)
- by TYCPR01MB10809.jpnprd01.prod.outlook.com (2603:1096:400:296::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Mon, 16 Jan
- 2023 16:17:56 +0000
-Received: from TYWPR01MB8775.jpnprd01.prod.outlook.com
- ([fe80::9459:ffa9:a884:8a8e]) by TYWPR01MB8775.jpnprd01.prod.outlook.com
- ([fe80::9459:ffa9:a884:8a8e%3]) with mapi id 15.20.6002.013; Mon, 16 Jan 2023
- 16:17:55 +0000
-From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mon, 16 Jan 2023 11:34:38 -0500
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2B423DBF;
+        Mon, 16 Jan 2023 08:22:32 -0800 (PST)
+Received: by mail-qt1-f170.google.com with SMTP id x5so1365026qti.3;
+        Mon, 16 Jan 2023 08:22:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lFslTO9Xsj1Mi5kjcW6WB1C1HG+qwEGGcinlnuagMLY=;
+        b=uGrBzbM56KZv3vd0fAENEKo1sWwp53BlKM/AK+PwKOMzNwI9WV/X5QY6I0O8P9Lmnt
+         N547wXDqlkqgEGGU6LYaZeOpF10IL60J8cfIJRTA2TGCM3xt3Y3WSchHdTuFTURba+c/
+         1TZsucM/lVpo4HJXlWhkFoi+HEvEV0du7n6w48E9pJsVLn+Li5N+DMi8qmRXkSbOQq4a
+         kh4wK14LUuO6awF4d7DPTjXWhgvX6u+TIw3Tr79ezVq9SYYPPSCsb5JWLZ3gOKrvL9IV
+         /1Sm6+w/lXhngUe9izJ54mrltZfoNSCScl9B84ipLWgO/MaMBCPBOI/1/2NVcpldft80
+         YZog==
+X-Gm-Message-State: AFqh2kpjINthGNHsX5/9W9nJun2HrmpWnUbTuVuqJlt2NQdIogUhgReA
+        uywtsg3AgZa2SSCSHClNXLYmtEJYvLw/wA==
+X-Google-Smtp-Source: AMrXdXuyBsLxJ9ioLKbYTUo6GI7QVZQZHB5atFY7TtQx44fMfptR3YC8Lo8O04G0yBKgjyEI0I40xw==
+X-Received: by 2002:a05:622a:4c88:b0:3a8:649:8d0a with SMTP id ez8-20020a05622a4c8800b003a806498d0amr140373277qtb.30.1673886151398;
+        Mon, 16 Jan 2023 08:22:31 -0800 (PST)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id b1-20020ac844c1000000b003b34650039bsm4775953qto.76.2023.01.16.08.22.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jan 2023 08:22:31 -0800 (PST)
+Received: by mail-yb1-f181.google.com with SMTP id c124so30779713ybb.13;
+        Mon, 16 Jan 2023 08:22:30 -0800 (PST)
+X-Received: by 2002:a05:6902:543:b0:7c1:b2e9:7e71 with SMTP id
+ z3-20020a056902054300b007c1b2e97e71mr17477ybs.604.1673886150316; Mon, 16 Jan
+ 2023 08:22:30 -0800 (PST)
+MIME-Version: 1.0
+References: <20221117114907.138583-1-fabrizio.castro.jz@renesas.com>
+ <20221117114907.138583-3-fabrizio.castro.jz@renesas.com> <CAMuHMdUzkAjF=v__r2vJrYugBuDt13LnToCW66n-5r-jcVV+8A@mail.gmail.com>
+ <TYWPR01MB877570EB023D2ECEB7896F84C2C19@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+In-Reply-To: <TYWPR01MB877570EB023D2ECEB7896F84C2C19@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 16 Jan 2023 17:22:18 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXxri6GgGxJy9WC-ktM_zoXDkzRz-6yBqQcikVe3DPShg@mail.gmail.com>
+Message-ID: <CAMuHMdXxri6GgGxJy9WC-ktM_zoXDkzRz-6yBqQcikVe3DPShg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] watchdog: rzg2l_wdt: Handle TYPE-B reset for RZ/V2M
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Biju Das <biju.das.jz@bp.renesas.com>,
@@ -53,126 +66,64 @@ CC:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         <linux-renesas-soc@vger.kernel.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Jacopo Mondi <jacopo@jmondi.org>
-Subject: RE: [PATCH 2/2] watchdog: rzg2l_wdt: Handle TYPE-B reset for RZ/V2M
-Thread-Topic: [PATCH 2/2] watchdog: rzg2l_wdt: Handle TYPE-B reset for RZ/V2M
-Thread-Index: AQHY+nqpy1QulZVqxE28XPYMi1eo7K6hkpCAgAAAPXA=
-Date:   Mon, 16 Jan 2023 16:17:55 +0000
-Message-ID: <TYWPR01MB877570EB023D2ECEB7896F84C2C19@TYWPR01MB8775.jpnprd01.prod.outlook.com>
-References: <20221117114907.138583-1-fabrizio.castro.jz@renesas.com>
- <20221117114907.138583-3-fabrizio.castro.jz@renesas.com>
- <CAMuHMdUzkAjF=v__r2vJrYugBuDt13LnToCW66n-5r-jcVV+8A@mail.gmail.com>
-In-Reply-To: <CAMuHMdUzkAjF=v__r2vJrYugBuDt13LnToCW66n-5r-jcVV+8A@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYWPR01MB8775:EE_|TYCPR01MB10809:EE_
-x-ms-office365-filtering-correlation-id: 3adee536-98a2-47c9-b26e-08daf7dd3a01
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: l9Gk/PWg1JlAlDIQjYGl2o2+3yLCZ+M4xdOTJMvs6d7rPGKQClOjr7u2v5Vdc/erLzEa1rDmxxFtAff+lk5NHtNkE4ZHiqyvgeS2zzSmF/1FDPrLBQ6UeSm/g5JWsxbYSPZCW5UycYoyaAvCoO/RUCU+OZoJJd62HXnAwxd7eCEYBYbyV9lLgChfCTAWuDpZ32yLvDrnEQPr4CUQL535ftr85Dw4sBjebimbUJybJW3+oJoXx9rnkUPaKKTmVKucNoNv+BHbtI+4MZWb1mtiiWrm2Br0GDTTppou8NCmMhnu2shnYDLZZ5Vzf9EIUugxOzZ+s0loM2yYBT6MigVg41iq8cB32hCbWFhx9H9UFNKDkBCAiAxu9d+Jcbz9LxXc15GgHJw/wKa+dE6OW9LLlTV38AVHrT6+YlRwflea743bICxVBCZWSdVZosxJgOP4ug2yJ37qMakJEVCggPLG2ACyV/wp9AGbAOlR/aPmvdax77JqD2f1Jeb6Df/Ws8uZPTv+U71JMmYUv5bPiDOxw2SwwuxNYxGDyrlKZomFOVM52PLe62TwzWtQCl9Mvg3JsIYcSU/o9Xa1DNKbQeFpkC2OoT0fQolPHu2UOK8gPm7HUH4vFeUodEMC0zG4X07gne4wyj74qHv+SB+S29Anc++gDlmB2He6rnI91sgRS//nrlbX5kHduExHQELoAgZnwde6R/mdwwcjLQKoMdOYDQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8775.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(136003)(346002)(376002)(366004)(451199015)(8936002)(76116006)(86362001)(66446008)(66476007)(64756008)(6916009)(52536014)(66946007)(83380400001)(8676002)(4326008)(38070700005)(55016003)(33656002)(122000001)(38100700002)(5660300002)(478600001)(66556008)(41300700001)(7696005)(2906002)(54906003)(9686003)(66899015)(6506007)(53546011)(26005)(186003)(316002)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WTFwMmNoN1NSRloybXovSUNuQkpZQXVBdWhuT1M5Umszbkl4eDVyZ2Y2Mzl3?=
- =?utf-8?B?d0lFVG5QSHFsTnJOK3ZxMTJ6ZTBhaTdKME1RTDZLM0JoRHlYQy9RZnVGRXJE?=
- =?utf-8?B?ekRnVFFDdXQ2clM2UmpRQmJhMzNoWVUrZVk3bndCc3ZpZU1uYlN5cHV6Q0VY?=
- =?utf-8?B?S2tHUytMaTJGSCthREdZNGdaRWNaY1UwNVBBVnlpMGlGdStoc0tNQWM4b3d5?=
- =?utf-8?B?b2pHUExnS25vRlhWOWhyQTBQRURyWHNmTWhRZ2FFd1lTK3BKYmRUS2ZOQzlp?=
- =?utf-8?B?aGxkK0pMT1VPWWJlM0tyQk9uczg5YkpBSmdBSFUvQUc2NlVGelFCZ0dORGJr?=
- =?utf-8?B?WlFqQVVOckZWZk5TOEFoZm5PbUh5d1JCN0piYzVnU0g1VUIzTHdxeXo4K1dn?=
- =?utf-8?B?K1dRMTkvcWRnaEVLZkpyblEvcXd4dVpwVjJqanRydzdJZFhQbWhrdW1vWE9S?=
- =?utf-8?B?YnZsSERXUzJuanA5b0kwQmJGa2J3UGJuc2lodDdMQm1yWkhnc2ErT3VqTmU2?=
- =?utf-8?B?eHdxMDNqNCtqOVowSlJKVXUwWlFrbHptcEo1MVplcXY4Y3A3N1NNVzRSVVYx?=
- =?utf-8?B?VjNZdWozL1d3Sk1kQVFwZDVKSUVBdUN6YnQydkVqNGNBQ1FCdUhHVFBaNFJL?=
- =?utf-8?B?ZXlpdUtFUGhMTFVFYlM1alpUUGpIcXovU0lQajY2c1BPTWZOYmwzUTRvN3Z5?=
- =?utf-8?B?dndVbCszd0VtRElPNFFxTGdVZzAwcmZ5MFJRL3V6anNWbFowNVAyLzNXRTVp?=
- =?utf-8?B?bm5tQ0xVT2hlNGNqZ08vWjRsWkNoRUtiVHRxMlU1aklLdnZYQ1B5NzN1R0Nk?=
- =?utf-8?B?TkYzQUZoeHBnblo2WDVmcDhBeGNzU2RyMjRxdEFsbDBZa1EwRkw5a1BNUEE5?=
- =?utf-8?B?QXgrUk9NdHg2bHJ6OWpOZitpM24rV0xKSEc1SXVvTDBFZ1dGWFhibTZGazFZ?=
- =?utf-8?B?NnZ3R2hNZkhpLzJMeVp4M2phNUREVENDTWRsUmRIQnIwYy9kQnJFVzdoYndB?=
- =?utf-8?B?YWhNYnNacHZQMTBQVWRaWmRPNnZSdkpha1FyeHFDUXFwS1NoQTg5WFZQMnZQ?=
- =?utf-8?B?WGU3U2NWcUtaYkE1UXFTTG13M0JOU3RvMURIZlducnQ2MDNPc3VpVjlGVUhv?=
- =?utf-8?B?VkhJd0VsbG5JNjVQVjRWQnppT3Z6YVhpak1zNG0rQ0NmeTFVQmFWUE9VZWRz?=
- =?utf-8?B?WktIQnJybEZwWTlzUG83bFRoSit1QTR3UWJndms5aEppZENEQUNpOTFHclkz?=
- =?utf-8?B?ZmR5Q1VxcHl0Q05KMzU2NDNCQ0hkK2FxQmNqOFlNNlJyQ2VVS2RZUlFxNlFj?=
- =?utf-8?B?WE5QNFo0ZFY4RmVJUGVkR2VaR25Lbm5iKzAreVhFYllVZDh6aEpRSGZzZGpj?=
- =?utf-8?B?ZjhtK21odE1tcTFxOExzQmszdW1sdVNnUkZjT3pqRVhuUGRrUDREVU9rN09Q?=
- =?utf-8?B?VENMREJrVzQvNzM5V284cG01SGhYK0JZZWwxVkVXaWpObjRjYmdlaWNsOW9l?=
- =?utf-8?B?WDhETFMwWnJ4eGFzUUxxVE91SExnNHhILys5Z2x3UU44akordERRaXNUdkRp?=
- =?utf-8?B?bG01Z1FDMnYwNFFSVWlvOU5BY0I3L2E2Q011SnZkV2V6cEtwMGUrZURUb1lJ?=
- =?utf-8?B?VFA2WU03SEdOTEZPUHdVL2tVWUZVM0JZT3cxbGFEMXlsQXlLdWdMNlI2ajNr?=
- =?utf-8?B?MzZ6UTFBenZOTEhmZU1tdW5TOFVvQlpHci9LTjRlS0dFM1hxZElYYnN6NHMw?=
- =?utf-8?B?RWdxaXloS3dLK2NLZS9XUExOckhuQXRnRWM2L3F0Nnpka0lLZ3c5T0g1S3BS?=
- =?utf-8?B?aHNzOUx3MUJ2MGE3bnRKRXV3MVoybGFJUXdLYUo5UmsvOE1nSEJzSmlvdlh3?=
- =?utf-8?B?Q2NKeDRVRC9Lc0NOSzNoNHhudFF2RlRiTFVjNkl2bWlaczNXYTJHdUdFbGdt?=
- =?utf-8?B?UEFtbW96Y3dPMnBWTzNRejBFeDd0c3pCaktlWnZZYlkxbmxlNUxDcHgyTWZT?=
- =?utf-8?B?VEMyb3NDM25sRzVFeGpWRGhMaXFoY1VnKzRadVY4VDVwSjNYMW5GSFQ1TWNi?=
- =?utf-8?B?ODlxRmp5U2ppZnNLaG12T3NFMkpKRW1wRVVwaDdHcVBNdzBLZENGTnlkemwx?=
- =?utf-8?B?VVh2MmxLcEIwTFZqTXFRUDM2UGpGSEtkRUVPd0pKUktrWkhGMmk1MzRxeVM1?=
- =?utf-8?B?SVE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8775.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3adee536-98a2-47c9-b26e-08daf7dd3a01
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jan 2023 16:17:55.9214
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7wMYByOB0pBZHaN1bWwoS5zaeZUB3LLC0Rjf7yP3/FbuQ+ZN2LSF6u3yT+tp0jEn9JeIzUakQPFYe3JWn41cRTnk7ZjnHCSon03ZEdzVq/w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB10809
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-SGkgR2VlcnQsDQoNCj4gDQo+IEhpIEZhYnJpemlvLA0KPiANCj4gT24gVGh1LCBOb3YgMTcsIDIw
-MjIgYXQgMTI6NDkgUE0gRmFicml6aW8gQ2FzdHJvDQo+IDxmYWJyaXppby5jYXN0cm8uanpAcmVu
-ZXNhcy5jb20+IHdyb3RlOg0KPiA+IEFzIHBlciBzZWN0aW9uIDQ4LjQgb2YgdGhlIEhXIFVzZXIg
-TWFudWFsLCBJUHMgaW4gdGhlIFJaL1YyTQ0KPiA+IFNvQyBuZWVkIGVpdGhlciBhIFRZUEUtQSBy
-ZXNldCBzZXF1ZW5jZSBvciBhIFRZUEUtQiByZXNldA0KPiA+IHNlcXVlbmNlLiBNb3JlIHNwZWNp
-ZmljYWxseSwgdGhlIHdhdGNoZG9nIElQIG5lZWRzIGEgVFlQRS1CDQo+ID4gcmVzZXQgc2VxdWVu
-Y2UuDQo+ID4NCj4gPiBJZiB0aGUgcHJvcGVyIHJlc2V0IHNlcXVlbmNlIGlzbid0IGltcGxlbWVu
-dGVkLCB0aGVuIHJlc2V0dGluZw0KPiA+IElQcyBtYXkgbGVhZCB0byB1bmRlc2lyZWQgYmVoYXZp
-b3VyLiBJbiB0aGUgcmVzdGFydCBjYWxsYmFjayBvZg0KPiA+IHRoZSB3YXRjaGRvZyBkcml2ZXIg
-dGhlIHJlc2V0IGhhcyBiYXNpY2FsbHkgbm8gZWZmZWN0IG9uIHRoZQ0KPiA+IGRlc2lyZWQgZnVu
-Y2lvbmFsaXR5LCBhcyB0aGUgcmVnaXN0ZXIgd3JpdGVzIGZvbGxvd2luZyB0aGUgcmVzZXQNCj4g
-PiBoYXBwZW4gYmVmb3JlIHRoZSBJUCBtYW5hZ2VzIHRvIGNvbWUgb3V0IG9mIHJlc2V0Lg0KPiA+
-DQo+ID4gSW1wbGVtZW50IHRoZSBUWVBFLUIgcmVzZXQgc2VxdWVuY2UgaW4gdGhlIHdhdGNoZG9n
-IGRyaXZlciB0bw0KPiA+IGFkZHJlc3MgdGhlIGlzc3VlcyB3aXRoIHRoZSByZXN0YXJ0IGNhbGxi
-YWNrIG9uIFJaL1YyTS4NCj4gPg0KPiA+IEZpeGVzOiBlYzEyMmZkOTRlZWIgKCJ3YXRjaGRvZzog
-cnpnMmxfd2R0OiBBZGQgcnp2Mm0gc3VwcG9ydCIpDQo+ID4gU2lnbmVkLW9mZi1ieTogRmFicml6
-aW8gQ2FzdHJvIDxmYWJyaXppby5jYXN0cm8uanpAcmVuZXNhcy5jb20+DQo+IA0KPiBSZXZpZXdl
-ZC1ieTogR2VlcnQgVXl0dGVyaG9ldmVuIDxnZWVydCtyZW5lc2FzQGdsaWRlci5iZT4NCj4gDQo+
-IFBlcmhhcHMgdGhpcyBsb2dpYyBjYW4gYmUgaW5jb3Jwb3JhdGVkIGludG8gdGhlIFJaL1YyTSBy
-ZXNldCBjb250cm9sbGVyDQo+IGRyaXZlciBsYXRlciwgc28gcmVzZXQgY29uc3VtZXJzIGRvbid0
-IGhhdmUgdG8gY2FyZSBhYm91dCBUWVBFLUEgYW5kDQo+IFRZUEUtQiByZXNldCwgYnV0IGNhbiBq
-dXN0IGNhbGwgcmVzZXRfY29udHJvbF9yZXNldCgpPw0KPiBJIHVuZGVyc3RhbmQgdGhhdCdzIG5v
-dCBnb25uYSBiZSBlYXN5LCBhcyBpdCBuZWVkcyB0byBrbm93IGFib3V0IHRoZQ0KPiByZWxhdGlv
-biBiZXR3ZWVuIHJlc2V0cyBhbmQgY2xvY2tzLCBhbmQgaG93IHRvIGhhbmRsZSBib3RoIGNhc2Vz
-IChjbG9jaw0KPiAobm90KSBzd2l0Y2hlZCBvZmYpIGZvciBUWVBFLUIgcmVzZXRzLg0KDQpZZWFo
-LCB3ZSBoYXZlIGJlZW4gdGhpbmtpbmcgYWJvdXQgZGVhbGluZyB3aXRoIHRoaXMgaW4gdGhlIHJl
-c2V0IGNvbnRyb2xsZXINCmRyaXZlciwgYnV0IGFzIHlvdSBwb2ludGVkIG91dCBpdCdzIG5vdCBn
-b2luZyB0byBiZSBzaW1wbGUsIGFuZCB0aGVyZWZvcmUNCml0J2xsIHRha2Ugc29tZSB0aW1lLiBU
-aGlzIGNoYW5nZSB3aWxsIGd1YXJhbnRlZSB0aGUgY29ycmVjdCBiZWhhdmlvdXIgb2YNCnRoZSB3
-YXRjaGRvZyBmb3Igbm93LCB3ZSdsbCB0YWNrbGUgdGhlIGxhcmdlciBpc3N1ZSBsYXRlciBvbiwg
-aWYgdGhhdCdzIG9rYXkNCndpdGggeW91Lg0KDQpUaGFua3MsDQpGYWINCg0KPiANCj4gR3J7b2V0
-amUsZWV0aW5nfXMsDQo+IA0KPiAgICAgICAgICAgICAgICAgICAgICAgICBHZWVydA0KPiANCj4g
-LS0NCj4gR2VlcnQgVXl0dGVyaG9ldmVuIC0tIFRoZXJlJ3MgbG90cyBvZiBMaW51eCBiZXlvbmQg
-aWEzMiAtLSBnZWVydEBsaW51eC0NCj4gbTY4ay5vcmcNCj4gDQo+IEluIHBlcnNvbmFsIGNvbnZl
-cnNhdGlvbnMgd2l0aCB0ZWNobmljYWwgcGVvcGxlLCBJIGNhbGwgbXlzZWxmIGEgaGFja2VyLg0K
-PiBCdXQNCj4gd2hlbiBJJ20gdGFsa2luZyB0byBqb3VybmFsaXN0cyBJIGp1c3Qgc2F5ICJwcm9n
-cmFtbWVyIiBvciBzb21ldGhpbmcgbGlrZQ0KPiB0aGF0Lg0KPiAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIC0tIExpbnVzIFRvcnZhbGRzDQo=
+Hi Fabrizio,
+
+On Mon, Jan 16, 2023 at 5:18 PM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+> > On Thu, Nov 17, 2022 at 12:49 PM Fabrizio Castro
+> > <fabrizio.castro.jz@renesas.com> wrote:
+> > > As per section 48.4 of the HW User Manual, IPs in the RZ/V2M
+> > > SoC need either a TYPE-A reset sequence or a TYPE-B reset
+> > > sequence. More specifically, the watchdog IP needs a TYPE-B
+> > > reset sequence.
+> > >
+> > > If the proper reset sequence isn't implemented, then resetting
+> > > IPs may lead to undesired behaviour. In the restart callback of
+> > > the watchdog driver the reset has basically no effect on the
+> > > desired funcionality, as the register writes following the reset
+> > > happen before the IP manages to come out of reset.
+> > >
+> > > Implement the TYPE-B reset sequence in the watchdog driver to
+> > > address the issues with the restart callback on RZ/V2M.
+> > >
+> > > Fixes: ec122fd94eeb ("watchdog: rzg2l_wdt: Add rzv2m support")
+> > > Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> >
+> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> >
+> > Perhaps this logic can be incorporated into the RZ/V2M reset controller
+> > driver later, so reset consumers don't have to care about TYPE-A and
+> > TYPE-B reset, but can just call reset_control_reset()?
+> > I understand that's not gonna be easy, as it needs to know about the
+> > relation between resets and clocks, and how to handle both cases (clock
+> > (not) switched off) for TYPE-B resets.
+>
+> Yeah, we have been thinking about dealing with this in the reset controller
+> driver, but as you pointed out it's not going to be simple, and therefore
+> it'll take some time. This change will guarantee the correct behaviour of
+> the watchdog for now, we'll tackle the larger issue later on, if that's okay
+> with you.
+
+Fine for me.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
