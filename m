@@ -2,82 +2,129 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51CB66C3EB
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Jan 2023 16:32:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA20866C3F2
+	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Jan 2023 16:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbjAPPcg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 16 Jan 2023 10:32:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
+        id S230391AbjAPPcw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 16 Jan 2023 10:32:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjAPPcA (ORCPT
+        with ESMTP id S231479AbjAPPc1 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 16 Jan 2023 10:32:00 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B53F23C47;
-        Mon, 16 Jan 2023 07:27:10 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-15ee27bb0a8so8763320fac.7;
-        Mon, 16 Jan 2023 07:27:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=+UDRzzqJZNu06Gc3ga3e9IbYLEa/rLRliciSPrDBYRg=;
-        b=RZ1n0r4AI2GerlleUSjlaFyWkhgl9jIMqXrEzlp1ISH72sFG9wRxtNfxl3PfYoU30v
-         Z80ubSNT6yJGj81XovIyuXolWqXluS6B5cE2P6/fLTlkFPpq2RjcGgCkeTpLVwynlHva
-         2hQo9OZ3BIBz9PU2Fjl579mEVJph58m0+YkHhx7cgqdC118Ru/WxV1vkcu6XhYHmPHZA
-         PeTCYHCFpJXFkWfN2Sxrxuz3zyASDXMfpvaj88JuB2BrJunQWn/dWiNbmIzQGo3uDTyb
-         /ZvCC5gfoLjbgmvLX1n+w+DbI6QC6Ch16CQfCine2/9Pod7zAFqZF3+fpYexfyItzswx
-         Yujg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+UDRzzqJZNu06Gc3ga3e9IbYLEa/rLRliciSPrDBYRg=;
-        b=szUsaW+DM7Tk/Nu1mVWxUN1o0ukk6R08OSoMVQDdqvyT4Vo/ZQ1mem+tappXxS2bko
-         ZH3bsCYMutsxG41JZYLCE951I7/LXbKhmrsZdtO8pbtCTG6X1fgZdIJgeiyiCkMXLUtM
-         8HD9krbrWL5YN0DDJw38iv4Dqad8bvOigkuZRdJwslwqIjAtbN+h1ZXEdwT+84djy3w4
-         84frSl1SiQQ0UArA3/6Yf138fJfTX1g1d4UE3Fd+eqG6mbT2t3yvVQh7ryoagI3uwfZa
-         73BWbtR7LEyAtFihobrBAwvk/8AZwy9wIEvthmfpHf9zSOrWxH9VwBIKX2J6Wfxh2I2j
-         qkrg==
-X-Gm-Message-State: AFqh2koynJ7xDdEZYiIytiJY6iLkl8AiT2CfetiJG7JuBD81bbzENurb
-        KY5U3KwMDL27ePRpHHKQuZdfALRuWZ8=
-X-Google-Smtp-Source: AMrXdXvOczUTz6EPlUdVCboKTU+LLgs9MuRt5dnGPTrU4EEQ8diSJ0rUGv8x4kcKVoA+IAM6neRL/w==
-X-Received: by 2002:a05:6871:110:b0:15b:868d:137f with SMTP id y16-20020a056871011000b0015b868d137fmr116467oab.1.1673882829313;
-        Mon, 16 Jan 2023 07:27:09 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c6-20020a056870c08600b0014be94a12d0sm14722761oad.44.2023.01.16.07.27.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Jan 2023 07:27:08 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <bfcac231-682d-8b2c-6c3a-e3a5a04ca5bf@roeck-us.net>
-Date:   Mon, 16 Jan 2023 07:27:06 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/2] watchdog: mtk_wdt: Add reset_by_toprgu support
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Mon, 16 Jan 2023 10:32:27 -0500
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2104.outbound.protection.outlook.com [40.107.114.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0045723C7B;
+        Mon, 16 Jan 2023 07:28:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZEFlcSZF+KSe+6ahu9dqNlp0GYR0AGSr/Xf5Gi0kzVyAHHRjC8BsNf4l7iqAi+tET4AEPBtrypMzHffC/pkrx3G0/jvO34CqqzcJJAB19SJJfVMuANV5u/H8hJHsOUXK1/8+/O+iNkDKo7EbuShjgMWh+hqB8tJMq72N5ihwe0aSz6LcNt8kFhNUn2VHQ3i1rVfi08pKx3jxOve96tKKNO8EhgjKjceDSyDPzwsZNJcAgXZWT6qKrhlsv4VrqyAB9eGtM726kRl8eOHe6hInw6t1rd7roST+9KELQyMhs9YJQlNDqTQiAcxE6VWHTnPJf1uXGBBraqmge2VN61zXrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VRjwtj6a28AZV9ac2d6DqzYm1P4TTM6xG0MCZ+GmqQY=;
+ b=H55X7g2w0ZFZm1sTz7xpBm2fspdFjVsN0g9aKgoBuIHKlH37qIoVrYaVV8KcTJU8nFDSXudtHP6hGk6ZEGz3YfR7Y/oW2UHjd23BeMmQ8O2DMssJZyjY2dV31Jt9HxRsK9DFJd/9zb96TnmeaRAKr1S2Xn2WiRz/HTXnpqdwIRlIVHR5z6+t5UPM6VXcNeqiZovIZ8W/PZmg0wJf0CrrkQsBp8Mpf1V0qYUHMvOJjwUikjjV6JhoFif0hUvDGeKmcQNpW8v2561qjuitxu3zIf8Z0Nnm1xc3XwJl1bjMLH5mBRwIS30pnwe5pQyTjiRkm2GRsI78eSBd0cSVfuQL2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VRjwtj6a28AZV9ac2d6DqzYm1P4TTM6xG0MCZ+GmqQY=;
+ b=TsYSnU9Cjonf0E12nuEgldQX01kj8ZxLOOEa8E6c4VsXG7+I0T0MCUmrVejJ+bhpIqTOaDiVKcHc9N6Vq9//H8K51kRcI1VpM8uaKNT+eJv2OAENx8Fx4jyB3STsDkI0EBPA4QcJ0wEt5Gs2olPbfqDiYPoXZObdHDBE+xDgFsI=
+Received: from TYWPR01MB8775.jpnprd01.prod.outlook.com (2603:1096:400:169::11)
+ by OSZPR01MB7841.jpnprd01.prod.outlook.com (2603:1096:604:1b5::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12; Mon, 16 Jan
+ 2023 15:28:16 +0000
+Received: from TYWPR01MB8775.jpnprd01.prod.outlook.com
+ ([fe80::9459:ffa9:a884:8a8e]) by TYWPR01MB8775.jpnprd01.prod.outlook.com
+ ([fe80::9459:ffa9:a884:8a8e%3]) with mapi id 15.20.6002.013; Mon, 16 Jan 2023
+ 15:28:16 +0000
+From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-watchdog@vger.kernel.org
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230116105305.31818-1-allen-kh.cheng@mediatek.com>
- <20230116105305.31818-3-allen-kh.cheng@mediatek.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230116105305.31818-3-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Guenter Roeck <linux@roeck-us.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+CC:     Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: RE: [PATCH 1/2] watchdog: rzg2l_wdt: Issue a reset before we put the
+ PM clocks
+Thread-Topic: [PATCH 1/2] watchdog: rzg2l_wdt: Issue a reset before we put the
+ PM clocks
+Thread-Index: AQHY+nqlXRu/6yqD8kG6N6RyQH2tma6hiOYw
+Date:   Mon, 16 Jan 2023 15:28:16 +0000
+Message-ID: <TYWPR01MB8775AD226DC8128F3B353AEDC2C19@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+References: <20221117114907.138583-1-fabrizio.castro.jz@renesas.com>
+ <20221117114907.138583-2-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20221117114907.138583-2-fabrizio.castro.jz@renesas.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYWPR01MB8775:EE_|OSZPR01MB7841:EE_
+x-ms-office365-filtering-correlation-id: 5f4dc40c-f2b4-47b9-8dff-08daf7d64a49
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FQsFlypiiix1S8YABvQBLJIsdinb1BgvYhm22rZkAbX0n8XU1ZzTztpQXhonnQeEsmlgyA2tWD7x7mhDVi/RouOcwmBaMSyvrH1O6hdWEBw5gvfjQXizcbZLbJEEPnX0x+XYkA5LKC9BNyuuF+pGQ8CXdlz96Ij/q7uKBUmrFf+zuvPChJ9hl77Vm1lr4ZdVYIdvgG2nmtw1aIhAfzgAkyUkbPNGU1e7JWqI83iG926mm+CWCxqIv8kJfN6PlmoqCvzXbEazkavoPjpHdd3lQ31zA5wD/JoO3GVAzKDejkHOZGp92YZ68SgMKKUixEhH1u4j/J/+ff93PInERhzfP1yBek5310yH1QXpF2CWNRKYwRC3pOfOjh/b5UYQ0hPjnD5QGeoJIIwlh5L+83cWhnx173rV9nZTjl1s1HcIM0HZJM49cMbPcnI2YJyLdPoQ/A46lbxA14L0v48BhWlhNj2eLJcX9Mcj9hYTvb0U1jEFxLFUXDhvq4GM0dj2VjEn+9hE76Bc7xqhyk0i+mJhKYQBDhIAv+WtT70lD5KVzRbbG9rSDD7kja392D1T/ZVD/1WlnrVnp3VHGTQdoirskqXQHjq2/0efyEkDj9KI/tWSkotmw2c5S7EashGxzaEU/mH24ljFWZsC8VgcrUqMnZFixnQn6bCd3bp3+Xelb3QlHHJptK5cdm0il6qNlEu3jLkKvVqwUBd+hV3cZfFeFQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8775.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(396003)(136003)(376002)(366004)(451199015)(6506007)(5660300002)(2906002)(76116006)(64756008)(66446008)(8676002)(8936002)(52536014)(122000001)(83380400001)(66476007)(66556008)(38100700002)(478600001)(4326008)(33656002)(41300700001)(38070700005)(66946007)(26005)(9686003)(86362001)(186003)(55016003)(7696005)(71200400001)(54906003)(110136005)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Qi5u+/xlS+ewjcdtPHynggjrhE1qs9HxL6JtrHwljaIHm7MPeNtzw7SvwrW+?=
+ =?us-ascii?Q?khnA7J7WGRjGwPdcYVF+mAO5nuV9URbntCYRQ+EO8wB/MylDDxgTCHXpFC7W?=
+ =?us-ascii?Q?JiIU3lkorGw3dtJhL+DffBgsT3q/TbV/VZLHfTKmoLyczV85TClJmUBAAt/H?=
+ =?us-ascii?Q?eKD2JSF5EZB2FmPoGpMF+nhCgRUGbM25X6WTJMTH61CPojdUt0ubP+T/t0mw?=
+ =?us-ascii?Q?5IIRkctiv++/0ugNkn5NvP+iE1OGl8CGw6kMc92KV36aPW8l/qGwzVqbRpEJ?=
+ =?us-ascii?Q?M6BK2ePdQ2T89eoaYigbEekG01dCmINoVAmOeF6INR5UcEEwMRa/LuEWYpj/?=
+ =?us-ascii?Q?JMsaAL+/k5pQ1lM9htzK4SU5K+a1vu82zK3Q8gEX5H0s0qX8J+e8YZfqRIFW?=
+ =?us-ascii?Q?Q6i2As1shDW4imVqHo4mi1iAATboxgpkiaPlg1kUkk+3KwevK/q0L2VKAkGO?=
+ =?us-ascii?Q?7yvSavO+ZGNPqYwNLOlceN7FY2EZkR6d2A2iIAofq7uE78YhCjDrh3PhzN+M?=
+ =?us-ascii?Q?6+Ee61WdsbyOG2M11XqPxUe0vsexgCG9yEI2aHqXUC9fXTmIKBOHg06LFsFk?=
+ =?us-ascii?Q?Cl+Z0QFzC/ck5AExfmz691mesNfF3iCAA8aRW+v9LB2l6SWjGVwR1P4La44J?=
+ =?us-ascii?Q?sNmVm7OUICF8q9cFVIvc5n+Zq6BPnxfKw47UJcSWYZx0eMtJ5pkwuJId49bX?=
+ =?us-ascii?Q?5qkCp/8He9BJXbP6FXZxPKssaa/Nb+wesGPiZyolWX+hyj3ZQNTDvTENK3nS?=
+ =?us-ascii?Q?nL1qq6XsKhaXr6QSv5nWEUQJisjCB9rZVX7Ihq762n21YrC6cclx5lHBlF/M?=
+ =?us-ascii?Q?f7EaU28e7uB1PwWhwx487n6yktii0bucECbDKPELu+oIdOiQ8A81XutKoKsX?=
+ =?us-ascii?Q?THMb84dgMhaXF3ltc0LxTZ0Gyhn26hWhpDBONiJ9Nrsgmh9fduk+FwELXnWQ?=
+ =?us-ascii?Q?g+/itogmvf3nnHIGYwv1Aw4eOOIFkbHUE4tGDp4xuwRE+1658Z9N1Qqj44/T?=
+ =?us-ascii?Q?YL+hKdUkmSfrMg+Neml9RhyL7Fr8nMevLxTxzzWYokHTfMWkrE4/xs2VeVBe?=
+ =?us-ascii?Q?tS+6depPalZjk6sLhlFINrvEdM2hWVkcjssTaKomMV1kVAFbpY9GBkMaGp/g?=
+ =?us-ascii?Q?EIfU5aSQalEFfiy6LfaWJLwdhZyxYivx4tGLY57hdmZVEAQDOJUK9reXqFPn?=
+ =?us-ascii?Q?zNhIiExmrUvQZpy7IvQJbRRKehtiWg7QfQo2nHce2VBy4fH9J12xJ+sS0U+q?=
+ =?us-ascii?Q?dnqTYhUIgP9hZKrZOi3JgaajNXT6kBs+G+evTFSCIhK0eHL2N/o8giZNeCCV?=
+ =?us-ascii?Q?jaJ7wnqunEIj/DAp770UV1KplVSfMBcEFUyWM5QSCuPQMRVNDdUZ24qoWasM?=
+ =?us-ascii?Q?x0ZhaLd72GroESZHuOetWAgt3Lpjglp/XBaoDKUMFaG3tKd8BtnXcgJnF6R4?=
+ =?us-ascii?Q?9Lsmf3kCgxuGzR9yP0RzuwiWh++80bMR/wQxgPlRFwPlQl6vC7UtZPWLJHJv?=
+ =?us-ascii?Q?GqNFbhDaIOiyFqLEZeWasFjjCmPpVM1arNNzbjZ0ulMD5vN4eQa6QyCqmVUh?=
+ =?us-ascii?Q?9Hh9DNx/b7x4AA/O8xegGKeZGR3RNuYnHE0llqqWD5jC2d9gVNYb0GmDbzrq?=
+ =?us-ascii?Q?jg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8775.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f4dc40c-f2b4-47b9-8dff-08daf7d64a49
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jan 2023 15:28:16.7430
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: H0UYvD7mIsoqVXkvck272cYlXeeNrjYuPvdwASq3G4fSuQZ2F3V0fp/3aQorxsd8sa/hkLX0XI24dbeizVIakM3tYX1khsriaVyYKXaSLE8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZPR01MB7841
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,57 +132,77 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 1/16/23 02:53, Allen-KH Cheng wrote:
-> In some cases, the MediaTek watchdog requires the toprgu to reset
-> timer after system resets.
-> 
-> Provide a reset_by_toprgu parameter for configuration.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Hi All,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+It looks like this patch has been reviewed by both Guenter Roeck
+and Geert Uytterhoeven, any chance that it can be taken for v6.3?
 
+Thanks,
+Fab
+
+>=20
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>=20
+> On RZ/Five SoC it was observed that setting timeout (to say 1 sec)
+> wouldn't
+> reset the system.
+>=20
+> The procedure described in the HW manual (Procedure for Activating
+> Modules)
+> for activating the target module states we need to start supply of the
+> clock module before applying the reset signal. This patch makes sure we
+> follow the same procedure to clear the registers of the WDT module, fixin=
+g
+> the issues seen on RZ/Five SoC.
+>=20
+> While at it re-used rzg2l_wdt_stop() in rzg2l_wdt_set_timeout() as it has
+> the same function calls.
+>=20
+> Fixes: 4055ee81009e ("watchdog: rzg2l_wdt: Add set_timeout callback")
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > ---
->   drivers/watchdog/mtk_wdt.c | 7 +++++++
->   1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-> index 3e6212591e69..a9c437598e7e 100644
-> --- a/drivers/watchdog/mtk_wdt.c
-> +++ b/drivers/watchdog/mtk_wdt.c
-> @@ -50,6 +50,7 @@
->   #define WDT_MODE_IRQ_EN		(1 << 3)
->   #define WDT_MODE_AUTO_START	(1 << 4)
->   #define WDT_MODE_DUAL_EN	(1 << 6)
-> +#define WDT_MODE_CNT_SEL	(1 << 8)
->   #define WDT_MODE_KEY		0x22000000
->   
->   #define WDT_SWRST		0x14
-> @@ -70,6 +71,7 @@ struct mtk_wdt_dev {
->   	spinlock_t lock; /* protects WDT_SWSYSRST reg */
->   	struct reset_controller_dev rcdev;
->   	bool disable_wdt_extrst;
-> +	bool reset_by_toprgu;
->   };
->   
->   struct mtk_wdt_data {
-> @@ -279,6 +281,8 @@ static int mtk_wdt_start(struct watchdog_device *wdt_dev)
->   		reg &= ~(WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN);
->   	if (mtk_wdt->disable_wdt_extrst)
->   		reg &= ~WDT_MODE_EXRST_EN;
-> +	if (mtk_wdt->reset_by_toprgu)
-> +		reg |= WDT_MODE_CNT_SEL;
->   	reg |= (WDT_MODE_EN | WDT_MODE_KEY);
->   	iowrite32(reg, wdt_base + WDT_MODE);
->   
-> @@ -408,6 +412,9 @@ static int mtk_wdt_probe(struct platform_device *pdev)
->   	mtk_wdt->disable_wdt_extrst =
->   		of_property_read_bool(dev->of_node, "mediatek,disable-extrst");
->   
-> +	mtk_wdt->reset_by_toprgu =
-> +		of_property_read_bool(dev->of_node, "mediatek,reset-by-toprgu");
-> +
->   	return 0;
->   }
->   
+>  drivers/watchdog/rzg2l_wdt.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
+> index 974a4194a8fd..ceca42db0837 100644
+> --- a/drivers/watchdog/rzg2l_wdt.c
+> +++ b/drivers/watchdog/rzg2l_wdt.c
+> @@ -115,25 +115,23 @@ static int rzg2l_wdt_stop(struct watchdog_device
+> *wdev)
+>  {
+>  	struct rzg2l_wdt_priv *priv =3D watchdog_get_drvdata(wdev);
+>=20
+> -	pm_runtime_put(wdev->parent);
+>  	reset_control_reset(priv->rstc);
+> +	pm_runtime_put(wdev->parent);
+>=20
+>  	return 0;
+>  }
+>=20
+>  static int rzg2l_wdt_set_timeout(struct watchdog_device *wdev, unsigned
+> int timeout)
+>  {
+> -	struct rzg2l_wdt_priv *priv =3D watchdog_get_drvdata(wdev);
+> -
+>  	wdev->timeout =3D timeout;
+>=20
+>  	/*
+>  	 * If the watchdog is active, reset the module for updating the
+> WDTSET
+> -	 * register so that it is updated with new timeout values.
+> +	 * register by calling rzg2l_wdt_stop() (which internally calls
+> reset_control_reset()
+> +	 * to reset the module) so that it is updated with new timeout
+> values.
+>  	 */
+>  	if (watchdog_active(wdev)) {
+> -		pm_runtime_put(wdev->parent);
+> -		reset_control_reset(priv->rstc);
+> +		rzg2l_wdt_stop(wdev);
+>  		rzg2l_wdt_start(wdev);
+>  	}
+>=20
+> --
+> 2.34.1
 
