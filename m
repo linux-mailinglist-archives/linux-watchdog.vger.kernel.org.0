@@ -2,100 +2,143 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4EC66E670
-	for <lists+linux-watchdog@lfdr.de>; Tue, 17 Jan 2023 19:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F399F66E787
+	for <lists+linux-watchdog@lfdr.de>; Tue, 17 Jan 2023 21:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjAQSup (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 17 Jan 2023 13:50:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
+        id S232157AbjAQUKt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 17 Jan 2023 15:10:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233040AbjAQSm1 (ORCPT
+        with ESMTP id S234641AbjAQUHS (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 17 Jan 2023 13:42:27 -0500
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577194C6E8;
-        Tue, 17 Jan 2023 10:13:31 -0800 (PST)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-15b9c93848dso24572671fac.1;
-        Tue, 17 Jan 2023 10:13:31 -0800 (PST)
+        Tue, 17 Jan 2023 15:07:18 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5118B45212
+        for <linux-watchdog@vger.kernel.org>; Tue, 17 Jan 2023 11:01:24 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-15085b8a2f7so33013691fac.2
+        for <linux-watchdog@vger.kernel.org>; Tue, 17 Jan 2023 11:01:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OgaymgAXi9Z6g6pYwBOzM02/P477EqWitgDVTE3LFbU=;
+        b=7UFMvbpKkJyjWVLlq6ctk0nXiLL3RrLgvGqk+/g8pD0wAzMEFNodkoMNXxSPAzvJye
+         T4nqVDpRCF5Pkw4fe0ROrd1BjE8DZbycDcUSRlgnihtqJaZkkqELJ7TzEZYyPHojRNxM
+         MBh6YZCgcmJgLXwboxe3bvrjmez4qHhfCRIxGuc2G0+QOOJ/eKT38XBZ7MfSSmNLVm7z
+         gDt6C3Ymsnj+eKLcMZ0dj5q2KFKnZutgcY/1C6+IgeLmT5DwAU4QsUhG6TCQdnlD6nEb
+         fYtWfawIuB6wYahQA/cq89ISwAR2GZXbrrCFpCVxRJqHc9Mn337ID3jg/QgfKjbyHIu6
+         BObQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qAQembbfAly4IRjGr3cDZDww9N/iI2dr1CRggFoPOeA=;
-        b=1W93M83LETR7b+sCCg/n7ungV5daeInt+aUq3Zfzd+OfpJ5dGEk+7wx4TMIThzx3r/
-         nrQd7NFqfhw469CXWU+4ZwSYwZNLT7uUr4OlQho+60IbDvc1kBZKGjX0TBCWRTirsdt0
-         iqWu1Bw6OFqH1TF5+TmZ/KCfVQZ1/hdrHP2NcZwbZS5SsTbkcoBHdDSdUzPBzeOS7m1y
-         JuCMvCjBGdLJHY0qT1cmeZxXO22jPeNcWdM2cQgWxCeVluf229WhIiaWWdEpmpfg1d9L
-         rAHWOb5Fz1jOq5R4SWuOWIxx4DPxywnZO2p1TTqKt+Tr3D+FkZFKB/wYg818kn2YlEoR
-         XAgQ==
-X-Gm-Message-State: AFqh2kr/RRr/3TGMuBc7ldyZHYRtFpotvZNqVr6yohxIeR9t6l7HMs+P
-        AN6NixOTckBJUBeLvOi/7Q==
-X-Google-Smtp-Source: AMrXdXtoKW0M+JEa5UDfl75nd/xbDorgIheGi98GezD8LwsaKaQtMEYFIlehYZ4gKtpGPhhQwY1v9w==
-X-Received: by 2002:a05:6870:9e92:b0:15e:fe0a:db84 with SMTP id pu18-20020a0568709e9200b0015efe0adb84mr7695952oab.27.1673979210329;
-        Tue, 17 Jan 2023 10:13:30 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c15-20020a4ae24f000000b004f28d09a880sm7028866oot.13.2023.01.17.10.13.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 10:13:29 -0800 (PST)
-Received: (nullmailer pid 3398763 invoked by uid 1000);
-        Tue, 17 Jan 2023 18:13:29 -0000
-Date:   Tue, 17 Jan 2023 12:13:29 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH v2 6/7] dt-bindings: watchdog: qcom-wdt: merge MSM timer
-Message-ID: <167397920868.3398730.2074338668546770210.robh@kernel.org>
-References: <20230113103346.29381-1-krzysztof.kozlowski@linaro.org>
- <20230113103346.29381-7-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OgaymgAXi9Z6g6pYwBOzM02/P477EqWitgDVTE3LFbU=;
+        b=6y7GVgJKpcwNbdYplw7w3vK4MsfMFAh/sGJi14s9/jO886hpQ6mBv46zlYlUrpKvCg
+         2xUn3Z0DGHOuCKHJHkWYC483XI4xZY7ak6t1SUuSEKEn5daaY04MAK0Nf60gVpJPuXPB
+         OuKScCT0ckX3hx5uLsTmgpkXi1nfKk0JnCT80ZEZKyihWXTI8DsqB4u2wgPPpVkxl4eG
+         iDaxS811OZF0qrSeMvS7AQKnpDL1SHDAyRiihyCKPMV2vxuM3yOK/9HXyTH60oXe7sn8
+         cx/dRktxQDVDZV/CPjOM/Q/8u+reCNu/U7hPGf7l3a1YL1i8WanmEsbnq3Q4WLcUW96s
+         JOFQ==
+X-Gm-Message-State: AFqh2kq42r7cyEeOdKVer+VOMUg4fzYOgfnR5SGLHFW8dHYQNvnmd9LC
+        nWNX/Own2IBOdce7IVEBgrOlHw==
+X-Google-Smtp-Source: AMrXdXsgzCxMhqm+bb3il7EsJjEv0NbGPCzT1qf9VREFYRxVllxrk/YEzaFAyrBdtefAaDgGfnk/UQ==
+X-Received: by 2002:a05:6870:c190:b0:15e:cfca:b312 with SMTP id h16-20020a056870c19000b0015ecfcab312mr2807015oad.52.1673982083592;
+        Tue, 17 Jan 2023 11:01:23 -0800 (PST)
+Received: from [192.168.86.224] ([136.62.38.22])
+        by smtp.gmail.com with ESMTPSA id r18-20020a05687080d200b0012763819bcasm16664335oab.50.2023.01.17.11.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 11:01:22 -0800 (PST)
+Message-ID: <9325a949-8d19-435a-50bd-9ebe0a432012@landley.net>
+Date:   Tue, 17 Jan 2023 13:13:38 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113103346.29381-7-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: remove arch/sh
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <20230116071306.GA15848@lst.de>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <20230116071306.GA15848@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On 1/16/23 01:13, Christoph Hellwig wrote:
+> On Fri, Jan 13, 2023 at 09:09:52AM +0100, John Paul Adrian Glaubitz wrote:
+>> I'm still maintaining and using this port in Debian.
+>>
+>> It's a bit disappointing that people keep hammering on it. It works fine for me.
+> 
+> What platforms do you (or your users) use it on?
 
-On Fri, 13 Jan 2023 11:33:45 +0100, Krzysztof Kozlowski wrote:
-> Merge Qualcomm MSM timer bindings into watchdog, because the timer
-> compatibles are already included here and the hardware is quite similar.
-> 
-> While converting the MSM timer bindings, adjust clock-frequency
-> property to take only one frequency, instead of two, because:
-> 1. DT schema does not allow to frequencies,
-> 2. The Linux timer driver reads only first frequency.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> 
-> ---
-> 
-> Changes since v1:
-> 1. Add tag.
-> 2. Correct clock-frequency description (Rob).
-> ---
->  .../bindings/timer/qcom,msm-timer.txt         | 47 ------------------
->  .../bindings/watchdog/qcom-wdt.yaml           | 49 +++++++++++++++++++
->  2 files changed, 49 insertions(+), 47 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
-> 
+3 j-core boards, two sh4 boards (the sh7760 one I patched the kernel of), and an
+sh4 emulator.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+I have multiple j-core systems (sh2 compatible with extensions, nommu, 3
+different kinds of boards running it here). There's an existing mmu version of
+j-core that's sh3 flavored but they want to redo it so it hasn't been publicly
+released yet, I have yet to get that to run Linux because the mmu code would
+need adapting, but the most recent customer projects were on the existing nommu
+SOC, as was last year's ASIC work via sky130.
+
+My physical sh4 boards are a Johnson Controls N40 (sh7760 chipset) and the
+little blue one is... sh4a I think? (It can run the same userspace, I haven't
+replaced that board's kernel since I got it, I think it's the type Glaubitz is
+using? It's mostly in case he had an issue I couldn't reproduce on different
+hardware, or if I spill something on my N40.)
+
+I also have a physical sh2 board on the shelf which I haven't touched in years
+(used to comparison test during j2 development, and then the j2 boards replaced it).
+
+I'm lazy and mostly test each new sh4 build under qemu -M r2d because it's
+really convenient: neither of my physical boards boot from SD card so replacing
+the kernel requires reflashing soldered in flash. (They'll net mount userspace
+but I haven't gotten either bootloader to net-boot a kernel.)
+
+I include sh4 in the my mkroot builds each toybox release, I have a ~300 line
+bash script that builds bootable toybox systems for a dozen-ish architectures,
+including building a kernel configured to run under qemu:
+
+  https://github.com/landley/toybox/blob/master/scripts/mkroot.sh
+
+And I ship the resulting bootable system images, most recent release is at:
+
+  https://landley.net/toybox/downloads/binaries/mkroot/0.8.9/
+
+As described at:
+
+  http://landley.net/toybox/faq.html#mkroot
+
+Various people in Japan have more hardware, but I haven't made it physically
+back there since 2020. (My residency card expired during the pandemic.)
+
+Rob
