@@ -2,98 +2,100 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F0E66DBED
-	for <lists+linux-watchdog@lfdr.de>; Tue, 17 Jan 2023 12:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4EC66E670
+	for <lists+linux-watchdog@lfdr.de>; Tue, 17 Jan 2023 19:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236181AbjAQLLP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 17 Jan 2023 06:11:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
+        id S230079AbjAQSup (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 17 Jan 2023 13:50:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236595AbjAQLK5 (ORCPT
+        with ESMTP id S233040AbjAQSm1 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 17 Jan 2023 06:10:57 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5A32B603
-        for <linux-watchdog@vger.kernel.org>; Tue, 17 Jan 2023 03:10:56 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id h12-20020a05600c314c00b003da50afcb33so5581544wmo.4
-        for <linux-watchdog@vger.kernel.org>; Tue, 17 Jan 2023 03:10:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UcsXRu4v4Y+Ep4I0A49mvEOyXRqnaq/f1PWoI6xqQUE=;
-        b=m6p1wGOnKJEDfkSA93hpergNA4e9NcWzqucHS531moH+87fERdNK56Ad1XCdBBqI/c
-         oc3TV7PAlAhAzPbRIgRIkOwl+yW+L/z/t1+bbAlTO9H5u6TiKe7mwGMIGef31A398tGM
-         R9j2j38lkdH4j99fwg/JWJpnPkepR2E9CSWcTGog9Ma7fO/GIuGliJyToAM0xVD9cqYN
-         WYUBDt1axj9uyQFbrRTV+AWE339r6lJiuRgaZZ8bZuo+U7L+KeDIcg7DZPBN6hawzjqv
-         oDoNZh7ypBYATwX9c+RfKmQ6LS8NqLUC744tjBfY88w9oYwLWLm2eAQudiKrXtqcTC2H
-         sPkA==
+        Tue, 17 Jan 2023 13:42:27 -0500
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577194C6E8;
+        Tue, 17 Jan 2023 10:13:31 -0800 (PST)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-15b9c93848dso24572671fac.1;
+        Tue, 17 Jan 2023 10:13:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UcsXRu4v4Y+Ep4I0A49mvEOyXRqnaq/f1PWoI6xqQUE=;
-        b=UT8EF9NLGMZZFEOMocCb07m33ogGcH04c9gFhlV1Ruutb9oAC2nXWDho/2NQLC2fbb
-         0UqFvf/2RblPw8hXCHeVXuxeNvIZ8uguZZUKhdS73B0k+1Oo1Ty4XH2mThZmYBzLQ50q
-         6OgYifMlPX88ifIvmVlyYC7FlDACawan1oqSB0MVdu54A4CMJpELftbzjpLeUdFTEVHo
-         Rk4FBu+sAGkCepF8/AccC1EJ6OSWuwCoFmEy20dy5oLm9e03ta/Vpf5BJdkjUdpUToEP
-         hyFqClVUA/5+lnZNqN9kGJqi7xFkYTof/BFIb9GT5+z5TcEG9Mi+P1xrmrfJ/x7+gGqa
-         h6dA==
-X-Gm-Message-State: AFqh2kqtEyRDvKj9ns9m7+1N82k2p6NiQ8cnKj9Frngw3nxve37fRXCm
-        Eyu3Vq9khzpPBj9fze17KJdgqTBthEvjUku8
-X-Google-Smtp-Source: AMrXdXs5sqtStasZ70vT/y/3ZTdwSxJRFyq2ZIub+y2aoLJDZqkTDXaBvoYOfrS9eUJjmLN3LwETew==
-X-Received: by 2002:a7b:c5cb:0:b0:3d3:4f99:bb32 with SMTP id n11-20020a7bc5cb000000b003d34f99bb32mr2539161wmk.36.1673953854842;
-        Tue, 17 Jan 2023 03:10:54 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n19-20020a05600c4f9300b003db08be84e3sm1620011wmq.32.2023.01.17.03.10.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 03:10:54 -0800 (PST)
-Message-ID: <3fea483a-2d33-e870-0dc0-f4073abff23a@linaro.org>
-Date:   Tue, 17 Jan 2023 12:10:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 1/2] dt-bindings: watchdog: mtk-wdt: Add
- reset-by-toprgu support
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qAQembbfAly4IRjGr3cDZDww9N/iI2dr1CRggFoPOeA=;
+        b=1W93M83LETR7b+sCCg/n7ungV5daeInt+aUq3Zfzd+OfpJ5dGEk+7wx4TMIThzx3r/
+         nrQd7NFqfhw469CXWU+4ZwSYwZNLT7uUr4OlQho+60IbDvc1kBZKGjX0TBCWRTirsdt0
+         iqWu1Bw6OFqH1TF5+TmZ/KCfVQZ1/hdrHP2NcZwbZS5SsTbkcoBHdDSdUzPBzeOS7m1y
+         JuCMvCjBGdLJHY0qT1cmeZxXO22jPeNcWdM2cQgWxCeVluf229WhIiaWWdEpmpfg1d9L
+         rAHWOb5Fz1jOq5R4SWuOWIxx4DPxywnZO2p1TTqKt+Tr3D+FkZFKB/wYg818kn2YlEoR
+         XAgQ==
+X-Gm-Message-State: AFqh2kr/RRr/3TGMuBc7ldyZHYRtFpotvZNqVr6yohxIeR9t6l7HMs+P
+        AN6NixOTckBJUBeLvOi/7Q==
+X-Google-Smtp-Source: AMrXdXtoKW0M+JEa5UDfl75nd/xbDorgIheGi98GezD8LwsaKaQtMEYFIlehYZ4gKtpGPhhQwY1v9w==
+X-Received: by 2002:a05:6870:9e92:b0:15e:fe0a:db84 with SMTP id pu18-20020a0568709e9200b0015efe0adb84mr7695952oab.27.1673979210329;
+        Tue, 17 Jan 2023 10:13:30 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c15-20020a4ae24f000000b004f28d09a880sm7028866oot.13.2023.01.17.10.13.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 10:13:29 -0800 (PST)
+Received: (nullmailer pid 3398763 invoked by uid 1000);
+        Tue, 17 Jan 2023 18:13:29 -0000
+Date:   Tue, 17 Jan 2023 12:13:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-watchdog@vger.kernel.org
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230117014023.2993-1-allen-kh.cheng@mediatek.com>
- <20230117014023.2993-2-allen-kh.cheng@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230117014023.2993-2-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH v2 6/7] dt-bindings: watchdog: qcom-wdt: merge MSM timer
+Message-ID: <167397920868.3398730.2074338668546770210.robh@kernel.org>
+References: <20230113103346.29381-1-krzysztof.kozlowski@linaro.org>
+ <20230113103346.29381-7-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113103346.29381-7-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 17/01/2023 02:40, Allen-KH Cheng wrote:
-> In some applications, the mtk-wdt requires the TOPRGU (Top Reset
-> Generation Unit) to reset timer after system resets. Add optional
-> mediatek,reset-by-toprgu property to enable it.
+
+On Fri, 13 Jan 2023 11:33:45 +0100, Krzysztof Kozlowski wrote:
+> Merge Qualcomm MSM timer bindings into watchdog, because the timer
+> compatibles are already included here and the hardware is quite similar.
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> While converting the MSM timer bindings, adjust clock-frequency
+> property to take only one frequency, instead of two, because:
+> 1. DT schema does not allow to frequencies,
+> 2. The Linux timer driver reads only first frequency.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> 
+> ---
+> 
+> Changes since v1:
+> 1. Add tag.
+> 2. Correct clock-frequency description (Rob).
+> ---
+>  .../bindings/timer/qcom,msm-timer.txt         | 47 ------------------
+>  .../bindings/watchdog/qcom-wdt.yaml           | 49 +++++++++++++++++++
+>  2 files changed, 49 insertions(+), 47 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+> 
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Reviewed-by: Rob Herring <robh@kernel.org>
