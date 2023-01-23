@@ -2,110 +2,119 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1775E67859A
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Jan 2023 19:58:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DAE56787E1
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Jan 2023 21:34:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbjAWS6B (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 23 Jan 2023 13:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
+        id S232558AbjAWUej (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 23 Jan 2023 15:34:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232831AbjAWS5t (ORCPT
+        with ESMTP id S229791AbjAWUeh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 23 Jan 2023 13:57:49 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000C234C25
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 Jan 2023 10:57:36 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso9822306wmn.5
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 Jan 2023 10:57:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ll7ZSjIpeSB6NE1hddkkSIG+LMmQi7hyj3TClP8BAtI=;
-        b=te6qDaYUyo8TM8PT/tzMinlXhKN4bn75eXTu94yYWaIrKgvzLqWIwQmhL9Uw8SdWln
-         CSGPyNRzoyl6j2EbrVkn+dxiwFyt1cnC4mG1+RWPzrYJTJBQjGfH6oKxpsOyhiU1fHV0
-         1PqtgEzQrIJDqOfMvFRxm73G/9W1SiM52wxQEIGt7yZrvHxki9/Pz3P1MTbAg4V7xijK
-         LD00SwMuu6ykgrkeZrIj4MRQ2SJXFy4zdE/1FGrwayN3Dis5HA8C5nU8T0za4UPZ9cZ4
-         yL3ycNfYot+rtlCrs3++iYHo7UdY4RZ+VauPlRmMxmD+RlPZ4w+6ti27PYN8WidKYbHa
-         niaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ll7ZSjIpeSB6NE1hddkkSIG+LMmQi7hyj3TClP8BAtI=;
-        b=eijd386vA1iab82s5TgmQ8AF98l4/s4cVsV0YWRjhXyQjUPycWoygD88KpnoITsXNE
-         ziOpX5SXpR4VOkRMzZYOCdtJF7MEtTEng5XsYVdWiEigTWnYxzwSj/2NknjNZHyUe77U
-         WxsJwVZix3OIWbCNfXJc+iGRFCPKw5u7TAUFw4cqkU51MXZNQ7cBCgoJqT/nJf0y/meC
-         9a+tAkrD6uGad7seTSdY86UQALhCBnOMVetUAu901tWBhHxTPbTtU2vSPKdjPhIR4lqW
-         R3oKo4LoIKfVsjbEI0EgZSHztj20wKqhPDVGo9hHH4Kb7AhwSgp4Uo4Uhjua6zIZ5eRW
-         rucQ==
-X-Gm-Message-State: AFqh2kqDRJp4GNMloxlLDh8u+6FGUhCgswGWID6bI+ChCHLDJN4ykIwG
-        NN07d+bVzjVMPlolHDXi2qUzUg==
-X-Google-Smtp-Source: AMrXdXvMpQT8hbdH3MYWCPRRes/tEObpS3tZubj0KJ2yKnFHSPQcLLM7GWtcB3sGoxQk43qdNi299Q==
-X-Received: by 2002:a05:600c:4f06:b0:3da:f671:eded with SMTP id l6-20020a05600c4f0600b003daf671ededmr25257158wmq.12.1674500255502;
-        Mon, 23 Jan 2023 10:57:35 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05600c359000b003da105437besm12283570wmq.29.2023.01.23.10.57.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 10:57:35 -0800 (PST)
-Message-ID: <04adfb17-5d66-1c24-19c5-c9f12ec7f9df@linaro.org>
-Date:   Mon, 23 Jan 2023 19:57:32 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v3 6/7] dt-bindings: mmc: convert amlogic,meson-gx.txt to
- dt-schema
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Mon, 23 Jan 2023 15:34:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFF0E04C;
+        Mon, 23 Jan 2023 12:34:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E28661026;
+        Mon, 23 Jan 2023 20:34:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 795F8C433EF;
+        Mon, 23 Jan 2023 20:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674506075;
+        bh=FmnPLtlEEZLnIMIwawfGix9wzSwjvgWL7c11CtPG7VM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=gF5F3tETTnRMP1JPBnu7Ptp/If+nrlkHmh1UvayGFWUyXYmpvpFIlY+pg0zyr7IvH
+         EVxJOqmXmJX4Qp/NQU69I9zkedvW44RZCoOXej3wWBme0Mdka7wWgcqiXHBS0ZO9AT
+         gCCeJ5Uq2QZnfqQa2fxLrDKyt14RL6D7czuJJnAOpLLNhbfPWA+yt32/GYape34E4O
+         F5mvBPdKOsbsv8biqPPZmtLiy9WobD+Fa+Nr4SCWtPIUvLRWLgmYTlf3NVqXtdDuWD
+         rOx+KcDSyNsyRQHtz5q6KnNbBnT517gw8xLmWe7kphfoQ/6r8WJFEAIN5ITvVAGWH0
+         7e32wlfHKB2Xw==
+Date:   Mon, 23 Jan 2023 14:34:34 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, alsa-devel@alsa-project.org,
+        linux-doc@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
+        dri-devel@lists.freedesktop.org, Jaroslav Kysela <perex@perex.cz>,
+        linux-mm@kvack.org, linux-watchdog@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Iwona Winiarska <iwona.winiarska@intel.com>,
+        openbmc@lists.ozlabs.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-pci@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>, linux-pm@vger.kernel.org,
+        linux-input@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org
-References: <20221117-b4-amlogic-bindings-convert-v3-0-e28dd31e3bed@linaro.org>
- <20221117-b4-amlogic-bindings-convert-v3-6-e28dd31e3bed@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221117-b4-amlogic-bindings-convert-v3-6-e28dd31e3bed@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-hwmon@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v2 1/1] Docs/subsystem-apis: Remove '[The ]Linux'
+ prefixes from titles of listed documents
+Message-ID: <20230123203434.GA979965@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230122184834.181977-1-sj@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 23/01/2023 11:10, Neil Armstrong wrote:
-> Convert the Amlogic SD / eMMC controller for S905/GXBB family SoCs
-> to dt-schema.
+On Sun, Jan 22, 2023 at 06:48:34PM +0000, SeongJae Park wrote:
+> Some documents that listed on subsystem-apis have 'Linux' or 'The Linux'
+> title prefixes.  It's duplicated information, and makes finding the
+> document of interest with human eyes not easy.  Remove the prefixes from
+> the titles.
 > 
-> Take in account the used variant with amlogic,meson-gx-mmc.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Signed-off-by: SeongJae Park <sj@kernel.org>
+
+PCI/index.rst change is fine with me:
+
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+
 > ---
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+> Changes from v1
+> (https://lore.kernel.org/lkml/20230114194741.115855-1-sj@kernel.org/)
+> - Drop second patch (will post later for each subsystem)
+> 
+>  Documentation/PCI/index.rst        | 6 +++---
+>  Documentation/cpu-freq/index.rst   | 6 +++---
+>  Documentation/crypto/index.rst     | 6 +++---
+>  Documentation/driver-api/index.rst | 6 +++---
+>  Documentation/gpu/index.rst        | 6 +++---
+>  Documentation/hwmon/index.rst      | 6 +++---
+>  Documentation/input/index.rst      | 6 +++---
+>  Documentation/mm/index.rst         | 6 +++---
+>  Documentation/peci/index.rst       | 6 +++---
+>  Documentation/scheduler/index.rst  | 6 +++---
+>  Documentation/scsi/index.rst       | 6 +++---
+>  Documentation/sound/index.rst      | 6 +++---
+>  Documentation/virt/index.rst       | 6 +++---
+>  Documentation/watchdog/index.rst   | 6 +++---
+>  14 files changed, 42 insertions(+), 42 deletions(-)
+> 
+> diff --git a/Documentation/PCI/index.rst b/Documentation/PCI/index.rst
+> index c17c87af1968..e73f84aebde3 100644
+> --- a/Documentation/PCI/index.rst
+> +++ b/Documentation/PCI/index.rst
+> @@ -1,8 +1,8 @@
+>  .. SPDX-License-Identifier: GPL-2.0
+>  
+> -=======================
+> -Linux PCI Bus Subsystem
+> -=======================
+> +=================
+> +PCI Bus Subsystem
+> +=================
+>  
+>  .. toctree::
+>     :maxdepth: 2
