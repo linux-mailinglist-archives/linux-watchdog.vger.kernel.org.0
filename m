@@ -2,62 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60CD76778B0
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Jan 2023 11:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 571C96778BA
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Jan 2023 11:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbjAWKKb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 23 Jan 2023 05:10:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37016 "EHLO
+        id S232010AbjAWKKn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 23 Jan 2023 05:10:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbjAWKKU (ORCPT
+        with ESMTP id S231952AbjAWKK0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 23 Jan 2023 05:10:20 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87EE12F35
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 Jan 2023 02:10:08 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso10183312wmc.4
-        for <linux-watchdog@vger.kernel.org>; Mon, 23 Jan 2023 02:10:08 -0800 (PST)
+        Mon, 23 Jan 2023 05:10:26 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6889227B2
+        for <linux-watchdog@vger.kernel.org>; Mon, 23 Jan 2023 02:10:11 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id b7so10267649wrt.3
+        for <linux-watchdog@vger.kernel.org>; Mon, 23 Jan 2023 02:10:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7QnuhptbipJYdHWSiiqtgEE8IRm3fj6CX7C8k1jBDlQ=;
-        b=D2y6U13jAntOiII5Aj+46tSWmTvxoLNv6sysz+VOmfozTTtUplEHw/9zJLa/WQFN4b
-         z6MDrnXxEpjFTbleI8OQga5JOVXSc5MQrAHEjm4F5lIELUOklfl2pVTVWBqYLTpAZWnq
-         +gHsMkk8a0sgdaCXNIh4/hLYh2fGtRSNjYfNBqqmHn/+PYmkBuOt7Dag3uuoruiOpF5G
-         +/6ZCncD01okOf0tQRspFteJ1WszTHPskrSwrNboikKlj0lOxNhwwWA+uZ5gJjKhebZ6
-         dKD0KuLRHj63x0REhkpGva8rSPkVla8xTKleOMeKYrIk2jgClPNA/DyLOBdsF3+ZXgIt
-         SHXw==
+        bh=/pQr6KmTdUgnaHE8iXfJ0bvx2pGOLcHh3rodgiE7+Kk=;
+        b=fNsjAacdBPOR5DiDkCUpjezb9Dvezn7/R1FOw2oZ6QwPNBVsWcDPdfYkSTPbKULF5H
+         L6X8evzYtigZvdTanLyQe7YKEypW1MmUWAFSXc/OX09EViqzK6jhSEbwUFE0CXqf6ClZ
+         xecJS89i7tQY3WnNwOsN2PxhADwmM9yP2wOXtSSOciODP5/ZScoY8iJRrd9rCWSQWr+I
+         6S2U+eXdSVoQ2hLeHBv4+RRBYOoGqIlisoiMjDNUQEm0Amv4dzcoL/6Se6PRpm8aNmlZ
+         0ahovNgqgULX1nnl+wkzFGtG/sy1fWqs6a8s0NEEargwtSBytuV/rX2GJW1zF3/gReFF
+         UDpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7QnuhptbipJYdHWSiiqtgEE8IRm3fj6CX7C8k1jBDlQ=;
-        b=2yX33ecwnp0Z+fyYtoIoEn7qFAECxmeYXcmXwD5OzQvUV3OLDpl2fVKtVI86QFniEv
-         geX+d1sQuOx++Owyd4P49hDbCE2IMqphxY7OJFmuZfPkmuwSbsP5dtTl38I8L2AaYSOB
-         G8jqgj1yugTuZ2pxdrW7NNOim1tAd3pK6NjQfdNrLQk6sRbEOLnb3BB1SYJixWAGnsx+
-         BwaKkj/+6v8jn7VckQdP16QVOMAyGyWFGbThoklmLPNfqSvMjWi+3MS0e8p3eBP3MnIK
-         rFM2TTPb+JfotNrpvqN+ZvVk/1ec8W0zaSxOsT7zTPf9zW5FD6J3homzSarmGeS7UbWf
-         wDHg==
-X-Gm-Message-State: AFqh2kq3/A0UMM9bFwNa2q+umwlu94fr6cx+KdJWf9ZIpGvJM/We0ISv
-        PTVKDT+57v4y9D2ATEnGKVzEYw==
-X-Google-Smtp-Source: AMrXdXuisOGGyFDugQEwjFlEIch7Uu3cTCmEFJEDE/gOYH0HI8ybTMIZvmf5kg2eaSJaUpWRvoxCng==
-X-Received: by 2002:a05:600c:2284:b0:3d3:5c21:dd9d with SMTP id 4-20020a05600c228400b003d35c21dd9dmr23604933wmf.19.1674468608355;
-        Mon, 23 Jan 2023 02:10:08 -0800 (PST)
+        bh=/pQr6KmTdUgnaHE8iXfJ0bvx2pGOLcHh3rodgiE7+Kk=;
+        b=XOL+x1MlMUR13irEX5HAyquF5n0tHwRqEUbjs1ApNSuGkXGvK3qDhTR76fJx+cftXO
+         CmceL8++vd06Z7GtDxSGPvUEG2Mrr0/oPoV14Zre6QJjwbUd2M02kLlwymjuIoSG5QB8
+         C6D4101MXJERaySRHryC6+18tx/NvEiGafQXAKm1alPJ8vYrKqNTa6yKzaJ9u2Vs9hBr
+         juq0i02UFJM7brn9H0Vm05/p1MrsceY36HXeLr0gQRS1BqZDhyvu0JDCOwW77Rm6RnRc
+         BmTqs2brRMVAGATwy4ZIlaReQeQaoSwTG68lYTyrnhKfgEDCfm9gWN68vAJz5XTNrmcI
+         dp+g==
+X-Gm-Message-State: AFqh2kqo/bwzysXih3BiPyrq9XkkEl+tZO+WprWyyUWrkCONNY5B6sFA
+        qRmQWtcMNuaJl7LClYwI9IbX+Q==
+X-Google-Smtp-Source: AMrXdXtX4ayB4/SYIKN3tEBT6oVM/Ouxw56XQljpQcVZlok0nl5I8ryh0pMDyUY+HyWaFPo2iskQvQ==
+X-Received: by 2002:a5d:4bce:0:b0:2be:4ae1:215a with SMTP id l14-20020a5d4bce000000b002be4ae1215amr11722277wrt.16.1674468609550;
+        Mon, 23 Jan 2023 02:10:09 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id m9-20020a056000024900b002bdec340a1csm22670403wrz.110.2023.01.23.02.10.07
+        by smtp.gmail.com with ESMTPSA id m9-20020a056000024900b002bdec340a1csm22670403wrz.110.2023.01.23.02.10.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 02:10:08 -0800 (PST)
+        Mon, 23 Jan 2023 02:10:09 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Mon, 23 Jan 2023 11:10:03 +0100
-Subject: [PATCH v3 6/7] dt-bindings: mmc: convert amlogic,meson-gx.txt to
+Date:   Mon, 23 Jan 2023 11:10:04 +0100
+Subject: [PATCH v3 7/7] dt-bindings: PCI: convert amlogic,meson-pcie.txt to
  dt-schema
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221117-b4-amlogic-bindings-convert-v3-6-e28dd31e3bed@linaro.org>
+Message-Id: <20221117-b4-amlogic-bindings-convert-v3-7-e28dd31e3bed@linaro.org>
 References: <20221117-b4-amlogic-bindings-convert-v3-0-e28dd31e3bed@linaro.org>
 In-Reply-To: <20221117-b4-amlogic-bindings-convert-v3-0-e28dd31e3bed@linaro.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
@@ -80,7 +80,8 @@ To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-watchdog@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org
+        linux-mmc@vger.kernel.org, linux-pci@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.12.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -92,80 +93,127 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Convert the Amlogic SD / eMMC controller for S905/GXBB family SoCs
-to dt-schema.
+Convert the Amlogic Meson AXG DWC PCIe SoC controller bindings to
+dt-schema.
 
-Take in account the used variant with amlogic,meson-gx-mmc.
-
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- .../bindings/mmc/amlogic,meson-gx-mmc.yaml         | 73 ++++++++++++++++++++++
- .../devicetree/bindings/mmc/amlogic,meson-gx.txt   | 39 ------------
- 2 files changed, 73 insertions(+), 39 deletions(-)
+ .../devicetree/bindings/pci/amlogic,axg-pcie.yaml  | 134 +++++++++++++++++++++
+ .../devicetree/bindings/pci/amlogic,meson-pcie.txt |  70 -----------
+ 2 files changed, 134 insertions(+), 70 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mmc/amlogic,meson-gx-mmc.yaml b/Documentation/devicetree/bindings/mmc/amlogic,meson-gx-mmc.yaml
+diff --git a/Documentation/devicetree/bindings/pci/amlogic,axg-pcie.yaml b/Documentation/devicetree/bindings/pci/amlogic,axg-pcie.yaml
 new file mode 100644
-index 000000000000..46e235bf228b
+index 000000000000..a5bd90bc0712
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/mmc/amlogic,meson-gx-mmc.yaml
-@@ -0,0 +1,73 @@
++++ b/Documentation/devicetree/bindings/pci/amlogic,axg-pcie.yaml
+@@ -0,0 +1,134 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/mmc/amlogic,meson-gx-mmc.yaml#
++$id: http://devicetree.org/schemas/pci/amlogic,axg-pcie.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Amlogic SD / eMMC controller for S905/GXBB family SoCs
-+
-+description:
-+  The MMC 5.1 compliant host controller on Amlogic provides the
-+  interface for SD, eMMC and SDIO devices
++title: Amlogic Meson AXG DWC PCIe SoC controller
 +
 +maintainers:
 +  - Neil Armstrong <neil.armstrong@linaro.org>
 +
++description:
++  Amlogic Meson PCIe host controller is based on the Synopsys DesignWare PCI core.
++
 +allOf:
-+  - $ref: mmc-controller.yaml#
++  - $ref: /schemas/pci/pci-bus.yaml#
++  - $ref: /schemas/pci/snps,dw-pcie-common.yaml#
++
++# We need a select here so we don't match all nodes with 'snps,dw-pcie'
++select:
++  properties:
++    compatible:
++      enum:
++        - amlogic,axg-pcie
++        - amlogic,g12a-pcie
++  required:
++    - compatible
 +
 +properties:
 +  compatible:
-+    oneOf:
-+      - const: amlogic,meson-axg-mmc
-+      - items:
-+          - const: amlogic,meson-gx-mmc
-+          - const: amlogic,meson-gxbb-mmc
++    items:
++      - enum:
++          - amlogic,axg-pcie
++          - amlogic,g12a-pcie
++      - const: snps,dw-pcie
 +
 +  reg:
-+    maxItems: 1
++    items:
++      - description: External local bus interface registers
++      - description: Meson designed configuration registers
++      - description: PCIe configuration space
++
++  reg-names:
++    items:
++      - const: elbi
++      - const: cfg
++      - const: config
 +
 +  interrupts:
 +    maxItems: 1
 +
 +  clocks:
-+    maxItems: 3
++    items:
++      - description: PCIe GEN 100M PLL clock
++      - description: PCIe RC clock gate
++      - description: PCIe PHY clock
 +
 +  clock-names:
 +    items:
-+      - const: core
-+      - const: clkin0
-+      - const: clkin1
++      - const: pclk
++      - const: port
++      - const: general
 +
-+  resets:
++  phys:
 +    maxItems: 1
 +
-+  amlogic,dram-access-quirk:
-+    type: boolean
-+    description:
-+      set when controller's internal DMA engine cannot access the DRAM memory,
-+      like on the G12A dedicated SDIO controller.
++  phy-names:
++    const: pcie
++
++  resets:
++    items:
++      - description: Port Reset
++      - description: Shared APB reset
++
++  reset-names:
++    items:
++      - const: port
++      - const: apb
++
++  num-lanes:
++    const: 1
++
++  power-domains:
++    maxItems: 1
 +
 +required:
 +  - compatible
 +  - reg
++  - reg-names
 +  - interrupts
-+  - clocks
++  - clock
 +  - clock-names
++  - "#address-cells"
++  - "#size-cells"
++  - "#interrupt-cells"
++  - interrupt-map
++  - interrupt-map-mask
++  - ranges
++  - bus-range
++  - device_type
++  - num-lanes
++  - phys
++  - phy-names
 +  - resets
++  - reset-names
 +
 +unevaluatedProperties: false
 +
@@ -173,59 +221,103 @@ index 000000000000..46e235bf228b
 +  - |
 +    #include <dt-bindings/interrupt-controller/irq.h>
 +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    mmc@70000 {
-+        compatible = "amlogic,meson-gx-mmc", "amlogic,meson-gxbb-mmc";
-+        reg = <0x70000 0x2000>;
-+        interrupts = <GIC_SPI 216 IRQ_TYPE_EDGE_RISING>;
-+        clocks = <&clk_mmc>, <&xtal>, <&clk_div>;
-+        clock-names = "core", "clkin0", "clkin1";
-+        pinctrl-0 = <&emm_pins>;
-+        resets = <&reset_mmc>;
++    pcie: pcie@f9800000 {
++        compatible = "amlogic,axg-pcie", "snps,dw-pcie";
++        reg = <0xf9800000 0x400000>, <0xff646000 0x2000>, <0xf9f00000 0x100000>;
++        reg-names = "elbi", "cfg", "config";
++        interrupts = <GIC_SPI 177 IRQ_TYPE_EDGE_RISING>;
++        clocks = <&pclk>, <&clk_port>, <&clk_phy>;
++        clock-names = "pclk", "port", "general";
++        resets = <&reset_pcie_port>, <&reset_pcie_apb>;
++        reset-names = "port", "apb";
++        phys = <&pcie_phy>;
++        phy-names = "pcie";
++        #interrupt-cells = <1>;
++        interrupt-map-mask = <0 0 0 0>;
++        interrupt-map = <0 0 0 0 &gic GIC_SPI 179 IRQ_TYPE_EDGE_RISING>;
++        bus-range = <0x0 0xff>;
++        #address-cells = <3>;
++        #size-cells = <2>;
++        device_type = "pci";
++        num-lanes = <1>;
++        ranges = <0x82000000 0 0 0xf9c00000 0 0x00300000>;
 +    };
-diff --git a/Documentation/devicetree/bindings/mmc/amlogic,meson-gx.txt b/Documentation/devicetree/bindings/mmc/amlogic,meson-gx.txt
++...
+diff --git a/Documentation/devicetree/bindings/pci/amlogic,meson-pcie.txt b/Documentation/devicetree/bindings/pci/amlogic,meson-pcie.txt
 deleted file mode 100644
-index ccc5358db131..000000000000
---- a/Documentation/devicetree/bindings/mmc/amlogic,meson-gx.txt
+index c3a75ac6e59d..000000000000
+--- a/Documentation/devicetree/bindings/pci/amlogic,meson-pcie.txt
 +++ /dev/null
-@@ -1,39 +0,0 @@
--Amlogic SD / eMMC controller for S905/GXBB family SoCs
+@@ -1,70 +0,0 @@
+-Amlogic Meson AXG DWC PCIE SoC controller
 -
--The MMC 5.1 compliant host controller on Amlogic provides the
--interface for SD, eMMC and SDIO devices.
+-Amlogic Meson PCIe host controller is based on the Synopsys DesignWare PCI core.
+-It shares common functions with the PCIe DesignWare core driver and
+-inherits common properties defined in
+-Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml.
 -
--This file documents the properties in addition to those available in
--the MMC core bindings, documented by mmc.txt.
+-Additional properties are described here:
 -
 -Required properties:
--- compatible : contains one of:
--  - "amlogic,meson-gx-mmc"
--  - "amlogic,meson-gxbb-mmc"
--  - "amlogic,meson-gxl-mmc"
--  - "amlogic,meson-gxm-mmc"
--  - "amlogic,meson-axg-mmc"
--- clocks     : A list of phandle + clock-specifier pairs for the clocks listed in clock-names.
--- clock-names: Should contain the following:
--	"core" - Main peripheral bus clock
--	"clkin0" - Parent clock of internal mux
--	"clkin1" - Other parent clock of internal mux
--  The driver has an internal mux clock which switches between clkin0 and clkin1 depending on the
--  clock rate requested by the MMC core.
--- resets     : phandle of the internal reset line
+-- compatible:
+-	should contain :
+-	- "amlogic,axg-pcie" for AXG SoC Family
+-	- "amlogic,g12a-pcie" for G12A SoC Family
+-	to identify the core.
+-- reg:
+-	should contain the configuration address space.
+-- reg-names: Must be
+-	- "elbi"	External local bus interface registers
+-	- "cfg"		Meson specific registers
+-	- "config"	PCIe configuration space
+-- reset-gpios: The GPIO to generate PCIe PERST# assert and deassert signal.
+-- clocks: Must contain an entry for each entry in clock-names.
+-- clock-names: Must include the following entries:
+-	- "pclk"       PCIe GEN 100M PLL clock
+-	- "port"       PCIe_x(A or B) RC clock gate
+-	- "general"    PCIe Phy clock
+-- resets: phandle to the reset lines.
+-- reset-names: must contain "port" and "apb"
+-       - "port"        Port A or B reset
+-       - "apb"         Share APB reset
+-- phys: should contain a phandle to the PCIE phy
+-- phy-names: must contain "pcie"
 -
--Optional properties:
--- amlogic,dram-access-quirk: set when controller's internal DMA engine cannot access the
--  DRAM memory, like on the G12A dedicated SDIO controller.
+-- device_type:
+-	should be "pci". As specified in snps,dw-pcie.yaml
 -
--Example:
 -
--	sd_emmc_a: mmc@70000 {
--		compatible = "amlogic,meson-gxbb-mmc";
--		reg = <0x0 0x70000 0x0 0x2000>;
--		interrupts = < GIC_SPI 216 IRQ_TYPE_EDGE_RISING>;
--		clocks = <&clkc CLKID_SD_EMMC_A>, <&xtal>, <&clkc CLKID_FCLK_DIV2>;
--		clock-names = "core", "clkin0", "clkin1";
--		pinctrl-0 = <&emmc_pins>;
--		resets = <&reset RESET_SD_EMMC_A>;
+-Example configuration:
+-
+-	pcie: pcie@f9800000 {
+-			compatible = "amlogic,axg-pcie", "snps,dw-pcie";
+-			reg = <0x0 0xf9800000 0x0 0x400000
+-					0x0 0xff646000 0x0 0x2000
+-					0x0 0xf9f00000 0x0 0x100000>;
+-			reg-names = "elbi", "cfg", "config";
+-			reset-gpios = <&gpio GPIOX_19 GPIO_ACTIVE_HIGH>;
+-			interrupts = <GIC_SPI 177 IRQ_TYPE_EDGE_RISING>;
+-			#interrupt-cells = <1>;
+-			interrupt-map-mask = <0 0 0 0>;
+-			interrupt-map = <0 0 0 0 &gic GIC_SPI 179 IRQ_TYPE_EDGE_RISING>;
+-			bus-range = <0x0 0xff>;
+-			#address-cells = <3>;
+-			#size-cells = <2>;
+-			device_type = "pci";
+-			ranges = <0x82000000 0 0 0x0 0xf9c00000 0 0x00300000>;
+-
+-			clocks = <&clkc CLKID_USB
+-					&clkc CLKID_PCIE_A
+-					&clkc CLKID_PCIE_CML_EN0>;
+-			clock-names = "general",
+-					"pclk",
+-					"port";
+-			resets = <&reset RESET_PCIE_A>,
+-				<&reset RESET_PCIE_APB>;
+-			reset-names = "port",
+-					"apb";
+-			phys = <&pcie_phy>;
+-			phy-names = "pcie";
 -	};
 
 -- 
