@@ -2,114 +2,107 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAB8967E1AF
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Jan 2023 11:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6C967E689
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Jan 2023 14:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbjA0KcX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 27 Jan 2023 05:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
+        id S234456AbjA0NYG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 27 Jan 2023 08:24:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231722AbjA0KcW (ORCPT
+        with ESMTP id S231863AbjA0NYF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 27 Jan 2023 05:32:22 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC2477DD0
-        for <linux-watchdog@vger.kernel.org>; Fri, 27 Jan 2023 02:32:19 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pLM1j-0002YC-7L; Fri, 27 Jan 2023 11:32:11 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pLM1g-000lOQ-R1; Fri, 27 Jan 2023 11:32:07 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pLM1f-00GGyF-1K; Fri, 27 Jan 2023 11:32:07 +0100
-Date:   Fri, 27 Jan 2023 11:32:04 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Grant Likely <grant.likely@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH 596/606] watchdog: ziirave_wdt: Convert to i2c's
- .probe_new()
-Message-ID: <20230127103204.t3k53rqaygxdlvyl@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-597-uwe@kleine-koenig.org>
- <20221118225747.GF686528@roeck-us.net>
+        Fri, 27 Jan 2023 08:24:05 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317467D6D2
+        for <linux-watchdog@vger.kernel.org>; Fri, 27 Jan 2023 05:24:04 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-4fd37a1551cso66186987b3.13
+        for <linux-watchdog@vger.kernel.org>; Fri, 27 Jan 2023 05:24:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LZZ3MuEVu6XkQPyGITmSKOdfGu07b5+34vXdaMUVpmM=;
+        b=UAHrFOhuENO8p4X6jjmFs9KrdLnh1L5ioIcN1vRBhDE992xV4cddAO0IjROU44dIG/
+         nalP7afFVUtdPnm8JH4xghgm1GM/q5GOZS2kC5Yd9GXI9Z7PktEengh3fovMoq+zsVVE
+         t0IPxp6dqeh897/z5G46UH91FQqy4WJQU8D3SIuIya0S9WZHfZk2C5Y30r2S827bu9eD
+         CJLrDr1gIIxiC13d3vWqjY/9ZHwEpUdCVVNQAD/k++s1nG+mBWETZdTm2h8dtkZQWFeu
+         swJGEwBP9C1DSuiQ188wLhYmsd5xFXheW++Lnq9ZpWPRKwvE/hZ2po1OCXDHo+L7t9nf
+         jzGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LZZ3MuEVu6XkQPyGITmSKOdfGu07b5+34vXdaMUVpmM=;
+        b=ILxY3tSQitN94MNk6XCCEz3ntGy1uHYO3UMJIjsVrMlfXPHuV4ch93W49jULd1iYIj
+         wu3t/DEftwrqNhklEJRxDKrHN9JSb7WgafCZ3Ztl1n3ct7DpOsrGe3JGUKTJ9etMYTvh
+         bFSbdWcKizLhGkUKu+FQIqHcktNjpEi7FRsjQ6538qKX+Vg8yOGGRG8EzqF4jW5HudVe
+         k1NkIdIxp7IK+Tm2mPHMZDSAcuhX07XhgIsuLaWYOf3K3s4QtjrpgWv+jAfrv7bxCnPQ
+         nBk5P4Tkfo+FPTLBiCfkDNTVoaC2m8uKbG8cW/+iiOTXp5pgVxozUeVRztmw2SlNen87
+         PnPw==
+X-Gm-Message-State: AFqh2krvMcDEgkRLTwmQoULcAXhuQMkpITTAKhx4/W8yPLdxMSjrOD1e
+        P+jIq/Udkf1e3NCwZf6/Okb/x4fgldZNI8VBEJuqqyLXA2PTQWo5
+X-Google-Smtp-Source: AMrXdXsM2Y+feqWmDnpZZfAnDgXVYRK43870GInPFgNTT7qpRIbR4qPNx7T9fr58byEQonupKGetuGN9HSWpF17Olo4=
+X-Received: by 2002:a05:690c:39b:b0:4f3:8d0e:edce with SMTP id
+ bh27-20020a05690c039b00b004f38d0eedcemr3538984ywb.185.1674825843435; Fri, 27
+ Jan 2023 05:24:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ixntberfnebndc6r"
-Content-Disposition: inline
-In-Reply-To: <20221118225747.GF686528@roeck-us.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230127093217.60818-1-krzysztof.kozlowski@linaro.org> <20230127093217.60818-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230127093217.60818-2-krzysztof.kozlowski@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 27 Jan 2023 14:23:51 +0100
+Message-ID: <CACRpkdabA03VEFFVDVDiEVnLDZXGmW-kyCpD8iRVOcBzNBTfkw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: intel,ixp4xx-expansion-bus: split out
+ peripheral properties
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linusw@kernel.org>,
+        Imre Kaloz <kaloz@openwrt.org>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Marek Vasut <marex@denx.de>, Lubomir Rintel <lkundrak@v3.sk>,
+        - <devicetree@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On Fri, Jan 27, 2023 at 10:32 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
---ixntberfnebndc6r
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> The properties of devices in IXP4xx expansion bus need to be also
+> applied to actual devices' bindings.  Prepare for this by splitting them
+> to separate intel,ixp4xx-expansion-peripheral-props binding, just like
+> other memory-controller peripheral properties.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Hello,
+Whoa, this is a complex one!
+But I assume you and Marek know what you're doing so:
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-On Fri, Nov 18, 2022 at 02:57:47PM -0800, Guenter Roeck wrote:
-> On Fri, Nov 18, 2022 at 11:45:30PM +0100, Uwe Kleine-K=F6nig wrote:
-> > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> >=20
-> > The probe function doesn't make use of the i2c_device_id * parameter so=
- it
-> > can be trivially converted.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
->=20
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Maybe I can assign the following external bus interface to the Qcom
+people, as it is yet another one of those:
+Documentation/devicetree/bindings/bus/qcom,ebi2.txt
 
-This patch hasn't made it into next yet. Is it still on your radar?
+I've been uncertain about how I should convert that one over properly.
 
-My plans for this series is to complete the conversion after the next
-merge window which should include most patches from this series.
-
-So I ask you to either take this patch during the next merge window or
-accept that it will be applied together with the i2c core conversion
-that drops .probe() with the i2c_device_id parameter.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ixntberfnebndc6r
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPTqCAACgkQwfwUeK3K
-7AlcHAf/c8PSrnAE7LbfWC7iyj5a9yPrCJwnVkJbDTtTfEio99x974hP6bmdO4Qj
-lbiC3IBkE6zVlleC1A5B1+ODLo0DAP36uAGisB3wdMgg6HOeVsXG579OnFe0HHEv
-aO2alrl+c3TQ/UOfWwmkp9/AJ8zFih4S797lMVpFdeGuP7ONRFxcTAkUoRPaKkij
-R7cNOnnwTVzLd0j8hjpL0i37cuzuBqlHM6NkAMoPykt/6PCR3pvG57GItHjMc4GL
-vdYSDf759o1tEowv5ptnBtFvxTRQNHNLvXbl8jwwkafNnOHUkAyzby2gJfoH3cMP
-+jNsUEYyAMDpxGogmjYVLOMXozE4Wg==
-=OArg
------END PGP SIGNATURE-----
-
---ixntberfnebndc6r--
+Yours,
+Linus Walleij
