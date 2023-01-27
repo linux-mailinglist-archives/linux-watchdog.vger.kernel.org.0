@@ -2,58 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6C967E689
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Jan 2023 14:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 026A567E68C
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Jan 2023 14:25:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234456AbjA0NYG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 27 Jan 2023 08:24:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
+        id S231863AbjA0NZH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 27 Jan 2023 08:25:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbjA0NYF (ORCPT
+        with ESMTP id S231643AbjA0NZG (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 27 Jan 2023 08:24:05 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317467D6D2
-        for <linux-watchdog@vger.kernel.org>; Fri, 27 Jan 2023 05:24:04 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-4fd37a1551cso66186987b3.13
-        for <linux-watchdog@vger.kernel.org>; Fri, 27 Jan 2023 05:24:04 -0800 (PST)
+        Fri, 27 Jan 2023 08:25:06 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1EE7CCB6
+        for <linux-watchdog@vger.kernel.org>; Fri, 27 Jan 2023 05:25:04 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id e15so5923731ybn.10
+        for <linux-watchdog@vger.kernel.org>; Fri, 27 Jan 2023 05:25:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LZZ3MuEVu6XkQPyGITmSKOdfGu07b5+34vXdaMUVpmM=;
-        b=UAHrFOhuENO8p4X6jjmFs9KrdLnh1L5ioIcN1vRBhDE992xV4cddAO0IjROU44dIG/
-         nalP7afFVUtdPnm8JH4xghgm1GM/q5GOZS2kC5Yd9GXI9Z7PktEengh3fovMoq+zsVVE
-         t0IPxp6dqeh897/z5G46UH91FQqy4WJQU8D3SIuIya0S9WZHfZk2C5Y30r2S827bu9eD
-         CJLrDr1gIIxiC13d3vWqjY/9ZHwEpUdCVVNQAD/k++s1nG+mBWETZdTm2h8dtkZQWFeu
-         swJGEwBP9C1DSuiQ188wLhYmsd5xFXheW++Lnq9ZpWPRKwvE/hZ2po1OCXDHo+L7t9nf
-         jzGw==
+        bh=YfmZdMJN/D3xI4YTB54xIsWSAze0zkG8RrFJPkBL4AQ=;
+        b=d2yyXte/yKIliOx/+8dSFRH8+M3Ex72UVdCuqh3m2tyi3rrRYlzuFLuFuOaXo8UJua
+         gElqKdzCZZxnNL7BluA63zU1vXbJTTdCGK01yYehPr6WfmZLwmosoPiS95G7b5lmagCS
+         L/upqPf5qIY2pjLEDKrUW9EdvBvPWpcC2GegAPRzTI8cGzevNc5TRFXyVw8hHFy7XJzN
+         TH3bv0sOG57U6+65n9Xq6fsYWtTWYlZhS/Bzf440xEraF0lC2iKIkZMz3ndkI1DvtaHw
+         EQNdQGri5E5aTQGN016ehd0p8PTqoPCqtOXzj5K3ayVZ69ryCa5toREYxDUTePUi+iWo
+         LVcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LZZ3MuEVu6XkQPyGITmSKOdfGu07b5+34vXdaMUVpmM=;
-        b=ILxY3tSQitN94MNk6XCCEz3ntGy1uHYO3UMJIjsVrMlfXPHuV4ch93W49jULd1iYIj
-         wu3t/DEftwrqNhklEJRxDKrHN9JSb7WgafCZ3Ztl1n3ct7DpOsrGe3JGUKTJ9etMYTvh
-         bFSbdWcKizLhGkUKu+FQIqHcktNjpEi7FRsjQ6538qKX+Vg8yOGGRG8EzqF4jW5HudVe
-         k1NkIdIxp7IK+Tm2mPHMZDSAcuhX07XhgIsuLaWYOf3K3s4QtjrpgWv+jAfrv7bxCnPQ
-         nBk5P4Tkfo+FPTLBiCfkDNTVoaC2m8uKbG8cW/+iiOTXp5pgVxozUeVRztmw2SlNen87
-         PnPw==
-X-Gm-Message-State: AFqh2krvMcDEgkRLTwmQoULcAXhuQMkpITTAKhx4/W8yPLdxMSjrOD1e
-        P+jIq/Udkf1e3NCwZf6/Okb/x4fgldZNI8VBEJuqqyLXA2PTQWo5
-X-Google-Smtp-Source: AMrXdXsM2Y+feqWmDnpZZfAnDgXVYRK43870GInPFgNTT7qpRIbR4qPNx7T9fr58byEQonupKGetuGN9HSWpF17Olo4=
-X-Received: by 2002:a05:690c:39b:b0:4f3:8d0e:edce with SMTP id
- bh27-20020a05690c039b00b004f38d0eedcemr3538984ywb.185.1674825843435; Fri, 27
- Jan 2023 05:24:03 -0800 (PST)
+        bh=YfmZdMJN/D3xI4YTB54xIsWSAze0zkG8RrFJPkBL4AQ=;
+        b=RhliZ0i1kWKYX4lrvrTfsAJ/aJ5xIeLdnTtHoUkSZ5IRYbpbKHC1kDk8s604u+dblw
+         oSWS7mMGch2a6MLsRO4p7f2mbFkaJLvJSiFETLzRsLCvRtT0ymMHFtUYY0QAZSxpWXgR
+         LMip79xkJsO71HqeR9g1acPFfL+QHXfigSuDMwHT/T8KfK5CZKSgUQN8xNfyMVzxSZII
+         d/cw6KRp1fIlTZijYbkDQ+DAJ/IvfGrwF8YmvxIj5B72q2Iyrv+7Of5LVcyCdN1pdG6G
+         JF1DpwwtaKU29Xkwkh5yFi14sO6lSrYoBdlf+/YYbwA+P7kjEkzY9cxjtQ36OaG/tivg
+         S+7g==
+X-Gm-Message-State: AO0yUKUIJZ5MrAm+KXmLC18iSQ/USCaImUu5NDtjZqUj6i3LIv6fonZ/
+        EYJohCtE7rTW2UGorQkUAZyWqOassZP2p2cYukWZWA==
+X-Google-Smtp-Source: AK7set/AyCr5YILgHa1njAbv5GENd6K1HRNPT5FGDcIp6NDqNoyOABScAptxZu4MVa9CTfeWH7nQwPnr2nr1FbGyMhU=
+X-Received: by 2002:a25:d1d1:0:b0:80b:4d84:b25 with SMTP id
+ i200-20020a25d1d1000000b0080b4d840b25mr1325238ybg.584.1674825903381; Fri, 27
+ Jan 2023 05:25:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20230127093217.60818-1-krzysztof.kozlowski@linaro.org> <20230127093217.60818-2-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230127093217.60818-2-krzysztof.kozlowski@linaro.org>
+References: <20230127093217.60818-1-krzysztof.kozlowski@linaro.org> <20230127093217.60818-3-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230127093217.60818-3-krzysztof.kozlowski@linaro.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 27 Jan 2023 14:23:51 +0100
-Message-ID: <CACRpkdabA03VEFFVDVDiEVnLDZXGmW-kyCpD8iRVOcBzNBTfkw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: intel,ixp4xx-expansion-bus: split out
- peripheral properties
+Date:   Fri, 27 Jan 2023 14:24:52 +0100
+Message-ID: <CACRpkdZUD1rw5j=Kik9KMt0w=JzS_T06FOGnyUA9GWmWZyQjcA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] dt-bindings: reference MC peripheral properties in
+ relevant devices
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -87,22 +87,20 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 On Fri, Jan 27, 2023 at 10:32 AM Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
 
-> The properties of devices in IXP4xx expansion bus need to be also
-> applied to actual devices' bindings.  Prepare for this by splitting them
-> to separate intel,ixp4xx-expansion-peripheral-props binding, just like
-> other memory-controller peripheral properties.
+> Several devices can be attached to memory controllers (or memory-mapped
+> buses), thus they can come with additional controller-specific
+> properties, e.g. devices wired under Intel IXP4XX bus: cfi-flash,
+> intel,ixp4xx-compact-flash, NS8250 serial and MAX6369 watchdog.
+>
+> Referencing Memory Controller or IXP4XX bus peripheral properties fixes
+> few dtbs_check warnings like:
+>
+>   intel-ixp42x-gateworks-gw2348.dtb: ide@1,0: Unevaluated properties are not allowed
+>     ('intel,ixp4xx-eb-ahb-split-transfers', 'intel,ixp4xx-eb-byte-access', ... ' were unexpected)
 >
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Whoa, this is a complex one!
-But I assume you and Marek know what you're doing so:
 Acked-by: Linus Walleij <linus.walleij@linaro.org>
-
-Maybe I can assign the following external bus interface to the Qcom
-people, as it is yet another one of those:
-Documentation/devicetree/bindings/bus/qcom,ebi2.txt
-
-I've been uncertain about how I should convert that one over properly.
 
 Yours,
 Linus Walleij
