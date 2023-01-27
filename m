@@ -2,107 +2,126 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC5167A5B0
-	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Jan 2023 23:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0FD867E03E
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Jan 2023 10:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbjAXW2M (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 24 Jan 2023 17:28:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56590 "EHLO
+        id S233053AbjA0Jcb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 27 Jan 2023 04:32:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234522AbjAXW2I (ORCPT
+        with ESMTP id S233006AbjA0Jc2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 24 Jan 2023 17:28:08 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FA2193C9;
-        Tue, 24 Jan 2023 14:28:01 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 5D12E739;
-        Tue, 24 Jan 2023 22:27:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 5D12E739
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1674599273; bh=MTaO760PJgYwDFixyQndXwkcxJ6qlGsTUp+EUcJgaCs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=XW1biFoIP9a4rIRf2cLd3puFe2cCFrQPnLjCIkaYxizp+J6e+ypbS83QROQV7RjZL
-         x+AsBikpA3Vkk3ujbg62UV6QrSznWRdtlGR3w9N1P6p5SjPTaB1VvvVuFhl7bYnzao
-         e+Pb9bvOHC00Tv7pEsztMhT9Z72Gat9MaqdsTs8TiPqfNYcDgG/+/KR+sn5dVczsue
-         lu1v1+vuz/4hzlpLBA+KYbHbvLOlZ4/b/+Fc8THgu2Xt0YT87foyxCIQE79oboIidh
-         ZhOk8JFsQO6mPuPHLHgprow+Ki52f77LDa52ffGAHq1nhkgYRnJAeU48pOJekm2FoI
-         ARNZkhtCcl3AQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Iwona Winiarska <iwona.winiarska@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
+        Fri, 27 Jan 2023 04:32:28 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CA4751BB
+        for <linux-watchdog@vger.kernel.org>; Fri, 27 Jan 2023 01:32:25 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id j17so3024779wms.0
+        for <linux-watchdog@vger.kernel.org>; Fri, 27 Jan 2023 01:32:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+nr5yhr/+t2gpLfGOs+Jk9mqx4K88IomiY/057Wk89I=;
+        b=afmjeNTvz+QfUYiPvDH9aI4+T3r6PKox0Z9VZNkm/tf4SrNrWhmAcU/fV+6GKjKun0
+         eo9QyIGD2KagMefssAESDksaJXXFJRmKbfo1rmLaHPLpff+IelOR/8NStIUQfsWi55uS
+         qA+Vkq6u2u9jqDXXsflTi3MrPmYzdeVqSMDTaSRU+kZaMs9USDTu2cP8vy0U7WTP9hWf
+         NxrdpUjYK3tZ0pqfZrABbKlgk6Jg/0+eBZF8tzTept+x41W70ysQfVEoPC9ugQNzXPuM
+         s+CCp3ROSLUim+9jHenXJtiPJrg6FHgFAKQW/3155i8iK7ZkRBShMo40/I7t/oUoTRlM
+         kD7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+nr5yhr/+t2gpLfGOs+Jk9mqx4K88IomiY/057Wk89I=;
+        b=l8t+S+rLU30DGOHON5B+lki1oDbISftroq6kEoPt9gJM/V9/cCaqwI1BQbSulsvzbG
+         yN9dV6JlmoZj5gsHPfPOh/0uv424xcNwKZv9m20d8ox6T0nLvjNvarJEQ8rAgBMyLc13
+         g8AoNfgBxn0v8wn7hbqmkKsq5/yHlUHi4xSF3mIo/wE+2JU4hPeYuZzZLbBHF5wYAf3P
+         D5VXZKg9bDgOrgK8ylvBuUkC4q+hNXQcsZIxMe1XwLII7GTDEhmjJVeQ+8QZO5OBTZEW
+         Dnm9M3o1Llbfm4swrRtS9erCTH8V+SEWTUqL4zptnQ03EdWWWXfsuBFI62ammUbD2CNi
+         Yx5Q==
+X-Gm-Message-State: AFqh2koZlrzmbaz7u7zN2DWUK64N9Vgl33C25qmHqbm4cIae6jzc6NB7
+        GSWCIVloiE6kx+4AzZkCypHIHTHgIx/Sapt+
+X-Google-Smtp-Source: AMrXdXuMTQOCdCJ4CvxFABguPpRWFrI5npvRZDl6tCte99HXwtgK6k0OjDxljIq3pESdxDzl3Zcb6A==
+X-Received: by 2002:a05:600c:1c1a:b0:3da:fbd2:a324 with SMTP id j26-20020a05600c1c1a00b003dafbd2a324mr38878286wms.36.1674811943923;
+        Fri, 27 Jan 2023 01:32:23 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id e19-20020a05600c439300b003cfd4e6400csm3795265wmn.19.2023.01.27.01.32.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 01:32:23 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linusw@kernel.org>,
+        Imre Kaloz <kaloz@openwrt.org>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-pci@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-mm@kvack.org,
-        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
-        linux-input@vger.kernel.org, openbmc@lists.ozlabs.org,
-        alsa-devel@alsa-project.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] Docs/subsystem-apis: Remove '[The ]Linux'
- prefixes from titles of listed documents
-In-Reply-To: <20230122184834.181977-1-sj@kernel.org>
-References: <20230122184834.181977-1-sj@kernel.org>
-Date:   Tue, 24 Jan 2023 15:27:52 -0700
-Message-ID: <87edrjftzr.fsf@meer.lwn.net>
+        Guenter Roeck <linux@roeck-us.net>,
+        Marek Vasut <marex@denx.de>, Lubomir Rintel <lkundrak@v3.sk>,
+        - <devicetree@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 0/3] dt-bindings: serial/mtd/mc/ata: use MC peripheral props
+Date:   Fri, 27 Jan 2023 10:32:14 +0100
+Message-Id: <20230127093217.60818-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-SeongJae Park <sj@kernel.org> writes:
+Hi,
 
-> Some documents that listed on subsystem-apis have 'Linux' or 'The Linux'
-> title prefixes.  It's duplicated information, and makes finding the
-> document of interest with human eyes not easy.  Remove the prefixes from
-> the titles.
->
-> Signed-off-by: SeongJae Park <sj@kernel.org>
-> ---
-> Changes from v1
-> (https://lore.kernel.org/lkml/20230114194741.115855-1-sj@kernel.org/)
-> - Drop second patch (will post later for each subsystem)
->
->  Documentation/PCI/index.rst        | 6 +++---
->  Documentation/cpu-freq/index.rst   | 6 +++---
->  Documentation/crypto/index.rst     | 6 +++---
->  Documentation/driver-api/index.rst | 6 +++---
->  Documentation/gpu/index.rst        | 6 +++---
->  Documentation/hwmon/index.rst      | 6 +++---
->  Documentation/input/index.rst      | 6 +++---
->  Documentation/mm/index.rst         | 6 +++---
->  Documentation/peci/index.rst       | 6 +++---
->  Documentation/scheduler/index.rst  | 6 +++---
->  Documentation/scsi/index.rst       | 6 +++---
->  Documentation/sound/index.rst      | 6 +++---
->  Documentation/virt/index.rst       | 6 +++---
->  Documentation/watchdog/index.rst   | 6 +++---
->  14 files changed, 42 insertions(+), 42 deletions(-)
+Dependencies
+============
+I think entire patchset should go via one tree (Rob's). Patch #2 depends on
+patch #1.  Patch #3 could go separate tree as long as others are in the
+linux-next.  However for simplicity let's push everything through Rob's DT
+tree?
 
-Applied, thanks.
+Changelog
+=========
+This is a v2 of this one patch:
+https://lore.kernel.org/linux-devicetree/20230123151302.368277-11-krzysztof.kozlowski@linaro.org/
 
-jon
+Changes since v1:
+1. Add patches 1 and 2 to fix dt_binding_check and few dtbs_check warnings
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (3):
+  dt-bindings: intel,ixp4xx-expansion-bus: split out peripheral
+    properties
+  dt-bindings: reference MC peripheral properties in relevant devices
+  dt-bindings: serial: restrict possible child node names
+
+ .../ata/intel,ixp4xx-compact-flash.yaml       |  1 +
+ ...intel,ixp4xx-expansion-bus-controller.yaml | 64 +--------------
+ ...tel,ixp4xx-expansion-peripheral-props.yaml | 80 +++++++++++++++++++
+ .../mc-peripheral-props.yaml                  |  1 +
+ .../devicetree/bindings/mtd/mtd-physmap.yaml  |  1 +
+ .../devicetree/bindings/serial/8250.yaml      |  1 +
+ .../devicetree/bindings/serial/serial.yaml    |  2 +-
+ .../bindings/watchdog/maxim,max63xx.yaml      |  1 +
+ 8 files changed, 87 insertions(+), 64 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/intel,ixp4xx-expansion-peripheral-props.yaml
+
+-- 
+2.34.1
+
