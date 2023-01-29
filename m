@@ -2,85 +2,64 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E5D67F35D
-	for <lists+linux-watchdog@lfdr.de>; Sat, 28 Jan 2023 01:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10786680012
+	for <lists+linux-watchdog@lfdr.de>; Sun, 29 Jan 2023 16:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233518AbjA1Ayd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 27 Jan 2023 19:54:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
+        id S229960AbjA2Psg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 29 Jan 2023 10:48:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233521AbjA1Ayc (ORCPT
+        with ESMTP id S230300AbjA2Psf (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 27 Jan 2023 19:54:32 -0500
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4368324B
-        for <linux-watchdog@vger.kernel.org>; Fri, 27 Jan 2023 16:54:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1674867270; x=1706403270;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=8HroFzcMUn53K8eqs6JLXQhk7cTtRl6khnafxvlvf58=;
-  b=VVunoUzRW73PFTr+OUe6+WCXr7dQn1aH2Kki7QMTGHwg4J2uMo64R+w2
-   PDexZqS1RRjcKizTtf7jhwx2VRLXgI3ZbyoMrRvRMJfgZB17GCO5N6NXF
-   /Th+aQu3Jh8+LRSYD1gHYSofR94Tea0YP53bjChojz2AJ+XmNd3yH9bU9
-   PT3yzyPr5kRFM19F/nira5iKZKb/vMzmX86rKIIqakqZHG4gQ0ZY/A6zZ
-   869q0TGz7uQptjsPfA78cgE8E6OBQRNYCBaOJyUJX3uZwgULpiWy+Nz3u
-   f9yo+Vn9jOEE+rdegPXZzDd5MR5bIx4edQ/XetYq2RTtYXXViNPHQocVx
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.97,252,1669046400"; 
-   d="scan'208";a="221742369"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Jan 2023 08:54:18 +0800
-IronPort-SDR: ZQD8tuxcrWsxdsa8GjY1V8o1/nsvrvcpSejyXprqRE7+IIQ67NED7IYt7uCD4Vk1KJ9NopzpNz
- /zKkQy85Ta1KZRsqD3deeO6guXjgBZqb6jS9vQ100KQlVxAUMcZrRyc4DeKTFJd29PJsaj0u/E
- 1LqrsfPzf18CdfrOJ0dv0e15gJFoKbkKpuG77Jcye1OBbjOxetuWNln4txSNe/UojqGmrhdHew
- k7hLk1KL3VxCANRy1R0ht72xF72Tk8flHkVnheAA0PmrGVkE34OOOKQUf3p/spLtjeuxAB44PD
- 5+4=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Jan 2023 16:06:03 -0800
-IronPort-SDR: h9HGW+dWDywPcaYLYGjz5p2YRbAsQvPG9YJliHd1jNqdAJ/mYmGl76O2dOK6TVcb+Rcf0naE3U
- hW9BODDJKJpJzRPb3zAu6b5BtYgbggPJE6BZ4hN0egS5eFi/tRqnOCRiM/rEMN7rF3//PrWavf
- lBMvQ8hJR6kAJObqQnSqpX4wJCJfRwOSFng4wbJv+/3WUO6sT5215N+JabA22oZn2hDXE7utmq
- R6QMxq1Ndi9Pz4uuIQr09CErPEwYxpDmEA4Jbj4Ev84q2r6K8uI7TgOGIHer1TFEscEMMrQjZY
- R9U=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Jan 2023 16:54:19 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4P3bYj6vKJz1RWxq
-        for <linux-watchdog@vger.kernel.org>; Fri, 27 Jan 2023 16:54:17 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1674867257; x=1677459258; bh=8HroFzcMUn53K8eqs6JLXQhk7cTtRl6khna
-        fxvlvf58=; b=H9do5qanQi9148CyOZRY31twpwGXvzGd0cSTgoJtixngz9LbUqz
-        80l1x6g2EzjCuD9qG06LQWbgZ26LOCsLbZ+w+qUGqhU8pNNi1EIo/K0SqBqtSztx
-        PYoVBe+gmRbzKai9NPzcXuvUlSBzda1LSZmH8Pz06CXgZUc2AM9EgqTxXR9Q8TdW
-        P5ApukYTGyXDgNAVeUrY3Qo2O4iEwELzu3GsJAZoPZYA/k7u3hReVbJEujoiQUqJ
-        3pQguqmYg5FjWgj17c3/2K/pp7UlNLgJ0lAU7Doa6szicmCdoOX7V5D3kZjr+lh1
-        Vr9qaxuKaVTaCNw0M6dD9nwXNMuUSF9lO7w==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id WbwYVqC9mNfH for <linux-watchdog@vger.kernel.org>;
-        Fri, 27 Jan 2023 16:54:17 -0800 (PST)
-Received: from [10.225.163.66] (unknown [10.225.163.66])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4P3bYd1nCCz1RvLy;
-        Fri, 27 Jan 2023 16:54:12 -0800 (PST)
-Message-ID: <75aa04c9-e173-6a2d-6b38-d0e16f3800aa@opensource.wdc.com>
-Date:   Sat, 28 Jan 2023 09:54:11 +0900
+        Sun, 29 Jan 2023 10:48:35 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E751A4B9
+        for <linux-watchdog@vger.kernel.org>; Sun, 29 Jan 2023 07:48:33 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id q8so6482470wmo.5
+        for <linux-watchdog@vger.kernel.org>; Sun, 29 Jan 2023 07:48:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=U/1SEXBl/drT6B50+MLoCmrJXk4pQjWe0OUv8/ULGY0=;
+        b=bHbAg0NEPiDWyIAfDBCrE9YEnCjl9DimD46s0O9s+iGCLDRWKJDdoXkcdY8Ic/GYqk
+         2VhvBr3441g2GYPzGBEuPhINkeJobRkV+fA9OyuJTnTwZZwhDbxZLKrM0WHOwAAj6lI2
+         HFwwAC91xT02fgqj+3kiNoArc+FJiJusmsBxIiuKIY7nX5aykzq2ufFKxzYR0sx8dKW/
+         czTO6hUOkmOg009ruXF33CHuFXw6olcv/mH7T70GQDJ4txGZSElVEECurqVSKEkvqa/O
+         +kWyZBwG3obnXNN4d+fE51z2lLJTXOTyKFmyn2A6Fw8/+hytQ3G1P5MbyVqj8ryt8s1a
+         ymUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U/1SEXBl/drT6B50+MLoCmrJXk4pQjWe0OUv8/ULGY0=;
+        b=CU5YA5GQIyAIKWTgx70cc0VmXJQ4/53ICZQ0HslwelNltuOlLC5dCeDh/ZiFM9LFg6
+         NKLbud/qDypIQbrlFNTnV++Wn25JZlYBRoF9ExptzmaFWqRP5qoxTIpcNAkGeKNeUhaz
+         eSmhakiHlxJrvcWIInE6GLPrFo9IvtpuNWEHBUiT2xFhGIubck6F4oUW4ekbiZI74rJE
+         T9g8tWmi6nEjDPI9sK4wWNhqIASSP0z9VEsOsItYG06zlL5teMzirF46NzRqXDMnhGHv
+         TX0ndydTDPFeHjIEOztokeoC+H5NTyWYogjCH7iQM0XY9SKXIARQi7yYoEvtY0wMEg9k
+         X/EQ==
+X-Gm-Message-State: AO0yUKXqeR0sGTLXyfMrSqR+pv9XY7r4QhfwBf+Hx5tZ5/341IznIwPd
+        tjMiwr8QWChMjMX8IrJ0WO8tTw==
+X-Google-Smtp-Source: AK7set+u31EI9YP+CMtlmZ0UQD0fuUfEjQ7CLKD/ky8YiQDj0Mgj7cggU1RQsvg6InTRJdV78D73sg==
+X-Received: by 2002:a05:600c:1994:b0:3dc:43cf:7302 with SMTP id t20-20020a05600c199400b003dc43cf7302mr6523633wmq.3.1675007311772;
+        Sun, 29 Jan 2023 07:48:31 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id j6-20020a05600c42c600b003dc521f336esm2984835wme.14.2023.01.29.07.48.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Jan 2023 07:48:31 -0800 (PST)
+Message-ID: <755d4a78-0b23-a381-c422-d12b0063f06f@linaro.org>
+Date:   Sun, 29 Jan 2023 16:48:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 2/3] dt-bindings: reference MC peripheral properties in
- relevant devices
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 3/3] dt-bindings: serial: restrict possible child node
+ names
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Linus Walleij <linusw@kernel.org>,
@@ -99,15 +78,15 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
         linux-watchdog@vger.kernel.org
 References: <20230127093217.60818-1-krzysztof.kozlowski@linaro.org>
- <20230127093217.60818-3-krzysztof.kozlowski@linaro.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20230127093217.60818-3-krzysztof.kozlowski@linaro.org>
+ <20230127093217.60818-4-krzysztof.kozlowski@linaro.org>
+ <CACRpkdbOZLhQ1DTNJowNXF=O-Nvpqcb_A+PwkPWFiUSQUbkR9A@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CACRpkdbOZLhQ1DTNJowNXF=O-Nvpqcb_A+PwkPWFiUSQUbkR9A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,23 +94,33 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 1/27/23 18:32, Krzysztof Kozlowski wrote:
-> Several devices can be attached to memory controllers (or memory-mapped
-> buses), thus they can come with additional controller-specific
-> properties, e.g. devices wired under Intel IXP4XX bus: cfi-flash,
-> intel,ixp4xx-compact-flash, NS8250 serial and MAX6369 watchdog.
+On 27/01/2023 14:29, Linus Walleij wrote:
+> On Fri, Jan 27, 2023 at 10:32 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
 > 
-> Referencing Memory Controller or IXP4XX bus peripheral properties fixes
-> few dtbs_check warnings like:
+>> The re-usable serial.yaml schema matches every property with ".*"
+>> pattern, thus any other schema referencing it will not report unknown
+>> (unevaluated) properties.  This hides several wrong properties.  It is
+>> a limitation of dtschema, thus provide a simple workaround: expect
+>> children to be only of few names matching upstream usage (Bluetooth,
+>> GNSS, GPS and MCU).
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
->   intel-ixp42x-gateworks-gw2348.dtb: ide@1,0: Unevaluated properties are not allowed
->     ('intel,ixp4xx-eb-ahb-split-transfers', 'intel,ixp4xx-eb-byte-access', ... ' were unexpected)
+> Fair enough,
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> However I think V.35 WAN devices (high speed serial network links)
+> should actually be using this? They are just some fancy serial port
+> after all. Cf
+> Documentation/devicetree/bindings/net/intel,ixp4xx-hss.yaml
+> 
+> No big deal I guess since they are mostly an anarchronism and not
+> on the table right now.
 
-Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+intel,ixp4xx-hss is not part of the expansion bus node.
 
--- 
-Damien Le Moal
-Western Digital Research
+
+Best regards,
+Krzysztof
 
