@@ -2,70 +2,43 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10786680012
-	for <lists+linux-watchdog@lfdr.de>; Sun, 29 Jan 2023 16:48:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0433E680971
+	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Jan 2023 10:28:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjA2Psg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 29 Jan 2023 10:48:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
+        id S235761AbjA3J1z (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 30 Jan 2023 04:27:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbjA2Psf (ORCPT
+        with ESMTP id S236275AbjA3J1X (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 29 Jan 2023 10:48:35 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E751A4B9
-        for <linux-watchdog@vger.kernel.org>; Sun, 29 Jan 2023 07:48:33 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id q8so6482470wmo.5
-        for <linux-watchdog@vger.kernel.org>; Sun, 29 Jan 2023 07:48:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U/1SEXBl/drT6B50+MLoCmrJXk4pQjWe0OUv8/ULGY0=;
-        b=bHbAg0NEPiDWyIAfDBCrE9YEnCjl9DimD46s0O9s+iGCLDRWKJDdoXkcdY8Ic/GYqk
-         2VhvBr3441g2GYPzGBEuPhINkeJobRkV+fA9OyuJTnTwZZwhDbxZLKrM0WHOwAAj6lI2
-         HFwwAC91xT02fgqj+3kiNoArc+FJiJusmsBxIiuKIY7nX5aykzq2ufFKxzYR0sx8dKW/
-         czTO6hUOkmOg009ruXF33CHuFXw6olcv/mH7T70GQDJ4txGZSElVEECurqVSKEkvqa/O
-         +kWyZBwG3obnXNN4d+fE51z2lLJTXOTyKFmyn2A6Fw8/+hytQ3G1P5MbyVqj8ryt8s1a
-         ymUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U/1SEXBl/drT6B50+MLoCmrJXk4pQjWe0OUv8/ULGY0=;
-        b=CU5YA5GQIyAIKWTgx70cc0VmXJQ4/53ICZQ0HslwelNltuOlLC5dCeDh/ZiFM9LFg6
-         NKLbud/qDypIQbrlFNTnV++Wn25JZlYBRoF9ExptzmaFWqRP5qoxTIpcNAkGeKNeUhaz
-         eSmhakiHlxJrvcWIInE6GLPrFo9IvtpuNWEHBUiT2xFhGIubck6F4oUW4ekbiZI74rJE
-         T9g8tWmi6nEjDPI9sK4wWNhqIASSP0z9VEsOsItYG06zlL5teMzirF46NzRqXDMnhGHv
-         TX0ndydTDPFeHjIEOztokeoC+H5NTyWYogjCH7iQM0XY9SKXIARQi7yYoEvtY0wMEg9k
-         X/EQ==
-X-Gm-Message-State: AO0yUKXqeR0sGTLXyfMrSqR+pv9XY7r4QhfwBf+Hx5tZ5/341IznIwPd
-        tjMiwr8QWChMjMX8IrJ0WO8tTw==
-X-Google-Smtp-Source: AK7set+u31EI9YP+CMtlmZ0UQD0fuUfEjQ7CLKD/ky8YiQDj0Mgj7cggU1RQsvg6InTRJdV78D73sg==
-X-Received: by 2002:a05:600c:1994:b0:3dc:43cf:7302 with SMTP id t20-20020a05600c199400b003dc43cf7302mr6523633wmq.3.1675007311772;
-        Sun, 29 Jan 2023 07:48:31 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id j6-20020a05600c42c600b003dc521f336esm2984835wme.14.2023.01.29.07.48.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Jan 2023 07:48:31 -0800 (PST)
-Message-ID: <755d4a78-0b23-a381-c422-d12b0063f06f@linaro.org>
-Date:   Sun, 29 Jan 2023 16:48:29 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 3/3] dt-bindings: serial: restrict possible child node
- names
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>
+        Mon, 30 Jan 2023 04:27:23 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4434030286;
+        Mon, 30 Jan 2023 01:25:16 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E901C40003;
+        Mon, 30 Jan 2023 09:24:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1675070654;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0TuPdf8fRkY/wdrnRAp1povjvstbHbqdy2BCWI+oz9I=;
+        b=hAojLtKxBrWI+/kZN9TP7+vqZsAJSx7PmUJJ5d0LXcczpjw+tcYhs9G0spZypKKRWHNx8c
+        TfSbENIBek943d/t62CHIDuyM2yIoJt5odiuMgEmpmlA8pnwLgAFfGnWb0zSu+QRHJxXgc
+        eGA9jX2JkKsuJOgfXIcp7J4kf0+WxSl3oBFem5mvaz9pvNKuZ7nl6nJt+cNJAnmDzRnRvg
+        fYCf9DjERqzi2VnPq8b/oOFNro3tUIzFyoLaNgzFmlejCZ/uGCLCnBgNfeL7KHTTxy4+0Z
+        DF5KFFPPbLkH8KOYVDCTDq03rQ/lZfRY9w7LZf/BHMqQynpd5t9RHwvAPmAhhw==
+Date:   Mon, 30 Jan 2023 10:24:06 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Linus Walleij <linusw@kernel.org>,
         Imre Kaloz <kaloz@openwrt.org>,
         Krzysztof Halasa <khalasa@piap.pl>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -77,50 +50,46 @@ Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
         linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] dt-bindings: reference MC peripheral properties
+ in relevant devices
+Message-ID: <20230130102406.20d2293e@xps-13>
+In-Reply-To: <20230127093217.60818-3-krzysztof.kozlowski@linaro.org>
 References: <20230127093217.60818-1-krzysztof.kozlowski@linaro.org>
- <20230127093217.60818-4-krzysztof.kozlowski@linaro.org>
- <CACRpkdbOZLhQ1DTNJowNXF=O-Nvpqcb_A+PwkPWFiUSQUbkR9A@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CACRpkdbOZLhQ1DTNJowNXF=O-Nvpqcb_A+PwkPWFiUSQUbkR9A@mail.gmail.com>
+        <20230127093217.60818-3-krzysztof.kozlowski@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 27/01/2023 14:29, Linus Walleij wrote:
-> On Fri, Jan 27, 2023 at 10:32 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> The re-usable serial.yaml schema matches every property with ".*"
->> pattern, thus any other schema referencing it will not report unknown
->> (unevaluated) properties.  This hides several wrong properties.  It is
->> a limitation of dtschema, thus provide a simple workaround: expect
->> children to be only of few names matching upstream usage (Bluetooth,
->> GNSS, GPS and MCU).
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Fair enough,
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> 
-> However I think V.35 WAN devices (high speed serial network links)
-> should actually be using this? They are just some fancy serial port
-> after all. Cf
-> Documentation/devicetree/bindings/net/intel,ixp4xx-hss.yaml
-> 
-> No big deal I guess since they are mostly an anarchronism and not
-> on the table right now.
+Hi Krzysztof,
 
-intel,ixp4xx-hss is not part of the expansion bus node.
+krzysztof.kozlowski@linaro.org wrote on Fri, 27 Jan 2023 10:32:16 +0100:
 
+> Several devices can be attached to memory controllers (or memory-mapped
+> buses), thus they can come with additional controller-specific
+> properties, e.g. devices wired under Intel IXP4XX bus: cfi-flash,
+> intel,ixp4xx-compact-flash, NS8250 serial and MAX6369 watchdog.
+>=20
+> Referencing Memory Controller or IXP4XX bus peripheral properties fixes
+> few dtbs_check warnings like:
+>=20
+>   intel-ixp42x-gateworks-gw2348.dtb: ide@1,0: Unevaluated properties are =
+not allowed
+>     ('intel,ixp4xx-eb-ahb-split-transfers', 'intel,ixp4xx-eb-byte-access'=
+, ... ' were unexpected)
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Best regards,
-Krzysztof
+Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
+Thanks,
+Miqu=C3=A8l
