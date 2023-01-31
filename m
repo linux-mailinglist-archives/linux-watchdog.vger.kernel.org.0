@@ -2,77 +2,73 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5066833F6
-	for <lists+linux-watchdog@lfdr.de>; Tue, 31 Jan 2023 18:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F26FE683419
+	for <lists+linux-watchdog@lfdr.de>; Tue, 31 Jan 2023 18:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjAaReU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 31 Jan 2023 12:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
+        id S231287AbjAaRmQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 31 Jan 2023 12:42:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjAaRdv (ORCPT
+        with ESMTP id S231264AbjAaRmN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 31 Jan 2023 12:33:51 -0500
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1140552B6;
-        Tue, 31 Jan 2023 09:33:49 -0800 (PST)
-Received: by mail-oi1-x22c.google.com with SMTP id r205so13447795oib.9;
-        Tue, 31 Jan 2023 09:33:49 -0800 (PST)
+        Tue, 31 Jan 2023 12:42:13 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017BF577ED;
+        Tue, 31 Jan 2023 09:42:12 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id s66so13469600oib.7;
+        Tue, 31 Jan 2023 09:42:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tel9l3MqKSV+aHD5I20WPC4DEySjXkhtFSfkOZC950I=;
-        b=mqmjXoHX6h/nXEWr8TFTcJ42H88rrs4ovDdpMyOo5Rmuwa4xbntHShmtY697Fyd13E
-         HWlNKouMwPRWaZbXBe/uNYq7UAV3fQdmHVZ8YLhgi0A+y6tHJwO4T32jjkmDI2NzxPVV
-         i0jjPGX/A7n2mMmcZrTKVCF6fsNHE0eTmBSDviDzQc7qNzOEvC7GJ1TNhLL4qIfBZypq
-         R4ZFyomzOayX7t4rzoIX1Q/Ez8ne2S38byPocNGi7o0tcoZrI9RRXH3NdWcZ2rKXJDmp
-         xRnazVseDJcy7r8CYRaWJsTTJCfEgnWxQlgdxjfRx4aPPHkbg5XRfwJUTDSGrmShIDWU
-         0y/g==
+        bh=/nQTlu24MgbwA1itsX0SvceyYlE+PA1Yy3UWZCbDfgE=;
+        b=S54Qr8+41Z6P+57CNzgSkPI6uPzQ1AoLYft7ruZy0dTsy2NmJWX3RjL09Pw76Fe513
+         aVEasY/WxXWdriPh5V8p7rafFAqInW/CzkH6ZuOL2pEzA6cpXq9YRrt+yE/HY7xz2Zy2
+         NebFji12wUByo6GIjqGNTgpQfZkC+MdfmhJqmXZCPVs4P3h2p+a06eDHRTKqKMFWZpPA
+         C3O+Urpob1AVr83BpxyKRs4fwqmnbNSJ7rg8OE/wgRHz1YScONDYzjaxo63cWTyy9IPK
+         f5ct8NAK01585tlGgDDZ1VCfxHS8ErtFHvGSk77UnwyBKqyzw6N2tSxoxtusemFVoRFf
+         bjCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tel9l3MqKSV+aHD5I20WPC4DEySjXkhtFSfkOZC950I=;
-        b=i6YM+b/ekmzuIM4UUlMMk1RpZJsfc1kxK+GuWAL+WEOS9QC5lXNi3eyZIKI6SA01tk
-         mWpskxac1A4Td8wBW3535EXdLIvsvww2OzGRnyU1PSUwYmJ3TfIVnKHK62klZpLHFJtr
-         tntsh/dKZ6Lu0Y2zHyQQ7MzRoUg5f/Ab75fYK0Va+GBNuIMQgAr2jx1BCHjldFezqMjU
-         fHpcA/L7dMEc4jbYAnG+/PJaRvwinQF4x7ShoMgcxG/E5DQMxwS0qZulj1ddeQz5QqLU
-         XLSm7FRiSIrPtRTH6PX4LYVJfqEgCqo6bEPNph3cjTRPshlebDP1hzdxqrJkwi59XZIs
-         bcyw==
-X-Gm-Message-State: AO0yUKUfPymN+TfwL9tPkEXjNMUaH7tFBYNWIk9F7pwDtDRGklY8Kju/
-        w75TzNkLhayPeqVhwlqY62UZDl5YV5A=
-X-Google-Smtp-Source: AK7set9djGTrwahZbXc5MZcj5yKkpn/FNseEiBmhvoyebK4qZqEFbWqJ7j6lLeimoFHEzbnokBH94A==
-X-Received: by 2002:a05:6808:3dc:b0:378:81c1:c615 with SMTP id o28-20020a05680803dc00b0037881c1c615mr1576268oie.27.1675186429175;
-        Tue, 31 Jan 2023 09:33:49 -0800 (PST)
+        bh=/nQTlu24MgbwA1itsX0SvceyYlE+PA1Yy3UWZCbDfgE=;
+        b=GpXvgAKr/i9yRAoERqk0XXASlspYA8/zZMpk6wilafBeGFBr7K+RG2s9UkOM6G9IgQ
+         c3RQWwDAWGDZPsPUNbmWcRTlYr/lC2jzYxmvXNyZt9az8FOEgWrJAzV5Ul6SJRNEklXJ
+         4Uz3cH3XvjG3tlBL7PjVBwyAFTMWnoinX0/va4lfVIu9Xb+lBYrMrP1K79eHKegWXMxz
+         VtTZFI8hVEwrZQKCHR899y4FAsAOgTtiO88rslBfbRt4uxr3morT6vhYJaqFeDiriKl5
+         OgQkWpuQfZeTGKDkx08kjxQhC0o60RY3OIBvUNgIOAi6u4ezt+WMuC0w/Hek60x2w7kb
+         u4Sg==
+X-Gm-Message-State: AO0yUKX6hpnZ8Q3nS4MN8SUSkdiKdRJMJqQD55qdLaolmNSeMzhjv4Qg
+        CKUIkTFjtmuvnGx/im5oaBc=
+X-Google-Smtp-Source: AK7set8/IWg5wpSXT2CaR5i54+1B2bm0kh1HPX8V0UVhuDrCRFFIZdJqj0rxXmNrfCC5saC8Ns9hSw==
+X-Received: by 2002:a54:4181:0:b0:378:808d:8441 with SMTP id 1-20020a544181000000b00378808d8441mr1701718oiy.45.1675186931335;
+        Tue, 31 Jan 2023 09:42:11 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u22-20020a056808115600b0036718f58b7esm5921114oiu.15.2023.01.31.09.33.48
+        by smtp.gmail.com with ESMTPSA id w8-20020a056808140800b0035bd65b776bsm6032464oiv.2.2023.01.31.09.42.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 09:33:48 -0800 (PST)
+        Tue, 31 Jan 2023 09:42:10 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 31 Jan 2023 09:33:47 -0800
+Date:   Tue, 31 Jan 2023 09:42:09 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 06/12] dt-bindings: watchdog: qcom-wdt: merge MSM timer
-Message-ID: <20230131173347.GA3602051@roeck-us.net>
-References: <20221212163532.142533-1-krzysztof.kozlowski@linaro.org>
- <20221212163532.142533-6-krzysztof.kozlowski@linaro.org>
+To:     Andrej Picej <andrej.picej@norik.com>
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, Anson.Huang@nxp.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] dt-bindings: watchdog: fsl-imx: document suspend
+ in wait mode
+Message-ID: <20230131174209.GA3602823@roeck-us.net>
+References: <20221104070358.426657-1-andrej.picej@norik.com>
+ <20221104070358.426657-3-andrej.picej@norik.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221212163532.142533-6-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221104070358.426657-3-andrej.picej@norik.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -84,160 +80,91 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Dec 12, 2022 at 05:35:26PM +0100, Krzysztof Kozlowski wrote:
-> Merge Qualcomm MSM timer bindings into watchdog, because the timer
-> compatibles are already included here and the hardware is quite similar.
+On Fri, Nov 04, 2022 at 08:03:57AM +0100, Andrej Picej wrote:
+> Property "fsl,suspend-in-wait" suspends watchdog in "WAIT" mode which
+> corresponds to Linux's Suspend-to-Idle S0 mode. If this property is not
+> set and the device is put into Suspend-to-Idle mode, the watchdog
+> triggers a reset after 128 seconds.
 > 
-> While converting the MSM timer bindings, adjust clock-frequency
-> property to take only one frequency, instead of two, because:
-> 1. DT schema does not allow to frequencies,
-> 2. The Linux timer driver reads only first frequency.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  .../bindings/timer/qcom,msm-timer.txt         | 47 ------------------
->  .../bindings/watchdog/qcom-wdt.yaml           | 49 +++++++++++++++++++
->  2 files changed, 49 insertions(+), 47 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
+> Changes in v4:
+>  - combine allOf, reorder allOf so it follows example-schema, drop the
+>    quotes around 'watchdog.yaml'.
 > 
-> diff --git a/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt b/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
-> deleted file mode 100644
-> index 5e10c345548f..000000000000
-> --- a/Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
-> +++ /dev/null
-> @@ -1,47 +0,0 @@
-> -* MSM Timer
-> -
-> -Properties:
-> -
-> -- compatible : Should at least contain "qcom,msm-timer". More specific
-> -               properties specify which subsystem the timers are paired with.
-> -
-> -               "qcom,kpss-timer" - krait subsystem
-> -               "qcom,scss-timer" - scorpion subsystem
-> -
-> -- interrupts : Interrupts for the debug timer, the first general purpose
-> -               timer, and optionally a second general purpose timer, and
-> -               optionally as well, 2 watchdog interrupts, in that order.
-> -
-> -- reg : Specifies the base address of the timer registers.
-> -
-> -- clocks: Reference to the parent clocks, one per output clock. The parents
-> -          must appear in the same order as the clock names.
-> -
-> -- clock-names: The name of the clocks as free-form strings. They should be in
-> -               the same order as the clocks.
-> -
-> -- clock-frequency : The frequency of the debug timer and the general purpose
-> -                    timer(s) in Hz in that order.
-> -
-> -Optional:
-> -
-> -- cpu-offset : per-cpu offset used when the timer is accessed without the
-> -               CPU remapping facilities. The offset is
-> -               cpu-offset + (0x10000 * cpu-nr).
-> -
-> -Example:
-> -
-> -       timer@200a000 {
-> -               compatible = "qcom,scss-timer", "qcom,msm-timer";
-> -               interrupts = <1 1 0x301>,
-> -                            <1 2 0x301>,
-> -                            <1 3 0x301>,
-> -                            <1 4 0x301>,
-> -                            <1 5 0x301>;
-> -               reg = <0x0200a000 0x100>;
-> -               clock-frequency = <19200000>,
-> -                                 <32768>;
-> -               clocks = <&sleep_clk>;
-> -               clock-names = "sleep";
-> -               cpu-offset = <0x40000>;
-> -       };
-> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> index b7fc57f4800e..697caf1937cc 100644
-> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> @@ -10,6 +10,9 @@ maintainers:
->    - Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+> Changes in v3:
+>  - disallow the property for devices which don't support WDW bit
+>    functionality with .yaml DTS allOf:if:then scheme.
+> 
+> Changes in v2:
+>  - add a commit message,
+>  - add a list of devices which support this functionality
+> ---
+>  .../bindings/watchdog/fsl-imx-wdt.yaml        | 37 +++++++++++++++++--
+>  1 file changed, 34 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> index fb7695515be1..181f0cc5b5bd 100644
+> --- a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> @@ -9,9 +9,6 @@ title: Freescale i.MX Watchdog Timer (WDT) Controller
+>  maintainers:
+>    - Anson Huang <Anson.Huang@nxp.com>
 >  
+> -allOf:
+> -  - $ref: "watchdog.yaml#"
+> -
 >  properties:
-> +  $nodename:
-> +    pattern: "^(watchdog|timer)@[0-9a-f]+$"
-> +
 >    compatible:
 >      oneOf:
->        - items:
-> @@ -48,6 +51,20 @@ properties:
->    clocks:
->      maxItems: 1
+> @@ -55,11 +52,45 @@ properties:
+>        If present, the watchdog device is configured to assert its
+>        external reset (WDOG_B) instead of issuing a software reset.
 >  
-> +  clock-names:
-> +    items:
-> +      - const: sleep
+> +  fsl,suspend-in-wait:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: |
+> +      If present, the watchdog device is suspended in WAIT mode
+> +      (Suspend-to-Idle). Only supported on certain devices.
 > +
-> +  clock-frequency:
-> +    description:
-> +      The frequency of the general purpose timer in Hz in that order.
-> +
-> +  cpu-offset:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Per-CPU offset used when the timer is accessed without the CPU remapping
-> +      facilities. The offset is cpu-offset + (0x10000 * cpu-nr).
-> +
->    interrupts:
->      minItems: 1
->      maxItems: 5
-> @@ -67,12 +84,27 @@ allOf:
->              const: qcom,kpss-wdt
->      then:
->        properties:
-> +        clock-frequency: false
-> +        cpu-offset: false
->          interrupts:
->            minItems: 1
->            items:
->              - description: Bark
->              - description: Bite
+>  required:
+>    - compatible
+>    - interrupts
+>    - reg
 >  
-> +    else:
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +  - if:
+> +      not:
+> +        properties:
+> +          compatible:
+> +            contains:
+> +              enum:
+> +                - fsl,imx25-wdt
+> +                - fsl,imx35-wdt
+> +                - fsl,imx50-wdt
+> +                - fsl,imx51-wdt
+> +                - fsl,imx53-wdt
+> +                - fsl,imx6q-wdt
+> +                - fsl,imx6sl-wdt
+> +                - fsl,imx6sll-wdt
+> +                - fsl,imx6sx-wdt
+> +                - fsl,imx6ul-wdt
+> +                - fsl,imx7d-wdt
+> +                - fsl,imx8mm-wdt
+> +                - fsl,imx8mn-wdt
+> +                - fsl,imx8mp-wdt
+> +                - fsl,imx8mq-wdt
+> +                - fsl,vf610-wdt
+> +    then:
 > +      properties:
-> +        interrupts:
-> +          minItems: 3
-> +          items:
-> +            - description: Debug
-> +            - description: First general purpose timer
-> +            - description: Second general purpose timer
-> +            - description: First watchdog
-> +            - description: Second watchdog
-> +      required:
-> +        - clock-frequency
+> +        fsl,suspend-in-wait: false
 > +
 >  unevaluatedProperties: false
 >  
 >  examples:
-> @@ -86,3 +118,20 @@ examples:
->        interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
->        timeout-sec = <10>;
->      };
-> +
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    watchdog@200a000 {
-> +      compatible = "qcom,kpss-wdt-ipq8064", "qcom,kpss-timer", "qcom,msm-timer";
-> +      interrupts = <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
-> +                   <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
-> +                   <GIC_PPI 3 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
-> +                   <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>,
-> +                   <GIC_PPI 5 (GIC_CPU_MASK_SIMPLE(2) | IRQ_TYPE_EDGE_RISING)>;
-> +      reg = <0x0200a000 0x100>;
-> +      clock-frequency = <25000000>;
-> +      clocks = <&sleep_clk>;
-> +      clock-names = "sleep";
-> +      cpu-offset = <0x80000>;
-> +    };
