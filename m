@@ -2,120 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C5B681E41
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Jan 2023 23:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28223682695
+	for <lists+linux-watchdog@lfdr.de>; Tue, 31 Jan 2023 09:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjA3WnF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 30 Jan 2023 17:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
+        id S231603AbjAaIgw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 31 Jan 2023 03:36:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjA3WnE (ORCPT
+        with ESMTP id S231588AbjAaIgj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 30 Jan 2023 17:43:04 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287791816A
-        for <linux-watchdog@vger.kernel.org>; Mon, 30 Jan 2023 14:43:03 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-50e7a0f0cc8so118335967b3.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 30 Jan 2023 14:43:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+TZHpce+LkRMQa6vx6q9obcgDlv0XoFb3aljOsKv7qU=;
-        b=nCBrIiE+L+vdLXic+BhlJTEfwEv/ysg8qF3ePyjPsY/A6pPFUyJ9yxWfviS5IS9XZ+
-         aTkrqx4WuQWd2ry/CmUYytg0ONmjJ++XzlyAcGDLyhrZ4/IX03EskCTili/5UQq5yKge
-         +e1rwxjmS0vI2LeI41+8f4VGz+I/dUip0S2eGn72UYX+dBh2W8CPEuyvYqHBwUzQTY52
-         5vUM6PPZirJQEM/wFGgVbRt8dqUJz0ZaVONsNu44LnLGVX5dLOGLew5RenS7kd33ruoM
-         AeG1hFJb4M2UAk+s92c6xRoPBpxkWpcN0CqUVNQ0xsATgHZATATevhE+7nH+bY+9BJXI
-         PhRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+TZHpce+LkRMQa6vx6q9obcgDlv0XoFb3aljOsKv7qU=;
-        b=eSIOrl1mD3cU0a7GBokvhkY0+z93kUfEUA9oyvR7Qm4OkVIN9a8NMvi75pTM13G+d3
-         o9fg9MEn0499QPkFISAWMcx5qkOBAm47ua6bNhzdHM3/ZP8QWVr/XGSqoVerU7/F/qrI
-         d1Z7IKgkTFxGIUi9ChETFmdsjuchCXiLSu/ATdGx1paqoYKPe9JFz1un8NujNwPvIo2L
-         f8P7YzRILT+dpmrqdCb6aKCzT8E81qkeiuLqrBNivhVP7IfSSBwhxP94194u270wTsMv
-         WMXSxabeWlhlnZxaT4RjHzLWO5zG8cvCffNW2BA0haW2CsZKpWV5JyLLdA7+Gyc0v0yC
-         V1Eg==
-X-Gm-Message-State: AFqh2koIjZXYdp76DEZU7i+at0F1F7WBbit2t7iqpa7pYGrJaXgKTxkx
-        qqs2+aZTwPrr7uO55GHBam+Sk1p5o2jPIiq6krJ8Mg==
-X-Google-Smtp-Source: AMrXdXtQIx/gOYQWR7Z9y8qC4zSuzlnGWFfiiT/LekYqnnNUbvQG32KG8P3YQVm2xu2If9pxmW9DcUUds+3TfNO/91s=
-X-Received: by 2002:a05:690c:39b:b0:4f3:8d0e:edce with SMTP id
- bh27-20020a05690c039b00b004f38d0eedcemr4580998ywb.185.1675118582401; Mon, 30
- Jan 2023 14:43:02 -0800 (PST)
+        Tue, 31 Jan 2023 03:36:39 -0500
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3B12C642
+        for <linux-watchdog@vger.kernel.org>; Tue, 31 Jan 2023 00:35:53 -0800 (PST)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id B9A9E83A80; Tue, 31 Jan 2023 08:35:49 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1675154151; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=Fr7idBV161MJflQS1iMFlO5H47vLOI7Q5nwv5RZfUTo+jh+hrKoIUqvBLe/wtdOpY
+         itFOzWqEBJrPu0/NRUPx5bK+p18Peir7kYIoyknizAxpRcscPnZL5IJeSwglhdrYpJ
+         Ro904AamwDaaeHihGGjaFfSvPtekUx1X9HcNj0ju3/zYjrVmoGV0dlgPxF8WuCu17X
+         ZZBHBnFjWQG961H/Xb9B+ZnBojJygWfhZf/rIw3RfG3ByTRI/PgwAjIt/et+bqG65X
+         iEhX4wus8RIBLzVYecTO/L+JVitvqCkJvAjkrUT8nAJvEvwcFNmzEu8kxlbeLuYJr0
+         1rwoptWC53XEQ==
+Received: by mail.lokoho.com for <linux-watchdog@vger.kernel.org>; Tue, 31 Jan 2023 08:35:43 GMT
+Message-ID: <20230131074501-0.1.3q.w18a.0.g3p1l07p5f@lokoho.com>
+Date:   Tue, 31 Jan 2023 08:35:43 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-watchdog@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-References: <20230127093217.60818-1-krzysztof.kozlowski@linaro.org>
- <20230127093217.60818-4-krzysztof.kozlowski@linaro.org> <CACRpkdbOZLhQ1DTNJowNXF=O-Nvpqcb_A+PwkPWFiUSQUbkR9A@mail.gmail.com>
- <755d4a78-0b23-a381-c422-d12b0063f06f@linaro.org>
-In-Reply-To: <755d4a78-0b23-a381-c422-d12b0063f06f@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 30 Jan 2023 23:42:51 +0100
-Message-ID: <CACRpkdZWqea+RT75g5CkCzT9zMOj419GMJeydgpZGSLvC9Xoog@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] dt-bindings: serial: restrict possible child node names
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linusw@kernel.org>,
-        Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Marek Vasut <marex@denx.de>, Lubomir Rintel <lkundrak@v3.sk>,
-        - <devicetree@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sun, Jan 29, 2023 at 4:48 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 27/01/2023 14:29, Linus Walleij wrote:
-> > On Fri, Jan 27, 2023 at 10:32 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >
-> >> The re-usable serial.yaml schema matches every property with ".*"
-> >> pattern, thus any other schema referencing it will not report unknown
-> >> (unevaluated) properties.  This hides several wrong properties.  It is
-> >> a limitation of dtschema, thus provide a simple workaround: expect
-> >> children to be only of few names matching upstream usage (Bluetooth,
-> >> GNSS, GPS and MCU).
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >
-> > Fair enough,
-> > Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> >
-> > However I think V.35 WAN devices (high speed serial network links)
-> > should actually be using this? They are just some fancy serial port
-> > after all. Cf
-> > Documentation/devicetree/bindings/net/intel,ixp4xx-hss.yaml
-> >
-> > No big deal I guess since they are mostly an anarchronism and not
-> > on the table right now.
->
-> intel,ixp4xx-hss is not part of the expansion bus node.
+Dzie=C5=84 dobry,
 
-True, my point is that WAN V.35 devices in general should be,
-so that the pattern properties should include wan.
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-But we can add it later if a user appears.
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-Yours,
-Linus Walleij
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+
+
+Pozdrawiam
+Adam Charachuta
