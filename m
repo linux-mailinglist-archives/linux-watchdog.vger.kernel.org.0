@@ -2,53 +2,54 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526E76869FE
-	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Feb 2023 16:21:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7A2686A07
+	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Feb 2023 16:21:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232320AbjBAPV0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 1 Feb 2023 10:21:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
+        id S231755AbjBAPV3 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 1 Feb 2023 10:21:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232071AbjBAPVX (ORCPT
+        with ESMTP id S232266AbjBAPV0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 1 Feb 2023 10:21:23 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5537A96
-        for <linux-watchdog@vger.kernel.org>; Wed,  1 Feb 2023 07:21:17 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id n13so5935979wmr.4
-        for <linux-watchdog@vger.kernel.org>; Wed, 01 Feb 2023 07:21:17 -0800 (PST)
+        Wed, 1 Feb 2023 10:21:26 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9AE6A4A
+        for <linux-watchdog@vger.kernel.org>; Wed,  1 Feb 2023 07:21:18 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso1730146wms.4
+        for <linux-watchdog@vger.kernel.org>; Wed, 01 Feb 2023 07:21:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=87tvueRd2jMJ3I0zmFC1ExMPpE2u2ENBfUILZoyxQTw=;
-        b=lk6Z1f/dTiXfiWKLliINNJnni4OHlyqmAvr/jR936PbaXeiCk14SDsO8QLDXIEhOUQ
-         U6nhqwrYndkpETIiYi/SHMZP+8ivpMgcL0dTsREKAXiLMXr4y/o/VLYlcsFI/tivxm+i
-         DSb53kh2mOgPf55zKCoAaAGVLkd/GgHHbiJXx2YoQPqLdYenN2zeEfO1w6j/wohQC5YB
-         EAgROM0VnDAvqB6RtmljoNqSwPKauS1dtbgDJOHpr99amWi15M/9uIzelOtByfMVtgYX
-         PNpB5KAq1I/WgFffRKZfA77sG6kH3hM5Rfch9Z0NzRiLm4xi3wCp5YmTuHC/TnnISL8A
-         NYkA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LgMf41rQRnpfSO16TfNaM4asZfPKKcxkyDK6JrIdSHY=;
+        b=sDPbCH9a4tYZ3zR1ztISMGXawM4AYviJBCRH2M6rJ7ItisZXeupM27wcGx4h6QeM2p
+         iadobtP3AEeQ+i/s9IfOgoA3XIq7eQ8s36/TgeCs+Z+dl5ra+Hm8iFEHiGTOmV1zHpT4
+         gUVHmQLJwJX1K7ccAdxQ3eFfjdqI+/RYYNeDjv1iOZYO0MJ0AdZHWjyBGMYpFXMuqztG
+         cTl8oWIBXNtwmkhDca7ULQBk52ey8ZA9kSWQKbdJ4FQU+madcAG1rLRLMThLS092OeVj
+         cV6oKePdQHaVheQk+hXxu/PgCVl2qxbLS8/NuB1K4SHBGTd52W4AZJrnBUl/LkkyxbgM
+         oSoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=87tvueRd2jMJ3I0zmFC1ExMPpE2u2ENBfUILZoyxQTw=;
-        b=OOpthTny89WQ+ILI/XHmeDHn6ujwruFFphmjDAtgusKYjy1V+8ZYGyZhFqZb88Jr+k
-         Y4dgQi6UIm++nAmtqW/0YjX03Dj1eISk+32FAagJ/evJaLf1PHwfRQlysZSBHVXCgnjW
-         Z62NKk+hyh5tvGPOcNYWtDnlFFyV7sIielhlmLpWk0bFDZcDD+4ncxiOOBLH/sAwoDoW
-         FeJSXM+MJjyHe7R4bSdlxFI9nd51jHt6CngXDpRxLPpSVmtEwMWNPQCJQaXMGEQg5Zp3
-         iE3mE4jyo/e64aNe2iGs2oGp2MvNGadZMQxyEQ481w+AhQpVi8GnCGDZWpX/j7oxvcog
-         yHMg==
-X-Gm-Message-State: AO0yUKXpMEQ7gC8RvAhLPtIFJAvyJ/z4GGHUyMk0/iCRQHBi4Cy0t92p
-        yYgmF3bvpZzMEe+uaFkfchD6qw==
-X-Google-Smtp-Source: AK7set8DA60s1ZaHq4wltMareWdZQqQaP1m3qNr/7luxj+0055vEF0R7zqjgLFyvlToBICe4bCI1Lw==
-X-Received: by 2002:a7b:ce94:0:b0:3dc:43a0:83bb with SMTP id q20-20020a7bce94000000b003dc43a083bbmr2582411wmj.3.1675264876040;
-        Wed, 01 Feb 2023 07:21:16 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LgMf41rQRnpfSO16TfNaM4asZfPKKcxkyDK6JrIdSHY=;
+        b=Vwk+bN45WKZJUNey2KnZHRiQd2ePNNJJsf6qf6qcMu27/7UGHRaNKp41Ct1XelZbWp
+         U7/eg7JWQ9NEiq8PtyXzbI+BzM9kgq/w+FGQ1DzXGLgphBofHQL3P16sai+Kk6JCLFQx
+         YXgWERMTIlMCk2cuHUyp8lIV/yoMoRDVwhr2eKvYTbZdOGpRYYAyWQCK46imTmTtRvG1
+         RhVIRDOcdlZfikY/fGdcUK5jVDnGnMt5evwLL90g3xRbNfFs42NEIjjfFidhLN2B2Y6M
+         FiuC6Fa+DyD3vVMmNbEEBHumTl3BKYdrHIx1TvMpc4Q3bLErQRoTVMUiuGW2cnuMLaX1
+         5smQ==
+X-Gm-Message-State: AO0yUKXxv/n8SOSGyNm4dIEB92x+syBy7tMfi0GFi/KsCtmuOuMwInxD
+        6Hwurx/cu+V6CyMbCFdmUhkJzA==
+X-Google-Smtp-Source: AK7set+Q9T4oseeyWKQwBg/d9CJwoFikCw5pS4/g+6Uwd+rTCHgqsRDJB+0/f8qxAcFJw/RUeB8jLw==
+X-Received: by 2002:a05:600c:3b0f:b0:3de:1d31:1048 with SMTP id m15-20020a05600c3b0f00b003de1d311048mr2328769wms.29.1675264877062;
+        Wed, 01 Feb 2023 07:21:17 -0800 (PST)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:d64:a4e6:40a8:8e69])
-        by smtp.gmail.com with ESMTPSA id j19-20020a05600c42d300b003dc53217e07sm1893120wme.16.2023.02.01.07.21.15
+        by smtp.gmail.com with ESMTPSA id j19-20020a05600c42d300b003dc53217e07sm1893120wme.16.2023.02.01.07.21.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Feb 2023 07:21:15 -0800 (PST)
+        Wed, 01 Feb 2023 07:21:16 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -61,11 +62,14 @@ To:     Andy Gross <agross@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v3 0/5] arm64: qcom: add initial support for qcom sa8775p-ride
-Date:   Wed,  1 Feb 2023 16:20:33 +0100
-Message-Id: <20230201152038.203387-1-brgl@bgdev.pl>
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 1/5] dt-bindings: firmware: qcom,scm: add qcom,scm-sa8775p compatible
+Date:   Wed,  1 Feb 2023 16:20:34 +0100
+Message-Id: <20230201152038.203387-2-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230201152038.203387-1-brgl@bgdev.pl>
+References: <20230201152038.203387-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,41 +83,27 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-This iteration contains a fixed DTS and all not already applied DT bindings
-patches (with tags collected).
+Add a compatible for the sa8775p platform's Secure Channel Manager
+firmware interface.
 
-v2 -> v3:
-- reorder properties (reg always first, etc.)
-- tweak node names
-- remove properties filled in by the firmware
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-v1 -> v2:
-- lots of improvements all around the place to make the dts pass dtbs_check
-  (with some additional patches fixing bugs in existing dt bindings),
-  make dtbs W=1 and checkpatch.pl
-- move board-specific properties to the board .dts file
-- ordered top-level nodes alphabetically and sub-nodes by the reg property
-- fixed licensing
-- set #address-cells and #size-cells to <2> in the soc node and update sub-nodes
-
-Bartosz Golaszewski (5):
-  dt-bindings: firmware: qcom,scm: add qcom,scm-sa8775p compatible
-  dt-bindings: mailbox: qcom-ipcc: document the sa8775p platform
-  dt-bindings: watchdog: qcom-wdt: add qcom,apss-wdt-sa8775p compatible
-  dt-bindings: arm: qcom: add the sa8775p-ride board
-  arm64: dts: qcom: add initial support for qcom sa8775p-ride
-
- .../devicetree/bindings/arm/qcom.yaml         |   7 +
- .../bindings/firmware/qcom,scm.yaml           |   1 +
- .../bindings/mailbox/qcom-ipcc.yaml           |   1 +
- .../bindings/watchdog/qcom-wdt.yaml           |   1 +
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts     |  47 +
- arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 812 ++++++++++++++++++
- 7 files changed, 870 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sa8775p-ride.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sa8775p.dtsi
-
+diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+index 4193492ba73e..fd3c787e44a8 100644
+--- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
++++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+@@ -39,6 +39,7 @@ properties:
+           - qcom,scm-msm8996
+           - qcom,scm-msm8998
+           - qcom,scm-qdu1000
++          - qcom,scm-sa8775p
+           - qcom,scm-sc7180
+           - qcom,scm-sc7280
+           - qcom,scm-sc8280xp
 -- 
 2.37.2
 
