@@ -2,141 +2,118 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C63C68341E
-	for <lists+linux-watchdog@lfdr.de>; Tue, 31 Jan 2023 18:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 526E76869FE
+	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Feb 2023 16:21:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbjAaRno (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 31 Jan 2023 12:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        id S232320AbjBAPV0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 1 Feb 2023 10:21:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjAaRnm (ORCPT
+        with ESMTP id S232071AbjBAPVX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 31 Jan 2023 12:43:42 -0500
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB996582B0;
-        Tue, 31 Jan 2023 09:43:23 -0800 (PST)
-Received: by mail-oo1-xc33.google.com with SMTP id z25-20020a4ad1b9000000b00517affa07c0so300200oor.7;
-        Tue, 31 Jan 2023 09:43:23 -0800 (PST)
+        Wed, 1 Feb 2023 10:21:23 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5537A96
+        for <linux-watchdog@vger.kernel.org>; Wed,  1 Feb 2023 07:21:17 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id n13so5935979wmr.4
+        for <linux-watchdog@vger.kernel.org>; Wed, 01 Feb 2023 07:21:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/8bGXJKT+ieOfI6c5+Z+pFLGLuruZbcv9kpibt6A2mI=;
-        b=Xd/YsxlgdykLM3Zm6dMvsNVYJibOxMynYY13SM3lTeXiWAxaBLnOOIeE7HjdDmVHZc
-         8n2AL2KaSVc5xQhKLCXZ+IE6NFq8yEv5yA3UKpuUi3gYr9grTK8OISWHlVlKFqx9DGs9
-         2Nq6FrIOPxi7seQokXAjYRjsM2KO3cE1XdVkYfHZeDBgkQ6Eoi4mbvcxA561AQYJGNH7
-         GEusrqQVzTMCDAMtFJLxJo7D0Vp2UWFTmxh9cQyQCRbkHWb987S25qPquVsOwnnrO4mw
-         NrFjUqqwPcOVoLSOmZJmpIwmRyFJwpbmHCENZJoPbuoyeFPgysmgAC/IrbQWwbmvOIbH
-         NM5g==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=87tvueRd2jMJ3I0zmFC1ExMPpE2u2ENBfUILZoyxQTw=;
+        b=lk6Z1f/dTiXfiWKLliINNJnni4OHlyqmAvr/jR936PbaXeiCk14SDsO8QLDXIEhOUQ
+         U6nhqwrYndkpETIiYi/SHMZP+8ivpMgcL0dTsREKAXiLMXr4y/o/VLYlcsFI/tivxm+i
+         DSb53kh2mOgPf55zKCoAaAGVLkd/GgHHbiJXx2YoQPqLdYenN2zeEfO1w6j/wohQC5YB
+         EAgROM0VnDAvqB6RtmljoNqSwPKauS1dtbgDJOHpr99amWi15M/9uIzelOtByfMVtgYX
+         PNpB5KAq1I/WgFffRKZfA77sG6kH3hM5Rfch9Z0NzRiLm4xi3wCp5YmTuHC/TnnISL8A
+         NYkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/8bGXJKT+ieOfI6c5+Z+pFLGLuruZbcv9kpibt6A2mI=;
-        b=bU0RDOrVNT1FQnzDG/fAsBjXgTlwXgJ8Yfjud+RwDMPw+1fSqySz8zc3LQ1XZk5DyS
-         p9KXTKBfPearYh17tr6TVMwBG9MqTpm1i3IClPLaPSIdRy46Dwi5evNMu6kXs5R6mP0d
-         KYV379+yEtxSxGdFwae/kGriZ7Xz9DXaufxinEGbV9yQQPJrDVrlrl0LjhVUQXqkv2Xs
-         PMIRNTjpauY363yXkoPNyDaCoVV1Kdzhk6pf9qJZ4XhTGyWOUKudkS+Erl6kWaeJ5YAK
-         9z19gi2UXv8y/axFe4M8865Is1b4U+YQ5Hsc5oSPybvwT3uXYRRNYljxouWeosPuIFkp
-         FJ7g==
-X-Gm-Message-State: AO0yUKX0V9pyb4m1y4ZxPOWZJNUc9w56qCuVrMjFyEOXSr5lQQi7t+DZ
-        lDWWFF0FeBFJp2mUlC+KSCfjGOAs4j0=
-X-Google-Smtp-Source: AK7set8KGPFQwOLFCtoCYackv7kJwNnzEryrd/8pL7wuQFoIlYZTuAo66nz4MPTqoZl1NKYu1/GX/A==
-X-Received: by 2002:a4a:e395:0:b0:517:b183:24aa with SMTP id l21-20020a4ae395000000b00517b18324aamr1545880oov.9.1675187003180;
-        Tue, 31 Jan 2023 09:43:23 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e12-20020a4aaacc000000b005177543fafdsm2798716oon.40.2023.01.31.09.43.22
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=87tvueRd2jMJ3I0zmFC1ExMPpE2u2ENBfUILZoyxQTw=;
+        b=OOpthTny89WQ+ILI/XHmeDHn6ujwruFFphmjDAtgusKYjy1V+8ZYGyZhFqZb88Jr+k
+         Y4dgQi6UIm++nAmtqW/0YjX03Dj1eISk+32FAagJ/evJaLf1PHwfRQlysZSBHVXCgnjW
+         Z62NKk+hyh5tvGPOcNYWtDnlFFyV7sIielhlmLpWk0bFDZcDD+4ncxiOOBLH/sAwoDoW
+         FeJSXM+MJjyHe7R4bSdlxFI9nd51jHt6CngXDpRxLPpSVmtEwMWNPQCJQaXMGEQg5Zp3
+         iE3mE4jyo/e64aNe2iGs2oGp2MvNGadZMQxyEQ481w+AhQpVi8GnCGDZWpX/j7oxvcog
+         yHMg==
+X-Gm-Message-State: AO0yUKXpMEQ7gC8RvAhLPtIFJAvyJ/z4GGHUyMk0/iCRQHBi4Cy0t92p
+        yYgmF3bvpZzMEe+uaFkfchD6qw==
+X-Google-Smtp-Source: AK7set8DA60s1ZaHq4wltMareWdZQqQaP1m3qNr/7luxj+0055vEF0R7zqjgLFyvlToBICe4bCI1Lw==
+X-Received: by 2002:a7b:ce94:0:b0:3dc:43a0:83bb with SMTP id q20-20020a7bce94000000b003dc43a083bbmr2582411wmj.3.1675264876040;
+        Wed, 01 Feb 2023 07:21:16 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:d64:a4e6:40a8:8e69])
+        by smtp.gmail.com with ESMTPSA id j19-20020a05600c42d300b003dc53217e07sm1893120wme.16.2023.02.01.07.21.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Jan 2023 09:43:22 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 31 Jan 2023 09:43:21 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wed, 01 Feb 2023 07:21:15 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@iguana.be>
-Subject: Re: [PATCH v2 1/2] watchdog: report fw_version in sysfs
-Message-ID: <20230131174321.GA3602958@roeck-us.net>
-References: <20221216-watchdog-sysfs-v2-0-6189311103a9@weissschuh.net>
- <20221216-watchdog-sysfs-v2-1-6189311103a9@weissschuh.net>
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v3 0/5] arm64: qcom: add initial support for qcom sa8775p-ride
+Date:   Wed,  1 Feb 2023 16:20:33 +0100
+Message-Id: <20230201152038.203387-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221216-watchdog-sysfs-v2-1-6189311103a9@weissschuh.net>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 09:30:39PM +0000, Thomas Weiﬂschuh wrote:
-> This synchronizes the information reported by ioctl and sysfs.
-> The mismatch is confusing because "wdctl" from util-linux uses the ioctl
-> when used with root privileges and sysfs without.
-> 
-> The file is called "fw_version" instead of "firmware_version" as
-> "firmware_version" is already used as custom attribute by single drivers.
-> 
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+This iteration contains a fixed DTS and all not already applied DT bindings
+patches (with tags collected).
 
-> ---
->  Documentation/ABI/testing/sysfs-class-watchdog |  7 +++++++
->  drivers/watchdog/watchdog_dev.c                | 10 ++++++++++
->  2 files changed, 17 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-class-watchdog b/Documentation/ABI/testing/sysfs-class-watchdog
-> index 585caecda3a5..27c000238fe4 100644
-> --- a/Documentation/ABI/testing/sysfs-class-watchdog
-> +++ b/Documentation/ABI/testing/sysfs-class-watchdog
-> @@ -6,6 +6,13 @@ Description:
->  		device at boot. It is equivalent to WDIOC_GETBOOTSTATUS of
->  		ioctl interface.
->  
-> +What:		/sys/class/watchdog/watchdogn/fw_version
-> +Date:		April 2023
-> +Contact:	Thomas Weiﬂschuh
-> +Description:
-> +		It is a read only file. It contains firmware version of
-> +		watchdog device.
-> +
->  What:		/sys/class/watchdog/watchdogn/identity
->  Date:		August 2015
->  Contact:	Wim Van Sebroeck <wim@iguana.be>
-> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-> index 55574ed42504..7feeda02a531 100644
-> --- a/drivers/watchdog/watchdog_dev.c
-> +++ b/drivers/watchdog/watchdog_dev.c
-> @@ -546,6 +546,15 @@ static ssize_t pretimeout_show(struct device *dev,
->  }
->  static DEVICE_ATTR_RO(pretimeout);
->  
-> +static ssize_t fw_version_show(struct device *dev, struct device_attribute *attr,
-> +			       char *buf)
-> +{
-> +	struct watchdog_device *wdd = dev_get_drvdata(dev);
-> +
-> +	return sysfs_emit(buf, "%d\n", wdd->info->firmware_version);
-> +}
-> +static DEVICE_ATTR_RO(fw_version);
-> +
->  static ssize_t identity_show(struct device *dev, struct device_attribute *attr,
->  				char *buf)
->  {
-> @@ -617,6 +626,7 @@ static umode_t wdt_is_visible(struct kobject *kobj, struct attribute *attr,
->  }
->  static struct attribute *wdt_attrs[] = {
->  	&dev_attr_state.attr,
-> +	&dev_attr_fw_version.attr,
->  	&dev_attr_identity.attr,
->  	&dev_attr_timeout.attr,
->  	&dev_attr_min_timeout.attr,
+v2 -> v3:
+- reorder properties (reg always first, etc.)
+- tweak node names
+- remove properties filled in by the firmware
+
+v1 -> v2:
+- lots of improvements all around the place to make the dts pass dtbs_check
+  (with some additional patches fixing bugs in existing dt bindings),
+  make dtbs W=1 and checkpatch.pl
+- move board-specific properties to the board .dts file
+- ordered top-level nodes alphabetically and sub-nodes by the reg property
+- fixed licensing
+- set #address-cells and #size-cells to <2> in the soc node and update sub-nodes
+
+Bartosz Golaszewski (5):
+  dt-bindings: firmware: qcom,scm: add qcom,scm-sa8775p compatible
+  dt-bindings: mailbox: qcom-ipcc: document the sa8775p platform
+  dt-bindings: watchdog: qcom-wdt: add qcom,apss-wdt-sa8775p compatible
+  dt-bindings: arm: qcom: add the sa8775p-ride board
+  arm64: dts: qcom: add initial support for qcom sa8775p-ride
+
+ .../devicetree/bindings/arm/qcom.yaml         |   7 +
+ .../bindings/firmware/qcom,scm.yaml           |   1 +
+ .../bindings/mailbox/qcom-ipcc.yaml           |   1 +
+ .../bindings/watchdog/qcom-wdt.yaml           |   1 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ arch/arm64/boot/dts/qcom/sa8775p-ride.dts     |  47 +
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 812 ++++++++++++++++++
+ 7 files changed, 870 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sa8775p-ride.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sa8775p.dtsi
+
+-- 
+2.37.2
+
