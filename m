@@ -2,42 +2,63 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3CB687681
-	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Feb 2023 08:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8328687AD8
+	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Feb 2023 11:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjBBHlp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 2 Feb 2023 02:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
+        id S231594AbjBBKvq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 2 Feb 2023 05:51:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjBBHlp (ORCPT
+        with ESMTP id S231216AbjBBKvp (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 2 Feb 2023 02:41:45 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D2F757BC
-        for <linux-watchdog@vger.kernel.org>; Wed,  1 Feb 2023 23:41:43 -0800 (PST)
-Received: from dggpemm100007.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4P6rGH1d4PzJqdD;
-        Thu,  2 Feb 2023 15:37:11 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by dggpemm100007.china.huawei.com
- (7.185.36.116) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 2 Feb
- 2023 15:41:41 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-watchdog@vger.kernel.org>
-CC:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <hca@linux.ibm.com>, <yangyingliang@huawei.com>
-Subject: [PATCH -next] watchdog: diag288_wdt: use kmemdup() to allocate memory
-Date:   Thu, 2 Feb 2023 15:41:27 +0800
-Message-ID: <20230202074127.4108100-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Feb 2023 05:51:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52207304F;
+        Thu,  2 Feb 2023 02:51:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24AB2B8255D;
+        Thu,  2 Feb 2023 10:50:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47FC3C433D2;
+        Thu,  2 Feb 2023 10:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675335011;
+        bh=1Y4msb8HKqisz6WtPDfC58eZbJAg0tpZAMC5s1XfPWw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E5uzUmvAh+yrTW3QZNlxMMS8lLvc40e4DSP2E384Hu9OxnyIlk4BnM6a7+Aaz0Qts
+         Or6MDjLlwI8WvSoJ2D3Af8Nig4NI1A7rXPg4Q4N3/G5Q/9IoDfHvT5RMzLFxbI+Z0G
+         GxFHoN+0BauQR3RHPBn/kHVcxzVlnx6BjDP4/bqk=
+Date:   Thu, 2 Feb 2023 11:50:03 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linusw@kernel.org>,
+        Imre Kaloz <kaloz@openwrt.org>,
+        Krzysztof Halasa <khalasa@piap.pl>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Marek Vasut <marex@denx.de>, Lubomir Rintel <lkundrak@v3.sk>,
+        - <devicetree@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] dt-bindings: serial/mtd/mc/ata: use MC peripheral
+ props
+Message-ID: <Y9uVWz32O1vuIXpk@kroah.com>
+References: <20230127093217.60818-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm100007.china.huawei.com (7.185.36.116)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230127093217.60818-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,34 +66,16 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Use kmemdup() helper instead of open-coding to simplify
-the code when allocating ebc_cmd.
+On Fri, Jan 27, 2023 at 10:32:14AM +0100, Krzysztof Kozlowski wrote:
+> Hi,
+> 
+> Dependencies
+> ============
+> I think entire patchset should go via one tree (Rob's). Patch #2 depends on
+> patch #1.  Patch #3 could go separate tree as long as others are in the
+> linux-next.  However for simplicity let's push everything through Rob's DT
+> tree?
 
-Generated by: scripts/coccinelle/api/memdup.cocci
+No objection from me:
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/watchdog/diag288_wdt.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/watchdog/diag288_wdt.c b/drivers/watchdog/diag288_wdt.c
-index 6ca5d9515d85..8c2832308284 100644
---- a/drivers/watchdog/diag288_wdt.c
-+++ b/drivers/watchdog/diag288_wdt.c
-@@ -273,12 +273,11 @@ static int __init diag288_init(void)
- 	watchdog_set_nowayout(&wdt_dev, nowayout_info);
- 
- 	if (MACHINE_IS_VM) {
--		ebc_cmd = kmalloc(sizeof(ebc_begin), GFP_KERNEL);
-+		ebc_cmd = kmemdup(ebc_begin, sizeof(ebc_begin), GFP_KERNEL);
- 		if (!ebc_cmd) {
- 			pr_err("The watchdog cannot be initialized\n");
- 			return -ENOMEM;
- 		}
--		memcpy(ebc_cmd, ebc_begin, sizeof(ebc_begin));
- 		ret = __diag288_vm(WDT_FUNC_INIT, 15,
- 				   ebc_cmd, sizeof(ebc_begin));
- 		kfree(ebc_cmd);
--- 
-2.25.1
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
