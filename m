@@ -2,89 +2,88 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D12368A16D
-	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Feb 2023 19:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3858F68A1E5
+	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Feb 2023 19:23:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233070AbjBCSRe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 3 Feb 2023 13:17:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
+        id S233380AbjBCSXe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 3 Feb 2023 13:23:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233019AbjBCSRd (ORCPT
+        with ESMTP id S233295AbjBCSXe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 3 Feb 2023 13:17:33 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D4B530F1;
-        Fri,  3 Feb 2023 10:17:30 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id x26-20020a056830115a00b0068bbc0ee3eeso1617121otq.0;
-        Fri, 03 Feb 2023 10:17:30 -0800 (PST)
+        Fri, 3 Feb 2023 13:23:34 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440738BDCF;
+        Fri,  3 Feb 2023 10:23:33 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id e21-20020a9d5615000000b006884e5dce99so1609028oti.5;
+        Fri, 03 Feb 2023 10:23:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dv4klRM8tNSfefu2k3P3n9JnaGoeMZey+8BmiGtUivQ=;
-        b=UIa2Vo+DG7fLDFII32hth2L7I3nWGjrqQdGtT52JVd8EK2oqc2bITXNhOElPH2YKBA
-         i77853KDXISnHDWK+vwkb3ptx+ZtHEzb8m4dh2RiZ5gAkiN9x64HiOz3RLf/67CwXe9h
-         YOmcv1+I6FtVn2PSHgTgkP+CKIqD4CL9+RQTy+AdODPG45l1vPn9cNx2oa26hwxz6uVa
-         hLQd0EDwKZCEHMz+zuSZB+H8smdBYKI8C9A+GR5ZZtNxtXiDlt/auBgwCB9icye1onY9
-         nDlCwWAVCLGOD5Dd0ijpVPm1yDcxIGt1Otwb35F7jOmfyD2MYKOLGMo42yPFVKqa3Nm1
-         fQtQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=S7X7WqOczCUyCBj08/fIIsSdgQKTDjj5sD2KRRUZOsI=;
+        b=VcmGKQ98YzAB+J9sBG60vTFulSIYCltoNE6sIU1I8ucAX2NlxULAawwaJ172PaQnna
+         caUaFUkYkepFiP62ybsRFhVQsQSBjiQcvwyUZPMtfMgJjD+ixWyBE0M7lbHlRrawI2D1
+         w91DZSI/nQx4Vpn8bK11UEdfCcoC8t5+mIy3/0oxl38AdD1cYiOXVIgVHTuOS/Qiba57
+         N21Es8nk8Kwz2ITSeEkc4HU3ivB26arZR7srJPqWY8AcBXfyrGlf8MLzvuibUvTO47Wi
+         QnB0Ua3pXsOWn7gexU3eOwhsC+QN1gBLQzD/doBpq3lGDtRRKVbTjedoipC0DsVg+Fvw
+         pOBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dv4klRM8tNSfefu2k3P3n9JnaGoeMZey+8BmiGtUivQ=;
-        b=EAdaU0ENK16oHi0WwHlZCAXvHiDsOiiAWHKpX2Io6zhnoHqfXLx2iQ9ww14j1qYXfr
-         6lh+zLjueb5snmO9cyifou+uAcdJ+hAbhyzrp782UM4KTb6WPs996aCJHNHtXyN3uRMy
-         lyA+pieTXAXUKvzKiBp1z3/6pJnkDdAmyJsbzmvNLmjiv2wONt44XehQKS/XDUKx0x++
-         NWYMvzSf91uSB0ldA/u7WeK/00r+oArCF4/CPaR5IU1/vqyvhr9IH9bWuztpiPjuFwAI
-         sLPrwlT7hqxXGumnzT1GEgqseAYzUClp7U0jH/+4MuoUfHEtpgYVveoKk9UtFDagRLLT
-         62rg==
-X-Gm-Message-State: AO0yUKXko2mLngRBt8QQfScFzmvR2ODq90UusUDy/tyuiPuvwfIwHche
-        1sHGPw3rAWB3Ewafi141v31CajV6RKI=
-X-Google-Smtp-Source: AK7set97S7wey76rFNA2rA5qRQqdiNWG9btq33wqDpmva7ZCY0SJU9ZD46yrbNCtCEf3Np2p00ctJg==
-X-Received: by 2002:a05:6830:4786:b0:684:9b6c:c341 with SMTP id df6-20020a056830478600b006849b6cc341mr2212300otb.31.1675448249986;
-        Fri, 03 Feb 2023 10:17:29 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n20-20020a9d7114000000b0068d3ec1427bsm1371599otj.69.2023.02.03.10.17.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 10:17:29 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S7X7WqOczCUyCBj08/fIIsSdgQKTDjj5sD2KRRUZOsI=;
+        b=K+99t+8gsNQRwMBIsywjEOci20R5HQtz9eBmaHnQmK0kXfqSHcNvVsR8EMdEbUF/fF
+         ABk+jyOrl2AY7Z0IXXmlQQopyrt7ShyumLju9qtQkdztgOaEc7ErMhfUBBH+UoYOcjLb
+         YJu6pKXoobkL5bcmD44nr6+GP6+0ufst+Ey8rw39LLYjv1Y8u5uweGUFlpQjSpPvqLpP
+         dlz7c1ZqnAk/CefnW4voIS8a/JJUd+htUYaHD0GkFDRzdbk+MDzhgmmRbdlhcvEDyrX0
+         4JaUTmLDOp3MjQvfwNy3pmAcbSzpTOlt7NIJXpaubnM3/CghjwlYxDd4zWFfvP3zTAfd
+         IUww==
+X-Gm-Message-State: AO0yUKX5mvbT6gwjL/upATY21RPYs+8J6cz0pgikv9lsR/nteUwSm+Oj
+        Nb6jrtWaLZM5gg7s84vPLI0=
+X-Google-Smtp-Source: AK7set930D87whC9k09OD4tmfsqQpmJXKWylcoQ0KG/aRGH4gJ2g6vtWy52ltNd/F5RLF21mDxT2ig==
+X-Received: by 2002:a05:6830:2b1f:b0:68b:c04d:79ca with SMTP id l31-20020a0568302b1f00b0068bc04d79camr7921044otv.33.1675448612610;
+        Fri, 03 Feb 2023 10:23:32 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z7-20020a9d65c7000000b0068bb3a9e2b9sm1365472oth.77.2023.02.03.10.23.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Feb 2023 10:23:32 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 3 Feb 2023 10:17:28 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alexander Egorenkov <egorenar@linux.ibm.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hca@linux.ibm.com
-Subject: Re: [PATCH 1/5] watchdog: diag288_wdt: get rid of register asm
-Message-ID: <20230203181728.GA3172478@roeck-us.net>
-References: <20230203073958.1585738-1-egorenar@linux.ibm.com>
- <20230203073958.1585738-2-egorenar@linux.ibm.com>
+Message-ID: <df2ee423-5913-fd3c-c0e1-6c494d941bfe@roeck-us.net>
+Date:   Fri, 3 Feb 2023 10:23:30 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203073958.1585738-2-egorenar@linux.ibm.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/5] watchdog: diag288_wdt: remove power management
+Content-Language: en-US
+To:     Alexander Egorenkov <egorenar@linux.ibm.com>,
+        wim@linux-watchdog.org
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hca@linux.ibm.com
+References: <20230203073958.1585738-1-egorenar@linux.ibm.com>
+ <20230203073958.1585738-3-egorenar@linux.ibm.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230203073958.1585738-3-egorenar@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        TVD_SUBJ_WIPE_DEBT autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 08:39:54AM +0100, Alexander Egorenkov wrote:
-> Using register asm statements has been proven to be very error prone,
-> especially when using code instrumentation where gcc may add function
-> calls, which clobbers register contents in an unexpected way.
-> 
-> Therefore, get rid of register asm statements in watchdog code, and make
-> sure this bug class cannot happen.
-> 
-> Moreover, remove the register r1 from the clobber list because this
-> register is not changed by DIAG 288.
+On 2/2/23 23:39, Alexander Egorenkov wrote:
+> Remove power management because s390 no longer supports hibernation since
+> commit 394216275c7d ("s390: remove broken hibernate / power management
+> support").
 > 
 > Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
 > Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
@@ -92,38 +91,133 @@ On Fri, Feb 03, 2023 at 08:39:54AM +0100, Alexander Egorenkov wrote:
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/diag288_wdt.c | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
+>   drivers/watchdog/diag288_wdt.c | 65 ++--------------------------------
+>   1 file changed, 2 insertions(+), 63 deletions(-)
 > 
 > diff --git a/drivers/watchdog/diag288_wdt.c b/drivers/watchdog/diag288_wdt.c
-> index 6ca5d9515d85..07ebbb709af4 100644
+> index 07ebbb709af4..c8d516ced6d2 100644
 > --- a/drivers/watchdog/diag288_wdt.c
 > +++ b/drivers/watchdog/diag288_wdt.c
-> @@ -73,20 +73,19 @@ MODULE_ALIAS("vmwatchdog");
->  static int __diag288(unsigned int func, unsigned int timeout,
->  		     unsigned long action, unsigned int len)
->  {
-> -	register unsigned long __func asm("2") = func;
-> -	register unsigned long __timeout asm("3") = timeout;
-> -	register unsigned long __action asm("4") = action;
-> -	register unsigned long __len asm("5") = len;
-> +	union register_pair r1 = { .even = func, .odd = timeout, };
-> +	union register_pair r3 = { .even = action, .odd = len, };
->  	int err;
->  
->  	err = -EINVAL;
->  	asm volatile(
-> -		"	diag	%1, %3, 0x288\n"
-> -		"0:	la	%0, 0\n"
-> +		"	diag	%[r1],%[r3],0x288\n"
-> +		"0:	la	%[err],0\n"
->  		"1:\n"
->  		EX_TABLE(0b, 1b)
-> -		: "+d" (err) : "d"(__func), "d"(__timeout),
-> -		  "d"(__action), "d"(__len) : "1", "cc", "memory");
-> +		: [err] "+d" (err)
-> +		: [r1] "d" (r1.pair), [r3] "d" (r3.pair)
-> +		: "cc", "memory");
->  	return err;
->  }
->  
+> @@ -27,7 +27,6 @@
+>   #include <linux/moduleparam.h>
+>   #include <linux/slab.h>
+>   #include <linux/watchdog.h>
+> -#include <linux/suspend.h>
+>   #include <asm/ebcdic.h>
+>   #include <asm/diag.h>
+>   #include <linux/io.h>
+> @@ -103,10 +102,6 @@ static int __diag288_lpar(unsigned int func, unsigned int timeout,
+>   	return __diag288(func, timeout, action, 0);
+>   }
+>   
+> -static unsigned long wdt_status;
+> -
+> -#define DIAG_WDOG_BUSY	0
+> -
+>   static int wdt_start(struct watchdog_device *dev)
+>   {
+>   	char *ebc_cmd;
+> @@ -114,15 +109,10 @@ static int wdt_start(struct watchdog_device *dev)
+>   	int ret;
+>   	unsigned int func;
+>   
+> -	if (test_and_set_bit(DIAG_WDOG_BUSY, &wdt_status))
+> -		return -EBUSY;
+> -
+>   	if (MACHINE_IS_VM) {
+>   		ebc_cmd = kmalloc(MAX_CMDLEN, GFP_KERNEL);
+> -		if (!ebc_cmd) {
+> -			clear_bit(DIAG_WDOG_BUSY, &wdt_status);
+> +		if (!ebc_cmd)
+>   			return -ENOMEM;
+> -		}
+>   		len = strlcpy(ebc_cmd, wdt_cmd, MAX_CMDLEN);
+>   		ASCEBC(ebc_cmd, MAX_CMDLEN);
+>   		EBC_TOUPPER(ebc_cmd, MAX_CMDLEN);
+> @@ -139,7 +129,6 @@ static int wdt_start(struct watchdog_device *dev)
+>   
+>   	if (ret) {
+>   		pr_err("The watchdog cannot be activated\n");
+> -		clear_bit(DIAG_WDOG_BUSY, &wdt_status);
+>   		return ret;
+>   	}
+>   	return 0;
+> @@ -152,8 +141,6 @@ static int wdt_stop(struct watchdog_device *dev)
+>   	diag_stat_inc(DIAG_STAT_X288);
+>   	ret = __diag288(WDT_FUNC_CANCEL, 0, 0, 0);
+>   
+> -	clear_bit(DIAG_WDOG_BUSY, &wdt_status);
+> -
+>   	return ret;
+>   }
+>   
+> @@ -222,45 +209,6 @@ static struct watchdog_device wdt_dev = {
+>   	.max_timeout = MAX_INTERVAL,
+>   };
+>   
+> -/*
+> - * It makes no sense to go into suspend while the watchdog is running.
+> - * Depending on the memory size, the watchdog might trigger, while we
+> - * are still saving the memory.
+> - */
+> -static int wdt_suspend(void)
+> -{
+> -	if (test_and_set_bit(DIAG_WDOG_BUSY, &wdt_status)) {
+> -		pr_err("Linux cannot be suspended while the watchdog is in use\n");
+> -		return notifier_from_errno(-EBUSY);
+> -	}
+> -	return NOTIFY_DONE;
+> -}
+> -
+> -static int wdt_resume(void)
+> -{
+> -	clear_bit(DIAG_WDOG_BUSY, &wdt_status);
+> -	return NOTIFY_DONE;
+> -}
+> -
+> -static int wdt_power_event(struct notifier_block *this, unsigned long event,
+> -			   void *ptr)
+> -{
+> -	switch (event) {
+> -	case PM_POST_HIBERNATION:
+> -	case PM_POST_SUSPEND:
+> -		return wdt_resume();
+> -	case PM_HIBERNATION_PREPARE:
+> -	case PM_SUSPEND_PREPARE:
+> -		return wdt_suspend();
+> -	default:
+> -		return NOTIFY_DONE;
+> -	}
+> -}
+> -
+> -static struct notifier_block wdt_power_notifier = {
+> -	.notifier_call = wdt_power_event,
+> -};
+> -
+>   static int __init diag288_init(void)
+>   {
+>   	int ret;
+> @@ -297,21 +245,12 @@ static int __init diag288_init(void)
+>   		return -EINVAL;
+>   	}
+>   
+> -	ret = register_pm_notifier(&wdt_power_notifier);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = watchdog_register_device(&wdt_dev);
+> -	if (ret)
+> -		unregister_pm_notifier(&wdt_power_notifier);
+> -
+> -	return ret;
+> +	return watchdog_register_device(&wdt_dev);
+>   }
+>   
+>   static void __exit diag288_exit(void)
+>   {
+>   	watchdog_unregister_device(&wdt_dev);
+> -	unregister_pm_notifier(&wdt_power_notifier);
+>   }
+>   
+>   module_init(diag288_init);
+
