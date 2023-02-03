@@ -2,200 +2,104 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6177B68911B
-	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Feb 2023 08:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D97C968923B
+	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Feb 2023 09:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232435AbjBCHkk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 3 Feb 2023 02:40:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
+        id S231868AbjBCI0r convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 3 Feb 2023 03:26:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232392AbjBCHke (ORCPT
+        with ESMTP id S232435AbjBCI0W (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 3 Feb 2023 02:40:34 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291AF93E08;
-        Thu,  2 Feb 2023 23:40:25 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31370nHu015928;
-        Fri, 3 Feb 2023 07:40:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=tIvJlJrYU4Flf0lu2LlXiqfJqpjr0G6K3AKhGGPmAVs=;
- b=n92bHkMC6MzB/nXIOfHWT1pcrEjXAwJyQ8KJiD9DbNUCKSnd4z9gkQ9zQJHWB99Wmjcp
- F350SJJ1FTq7WZyPuzPhoucgZtpVY+kjG60Xd9tIzky/93bBewLWlGVjQVnJYPhPJh6z
- PNNCh0xqgmuDq34TtJKJYq35VhzgjAXi0vMGOslaHqU3IwdHCMMk7u6yYp/YUNMy9ok5
- Z7uOBLUwSSm3duDySAyq0NFNMMiSoefttNB5iWeHDXJVP+fzb9PdXz4X3TwQiMEBQmS/
- yPsA5hZ4aS8m3UyJ1566DfXSckxCOq2p1R5+46zoozb8t73CaWtxsUyk4GLlFXHjPLhF 8Q== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ngwgeguh5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 07:40:12 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3136xHho014735;
-        Fri, 3 Feb 2023 07:40:10 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3ncvtty3vf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Feb 2023 07:40:09 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3137e7Qj22282850
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 3 Feb 2023 07:40:07 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2136821426;
-        Fri,  3 Feb 2023 07:40:07 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B75F621435;
-        Fri,  3 Feb 2023 07:40:04 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri,  3 Feb 2023 07:40:04 +0000 (GMT)
-From:   Alexander Egorenkov <egorenar@linux.ibm.com>
-To:     wim@linux-watchdog.org, linux@roeck-us.net
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hca@linux.ibm.com
-Subject: [PATCH 5/5] watchdog: diag288_wdt: unify lpar and zvm diag288 helpers
-Date:   Fri,  3 Feb 2023 08:39:58 +0100
-Message-Id: <20230203073958.1585738-6-egorenar@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230203073958.1585738-1-egorenar@linux.ibm.com>
-References: <20230203073958.1585738-1-egorenar@linux.ibm.com>
+        Fri, 3 Feb 2023 03:26:22 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17E395D08;
+        Fri,  3 Feb 2023 00:24:59 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pNrNI-003Nx4-Ij; Fri, 03 Feb 2023 09:24:48 +0100
+Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pNrNI-0042Ei-Ac; Fri, 03 Feb 2023 09:24:48 +0100
+Message-ID: <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
+Subject: Re: remove arch/sh
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Date:   Fri, 03 Feb 2023 09:24:46 +0100
+In-Reply-To: <20230203071423.GA24833@lst.de>
+References: <20230113062339.1909087-1-hch@lst.de>
+         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+         <20230116071306.GA15848@lst.de>
+         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+         <20230203071423.GA24833@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Lff_S4qLoP8GXhEN0LtVG907S7o0xdIU
-X-Proofpoint-GUID: Lff_S4qLoP8GXhEN0LtVG907S7o0xdIU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-03_04,2023-02-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=990 phishscore=0
- spamscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0 malwarescore=0
- priorityscore=1501 adultscore=0 bulkscore=0 clxscore=1015 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302030069
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.148.100
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Change naming of the internal diag288 helper functions
-to improve overall readability and reduce confusion:
-* Rename __diag288() to diag288().
-* Get rid of the misnamed helper __diag288_lpar() that was used not only
-  on LPARs but also zVM and KVM systems.
-* Rename __diag288_vm() to diag288_str().
+Hello Christoph!
 
-Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
-Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
----
- drivers/watchdog/diag288_wdt.c | 32 +++++++++++++-------------------
- 1 file changed, 13 insertions(+), 19 deletions(-)
+On Fri, 2023-02-03 at 08:14 +0100, Christoph Hellwig wrote:
+> On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
+> > We have had a discussion between multiple people invested in the SuperH port and
+> > I have decided to volunteer as a co-maintainer of the port to support Rich Felker
+> > when he isn't available.
+> 
+> So, this still isn't reflected in MAINTAINERS in linux-next.  When
+> do you plan to take over?
 
-diff --git a/drivers/watchdog/diag288_wdt.c b/drivers/watchdog/diag288_wdt.c
-index a29ad164b27a..4631d0a3866a 100644
---- a/drivers/watchdog/diag288_wdt.c
-+++ b/drivers/watchdog/diag288_wdt.c
-@@ -71,8 +71,8 @@ MODULE_ALIAS("vmwatchdog");
- 
- static char *cmd_buf;
- 
--static int __diag288(unsigned int func, unsigned int timeout,
--		     unsigned long action, unsigned int len)
-+static int diag288(unsigned int func, unsigned int timeout,
-+		   unsigned long action, unsigned int len)
- {
- 	union register_pair r1 = { .even = func, .odd = timeout, };
- 	union register_pair r3 = { .even = action, .odd = len, };
-@@ -92,7 +92,7 @@ static int __diag288(unsigned int func, unsigned int timeout,
- 	return err;
- }
- 
--static int __diag288_vm(unsigned int  func, unsigned int timeout, char *cmd)
-+static int diag288_str(unsigned int func, unsigned int timeout, char *cmd)
- {
- 	ssize_t len;
- 
-@@ -102,13 +102,7 @@ static int __diag288_vm(unsigned int  func, unsigned int timeout, char *cmd)
- 	ASCEBC(cmd_buf, MAX_CMDLEN);
- 	EBC_TOUPPER(cmd_buf, MAX_CMDLEN);
- 
--	return __diag288(func, timeout, virt_to_phys(cmd_buf), len);
--}
--
--static int __diag288_lpar(unsigned int func, unsigned int timeout,
--			  unsigned long action)
--{
--	return __diag288(func, timeout, action, 0);
-+	return diag288(func, timeout, virt_to_phys(cmd_buf), len);
- }
- 
- static int wdt_start(struct watchdog_device *dev)
-@@ -119,11 +113,10 @@ static int wdt_start(struct watchdog_device *dev)
- 	if (MACHINE_IS_VM) {
- 		func = conceal_on ? (WDT_FUNC_INIT | WDT_FUNC_CONCEAL)
- 			: WDT_FUNC_INIT;
--		ret = __diag288_vm(func, dev->timeout, wdt_cmd);
-+		ret = diag288_str(func, dev->timeout, wdt_cmd);
- 		WARN_ON(ret != 0);
- 	} else {
--		ret = __diag288_lpar(WDT_FUNC_INIT,
--				     dev->timeout, LPARWDT_RESTART);
-+		ret = diag288(WDT_FUNC_INIT, dev->timeout, LPARWDT_RESTART, 0);
- 	}
- 
- 	if (ret) {
-@@ -135,7 +128,7 @@ static int wdt_start(struct watchdog_device *dev)
- 
- static int wdt_stop(struct watchdog_device *dev)
- {
--	return __diag288(WDT_FUNC_CANCEL, 0, 0, 0);
-+	return diag288(WDT_FUNC_CANCEL, 0, 0, 0);
- }
- 
- static int wdt_ping(struct watchdog_device *dev)
-@@ -152,10 +145,10 @@ static int wdt_ping(struct watchdog_device *dev)
- 		func = conceal_on ? (WDT_FUNC_INIT | WDT_FUNC_CONCEAL)
- 			: WDT_FUNC_INIT;
- 
--		ret = __diag288_vm(func, dev->timeout, wdt_cmd);
-+		ret = diag288_str(func, dev->timeout, wdt_cmd);
- 		WARN_ON(ret != 0);
- 	} else {
--		ret = __diag288_lpar(WDT_FUNC_CHANGE, dev->timeout, 0);
-+		ret = diag288(WDT_FUNC_CHANGE, dev->timeout, 0, 0);
- 	}
- 
- 	if (ret)
-@@ -206,20 +199,21 @@ static int __init diag288_init(void)
- 			return -ENOMEM;
- 		}
- 
--		ret = __diag288_vm(WDT_FUNC_INIT, MIN_INTERVAL, "BEGIN");
-+		ret = diag288_str(WDT_FUNC_INIT, MIN_INTERVAL, "BEGIN");
- 		if (ret != 0) {
- 			pr_err("The watchdog cannot be initialized\n");
- 			kfree(cmd_buf);
- 			return -EINVAL;
- 		}
- 	} else {
--		if (__diag288_lpar(WDT_FUNC_INIT, 30, LPARWDT_RESTART)) {
-+		if (diag288(WDT_FUNC_INIT, WDT_DEFAULT_TIMEOUT,
-+			    LPARWDT_RESTART, 0)) {
- 			pr_err("The watchdog cannot be initialized\n");
- 			return -EINVAL;
- 		}
- 	}
- 
--	if (__diag288_lpar(WDT_FUNC_CANCEL, 0, 0)) {
-+	if (diag288(WDT_FUNC_CANCEL, 0, 0, 0)) {
- 		pr_err("The watchdog cannot be deactivated\n");
- 		return -EINVAL;
- 	}
+Since this is my very first time stepping up as a kernel maintainer, I was hoping
+to get some pointers on what to do to make this happen.
+
+So far, we have set up a new kernel tree and I have set up a local development and
+test environment for SH kernels using my SH7785LCR board as the target platform.
+
+Do I just need to send a patch asking to change the corresponding entry in the
+MAINTAINERS file?
+
+> What platforms will remain supported and what can we start dropping due to
+> being unused and unmaintained?
+
+This has not been sorted out yet.
+
+Adrian
+
 -- 
-2.37.2
-
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
