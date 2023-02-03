@@ -2,78 +2,78 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3858F68A1E5
-	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Feb 2023 19:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D1A68A20F
+	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Feb 2023 19:34:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233380AbjBCSXe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 3 Feb 2023 13:23:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
+        id S233656AbjBCSez (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 3 Feb 2023 13:34:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233295AbjBCSXe (ORCPT
+        with ESMTP id S233716AbjBCSey (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 3 Feb 2023 13:23:34 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440738BDCF;
-        Fri,  3 Feb 2023 10:23:33 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id e21-20020a9d5615000000b006884e5dce99so1609028oti.5;
-        Fri, 03 Feb 2023 10:23:33 -0800 (PST)
+        Fri, 3 Feb 2023 13:34:54 -0500
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48349F9E5;
+        Fri,  3 Feb 2023 10:34:52 -0800 (PST)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-169ba826189so7694816fac.2;
+        Fri, 03 Feb 2023 10:34:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=S7X7WqOczCUyCBj08/fIIsSdgQKTDjj5sD2KRRUZOsI=;
-        b=VcmGKQ98YzAB+J9sBG60vTFulSIYCltoNE6sIU1I8ucAX2NlxULAawwaJ172PaQnna
-         caUaFUkYkepFiP62ybsRFhVQsQSBjiQcvwyUZPMtfMgJjD+ixWyBE0M7lbHlRrawI2D1
-         w91DZSI/nQx4Vpn8bK11UEdfCcoC8t5+mIy3/0oxl38AdD1cYiOXVIgVHTuOS/Qiba57
-         N21Es8nk8Kwz2ITSeEkc4HU3ivB26arZR7srJPqWY8AcBXfyrGlf8MLzvuibUvTO47Wi
-         QnB0Ua3pXsOWn7gexU3eOwhsC+QN1gBLQzD/doBpq3lGDtRRKVbTjedoipC0DsVg+Fvw
-         pOBA==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r3xAgyB/P34VPcjKH6mtGdp098RjQ2FS2vibr1qsdYQ=;
+        b=cTHXYzRuHAMLxkHrkUPLWwJ5IBsBDpwGV6qoTcdt78FUNElTQuQS8lh0hUN2c9VHqQ
+         ehR/BeK8KbDB86jD0u5uhB9w/IAsqNIlaLFjz6wbNMtdYngnLRB1PvP2aVI/vtAz9f2i
+         6LbtT3w7Ytb+wClz4NcDlVdk9y0GkFSDLe3IOHZoGU/HxJRJg6Rd6Mav3E+oK7AEVOZF
+         okeXvytpieRAy0h6uXFJpoV8iW5n92KiCTVb6pR94D++rm17RE35XeiMDYtz51RNCpEY
+         NKI+uDfC48KYCBR5/BC1Or1Wv9yFPs3cR34aDf150zaWjq/oCAQxhsTUsvsvfSpBv2ia
+         E+rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S7X7WqOczCUyCBj08/fIIsSdgQKTDjj5sD2KRRUZOsI=;
-        b=K+99t+8gsNQRwMBIsywjEOci20R5HQtz9eBmaHnQmK0kXfqSHcNvVsR8EMdEbUF/fF
-         ABk+jyOrl2AY7Z0IXXmlQQopyrt7ShyumLju9qtQkdztgOaEc7ErMhfUBBH+UoYOcjLb
-         YJu6pKXoobkL5bcmD44nr6+GP6+0ufst+Ey8rw39LLYjv1Y8u5uweGUFlpQjSpPvqLpP
-         dlz7c1ZqnAk/CefnW4voIS8a/JJUd+htUYaHD0GkFDRzdbk+MDzhgmmRbdlhcvEDyrX0
-         4JaUTmLDOp3MjQvfwNy3pmAcbSzpTOlt7NIJXpaubnM3/CghjwlYxDd4zWFfvP3zTAfd
-         IUww==
-X-Gm-Message-State: AO0yUKX5mvbT6gwjL/upATY21RPYs+8J6cz0pgikv9lsR/nteUwSm+Oj
-        Nb6jrtWaLZM5gg7s84vPLI0=
-X-Google-Smtp-Source: AK7set930D87whC9k09OD4tmfsqQpmJXKWylcoQ0KG/aRGH4gJ2g6vtWy52ltNd/F5RLF21mDxT2ig==
-X-Received: by 2002:a05:6830:2b1f:b0:68b:c04d:79ca with SMTP id l31-20020a0568302b1f00b0068bc04d79camr7921044otv.33.1675448612610;
-        Fri, 03 Feb 2023 10:23:32 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r3xAgyB/P34VPcjKH6mtGdp098RjQ2FS2vibr1qsdYQ=;
+        b=4UkVfVA7YPLiVSH/Pj+NYJYL+GPtscNtysQQh3fEYtRwRKFKHjurw+4CgQqDu4/q1H
+         iR5/U4vVFYD34HKoPgvr3yNl9GN6xRacFgnd0Z1S3Tv9fcyqJBxt57PCv3fcw74GScl4
+         mRDVyt9gY/HYm35rza5gC3cEfPOukIEIcg6QJmiOMNhNAFc/clWs+zI5xgTEBdPQ4gpG
+         7Au1LLr6AaoB5K/JlEIxoPYPdk2cRcodFwhMfGVUxWFj5xKraQyd7eOrxyqrKnneZw8M
+         k7TpysMC5pM6oCL3zWdm5v9vUKqCnZkfJkuwUdXYbayNgSAlRjI6nooFX0MjhnafAWT6
+         /feA==
+X-Gm-Message-State: AO0yUKUXKc6vDP7mXuQjzXAq0NhqxzM8Kmzbos6O7etFB5RzLN8cDsgk
+        +upeM8aY7TVZfHlO6D+97W/8xG0nzys=
+X-Google-Smtp-Source: AK7set/4rhXUAgi9ebhQj4/abCroCXSvbIZWfq4Of4h+XWfMADhQGYso/zPRbMxwu4lZb+8GW8QGfg==
+X-Received: by 2002:a05:6870:1781:b0:163:b342:cd23 with SMTP id r1-20020a056870178100b00163b342cd23mr4727302oae.48.1675449291972;
+        Fri, 03 Feb 2023 10:34:51 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z7-20020a9d65c7000000b0068bb3a9e2b9sm1365472oth.77.2023.02.03.10.23.31
+        by smtp.gmail.com with ESMTPSA id z18-20020a4a9c92000000b0051a317b5687sm1263624ooj.27.2023.02.03.10.34.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 10:23:32 -0800 (PST)
+        Fri, 03 Feb 2023 10:34:51 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <df2ee423-5913-fd3c-c0e1-6c494d941bfe@roeck-us.net>
-Date:   Fri, 3 Feb 2023 10:23:30 -0800
+Message-ID: <1e1451c1-686c-d34a-4388-edb429c212a4@roeck-us.net>
+Date:   Fri, 3 Feb 2023 10:34:49 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 2/5] watchdog: diag288_wdt: remove power management
 Content-Language: en-US
 To:     Alexander Egorenkov <egorenar@linux.ibm.com>,
         wim@linux-watchdog.org
 Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
         hca@linux.ibm.com
 References: <20230203073958.1585738-1-egorenar@linux.ibm.com>
- <20230203073958.1585738-3-egorenar@linux.ibm.com>
+ <20230203073958.1585738-4-egorenar@linux.ibm.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230203073958.1585738-3-egorenar@linux.ibm.com>
+Subject: Re: [PATCH 3/5] watchdog: diag288_wdt: unify command buffer handling
+ for diag288 zvm
+In-Reply-To: <20230203073958.1585738-4-egorenar@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        TVD_SUBJ_WIPE_DEBT autolearn=no autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,142 +81,152 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 2/2/23 23:39, Alexander Egorenkov wrote:
-> Remove power management because s390 no longer supports hibernation since
-> commit 394216275c7d ("s390: remove broken hibernate / power management
-> support").
+> Simplify and de-duplicate code by introducing a common single command
+> buffer allocated once at initialization. Moreover, simplify the interface
+> of __diag288_vm() by accepting ASCII strings as the command parameter
+> and converting it to the EBCDIC format within the function itself.
 > 
 > Reviewed-by: Heiko Carstens <hca@linux.ibm.com>
 > Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+> ---
+>   drivers/watchdog/diag288_wdt.c | 55 +++++++++++++---------------------
+>   1 file changed, 20 insertions(+), 35 deletions(-)
+> 
+> diff --git a/drivers/watchdog/diag288_wdt.c b/drivers/watchdog/diag288_wdt.c
+> index c8d516ced6d2..c717f47dd4c3 100644
+> --- a/drivers/watchdog/diag288_wdt.c
+> +++ b/drivers/watchdog/diag288_wdt.c
+> @@ -69,6 +69,8 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default = C
+>   
+>   MODULE_ALIAS("vmwatchdog");
+>   
+> +static char *cmd_buf;
+> +
+
+Personally I wound not even bother allocating this, but that is just my personal
+opinion. And I guess one more static variable doesn't make much of a difference
+either.
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> ---
->   drivers/watchdog/diag288_wdt.c | 65 ++--------------------------------
->   1 file changed, 2 insertions(+), 63 deletions(-)
-> 
-> diff --git a/drivers/watchdog/diag288_wdt.c b/drivers/watchdog/diag288_wdt.c
-> index 07ebbb709af4..c8d516ced6d2 100644
-> --- a/drivers/watchdog/diag288_wdt.c
-> +++ b/drivers/watchdog/diag288_wdt.c
-> @@ -27,7 +27,6 @@
->   #include <linux/moduleparam.h>
->   #include <linux/slab.h>
->   #include <linux/watchdog.h>
-> -#include <linux/suspend.h>
->   #include <asm/ebcdic.h>
->   #include <asm/diag.h>
->   #include <linux/io.h>
-> @@ -103,10 +102,6 @@ static int __diag288_lpar(unsigned int func, unsigned int timeout,
->   	return __diag288(func, timeout, action, 0);
+>   static int __diag288(unsigned int func, unsigned int timeout,
+>   		     unsigned long action, unsigned int len)
+>   {
+> @@ -88,11 +90,18 @@ static int __diag288(unsigned int func, unsigned int timeout,
+>   	return err;
 >   }
 >   
-> -static unsigned long wdt_status;
-> -
-> -#define DIAG_WDOG_BUSY	0
-> -
+> -static int __diag288_vm(unsigned int  func, unsigned int timeout,
+> -			char *cmd, size_t len)
+> +static int __diag288_vm(unsigned int  func, unsigned int timeout, char *cmd)
+>   {
+> +	ssize_t len;
+> +
+> +	len = strscpy(cmd_buf, cmd, MAX_CMDLEN);
+> +	if (len < 0)
+> +		return len;
+> +	ASCEBC(cmd_buf, MAX_CMDLEN);
+> +	EBC_TOUPPER(cmd_buf, MAX_CMDLEN);
+> +
+>   	diag_stat_inc(DIAG_STAT_X288);
+> -	return __diag288(func, timeout, virt_to_phys(cmd), len);
+> +	return __diag288(func, timeout, virt_to_phys(cmd_buf), len);
+>   }
+>   
+>   static int __diag288_lpar(unsigned int func, unsigned int timeout,
+> @@ -104,24 +113,14 @@ static int __diag288_lpar(unsigned int func, unsigned int timeout,
+>   
 >   static int wdt_start(struct watchdog_device *dev)
 >   {
->   	char *ebc_cmd;
-> @@ -114,15 +109,10 @@ static int wdt_start(struct watchdog_device *dev)
+> -	char *ebc_cmd;
+> -	size_t len;
 >   	int ret;
 >   	unsigned int func;
 >   
-> -	if (test_and_set_bit(DIAG_WDOG_BUSY, &wdt_status))
-> -		return -EBUSY;
-> -
 >   	if (MACHINE_IS_VM) {
->   		ebc_cmd = kmalloc(MAX_CMDLEN, GFP_KERNEL);
-> -		if (!ebc_cmd) {
-> -			clear_bit(DIAG_WDOG_BUSY, &wdt_status);
-> +		if (!ebc_cmd)
->   			return -ENOMEM;
-> -		}
->   		len = strlcpy(ebc_cmd, wdt_cmd, MAX_CMDLEN);
->   		ASCEBC(ebc_cmd, MAX_CMDLEN);
->   		EBC_TOUPPER(ebc_cmd, MAX_CMDLEN);
-> @@ -139,7 +129,6 @@ static int wdt_start(struct watchdog_device *dev)
+> -		ebc_cmd = kmalloc(MAX_CMDLEN, GFP_KERNEL);
+> -		if (!ebc_cmd)
+> -			return -ENOMEM;
+> -		len = strlcpy(ebc_cmd, wdt_cmd, MAX_CMDLEN);
+> -		ASCEBC(ebc_cmd, MAX_CMDLEN);
+> -		EBC_TOUPPER(ebc_cmd, MAX_CMDLEN);
+> -
+>   		func = conceal_on ? (WDT_FUNC_INIT | WDT_FUNC_CONCEAL)
+>   			: WDT_FUNC_INIT;
+> -		ret = __diag288_vm(func, dev->timeout, ebc_cmd, len);
+> +		ret = __diag288_vm(func, dev->timeout, wdt_cmd);
+>   		WARN_ON(ret != 0);
+> -		kfree(ebc_cmd);
+>   	} else {
+>   		ret = __diag288_lpar(WDT_FUNC_INIT,
+>   				     dev->timeout, LPARWDT_RESTART);
+> @@ -146,19 +145,10 @@ static int wdt_stop(struct watchdog_device *dev)
 >   
->   	if (ret) {
->   		pr_err("The watchdog cannot be activated\n");
-> -		clear_bit(DIAG_WDOG_BUSY, &wdt_status);
->   		return ret;
+>   static int wdt_ping(struct watchdog_device *dev)
+>   {
+> -	char *ebc_cmd;
+> -	size_t len;
+>   	int ret;
+>   	unsigned int func;
+>   
+>   	if (MACHINE_IS_VM) {
+> -		ebc_cmd = kmalloc(MAX_CMDLEN, GFP_KERNEL);
+> -		if (!ebc_cmd)
+> -			return -ENOMEM;
+> -		len = strlcpy(ebc_cmd, wdt_cmd, MAX_CMDLEN);
+> -		ASCEBC(ebc_cmd, MAX_CMDLEN);
+> -		EBC_TOUPPER(ebc_cmd, MAX_CMDLEN);
+> -
+>   		/*
+>   		 * It seems to be ok to z/VM to use the init function to
+>   		 * retrigger the watchdog. On LPAR WDT_FUNC_CHANGE must
+> @@ -167,9 +157,8 @@ static int wdt_ping(struct watchdog_device *dev)
+>   		func = conceal_on ? (WDT_FUNC_INIT | WDT_FUNC_CONCEAL)
+>   			: WDT_FUNC_INIT;
+>   
+> -		ret = __diag288_vm(func, dev->timeout, ebc_cmd, len);
+> +		ret = __diag288_vm(func, dev->timeout, wdt_cmd);
+>   		WARN_ON(ret != 0);
+> -		kfree(ebc_cmd);
+>   	} else {
+>   		ret = __diag288_lpar(WDT_FUNC_CHANGE, dev->timeout, 0);
 >   	}
->   	return 0;
-> @@ -152,8 +141,6 @@ static int wdt_stop(struct watchdog_device *dev)
->   	diag_stat_inc(DIAG_STAT_X288);
->   	ret = __diag288(WDT_FUNC_CANCEL, 0, 0, 0);
->   
-> -	clear_bit(DIAG_WDOG_BUSY, &wdt_status);
-> -
->   	return ret;
->   }
->   
-> @@ -222,45 +209,6 @@ static struct watchdog_device wdt_dev = {
->   	.max_timeout = MAX_INTERVAL,
->   };
->   
-> -/*
-> - * It makes no sense to go into suspend while the watchdog is running.
-> - * Depending on the memory size, the watchdog might trigger, while we
-> - * are still saving the memory.
-> - */
-> -static int wdt_suspend(void)
-> -{
-> -	if (test_and_set_bit(DIAG_WDOG_BUSY, &wdt_status)) {
-> -		pr_err("Linux cannot be suspended while the watchdog is in use\n");
-> -		return notifier_from_errno(-EBUSY);
-> -	}
-> -	return NOTIFY_DONE;
-> -}
-> -
-> -static int wdt_resume(void)
-> -{
-> -	clear_bit(DIAG_WDOG_BUSY, &wdt_status);
-> -	return NOTIFY_DONE;
-> -}
-> -
-> -static int wdt_power_event(struct notifier_block *this, unsigned long event,
-> -			   void *ptr)
-> -{
-> -	switch (event) {
-> -	case PM_POST_HIBERNATION:
-> -	case PM_POST_SUSPEND:
-> -		return wdt_resume();
-> -	case PM_HIBERNATION_PREPARE:
-> -	case PM_SUSPEND_PREPARE:
-> -		return wdt_suspend();
-> -	default:
-> -		return NOTIFY_DONE;
-> -	}
-> -}
-> -
-> -static struct notifier_block wdt_power_notifier = {
-> -	.notifier_call = wdt_power_event,
-> -};
-> -
+> @@ -212,25 +201,20 @@ static struct watchdog_device wdt_dev = {
 >   static int __init diag288_init(void)
 >   {
 >   	int ret;
-> @@ -297,21 +245,12 @@ static int __init diag288_init(void)
->   		return -EINVAL;
->   	}
+> -	char ebc_begin[] = {
+> -		194, 197, 199, 201, 213
+> -	};
+> -	char *ebc_cmd;
 >   
-> -	ret = register_pm_notifier(&wdt_power_notifier);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = watchdog_register_device(&wdt_dev);
-> -	if (ret)
-> -		unregister_pm_notifier(&wdt_power_notifier);
-> -
-> -	return ret;
-> +	return watchdog_register_device(&wdt_dev);
->   }
+>   	watchdog_set_nowayout(&wdt_dev, nowayout_info);
 >   
+>   	if (MACHINE_IS_VM) {
+> -		ebc_cmd = kmalloc(sizeof(ebc_begin), GFP_KERNEL);
+> -		if (!ebc_cmd) {
+> +		cmd_buf = kmalloc(MAX_CMDLEN, GFP_KERNEL);
+> +		if (!cmd_buf) {
+>   			pr_err("The watchdog cannot be initialized\n");
+>   			return -ENOMEM;
+>   		}
+> -		memcpy(ebc_cmd, ebc_begin, sizeof(ebc_begin));
+> -		ret = __diag288_vm(WDT_FUNC_INIT, 15,
+> -				   ebc_cmd, sizeof(ebc_begin));
+> -		kfree(ebc_cmd);
+> +
+> +		ret = __diag288_vm(WDT_FUNC_INIT, MIN_INTERVAL, "BEGIN");
+>   		if (ret != 0) {
+>   			pr_err("The watchdog cannot be initialized\n");
+> +			kfree(cmd_buf);
+>   			return -EINVAL;
+>   		}
+>   	} else {
+> @@ -251,6 +235,7 @@ static int __init diag288_init(void)
 >   static void __exit diag288_exit(void)
 >   {
 >   	watchdog_unregister_device(&wdt_dev);
-> -	unregister_pm_notifier(&wdt_power_notifier);
+> +	kfree(cmd_buf);
 >   }
 >   
 >   module_init(diag288_init);
