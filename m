@@ -2,105 +2,107 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF6868B937
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Feb 2023 11:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E6C68BEFC
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Feb 2023 14:57:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjBFKA6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Feb 2023 05:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53218 "EHLO
+        id S231218AbjBFN53 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 6 Feb 2023 08:57:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjBFKAe (ORCPT
+        with ESMTP id S230238AbjBFN5M (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Feb 2023 05:00:34 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3F3206A1;
-        Mon,  6 Feb 2023 02:00:17 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3169Hhtn019017;
-        Mon, 6 Feb 2023 10:00:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=gukPO4AglsSWsyYU7ixRfKwe2lBd8CbhvzavI5w21YI=;
- b=M96HcVNS8hcWO0nkLoLFn9QlgeArVCOl79h4pOW48M6Wh6SFrQsj7aobWh0zZ6yi0S+S
- ToTisuUUFMFtFyLgIKS81EgsQIimB8YjRDfcIgGQqFfnwlfo/dNg1ocxR7fjqgz7D8uv
- 0oCdfOl5L98Ey67lon1BnGcei/v6vifAByZHNkHuOz43wl1kqGZu2TXxT+hufShT+s3Q
- B8Ynzq481YBH/1gILyAUHWai22N04GWnfZkhK1kb4e5pT70FGJtjd3iDDmdc/Jd02Amn
- TtgHmFfBt+ANmBL53GmHbRV8dyM6hDOL/l3rOJl5g1cqMSOCppgzVJ40d6oOPJhLlqJg 5g== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3njxsm90h1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Feb 2023 10:00:03 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3161VFcm027110;
-        Mon, 6 Feb 2023 10:00:01 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3nhf06sk99-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Feb 2023 10:00:01 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3169xwPW43975050
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Feb 2023 09:59:58 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B13182004B;
-        Mon,  6 Feb 2023 09:59:58 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5224020043;
-        Mon,  6 Feb 2023 09:59:58 +0000 (GMT)
-Received: from osiris (unknown [9.171.69.162])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon,  6 Feb 2023 09:59:58 +0000 (GMT)
-Date:   Mon, 6 Feb 2023 10:59:56 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
+        Mon, 6 Feb 2023 08:57:12 -0500
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6C0279A5;
+        Mon,  6 Feb 2023 05:56:18 -0800 (PST)
+Received: by mail-oo1-xc2e.google.com with SMTP id 123-20020a4a0681000000b004faa9c6f6b9so1105166ooj.11;
+        Mon, 06 Feb 2023 05:56:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=M/ScyK/OROP9tthD5it+CFMOeANaS2TfYZEW0alU7+w=;
+        b=jfpeSuNtRk8ZozjxQKKYLnoCz0wSDUzbwrEXZS3SESQ7qoEFs9HlAFqlpWB+5HTyTC
+         GJ+2jU2K5/gX0EVZAr1NgmN/Im9vSzLaYrLmOQivC0h77AyO8JIdgUZoPv+9DKy0ktWF
+         r6QUxGELY5Mx8D5PdIH2kaqkVgXuEvQekJvibyhoefTK4a74Xx86aUtuUQrAFpsqh2BN
+         D38uC3FIx4QC5rWtu8dKxCxl1JgTX7Ifr14e4Yv8KLxb/mCy7+aYunf/ZaxUbsHqS3IE
+         FCE6mGnmNmHpPcpZOaSlNvUR607ZKQtMid7vGhqal8YGj5SjTakV807cFKki84QkKkVR
+         c5mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M/ScyK/OROP9tthD5it+CFMOeANaS2TfYZEW0alU7+w=;
+        b=xRxHVOzQC5Z4dH2f44JnYD/NC9LWFjX2mJ19LOJyXIL9rbGCcACGJHW1KjBgAK+eNz
+         3Zp+ECVtZUo9I2UNCZ1/jtfAt6QGp1YOhn/vO9/jIQR7M2oklVUpwijosytwyA4tQ/dH
+         nMmQlM9T3wstUqcmE9s7pqDfJgIpH6fy8Aeb8M68tbcVxNc4J3k5JOUe2Revk+9G7kbt
+         5dVAAiwxA86GLyDCkH/hvP7RFL2dSyZ7rniyY+3E0GFPQ+xOcOw8DrqUB47hNwtjIuAY
+         NDcNoxzL2EO3QxI1SBn7Bf708uLpPTsZ2VyL06MGxIbHufcy2BV2leP38fhg0ByaZPDv
+         lquQ==
+X-Gm-Message-State: AO0yUKXBQICJSLhTrgWB7QMONmhVs6IrC3KCVjHgQHC23J9EdASWcIa+
+        zSW+EA67L5S95hYB7K9GEjg=
+X-Google-Smtp-Source: AK7set8XCGE2V8OJ/1Fo5vsdndP5+FcblwVGf8Ip72WurbGHEgkZfXaF5KT1pttcuNKlN9mxzhAoTg==
+X-Received: by 2002:a4a:4f42:0:b0:517:b904:b4ec with SMTP id c63-20020a4a4f42000000b00517b904b4ecmr9624885oob.2.1675691743411;
+        Mon, 06 Feb 2023 05:55:43 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v8-20020a4aa408000000b005178a98b6d2sm4567423ool.30.2023.02.06.05.55.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Feb 2023 05:55:42 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b7da8789-6c55-cf41-b95a-e87f9341c438@roeck-us.net>
+Date:   Mon, 6 Feb 2023 05:55:40 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 0/5] diag288 watchdog fixes and improvements
+Content-Language: en-US
+To:     Heiko Carstens <hca@linux.ibm.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>
 Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
         Alexander Egorenkov <egorenar@linux.ibm.com>
-Subject: Re: [PATCH 0/5] diag288 watchdog fixes and improvements
-Message-ID: <Y+DPnGN9l7Ix+TX7@osiris>
 References: <20230203073958.1585738-1-egorenar@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230203073958.1585738-1-egorenar@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: h2_lCqvfpK4eiKS4hLOyxvL-Ri18TvA2
-X-Proofpoint-ORIG-GUID: h2_lCqvfpK4eiKS4hLOyxvL-Ri18TvA2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-06_05,2023-02-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- mlxlogscore=856 clxscore=1015 lowpriorityscore=0 spamscore=0 mlxscore=0
- impostorscore=0 bulkscore=0 suspectscore=0 priorityscore=1501 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2302060079
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+ <Y+DPnGN9l7Ix+TX7@osiris>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <Y+DPnGN9l7Ix+TX7@osiris>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 08:39:53AM +0100, Alexander Egorenkov wrote:
-> Minor code refactoring to improve readability of the driver,
-> reduce code duplication and remove dead code.
+On 2/6/23 01:59, Heiko Carstens wrote:
+> On Fri, Feb 03, 2023 at 08:39:53AM +0100, Alexander Egorenkov wrote:
+>> Minor code refactoring to improve readability of the driver,
+>> reduce code duplication and remove dead code.
+>>
+>> Alexander Egorenkov (5):
+>>    watchdog: diag288_wdt: get rid of register asm
+>>    watchdog: diag288_wdt: remove power management
+>>    watchdog: diag288_wdt: unify command buffer handling for diag288 zvm
+>>    watchdog: diag288_wdt: de-duplicate diag_stat_inc() calls
+>>    watchdog: diag288_wdt: unify lpar and zvm diag288 helpers
+>>
+>>   drivers/watchdog/diag288_wdt.c | 162 ++++++++-------------------------
+>>   1 file changed, 37 insertions(+), 125 deletions(-)
 > 
-> Alexander Egorenkov (5):
->   watchdog: diag288_wdt: get rid of register asm
->   watchdog: diag288_wdt: remove power management
->   watchdog: diag288_wdt: unify command buffer handling for diag288 zvm
->   watchdog: diag288_wdt: de-duplicate diag_stat_inc() calls
->   watchdog: diag288_wdt: unify lpar and zvm diag288 helpers
+> Guenter, Wim, how should this go upstream?
 > 
->  drivers/watchdog/diag288_wdt.c | 162 ++++++++-------------------------
->  1 file changed, 37 insertions(+), 125 deletions(-)
+> I can easily pick this up via the s390 tree for the next merge window.
+> Please let me know.
+> 
 
-Guenter, Wim, how should this go upstream?
+I have it currently in my watchdog-next tree, but that is not in linux-next.
+Fine with me to go through the s390 tree.
 
-I can easily pick this up via the s390 tree for the next merge window.
-Please let me know.
+Guenter
 
-Thanks,
-Heiko
