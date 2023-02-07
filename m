@@ -2,83 +2,69 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438DE68DD56
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Feb 2023 16:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B9068DD89
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Feb 2023 17:03:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232571AbjBGPvs (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Feb 2023 10:51:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
+        id S232049AbjBGQDx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Feb 2023 11:03:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232239AbjBGPvq (ORCPT
+        with ESMTP id S230411AbjBGQDw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Feb 2023 10:51:46 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87C3170A;
-        Tue,  7 Feb 2023 07:51:44 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-15fe106c7c7so19489890fac.8;
-        Tue, 07 Feb 2023 07:51:44 -0800 (PST)
+        Tue, 7 Feb 2023 11:03:52 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1AC93D8;
+        Tue,  7 Feb 2023 08:03:50 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-16a8d511ce0so1036439fac.1;
+        Tue, 07 Feb 2023 08:03:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=oFFVAGXmAn33jC18iARlTq1W8BZjLwMZcFPq63oKn2w=;
-        b=N0M+DO+J5+8deeO0M0F0jkP8kFzkQUYSFG9m4l8/7ha6QaAjjunm75adpx+ffgejLn
-         zT7B63dvvqOiPpxijDe19VG5AnZabeNFVByHzUAaH3soPlFhWvfEqx3yqq6OlWPdpLc9
-         TRhVwi3uox8kjgd4WS6Pf8tWiXTBXLa7My7s/14hfldBrxkWrxEDyYj0Sh39RpV/Cf+U
-         peBOKoRCIyvFXzHclmttBP8SEx33npRMewYNa3NDTZgOQOcoG9HxLTNuhLp+CtlKhy5n
-         Wkoitlm0vcKs1AXWYYF7d61Bp0GI+XMizz7CpXPjX2r0D1NKp5qXTvmoG6cy1qsgW6Rx
-         kxGA==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w1FeMxMrXft7z/3fTjcABkiIwj31U55sfnDiFJ4Qoog=;
+        b=calax4UQTytx5iAQEsC2lmqiIYBZQMAC5bUinNdJrYxICDkTNp2FBzmjzbPCLAvnVc
+         4KjukMEFdQC3jzrOQPyC1owLE8uhdCedwEB4D8zqHqT1Pgu3w8IIfnf364vDYmWrgIEt
+         dKyh6Zd4hQMPaEB9bCqzAUDiIYHm/TxzLcEYQykkzCQNJPL58g1F5QmswHA95UsTYczT
+         czh5dopIdOxYSgBMDAUqm02Se+klOBqcqFxdYC3tRYKzuPTKmtbny+5Rb/xJjUZXa2Pa
+         PkZvLyCCjbjslznbUXnAAS/ZzWplb1H7y9+1DTi+R0qPElAmVcc1goSdSxdiyN8QVMn7
+         06+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oFFVAGXmAn33jC18iARlTq1W8BZjLwMZcFPq63oKn2w=;
-        b=GyFQT3MLGxNCnni1JsX1to/AsNt4Zkmqk/0XC6ebALx4c5SLBO1WCSOPLpWv2ZAEes
-         pzS/cu94N6CgzRnkQcsqDGW5Pp+PTNZINVdylYOIldEyUolBgrmAJ52NR03/eprj5M+K
-         oo6uJFMiDDWcZrpcf+F5Hg2pe5glW3Z8aJPJnzGWqx1CzIWC2Da/cPEKXOusDEa9481d
-         zKblP6yqlrl+EVNbjK4kGcSHBMKxBwdiaUwOKXu2i9eIMTi0jTVr3tV6T4wVPigsE+Qp
-         PvBrnjsCon/vsB75iDy/um1y4bUM1511YMp5aVSPyj3X9EBQGZTPfbtZdIvC0yDsIhFs
-         NNvA==
-X-Gm-Message-State: AO0yUKX4rIU3LFjkXPM9RyeF95Rt+9P/IGIqR9np4sGEkHJuumTec3vn
-        3YCyquKoV7d0wXsR/j597Fk=
-X-Google-Smtp-Source: AK7set8PNt0Bn7P7Em47vAQqHH8+QDOWgFLHEK1CoQh6BYQQUFWvd4MqvJ34uFVT/CoYEylUVKxGvw==
-X-Received: by 2002:a05:6870:a7a4:b0:163:af13:c4e1 with SMTP id x36-20020a056870a7a400b00163af13c4e1mr1432071oao.46.1675785104217;
-        Tue, 07 Feb 2023 07:51:44 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w1FeMxMrXft7z/3fTjcABkiIwj31U55sfnDiFJ4Qoog=;
+        b=nhtnraeICvinvhj4BJara0T2sdyIkaxFNYLM2FxXKL1e0vCl8afgon5/Xe6ZCKR26/
+         w2xuzUOwpn+T9hXVwiKHYcJ0Qx2FpN5ulM1rSyc/neN0SAOjkr4JiVSLwRebGArKegdR
+         Gew5fXyvO7T3h1/1I6fvg1u+9SLm5bIQFEVopIPVUqApQRAMT8ft7q0JFIKa8kOQ2/By
+         Qu21RFcZV37JmwnI+zle8MJqC+iSXRtKee6YaenLgxHRNQWB/zWMJNjxKXBodCTUxAqC
+         nm6TpL5dE8bJrz2i97EwJrei45zSGsrj4bdsOQdHq/5rGFqgKy9JXDHvqgji2ehPjw1j
+         JAcg==
+X-Gm-Message-State: AO0yUKXcj93JojshMLw2qh7cLfRZKmY5pQQS8mHBTR2pr5iq1ts3nlhF
+        Md6fjijVMd6ZkXY/q5cAV2pW7MIk7bo=
+X-Google-Smtp-Source: AK7set+N0vkBjZyEwfj5EvOQwixlYChoyR+ECAaTDm10miWpuJC6b9m/1OOKXMAg0VyIdpt2biy7tg==
+X-Received: by 2002:a05:6870:a408:b0:15f:be68:501 with SMTP id m8-20020a056870a40800b0015fbe680501mr2005657oal.21.1675785829821;
+        Tue, 07 Feb 2023 08:03:49 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m1-20020a056870194100b0014ff15936casm1818137oak.40.2023.02.07.07.51.41
+        by smtp.gmail.com with ESMTPSA id zh37-20020a0568716ba500b00140d421445bsm4211003oab.11.2023.02.07.08.03.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Feb 2023 07:51:43 -0800 (PST)
+        Tue, 07 Feb 2023 08:03:49 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ecd5ff48-78af-8cae-dd54-3bd3f0288434@roeck-us.net>
-Date:   Tue, 7 Feb 2023 07:51:39 -0800
+Message-ID: <db0eda3d-65a7-8d8a-e9a3-7f7617d242ef@roeck-us.net>
+Date:   Tue, 7 Feb 2023 08:03:47 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/7] dt-bindings: watchdog: qcom-wdt: require fallback
- for IPQ4019
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-References: <20230113103346.29381-1-krzysztof.kozlowski@linaro.org>
- <20230113103346.29381-2-krzysztof.kozlowski@linaro.org>
- <20230113140230.GA1606649@roeck-us.net>
- <7e600ba9-a99e-5f07-334f-bb872f5ed7db@linaro.org>
+To:     George Cherian <george.cherian@marvell.com>,
+        wim@linux-watchdog.org, zhangshaokun@hisilicon.com
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230207044603.1011555-1-george.cherian@marvell.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <7e600ba9-a99e-5f07-334f-bb872f5ed7db@linaro.org>
+Subject: Re: [PATCH 1/2] watchdog: sbsa_wdog: Fix the timeout calculation
+ while programming
+In-Reply-To: <20230207044603.1011555-1-george.cherian@marvell.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,24 +78,48 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2/7/23 01:17, Krzysztof Kozlowski wrote:
-> On 13/01/2023 15:02, Guenter Roeck wrote:
->> On Fri, Jan 13, 2023 at 11:33:40AM +0100, Krzysztof Kozlowski wrote:
->>> The device specific compatibles ("qcom,kpss-wdt-ipq4019") should be
->>> follwed by fallback "qcom,kpss-wdt", which is actually used by Linux
->>> driver for binding.
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> Acked-by: Rob Herring <robh@kernel.org>
->>
->> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+On 2/6/23 20:46, George Cherian wrote:
+> The time out calculation done in sbsa_gwdt_set_timeout() would always
+> return a 32-bit value. Use proper typecasting to make sure the overflow
+> values are captured.
 > 
-> The patchset was acked and reviewed, so are there any other comments?
-> Guenter/Will - are you planning to pick it up?
+> Fixes: abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
 > 
+> Signed-off-by: George Cherian <george.cherian@marvell.com>
+> ---
+>   drivers/watchdog/sbsa_gwdt.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
+> index 9791c74aebd4..aaa3f5631f29 100644
+> --- a/drivers/watchdog/sbsa_gwdt.c
+> +++ b/drivers/watchdog/sbsa_gwdt.c
+> @@ -152,14 +152,14 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
+>   	wdd->timeout = timeout;
+>   
+>   	if (action)
+> -		sbsa_gwdt_reg_write(gwdt->clk * timeout, gwdt);
+> +		sbsa_gwdt_reg_write((u64)gwdt->clk * (u64)timeout, gwdt);
+>   	else
+>   		/*
+>   		 * In the single stage mode, The first signal (WS0) is ignored,
+>   		 * the timeout is (WOR * 2), so the WOR should be configured
+>   		 * to half value of timeout.
+>   		 */
+> -		sbsa_gwdt_reg_write(gwdt->clk / 2 * timeout, gwdt);
+> +		sbsa_gwdt_reg_write((u64)gwdt->clk / 2 * (u64)timeout, gwdt);
+>   
+>   	return 0;
+>   }
 
-The series is in my watchdog-next branch. Wim usually picks patches
-up from there.
+The driver sets max_hw_heartbeat_ms. It is its responsibility to clamp
+the timeout value written into the controller to the configured limit
+to avoid confusing the watchdog core. Something like
+
+	timeout = clamp(timeout, 0, wdd->max_hw_heartbeat_ms / 1000);
+
+This also solves the problem in patch 2 since it guarantees that the
+resulting register value is <= U32_MAX for version 0.
 
 Guenter
 
