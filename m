@@ -2,98 +2,105 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3B368D219
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Feb 2023 10:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 418C068D265
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Feb 2023 10:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbjBGJHO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Feb 2023 04:07:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
+        id S231438AbjBGJR2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Feb 2023 04:17:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjBGJHM (ORCPT
+        with ESMTP id S231411AbjBGJR0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Feb 2023 04:07:12 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68931234DF;
-        Tue,  7 Feb 2023 01:07:08 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pPJwG-001RJZ-JC; Tue, 07 Feb 2023 10:06:56 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pPJwE-000mCw-Hc; Tue, 07 Feb 2023 10:06:56 +0100
-Message-ID: <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
-Subject: Re: remove arch/sh
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Date:   Tue, 07 Feb 2023 10:06:53 +0100
-In-Reply-To: <20230203071423.GA24833@lst.de>
-References: <20230113062339.1909087-1-hch@lst.de>
-         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
-         <20230116071306.GA15848@lst.de>
-         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
-         <20230203071423.GA24833@lst.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 
+        Tue, 7 Feb 2023 04:17:26 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4071F491
+        for <linux-watchdog@vger.kernel.org>; Tue,  7 Feb 2023 01:17:23 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id bg26so10562162wmb.0
+        for <linux-watchdog@vger.kernel.org>; Tue, 07 Feb 2023 01:17:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cxgNacSbWKAoLPJGvCUOev++so7sWmiz/ADYtyXJHhM=;
+        b=q4QX9wvAso2SladkGFfXBFtH+tFjhCCjxuqsenbRr+tqB3FgMdePtUisENN32dhL8t
+         j4NAjdsKwm7A0bCfiznDnQH85XvsC4t2+NdNK7k7zulDvb1HUx6YPDfT0whOZ/uV4A4q
+         jT+OExMxDpMDl3JIxNIC4nN+WwJLt/qraOcwmCNJzdMXiL7grKe55VRQ2u0tJCZz+RCX
+         SwjA7Yy4HpOn6a2SUEPYHujzYYlva/cvpG/45V80tA7oZ+UgCaTmPFa70tObz7Kj9x7l
+         cc4+rE1I1U2z7PIW+TVCMh/8VQ+WVX0cEL596epDjB7/MGzWvfiYg1+U3ghHPjhCQEUl
+         Sibg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cxgNacSbWKAoLPJGvCUOev++so7sWmiz/ADYtyXJHhM=;
+        b=4H/EJAqSpLgeVeRdGoVsQgEVg+j11Pbp2QkCscaND335+lz2udwTFK29IUdD99t2lb
+         Bb62jTjSs93CRhOT0YnugXnaFjnkViAVdP6m7fDCZtO53ohe76xelQvDl13gz+Yirbv9
+         5kYx2mJ9vptakrn0vWTGqUc80tSRjBfsbmkQWhC6CdbAKCq45C/Zfrq3+UlF3AtNJ7np
+         FvWCQ7TwOhCzOafk/ONIiJpmE0BJVy/Df88JpXS+WtSPyPK0nxQcM3jZP5p8dUXLfC/I
+         eYfe/+TwNfEeHosO0QewsSiSXHO+0NSij7Co+2cvQgYAjIfJkXCZJltgD5bLf0O0mGXB
+         Ms2Q==
+X-Gm-Message-State: AO0yUKWHh0A2gr57+1szUh8sciJv21zg9OxMAzVAsh3tx2MldDEIo45y
+        NjYGfnIvjnp+i3HObf/nitr2VQ==
+X-Google-Smtp-Source: AK7set/HJGlRQUymSmGMyLm8oSXzb9N2ZeMGj70/h6aS3O4Kp0jDqc2sHmTH4FuaURFaLKgmDKAO6Q==
+X-Received: by 2002:a05:600c:490a:b0:3d3:4007:9c88 with SMTP id f10-20020a05600c490a00b003d340079c88mr3092839wmp.18.1675761442076;
+        Tue, 07 Feb 2023 01:17:22 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f1-20020a1cc901000000b003df14531724sm17869217wmb.21.2023.02.07.01.17.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 01:17:21 -0800 (PST)
+Message-ID: <7e600ba9-a99e-5f07-334f-bb872f5ed7db@linaro.org>
+Date:   Tue, 7 Feb 2023 10:17:19 +0100
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 1/7] dt-bindings: watchdog: qcom-wdt: require fallback
+ for IPQ4019
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+References: <20230113103346.29381-1-krzysztof.kozlowski@linaro.org>
+ <20230113103346.29381-2-krzysztof.kozlowski@linaro.org>
+ <20230113140230.GA1606649@roeck-us.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230113140230.GA1606649@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hello Christoph!
-
-On Fri, 2023-02-03 at 08:14 +0100, Christoph Hellwig wrote:
-> On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
-> > We have had a discussion between multiple people invested in the SuperH port and
-> > I have decided to volunteer as a co-maintainer of the port to support Rich Felker
-> > when he isn't available.
+On 13/01/2023 15:02, Guenter Roeck wrote:
+> On Fri, Jan 13, 2023 at 11:33:40AM +0100, Krzysztof Kozlowski wrote:
+>> The device specific compatibles ("qcom,kpss-wdt-ipq4019") should be
+>> follwed by fallback "qcom,kpss-wdt", which is actually used by Linux
+>> driver for binding.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Acked-by: Rob Herring <robh@kernel.org>
 > 
-> So, this still isn't reflected in MAINTAINERS in linux-next.  When
-> do you plan to take over?  What platforms will remain supported and
-> what can we start dropping due to being unused and unmaintained?
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-I'm getting everything ready now with Geert's help and I have a probably dumb
-question regarding the MAINTAINERS file change: Shall I just add myself as an
-additional maintainer first or shall I also drop Yoshinori Sato?
+The patchset was acked and reviewed, so are there any other comments?
+Guenter/Will - are you planning to pick it up?
 
-Also, is it desirable to add a "T:" entry for the kernel tree?
+Best regards,
+Krzysztof
 
-Thanks,
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
