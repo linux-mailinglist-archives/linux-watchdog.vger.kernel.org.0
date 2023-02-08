@@ -2,144 +2,108 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4808E68F072
-	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Feb 2023 15:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0669368F1A8
+	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Feb 2023 16:11:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbjBHONK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 8 Feb 2023 09:13:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
+        id S230203AbjBHPLD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Feb 2023 10:11:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbjBHONB (ORCPT
+        with ESMTP id S231749AbjBHPKn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 8 Feb 2023 09:13:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC5437F1E;
-        Wed,  8 Feb 2023 06:12:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99DC5B81C76;
-        Wed,  8 Feb 2023 14:12:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6EF7C4339C;
-        Wed,  8 Feb 2023 14:12:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675865539;
-        bh=CM9X2AuKUJbsYimacCNPKUAK4TpbgQFBIKIrx7h4lJw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LVucjxu+REx2vxJaU73V9LeqN0VfNlpVqOVjlgapAR7+Js6CJh2wUlBGjryat06Mx
-         D9i30JRbIJdOspvFUtAoFUTSjc7q9zKrJAeQbeBiwFIiiX8euIEbk0Ty1Tz6V657+T
-         FLA5gRRVsKUOtlkaWGYAvOyX2NIaQlgKRJiFZbCRwtUw7qjRf/eGTg/jPYZv/0q1tt
-         FcUOC2BCeTia4s8YYIZRIs5mKBJvajFbiu7xD8C4mv+0OOcBl6e5vyuvgWOBBh+MUZ
-         xz5q4YEAPB/J4RrPpxV69F8ll/mVwhh9Od/sV4/BiL8f+TOBF8F2/I8j5Fv6bLISdE
-         LVYCGEEzxvGgw==
-Date:   Wed, 8 Feb 2023 15:12:16 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Subject: Re: remove arch/sh
-Message-ID: <Y+OtwCqt26UjCwkZ@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de>
- <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
- <20230203071423.GA24833@lst.de>
- <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
- <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
- <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
- <CAAhV-H57bV855SMr6iBqoQzdak5QSnaRLjQ9oAbOtYZnik5SoQ@mail.gmail.com>
- <91be7f6b52d8ed74798e86270d59bc5cddefe130.camel@physik.fu-berlin.de>
+        Wed, 8 Feb 2023 10:10:43 -0500
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B39438E95;
+        Wed,  8 Feb 2023 07:10:39 -0800 (PST)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-16aa71c1600so1636455fac.11;
+        Wed, 08 Feb 2023 07:10:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=rMOh+YWDoT20q0bU4h7O0uaMSnzV9l0gaPz7VD0hjmg=;
+        b=N6T/xM1nlVfGtGs71rjZQEgiZQqzArFXPD/VIVvWYLf2GmnmRRj7h0H0qfzLr7KWWv
+         Fy1N/0e2ua24zuT6QvppM/D0ixY5y8WQ0AFWGWSWQ5iVTHyzQVEh9CUrJFId93eIS4m0
+         hfQs2IBYhT+48RV9fP5F5lBed7iDCCrdY4QQagI2tuBzWA75UW5XhZ5CbKCr4Qv53dUH
+         9A6ReNKAV+Val/OM5gY7YnOl/2egJPAK1r9UIn470LdXUW6Gql/Ru9SV8eXVQqZSrIKX
+         ELb1JrrZWMvMqELVENPg+OA/+Y+WuG94LBZMddvQ9/upsjoBtGsQueM5n1ikaxHgfl2/
+         iVyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rMOh+YWDoT20q0bU4h7O0uaMSnzV9l0gaPz7VD0hjmg=;
+        b=g9Umt26rHYJYhFLY8V9Vn1N2b9rSuE4Op+6wh3YfYpuQV0Z0XRG9+H6Pw70/1vv+qJ
+         L0Nagvjc9Z1w/vfQVn1hRqOplAuICVO1XX+zfDzQyC3p79XT6NUMseaJinFxNZJldAYe
+         b++YSdZ0Lbfbxfg9XZcelHF4Hb6bhECZbp+CH98uPt1zd6GzK9tbLvjbR0mrYor5821A
+         Lq6J9PgcpqGBoY2IJMMkcwgqiOcdzlZRBRbHrXjPPsm1RNp38KjS+x5KdjFYvSEZaErm
+         6YPi/Su0JhEz9MOdn99ZeOaz7n9OnRnFAENn4lfRRPyxsS4gmyjtaA0djHUryNiqpT+6
+         xp3w==
+X-Gm-Message-State: AO0yUKUvjdRWBdg/mY1X+C0/GeBzHYJ4bEJvbnatqA/mpJulEX4cilsd
+        YDju6ye4PgVMG3NDg2A7NGs8SFMf2Wc=
+X-Google-Smtp-Source: AK7set8g6X8ya1YyHzAHzThnVsGac9b1O1Rt71iMRSbGd/7Y2f1fG0XZzjJv6emprULtB+eFs2EpSQ==
+X-Received: by 2002:a05:6871:8e:b0:16a:af93:9ae6 with SMTP id u14-20020a056871008e00b0016aaf939ae6mr134955oaa.9.1675869038204;
+        Wed, 08 Feb 2023 07:10:38 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w1-20020a9d70c1000000b006863c59f685sm8229834otj.28.2023.02.08.07.10.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 07:10:37 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <2f2dcb7c-e5bc-7e97-71e0-eebdc72fbd03@roeck-us.net>
+Date:   Wed, 8 Feb 2023 07:10:35 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="H/y3lZ2MEalioY2m"
-Content-Disposition: inline
-In-Reply-To: <91be7f6b52d8ed74798e86270d59bc5cddefe130.camel@physik.fu-berlin.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] watchdog: sbsa_wdog: Make sure the timeout programming
+ is within the limits
+Content-Language: en-US
+To:     George Cherian <george.cherian@marvell.com>,
+        wim@linux-watchdog.org, zhangshaokun@hisilicon.com
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230208083736.1237256-1-george.cherian@marvell.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230208083736.1237256-1-george.cherian@marvell.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On 2/8/23 00:37, George Cherian wrote:
+> Make sure to honour the max_hw_heartbeat_ms while programming the timeout
+> value to WOR. Clamp the timeout passed to sbsa_gwdt_set_timeout() to
+> make sure the programmed value is within the permissible range.
+> 
+> Fixes: abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
+> 
+> Signed-off-by: George Cherian <george.cherian@marvell.com>
+> ---
+>   drivers/watchdog/sbsa_gwdt.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
+> index 9791c74aebd4..ee1039a652f1 100644
+> --- a/drivers/watchdog/sbsa_gwdt.c
+> +++ b/drivers/watchdog/sbsa_gwdt.c
+> @@ -149,6 +149,7 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
+>   {
+>   	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
+>   
+> +	timeout = clamp_t(unsigned int, timeout, 1, wdd->max_hw_heartbeat_ms / 1000);
+>   	wdd->timeout = timeout;
+>   
 
---H/y3lZ2MEalioY2m
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Wrong order. wdd->timeout should still contain the requested timeout.
 
+Guenter
 
-> Yes, that's the plan. We're collecting the various patches people have se=
-nt
-> in for arch/sh, review and test them and apply them.
->=20
-> My test board is running the latest kernel now, so I can test new patches=
-, too.
-
-I am just witnessing this development, but I want to say thanks for your
-effort and congrats on your progress. Looks like you do the right things
-correctly, cool! Kudos also to Geert and others for their assistance.
-
-
---H/y3lZ2MEalioY2m
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmPjrbwACgkQFA3kzBSg
-KbYHCw//YV/RG0PWJ1txmpgpA0mLX7EfhxqJS6vwNlqziCSd910A+/ZNL7p2Q5Hx
-wVdeRoLHd9OcZFYXr0HLH0VCIJUYpr57DCy0AoIKL9q9CWET1hAMZjsIv5Kx2uVa
-1obdyCX46XEMqpSBhcsq8Vsq0TMQ4sCLdpVq/wPqBEDGUBGAIhkWX1UMQv2kiS1T
-uuYPKgsFmI2kl52owcOU2yZ42SVZNTEWiO2A8/4BXFfhhzKLWVcZQpEV9OInJ30n
-iXm6abMFAsFavgI90NZl1H4UKKLOzD5Jgr9Rv6DfYuyeADsKe2oQN1NvioHHVqvm
-qWG2b2UnZ7oS+dXxhS7YsQeiiTyZP/mpUprmrCrm0HMsl6iKCgCU8ceuRzy80Obt
-7u9CpA+ceRJ05Gfgo18YElk42l4Qhwk4zSWDQdOwtOlk1FpX9TBxOtOVngYEprMM
-UDRSSXFIJZTEyUAbqWqsMDuGRVcq3S9XAPYINbzig3H+Iy7an/wpxWBnYrRm+eCz
-/eb7eQ/iQYmBd7Zn8XO74E6vvH+pG8f9nqr2sRPpk89ZDPsZEk0wFCHpJQShIYJt
-iSeMDaLVGP+e+YlW7qvKavsdPISxlLhNFA1kj66ccHNZVbNQ5xyGhps/8qefpitG
-nN9N+KCLmNvyC8QCuMiMRDD9RVq8OSQ3VcL2zT8pj3XuJo2po4s=
-=9hIS
------END PGP SIGNATURE-----
-
---H/y3lZ2MEalioY2m--
