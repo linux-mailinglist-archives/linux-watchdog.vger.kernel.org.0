@@ -2,92 +2,111 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027BA68E9FD
-	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Feb 2023 09:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF6868EEAD
+	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Feb 2023 13:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjBHIiP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 8 Feb 2023 03:38:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
+        id S231338AbjBHMOM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Feb 2023 07:14:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjBHIiO (ORCPT
+        with ESMTP id S231186AbjBHMOJ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 8 Feb 2023 03:38:14 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBE51ADE0;
-        Wed,  8 Feb 2023 00:38:09 -0800 (PST)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3188522C028012;
-        Wed, 8 Feb 2023 00:37:50 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=FWDZAph1aUJdfRRes0C3lVLtgy216Pn86srzZbWvq7M=;
- b=DG44PIZVsxlGNnb58cDlAtAwelakQV+klawhh4aFS7ZnLPxtFEnli65RIGd9rcUyBpqR
- Lk+QAegSK1rjnmKviJ2CXL4qxyJUvYucGzEWDvl/oQzaixgoC0BZu5SzH6sxYTXqZPV2
- 9kso5OajvvunyQJLmEd0t6LXjE6Ym7CFpojT5b+AbnAJg1aUGi0i8kNS4NYf9Zv8UGT/
- Heu1Qtdg8FelhRbnmuc0ziX9KVWgsWvwJfcY2TAMSms2rkxpkpuu9ntdhs0UBztX5/j/
- A+CQbjLG/Vkks5yEjD07LY+NBcFR3V0AYmf+8ZUWBxGKe/pGUKQJagXb8krZdH0kwadL 2A== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3nkdyrvbyt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 00:37:49 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Feb
- 2023 00:37:48 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Wed, 8 Feb 2023 00:37:48 -0800
-Received: from tx2-sever.caveonetworks.com (unknown [10.110.141.15])
-        by maili.marvell.com (Postfix) with ESMTP id E59BA5B6925;
-        Wed,  8 Feb 2023 00:37:47 -0800 (PST)
-From:   George Cherian <george.cherian@marvell.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <zhangshaokun@hisilicon.com>
-CC:     <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "George Cherian" <george.cherian@marvell.com>
-Subject: [PATCH v2] watchdog: sbsa_wdog: Make sure the timeout programming is within the limits
-Date:   Wed, 8 Feb 2023 08:37:36 +0000
-Message-ID: <20230208083736.1237256-1-george.cherian@marvell.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 8 Feb 2023 07:14:09 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C543C212A4;
+        Wed,  8 Feb 2023 04:14:04 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pPjKb-0028L0-7w; Wed, 08 Feb 2023 13:13:45 +0100
+Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pPjKa-000FU0-W6; Wed, 08 Feb 2023 13:13:45 +0100
+Message-ID: <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
+Subject: Re: remove arch/sh
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Date:   Wed, 08 Feb 2023 13:13:43 +0100
+In-Reply-To: <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
+References: <20230113062339.1909087-1-hch@lst.de>
+         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+         <20230116071306.GA15848@lst.de>
+         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+         <20230203071423.GA24833@lst.de>
+         <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
+         <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: ULaR2B_LlbXikqaY_B4IH4RuQXBb2IgU
-X-Proofpoint-GUID: ULaR2B_LlbXikqaY_B4IH4RuQXBb2IgU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_03,2023-02-06_03,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.148.100
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Make sure to honour the max_hw_heartbeat_ms while programming the timeout
-value to WOR. Clamp the timeout passed to sbsa_gwdt_set_timeout() to
-make sure the programmed value is within the permissible range.
+Hi Randy!
 
-Fixes: abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
+On Tue, 2023-02-07 at 17:31 -0800, Randy Dunlap wrote:
+> 
+> On 2/7/23 01:06, John Paul Adrian Glaubitz wrote:
+> > Hello Christoph!
+> > 
+> > On Fri, 2023-02-03 at 08:14 +0100, Christoph Hellwig wrote:
+> > > On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
+> > > > We have had a discussion between multiple people invested in the SuperH port and
+> > > > I have decided to volunteer as a co-maintainer of the port to support Rich Felker
+> > > > when he isn't available.
+> > > 
+> > > So, this still isn't reflected in MAINTAINERS in linux-next.  When
+> > > do you plan to take over?  What platforms will remain supported and
+> > > what can we start dropping due to being unused and unmaintained?
+> > 
+> > I'm getting everything ready now with Geert's help and I have a probably dumb
+> > question regarding the MAINTAINERS file change: Shall I just add myself as an
+> > additional maintainer first or shall I also drop Yoshinori Sato?
+> > 
+> > Also, is it desirable to add a "T:" entry for the kernel tree?
+> 
+> Yes, definitely.
 
-Signed-off-by: George Cherian <george.cherian@marvell.com>
----
- drivers/watchdog/sbsa_gwdt.c | 1 +
- 1 file changed, 1 insertion(+)
+Geert has suggested to wait with adding a tree source to the entry until I get my
+own kernel.org account. I have enough GPG signatures from multiple kernel developers
+on my GPG key, so I think it shouldn't be too difficult to qualify for an account.
 
-diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
-index 9791c74aebd4..ee1039a652f1 100644
---- a/drivers/watchdog/sbsa_gwdt.c
-+++ b/drivers/watchdog/sbsa_gwdt.c
-@@ -149,6 +149,7 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
- {
- 	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
- 
-+	timeout = clamp_t(unsigned int, timeout, 1, wdd->max_hw_heartbeat_ms / 1000);
- 	wdd->timeout = timeout;
- 
- 	if (action)
+Adrian
+
 -- 
-2.34.1
-
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
