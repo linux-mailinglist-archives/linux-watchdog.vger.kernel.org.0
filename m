@@ -2,79 +2,71 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5202D68E24A
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Feb 2023 21:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A6C68E574
+	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Feb 2023 02:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjBGUyX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Feb 2023 15:54:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
+        id S230173AbjBHBcL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Feb 2023 20:32:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbjBGUyM (ORCPT
+        with ESMTP id S229457AbjBHBcH (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Feb 2023 15:54:12 -0500
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1313FF3D;
-        Tue,  7 Feb 2023 12:53:59 -0800 (PST)
-Received: by mail-ot1-f41.google.com with SMTP id p24-20020a056830131800b0068d4b30536aso4624681otq.9;
-        Tue, 07 Feb 2023 12:53:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=907sHulvoF8neoDNe5yAkdaGfb+ehLMcUUS+7y6XLyY=;
-        b=lAo6emSRTfY0j+dpZeZgujisLVkETsdrbcVEvduerwOaJ6rFfeoPoo60/H3yODVex9
-         jOy4nvg1ICAB2lPVWRByrI6W6O+9vqkqkCXDceDZahIhzVtSKHp67vujrs7SBU3EV5Ln
-         6S8/XbyK9TBiseziw/UkV5h6DSgVaZTdzLYboamD/nkWagHYQzqm9PnFc3P1h4sTwmJr
-         MUbiTbgMDXpQSAg5GkDEKXN3sRj4bCqIOUU8jBiu5K2tu3ShNkbo14HYg9ZMjBJdTzEp
-         HgrXlKtP/0C13CiwoMcl08scKqdXs7FJ0nKd0MvDXPg/ivrAiwjjqruCAlsmTsrKsP57
-         uJcg==
-X-Gm-Message-State: AO0yUKV5OiLM47LTgu/3BNGX9LsoC3tlpcJ/b75CzSQzqCN0Dk8QXDn5
-        EeroR5FU34TwCmiwmGKJzg==
-X-Google-Smtp-Source: AK7set/fOQVEpQW3hMQDSrruhbgbX3P3rL9zsI3we2gs+uwqyb4nXwNhkr6oeYGTlz4aYRQ5QItAeA==
-X-Received: by 2002:a05:6830:68c4:b0:68d:9dce:b59b with SMTP id cw4-20020a05683068c400b0068d9dceb59bmr2452765otb.3.1675803238308;
-        Tue, 07 Feb 2023 12:53:58 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id ci10-20020a05683063ca00b00684a10970adsm7083602otb.16.2023.02.07.12.53.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Feb 2023 12:53:57 -0800 (PST)
-Received: (nullmailer pid 4137580 invoked by uid 1000);
-        Tue, 07 Feb 2023 20:53:56 -0000
-Date:   Tue, 7 Feb 2023 14:53:56 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Rob Herring <robh+dt@kernel.org>, linux-serial@vger.kernel.org,
-        Linus Walleij <linusw@kernel.org>, linux-ide@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Marek Vasut <marex@denx.de>, linux-mtd@lists.infradead.org,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Richard Weinberger <richard@nod.at>,
-        - <devicetree@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Marc Zyngier <maz@kernel.org>, Imre Kaloz <kaloz@openwrt.org>
-Subject: Re: [PATCH v3 3/3] dt-bindings: serial: restrict possible child node
- names
-Message-ID: <167580323532.4137506.13064088667949445777.robh@kernel.org>
-References: <20230206092624.22922-1-krzysztof.kozlowski@linaro.org>
- <20230206092624.22922-4-krzysztof.kozlowski@linaro.org>
+        Tue, 7 Feb 2023 20:32:07 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697E618B2C;
+        Tue,  7 Feb 2023 17:32:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=jo71tlA2eEZPdxKjgTvLhMtzKyjxK2QlLMd+t0w/e3Q=; b=ay2mX2FLZ3Pvx6L5UJcyeffPih
+        Z2FzC7RnqKsgae3U/fJ+2MREDfNnYcX+7/DIUMs8G3h8JY9UkvYd4HWnOOk7Is6BNTJaTYAZxe1vf
+        l8LfWY1qS4pm/xpZ6w6Q4zuQ/rSlOUnCWslbQWOSRIy7DLC8xbsQgRlz+/9U8gmSYKYFTGHng3Won
+        9zYe4KLDgG2h5xOK/JslAPD/TMcDxUIDr8Uh+bYJm6gP5/ICWPz84oG5SIr1LjuTibzDMj3s3eZNT
+        vAuQJO05IAMM1Vxg5h6AY1cFu3fy6HRqxOeCQZZ0SMxWcVxafZAqAdGTnLRRAF2dInznQN6ckvsDV
+        zMkQoO9Q==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pPZJD-00Dmp1-1J; Wed, 08 Feb 2023 01:31:39 +0000
+Message-ID: <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
+Date:   Tue, 7 Feb 2023 17:31:37 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230206092624.22922-4-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: remove arch/sh
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <20230116071306.GA15848@lst.de>
+ <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+ <20230203071423.GA24833@lst.de>
+ <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,21 +74,28 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 
-On Mon, 06 Feb 2023 10:26:24 +0100, Krzysztof Kozlowski wrote:
-> The re-usable serial.yaml schema matches every property with ".*"
-> pattern, thus any other schema referencing it will not report unknown
-> (unevaluated) properties.  This hides several wrong properties.  It is
-> a limitation of dtschema, thus provide a simple workaround: expect
-> children to be only of few names matching upstream usage (Bluetooth,
-> GNSS, GPS and MCU).
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  Documentation/devicetree/bindings/serial/serial.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
 
-Applied, thanks!
+On 2/7/23 01:06, John Paul Adrian Glaubitz wrote:
+> Hello Christoph!
+> 
+> On Fri, 2023-02-03 at 08:14 +0100, Christoph Hellwig wrote:
+>> On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
+>>> We have had a discussion between multiple people invested in the SuperH port and
+>>> I have decided to volunteer as a co-maintainer of the port to support Rich Felker
+>>> when he isn't available.
+>>
+>> So, this still isn't reflected in MAINTAINERS in linux-next.  When
+>> do you plan to take over?  What platforms will remain supported and
+>> what can we start dropping due to being unused and unmaintained?
+> 
+> I'm getting everything ready now with Geert's help and I have a probably dumb
+> question regarding the MAINTAINERS file change: Shall I just add myself as an
+> additional maintainer first or shall I also drop Yoshinori Sato?
+> 
+> Also, is it desirable to add a "T:" entry for the kernel tree?
 
+Yes, definitely.
+
+thanks.
+-- 
+~Randy
