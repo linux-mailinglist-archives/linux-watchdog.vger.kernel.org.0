@@ -2,135 +2,108 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23E768FD92
-	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Feb 2023 04:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F25F68FE01
+	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Feb 2023 04:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232127AbjBIDAy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 8 Feb 2023 22:00:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
+        id S231418AbjBIDdd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Feb 2023 22:33:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232224AbjBIC7I (ORCPT
+        with ESMTP id S231355AbjBIDdd (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 8 Feb 2023 21:59:08 -0500
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F8B4480
-        for <linux-watchdog@vger.kernel.org>; Wed,  8 Feb 2023 18:56:37 -0800 (PST)
-Received: by mail-oo1-xc34.google.com with SMTP id w3-20020a4aa443000000b0051ac1e0f6b7so92986ool.11
-        for <linux-watchdog@vger.kernel.org>; Wed, 08 Feb 2023 18:56:37 -0800 (PST)
+        Wed, 8 Feb 2023 22:33:33 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6810A8;
+        Wed,  8 Feb 2023 19:33:30 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id y11-20020a05683009cb00b0068dbf908574so194443ott.8;
+        Wed, 08 Feb 2023 19:33:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MeuDR87mT5oZz0xYPlgMzWTRgnSVFdT+RIi9fTOHK48=;
-        b=cpXzCzr+cz0YwMg8OioZbOdFT6x6Xm6HxQuCqdoPsmS9hedulw1eO6Kk/3hEebcpma
-         XmVmNXfmMApG2N79Si3uHiYwQf3pkrY8yoF8TXhNqwM63RW+rXEAr2c9GvCwLnpdMizZ
-         /i8XL5yNmB4lLP5zpVm7le3plURiLI5xI0pF39yvS1te1cCGkPno0+9YUYvh8/jIQets
-         PkfeCX7kq7oaaZINx71/ntTci+5+uSn1VJ3kfEYljJIBKf1cp8PDE/LSANc9+WdWamP2
-         UdiemMHM1/q9NSBnjYTg3Wlj/GIvYnBRMQxV2QKkM2GCOhCzUuRGyTbkMr557hPEVKAp
-         8+Cw==
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=OaaMmw3PAi+pi0tWEgA6WtRfrUnFX1OCuwDrc+Vf7fQ=;
+        b=K3w6+uKAhBI4KktI+N9J0HK+96JSPzEWuzf2PGUmoKNpzqtXCOOFYfxnNqJXG43EJK
+         MB4ENeC89yh0WVTvZ7QsguKEMDJUSOQ02E03D/K+hONi5xQkHWjhKg9CPp2/oCGVBGPN
+         rgLALpKK0Y9dxaaO4zqn6re2pSRYrT5PSJvuQ6WfJP3X7TBXXiuPHSV9//wteYeYv9Zv
+         53eWFczOiFpotVSJ891ufi8E2XTkYiF3Rz8KFsRfKpEaDQfvjxvCuDrevskIqvhnlqZU
+         gvYU9rUjJFDfU7HCPdsrjRMk3vGgMBsDlywAVSFMvDI/JmnxPAUlz+Gk9sRMYnNPHaRT
+         rDyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MeuDR87mT5oZz0xYPlgMzWTRgnSVFdT+RIi9fTOHK48=;
-        b=FWfd0kEuv7CKaycFIM+PXwJ0I+wBQU/AjuMlI6D7zxleqEgKwBZAkuN+fNaMPA4VcB
-         H9um3Upg4tgycrmFd18oFKNI2Cj8vTo0ICsMCW2yzS5mKVkN0Ix4zzUzj0DvNovkZpYF
-         9g86h76/QTJbwEvFWBpVkwy2e71gZcj6GV++FuuapszwhTNJzJfTwyGurinG/TcH4Zqm
-         6FEumWkhjJ/U+b6AIWhQBddIXsCnJT/QzObvapEGHQ2Enh6Oec6OsrwIw71nKBbGQVso
-         iymxaGaNdw3c2aV7IFPdZ7hVWkeYyYegUlWSWxOy3YH+PiVNKq9lUbCyFNrJ1qUtDwza
-         PeOg==
-X-Gm-Message-State: AO0yUKUdAZWWrgdEZ6wQ7ITSCcY5CMBKStqI8ShaYf8k0a7oe7J3v74E
-        3X6jkYRtfooG5C7vR2anT0P2sw==
-X-Google-Smtp-Source: AK7set/z8RwoK5zLi99e0gYyO0saoOIvr4Qi+M0w1VEg8sxij2tCPL/DbU7DENRObgoCAx8yBLGhmQ==
-X-Received: by 2002:a4a:9b8e:0:b0:51a:48f4:75de with SMTP id x14-20020a4a9b8e000000b0051a48f475demr241022ooj.0.1675911397288;
-        Wed, 08 Feb 2023 18:56:37 -0800 (PST)
-Received: from [192.168.86.224] ([136.62.38.22])
-        by smtp.gmail.com with ESMTPSA id bm9-20020a056820188900b004f8cf5f45e9sm133765oob.22.2023.02.08.18.56.36
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OaaMmw3PAi+pi0tWEgA6WtRfrUnFX1OCuwDrc+Vf7fQ=;
+        b=L+6RVP6FhnFV6cHAcrM6AtU2SaA/Qj1c3JEA16CbcAX657QZaIaOc8LbiIY2U+wjQp
+         8XFQfcxJPsuAflYSgNwC/p8QOdGFnuV1mwmGF5/Xdebq/NZg0A28Xesb7vEIUcEWoIt1
+         ecAJ5XCujL9xE76xoLYo2X9onbYlWOR9s2ld/6rX/+aNkld29ewOJjJazU+lBpbfGwuD
+         Zx2oEhEhNvICFiLOksb0Y9SE8BSXgv+njuZmqImlvOpBJfG7e1sfVwf/bU/OfPYeri/u
+         zI2gDG+R80a4Fgr3NGyxTfSGITNQJnHbXK1tWqTaA8uvU2lRtC7+WgGPO79KmdQFW9ga
+         xkbA==
+X-Gm-Message-State: AO0yUKUOV0o7DEok1/7whSrM1AXsvBBMQAsim+MaLBM0NIIh4Wkoa/71
+        jz2kCFrwb4S8CsnF9VcFIUgvQ81BChs=
+X-Google-Smtp-Source: AK7set8UuwCG1RVoAQYZsOHDmBml2TyyIcPs70abON0BvM9w0Vu57+LvCGNOYrObjRnf4XAclnD5HQ==
+X-Received: by 2002:a9d:6458:0:b0:68d:57af:2678 with SMTP id m24-20020a9d6458000000b0068d57af2678mr4387581otl.38.1675913610176;
+        Wed, 08 Feb 2023 19:33:30 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u4-20020a9d4d84000000b0068d752f1870sm130284otk.5.2023.02.08.19.33.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 18:56:37 -0800 (PST)
-Message-ID: <1c6e7a19-a650-1852-6f74-ca5547db44c4@landley.net>
-Date:   Wed, 8 Feb 2023 21:09:35 -0600
+        Wed, 08 Feb 2023 19:33:29 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0106b656-9e86-271b-eda6-20ac7cb1792c@roeck-us.net>
+Date:   Wed, 8 Feb 2023 19:33:28 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: remove arch/sh
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3] watchdog: sbsa_wdog: Make sure the timeout programming
+ is within the limits
 Content-Language: en-US
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de>
- <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
- <20230203071423.GA24833@lst.de>
- <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
- <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
- <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
-Content-Type: text/plain; charset=UTF-8
+To:     George Cherian <george.cherian@marvell.com>,
+        wim@linux-watchdog.org, zhangshaokun@hisilicon.com
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230209021117.1512097-1-george.cherian@marvell.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230209021117.1512097-1-george.cherian@marvell.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2/8/23 06:13, John Paul Adrian Glaubitz wrote:
-> Hi Randy!
+On 2/8/23 18:11, George Cherian wrote:
+> Make sure to honour the max_hw_heartbeat_ms while programming the timeout
+> value to WOR. Clamp the timeout passed to sbsa_gwdt_set_timeout() to
+> make sure the programmed value is within the permissible range.
 > 
-> On Tue, 2023-02-07 at 17:31 -0800, Randy Dunlap wrote:
->> 
->> On 2/7/23 01:06, John Paul Adrian Glaubitz wrote:
->> > Hello Christoph!
->> > 
->> > On Fri, 2023-02-03 at 08:14 +0100, Christoph Hellwig wrote:
->> > > On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
->> > > > We have had a discussion between multiple people invested in the SuperH port and
->> > > > I have decided to volunteer as a co-maintainer of the port to support Rich Felker
->> > > > when he isn't available.
->> > > 
->> > > So, this still isn't reflected in MAINTAINERS in linux-next.  When
->> > > do you plan to take over?  What platforms will remain supported and
->> > > what can we start dropping due to being unused and unmaintained?
->> > 
->> > I'm getting everything ready now with Geert's help and I have a probably dumb
->> > question regarding the MAINTAINERS file change: Shall I just add myself as an
->> > additional maintainer first or shall I also drop Yoshinori Sato?
->> > 
->> > Also, is it desirable to add a "T:" entry for the kernel tree?
->> 
->> Yes, definitely.
+> Fixes: abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
 > 
-> Geert has suggested to wait with adding a tree source to the entry until I get my
-> own kernel.org account. I have enough GPG signatures from multiple kernel developers
-> on my GPG key, so I think it shouldn't be too difficult to qualify for an account.
+> Signed-off-by: George Cherian <george.cherian@marvell.com>
 
-So you're not planning to use https://lk.j-core.org/J-Core-Developers/sh-linux
-but push to kernel.org and ask Linus to pull from there?
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> Adrian
+> ---
+>   drivers/watchdog/sbsa_gwdt.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
+> index 9791c74aebd4..63862803421f 100644
+> --- a/drivers/watchdog/sbsa_gwdt.c
+> +++ b/drivers/watchdog/sbsa_gwdt.c
+> @@ -150,6 +150,7 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
+>   	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
+>   
+>   	wdd->timeout = timeout;
+> +	timeout = clamp_t(unsigned int, timeout, 1, wdd->max_hw_heartbeat_ms / 1000);
+>   
+>   	if (action)
+>   		sbsa_gwdt_reg_write(gwdt->clk * timeout, gwdt);
 
-Rob
