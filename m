@@ -2,92 +2,228 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5A068FCF4
-	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Feb 2023 03:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF1D68FD6A
+	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Feb 2023 03:57:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbjBICMd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 8 Feb 2023 21:12:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
+        id S232530AbjBIC5C (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Feb 2023 21:57:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjBICMc (ORCPT
+        with ESMTP id S230054AbjBICzv (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 8 Feb 2023 21:12:32 -0500
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA2525BB8;
-        Wed,  8 Feb 2023 18:11:54 -0800 (PST)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31921Km4026350;
-        Wed, 8 Feb 2023 18:11:22 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=HQTLW3GXXAvE//tLnEkmnSFWMNDpVwqLK+9NZXZOOD8=;
- b=OPHUKGCps/Qlt782HCW2QzgPHwii79HXF8B9Mk17M4fe7SdbTWXimkVTDexamoVNexOm
- d4+BslFvmX7nG4bugylOLBqYWKJjZwSsvEbIj68o7lIK651oBTySwZOhG2TipLQHUSU2
- 9tiDCb4VSWC4IZT6xi8R9MZiPgeaP8uSCNEE9gjo+xXc5iCiCfPW+0NRyWLoXf/ps0+m
- nD3GVepNrGv9rWg9P3531JrV87IoLzKxj+rWcGJ1KkC4I9uPQ1bOW2cFk5+E2WtTqW2t
- YZrLmXT9jB6j+UjWdJ8HH4WFgYNZRHqKNF5cwlkNJd278x/TpmsujheCDpGsoXfyQILH WQ== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3nm65kydux-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 08 Feb 2023 18:11:21 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Feb
- 2023 18:11:19 -0800
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Wed, 8 Feb 2023 18:11:19 -0800
-Received: from tx2-sever.caveonetworks.com (unknown [10.110.141.15])
-        by maili.marvell.com (Postfix) with ESMTP id 587ED5B692A;
-        Wed,  8 Feb 2023 18:11:19 -0800 (PST)
-From:   George Cherian <george.cherian@marvell.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <zhangshaokun@hisilicon.com>
-CC:     <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "George Cherian" <george.cherian@marvell.com>
-Subject: [PATCH v3] watchdog: sbsa_wdog: Make sure the timeout programming is within the limits
-Date:   Thu, 9 Feb 2023 02:11:17 +0000
-Message-ID: <20230209021117.1512097-1-george.cherian@marvell.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 8 Feb 2023 21:55:51 -0500
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5951432E60
+        for <linux-watchdog@vger.kernel.org>; Wed,  8 Feb 2023 18:53:23 -0800 (PST)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-16a7f5b6882so944038fac.10
+        for <linux-watchdog@vger.kernel.org>; Wed, 08 Feb 2023 18:53:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uim76Lm5dMHI6OEZRl5dYh1Pi4k74h79vxsD8ejV228=;
+        b=cGJLZWh92YeqRetjDZ7mm7cWN9+7V9DkC4NxT3TFyzxOr/dT+y9RySdTXQJoGNFodj
+         Lhk5mURgRjvFpcDTTz997u4uYb5mXXSYufkvOHW16uecAigBafpKfrfPhjupqfB69TqU
+         CpdJtnnu16tBfQsfiDPbx5CJt8woI9p/61QJECQkg6ib53DsbPoG/6qEIFtT82h7XZEd
+         bH7zIZ7zeIu+guqsHWHH7HwzmCW5uJfaHSVq8vhoIZZxTs9cCuui2tEeecApAXxH34Kl
+         VCUo/SLo54vsVKd1HLhUdcTfFi+wK+KZOUpQFgXm1zVH8Gmha3IwtqAbksT7XdA8QMjg
+         0+9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uim76Lm5dMHI6OEZRl5dYh1Pi4k74h79vxsD8ejV228=;
+        b=rCSNgYkPYmqp8nbz2AfgDgXcljZh1BVmWKt1BZXXKYnM6JWMPCgI9+FXEXL5cZJ9gl
+         r+WtIjqSB6MoSjQXxnShNJtdKJubYHhWybUwPizgLhOTu0roDhe0G06j5qfngpoWrjz1
+         342h436Hi6s16AtT7klzjvpSFoK2WY4B0/wskIEjuGhDaY+5TtDW0YgYadC4R6hD86gx
+         VFSQkPzTdrbzndmbXGxZYpKDw1zdswxYtAdcLJq/M3oxyvoDgJ8km5biqqm8LM/FbsWh
+         PE2jxN6ZCgpw8TuWYUZwi/mQ5XnjKwXYTckVuFVmHrQuCH6xOa1m2sK5SUz1o4MIWHFK
+         xLjg==
+X-Gm-Message-State: AO0yUKUzWcUBwkMJrqdmxwOLeSlTnscZQvgKK2v4CPCEA12WkoKfSGp0
+        L3Z66/Ac1tx3HY3PqXwPwLp/+w==
+X-Google-Smtp-Source: AK7set/IY8hpNoA4Lil9GPnYxD0kM8QMzh26dc48QApuMMt+T/W+mzLQoVZI9oh721NfnL8VF3E7Fg==
+X-Received: by 2002:a05:6870:7386:b0:163:ad96:f89c with SMTP id z6-20020a056870738600b00163ad96f89cmr5551951oam.15.1675911202632;
+        Wed, 08 Feb 2023 18:53:22 -0800 (PST)
+Received: from [192.168.86.224] ([136.62.38.22])
+        by smtp.gmail.com with ESMTPSA id v6-20020a4a5a06000000b00517b076e071sm100253ooa.47.2023.02.08.18.53.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 18:53:21 -0800 (PST)
+Message-ID: <b394bf10-2fc5-6498-955f-a904a756e0c9@landley.net>
+Date:   Wed, 8 Feb 2023 21:06:19 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: opIW65Fj7LaV0cAkHuyAIl6IO-X7noSs
-X-Proofpoint-ORIG-GUID: opIW65Fj7LaV0cAkHuyAIl6IO-X7noSs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-02-08_11,2023-02-08_02,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: remove arch/sh
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <20230116071306.GA15848@lst.de>
+ <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+ <20230203071423.GA24833@lst.de>
+ <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
+ <20230203083037.GA30738@lst.de>
+ <d10fe31b2af6cf4e03618f38ca9d3ca5c72601ed.camel@physik.fu-berlin.de>
+ <CAMuHMdUitVfW088YOmqYm4kwbKwkwb22fAakHcu6boxv7dXDfQ@mail.gmail.com>
+ <f6a60193-a5d1-c42c-158a-4b0bfe9c7538@infradead.org>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <f6a60193-a5d1-c42c-158a-4b0bfe9c7538@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Make sure to honour the max_hw_heartbeat_ms while programming the timeout
-value to WOR. Clamp the timeout passed to sbsa_gwdt_set_timeout() to
-make sure the programmed value is within the permissible range.
+On 2/3/23 09:57, Randy Dunlap wrote:
+> Hi--
+> 
+> On 2/3/23 02:33, Geert Uytterhoeven wrote:
+>> Hi Adrian,
+>> 
+>> On Fri, Feb 3, 2023 at 11:29 AM John Paul Adrian Glaubitz
+>> <glaubitz@physik.fu-berlin.de> wrote:
+>>> On Fri, 2023-02-03 at 09:30 +0100, Christoph Hellwig wrote:
+>>>> On Fri, Feb 03, 2023 at 09:24:46AM +0100, John Paul Adrian Glaubitz wrote:
+>>>>> Since this is my very first time stepping up as a kernel maintainer, I was hoping
+>>>>> to get some pointers on what to do to make this happen.
+>>>>>
+>>>>> So far, we have set up a new kernel tree and I have set up a local development and
+>>>>> test environment for SH kernels using my SH7785LCR board as the target platform.
+>>>>>
+>>>>> Do I just need to send a patch asking to change the corresponding entry in the
+>>>>> MAINTAINERS file?
+>>>>
+>>>> I'm not sure a there is a document, but:
+>>>>
+>>>>  - add the MAINTAINERS change to your tree
+>>>>  - ask Stephen to get your tree included in linux-next
+>>>>
+>>>> then eventually send a pull request to Linus with all of that.  Make
+>>>> sure it's been in linux-next for a while.
+>>>
+>>> OK, thanks for the pointers! Will try to get this done by next week.
+>>>
+>>> We're still discussing among SuperH developer community whether there will be a second
+>>> maintainer, so please bear with us a few more days. I will collect patches in the
+>>> meantime.
+>> 
+>> Thanks a lot!
+>> 
+>> If you need any help with process, setup, ... don't hesitate to ask
+>> (on e.g. #renesas-soc on Libera).
+> 
+> While Adrian and Geert are reading this, I have a question:
+> 
+> Is this "sh64" still accurate and applicable?
 
-Fixes: abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
+I hadn't noticed it was there... Randy Dunlap added that in 2018 (commit
+09b1565324cba). I wonder why?
 
-Signed-off-by: George Cherian <george.cherian@marvell.com>
----
- drivers/watchdog/sbsa_gwdt.c | 1 +
- 1 file changed, 1 insertion(+)
+> from Documentation/kbuild/kbuild.rst:
 
-diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
-index 9791c74aebd4..63862803421f 100644
---- a/drivers/watchdog/sbsa_gwdt.c
-+++ b/drivers/watchdog/sbsa_gwdt.c
-@@ -150,6 +150,7 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
- 	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
- 
- 	wdd->timeout = timeout;
-+	timeout = clamp_t(unsigned int, timeout, 1, wdd->max_hw_heartbeat_ms / 1000);
- 
- 	if (action)
- 		sbsa_gwdt_reg_write(gwdt->clk * timeout, gwdt);
--- 
-2.34.1
+There isn't an active 64 bit superh architecture for the moment: sh5 was a
+prototype that never shipped in volume, and support was removed in commit
+37744feebc08. From the j-core side j64 hasn't shipped yet either (still planned
+last I heard, but j-core went downmarket first instead due to customer demand,
+and multi-issue is on the roadmap before 64 bit address space).
 
+The general trend in linux kernel architectures has been to merge 32 and 64 bit
+anyway, and just have the .config set CONFIG_64BIT to distinguish: arch/x86 was
+created by merging arch/i386 and arch/x86_64 in 2007, arch/powerpc merged the 32
+and 64 bit directories in 2005, arch/s390 and s390x are in the same dir,
+arch/mips... (For some reason arm and arm64 are still split, but that might be
+fallout from Arm Ltd trying to distinguish aarrcchh6644 from "arm" for some
+reason? Dunno.)
+
+I wonder why is this going the other way? I thought $ARCH mostly just specified
+the subdirectory under arch/ with a few historical aliases in the top level
+Makefile:
+
+# Additional ARCH settings for x86
+ifeq ($(ARCH),i386)
+        SRCARCH := x86
+endif
+ifeq ($(ARCH),x86_64)
+        SRCARCH := x86
+endif
+
+# Additional ARCH settings for sparc
+ifeq ($(ARCH),sparc32)
+       SRCARCH := sparc
+endif
+ifeq ($(ARCH),sparc64)
+       SRCARCH := sparc
+endif
+
+# Additional ARCH settings for parisc
+ifeq ($(ARCH),parisc64)
+       SRCARCH := parisc
+endif
+
+But you could always just specify the correct ARCH directory directly and it
+would work. (Always did when I tried it, although I haven't built sparc in years
+because there's no musl-libc support, and never built parisc64 because I
+couldn't get it to work with uClibc even before musl. I _am_ still building both
+32 bit and 64 bit x86 with ARCH=x86 both times...)
+
+> But some architectures such as x86 and sparc have aliases.
+> 
+> - x86: i386 for 32 bit, x86_64 for 64 bit
+> - sh: sh for 32 bit, sh64 for 64 bit <<<<<<<<<<<<<<<
+> - sparc: sparc32 for 32 bit, sparc64 for 64 bit
+
+Randy also added the sparc alias in commit 5ba800962a80. That at least exists in
+the top level Makefile.
+
+Did he mean parisc64 and typoed sh64? Because that's the only other alias in the
+top level Makefile...
+
+In any case, these are historical aliases for old builds, which can probably get
+yanked because it should be a trivial fix to use the right ARCH= value for
+modern builds? (I'd think?)
+
+You'd even be able to build a 64 bit version of ARCH=i386 just fine if it wasn't
+for the ONE place in arch/x86/Kconfig that actually checks:
+
+config 64BIT
+        bool "64-bit kernel" if "$(ARCH)" = "x86"
+        default "$(ARCH)" != "i386"
+
+Same for arch/sparc/Kconfig:
+
+config 64BIT
+        bool "64-bit kernel" if "$(ARCH)" = "sparc"
+        default "$(ARCH)" = "sparc64"
+
+Nothing else anywhere seems to care...
+
+> Thanks.
+
+Rob
