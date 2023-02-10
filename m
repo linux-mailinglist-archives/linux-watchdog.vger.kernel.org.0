@@ -2,86 +2,69 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16ED692227
-	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Feb 2023 16:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B710F692281
+	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Feb 2023 16:43:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232617AbjBJP22 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 10 Feb 2023 10:28:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
+        id S232083AbjBJPnr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 10 Feb 2023 10:43:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231897AbjBJP21 (ORCPT
+        with ESMTP id S232024AbjBJPnp (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 10 Feb 2023 10:28:27 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB14BC;
-        Fri, 10 Feb 2023 07:28:25 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-16aca2628c6so4866699fac.7;
-        Fri, 10 Feb 2023 07:28:25 -0800 (PST)
+        Fri, 10 Feb 2023 10:43:45 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61125FDA;
+        Fri, 10 Feb 2023 07:43:43 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-16dcb07b805so598022fac.0;
+        Fri, 10 Feb 2023 07:43:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9hVlPe6eJuNFcNFFfLabGm+E19dcSTToLIMGVvbXQT4=;
-        b=knlC8WzdrM/m+aS0ypSlu3cSKtJRHjQV63Bd4AUvQDADk5tAA69DFKVPfxX64FG9dr
-         OUxbAR/GHmcxaqX/NDk8dfC/xkQBhpElTCweaD88AHi1gDlQywT6wlsLnpwUH3EHWmtN
-         hZVWOYdxSQ0j3noNiOG/v99wBcLMkBEvQDihEhAYfI7K+QiM+k2TP9hMw7+QjOkIdZls
-         7riK1kAy/JtjEKfFaVpDXkIF8H9VpOMuVL1eICK0jFGCFxl+woDgir07I9A67HsdQhzn
-         wC/+YPuZBvd7kCyfuXaANBxeV5UVL01A/ceg7opO/A2Y4RES6IZLl6q3WnFMHQiRrVJc
-         5Qag==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=X15WkfAllK4QnYioovuov5odntKZjuq/k4FJqkuDZqk=;
+        b=ltkm6kdzR3STq207DiPKMQy0T66g9jT6+iHXjwkqo9bZI4up/jmkq4T/qPjQ6+mYqz
+         0Bghy68EJoF9l9lkOO9c0OywBqC9K2xt94AFCvnLKAHN42v9G7PajK+waEcyEUE+cYVM
+         LpX5YPyiC1wiQIfxyiaJp5iFoQ9cYciFBPxR3XwZMNod5NUOy9aWYq9T0MCFv8OQgKwP
+         PCOP6J3kQVrjSwWgpW9Kdsk0dFxt1aIfyTlsKQfwz1UutptVpt8oDVbao8G93s++zLFb
+         Q6PMeSj+Jee8TtxNuG5a+nAOox0AQMto4XYGK5t576efkjyRWxnEhrdAwp8XlS2w+Sxz
+         enyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9hVlPe6eJuNFcNFFfLabGm+E19dcSTToLIMGVvbXQT4=;
-        b=Pq5m3PeGN33+iZnLHOTR8iazFH57HDfZZSFJRftnFzBp6gwSda57ouhbfGI7U8MaLw
-         NkFUXVxmWA6RymOu5XXpATwp7xM6Hn9jKkglcMogdDUu8M5cqVY8VAiBD9JY8QpfqtqA
-         rhxBJAEXxuGOKgWZLKquI4jcrUoUmBKDeoy/mmVJaAbACWX+u3j16q3awPE00jeTRhjs
-         v24gtE/4XlSocATj/qaQkcgtHBWWbxWVOguV4J4v0chbMYr7EO+conoRJfUa353T6kYg
-         6WlnsrW2Asv4A+XxV61dzxEoptRC4eFnFvdR8XWS+VcaR/8Y/Eetmox3D6H4vBEATQSs
-         IAoA==
-X-Gm-Message-State: AO0yUKUatkygtNREmCwbHhS4g+HdGBhK0yOsDv3kiDoaPAOQQkwUCpU3
-        ib5jtZtTHPFnQpAl1tYrFwA=
-X-Google-Smtp-Source: AK7set+LobSO3egjDr5FecVn4QDlPWobGrRvafyWYi36GTE4G99DwPOP03YbIaL2mFkuOGcxF7eqfQ==
-X-Received: by 2002:a05:6870:c148:b0:169:c54d:f069 with SMTP id g8-20020a056870c14800b00169c54df069mr8281713oad.26.1676042904162;
-        Fri, 10 Feb 2023 07:28:24 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h43-20020a056870172b00b001676a4dc22bsm1946836oae.58.2023.02.10.07.28.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Feb 2023 07:28:22 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <690da4a4-b4df-f316-e948-38c857237095@roeck-us.net>
-Date:   Fri, 10 Feb 2023 07:28:20 -0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X15WkfAllK4QnYioovuov5odntKZjuq/k4FJqkuDZqk=;
+        b=AcAVavIR4gXozcvhLi41tjkqy1DSEdohfJu7PHkVF7JZujJPPuzh+tlpthGp7qU0Sb
+         huNYIWkqkn2sXvQDFmRyJucDnXQYFOM0SqWCL3h8tcVzF7fDuaWxEiOHyuOomP++Pz+E
+         yMJ8RBXNfizm+BTbf/g22pGSzEhqpKcV+tRa+6JLGk1jC4Z2JsjRqYTQgO/V6uaLNgxQ
+         BSrwwEMn77Yk+iUR/wPG/zEFCfau54cF/Gr78z5wYI9lU9/yOvJc6Berl+kUzixR6R6g
+         5202thBPZecQprCZRy7FyaZ1CmGVn8umCheSfNu1MZ9FxAb7FnFntBvY26WMfwEJXJW/
+         JHEw==
+X-Gm-Message-State: AO0yUKVZtj/hHRNbv+vLRcppV4CvYibNcJRgdCbC67QkuxielHJW5vaq
+        Pd0QjC3oydk53HEMP9/GoM4jGUb7gJ5ea/RNrfw=
+X-Google-Smtp-Source: AK7set+ukf4zVIwGVKKNG40441UZDPKvyBOCSkGofagHjn2q4QkWk3XzghaJ5mTqytpWqNtiHeW0in5YJoJcBC/118o=
+X-Received: by 2002:a05:6870:9615:b0:169:fabf:b222 with SMTP id
+ d21-20020a056870961500b00169fabfb222mr1935644oaq.83.1676043823008; Fri, 10
+ Feb 2023 07:43:43 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org
-References: <20221219094233.179153-1-xingyu.wu@starfivetech.com>
- <20221219094233.179153-3-xingyu.wu@starfivetech.com>
- <20230201224619.GA3194283@roeck-us.net>
- <8feda5d9-8510-acbf-1ec2-3a0e67df0adc@starfivetech.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 2/3] drivers: watchdog: Add StarFive Watchdog driver
-In-Reply-To: <8feda5d9-8510-acbf-1ec2-3a0e67df0adc@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230210121735.639089-1-sergio.paracuellos@gmail.com>
+ <20230210121735.639089-4-sergio.paracuellos@gmail.com> <b586fd0f-f5b3-6fd1-3cce-2809e5476bf5@roeck-us.net>
+In-Reply-To: <b586fd0f-f5b3-6fd1-3cce-2809e5476bf5@roeck-us.net>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Fri, 10 Feb 2023 16:43:31 +0100
+Message-ID: <CAMhs-H_wbsRNvA6JWuUEamxb3+BtDCzj8aR6v3T0K1DCczfZgA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] watchdog: mt7621-wdt: avoid static global declarations
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, arinc.unal@arinc9.com,
+        tsbogend@alpha.franken.de, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,611 +72,245 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2/9/23 23:01, Xingyu Wu wrote:
-> On 2023/2/2 6:46, Guenter Roeck wrote:
->> On Mon, Dec 19, 2022 at 05:42:32PM +0800, Xingyu Wu wrote:
->>> Add watchdog driver for the StarFive JH7110 SoC.
->>>
->>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->>
->> This driver is almost impossible for me to review. There is a lot of code
->> which doesn't make sense to me. I'll outline some of it below, but this is
->> by far not a complete review.
-> 
-> Thanks for your review. It is enough complete and useful.
-> 
->>
->>> [...]
->>> +
->>> +#include <linux/clk.h>
->>> +#include <linux/delay.h>
->>> +#include <linux/err.h>
->>> +#include <linux/interrupt.h>
->>> +#include <linux/io.h>
->>> +#include <linux/iopoll.h>
->>> +#include <linux/module.h>
->>> +#include <linux/moduleparam.h>
->>> +#include <linux/of.h>
->>> +#include <linux/of_device.h>
->>> +#include <linux/platform_device.h>
->>> +#include <linux/pm_runtime.h>
->>> +#include <linux/reset.h>
->>> +#include <linux/reset-controller.h>
->>> +#include <linux/slab.h>
->>> +#include <linux/timer.h>
->>> +#include <linux/types.h>
->>> +#include <linux/uaccess.h>
->>> +#include <linux/watchdog.h>
->>
->> Several of those include files are unnecessary.
-> 
-> Will drop it.
-> 
->>
->>> [...]
->>> +
->>> +static bool nowayout = WATCHDOG_NOWAYOUT;
->>> +static int tmr_margin;
->>> +static int tmr_atboot = STARFIVE_WDT_ATBOOT;
->>> +static int soft_noboot;
->>> +
->>> +module_param(tmr_margin, int, 0);
->>> +module_param(tmr_atboot, int, 0);
->>> +module_param(nowayout, bool, 0);
->>> +module_param(soft_noboot, int, 0);
->>> +
->>> +MODULE_PARM_DESC(tmr_margin, "Watchdog tmr_margin in seconds. (default="
->>> +		 __MODULE_STRING(STARFIVE_WDT_DEFAULT_TIME) ")");
->>
->> Use "timeout" or "heartbeat".
-> 
-> Will fix.
-> 
->>
->>> +MODULE_PARM_DESC(tmr_atboot,
->>> +		 "Watchdog is started at boot time if set to 1, default="
->>> +		 __MODULE_STRING(STARFIVE_WDT_ATBOOT));
->>
->> Use "early_enable"
-> 
-> Will fix.
-> 
->>
->>> +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
->>> +		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
->>> +MODULE_PARM_DESC(soft_noboot,
->>> +		 "Watchdog action, set to 1 to ignore reboots, 0 to reboot (default 0)");
->>
->> I do not understand what this module parameter is supposed to be used for,
->> and what the "soft_' prefix is supposed to mean.
-> 
-> This 'soft_noboot' means watchdog reset enabled status. If 'soft_noboot' is set to 1,
-> it means reset is disabled and do not reboot.Or 'reboot_disbled' instead?
-> 
+Hi Guenter,
 
-That means it does nothing ? Why load the watchdog in the first place then ?
+Thanks for reviewing this.
 
->>
->>> [...]
->>> +#ifdef CONFIG_OF
->>> +/* Register bias in JH7110 */
->>> +static const struct starfive_wdt_variant drv_data_jh7110 = {
->>> +	.control = STARFIVE_WDT_JH7110_CONTROL,
->>> +	.load = STARFIVE_WDT_JH7110_LOAD,
->>> +	.enable = STARFIVE_WDT_JH7110_CONTROL,
->>> +	.value = STARFIVE_WDT_JH7110_VALUE,
->>> +	.int_clr = STARFIVE_WDT_JH7110_INTCLR,
->>> +	.unlock = STARFIVE_WDT_JH7110_LOCK,
->>> +	.unlock_key = STARFIVE_WDT_JH7110_UNLOCK_KEY,
->>> +	.irq_is_raise = STARFIVE_WDT_JH7110_IMS,
->>> +	.enrst_shift = STARFIVE_WDT_JH7110_RESEN_SHIFT,
->>> +	.en_shift = STARFIVE_WDT_JH7110_EN_SHIFT,
->>> +};
->>> +
->>> +static const struct of_device_id starfive_wdt_match[] = {
->>> +	{ .compatible = "starfive,jh7110-wdt", .data = &drv_data_jh7110 },
->>> +	{}
->>> +};
->>> +MODULE_DEVICE_TABLE(of, starfive_wdt_match);
->>> +#endif
->>> +
->>> +static const struct platform_device_id starfive_wdt_ids[] = {
->>> +	{
->>> +		.name = "starfive-jh7110-wdt",
->>> +		.driver_data = (unsigned long)&drv_data_jh7110,
->>
->> This will fail to compile if CONFIG_OF=n.
-> 
-> Will drop '#ifdef CONFIG_OF'.
-> 
->>
->>> +	},
->>> +	{}
->>> +};
->>> +MODULE_DEVICE_TABLE(platform, starfive_wdt_ids);
->>> +
->>> +static int starfive_wdt_get_clock_rate(struct starfive_wdt *wdt)
->>> +{
->>> +	if (!IS_ERR(wdt->core_clk)) {
->>> +		wdt->freq = clk_get_rate(wdt->core_clk);
->>
->> wdt->freq can at least in theory be 0, which would
->> result in a zero-divide crash later on.
-> 
-> Will add a check whether rate is 0 to avoid zero-divide crash.
-> 
->>
->>> +		return 0;
->>> +	}
->>> +	dev_err(wdt->dev, "get clock rate failed.\n");
->>> +
->>> +	return -ENOENT;
->>
->> The above code can not be reached.
->>
->>> +}
->>> +
->>> +static int starfive_wdt_enable_clock(struct starfive_wdt *wdt)
->>> +{
->>> +	int ret = 0;
->>> +
->>> +	wdt->apb_clk = devm_clk_get_enabled(wdt->dev, "apb");
->>> +	if (IS_ERR(wdt->apb_clk)) {
->>> +		dev_err(wdt->dev, "failed to get and enable apb clock.\n");
->>> +		ret = PTR_ERR(wdt->apb_clk);
->>> +		return ret;
->>> +	}
->>> +
->>> +	wdt->core_clk = devm_clk_get_enabled(wdt->dev, "core");
->>> +	if (IS_ERR(wdt->core_clk)) {
->>> +		dev_err(wdt->dev, "failed to get and enable core clock.\n");
->>> +		ret = PTR_ERR(wdt->core_clk);
->>> +	}
->>> +
->>> +	return ret;
->>> +}
->>> +
->>> +static int starfive_wdt_reset_init(struct starfive_wdt *wdt)
->>> +{
->>> +	int ret = 0;
->>> +
->>> +	wdt->rsts = devm_reset_control_array_get_exclusive(wdt->dev);
->>> +	if (!IS_ERR(wdt->rsts)) {
->>
->> Error handling should come first, and return immediately.
-> 
-> Will change the order and return error first.
-> 
->>
->>> +		ret = reset_control_deassert(wdt->rsts);
->>> +		if (ret)
->>> +			dev_err(wdt->dev, "failed to deassert rsts.\n");
->>> +	} else {
->>> +		dev_err(wdt->dev, "failed to get rsts error.\n");
->>> +		ret = PTR_ERR(wdt->rsts);
->>> +	}
->>> +
->>> +	return ret;
->>> +}
->>> [...]
->>> +
->>> +/* interrupt status whether has been raised from the counter */
->>> +static bool starfive_wdt_raise_irq_status(struct starfive_wdt *wdt)
->>> +{
->>> +	return !!readl(wdt->base + wdt->drv_data->irq_is_raise);
->>> +}
->>> +
->>> +static void starfive_wdt_int_clr(struct starfive_wdt *wdt)
->>> +{
->>> +	writel(STARFIVE_WDT_INTCLR, wdt->base + wdt->drv_data->int_clr);
->>> +}
->>
->> There is no explanation for this interrupt handling (or, rather,
->> non-handling since there is no interrupt handler. What is the purpose
->> of even having all this code ?
-> 
-> Because the watchdog raise an interrupt signal on the hardware when timeout,
-> although we do not use interrupt handler on the sorfware, but the watchdog
-> initialization or reload also need to clear the hardware interrupt signal.
-> 
+On Fri, Feb 10, 2023 at 4:00 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 2/10/23 04:17, Sergio Paracuellos wrote:
+> > Instead of using static global definitions in driver code, refactor code
+> > introducing a new watchdog driver data structure and use it along the
+> > code.
+> >
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > ---
+> >   drivers/watchdog/mt7621_wdt.c | 104 ++++++++++++++++++++++------------
+> >   1 file changed, 67 insertions(+), 37 deletions(-)
+> >
+> > diff --git a/drivers/watchdog/mt7621_wdt.c b/drivers/watchdog/mt7621_wdt.c
+> > index a8aa3522c..f1c702971 100644
+> > --- a/drivers/watchdog/mt7621_wdt.c
+> > +++ b/drivers/watchdog/mt7621_wdt.c
+> > @@ -31,8 +31,11 @@
+> >   #define TMR1CTL_RESTART                     BIT(9)
+> >   #define TMR1CTL_PRESCALE_SHIFT              16
+> >
+> > -static void __iomem *mt7621_wdt_base;
+> > -static struct reset_control *mt7621_wdt_reset;
+> > +struct mt7621_wdt_data {
+> > +     void __iomem *base;
+> > +     struct reset_control *rst;
+> > +     struct watchdog_device wdt;
+> > +};
+> >
+> >   static bool nowayout = WATCHDOG_NOWAYOUT;
+> >   module_param(nowayout, bool, 0);
+> > @@ -40,27 +43,31 @@ MODULE_PARM_DESC(nowayout,
+> >                "Watchdog cannot be stopped once started (default="
+> >                __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> >
+> > -static inline void rt_wdt_w32(unsigned reg, u32 val)
+> > +static inline void rt_wdt_w32(void __iomem *base, unsigned reg, u32 val)
+> >   {
+> > -     iowrite32(val, mt7621_wdt_base + reg);
+> > +     iowrite32(val, base + reg);
+> >   }
+> >
+> > -static inline u32 rt_wdt_r32(unsigned reg)
+> > +static inline u32 rt_wdt_r32(void __iomem *base, unsigned reg)
+> >   {
+> > -     return ioread32(mt7621_wdt_base + reg);
+> > +     return ioread32(base + reg);
+> >   }
+> >
+> >   static int mt7621_wdt_ping(struct watchdog_device *w)
+> >   {
+> > -     rt_wdt_w32(TIMER_REG_TMRSTAT, TMR1CTL_RESTART);
+> > +     struct mt7621_wdt_data *drvdata = watchdog_get_drvdata(w);
+> > +
+> > +     rt_wdt_w32(drvdata->base, TIMER_REG_TMRSTAT, TMR1CTL_RESTART);
+> >
+> >       return 0;
+> >   }
+> >
+> >   static int mt7621_wdt_set_timeout(struct watchdog_device *w, unsigned int t)
+> >   {
+> > +     struct mt7621_wdt_data *drvdata = watchdog_get_drvdata(w);
+> > +
+> >       w->timeout = t;
+> > -     rt_wdt_w32(TIMER_REG_TMR1LOAD, t * 1000);
+> > +     rt_wdt_w32(drvdata->base, TIMER_REG_TMR1LOAD, t * 1000);
+> >       mt7621_wdt_ping(w);
+> >
+> >       return 0;
+> > @@ -68,29 +75,31 @@ static int mt7621_wdt_set_timeout(struct watchdog_device *w, unsigned int t)
+> >
+> >   static int mt7621_wdt_start(struct watchdog_device *w)
+> >   {
+> > +     struct mt7621_wdt_data *drvdata = watchdog_get_drvdata(w);
+> >       u32 t;
+> >
+> >       /* set the prescaler to 1ms == 1000us */
+> > -     rt_wdt_w32(TIMER_REG_TMR1CTL, 1000 << TMR1CTL_PRESCALE_SHIFT);
+> > +     rt_wdt_w32(drvdata->base, TIMER_REG_TMR1CTL, 1000 << TMR1CTL_PRESCALE_SHIFT);
+> >
+> >       mt7621_wdt_set_timeout(w, w->timeout);
+> >
+> > -     t = rt_wdt_r32(TIMER_REG_TMR1CTL);
+> > +     t = rt_wdt_r32(drvdata->base, TIMER_REG_TMR1CTL);
+> >       t |= TMR1CTL_ENABLE;
+> > -     rt_wdt_w32(TIMER_REG_TMR1CTL, t);
+> > +     rt_wdt_w32(drvdata->base, TIMER_REG_TMR1CTL, t);
+> >
+> >       return 0;
+> >   }
+> >
+> >   static int mt7621_wdt_stop(struct watchdog_device *w)
+> >   {
+> > +     struct mt7621_wdt_data *drvdata = watchdog_get_drvdata(w);
+> >       u32 t;
+> >
+> >       mt7621_wdt_ping(w);
+> >
+> > -     t = rt_wdt_r32(TIMER_REG_TMR1CTL);
+> > +     t = rt_wdt_r32(drvdata->base, TIMER_REG_TMR1CTL);
+> >       t &= ~TMR1CTL_ENABLE;
+> > -     rt_wdt_w32(TIMER_REG_TMR1CTL, t);
+> > +     rt_wdt_w32(drvdata->base, TIMER_REG_TMR1CTL, t);
+> >
+> >       return 0;
+> >   }
+> > @@ -105,7 +114,9 @@ static int mt7621_wdt_bootcause(void)
+> >
+> >   static int mt7621_wdt_is_running(struct watchdog_device *w)
+> >   {
+> > -     return !!(rt_wdt_r32(TIMER_REG_TMR1CTL) & TMR1CTL_ENABLE);
+> > +     struct mt7621_wdt_data *drvdata = watchdog_get_drvdata(w);
+> > +
+> > +     return !!(rt_wdt_r32(drvdata->base, TIMER_REG_TMR1CTL) & TMR1CTL_ENABLE);
+> >   }
+> >
+> >   static const struct watchdog_info mt7621_wdt_info = {
+> > @@ -121,30 +132,39 @@ static const struct watchdog_ops mt7621_wdt_ops = {
+> >       .set_timeout = mt7621_wdt_set_timeout,
+> >   };
+> >
+> > -static struct watchdog_device mt7621_wdt_dev = {
+> > -     .info = &mt7621_wdt_info,
+> > -     .ops = &mt7621_wdt_ops,
+> > -     .min_timeout = 1,
+> > -     .max_timeout = 0xfffful / 1000,
+> > -};
+> > -
+> >   static int mt7621_wdt_probe(struct platform_device *pdev)
+> >   {
+> >       struct device *dev = &pdev->dev;
+> > -     mt7621_wdt_base = devm_platform_ioremap_resource(pdev, 0);
+> > -     if (IS_ERR(mt7621_wdt_base))
+> > -             return PTR_ERR(mt7621_wdt_base);
+> > +     struct watchdog_device *mt7621_wdt;
+> > +     struct mt7621_wdt_data *drvdata;
+> > +     int err;
+> > +
+> > +     drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
+> > +     if (!drvdata)
+> > +             return -ENOMEM;
+> > +
+> > +     drvdata->base = devm_platform_ioremap_resource(pdev, 0);
+> > +     if (IS_ERR(drvdata->base))
+> > +             return PTR_ERR(drvdata->base);
+> >
+> > -     mt7621_wdt_reset = devm_reset_control_get_exclusive(dev, NULL);
+> > -     if (!IS_ERR(mt7621_wdt_reset))
+> > -             reset_control_deassert(mt7621_wdt_reset);
+> > +     drvdata->rst = devm_reset_control_get_exclusive(dev, NULL);
+> > +     if (!IS_ERR(drvdata->rst))
+> > +             reset_control_deassert(drvdata->rst);
+> >
+> > -     mt7621_wdt_dev.bootstatus = mt7621_wdt_bootcause();
+> > +     mt7621_wdt = &drvdata->wdt;
+> > +     mt7621_wdt->info = &mt7621_wdt_info;
+> > +     mt7621_wdt->ops = &mt7621_wdt_ops;
+> > +     mt7621_wdt->min_timeout = 1;
+> > +     mt7621_wdt->max_timeout = 0xfffful / 1000;
+> > +     mt7621_wdt->parent = dev;
+> >
+> > -     watchdog_init_timeout(&mt7621_wdt_dev, mt7621_wdt_dev.max_timeout,
+> > -                           dev);
+> > -     watchdog_set_nowayout(&mt7621_wdt_dev, nowayout);
+> > -     if (mt7621_wdt_is_running(&mt7621_wdt_dev)) {
+> > +     mt7621_wdt->bootstatus = mt7621_wdt_bootcause();
+> > +
+> > +     watchdog_init_timeout(mt7621_wdt, mt7621_wdt->max_timeout, dev);
+>
+> FWIW, setting ->timeout would have been sufficient. watchdog_init_timeout()
+> is only really valuable if there is a module parameter, or if the timeout
+> is set from devicetree. That won't work here, though, because the passed
+> value takes precedence. Changing that would change functionality and thus would
+> have to be done in a separate patch, I just wanted to mention it.
 
-That should be documented.
+Thanks for letting me know. By now I only want to maintain the current
+functionality and if it really makes sense I will send functionality
+changes in new series after this one is applied.
 
->>
->>> [...]
->>> +
->>> +static unsigned int starfive_wdt_max_timeout(struct starfive_wdt *wdt)
->>> +{
->>> +	return DIV_ROUND_UP(STARFIVE_WDT_MAXCNT, wdt->freq) - 1;
->>> +}
->>
->> For a frequency of 1 MHz, this results in a maximum timeout of 4294.
->>
->> This value is then used in starfive_wdt_set_timeout(), but as
->> (4294 * 1000000) / 2, which is then again compared against
->> STARFIVE_WDT_MAXCNT. Somewhere this calculation is wrong.
-> 
-> Modify to 'DIV_ROUND_UP(STARFIVE_WDT_MAXCNT, (wdt->freq / 2)) - 1'.
-> 
->>
->> [...]
->>> +
->>> +static int starfive_wdt_restart(struct watchdog_device *wdd, unsigned long action,
->>> +				void *data)
->>> +{
->>> +	struct starfive_wdt *wdt = watchdog_get_drvdata(wdd);
->>> +
->>> +	spin_lock(&wdt->lock);
->>> +	starfive_wdt_unlock(wdt);
->>> +	/* disable watchdog, to be safe */
->>> +	starfive_wdt_disable(wdt);
->>> +
->>> +	if (soft_noboot)
->>> +		starfive_wdt_disable_reset(wdt);
->>> +	else
->>> +		starfive_wdt_enable_reset(wdt);
->>> +
->>
->> This is a _restart_ handler. Disabling it doesn't make any sense.
-> 
-> Will drop 'starfive_wdt_disable_reset(wdt)' part.
-> 
->>
->>> +	/* put native values into count */
->>> +	starfive_wdt_set_count(wdt, wdt->count);
->>> +
->>> +	/* set the watchdog to go and reset */
->>> +	starfive_wdt_int_clr(wdt);
->>> +	starfive_wdt_enable(wdt);
->>> +
->>> +	starfive_wdt_lock(wdt);
->>> +	spin_unlock(&wdt->lock);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int starfive_wdt_set_timeout(struct watchdog_device *wdd,
->>> +				    unsigned int timeout)
->>> +{
->>> +	struct starfive_wdt *wdt = watchdog_get_drvdata(wdd);
->>> +
->>> +	unsigned long freq = wdt->freq;
->>> +	unsigned int count;
->>> +
->>> +	spin_lock(&wdt->lock);
->>> +
->>> +	if (timeout < wdt->wdt_device.min_timeout)
->>> +		return -EINVAL;
->>
->> This is checked by the watchdog core.
-> 
-> Will drop it.
-> 
->>
->>> +
->>> +	/*
->>> +	 * This watchdog takes twice timeouts to reset.
->>> +	 * In order to reduce time to reset, should set half count value.
->>> +	 */
->>> +	count = timeout * freq / 2;
->>> +
->>> +	if (count > STARFIVE_WDT_MAXCNT) {
->>
->> count is an unsigned int, which is pretty much everywhere a 32-bit
->> value. STARFIVE_WDT_MAXCNT is 0xffffffff. How is an unsigned integer
->> ever supposed to be larger than 0xffffffff ?
->>
->>> +		dev_warn(wdt->dev, "timeout %d too big,use the MAX-timeout set.\n",
->>> +			 timeout);
->>> +		timeout = starfive_wdt_max_timeout(wdt);
->>> +		count = timeout * freq;
->>
->> This is confusing. First, the timeout range is checked by the calling code,
->> which makes sure it is never larger than max_timeout. max_timeout is
->> set to the value returned by starfive_wdt_max_timeout().
->> Thus, count = timeout * freq / 2 will _never_ be larger than
->> STARFIVE_WDT_MAXCNT. Even if it ever was, it doesn't make sense
->> to use a count value of timeout * freq in that case, ie a value which
->> could be twice as large as the supposed maximum value.
-> 
-> Change 'count' type to 'u64'. And if 'count' is larger than STARFIVE_WDT_MAXCNT,
-> 'count' is equal to STARFIVE_WDT_MAXCNT. Does that seem OK?
-> 
+>
+> > +     watchdog_set_nowayout(mt7621_wdt, nowayout);
+> > +     watchdog_set_drvdata(mt7621_wdt, drvdata);
+> > +
+> > +     if (mt7621_wdt_is_running(mt7621_wdt)) {
+> >               /*
+> >                * Make sure to apply timeout from watchdog core, taking
+> >                * the prescaler of this driver here into account (the
+> > @@ -154,17 +174,27 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
+> >                * we first disable the watchdog, set the new prescaler
+> >                * and timeout, and then re-enable the watchdog.
+> >                */
+> > -             mt7621_wdt_stop(&mt7621_wdt_dev);
+> > -             mt7621_wdt_start(&mt7621_wdt_dev);
+> > -             set_bit(WDOG_HW_RUNNING, &mt7621_wdt_dev.status);
+> > +             mt7621_wdt_stop(mt7621_wdt);
+> > +             mt7621_wdt_start(mt7621_wdt);
+> > +             set_bit(WDOG_HW_RUNNING, &mt7621_wdt->status);
+> > +     }
+> > +
+> > +     err = devm_watchdog_register_device(dev, &drvdata->wdt);
+> > +     if (err) {
+> > +             dev_err(dev, "Error registering watchdog device\n");
+> > +             return err;
+> >       }
+>
+> This is a functional change. If you want to add an error message,
+> do it in a separate patch and provide a rationale for it.
 
-That would not change anything. This is not about overflows; I would
-have mentioned that. count can still never be larger than STARFIVE_WDT_MAXCNT.
-Please do the math.
+True, will drop this error message in v3 to maintain current
+functionality without any extra changes.
 
->>
->>> +	}
->>> +
->>> +	dev_info(wdt->dev, "Heartbeat: timeout=%d, count/2=%d (%08x)\n",
->>> +		 timeout, count, count);
->>
->> No. Drop such noise. Make it a debug message if you think you need it.
-> 
-> Will modify it to 'dev_dbg'.
-> 
->>
->>> +
->>> +	starfive_wdt_unlock(wdt);
->>> +	starfive_wdt_disable(wdt);
->>> +	starfive_wdt_set_reload_count(wdt, count);
->>> +	starfive_wdt_enable(wdt);
->>> +	starfive_wdt_lock(wdt);
->>> +
->>> +	wdt->count = count;
->>> +	wdd->timeout = timeout;
->>> +
->>> +	spin_unlock(&wdt->lock);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +#define OPTIONS (WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE)
->>> +
->>> +static const struct watchdog_info starfive_wdt_ident = {
->>> +	.options = OPTIONS,
->>> +	.firmware_version = 0,
->>
->> It is not necessary to initilize a static variable with 0.
-> 
-> Will drop '0'.
-> 
->>
->>> +	.identity = "StarFive Watchdog",
->>> +};
->>> +
->>> +static const struct watchdog_ops starfive_wdt_ops = {
->>> +	.owner = THIS_MODULE,
->>> +	.start = starfive_wdt_start,
->>> +	.stop = starfive_wdt_pm_stop,
->>> +	.ping = starfive_wdt_keepalive,
->>> +	.set_timeout = starfive_wdt_set_timeout,
->>> +	.restart = starfive_wdt_restart,
->>> +	.get_timeleft = starfive_wdt_get_timeleft,
->>> +};
->>> +
->>> +static const struct watchdog_device starfive_wdd = {
->>> +	.info = &starfive_wdt_ident,
->>> +	.ops = &starfive_wdt_ops,
->>> +	.timeout = STARFIVE_WDT_DEFAULT_TIME,
->>> +};
->>> +
->>> +static inline const struct starfive_wdt_variant *
->>> +starfive_wdt_get_drv_data(struct platform_device *pdev)
->>> +{
->>> +	const struct starfive_wdt_variant *variant;
->>> +
->>> +	variant = of_device_get_match_data(&pdev->dev);
->>> +	if (!variant) {
->>> +		/* Device matched by platform_device_id */
->>> +		variant = (struct starfive_wdt_variant *)
->>> +			   platform_get_device_id(pdev)->driver_data;
->>> +	}
->>> +
->>> +	return variant;
->>> +}
->>> +
->>> +static int starfive_wdt_probe(struct platform_device *pdev)
->>> +{
->>> +	struct device *dev = &pdev->dev;
->>> +	struct starfive_wdt *wdt;
->>> +	int started = 0;
->>
->> What is this variable supposed to be used for ? It is alway 0.
-> 
-> This variable is used to switch for debugging whether to allow the watchdog
-> to be started at boot time by driver. I think I should remove it.
-> 
->>
->>> [...]
->>> +
->>> +	if (tmr_atboot && started == 0) {
->>> +		starfive_wdt_start(&wdt->wdt_device);
->>> +	} else if (!tmr_atboot) {
->>> +		/*
->>> +		 *if we're not enabling the watchdog, then ensure it is
->>> +		 * disabled if it has been left running from the bootloader
->>> +		 * or other source.
->>> +		 */
->>> +		starfive_wdt_stop(&wdt->wdt_device);
->>
->> If it _is_ running from the boot loader, the watchdog core is not
->> informed about it. If it is started here, it is not informed either.
->> This is unusual and will need to be explained.
->> Why ?
-> 
-> Is is okay to remove the 'started'?
-> 
-Yes, though of course it would be better if the watchdog is kept running
-in that situation and the watchdog core is informed about it. Also,
-the watchdog core is still not informed that the watchdog is running
-(i.e., WDOG_HW_RUNNING is not set) when it is explicitly started.
+>
+> >
+> > -     return devm_watchdog_register_device(dev, &mt7621_wdt_dev);
+> > +     platform_set_drvdata(pdev, drvdata);
+> > +
+> > +     return 0;
+> >   }
+> >
+> >   static void mt7621_wdt_shutdown(struct platform_device *pdev)
+> >   {
+> > -     mt7621_wdt_stop(&mt7621_wdt_dev);
+> > +     struct mt7621_wdt_data *drvdata = platform_get_drvdata(pdev);
+> > +
+> > +     mt7621_wdt_stop(&drvdata->wdt);
+> >   }
+>
+> Also FWIW, we have watchdog_stop_on_reboot() for that purpose.
+> Changing that would be a separate patch, though.
 
->>
->>> +	}
->>> +
->>> +#ifdef CONFIG_PM
->>> +	clk_disable_unprepare(wdt->core_clk);
->>> +	clk_disable_unprepare(wdt->apb_clk);
->>> +#endif
->>
->> I do not understand the above code. Why stop the watchdog if CONFIG_PM
->> is enabled, even if it is supposed to be running ?
-> 
-> There misses a check about 'early_enable' and add 'if (!early_enable)'.
-> There means that disable clock when watchdog sleep and CONFIG_PM is enable.
-> Then enable clock when watchdog work by 'starfive_wdt_runtime_resume' function.
-> 
+Thanks. As I have just said above, let's focus only on maintaining
+current functionality in this series.
 
-I am quite sure that you are supposed to use pm functions for that purpose,
-such as pm_runtime_get_sync(), pm_runtime_put_sync(), and pm_runtime_enable(),
-similar to the code in omap_wdt.c.
-
->>
->>> +
->>> +	platform_set_drvdata(pdev, wdt);
->>> +
->>> +	return 0;
->>> +
->>> +err_clk_disable:
->>> +	clk_disable_unprepare(wdt->core_clk);
->>> +	clk_disable_unprepare(wdt->apb_clk);
->>> +
->>> +	return ret;
->>> +}
->>> +
->>> +static int starfive_wdt_remove(struct platform_device *dev)
->>> +{
->>> +	struct starfive_wdt *wdt = platform_get_drvdata(dev);
->>> +
->>> +	starfive_wdt_mask_and_disable_reset(wdt, true);
->>> +	watchdog_unregister_device(&wdt->wdt_device);
->>> +
->>> +	clk_disable_unprepare(wdt->core_clk);
->>> +	clk_disable_unprepare(wdt->apb_clk);
->>> +	pm_runtime_disable(wdt->dev);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static void starfive_wdt_shutdown(struct platform_device *dev)
->>> +{
->>> +	struct starfive_wdt *wdt = platform_get_drvdata(dev);
->>> +
->>> +	starfive_wdt_mask_and_disable_reset(wdt, true);
->>> +
->>> +	starfive_wdt_pm_stop(&wdt->wdt_device);
->>> +}
->>> +
->>> +#ifdef CONFIG_PM_SLEEP
->>> +static int starfive_wdt_suspend(struct device *dev)
->>> +{
->>> +	int ret;
->>> +	struct starfive_wdt *wdt = dev_get_drvdata(dev);
->>> +
->>> +	starfive_wdt_unlock(wdt);
->>> +
->>> +	/* Save watchdog state, and turn it off. */
->>> +	wdt->reload = starfive_wdt_get_count(wdt);
->>> +
->>> +	starfive_wdt_mask_and_disable_reset(wdt, true);
->>> +
->>> +	/* Note that WTCNT doesn't need to be saved. */
->>> +	starfive_wdt_stop(&wdt->wdt_device);
->>> +	pm_runtime_force_suspend(dev);
->>> +
->>> +	starfive_wdt_lock(wdt);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int starfive_wdt_resume(struct device *dev)
->>> +{
->>> +	int ret;
->>> +	struct starfive_wdt *wdt = dev_get_drvdata(dev);
->>> +
->>> +	starfive_wdt_unlock(wdt);
->>> +
->>> +	pm_runtime_force_resume(dev);
->>> +
->>> +	/* Restore watchdog state. */
->>> +	starfive_wdt_set_reload_count(wdt, wdt->reload);
->>> +
->>> +	starfive_wdt_restart(&wdt->wdt_device, 0, NULL);
->>
->> I do not understand this call. Per its definition it is a restart handler,
->> supposed to restart the hardware. Why would anyone want to restart the
->> system on resume ?
-> 
-> The watchdog start counting from 'count' to 0 on everytime resume like a restart.
-> So I directly use a restart.
-> 
-
-That doesn't answer my question. The "restart" callback resets the hardware.
-starfive_wdt_restart() is registered as restart handler, and thus expected
-to reset the hardware. It it doesn't reset the hardware, it should not
-register itself as restart handler. If it does restart the hardware, calling
-it on resume would automatically reset the system on each resume.
-Something is wrong here, and will have to be fixed.
-
-I _suspect_ that you think that the restart callback is supposed to reset
-the watchdog. That would be wrong. It resets (restarts) the hardware,
-not the watchdog. Please read Documentation/watchdog/watchdog-kernel-api.rst
-if there are questions about this callback.
+>
+> >   static const struct of_device_id mt7621_wdt_match[] = {
+>
 
 Thanks,
-Guenter
-
->>
->>> +
->>> +	starfive_wdt_mask_and_disable_reset(wdt, false);
->>> +
->>> +	starfive_wdt_lock(wdt);
->>> +
->>> +	return 0;
->>> +}
->>> +#endif /* CONFIG_PM_SLEEP */
->>> +
->>> +#ifdef CONFIG_PM
->>> +static int starfive_wdt_runtime_suspend(struct device *dev)
->>> +{
->>> +	struct starfive_wdt *wdt = dev_get_drvdata(dev);
->>> +
->>> +	clk_disable_unprepare(wdt->apb_clk);
->>> +	clk_disable_unprepare(wdt->core_clk);
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int starfive_wdt_runtime_resume(struct device *dev)
->>> +{
->>> +	struct starfive_wdt *wdt = dev_get_drvdata(dev);
->>> +	int ret;
->>> +
->>> +	ret = clk_prepare_enable(wdt->apb_clk);
->>> +	if (ret) {
->>> +		dev_err(wdt->dev, "failed to enable apb_clk.\n");
->>> +		return ret;
->>> +	}
->>> +
->>> +	ret = clk_prepare_enable(wdt->core_clk);
->>> +	if (ret)
->>> +		dev_err(wdt->dev, "failed to enable core_clk.\n");
->>> +
->>> +	return ret;
->>> +}
->>> +#endif /* CONFIG_PM */
->>> +
->>> +static const struct dev_pm_ops starfive_wdt_pm_ops = {
->>> +	SET_RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
->>> +	SET_SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
->>> +};
->>> +
->>> +static struct platform_driver starfive_wdt_driver = {
->>> +	.probe		= starfive_wdt_probe,
->>> +	.remove		= starfive_wdt_remove,
->>> +	.shutdown	= starfive_wdt_shutdown,
->>> +	.id_table	= starfive_wdt_ids,
->>> +	.driver		= {
->>> +		.name	= "starfive-wdt",
->>> +		.pm	= &starfive_wdt_pm_ops,
->>> +		.of_match_table = of_match_ptr(starfive_wdt_match),
->>> +	},
->>> +};
->>> +
->>> +module_platform_driver(starfive_wdt_driver);
->>> +
->>> +MODULE_AUTHOR("Xingyu Wu <xingyu.wu@starfivetech.com>");
->>> +MODULE_AUTHOR("Samin Guo <samin.guo@starfivetech.com>");
->>> +MODULE_DESCRIPTION("StarFive Watchdog Device Driver");
->>> +MODULE_LICENSE("GPL v2");
-> 
-> 
-> Thank for your review, I will modify this according to your suggestions.
-> 
-> Best regards,
-> Xingyu Wu
-> 
-
+    Sergio Paracuellos
