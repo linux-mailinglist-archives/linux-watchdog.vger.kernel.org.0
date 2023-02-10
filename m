@@ -2,60 +2,60 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0268691E71
-	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Feb 2023 12:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6062D691E7A
+	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Feb 2023 12:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbjBJLiK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 10 Feb 2023 06:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
+        id S232155AbjBJLi5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 10 Feb 2023 06:38:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbjBJLiJ (ORCPT
+        with ESMTP id S231889AbjBJLi5 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 10 Feb 2023 06:38:09 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2CFB4A1D2;
-        Fri, 10 Feb 2023 03:38:08 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-15ff0a1f735so6297212fac.5;
-        Fri, 10 Feb 2023 03:38:08 -0800 (PST)
+        Fri, 10 Feb 2023 06:38:57 -0500
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3832A6C7;
+        Fri, 10 Feb 2023 03:38:51 -0800 (PST)
+Received: by mail-oi1-x230.google.com with SMTP id bh15so4185039oib.4;
+        Fri, 10 Feb 2023 03:38:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wQAje8o9vKu1sVJcWpM4QT60HNT24tOCm7UUbonsHnk=;
-        b=qUYpbnpitSihuJEV3O/lbnxaQO00x5IeaDYHb8975dPCFnl7B8SygHfMoXEhAhaCC6
-         LIiU1g2pGB2S6ETkCqQzmKfIlGr/9ZPtpRC/8jSeB6TFHAkv57f71RgsnFgyIXnEPcht
-         PxXPoBTYHbeBcxVlamzu1WrC5hAVmf86NBZKv2Xz9G0/CGjJUyvjL6lB+Dwaa8AJv9uJ
-         KcUKTH7dqwEn8Lq/whTvCv6ZUg1RNvBCnz4uLAq6tN4P+t+IXEXKc3uYI1mBRWMsZGPt
-         FM7lV5dESm6t96vE2CmuxKrZQuHTPKGn5UkKVqaYWdZQz63sUyZWx7z10rE1dRqXZXDI
-         wWXw==
+        bh=94HhLZErt6tptJHKl864lXCVSB3thrXy6dwt+pBa51c=;
+        b=R5upjjTKnzH4g9QpGIHa0f5qmZDvx3e8nLzmqvj5DijyduOJU6Vck18dxSboy8ycN6
+         bkVhdxyy3VBBZ1YGrK7WojTrZbcg+PAxPxp6dNV/VXkoQANyPGzvcjILBSQ2G3f6STdH
+         k0uaI18Ewb8hECiIWvyRz7twZfww8peCLMTghfsq08xiByLJSjFxGedSiue6lUkb9FYv
+         jBPPvKpBr2uA3lYU6apI9t2qHggiTOmOew2k7n9I2SfxWeSZ7JnZYKqbb1SiMKYhiF6J
+         xMqbCyDgqZFpLLnOOHjSDzM8UH5ei5sKuEhwsMOpk6nC/oat3oIrLFACCOZbMElr7a3b
+         /6cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wQAje8o9vKu1sVJcWpM4QT60HNT24tOCm7UUbonsHnk=;
-        b=UDckWOp/+qRT5YFLBRGoruKQGQSin3lEiIKIEs2soQ8aWVmK9W8NWjMNyIbuHYkGuN
-         AmbpFO7nJRBbjJffiWqYLpgd0dNlx3WGs9eJa2QD81Rk00zAH5RpyXuVPj6zgDQdo2IU
-         Ty/P0zNCmvzn/oCitVrv/hLzkRd9ZVn7GQiK9akdvdSAadt42cXB4KwBKI2D78BO4LQv
-         uKlKJQ1jVF7995NoJIeBtF3CBllPOMfPTBi+rXAeddzVlT4h/p53ZdEPgpqk0wK8oU0j
-         exMQhOKTIxp/GyIfXc1tXSPHWYCtJdX0Rcy55bD3reaVjtmqybyIY6I+LhEK/8rXQ2sX
-         zv+w==
-X-Gm-Message-State: AO0yUKW9ECrQWhwKc1Pl0ACWaOf+qwyAc+ptZRpCGUqrpgNLyfhkWhy/
-        qLwuU1jgnoXRE4JAZtbROg+fDBnq347wW8gGr5U=
-X-Google-Smtp-Source: AK7set+yCZllVEn/omsFqEsC7Eu7/3DWeJiJvOgrjEdNoya54mxHSCR4nA1rr870dt00x3uzT/p1O09cMK4vs666ecM=
-X-Received: by 2002:a05:6870:9615:b0:169:fabf:b222 with SMTP id
- d21-20020a056870961500b00169fabfb222mr1840803oaq.83.1676029088227; Fri, 10
- Feb 2023 03:38:08 -0800 (PST)
+        bh=94HhLZErt6tptJHKl864lXCVSB3thrXy6dwt+pBa51c=;
+        b=E7vC4TJSIv4WwIsTptSGteO2DoMyrh9q4QcUTc6zOd6WVRG/YgDNxma+i0JNOJFAft
+         Rv6TW298wPD8hUd1PQ8l1un3V6TTlEhQVBnnccZrnZIFaDJY3huYC9UNerg9PG96hO96
+         u+Hh6vPNvTtjSBiNhSVzfdSWWF1qhrdTQt/KLdYiPYLO/OOO8JMNrYGlmCGwS6VMld19
+         kuKRXTJ25EYBcpVMs4qPZgEiFUiMvhReOl3NksKWjkJzmRqt1ZLCIUoxe0g2VJCyfhu0
+         qVrj7xvNCbH/m/hFpnlNOdTYv8e0rCb9InaPro3blFbYFDrZQttHGx6SoAjmVC8pdK6U
+         vWVw==
+X-Gm-Message-State: AO0yUKXfdCc2QcNpHFMmKUTAmLF25uM4Nkv2tJtIJSMVtv2qfRkINnCt
+        PoPTE7V2xi4+D2p61OQVk7VMxEVQuaACiGbGB10=
+X-Google-Smtp-Source: AK7set/ubUws40cQ2vkTOkYAzkszvk+IasHiO0DtUU+SZZxvFdGRf2CzvH0oEnwNqH3p605m6DTiVTzMH5A9ZHT8MRU=
+X-Received: by 2002:aca:d909:0:b0:37a:d1e1:65aa with SMTP id
+ q9-20020acad909000000b0037ad1e165aamr1140240oig.83.1676029130415; Fri, 10 Feb
+ 2023 03:38:50 -0800 (PST)
 MIME-Version: 1.0
 References: <20230210065621.598120-1-sergio.paracuellos@gmail.com>
- <20230210065621.598120-3-sergio.paracuellos@gmail.com> <23d2f23f-b063-c417-e85d-40f09b509d04@linaro.org>
- <CAMhs-H-rozEWNvRV0_CA1UeAZ9YJtg8PsHWjRnwBZp8ojqOcjQ@mail.gmail.com> <cd94db40-32c1-6541-c1a7-bf937802e464@linaro.org>
-In-Reply-To: <cd94db40-32c1-6541-c1a7-bf937802e464@linaro.org>
+ <20230210065621.598120-2-sergio.paracuellos@gmail.com> <a0a141ef-b5ab-f84a-9a77-7b6d1f54ccc9@linaro.org>
+ <CAMhs-H-w3O_Yjo7CcGdXyw0bSeqefR32Oj4hhQWsVVWoThNLyA@mail.gmail.com> <a592580a-df1f-1ebd-5752-8c2dd1b770fb@linaro.org>
+In-Reply-To: <a592580a-df1f-1ebd-5752-8c2dd1b770fb@linaro.org>
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 10 Feb 2023 12:37:57 +0100
-Message-ID: <CAMhs-H9NBF1jUBzrcX_D-3fP0O+dorR_T+_G_r6i5t9Tp0gUrA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] mips: dts: ralink: mt7621: add phandle to system
- controller node for watchdog
+Date:   Fri, 10 Feb 2023 12:38:38 +0100
+Message-ID: <CAMhs-H_NBtZV4kJtyMwkPqd1gZ1nQLRH1fbf7gqeJa13tOB5PQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: watchdog: mt7621-wdt: add phandle to
+ access system controller registers
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
         linux@roeck-us.net, robh+dt@kernel.org,
@@ -74,35 +74,33 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 12:31 PM Krzysztof Kozlowski
+On Fri, Feb 10, 2023 at 12:27 PM Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
 >
-> On 10/02/2023 12:29, Sergio Paracuellos wrote:
+> On 10/02/2023 12:22, Sergio Paracuellos wrote:
 > > Hi Krzysztof,
 > >
-> > On Fri, Feb 10, 2023 at 12:00 PM Krzysztof Kozlowski
+> > On Fri, Feb 10, 2023 at 11:59 AM Krzysztof Kozlowski
 > > <krzysztof.kozlowski@linaro.org> wrote:
 > >>
 > >> On 10/02/2023 07:56, Sergio Paracuellos wrote:
-> >>> To allow to access system controller registers from watchdog driver code
-> >>> add a phandle in the watchdog 'wdt' node. This avoid using arch dependent
+> >>> MT7621 SoC provides a system controller node for accessing to some registers.
+> >>> Add a phandle to this node to avoid using MIPS related arch operations and
 > >>
-> >> ??? This does not make sense.
+> >> I don't understand this part. You claim you add a phandle to this node,
+> >> but your binding suggest you add here a phandle to other node.
 > >
-> > What do you mean? The commit message itself? I need the phandle to
-> > 'sysc' system controller node for accessing reset status registers
-> > inside the watchdog driver code.
+> > Probably my English is not the best here :-). Yes, you are right, I
+> > just want to add a phandle to the 'sysc' node in the current node.
 >
-> The message makes sense. The message for the code does not make anymore.
-> I meant, you want to access system controller registers from watchdog,
-> so you add syscon to watchdog...
+> Then why do you need syscon compatible here?
 
-I got your point now, thanks. Will remove the syscon compatible from
-the watchdog node.
+Clear now. Will drop that in v2.
 
 >
 > Best regards,
 > Krzysztof
 >
-Best regards,
-   Sergio Paracuellos
+
+Thanks,
+    Sergio Paracuellos
