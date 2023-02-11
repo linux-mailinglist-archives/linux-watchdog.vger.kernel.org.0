@@ -2,95 +2,123 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C39693070
-	for <lists+linux-watchdog@lfdr.de>; Sat, 11 Feb 2023 12:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D7E69348B
+	for <lists+linux-watchdog@lfdr.de>; Sun, 12 Feb 2023 00:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjBKLm2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 11 Feb 2023 06:42:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
+        id S229540AbjBKXBq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 11 Feb 2023 18:01:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBKLm0 (ORCPT
+        with ESMTP id S229457AbjBKXBp (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 11 Feb 2023 06:42:26 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8EA30B30
-        for <linux-watchdog@vger.kernel.org>; Sat, 11 Feb 2023 03:42:22 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id n13so5619128wmr.4
-        for <linux-watchdog@vger.kernel.org>; Sat, 11 Feb 2023 03:42:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2x/LsCBmfGTIjbc1yOM0Xju00iFpGl/hJPZfcuAHtts=;
-        b=GrAEVvFqCHgBuS9TvZVol5Kj5DeduLYlY656wDpAATtS8l8tauhecDcWOf5Ey7I8Y4
-         rn16YhtrH60peTWay0sJtFWONIifKMhCl9TOMJcfoOspskDp5CkuaEP5eOnYDNZuHNU2
-         dJWP7H5bJeTuP8A4vexsEP3maU/gxOApM2Mwoi1DTXqWLev8nIvkOQYtyd3eJl32th6G
-         zVhegVSdNjuXz2jPw0sdu1tBI8Xy8WIPZtWwIhADkxVoPIg5mRtjWuBGH9Ij07w3F604
-         s3FHwtReRIf3FOAHLFBBko4EUHY5JW1/MFYnSor/1ZCh/4o4yVIzHpKX11RS5kfkj00P
-         Pfig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2x/LsCBmfGTIjbc1yOM0Xju00iFpGl/hJPZfcuAHtts=;
-        b=h/AW0gftydbXk5+7wLj3+/uDZuo99E7JSVB7PVr1b1n1jVKKR8UIZmrPEE/oudgpiL
-         DWRpwD8NcP3uqyweEq/lASXuA/HR+babbMrF7vud5qiH+VHf5AZIwG4p7PPHHa4Lptly
-         XhI9KvtR2O/EY2Z4LBLoVRm9MirV71hr49LKpBhlVicsgqY56pUK6zSdNqws3UDLDC9p
-         SVkoY3EfuWyJU1fqGfJXsZHJxukcvjXRNsekCgXZMQ7fPgfC9fYmdTE3xvUl9zttZitA
-         KKEKLja7MMhWANcmsl8rF7Xmy6Dz+09dQrU1vCjcRPyuM2oLQXhPwlg5PJq4u5yF6OKw
-         oz2A==
-X-Gm-Message-State: AO0yUKVEor7u4bzak3dO3Ivqb0VcY79kX6Ch5EjG4+8WCnMst+9s0LGL
-        ucVb2mbHx/9AY+Pi7ZbQr20gwg==
-X-Google-Smtp-Source: AK7set/gI4wuceoQETSMpL/c/K84URPdsZxk4ck7FUVh3KRDpb2vrcitaud7hltK9fJRLuvHOYKDlw==
-X-Received: by 2002:a05:600c:43d2:b0:3df:eedf:df32 with SMTP id f18-20020a05600c43d200b003dfeedfdf32mr16642733wmn.17.1676115741393;
-        Sat, 11 Feb 2023 03:42:21 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id q28-20020a05600c331c00b003de2fc8214esm7468458wmp.20.2023.02.11.03.42.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Feb 2023 03:42:21 -0800 (PST)
-Message-ID: <65dc9dfc-8f0b-9c5d-8f02-2d23c4486efe@linaro.org>
-Date:   Sat, 11 Feb 2023 12:42:18 +0100
+        Sat, 11 Feb 2023 18:01:45 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91F111641
+        for <linux-watchdog@vger.kernel.org>; Sat, 11 Feb 2023 15:01:44 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pQysC-000178-6g; Sun, 12 Feb 2023 00:01:36 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pQys8-004J11-DQ; Sun, 12 Feb 2023 00:01:33 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pQys8-002mBY-S5; Sun, 12 Feb 2023 00:01:32 +0100
+Date:   Sun, 12 Feb 2023 00:01:27 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-watchdog@vger.kernel.org,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Grant Likely <grant.likely@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH 596/606] watchdog: ziirave_wdt: Convert to i2c's
+ .probe_new()
+Message-ID: <20230211230127.gsaixwtfd6squ7ce@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-597-uwe@kleine-koenig.org>
+ <20221118225747.GF686528@roeck-us.net>
+ <20230127103204.t3k53rqaygxdlvyl@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 1/5] dt-bindings: watchdog: mt7621-wdt: add phandle to
- access system controller registers
-Content-Language: en-US
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20230211073357.755893-1-sergio.paracuellos@gmail.com>
- <20230211073357.755893-2-sergio.paracuellos@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230211073357.755893-2-sergio.paracuellos@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wmhymxh6nxqskys3"
+Content-Disposition: inline
+In-Reply-To: <20230127103204.t3k53rqaygxdlvyl@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/02/2023 08:33, Sergio Paracuellos wrote:
-> MT7621 SoC provides a system controller node for accessing to some registers.
-> Add a phandle in this node to avoid using MIPS related arch operations and
-> includes in watchdog driver code.
-> 
-> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> ---
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+--wmhymxh6nxqskys3
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+Hello,
 
+On Fri, Jan 27, 2023 at 11:32:04AM +0100, Uwe Kleine-K=F6nig wrote:
+> On Fri, Nov 18, 2022 at 02:57:47PM -0800, Guenter Roeck wrote:
+> > On Fri, Nov 18, 2022 at 11:45:30PM +0100, Uwe Kleine-K=F6nig wrote:
+> > > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > >=20
+> > > The probe function doesn't make use of the i2c_device_id * parameter =
+so it
+> > > can be trivially converted.
+> > >=20
+> > > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> >=20
+> > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>=20
+> This patch hasn't made it into next yet. Is it still on your radar?
+>=20
+> My plans for this series is to complete the conversion after the next
+> merge window which should include most patches from this series.
+>=20
+> So I ask you to either take this patch during the next merge window or
+> accept that it will be applied together with the i2c core conversion
+> that drops .probe() with the i2c_device_id parameter.
+
+This got Guenter's R-b tag twice now, but the patch didn't appear yet in
+next. I'll prepare a series for Wolfram to apply via his i2c tree based
+on what is in next during the merge window with the idea to get the
+change early into next with an immutable tag. If you get this patch in
+during the merge window that would be ideal, but if not, I will take
+care of it and as announced will send it together with the i2c change.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--wmhymxh6nxqskys3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmPoHkQACgkQwfwUeK3K
+7AnIDgf/fHKAF8C1Wm4rkkljsA+gi7jbIkRi9VEYkM7wGVUGwvd3pD5V1PVReja4
+N0GGdW9sIRVRvNYLCHtQgm71/y9KN2oy+UXnQNEP4NkJa3lkk+FXQvrXLVIQMeLm
+7n5xcixeddfX2foFmNYu8Bu/J+E9/KlvQfRJMPw1FOYmuNdxGCRVAmcsRLsYg+ES
++Z9ujYWt6SXDxERt5OcLGVO+Ff3LUIZhljrUm+i79Iu22LDjA7WWyoYa+R/BxJG4
+aAvNHh6Fx3zfQoGq6WgQvegfwr7U2aX6JASEKayp6aTeZIWS2G91KYJtKP3EffEs
+xb3dDBMyF+VrQvuNCultn75FKXcFQw==
+=UZCd
+-----END PGP SIGNATURE-----
+
+--wmhymxh6nxqskys3--
