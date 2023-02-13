@@ -2,79 +2,154 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49FB693800
-	for <lists+linux-watchdog@lfdr.de>; Sun, 12 Feb 2023 16:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E7C693FC7
+	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Feb 2023 09:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjBLPlc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 12 Feb 2023 10:41:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39048 "EHLO
+        id S229604AbjBMIiN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 13 Feb 2023 03:38:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjBLPlb (ORCPT
+        with ESMTP id S230061AbjBMIiK (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 12 Feb 2023 10:41:31 -0500
-Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3C5CC3E;
-        Sun, 12 Feb 2023 07:41:31 -0800 (PST)
-Received: from robin.home.jannau.net (p579ad32f.dip0.t-ipconnect.de [87.154.211.47])
-        by soltyk.jannau.net (Postfix) with ESMTPSA id 7274F26F778;
-        Sun, 12 Feb 2023 16:41:29 +0100 (CET)
-From:   Janne Grunau <j@jannau.net>
-To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH 03/17] dt-bindings: watchdog: apple,wdt: Add t8112-wdt compatible
-Date:   Sun, 12 Feb 2023 16:41:13 +0100
-Message-Id: <20230202-asahi-t8112-dt-v1-3-cb5442d1c229@jannau.net>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net>
-References: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net>
+        Mon, 13 Feb 2023 03:38:10 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED116CDF9
+        for <linux-watchdog@vger.kernel.org>; Mon, 13 Feb 2023 00:38:08 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id he5so321697wmb.3
+        for <linux-watchdog@vger.kernel.org>; Mon, 13 Feb 2023 00:38:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=x93TSjXtO2TlBbQBk5NGYGAmIwuwgwhV00wjEqEE7Ys=;
+        b=cENjSiAp/PKrOCayJWJN1sfYW7o5AjlEiGfBmJW6RbMtdZDQ+Tgr5Lz/zBpkcdTiZw
+         lY9XIPWbgwgPKc83YQDqDJic4iWhRledbERbyDRX9vv5VKn9kzqi582th6XVx/qr+AFA
+         3bdwU116Zd0XZkPh6/RmFVKrrBQK1NO6DFqaAKl+LocAHAdSD1TFKOQkRxldhBLVwro1
+         Jzm5hW1reFVAcD9AEqHSvFpGN2xw8bACf+/SMZD/U/bWmRLg+rAibvGdbnfMcs1Sc+0i
+         a/gr21XFHk7ZoHXs3/+vyxLufhJ8rOSxqkDJzux/IxJw9RiFbnP67n3j80xfCRNcz26R
+         SjOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x93TSjXtO2TlBbQBk5NGYGAmIwuwgwhV00wjEqEE7Ys=;
+        b=7LQMmX2x1+jS6XbyYW6rSG20GuO/570XpIGm9qL9mMqVkqilflp6LR9p1mG0r2DYDC
+         97uWgoDVgU++2/nVhj34hX1EmUF8rQqdtqI4tZEa35c1UbUXPI8vu/COdjGd/nFKDzuL
+         5GlykQ/uFYVqMhuA8zx0jPtZhB/dh1g7QWNQ1mluQ8gZyXnlwn2j3Br/8fTYHkUVfuJo
+         kscPp/mmID0iqZIDx0avZuQVkUtOg4ENPdAPOjecX2BeHdAaVOQ9aPjLjTlRykoXBEoe
+         wM8m2nsUeC9MleMdwzOPgS+JhukYv0b9H1CZD2aK/gDqjoBD1AuxnAFoTC/ox1SERCMu
+         UTYA==
+X-Gm-Message-State: AO0yUKUwnH55LIj4eYYyq2MviSSXWuNKBabywpuUDpPdNZHcoFL+pdng
+        j6EHmgosw1uIhtTs3kp//ZGG3w==
+X-Google-Smtp-Source: AK7set/x2ojpgyB5m1IoMLipum1xi70lchdc6voJigmp6PgY5rE/K5spEew1vHApe+/oMNVamvMVCQ==
+X-Received: by 2002:a05:600c:491d:b0:3da:2a78:d7a4 with SMTP id f29-20020a05600c491d00b003da2a78d7a4mr18267334wmp.21.1676277487553;
+        Mon, 13 Feb 2023 00:38:07 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o19-20020a05600c379300b003b47b80cec3sm16081969wmr.42.2023.02.13.00.38.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Feb 2023 00:38:07 -0800 (PST)
+Message-ID: <d10e541a-cdfd-08af-6a2c-eb7edcdb486a@linaro.org>
+Date:   Mon, 13 Feb 2023 09:38:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=911; i=j@jannau.net; h=from:subject:message-id; bh=+69NoRn07oX1kEzEXqbbrxc9N6YJ6elGhnhIqdxBYk0=; b=owGbwMvMwCG2UNrmdq9+ahrjabUkhuSX7MePzdh94bPHm7R2pcD9Pmm5Zk5ub1oKQ3duzCv+2 lRuZbGmo5SFQYyDQVZMkSVJ+2UHw+oaxZjaB2Ewc1iZQIYwcHEKwES0rzEyrLGrYeLp07l58s4S 6RW3Sws9ys7WCEb+zVT/PUtcXMc+hZGhseDjequGOTyni0weedad6X2/vPv0VrkTepNvvD209uc jfgA=
-X-Developer-Key: i=j@jannau.net; a=openpgp; fpr=8B336A6BE4E5695E89B8532B81E806F586338419
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 1/5] dt-bindings: watchdog: mt7621-wdt: add phandle to
+ access system controller registers
+Content-Language: en-US
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        tsbogend@alpha.franken.de, p.zabel@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20230211073357.755893-1-sergio.paracuellos@gmail.com>
+ <20230211073357.755893-2-sergio.paracuellos@gmail.com>
+ <190b3135-82f3-4dfa-55ee-e048c5510e3c@arinc9.com>
+ <CAMhs-H8tehOWvYKmFtW_LHNb62h5mnzVGN_bfGOtLgNE9qUxqw@mail.gmail.com>
+ <d14f0065-e8d3-50ed-7ea4-ba57dbd18d51@arinc9.com>
+ <CAMhs-H_1dtdAmeNW9arK9JxhdWaQJwcMU1Pk7TOW1f5MREzzug@mail.gmail.com>
+ <76353597-0170-e0d9-9f5d-f208a03e44e8@linaro.org>
+ <CAMhs-H-JGZMR6mB=USywAh4aRS9ZFOVebwLv8=N2f3uvWpcXDA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMhs-H-JGZMR6mB=USywAh4aRS9ZFOVebwLv8=N2f3uvWpcXDA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The block on the Apple M2 SoC is compatible with the existing driver so
-add its per-SoC compatible.
+On 12/02/2023 09:13, Sergio Paracuellos wrote:
+> On Sat, Feb 11, 2023 at 12:42 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 11/02/2023 12:01, Sergio Paracuellos wrote:
+>>> On Sat, Feb 11, 2023 at 11:47 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
+>>>>
+>>>> On 11.02.2023 13:41, Sergio Paracuellos wrote:
+>>>>> On Sat, Feb 11, 2023 at 10:10 AM Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
+>>>>>>
+>>>>>> Is this mediatek,sysctl property required after your changes on the
+>>>>>> watchdog code?
+>>>>>
+>>>>> I don't really understand the question :-) Yes, it is. Since we have
+>>>>> introduced a new phandle in the watchdog node to be able to access the
+>>>>> reset status register through the 'sysc' syscon node.
+>>>>> We need the bindings to be aligned with the mt7621.dtsi file and we
+>>>>> are getting the syscon regmap handler via
+>>>>> 'syscon_regmap_lookup_by_phandle()'. See PATCH 5 of the series, Arınç.
+>>>>
+>>>> I believe you need to put mediatek,sysctl under "required:".
+>>>
+>>> Ah, I understood your question now :-). You meant 'required' property.
+>>> I need more coffee, I guess :-). I am not sure if you can add
+>>> properties as required after bindings are already mainlined for
+>>> compatibility issues. The problem with this SoC is that drivers become
+>>> mainlined before the device tree was so if things are properly fixed
+>>> now this kind of issues appear.  Let's see Krzysztof and Rob comments
+>>> for this.
+>>
+>> If your driver fails to probe without mediatek,sysctl, you already made
+>> it required (thus broke the ABI) regardless what dt-binding is saying.
+>> In such case you should update dt-binding to reflect reality.
+>>
+>> Now ABI break is different case. Usually you should not break it without
+>> valid reasons (e.g. it was never working before). Your commit msg
+>> suggests that you only improve the code, thus ABI break is not really
+>> justified. In such case - binding is correct, driver should be reworked
+>> to accept DTS without the new property.
+> 
+> Thanks for clarification, Krzysztof. Ok, so if this is the case I need
+> to add this property required (as Arinc was properly pointing out in
+> previous mail) since without it the driver is going to fail on probe
+> (PATCH 5 of the series). I understand the "it was never working
+> before" argument reason for ABI breaks. What happens if the old driver
+> code was not ideal and totally dependent on architecture specific
+> operations when this could be totally avoided and properly make arch
+> independent agnostic drivers?
 
-Signed-off-by: Janne Grunau <j@jannau.net>
+It's just an improvement and improvements should be incremental and not
+break ABI.
 
----
-This trivial dt-bindings update should be merged through the asahi-soc
-tree to ensure validation of the Apple M2 (t8112) devicetrees in this
-series.
----
- Documentation/devicetree/bindings/watchdog/apple,wdt.yaml | 1 +
- 1 file changed, 1 insertion(+)
+> This driver was added in 2016 [0]. There
+> was not a device tree file in the kernel for this SoC mainlined until
+> 2022 [1]. 
 
-diff --git a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
-index e58c56a6fdf6..3d7e2a2bf1f1 100644
---- a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
-@@ -17,6 +17,7 @@ properties:
-     items:
-       - enum:
-           - apple,t8103-wdt
-+          - apple,t8112-wdt
-           - apple,t6000-wdt
-       - const: apple,wdt
- 
+2022 march was almost a year ago, so there were kernel releases with
+this ABI.
 
--- 
-2.39.1
+Also, what about all out of tree DTS? What about other operating
+systems, bootloaders, firmwares etc?
+
+
+Best regards,
+Krzysztof
 
