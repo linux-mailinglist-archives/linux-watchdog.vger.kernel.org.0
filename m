@@ -2,101 +2,139 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0045E694400
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Feb 2023 12:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C137694538
+	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Feb 2023 13:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjBMLMD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 13 Feb 2023 06:12:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
+        id S229945AbjBMMHk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 13 Feb 2023 07:07:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjBMLLz (ORCPT
+        with ESMTP id S230059AbjBMMHi (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 13 Feb 2023 06:11:55 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589F818ABE
-        for <linux-watchdog@vger.kernel.org>; Mon, 13 Feb 2023 03:11:30 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id r18so8419047wmq.5
-        for <linux-watchdog@vger.kernel.org>; Mon, 13 Feb 2023 03:11:30 -0800 (PST)
+        Mon, 13 Feb 2023 07:07:38 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613D31A667;
+        Mon, 13 Feb 2023 04:07:10 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id n13so8530368wmr.4;
+        Mon, 13 Feb 2023 04:07:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9F7cJax0QH/QZaBK2YDN758lsvYWSdX4ohNIeUxAEAM=;
-        b=SVA4Dj5Xuyr9HVEH0lvTiL0cMIi+LvPIeX86RcDpd+cPeDOhEjxwaaZwt3SPcz7TWG
-         8ChGY5xRhFwZAgmccT85G0O19W34h7jaMBg1Udvnl9wEzPNLYBhnSdrzd0HoGVJ/AEBa
-         nx9+E8qh3R3ttfHLlZisIn38JBhH1vHdZCkTBKS508cPMFM5G2GkqTYtsSsEV22GVZBv
-         roSImdoCRaLJ+3MqOcU+I9I47t0h+VbRUXdgyWEe0qnjxr6nda5tW1KnlrJ00M632ORp
-         Tz+3YzbRI7KcoayGIR2bYZEZdZtBLQfj2RRQtwPt8Nz+bRJURmx92RETNDLEmh1wn6g+
-         todg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qIe/r9mtEwhdvVyE7xopkyv6C9oZIn7clQlBN8qdMMY=;
+        b=kepk6NN6rirGl0ugTuXjEO0p/+KlA4ZL8G9nVAH71WeykU6x0KkaXcLvHnMgdQymLd
+         gsDiG2lRWktkwtQuN9cwvazad9kDEBORfoAnxYX05ziLGmOiM20cwndYpgpVv/X+RtHM
+         vZT6CbQmaYvMQX4oHwkQk3AlDHWAmAP1/ZLXOFa4jQq1o6vsevphFHbWgQ48F5X5FB3o
+         7i7HWWY1RuCSvLC38doiZdm7qaEr1DAgtmkWAHu6gcs8yj6/yWVg4JRWpAVHsYmB7hSy
+         UOb5UKZt0Adi/QU31jEnsu9N4yxty4/o/2cCGcoJG8J4z54s28R/3TY7okXw184OajSs
+         +EAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9F7cJax0QH/QZaBK2YDN758lsvYWSdX4ohNIeUxAEAM=;
-        b=OpeY4h8E4XIQHRxncHSFGm0Y97tmtcIhlPh/9675PyC4cQxGzHwZrVVumJzhHtOf2+
-         TZhf4we3ThIp3lc+WHB+jxtOVWd0i2jGREhq7EOiuJvwMzKLcKMmG+EJBWpRaANe/1+s
-         uOeu+1O3TnHPohzVLFgIAntdJINCs8wa0HiC47Tm05Gt1j+KjdF/e2CECaXVqVRipZEc
-         W03GVKSOwVr9V8IuQdEKqO3qsQsVajVeta+mf0+ZWRSDl1z4sdedzIUJgsFNNTK1bIqA
-         lRu8YauOa0LHNrK1yHYVrJ+9yN7Z7TeeT2lE+3AHXDFio7hg59inihRF/8eqfzKGflea
-         2DGw==
-X-Gm-Message-State: AO0yUKXFXKulMbKSJ32YYdEFWz4e394fLj+YRHm4Va+va5i7ROQxp5lk
-        fbuqw2YGw4fomgszLyawyou9nw==
-X-Google-Smtp-Source: AK7set9Ifw0+tELdcUwLkSrgoYRSHeB+Wjh3bsRxKQ7ICkMhR+qYAHJfbsSS0fGi6pKvYn6YyOEvjg==
-X-Received: by 2002:a05:600c:502b:b0:3db:2e6e:7826 with SMTP id n43-20020a05600c502b00b003db2e6e7826mr22764706wmr.5.1676286682837;
-        Mon, 13 Feb 2023 03:11:22 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m24-20020a05600c3b1800b003dc41a9836esm15156957wms.43.2023.02.13.03.11.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Feb 2023 03:11:22 -0800 (PST)
-Message-ID: <942dcc16-9d7a-2f7c-763d-47515030931c@linaro.org>
-Date:   Mon, 13 Feb 2023 12:11:20 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qIe/r9mtEwhdvVyE7xopkyv6C9oZIn7clQlBN8qdMMY=;
+        b=u6DPZGqIZg5NpSk3YnKjDMWC5GwSxEnm/ZoPwaH1ILmlCWRpMtg+uwsVq5VAdnt5GO
+         YVIX7TrSMqSQCvCcR44anUNgtEdQ6vfhSAtAC1UUrZ8oNTuFebti81BMZxXWcU93d6hV
+         pMemN60E4A28NdzsT72EYJMnHMY8Admz1jxjiLfUXc5HBdXHF9dacis1rSDZtlJ9mHKo
+         rVlcuvWumYwJUnF1L05eAU9iM66yQu80DuOdbsLGdvY4IIefodcgOHGut3h7wlSJgiGp
+         3RGsk1UWY6Fqq2lcHupaLsqjjMWMHJ06eItZRO0XnX6OyH0iP6UJlvdHcYBO1iogkyLA
+         qMCQ==
+X-Gm-Message-State: AO0yUKXmUU0hQxLvDbvqGx+XBYO9DzGuev3dKUqjU2Z5xhWU2fQer9aW
+        w+EbH0Omz+OEoNJADWfTWR2tLxgSuwk=
+X-Google-Smtp-Source: AK7set/15D6mq15XzGu3c5gMXOqy6dzq7wfhOfQQCzO/fzVFdTPZAlofS7xN9HHMY7EqGV4jZVoDRg==
+X-Received: by 2002:a05:600c:331c:b0:3df:ee43:860b with SMTP id q28-20020a05600c331c00b003dfee43860bmr18775270wmp.23.1676290000779;
+        Mon, 13 Feb 2023 04:06:40 -0800 (PST)
+Received: from localhost.localdomain (23.red-88-10-60.dynamicip.rima-tde.net. [88.10.60.23])
+        by smtp.gmail.com with ESMTPSA id n13-20020a05600c3b8d00b003dc434900e1sm14798046wms.34.2023.02.13.04.06.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 04:06:40 -0800 (PST)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: [PATCH v5 0/2] avoid globals and arch dependencies
+Date:   Mon, 13 Feb 2023 13:06:36 +0100
+Message-Id: <20230213120638.850612-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 03/17] dt-bindings: watchdog: apple,wdt: Add t8112-wdt
- compatible
-Content-Language: en-US
-To:     Janne Grunau <j@jannau.net>, Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Kettenis <kettenis@openbsd.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-References: <20230202-asahi-t8112-dt-v1-0-cb5442d1c229@jannau.net>
- <20230202-asahi-t8112-dt-v1-3-cb5442d1c229@jannau.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230202-asahi-t8112-dt-v1-3-cb5442d1c229@jannau.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 12/02/2023 16:41, Janne Grunau wrote:
-> The block on the Apple M2 SoC is compatible with the existing driver so
-> add its per-SoC compatible.
-> 
-> Signed-off-by: Janne Grunau <j@jannau.net>
-> 
-> ---
-> This trivial dt-bindings update should be merged through the asahi-soc
-> tree to ensure validation of the Apple M2 (t8112) devicetrees in this
-> series.
+Hi all,
 
-Same comment as before, that's not a valid reason.
+This series make an update in the MT7621 SoC's watchdog driver code. This
+SoC already provides a system controller node to access reset status
+register needed for the watchdog. Instead of using MIPS architecture
+dependent operations in header 'asm/mach-ralink/ralink_regs.h' could use
+a phandle to the system controller node and use it through regmap APIs
+from the code. However this means to break dtb's ABI so previous series
+patches related with this have been droped from this version.
+Driver is also using some globals that are not needed at all if a driver
+data structure is used along the code. Hence, add all new needed stuff
+inside a new driver data structure.
+
+Thanks in advance for reviewing this!
+
+v1 of this series here [0].
+v2 os thise series here [1].
+v3 os thise series here [2].
+v4 os thise series here [3].
+
+Changes in v5:
+    - Drop patches related with device tree ABI breakage and only
+      maintain the rest.
+    - Collect Arinc 'Reviewed-by' tag for watchdog node warning fix.
+
+Changes in v4:
+    - Add a patch to fix a watchdog node warning with 'make dtbs_check'
+      because of a wrong node name.
+    - Collect Guenter 'Reviewed-by' tags for watchdog driver code.
+    - Add a missing 'COMPILE_TEST' to Kconfig which was lost when driver
+      code was split in two patches in v2.
+
+Changes in v3:
+    - rename phandler from 'ralink,sysctl' into 'mediatek,sysctl'.
+    - Drop error message added in PATCH 3 that modifies functionality
+      and we only want to maintain current functionaloty by now.
+
+Changes in v2:
+    - Remove no needed compatible 'syscon' from bindings.
+    - Rewrite new syscon phandle description in bindings.
+    - Remove 'syscon' from compatible in 'mt7621.dtsi'.
+    - Split PATCH 3 into two different patches:
+        - PATCH 3: removes static globals using a driver data structure.
+        - PATCH 4: remove ralink architecture dependent includes and code.
 
 Best regards,
-Krzysztof
+    Sergio Paracuellos
+
+[0]: https://lore.kernel.org/linux-watchdog/20230210065621.598120-1-sergio.paracuellos@gmail.com/T/#t
+[1]: https://lore.kernel.org/linux-watchdog/20230210121735.639089-1-sergio.paracuellos@gmail.com/T/#t
+[2]: https://lore.kernel.org/linux-watchdog/20230210173841.705783-1-sergio.paracuellos@gmail.com/T/#t
+[3]: https://lore.kernel.org/linux-watchdog/20230211073357.755893-1-sergio.paracuellos@gmail.com/T/#t
+
+Sergio Paracuellos (2):
+  mips: dts: ralink: mt7621: rename watchdog node from 'wdt' into
+    'watchdog'
+  watchdog: mt7621-wdt: avoid static global declarations
+
+ arch/mips/boot/dts/ralink/mt7621.dtsi |   2 +-
+ drivers/watchdog/mt7621_wdt.c         | 102 ++++++++++++++++----------
+ 2 files changed, 66 insertions(+), 38 deletions(-)
+
+-- 
+2.25.1
 
