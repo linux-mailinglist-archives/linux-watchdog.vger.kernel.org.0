@@ -2,139 +2,160 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3E3695FDB
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Feb 2023 10:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6227C6960F8
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Feb 2023 11:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbjBNJyi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 14 Feb 2023 04:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
+        id S232227AbjBNKjm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 14 Feb 2023 05:39:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbjBNJya (ORCPT
+        with ESMTP id S229769AbjBNKjm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:54:30 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F171E2AE
-        for <linux-watchdog@vger.kernel.org>; Tue, 14 Feb 2023 01:54:28 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id co8so11251210wrb.1
-        for <linux-watchdog@vger.kernel.org>; Tue, 14 Feb 2023 01:54:28 -0800 (PST)
+        Tue, 14 Feb 2023 05:39:42 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA47244B6;
+        Tue, 14 Feb 2023 02:39:40 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id co8so11381199wrb.1;
+        Tue, 14 Feb 2023 02:39:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RgvF89o6ZcBymJMWYMDUfo/mipTfyd/qv7ZfD7kB7f8=;
-        b=LYqKURiyfJTPtTDUTgxztjHHTrcwpBdRJ8gWzviECue8nZDvONWw7gmmrgFge8NIol
-         rSdfPI7maNIwe/51tu3oE/x5h5O2bVV1NmXoPrVOEjyRKJkUtwYcB61sYZRlnQ0l3kCz
-         Ne1DAW2AoBUvxARiGm3vr4xOugiZaLYc5HJ+PSnva4dPk1PuEFnoOJey2rnUWSjEosVv
-         2oq/WOBf2udzzqHejwzw2y6QuCagUnvTY7yauoynbnxl3V2yDkIVo/l85yF/xNDUg2G4
-         VIqQN2cXRELU219cc4krQJgMvzY4KKH4BG+EeaYxymLbgWlL3SnpTbxJJ7x5tEm30vnA
-         /Fpg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oGjm8oBx0DVqNF28ZQWMD/Yy3Cb0BqYpu5HyyEPRUT4=;
+        b=Jxq3HftI2tU9Q1sJCyGfgNcZ0OJSlkmn7JRWjGq/IVNaycfKG0mpJvfe6UaatTWHLX
+         o0bQgL7WEQn6bsrMiL9e3HhvRKUX6zp2jf8D6YV8TJ+FiI7yE5hLg3vSdS60YpvjQ4Pr
+         NDOBtb6AJqkeWHYwqJx8o0fuv1CKMuUypSmO/t33CfIS1Yala57mwEn6Fy5koz5sbKjE
+         Zt8rbXAwrWM+ZpoLnOFevDs1l3xOjLAk6QpKdwTG3tXScSt8Bp6YshbrfG7Ityk+hvok
+         W2P97Rdn4vcicGmDxJ37NCRNUzgoPrzrWJ5Q9HKIvkkqvagO/GyHRH6e0Y3s37ZzA1hv
+         pz5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RgvF89o6ZcBymJMWYMDUfo/mipTfyd/qv7ZfD7kB7f8=;
-        b=jxia7xO5AU9m00YMBYRdTU9dgLbQwLRf83fbXFqb/SNaSxCoNjymZCd+vqk7bhw6PJ
-         kIK7BZIptvsSoHZrf1ZvcU1y1vsCxbNoGNDRZjya7fE56cHOnSp1p8V+UlqL2C146y8i
-         fEazXclxN4NaLiei9K7Ikcv6Ul8ZpvMVOgEkAjh/AaM7iXr1ZWc33fgjWrHIQjS/S0xx
-         6JlEiZpRjXOWYMJqLpz50EaX0i7TGIsKMtuKowlkkFi7WJF/PrdgBn5RgnO4POLw+o1I
-         6R++l4FSsHYbNw9rYaY4wedENGcCOSh6stJ8AWU1GX9bD8cQmEpa/Eup6jgsSl3d4kc7
-         2edQ==
-X-Gm-Message-State: AO0yUKXs4yJ8jQgln4M7H5wj8msX52Elj+JoTrdtfwDC6MzUKjfhQ+HQ
-        CMDcVkXRz7PpbKA7N3tX/VaV8g==
-X-Google-Smtp-Source: AK7set/k8I3ls3Dk3K9u1Ly5QLY21zRXzjLQRRJQp+VJzwjjdN22mbPH9pkx/RgZgoS2yCOs60bxwQ==
-X-Received: by 2002:adf:e6c5:0:b0:2bf:95d6:4789 with SMTP id y5-20020adfe6c5000000b002bf95d64789mr1117227wrm.2.1676368467087;
-        Tue, 14 Feb 2023 01:54:27 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id u14-20020adff88e000000b002c56046a3b5sm2624973wrp.53.2023.02.14.01.54.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 01:54:26 -0800 (PST)
-Message-ID: <f224fc29-4954-60f0-3eea-0973a94b29f4@linaro.org>
-Date:   Tue, 14 Feb 2023 10:54:25 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v6 3/3] watchdog: mt7621-wdt: avoid ralink architecture
- dependent code
-Content-Language: en-US
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oGjm8oBx0DVqNF28ZQWMD/Yy3Cb0BqYpu5HyyEPRUT4=;
+        b=gBDq24yWm2FGvBKt4Zz6IA3rdR7mRYtm6QCjRoYQjbQVhe/4Zr5lEle+meVDQOf7Wp
+         EoPx2PtnaS0a9Aadp7QkT1dSR4Mdhmhkg3iZUw60EuIrYBcRJ2vVp5e/SJVWp3G+3Vf/
+         W8uW+RW4ifzExEfQRZA5+n1yuLaP94ItiUWrcjz6/NxSVufmH68GE7Eo4uQ5dhBIH2fA
+         h9Z+spgJk08oHwF8Zt3knlA0zUTAB/QcW9pdTxTFVECjuSNvyhCpzBC3gRPBcJAbAAIS
+         23nYhTTmKrobKUwrCupsnRt2/2EaiWWzy6XXuERt3KcecMCRDUMhDWKgaWMZcBNr/MgJ
+         fPgA==
+X-Gm-Message-State: AO0yUKVsuifico3tpVkyet23lDwXxR1IiHaeJH26CAbdThftWofwEQRS
+        blvCSoy1WM7I1ktURaAwIGfduzp1FT0=
+X-Google-Smtp-Source: AK7set87XWldfUeW3qzBirdz3IGvGZDTJ9pr2WGrPT4qeEz8VdHRQee+fZ7IB6fc7su/UToyUXpXKQ==
+X-Received: by 2002:a5d:514a:0:b0:2c5:54a7:363a with SMTP id u10-20020a5d514a000000b002c554a7363amr1826254wrt.3.1676371178869;
+        Tue, 14 Feb 2023 02:39:38 -0800 (PST)
+Received: from localhost.localdomain (23.red-88-10-60.dynamicip.rima-tde.net. [88.10.60.23])
+        by smtp.gmail.com with ESMTPSA id v2-20020a5d6102000000b002be5bdbe40csm12693241wrt.27.2023.02.14.02.39.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Feb 2023 02:39:38 -0800 (PST)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
         arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
         p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-mips@vger.kernel.org
-References: <20230213200519.889503-1-sergio.paracuellos@gmail.com>
- <20230213200519.889503-4-sergio.paracuellos@gmail.com>
- <f105c7a8-8821-1e7b-af46-13a46971db63@linaro.org>
- <CAMhs-H_Cd9F+UWWe+dAA89r_huX_srtsgjh1qus93nGehQN1AQ@mail.gmail.com>
- <7f2e556c-ee11-fe4e-f4d6-94c761f976d0@linaro.org>
- <CAMhs-H8Ls2oTZ8LYguCdizNZN3cUC8kKA4e_L6BD3C3cFDP0tA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAMhs-H8Ls2oTZ8LYguCdizNZN3cUC8kKA4e_L6BD3C3cFDP0tA@mail.gmail.com>
+Subject: [PATCH v7 0/5] watchdog: mt7621-wdt: avoid globals and arch dependencies
+Date:   Tue, 14 Feb 2023 11:39:31 +0100
+Message-Id: <20230214103936.1061078-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 14/02/2023 10:50, Sergio Paracuellos wrote:
-> On Tue, Feb 14, 2023 at 10:33 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 14/02/2023 09:54, Sergio Paracuellos wrote:
->>>>>       return 0;
->>>>> @@ -143,6 +147,10 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
->>>>>       if (!drvdata)
->>>>>               return -ENOMEM;
->>>>>
->>>>> +     drvdata->sysc = syscon_regmap_lookup_by_compatible("mediatek,mt7621-sysc");
->>>>> +     if (IS_ERR(drvdata->sysc))
->>>>> +             return PTR_ERR(drvdata->sysc);
->>>>
->>>> This should be the backup/error path for original code using syscon
->>>> property. Looking up by compatible is really not portable/re-usable.
->>>
->>> I can change the code in the way you are pointing out here but...
->>> Why is it not re-usable? Compatible is not supposed to be changed
->>> since in other cases the DTB ABI will be broken. I am totally lost
->>> about what is an ABI breakage, then.
->>
->> How do you use it on other platform?
-> 
-> I see, thanks.
-> 
-> So if I am understanding you correctly I have to maintain the
-> 'mediatek,sysctl' phandle and use it in the first instance and if it
-> fails I have to use regmap_loopup_by_compatible() stuff, right?
-> Something like:
-> 
-> ...
-> 
-> drvdata->sysc = syscon_regmap_lookup_by_phandle(np, "mediatek,sysctl");
-> if (IS_ERR(drvdata->sysc)) {
->          drvdata->sysc =
-> syscon_regmap_lookup_by_compatible("mediatek,mt7621-sysc");
->          if (IS_ERR(drvdata->sysc))
->               return PTR_ERR(drvdata->sysc);
-> }
-> 
-> ....
-> 
-> So in that case, we can add the new phandle to the bindings without
-> any kind of ABI breakage and we can use old dtbs using new watchdog
-> driver code.
-> 
+Hi all,
 
-Yes.
+This series make an update in the MT7621 SoC's watchdog driver code. This
+SoC already provides a system controller node to access reset status
+register needed for the watchdog. Instead of using MIPS architecture
+dependent operations in header 'asm/mach-ralink/ralink_regs.h' use
+a phandle to the system controller node and use it through regmap APIs
+from the code. Driver is also using some globals that are not needed at
+all if a driver data structure is used along the code. Hence, add all
+new needed stuff inside a new driver data structure. With this changes
+driver can be properly compile tested.
+
+Thanks in advance for reviewing this!
+
+v1 of this series here [0].
+v2 of this series here [1].
+v3 of this series here [2].
+v4 of this series here [3].
+v5 of this series here [4].
+v6 of this series here [5].
+
+Changes in v7:
+    - Restore phandler 'mediatek,sysctl' in bindings with Krzysztof's 'Acked-by'.
+    - Use regmap syscon 'syscon_regmap_lookup_by_phandle()' and only if this
+      fails use 'syscon_regmap_lookup_by_compatible()' to avoid DTB's ABI breakage.
+
+Changes in v6:
+    - Get regmap syscon using 'syscon_regmap_lookup_by_compatible()'
+    - Add COMPILE_TEST and dependencies to Kconfig.
+    - Collect Philippe Mathieu-Daudé 'Reviewed-by' tag for watchdog node
+      warning fix.
+
+Changes in v5:
+    - Drop patches related with device tree ABI breakage and only
+      maintain the rest.
+    - Collect Arinc 'Reviewed-by' tag for watchdog node warning fix.
+
+Changes in v4:
+    - Add a patch to fix a watchdog node warning with 'make dtbs_check'
+      because of a wrong node name.
+    - Collect Guenter 'Reviewed-by' tags for watchdog driver code.
+    - Add a missing 'COMPILE_TEST' to Kconfig which was lost when driver
+      code was split in two patches in v2.
+
+Changes in v3:
+    - rename phandler from 'ralink,sysctl' into 'mediatek,sysctl'.
+    - Drop error message added in PATCH 3 that modifies functionality
+      and we only want to maintain current functionaloty by now.
+
+Changes in v2:
+    - Remove no needed compatible 'syscon' from bindings.
+    - Rewrite new syscon phandle description in bindings.
+    - Remove 'syscon' from compatible in 'mt7621.dtsi'.
+    - Split PATCH 3 into two different patches:
+        - PATCH 3: removes static globals using a driver data structure.
+        - PATCH 4: remove ralink architecture dependent includes and code.
 
 Best regards,
-Krzysztof
+    Sergio Paracuellos
+
+[0]: https://lore.kernel.org/linux-watchdog/20230210065621.598120-1-sergio.paracuellos@gmail.com/T/#t
+[1]: https://lore.kernel.org/linux-watchdog/20230210121735.639089-1-sergio.paracuellos@gmail.com/T/#t
+[2]: https://lore.kernel.org/linux-watchdog/20230210173841.705783-1-sergio.paracuellos@gmail.com/T/#t
+[3]: https://lore.kernel.org/linux-watchdog/20230211073357.755893-1-sergio.paracuellos@gmail.com/T/#t
+[4]: https://lore.kernel.org/linux-watchdog/20230213120638.850612-1-sergio.paracuellos@gmail.com/T/#t
+[5]: https://lore.kernel.org/linux-watchdog/b302c25e-5365-c335-c790-71b3135847d0@arinc9.com/T/#t
+
+Sergio Paracuellos (5):
+  dt-bindings: watchdog: mt7621-wdt: add phandle to access system
+    controller registers
+  mips: dts: ralink: mt7621: rename watchdog node from 'wdt' into
+    'watchdog'
+  mips: dts: ralink: mt7621: add phandle to system controller node for
+    watchdog
+  watchdog: mt7621-wdt: avoid static global declarations
+  watchdog: mt7621-wdt: avoid ralink architecture dependent code
+
+ .../watchdog/mediatek,mt7621-wdt.yaml         |   7 +
+ arch/mips/boot/dts/ralink/mt7621.dtsi         |   3 +-
+ drivers/watchdog/Kconfig                      |   4 +-
+ drivers/watchdog/mt7621_wdt.c                 | 122 ++++++++++++------
+ 4 files changed, 93 insertions(+), 43 deletions(-)
+
+-- 
+2.25.1
 
