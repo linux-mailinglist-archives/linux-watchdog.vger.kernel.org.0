@@ -2,101 +2,107 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1039C695F33
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Feb 2023 10:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5BA695F48
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Feb 2023 10:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231673AbjBNJ3g (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 14 Feb 2023 04:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
+        id S232291AbjBNJdm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 14 Feb 2023 04:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbjBNJ3c (ORCPT
+        with ESMTP id S232360AbjBNJdl (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 14 Feb 2023 04:29:32 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8937024136
-        for <linux-watchdog@vger.kernel.org>; Tue, 14 Feb 2023 01:29:10 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id j18so2754236vkd.4
-        for <linux-watchdog@vger.kernel.org>; Tue, 14 Feb 2023 01:29:10 -0800 (PST)
+        Tue, 14 Feb 2023 04:33:41 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5032855A8
+        for <linux-watchdog@vger.kernel.org>; Tue, 14 Feb 2023 01:33:33 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id j23so14984589wra.0
+        for <linux-watchdog@vger.kernel.org>; Tue, 14 Feb 2023 01:33:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4RQJbxa2zxf1eok3NXzyUCkQgINd0o868aLrSeXERKc=;
-        b=QntRrzqMo+9Pc8HtQ8MxpyBxBAK+Dl8ion1QywDB8e0eh1FsGp+sEbGRkpEgHoYb1S
-         8sWqz0TXQVdGWIM+0wW2RQi7F6Ca9eBWixBfR2PqMD20/JRHYaLVKagVYLrZ2CTzOj1f
-         d54nTdKQ0WA3a9P9Y6aKyw8kfb1SogA+oPFDZV2Jc5GH4RrTBxRT/1XxSzyDjm3jDcF6
-         SNb5fOqxcgFGLeWI3Y4ya64HSULhb9aXSHVG/zcIcu8fdBT/zviwz8VkE/V4cpcRIJWw
-         sKGYOU5K6DY/qTwzizj1Xgq04VKIPVkbU8ldKttq2GD2nS6WAMxutuLY3UZ1+MSeZ4/f
-         uFRw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cfs+Q3/NCe1EQO+5Ft904kfT2AxcjZbiWamdz5bJvaY=;
+        b=NBHd90XfEE+9tYmS2wB/jBXfk75s5nVkMimrJFGyXaOOIMZa0vkXAJOOHXF1u5XY9t
+         xplGnNakc/TE5VfShtEHgvbB8At5wt8XtDhR7SuH29r0Y7aMzwZPloOMait+35FZHqie
+         NYvksuYtcQdpbwfkMJ4o7bwaDzn2BZi9L9H6OQ9KmTRHLN/Oq26c1dD5rNv9ZEEbv2oX
+         I1plKNd8RdeKsdQXmlEtI6hsz0cq8Lh0+aFPmuEBE1LWPiXx7qgQbYC49AhIaJJZj+sQ
+         6BRubrd+kaochlSJDFS5OXlEnPM4V3JcargCwm5zMCrAq6ep0eOqWJcIPRi7r3D+NONd
+         hsrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4RQJbxa2zxf1eok3NXzyUCkQgINd0o868aLrSeXERKc=;
-        b=xX7illkl2mzNfLR7TqjwQJOOyjDKv5iSDwZ12/RBRbrA+l+1klpKMiSH/kcK5/1jFI
-         DCd6wT7jM8bf9lzcAxOWpHqyWvAXoyLebadopcCc503TNuY+2kB5Nmx+QZTY0vxvXsru
-         otuIYVTuG5St4JzAHQjtZ/KxTTLCEefjXdiHy4kApCu5CahpA9Ij8bvSe4BLLQ0QIAHw
-         e9a/0+o59iv/pa4qyXYeKG/snep6L5Md6GNoRKoaND+eZa3W40moRztPT+SttwYtD+KA
-         oiCwWUMtuZhSO0JMSnIqWYfUYe3ebKgcoOsJ3Qw8oJbEC9kplG6zftb8qv/vSErBdlL0
-         jgCg==
-X-Gm-Message-State: AO0yUKUxxr1y2cgqUFpWZCaRR20dyQ22VJPzVuvuic6+FArzQ77r4Ixs
-        WX6PLDQIvyrJI9KQt8hee5qor3O2X3YIpJzaD8HuKw==
-X-Google-Smtp-Source: AK7set+eIcvPal1BBBaXy9jZQLy65xiyv7ukZ+pdg2djtmGh73BkZuMicJiUVcn1KW629aOyxKTN/qycaQuNWppEl7Q=
-X-Received: by 2002:a1f:2110:0:b0:3e1:95e8:fe1e with SMTP id
- h16-20020a1f2110000000b003e195e8fe1emr262782vkh.1.1676366948809; Tue, 14 Feb
- 2023 01:29:08 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cfs+Q3/NCe1EQO+5Ft904kfT2AxcjZbiWamdz5bJvaY=;
+        b=0ZrdzT7x3fMvUp7pHdSxvw9rVbCgnZ/g4+GU/8vUkjzwh2QuLvjJhJ/7sjSw76UQAp
+         OG8VUrr3Jfllo/HnMWdKscK7xKxF4SRJIzxTFNCiPkqNW5OynLXm1K5J//x1pWKYLiXV
+         5ewkvCtog2MrKKW1Pry0O/W9UUaHUERU8e1qmnd8uWrf8PRbW/XZ/rolBEIh+oS7PhxA
+         DPkc9DKeIvPH8BFGYvvOruZeKjAh2fepc/6F4VW6aMXYh2OeXCugoxWgxaZ0EN9ECEKn
+         MRwF17OsctzHsJLBFQciYoEtlh0WdrshOdGgGdtuG6Xp2nNoaoqzCKwlw5j+mKlUNFl9
+         s02g==
+X-Gm-Message-State: AO0yUKXz50qou2dQfbP2eMVuK/tD3SDRjcC3upPV4ZG51cy9By/Ug3y3
+        eiyUmoK/lP9BebREpG7FNQ9qRg==
+X-Google-Smtp-Source: AK7set+dVtdtCDNLgA5545ILg7PF/u84//tVlT2VUmHK0xnzko5rFmzjH7eBd7V/o9AYBTmJjQEE+g==
+X-Received: by 2002:adf:f8c6:0:b0:2bf:95d0:fa5d with SMTP id f6-20020adff8c6000000b002bf95d0fa5dmr2093230wrq.9.1676367211857;
+        Tue, 14 Feb 2023 01:33:31 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id n6-20020adffe06000000b002c559843748sm4162918wrr.10.2023.02.14.01.33.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Feb 2023 01:33:31 -0800 (PST)
+Message-ID: <7f2e556c-ee11-fe4e-f4d6-94c761f976d0@linaro.org>
+Date:   Tue, 14 Feb 2023 10:33:29 +0100
 MIME-Version: 1.0
-References: <20230201152038.203387-1-brgl@bgdev.pl> <20230201152038.203387-6-brgl@bgdev.pl>
-In-Reply-To: <20230201152038.203387-6-brgl@bgdev.pl>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 14 Feb 2023 10:28:58 +0100
-Message-ID: <CAMRc=McjsvXi_HZVKJcJ_Y8tF0scfNvhxYF5Hh6HVAUzUkfqBg@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: add initial support for qcom sa8775p-ride
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v6 3/3] watchdog: mt7621-wdt: avoid ralink architecture
+ dependent code
+Content-Language: en-US
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        arinc.unal@arinc9.com, tsbogend@alpha.franken.de,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org
+References: <20230213200519.889503-1-sergio.paracuellos@gmail.com>
+ <20230213200519.889503-4-sergio.paracuellos@gmail.com>
+ <f105c7a8-8821-1e7b-af46-13a46971db63@linaro.org>
+ <CAMhs-H_Cd9F+UWWe+dAA89r_huX_srtsgjh1qus93nGehQN1AQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAMhs-H_Cd9F+UWWe+dAA89r_huX_srtsgjh1qus93nGehQN1AQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 4:21 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->
-> This adds basic support for the Qualcomm sa8775p platform and the
-> reference board: sa8775p-ride. The dt files describe the basics of the
-> SoC and enable booting to shell.
->
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/Makefile         |   1 +
->  arch/arm64/boot/dts/qcom/sa8775p-ride.dts |  47 ++
->  arch/arm64/boot/dts/qcom/sa8775p.dtsi     | 812 ++++++++++++++++++++++
->  3 files changed, 860 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sa8775p-ride.dts
->  create mode 100644 arch/arm64/boot/dts/qcom/sa8775p.dtsi
->
+On 14/02/2023 09:54, Sergio Paracuellos wrote:
+>>>       return 0;
+>>> @@ -143,6 +147,10 @@ static int mt7621_wdt_probe(struct platform_device *pdev)
+>>>       if (!drvdata)
+>>>               return -ENOMEM;
+>>>
+>>> +     drvdata->sysc = syscon_regmap_lookup_by_compatible("mediatek,mt7621-sysc");
+>>> +     if (IS_ERR(drvdata->sysc))
+>>> +             return PTR_ERR(drvdata->sysc);
+>>
+>> This should be the backup/error path for original code using syscon
+>> property. Looking up by compatible is really not portable/re-usable.
+> 
+> I can change the code in the way you are pointing out here but...
+> Why is it not re-usable? Compatible is not supposed to be changed
+> since in other cases the DTB ABI will be broken. I am totally lost
+> about what is an ABI breakage, then.
 
-Bjorn,
+How do you use it on other platform?
 
-Please DON'T APPLY this one, pick v4 instead. After discussing with
-qualcomm, we're removing the watchdog node from dt.
+Best regards,
+Krzysztof
 
-Bart
