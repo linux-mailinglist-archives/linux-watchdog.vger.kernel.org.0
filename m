@@ -2,111 +2,88 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9153969A619
-	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Feb 2023 08:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54EFA69A8A2
+	for <lists+linux-watchdog@lfdr.de>; Fri, 17 Feb 2023 10:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjBQH3K convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 17 Feb 2023 02:29:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46936 "EHLO
+        id S229718AbjBQJxe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 17 Feb 2023 04:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjBQH3J (ORCPT
+        with ESMTP id S229436AbjBQJxd (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 17 Feb 2023 02:29:09 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB7265A0;
-        Thu, 16 Feb 2023 23:28:53 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 5D5A624DE83;
-        Fri, 17 Feb 2023 15:28:32 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Feb
- 2023 15:28:32 +0800
-Received: from [192.168.125.128] (183.27.98.67) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Feb
- 2023 15:28:30 +0800
-Message-ID: <267ab62d-d680-d505-4183-ccb8c654419e@starfivetech.com>
-Date:   Fri, 17 Feb 2023 15:29:00 +0800
+        Fri, 17 Feb 2023 04:53:33 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87D65F257
+        for <linux-watchdog@vger.kernel.org>; Fri, 17 Feb 2023 01:53:32 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pSxQj-0001Bz-GS; Fri, 17 Feb 2023 10:53:25 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pSxQg-005YFM-TS; Fri, 17 Feb 2023 10:53:24 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pSxQh-004I1u-Fu; Fri, 17 Feb 2023 10:53:23 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
+Subject: [PATCH] watchdog: at91rm9200: Only warn once about problems in .remove()
+Date:   Fri, 17 Feb 2023 10:53:17 +0100
+Message-Id: <20230217095317.1213387-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH v2 2/3] drivers: watchdog: Add StarFive Watchdog driver
-Content-Language: en-US
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20221219094233.179153-1-xingyu.wu@starfivetech.com>
- <20221219094233.179153-3-xingyu.wu@starfivetech.com>
- <20230201224619.GA3194283@roeck-us.net>
- <1f18bfdc-7a04-4914-d970-7ef1d4f99653@starfivetech.com>
- <bfc81429-1829-bec1-ac29-0559f6a01215@roeck-us.net>
- <c0b03600-13a9-b9e7-e4f3-701fd5b55c86@starfivetech.com>
-In-Reply-To: <c0b03600-13a9-b9e7-e4f3-701fd5b55c86@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [183.27.98.67]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1019; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=KCFCul1v7TIKLH577N/fp9oqdUwOHohszUuC4GmMQVs=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBj706K832g6brobPK/iG1WsgyKDXYEPahLdnc4B vxqba+uWLCJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY+9OigAKCRDB/BR4rcrs CTvbB/9hR2AJfN4Nnwl/XUWQoa0lWCxmm83VlXuVTHoH+xnqjh8sKqfa0iBPGCrCWeQyE0NJuZv meH9xvEgp0NFaLBGwXeXkjz4FBUmYOOyrGYhAR618vqZ387eLsTmRHMaBGzCKQoEo7PE/mH7Vb9 xF7y/dmcyOh2kLhvDlpgFgZi/6PpTpkjxKIAZkEo1uQB9he7hmXC2Vkp6lM9eue3UQKGlQa8WQV NxFeOMCpQ9Cf4IbwDuQ29+mJ3U0cufx3euEly3cr0K8tRdkH9zltetRIRrbG6rr9A3ETxOcbgKj KGzFjXiwA9W4PHO1MtlpmIX0rbOtODM8XsedB1EHnAQCbtct
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2023/2/17 10:30, Xingyu Wu wrote:
-> On 2023/2/16 22:57, Guenter Roeck wrote:
->> On 2/15/23 23:11, Xingyu Wu wrote:
->>> On 2023/2/2 6:46, Guenter Roeck wrote:
->>>> On Mon, Dec 19, 2022 at 05:42:32PM +0800, Xingyu Wu wrote:
->>>>> Add watchdog driver for the StarFive JH7110 SoC.
->>>>>
->>>>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->>>>> +
->>>>> [...]
->>>>> +
->>>>> +static const struct watchdog_info starfive_wdt_ident = {
->>>>> +    .options = OPTIONS,
->>>>> +    .firmware_version = 0,
->>>>
->>>> It is not necessary to initilize a static variable with 0.
->>>>
->>>>> +    .identity = "StarFive Watchdog",
->>>>> +};
->>>
->>> Hi Guenter,
->>>
->>> It would be a compilation error if drop the '0'. I found that other files
->> 
->> No.
->> 
->>> initialize this static variable as well.
->>>
->> 
->> Ah, the old "others do it, so do I" argument.
->> Sorry, that is not a valid argument.
->> 
-> 
-> Can I assign ‘firmware_version’ to a macro definition in the probe?
-> 
+The single difference between returning 0 and returning an error code in
+a platform remove callback is that in the latter case the platform core
+emits a warning about the error being ignored.
 
-Or drop the 'firmware_version' ?
+at91wdt_remove() already emits a warning in the error case, so suppress
+the more generic (and less helpful) one by returning 0.
 
-Best regards,
-Xingyu Wu
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/watchdog/at91rm9200_wdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/watchdog/at91rm9200_wdt.c b/drivers/watchdog/at91rm9200_wdt.c
+index 5126454bb861..d57409c1a4d1 100644
+--- a/drivers/watchdog/at91rm9200_wdt.c
++++ b/drivers/watchdog/at91rm9200_wdt.c
+@@ -270,7 +270,7 @@ static int at91wdt_remove(struct platform_device *pdev)
+ 	misc_deregister(&at91wdt_miscdev);
+ 	at91wdt_miscdev.parent = NULL;
+ 
+-	return res;
++	return 0;
+ }
+ 
+ static void at91wdt_shutdown(struct platform_device *pdev)
+
+base-commit: 033c40a89f55525139fd5b6342281b09b97d05bf
+-- 
+2.39.1
 
