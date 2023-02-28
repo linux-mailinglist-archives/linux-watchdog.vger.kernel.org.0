@@ -2,94 +2,69 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EA26A5B69
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Feb 2023 16:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5E56A5B81
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Feb 2023 16:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbjB1PLA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 28 Feb 2023 10:11:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54818 "EHLO
+        id S229861AbjB1PRN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 28 Feb 2023 10:17:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjB1PK7 (ORCPT
+        with ESMTP id S229881AbjB1PRN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 28 Feb 2023 10:10:59 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F349E212A0;
-        Tue, 28 Feb 2023 07:10:53 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id u6so6445457ilk.12;
-        Tue, 28 Feb 2023 07:10:53 -0800 (PST)
+        Tue, 28 Feb 2023 10:17:13 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F60305EC;
+        Tue, 28 Feb 2023 07:16:52 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id t129so4148869iof.12;
+        Tue, 28 Feb 2023 07:16:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=0hFgCVYvdf8qCio/mcfsT/HFMMai5H9F95nC41WxplU=;
-        b=dijrorNv9fDP9TTW1Cs81VGsu1XCztj0Z2xPY7I9NWdwoIiqm/LKgimo/i6O2xaMLR
-         yzO0K0yqc+hQZL25Vvoly6iZBrakjAHqmGhnXrK+npdDeH0UokiBGgYyi4Yhsedvc8on
-         pJ5ZZZhqZH/4JcwVJxjJ4GHUsz0wizN2i9HYjsCLYiGhTgSyaVQ3p3N6M3HPj4DQXi/H
-         2BW/swGHEI1Qhpu/AKdH3ur9UBbIvcdkvOShLPwADfDQxDzuFmwGD7KVupZ9IikRl/17
-         mXzUpZ+uPVzJYf08j/rWYYyOCtn+QG3AjRVoj0mav667JNh/tAu9VjuxeBovRWgbL7v2
-         MLSg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=qiodHOalcxGf8K4hBKSYGSAd7AoMbD2MMYCxsDBycs0=;
+        b=OWxgA4KAnMBqLFrkgSwnbM6abdK6p4NVS8P0iAoJs88nRB2/6wloExy3xUCtxhQJC2
+         ogd7sqhZJnz8qLVibnhDxojDKIA9z4tlkMFhUb3apNfSRyQM72qXWRNZifG76Y/Hq6IW
+         3CCyD1zvTY47Edr0pw5qGh+IXiBMbhKjobsQ89xS+3+t3NF+cSLpOGPnDK5xzScvHMLb
+         LLHfHgjqhkwZaDU3sSQl+vhR3oe5QHGMOss+JBOKIFeIQyV+59G6S49kLSZ+cEXQW+1+
+         ubWSkD5/OG9MeFGKaFkD2AKRdb6aIG0FPQKkGA0RpD9Vwl2JBMKXuxeM2Q/yQ9c5/Ci1
+         Z4YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0hFgCVYvdf8qCio/mcfsT/HFMMai5H9F95nC41WxplU=;
-        b=NitGhgVsPRE/j8Mk0ws15T7ceegBvORTxmhx6pze5BgsMPAkN12adinjrnj1x1Acvl
-         2TuSJ1aNCj8BVku2m/bPl2sW34sx/nUNPOcpl/2ObUaMuCYuyMkerdbWmYhr0yGTGgjJ
-         86VxNL7VjHcBsL8ITVgr3QFSykRB2xDLzsbGPKsw7noTUpTL8BQIxoa/fj4PZ9cPe/O/
-         zNAjP8xyu0A7ozM/1P5O82b40otj0kw512RumFmGriBHBmv7RZRbwTIO4Q4S4Z5W7tfL
-         nAGJLF95gQns69W2KiO2rHgHFmi5+5qmjSaPE+YbXGnsU+iby3AxSsZsTRkQbzrJ/XfI
-         ItVA==
-X-Gm-Message-State: AO0yUKVO/ZdyyQ5Xs0SeV9Koj3IdYL3qXt3IRQUMwhJNJZfD1y0U0kpN
-        tEfdkxSfS72V3yKuV4fRXF8=
-X-Google-Smtp-Source: AK7set/G+92FN/0hLG5LTDqB/5HLO+jsglkAAhxlxzfORyNGXB0Myo5noi0wmboxoHyoUt8qSFqJcg==
-X-Received: by 2002:a92:cd89:0:b0:315:34b8:4c6d with SMTP id r9-20020a92cd89000000b0031534b84c6dmr2888115ilb.17.1677597053373;
-        Tue, 28 Feb 2023 07:10:53 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b13-20020a05663801ad00b003e9e5e1aacasm2778973jaq.143.2023.02.28.07.10.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Feb 2023 07:10:52 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qiodHOalcxGf8K4hBKSYGSAd7AoMbD2MMYCxsDBycs0=;
+        b=8QyaPaMM7hCJwao7S1hLgq3/VBck351QcAjPtg2uqmINqSlF9sUTLKwT9tObLAStqv
+         9fFJc91mfGJ+/qrSrfZsKIK0Kgiu6OTQriyVf5SbzO2WPq0/CKlO0fiMalbnuqRVj2it
+         dhon6XFOD39YMqzZRSV1RVcMMHejRNJ8Rkq7p7tdIoseS06PsgI3uzu8LFu7tBcolhXr
+         /xy72jaI2Y9moM80iMluusLoW2/0r9AFQjWvEg1N1aya6wIbnsJf/owB+b1jbPMGdvdj
+         rCZuoYb2kZ7zzZxIXaJXep/aRt24Jueo9TJ/04LoMzyUXf9za3rcW9L6FsUAcnwMsUXA
+         aZaQ==
+X-Gm-Message-State: AO0yUKVj/sOLPxaWyFzJ3/rGwC+nPJmDk/7SUvT8BOyLOZ+PS4tP4/QB
+        8CVZ5eaorvymRM7p+SOYijOTlj7+2GQ=
+X-Google-Smtp-Source: AK7set+23itn809L6aK0fTFAvKGW28scVtuC9g81AHun47A8WQD4iQ6C/oyxrHZ2Fw37C8p+Se3b3A==
+X-Received: by 2002:a6b:e912:0:b0:74c:c218:5007 with SMTP id u18-20020a6be912000000b0074cc2185007mr2218498iof.21.1677597411538;
+        Tue, 28 Feb 2023 07:16:51 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d21-20020a05660225d500b00704c767ead9sm3224050iop.28.2023.02.28.07.16.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 07:16:51 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d2aada79-61c4-0cc7-7b09-058564ed9fce@roeck-us.net>
-Date:   Tue, 28 Feb 2023 07:10:50 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 2/2] drivers: watchdog: Add StarFive Watchdog driver
-Content-Language: en-US
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org, Conor Dooley <conor@kernel.org>
-References: <20230220081926.267695-1-xingyu.wu@starfivetech.com>
- <20230220081926.267695-3-xingyu.wu@starfivetech.com>
- <CAJM55Z823iqUqD8enM0qJ_MA3Tw94Mn0mq71fbLT1Qjo2s2J3g@mail.gmail.com>
- <0ffb02d2-0bbd-fd0d-b0f6-cb5605570050@starfivetech.com>
- <CAJM55Z_hRpUYueZ-XuWUx1NfAsL9E+-4ry9TYeRWM_bKXvym-g@mail.gmail.com>
- <Y/3coFvMWOLaaY9p@wendy> <545c23f3-1d68-2bff-89d9-584e3ca31044@linaro.org>
- <Y/3hVlp/YPnWHDCX@wendy>
- <f9e380f6-334f-11fa-1118-8d6c3c9befaf@starfivetech.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <f9e380f6-334f-11fa-1118-8d6c3c9befaf@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrej Picej <andrej.picej@norik.com>
+Subject: [PATCH] watchdog: imx2_wdg: Declare local symbols static
+Date:   Tue, 28 Feb 2023 07:16:48 -0800
+Message-Id: <20230228151648.4087637-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,40 +72,40 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2/28/23 05:16, Xingyu Wu wrote:
-> On 2023/2/28 19:11, Conor Dooley wrote:
->> On Tue, Feb 28, 2023 at 11:57:58AM +0100, Krzysztof Kozlowski wrote:
->>> On 28/02/2023 11:51, Conor Dooley wrote:
->>>> On Tue, Feb 28, 2023 at 11:36:49AM +0100, Emil Renner Berthing wrote:
->>>>> On Tue, 28 Feb 2023 at 10:44, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
->>>>>> On 2023/2/26 22:14, Emil Renner Berthing wrote:
->>>>>>> On Mon, 20 Feb 2023 at 09:21, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
->>>>
->>>>>> So the dt-bingdings need to rename, and which one could be better,
->>>>>> 'starfive,jh71x0-wdt.yaml' or 'starfive,jh-wdt.yaml'?
->>>>>
->>>>> Sure, starfive,jh71x0-wdt.yaml sounds good to me.
->>>>
->>>> I feel like a common comment I see from the dt folks is to not put
->>>> wildcards in filenames & just pick the first compatible.
->>>> I could very well be wrong on that front though...
->>>
->>> First compatible is a bit better, unless you are sure this will cover
->>> all such compatibles now and in the future. For many bindings the
->>> family/wildcards were fine in filename.
->>
->> Ahh cool, good to know what the specific policy is - thanks!
-> 
-> If this watchdog driver is improved to also support JH7100 in next patch,
-> it seems more reasonable to rename the dt-bingdings to 'starfive,jh71x0-wdt.yaml'.
+0-day complains:
 
+drivers/watchdog/imx2_wdt.c:442:22: sparse:
+	symbol 'imx_wdt' was not declared. Should it be static?
+drivers/watchdog/imx2_wdt.c:446:22: sparse:
+	symbol 'imx_wdt_legacy' was not declared. Should it be static?
 
-Up to the devicetree maintainers to decide, but I for my part never accept
-wildcards in file names. You can not guarantee that all of jh71[0-9]0 will
-be supported by this set of bindings. On top of that, when / if you add
-support for anything outside that range (say, jh7200 or jh8100 or jh7101
-or whatever) you'd have an even worse problem. Are you then going to suggest
-renaming the file to jhxxxx-wdt ? Or one digit at a time ?
+Declare as static variables.
 
-Guenter
+Fixes: e42c73f1ef0d ("watchdog: imx2_wdg: suspend watchdog in WAIT mode")
+Cc: Andrej Picej <andrej.picej@norik.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/watchdog/imx2_wdt.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+index 19ab7b3d286b..6fcc3596103c 100644
+--- a/drivers/watchdog/imx2_wdt.c
++++ b/drivers/watchdog/imx2_wdt.c
+@@ -439,11 +439,11 @@ static int __maybe_unused imx2_wdt_resume(struct device *dev)
+ static SIMPLE_DEV_PM_OPS(imx2_wdt_pm_ops, imx2_wdt_suspend,
+ 			 imx2_wdt_resume);
+ 
+-struct imx2_wdt_data imx_wdt = {
++static struct imx2_wdt_data imx_wdt = {
+ 	.wdw_supported = true,
+ };
+ 
+-struct imx2_wdt_data imx_wdt_legacy = {
++static struct imx2_wdt_data imx_wdt_legacy = {
+ 	.wdw_supported = false,
+ };
+ 
+-- 
+2.39.1
 
