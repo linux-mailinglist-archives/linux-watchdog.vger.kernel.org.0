@@ -2,323 +2,151 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0BE6A5AB9
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Feb 2023 15:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6936A5B23
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Feb 2023 15:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbjB1OUL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 28 Feb 2023 09:20:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
+        id S229781AbjB1Ozr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 28 Feb 2023 09:55:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjB1OUK (ORCPT
+        with ESMTP id S229745AbjB1Ozq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 28 Feb 2023 09:20:10 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108362FCE1;
-        Tue, 28 Feb 2023 06:20:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677594004; x=1709130004;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HpSQ1PizI63SLWLdOXUaQfPsd5UJVmxUZhcPqhd00Go=;
-  b=D2Gc87tE2btok2GVtFmJ/Qt9b5kKhSKknnaAmbUinYOtN6P8RkUz1cAe
-   yUButSKVIBnziIMWeQVSWzmfiWIB1IvSkPgeO+VV4j4vRMTT9Z+ZBhgEl
-   gdrGq2Pa3p03okUhgFgpucCLRxsomjvvBdI0wbafu1x0303uaw0UDUx6p
-   aAG+KSFlEfopOTfmeCrb6+Mao2jCCNFA1XPvc89DTSGqlmbGPyQpGW15f
-   GS9Bj35FvGLLiL23My/f18Fw9RilMO4cu6dzYf7DzfKwaleTeRl/TlBMp
-   3NZ0pDVznEBkhJHv+rKTf9yYce0/RpNvzqlucvAnKcRMZOXgnb72Wm2N7
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="398922790"
-X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
-   d="scan'208";a="398922790"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2023 06:19:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10635"; a="763185348"
-X-IronPort-AV: E=Sophos;i="5.98,222,1673942400"; 
-   d="scan'208";a="763185348"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 28 Feb 2023 06:19:37 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pX0pM-0005S7-0g;
-        Tue, 28 Feb 2023 14:19:36 +0000
-Date:   Tue, 28 Feb 2023 22:18:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        asahi@lists.linux.dev, amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- 058f4df42121baadbb8a980c06011e912784dbd2
-Message-ID: <63fe0d4a.ELRnTR/tsOu56isL%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 28 Feb 2023 09:55:46 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F285CC3D;
+        Tue, 28 Feb 2023 06:55:33 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id i12so6417931ila.5;
+        Tue, 28 Feb 2023 06:55:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677596133;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q5eTTfgqaqAQ3CFcC2lIe16x/qcJqi2p2PHjQUf8Jvw=;
+        b=Q7xAlJQyRu5B7Cy83Q+sT2qzoqhrkVrBSrGXj4JcG5zoSL3Kbj9QszSrpZGLczlO3h
+         eck2+fXID/edmLhozaZjTAtbLVRV5palbbPxUkLFNkRjha8Yu6rnnke+qdemzHeFekqm
+         lOtL1XmXEGHtd8SDcd6f1fMgRvx5cJ3IDYj6I4KWqocDOcGlgcdTpRY/Co1s6CbWNhnY
+         b05UeRVP3LzQPoB5V8jDDcfeHN7dUGLjcfNm+1Rtd0iucT2YrmV6eN6ii4k92SGaomN2
+         Zx/Luw3CKLpsoTKfI9442yfXiLAHSxe2Uw6lHcFSt4wpiKfPfG+YLBUZiNJ6hX/m/Tc5
+         80cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677596133;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q5eTTfgqaqAQ3CFcC2lIe16x/qcJqi2p2PHjQUf8Jvw=;
+        b=NgNiloE+w86C18vxfODa/MCyFG5kjdx8Ii/T2TywCfuiTeR3IC56A6y6U7pVveSe3t
+         HMIZls4gkwOxFAL1dA75SgWZTPZ5Ty4vgSyUSDYu5WXvvYfGQxKuBJ2k4Oawm9KUmdT4
+         8c9sjrihztQhLgZ0ntCDuUGB1q+BTg6XJaZdDpAmC+x7cxTREeX+8N43H4Gu/sTM4UGa
+         kR6rV6L3Qxfa8MIwHGe3s4x129cpZNraorB2aN/w/Owe/keJnLByA2tl0AtfrkLi2sK3
+         AZ5PfzOdKm6f3e+dQYiQyiGzHmVcKdO//I/yeYGyY+xz5Rcw3eYF+UN/sAG41IuEV50a
+         JwUg==
+X-Gm-Message-State: AO0yUKVSEfK/MJEGkx+6PU47GC7s93MJRlT8vk2byHkMWEqVfFsSj0gO
+        VmpCfraf296oyZrr5PP4VsX0kpWNEMw=
+X-Google-Smtp-Source: AK7set9shbJpReCH2WaoIyL8idU/N5JfWPZwcmqak7rP5Tjb+0Muq4sVw//bvSpOwHBJVZsI6P2Sbw==
+X-Received: by 2002:a05:6e02:2142:b0:315:7fec:f1f0 with SMTP id d2-20020a056e02214200b003157fecf1f0mr2650247ilv.7.1677596132916;
+        Tue, 28 Feb 2023 06:55:32 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o21-20020a02b815000000b003b8708902c0sm3084290jam.21.2023.02.28.06.55.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Feb 2023 06:55:31 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <82659eef-528d-e421-aed4-21e1a7794bf5@roeck-us.net>
+Date:   Tue, 28 Feb 2023 06:55:29 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v7 2/5] mips: dts: ralink: mt7621: rename watchdog node
+ from 'wdt' into 'watchdog'
+Content-Language: en-US
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, arinc.unal@arinc9.com,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+References: <20230214103936.1061078-1-sergio.paracuellos@gmail.com>
+ <20230214103936.1061078-3-sergio.paracuellos@gmail.com>
+ <20230214151101.GB742354@roeck-us.net>
+ <CAMhs-H915iSR7TpuXdcg8NKLV8Scv9cwW36SZaXNK839kA4ybg@mail.gmail.com>
+ <CAMhs-H_Ce-+MFi5zTMg8v8dSSg5ioaTy+Pw-0QMgK++PVtEViQ@mail.gmail.com>
+ <20230228083920.GA5801@alpha.franken.de>
+ <CAMhs-H8xGjGs0-qvxb5KgQ3YZw=2=scqaY15K3ZRp50jQcncSg@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAMhs-H8xGjGs0-qvxb5KgQ3YZw=2=scqaY15K3ZRp50jQcncSg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 058f4df42121baadbb8a980c06011e912784dbd2  Add linux-next specific files for 20230228
+On 2/28/23 00:51, Sergio Paracuellos wrote:
+> On Tue, Feb 28, 2023 at 9:41 AM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+>>
+>> On Tue, Feb 28, 2023 at 05:44:21AM +0100, Sergio Paracuellos wrote:
+>>> On Tue, Feb 14, 2023 at 4:12 PM Sergio Paracuellos
+>>> <sergio.paracuellos@gmail.com> wrote:
+>>>>
+>>>> On Tue, Feb 14, 2023 at 4:11 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>>>>
+>>>>> On Tue, Feb 14, 2023 at 11:39:33AM +0100, Sergio Paracuellos wrote:
+>>>>>> Watchdog nodes must use 'watchdog' for node name. When a 'make dtbs_check'
+>>>>>> is performed the following warning appears:
+>>>>>>
+>>>>>> wdt@100: $nodename:0: 'wdt@100' does not match '^watchdog(@.*|-[0-9a-f])?$'
+>>>>>>
+>>>>>> Fix this warning up properly renaming the node into 'watchdog'.
+>>>>>>
+>>>>>> Reviewed-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>>>> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+>>>>>> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>>>>>
+>>>>> Acked-by: Guenter Roeck <linux@roeck-us.net>
+>>>>>
+>>>>> Note that we can not apply this and the next patch of the series
+>>>>> through the watchdog tree since it crosses a maintainer boundary.
+>>>>
+>>>> I was expecting Thomas to get these two arch/mips patches or get an
+>>>> Acked-by from him in order for you to apply them.
+>>>
+>>> Hi Thomas,
+>>>
+>>> I think you have missed this series since you have started to apply
+>>> newer stuff in mips-next. Are you ok with taking or Acking patches 2
+>>> and 3 of this series?
+>>
+>> yes, I sort of missed it. If it's enough to take patch 2/3 I'll do that.
+>> If it's better to keep the series, I'm also ok with acking them.
+>> What's the best way forward ?
+> 
+> Both trees work for me. The rest of the patches of this series should
+> go through the watchdog tree. Guenter, what is better for you?
+> 
 
-Error/Warning reports:
+Wim is handling pull requests. He has queued the other three patches in his
+tree. I would suggest to apply the two remaining patches through the mips
+tree.
 
-https://lore.kernel.org/oe-kbuild-all/202302111601.jtY4lKrA-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302170355.Ljqlzucu-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302210350.lynWcL4t-lkp@intel.com
+Guenter
 
-Error/Warning: (recently discovered and may have been fixed)
+> Thanks,
+>      Sergio Paracuellos
+> 
+>>
+>> Thomas.
+>>
+>> --
+>> Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+>> good idea.                                                [ RFC1925, 2.3 ]
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for 'optc3_wait_drr_doublebuffer_pending_clear' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/umc_v8_10.c:212:6: warning: no previous prototype for 'umc_v8_10_convert_error_address' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/umc_v8_10.c:212:6: warning: no previous prototype for function 'umc_v8_10_convert_error_address' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/umc_v8_10.c:437:37: warning: variable 'channel_index' set but not used [-Wunused-but-set-variable]
-drivers/gpu/drm/amd/amdgpu/vcn_v4_0.c:81:29: warning: variable 'ring' set but not used [-Wunused-but-set-variable]
-include/asm-generic/div64.h:238:36: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
-
-Unverified Error/Warning (likely false positive, please contact us if interested):
-
-arch/parisc/mm/fault.c:427 do_page_fault() error: uninitialized symbol 'msg'.
-drivers/iommu/apple-dart.c:1281:1: sparse: sparse: symbol 'apple_dart_pm_ops' was not declared. Should it be static?
-drivers/usb/gadget/composite.c:2082:33: sparse: sparse: restricted __le16 degrades to integer
-drivers/watchdog/imx2_wdt.c:442:22: sparse: sparse: symbol 'imx_wdt' was not declared. Should it be static?
-drivers/watchdog/imx2_wdt.c:446:22: sparse: sparse: symbol 'imx_wdt_legacy' was not declared. Should it be static?
-net/bluetooth/hci_sync.c:2403 hci_pause_addr_resolution() warn: missing error code? 'err'
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:no-previous-prototype-for-umc_v8_10_convert_error_address
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:variable-channel_index-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-vcn_v4_0.c:warning:variable-ring-set-but-not-used
-|-- alpha-randconfig-c041-20230226
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:no-previous-prototype-for-umc_v8_10_convert_error_address
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:variable-channel_index-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-vcn_v4_0.c:warning:variable-ring-set-but-not-used
-|-- alpha-randconfig-c043-20230226
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:no-previous-prototype-for-umc_v8_10_convert_error_address
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:variable-channel_index-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-vcn_v4_0.c:warning:variable-ring-set-but-not-used
-|-- arc-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:no-previous-prototype-for-umc_v8_10_convert_error_address
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:variable-channel_index-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-vcn_v4_0.c:warning:variable-ring-set-but-not-used
-|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
-|-- arc-randconfig-r033-20230226
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:no-previous-prototype-for-umc_v8_10_convert_error_address
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:variable-channel_index-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-vcn_v4_0.c:warning:variable-ring-set-but-not-used
-|-- arm-allmodconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:no-previous-prototype-for-umc_v8_10_convert_error_address
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:variable-channel_index-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-vcn_v4_0.c:warning:variable-ring-set-but-not-used
-|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
-|-- arm-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:no-previous-prototype-for-umc_v8_10_convert_error_address
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:variable-channel_index-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-vcn_v4_0.c:warning:variable-ring-set-but-not-used
-|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
-|-- arm-randconfig-s041-20230226
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:no-previous-prototype-for-umc_v8_10_convert_error_address
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:variable-channel_index-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-vcn_v4_0.c:warning:variable-ring-set-but-not-used
-|-- arm64-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:no-previous-prototype-for-umc_v8_10_convert_error_address
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:variable-channel_index-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-vcn_v4_0.c:warning:variable-ring-set-but-not-used
-|-- i386-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:no-previous-prototype-for-umc_v8_10_convert_error_address
-|   |-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:variable-channel_index-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-vcn_v4_0.c:warning:variable-ring-set-but-not-used
-|-- i386-randconfig-s001
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- i386-randconfig-s003
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- ia64-allmodconfig
-clang_recent_errors
-`-- arm64-randconfig-r012-20230226
-    `-- drivers-gpu-drm-amd-amdgpu-umc_v8_10.c:warning:no-previous-prototype-for-function-umc_v8_10_convert_error_address
-
-elapsed time: 729m
-
-configs tested: 161
-configs skipped: 11
-
-tested configs:
-alpha                            alldefconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r003-20230226   gcc  
-arc                                 defconfig   gcc  
-arc                 nsimosci_hs_smp_defconfig   gcc  
-arc                  randconfig-r004-20230226   gcc  
-arc                  randconfig-r004-20230227   gcc  
-arc                  randconfig-r021-20230226   gcc  
-arc                  randconfig-r033-20230226   gcc  
-arc                  randconfig-r034-20230226   gcc  
-arc                  randconfig-r035-20230226   gcc  
-arc                  randconfig-r043-20230226   gcc  
-arc                  randconfig-r043-20230227   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r005-20230226   gcc  
-arm          buildonly-randconfig-r005-20230227   clang
-arm                                 defconfig   gcc  
-arm                          ep93xx_defconfig   clang
-arm                         lpc18xx_defconfig   gcc  
-arm                        mvebu_v5_defconfig   clang
-arm                       omap2plus_defconfig   gcc  
-arm                  randconfig-r031-20230227   gcc  
-arm                  randconfig-r046-20230226   gcc  
-arm                  randconfig-r046-20230227   clang
-arm                           sama7_defconfig   clang
-arm                        spear3xx_defconfig   clang
-arm                           stm32_defconfig   gcc  
-arm                       versatile_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r003-20230227   clang
-arm64                randconfig-r012-20230226   clang
-arm64                randconfig-r024-20230226   clang
-csky         buildonly-randconfig-r001-20230226   gcc  
-csky         buildonly-randconfig-r004-20230226   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r022-20230227   gcc  
-csky                 randconfig-r035-20230227   gcc  
-hexagon              randconfig-r002-20230226   clang
-hexagon              randconfig-r014-20230226   clang
-hexagon              randconfig-r016-20230226   clang
-hexagon              randconfig-r021-20230226   clang
-hexagon              randconfig-r022-20230226   clang
-hexagon              randconfig-r041-20230226   clang
-hexagon              randconfig-r041-20230227   clang
-hexagon              randconfig-r045-20230227   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230227   clang
-i386                 randconfig-a002-20230227   clang
-i386                 randconfig-a003-20230227   clang
-i386                 randconfig-a004-20230227   clang
-i386                 randconfig-a005-20230227   clang
-i386                 randconfig-a006-20230227   clang
-i386                 randconfig-a011-20230227   gcc  
-i386                 randconfig-a012-20230227   gcc  
-i386                 randconfig-a013-20230227   gcc  
-i386                 randconfig-a014-20230227   gcc  
-i386                 randconfig-a015-20230227   gcc  
-i386                 randconfig-a016-20230227   gcc  
-i386                          randconfig-c001   gcc  
-i386                 randconfig-r033-20230227   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r006-20230227   gcc  
-ia64                 randconfig-r024-20230227   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r023-20230227   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        mvme147_defconfig   gcc  
-m68k                 randconfig-r005-20230227   gcc  
-m68k                 randconfig-r011-20230226   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                         cobalt_defconfig   gcc  
-mips                           gcw0_defconfig   gcc  
-mips                           ip22_defconfig   clang
-mips                      loongson3_defconfig   gcc  
-mips                        qi_lb60_defconfig   clang
-mips                 randconfig-r001-20230227   gcc  
-mips                 randconfig-r015-20230226   gcc  
-mips                 randconfig-r032-20230227   gcc  
-mips                           rs90_defconfig   clang
-mips                         rt305x_defconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r026-20230226   gcc  
-nios2                randconfig-r032-20230226   gcc  
-openrisc     buildonly-randconfig-r002-20230227   gcc  
-openrisc             randconfig-r036-20230226   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r022-20230226   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r004-20230227   gcc  
-powerpc                      pasemi_defconfig   gcc  
-powerpc              randconfig-r023-20230226   clang
-powerpc              randconfig-r025-20230227   gcc  
-powerpc                    sam440ep_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r031-20230226   gcc  
-riscv                randconfig-r042-20230226   clang
-riscv                randconfig-r042-20230227   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r005-20230226   gcc  
-s390                 randconfig-r026-20230227   gcc  
-s390                 randconfig-r044-20230226   clang
-s390                 randconfig-r044-20230227   gcc  
-sh                               allmodconfig   gcc  
-sh                 kfr2r09-romimage_defconfig   gcc  
-sh                   randconfig-r025-20230226   gcc  
-sh                   randconfig-r036-20230227   gcc  
-sh                            shmin_defconfig   gcc  
-sparc        buildonly-randconfig-r001-20230227   gcc  
-sparc        buildonly-randconfig-r006-20230227   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r006-20230226   gcc  
-sparc                randconfig-r025-20230226   gcc  
-sparc64              randconfig-r003-20230226   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230227   clang
-x86_64               randconfig-a002-20230227   clang
-x86_64               randconfig-a003-20230227   clang
-x86_64               randconfig-a004-20230227   clang
-x86_64               randconfig-a005-20230227   clang
-x86_64               randconfig-a006-20230227   clang
-x86_64               randconfig-a011-20230227   gcc  
-x86_64               randconfig-a012-20230227   gcc  
-x86_64               randconfig-a013-20230227   gcc  
-x86_64               randconfig-a014-20230227   gcc  
-x86_64               randconfig-a015-20230227   gcc  
-x86_64               randconfig-a016-20230227   gcc  
-x86_64                        randconfig-k001   clang
-x86_64                           rhel-8.3-bpf   gcc  
-x86_64                          rhel-8.3-func   gcc  
-x86_64                    rhel-8.3-kselftests   gcc  
-x86_64                         rhel-8.3-kunit   gcc  
-x86_64                           rhel-8.3-kvm   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                           rhel-8.3-syz   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r006-20230226   gcc  
-xtensa               randconfig-r001-20230226   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
