@@ -2,124 +2,241 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F946A668D
-	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Mar 2023 04:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 186556A67CE
+	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Mar 2023 07:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjCADlD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 28 Feb 2023 22:41:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
+        id S229515AbjCAGzR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 1 Mar 2023 01:55:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjCADlC (ORCPT
+        with ESMTP id S229486AbjCAGzQ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 28 Feb 2023 22:41:02 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2A0149A4;
-        Tue, 28 Feb 2023 19:40:57 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id E511C24E21E;
-        Wed,  1 Mar 2023 11:40:41 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 1 Mar
- 2023 11:40:41 +0800
-Received: from [192.168.125.128] (113.72.145.171) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 1 Mar
- 2023 11:40:40 +0800
-Message-ID: <8b070b58-a031-5ff5-ea69-08bb750442cb@starfivetech.com>
-Date:   Wed, 1 Mar 2023 11:40:56 +0800
+        Wed, 1 Mar 2023 01:55:16 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AB02E0C9;
+        Tue, 28 Feb 2023 22:55:15 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id p16so7846263wmq.5;
+        Tue, 28 Feb 2023 22:55:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677653712;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4BznZY3DwzY1Ny939pkp41laSlmuq7UqVrDzh8/niGI=;
+        b=XAH9M2EAUyKsNg85Mhs4md8BH5lu6CplILqnEnQjkFWftoe3PISpd5yG3ric9RcFwe
+         P0fncKWHddPootloz20EiRNial6hPeIJ8sCrBkwk8FOCFlI6LJbL3xctWpoCgGR8o+D/
+         1WZmsujxwT8i8HGr2UGD+78U1ak3+R+BoOpQ2PZYo2asIojXqycobopE8wpJyuiLFSAB
+         j/8JKqL1ngjd/xOgJmiZGSikn3Iv8cSc9b9/OYky0XgmLcReclq7F0ZX+Ci+gUYzR+X4
+         Bu0lX7UImVzDVfSjtvASpev+xSpWzyJ109rm5CgPrrfHxt/6/5Azbd2RM/7p5Fu/b2vx
+         6iow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677653712;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4BznZY3DwzY1Ny939pkp41laSlmuq7UqVrDzh8/niGI=;
+        b=ju9x5iVATTMgkSrpuUWDZ1Q5zIKxu82znwJKz1JC6jWnOcFYAqBWt8K9MqDH81O6XB
+         LjZuen4W/6akGvb94fP3r3aPX3HyOarKHBWml2ZY3UKIINM9KT+o4UUpey62e+wUSFG/
+         f7IIMpQc5xS/ALXOIJ5mEOx/RYrgN+Ya0SPvZbv9GW+vml/v3Iv8SmLkAe6BfqPLrvKI
+         QzmPPb8wgLa2jDh2m8k8c1A/NycE/C/nNL3JX2XsC45D4OpaEZcF/mhaWcIEWm5kdLKU
+         Cot71lOXDk9JVmRK0fpUwMMuHBQVd4WlLjJSZzEOeH7sLC5RyPmARfRDsDH+a64O3+iU
+         D/OQ==
+X-Gm-Message-State: AO0yUKVa+IMpkJDBXLzHz+DfI1TxKr0p72GxiZJyDx79ja/BKjg+4p51
+        0TXMIUXzPTGGCCTvRZluNB1r3cpnmJI=
+X-Google-Smtp-Source: AK7set/YKllQZvY0MBC4AnXlCk0f+g+1j2ZNr45jI9htpv7pWPLSc8ib1/K0MFJMDr5dsTHFkAdlEA==
+X-Received: by 2002:a05:600c:19c7:b0:3dc:40a0:3853 with SMTP id u7-20020a05600c19c700b003dc40a03853mr4019407wmq.11.1677653712258;
+        Tue, 28 Feb 2023 22:55:12 -0800 (PST)
+Received: from localhost.localdomain (106.red-88-13-29.dynamicip.rima-tde.net. [88.13.29.106])
+        by smtp.gmail.com with ESMTPSA id e17-20020a05600c219100b003e7f1086660sm18279998wme.15.2023.02.28.22.55.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Feb 2023 22:55:11 -0800 (PST)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] watchdog: rt2880-wdt: avoid static global declarations
+Date:   Wed,  1 Mar 2023 07:55:09 +0100
+Message-Id: <20230301065510.2818425-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 2/2] drivers: watchdog: Add StarFive Watchdog driver
-Content-Language: en-US
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, Conor Dooley <conor@kernel.org>
-References: <20230220081926.267695-1-xingyu.wu@starfivetech.com>
- <20230220081926.267695-3-xingyu.wu@starfivetech.com>
- <CAJM55Z823iqUqD8enM0qJ_MA3Tw94Mn0mq71fbLT1Qjo2s2J3g@mail.gmail.com>
- <0ffb02d2-0bbd-fd0d-b0f6-cb5605570050@starfivetech.com>
- <CAJM55Z_hRpUYueZ-XuWUx1NfAsL9E+-4ry9TYeRWM_bKXvym-g@mail.gmail.com>
- <Y/3coFvMWOLaaY9p@wendy> <545c23f3-1d68-2bff-89d9-584e3ca31044@linaro.org>
- <Y/3hVlp/YPnWHDCX@wendy>
- <f9e380f6-334f-11fa-1118-8d6c3c9befaf@starfivetech.com>
- <d2aada79-61c4-0cc7-7b09-058564ed9fce@roeck-us.net>
- <CAJM55Z9G5omehjgDJncPmN6n7zUCVwrMuqDKLXCDs95LtN66MA@mail.gmail.com>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <CAJM55Z9G5omehjgDJncPmN6n7zUCVwrMuqDKLXCDs95LtN66MA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.171]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2023/2/28 23:32, Emil Renner Berthing wrote:
-> On Tue, 28 Feb 2023 at 16:10, Guenter Roeck <linux@roeck-us.net> wrote:
->> On 2/28/23 05:16, Xingyu Wu wrote:
->> > On 2023/2/28 19:11, Conor Dooley wrote:
->> >> On Tue, Feb 28, 2023 at 11:57:58AM +0100, Krzysztof Kozlowski wrote:
->> >>> On 28/02/2023 11:51, Conor Dooley wrote:
->> >>>> On Tue, Feb 28, 2023 at 11:36:49AM +0100, Emil Renner Berthing wrote:
->> >>>>> On Tue, 28 Feb 2023 at 10:44, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
->> >>>>>> On 2023/2/26 22:14, Emil Renner Berthing wrote:
->> >>>>>>> On Mon, 20 Feb 2023 at 09:21, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
->> >>>>
->> >>>>>> So the dt-bingdings need to rename, and which one could be better,
->> >>>>>> 'starfive,jh71x0-wdt.yaml' or 'starfive,jh-wdt.yaml'?
->> >>>>>
->> >>>>> Sure, starfive,jh71x0-wdt.yaml sounds good to me.
->> >>>>
->> >>>> I feel like a common comment I see from the dt folks is to not put
->> >>>> wildcards in filenames & just pick the first compatible.
->> >>>> I could very well be wrong on that front though...
->> >>>
->> >>> First compatible is a bit better, unless you are sure this will cover
->> >>> all such compatibles now and in the future. For many bindings the
->> >>> family/wildcards were fine in filename.
->> >>
->> >> Ahh cool, good to know what the specific policy is - thanks!
->> >
->> > If this watchdog driver is improved to also support JH7100 in next patch,
->> > it seems more reasonable to rename the dt-bingdings to 'starfive,jh71x0-wdt.yaml'.
->>
->>
->> Up to the devicetree maintainers to decide, but I for my part never accept
->> wildcards in file names. You can not guarantee that all of jh71[0-9]0 will
->> be supported by this set of bindings. On top of that, when / if you add
->> support for anything outside that range (say, jh7200 or jh8100 or jh7101
->> or whatever) you'd have an even worse problem. Are you then going to suggest
->> renaming the file to jhxxxx-wdt ? Or one digit at a time ?
-> 
-> Makes sense to me, in which case this should be called
-> starfive,jh7100-wdt since that's the first SoC to feature this
-> watchdog and will hopefully be supported in the next version of this
-> patchset.
-> 
+Instead of using static global definitions in driver code, refactor code
+introducing a new watchdog driver data structure and use it along the code.
 
-Thanks for your suggestions. I will use starfive,jh7100-wdt and improve this
-driver to support 7100 in the next patchset.
+Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+---
+ drivers/watchdog/rt2880_wdt.c | 89 ++++++++++++++++++++---------------
+ 1 file changed, 50 insertions(+), 39 deletions(-)
 
-Best regards,
-Xingyu Wu
+diff --git a/drivers/watchdog/rt2880_wdt.c b/drivers/watchdog/rt2880_wdt.c
+index 49aff800824d..e54737bcf939 100644
+--- a/drivers/watchdog/rt2880_wdt.c
++++ b/drivers/watchdog/rt2880_wdt.c
+@@ -40,10 +40,13 @@
+ #define TMR1CTL_PRESCALE_MASK		0xf
+ #define TMR1CTL_PRESCALE_65536		0xf
+ 
+-static struct clk *rt288x_wdt_clk;
+-static unsigned long rt288x_wdt_freq;
+-static void __iomem *rt288x_wdt_base;
+-static struct reset_control *rt288x_wdt_reset;
++struct rt2880_wdt_data {
++	void __iomem *base;
++	unsigned long freq;
++	struct clk *clk;
++	struct reset_control *rst;
++	struct watchdog_device wdt;
++};
+ 
+ static bool nowayout = WATCHDOG_NOWAYOUT;
+ module_param(nowayout, bool, 0);
+@@ -51,52 +54,56 @@ MODULE_PARM_DESC(nowayout,
+ 		"Watchdog cannot be stopped once started (default="
+ 		__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+ 
+-static inline void rt_wdt_w32(unsigned reg, u32 val)
++static inline void rt_wdt_w32(void __iomem *base, unsigned reg, u32 val)
+ {
+-	iowrite32(val, rt288x_wdt_base + reg);
++	iowrite32(val, base + reg);
+ }
+ 
+-static inline u32 rt_wdt_r32(unsigned reg)
++static inline u32 rt_wdt_r32(void __iomem *base, unsigned reg)
+ {
+-	return ioread32(rt288x_wdt_base + reg);
++	return ioread32(base + reg);
+ }
+ 
+ static int rt288x_wdt_ping(struct watchdog_device *w)
+ {
+-	rt_wdt_w32(TIMER_REG_TMR1LOAD, w->timeout * rt288x_wdt_freq);
++	struct rt2880_wdt_data *drvdata = watchdog_get_drvdata(w);
++
++	rt_wdt_w32(drvdata->base, TIMER_REG_TMR1LOAD, w->timeout * drvdata->freq);
+ 
+ 	return 0;
+ }
+ 
+ static int rt288x_wdt_start(struct watchdog_device *w)
+ {
++	struct rt2880_wdt_data *drvdata = watchdog_get_drvdata(w);
+ 	u32 t;
+ 
+-	t = rt_wdt_r32(TIMER_REG_TMR1CTL);
++	t = rt_wdt_r32(drvdata->base, TIMER_REG_TMR1CTL);
+ 	t &= ~(TMR1CTL_MODE_MASK << TMR1CTL_MODE_SHIFT |
+ 		TMR1CTL_PRESCALE_MASK);
+ 	t |= (TMR1CTL_MODE_WDT << TMR1CTL_MODE_SHIFT |
+ 		TMR1CTL_PRESCALE_65536);
+-	rt_wdt_w32(TIMER_REG_TMR1CTL, t);
++	rt_wdt_w32(drvdata->base, TIMER_REG_TMR1CTL, t);
+ 
+ 	rt288x_wdt_ping(w);
+ 
+-	t = rt_wdt_r32(TIMER_REG_TMR1CTL);
++	t = rt_wdt_r32(drvdata->base, TIMER_REG_TMR1CTL);
+ 	t |= TMR1CTL_ENABLE;
+-	rt_wdt_w32(TIMER_REG_TMR1CTL, t);
++	rt_wdt_w32(drvdata->base, TIMER_REG_TMR1CTL, t);
+ 
+ 	return 0;
+ }
+ 
+ static int rt288x_wdt_stop(struct watchdog_device *w)
+ {
++	struct rt2880_wdt_data *drvdata = watchdog_get_drvdata(w);
+ 	u32 t;
+ 
+ 	rt288x_wdt_ping(w);
+ 
+-	t = rt_wdt_r32(TIMER_REG_TMR1CTL);
++	t = rt_wdt_r32(drvdata->base, TIMER_REG_TMR1CTL);
+ 	t &= ~TMR1CTL_ENABLE;
+-	rt_wdt_w32(TIMER_REG_TMR1CTL, t);
++	rt_wdt_w32(drvdata->base, TIMER_REG_TMR1CTL, t);
+ 
+ 	return 0;
+ }
+@@ -130,41 +137,45 @@ static const struct watchdog_ops rt288x_wdt_ops = {
+ 	.set_timeout = rt288x_wdt_set_timeout,
+ };
+ 
+-static struct watchdog_device rt288x_wdt_dev = {
+-	.info = &rt288x_wdt_info,
+-	.ops = &rt288x_wdt_ops,
+-	.min_timeout = 1,
+-};
+-
+ static int rt288x_wdt_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
++	struct watchdog_device *wdt;
++	struct rt2880_wdt_data *drvdata;
+ 	int ret;
+ 
+-	rt288x_wdt_base = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(rt288x_wdt_base))
+-		return PTR_ERR(rt288x_wdt_base);
++	drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
++	if (!drvdata)
++		return -ENOMEM;
++
++	drvdata->base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(drvdata->base))
++		return PTR_ERR(drvdata->base);
+ 
+-	rt288x_wdt_clk = devm_clk_get(dev, NULL);
+-	if (IS_ERR(rt288x_wdt_clk))
+-		return PTR_ERR(rt288x_wdt_clk);
++	drvdata->clk = devm_clk_get(dev, NULL);
++	if (IS_ERR(drvdata->clk))
++		return PTR_ERR(drvdata->clk);
+ 
+-	rt288x_wdt_reset = devm_reset_control_get_exclusive(dev, NULL);
+-	if (!IS_ERR(rt288x_wdt_reset))
+-		reset_control_deassert(rt288x_wdt_reset);
++	drvdata->rst = devm_reset_control_get_exclusive(dev, NULL);
++	if (!IS_ERR(drvdata->rst))
++		reset_control_deassert(drvdata->rst);
+ 
+-	rt288x_wdt_freq = clk_get_rate(rt288x_wdt_clk) / RALINK_WDT_PRESCALE;
++	drvdata->freq = clk_get_rate(drvdata->clk) / RALINK_WDT_PRESCALE;
+ 
+-	rt288x_wdt_dev.bootstatus = rt288x_wdt_bootcause();
+-	rt288x_wdt_dev.max_timeout = (0xfffful / rt288x_wdt_freq);
+-	rt288x_wdt_dev.parent = dev;
++	wdt = &drvdata->wdt;
++	wdt->info = &rt288x_wdt_info;
++	wdt->ops = &rt288x_wdt_ops;
++	wdt->min_timeout = 1;
++	wdt->max_timeout = (0xfffful / drvdata->freq);
++	wdt->parent = dev;
++	wdt->bootstatus = rt288x_wdt_bootcause();
+ 
+-	watchdog_init_timeout(&rt288x_wdt_dev, rt288x_wdt_dev.max_timeout,
+-			      dev);
+-	watchdog_set_nowayout(&rt288x_wdt_dev, nowayout);
++	watchdog_init_timeout(wdt, wdt->max_timeout, dev);
++	watchdog_set_nowayout(wdt, nowayout);
++	watchdog_set_drvdata(wdt, drvdata);
+ 
+-	watchdog_stop_on_reboot(&rt288x_wdt_dev);
+-	ret = devm_watchdog_register_device(dev, &rt288x_wdt_dev);
++	watchdog_stop_on_reboot(wdt);
++	ret = devm_watchdog_register_device(dev, &drvdata->wdt);
+ 	if (!ret)
+ 		dev_info(dev, "Initialized\n");
+ 
+-- 
+2.25.1
 
