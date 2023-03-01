@@ -2,64 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDFEB6A67CD
-	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Mar 2023 07:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 673FA6A69A8
+	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Mar 2023 10:20:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjCAGzR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 1 Mar 2023 01:55:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
+        id S229511AbjCAJUD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 1 Mar 2023 04:20:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjCAGzQ (ORCPT
+        with ESMTP id S229453AbjCAJUC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 1 Mar 2023 01:55:16 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C39B30EBC;
-        Tue, 28 Feb 2023 22:55:15 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso7661492wmb.0;
-        Tue, 28 Feb 2023 22:55:15 -0800 (PST)
+        Wed, 1 Mar 2023 04:20:02 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2CB2DE74;
+        Wed,  1 Mar 2023 01:20:01 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id az36so8086588wmb.1;
+        Wed, 01 Mar 2023 01:20:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677653713;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X7TQlLP33d/hsxTkfWm0RTdIoRZwSrsSyc6CDAnRU9w=;
-        b=VT+XCeOXzFAVdn3CVlD1Wt1dgyeHRKbNrJyb1aPMxVh6xj8SIcHJ4WODGcJ0hEVPjZ
-         VWVl9W8uFFfN0nPvOyuFAc9DGXat+LvLUWqeEorKYvTYGSgOuVviB+cefDPyAARJZVXq
-         1MW9zKTHCrKKJ9Kf1VPaqA8yB4mQA7TjyIPIzreC73IIsha+aWuv70PdCDH8ZR5hyZ01
-         hBFDj80sueK1yCUPUi+hK0U3UnuVXr2fBvwg0Soo4re68eQbr7qgqsQglzfQ3o/SKDl+
-         3rkUMk61WKSUfJTKlnwc5lhSg2Awpn4nKl6ANw7dO1QvG9ZoTAC0sHLQkizoGSybp49N
-         O7tQ==
+        d=gmail.com; s=20210112; t=1677662400;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2v2Z5ZAJAE3AkqP3wTiWZfs6czfSMkDVDFA1arlPKdk=;
+        b=YOSWz2zNyQ+o4XYLOZ08BdKzxKhMce0VbkPb95cCeL5PDT+gO+vHFVoaCfgGzr20ZB
+         Z7/bXmxv2I30+5fgb9Q7llOleQzV5fD9bZbcBA2EzBZPY5neQVWlJMxn4FEowtks09c1
+         X9B1elevpXdY2nGY8ehshXIYMwdE3/J/CLqmsx2JpUlhESQ/oEfHLH1TXGA5B+hDJAUZ
+         ydpPLS8Z7Fs3k3SsHN+xNq+08mG0VQYQzTFoJTtehXDPzLmKpuh0ACL7g2RiZ32C8s9y
+         aMLS7Ijy2KLCIcvy/GD5lH1mxjaI/dULRBB3OMUO6cmpeuXBg4RR9vH2C8sbBgiQUg5Z
+         2o3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677653713;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X7TQlLP33d/hsxTkfWm0RTdIoRZwSrsSyc6CDAnRU9w=;
-        b=6UnH/+lttkvATE6ZdYXdRg6BRBrgIX0/vuvKbU1zgTW+ofBDuKMzGY3ron3HnA09hV
-         Bh3aMKAnw1y5TBW4q+FGdMfyvC58iWGJmZejN9of6z55lf/gTzMbhPlBYQ2yMEcqvqil
-         LLETOnvF0GOd8hbcb8NW7MpfA4Tp2RbrB2y0hl+RToY9I0B9muZEP06Tj2p6RzA5xy4P
-         Xob1jUPyPtbHhxZ3O+dgLVuQcOTB77/jg2iLE/M7nHC5IHZGiCPLBn5Sj3/RK/MANJaa
-         QQyZf14JFqW0HpnzxRt3fRwbzPCVUd5t+IhrJuowO/BPi44Lq9G729QUNnzCNYmCNzNy
-         J0aw==
-X-Gm-Message-State: AO0yUKVRpsbmJSGEh5uxG0CS53eWnmMLJu7ryzi5iSNZKmKS4QenKLq1
-        MAId51Gk+e8cfHemcHl4lgz5w/C2XTI=
-X-Google-Smtp-Source: AK7set/4wvnupagkweswyKRIVBnfKUbDE/9mHXNLwBHcB6DFO3YdEDoK2PsgCXEAJqj/nAdIE2AIig==
-X-Received: by 2002:a05:600c:18a3:b0:3eb:2da4:efe7 with SMTP id x35-20020a05600c18a300b003eb2da4efe7mr4001134wmp.11.1677653713404;
-        Tue, 28 Feb 2023 22:55:13 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677662400;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2v2Z5ZAJAE3AkqP3wTiWZfs6czfSMkDVDFA1arlPKdk=;
+        b=unntgKJxVPu5MeV9YJxkDBdHYYxBIn3fY0aLMprxjkGtkldpPhAs2eTHATAewkrZgK
+         hNjUXmsfiAd43AHEsp9x6bFxmXzh9PfJ68G4Z6zKidesp+ZwVE17t2dxZw96HBgBQzy2
+         VOwN/CCswTXwhZuk4sdMYtk/qGfG2Tn9E6iUtkpImEGoKurJ3X9iVQHB01uqayv6udQ7
+         oJPUREMHoNnTJZ82u4NK/g19zbqzygvKGIGlcDgFCoY1KYlAGQFnD/wEGWA4flZihMw8
+         hyO9deRPfYY883BFF18Yhn1cb1q1CpwXrwpA65/jPhWi8t+n+OPhIYkJ5GbTTVf0+3AM
+         yNzw==
+X-Gm-Message-State: AO0yUKUztQW1KE3/t7PbneK8DTvW6RHE9X4EuoipfmggUxhFD0fgHtrd
+        OEYtDYwjzs6ifquhiCMOG2Jk7SuskF4=
+X-Google-Smtp-Source: AK7set+hb4i9vLUbmrGfnHE1crI0InRYGxZ/woMKdlusPWa2L3J2HoIc7b/dTDcoG2ZV1SaG9brkzA==
+X-Received: by 2002:a05:600c:1898:b0:3dc:58a2:3900 with SMTP id x24-20020a05600c189800b003dc58a23900mr4373844wmp.29.1677662399860;
+        Wed, 01 Mar 2023 01:19:59 -0800 (PST)
 Received: from localhost.localdomain (106.red-88-13-29.dynamicip.rima-tde.net. [88.13.29.106])
-        by smtp.gmail.com with ESMTPSA id e17-20020a05600c219100b003e7f1086660sm18279998wme.15.2023.02.28.22.55.12
+        by smtp.gmail.com with ESMTPSA id h16-20020adff4d0000000b002c70851fdd8sm12137908wrp.75.2023.03.01.01.19.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Feb 2023 22:55:12 -0800 (PST)
+        Wed, 01 Mar 2023 01:19:59 -0800 (PST)
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     linux-watchdog@vger.kernel.org
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] watchdog: rt2880-wdt: prefer unsigned int over unsigned
-Date:   Wed,  1 Mar 2023 07:55:10 +0100
-Message-Id: <20230301065510.2818425-2-sergio.paracuellos@gmail.com>
+To:     devicetree@vger.kernel.org
+Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Subject: [PATCH] dt-bindings: watchdog: migrate rt2880 text bindings to YAML
+Date:   Wed,  1 Mar 2023 10:19:57 +0100
+Message-Id: <20230301091957.2824172-1-sergio.paracuellos@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230301065510.2818425-1-sergio.paracuellos@gmail.com>
-References: <20230301065510.2818425-1-sergio.paracuellos@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,33 +70,98 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Instead of declare 'reg' variable in read and write operations as a bare
-'unsigned' type prefer to declate it as 'unsigned int'.
+Ralink RT2880 Watchdog bindings used text format, so migrate them to YAML.
+There are some additions to the binding that were not in the original
+txt file. This binding is used in RT2880, RT3050, RT3352, RT3883, RT5350,
+and MT7620 SoCs. To properly match all dts nodes included in openWRT git
+trees we need to add to the schema 'reset' and 'reset-names'. 'reset-names'
+property is always string 'wdt' so maintain that as const in the schema.
 
 Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 ---
- drivers/watchdog/rt2880_wdt.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../bindings/watchdog/ralink,rt2880-wdt.yaml  | 47 +++++++++++++++++++
+ .../bindings/watchdog/rt2880-wdt.txt          | 18 -------
+ 2 files changed, 47 insertions(+), 18 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/ralink,rt2880-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/rt2880-wdt.txt
 
-diff --git a/drivers/watchdog/rt2880_wdt.c b/drivers/watchdog/rt2880_wdt.c
-index e54737bcf939..4499ba0eb5ea 100644
---- a/drivers/watchdog/rt2880_wdt.c
-+++ b/drivers/watchdog/rt2880_wdt.c
-@@ -54,12 +54,12 @@ MODULE_PARM_DESC(nowayout,
- 		"Watchdog cannot be stopped once started (default="
- 		__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
- 
--static inline void rt_wdt_w32(void __iomem *base, unsigned reg, u32 val)
-+static inline void rt_wdt_w32(void __iomem *base, unsigned int reg, u32 val)
- {
- 	iowrite32(val, base + reg);
- }
- 
--static inline u32 rt_wdt_r32(void __iomem *base, unsigned reg)
-+static inline u32 rt_wdt_r32(void __iomem *base, unsigned int reg)
- {
- 	return ioread32(base + reg);
- }
+diff --git a/Documentation/devicetree/bindings/watchdog/ralink,rt2880-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ralink,rt2880-wdt.yaml
+new file mode 100644
+index 000000000000..c96bf2e61364
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/ralink,rt2880-wdt.yaml
+@@ -0,0 +1,47 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/ralink,rt2880-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Ralink Watchdog Timers
++
++maintainers:
++  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    const: ralink,rt2880-wdt
++
++  reg:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  reset-names:
++    items:
++      - const: wdt
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    watchdog@100 {
++      compatible = "ralink,rt2880-wdt";
++      reg = <0x100 0x100>;
++      resets = <&rstctrl 8>;
++      reset-names = "wdt";
++      interrupt-parent = <&intc>;
++      interrupts = <1>;
++    };
+diff --git a/Documentation/devicetree/bindings/watchdog/rt2880-wdt.txt b/Documentation/devicetree/bindings/watchdog/rt2880-wdt.txt
+deleted file mode 100644
+index 05b95bfa2a89..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/rt2880-wdt.txt
++++ /dev/null
+@@ -1,18 +0,0 @@
+-Ralink Watchdog Timers
+-
+-Required properties:
+-- compatible: must be "ralink,rt2880-wdt"
+-- reg: physical base address of the controller and length of the register range
+-
+-Optional properties:
+-- interrupts: Specify the INTC interrupt number
+-
+-Example:
+-
+-	watchdog@120 {
+-		compatible = "ralink,rt2880-wdt";
+-		reg = <0x120 0x10>;
+-
+-		interrupt-parent = <&intc>;
+-		interrupts = <1>;
+-	};
 -- 
 2.25.1
 
