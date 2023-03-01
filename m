@@ -2,382 +2,137 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66216A7363
-	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Mar 2023 19:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 132BE6A7375
+	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Mar 2023 19:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjCASZU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 1 Mar 2023 13:25:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33090 "EHLO
+        id S229527AbjCASbo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 1 Mar 2023 13:31:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjCASZU (ORCPT
+        with ESMTP id S229504AbjCASbn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 1 Mar 2023 13:25:20 -0500
-X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Mar 2023 10:25:18 PST
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C7773B0D5
-        for <linux-watchdog@vger.kernel.org>; Wed,  1 Mar 2023 10:25:18 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id XR1IphQCnyrvBXR1IptlD8; Wed, 01 Mar 2023 19:17:45 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 01 Mar 2023 19:17:45 +0100
-X-ME-IP: 86.243.2.178
-Message-ID: <3da08274-5a7c-6f0e-d093-508494de0c1f@wanadoo.fr>
-Date:   Wed, 1 Mar 2023 19:17:40 +0100
+        Wed, 1 Mar 2023 13:31:43 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E5242BFC;
+        Wed,  1 Mar 2023 10:31:42 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id r4so8882038ila.2;
+        Wed, 01 Mar 2023 10:31:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677695502;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=a/YclZa16B+dv50g9dZnP2lIX+zrcQhTqU5677uxE5I=;
+        b=RjeIERGXJCr3qI0RC7ybrOmq1mjkTvW5LL/dsIO5PY0j96XzYZXWfM0X3cNgQ5wLdS
+         SdoHbeLFacDRPUbu42j6BAB1Uf3r1ebji2quBUcYl8FzH+IOHJEar/yOWboCan5zMtfq
+         +M6DN2SitzfF39tu2D1ueMCdVEmqupYOfrvEeZK5yNcKHWoIoKwDfnPReB4Dl2fk8KXG
+         NXshQUMOLUBPOVZPPKwtv8+ChRA7WjhnC+f/LaHV9hnXzZejDH7gFUUEWOhD/cJ9cXd1
+         bFARtgmw/AyV1NV0YgeSugjiPEkRLYKLZgJRzfnLurOt3SuritmPd3eZeycgfdkYHnx4
+         8bng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677695502;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a/YclZa16B+dv50g9dZnP2lIX+zrcQhTqU5677uxE5I=;
+        b=ACPcuo5gA8HzH+tGcEIZ9AvX09gGkJbWk9gGySOa8nQ2YOqkHowJujvq5HNYPwrQUM
+         G0F7ug9WVl67IYY7KJ28tl8boiZHKqRTrFnVBLsXKsQZuZmkyfmxP7zNHXqGhHPWZ53e
+         3pFS/LeVHEvLf5430wk5i69C//qyYE5/NvPwx7WfBDM61jEIVdjNinC+PZiDK1NrnRY+
+         H0v4N8lrzjIfESCwE91PVmnJVwMrh2eSYXwJJVj/v73VjHWapuj2ocCb26NLVlmidCwI
+         Ll12+uKX+7xJgwlgeiGnKaH9tfVw4teTdpWpRzfuuPiPc8NmY36ZPBNh/KIF/NEGigBS
+         syRg==
+X-Gm-Message-State: AO0yUKWA7Z8SG2iONsbU+p8B2rauajrAHY5mApJ/bBYlGmBn7drgY+H5
+        zyYjTs10fDRU7575aoX+NVb04kxeevY=
+X-Google-Smtp-Source: AK7set9xJ2YQU4WS7eYhgtrqloRddxtCth6qjD5+C2kxWwxKPiRlV/i5iGDJldk7BqCslKy69rGReA==
+X-Received: by 2002:a05:6e02:1bc9:b0:315:4793:f7b4 with SMTP id x9-20020a056e021bc900b003154793f7b4mr7115054ilv.31.1677695501863;
+        Wed, 01 Mar 2023 10:31:41 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l3-20020a02a883000000b003c4f97d41d2sm3767491jam.116.2023.03.01.10.31.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 10:31:41 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <1570650d-ea9d-c3b5-801a-60e246947242@roeck-us.net>
+Date:   Wed, 1 Mar 2023 10:31:38 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH V2 3/4] watchdog: xilinx_wwdt: Add Versal window watchdog
- support
-To:     Srinivas Neeli <srinivas.neeli@amd.com>, linux@roeck-us.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        michal.simek@amd.com, neelisrinivas18@gmail.com
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com, git@amd.com, devicetree@vger.kernel.org
-References: <20230301175229.342004-1-srinivas.neeli@amd.com>
- <20230301175229.342004-4-srinivas.neeli@amd.com>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230301175229.342004-4-srinivas.neeli@amd.com>
+Subject: Re: [PATCH] watchdog: avoid usage of iterator after loop
+To:     Jakob Koschel <jkl820.git@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+References: <20230301-watchdog-avoid-iter-after-loop-v1-1-851f583be9f7@gmail.com>
+Content-Language: en-US
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230301-watchdog-avoid-iter-after-loop-v1-1-851f583be9f7@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Le 01/03/2023 à 18:52, Srinivas Neeli a écrit :
-> Versal watchdog driver uses window watchdog mode. Window watchdog
-> timer(WWDT) contains closed(first) and open(second) window with
-> 32 bit width. Write to the watchdog timer within predefined window
-> periods of time. This means a period that is not too soon and a
-> period that is not too late. The WWDT has to be restarted within
-> the open window time. If software tries to restart WWDT outside of
-> the open window time period, it generates a reset.
+On 3/1/23 09:17, Jakob Koschel wrote:
+> If potentially no valid element is found, 'p' would contain an invalid
+> pointer past the iterator loop. To ensure 'p' is valid under any
+> circumstances, the kfree() should be within the loop body.
 > 
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
+> Additionally, Linus proposed to avoid any use of the list iterator
+> variable after the loop, in the attempt to move the list iterator
+> variable declaration into the marcro to avoid any potential misuse after
 
-Hi,
+macro
 
-a few nits below.
-
-> ---
-> Changes in V2:
-> - Takes "xlnx,close-percent" property from device tree parameter.
-> - Removed clk_disable() function.
-> - Removed module parameter permisions and using readomly.
-> - Added check for close_percent( 0 < close_perecent < 100).
-> - Updated other minor comments.
-> ---
->   drivers/watchdog/Kconfig       |  18 +++
->   drivers/watchdog/Makefile      |   1 +
->   drivers/watchdog/xilinx_wwdt.c | 232 +++++++++++++++++++++++++++++++++
->   3 files changed, 251 insertions(+)
->   create mode 100644 drivers/watchdog/xilinx_wwdt.c
+> the loop [1].
 > 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index f0872970daf9..ec4b522ae29e 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -304,6 +304,24 @@ config XILINX_WATCHDOG
->   	  To compile this driver as a module, choose M here: the
->   	  module will be called of_xilinx_wdt.
->   
-> +config XILINX_WINDOW_WATCHDOG
-> +	tristate "Xilinx window watchdog timer"
-> +	depends on HAS_IOMEM
-> +	depends on ARM64
-> +	select WATCHDOG_CORE
-> +	help
-> +	  Window watchdog driver for the versal_wwdt IP core.
-> +	  Window watchdog timer(WWDT) contains closed(first) and
-> +	  open(second) window with 32 bit width. Write to the watchdog
-> +	  timer within predefined window periods of time. This means
-> +	  a period that is not too soon and a period that is not too
-> +	  late. The WWDT has to be restarted within the open window time.
-> +	  If software tries to restart WWDT outside of the open window
-> +	  time period, it generates a reset.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called xilinx_wwdt.
-> +
->   config ZIIRAVE_WATCHDOG
->   	tristate "Zodiac RAVE Watchdog Timer"
->   	depends on I2C
-> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index 9cbf6580f16c..6cb5f1dfb492 100644
-> --- a/drivers/watchdog/Makefile
-> +++ b/drivers/watchdog/Makefile
-> @@ -157,6 +157,7 @@ obj-$(CONFIG_M54xx_WATCHDOG) += m54xx_wdt.o
->   
->   # MicroBlaze Architecture
->   obj-$(CONFIG_XILINX_WATCHDOG) += of_xilinx_wdt.o
-> +obj-$(CONFIG_XILINX_WINDOW_WATCHDOG) += xilinx_wwdt.o
->   
->   # MIPS Architecture
->   obj-$(CONFIG_ATH79_WDT) += ath79_wdt.o
-> diff --git a/drivers/watchdog/xilinx_wwdt.c b/drivers/watchdog/xilinx_wwdt.c
-> new file mode 100644
-> index 000000000000..5b50376d1474
-> --- /dev/null
-> +++ b/drivers/watchdog/xilinx_wwdt.c
-> @@ -0,0 +1,232 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Window watchdog device driver for Xilinx Versal WWDT
-> + *
-> + * Copyright (C) 2022 - 2023, Advanced Micro Devices, Inc.
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/ioport.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of_address.h>
-> +#include <linux/watchdog.h>
-> +
-> +#define XWWDT_DEFAULT_TIMEOUT	40
-> +#define XWWDT_MIN_TIMEOUT	1
-> +
-> +/* Register offsets for the WWDT device */
-> +#define XWWDT_MWR_OFFSET	0x00
-> +#define XWWDT_ESR_OFFSET	0x04
-> +#define XWWDT_FCR_OFFSET	0x08
-> +#define XWWDT_FWR_OFFSET	0x0c
-> +#define XWWDT_SWR_OFFSET	0x10
-> +
-> +/* Master Write Control Register Masks */
-> +#define XWWDT_MWR_MASK		BIT(0)
-> +
-> +/* Enable and Status Register Masks */
-> +#define XWWDT_ESR_WINT_MASK	BIT(16)
-> +#define XWWDT_ESR_WSW_MASK	BIT(8)
-> +#define XWWDT_ESR_WEN_MASK	BIT(0)
-> +
-> +#define XWWDT_CLOSE_WINDOW_PERCENT		50
-> +
-> +static int xwwdt_timeout;
-> +
-> +module_param(xwwdt_timeout, int, 0);
-> +MODULE_PARM_DESC(xwwdt_timeout,
-> +		 "Watchdog time in seconds. (default="
-> +		 __MODULE_STRING(XWWDT_DEFAULT_TIMEOUT) ")");
-> +
-> +/**
-> + * struct xwwdt_device - Watchdog device structure
-> + * @base: base io address of WDT device
-> + * @spinlock: spinlock for IO register access
-> + * @xilinx_wwdt_wdd: watchdog device structure
-> + * @clk: struct clk * of a clock source
-> + * @freq: source clock frequency of WWDT
-> + * @close_percent : Closed window percent
-                     ~
-extra space?
+> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+> Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+> ---
+>   drivers/watchdog/watchdog_pretimeout.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/watchdog/watchdog_pretimeout.c b/drivers/watchdog/watchdog_pretimeout.c
+> index 376a495ab80c..d8c78696eaf5 100644
+> --- a/drivers/watchdog/watchdog_pretimeout.c
+> +++ b/drivers/watchdog/watchdog_pretimeout.c
+> @@ -207,10 +207,10 @@ void watchdog_unregister_pretimeout(struct watchdog_device *wdd)
+>   	list_for_each_entry_safe(p, t, &pretimeout_list, entry) {
+>   		if (p->wdd == wdd) {
+>   			list_del(&p->entry);
+> -			break;
+> +			spin_unlock_irq(&pretimeout_lock);
+> +			kfree(p);
+> +			return;
 
-> + */
-> +struct xwwdt_device {
-> +	void __iomem *base;
-> +	spinlock_t spinlock; /* spinlock for register handling */
-> +	struct watchdog_device xilinx_wwdt_wdd;
-> +	struct clk *clk;
+Please just make it
+			kfree(p);
+			break;
 
-Is clk needed here?
-(see other comment below that explain why)
+There is no need to drop the spinlock here and/or to return
+directly.
 
-> +	unsigned long	freq;
+Thanks,
+Guenter
 
-                      ~~~
-extra spaces?
-
-> +	u32 close_percent;
-> +};
-> +
-> +static int xilinx_wwdt_start(struct watchdog_device *wdd)
-> +{
-> +	struct xwwdt_device *xdev = watchdog_get_drvdata(wdd);
-> +	struct watchdog_device *xilinx_wwdt_wdd = &xdev->xilinx_wwdt_wdd;
-> +	u64 time_out, closed_timeout, open_timeout;
-> +	u32 control_status_reg;
-> +
-> +	/* Calculate timeout count */
-> +	time_out = xdev->freq * wdd->timeout;
-> +
-> +	if (xdev->close_percent && xdev->close_percent < 100) {
-> +		closed_timeout = (time_out * xdev->close_percent) / 100;
-> +		open_timeout = time_out - closed_timeout;
-> +		wdd->min_hw_heartbeat_ms = xdev->close_percent * 10 * wdd->timeout;
-> +	} else {
-> +		/* Calculate XWWDT_CLOSE_WINDOW_PERCENT of timeout */
-> +		time_out *= XWWDT_CLOSE_WINDOW_PERCENT;
-> +		time_out /= 100;
-> +		wdd->min_hw_heartbeat_ms = XWWDT_CLOSE_WINDOW_PERCENT * 10 * wdd->timeout;
-> +	}
-> +
-> +	spin_lock(&xdev->spinlock);
-> +
-> +	iowrite32(XWWDT_MWR_MASK, xdev->base + XWWDT_MWR_OFFSET);
-> +	iowrite32(~(u32)XWWDT_ESR_WEN_MASK, xdev->base + XWWDT_ESR_OFFSET);
-> +
-> +	if (xdev->close_percent && xdev->close_percent < 100) {
-> +		iowrite32((u32)closed_timeout, xdev->base + XWWDT_FWR_OFFSET);
-> +		iowrite32((u32)open_timeout, xdev->base + XWWDT_SWR_OFFSET);
-> +	} else {
-> +		/* Configure closed and open windows with XWWDT_CLOSE_WINDOW_PERCENT of timeout */
-> +		iowrite32((u32)time_out, xdev->base + XWWDT_FWR_OFFSET);
-> +		iowrite32((u32)time_out, xdev->base + XWWDT_SWR_OFFSET);
-> +	}
-> +
-> +	/* Enable the window watchdog timer */
-> +	control_status_reg = ioread32(xdev->base + XWWDT_ESR_OFFSET);
-> +	control_status_reg |= XWWDT_ESR_WEN_MASK;
-> +	iowrite32(control_status_reg, xdev->base + XWWDT_ESR_OFFSET);
-> +
-> +	spin_unlock(&xdev->spinlock);
-> +
-> +	dev_dbg(xilinx_wwdt_wdd->parent, "Watchdog Started!\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static int xilinx_wwdt_keepalive(struct watchdog_device *wdd)
-> +{
-> +	struct xwwdt_device *xdev = watchdog_get_drvdata(wdd);
-> +	u32 control_status_reg;
-> +
-> +	spin_lock(&xdev->spinlock);
-> +
-> +	/* Enable write access control bit for the window watchdog */
-> +	iowrite32(XWWDT_MWR_MASK, xdev->base + XWWDT_MWR_OFFSET);
-> +
-> +	/* Trigger restart kick to watchdog */
-> +	control_status_reg = ioread32(xdev->base + XWWDT_ESR_OFFSET);
-> +	control_status_reg |= XWWDT_ESR_WSW_MASK;
-> +	iowrite32(control_status_reg, xdev->base + XWWDT_ESR_OFFSET);
-> +
-> +	spin_unlock(&xdev->spinlock);
-> +
-> +	return 0;
-> +}
-> +
-> +static void xwwdt_clk_disable_unprepare(void *data)
-> +{
-> +	clk_disable_unprepare(data);
-> +}
-> +
-> +static const struct watchdog_info xilinx_wwdt_ident = {
-> +	.options = WDIOF_KEEPALIVEPING |
-> +		WDIOF_SETTIMEOUT,
-> +	.firmware_version = 1,
-> +	.identity = "xlnx_window watchdog",
-> +};
-> +
-> +static const struct watchdog_ops xilinx_wwdt_ops = {
-> +	.owner = THIS_MODULE,
-> +	.start = xilinx_wwdt_start,
-> +	.ping = xilinx_wwdt_keepalive,
-> +};
-> +
-> +static int xwwdt_probe(struct platform_device *pdev)
-> +{
-> +	struct watchdog_device *xilinx_wwdt_wdd;
-> +	struct device *dev = &pdev->dev;
-> +	struct xwwdt_device *xdev;
-> +	int ret;
-> +
-> +	xdev = devm_kzalloc(dev, sizeof(*xdev), GFP_KERNEL);
-> +	if (!xdev)
-> +		return -ENOMEM;
-> +
-> +	xilinx_wwdt_wdd = &xdev->xilinx_wwdt_wdd;
-> +	xilinx_wwdt_wdd->info = &xilinx_wwdt_ident;
-> +	xilinx_wwdt_wdd->ops = &xilinx_wwdt_ops;
-> +	xilinx_wwdt_wdd->parent = dev;
-> +
-> +	xdev->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(xdev->base))
-> +		return PTR_ERR(xdev->base);
-> +
-> +	xdev->clk = devm_clk_get(dev, NULL);
-> +	if (IS_ERR(xdev->clk))
-> +		return PTR_ERR(xdev->clk);
-
-devm_clk_get_enabled() could also be used here.
-It saves clk_prepare_enable(), devm_add_action_or_reset() and 
-xwwdt_clk_disable_unprepare(), and maybe even clk.
-
-Several watchdog drivers have been updated this way a few weeks ago.
-
-CJ
-
-> +
-> +	xdev->freq = clk_get_rate(xdev->clk);
-> +	if (!xdev->freq)
-> +		return -EINVAL;
-> +
-> +	ret = clk_prepare_enable(xdev->clk);
-> +	if (ret) {
-> +		dev_err(dev, "unable to enable clock\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = devm_add_action_or_reset(dev, xwwdt_clk_disable_unprepare,
-> +				       xdev->clk);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = of_property_read_u32(dev->of_node, "xlnx,close-percent",
-> +				   &xdev->close_percent);
-> +	if (ret)
-> +		xdev->close_percent = XWWDT_CLOSE_WINDOW_PERCENT;
-> +
-> +	xilinx_wwdt_wdd->timeout = XWWDT_DEFAULT_TIMEOUT;
-> +	xilinx_wwdt_wdd->min_timeout = XWWDT_MIN_TIMEOUT;
-> +	xilinx_wwdt_wdd->max_hw_heartbeat_ms = 1000 * xilinx_wwdt_wdd->timeout;
-> +
-> +	ret = watchdog_init_timeout(xilinx_wwdt_wdd,
-> +				    xwwdt_timeout, &pdev->dev);
-> +	if (ret)
-> +		dev_info(&pdev->dev, "Configured default timeout value\n");
-> +
-> +	spin_lock_init(&xdev->spinlock);
-> +	watchdog_set_drvdata(xilinx_wwdt_wdd, xdev);
-> +	watchdog_set_nowayout(xilinx_wwdt_wdd, WATCHDOG_NOWAYOUT);
-> +
-> +	ret = devm_watchdog_register_device(dev, xilinx_wwdt_wdd);
-> +	if (ret)
-> +		return ret;
-> +
-> +	dev_info(dev, "Xilinx window watchdog Timer with timeout %ds\n",
-> +		 xilinx_wwdt_wdd->timeout);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id xwwdt_of_match[] = {
-> +	{ .compatible = "xlnx,versal-wwdt", },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, xwwdt_of_match);
-> +
-> +static struct platform_driver xwwdt_driver = {
-> +	.probe = xwwdt_probe,
-> +	.driver = {
-> +		.name = "Xilinx window watchdog",
-> +		.of_match_table = xwwdt_of_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(xwwdt_driver);
-> +
-> +MODULE_AUTHOR("Neeli Srinivas <srinivas.neeli@amd.com>");
-> +MODULE_DESCRIPTION("Xilinx window watchdog driver");
-> +MODULE_LICENSE("GPL");
+>   		}
+>   	}
+>   	spin_unlock_irq(&pretimeout_lock);
+> -
+> -	kfree(p);
+>   }
+> 
+> ---
+> base-commit: c0927a7a5391f7d8e593e5e50ead7505a23cadf9
+> change-id: 20230301-watchdog-avoid-iter-after-loop-a197bf201435
+> 
+> Best regards,
 
