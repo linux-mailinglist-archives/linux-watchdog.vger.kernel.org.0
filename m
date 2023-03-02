@@ -2,33 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1726A8868
-	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Mar 2023 19:17:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EED6A8998
+	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Mar 2023 20:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbjCBSRA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 2 Mar 2023 13:17:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44980 "EHLO
+        id S229797AbjCBTjk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 2 Mar 2023 14:39:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjCBSRA (ORCPT
+        with ESMTP id S230001AbjCBTja (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 2 Mar 2023 13:17:00 -0500
-Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51CB741B4B;
-        Thu,  2 Mar 2023 10:16:57 -0800 (PST)
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-        id 3752740A03; Thu,  2 Mar 2023 17:25:37 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 3752740A03
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-        s=odk20180602; t=1677774337;
-        bh=HPEYhkQ7rJm1C5Sj//VfLmecOW3zTfkuHUrB7rR0Rak=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mV1nSQOIg2ynjJ2qbNLouBElxf3pNW5LT+jv3Tm3f7WGq/fbDTsVKJ+lL9z2qkEsB
-         +NxGpnvLC8hIHIjQLJ2McGoRtY1ebaM4Isl5HpilqZ/BgMBE8uySwfAH3Y4vLGxKlC
-         Kag4A0Xd/9yAX7/7rCAjYCWatQ6kKGTyLfMYH17w=
-Date:   Thu, 2 Mar 2023 17:25:37 +0100
-From:   Wim Van Sebroeck <wim@linux-watchdog.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thu, 2 Mar 2023 14:39:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74965193EF;
+        Thu,  2 Mar 2023 11:39:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1427BB8136A;
+        Thu,  2 Mar 2023 19:39:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A759EC433D2;
+        Thu,  2 Mar 2023 19:39:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677785950;
+        bh=6JwMPUWd00//r4UeQvZqh9mQS5U5zy8fqsW8CNRhtfk=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=YOkspzMtkNDvZfhZU2PqlsY3teOh+zpEWv6rJUdRl3SPY7qnk+O6DxqR7+jravHIa
+         C0dOAUYYLU5yNum+R+MTNR92mVirsyndT91xouUjM35+PpibJB1tMsaBhcBWUn2j18
+         ZrXSen4tWkpBYM8QzTgu7EXizxGIG5XZnTMT8d7HkKGgVLB854c/UuMWuNrjMF0xD0
+         VRTz2+omD5/40s7AFAz9Wa6X5+eTBnPUd4P/LoWBkCtvGogf9Joafx5qdLx10ZSbAD
+         cGMB2mGRxAS/eb7VaR/x1DVhN1KNI++k7PqcMWf82J90NJGNDJE02SBv72wyaa4Vun
+         sUb6senWiQMgA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 93D15C43161;
+        Thu,  2 Mar 2023 19:39:10 +0000 (UTC)
+Subject: Re: [GIT PULL REQUEST] watchdog - v6.3 release cycle.
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230302162537.GA3071@www.linux-watchdog.org>
+References: <20230302162537.GA3071@www.linux-watchdog.org>
+X-PR-Tracked-List-Id: <linux-watchdog.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230302162537.GA3071@www.linux-watchdog.org>
+X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.3-rc1
+X-PR-Tracked-Commit-Id: cf3be7e82b129ed34f811f116f2b113f6299d449
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a9a01e1238cf5b477ec6aa54855356e518998991
+Message-Id: <167778595059.8121.3076175281513742141.pr-tracker-bot@kernel.org>
+Date:   Thu, 02 Mar 2023 19:39:10 +0000
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -49,198 +71,27 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Robert Marko <robert.marko@sartura.hr>,
         ruanjinjie <ruanjinjie@huawei.com>,
         Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Thomas =?i so-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
         Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>
-Subject: [GIT PULL REQUEST] watchdog - v6.3 release cycle.
-Message-ID: <20230302162537.GA3071@www.linux-watchdog.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.5.20 (2009-12-10)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Linus,
+The pull request you sent on Thu, 2 Mar 2023 17:25:37 +0100:
 
-Please pull following watchdog changes for the v5.19 release cycle.
+> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.3-rc1
 
-This series contains:
-* qcom-wdt dt-bindings improvements and additions (like MSM8994 and MDM9615)
-* mtk_wdt: Add reset_by_toprgu support
-* devm_clk_get_enabled() helper changes
-* Fix kmemleak in watchdog_cdev_register
-* watchdog sysfs improvements
-* Other fixes and small improvements
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a9a01e1238cf5b477ec6aa54855356e518998991
 
-The output from git request-pull:
-----------------------------------------------------------------
-The following changes since commit d2d11f342b179f1894a901f143ec7c008caba43e:
+Thank you!
 
-  Merge branch 'fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs (2023-02-05 17:17:10 -0800)
-
-are available in the git repository at:
-
-  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.3-rc1
-
-for you to fetch changes up to cf3be7e82b129ed34f811f116f2b113f6299d449:
-
-  watchdog: at91rm9200: Only warn once about problems in .remove() (2023-03-02 06:51:35 +0100)
-
-----------------------------------------------------------------
-linux-watchdog 6.3-rc1 tag
-
-----------------------------------------------------------------
-Allen-KH Cheng (2):
-      dt-bindings: watchdog: mtk-wdt: Add reset-by-toprgu support
-      watchdog: mtk_wdt: Add reset_by_toprgu support
-
-Andrej Picej (2):
-      watchdog: imx2_wdg: suspend watchdog in WAIT mode
-      dt-bindings: watchdog: fsl-imx: document suspend in wait mode
-
-Bartosz Golaszewski (1):
-      dt-bindings: watchdog: qcom-wdt: add qcom,apss-wdt-sa8775p compatible
-
-Chen Jun (1):
-      watchdog: Fix kmemleak in watchdog_cdev_register
-
-Christophe JAILLET (19):
-      watchdog: realtek_otto: Use devm_clk_get_enabled() helper
-      watchdog: pnx4008: Use devm_clk_get_enabled() helper
-      watchdog: pic32-wdt: Use devm_clk_get_enabled() helper
-      watchdog: pic32-dmt: Use devm_clk_get_enabled() helper
-      watchdog: lpc18xx: Use devm_clk_get_enabled() helper
-      watchdog: of_xilinx_wdt: Use devm_clk_get_enabled() helper
-      watchdog: imgpdc: Use devm_clk_get_enabled() helper
-      watchdog: cadence: Use devm_clk_get_enabled() helper
-      watchdog: meson_gxbb: Use devm_clk_get_enabled() helper
-      watchdog: davinci: Use devm_clk_get_enabled() helper
-      watchdog: imx7ulp: Use devm_clk_get_enabled() helper
-      watchdog: rtd119x: Use devm_clk_get_enabled() helper
-      watchdog: bcm7038: Use devm_clk_get_enabled() helper
-      watchdog: armada_37xx: Use devm_clk_get_enabled() helper
-      watchdog: qcom: Use devm_clk_get_enabled() helper
-      watchdog: rzn1: Use devm_clk_get_enabled() helper
-      watchdog: visconti: Use devm_clk_get_enabled() helper
-      watchdog: apple: Use devm_clk_get_enabled() helper
-      watchdog: Include <linux/kstrtox.h> when appropriate
-
-Cosmin Tanislav (1):
-      watchdog: dw_wdt: stop on reboot
-
-Fabrizio Castro (1):
-      watchdog: rzg2l_wdt: Handle TYPE-B reset for RZ/V2M
-
-George Cherian (1):
-      watchdog: sbsa_wdog: Make sure the timeout programming is within the limits
-
-Konrad Dybcio (1):
-      dt-bindings: watchdog: Add MSM8994 watchdog timer
-
-Krzysztof Kozlowski (7):
-      dt-bindings: watchdog: allow "timer" as node name
-      dt-bindings: watchdog: qcom-wdt: require fallback for IPQ4019
-      dt-bindings: watchdog: qcom-wdt: do not allow fallback alone
-      dt-bindings: watchdog: qcom-wdt: fix list of MSM timer compatibles
-      dt-bindings: watchdog: qcom-wdt: add qcom,kpss-wdt-mdm9615
-      dt-bindings: watchdog: qcom-wdt: allow interrupts
-      dt-bindings: watchdog: qcom-wdt: merge MSM timer
-
-Lad Prabhakar (2):
-      dt-bindings: watchdog: renesas,wdt: Document RZ/Five SoC
-      watchdog: rzg2l_wdt: Issue a reset before we put the PM clocks
-
-Li Hua (1):
-      watchdog: pcwd_usb: Fix attempting to access uninitialized memory
-
-Neil Armstrong (1):
-      dt-bindings: watchdog: convert meson-wdt.txt to dt-schema
-
-Primoz Fiser (1):
-      watchdog: da9062: da9063: use unlocked xfer function in restart
-
-Robert Marko (1):
-      dt-bindings: watchdog: Convert GPIO binding to json-schema
-
-Sergio Paracuellos (3):
-      dt-bindings: watchdog: mt7621-wdt: add phandle to access system controller registers
-      watchdog: mt7621-wdt: avoid static global declarations
-      watchdog: mt7621-wdt: avoid ralink architecture dependent code
-
-Thomas Weißschuh (4):
-      watchdog: wdat_wdt: Avoid unimplemented get_timeleft
-      watchdog: iTCO_wdt: Report firmware_version
-      watchdog: report fw_version in sysfs
-      watchdog: report options in sysfs
-
-Uwe Kleine-König (2):
-      watchdog: ziirave_wdt: Convert to i2c's .probe_new()
-      watchdog: at91rm9200: Only warn once about problems in .remove()
-
-ruanjinjie (1):
-      watchdog: at91sam9_wdt: use devm_request_irq to avoid missing free_irq() in error path
-
- Documentation/ABI/testing/sysfs-class-watchdog     |  13 +++
- .../devicetree/bindings/timer/qcom,msm-timer.txt   |  47 --------
- .../bindings/watchdog/amlogic,meson6-wdt.yaml      |  50 +++++++++
- .../devicetree/bindings/watchdog/fsl-imx-wdt.yaml  |  37 ++++++-
- .../devicetree/bindings/watchdog/gpio-wdt.yaml     |  55 ++++++++++
- .../bindings/watchdog/mediatek,mt7621-wdt.yaml     |   7 ++
- .../bindings/watchdog/mediatek,mtk-wdt.yaml        |   6 +
- .../devicetree/bindings/watchdog/meson-wdt.txt     |  21 ----
- .../devicetree/bindings/watchdog/qcom-wdt.yaml     |  96 ++++++++++++++--
- .../devicetree/bindings/watchdog/renesas,wdt.yaml  |   2 +-
- .../devicetree/bindings/watchdog/watchdog.yaml     |   7 +-
- drivers/watchdog/Kconfig                           |   4 +-
- drivers/watchdog/apple_wdt.c                       |  18 +--
- drivers/watchdog/armada_37xx_wdt.c                 |  15 +--
- drivers/watchdog/aspeed_wdt.c                      |   1 +
- drivers/watchdog/at91rm9200_wdt.c                  |   2 +-
- drivers/watchdog/at91sam9_wdt.c                    |   7 +-
- drivers/watchdog/bcm7038_wdt.c                     |  15 +--
- drivers/watchdog/cadence_wdt.c                     |  17 +--
- drivers/watchdog/da9062_wdt.c                      |  15 ++-
- drivers/watchdog/da9063_wdt.c                      |  15 ++-
- drivers/watchdog/davinci_wdt.c                     |  18 +--
- drivers/watchdog/dw_wdt.c                          |   1 +
- drivers/watchdog/iTCO_wdt.c                        |   4 +-
- drivers/watchdog/imgpdc_wdt.c                      |  31 +-----
- drivers/watchdog/imx2_wdt.c                        |  55 +++++++++-
- drivers/watchdog/imx7ulp_wdt.c                     |  15 +--
- drivers/watchdog/lpc18xx_wdt.c                     |  30 +----
- drivers/watchdog/meson_gxbb_wdt.c                  |  16 +--
- drivers/watchdog/mt7621_wdt.c                      | 122 ++++++++++++++-------
- drivers/watchdog/mtk_wdt.c                         |   7 ++
- drivers/watchdog/of_xilinx_wdt.c                   |  16 +--
- drivers/watchdog/pcwd_usb.c                        |   6 +-
- drivers/watchdog/pic32-dmt.c                       |  15 +--
- drivers/watchdog/pic32-wdt.c                       |  17 +--
- drivers/watchdog/pnx4008_wdt.c                     |  15 +--
- drivers/watchdog/qcom-wdt.c                        |  16 +--
- drivers/watchdog/realtek_otto_wdt.c                |  17 +--
- drivers/watchdog/rtd119x_wdt.c                     |  16 +--
- drivers/watchdog/rzg2l_wdt.c                       |  45 +++++++-
- drivers/watchdog/rzn1_wdt.c                        |  18 +--
- drivers/watchdog/sbsa_gwdt.c                       |   1 +
- drivers/watchdog/visconti_wdt.c                    |  17 +--
- drivers/watchdog/watchdog_dev.c                    |  23 +++-
- drivers/watchdog/wdat_wdt.c                        |   6 +-
- drivers/watchdog/ziirave_wdt.c                     |   5 +-
- 46 files changed, 527 insertions(+), 455 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/timer/qcom,msm-timer.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/amlogic,meson6-wdt.yaml
- create mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/meson-wdt.txt
-----------------------------------------------------------------
-
-Kind regards,
-Wim.
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
