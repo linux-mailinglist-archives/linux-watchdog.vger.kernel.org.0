@@ -2,160 +2,89 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3BAB6A7BEF
-	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Mar 2023 08:38:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D67D6A7D38
+	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Mar 2023 10:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjCBHil (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 2 Mar 2023 02:38:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
+        id S229728AbjCBJBk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 2 Mar 2023 04:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjCBHik (ORCPT
+        with ESMTP id S229842AbjCBJBj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 2 Mar 2023 02:38:40 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F045DCA3A
-        for <linux-watchdog@vger.kernel.org>; Wed,  1 Mar 2023 23:38:37 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id u9so14481387edd.2
-        for <linux-watchdog@vger.kernel.org>; Wed, 01 Mar 2023 23:38:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677742716;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rXBpuovAno/5WCGDBV+AisE7CduBEJt/pA7c+lDgz+U=;
-        b=CtKIX0svb8mSkZgFLyFr9jWV5y+5hXYP7lDRB7ItN9JP+1Y2FepFoLwhA1GetDiSKW
-         1ucgVAHyAUIqfv/yzvVsAf7sMF82M5fJaQIZZYmfTvxyozPPVhqQZLlX8fl4vA4W0aIi
-         5cj2rJU4LVe7WMFMZBAUWC5xa80DX4GpniOrXlj/y+8lu5U2LlOY48rvOcjZQM3+PnyI
-         a7J75lhYwwhYMyiKf6SfDHaKuuAgB/S3T0Jfm8sFU+p6gBbLuyyhE3Z32dmo4ZgWqK33
-         8B5fmQDVDhYWaQ+IbpwQCfvir3buV9XbMTbXfAgQdSZwu7Fh6/ySm7XXzU7pRGR2/fRM
-         h8ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677742716;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rXBpuovAno/5WCGDBV+AisE7CduBEJt/pA7c+lDgz+U=;
-        b=2ksdiSAahqo06YeVVqv9kguH10z8B9OzQGknfOdoZZnXCMscb9ZzR+sjPv6fOlrMuD
-         pSVmWCVyfplYiGI30W7rwG4F/wPi3+ub1AqeNu2UxNOqarzoYs5KPA77H6FMlhgMlB43
-         q9pNt2dTZ+d5ihHiYkh4tSKSm2BKa9xFC2lapDRf2T6JNjp1HITzEHKGHLESWqAcg9kE
-         eQMXt4fRivsTsZx4EPOvf6iyfldJwUgcndKRlXRM3l81J4mTTnVQFg+/PvP0DqW88jPY
-         u1877VWCUhWqwyEgFAjSHHqMioyua+ze53GxcA6qPbM4Jvhd98kEPArM9jF80XKudFdn
-         9kBQ==
-X-Gm-Message-State: AO0yUKUyxFhoLXb/4Xg1P6g64y/OfPk3aeAZ928P/tEp4xRl2HOkQmpf
-        I573LWRJyNbiTCt72J99MYNx4Q==
-X-Google-Smtp-Source: AK7set+XPLhKndG5E75elshInMBO12jf2Y0kWOxB2hX9mc2dJBDx5XFbqaU8SlL3kW9dxo76L4ZYMA==
-X-Received: by 2002:a17:907:7e91:b0:907:89d1:1ba9 with SMTP id qb17-20020a1709077e9100b0090789d11ba9mr2367300ejc.51.1677742716300;
-        Wed, 01 Mar 2023 23:38:36 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id m29-20020a50931d000000b004c0459c20f9sm334103eda.66.2023.03.01.23.38.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 23:38:35 -0800 (PST)
-Message-ID: <99fbc30c-7239-f63b-c76d-0b55a377eea7@linaro.org>
-Date:   Thu, 2 Mar 2023 08:38:34 +0100
+        Thu, 2 Mar 2023 04:01:39 -0500
+X-Greylist: delayed 3488 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Mar 2023 01:01:26 PST
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16A315167
+        for <linux-watchdog@vger.kernel.org>; Thu,  2 Mar 2023 01:01:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=EogLFcVbQRUQ3zsIo9NgsjC0jIGju+sWk3KgrzT8SDw=; b=C6HxO8R6Gc2VQjuH4s9M7qH34W
+        D4ss9HzmLIJF6Mb4QTcFYgl2imZa1vRrmpPlK+BwCe5pCc/XqSWiPmB9lc1WJ+BiCECgkawAtd+WW
+        hRbfJaGhY57PHUFRI5D3XPgzquVebXrX5rLN+gpfG+5shzs1DTcZmXu7/n7PRncP8bSQjWJ1TS2Bc
+        qiMhh6PNdsvgbC1fjPqOlh0gfkm3+QNOSVMqNLjaLDp1E9/tS6XHL1KiExSRIYjvwVKrR1OVpM+mg
+        tcViiKmt0TaX6ZiQJV6Qt1QNr72u1BT/15xafsiJLo5FOfXiirQQP9f0sVu4osL3FXxwzmLLvYWno
+        Qm0ge9lQ==;
+Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:48406 helo=[192.168.69.85])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.96)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1pXduG-00Bpix-20;
+        Thu, 02 Mar 2023 09:03:16 +0100
+Message-ID: <be465a23-7f31-004c-3bb7-d8021187da5d@norik.com>
+Date:   Thu, 2 Mar 2023 09:03:15 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH V2 2/4] dt-bindings: watchdog: xlnx,versal-wwdt: Add
- versal watchdog bindings
-Content-Language: en-US
-To:     Srinivas Neeli <srinivas.neeli@amd.com>, linux@roeck-us.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        michal.simek@amd.com, neelisrinivas18@gmail.com
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com, git@amd.com, devicetree@vger.kernel.org
-References: <20230301175229.342004-1-srinivas.neeli@amd.com>
- <20230301175229.342004-3-srinivas.neeli@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230301175229.342004-3-srinivas.neeli@amd.com>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] watchdog: imx2_wdg: Declare local symbols static
+Content-Language: en-GB
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230228151648.4087637-1-linux@roeck-us.net>
+From:   Andrej Picej <andrej.picej@norik.com>
+In-Reply-To: <20230228151648.4087637-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 01/03/2023 18:52, Srinivas Neeli wrote:
-> Versal watchdog driver uses window watchdog mode. Window watchdog
-> timer(WWDT) contains closed(first) and open(second) window with
-> 32 bit width. Write to the watchdog timer within predefined window
-> periods of time. This means a period that is not too soon and
-> a period that is not too late.
+On 28. 02. 23 16:16, Guenter Roeck wrote:
+> 0-day complains:
 > 
-> Updated devicetree bindings for adding versal window watchdog device.
+> drivers/watchdog/imx2_wdt.c:442:22: sparse:
+> 	symbol 'imx_wdt' was not declared. Should it be static?
+> drivers/watchdog/imx2_wdt.c:446:22: sparse:
+> 	symbol 'imx_wdt_legacy' was not declared. Should it be static?
 > 
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
-> ---
-> Changes in V2:
-> - Added watchdog ref
-> - Removed timeout-sec property
-> - Used 4 spaces for example indentation.
-> ---
->  .../bindings/watchdog/xlnx,versal-wwdt.yaml   | 58 +++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
+> Declare as static variables.
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml b/Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
-> new file mode 100644
-> index 000000000000..733de1ac60e8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
-> @@ -0,0 +1,58 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/xlnx,versal-wwdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Xilinx Versal window watchdog timer controller
-> +
-> +maintainers:
-> +  - Neeli Srinivas <srinivas.neeli@amd.com>
-> +
-> +description:
-> +  Versal watchdog driver uses window watchdog mode. Window watchdog
-> +  timer(WWDT) contains closed(first) and open(second) window with
-> +  32 bit width. Write to the watchdog timer within predefined window
-> +  periods of time. This means a period that is not too soon and a
-> +  period that is not too late. The WWDT has to be restarted within
-> +  the open window time. If software tries to restart WWDT outside of
-> +  the open window time period, it generates a reset.
-> +
-> +allOf:
-> +  - $ref: /schemas/watchdog/watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - xlnx,versal-wwdt
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  xlnx,close_percent:
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    minimum: 1
-> +    maximum: 99
-> +    default: 50
-> +    description: closed window percentage
+> Fixes: e42c73f1ef0d ("watchdog: imx2_wdg: suspend watchdog in WAIT mode")
+> Cc: Andrej Picej <andrej.picej@norik.com>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-There was no such property before and your changelog does not explain
-it. Don't add new stuff silently in new versions.
+Hi Guenter,
 
-There are several issues with this - missing dscription (you just copied
-name of property!), unneeded quotes, using underscore, incorrect name
-suffix... but what's the most important - what is the justification to
-put it into DT? IOW, why this is suitable for DT?
-
+thanks for the fix. Sorry for the trouble.
 
 Best regards,
-Krzysztof
-
+Andrej
