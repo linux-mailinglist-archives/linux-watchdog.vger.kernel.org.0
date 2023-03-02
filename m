@@ -2,133 +2,160 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A096A784E
-	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Mar 2023 01:17:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BAB6A7BEF
+	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Mar 2023 08:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229451AbjCBAQk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 1 Mar 2023 19:16:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
+        id S229692AbjCBHil (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 2 Mar 2023 02:38:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjCBAQJ (ORCPT
+        with ESMTP id S229882AbjCBHik (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 1 Mar 2023 19:16:09 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF004AFD5;
-        Wed,  1 Mar 2023 16:16:05 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id u6so9462721ilk.12;
-        Wed, 01 Mar 2023 16:16:05 -0800 (PST)
+        Thu, 2 Mar 2023 02:38:40 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F045DCA3A
+        for <linux-watchdog@vger.kernel.org>; Wed,  1 Mar 2023 23:38:37 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id u9so14481387edd.2
+        for <linux-watchdog@vger.kernel.org>; Wed, 01 Mar 2023 23:38:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677716164;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
+        d=linaro.org; s=google; t=1677742716;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xxwe+KTQPI2+8OTrjVQjLbEsSRAVf0AZSMKHO2KLldA=;
-        b=MaQb9ZDljyUPQiKLVJF86dyLmH/ZLLLXAZxfPz7IRY5VcDHJzc0jTMAggrQ1quJ32H
-         muZQBulCqZvVfRIxamudedO2DzNOJvi3YWXI+oKkULQAOoKQneZPOMwp1rm8XAgZH/4D
-         0hS7ZHkjPUOsjYZ10eYQ76eMK6yW605LeZdZ1OM7b68XxgZ6NDSPRjBkFswf/U6L9fJM
-         lZ1ONbpZ2mi+oABY5ZTXk0YrdugwO8XrzITBADSOyh2S7Ogbzy86ve+FPycXzwU2vZgI
-         +C8rDuhzOcWpBuCDKYmyZ7TWUtFJQvxJ65csmUy/cdipl48j22X6qXYv6jwV1CXq91Wb
-         8csg==
+        bh=rXBpuovAno/5WCGDBV+AisE7CduBEJt/pA7c+lDgz+U=;
+        b=CtKIX0svb8mSkZgFLyFr9jWV5y+5hXYP7lDRB7ItN9JP+1Y2FepFoLwhA1GetDiSKW
+         1ucgVAHyAUIqfv/yzvVsAf7sMF82M5fJaQIZZYmfTvxyozPPVhqQZLlX8fl4vA4W0aIi
+         5cj2rJU4LVe7WMFMZBAUWC5xa80DX4GpniOrXlj/y+8lu5U2LlOY48rvOcjZQM3+PnyI
+         a7J75lhYwwhYMyiKf6SfDHaKuuAgB/S3T0Jfm8sFU+p6gBbLuyyhE3Z32dmo4ZgWqK33
+         8B5fmQDVDhYWaQ+IbpwQCfvir3buV9XbMTbXfAgQdSZwu7Fh6/ySm7XXzU7pRGR2/fRM
+         h8ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677716164;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
+        d=1e100.net; s=20210112; t=1677742716;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xxwe+KTQPI2+8OTrjVQjLbEsSRAVf0AZSMKHO2KLldA=;
-        b=v/NVIpOrNW7U48C7UxerJuyphGrNhB2WoDxUAL+jUaoR2xjWZ0OvZQIbAy9WCGBoy+
-         M6jYqXqpicBtNcqMeCEcSARb7wct4+EBiEMemsTH8b0X28BPoTCx8Q4Y6pG+eUhutavv
-         t/HWLuVt6wZNG7sXNB1GQOEx2rxZEMszyC4Ge4tIXcF7R6vTkbWj61GTUpC2sFLqxwBi
-         1yAgMACVsvXrYbCA5Xiuudx2LbVccHDBqrr6qj4aSY5zmHVM9EtU9Yo4kpQ7apFbGuiv
-         z0xmcBlTO5SwE+gGAPaG7Fzgl2+zbfplmFC4GI276ootqYwuT8AznUAUVpG28isT7TP6
-         9bsw==
-X-Gm-Message-State: AO0yUKVZa0mW9kWA1rTqKYpZwhrLaNk5TAcaZ3auUVtCoVKIOIRDBIFk
-        MPew7DP//llNAmbgpg8AJegSavsJck8=
-X-Google-Smtp-Source: AK7set9G7v9elUlBdyc6g5M46el7/PMhIcr7vNUu3bCYbGKfLXjrFjbZgfg94ter1QiVyXhtDkxPKA==
-X-Received: by 2002:a05:6e02:1687:b0:317:9b4d:62c7 with SMTP id f7-20020a056e02168700b003179b4d62c7mr2293463ila.30.1677716164567;
-        Wed, 01 Mar 2023 16:16:04 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p10-20020a02b38a000000b003c4f96913c1sm4332648jan.105.2023.03.01.16.16.02
+        bh=rXBpuovAno/5WCGDBV+AisE7CduBEJt/pA7c+lDgz+U=;
+        b=2ksdiSAahqo06YeVVqv9kguH10z8B9OzQGknfOdoZZnXCMscb9ZzR+sjPv6fOlrMuD
+         pSVmWCVyfplYiGI30W7rwG4F/wPi3+ub1AqeNu2UxNOqarzoYs5KPA77H6FMlhgMlB43
+         q9pNt2dTZ+d5ihHiYkh4tSKSm2BKa9xFC2lapDRf2T6JNjp1HITzEHKGHLESWqAcg9kE
+         eQMXt4fRivsTsZx4EPOvf6iyfldJwUgcndKRlXRM3l81J4mTTnVQFg+/PvP0DqW88jPY
+         u1877VWCUhWqwyEgFAjSHHqMioyua+ze53GxcA6qPbM4Jvhd98kEPArM9jF80XKudFdn
+         9kBQ==
+X-Gm-Message-State: AO0yUKUyxFhoLXb/4Xg1P6g64y/OfPk3aeAZ928P/tEp4xRl2HOkQmpf
+        I573LWRJyNbiTCt72J99MYNx4Q==
+X-Google-Smtp-Source: AK7set+XPLhKndG5E75elshInMBO12jf2Y0kWOxB2hX9mc2dJBDx5XFbqaU8SlL3kW9dxo76L4ZYMA==
+X-Received: by 2002:a17:907:7e91:b0:907:89d1:1ba9 with SMTP id qb17-20020a1709077e9100b0090789d11ba9mr2367300ejc.51.1677742716300;
+        Wed, 01 Mar 2023 23:38:36 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id m29-20020a50931d000000b004c0459c20f9sm334103eda.66.2023.03.01.23.38.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Mar 2023 16:16:03 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <94616252-31b2-3c9f-29e2-f5ccf165d787@roeck-us.net>
-Date:   Wed, 1 Mar 2023 16:16:01 -0800
+        Wed, 01 Mar 2023 23:38:35 -0800 (PST)
+Message-ID: <99fbc30c-7239-f63b-c76d-0b55a377eea7@linaro.org>
+Date:   Thu, 2 Mar 2023 08:38:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V2 2/4] dt-bindings: watchdog: xlnx,versal-wwdt: Add
+ versal watchdog bindings
 Content-Language: en-US
-To:     Jakob Koschel <jkl820.git@gmail.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pietro Borrello <borrello@diag.uniroma1.it>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-References: <20230301-watchdog-avoid-iter-after-loop-v1-1-851f583be9f7@gmail.com>
- <1570650d-ea9d-c3b5-801a-60e246947242@roeck-us.net>
- <20230301224211.qz4tu7ayq5iwio4q@jm1p>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] watchdog: avoid usage of iterator after loop
-In-Reply-To: <20230301224211.qz4tu7ayq5iwio4q@jm1p>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Srinivas Neeli <srinivas.neeli@amd.com>, linux@roeck-us.net,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        michal.simek@amd.com, neelisrinivas18@gmail.com
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        git@xilinx.com, git@amd.com, devicetree@vger.kernel.org
+References: <20230301175229.342004-1-srinivas.neeli@amd.com>
+ <20230301175229.342004-3-srinivas.neeli@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230301175229.342004-3-srinivas.neeli@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 3/1/23 14:42, Jakob Koschel wrote:
-> On 23/03/01 10:31AM, Guenter Roeck wrote:
->> On 3/1/23 09:17, Jakob Koschel wrote:
->>> If potentially no valid element is found, 'p' would contain an invalid
->>> pointer past the iterator loop. To ensure 'p' is valid under any
->>> circumstances, the kfree() should be within the loop body.
->>>
->>> Additionally, Linus proposed to avoid any use of the list iterator
->>> variable after the loop, in the attempt to move the list iterator
->>> variable declaration into the marcro to avoid any potential misuse after
->>
->> macro
->>
->>> the loop [1].
->>>
->>> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
->>> Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
->>> ---
->>>    drivers/watchdog/watchdog_pretimeout.c | 6 +++---
->>>    1 file changed, 3 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/watchdog/watchdog_pretimeout.c b/drivers/watchdog/watchdog_pretimeout.c
->>> index 376a495ab80c..d8c78696eaf5 100644
->>> --- a/drivers/watchdog/watchdog_pretimeout.c
->>> +++ b/drivers/watchdog/watchdog_pretimeout.c
->>> @@ -207,10 +207,10 @@ void watchdog_unregister_pretimeout(struct watchdog_device *wdd)
->>>    	list_for_each_entry_safe(p, t, &pretimeout_list, entry) {
->>>    		if (p->wdd == wdd) {
->>>    			list_del(&p->entry);
->>> -			break;
->>> +			spin_unlock_irq(&pretimeout_lock);
->>> +			kfree(p);
->>> +			return;
->>
->> Please just make it
->> 			kfree(p);
->> 			break;
->>
->> There is no need to drop the spinlock here and/or to return
->> directly.
+On 01/03/2023 18:52, Srinivas Neeli wrote:
+> Versal watchdog driver uses window watchdog mode. Window watchdog
+> timer(WWDT) contains closed(first) and open(second) window with
+> 32 bit width. Write to the watchdog timer within predefined window
+> periods of time. This means a period that is not too soon and
+> a period that is not too late.
 > 
-> Ok great, I'll fix that in v2. I wasn't sure if something breaks if 'p' is released if the spinlock is still hold.
+> Updated devicetree bindings for adding versal window watchdog device.
 > 
+> Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
+> ---
+> Changes in V2:
+> - Added watchdog ref
+> - Removed timeout-sec property
+> - Used 4 spaces for example indentation.
+> ---
+>  .../bindings/watchdog/xlnx,versal-wwdt.yaml   | 58 +++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml b/Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
+> new file mode 100644
+> index 000000000000..733de1ac60e8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
+> @@ -0,0 +1,58 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/xlnx,versal-wwdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx Versal window watchdog timer controller
+> +
+> +maintainers:
+> +  - Neeli Srinivas <srinivas.neeli@amd.com>
+> +
+> +description:
+> +  Versal watchdog driver uses window watchdog mode. Window watchdog
+> +  timer(WWDT) contains closed(first) and open(second) window with
+> +  32 bit width. Write to the watchdog timer within predefined window
+> +  periods of time. This means a period that is not too soon and a
+> +  period that is not too late. The WWDT has to be restarted within
+> +  the open window time. If software tries to restart WWDT outside of
+> +  the open window time period, it generates a reset.
+> +
+> +allOf:
+> +  - $ref: /schemas/watchdog/watchdog.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - xlnx,versal-wwdt
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  xlnx,close_percent:
+> +    $ref: "/schemas/types.yaml#/definitions/uint32"
+> +    minimum: 1
+> +    maximum: 99
+> +    default: 50
+> +    description: closed window percentage
 
-Ah, interesting question. Looking into it, I don't think that is a problem.
-Just to be sure, I wrote a little coccinelle script to find calls to kfree()
-under spinlock_irq() and found several instances.
+There was no such property before and your changelog does not explain
+it. Don't add new stuff silently in new versions.
 
-Guenter
+There are several issues with this - missing dscription (you just copied
+name of property!), unneeded quotes, using underscore, incorrect name
+suffix... but what's the most important - what is the justification to
+put it into DT? IOW, why this is suitable for DT?
+
+
+Best regards,
+Krzysztof
 
