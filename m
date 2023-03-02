@@ -2,96 +2,138 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EED6A8998
-	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Mar 2023 20:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9FE76A89F7
+	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Mar 2023 21:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbjCBTjk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 2 Mar 2023 14:39:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
+        id S229560AbjCBUCC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 2 Mar 2023 15:02:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjCBTja (ORCPT
+        with ESMTP id S229688AbjCBUCA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 2 Mar 2023 14:39:30 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74965193EF;
-        Thu,  2 Mar 2023 11:39:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1427BB8136A;
-        Thu,  2 Mar 2023 19:39:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A759EC433D2;
-        Thu,  2 Mar 2023 19:39:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677785950;
-        bh=6JwMPUWd00//r4UeQvZqh9mQS5U5zy8fqsW8CNRhtfk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=YOkspzMtkNDvZfhZU2PqlsY3teOh+zpEWv6rJUdRl3SPY7qnk+O6DxqR7+jravHIa
-         C0dOAUYYLU5yNum+R+MTNR92mVirsyndT91xouUjM35+PpibJB1tMsaBhcBWUn2j18
-         ZrXSen4tWkpBYM8QzTgu7EXizxGIG5XZnTMT8d7HkKGgVLB854c/UuMWuNrjMF0xD0
-         VRTz2+omD5/40s7AFAz9Wa6X5+eTBnPUd4P/LoWBkCtvGogf9Joafx5qdLx10ZSbAD
-         cGMB2mGRxAS/eb7VaR/x1DVhN1KNI++k7PqcMWf82J90NJGNDJE02SBv72wyaa4Vun
-         sUb6senWiQMgA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 93D15C43161;
-        Thu,  2 Mar 2023 19:39:10 +0000 (UTC)
-Subject: Re: [GIT PULL REQUEST] watchdog - v6.3 release cycle.
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230302162537.GA3071@www.linux-watchdog.org>
-References: <20230302162537.GA3071@www.linux-watchdog.org>
-X-PR-Tracked-List-Id: <linux-watchdog.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230302162537.GA3071@www.linux-watchdog.org>
-X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.3-rc1
-X-PR-Tracked-Commit-Id: cf3be7e82b129ed34f811f116f2b113f6299d449
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a9a01e1238cf5b477ec6aa54855356e518998991
-Message-Id: <167778595059.8121.3076175281513742141.pr-tracker-bot@kernel.org>
-Date:   Thu, 02 Mar 2023 19:39:10 +0000
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Andrej Picej <andrej.picej@norik.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Chen Jun <chenjun102@huawei.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        George Cherian <george.cherian@marvell.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Li Hua <hucool.lihua@huawei.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Primoz Fiser <primoz.fiser@norik.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        ruanjinjie <ruanjinjie@huawei.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Thomas =?i so-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 2 Mar 2023 15:02:00 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147442005C
+        for <linux-watchdog@vger.kernel.org>; Thu,  2 Mar 2023 12:01:27 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id i4so402773ils.1
+        for <linux-watchdog@vger.kernel.org>; Thu, 02 Mar 2023 12:01:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677787251;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=y1gtpjRpUqWMtqOkJwQw2lOGRTiBj3ZUiEXwyYi+oIA=;
+        b=L1F5uGlVEFhTWL98NcFz8aTWD7DzoHUWmz/xayFFFp2FWKJXg4nhbu+6cU0zUciU3Q
+         8uyJMae+oGtOIIb+p0KRpe8uHeyTNaIRcwx8KsUYl7bXjBBgPsQbtgEOtIA4YIh15n/V
+         tk4UPygcfgMY2LlEV2Ed1XDoCPGKUnISzpQvN8vzlMuu0hmVFigFMbP/FPie5DzmgVN4
+         M58S2QP6JxudNBzv+7NtuJq9KOya+gxL31ij6URrjkrmqA9sZA+We7ZTj6hitYz6z0hu
+         Ou2/+r0MfSWN/8TRV1ofla+l2jGOX9sny6v8KuelujB3401U5OdjJOxRLEJHKYjotk22
+         Pskw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677787251;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y1gtpjRpUqWMtqOkJwQw2lOGRTiBj3ZUiEXwyYi+oIA=;
+        b=j6Ymt9f1gJ+g4ZjLfH7A4yG9yzD0xmexSkIQQS+LAWCkFNWkcfP6RbBK+4aNFjU+li
+         3qMN3kBEVHjEU/KT8NXsw0bFW0vydvxdn1aVYLb/hu8zfiQgcM2maVM7ZEsinEGUhZsj
+         kNQ+vJ1Sd/DGD3qUvEXSC88JJXg7d6ZsaPJ5nLg1m7Kti6g1UNTM4LxY/lkB5dTpJhWq
+         ornFitXjUIZxYUfvO0YFOxdhU9+uUnBeX2E8uAOxAx6OxmV3IwDRkdLOXol5kZN7MlPh
+         UEly2+3RMqz83TlTQDzcASXo2BYQQRLDlUqM8Bfl6shkCYT7uuRXZbJ7mQIme5hzfV5g
+         iMsQ==
+X-Gm-Message-State: AO0yUKXGKselGG9/VJVJhr1V/bzZPpvAwzZf/P37vGY0LhQOZ/iSzeAh
+        WKastvT2PEpKVbrXGcCTBiQ=
+X-Google-Smtp-Source: AK7set87NXe6y3KwAjPrW8yct0ko2/r/DIsnVCooRdvx8H2Yb7rnzaO+xJdvwfNnou+9Vj8LirQUHw==
+X-Received: by 2002:a92:c541:0:b0:318:a974:ab4a with SMTP id a1-20020a92c541000000b00318a974ab4amr2208043ilj.6.1677787251509;
+        Thu, 02 Mar 2023 12:00:51 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u10-20020a02cb8a000000b003ea1dbd00d6sm124104jap.70.2023.03.02.12.00.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Mar 2023 12:00:50 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <6ae3943d-8c2c-ad87-c27c-15ad34820b7b@roeck-us.net>
+Date:   Thu, 2 Mar 2023 12:00:48 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] watchdog: sp5100_tco: Immediately trigger upon starting.
+Content-Language: en-US
+To:     Gregory Oakes <gregory.oakes@amd.com>,
+        linux-watchdog@vger.kernel.org
+Cc:     terry.bowman@amd.com
+References: <20230301195001.26843-1-gregory.oakes@amd.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230301195001.26843-1-gregory.oakes@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The pull request you sent on Thu, 2 Mar 2023 17:25:37 +0100:
+On 3/1/23 11:50, Gregory Oakes wrote:
+> The watchdog countdown is supposed to begin when the device file is
+> opened. Instead, it would begin countdown upon the first write to or
+> close of the device file. Now, the ping operation is called within the
+> start operation which ensures the countdown begins. From experimenation,
+> it does not appear possible to do this with a single write including
+> both the start bit and the trigger bit. So, it is done as two distinct
+> writes.
+> 
+> Signed-off-by: Gregory Oakes <gregory.oakes@amd.com>
+> ---
+> 
+> I tested on several AMD client devices. I verified the countdown begins
+> immediately upon the open ioctl and resets upon subsequent write ioctl's.
+> 
+>   drivers/watchdog/sp5100_tco.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
+> index fb426b7d81da..18ab0e096f99 100644
+> --- a/drivers/watchdog/sp5100_tco.c
+> +++ b/drivers/watchdog/sp5100_tco.c
+> @@ -86,6 +86,8 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started."
+>    * Some TCO specific functions
+>    */
+>   
+> +static int tco_timer_ping(struct watchdog_device *wdd);
+> +
+>   static enum tco_reg_layout tco_reg_layout(struct pci_dev *dev)
+>   {
+>   	if (dev->vendor == PCI_VENDOR_ID_ATI &&
+> @@ -115,7 +117,7 @@ static int tco_timer_start(struct watchdog_device *wdd)
+>   	val |= SP5100_WDT_START_STOP_BIT;
+>   	writel(val, SP5100_WDT_CONTROL(tco->tcobase));
+>   
+> -	return 0;
+> +	return tco_timer_ping(wdd);
 
-> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.3-rc1
+I think something like
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a9a01e1238cf5b477ec6aa54855356e518998991
+	val = readl(SP5100_WDT_CONTROL(tco->tcobase));
+         val |= SP5100_WDT_START_STOP_BIT;
+         writel(val, SP5100_WDT_CONTROL(tco->tcobase));
+	val |= SP5100_WDT_TRIGGER_BIT;
+	writel(val, SP5100_WDT_CONTROL(tco->tcobase));
 
-Thank you!
+would be better here to avoid the extra read operation.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Also please add a comment into the code explaining that a single
+write operation is insufficient to avoid someone stepping in later
+and trying to "optimize" the code.
+
+Thanks,
+Guenter
+
+>   }
+>   
+>   static int tco_timer_stop(struct watchdog_device *wdd)
+
