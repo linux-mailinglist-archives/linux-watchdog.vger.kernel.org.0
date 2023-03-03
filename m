@@ -2,45 +2,52 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C251A6AA152
-	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Mar 2023 22:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 051056AA15A
+	for <lists+linux-watchdog@lfdr.de>; Fri,  3 Mar 2023 22:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231764AbjCCVhh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 3 Mar 2023 16:37:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48410 "EHLO
+        id S231725AbjCCVhl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 3 Mar 2023 16:37:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbjCCVhg (ORCPT
+        with ESMTP id S231836AbjCCVhi (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 3 Mar 2023 16:37:36 -0500
+        Fri, 3 Mar 2023 16:37:38 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF4C6233F
-        for <linux-watchdog@vger.kernel.org>; Fri,  3 Mar 2023 13:37:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A1A62D95
+        for <linux-watchdog@vger.kernel.org>; Fri,  3 Mar 2023 13:37:37 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pYD5p-0008V9-N4; Fri, 03 Mar 2023 22:37:33 +0100
+        id 1pYD5r-00005s-6N; Fri, 03 Mar 2023 22:37:35 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pYD5p-001eAP-1k; Fri, 03 Mar 2023 22:37:33 +0100
+        id 1pYD5p-001eAb-U5; Fri, 03 Mar 2023 22:37:33 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pYD5o-001wxR-CM; Fri, 03 Mar 2023 22:37:32 +0100
+        id 1pYD5o-001wxV-Iv; Fri, 03 Mar 2023 22:37:32 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 06/34] watchdog: ath79: Convert to platform remove callback returning void
-Date:   Fri,  3 Mar 2023 22:36:48 +0100
-Message-Id: <20230303213716.2123717-7-u.kleine-koenig@pengutronix.de>
+        Guenter Roeck <linux@roeck-us.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
+Subject: [PATCH 07/34] watchdog: bcm2835: Convert to platform remove callback returning void
+Date:   Fri,  3 Mar 2023 22:36:49 +0100
+Message-Id: <20230303213716.2123717-8-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230303213716.2123717-1-u.kleine-koenig@pengutronix.de>
 References: <20230303213716.2123717-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1606; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=abIaa5WCkXHESWKNN8dLZhdz2pEteQfyDjCNlGaF9lM=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkAmgj3nBpq2X9YByL60qTTdeTFoVEWNIfvAKxk 7xdWPyY5r+JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAJoIwAKCRDB/BR4rcrs CWgiB/9ZZEcHclbs9JoxVCmjPMh0ZaMXIb/6z/krBcnE+KbWCSmD1oZHm26ZT2BVOxNumnOmr+M xK9Ypmgqov9Gj4FtiP/DtbUsunepT6FHSEmDAaI7raRukoI8Q3lwg16zM3pH6j+f/3w6IPlJcEV 6oDygimRvKLIAEeqEV279Q0F+B9rAFx1298cnLo0ShwA2/V/KSRpJXrbiHF5TacAQIHPZ9uQWcL 5iyYs+TDZ6UFj8B5bBqsDQ/ZTbMMaAlU3fePyUgzlwBkWv/734pA2a/qngfD2o4JxCfRPbyl2Sv TiucmIeXg0NSBdq7QqYcWAhfsEEuwfJIkf5ehP8ndtPBXVer
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1468; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=cI7FTjbvztVO6mz6+txwLW+bweaeRgJNiyo/oBrE/yY=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkAmgo+Puf549yBsfiDBiX7gp2NIBVMu1ZVqoJI 8YaJ3R9+AiJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAJoKAAKCRDB/BR4rcrs CVHhB/0XbA+S7QgbQsCThmgE0osCJrZKChczOg9O2uvLgw1cyTcyuXLxyPApWp91Iy582TBmLh0 Vx9v1dPCvT2hDupuL2plxhX88u5l2hfTDigVXN7zeP5VZOOU5vlNW4jwZz7+3biAUJCs2POkMNX TO8NXN6jibV8Dz/wM9mpUvtY2LelV4nXdg7jym9tMepWqLf3xuKJik1AgU6EK7SLZyUnhp43Ot6 f5p+Xk42TN8j0zIdgytM4Z+jiztdo3V8G3zXgXrPSAJAoamb3jxv57hTJ9RW5L9fyGHFL8tvSWl JjmW6GhwHQSPVohn877iWueLGpwM9QKpuI4hmcCpry7yMEEV
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -68,35 +75,33 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/watchdog/ath79_wdt.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/watchdog/bcm2835_wdt.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/watchdog/ath79_wdt.c b/drivers/watchdog/ath79_wdt.c
-index 0f18f06a21b6..b7b705060438 100644
---- a/drivers/watchdog/ath79_wdt.c
-+++ b/drivers/watchdog/ath79_wdt.c
-@@ -296,11 +296,10 @@ static int ath79_wdt_probe(struct platform_device *pdev)
- 	return err;
+diff --git a/drivers/watchdog/bcm2835_wdt.c b/drivers/watchdog/bcm2835_wdt.c
+index 94907176a0e4..7a855289ff5e 100644
+--- a/drivers/watchdog/bcm2835_wdt.c
++++ b/drivers/watchdog/bcm2835_wdt.c
+@@ -218,17 +218,15 @@ static int bcm2835_wdt_probe(struct platform_device *pdev)
+ 	return 0;
  }
  
--static int ath79_wdt_remove(struct platform_device *pdev)
-+static void ath79_wdt_remove(struct platform_device *pdev)
+-static int bcm2835_wdt_remove(struct platform_device *pdev)
++static void bcm2835_wdt_remove(struct platform_device *pdev)
  {
- 	misc_deregister(&ath79_wdt_miscdev);
- 	clk_disable_unprepare(wdt_clk);
+ 	if (pm_power_off == bcm2835_power_off)
+ 		pm_power_off = NULL;
+-
 -	return 0;
  }
  
- static void ath79_wdt_shutdown(struct platform_device *pdev)
-@@ -318,7 +317,7 @@ MODULE_DEVICE_TABLE(of, ath79_wdt_match);
- 
- static struct platform_driver ath79_wdt_driver = {
- 	.probe		= ath79_wdt_probe,
--	.remove		= ath79_wdt_remove,
-+	.remove_new	= ath79_wdt_remove,
- 	.shutdown	= ath79_wdt_shutdown,
- 	.driver		= {
- 		.name	= DRIVER_NAME,
+ static struct platform_driver bcm2835_wdt_driver = {
+ 	.probe		= bcm2835_wdt_probe,
+-	.remove		= bcm2835_wdt_remove,
++	.remove_new	= bcm2835_wdt_remove,
+ 	.driver = {
+ 		.name =		"bcm2835-wdt",
+ 	},
 -- 
 2.39.1
 
