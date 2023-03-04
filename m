@@ -2,76 +2,74 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186E66AAB1A
-	for <lists+linux-watchdog@lfdr.de>; Sat,  4 Mar 2023 17:24:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 527FE6AAB4C
+	for <lists+linux-watchdog@lfdr.de>; Sat,  4 Mar 2023 17:57:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjCDQYO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 4 Mar 2023 11:24:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
+        id S229698AbjCDQ5B (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 4 Mar 2023 11:57:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjCDQYL (ORCPT
+        with ESMTP id S229688AbjCDQ5A (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 4 Mar 2023 11:24:11 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB9D11174;
-        Sat,  4 Mar 2023 08:24:10 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id 4so3788360ilz.6;
-        Sat, 04 Mar 2023 08:24:10 -0800 (PST)
+        Sat, 4 Mar 2023 11:57:00 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466521167A;
+        Sat,  4 Mar 2023 08:56:57 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id t129so2290005iof.12;
+        Sat, 04 Mar 2023 08:56:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677947050;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=UsIe5Z5hRwOSr549xE297j36VOsUJE5/tQaq3CEC9RU=;
-        b=ICgnDvsyDrZ5zLAv8lwz6P7ATWpP7LpyBOVZiUH0JFWgBe2ONH3IVfIjCmE+XtrnS5
-         zsGNLqO3x4OmZ8n9aUaLGnWrpNBzz7XqD7xQWG1iw0/oJu98GpXrwtWotxifXoqxI+dN
-         9tL0xTopczCCkE0lVdoVp8qIbQKu4GLFb6j9GysYwC6pcDhjrg40bIU5dYwl+O0km4W1
-         TcrzpkRL7eLCaj5CYA+uF6WAy9L7lKik1P53CX7L5GbUpoH/e95mC2ZUokFE9uxAvsGY
-         YdwNJQxtd80rXasgya5+HiWHkxIgLeZVnimC+rlyH5HwbTLlVk793WBazdG0m0b0g2eD
-         vBGg==
+        d=gmail.com; s=20210112; t=1677949016;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=tpSFi8oQ8gJhvBK+1ukBO6QMtwZSSdSaUChPuPzBR3c=;
+        b=Rb4ZNyGKUE3v/LdbeL9momfA58G5zQHoFZ3eElXIlCFDv59pTz9zk/d9GAyQGkyd+N
+         PhlywmLX/4G64ibYGXNPjZlQROv50yG7R3b80N2+nEO6gvMc1e4+z3sBH6G1CErZOorn
+         zwyoKlzOfjfXyTB//5jzMpJuJFWwABEqWhHHW34VxfMVWf1lnYsfSMKjm/Ahr7aXmEaE
+         YOjPpujV00eHUCslDs6BPSBzNHYB1a+lqnf/P8R3eSbmlEN+BND1P69wCfCon0IlZX+x
+         DN/eljo8Q46TqPZkI/9aw8M8/ABKX71fvwr4hdOt7fqFbpxffTWo2Ye1hr8GZz3aTa/L
+         R7kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677947050;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UsIe5Z5hRwOSr549xE297j36VOsUJE5/tQaq3CEC9RU=;
-        b=Ph9Cu1RuvBWK3wHVGWJ4sHo1YKvTeR3gXr41zcnI4zqT3R0+TqWGbEdulczekIGu0V
-         AAZQ42G5+2kGDDLNqtexbPvPiRMcNiSUHORPLbbSjIScudVMl1ggLONW1RJNZxFJc3X7
-         dOUj7JUhS6vSTsMyAWHzcBlN0JfuVFe7kL0/y+v6FDP+Fwy+aPp6EEkRraZrTOk3avGK
-         e84HGT4lKrB7ViHevQda5cOkh+LpoSn3AYYZlEVtNGU1FkGYzve8+0jj8hpwSuMooPCv
-         TA/QqCgcA8UjWMAx01VQz8guPA8+mEz3CueqGhgIvKAsEbJ4E9S9hab+XS1XhKxpQkEA
-         ZCIw==
-X-Gm-Message-State: AO0yUKU5ewaQlBPJ7TD1SVvhNJn9zZzEciLkyQebJHAJjD6iBc+7hsTF
-        XV7eUdJmG63dtaWZ/XDvCPM=
-X-Google-Smtp-Source: AK7set9lKjx9VdzxEhocK/D2i2awazq3VEo2G0g6puAJ73I89QlJDOpLYfl3ztBKX6Lp22pbSUuWjw==
-X-Received: by 2002:a05:6e02:2164:b0:318:aac9:3e55 with SMTP id s4-20020a056e02216400b00318aac93e55mr4577469ilv.17.1677947050051;
-        Sat, 04 Mar 2023 08:24:10 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o22-20020a02c6b6000000b003b4dc9ca57asm1735338jan.13.2023.03.04.08.24.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Mar 2023 08:24:09 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677949016;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tpSFi8oQ8gJhvBK+1ukBO6QMtwZSSdSaUChPuPzBR3c=;
+        b=cDO+ceJTcV5qtYWyjTgq6v4GQUjGimy+gJ9nwO+xF6woue5uwQs1PeHoykfxl/IJSx
+         dvSSyPV07Xi+Y3Znd8FkD+YNVjhXe0ayvq8G/D9O+igQk4EeykJOOcAW3oq49bVnwZdq
+         hr/CFKlPGuEYuSzhr+XobOgVB6t71Md0gMpQ7vVfLIw0pLsZlAst8sWLAIG/coqUtc9X
+         AqGVSR8U/7SGo254Ip0JcVSS/Rk9vfHEKHOgsXIVJMjAvkm39gRsV1ScQfdZoDR0twk5
+         qy1VicWOTf9EHGZ6zChQU2rx0Qz/1CpigKx9sST/l78QAHS/jNhc0eC7cxd54zA1tlSN
+         D6pQ==
+X-Gm-Message-State: AO0yUKXQktNenWJ0hrS2NizTk4IcPZh9QYw99nv9rgOhcxNqdXdqY+0W
+        4NptWXFM5C2LVbZ2MiLZa3g=
+X-Google-Smtp-Source: AK7set83oJcNExK3Eb+T8l1q48j5qW46pOyFnowBwt1rO9/RepcMWvXnXt7Dv94AjLnFOwFjhngDLw==
+X-Received: by 2002:a6b:c993:0:b0:74c:8f72:291c with SMTP id z141-20020a6bc993000000b0074c8f72291cmr7584839iof.2.1677949016532;
+        Sat, 04 Mar 2023 08:56:56 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f13-20020a5d858d000000b0073f8a470bacsm1672220ioj.16.2023.03.04.08.56.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Mar 2023 08:56:55 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <636f01fb-a795-a43a-d57d-88e8228c4bc1@roeck-us.net>
-Date:   Sat, 4 Mar 2023 08:24:08 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH -next] watchdog: sbsa: Test WDOG_HW_RUNNING bit in suspend
- and resume
-Content-Language: en-US
-To:     Wang Wensheng <wangwensheng4@huawei.com>, wim@linux-watchdog.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     xuqiang36@huawei.com
-References: <20230301113702.76437-1-wangwensheng4@huawei.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230301113702.76437-1-wangwensheng4@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 1/2] watchdog: s3c2410_wdt: Use Use devm_clk_get[_optional]_enabled() helpers
+Date:   Sat,  4 Mar 2023 08:56:52 -0800
+Message-Id: <20230304165653.2179835-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,49 +77,118 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 3/1/23 03:37, Wang Wensheng wrote:
-> If the sbsa_gwdt is enabled by BIOS, the kernel set WDOG_HW_RUNNING bit
-> and keep it alive before anyone else would open it. When system suspend,
-> the sbsa_gwdt would not be disabled because WDOG_ACTIVE is not set. Then
-> the sbsa_gwdt would reach timeout since no one touch it during system
-> suspend.
-> 
-> To solve this, just test WDOG_HW_RUNNING bit in suspend and disable the
-> sbsa_gwdt if the bit is set, then reopen it accordingly in resume
-> process.
-> 
-> Signed-off-by: Wang Wensheng <wangwensheng4@huawei.com>
+The devm_clk_get[_optional]_enabled() helpers:
+    - call devm_clk_get[_optional]()
+    - call clk_prepare_enable() and register what is needed in order to
+      call clk_disable_unprepare() when needed, as a managed resource.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+This simplifies the code and avoids the calls to clk_disable_unprepare().
 
-Prerequisite: "watchdog: core: Always set WDOG_HW_RUNNING when starting watchdog"
+While at it, use dev_err_probe consistently, and use its return value
+to return the error code.
 
-Guenter
+Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ drivers/watchdog/s3c2410_wdt.c | 45 +++++++---------------------------
+ 1 file changed, 9 insertions(+), 36 deletions(-)
 
-> ---
->   drivers/watchdog/sbsa_gwdt.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
-> index 9791c74aebd4..60875a710e43 100644
-> --- a/drivers/watchdog/sbsa_gwdt.c
-> +++ b/drivers/watchdog/sbsa_gwdt.c
-> @@ -360,7 +360,7 @@ static int __maybe_unused sbsa_gwdt_suspend(struct device *dev)
->   {
->   	struct sbsa_gwdt *gwdt = dev_get_drvdata(dev);
->   
-> -	if (watchdog_active(&gwdt->wdd))
-> +	if (watchdog_hw_running(&gwdt->wdd))
->   		sbsa_gwdt_stop(&gwdt->wdd);
->   
->   	return 0;
-> @@ -371,7 +371,7 @@ static int __maybe_unused sbsa_gwdt_resume(struct device *dev)
->   {
->   	struct sbsa_gwdt *gwdt = dev_get_drvdata(dev);
->   
-> -	if (watchdog_active(&gwdt->wdd))
-> +	if (watchdog_hw_running(&gwdt->wdd))
->   		sbsa_gwdt_start(&gwdt->wdd);
->   
->   	return 0;
+diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+index 200ba236a72e..a1fcb79b0b7c 100644
+--- a/drivers/watchdog/s3c2410_wdt.c
++++ b/drivers/watchdog/s3c2410_wdt.c
+@@ -661,35 +661,17 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+ 	if (IS_ERR(wdt->reg_base))
+ 		return PTR_ERR(wdt->reg_base);
+ 
+-	wdt->bus_clk = devm_clk_get(dev, "watchdog");
+-	if (IS_ERR(wdt->bus_clk)) {
+-		dev_err(dev, "failed to find bus clock\n");
+-		return PTR_ERR(wdt->bus_clk);
+-	}
+-
+-	ret = clk_prepare_enable(wdt->bus_clk);
+-	if (ret < 0) {
+-		dev_err(dev, "failed to enable bus clock\n");
+-		return ret;
+-	}
++	wdt->bus_clk = devm_clk_get_enabled(dev, "watchdog");
++	if (IS_ERR(wdt->bus_clk))
++		return dev_err_probe(dev, PTR_ERR(wdt->bus_clk), "failed to get bus clock\n");
+ 
+ 	/*
+ 	 * "watchdog_src" clock is optional; if it's not present -- just skip it
+ 	 * and use "watchdog" clock as both bus and source clock.
+ 	 */
+-	wdt->src_clk = devm_clk_get_optional(dev, "watchdog_src");
+-	if (IS_ERR(wdt->src_clk)) {
+-		dev_err_probe(dev, PTR_ERR(wdt->src_clk),
+-			      "failed to get source clock\n");
+-		ret = PTR_ERR(wdt->src_clk);
+-		goto err_bus_clk;
+-	}
+-
+-	ret = clk_prepare_enable(wdt->src_clk);
+-	if (ret) {
+-		dev_err(dev, "failed to enable source clock\n");
+-		goto err_bus_clk;
+-	}
++	wdt->src_clk = devm_clk_get_optional_enabled(dev, "watchdog_src");
++	if (IS_ERR(wdt->src_clk))
++		return dev_err_probe(dev, PTR_ERR(wdt->src_clk), "failed to get source clock\n");
+ 
+ 	wdt->wdt_device.min_timeout = 1;
+ 	wdt->wdt_device.max_timeout = s3c2410wdt_max_timeout(wdt);
+@@ -710,7 +692,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+ 				 S3C2410_WATCHDOG_DEFAULT_TIME);
+ 		} else {
+ 			dev_err(dev, "failed to use default timeout\n");
+-			goto err_src_clk;
++			return ret;
+ 		}
+ 	}
+ 
+@@ -718,7 +700,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+ 			       pdev->name, pdev);
+ 	if (ret != 0) {
+ 		dev_err(dev, "failed to install irq (%d)\n", ret);
+-		goto err_src_clk;
++		return ret;
+ 	}
+ 
+ 	watchdog_set_nowayout(&wdt->wdt_device, nowayout);
+@@ -744,7 +726,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+ 
+ 	ret = watchdog_register_device(&wdt->wdt_device);
+ 	if (ret)
+-		goto err_src_clk;
++		return ret;
+ 
+ 	ret = s3c2410wdt_enable(wdt, true);
+ 	if (ret < 0)
+@@ -766,12 +748,6 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+  err_unregister:
+ 	watchdog_unregister_device(&wdt->wdt_device);
+ 
+- err_src_clk:
+-	clk_disable_unprepare(wdt->src_clk);
+-
+- err_bus_clk:
+-	clk_disable_unprepare(wdt->bus_clk);
+-
+ 	return ret;
+ }
+ 
+@@ -786,9 +762,6 @@ static int s3c2410wdt_remove(struct platform_device *dev)
+ 
+ 	watchdog_unregister_device(&wdt->wdt_device);
+ 
+-	clk_disable_unprepare(wdt->src_clk);
+-	clk_disable_unprepare(wdt->bus_clk);
+-
+ 	return 0;
+ }
+ 
+-- 
+2.39.1
 
