@@ -2,71 +2,71 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665986AAB77
-	for <lists+linux-watchdog@lfdr.de>; Sat,  4 Mar 2023 18:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B326AAB78
+	for <lists+linux-watchdog@lfdr.de>; Sat,  4 Mar 2023 18:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjCDRKt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 4 Mar 2023 12:10:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
+        id S229686AbjCDRLC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 4 Mar 2023 12:11:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjCDRKr (ORCPT
+        with ESMTP id S229519AbjCDRLB (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 4 Mar 2023 12:10:47 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F97412BF4
-        for <linux-watchdog@vger.kernel.org>; Sat,  4 Mar 2023 09:10:46 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id k9so3333321ilu.13
-        for <linux-watchdog@vger.kernel.org>; Sat, 04 Mar 2023 09:10:46 -0800 (PST)
+        Sat, 4 Mar 2023 12:11:01 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3A113510
+        for <linux-watchdog@vger.kernel.org>; Sat,  4 Mar 2023 09:11:00 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id 4so3857115ilz.6
+        for <linux-watchdog@vger.kernel.org>; Sat, 04 Mar 2023 09:11:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677949845;
+        d=gmail.com; s=20210112; t=1677949859;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=o92Ndb8zdrZV2q/Zf1jXZ7CuFJwGWoKG0a6TIK8APpI=;
-        b=WLr2MgLWz79uSQ7y2zcGBjYBP30dn9caxiBH61zrgGxdg+cVcbCv0UKrOpkzk4xEPr
-         en2/1I5smYSauvR5/N91+f4AUFZaJiMqoGEOv8BMi9nlYvfzjAocvirxmdw6Ttj0pcHW
-         FrkGQGif9lhTxzKjBjaFS0RumL67kyjBga4k7X/W8/Ze2AKP0Hez7106vOE+wxUgms8f
-         qAWQXcjhs21MW2xW5IznDUJdsqvbo9quCPkCA8RZg1Ld/ltsUvuArRazFoNuj6M0YUwg
-         enB6OrQuYu87o54NLe/r2PcxSEXImVndDXvbNVe63XlosgzbHAmPX02FklFbZcJVNcfl
-         v/IA==
+        bh=8wpQINzxq3dPsn3B4tqJ00jgDqN9SsTnp4sqKQle58A=;
+        b=oot7eXuKbqq7xFeiAshmWghEPCxUQzEgMjNBK4PnKHGtL/y16sdHnRj/h+n5mDkQtE
+         WB/cgo3H8NOx3u6VfKhUdaH0geo6Commc8XCjXfowonZ8Xt6r1xPa87GkIWcNmIpwG8c
+         Nb8FXwHvGlsnXMCIUqbVCu1aUZhxUWssgzMJKeG9o8vF12QBDWuGuS0JMGbYWC3Ydb0y
+         VpWz8+r+X0QCY297UJnMWG8kTdpfBQeU7c1V/L2ag/AeZArH6o1Fo2wNNREwI8P5Y50Q
+         OTUmXCBIO1LSh2nTiI39A7gAFG+mu83iy+ggWQ7/WposaMqmTDx7P4R2E4dyWG5yZ6XS
+         GjYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677949845;
+        d=1e100.net; s=20210112; t=1677949859;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o92Ndb8zdrZV2q/Zf1jXZ7CuFJwGWoKG0a6TIK8APpI=;
-        b=ws88NuptCPzlVtc5L8Oh2HemFyUzSBP+bWpbI8G2+zGe6u33QsXMNue8AfNQ1oKKgH
-         y8t6VL6l4RlLPA8bGCljg67gEHsbF7nInGW6s9VWnDWf9/UhT3aeOa3FFAm0BVhXXOqJ
-         aGpotmVzrGZjOxm36tks2JZ+dtZvlmmF5Ryox3V24WM9RmM5qucG7LLhALbUa96ycw0W
-         a2PWY9uVwF82zkvxtFU/0u37UunRyFKiLFbeGwO8Z7bPyj7lCRfVeeadlTYev7UfQ17/
-         4RVF8WMOlOLtkkXgSi21oZnrv+L6DxZ28Dg2Q4i9Atv4idFr9aNvW0pC7lfD6z2qAdDr
-         3Guw==
-X-Gm-Message-State: AO0yUKVXFXiIEuiL2MT7fDeUfmjujSvejTEJPOTozDWchvVMtqeNJpGo
-        UXilQbiFjaNbbUgPzUSe9vaqFFoVA0k=
-X-Google-Smtp-Source: AK7set9sxHa+axUmCqJegCD9MmCA9ztXKOiATURjteyXqglh4CcgMLex4yuGMWWDkYhaL1VruAcl/Q==
-X-Received: by 2002:a05:6e02:20e6:b0:315:7fec:f1f0 with SMTP id q6-20020a056e0220e600b003157fecf1f0mr4457535ilv.7.1677949845722;
-        Sat, 04 Mar 2023 09:10:45 -0800 (PST)
+        bh=8wpQINzxq3dPsn3B4tqJ00jgDqN9SsTnp4sqKQle58A=;
+        b=qa+t+2AaFGd+Hkaf/HWXrw4Y9BjRLR7YISLkd6Zv71WkEJazsOJxFZ+tw6ReV43Y8D
+         rLdl2uJq+/vuYmLxIQVQ2FNrHORrXcmN6O96UD31y1HmH7SXNSxXP9pfTvRz2LMLLqbk
+         91Mj8eGQlxQbU+IrSk1+LFAroOKcEecDOW/ThO08qRKFNtwpDeBtq7BNSmv16456xHp3
+         dPiRT3FoPm58Qhgy0nEES362DaCNvwQM+64I46jqeqtnVy4GJYHlMGhTVtblu+LeAtra
+         SvMRkqmf/mvLS7oO67Xpdef44p/XymriQLS5/YaUeZpydXrI660qQFKosFlXx3IYFkmp
+         DgUA==
+X-Gm-Message-State: AO0yUKVjKkzgNu8hJq6PHtN+DG5cpritT0QOIxLk1P4JCpjCkZrKvsUW
+        UVOLQoya4OiOMcTIEHDv3kI=
+X-Google-Smtp-Source: AK7set8HblHt+nWAFytfTPD0mZP4CcZ70lg6lHNu6pcEiNUn+A7vRynRg/mbdM5XMiPVw064QZunDQ==
+X-Received: by 2002:a05:6e02:1527:b0:316:e6e5:f0db with SMTP id i7-20020a056e02152700b00316e6e5f0dbmr4972219ilu.0.1677949859568;
+        Sat, 04 Mar 2023 09:10:59 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a25-20020a056638019900b003a058610fc8sm1709950jaq.82.2023.03.04.09.10.45
+        by smtp.gmail.com with ESMTPSA id o16-20020a92d4d0000000b003179b34916dsm1528714ilm.0.2023.03.04.09.10.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Mar 2023 09:10:45 -0800 (PST)
+        Sat, 04 Mar 2023 09:10:59 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 4 Mar 2023 09:10:44 -0800
+Date:   Sat, 4 Mar 2023 09:10:58 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-watchdog@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 24/34] watchdog: renesas: Convert to platform remove
+Subject: Re: [PATCH 25/34] watchdog: riowd: Convert to platform remove
  callback returning void
-Message-ID: <126e3d78-c653-4eeb-8c43-96297f44f24d@roeck-us.net>
+Message-ID: <a4a65706-fae7-4b66-b134-ee89db61d0b7@roeck-us.net>
 References: <20230303213716.2123717-1-u.kleine-koenig@pengutronix.de>
- <20230303213716.2123717-25-u.kleine-koenig@pengutronix.de>
+ <20230303213716.2123717-26-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230303213716.2123717-25-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20230303213716.2123717-26-u.kleine-koenig@pengutronix.de>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -78,7 +78,7 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 10:37:06PM +0100, Uwe Kleine-König wrote:
+On Fri, Mar 03, 2023 at 10:37:07PM +0100, Uwe Kleine-König wrote:
 > The .remove() callback for a platform driver returns an int which makes
 > many driver authors wrongly assume it's possible to do error handling by
 > returning an error code. However the value returned is (mostly) ignored
@@ -95,38 +95,38 @@ On Fri, Mar 03, 2023 at 10:37:06PM +0100, Uwe Kleine-König wrote:
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/renesas_wdt.c | 6 ++----
+>  drivers/watchdog/riowd.c | 6 ++----
 >  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/watchdog/renesas_wdt.c b/drivers/watchdog/renesas_wdt.c
-> index 41d58ea5eb2f..12c41d6e5cd6 100644
-> --- a/drivers/watchdog/renesas_wdt.c
-> +++ b/drivers/watchdog/renesas_wdt.c
-> @@ -292,14 +292,12 @@ static int rwdt_probe(struct platform_device *pdev)
->  	return ret;
+> diff --git a/drivers/watchdog/riowd.c b/drivers/watchdog/riowd.c
+> index 747e346ed06c..c04b383e1712 100644
+> --- a/drivers/watchdog/riowd.c
+> +++ b/drivers/watchdog/riowd.c
+> @@ -217,14 +217,12 @@ static int riowd_probe(struct platform_device *op)
+>  	return err;
 >  }
 >  
-> -static int rwdt_remove(struct platform_device *pdev)
-> +static void rwdt_remove(struct platform_device *pdev)
+> -static int riowd_remove(struct platform_device *op)
+> +static void riowd_remove(struct platform_device *op)
 >  {
->  	struct rwdt_priv *priv = platform_get_drvdata(pdev);
+>  	struct riowd *p = platform_get_drvdata(op);
 >  
->  	watchdog_unregister_device(&priv->wdev);
->  	pm_runtime_disable(&pdev->dev);
+>  	misc_deregister(&riowd_miscdev);
+>  	of_iounmap(&op->resource[0], p->regs, 2);
 > -
 > -	return 0;
 >  }
 >  
->  static int __maybe_unused rwdt_suspend(struct device *dev)
-> @@ -339,7 +337,7 @@ static struct platform_driver rwdt_driver = {
->  		.pm = &rwdt_pm_ops,
+>  static const struct of_device_id riowd_match[] = {
+> @@ -241,7 +239,7 @@ static struct platform_driver riowd_driver = {
+>  		.of_match_table = riowd_match,
 >  	},
->  	.probe = rwdt_probe,
-> -	.remove = rwdt_remove,
-> +	.remove_new = rwdt_remove,
+>  	.probe		= riowd_probe,
+> -	.remove		= riowd_remove,
+> +	.remove_new	= riowd_remove,
 >  };
->  module_platform_driver(rwdt_driver);
 >  
+>  module_platform_driver(riowd_driver);
 > -- 
 > 2.39.1
 > 
