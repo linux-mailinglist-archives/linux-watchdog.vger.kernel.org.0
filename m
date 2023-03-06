@@ -2,195 +2,154 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C076AB100
-	for <lists+linux-watchdog@lfdr.de>; Sun,  5 Mar 2023 15:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBED36AB959
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Mar 2023 10:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjCEObN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 5 Mar 2023 09:31:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
+        id S229661AbjCFJJw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 6 Mar 2023 04:09:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjCEObN (ORCPT
+        with ESMTP id S229816AbjCFJJs (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 5 Mar 2023 09:31:13 -0500
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C340510271;
-        Sun,  5 Mar 2023 06:31:11 -0800 (PST)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-172afa7bee2so8716484fac.6;
-        Sun, 05 Mar 2023 06:31:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678026671;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iLNqvkQlPnIR/APHKTv2kM9g4sr2SoXTzXR+UI/Z6gI=;
-        b=FmdRV5PKZ//h/svqkuQi4Z3pnEO4T8hnizDPFcF1nb0jbtc1uxvEIGlX6+SDpLCx9N
-         gFRhfv1WRdUx02lj7vH5YNdjYSqRuhnV5FclN+0K00i4Kxg6SXtepLQu6GrUY50C832i
-         EiF4S+jA1g6KRw6wi3OpA93p9ceu1l+M93NgJBCsrcWAl567xgC9/s0Ff+aCOmdfRuwi
-         XzC+LXGQigsKbQZKxgJaYUwS3OnDP9Zr2NEWF57dSY3fSmHX9imWNuhsp6ZOjPIVq5X/
-         B0uRWQGZQHP+nUkujCJGH6y/clIR0QpNXqztzMXa184g+LrjlNF5louIAnNGQi3DO8IV
-         3YGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678026671;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iLNqvkQlPnIR/APHKTv2kM9g4sr2SoXTzXR+UI/Z6gI=;
-        b=wHSrLtxI5mLsZu3P419vHyVGLCDPgQ+KmXtCIzh+RePc3SviOInCjvRiPvQtRUUqM2
-         uQ7X/a5gxhRH3ZfwCEjYdfJG+Wc7a7FUWb4hHK6U3z5F0wuD2o9zUxMu6YA/hW0f+Hnp
-         Tn9WFsptYL7PPBFTptBE1JlcOmNU3k4Yq8KQT6RIlT+YHY4HzfPu6inwv7FFpXT8eBoE
-         l2FjgvwBB6ljE0WT9jyTK6QBQoNWF2ITpq+QeFHczjfxmWOM7w23O3p12B0ZiN0CJJ5K
-         m8veODXL15Wi3jpFBglS39yiWxguGnPXDuixCnCKPEc74kVwgiTGckX0nmi92hmyuovi
-         G4hw==
-X-Gm-Message-State: AO0yUKVb+JMt9xHoP5H0+6yCXRe4d0u+mWFqUsBktm+ftX+jNb17MQpY
-        OzrmDpb9HW1LysvUP42jPsU=
-X-Google-Smtp-Source: AK7set/T3JLL8ZmcIt8S0a9GBjZH2KGWRQJeefAPX/9NhUh+844MYFCz8o3Zd4hCx0UMawdbkx79CA==
-X-Received: by 2002:a05:6870:14d5:b0:172:5a8b:b43c with SMTP id l21-20020a05687014d500b001725a8bb43cmr4834291oab.49.1678026670996;
-        Sun, 05 Mar 2023 06:31:10 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u10-20020a4ae68a000000b00524f47b4682sm2915395oot.10.2023.03.05.06.31.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Mar 2023 06:31:10 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 5 Mar 2023 06:31:08 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        Mon, 6 Mar 2023 04:09:48 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA8E1985
+        for <linux-watchdog@vger.kernel.org>; Mon,  6 Mar 2023 01:09:46 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZ6qV-0006Z0-Ai; Mon, 06 Mar 2023 10:09:27 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZ6qR-002D7W-QZ; Mon, 06 Mar 2023 10:09:23 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZ6qR-002coG-5Y; Mon, 06 Mar 2023 10:09:23 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
         linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] watchdog: s3c2410_wdt: Use Use
- devm_clk_get[_optional]_enabled() helpers
-Message-ID: <891023d7-9510-445e-9053-ad5c0398d350@roeck-us.net>
-References: <20230304165653.2179835-1-linux@roeck-us.net>
- <93d115a2-702d-7d68-cd88-98f1c9f03f95@wanadoo.fr>
- <431a8ae1-54a7-e71a-484d-cab618a2a1c4@roeck-us.net>
- <20230305111500.jvass6ymkity4nnd@pengutronix.de>
+        linux-samsung-soc@vger.kernel.org, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH 0/3] watchdog: s3c2410_wdt: Simplify using dev_err_probe()
+Date:   Mon,  6 Mar 2023 10:09:16 +0100
+Message-Id: <20230306090919.2206871-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <891023d7-9510-445e-9053-ad5c0398d350@roeck-us.net>
+References: <891023d7-9510-445e-9053-ad5c0398d350@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4134; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=dbOnuKo6PAvTY72AG+BV5c/SL7l2SajkGuyceprD1LY=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkBa2viWCqV5t+UroQTcp7HhFtUP28LNcAXyyhx wa2CaN4jq+JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAWtrwAKCRDB/BR4rcrs CUpTB/9qB6PfHLNjPnGdZajL8QSJuFMGNV9X1m15eEDJGlTuaCuPb/dvzC9HNyWqodYQV0q1aJk 31wGYV1yZ9h6Le+C7HEr0F1xBbQgce05MyfmDYjJ6t3Q4Gj6LRXWmZ7ABoR0UwJ9Ya46Mwhz7Ay 2ZynYidbKjdql0paRK6TbUkUanbJp4fs45dn4DHUpXIX7xtQzS6jP6Sp+20hHmVEO1HQYo1fK9M ET6eWXgY9B0XrLVnZlm+IQmL55hOGouo1IpIYfR/DCe+pJSsSLsW2ItkZ+OnoAY9JBL+XS+lm77 sHM8nxgxMtOCoVVzatR6x0QOgdpcaeLg3LeG5r5TkQ7Hxi87
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230305111500.jvass6ymkity4nnd@pengutronix.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sun, Mar 05, 2023 at 12:15:00PM +0100, Uwe Kleine-König wrote:
-> Hello Guenter,
-> 
-> On Sat, Mar 04, 2023 at 02:10:47PM -0800, Guenter Roeck wrote:
-> > On 3/4/23 13:46, Christophe JAILLET wrote:
-> > > Le 04/03/2023 à 17:56, Guenter Roeck a écrit :
-> > > > The devm_clk_get[_optional]_enabled() helpers:
-> > > >      - call devm_clk_get[_optional]()
-> > > >      - call clk_prepare_enable() and register what is needed in order to
-> > > >        call clk_disable_unprepare() when needed, as a managed resource.
-> > > > 
-> > > > This simplifies the code and avoids the calls to clk_disable_unprepare().
-> > > > 
-> > > > While at it, use dev_err_probe consistently, and use its return value
-> > > > to return the error code.
-> > > > 
-> > > > Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> > > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > > > ---
-> > > >   drivers/watchdog/s3c2410_wdt.c | 45 +++++++---------------------------
-> > > >   1 file changed, 9 insertions(+), 36 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-> > > > index 200ba236a72e..a1fcb79b0b7c 100644
-> > > > --- a/drivers/watchdog/s3c2410_wdt.c
-> > > > +++ b/drivers/watchdog/s3c2410_wdt.c
-> > > > @@ -661,35 +661,17 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
-> > > >       if (IS_ERR(wdt->reg_base))
-> > > >           return PTR_ERR(wdt->reg_base);
-> > > > -    wdt->bus_clk = devm_clk_get(dev, "watchdog");
-> > > > -    if (IS_ERR(wdt->bus_clk)) {
-> > > > -        dev_err(dev, "failed to find bus clock\n");
-> > > > -        return PTR_ERR(wdt->bus_clk);
-> > > > -    }
-> > > > -
-> > > > -    ret = clk_prepare_enable(wdt->bus_clk);
-> > > > -    if (ret < 0) {
-> > > > -        dev_err(dev, "failed to enable bus clock\n");
-> > > > -        return ret;
-> > > > -    }
-> > > > +    wdt->bus_clk = devm_clk_get_enabled(dev, "watchdog");
-> > > > +    if (IS_ERR(wdt->bus_clk))
-> > > > +        return dev_err_probe(dev, PTR_ERR(wdt->bus_clk), "failed to get bus clock\n");
-> > > >       /*
-> > > >        * "watchdog_src" clock is optional; if it's not present -- just skip it
-> > > >        * and use "watchdog" clock as both bus and source clock.
-> > > >        */
-> > > > -    wdt->src_clk = devm_clk_get_optional(dev, "watchdog_src");
-> > > > -    if (IS_ERR(wdt->src_clk)) {
-> > > > -        dev_err_probe(dev, PTR_ERR(wdt->src_clk),
-> > > > -                  "failed to get source clock\n");
-> > > > -        ret = PTR_ERR(wdt->src_clk);
-> > > > -        goto err_bus_clk;
-> > > > -    }
-> > > > -
-> > > > -    ret = clk_prepare_enable(wdt->src_clk);
-> > > > -    if (ret) {
-> > > > -        dev_err(dev, "failed to enable source clock\n");
-> > > > -        goto err_bus_clk;
-> > > > -    }
-> > > > +    wdt->src_clk = devm_clk_get_optional_enabled(dev, "watchdog_src");
-> > > > +    if (IS_ERR(wdt->src_clk))
-> > > > +        return dev_err_probe(dev, PTR_ERR(wdt->src_clk), "failed to get source clock\n");
-> > > >       wdt->wdt_device.min_timeout = 1;
-> > > >       wdt->wdt_device.max_timeout = s3c2410wdt_max_timeout(wdt);
-> > > > @@ -710,7 +692,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
-> > > >                    S3C2410_WATCHDOG_DEFAULT_TIME);
-> > > >           } else {
-> > > >               dev_err(dev, "failed to use default timeout\n");
-> > > > -            goto err_src_clk;
-> > > > +            return ret;
-> > > 
-> > > Hi,
-> > > 
-> > > Nit: this also could be "return dev_err_probe()"
-> > > 
-> > > >           }
-> > > >       }
-> > > > @@ -718,7 +700,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
-> > > >                      pdev->name, pdev);
-> > > >       if (ret != 0) {
-> > > >           dev_err(dev, "failed to install irq (%d)\n", ret);
-> > > > -        goto err_src_clk;
-> > > > +        return ret;
-> > > 
-> > > Nit: this also could be "return dev_err_probe()"
-> > > 
+Hello,
+
+On Sun, Mar 05, 2023 at 06:31:08AM -0800, Guenter Roeck wrote:
+> On Sun, Mar 05, 2023 at 12:15:00PM +0100, Uwe Kleine-KÃ¶nig wrote:
+> > On Sat, Mar 04, 2023 at 02:10:47PM -0800, Guenter Roeck wrote:
+> > > The primary reason to call dev_err_probe() is that the error may be
+> > > -EPROBE_DEFER, in which case the error message is suppressed.
+> > > That is not the case for those two functions; they never return
+> > > -EPROBE_DEFER. Calling dev_err_probe() would give the false impression
+> > > that the functions _might_ return -EPROBE_DEFER.
 > > 
-> > The primary reason to call dev_err_probe() is that the error may be
-> > -EPROBE_DEFER, in which case the error message is suppressed.
-> > That is not the case for those two functions; they never return
-> > -EPROBE_DEFER. Calling dev_err_probe() would give the false impression
-> > that the functions _might_ return -EPROBE_DEFER.
+> > That is subjective. In my book dev_err_probe() handling -EPROBE_DEFER is
+> > only one aspect. Another is that using it allows to have return and error
+> > message in a single line and also that if already other exit paths use
+> > it to get a consistent style for the emitted messages. Having said that
+> > *I* wouldn't assume that the previous call might return -EPROBE_DEFER
+> > just because dev_err_probe() is used.
+> > 
+> > Having said that, I also don't think there is much harm if someone
+> > thinks that a given function (here devm_request_irq()) might return
+> > -EPROBE_DEFER.
+> > 
 > 
-> That is subjective. In my book dev_err_probe() handling -EPROBE_DEFER is
-> only one aspect. Another is that using it allows to have return and error
-> message in a single line and also that if already other exit paths use
-> it to get a consistent style for the emitted messages. Having said that
-> *I* wouldn't assume that the previous call might return -EPROBE_DEFER
-> just because dev_err_probe() is used.
-> 
-> Having said that, I also don't think there is much harm if someone
-> thinks that a given function (here devm_request_irq()) might return
-> -EPROBE_DEFER.
-> 
+> I guess we'll have to agree to disagree.
 
-I guess we'll have to agree to disagree.
+I don't agree to disagree. In my eyes you weight the corresponding facts
+in an irrational way. To have some code changes to talk about, I created
+this series (on top of Guenter's patches to this driver from Saturday
+[1]).
 
-Guenter
+Patch 1 is necessary to effectively make use of dev_err_probe(). I admit
+this annoys me a bit as it shows that dev_err_probe() isn't a plug-in
+replacement, but given that it reduces the binary size a bit, it has at
+least positive usefulness. (But maybe this is subjective? *shrug*)
+
+Patch 2 unifies the format of the error messages between the error paths
+that make use of dev_err_probe() and those that (only) use dev_err().
+IMHO this has mixed value, but still positive in sum. While having a
+consistent error log style is nice, having to manually use
+dev_err_probe()'s style is a bit ugly. Together with a) the messages get
+more useful mentioning the error code and b) the downside is removed by
+patch 3, I still like it. (And if you don't because of b), please
+consider squashing patches 2 and 3 together. In fact I only created
+patch 2 to make the upsides for patch 3 more obvious and I don't mind a
+squash.)
+
+Patch 3 does the actual conversion to dev_err_probe() for all error
+paths in .probe(). The (unarguable?) upsides are:
+
+ - Reduced line count
+ - Reduced binary size (and the reduction mentioned in the commit log
+   doesn't even account for the shorter format strings!)
+
+The fact where Guenter doesn't agree to me (and Krzysztof) is:
+
+ - You cannot any more defer from the usage of dev_err_probe() vs.
+   dev_err() if the function that failed before might return
+   -EPROBE_DEFER.
+
+In my eyes this is irrelevant because there is no objective reason to
+have to know that. If the function might return -EPROBE_DEFER or not
+shouldn't (and doesn't!) have an influence on how the driver should
+behave in the error case. Also the ability to defer that property is
+very unreliable. It's not even reliable in drivers/watchdog, look at how
+imx2_wdt handles devm_clk_get() or keembay_wdt handles clk_get_rate()
+returning zero.
+
+So using dev_err_probe() has two big benefits in contrast to a dubious
+and unreliable connection between -EPROBE_DEFER and dev_err_probe().
+
+Best regards
+Uwe
+
+[1] https://lore.kernel.org/linux-watchdog/20230304165653.2179835-1-linux@roeck-us.net
+
+Uwe Kleine-KÃ¶nig (3):
+  watchdog: s3c2410_wdt: Fold s3c2410_get_wdt_drv_data() into only
+    caller
+  watchdog: s3c2410_wdt: Unify error logging format in probe function
+  watchdog: s3c2410_wdt: Simplify using dev_err_probe()
+
+ drivers/watchdog/s3c2410_wdt.c | 93 ++++++++++++++--------------------
+ 1 file changed, 37 insertions(+), 56 deletions(-)
+
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+prerequisite-patch-id: 775bdd863307268e1ef16250bf2f40862637b453
+prerequisite-patch-id: 924ddfbe583e97e7c9a46c2460ecbc88c29ee319
+-- 
+2.39.1
+
