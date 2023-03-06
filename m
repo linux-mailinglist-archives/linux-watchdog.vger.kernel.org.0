@@ -2,93 +2,112 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023D46AC96C
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Mar 2023 18:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 338646AC99E
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Mar 2023 18:18:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbjCFRKj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Mar 2023 12:10:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
+        id S229846AbjCFRS2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 6 Mar 2023 12:18:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbjCFRKX (ORCPT
+        with ESMTP id S229650AbjCFRS0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:10:23 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D863B673
-        for <linux-watchdog@vger.kernel.org>; Mon,  6 Mar 2023 09:09:45 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pZEKi-0004gr-Cu; Mon, 06 Mar 2023 18:09:08 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pZEKh-002Ifd-Oe; Mon, 06 Mar 2023 18:09:07 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pZEKg-002l03-KK; Mon, 06 Mar 2023 18:09:06 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     patches@opensource.cirrus.com, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 3/3] watchdog: wm8350: Simplify using devm_watchdog_register_device()
-Date:   Mon,  6 Mar 2023 18:09:01 +0100
-Message-Id: <20230306170901.2232323-4-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230306170901.2232323-1-u.kleine-koenig@pengutronix.de>
-References: <20230306170901.2232323-1-u.kleine-koenig@pengutronix.de>
+        Mon, 6 Mar 2023 12:18:26 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2858A45;
+        Mon,  6 Mar 2023 09:18:02 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-173435e0ec4so12109676fac.12;
+        Mon, 06 Mar 2023 09:18:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678123046;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S0sctzMQRiraFg62oYuZlLcDDNcLGWUWrlXyOzIV7mo=;
+        b=TsYa+QtM+WVh6i9Of2refGVaXt7sMv0H1TyxbBIBmwq4UGHXPbI8E/p154fsOpyyQO
+         FbYXkgYgfHZ4AOEITkq/CTTMtcuVMACzMNtexAy+pn82kXuBcb36vl8et8zuyomOMzOA
+         nKH0NmXhi3UrET/IFFzsaJODZ5DVQT79WV2WTjlLD+GkGY63m/YGoOO+zk4m/bTjkN7J
+         vvsehEG/s+m2RlY+9vjbf1v6N6w7neXnExhoDWea3mRK/WGe5HDxAlne4kvUDRar4wxj
+         MJtAsKBRcgKpnEtv8yJ4f0YGODgm8aMf86qSyXmR3xfVUREH2XjRr5/R3JXmUu1MVaQX
+         UkUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678123046;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S0sctzMQRiraFg62oYuZlLcDDNcLGWUWrlXyOzIV7mo=;
+        b=cvzA+E1+U932ZjOKfpn0vQbLKf9S0hfGXyjQIDN8nheD8tXPz1kGaaHDBxqSw9c2Ca
+         58LcTfBq8nQ/XxlzQwNuVYHSTLPJW4KpRvEGe+2OeIpj7RkzwIniDC83TXmArwLFXdMT
+         oBgGg8oJvC8fJay6tXP+5Vgq9WNeptIeC0A0sRxSHCnMrnw3vUV/xosSBOoUwQ2gtXF9
+         HL/xHwpPnNBd/Y0ujlNUHnu9HjQ+fY+FVSHBHEwIxaN91ILLNTlS4Js+SlKOdlGRlQGv
+         vadeI3B32osMkp0MZe5KSYDCYziFwbct6L0Y6jwwpI1ZrSMPQFUwQPFxSu6YCf5ujBtv
+         T+zA==
+X-Gm-Message-State: AO0yUKXT63yOIfJBF8wyzfqn0Kuk++nehmoi2C59sp7j9pmt1WIcUYB4
+        uxxU+HpJzj4RpDty0fR6EBE=
+X-Google-Smtp-Source: AK7set/tMMdJ8dCV5bEacRjA+f4zjiFks1hoVEIZBqVftkGKw5SwwAXHlTXwewnGW99cLpO8lhmjJw==
+X-Received: by 2002:a05:6870:a108:b0:176:348d:fb0 with SMTP id m8-20020a056870a10800b00176348d0fb0mr7771666oae.42.1678123046228;
+        Mon, 06 Mar 2023 09:17:26 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b26-20020a9d479a000000b0068bcb44e7f5sm4315137otf.68.2023.03.06.09.17.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 09:17:25 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <312e57b8-d47f-1269-a463-d2a4ef19b212@roeck-us.net>
+Date:   Mon, 6 Mar 2023 09:17:23 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1112; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=eKbSbgyM6iAAADJRyccERsxfhL/Xxs4zw+WOxJ+10fo=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkBh4nWsFYVrBiPkosnDl6xkGrWr/JqNqSvfocp dlwibEG0iOJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAYeJwAKCRDB/BR4rcrs CVhHCACHQhP0vt3MEa1XkSByGKFVe9hQ7w8a1xgKHQIvYp4Zbaq0qPwWSu/xd5aUGZ0jpKAey3O CFUR3rcQ6MDlCM8AbyXa+iNtxScjzIdiigono4GKYkmZmnQqt0YJOdrDMv+TSVYituJEzxT+rZL q7hYdLPtsEuAXHdbueH35QYZpGzXhWalHRNt3PeuvJS1Oj8jDuTMNxykliSwUeqGPfuYW5czzWx EhVHBBgQjuyPU8q/wgjrB+/lJ8vks54vZbXPj0k6bjWGNMWCJrx0bYo5Bjq3sg+9yveQhgBzSuB Gi0IoKbFD5ZQJdWN2MShy2NnaZxZErerPUeEGBnEWhaj0P53
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org
+References: <891023d7-9510-445e-9053-ad5c0398d350@roeck-us.net>
+ <20230306090919.2206871-1-u.kleine-koenig@pengutronix.de>
+ <20230306090919.2206871-2-u.kleine-koenig@pengutronix.de>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/3] watchdog: s3c2410_wdt: Fold
+ s3c2410_get_wdt_drv_data() into only caller
+In-Reply-To: <20230306090919.2206871-2-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This allows to drop the .remove() function as it only exists to
-unregister the watchdog device which is now done in a callback
-registered by devm_watchdog_register_device().
+On 3/6/23 01:09, Uwe Kleine-König wrote:
+> s3c2410_get_wdt_drv_data() is only called by s3c2410wdt_probe(), so the
+> implementation of the former can move to the latter.
+> 
+> scripts/bloat-o-meter reports for this change (on an ARCH=arm
+> allmodconfig build):
+> 
+> 	add/remove: 1/1 grow/shrink: 0/2 up/down: 4/-129 (-125)
+> 
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/watchdog/wm8350_wdt.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+The reason for separating functions in this case wasn't that the separate function
+would be called several times. It was to improve code readability. If anything,
+I would argue that it might sense to split the already lengthy probe function
+further instead of combining it.
 
-diff --git a/drivers/watchdog/wm8350_wdt.c b/drivers/watchdog/wm8350_wdt.c
-index 33c62d51f00a..911ad64460a6 100644
---- a/drivers/watchdog/wm8350_wdt.c
-+++ b/drivers/watchdog/wm8350_wdt.c
-@@ -153,18 +153,11 @@ static int wm8350_wdt_probe(struct platform_device *pdev)
- 	/* Default to 4s timeout */
- 	wm8350_wdt_set_timeout(&wm8350_wdt, 4);
- 
--	return watchdog_register_device(&wm8350_wdt);
--}
--
--static int wm8350_wdt_remove(struct platform_device *pdev)
--{
--	watchdog_unregister_device(&wm8350_wdt);
--	return 0;
-+	return devm_watchdog_register_device(&wm8350_wdt);
- }
- 
- static struct platform_driver wm8350_wdt_driver = {
- 	.probe = wm8350_wdt_probe,
--	.remove = wm8350_wdt_remove,
- 	.driver = {
- 		.name = "wm8350-wdt",
- 	},
--- 
-2.39.1
+Maybe I am old fashioned. Maybe the old "split your code into multiple functions
+if the function size is larger than X lines" no longer applies, and it is now
+"never split functions unless the separated function is called more than once".
+Still, I am quite concerned that accepting this patch would result in a flurry
+of similar patches which would all do nothing but hurt readability, using the
+same set of arguments. I really don't like where this is going. I am going to
+leave it up to Wim to decide if and how to proceed.
+
+Guenter
 
