@@ -2,102 +2,76 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5889D6AB970
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Mar 2023 10:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DFB6ABC09
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Mar 2023 11:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjCFJPS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Mar 2023 04:15:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
+        id S229922AbjCFKZL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 6 Mar 2023 05:25:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjCFJPR (ORCPT
+        with ESMTP id S229670AbjCFKZK (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:15:17 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A525C175
-        for <linux-watchdog@vger.kernel.org>; Mon,  6 Mar 2023 01:15:16 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pZ6vx-0007rn-3O; Mon, 06 Mar 2023 10:15:05 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pZ6vv-002D8q-Cn; Mon, 06 Mar 2023 10:15:03 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pZ6vu-002cpx-C9; Mon, 06 Mar 2023 10:15:02 +0100
-Date:   Mon, 6 Mar 2023 10:15:02 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] watchdog: s3c2410_wdt: Use
- devm_add_action_or_reset() to disable watchdog
-Message-ID: <20230306091502.3zlodw6vkqqwgozj@pengutronix.de>
-References: <20230304165653.2179835-1-linux@roeck-us.net>
- <20230304165653.2179835-2-linux@roeck-us.net>
+        Mon, 6 Mar 2023 05:25:10 -0500
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80434211EC
+        for <linux-watchdog@vger.kernel.org>; Mon,  6 Mar 2023 02:25:09 -0800 (PST)
+Received: by mail-ua1-x933.google.com with SMTP id x40so6066266uaf.2
+        for <linux-watchdog@vger.kernel.org>; Mon, 06 Mar 2023 02:25:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678098308;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vh7FN/ulAdnmY8O0LKz7bqpIFk4oOSQ9iCZ8VQ/AkNo=;
+        b=XLGWJIk9ngr+DzzO288LuvJaM4tXJNvPNwQ2aS9Ags44qiVmrxsinzlSTI373SWvQL
+         +6SgUcT0EwDOIVN2f57batbL6WGkZ2VjHiZD2U0ZfoB3ufKNwLox0AmmmOFBlt9HJ6RH
+         OS5dvcaELSOGwrw7xfZFJ2NbgVH7MQKiyCspd7sI5fG3WOcHvbeWf9pH0zYeQabOYzn3
+         yw9gnSfWn+YHaL2P9olrtireCVfXlHXeG4tpX1ltR43P7LxaSqE8ArqnuABg3RgkQyVT
+         NPOLZ1x9kR7oCsOGhR6lezPY8aiclxT9jA/o8x8OVtbG9/bfL0WUzRZuLJI8IqemKCfK
+         Id5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678098308;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vh7FN/ulAdnmY8O0LKz7bqpIFk4oOSQ9iCZ8VQ/AkNo=;
+        b=Y2SaO5/P+G/7Fcb4PbrcJX82E0ZDM8vVLmtH5s8qQQrvCeH8r1XrMxlpdN5bsmMn4t
+         Af9cR5etPLGR41udUdfuWV//FKnBROB7P7lDXEyMcMC9LSxpQ+nbyUK4xvSffuKVIiSr
+         YZ+HiayMXH+WWYBdUrlQ5CqtUTbixbQrUYlMDgVR8XGVU4RxPa4kTuwshsvBWEkzGiau
+         nUsYhig1L+SHe/LUVAUKrv7yFp3kdY/IxOES1hAJ1FnnGepLVQFE7xCPFPR7IUbpazlF
+         k8mpFj8MqS9g0yHkSzGXmktzh1vP3+ExfQpR2/1Qy7hSep9uAqUBNyQ20bd0+ZAaD5E4
+         8Cjg==
+X-Gm-Message-State: AO0yUKXyd2FagMB7bzxI+LdPl8hhhssp2JNIG147BGAfJkhovOYawGCp
+        Qy+Sgs0hNvFM+RveJOIVotWn/xdtJB4USV2+uSo=
+X-Google-Smtp-Source: AK7set+HbxOG8fRWYdSd2Spe8YgeAHrZJbrwpyn/MCNLktCdTFpedrqR91TU0+OXtW6ZaqP/6B7py4FyO7omWVyWxwo=
+X-Received: by 2002:a1f:1752:0:b0:401:f65:99c2 with SMTP id
+ 79-20020a1f1752000000b004010f6599c2mr6566336vkx.3.1678098308425; Mon, 06 Mar
+ 2023 02:25:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mfc65ih3brexj23r"
-Content-Disposition: inline
-In-Reply-To: <20230304165653.2179835-2-linux@roeck-us.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Received: by 2002:a59:ce6f:0:b0:3ae:930b:3e70 with HTTP; Mon, 6 Mar 2023
+ 02:25:08 -0800 (PST)
+Reply-To: madis.scarl@terlera.it
+From:   "Ms Eve from U.N" <denisagotou@gmail.com>
+Date:   Mon, 6 Mar 2023 11:25:08 +0100
+Message-ID: <CAD6bNBj=acZn6jpkuAhuMAxbq=prud3DvWJUd6YsqM0swBt35Q@mail.gmail.com>
+Subject: Re: Claim of Fund:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_SCAM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Hello Good Morning,
+This is to bring to your notice that all our efforts to contact you
+through this your email ID failed Please Kindly contact Barrister.
+Steven Mike { mbarrsteven@gmail.com } on his private email for the
+claim of your compensation entitlement
 
---mfc65ih3brexj23r
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sat, Mar 04, 2023 at 08:56:53AM -0800, Guenter Roeck wrote:
-> Use devm_add_action_or_reset() to disable the watchdog when the driver
-> is removed to simplify the code. With this in place, we can use
-> devm_watchdog_register_device() to register the watchdog, and the removal
-> function is no longer necessary.
-
-While the cleanup in this driver is good (
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-) I wonder if disabling the watchdog at .remove() is right.
-
-At least there is an inconsistency among watchdog drivers if the
-hardware is supposed to stop or not.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---mfc65ih3brexj23r
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQFrxMACgkQwfwUeK3K
-7AmSNQgAjGAtvM1eh0nKDC870DA5F533NBiieDzs8Xd3+JEAmkPdFXu0MLd8EjKy
-sSMxPj3wiqRY+amhAgphGVZnonT+mjnaB1KWVoBSE1PBQcpkkHrBht5tZB+IMxb/
-t8OpkA1M1mHlW5kWTYZ/EOB9LxCheEsWhU4fZ6KXq6lufAu7V9xNbOaLYbBGnLYU
-/097Drvf2CRIE5ZkEW7RXa1NnVl8CCcnJqArvXcViOnwQYp0dJXO3lUgHd7dD7ab
-lEcYm3MfBhicgdaudrKvIffBxbMZkeiGCIUqVDwFcSaDirjUR1R3BMI98UoL1J9U
-HumzWTJD12ZkTqK0I8xGsjzrp4FiIw==
-=VJRh
------END PGP SIGNATURE-----
-
---mfc65ih3brexj23r--
+Note: You have to pay for the delivery fee.
+Yours Sincerely
+Mrs EVE LEWIS
