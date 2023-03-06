@@ -2,113 +2,149 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BEC76ACC5E
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Mar 2023 19:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26ECF6ACE43
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Mar 2023 20:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjCFSW0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Mar 2023 13:22:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39818 "EHLO
+        id S229757AbjCFTkh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 6 Mar 2023 14:40:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbjCFSWY (ORCPT
+        with ESMTP id S229710AbjCFTkg (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Mar 2023 13:22:24 -0500
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5122234C9;
-        Mon,  6 Mar 2023 10:22:07 -0800 (PST)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-176d93cd0daso2969051fac.4;
-        Mon, 06 Mar 2023 10:22:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678126920;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uq610a7Shc6tuljdDKHAPf3qm5p/qwDI9hFktJ65y3U=;
-        b=qY3qiuFLFnNjVVfJm0itJmjlyZmBsTUlebTdIoJje3iMdFw2LnAsg6PL3Oq3N70l6F
-         7r/wSxOp7+BKfk/Cyh274M8wYKMQG1Z1qBVrm8YFppazWCADdh+9+Wx0RDYv9cxk6OBl
-         n3M9XLrHFFPTyw0bBCO8TrfSVKiIwQja3pbGrkl1A16P3tBOCf5jnAmQ9PaL6jVVLPGX
-         flJ/QIUPqAKwsEA7DzYW/867xX7lPrZ3fcQOxw4mLbWuzczso+K+dum/nHsYx94Au6za
-         QfPqGHBP94hfWhjkyiMDyPlQX9U2yBs3MqpEREcsGfkBWZxfNrWbWi+kWSy7KTuR1VpQ
-         qg7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678126920;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uq610a7Shc6tuljdDKHAPf3qm5p/qwDI9hFktJ65y3U=;
-        b=Mdhcmy6DMQh3H1iJCH3teNcvoPzmVvPDSEZ5qLt/UTPsh2PM1a++B6hXCalMplNrcS
-         heNuFlVpFFn/BhPEiW+8gVLvOrwwx1nK56gpKVGrqhgWRvl+usaMd5l9LW3bbzl8pInE
-         SxaHOIQaYMA6Y+R/tBIc2ua7Km0XEozM84M3r3NcX1pevyld4tpECU7GmTQgJjwnvCWN
-         WtdIEYlHHxEO5oA0rm7wt/Shyu99pO87ezp8OrYQS3AuegTTGXzU7yXvPQH/L9N1hZBQ
-         gdpgKrHh5B8Z0xifCDZuX0UGNTk+qfqCjTWrP9j3PFe0fuClyWwUm6WFqGxAsStv1RgB
-         lujQ==
-X-Gm-Message-State: AO0yUKUXVm4cW7G13gtkebijvX9D76/hWfp6gCLeT0ozBW3oukv4Nfho
-        00IYRSH5b4ZE40Sx640d1AU=
-X-Google-Smtp-Source: AK7set+s1lViStQJYSOSuZQ61DTJsgyBuZ2TcP/0eUh46dq9yyP88/Qm51k8HoOq8OxxtE7AWKZeLQ==
-X-Received: by 2002:a05:6870:42cd:b0:172:1fb5:68ed with SMTP id z13-20020a05687042cd00b001721fb568edmr5856900oah.20.1678126920749;
-        Mon, 06 Mar 2023 10:22:00 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id dv23-20020a056870d89700b001728669a604sm4266045oab.5.2023.03.06.10.21.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 10:22:00 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1c1f9813-7f65-6a45-45fc-3d6edf8f2496@roeck-us.net>
-Date:   Mon, 6 Mar 2023 10:21:58 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com, kernel@pengutronix.de
-References: <20230306170901.2232323-1-u.kleine-koenig@pengutronix.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 0/3] watchdog: Simplify using
+        Mon, 6 Mar 2023 14:40:36 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF8642BF8;
+        Mon,  6 Mar 2023 11:40:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678131634; x=1709667634;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FWoyhIIxfE7mlB+PZ9iwUX0MhoU78leSOGm1xQPZDzA=;
+  b=dU1m6rVIkNigpVb39LN26aja0lxMMw1ofNQFF1TBnWf7EDvM7nsmxjHu
+   j+wEtjCREHbj3b3csR1crZANoyABigYaml41kMGugVO4N3ikDu8wpIt8J
+   3FE36JnPLS7FXzrqCl4VHdMn9+0FpxpGunjtXxagO4vhe+lGjmXedvsjD
+   t4YMRWagHd7FipIVtGTYZAw6dfeMwkQ9PcHzrw2NV52R9MkD+fF9KnNBi
+   CwaWbEMZkLukRRjMR+jvyTgAhEpontRQcC5HHk97XKNHtBCayWScDdyKy
+   EMqFGh43uU3smrWHdoWgxUzVqBeqps7S3Pb4HV/M7vn9qmq9RQ7D4nfBU
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="363276636"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="363276636"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 11:40:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="676287271"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="676287271"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 06 Mar 2023 11:40:31 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pZGhC-0000Zz-2q;
+        Mon, 06 Mar 2023 19:40:30 +0000
+Date:   Tue, 7 Mar 2023 03:39:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     oe-kbuild-all@lists.linux.dev, patches@opensource.cirrus.com,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 3/3] watchdog: wm8350: Simplify using
  devm_watchdog_register_device()
-In-Reply-To: <20230306170901.2232323-1-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Message-ID: <202303070325.74bkgnG6-lkp@intel.com>
+References: <20230306170901.2232323-4-u.kleine-koenig@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230306170901.2232323-4-u.kleine-koenig@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 3/6/23 09:08, Uwe Kleine-König wrote:
-> Hello,
-> 
-> this series converts three drivers to use
-> devm_watchdog_register_device(). This allows to drop their remove
-> callback.
-> 
+Hi Uwe,
 
-Side note: We could do more of the same by also replacing pm_runtime_enable()
-with devm_pm_runtime_enable(), only I don't know if the additional
-call to pm_runtime_dont_use_autosuspend() in its disable callback would
-be a functional change. I also don't know if pm_runtime_put() in the remove
-function is necessary or if it even makes sense. Any idea ?
+I love your patch! Yet something to improve:
 
-Thanks,
-Guenter
+[auto build test ERROR on fe15c26ee26efa11741a7b632e9f23b01aca4cc6]
 
-> Best regards
-> Uwe
-> 
-> Uwe Kleine-König (3):
->    watchdog: bcm47xx: Simplify using devm_watchdog_register_device()
->    watchdog: rn5t618: Simplify using devm_watchdog_register_device()
->    watchdog: wm8350: Simplify using devm_watchdog_register_device()
-> 
->   drivers/watchdog/bcm47xx_wdt.c | 12 +-----------
->   drivers/watchdog/rn5t618_wdt.c | 12 +-----------
->   drivers/watchdog/wm8350_wdt.c  |  9 +--------
->   3 files changed, 3 insertions(+), 30 deletions(-)
-> 
-> 
-> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+url:    https://github.com/intel-lab-lkp/linux/commits/Uwe-Kleine-K-nig/watchdog-bcm47xx-Simplify-using-devm_watchdog_register_device/20230307-011628
+base:   fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+patch link:    https://lore.kernel.org/r/20230306170901.2232323-4-u.kleine-koenig%40pengutronix.de
+patch subject: [PATCH 3/3] watchdog: wm8350: Simplify using devm_watchdog_register_device()
+config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20230307/202303070325.74bkgnG6-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/94594fa75b3515d5dbff3ec2d1db1cf5627900b1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Uwe-Kleine-K-nig/watchdog-bcm47xx-Simplify-using-devm_watchdog_register_device/20230307-011628
+        git checkout 94594fa75b3515d5dbff3ec2d1db1cf5627900b1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303070325.74bkgnG6-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/watchdog/wm8350_wdt.c: In function 'wm8350_wdt_probe':
+>> drivers/watchdog/wm8350_wdt.c:156:46: error: passing argument 1 of 'devm_watchdog_register_device' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     156 |         return devm_watchdog_register_device(&wm8350_wdt);
+         |                                              ^~~~~~~~~~~
+         |                                              |
+         |                                              struct watchdog_device *
+   In file included from drivers/watchdog/wm8350_wdt.c:15:
+   include/linux/watchdog.h:226:50: note: expected 'struct device *' but argument is of type 'struct watchdog_device *'
+     226 | int devm_watchdog_register_device(struct device *dev, struct watchdog_device *);
+         |                                   ~~~~~~~~~~~~~~~^~~
+>> drivers/watchdog/wm8350_wdt.c:156:16: error: too few arguments to function 'devm_watchdog_register_device'
+     156 |         return devm_watchdog_register_device(&wm8350_wdt);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/watchdog.h:226:5: note: declared here
+     226 | int devm_watchdog_register_device(struct device *dev, struct watchdog_device *);
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/watchdog/wm8350_wdt.c:157:1: error: control reaches end of non-void function [-Werror=return-type]
+     157 | }
+         | ^
+   cc1: some warnings being treated as errors
+
+
+vim +/devm_watchdog_register_device +156 drivers/watchdog/wm8350_wdt.c
+
+   139	
+   140	static int wm8350_wdt_probe(struct platform_device *pdev)
+   141	{
+   142		struct wm8350 *wm8350 = platform_get_drvdata(pdev);
+   143	
+   144		if (!wm8350) {
+   145			pr_err("No driver data supplied\n");
+   146			return -ENODEV;
+   147		}
+   148	
+   149		watchdog_set_nowayout(&wm8350_wdt, nowayout);
+   150		watchdog_set_drvdata(&wm8350_wdt, wm8350);
+   151		wm8350_wdt.parent = &pdev->dev;
+   152	
+   153		/* Default to 4s timeout */
+   154		wm8350_wdt_set_timeout(&wm8350_wdt, 4);
+   155	
+ > 156		return devm_watchdog_register_device(&wm8350_wdt);
+   157	}
+   158	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
