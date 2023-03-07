@@ -2,296 +2,175 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7CE6AE3FD
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Mar 2023 16:10:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 761726AE6DF
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Mar 2023 17:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjCGPKo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Mar 2023 10:10:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55290 "EHLO
+        id S229871AbjCGQkM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Mar 2023 11:40:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231357AbjCGPKP (ORCPT
+        with ESMTP id S231239AbjCGQjr (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:10:15 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC19A84F46;
-        Tue,  7 Mar 2023 07:04:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678201470; x=1709737470;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dD7/vAAn4YW8k4L1ZL28fs42vlmmEZEdoamXsQ8zEOM=;
-  b=k/pRx9CfI1wgM9bHjlLPEvRIbqIX+6C33XVo8wOlZ2vr5XM7CFrLmJlc
-   /6IcSeLUzIfIbNSl9Cjg4a7rCe+OCz/O7xUCA0KfT9x4J+OZJCRlGaPHy
-   nnGds8Yz3QEsljOkcWSUd9Ojd9Vmmc47/bj3kNjULFu4eUEnsk6MlfysO
-   mYrvyFu7WGUM7Xf4BsR0Fu8jE4ryMTtk4BHmwrGukrCdz0kDZW1dNIjzQ
-   XY9sA5RnNTopua9WembRhgPplmcLwZ2BH276bBFGtPH8GY9JmURJW1Fz8
-   53SYJ9VtadG1IreBkMhdgoqA7GFzsVJZZkKnfaLtVvP55/c1w0Wg/rNUL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="319698799"
-X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="319698799"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 07:03:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="676590732"
-X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="676590732"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 07 Mar 2023 07:03:09 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pZYqL-0001PX-0K;
-        Tue, 07 Mar 2023 15:03:09 +0000
-Date:   Tue, 07 Mar 2023 23:02:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-rdma@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD SUCCESS WITH WARNING
- 709c6adf19dc558e44ab5c01659b09a16a2d3c82
-Message-ID: <64075221.UqJaC4j/w2D0ATu0%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 7 Mar 2023 11:39:47 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE659008E;
+        Tue,  7 Mar 2023 08:37:11 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id bj30so10057817oib.6;
+        Tue, 07 Mar 2023 08:37:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678207031;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q2JOb5kKOMDRqeX2vxiCKA6VX8yh3XwjyP2TdsrpV1U=;
+        b=ISov41jyE0UedvwU6BAdypa9ab8UOuHF5640Xa2s7Z8Fa5ernDpCYhFkBvT0QpHrJO
+         IoRDfp+3fi6XxqdkyK1RmOEEXX1wAzKpsWe2p9l5hXRdk73bIERSy+E8VjxluXIieCVj
+         /kdmPgG062giu2hD2T0P57PyfW+ViFJM38h+1Tu5DEYRC1RTP4UAOlfFQ1gtxxQqs5vh
+         ufZuRnQJ7IQN3bysFqVoWu9tUFjYPUxkeUp9imfyBGg8n3w4un+QLW1Get9LSGbGiZ6N
+         20O1dcpz4P3iwQ55fkQapiRGxusvqrBjx9HEJkfTOIU3WD6tIDwOG3J8vqiAR9n5dU4J
+         Xt1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678207031;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q2JOb5kKOMDRqeX2vxiCKA6VX8yh3XwjyP2TdsrpV1U=;
+        b=8GA2YFPerVr5Ds1pMNjSqmTbYOQ2dDQQHHKCDHNIU8fogSaHLmoyICSwOpovQAXdJi
+         iwvTgEldE9zm9YR6zGmSVzUAswO1WDJoXEcEl+ZEQLVaOVWV0+1+zK+e1ZwCZJeG3Zo4
+         HKTPNj8YEKyxxcNCkd4TE5Zs92tClkM35uw/Po9Ncjz8lWH8LTWx5hnEhwhNXbGJuV4W
+         Y7YJg2kmrvQoX8mkqeoR+EKTaPR1sc+4QWLpg6CTdyDQ3u99hnUi0DQwYgsUCIldwhXd
+         dhVED3ilK+faxd4XcehIJMCJ8AhTcW7c8R6hmsE1NGjaUh68u9Y6GvvEGK3e1ZHB2FiP
+         Oe/Q==
+X-Gm-Message-State: AO0yUKVcBG2PKVNhP+9dKlUGAbyFetc2bukQQCW94mPfV3OLi/8EFEYO
+        MQLh7/nc7qIhEwzcSDZeZU/RAoTfM14=
+X-Google-Smtp-Source: AK7set98rKmyRdQp98boe/MffPQvNxuQmk5G3hOBz765iI8kUdckoS1xH6cl+dG3KlSLTtrohmwBRQ==
+X-Received: by 2002:a05:6808:197:b0:384:311d:5664 with SMTP id w23-20020a056808019700b00384311d5664mr6411425oic.23.1678207030876;
+        Tue, 07 Mar 2023 08:37:10 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h19-20020a056808015300b00384926684b8sm5204703oie.13.2023.03.07.08.37.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 08:37:10 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 7 Mar 2023 08:37:08 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH v2 1/2] watchdog: s3c2410: Make
+ s3c2410_get_wdt_drv_data() return an int
+Message-ID: <84ba9412-d7f7-4102-93b0-372d4a5a06a0@roeck-us.net>
+References: <20230307065603.2253054-1-u.kleine-koenig@pengutronix.de>
+ <20230307065603.2253054-2-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230307065603.2253054-2-u.kleine-koenig@pengutronix.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 709c6adf19dc558e44ab5c01659b09a16a2d3c82  Add linux-next specific files for 20230307
+On Tue, Mar 07, 2023 at 07:56:02AM +0100, Uwe Kleine-König wrote:
+> This is a preparation for making more use of dev_err_probe(). The idea
+> is that s3c2410_get_wdt_drv_data() (as it's called only by .probe()) can
+> make effective use of dev_err_probe() only if it returns an int. For
+> that the assignment to wdt->drv_data has to happen in the function. The
+> caller can then just pass on the return value in the error case.
+> 
+> This seems to be nicer for the compiler: bloatometer reports for an
+> ARCH=arm s3c6400_defconfig build:
+> 
+> 	add/remove: 1/1 grow/shrink: 0/1 up/down: 4/-64 (-60)
+> 	Function                                     old     new   delta
+> 	__initcall__kmod_s3c2410_wdt__209_821_s3c2410wdt_driver_init6       -       4      +4
+> 	__initcall__kmod_s3c2410_wdt__209_819_s3c2410wdt_driver_init6       4       -      -4
+> 	s3c2410wdt_probe                            1332    1272     -60
+> 
+> There is no semantical change. (Just one minor difference: Before this
+> patch wdt->drv_data was always assigned, now that only happens in the
+> non-error case. That doesn't matter however as *wdt is freed in the
+> error case.)
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Warning reports:
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-https://lore.kernel.org/oe-kbuild-all/202302111601.jtY4lKrA-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303071444.sIbZTDCy-lkp@intel.com
-
-Warning: (recently discovered and may have been fixed)
-
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for 'optc3_wait_drr_doublebuffer_pending_clear' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c:1600:5: warning: no previous prototype for function 'vangogh_set_apu_thermal_limit' [-Wmissing-prototypes]
-drivers/infiniband/ulp/srp/ib_srp.c:66: warning: "DEFINE_DYNAMIC_DEBUG_METADATA" redefined
-drivers/infiniband/ulp/srp/ib_srp.c:67: warning: "DYNAMIC_DEBUG_BRANCH" redefined
-
-Unverified Warning (likely false positive, please contact us if interested):
-
-drivers/tty/serial/8250/8250_dfl.c:63 dfl_uart_get_params() error: uninitialized symbol 'clk_freq'.
-drivers/tty/serial/8250/8250_dfl.c:69 dfl_uart_get_params() error: uninitialized symbol 'fifo_len'.
-drivers/tty/serial/8250/8250_dfl.c:90 dfl_uart_get_params() error: uninitialized symbol 'reg_layout'.
-drivers/usb/gadget/composite.c:2082:33: sparse: sparse: restricted __le16 degrades to integer
-drivers/watchdog/imx2_wdt.c:442:22: sparse: sparse: symbol 'imx_wdt' was not declared. Should it be static?
-drivers/watchdog/imx2_wdt.c:446:22: sparse: sparse: symbol 'imx_wdt_legacy' was not declared. Should it be static?
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- arc-randconfig-r011-20230305
-|   |-- drivers-infiniband-ulp-srp-ib_srp.c:warning:DEFINE_DYNAMIC_DEBUG_METADATA-redefined
-|   `-- drivers-infiniband-ulp-srp-ib_srp.c:warning:DYNAMIC_DEBUG_BRANCH-redefined
-|-- arm64-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|-- csky-randconfig-m031-20230305
-|   |-- drivers-tty-serial-8250_dfl.c-dfl_uart_get_params()-error:uninitialized-symbol-clk_freq-.
-|   |-- drivers-tty-serial-8250_dfl.c-dfl_uart_get_params()-error:uninitialized-symbol-fifo_len-.
-|   `-- drivers-tty-serial-8250_dfl.c-dfl_uart_get_params()-error:uninitialized-symbol-reg_layout-.
-|-- csky-randconfig-s031-20230305
-|   |-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|   |-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt-was-not-declared.-Should-it-be-static
-|   `-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt_legacy-was-not-declared.-Should-it-be-static
-|-- i386-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|-- i386-randconfig-s001
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- i386-randconfig-s003
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- ia64-randconfig-s043-20230305
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- sparc-randconfig-s032-20230305
-|   |-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt-was-not-declared.-Should-it-be-static
-|   `-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt_legacy-was-not-declared.-Should-it-be-static
-|-- sparc-randconfig-s042-20230305
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- sparc64-randconfig-s041-20230305
-|   |-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|   |-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt-was-not-declared.-Should-it-be-static
-|   `-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt_legacy-was-not-declared.-Should-it-be-static
-|-- x86_64-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-`-- x86_64-randconfig-s021
-    `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-clang_recent_errors
-`-- arm-randconfig-r025-20230305
-    `-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu11-vangogh_ppt.c:warning:no-previous-prototype-for-function-vangogh_set_apu_thermal_limit
-
-elapsed time: 729m
-
-configs tested: 154
-configs skipped: 13
-
-tested configs:
-alpha                            alldefconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r034-20230306   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r005-20230306   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r004-20230306   gcc  
-arc                  randconfig-r011-20230305   gcc  
-arc                  randconfig-r014-20230305   gcc  
-arc                  randconfig-r035-20230305   gcc  
-arc                  randconfig-r043-20230305   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                         bcm2835_defconfig   clang
-arm                          collie_defconfig   clang
-arm                                 defconfig   gcc  
-arm                      footbridge_defconfig   gcc  
-arm                  randconfig-r006-20230305   gcc  
-arm                  randconfig-r025-20230305   clang
-arm                  randconfig-r046-20230305   clang
-arm                         socfpga_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r002-20230305   clang
-arm64        buildonly-randconfig-r006-20230305   clang
-arm64                               defconfig   gcc  
-arm64                randconfig-r001-20230306   gcc  
-arm64                randconfig-r004-20230305   clang
-arm64                randconfig-r012-20230306   clang
-arm64                randconfig-r015-20230305   gcc  
-csky                                defconfig   gcc  
-hexagon      buildonly-randconfig-r003-20230305   clang
-hexagon              randconfig-r041-20230305   clang
-hexagon              randconfig-r045-20230305   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230306   gcc  
-i386                 randconfig-a002-20230306   gcc  
-i386                 randconfig-a003-20230306   gcc  
-i386                 randconfig-a004-20230306   gcc  
-i386                 randconfig-a005-20230306   gcc  
-i386                 randconfig-a006-20230306   gcc  
-i386                 randconfig-a011-20230306   clang
-i386                 randconfig-a012-20230306   clang
-i386                 randconfig-a013-20230306   clang
-i386                 randconfig-a014-20230306   clang
-i386                 randconfig-a015-20230306   clang
-i386                 randconfig-a016-20230306   clang
-i386                          randconfig-c001   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r005-20230305   gcc  
-ia64                 randconfig-r005-20230306   gcc  
-ia64                 randconfig-r013-20230305   gcc  
-ia64                 randconfig-r033-20230306   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r001-20230305   gcc  
-loongarch                           defconfig   gcc  
-m68k                             alldefconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                         apollo_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5208evb_defconfig   gcc  
-m68k                          sun3x_defconfig   gcc  
-microblaze   buildonly-randconfig-r004-20230305   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                            ar7_defconfig   gcc  
-mips                        bcm63xx_defconfig   clang
-mips                           ip22_defconfig   clang
-mips                          malta_defconfig   clang
-mips                        qi_lb60_defconfig   clang
-mips                 randconfig-r026-20230305   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r022-20230305   gcc  
-nios2                randconfig-r031-20230305   gcc  
-openrisc     buildonly-randconfig-r002-20230306   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r016-20230306   gcc  
-parisc               randconfig-r032-20230305   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                      arches_defconfig   gcc  
-powerpc                        icon_defconfig   clang
-powerpc                 mpc836x_rdk_defconfig   clang
-powerpc                     mpc83xx_defconfig   gcc  
-powerpc                 mpc8540_ads_defconfig   gcc  
-powerpc              randconfig-r014-20230306   clang
-powerpc              randconfig-r016-20230305   gcc  
-powerpc              randconfig-r024-20230305   gcc  
-powerpc              randconfig-r026-20230306   clang
-powerpc              randconfig-r035-20230306   gcc  
-powerpc                  storcenter_defconfig   gcc  
-powerpc                     stx_gp3_defconfig   gcc  
-powerpc                     tqm8555_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r003-20230305   clang
-riscv                randconfig-r042-20230305   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r005-20230305   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230306   gcc  
-s390                 randconfig-r031-20230306   gcc  
-s390                 randconfig-r032-20230306   gcc  
-s390                 randconfig-r044-20230305   gcc  
-sh                               allmodconfig   gcc  
-sh                        apsh4ad0a_defconfig   gcc  
-sh                        dreamcast_defconfig   gcc  
-sh                ecovec24-romimage_defconfig   gcc  
-sh                             espt_defconfig   gcc  
-sh                          polaris_defconfig   gcc  
-sh                   randconfig-r006-20230306   gcc  
-sh                   randconfig-r023-20230305   gcc  
-sh                           se7750_defconfig   gcc  
-sh                            titan_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r002-20230306   gcc  
-sparc                randconfig-r023-20230306   gcc  
-sparc                randconfig-r034-20230305   gcc  
-sparc                randconfig-r036-20230305   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r003-20230306   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230306   gcc  
-x86_64               randconfig-a002-20230306   gcc  
-x86_64               randconfig-a003-20230306   gcc  
-x86_64               randconfig-a004-20230306   gcc  
-x86_64               randconfig-a005-20230306   gcc  
-x86_64               randconfig-a006-20230306   gcc  
-x86_64               randconfig-a011-20230306   clang
-x86_64               randconfig-a012-20230306   clang
-x86_64               randconfig-a013-20230306   clang
-x86_64               randconfig-a014-20230306   clang
-x86_64               randconfig-a015-20230306   clang
-x86_64               randconfig-a016-20230306   clang
-x86_64               randconfig-r022-20230306   clang
-x86_64               randconfig-r025-20230306   clang
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r004-20230306   gcc  
-xtensa               randconfig-r002-20230305   gcc  
-xtensa               randconfig-r011-20230306   gcc  
-xtensa               randconfig-r021-20230305   gcc  
-xtensa               randconfig-r024-20230306   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> ---
+>  drivers/watchdog/s3c2410_wdt.c | 22 ++++++++++++----------
+>  1 file changed, 12 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+> index 58b262ca4e88..f3de8ef499c3 100644
+> --- a/drivers/watchdog/s3c2410_wdt.c
+> +++ b/drivers/watchdog/s3c2410_wdt.c
+> @@ -579,8 +579,8 @@ static inline unsigned int s3c2410wdt_get_bootstatus(struct s3c2410_wdt *wdt)
+>  	return 0;
+>  }
+>  
+> -static inline const struct s3c2410_wdt_variant *
+> -s3c2410_get_wdt_drv_data(struct platform_device *pdev)
+> +static inline int
+> +s3c2410_get_wdt_drv_data(struct platform_device *pdev, struct s3c2410_wdt *wdt)
+>  {
+>  	const struct s3c2410_wdt_variant *variant;
+>  	struct device *dev = &pdev->dev;
+> @@ -603,24 +603,26 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev)
+>  					   "samsung,cluster-index", &index);
+>  		if (err) {
+>  			dev_err(dev, "failed to get cluster index\n");
+> -			return NULL;
+> +			return -EINVAL;
+>  		}
+>  
+>  		switch (index) {
+>  		case 0:
+> -			return variant;
+> +			break;
+>  		case 1:
+> -			return (variant == &drv_data_exynos850_cl0) ?
+> +			variant = (variant == &drv_data_exynos850_cl0) ?
+>  				&drv_data_exynos850_cl1 :
+>  				&drv_data_exynosautov9_cl1;
+> +			break;
+>  		default:
+>  			dev_err(dev, "wrong cluster index: %u\n", index);
+> -			return NULL;
+> +			return -EINVAL;
+>  		}
+>  	}
+>  #endif
+>  
+> -	return variant;
+> +	wdt->drv_data = variant;
+> +	return 0;
+>  }
+>  
+>  static void s3c2410wdt_wdt_disable_action(void *data)
+> @@ -644,9 +646,9 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>  	spin_lock_init(&wdt->lock);
+>  	wdt->wdt_device = s3c2410_wdd;
+>  
+> -	wdt->drv_data = s3c2410_get_wdt_drv_data(pdev);
+> -	if (!wdt->drv_data)
+> -		return -EINVAL;
+> +	ret = s3c2410_get_wdt_drv_data(pdev, wdt);
+> +	if (ret)
+> +		return ret;
+>  
+>  	if (wdt->drv_data->quirks & QUIRKS_HAVE_PMUREG) {
+>  		wdt->pmureg = syscon_regmap_lookup_by_phandle(dev->of_node,
+> -- 
+> 2.39.1
+> 
