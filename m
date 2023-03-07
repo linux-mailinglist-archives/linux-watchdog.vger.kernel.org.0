@@ -2,73 +2,73 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E39F06AED33
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Mar 2023 19:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D91806AED9B
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Mar 2023 19:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbjCGSC1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Mar 2023 13:02:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
+        id S229878AbjCGSF5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Mar 2023 13:05:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbjCGSCC (ORCPT
+        with ESMTP id S229972AbjCGSFh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:02:02 -0500
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61169A8C58;
-        Tue,  7 Mar 2023 09:55:21 -0800 (PST)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-176b48a9a05so8475427fac.0;
-        Tue, 07 Mar 2023 09:55:21 -0800 (PST)
+        Tue, 7 Mar 2023 13:05:37 -0500
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FCEA1012;
+        Tue,  7 Mar 2023 09:58:38 -0800 (PST)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-176b48a9a05so8487997fac.0;
+        Tue, 07 Mar 2023 09:58:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678211720;
+        d=gmail.com; s=20210112; t=1678211915;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uHG36lzNr+0MKns2Z8CLtBxE1/BWaAWLiQcYx5kbvTI=;
-        b=h69phTOnMkva0qAJniwtPXqWnZBB20ZvoeVHVDLVJeHrLgcfFPWj38k4itcLwOlnNv
-         M7pb3iPMH1VFpISaJDqXvTteYXF4Z4r1jLkxDHAdZ2aEhBdPCJP2OqDCShTgU8nmPKw+
-         Q19CsP7x7F0TGZENf70DfPyC7y/W101avtunhvAwGnngUEb1ur+wecqw13nbLG0wUCka
-         bVk5ke4C6JWtUe8waZPrDggLV8hSYe83++9bFfLam/jyG8N39Ic1Cvjuw1nqCFgGUtxi
-         i6RxGkL0FxXBgBXvIQLbxiZ5DDXfUOPvex82NewhYQZx1wqjvgnTu1Uy5ssDaf6/VLDc
-         beww==
+        bh=t7Dj956z7zlWgar9S6Lis3J9Q3P6kOtz+RnDkzL7hwk=;
+        b=JH9f3ubVIpHZlVZS3/FdKRZy7OFbB04pOcOdkX6NzYHugyQUvy7Cm7DCPJAVMKZDbQ
+         xR/mBDW0v5HctbFTZ4GNx+6iYIVKcescKxzw3s2GnA7wfl5NvlFuc8jtmTqZdu18Y473
+         mOW7cQvlrpI1u+5szD2fA4zt0g1xbtP6pqRz/3/XDy6XIowNdMBWM4143O2PElXmYKmw
+         Gcv1b0ZrCA5xN4xkgaQXSmMWo5Sf0REnWVyeQvPnZdMdPsDlWqizPYF0Vrc3PCbEdfD6
+         q9+8qIUREhTuoHHp1hBJLkj0M/61Xn3qYkvCJjcBXnVJkiuvDLcF88LjqK/PfUEZiqSw
+         A1fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678211720;
+        d=1e100.net; s=20210112; t=1678211915;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uHG36lzNr+0MKns2Z8CLtBxE1/BWaAWLiQcYx5kbvTI=;
-        b=jN92wPCVHuZRgga4051t60L7r9p134hrfm8XNKm2aXhUuwDMCIhnU7MaQjOnyQkN89
-         Fec+k4rSpZlSd1sEwSW7FB69z17NLDNU2fLXe0aquZX5J8D4Ah1MPsSgzyxW7tUPSgvp
-         SD+3JjVLjW4JPQBe6obfn1bxXb809g4kusjL0XS7Lot0JLvyETk1QWdNXdj/MQj/83Ht
-         ykYS11YwjK4K28WLeiZiXWBmsmLxdGMeSUUkFY8utBuiXdfQj8BfjSGEw3CZOjJVkkMQ
-         KJrwRMCp5zBhdzqdxzHMtAtpt7ChaSLlxX3uZL8Le5gVW42nkx5Bknp8dFm8wiCvhPuA
-         B3hQ==
-X-Gm-Message-State: AO0yUKWmvKbocvxnAJb02DDCy4IAOQ//wV+9LS1cWIRImK8JJVtxO4sV
-        zni0ucZOnsT74NdUEe0y558=
-X-Google-Smtp-Source: AK7set8n+Y8sZKSYTNBR5dC2J0IYWxQgIchgUGkDmOPwc4oBXKBbxCYC4mqx7e6bnlKwlfIA2ouAqA==
-X-Received: by 2002:a05:6870:3a06:b0:176:3218:a837 with SMTP id du6-20020a0568703a0600b001763218a837mr7463844oab.16.1678211720222;
-        Tue, 07 Mar 2023 09:55:20 -0800 (PST)
+        bh=t7Dj956z7zlWgar9S6Lis3J9Q3P6kOtz+RnDkzL7hwk=;
+        b=E/VYK5F+zHviSS4GUvdFDJt4tHPVQwGeAVoaHr9Uc7YWXWAsFW+TNOf6Mq+yjHA0Gj
+         Uup4VAT2BXsczEDt1kEJwlTDEy1C34QV7pejksm5+OT7W4EtoAt4/qDewlYvKmIGhU8B
+         zbyit4SHkJta4HdnROlmDEq0iGCHIYP+t2xPYokSnExGP6gK/ZHDGBTHcVcD0PWZtQPk
+         2tPxDlc3UnXLiry/c8kfCZJlthnG2QbypqzsK2aCugYzvpwA4QJdNPw4hNWU8AzgCbuF
+         fqTlZdT1AaeNavmSc5gMiNgJdTbu/nc2fL6VkfPITi5h0oxaBSG8reQfC5N4hVIiewqF
+         wS9w==
+X-Gm-Message-State: AO0yUKXg2MbN7xxm8gqlnODh0ufyCBT1+QPRuZ0L394xgZVyfae0lXJs
+        ugVJa1TXU2g3gMUYljojl4+9/doP3YU=
+X-Google-Smtp-Source: AK7set+8sgZzLXe6OxGMtrBOVojQfoKc7RKmMe8VookJMCejPnhNvEahzce35WEOND5QL/cY1vtyLw==
+X-Received: by 2002:a05:6870:3a06:b0:176:3218:a837 with SMTP id du6-20020a0568703a0600b001763218a837mr7467248oab.16.1678211915625;
+        Tue, 07 Mar 2023 09:58:35 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ax39-20020a05687c022700b0016b0369f08fsm5329261oac.15.2023.03.07.09.55.19
+        by smtp.gmail.com with ESMTPSA id j6-20020a056870020600b001723f29f6e2sm2073271oad.37.2023.03.07.09.58.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 09:55:19 -0800 (PST)
+        Tue, 07 Mar 2023 09:58:35 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 7 Mar 2023 09:55:18 -0800
+Date:   Tue, 7 Mar 2023 09:58:34 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Keguang Zhang <keguang.zhang@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] watchdog: loongson1: Use devm_clk_get_enabled() helper
-Message-ID: <3144eb08-ca46-42df-9a7d-c541ad534857@roeck-us.net>
-References: <624106aa86ef7e49f16b11b229528eabd63de8f7.1672485257.git.christophe.jaillet@wanadoo.fr>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        wim@linux-watchdog.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Subject: Re: [PATCH v3] dt-bindings: watchdog: migrate rt2880 text bindings
+ to YAML
+Message-ID: <96b9712e-3c89-4425-9f34-580ff76aeec9@roeck-us.net>
+References: <20230302085914.2858645-1-sergio.paracuellos@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <624106aa86ef7e49f16b11b229528eabd63de8f7.1672485257.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20230302085914.2858645-1-sergio.paracuellos@gmail.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,72 +76,107 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Dec 31, 2022 at 12:14:30PM +0100, Christophe JAILLET wrote:
-> The devm_clk_get_enabled() helper:
->    - calls devm_clk_get()
->    - calls clk_prepare_enable() and registers what is needed in order to
->      call clk_disable_unprepare() when needed, as a managed resource.
+On Thu, Mar 02, 2023 at 09:59:14AM +0100, Sergio Paracuellos wrote:
+> Ralink RT2880 Watchdog bindings used text format, so migrate them to YAML.
+> There are some additions to the binding that were not in the original
+> txt file. This binding is used in RT2880, RT3050, RT3352, RT3883, RT5350,
+> and MT7620 SoCs. To properly align binding with driver code we need to add
+> to the schema 'clocks' and 'resets' properties.
 > 
-> This simplifies the code and avoids the need of a dedicated function used
-> with devm_add_action_or_reset().
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
-> Note that I get a compilation error because <loongson1.h> is not found on
-> my system (x86_64).
-> So I think that a "depends on LOONG<something>" in missing in a KConfig
-> file.
-
-It has "depends on MACH_LOONGSON32" and is not expected to be buildable if
-MACH_LOONGSON32 is not selected. It builds just fine if MACH_LOONGSON32
-is selected.
-
-Guenter
-
+> Changes in v3:
+>  - Re-do commit message.
+>  - add 'clocks' property and update example using it.
+>  - drop 'reset-names'.
+>  - Use 'unevaluatedProperties' instead of 'additionalProperties'.
 > 
-> Fixing it could help compilation farms build-bots.
-> ---
->  drivers/watchdog/loongson1_wdt.c | 17 +----------------
->  1 file changed, 1 insertion(+), 16 deletions(-)
+> Changes in v2:
+>  - Fix reg address and size in example.
 > 
-> diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
-> index bb3d075c0633..c55656cfb403 100644
-> --- a/drivers/watchdog/loongson1_wdt.c
-> +++ b/drivers/watchdog/loongson1_wdt.c
-> @@ -79,11 +79,6 @@ static const struct watchdog_ops ls1x_wdt_ops = {
->  	.set_timeout = ls1x_wdt_set_timeout,
->  };
->  
-> -static void ls1x_clk_disable_unprepare(void *data)
-> -{
-> -	clk_disable_unprepare(data);
-> -}
+>  .../bindings/watchdog/ralink,rt2880-wdt.yaml  | 46 +++++++++++++++++++
+>  .../bindings/watchdog/rt2880-wdt.txt          | 18 --------
+>  2 files changed, 46 insertions(+), 18 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/ralink,rt2880-wdt.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/rt2880-wdt.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/ralink,rt2880-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ralink,rt2880-wdt.yaml
+> new file mode 100644
+> index 000000000000..51e00de947e9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/ralink,rt2880-wdt.yaml
+> @@ -0,0 +1,46 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/ralink,rt2880-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Ralink Watchdog Timers
+> +
+> +maintainers:
+> +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> +
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: ralink,rt2880-wdt
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    watchdog@100 {
+> +      compatible = "ralink,rt2880-wdt";
+> +      reg = <0x120 0x10>;
+> +      clocks = <&clkref>;
+> +      resets = <&rstctrl 8>;
+> +      interrupt-parent = <&intc>;
+> +      interrupts = <1>;
+> +    };
+> diff --git a/Documentation/devicetree/bindings/watchdog/rt2880-wdt.txt b/Documentation/devicetree/bindings/watchdog/rt2880-wdt.txt
+> deleted file mode 100644
+> index 05b95bfa2a89..000000000000
+> --- a/Documentation/devicetree/bindings/watchdog/rt2880-wdt.txt
+> +++ /dev/null
+> @@ -1,18 +0,0 @@
+> -Ralink Watchdog Timers
 > -
->  static int ls1x_wdt_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> @@ -100,20 +95,10 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
->  	if (IS_ERR(drvdata->base))
->  		return PTR_ERR(drvdata->base);
->  
-> -	drvdata->clk = devm_clk_get(dev, pdev->name);
-> +	drvdata->clk = devm_clk_get_enabled(dev, pdev->name);
->  	if (IS_ERR(drvdata->clk))
->  		return PTR_ERR(drvdata->clk);
->  
-> -	err = clk_prepare_enable(drvdata->clk);
-> -	if (err) {
-> -		dev_err(dev, "clk enable failed\n");
-> -		return err;
-> -	}
-> -	err = devm_add_action_or_reset(dev, ls1x_clk_disable_unprepare,
-> -				       drvdata->clk);
-> -	if (err)
-> -		return err;
+> -Required properties:
+> -- compatible: must be "ralink,rt2880-wdt"
+> -- reg: physical base address of the controller and length of the register range
 > -
->  	clk_rate = clk_get_rate(drvdata->clk);
->  	if (!clk_rate)
->  		return -EINVAL;
+> -Optional properties:
+> -- interrupts: Specify the INTC interrupt number
+> -
+> -Example:
+> -
+> -	watchdog@120 {
+> -		compatible = "ralink,rt2880-wdt";
+> -		reg = <0x120 0x10>;
+> -
+> -		interrupt-parent = <&intc>;
+> -		interrupts = <1>;
+> -	};
