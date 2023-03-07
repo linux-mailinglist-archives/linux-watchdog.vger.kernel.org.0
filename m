@@ -2,134 +2,100 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A6A6ACEFE
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Mar 2023 21:17:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 245AC6AD90C
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Mar 2023 09:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjCFURn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Mar 2023 15:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
+        id S230037AbjCGISC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Mar 2023 03:18:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCFURm (ORCPT
+        with ESMTP id S230019AbjCGIR4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Mar 2023 15:17:42 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200802CC74;
-        Mon,  6 Mar 2023 12:17:42 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-17671fb717cso11243583fac.8;
-        Mon, 06 Mar 2023 12:17:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678133861;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=H6iNhP+WryT/rObff/l5NG10IiCzongLQj2pyPqmaqY=;
-        b=lk26gdv5IgDCYF6vy0dIOeLDlURNdXe+ITlwixDFs8SJQ+CdgEx/xSBLU7iEqb2wjA
-         kG0NN2S7xNHKSdpXUG3d8wKL/SOKxe5OLcU+wr/zBOulugmgZecQK5q4xjVMy1H8Ugv1
-         xlOeN+iau/jlvYn85MCA+BX9m39KlbC3uvxPRs39C7gSxRs3b4C8igSB+1++xJ48UAu2
-         Mx2OjfKgq4UAcLt+NAM/tfV9cg89g6amUSi1PETnGvl+KyqJB22Zn7t6XloIaj6L6dRX
-         /o0LDDHiwqaQZKIsqGH5pa6Q0k1LoC9UVnW9hkdUg2gSEe57mb4eFO5YHcIhFpTnLwUA
-         0cbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678133861;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H6iNhP+WryT/rObff/l5NG10IiCzongLQj2pyPqmaqY=;
-        b=fwCDzZFHEOoq8vSQavdTaLAbgYsNfSQdlNHDKV/JPZqUbuel4X/ezfElJghIUmBLoa
-         ymTGiTdMF+N8Uspti5BlcB3mDW19nfVaRPsNyaBox3quCeKQQmGZkg2TDJu4OxGgtJEN
-         S8PKl0b0rEK/q/cbFI2KZetH0ImM7Di9AVH0Ufa3CuDpgowA3Z+mKS3uDoJW8Ld4gp+C
-         cVsndnHL8qmDPjJu+w4UlOhyhiPQjfNBmfmWWXmebbmoHIgZrkagS54IBwmC/MZpRnxX
-         aVMGYKPU6b9DvrOtuF7WMbE835CJ6FEANpNB5iUSlBqbAJF0dalsBuQYzqKKmbY5zQqF
-         fyfw==
-X-Gm-Message-State: AO0yUKXVYmlx1soWcQdOFh6E22XdCOW8QrdP/VALUI/DfrwZEwyHBk74
-        JEiQi0rjDm+qHwZa28rjtiaMpWjReHs=
-X-Google-Smtp-Source: AK7set+3/KytYsX3vJySSeyTX8gx9ImJGr+bLzayBgrhwNp8DixB8bExuqOqadNTM3u+8H8343A5lw==
-X-Received: by 2002:a05:6870:8193:b0:176:2420:d09b with SMTP id k19-20020a056870819300b001762420d09bmr8250629oae.53.1678133861475;
-        Mon, 06 Mar 2023 12:17:41 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id dw48-20020a056870773000b001765b2f6c53sm4332260oab.9.2023.03.06.12.17.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 12:17:40 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ea4bcac7-e78d-d051-21fe-1014d39cd52a@roeck-us.net>
-Date:   Mon, 6 Mar 2023 12:17:39 -0800
+        Tue, 7 Mar 2023 03:17:56 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9624FF30
+        for <linux-watchdog@vger.kernel.org>; Tue,  7 Mar 2023 00:17:43 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZSVk-0003g3-IZ; Tue, 07 Mar 2023 09:17:28 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZRF5-002Q7E-4V; Tue, 07 Mar 2023 07:56:11 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZRF4-002uCb-Ap; Tue, 07 Mar 2023 07:56:10 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH v2 0/2] watchdog: s3c2410_wdt: Simplify using dev_err_probe()
+Date:   Tue,  7 Mar 2023 07:56:01 +0100
+Message-Id: <20230307065603.2253054-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/3] watchdog: bcm47xx: Simplify using
- devm_watchdog_register_device()
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-References: <20230306170901.2232323-1-u.kleine-koenig@pengutronix.de>
- <20230306170901.2232323-2-u.kleine-koenig@pengutronix.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230306170901.2232323-2-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1505; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=3sAJvEw7NUBqpA5/z9WbVZ+NLIWBt2CTWqjU090NkEs=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkBt/23ZqoKD56fHAi1FMi7zJtN+UfwgOMebeP3 SGR63M+fEeJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAbf9gAKCRDB/BR4rcrs CU/+B/9thet8egko24kA9dERLG7fYtwz7nxG4auEGQ+twbgp4hyF1Ln/nZBwmyv4kLCaaz0mJt2 5AWRQeW/E2BSwsPe+jlwa4GJSYdZQP5gltoenX0wImvxu09aW1Iwa/HEDq2XhCZVRtZFm8uVAKB bConPUuDyqDou6h3xLesQhcWToGrhx/6Kn9PGmTHBdxKxeTQJxlXXHAuweMXCO8/HlYhqfdpGPh n7EW3j257N9/TyiZw8SpRRBU2lmj9eemIHpYu0U1IweoYClDBPMnWGX5z7Ys2KDrOc+/RWyd0KN S1yUYouls9BPjM6TtrHp5HfQFaGeZPlm5rDZLAzhT23vwZNS
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 3/6/23 09:08, Uwe Kleine-König wrote:
-> This allows to drop the .remove() function as it only exists to
-> unregister the watchdog device which is now done in a callback
-> registered by devm_watchdog_register_device().
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->   drivers/watchdog/bcm47xx_wdt.c | 12 +-----------
->   1 file changed, 1 insertion(+), 11 deletions(-)
-> 
-> diff --git a/drivers/watchdog/bcm47xx_wdt.c b/drivers/watchdog/bcm47xx_wdt.c
-> index 05425c1dfd4c..8698ef94dddf 100644
-> --- a/drivers/watchdog/bcm47xx_wdt.c
-> +++ b/drivers/watchdog/bcm47xx_wdt.c
-> @@ -202,7 +202,7 @@ static int bcm47xx_wdt_probe(struct platform_device *pdev)
->   	watchdog_set_restart_priority(&wdt->wdd, 64);
->   	watchdog_stop_on_reboot(&wdt->wdd);
->   
-> -	ret = watchdog_register_device(&wdt->wdd);
-> +	ret = devm_watchdog_register_device(&wdt->wdd);
+Hello,
 
-Oops, all those need &pdev->dev as first argument. Please resend with that fixed.
+changes since (implicit) v1, sent with Message-Id:
+20230306090919.2206871-1-u.kleine-koenig@pengutronix.de:
 
-Thanks,
-Guenter
+ - Rework patch #1 to keep s3c2410_get_wdt_drv_data() as a separate
+   function. The return value has to change however to make effective
+   use of dev_err_probe(). (I thought about using
 
->   	if (ret)
->   		goto err_timer;
->   
-> @@ -218,21 +218,11 @@ static int bcm47xx_wdt_probe(struct platform_device *pdev)
->   	return ret;
->   }
->   
-> -static int bcm47xx_wdt_remove(struct platform_device *pdev)
-> -{
-> -	struct bcm47xx_wdt *wdt = dev_get_platdata(&pdev->dev);
-> -
-> -	watchdog_unregister_device(&wdt->wdd);
-> -
-> -	return 0;
-> -}
-> -
->   static struct platform_driver bcm47xx_wdt_driver = {
->   	.driver		= {
->   		.name	= "bcm47xx-wdt",
->   	},
->   	.probe		= bcm47xx_wdt_probe,
-> -	.remove		= bcm47xx_wdt_remove,
->   };
->   
->   module_platform_driver(bcm47xx_wdt_driver);
+   	return ERR_PTR(dev_err_probe(...));
+
+   but this looks too ugly and that's less effective because then
+   dev_err_probe cannot be compiled into a tail call.)
+
+ - Squash patches #2 and #3. This destroys the pretty bloatometer
+   statistic, in fact bloatometer diagnoses that the code gets bigger.
+   I'm a bit surprised but didn't try to understand it. I assume that's
+   because the additional parameter that dev_err_probe has to get over
+   dev_err is the culprit. Still given that the error code is now
+   included in the error message this is an IMHO nice patch.
+
+Now that Gunter likes patch #1 better than the one from v1, I wonder
+about his position about patch #2.
+
+Best regards
+Uwe
+
+Uwe Kleine-König (2):
+  watchdog: s3c2410: Make s3c2410_get_wdt_drv_data() return an int
+  watchdog: s3c2410_wdt: Simplify using dev_err_probe()
+
+ drivers/watchdog/s3c2410_wdt.c | 47 +++++++++++++++-------------------
+ 1 file changed, 20 insertions(+), 27 deletions(-)
+
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+prerequisite-patch-id: 775bdd863307268e1ef16250bf2f40862637b453
+prerequisite-patch-id: 924ddfbe583e97e7c9a46c2460ecbc88c29ee319
+-- 
+2.39.1
 
