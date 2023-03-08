@@ -2,318 +2,131 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870DB6B0D00
-	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Mar 2023 16:39:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B68496B0E38
+	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Mar 2023 17:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232187AbjCHPjJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 8 Mar 2023 10:39:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
+        id S232406AbjCHQKZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Mar 2023 11:10:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232035AbjCHPiv (ORCPT
+        with ESMTP id S232629AbjCHQKE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:38:51 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32A096C1F;
-        Wed,  8 Mar 2023 07:38:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678289899; x=1709825899;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Oi3lNQaVAFKyZUn3mVauGWFNxI0A2vEeaMf+G8WoBDk=;
-  b=ElS9RszdcOl5pNn5ZBzENkpYQiAnrh2ym6tGrj4920DEDwibqW2XVMf3
-   xnqgWz772GgopEAWlBSQdR1GT6f1rFggmBVL2oVbQonduz3AUbIbZRqS5
-   qus8oRLsZh91I9Yj1f6t/qR3vtulvWeLRi4kSrX0lnlEHUkWTLPGOGlEX
-   EGl+mgcAlqmBNx+CXZz0UY8rKx3vbnX0v0kuRhcloDyIdFVBfmECNFIZn
-   GMCjLuNh6Eva1K2Azh4fceqxQ6qrYuzP9BYb4m9KlcNcEwVZwR6j/4NVa
-   CA1dchB05tAwEZ3oZ3JvRS37U9R9uOvCFN1OfoSRbynyLI/Yol/2OL5aF
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="336201687"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="336201687"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 07:37:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="800797338"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="800797338"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2023 07:37:49 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pZvrQ-0002EB-1r;
-        Wed, 08 Mar 2023 15:37:48 +0000
-Date:   Wed, 08 Mar 2023 23:37:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD SUCCESS WITH WARNING
- fc31900c948610e7b5c2f15fb7795832c8325327
-Message-ID: <6408abb4.d/PEd5OkKkiw2OLw%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 8 Mar 2023 11:10:04 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9F750F92
+        for <linux-watchdog@vger.kernel.org>; Wed,  8 Mar 2023 08:09:28 -0800 (PST)
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 347963F597
+        for <linux-watchdog@vger.kernel.org>; Wed,  8 Mar 2023 16:09:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678291766;
+        bh=jxEkW8OFX3baFTB/CKLudkQuvhDNrRf95y5rQkRLsGE=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=eyW/8nofgUFcTirYPvjZNN5tzG13OiiHcNT/UjW3PibbRfEvyY0MQZpTKJBByca4C
+         7p6XHBEkoElNIrx+I1nh3Cno3KMWj9CQZ6H2BECi9cFb8H76avmUjRwfhhcVNYb4ri
+         J2TU0198xJsSzandzB0CsmzRmZCEXfkx7yT3s6b1+al61mE8gHYwamff2YAnJI/h0r
+         OOpDfcawt6xSstGWc2vYYEzxsbX55ES7FDcppikHnW/70RdiscCNPcRiH+KP6Rthd+
+         00sOGBWhyHcJjb1Bh9UFpzoPMVPxZ2AfnUYi8VVJ3UfiHrsJTcd23x8Lp+iPLrVdg8
+         1bXaphw6d8vJQ==
+Received: by mail-qv1-f70.google.com with SMTP id pm17-20020ad446d1000000b0057256b237b9so9513536qvb.16
+        for <linux-watchdog@vger.kernel.org>; Wed, 08 Mar 2023 08:09:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678291765;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jxEkW8OFX3baFTB/CKLudkQuvhDNrRf95y5rQkRLsGE=;
+        b=NbA1afILN/RQEpu5xKungsX3xKgNDFw2w6JN1ZWqdxt0ZfdMIp6eO/GsFFcDlvbBV9
+         YXq6vI6n0Yul2uM178QX0cwUjnbMLdEVaAo0oXH5XHD2HpvvZs+F0ezxLwVRyxIKP2P2
+         hVgvgFlZW1w4Y+HafICZ8dhLd7E4B9u5E+2GVG5zy4fMZ7iLQv3Z97y4YeAo4l7BOXTG
+         HrSYSkJfg+gbCPHSdUIxzWq3RzyCEEaVBE9S5uowURYQXo+YuypdiKxvrbVzjSGpp1LB
+         Vc93/uLJ1sjksnSLuHVYPuPfLJHqiay2BMiV33RGjYwdiwrSw3iptyAPN5qxzW+Ey+Pk
+         lByg==
+X-Gm-Message-State: AO0yUKVbDf9CKW/3KNbiRBKDx926xl0rYvEG7+XbgE7mKexeFAK+2bH4
+        qJJEazb0OAPEX7S07Fub/ZOxtAoQaZV8oMHAM3TESjfa2Mj1acn/yUEYtCYYbgEm6wE+tt2GuZ3
+        uTsrGxmfQ+zo1bNkAitw34rVrmim73mlApxtaHA6eR4SKSSEKmDFCQmT+5+qU
+X-Received: by 2002:a05:620a:8416:b0:742:9899:98fb with SMTP id pc22-20020a05620a841600b00742989998fbmr4036587qkn.7.1678291765342;
+        Wed, 08 Mar 2023 08:09:25 -0800 (PST)
+X-Google-Smtp-Source: AK7set9rDdUme+19ci4Y+eeQIQ1S8Pps6PmhEkfVr/t2a1f+TOq5hvLfQHCft/Xi0WgN485LzYzwIKfwYQUqflfbMR8=
+X-Received: by 2002:a05:620a:8416:b0:742:9899:98fb with SMTP id
+ pc22-20020a05620a841600b00742989998fbmr4036581qkn.7.1678291765113; Wed, 08
+ Mar 2023 08:09:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20230308034036.99213-1-xingyu.wu@starfivetech.com> <20230308034036.99213-4-xingyu.wu@starfivetech.com>
+In-Reply-To: <20230308034036.99213-4-xingyu.wu@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Wed, 8 Mar 2023 17:09:09 +0100
+Message-ID: <CAJM55Z9-BK1zPop_C9JX8qGLpzGXPzizUSyEtaevwbQ4NT2xaQ@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] riscv: dts: starfive: jh7100: Add watchdog node
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: fc31900c948610e7b5c2f15fb7795832c8325327  Add linux-next specific files for 20230308
+On Wed, 8 Mar 2023 at 04:42, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
+>
+> Add watchdog node for the StarFive JH7100 RISC-V SoC.
+>
+> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> ---
+>  arch/riscv/boot/dts/starfive/jh7100.dtsi | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/arch/riscv/boot/dts/starfive/jh7100.dtsi b/arch/riscv/boot/dts/starfive/jh7100.dtsi
+> index 000447482aca..1eb7c21a94fd 100644
+> --- a/arch/riscv/boot/dts/starfive/jh7100.dtsi
+> +++ b/arch/riscv/boot/dts/starfive/jh7100.dtsi
+> @@ -238,5 +238,15 @@ i2c3: i2c@12460000 {
+>                         #size-cells = <0>;
+>                         status = "disabled";
+>                 };
+> +
+> +               wdog: watchdog@12480000 {
 
-Warning reports:
+I don't see anything referencing this node, so the label can be dropped.
+With that fixed:
+Reviewed-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
 
-https://lore.kernel.org/oe-kbuild-all/202302100744.d1zZxXFn-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302111601.jtY4lKrA-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303081345.OAmwqAh7-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303081432.D9JWIDY9-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303081657.6Ble80UY-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303081807.lBLWKmpX-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303082135.NjdX1Bij-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303082325.YWFMFBAj-lkp@intel.com
-
-Warning: (recently discovered and may have been fixed)
-
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_mst_types.c:1214:31: warning: variable 'res_pool' set but not used [-Wunused-but-set-variable]
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for 'optc3_wait_drr_doublebuffer_pending_clear' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_capability.c:2182: warning: expecting prototype for Check if there is a native DP or passive DP(). Prototype was for dp_is_sink_present() instead
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_capability.c:2184: warning: expecting prototype for Check if there is a native DP or passive DP(). Prototype was for dp_is_sink_present() instead
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_dpia_bw.c:297:13: warning: variable 'available' set but not used [-Wunused-but-set-variable]
-drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1146:3: warning: variable 'hotspotlimit' is uninitialized when used here [-Wuninitialized]
-drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1149:24: warning: variable 'memlimit' is uninitialized when used here [-Wuninitialized]
-drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1152:34: warning: variable 'software_shutdown_temp' is uninitialized when used here [-Wuninitialized]
-drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:315:17: sparse:    int
-drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:315:17: sparse:    void
-drivers/soc/renesas/pwc-rzv2m.c:124:34: warning: unused variable 'rzv2m_pwc_of_match' [-Wunused-const-variable]
-security/security.c:3647: warning: expecting prototype for security_socket_create(). Prototype was for security_socket_post_create() instead
-security/security.c:4110: warning: expecting prototype for security_socket_create(). Prototype was for security_socket_post_create() instead
-
-Unverified Warning (likely false positive, please contact us if interested):
-
-drivers/usb/gadget/composite.c:2082:33: sparse: sparse: restricted __le16 degrades to integer
-drivers/watchdog/imx2_wdt.c:442:22: sparse: sparse: symbol 'imx_wdt' was not declared. Should it be static?
-drivers/watchdog/imx2_wdt.c:446:22: sparse: sparse: symbol 'imx_wdt_legacy' was not declared. Should it be static?
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-randconfig-s033-20230305
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_dpia_bw.c:warning:variable-available-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu13-smu_v13_0_6_ppt.c:sparse:int
-|   |-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu13-smu_v13_0_6_ppt.c:sparse:sparse:incompatible-types-in-conditional-expression-(different-base-types):
-|   `-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu13-smu_v13_0_6_ppt.c:sparse:void
-|-- arm64-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|-- csky-randconfig-s031-20230305
-|   |-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|   |-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt-was-not-declared.-Should-it-be-static
-|   `-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt_legacy-was-not-declared.-Should-it-be-static
-|-- i386-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|-- i386-buildonly-randconfig-r006-20230306
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|-- microblaze-randconfig-c033-20230305
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_dpia_bw.c:warning:variable-available-set-but-not-used
-|-- openrisc-randconfig-s052-20230305
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- powerpc-allmodconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_dpia_bw.c:warning:variable-available-set-but-not-used
-|-- sparc-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm_mst_types.c:warning:variable-res_pool-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_dpia_bw.c:warning:variable-available-set-but-not-used
-|-- sparc-randconfig-s032-20230305
-|   |-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt-was-not-declared.-Should-it-be-static
-|   `-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt_legacy-was-not-declared.-Should-it-be-static
-|-- x86_64-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_dpia_bw.c:warning:variable-available-set-but-not-used
-`-- x86_64-randconfig-s021
-    `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-clang_recent_errors
-|-- hexagon-randconfig-r023-20230306
-|   `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
-|-- hexagon-randconfig-r045-20230305
-|   `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
-|-- hexagon-randconfig-r045-20230306
-|   `-- drivers-soc-renesas-pwc-rzv2m.c:warning:unused-variable-rzv2m_pwc_of_match
-|-- riscv-randconfig-r034-20230305
-|   `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
-|-- riscv-randconfig-r042-20230306
-|   |-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu13-smu_v13_0_6_ppt.c:warning:variable-hotspotlimit-is-uninitialized-when-used-here
-|   |-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu13-smu_v13_0_6_ppt.c:warning:variable-memlimit-is-uninitialized-when-used-here
-|   `-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu13-smu_v13_0_6_ppt.c:warning:variable-software_shutdown_temp-is-uninitialized-when-used-here
-|-- s390-randconfig-r035-20230305
-|   `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
-|-- x86_64-randconfig-a011-20230306
-|   `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
-|-- x86_64-randconfig-a014-20230306
-|   `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
-|-- x86_64-randconfig-a015-20230306
-|   `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
-`-- x86_64-randconfig-a016-20230306
-    `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
-
-elapsed time: 727m
-
-configs tested: 143
-configs skipped: 10
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r001-20230305   gcc  
-alpha        buildonly-randconfig-r004-20230306   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r016-20230305   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r004-20230306   gcc  
-arc                  randconfig-r043-20230305   gcc  
-arc                  randconfig-r043-20230306   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                          moxart_defconfig   clang
-arm                        neponset_defconfig   clang
-arm                  randconfig-r006-20230305   gcc  
-arm                  randconfig-r021-20230306   gcc  
-arm                  randconfig-r046-20230305   clang
-arm                  randconfig-r046-20230306   gcc  
-arm                       spear13xx_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r001-20230306   gcc  
-arm64                randconfig-r004-20230305   clang
-arm64                randconfig-r024-20230305   gcc  
-csky         buildonly-randconfig-r001-20230306   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r032-20230305   gcc  
-hexagon              randconfig-r011-20230306   clang
-hexagon              randconfig-r022-20230306   clang
-hexagon              randconfig-r023-20230306   clang
-hexagon              randconfig-r041-20230305   clang
-hexagon              randconfig-r041-20230306   clang
-hexagon              randconfig-r045-20230305   clang
-hexagon              randconfig-r045-20230306   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r003-20230306   gcc  
-i386         buildonly-randconfig-r006-20230306   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230306   gcc  
-i386                 randconfig-a002-20230306   gcc  
-i386                 randconfig-a003-20230306   gcc  
-i386                 randconfig-a004-20230306   gcc  
-i386                 randconfig-a005-20230306   gcc  
-i386                 randconfig-a006-20230306   gcc  
-i386                 randconfig-a011-20230306   clang
-i386                 randconfig-a012-20230306   clang
-i386                 randconfig-a013-20230306   clang
-i386                 randconfig-a014-20230306   clang
-i386                 randconfig-a015-20230306   clang
-i386                 randconfig-a016-20230306   clang
-i386                          randconfig-c001   gcc  
-i386                 randconfig-r034-20230306   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r005-20230305   gcc  
-ia64                 randconfig-r005-20230306   gcc  
-ia64                 randconfig-r012-20230305   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r011-20230305   gcc  
-loongarch            randconfig-r021-20230305   gcc  
-loongarch            randconfig-r036-20230305   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze           randconfig-r013-20230305   gcc  
-microblaze           randconfig-r013-20230306   gcc  
-microblaze           randconfig-r031-20230306   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                           ci20_defconfig   gcc  
-mips                 randconfig-r015-20230305   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r035-20230306   gcc  
-openrisc             randconfig-r014-20230306   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r014-20230305   gcc  
-parisc64                         alldefconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r005-20230305   gcc  
-powerpc                     mpc5200_defconfig   clang
-powerpc                      pmac32_defconfig   clang
-powerpc                      ppc40x_defconfig   gcc  
-powerpc              randconfig-r023-20230305   gcc  
-powerpc              randconfig-r031-20230305   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r003-20230305   gcc  
-riscv        buildonly-randconfig-r005-20230306   clang
-riscv                               defconfig   gcc  
-riscv                randconfig-r003-20230305   clang
-riscv                randconfig-r024-20230306   clang
-riscv                randconfig-r025-20230306   clang
-riscv                randconfig-r034-20230305   clang
-riscv                randconfig-r042-20230305   gcc  
-riscv                randconfig-r042-20230306   clang
-riscv                          rv32_defconfig   gcc  
-s390                             alldefconfig   clang
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230306   gcc  
-s390                 randconfig-r016-20230306   clang
-s390                 randconfig-r035-20230305   clang
-s390                 randconfig-r044-20230305   gcc  
-s390                 randconfig-r044-20230306   clang
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r006-20230305   gcc  
-sh                   randconfig-r006-20230306   gcc  
-sh                   randconfig-r012-20230306   gcc  
-sh                   randconfig-r015-20230306   gcc  
-sh                   randconfig-r026-20230305   gcc  
-sh                   randconfig-r033-20230305   gcc  
-sh                           sh2007_defconfig   gcc  
-sparc        buildonly-randconfig-r004-20230305   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r002-20230306   gcc  
-sparc64              randconfig-r022-20230305   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230306   gcc  
-x86_64               randconfig-a002-20230306   gcc  
-x86_64               randconfig-a003-20230306   gcc  
-x86_64               randconfig-a004-20230306   gcc  
-x86_64               randconfig-a005-20230306   gcc  
-x86_64               randconfig-a006-20230306   gcc  
-x86_64               randconfig-a011-20230306   clang
-x86_64               randconfig-a012-20230306   clang
-x86_64               randconfig-a013-20230306   clang
-x86_64               randconfig-a014-20230306   clang
-x86_64               randconfig-a015-20230306   clang
-x86_64               randconfig-a016-20230306   clang
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r002-20230305   gcc  
-xtensa               randconfig-r002-20230305   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> +                       compatible = "starfive,jh7100-wdt";
+> +                       reg = <0x0 0x12480000 0x0 0x10000>;
+> +                       clocks = <&clkgen JH7100_CLK_WDTIMER_APB>,
+> +                                <&clkgen JH7100_CLK_WDT_CORE>;
+> +                       clock-names = "apb", "core";
+> +                       resets = <&rstgen JH7100_RSTN_WDTIMER_APB>,
+> +                                <&rstgen JH7100_RSTN_WDT>;
+> +               };
+>         };
+>  };
+> --
+> 2.25.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
