@@ -2,251 +2,318 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B1D6B0C5F
-	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Mar 2023 16:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 870DB6B0D00
+	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Mar 2023 16:39:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbjCHPSF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 8 Mar 2023 10:18:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
+        id S232187AbjCHPjJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Mar 2023 10:39:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjCHPSC (ORCPT
+        with ESMTP id S232035AbjCHPiv (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:18:02 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616E8B7D9F;
-        Wed,  8 Mar 2023 07:17:50 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id g73-20020a9d12cf000000b006943a7df072so9146802otg.11;
-        Wed, 08 Mar 2023 07:17:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678288669;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rCEf+NQ+Pc1ncYD3djIGD+iYastMQpss3chPBnkt7Ig=;
-        b=AOvv9WB4IQmxykMtzq2277on7e0CPR51Ry/Rl6JUraFHKAEczYdKlV3ZDAkpMwV7pX
-         kqJzDKu/EiuahfwOKicycBXDJMcZYSXAj7wh6JHiliFpDRLaqaWuVx/pFOGnMGTWIdpi
-         rxkHnmI9vyyUbqmUIY3Ya+7VRZhZSoKYOCGwO1uD/BhvekSjGkMANNNneYDAODXQ8VcQ
-         FCCO8oovrLlGGM49MUqzEp29tc3p2d11z6Vo1HFCcBNu6fdOFRnrDY6ScHn9RB4HJONj
-         mOzhAVITUapgFfjUO/TZDv1Hb9nMNiUJB9DNr26LiMcUk+A0K3xFmzg0m40cljLJBoCt
-         2nqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678288669;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rCEf+NQ+Pc1ncYD3djIGD+iYastMQpss3chPBnkt7Ig=;
-        b=fuSy4Ztl6TatpigMBjh4gDXi3Cd4fTVV+nJFMn76+0NZFZvw0hi/xHCSiA1Uyf6f8a
-         iHRhDBQoS4zeSiO33ml4DxWbVdbacGXmmbdkoaJhkm/YRRLPm30EUnCpHHZgwtgXT3ph
-         uvxuP36q4XVmIyAgqvC2VAZsWdlruiAuJdu1RGsdYlCrm+I17usJZoFoV2VkVCFRCInY
-         e2hTQzNyMZNPOZyYm5pbbYtR0tDTKhyqG9XPN7TU4zSo3kUgkditt99gLlWW6+bHaFPj
-         VBZtM5q4iZJtm7G3VRlLyr4EHJNByherjeX+jgkz56I1XpMjGAPzPZl7846aj2Iqk7p2
-         dWtw==
-X-Gm-Message-State: AO0yUKXRpRfcEruXqEfEQgJ8zVFQxib0/yulC9+hR25hhuw4sRRu/Olu
-        JdzX/8rVnV1mAzYepLJ2Ax4=
-X-Google-Smtp-Source: AK7set9aolhusX/PmFaEseHKB8tfkbfJcx/8fA5YeZ0OaHKrPcRid0K89cnxM2/CLstuGYynD1rjhA==
-X-Received: by 2002:a9d:5f9d:0:b0:694:2f51:129b with SMTP id g29-20020a9d5f9d000000b006942f51129bmr7769218oti.24.1678288669514;
-        Wed, 08 Mar 2023 07:17:49 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a16-20020a9d3e10000000b0068d752f1870sm6539288otd.5.2023.03.08.07.17.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 07:17:48 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0b467896-17d4-c355-da86-437b45f089d4@roeck-us.net>
-Date:   Wed, 8 Mar 2023 07:17:45 -0800
+        Wed, 8 Mar 2023 10:38:51 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32A096C1F;
+        Wed,  8 Mar 2023 07:38:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678289899; x=1709825899;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Oi3lNQaVAFKyZUn3mVauGWFNxI0A2vEeaMf+G8WoBDk=;
+  b=ElS9RszdcOl5pNn5ZBzENkpYQiAnrh2ym6tGrj4920DEDwibqW2XVMf3
+   xnqgWz772GgopEAWlBSQdR1GT6f1rFggmBVL2oVbQonduz3AUbIbZRqS5
+   qus8oRLsZh91I9Yj1f6t/qR3vtulvWeLRi4kSrX0lnlEHUkWTLPGOGlEX
+   EGl+mgcAlqmBNx+CXZz0UY8rKx3vbnX0v0kuRhcloDyIdFVBfmECNFIZn
+   GMCjLuNh6Eva1K2Azh4fceqxQ6qrYuzP9BYb4m9KlcNcEwVZwR6j/4NVa
+   CA1dchB05tAwEZ3oZ3JvRS37U9R9uOvCFN1OfoSRbynyLI/Yol/2OL5aF
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="336201687"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="336201687"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 07:37:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="800797338"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="800797338"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2023 07:37:49 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pZvrQ-0002EB-1r;
+        Wed, 08 Mar 2023 15:37:48 +0000
+Date:   Wed, 08 Mar 2023 23:37:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD SUCCESS WITH WARNING
+ fc31900c948610e7b5c2f15fb7795832c8325327
+Message-ID: <6408abb4.d/PEd5OkKkiw2OLw%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 2/3] drivers: watchdog: Add StarFive Watchdog driver
-Content-Language: en-US
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        linux-kernel@vger.kernel.org
-References: <20230308034036.99213-1-xingyu.wu@starfivetech.com>
- <20230308034036.99213-3-xingyu.wu@starfivetech.com>
- <CAJM55Z9LvQZjeEY92bZETBYhp9sSavTNkKT4T-gpsHPTQ2_LAA@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <CAJM55Z9LvQZjeEY92bZETBYhp9sSavTNkKT4T-gpsHPTQ2_LAA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 3/8/23 07:07, Emil Renner Berthing wrote:
-> On Wed, 8 Mar 2023 at 04:43, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
->>
->> Add watchdog driver for the StarFive JH7100 and JH7110 SoC.
->>
->> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-> 
-> Hi Xingyu,
-> 
-> Thanks for adding the JH7100 support. I tried it on my Starlight board
-> and it seems to work fine except systemd complains about not being
-> able to set a 10min timeout on reboot:
-> systemd-shutdown[1]: Using hardware watchdog 'StarFive Watchdog',
-> version 0, device /dev/watchdog0
-> systemd-shutdown[1]: Failed to set timeout to 10min: Invalid argument
-> systemd-shutdown[1]: Syncing filesystems and block devices.
-> systemd-shutdown[1]: Sending SIGTERM to remaining processes...
-> 
-> The systemd runtime watchdog seems to work, so I guess this is just
-> because 10min is too long a timeout for the StarFive watchdog.
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: fc31900c948610e7b5c2f15fb7795832c8325327  Add linux-next specific files for 20230308
 
-Correct, the driver would have to be implemented slightly differently
-for the watchdog subsystem to accept larger timeout values.
+Warning reports:
 
-> More comments below.
-> 
->> ---
->>   MAINTAINERS                     |   7 +
->>   drivers/watchdog/Kconfig        |   9 +
->>   drivers/watchdog/Makefile       |   2 +
->>   drivers/watchdog/starfive-wdt.c | 675 ++++++++++++++++++++++++++++++++
->>   4 files changed, 693 insertions(+)
->>   create mode 100644 drivers/watchdog/starfive-wdt.c
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 8d5bc223f305..721d0e4e8a0d 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19962,6 +19962,13 @@ S:     Supported
->>   F:     Documentation/devicetree/bindings/rng/starfive*
->>   F:     drivers/char/hw_random/jh7110-trng.c
->>
->> +STARFIVE WATCHDOG DRIVER
->> +M:     Xingyu Wu <xingyu.wu@starfivetech.com>
->> +M:     Samin Guo <samin.guo@starfivetech.com>
->> +S:     Supported
->> +F:     Documentation/devicetree/bindings/watchdog/starfive*
->> +F:     drivers/watchdog/starfive-wdt.c
->> +
->>   STATIC BRANCH/CALL
->>   M:     Peter Zijlstra <peterz@infradead.org>
->>   M:     Josh Poimboeuf <jpoimboe@kernel.org>
->> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
->> index f0872970daf9..9d825ffaf292 100644
->> --- a/drivers/watchdog/Kconfig
->> +++ b/drivers/watchdog/Kconfig
->> @@ -2090,6 +2090,15 @@ config UML_WATCHDOG
->>          tristate "UML watchdog"
->>          depends on UML || COMPILE_TEST
->>
->> +config STARFIVE_WATCHDOG
->> +       tristate "StarFive Watchdog support"
->> +       depends on ARCH_STARFIVE || COMPILE_TEST
->> +       select WATCHDOG_CORE
->> +       default ARCH_STARFIVE
->> +       help
->> +         Say Y here to support the watchdog of StarFive JH7100 and JH7110
->> +         SoC. This driver can also be built as a module if choose M.
-> 
-> This file seems to be sorted by architecture, so you probably want to
-> add something like this at the appropriate place
-> 
-> # RISC-V Architecture
-> 
-> config STARFIVE_WATCHDOG
-> ...
-> 
-> 
->>   #
->>   # ISA-based Watchdog Cards
->>   #
->> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
->> index 9cbf6580f16c..4c0bd377e92a 100644
->> --- a/drivers/watchdog/Makefile
->> +++ b/drivers/watchdog/Makefile
->> @@ -211,6 +211,8 @@ obj-$(CONFIG_WATCHDOG_SUN4V)                += sun4v_wdt.o
->>   # Xen
->>   obj-$(CONFIG_XEN_WDT) += xen_wdt.o
->>
->> +obj-$(CONFIG_STARFIVE_WATCHDOG) += starfive-wdt.o
-> 
-> Again please follow the layout of the file. Eg. something like this at
-> the appropriate place
-> 
-> # RISC-V Architecture
-> obj-$(CONFIG_STARFIVE_WATCHDOG) += starfive-wdt.o
-> 
->>   # Architecture Independent
->>   obj-$(CONFIG_BD957XMUF_WATCHDOG) += bd9576_wdt.o
->>   obj-$(CONFIG_DA9052_WATCHDOG) += da9052_wdt.o
->> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
->> new file mode 100644
->> index 000000000000..8ce9f985f068
->> --- /dev/null
->> +++ b/drivers/watchdog/starfive-wdt.c
->> @@ -0,0 +1,675 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Starfive Watchdog driver
->> + *
->> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
->> + */
->> +
->> +#include <linux/clk.h>
->> +#include <linux/iopoll.h>
->> +#include <linux/module.h>
->> +#include <linux/of_device.h>
->> +#include <linux/pm_runtime.h>
->> +#include <linux/reset.h>
->> +#include <linux/watchdog.h>
->> +
->> +/* JH7100 Watchdog register define */
->> +#define STARFIVE_WDT_JH7100_INTSTAUS   0x000   /* RO: [4]: Watchdog Interrupt status */
->> +#define STARFIVE_WDT_JH7100_CONTROL    0x104   /* RW: reset enable */
->> +#define STARFIVE_WDT_JH7100_LOAD       0x108   /* RW: Watchdog Load register */
->> +#define STARFIVE_WDT_JH7100_EN         0x110   /* RW: Watchdog Enable Register */
->> +#define STARFIVE_WDT_JH7100_RELOAD     0x114   /* RW: Write 0 or 1 to reload preset value */
->> +#define STARFIVE_WDT_JH7100_VALUE      0x118   /* RO: The current value for watchdog counter */
->> +#define STARFIVE_WDT_JH7100_INTCLR     0x120   /*
->> +                                                * RW: Watchdog Clear Interrupt Register
->> +                                                * [0]: Write 1 to clear interrupt
->> +                                                * [1]: 1 mean clearing and 0 mean complete
->> +                                                */
->> +#define STARFIVE_WDT_JH7100_LOCK       0x13c   /* RW: Lock Register, write 0x378f0765 to unlock */
->> +
->> +/* JH7110 Watchdog register define */
->> +#define STARFIVE_WDT_JH7110_LOAD       0x000   /* RW: Watchdog Load register */
->> +#define STARFIVE_WDT_JH7110_VALUE      0x004   /* RO: The current value for watchdog counter */
->> +#define STARFIVE_WDT_JH7110_CONTROL    0x008   /*
->> +                                                * RW:
->> +                                                * [0]: reset enable;
->> +                                                * [1]: int enable/wdt enable/reload counter;
->> +                                                * [31:2]: reserved.
->> +                                                */
->> +#define STARFIVE_WDT_JH7110_INTCLR     0x00c   /* WO: clear intterupt && reload the counter */
->> +#define STARFIVE_WDT_JH7110_IMS                0x014   /* RO: Enabled interrupt status from the counter */
->> +#define STARFIVE_WDT_JH7110_LOCK       0xc00   /* RW: Lock Register, write 0x1ACCE551 to unlock */
-> 
-> Since these register offsets are only used to fill in the
-> starfive_wdt_variant structures, consider just adding them directly
-> there with the comments.
-> 
+https://lore.kernel.org/oe-kbuild-all/202302100744.d1zZxXFn-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202302111601.jtY4lKrA-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202303081345.OAmwqAh7-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202303081432.D9JWIDY9-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202303081657.6Ble80UY-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202303081807.lBLWKmpX-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202303082135.NjdX1Bij-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202303082325.YWFMFBAj-lkp@intel.com
 
-As maintainer, I prefer defines, even if only used oonce.
+Warning: (recently discovered and may have been fixed)
 
-Guenter
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_mst_types.c:1214:31: warning: variable 'res_pool' set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for 'optc3_wait_drr_doublebuffer_pending_clear' [-Wmissing-prototypes]
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_capability.c:2182: warning: expecting prototype for Check if there is a native DP or passive DP(). Prototype was for dp_is_sink_present() instead
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_capability.c:2184: warning: expecting prototype for Check if there is a native DP or passive DP(). Prototype was for dp_is_sink_present() instead
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_dpia_bw.c:297:13: warning: variable 'available' set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1146:3: warning: variable 'hotspotlimit' is uninitialized when used here [-Wuninitialized]
+drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1149:24: warning: variable 'memlimit' is uninitialized when used here [-Wuninitialized]
+drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:1152:34: warning: variable 'software_shutdown_temp' is uninitialized when used here [-Wuninitialized]
+drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:315:17: sparse:    int
+drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:315:17: sparse:    void
+drivers/soc/renesas/pwc-rzv2m.c:124:34: warning: unused variable 'rzv2m_pwc_of_match' [-Wunused-const-variable]
+security/security.c:3647: warning: expecting prototype for security_socket_create(). Prototype was for security_socket_post_create() instead
+security/security.c:4110: warning: expecting prototype for security_socket_create(). Prototype was for security_socket_post_create() instead
 
+Unverified Warning (likely false positive, please contact us if interested):
+
+drivers/usb/gadget/composite.c:2082:33: sparse: sparse: restricted __le16 degrades to integer
+drivers/watchdog/imx2_wdt.c:442:22: sparse: sparse: symbol 'imx_wdt' was not declared. Should it be static?
+drivers/watchdog/imx2_wdt.c:446:22: sparse: sparse: symbol 'imx_wdt_legacy' was not declared. Should it be static?
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-randconfig-s033-20230305
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_dpia_bw.c:warning:variable-available-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu13-smu_v13_0_6_ppt.c:sparse:int
+|   |-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu13-smu_v13_0_6_ppt.c:sparse:sparse:incompatible-types-in-conditional-expression-(different-base-types):
+|   `-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu13-smu_v13_0_6_ppt.c:sparse:void
+|-- arm64-allyesconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
+|-- csky-randconfig-s031-20230305
+|   |-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
+|   |-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt-was-not-declared.-Should-it-be-static
+|   `-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt_legacy-was-not-declared.-Should-it-be-static
+|-- i386-allyesconfig
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
+|-- i386-buildonly-randconfig-r006-20230306
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
+|-- microblaze-randconfig-c033-20230305
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_dpia_bw.c:warning:variable-available-set-but-not-used
+|-- openrisc-randconfig-s052-20230305
+|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
+|-- powerpc-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_dpia_bw.c:warning:variable-available-set-but-not-used
+|-- sparc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-amdgpu_dm-amdgpu_dm_mst_types.c:warning:variable-res_pool-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_dpia_bw.c:warning:variable-available-set-but-not-used
+|-- sparc-randconfig-s032-20230305
+|   |-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt-was-not-declared.-Should-it-be-static
+|   `-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt_legacy-was-not-declared.-Should-it-be-static
+|-- x86_64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_dpia_bw.c:warning:variable-available-set-but-not-used
+`-- x86_64-randconfig-s021
+    `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
+clang_recent_errors
+|-- hexagon-randconfig-r023-20230306
+|   `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
+|-- hexagon-randconfig-r045-20230305
+|   `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
+|-- hexagon-randconfig-r045-20230306
+|   `-- drivers-soc-renesas-pwc-rzv2m.c:warning:unused-variable-rzv2m_pwc_of_match
+|-- riscv-randconfig-r034-20230305
+|   `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
+|-- riscv-randconfig-r042-20230306
+|   |-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu13-smu_v13_0_6_ppt.c:warning:variable-hotspotlimit-is-uninitialized-when-used-here
+|   |-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu13-smu_v13_0_6_ppt.c:warning:variable-memlimit-is-uninitialized-when-used-here
+|   `-- drivers-gpu-drm-amd-amdgpu-..-pm-swsmu-smu13-smu_v13_0_6_ppt.c:warning:variable-software_shutdown_temp-is-uninitialized-when-used-here
+|-- s390-randconfig-r035-20230305
+|   `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
+|-- x86_64-randconfig-a011-20230306
+|   `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
+|-- x86_64-randconfig-a014-20230306
+|   `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
+|-- x86_64-randconfig-a015-20230306
+|   `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
+`-- x86_64-randconfig-a016-20230306
+    `-- security-security.c:warning:expecting-prototype-for-security_socket_create().-Prototype-was-for-security_socket_post_create()-instead
+
+elapsed time: 727m
+
+configs tested: 143
+configs skipped: 10
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r001-20230305   gcc  
+alpha        buildonly-randconfig-r004-20230306   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r016-20230305   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r004-20230306   gcc  
+arc                  randconfig-r043-20230305   gcc  
+arc                  randconfig-r043-20230306   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                          moxart_defconfig   clang
+arm                        neponset_defconfig   clang
+arm                  randconfig-r006-20230305   gcc  
+arm                  randconfig-r021-20230306   gcc  
+arm                  randconfig-r046-20230305   clang
+arm                  randconfig-r046-20230306   gcc  
+arm                       spear13xx_defconfig   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r001-20230306   gcc  
+arm64                randconfig-r004-20230305   clang
+arm64                randconfig-r024-20230305   gcc  
+csky         buildonly-randconfig-r001-20230306   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r032-20230305   gcc  
+hexagon              randconfig-r011-20230306   clang
+hexagon              randconfig-r022-20230306   clang
+hexagon              randconfig-r023-20230306   clang
+hexagon              randconfig-r041-20230305   clang
+hexagon              randconfig-r041-20230306   clang
+hexagon              randconfig-r045-20230305   clang
+hexagon              randconfig-r045-20230306   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r003-20230306   gcc  
+i386         buildonly-randconfig-r006-20230306   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230306   gcc  
+i386                 randconfig-a002-20230306   gcc  
+i386                 randconfig-a003-20230306   gcc  
+i386                 randconfig-a004-20230306   gcc  
+i386                 randconfig-a005-20230306   gcc  
+i386                 randconfig-a006-20230306   gcc  
+i386                 randconfig-a011-20230306   clang
+i386                 randconfig-a012-20230306   clang
+i386                 randconfig-a013-20230306   clang
+i386                 randconfig-a014-20230306   clang
+i386                 randconfig-a015-20230306   clang
+i386                 randconfig-a016-20230306   clang
+i386                          randconfig-c001   gcc  
+i386                 randconfig-r034-20230306   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r005-20230305   gcc  
+ia64                 randconfig-r005-20230306   gcc  
+ia64                 randconfig-r012-20230305   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r011-20230305   gcc  
+loongarch            randconfig-r021-20230305   gcc  
+loongarch            randconfig-r036-20230305   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze           randconfig-r013-20230305   gcc  
+microblaze           randconfig-r013-20230306   gcc  
+microblaze           randconfig-r031-20230306   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                           ci20_defconfig   gcc  
+mips                 randconfig-r015-20230305   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r035-20230306   gcc  
+openrisc             randconfig-r014-20230306   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r014-20230305   gcc  
+parisc64                         alldefconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc      buildonly-randconfig-r005-20230305   gcc  
+powerpc                     mpc5200_defconfig   clang
+powerpc                      pmac32_defconfig   clang
+powerpc                      ppc40x_defconfig   gcc  
+powerpc              randconfig-r023-20230305   gcc  
+powerpc              randconfig-r031-20230305   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv        buildonly-randconfig-r003-20230305   gcc  
+riscv        buildonly-randconfig-r005-20230306   clang
+riscv                               defconfig   gcc  
+riscv                randconfig-r003-20230305   clang
+riscv                randconfig-r024-20230306   clang
+riscv                randconfig-r025-20230306   clang
+riscv                randconfig-r034-20230305   clang
+riscv                randconfig-r042-20230305   gcc  
+riscv                randconfig-r042-20230306   clang
+riscv                          rv32_defconfig   gcc  
+s390                             alldefconfig   clang
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r003-20230306   gcc  
+s390                 randconfig-r016-20230306   clang
+s390                 randconfig-r035-20230305   clang
+s390                 randconfig-r044-20230305   gcc  
+s390                 randconfig-r044-20230306   clang
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r006-20230305   gcc  
+sh                   randconfig-r006-20230306   gcc  
+sh                   randconfig-r012-20230306   gcc  
+sh                   randconfig-r015-20230306   gcc  
+sh                   randconfig-r026-20230305   gcc  
+sh                   randconfig-r033-20230305   gcc  
+sh                           sh2007_defconfig   gcc  
+sparc        buildonly-randconfig-r004-20230305   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r002-20230306   gcc  
+sparc64              randconfig-r022-20230305   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230306   gcc  
+x86_64               randconfig-a002-20230306   gcc  
+x86_64               randconfig-a003-20230306   gcc  
+x86_64               randconfig-a004-20230306   gcc  
+x86_64               randconfig-a005-20230306   gcc  
+x86_64               randconfig-a006-20230306   gcc  
+x86_64               randconfig-a011-20230306   clang
+x86_64               randconfig-a012-20230306   clang
+x86_64               randconfig-a013-20230306   clang
+x86_64               randconfig-a014-20230306   clang
+x86_64               randconfig-a015-20230306   clang
+x86_64               randconfig-a016-20230306   clang
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r002-20230305   gcc  
+xtensa               randconfig-r002-20230305   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
