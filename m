@@ -2,64 +2,65 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE5C6B2604
-	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Mar 2023 15:00:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A446B27F9
+	for <lists+linux-watchdog@lfdr.de>; Thu,  9 Mar 2023 15:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbjCIOAD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 9 Mar 2023 09:00:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
+        id S232149AbjCIOze (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 9 Mar 2023 09:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbjCIN7h (ORCPT
+        with ESMTP id S232336AbjCIOy7 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 9 Mar 2023 08:59:37 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249A4F1849
-        for <linux-watchdog@vger.kernel.org>; Thu,  9 Mar 2023 05:56:45 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-536bbef1c5eso36183657b3.9
-        for <linux-watchdog@vger.kernel.org>; Thu, 09 Mar 2023 05:56:45 -0800 (PST)
+        Thu, 9 Mar 2023 09:54:59 -0500
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C67FF4023
+        for <linux-watchdog@vger.kernel.org>; Thu,  9 Mar 2023 06:51:56 -0800 (PST)
+Received: by mail-oi1-x22f.google.com with SMTP id bp19so1826004oib.4
+        for <linux-watchdog@vger.kernel.org>; Thu, 09 Mar 2023 06:51:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678370204;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vhxj3g02U6JfJorCEqukLhEPbi5ScM6y20Fj/uWtxsc=;
-        b=M6OUagewNatTVBWogs7CL7Frl+ekF/MC2BZgxAEhzQWeyuSsXaRpkf4c99DXMGsgc6
-         GIkzhUNU2BURb1j3QuJVpX9peQPez+0A+Lwv3I+Pr4W55I9ScaDo7aFhChRp0sadmIiL
-         0lKL1TZ0CxVdMF8HoIQ/7ufJEuKA5Dra+MJuKUyHRmB9rs9CuHe4y70Qv5xVu1WwZK0B
-         1vXdXtOHzSOCFokSbLcL3GvOf4lTYuXwXKVhUa8ogJNH81T3PpCdFdiMh5PpBeOSTCOE
-         8RasSI/d7wlsztguwb8tqjCkoykqGh1gdjoQgiePJjOS2aABefBearXVltjCsf9a3xlk
-         bqLQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678373516;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Gpqy2UwJbTsT8CSlsBkekwaizPbfI6waBJSct+QDKo8=;
+        b=7VnZ8eoq8JCRR9LWSoq6SXSKIYIRedzcewZzSE9gKx6AQQB2Ax7dwKBcAYwJrjlsWs
+         4TCezR69X8MwfD4+CKaz/SObaltdvIIieLVdJ+BWlplOPFiALrUJwDgjMU47Vf51qRDl
+         xdFrwA1rnPNMA0GVzeDnkpXSGfyag6vAi04knNO8VIXj+D5n+705no78/qGHcnD2tLqc
+         nohnomuGXgF8COo7QbluFk8QfItIs5fLy7I2ZnAC1v81iSP6Ds1uiOBx5oP32kgrJXPW
+         yTtqYLrIVGryvFjGoykGRd0Kl8dTZeGhvhFDQoCSZrB7mIPyeb5SEOWrMbUnxfz7JmgZ
+         oQYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678370204;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Vhxj3g02U6JfJorCEqukLhEPbi5ScM6y20Fj/uWtxsc=;
-        b=wpwGYZCMemDXhQTh3ggIFOwnxO0lzRdH1IuMOYqevuk9UdPS91Odc+pjxT6c1FDTrq
-         4fdiPDw8+SA3vdKktCLzpPwYVX24EhLfvbzAhKrmf26MvHZXwJt4hoqHKFNWNAh7Xwy3
-         SztFOKaUmuo9knx0yg8O5qwgs1xLsUuPbCU1M9cjdB3rz1UMQaXKijmwKuHuANfkFXhE
-         uq2AwA+blP5tA2UeDOBeWE2+9csw43V++xbpOJQpfwjbbxs1w7w2x82ZJ8wUBsHWDJJS
-         MyCxQ1Y4DOQNqyjBRCtbN5QevhuFikQ2SevHm2bOi62HpDz2FELppGApr1McyRv7/aZu
-         RfMg==
-X-Gm-Message-State: AO0yUKWEI0LGQFl992Hdm4GP/9gQuCgD7aVpabbIpcyNzY+B43NjehJJ
-        snfhGxveBX7NDnnD5cEOT8XRPBZhGvC4x45jdGeSHLprgNivpbge
-X-Google-Smtp-Source: AK7set8C8YjXMi5gSQYXdOX+ayCa5RjgmjqpOw5RNChqcaFChToV9jRVJLPT0IsYxq4ctbaJ0y/nV2OJRYi9K+NoTvc=
-X-Received: by 2002:a81:ad63:0:b0:52a:9f66:80c6 with SMTP id
- l35-20020a81ad63000000b0052a9f6680c6mr13521476ywk.9.1678370204353; Thu, 09
- Mar 2023 05:56:44 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678373516;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Gpqy2UwJbTsT8CSlsBkekwaizPbfI6waBJSct+QDKo8=;
+        b=8Ch06LIfgCTxwQUq64/zFUbAK8wx7BpJfBXZO9mOM4x5r2Z8khCNvcWx95pN/n+mAZ
+         vuo91kRRGVwIUIjHL4xM92zW0hp0Tb9Eu6/G293pv4dm6CdvC5FtmNgsu2Wod89h8CgO
+         PsWO8r1Cz7dDwFG6wYDxh1X8ikyeIpmT8vNtm7FbFlKZU+z/d4aFKi9udjRU8JXQY5lZ
+         1pzkTacuILg7asaio2IRuNX2ziVaWtVNk2O6Gs2veoZ5aBXfauz7wBJSpFqyCDVev3gy
+         8udV1ZcaNPLjMQVLcoDaq05/qO0O14rSk80Zgd+Gm0gj7Ye0BsOvTghALmoY6VDkkNpI
+         eANQ==
+X-Gm-Message-State: AO0yUKVy3vgoJbHJkeckB9GaLf+zR5WvgZm7ck8WuE+cUYw3A4Sk+C4j
+        43egHqmy8W2ctHxBzExF3E5FMQoZS1Cpc/ae8uS/NA==
+X-Google-Smtp-Source: AK7set8A8FpW9dqaR73G09blcvv/Ti7DIE1vGNLlncw0hLE8FnQCoXHRSlvX0YUqfVCqYXdazGxGSi3CnqOThNIO2y8=
+X-Received: by 2002:a05:6808:2208:b0:37a:2bed:5756 with SMTP id
+ bd8-20020a056808220800b0037a2bed5756mr12243997oib.0.1678373515531; Thu, 09
+ Mar 2023 06:51:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20230203-evk-board-support-v2-0-6ec7cdb10ccf@baylibre.com> <20230203-evk-board-support-v2-3-6ec7cdb10ccf@baylibre.com>
-In-Reply-To: <20230203-evk-board-support-v2-3-6ec7cdb10ccf@baylibre.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 9 Mar 2023 14:56:33 +0100
-Message-ID: <CACRpkdb+CQFOW8zjK2pGhRX=tBUcJAyVN=ohEt8eccndA2nYpA@mail.gmail.com>
-Subject: Re: [PATCH v2 03/18] dt-bindings: pinctrl: mediatek,mt8365-pinctrl:
- add drive strength property
-To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     Zhiyong Tao <zhiyong.tao@mediatek.com>,
+References: <20230203-evk-board-support-v2-0-6ec7cdb10ccf@baylibre.com>
+ <20230203-evk-board-support-v2-17-6ec7cdb10ccf@baylibre.com> <0fb37a8f-f284-76f2-e2f3-ff0f23eaa200@collabora.com>
+In-Reply-To: <0fb37a8f-f284-76f2-e2f3-ff0f23eaa200@collabora.com>
+From:   =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+Date:   Thu, 9 Mar 2023 15:51:44 +0100
+Message-ID: <CAP2ifjOtORrGKEBMw-CzPR4B8CPDaRKnqKHyKL7mC_8qH08=iA@mail.gmail.com>
+Subject: Re: [PATCH v2 17/18] arm64: dts: mediatek: fix systimer properties
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -75,35 +76,40 @@ Cc:     Zhiyong Tao <zhiyong.tao@mediatek.com>,
         linux-mediatek@lists.infradead.org,
         Fabien Parent <fparent@baylibre.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 2:18 PM Alexandre Mergnat <amergnat@baylibre.com> wrote:
+Hi,
 
-> This SoC is able to drive the following output current:
-> - 2 mA
-> - 4 mA
-> - 6 mA
-> - 8 mA
-> - 10 mA
-> - 12 mA
-> - 14 mA
-> - 16 mA
+On Thu, Mar 9, 2023 at 2:32=E2=80=AFPM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> Then drive-strength property is set with enum to reflect its HW capability.
+> Il 07/03/23 14:17, Alexandre Mergnat ha scritto:
+> > From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> >
+> > MT8365 has a SYST timer (System Timer), therefore the compatible node
+> > should be "mediatek,mt6765-timer" instead of "mediatek,mt6795-systimer"
+> > (which corresponds to ARM/ARM64 System Timer).
 >
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> So this is not a CPUXGPT, not a GPT, but a SYST?
+>
+> At this point, this should not be even introduced because commit [1] is
+> not in linux-next yet.
+>
+> [1]: https://lore.kernel.org/all/20230125143503.1015424-10-bero@baylibre.=
+com/
 
-Is this something I can apply directly to the pinctrl tree once the DT
-maintainers have
-had a chance to look at it?
+I've posted a new revision of this patchset containing the systimer fix.
 
-Yours,
-Linus Walleij
+https://lore.kernel.org/linux-mediatek/20230309143459.401783-1-bero@baylibr=
+e.com/
+
+ttyl
+bero
