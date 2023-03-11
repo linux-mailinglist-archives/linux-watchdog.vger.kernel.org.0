@@ -2,72 +2,73 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4836B5C92
-	for <lists+linux-watchdog@lfdr.de>; Sat, 11 Mar 2023 15:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF08A6B5D25
+	for <lists+linux-watchdog@lfdr.de>; Sat, 11 Mar 2023 16:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjCKOEP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 11 Mar 2023 09:04:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44506 "EHLO
+        id S230174AbjCKPGM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 11 Mar 2023 10:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCKOEO (ORCPT
+        with ESMTP id S229772AbjCKPGL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 11 Mar 2023 09:04:14 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8133DF146E;
-        Sat, 11 Mar 2023 06:04:10 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id q11-20020a056830440b00b00693c1a62101so4573780otv.0;
-        Sat, 11 Mar 2023 06:04:10 -0800 (PST)
+        Sat, 11 Mar 2023 10:06:11 -0500
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5778011E6CF
+        for <linux-watchdog@vger.kernel.org>; Sat, 11 Mar 2023 07:06:09 -0800 (PST)
+Received: by mail-oo1-xc34.google.com with SMTP id c184-20020a4a4fc1000000b005250b2dc0easo1235089oob.2
+        for <linux-watchdog@vger.kernel.org>; Sat, 11 Mar 2023 07:06:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678543450;
+        d=linaro.org; s=google; t=1678547168;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lHbYfWWFMq3xnfq8RK48zaeSfQyOjYz9H9AeVr7JDkI=;
-        b=VSuD1HPMoR8jMcVqSmVwP16birkFAsyWL8T9rTU8gib6oQjzN7aJsGKu4CfC6q1l79
-         G/MzAJaljkexPdToBpeZqRYKCNUwC+8sMvWZEEMlGxevBTLZAlIdf7tJATO1Tx+l/8At
-         AQ1b0lsrvv8gJAjS3ugAPWILzVr+2g/NC0batxEBIi9UNN7ZcFbG3o6XiGTtbVDOzZVr
-         TwJrAx/wH8QQKpsV3eC+bAZQMDDU4SHzmRNZD5M6O7aDKOiFMQmpVef2mV/kg3H+y3pf
-         tWoaFFNxqPVW6IqQiJVln2qHHkBxaDgl+DGyusJoABHQbn9DpavcZElIOj2PxAc5vMA3
-         KLOw==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QSjJSFKnSJ9NNZL9oVyJv4eP2OOu2hx/+ygM+UpA2Gk=;
+        b=R5gi8dNiXcO8VhEzWnGZ+j1QDnktS/fNhHnRz5EIzqAsQko/NXeD4amguP6U5pRbxT
+         YaU8ljLavK2ZKjct/VC7ZlN25yDbjQgGe5z7dkIq0kLgClkbAmYGhS8NgFEl2vPg34gx
+         ux8BPoH5tDkhwGPVFHk1ZXql3lXwxXtJEcvLfXmW/cFI1sOcWyNksw7992x7Y85bLAC9
+         w19g0q9RR54pHTdoaizS3hbet8DLhnbgeQT07H9c41LKRveLqVo93h1A93WbpIoJOUPq
+         9bMDZktPQ4y6Umct1tGpd6Hed7X6DeCsknMu+iAogSMkPzwTJ/megjUy/aHcK5TTJUjm
+         hgYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678543450;
+        d=1e100.net; s=20210112; t=1678547168;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lHbYfWWFMq3xnfq8RK48zaeSfQyOjYz9H9AeVr7JDkI=;
-        b=3BqfdgRyCAWmljivFbj3w35fI2lM+Ethb8Wn4Oj6hwYDsaN7BRyd9QwsfuCQcAcwVS
-         THPu2h0gtWfZEwGT9FLBklRWEdBo/yyhx37iRWfYy425jqoZPx6pxxHn8NYqS9ldVtx7
-         2av4qkRnFH56IRrhDRcqwDg1HhTEBgIIf2tbQWbhvhrHzDZCSLyojR7vHBq8pES9VAx/
-         4xjv2Nxh1FCmcjP2pPJNr1IDqkwJQJiTrqJEK3gd7zBrG7oMJBbTVREXCpUZu4Iqdw8y
-         MLDVpZuIbOBrneOh+9LvSSdKeAxNouWFklVFuF9Eq26JKm/1WBLdWIqtRq5nMK6PTq1t
-         fneQ==
-X-Gm-Message-State: AO0yUKWdcQjgv+90jKRncMeu4hRHPN3kkMk7xAJxoGQ6LkTxAw3dcpOO
-        BT1U1FEISDCABR551OMYL9Ldh1pDsdw=
-X-Google-Smtp-Source: AK7set+IWuZ9Mh0/VK7kFulWIn5n9rP+YfScDH/5eoHPT4RE3YW6S5Miq5wtKTUgJ8EooryMLcDZEg==
-X-Received: by 2002:a05:6830:6210:b0:68b:d62a:a64a with SMTP id cd16-20020a056830621000b0068bd62aa64amr6055562otb.29.1678543449779;
-        Sat, 11 Mar 2023 06:04:09 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v6-20020a05683024a600b00690e7b0f9e3sm1181701ots.34.2023.03.11.06.04.09
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QSjJSFKnSJ9NNZL9oVyJv4eP2OOu2hx/+ygM+UpA2Gk=;
+        b=IH78+OM6zRT5MTXNIA1Wb8VyhPWZYGIzZEDLvx/CKoGwj49sbS5Vco5vpfcFQpEU+j
+         BiUiEK/7uhCZuUSgySPDvb82AD/VG7zcXsurSzZw6si3daopjmXYVA33STlgNwtFXaLR
+         FLfufIDA2Ue934Vq+JBF289DuwZp9sz+bLRdz7v0dPw8xwkQFlmBxEKFxV7SLMCBZCQW
+         lhvz3Q1B0Q4+LEOGGTxfkOzWiYeXbRVhYjyb1oe3tb//GSmgQfPAas+R+pQXB8sMny/8
+         f2N2HjD7WuYcz6t0a2ajGKzXERcA9sm2ddfAUxO6odJvn2/r1QCXvfUypL9DMKvSqweI
+         sRLA==
+X-Gm-Message-State: AO0yUKVr6wZXY8n6pNqv7T1EJ0/xwpA8DyZwrsmTuTCpH4wuf78xTM92
+        8YlP0jbEnex9JW8JFZ1LpPwtAw==
+X-Google-Smtp-Source: AK7set8wgUqiaZeZ2snB6JPbJ/8K6anS+l6yd/zrihTWdRMWzgZwMR96bH6fkwKpnWCc1kTMEiavnw==
+X-Received: by 2002:a4a:c183:0:b0:51f:fa7e:3804 with SMTP id w3-20020a4ac183000000b0051ffa7e3804mr12287503oop.8.1678547168626;
+        Sat, 11 Mar 2023 07:06:08 -0800 (PST)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id x67-20020a4a4146000000b00525240c6149sm1092732ooa.31.2023.03.11.07.06.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 06:04:09 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 11 Mar 2023 06:04:08 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     William Breathitt Gray <william.gray@linaro.org>
+        Sat, 11 Mar 2023 07:06:07 -0800 (PST)
+Date:   Sat, 11 Mar 2023 10:06:05 -0500
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Demetrotion <pdemetrotion@winsystems.com>,
+        techsupport@winsystems.com
 Subject: Re: [PATCH] watchdog: ebc-c384_wdt: Migrate to the regmap API
-Message-ID: <b65233f4-c8e2-435d-8321-03cc5f6b1c3d@roeck-us.net>
+Message-ID: <ZAyY3VGlo4N4SLZQ@fedora>
 References: <20230311004404.62980-1-william.gray@linaro.org>
+ <b65233f4-c8e2-435d-8321-03cc5f6b1c3d@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="b+Kv2GvGpypcTEIM"
 Content-Disposition: inline
-In-Reply-To: <20230311004404.62980-1-william.gray@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <b65233f4-c8e2-435d-8321-03cc5f6b1c3d@roeck-us.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,186 +76,98 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 07:44:04PM -0500, William Breathitt Gray wrote:
-> The regmap API supports IO port accessors so we can take advantage of
-> regmap abstractions rather than handling access to the device registers
-> directly in the driver.
-> 
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 
-I assume you did, but just to be sure: Did you test this on hardware ?
+--b+Kv2GvGpypcTEIM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  drivers/watchdog/Kconfig        |  1 +
->  drivers/watchdog/ebc-c384_wdt.c | 64 +++++++++++++++++++++++----------
->  2 files changed, 46 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index f0872970daf9..301cfe79263c 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1089,6 +1089,7 @@ config EBC_C384_WDT
->  	tristate "WinSystems EBC-C384 Watchdog Timer"
->  	depends on X86
->  	select ISA_BUS_API
-> +	select REGMAP_MMIO
->  	select WATCHDOG_CORE
->  	help
->  	  Enables watchdog timer support for the watchdog timer on the
-> diff --git a/drivers/watchdog/ebc-c384_wdt.c b/drivers/watchdog/ebc-c384_wdt.c
-> index 8ef4b0df3855..3776d32cb863 100644
-> --- a/drivers/watchdog/ebc-c384_wdt.c
-> +++ b/drivers/watchdog/ebc-c384_wdt.c
-> @@ -3,15 +3,15 @@
->   * Watchdog timer driver for the WinSystems EBC-C384
->   * Copyright (C) 2016 William Breathitt Gray
->   */
-> +#include <linux/bits.h>
->  #include <linux/device.h>
->  #include <linux/dmi.h>
-> -#include <linux/errno.h>
-> -#include <linux/io.h>
-> -#include <linux/ioport.h>
-> +#include <linux/err.h>
->  #include <linux/isa.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/moduleparam.h>
-> +#include <linux/regmap.h>
->  #include <linux/types.h>
->  #include <linux/watchdog.h>
->  
-> @@ -24,8 +24,11 @@
->  #define WATCHDOG_MAX_TIMEOUT	15300
->  #define BASE_ADDR		0x564
->  #define ADDR_EXTENT		5
-> -#define CFG_ADDR		(BASE_ADDR + 1)
-> -#define PET_ADDR		(BASE_ADDR + 2)
-> +#define CFG_REG			0x1
-> +#define PET_REG			0x2
-> +#define CFG_MINUTES		0x00
-> +#define CFG_SECONDS		BIT(7)
-> +#define PET_DISABLED		0x00
->  
->  static bool nowayout = WATCHDOG_NOWAYOUT;
->  module_param(nowayout, bool, 0);
-> @@ -37,43 +40,54 @@ module_param(timeout, uint, 0);
->  MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds (default="
->  	__MODULE_STRING(WATCHDOG_TIMEOUT) ")");
->  
-> +static const struct regmap_range ebc_c384_wdt_wr_ranges[] = {
-> +	regmap_reg_range(0x1, 0x2),
+On Sat, Mar 11, 2023 at 06:04:08AM -0800, Guenter Roeck wrote:
+> On Fri, Mar 10, 2023 at 07:44:04PM -0500, William Breathitt Gray wrote:
+> > The regmap API supports IO port accessors so we can take advantage of
+> > regmap abstractions rather than handling access to the device registers
+> > directly in the driver.
+> >=20
+> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+>=20
+> I assume you did, but just to be sure: Did you test this on hardware ?
 
-Any reasons for not using defines ?
+I've only done a build test; I no longer have access to a WINSYSTEMS
+EBC-C384 motherboard to test this on real hardware. I've CC'd Paul
+Demetrotion and the WINSYSTEMS tech support list to this thread as
+hopefully one of the WINSYSTEMS engineers may help us test this.
 
-> +};
-> +static const struct regmap_access_table ebc_c384_wdt_wr_table = {
-> +	.yes_ranges = ebc_c384_wdt_wr_ranges,
-> +	.n_yes_ranges = ARRAY_SIZE(ebc_c384_wdt_wr_ranges),
-> +};
-> +static const struct regmap_config ebc_c384_wdt_regmap_config = {
-> +	.reg_bits = 8,
-> +	.reg_stride = 1,
-> +	.val_bits = 8,
-> +	.io_port = true,
-> +	.max_register = 0x2,
+> > @@ -37,43 +40,54 @@ module_param(timeout, uint, 0);
+> >  MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds (default=3D"
+> >  	__MODULE_STRING(WATCHDOG_TIMEOUT) ")");
+> > =20
+> > +static const struct regmap_range ebc_c384_wdt_wr_ranges[] =3D {
+> > +	regmap_reg_range(0x1, 0x2),
+>=20
+> Any reasons for not using defines ?
 
-Any reason for not using a define ?
+I feel direct addresses are somewhat clearer in this context. Regmap
+configurations describe the address range of valid read and write
+operations. Although the range for this device is simple, other devices
+might have multiple ranges with gaps of invalid addresses.
 
-> +	.wr_table = &ebc_c384_wdt_wr_table,
-> +};
-> +
->  static int ebc_c384_wdt_start(struct watchdog_device *wdev)
->  {
-> +	struct regmap *const map = wdev->driver_data;
+For example, our valid write address range is 0x1-0x2 here:
 
-Please use watchdog_get_drvdata() and watchdog_set_drvdata() when accessing
-or setting watchdog driver data.
+    regmap_reg_range(0x1, 0x2)
 
-Guenter
+Which is much clearer than trying to match these to register defines:
 
->  	unsigned t = wdev->timeout;
->  
->  	/* resolution is in minutes for timeouts greater than 255 seconds */
->  	if (t > 255)
->  		t = DIV_ROUND_UP(t, 60);
->  
-> -	outb(t, PET_ADDR);
-> -
-> -	return 0;
-> +	return regmap_write(map, PET_REG, t);
->  }
->  
->  static int ebc_c384_wdt_stop(struct watchdog_device *wdev)
->  {
-> -	outb(0x00, PET_ADDR);
-> +	struct regmap *const map = wdev->driver_data;
->  
-> -	return 0;
-> +	return regmap_write(map, PET_REG, PET_DISABLED);
->  }
->  
->  static int ebc_c384_wdt_set_timeout(struct watchdog_device *wdev, unsigned t)
->  {
-> +	struct regmap *const map = wdev->driver_data;
-> +
->  	/* resolution is in minutes for timeouts greater than 255 seconds */
->  	if (t > 255) {
->  		/* round second resolution up to minute granularity */
->  		wdev->timeout = roundup(t, 60);
-> -
-> -		/* set watchdog timer for minutes */
-> -		outb(0x00, CFG_ADDR);
-> -	} else {
-> -		wdev->timeout = t;
-> -
-> -		/* set watchdog timer for seconds */
-> -		outb(0x80, CFG_ADDR);
-> +		return regmap_write(map, CFG_REG, CFG_MINUTES);
->  	}
->  
-> -	return 0;
-> +	wdev->timeout = t;
-> +	return regmap_write(map, CFG_REG, CFG_SECONDS);
->  }
->  
->  static const struct watchdog_ops ebc_c384_wdt_ops = {
-> @@ -89,6 +103,8 @@ static const struct watchdog_info ebc_c384_wdt_info = {
->  
->  static int ebc_c384_wdt_probe(struct device *dev, unsigned int id)
->  {
-> +	void __iomem *regs;
-> +	struct regmap *map;
->  	struct watchdog_device *wdd;
->  
->  	if (!devm_request_region(dev, BASE_ADDR, ADDR_EXTENT, dev_name(dev))) {
-> @@ -97,6 +113,15 @@ static int ebc_c384_wdt_probe(struct device *dev, unsigned int id)
->  		return -EBUSY;
->  	}
->  
-> +	regs = devm_ioport_map(dev, BASE_ADDR, ADDR_EXTENT);
-> +	if (!regs)
-> +		return -ENOMEM;
-> +
-> +	map = devm_regmap_init_mmio(dev, regs, &ebc_c384_wdt_regmap_config);
-> +	if (IS_ERR(map))
-> +		return dev_err_probe(dev, PTR_ERR(map),
-> +				     "Unable to initialize register map\n");
-> +
->  	wdd = devm_kzalloc(dev, sizeof(*wdd), GFP_KERNEL);
->  	if (!wdd)
->  		return -ENOMEM;
-> @@ -106,6 +131,7 @@ static int ebc_c384_wdt_probe(struct device *dev, unsigned int id)
->  	wdd->timeout = WATCHDOG_TIMEOUT;
->  	wdd->min_timeout = 1;
->  	wdd->max_timeout = WATCHDOG_MAX_TIMEOUT;
-> +	wdd->driver_data = map;
->  
->  	watchdog_set_nowayout(wdd, nowayout);
->  	watchdog_init_timeout(wdd, timeout, dev);
-> 
-> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-> -- 
-> 2.39.2
-> 
+    regmap_reg_range(CFG_REG, PET_REG)
+
+Because it's not immediately clear that CFG_REG to PET_REG is a
+contiguous address range.
+
+> > +};
+> > +static const struct regmap_access_table ebc_c384_wdt_wr_table =3D {
+> > +	.yes_ranges =3D ebc_c384_wdt_wr_ranges,
+> > +	.n_yes_ranges =3D ARRAY_SIZE(ebc_c384_wdt_wr_ranges),
+> > +};
+> > +static const struct regmap_config ebc_c384_wdt_regmap_config =3D {
+> > +	.reg_bits =3D 8,
+> > +	.reg_stride =3D 1,
+> > +	.val_bits =3D 8,
+> > +	.io_port =3D true,
+> > +	.max_register =3D 0x2,
+>=20
+> Any reason for not using a define ?
+
+Same reason as above: `max_register =3D 0x2` is already clear enough and
+`max_register =3D EBC_C384_MAX_REGISTER` wouldn't add any substantial
+clarity.
+
+> > +	.wr_table =3D &ebc_c384_wdt_wr_table,
+> > +};
+> > +
+> >  static int ebc_c384_wdt_start(struct watchdog_device *wdev)
+> >  {
+> > +	struct regmap *const map =3D wdev->driver_data;
+>=20
+> Please use watchdog_get_drvdata() and watchdog_set_drvdata() when accessi=
+ng
+> or setting watchdog driver data.
+>=20
+> Guenter
+
+I'll adjust the driver_data interactions in my v2 submission to utilize
+watchdog_get_drvdata() and watchdog_set_drvdata().
+
+William Breathitt Gray
+
+--b+Kv2GvGpypcTEIM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZAyY3QAKCRC1SFbKvhIj
+K7ZYAP0ame//zn/G+yvSJeRUMTvZqJhg5hNgtPG5kKZDam+8mgEA2zNrGImNqwNe
+bjBGtRFEADurS58TbPdwdjn8yZ+9QAE=
+=zCZs
+-----END PGP SIGNATURE-----
+
+--b+Kv2GvGpypcTEIM--
