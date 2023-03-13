@@ -2,73 +2,81 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF08A6B5D25
-	for <lists+linux-watchdog@lfdr.de>; Sat, 11 Mar 2023 16:06:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE17B6B79BE
+	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Mar 2023 15:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjCKPGM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 11 Mar 2023 10:06:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
+        id S230176AbjCMOAH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 13 Mar 2023 10:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjCKPGL (ORCPT
+        with ESMTP id S231267AbjCMN7w (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 11 Mar 2023 10:06:11 -0500
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5778011E6CF
-        for <linux-watchdog@vger.kernel.org>; Sat, 11 Mar 2023 07:06:09 -0800 (PST)
-Received: by mail-oo1-xc34.google.com with SMTP id c184-20020a4a4fc1000000b005250b2dc0easo1235089oob.2
-        for <linux-watchdog@vger.kernel.org>; Sat, 11 Mar 2023 07:06:09 -0800 (PST)
+        Mon, 13 Mar 2023 09:59:52 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81C96F611;
+        Mon, 13 Mar 2023 06:59:30 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id y4so19635056edo.2;
+        Mon, 13 Mar 2023 06:59:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678547168;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QSjJSFKnSJ9NNZL9oVyJv4eP2OOu2hx/+ygM+UpA2Gk=;
-        b=R5gi8dNiXcO8VhEzWnGZ+j1QDnktS/fNhHnRz5EIzqAsQko/NXeD4amguP6U5pRbxT
-         YaU8ljLavK2ZKjct/VC7ZlN25yDbjQgGe5z7dkIq0kLgClkbAmYGhS8NgFEl2vPg34gx
-         ux8BPoH5tDkhwGPVFHk1ZXql3lXwxXtJEcvLfXmW/cFI1sOcWyNksw7992x7Y85bLAC9
-         w19g0q9RR54pHTdoaizS3hbet8DLhnbgeQT07H9c41LKRveLqVo93h1A93WbpIoJOUPq
-         9bMDZktPQ4y6Umct1tGpd6Hed7X6DeCsknMu+iAogSMkPzwTJ/megjUy/aHcK5TTJUjm
-         hgYg==
+        d=gmail.com; s=20210112; t=1678715969;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fN1dQT+PN2R8a3kO0NDn0Z6JMMME9zE9z+uQaFMNxh4=;
+        b=jcpxiX875t/ZNhNKsmB738+3N2Jq9gvZoTjtb3wq6So/RnAHOBZOy0dI91Sp16dAJd
+         4kTAsHVnjd76NKjEKp0/iveiBzyVYgg5+VRQLE8Bu8y1HQPSwqVHAu2tdxBxU7u17g0C
+         yoxysF68AueW1Gf0VQa+nHoEPsqTWfOjTxFeOmkQKBj/tcvlcWdHwyIBpiMc3zhvZLtx
+         g8NqJR3l/SN9i68mj23fdFG6OHQ7B2NJp5BzWIr6Cj5Isb3zvfy2H7ELLoUEhbVwevne
+         EUqrt6+AXqYW8rOZ8HGO7bhsHMtx1AjV0NqXcRYuqVKcgdrayO2oL1OwbBw6hfhf+mq7
+         96ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678547168;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QSjJSFKnSJ9NNZL9oVyJv4eP2OOu2hx/+ygM+UpA2Gk=;
-        b=IH78+OM6zRT5MTXNIA1Wb8VyhPWZYGIzZEDLvx/CKoGwj49sbS5Vco5vpfcFQpEU+j
-         BiUiEK/7uhCZuUSgySPDvb82AD/VG7zcXsurSzZw6si3daopjmXYVA33STlgNwtFXaLR
-         FLfufIDA2Ue934Vq+JBF289DuwZp9sz+bLRdz7v0dPw8xwkQFlmBxEKFxV7SLMCBZCQW
-         lhvz3Q1B0Q4+LEOGGTxfkOzWiYeXbRVhYjyb1oe3tb//GSmgQfPAas+R+pQXB8sMny/8
-         f2N2HjD7WuYcz6t0a2ajGKzXERcA9sm2ddfAUxO6odJvn2/r1QCXvfUypL9DMKvSqweI
-         sRLA==
-X-Gm-Message-State: AO0yUKVr6wZXY8n6pNqv7T1EJ0/xwpA8DyZwrsmTuTCpH4wuf78xTM92
-        8YlP0jbEnex9JW8JFZ1LpPwtAw==
-X-Google-Smtp-Source: AK7set8wgUqiaZeZ2snB6JPbJ/8K6anS+l6yd/zrihTWdRMWzgZwMR96bH6fkwKpnWCc1kTMEiavnw==
-X-Received: by 2002:a4a:c183:0:b0:51f:fa7e:3804 with SMTP id w3-20020a4ac183000000b0051ffa7e3804mr12287503oop.8.1678547168626;
-        Sat, 11 Mar 2023 07:06:08 -0800 (PST)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id x67-20020a4a4146000000b00525240c6149sm1092732ooa.31.2023.03.11.07.06.06
+        d=1e100.net; s=20210112; t=1678715969;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fN1dQT+PN2R8a3kO0NDn0Z6JMMME9zE9z+uQaFMNxh4=;
+        b=tKPdP+ihkSvJw8+VlkJXMPdlTH5fq02Hts5VAMR6X9Ye7XcvGmh77MjmlKlnK2zCaf
+         gBMoPwy/ooVHUNlmIacks4J90fojpM0VjzVfWp6e3CnAhe9VLBHve2ly9gKlhEgBjCKj
+         1ynZZ0ESIwSfB0ZNewk5qT8rY6hjrj9X82OTK69FDqF3cfIEkisYWG9RAnrDVVotK6pb
+         hypcWISB0Vd460ba1uOPuxUbMr+z52lagMPtw9lsJI9jZ2mpuAzabHzcc8bE5AOFOouI
+         n+t4kcFW/bU6LMsMYYD14jJ9K2UaQKjP8142CA/db09eVW5cKN3GignVuXAXa993enow
+         NFyA==
+X-Gm-Message-State: AO0yUKVALXwQOFQnfayuFpWQqZI2VP2fFx2uKVZzAu/aJ84ydOExD9CE
+        cmuO3G/e/6psJN4KNCkNjhY=
+X-Google-Smtp-Source: AK7set/Hs5/np/06DvK71sMCs5LvwEH+FBtLTWDd7uwUA8oxyW7QC+KHB6dBgcf4GBfaRqFOMS+hTw==
+X-Received: by 2002:a17:907:b1b:b0:92a:32ac:8f3d with SMTP id h27-20020a1709070b1b00b0092a32ac8f3dmr2778237ejl.66.1678715969365;
+        Mon, 13 Mar 2023 06:59:29 -0700 (PDT)
+Received: from [127.0.1.1] (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id w7-20020a50d787000000b004c19f1891fasm3299161edi.59.2023.03.13.06.59.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 07:06:07 -0800 (PST)
-Date:   Sat, 11 Mar 2023 10:06:05 -0500
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Paul Demetrotion <pdemetrotion@winsystems.com>,
-        techsupport@winsystems.com
-Subject: Re: [PATCH] watchdog: ebc-c384_wdt: Migrate to the regmap API
-Message-ID: <ZAyY3VGlo4N4SLZQ@fedora>
-References: <20230311004404.62980-1-william.gray@linaro.org>
- <b65233f4-c8e2-435d-8321-03cc5f6b1c3d@roeck-us.net>
+        Mon, 13 Mar 2023 06:59:29 -0700 (PDT)
+From:   Jakob Koschel <jkl820.git@gmail.com>
+Date:   Mon, 13 Mar 2023 14:59:19 +0100
+Subject: [PATCH v2] watchdog: avoid usage of iterator after loop
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="b+Kv2GvGpypcTEIM"
-Content-Disposition: inline
-In-Reply-To: <b65233f4-c8e2-435d-8321-03cc5f6b1c3d@roeck-us.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230301-watchdog-avoid-iter-after-loop-v2-1-8411e3bbe0de@gmail.com>
+X-B4-Tracking: v=1; b=H4sIADYsD2QC/42OwQ6DIBBEf6Xh3G0EatSe+h+NhwVBNlExYGgb4
+ 78X/IJeJnk7m5nZWTSBTGSPy86CSRTJLxnE9cK0w2U0QENmJiohK1lxeOOm3eBHwORpANpMALR
+ FJ+9XQN41yoqK32XNcojCaEAFXLQrMTPG/FqMNRhLn7P51Wd2FDcfvueQxMv1787EgUNbc1u3U
+ pnONs9xRppu2s+sP47jBxZllqrlAAAA
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678715968; l=1573;
+ i=jkl820.git@gmail.com; s=20230112; h=from:subject:message-id;
+ bh=Zyf7+R+AMoECnD523+X9aDNjyuDaYzeTvhqsg90q7kU=;
+ b=900ZykUCEY7u8MZhgZuIdUmEP0GFLUY8w8tcsGY3dlz96RpuYHcAy1POmpE9uT/J849Xe8WscfsP
+ cQfCfCOsDUwamdqgABhFvvVkQLUuJfsLF3KLFLc78doPd0GhvRkg
+X-Developer-Key: i=jkl820.git@gmail.com; a=ed25519;
+ pk=rcRpP90oZXet9udPj+2yOibfz31aYv8tpf0+ZYOQhyA=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,98 +84,47 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+If potentially no valid element is found, 'p' would contain an invalid
+pointer past the iterator loop. To ensure 'p' is valid under any
+circumstances, the kfree() should be within the loop body.
 
---b+Kv2GvGpypcTEIM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Additionally, Linus proposed to avoid any use of the list iterator
+variable after the loop, in the attempt to move the list iterator
+variable declaration into the macro to avoid any potential misuse after
+the loop [1].
 
-On Sat, Mar 11, 2023 at 06:04:08AM -0800, Guenter Roeck wrote:
-> On Fri, Mar 10, 2023 at 07:44:04PM -0500, William Breathitt Gray wrote:
-> > The regmap API supports IO port accessors so we can take advantage of
-> > regmap abstractions rather than handling access to the device registers
-> > directly in the driver.
-> >=20
-> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
->=20
-> I assume you did, but just to be sure: Did you test this on hardware ?
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+---
+Changes in v2:
+- avoid returning within the list iterator
+- Link to v1: https://lore.kernel.org/r/20230301-watchdog-avoid-iter-after-loop-v1-1-851f583be9f7@gmail.com
+---
+ drivers/watchdog/watchdog_pretimeout.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-I've only done a build test; I no longer have access to a WINSYSTEMS
-EBC-C384 motherboard to test this on real hardware. I've CC'd Paul
-Demetrotion and the WINSYSTEMS tech support list to this thread as
-hopefully one of the WINSYSTEMS engineers may help us test this.
+diff --git a/drivers/watchdog/watchdog_pretimeout.c b/drivers/watchdog/watchdog_pretimeout.c
+index 376a495ab80c..e5295c990fa1 100644
+--- a/drivers/watchdog/watchdog_pretimeout.c
++++ b/drivers/watchdog/watchdog_pretimeout.c
+@@ -207,10 +207,9 @@ void watchdog_unregister_pretimeout(struct watchdog_device *wdd)
+ 	list_for_each_entry_safe(p, t, &pretimeout_list, entry) {
+ 		if (p->wdd == wdd) {
+ 			list_del(&p->entry);
++			kfree(p);
+ 			break;
+ 		}
+ 	}
+ 	spin_unlock_irq(&pretimeout_lock);
+-
+-	kfree(p);
+ }
 
-> > @@ -37,43 +40,54 @@ module_param(timeout, uint, 0);
-> >  MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds (default=3D"
-> >  	__MODULE_STRING(WATCHDOG_TIMEOUT) ")");
-> > =20
-> > +static const struct regmap_range ebc_c384_wdt_wr_ranges[] =3D {
-> > +	regmap_reg_range(0x1, 0x2),
->=20
-> Any reasons for not using defines ?
+---
+base-commit: c0927a7a5391f7d8e593e5e50ead7505a23cadf9
+change-id: 20230301-watchdog-avoid-iter-after-loop-a197bf201435
 
-I feel direct addresses are somewhat clearer in this context. Regmap
-configurations describe the address range of valid read and write
-operations. Although the range for this device is simple, other devices
-might have multiple ranges with gaps of invalid addresses.
+Best regards,
+-- 
+Jakob Koschel <jkl820.git@gmail.com>
 
-For example, our valid write address range is 0x1-0x2 here:
-
-    regmap_reg_range(0x1, 0x2)
-
-Which is much clearer than trying to match these to register defines:
-
-    regmap_reg_range(CFG_REG, PET_REG)
-
-Because it's not immediately clear that CFG_REG to PET_REG is a
-contiguous address range.
-
-> > +};
-> > +static const struct regmap_access_table ebc_c384_wdt_wr_table =3D {
-> > +	.yes_ranges =3D ebc_c384_wdt_wr_ranges,
-> > +	.n_yes_ranges =3D ARRAY_SIZE(ebc_c384_wdt_wr_ranges),
-> > +};
-> > +static const struct regmap_config ebc_c384_wdt_regmap_config =3D {
-> > +	.reg_bits =3D 8,
-> > +	.reg_stride =3D 1,
-> > +	.val_bits =3D 8,
-> > +	.io_port =3D true,
-> > +	.max_register =3D 0x2,
->=20
-> Any reason for not using a define ?
-
-Same reason as above: `max_register =3D 0x2` is already clear enough and
-`max_register =3D EBC_C384_MAX_REGISTER` wouldn't add any substantial
-clarity.
-
-> > +	.wr_table =3D &ebc_c384_wdt_wr_table,
-> > +};
-> > +
-> >  static int ebc_c384_wdt_start(struct watchdog_device *wdev)
-> >  {
-> > +	struct regmap *const map =3D wdev->driver_data;
->=20
-> Please use watchdog_get_drvdata() and watchdog_set_drvdata() when accessi=
-ng
-> or setting watchdog driver data.
->=20
-> Guenter
-
-I'll adjust the driver_data interactions in my v2 submission to utilize
-watchdog_get_drvdata() and watchdog_set_drvdata().
-
-William Breathitt Gray
-
---b+Kv2GvGpypcTEIM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZAyY3QAKCRC1SFbKvhIj
-K7ZYAP0ame//zn/G+yvSJeRUMTvZqJhg5hNgtPG5kKZDam+8mgEA2zNrGImNqwNe
-bjBGtRFEADurS58TbPdwdjn8yZ+9QAE=
-=zCZs
------END PGP SIGNATURE-----
-
---b+Kv2GvGpypcTEIM--
