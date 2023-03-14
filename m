@@ -2,156 +2,124 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC086B9379
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Mar 2023 13:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF926B9509
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Mar 2023 13:59:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjCNMPx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 14 Mar 2023 08:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
+        id S232008AbjCNM7b (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 14 Mar 2023 08:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231800AbjCNMPK (ORCPT
+        with ESMTP id S232010AbjCNM7C (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:15:10 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8C2A188C;
-        Tue, 14 Mar 2023 05:14:15 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32EAj6gl027432;
-        Tue, 14 Mar 2023 12:13:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=O2TuigoThC85MUm+xrTBf7ysRHIcd+HyV6A5mkUeIME=;
- b=LeDAZaQluRlxyTCw2mZ4Pm7GPA7+0VMWVDRGXyt8MnMVECOTujJa4HS2iJHAMRtxxpZU
- ekEqf/ycS4n6r8rMugihqhVDyctXF5c/jZFGYtKjStvg/ALegZuegSI/ucjakCRHdZmp
- k2u8jCKvZJuw5ho/dQdmgiB9kPUKWH0URzYsMNgrJZ811oh9iv7Bp3+AM+WxU/0iEvlW
- LqSH+gORh6VNaRc8B5qJouLI8JSsdvnArahMc3Qbzdx3LYl9RwoXmUWexGSUi8w9dX4e
- xX1lKbwySWTEV7aY6oGU2Q/LZbSsrrymTk6Yu6xsg4Kew05yYzDF7umolJ/C1ZFZfRN8 Hw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3panssw8x4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 12:13:02 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32EBU5l4001811;
-        Tue, 14 Mar 2023 12:13:01 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3panssw8vd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 12:13:01 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32E7kqS2028633;
-        Tue, 14 Mar 2023 12:12:58 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3p8h96msn2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 12:12:57 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32ECCtca62259526
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Mar 2023 12:12:55 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 89ECF2007D;
-        Tue, 14 Mar 2023 12:12:55 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1A6B12007B;
-        Tue, 14 Mar 2023 12:12:55 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Mar 2023 12:12:55 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH v3 36/38] watchdog: add HAS_IOPORT dependencies
-Date:   Tue, 14 Mar 2023 13:12:14 +0100
-Message-Id: <20230314121216.413434-37-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230314121216.413434-1-schnelle@linux.ibm.com>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+        Tue, 14 Mar 2023 08:59:02 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDBE126FB
+        for <linux-watchdog@vger.kernel.org>; Tue, 14 Mar 2023 05:54:53 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id i28so19920883lfv.0
+        for <linux-watchdog@vger.kernel.org>; Tue, 14 Mar 2023 05:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678798393;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Oc/yTtxpfi/cx0O/ciOGYJj7wULj4xSmUjomTMHGaJ0=;
+        b=BDH+zmtwaQICLk0RimsYEFMvJaCY5d622GlOKgq2u86mQuYemKYcYDJN9jBfjM0vQm
+         vE8hQhXPmdISmKMUV50Id/yh/pmw0TEnBi3GqKrnrUKMFNq+K2vhz3srKTcDoluhaMUz
+         srvcx0C+68alcOL3JyCMEwL70Es67yRRoSWBl/qcrPmLyhV37KNP0I1a2Dx+o2M/pz1r
+         1ECnoGdSxriHcNkDRDY+bFmbItNtQq+5OB4f2Af786PCGlpZEV5VPbCZTWBQoNrvjZxm
+         sXA/DXHfbtperWSlep3vntPiWb3iUmXfOZ9nNJ9TVxNkfVvvTGuShr32u+5oryy87suI
+         aUSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678798393;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Oc/yTtxpfi/cx0O/ciOGYJj7wULj4xSmUjomTMHGaJ0=;
+        b=HkxAI3W0vP1PC5nCRFHMpn4NZqaXnaCPBSM3KGoRLQShVAcD1Fl7XXOYULEqDpK6WX
+         ITacDz4cup9cIPbTH9llcDCJbqplPHLwTf1PnyEOqohWX0ZFwKwVzWSezPT+pfmJ/+Ve
+         Fvoi6VLlY/sU3N0YULbZ8YjMnz5aAZtjTVWE9x+4XA9FYj6PZq7Eoa7vMSMlUBUrHp75
+         y9qhdhvTqACil8xKGKQRnVuufoewD8SvSPPFtif6H6QLaU2lQWT58DCIH6lGQlqwp+4h
+         cBuIjucLuqPj6sxMqXSn2Xa8Q7wEhH1gLQqXqoeXL8uSf5Kf8hho7NsmbBR2zbrrhh5C
+         Repg==
+X-Gm-Message-State: AO0yUKU7AgYxou35tGNcWAiPVnWPcXpyczAq79CD5trc5Sa6UrumH5qz
+        M8OvnDyEwRJ+fK/fbMTyP5Agvg==
+X-Google-Smtp-Source: AK7set/cA5JzNq58dSwBAkLHZCu0RayEc27uAlLkeTiHXGkrsrtUKK6Xmh8rmkhOulNKQc/fzE5z3w==
+X-Received: by 2002:ac2:4c29:0:b0:4e8:49ff:8df8 with SMTP id u9-20020ac24c29000000b004e849ff8df8mr770470lfq.61.1678798393458;
+        Tue, 14 Mar 2023 05:53:13 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id s9-20020a19ad49000000b004dda74eccafsm395374lfd.68.2023.03.14.05.53.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 05:53:13 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Tue, 14 Mar 2023 13:52:58 +0100
+Subject: [PATCH 3/6] dt-bindings: nvmem: Add compatible for QCM2290
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4O6iP_YBCAM4s6g7olLFIbnJC6tUU4A-
-X-Proofpoint-ORIG-GUID: JkZNKnr4AI9zvWdhgJsUOZTfwlhbdCyR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-14_06,2023-03-14_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
- malwarescore=0 suspectscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
- mlxlogscore=999 adultscore=0 lowpriorityscore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303140103
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230314-topic-2290_compats-v1-3-47e26c3c0365@linaro.org>
+References: <20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org>
+In-Reply-To: <20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678798384; l=777;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=hWgvEppu/A1SXLKMMX+IVEfzPX58BD27JWEng55RY7w=;
+ b=Ef0WrVrVXlVDBJBByuHYfJlJ7lKiC4VKDD9vte3q6X/PFMC2o+9sSEcy8IVuH2VILi/qU5aK+BY5
+ Ts3tc5KED8ipFSTE15LUOfkLBF7qH00cFE3ULYIfdjVnID+Jp6zW
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-not being declared. We thus need to add HAS_IOPORT as dependency for
-those drivers using them.
+Docuemnt the QFPROM on QCM2290.
 
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/watchdog/Kconfig | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index f0872970daf9..e5d6f886e25d 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -453,6 +453,7 @@ config 21285_WATCHDOG
- config 977_WATCHDOG
- 	tristate "NetWinder WB83C977 watchdog"
- 	depends on (FOOTBRIDGE && ARCH_NETWINDER) || (ARM && COMPILE_TEST)
-+	depends on HAS_IOPORT
- 	help
- 	  Say Y here to include support for the WB977 watchdog included in
- 	  NetWinder machines. Alternatively say M to compile the driver as
-@@ -1271,6 +1272,7 @@ config ITCO_WDT
- 	select WATCHDOG_CORE
- 	depends on I2C || I2C=n
- 	depends on MFD_INTEL_PMC_BXT || !MFD_INTEL_PMC_BXT
-+	depends on HAS_IOPORT # for I2C_I801
- 	select LPC_ICH if !EXPERT
- 	select I2C_I801 if !EXPERT && I2C
- 	help
-@@ -2148,7 +2150,7 @@ comment "PCI-based Watchdog Cards"
- 
- config PCIPCWATCHDOG
- 	tristate "Berkshire Products PCI-PC Watchdog"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  This is the driver for the Berkshire Products PCI-PC Watchdog card.
- 	  This card simply watches your kernel to make sure it doesn't freeze,
-@@ -2163,7 +2165,7 @@ config PCIPCWATCHDOG
- 
- config WDTPCI
- 	tristate "PCI-WDT500/501 Watchdog timer"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  If you have a PCI-WDT500/501 watchdog board, say Y here, otherwise N.
- 
+diff --git a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
+index 2173fe82317d..1bd213f9eb38 100644
+--- a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
++++ b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
+@@ -25,6 +25,7 @@ properties:
+           - qcom,msm8976-qfprom
+           - qcom,msm8996-qfprom
+           - qcom,msm8998-qfprom
++          - qcom,qcm2290-qfprom
+           - qcom,qcs404-qfprom
+           - qcom,sc7180-qfprom
+           - qcom,sc7280-qfprom
+
 -- 
-2.37.2
+2.39.2
 
