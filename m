@@ -2,110 +2,130 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FA36B9AD5
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Mar 2023 17:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C8B6B9B7F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Mar 2023 17:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbjCNQPY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 14 Mar 2023 12:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        id S229823AbjCNQb0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 14 Mar 2023 12:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbjCNQPV (ORCPT
+        with ESMTP id S229853AbjCNQbZ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:15:21 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FEB66D08;
-        Tue, 14 Mar 2023 09:14:54 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id b5so6640111iow.0;
-        Tue, 14 Mar 2023 09:14:54 -0700 (PDT)
+        Tue, 14 Mar 2023 12:31:25 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7409C1350B
+        for <linux-watchdog@vger.kernel.org>; Tue, 14 Mar 2023 09:31:24 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id ks17so11911228qvb.6
+        for <linux-watchdog@vger.kernel.org>; Tue, 14 Mar 2023 09:31:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678810493;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7/NJFMp55FP9d4lUfA2syHfWROdB2xhss/WwEMJ0xxI=;
-        b=ReS4FkoZnmEIS0BNihLjnK9REN1O1hRdyKv4YF6CvlbftQbHyPRHiazY7KguD6YL1Z
-         bKfoobYN8lZrLfaOm2hhz7JiynZ5BkBFVQc1YBk5sYhQg7LziYOJrnQjpESbXVDQmWng
-         c5Ha1teqwYdAiuzxOpRCbWFPTAdJ87r5l01QOChSyLdHqMl91uMd1XWJZuA+s03ds/LP
-         LnVugI/vlW74kLuMhkx47JCPmY+Le/ZomaWLaEiI7JhIEJUguqzVX2CFFKbJ5rB350VJ
-         qcodUHBupVcterXQgvK4IU3j9rRQFwu8UwJXPPvbwpsqNXUZU0i6y9MaI9TQIdAY7vE6
-         2EJw==
+        d=linaro.org; s=google; t=1678811483;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JokN87WLq1aEN8gzjoxg/4DilusycZbuSWsZ0B+pKHY=;
+        b=DJ0YYOjy0s2tRXjYajolLFEUbB0dYP269vTqxV/+xq8YPOsEt/A4ABK0TLJgnbzT6k
+         tpdPh4xKnsXglIiSNgDi5cPzwkQLMNkuBxfbr+VhXy6vMBT6JkxGWmEZd/eB6g1/BNbA
+         JpOWWjSofQVj7gsHN67e7G/DMwA9ADKugo1Rps+YtWEARGec4M+B+86ns0un0iVaZqk5
+         20CHNqGXpwuNTN/GR+Ts/0OaA1nkfhtxWPrsdyRKDXkcmRpx7pvUFY+6g9VqnKkoU7ZS
+         iimAYZCFRfWqfl1qMmYpavNRSV6C/GXkZmimecQweQadifYh3vY1FOedCe/Wg9tIkCSU
+         fYTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678810493;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7/NJFMp55FP9d4lUfA2syHfWROdB2xhss/WwEMJ0xxI=;
-        b=6JIFLOAUaTLark6ybEtyprQkDXHM9og+MmBEvvSQZqljFtYeulS1191PBONAawyQdX
-         uIOoPCS5TMVfXQy3LrChgCEQZhW5bhEqmfc1n9Bw89fYQhIwMGBtnLQRk1gxD6dHTbAt
-         deLZ6yYnw80D8pYDIyFmPMRruX9nyZpjmEfAidsV9NLRqSjJXwHQvP1TXAffeh5yvaNI
-         +iivS6GKtXcBXYZ1q81q8tF6a3IVeXSDwLthTRGmZK7i30/+rL1zjGlGEYgnDdyjGioA
-         Y+03qPmmTW1zDaA1rJIz/ruYxDlkrW/vB4VEPdenGE9t71fHnjrJKUd1cQlDtrVwPlgs
-         yWnQ==
-X-Gm-Message-State: AO0yUKXPR/9zC4B8Z2o5yCv8QXJ0roo3qVzZiGDHHOG6Shomp6ekDpGM
-        +SAddgYhyVGDlk6YuZysb3Q=
-X-Google-Smtp-Source: AK7set/wzGnZZPegnybU6k9dt8ljC2I+CBFCuN+imlykWn38LOFV9u7phFJorbIH+ciPeuYmvh/Paw==
-X-Received: by 2002:a5e:9e03:0:b0:74f:b453:b334 with SMTP id i3-20020a5e9e03000000b0074fb453b334mr2368824ioq.18.1678810493356;
-        Tue, 14 Mar 2023 09:14:53 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u16-20020a02c950000000b00403089c2a1dsm877882jao.108.2023.03.14.09.14.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 09:14:52 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d6401cc5-990c-e46c-2d5c-148ce76c8b79@roeck-us.net>
-Date:   Tue, 14 Mar 2023 09:14:50 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] watchdog: ebc-c384_wdt: Migrate to the regmap API
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        William Breathitt Gray <william.gray@linaro.org>
+        d=1e100.net; s=20210112; t=1678811483;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JokN87WLq1aEN8gzjoxg/4DilusycZbuSWsZ0B+pKHY=;
+        b=u2BXFkXu0Lj/EfmtaOaFSwomrxZpypCxRmjROIW9Mjwd6Ah+YhsfU0bVlT/zFe8l2k
+         /xxu4dzal3KqpQ61oQ8KCd69UPC6ravP0nkrWnd2WU7ID1YTBjFogSpmcgdt/jQyvgTX
+         M7J32FGlj3MxjGW3Qy7ERSEFP9x1ziA8cOLIAUAWcBCAf2QEeu7oH6is451cCnP59SGc
+         xOH7sS48A3klEvMOI9g+QLOJmPCqcHiK5gheiWmm1QkZhzHq1tIHMcLGK3Zq46RvrPBy
+         Wqf3nR8SftEJFVra71slnKJYB6MWR20mKV9RMdMLFRXn/VjLRsgVZwsgqYtqRtGzN1P/
+         nbMQ==
+X-Gm-Message-State: AO0yUKWD6nhp6DhRHQmoYtKLB46SuvEs1xZAAOpwibW3FC62IgqY9+YQ
+        Ea6oCMrAS+WwvJluXknv5vizyxczIeTE2RAOyG4=
+X-Google-Smtp-Source: AK7set8YqlrmUkzzTOaG8j2sxU7H6fp5fxqiCnnUsnzZjFjxPwB8vCprLJ+6mBOe6Blb/ZUCMj4hVA==
+X-Received: by 2002:a05:622a:8b:b0:3d4:17dc:3fcf with SMTP id o11-20020a05622a008b00b003d417dc3fcfmr1126549qtw.5.1678811483494;
+        Tue, 14 Mar 2023 09:31:23 -0700 (PDT)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id d18-20020ac86152000000b003d3a34d2eb2sm589289qtm.41.2023.03.14.09.31.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 09:31:22 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 12:31:20 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
         Paul Demetrotion <pdemetrotion@winsystems.com>,
         techsupport@winsystems.com
+Subject: Re: [PATCH v2] watchdog: ebc-c384_wdt: Migrate to the regmap API
+Message-ID: <ZBChWA6aGLPZ/2vG@fedora>
 References: <20230314152916.185939-1-william.gray@linaro.org>
  <ZBCX0iVwYD4uVxwM@smile.fi.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="IxJEXLiCa9EcaoIp"
+Content-Disposition: inline
 In-Reply-To: <ZBCX0iVwYD4uVxwM@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 3/14/23 08:50, Andy Shevchenko wrote:
+
+--IxJEXLiCa9EcaoIp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Mar 14, 2023 at 05:50:42PM +0200, Andy Shevchenko wrote:
 > On Tue, Mar 14, 2023 at 11:29:16AM -0400, William Breathitt Gray wrote:
->> The regmap API supports IO port accessors so we can take advantage of
->> regmap abstractions rather than handling access to the device registers
->> directly in the driver.
-> 
+> > The regmap API supports IO port accessors so we can take advantage of
+> > regmap abstractions rather than handling access to the device registers
+> > directly in the driver.
+>=20
 > ...
-> 
->>   - Utilize watchdog_set_drvdata() and watchdog_get_drvdata()
-> 
+>=20
+> >  - Utilize watchdog_set_drvdata() and watchdog_get_drvdata()
+>=20
 > I'm wondering why you can't use dev_get_regmap() instead.
-> 
 
-That function is quite expensive to use in code that is called
-for each register access. Its typical use is to get the regmap
-for a driver once and store it in a local data structure, not
-to use it for each access.
+We can set `wdd->parent =3D dev` in ebc_c384_wdt_probe(), and then use
+`dev_get_regmap(wdev->parent)` to retrieve the regmap. The only downside
+I see if perhaps the added latency a call to devres_find(), whereas
+using watchdog_get_drvdata() is just a pointer dereference.
 
-Guenter
+I'm indifferent to either choice, so if Guenter or Wim have a preference
+here I'll follow their decision.
 
->>   - Map watchdog control registers based on offset 0x1 and adjust regmap
->>     configurations accordingly; offset 0x0 is unused in this driver so we
->>     should avoid unnecessary exposure of it
-> 
+>=20
+> >  - Map watchdog control registers based on offset 0x1 and adjust regmap
+> >    configurations accordingly; offset 0x0 is unused in this driver so we
+> >    should avoid unnecessary exposure of it
+>=20
 > I'm wondering what bad could happen if you expose it.
-> 
 
+The WINSYSTEMS EBC-C384 documentation I have does not specify what
+offset 0x0 does (nor offsets 0x3-0x4), so I don't know if there are side
+effects to reading those addresses. Really, I'm just avoiding the hassle
+of writing an explicit precious registers table for those offsets by not
+exposing them at all.
+
+William Breathitt Gray
+
+--IxJEXLiCa9EcaoIp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZBChWAAKCRC1SFbKvhIj
+K+drAP9p43P0w0nREDtGKpEvbdiSQ+iGLMm+VukR4SVjeTLX0wD/RmCC9x7xhBnC
+UJ0SEqq84HDKODsHYOZfWi6/AB8qSwY=
+=PSAm
+-----END PGP SIGNATURE-----
+
+--IxJEXLiCa9EcaoIp--
