@@ -2,132 +2,156 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BD76B9561
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Mar 2023 14:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CE96B961E
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Mar 2023 14:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjCNNFi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 14 Mar 2023 09:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
+        id S232483AbjCNN1m convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 14 Mar 2023 09:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbjCNNFS (ORCPT
+        with ESMTP id S232024AbjCNN1W (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:05:18 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A7CAA730
-        for <linux-watchdog@vger.kernel.org>; Tue, 14 Mar 2023 06:01:38 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id r11so10059449edd.5
-        for <linux-watchdog@vger.kernel.org>; Tue, 14 Mar 2023 06:01:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678798873;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FQYNV4JS9J59GL9ARq0SzSc6IYTv8e6Odhxu43xh8dM=;
-        b=DXcgzCRG3ImbWERH1DYWvg5iQ4jLgKUFzroO+xvfuL5ZVzxxJcnrFQG2/lNFLH2ATR
-         NvvduCgygH4POrFSTfzSgmVzSyA+WqK5WWEWcliIs2PF1y3pwD+4W+3wyekCvbcpiW0r
-         OnXRoEDg3MEIPkAxYpYtErPPYnmlHF2C4zbqXVrBiR4u928jVigIOpeFxMA9wYUsDxOM
-         Cy1n8af6a0xCBPyp29e3xLP951dJ0Y1YlQ8QaNRfPfbwnWuhmSNHFvs+A/upgZVciPPI
-         pxGqa1WRqMaY1LECqTvYbhSV8K2jbDsEP7QirPhEJUNV6p+Tf6vDVM++EeUuTscXgPw6
-         +ZFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678798873;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FQYNV4JS9J59GL9ARq0SzSc6IYTv8e6Odhxu43xh8dM=;
-        b=T9uaoshh4vF5LeqNIGcU8DXpLgmyhh4dgn+Ex0d0YbN0RFCR8j70eo2/ZslSzTQpfH
-         0305Rj55VtvmZBZusSDwco9SLthKey1mEaH71TJp7muGzF503vs8NGCYmny2Z1OTjH8p
-         NYu+9B5StM2YJ3wsIyTOEJ13Uoi4XM7TfqGa/U3p4aOHTggDey6SUAmEuozKRb8ENZu7
-         hbFDCMQ5ef6Ec8fWcJdfU4OIp2cj0vGe1cfTkyOxGhS3jOt9vZ5SuUew06rS/SsgTnts
-         Y7UHrfswSZ5wsyLUW/COkHZhsA/ZiENonSbQyJJpJt2y1/ztpDIgDrHlMhqRvzM8G0sy
-         wtfg==
-X-Gm-Message-State: AO0yUKUl+shs/PgUJwpISSxZygcFHF8ComG0TDqqxZjWmQDcvMrfKaaF
-        ElPORG7aqYpErHlUGPHfUFpuJ27leIAd27biHMs=
-X-Google-Smtp-Source: AK7set/mIFSkFUi0R/m1jVrscAIJA30bZ0/Za28UAQk9sWPAr9Zdpre4fTc8I9Ct7+OhtZVjkPjGnA==
-X-Received: by 2002:a2e:3a16:0:b0:295:b0a5:f66f with SMTP id h22-20020a2e3a16000000b00295b0a5f66fmr10286645lja.28.1678798397989;
-        Tue, 14 Mar 2023 05:53:17 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id s9-20020a19ad49000000b004dda74eccafsm395374lfd.68.2023.03.14.05.53.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 05:53:17 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 14 Mar 2023 13:53:00 +0100
-Subject: [PATCH 5/6] dt-bindings: usb: dwc3: Add QCM2290 compatible
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230314-topic-2290_compats-v1-5-47e26c3c0365@linaro.org>
-References: <20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org>
-In-Reply-To: <20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        Tue, 14 Mar 2023 09:27:22 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D66A18B3F;
+        Tue, 14 Mar 2023 06:24:41 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 5A1B424E20D;
+        Tue, 14 Mar 2023 21:24:39 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Mar
+ 2023 21:24:39 +0800
+Received: from localhost.localdomain (113.72.145.194) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Mar
+ 2023 21:24:37 +0800
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678798384; l=984;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=6UMUh/04krKh/2VacWll/qoFcprxFJbKkd3m3SNGTZM=;
- b=/oaiLc0pXANHZhWzQ/BEVQSNywVPnQB31vN4WC+T8+P+ztrzZ8NNt0yoLTJ+2er1hnvbb21gkHWH
- kqGpBpdUDsPK0PfXwn5NMl/sBElXyHKHZwL7EtIQ0THs9nQTJV+Y
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 0/3] Add watchdog driver for StarFive JH7100/JH7110 RISC-V SoCs
+Date:   Tue, 14 Mar 2023 21:24:34 +0800
+Message-ID: <20230314132437.121534-1-xingyu.wu@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [113.72.145.194]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Document the QCM2290 DWC3 controller.
+This patch serises are to add watchdog driver for the StarFive
+JH7100 and JH7110 RISC-V SoCs. The first patch adds docunmentation to
+describe device tree bindings. The subsequent patch adds watchdog driver
+and support JH7100/JH7110 SoCs. And the last patch adds watchdog node in
+the JH7100 dts. And the addition of JH7110 device tree node will be
+submitted after the JH7110 dts merge. This patchset is based on 6.3-rc1.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+The watchdog driver has been tested on the VisionFive 1 and VisionFive 2
+boards which equip with JH7100 and JH7110 SoCs respectively and both
+works normally.
 
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index 4875c5b7d5b5..a2aabdac4105 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -21,6 +21,7 @@ properties:
-           - qcom,msm8994-dwc3
-           - qcom,msm8996-dwc3
-           - qcom,msm8998-dwc3
-+          - qcom,qcm2290-dwc3
-           - qcom,qcs404-dwc3
-           - qcom,sc7180-dwc3
-           - qcom,sc7280-dwc3
-@@ -300,6 +301,7 @@ allOf:
-         compatible:
-           contains:
-             enum:
-+              - qcom,qcm2290-dwc3
-               - qcom,sm6115-dwc3
-               - qcom,sm6125-dwc3
-               - qcom,sm8150-dwc3
+Changes since v4:
+Patch 2:
+- Dropped the struct device.
+- Renamed the struct watchdog_device.
+- Modified the struct reset_control to be local variable.
+- Fixed the exit error with spinlock.
+- Dropped the function of starfive_wdt_is_locked().
+- Changed the macro name of 'OPTIONS'.
+- Changed the order in probe to do less work if return '-EPROBE_DEFER'.
+- Fixed some function that ignored return value.
+Patch 3:
+- Dropped the label of watchdog node.
 
+Changes since v3:
+- Modified the dt-binding, driver and dts to support JH7100 watchdog.
+- Modified the register comments.
+- Changed the return value and order when getting clock rate.
+- Used dev_err_probe() when getting clocks and resets.
+- Improved the codes of setting default timeout.
+- Moved the watchdog_register_device() after setting WDOG_HW_RUNNING.
+- Changed 'SOC_STARFIVE' to 'ARCH_STARFIVE' in Kconfig file.
+- Dropped the struct of platform_device_id.
+- Used new functions to enable or disable clock.
+
+Changes since v2: 
+- Added watchdog.yaml and unevaluatedProperties in the dt-binding.
+- Removed some unnecessary include files.
+- Changed the 'module_param' name and dropped 'soft_noboot'.
+- Rrmoved 'CONFIG_OF'.
+- Added a check if clock rate is 0.
+- Modified the max_timeout calculation formula.
+- Removed restart function.
+- Removed duplicate checks on the upper and lower bounds of 'count'.
+- Removed 'started' variable.
+- Added pm_runtime_get_sync() and pm_runtime_put_sync().
+- Removed 'firmware_version = 0' variable.
+- Drop the device tree node commit.
+
+Changes since v1:
+- Renamed the dt-binding 'starfive,wdt.yaml' to 'starfive,jh7110-wdt.yaml'.
+- Dropped the '_clk' and 'rst_' about the 'clock-names' and 'reset-names'
+  in the dt-binding.
+- Updated the example context in the dt-binding 'starfive,jh7110-wdt.yaml'
+  to be independent of other patchset.
+- Deleted unused macros like 'JH7110_WDOG_INT_EN'.
+- Changed the type of 'freq' in the struct from u64 to u32.
+- Used 'devm_clk_get_enabled()' instead of 'devm_clk_get()' and
+  'clk_prepare_enable()'.
+- Removed the operation to get the frequency from the device tree.
+- Added watchdog_stop_on_unregister() and watchdog_stop_on_reboot().
+- Removed any operations about interrupt.
+
+v4:
+--- https://lore.kernel.org/all/20230308034036.99213-1-xingyu.wu@starfivetech.com/
+v3:
+--- https://lore.kernel.org/all/20230220081926.267695-1-xingyu.wu@starfivetech.com/
+v2:
+--- https://lore.kernel.org/all/20221219094233.179153-1-xingyu.wu@starfivetech.com/
+v1:
+--- https://lore.kernel.org/all/20221202093943.149674-1-xingyu.wu@starfivetech.com/
+
+Xingyu Wu (3):
+  dt-bindings: watchdog: Add watchdog for StarFive JH7100 and JH7110
+  drivers: watchdog: Add StarFive Watchdog driver
+  riscv: dts: starfive: jh7100: Add watchdog node
+
+ .../watchdog/starfive,jh7100-wdt.yaml         |  71 ++
+ MAINTAINERS                                   |   7 +
+ arch/riscv/boot/dts/starfive/jh7100.dtsi      |  10 +
+ drivers/watchdog/Kconfig                      |  11 +
+ drivers/watchdog/Makefile                     |   3 +
+ drivers/watchdog/starfive-wdt.c               | 606 ++++++++++++++++++
+ 6 files changed, 708 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml
+ create mode 100644 drivers/watchdog/starfive-wdt.c
+
+
+base-commit: 8ca09d5fa3549d142c2080a72a4c70ce389163cd
+prerequisite-patch-id: 558a5b43260d13a6f5229b139ccd45f737a4f686
 -- 
-2.39.2
+2.25.1
 
