@@ -2,337 +2,128 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85CEB6BD294
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Mar 2023 15:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD586BD9F2
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Mar 2023 21:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjCPOno (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 16 Mar 2023 10:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
+        id S229894AbjCPUNf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 16 Mar 2023 16:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjCPOnk (ORCPT
+        with ESMTP id S229682AbjCPUNe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 16 Mar 2023 10:43:40 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E883211D;
-        Thu, 16 Mar 2023 07:43:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678977816; x=1710513816;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0v8x1C5VEZNs5wGyskU503X9ow31HPWVC3p4bfXL5/o=;
-  b=H9Zb15Y7DDv9dpVqsHrR/h3eD7VMrvvIo7Vph8lj5X+gmMR8EvgKrrKE
-   1SHvAvs5JVf2Nb1Q7OShghabORW2qrOFIPQOXPOzYe/WXzX/MTjqXBsvu
-   rMpklytlekeQKmRLdpSmKnQEmqlfCK3tjgAFbZigRmUI9yrEj7aqgShjH
-   5wwm2Mkj74t5kCjsc6xJeQsYMfbEZ6ewsSuKas9wDxYtT4UNkab4EcypZ
-   VVIf9zTHOPj36u+9GyUuRY/CwNFTr7nAiSl8MgaZkishi9ZKpZr/47qzO
-   bHydCjJ0ushpZCDKF8P2m9hIlCzbvziUH1q4xFqUGqpo6AZMlaXBtgA67
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="400596364"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="400596364"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 07:43:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="768980481"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="768980481"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Mar 2023 07:43:32 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcopI-0008Zq-0L;
-        Thu, 16 Mar 2023 14:43:32 +0000
-Date:   Thu, 16 Mar 2023 22:42:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-wireless@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-modules@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-crypto@vger.kernel.org, io-uring@vger.kernel.org,
-        bpf@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- 6f72958a49f68553f2b6ff713e8c8e51a34c1e1e
-Message-ID: <64132af1.wtWgGZt+l6ToHgUb%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 16 Mar 2023 16:13:34 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2054.outbound.protection.outlook.com [40.107.95.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910262330C
+        for <linux-watchdog@vger.kernel.org>; Thu, 16 Mar 2023 13:13:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fLNGXTSu2I2AtjzOc6ZDeSOzc+T3cOImsxC/NxkOBFQ/+7KpVPnyQBcrhs+QF99KJ+TLQCpjkdJOCwagPf5HhvltN2IPSH9u/vhFpIzUoY3zOkYBlxuuTyaMkqAu4fiSErbHtuR0nFJW0Hlm4/omLY4J5U4Ro9C4YTTk9AQ2+zHv6i3sYGsqN8IqfgJM1vXB0mZFXh7XjD8vIcaZD68H3ozHPi9oeu7L8uL6SPA61TyRV0HZf4EoCHuxy7f17p0k286rMsgFLjL43cBH0mqrPlpruUsquJZl6pNUx8sAk/r4IXFsUlZidOXU9nRJ4YSz2LZBX3CaV8TTTZi6hd2Jow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Pd0eiCxOKRGClnFhFr2EZTgXVuc1LL4HreGHNawzF+Q=;
+ b=HHSH4REENuX1SFlYleK3K3c01AdWRABFE+cZEy8cKKr3zM0x1wKFOyV3+7/EdbGuWNawka/5OGduLbeJRhl+KyAhp6X+6mIvD+nSKy1LRHKH3rZ+JlxqNWH7+e5D/ppv+lcVWYEC2CDpEAM3D1gTFQMQ3oe/2riLpf5mQn8GJdP/D1vvjIkScS8Q5jQh9ntikfrTwn9crtVP2BWv/41Uuf+mOky6w6S3VR+Ctng9BaVOBfCO/6qBUwoTusKNSpAkdS0s/oVbW1xjXCn7AIze0Vd6qm9nHaG4bG6B4kc4zdclz2gydXyh9V9zvMNT87e7napmSh0ngUUHwkhXTke+2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Pd0eiCxOKRGClnFhFr2EZTgXVuc1LL4HreGHNawzF+Q=;
+ b=tM1EWmvHaGNkzO/yjzQNGTJwQVHvy8Nc2j7PPN7aj+vLTCrJFuUBGpGLt7YPGiX50nCpTSmZlmhkcwF3uT5wwBP4HsXHFcbCicpuW2ZQc4hYaB/ON9q59IHdieYNan3yjA121qljIr1f233x4fa3uwg7ftALA04gwJwYW/NHkcQ=
+Received: from MW4PR04CA0078.namprd04.prod.outlook.com (2603:10b6:303:6b::23)
+ by CY5PR12MB6299.namprd12.prod.outlook.com (2603:10b6:930:20::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.33; Thu, 16 Mar
+ 2023 20:13:30 +0000
+Received: from CO1NAM11FT054.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:6b:cafe::1d) by MW4PR04CA0078.outlook.office365.com
+ (2603:10b6:303:6b::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.30 via Frontend
+ Transport; Thu, 16 Mar 2023 20:13:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT054.mail.protection.outlook.com (10.13.174.70) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6199.18 via Frontend Transport; Thu, 16 Mar 2023 20:13:30 +0000
+Received: from aus-lx-greoakes.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 16 Mar
+ 2023 15:13:29 -0500
+From:   Gregory Oakes <gregory.oakes@amd.com>
+To:     <linux-watchdog@vger.kernel.org>
+CC:     <terry.bowman@amd.com>, Gregory Oakes <gregory.oakes@amd.com>
+Subject: [PATCH v2] watchdog: sp5100_tco: Immediately trigger upon starting.
+Date:   Thu, 16 Mar 2023 15:13:12 -0500
+Message-ID: <20230316201312.17538-1-gregory.oakes@amd.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT054:EE_|CY5PR12MB6299:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5d861f5c-5f6a-4841-bf2b-08db265ae93c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: y/So47eHxzz82V+dLJZ+BHhnZ1bQ0OmET3vGtpM5exain1ULacGGpqUw7jKr6MoUcaUUfTMUHsKu+fBIWQPqdZvW8DmMuPWhrmrUMWGbWgl3x/qP9oBlxc3uJgVvfNK0/pZqCy1lxZ+lLGsLiOmNE8nZp5z0Mii8FJWvtKnINS57jUAXAn6MbKZf9MwS9giSmgpvTkLkwjCGndMivqsvN+mP9r+in61et19OTLuTBFhbkE7twHKO3uAhVyUNQMUoo6PGcBxYmXO/aR/wdJb+KcijRA4h5SGdzfySGlitgHXJDGh9V4h1b7q/EZeHJQNPswwHHkUYw9Q1Xd6vBr1WiPtH9A0cAoKFGrXC4Zmup/R+jsH46P6nOIgYwxOvdvpy20/LL/70HsekdM0uQOAK0jr7opZ/ShS7lLt5BN5PrLgxYhA6DfBCaxORQyXmYW9G0vJeJKfa8PEAtFH1PycrCG7rvN13k6+yWP/o9rVbHMM/LIhp4HHQamAVv2AVPR3X7pGKGJgG46usleS/bOx/xAJDb4TwkMFdQTJOYi+UnHsxRDSAVSZPVRrTjOrhRr39DszgzmNDIorWhVL1/LnSQ+BOC//pwdit3eZiLhP7AOPqCSh3+9eKc/Fl7vDQUWQ5DphAPBfKVp7mCmMMOrHJlzGvAwIQuwbrugA1+JgcGtdxbG/h/qp3qOz3Pvtl/CACZRdFMBF5KiN+QrcFd58SF7qi5u/Gvq6OYHzRCreWts/mdxdqZiRhwTisiJtST6Ql
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(376002)(346002)(396003)(451199018)(46966006)(36840700001)(40470700004)(1076003)(26005)(47076005)(2616005)(336012)(426003)(316002)(44832011)(82310400005)(478600001)(54906003)(2906002)(83380400001)(6666004)(36860700001)(186003)(70206006)(7696005)(40480700001)(81166007)(82740400003)(16526019)(8676002)(4326008)(86362001)(41300700001)(6916009)(5660300002)(356005)(40460700003)(70586007)(8936002)(36756003)(14773001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 20:13:30.3323
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d861f5c-5f6a-4841-bf2b-08db265ae93c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT054.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6299
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 6f72958a49f68553f2b6ff713e8c8e51a34c1e1e  Add linux-next specific files for 20230316
+The watchdog countdown is supposed to begin when the device file is
+opened. Instead, it would begin countdown upon the first write to or
+close of the device file. Now, the ping operation is called within the
+start operation which ensures the countdown begins. From experimenation,
+it does not appear possible to do this with a single write including
+both the start bit and the trigger bit. So, it is done as two distinct
+writes.
 
-Error/Warning reports:
+Signed-off-by: Gregory Oakes <gregory.oakes@amd.com>
+---
+ drivers/watchdog/sp5100_tco.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-https://lore.kernel.org/oe-kbuild-all/202303081807.lBLWKmpX-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303151409.por0SBf7-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303161311.Qv4gDU9T-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303161354.T2OZFUFZ-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303161404.OrmfCy09-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303161507.ZUkKisp2-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303161521.jbGbaFjJ-lkp@intel.com
-
-Error/Warning: (recently discovered and may have been fixed)
-
-cc_driver.c:(.text+0x1232): undefined reference to `devm_platform_get_and_ioremap_resource'
-drivers/crypto/ccree/cc_driver.c:354: undefined reference to `devm_platform_get_and_ioremap_resource'
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_validation.c:258:10: warning: no previous prototype for 'link_timing_bandwidth_kbps' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_capability.c:2184: warning: expecting prototype for Check if there is a native DP or passive DP(). Prototype was for dp_is_sink_present() instead
-drivers/net/wireless/legacy/ray_cs.c:628:17: warning: 'strncpy' specified bound 32 equals destination size [-Wstringop-truncation]
-kernel/bpf/../module/internal.h:212:2: error: assigning to 'struct module *' from incompatible type 'void'
-kernel/bpf/../module/internal.h:212:2: error: incomplete definition of type 'struct module'
-kernel/bpf/../module/internal.h:212:2: error: offsetof of incomplete type 'typeof (*mod)' (aka 'struct module')
-kernel/bpf/../module/internal.h:212:2: error: operand of type 'void' where arithmetic or pointer type is required
-kernel/bpf/../module/internal.h:260:56: error: expected ';', ',' or ')' before 'const'
-kernel/bpf/verifier.c:18488:48: error: implicit declaration of function 'find_kallsyms_symbol_value'; did you mean 'kallsyms_symbol_value'? [-Werror=implicit-function-declaration]
-kernel/module/internal.h:260:56: error: expected ';', ',' or ')' before 'const'
-lib/dynamic_debug.c:947:6: warning: no previous prototype for function '__dynamic_ibdev_dbg' [-Wmissing-prototypes]
-
-Unverified Error/Warning (likely false positive, please contact us if interested):
-
-crypto/acompress.c:191:32: warning: Value stored to 'istat' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-crypto/ahash.c:311:26: warning: Value stored to 'alg' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-crypto/shash.c:573:28: warning: Value stored to 'istat' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-drivers/watchdog/imx2_wdt.c:442:22: sparse: sparse: symbol 'imx_wdt' was not declared. Should it be static?
-drivers/watchdog/imx2_wdt.c:446:22: sparse: sparse: symbol 'imx_wdt_legacy' was not declared. Should it be static?
-include/linux/gpio/consumer.h: linux/err.h is included more than once.
-include/linux/gpio/driver.h: asm/bug.h is included more than once.
-io_uring/io_uring.c:432 io_prep_async_work() error: we previously assumed 'req->file' could be null (see line 425)
-io_uring/kbuf.c:221 __io_remove_buffers() warn: variable dereferenced before check 'bl->buf_ring' (see line 219)
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:no-previous-prototype-for-link_timing_bandwidth_kbps
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|-- arc-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:no-previous-prototype-for-link_timing_bandwidth_kbps
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|-- arm-allmodconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:no-previous-prototype-for-link_timing_bandwidth_kbps
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|-- arm-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:no-previous-prototype-for-link_timing_bandwidth_kbps
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|-- arm-randconfig-r001-20230312
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:no-previous-prototype-for-link_timing_bandwidth_kbps
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|-- arm64-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:no-previous-prototype-for-link_timing_bandwidth_kbps
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|-- csky-buildonly-randconfig-r004-20230312
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:no-previous-prototype-for-link_timing_bandwidth_kbps
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|-- i386-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:no-previous-prototype-for-link_timing_bandwidth_kbps
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|-- ia64-allmodconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:no-previous-prototype-for-link_timing_bandwidth_kbps
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|-- ia64-randconfig-s043-20230313
-|   |-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt-was-not-declared.-Should-it-be-static
-|   `-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt_legacy-was-not-declared.-Should-it-be-static
-|-- loongarch-allmodconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:no-previous-prototype-for-link_timing_bandwidth_kbps
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|-- loongarch-defconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:no-previous-prototype-for-link_timing_bandwidth_kbps
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|-- loongarch-randconfig-r001-20230313
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:no-previous-prototype-for-link_timing_bandwidth_kbps
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|-- m68k-randconfig-r001-20230313
-|   |-- kernel-bpf-..-module-internal.h:error:expected-or-)-before-const
-|   |-- kernel-bpf-verifier.c:error:implicit-declaration-of-function-find_kallsyms_symbol_value
-|   `-- kernel-module-internal.h:error:expected-or-)-before-const
-|-- mips-allmodconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:no-previous-prototype-for-link_timing_bandwidth_kbps
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|-- mips-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:no-previous-prototype-for-link_timing_bandwidth_kbps
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:expecting-prototype-for-Check-if-there-is-a-native-DP-or-passive-DP().-Prototype-was-for-dp_is_sink_present()-inste
-|-- parisc-allmodconfig
-clang_recent_errors
-|-- arm-randconfig-c002-20230312
-|   |-- crypto-acompress.c:warning:Value-stored-to-istat-during-its-initialization-is-never-read-clang-analyzer-deadcode.DeadStores
-|   |-- crypto-ahash.c:warning:Value-stored-to-alg-during-its-initialization-is-never-read-clang-analyzer-deadcode.DeadStores
-|   `-- crypto-shash.c:warning:Value-stored-to-istat-during-its-initialization-is-never-read-clang-analyzer-deadcode.DeadStores
-|-- hexagon-randconfig-r031-20230313
-|   `-- lib-dynamic_debug.c:warning:no-previous-prototype-for-function-__dynamic_ibdev_dbg
-|-- i386-randconfig-a012-20230313
-|   `-- lib-dynamic_debug.c:warning:no-previous-prototype-for-function-__dynamic_ibdev_dbg
-|-- i386-randconfig-a013-20230313
-|   `-- lib-dynamic_debug.c:warning:no-previous-prototype-for-function-__dynamic_ibdev_dbg
-|-- i386-randconfig-a016-20230313
-|   `-- lib-dynamic_debug.c:warning:no-previous-prototype-for-function-__dynamic_ibdev_dbg
-`-- riscv-randconfig-r042-20230313
-    |-- kernel-bpf-..-module-internal.h:error:assigning-to-struct-module-from-incompatible-type-void
-    |-- kernel-bpf-..-module-internal.h:error:incomplete-definition-of-type-struct-module
-    |-- kernel-bpf-..-module-internal.h:error:offsetof-of-incomplete-type-typeof-(-mod)-(aka-struct-module-)
-    `-- kernel-bpf-..-module-internal.h:error:operand-of-type-void-where-arithmetic-or-pointer-type-is-required
-
-elapsed time: 728m
-
-configs tested: 146
-configs skipped: 8
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r006-20230312   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r026-20230313   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r012-20230312   gcc  
-arc                  randconfig-r024-20230313   gcc  
-arc                  randconfig-r043-20230312   gcc  
-arc                  randconfig-r043-20230313   gcc  
-arc                  randconfig-r043-20230315   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                       omap2plus_defconfig   gcc  
-arm                  randconfig-r001-20230312   gcc  
-arm                  randconfig-r006-20230313   clang
-arm                  randconfig-r024-20230312   clang
-arm                  randconfig-r046-20230312   clang
-arm                  randconfig-r046-20230313   gcc  
-arm                  randconfig-r046-20230315   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r004-20230312   clang
-arm64                randconfig-r006-20230312   clang
-csky         buildonly-randconfig-r003-20230312   gcc  
-csky         buildonly-randconfig-r004-20230312   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r025-20230312   gcc  
-csky                 randconfig-r033-20230313   gcc  
-csky                 randconfig-r036-20230312   gcc  
-hexagon              randconfig-r015-20230312   clang
-hexagon              randconfig-r031-20230313   clang
-hexagon              randconfig-r041-20230312   clang
-hexagon              randconfig-r041-20230313   clang
-hexagon              randconfig-r041-20230315   clang
-hexagon              randconfig-r045-20230312   clang
-hexagon              randconfig-r045-20230313   clang
-hexagon              randconfig-r045-20230315   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230313   gcc  
-i386                 randconfig-a002-20230313   gcc  
-i386                 randconfig-a003-20230313   gcc  
-i386                 randconfig-a004-20230313   gcc  
-i386                 randconfig-a005-20230313   gcc  
-i386                 randconfig-a006-20230313   gcc  
-i386                 randconfig-a011-20230313   clang
-i386                 randconfig-a012-20230313   clang
-i386                 randconfig-a013-20230313   clang
-i386                 randconfig-a014-20230313   clang
-i386                 randconfig-a015-20230313   clang
-i386                 randconfig-a016-20230313   clang
-i386                          randconfig-c001   gcc  
-i386                 randconfig-r004-20230313   gcc  
-i386                 randconfig-r023-20230313   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r001-20230313   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r002-20230313   gcc  
-m68k                 randconfig-r005-20230312   gcc  
-m68k                 randconfig-r031-20230312   gcc  
-m68k                 randconfig-r035-20230313   gcc  
-m68k                           virt_defconfig   gcc  
-microblaze   buildonly-randconfig-r002-20230312   gcc  
-microblaze           randconfig-r011-20230312   gcc  
-microblaze           randconfig-r012-20230313   gcc  
-microblaze           randconfig-r015-20230313   gcc  
-microblaze           randconfig-r023-20230312   gcc  
-microblaze           randconfig-r032-20230313   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                       bmips_be_defconfig   gcc  
-mips         buildonly-randconfig-r001-20230312   gcc  
-mips                      maltasmvp_defconfig   gcc  
-mips                 randconfig-r013-20230312   clang
-mips                 randconfig-r034-20230313   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r014-20230312   gcc  
-openrisc     buildonly-randconfig-r003-20230313   gcc  
-openrisc     buildonly-randconfig-r006-20230313   gcc  
-openrisc             randconfig-r003-20230312   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r011-20230313   gcc  
-parisc               randconfig-r034-20230312   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r005-20230312   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv        buildonly-randconfig-r005-20230313   clang
-riscv                               defconfig   gcc  
-riscv                randconfig-r033-20230312   clang
-riscv                randconfig-r042-20230312   gcc  
-riscv                randconfig-r042-20230313   clang
-riscv                randconfig-r042-20230315   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r005-20230313   gcc  
-s390                 randconfig-r025-20230313   clang
-s390                 randconfig-r032-20230312   clang
-s390                 randconfig-r044-20230312   gcc  
-s390                 randconfig-r044-20230313   clang
-s390                 randconfig-r044-20230315   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r022-20230312   gcc  
-sh                   randconfig-r022-20230313   gcc  
-sparc        buildonly-randconfig-r001-20230313   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r021-20230313   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230313   gcc  
-x86_64               randconfig-a002-20230313   gcc  
-x86_64               randconfig-a003-20230313   gcc  
-x86_64               randconfig-a004-20230313   gcc  
-x86_64               randconfig-a005-20230313   gcc  
-x86_64               randconfig-a006-20230313   gcc  
-x86_64               randconfig-a011-20230313   clang
-x86_64               randconfig-a012-20230313   clang
-x86_64               randconfig-a013-20230313   clang
-x86_64               randconfig-a014-20230313   clang
-x86_64               randconfig-a015-20230313   clang
-x86_64               randconfig-a016-20230313   clang
-x86_64               randconfig-r016-20230313   clang
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r002-20230313   gcc  
-xtensa               randconfig-r002-20230312   gcc  
-xtensa               randconfig-r013-20230313   gcc  
-xtensa               randconfig-r014-20230313   gcc  
-xtensa               randconfig-r016-20230312   gcc  
-xtensa               randconfig-r035-20230312   gcc  
-
+diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
+index fb426b7d81da..14f8d8d90920 100644
+--- a/drivers/watchdog/sp5100_tco.c
++++ b/drivers/watchdog/sp5100_tco.c
+@@ -115,6 +115,10 @@ static int tco_timer_start(struct watchdog_device *wdd)
+ 	val |= SP5100_WDT_START_STOP_BIT;
+ 	writel(val, SP5100_WDT_CONTROL(tco->tcobase));
+ 
++	/* This must be a distinct write. */
++	val |= SP5100_WDT_TRIGGER_BIT;
++	writel(val, SP5100_WDT_CONTROL(tco->tcobase));
++
+ 	return 0;
+ }
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.1
+
