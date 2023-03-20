@@ -2,112 +2,96 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3066C0CFA
-	for <lists+linux-watchdog@lfdr.de>; Mon, 20 Mar 2023 10:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 266056C0D96
+	for <lists+linux-watchdog@lfdr.de>; Mon, 20 Mar 2023 10:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjCTJTN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 20 Mar 2023 05:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
+        id S230045AbjCTJp1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 20 Mar 2023 05:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjCTJTM (ORCPT
+        with ESMTP id S229970AbjCTJp0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 20 Mar 2023 05:19:12 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EC812CEF;
-        Mon, 20 Mar 2023 02:19:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1679303947; x=1710839947;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KcTqCESxcN73NYJ/dcxfK/tm8NaiYnSt/OcyW2m0CDY=;
-  b=PzYMe67ybkNgPD2CFOjwa4BeFbVm5/gSEao3zziy5/O8dRGmvtRvZv0/
-   1i9hRm3JyK5RdqDjI1VPjU/yGnX5QsJFi0KfmAU322Rth2qlmrR5EZjrW
-   PQ9UTqCL6ijXW/6fSULey4OloJ9VSRRqWBA4PXbfoN9OXUVtDDIL1tBL9
-   ZBdcn+4dENa60WfV2Q7SA95g8iY97idwybce5J4omy2DY7QBQwhFcJvNu
-   mgyo36WervCpPvyMKi5OysmDS4N9MW/rkHqNytVmsbgBeGjq6wXv9oUeI
-   95OpbShzQaPXtWK7lV8A7XyUS/bL3zWjpe5zBDTkSLmn6i7ssL6Z0YHmi
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.98,274,1673938800"; 
-   d="scan'208";a="202463786"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Mar 2023 02:19:05 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 20 Mar 2023 02:19:02 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Mon, 20 Mar 2023 02:18:56 -0700
-Message-ID: <b6609e59-0f68-689b-81db-4324ed5deb26@microchip.com>
-Date:   Mon, 20 Mar 2023 10:18:50 +0100
+        Mon, 20 Mar 2023 05:45:26 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169271689D;
+        Mon, 20 Mar 2023 02:45:25 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32K8O9am030427;
+        Mon, 20 Mar 2023 09:45:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=JDuIQbKMao+wWW6Ufi3gVOnNAyYqAbOG9yFVNg7be5Y=;
+ b=Yeo8/u9jBE5uCrUZyGt6RqWRcXS1OvONA06TrfeyQcGYuDDYzW3NBQ8TmHGpIeo4AX5m
+ 2YaC/X2sSWAAtAFQyHvDzEEBmARnLMZ2dX18dbk0wDel+R2HPl7CX0zNzyKcWCh0pR6v
+ ZaiQz31jS8Hh5LdY6uJQsSV3K/fjNtCUJXz1HPlF2kNY1KYFODNctt4yJhnblGrGUlnI
+ fBLjNMzZw/TQjtt3IFIS5n0ggsxMeHm5aNsLbWUrDH5FbRFnLVzJDiBtsIFMJv/03gvv
+ IiKfermdHMpvpuEFFjOPRAe7b7uqUHklH2o3TIUTDIwduTa1TZP/P0IBpUQCa7vJjlbl 2A== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pek4fg9kb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Mar 2023 09:45:08 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32K9j8xn025415
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 20 Mar 2023 09:45:08 GMT
+Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Mon, 20 Mar 2023 02:45:04 -0700
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH 0/2] Add few device nodes for IPQ5332 SoC
+Date:   Mon, 20 Mar 2023 15:14:48 +0530
+Message-ID: <20230320094450.8015-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] dt-bindings: watchdog: Drop unneeded quotes
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
-        Julius Werner <jwerner@chromium.org>,
-        "Evan Benn" <evanbenn@chromium.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <asahi@lists.linux.dev>, <linux-stm32@st-md-mailman.stormreply.com>
-References: <20230317233643.3969019-1-robh@kernel.org>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20230317233643.3969019-1-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: viC1bv77-4i7UpfGZG_9bWTSkB2mz4Ud
+X-Proofpoint-ORIG-GUID: viC1bv77-4i7UpfGZG_9bWTSkB2mz4Ud
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-20_06,2023-03-16_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ mlxscore=0 priorityscore=1501 adultscore=0 impostorscore=0 spamscore=0
+ mlxlogscore=643 suspectscore=0 phishscore=0 clxscore=1011
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303200084
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 18/03/2023 at 00:36, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Rob Herring<robh@kernel.org>
-> ---
+This series adds the support for QUP peripherals, PRNG, WDT for IPQ5332
+SoC.
 
-[..]
+This series depends on the below patch, due to the node ordering
+https://lore.kernel.org/linux-arm-msm/20230217083308.12017-6-quic_kathirav@quicinc.com/#t
 
->   .../devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml         | 2 +-
 
-For Microchip platforms:
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Kathiravan T (2):
+  dt-bindings: watchdog: qcom-wdt: add qcom,apss-wdt-ipq5332 compatible
+  arm64: dts: qcom: ipq5332: add few device nodes
 
-Thanks, best regards,
-   Nicolas
+ .../bindings/watchdog/qcom-wdt.yaml           |  1 +
+ arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts   | 14 ++++
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi         | 67 +++++++++++++++++++
+ 3 files changed, 82 insertions(+)
+
 -- 
-Nicolas Ferre
+2.17.1
 
