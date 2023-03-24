@@ -2,471 +2,273 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678606C8083
-	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Mar 2023 15:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 056676C8345
+	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Mar 2023 18:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232259AbjCXO50 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 24 Mar 2023 10:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
+        id S231384AbjCXRYd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 24 Mar 2023 13:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbjCXO5W (ORCPT
+        with ESMTP id S231678AbjCXRYc (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 24 Mar 2023 10:57:22 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFBA4EC8;
-        Fri, 24 Mar 2023 07:57:20 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32O6Ym7a018470;
-        Fri, 24 Mar 2023 07:57:03 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=zDGtFUqIAVVV28fMS7e0nvbav3/7aaFs9XKBr54WU1c=;
- b=VCQrT3Tacpw4YS9i3Opi8i10xUGPa4wyEJqbLN84c+t6Hq/M4BagB2sVD6dz18KG+SjH
- bvfmeF2FB5EK4jLYe0eWzWSmUn+fxdaEVt9ql6NX3Sq2MZJ/HeDUNDmJvS5lr9kHVpns
- Lz3HnEarU5552X/3+sYqSuY/M28lQA6vOF4JSrxeOerzREJ/BZmCfx8TiI8rRdPb6tZG
- 54ygZVCCjD4DnJd5J9+Hj7z1Q5UoaXePfD9xF3iH+F0TBTwzM2h1nsLVsa6xVte6SSex
- u7JolDvs25lv81U51fiG7eN2JHrurPpS1DMV7x2JMsY1CRdKvjiVLkO8+EePNqks7U6U 7g== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3ph6q3sk1p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 24 Mar 2023 07:57:03 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Mar
- 2023 07:57:01 -0700
-Received: from bbhushan2.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
- Transport; Fri, 24 Mar 2023 07:56:59 -0700
-From:   Bharat Bhushan <bbhushan2@marvell.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Bharat Bhushan <bbhushan2@marvell.com>
-Subject: [PATCH 2/2] Watchdog: octeontx2: Add Pseudo-NMI GTI watchdog driver
-Date:   Fri, 24 Mar 2023 20:26:52 +0530
-Message-ID: <20230324145652.19221-2-bbhushan2@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230324145652.19221-1-bbhushan2@marvell.com>
-References: <20230324145652.19221-1-bbhushan2@marvell.com>
+        Fri, 24 Mar 2023 13:24:32 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90235A243;
+        Fri, 24 Mar 2023 10:24:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679678670; x=1711214670;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cZoiQIaQx8CAo4L2prizalWlvjlDIFhsgsRTP46n1v4=;
+  b=HnfJJ/2x6q7kJT2ALya3DZtTz8ajEDZUcoEjo3gMU+PMUn3zV3uyABkS
+   zpbHFg3JOecAbONZrB3kEoQgoBIEORLxUvR9Wq1SfyLslbdtk/ceZx5pv
+   qezNgAp6WHTY4+/Edts7PzryV/g/inK/SMh/VhxW+OZHTzsOL4rhNahMf
+   yfxH+930OFNM9CtsWrgiFuFWJlvWk+ZTFuvAHx9F4FqV75MI39PgNmZS/
+   jlLxYf1UWhXxdJ0Pao8gGM97sZbZmS7lVVp4ibetO7D0B/oKt9+LMdMtx
+   HUqhD6zhUpgGkNY2h0CEfGY/ka3GLq739Qg/bO+FKQF3Svd37xUN83Ugd
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="320234927"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="320234927"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 10:24:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="713144079"
+X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
+   d="scan'208";a="713144079"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 24 Mar 2023 10:24:26 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pfl9O-000FW1-05;
+        Fri, 24 Mar 2023 17:24:26 +0000
+Date:   Sat, 25 Mar 2023 01:24:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     loongarch@lists.linux.dev, linux-wireless@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-gpio@vger.kernel.org,
+        io-uring@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD SUCCESS WITH WARNING
+ e5dbf24e8b9e6aa0a185d86ce46a7a9c79ebb40f
+Message-ID: <641ddcc0./G3Ynu0QmT+21nAC%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: 9WIopST8WCwU2nWBgW0K9tjMdLAVdXrs
-X-Proofpoint-ORIG-GUID: 9WIopST8WCwU2nWBgW0K9tjMdLAVdXrs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-24_08,2023-03-24_01,2023-02-09_01
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-GTI hardware supports per-core watchdog timer which are programmed
-in "interrupt + del3t + reset mode" and del3t traps are not enabled.
-This driver uses ARM64 pseudo-nmi interrupt support.
-GTI watchdog exception flow is:
- - 1st timer expiration generates pseudo-nmi interrupt.
-   NMI exception handler dumps register/context state on all cpu's.
- - 2nd timer expiration is ignored
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: e5dbf24e8b9e6aa0a185d86ce46a7a9c79ebb40f  Add linux-next specific files for 20230324
 
- - On 3rd timer expiration will trigger a system-wide core reset.
+Warning reports:
 
-Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
----
- drivers/watchdog/Kconfig                  |   9 +
- drivers/watchdog/Makefile                 |   1 +
- drivers/watchdog/octeontx2_gti_watchdog.c | 352 ++++++++++++++++++++++
- 3 files changed, 362 insertions(+)
- create mode 100644 drivers/watchdog/octeontx2_gti_watchdog.c
+https://lore.kernel.org/oe-kbuild-all/202303011456.WEPeM0ZN-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202303082135.NjdX1Bij-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202303161521.jbGbaFjJ-lkp@intel.com
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index f0872970daf9..9607d36645f6 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -2212,4 +2212,13 @@ config KEEMBAY_WATCHDOG
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called keembay_wdt.
- 
-+config OCTEON_GTI_WATCHDOG
-+	tristate "OCTEONTX2 GTI Watchdog driver"
-+	depends on ARM64
-+	help
-+	 OCTEONTX2 GTI hardware supports per-core watchdog timer which
-+	 are programmed in "interrupt + del3t + reset mode" and del3t
-+	 traps are not enabled.
-+	 This driver uses ARM64 pseudo-nmi interrupt support.
-+
- endif # WATCHDOG
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 9cbf6580f16c..11af3db62fec 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -230,3 +230,4 @@ obj-$(CONFIG_MENZ069_WATCHDOG) += menz69_wdt.o
- obj-$(CONFIG_RAVE_SP_WATCHDOG) += rave-sp-wdt.o
- obj-$(CONFIG_STPMIC1_WATCHDOG) += stpmic1_wdt.o
- obj-$(CONFIG_SL28CPLD_WATCHDOG) += sl28cpld_wdt.o
-+obj-$(CONFIG_OCTEON_GTI_WATCHDOG) += octeontx2_gti_watchdog.o
-diff --git a/drivers/watchdog/octeontx2_gti_watchdog.c b/drivers/watchdog/octeontx2_gti_watchdog.c
-new file mode 100644
-index 000000000000..766b7d41defe
---- /dev/null
-+++ b/drivers/watchdog/octeontx2_gti_watchdog.c
-@@ -0,0 +1,352 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Marvell GTI Watchdog driver
-+ *
-+ * Copyright (C) 2023 Marvell International Ltd.
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License version 2 as
-+ * published by the Free Software Foundation.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/cpu.h>
-+#include <linux/interrupt.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/watchdog.h>
-+#include <linux/sched/debug.h>
-+
-+#include <asm/arch_timer.h>
-+
-+/* GTI CWD Watchdog Registers */
-+#define GTI_CWD_WDOG(cpu)		(0x8 * cpu)
-+#define GTI_CWD_WDOG_MODE_INT_DEL3T_RST	(0x3)
-+#define GTI_CWD_WDOG_MODE_MASK		(0x3)
-+#define GTI_CWD_WDOG_LEN_SHIFT		(4)
-+#define GTI_CWD_WDOG_CNT_SHIFT		(20)
-+
-+/* GTI Per-core Watchdog Interrupt Register */
-+#define GTI_CWD_INT			0x200
-+
-+/* GTI Per-core Watchdog Interrupt Enable Clear Register */
-+#define GTI_CWD_INT_ENA_CLR		0x210
-+
-+/* GTI Per-core Watchdog Interrupt Enable Set Register */
-+#define GTI_CWD_INT_ENA_SET		0x218
-+
-+/* GTI Per-core Watchdog Poke Registers */
-+#define GTI_CWD_POKE(cpu)		(0x10000 + 0x8 * cpu)
-+
-+struct octeontx2_gti_wdt_percpu_priv {
-+	struct watchdog_device wdev;
-+	int irq;
-+};
-+
-+struct octeontx2_gti_wdt_priv {
-+	void __iomem *base;
-+	u64 clock_freq;
-+	int is_nmi;
-+	struct octeontx2_gti_wdt_percpu_priv __percpu *percpu_priv;
-+};
-+
-+static int octeontx2_gti_wdt_get_cpuid(struct watchdog_device *wdev)
-+{
-+	struct octeontx2_gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	struct octeontx2_gti_wdt_percpu_priv *percpu_priv;
-+	int cpu;
-+
-+	for_each_online_cpu(cpu) {
-+		percpu_priv = per_cpu_ptr(priv->percpu_priv, cpu);
-+		if (&percpu_priv->wdev == wdev)
-+			return cpu;
-+	}
-+
-+	return -1;
-+}
-+
-+void octeontx2_gti_wdt_callback_other_cpus(void *unused)
-+{
-+	struct pt_regs *regs = get_irq_regs();
-+
-+	pr_emerg("GTI Watchdog CPU:%d\n", raw_smp_processor_id());
-+
-+	if (regs)
-+		show_regs(regs);
-+	else
-+		dump_stack();
-+}
-+
-+static irqreturn_t octeontx2_gti_wdt_interrupt(int irq, void *data)
-+{
-+	struct octeontx2_gti_wdt_priv *priv = (struct octeontx2_gti_wdt_priv *)data;
-+	int cpu = smp_processor_id();
-+
-+	/* Clear interrupt to fire again if delayed poke happens */
-+	writeq(1 << cpu, priv->base + GTI_CWD_INT);
-+	dump_stack();
-+
-+	for_each_online_cpu(cpu) {
-+		if (cpu == raw_smp_processor_id())
-+			continue;
-+
-+		smp_call_function_single(cpu,
-+					 octeontx2_gti_wdt_callback_other_cpus,
-+					 NULL, 1);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int octeontx2_gti_wdt_ping(struct watchdog_device *wdev)
-+{
-+	struct octeontx2_gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	int cpu = octeontx2_gti_wdt_get_cpuid(wdev);
-+
-+	if (cpu < 0)
-+		return -EINVAL;
-+
-+	writeq(1, priv->base + GTI_CWD_POKE(cpu));
-+	return 0;
-+}
-+
-+static int octeontx2_gti_wdt_start(struct watchdog_device *wdev)
-+{
-+	struct octeontx2_gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	int cpu = octeontx2_gti_wdt_get_cpuid(wdev);
-+	u64 regval;
-+
-+	if (cpu < 0)
-+		return -EINVAL;
-+
-+	set_bit(WDOG_HW_RUNNING, &wdev->status);
-+
-+	/* Clear any pending interrupt */
-+	writeq(1 << cpu, priv->base + GTI_CWD_INT);
-+
-+	/* Enable Interrupt */
-+	writeq(1 << cpu, priv->base + GTI_CWD_INT_ENA_SET);
-+
-+	/* Set (Interrupt + SCP interrupt (DEL3T) + core domain reset) Mode */
-+	regval = readq(priv->base + GTI_CWD_WDOG(cpu));
-+	regval |= GTI_CWD_WDOG_MODE_INT_DEL3T_RST;
-+	writeq(regval, priv->base + GTI_CWD_WDOG(cpu));
-+
-+	return 0;
-+}
-+
-+static int octeontx2_gti_wdt_stop(struct watchdog_device *wdev)
-+{
-+	struct octeontx2_gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	u64 regval;
-+	int cpu = octeontx2_gti_wdt_get_cpuid(wdev);
-+
-+	if (cpu < 0)
-+		return -EINVAL;
-+
-+	/* Disable Interrupt */
-+	writeq(1 << cpu, priv->base + GTI_CWD_INT_ENA_CLR);
-+
-+	/* Set GTI_CWD_WDOG.Mode = 0 to stop the timer */
-+	regval = readq(priv->base + GTI_CWD_WDOG(cpu));
-+	regval &= ~GTI_CWD_WDOG_MODE_MASK;
-+	writeq(regval, priv->base + GTI_CWD_WDOG(cpu));
-+
-+	return 0;
-+}
-+
-+static int octeontx2_gti_wdt_settimeout(struct watchdog_device *wdev,
-+					unsigned int timeout)
-+{
-+	struct octeontx2_gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	int cpu = octeontx2_gti_wdt_get_cpuid(wdev);
-+	u64 timeout_wdog, regval;
-+
-+	if (cpu < 0)
-+		return -EINVAL;
-+
-+	/* Update new timeout */
-+	wdev->timeout = timeout;
-+
-+	/* Get clock cycles from timeout in second */
-+	timeout_wdog = (u64)timeout * priv->clock_freq;
-+
-+	/* Watchdog counts in 1024 cycle steps */
-+	timeout_wdog = timeout_wdog >> 10;
-+
-+	/*
-+	 * Hardware allows programming of upper 16-bits of 24-bits cycles
-+	 * Round up and use upper 16-bits only.
-+	 * Set max if timeout more than h/w supported
-+	 */
-+	timeout_wdog = (timeout_wdog + 0xff) >> 8;
-+	if (timeout_wdog >= 0x10000)
-+		timeout_wdog = 0xffff;
-+
-+	/*
-+	 * GTI_CWD_WDOG.LEN have only upper 16-bits of 24-bits
-+	 * GTI_CWD_WDOG.CNT, need addition shift of 8.
-+	 */
-+	regval = readq(priv->base + GTI_CWD_WDOG(cpu));
-+	regval &= GTI_CWD_WDOG_MODE_MASK;
-+	regval |= ((timeout_wdog) << (GTI_CWD_WDOG_CNT_SHIFT + 8)) |
-+		   (timeout_wdog << GTI_CWD_WDOG_LEN_SHIFT);
-+	writeq(regval, priv->base + GTI_CWD_WDOG(cpu));
-+	return 0;
-+}
-+
-+static const struct watchdog_info octeontx2_gti_wdt_ident = {
-+	.identity = "OcteonTX2 GTI watchdog",
-+	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE |
-+			  WDIOF_CARDRESET,
-+};
-+
-+static const struct watchdog_ops octeontx2_gti_wdt_ops = {
-+	.owner = THIS_MODULE,
-+	.start = octeontx2_gti_wdt_start,
-+	.stop = octeontx2_gti_wdt_stop,
-+	.ping = octeontx2_gti_wdt_ping,
-+	.set_timeout = octeontx2_gti_wdt_settimeout,
-+};
-+
-+static void octeontx2_gti_wdt_free_irqs(struct octeontx2_gti_wdt_priv *priv)
-+{
-+	struct octeontx2_gti_wdt_percpu_priv *percpu_priv;
-+	int irq, cpu = 0;
-+
-+	for_each_online_cpu(cpu) {
-+		percpu_priv = per_cpu_ptr(priv->percpu_priv, cpu);
-+		irq = percpu_priv->irq;
-+		if (irq) {
-+			if (priv->is_nmi) {
-+				disable_nmi_nosync(irq);
-+				free_nmi(irq, priv);
-+			} else {
-+				disable_irq_nosync(irq);
-+				free_irq(irq, priv);
-+			}
-+
-+			percpu_priv->irq = 0;
-+		}
-+	}
-+}
-+
-+static int octeontx2_gti_wdt_probe(struct platform_device *pdev)
-+{
-+	struct octeontx2_gti_wdt_percpu_priv *percpu_priv;
-+	struct octeontx2_gti_wdt_priv *priv;
-+	struct device *dev = &pdev->dev;
-+	struct watchdog_device *wdog_dev;
-+	unsigned long irq_flags;
-+	int irq, cpu, num_irqs;
-+	int err;
-+
-+	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->percpu_priv = devm_alloc_percpu(&pdev->dev, *priv->percpu_priv);
-+	if (!priv->percpu_priv)
-+		return -ENOMEM;
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(priv->base),
-+			      "reg property not valid/found\n");
-+
-+	num_irqs = platform_irq_count(pdev);
-+	if (num_irqs < 0)
-+		return dev_err_probe(dev, num_irqs, "GTI CWD no IRQs\n");
-+
-+	if (num_irqs < num_online_cpus())
-+		return dev_err_probe(dev, -EINVAL, "IRQs (%d) < CPUs (%d)\n",
-+				     num_irqs, num_online_cpus());
-+
-+	priv->clock_freq = arch_timer_get_cntfrq();
-+
-+	for_each_online_cpu(cpu) {
-+		percpu_priv = per_cpu_ptr(priv->percpu_priv, cpu);
-+		wdog_dev = &percpu_priv->wdev;
-+		wdog_dev->info = &octeontx2_gti_wdt_ident,
-+		wdog_dev->ops = &octeontx2_gti_wdt_ops,
-+		wdog_dev->parent = dev;
-+		wdog_dev->min_timeout = 1;
-+		wdog_dev->max_timeout = 16;
-+		wdog_dev->max_hw_heartbeat_ms = 16000;
-+		wdog_dev->timeout = 8;
-+
-+		irq = platform_get_irq(pdev, cpu);
-+		if (irq < 0) {
-+			dev_err(&pdev->dev, "IRQ resource not found\n");
-+			err = -ENODEV;
-+			goto out;
-+		}
-+
-+		err = irq_force_affinity(irq, cpumask_of(cpu));
-+		if (err) {
-+			pr_warn("unable to set irq affinity (irq=%d, cpu=%u)\n", irq, cpu);
-+			goto out;
-+		}
-+
-+		irq_flags = IRQF_PERCPU | IRQF_NOBALANCING | IRQF_NO_AUTOEN |
-+			    IRQF_NO_THREAD;
-+		err = request_nmi(irq, octeontx2_gti_wdt_interrupt, irq_flags,
-+				  pdev->name, priv);
-+		if (err) {
-+			err = request_irq(irq, octeontx2_gti_wdt_interrupt, irq_flags,
-+					  pdev->name, priv);
-+			if (err) {
-+				dev_err(dev, "cannot register interrupt handler %d\n", err);
-+				goto out;
-+			}
-+			enable_irq(irq);
-+		} else {
-+			priv->is_nmi = 1;
-+			enable_nmi(irq);
-+		}
-+
-+		percpu_priv->irq = irq;
-+		watchdog_set_drvdata(wdog_dev, priv);
-+		platform_set_drvdata(pdev, priv);
-+		watchdog_init_timeout(wdog_dev, wdog_dev->timeout, dev);
-+		octeontx2_gti_wdt_settimeout(wdog_dev, wdog_dev->timeout);
-+		watchdog_stop_on_reboot(wdog_dev);
-+		watchdog_stop_on_unregister(wdog_dev);
-+
-+		err = devm_watchdog_register_device(dev, wdog_dev);
-+		if (unlikely(err))
-+			goto out;
-+		dev_info(dev, "Watchdog enabled (timeout=%d sec)", wdog_dev->timeout);
-+	}
-+	return 0;
-+
-+out:
-+	octeontx2_gti_wdt_free_irqs(priv);
-+	return err;
-+}
-+
-+static int octeontx2_gti_wdt_remove(struct platform_device *pdev)
-+{
-+	struct octeontx2_gti_wdt_priv *priv = platform_get_drvdata(pdev);
-+
-+	octeontx2_gti_wdt_free_irqs(priv);
-+	return 0;
-+}
-+
-+static const struct of_device_id octeontx2_gti_wdt_of_match[] = {
-+	{ .compatible = "mrvl,octeontx2-gti-wdt", },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, octeontx2_gti_wdt_of_match);
-+
-+static struct platform_driver octeontx2_gti_wdt_driver = {
-+	.driver = {
-+		.name = "octeontx2-gti-wdt",
-+		.of_match_table = octeontx2_gti_wdt_of_match,
-+	},
-+	.probe = octeontx2_gti_wdt_probe,
-+	.remove = octeontx2_gti_wdt_remove,
-+};
-+module_platform_driver(octeontx2_gti_wdt_driver);
-+
-+MODULE_AUTHOR("Bharat Bhushan <bbhushan2@marvell.com>");
-+MODULE_DESCRIPTION("OcteonTX2 GTI per cpu watchdog driver");
+Warning: (recently discovered and may have been fixed)
+
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_validation.c:351:13: warning: variable 'bw_needed' set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_validation.c:352:25: warning: variable 'link' set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c:1600:5: warning: no previous prototype for 'vangogh_set_apu_thermal_limit' [-Wmissing-prototypes]
+drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:309:17: sparse:    int
+drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/smu_v13_0_6_ppt.c:309:17: sparse:    void
+drivers/net/wireless/legacy/ray_cs.c:628:17: warning: 'strncpy' specified bound 32 equals destination size [-Wstringop-truncation]
+
+Unverified Warning (likely false positive, please contact us if interested):
+
+arch/loongarch/include/asm/loongarch.h:226:9: sparse: sparse: too many errors
+drivers/pinctrl/pinctrl-mlxbf3.c:162:20: sparse: sparse: symbol 'mlxbf3_pmx_funcs' was not declared. Should it be static?
+drivers/watchdog/imx2_wdt.c:442:22: sparse: sparse: symbol 'imx_wdt' was not declared. Should it be static?
+drivers/watchdog/imx2_wdt.c:446:22: sparse: sparse: symbol 'imx_wdt_legacy' was not declared. Should it be static?
+io_uring/io_uring.c:432 io_prep_async_work() error: we previously assumed 'req->file' could be null (see line 425)
+io_uring/kbuf.c:221 __io_remove_buffers() warn: variable dereferenced before check 'bl->buf_ring' (see line 219)
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|   `-- drivers-net-wireless-legacy-ray_cs.c:warning:strncpy-specified-bound-equals-destination-size
+|-- alpha-randconfig-r014-20230322
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- alpha-randconfig-s052-20230324
+|   `-- drivers-pinctrl-pinctrl-mlxbf3.c:sparse:sparse:symbol-mlxbf3_pmx_funcs-was-not-declared.-Should-it-be-static
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- arc-randconfig-c44-20230322
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- arm-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- arm-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- arm64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- i386-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- ia64-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|   `-- drivers-net-wireless-legacy-ray_cs.c:warning:strncpy-specified-bound-equals-destination-size
+|-- ia64-randconfig-r003-20230323
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- ia64-randconfig-r033-20230322
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|   `-- drivers-net-wireless-legacy-ray_cs.c:warning:strncpy-specified-bound-equals-destination-size
+|-- loongarch-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- loongarch-defconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- loongarch-randconfig-r004-20230322
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-bw_needed-set-but-not-used
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_validation.c:warning:variable-link-set-but-not-used
+|-- loongarch-randconfig-s053-20230324
+|   |-- arch-loongarch-include-asm-loongarch.h:sparse:sparse:too-many-errors
+|   |-- arch-loongarch-kernel-relocate.c:sparse:sparse:incorrect-type-in-initializer-(different-address-spaces)-expected-char-cmdline-got-void-noderef-__iomem
+
+elapsed time: 722m
+
+configs tested: 115
+configs skipped: 10
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r014-20230322   gcc  
+arc                              allyesconfig   gcc  
+arc                          axs101_defconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230322   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                      integrator_defconfig   gcc  
+arm                      jornada720_defconfig   gcc  
+arm                  randconfig-r002-20230323   clang
+arm                  randconfig-r025-20230322   clang
+arm                  randconfig-r046-20230322   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r006-20230322   clang
+csky                                defconfig   gcc  
+hexagon      buildonly-randconfig-r003-20230322   clang
+hexagon              randconfig-r041-20230322   clang
+hexagon              randconfig-r045-20230322   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+i386                          randconfig-c001   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r003-20230323   gcc  
+ia64                 randconfig-r033-20230322   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch    buildonly-randconfig-r001-20230322   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r004-20230322   gcc  
+loongarch            randconfig-r016-20230322   gcc  
+loongarch            randconfig-r021-20230322   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                       m5275evb_defconfig   gcc  
+m68k                        mvme16x_defconfig   gcc  
+m68k                 randconfig-r005-20230322   gcc  
+m68k                 randconfig-r013-20230322   gcc  
+m68k                          sun3x_defconfig   gcc  
+microblaze   buildonly-randconfig-r006-20230322   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                           mtx1_defconfig   clang
+mips                 randconfig-r034-20230322   gcc  
+mips                   sb1250_swarm_defconfig   clang
+nios2        buildonly-randconfig-r004-20230322   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r035-20230322   gcc  
+openrisc             randconfig-r004-20230323   gcc  
+openrisc             randconfig-r006-20230323   gcc  
+openrisc             randconfig-r032-20230322   gcc  
+openrisc             randconfig-r036-20230322   gcc  
+parisc                           alldefconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r031-20230322   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r005-20230323   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230322   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r001-20230322   clang
+s390                 randconfig-r044-20230322   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r012-20230322   gcc  
+sh                   randconfig-r026-20230322   gcc  
+sh                          rsk7264_defconfig   gcc  
+sparc                               defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                        randconfig-k001   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r011-20230322   gcc  
+xtensa               randconfig-r015-20230322   gcc  
+xtensa               randconfig-r022-20230322   gcc  
+xtensa                    smp_lx200_defconfig   gcc  
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
