@@ -2,82 +2,59 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D23F6C67BC
-	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Mar 2023 13:13:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E766C8082
+	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Mar 2023 15:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbjCWMN1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 23 Mar 2023 08:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        id S232267AbjCXO51 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 24 Mar 2023 10:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbjCWMN0 (ORCPT
+        with ESMTP id S232239AbjCXO5X (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 23 Mar 2023 08:13:26 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B32D1B2F8
-        for <linux-watchdog@vger.kernel.org>; Thu, 23 Mar 2023 05:13:22 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5419d4c340aso391147847b3.11
-        for <linux-watchdog@vger.kernel.org>; Thu, 23 Mar 2023 05:13:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679573602;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SqdMrjKZcesKvWGpxbhVUZrrqQQyPMex40BfwsH73Mw=;
-        b=Rbzcb8b7uVMxju+D5/CxadWh3a4xL7OqSbqLhReppWwhkppJlcfHxcnh9BlnKiZfZW
-         kyM+9BiJgNJPNf65xkcxZIBBxRfrM22SrXS9+o6knJMsVn8APlD4Ji1hCIfKZ895Pjzc
-         O48YHqN4bBbD+hMvGntKwHwErfp2hsU1Zrn7SaP4mtaiWQufleIR/BjvAbYzOh41KtuB
-         YzJjvnJL2i3/SgYs4ewF90MXW+E+DmcMNzE+B/wJ7tnB5hnOxTRIQ5bgN0Nu2GwMbgH6
-         +5MsVhZmDm172Ij1nsdyzZg8yezeQOnRc/vNBVk8G/9D3KUED7wtPMHiYMI+JyJ/tyvN
-         gRFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679573602;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SqdMrjKZcesKvWGpxbhVUZrrqQQyPMex40BfwsH73Mw=;
-        b=UE/UXIv4qKvB45kOOl3nYf7cRBzNZuwdozRtcxNr7PNVBfa5Co5WB8xu4vi7sun/Yc
-         WWRb5EPrpQpq6zhYHHP/GxQx/egajy67dRAEDJlzLnfB9ko4EONVvIYDUJUOXUKnUmvF
-         /nUa39UW4oZeJThzx1FamVl0AbkcUGBH9aI3DbYIW1gdk0A6/LHjv1/9Owu/4vshaCzC
-         1ad++XdBiUAMvPlQ9+RNbT75PJ8GCT5Cc86/SgO7uKNbMMhqx72oSe3IoPjtiBesmtRh
-         5F/n0qo2aTx2GiVXncqdBKMkapbM0qNvSaw23XbLrok0/HxuzmMDZKG6A4zHvL1TIGrB
-         VmDQ==
-X-Gm-Message-State: AAQBX9d+gDHwrJqkTo7Mgh5NTryBtfLpXW1aPdQ1wyjF9cwKdseXTfq2
-        ThNEKmGxE+DIBEIof+bmvYzGtFw3qXtuLJtrRwD6pg==
-X-Google-Smtp-Source: AKy350ZLDXTgQmOwqbA0MAoLnKfUlTQWcUqEZLD9LuaUs8JbjfgJ8cUjE7ItSFrSS/I/z3l5JjKrz5bLJY0UbOHEDsI=
-X-Received: by 2002:a81:b342:0:b0:52b:fd10:4809 with SMTP id
- r63-20020a81b342000000b0052bfd104809mr1792507ywh.0.1679573601803; Thu, 23 Mar
- 2023 05:13:21 -0700 (PDT)
+        Fri, 24 Mar 2023 10:57:23 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E22C14B;
+        Fri, 24 Mar 2023 07:57:22 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32OD7YT7030567;
+        Fri, 24 Mar 2023 07:57:00 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=PK+Rv7jXbC9ogJCpPAItVG+0CU9r1/yBY9eM/5NlpvQ=;
+ b=DFSFKC6LNTNJTlU5AE7zYABanJ1ahXGTkrNWFIkeduuJg6pEnCkSYM+BAD4NfSgktXNX
+ TcfaO8zhnvrKJhgXJwRIatsCnvbjRuDXRqamPCJ/Kqz6IaBLLmCHIiy0L1ngdGYcLxPH
+ Gwjrs0TeBgcUYG4cmhaj3iN0pFlC3tqG19PcbEpQ2IEzFKMIwiU9ZdysaTs9ERI4zQWY
+ EZsc+XQ5qFYsIBO1oEnQklhKyUekywXiifFJyBfOj+yqNRvxe8Soc89bP4Ev2q2aPkd9
+ ws0CQICz0wMizEpozO7AClZfJGnvfB/0i+tf32GdZa7iK3BLSVcxmw8acZZTeb+Kguoq tg== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3pgxmfjuk0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Fri, 24 Mar 2023 07:56:59 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 24 Mar
+ 2023 07:56:57 -0700
+Received: from bbhushan2.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.42 via Frontend
+ Transport; Fri, 24 Mar 2023 07:56:55 -0700
+From:   Bharat Bhushan <bbhushan2@marvell.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Bharat Bhushan <bbhushan2@marvell.com>
+Subject: [PATCH 1/2] dt-bindings: watchdog: marvell octeonTX2 GTI watchdog driver
+Date:   Fri, 24 Mar 2023 20:26:51 +0530
+Message-ID: <20230324145652.19221-1-bbhushan2@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org> <20230314-topic-2290_compats-v1-4-47e26c3c0365@linaro.org>
-In-Reply-To: <20230314-topic-2290_compats-v1-4-47e26c3c0365@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 23 Mar 2023 13:12:45 +0100
-Message-ID: <CAPDyKFrW_bENzuAWqt+aTBHBV1gNOycNoPUHWM32C_U5Pz22zw@mail.gmail.com>
-Subject: Re: [PATCH 4/6] dt-bindings: mmc: sdhci-msm: Document QCM2290 SDHCI
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain
+X-Proofpoint-GUID: cPFjYVVAaM0Mh7ztn062RuEWeK0tBSZq
+X-Proofpoint-ORIG-GUID: cPFjYVVAaM0Mh7ztn062RuEWeK0tBSZq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-24_08,2023-03-24_01,2023-02-09_01
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,35 +62,64 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, 14 Mar 2023 at 13:53, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> Document the SDHCI on QCM2290.
->
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Add binding documentation for the Marvell octeonTX2
+GTI watchdog driver.
 
-Applied for next, thanks!
+Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+---
+ .../watchdog/marvel-octeontx2-wdt.yaml        | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml
 
-Kind regards
-Uffe
+diff --git a/Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml
+new file mode 100644
+index 000000000000..586b3c1bd780
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml
+@@ -0,0 +1,43 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/marvel-octeontx2-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Marvell OcteonTX2 GTI watchdog
++
++allOf:
++  - $ref: "watchdog.yaml#"
++
++maintainers:
++  - Bharat Bhushan <bbhushan2@marvell.com>
++
++properties:
++  compatible:
++    enum:
++      - mrvl,octeontx2-gti-wdt
++
++  reg:
++    maxItems: 2
++
++  interrupts:
++    minItems: 1
++    maxItems: 36
++
++required:
++ - compatible
++ - reg
++ - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    watch-dog@802000040000 {
++      compatible = "mrvl,octeontx2-gti-wdt";
++      reg = <0x8020 0x40000 0x0 0x20000>;
++      interrupts = <0 38 1>, /* Core-0 */
++                   <0 39 1>; /* Core-1 */
++    };
++
++...
+-- 
+2.17.1
 
-
-> ---
->  Documentation/devicetree/bindings/mmc/sdhci-msm.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-> index 64df6919abaf..7d4c5ca25e0d 100644
-> --- a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
-> @@ -36,6 +36,7 @@ properties:
->            - enum:
->                - qcom,ipq5332-sdhci
->                - qcom,ipq9574-sdhci
-> +              - qcom,qcm2290-sdhci
->                - qcom,qcs404-sdhci
->                - qcom,sc7180-sdhci
->                - qcom,sc7280-sdhci
->
-> --
-> 2.39.2
->
