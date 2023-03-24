@@ -2,50 +2,81 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16AE6C8737
-	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Mar 2023 22:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 428916C87F0
+	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Mar 2023 23:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjCXVEz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 24 Mar 2023 17:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40740 "EHLO
+        id S232027AbjCXWD1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 24 Mar 2023 18:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231840AbjCXVEx (ORCPT
+        with ESMTP id S230075AbjCXWD0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 24 Mar 2023 17:04:53 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE68B166C1;
-        Fri, 24 Mar 2023 14:04:50 -0700 (PDT)
-Date:   Fri, 24 Mar 2023 21:04:46 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1679691889; bh=iJwH2Fx5hEcdYN83wELFnuodo3IDfMVb36Ko204Svr8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R5tGWXMz3Lj8bjqMAX4pyfLYgoKNcBhlt7dyHzQBw5jabcFocfljPdFzH9pEwD4kA
-         Eel/6Dp/JddURQIt3YYr1prptvJzNs+zLkw+lJnQCHgTTx3bOgkJz85+e0ZCW6zNrn
-         TaR+QZCz6J9onZqmXeYMvbfwJFL6RjHBvOpcs5jY=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+        Fri, 24 Mar 2023 18:03:26 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B518166F2;
+        Fri, 24 Mar 2023 15:03:23 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id u8so1579315ilb.2;
+        Fri, 24 Mar 2023 15:03:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679695402;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nLVVb4QeRJ/2YicZcXavV0yGJfW//waUv/WRxmqg+oo=;
+        b=N82D/MiHlY2SwW/GE+gu58LOkZhCc+OIufb4VEHVQZPAUcJlEcy/g8nZINMpRmz/F3
+         dCANShQBASYT0aBA53RYRe9fvalREbhmHwqHw+e3ZyQRGF2vCmqPgnl43G+7//ni4Rw5
+         xXxy6YXPuVBiFfLMMpnoN2V33CITblRf/SF5Ljent/01o5qLEUx8h2HIeIeQM6P3FrQm
+         5+R3eb3vA6oS0r0TeNAYzxN8mecV39NeYXaYOfDSh7z54V7rr4FXWLPKv2NJ/KZaKmWm
+         E4+SSseO2Jrjl7nSp+k8wfvxod2+EoZ29IvahMdzL4oXkNV8lnobp22spJxjsRAOBzYW
+         E7jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679695402;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nLVVb4QeRJ/2YicZcXavV0yGJfW//waUv/WRxmqg+oo=;
+        b=e5QNoBNL+2XqPRQMTTfuIJUTx0tSRFG4AFSPiMrjAC3OI7d9Twr5JgS2xoducWWiph
+         B3WoKmoIW3xXRV7B34JYo3XHG6AecqvbfAbQuT13O63f1fU17NCjGVslKRucezndu69W
+         bPIkyIseJ6ZZQvHiOQo7tLFoeh7JyZHzJf1tB9elMRHZcujE2RWAKh9y+tkdCUKo88rx
+         FaXM0dGN/mkB4zTG70vm7Gb+q8GNNjDQ4nMfz/zZqGlMJNydUVE4LjdCpXDm69OcYF37
+         f1OyUiFTikADSfjdhI+ZTXsJpWlij2MdpCDD/fqrxCmzbpuLSEm+Bc+Q9ufZvf6JE8BU
+         QuNg==
+X-Gm-Message-State: AAQBX9c3zVoUmLOwLEuKbdhfBYZmFz032AsRn50ofGte5ImMCp825sOj
+        borxphmUsPvoEo+WIM/jCQB6jxPJz7Y=
+X-Google-Smtp-Source: AKy350Zvi3FnYpoxKFu12H5UUzcqQJhhb6cvY9+zRCeqLyF4Nf2a5Wk2k97PHTTkhb+Nv9pQMkNXOA==
+X-Received: by 2002:a92:909:0:b0:317:99c6:2791 with SMTP id y9-20020a920909000000b0031799c62791mr3726194ilg.26.1679695402509;
+        Fri, 24 Mar 2023 15:03:22 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j1-20020a056e020ee100b003231258f7e7sm6131479ilk.11.2023.03.24.15.03.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Mar 2023 15:03:21 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 24 Mar 2023 15:03:18 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
 To:     Bharat Bhushan <bbhushan2@marvell.com>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 2/2] Watchdog: octeontx2: Add Pseudo-NMI GTI watchdog
  driver
-Message-ID: <6ede1391-7b60-4c78-a93b-40d2c96e6ae8@t-8ch.de>
+Message-ID: <b5c3fe52-63fa-4fa2-b500-6233297c01c4@roeck-us.net>
 References: <20230324145652.19221-1-bbhushan2@marvell.com>
  <20230324145652.19221-2-bbhushan2@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20230324145652.19221-2-bbhushan2@marvell.com>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2023-03-24 20:26:52+0530, Bharat Bhushan wrote:
+On Fri, Mar 24, 2023 at 08:26:52PM +0530, Bharat Bhushan wrote:
 > GTI hardware supports per-core watchdog timer which are programmed
 > in "interrupt + del3t + reset mode" and del3t traps are not enabled.
 > This driver uses ARM64 pseudo-nmi interrupt support.
@@ -164,9 +195,6 @@ On 2023-03-24 20:26:52+0530, Bharat Bhushan wrote:
 > +}
 > +
 > +void octeontx2_gti_wdt_callback_other_cpus(void *unused)
-
-Could be static.
-
 > +{
 > +	struct pt_regs *regs = get_irq_regs();
 > +
@@ -300,9 +328,6 @@ Could be static.
 > +	.identity = "OcteonTX2 GTI watchdog",
 > +	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE |
 > +			  WDIOF_CARDRESET,
-
-Weird alignment.
-
 > +};
 > +
 > +static const struct watchdog_ops octeontx2_gti_wdt_ops = {
@@ -369,6 +394,15 @@ Weird alignment.
 > +	priv->clock_freq = arch_timer_get_cntfrq();
 > +
 > +	for_each_online_cpu(cpu) {
+
+Watchdogs are supposed to be per system, not per CPU. The Linux kernel has
+other means to detect hung CPUs, and the watchdog subsystem should be
+(ab)used to bypass or replace those methods.
+
+I am not inclined to accept this patch.
+
+Guenter
+
 > +		percpu_priv = per_cpu_ptr(priv->percpu_priv, cpu);
 > +		wdog_dev = &percpu_priv->wdev;
 > +		wdog_dev->info = &octeontx2_gti_wdt_ident,
@@ -419,9 +453,6 @@ Weird alignment.
 > +
 > +		err = devm_watchdog_register_device(dev, wdog_dev);
 > +		if (unlikely(err))
-
-This unlikely() should really not be needed.
-
 > +			goto out;
 > +		dev_info(dev, "Watchdog enabled (timeout=%d sec)", wdog_dev->timeout);
 > +	}
@@ -443,9 +474,6 @@ This unlikely() should really not be needed.
 > +static const struct of_device_id octeontx2_gti_wdt_of_match[] = {
 > +	{ .compatible = "mrvl,octeontx2-gti-wdt", },
 > +	{ },
-
-No trailing comma for end-of-array marker.
-
 > +};
 > +MODULE_DEVICE_TABLE(of, octeontx2_gti_wdt_of_match);
 > +
@@ -461,5 +489,6 @@ No trailing comma for end-of-array marker.
 > +
 > +MODULE_AUTHOR("Bharat Bhushan <bbhushan2@marvell.com>");
 > +MODULE_DESCRIPTION("OcteonTX2 GTI per cpu watchdog driver");
-
-No MODULE_LICENSE() ?
+> -- 
+> 2.17.1
+> 
