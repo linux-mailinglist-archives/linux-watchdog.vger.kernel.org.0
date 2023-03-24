@@ -2,59 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC0F6C86A2
-	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Mar 2023 21:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69FEB6C86DD
+	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Mar 2023 21:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbjCXURo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 24 Mar 2023 16:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
+        id S231908AbjCXUek (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 24 Mar 2023 16:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbjCXURn (ORCPT
+        with ESMTP id S231661AbjCXUej (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 24 Mar 2023 16:17:43 -0400
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7E11A486;
-        Fri, 24 Mar 2023 13:17:43 -0700 (PDT)
-Received: by mail-oi1-f173.google.com with SMTP id b19so2125817oib.7;
-        Fri, 24 Mar 2023 13:17:43 -0700 (PDT)
+        Fri, 24 Mar 2023 16:34:39 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A711717B;
+        Fri, 24 Mar 2023 13:34:39 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id bf30so2143862oib.12;
+        Fri, 24 Mar 2023 13:34:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679689062;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hjo6T06AhgrOxDlWz+2G2Zgc5NeJaNtNcNVYDLu3Z6E=;
-        b=2JWRXrSz7YYmceDbTOfUwUqzTSmkWF55UTopg3rQRL50jhD2xcveMSu7kOvHRDKtar
-         e1rn2uE0pyQscjP1tqk/II2gWeqFjDF3pPYPeKvmR10EG/z2TDaPd1nWhWFznKLd9O1p
-         ZMxOz+A3TAAfu3o3vHlVB9Ixi03atqUoNXwmn/dF/KFi/Aov9DiOkCbWtj2M9eeM6L72
-         UGE5ebt58v38VggFdeAJ8gOd+QlpZNEeo5rY+cUasHu5B4wLhnwZocpZk+YGjdmJX+LT
-         vkg8N8ij04/CtGxxz5LI9tebEbEnIm34eSl10WXoUz0SetfQQO2o3detFmC5Xi262UwR
-         4v5A==
-X-Gm-Message-State: AO0yUKXLtl9yKbkWItMm6zvyywfwtJIw7d8NebVkvQ5v1t2ZoE3HJ/1I
-        YgvinMYKkrYyhtnpxIgqXP7Wyxc2pg==
-X-Google-Smtp-Source: AK7set83s82uaUJRj3dzo4SvDlSjN2K84Zt++hVAUhsWxmrL3xduYCYWVxI9pwtd5f8gJw4OKYZ90g==
-X-Received: by 2002:aca:a913:0:b0:386:a30c:f16a with SMTP id s19-20020acaa913000000b00386a30cf16amr1668100oie.50.1679689062413;
-        Fri, 24 Mar 2023 13:17:42 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679690078;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f9FU1okYjNaTTvHlzFDbnyfTKzLx7kyIZ/RZ3UO1QI8=;
+        b=roWwwSktPCVljTsiLoEIA6kZ2uuHQKnxVvUuZhVyj8noVmMPVZvpiRkZ3AFz+XZBxx
+         h6Urqs5n5+WLPYR81HOD/e2ugNyW4acVCjSTX/mZH0xJYj2CnqgRZdBtiScVhOaeNBAh
+         UpudSxCR1c+4uNgZwacf/TPMm/gaxw776iQXvEY9nMte4hPLLGmIbsjvhskTINswKgmL
+         rPKSag7u9gcyxQSi0a5dG6r6+QC23iKbx9YTclKe4FxpviXJ4znxiTcdkF31hk0Cca6w
+         wEozSrwKTp9utZoDxkCE1N3eDhaQKrNYlAWUHOVcDW/TsToAcXBMrJBQDhqFxpIgj+Vc
+         KskA==
+X-Gm-Message-State: AO0yUKVi2DAfu/5GvGX0DUZtGDgB0sbCtgtj7blfJ9QLyoHC7lVvM7KN
+        fCYwcGeMy5XUcTKiJyL+dg==
+X-Google-Smtp-Source: AK7set/KwOyEyWEDcM3nn+7L9qghYTCY+NGAz+QDvS2Y+PVAuwKAhkaFRH+XuAdy/7QN1kftkUbYSg==
+X-Received: by 2002:a05:6808:1a22:b0:387:1ac9:17d with SMTP id bk34-20020a0568081a2200b003871ac9017dmr2055119oib.40.1679690078303;
+        Fri, 24 Mar 2023 13:34:38 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l4-20020acabb04000000b00387852ef095sm918996oif.25.2023.03.24.13.17.41
+        by smtp.gmail.com with ESMTPSA id e17-20020a544f11000000b0038778d9d8efsm1529641oiy.56.2023.03.24.13.34.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Mar 2023 13:17:42 -0700 (PDT)
-Received: (nullmailer pid 2436315 invoked by uid 1000);
-        Fri, 24 Mar 2023 20:17:41 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-MIME-Version: 1.0
+        Fri, 24 Mar 2023 13:34:38 -0700 (PDT)
+Received: (nullmailer pid 2459085 invoked by uid 1000);
+        Fri, 24 Mar 2023 20:34:37 -0000
+Date:   Fri, 24 Mar 2023 15:34:37 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Bharat Bhushan <bbhushan2@marvell.com>
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        linux@roeck-us.net, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        wim@linux-watchdog.org
-In-Reply-To: <20230324145652.19221-1-bbhushan2@marvell.com>
-References: <20230324145652.19221-1-bbhushan2@marvell.com>
-Message-Id: <167968860240.2423272.17528725519300805146.robh@kernel.org>
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
+        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 1/2] dt-bindings: watchdog: marvell octeonTX2 GTI
  watchdog driver
-Date:   Fri, 24 Mar 2023 15:17:41 -0500
+Message-ID: <20230324203437.GA2439497-robh@kernel.org>
+References: <20230324145652.19221-1-bbhushan2@marvell.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324145652.19221-1-bbhushan2@marvell.com>
 X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -65,42 +64,86 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-
-On Fri, 24 Mar 2023 20:26:51 +0530, Bharat Bhushan wrote:
+On Fri, Mar 24, 2023 at 08:26:51PM +0530, Bharat Bhushan wrote:
 > Add binding documentation for the Marvell octeonTX2
 > GTI watchdog driver.
 > 
 > Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
 > ---
 >  .../watchdog/marvel-octeontx2-wdt.yaml        | 43 +++++++++++++++++++
+
+The comics?
+
+Use compatible string for filename.
+
 >  1 file changed, 43 insertions(+)
 >  create mode 100644 Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml
+> new file mode 100644
+> index 000000000000..586b3c1bd780
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml
+> @@ -0,0 +1,43 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/marvel-octeontx2-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell OcteonTX2 GTI watchdog
+> +
+> +allOf:
+> +  - $ref: "watchdog.yaml#"
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Drop quotes
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml:28:2: [warning] wrong indentation: expected 2 but found 1 (indentation)
+> +
+> +maintainers:
+> +  - Bharat Bhushan <bbhushan2@marvell.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mrvl,octeontx2-gti-wdt
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.example.dtb: watch-dog@802000040000: $nodename:0: 'watch-dog@802000040000' does not match '^(timer|watchdog)(@.*|-[0-9a-f])?$'
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/watchdog/marvel-octeontx2-wdt.yaml
+'mrvl' is deprecated. Use 'marvell'
 
-doc reference errors (make refcheckdocs):
+> +
+> +  reg:
+> +    maxItems: 2
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230324145652.19221-1-bbhushan2@marvell.com
+Need to define what each entry is.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 36
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Need to define what each entry is. How does the h/w have a variable 
+number of interrupts?
 
-pip3 install dtschema --upgrade
+> +
+> +required:
+> + - compatible
+> + - reg
+> + - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    watch-dog@802000040000 {
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+watchdog@...
 
+> +      compatible = "mrvl,octeontx2-gti-wdt";
+> +      reg = <0x8020 0x40000 0x0 0x20000>;
+> +      interrupts = <0 38 1>, /* Core-0 */
+> +                   <0 39 1>; /* Core-1 */
+> +    };
+> +
+> +...
+> -- 
+> 2.17.1
+> 
