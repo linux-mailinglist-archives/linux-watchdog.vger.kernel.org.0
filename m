@@ -2,106 +2,90 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7B56CAFFC
-	for <lists+linux-watchdog@lfdr.de>; Mon, 27 Mar 2023 22:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA456CC30F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 Mar 2023 16:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbjC0U2q (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 27 Mar 2023 16:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S233480AbjC1OvK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 28 Mar 2023 10:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjC0U2q (ORCPT
+        with ESMTP id S233439AbjC1Oup (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 27 Mar 2023 16:28:46 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4636C270B
-        for <linux-watchdog@vger.kernel.org>; Mon, 27 Mar 2023 13:28:44 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id u11-20020a05600c19cb00b003edcc414997so6115860wmq.3
-        for <linux-watchdog@vger.kernel.org>; Mon, 27 Mar 2023 13:28:44 -0700 (PDT)
+        Tue, 28 Mar 2023 10:50:45 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12714E385;
+        Tue, 28 Mar 2023 07:50:19 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id i6so15394315ybu.8;
+        Tue, 28 Mar 2023 07:50:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679948922;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6XyQGB5YTPzqeEncabjYPJXPQhCRKXMrHKIK18rowh8=;
-        b=PwM5zTNc6t6e5pXudxvs7t7xKDNPvfG/rURST6WDCtP3mcyybZ102fqTIrXQWHn3jt
-         GsqqgakjXsx6fToQ7fE5yhK8hav6uhemLk84xH2jD+DTzp9sloDFzZBlXg7ybcLlw4Ti
-         0QmtudtFSsJrYaDAjmKNGWv0sOiWvUXKj90KJOJ9EV69agikfMqOdIAHfjizAYhxO/gt
-         AQD7UqtKQvA0biIWVbHKWeSEV4VH51/j48VV72LBzIMPWu6tPoH3dRJrIofEWO7Tz06L
-         4NrOTJdN8+hf9xupW3aD0Q5CIhblZVuLaT0WE7GXlHH5Y26V+Ez9sFkjz99tenE/uRvX
-         Xnew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679948922;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20210112; t=1680015019;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6XyQGB5YTPzqeEncabjYPJXPQhCRKXMrHKIK18rowh8=;
-        b=diQ4c1D+TzV/HwBXh+VSbUf4wUbvoyfbtYgfxL0I2tJvHbpzeDdYSJtAccb+SD8bCx
-         Tz/e9ETD69MGyTeThU2urOISXBIFIxLU5f66T07OprNse1MHIARlIp4TlonLNuAlNStF
-         aUSSB78tNzyExmWpfneZVK+L7Kn4jgJhJUtpfleFggvA9E7wKvPke6mKNrUkIyj650Ep
-         7dsS1/5whcSIR52770aoUrvBdoA6D3KxhYF0dndqtK2HHM3FaQj/WK6fOLZQuwJuZtSR
-         TsgZI8WnVfUHQ05c2ml+BGYCyyVZTa/SYUwCo2RBmtlDjQSXJD1J1qqAYbkkZyNEx3CF
-         qMDQ==
-X-Gm-Message-State: AO0yUKU3JOmKaeM1rfQQqA0U1gnZZpsspe6F8MnlT/s6h2nQE3783FXy
-        OzugfQ8QpgAxH6YFC9al4Vp2Yw44dcKKQeXw3WtOmtuSkou2ZlxL
-X-Google-Smtp-Source: AK7set++o4/dXRKys9UorCef67oaPvg27xdjunH5dcKwpPvKZximdpQ8YdNUTuh/cGVbtlOL+fONXrkijAqK3Syb7Fs=
-X-Received: by 2002:a7b:ce8f:0:b0:3ed:c669:8a13 with SMTP id
- q15-20020a7bce8f000000b003edc6698a13mr2804145wmj.8.1679948922332; Mon, 27 Mar
- 2023 13:28:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230314051351.1754321-1-bhupesh.sharma@linaro.org>
-In-Reply-To: <20230314051351.1754321-1-bhupesh.sharma@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Tue, 28 Mar 2023 01:58:31 +0530
-Message-ID: <CAH=2Ntzsppo6QmX27tRszHTf5LTwgL0goTqg06-PtpW4jEHbbQ@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: watchdog: Document Qualcomm SM6115 watchdog
-To:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     konrad.dybcio@linaro.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, agross@kernel.org, andersson@kernel.org,
+        bh=NiDQyAXhgWCz4KK2SHpIkYv9FCWP7ln2+V7AJtildZ4=;
+        b=oAx3D/IZESQgWeH5/u7nYGbo3gkv70eejPKpr225Vmm66knBU37kofn38W0AKNTGn+
+         x/4pe7fBnIOnazHzKhbu6Ov5SemHVPLZ5WRkKoPINymk8S2yHH5bV1lkGMp9/e8wm+9e
+         Y3KBOmQqODrOdVZqBIOHqzn1IBWbj8UW4B5FlSG8rnPhp8q57ROI3jH3S+3tFs2ypn/V
+         RxNJlGeedBXxyUI2yigo/mGPdA42ft2WLnjpKusmgIbJTrSW+6vkaNEmum49ezotR90m
+         IMZJkGXyS/+7+9E29GIYE1FWPLIrp9vpUPTLsa96ngE8zi6nTtfJ8ypIXrwsPvk0Fxfi
+         jibw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680015019;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NiDQyAXhgWCz4KK2SHpIkYv9FCWP7ln2+V7AJtildZ4=;
+        b=OW9Wzr4RoiVWOBqsnWu8q75px0DHS20FGkT6iQGHyrCJ0v+00VVUNBKHveVV7cXtAE
+         4UTx3PO1ym8grzs/sWcKxWNz9+/cp2QOnJ3+zvS/nrMcGmZFLTXakdZncy/4m0EQc8Zo
+         fToyWTjwnuYnuo0xK0GsnGW/r72XEKxgeqk8+DFvBdC0vQxzwkN6+t3U40yOIEXI5Ji6
+         c7/oskmzfkbyO49PYZXQ3zo4okBcjuLSc/KcRib2LhSAyId+nL9Lfqq6n4fHZ6DH1Qh1
+         8JU1yBnMWa146/4cavkvstAJ03DhX2HEQDWWRlggLcRl9db+LOXurJb7grhLbFk1XhnS
+         vGuA==
+X-Gm-Message-State: AAQBX9dWR4bJ8UtwDPGBko3SYf82S8W/s9e7aCq49zS/eCkXIjRA4up0
+        me6frmt8EnHimOurys1aZUU=
+X-Google-Smtp-Source: AKy350ZIHS0JDgLGX9+NMLarjPoffiIgQyFp/HsmWdcvG5BWLOJWQI7cUPnqyiUWvUooG8byHw3i+w==
+X-Received: by 2002:a25:468a:0:b0:b3d:5a52:5c6b with SMTP id t132-20020a25468a000000b00b3d5a525c6bmr18947517yba.21.1680015018888;
+        Tue, 28 Mar 2023 07:50:18 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o137-20020a25418f000000b00b7767ca7496sm2938471yba.51.2023.03.28.07.50.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 07:50:18 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 28 Mar 2023 07:50:16 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        konrad.dybcio@linaro.org, wim@linux-watchdog.org,
+        agross@kernel.org, andersson@kernel.org,
         saiprakash.ranjan@codeaurora.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2] dt-bindings: watchdog: Document Qualcomm SM6115
+ watchdog
+Message-ID: <501ab5b8-568f-43d4-8121-b888cc49cb50@roeck-us.net>
+References: <20230314051351.1754321-1-bhupesh.sharma@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314051351.1754321-1-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, 14 Mar 2023 at 10:44, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
->
+On Tue, Mar 14, 2023 at 10:43:51AM +0530, Bhupesh Sharma wrote:
 > Add devicetree binding for watchdog present on Qualcomm
 > SM6115 SoC.
->
+> 
 > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
-> Changes since v1:
-> ~ v1 can be seen here - https://lore.kernel.org/linux-arm-msm/20230119122619.1020908-1-bhupesh.sharma@linaro.org/
-> ~ v2 collects Ack from Krzysztof and also fixes the subject as per his
->   v1 review comments.
->
->  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> index 6448b633c970..4ba61e1831ec 100644
-> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> @@ -28,6 +28,7 @@ properties:
->                - qcom,apss-wdt-sdm845
->                - qcom,apss-wdt-sdx55
->                - qcom,apss-wdt-sdx65
-> +              - qcom,apss-wdt-sm6115
->                - qcom,apss-wdt-sm6350
->                - qcom,apss-wdt-sm8150
->                - qcom,apss-wdt-sm8250
-> --
-> 2.38.1
 
-Gentle ping. Any updates on this patch?
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Thanks,
-Bhupesh
+Guenter
