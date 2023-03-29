@@ -2,45 +2,72 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE4E6CD9E6
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Mar 2023 15:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2F96CDA50
+	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Mar 2023 15:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjC2NFE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 29 Mar 2023 09:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
+        id S230192AbjC2NSA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 29 Mar 2023 09:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjC2NFE (ORCPT
+        with ESMTP id S230177AbjC2NR6 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 29 Mar 2023 09:05:04 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED71D2;
-        Wed, 29 Mar 2023 06:05:01 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1phVTx-00048M-Cs; Wed, 29 Mar 2023 15:04:53 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Shreeya Patel <shreeya.patel@collabora.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jamie@jamieiles.com,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH 2/2] dt-bindings: watchdog: rockchip: Add rockchip,rk3588-wdt
- string
-Date:   Wed, 29 Mar 2023 15:04:52 +0200
-Message-ID: <4256207.ejJDZkT8p0@diego>
-In-Reply-To: <157937fd-0af7-4ff5-8430-2f956c7aafba@roeck-us.net>
-References: <20230328210048.195124-1-shreeya.patel@collabora.com>
- <20230328210048.195124-3-shreeya.patel@collabora.com>
- <157937fd-0af7-4ff5-8430-2f956c7aafba@roeck-us.net>
+        Wed, 29 Mar 2023 09:17:58 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8403049D5;
+        Wed, 29 Mar 2023 06:17:54 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DF74D660316F;
+        Wed, 29 Mar 2023 14:17:51 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1680095873;
+        bh=qTmxjyfcP5I5Xj6wCEgR0k1cS22atKBkP1Lgre2sabQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FaIVp1r52Fx00yV49EnK0WzOWDoXi12jY33WMlwI/oJO0/2cEeqd2vopPu72LiWAC
+         jMkjAOlm68kEYppT0VjI4UnlPSk7HqWlKhHKv/BmZlq7zrEsTlMVaq6xJtxnd8poAo
+         IpI9/u9jQUJrEFUQZEbn4+zQEBLC7RYOhiUBHp216Oj2c6t74RCorpIzJTHojXquSe
+         FaX23FAAajNdpeorVFUOwnEch3x+a/hmFZQkx+Euz7ro6S7kHH5vUK76hIuNwUb+M3
+         xtpHnBzSt8q2e1OMcsI53xdQRd9DzUge0v/suvoiWLvT1ZxeZwQhUxqi8AC0vG1g3f
+         yOHNsJHe8zVFw==
+Message-ID: <dd3a26af-819b-6d79-3e08-a351c404060e@collabora.com>
+Date:   Wed, 29 Mar 2023 15:17:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 04/17] arm64: dts: mediatek: add watchdog support for
+ mt8365 SoC
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>
+References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
+ <20230203-evk-board-support-v3-4-0003e80e0095@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230203-evk-board-support-v3-4-0003e80e0095@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,21 +75,31 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Guenter,
-
-Am Mittwoch, 29. März 2023, 14:47:34 CEST schrieb Guenter Roeck:
-> On Wed, Mar 29, 2023 at 02:30:48AM +0530, Shreeya Patel wrote:
-> > Add rockchip,rk3588-wdt compatible string.
-> > 
-> > Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+Il 29/03/23 10:54, Alexandre Mergnat ha scritto:
+> Add watchdog support.
 > 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8365.dtsi | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> index 553c7516406a..e018df6844f6 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> @@ -162,6 +162,13 @@ syscfg_pctl: syscfg-pctl@10005000 {
+>   			reg = <0 0x10005000 0 0x1000>;
+>   		};
+>   
+> +		watchdog: watchdog@10007000 {
+> +			compatible = "mediatek,mt8365-wdt",
+> +				     "mediatek,mt6589-wdt";
 
-just the usual question who is expected to pick up the binding patch?
-Should I just take it together with the dts-patch or do we wait for
-a watchdog-maintainer to pick up the binding alone?
+This fits in one line, 83 columns is *definitely* fine.
+Can you please compress that?
 
-Thanks
-Heiko
+After which:
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 
