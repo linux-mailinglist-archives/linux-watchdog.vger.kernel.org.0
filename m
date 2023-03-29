@@ -2,62 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D246CD580
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Mar 2023 10:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820D26CD585
+	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Mar 2023 10:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjC2Izl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 29 Mar 2023 04:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
+        id S230142AbjC2Izw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 29 Mar 2023 04:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjC2IzR (ORCPT
+        with ESMTP id S231405AbjC2IzX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:55:17 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1974349DE
-        for <linux-watchdog@vger.kernel.org>; Wed, 29 Mar 2023 01:55:05 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id y14so14859898wrq.4
-        for <linux-watchdog@vger.kernel.org>; Wed, 29 Mar 2023 01:55:05 -0700 (PDT)
+        Wed, 29 Mar 2023 04:55:23 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D1140D3
+        for <linux-watchdog@vger.kernel.org>; Wed, 29 Mar 2023 01:55:07 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id o24-20020a05600c511800b003ef59905f26so9049731wms.2
+        for <linux-watchdog@vger.kernel.org>; Wed, 29 Mar 2023 01:55:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680080104;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680080105;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YCK9ixqSl+74rQaK3ldRCMI5KeuVJdjVcuRaPTgCkqo=;
-        b=rZnYHG0CnPjE+aEbbLw1j7Stc0yw9/iFGuyOULIXI9RehtDVStHFNNyMsvtDPzDyIq
-         WnBzjjWp1FhortWNAg2XxCo5753rzH/6L6oRWV9kQ+tNXRu6AwT8p79kl1PsaEEzIgPa
-         CP7vpEfoi9sJIW0aORJz0X2NgoR4CB59unuupubSF2qrm27y5MQtNmW9BCaGKarP5zsr
-         xrJayyvSvTp9BtQEMiZvFpdBhZBqs3buM1e2qb3YcFhfvSHFVofGw0z6gFaqdTq2jEU7
-         6XO2MRiiwh1AKECtBO+UxDD9zSBE8nuGDvqLoXXcDC4lZ0TrhsVyQnPknbA1H5M2BfNY
-         K7GQ==
+        bh=vfv77BVZkJVCikonyTsjNYks4OjSzyX47Vy4hDh/Sg0=;
+        b=6SQOn3AJXk0D5Kmi5TeP8s87oZ3KX+eIQfpKDAuDtGetLDd9+GVbBxu4RqkbYL8PHE
+         DfVRGafoTh26zXW+hO1Frc4nH4o3B6J6VH1tYwtwNURXrES+YzDKk99tSeWDlliCqwzq
+         zUjdWynxSFX0vAiT8DiuQRVAcQlqJrOy4fHil/9G9VZnThrzNNGk2rRGIZax8sItmxVZ
+         mFOktn0S90ci9viYPO0tkYCC1tQy1oRQUbhucGHnZ88doT3Aupn3OP5uNpgwM5GK6tz9
+         Zeoo15TMG0l1qb4Os2mOV1uTiHn/b0L9LaKoJSip+Cd5CO7+fzzYnPd1jLzlAE+2lKTu
+         a3AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680080104;
+        d=1e100.net; s=20210112; t=1680080105;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YCK9ixqSl+74rQaK3ldRCMI5KeuVJdjVcuRaPTgCkqo=;
-        b=qWP+VuVnNiGKHP7TO1J+ULEgLvYJfkDyYHpUWav3nrqni+NRHAdcB5YeJ8lZZs9uAh
-         R4AU4dVYnncehW+1CUKekj3pKZ9BXmzZ4QYryRl5Vrz2GkYfJp3EuTPLASHXGspbqUQo
-         LG6f1Auf/kUza2gpmF119Azc1fOZOHIRfYUj4MB/rMMpzek834h1Zpuvt6v+umcy2AJk
-         Ahq6mZoNYO7hPL3rUbVLE3qcM3z9nDUe0cDVsOXpbx/PojKBZH9UYNQU+aLvYVJEbEj2
-         UQsHogJtfuB+jqWObcgGcal7q7bRY6lstlf2rFZYd5jJ3o5T1KYPIqwTaoxpgb72N1Mz
-         z0Ew==
-X-Gm-Message-State: AAQBX9ciuJhOUDNPnUAAS8LcSRoB2SLom4iXP4u+aaaoc6bfm1O157G1
-        Jm6dcCgB5t7I/yptVSM/Nql2kg==
-X-Google-Smtp-Source: AKy350ak1x66ouEr6/ZWlRxs/GEyCSqDlQIq1u/HdPCZG58AWG//Gs5m1l+y+ltFSIZ41bgqmi5yBg==
-X-Received: by 2002:a5d:6845:0:b0:2d0:3584:27f with SMTP id o5-20020a5d6845000000b002d03584027fmr15013155wrw.68.1680080104530;
-        Wed, 29 Mar 2023 01:55:04 -0700 (PDT)
+        bh=vfv77BVZkJVCikonyTsjNYks4OjSzyX47Vy4hDh/Sg0=;
+        b=S1d5VoDYwOQqfazHBpC9KMZJWlgX2fyOFW5O641QS04rvZltOCFQm2SXYq3HmTvOOk
+         nn5e5NH5ccJeEww4F3+IwHRuVd5NNH//3QLk+bVNV1PNDtn8pk6hHJpbZl0f1nhb7+VT
+         hbaWdalPcbPmi3c2cyYXtoJot10Wk4ysfdIEig+Z1xyiv1bzey534DBBmhbuH+vABq9+
+         v2TEouNxpELZIfegsd2PX/V1aiUv0jhdlutedkVf8n7dtzLJCJzVRf8eqVzxQY2NBhCU
+         KdW69aL1oBYIlubjl22nCDtNaiQgpboRzBfkCVwbgvIg05iL0FejV1DUbLPzfz7gT/YB
+         JFDg==
+X-Gm-Message-State: AO0yUKXXywaJphjuS+TFS0u433+MglH8+FTsyLgMUZW950vICDMdhvCR
+        ZPF5gH/EPVVGl2YjIUaYARtKYQ==
+X-Google-Smtp-Source: AK7set/NurkZ3bIlLrAgkr2Y6JZgLdOtnj5zDBVm+jrx0GGKfsz6ayM5R8SktVJ0Y4FoVQt2ebs1jQ==
+X-Received: by 2002:a05:600c:20f:b0:3eb:5ab3:b6d0 with SMTP id 15-20020a05600c020f00b003eb5ab3b6d0mr14323525wmi.6.1680080105715;
+        Wed, 29 Mar 2023 01:55:05 -0700 (PDT)
 Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id f9-20020adff989000000b002cea392f000sm29571964wrr.69.2023.03.29.01.55.03
+        by smtp.googlemail.com with ESMTPSA id f9-20020adff989000000b002cea392f000sm29571964wrr.69.2023.03.29.01.55.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Mar 2023 01:55:04 -0700 (PDT)
-From:   amergnat@baylibre.com
-Date:   Wed, 29 Mar 2023 10:54:31 +0200
-Subject: [PATCH v3 10/17] arm64: dts: mediatek: set vmc regulator as always
- on
+        Wed, 29 Mar 2023 01:55:05 -0700 (PDT)
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Wed, 29 Mar 2023 10:54:32 +0200
+Subject: [PATCH v3 11/17] arm64: dts: mediatek: add usb controller support
+ for mt8365-evk
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230203-evk-board-support-v3-10-0003e80e0095@baylibre.com>
+Message-Id: <20230203-evk-board-support-v3-11-0003e80e0095@baylibre.com>
 References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
 In-Reply-To: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -82,19 +82,19 @@ Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         Amjad Ouled-Ameur <aouledameur@baylibre.com>,
         Alexandre Mergnat <amergnat@baylibre.com>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=733; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=9K3Z9ZHZRcpHgGgX6of5yD1IBErtg5bxp3QfwtuyWKQ=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkI/zcANh6NbaBSLSGX7UyNKUYZh38g0bh6bGpblto
- fYtesxaJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZCP83AAKCRArRkmdfjHURYGbD/
- 9jIzNron9cdGretzk3TABJ8IvjGER4c8zIv3L7b/Y3BrMhT62nJUgKQhwKbQbkFFBBHzDkQaiuSZid
- j/ejgvMj8esHOIEijk9aJPuYtKU+GAChZvQycwnxI0XVlsSl3xX2QzWai0zGhDnk6ysK6lZ+4bnmio
- QqMDshGzFMYfyBaSUK3M41uyvQOqsPYK0yK0FBMqy9jneZK+5Gz3Nwxrd3TEy1cnLeAK4pctBOL8Kc
- DVLmugqHTkVeu39hXVZ0LdcQ39NbAe5/NS60xZSOoRjHAlfyo5jm15XEVG6miOwN9SpxpTJalW6Rt2
- D8fEzR+n4ipk1HdnlWDE6bxYMiZ6Sbcqqxh6w5IPO1xfDo2+fk0Cr1JQAVlB1h/X+cjF4pyLSauYG2
- hT1Npr5Ak+jOJ3SQV4O7P8j0sVjodB/WTLB4GMSJUnuQCZ6K0lVMzTz1o0MU7tgXlmiuBXpXOEF/De
- csyHKqRto6rThWwm0QQQCb4BuDRT9XF0M916JYpVndOXALa6rKsfQ/yfJVIKF6nmm4SfA1WOTz82hU
- xKIloRVIZq8rbobpIhiIy8dyyCoDAvnsQui7NGpO7y+NYT8cb9QDQiPXdSdnytS6+HvwlLMs28Froj
- dLf+NXBO9zXiZGJYWzTysxJkANPZWkbEuIftbS4bKPeLMx1sSsQmr9dnqA8w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1190; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=C4mUGelmedcnsN+galzBspSPAKiY8Y1mIDOmQThfXX8=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkI/zcIyxSg+PaknWT166wpFSYZfFQS1WkE9JumQvN
+ r/47U5WJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZCP83AAKCRArRkmdfjHUReesD/
+ 9Qb6O84sJevPXhmoLp2Gww0rkY/wGRPEGhBPMtfdiR5LM+AiXe24K1XkDzxLktmXzK+/9Fa7OA0yo7
+ hvMCbtYq4McT6FnpWYmbHBx1MBvi4w/TimSalwDbqWhAWeRcKF1o3mwtOjqsoonDX1659VvaLRpd1D
+ j/eSGdU/OM+1SXVft/W+cCmln8toeVaxzbtErhbJY1f9BUuUK4fA+jvrAUIeUxGy6md37tS2OiczNz
+ 4GCQaCo6lBbBmBY/LiG7VphksjdUyITtup1O2TLYY2Mj+5B2gcryHrDTiS9nhj6ICXuMzenIQ8n55k
+ i9Q0iGBKds6nxmpkP+qfFKnNR4J+LabVedbbscReeTzGmy3gLOwAQc/Y3b/uJTYARd7o8yz0FBW+KV
+ o0AOU4XAd+dHvn+HxQuUoYDqhrcYFZJB+sH6ukVGQ/7SWl4xSOefWZ8M/Z0gXFNW7zTpqTgXJp8COd
+ a22ukHnSgKftyzmwPEuHIuANmIs/jMxvNmlguRvAtyNn5bBzUERa9RdVmhsc4LhBI9/rp8HxC6VH66
+ ygLXqfqP5SLBN7Y5yIawKtk/ssllkPGTtdlfVqoRYMO04qvkJDhaik6aoH+bu0WQ1ufMBOtAE2jvj0
+ nCt6N/VUzwEzbBt5zSb7HBBAGaKzBGwVpyhM0/g0NhfugxFDEwgoszrw6cdA==
 X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
  fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
 X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -106,32 +106,47 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Fabien Parent <fparent@baylibre.com>
+This patch add support for SuperSpeed USB, in OTG mode, on micro connector.
+It also add support for the Extensible Host Controller Interface USB.
 
-MSDC1 IP block is powered by VMC. Make sure it is always on.
-
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
 Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-index b5d018686cbe..22ec332fe9c9 100644
+index 22ec332fe9c9..868ee0d160e4 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
 +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-@@ -140,6 +140,11 @@ &mt6357_pmic {
- 	#interrupt-cells = <2>;
+@@ -319,6 +319,28 @@ &pwm {
+ 	status = "okay";
  };
  
-+/* Needed by MSDC1 */
-+&mt6357_vmc_reg {
-+	regulator-always-on;
++&ssusb {
++	pinctrl-0 = <&usb_pins>;
++	pinctrl-names = "default";
++	maximum-speed = "high-speed";
++	usb-role-switch;
++	dr_mode = "otg";
++	vusb33-supply = <&mt6357_vusb33_reg>;
++	status = "okay";
++
++	connector {
++		compatible = "gpio-usb-b-connector", "usb-b-connector";
++		type = "micro";
++		id-gpios = <&pio 17 GPIO_ACTIVE_HIGH>;
++		vbus-supply = <&usb_otg_vbus>;
++	};
 +};
 +
- &pio {
- 	gpio_keys: gpio-keys-pins {
- 		pins {
++&usb_host {
++	vusb33-supply = <&mt6357_vusb33_reg>;
++	status = "okay";
++};
++
+ &uart0 {
+ 	pinctrl-0 = <&uart0_pins>;
+ 	pinctrl-names = "default";
 
 -- 
 2.25.1
