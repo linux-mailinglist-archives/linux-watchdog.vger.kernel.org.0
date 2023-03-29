@@ -2,93 +2,175 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E7B6CD4BC
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Mar 2023 10:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D936CD54E
+	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Mar 2023 10:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjC2Ifa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 29 Mar 2023 04:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
+        id S230298AbjC2Iy7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 29 Mar 2023 04:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjC2If3 (ORCPT
+        with ESMTP id S229943AbjC2Iy6 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 29 Mar 2023 04:35:29 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B65610F8
-        for <linux-watchdog@vger.kernel.org>; Wed, 29 Mar 2023 01:35:26 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id o20so12327358ljp.3
-        for <linux-watchdog@vger.kernel.org>; Wed, 29 Mar 2023 01:35:26 -0700 (PDT)
+        Wed, 29 Mar 2023 04:54:58 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D353270B
+        for <linux-watchdog@vger.kernel.org>; Wed, 29 Mar 2023 01:54:55 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id l27so14860112wrb.2
+        for <linux-watchdog@vger.kernel.org>; Wed, 29 Mar 2023 01:54:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680078924;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8n6H02kYmd8gwvoaq31SqGY+BRAc0v4qQoRYdY6sZnE=;
-        b=VPMdksRMaakDYMc+JCTrhyek8dDo2DhMdiPf1p7ECaK5PYJLpj69nRPbl/N40FJgvj
-         ZX7zujtuLD4QePT3VEOQBMeQQOgJk2A9ZE403xwdFUVMKmVqwNx9Bw8fm1jEw2aal14g
-         1AsfdXeO+rI2Vo0zEEpvwfP4910kbKIB/PKcIpGIp00CYFx8AAR7BIVsNwzxV64MwwrV
-         n4KRtr1GpNtuae5LRWyxFnJqnvP65i1sjRO33jeLPOjzLTUsnZccT0wDU+MnWsrkrKgE
-         ZWTafX9FCdZ7TJNyElwOxJpf6v8p/lV9IQHNa7b9mNwVnhH1dnrRqKq1yTvSZonV9ian
-         pd7g==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680080093;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uzdO+lxAfOJTORFrou5SxAjDVdCRcCpSAaKg+Ly9+Yo=;
+        b=4sW4i7rA5XGJYWXbRj7E9hHI/H8WM4pXoWaXpU/eM7Y6mgfqcI722Nvfi0AtZr654k
+         Pf2WGcgNZXvzbYJ2Jf3ecdD1GMyApi+9xQeRVG993cYY891D1SS+UCHvfaTQauRsEjtG
+         a7/UgoT92z2OdSbT9YrU1bTuD3i5DOZzn9CwY0V3PjMe1nAsGQbvNbDYu5ePqQYCSVtd
+         I/uM2mEn7ZvBLKTQdm0lXx9NOj6W8JpKz6jMqkjljdXmRhh84m28diVuwRoEYGb2igUe
+         OZ8mrFZN0uHCTY5CQaLKZTHgbE2ejaRty8T7OBEe8fG1LKeYLjqXKsMV+slOMPMbkNau
+         aiUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680078924;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8n6H02kYmd8gwvoaq31SqGY+BRAc0v4qQoRYdY6sZnE=;
-        b=LZk4w8D9yJhHuFGyHT0Qoh7YqShKjLLIsRWPIhWKF35JknVNdg4mVKtfvfbFKqUgea
-         kgFmx4GKX8TxzSi8pWtjVJps1vm/Xu/gPqUMDlFbmFTAID2NFZ6RjIUbgAe+bjUygQaf
-         dx5tgWitrxPBZUqp9ycxeouZq8+5grFrK9a31mJsDPJ38VaQH2ZxmdQ+dBkBfu158go9
-         c45k2WSey8NsZEspwK7pfGFkPWQPzbUS717W0q75afrwuYuCKOg7m96xQanRtQCS41HY
-         S15QUR6UflEwsOGaJiBgUDx0Pp6ZGg1q2+x3JeLHv6UpN3EQCna6BAIv/0Cfbdiq3uBv
-         6Vbw==
-X-Gm-Message-State: AAQBX9cPFygn9Bm9HgrEcGiXENO6wuqntREqEtiKlpWzFtCCPwdb3f60
-        w3gjnpTstT3y0gYhoaUvUevW/Q==
-X-Google-Smtp-Source: AKy350YTSR8X1/RiTJ1meCrfQSilvlZ5ZdA39iG6PqjvRZxaJwRfrUJGIdyjXbE9qVKd8aeYas4npg==
-X-Received: by 2002:a2e:884b:0:b0:2a6:13c:30c8 with SMTP id z11-20020a2e884b000000b002a6013c30c8mr1972059ljj.33.1680078924640;
-        Wed, 29 Mar 2023 01:35:24 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id l18-20020a2e9092000000b002986d9bdecesm5427078ljg.129.2023.03.29.01.35.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Mar 2023 01:35:24 -0700 (PDT)
-Message-ID: <80e926e1-28aa-eb9b-9ab4-9bc3b349a5e4@linaro.org>
-Date:   Wed, 29 Mar 2023 10:35:23 +0200
+        d=1e100.net; s=20210112; t=1680080093;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uzdO+lxAfOJTORFrou5SxAjDVdCRcCpSAaKg+Ly9+Yo=;
+        b=rjpVLKmbTeN8yxiAkdai41P8V2Nj1scvNxiDCbd2zmTCBrvvRVdW1Y6KIDasKT6NIW
+         0f3m4FABCmyRpG3l35hosCuWk0+TDHQPGiSIdygsbsIbZiJ4uuN65HAbxMsFbQb2hTC1
+         wSXDDSxM/eI9xMNY+scDkzWKc7lfdvNxMuBzcLIBdIQ7LS/06BPcCSjhq4TKHjHEaZTv
+         gkkBJSh6E9upsiTf21R4spqeQf70VBZ3ZqEN9Eet6NfG7U3EBrQ6RrP0ksQa31o86Ojv
+         Nx3Ytk6cukC/25k45ui99Pnn+xoBAiXU0r2Gj5LbxfU9CDH2A/MdAnNOVWkYQoN76ZmJ
+         QhFQ==
+X-Gm-Message-State: AAQBX9eDXyvOXW0yleMVfKIrnRh3zwbsG1WDbt73t7OIsLi5I8pPmjic
+        2FSBWnD3dBbWFOFklZr5nXmw6Q==
+X-Google-Smtp-Source: AKy350YBJmqeUhUjQyfCAqVgv5XtFtzTflowmykdXvxURkGr/ltJSCccPuaqoPcUxGCCy4NGiuPXBQ==
+X-Received: by 2002:a5d:5229:0:b0:2c7:1c08:121c with SMTP id i9-20020a5d5229000000b002c71c08121cmr15195510wra.61.1680080093551;
+        Wed, 29 Mar 2023 01:54:53 -0700 (PDT)
+Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.googlemail.com with ESMTPSA id f9-20020adff989000000b002cea392f000sm29571964wrr.69.2023.03.29.01.54.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Mar 2023 01:54:53 -0700 (PDT)
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Subject: [PATCH v3 00/17] Improve the MT8365 SoC and EVK board support
+Date:   Wed, 29 Mar 2023 10:54:21 +0200
+Message-Id: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] dt-bindings: watchdog: rockchip: Add
- rockchip,rk3588-wdt string
-Content-Language: en-US
-To:     Shreeya Patel <shreeya.patel@collabora.com>,
-        wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jamie@jamieiles.com,
-        heiko@sntech.de
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAL38I2QC/4XNTQrCMBAF4KuUrI1MEtuoK+8hLvIz2mBNStIGS
+ undHVy60NXwHrxvVlYwByzs3KwsYw0lpEhB7RrmehMfyIOnzCRIBRIUx/rkNpnseZnHMeWJ+9Z
+ qc1Qn9Noy2llTkNtsoutpGedhoLIPZUp5+fypgs71F1kFBw4dKKmhPQjfXqxZhmAz7l16sRuBV
+ f5FJCEdOu28FeDc/QvZtu0N/ksqGv8AAAA=
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?utf-8?q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>
 Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-References: <20230328210048.195124-1-shreeya.patel@collabora.com>
- <20230328210048.195124-3-shreeya.patel@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230328210048.195124-3-shreeya.patel@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2566; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=g3X31va/VDwpY2eFLvZJUQe6Yd+D9Pt4ItUQKxlH3oA=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkI/zbKYL5HQCSxV8z4D6VVyX8VhpZc/3jth3XoWuF
+ qJn1N86JAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZCP82wAKCRArRkmdfjHURScIEA
+ CvYNYx5SNpOC5jRj/ilI2B3OdPkasa3RaWWW303TI7JDD0gGDMXX+bHpcCYqVzFg7FlcnIcGBjRs7E
+ Jr6x1jv3WkPl5+mUAELpby4F5zh7pegFOCfcrJ9HtcHX/cdLEiRJ2umjXGlu5VQVuv3ZmQEOcV3WJh
+ tfPh92mwf0eLS8lfXw7tOkky3kpD387xb1JgnN9gsUCDBsjUIU7MRcJx7HHQcjiuUrrytSt5klBcwP
+ 9RZ71pZfTDDD7VRiM9VxlvU3th766j4bA+UqINLHM2IohbGpCr6NbhVrD7JdqJF5gJ9eOP4LshWjqE
+ 0+vNMsXOpmmcpugJkEQ7zuL247NHfgZU29xmUlpq7KtYjW2YXseIG7G+p5SpKY++45RS4GdgJMDIl7
+ E0wUMxMkzJ5BgIea5tQTfSJ85Ooozh+mLb1d1svXE0aR55EV7xMvr/RdL/c89cCJe+F1btaWHk3rUk
+ 4Qdgrma2LVv/C+4vvTt6csqs2Zl6YN10PeMMsEpPTHlfZV+zcyQ40vAvYMBS+SPPoN5Tc9rk9rRglf
+ Vrx1rY1XqtGk8xcwjoVxdp+k09y3RfKcUJuouOkpVUefkghZJrMM1r5dkDP8irJkJB04SiQB9CkCH7
+ ESqzmMQ6PBazV6JhB2Ilp9LNDGhUWQvC6MYaVdy3ipJxNsnZzVPL/SultYNA==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 28/03/2023 23:00, Shreeya Patel wrote:
-> Add rockchip,rk3588-wdt compatible string.
-> 
-> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
-> ---
+This commits are based on the Fabien Parent <fparent@baylibre.com> work.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The purpose of this series is to add the following HWs / IPs support for
+the mt8365-evk board:
+- Watchdog
+- Power Management Integrated Circuit "PMIC" wrapper
+  - MT6357 PMIC
+- MultiMediaCard "MMC" & Secure Digital "SD" controller
+- USB controller
+- Ethernet MAC controller
+
+Add CPU Freq & IDLE support for this board.
+
+This series depends to another one which add support for MT8365 SoC and
+EVK board [1].
+
+Regards,
+Alex
+
+[1]: https://lore.kernel.org/all/20230125143503.1015424-1-bero@baylibre.com/
+
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+---
+Changes in v3:
+- Add trailers and simply resend.
+- Link to v2: https://lore.kernel.org/r/20230203-evk-board-support-v2-0-6ec7cdb10ccf@baylibre.com
+
+---
+Alexandre Bailon (1):
+      arm64: dts: mediatek: Increase the size BL31 reserved memory
+
+Alexandre Mergnat (12):
+      dt-bindings: watchdog: mediatek,mtk-wdt: add mt8365
+      dt-bindings: pinctrl: mediatek,mt8365-pinctrl: add drive strength property
+      arm64: dts: mediatek: add watchdog support for mt8365 SoC
+      arm64: dts: mediatek: add pwrap support to mt8365 SoC
+      arm64: dts: mediatek: add mt6357 PMIC support for  mt8365-evk
+      arm64: dts: mediatek: add mmc support for mt8365 SoC
+      arm64: dts: mediatek: add mmc support for mt8365-evk
+      arm64: dts: mediatek: add usb controller support for mt8365-evk
+      arm64: dts: mediatek: add ethernet support for mt8365 SoC
+      arm64: dts: mediatek: add ethernet support for mt8365-evk
+      arm64: dts: mediatek: add OPP support for mt8365 SoC
+      arm64: dts: mediatek: add cpufreq support for mt8365-evk
+
+Amjad Ouled-Ameur (2):
+      arm64: dts: mediatek: fix systimer properties
+      arm64: dts: mediatek: Add CPU Idle support
+
+Fabien Parent (2):
+      arm64: dts: mediatek: add mt6357 device-tree
+      arm64: dts: mediatek: set vmc regulator as always on
+
+ .../bindings/pinctrl/mediatek,mt8365-pinctrl.yaml  |   3 +
+ .../bindings/watchdog/mediatek,mtk-wdt.yaml        |   1 +
+ arch/arm64/boot/dts/mediatek/mt6357.dtsi           | 282 +++++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8365-evk.dts        | 254 ++++++++++++++++++-
+ arch/arm64/boot/dts/mediatek/mt8365.dtsi           | 196 +++++++++++++-
+ 5 files changed, 731 insertions(+), 5 deletions(-)
+---
+base-commit: 555b3a55823ec063129de4403899203febb58788
+change-id: 20230203-evk-board-support-d5b7a839ed7b
 
 Best regards,
-Krzysztof
+-- 
+Alexandre Mergnat <amergnat@baylibre.com>
 
