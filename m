@@ -2,76 +2,78 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD916D082F
-	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Mar 2023 16:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002FD6D0995
+	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Mar 2023 17:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbjC3OZ0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 30 Mar 2023 10:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
+        id S233072AbjC3Pb1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 30 Mar 2023 11:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232396AbjC3OZZ (ORCPT
+        with ESMTP id S233007AbjC3PbY (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 30 Mar 2023 10:25:25 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C6276B3
-        for <linux-watchdog@vger.kernel.org>; Thu, 30 Mar 2023 07:25:21 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id g17so24772681lfv.4
-        for <linux-watchdog@vger.kernel.org>; Thu, 30 Mar 2023 07:25:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680186319;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RbcdKtnU83MjCH5VKN7UVMZjINa3aw1O5eVk90/Jzi4=;
-        b=Jeg6DoMgQCqG62qFOyKTTEO0dhDPpXJsCB8Kbrrp0vXO9/SYHnjiyC6i/NIDHyXX3e
-         6ieUpxUfydyiTPGgQSchraJ4Arz7jEvw+Hm+WT9xiePCI1yu2G1DCOAGnNSgaf5LH5Ij
-         iPzgXoGKDNQtH77tfR+idnlt44Td30jTu4/TlLMwbHVqubnjD0CHEvsknLeQ2OAM/0wA
-         ADBcr0khUC7xqF6euWik8Sft+jQMvOt9gdowPhe41ghHtZknP6PLgRpLWgHeuX2dPXx8
-         xiBOdP4KlMAGsKwXpCRXEyzJPuHXY9OLY4dwipHiJn9049Ss65GaJFC2JJMyPbTy32m+
-         /WzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680186319;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RbcdKtnU83MjCH5VKN7UVMZjINa3aw1O5eVk90/Jzi4=;
-        b=CB7SUAF2oLUDal+dSphxyATqV/cVURhAQ3dcevCwlQY11zM1Fp/6DxAleS3hlNJKBl
-         wXLZKIW4GcanKlxprSojRR01WQ31Bkl+W7XRtYhIGpgRHFdtsP5QVMTkXGKWQZqpJCGh
-         xFVpOvCE804ijoNbBAX4rDZlue0kRMPo/GPOAvEwbEdI0C50v3Q+rjTX1asjxf/2Dp2o
-         yhW+x0BvZz4A4F+Sm2QyqKb9UV5SdY05DMPhuUCQ+0tYFu3Rbox2uMiaAq+Nn9lnov6c
-         GzPoP8yrSa/oVaXWfln71AVLzhkqsTqod9MSWg9Aa1XyxKGT+zaFpwpUraZ7vqvHrBq7
-         O25A==
-X-Gm-Message-State: AAQBX9e/cGXLEmK+Iam47YeX6TUvhDgbf05JFcWPy6hZDxV9AJW1x7KV
-        fl1NR+5cXEzzH1gYIo23BL9AJw==
-X-Google-Smtp-Source: AKy350Y6Wd0/7Vc5j1u6Qe33IRFjD1O5MeToNQ2eZmV+zgyh/Vkr0JS/6i+vN/GCjwzKkITMt3tsMA==
-X-Received: by 2002:a19:5502:0:b0:4ea:e262:b94e with SMTP id n2-20020a195502000000b004eae262b94emr6585300lfe.21.1680186319269;
-        Thu, 30 Mar 2023 07:25:19 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id d3-20020ac25ec3000000b004d575f56227sm5864812lfq.114.2023.03.30.07.25.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 07:25:18 -0700 (PDT)
-Message-ID: <89b350bd-94c0-c853-0ba7-808a426a2317@linaro.org>
-Date:   Thu, 30 Mar 2023 16:25:17 +0200
+        Thu, 30 Mar 2023 11:31:24 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85B8DBE5;
+        Thu, 30 Mar 2023 08:31:09 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32UBUWHj008825;
+        Thu, 30 Mar 2023 15:30:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=gCKhnWFEhd2dmMFgaQAZ3b/AKnYi7MqyuXP/Q+DJ4e4=;
+ b=WJqQNEcek4grXYYFc/WRA8O0ueoDFpWbZSVsPCF4VeaCSyGgsBwc1PVOHDJ1Suj9cFwg
+ xIPFmXCxpdtGrN+Ke2KUSQNKqXYYZAlgbHEQDen3tvHgst/FLJ5kJv4aQk9tEW/3B3yF
+ QHQJg2DCDSiVzUMiP3b6h39mzNuM/FRnmY1GmKV+ZwN0qoJ8+g0N6+tRyaFnXgwA5Z5B
+ IDFaUMH0DnzVIY/o6XbDN9cgYvUswRIZ2TxdunFDRwCBpLM+s5E9Uf30n08WOYwW4Bpi
+ 5j4Esz4dFYdr9DuAYxs5V5CLKTr40PmkYeHqrjxQS4qxKEgZx03uQZ5uH+0JQlw1AJXG Ig== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pn9kgrrh7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 15:30:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32UFUWFG012754
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Mar 2023 15:30:32 GMT
+Received: from [10.50.13.177] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 30 Mar
+ 2023 08:30:28 -0700
+Message-ID: <57a4a970-8e50-c0ac-962a-6bb1ebf337f1@quicinc.com>
+Date:   Thu, 30 Mar 2023 21:00:04 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: qcom-wdt: add
- qcom,apss-wdt-ipq9574 compatible
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH V2 0/2] Add few device nodes for IPQ5332 SoC
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230320104530.30411-1-quic_kathirav@quicinc.com>
 Content-Language: en-US
-To:     Kathiravan T <quic_kathirav@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230329053726.14860-1-quic_kathirav@quicinc.com>
- <20230329053726.14860-2-quic_kathirav@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230329053726.14860-2-quic_kathirav@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+In-Reply-To: <20230320104530.30411-1-quic_kathirav@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: z5l5kQf4nWLf5ccqzv--hHIyHOegO5ha
+X-Proofpoint-ORIG-GUID: z5l5kQf4nWLf5ccqzv--hHIyHOegO5ha
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-30_09,2023-03-30_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ adultscore=0 malwarescore=0 suspectscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 mlxlogscore=719 lowpriorityscore=0 impostorscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2303300123
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,17 +82,25 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 29/03/2023 07:37, Kathiravan T wrote:
-> Add a compatible for the IPQ9574 platform's APSS watchdog.
-> 
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
->  1 file changed, 1 insertion(+)
+
+On 3/20/2023 4:15 PM, Kathiravan T wrote:
+> This series adds the support for QUP peripherals, PRNG, WDT for IPQ5332
+> SoC.
+>
+> This series depends on the below patch, due to the node ordering
+> https://lore.kernel.org/linux-arm-msm/20230217083308.12017-6-quic_kathirav@quicinc.com/#t
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Gentle Reminder...
 
-Best regards,
-Krzysztof
 
+>
+> Kathiravan T (2):
+>    dt-bindings: watchdog: qcom-wdt: add qcom,apss-wdt-ipq5332 compatible
+>    arm64: dts: qcom: ipq5332: add few device nodes
+>
+>   .../bindings/watchdog/qcom-wdt.yaml           |  1 +
+>   arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts   | 14 ++++
+>   arch/arm64/boot/dts/qcom/ipq5332.dtsi         | 67 +++++++++++++++++++
+>   3 files changed, 82 insertions(+)
+>
