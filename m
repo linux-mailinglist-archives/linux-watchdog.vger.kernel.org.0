@@ -2,105 +2,123 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21326D0C25
-	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Mar 2023 19:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB806D0C7A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Mar 2023 19:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbjC3REX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 30 Mar 2023 13:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
+        id S231866AbjC3RRB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 30 Mar 2023 13:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231852AbjC3REW (ORCPT
+        with ESMTP id S229734AbjC3RRA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 30 Mar 2023 13:04:22 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C1A72A2;
-        Thu, 30 Mar 2023 10:04:18 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id cf7so24368083ybb.5;
-        Thu, 30 Mar 2023 10:04:18 -0700 (PDT)
+        Thu, 30 Mar 2023 13:17:00 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A8CF0;
+        Thu, 30 Mar 2023 10:16:59 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id l37so11379275wms.2;
+        Thu, 30 Mar 2023 10:16:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680195857;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IlDwVnjXPjHRMPhMgjQhgcuV4GVG8mC7w2wq3ycJVpU=;
-        b=hw3Ylsu5/V5zmwUjbFQXMniyjy0U/PBm0rpdJF50D+Ie8uy9rJHxKVvxxJmPY3Hs3q
-         1M4MqLLDVv5JqgU/UsXaZwyRl7KbI0l47/T7UX3/d62GpHY8de5mJ11QJ13H8Cmz03Ma
-         +4gQUV0qQn6nID4G7YOmp6D0EevpJGx/UTqTwyLwjI0qMsW2YCLWaLK2G/5FjQHe4d+n
-         5MYUswOsAq+rLvzT1GsBXRYI7+e9UXnwkqt+zuDy6CcVi0nd6MLj1iRivRDonheBtSII
-         Mq1jNw+S4d4hemsSqdukbojl0Xt3VqUiXukBKaLr1R+wogW8Cu/6mfTKAoihnh2Jpd2U
-         vQIA==
+        d=gmail.com; s=20210112; t=1680196618;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T8gFRk6npXZUFsEh6okDavKy5iOSV5lNNvjAZq8dGGQ=;
+        b=Xqxw08Vr4ij2tYYkX+zcETwPPckqyN+pCYWhay+i+vFGCC1ur8xR+PGWB6X5RqJxcz
+         6G3HYbXACggrpVucvh44NtMuxmPIbHuThNE6K9OMcEY5kWl7ZKkCT+i9HkSW6hH5BRNY
+         rVHHqMrzIHOUbm7rbhGHle5f4Y9AU+2q/Nb785UhbLTISjEQ1tfBEKtJg4x+eQSTOVwS
+         iNb85SOiFW3gT2Lb4HFTz1dglpp6p1mewGxWpy6nr94k0K/mK15zwotK8GjFJ4pzQMa/
+         lzoenhLO0stw5fqzXXxlq8a4gcNfIa3bX5XKgF/VU3jz2cufTBkKYwKcZBCUnHNmbgjE
+         TV9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680195857;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IlDwVnjXPjHRMPhMgjQhgcuV4GVG8mC7w2wq3ycJVpU=;
-        b=uhoZvyOtVR5aSqJ5D+GK2Efkjp6bfXvYdKQm4YzvvIMGnKinylM1XpK7l+m8fgpxoI
-         irorWhvf490j1khbOCiBVQrCz8/aTv1QfZ0ThjGuxi3CFIQDLCEVztxBCE+56RuSfUDj
-         V7bwAarwTViGuagNLZeYfvbpz/ZpimyLW1eMVkuzT7pBPXu+xult0gjuDR5t4Z7omhmU
-         tySXOkbAaqr2Z785REah3Bvilkl9j1TjSmpHKffhLLnswHCMSUgjLan86GU57e7y1jjC
-         YE82mMFlnqTGhQc5hohjgj4VERE/GRXYk0m67LoWHJd6m7xhhpUAnJtjqlGpQosSlMze
-         Gudw==
-X-Gm-Message-State: AAQBX9c12qanvZdmL8+J/4nL6KqpktFFODIlpfrD0l8n5ruG9YRrM39b
-        ZcZlRBl2JN1uu4UDFfW30jZmTMR7I7U=
-X-Google-Smtp-Source: AKy350ZS888I2zvXwETSVCnDXVQBy76l3/CT2E1Vs+5IucefI2Rh9djzDoE+4XCUkMT8UWj7OcLeQg==
-X-Received: by 2002:a25:6d43:0:b0:89a:338:b74f with SMTP id i64-20020a256d43000000b0089a0338b74fmr18782917ybc.55.1680195857269;
-        Thu, 30 Mar 2023 10:04:17 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b125-20020a256783000000b00b7767ca748dsm4261822ybc.42.2023.03.30.10.04.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 10:04:16 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 30 Mar 2023 10:04:14 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Kathiravan T <quic_kathirav@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        wim@linux-watchdog.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: qcom-wdt: add
- qcom,apss-wdt-ipq9574 compatible
-Message-ID: <caf973ad-91e8-41b2-a801-123bfc54d12a@roeck-us.net>
-References: <20230329053726.14860-1-quic_kathirav@quicinc.com>
- <20230329053726.14860-2-quic_kathirav@quicinc.com>
+        d=1e100.net; s=20210112; t=1680196618;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T8gFRk6npXZUFsEh6okDavKy5iOSV5lNNvjAZq8dGGQ=;
+        b=ddr3/4D24QV27DkUcZKU868eLKbt+DbKRDSM8skF70cvIWB2pHdJDMsgi1t+MffU5o
+         xy74CNJ/10+n6QZ+O9HK0tEBcDR+UqM4iA8vmFjjMQ/HxhGCfoqxw5GCVzdMUz4gr/vR
+         e+53dBBX8JeCLrr1dTQzGbn9xx1n2ZWmkGJjxky7+8GolBGmewHJDEq9hGS8T7czpNaH
+         9poPbXm0T8u4Ofa34rHLX7LJaz1591falCWHMXOqJqkPj7zM6+mCObabtkl5jkTfAwGP
+         +oIcdMpg0xrztGP7DbfvBXyCX51fTFDKc3Y8siEkxLL3iE4Dvq44fButM9+Vk4MJm7PX
+         kHqg==
+X-Gm-Message-State: AO0yUKWxMo1iAsGUAsd0/6hgyZop/nOP57avDZaVwyMp+fp2VGx3tNrx
+        EIntcY2t7JekznbzhI6QPCslD5841Oj+gw==
+X-Google-Smtp-Source: AK7set92ZY/22pauXvcejr1Pry9EPukTCSQrrUreYCewWLNmuq2Q45DRuWZmp0KGJgjsRAQnql1X/Q==
+X-Received: by 2002:a7b:c3c7:0:b0:3ed:fddf:b771 with SMTP id t7-20020a7bc3c7000000b003edfddfb771mr18578210wmj.12.1680196618247;
+        Thu, 30 Mar 2023 10:16:58 -0700 (PDT)
+Received: from [192.168.1.135] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id 16-20020a05600c029000b003dc522dd25esm6406727wmk.30.2023.03.30.10.16.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Mar 2023 10:16:57 -0700 (PDT)
+Message-ID: <7dd96d42-e43d-9e49-a549-07f3969dfba1@gmail.com>
+Date:   Thu, 30 Mar 2023 19:16:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230329053726.14860-2-quic_kathirav@quicinc.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 01/17] dt-bindings: watchdog: mediatek,mtk-wdt: add
+ mt8365
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
+ <20230203-evk-board-support-v3-1-0003e80e0095@baylibre.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230203-evk-board-support-v3-1-0003e80e0095@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Mar 29, 2023 at 11:07:25AM +0530, Kathiravan T wrote:
-> Add a compatible for the IPQ9574 platform's APSS watchdog.
-> 
-> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+On 29/03/2023 10:54, Alexandre Mergnat wrote:
+> Add binding description for mediatek,mt8365-wdt
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
 > ---
->  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>   Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> index 6448b633c970..6910533aee50 100644
-> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> @@ -18,6 +18,7 @@ properties:
->        - items:
->            - enum:
->                - qcom,kpss-wdt-ipq4019
-> +              - qcom,apss-wdt-ipq9574
->                - qcom,apss-wdt-msm8994
->                - qcom,apss-wdt-qcs404
->                - qcom,apss-wdt-sa8775p
-> -- 
-> 2.17.1
+> diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+> index 55b34461df1b..66cacea8e47f 100644
+> --- a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+> @@ -38,6 +38,7 @@ properties:
+>                 - mediatek,mt7623-wdt
+>                 - mediatek,mt7629-wdt
+>                 - mediatek,mt8173-wdt
+> +              - mediatek,mt8365-wdt
+>                 - mediatek,mt8516-wdt
+>             - const: mediatek,mt6589-wdt
+>   
 > 
