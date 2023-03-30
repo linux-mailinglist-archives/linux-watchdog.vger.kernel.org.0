@@ -2,93 +2,152 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF786D1048
-	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Mar 2023 22:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B9A6D105E
+	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Mar 2023 22:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjC3Uu6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 30 Mar 2023 16:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
+        id S229994AbjC3U4P (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 30 Mar 2023 16:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjC3Uu5 (ORCPT
+        with ESMTP id S229452AbjC3U4O (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 30 Mar 2023 16:50:57 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF91749CF;
-        Thu, 30 Mar 2023 13:50:56 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id k14-20020a9d700e000000b0069faa923e7eso10743886otj.10;
-        Thu, 30 Mar 2023 13:50:56 -0700 (PDT)
+        Thu, 30 Mar 2023 16:56:14 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCCDD512
+        for <linux-watchdog@vger.kernel.org>; Thu, 30 Mar 2023 13:56:09 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id kc4so19306342plb.10
+        for <linux-watchdog@vger.kernel.org>; Thu, 30 Mar 2023 13:56:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680209768;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bk3AJcU0Vx2dUlJVSwRSD2rFIMPkaNP8pt8iHwIyw/I=;
+        b=DxOkvfgyGlyZIdctyMoucrRwTgAvwdnFKYHtd6iQSv64o0bLznsU+3yzLh4wHENo5c
+         12ynOk18zhZ0y95L2CbIDmbZ8i1k1/QpkV5T+HTRG1mTjVQe4JbSFYLZJjc4p0aK4gNA
+         E6eS/ma0+SXAXwlAZkZYsYt325r2yj3PyANVjP+xrTTGesU5N/N0pB5EAtDYO2wU0vL7
+         3ZjsPG/j9FxQp/xq1Hd1rrY8bdlANwqVnbNEmgU8g5yzpN0E54kxWlPi8scFowwBX/y+
+         s6uKf6ztIucMnzTvdHXCrArvCd40ZLKLpCVtN72XC/258aNlybIufSvn1PhRRkWj1QHP
+         tfkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680209456;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=e5eLhRpS5QUemU171kaJZBbMWe4s/0L9/7Btk4sk5Zs=;
-        b=IY5mjdkikKw049rAsr2hbu4Ku3p2j9tWTApP6le5uijxRZeNmZZqTvkSAnxnsRIpVs
-         LcOzERom++aK1/kBmregw9CpHtLTuJ1MN/MAWYG43otHTHlxpGyCPoeINhtskwI8VrYm
-         nycedgX1dgT+ENOau3rZDFzEfKeUvGyOnEeI0WNTJKerTZqYOZwLSg02+PjiaHtasY30
-         HIWc6TWq1vTTtPWHBeMVlZ8y0fhS319gNPW76rOiNSFIuhZdR9VzzA1/trwkRzwfTJH7
-         avM6fX5+jDbnxipbGOUNOYwVmQ2en5MaW0BxGP437wmXPNtZ0L3Nh1P+dadyRZE6ZqMt
-         brqA==
-X-Gm-Message-State: AO0yUKWJgYS4DbAVsuLLz1Qz6sg731FW4IMMGbwK4Gnxfx9yFmnq5AzV
-        UG6CdbM1OBeLII5qzc4tIw==
-X-Google-Smtp-Source: AK7set/GHdEnabZLNc3Ajn9m0NHgQ0cQjBi09b9EvaWxQBT1iWIQnNEzMxA9287IJxFAsT7DwLzeHA==
-X-Received: by 2002:a05:6830:146:b0:68c:1b5f:96de with SMTP id j6-20020a056830014600b0068c1b5f96demr11920049otp.2.1680209456174;
-        Thu, 30 Mar 2023 13:50:56 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l26-20020a9d6a9a000000b0069fb690b38esm371652otq.21.2023.03.30.13.50.55
+        d=1e100.net; s=20210112; t=1680209768;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Bk3AJcU0Vx2dUlJVSwRSD2rFIMPkaNP8pt8iHwIyw/I=;
+        b=mFDyVMvbc01Lxo61Ckpxo1taQi+3gPq2Rk406/yuY2CGN3PsC0WokQ+CRW0eaHDbh4
+         sFkkewDrvXBCwAZ7uf7sCFtcFI60+ndra1/TTwxM2evUiwuGgpu9hLn19LaUY9mV7QF8
+         ecTsFEPD7mFVnrvYKOJpf8fx2uKDEosLPpsNrNF/2VpmlVFnlHNNW6J4qxO4lWBzxzsp
+         E6hZZ/CV0XrHS5XC6ntjCUZDFl5pUk0UjX8DGXZEx/VF+fVCSfmp46OC2NvSQUvSFPif
+         ggEezOOaM62BwWhOKmone08/c0UZiYTjZWSBm6zvgFL/NqwummQpWIdcpv9mao/Jtb7p
+         HKKg==
+X-Gm-Message-State: AAQBX9fdUrUU7/AODrzDIFnTF6P9aj9z/8pn0+AAaysyUp6RWiB66vjT
+        MOnVRgWOnPBzDTZuzCl1xwh49g==
+X-Google-Smtp-Source: AKy350YUmLiSO/0zx78yxuNvIBq/d2XMWROc3sNsblZMXAHe6u6xTxhKGFofc2ryyJ1Tl2KTks3vBw==
+X-Received: by 2002:a17:903:708:b0:1a1:bfe8:4fae with SMTP id kk8-20020a170903070800b001a1bfe84faemr22003294plb.43.1680209768644;
+        Thu, 30 Mar 2023 13:56:08 -0700 (PDT)
+Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
+        by smtp.gmail.com with ESMTPSA id d19-20020a170902b71300b00198d7b52eefsm128062pls.257.2023.03.30.13.56.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Mar 2023 13:50:55 -0700 (PDT)
-Received: (nullmailer pid 2782004 invoked by uid 1000);
-        Thu, 30 Mar 2023 20:50:54 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Thu, 30 Mar 2023 13:56:08 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Bernhard =?utf-8?Q?Rosenkr=C3=A4n?= =?utf-8?Q?zer?= 
+        <bero@baylibre.com>, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 00/17] Improve the MT8365 SoC and EVK board support
+In-Reply-To: <CAFGrd9p7oPvhZ8KL40XYfNi2CAdEd8BZWrXPqfcqu7DTSSg4Kw@mail.gmail.com>
+References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
+ <7h8rffyu9x.fsf@baylibre.com>
+ <CAFGrd9p7oPvhZ8KL40XYfNi2CAdEd8BZWrXPqfcqu7DTSSg4Kw@mail.gmail.com>
+Date:   Thu, 30 Mar 2023 13:56:07 -0700
+Message-ID: <7h1ql6yn4o.fsf@baylibre.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Nikita Bondarenko <n2h9z4@gmail.com>
-Cc:     rjui@broadcom.com, linux-watchdog@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sbranden@broadcom.com,
-        linux@roeck-us.net, robh+dt@kernel.org, f.fainelli@gmail.com,
-        devicetree@vger.kernel.org, wim@linux-watchdog.org,
-        bcm-kernel-feedback-list@broadcom.com
-In-Reply-To: <20230330182447.51674-1-n2h9z4@gmail.com>
-References: <20230330182447.51674-1-n2h9z4@gmail.com>
-Message-Id: <168020932908.2779835.7122491631340015762.robh@kernel.org>
-Subject: Re: [PATCH] Convert brcm,kona-wdt.txt to brcm,kona-wdt.yaml
-Date:   Thu, 30 Mar 2023 15:50:54 -0500
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Alexandre Mergnat <amergnat@baylibre.com> writes:
 
-On Thu, 30 Mar 2023 20:24:47 +0200, Nikita Bondarenko wrote:
-> Signed-off-by: Nikita Bondarenko <n2h9z4@gmail.com>
-> ---
->  .../bindings/watchdog/brcm,kona-wdt.txt       | 15 -------
->  .../bindings/watchdog/brcm,kona-wdt.yaml      | 45 +++++++++++++++++++
->  2 files changed, 45 insertions(+), 15 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
-> 
+> Le jeu. 30 mars 2023 =C3=A0 02:09, Kevin Hilman <khilman@baylibre.com> a =
+=C3=A9crit :
+>>
+>> Alexandre Mergnat <amergnat@baylibre.com> writes:
+>>
+>> > This commits are based on the Fabien Parent <fparent@baylibre.com> wor=
+k.
+>> >
+>> > The purpose of this series is to add the following HWs / IPs support f=
+or
+>> > the mt8365-evk board:
+>> > - Watchdog
+>> > - Power Management Integrated Circuit "PMIC" wrapper
+>> >   - MT6357 PMIC
+>> > - MultiMediaCard "MMC" & Secure Digital "SD" controller
+>> > - USB controller
+>> > - Ethernet MAC controller
+>> >
+>> > Add CPU Freq & IDLE support for this board.
+>> >
+>> > This series depends to another one which add support for MT8365 SoC and
+>> > EVK board [1].
+>>
+>> It seems to depend on more than that series.  In order to test this, I
+>> tried applying this series on top of Bero's minimal support (now in
+>> linux-next), and it does not apply cleanly.
+>>
+>> Could you please list all the dependencies that are not yet upstream.
+>
+> Hi Kevin,
+> You're right, it also depend to
+> https://lore.kernel.org/all/20221122-mt8365-i2c-support-v6-0-e1009c8afd53=
+@baylibre.com/
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+Nope. Something else is missing too.  I tried this series on top of
+Bero's series + i2c series and still doesn't apply cleanly.  Look like
+some pinctrl stuff is also missing[1].
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+Kevin
 
-Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230330182447.51674-1-n2h9z4@gmail.com
+[1]
+ Link: https://lore.kernel.org/r/20230203-evk-board-support-v3-0-0003e80e00=
+95@baylibre.com
+ Base: base-commit 555b3a55823ec063129de4403899203febb58788 not known, igno=
+ring
+ Base: not specified
+       git am /ssd/work/tmp/b4.mbx
+Applying: dt-bindings: watchdog: mediatek,mtk-wdt: add mt8365
+Applying: dt-bindings: pinctrl: mediatek,mt8365-pinctrl: add drive strength=
+ property
+error: Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.ya=
+ml: does not exist in index
+Patch failed at 0002 dt-bindings: pinctrl: mediatek,mt8365-pinctrl: add dri=
+ve strength property
 
-
-watchdog@35002f40: compatible: ['brcm,bcm11351-wdt', 'brcm,kona-wdt'] is too long
-	arch/arm/boot/dts/bcm28155-ap.dtb
-
-watchdog@35002f40: Unevaluated properties are not allowed ('compatible' was unexpected)
-	arch/arm/boot/dts/bcm28155-ap.dtb
 
