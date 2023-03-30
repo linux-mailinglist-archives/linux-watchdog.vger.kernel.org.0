@@ -2,88 +2,68 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5546D0CEA
-	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Mar 2023 19:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B726D0DAF
+	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Mar 2023 20:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbjC3Rer (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 30 Mar 2023 13:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
+        id S231127AbjC3SY4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 30 Mar 2023 14:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232434AbjC3Req (ORCPT
+        with ESMTP id S231376AbjC3SYy (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 30 Mar 2023 13:34:46 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BE25FD9;
-        Thu, 30 Mar 2023 10:34:45 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id h17so19874022wrt.8;
-        Thu, 30 Mar 2023 10:34:45 -0700 (PDT)
+        Thu, 30 Mar 2023 14:24:54 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6BDD517;
+        Thu, 30 Mar 2023 11:24:53 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id h8so80075232ede.8;
+        Thu, 30 Mar 2023 11:24:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680197684;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aKcsS9RzCGec1E//KXDqFuO125uv1xUjBzG3GmeKye8=;
-        b=dNK04s5t55ImmI318ms5Q5vMBO6oGsmgyndXUx2HwP0KcT03d4xUijqy9mx9MidUla
-         oqnhQbfNk27Gv4tSdtc9YCZqR9JnL83ry2Ph5XWSSkjhQXQzOFZkN48wR8eRDOMVqh65
-         /zGwapoRE4auJbHsNTt+aaVjCyO+2Y6MvnMKQaTJ1ueAUS8b98TgPaTj3h6ntiSP9O9E
-         wp8IWnm1g7WKdojuXFP1+q7hApx+SmDNfWbnF7oeTOG3QljXLNb7fa35PK6kbTpwxdfT
-         JP53oDnNjI+IOjOMCylwS/S+SqPzybQh93EOpgRw1RW+NaIf/eupOZWphDnVZijch8Tt
-         3Bcg==
+        d=gmail.com; s=20210112; t=1680200692;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vOmbHXxgl5AIX4hLwyDtng0AW8nkrnwi8e/O7fTQX2I=;
+        b=UlzQKSnTOcb/dH8AASCRMK8obXyE/Y+zy8xNqxm4Pbq18AQHfXoneaLQHzt2o4Esa5
+         mG5WTba90pRPp+/wXKfuMpMFN1aahy5Az682K8EJ9jeQNt438a2TDvh4AnM4qI9ehils
+         7MMxZP7M3j3TP9PZ6uKOnW53bQtz2cOYDRaT/RCLZ6fqrbj/4plvkCyM/xzX4W62NaB6
+         whXHrvc/JYdqr4znDnvZETXnpkh8DQGIEa2AQOO4Koy2JOz7bfGgT3WYRz2ddBhgpiIp
+         /tN1LJC2AXbmP4cZdsi6Z+FWBQEfrfcBM30cp8u6qLDOUO+VchyeubKS0Y+ciZfPmQb0
+         wohg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680197684;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aKcsS9RzCGec1E//KXDqFuO125uv1xUjBzG3GmeKye8=;
-        b=uZmkMh9lrozd/lEgN4DnsYzN8oMnGBnKXcaN+Lgic1ZbJZsW10uGsMIxEVJ0TA5yce
-         TPFEJU3tUDh9QNb/LVAO5+ZWG25NLr5yobBkEdJ0wufcB/QlcHapfzK0H59XtcRuWhem
-         zI/A/DNsrVlDOySa9/K0EWFwtPXk2cHYW52sQyE1QtuHsqMsB69+to8A2Iwy1zTJMiST
-         wT46BQZVo4Pm8Tq0Sr6t2HNWglp8RpPcz3lhylyJt4j/3AMg64PZXjkw24gZMyCHORCp
-         rbLQkTj4I+F362JJHNfSYiK3xHak1Zfwo5IAMKHVxqzLI14/v9C1OCgUSSv5WQpSp0Qv
-         YRUA==
-X-Gm-Message-State: AAQBX9d47/1iDPjNPHb6YdeoM+S5vb1k3v5z44oG9B2Aass22H0KqfiO
-        jwEZqfEeYVVXONlO+acGnR8=
-X-Google-Smtp-Source: AKy350aqPaeaRaIzLq93xnKLSwV1qqKksBHcvZw5qKcC1QEWi7p3c+y9jOvEB5VB6d4m4y575WhvRQ==
-X-Received: by 2002:a05:6000:ca:b0:2d6:5afe:7b91 with SMTP id q10-20020a05600000ca00b002d65afe7b91mr4918787wrx.30.1680197684064;
-        Thu, 30 Mar 2023 10:34:44 -0700 (PDT)
-Received: from [192.168.1.135] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id n13-20020a5d67cd000000b002e40d124460sm4189268wrw.97.2023.03.30.10.34.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Mar 2023 10:34:43 -0700 (PDT)
-Message-ID: <8c917be2-e15a-921f-aaa9-b8753d2463de@gmail.com>
-Date:   Thu, 30 Mar 2023 19:34:41 +0200
+        d=1e100.net; s=20210112; t=1680200692;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vOmbHXxgl5AIX4hLwyDtng0AW8nkrnwi8e/O7fTQX2I=;
+        b=TedFq56na0ILOkVfI9R0Lk8SghaNnCwHVWZIRacR1xkTtCvaZoR0E3eJycIZL7QrwW
+         02Jk47J3/ze3we1j2HLnFYNHkRH6clKe0AreQ7QfXBftkxvXGH1p/hnllTUS6noa+nna
+         7L5bhQHUId6tGNXRC7mVKw1H0MbZTfGZmpQXuwrQtTpX68rsC8iqCdBOgeWes4S3WpkC
+         5tHZOLqd1s4Q/zz0GkukNgMVDiI84UxQAThcA5MzjyQt7Hr/lFRKLV7wZHRg16pt9lMP
+         TDv3VVgf1hrsSJiUiWoo58G4Q9vlWhFMuyN1yycwsRi9wEr4j/SdGZRutE/vb5pozvxZ
+         ZUvA==
+X-Gm-Message-State: AAQBX9d0Jo4gRThXtDEP5DiPUo3Cqqo7DU7ZH+X44YYZOCZWeeEjYiJi
+        bt5e3uuJM/g8/Jt/z1/nI50=
+X-Google-Smtp-Source: AKy350YBrOqbBAi66TRuaaQ1mnLn7kuv/imUBVsaeduC4hdggeZjE1wQf+b8FXAy+ZMjBDAVtqBJ2A==
+X-Received: by 2002:aa7:c7cf:0:b0:500:50f6:dd27 with SMTP id o15-20020aa7c7cf000000b0050050f6dd27mr20835611eds.26.1680200692048;
+        Thu, 30 Mar 2023 11:24:52 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:8109:8c00:3b40:1039:1167:a648:b315])
+        by smtp.gmail.com with ESMTPSA id i24-20020a508718000000b005024aff3bb5sm202714edb.80.2023.03.30.11.24.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Mar 2023 11:24:51 -0700 (PDT)
+From:   Nikita Bondarenko <n2h9z4@gmail.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, f.fainelli@gmail.com,
+        rjui@broadcom.com, sbranden@broadcom.com
+Cc:     Nikita Bondarenko <n2h9z4@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH] Convert brcm,kona-wdt.txt to brcm,kona-wdt.yaml
+Date:   Thu, 30 Mar 2023 20:24:47 +0200
+Message-Id: <20230330182447.51674-1-n2h9z4@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 16/17] arm64: dts: mediatek: fix systimer properties
-Content-Language: en-US
-To:     amergnat@baylibre.com, Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>
-References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
- <20230203-evk-board-support-v3-16-0003e80e0095@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230203-evk-board-support-v3-16-0003e80e0095@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,50 +72,86 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Signed-off-by: Nikita Bondarenko <n2h9z4@gmail.com>
+---
+ .../bindings/watchdog/brcm,kona-wdt.txt       | 15 -------
+ .../bindings/watchdog/brcm,kona-wdt.yaml      | 45 +++++++++++++++++++
+ 2 files changed, 45 insertions(+), 15 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
 
+diff --git a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
+deleted file mode 100644
+index 2b86a00e351d..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
++++ /dev/null
+@@ -1,15 +0,0 @@
+-Broadcom Kona Family Watchdog Timer
+------------------------------------
+-
+-This watchdog timer is used in the following Broadcom SoCs:
+-  BCM11130, BCM11140, BCM11351, BCM28145, BCM28155
+-
+-Required properties:
+-  - compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
+-  - reg: memory address & range
+-
+-Example:
+-	watchdog@35002f40 {
+-		compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
+-		reg = <0x35002f40 0x6c>;
+-	};
+diff --git a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
+new file mode 100644
+index 000000000000..ffc4870bdb57
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
+@@ -0,0 +1,45 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/brcm,kona-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Broadcom Kona Family Watchdog Timer
++
++description: |
++  This watchdog timer is used in the following Broadcom SoCs:
++  BCM11130, BCM11140, BCM11351, BCM28145, BCM28155
++
++maintainers:
++  - Rob Herring <robh@kernel.org>
++
++allOf:
++  - $ref: "watchdog.yaml#"
++
++properties:
++  compatible:
++    enum:
++      - brcm,bcm11351-wdt
++      - brcm,kona-wdt
++
++  reg:
++    maxItems: 1
++    description: memory address & range
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    watchdog@35002f40 {
++      compatible = "brcm,bcm11351-wdt";
++      reg = <0x35002f40 0x6c>;
++    };
++  - |
++    watchdog@35002f40 {
++      compatible = "brcm,kona-wdt";
++      reg = <0x35002f40 0x6c>;
++    };
+-- 
+2.34.1
 
-On 29/03/2023 10:54, amergnat@baylibre.com wrote:
-> From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> 
-> MT8365 has a SYST timer (System Timer), therefore the compatible node
-> should be "mediatek,mt6765-timer" instead of "mediatek,mt6795-systimer"
-> (which corresponds to ARM/ARM64 System Timer).
-> 
-> Plus, register range should be 0x100 instead of 0x10.
-> 
-> Finally, interrupt polarity of systimer is LEVEL_HIGH.
-> 
-> Fix the above properties accordingly.
-> 
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-
-Patch looks good but does not apply cleanly because of previous patches that I 
-didn't take and need rework. Please resend the patches I didn't queue with the 
-comments addressed.
-
-Regards,
-Matthias
-
-> ---
->   arch/arm64/boot/dts/mediatek/mt8365.dtsi | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-> index c3ea3cc97a47..959d8533c24c 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-> @@ -575,9 +575,9 @@ system_clk: dummy13m {
->   	};
->   
->   	systimer: timer@10017000 {
-> -		compatible = "mediatek,mt8365-systimer", "mediatek,mt6795-systimer";
-> -		reg = <0 0x10017000 0 0x10>;
-> -		interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_LOW>;
-> +		compatible = "mediatek,mt8365-systimer", "mediatek,mt6765-timer";
-> +		reg = <0 0x10017000 0 0x100>;
-> +		interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>;
->   		clocks = <&system_clk>;
->   		clock-names = "clk13m";
->   	};
-> 
