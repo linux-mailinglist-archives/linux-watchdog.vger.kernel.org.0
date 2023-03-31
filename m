@@ -2,188 +2,134 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03D86D19DF
-	for <lists+linux-watchdog@lfdr.de>; Fri, 31 Mar 2023 10:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650AA6D1CB7
+	for <lists+linux-watchdog@lfdr.de>; Fri, 31 Mar 2023 11:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjCaIaw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 31 Mar 2023 04:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
+        id S232184AbjCaJlx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 31 Mar 2023 05:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjCaIau (ORCPT
+        with ESMTP id S229646AbjCaJlw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 31 Mar 2023 04:30:50 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22A61BEA
-        for <linux-watchdog@vger.kernel.org>; Fri, 31 Mar 2023 01:30:47 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id j11so27883140lfg.13
-        for <linux-watchdog@vger.kernel.org>; Fri, 31 Mar 2023 01:30:47 -0700 (PDT)
+        Fri, 31 Mar 2023 05:41:52 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECE6B443
+        for <linux-watchdog@vger.kernel.org>; Fri, 31 Mar 2023 02:41:49 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5416698e889so405165807b3.2
+        for <linux-watchdog@vger.kernel.org>; Fri, 31 Mar 2023 02:41:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680251446;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IHrQkYwU28+YD0YgjEi8GJzUf2Kpg4wy4ZfXmfoC9os=;
-        b=qQEa6Arqk2jHRxOPJwePLJZ0lVdGe1lzg6LAd4bLAmraUorwhqpU8J9TDdiaWsQIQy
-         9ohcLaLbBecWH7LEUxZu2Z+aCgKgbyDlEWT87A52MBRV8Zalwj+0ShPvs904im8FpAhw
-         RHXlw2MZut2MXwEQMWGWYrXo8QXxk3AbHT5lMBq+27IZEphLPdFPNRMxYr20xkAwlgGR
-         L+Ea0ylBXOS1+HUyp40AHILesmnvUUyI8HUm201ZaEhb9YVC+OBShr/cAAKtbSVt+c5w
-         WMDsX3czzZuPH411QFRS8LJJHksDXgp3sO9KfFV08AYYJ066qQQk3FgShmlYRyFOu55T
-         I5sA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680255709;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xo2e908Td2gve6mc5SW+VA1nrFzqtdIPvQwGYibnpiE=;
+        b=uBMQIM9oghtu65OYry7lh4Mg9Ey6cTyShHDuQhNvkKE7cvwdYHy8HnejROCk4ISgBp
+         n4e9O+dpRLoxInIr0AZo6wccf2QiNwAmGY6ht9Plojz33GD3k3FLmtt9lRBB2OoL5AhL
+         q2tQFIWfJ/sC6d85vYFLRhLcrxJBPlr1eaExYaWQbIa5/50Jh2eHlnucVQQ3EXIqsMhF
+         Xn7baerAqsPtuvTx5Dhgm9XDMjpTYzSMOsnAxiuciECoi/2dtVis3DjNLK35S0dVG0KG
+         wAvNRlq2DbLnfG9+b2gm/R5ppzBZy9uGHsRoJDKHucpOb8KGlIogRpALWSfLixgMC6r8
+         opMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680251446;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IHrQkYwU28+YD0YgjEi8GJzUf2Kpg4wy4ZfXmfoC9os=;
-        b=TOuVRTPMekFbcMQfc29KZikDHp9d8+XD96r8bMcaZmNErXb4JzDocDCokmaQmuGbEr
-         zHU+TA13d3criiSxzyAAemebb1QXQ3bxMyeA9ic6lCvfqz6J0mq2pezqtj+soS5RbDwQ
-         4IZIJrZNe8CSe4ftj4zLsnbfRuaEvXB/MuoG08qrDiZm5DA1tFX8MeRLfBWDzxpnKtw2
-         AIYjdUuyQMm9bIh7kRadyguFL8USLSbSLqV1hwFwt8OGz7xPNSpCnQ4k8AeAoyHKtehQ
-         +oJdJz9Svw2iLn0OlI/vU5eQ86P5VDVTy53isdqu67W0sYNd4NWcTzWuNmn3rzAdAx7p
-         QDZQ==
-X-Gm-Message-State: AAQBX9ciB8J/AvmXh//dC5zaANF0FuwBzEOSs67P/s/mivZwrMeEluRi
-        UJFYsZ8a1A7sBhDabzSPpG6GNA==
-X-Google-Smtp-Source: AKy350ZGTisHUdzdU2gV2A1Zc7DwpzW8O/gAkiAXLJ6ry1oPid6IBkMp3vxlSNHWH7lps6pU2KUhFA==
-X-Received: by 2002:ac2:5a4e:0:b0:4a4:68b9:19f9 with SMTP id r14-20020ac25a4e000000b004a468b919f9mr7614294lfn.33.1680251445961;
-        Fri, 31 Mar 2023 01:30:45 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id l9-20020ac25549000000b004d5a4f63402sm281893lfk.213.2023.03.31.01.30.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Mar 2023 01:30:45 -0700 (PDT)
-Message-ID: <471dfaaa-8ca5-c4a0-471d-8e4b12ed355b@linaro.org>
-Date:   Fri, 31 Mar 2023 10:30:44 +0200
+        d=1e100.net; s=20210112; t=1680255709;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xo2e908Td2gve6mc5SW+VA1nrFzqtdIPvQwGYibnpiE=;
+        b=LeSFBBQlDv+eApMOHM+19zSG5uo2r1/nODx+r4Y1tcYZ89SGzWpyCiirBZeVOceJxl
+         I+fjCnhhPiEGwicIA48t7pofC8qVJv74NCuXTyBtk7SaDi0dPutcJFFCtUBmchmbbEuR
+         td0WF6mNEb2SJhKeIfnMMj5C/wRZnXgVF5nkORHv1C0LJRjs2+M4o7cPOVT5vQYjnl9H
+         A7ahmn0Frp3IfZ1W3PqDtMzFv6cFGiQpUuKUAcLeIMrsrtf+1gFOFSQkxrVjgsTfg4vc
+         0NY1un982C67XnFzvb+7Kgui01skNbMO55Jp2jpF+Wm/s39ApZH4y9J37TP3in4zvprF
+         NZGQ==
+X-Gm-Message-State: AAQBX9ciZB1O3ZD+rZaJp1Wj5r/+yJkAqPy037DIQ79aqVxQ+92n6WC0
+        tb9+v2EPpKEd2PatBby9puGhVPBIdxdg9jM/RbsD7w==
+X-Google-Smtp-Source: AKy350Zp7b7rjPNqqt62mXM2VNu7M6RMNX9eWwNzvLF+Jhy96wQfhw+jaU3Fvyd5viiVC5EgACPo2KWYnzUvEMriI7w=
+X-Received: by 2002:a81:b620:0:b0:541:8995:5334 with SMTP id
+ u32-20020a81b620000000b0054189955334mr13089289ywh.3.1680255709091; Fri, 31
+ Mar 2023 02:41:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] Convert brcm,kona-wdt.txt to brcm,kona-wdt.yaml
-Content-Language: en-US
-To:     Nikita Bondarenko <n2h9z4@gmail.com>, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, f.fainelli@gmail.com,
-        rjui@broadcom.com, sbranden@broadcom.com
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230330182447.51674-1-n2h9z4@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230330182447.51674-1-n2h9z4@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
+ <20230203-evk-board-support-v3-5-0003e80e0095@baylibre.com> <889be563-78d6-7148-f7d2-09ae21383ee4@collabora.com>
+In-Reply-To: <889be563-78d6-7148-f7d2-09ae21383ee4@collabora.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Fri, 31 Mar 2023 11:41:38 +0200
+Message-ID: <CAFGrd9rGoAN=B6O=X7peOtyYuWpWkMBFakrkLp2fcD-D2uajqw@mail.gmail.com>
+Subject: Re: [PATCH v3 05/17] arm64: dts: mediatek: add mt6357 device-tree
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 30/03/2023 20:24, Nikita Bondarenko wrote:
-> Signed-off-by: Nikita Bondarenko <n2h9z4@gmail.com>
+Le mer. 29 mars 2023 =C3=A0 15:17, AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> a =C3=A9crit :
+>
+> Il 29/03/23 10:54, amergnat@baylibre.com ha scritto:
+> > From: Fabien Parent <fparent@baylibre.com>
+> >
+> > This new device-tree add the regulators, rtc and keys support
+> > for the MT6357 PMIC.
+> >
+> > Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt6357.dtsi | 282 ++++++++++++++++++++++=
++++++++++
+> >   1 file changed, 282 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt6357.dtsi b/arch/arm64/boot=
+/dts/mediatek/mt6357.dtsi
+> > new file mode 100644
+> > index 000000000000..3330a03c2f74
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/mediatek/mt6357.dtsi
+> > @@ -0,0 +1,282 @@
+>
+> ..snip..
+>
+> > +
+> > +             keys {
+> > +                     compatible =3D "mediatek,mt6357-keys";
+> > +
+> > +                     key-power {
+> > +                             linux,keycodes =3D <KEY_POWER>;
+> > +                             wakeup-source;
+> > +                     };
+> > +
+> > +                     key-home {
+> > +                             linux,keycodes =3D <KEY_HOME>;
+> > +                             wakeup-source;
+>
+> KEY_HOME is a wakeup-source?! are you sure?!
+>
+> (P.S.: I'm just checking if that was intended)
 
-Use subject prefixes matching the subsystem (which you can get for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching).
+Yes it's the setup used in the official Mediatek Rity project.
 
-Missing commit msg.
-
-> ---
->  .../bindings/watchdog/brcm,kona-wdt.txt       | 15 -------
->  .../bindings/watchdog/brcm,kona-wdt.yaml      | 45 +++++++++++++++++++
->  2 files changed, 45 insertions(+), 15 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
-> deleted file mode 100644
-> index 2b86a00e351d..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
-> +++ /dev/null
-> @@ -1,15 +0,0 @@
-> -Broadcom Kona Family Watchdog Timer
-> ------------------------------------
-> -
-> -This watchdog timer is used in the following Broadcom SoCs:
-> -  BCM11130, BCM11140, BCM11351, BCM28145, BCM28155
-> -
-> -Required properties:
-> -  - compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
-> -  - reg: memory address & range
-> -
-> -Example:
-> -	watchdog@35002f40 {
-> -		compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
-> -		reg = <0x35002f40 0x6c>;
-> -	};
-> diff --git a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
-> new file mode 100644
-> index 000000000000..ffc4870bdb57
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/brcm,kona-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom Kona Family Watchdog Timer
-> +
-> +description: |
-> +  This watchdog timer is used in the following Broadcom SoCs:
-> +  BCM11130, BCM11140, BCM11351, BCM28145, BCM28155
-> +
-> +maintainers:
-> +  - Rob Herring <robh@kernel.org>
-
-No, it should be device maintainer.
-
-> +
-> +allOf:
-> +  - $ref: "watchdog.yaml#"
-
-Drop quotes.
-
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - brcm,bcm11351-wdt
-> +      - brcm,kona-wdt
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: memory address & range
-
-Drop description.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    watchdog@35002f40 {
-> +      compatible = "brcm,bcm11351-wdt";
-> +      reg = <0x35002f40 0x6c>;
-> +    };
-> +  - |
-> +    watchdog@35002f40 {
-
-Does not look like you tested the bindings. Please run `make
-dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
-
-> +      compatible = "brcm,kona-wdt";
-> +      reg = <0x35002f40 0x6c>;
-> +    };
-
-Keep only one example.
-
-
-Best regards,
-Krzysztof
-
+Regards,
+Alex
