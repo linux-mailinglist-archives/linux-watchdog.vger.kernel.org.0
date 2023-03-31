@@ -2,68 +2,66 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CCD6D1EE8
-	for <lists+linux-watchdog@lfdr.de>; Fri, 31 Mar 2023 13:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7BF6D1F9F
+	for <lists+linux-watchdog@lfdr.de>; Fri, 31 Mar 2023 14:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbjCaLXt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 31 Mar 2023 07:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
+        id S231205AbjCaMFf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 31 Mar 2023 08:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjCaLXs (ORCPT
+        with ESMTP id S230390AbjCaMFe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 31 Mar 2023 07:23:48 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB681D920
-        for <linux-watchdog@vger.kernel.org>; Fri, 31 Mar 2023 04:23:44 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id p204so26956211ybc.12
-        for <linux-watchdog@vger.kernel.org>; Fri, 31 Mar 2023 04:23:44 -0700 (PDT)
+        Fri, 31 Mar 2023 08:05:34 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBC61D2C0
+        for <linux-watchdog@vger.kernel.org>; Fri, 31 Mar 2023 05:05:31 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-54606036bb3so245196047b3.6
+        for <linux-watchdog@vger.kernel.org>; Fri, 31 Mar 2023 05:05:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680261823;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680264331;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6TmvPpd2YmgmpZIHsxp1gukcZ6IkVkvn2jIN3kBi1i8=;
-        b=sTIfTWSObIn7UMlmphrTSYvN9Y7arYi6CRjrwIvqEAI9HkX9Exwa13txK+uYbpM7v3
-         l6J4vkOqq8a0i3booWaeIUu92m/13ZKH2zw0OnWjp2qz2/hGDwkQeo9u2FnZnTxFWsxE
-         9P7yyDufLYI6/2Q2hVxULgawDVnW3549Q1R+UtZSFfXLvjtNR6wvhVIjY3uC0C87RLam
-         hX+jLrZKivu8A7dWkLaZPlBNwjfq5Cle2ETuJ8QDD5u6ndQPqq2STdtrm9yOoRXgMqZE
-         Pd8H77fN3eDjuTD2iMiOpP6dJDo1FgaiTZm+w2XLGm3TDUzPGtd+RFL/46DdUX/uY+il
-         RK0A==
+        bh=SBertetORVW57D4Qn1kS8HxfnJyMQ3NfyoVt6rJXeWw=;
+        b=jJYKQuohc4q23MSrpDjfNbvItKi4OeXxV/JiVsMH1u69/oc+hhZnHl+qafU/eiH4n6
+         fW+LnLnJ1EbzJrlZrmw27H30jZAlcHuAElxlUoo5p2XHokmFvACqJ/swhGjAQ3WNqWco
+         DumOcwmKSRpfirCl6ztX/cQNURZ8+AB/lp1zGF80Ul/QKpbuTucfgL8kH8y1HF+8j+9+
+         yq8jO/0GALbIjk7DOXxP5cnYW/SuxOZ/j+PBe9ZNyRhAoEyiR6ye1iP69ZbVcGpU3a+3
+         nSQ1Lhe98iMsb8F3ZOh6VIDOIfw5wXQQjHoL6I9b4Rp0OkH3q45tYXLqlUmlP+IGCdL1
+         6oLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680261823;
+        d=1e100.net; s=20210112; t=1680264331;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6TmvPpd2YmgmpZIHsxp1gukcZ6IkVkvn2jIN3kBi1i8=;
-        b=dDN/xjcD41MWN+xyB2JTWtRf8zXbh8q4zJGR65P9LxBpyBgrtrAluUQ4XbAMNwZl5W
-         2p7vbKd5bdcmjla0j84Aiiqs9Ya6a2zN2KDAQl8HVTNI01WIyqw3cq4ZayFCoKL5oFTj
-         Wxg+AhiYoj+2mw7hCLhwxVbme+zYgXxOyZZThnn5mxxDcyr1I+DJ45KBDmfrwxP9f3cX
-         uNPxgpygWWXJkpbDBnQoxpfP5n9+OMODgVMDGf4P4a/6zZ+BDv01kacNNhzbzD6fxTCL
-         a3WDTJ6/nJJdQ1/b5JwPMuHTa3514ycJS3labVlMokLg9WgsLYkHvIZVFsei91jnErMd
-         K12g==
-X-Gm-Message-State: AAQBX9ckBONfM3gA+FviEM2J+rjTk5cRG5WFb+A94FhZ7QsSq3zElb3Y
-        9Z7NZ8T8+xsV8ukkgSavb8E5WVo5LOHTfC6lPlpQDw==
-X-Google-Smtp-Source: AKy350Y1O6fb4CGhMXuQEcYQBTT1/oazAxitXaSHy0j76q36BAoNePcj7hYGMpWDOiNCG1ARjEL0yjdg1OiNTqnv+G8=
-X-Received: by 2002:a05:6902:1181:b0:b6c:2224:8a77 with SMTP id
- m1-20020a056902118100b00b6c22248a77mr17804559ybu.1.1680261823120; Fri, 31 Mar
- 2023 04:23:43 -0700 (PDT)
+        bh=SBertetORVW57D4Qn1kS8HxfnJyMQ3NfyoVt6rJXeWw=;
+        b=xM8MIs+30z5k6PlHOiuY7CPAcIkF7QhsAZAdiKwnQ3MASQRe0nIHgl2M+EPtP3bx45
+         g9VZ9H3WSvbLcKBwuIq5CtbUt/TcBWDBsnAeP+nu76KRVLLZGGEmqtCxGswQ41sasB8Z
+         qNq+uqqhu25kpMvpdJDYKxozcK3dlVfNtB4RjLQGfgmCgjkWknX22/h/sxaErsYm3w04
+         CJRZx/rPlju6EKRSQTeInyPs7ZLPF6URGbb9BCzmLGeVlawn8gtJeqscyIpYvtZiViU9
+         namjKKcqo303VK5hCROngfCGocD2F75y8E7TqtIg2hdwEzerJa/h7/w1VyfovgZHuTzQ
+         HsPQ==
+X-Gm-Message-State: AAQBX9dy0Y7jEcqNAnZI3zy4Kd7uW08DrjrPIIm+dvRmi9EN2XDSq3A7
+        dRZdhDEl4jy0uQkI2VTDoUdCWU3pk+tplU/26ThmVA==
+X-Google-Smtp-Source: AKy350alOUKFv8JHxb8OmChOgvitPrDAx4h8WLR3fhEV2ib1x87O1DkuqB5uGPeBCLNGixpUYQPibS7V5oz35p99nco=
+X-Received: by 2002:a81:ad5d:0:b0:540:e744:13ae with SMTP id
+ l29-20020a81ad5d000000b00540e74413aemr12477767ywk.3.1680264330881; Fri, 31
+ Mar 2023 05:05:30 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com>
- <20230203-evk-board-support-v3-10-0003e80e0095@baylibre.com>
- <7b6be990-9e90-8e44-7c5e-f8b7a2701ce7@collabora.com> <CAFGrd9qMEtHVT+P-mBNxh6g1jOm5ifArSxi1bbGnrKgxCf7zSQ@mail.gmail.com>
-In-Reply-To: <CAFGrd9qMEtHVT+P-mBNxh6g1jOm5ifArSxi1bbGnrKgxCf7zSQ@mail.gmail.com>
+ <20230203-evk-board-support-v3-16-0003e80e0095@baylibre.com> <8c917be2-e15a-921f-aaa9-b8753d2463de@gmail.com>
+In-Reply-To: <8c917be2-e15a-921f-aaa9-b8753d2463de@gmail.com>
 From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Fri, 31 Mar 2023 13:23:32 +0200
-Message-ID: <CAFGrd9oYMXgWVxQHfn6hT0chx6kg+4UhP4Q=v4f+gF_NahhNdA@mail.gmail.com>
-Subject: Re: [PATCH v3 10/17] arm64: dts: mediatek: set vmc regulator as
- always on
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
+Date:   Fri, 31 Mar 2023 14:05:20 +0200
+Message-ID: <CAFGrd9oPKn84yK2VpfJQRd1HbBTwq87Fuc6=Uw3uaeLjm89=8w@mail.gmail.com>
+Subject: Re: [PATCH v3 16/17] arm64: dts: mediatek: fix systimer properties
+To:     Matthias Brugger <matthias.bgg@gmail.com>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
         Chaotian Jing <chaotian.jing@mediatek.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Wenbin Mei <wenbin.mei@mediatek.com>,
@@ -88,30 +86,40 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Le ven. 31 mars 2023 =C3=A0 13:08, Alexandre Mergnat
-<amergnat@baylibre.com> a =C3=A9crit :
->
-> Le mer. 29 mars 2023 =C3=A0 15:25, AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> a =C3=A9crit :
-> >
-> > Il 29/03/23 10:54, amergnat@baylibre.com ha scritto:
-> > > From: Fabien Parent <fparent@baylibre.com>
-> > >
-> > > MSDC1 IP block is powered by VMC. Make sure it is always on.
-> >
-> > Why always on?
-> > Can't you just set mt6357_vmc_reg as VIN of mt6357_vmch_reg? :-)
->
-> I'm not sure to get it. mt6357_vmc_reg & mt6357_vmch_reg come from
-> PMIC and are supposed to be independent.
-> You suggest to link them in the mt8365-evk dts file using something like:
-> &mt6357_vmch_reg {
->     vin-supply =3D <&mt6357_vmc_reg>;
-> };
+Hi Matthias
 
-Additionally, vin-supply is supported by fixed-regulator and
-gpio-regulator, which is not the case here.
-I think it isn't doable.
+Le jeu. 30 mars 2023 =C3=A0 19:34, Matthias Brugger
+<matthias.bgg@gmail.com> a =C3=A9crit :
+>
+>
+>
+> On 29/03/2023 10:54, amergnat@baylibre.com wrote:
+> > From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> >
+> > MT8365 has a SYST timer (System Timer), therefore the compatible node
+> > should be "mediatek,mt6765-timer" instead of "mediatek,mt6795-systimer"
+> > (which corresponds to ARM/ARM64 System Timer).
+> >
+> > Plus, register range should be 0x100 instead of 0x10.
+> >
+> > Finally, interrupt polarity of systimer is LEVEL_HIGH.
+> >
+> > Fix the above properties accordingly.
+> >
+> > Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+>
+> Patch looks good but does not apply cleanly because of previous patches t=
+hat I
+> didn't take and need rework. Please resend the patches I didn't queue wit=
+h the
+> comments addressed.
+
+Sorry for that, I forgot to drop this patch since it has been already
+fixed in the Bero's series [1]
+I will drop it for the next version
+
+[1]: https://lore.kernel.org/all/20230309213501.794764-4-bero@baylibre.com/
 
 Regards,
 Alex
