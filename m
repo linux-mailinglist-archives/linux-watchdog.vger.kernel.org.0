@@ -2,202 +2,177 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CEE6D3B28
-	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Apr 2023 02:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 370456D3C6B
+	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Apr 2023 06:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjDCAnE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 2 Apr 2023 20:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
+        id S230433AbjDCE2V (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 3 Apr 2023 00:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDCAnE (ORCPT
+        with ESMTP id S230090AbjDCE2U (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 2 Apr 2023 20:43:04 -0400
-Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02335BBB;
-        Sun,  2 Apr 2023 17:43:01 -0700 (PDT)
-Date:   Mon, 03 Apr 2023 00:42:35 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1680482576; x=1680741776;
-        bh=GrH4LNncTeaHJC9oMAUJWv4wtKVY6Ir+P33KCx8nHxo=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-        b=eGOi9cvjkJlbWuY7XyTzX+u/CatWgG+3NuxKGBy2Ko2+Mz/O0sPl/gg3mn2wF5t4V
-         xt1+s/+in+vsyxyCSiUp8ot8eu5EU+QXZI+1y+jqvkPlg9Q3nNpZU8AbHbKKRfKhWs
-         d76Tc/xcBL0l5OsYG0l/mf/6Z+/e3JSgBoByxrW/rqee3BAMI0uCmk6RLTN3e8Sf54
-         LiTMaYnQUtVzkE9Z8izqEuLTyuizTNECUoYZqMTlxvKDgR+GAB1pJeiHRsgTGWYN2v
-         1cU2g6WGUJ1d1I024EwUmt+BO+CAkwZ82JKY7stPA4+rpebgCbAWKjX5G5HKULsTMR
-         Nvnd3OWBIcwBQ==
-To:     daniel.baluta@nxp.com
-From:   Om Parikh <hack3r-0m@proton.me>
-Cc:     hack3r-0m@proton.me, Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Olof Johansson <olof@lixom.net>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: watchdog: alphascale-asm9260: convert to DT schema
-Message-ID: <20230403004138.326482-1-hack3r-0m@proton.me>
-Feedback-ID: 58440162:user:proton
+        Mon, 3 Apr 2023 00:28:20 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3262483F0;
+        Sun,  2 Apr 2023 21:28:19 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3334RW7Y002535;
+        Mon, 3 Apr 2023 04:27:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=HeWakqRZs0eSLkfl7NVEQwQvQ1rUnhRuB8uvDie+i5Y=;
+ b=MgRxU0jNDeiaTD9ek6UBXosTmprXwfxrlRSDYO+9XVJ01x4zXpgVDI04i+uIy/pvbKeL
+ aw1BBE0XABH0gnZcQk0SdfpK7DsS3Hs4LLn1OWqjby/gsQXNEYhl6GsKggPfdO9clbr1
+ 4UmptU/NG8KNmAv55i1Z3oYe6dSYzl6XYYCJqzA4hHI7212DIGiB7HrPt5FUL53andAc
+ Dg4MFAS8fpIvCwPUoacXgkSzUy4MeMhppNLmKD5/9HSDBKsf5UWE0RTxbNiK7hvmr7M8
+ JwebdHEsBBpLApJBtP+m6n56gQMGiCmuJ1SGW1NpEbcKFwQai9a2hoUOrHaytp6fbGzg pw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ppdswb8bv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Apr 2023 04:27:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3334RtSO028150
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 3 Apr 2023 04:27:55 GMT
+Received: from [10.50.60.246] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 2 Apr 2023
+ 21:27:51 -0700
+Message-ID: <30c4c8d6-1eaa-99f2-9b47-7e91390cf7f1@quicinc.com>
+Date:   Mon, 3 Apr 2023 09:57:47 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: ipq9574: add few device nodes
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230329053726.14860-1-quic_kathirav@quicinc.com>
+ <20230329053726.14860-3-quic_kathirav@quicinc.com>
+ <1772ce2e-9a52-7fc6-62bc-990755ca63ab@quicinc.com>
+Content-Language: en-US
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+In-Reply-To: <1772ce2e-9a52-7fc6-62bc-990755ca63ab@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: _VUf3Y4jaxjXTY7kEDaVEwjy6dAv2_Vo
+X-Proofpoint-GUID: _VUf3Y4jaxjXTY7kEDaVEwjy6dAv2_Vo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-03_01,2023-03-31_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ adultscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 suspectscore=0
+ priorityscore=1501 clxscore=1015 impostorscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2304030032
+X-Spam-Status: No, score=-3.3 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-this patch replaces the txt file and adds YAML bindings file
-adhering to the json-schema for alphascale-asm9260. It is a
-demo patch for potential further contributions to the GSOC
-project.
 
-(see: https://wiki.linuxfoundation.org/gsoc/2023-gsoc-device-tree-bindings)
-
-Signed-off-by: Om Parikh <hack3r-0m@proton.me>
----
- .../watchdog/alphascale,asm9260-wdt.yaml      | 76 +++++++++++++++++++
- .../bindings/watchdog/alphascale-asm9260.txt  | 35 ---------
- 2 files changed, 76 insertions(+), 35 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/watchdog/alphascale,a=
-sm9260-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/alphascale-a=
-sm9260.txt
-
-diff --git a/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-=
-wdt.yaml b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wd=
-t.yaml
-new file mode 100644
-index 000000000000..1f7baaf6b0f3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.yam=
-l
-@@ -0,0 +1,76 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/alphascale,asm9260-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Alphascale asm9260 Watchdog timer
-+
-+allOf:
-+  - $ref: "watchdog.yaml#"
-+
-+maintainers:
-+  - Oleksij Rempel <linux@rempel-privat.de>
-+  - Olof Johansson <olof@lixom.net>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - alphascale,asm9260
-+      - alphascale,asm9260devkit
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: source clock, used for tick counter
-+      - description: ahb gate
-+
-+  clock-names:
-+    items:
-+      - const: mod
-+      - const: ahb
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  resets:
-+    items:
-+      - description: phandle pointing to the system reset controller with =
-line
-+                     index for the watchdog.
-+
-+  reset-names:
-+    items:
-+      - const: wdt_rst
-+
-+  timeout-sec: true
-+
-+  alphascale,mode:
-+    description: to specify the reset mode of operation
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [hw, sw, debug]
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - interrupts
-+  - resets
-+  - reset-names
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/alphascale,asm9260.h>
-+    watchdog0: watchdog@80048000 {
-+      compatible =3D "alphascale,asm9260-wdt";
-+      reg =3D <0x80048000 0x10>;
-+      clocks =3D <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
-+      clock-names =3D "mod", "ahb";
-+      interrupts =3D <55>;
-+      timeout-sec =3D <30>;
-+      alphascale,mode =3D "hw";
-+    };
-diff --git a/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.=
-txt b/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
-deleted file mode 100644
-index 75b265a04047..000000000000
---- a/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
-+++ /dev/null
-@@ -1,35 +0,0 @@
--Alphascale asm9260 Watchdog timer
--
--Required properties:
--
--- compatible : should be "alphascale,asm9260-wdt".
--- reg : Specifies base physical address and size of the registers.
--- clocks : the clocks feeding the watchdog timer. See clock-bindings.txt
--- clock-names : should be set to
--=09"mod" - source for tick counter.
--=09"ahb" - ahb gate.
--- resets : phandle pointing to the system reset controller with
--=09line index for the watchdog.
--- reset-names : should be set to "wdt_rst".
--
--Optional properties:
--- timeout-sec : shall contain the default watchdog timeout in seconds,
--=09if unset, the default timeout is 30 seconds.
--- alphascale,mode : three modes are supported
--=09"hw" - hw reset (default).
--=09"sw" - sw reset.
--=09"debug" - no action is taken.
--
--Example:
--
--watchdog0: watchdog@80048000 {
--=09compatible =3D "alphascale,asm9260-wdt";
--=09reg =3D <0x80048000 0x10>;
--=09clocks =3D <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
--=09clock-names =3D "mod", "ahb";
--=09interrupts =3D <55>;
--=09resets =3D <&rst WDT_RESET>;
--=09reset-names =3D "wdt_rst";
--=09timeout-sec =3D <30>;
--=09alphascale,mode =3D "hw";
--};
---=20
-2.40.0
+On 3/31/2023 1:45 AM, Sricharan Ramabadhran wrote:
+>
+>
+> On 3/29/2023 11:07 AM, Kathiravan T wrote:
+>> Add QUP(SPI / I2C) peripheral, PRNG, WDOG and the remaining UART nodes.
+>> While at it, enable the SPI NOR in RDP433 board.
+>>
+>> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts |  21 ++
+>>   arch/arm64/boot/dts/qcom/ipq9574.dtsi       | 202 ++++++++++++++++++++
+>>   2 files changed, 223 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts 
+>> b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+>> index 2ce8e09e7565..7be578017bf7 100644
+>> --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+>> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+>> @@ -29,6 +29,20 @@
+>>       status = "okay";
+>>   };
+>>   +&blsp1_spi0 {
+>> +    pinctrl-0 = <&spi_0_pins>;
+>> +    pinctrl-names = "default";
+>> +    status = "okay";
+>> +
+>> +    flash@0 {
+>> +        compatible = "micron,n25q128a11", "jedec,spi-nor";
+>> +        reg = <0>;
+>> +        #address-cells = <1>;
+>> +        #size-cells = <1>;
+>> +        spi-max-frequency = <50000000>;
+>> +    };
+>> +};
+>> +
+>>   &sdhc_1 {
+>>       pinctrl-0 = <&sdc_default_state>;
+>>       pinctrl-names = "default";
+>> @@ -77,6 +91,13 @@
+>>               bias-pull-down;
+>>           };
+>>       };
+>> +
+>> +    spi_0_pins: spi-0-state {
+>> +        pins = "gpio11", "gpio12", "gpio13", "gpio14";
+>> +        function = "blsp0_spi";
+>> +        drive-strength = <8>;
+>> +        bias-disable;
+>> +    };
+>>   };
+>>     &xo_board_clk {
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi 
+>> b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>> index 14a3396b0381..f3da0190284c 100644
+>> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>> @@ -122,6 +122,13 @@
+>>           #size-cells = <1>;
+>>           ranges = <0 0 0 0xffffffff>;
+>>   +        rng: rng@e3000 {
+>> +            compatible = "qcom,prng-ee";
+>> +            reg = <0x000e3000 0x1000>;
+>> +            clocks = <&gcc GCC_PRNG_AHB_CLK>;
+>> +            clock-names = "core";
+>> +        };
+>> +
+>>           tlmm: pinctrl@1000000 {
+>>               compatible = "qcom,ipq9574-tlmm";
+>>               reg = <0x01000000 0x300000>;
+>> @@ -184,6 +191,36 @@
+>>               status = "disabled";
+>>           };
+>>   +        blsp_dma: dma-controller@7884000 {
+>> +            compatible = "qcom,bam-v1.7.0";
+>> +            reg = <0x07884000 0x2b000>;
+>
+>  Does the size needs to be 0x2b000 really ?
 
 
+As per the document, BLSP DMA block size is 0x2b000, however the last 
+register offset is 0x13934. In most of the places, irrespective of last 
+register offset, we covered the entire region as mentioned in the document.
+
+
+Thanks, Kathiravan T.
+
+
+>
+> Regards,
+>  Sricharan
