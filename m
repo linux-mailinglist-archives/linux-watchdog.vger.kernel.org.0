@@ -2,138 +2,202 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA396D3884
-	for <lists+linux-watchdog@lfdr.de>; Sun,  2 Apr 2023 16:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CEE6D3B28
+	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Apr 2023 02:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjDBOne (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 2 Apr 2023 10:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
+        id S230429AbjDCAnE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 2 Apr 2023 20:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDBOnd (ORCPT
+        with ESMTP id S229379AbjDCAnE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 2 Apr 2023 10:43:33 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A9465AD;
-        Sun,  2 Apr 2023 07:43:32 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id l18so20012133oic.13;
-        Sun, 02 Apr 2023 07:43:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680446612;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sUwmWgSfaGA5atDzRhwn1tpe5ebZkyiB77hJpeGdg84=;
-        b=nv0XhA/T5AIkp1Qv7E1OpA0IV0oSHIFicHYSNN8j6NgJbyO7us4BReYOICj0gs6lOB
-         OeyGV+IQTqbcy1O+C45fZxifIuS2dJvARn+MH3gphxHir3gMGC+DvBydE1AAWoxHAzNk
-         8R5dvSa3Vog6Y7UyAUDBE6ZxUb4QhseNxvil0XhZdQ/FTSyDVRwCnxIy8zuWim/lPU7l
-         yUZqOqf816TvsQwFa5pOnwQq+4VQOAW3T9pFzSRMgAzmtLbla6K8QkTGE63zmUCfCJHq
-         205hIk5pRTAMQVRyNkBHcyCe7F18NEQ8gYViKEhWpsc5n5YFH4DQFUpZVW+Ij/buwyRK
-         +/ng==
-X-Gm-Message-State: AAQBX9d4XDwXs4bKs1b2n2P5vgWpti4Zd7OCTON5USJHPFNUgyojvM8d
-        ns81tAUyN2vt8tcPrHdZkg==
-X-Google-Smtp-Source: AKy350YWvZr3975Dnkh/gHPxxNhfiohDAWa1yAnyk7vbBz8LN5dXTp+7ALZnHhJdHNoSWB5sswMD6w==
-X-Received: by 2002:a05:6808:12:b0:389:23e:45e0 with SMTP id u18-20020a056808001200b00389023e45e0mr13478672oic.11.1680446611708;
-        Sun, 02 Apr 2023 07:43:31 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q189-20020acad9c6000000b0038756901d1esm2962147oig.35.2023.04.02.07.43.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Apr 2023 07:43:31 -0700 (PDT)
-Received: (nullmailer pid 2422586 invoked by uid 1000);
-        Sun, 02 Apr 2023 14:43:30 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Sun, 2 Apr 2023 20:43:04 -0400
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02335BBB;
+        Sun,  2 Apr 2023 17:43:01 -0700 (PDT)
+Date:   Mon, 03 Apr 2023 00:42:35 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=protonmail; t=1680482576; x=1680741776;
+        bh=GrH4LNncTeaHJC9oMAUJWv4wtKVY6Ir+P33KCx8nHxo=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=eGOi9cvjkJlbWuY7XyTzX+u/CatWgG+3NuxKGBy2Ko2+Mz/O0sPl/gg3mn2wF5t4V
+         xt1+s/+in+vsyxyCSiUp8ot8eu5EU+QXZI+1y+jqvkPlg9Q3nNpZU8AbHbKKRfKhWs
+         d76Tc/xcBL0l5OsYG0l/mf/6Z+/e3JSgBoByxrW/rqee3BAMI0uCmk6RLTN3e8Sf54
+         LiTMaYnQUtVzkE9Z8izqEuLTyuizTNECUoYZqMTlxvKDgR+GAB1pJeiHRsgTGWYN2v
+         1cU2g6WGUJ1d1I024EwUmt+BO+CAkwZ82JKY7stPA4+rpebgCbAWKjX5G5HKULsTMR
+         Nvnd3OWBIcwBQ==
+To:     daniel.baluta@nxp.com
+From:   Om Parikh <hack3r-0m@proton.me>
+Cc:     hack3r-0m@proton.me, Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Olof Johansson <olof@lixom.net>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: watchdog: alphascale-asm9260: convert to DT schema
+Message-ID: <20230403004138.326482-1-hack3r-0m@proton.me>
+Feedback-ID: 58440162:user:proton
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Nikita Bondarenko <n2h9z4@gmail.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, rjui@broadcom.com,
-        linux@roeck-us.net, f.fainelli@gmail.com, robh+dt@kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-watchdog@vger.kernel.org, sbranden@broadcom.com,
-        wim@linux-watchdog.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-In-Reply-To: <20230402135555.62507-1-n2h9z4@gmail.com>
-References: <20230402135555.62507-1-n2h9z4@gmail.com>
-Message-Id: <168044604098.2412538.8062482147729168054.robh@kernel.org>
-Subject: Re: [PATCH v2] dt-bindings: watchdog: brcm,kona-wdt: convert txt
- file to yaml
-Date:   Sun, 02 Apr 2023 09:43:30 -0500
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+this patch replaces the txt file and adds YAML bindings file
+adhering to the json-schema for alphascale-asm9260. It is a
+demo patch for potential further contributions to the GSOC
+project.
 
-On Sun, 02 Apr 2023 15:55:55 +0200, Nikita Bondarenko wrote:
-> Remove device tree binding in txt
-> Add device tree binding in json-schema
+(see: https://wiki.linuxfoundation.org/gsoc/2023-gsoc-device-tree-bindings)
 
-Write complete sentences. The commit msg purpose is not to explain the 
-diff, we can read that. The purpose is to explain why though we don't 
-need much reasoning why for conversions. What is useful is any fixes or 
-changes you made to the binding (only because the existing binding 
-didn't match reality). For example, there's a mismatch in the 
-compatible. If you aren't adjusting the schema, then it means you think 
-the .dts file is wrong and it needs to be fixed.
+Signed-off-by: Om Parikh <hack3r-0m@proton.me>
+---
+ .../watchdog/alphascale,asm9260-wdt.yaml      | 76 +++++++++++++++++++
+ .../bindings/watchdog/alphascale-asm9260.txt  | 35 ---------
+ 2 files changed, 76 insertions(+), 35 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/alphascale,a=
+sm9260-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/alphascale-a=
+sm9260.txt
 
-> 
-> 
+diff --git a/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-=
+wdt.yaml b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wd=
+t.yaml
+new file mode 100644
+index 000000000000..1f7baaf6b0f3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.yam=
+l
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/alphascale,asm9260-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Alphascale asm9260 Watchdog timer
++
++allOf:
++  - $ref: "watchdog.yaml#"
++
++maintainers:
++  - Oleksij Rempel <linux@rempel-privat.de>
++  - Olof Johansson <olof@lixom.net>
++
++properties:
++  compatible:
++    enum:
++      - alphascale,asm9260
++      - alphascale,asm9260devkit
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: source clock, used for tick counter
++      - description: ahb gate
++
++  clock-names:
++    items:
++      - const: mod
++      - const: ahb
++
++  interrupts:
++    maxItems: 1
++
++  resets:
++    items:
++      - description: phandle pointing to the system reset controller with =
+line
++                     index for the watchdog.
++
++  reset-names:
++    items:
++      - const: wdt_rst
++
++  timeout-sec: true
++
++  alphascale,mode:
++    description: to specify the reset mode of operation
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [hw, sw, debug]
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - interrupts
++  - resets
++  - reset-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/alphascale,asm9260.h>
++    watchdog0: watchdog@80048000 {
++      compatible =3D "alphascale,asm9260-wdt";
++      reg =3D <0x80048000 0x10>;
++      clocks =3D <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
++      clock-names =3D "mod", "ahb";
++      interrupts =3D <55>;
++      timeout-sec =3D <30>;
++      alphascale,mode =3D "hw";
++    };
+diff --git a/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.=
+txt b/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
+deleted file mode 100644
+index 75b265a04047..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
++++ /dev/null
+@@ -1,35 +0,0 @@
+-Alphascale asm9260 Watchdog timer
+-
+-Required properties:
+-
+-- compatible : should be "alphascale,asm9260-wdt".
+-- reg : Specifies base physical address and size of the registers.
+-- clocks : the clocks feeding the watchdog timer. See clock-bindings.txt
+-- clock-names : should be set to
+-=09"mod" - source for tick counter.
+-=09"ahb" - ahb gate.
+-- resets : phandle pointing to the system reset controller with
+-=09line index for the watchdog.
+-- reset-names : should be set to "wdt_rst".
+-
+-Optional properties:
+-- timeout-sec : shall contain the default watchdog timeout in seconds,
+-=09if unset, the default timeout is 30 seconds.
+-- alphascale,mode : three modes are supported
+-=09"hw" - hw reset (default).
+-=09"sw" - sw reset.
+-=09"debug" - no action is taken.
+-
+-Example:
+-
+-watchdog0: watchdog@80048000 {
+-=09compatible =3D "alphascale,asm9260-wdt";
+-=09reg =3D <0x80048000 0x10>;
+-=09clocks =3D <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
+-=09clock-names =3D "mod", "ahb";
+-=09interrupts =3D <55>;
+-=09resets =3D <&rst WDT_RESET>;
+-=09reset-names =3D "wdt_rst";
+-=09timeout-sec =3D <30>;
+-=09alphascale,mode =3D "hw";
+-};
+--=20
+2.40.0
 
-Single blank line here.
-
-> Signed-off-by: Nikita Bondarenko <n2h9z4@gmail.com>
-> ---
-> 
-> Changes in v2, according to review comments:
-> - use subject prefixes matching the subsystem in patch subject
-> - add commit message
-> - update the list of maintainers: add here all maintainers returned by scripts/get_maintainer.p who are marked as "maintainer:BROADCOM BCM281XX/BCM11XXX/BCM216XX"
-> - remove quotes in - $ref: watchdog.yaml#
-> - remove description for reg
-> - leave one example
-> - add all SoCs mentioned in txt file description to compatible enum values
-> 
-> Both checks (dtbs_check, dt_binding_check) return no error:
-> 
-> make  DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml ARCH=arm dtbs_check
->   LINT    Documentation/devicetree/bindings
->   CHKDT   Documentation/devicetree/bindings/processed-schema.json
->   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
-
-Doesn't match what I get below...
-
-> 
-> make  DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml ARCH=arm dt_binding_check
->   LINT    Documentation/devicetree/bindings
->   CHKDT   Documentation/devicetree/bindings/processed-schema.json
->   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
->   DTEX    Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.example.dts
->   DTC_CHK Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.example.dtb
-> 
->  .../bindings/watchdog/brcm,kona-wdt.txt       | 15 -------
->  .../bindings/watchdog/brcm,kona-wdt.yaml      | 45 +++++++++++++++++++
->  2 files changed, 45 insertions(+), 15 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
-> 
-
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
-
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
-
-Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230402135555.62507-1-n2h9z4@gmail.com
-
-
-watchdog@35002f40: compatible: ['brcm,bcm11351-wdt', 'brcm,kona-wdt'] is too long
-	arch/arm/boot/dts/bcm28155-ap.dtb
-
-watchdog@35002f40: Unevaluated properties are not allowed ('compatible' was unexpected)
-	arch/arm/boot/dts/bcm28155-ap.dtb
 
