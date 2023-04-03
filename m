@@ -2,61 +2,61 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B956D505F
-	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Apr 2023 20:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF786D50A5
+	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Apr 2023 20:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233167AbjDCSac (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 3 Apr 2023 14:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
+        id S233386AbjDCSdw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 3 Apr 2023 14:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbjDCSaa (ORCPT
+        with ESMTP id S233264AbjDCSdg (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:30:30 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DDC2D40
-        for <linux-watchdog@vger.kernel.org>; Mon,  3 Apr 2023 11:30:21 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id i5so121218443eda.0
-        for <linux-watchdog@vger.kernel.org>; Mon, 03 Apr 2023 11:30:21 -0700 (PDT)
+        Mon, 3 Apr 2023 14:33:36 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9F030FD
+        for <linux-watchdog@vger.kernel.org>; Mon,  3 Apr 2023 11:32:59 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id eg48so120956675edb.13
+        for <linux-watchdog@vger.kernel.org>; Mon, 03 Apr 2023 11:32:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680546619;
+        d=linaro.org; s=google; t=1680546778;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=NFB10rxKhuSnr8G+D45g+FQ9NDBsDveWCcMjexIqOoQ=;
-        b=Kaj1AMXaoU7F3KH6UVSShPDhgf9THNic7EhcuaPT3ZujyG7EvehDV246LeYUnL+qyI
-         K/7fFdKmOgWDQRLZaTrks3l102LTG8YX7JoP4WbXdsKtOe8UU5WF8dMMd1NqPPVEkmGq
-         AljMz56PV392UV+a5X6G04dFDGi3uM8IHqJBePgHcF2RhwegwsCsT27MnRX1M1cjf0V2
-         rsM0DepOIMYQsex3QUowLDxMiw/A4ys5s64mVZ97GFNBcorAZgOapKB/35pHkoGu8MNr
-         9/dCmlATdw06rQ8Zpw8HSBp50prrAhM/Kus4E4KUKmghlC8tPbkg+TStMALQbPqbVovK
-         ugxA==
+        bh=EPWT5mMmuGrFkQaGaj75abt7BvFmjgz0kWUiVZiK+60=;
+        b=F2GsOoTdBB99ORU2xWrBAyXtTxEW63x/qTkd9bnEjUalG0IkTiwxfDqA6EYadBh8pP
+         vwyMm+hX6ih0XzUM4XtCwk4+vZUdjXdYE6bJHph8vK6cQO6iDgBm3PUIaisbCAOOkA86
+         l9WaVyERMvWNz1GmqPxdgqdIF4tfvEkw62UeH0Iwv8od2RImp00TZREbGnqrbtlqXpxe
+         IhAOAcTAXtQR3WvPXGOClOo90KVfGODQjFXF7uN003AI2qKMYiRYtgoR9a9ckkyVPEfn
+         nO8LUwxUVeBT36nvPtpcRJ9C3SHnHGlkFMul6ogJoooxMiABfRUaLaEUnfj4QF9fp8d3
+         L48Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680546619;
+        d=1e100.net; s=20210112; t=1680546778;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NFB10rxKhuSnr8G+D45g+FQ9NDBsDveWCcMjexIqOoQ=;
-        b=UC0k7rkXQb+lNMDBSDoU2VIYwiW6swSSgIPFovkUhUxOdaVia0jXN+YIq0wcHaFhF3
-         ohfeLwpFFFWNMp/Szix65sUqr3kqqPFC+XouwIj5NDUs9KTLFB4Zoo6Fs3dPaV1xlGfY
-         cS4uzwYe7/epOhVxqeVw9arpfaqEXlzyBVJWO1yASTkMfOlOZfVObtcHrWRZouh5Zt58
-         XXfSF84+ZWfU0mOCOLfP9e9toemVvNvcSgsNETS2waTiCtkRDSUx/Ywq9dKjhDuyyLfI
-         Ff42d/nJkvBubZ/YBoEC4vFZ8tMo9lnlTXxgbyHZxYxjzOs3snzRyayAFwaJ0TGYLXEv
-         8Rgg==
-X-Gm-Message-State: AAQBX9fQxbQZ26p7UdC5fPO1T0EjwJufvwjG81xNAqw+ZP56HdpUXo9x
-        aeJ8ewYarfHn7pVCYhIRLnZiKA==
-X-Google-Smtp-Source: AKy350ZXjZbzVWh7Vb801ZxzHCIBWyoTyi83AEpPBnF/1+m2w/AJzS242zLY0pfrMJRViuKuzJD5uQ==
-X-Received: by 2002:a17:907:8a8e:b0:944:49ee:aea2 with SMTP id sf14-20020a1709078a8e00b0094449eeaea2mr32280742ejc.71.1680546619534;
-        Mon, 03 Apr 2023 11:30:19 -0700 (PDT)
+        bh=EPWT5mMmuGrFkQaGaj75abt7BvFmjgz0kWUiVZiK+60=;
+        b=E+X0zMywO08J7dF2A+1Kciii5TKp88Q5CASPqa2ob33e0vDKHtNZE9F/sZU37V5vhE
+         5y6kJ4Jr3hzt5Lel8dv6rusSdwdDL26rR2cphrK2XjzCTyq6G8ZDkOmOcn4zP/VbMmGr
+         a83uFD2vHQmUhkorz3r0wBROKvLJDFRSVv0HhfwQnlPjHCQEb3WWDUui30XuCyTMZ97B
+         736keR/QDmEyCopZJjc+TExIXjDd/h/uKAr5VY3CEcVLiSmtZgDJ+Tin0rHtdWbvbr7z
+         CHY0bQU5+B6Cp5GCeoAMu7m5xju97uuBUtAhnR0t0aZUIiwr9rhLsbKq2PcoXU3ZWhqg
+         Y+VA==
+X-Gm-Message-State: AAQBX9eMB4lNR/rjh0nTfuh37G4Z46K0lUrDlBB1gWayICV1RgLVjGuV
+        1DJQwQJGuCTJPZl1cGgr0IrDsw==
+X-Google-Smtp-Source: AKy350aW2SN3jstLLNu7d+H5mzsNCZIqfayZUeK8PGvt9ZdUMKzysVtsFyu0PycM5P2N+wDccL5QXA==
+X-Received: by 2002:aa7:c699:0:b0:4fb:80cf:89e6 with SMTP id n25-20020aa7c699000000b004fb80cf89e6mr172550edq.8.1680546777852;
+        Mon, 03 Apr 2023 11:32:57 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
-        by smtp.gmail.com with ESMTPSA id z12-20020a1709064e0c00b00882f9130eafsm4783674eju.26.2023.04.03.11.30.18
+        by smtp.gmail.com with ESMTPSA id p9-20020a50cd89000000b004c0c5864cc5sm4915461edi.25.2023.04.03.11.32.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 11:30:19 -0700 (PDT)
-Message-ID: <d9aade73-1bce-c2a3-f9da-883a5388527f@linaro.org>
-Date:   Mon, 3 Apr 2023 20:30:17 +0200
+        Mon, 03 Apr 2023 11:32:57 -0700 (PDT)
+Message-ID: <23a7215e-0be4-195c-f3c9-3b1d1b760fa0@linaro.org>
+Date:   Mon, 3 Apr 2023 20:32:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [PATCH V3 1/4] MAINTAINERS: Add fragment for Xilinx watchdog
- driver
+Subject: Re: [PATCH V3 2/4] dt-bindings: watchdog: xlnx,versal-wwdt: Add
+ versal watchdog bindings
 Content-Language: en-US
 To:     Srinivas Neeli <srinivas.neeli@amd.com>,
         shubhrajyoti.datta@amd.com, michal.simek@amd.com,
@@ -66,9 +66,9 @@ Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         git@amd.com, git@xilinx.com, neelisrinivas18@gmail.com
 References: <20230331074117.356339-1-srinivas.neeli@amd.com>
- <20230331074117.356339-2-srinivas.neeli@amd.com>
+ <20230331074117.356339-3-srinivas.neeli@amd.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230331074117.356339-2-srinivas.neeli@amd.com>
+In-Reply-To: <20230331074117.356339-3-srinivas.neeli@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
@@ -82,33 +82,72 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 31/03/2023 09:41, Srinivas Neeli wrote:
-> Added entry for Xilinx xps-timebase watchdog driver.
+> Versal watchdog driver uses window watchdog mode. Window watchdog
+
+Subject: drop second/last, redundant "bindings". The "dt-bindings"
+prefix is already stating that these are bindings.
+
+> timer(WWDT) contains closed(first) and open(second) window with
+> 32 bit width. Write to the watchdog timer within predefined window
+> periods of time. This means a period that is not too soon and
+> a period that is not too late.
+> 
+> This patch adds devicetree bindings for versal window watchdog device.
+
+Do not use "This commit/patch", but imperative mood. See:
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+
 > 
 > Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
 > ---
 > Changes in V3:
-> -None
+> - Removed  xlnx,close_percent property.
+> Changes in V2:
+> - Added watchdog ref
+> - Removed timeout-sec property
+> - Used 4 spaces for example indentation.
 > ---
->  MAINTAINERS | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  .../bindings/watchdog/xlnx,versal-wwdt.yaml   | 50 +++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d8287eb2ab4a..4ed139d56913 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -23071,6 +23071,14 @@ F:	Documentation/devicetree/bindings/media/xilinx/
->  F:	drivers/media/platform/xilinx/
->  F:	include/uapi/linux/xilinx-v4l2-controls.h
->  
-> +XILINX WATCHDOG DRIVER
-> +M:	Srinivas Neeli <srinivas.neeli@amd.com>
-> +R:	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
-> +R:	Michal Simek <michal.simek@amd.com>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
-> +F:	drivers/watchdog/of_xilinx_wdt.c
+> diff --git a/Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml b/Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
+> new file mode 100644
+> index 000000000000..dea1e7c487d3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/xlnx,versal-wwdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx Versal window watchdog timer controller
+> +
+> +maintainers:
+> +  - Neeli Srinivas <srinivas.neeli@amd.com>
+> +
+> +description:
+> +  Versal watchdog driver uses window watchdog mode. Window watchdog
 
-Your patchset is not bisectable. These files do not exist.
+What is driver? If you mean Linux driver, then drop all references to it
+and rephrase to describe hardware.
+
+> +  timer(WWDT) contains closed(first) and open(second) window with
+> +  32 bit width. Write to the watchdog timer within predefined window
+> +  periods of time. This means a period that is not too soon and a
+> +  period that is not too late. The WWDT has to be restarted within
+> +  the open window time. If software tries to restart WWDT outside of
+> +  the open window time period, it generates a reset.
+> +
+> +allOf:
+> +  - $ref: /schemas/watchdog/watchdog.yaml#
+
+All other examples reference local watchdog.yaml. Don't do it
+differently than others (git grep watchdog.yaml)
+
+> +
 
 Best regards,
 Krzysztof
