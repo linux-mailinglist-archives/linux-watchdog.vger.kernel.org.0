@@ -2,112 +2,70 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 805006D69E7
-	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Apr 2023 19:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6079D6D6CC7
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Apr 2023 21:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234131AbjDDRJ6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 4 Apr 2023 13:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
+        id S235839AbjDDTBR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 4 Apr 2023 15:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235408AbjDDRJ5 (ORCPT
+        with ESMTP id S232952AbjDDTBR (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 4 Apr 2023 13:09:57 -0400
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C61AE7D;
-        Tue,  4 Apr 2023 10:09:56 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id r14so19041999oiw.12;
-        Tue, 04 Apr 2023 10:09:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680628195;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DQfDPbeHzXvhNMP21e47HMs1Ss6VjJ3ppCcbbXGV5fo=;
-        b=5mUBVjZRq5/qxt/GBFP1amypw6ebuzfXYq40Nlxh0ZXE084b0c1GQgFIWjr/Y/95AM
-         D5dsXP2Ksy68BvAgGVHAIZ+DFJvQLWnnqO3KwNC4XWCf1/rNMYUeGiBnxARRWjWdmQDV
-         2XMiXrqiCVClZOUHEZNEYhsqzfl5m9ZqwMnzqw2HIHPlR64ihxB0c2XpOyMHE2tO5ALO
-         4FUpT2m4uFx4891W87pcQMA6RusGHFzA+9bhMGHSneyKFkXhlASHJVwasAnptpJlQEOS
-         wdLzpT7x03tRSWmifkJq6Lzba1lNPTpKgPCV4c68eT8UFcPQb0AEMzIcczzGtz0KMZk2
-         Wtpw==
-X-Gm-Message-State: AAQBX9fj+BRzu3V88LCEAHyBgxQa6VMLk/eSOcScJakSXgjJnw80hvMn
-        RjqeRj1k629+pbJPEyMnOg==
-X-Google-Smtp-Source: AKy350ZZ7BG/vNzA7V0xxF/wFLGRBOLHnE+ociOtzhxPFF1JrYNXX4h2mrA1aYYKqBLL6ePOmatUBA==
-X-Received: by 2002:a05:6808:3a99:b0:378:9c1:514e with SMTP id fb25-20020a0568083a9900b0037809c1514emr1312221oib.42.1680628194745;
-        Tue, 04 Apr 2023 10:09:54 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o184-20020acabec1000000b003646062e83bsm5388522oif.29.2023.04.04.10.09.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 10:09:54 -0700 (PDT)
-Received: (nullmailer pid 133735 invoked by uid 1000);
-        Tue, 04 Apr 2023 17:09:52 -0000
-Date:   Tue, 4 Apr 2023 12:09:52 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Julius Werner <jwerner@chromium.org>,
-        Evan Benn <evanbenn@chromium.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH] dt-bindings: watchdog: Drop unneeded quotes
-Message-ID: <20230404170952.GF49361-robh@kernel.org>
-References: <20230317233643.3969019-1-robh@kernel.org>
+        Tue, 4 Apr 2023 15:01:17 -0400
+X-Greylist: delayed 357 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Apr 2023 12:01:14 PDT
+Received: from mwp-bld-mts-001c1.ocn.ad.jp (mwp-bld-mts-001c1.ocn.ad.jp [153.128.188.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE51170F
+        for <linux-watchdog@vger.kernel.org>; Tue,  4 Apr 2023 12:01:14 -0700 (PDT)
+Received: from cmn-spm-mts-004c1.ocn.ad.jp (cmn-spm-mts-004c1.ocn.ad.jp [153.153.67.139])
+        by mwp-bld-mts-001c1.ocn.ad.jp (Postfix) with ESMTP id C37845400464D;
+        Wed,  5 Apr 2023 03:55:14 +0900 (JST)
+Received: from mgw-vc-mts-006c1.ocn.ad.jp ([153.138.238.213])
+        by cmn-spm-mts-004c1.ocn.ad.jp with ESMTP
+        id jloIprvU77oTtjloIpVf1F; Wed, 05 Apr 2023 03:55:14 +0900
+X-BIZ-RELAY: yes
+Received: from mwp-sdgw-mts-006c1.ocn.ad.jp ([122.28.88.73])
+        by mgw-vc-mts-006c1.ocn.ad.jp with ESMTP
+        id jloIpWmeixiOUjloIpSMrh; Wed, 05 Apr 2023 03:55:14 +0900
+Received: from c154sdl0.mwprem.net (c154sdl0.mwprem.net [122.17.174.240])
+        by mwp-sdgw-mts-006c1.ocn.ad.jp (Postfix) with SMTP id 34DBE8000414;
+        Wed,  5 Apr 2023 03:55:14 +0900 (JST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230317233643.3969019-1-robh@kernel.org>
-X-Spam-Status: No, score=0.7 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Sch=C3=B6nen_Tag?=
+To:     Recipients <takata@otw.co.jp>
+From:   takata@otw.co.jp
+Date:   Tue, 04 Apr 2023 11:54:57 -0700
+Reply-To: manuelfranco000012@gmail.com
+Message-Id: <20230404185507.82E784038DC0@c154sdl0.mwprem.net>
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
+        REPTO_419_FRAUD_GM_LOOSE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [manuelfranco000012[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.0 REPTO_419_FRAUD_GM_LOOSE Ends-in-digits Reply-To is similar to
+        *      known advance fee fraud collector mailbox
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  2.5 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  1.5 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 06:36:42PM -0500, Rob Herring wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml   | 2 +-
->  Documentation/devicetree/bindings/watchdog/apple,wdt.yaml       | 2 +-
->  Documentation/devicetree/bindings/watchdog/arm-smc-wdt.yaml     | 2 +-
->  .../devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml         | 2 +-
->  .../devicetree/bindings/watchdog/brcm,bcm7038-wdt.yaml          | 2 +-
->  .../devicetree/bindings/watchdog/faraday,ftwdt010.yaml          | 2 +-
->  Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml | 2 +-
->  Documentation/devicetree/bindings/watchdog/maxim,max63xx.yaml   | 2 +-
->  Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml     | 2 +-
->  Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml     | 2 +-
->  .../devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml    | 2 +-
->  Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml   | 2 +-
->  Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml      | 2 +-
->  13 files changed, 13 insertions(+), 13 deletions(-)
+GUTER TAG
 
-Applied, thanks.
+
+Mein Name ist Manuel Franco Jr. Ich habe eine Spende von 4, Millionen Euro für Sie. Ich bin derzeit an Krebs erkrankt. Ich habe eine Lotterie von 344,6  Millionen Dollar gewonnen und mein Leben hat sich verändert. Um diese Spende zu erhalten, antworten Sie bitte:
+
+
+(manuelfranco000012@gmail.com)
