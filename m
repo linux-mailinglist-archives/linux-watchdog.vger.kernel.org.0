@@ -2,119 +2,115 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E446D50B2
-	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Apr 2023 20:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D371B6D5556
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Apr 2023 02:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233242AbjDCSfm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 3 Apr 2023 14:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+        id S229446AbjDDAEN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 3 Apr 2023 20:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233240AbjDCSfl (ORCPT
+        with ESMTP id S229757AbjDDAEM (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 3 Apr 2023 14:35:41 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E4240F2
-        for <linux-watchdog@vger.kernel.org>; Mon,  3 Apr 2023 11:35:09 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id eg48so120979572edb.13
-        for <linux-watchdog@vger.kernel.org>; Mon, 03 Apr 2023 11:35:09 -0700 (PDT)
+        Mon, 3 Apr 2023 20:04:12 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FF03ABC
+        for <linux-watchdog@vger.kernel.org>; Mon,  3 Apr 2023 17:04:09 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so32257675pjb.0
+        for <linux-watchdog@vger.kernel.org>; Mon, 03 Apr 2023 17:04:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680546905;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ueGbaW2O+Qwz3FkYgXkwgtIxdt5rpvOVab1WmVRUhSY=;
-        b=LUhiSNSR1HYwkvfRr64wDu/aXbdSfatLXVuH0q5ognTmyktUbLzd6mRBhDOciDRefm
-         8EAJZ4JcaI020aGXQRQUC05yN/d4SHCCTowEMoxS21hnCH96GomWI8PNHQme5fDt+Py4
-         jI7V50GLVlCYGR3QJ8cDSFQZ5eqgPZD4K3Ym2g6npRGyIyhZGWLX3IBPWDypLktIH9rE
-         jRKBVd9tC8YcTFvy1mbHK25CSKU/kKL93qdD9EnjAn+mwH7kWD/8E0KLs55JqOds+h1r
-         sPpY9/rya2DtOV5Dz6pZTh6dwvMzUYxncbE5EzRq48VS28+Q/rcCxn70n9sWvuT5+K4D
-         yTYQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680566649;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ISmF8nvjx0ybm2sJtfCgvvFezmys6zwifQtFbY4uoY8=;
+        b=MwdHJ64U4y9L9kZbHHfLVw/Yd20B0fWkelqUdVZKhghqkkLvcPVf5B/6AWkmBB4Iix
+         +6tiPsqWaXqSXSn8S84GPwhqvDiSgDDTDKeDa2hvLDLi4j/+CCABcLPq8xaRpG0Pt/iR
+         m3n/ZBnrLEegJD9Zp4IhyYwIdwet6dag19biR/jtwRQx3RjBfYuWQG3kN4WLeo20GAGh
+         s//j38Y0q8steIx9r+nGeDisdVHWCpXQnX2VxW9sXQnriP1zNanKE+3pzzt6D7jTcNcU
+         P+OKQEdq0B2mVWPvnZQ8CFsCe6JC6fhVy+6K1pAUcoLK6Sje4zLwkgVCCeqAr9kEdmp3
+         SwoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680546905;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ueGbaW2O+Qwz3FkYgXkwgtIxdt5rpvOVab1WmVRUhSY=;
-        b=U8pbyYZNLljxjE/akP5WM1CobKDBMNQRUyYwB+J2Ib3IhfAfc0z/kodV+ZT2rRpBIV
-         ukPAHvgFcR8bvSd8VnxfKeD8J5oPYuilnwU8Y8LAvhOpyRBXMQ/d/Prw2DbwNyMpzaPb
-         Ek5YkZoUzvJYL/2tJtl34ZgPeXgoobhQACQmg0n7s5YuCyL4SAlOV4Xb4brFArL+f3NE
-         8P944wKvwWaJuxyjt/qeEQ/hZWvNm3EMRNQGhPUL7DdTHGO3iJBOISzFf+UF3offXHqT
-         /3I+fMrsl/rIdXMXnT+WdtlR/zsGP9HYRzuHTkATX66g0B64j9SkUIUH9Dzo9WmdN18r
-         r3XA==
-X-Gm-Message-State: AAQBX9cTtqYJN4x3tWUtzC0F2tLfrdoxrDYwwab+ya1L0oAxN1nJxBTC
-        BFS3wa38Kl7+n1EOxgmftiU/iUsxqWy/68DJpCE=
-X-Google-Smtp-Source: AKy350YibgRgb9sIiYtrSA3BqsPmJ+XsScK2P+gSvuEkworRBgH+4OIRqNiq20c5bctw0bWeBIuncg==
-X-Received: by 2002:a17:906:ecf4:b0:930:2e1c:97ba with SMTP id qt20-20020a170906ecf400b009302e1c97bamr37859577ejb.5.1680546904762;
-        Mon, 03 Apr 2023 11:35:04 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ae90:d80:1069:4805? ([2a02:810d:15c0:828:ae90:d80:1069:4805])
-        by smtp.gmail.com with ESMTPSA id xh12-20020a170906da8c00b00947ccb6150bsm4164275ejb.102.2023.04.03.11.35.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 11:35:04 -0700 (PDT)
-Message-ID: <a785c232-a3c0-dea2-fc60-f8394c0db95f@linaro.org>
-Date:   Mon, 3 Apr 2023 20:35:03 +0200
+        d=1e100.net; s=20210112; t=1680566649;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ISmF8nvjx0ybm2sJtfCgvvFezmys6zwifQtFbY4uoY8=;
+        b=4efmOl7uE1xryYsRBdXR/72Ff3h8VGylQQRcAUri6scO21jW6otMqGJoqPhY0MeHdO
+         8Mc85RsGh0Sxt+fuR6tWmUeUy+MbeYc94j81ln6WFTTJ5uO9cq7vvRVift7Rk6LUKiSF
+         eU/L91wRjJnjjgERtoMI+bNQ2I4xApwbSRWQqP2jcMmcnEJCvrlDOFZwRc7bGos89pBo
+         2BmYWboD0zn41Xco4m/05ScKMNVHT7d0tWzlG7B60HhJZKOJCyR8GnBA9jIBW+m6Obkz
+         lYLakX1ry6nmT2TnutK6gk1RwSECN9nZGwz0kiM07jlSYK3jQ92PS5dXvZyqtsb4P9IX
+         CVeA==
+X-Gm-Message-State: AAQBX9cSPUoTDCs44Lkq0oQ3E9RZfoK+sx2mkXFaRG/p69X1DYoXr1Or
+        OR10n34Q7U7e0YyOMnaD7gCx+A==
+X-Google-Smtp-Source: AKy350ZCXF7QNH2FUbpLyZBKB7LqVlEd3NIT2fIvf/7ilkhxZ2ZkkRksxI97+pH7cPZRyzcqEjxgZA==
+X-Received: by 2002:a05:6a20:ba9c:b0:de:807e:620e with SMTP id fb28-20020a056a20ba9c00b000de807e620emr343481pzb.58.1680566649333;
+        Mon, 03 Apr 2023 17:04:09 -0700 (PDT)
+Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
+        by smtp.gmail.com with ESMTPSA id b24-20020a630c18000000b005023496e339sm6318991pgl.63.2023.04.03.17.04.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 17:04:08 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Bernhard =?utf-8?Q?Rosenkr=C3=A4n?= =?utf-8?Q?zer?= 
+        <bero@baylibre.com>, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v4 00/11] Improve the MT8365 SoC and EVK board support
+In-Reply-To: <CAFGrd9rKy9a4bUf1dkUtTogtWPFr5eu3jcsdaixi3hs_dWMwrg@mail.gmail.com>
+References: <20230203-evk-board-support-v4-0-5cffe66a38c0@baylibre.com>
+ <7hy1ncydtc.fsf@baylibre.com>
+ <CAFGrd9rKy9a4bUf1dkUtTogtWPFr5eu3jcsdaixi3hs_dWMwrg@mail.gmail.com>
+Date:   Mon, 03 Apr 2023 17:04:08 -0700
+Message-ID: <7h4jpwy0lj.fsf@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH V3 1/4] MAINTAINERS: Add fragment for Xilinx watchdog
- driver
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Srinivas Neeli <srinivas.neeli@amd.com>,
-        shubhrajyoti.datta@amd.com, michal.simek@amd.com,
-        srinivas.goud@amd.com, wim@linux-watchdog.org, linux@roeck-us.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        git@amd.com, git@xilinx.com, neelisrinivas18@gmail.com
-References: <20230331074117.356339-1-srinivas.neeli@amd.com>
- <20230331074117.356339-2-srinivas.neeli@amd.com>
- <d9aade73-1bce-c2a3-f9da-883a5388527f@linaro.org>
-In-Reply-To: <d9aade73-1bce-c2a3-f9da-883a5388527f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 03/04/2023 20:30, Krzysztof Kozlowski wrote:
-> On 31/03/2023 09:41, Srinivas Neeli wrote:
->> Added entry for Xilinx xps-timebase watchdog driver.
->>
->> Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
->> ---
->> Changes in V3:
->> -None
->> ---
->>  MAINTAINERS | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index d8287eb2ab4a..4ed139d56913 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -23071,6 +23071,14 @@ F:	Documentation/devicetree/bindings/media/xilinx/
->>  F:	drivers/media/platform/xilinx/
->>  F:	include/uapi/linux/xilinx-v4l2-controls.h
->>  
->> +XILINX WATCHDOG DRIVER
->> +M:	Srinivas Neeli <srinivas.neeli@amd.com>
->> +R:	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
->> +R:	Michal Simek <michal.simek@amd.com>
->> +S:	Maintained
->> +F:	Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
->> +F:	drivers/watchdog/of_xilinx_wdt.c
-> 
-> Your patchset is not bisectable. These files do not exist.
+Alexandre Mergnat <amergnat@baylibre.com> writes:
 
-Ah, I was too fast in judging this. It seems you document existing
-driver, although nothing in commit msg suggests it.
+> You forgot to apply the patches merged by Matthias:
 
-Best regards,
-Krzysztof
+Because they weren't listed as dependencies. :)
 
+Kevin
+
+> Changes in v4:
+> - Remove v3 applied patch from the serie:
+>   - arm64: dts: mediatek: add ethernet support for mt8365 SoC
+>   - arm64: dts: mediatek: add mmc support for mt8365 SoC
+>   - arm64: dts: mediatek: add mt6357 device-tree
+>   - arm64: dts: mediatek: add pwrap support to mt8365 SoC
+>   - arm64: dts: mediatek: Increase the size BL31 reserved memory
+>
+> ...
+>
+> Changes in v3:
+> - Remove v2 applied patch from the serie:
+>   - dt-bindings: mmc: mediatek,mtk-sd: add mt8365
+>
+> Regards,
+> Alex
