@@ -2,65 +2,67 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836376D581E
-	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Apr 2023 07:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3273C6D5826
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Apr 2023 07:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbjDDFo5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 4 Apr 2023 01:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36436 "EHLO
+        id S233386AbjDDFrN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 4 Apr 2023 01:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjDDFoz (ORCPT
+        with ESMTP id S233392AbjDDFrE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 4 Apr 2023 01:44:55 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F23910E7;
-        Mon,  3 Apr 2023 22:44:54 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id u10so30264329plz.7;
-        Mon, 03 Apr 2023 22:44:54 -0700 (PDT)
+        Tue, 4 Apr 2023 01:47:04 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4754C2114;
+        Mon,  3 Apr 2023 22:46:54 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id x15so29444405pjk.2;
+        Mon, 03 Apr 2023 22:46:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680587094;
+        d=gmail.com; s=20210112; t=1680587213;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=d+F0dZyiKU33/0WvR2UeV+9/wtxwNMTO8WsL5WoTX7o=;
-        b=RsEywNBljP5SQTDWGasJGwoCh7g81TmHS4a6UJOXairEHdx6g/wWQu8IJI5dgNaz6s
-         vyYQfzfaDZHioGpHf2VYGhaYQo5aLxQog4LV7OlkNZEFRvJtRxXcaKJleRtgzelZZ24B
-         NZDQWadzXkBzUrYXmRvKeWZjXU7RM36XWwddaICO4jaHyPc0AN6jn9Gnp4VuEL4xcvhf
-         UsGDwc5rresJ9Cy1l1wi/tF9rFEndtXYuKEGZmazFQULHPvc7zMCnNsHg12G14FK9GDb
-         gMITVEDucn9egBYp7N5FjQCTr4ZVIyyzkbx19mIDI4DhMf+8JJdf6xRvsFhUXNrGJypW
-         +hag==
+        bh=W+/0LPIj3HM2hNCFq+jgpW1KVyITP1DwvC67zTe2p2w=;
+        b=FApummjK53fz6CzEbSo4UuyG/zoVv6TAWrxUk0DM81aCtq/nx3BqUNMwBnHYnoVYaw
+         HCRCuU+b348mIWIGJ/9/8b4MmoBjO4Q/NWE0e+dEzJD3EZMMD8WyAOSuk88Mx79bGja6
+         gBEKf3rbUxOV5nwv0I3lqL/xCoYwfz4PeDT/LtPZwxQq0I/e73cJVvitDMm3LVCBimTR
+         t3PdR70B/7XyEczC3I7xLj0Hzq75xaN/L5R6580D0bXNh+0PhxQLgnFN01t5fS7gDPxz
+         PcFgOz3TLwac2mDCFYgDwWKFormcCIkkv3ngBNJ2B/lPp61Vw2UOQRZlbkbuCtzb//18
+         7rVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680587094;
+        d=1e100.net; s=20210112; t=1680587213;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=d+F0dZyiKU33/0WvR2UeV+9/wtxwNMTO8WsL5WoTX7o=;
-        b=7nnFJXSM8CHe1BcFGQl2wPkNbHnK6STP+k5WpVyhP5JBZMi/Pv4b7KOaYGMc3Bsazl
-         SiCa13CT6mALqecKRFIHeSKVafCjljhUqe5iEJeKJaGbF3r3j84VR/geNvWcPVIV8Wvd
-         YMS+3auUWw1HrgY+LmSMNBkoegDRzrhBV6dBKmeuY4ijR0T4TBwHPZ6117798Gkr/xLW
-         IPpfmubEBsHgy8uQ9dExR78gV8QJ1v48T/Zz9fGFsHEmNp8uztgmEs/yau7wbBQ/ni+Q
-         dQoUpMwow057kb5XJzB52VWZ6RKd9WzFMkaa34KksIM0SFYvoT2gnII3O+QYrdb/3vsb
-         9/0g==
-X-Gm-Message-State: AAQBX9f0svOYntSIHcAAasN+1XNfnoyPc/Hs+zv3JkFq5GM5AKENnvTj
-        7L4flPjflNS8BZNiejGBJ80=
-X-Google-Smtp-Source: AKy350YtPKdZBGjXSSDeuONJcN7dsaU2ZhZuFQDhwWcrAsPRJlTUwTagqO1GZWQoSzXgapGVf6ujxw==
-X-Received: by 2002:a05:6a20:b806:b0:d9:9d04:2c73 with SMTP id fi6-20020a056a20b80600b000d99d042c73mr857102pzb.45.1680587093639;
-        Mon, 03 Apr 2023 22:44:53 -0700 (PDT)
+        bh=W+/0LPIj3HM2hNCFq+jgpW1KVyITP1DwvC67zTe2p2w=;
+        b=P3S3I6I1Pt5r027sbj+QpP0dtgl64j9oiHglDsuSlbsRgiuw7TrWNAG1rsaxGCda8D
+         gUkfzNvk7w1tKyn+9kycGWV9vUachTAcsFD2orTwmsQCpKwtQB+W+CqWLB9lLWXS1B27
+         Iz0SB434Df+2hGqi5gpRkZmRmkDwsEg4RWjvefZ2enQzZ3p6P/K524ykDKK6yVTAk1U8
+         3QdkhCgKXXP/iUunfh/WvKfawE69kgzdAWUdAbI5j/Re5EzuPkzZo0ualFZjA9Gck5no
+         GrJAB2rcEbmrdVUCDXpMnQkg6SSgge++Y0TMCsVk9/WriTeDSpgz+AMLk2AyiE5S2XiC
+         e0aw==
+X-Gm-Message-State: AAQBX9fANkh1Plj0OPlo38SgXsxjvsxpxN+eAZwzDC4xcIeGOQ8p9fqL
+        fCk2HMiSZwdLd9s4Gpesncw=
+X-Google-Smtp-Source: AKy350YECH2zBFNTc5RSj05HDIG6b1IsIC/IFCZ19pm+vgoIH37k+pOfeALbNo8FYRiO3BKn3hW6/A==
+X-Received: by 2002:a17:90b:1a86:b0:23f:7c82:2463 with SMTP id ng6-20020a17090b1a8600b0023f7c822463mr1802247pjb.9.1680587213662;
+        Mon, 03 Apr 2023 22:46:53 -0700 (PDT)
 Received: from otabekn-virtual-machine.localdomain ([211.169.38.26])
-        by smtp.gmail.com with ESMTPSA id s21-20020a056a00195500b0062dbafced27sm7802624pfk.27.2023.04.03.22.44.51
+        by smtp.gmail.com with ESMTPSA id u3-20020a17090abb0300b0023371cb020csm10600524pjr.34.2023.04.03.22.46.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Apr 2023 22:44:53 -0700 (PDT)
+        Mon, 03 Apr 2023 22:46:53 -0700 (PDT)
 From:   Otabek Nazrullaev <otabeknazrullaev1998@gmail.com>
 Cc:     Otabek Nazrullaev <otabeknazrullaev1998@gmail.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] watchdog: dt-bindings: armada-37xx-wdt: convert text binding
-Date:   Tue,  4 Apr 2023 14:44:08 +0900
-Message-Id: <20230404054449.5665-1-otabeknazrullaev1998@gmail.com>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] watchdog: dt-bindings: atmel-at91rm9200-wdt convert to json-schema
+Date:   Tue,  4 Apr 2023 14:46:40 +0900
+Message-Id: <20230404054642.5691-1-otabeknazrullaev1998@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,104 +77,65 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Convert Armada 37xx watchdog timer controller to YAML format
+Convert atmel AT91RM9200 system timer watchdog from text bindings
+to YAML format
 
 Signed-off-by: Otabek Nazrullaev <otabeknazrullaev1998@gmail.com>
 ---
- .../bindings/watchdog/armada-37xx-wdt.txt     | 23 --------
- .../bindings/watchdog/armada-37xx-wdt.yaml    | 54 +++++++++++++++++++
- 2 files changed, 54 insertions(+), 23 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.yaml
+ .../watchdog/atmel-at91rm9200-wdt.txt         |  9 ------
+ .../watchdog/atmel-at91rm9200-wdt.yaml        | 28 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.yaml
 
-diff --git a/Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.txt b/Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.txt
+diff --git a/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt b/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
 deleted file mode 100644
-index a8d00c31a1d8..000000000000
---- a/Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.txt
+index d4d86cf8f9eb..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
 +++ /dev/null
-@@ -1,23 +0,0 @@
--* Armada 37xx CPU Watchdog Timer Controller
+@@ -1,9 +0,0 @@
+-Atmel AT91RM9200 System Timer Watchdog
 -
 -Required properties:
--- compatible : must be "marvell,armada-3700-wdt"
--- reg : base physical address of the controller and length of memory mapped
--	region.
--- clocks : the clock feeding the watchdog timer. See clock-bindings.txt
--- marvell,system-controller : reference to syscon node for the CPU Miscellaneous
--	Registers
+-- compatible: must be "atmel,at91sam9260-wdt".
 -
 -Example:
--
--	cpu_misc: system-controller@d000 {
--		compatible = "marvell,armada-3700-cpu-misc", "syscon";
--		reg = <0xd000 0x1000>;
+-	watchdog@fffffd00 {
+-		compatible = "atmel,at91rm9200-wdt";
 -	};
--
--	wdt: watchdog@8300 {
--		compatible = "marvell,armada-3700-wdt";
--		reg = <0x8300 0x40>;
--		marvell,system-controller = <&cpu_misc>;
--		clocks = <&xtalclk>;
--	};
-diff --git a/Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.yaml b/Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.yaml
+diff --git a/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.yaml b/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.yaml
 new file mode 100644
-index 000000000000..e9bdae720bed
+index 000000000000..e9e14fabe0fb
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.yaml
-@@ -0,0 +1,54 @@
++++ b/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.yaml
+@@ -0,0 +1,28 @@
 +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: "http://devicetree.org/schemas/watchdog/armada-37xx-wdt.yaml#"
++$id: "http://devicetree.org/schemas/watchdog/atmel-at91rm9200-wdt.yaml#"
 +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
 +maintainers:
 +  - Otabek Nazrullaev <otabeknazrullaev1998@gmail.com>
 +
-+title: Armada 37xx CPU Watchdog Timer Controller
++title: Atmel AT91RM9200 System Timer Watchdog
 +
 +allOf:
 +  - $ref: "watchdog.yaml#"
 +
 +properties:
 +  compatible:
-+    const: marvell,armada-3700-wdt
-+
-+  reg:
-+    maxItems: 1
-+    description: |
-+      base physical address of the controller and length of memory mapped
-+      region.
-+
-+  clocks:
-+    maxItems: 1
-+    description: the clock feeding the watchdog timer.
-+
-+  marvell,system-controller:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: |
-+      reference to syscon node for the CPU Miscellaneous Registers
++    const: atmel,at91sam9260-wdt
 +
 +required:
 +  - compatible
-+  - reg
-+  - clocks
-+  - marvell,system-controller
 +
-+additionalProperties: false
++unevaluatedProperties: false
 +
 +examples:
 +  - |
-+    cpu_misc: system-controller@d000 {
-+      compatible = "marvell,armada-3700-cpu-misc", "syscon";
-+      reg = <0xd000 0x1000>;
-+    };
-+
-+    watchdog@8300 {
-+      compatible = "marvell,armada-3700-wdt";
-+      reg = <0x8300 0x40>;
-+      marvell,system-controller = <&cpu_misc>;
-+      clocks = <&xtalclk>;
++    watchdog@fffffd00 {
++      compatible = "atmel,at91rm9200-wdt";
 +    };
 -- 
 2.34.1
