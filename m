@@ -2,107 +2,118 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679616D60E9
-	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Apr 2023 14:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08AED6D642A
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Apr 2023 15:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234989AbjDDMiF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 4 Apr 2023 08:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
+        id S235496AbjDDN5B (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 4 Apr 2023 09:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234923AbjDDMiA (ORCPT
+        with ESMTP id S235482AbjDDN4e (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 4 Apr 2023 08:38:00 -0400
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BCA840D7;
-        Tue,  4 Apr 2023 05:37:36 -0700 (PDT)
-Received: by mail-ot1-f54.google.com with SMTP id w15-20020a056830410f00b006a386a0568dso1960586ott.4;
-        Tue, 04 Apr 2023 05:37:36 -0700 (PDT)
+        Tue, 4 Apr 2023 09:56:34 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3679159C1
+        for <linux-watchdog@vger.kernel.org>; Tue,  4 Apr 2023 06:55:41 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-545e907790fso499116437b3.3
+        for <linux-watchdog@vger.kernel.org>; Tue, 04 Apr 2023 06:55:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1680616537;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wHkwTuEK0sRBaJKLMcnB+ss8uWVVS2sTLaR7SSh4ZeE=;
+        b=Qq5kv5hhcFuFy0PJtvFX4bmOosaBrR84kqX5KLBFFzUEc6HYu6DcRmucycm+pwLw4z
+         c1uAzgS+6IfRZYHJk5KJGH6BUXWCXHUvONFdF36/iOgG9fJm+Or6v5c3zg4rspaHH3g3
+         HiltUNh0Van26IVMA9fB0iQ/2JU4EmqjOAKnh9wB4GYotEL+CBZNtjApM3/Mvn7TE8jd
+         7annxlm42iGSeOwxHaUKhpp00xjGstfzsDYvTrigHwC9433728mLS/XLnCAvVdN12kQr
+         08QyncQY1xCydyx4nySCZClEtVlnx7zpGvVuhHi5DCP1Pb+uzJy0FxU1zuboEdb75qqE
+         HUcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680611794;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zjG68dibK9/cWxjvku/lAc6j3Rz6IJnfcIxgAADMEtA=;
-        b=HSwTdP9vZGFBn85pt0qo11fS6+xcXhsGdl9FSatpcLkzmlTg/b6Nafy+KAs6TqqHB9
-         v8V2k7NOCYOPKitCvhgBjjI3X59AmmVNR4r+Nw3N9ivinBu4DmazSY570nengCY6R3zj
-         gXVAUZa5Iw9nZkzKY7uD+VQKlZg0Wgys5Kw2yHQlLzQ2bQcMqD64rlD58P+1YRnMHGUs
-         LpP8aG/YShurJcUsITc51hNIKaWniRlHit0/mcbzjO8111qb/Udc9gYmsm1+UiP8xnKh
-         Kx6E4nLII61k2jE7RyGmzBbTPlHQSW+cOdttkowG2mG3zsZEnwot9w/ihxEK4AVfEcuT
-         RLPg==
-X-Gm-Message-State: AAQBX9cfC5k6P8D1KypLKpedBCZOHOfQ/UKGnXK+jQQ2vgoa3SaTJVnj
-        geU9sVBmUTayqGe8yELmVNs3Y0vf3w==
-X-Google-Smtp-Source: AKy350Y/UGYizDkd9w8AuBHG7Ho7zL2RA+5L2HIPoQs9B4tzgKhk490HQ1Uhx9IoP13r4X7M44oWYQ==
-X-Received: by 2002:a9d:6a93:0:b0:6a1:7d40:f862 with SMTP id l19-20020a9d6a93000000b006a17d40f862mr1108755otq.35.1680611793988;
-        Tue, 04 Apr 2023 05:36:33 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x5-20020a056830114500b006a2fd720f82sm4352384otq.7.2023.04.04.05.36.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 05:36:33 -0700 (PDT)
-Received: (nullmailer pid 3710626 invoked by uid 1000);
-        Tue, 04 Apr 2023 12:36:32 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20210112; t=1680616537;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wHkwTuEK0sRBaJKLMcnB+ss8uWVVS2sTLaR7SSh4ZeE=;
+        b=jUxBYFMOWMhahKNLNadh6jIRUHQ3fIUzUd12JXC8tjoyQ0sXg1j78tgpTHpxbD6y+s
+         PFf3H9tOnhMA8uUI8wUxhFOk6U6RC2yLK6d5NPzpOXrGkvTsb+lLDNYQG3Gwi6aaB2Lo
+         m0rIJ+xrpzgUh++3IwC/Cf9v6R0E4pfsm2r1Kb2hEOWwJwrVG5IaKQqVt1lRhhMuZbP4
+         eczWnZz/t7yjZ2Zu6KdJ8pTpvCA/lbEDDf1LZfkQazmoyExXMlCSOU2xlExn9a1m8Kcj
+         imRMBr+L9DpFGv3HLGLBK8C2irtucxVzhK8lABHpz5zQOOLe9m0Bbs9I11mJo2tcSClp
+         Vv0w==
+X-Gm-Message-State: AAQBX9dtCAmI2E9QqwzM9REk8gvevUwg1v4pjjqwdRxMJdhd3Cr+xBG9
+        RdeeBMQvlQ8FOT516H2tw4bUJmmJtx6sX2S4Xx7UuA==
+X-Google-Smtp-Source: AKy350YrZFFIvslatnz6+JHLJxRXhURuO0Qe/CqTvhzL+6y/s/8tkJIoSvOoisaRTFct5e3xH8itE5OFyL+d4Sx3qSk=
+X-Received: by 2002:a81:e545:0:b0:545:8202:bbcf with SMTP id
+ c5-20020a81e545000000b005458202bbcfmr1485931ywm.9.1680616536968; Tue, 04 Apr
+ 2023 06:55:36 -0700 (PDT)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Otabek Nazrullaev <otabeknazrullaev1998@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230404054449.5665-1-otabeknazrullaev1998@gmail.com>
-References: <20230404054449.5665-1-otabeknazrullaev1998@gmail.com>
-Message-Id: <168061168969.3708419.4281966310027889475.robh@kernel.org>
-Subject: Re: [PATCH] watchdog: dt-bindings: armada-37xx-wdt: convert text
- binding
-Date:   Tue, 04 Apr 2023 07:36:32 -0500
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230203-evk-board-support-v4-0-5cffe66a38c0@baylibre.com> <20230203-evk-board-support-v4-2-5cffe66a38c0@baylibre.com>
+In-Reply-To: <20230203-evk-board-support-v4-2-5cffe66a38c0@baylibre.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 4 Apr 2023 15:55:26 +0200
+Message-ID: <CACRpkdYSpMD-V0QNGwtiKCA4KAedYfmFpvdCHWhjST9uTricTg@mail.gmail.com>
+Subject: Re: [PATCH v4 02/11] dt-bindings: pinctrl: mediatek,mt8365-pinctrl:
+ add drive strength property
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On Fri, Mar 31, 2023 at 7:55=E2=80=AFPM Alexandre Mergnat <amergnat@baylibr=
+e.com> wrote:
 
-On Tue, 04 Apr 2023 14:44:08 +0900, Otabek Nazrullaev wrote:
-> Convert Armada 37xx watchdog timer controller to YAML format
-> 
-> Signed-off-by: Otabek Nazrullaev <otabeknazrullaev1998@gmail.com>
-> ---
->  .../bindings/watchdog/armada-37xx-wdt.txt     | 23 --------
->  .../bindings/watchdog/armada-37xx-wdt.yaml    | 54 +++++++++++++++++++
->  2 files changed, 54 insertions(+), 23 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.yaml
-> 
+> This SoC is able to drive the following output current:
+> - 2 mA
+> - 4 mA
+> - 6 mA
+> - 8 mA
+> - 10 mA
+> - 12 mA
+> - 14 mA
+> - 16 mA
+>
+> Then drive-strength property is set with enum to reflect its HW capabilit=
+y.
+>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+This patch does not apply to my devel branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/lo=
+g/?h=3Ddevel
 
-yamllint warnings/errors:
+Can you please rebase and resend?
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.example.dtb: /example-0/system-controller@d000: failed to match any schema with compatible: ['marvell,armada-3700-cpu-misc', 'syscon']
-
-doc reference errors (make refcheckdocs):
-MAINTAINERS: Documentation/devicetree/bindings/watchdog/armada-37xx-wdt.txt
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230404054449.5665-1-otabeknazrullaev1998@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Yours,
+Linus Walleij
