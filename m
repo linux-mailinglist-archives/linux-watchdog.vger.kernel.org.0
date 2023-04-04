@@ -2,56 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B68756D5841
-	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Apr 2023 07:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3116D5845
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Apr 2023 07:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233491AbjDDFyl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 4 Apr 2023 01:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
+        id S233397AbjDDF4N (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 4 Apr 2023 01:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233470AbjDDFyj (ORCPT
+        with ESMTP id S233290AbjDDF4M (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 4 Apr 2023 01:54:39 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E392713
-        for <linux-watchdog@vger.kernel.org>; Mon,  3 Apr 2023 22:54:37 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id t10so125821626edd.12
-        for <linux-watchdog@vger.kernel.org>; Mon, 03 Apr 2023 22:54:37 -0700 (PDT)
+        Tue, 4 Apr 2023 01:56:12 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE041997
+        for <linux-watchdog@vger.kernel.org>; Mon,  3 Apr 2023 22:56:11 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id t10so125831489edd.12
+        for <linux-watchdog@vger.kernel.org>; Mon, 03 Apr 2023 22:56:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680587676;
+        d=linaro.org; s=google; t=1680587769;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=JYftsXhC1HlJf5hn91ov8niN90wVvfkqT+woZX4vRJQ=;
-        b=YjTqz+FV29I4cIj4K64Ymc/XuFW02eB4EfUcOAB+zEYBBqCz8YuHSlp67Sw4ltyXoG
-         uEmNdMZYF9zZaygT+i02TZ8LcSn6w348Mxz/f5VczdwbL3TXS02Rv7P4opqAL/naLB82
-         Nruo/TC0fKWG0/iUsF52Z/6sHzSe49P4NQZIaMMoVFUHLaAopAjrV+1A4W2PQWpHmE70
-         sHDue9wSkiMtfMGJA/ZCXj6uHj34SnGkXLpnbV2A4ZMsdfSttKHu4kGBxhDghnDCfvPb
-         E+XATqbbP2gj6m6byh4m2tPRtr/DEygysugpyAUaJAioC+xZ1Y5aBcs541yTPd7JEF5N
-         XIMw==
+        bh=CUSbmYm7Thlr3qErxfg3DCYXeLDBbkSf11BtgUpbVOM=;
+        b=LNJXNHOPy4HsV+T7i9vasHRj8Fv5vXgaaP1UpTVCNWDx/hrJYwWD6Zs96kauiMVsu2
+         Re5oNhazexcjC1tiS3YAuon8Hux3eDfEAaYPCTjAd00UkZRE7d4MBD+b07B4L38BwuWR
+         acUr1N1Ut+sl1w0Mrk4jx5R8UQn520Jp5/YeLCKpsxs3b4EwvKmbffXnV567hJbkmQJ2
+         89D2vvssyizB2l6UtYLFAo2PuVu72jF5CSYdRpWr5DzpvDT8KvpmzTNOhrRykeXonkZr
+         gALm1+9yKWw+UY1Drb0hub3X2NVjWE8wCXy5DwMr4xrRagdJVPBE7WQzTn1JFImj3I5a
+         3S4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680587676;
+        d=1e100.net; s=20210112; t=1680587769;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JYftsXhC1HlJf5hn91ov8niN90wVvfkqT+woZX4vRJQ=;
-        b=SpcTvAzmxynwWwDfvSr3JXVPS+5VMXJd3tR+VJALmzFgwtkugc6sDDhwbOX4YqBYgQ
-         BDi8hayHpq+kGzvRgtBcLo6tI6bdFkFISI8f2WOxitWDlTghN+Rk4axN48E4mXoFT/zM
-         NZ2yRKjUsO1Mp+4+0ojA+ozbTLqjKSUIzzyVMvQfEJLxPnctH8Nhe10ZtEHphfFvxsMP
-         hlyv5FMQ5iEyhZ83Zq0nB5JBipi1IIMCEHQdVWAZ0Mw2MBpxK+ZBpb0f1HRXREb2ASeG
-         WfX69ck6muWoa1+aknoPQn8upCOKWgv23febrcI+FibIzV1n1fhliCEMQp8gs9rjo5Lh
-         cL0w==
-X-Gm-Message-State: AAQBX9eq9Wk1leJJ3PyjSJjUyDdf2Bhh3928NuwskZ9cvNHyLKW4v4Pc
-        lwBZoj9C0dEuGAPlnIlKG8P3MA==
-X-Google-Smtp-Source: AKy350aojCzjyRrbaIydSiYdeKAJkJwokjgct9kDO5bQ4DhN3A6YUlRJlb26IFTmEAmcKqA+q7Xppw==
-X-Received: by 2002:a17:907:7752:b0:948:aae5:e3bd with SMTP id kx18-20020a170907775200b00948aae5e3bdmr1121770ejc.41.1680587676290;
-        Mon, 03 Apr 2023 22:54:36 -0700 (PDT)
+        bh=CUSbmYm7Thlr3qErxfg3DCYXeLDBbkSf11BtgUpbVOM=;
+        b=O5VixmD9EospWku4Ivx3zcRbBDVU7x5ryVKt3f9NibYyFPZbq8X4EXhdrg3/PMYvSZ
+         7vFqe0g07dHF7kAODM4sQpoow+OKkuJtLufw7ar0cCdFOxBEGeahGG+efa7g/UpEdh3S
+         Ni2lA6nmtazMZnje1yYJwNOw9JAEGjH2E36Rw7aH5+uYZT6LUGUlOp/TvO0EpqncOpDn
+         oo8cuhUSO1y5ZHLddemRJ8LMFnTo4QBZ5Pp5IpXsguq3eaqcmjZF8Bsfgp8jG/HYULsn
+         IcsbdX0y5B8RYjAeQC9abD5iF+l/iR1nfEhqXfOf2jqw3MWBzOoqueNQu/2Hqb5eCZyU
+         AzQA==
+X-Gm-Message-State: AAQBX9cyqYFbUbsX3GsP5q1GY/6ocKVPQfjdwFjFszBQfKsz5lRJBOxK
+        OH/ma53KoCtE482GpwpQrr3dTw==
+X-Google-Smtp-Source: AKy350arsykze/fNQjW+jfzLcLr0fVb7LmmgY683Vvilgy+sGdx4O98hikKaI1+dtBJT8xJLxeuoOQ==
+X-Received: by 2002:a17:906:b741:b0:932:cfbc:7613 with SMTP id fx1-20020a170906b74100b00932cfbc7613mr938443ejb.24.1680587769597;
+        Mon, 03 Apr 2023 22:56:09 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:233a:5c18:b527:381e? ([2a02:810d:15c0:828:233a:5c18:b527:381e])
-        by smtp.gmail.com with ESMTPSA id d20-20020a170906c21400b00947792df079sm5426899ejz.115.2023.04.03.22.54.35
+        by smtp.gmail.com with ESMTPSA id y20-20020a170906519400b00930569e6910sm5560139ejk.16.2023.04.03.22.56.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 22:54:36 -0700 (PDT)
-Message-ID: <3ac02bdb-8a1d-d72e-c9c9-1526e1fdd81b@linaro.org>
-Date:   Tue, 4 Apr 2023 07:54:35 +0200
+        Mon, 03 Apr 2023 22:56:09 -0700 (PDT)
+Message-ID: <d36da931-28e4-8793-2f0a-8044b59ad236@linaro.org>
+Date:   Tue, 4 Apr 2023 07:56:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
@@ -86,23 +86,17 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 On 04/04/2023 07:46, Otabek Nazrullaev wrote:
 > Convert atmel AT91RM9200 system timer watchdog from text bindings
 > to YAML format
-> 
 
-Same comments apply as other patch.
-
-Also - subject has missing colon.
 
 ...
 
-> +  compatible:
-> +    const: atmel,at91sam9260-wdt
 > +
-> +required:
-> +  - compatible
-> +
-> +unevaluatedProperties: false
+> +examples:
+> +  - |
+> +    watchdog@fffffd00 {
 
-Why doing it here correctly but in the other patch differently?
+Drop unit address. Test your patches before sending, you should see
+clearly warning.
 
 Best regards,
 Krzysztof
