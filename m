@@ -2,59 +2,53 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AED6D642A
-	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Apr 2023 15:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9E46D6674
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Apr 2023 16:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235496AbjDDN5B (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 4 Apr 2023 09:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
+        id S235505AbjDDO7K (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 4 Apr 2023 10:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235482AbjDDN4e (ORCPT
+        with ESMTP id S235369AbjDDO6y (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 4 Apr 2023 09:56:34 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3679159C1
-        for <linux-watchdog@vger.kernel.org>; Tue,  4 Apr 2023 06:55:41 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-545e907790fso499116437b3.3
-        for <linux-watchdog@vger.kernel.org>; Tue, 04 Apr 2023 06:55:41 -0700 (PDT)
+        Tue, 4 Apr 2023 10:58:54 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB4659CF
+        for <linux-watchdog@vger.kernel.org>; Tue,  4 Apr 2023 07:58:03 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id kq3so31500771plb.13
+        for <linux-watchdog@vger.kernel.org>; Tue, 04 Apr 2023 07:58:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1680616537;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wHkwTuEK0sRBaJKLMcnB+ss8uWVVS2sTLaR7SSh4ZeE=;
-        b=Qq5kv5hhcFuFy0PJtvFX4bmOosaBrR84kqX5KLBFFzUEc6HYu6DcRmucycm+pwLw4z
-         c1uAzgS+6IfRZYHJk5KJGH6BUXWCXHUvONFdF36/iOgG9fJm+Or6v5c3zg4rspaHH3g3
-         HiltUNh0Van26IVMA9fB0iQ/2JU4EmqjOAKnh9wB4GYotEL+CBZNtjApM3/Mvn7TE8jd
-         7annxlm42iGSeOwxHaUKhpp00xjGstfzsDYvTrigHwC9433728mLS/XLnCAvVdN12kQr
-         08QyncQY1xCydyx4nySCZClEtVlnx7zpGvVuhHi5DCP1Pb+uzJy0FxU1zuboEdb75qqE
-         HUcA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680620283;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=H9uYwVcXo7cBUUBOTLZ2J2lrgVJ/xfkFZclj3HBehK8=;
+        b=UAETlx+9wQOEYw9NkD5esQ22zJR9CYzlPJFuuru/zG8A7bcoHUo5CXJ9VMeQYHfVj4
+         a6KAda1lEkoabUz13lUVXFC0HOTYZxNrY28ZtkJwknBw2NpS4RPwtznfSXXUrdnZI0T7
+         QmwkjqpQrUKWOZC3HtGUeObmFnSzFFtkmfJSqhp40MV8d2URnW6nb/8H83pnqsLUpNCo
+         9E4Ebl0P7KOXfKbvh46S7fB2ewb8ceCDSz600lMgQ4Jr1IKVVBcoP4jovOaIi2xfINbo
+         ZiZlIOrHGJNGygni7UnfXlF+ipe0cAdJEAT54EvufshEYUUh8gD6sHYaV/jSusLemeot
+         wXHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680616537;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wHkwTuEK0sRBaJKLMcnB+ss8uWVVS2sTLaR7SSh4ZeE=;
-        b=jUxBYFMOWMhahKNLNadh6jIRUHQ3fIUzUd12JXC8tjoyQ0sXg1j78tgpTHpxbD6y+s
-         PFf3H9tOnhMA8uUI8wUxhFOk6U6RC2yLK6d5NPzpOXrGkvTsb+lLDNYQG3Gwi6aaB2Lo
-         m0rIJ+xrpzgUh++3IwC/Cf9v6R0E4pfsm2r1Kb2hEOWwJwrVG5IaKQqVt1lRhhMuZbP4
-         eczWnZz/t7yjZ2Zu6KdJ8pTpvCA/lbEDDf1LZfkQazmoyExXMlCSOU2xlExn9a1m8Kcj
-         imRMBr+L9DpFGv3HLGLBK8C2irtucxVzhK8lABHpz5zQOOLe9m0Bbs9I11mJo2tcSClp
-         Vv0w==
-X-Gm-Message-State: AAQBX9dtCAmI2E9QqwzM9REk8gvevUwg1v4pjjqwdRxMJdhd3Cr+xBG9
-        RdeeBMQvlQ8FOT516H2tw4bUJmmJtx6sX2S4Xx7UuA==
-X-Google-Smtp-Source: AKy350YrZFFIvslatnz6+JHLJxRXhURuO0Qe/CqTvhzL+6y/s/8tkJIoSvOoisaRTFct5e3xH8itE5OFyL+d4Sx3qSk=
-X-Received: by 2002:a81:e545:0:b0:545:8202:bbcf with SMTP id
- c5-20020a81e545000000b005458202bbcfmr1485931ywm.9.1680616536968; Tue, 04 Apr
- 2023 06:55:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230203-evk-board-support-v4-0-5cffe66a38c0@baylibre.com> <20230203-evk-board-support-v4-2-5cffe66a38c0@baylibre.com>
-In-Reply-To: <20230203-evk-board-support-v4-2-5cffe66a38c0@baylibre.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 4 Apr 2023 15:55:26 +0200
-Message-ID: <CACRpkdYSpMD-V0QNGwtiKCA4KAedYfmFpvdCHWhjST9uTricTg@mail.gmail.com>
-Subject: Re: [PATCH v4 02/11] dt-bindings: pinctrl: mediatek,mt8365-pinctrl:
- add drive strength property
+        d=1e100.net; s=20210112; t=1680620283;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H9uYwVcXo7cBUUBOTLZ2J2lrgVJ/xfkFZclj3HBehK8=;
+        b=FOFwXeT1sg8yOo6bksfe9cEUvr6fFxadW/yG3Cy+Yj0lXaW+Omtblf1AAn12rmVl60
+         QBgs3raBTJHv1m9JVGUESWdakL5UxNMqkcjsf6dZzlumyIMLlhjIOUoCnkFttb1NHywj
+         gqjBbMNWEeBsZ1yogAdxeRSX8uEHpXYtTu7Hd4rzM6kxe+GxLfQtmTWN524PCZkZ2IcW
+         9fDoepjtZGu2Dix6NiMc3PDet3tulmt4Qh9YcATFsvz8w15hCDDWUZMCMqvkzSGMKsSM
+         YwqAtncgWaYSTEF7SAgvVxl081vRhlofN3xaA3gmlCgsAdgCUynBH6iESeF//l5TDobF
+         Frdw==
+X-Gm-Message-State: AAQBX9eynhM7ATLXRCNU3fRIRdERG2UbkQqa3FPNe+ZI4Me7gGaX99EC
+        tUUCzSLjNivHDD47NCXt9lK86w==
+X-Google-Smtp-Source: AKy350YdY2blg+WDMTITRqonrmBC853Tqawrwror3LCdLvv5uZ3X8E8eImt5a/UgDnCMC9oeW3hnfg==
+X-Received: by 2002:a17:902:ec92:b0:1a2:87a2:c91a with SMTP id x18-20020a170902ec9200b001a287a2c91amr3262702plg.34.1680620283196;
+        Tue, 04 Apr 2023 07:58:03 -0700 (PDT)
+Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
+        by smtp.gmail.com with ESMTPSA id k17-20020a170902761100b0019ef86c2574sm8381272pll.270.2023.04.04.07.58.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Apr 2023 07:58:02 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
 To:     Alexandre Mergnat <amergnat@baylibre.com>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -66,54 +60,49 @@ Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Chaotian Jing <chaotian.jing@mediatek.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Bernhard =?utf-8?Q?Rosenkr=C3=A4n?= =?utf-8?Q?zer?= 
+        <bero@baylibre.com>, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
         linux-gpio@vger.kernel.org,
         Alexandre Bailon <abailon@baylibre.com>,
         Fabien Parent <fparent@baylibre.com>,
         Amjad Ouled-Ameur <aouledameur@baylibre.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4 00/11] Improve the MT8365 SoC and EVK board support
+In-Reply-To: <7h1ql0y0j7.fsf@baylibre.com>
+References: <20230203-evk-board-support-v4-0-5cffe66a38c0@baylibre.com>
+ <7hy1ncydtc.fsf@baylibre.com>
+ <CAFGrd9rKy9a4bUf1dkUtTogtWPFr5eu3jcsdaixi3hs_dWMwrg@mail.gmail.com>
+ <CAFGrd9qLzcDJO_Fk_-B6XYuuxQzQoYLXmdp0Qj1Tszr0-sqNgw@mail.gmail.com>
+ <7h1ql0y0j7.fsf@baylibre.com>
+Date:   Tue, 04 Apr 2023 07:58:01 -0700
+Message-ID: <7hy1n7wv7q.fsf@baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 7:55=E2=80=AFPM Alexandre Mergnat <amergnat@baylibr=
-e.com> wrote:
+Kevin Hilman <khilman@baylibre.com> writes:
 
-> This SoC is able to drive the following output current:
-> - 2 mA
-> - 4 mA
-> - 6 mA
-> - 8 mA
-> - 10 mA
-> - 12 mA
-> - 14 mA
-> - 16 mA
+> Alexandre Mergnat <amergnat@baylibre.com> writes:
 >
-> Then drive-strength property is set with enum to reflect its HW capabilit=
-y.
+>> Here a build-able & working branch with dependencies:
+>> https://gitlab.baylibre.com/baylibre/mediatek/bsp/linux/-/commits/amergnat/i350-evk-board-support
 >
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
-ora.com>
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> This branch doesn't compile.
 
-This patch does not apply to my devel branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/lo=
-g/?h=3Ddevel
+I'm wrong, it compiles fine.  I was on the wrong branch.
 
-Can you please rebase and resend?
+Sorry for the noise,
 
-Yours,
-Linus Walleij
+Kevin
