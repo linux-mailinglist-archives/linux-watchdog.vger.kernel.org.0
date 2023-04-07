@@ -2,79 +2,103 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90BD76DACB3
-	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Apr 2023 14:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE6C6DACEC
+	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Apr 2023 15:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232715AbjDGMqz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 7 Apr 2023 08:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
+        id S240651AbjDGM76 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 7 Apr 2023 08:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbjDGMqy (ORCPT
+        with ESMTP id S240214AbjDGM7p (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 7 Apr 2023 08:46:54 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15DBAD02;
-        Fri,  7 Apr 2023 05:46:50 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id r40-20020a05683044a800b006a14270bc7eso18725824otv.6;
-        Fri, 07 Apr 2023 05:46:50 -0700 (PDT)
+        Fri, 7 Apr 2023 08:59:45 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E756A7AB8
+        for <linux-watchdog@vger.kernel.org>; Fri,  7 Apr 2023 05:59:41 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id d17so42227066wrb.11
+        for <linux-watchdog@vger.kernel.org>; Fri, 07 Apr 2023 05:59:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680871610; x=1683463610;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7OOaJWRsqF5f3cp/B9FDAMADpbCuFWKQIWMGzgwGG4I=;
-        b=PnjN0Q3tykVW8UtftVm7wAXYCY0sHkDutOu46Z5WOJvciTHyr9GgP3o5jPpu0TH9mx
-         2de22563QodepzobSaq7qmDvZJSaynTQIqqW4RS/SwpGcHebMzsaA7oHn3wwW4HLvMgS
-         ECMnv05+ZSxLlw/7aruZSq93ynHFKDLPmavwIWP60k/kXx9DMJL+ZUxeiC//DH9Tk/Qi
-         PtJGPFgzA6TDGupFnp3Mib60ieivq0s24xZpkZrpFa1tnvPOfiq0w+aPpm+MS1Cjb5Q1
-         ewcmU6fAeRE/ZpWvVFKkiUoOmOFjPNR5rHm6gqBdhhUHkpZqrH8iLe9D7o7nsIAqWxuh
-         8k3Q==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680872380; x=1683464380;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kq3srRZu0LgAYU4VKXs4/x4Tf8N0jKR40LSgweSSzt4=;
+        b=J8F4OlPAWoGfnnTQnhWuwZuquQmDiCe49xZdCmHOE9h9usVYq1yauUBTCmjPfjYB3Z
+         d1ldncRdPQsHKcPd3Ck9RWGT0GlBFFdSHOiou1N+N7qh/Q4JLZcd+NJs89fOTxmC+RDG
+         dWlpah3w/1qSsT1vjfjzsg7h/9joVEIY5uUuTTvgKKRh3L3AKy+CTRT4Wwi+HJd5gtL8
+         lyeNHXT+6g55BsO/f4Ml8TMByzqWkq+jG4Z8JlJ0ZjV4EiIO0p3O49KX+EDIUrtvsHqY
+         SXtG8I1RRkLh6igGelUg/FvhN9t5iiJ5R/4ylFlO1IISQqoG4kP1xHOlT8U1e8eGF95X
+         Lntw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680871610; x=1683463610;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1680872380; x=1683464380;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7OOaJWRsqF5f3cp/B9FDAMADpbCuFWKQIWMGzgwGG4I=;
-        b=CS8hx1CBLioOmlAjYN9GHI2MEszOIBHQQu87ebRdFB3dXV0A4Ytd7zln666rufMRwx
-         GFoVpWbIQRscKb6q6RG/wuQJE1XLm7cCtWFXsbLK0l4+JFlLju8ubzJhVjdKv6uJhJYs
-         Nm+O2G8QoBBbKbW2uDMgYEnm3BoRj8iG9Q21/ijTnOoSqP3zexmYa7Q9cjgC2hggQk7/
-         4rlSjKxca2kSaWBEWPgNkMNTuwlxLBwb1cDoqeI9KG9igclP7F8wP6np2G+M1gdx8Onw
-         kEx1aiCmt/4EVkJdtsG0c3gpHgivAQLqiWiAdao/d62Jx6CxiWB2YOhJ5XMvGR+twZM4
-         DH5A==
-X-Gm-Message-State: AAQBX9fI0l5YEZo6mrq7r+qIlNw0KKsvEd76v4aaGn3x6uGiOJgXH/zN
-        ll06tJh+GeWrMdg3v/zAEW16OnuXp+g=
-X-Google-Smtp-Source: AKy350buYaLh+KrmXZBo0/Wm/s1AM5CYsV+B4+BDSnrmL3bR9QqWEkb4sIeE5zhomhkFx9ka+WDYiA==
-X-Received: by 2002:a9d:6c0c:0:b0:68b:d61c:168f with SMTP id f12-20020a9d6c0c000000b0068bd61c168fmr953370otq.11.1680871610135;
-        Fri, 07 Apr 2023 05:46:50 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d16-20020a9d5e10000000b006a305c68617sm1664872oti.53.2023.04.07.05.46.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 05:46:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <27bafe2b-6fc0-2e5c-8c4e-99ed74caa5d6@roeck-us.net>
-Date:   Fri, 7 Apr 2023 05:46:47 -0700
+        bh=kq3srRZu0LgAYU4VKXs4/x4Tf8N0jKR40LSgweSSzt4=;
+        b=I57UB9jmh6d9AFtHx02gvHcao195wzcJEfVBVJae8UH7mmHv4YwL7W2qsZKPIDdVB2
+         aqjKCSYPSg/vXtIYtoP5KNiUrwloNz0BTqL94AQxbwsXh4OmH0zrA7FtK91R/VBS5sIx
+         n4QATK4uYKQ8cojKQe0LyJ6ZsHAM7v/gcUN6t/LxmIauCltcUC6PMNk4mw+vI2nNJYdo
+         9sQt/2GKI3sDkam7FnnCZv0ILEEJPjj9TcScXaysj41BwWnViThjOCLzunUEAaIiqMs7
+         7GGqGyliORoL3d2DvRwuUZmC0Tb487xiE3dBlnn6edVHZip0EQjcBml5N57lrh/b5RZo
+         qwMQ==
+X-Gm-Message-State: AAQBX9fyQWDOIuInJinHThMntgCkI2TWw4SX9Yo9MnseTV/RPIRl8pFh
+        qwvKPIg3BfellEory5tylLYKWg==
+X-Google-Smtp-Source: AKy350aG6CSkeDb0CB1KwfgXuanzjSo9RbQa9ivfIsXGFklPxG3zSB10aYjFNeGA5ApfzmlpCuFLOA==
+X-Received: by 2002:adf:fd46:0:b0:2ef:466b:8f27 with SMTP id h6-20020adffd46000000b002ef466b8f27mr1192967wrs.18.1680872380324;
+        Fri, 07 Apr 2023 05:59:40 -0700 (PDT)
+Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.googlemail.com with ESMTPSA id t4-20020a5d6a44000000b002e558f1c45fsm4471446wrw.69.2023.04.07.05.59.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Apr 2023 05:59:39 -0700 (PDT)
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Subject: [PATCH v5 00/12] Improve the MT8365 SoC and EVK board support
+Date:   Fri, 07 Apr 2023 14:59:19 +0200
+Message-Id: <20230203-evk-board-support-v5-0-1883c1b405ad@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] watchdog: loongson1_wdt: Add DT support
-Content-Language: en-US
-To:     Keguang Zhang <keguang.zhang@gmail.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKcTMGQC/4XOwQrCMAwG4FeRnq1k7bpNT76HeGjTzBXnKq0WR
+ PbuRo8i7hT+wP8lT5EpBcpit3qKRCXkECcOZr0SONjpRDJ4zkKB0qBASypn6aJNXub79RrTTXr
+ jWtvpLfnWCe45m0m6ZCccuDndx5GXQ8i3mB6fO6XicfhHlkqChAa0asHUlTd7Zx9jcIk2GC/iy
+ GBRi4hipCFs0bsKEPsfiF5E9PsTAE0dEMD21yf1IlIzYrDvqWms7hC+kHmeX37qXbeJAQAA
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Yang Ling <gnaygnil@gmail.com>
-References: <20230407110025.516405-1-keguang.zhang@gmail.com>
- <20230407110025.516405-3-keguang.zhang@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230407110025.516405-3-keguang.zhang@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
-        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?utf-8?q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4029; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=EIPehOyKI/NzIl5wvVSNCdB4HdlMEQRiPIApPxEycOU=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkMBO54ToqEDvwXUh0RFYVMxOGueAOJNRyVbQ7vcCE
+ qhK+wO2JAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZDATuQAKCRArRkmdfjHURSmNEA
+ C3HhBnDWjrngdrYcbYlvOmYXCKSvy4CHP8QLWSRKvPof7NB9L0STInkkeKaHP10FN6j9ZgLhzHyy1F
+ dBRxXLMuzG4TenqY1tCQpkAAil4QJ0OU1EGpt7ViKNW18bksXV4gaGh5DeTqRr/94H6eS9gZvgoYwi
+ 1QTp2TYann1sMzDiKx499sjbUp8nyXsjspPanivSsHqeMW20OOIbmXbSW9RifyCdV+5xIat9T9vaiJ
+ i8Rssc4dITvMoEGXXlWDpBEwqU1VLK2S4xudk8m2+6SyIkmcJBLYBfu7qNi/j/vkKv9pnqtUmXBvZ/
+ QaYEiULr52hCG5Yt89scfq65cWfLlZWFHFV4mUBI2vUDR+wIdLk22eb8KrICwCSQktY9ZTmLYkJUpk
+ N0hWlbLuoousXycLbBpwfs7IwDt77a9LyarQk/cVy/83Ea0HaVf6Mybi6hzq9RVyVIjSDo+PX7L/L0
+ mgyVNNJP97EPjXqdkdVb5GyQshZ34u0JrFXPZRibNAbuCHmA17kg0FNAG8g4LIAgpqBDWifa4zFaGj
+ lw9XU8HF/4m5lclzPpjs++2moDjtl0vYQbOJuLJm+L00OvB/erfXKu5tBoM2W4/a6wgvzNEsirOwxG
+ ejtsBivDTmxWCIzKnyV3b4sns+WpB2/EdykFRrp+Jq5lz+dQsrURQ8a0oM+g==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
+X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,56 +107,99 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 4/7/23 04:00, Keguang Zhang wrote:
-> This patch adds the of_match_table to enable DT support
-> of Loongson-1 watchdog driver.
-> And modify the parameter of devm_clk_get() accordingly.
-> 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
->   drivers/watchdog/loongson1_wdt.c | 12 +++++++++++-
->   1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
-> index bb3d075c0633..c2694222ea86 100644
-> --- a/drivers/watchdog/loongson1_wdt.c
-> +++ b/drivers/watchdog/loongson1_wdt.c
-> @@ -5,6 +5,7 @@
->   
->   #include <linux/clk.h>
->   #include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
->   #include <linux/platform_device.h>
->   #include <linux/watchdog.h>
->   #include <loongson1.h>
-> @@ -100,7 +101,7 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
->   	if (IS_ERR(drvdata->base))
->   		return PTR_ERR(drvdata->base);
->   
-> -	drvdata->clk = devm_clk_get(dev, pdev->name);
-> +	drvdata->clk = devm_clk_get(dev, NULL);
->   	if (IS_ERR(drvdata->clk))
->   		return PTR_ERR(drvdata->clk);
->   
-> @@ -142,10 +143,19 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
->   	return 0;
->   }
->   
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id ls1x_wdt_dt_ids[] = {
-> +	{ .compatible = "loongson,ls1x-wdt", },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ls1x_wdt_dt_ids);
-> +#endif
-> +
->   static struct platform_driver ls1x_wdt_driver = {
->   	.probe = ls1x_wdt_probe,
->   	.driver = {
->   		.name = "ls1x-wdt",
-> +		.of_match_table = ls1x_wdt_dt_ids,
+This commits are based on the Fabien Parent <fparent@baylibre.com> work.
 
-If CONFIG_OF=n, this would result in a missing symbol.
+The purpose of this series is to add the following HWs / IPs support for
+the mt8365-evk board:
+- Watchdog
+- Power Management Integrated Circuit "PMIC" wrapper
+- MT6357 PMIC
+- MultiMediaCard "MMC" & Secure Digital "SD" controller
+- USB controller
+- Ethernet MAC controller
 
-Guenter
+Add CPU Freq & IDLE support for this board.
+
+This series depends to anothers which add support for MT8365 EVK board
+[1], add the MT8365 I2C support [2] (both are currently applied) and
+finally the pinctrl binding cleanup [3].
+
+=== Build:
+
+To test this serie, cherry-pick patches from the dependent series ([1],[2],[3])
+and the applied patches from this serie (documented in the "Changes" below).
+Be carefull, the pinctrl serie [3] is rebased to linusw/linux-pinctrl,
+cherry-pick will not be straightforward.
+Finally, cherry-pick this serie.
+
+You can also take my branch [4] which have all the needed patches
+retrieved from the instructions above.
+
+Use the arm64 defconfig to make the build.
+
+Regards,
+Alex
+
+[1]: https://lore.kernel.org/all/20230309213501.794764-1-bero@baylibre.com/
+[2]: https://lore.kernel.org/all/20221122-mt8365-i2c-support-v6-0-e1009c8afd53@baylibre.com/
+[3]: https://lore.kernel.org/all/20230327-cleanup-pinctrl-binding-v3-0-6f56d5c7a8de@baylibre.com/
+[4]: https://gitlab.baylibre.com/baylibre/mediatek/bsp/linux/-/commits/amergnat/i350-evk-board-support
+
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+---
+Changes in v5:
+- Add patches to build the MT6357 regulator driver and MTK PMIC keys by default
+- Remove "dt-bindings: pinctrl: mediatek,mt8365-pinctrl: add drive strength property"
+  patch from this serie and add it to the pinctrl serie [3]
+- Link to v4: https://lore.kernel.org/r/20230203-evk-board-support-v4-0-5cffe66a38c0@baylibre.com
+
+Changes in v4:
+- Remove v3 applied patch from the serie:
+  - arm64: dts: mediatek: add ethernet support for mt8365 SoC
+  - arm64: dts: mediatek: add mmc support for mt8365 SoC
+  - arm64: dts: mediatek: add mt6357 device-tree
+  - arm64: dts: mediatek: add pwrap support to mt8365 SoC
+  - arm64: dts: mediatek: Increase the size BL31 reserved memory
+- Drop "arm64: dts: mediatek: fix systimer properties" which is done [1]
+- Fix style, typo and re-order properties.
+- Use interrupts-extended for the PMIC node.
+- Link to v3: https://lore.kernel.org/r/20230203-evk-board-support-v3-0-0003e80e0095@baylibre.com
+
+Changes in v3:
+- Remove v2 applied patch from the serie:
+  - dt-bindings: mmc: mediatek,mtk-sd: add mt8365
+- Add trailers and simply resend.
+- Link to v2: https://lore.kernel.org/r/20230203-evk-board-support-v2-0-6ec7cdb10ccf@baylibre.com
+
+---
+Alexandre Mergnat (10):
+      arm64: defconfig: enable MT6357 regulator
+      arm64: defconfig: enable Mediatek PMIC key
+      dt-bindings: watchdog: mediatek,mtk-wdt: add mt8365
+      arm64: dts: mediatek: add watchdog support for mt8365 SoC
+      arm64: dts: mediatek: add mt6357 PMIC support for  mt8365-evk
+      arm64: dts: mediatek: add mmc support for mt8365-evk
+      arm64: dts: mediatek: add usb controller support for mt8365-evk
+      arm64: dts: mediatek: add ethernet support for mt8365-evk
+      arm64: dts: mediatek: add OPP support for mt8365 SoC
+      arm64: dts: mediatek: add cpufreq support for mt8365-evk
+
+Amjad Ouled-Ameur (1):
+      arm64: dts: mediatek: Add CPU Idle support
+
+Fabien Parent (1):
+      arm64: dts: mediatek: set vmc regulator as always on
+
+ .../bindings/watchdog/mediatek,mtk-wdt.yaml        |   1 +
+ arch/arm64/boot/dts/mediatek/mt8365-evk.dts        | 249 +++++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt8365.dtsi           | 142 ++++++++++++
+ arch/arm64/configs/defconfig                       |   3 +
+ 4 files changed, 395 insertions(+)
+---
+base-commit: 4f2a499a344b36ebb325e610265452ea88541116
+change-id: 20230203-evk-board-support-d5b7a839ed7b
+
+Best regards,
+-- 
+Alexandre Mergnat <amergnat@baylibre.com>
 
