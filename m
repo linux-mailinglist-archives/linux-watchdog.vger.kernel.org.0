@@ -2,110 +2,79 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D926DAECF
-	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Apr 2023 16:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA666DB1DE
+	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Apr 2023 19:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240247AbjDGOWE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 7 Apr 2023 10:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
+        id S230206AbjDGRjR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 7 Apr 2023 13:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232908AbjDGOWD (ORCPT
+        with ESMTP id S230335AbjDGRjB (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 7 Apr 2023 10:22:03 -0400
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F4CFE;
-        Fri,  7 Apr 2023 07:21:58 -0700 (PDT)
-Received: by mail-ot1-f45.google.com with SMTP id k14-20020a9d700e000000b0069faa923e7eso22164480otj.10;
-        Fri, 07 Apr 2023 07:21:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680877317; x=1683469317;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=YsRxXaApn9xqdxBsn1qMUWKQy9YkoaOpoPL73WZA9M4=;
-        b=avniN7QEhTVP5bjEuluc7cZ/n0UfgwQ4fssIWaWuXgM23MmkXinnZYapxrmay4942F
-         Nu89UwXheFHE85Y0nwMiItL5yg9EeToIWlyQ0FXKdKCzGlo/YoR+TnwzcJ7BLlymATl7
-         cAJ876vhcaZ4B04p9wXJz0gs9mwkApFyUEr8aQxcTWL+9ztTYmSfFZwaXfhhdAF4/eeZ
-         vDBcc2w3Mr6zl4pv0866owfUhVYJdw58RAYOdBKp39Cr7UDXKIKO7UlyEn7Par4kuuHb
-         6UKd4r+ek99GVY/GXQieD8ZcQpFTnNsWkgJR9RmxdUVkc65KIMpawqwopPe4KQmAFDTd
-         uoBg==
-X-Gm-Message-State: AAQBX9ck6kouAhYO2wme0CBoSfK189BfP/iLvFGtcHX7uF96rt7PJTD2
-        o3knmFtFh0WF2+4iOlmE9w==
-X-Google-Smtp-Source: AKy350aNwBFWMxb/vuIZvZXDuIvV6p1Qf5utJufM3NqZZNE2XXf2am6NlHRLQFasd7g6u1RNlTlqlw==
-X-Received: by 2002:a9d:6b94:0:b0:68f:2134:9a3a with SMTP id b20-20020a9d6b94000000b0068f21349a3amr1048221otq.30.1680877317581;
-        Fri, 07 Apr 2023 07:21:57 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e12-20020a9d730c000000b006a3ae1c5a30sm1749510otk.9.2023.04.07.07.21.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 07:21:57 -0700 (PDT)
-Received: (nullmailer pid 2506789 invoked by uid 1000);
-        Fri, 07 Apr 2023 14:21:55 -0000
+        Fri, 7 Apr 2023 13:39:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBB1B47A;
+        Fri,  7 Apr 2023 10:38:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AC7965338;
+        Fri,  7 Apr 2023 17:38:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30A74C433D2;
+        Fri,  7 Apr 2023 17:38:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680889121;
+        bh=OQSosJYSuZVbDTMHCZ0H3HYidHURX5xdpy3yEE+Eb9k=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=qY+CAeSJgIHvMupF+KC04cNMhlT6Dj2TYQ6XSPaZu3rXWA0qkLudxoxmsuCeXR4KC
+         hwUOR1pznjXxvPwqVh2izqJAIcL9SUT1a6heLH0YlhYHZyT4M3M+8gh7jSqbp8Agbz
+         dZTigZfJsB38f7MZ+ebSHT0QQwudM+OefzX2yaGVZnEDL5ZEKCYY959JEftGXLtDGv
+         TIhS2pI1sDsDAtuIFj7OfTh0+xaGMTqOBzi7JL5n04bteeMeBtFW+dxow+5UvbIBtw
+         b3A2k335AtIlImv0rxbajLQ1OhZdFnxzhyJtTsbZHsngnCchxq8h89M32wK9jU1YOg
+         nl4XDdcVuRBpQ==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net,
+        wim@linux-watchdog.org, robh+dt@kernel.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kathiravan T <quic_kathirav@quicinc.com>,
+        konrad.dybcio@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: (subset) [PATCH V2 0/2] Add few device nodes for IPQ5332 SoC
+Date:   Fri,  7 Apr 2023 10:41:17 -0700
+Message-Id: <168088927578.2561591.12316304033286537024.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230320104530.30411-1-quic_kathirav@quicinc.com>
+References: <20230320104530.30411-1-quic_kathirav@quicinc.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Keguang Zhang <keguang.zhang@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Yang Ling <gnaygnil@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mips@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230407110025.516405-2-keguang.zhang@gmail.com>
-References: <20230407110025.516405-1-keguang.zhang@gmail.com>
- <20230407110025.516405-2-keguang.zhang@gmail.com>
-Message-Id: <168087712122.2500896.540819430483949508.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add Loongson-1 watchdog
-Date:   Fri, 07 Apr 2023 09:21:55 -0500
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-
-On Fri, 07 Apr 2023 19:00:24 +0800, Keguang Zhang wrote:
-> Add devicetree binding document for Loongson-1 watchdog.
+On Mon, 20 Mar 2023 16:15:28 +0530, Kathiravan T wrote:
+> This series adds the support for QUP peripherals, PRNG, WDT for IPQ5332
+> SoC.
 > 
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
->  .../bindings/watchdog/loongson,ls1x-wdt.yaml  | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.yaml
+> This series depends on the below patch, due to the node ordering
+> https://lore.kernel.org/linux-arm-msm/20230217083308.12017-6-quic_kathirav@quicinc.com/#t
 > 
+> Kathiravan T (2):
+>   dt-bindings: watchdog: qcom-wdt: add qcom,apss-wdt-ipq5332 compatible
+>   arm64: dts: qcom: ipq5332: add few device nodes
+> 
+> [...]
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Applied, thanks!
 
-yamllint warnings/errors:
+[2/2] arm64: dts: qcom: ipq5332: add few device nodes
+      commit: d0367098dc1e925d22a6706e358636d12371116c
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.example.dts:18:18: fatal error: dt-bindings/clock/loongson,ls1x-clk.h: No such file or directory
-   18 |         #include <dt-bindings/clock/loongson,ls1x-clk.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1512: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230407110025.516405-2-keguang.zhang@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
