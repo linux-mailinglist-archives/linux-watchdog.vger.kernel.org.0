@@ -2,115 +2,125 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406426DB20D
-	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Apr 2023 19:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A57736DB929
+	for <lists+linux-watchdog@lfdr.de>; Sat,  8 Apr 2023 08:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjDGRut (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 7 Apr 2023 13:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
+        id S229702AbjDHGNl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 8 Apr 2023 02:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjDGRur (ORCPT
+        with ESMTP id S229652AbjDHGNj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 7 Apr 2023 13:50:47 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71646BB92
-        for <linux-watchdog@vger.kernel.org>; Fri,  7 Apr 2023 10:50:43 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1a2bef29f3cso1819575ad.2
-        for <linux-watchdog@vger.kernel.org>; Fri, 07 Apr 2023 10:50:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1680889843;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eJzkrQgSJLoh68CvGvp1JznAA6lKkLejE1Wur3zdskg=;
-        b=XH0UjXnkmfvcZqjTewbnJtcDWSFSJA41wC6V9r5Jriy4njsRmD3H27O3QYYV4AMbUm
-         tXDMOylFQmjGVHAvVJDVThyrSJpCbK15BdyXAw/RTy3qqsHIR6h5GbuWp0D0RbsJJMyQ
-         tYigUWAUK0wuJZ9Ln/RC6nNHR0Xc5/0j6baPRmmPBKLWI8mS58J1JBnQoFDh2fV6gAVB
-         aCWwMbSzJaVd3dqKFSysqW62WCaXVoVFyPNeXhO/N8IkyefOB7epKgE0KjIbL9lO4E2A
-         nOD8OiTN+7/mE4Ln7W/1Og55k8VV9viFgsgqrLPhDjnLlEirWNgizYb/4I63kiVYkSRp
-         /wmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680889843;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eJzkrQgSJLoh68CvGvp1JznAA6lKkLejE1Wur3zdskg=;
-        b=MnwCwMNwlP010V4bsrpsbospsaqVndqkP+HtMDSm+DDNLfcnu/bk1D8BiDtFySgfTt
-         Y3HsiiHcASPB/+6veiVDRGm5mv70vspl8RX6yQFghbr2/NdOYpKo9FbMTkTjfyddb2cB
-         PO/ScQBQdmcQ3SJYFulGg6EUvkA6WpUkBG42C6PSkTBfJGFRVh6gfwCL9kX1KOh4WN/u
-         5tMIbGTxssOYuGCzyog1ngGClxtC5XH1jnM47DQJ3PCEtDDMNpyzp1zkrAwRlEh+Zuoj
-         w9kSfcp47mAIl53skZzU5kLaONJwzh7UgwLx/GAbm0NkQsYPVQir77xs9glShr1zG5iI
-         ga0Q==
-X-Gm-Message-State: AAQBX9fB+jlMeGR+5vaMTlSx0A0EJVAk+UTgLilJqJaaUTARa6kLIp0I
-        XZPcbgVJhZV2movk66dhl+KJIg==
-X-Google-Smtp-Source: AKy350aspk9YnMVy5hked+xx58M1c9hroC6snupKIoerfp0YWnXGXrL18Plz3ceLDw7pQ7fY4UQTgQ==
-X-Received: by 2002:aa7:9ec4:0:b0:626:7c43:7cb8 with SMTP id r4-20020aa79ec4000000b006267c437cb8mr3003966pfq.20.1680889842767;
-        Fri, 07 Apr 2023 10:50:42 -0700 (PDT)
-Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
-        by smtp.gmail.com with ESMTPSA id e18-20020aa78c52000000b0062a474cd46asm3298198pfd.137.2023.04.07.10.50.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Apr 2023 10:50:42 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Sat, 8 Apr 2023 02:13:39 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDD4D301;
+        Fri,  7 Apr 2023 23:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680934418; x=1712470418;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3pSwex2GTRoIwzE9M/rgXMQbLMvVYq457TO/GzodD5c=;
+  b=dQMdUbUfNiQeM9FSn1M5uF4RUwI7Ao1sDincxhmrhUOwY+YVqEInD2aI
+   GQXNBY/ms530RiwRobh6ZCRjXsGHl0kA4yOAkhiiI7yybVzwr0nttg+FR
+   WhcVW35jyTn7h5QVC65uc1wWbptoKtOJPHFJ8AWp2KCniJsE8Jnd0pLTi
+   U96yuVJ2EKDS1rd3Nu5aNc9Sy3CLU1eYgl/wN1c3GpInY5jn+n5huBf2g
+   /SuIXQmYZBOef0v9LyoHVn77XNxP9tUKxxea82sc/G6Yamj71geJ+no+l
+   zn8l+DC4EiI5+8an5v0GXQC5x6E15Q7tcZ3HX5fJg2/UDMt+x3TqtMONO
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="341867454"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="341867454"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2023 23:13:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10673"; a="861970833"
+X-IronPort-AV: E=Sophos;i="5.98,329,1673942400"; 
+   d="scan'208";a="861970833"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 07 Apr 2023 23:13:35 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pl1pN-000TPJ-2u;
+        Sat, 08 Apr 2023 06:13:33 +0000
+Date:   Sat, 8 Apr 2023 14:12:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Keguang Zhang <keguang.zhang@gmail.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        Bernhard =?utf-8?Q?Rosenkr=C3=A4n?= =?utf-8?Q?zer?= 
-        <bero@baylibre.com>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v5 00/12] Improve the MT8365 SoC and EVK board support
-In-Reply-To: <20230203-evk-board-support-v5-0-1883c1b405ad@baylibre.com>
-References: <20230203-evk-board-support-v5-0-1883c1b405ad@baylibre.com>
-Date:   Fri, 07 Apr 2023 10:50:41 -0700
-Message-ID: <7h355b1szy.fsf@baylibre.com>
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Yang Ling <gnaygnil@gmail.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: Re: [PATCH 2/2] watchdog: loongson1_wdt: Add DT support
+Message-ID: <202304081301.6Ukja1z0-lkp@intel.com>
+References: <20230407110025.516405-3-keguang.zhang@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=0.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230407110025.516405-3-keguang.zhang@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Alexandre Mergnat <amergnat@baylibre.com> writes:
+Hi Keguang,
 
-> This commits are based on the Fabien Parent <fparent@baylibre.com> work.
->
-> The purpose of this series is to add the following HWs / IPs support for
-> the mt8365-evk board:
-> - Watchdog
-> - Power Management Integrated Circuit "PMIC" wrapper
-> - MT6357 PMIC
-> - MultiMediaCard "MMC" & Secure Digital "SD" controller
-> - USB controller
-> - Ethernet MAC controller
->
-> Add CPU Freq & IDLE support for this board.
+kernel test robot noticed the following build errors:
 
-Tested-by: Kevin Hilman <khilman@baylibre.com>
+[auto build test ERROR on cf3be7e82b129ed34f811f116f2b113f6299d449]
 
-Thanks for providing the branch with the dependencies.  With that, I
-tested basic build & boot on mt8365-evk, and things are working as
-expected.
+url:    https://github.com/intel-lab-lkp/linux/commits/Keguang-Zhang/dt-bindings-watchdog-Add-Loongson-1-watchdog/20230407-190222
+base:   cf3be7e82b129ed34f811f116f2b113f6299d449
+patch link:    https://lore.kernel.org/r/20230407110025.516405-3-keguang.zhang%40gmail.com
+patch subject: [PATCH 2/2] watchdog: loongson1_wdt: Add DT support
+config: mips-loongson1c_defconfig (https://download.01.org/0day-ci/archive/20230408/202304081301.6Ukja1z0-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 2c57868e2e877f73c339796c3374ae660bb77f0d)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mipsel-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/26b8fbfd577b41f39d6af516ef7c49cbffa05117
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Keguang-Zhang/dt-bindings-watchdog-Add-Loongson-1-watchdog/20230407-190222
+        git checkout 26b8fbfd577b41f39d6af516ef7c49cbffa05117
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/
 
-I also enabled `CONFIG_USB_ETH=y` to test with USB ethernet gadget, and
-was able use NFSroot, so that's working well also.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304081301.6Ukja1z0-lkp@intel.com/
 
-Kevin
+All errors (new ones prefixed by >>):
+
+>> drivers/watchdog/loongson1_wdt.c:158:21: error: use of undeclared identifier 'ls1x_wdt_dt_ids'
+                   .of_match_table = ls1x_wdt_dt_ids,
+                                     ^
+   1 error generated.
+
+
+vim +/ls1x_wdt_dt_ids +158 drivers/watchdog/loongson1_wdt.c
+
+   153	
+   154	static struct platform_driver ls1x_wdt_driver = {
+   155		.probe = ls1x_wdt_probe,
+   156		.driver = {
+   157			.name = "ls1x-wdt",
+ > 158			.of_match_table = ls1x_wdt_dt_ids,
+   159		},
+   160	};
+   161	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
