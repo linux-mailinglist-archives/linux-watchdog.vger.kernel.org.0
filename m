@@ -2,123 +2,124 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BC66DC814
-	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Apr 2023 16:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08A26DC81E
+	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Apr 2023 17:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjDJOvr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 10 Apr 2023 10:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
+        id S229697AbjDJPBS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 10 Apr 2023 11:01:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjDJOvq (ORCPT
+        with ESMTP id S229669AbjDJPBR (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 10 Apr 2023 10:51:46 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358104C17
-        for <linux-watchdog@vger.kernel.org>; Mon, 10 Apr 2023 07:51:45 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id i20so8508287ybg.10
-        for <linux-watchdog@vger.kernel.org>; Mon, 10 Apr 2023 07:51:45 -0700 (PDT)
+        Mon, 10 Apr 2023 11:01:17 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3BF4ED3;
+        Mon, 10 Apr 2023 08:01:16 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id e18-20020a17090ac21200b00246952d917fso3254958pjt.4;
+        Mon, 10 Apr 2023 08:01:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681138304; x=1683730304;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DS7lM4UvPhdsZz3QUAdTpEwkc1b3jnb1BvSC4K65hcs=;
-        b=h4PKEDoQDsUC8mBNp4HscgecqV8REYXFA4+CGebmmkkxZHAcvh8QzKzPunfvUg1f7D
-         XQxJ4UlJYaDda52CWHtesoL6yEj9FEd+v36Cb23Q3O/ZZSdP3BP8HDP31Y6F0MNjCuUm
-         c4C9bz7CFAVetMIDjiG6MLoCbV6EDSkvj1RYohr8XR8kcpC4tjPKrBlNYt+iQ7X5n3Jl
-         9ieHIIVOYIIxhUakdQBdjOYyMTN4HWirWtHYwLf4+fCTpZKkL49B+UlYdauym46uHKcx
-         FetahX5cSGNxhoT8lewBl96h4Al2UKEKhbjeenkJhODxO1ruO361k2gSa1Mxl3OJpjfv
-         zRQA==
+        d=gmail.com; s=20210112; t=1681138876; x=1683730876;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=D/gheyaCTp4V2rB10c4zOvu9Oo7rvG6c7rSlnCnrhsM=;
+        b=AoIgJLUa3lJgR4pR1dCSqC/X1z+doWpyDjIOIrQWFfYK32IKPjTfyv54o+LqUx36tE
+         zEhARCNCOb9nMheGkGhASK+lbJf/FA5fv6q1sxbccydJjZ/1SSjQgKihpEbmZ/UTKbsL
+         1rK1uSvNQRKq+LElzETzZZ4wxaRGDaB65f35Imm6F9ijjfsPolgUPyOe57R9uRy4Z/zu
+         lVjHGQ2kXd7EuSwn83PmzmsXUt4a+JEZYxLye5hIi64HtyOhVfnLynDfNDx8DGpC9gs5
+         4v9r/t6EUe6NSWZtrOuVTgQV7KIItRNmjYWKbwbCFYXVAa3+RtmzORT90cwpFji5c0Wz
+         Am4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681138304; x=1683730304;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DS7lM4UvPhdsZz3QUAdTpEwkc1b3jnb1BvSC4K65hcs=;
-        b=L4OmIAfwuTHAbAcc+1pYOTKIXJ59ByKXYYG0WPB53yPnOP/s5m8Ma8FgrpzBc+OJR/
-         uiM5LSh9DtwYZNefalRcK39f+LRNLVuDLTi/LdGptoQ/DP3a+ROUnYBBd8s2esbthz9L
-         QocwWfYT7G8/Hmgz/2X81j/j5GKDMx9MTyEOM1HMSSNv1IPQGPKUhbFc7vZ5P0TONsFp
-         OhqMbObgolt42itafrVgM0GemrPqTH2iga/jbCGMhMvKAabC6FUzSHxATdryZguctpm6
-         JQmnXpw8ko/efTQbF9kDHTudD/Ae8fO4kA6mLduzrhlUaQjHIrNDy5a9gaZWHw914rqu
-         O42g==
-X-Gm-Message-State: AAQBX9fNVhZ1NEx6v8u9w/lgXswQ6RSZhtv6LxRrAeh8l8ge7GvOTV7/
-        6X3EsYXTIDj3nyTPK0N65AKHRQ==
-X-Google-Smtp-Source: AKy350Z7iUPXJT7xvEHCirYFplhyypqwYmvgJbb+dWAEndGof6Ml++KCOMzYUg1jEW374gcAxVHVcg==
-X-Received: by 2002:a25:dc88:0:b0:b8e:d098:26ee with SMTP id y130-20020a25dc88000000b00b8ed09826eemr5621383ybe.29.1681138304298;
-        Mon, 10 Apr 2023 07:51:44 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id i13-20020a056902068d00b00b7767ca749fsm2956110ybt.60.2023.04.10.07.51.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Apr 2023 07:51:43 -0700 (PDT)
-Date:   Mon, 10 Apr 2023 10:51:42 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Guenter Roeck <linux@roeck-us.net>
+        d=1e100.net; s=20210112; t=1681138876; x=1683730876;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D/gheyaCTp4V2rB10c4zOvu9Oo7rvG6c7rSlnCnrhsM=;
+        b=60SZAnkfukdWZ6Ee9S4+YD6DLoNgzRfCo/GLFmqDdpZrYzjF4RP2D9+Z3zQV+YmO3T
+         YGKLttWLqS1nLvBDkG27C4kNuBmUQ0t0FadHCUE7Vgt4ooadqPVplb9jZtpLfiEPy4Py
+         tmwMldfWdOBJLzVhyqnLj4SGX5eyIxIuKfOr0aoOmAXhs6x2m3TYBkOY1Bqz/bWBJi/G
+         cQUQCeW1z9EXDAUpM/chirghTB74QZt+ZhBbqJnaudxodEAyf9go/xbTJY1DBUTwI/LM
+         748PB9bHwsOZU1d/KEImBhIYFnP8Ll4tfnoqXzMUrxa5TuK3npoSI99/Jd2/ok0ZLiED
+         Pfww==
+X-Gm-Message-State: AAQBX9d7jUbnCmqH6pPwlyQ2nThTDp2TAWcRIsucJx/lW2DBqCX3l1BF
+        vhFIk7gEdIgoaDnAKPon3wI=
+X-Google-Smtp-Source: AKy350Y9XKZgt5cHBZpkiyzzMdjkE3jeC/Na9/l9cPQdfSolpcWiFr8jW0VR/iJ0T9OdgIyVWQ64Ug==
+X-Received: by 2002:a17:902:bf41:b0:1a1:a800:96a7 with SMTP id u1-20020a170902bf4100b001a1a80096a7mr12955497pls.8.1681138875948;
+        Mon, 10 Apr 2023 08:01:15 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a9-20020a170902ee8900b001a52974700dsm4386082pld.174.2023.04.10.08.01.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Apr 2023 08:01:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <fd4497b6-32a4-3135-fc62-fafb9fb76d26@roeck-us.net>
+Date:   Mon, 10 Apr 2023 08:01:14 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] watchdog: ebc-c384_wdt: Remove support
+Content-Language: en-US
+To:     William Breathitt Gray <william.gray@linaro.org>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
         Paul Demetrotion <pdemetrotion@winsystems.com>,
         techsupport@winsystems.com,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Fred Eckert <Frede@cmslaser.com>
-Subject: Re: [PATCH] watchdog: ebc-c384_wdt: Remove support
-Message-ID: <ZDQifl7EB33dh/eu@fedora>
 References: <20230410143101.182563-1-william.gray@linaro.org>
- <7b0fbd06-73d0-7fa9-3f03-e788f1df4631@roeck-us.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kXGntYyXbZjGn7a2"
-Content-Disposition: inline
-In-Reply-To: <7b0fbd06-73d0-7fa9-3f03-e788f1df4631@roeck-us.net>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ <7b0fbd06-73d0-7fa9-3f03-e788f1df4631@roeck-us.net> <ZDQifl7EB33dh/eu@fedora>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <ZDQifl7EB33dh/eu@fedora>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,
+        FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On 4/10/23 07:51, William Breathitt Gray wrote:
+> On Mon, Apr 10, 2023 at 07:43:37AM -0700, Guenter Roeck wrote:
+>> On 4/10/23 07:31, William Breathitt Gray wrote:
+>>> The current maintainer no longer has access to the device for testing,
+>>> the original user of this driver indicates that they have moved on to
+>>> another device, and the manufacturer WINSYSTEMS does not appear
+>>> interested in taking over support for this code.
+>>>
+>>> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+>>
+>> A bit harsh, maybe. Just mark it as orphan for the time being.
+>>
+>> I see there are other Winsystems drivers. What are you going to do
+>> with those ?
+>>
+>> Guenter
+> 
+> Oops, I didn't mean for that commit message to sound so harsh but merely
+> log some brief reasons for the support removal for posterity. However, I
+> adjust this to orphan status rather than dropping; what is the process
+> to mark a driver as orphaned?
+> 
 
---kXGntYyXbZjGn7a2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I didn't refer to the description when saying "harsh" (the description was fine),
+I meant to say that removing the driver would be a bit harsh. There might still
+be some (unknown) users, after all.
 
-On Mon, Apr 10, 2023 at 07:43:37AM -0700, Guenter Roeck wrote:
-> On 4/10/23 07:31, William Breathitt Gray wrote:
-> > The current maintainer no longer has access to the device for testing,
-> > the original user of this driver indicates that they have moved on to
-> > another device, and the manufacturer WINSYSTEMS does not appear
-> > interested in taking over support for this code.
-> >=20
-> > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
->=20
-> A bit harsh, maybe. Just mark it as orphan for the time being.
->=20
-> I see there are other Winsystems drivers. What are you going to do
-> with those ?
->=20
-> Guenter
+Just submit a patch removing yourself as driver maintainer and mark its
+status as "Orphan", with the same explanation.
 
-Oops, I didn't mean for that commit message to sound so harsh but merely
-log some brief reasons for the support removal for posterity. However, I
-adjust this to orphan status rather than dropping; what is the process
-to mark a driver as orphaned?
+Thanks,
+Guenter
 
-As for the other Winsystems drivers, I'm still able to test those so I
-can continue maintainance of those -- although I'm always open if
-WINSYSTEMS would like to join as a supporter, or a user co-maintainer
-comes along. ;-)
+> As for the other Winsystems drivers, I'm still able to test those so I
+> can continue maintainance of those -- although I'm always open if
+> WINSYSTEMS would like to join as a supporter, or a user co-maintainer
+> comes along. ;-)
+> 
+> William Breathitt Gray
 
-William Breathitt Gray
-
---kXGntYyXbZjGn7a2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZDQifgAKCRC1SFbKvhIj
-K4PZAP9vBvzOzd8mRW35dKX/XGo7maxqBvWwRcgTzfvwb7iMygD9HKov1wQXvkqZ
-MZsaSR0i1y6OmR4CUb2u/g3GRE0L/QI=
-=Uzif
------END PGP SIGNATURE-----
-
---kXGntYyXbZjGn7a2--
