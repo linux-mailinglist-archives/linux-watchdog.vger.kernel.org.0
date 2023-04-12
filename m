@@ -2,132 +2,141 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D639C6DDC5B
-	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Apr 2023 15:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5545D6DFE88
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Apr 2023 21:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjDKNkr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 11 Apr 2023 09:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
+        id S229535AbjDLTOf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 12 Apr 2023 15:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbjDKNkn (ORCPT
+        with ESMTP id S229498AbjDLTOe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 11 Apr 2023 09:40:43 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6A344B8;
-        Tue, 11 Apr 2023 06:40:34 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id cp25-20020a056830661900b00693ce5a2f3eso3861069otb.8;
-        Tue, 11 Apr 2023 06:40:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681220433; x=1683812433;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kgFPvyHrHPtWE9sKCzX6mH86Owceqhrm+Hat2sO8n/A=;
-        b=MrjRJQAHsKT5D9MRrrI7jRj4QO9oi0vDxaEsUC0BuvQh5GooLZhjISuaGDmmXpl/9N
-         3PUTMqcZcqgDKcMNgowbdXo+3zoqIBSVFdhfa7VVst7s2I6FgKZ2BisOS2U/47H4wgm1
-         a9nBdxQLutH6BbTJuKKFIwC8OWZv8y87LG1DVmiXM5saS9WvSWxLc1WW5YUjY73xXScC
-         Om/9dpdJWqrkJeMn5MkB+Y4+IUtDx58Dp0/we7b7yGMbMrbcn2yDYcwrFr3fXbp5R+6c
-         nm+Z78myxWOgQJn0MVHyhb+zJn6OaL/rGBxff5ykliF5NVr/ptBZJGaPyiDbD0gyCtqE
-         8tAQ==
-X-Gm-Message-State: AAQBX9fcrPqbtV39JmEhUT9WGLnB+6uoQkomcX9glvKoxULBO0i/c5mh
-        KODN5kKnjpayEz//Vmfauw==
-X-Google-Smtp-Source: AKy350YG5U9QNvXG9urYlKAKQZf2PCcV3KsTjbecvU+8kIfA5d1v5KG8LereLUse+pLSeMjkUuqZwQ==
-X-Received: by 2002:a9d:6659:0:b0:6a3:c70d:bb94 with SMTP id q25-20020a9d6659000000b006a3c70dbb94mr5785020otm.17.1681220433511;
-        Tue, 11 Apr 2023 06:40:33 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g25-20020a9d6c59000000b0069f95707335sm5338427otq.69.2023.04.11.06.40.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Apr 2023 06:40:33 -0700 (PDT)
-Received: (nullmailer pid 2941891 invoked by uid 1000);
-        Tue, 11 Apr 2023 13:40:31 -0000
-Date:   Tue, 11 Apr 2023 08:40:31 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wed, 12 Apr 2023 15:14:34 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8505BB1;
+        Wed, 12 Apr 2023 12:14:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1681326839; i=j.neuschaefer@gmx.net;
+        bh=T3r05AvByQ78pgr1f+lKaqtb69c4CJPLVX+ymwewCz0=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=BMDmPowP9+uvcrSgaSX3EcRgQBsMoAV4dSlY2URUK6PSdUTENrBQ3WVLDpyKF+I7e
+         sD6cUSF3TqA3yddz9KCUrVUQXlx50ilGMnA2JLiHcPzjLUM6JRCzPXrvEU2JmWtkB1
+         oVoQALEjco2fA7BFx4SvPtC2PbH1r8O8Ya2oicg2mBZYWDN1pMG82+6Cq705JjJPm7
+         sKTGbLNlXQ3vEIRvWl5y2nnhv/M6vWKXAZmyjQ8R86tJGymBi/IWzaFrIysn2L0ce9
+         4ZJqapG0/788qtp8tTcRnVyhuikYCCyI0DvuDsPoS8oJnCniaStsHqY5Pj9KTpAIWu
+         henKw6Jdd+H3Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([185.66.193.41]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M4s4r-1pkklt3ghD-0022df; Wed, 12
+ Apr 2023 21:13:59 +0200
+Date:   Wed, 12 Apr 2023 21:13:56 +0200
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        Bernhard =?iso-8859-1?Q?Rosenkr=E4nzer?= <bero@baylibre.com>,
-        catalin.marinas@arm.com, Will Deacon <will@kernel.org>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-mmc@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v5 03/12] dt-bindings: watchdog: mediatek,mtk-wdt: add
- mt8365
-Message-ID: <20230411134031.GA2934043-robh@kernel.org>
-References: <20230203-evk-board-support-v5-0-1883c1b405ad@baylibre.com>
- <20230203-evk-board-support-v5-3-1883c1b405ad@baylibre.com>
- <CAFGrd9oi0AT3L8DVs7OYq-RjzBTqD+CB5mjKOwEbgNJDdyj2=g@mail.gmail.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH v5 3/6] dt-bindings: clock: Add Nuvoton WPCM450
+ clock/reset controller
+Message-ID: <ZDcC9JBidzfu94NW@probook>
+References: <20221104161850.2889894-1-j.neuschaefer@gmx.net>
+ <20221104161850.2889894-4-j.neuschaefer@gmx.net>
+ <20221209202120.0AFACC433D2@smtp.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NpfuWbq9gkMhlu2M"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFGrd9oi0AT3L8DVs7OYq-RjzBTqD+CB5mjKOwEbgNJDdyj2=g@mail.gmail.com>
-X-Spam-Status: No, score=0.8 required=5.0 tests=FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221209202120.0AFACC433D2@smtp.kernel.org>
+X-Provags-ID: V03:K1:jUhIJfNgdC6wpEPx0keI2q2HMSs6qQtOBLXprOGbFfn5tkVL2Le
+ D4mUx7y9IdovWAByCWzmeqOc/Jda5pRaQeNLOBlbXCyJ6kfiuhlK136i0yzPEdWy+PmdHQA
+ g/YcNZCdyosbqrpM8xaMk6vPRgapkJSGCNbZQpbn6mo1XziL7xFM2Q/LtrGcXz7LtLQJZqb
+ i9OAiRhoyf+BgC8bGgFWQ==
+UI-OutboundReport: notjunk:1;M01:P0:aCI64BL1rgk=;TL2u7xYyP8bK5xqtVfvB7EBtY5T
+ Gw7znmdjLs8JpkvMQFwfxDU8G8fLi47mDtkSmJzJtYQoSFOlRTgLOILJduh01l4p/hf5Ypi4P
+ sxF5bGN4WfEhhaGfnuFIT2pcQJkaHqygv+MLvRXEeUT4yOx7NiZeUpOqNF9nKfoUGn4m8PB8u
+ qWIzHFJyarkEcZGRgEY/gDbR93z8LW73zNWiXkJjDWdI62izJ/pm7ZxZEeaGl2uK7XH9BLH2Z
+ fFFMcjQnVxgj2N8xfeuK8pbbp5++95p2HOPPHlnBnZuqql8e+XzkPljyFRtulxIrR6L7G5phy
+ teL9XySDInzWUojCzPLV9TC3QyOKtCQ/yt5uXjFEcbo4U5zLCAW9ys6YYnfQ1EviXCc2GoOru
+ S2cXsa7diI0rAGPyVhNVMqZUK3SozdU/XlM6MhN23EQA7OdoJmnrLhhGeUinwfVZJmBlHgT8b
+ +TUQlKpPp7ZCZ0sBcKSDatfAF+fyKi5DweIw4IxSutCtmavrh3BE3s7y6eAW7IEmlJliJwOXW
+ gwa5kSbNvP879KKFDngK8OpGoneGx0N40FmM4ICEuJcbIPcWg2UActy442702QD29EpZj5qAW
+ 1UiVCrOVNBJrvFsdSdhVnNvUiu2jxy7ixO8Dv/O7OPcUBg0JOX70p1UNKdqxYaj6PjH9LDSjt
+ V8ueMb/dmvvAWQlIJQBGL/02JdlmVI99vDvmg0BMNsdM+aHx2VCg9PVEEie0amBJdUNj/Xnol
+ DIRdCLxnpcjIBfgxZA/MmQhuw/dhQuI6HuL68HCvY10EZ5o2RxUBsWWQBTMLypUVy2AilStJc
+ vjgsgtuNSMQE7YwPjY+4R/m1cYln8xsO8Ztm/XSg/iFDoGeowZXZ0Ztx6Ng8LOgtut+3/0zIw
+ tH+jWbCo3nO0udRfne7yiuwrAWHNnaksJzBFRmVXfEWabRJkRqpIj1tqOSaW9Qjf7X9BOIHdj
+ I5jfaQ==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 03:11:18PM +0200, Alexandre Mergnat wrote:
-> + To: Catalin Marinas <catalin.marinas@arm.com>
-> + To: Will Deacon <will@kernel.org>
 
-Why? They don't take bindings or dts files. Those go thru the subsystem 
-(watchdog (for bindings) or Mediatek sub-arch tree.
+--NpfuWbq9gkMhlu2M
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Second, if they did pick this up, they likely need the original mail 
-sent to them, not a reply.
+Hi,
 
-Rob
-
-> 
-> Sorry for the noise.
-> 
-> Regards,
-> Alexandre
-> 
-> Le ven. 7 avr. 2023 à 14:59, Alexandre Mergnat <amergnat@baylibre.com> a écrit :
-> >
-> > Add binding description for mediatek,mt8365-wdt
-> >
-> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+On Fri, Dec 09, 2022 at 12:21:17PM -0800, Stephen Boyd wrote:
+> Quoting Jonathan Neusch=C3=A4fer (2022-11-04 09:18:47)
+> > The Nuvoton WPCM450 SoC has a combined clock and reset controller.
+> > Add a devicetree binding for it, as well as definitions for the bit
+> > numbers used by it.
+> >=20
+> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > > ---
-> >  Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
-> > index 55b34461df1b..66cacea8e47f 100644
-> > --- a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
-> > +++ b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
-> > @@ -38,6 +38,7 @@ properties:
-> >                - mediatek,mt7623-wdt
-> >                - mediatek,mt7629-wdt
-> >                - mediatek,mt8173-wdt
-> > +              - mediatek,mt8365-wdt
-> >                - mediatek,mt8516-wdt
-> >            - const: mediatek,mt6589-wdt
-> >
-> >
-> > --
-> > 2.25.1
-> >
+>=20
+> Applied to clk-next
+
+I don't see this patch in clk/linux.git's clk-next branch. Did it get
+lost somehow?
+
+
+Best regards,
+Jonathan
+
+--NpfuWbq9gkMhlu2M
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmQ3AtAACgkQCDBEmo7z
+X9sIKRAAiN2ZmLRYACFaEh3bwfcujm/d3XGjZwlH08eGmyruyMebk/PfHKBWvAkT
+Fy4gl2t3YBljBGEK/T/TXymbEYALVNV2hIubLWjy35GCj+q/be0a1Ko3zIQTJY7P
+xG6ldUH6deZOCSeyVc5VB/z+fZY1x5rMB3ZJJCLxYj6SQPjcxBuLVdIfkQExTmp6
+uNf8Uxc7LMAZJ1IBfUoyTnfCgJZ5rNwSOhUQ9sDYwBKdi8lJHVR7ZQtGZPg3tKMx
+BK/PP04jvsV/1BlncBsp7WVemVjaMRdJRG71mMU+Rm5Gl5//ZyyBdx1bxouPXqMZ
++hpDpvXXJ8CDGVprURGaM3U9zcR6P43RfldCwocHqNLnz4b3a11ONboiN18mujds
+bB5XTWXBC7LeN+q0WC7Pv6soVK0EnQzaze+ts8Bf0DoPpTFvphwTvLlEMLYwSFeP
+w2y7iH8nxWDQjxSpgrly1YdR6/ivLbnqzTWAgPEInJAT1jsVdDJM/ARza3T/WGaB
+0wVAJR8A2fJz3iAwR54/LQ5av90kGQMT+Vmslzmpfrye0EW0gIuOY2iiWidcUlcz
+q3kAwaN6iAILBRhko5ihBznj7fTGBBRd6//0aaP6Cr39c+N+e7dmq0cLSqgjRZjI
+lL64RXXcalaOanGUa1C7lVLR8lt4pmwnNWx1GUdJonrZwTvomLA=
+=diBx
+-----END PGP SIGNATURE-----
+
+--NpfuWbq9gkMhlu2M--
