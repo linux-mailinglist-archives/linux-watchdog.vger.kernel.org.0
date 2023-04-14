@@ -2,150 +2,131 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A886E18DF
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Apr 2023 02:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DCC6E20A2
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Apr 2023 12:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjDNAOb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 13 Apr 2023 20:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
+        id S230210AbjDNKYN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 14 Apr 2023 06:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjDNAOa (ORCPT
+        with ESMTP id S230115AbjDNKYM (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 13 Apr 2023 20:14:30 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E75D5FD0;
-        Thu, 13 Apr 2023 17:13:49 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id c10-20020a17090abf0a00b0023d1bbd9f9eso20106471pjs.0;
-        Thu, 13 Apr 2023 17:13:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681431191; x=1684023191;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=WJQn8xlUXGO8WXDwuesuglKEx8PEVVyreK/tNf7kaQ8=;
-        b=C2Ylhbi83oEcJ+Pl6mYnd5e/4cYbF7z7TIhJoV60QIIHSzNak/9XG5hfI5PrvadNyd
-         nSIFxi2Ihdt9V91JfnQbi+hyFTP9wWie05OBgCoJRuZYtYUVoUBRWjWzB2MOXtnvkhpX
-         WNqEzBdGtqw1OK7+Nv0GCjEkR5B6z/Jj6WqjBDzQWCE/CCcqZ6w0/WH8hyGhRq0B7jQu
-         lQPnedLfThkA7MxOOwc/i8QmJc+jpEvAlqAjqUQs2k2DU6RZXd+H1BFv5oF9kgMJRRSR
-         bwiX/QsTEGNj3M+oA+0+o4k7mbeMgvgUl0VjHnwCAzj0K8U5smnGgVlN7vRyxvd2PCLA
-         O3zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681431191; x=1684023191;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WJQn8xlUXGO8WXDwuesuglKEx8PEVVyreK/tNf7kaQ8=;
-        b=TRxP5FjBkqKOdX3kBQmWl/B+pPvjOSgvO0tEee29SNVFuB93zrubvb8N41NbxQG6ve
-         ryyg/n/gc9dC+ic52BJwhsenkTPkSKJ2MG9d5aKak38YEMdm1o9RsBgZk/m6IflQEDZq
-         ADU2EMMBW/0Ow4RS7DiI6+SXgvWxvZC7ek2yfikvF9TaziT3mTXrifWI1igvHwm8nFDr
-         2D9m7VeuZe308m5ue1UJPJkjBnZy9J0M4wc/tjEB6S5BLRC8IpCm4je855SsPt5GZuVd
-         VBA6QR30vX3l+x6DPgTyMn9lVoDAhJjNvBOw7n3W7i3ajP+RF7JCmZu4yV7Z50njLtGb
-         VZFA==
-X-Gm-Message-State: AAQBX9cJnQu3QTu8mhh5j1L+Bxn+jN04MQvq43R96mWiuwjEcmQlCbu4
-        op0i+bO5HmvTqDRLHhQ86uM=
-X-Google-Smtp-Source: AKy350ZNzGuilfrbZYFX/ozYgyPOUjmKHTLeRWP3lNOGxrmFegL4vBQnImajURZ3gYAVkmhnC6zC0w==
-X-Received: by 2002:a17:90b:e90:b0:246:fd10:a652 with SMTP id fv16-20020a17090b0e9000b00246fd10a652mr3591599pjb.33.1681431191463;
-        Thu, 13 Apr 2023 17:13:11 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id oa4-20020a17090b1bc400b002469a865810sm3745477pjb.28.2023.04.13.17.13.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Apr 2023 17:13:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c19781d1-8cb9-ee38-9892-b4bc9016dd38@roeck-us.net>
-Date:   Thu, 13 Apr 2023 17:13:08 -0700
+        Fri, 14 Apr 2023 06:24:12 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85744C0A;
+        Fri, 14 Apr 2023 03:24:11 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33E90DIl011792;
+        Fri, 14 Apr 2023 03:23:50 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=bD5Y1MPDHvXV1+72/2W7Q1ijnYncf1yOPj42QcwQtIQ=;
+ b=YIXpOi2SluS2ubcANTQZmttd15PdlwZRPQZ7b/5BddELq43PgF7QcsyhTQ7CODr13doh
+ /T08jOWPiK2q1PBQJXiu0CRl6D0aotsYJW2ztkn3EGr6k1GjutywhQ/8vIm5ji/r7Hqj
+ K0I10tHp7pYwdKwRRmZ3XOzOMpvEMgTs6BufAn6fpXCj/++kSYVU+Iv3xzJuZWZJ3MEi
+ En9t+4jd4KslEPT0Uue3xgBLOR7TXB9Eg4hwcjHIhXqIvtdOiWRxWRvjwXJ9iGb3mKEV
+ KaQjT1gCwCdG2R8q1aFmG6LrDRhNmO1plJDmpkO4819WujI8VB7KUicix24BlRnkBmUU rA== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3py3tk0bph-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 03:23:50 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 14 Apr
+ 2023 03:23:48 -0700
+Received: from bbhushan2.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Fri, 14 Apr 2023 03:23:46 -0700
+From:   Bharat Bhushan <bbhushan2@marvell.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Bharat Bhushan <bbhushan2@marvell.com>
+Subject: [PATCH 1/2] dt-bindings: watchdog: marvell octeonTX2 GTI system atchdog driver
+Date:   Fri, 14 Apr 2023 15:53:41 +0530
+Message-ID: <20230414102342.23696-1-bbhushan2@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 5.10 5.4 4.19 4.14] watchdog: sbsa_wdog: Make sure the
- timeout programming is within the limits
-Content-Language: en-US
-To:     "Tyler Hicks (Microsoft)" <code@tyhicks.com>,
-        stable@vger.kernel.org
-Cc:     George Cherian <george.cherian@marvell.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org
-References: <20230413204823.724485-1-code@tyhicks.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230413204823.724485-1-code@tyhicks.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-GUID: ojrR47Yeiac9xXFmQ9OLXtsaSm1HYoR0
+X-Proofpoint-ORIG-GUID: ojrR47Yeiac9xXFmQ9OLXtsaSm1HYoR0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_04,2023-04-14_01,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 4/13/23 13:48, Tyler Hicks (Microsoft) wrote:
-> From: George Cherian <george.cherian@marvell.com>
-> 
-> [ Upstream commit 000987a38b53c172f435142a4026dd71378ca464 ]
-> 
-> Make sure to honour the max_hw_heartbeat_ms while programming the timeout
-> value to WOR. Clamp the timeout passed to sbsa_gwdt_set_timeout() to
-> make sure the programmed value is within the permissible range.
-> 
-> Fixes: abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
-> 
-> Signed-off-by: George Cherian <george.cherian@marvell.com>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> Link: https://lore.kernel.org/r/20230209021117.1512097-1-george.cherian@marvell.com
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Signed-off-by: Tyler Hicks (Microsoft) <code@tyhicks.com>
+Add binding documentation for the Marvell octeonTX2
+GTI system watchdog driver.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+---
+ .../watchdog/marvell-octeontx2-wdt.yaml       | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/marvell-octeontx2-wdt.yaml
 
-> ---
-> 
-> The Fixes line in the original commit is incorrect. This commit fixes a
-> bug that goes all the way back to v4.6 commit 57d2caaabfc7 ("Watchdog:
-> introduce ARM SBSA watchdog driver") when only 32-bit Watchdog Offset
-> Registers (WOR) were supported.
-> 
-> Without this fix, there's a truncation on the first argument, of u32
-> type, passed to writel() in the following situation situation:
-> 
-> Generic Watchdog architecture version is 1 (WOR is 32-bit)
-> action is 1
-> timeout is 240s
-> CNTFRQ_EL0 is 25000050 Hz
-> wdd.max_hw_heartbeat_ms is 171s
-> 
-> 25000050 * 240 = 6000012000  <--- requires 33 bits to store
-> 6000012000 & 0xFFFFFFFF = 1705044704  <--- truncated value written to WOR
-> 1705044704 / 25000050 = 68.2s  <--- timeout incorrectly set to 68.2s
-> 
-> The timeout from userspace is greater than wdd.max_hw_heartbeat_ms so
-> the watchdog core pings at 69s (240 - 171) which results in
-> intermittent and unexpected panics (action=1).
-> 
-> With this patch applied, the timeout passed to writel() never exceeds
-> 32-bits and the watchdog core + systemd keeps the watchdog happy.
-> 
-> I've validated this fix on real hardware running a linux-5.10.y stable
-> kernel. Please apply this patch to 5.10 through 4.14. Thanks!
-> 
-> Tyler
-> 
->   drivers/watchdog/sbsa_gwdt.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
-> index f0f1e3b2e463..4cbe6ba52754 100644
-> --- a/drivers/watchdog/sbsa_gwdt.c
-> +++ b/drivers/watchdog/sbsa_gwdt.c
-> @@ -121,6 +121,7 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
->   	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
->   
->   	wdd->timeout = timeout;
-> +	timeout = clamp_t(unsigned int, timeout, 1, wdd->max_hw_heartbeat_ms / 1000);
->   
->   	if (action)
->   		writel(gwdt->clk * timeout,
+diff --git a/Documentation/devicetree/bindings/watchdog/marvell-octeontx2-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvell-octeontx2-wdt.yaml
+new file mode 100644
+index 000000000000..e509f26c61b9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/marvell-octeontx2-wdt.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/marvell-octeontx2-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Marvell OcteonTX2 GTI system watchdog
++
++allOf:
++  - $ref: watchdog.yaml#
++
++maintainers:
++  - Bharat Bhushan <bbhushan2@marvell.com>
++
++properties:
++  compatible:
++    const: marvell-octeontx2-wdt
++
++  reg:
++    maxItems: 1
++    description:
++      OcteonTX2 GTI system watchdog register space
++
++  interrupts:
++    maxItems: 1
++    description:
++      OcteonTX2 GTI system watchdog interrupt number
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        watchdog@802000040000 {
++          compatible = "marvell-octeontx2-wdt";
++          reg = <0x8020 0x40000 0x0 0x20000>;
++          interrupts = <0 38 1>;
++        };
++    };
++
++...
+-- 
+2.17.1
 
