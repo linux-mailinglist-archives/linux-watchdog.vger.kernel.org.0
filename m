@@ -2,81 +2,78 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306E46E1613
-	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Apr 2023 22:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A886E18DF
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Apr 2023 02:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjDMUsz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 13 Apr 2023 16:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
+        id S229625AbjDNAOb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 13 Apr 2023 20:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjDMUsy (ORCPT
+        with ESMTP id S229577AbjDNAOa (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 13 Apr 2023 16:48:54 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E46193C9;
-        Thu, 13 Apr 2023 13:48:52 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 12C3E32009A9;
-        Thu, 13 Apr 2023 16:48:51 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 13 Apr 2023 16:48:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tyhicks.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1681418930; x=1681505330; bh=XKbPIBcAeh
-        D9dQDK3VzDyoTlY+7K8DvNqjYIwyhgnaw=; b=h4e8kUBnCtcl5EdT+h18RV/CvK
-        KURTVEsFDfNAdWvSnSJcO3y003ajKtaObY4E6TbkTVPBtoB+PGd3OGQDj3SjzTT+
-        KJmLqJiSyPgzNaU//ne5kugMwDv2x/o34UUG/FMXKh8sHL96Q/mtf8B29GpPbK+z
-        OMDI4/r5o3Bg/fAL8q9EFB/2UmtmZ+OTT9+Kwtcqzko1Td2BYfsDFIDfun6YbwGe
-        U7spXjdI1VbXSZE7jJxBTNSekpf+PdMQhDPRuqeyjtN0nw5v6qZYcYzXeCtgMX8U
-        APuX2Aj2Hv+Gy+psjB0PPTDxMvj66s6GcTr41P2FoSnp5OG6ji+O+FSCK2iQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1681418930; x=1681505330; bh=XKbPIBcAehD9d
-        QDK3VzDyoTlY+7K8DvNqjYIwyhgnaw=; b=bYwWhgEaQsP/JLWWYbrcIorL9Vdcg
-        CI5u2t8bR45ucBkJhpzwhQmpyJyMJFja0kryt1WFtYR4fCZec4Uqv9U9oTYRUguY
-        kScvLaTyw0tvbrRIhoI+aHSuNJotQF/wY8nN0LJjkUjLPftV+dplMufuWuWpy0dq
-        DwUDa7BCmYZ404i4DntbPfg8Gc2kroiyBIJgmAZEj7Mimd9atQe2B1iaIjr2zx/q
-        kPuMb4zRgS+gEkhobDTCtF5p+GQiqgPTIyMA2z8+5XKcoMAAjdxAYRcaJunyh/s6
-        0pKwYXZN/6hR15WKBGuULmBq21GI1+SxZGDAXKS7t3erHcZbb3Tm3Kr0Q==
-X-ME-Sender: <xms:smo4ZGgjktrfFtGWnqyKzUupxur12RnYoqs438zMKFaKPKzRT5kFaQ>
-    <xme:smo4ZHCf3nctc5Sq64vkk2lZcbOxL9HlHgWrNssozXmhrO4WAdzUgZfG2DbqHwp_P
-    I3IY6jJNjs2wpkfTJw>
-X-ME-Received: <xmr:smo4ZOHaqB-i4UGwvZ_0-pi0VdQGZaFhpLapyU1_erWPZuVABXHGhmbYR5szjbMwpwx3n7mzSNaxa5km4yDS00umUWuGFnPd3uULXwD6bqQwyRz6>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdekkedgudehhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpedfvfihlhgv
-    rhcujfhitghkshculdfoihgtrhhoshhofhhtmddfuceotghouggvsehthihhihgtkhhsrd
-    gtohhmqeenucggtffrrghtthgvrhhnpeeitdfgudeikefgheegfffhvdfgfedvfeevgeeh
-    keegfffgudekveffvdejtedvieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
-    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheptghouggvseht
-    hihhihgtkhhsrdgtohhm
-X-ME-Proxy: <xmx:smo4ZPTD2lnhFsWhbc9SgS_WawDHz2an-YEGEB42tL4uODcCQkgPDg>
-    <xmx:smo4ZDxrZkf94rTR11IWkejUnNZnCdThP1vv5QNtZ3u90g-2nQvr6Q>
-    <xmx:smo4ZN4sKs92MizQjSJS2vhEvGRUY-PW3bmqW-YwQj_YMz-zknFgUg>
-    <xmx:smo4ZFskYzK6pNxnb4QkXDmwXjV1PQXpZT3mxouMxuPVbcq_HDFZWg>
-Feedback-ID: i78e14604:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 13 Apr 2023 16:48:49 -0400 (EDT)
-From:   "Tyler Hicks (Microsoft)" <code@tyhicks.com>
-To:     stable@vger.kernel.org
+        Thu, 13 Apr 2023 20:14:30 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E75D5FD0;
+        Thu, 13 Apr 2023 17:13:49 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id c10-20020a17090abf0a00b0023d1bbd9f9eso20106471pjs.0;
+        Thu, 13 Apr 2023 17:13:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681431191; x=1684023191;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=WJQn8xlUXGO8WXDwuesuglKEx8PEVVyreK/tNf7kaQ8=;
+        b=C2Ylhbi83oEcJ+Pl6mYnd5e/4cYbF7z7TIhJoV60QIIHSzNak/9XG5hfI5PrvadNyd
+         nSIFxi2Ihdt9V91JfnQbi+hyFTP9wWie05OBgCoJRuZYtYUVoUBRWjWzB2MOXtnvkhpX
+         WNqEzBdGtqw1OK7+Nv0GCjEkR5B6z/Jj6WqjBDzQWCE/CCcqZ6w0/WH8hyGhRq0B7jQu
+         lQPnedLfThkA7MxOOwc/i8QmJc+jpEvAlqAjqUQs2k2DU6RZXd+H1BFv5oF9kgMJRRSR
+         bwiX/QsTEGNj3M+oA+0+o4k7mbeMgvgUl0VjHnwCAzj0K8U5smnGgVlN7vRyxvd2PCLA
+         O3zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681431191; x=1684023191;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WJQn8xlUXGO8WXDwuesuglKEx8PEVVyreK/tNf7kaQ8=;
+        b=TRxP5FjBkqKOdX3kBQmWl/B+pPvjOSgvO0tEee29SNVFuB93zrubvb8N41NbxQG6ve
+         ryyg/n/gc9dC+ic52BJwhsenkTPkSKJ2MG9d5aKak38YEMdm1o9RsBgZk/m6IflQEDZq
+         ADU2EMMBW/0Ow4RS7DiI6+SXgvWxvZC7ek2yfikvF9TaziT3mTXrifWI1igvHwm8nFDr
+         2D9m7VeuZe308m5ue1UJPJkjBnZy9J0M4wc/tjEB6S5BLRC8IpCm4je855SsPt5GZuVd
+         VBA6QR30vX3l+x6DPgTyMn9lVoDAhJjNvBOw7n3W7i3ajP+RF7JCmZu4yV7Z50njLtGb
+         VZFA==
+X-Gm-Message-State: AAQBX9cJnQu3QTu8mhh5j1L+Bxn+jN04MQvq43R96mWiuwjEcmQlCbu4
+        op0i+bO5HmvTqDRLHhQ86uM=
+X-Google-Smtp-Source: AKy350ZNzGuilfrbZYFX/ozYgyPOUjmKHTLeRWP3lNOGxrmFegL4vBQnImajURZ3gYAVkmhnC6zC0w==
+X-Received: by 2002:a17:90b:e90:b0:246:fd10:a652 with SMTP id fv16-20020a17090b0e9000b00246fd10a652mr3591599pjb.33.1681431191463;
+        Thu, 13 Apr 2023 17:13:11 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id oa4-20020a17090b1bc400b002469a865810sm3745477pjb.28.2023.04.13.17.13.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Apr 2023 17:13:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c19781d1-8cb9-ee38-9892-b4bc9016dd38@roeck-us.net>
+Date:   Thu, 13 Apr 2023 17:13:08 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 5.10 5.4 4.19 4.14] watchdog: sbsa_wdog: Make sure the
+ timeout programming is within the limits
+Content-Language: en-US
+To:     "Tyler Hicks (Microsoft)" <code@tyhicks.com>,
+        stable@vger.kernel.org
 Cc:     George Cherian <george.cherian@marvell.com>,
-        Guenter Roeck <linux@roeck-us.net>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-watchdog@vger.kernel.org
-Subject: [PATCH 5.10 5.4 4.19 4.14] watchdog: sbsa_wdog: Make sure the timeout programming is within the limits
-Date:   Thu, 13 Apr 2023 15:48:23 -0500
-Message-Id: <20230413204823.724485-1-code@tyhicks.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+References: <20230413204823.724485-1-code@tyhicks.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230413204823.724485-1-code@tyhicks.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,69 +81,71 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: George Cherian <george.cherian@marvell.com>
+On 4/13/23 13:48, Tyler Hicks (Microsoft) wrote:
+> From: George Cherian <george.cherian@marvell.com>
+> 
+> [ Upstream commit 000987a38b53c172f435142a4026dd71378ca464 ]
+> 
+> Make sure to honour the max_hw_heartbeat_ms while programming the timeout
+> value to WOR. Clamp the timeout passed to sbsa_gwdt_set_timeout() to
+> make sure the programmed value is within the permissible range.
+> 
+> Fixes: abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
+> 
+> Signed-off-by: George Cherian <george.cherian@marvell.com>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Link: https://lore.kernel.org/r/20230209021117.1512097-1-george.cherian@marvell.com
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+> Signed-off-by: Tyler Hicks (Microsoft) <code@tyhicks.com>
 
-[ Upstream commit 000987a38b53c172f435142a4026dd71378ca464 ]
-
-Make sure to honour the max_hw_heartbeat_ms while programming the timeout
-value to WOR. Clamp the timeout passed to sbsa_gwdt_set_timeout() to
-make sure the programmed value is within the permissible range.
-
-Fixes: abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
-
-Signed-off-by: George Cherian <george.cherian@marvell.com>
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20230209021117.1512097-1-george.cherian@marvell.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-Signed-off-by: Tyler Hicks (Microsoft) <code@tyhicks.com>
----
 
-The Fixes line in the original commit is incorrect. This commit fixes a
-bug that goes all the way back to v4.6 commit 57d2caaabfc7 ("Watchdog:
-introduce ARM SBSA watchdog driver") when only 32-bit Watchdog Offset
-Registers (WOR) were supported.
-
-Without this fix, there's a truncation on the first argument, of u32
-type, passed to writel() in the following situation situation:
-
-Generic Watchdog architecture version is 1 (WOR is 32-bit)
-action is 1
-timeout is 240s
-CNTFRQ_EL0 is 25000050 Hz
-wdd.max_hw_heartbeat_ms is 171s
-
-25000050 * 240 = 6000012000  <--- requires 33 bits to store
-6000012000 & 0xFFFFFFFF = 1705044704  <--- truncated value written to WOR
-1705044704 / 25000050 = 68.2s  <--- timeout incorrectly set to 68.2s
-
-The timeout from userspace is greater than wdd.max_hw_heartbeat_ms so
-the watchdog core pings at 69s (240 - 171) which results in
-intermittent and unexpected panics (action=1).
-
-With this patch applied, the timeout passed to writel() never exceeds
-32-bits and the watchdog core + systemd keeps the watchdog happy.
-
-I've validated this fix on real hardware running a linux-5.10.y stable
-kernel. Please apply this patch to 5.10 through 4.14. Thanks!
-
-Tyler
-
- drivers/watchdog/sbsa_gwdt.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
-index f0f1e3b2e463..4cbe6ba52754 100644
---- a/drivers/watchdog/sbsa_gwdt.c
-+++ b/drivers/watchdog/sbsa_gwdt.c
-@@ -121,6 +121,7 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
- 	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
- 
- 	wdd->timeout = timeout;
-+	timeout = clamp_t(unsigned int, timeout, 1, wdd->max_hw_heartbeat_ms / 1000);
- 
- 	if (action)
- 		writel(gwdt->clk * timeout,
--- 
-2.34.1
+> ---
+> 
+> The Fixes line in the original commit is incorrect. This commit fixes a
+> bug that goes all the way back to v4.6 commit 57d2caaabfc7 ("Watchdog:
+> introduce ARM SBSA watchdog driver") when only 32-bit Watchdog Offset
+> Registers (WOR) were supported.
+> 
+> Without this fix, there's a truncation on the first argument, of u32
+> type, passed to writel() in the following situation situation:
+> 
+> Generic Watchdog architecture version is 1 (WOR is 32-bit)
+> action is 1
+> timeout is 240s
+> CNTFRQ_EL0 is 25000050 Hz
+> wdd.max_hw_heartbeat_ms is 171s
+> 
+> 25000050 * 240 = 6000012000  <--- requires 33 bits to store
+> 6000012000 & 0xFFFFFFFF = 1705044704  <--- truncated value written to WOR
+> 1705044704 / 25000050 = 68.2s  <--- timeout incorrectly set to 68.2s
+> 
+> The timeout from userspace is greater than wdd.max_hw_heartbeat_ms so
+> the watchdog core pings at 69s (240 - 171) which results in
+> intermittent and unexpected panics (action=1).
+> 
+> With this patch applied, the timeout passed to writel() never exceeds
+> 32-bits and the watchdog core + systemd keeps the watchdog happy.
+> 
+> I've validated this fix on real hardware running a linux-5.10.y stable
+> kernel. Please apply this patch to 5.10 through 4.14. Thanks!
+> 
+> Tyler
+> 
+>   drivers/watchdog/sbsa_gwdt.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
+> index f0f1e3b2e463..4cbe6ba52754 100644
+> --- a/drivers/watchdog/sbsa_gwdt.c
+> +++ b/drivers/watchdog/sbsa_gwdt.c
+> @@ -121,6 +121,7 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
+>   	struct sbsa_gwdt *gwdt = watchdog_get_drvdata(wdd);
+>   
+>   	wdd->timeout = timeout;
+> +	timeout = clamp_t(unsigned int, timeout, 1, wdd->max_hw_heartbeat_ms / 1000);
+>   
+>   	if (action)
+>   		writel(gwdt->clk * timeout,
 
