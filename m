@@ -2,381 +2,313 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609F46E2209
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Apr 2023 13:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8626E2232
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Apr 2023 13:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjDNL1w (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 14 Apr 2023 07:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
+        id S229820AbjDNLar (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 14 Apr 2023 07:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjDNL1v (ORCPT
+        with ESMTP id S229450AbjDNLaq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 14 Apr 2023 07:27:51 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A0383CF
-        for <linux-watchdog@vger.kernel.org>; Fri, 14 Apr 2023 04:27:49 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id q23so35259219ejz.3
-        for <linux-watchdog@vger.kernel.org>; Fri, 14 Apr 2023 04:27:49 -0700 (PDT)
+        Fri, 14 Apr 2023 07:30:46 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB0E90;
+        Fri, 14 Apr 2023 04:30:14 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33E9092m011326;
+        Fri, 14 Apr 2023 04:29:32 -0700
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2048.outbound.protection.outlook.com [104.47.66.48])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3py3tk0ke4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Apr 2023 04:29:32 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ncrnuzVsIUF9w6QLWnYJ8i60RAPPrgMziY+o5NjxnTzJm+58Q9N3kJU+s+HGMZA6oj/q17C23/UPxdkMJDAvnJtQLkzx89aD6xT0iIDKyZkK35k0iKZJF/JoLYRWb8+0uGiLdnCOqpV8jqYqKGLOT8TRg0fkj7DLmetXXKO+L3e8OVlsPtprA7Tp12TAkLXpNqoLYGPHF285+z5Agy943VUs9gx33lCCFBXrT79Yo81MQWVUMhRyCqyOISHkm6JabjssCHkhBwP7leukkSG06F+1ja/Y6xtqiYRwPh6KaVqVCgH8TQOliyegLcfqFYQod+tdgax6xSPl7WIzP9CRVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hel0ksJQNuQBRVyXxHly1lhU/tiDHna/OhRVn3cfe/M=;
+ b=EpQhu3k0znzl5mGJz7gmKJQeYARkc3QkTv24i00JgXy5CQ2yXPPanwAaP16JUh0taS1/HB2H6WCSIvQF/GVN2U9GmVtS2jdBpXchyoe4Nv+fjxiMcoyCKRTpwl8nb3fzwJ/BMk5Pxy4v24eimppG82S38Qsm5GHaqr3mBvnZN1fdoY+4k7UtCRVLLr4yuniPipp+0mnFvcJUZFDl/UFNRWhk44rgzWHDDVboWCofwPX1/JcMyGghbpkgQBQeARbL1ePQ8AniPAPKu15gsPA5ExeAx+97Z7EVfIdpIdqgEeebwnMk+eMGRsYR5G+82TarN6YMBEbtiPlKQ8bdPhsO6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681471668; x=1684063668;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XM86V3q0VssVgC57HZFavLzNSvDNISvAL0hx/IADtCs=;
-        b=GysGcyMM2DpD83blgu4UAReXUkqavpGB5hKnRD7pRKNjuoCgLwuXBM66VqqvJ/kwQ3
-         Z2W4X7jWmdCiIwe+hWB2EY5LRsNdqR0w4NjVybO7j5bz/FomK6QnHlM3A1WgCSpOZABM
-         3+L8ZZXGDCgWwZHH8aPl8Qx2B0NiMgHwvSqyMgC/I5bSnZtljGOetPd3mTmLWwSZcfvq
-         HzfxpLe3s5Cnj4tT/yOrJpxnlivFrXafq/UHwUrSxCKPJXQn3IITYghrj8PzpWBzmgHP
-         iS5JiDzY0FEpuLAjXH/7eomV7tI1ccLotTLjE9PBBWQB5Svo0ro1ebWxco0Pz7+rOFjf
-         FTHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681471668; x=1684063668;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XM86V3q0VssVgC57HZFavLzNSvDNISvAL0hx/IADtCs=;
-        b=Dq4bmm3aphkYLz7egiUn+4hGraKgjDGR2ZS4v98q8o/zhu6ocwJqmMDn9wSmejwRnv
-         wzuiBwQ48sA/y/YsSL5kwu3LCq2CsgbsjSsFxbkXYbUs5iS7848u7VG6ahhGIYefGTtw
-         FTV+WdZdWtcaZXluG/zOOlOw2mev1SqJRVZuUMtkYJAGYDrl2LiU0CPXX7N/DIWLBtwX
-         phoBXGw3E+iL4eOP7udaFxKtVhxQzLEYwlzpLf8t3N0SSN/ZerXmzGtnvOHVEwRTT681
-         kGygbaz9DIvdcflvcACJbIknoqBJ7ZwGbpyjwQ3XogPbuzqErpoUHxfiDII4eEgHuvO2
-         c0Cg==
-X-Gm-Message-State: AAQBX9el4hfJ5qLpILiiRuGmwXnXodcCgno9k6HUxv1g7svF0Ox4Ol8w
-        MQx0vfGrqTF7Sh0K8/06I9M3VA==
-X-Google-Smtp-Source: AKy350ZIISl8bncVzBpGN6xCIPgW8roFvudPexgCuXBzuI//MWjpuQNw+IshnQjsjUEtsZ1QH0FE4Q==
-X-Received: by 2002:a17:907:1b1b:b0:94e:4fac:d92b with SMTP id mp27-20020a1709071b1b00b0094e4facd92bmr6010702ejc.58.1681471668315;
-        Fri, 14 Apr 2023 04:27:48 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:40b9:8c57:b112:651d? ([2a02:810d:15c0:828:40b9:8c57:b112:651d])
-        by smtp.gmail.com with ESMTPSA id nd23-20020a170907629700b0094e9f87c6d4sm2296149ejc.192.2023.04.14.04.27.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Apr 2023 04:27:47 -0700 (PDT)
-Message-ID: <832d7830-be98-243c-ebf7-c23ae51e4ccc@linaro.org>
-Date:   Fri, 14 Apr 2023 13:27:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 2/2] Watchdog: Add octeontx2 GTI watchdog driver
-Content-Language: en-US
-To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+ d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hel0ksJQNuQBRVyXxHly1lhU/tiDHna/OhRVn3cfe/M=;
+ b=NpZNF1JW9HUaIeFKgMKSR2SnnzUG2UpbMB1bM98FJ4Lw4h7FUpNyckeifJgpeZbj/G7dgNhihprZxvRsAotKrKvEXH4F6gzWZqN5XowYk+BfqE5scE4iWR27zL1terxhf0lRq1IXcAZ8+F14NeMxCvDtplQfgVZGgNZNggmkF+c=
+Received: from DM5PR1801MB1883.namprd18.prod.outlook.com (2603:10b6:4:62::23)
+ by DM5PR18MB2262.namprd18.prod.outlook.com (2603:10b6:4:b4::35) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.35; Fri, 14 Apr
+ 2023 11:29:27 +0000
+Received: from DM5PR1801MB1883.namprd18.prod.outlook.com
+ ([fe80::539a:cb03:47cd:9551]) by DM5PR1801MB1883.namprd18.prod.outlook.com
+ ([fe80::539a:cb03:47cd:9551%6]) with mapi id 15.20.6254.033; Fri, 14 Apr 2023
+ 11:29:27 +0000
+From:   Bharat Bhushan <bbhushan2@marvell.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [EXT] Re: [PATCH 1/2] dt-bindings: watchdog: marvell octeonTX2
+ GTI system atchdog driver
+Thread-Topic: [EXT] Re: [PATCH 1/2] dt-bindings: watchdog: marvell octeonTX2
+ GTI system atchdog driver
+Thread-Index: AQHZbrs1BHIKgidtBU69la6HTO70r68qqRMAgAAAx/A=
+Date:   Fri, 14 Apr 2023 11:29:27 +0000
+Message-ID: <DM5PR1801MB1883C0B40D8D7C84BA0435FDE3999@DM5PR1801MB1883.namprd18.prod.outlook.com>
 References: <20230414102342.23696-1-bbhushan2@marvell.com>
- <20230414102342.23696-2-bbhushan2@marvell.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230414102342.23696-2-bbhushan2@marvell.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <a5aa1be1-f98d-af04-9879-b924a5bcb14c@linaro.org>
+In-Reply-To: <a5aa1be1-f98d-af04-9879-b924a5bcb14c@linaro.org>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: =?utf-8?B?UEcxbGRHRStQR0YwSUc1dFBTSmliMlI1TG5SNGRDSWdjRDBpWXpwY2RYTmxj?=
+ =?utf-8?B?bk5jWW1Kb2RYTm9ZVzR5WEdGd2NHUmhkR0ZjY205aGJXbHVaMXd3T1dRNE5E?=
+ =?utf-8?B?bGlOaTB6TW1RekxUUmhOREF0T0RWbFpTMDJZamcwWW1FeU9XVXpOV0pjYlhO?=
+ =?utf-8?B?bmMxeHRjMmN0T1dJd01tSTFNVGt0WkdGaU55MHhNV1ZrTFdGbE4yRXRORGd5?=
+ =?utf-8?B?WVdVek56UXdZamMyWEdGdFpTMTBaWE4wWERsaU1ESmlOVEZpTFdSaFlqY3RN?=
+ =?utf-8?B?VEZsWkMxaFpUZGhMVFE0TW1GbE16YzBNR0kzTm1KdlpIa3VkSGgwSWlCemVq?=
+ =?utf-8?B?MGlOREV5T0NJZ2REMGlNVE16TWpVNU5EVXpOalF6TVRJeU1URTJJaUJvUFNK?=
+ =?utf-8?B?TVFucGlORlE1V0daa1dreFVTMEY2ZDNkS1UwVjZjRGhPWm04OUlpQnBaRDBp?=
+ =?utf-8?B?SWlCaWJEMGlNQ0lnWW04OUlqRWlJR05wUFNKalFVRkJRVVZTU0ZVeFVsTlNW?=
+ =?utf-8?B?VVpPUTJkVlFVRklXVWxCUVVSRldsWjRaSGhITjFwQlVub3paelJsYkRSbVMy?=
+ =?utf-8?B?UklVR1ZFYURaWWFEaHdNRTVCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJTRUZCUVVGQlIwTkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlJVRkJVVUZDUVVGQlFURkdTRE5oUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VW8wUVVGQlFtaEJSMUZCV2tGQ2VVRkhWVUZqZDBKNlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGRlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFXZEJRVUZCUVVGdVowRkJRVWROUVdSUlFucEJTRkZCWW5kQ2RFRkdPRUZq?=
+ =?utf-8?B?UVVKc1FVaEpRV04zUW5aQlJ6UkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJV?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVU5CUVVGQlFVRkRaVUZCUVVGWmQwSXhRVWhOUVdSQlFu?=
+ =?utf-8?B?WkJSekJCV0hkQ2QwRkhaMEZpZDBKMVFVZFZRV0puUWpGQlJ6QkJXV2RDYkVG?=
+ =?utf-8?B?SVNVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUWtGQlFVRkJRVUZCUVVGSlFVRkJRVUZCU2pSQlFVRkNha0ZJ?=
+ =?utf-8?B?VlVGamQwSXdRVWM0UVdKUlFtWkJTRTFCWTNkQ2RVRkdPRUZhUVVKb1FVaE5R?=
+ =?utf-8?B?V0ZCUW1aQlNGbEJUVUZCZVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?Q?FBQUFB?=
+x-dg-refone: =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVVkJRVUZCUVVGQlFVRkJaMEZCUVVGQlFXNW5RVUZC?=
+ =?utf-8?B?UjAxQlpGRkNla0ZJVVVGaWQwSjBRVVk0UVdOM1FucEJSelJCV0hkQ2NrRkhW?=
+ =?utf-8?B?VUZsVVVJelFVYzRRV05uUW10QlNFMUJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZSUVVGQlFVRkJRVUZCUTBGQlFV?=
+ =?utf-8?B?RkJRVU5sUVVGQlFWbDNRakZCU0UxQlpFRkNka0ZITUVGWWQwSjZRVWhOUVdK?=
+ =?utf-8?B?blFtWkJSelJCWW5kQ2EwRkhWVUZpUVVKd1FVY3dRV0ZSUWpCQlIxVkJZMmRD?=
+ =?utf-8?B?WmtGSVdVRk5RVUY1UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQ1FVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVbEJRVUZCUVVGS05FRkJRVUpxUVVoVlFXTjNRakJCUnpoQllsRkNa?=
+ =?utf-8?B?a0ZJVFVGamQwSjFRVVk0UVdOM1FuZEJSMFZCV1hkQ2JFRkdPRUZrWjBGM1FV?=
+ =?utf-8?B?UkpRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJSVUZCUVVGQlFVRkJRVUZuUVVGQlFVRkJibWRCUVVGSFVVRmlRVUozUVVZ?=
+ =?utf-8?B?NFFXTjNRbkpCU0d0QlkwRkNiRUZHT0VGWmQwSnZRVWRGUVdSQlFtWkJSekJC?=
+ =?utf-8?B?V2xGQ2VrRklUVUZaVVVKdVFVZFZRVmgzUWpKQlJFRkJUV2RCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVZGQlFVRkJRVUZCUVVGRFFVRkJRVUZCUTJWQlFVRkJX?=
+ =?utf-8?B?a0ZDYzBGSVFVRllkMEo2UVVkM1FWbFJRbXBCUjNOQldIZENha0ZIWjBGWlVV?=
+ =?utf-8?B?SXdRVVk0UVdKUlFteEJTRTFCWTNkQ2FFRkhZMEZhVVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?Q?FBQUFB?=
+x-dg-reftwo: =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVSkJRVUZCUVVGQlFVRkJTVUZCUVVGQlFVbzBR?=
+ =?utf-8?B?VUZCUW10QlIzZEJZMEZDWmtGSVVVRmFVVUpvUVVjd1FXTjNRbVpCUnpoQllt?=
+ =?utf-8?B?ZENiRUZIVVVGalowSndRVWhaUVZwUlFtWkJSMWxCWVZGQ2MwRkhWVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZGUVVGQlFVRkJRVUZCUVdk?=
+ =?utf-8?B?QlFVRkJRVUZ1WjBGQlFVZFZRV0pSUW1oQlIydEJZa0ZDWmtGSFJVRmFRVUpy?=
+ =?utf-8?B?UVVoSlFWcFJRbnBCU0UxQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVTjNRVUZCUVVGQlFVRkJRVUZCUVVGQlVVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVTkJRVUZCUVVGRFpVRkJRVUZpVVVKb1FVaEpRV1JuUW14QlIz?=
+ =?utf-8?B?ZEJZa0ZDWmtGSVFVRmpaMEoyUVVkdlFWcFJRbXBCU0ZGQldIZENha0ZIT0VG?=
+ =?utf-8?B?YVFVSnNRVWhOUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRa0ZCUVVGQlFVRkJRVUZKUVVGQlFVRkJTalJCUVVGQ2RFRkhSVUZq?=
+ =?utf-8?B?WjBJeVFVZFZRV0pCUW5OQlJqaEJaRUZDYkVGSVNVRmlVVUp3UVVjMFFXUlJR?=
+ =?utf-8?B?bnBCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVWQlFVRkJRVUZCUVVGQlowRkJRVUZCUVNJdlBq?=
+ =?utf-8?Q?wvbWV0YT4=3D?=
+x-dg-rorf: true
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM5PR1801MB1883:EE_|DM5PR18MB2262:EE_
+x-ms-office365-filtering-correlation-id: aae9a65a-419e-4fde-635c-08db3cdb81c4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: JNjaWn60HNOzswzuEO+/OjXWo5B/wcIPCF8tzSYHugtn0jao+T5yrLOpykqdZRONJH0NWVLQ6Qurf/QPQobNdRRMwSRF1ZB0UqqVWpnws9LB1OHR/1Bk5Bz6oQ/VLnWB3CtclviwdWvsxWqi7cBDGmggscwRX6mojW5P8bzZiXT9FalLg6N62W27NHLlv6IVsS+Vk2CT8v/cq/3FSj1PHH6rq0eYeJPDi5uwkuE3v+0pTDXtjGFLknPvY073LDn3Dbmt1qiIz4EnmgK3DKq76Ubi7jlHRtESDnq5cap613+DPeQKX1fU5CpkiV6HToRf2JM1pMYJMmSb6NfzL8q+ZIks863xDfI+EvBSKsJ5/EiHT9QxAQohJKbJru6nx6EcJzA0bkoPbQqp3S8bD+dxqJZ6284dNS89xMDFljw9/T5RkRu7ckapapIjkvg9Kr6zw4uQmL8SEXApMZzJXQ8FOVX3iX/1cJ4gDKJOQF509dTTdCtWzh3HrIlu3uckKZ+4zNzTWXP3CnLUVNVFM5yGamMfvR8HvmHQiIwG7/r1oMl56Ut72F0fp1mLd2SHi10Wogk2Y6i96jBFpYbyxv9sp+Dg8LLwX9e74g8R5zQ7H6Q=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1801MB1883.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(376002)(346002)(396003)(136003)(451199021)(41300700001)(38070700005)(122000001)(5660300002)(8936002)(478600001)(8676002)(55016003)(38100700002)(52536014)(33656002)(83380400001)(2906002)(186003)(19627235002)(76116006)(26005)(86362001)(53546011)(55236004)(66946007)(9686003)(6506007)(66556008)(316002)(66476007)(66446008)(110136005)(64756008)(7696005)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bTI0UXUwUjZTb2hVWU85VjNkc05GQXR0bmQ5a24vTXgvQjNocGZrZ29zSDI0?=
+ =?utf-8?B?a0lrcjd1ZG5GVXpMLzBvRGV0QmNoTXVRRE9vUm54akZRMGlCQThlYmFzc05I?=
+ =?utf-8?B?UGpDVUlqa0pjT0c0Z0lpUTU1VllSUnJNbXF4NUZmbkRMUElFdGZqbm82Q0Zs?=
+ =?utf-8?B?bTUwVGdpYytETWViVTB0ZDJqMllEZTNicjUzc0FPUkhjSEFNbVY3V1NhTVlV?=
+ =?utf-8?B?S0o0Z2RGWnVWSTZQVWJRQkxQd0FWRXNwZlpMaE1hZS9Da2t0cWk1cFlCT2ty?=
+ =?utf-8?B?VWZiWk12OFliUmg3cHorU3c2TDdtV28vMWlYa1RMYk9ncDdsbnI3aW5UajV3?=
+ =?utf-8?B?Y1V2YW0zNjdSRzNpblpDazVlUHMramJLQUFQR2d4Si9iUXFoV21BUTdEUkpO?=
+ =?utf-8?B?T05YSC9SWkxnQ2loNmxVTXZhUFoxUndPUm5DVHR5UnhkWU1xcEdzRW1HMVNG?=
+ =?utf-8?B?UEZ0cXYxNzZwVlk2S1NYUENOSHFWamY3L3FYNUkrcDdDY1ZCeWtSc0dGV2E1?=
+ =?utf-8?B?c3BrRzF3a2VwcmVCRmRUVlk1Y1F4aFFLamVON2V3STJtRVhqanZkOGNYTFI0?=
+ =?utf-8?B?YWNRYTNVNm9sRlBkT2o0M3B3cXl3WjJFVTNsR2lhRTVZZHBncGZMUXFJYTJS?=
+ =?utf-8?B?UkFpQ2lZUzh5NDd5NTJHVHhTdVVnZHFxbWhNemJxaVh2S3hBOEh0VmlqNDZt?=
+ =?utf-8?B?WE4xaDhDVWwvMTZRVFVycUpuNE5SejZHcm1ZOUoxT0ZMbmlNN21DemJUUnI4?=
+ =?utf-8?B?QzZJT1Z1M1pkWko4eDd6bXR0dW00MTdOcGk2eWlIcGVSNFcrSEFRMzltUjVQ?=
+ =?utf-8?B?MXBZK3N4UUxtUHVQQmFtdER0bi9ua0ZUYXlxY0xHS2QwbExTWWllS09KSFo4?=
+ =?utf-8?B?bS9RZ2UxSVRQZnJyTE5lRFdQTkZYMFFid3RYTWFYUU5SVjRJRmY3OUpLUHlU?=
+ =?utf-8?B?VEFwc281dVdlakR0VFBpV2haMVBETDJOU2VjV2EzaUJEc2lTSWR5MlMxRWti?=
+ =?utf-8?B?MGw4cTV3V3JLV0pmTDZ6Y3ZFUFVvM0FYUUR4b25VSkRNY0tHMTVXNGNwdnhM?=
+ =?utf-8?B?OUJsQnhMUFRjMUNIZTdNUU9hd25paWJtZkRqckZJMEZFNDNFcDB1TUJBc3h6?=
+ =?utf-8?B?cDVQams3bnp4TW54KzdUc2dtUFcwUnd0VWJlUmQrcDlPSkJnM2EzSG8ySU13?=
+ =?utf-8?B?aHUrN09LT3Y5U3dRNitrMVZMRk9xSHNzVkY1alFlWjI2N0I2T1NIUXNwZnpH?=
+ =?utf-8?B?UExxYXhlbENxVkh3YkYvV2Ztb2x0L0U1Y1I0a0E0c0VoU0NvaGt3NXd3cGNx?=
+ =?utf-8?B?R3p4azgvUE5rK1I5d3NKbytVWU9QMXZVMU1tbXcrbTQ3WFBTaFgvSkVlUzFr?=
+ =?utf-8?B?eGpMSkRrNjVVOFI1bGdrcVdSVy9qTm0xMmUvYmd5a0ZlR1FLZkpyTTFFQXJB?=
+ =?utf-8?B?RzhwKzBvbXp0TkNubUFncDY5bmhEeGJlR3FhcU5lMWZ2ZnJEOVA5SVNydnh6?=
+ =?utf-8?B?TFpSYXRrM1pJbyt4ajJobkpIV2taTVVzWmI2Y2FJVitJRTNXQXpDY0VqaUlY?=
+ =?utf-8?B?WGhtV1FDaURpbUtSQmhQTUxiR0gvYzI5NEwrbnQxRWh6WUJRRWo4bWJKNUsr?=
+ =?utf-8?B?ekZwL2dZRXhCN3h5Q1JyNHF2SmczS0lUclFIUGM0emoyY3ErU1JNL2R0L3Jz?=
+ =?utf-8?B?THFLVE9Qb3hLNGxldkd1U0NCOThYTGxmOCtNWW1kVjVGVmNyQno3VDQwNzNs?=
+ =?utf-8?B?Q2RlMUplN0d1WnM0OXhXOFZxZ3FROUoreldxc3NiWG9Vd3NsTHJXVXpiQitD?=
+ =?utf-8?B?QU9RSFZVakJZK1RnV1JxVEhESTJTQ0kwNVZhSUp1WnNFUWRDMmtleDkrRnhB?=
+ =?utf-8?B?UXFUcTk1cjlzR21OQnR2TGJxaE1sbnAvL0lXc2tjR3BPaUZWRUpWU3ZuL3hI?=
+ =?utf-8?B?U2x3bEJScWZRN25zcjBNbG9nNEo4Ym9IcldqaFNGdVJib2FIT1BpNzF1Z3Ir?=
+ =?utf-8?B?dTVyNFBCRWlzY2lrNUhsRnBWKzlYREdTSGlYaXkwbkl3ZklhanBhTDhBdUdY?=
+ =?utf-8?B?d010dFdpWVRTZmpzb0kzVi9qL2tueGFIeFFnTER1TFBrR2xQNlNHSmRJbzdI?=
+ =?utf-8?Q?eA40JTtkOEV1AfZBSZCfdAfKm?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: marvell.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR1801MB1883.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aae9a65a-419e-4fde-635c-08db3cdb81c4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2023 11:29:27.5214
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: AS5O4jdYEpNZIqIQxHDtw8k949BF00zW83sKNCQ2Tkw/sCwYjLiQPIgaJ54cVtj+yOyS3rgCvQN6CRJHIv7Slg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR18MB2262
+X-Proofpoint-GUID: Z7kmBBiNZ4XDWQ-rdkl1lTZD-UiUTEE_
+X-Proofpoint-ORIG-GUID: Z7kmBBiNZ4XDWQ-rdkl1lTZD-UiUTEE_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-14_06,2023-04-14_01,2023-02-09_01
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 14/04/2023 12:23, Bharat Bhushan wrote:
-> GTI watchdog timer are programmed in "interrupt + del3t + reset mode"
-> and del3t traps are not enabled.
-> GTI watchdog exception flow is:
->  - 1st timer expiration generates watchdog interrupt.
->  - 2nd timer expiration is ignored
->  - On 3rd timer expiration will trigger a system-wide core reset.
-> 
-> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
-> ---
->  drivers/watchdog/Kconfig         |   9 ++
->  drivers/watchdog/Makefile        |   1 +
->  drivers/watchdog/octeontx2_wdt.c | 238 +++++++++++++++++++++++++++++++
->  3 files changed, 248 insertions(+)
->  create mode 100644 drivers/watchdog/octeontx2_wdt.c
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index f0872970daf9..31ff282c62ad 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -2212,4 +2212,13 @@ config KEEMBAY_WATCHDOG
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called keembay_wdt.
->  
-> +config OCTEONTX2_WATCHDOG
-> +	tristate "OCTEONTX2 Watchdog driver"
-> +	depends on ARCH_THUNDER || (COMPILE_TEST && 64BIT)
-
-Why it cannot be compile tested on 32-bit?
-
-> +	help
-> +	 OCTEONTX2 GTI hardware supports watchdog timer. This watchdog timer are
-> +	 programmed in "interrupt + del3t + reset" mode. On first expiry it will
-> +	 generate interrupt. Second expiry (del3t) is ignored and system will reset
-> +	 on final timer expiry.
-> +
->  endif # WATCHDOG
-> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index 9cbf6580f16c..aa1b813ad1f9 100644
-> --- a/drivers/watchdog/Makefile
-> +++ b/drivers/watchdog/Makefile
-> @@ -230,3 +230,4 @@ obj-$(CONFIG_MENZ069_WATCHDOG) += menz69_wdt.o
->  obj-$(CONFIG_RAVE_SP_WATCHDOG) += rave-sp-wdt.o
->  obj-$(CONFIG_STPMIC1_WATCHDOG) += stpmic1_wdt.o
->  obj-$(CONFIG_SL28CPLD_WATCHDOG) += sl28cpld_wdt.o
-> +obj-$(CONFIG_OCTEONTX2_WATCHDOG) += octeontx2_wdt.o
-
-Please tell me that you added it in some reasonable place, not just at
-the end... The same in Kconfig.
-
-> diff --git a/drivers/watchdog/octeontx2_wdt.c b/drivers/watchdog/octeontx2_wdt.c
-> new file mode 100644
-> index 000000000000..7b78a092e83f
-> --- /dev/null
-> +++ b/drivers/watchdog/octeontx2_wdt.c
-> @@ -0,0 +1,238 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Marvell Octeontx2 Watchdog driver
-> + *
-> + * Copyright (C) 2023 Marvell International Ltd.
-> + *
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License version 2 as
-> + * published by the Free Software Foundation.
-
-Drop boilerplate.
-
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/cpu.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/watchdog.h>
-> +#include <linux/sched/debug.h>
-> +
-> +#include <asm/arch_timer.h>
-> +
-> +/* GTI CWD Watchdog Registers */
-> +#define GTI_CWD_GLOBAL_WDOG_IDX		63
-> +#define GTI_CWD_WDOG			(0x8 * GTI_CWD_GLOBAL_WDOG_IDX)
-> +#define GTI_CWD_WDOG_MODE_INT_DEL3T_RST	0x3
-> +#define GTI_CWD_WDOG_MODE_MASK		0x3
-> +#define GTI_CWD_WDOG_LEN_SHIFT		4
-> +#define GTI_CWD_WDOG_CNT_SHIFT		20
-> +
-> +/* GTI Per-core Watchdog Interrupt Register */
-> +#define GTI_CWD_INT			0x200
-> +#define GTI_CWD_INT_PENDING_STATUS	(1ULL << GTI_CWD_GLOBAL_WDOG_IDX)
-> +
-> +/* GTI Per-core Watchdog Interrupt Enable Clear Register */
-> +#define GTI_CWD_INT_ENA_CLR		0x210
-> +#define GTI_CWD_INT_ENA_CLR_VAL		(1ULL << GTI_CWD_GLOBAL_WDOG_IDX)
-> +
-> +/* GTI Per-core Watchdog Interrupt Enable Set Register */
-> +#define GTI_CWD_INT_ENA_SET		0x218
-> +#define GTI_CWD_INT_ENA_SET_VAL		(1ULL << GTI_CWD_GLOBAL_WDOG_IDX)
-> +
-> +/* GTI Per-core Watchdog Poke Registers */
-> +#define GTI_CWD_POKE		(0x10000 + 0x8 * GTI_CWD_GLOBAL_WDOG_IDX)
-> +#define GTI_CWD_POKE_VAL	(1ULL << GTI_CWD_GLOBAL_WDOG_IDX)
-> +
-> +struct octeontx2_wdt_priv {
-> +	struct watchdog_device wdev;
-> +	void __iomem *base;
-> +	u64 clock_freq;
-> +	int irq;
-> +};
-> +
-> +static irqreturn_t octeontx2_wdt_interrupt(int irq, void *data)
-> +{
-> +	panic("Kernel Watchdog");
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int octeontx2_wdt_ping(struct watchdog_device *wdev)
-> +{
-> +	struct octeontx2_wdt_priv *priv = watchdog_get_drvdata(wdev);
-> +
-> +	writeq(GTI_CWD_POKE_VAL, priv->base + GTI_CWD_POKE);
-> +	return 0;
-> +}
-> +
-> +static int octeontx2_wdt_start(struct watchdog_device *wdev)
-> +{
-> +	struct octeontx2_wdt_priv *priv = watchdog_get_drvdata(wdev);
-> +	u64 regval;
-> +
-> +	set_bit(WDOG_HW_RUNNING, &wdev->status);
-> +
-> +	/* Clear any pending interrupt */
-> +	writeq(GTI_CWD_INT_PENDING_STATUS, priv->base + GTI_CWD_INT);
-> +
-> +	/* Enable Interrupt */
-> +	writeq(GTI_CWD_INT_ENA_SET_VAL, priv->base + GTI_CWD_INT_ENA_SET);
-> +
-> +	/* Set (Interrupt + SCP interrupt (DEL3T) + core domain reset) Mode */
-> +	regval = readq(priv->base + GTI_CWD_WDOG);
-> +	regval |= GTI_CWD_WDOG_MODE_INT_DEL3T_RST;
-> +	writeq(regval, priv->base + GTI_CWD_WDOG);
-> +
-> +	return 0;
-> +}
-> +
-> +static int octeontx2_wdt_stop(struct watchdog_device *wdev)
-> +{
-> +	struct octeontx2_wdt_priv *priv = watchdog_get_drvdata(wdev);
-> +	u64 regval;
-> +
-> +	/* Disable Interrupt */
-> +	writeq(GTI_CWD_INT_ENA_CLR_VAL, priv->base + GTI_CWD_INT_ENA_CLR);
-> +
-> +	/* Set GTI_CWD_WDOG.Mode = 0 to stop the timer */
-> +	regval = readq(priv->base + GTI_CWD_WDOG);
-> +	regval &= ~GTI_CWD_WDOG_MODE_MASK;
-> +	writeq(regval, priv->base + GTI_CWD_WDOG);
-> +
-> +	return 0;
-> +}
-> +
-> +static int octeontx2_wdt_settimeout(struct watchdog_device *wdev,
-> +					unsigned int timeout)
-> +{
-> +	struct octeontx2_wdt_priv *priv = watchdog_get_drvdata(wdev);
-> +	u64 timeout_wdog, regval;
-> +
-> +	/* Update new timeout */
-> +	wdev->timeout = timeout;
-> +
-> +	/* Get clock cycles from timeout in second */
-> +	timeout_wdog = (u64)timeout * priv->clock_freq;
-> +
-> +	/* Watchdog counts in 1024 cycle steps */
-> +	timeout_wdog = timeout_wdog >> 10;
-> +
-> +	/*
-> +	 * Hardware allows programming of upper 16-bits of 24-bits cycles
-> +	 * Round up and use upper 16-bits only.
-> +	 * Set max if timeout more than h/w supported
-> +	 */
-> +	timeout_wdog = (timeout_wdog + 0xff) >> 8;
-> +	if (timeout_wdog >= 0x10000)
-> +		timeout_wdog = 0xffff;
-> +
-> +	/*
-> +	 * GTI_CWD_WDOG.LEN have only upper 16-bits of 24-bits
-> +	 * GTI_CWD_WDOG.CNT, need addition shift of 8.
-> +	 */
-> +	regval = readq(priv->base + GTI_CWD_WDOG);
-> +	regval &= GTI_CWD_WDOG_MODE_MASK;
-> +	regval |= ((timeout_wdog) << (GTI_CWD_WDOG_CNT_SHIFT + 8)) |
-> +		   (timeout_wdog << GTI_CWD_WDOG_LEN_SHIFT);
-> +	writeq(regval, priv->base + GTI_CWD_WDOG);
-> +	return 0;
-> +}
-> +
-> +static const struct watchdog_info octeontx2_wdt_ident = {
-> +	.identity = "OcteonTX2 watchdog",
-> +	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE |
-> +			  WDIOF_CARDRESET,
-
-Weird indentation in =
-
-> +};
-> +
-> +static const struct watchdog_ops octeontx2_wdt_ops = {
-> +	.owner = THIS_MODULE,
-> +	.start = octeontx2_wdt_start,
-> +	.stop = octeontx2_wdt_stop,
-> +	.ping = octeontx2_wdt_ping,
-> +	.set_timeout = octeontx2_wdt_settimeout,
-> +};
-> +
-> +static int octeontx2_wdt_probe(struct platform_device *pdev)
-> +{
-> +	struct octeontx2_wdt_priv *priv;
-> +	struct device *dev = &pdev->dev;
-> +	struct watchdog_device *wdog_dev;
-> +	int irq;
-> +	int err;
-> +
-> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(priv->base))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(priv->base),
-> +			      "reg property not valid/found\n");
-> +
-> +	priv->clock_freq = arch_timer_get_cntfrq();
-> +
-> +	wdog_dev = &priv->wdev;
-> +	wdog_dev->info = &octeontx2_wdt_ident,
-> +	wdog_dev->ops = &octeontx2_wdt_ops,
-> +	wdog_dev->parent = dev;
-> +	wdog_dev->min_timeout = 1;
-> +	wdog_dev->max_timeout = 16;
-> +	wdog_dev->max_hw_heartbeat_ms = 16000;
-> +	wdog_dev->timeout = 8;
-> +
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq < 0) {
-> +		dev_err(&pdev->dev, "IRQ resource not found\n");
-
-return dev_err_probe
-also in other places
-
-> +		return -ENODEV;
-> +	}
-> +
-> +	err = request_irq(irq, octeontx2_wdt_interrupt, 0, pdev->name, priv);
-> +	if (err) {
-> +		dev_err(dev, "cannot register interrupt handler %d\n", err);
-> +		return err;
-> +	}
-> +
-> +	priv->irq = irq;
-> +	watchdog_set_drvdata(wdog_dev, priv);
-> +	platform_set_drvdata(pdev, priv);
-> +	watchdog_init_timeout(wdog_dev, wdog_dev->timeout, dev);
-> +	octeontx2_wdt_settimeout(wdog_dev, wdog_dev->timeout);
-> +	watchdog_stop_on_reboot(wdog_dev);
-> +	watchdog_stop_on_unregister(wdog_dev);
-> +
-> +	err = devm_watchdog_register_device(dev, wdog_dev);
-> +	if (err) {
-> +		free_irq(irq, priv);
-> +		return err;
-> +	}
-> +
-> +	dev_info(dev, "Watchdog enabled (timeout=%d sec)\n", wdog_dev->timeout);
-> +	return 0;
-> +}
-> +
-> +static int octeontx2_wdt_remove(struct platform_device *pdev)
-> +{
-> +	struct octeontx2_wdt_priv *priv = platform_get_drvdata(pdev);
-> +
-> +	if (priv->irq)
-
-Is it possible?
-
-> +		free_irq(priv->irq, priv);
-
-Anyway, your order of cleanup is a bit surprising. It is expected to be
-reversed from probe. In probe() you requested IRQs before watchdog, but
-cleanup will be done before watchdog release? This does not look right.
-
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id octeontx2_wdt_of_match[] = {
-> +	{ .compatible = "marvell-octeontx2-wdt", },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, octeontx2_wdt_of_match);
-
-Best regards,
-Krzysztof
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS3J6eXN6dG9mIEtvemxv
+d3NraSA8a3J6eXN6dG9mLmtvemxvd3NraUBsaW5hcm8ub3JnPg0KPiBTZW50OiBGcmlkYXksIEFw
+cmlsIDE0LCAyMDIzIDQ6NTIgUE0NCj4gVG86IEJoYXJhdCBCaHVzaGFuIDxiYmh1c2hhbjJAbWFy
+dmVsbC5jb20+OyB3aW1AbGludXgtd2F0Y2hkb2cub3JnOw0KPiBsaW51eEByb2Vjay11cy5uZXQ7
+IHJvYmgrZHRAa2VybmVsLm9yZzsga3J6eXN6dG9mLmtvemxvd3NraStkdEBsaW5hcm8ub3JnOw0K
+PiBsaW51eC13YXRjaGRvZ0B2Z2VyLmtlcm5lbC5vcmc7IGRldmljZXRyZWVAdmdlci5rZXJuZWwu
+b3JnOyBsaW51eC0NCj4ga2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBbRVhUXSBS
+ZTogW1BBVENIIDEvMl0gZHQtYmluZGluZ3M6IHdhdGNoZG9nOiBtYXJ2ZWxsIG9jdGVvblRYMiBH
+VEkNCj4gc3lzdGVtIGF0Y2hkb2cgZHJpdmVyDQo+IA0KPiBFeHRlcm5hbCBFbWFpbA0KPiANCj4g
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLQ0KPiBPbiAxNC8wNC8yMDIzIDEyOjIzLCBCaGFyYXQgQmh1c2hhbiB3cm90
+ZToNCj4gPiBBZGQgYmluZGluZyBkb2N1bWVudGF0aW9uIGZvciB0aGUgTWFydmVsbCBvY3Rlb25U
+WDIgR1RJIHN5c3RlbQ0KPiA+IHdhdGNoZG9nIGRyaXZlci4NCj4gDQo+IFN1YmplY3Q6IHR5cG86
+IGF0Y2hkb2cNCg0KV2lsbCBmaXgsIHRoYW5rcw0KDQo+IA0KPiA+DQo+ID4gU2lnbmVkLW9mZi1i
+eTogQmhhcmF0IEJodXNoYW4gPGJiaHVzaGFuMkBtYXJ2ZWxsLmNvbT4NCj4gPiAtLS0NCj4gPiAg
+Li4uL3dhdGNoZG9nL21hcnZlbGwtb2N0ZW9udHgyLXdkdC55YW1sICAgICAgIHwgNDkgKysrKysr
+KysrKysrKysrKysrKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgNDkgaW5zZXJ0aW9ucygrKQ0KPiA+
+ICBjcmVhdGUgbW9kZSAxMDA2NDQNCj4gPiBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGlu
+Z3Mvd2F0Y2hkb2cvbWFydmVsbC1vY3Rlb250eDItd2R0LnlhbWwNCj4gPg0KPiA+IGRpZmYgLS1n
+aXQNCj4gPiBhL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy93YXRjaGRvZy9tYXJ2
+ZWxsLW9jdGVvbnR4Mi13ZHQueWFtDQo+ID4gbA0KPiA+IGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0
+cmVlL2JpbmRpbmdzL3dhdGNoZG9nL21hcnZlbGwtb2N0ZW9udHgyLXdkdC55YW0NCj4gPiBsDQo+
+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiBpbmRleCAwMDAwMDAwMDAwMDAuLmU1MDlmMjZj
+NjFiOQ0KPiA+IC0tLSAvZGV2L251bGwNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRy
+ZWUvYmluZGluZ3Mvd2F0Y2hkb2cvbWFydmVsbC1vY3Rlb250eDItd2R0DQo+ID4gKysrIC55YW1s
+DQo+ID4gQEAgLTAsMCArMSw0OSBAQA0KPiA+ICsjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiAo
+R1BMLTIuMC1vbmx5IE9SIEJTRC0yLUNsYXVzZSkgJVlBTUwgMS4yDQo+ID4gKy0tLQ0KPiA+ICsk
+aWQ6DQo+ID4gK2h0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw/dT1odHRw
+LTNBX19kZXZpY2V0cmVlLm9yZ19zYw0KPiA+ICtoZW1hc193YXRjaGRvZ19tYXJ2ZWxsLTJEb2N0
+ZW9udHgyLTJEd2R0LnlhbWwtDQo+IDIzJmQ9RHdJQ2FRJmM9bktqV2VjMmI2DQo+ID4NCj4gK1Iw
+bU95UGF6N3h0ZlEmcj1QQUFsV3N3UGU3ZDhnSGxHYkNMbXkyWWV6eUs3TzNIdl90MmhlR25vdUJ3
+Jm0NCj4gPXdrWUFNaEINCj4gPiArZUhEbU9iT2tNVV9OS09IQzdhbWtqRFQ2SGZZZjRsRmZJVURa
+ZzRPb241MXdHR3c1akQtDQo+IFdtdmpHRCZzPVlpUGxKQWpTVQ0KPiA+ICs5ZURSZUUtMV9uUllG
+c01Eb2k0Y0tqdkpEUnk2alMxUzR3JmU9DQo+ID4gKyRzY2hlbWE6DQo+ID4gK2h0dHBzOi8vdXJs
+ZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw/dT1odHRwLTNBX19kZXZpY2V0cmVlLm9yZ19t
+ZQ0KPiA+ICt0YS0yRHNjaGVtYXNfY29yZS55YW1sLQ0KPiAyMyZkPUR3SUNhUSZjPW5LaldlYzJi
+NlIwbU95UGF6N3h0ZlEmcj1QQUFsV3N3DQo+ID4NCj4gK1BlN2Q4Z0hsR2JDTG15MlllenlLN08z
+SHZfdDJoZUdub3VCdyZtPXdrWUFNaEJlSERtT2JPa01VX04NCj4gS09IQzdhbWtqRFQNCj4gPiAr
+NkhmWWY0bEZmSVVEWmc0T29uNTF3R0d3NWpELQ0KPiBXbXZqR0Qmcz1jTXU4bWV3QTBVMXBSTk1B
+cDNNTzZwZjFmeDljTHFYWQ0KPiA+ICtuNGJvdENhcnZ6VSZlPQ0KPiA+ICsNCj4gPiArdGl0bGU6
+IE1hcnZlbGwgT2N0ZW9uVFgyIEdUSSBzeXN0ZW0gd2F0Y2hkb2cNCj4gPiArDQo+ID4gK2FsbE9m
+Og0KPiA+ICsgIC0gJHJlZjogd2F0Y2hkb2cueWFtbCMNCj4gPiArDQo+ID4gK21haW50YWluZXJz
+Og0KPiA+ICsgIC0gQmhhcmF0IEJodXNoYW4gPGJiaHVzaGFuMkBtYXJ2ZWxsLmNvbT4NCj4gPiAr
+DQo+ID4gK3Byb3BlcnRpZXM6DQo+ID4gKyAgY29tcGF0aWJsZToNCj4gPiArICAgIGNvbnN0OiBt
+YXJ2ZWxsLW9jdGVvbnR4Mi13ZHQNCj4gDQo+IFRoYXQncyBub3QgY29ycmVjdCBjb21wYXRpYmxl
+LiBtYXJ2ZWxsIGlzIGEgdmVuZG9yIHByZWZpeC4NCj4gDQo+IERpZCB5b3UgdGVzdCB0aGUgYmlu
+ZGluZ3MgYmVmb3JlIHNlbmRpbmc/DQoNCldpbGwgY29udmVydCB0aGlzIHRvIG1hcnZlbGwsb2N0
+ZW9udHgyLXdkdA0KDQo+IA0KPiA+ICsNCj4gPiArICByZWc6DQo+ID4gKyAgICBtYXhJdGVtczog
+MQ0KPiA+ICsgICAgZGVzY3JpcHRpb246DQo+ID4gKyAgICAgIE9jdGVvblRYMiBHVEkgc3lzdGVt
+IHdhdGNoZG9nIHJlZ2lzdGVyIHNwYWNlDQo+IA0KPiBEcm9wIGRlc2NyaXB0aW9uLCBpdCBpcyBv
+YnZpb3VzLg0KDQpPaywNCg0KPiANCj4gPiArDQo+ID4gKyAgaW50ZXJydXB0czoNCj4gPiArICAg
+IG1heEl0ZW1zOiAxDQo+ID4gKyAgICBkZXNjcmlwdGlvbjoNCj4gPiArICAgICAgT2N0ZW9uVFgy
+IEdUSSBzeXN0ZW0gd2F0Y2hkb2cgaW50ZXJydXB0IG51bWJlcg0KPiANCj4gRGl0dG8NCj4gDQo+
+ID4gKw0KPiA+ICtyZXF1aXJlZDoNCj4gPiArICAtIGNvbXBhdGlibGUNCj4gPiArICAtIHJlZw0K
+PiA+ICsgIC0gaW50ZXJydXB0cw0KPiA+ICsNCj4gPiArYWRkaXRpb25hbFByb3BlcnRpZXM6IGZh
+bHNlDQo+IA0KPiB1bmV2YWx1YXRlZFByb3BlcnRpZXM6IGZhbHNlIGluc3RlYWQNCg0KV2lsbCBy
+ZW1vdmUNCg0KPiANCj4gPiArDQo+ID4gK2V4YW1wbGVzOg0KPiA+ICsgIC0gfA0KPiA+ICsgICAg
+c29jIHsNCj4gPiArICAgICAgICAjYWRkcmVzcy1jZWxscyA9IDwyPjsNCj4gPiArICAgICAgICAj
+c2l6ZS1jZWxscyA9IDwyPjsNCj4gPiArDQo+ID4gKyAgICAgICAgd2F0Y2hkb2dAODAyMDAwMDQw
+MDAwIHsNCj4gPiArICAgICAgICAgIGNvbXBhdGlibGUgPSAibWFydmVsbC1vY3Rlb250eDItd2R0
+IjsNCj4gPiArICAgICAgICAgIHJlZyA9IDwweDgwMjAgMHg0MDAwMCAweDAgMHgyMDAwMD47DQo+
+IA0KPiBBcmUgeW91IHN1cmUgdGhhdCB0aGlzIGlzIGNvcnJlY3QgRFRTPyAzMi1iaXQgbnVtYmVy
+cyBhcmUgdXN1YWxseSA4LWRpZ2l0IGxvbmcuIFBsdXMNCj4gc2l6ZSBvZiAweDIwMDAwIGlzIGNy
+YXp5IGh1Z2UuIEFuZCB0aGUgdW5pdCBhZGRyZXNzIGlzIGEgYml0IHVudXN1YWwuIEFyZSB5b3Ug
+c3VyZQ0KPiBkdGMgVz0xIGRvZXMgbm90IHNheSBhYm91dCBhbnkgZXJyb3JzIGluIHlvdXIgRFRT
+Pw0KDQpFYWNoIGNlbGwgaXMgMzJiaXQsIHNvIGlmIHdlIHNwZWNpZnkgbGVzcyB0aGFuIHVwcGVy
+IHZhbHVlcyBiZWNvbWVzIHplcm9zICgwcykuIA0KDQo+IA0KPiANCj4gPiArICAgICAgICAgIGlu
+dGVycnVwdHMgPSA8MCAzOCAxPjsNCj4gDQo+IFVzZSBkZWZpbmVzIGZvciBjb21tb24gZmxhZ3Mu
+DQoNCk9rLA0KDQpUaGFua3MgZm9yIHJldmlldw0KDQotQmhhcmF0DQoNCj4gDQo+ID4gKyAgICAg
+ICAgfTsNCj4gPiArICAgIH07DQo+ID4gKw0KPiA+ICsuLi4NCj4gDQo+IEJlc3QgcmVnYXJkcywN
+Cj4gS3J6eXN6dG9mDQoNCg==
