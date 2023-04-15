@@ -2,54 +2,54 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455866E3042
-	for <lists+linux-watchdog@lfdr.de>; Sat, 15 Apr 2023 11:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56ACB6E304D
+	for <lists+linux-watchdog@lfdr.de>; Sat, 15 Apr 2023 11:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjDOJ6X (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 15 Apr 2023 05:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
+        id S229994AbjDOJ6h (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 15 Apr 2023 05:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbjDOJ6V (ORCPT
+        with ESMTP id S230126AbjDOJ6Y (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 15 Apr 2023 05:58:21 -0400
+        Sat, 15 Apr 2023 05:58:24 -0400
 Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45274C2B
-        for <linux-watchdog@vger.kernel.org>; Sat, 15 Apr 2023 02:58:19 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id ud9so51490413ejc.7
-        for <linux-watchdog@vger.kernel.org>; Sat, 15 Apr 2023 02:58:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24FE4692
+        for <linux-watchdog@vger.kernel.org>; Sat, 15 Apr 2023 02:58:22 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id dx24so7653321ejb.11
+        for <linux-watchdog@vger.kernel.org>; Sat, 15 Apr 2023 02:58:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681552698; x=1684144698;
+        d=linaro.org; s=google; t=1681552701; x=1684144701;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hT0dzvsXvb7f698PuX8ThKiPZDrN3+S4Z3pmgV6QSpo=;
-        b=bTJHqYbGlp4UGrO9oKw8Bghu6wDHkK/qnJECB0OENhFCw2eZ/EZszvWSjj70/YPJYt
-         e+SbWG3F0D4EqrDyxt6GxI8XihIfzTdjOTHapVRqqT6cKzhUCJtTQ3r0G4h44nzNLWWQ
-         ux2Kjc8ytqLSZQAEKogyli0FMWqt/vZNMr9SEyUA2YTNUpD7/nItuVCDjwdg+MiJuJW1
-         vANBOgpdSnvkdN9ZVr1N13DrgR+Gp4mx0gNHxIXIeJLfdX7IeqmgcSTF9N/UZTh/L0Ry
-         wxJlWA70/mXfUjCxjF7exBcKLFTWKawIgeepbswAsogQGBefk2Bd6BbI99WZQHoonpcn
-         J1uw==
+        bh=X++FhK1t/fMQBncyu3FeTc1IPRncKd5sGne3lbXD1HA=;
+        b=ElHS0DixfV4Wx0/NRCOiZ3tsYfPcSyO/g1j7g/FJw5/YfXipUfJBvmFPzXl13E2Tvf
+         SlSdK+EcP2/VLC4TtP1izTSZh2TYXhQwqrEHTP4zmLknPDHuF6W0Ez3oOwri2AO4Ln8J
+         DKM/IsZIxge+Q36axXN56jyjNpGR6y1DekpVmrGRzkbCcPf8lzZTffR5fyyV3yf3kqgU
+         XY3Jr5gNhHwtScMoax+woXvPJV+LbcS1d3mQ8aHbvrtS9cqK7eNuaskGH+C3p4x28hPk
+         gE0r2qXpKKwQao2swDA6m552WDpf1EkvhZhgjtn7/+5P2CZIcSXmPfyymhrvI2osVwKR
+         mSyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681552698; x=1684144698;
+        d=1e100.net; s=20221208; t=1681552701; x=1684144701;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hT0dzvsXvb7f698PuX8ThKiPZDrN3+S4Z3pmgV6QSpo=;
-        b=OAtUdmQ72r+Y8SdYfrHOxnVFaNR9/Ttc/62Dg4sTscyNVYd0f7hvIA3KmGzBd7T6Iu
-         vnUuiAfLXYf89a3nDF5ShgMoU2+JMs/H8dVGw9ZPMqDxiZ6pceoL6u8Ba/fxYYYtFu9v
-         WyUMdPPCNoCDCmc98Vfal/KTkW+lZET2Ebt+3J2KUIpqNXgh3Lx5xkWNpAt5GhIuWmqd
-         srWFiE5mjfLTWHckGkU6gI6gGgak9nsf/2LZUFpyXj0gZGTXgqLK30AgrvUlL29XF1w7
-         hsMXgAAloP6y7NeHNqbzJNmNdRdTevKd0XrmhprpJuUOmFgw9ucntLT3a5IpLG6btvI2
-         DAbg==
-X-Gm-Message-State: AAQBX9djuHX1onogkJuf4LJS+Er3l6qvH1hMGWWmMhkuOQGfXqQ8PC7k
-        yPgC7X1wYBgmbG+VsmcOuQIWXA==
-X-Google-Smtp-Source: AKy350aa/SbsRtF67gLeFejSr20s5v+RMrFrIbspoXpE7GmfmW1U/LDuriV5iYIvkKV83gJzv44SFQ==
-X-Received: by 2002:a17:907:77cc:b0:94e:e30e:7245 with SMTP id kz12-20020a17090777cc00b0094ee30e7245mr1380769ejc.8.1681552698443;
-        Sat, 15 Apr 2023 02:58:18 -0700 (PDT)
+        bh=X++FhK1t/fMQBncyu3FeTc1IPRncKd5sGne3lbXD1HA=;
+        b=PGuUd28Ol/VLDdSGkY+xw8oCRPUuk7wTg4aG/CZgZ7f2B8iTZGrImXcV9Ak05TW2Lo
+         u/WTqI1EIx97c35NIFbdmkmQsnRBd4NTE39mBAqUBtf4UGeZJ2zbYugF4BeCJk+jxXHY
+         EylVZqFOLZOvCU3Khc2Rjhrnv1ytSy8iPD3KjPDJs5QrKMEs3dVlGZ73QR93+dcFUFMO
+         vFnteu2UhjHLS6FReiTN1oTrXPoAKnu5sF94xxnjM+8rPF91sWMOpXiELw+C1Htaxfgk
+         CtQY1sF/lRzLd+AnNw97+xIQQjO4NLyPHs+deXlsmkgw/cdlzeM4fxnwHu8UQQzHQU3J
+         jGdA==
+X-Gm-Message-State: AAQBX9d07eXe8IYAXP9kPS/g/hVqBQCaBM9jAGhaoGnbj7o/jvH383Ox
+        RuOSK2gfHDx0CIKlloNgqFyh0w==
+X-Google-Smtp-Source: AKy350Yav0SQe0tEvR6ZtIMRzAj9K6H8406yqb7Hzclv9sLARZM1w9Vr1g/iMuC5RnPGGtv3bjO69Q==
+X-Received: by 2002:a17:906:149b:b0:948:b9ea:3302 with SMTP id x27-20020a170906149b00b00948b9ea3302mr1901974ejc.1.1681552700850;
+        Sat, 15 Apr 2023 02:58:20 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:a3bf:4ed:6c53:2a36])
-        by smtp.gmail.com with ESMTPSA id gn23-20020a1709070d1700b009373f1b5c4esm3594248ejc.161.2023.04.15.02.58.15
+        by smtp.gmail.com with ESMTPSA id gn23-20020a1709070d1700b009373f1b5c4esm3594248ejc.161.2023.04.15.02.58.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Apr 2023 02:58:17 -0700 (PDT)
+        Sat, 15 Apr 2023 02:58:20 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -107,9 +107,9 @@ To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-renesas-soc@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 3/6] dt-bindings: watchdog: arm,sp805: drop unneeded minItems
-Date:   Sat, 15 Apr 2023 11:51:09 +0200
-Message-Id: <20230415095112.51257-3-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 4/6] dt-bindings: watchdog: fsl-imx7ulp-wdt: simplify with unevaluatedProperties
+Date:   Sat, 15 Apr 2023 11:51:10 +0200
+Message-Id: <20230415095112.51257-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org>
 References: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org>
@@ -125,26 +125,34 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-There is no need to specify minItems when they are equal to maxItems,
-because it is implied by maxItems.
+Allow generic watchdog properties by using unevaluatedProperties: false.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/watchdog/arm,sp805.yaml | 1 -
- 1 file changed, 1 deletion(-)
+ .../devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml         | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/arm,sp805.yaml b/Documentation/devicetree/bindings/watchdog/arm,sp805.yaml
-index a69cac8ec208..7aea255b301b 100644
---- a/Documentation/devicetree/bindings/watchdog/arm,sp805.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/arm,sp805.yaml
-@@ -43,7 +43,6 @@ properties:
-       Clocks driving the watchdog timer hardware. The first clock is used
-       for the actual watchdog counter. The second clock drives the register
-       interface.
--    minItems: 2
-     maxItems: 2
+diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
+index d3790f1a96a2..4b7ed1355701 100644
+--- a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
+@@ -30,15 +30,13 @@ properties:
+   clocks:
+     maxItems: 1
  
-   clock-names:
+-  timeout-sec: true
+-
+ required:
+   - compatible
+   - interrupts
+   - reg
+   - clocks
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
 -- 
 2.34.1
 
