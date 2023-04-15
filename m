@@ -2,118 +2,248 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A45246E2EEB
-	for <lists+linux-watchdog@lfdr.de>; Sat, 15 Apr 2023 05:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251206E3036
+	for <lists+linux-watchdog@lfdr.de>; Sat, 15 Apr 2023 11:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjDOD7R (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 14 Apr 2023 23:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
+        id S229890AbjDOJ6R (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 15 Apr 2023 05:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjDOD7P (ORCPT
+        with ESMTP id S229591AbjDOJ6Q (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 14 Apr 2023 23:59:15 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39D3618B;
-        Fri, 14 Apr 2023 20:59:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681531153; x=1713067153;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xzogbmSon2s2bEoo/kT0VBE8ZrpEDaGf2zjbhtS2GY0=;
-  b=SJSLX+PddiySmK/yjMiilfo3877WvdLNhCXjHx95+r1E9IizqUzGNq0Q
-   wzMQEdK+nvQr8vsn34+v8X4QNIrbwAPkxltTu88pX4ba3B8VO4j+NrPYz
-   PtYUnSeHoqpG5pR+ibtFZTiVaFurss50Vde6FKW470W6/jXmXIp40NG8W
-   7521F+HF1PnJymmSg9rfwMSHRH3bWL4sVgdSXjptb3aD/woffGiIiLXmN
-   C2/USkEds45Coq8N2MjPMuRud1kpI/k4RwzXFbdJYHLBUWVuFE1dZJxuX
-   wzl2TxUB4BzNUuMF/AvJF2hIIivskDy8NzzuSzxPunYEs5uE2xxZ6dZL9
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="328768187"
-X-IronPort-AV: E=Sophos;i="5.99,199,1677571200"; 
-   d="scan'208";a="328768187"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2023 20:59:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10680"; a="690037658"
-X-IronPort-AV: E=Sophos;i="5.99,199,1677571200"; 
-   d="scan'208";a="690037658"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 14 Apr 2023 20:59:10 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pnX49-000aP1-0x;
-        Sat, 15 Apr 2023 03:59:09 +0000
-Date:   Sat, 15 Apr 2023 11:59:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Bharat Bhushan <bbhushan2@marvell.com>
-Subject: Re: [PATCH 2/2] Watchdog: Add octeontx2 GTI watchdog driver
-Message-ID: <202304151147.xkLFltfQ-lkp@intel.com>
-References: <20230414102342.23696-2-bbhushan2@marvell.com>
+        Sat, 15 Apr 2023 05:58:16 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4718C40D4
+        for <linux-watchdog@vger.kernel.org>; Sat, 15 Apr 2023 02:58:14 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id dm2so51805619ejc.8
+        for <linux-watchdog@vger.kernel.org>; Sat, 15 Apr 2023 02:58:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681552693; x=1684144693;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qBW7voqUuCZ1/G9Ruo0KBFBVOsPyocZSL7gk/zrdikA=;
+        b=vV0UVC8YX5hmGr0O97HyyHm2Xo8rJmT7MUThJiturG/vbsOZEQRCW+4Z0YLug1TOuA
+         9Fl8JfgAPV0dxpjL6yz1awbckIWcCiv4Hd8gj0dA972smjEZDmZv4JjOqq7iZVpBW1sY
+         mF5wUG94gjCJkPbW3xKn1lVAPzwYVtZa1qeOWVyYbG8fUaE7YKWfd8oS2zh10JImfbRT
+         O8lCVvmjaHsSea0ZY/SQAum9EPpDkCtdmnt2u3aFbMLw2G9sg2x+R/EdSXH/RcSPmxwH
+         Iu3rdR7zRs4CK/5xpJtAtfDsmNTydHU8iff+2leZXDusAHTEaDLK7m0Ywax1Mb5TkID/
+         qMrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681552693; x=1684144693;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qBW7voqUuCZ1/G9Ruo0KBFBVOsPyocZSL7gk/zrdikA=;
+        b=KJcMvAALs1MNSbml+fB9VzCJ2i/SdVv9kSZTce04GuTH7kXRf84gNwmrfi4A/xOkuO
+         2BIQjchTrWy61/FW7mo6jENEaeoLcs4kiosH1J5z3E43kai64eis/GAIuGtw567buAgM
+         gELcmQGg6GPSXf02qan01wuh+eQj3Cpdz1YBBqY4qtGepGmBGWZbpLP4ZNhJU7RH2Tqh
+         HvUwefdyaKMzCgqSCbNMWjtvvG40QR3eyrLzOBMvoDzdeoDfMUupGkkPfXG8BpedbQk0
+         SGloaOIk/m6T6I82i4svI7M+EpL9bhyEBKvD1OpQb2YW39YzdBBgpgzAy1cBetI0/MeF
+         tecQ==
+X-Gm-Message-State: AAQBX9f4OOKaASIsI5FhTQ1uq1PDLqpSlgUCDSAaDnqhYK/5UyWqAulo
+        HTeO1TRiRLKZ7ZUom3B31xkpXQ==
+X-Google-Smtp-Source: AKy350ZYKRSYuyMEh5n5Qwf2//t0LPyGrPZqab6XuiqTfYLkjAF0dCA9it0pvgVfMz92eYuf6M/tYA==
+X-Received: by 2002:a17:907:1245:b0:94e:6294:9d23 with SMTP id wc5-20020a170907124500b0094e62949d23mr1342399ejb.26.1681552692687;
+        Sat, 15 Apr 2023 02:58:12 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:a3bf:4ed:6c53:2a36])
+        by smtp.gmail.com with ESMTPSA id gn23-20020a1709070d1700b009373f1b5c4esm3594248ejc.161.2023.04.15.02.58.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Apr 2023 02:58:12 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Evan Benn <evanbenn@chromium.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sander Vanheule <sander@svanheule.net>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Fu Wei <fu.wei@linaro.org>, Viresh Kumar <vireshk@kernel.org>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        =?UTF-8?q?=82ecki?= <rafal@milecki.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jamie Iles <jamie@jamieiles.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-renesas-soc@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/6] dt-bindings: watchdog: drop duplicated GPIO watchdog bindings
+Date:   Sat, 15 Apr 2023 11:51:07 +0200
+Message-Id: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230414102342.23696-2-bbhushan2@marvell.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Bharat,
+Two conversions to DT schema of GPIO watchdog binding happened and came
+through different trees.  Merge them into one:
+1. Combine maintainers,
+2. Use more descriptive property descriptions and constraints from
+   gpio-wdt.yaml,
+3. Switch to unevaluatedProperties:false, to allow generic watchdog
+   properties.
 
-kernel test robot noticed the following build errors:
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/watchdog/gpio-wdt.yaml           | 55 -------------------
+ .../bindings/watchdog/linux,wdt-gpio.yaml     | 17 +++++-
+ 2 files changed, 15 insertions(+), 57 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/gpio-wdt.yaml
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on groeck-staging/hwmon-next linus/master v6.3-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bharat-Bhushan/Watchdog-Add-octeontx2-GTI-watchdog-driver/20230414-182508
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230414102342.23696-2-bbhushan2%40marvell.com
-patch subject: [PATCH 2/2] Watchdog: Add octeontx2 GTI watchdog driver
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20230415/202304151147.xkLFltfQ-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/62fe2733152f0c68369948612f66ca68d43cb6f3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bharat-Bhushan/Watchdog-Add-octeontx2-GTI-watchdog-driver/20230414-182508
-        git checkout 62fe2733152f0c68369948612f66ca68d43cb6f3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/watchdog/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304151147.xkLFltfQ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/watchdog/octeontx2_wdt.c:19:10: fatal error: asm/arch_timer.h: No such file or directory
-      19 | #include <asm/arch_timer.h>
-         |          ^~~~~~~~~~~~~~~~~~
-   compilation terminated.
-
-
-vim +19 drivers/watchdog/octeontx2_wdt.c
-
-    18	
-  > 19	#include <asm/arch_timer.h>
-    20	
-
+diff --git a/Documentation/devicetree/bindings/watchdog/gpio-wdt.yaml b/Documentation/devicetree/bindings/watchdog/gpio-wdt.yaml
+deleted file mode 100644
+index 155dc7965e9b..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/gpio-wdt.yaml
++++ /dev/null
+@@ -1,55 +0,0 @@
+-# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+-%YAML 1.2
+----
+-$id: http://devicetree.org/schemas/watchdog/gpio-wdt.yaml#
+-$schema: http://devicetree.org/meta-schemas/core.yaml#
+-
+-title: GPIO controlled watchdog
+-
+-maintainers:
+-  - Robert Marko <robert.marko@sartura.hr>
+-
+-properties:
+-  compatible:
+-    const: linux,wdt-gpio
+-
+-  gpios:
+-    maxItems: 1
+-    description: GPIO connected to the WDT reset pin
+-
+-  hw_algo:
+-    $ref: /schemas/types.yaml#/definitions/string
+-    description: Algorithm used by the driver
+-    oneOf:
+-      - description:
+-          Either a high-to-low or a low-to-high transition clears the WDT counter.
+-          The watchdog timer is disabled when GPIO is left floating or connected
+-          to a three-state buffer.
+-        const: toggle
+-      - description:
+-          Low or high level starts counting WDT timeout, the opposite level
+-          disables the WDT.
+-          Active level is determined by the GPIO flags.
+-        const: level
+-
+-  hw_margin_ms:
+-    $ref: /schemas/types.yaml#/definitions/uint32
+-    description: Maximum time to reset watchdog circuit (in milliseconds)
+-    minimum: 2
+-    maximum: 65535
+-
+-  always-running:
+-    type: boolean
+-    description:
+-      If the watchdog timer cannot be disabled, add this flag to have the driver
+-      keep toggling the signal without a client.
+-      It will only cease to toggle the signal when the device is open and the
+-      timeout elapsed.
+-
+-required:
+-  - compatible
+-  - gpios
+-  - hw_algo
+-  - hw_margin_ms
+-
+-unevaluatedProperties: false
+diff --git a/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml b/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
+index 50af79af6416..499f1b7e03f9 100644
+--- a/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
++++ b/Documentation/devicetree/bindings/watchdog/linux,wdt-gpio.yaml
+@@ -8,6 +8,7 @@ title: GPIO-controlled Watchdog
+ 
+ maintainers:
+   - Guenter Roeck <linux@roeck-us.net>
++  - Robert Marko <robert.marko@sartura.hr>
+ 
+ properties:
+   compatible:
+@@ -19,11 +20,23 @@ properties:
+ 
+   hw_algo:
+     description: The algorithm used by the driver.
+-    enum: [ level, toggle ]
++    oneOf:
++      - description:
++          Either a high-to-low or a low-to-high transition clears the WDT counter.
++          The watchdog timer is disabled when GPIO is left floating or connected
++          to a three-state buffer.
++        const: toggle
++      - description:
++          Low or high level starts counting WDT timeout, the opposite level
++          disables the WDT.
++          Active level is determined by the GPIO flags.
++        const: level
+ 
+   hw_margin_ms:
+     description: Maximum time to reset watchdog circuit (milliseconds).
+     $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 2
++    maximum: 65535
+ 
+   always-running:
+     type: boolean
+@@ -42,7 +55,7 @@ required:
+ allOf:
+   - $ref: watchdog.yaml#
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.34.1
+
