@@ -2,101 +2,107 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617136E3763
-	for <lists+linux-watchdog@lfdr.de>; Sun, 16 Apr 2023 12:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919336E39DF
+	for <lists+linux-watchdog@lfdr.de>; Sun, 16 Apr 2023 17:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjDPKWz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 16 Apr 2023 06:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33106 "EHLO
+        id S230319AbjDPPoA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 16 Apr 2023 11:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjDPKWB (ORCPT
+        with ESMTP id S229446AbjDPPn7 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 16 Apr 2023 06:22:01 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D668A5BAF
-        for <linux-watchdog@vger.kernel.org>; Sun, 16 Apr 2023 03:19:20 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id xd13so22889907ejb.4
-        for <linux-watchdog@vger.kernel.org>; Sun, 16 Apr 2023 03:19:20 -0700 (PDT)
+        Sun, 16 Apr 2023 11:43:59 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D6C26AE;
+        Sun, 16 Apr 2023 08:43:58 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-7606d6bb669so36459839f.2;
+        Sun, 16 Apr 2023 08:43:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681640357; x=1684232357;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JQ2pSbWS+VnJQa+rka9MRnpcuYtmOv6aRPbfjmRczfo=;
-        b=CHgLPHJr3sdJV5BUyzdFwSkUgyZixULskPWaSH2Hn9KzlENG3/SlIOd9rPjsK1RerT
-         itBE8Uwcpdo3b8x7BM8vdCKIADKOOi1aOHJ1TqXjOCtKmyfPJ+knH+CPr1P4eoDQfW73
-         iYcwAa8c3MgtJAXDlW9GlBp+Y33jia14jaBYANBRn3k9FhtOBNbjJ8Te4voHCAOh2Z8u
-         kEPPbqFIgBdAFC9uQn4PEw8wT0P9VQke1ryhMEmaT1f9SP5NnFeZ8gbVo6eE5X0jsvDB
-         v+EdBbr+/p5OLefORpS3BBxWjAuIFyQUFLgc2k2VFjIP/22gcq8NxpyAdr4nPULmDR4z
-         rO2w==
+        d=gmail.com; s=20221208; t=1681659837; x=1684251837;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gFn5R4xXzuvnwOnRhG3Vhya1AEqvHvNArnfqEJR1x7Y=;
+        b=RPGCj6RbG27UEGViRruRGBWBJLUbnTs9IMB0y05AunSX2LTybgsQFFG+xkwbS6Uf+9
+         tMwt9rLA57orOj98V4Z2YHnypLsGYm7F0LpPz06Im1/V39oobjpUeQFhdk6jykwzC75N
+         twNZoJkLaL/fijF19RgUnyuwNvkxBV5i1yJNoY96ffRI38W3Zv9L9LGbnONuFnf6V81C
+         jdOSfzwUw6RZzS65ITgbD7rgGdliHkywvTptYiTvQBIUwopCaE70xcbdge3qZqCnne5T
+         PWWV8JRO7zFQ021HhqFv1h0Ezb/IAcPpzggZdObO+dwoBcLVjfBzljddM0RzrFFpnt68
+         g2qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681640357; x=1684232357;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JQ2pSbWS+VnJQa+rka9MRnpcuYtmOv6aRPbfjmRczfo=;
-        b=fx19tdUeIJoVHBhWUWN8umpZQf5BuSjqtiXV5WeMSZ9t2yRImR+pVDI+0JhbU+HIdQ
-         1G2ryxJwN5DLKA2XhKuHy0I2aEsLUqwAF7vBJN69j1gn3HYMMwiJ5zA+fC/Ks/dIXYNG
-         XpTkzKae1n6WLPLOR38NDw0RC/VIJ50dtMzsu9UbsD5RdgGYO/UB8++Izpzne/33xMcl
-         C7AEuq6nksq0Txnli42PuO57bemrhkPhZE9QcUyuuO2Jyqc2EaFI08WiGRu1UnURyCzH
-         GlA6mIeniRTIzKAsA3E0/uUg7QzGWvbxDaOshkuZ3q0Ixkwa4CSX+VE1GQEwMrtb+xE/
-         uoQQ==
-X-Gm-Message-State: AAQBX9dQMYjVdkmrD5mPir+DrO+1jaGWXv9kj25xBkoSCKP9bvEc1e/J
-        7iSBRUwIvc6Pro+VV/yg4R8o3A==
-X-Google-Smtp-Source: AKy350ZJ3oonRhplCGqgST+8seRhbMoZGcq/ItBJs9vGaQcqM0VK6aBZd2ELjWPgX3Z9uNPSET+PWw==
-X-Received: by 2002:a17:907:2c42:b0:94f:2948:b15e with SMTP id hf2-20020a1709072c4200b0094f2948b15emr2730962ejc.5.1681640356716;
-        Sun, 16 Apr 2023 03:19:16 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:29dd:ded4:3ccc:83db? ([2a02:810d:15c0:828:29dd:ded4:3ccc:83db])
-        by smtp.gmail.com with ESMTPSA id xi11-20020a170906dacb00b0094f62181917sm394859ejb.138.2023.04.16.03.19.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Apr 2023 03:19:16 -0700 (PDT)
-Message-ID: <1613da77-d77e-94c6-802a-b2d856c5b40f@linaro.org>
-Date:   Sun, 16 Apr 2023 12:19:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V2 1/2] dt-bindings: watchdog: qcom-wdt: add
- qcom,apss-wdt-ipq5332 compatible
-Content-Language: en-US
-To:     Kathiravan T <quic_kathirav@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        d=1e100.net; s=20221208; t=1681659837; x=1684251837;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gFn5R4xXzuvnwOnRhG3Vhya1AEqvHvNArnfqEJR1x7Y=;
+        b=A7yihYPt+NICN7Plo5XGk2zsb2ihwj5KwmoNEqBaY/ixDp1KgQkaX1FVfTLJtRvOHi
+         m0nLE0QuJj+dxmcEVg2g8PZoFTh4hgCbp8OS56orqOjDneajrec4XiMtUSiISLWlA3gb
+         yBwSpwTkIjT2Kx2wPfTYvA4TmRWHMyZnJlUxCdDIcF0byJDesfSIsALcYWuqBtYCJLE0
+         t1gJVM1ROFISCcwKHqJSPNxmU9VkwO9QV2ancLyb26GiycEfOxXy+pfF7vto75Q2rRLn
+         Qt2sJI56hSo2vmpf61KRLw3N8ZoLmRjl7PBvSRD9UA55U8rbVbY6UhCKegiRkBZrkfla
+         7Jlg==
+X-Gm-Message-State: AAQBX9e1FZC5q4CHQgrh+HMAlAHuogzPO4KLGTwWsea8t1D46k0DRSbh
+        g/JAsHLAw/j5xuR84mq239OI0zJK4nk=
+X-Google-Smtp-Source: AKy350ZpMx84dPLE9eO18JJEM0NfPihoCSRCw4RFiUudqaj5E6BLXeL3qZ3w/Bo5NH376PtQUCR63g==
+X-Received: by 2002:a92:cecf:0:b0:328:3002:9732 with SMTP id z15-20020a92cecf000000b0032830029732mr8005995ilq.16.1681659837673;
+        Sun, 16 Apr 2023 08:43:57 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y42-20020a02952d000000b0040f9f562bfesm670449jah.123.2023.04.16.08.43.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Apr 2023 08:43:57 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 16 Apr 2023 08:43:55 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Kathiravan T <quic_kathirav@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        wim@linux-watchdog.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 1/2] dt-bindings: watchdog: qcom-wdt: add
+ qcom,apss-wdt-ipq5332 compatible
+Message-ID: <e1b88c17-2335-43da-b5e2-f9e150a87b0a@roeck-us.net>
 References: <20230320104530.30411-1-quic_kathirav@quicinc.com>
  <20230320104530.30411-2-quic_kathirav@quicinc.com>
- <0569ed09-2241-d981-4e0c-209caa7483ab@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0569ed09-2241-d981-4e0c-209caa7483ab@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230320104530.30411-2-quic_kathirav@quicinc.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 13/04/2023 06:39, Kathiravan T wrote:
+On Mon, Mar 20, 2023 at 04:15:29PM +0530, Kathiravan T wrote:
+> Add a compatible for the IPQ5332 platform's APSS watchdog.
 > 
-> On 3/20/2023 4:15 PM, Kathiravan T wrote:
->> Add a compatible for the IPQ5332 platform's APSS watchdog.
-> 
-> Guenter,
-> 
-> 
-> Without this patch, I see dtbs_check failure in linux-next.
-> 
-> 
-> I see you reviewed the V1 of this patch, can you pick up this patch? I don't see it in https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git/log/?h=watchdog-next
-> I'm not sure if I am looking at the right tree, Please correct me if I am wrong.
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
 
-Are you sure that patch still applies?
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Best regards,
-Krzysztof
-
+> ---
+> Changes in V2:
+> 	- Pick up R-b tag
+> 
+>  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> index 6448b633c970..8060a87d29da 100644
+> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> @@ -18,6 +18,7 @@ properties:
+>        - items:
+>            - enum:
+>                - qcom,kpss-wdt-ipq4019
+> +              - qcom,apss-wdt-ipq5332
+>                - qcom,apss-wdt-msm8994
+>                - qcom,apss-wdt-qcs404
+>                - qcom,apss-wdt-sa8775p
