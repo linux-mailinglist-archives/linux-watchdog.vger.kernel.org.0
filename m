@@ -2,196 +2,117 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D91DF6E3C09
-	for <lists+linux-watchdog@lfdr.de>; Sun, 16 Apr 2023 23:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AED376E3E06
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Apr 2023 05:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjDPVMb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 16 Apr 2023 17:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
+        id S229648AbjDQD25 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 16 Apr 2023 23:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjDPVMa (ORCPT
+        with ESMTP id S229776AbjDQD2v (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 16 Apr 2023 17:12:30 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247A4198E
-        for <linux-watchdog@vger.kernel.org>; Sun, 16 Apr 2023 14:12:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=PcdhZzelGiLWVRkQSPYVU84yN6BD
-        oaInWPYe2mWzyWI=; b=0vlvYnXM0yc2UOV09gFwoU0Plkbv9q8QVtBV91C/Xct+
-        nQaNG2FpJ5ue/IGfl/+vqlk/skwVcvLJ/OiMlAMchiTrl0GtHOLktk8sjvMT1ycY
-        6D3x7GP9CzLuMSAWyzexEUQPLk1ptIFAEipKhWYtxMOtuO22My5NQaelxoDf/TM=
-Received: (qmail 2639833 invoked from network); 16 Apr 2023 23:12:19 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 16 Apr 2023 23:12:19 +0200
-X-UD-Smtp-Session: l3s3148p1@dHlEh3r5xr4gAQnoAEhOALUKm+CIhvWF
-Date:   Sun, 16 Apr 2023 23:12:13 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Julius Werner <jwerner@chromium.org>,
-        Evan Benn <evanbenn@chromium.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sander Vanheule <sander@svanheule.net>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Fu Wei <fu.wei@linaro.org>, Viresh Kumar <vireshk@kernel.org>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        =?utf-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Jamie Iles <jamie@jamieiles.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 2/6] dt-bindings: watchdog: indentation, quotes and
- white-space cleanup
-Message-ID: <ZDxkrVOhrEMg0oWh@sai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sun, 16 Apr 2023 23:28:51 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD1335A6;
+        Sun, 16 Apr 2023 20:28:35 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-504eac2f0b2so4328326a12.3;
+        Sun, 16 Apr 2023 20:28:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681702114; x=1684294114;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sclm3NiSyjGTXJ3EM8GpKC+H9zqtpnRJNhokYQ4pWxE=;
+        b=aIVLzpwLDgH7PSXcKuXcxG9qleJgPVUvyy8XHPJb3V3zYFW2Nw1x6Bi/9WBnT90WrC
+         sx0yrMThm4aNO1vXphTas5n+gc1DEnWBFd7BnLFGEs61x1yk3NfPJaBW18ffRYREvbR3
+         HFoVkHaN2St1yHEHmXuOa1nn7o9CISGFQcZpltxpyNE+T5BfC+4gWCAju0qWIjvCl4sN
+         oUD8v3oI9HJYKdIP0NVwjGdMXg3/3AWfaKcxoQVWDZi8cEM2ouomNaEh8S0a8Tqz2acV
+         /YyvFWZZO2d0EucaEw0cImxRVY9iVJKZpESUWQaEmp6PfszJg30KZ0fJZkTyERazAH8v
+         F50w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681702114; x=1684294114;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Sclm3NiSyjGTXJ3EM8GpKC+H9zqtpnRJNhokYQ4pWxE=;
+        b=Fc+AAEbSJj7uEDb5XH4gpAVz/W7B7h5QrSlAFPVlQrir5CPU+0skpTtFJivfvCgG7p
+         B0wg2kGxL/wPpF7meu/tBroD2eDs6MYEB4tFDdPtLbiaCi5tArF9q0sUNRY/mDIH+lgT
+         7kdojEbD+CdP6gscySiRYAgIZi1KmXwrjbTZ6bUko630qzkz+bz3xcXjkjoqwOc5JH2F
+         WJ+HdtPIb0wpsnp5bErnN9WOIurBnuRfoBltLdEXCsyH7JJbvAQfl+2qXvcRpKk64KOJ
+         gh2cM12wvPva50c/CR0ZXQuPW4zd6mQZZr/0UQEHplWrgI1nL0tHYuNOs8YmL2gnkSqg
+         MaVg==
+X-Gm-Message-State: AAQBX9dZ1/TssMpP0runGV0MWWzhUitAfRqunUB6d7iInp9FbZdodO4C
+        AuA133Gvtjo/pqqf+QdcrXKYsEQ6GkC7PgpWGP8=
+X-Google-Smtp-Source: AKy350ZfFbhqSvOEG2EDXFS8/j14sozOTQatjzxzULmwFxka8Bp5GN1htoY0hzrqGoYZYR9aZ2slsRSvUUu8hdG7JSM=
+X-Received: by 2002:a50:cd55:0:b0:504:fcf5:63ee with SMTP id
+ d21-20020a50cd55000000b00504fcf563eemr6393394edj.0.1681702113958; Sun, 16 Apr
+ 2023 20:28:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230330102013.545588-1-keguang.zhang@gmail.com>
+ <20230330102013.545588-2-keguang.zhang@gmail.com> <20230330113053.GB9674@alpha.franken.de>
+In-Reply-To: <20230330113053.GB9674@alpha.franken.de>
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+Date:   Mon, 17 Apr 2023 11:28:17 +0800
+Message-ID: <CAJhJPsWDP1Wvef2HGhAqiL77bDRMzz37XkXkVWgzW7Ca54p5XA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] MIPS: Loongson32: Remove reset.c
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-watchdog@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Julius Werner <jwerner@chromium.org>,
-        Evan Benn <evanbenn@chromium.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sander Vanheule <sander@svanheule.net>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>, Fu Wei <fu.wei@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        =?utf-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Jamie Iles <jamie@jamieiles.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-renesas-soc@vger.kernel.org
-References: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org>
- <20230415095112.51257-2-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+8XwfRVUNrqARVTo"
-Content-Disposition: inline
-In-Reply-To: <20230415095112.51257-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        Yang Ling <gnaygnil@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On Thu, Mar 30, 2023 at 7:33=E2=80=AFPM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Thu, Mar 30, 2023 at 06:20:12PM +0800, Keguang Zhang wrote:
+> > The Loongson-1 restart handler will be moved to watchdog driver,
+> > then _machine_restart is no longer needed.
+> > The _machine_halt and pm_power_off are also unnecessary,
+> > which contain no hardware operations.
+> >
+> > Therefore, remove the entire reset.c and related header file.
+> > Update the Makefile accordingly.
+> >
+> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > ---
+> >  .../include/asm/mach-loongson32/regs-wdt.h    | 15 ------
+> >  arch/mips/loongson32/common/Makefile          |  2 +-
+> >  arch/mips/loongson32/common/reset.c           | 51 -------------------
+> >  3 files changed, 1 insertion(+), 67 deletions(-)
+> >  delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-wdt.h
+> >  delete mode 100644 arch/mips/loongson32/common/reset.c
+>
+> Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+>
+Thomas,
+Sorry! I forgot to remove the reference to regs-wdt.h, which will
+cause a build error.
+Could you please review v2:
+https://lore.kernel.org/all/20230330112051.551648-2-keguang.zhang@gmail.com=
+/
+Thanks very much!
 
---+8XwfRVUNrqARVTo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sat, Apr 15, 2023 at 11:51:08AM +0200, Krzysztof Kozlowski wrote:
-> Minor cleanup without functional impact:
-> 1. Indent DTS examples to preferred four-spaces (more readable for DTS),
-> 2. Drop unneeded quotes,
-> 3. Add/drop blank lines to make the code readable.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com> # for Renesas =
-WDT
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
+y a
+> good idea.                                                [ RFC1925, 2.3 =
+]
 
 
---+8XwfRVUNrqARVTo
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+--
+Best regards,
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQ8ZKIACgkQFA3kzBSg
-KbYctA//WZaNN4qBA3XDpxqd0lCrFYt2SAthM8gh8vN6cczN1b9Nak3ux3+Boc1k
-TKtCJ81t8g4Gg65bxDolozTwVxdZ3qsHXLOtRJrlLwn4SQjNtyjQPxt+FSYxe/AJ
-gDf8hNvHEHfeKRFI4boNK2fzxDkjE9R8RMrZnh63OnGtcCNQvEp6MkZimwStVVlX
-TwYmE7rf6r8dbq7n3yDuWZFJB+eXi1ld0LNJrsROMMc5m88KNRHWi4r9Dxjg+UfK
-VjpH5kYQFUtnFrd9Q8kcPdV/r9L9sVW3jdZJG5KB5xMPfZk4sX8wpXf28gqyOrW0
-ENNFH8YV1rbQxZ8c6wszQs5+HJDbJmAetk9rJ32K98sTissdzrVZxm3hM8jSbO63
-3oD8Gsy5wFifbAKlMukOSCavhnsbHQEUs0QLkBDOnOBCRGItoabDJLAT3TsLMyKq
-ln8lCA9vu9InZ0UCtC0RJKpkFHxXorcEGZ3mu7xPeT7eUW9Qj6hsJ3nhvfgD9Tsd
-jOFUoL9NSbGmTvFfM3wQDG1e9kFKvVZ01wN/8GRDEkKlOxP5O3oCvUW4VSa1Rq6u
-fXpV0eFgzt0452QFbx0/Q5RU9+N25EOGcM3zZXzc7SHs2/yvNnCWvmB/RY9o6wxB
-2YGS7nThdzLseBhIGuQPyyrmhwtJImDqa8043vnHIxUJ4RiG4i4=
-=fYC2
------END PGP SIGNATURE-----
-
---+8XwfRVUNrqARVTo--
+Keguang Zhang
