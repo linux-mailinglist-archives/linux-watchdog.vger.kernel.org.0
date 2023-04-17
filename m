@@ -2,49 +2,126 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EE56E3ED0
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Apr 2023 07:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD306E3F9E
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Apr 2023 08:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjDQFRu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 17 Apr 2023 01:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50358 "EHLO
+        id S230032AbjDQGUM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 17 Apr 2023 02:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjDQFRt (ORCPT
+        with ESMTP id S230072AbjDQGUL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 17 Apr 2023 01:17:49 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446FB199C
-        for <linux-watchdog@vger.kernel.org>; Sun, 16 Apr 2023 22:17:46 -0700 (PDT)
-Date:   Mon, 17 Apr 2023 05:17:28 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=v4v5elwsenamxmvcu2ko4nipba.protonmail; t=1681708661; x=1681967861;
-        bh=eyEEFuJ6J03iyuYUhTw6txWj7lanqGKlF05HL7VvWs4=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-        b=aJcnCwLaG0gx0uqeNj4g36x5lutATDQ8idrUUvqscCox/mo1P6LUPMIQEX/owSZzP
-         Dw0j9wYpjWBPoQ6D7JiC9xH6GxkggNFn6YzGcidf7L+T4cA4MxuW5AZMY7k11DRp6K
-         niHq/QQay5ZagajFEpHbLJd7kn79Zy8JOrnsSJuw5TQS7X1JzZiXOR9ovwM4ualQ4t
-         uPehRD8CnhG6kowxeNEMAqO/FQ3LVWhBjmz/rMcg7JhQX8L4I2p1j46VyNItjJapTj
-         aX0CE7gv1sD+kP8PAUTKajUvzcaeUbk+raXWlgdK2jkjqHZCaNbwrhSRyH/XjT4Bmn
-         cRM8PicrHn4Qw==
-To:     hack3r-0m@proton.me
-From:   Om Parikh <hack3r-0m@proton.me>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mon, 17 Apr 2023 02:20:11 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F103AA9
+        for <linux-watchdog@vger.kernel.org>; Sun, 16 Apr 2023 23:20:08 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id sz19so4141634ejc.2
+        for <linux-watchdog@vger.kernel.org>; Sun, 16 Apr 2023 23:20:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681712407; x=1684304407;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cJzj86LhSJdAtbDEWAVBqUw/9fJfGhViwtTg9bTQuwI=;
+        b=UwxNUHi1Q2SgXqIq3683UkBdctv5eKKX4T6cw2UjfsXc5YW6Z3PBE6NlPjLW6oVX8G
+         kwN3WLBuMU05G6+iRNYz4AZAV6bHlfUVNFqrywbO0pBt8oD6KYzVcHpeWoGmx1hDTw2Z
+         KDBCiGit5JahQBASnL1rzyGRy43I70DwwKGxJ2LI1rlRjLOC+s/4sO1GLMxjvOkb1b/T
+         5+39CQS1xToB6e9McpvQoD7TYUklpGa9WnUh/ubH/roqVLknUgjocOXkSxqtFtXXR0PP
+         dC31xa56ppER0VHU4Dpk+mo3NIAVMs1Nf0+pr4opnCQ2wUQ7Noh4n4hLAjs8xQFRm2bX
+         ct0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681712407; x=1684304407;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cJzj86LhSJdAtbDEWAVBqUw/9fJfGhViwtTg9bTQuwI=;
+        b=SA2TSGq1Urbtc0jo2HDD1UDPR2+oj7og0KV13KExdyBeEKu8+dHy+pqxwvBLZmATIy
+         N93lD1E1B8qISFaK+mb7OO5f7JEwe+UU/HdsWavCyHpHWQ5us5IHRypIS8kVoGOpOlra
+         N5VDhtWH80/1ACGSnm2f3aKrhilG0uRksIitPCmbQ4w82mcbGQQK2kOoQjBdUIIXIxF/
+         DnVc9UicRn49Y1xK/kJK4mUnCPdk5nlDKyRmH0TlIajH8bBPebWuC7ELA1neJ08b2jJK
+         Ge31yFTrRpklDN39n8cuUFAfxn/Mj65Ikw2W9f+VCwreWvmQPtAJfFpfgBEvN2cpcW0Z
+         X0IQ==
+X-Gm-Message-State: AAQBX9fe1WEhiYCCFJmco8cLR2ndBTfBcaOm3jmHbT2yLjDMrPHBOZvv
+        KsGbV6uyUUIFn3HnYdrViyAKVw==
+X-Google-Smtp-Source: AKy350b8SXOaVHs71B0PzryL6gYZwUkAWF9/MWVAL9BYOIq7rQp8WPjgG4lUStlvKPn23FMl4BQA3g==
+X-Received: by 2002:a17:907:a08d:b0:94f:8f37:d4e with SMTP id hu13-20020a170907a08d00b0094f8f370d4emr707144ejc.65.1681712407414;
+        Sun, 16 Apr 2023 23:20:07 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:b0ac:4d3b:966c:b33d? ([2a02:810d:15c0:828:b0ac:4d3b:966c:b33d])
+        by smtp.gmail.com with ESMTPSA id s15-20020a1709060c0f00b0094ca077c985sm6072788ejf.213.2023.04.16.23.20.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Apr 2023 23:20:06 -0700 (PDT)
+Message-ID: <9edfca01-4191-8eca-32c6-c95f7c7601ae@linaro.org>
+Date:   Mon, 17 Apr 2023 08:20:04 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 6/6] dt-bindings: watchdog: realtek,otto-wdt: simplify
+ requiring interrupt-names
+Content-Language: en-US
+To:     Sander Vanheule <sander@svanheule.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Evan Benn <evanbenn@chromium.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Fu Wei <fu.wei@linaro.org>, Viresh Kumar <vireshk@kernel.org>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        Justin Chen <justinpopo6@gmail.com>, ?ecki <rafal@milecki.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jamie Iles <jamie@jamieiles.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        Srinivas Neeli <srinivas.neeli@xilinx.com>,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: watchdog: alphascale-asm9260: convert to DT schema
-Message-ID: <20230417051641.3832314-1-hack3r-0m@proton.me>
-Feedback-ID: 58440162:user:proton
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-renesas-soc@vger.kernel.org
+References: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org>
+ <20230415095112.51257-6-krzysztof.kozlowski@linaro.org>
+ <75148300a158ceb0f86043535b089838e1d1bb61.camel@svanheule.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <75148300a158ceb0f86043535b089838e1d1bb61.camel@svanheule.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,147 +129,23 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Makes alphascale-asm9260 dt bindings adhere to the dt json-schema
-by replacing txt file with yaml file.
+On 16/04/2023 21:00, Sander Vanheule wrote:
+> Hi Krzysztof,
+> 
+> On Sat, 2023-04-15 at 11:51 +0200, Krzysztof Kozlowski wrote:
+>> Required properties should be listed in "required:" block.  Since
+>> interrupts are already there, the dependency of interrupt-names on the
+>> interrupts can be simplified.
+> 
+> Maybe I'm not reading this right, but isn't the dependency stated in the binding
+> "interrupts requires interrupt-names to be present"? resource-names.txt
+> describes the reverse dependency ("interrupt-names is only meaningful with an
+> associated interrupts").
 
-CHANGELOG from v1:
-- drop quotes in "$ref" value
-- update compatible string from board name to node name
-- drop "Olof Johansson" from maintainers
-- update "compatible" property from enum to const
-- drop generic reset description
+The interrupts are already required by the binding, so the dependency,
+which makes interrupts depending on presence of interrupt-names,
+effectively was making the names required.
 
-Signed-off-by: Om Parikh <hack3r-0m@proton.me>
----
- .../watchdog/alphascale,asm9260-wdt.yaml      | 69 +++++++++++++++++++
- .../bindings/watchdog/alphascale-asm9260.txt  | 35 ----------
- 2 files changed, 69 insertions(+), 35 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/watchdog/alphascale,a=
-sm9260-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/alphascale-a=
-sm9260.txt
-
-diff --git a/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-=
-wdt.yaml b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wd=
-t.yaml
-new file mode 100644
-index 000000000000..aefcb0cf3e3a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.yam=
-l
-@@ -0,0 +1,69 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/alphascale,asm9260-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Alphascale asm9260 Watchdog timer
-+
-+allOf:
-+  - $ref: watchdog.yaml#
-+
-+maintainers:
-+  - Oleksij Rempel <linux@rempel-privat.de>
-+
-+properties:
-+  compatible:
-+    const: alphascale,asm9260-wdt
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: source clock, used for tick counter
-+      - description: ahb gate
-+
-+  clock-names:
-+    items:
-+      - const: mod
-+      - const: ahb
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  reset-names:
-+    items:
-+      - const: wdt_rst
-+
-+  timeout-sec: true
-+
-+  alphascale,mode:
-+    description: to specify the reset mode of operation
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [hw, sw, debug]
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/alphascale,asm9260.h>
-+    watchdog0: watchdog@80048000 {
-+      compatible =3D "alphascale,asm9260-wdt";
-+      reg =3D <0x80048000 0x10>;
-+      clocks =3D <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
-+      clock-names =3D "mod", "ahb";
-+      interrupts =3D <55>;
-+      timeout-sec =3D <30>;
-+      alphascale,mode =3D "hw";
-+    };
-diff --git a/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.=
-txt b/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
-deleted file mode 100644
-index 75b265a04047..000000000000
---- a/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
-+++ /dev/null
-@@ -1,35 +0,0 @@
--Alphascale asm9260 Watchdog timer
--
--Required properties:
--
--- compatible : should be "alphascale,asm9260-wdt".
--- reg : Specifies base physical address and size of the registers.
--- clocks : the clocks feeding the watchdog timer. See clock-bindings.txt
--- clock-names : should be set to
--=09"mod" - source for tick counter.
--=09"ahb" - ahb gate.
--- resets : phandle pointing to the system reset controller with
--=09line index for the watchdog.
--- reset-names : should be set to "wdt_rst".
--
--Optional properties:
--- timeout-sec : shall contain the default watchdog timeout in seconds,
--=09if unset, the default timeout is 30 seconds.
--- alphascale,mode : three modes are supported
--=09"hw" - hw reset (default).
--=09"sw" - sw reset.
--=09"debug" - no action is taken.
--
--Example:
--
--watchdog0: watchdog@80048000 {
--=09compatible =3D "alphascale,asm9260-wdt";
--=09reg =3D <0x80048000 0x10>;
--=09clocks =3D <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
--=09clock-names =3D "mod", "ahb";
--=09interrupts =3D <55>;
--=09resets =3D <&rst WDT_RESET>;
--=09reset-names =3D "wdt_rst";
--=09timeout-sec =3D <30>;
--=09alphascale,mode =3D "hw";
--};
---=20
-2.40.0
-
+Best regards,
+Krzysztof
 
