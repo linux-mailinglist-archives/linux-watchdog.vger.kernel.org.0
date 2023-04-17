@@ -2,117 +2,197 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED376E3E06
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Apr 2023 05:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00EE56E3ED0
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Apr 2023 07:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjDQD25 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 16 Apr 2023 23:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
+        id S229958AbjDQFRu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 17 Apr 2023 01:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjDQD2v (ORCPT
+        with ESMTP id S229977AbjDQFRt (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 16 Apr 2023 23:28:51 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD1335A6;
-        Sun, 16 Apr 2023 20:28:35 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-504eac2f0b2so4328326a12.3;
-        Sun, 16 Apr 2023 20:28:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681702114; x=1684294114;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sclm3NiSyjGTXJ3EM8GpKC+H9zqtpnRJNhokYQ4pWxE=;
-        b=aIVLzpwLDgH7PSXcKuXcxG9qleJgPVUvyy8XHPJb3V3zYFW2Nw1x6Bi/9WBnT90WrC
-         sx0yrMThm4aNO1vXphTas5n+gc1DEnWBFd7BnLFGEs61x1yk3NfPJaBW18ffRYREvbR3
-         HFoVkHaN2St1yHEHmXuOa1nn7o9CISGFQcZpltxpyNE+T5BfC+4gWCAju0qWIjvCl4sN
-         oUD8v3oI9HJYKdIP0NVwjGdMXg3/3AWfaKcxoQVWDZi8cEM2ouomNaEh8S0a8Tqz2acV
-         /YyvFWZZO2d0EucaEw0cImxRVY9iVJKZpESUWQaEmp6PfszJg30KZ0fJZkTyERazAH8v
-         F50w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681702114; x=1684294114;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Sclm3NiSyjGTXJ3EM8GpKC+H9zqtpnRJNhokYQ4pWxE=;
-        b=Fc+AAEbSJj7uEDb5XH4gpAVz/W7B7h5QrSlAFPVlQrir5CPU+0skpTtFJivfvCgG7p
-         B0wg2kGxL/wPpF7meu/tBroD2eDs6MYEB4tFDdPtLbiaCi5tArF9q0sUNRY/mDIH+lgT
-         7kdojEbD+CdP6gscySiRYAgIZi1KmXwrjbTZ6bUko630qzkz+bz3xcXjkjoqwOc5JH2F
-         WJ+HdtPIb0wpsnp5bErnN9WOIurBnuRfoBltLdEXCsyH7JJbvAQfl+2qXvcRpKk64KOJ
-         gh2cM12wvPva50c/CR0ZXQuPW4zd6mQZZr/0UQEHplWrgI1nL0tHYuNOs8YmL2gnkSqg
-         MaVg==
-X-Gm-Message-State: AAQBX9dZ1/TssMpP0runGV0MWWzhUitAfRqunUB6d7iInp9FbZdodO4C
-        AuA133Gvtjo/pqqf+QdcrXKYsEQ6GkC7PgpWGP8=
-X-Google-Smtp-Source: AKy350ZfFbhqSvOEG2EDXFS8/j14sozOTQatjzxzULmwFxka8Bp5GN1htoY0hzrqGoYZYR9aZ2slsRSvUUu8hdG7JSM=
-X-Received: by 2002:a50:cd55:0:b0:504:fcf5:63ee with SMTP id
- d21-20020a50cd55000000b00504fcf563eemr6393394edj.0.1681702113958; Sun, 16 Apr
- 2023 20:28:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230330102013.545588-1-keguang.zhang@gmail.com>
- <20230330102013.545588-2-keguang.zhang@gmail.com> <20230330113053.GB9674@alpha.franken.de>
-In-Reply-To: <20230330113053.GB9674@alpha.franken.de>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Mon, 17 Apr 2023 11:28:17 +0800
-Message-ID: <CAJhJPsWDP1Wvef2HGhAqiL77bDRMzz37XkXkVWgzW7Ca54p5XA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] MIPS: Loongson32: Remove reset.c
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-watchdog@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mon, 17 Apr 2023 01:17:49 -0400
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446FB199C
+        for <linux-watchdog@vger.kernel.org>; Sun, 16 Apr 2023 22:17:46 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 05:17:28 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=v4v5elwsenamxmvcu2ko4nipba.protonmail; t=1681708661; x=1681967861;
+        bh=eyEEFuJ6J03iyuYUhTw6txWj7lanqGKlF05HL7VvWs4=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=aJcnCwLaG0gx0uqeNj4g36x5lutATDQ8idrUUvqscCox/mo1P6LUPMIQEX/owSZzP
+         Dw0j9wYpjWBPoQ6D7JiC9xH6GxkggNFn6YzGcidf7L+T4cA4MxuW5AZMY7k11DRp6K
+         niHq/QQay5ZagajFEpHbLJd7kn79Zy8JOrnsSJuw5TQS7X1JzZiXOR9ovwM4ualQ4t
+         uPehRD8CnhG6kowxeNEMAqO/FQ3LVWhBjmz/rMcg7JhQX8L4I2p1j46VyNItjJapTj
+         aX0CE7gv1sD+kP8PAUTKajUvzcaeUbk+raXWlgdK2jkjqHZCaNbwrhSRyH/XjT4Bmn
+         cRM8PicrHn4Qw==
+To:     hack3r-0m@proton.me
+From:   Om Parikh <hack3r-0m@proton.me>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Yang Ling <gnaygnil@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: watchdog: alphascale-asm9260: convert to DT schema
+Message-ID: <20230417051641.3832314-1-hack3r-0m@proton.me>
+Feedback-ID: 58440162:user:proton
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Mar 30, 2023 at 7:33=E2=80=AFPM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Thu, Mar 30, 2023 at 06:20:12PM +0800, Keguang Zhang wrote:
-> > The Loongson-1 restart handler will be moved to watchdog driver,
-> > then _machine_restart is no longer needed.
-> > The _machine_halt and pm_power_off are also unnecessary,
-> > which contain no hardware operations.
-> >
-> > Therefore, remove the entire reset.c and related header file.
-> > Update the Makefile accordingly.
-> >
-> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > ---
-> >  .../include/asm/mach-loongson32/regs-wdt.h    | 15 ------
-> >  arch/mips/loongson32/common/Makefile          |  2 +-
-> >  arch/mips/loongson32/common/reset.c           | 51 -------------------
-> >  3 files changed, 1 insertion(+), 67 deletions(-)
-> >  delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-wdt.h
-> >  delete mode 100644 arch/mips/loongson32/common/reset.c
->
-> Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
->
-Thomas,
-Sorry! I forgot to remove the reference to regs-wdt.h, which will
-cause a build error.
-Could you please review v2:
-https://lore.kernel.org/all/20230330112051.551648-2-keguang.zhang@gmail.com=
-/
-Thanks very much!
+Makes alphascale-asm9260 dt bindings adhere to the dt json-schema
+by replacing txt file with yaml file.
 
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
-y a
-> good idea.                                                [ RFC1925, 2.3 =
-]
+CHANGELOG from v1:
+- drop quotes in "$ref" value
+- update compatible string from board name to node name
+- drop "Olof Johansson" from maintainers
+- update "compatible" property from enum to const
+- drop generic reset description
+
+Signed-off-by: Om Parikh <hack3r-0m@proton.me>
+---
+ .../watchdog/alphascale,asm9260-wdt.yaml      | 69 +++++++++++++++++++
+ .../bindings/watchdog/alphascale-asm9260.txt  | 35 ----------
+ 2 files changed, 69 insertions(+), 35 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/alphascale,a=
+sm9260-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/alphascale-a=
+sm9260.txt
+
+diff --git a/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-=
+wdt.yaml b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wd=
+t.yaml
+new file mode 100644
+index 000000000000..aefcb0cf3e3a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.yam=
+l
+@@ -0,0 +1,69 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/alphascale,asm9260-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Alphascale asm9260 Watchdog timer
++
++allOf:
++  - $ref: watchdog.yaml#
++
++maintainers:
++  - Oleksij Rempel <linux@rempel-privat.de>
++
++properties:
++  compatible:
++    const: alphascale,asm9260-wdt
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: source clock, used for tick counter
++      - description: ahb gate
++
++  clock-names:
++    items:
++      - const: mod
++      - const: ahb
++
++  interrupts:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  reset-names:
++    items:
++      - const: wdt_rst
++
++  timeout-sec: true
++
++  alphascale,mode:
++    description: to specify the reset mode of operation
++    $ref: /schemas/types.yaml#/definitions/string
++    enum: [hw, sw, debug]
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/alphascale,asm9260.h>
++    watchdog0: watchdog@80048000 {
++      compatible =3D "alphascale,asm9260-wdt";
++      reg =3D <0x80048000 0x10>;
++      clocks =3D <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
++      clock-names =3D "mod", "ahb";
++      interrupts =3D <55>;
++      timeout-sec =3D <30>;
++      alphascale,mode =3D "hw";
++    };
+diff --git a/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.=
+txt b/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
+deleted file mode 100644
+index 75b265a04047..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
++++ /dev/null
+@@ -1,35 +0,0 @@
+-Alphascale asm9260 Watchdog timer
+-
+-Required properties:
+-
+-- compatible : should be "alphascale,asm9260-wdt".
+-- reg : Specifies base physical address and size of the registers.
+-- clocks : the clocks feeding the watchdog timer. See clock-bindings.txt
+-- clock-names : should be set to
+-=09"mod" - source for tick counter.
+-=09"ahb" - ahb gate.
+-- resets : phandle pointing to the system reset controller with
+-=09line index for the watchdog.
+-- reset-names : should be set to "wdt_rst".
+-
+-Optional properties:
+-- timeout-sec : shall contain the default watchdog timeout in seconds,
+-=09if unset, the default timeout is 30 seconds.
+-- alphascale,mode : three modes are supported
+-=09"hw" - hw reset (default).
+-=09"sw" - sw reset.
+-=09"debug" - no action is taken.
+-
+-Example:
+-
+-watchdog0: watchdog@80048000 {
+-=09compatible =3D "alphascale,asm9260-wdt";
+-=09reg =3D <0x80048000 0x10>;
+-=09clocks =3D <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
+-=09clock-names =3D "mod", "ahb";
+-=09interrupts =3D <55>;
+-=09resets =3D <&rst WDT_RESET>;
+-=09reset-names =3D "wdt_rst";
+-=09timeout-sec =3D <30>;
+-=09alphascale,mode =3D "hw";
+-};
+--=20
+2.40.0
 
 
-
---
-Best regards,
-
-Keguang Zhang
