@@ -2,206 +2,75 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246896E586B
-	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Apr 2023 07:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C610D6E58F3
+	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Apr 2023 07:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjDRFQb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 18 Apr 2023 01:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        id S230355AbjDRF7l (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 18 Apr 2023 01:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjDRFQa (ORCPT
+        with ESMTP id S230414AbjDRF7g (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 18 Apr 2023 01:16:30 -0400
-X-Greylist: delayed 86324 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 22:16:27 PDT
-Received: from mail-40138.protonmail.ch (mail-40138.protonmail.ch [185.70.40.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C801C40EF
-        for <linux-watchdog@vger.kernel.org>; Mon, 17 Apr 2023 22:16:27 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 05:16:10 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1681794985; x=1682054185;
-        bh=+w7z3alPLwzNkvvn0KLBZKtp9RjVXYgSCWgZ1BS3+8I=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-        b=Khq572Bk4K5UafoQEWcO8lCaHSfx0kzISL94FuV8E0Aei94bwWqFWAuLvy4mvQFwz
-         rfFYyeSiQy6rjFWByzMUk9bL9hjxM49uoQn3g2AqXDUf3wl0aCum9obVSijzsKT6b6
-         WhtlyERSHCW6H8AlVpOoFacuOMasSLQ1sSPyL8K7hnyAPBGz0Ro2nVpZeIGZ4TXRoX
-         48bhZDm0hTqb16D8egF2SgLjdNOE8dWV1j93TDYTY6MkpszP0kHOJO+iMeEBFu26yv
-         uVx48JVYooaRSxzVEOePMYJonc96BjkzkCsr0JL7ZxVrLbgPJjvB9tlYkB+OyvLNri
-         9X+umVSiOelAA==
-To:     hack3r-0m@proton.me
-From:   Om Parikh <hack3r-0m@proton.me>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] dt-bindings: watchdog: alphascale-asm9260: convert to DT schema
-Message-ID: <20230418051446.24288-1-hack3r-0m@proton.me>
-Feedback-ID: 58440162:user:proton
+        Tue, 18 Apr 2023 01:59:36 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8E359E6
+        for <linux-watchdog@vger.kernel.org>; Mon, 17 Apr 2023 22:59:32 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id c9so31395473ejz.1
+        for <linux-watchdog@vger.kernel.org>; Mon, 17 Apr 2023 22:59:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681797571; x=1684389571;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
+        b=h2u+IvYIbnFxxtQG/ZtOJXOGODtmHZE6DE2kphmV5deUhBtI5SSl5ZpPS81I4DoyvM
+         cL/QsMoq/nZ79QoTUVBpjigDCpbkhNV4ihdOYSWAZCOke9dA/QR1VB/koOlQ9LVEDYMX
+         XtbtlwSc8k7WA+c3R6xpugIUkMv4IcvxiBX5jugHOkE6bIQRd6XIP4bPoYTYUOtLJ8cY
+         jqOSy7VahCSY+50nHqKMLAvtMY0jgSKZG9RLZ0VM4rlX3dlYAIwPmpAZEs5sdE1jKPzt
+         sUSa+Yt3rvdogEL685HX9OzzgKvbxUuLxSFiR0ubii95w3DTWRmDDneYGKBqJn2l6obd
+         7Bag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681797571; x=1684389571;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
+        b=ctU1V+5JBQoKeZwLDc2CpK+cLWW+/jWJ0h921798S7nQYuhwCnvJK9rKX/zIIyfNv5
+         fdLk8a8HflprpxTScOP1UZ5Qn1GLpjt1Y35BhPjUIYRxIiVPoLFXRhQSdl3FMgQezNGu
+         ZkeRFSdFfQr80t60gdX4IomCJsk1bnA26kp6aiwE5JdZi+7LPdDyt3Jk0KRM8RqD23NR
+         ftVv/FTkLAVV1XGwAMNq8kkUIeofS1mnbxCru0ybWwcwj/uEpsuql/VT0h68shaReU2t
+         H309YjIXfTKXhT0xuzEm5maldUT26c2GZ1/tj5e5Xi257ORDnLbce+WNnKFnGfPlMPum
+         KG4Q==
+X-Gm-Message-State: AAQBX9drqKcGWWBJJFNoZ44TFXEWK9ZK1A0xcaiCRQLEKnIPDXHUouTK
+        qXPP3MFES+sMVDxMfTw6Wi2ebgqqGtqGCRpP+7m1taRQ9S9esXjM
+X-Google-Smtp-Source: AKy350YRsUSKQ0+i58Lzun7WtY7IrRwSkm+DWIi2JdfS71rVYYWUT2OQ/a/Q5PRWIBazn3AQLm2dWBYGVxBajLvvRoE=
+X-Received: by 2002:a05:6512:96b:b0:4e8:4b7a:6b73 with SMTP id
+ v11-20020a056512096b00b004e84b7a6b73mr2935594lft.4.1681797550844; Mon, 17 Apr
+ 2023 22:59:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ab2:2681:0:b0:1b6:840f:9075 with HTTP; Mon, 17 Apr 2023
+ 22:59:10 -0700 (PDT)
+Reply-To: mariamkouame.info@myself.com
+From:   Mariam Kouame <mariamkouame1992@gmail.com>
+Date:   Mon, 17 Apr 2023 22:59:10 -0700
+Message-ID: <CADUz=agNY633M0qMXMnAP3Ms7-3rKuWtAZGCOQZKeYpCdBxT_w@mail.gmail.com>
+Subject: from mariam kouame
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Makes alphascale-asm9260 dt bindings adhere to the dt json-schema
-by replacing txt file with yaml file.
+Dear,
 
-Signed-off-by: Om Parikh <hack3r-0m@proton.me>
----
- v1 -> v2:
-  - drop quotes in "$ref" value
-  - update compatible string from board name to node name
-  - drop "Olof Johansson" from maintainers
-  - update "compatible" property from enum to const
-  - drop generic reset description
+Please grant me permission to share a very crucial discussion with
+you. I am looking forward to hearing from you at your earliest
+convenience.
 
- v2 -> v3:
-  - drop timeout-sec property
-  - update description for mode property
-  - set default as "hw" for mode enum
-
- .../watchdog/alphascale,asm9260-wdt.yaml      | 70 +++++++++++++++++++
- .../bindings/watchdog/alphascale-asm9260.txt  | 35 ----------
- 2 files changed, 70 insertions(+), 35 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/watchdog/alphascale,a=
-sm9260-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/alphascale-a=
-sm9260.txt
-
-diff --git a/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-=
-wdt.yaml b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wd=
-t.yaml
-new file mode 100644
-index 000000000000..fea84f5b7e6d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/alphascale,asm9260-wdt.yam=
-l
-@@ -0,0 +1,70 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/alphascale,asm9260-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Alphascale asm9260 Watchdog timer
-+
-+allOf:
-+  - $ref: watchdog.yaml#
-+
-+maintainers:
-+  - Oleksij Rempel <linux@rempel-privat.de>
-+
-+properties:
-+  compatible:
-+    const: alphascale,asm9260-wdt
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: source clock, used for tick counter
-+      - description: ahb gate
-+
-+  clock-names:
-+    items:
-+      - const: mod
-+      - const: ahb
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  reset-names:
-+    items:
-+      - const: wdt_rst
-+
-+  alphascale,mode:
-+    description: |
-+      Specifies the reset mode of operation. If set to sw, then reset is h=
-andled
-+      via interrupt request, if set to debug, then it does nothing and log=
-s.
-+    $ref: /schemas/types.yaml#/definitions/string
-+    enum: [hw, sw, debug]
-+    default: hw
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/alphascale,asm9260.h>
-+    watchdog0: watchdog@80048000 {
-+      compatible =3D "alphascale,asm9260-wdt";
-+      reg =3D <0x80048000 0x10>;
-+      clocks =3D <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
-+      clock-names =3D "mod", "ahb";
-+      interrupts =3D <55>;
-+      timeout-sec =3D <30>;
-+      alphascale,mode =3D "hw";
-+    };
-diff --git a/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.=
-txt b/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
-deleted file mode 100644
-index 75b265a04047..000000000000
---- a/Documentation/devicetree/bindings/watchdog/alphascale-asm9260.txt
-+++ /dev/null
-@@ -1,35 +0,0 @@
--Alphascale asm9260 Watchdog timer
--
--Required properties:
--
--- compatible : should be "alphascale,asm9260-wdt".
--- reg : Specifies base physical address and size of the registers.
--- clocks : the clocks feeding the watchdog timer. See clock-bindings.txt
--- clock-names : should be set to
--=09"mod" - source for tick counter.
--=09"ahb" - ahb gate.
--- resets : phandle pointing to the system reset controller with
--=09line index for the watchdog.
--- reset-names : should be set to "wdt_rst".
--
--Optional properties:
--- timeout-sec : shall contain the default watchdog timeout in seconds,
--=09if unset, the default timeout is 30 seconds.
--- alphascale,mode : three modes are supported
--=09"hw" - hw reset (default).
--=09"sw" - sw reset.
--=09"debug" - no action is taken.
--
--Example:
--
--watchdog0: watchdog@80048000 {
--=09compatible =3D "alphascale,asm9260-wdt";
--=09reg =3D <0x80048000 0x10>;
--=09clocks =3D <&acc CLKID_SYS_WDT>, <&acc CLKID_AHB_WDT>;
--=09clock-names =3D "mod", "ahb";
--=09interrupts =3D <55>;
--=09resets =3D <&rst WDT_RESET>;
--=09reset-names =3D "wdt_rst";
--=09timeout-sec =3D <30>;
--=09alphascale,mode =3D "hw";
--};
---
-2.40.0
-
-
+Mrs. Mariam Kouame
