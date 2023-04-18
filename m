@@ -2,109 +2,134 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A4346E6BFF
-	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Apr 2023 20:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7FB6E6DD8
+	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Apr 2023 23:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231974AbjDRSVf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 18 Apr 2023 14:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
+        id S232824AbjDRVFx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 18 Apr 2023 17:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232635AbjDRSVd (ORCPT
+        with ESMTP id S232840AbjDRVFv (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 18 Apr 2023 14:21:33 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A0CB464;
-        Tue, 18 Apr 2023 11:21:32 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-63d4595d60fso1579238b3a.0;
-        Tue, 18 Apr 2023 11:21:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681842091; x=1684434091;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=NHSuSSQ9P6xK9QCJtcWEYNs0SaujXBKf1zxRzDXpo68=;
-        b=sjGwNFaKwbxXWg/bAQka076APjfFv+D8cnEraqagA5JVqiS1EnpDvmRwoUhlVEAoLD
-         Gip9jA2JGni820IxH2MdlR5GJRerEC6M1DHtS6w7xEkRRSglq262KYtDNjl9PREfuH1X
-         D2Rr5CuGSy4Q+H//XqaLnmsDE/pde2sL6+kZq4H1210+Br1c5aQkySKVMCQLiClEgyUa
-         tnT9s3OICyjrrJ1pLJnY/sLPteLxndAPQbtl9Fwv8mfZXS0nHFlCbbHdzPeR0BZIC5om
-         js81DAyIHGcU1p1n/3m8UV8G9JBDIwcLubwKilyr1S7Vx/nRLlnfbxIxzoMR85J2Z5mY
-         jHXA==
+        Tue, 18 Apr 2023 17:05:51 -0400
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011B1C172;
+        Tue, 18 Apr 2023 14:05:49 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-38e3a1a07c8so574373b6e.0;
+        Tue, 18 Apr 2023 14:05:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681842091; x=1684434091;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NHSuSSQ9P6xK9QCJtcWEYNs0SaujXBKf1zxRzDXpo68=;
-        b=K8fIHUofyh0rN4QEIc/A56bobKD0vm19MR2jIO9XWZ154/kwwBYlQCFgBibQVKiUtn
-         tXErpN15trMYp2OWwVL109Bb56o0/6dNoiuBWKJUmIoggVp0dhpYJqVPVL+JILkjBPhr
-         JG+osHQowPTDpVVvaavO23jpsWbZ0d/nWs9Dx0dAo5Mo2j5Kl1bwV+ChpleUqN6GvAMX
-         Yer8vGS2db1HUFO2qhL6WZDUX5Lk0cvVOailz1dHFXljCW0pEWfPozkW0ziN4samkxzO
-         1ByvSzviwO2trAmK5idYSiPapvgZ14MYT7OBZ5g6Rlem0DsDVljExPXLjHDfBBDhiFhq
-         QLXg==
-X-Gm-Message-State: AAQBX9dQfVHyMQQuDRv4/H7seJrpZjPKqhV0re++8cbbO5NRz7vi1mQy
-        kmFBzASy0+syvrhBN5Xpuok=
-X-Google-Smtp-Source: AKy350YpjgzYcwvlme3Qa9TxvnWfB4G9uh+LEHBqUWuzrzlb7XQbfCBICt3UjvFdlYLb3C9Doykauw==
-X-Received: by 2002:a17:90b:503:b0:23f:2486:5b53 with SMTP id r3-20020a17090b050300b0023f24865b53mr495244pjz.17.1681842091507;
-        Tue, 18 Apr 2023 11:21:31 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id mg12-20020a17090b370c00b0023670dbb82fsm6414940pjb.25.2023.04.18.11.21.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 11:21:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a2d036ae-de4e-770d-03d1-e4147ddaee10@roeck-us.net>
-Date:   Tue, 18 Apr 2023 11:21:29 -0700
+        d=1e100.net; s=20221208; t=1681851949; x=1684443949;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jIDYp/2j9X9Mpn+NMTYQeGLVTSLMhfAeiCWuUAQuqdE=;
+        b=L2D0sWRHzaKlrGOx93OnJwUvy8I49Jlsye+7qN39NcGFERnIVhaNgaBuZT0RM6roTN
+         kzAcl6SjoATgFzv9XtRJpM2Z4MAZs9c1aYsqWNZ+NMdaqcC4ldUjeIASu9PNBPK3iOus
+         o8rkyRFVd1T1DP7E0BbWPpO8/MxMnlcbcGUuaPcA+E0ssNNHILrTqq8qBfMgbqleexJH
+         tT4ExMj2hY3pSaP+E9idSSM6hn2/eb1Sl/+pac/5mx7XpHry1gafIj/pg0vqLng41ACx
+         W1JySVyD4tasYjy0kF+M/vwDsdZh5L+hggit7k4CXsGomy1O3z+7KopzA4a4V0FPpsML
+         vvNQ==
+X-Gm-Message-State: AAQBX9eoPkzWV02xyWJB49+1XRAahKNEuQ2o4vowJDznrMjhTGMWxc4a
+        jYfzkZe9YRzDPNLS4g2L9A==
+X-Google-Smtp-Source: AKy350bet3km/yb3giQkK8izKkkQaSFBeZstujhyhN82Nm+RKFFGmGsH37dO5tcBMB2o2VobJD5nKw==
+X-Received: by 2002:a05:6808:23d2:b0:38e:3902:6d37 with SMTP id bq18-20020a05680823d200b0038e39026d37mr1582824oib.59.1681851949075;
+        Tue, 18 Apr 2023 14:05:49 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l15-20020a54450f000000b00389898f4c4fsm3142112oil.45.2023.04.18.14.05.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 14:05:48 -0700 (PDT)
+Received: (nullmailer pid 2339121 invoked by uid 1000);
+        Tue, 18 Apr 2023 21:05:47 -0000
+Date:   Tue, 18 Apr 2023 16:05:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Bharat Bhushan <bbhushan2@marvell.com>
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
+        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] Watchdog: Add octeontx2 GTI watchdog driver
+Message-ID: <20230418210547.GA2322152-robh@kernel.org>
+References: <20230414102342.23696-1-bbhushan2@marvell.com>
+ <20230414102342.23696-2-bbhushan2@marvell.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] watchdog: menz069_wdt: fix timeout setting
-Content-Language: en-US
-To:     Johannes Thumshirn <jth@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230418172531.177349-1-jth@kernel.org>
- <20230418172531.177349-3-jth@kernel.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230418172531.177349-3-jth@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230414102342.23696-2-bbhushan2@marvell.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 4/18/23 10:25, Johannes Thumshirn wrote:
-> When setting the timeout for the menz069_wdt watchdog driver, we
-> erroneously read from the 'watchdog value register' (WVR) instead of the
-> 'watchdog timer register' (WTR) and then write the value back into WTR.
+On Fri, Apr 14, 2023 at 03:53:42PM +0530, Bharat Bhushan wrote:
+> GTI watchdog timer are programmed in "interrupt + del3t + reset mode"
+> and del3t traps are not enabled.
+> GTI watchdog exception flow is:
+>  - 1st timer expiration generates watchdog interrupt.
+>  - 2nd timer expiration is ignored
+>  - On 3rd timer expiration will trigger a system-wide core reset.
 > 
-> This can potentially lead to wrong timeouts and wrong enable bit settings.
-> 
-> Signed-off-by: Johannes Thumshirn <jth@kernel.org>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
 > ---
->   drivers/watchdog/menz69_wdt.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/watchdog/Kconfig         |   9 ++
+>  drivers/watchdog/Makefile        |   1 +
+>  drivers/watchdog/octeontx2_wdt.c | 238 +++++++++++++++++++++++++++++++
+>  3 files changed, 248 insertions(+)
+>  create mode 100644 drivers/watchdog/octeontx2_wdt.c
 > 
-> diff --git a/drivers/watchdog/menz69_wdt.c b/drivers/watchdog/menz69_wdt.c
-> index bca0938f3429..3c98030b9fcd 100644
-> --- a/drivers/watchdog/menz69_wdt.c
-> +++ b/drivers/watchdog/menz69_wdt.c
-> @@ -77,7 +77,7 @@ static int men_z069_wdt_set_timeout(struct watchdog_device *wdt,
->   	wdt->timeout = timeout;
->   	val = timeout * MEN_Z069_TIMER_FREQ;
->   
-> -	reg = readw(drv->base + MEN_Z069_WVR);
-> +	reg = readw(drv->base + MEN_Z069_WTR);
->   	ena = reg & MEN_Z069_WTR_WDEN;
->   	reg = ena | val;
->   	writew(reg, drv->base + MEN_Z069_WTR);
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index f0872970daf9..31ff282c62ad 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -2212,4 +2212,13 @@ config KEEMBAY_WATCHDOG
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called keembay_wdt.
+>  
+> +config OCTEONTX2_WATCHDOG
+> +	tristate "OCTEONTX2 Watchdog driver"
+> +	depends on ARCH_THUNDER || (COMPILE_TEST && 64BIT)
+> +	help
+> +	 OCTEONTX2 GTI hardware supports watchdog timer. This watchdog timer are
+> +	 programmed in "interrupt + del3t + reset" mode. On first expiry it will
+> +	 generate interrupt. Second expiry (del3t) is ignored and system will reset
+> +	 on final timer expiry.
+> +
+>  endif # WATCHDOG
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index 9cbf6580f16c..aa1b813ad1f9 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -230,3 +230,4 @@ obj-$(CONFIG_MENZ069_WATCHDOG) += menz69_wdt.o
+>  obj-$(CONFIG_RAVE_SP_WATCHDOG) += rave-sp-wdt.o
+>  obj-$(CONFIG_STPMIC1_WATCHDOG) += stpmic1_wdt.o
+>  obj-$(CONFIG_SL28CPLD_WATCHDOG) += sl28cpld_wdt.o
+> +obj-$(CONFIG_OCTEONTX2_WATCHDOG) += octeontx2_wdt.o
+> diff --git a/drivers/watchdog/octeontx2_wdt.c b/drivers/watchdog/octeontx2_wdt.c
+> new file mode 100644
+> index 000000000000..7b78a092e83f
+> --- /dev/null
+> +++ b/drivers/watchdog/octeontx2_wdt.c
+> @@ -0,0 +1,238 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Marvell Octeontx2 Watchdog driver
+> + *
+> + * Copyright (C) 2023 Marvell International Ltd.
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License version 2 as
+> + * published by the Free Software Foundation.
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/cpu.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/of_platform.h>
 
+It's doubtful you need anything from of_platform.h other than implicit 
+includes. Use the header(s) you need directly.
+
+Rob
