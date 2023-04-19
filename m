@@ -2,401 +2,147 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC0F6E7955
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Apr 2023 14:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628566E8275
+	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Apr 2023 22:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233135AbjDSMHG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 19 Apr 2023 08:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58772 "EHLO
+        id S231423AbjDSUS0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 19 Apr 2023 16:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjDSMHF (ORCPT
+        with ESMTP id S231251AbjDSUSZ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 19 Apr 2023 08:07:05 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FC8C172;
-        Wed, 19 Apr 2023 05:07:03 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33J97Jec031612;
-        Wed, 19 Apr 2023 05:06:47 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=RBeQ5qBcWGPDRdxVapj193YnswfXf5QqKIIfQ0VAsIg=;
- b=hHLMaTdYHFN1teFmppOKc9JN7J/0tHRmuYGhjzK5Lwqj5OpQyetLLICtv8LPBzT8F5Mv
- UrhfXAWbXRixjN34OKUi6d9flwYVbCzFOgSs/jIEcEDpBWQEzcfCkleo5q1TwaBtSBYE
- gbSm7Fst1BUT00znvWusj0YjSKiAlThnnMeyimoeqhP88JpfRvWmWLTtxipVz3Uhn2Q9
- Qo1wmx8Xi14pyDeJLM1O4Fbn42uAs/dokyrzFmGtlnfDijwVGzz396eVrqwRQASARdJK
- XAarGGMX8Y/PUwsDk3mAzrJSE8VvbzspA+ZpUKQTAZ2Af9//eEylFvPQyWpMCQdYOIOK 7g== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3q2917su0y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 19 Apr 2023 05:06:47 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 19 Apr
- 2023 05:06:44 -0700
-Received: from bbhushan2.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Wed, 19 Apr 2023 05:06:42 -0700
-From:   Bharat Bhushan <bbhushan2@marvell.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>
-CC:     Bharat Bhushan <bbhushan2@marvell.com>
-Subject: [PATCH 2/2 v2] Watchdog: Add marvell octeontx2 watchdog driver
-Date:   Wed, 19 Apr 2023 17:36:35 +0530
-Message-ID: <20230419120635.3736-2-bbhushan2@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230419120635.3736-1-bbhushan2@marvell.com>
-References: <20230419120635.3736-1-bbhushan2@marvell.com>
+        Wed, 19 Apr 2023 16:18:25 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE12558E
+        for <linux-watchdog@vger.kernel.org>; Wed, 19 Apr 2023 13:18:23 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id vc20so1237397ejc.10
+        for <linux-watchdog@vger.kernel.org>; Wed, 19 Apr 2023 13:18:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1681935502; x=1684527502;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6pbzo4OluoRMXV+MR3P7u+CXjqXd/it4CqxiYCU0P9A=;
+        b=btV0gK2VFbXrK3woTgBAayGrxear9h3tidO6nMICtFU+IhyWrj/M/Jh7hjisWBc1Zx
+         XKY66a2n6iL+1jau2DCE8eAZrBI239NA+MIQyKnF5cgpnHfIXJeXiDSw4Al9tbxJUmtj
+         mzWnMSQawuJ368G4GLTCYa2HLPWrmBSeLdIf6T+0OWLmKgOz9gU10KXgC/3kGal6DDHG
+         WNCCA9EOovlQDyu2ALQe1gFLx56qgtAWAl1Dm0E3Iy9YKxj8n2pox7xJ3igCpK5qVf2E
+         xUJFLdKuUkHOpIuPZDo5a//c7BTTtV1ZS098nYzt262A6vjsL3lOaGKKliz/aKNRVukd
+         D8mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681935502; x=1684527502;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6pbzo4OluoRMXV+MR3P7u+CXjqXd/it4CqxiYCU0P9A=;
+        b=ddiX4XLcHwNa3VlgcBsZ3vZJ9Hq31CnJWy19H9x/IIq2sPe1yYSfSm6cYdEsPJVwYC
+         RSkfeVBNBaJ8sztSbGAY3fIm44/tAclFIbHn6E1fVY+ulmqlH0d/ucRiOP3zavZXhKDh
+         LfDm2H1HdwaoJAnWFordKAipu2TGSkNmunUxlPohqwD7p0YV1BpKW4Q+hxpgMOkAn6Uy
+         9P29dScHTe8BwkALplapzcYa+13dxGG8MP/Z2DS+1YQvGf77ljzlAhObFYCN8sozUHgD
+         +s3yj7xpvXMdId+aWFk/mP6Y6bhzILOD971+3ybjAqwvWXSvHvHypeMOLc/XZtGW5e8Z
+         X+gg==
+X-Gm-Message-State: AAQBX9cQv21x+ChR2E/lIYqPb7p5gXxMPoGZrD+oqv1Kli1Oftsi7hY/
+        EyCs8vYGNCDjA+MKsdNJKPeB031Hb/o7aXz2YtDJPA==
+X-Google-Smtp-Source: AKy350aPYDtN4ck6FY3wvdtXBvqts4HMhVtEKMJkuZRG6iceMxMu0/SFu7q2kDFyXRuOy1kw1nJLJg==
+X-Received: by 2002:a17:906:3790:b0:94a:845c:3529 with SMTP id n16-20020a170906379000b0094a845c3529mr14378455ejc.9.1681935501841;
+        Wed, 19 Apr 2023 13:18:21 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:976c:1d6c:6ed0:8935? ([2a02:810d:15c0:828:976c:1d6c:6ed0:8935])
+        by smtp.gmail.com with ESMTPSA id fl3-20020a1709072a8300b0094f396c7a7asm6052425ejc.214.2023.04.19.13.18.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Apr 2023 13:18:21 -0700 (PDT)
+Message-ID: <6c4dadfb-b92f-3e95-1d56-de033d560eba@linaro.org>
+Date:   Wed, 19 Apr 2023 22:18:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: kofphIlwd1Qld8vjfbX9_Lzf_8Skbxg5
-X-Proofpoint-ORIG-GUID: kofphIlwd1Qld8vjfbX9_Lzf_8Skbxg5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-04-19_06,2023-04-18_01,2023-02-09_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/2 v2] dt-bindings: watchdog: marvell octeonTX2 GTI
+ system watchdog driver
+Content-Language: en-US
+To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sgoutham@marvell.com
+References: <20230419120635.3736-1-bbhushan2@marvell.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230419120635.3736-1-bbhushan2@marvell.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This patch add support for Marvell OcteonTX2 watchdog. OcteonTX2
-Global timer unit (GTI) support hardware watchdog timer. Software
-programs watchdog timer to generate interrupt on first timeout,
-second timeout is configured to be ignored and system reboots on
-third timeout.
+On 19/04/2023 14:06, Bharat Bhushan wrote:
+> Add binding documentation for the Marvell octeonTX2
+> GTI system watchdog driver.
+> 
+> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+> ---
+> v2:
+>  - compatible changed from marvell-octeontx2-wdt to marvell,octeontx2-wdt
+>  - corrected type atchdog to watchdog 
+>  - Replaced hardcoding to use IRQ_TYPE_EDGE_RISING flag
+> 
+>  .../watchdog/marvell,octeontx2-wdt.yaml       | 46 +++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+> new file mode 100644
+> index 000000000000..96a979c4082d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+> @@ -0,0 +1,46 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/marvell,octeontx2-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell OcteonTX2 GTI system watchdog
+> +
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +
+> +maintainers:
+> +  - Bharat Bhushan <bbhushan2@marvell.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: marvell,octeontx2-wdt
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        watchdog@802000040000 {
+> +          compatible = "marvell,octeontx2-wdt";
 
-Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
----
-v2:
- - Using pretimout
- - using devm_request_irq()
- - Removed extra header files
- - dev_err() to dev_err_probe()
- - Kconfig and patch description changed
+Mixed indentation. Use 4 spaces for entire DTS example (or 2 spaces, but
+4 is preferred).
 
- drivers/watchdog/Kconfig         |  11 ++
- drivers/watchdog/Makefile        |   1 +
- drivers/watchdog/octeontx2_wdt.c | 271 +++++++++++++++++++++++++++++++
- 3 files changed, 283 insertions(+)
- create mode 100644 drivers/watchdog/octeontx2_wdt.c
-
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index f0872970daf9..bd52461a19f2 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1779,6 +1779,17 @@ config OCTEON_WDT
- 	  from the first interrupt, it is then only poked when the
- 	  device is written.
- 
-+config OCTEONTX2_WATCHDOG
-+	tristate "OCTEONTX2 Watchdog driver"
-+	depends on ARCH_THUNDER || COMPILE_TEST
-+	help
-+	 OCTEONTX2 GTI hardware supports watchdog timer. First timeout
-+	 works as watchdog pretimeout and installed interrupt handler
-+	 will be called on first timeout. Hardware can generate interrupt
-+	 to SCP on second timeout but it is not enabled, So second
-+	 timeout is ignored. If device poke does not happen then system
-+	 will reboot on third timeout.
-+
- config BCM2835_WDT
- 	tristate "Broadcom BCM2835 hardware watchdog"
- 	depends on ARCH_BCM2835 || (OF && COMPILE_TEST)
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 9cbf6580f16c..aabe1afb0007 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -98,6 +98,7 @@ obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
- obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
- obj-$(CONFIG_APPLE_WATCHDOG) += apple_wdt.o
- obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
-+obj-$(CONFIG_OCTEONTX2_WATCHDOG) += octeontx2_wdt.o
- 
- # X86 (i386 + ia64 + x86_64) Architecture
- obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
-diff --git a/drivers/watchdog/octeontx2_wdt.c b/drivers/watchdog/octeontx2_wdt.c
-new file mode 100644
-index 000000000000..564a1ba2bf21
---- /dev/null
-+++ b/drivers/watchdog/octeontx2_wdt.c
-@@ -0,0 +1,271 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Marvell Octeontx2 Watchdog driver
-+ *
-+ * Copyright (C) 2023 Marvell International Ltd.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/interrupt.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/watchdog.h>
-+
-+#include <asm/arch_timer.h>
-+
-+/*
-+ * Hardware supports following mode of operation:
-+ * 1) Interrupt Only:
-+ *    This will generate the interrupt to arm core whenever timeout happens.
-+ *
-+ * 2) Interrupt + del3t (Interrupt to firmware (SCP processor)).
-+ *    This will generate interrupt to arm core on 1st timeout happens
-+ *    This will generate interrupt to SCP processor on 2nd timeout happens
-+ *
-+ * 3) Interrupt + Interrupt to SCP processor (called delt3t) + reboot.
-+ *    This will generate interrupt to arm core on 1st timeout happens
-+ *    Will generate interrupt to SCP processor on 2nd timeout happens,
-+ *    if interrupt is configured.
-+ *    Reboot on 3rd timeout.
-+ *
-+ * Driver will use hardware in mode-3 above so that system can reboot in case
-+ * a hardware hang. Also h/w is configured not to generate SCP interrupt, so
-+ * effectively 2nd timeout is ignored within hardware.
-+ */
-+
-+
-+/* GTI CWD Watchdog Registers */
-+#define GTI_CWD_GLOBAL_WDOG_IDX		63
-+#define GTI_CWD_WDOG			(0x8 * GTI_CWD_GLOBAL_WDOG_IDX)
-+#define GTI_CWD_WDOG_MODE_INT_DEL3T_RST	0x3
-+#define GTI_CWD_WDOG_MODE_MASK		0x3
-+#define GTI_CWD_WDOG_LEN_SHIFT		4
-+#define GTI_CWD_WDOG_CNT_SHIFT		20
-+
-+/* GTI Per-core Watchdog Interrupt Register */
-+#define GTI_CWD_INT			0x200
-+#define GTI_CWD_INT_PENDING_STATUS	(1ULL << GTI_CWD_GLOBAL_WDOG_IDX)
-+
-+/* GTI Per-core Watchdog Interrupt Enable Clear Register */
-+#define GTI_CWD_INT_ENA_CLR		0x210
-+#define GTI_CWD_INT_ENA_CLR_VAL		(1ULL << GTI_CWD_GLOBAL_WDOG_IDX)
-+
-+/* GTI Per-core Watchdog Interrupt Enable Set Register */
-+#define GTI_CWD_INT_ENA_SET		0x218
-+#define GTI_CWD_INT_ENA_SET_VAL		(1ULL << GTI_CWD_GLOBAL_WDOG_IDX)
-+
-+/* GTI Per-core Watchdog Poke Registers */
-+#define GTI_CWD_POKE		(0x10000 + 0x8 * GTI_CWD_GLOBAL_WDOG_IDX)
-+#define GTI_CWD_POKE_VAL	(1ULL << GTI_CWD_GLOBAL_WDOG_IDX)
-+
-+struct octeontx2_wdt_priv {
-+	struct watchdog_device wdev;
-+	void __iomem *base;
-+	u64 clock_freq;
-+	int irq;
-+};
-+
-+static irqreturn_t octeontx2_wdt_interrupt(int irq, void *data)
-+{
-+	struct watchdog_device *wdev = data;
-+	struct octeontx2_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+
-+	/* Clear Interrupt Pending Status */
-+	writeq(GTI_CWD_INT_PENDING_STATUS, priv->base + GTI_CWD_INT);
-+
-+	watchdog_notify_pretimeout(wdev);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int octeontx2_wdt_ping(struct watchdog_device *wdev)
-+{
-+	struct octeontx2_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+
-+	writeq(GTI_CWD_POKE_VAL, priv->base + GTI_CWD_POKE);
-+
-+	return 0;
-+}
-+
-+static int octeontx2_wdt_start(struct watchdog_device *wdev)
-+{
-+	struct octeontx2_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	u64 regval;
-+
-+	if (!wdev->pretimeout)
-+		return -EINVAL;
-+
-+	set_bit(WDOG_HW_RUNNING, &wdev->status);
-+
-+	/* Clear any pending interrupt */
-+	writeq(GTI_CWD_INT_PENDING_STATUS, priv->base + GTI_CWD_INT);
-+
-+	/* Enable Interrupt */
-+	writeq(GTI_CWD_INT_ENA_SET_VAL, priv->base + GTI_CWD_INT_ENA_SET);
-+
-+	/* Set (Interrupt + SCP interrupt (DEL3T) + core domain reset) Mode */
-+	regval = readq(priv->base + GTI_CWD_WDOG);
-+	regval |= GTI_CWD_WDOG_MODE_INT_DEL3T_RST;
-+	writeq(regval, priv->base + GTI_CWD_WDOG);
-+
-+	return 0;
-+}
-+
-+static int octeontx2_wdt_stop(struct watchdog_device *wdev)
-+{
-+	struct octeontx2_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	u64 regval;
-+
-+	/* Disable Interrupt */
-+	writeq(GTI_CWD_INT_ENA_CLR_VAL, priv->base + GTI_CWD_INT_ENA_CLR);
-+
-+	/* Set GTI_CWD_WDOG.Mode = 0 to stop the timer */
-+	regval = readq(priv->base + GTI_CWD_WDOG);
-+	regval &= ~GTI_CWD_WDOG_MODE_MASK;
-+	writeq(regval, priv->base + GTI_CWD_WDOG);
-+
-+	return 0;
-+}
-+
-+static int octeontx2_wdt_settimeout(struct watchdog_device *wdev,
-+					unsigned int timeout)
-+{
-+	struct octeontx2_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	u64 timeout_wdog, regval;
-+
-+	/* Update new timeout */
-+	wdev->timeout = timeout;
-+
-+	/* Pretimeout is 1/3 of timeout */
-+	wdev->pretimeout = timeout / 3;
-+	if (!wdev->pretimeout)
-+		return -EINVAL;
-+
-+	/* Get clock cycles from timeout in second */
-+	timeout_wdog = wdev->pretimeout * priv->clock_freq;
-+
-+	/* Watchdog counts in 1024 cycle steps */
-+	timeout_wdog = timeout_wdog >> 10;
-+
-+	timeout_wdog = (timeout_wdog + 0xff) >> 8;
-+	if (timeout_wdog >= 0x10000)
-+		timeout_wdog = 0xffff;
-+
-+	/*
-+	 * GTI_CWD_WDOG.LEN have only upper 16-bits of 24-bits
-+	 * GTI_CWD_WDOG.CNT, need addition shift of 8.
-+	 */
-+	regval = readq(priv->base + GTI_CWD_WDOG);
-+	regval &= GTI_CWD_WDOG_MODE_MASK;
-+	regval |= (timeout_wdog << (GTI_CWD_WDOG_CNT_SHIFT + 8)) |
-+		   (timeout_wdog << GTI_CWD_WDOG_LEN_SHIFT);
-+	writeq(regval, priv->base + GTI_CWD_WDOG);
-+
-+	return 0;
-+}
-+
-+static int octeontx2_wdt_set_pretimeout(struct watchdog_device *wdev,
-+					unsigned int timeout)
-+{
-+	struct octeontx2_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	struct watchdog_device *wdog_dev = &priv->wdev;
-+
-+	/* pretimeout should 1/3 of max_timeout */
-+	if ((timeout * 3) <= wdog_dev->max_timeout)
-+		return octeontx2_wdt_settimeout(wdev, timeout * 3);
-+
-+	return -EINVAL;
-+}
-+
-+static const struct watchdog_info octeontx2_wdt_ident = {
-+	.identity = "OcteonTX2 watchdog",
-+	.options = WDIOF_SETTIMEOUT | WDIOF_PRETIMEOUT | WDIOF_KEEPALIVEPING |
-+		   WDIOF_MAGICCLOSE | WDIOF_CARDRESET,
-+};
-+
-+static const struct watchdog_ops octeontx2_wdt_ops = {
-+	.owner = THIS_MODULE,
-+	.start = octeontx2_wdt_start,
-+	.stop = octeontx2_wdt_stop,
-+	.ping = octeontx2_wdt_ping,
-+	.set_timeout = octeontx2_wdt_settimeout,
-+	.set_pretimeout = octeontx2_wdt_set_pretimeout,
-+};
-+
-+static int octeontx2_wdt_probe(struct platform_device *pdev)
-+{
-+	struct octeontx2_wdt_priv *priv;
-+	struct device *dev = &pdev->dev;
-+	struct watchdog_device *wdog_dev;
-+	int irq;
-+	int err;
-+
-+	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(priv->base),
-+			      "reg property not valid/found\n");
-+
-+	priv->clock_freq = arch_timer_get_cntfrq();
-+
-+	wdog_dev = &priv->wdev;
-+	wdog_dev->info = &octeontx2_wdt_ident,
-+	wdog_dev->ops = &octeontx2_wdt_ops,
-+	wdog_dev->parent = dev;
-+	/*
-+	 * Watchdog counter is 24 bit where lower 8 bits are zeros, so maximum
-+	 * value that can be programmed in hardware is 0xffff00. This counter
-+	 * decrements every one microsec.
-+	 * Hardware will generate interrupt on first timeout (pretimeout)
-+	 * reset the system on 3rd timeout.
-+	 * Max watchdog pretimeout can be 16 sec, so max timeout is 48 sec.
-+	 * Let's have min pretimeout to 1sec, so min timeout is 3sec.
-+	 */
-+	wdog_dev->max_timeout = 48;
-+	wdog_dev->min_timeout = 3;
-+	wdog_dev->timeout = 30;
-+	wdog_dev->pretimeout = wdog_dev->timeout / 3;
-+
-+	priv->irq = irq;
-+	watchdog_set_drvdata(wdog_dev, priv);
-+	platform_set_drvdata(pdev, priv);
-+	octeontx2_wdt_settimeout(wdog_dev, wdog_dev->timeout);
-+	watchdog_stop_on_reboot(wdog_dev);
-+	watchdog_stop_on_unregister(wdog_dev);
-+
-+	err = devm_watchdog_register_device(dev, wdog_dev);
-+	if (err)
-+		return err;
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return dev_err_probe(&pdev->dev, irq, "IRQ resource not found\n");
-+
-+	err = devm_request_irq(dev, irq, octeontx2_wdt_interrupt, 0,
-+			       pdev->name, &priv->wdev);
-+	if (err)
-+		return dev_err_probe(dev, err, "Failed to register interrupt handler\n");
-+
-+	dev_info(dev, "Watchdog enabled (timeout=%d sec)\n", wdog_dev->timeout);
-+	return 0;
-+}
-+
-+static const struct of_device_id octeontx2_wdt_of_match[] = {
-+	{ .compatible = "marvell,octeontx2-wdt", },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, octeontx2_wdt_of_match);
-+
-+static struct platform_driver octeontx2_wdt_driver = {
-+	.driver = {
-+		.name = "octeontx2-wdt",
-+		.of_match_table = octeontx2_wdt_of_match,
-+	},
-+	.probe = octeontx2_wdt_probe,
-+};
-+module_platform_driver(octeontx2_wdt_driver);
-+
-+MODULE_AUTHOR("Bharat Bhushan <bbhushan2@marvell.com>");
-+MODULE_DESCRIPTION("OcteonTX2 watchdog driver");
--- 
-2.17.1
+Best regards,
+Krzysztof
 
