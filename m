@@ -2,75 +2,78 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 628566E8275
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Apr 2023 22:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 736EB6E83F2
+	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Apr 2023 23:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbjDSUS0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 19 Apr 2023 16:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
+        id S229724AbjDSVxb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 19 Apr 2023 17:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbjDSUSZ (ORCPT
+        with ESMTP id S229572AbjDSVxb (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 19 Apr 2023 16:18:25 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE12558E
-        for <linux-watchdog@vger.kernel.org>; Wed, 19 Apr 2023 13:18:23 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id vc20so1237397ejc.10
-        for <linux-watchdog@vger.kernel.org>; Wed, 19 Apr 2023 13:18:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1681935502; x=1684527502;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6pbzo4OluoRMXV+MR3P7u+CXjqXd/it4CqxiYCU0P9A=;
-        b=btV0gK2VFbXrK3woTgBAayGrxear9h3tidO6nMICtFU+IhyWrj/M/Jh7hjisWBc1Zx
-         XKY66a2n6iL+1jau2DCE8eAZrBI239NA+MIQyKnF5cgpnHfIXJeXiDSw4Al9tbxJUmtj
-         mzWnMSQawuJ368G4GLTCYa2HLPWrmBSeLdIf6T+0OWLmKgOz9gU10KXgC/3kGal6DDHG
-         WNCCA9EOovlQDyu2ALQe1gFLx56qgtAWAl1Dm0E3Iy9YKxj8n2pox7xJ3igCpK5qVf2E
-         xUJFLdKuUkHOpIuPZDo5a//c7BTTtV1ZS098nYzt262A6vjsL3lOaGKKliz/aKNRVukd
-         D8mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681935502; x=1684527502;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6pbzo4OluoRMXV+MR3P7u+CXjqXd/it4CqxiYCU0P9A=;
-        b=ddiX4XLcHwNa3VlgcBsZ3vZJ9Hq31CnJWy19H9x/IIq2sPe1yYSfSm6cYdEsPJVwYC
-         RSkfeVBNBaJ8sztSbGAY3fIm44/tAclFIbHn6E1fVY+ulmqlH0d/ucRiOP3zavZXhKDh
-         LfDm2H1HdwaoJAnWFordKAipu2TGSkNmunUxlPohqwD7p0YV1BpKW4Q+hxpgMOkAn6Uy
-         9P29dScHTe8BwkALplapzcYa+13dxGG8MP/Z2DS+1YQvGf77ljzlAhObFYCN8sozUHgD
-         +s3yj7xpvXMdId+aWFk/mP6Y6bhzILOD971+3ybjAqwvWXSvHvHypeMOLc/XZtGW5e8Z
-         X+gg==
-X-Gm-Message-State: AAQBX9cQv21x+ChR2E/lIYqPb7p5gXxMPoGZrD+oqv1Kli1Oftsi7hY/
-        EyCs8vYGNCDjA+MKsdNJKPeB031Hb/o7aXz2YtDJPA==
-X-Google-Smtp-Source: AKy350aPYDtN4ck6FY3wvdtXBvqts4HMhVtEKMJkuZRG6iceMxMu0/SFu7q2kDFyXRuOy1kw1nJLJg==
-X-Received: by 2002:a17:906:3790:b0:94a:845c:3529 with SMTP id n16-20020a170906379000b0094a845c3529mr14378455ejc.9.1681935501841;
-        Wed, 19 Apr 2023 13:18:21 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:976c:1d6c:6ed0:8935? ([2a02:810d:15c0:828:976c:1d6c:6ed0:8935])
-        by smtp.gmail.com with ESMTPSA id fl3-20020a1709072a8300b0094f396c7a7asm6052425ejc.214.2023.04.19.13.18.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Apr 2023 13:18:21 -0700 (PDT)
-Message-ID: <6c4dadfb-b92f-3e95-1d56-de033d560eba@linaro.org>
-Date:   Wed, 19 Apr 2023 22:18:20 +0200
+        Wed, 19 Apr 2023 17:53:31 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F9F3C1E;
+        Wed, 19 Apr 2023 14:53:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1681941173; i=j.neuschaefer@gmx.net;
+        bh=E3MwaTC39cHV5jEqiGIoFdw7WcRGnfVKbe7RZwo68iw=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=LMkeOne8W12inAaZ/YilffTeUnstAOesHyxyoojqAF5QqEUyGHFxXGenviIBKVZDv
+         JnFaTLZIwIz3H+zJWTjMJ/H7Fpp+Gcf37ot94tS7gYcv30+KcJjbDGk6+QUbyjlRsc
+         sEXODlI9TmrUm1cnPr8pVmari2bYex5Hp2SPEZ6F+rTqtyxKZKvg1n7n2SSHHdCqQT
+         dr/LDcwBco9ZBLrQXmOqurNrgJzOy62MvR4W/y+N4LS8VaWG/i259Gqywatxeuextl
+         ZuMxy4V9fyIuQhAxmG9bH4+B+NE6EvnU6fY6FZOvo7gZJ3nfZXxM4mLMo2i8DZjc1o
+         I6NB30sJayYag==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M8QWG-1ptfZl1Qe0-004QMs; Wed, 19
+ Apr 2023 23:52:53 +0200
+Date:   Wed, 19 Apr 2023 23:52:57 +0200
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     j.neuschaefer@gmx.net, avifishman70@gmail.com,
+        benjaminfair@google.com, daniel.lezcano@linaro.org,
+        devicetree@vger.kernel.org, krzk+dt@kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux@roeck-us.net,
+        mturquette@baylibre.com, openbmc@lists.ozlabs.org,
+        p.zabel@pengutronix.de, robh+dt@kernel.org, sboyd@kernel.org,
+        tali.perry1@gmail.com, tglx@linutronix.de, tmaimon77@gmail.com,
+        venture@google.com, wim@linux-watchdog.org, yuenn@google.com
+Subject: Re: [PATCH v6 2/2] clk: wpcm450: Add Nuvoton WPCM450 clock/reset
+ controller driver
+Message-ID: <ZEBiuRH3DjVUO/Kp@probook>
+References: <20230415111355.696738-1-j.neuschaefer@gmx.net>
+ <20230415111355.696738-3-j.neuschaefer@gmx.net>
+ <c04038f2-b7aa-7c37-df93-6950831579f6@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/2 v2] dt-bindings: watchdog: marvell octeonTX2 GTI
- system watchdog driver
-Content-Language: en-US
-To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sgoutham@marvell.com
-References: <20230419120635.3736-1-bbhushan2@marvell.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230419120635.3736-1-bbhushan2@marvell.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nBgbEHe+7HdynUHs"
+Content-Disposition: inline
+In-Reply-To: <c04038f2-b7aa-7c37-df93-6950831579f6@wanadoo.fr>
+X-Provags-ID: V03:K1:TTKfScm3X+1lV46i2xneBJJ+mRnIdHaebMSneyl8EkLY7S7V6ir
+ tmEvh62wdv/WVjbqdH7A84xGNb3RKFAch9n0YeCEcF0Igi49ekDymYcVSXXM2R9hgXdaLO7
+ dp/ICD4eIfn/dwbQzeE8iunQWMeFvF0BYiArqRE9d8zM1ppM0/o03p5BANY3lRmUNvTqR9u
+ b8Xg1w19VhdJqSmL5lteA==
+UI-OutboundReport: notjunk:1;M01:P0:wJFEDQxfRL4=;ah7J+2kmEogfH5rqEMt6ppjheoH
+ KrP7wiEcbiG50T6ZYLvyues+omkXepggjO1En8RKwfFQvj9Q+/y30OpG4QV4dyzjUN32pBp8k
+ ZTOgqXUIPXH09ZtfnfM5ucGA2R7aA9xIY/8m0Qx0Yx4uhsV16pEv2Ha7tGLWu+a/yy6tayKSP
+ xPZUwjW4slngP1ZdWok+JvE2R5s/MzPU9UbEGeuW32Lvdi4Qsmy2H+O/D+Mll3FavTSh+cu0A
+ HRhfEflMdgGaYjR3Wrk9oXiLuozTAkbmMf3jCKoqkZbfksy0A2NgAmXsk8syQv9WZri75JWBM
+ XOZe5Wg+QW0I6VMzgyXpbPtoSAvWQEFICalKEQfNxdnhRuXGb5EfRaolqY4L4+OjPFFKcEzFH
+ Kwpj5X72qUDcZG1Wc4Ll5dlHra46FzDl/zktU65dDa0zbQWPNcGMkFeldM2tQ0KORW+S17Vxv
+ bJI0IoSK+2qbFL8239d0Q9Ri/Cjp8AnawJWxWswlaEDN/ItKwjHD1P8WoNStTpfMfT7OBdGsJ
+ Y4YhWqJPLhP/d1YvVS8CbI19IEIVGctfHMOh++sB4XXw9mAdMi983yL9429cG7UYEBYHLk7Mo
+ HcNDjXXcynLxVelOIm0Wt2I4V9gB+p1H2V59i/4ozElhg74t2lo4Q6NXbx15TBHKhuyY4rZoM
+ /PpP7mqUYeLL169L133ueg8iz2uzY3DtntdvNPRlHBO1J24vRPukY6oxol70s1Vk3cqi6vldI
+ Z2OWlxj7ZzhJI4goYOm21BAmiSmrNtz07c0UP8kJgq5AUTo/YZexa5Yc8mrZqSyJi77YimMQe
+ xf0z2cjZPWQdKZxeMR0MwDmDHCf//oF/Hr+QkfMG9d6w9yVC0UU05ikuA8AZS36uNOTOHH08q
+ hKRT8qoU1bMND9hd87X4fZRw/56xTQwjo7noyODDFxPbqIBT8EW0TwbyA2MPek3sGnt7MVPDk
+ oJSfanfvsoDljHysdHMo1TiqsIc=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,71 +81,86 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 19/04/2023 14:06, Bharat Bhushan wrote:
-> Add binding documentation for the Marvell octeonTX2
-> GTI system watchdog driver.
-> 
-> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
-> ---
-> v2:
->  - compatible changed from marvell-octeontx2-wdt to marvell,octeontx2-wdt
->  - corrected type atchdog to watchdog 
->  - Replaced hardcoding to use IRQ_TYPE_EDGE_RISING flag
-> 
->  .../watchdog/marvell,octeontx2-wdt.yaml       | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
-> new file mode 100644
-> index 000000000000..96a979c4082d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
-> @@ -0,0 +1,46 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/marvell,octeontx2-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Marvell OcteonTX2 GTI system watchdog
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +maintainers:
-> +  - Bharat Bhushan <bbhushan2@marvell.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: marvell,octeontx2-wdt
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        watchdog@802000040000 {
-> +          compatible = "marvell,octeontx2-wdt";
 
-Mixed indentation. Use 4 spaces for entire DTS example (or 2 spaces, but
-4 is preferred).
+--nBgbEHe+7HdynUHs
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello Christophe,
+
+On Sat, Apr 15, 2023 at 02:16:09PM +0200, Christophe JAILLET wrote:
+> Le 15/04/2023 =C3=A0 13:13, Jonathan Neusch=C3=A4fer a =C3=A9crit=C2=A0:
+> > This driver implements the following features w.r.t. the clock and reset
+> > controller in the WPCM450 SoC:
+> >=20
+> > - It calculates the rates for all clocks managed by the clock controller
+> > - It leaves the clock tree mostly unchanged, except that it enables/
+> >    disables clock gates based on usage.
+> > - It exposes the reset lines managed by the controller using the
+> >    Generic Reset Controller subsystem
+> >=20
+> > NOTE: If the driver and the corresponding devicetree node are present,
+> >        the driver will disable "unused" clocks. This is problem until
+> >        the clock relations are properly declared in the devicetree (in a
+> >        later patch). Until then, the clk_ignore_unused kernel parameter
+> >        can be used as a workaround.
+> >=20
+> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer-hi6Y0CQ0nG0@publ=
+ic.gmane.org>
+> > ---
+[...]
+> > +	// Enables/gates
+> > +	for (i =3D 0; i < ARRAY_SIZE(clken_data); i++) {
+> > +		const struct wpcm450_clken_data *data =3D &clken_data[i];
+> > +
+> > +		hw =3D clk_hw_register_gate_parent_data(NULL, data->name, &data->par=
+ent, data->flags,
+> > +						      clk_base + REG_CLKEN, data->bitnum,
+> > +						      data->flags, &wpcm450_clk_lock);
+>=20
+> If an error occures in the 'for' loop or after it, should this be
+> clk_hw_unregister_gate()'ed somewhere?
+
+Ideally yes =E2=80=94
+
+in this case, if the clock driver fails, the system is arguably in such
+a bad state that there isn't much point in bothering.
+
+
+>=20
+> CJ
+>=20
+> > +		if (IS_ERR(hw)) {
+> > +			pr_err("Failed to register gate: %pe\n", hw);
+> > +			goto err_free;
+> > +		}
+> > +		clk_data->hws[data->bitnum] =3D hw;
+> > +	}
+
+
 
 Best regards,
-Krzysztof
+Jonathan
 
+--nBgbEHe+7HdynUHs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmRAYpUACgkQCDBEmo7z
+X9v2qw/9EiZBIWVLXrb/H+SBZLajTH8gs/+wWatpfYY9MHKe6PQ4wEqD3wHZvC1j
+XNyEizeN9zKD617uEUNnj4LS65mXB9jpk+IBn2V3S9m8aK0ZnohGPIBQbp7fJxRD
+scBOpgCKxii9YUjJFDwfJc+aGteD1FZCV5ufF6W7tAlpqdpRJiV4Sxyui6tplBjb
+tmz3EbyRRYJ5IW+qM84oS9xocMvIyFUcSqIAyHZNzS2QyUzl48dHpwjfGn2jJ2q8
+enIxwqOsbNUNyYJHynYGVqQGTusRYJxd6Qg7c2fZyOtsRdvvS/cvTvaNeFap27zr
+4ciW+NTiD40FzGgrq8glOz18+fBi4HIpR9XYDIYSPNAIiQEmj3Uzn78EQ7xNrSk5
+6pjoPtE6AkYtGe/M7CAAjHkV6xiuKIXTXxZQMCI/vw22rg76CJkNzq1UapIqmYUQ
+klfYRnd/UFavPt57hVLC94KgBZO2tmikTOksaSnZw6tN0CCXwaz9MnAPR/aaA8YC
+8eO/7oNgydKM/K1fUrFBWbR0Td8MLlHmH35xsa9kdVayHin9v7oK8oqtCDFQvDHL
+1cd6KQcPHppWTQ7A8nWIjlmm+lm0Y5n1dfRL7/k/Lj6RrpkTOp6BQ+xqIM4LCpQb
+SQNXKoHLuiincVsxMWIWi+qDKYENxeosPds/iY3v6vSY82fkv50=
+=r2E3
+-----END PGP SIGNATURE-----
+
+--nBgbEHe+7HdynUHs--
