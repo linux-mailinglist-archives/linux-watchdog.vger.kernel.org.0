@@ -2,116 +2,60 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD496E6E6F
-	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Apr 2023 23:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD5F6E7940
+	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Apr 2023 14:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232924AbjDRVjz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 18 Apr 2023 17:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
+        id S233118AbjDSMCv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 19 Apr 2023 08:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233095AbjDRVjx (ORCPT
+        with ESMTP id S233041AbjDSMCr (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 18 Apr 2023 17:39:53 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C047BBB5;
-        Tue, 18 Apr 2023 14:39:37 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-38c6bbbeeb3so456173b6e.1;
-        Tue, 18 Apr 2023 14:39:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681853976; x=1684445976;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9FTQgI3HTIujYCvmdGvbn1iYHKKTz5bkM55o7VU7wfs=;
-        b=CNMQe6I34mx9dAFwKVO7dYtezQBYC4huJucPEzQI94ghKB0d5HVtLam+cyyj1Aysyp
-         NGPVgN810QZ/zoX7iAlIvCC7p97LWM2nZDCUncIX8hXSDTiOBqEnm7wN9VynkMk60QaE
-         Cc0K4FXXqCqQpOpuXF58c5Ov3Sx0GofevSsnWOPZAnUP8clm/Vq7+y5Ehr8erCrnyzc7
-         jowc6n66hbLm4W83d1KiQmk3A2nK27YXL5Y3PxKsHq51tXLwrMgld8UFFfxgdAuVPEUn
-         PZSuvZHnYZ8DLl/d4QL8tqK9c9JPjbGgyuewCdGV68S9kQQE3pAKncctaITENb3R0PAB
-         IElw==
-X-Gm-Message-State: AAQBX9eXSFPFhTqxD9gJ97ApUD/2ak8K3323OfQKkNfWE2WUwZWV2gO7
-        GL4sTzSbG569law3fAUCqA==
-X-Google-Smtp-Source: AKy350ad1gFJziMA7uFDXKgRYHOImiDLZc2+2kux8SA8FrsvhCP7QU7dcKoZR+twA7gAQFYNGfgJUA==
-X-Received: by 2002:aca:644:0:b0:378:2df5:49f5 with SMTP id 65-20020aca0644000000b003782df549f5mr1944858oig.2.1681853974837;
-        Tue, 18 Apr 2023 14:39:34 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n3-20020aca2403000000b0038bffe1332dsm3950756oic.57.2023.04.18.14.39.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 14:39:31 -0700 (PDT)
-Received: (nullmailer pid 2376874 invoked by uid 1000);
-        Tue, 18 Apr 2023 21:39:29 -0000
-Date:   Tue, 18 Apr 2023 16:39:29 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Andy Gross <agross@kernel.org>, linux-watchdog@vger.kernel.org,
-        Fu Wei <fu.wei@linaro.org>, Jamie Iles <jamie@jamieiles.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-amlogic@lists.infradead.org,
-        =?UTF-8?B?77+9ZWNraQ==?= <rafal@milecki.pl>,
-        Julius Werner <jwerner@chromium.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Christophe Roullier <christophe.roullier@foss.st.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-mediatek@lists.infradead.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Evan Benn <evanbenn@chromium.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Sander Vanheule <sander@svanheule.net>
-Subject: Re: [PATCH 6/6] dt-bindings: watchdog: realtek,otto-wdt: simplify
- requiring interrupt-names
-Message-ID: <168185396909.2376821.8732982905359058158.robh@kernel.org>
-References: <20230415095112.51257-1-krzysztof.kozlowski@linaro.org>
- <20230415095112.51257-6-krzysztof.kozlowski@linaro.org>
+        Wed, 19 Apr 2023 08:02:47 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6752719BC;
+        Wed, 19 Apr 2023 05:02:37 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33JAffpt016283;
+        Wed, 19 Apr 2023 05:02:20 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=Bgdb/hrTjHuJn/1SOfm2FVObXma7/i2K9WZQV6U0ZCw=;
+ b=aUatAVyU9yx7Z+pCxoWLTKuEEqQ5db3UIa1kggy2MT98w/YLVxNShfiMOOl/3NRAiIDi
+ XJt//Fy5rU78ftpi0oH7puZVOGssbjABsfcp3GxANBFmZkx6nJAZnqEENzszbNSNzkfj
+ JkdB3mpYAvi94cuYzP/J93pPDEhn7tb42JXY9P2TmrPkrmK45f4muzGer8tu1A7WZ/Y/
+ k7w0tdougSDgu7QG0ChXAGmL8HHvFPlIP+OBjgbGtRQz3Z/bR4Kmg/rNuS6DBi2/Zqcz
+ fr5S+RLZn8fEi3ehQ7ViNH7XHbXVV9THUvBkqQxR9EiAI7eF9Gv5Qj2mbEf68VzyvbRg Eg== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3q2917st4s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 19 Apr 2023 05:02:19 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 19 Apr
+ 2023 05:02:17 -0700
+Received: from bbhushan2.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Wed, 19 Apr 2023 05:02:15 -0700
+From:   Bharat Bhushan <bbhushan2@marvell.com>
+To:     <im@linux-watchdog.org>, <linux@roeck-us.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>
+CC:     Bharat Bhushan <bbhushan2@marvell.com>
+Subject: [PATCH 1/2 v2] dt-bindings: watchdog: marvell octeonTX2 GTI system watchdog driver
+Date:   Wed, 19 Apr 2023 17:32:11 +0530
+Message-ID: <20230419120212.3675-1-bbhushan2@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230415095112.51257-6-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain
+X-Proofpoint-GUID: 6HeHGL5OyDx2Hw3-Hr5ebtzwP6VrV7Cz
+X-Proofpoint-ORIG-GUID: 6HeHGL5OyDx2Hw3-Hr5ebtzwP6VrV7Cz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-19_06,2023-04-18_01,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,17 +63,72 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Add binding documentation for the Marvell octeonTX2
+GTI system watchdog driver.
 
-On Sat, 15 Apr 2023 11:51:12 +0200, Krzysztof Kozlowski wrote:
-> Required properties should be listed in "required:" block.  Since
-> interrupts are already there, the dependency of interrupt-names on the
-> interrupts can be simplified.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/watchdog/realtek,otto-wdt.yaml        | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
+Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+---
+v2:
+ - compatible changed from marvell-octeontx2-wdt to marvell,octeontx2-wdt
+ - corrected type atchdog to watchdog 
+ - Replaced hardcoding to use IRQ_TYPE_EDGE_RISING flag
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+ .../watchdog/marvell,octeontx2-wdt.yaml       | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+
+diff --git a/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+new file mode 100644
+index 000000000000..96a979c4082d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
+@@ -0,0 +1,46 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/marvell,octeontx2-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Marvell OcteonTX2 GTI system watchdog
++
++allOf:
++  - $ref: watchdog.yaml#
++
++maintainers:
++  - Bharat Bhushan <bbhushan2@marvell.com>
++
++properties:
++  compatible:
++    const: marvell,octeontx2-wdt
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        watchdog@802000040000 {
++          compatible = "marvell,octeontx2-wdt";
++          reg = <0x00008020 0x00040000 0x00000000 0x00020000>;
++          interrupts = <0 38 IRQ_TYPE_EDGE_RISING>;
++        };
++    };
++
++...
+-- 
+2.17.1
 
