@@ -2,134 +2,156 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4A16EBDE1
-	for <lists+linux-watchdog@lfdr.de>; Sun, 23 Apr 2023 10:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 768C86EC06D
+	for <lists+linux-watchdog@lfdr.de>; Sun, 23 Apr 2023 16:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbjDWIIp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 23 Apr 2023 04:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
+        id S229996AbjDWOj6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 23 Apr 2023 10:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjDWIIo (ORCPT
+        with ESMTP id S229453AbjDWOj5 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 23 Apr 2023 04:08:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872AC1737
-        for <linux-watchdog@vger.kernel.org>; Sun, 23 Apr 2023 01:08:43 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pqUln-0003lR-Hu; Sun, 23 Apr 2023 10:08:27 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pqUll-00DCWp-0g; Sun, 23 Apr 2023 10:08:25 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pqUlk-00FVtr-BJ; Sun, 23 Apr 2023 10:08:24 +0200
-Date:   Sun, 23 Apr 2023 10:08:24 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Sun, 23 Apr 2023 10:39:57 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFA7E6A;
+        Sun, 23 Apr 2023 07:39:55 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f20215fa70so2465025e9.0;
+        Sun, 23 Apr 2023 07:39:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682260794; x=1684852794;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DxascrpnkHsxUo0LirHOTOs03IZF0Zd8/Rtbdyketmg=;
+        b=mPuZ9Ir1i7hak/yYSbI/PcvjGSebu/6dMaWjhg55ov7WSNXRhaQw9SdwF5hrpiFfYD
+         6Gw7veIFxdQz2CDqrpcSFRoMHHJ/KQ83s+xtiAJqbf7kfPd7CVkvaVTiMn8gpRHeL2sX
+         rnVt5BdYYN1q00XBsrppf8tuTqqB2NGePafK9LsC/vumSRZZqUBIYB0zRMj/JWU10+5f
+         kreoR565uQzQLI8/L1amA1gJxBE8nC6gyz7Qr1XPJ0NGT2W7NXrAHmrGg6p1m21uEDZv
+         T7Yzpp0eIU5ZPwQxN5falUUhIj6zpqQ5BsWeyYQDOkdNhYiS8JIn4o5SD6uXSulofFFO
+         uicw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682260794; x=1684852794;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DxascrpnkHsxUo0LirHOTOs03IZF0Zd8/Rtbdyketmg=;
+        b=ZtAnBk17Eu1oW5PN8xgjth78NGoffRVO0MHIvs0NiZ4W59mU/MYcSjwKB32ECJ0c9l
+         jwAsnQ/vHRxfrQhpCgftkUmEkArozMvivZn8dyBfs+U3c5gMSbYQfjlgP/4Xe1rZ1EHA
+         rtxbgoeeUSML6+F7NWXR7s/lutcePNQO/UK5Q/V3aQZ/xuGDbXlCunYQARtHdpcc4myY
+         9HsZXqllCcz+LauDJ4fx91NQuO44VRSImRgsECc9+W82GIh9CWACVJ0liWfHiAXb0o3s
+         eFPlBrBUA/T7fwpzhLSZaO8cKEWllOd7Hl1LVJyYNtazCBqnnQfOyAJTXvWtxCoiCJ0v
+         eKnQ==
+X-Gm-Message-State: AAQBX9fTVIRp7IdGD0kY56Q0LwJoL5iVmLAIoF+QKjGg9NNe2ep4y/VF
+        hOavkj0LkuNI+YwtnIZId8A=
+X-Google-Smtp-Source: AKy350aPyZPa0CtW4ev4K4hqS4De6YZ1OaWbU9d9U5y6hhqvznG19xTAbpwfSf+xzBGdLdwhFEVBRQ==
+X-Received: by 2002:a1c:7201:0:b0:3ee:775:c573 with SMTP id n1-20020a1c7201000000b003ee0775c573mr5550759wmc.20.1682260793646;
+        Sun, 23 Apr 2023 07:39:53 -0700 (PDT)
+Received: from standask-GA-A55M-S2HP ([188.123.113.247])
+        by smtp.gmail.com with ESMTPSA id r6-20020a05600c458600b003f195d540d9sm5362328wmo.14.2023.04.23.07.39.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Apr 2023 07:39:53 -0700 (PDT)
+Date:   Sun, 23 Apr 2023 16:39:51 +0200
+From:   Stanislav Jakubek <stano.jakubek@gmail.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] watchdog: s3c2410_wdt: Use Use
- devm_clk_get[_optional]_enabled() helpers
-Message-ID: <20230423080824.7u2ydmmwk4jdbobm@pengutronix.de>
-References: <20230304165653.2179835-1-linux@roeck-us.net>
- <20230306091048.mfrpexle24t6nwzy@pengutronix.de>
- <20230418065603.rzpiazzw4upitynt@pengutronix.de>
- <20230422112229.GA23896@www.linux-watchdog.org>
+Subject: [PATCH,RESEND] dt-bindings: watchdog: brcm,kona-wdt: convert to YAML
+Message-ID: <20230423143951.GA10743@standask-GA-A55M-S2HP>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ii4dxdi23ndnywjj"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230422112229.GA23896@www.linux-watchdog.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Convert Broadcom Kona family watchdog timer bindings to DT schema.
 
---ii4dxdi23ndnywjj
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+---
+RESEND because I originally sent this to the wrong maintainers and
+mailing lists by accident. Sorry for the noise.
 
-On Sat, Apr 22, 2023 at 01:22:29PM +0200, Wim Van Sebroeck wrote:
-> Hi Uwe,
->=20
-> > Hello,
-> >=20
-> > On Mon, Mar 06, 2023 at 10:10:48AM +0100, Uwe Kleine-K=F6nig wrote:
-> > > On Sat, Mar 04, 2023 at 08:56:52AM -0800, Guenter Roeck wrote:
-> > > > The devm_clk_get[_optional]_enabled() helpers:
-> > > >     - call devm_clk_get[_optional]()
-> > > >     - call clk_prepare_enable() and register what is needed in orde=
-r to
-> > > >       call clk_disable_unprepare() when needed, as a managed resour=
-ce.
-> > > >=20
-> > > > This simplifies the code and avoids the calls to clk_disable_unprep=
-are().
-> > > >=20
-> > > > While at it, use dev_err_probe consistently, and use its return val=
-ue
-> > > > to return the error code.
-> > > >=20
-> > > > Cc: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > >=20
-> > > Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> >=20
-> > This patch is in next now as b05a2e58c16c47f3d752b7db1714ef077e5b82d9.
-> > My name occurs twice in the tag area, once it is mangled as
-> >=20
-> > 	Uwe Kleine-K=3DF6nig
-> >=20
-> > I would welcome fixing that (i.e. s/=3DF6/=F6/). When this commit is
-> > touched, you can also do s/Use Use/Use/ in the Subject.
->=20
-> Fixed.
+ .../bindings/watchdog/brcm,kona-wdt.txt       | 15 --------
+ .../bindings/watchdog/brcm,kona-wdt.yaml      | 37 +++++++++++++++++++
+ 2 files changed, 37 insertions(+), 15 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
 
-Looking at the output of
+diff --git a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
+deleted file mode 100644
+index 2b86a00e351d..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
++++ /dev/null
+@@ -1,15 +0,0 @@
+-Broadcom Kona Family Watchdog Timer
+------------------------------------
+-
+-This watchdog timer is used in the following Broadcom SoCs:
+-  BCM11130, BCM11140, BCM11351, BCM28145, BCM28155
+-
+-Required properties:
+-  - compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
+-  - reg: memory address & range
+-
+-Example:
+-	watchdog@35002f40 {
+-		compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
+-		reg = <0x35002f40 0x6c>;
+-	};
+diff --git a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
+new file mode 100644
+index 000000000000..5de1b022847b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
+@@ -0,0 +1,37 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/brcm,kona-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Broadcom Kona family watchdog timer
++
++maintainers:
++  - Florian Fainelli <f.fainelli@gmail.com>
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - brcm,bcm11351-wdt
++      - const: brcm,kona-wdt
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    watchdog@35002f40 {
++        compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
++        reg = <0x35002f40 0x6c>;
++    };
++...
+-- 
+2.25.1
 
-	git range-diff b05a2e58c16c47f3d752b7db1714ef077e5b82d9...9b31b1ea125ca2e7=
-34ae89badc0c3073b4445842
-
-it looks good to me now.
-
-Thanks
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ii4dxdi23ndnywjj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRE53cACgkQj4D7WH0S
-/k51MQf9GQenHNrdE5Chnn1T7wY3+ZaqeHuRUzF2W9AeBfOx6mq5o86ClrpDoMWI
-jKPWe/2g5KGNmjYbpmnVAaujc3XscQM8znRYmJE5m/vkKKbbWoaqgP+dVQPhIImz
-+GitDdLYnV5E9nHqWuLB2ajsqsWcvI9bIcHsvsfGaD3BVKzwMaxjWAQoZtoZvG6V
-jZ5dcFhcnmZgOMSwK2nCMj5SXHEYPczFTpDB00aXZ1hBLsxfEUUuz5iZeOfCCGrs
-DqoNF3l29Lji9IsINO6BTnroOoKqVIckgaKGwB8HRFiF4CKhEX+6pOZT3tweu13b
-4Lp2sZKvLM37rgHgChQMRaZ5hVXZXA==
-=hwCc
------END PGP SIGNATURE-----
-
---ii4dxdi23ndnywjj--
