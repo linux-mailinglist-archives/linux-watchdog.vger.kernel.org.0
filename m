@@ -2,133 +2,204 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECEF6ED269
-	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Apr 2023 18:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 900126ED2E2
+	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Apr 2023 18:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231293AbjDXQ1B (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 24 Apr 2023 12:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
+        id S231696AbjDXQxv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 24 Apr 2023 12:53:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231268AbjDXQ1A (ORCPT
+        with ESMTP id S230500AbjDXQxu (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 24 Apr 2023 12:27:00 -0400
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605CD19AE;
-        Mon, 24 Apr 2023 09:26:59 -0700 (PDT)
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-541b60e7288so3704124eaf.1;
-        Mon, 24 Apr 2023 09:26:59 -0700 (PDT)
+        Mon, 24 Apr 2023 12:53:50 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A061712;
+        Mon, 24 Apr 2023 09:53:49 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4ec816d64afso20195782e87.1;
+        Mon, 24 Apr 2023 09:53:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682355227; x=1684947227;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4a2P0TUQ0mn+DpoMQpgGHoufc6HMZENvo2lrGhlperY=;
+        b=AMO41QCJ9wgDvxfnHevXOMLXc5fmHjxUDQW7Sq5BkbnA/YBKTmx9W1ba2Bq9aqCsOB
+         nh5grgU3i7+ybXGo9IbyMKeBOzfT+1D4GcQS/5aHukaSAdxyNxch2vVJuDuzt+30LIlw
+         fvPCgwBLJvshkBAxGXDG3cuniq/GDuqaPD3K5rntvzMAZbvcxcQpjvseaoI2hd1quFmQ
+         cyqRyZpD1TDGA++plkbhwGAVG63Ln+sCUnW7GqVp38ZRsb14cEUBy6J0wJN6hMxXM6fV
+         DgrJvAQb6x6R0QOEk4yKHr/ZqjZywySSUUxgVRXup3axAjk3AnqBu3cEmdx0rVf+gEL6
+         ay2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682353618; x=1684945618;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TNw2i3Q9unD3TSIdaH9haVdJnYN/tbo0P8vrj33ORQk=;
-        b=Bz4/QA9Hor/OSmhw/vUjr7NCI91RK+J3wnnpDqG3ImJQ6JQr7bvqHEtCDpr0MVelYp
-         fbjbeK1DkyxYDQw8OMz3rXtHFZRS1NHi7Ss7hBfnuwZh+NRgc28TL8GqgymUmMedEGnQ
-         qpbkDH+j3P9MZuFZ0rP46pOiJNIhuZTTSOUJVfe7jKX87vUyzoh1PKnV1oaXe6CraMYk
-         XHcQrakhf17dSRvNCKWO4vNzB7mKa+0/1IpGGX7TFas2WfogLKuVSGbMfVSTIDJsTfou
-         yDsLgr7UXMSbQRsQP72wbGyiVbd0CnkhONrgMSjeX69iJoWJlSdCEmix4hT46UmaYBj7
-         94Dg==
-X-Gm-Message-State: AAQBX9ddxNvQT+PORsYyqBuAtdrE8clN4cHCCDRJtscfHjtiSMUOjRXa
-        cYXRpCC953fPsnOXRQfY0DjcGUWYAw==
-X-Google-Smtp-Source: AKy350YhrY2rO66tkMy1Aa7AZTVTqGNmTd1lT1ryxJCDF/XFxa6cVAbTtrHWeRYfcW/ZrYNfWS8/3g==
-X-Received: by 2002:a05:6808:9a6:b0:38d:ef18:53b5 with SMTP id e6-20020a05680809a600b0038def1853b5mr6945471oig.51.1682353618592;
-        Mon, 24 Apr 2023 09:26:58 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d13-20020a05680805cd00b0038e34b0a0ecsm4705160oij.8.2023.04.24.09.26.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Apr 2023 09:26:58 -0700 (PDT)
-Received: (nullmailer pid 2778590 invoked by uid 1000);
-        Mon, 24 Apr 2023 16:26:57 -0000
-Date:   Mon, 24 Apr 2023 11:26:57 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        d=1e100.net; s=20221208; t=1682355227; x=1684947227;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4a2P0TUQ0mn+DpoMQpgGHoufc6HMZENvo2lrGhlperY=;
+        b=VCZONbHh5s/N4lsDjpXTbot3eDIvS5vL0nNU++3f08fE1UxAPZ1CYzd5BL78hUWFwQ
+         DRCeO9++54cldZSZwX5ObqeHP+6O9KPpDXcIDj5cvs4rMcqQdH/9BAoukHeHEH7x2Jt+
+         mD9r3cugUIkgZKFt9HIJp30VGbGTDkvlDWChShx7bsl2YpOaek92SsvKsyoD6FpbIWNn
+         WgJTT6BXhmIPqEU89p9z5elyYUiEA4CYriMEAg6KO7IMWqkMWTKijMqS9FiMmgEQX1sy
+         HYZaobO5B1BVVMQ8lE7D3WOClNWJrCn0Wp7wM2e+/+c7skLQZDsQHOFfaNVM9ZGXEV7f
+         3ISQ==
+X-Gm-Message-State: AAQBX9drJFg4v0ksqP38qn5bIBXYCAyxNEZRNuK2iXIwODUew4cQeKJf
+        ij0jfp2jVPwGHejWRw9FfHmaeryk+EheLyA+MeA=
+X-Google-Smtp-Source: AKy350b/IT3RaAB1CmITHJJLsYFLerjZZ/NE70bzoYD2fmKSh3wDqqv0xtIuxcZi+DcSWA4fU+VlG4ZXc3K+GrR1+FM=
+X-Received: by 2002:a05:6512:1589:b0:4e2:7ab6:15cd with SMTP id
+ bp9-20020a056512158900b004e27ab615cdmr5502211lfb.30.1682355227201; Mon, 24
+ Apr 2023 09:53:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230418170341.28805-1-n2h9z4@gmail.com> <20230421183420.GA1568047-robh@kernel.org>
+In-Reply-To: <20230421183420.GA1568047-robh@kernel.org>
+From:   Nikita B <n2h9z4@gmail.com>
+Date:   Mon, 24 Apr 2023 18:53:35 +0200
+Message-ID: <CAJVoGU0QDSjQ+pjCWQ7PW8aA6-GyU9j8nAAoDD_hriAHp7Eirg@mail.gmail.com>
+Subject: Re: [PATCH v3] dt-bindings: watchdog: brcm,kona-wdt: convert txt file
+ to yaml
+To:     Rob Herring <robh@kernel.org>
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net,
+        krzysztof.kozlowski+dt@linaro.org, f.fainelli@gmail.com,
+        rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 30/43] dt-bindings: wdt: Add DT binding ts72xx wdt
-Message-ID: <20230424162657.GJ2701399-robh@kernel.org>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230424123522.18302-31-nikita.shubin@maquefel.me>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230424123522.18302-31-nikita.shubin@maquefel.me>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 03:34:46PM +0300, Nikita Shubin wrote:
-> Add DT binding for Technologic Systems TS-72xx watchdog.
-> 
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-> ---
->  .../watchdog/technologic,ts72xx-wdt.yaml      | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/technologic,ts72xx-wdt.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/technologic,ts72xx-wdt.yaml b/Documentation/devicetree/bindings/watchdog/technologic,ts72xx-wdt.yaml
-> new file mode 100644
-> index 000000000000..0e06dbaec85f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/technologic,ts72xx-wdt.yaml
-> @@ -0,0 +1,39 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/technologic,ts72xx-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Technologic Systems TS-72xx based SBCs watchdog bindings
-> +
-> +maintainers:
-> +  - Wim Van Sebroeck <wim@linux-watchdog.org>
-> +  - Guenter Roeck <linux@roeck-us.net>
-> +
-> +allOf:
-> +  - $ref: "watchdog.yaml#"
+On Fri, 21 Apr 2023 at 20:34, Rob Herring <robh@kernel.org> wrote:
+>
+> On Tue, Apr 18, 2023 at 07:03:41PM +0200, Nikita Bondarenko wrote:
+> > Converted txt file to yaml. No additional changes.
+> >
+> > Signed-off-by: Nikita Bondarenko <n2h9z4@gmail.com>
+> > ---
+> >
+> > Changes in v3:
+> > - updated commit message
+> > - updated the compatible definition to probably fix "compatible is too long" warning
+> > - updated example to how it was in the txt file
+> >
+> >
+> > I do not have this warning when I am running
+> > make  DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml ARCH=arm dt_binding_check
+> > maybe I run it without some additional variable?
+> >
+> > But I checked arch/arm/boot/dts/bcm28155-ap.dts, it includes bcm11351.dtsiv which contains
+> > compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
+> > which probably causes a warning
+> > This is exact how it was in txt file example.
+> >
+> > If I put it in an example in a yaml file, dt_binding_check does not pass.
+> > Looks like the issue is in the enum type of compatible. It does not allow multiple strings.
+> > Updated to not to use enum. The example with two strings in compatible passes the checks.
+> >
+> > make  DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml ARCH=arm dt_binding_check
+> >   LINT    Documentation/devicetree/bindings
+> >   CHKDT   Documentation/devicetree/bindings/processed-schema.json
+> >   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+> >   DTEX    Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.example.dts
+> >   DTC_CHK Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.example.dtb
+> >
+> > make  DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml ARCH=arm dtbs_check
+> >   LINT    Documentation/devicetree/bindings
+> >   CHKDT   Documentation/devicetree/bindings/processed-schema.json
+> >   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+>
+> And that's it? You need to remove all the .dtb files if you don't see
+> any DTB lines. But this runs it for you:
+>
+> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230418170341.28805-1-n2h9z4@gmail.com/
+>
+> It all looks fine, so not sure what your question/issue is?
+>
+> >
+> >
+> > v2 patch is here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230402135555.62507-1-n2h9z4@gmail.com/
+> >
+> >  .../bindings/watchdog/brcm,kona-wdt.txt       | 15 -------
+> >  .../bindings/watchdog/brcm,kona-wdt.yaml      | 41 +++++++++++++++++++
+> >  2 files changed, 41 insertions(+), 15 deletions(-)
+> >  delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
+> >  create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
+> > deleted file mode 100644
+> > index 2b86a00e351d..000000000000
+> > --- a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
+> > +++ /dev/null
+> > @@ -1,15 +0,0 @@
+> > -Broadcom Kona Family Watchdog Timer
+> > ------------------------------------
+> > -
+> > -This watchdog timer is used in the following Broadcom SoCs:
+> > -  BCM11130, BCM11140, BCM11351, BCM28145, BCM28155
+> > -
+> > -Required properties:
+> > -  - compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
+> > -  - reg: memory address & range
+> > -
+> > -Example:
+> > -     watchdog@35002f40 {
+> > -             compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
+> > -             reg = <0x35002f40 0x6c>;
+> > -     };
+> > diff --git a/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
+> > new file mode 100644
+> > index 000000000000..3d4403b41cbe
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
+> > @@ -0,0 +1,41 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/watchdog/brcm,kona-wdt.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Broadcom Kona Family Watchdog Timer
+> > +
+> > +description: |
+> > +  This watchdog timer is used in the following Broadcom SoCs:
+> > +  BCM11130, BCM11140, BCM11351, BCM28145, BCM28155
+> > +
+> > +maintainers:
+> > +  - Florian Fainelli <f.fainelli@gmail.com>
+> > +  - Ray Jui <rjui@broadcom.com>
+> > +  - Scott Branden <sbranden@broadcom.com>
+> > +
+> > +allOf:
+> > +  - $ref: watchdog.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    items:
+> > +      - const: brcm,bcm11351-wdt
+> > +      - const: brcm,kona-wdt
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    watchdog@35002f40 {
+> > +        compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
+> > +        reg = <0x35002f40 0x6c>;
+> > +    };
+> > --
+> > 2.34.1
+> >
 
-Drop quotes
+Hello!
 
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - technologic,ts7200-wdt
-> +
-> +  reg:
-> +    maxItems: 2
-
-Need to define each entry.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    watchdog0: watchdog@5a002000 {
-> +      compatible = "technologic,ts7200-wdt";
-> +      reg = <0x23800000 0x01>, <0x23c00000 0x01>;
-> +      timeout-sec = <30>;
-> +    };
-> +
-> +...
-> +
-> -- 
-> 2.39.2
-> 
+Got it, thank you!
