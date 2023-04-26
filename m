@@ -2,158 +2,93 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8036EFC27
-	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Apr 2023 23:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D675B6EFC35
+	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Apr 2023 23:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239968AbjDZVGy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 26 Apr 2023 17:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
+        id S239475AbjDZVK2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 26 Apr 2023 17:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239995AbjDZVGv (ORCPT
+        with ESMTP id S239746AbjDZVK1 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 26 Apr 2023 17:06:51 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632E735B6
-        for <linux-watchdog@vger.kernel.org>; Wed, 26 Apr 2023 14:06:48 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-54fc6949475so87479147b3.3
-        for <linux-watchdog@vger.kernel.org>; Wed, 26 Apr 2023 14:06:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682543207; x=1685135207;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8C6tKrbT51GaZnl8zer1AnBo8yNRgpprgLkj0av5l+E=;
-        b=Kh7TmG3JlHQoPDgJrxEspZSpUN+36yUdamiO43UnPnWU5WHRHExsZuq1crpHQPMIXw
-         zzWzXMlOi38Xx4my+77mCqHvk7/X81J/7WthQKZt0CHx/5a1ohrap/HzGWEDQbQACJTb
-         YhsFcjssiyz48P8HUQnvmRDVNrO8n5ZicePPH1S7Zj9YadbExO7GDrfEmhV8+JMdHi44
-         dS/U1Lzmekv6Z1Px+wN/pWN5LwOrRpCZPrnqoQccfnfTFROZXP698w5QlH4NBcZahcI9
-         Av/WtFSCGNW/WXdsMcqPPizaCNJVu9G6mBZV0Jx9mGGkKSo+tGaTmr2RPFnSQVsLEyzh
-         SKbg==
+        Wed, 26 Apr 2023 17:10:27 -0400
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E413ABD;
+        Wed, 26 Apr 2023 14:10:08 -0700 (PDT)
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5475e0147c9so2209959eaf.1;
+        Wed, 26 Apr 2023 14:10:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682543207; x=1685135207;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8C6tKrbT51GaZnl8zer1AnBo8yNRgpprgLkj0av5l+E=;
-        b=HElDPhlrlD8X9mxehn7kw9IBqy9h1RwO2AIVfnEjmMjnlI0igcIHrBj6Z93MTH4qBU
-         jRXVkXPkEh0T+PqqiBZpKDHkWPQzxzoPwji2zQdonIztVha6XkDfrl/SOd7phl7t5u+Z
-         FbSA1d2Yrtx/1EwVzc2Yujd4Kv6emAGFrAbKsx6QmOAR9IeoeGHHY+aEC/foRs+jTJ9m
-         CbSEcUs8RQyhml/zwHDU0S0QQ9JC07ToJco/PPT/eNRd5M3Ao8BkDX5odLjWFLFsZobL
-         tB5RA81oxvIZ2ltPJVtl+odCa2b1drJSTPhWSG75XoFkmIGzFarOokxYewmCE26N871B
-         GbrQ==
-X-Gm-Message-State: AAQBX9cpP1VWcRv6wPeUEu9HCg1dXq30UyfBs58BEyjXnstfQ3JKw9Ue
-        OXOWKGVYZhjnuNvg1Qw9mEeUVjIR0VxWhpQtFvGTXQ==
-X-Google-Smtp-Source: AKy350bnHkFKck7ScHLySUohS3TGug3PuU6k1b4WHzFwKnH0/14BD/IU48R1JEuMfUGu5baNdUtxQXCsghQML3QSaV8=
-X-Received: by 2002:a81:5d02:0:b0:54f:8b56:bb3 with SMTP id
- r2-20020a815d02000000b0054f8b560bb3mr13933284ywb.5.1682543207061; Wed, 26 Apr
- 2023 14:06:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <CACRpkdarANFQ7-p=-Pi_iuk6L=PfSLDsD3_w4dEVqarwXkEGMQ@mail.gmail.com> <b5396ef5-3fed-4e98-8f37-a9cd4473bddc@sirena.org.uk>
-In-Reply-To: <b5396ef5-3fed-4e98-8f37-a9cd4473bddc@sirena.org.uk>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 26 Apr 2023 23:06:35 +0200
-Message-ID: <CACRpkdaZvKoFuDHP0Cd1MuayKtnBjCG5wmWPjwq3pccCrb-P9A@mail.gmail.com>
-Subject: Re: [PATCH 00/43] ep93xx device tree conversion
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Nikita Shubin <nikita.shubin@maquefel.me>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Linus Walleij <linusw@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Brian Norris <briannorris@chromium.org>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jean Delvare <jdelvare@suse.de>, Joel Stanley <joel@jms.id.au>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Le Moal <damien.lemoal@opensource.wdc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Lukasz Majewski <lukma@denx.de>, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Qin Jian <qinjian@cqplus1.com>,
-        Richard Weinberger <richard@nod.at>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>,
-        Sebastian Reichel <sre@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Sven Peter <sven@svenpeter.dev>, Takashi Iwai <tiwai@suse.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Walker Chen <walker.chen@starfivetech.com>,
+        d=1e100.net; s=20221208; t=1682543408; x=1685135408;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mu0CENun8oFZTueHArmv4VmXak5XmpNKe7QDDJtnNAM=;
+        b=EYUEHhuwHQ/DevkXkerGPX0wXksDma91oKP96pfCY2B2PMqWkhkGiF97muhbmTFvs6
+         HpXkOr1mKTiyIDSVdM3I7j4Wb24UmaFe/DZdlG0OyODiU3D2FkqXmiRd2BAsTHSVERJk
+         1Y7c9pYMkqDpbsxpikyGoe9QlmTJVa3yNbuN8ltSxaz0SXxka50WHB4JflMH41ePTNn4
+         wiR6jq9sbI3j1wrnLvt0Z/Kj19Rq4d453azGDJfZdJWeXbLeivtEgsgu8ATDUn4p9r6n
+         STtM/dBCDPPHWuVYNRHrmq0nWHsKA8p5WIp3J1ORExnavczryQYhIU/ZFW8C1MOY0k3C
+         m1Qg==
+X-Gm-Message-State: AAQBX9e+H0CXA8z8jur89r5M/M/shkFtpsWBpGTkY3EjPz7asX2TF3S5
+        ljlFinn7kH+z/KS7IGL9gg==
+X-Google-Smtp-Source: AKy350ZiQQZVuONWZ4qZ3rjKWFp/+fC6WoEIdnMn+PbZciaDx8naIN2vbcz6/nEY74IMf5U9XKf8aQ==
+X-Received: by 2002:a05:6808:21a2:b0:38e:6cb1:298b with SMTP id be34-20020a05680821a200b0038e6cb1298bmr11228463oib.53.1682543407669;
+        Wed, 26 Apr 2023 14:10:07 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b82-20020aca3455000000b0038ec2b341c2sm4366485oia.12.2023.04.26.14.10.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Apr 2023 14:10:07 -0700 (PDT)
+Received: (nullmailer pid 1240028 invoked by uid 1000);
+        Wed, 26 Apr 2023 21:10:06 -0000
+Date:   Wed, 26 Apr 2023 16:10:06 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        netdev@vger.kernel.org, soc@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>
+Subject: Re: [PATCH v6 03/12] dt-bindings: watchdog: mediatek,mtk-wdt: add
+ mt8365
+Message-ID: <20230426211006.GA1227761-robh@kernel.org>
+References: <20230203-evk-board-support-v6-0-8d6b1cfe7f29@baylibre.com>
+ <20230203-evk-board-support-v6-3-8d6b1cfe7f29@baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203-evk-board-support-v6-3-8d6b1cfe7f29@baylibre.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 11:02=E2=80=AFPM Mark Brown <broonie@kernel.org> wr=
-ote:
-> On Wed, Apr 26, 2023 at 10:56:53PM +0200, Linus Walleij wrote:
->
-> > This is a big patch set and the improvement to the ARM kernel it
-> > brings is great, so I am a bit worried about over-review stalling the
-> > merged. If there start to be nitpicky comments I would prefer that
-> > we merge it and let minor comments and "nice-to-haves" be
-> > addressed in-tree during the development cycle.
->
-> I'm really not enthusiastic about the SPI bindings being merged as-is.
+On Wed, Apr 26, 2023 at 12:49:03PM +0200, Alexandre Mergnat wrote:
+> Add binding description for mediatek,mt8365-wdt
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Tested-by: Kevin Hilman <khilman@baylibre.com>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>  Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-Agree, the bindings are more important than the code IMO,
-they tend to get written in stone.
+This has already been applied by Guenter.
 
-Yours,
-Linus Walleij
+Rob
