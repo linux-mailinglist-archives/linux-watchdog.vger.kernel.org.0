@@ -2,44 +2,58 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C3C6EEF56
-	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Apr 2023 09:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 164086EEF84
+	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Apr 2023 09:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239677AbjDZHdC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 26 Apr 2023 03:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
+        id S239896AbjDZHn6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 26 Apr 2023 03:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239639AbjDZHc5 (ORCPT
+        with ESMTP id S239947AbjDZHn5 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 26 Apr 2023 03:32:57 -0400
+        Wed, 26 Apr 2023 03:43:57 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0483591
-        for <linux-watchdog@vger.kernel.org>; Wed, 26 Apr 2023 00:32:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598CB3598
+        for <linux-watchdog@vger.kernel.org>; Wed, 26 Apr 2023 00:43:51 -0700 (PDT)
 Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <pza@pengutronix.de>)
-        id 1prZds-0000C9-I5; Wed, 26 Apr 2023 09:32:44 +0200
+        id 1prZoO-0001la-DI; Wed, 26 Apr 2023 09:43:36 +0200
 Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <pza@pengutronix.de>)
-        id 1prZdr-0001IB-4x; Wed, 26 Apr 2023 09:32:43 +0200
-Date:   Wed, 26 Apr 2023 09:32:43 +0200
+        id 1prZoM-0001fM-I9; Wed, 26 Apr 2023 09:43:34 +0200
+Date:   Wed, 26 Apr 2023 09:43:34 +0200
 From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Wim Van Sebroeck <wim@iguana.be>,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 1/2] watchdog: dw_wdt: Fix the error handling path of
- dw_wdt_drv_probe()
-Message-ID: <20230426073243.GA4724@pengutronix.de>
-References: <fbb650650bbb33a8fa2fd028c23157bedeed50e1.1682491863.git.christophe.jaillet@wanadoo.fr>
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v7 2/2] clk: wpcm450: Add Nuvoton WPCM450 clock/reset
+ controller driver
+Message-ID: <20230426074334.GC4724@pengutronix.de>
+References: <20230422220240.322572-1-j.neuschaefer@gmx.net>
+ <20230422220240.322572-3-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <fbb650650bbb33a8fa2fd028c23157bedeed50e1.1682491863.git.christophe.jaillet@wanadoo.fr>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230422220240.322572-3-j.neuschaefer@gmx.net>
 X-Sent-From: Pengutronix Hildesheim
 X-URL:  http://www.pengutronix.de/
 X-Accept-Language: de,en
@@ -58,18 +72,56 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Christophe,
+Hi Jonathan,
 
-On Wed, Apr 26, 2023 at 08:52:48AM +0200, Christophe JAILLET wrote:
-> The commit in Fixes has only updated the remove function and missed the
-> error handling path of the probe.
+On Sun, Apr 23, 2023 at 12:02:40AM +0200, Jonathan Neuschäfer wrote:
+> This driver implements the following features w.r.t. the clock and reset
+> controller in the WPCM450 SoC:
 > 
-> Add the missing reset_control_assert() call.
+> - It calculates the rates for all clocks managed by the clock controller
+> - It leaves the clock tree mostly unchanged, except that it enables/
+>   disables clock gates based on usage.
+> - It exposes the reset lines managed by the controller using the
+>   Generic Reset Controller subsystem
 > 
-> Fixes: 65a3b6935d92 ("watchdog: dw_wdt: get reset lines from dt")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> NOTE: If the driver and the corresponding devicetree node are present,
+>       the driver will disable "unused" clocks. This is problem until
+>       the clock relations are properly declared in the devicetree (in a
+>       later patch). Until then, the clk_ignore_unused kernel parameter
+>       can be used as a workaround.
+> 
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+[...]
+> diff --git a/drivers/clk/clk-wpcm450.c b/drivers/clk/clk-wpcm450.c
+> new file mode 100644
+> index 0000000000000..6f6d8a1ea3484
+> --- /dev/null
+> +++ b/drivers/clk/clk-wpcm450.c
+> @@ -0,0 +1,374 @@
+[...]
+> +static void __init wpcm450_clk_init(struct device_node *clk_np)
+> +{
+> +	struct clk_hw_onecell_data *clk_data;
+> +	static struct clk_hw **hws;
+> +	static struct clk_hw *hw;
+> +	void __iomem *clk_base;
+> +	int i, ret;
+> +	struct reset_simple_data *reset;
+[...]
+> +	// Reset controller
+> +	reset = kzalloc(sizeof(*reset), GFP_KERNEL);
+> +	if (!reset)
+> +		return;
+> +	reset->rcdev.owner = THIS_MODULE;
+> +	reset->rcdev.nr_resets = WPCM450_NUM_RESETS;
+> +	reset->rcdev.ops = &reset_simple_ops;
+> +	reset->rcdev.of_node = clk_np;
+> +	reset->membase = clk_base + REG_IPSRST;
+> +	ret = reset_controller_register(&reset->rcdev);
+> +	if (ret)
+> +		pr_err("Failed to register reset controller: %d\n", ret);
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+You could use %pe for consistency.
 
 regards
 Philipp
