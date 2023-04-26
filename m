@@ -2,84 +2,125 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDFB66EE7F2
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Apr 2023 21:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7686EEC0E
+	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Apr 2023 03:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235081AbjDYTBA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 25 Apr 2023 15:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
+        id S238407AbjDZBvQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 25 Apr 2023 21:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234458AbjDYTA7 (ORCPT
+        with ESMTP id S239008AbjDZBvM (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 25 Apr 2023 15:00:59 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57574CC;
-        Tue, 25 Apr 2023 12:00:58 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-187af4a5437so4508563fac.0;
-        Tue, 25 Apr 2023 12:00:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682449257; x=1685041257;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fGfTh6aEPBP2zPBc8sodaau12HqZshVg1l6oDdUcrhg=;
-        b=FFaZiW4S7EUm/OdCLlNy2oL/ft2lWC895KmBMLN7rtUOG2CcNcrGkFb/m7RPCk+yZ6
-         2eMWIkX9muQ45RBYxb5doP7OyAI0uDTXXMICAVB21M9yC7X4MX6YtzWrPVVYFIikavlq
-         29jp7Ep4Ed70c+alADHaBd3Aj3PLrvXJFsOUzYaOFh/rQMN8AWFHR+Yuyv/NydgUNRQL
-         TozzT9zwu7GafXLQj7z7qo8hFM7AAEKKJt6SrADG84XV0fkrLteOE3ysPpgIUJKEYa07
-         ZjPN20je3+LxV+lJNp53GsrsJ132TPAJI7f+v8aZpPu4YeMKmQ5usTOXXRjw/EJvsKHK
-         yGBg==
-X-Gm-Message-State: AAQBX9f9rWMtjoucsdG0kuYQd0Xx2aEst4S4iBVkTl6dEM07TjgbC154
-        1+9LSKvEIo1NQPZMeE2q8A==
-X-Google-Smtp-Source: AKy350YhZEueyWFqwlhM7KIm3mZnkPtZe/gu70qsQmRdddqqLoErBq67vbMQCEtsBT1z0FJeUmVo4A==
-X-Received: by 2002:a05:6870:330f:b0:187:7f29:b9 with SMTP id x15-20020a056870330f00b001877f2900b9mr11650647oae.13.1682449257481;
-        Tue, 25 Apr 2023 12:00:57 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c6-20020a05687091c600b001806f2ac9a6sm5778357oaf.47.2023.04.25.12.00.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Apr 2023 12:00:57 -0700 (PDT)
-Received: (nullmailer pid 2087501 invoked by uid 1000);
-        Tue, 25 Apr 2023 19:00:56 -0000
-Date:   Tue, 25 Apr 2023 14:00:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Bharat Bhushan <bbhushan2@marvell.com>
-Cc:     robh+dt@kernel.org, linux-watchdog@vger.kernel.org,
-        linux@roeck-us.net, sgoutham@marvell.com,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        wim@linux-watchdog.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2 v3] dt-bindings: watchdog: marvell octeonTX2 GTI
- system watchdog driver
-Message-ID: <168244924738.2086493.15313274108214738857.robh@kernel.org>
-References: <20230425081926.9234-1-bbhushan2@marvell.com>
+        Tue, 25 Apr 2023 21:51:12 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6290E1988;
+        Tue, 25 Apr 2023 18:50:56 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id B6E0124DBCE;
+        Wed, 26 Apr 2023 09:50:53 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
+ 2023 09:50:53 +0800
+Received: from [192.168.125.131] (113.72.145.137) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 26 Apr
+ 2023 09:50:52 +0800
+Message-ID: <dca081d0-cc06-3e65-ec9b-3885baf5dcde@starfivetech.com>
+Date:   Wed, 26 Apr 2023 09:49:48 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230425081926.9234-1-bbhushan2@marvell.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1] watchdog: starfive: Fix the probe return error if PM
+ and early_enable are both disabled
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        <linux-watchdog@vger.kernel.org>,
+        "Wim Van Sebroeck" <wim@linux-watchdog.org>
+CC:     Samin Guo <samin.guo@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230425100456.32718-1-xingyu.wu@starfivetech.com>
+ <2ea16959-4525-90fb-b928-d652a4613574@roeck-us.net>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <2ea16959-4525-90fb-b928-d652a4613574@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [113.72.145.137]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On 2023/4/25 22:06, Guenter Roeck wrote:
+> On 4/25/23 03:04, Xingyu Wu wrote:
+>> When the starfive watchdog driver uses 'pm_runtime_put_sync()' as probe
+>> return value at last and 'early_enable' is disabled, it could return the
+>> error '-ENOSYS' if the CONFIG_PM is disabled, but the driver should works
+>> normally.
+>>
+>> Add a check to make sure the PM is enabled and then use
+>> 'pm_runtime_put_sync()' as return value when 'early_enable' is disabled.
+>>
+>> Fixes: db728ea9c7be ("drivers: watchdog: Add StarFive Watchdog driver")
+>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+>> ---
+>>
+>> Hi, Guenter and Wim,
+>>
+>> This patch fixes the issue of StarFive watchdog driver and rebases on
+>> the master branch of linux-next.
+>>
+>> Thanks.
+>>   ---
+>>   drivers/watchdog/starfive-wdt.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
+>> index 1995cceca51e..51e487e09960 100644
+>> --- a/drivers/watchdog/starfive-wdt.c
+>> +++ b/drivers/watchdog/starfive-wdt.c
+>> @@ -492,7 +492,8 @@ static int starfive_wdt_probe(struct platform_device *pdev)
+>>           goto err_exit;
+>>         if (!early_enable)
+>> -        return pm_runtime_put_sync(&pdev->dev);
+>> +        if (pm_runtime_enabled(&pdev->dev))
+>> +            return pm_runtime_put_sync(&pdev->dev);
+>>   
+> 
+> Why not just
+> 
+>     if (!early_enable)
+>         pm_runtime_put_sync(&pdev->dev)
+> 
+> like almost every other caller of pm_runtime_put_sync() ?
+> 
 
-On Tue, 25 Apr 2023 13:49:25 +0530, Bharat Bhushan wrote:
-> Add binding documentation for the Marvell octeonTX2
-> GTI system watchdog driver.
-> 
-> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
-> ---
-> v3:
->  - Used 4 spaces for entire DTS example
-> 
->  .../watchdog/marvell,octeontx2-wdt.yaml       | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,octeontx2-wdt.yaml
-> 
+The function of pm_runtime_put_sync() is that:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+static inline int pm_runtime_put_sync(struct device *dev)
+{
+	return __pm_runtime_idle(dev, RPM_GET_PUT);
+}
+
+and when do not enable CONFIG_PM, the __pm_runtime_idle() is that:
+
+static inline int __pm_runtime_idle(struct device *dev, int rpmflags)
+{
+	return -ENOSYS;
+}
+
+If I do not open PM, it will return error saying probe failed
+but it works fine without PM. I had tested that and probe really
+was failed. So I should add this check before using pm_runtime_put_sync().
+
+Best regards,
+Xingyu Wu
 
