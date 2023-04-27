@@ -2,123 +2,96 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279686F06B0
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Apr 2023 15:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 084566F070B
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Apr 2023 16:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243721AbjD0NeE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 27 Apr 2023 09:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45500 "EHLO
+        id S243830AbjD0OMv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 27 Apr 2023 10:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243664AbjD0Nd6 (ORCPT
+        with ESMTP id S243873AbjD0OMu (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 27 Apr 2023 09:33:58 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93ACC5;
-        Thu, 27 Apr 2023 06:33:57 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4757E1FE35;
-        Thu, 27 Apr 2023 13:33:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1682602436; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sKRJAQs2Ndqm7IzSMR+A7rxBU8QW8BdAdffC5PULh3w=;
-        b=XloF75KsTh3J3orK1J0Om5HGNjp5OUXB5yz7v1zQNFL0Sa5F95PKX5D82vj3eIk0i60ABc
-        7Wpeb3xUf4nblskvjF0LGbrnvvwwRIjM5voi2GpV2VOGeuGG4/2z5UJuX74xa1w5tecqOc
-        JYSSU/85rftkl1xoTHxkI3YsbqcLeKU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 01B3E138F9;
-        Thu, 27 Apr 2023 13:33:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id mAUPOsN5SmSVeQAAMHmgww
-        (envelope-from <oneukum@suse.com>); Thu, 27 Apr 2023 13:33:55 +0000
-From:   Oliver Neukum <oneukum@suse.com>
-To:     wim@linux-watchdog.org, linux@roeck-us.net,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH 8/8] usb_pcwd: remove superfluous usb_device pointer
-Date:   Thu, 27 Apr 2023 15:33:50 +0200
-Message-Id: <20230427133350.31064-9-oneukum@suse.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230427133350.31064-1-oneukum@suse.com>
-References: <20230427133350.31064-1-oneukum@suse.com>
+        Thu, 27 Apr 2023 10:12:50 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEE54C37;
+        Thu, 27 Apr 2023 07:12:42 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64115eef620so5226433b3a.1;
+        Thu, 27 Apr 2023 07:12:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682604762; x=1685196762;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=c9pWafJdGs9XhHSjXJtv5YiQxlqlIFTZBpbtKAwDdxk=;
+        b=Av+lNUajxjSv8UgxbnVRhGfFQOAHb/COccIZjuLSdikQkwF+nvWnzi+wvy8GDo09tz
+         t+8XH44U1+25d2cXzrsrpRO5ZbQ6qrkgYSWE2bgiRb3uGgBsy1TD0Eb9s/a7UcJW4wIY
+         04CzU90dWtjoDoyo/cX0ruKtIZwx6kdtAA4fhHgdvmGO8E1LKDKtQlmSNGClM255u3I5
+         zHpSnqVXb2wy6soIHAqwz4sRDnSOtl8C+P/EQFsLr9CT84WB7gOu3/NUVmu9Xt8emVne
+         WgFN2ClYxiFK10Rpd+cdPG/bLY748kn4PeXAeksl+R/BRL/TcW1p54EZG76SnrbHslrX
+         wSMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682604762; x=1685196762;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c9pWafJdGs9XhHSjXJtv5YiQxlqlIFTZBpbtKAwDdxk=;
+        b=ZDHgGOiYwb8tWowwUXLAOOuKLP+cA4/rTJHGHoWXFks05xjp5ol+Ncxt94KuOYnEiq
+         Cakefsy+rXY2NxGc2jRtBIr5ulZpmpMJoHfblaosF3fWREKGCdkQXZT5eLyW0+h/InKq
+         W+cqdDXeNmmt41L/EAVRyxmdtiO8kEBS8tJ3sWxBmIf+dCIb0bfkGow5tj4b03P9xSB6
+         DZj4Kt0uXfkvUIDyMROyz3rm9L4/8FKnSOz//rdsvWkNB/bGjdYna9Cz6WqzfD9fzRHa
+         rLHGzNNGPILWRPAbMJNS+RNxtMwnerHoBmM5G6yjMAMg/V9HfhLb/tln99O1/8Hyu9Vb
+         uQYQ==
+X-Gm-Message-State: AC+VfDwqZBYv0reeX/v/J95VzAL1yAlIulwCI2Djd2ZC1ooS+2yyBN8C
+        tLnmQ9+Zyg4O0QEsYQWP0/CIU4tLKGY=
+X-Google-Smtp-Source: ACHHUZ7iZXc8EIBQRmObMHVapK4Qag9lL7UzrHVy/qkUv4+LaXWJz9k3iC0D9apl6kRLD5Foi6QZIw==
+X-Received: by 2002:a05:6a00:179f:b0:63c:56f5:5053 with SMTP id s31-20020a056a00179f00b0063c56f55053mr8262985pfg.13.1682604761985;
+        Thu, 27 Apr 2023 07:12:41 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i64-20020a62c143000000b0063d328a690fsm13188926pfg.25.2023.04.27.07.12.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Apr 2023 07:12:41 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <a6dd47dd-6dfc-787b-43ed-edda0cc0e51f@roeck-us.net>
+Date:   Thu, 27 Apr 2023 07:12:39 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: watchdog: pcwd driver updates (was: No subject)
+Content-Language: en-US
+To:     Oliver Neukum <oneukum@suse.com>, wim@linux-watchdog.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230427133350.31064-1-oneukum@suse.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230427133350.31064-1-oneukum@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Retrieve the device from the interface
+Oliver,
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/watchdog/pcwd_usb.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+On 4/27/23 06:33, Oliver Neukum wrote:
+> This fixes some long standing deficiencies in error handling,
+> several race conditions and disconnect handling.
+> Finally a cleanup as we now can get the device easily
+> from the interface.
+> 
 
-diff --git a/drivers/watchdog/pcwd_usb.c b/drivers/watchdog/pcwd_usb.c
-index 09cae7a6ad07..055acc191af9 100644
---- a/drivers/watchdog/pcwd_usb.c
-+++ b/drivers/watchdog/pcwd_usb.c
-@@ -112,8 +112,6 @@ static char expect_release;
- 
- /* Structure to hold all of our device specific stuff */
- struct usb_pcwd_private {
--	/* save off the usb device pointer */
--	struct usb_device	*udev;
- 	/* the interface for this device */
- 	struct usb_interface	*interface;
- 
-@@ -210,6 +208,7 @@ static int usb_pcwd_send_command(struct usb_pcwd_private *usb_pcwd,
- {
- 	int got_response, count;
- 	unsigned char *buf;
-+	struct usb_device *udev = interface_to_usbdev(usb_pcwd->interface);
- 
- 	/* We will not send any commands if the USB PCWD device does
- 	 * not exist */
-@@ -233,7 +232,7 @@ static int usb_pcwd_send_command(struct usb_pcwd_private *usb_pcwd,
- 
- 	atomic_set(&usb_pcwd->cmd_received, 0);
- 
--	if (usb_control_msg(usb_pcwd->udev, usb_sndctrlpipe(usb_pcwd->udev, 0),
-+	if (usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
- 			HID_REQ_SET_REPORT, HID_DT_REPORT,
- 			0x0200, usb_pcwd->interface_number, buf, 6,
- 			USB_COMMAND_TIMEOUT) != 6) {
-@@ -625,8 +624,10 @@ static struct notifier_block usb_pcwd_notifier = {
-  */
- static inline void usb_pcwd_delete(struct usb_pcwd_private *usb_pcwd)
- {
-+	struct usb_device *udev = interface_to_usbdev(usb_pcwd->interface);
-+
- 	usb_free_urb(usb_pcwd->intr_urb);
--	usb_free_coherent(usb_pcwd->udev, usb_pcwd->intr_size,
-+	usb_free_coherent(udev, usb_pcwd->intr_size,
- 			  usb_pcwd->intr_buffer, usb_pcwd->intr_dma);
- 	kfree(usb_pcwd);
- }
-@@ -691,7 +692,6 @@ static int usb_pcwd_probe(struct usb_interface *interface,
- 	usb_pcwd_device = usb_pcwd;
- 
- 	mutex_init(&usb_pcwd->mtx);
--	usb_pcwd->udev = udev;
- 	usb_pcwd->interface = interface;
- 	usb_pcwd->interface_number = iface_desc->desc.bInterfaceNumber;
- 	usb_pcwd->intr_size = (le16_to_cpu(endpoint->wMaxPacketSize) > 8 ?
--- 
-2.40.0
+This series is a no-go. If you want to improve the driver, please
+convert it to use the watchdog subsystem API.
+
+Please note that the subject of your patches should start with
+"watchdog: pcwd:"
+
+Thanks,
+Guenter
 
