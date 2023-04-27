@@ -2,119 +2,119 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3686F0793
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Apr 2023 16:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DE56F0DC1
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Apr 2023 23:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244095AbjD0OfN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 27 Apr 2023 10:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
+        id S1344184AbjD0Vab (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 27 Apr 2023 17:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244062AbjD0OfL (ORCPT
+        with ESMTP id S229508AbjD0Vab (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 27 Apr 2023 10:35:11 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2AB133;
-        Thu, 27 Apr 2023 07:35:10 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-24b9e5a9a68so3668319a91.3;
-        Thu, 27 Apr 2023 07:35:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682606110; x=1685198110;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=nhLUOg/O0ErdhjEBLThxBOr1HWHr6gY9gruopyLBAXY=;
-        b=a+LN2y+Eccy1++eyl5EldZerqR7ygJorniBBeyL6EnKP6gSZaPQAscgd7gRE9DaIiN
-         IF8EpTQszUjaWyy3JSzC4KnnqF+/Q1gmor+3R5CqXTS4fUXsfVvjyX7PaFg4LW3p36+l
-         0aUTAl3pPXRIRwYfVLbsQDt6wnj1mteP0XUjiR/2oEgCyuYLVL+KURzwUmPdXtWyCq2K
-         ei61aAEugueW2XzY/GlFTrO0hTkOa87m2bD0psyFpRyvotO2Y785zUljzvCwOX7Idi0Q
-         40TFlN20wUoZCkLi7/jcUZq1KfDvNPyfBEI+DzhM6KABCIFZKHnWPXZTq1rwGmWlZTNs
-         XUWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682606110; x=1685198110;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nhLUOg/O0ErdhjEBLThxBOr1HWHr6gY9gruopyLBAXY=;
-        b=UJjlr8di+MiNWao+54JlLjqWe2zHwwJVj6jlY07SvFgDzlIo7vi0n8xl4gRs/v6hl6
-         ZoC5O4dVYfUtx10FyTIkBEvWopQ1R64PiBuPoPDXdB5sU4XX2as7vii8fC4RPharVyFA
-         XHbe5K5b4F/QwwKANygNpB7QU61wkwIc+sw36k0pDsi8K1UJamKByKDMe0o9aN78jKI9
-         HK06naUWB38W6zFVXjZwL5CHA4fDsAjLlzpBauR+G+jA15/MWYApO1743j6HFZe/Y466
-         gS/6Ax8BZlcMrtQftUAwwiCdwnu+uJuo2Zi0Ht3257sqLkZOMbTfjgyNxNd9nKPHyrf/
-         K14Q==
-X-Gm-Message-State: AC+VfDz08mqyVHWPhEnx0tLD/etWQ/V3xUvhZU3vD4p66VG5p9OsJaeO
-        zpC5pXxZ/nTLTSQZ1WfQ8FLD+G7JzIE=
-X-Google-Smtp-Source: ACHHUZ4bkFOW4nTAq8dOr8kuMNLc4Ejdgh+ck3hGHyRf4jbfV3DPjWOw7pUZ7hLAQhP5wXhtPQMF1w==
-X-Received: by 2002:a17:90a:5d0e:b0:247:a68d:7f22 with SMTP id s14-20020a17090a5d0e00b00247a68d7f22mr2278984pji.4.1682606110033;
-        Thu, 27 Apr 2023 07:35:10 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id gd12-20020a17090b0fcc00b00246578736bbsm11501537pjb.8.2023.04.27.07.35.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Apr 2023 07:35:09 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <05d08707-520f-9b94-81cf-a6a8d4c5386c@roeck-us.net>
-Date:   Thu, 27 Apr 2023 07:35:08 -0700
+        Thu, 27 Apr 2023 17:30:31 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF0D212C;
+        Thu, 27 Apr 2023 14:30:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1682631030; x=1714167030;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=E7BGj3Gl5g9SCm5OO2PVG1LtEWlAgM0zB1osTNxvMHw=;
+  b=FxmgsdC5JPWD0qmnyK9p6D97xAaWHZYGrdqs9ZAHfF6A1G8G79GjVMQQ
+   z+f9ZJ5DeZ3NUZS76Cg47dVqict1cz3qkxxyhvftfq0DxABtWD+TTFbW9
+   u6Ksrgn3XzjTSfavN0H3ibG4Wf3Atm4vHcSmWOjWTY7qXfSqg0THF2lzh
+   6EcfAWA0JVMMkMdj8bA/KIdo+c0teSTgKc88NXCd+Xlr+lx5s5Gw9JQqt
+   9fkqwVXNiIhudojWo5S1N/rlpioH9XHHeHK+au4E5nQ/VQPsrYZ/0+7/e
+   KBNM9/1PLKhzOMP1dehvxbrgy5B43OO5b9dAjKsCuzvswS9BbI0PfwOrL
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="345028871"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="345028871"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2023 14:30:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10693"; a="838570345"
+X-IronPort-AV: E=Sophos;i="5.99,232,1677571200"; 
+   d="scan'208";a="838570345"
+Received: from lkp-server01.sh.intel.com (HELO b95e16499b55) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 27 Apr 2023 14:30:27 -0700
+Received: from kbuild by b95e16499b55 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ps9C6-00008N-2M;
+        Thu, 27 Apr 2023 21:30:26 +0000
+Date:   Fri, 28 Apr 2023 05:29:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sgoutham@marvell.com
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Bharat Bhushan <bbhushan2@marvell.com>
+Subject: Re: [PATCH 2/2 v4] Watchdog: Add marvell GTI watchdog driver
+Message-ID: <202304280541.b8a8NzCY-lkp@intel.com>
+References: <20230427071408.8493-2-bbhushan2@marvell.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: watchdog: pcwd driver updates (was: No subject)
-Content-Language: en-US
-To:     Oliver Neukum <oneukum@suse.com>, wim@linux-watchdog.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230427133350.31064-1-oneukum@suse.com>
- <a6dd47dd-6dfc-787b-43ed-edda0cc0e51f@roeck-us.net>
- <a0ce066a-fa24-1e56-ade9-22d7cde18c14@suse.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <a0ce066a-fa24-1e56-ade9-22d7cde18c14@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230427071408.8493-2-bbhushan2@marvell.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 4/27/23 07:19, Oliver Neukum wrote:
-> 
-> 
-> On 27.04.23 16:12, Guenter Roeck wrote:
->> Oliver,
->>
->> On 4/27/23 06:33, Oliver Neukum wrote:
->>> This fixes some long standing deficiencies in error handling,
->>> several race conditions and disconnect handling.
->>> Finally a cleanup as we now can get the device easily
->>> from the interface.
->>>
->>
->> This series is a no-go. If you want to improve the driver, please
->> convert it to use the watchdog subsystem API.
->>
->> Please note that the subject of your patches should start with
->> "watchdog: pcwd:"
-> 
-> Hi,
-> 
-> this would be problematic, because I do not have the hardware
-> and given its age I won't. I certainly will break the driver
-> if I do this extensive a change without testing it.
-> 
-> However, as is the driver has obvious issues, which I can fix.
-> We can either do the sensible fixes or let it quietly rot.
-> 
+Hi Bharat,
 
-Several of those issues would be solved by using the watchdog subsystem.
+kernel test robot noticed the following build errors:
 
-I am not going to review patches for watchdog drivers not using
-the watchdog subsystem. I would suggest to refrain from making changes
-to such drivers, even more so if you don't have the hardware to test
-those changes.
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on groeck-staging/hwmon-next linus/master v6.3 next-20230427]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
-Guenter
+url:    https://github.com/intel-lab-lkp/linux/commits/Bharat-Bhushan/Watchdog-Add-marvell-GTI-watchdog-driver/20230427-154706
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230427071408.8493-2-bbhushan2%40marvell.com
+patch subject: [PATCH 2/2 v4] Watchdog: Add marvell GTI watchdog driver
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230428/202304280541.b8a8NzCY-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/86559345de78e2e9f634ba9835a63764b6f88fd5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bharat-Bhushan/Watchdog-Add-marvell-GTI-watchdog-driver/20230427-154706
+        git checkout 86559345de78e2e9f634ba9835a63764b6f88fd5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/watchdog/
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304280541.b8a8NzCY-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/watchdog/marvell_gti_wdt.c:13:10: fatal error: asm/arch_timer.h: No such file or directory
+      13 | #include <asm/arch_timer.h>
+         |          ^~~~~~~~~~~~~~~~~~
+   compilation terminated.
+
+
+vim +13 drivers/watchdog/marvell_gti_wdt.c
+
+    12	
+  > 13	#include <asm/arch_timer.h>
+    14	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
