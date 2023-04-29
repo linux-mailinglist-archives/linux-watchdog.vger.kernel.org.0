@@ -2,569 +2,451 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF7D6F1E82
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Apr 2023 21:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02FEC6F2526
+	for <lists+linux-watchdog@lfdr.de>; Sat, 29 Apr 2023 17:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346586AbjD1TDt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 28 Apr 2023 15:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
+        id S230255AbjD2POc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 29 Apr 2023 11:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346461AbjD1TDs (ORCPT
+        with ESMTP id S229696AbjD2POb (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 28 Apr 2023 15:03:48 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF31A49E0;
-        Fri, 28 Apr 2023 12:03:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1682708563; i=j.neuschaefer@gmx.net;
-        bh=U6OCGFsaqNrPFLhXW85HpjKi7ETxJwGM54chQOt9gzA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=kONUfV0rIbc8c8BFWusZL2Zv7uES+Gagk7lkLwWLiMDm8b5ySnzk4+GV91aVjqL/T
-         UGVT/ZCFbTqwYdwE0CUUWzT/gOKRfoPXpCQubcCiuamzurpoddxJpFyICQjPlG7Sj7
-         0IpuhgG2I8hrq/F7lnyoS0tXh/3215rMzITCXv7mS/F7rqaEq6j97vlSDkHFMAHqWh
-         Vcb+uirUYCcqTBt8FQOhXaCS4t9MQ4tyfG1aVDHATsainp8kEpYnn/XA2yEj16f9ba
-         c3mztxU3eLT9eCW5Ts+zAQ0HSHZ1Co8Tx6IjK3PqgGy6wnqvIezvPnRNeriFgzQYbJ
-         Nq4IBzH6FWU+w==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([87.78.41.149]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MEFzr-1q0UFy2Gzl-00AHgt; Fri, 28
- Apr 2023 21:02:43 +0200
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Joel Stanley <joel@jms.id.au>
-Subject: [PATCH v8 2/2] clk: wpcm450: Add Nuvoton WPCM450 clock/reset controller driver
-Date:   Fri, 28 Apr 2023 21:02:26 +0200
-Message-Id: <20230428190226.1304326-3-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230428190226.1304326-1-j.neuschaefer@gmx.net>
-References: <20230428190226.1304326-1-j.neuschaefer@gmx.net>
+        Sat, 29 Apr 2023 11:14:31 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F77B1BE4;
+        Sat, 29 Apr 2023 08:14:29 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1aae46e62e9so1171455ad.2;
+        Sat, 29 Apr 2023 08:14:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682781269; x=1685373269;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jS/Qj5qy6a2iwP+ksA0M21M2FNcCXcOLPE8xjaXit00=;
+        b=QmxozxAtwsr9yArsMKtZ+3pRvwEoMnL2stoyIyBDYVd5Y4eauNPSsZjh7WoRJvm232
+         n3FYJ/9vDqBnRs736NfhXDUu2ZTvWzQO3QarV85Ny7pRq83uPKQsfpzPZMYcg9AGyhFS
+         HzQsSrORn29qVqLs5ZiV+MjZM58Smtt4LaCsvqEPOxYN86Hz0/bwBHSulCyFv/YRwODB
+         F5w93NJKoGP6ocf60V05lqKCaex5s3uIWk9XIP9N531Ydn5zvIpZ1ZpGZzdavurcs0S6
+         jAOArkhK5zC+ek32cnO3ogwOEb15J44q8nAqEpp4xiOJkT97VauSsefe0cDFrGvXYkcH
+         j1dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682781269; x=1685373269;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jS/Qj5qy6a2iwP+ksA0M21M2FNcCXcOLPE8xjaXit00=;
+        b=g49Hk42UxzG9cnhVBQQf11F7tPTUxOe/0x1VOyxoqgDL75eYdbLhTfCF+lz8XqbDSi
+         viihKThAhNWz02iaasK6Ean711i2Y4vk0ek/xY591vc2I+vbjlz+1wRClkECqBsQrNKn
+         TCkIZ1oO/yJsAmVo6wgaxQEfXc1eX7aPpKmmaBYAtR9u12dXmPVhxSa5vK59VTaw1pWy
+         tSq5CrChoV39LLjImra5lssXEWRUOWlre6Rh68MhEIEbbpbfHxzCIBtmTeisbUQjAn06
+         nknYNW6txEFUPuU2u9NOoFj6V6OisCOIElOLusM0/iHdUYqbWZu5YcebgBcNHBkVEtoV
+         +QRA==
+X-Gm-Message-State: AC+VfDx5hfpbU+DH1/UvNIdOIDWHBbbNH7fbUx490fAT4vqqa31WXT8X
+        PHTfOYqZHs0RTlmsBtRzfZs=
+X-Google-Smtp-Source: ACHHUZ6zHbzuQ3Mz8G4lRMSTiyEL779griAx+Gq2oJqRvGQ1cJ0nJzpfnUdhopNmju76HIT2B4NfMQ==
+X-Received: by 2002:a17:902:b20e:b0:1a1:d366:b085 with SMTP id t14-20020a170902b20e00b001a1d366b085mr8349435plr.21.1682781268695;
+        Sat, 29 Apr 2023 08:14:28 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q8-20020a17090a2dc800b0024b4a06a4fesm3203532pjm.5.2023.04.29.08.14.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 29 Apr 2023 08:14:28 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <55b5c88b-8d0d-d02f-6fe7-091a991f4065@roeck-us.net>
+Date:   Sat, 29 Apr 2023 08:14:26 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:QNxNu3eWtY1VDLN0QQjZOcQJWBuUvJQFZGUAHPxSP3sRD03IO3e
- D/UDDPAo7c79lRtC8aq9vXfHnquYoWZCS/xLgL+OE9vvxIdcvpAm/iXDZh1KykI3goCZvcE
- hLDcY2RmMPn6B4LCnsxy0MS1uF9uteS8SzXwZotYlQUvINYWjzgBvdWoPKDttrbRfL2wYMQ
- Qlm0iqVNfjMRMZldrBQog==
-UI-OutboundReport: notjunk:1;M01:P0:8WxdlT5TBNw=;4kbCIkp56RH6qvnZfGzpPn7ol3U
- NzCnn2miukUboFkQvBN+LaZ9JH5LZMOpaA6C/+yxeksEni10J5xjRp5DGbatroMkmGViSet03
- lDJJXBbuAlQpnxlofoQzfvrEMvRlCNQOpGUZ2TmpsHUd5q/EjhKNp0GbnBxkdE6l2AazJDSPo
- MyOM/XHtmGzFDae67untAvY0jrWekm9vKMiLhx0lkvZ2861CsKq3fk5a0fEVYOLheQTuksUWd
- PNiEId1gymrNMNMGO5IVBgd111XutcMyKy22cz0RNS0rnRl0cv08ORV9eohjTwEGXyivOaktQ
- ljQkXRYr6pkGOz8107FEvgRmbRTxgkMdUWtwAQBzjIJnp4Q1+1FtKMztjWFnRP8zoQgy+0MGg
- AttWcQeKDgnUGyOVuuD7MPJwnTgQI08AdS0UVxiefxHzzsZJpzQeLfs6UcW3nU65D+KPE6UT8
- O54GzzH1v1zx/zXux9CuSvmcRb7PE+KFQLkIhI+k2vXl1Kwlf47WgDVaY4rnuadXosqYG1seU
- 8UQkvKUq8xS1fRJc+PAWUtofAQpa0ao3jvismh+ybJEZrHbwXnmDRm5bnHYtd2THtQcm5NE72
- d1bnXSAc1Vs1KldyEaWQ60gJuml29J262w2Yj40eGFR0f3TVplQis05zPr7YLBNn33aTNea1f
- YKwEHgmfpXrugZqN/mr+8dFtiuO78YeEKAZ21EggJAYyZAX1iX2sf7lIWlxPqCIEpxP4T8yji
- bnYJJsen7kN6Idht08Oh7R+827U7AV1lxtN0qxasZggYasAdZLEvN/6cm+b4EAbWpW+5uKcY3
- 5oKbfn0wNMisNNClSc7UZxcRHMPTq/LJME+yzdklZh1yVEQ7MsbWQPRrm8XRbeZg9Pd62wgfL
- wRvaWpd9nhuJdY933Ic0GVl4bXgAgWWzfV3PpFKMW6Nj2g2oAzRCWqUXXYtrugWjo1tHK4RD6
- b6uQZ/pQYjIX4UAKkWMRvjNaa/M=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sgoutham@marvell.com
+References: <20230427071408.8493-1-bbhushan2@marvell.com>
+ <20230427071408.8493-2-bbhushan2@marvell.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 2/2 v4] Watchdog: Add marvell GTI watchdog driver
+In-Reply-To: <20230427071408.8493-2-bbhushan2@marvell.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This driver implements the following features w.r.t. the clock and reset
-controller in the WPCM450 SoC:
+On 4/27/23 00:14, Bharat Bhushan wrote:
+> This patch add support for Marvell GTI watchdog.  Global timer
+> unit (GTI) support hardware watchdog timer. Software programs
+> watchdog timer to generate interrupt on first timeout, second
+> timeout is configured to be ignored and system reboots on
+> third timeout.
+> 
+> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+> ---
+> v4:
+>   - Use generic name "GTI (Global Timer)" and removed OcteonTX2 as this driver
+>     is applicable for other marvell devices as well.
+> 
+>   drivers/watchdog/Kconfig           |  11 ++
+>   drivers/watchdog/Makefile          |   1 +
+>   drivers/watchdog/marvell_gti_wdt.c | 271 +++++++++++++++++++++++++++++
+>   3 files changed, 283 insertions(+)
+>   create mode 100644 drivers/watchdog/marvell_gti_wdt.c
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index f0872970daf9..a96e7d7c0ad2 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -1779,6 +1779,17 @@ config OCTEON_WDT
+>   	  from the first interrupt, it is then only poked when the
+>   	  device is written.
+>   
+> +config MARVELL_GTI_WDT
+> +	tristate "Marvell GTI Watchdog driver"
+> +	depends on ARCH_THUNDER || COMPILE_TEST
 
-- It calculates the rates for all clocks managed by the clock controller
-- It leaves the clock tree mostly unchanged, except that it enables/
-  disables clock gates based on usage.
-- It exposes the reset lines managed by the controller using the
-  Generic Reset Controller subsystem
+As 0-day reported, COMPILE_TEST does not work if there are asm includes
+in the code.
 
-NOTE: If the driver and the corresponding devicetree node are present,
-      the driver will disable "unused" clocks. This is problem until
-      the clock relations are properly declared in the devicetree (in a
-      later patch). Until then, the clk_ignore_unused kernel parameter
-      can be used as a workaround.
+> +	help
+> +	 Marvell GTI hardware supports watchdog timer. First timeout
+> +	 works as watchdog pretimeout and installed interrupt handler
+> +	 will be called on first timeout. Hardware can generate interrupt
+> +	 to SCP on second timeout but it is not enabled, So second
+> +	 timeout is ignored. If device poke does not happen then system
+> +	 will reboot on third timeout.
+> +
+>   config BCM2835_WDT
+>   	tristate "Broadcom BCM2835 hardware watchdog"
+>   	depends on ARCH_BCM2835 || (OF && COMPILE_TEST)
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index 9cbf6580f16c..bd425408fcaa 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -98,6 +98,7 @@ obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
+>   obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
+>   obj-$(CONFIG_APPLE_WATCHDOG) += apple_wdt.o
+>   obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
+> +obj-$(CONFIG_MARVELL_GTI_WDT) += marvell_gti_wdt.o
+>   
+>   # X86 (i386 + ia64 + x86_64) Architecture
+>   obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
+> diff --git a/drivers/watchdog/marvell_gti_wdt.c b/drivers/watchdog/marvell_gti_wdt.c
+> new file mode 100644
+> index 000000000000..a3f0740dedca
+> --- /dev/null
+> +++ b/drivers/watchdog/marvell_gti_wdt.c
+> @@ -0,0 +1,271 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Marvell GTI Watchdog driver
+> + *
+> + * Copyright (C) 2023 Marvell.
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/watchdog.h>
+> +
+> +#include <asm/arch_timer.h>
+> +
+> +/*
+> + * Hardware supports following mode of operation:
+> + * 1) Interrupt Only:
+> + *    This will generate the interrupt to arm core whenever timeout happens.
+> + *
+> + * 2) Interrupt + del3t (Interrupt to firmware (SCP processor)).
+> + *    This will generate interrupt to arm core on 1st timeout happens
+> + *    This will generate interrupt to SCP processor on 2nd timeout happens
+> + *
+> + * 3) Interrupt + Interrupt to SCP processor (called delt3t) + reboot.
+> + *    This will generate interrupt to arm core on 1st timeout happens
+> + *    Will generate interrupt to SCP processor on 2nd timeout happens,
+> + *    if interrupt is configured.
+> + *    Reboot on 3rd timeout.
+> + *
+> + * Driver will use hardware in mode-3 above so that system can reboot in case
+> + * a hardware hang. Also h/w is configured not to generate SCP interrupt, so
+> + * effectively 2nd timeout is ignored within hardware.
+> + */
+> +
+> +
+> +/* GTI CWD Watchdog Registers */
+> +#define GTI_CWD_GLOBAL_WDOG_IDX		63
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-=2D--
-v8:
-- Use %pe format specifier throughout the driver, as suggested by Philipp =
-Zabel
-- Add Joel's R-b
+It might make sense to explain "63".
 
-v7:
-- https://lore.kernel.org/lkml/20230422220240.322572-3-j.neuschaefer@gmx.n=
-et/
-- Simplify error handling by not deallocating resources
+> +#define GTI_CWD_WDOG			(0x8 * GTI_CWD_GLOBAL_WDOG_IDX)
+> +#define GTI_CWD_WDOG_MODE_INT_DEL3T_RST	0x3
+> +#define GTI_CWD_WDOG_MODE_MASK		0x3
+> +#define GTI_CWD_WDOG_LEN_SHIFT		4
+> +#define GTI_CWD_WDOG_CNT_SHIFT		20
+> +
+> +/* GTI Per-core Watchdog Interrupt Register */
+> +#define GTI_CWD_INT			0x200
+> +#define GTI_CWD_INT_PENDING_STATUS	(1ULL << GTI_CWD_GLOBAL_WDOG_IDX)
 
-v6:
-- Enable RESET_SIMPLE based on ARCH_WPCM450, not ARCH_NPCM, as suggested b=
-y Tomer Maimon
+Please use BIT_ULL().
 
-v5:
-- https://lore.kernel.org/lkml/20221104161850.2889894-6-j.neuschaefer@gmx.=
-net/
-- Switch to using clk_parent_data
+> +
+> +/* GTI Per-core Watchdog Interrupt Enable Clear Register */
+> +#define GTI_CWD_INT_ENA_CLR		0x210
+> +#define GTI_CWD_INT_ENA_CLR_VAL		(1ULL << GTI_CWD_GLOBAL_WDOG_IDX)
+> +
+> +/* GTI Per-core Watchdog Interrupt Enable Set Register */
+> +#define GTI_CWD_INT_ENA_SET		0x218
+> +#define GTI_CWD_INT_ENA_SET_VAL		(1ULL << GTI_CWD_GLOBAL_WDOG_IDX)
+> +
+> +/* GTI Per-core Watchdog Poke Registers */
+> +#define GTI_CWD_POKE		(0x10000 + 0x8 * GTI_CWD_GLOBAL_WDOG_IDX)
 
-v4:
-- Fix reset controller initialization
+There should be a comment explaining the "8". Also,
+there is a define for "0x8 * GTI_CWD_GLOBAL_WDOG_IDX" above.
+Why not use it here ?
 
-v3:
-- Change reference clock name from "refclk" to "ref"
-- Remove unused variable in return path of wpcm450_clk_register_pll
-- Remove unused divisor tables
+> +#define GTI_CWD_POKE_VAL	(1ULL << GTI_CWD_GLOBAL_WDOG_IDX)
 
-v2:
-- no changes
-=2D--
- drivers/clk/Makefile      |   1 +
- drivers/clk/clk-wpcm450.c | 374 ++++++++++++++++++++++++++++++++++++++
- drivers/reset/Kconfig     |   2 +-
- 3 files changed, 376 insertions(+), 1 deletion(-)
- create mode 100644 drivers/clk/clk-wpcm450.c
+I don't think it makes sense to have three defines with the same value.
 
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index e3ca0d058a256..b58352d4d615d 100644
-=2D-- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -75,6 +75,7 @@ obj-$(CONFIG_COMMON_CLK_RS9_PCIE)	+=3D clk-renesas-pcie.=
-o
- obj-$(CONFIG_COMMON_CLK_VC5)		+=3D clk-versaclock5.o
- obj-$(CONFIG_COMMON_CLK_VC7)		+=3D clk-versaclock7.o
- obj-$(CONFIG_COMMON_CLK_WM831X)		+=3D clk-wm831x.o
-+obj-$(CONFIG_ARCH_WPCM450)		+=3D clk-wpcm450.o
- obj-$(CONFIG_COMMON_CLK_XGENE)		+=3D clk-xgene.o
+> +
+> +struct gti_wdt_priv {
+> +	struct watchdog_device wdev;
+> +	void __iomem *base;
+> +	u64 clock_freq;
+> +	int irq;
+> +};
+> +
+> +static irqreturn_t gti_wdt_interrupt(int irq, void *data)
+> +{
+> +	struct watchdog_device *wdev = data;
+> +	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +
+> +	/* Clear Interrupt Pending Status */
+> +	writeq(GTI_CWD_INT_PENDING_STATUS, priv->base + GTI_CWD_INT);
+> +
+> +	watchdog_notify_pretimeout(wdev);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int gti_wdt_ping(struct watchdog_device *wdev)
+> +{
+> +	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +
+> +	writeq(GTI_CWD_POKE_VAL, priv->base + GTI_CWD_POKE);
+> +
+> +	return 0;
+> +}
+> +
+> +static int gti_wdt_start(struct watchdog_device *wdev)
+> +{
+> +	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	u64 regval;
+> +
+> +	if (!wdev->pretimeout)
+> +		return -EINVAL;
+> +
+> +	set_bit(WDOG_HW_RUNNING, &wdev->status);
+> +
+> +	/* Clear any pending interrupt */
+> +	writeq(GTI_CWD_INT_PENDING_STATUS, priv->base + GTI_CWD_INT);
+> +
+> +	/* Enable Interrupt */
+> +	writeq(GTI_CWD_INT_ENA_SET_VAL, priv->base + GTI_CWD_INT_ENA_SET);
+> +
+> +	/* Set (Interrupt + SCP interrupt (DEL3T) + core domain reset) Mode */
+> +	regval = readq(priv->base + GTI_CWD_WDOG);
+> +	regval |= GTI_CWD_WDOG_MODE_INT_DEL3T_RST;
+> +	writeq(regval, priv->base + GTI_CWD_WDOG);
+> +
+> +	return 0;
+> +}
+> +
+> +static int gti_wdt_stop(struct watchdog_device *wdev)
+> +{
+> +	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	u64 regval;
+> +
+> +	/* Disable Interrupt */
+> +	writeq(GTI_CWD_INT_ENA_CLR_VAL, priv->base + GTI_CWD_INT_ENA_CLR);
+> +
+> +	/* Set GTI_CWD_WDOG.Mode = 0 to stop the timer */
+> +	regval = readq(priv->base + GTI_CWD_WDOG);
+> +	regval &= ~GTI_CWD_WDOG_MODE_MASK;
+> +	writeq(regval, priv->base + GTI_CWD_WDOG);
+> +
+> +	return 0;
+> +}
+> +
+> +static int gti_wdt_settimeout(struct watchdog_device *wdev,
+> +					unsigned int timeout)
+> +{
+> +	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	u64 timeout_wdog, regval;
+> +
+> +	/* Update new timeout */
+> +	wdev->timeout = timeout;
+> +
+> +	/* Pretimeout is 1/3 of timeout */
+> +	wdev->pretimeout = timeout / 3;
+> +	if (!wdev->pretimeout)
+> +		return -EINVAL;
 
- # please keep this section sorted lexicographically by directory path nam=
-e
-diff --git a/drivers/clk/clk-wpcm450.c b/drivers/clk/clk-wpcm450.c
-new file mode 100644
-index 0000000000000..358be5befa887
-=2D-- /dev/null
-+++ b/drivers/clk/clk-wpcm450.c
-@@ -0,0 +1,374 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Nuvoton WPCM450 clock and reset controller driver.
-+ *
-+ * Copyright (C) 2022 Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-+ */
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/bitfield.h>
-+#include <linux/clk-provider.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_address.h>
-+#include <linux/reset-controller.h>
-+#include <linux/reset/reset-simple.h>
-+#include <linux/slab.h>
-+
-+#include <dt-bindings/clock/nuvoton,wpcm450-clk.h>
-+
-+struct wpcm450_clk_pll {
-+	struct clk_hw hw;
-+	void __iomem *pllcon;
-+	u8 flags;
-+};
-+
-+#define to_wpcm450_clk_pll(_hw) container_of(_hw, struct wpcm450_clk_pll,=
- hw)
-+
-+#define PLLCON_FBDV	GENMASK(24, 16)
-+#define PLLCON_PRST	BIT(13)
-+#define PLLCON_PWDEN	BIT(12)
-+#define PLLCON_OTDV	GENMASK(10, 8)
-+#define PLLCON_INDV	GENMASK(5, 0)
-+
-+static unsigned long wpcm450_clk_pll_recalc_rate(struct clk_hw *hw,
-+						 unsigned long parent_rate)
-+{
-+	struct wpcm450_clk_pll *pll =3D to_wpcm450_clk_pll(hw);
-+	unsigned long fbdv, indv, otdv;
-+	u64 rate;
-+	u32 pllcon;
-+
-+	if (parent_rate =3D=3D 0) {
-+		pr_err("%s: parent rate is zero", __func__);
-+		return 0;
-+	}
-+
-+	pllcon =3D readl_relaxed(pll->pllcon);
-+
-+	indv =3D FIELD_GET(PLLCON_INDV, pllcon) + 1;
-+	fbdv =3D FIELD_GET(PLLCON_FBDV, pllcon) + 1;
-+	otdv =3D FIELD_GET(PLLCON_OTDV, pllcon) + 1;
-+
-+	rate =3D (u64)parent_rate * fbdv;
-+	do_div(rate, indv * otdv);
-+
-+	return rate;
-+}
-+
-+static int wpcm450_clk_pll_is_enabled(struct clk_hw *hw)
-+{
-+	struct wpcm450_clk_pll *pll =3D to_wpcm450_clk_pll(hw);
-+	u32 pllcon;
-+
-+	pllcon =3D readl_relaxed(pll->pllcon);
-+
-+	return !(pllcon & PLLCON_PRST);
-+}
-+
-+static void wpcm450_clk_pll_disable(struct clk_hw *hw)
-+{
-+	struct wpcm450_clk_pll *pll =3D to_wpcm450_clk_pll(hw);
-+	u32 pllcon;
-+
-+	pllcon =3D readl_relaxed(pll->pllcon);
-+	pllcon |=3D PLLCON_PRST | PLLCON_PWDEN;
-+	writel(pllcon, pll->pllcon);
-+}
-+
-+static const struct clk_ops wpcm450_clk_pll_ops =3D {
-+	.recalc_rate =3D wpcm450_clk_pll_recalc_rate,
-+	.is_enabled =3D wpcm450_clk_pll_is_enabled,
-+	.disable =3D wpcm450_clk_pll_disable
-+};
-+
-+static struct clk_hw *
-+wpcm450_clk_register_pll(void __iomem *pllcon, const char *name,
-+			 const struct clk_parent_data *parent, unsigned long flags)
-+{
-+	struct wpcm450_clk_pll *pll;
-+	struct clk_init_data init =3D {};
-+	int ret;
-+
-+	pll =3D kzalloc(sizeof(*pll), GFP_KERNEL);
-+	if (!pll)
-+		return ERR_PTR(-ENOMEM);
-+
-+	init.name =3D name;
-+	init.ops =3D &wpcm450_clk_pll_ops;
-+	init.parent_data =3D parent;
-+	init.num_parents =3D 1;
-+	init.flags =3D flags;
-+
-+	pll->pllcon =3D pllcon;
-+	pll->hw.init =3D &init;
-+
-+	ret =3D clk_hw_register(NULL, &pll->hw);
-+	if (ret) {
-+		kfree(pll);
-+		return ERR_PTR(ret);
-+	}
-+
-+	return &pll->hw;
-+}
-+
-+#define REG_CLKEN	0x00
-+#define REG_CLKSEL	0x04
-+#define REG_CLKDIV	0x08
-+#define REG_PLLCON0	0x0c
-+#define REG_PLLCON1	0x10
-+#define REG_PMCON	0x14
-+#define REG_IRQWAKECON	0x18
-+#define REG_IRQWAKEFLAG	0x1c
-+#define REG_IPSRST	0x20
-+
-+struct wpcm450_pll_data {
-+	const char *name;
-+	struct clk_parent_data parent;
-+	unsigned int reg;
-+	unsigned long flags;
-+};
-+
-+static const struct wpcm450_pll_data pll_data[] =3D {
-+	{ "pll0", { .name =3D "ref" }, REG_PLLCON0, 0 },
-+	{ "pll1", { .name =3D "ref" }, REG_PLLCON1, 0 },
-+};
-+
-+struct wpcm450_clksel_data {
-+	const char *name;
-+	const struct clk_parent_data *parents;
-+	unsigned int num_parents;
-+	const u32 *table;
-+	int shift;
-+	int width;
-+	int index;
-+	unsigned long flags;
-+};
-+
-+static const u32 parent_table[] =3D { 0, 1, 2 };
-+
-+static const struct clk_parent_data default_parents[] =3D {
-+	{ .name =3D "pll0" },
-+	{ .name =3D "pll1" },
-+	{ .name =3D "ref" },
-+};
-+
-+static const struct clk_parent_data huart_parents[] =3D {
-+	{ .name =3D "ref" },
-+	{ .name =3D "refdiv2" },
-+};
-+
-+static const struct wpcm450_clksel_data clksel_data[] =3D {
-+	{ "cpusel", default_parents, ARRAY_SIZE(default_parents),
-+		parent_table, 0, 2, -1, CLK_IS_CRITICAL },
-+	{ "clkout", default_parents, ARRAY_SIZE(default_parents),
-+		parent_table, 2, 2, -1, 0 },
-+	{ "usbphy", default_parents, ARRAY_SIZE(default_parents),
-+		parent_table, 6, 2, -1, 0 },
-+	{ "uartsel", default_parents, ARRAY_SIZE(default_parents),
-+		parent_table, 8, 2, WPCM450_CLK_USBPHY, 0 },
-+	{ "huartsel", huart_parents, ARRAY_SIZE(huart_parents),
-+		parent_table, 10, 1, -1, 0 },
-+};
-+
-+static const struct clk_div_table div_fixed2[] =3D {
-+	{ .val =3D 0, .div =3D 2 },
-+	{ }
-+};
-+
-+struct wpcm450_clkdiv_data {
-+	const char *name;
-+	struct clk_parent_data parent;
-+	int div_flags;
-+	const struct clk_div_table *table;
-+	int shift;
-+	int width;
-+	unsigned long flags;
-+};
-+
-+static struct wpcm450_clkdiv_data clkdiv_data_early[] =3D {
-+	{ "refdiv2", { .name =3D "ref" }, 0, div_fixed2, 0, 0 },
-+};
-+
-+static const struct wpcm450_clkdiv_data clkdiv_data[] =3D {
-+	{ "cpu", { .name =3D "cpusel" }, 0, div_fixed2, 0, 0, CLK_IS_CRITICAL },
-+	{ "adcdiv", { .name =3D "ref" }, CLK_DIVIDER_POWER_OF_TWO, NULL, 28, 2, =
-0 },
-+	{ "apb", { .name =3D "ahb" }, CLK_DIVIDER_POWER_OF_TWO, NULL, 26, 2, 0 }=
-,
-+	{ "ahb", { .name =3D "cpu" }, CLK_DIVIDER_POWER_OF_TWO, NULL, 24, 2, 0 }=
-,
-+	{ "uart", { .name =3D "uartsel" }, 0, NULL, 16, 4, 0 },
-+	{ "ahb3", { .name =3D "ahb" }, CLK_DIVIDER_POWER_OF_TWO, NULL, 8, 2, 0 }=
-,
-+};
-+
-+struct wpcm450_clken_data {
-+	const char *name;
-+	struct clk_parent_data parent;
-+	int bitnum;
-+	unsigned long flags;
-+};
-+
-+static const struct wpcm450_clken_data clken_data[] =3D {
-+	{ "fiu", { .name =3D "ahb3" }, WPCM450_CLK_FIU, 0 },
-+	{ "xbus", { .name =3D "ahb3" }, WPCM450_CLK_XBUS, 0 },
-+	{ "kcs", { .name =3D "apb" }, WPCM450_CLK_KCS, 0 },
-+	{ "shm", { .name =3D "ahb3" }, WPCM450_CLK_SHM, 0 },
-+	{ "usb1", { .name =3D "ahb" }, WPCM450_CLK_USB1, 0 },
-+	{ "emc0", { .name =3D "ahb" }, WPCM450_CLK_EMC0, 0 },
-+	{ "emc1", { .name =3D "ahb" }, WPCM450_CLK_EMC1, 0 },
-+	{ "usb0", { .name =3D "ahb" }, WPCM450_CLK_USB0, 0 },
-+	{ "peci", { .name =3D "apb" }, WPCM450_CLK_PECI, 0 },
-+	{ "aes", { .name =3D "apb" }, WPCM450_CLK_AES, 0 },
-+	{ "uart0", { .name =3D "uart" }, WPCM450_CLK_UART0, 0 },
-+	{ "uart1", { .name =3D "uart" }, WPCM450_CLK_UART1, 0 },
-+	{ "smb2", { .name =3D "apb" }, WPCM450_CLK_SMB2, 0 },
-+	{ "smb3", { .name =3D "apb" }, WPCM450_CLK_SMB3, 0 },
-+	{ "smb4", { .name =3D "apb" }, WPCM450_CLK_SMB4, 0 },
-+	{ "smb5", { .name =3D "apb" }, WPCM450_CLK_SMB5, 0 },
-+	{ "huart", { .name =3D "huartsel" }, WPCM450_CLK_HUART, 0 },
-+	{ "pwm", { .name =3D "apb" }, WPCM450_CLK_PWM, 0 },
-+	{ "timer0", { .name =3D "refdiv2" }, WPCM450_CLK_TIMER0, 0 },
-+	{ "timer1", { .name =3D "refdiv2" }, WPCM450_CLK_TIMER1, 0 },
-+	{ "timer2", { .name =3D "refdiv2" }, WPCM450_CLK_TIMER2, 0 },
-+	{ "timer3", { .name =3D "refdiv2" }, WPCM450_CLK_TIMER3, 0 },
-+	{ "timer4", { .name =3D "refdiv2" }, WPCM450_CLK_TIMER4, 0 },
-+	{ "mft0", { .name =3D "apb" }, WPCM450_CLK_MFT0, 0 },
-+	{ "mft1", { .name =3D "apb" }, WPCM450_CLK_MFT1, 0 },
-+	{ "wdt", { .name =3D "refdiv2" }, WPCM450_CLK_WDT, 0 },
-+	{ "adc", { .name =3D "adcdiv" }, WPCM450_CLK_ADC, 0 },
-+	{ "sdio", { .name =3D "ahb" }, WPCM450_CLK_SDIO, 0 },
-+	{ "sspi", { .name =3D "apb" }, WPCM450_CLK_SSPI, 0 },
-+	{ "smb0", { .name =3D "apb" }, WPCM450_CLK_SMB0, 0 },
-+	{ "smb1", { .name =3D "apb" }, WPCM450_CLK_SMB1, 0 },
-+};
-+
-+static DEFINE_SPINLOCK(wpcm450_clk_lock);
-+
-+/*
-+ * NOTE: Error handling is very rudimentary here. If the clock driver ini=
-tial-
-+ * ization fails, the system is probably in bigger trouble than what is c=
-aused
-+ * by a few leaked resources.
-+ */
-+
-+static void __init wpcm450_clk_init(struct device_node *clk_np)
-+{
-+	struct clk_hw_onecell_data *clk_data;
-+	static struct clk_hw **hws;
-+	static struct clk_hw *hw;
-+	void __iomem *clk_base;
-+	int i, ret;
-+	struct reset_simple_data *reset;
-+
-+	clk_base =3D of_iomap(clk_np, 0);
-+	if (!clk_base) {
-+		pr_err("%pOFP: failed to map registers\n", clk_np);
-+		of_node_put(clk_np);
-+		return;
-+	}
-+	of_node_put(clk_np);
-+
-+	clk_data =3D kzalloc(struct_size(clk_data, hws, WPCM450_NUM_CLKS), GFP_K=
-ERNEL);
-+	if (!clk_data)
-+		return;
-+
-+	clk_data->num =3D WPCM450_NUM_CLKS;
-+	hws =3D clk_data->hws;
-+
-+	for (i =3D 0; i < WPCM450_NUM_CLKS; i++)
-+		hws[i] =3D ERR_PTR(-ENOENT);
-+
-+	// PLLs
-+	for (i =3D 0; i < ARRAY_SIZE(pll_data); i++) {
-+		const struct wpcm450_pll_data *data =3D &pll_data[i];
-+
-+		hw =3D wpcm450_clk_register_pll(clk_base + data->reg, data->name,
-+					      &data->parent, data->flags);
-+		if (IS_ERR(hw)) {
-+			pr_info("Failed to register PLL: %pe", hw);
-+			return;
-+		}
-+	}
-+
-+	// Early divisors (REF/2)
-+	for (i =3D 0; i < ARRAY_SIZE(clkdiv_data_early); i++) {
-+		const struct wpcm450_clkdiv_data *data =3D &clkdiv_data_early[i];
-+
-+		hw =3D clk_hw_register_divider_table_parent_data(NULL, data->name, &dat=
-a->parent,
-+							       data->flags, clk_base + REG_CLKDIV,
-+							       data->shift, data->width,
-+							       data->div_flags, data->table,
-+							       &wpcm450_clk_lock);
-+		if (IS_ERR(hw)) {
-+			pr_err("Failed to register div table: %pe\n", hw);
-+			return;
-+		}
-+	}
-+
-+	// Selects/muxes
-+	for (i =3D 0; i < ARRAY_SIZE(clksel_data); i++) {
-+		const struct wpcm450_clksel_data *data =3D &clksel_data[i];
-+
-+		hw =3D clk_hw_register_mux_parent_data(NULL, data->name, data->parents,
-+						     data->num_parents, data->flags,
-+						     clk_base + REG_CLKSEL, data->shift,
-+						     data->width, 0,
-+						     &wpcm450_clk_lock);
-+		if (IS_ERR(hw)) {
-+			pr_err("Failed to register mux: %pe\n", hw);
-+			return;
-+		}
-+		if (data->index >=3D 0)
-+			clk_data->hws[data->index] =3D hw;
-+	}
-+
-+	// Divisors
-+	for (i =3D 0; i < ARRAY_SIZE(clkdiv_data); i++) {
-+		const struct wpcm450_clkdiv_data *data =3D &clkdiv_data[i];
-+
-+		hw =3D clk_hw_register_divider_table_parent_data(NULL, data->name, &dat=
-a->parent,
-+							       data->flags, clk_base + REG_CLKDIV,
-+							       data->shift, data->width,
-+							       data->div_flags, data->table,
-+							       &wpcm450_clk_lock);
-+		if (IS_ERR(hw)) {
-+			pr_err("Failed to register divider: %pe\n", hw);
-+			return;
-+		}
-+	}
-+
-+	// Enables/gates
-+	for (i =3D 0; i < ARRAY_SIZE(clken_data); i++) {
-+		const struct wpcm450_clken_data *data =3D &clken_data[i];
-+
-+		hw =3D clk_hw_register_gate_parent_data(NULL, data->name, &data->parent=
-, data->flags,
-+						      clk_base + REG_CLKEN, data->bitnum,
-+						      data->flags, &wpcm450_clk_lock);
-+		if (IS_ERR(hw)) {
-+			pr_err("Failed to register gate: %pe\n", hw);
-+			return;
-+		}
-+		clk_data->hws[data->bitnum] =3D hw;
-+	}
-+
-+	ret =3D of_clk_add_hw_provider(clk_np, of_clk_hw_onecell_get, clk_data);
-+	if (ret)
-+		pr_err("Failed to add DT provider: %pe\n", ERR_PTR(ret));
-+
-+	// Reset controller
-+	reset =3D kzalloc(sizeof(*reset), GFP_KERNEL);
-+	if (!reset)
-+		return;
-+	reset->rcdev.owner =3D THIS_MODULE;
-+	reset->rcdev.nr_resets =3D WPCM450_NUM_RESETS;
-+	reset->rcdev.ops =3D &reset_simple_ops;
-+	reset->rcdev.of_node =3D clk_np;
-+	reset->membase =3D clk_base + REG_IPSRST;
-+	ret =3D reset_controller_register(&reset->rcdev);
-+	if (ret)
-+		pr_err("Failed to register reset controller: %pe\n", ERR_PTR(ret));
-+
-+	of_node_put(clk_np);
-+}
-+
-+CLK_OF_DECLARE(wpcm450_clk_init, "nuvoton,wpcm450-clk", wpcm450_clk_init)=
-;
-diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-index 2a52c990d4fec..16e111d213560 100644
-=2D-- a/drivers/reset/Kconfig
-+++ b/drivers/reset/Kconfig
-@@ -208,7 +208,7 @@ config RESET_SCMI
+Since min_timeout is set to 3 seconds, this can not happen,
+and the check is unnecessary.
 
- config RESET_SIMPLE
- 	bool "Simple Reset Controller Driver" if COMPILE_TEST || EXPERT
--	default ARCH_ASPEED || ARCH_BCMBCA || ARCH_BITMAIN || ARCH_REALTEK || AR=
-CH_STM32 || (ARCH_INTEL_SOCFPGA && ARM64) || ARCH_SUNXI || ARC
-+	default ARCH_ASPEED || ARCH_BCMBCA || ARCH_BITMAIN || ARCH_REALTEK || AR=
-CH_STM32 || (ARCH_INTEL_SOCFPGA && ARM64) || ARCH_SUNXI || ARC || ARCH_WPC=
-M450
- 	depends on HAS_IOMEM
- 	help
- 	  This enables a simple reset controller driver for reset lines that
-=2D-
-2.39.2
+> +
+> +	/* Get clock cycles from timeout in second */
+
+from pretimeout ?
+
+> +	timeout_wdog = wdev->pretimeout * priv->clock_freq;
+> +
+> +	/* Watchdog counts in 1024 cycle steps */
+> +	timeout_wdog = timeout_wdog >> 10;
+> +
+> +	timeout_wdog = (timeout_wdog + 0xff) >> 8;
+> +	if (timeout_wdog >= 0x10000)
+> +		timeout_wdog = 0xffff;
+> +
+> +	/*
+> +	 * GTI_CWD_WDOG.LEN have only upper 16-bits of 24-bits
+> +	 * GTI_CWD_WDOG.CNT, need addition shift of 8.
+> +	 */
+> +	regval = readq(priv->base + GTI_CWD_WDOG);
+> +	regval &= GTI_CWD_WDOG_MODE_MASK;
+> +	regval |= (timeout_wdog << (GTI_CWD_WDOG_CNT_SHIFT + 8)) |
+> +		   (timeout_wdog << GTI_CWD_WDOG_LEN_SHIFT);
+> +	writeq(regval, priv->base + GTI_CWD_WDOG);
+> +
+> +	return 0;
+> +}
+> +
+> +static int gti_wdt_set_pretimeout(struct watchdog_device *wdev,
+> +					unsigned int timeout)
+> +{
+> +	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> +	struct watchdog_device *wdog_dev = &priv->wdev;
+> +
+> +	/* pretimeout should 1/3 of max_timeout */
+> +	if ((timeout * 3) <= wdog_dev->max_timeout)
+
+Unnecessary ()
+
+> +		return gti_wdt_settimeout(wdev, timeout * 3);
+> +
+> +	return -EINVAL;
+> +}
+> +
+> +static const struct watchdog_info gti_wdt_ident = {
+> +	.identity = "Marvell GTI watchdog",
+> +	.options = WDIOF_SETTIMEOUT | WDIOF_PRETIMEOUT | WDIOF_KEEPALIVEPING |
+> +		   WDIOF_MAGICCLOSE | WDIOF_CARDRESET,
+> +};
+> +
+> +static const struct watchdog_ops gti_wdt_ops = {
+> +	.owner = THIS_MODULE,
+> +	.start = gti_wdt_start,
+> +	.stop = gti_wdt_stop,
+> +	.ping = gti_wdt_ping,
+> +	.set_timeout = gti_wdt_settimeout,
+> +	.set_pretimeout = gti_wdt_set_pretimeout,
+> +};
+> +
+> +static int gti_wdt_probe(struct platform_device *pdev)
+> +{
+> +	struct gti_wdt_priv *priv;
+> +	struct device *dev = &pdev->dev;
+> +	struct watchdog_device *wdog_dev;
+> +	int irq;
+> +	int err;
+> +
+> +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(priv->base))
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(priv->base),
+> +			      "reg property not valid/found\n");
+> +
+> +	priv->clock_freq = arch_timer_get_cntfrq();
+
+arch_timer_get_cntfrq() returns u32. Storing it as u64 to save
+a couple of typecasts really doesn't add value.
+
+Note that this limits compilability to arm and arm64.
+
+> +
+> +	wdog_dev = &priv->wdev;
+> +	wdog_dev->info = &gti_wdt_ident,
+> +	wdog_dev->ops = &gti_wdt_ops,
+> +	wdog_dev->parent = dev;
+> +	/*
+> +	 * Watchdog counter is 24 bit where lower 8 bits are zeros, so maximum
+> +	 * value that can be programmed in hardware is 0xffff00. This counter
+> +	 * decrements every one microsec.
+> +	 * Hardware will generate interrupt on first timeout (pretimeout)
+> +	 * reset the system on 3rd timeout.
+> +	 * Max watchdog pretimeout can be 16 sec, so max timeout is 48 sec.
+> +	 * Let's have min pretimeout to 1sec, so min timeout is 3sec.
+> +	 */
+> +	wdog_dev->max_timeout = 48;
+
+The code setting the actual timeout checks for overflow, suggesting that
+the actual maximum timeout depends on the clock speed and may be less
+than 48 seconds. If that ever happens, the actual timeout would be set
+to less than 48 seconds, which could cause random reboots.
+
+> +	wdog_dev->min_timeout = 3;
+> +	wdog_dev->timeout = 30;
+> +	wdog_dev->pretimeout = wdog_dev->timeout / 3;
+> +
+> +	priv->irq = irq;
+> +	watchdog_set_drvdata(wdog_dev, priv);
+> +	platform_set_drvdata(pdev, priv);
+> +	gti_wdt_settimeout(wdog_dev, wdog_dev->timeout);
+> +	watchdog_stop_on_reboot(wdog_dev);
+> +	watchdog_stop_on_unregister(wdog_dev);
+> +
+> +	err = devm_watchdog_register_device(dev, wdog_dev);
+> +	if (err)
+> +		return err;
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0)
+> +		return dev_err_probe(&pdev->dev, irq, "IRQ resource not found\n");
+> +
+> +	err = devm_request_irq(dev, irq, gti_wdt_interrupt, 0,
+> +			       pdev->name, &priv->wdev);
+> +	if (err)
+> +		return dev_err_probe(dev, err, "Failed to register interrupt handler\n");
+> +
+> +	dev_info(dev, "Watchdog enabled (timeout=%d sec)\n", wdog_dev->timeout);
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id gti_wdt_of_match[] = {
+> +	{ .compatible = "marvell,gti-wdt", },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, gti_wdt_of_match);
+> +
+> +static struct platform_driver gti_wdt_driver = {
+> +	.driver = {
+> +		.name = "gti-wdt",
+> +		.of_match_table = gti_wdt_of_match,
+> +	},
+> +	.probe = gti_wdt_probe,
+> +};
+> +module_platform_driver(gti_wdt_driver);
+> +
+> +MODULE_AUTHOR("Bharat Bhushan <bbhushan2@marvell.com>");
+> +MODULE_DESCRIPTION("Marvell GTI watchdog driver");
 
