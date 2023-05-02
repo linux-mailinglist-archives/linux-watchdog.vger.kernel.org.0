@@ -2,1171 +2,541 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC766F468C
-	for <lists+linux-watchdog@lfdr.de>; Tue,  2 May 2023 17:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C897F6F48CD
+	for <lists+linux-watchdog@lfdr.de>; Tue,  2 May 2023 19:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233865AbjEBPCb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 2 May 2023 11:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57826 "EHLO
+        id S233832AbjEBRF0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 2 May 2023 13:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233771AbjEBPCa (ORCPT
+        with ESMTP id S231728AbjEBRFZ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 2 May 2023 11:02:30 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB6E1BDC;
-        Tue,  2 May 2023 08:02:26 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-74fc1452fbdso306180685a.2;
-        Tue, 02 May 2023 08:02:26 -0700 (PDT)
+        Tue, 2 May 2023 13:05:25 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5844E1B5;
+        Tue,  2 May 2023 10:05:23 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342Gss1C025073;
+        Tue, 2 May 2023 10:05:03 -0700
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2102.outbound.protection.outlook.com [104.47.70.102])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3q92rp1d6v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 10:05:03 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ALuZE+6dFMLhGh4SNhoaZaxJCvFzvnSgUJrtamdkFmRaVpexjlPCMPtFkpTOFv3qDxgAaRq5Dgdvs5rV3r1j33wJm+xuUOF5fmqngfsfc6G5Rr3nZwRZRbd9D9nF/HBT8KqFlvKPM9ccclpS2vDuKEfRlEJQao2Ahmgw91IYUCYpTiReG5eQdVe08WhmUS38JPTjBNBM/bPZFo+VSmnpfy3Gy3a1fDRQUzrwlYTYU72D+DD9O/cfWPJj/BAB4jZgqLJr4lzdi6Wvj5xX7grYQu04um2SjZ7TkJ+Jef1GRkDzVjfM+cyesgygAQGQtVR4b+7nnzIzf8ltPOwhxB9MMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dNCgAH3arDAljwtY9MPaqo2S27PFJN1ZC4XKMzxcYUk=;
+ b=ZNP6cfQOXwTV4Q8doOzoJSaI6t4fXq2ApkO+iVx1r+JYoMZF6DflG3eDEZRdClpMA2rr+dvWx/FkL4nsQTp63NJI3uw7TLuohDjNOv10GuRq2a2U9KgMznJgi5YJhmkY8ZRPdyOM0aB1l5YaC++ePgKD5ZaLUhLdRyDD+sA5+f9iyHIyugxReMl/LF90uCTq+erzPc0lfDStnby9Q8sNrJI4rxF21C5K3psTR/Y3PfGCt2wJ9nIaSB76co7UrbXWJ+x4tBT7eXOPx3W25MTH0Omu83UxiQloGtz0VgvFYBNC//pbf7FvTxJB6wYusYzqg5Jpd9zdbmVtpO8Yzm5VOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683039746; x=1685631746;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=AVsW3V4u50q5sa5lagJfaL7UVEIL2ahaG0045SLIufc=;
-        b=kCAXX7y2YjoqZ1r+HoPFEfOqUf4CuwS27yoRPMGTMJr98k5mur2wWRYSO1BXdGt0mW
-         KqFjsebhAZV7S0nhrlDjuQWZIIzT8ePZMrDikjM+QEWVIbynP4D6wEsLjrxlOdIiOl7z
-         IWVVUgmwCnihPXQ6e1kL6b8I4RhxxRMWtqT0ermQzEEVLLJsk/Z3HRRlm9/CnbrlpXLb
-         B6dneFa/YN2iaH3em+DzKTiBOk6XEL1xCfcqlBQ9O6hfelbOPDQrwU0RF6TagDr8p60H
-         IjtluR5tQuZUnSBUUW9BkAPhh619FgnMA/2bSHo7joDyD2EjX2mX/NUZI8D+FKQ4gebu
-         z5EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683039746; x=1685631746;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AVsW3V4u50q5sa5lagJfaL7UVEIL2ahaG0045SLIufc=;
-        b=k5USI3QjpJbUevXwMN77lr8t/7t5FRPrwhehGAzyGYD210DuyMDze8s2lv0kwI0mj6
-         vmh0RxqNCwN6KNR8gIxoghqycjvIUB+4ol5V3+8HehUMdEwS8xLHYNpz3FhgyRfZ2iYk
-         ZZabWPd8XvRt9OtGHbY/Sv9C+OWhr2sMD1Fu+eE2LvMPbiUIsLmXQfSZwLzDbPdmHXxc
-         e+G5NyLchmsP0RQnfr/xZlyZJmRnLgk1tSg16etyoYK3kLVvBOCIq217CVN1fTtJX4cZ
-         IN7i80Y0KOnIARva0NvCOAby0vaft7L5Wz9Q83BaeJTb6qoTpnnF2PWxyF32pD7XbVQn
-         x21Q==
-X-Gm-Message-State: AC+VfDxB5/LBj6D25AGPg8LAFiI6YN0bQ7HMVVXpyjK+SOzSmpzSyZEp
-        JdngwCCsvIG4MemkYR9B5g==
-X-Google-Smtp-Source: ACHHUZ72mAJODQ/QdwtsFl2FrgKHOnjInqPVv6JuKUJ2oCq+Duwwccz332KOaIMifko6V1/qqngoKg==
-X-Received: by 2002:a05:6214:20cf:b0:5ef:8004:e0b0 with SMTP id 15-20020a05621420cf00b005ef8004e0b0mr6592003qve.17.1683039745269;
-        Tue, 02 May 2023 08:02:25 -0700 (PDT)
-Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
-        by smtp.gmail.com with ESMTPSA id f14-20020a0caa8e000000b0061b5b399d1csm1403305qvb.104.2023.05.02.08.02.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 May 2023 08:02:24 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from t560.mvista.com (unknown [IPv6:2001:470:b8f6:1b:fdc2:8f04:3acf:c29d])
-        by serve.minyard.net (Postfix) with ESMTPA id 19607180011;
-        Tue,  2 May 2023 15:02:23 +0000 (UTC)
-From:   minyard@acm.org
-To:     im Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Corey Minyard <cminyard@mvista.com>
-Subject: [PATCH] watchdog: Add an IPMI watchdog driver in the watchdog framework
-Date:   Tue,  2 May 2023 10:02:15 -0500
-Message-Id: <20230502150215.1266526-1-minyard@acm.org>
-X-Mailer: git-send-email 2.34.1
+ d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dNCgAH3arDAljwtY9MPaqo2S27PFJN1ZC4XKMzxcYUk=;
+ b=Z7VaEHTo0+yq44qkYCv0FffXKwqoTW0k9gxYp2iRR1/ehgtRmzYXyrurwAxNfWhpatEsh/wh0rZKd6e2XY3ys+p0lLt7z86FTe1TaKq3ffby8aHodFxVV80J2rgaRIt7+SOVvVIfRqUI6+PQZnqcwT6MOwbRc7VZgBbjgk4mi2o=
+Received: from DM5PR1801MB1883.namprd18.prod.outlook.com (2603:10b6:4:62::23)
+ by MWHPR18MB0958.namprd18.prod.outlook.com (2603:10b6:300:9d::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.31; Tue, 2 May
+ 2023 17:05:00 +0000
+Received: from DM5PR1801MB1883.namprd18.prod.outlook.com
+ ([fe80::e4d4:8770:3d35:1d13]) by DM5PR1801MB1883.namprd18.prod.outlook.com
+ ([fe80::e4d4:8770:3d35:1d13%5]) with mapi id 15.20.6340.030; Tue, 2 May 2023
+ 17:05:00 +0000
+From:   Bharat Bhushan <bbhushan2@marvell.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sunil Kovvuri Goutham <sgoutham@marvell.com>
+Subject: RE: [EXT] Re: [PATCH 2/2 v4] Watchdog: Add marvell GTI watchdog
+ driver
+Thread-Topic: [EXT] Re: [PATCH 2/2 v4] Watchdog: Add marvell GTI watchdog
+ driver
+Thread-Index: AQHZeNfmwo9A8u8UPE+KY4MY9zvSQ69CaOIAgATJGmA=
+Date:   Tue, 2 May 2023 17:05:00 +0000
+Message-ID: <DM5PR1801MB1883CBF4E6FDB5EE8F0F8E8DE36F9@DM5PR1801MB1883.namprd18.prod.outlook.com>
+References: <20230427071408.8493-1-bbhushan2@marvell.com>
+ <20230427071408.8493-2-bbhushan2@marvell.com>
+ <55b5c88b-8d0d-d02f-6fe7-091a991f4065@roeck-us.net>
+In-Reply-To: <55b5c88b-8d0d-d02f-6fe7-091a991f4065@roeck-us.net>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: =?utf-8?B?UEcxbGRHRStQR0YwSUc1dFBTSmliMlI1TG5SNGRDSWdjRDBpWXpwY2RYTmxj?=
+ =?utf-8?B?bk5jWW1Kb2RYTm9ZVzR5WEdGd2NHUmhkR0ZjY205aGJXbHVaMXd3T1dRNE5E?=
+ =?utf-8?B?bGlOaTB6TW1RekxUUmhOREF0T0RWbFpTMDJZamcwWW1FeU9XVXpOV0pjYlhO?=
+ =?utf-8?B?bmMxeHRjMmN0Tnpaak5qRTBPVFV0WlRrd1lpMHhNV1ZrTFdGbE4yTXRNRFJp?=
+ =?utf-8?B?T1dVek16TTRaalpsWEdGdFpTMTBaWE4wWERjMll6WXhORGsyTFdVNU1HSXRN?=
+ =?utf-8?B?VEZsWkMxaFpUZGpMVEEwWWpsbE16TXpPR1kyWldKdlpIa3VkSGgwSWlCemVq?=
+ =?utf-8?B?MGlNVFE0TlRZaUlIUTlJakV6TXpJM05USXdOamszTnpZMk9EUTNOeUlnYUQw?=
+ =?utf-8?B?aWFYSTFXSFpHT0hNMFowNVJNMHRSVXpabWJtazNiekIyYWxsUlBTSWdhV1E5?=
+ =?utf-8?B?SWlJZ1ltdzlJakFpSUdKdlBTSXhJaUJqYVQwaVkwRkJRVUZGVWtoVk1WSlRV?=
+ =?utf-8?B?bFZHVGtOblZVRkJRelJOUVVGQ09WSlZWVFZIU0ROYVFWVm5lV2RwVEVSRWRW?=
+ =?utf-8?B?UmpVMFJMUTBselRVODFUbmRQUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVWhCUVVGQlEydERRVUZCUmtGclFVRkNiMFJCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVVkJRVkZCUWtGQlFVRm9VVGR5UkhkQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZLTkVGQlFVSm9RVWRSUVZwQlFubEJSMVZCWTNkQ2VrRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlJVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRm5RVUZCUVVGQmJtZEJRVUZIVFVGa1VVSjZRVWhSUVdKM1FuUkJSamhC?=
+ =?utf-8?B?WTBGQ2JFRklTVUZqZDBKMlFVYzBRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VkZCUVVGQlFVRkJRVUZEUVVGQlFVRkJRMlZCUVVGQldYZENNVUZJVFVGa1FV?=
+ =?utf-8?B?SjJRVWN3UVZoM1FuZEJSMmRCWW5kQ2RVRkhWVUZpWjBJeFFVY3dRVmxuUW14?=
+ =?utf-8?B?QlNFbEJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVKQlFVRkJRVUZCUVVGQlNVRkJRVUZCUVVvMFFVRkJRbXBC?=
+ =?utf-8?B?U0ZWQlkzZENNRUZIT0VGaVVVSm1RVWhOUVdOM1FuVkJSamhCV2tGQ2FFRklU?=
+ =?utf-8?B?VUZoUVVKbVFVaFpRVTFCUVhsQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?Q?FBQUFB?=
+x-dg-refone: =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkZRVUZCUVVGQlFVRkJRV2RCUVVGQlFVRnVaMEZC?=
+ =?utf-8?B?UVVkTlFXUlJRbnBCU0ZGQlluZENkRUZHT0VGamQwSjZRVWMwUVZoM1FuSkJS?=
+ =?utf-8?B?MVZCWlZGQ00wRkhPRUZqWjBKclFVaE5RVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCVVVGQlFVRkJRVUZCUVVOQlFV?=
+ =?utf-8?B?RkJRVUZEWlVGQlFVRlpkMEl4UVVoTlFXUkJRblpCUnpCQldIZENla0ZJVFVG?=
+ =?utf-8?B?aVowSm1RVWMwUVdKM1FtdEJSMVZCWWtGQ2NFRkhNRUZoVVVJd1FVZFZRV05u?=
+ =?utf-8?B?UW1aQlNGbEJUVUZCZVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFrRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkpRVUZCUVVGQlNqUkJRVUZDYWtGSVZVRmpkMEl3UVVjNFFXSlJR?=
+ =?utf-8?B?bVpCU0UxQlkzZENkVUZHT0VGamQwSjNRVWRGUVZsM1FteEJSamhCWkdkQmQw?=
+ =?utf-8?B?RkVTVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVVZCUVVGQlFVRkJRVUZCWjBGQlFVRkJRVzVuUVVGQlIxRkJZa0ZDZDBG?=
+ =?utf-8?B?R09FRmpkMEp5UVVoclFXTkJRbXhCUmpoQldYZENiMEZIUlVGa1FVSm1RVWN3?=
+ =?utf-8?B?UVZwUlFucEJTRTFCV1ZGQ2JrRkhWVUZZZDBJeVFVUkJRVTFuUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGUlFVRkJRVUZCUVVGQlEwRkJRVUZCUVVObFFVRkJR?=
+ =?utf-8?B?VnBCUW5OQlNFRkJXSGRDZWtGSGQwRlpVVUpxUVVkelFWaDNRbXBCUjJkQldW?=
+ =?utf-8?B?RkNNRUZHT0VGaVVVSnNRVWhOUVdOM1FtaEJSMk5CV2xGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?Q?FBQUFB?=
+x-dg-reftwo: =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkNRVUZCUVVGQlFVRkJRVWxCUVVGQlFVRktO?=
+ =?utf-8?B?RUZCUVVKclFVZDNRV05CUW1aQlNGRkJXbEZDYUVGSE1FRmpkMEptUVVjNFFX?=
+ =?utf-8?B?Sm5RbXhCUjFGQlkyZENjRUZJV1VGYVVVSm1RVWRaUVdGUlFuTkJSMVZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUlVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?blFVRkJRVUZCYm1kQlFVRkhWVUZpVVVKb1FVZHJRV0pCUW1aQlIwVkJXa0ZD?=
+ =?utf-8?B?YTBGSVNVRmFVVUo2UVVoTlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkRkMEZCUVVGQlFVRkJRVUZCUVVGQlFWRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkRRVUZCUVVGQlEyVkJRVUZCWWxGQ2FFRklTVUZrWjBKc1FV?=
+ =?utf-8?B?ZDNRV0pCUW1aQlNFRkJZMmRDZGtGSGIwRmFVVUpxUVVoUlFWaDNRbXBCUnpo?=
+ =?utf-8?B?QldrRkNiRUZJVFVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUpCUVVGQlFVRkJRVUZCU1VGQlFVRkJRVW8wUVVGQlFuUkJSMFZC?=
+ =?utf-8?B?WTJkQ01rRkhWVUZpUVVKelFVWTRRV05CUW5sQlJ6aEJZV2RDYkVGSFRVRmtR?=
+ =?utf-8?B?VUptUVVkTlFXSjNRbXRCUjFWQlkzZENaa0ZIVVVGaFVVSnFRVWhSUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFWRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGRlFVRkJRVUZCUVVGQlFXZEJRVUZCUVVGdVow?=
+ =?utf-8?B?RkJRVWN3UVZsUlFubEJTRmxCV2xGQ2MwRkhkMEZZZDBJd1FVZFZRV05uUW5S?=
+ =?utf-8?B?QlIydEJZbWRDTVVGSVRVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
+ =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
+ =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJVVUZCUVVGQlFVRkJRVU5C?=
+ =?utf-8?B?UVVGQlFVRkJZVUYzUVVGQlFVRkJRVUozUVVGQlFVSkJRVUZCUVVGQlFVRkxV?=
+ =?utf-8?B?VmN3UVdoV1lVaENUM055TVhKUGRWWjFkRFU0WTBGQlFVRkJVVUZCUVVGQlFV?=
+ =?utf-8?Q?FBRHpn?=
+x-dg-refthree: =?utf-8?B?U2xWVE1qUkdXVkZNTjAxUlJqTlZVRmhwYkV4QlFVRkJRVVZCUVVGQmEwRkJR?=
+ =?utf-8?B?VUZCUVVGQlFVaEJRV05uUW5aQlIyOUJXbEZDYWtGSVVVRllkMEpxUVVjNFFW?=
+ =?utf-8?B?cEJRbXhCU0UxQlFVRkRkVUZuUVVGRVowRkJRVUpuUVVGQlFVRkJRVUZCV1ZG?=
+ =?utf-8?B?Q2EwRkhVVUZqWjBKc1FVaE5RV04zUVVGQlExRkJRVUZCUVVGQlFVRlpkMEl4?=
+ =?utf-8?B?UVVoTlFXUkJRblpCUnpCQldIZENkMEZIVlVGalowSjZRVWM0UVdKblFVRkJR?=
+ =?utf-8?B?elJCUVVGQlFVRkJRVUZaZDBJeFFVaE5RV1JCUW5aQlJ6QkJXSGRDZDBGSFow?=
+ =?utf-8?B?RmlkMEoxUVVkVlFXSm5RakZCUnpCQldXZENiRUZJU1VGQlFVRjNRVUZCUVVG?=
+ =?utf-8?B?QlFVRkJSMDFCWkZGQ2VrRklVVUZpZDBKMFFVWTRRV04zUW5wQlJ6UkJXSGRD?=
+ =?utf-8?B?YTBGSFJVRmpkMEp2UVVZNFFXUm5RWGRCUkVsQlFVRkJkMEZCUVVGQlFVRkJR?=
+ =?utf-8?B?VWROUVdSUlFucEJTRkZCWW5kQ2RFRkdPRUZqZDBKNlFVYzBRVmgzUW5KQlIx?=
+ =?utf-8?B?VkJaVkZDTTBGSE9FRmpaMEpyUVVoTlFVRkJRU3RCUVVGQlFVRkJRVUZIVFVG?=
+ =?utf-8?B?a1VVSjZRVWhSUVdKM1FuUkJSamhCWTNkQ2VrRkhORUZZZDBKMVFVYzRRVnBC?=
+ =?utf-8?B?UW14QlIzZEJZVkZDZEVGSGEwRmtRVUpzUVVoSlFWaDNRakpCUkVGQlRXZEJR?=
+ =?utf-8?B?VUZFU1VGQlFVRkJRVUZCUVZsM1FqRkJTRTFCWkVGQ2RrRkhNRUZZZDBKNlFV?=
+ =?utf-8?B?aE5RV0puUW1aQlNFMUJZMEZDYUVGSFRVRmFVVUptUVVoWlFVMUJRWGxCUVVG?=
+ =?utf-8?B?QlVHZEJRVUZCUVVGQlFVSnJRVWQzUVdOQlFtWkJTRTFCWVhkQ05VRklRVUZh?=
+ =?utf-8?B?VVVKbVFVZE5RV0ZCUW1oQlNGRkJXSGRDZEVGSFZVRmpkMEo2UVVkRlFWcDNR?=
+ =?utf-8?B?bXhCUmpoQlpHZEJkMEZFU1VGQlFVRXlRVUZCUVVGQlFVRkJSMUZCWWtGQ2Qw?=
+ =?utf-8?B?RkdPRUZqZDBKelFVZEZRVmwzUW5KQlJqaEJXWGRDYjBGSFJVRmtRVUptUVVj?=
+ =?utf-8?B?d1FWcFJRbnBCU0UxQldWRkNia0ZIVlVGQlFVRTBRVUZCUVVGQlFVRkJSMUZC?=
+ =?utf-8?B?WWtGQ2QwRkdPRUZrUVVKc1FVZEZRV0pSUW5wQlJqaEJZbmRDZFVGSFZVRmFR?=
+ =?utf-8?B?VUo1UVVkclFXUm5RbXhCUmpoQldtZENjRUZIZDBGYVVVRkJRVU5SUVVGQlFV?=
+ =?utf-8?B?eEJRVUZCV2xGQ2RFRkhSVUZoVVVKelFVWTRRVmxSUW10QlIxRkJZMmRDYkVG?=
+ =?utf-8?B?SVRVRmpkMEZCUVVSUlFVRkJRVUZCUVVGQllsRkNhRUZJU1VGa1owSnNRVWQz?=
+ =?utf-8?B?UVdKQlFtWkJTRUZCWTJkQ2RrRkhiMEZhVVVKcVFVaFJRVmgzUW1wQlJ6aEJX?=
+ =?utf-8?B?a0ZDYkVGSVRVRkJRVUVyUVVGQlFVSkJRVUZCUnpCQldWRkNlVUZJV1VGYVVV?=
+ =?utf-8?B?SnpRVWQzUVZoM1FuZEJTRWxCWW5kQ2NVRkhWVUZaZDBJd1FVWTRRVmwzUW5a?=
+ =?utf-8?B?QlIxRkJXbEZDZWtGR09FRmFRVUp3UVVkTlFXUkJRVUZCUTI5QlFVRkJRVUZC?=
+ =?utf-8?B?UVVGaVVVSm9RVWhKUVdSblFteEJSM2RCWWtGQ1prRklVVUZhVVVKNVFVY3dR?=
+ =?utf-8?Q?WFRQnVBSFVBY3dBQUFBPT0iLz48L21ldGE+?=
+x-dg-rorf: true
+x-dg-tag-bcast: {F3099120-E875-427D-98C8-D9AF53EBB3D4}
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM5PR1801MB1883:EE_|MWHPR18MB0958:EE_
+x-ms-office365-filtering-correlation-id: b0475cb9-176b-4e95-2c19-08db4b2f5d3e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: uzax5+TGP9qgG2NDSfMGJfIadD8urRYeimBk4qxGG7Mzo7cUyQHKtmQbfJ7/AHZHf3Ai8+jbB34zX5kcPDJPyle5FTH33xff3h5WJzuOiy82GNANvlWXNeTJmsjNv9GHFGCE0vntlPNd+tJhk4I2QRjveNoaQ7Wnwx9pPt3VAGk5lvcgx34lDzeCvgD6ZbsV36LpASMLXqAekF5zhyo8g2xjbE5mYOgp0nyyOmA5SX894Fum3Pb8JUN1Y2ffhT3evF4SXMgrEXMW/jnUEoCgLY0F6kIOYVOea6QxkS9GFpzRSnqxy+06yAjiiJN4pCD3vQ0FR0GfCv1QbB7mfJSMaW71KQmuMTdzVuSNMFaILdyH6s+K3aUFb78JiP0pogEXRyVNn8mCzX6R7GmZ8MM154DBtXGZ1RB6Fzdl0PSJcRboscjnYuzLWOPNV6QEVWEAnmUWoM7Ym3OEoX3TpTqy1h+w+urMoSAPBJBpg68f2emC/SMhcxiIZE9JuHAg70OUrHaNssJbDEEQH6wGXIAKQpHzfB8ICyqK8cvlvz2HHGqM+zang6B/Owe2OPXA7yU/w3tQkJJu5EqsT6t+SGrtU4bc6o+AHkZWooB+W/L30nVH7EQIbE21V7c4near9/HG
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1801MB1883.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(346002)(366004)(376002)(136003)(451199021)(6506007)(9686003)(53546011)(122000001)(26005)(38070700005)(55236004)(38100700002)(186003)(83380400001)(8676002)(8936002)(52536014)(5660300002)(30864003)(2906002)(33656002)(55016003)(316002)(6636002)(86362001)(110136005)(478600001)(7696005)(71200400001)(41300700001)(76116006)(64756008)(66446008)(66476007)(66556008)(66946007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VXdPUmJ2WWtmc056anJoV3p5MmJVbUh4KytaTEowb2VlNkVBL1VWNUFVYkFT?=
+ =?utf-8?B?VVZ0MTJCdjFFN3JTeE9aNUllRlhKeVMyRnB5TDQ2U1ZMM3lmcGFwejMwd3BE?=
+ =?utf-8?B?L212L3U0OHNkTmZEeGdyUjFFMWFpYU8wblJ0dC9pOGFrMHd5WkdOajdSTHZp?=
+ =?utf-8?B?NldGMVkxNWpTSXFoS0FwTzY5eDNYMjh3dEpZWEhoSXd4Sjl0ZzdzdzhoRndM?=
+ =?utf-8?B?Slg5OVd4ZmlTUTJ3akhwVGFBdHhmd2tqZm0yZDVDSTZmQzY3SjFPM1RCUDkw?=
+ =?utf-8?B?WTBUYkw2Tmt4VzRCYk9LelpFZFZTeGdpZy9mMVhzemErUWtZSW42aXYxUkpx?=
+ =?utf-8?B?SEJyUlcwSDdOM1BJenFLZTR3emNqekZ1VGRCcVA2T05aS01kSkRaaWRnaVQ1?=
+ =?utf-8?B?TWUrZzFXam5hM0Z2b2QwRU42eGptc1l0RVorQTZGZHQ5c0E1TEcxd0U1ZEc3?=
+ =?utf-8?B?VFltdU9XNGFUZWpuSFdHdXJ1MUJlRDJYbGRzNEtoOWpDUkJWZXBWdm05K2xD?=
+ =?utf-8?B?eGFQbkdEZllhcG5scExxZGtpRkRuZThNM0IvVG5qOU1iY1Iyb2hEbGZBN2ly?=
+ =?utf-8?B?ekFWUFBmY1NJSVB5eW1uVjgyemt1SHR2aG9KQWhZaE5KYjI5dWNKQklLeDF6?=
+ =?utf-8?B?ait5UG1kOXNITmNYWEVXVkpCVlVYOUFWY0gzenA2MnhmVEhkVUhVSWYvNkRJ?=
+ =?utf-8?B?Wmd6R1hDSG5BakY5Lzd3TXZsL2JZWnVCczg5MzdEcGg4dlp4NDdhMGtDVmhR?=
+ =?utf-8?B?L2JzSmk1aW5RSE1jZTIxSWhhUmZFaU8wMk8xNTBqWVhSNWZrcmtxOWtFUDcr?=
+ =?utf-8?B?cjhZR3Brakc2cUN5NU9RRndsdG5oNTIxY293QUg2YzdOQzNMTnJYcERraWtt?=
+ =?utf-8?B?aU1iQUFSa3ozTFhZSkpTTjBZaHc3MEhZakNucm40LzNGL2k3UFhHOHc5V1FF?=
+ =?utf-8?B?TFU1UjJ0RjIwRUo4dzBWWGpJSmJya3ZJSlg1M0EyYitnTWZwUnd3MUpJOGxk?=
+ =?utf-8?B?anpnYkVQc1hoRHNteGpDSGpZcS9wdG1qd0kyWUdFbmhHR0NoQkwrZG45cXU4?=
+ =?utf-8?B?aTlTd29TYTB0em9jRTAxYVg5a2IwV0Q1WnBWcnVEN0JQaEZCdk1VSHk0NTI1?=
+ =?utf-8?B?VnM1cjFvUFVGYVd4SHJMOE85RnhSZ1ZLZm5GUXlBbzM3UlpOMnlkVkZNMC80?=
+ =?utf-8?B?NHdMRWVDZ2VzdTVpa21PWHprVGx0WmttWkZEaWJ3bnZ5OXdnR1FCY2J1NEN4?=
+ =?utf-8?B?aUxYN2M5Rkc3WjNRTy9YSmZKRlF3WEZITTBlbDZzRm5aRk1PdW5QejF3RERE?=
+ =?utf-8?B?R09nZHBYSW41dFRaWHVKR0xSdWErUVJmQUd4TXBjdEoxeU1RVTRuUkxGRlVI?=
+ =?utf-8?B?U1p5dUZGdTFPZkIya3Z5SkdQaVJ5TU5qVmdnVERvek8xQVJTRUlhK0hXcnU4?=
+ =?utf-8?B?T0tRVkkveDNDSGdLQ2s1eElnQjFWSHNSdFNhODlYK3NKSjFGRXBuS29LTFg3?=
+ =?utf-8?B?bDEwU2FkSGJXUnF5MzFDaE5ldVBRWjgzTGs2VVJ1eERPbXJTaGhsVUpmUG1k?=
+ =?utf-8?B?OWRBQURRZ291ek9KbkF6K0dlTkhZc0xHSVdKeDdMek4vSWpja0xJb2dNayto?=
+ =?utf-8?B?M3hacUhzWkVNQnUyRGcxZUdaMmJibElTeFBzT3AxTDRFSGRYRlJCTXRDSlRC?=
+ =?utf-8?B?TFpWaU5kOUtGcWllTnRQVDA0MUZGUnNVaFB1MHJMNFFQQVZVN2RTK25GdjZN?=
+ =?utf-8?B?R2tOVWw1b3EvN09vOTVVbXdLQkliRW80dllBVEZMSjFpbWtmRXkrNm13WnVY?=
+ =?utf-8?B?ZGRWWG11VFF5WGNSdDFPUzNwM3d0c1l2WVFMVUhLd1M0b3ZXZTVUR0dKSmhl?=
+ =?utf-8?B?TlFYZi9lL2pqYVJnQmZ4MmRBb2ZIQjZTNWJjQ0pqKzVhZEZLb0owWE9ETmU2?=
+ =?utf-8?B?NEM4RXpCaUlUTlJMZms4NW9uYU40MldrZWxydHRyMVNVNXpQYmRMaUR4MHI1?=
+ =?utf-8?B?bjUyVFJGa0Q4aXVyVXdjYnJXbjdLdGE1MWJRNGJZeXhVZzVtaGkxYkgwVUxz?=
+ =?utf-8?B?ZzNVdkljQVZ4b2pURXJySGRLUDF6UVRKV05WekdPMVF4Y054alpjYXFocWFv?=
+ =?utf-8?Q?+7ArXCLPFVnTquat4iJ9gucyu?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: marvell.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR1801MB1883.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b0475cb9-176b-4e95-2c19-08db4b2f5d3e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 May 2023 17:05:00.2617
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LxSD7fura+cFGyb3vxy0o/qtMfK1f95bV8RM7/M6NygNi+PyoeQkHGlTHiHiIKlTUzP/iPAHkWPNrKUwlRRRzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR18MB0958
+X-Proofpoint-ORIG-GUID: HJ-uUU0K4RB6J1_0LbxzHiUYSf_SKdeW
+X-Proofpoint-GUID: HJ-uUU0K4RB6J1_0LbxzHiUYSf_SKdeW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-02_10,2023-04-27_01,2023-02-09_01
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Corey Minyard <cminyard@mvista.com>
-
-This basically strips out the things from the old watchdog driver that
-the standard watchdog doesn't support and ties into the watchdog
-framework.  The old driver is left alone, but will be deprecated.
-
-Signed-off-by: Corey Minyard <cminyard@mvista.com>
----
-Something I should have done a long time ago (and was hoping someone
-else would do).  Here's the first cut at this.
-
-This creates a new watchdog driver for IPMI in addition to the old one.
-It is missing some of the features not supported by the watchdog
-framework, but few people if anybody probably use those features.
-However, it will integrate with other watchdog drivers cleanly.
-
- Documentation/driver-api/ipmi.rst |  58 +-
- MAINTAINERS                       |   1 +
- drivers/char/ipmi/Kconfig         |   5 +-
- drivers/watchdog/Kconfig          |  11 +
- drivers/watchdog/Makefile         |   1 +
- drivers/watchdog/ipmi_wdt.c       | 908 ++++++++++++++++++++++++++++++
- 6 files changed, 942 insertions(+), 42 deletions(-)
- create mode 100644 drivers/watchdog/ipmi_wdt.c
-
-diff --git a/Documentation/driver-api/ipmi.rst b/Documentation/driver-api/ipmi.rst
-index e224e47b6b09..2db717028cb7 100644
---- a/Documentation/driver-api/ipmi.rst
-+++ b/Documentation/driver-api/ipmi.rst
-@@ -114,9 +114,8 @@ over the SMBus.
- 
- ipmi_powernv - A driver for access BMCs on POWERNV systems.
- 
--ipmi_watchdog - IPMI requires systems to have a very capable watchdog
--timer.  This driver implements the standard Linux watchdog timer
--interface on top of the IPMI message handler.
-+ipmi_watchdog - This is the old IPMI watchdog driver, the new one is
-+in the watchdog directory and is in driver/watchdog/ipmi_wdt.c.
- 
- ipmi_poweroff - Some systems support the ability to be turned off via
- IPMI commands.
-@@ -664,12 +663,11 @@ Watchdog
- --------
- 
- A watchdog timer is provided that implements the Linux-standard
--watchdog timer interface.  It has three module parameters that can be
-+watchdog timer interface.  It has module parameters that can be
- used to control it::
- 
--  modprobe ipmi_watchdog timeout=<t> pretimeout=<t> action=<action type>
--      preaction=<preaction type> preop=<preop type> start_now=x
--      nowayout=x ifnum_to_use=n panic_wdt_timeout=<t>
-+  modprobe ipmi_wdt timeout=<t> pretimeout=<t> nowayout[=x]
-+      ifnum_to_use=n panic_wdt_timeout=<t> test_pretimeout[=x]
- 
- ifnum_to_use specifies which interface the watchdog timer should use.
- The default is -1, which means to pick the first one registered.
-@@ -679,46 +677,26 @@ is the amount of seconds before the reset that the pre-timeout panic will
- occur (if pretimeout is zero, then pretimeout will not be enabled).  Note
- that the pretimeout is the time before the final timeout.  So if the
- timeout is 50 seconds and the pretimeout is 10 seconds, then the pretimeout
--will occur in 40 second (10 seconds before the timeout). The panic_wdt_timeout
--is the value of timeout which is set on kernel panic, in order to let actions
--such as kdump to occur during panic.
-+will occur in 40 second (10 seconds before the timeout).
- 
--The action may be "reset", "power_cycle", or "power_off", and
--specifies what to do when the timer times out, and defaults to
--"reset".
--
--The preaction may be "pre_smi" for an indication through the SMI
--interface, "pre_int" for an indication through the SMI with an
--interrupts, and "pre_nmi" for a NMI on a preaction.  This is how
--the driver is informed of the pretimeout.
--
--The preop may be set to "preop_none" for no operation on a pretimeout,
--"preop_panic" to set the preoperation to panic, or "preop_give_data"
--to provide data to read from the watchdog device when the pretimeout
--occurs.  A "pre_nmi" setting CANNOT be used with "preop_give_data"
--because you can't do data operations from an NMI.
--
--When preop is set to "preop_give_data", one byte comes ready to read
--on the device when the pretimeout occurs.  Select and fasync work on
--the device, as well.
--
--If start_now is set to 1, the watchdog timer will start running as
--soon as the driver is loaded.
--
--If nowayout is set to 1, the watchdog timer will not stop when the
-+If nowayout is enabled, the watchdog timer will not stop when the
- watchdog device is closed.  The default value of nowayout is true
- if the CONFIG_WATCHDOG_NOWAYOUT option is enabled, or false if not.
- 
-+panic_wdt_timeout is the value of timeout which is set on kernel
-+panic, in order to let actions such as kernel dump to occur during
-+panic.  It defaults to 255 seconds.
-+
-+If test_pretimeout is enabled, then a test is done on the NMI timeout
-+to verify that it works.  The results are printed to the system log.
-+
- When compiled into the kernel, the kernel command line is available
- for configuring the watchdog::
- 
--  ipmi_watchdog.timeout=<t> ipmi_watchdog.pretimeout=<t>
--	ipmi_watchdog.action=<action type>
--	ipmi_watchdog.preaction=<preaction type>
--	ipmi_watchdog.preop=<preop type>
--	ipmi_watchdog.start_now=x
--	ipmi_watchdog.nowayout=x
--	ipmi_watchdog.panic_wdt_timeout=<t>
-+  ipmi_wdt.timeout=<t> ipmi_wdt.pretimeout=<t>
-+	ipmi_wdt.nowayout=x
-+	ipmi_wdt.panic_wdt_timeout=<t>
-+	ipmi_wdt.test_pretimeout=<t>
- 
- The options are the same as the module parameter options.
- 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index edd3d562beee..f408a63154ac 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10796,6 +10796,7 @@ T:	git https://github.com/cminyard/linux-ipmi.git for-next
- F:	Documentation/driver-api/ipmi.rst
- F:	Documentation/devicetree/bindings/ipmi/
- F:	drivers/char/ipmi/
-+F:	drivers/watchdog/ipmi_wdt.c
- F:	include/linux/ipmi*
- F:	include/uapi/linux/ipmi*
- 
-diff --git a/drivers/char/ipmi/Kconfig b/drivers/char/ipmi/Kconfig
-index f4adc6feb3b2..8ef86d0b18e1 100644
---- a/drivers/char/ipmi/Kconfig
-+++ b/drivers/char/ipmi/Kconfig
-@@ -91,9 +91,10 @@ config IPMI_POWERNV
- 	  Provides a driver for OPAL firmware-based IPMI interfaces.
- 
- config IPMI_WATCHDOG
--	tristate 'IPMI Watchdog Timer'
-+	tristate 'Old IPMI Watchdog Timer'
- 	help
--	  This enables the IPMI watchdog timer.
-+	  This enables the IPMI watchdog timer.  This is deprecated, use
-+	  IPMI_WDT in the watchdog area.
- 
- config IPMI_POWEROFF
- 	tristate 'IPMI Poweroff'
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 5de74686f12b..fc0f236a450b 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -350,6 +350,17 @@ config SL28CPLD_WATCHDOG
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called sl28cpld_wdt.
- 
-+config IPMI_WDT
-+	tristate "IPMI Watchdog Timer"
-+	depends on IPMI_HANDLER
-+	select WATCHDOG_CORE
-+	help
-+	  IPMI watchdog timer integrated into the watchdog framework.
-+	  Note that you cannot use this driver with the old IPMI watchdog
-+	  driver (IPMI_WATCHDOG).
-+
-+	  If unsure, say Y.
-+
- # ALPHA Architecture
- 
- # ARM Architecture
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 9cbf6580f16c..af12a9dfec3c 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -230,3 +230,4 @@ obj-$(CONFIG_MENZ069_WATCHDOG) += menz69_wdt.o
- obj-$(CONFIG_RAVE_SP_WATCHDOG) += rave-sp-wdt.o
- obj-$(CONFIG_STPMIC1_WATCHDOG) += stpmic1_wdt.o
- obj-$(CONFIG_SL28CPLD_WATCHDOG) += sl28cpld_wdt.o
-+obj-$(CONFIG_IPMI_WDT) += ipmi_wdt.o
-diff --git a/drivers/watchdog/ipmi_wdt.c b/drivers/watchdog/ipmi_wdt.c
-new file mode 100644
-index 000000000000..b72a95529458
---- /dev/null
-+++ b/drivers/watchdog/ipmi_wdt.c
-@@ -0,0 +1,908 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * ipmi_watchdog.c
-+ *
-+ * A watchdog timer based upon the IPMI interface.
-+ *
-+ * Author: MontaVista Software, Inc.
-+ *         Corey Minyard <minyard@mvista.com>
-+ *         source@mvista.com
-+ *
-+ * Copyright 2002 MontaVista Software Inc.
-+ */
-+
-+#define pr_fmt(fmt) "IPMI Watchdog: " fmt
-+
-+#include <linux/module.h>
-+#include <linux/moduleparam.h>
-+#include <linux/ipmi.h>
-+#include <linux/ipmi_smi.h>
-+#include <linux/mutex.h>
-+#include <linux/watchdog.h>
-+#include <linux/miscdevice.h>
-+#include <linux/init.h>
-+#include <linux/completion.h>
-+#include <linux/kdebug.h>
-+#include <linux/kstrtox.h>
-+#include <linux/rwsem.h>
-+#include <linux/errno.h>
-+#include <linux/uaccess.h>
-+#include <linux/notifier.h>
-+#include <linux/nmi.h>
-+#include <linux/reboot.h>
-+#include <linux/string.h>
-+#include <linux/ctype.h>
-+#include <linux/delay.h>
-+#include <linux/atomic.h>
-+#include <linux/sched/signal.h>
-+
-+#ifdef CONFIG_X86
-+/*
-+ * This is ugly, but I've determined that x86 is the only architecture
-+ * that can reasonably support the IPMI NMI watchdog timeout at this
-+ * time.  If another architecture adds this capability somehow, it
-+ * will have to be a somewhat different mechanism and I have no idea
-+ * how it will work.  So in the unlikely event that another
-+ * architecture supports this, we can figure out a good generic
-+ * mechanism for it at that time.
-+ */
-+#include <linux/nmi.h>
-+#define HAVE_DIE_NMI
-+#endif
-+
-+/*
-+ * The IPMI command/response information for the watchdog timer.
-+ */
-+
-+/* values for byte 1 of the set command, byte 2 of the get response. */
-+#define WDOG_DONT_LOG		(1 << 7)
-+#define WDOG_DONT_STOP_ON_SET	(1 << 6)
-+#define WDOG_SET_TIMER_USE(byte, use) \
-+	(((byte) & 0xf8) | ((use) & 0x7))
-+#define WDOG_GET_TIMER_USE(byte) ((byte) & 0x7)
-+#define WDOG_TIMER_USE_BIOS_FRB2	1
-+#define WDOG_TIMER_USE_BIOS_POST	2
-+#define WDOG_TIMER_USE_OS_LOAD		3
-+#define WDOG_TIMER_USE_SMS_OS		4
-+#define WDOG_TIMER_USE_OEM		5
-+
-+/* values for byte 2 of the set command, byte 3 of the get response. */
-+#define WDOG_SET_PRETIMEOUT_ACT(byte, use) \
-+	(((byte) & 0x8f) | (((use) & 0x7) << 4))
-+#define WDOG_GET_PRETIMEOUT_ACT(byte) (((byte) >> 4) & 0x7)
-+#define WDOG_PRETIMEOUT_NONE		0
-+#define WDOG_PRETIMEOUT_SMI		1
-+#define WDOG_PRETIMEOUT_NMI		2
-+#define WDOG_PRETIMEOUT_MSG_INT		3
-+
-+/* Actions to perform on a full timeout. */
-+#define WDOG_SET_TIMEOUT_ACT(byte, use) \
-+	(((byte) & 0xf8) | ((use) & 0x7))
-+#define WDOG_GET_TIMEOUT_ACT(byte) ((byte) & 0x7)
-+#define WDOG_TIMEOUT_NONE		0
-+#define WDOG_TIMEOUT_RESET		1
-+#define WDOG_TIMEOUT_POWER_DOWN		2
-+#define WDOG_TIMEOUT_POWER_CYCLE	3
-+
-+/*
-+ * Byte 3 of the get command, byte 4 of the get response is the
-+ * pre-timeout in seconds.
-+ */
-+
-+/* Bits for setting byte 4 of the set command, byte 5 of the get response. */
-+#define WDOG_EXPIRE_CLEAR_BIOS_FRB2	(1 << 1)
-+#define WDOG_EXPIRE_CLEAR_BIOS_POST	(1 << 2)
-+#define WDOG_EXPIRE_CLEAR_OS_LOAD	(1 << 3)
-+#define WDOG_EXPIRE_CLEAR_SMS_OS	(1 << 4)
-+#define WDOG_EXPIRE_CLEAR_OEM		(1 << 5)
-+
-+/*
-+ * Setting/getting the watchdog timer value.  This is for bytes 5 and
-+ * 6 (the timeout time) of the set command, and bytes 6 and 7 (the
-+ * timeout time) and 8 and 9 (the current countdown value) of the
-+ * response.  The timeout value is given in seconds (in the command it
-+ * is 100ms intervals).
-+ */
-+static inline void wdog_set_timeout_val(unsigned char *val, int timeout)
-+{
-+	val[0] = (timeout * 10) & 0xff;
-+	val[1] = (timeout * 10) >> 8;
-+}
-+#define WDOG_GET_TIMEOUT(byte1, byte2) (((byte1) | ((byte2) << 8)) / 10)
-+
-+#define IPMI_WDOG_RESET_TIMER		0x22
-+#define IPMI_WDOG_SET_TIMER		0x24
-+#define IPMI_WDOG_GET_TIMER		0x25
-+
-+#define IPMI_WDOG_TIMER_NOT_INIT_RESP	0x80
-+
-+static DEFINE_MUTEX(ipmi_watchdog_mutex);
-+
-+static struct ipmi_user *watchdog_user;
-+static int watchdog_ifnum;
-+
-+/* Default the timeout to 10 seconds. */
-+static int timeout = 10;
-+
-+/* The pre-timeout is disabled by default. */
-+static int pretimeout;
-+
-+/* Whether the timer can be stopped or not. */
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+
-+/* Default timeout to set on panic, in seconds. */
-+static int panic_wdt_timeout = 255;
-+
-+/* Default action is to reset the board on a timeout. */
-+static unsigned char action_val = WDOG_TIMEOUT_RESET;
-+
-+/* Default state of the timer. */
-+static unsigned char ipmi_watchdog_state = WDOG_TIMEOUT_NONE;
-+
-+/* Default pretimeout is disabled until set_pretimeout is called. */
-+static unsigned char pretimeout_state = WDOG_PRETIMEOUT_NONE;
-+
-+/* Test the NMI pretimeout at startup. */
-+static bool test_pretimeout;
-+
-+static atomic_t pretimeout_since_last_heartbeat;
-+
-+static int ifnum_to_use = -1;
-+
-+/* Parameters to ipmi_set_timeout */
-+#define IPMI_SET_TIMEOUT_NO_HB			0
-+#define IPMI_SET_TIMEOUT_HB_IF_NECESSARY	1
-+#define IPMI_SET_TIMEOUT_FORCE_HB		2
-+
-+static void ipmi_register_watchdog(int ipmi_intf);
-+static void ipmi_unregister_watchdog(int ipmi_intf);
-+
-+static int set_param_wdog_ifnum(const char *val, const struct kernel_param *kp)
-+{
-+	int rv = param_set_int(val, kp);
-+
-+	if (rv)
-+		return rv;
-+	if ((ifnum_to_use < 0) || (ifnum_to_use == watchdog_ifnum))
-+		return 0;
-+
-+	ipmi_unregister_watchdog(watchdog_ifnum);
-+	ipmi_register_watchdog(ifnum_to_use);
-+	return 0;
-+}
-+
-+static const struct kernel_param_ops param_ops_wdog_ifnum = {
-+	.set = set_param_wdog_ifnum,
-+	.get = param_get_int,
-+};
-+
-+#define param_check_wdog_ifnum param_check_int
-+
-+module_param(ifnum_to_use, wdog_ifnum, 0644);
-+MODULE_PARM_DESC(ifnum_to_use, "The interface number to use for the watchdog timer.  Setting to -1 defaults to the first registered interface");
-+
-+module_param(timeout, int, 0644);
-+MODULE_PARM_DESC(timeout, "Timeout value in seconds.");
-+
-+module_param(pretimeout, int, 0644);
-+MODULE_PARM_DESC(pretimeout, "Pretimeout value in seconds.");
-+
-+module_param(nowayout, bool, 0644);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default=CONFIG_WATCHDOG_NOWAYOUT)");
-+
-+module_param(panic_wdt_timeout, int, 0644);
-+MODULE_PARM_DESC(panic_wdt_timeout, "Timeout value on kernel panic in seconds.");
-+
-+module_param(test_pretimeout, bool, 0444);
-+MODULE_PARM_DESC(test_pretimeout, "Test that the NMI pretimeout works");
-+
-+/* IPMI version of the BMC. */
-+static unsigned char ipmi_version_major;
-+static unsigned char ipmi_version_minor;
-+
-+/* If a pretimeout occurs, this is used to allow only one panic to happen. */
-+static atomic_t preop_panic_excl = ATOMIC_INIT(-1);
-+
-+#ifdef HAVE_DIE_NMI
-+static int testing_nmi;
-+static int nmi_handler_registered;
-+#endif
-+
-+static int __ipmi_heartbeat(void);
-+
-+/*
-+ * We use a mutex to make sure that only one thing can send a set a
-+ * message at one time.  The mutex is claimed when a message is sent
-+ * and freed when both the send and receive messages are free.
-+ */
-+static atomic_t msg_tofree = ATOMIC_INIT(0);
-+static DECLARE_COMPLETION(msg_wait);
-+static void msg_free_smi(struct ipmi_smi_msg *msg)
-+{
-+	if (atomic_dec_and_test(&msg_tofree)) {
-+		if (!oops_in_progress)
-+			complete(&msg_wait);
-+	}
-+}
-+static void msg_free_recv(struct ipmi_recv_msg *msg)
-+{
-+	if (atomic_dec_and_test(&msg_tofree)) {
-+		if (!oops_in_progress)
-+			complete(&msg_wait);
-+	}
-+}
-+static struct ipmi_smi_msg smi_msg = INIT_IPMI_SMI_MSG(msg_free_smi);
-+static struct ipmi_recv_msg recv_msg = INIT_IPMI_RECV_MSG(msg_free_recv);
-+
-+static int __ipmi_set_timeout(struct ipmi_smi_msg  *smi_msg,
-+			      struct ipmi_recv_msg *recv_msg,
-+			      int                  *send_heartbeat_now)
-+{
-+	struct kernel_ipmi_msg            msg;
-+	unsigned char                     data[6];
-+	int                               rv;
-+	struct ipmi_system_interface_addr addr;
-+	int                               hbnow = 0;
-+
-+
-+	data[0] = 0;
-+	data[0] = WDOG_SET_TIMER_USE(data[0], WDOG_TIMER_USE_SMS_OS);
-+
-+	if (ipmi_watchdog_state != WDOG_TIMEOUT_NONE) {
-+		if ((ipmi_version_major > 1) ||
-+		    ((ipmi_version_major == 1) && (ipmi_version_minor >= 5))) {
-+			/* This is an IPMI 1.5-only feature. */
-+			data[0] |= WDOG_DONT_STOP_ON_SET;
-+		} else {
-+			/*
-+			 * In ipmi 1.0, setting the timer stops the watchdog, we
-+			 * need to start it back up again.
-+			 */
-+			hbnow = 1;
-+		}
-+	}
-+
-+	data[1] = 0;
-+	data[1] = WDOG_SET_TIMEOUT_ACT(data[1], ipmi_watchdog_state);
-+	if ((pretimeout > 0) && (ipmi_watchdog_state != WDOG_TIMEOUT_NONE)) {
-+		data[1] = WDOG_SET_PRETIMEOUT_ACT(data[1], pretimeout_state);
-+		data[2] = pretimeout;
-+	} else {
-+		data[1] = WDOG_SET_PRETIMEOUT_ACT(data[1],
-+						  WDOG_PRETIMEOUT_NONE);
-+		data[2] = 0; /* No pretimeout. */
-+	}
-+	data[3] = 0;
-+	wdog_set_timeout_val(data + 4, timeout);
-+
-+	addr.addr_type = IPMI_SYSTEM_INTERFACE_ADDR_TYPE;
-+	addr.channel = IPMI_BMC_CHANNEL;
-+	addr.lun = 0;
-+
-+	msg.netfn = 0x06;
-+	msg.cmd = IPMI_WDOG_SET_TIMER;
-+	msg.data = data;
-+	msg.data_len = sizeof(data);
-+	rv = ipmi_request_supply_msgs(watchdog_user,
-+				      (struct ipmi_addr *) &addr,
-+				      0,
-+				      &msg,
-+				      NULL,
-+				      smi_msg,
-+				      recv_msg,
-+				      1);
-+	if (rv)
-+		pr_warn("set timeout error: %d\n", rv);
-+	else if (send_heartbeat_now)
-+		*send_heartbeat_now = hbnow;
-+
-+	return rv;
-+}
-+
-+static int _ipmi_set_timeout(int do_heartbeat)
-+{
-+	int send_heartbeat_now;
-+	int rv;
-+
-+	if (!watchdog_user)
-+		return -ENODEV;
-+
-+	atomic_set(&msg_tofree, 2);
-+
-+	rv = __ipmi_set_timeout(&smi_msg,
-+				&recv_msg,
-+				&send_heartbeat_now);
-+	if (rv) {
-+		atomic_set(&msg_tofree, 0);
-+		return rv;
-+	}
-+
-+	wait_for_completion(&msg_wait);
-+
-+	if ((do_heartbeat == IPMI_SET_TIMEOUT_FORCE_HB)
-+		|| ((send_heartbeat_now)
-+		    && (do_heartbeat == IPMI_SET_TIMEOUT_HB_IF_NECESSARY)))
-+		rv = __ipmi_heartbeat();
-+
-+	return rv;
-+}
-+
-+static atomic_t panic_done_count = ATOMIC_INIT(0);
-+
-+static void panic_smi_free(struct ipmi_smi_msg *msg)
-+{
-+	atomic_dec(&panic_done_count);
-+}
-+static void panic_recv_free(struct ipmi_recv_msg *msg)
-+{
-+	atomic_dec(&panic_done_count);
-+}
-+
-+static struct ipmi_smi_msg panic_halt_heartbeat_smi_msg =
-+	INIT_IPMI_SMI_MSG(panic_smi_free);
-+static struct ipmi_recv_msg panic_halt_heartbeat_recv_msg =
-+	INIT_IPMI_RECV_MSG(panic_recv_free);
-+
-+static void panic_halt_ipmi_heartbeat(void)
-+{
-+	struct kernel_ipmi_msg             msg;
-+	struct ipmi_system_interface_addr addr;
-+	int rv;
-+
-+	/*
-+	 * Don't reset the timer if we have the timer turned off, that
-+	 * re-enables the watchdog.
-+	 */
-+	if (ipmi_watchdog_state == WDOG_TIMEOUT_NONE)
-+		return;
-+
-+	addr.addr_type = IPMI_SYSTEM_INTERFACE_ADDR_TYPE;
-+	addr.channel = IPMI_BMC_CHANNEL;
-+	addr.lun = 0;
-+
-+	msg.netfn = 0x06;
-+	msg.cmd = IPMI_WDOG_RESET_TIMER;
-+	msg.data = NULL;
-+	msg.data_len = 0;
-+	atomic_add(2, &panic_done_count);
-+	rv = ipmi_request_supply_msgs(watchdog_user,
-+				      (struct ipmi_addr *) &addr,
-+				      0,
-+				      &msg,
-+				      NULL,
-+				      &panic_halt_heartbeat_smi_msg,
-+				      &panic_halt_heartbeat_recv_msg,
-+				      1);
-+	if (rv)
-+		atomic_sub(2, &panic_done_count);
-+}
-+
-+static struct ipmi_smi_msg panic_halt_smi_msg =
-+	INIT_IPMI_SMI_MSG(panic_smi_free);
-+static struct ipmi_recv_msg panic_halt_recv_msg =
-+	INIT_IPMI_RECV_MSG(panic_recv_free);
-+
-+/*
-+ * Special call, doesn't claim any locks.  This is only to be called
-+ * at panic or halt time, in run-to-completion mode, when the caller
-+ * is the only CPU and the only thing that will be going is these IPMI
-+ * calls.
-+ */
-+static void panic_halt_ipmi_set_timeout(void)
-+{
-+	int send_heartbeat_now;
-+	int rv;
-+
-+	/* Wait for the messages to be free. */
-+	while (atomic_read(&panic_done_count) != 0)
-+		ipmi_poll_interface(watchdog_user);
-+	atomic_add(2, &panic_done_count);
-+	rv = __ipmi_set_timeout(&panic_halt_smi_msg,
-+				&panic_halt_recv_msg,
-+				&send_heartbeat_now);
-+	if (rv) {
-+		atomic_sub(2, &panic_done_count);
-+		pr_warn("Unable to extend the watchdog timeout\n");
-+	} else {
-+		if (send_heartbeat_now)
-+			panic_halt_ipmi_heartbeat();
-+	}
-+	while (atomic_read(&panic_done_count) != 0)
-+		ipmi_poll_interface(watchdog_user);
-+}
-+
-+static int __ipmi_heartbeat(void)
-+{
-+	struct kernel_ipmi_msg msg;
-+	int rv;
-+	struct ipmi_system_interface_addr addr;
-+	int timeout_retries = 0;
-+
-+restart:
-+	/*
-+	 * Don't reset the timer if we have the timer turned off, that
-+	 * re-enables the watchdog.
-+	 */
-+	if (ipmi_watchdog_state == WDOG_TIMEOUT_NONE)
-+		return 0;
-+
-+	atomic_set(&msg_tofree, 2);
-+
-+	addr.addr_type = IPMI_SYSTEM_INTERFACE_ADDR_TYPE;
-+	addr.channel = IPMI_BMC_CHANNEL;
-+	addr.lun = 0;
-+
-+	msg.netfn = 0x06;
-+	msg.cmd = IPMI_WDOG_RESET_TIMER;
-+	msg.data = NULL;
-+	msg.data_len = 0;
-+	rv = ipmi_request_supply_msgs(watchdog_user,
-+				      (struct ipmi_addr *) &addr,
-+				      0,
-+				      &msg,
-+				      NULL,
-+				      &smi_msg,
-+				      &recv_msg,
-+				      1);
-+	if (rv) {
-+		atomic_set(&msg_tofree, 0);
-+		pr_warn("heartbeat send failure: %d\n", rv);
-+		return rv;
-+	}
-+
-+	/* Wait for the heartbeat to be sent. */
-+	wait_for_completion(&msg_wait);
-+
-+	if (recv_msg.msg.data[0] == IPMI_WDOG_TIMER_NOT_INIT_RESP)  {
-+		timeout_retries++;
-+		if (timeout_retries > 3) {
-+			pr_err("Unable to restore the IPMI watchdog's settings, giving up\n");
-+			rv = -EIO;
-+			goto out;
-+		}
-+
-+		/*
-+		 * The timer was not initialized, that means the BMC was
-+		 * probably reset and lost the watchdog information.  Attempt
-+		 * to restore the timer's info.  Note that we still hold
-+		 * the heartbeat lock, to keep a heartbeat from happening
-+		 * in this process, so must say no heartbeat to avoid a
-+		 * deadlock on this mutex
-+		 */
-+		rv = _ipmi_set_timeout(IPMI_SET_TIMEOUT_NO_HB);
-+		if (rv) {
-+			pr_err("Unable to send the command to set the watchdog's settings, giving up\n");
-+			goto out;
-+		}
-+
-+		/* Might need a heartbeat send, go ahead and do it. */
-+		goto restart;
-+	} else if (recv_msg.msg.data[0] != 0) {
-+		/*
-+		 * Got an error in the heartbeat response.  It was already
-+		 * reported in ipmi_wdog_msg_handler, but we should return
-+		 * an error here.
-+		 */
-+		rv = -EINVAL;
-+	}
-+
-+out:
-+	return rv;
-+}
-+
-+static int _ipmi_heartbeat(void)
-+{
-+	int rv;
-+
-+	if (!watchdog_user)
-+		return -ENODEV;
-+
-+	if (atomic_cmpxchg(&pretimeout_since_last_heartbeat, 1, 0)) {
-+		/*
-+		 * A pretimeout occurred, make sure we set the timeout.
-+		 * We don't want to set the action, though, we want to
-+		 * leave that alone (thus it can't be combined with the
-+		 * above operation.
-+		 */
-+		rv = _ipmi_set_timeout(IPMI_SET_TIMEOUT_HB_IF_NECESSARY);
-+	} else {
-+		rv = __ipmi_heartbeat();
-+	}
-+
-+	return rv;
-+}
-+
-+int ipmi_wdt_start(struct watchdog_device *wd)
-+{
-+	int rv;
-+
-+	mutex_lock(&ipmi_watchdog_mutex);
-+	ipmi_watchdog_state = action_val;
-+	rv = _ipmi_set_timeout(IPMI_SET_TIMEOUT_FORCE_HB);
-+	if (rv)
-+		ipmi_watchdog_state = WDOG_TIMEOUT_NONE;
-+	mutex_unlock(&ipmi_watchdog_mutex);
-+
-+	return rv;
-+}
-+
-+int ipmi_wdt_stop(struct watchdog_device *wd)
-+{
-+	mutex_lock(&ipmi_watchdog_mutex);
-+	ipmi_watchdog_state = WDOG_TIMEOUT_NONE;
-+	_ipmi_set_timeout(IPMI_SET_TIMEOUT_NO_HB);
-+	mutex_unlock(&ipmi_watchdog_mutex);
-+
-+	return 0;
-+}
-+
-+int ipmi_wdt_ping(struct watchdog_device *wd)
-+{
-+	int rv;
-+
-+	mutex_lock(&ipmi_watchdog_mutex);
-+	rv = _ipmi_heartbeat();
-+	mutex_unlock(&ipmi_watchdog_mutex);
-+
-+	return rv;
-+}
-+
-+int ipmi_wdt_set_timeout(struct watchdog_device *wd, unsigned int to)
-+{
-+	int rv;
-+
-+	mutex_lock(&ipmi_watchdog_mutex);
-+	timeout = to;
-+	rv = _ipmi_set_timeout(IPMI_SET_TIMEOUT_HB_IF_NECESSARY);
-+	mutex_unlock(&ipmi_watchdog_mutex);
-+
-+	return rv;
-+}
-+
-+#ifdef HAVE_DIE_NMI
-+int ipmi_wdt_set_pretimeout(struct watchdog_device *wd, unsigned int pto)
-+{
-+	int rv;
-+
-+	mutex_lock(&ipmi_watchdog_mutex);
-+	pretimeout = pto;
-+	if (pto)
-+		pretimeout_state = WDOG_PRETIMEOUT_NMI;
-+	else
-+		pretimeout_state = WDOG_PRETIMEOUT_NONE;
-+
-+	rv = _ipmi_set_timeout(IPMI_SET_TIMEOUT_HB_IF_NECESSARY);
-+	mutex_unlock(&ipmi_watchdog_mutex);
-+
-+	return rv;
-+}
-+#endif
-+
-+static const struct watchdog_info ipmi_wdt_info = {
-+	.options = (WDIOF_SETTIMEOUT |
-+		    WDIOF_MAGICCLOSE |
-+#ifdef HAVE_DIE_NMI
-+		    WDIOF_PRETIMEOUT |
-+#endif
-+		    WDIOF_KEEPALIVEPING),
-+	.identity = "IPMI",
-+};
-+
-+static const struct watchdog_ops ipmi_wdt_ops = {
-+	.owner		= THIS_MODULE,
-+	.start		= ipmi_wdt_start,
-+	.stop		= ipmi_wdt_stop,
-+	.ping		= ipmi_wdt_ping,
-+	.set_timeout	= ipmi_wdt_set_timeout,
-+#ifdef HAVE_DIE_NMI
-+	.set_pretimeout	= ipmi_wdt_set_pretimeout,
-+#endif
-+};
-+
-+static struct watchdog_device ipmi_wdt = {
-+	.info		= &ipmi_wdt_info,
-+	.ops		= &ipmi_wdt_ops,
-+	.min_timeout	= 1,
-+	.max_timeout	= 255,
-+};
-+
-+static void ipmi_wdog_msg_handler(struct ipmi_recv_msg *msg,
-+				  void                 *handler_data)
-+{
-+	if (msg->msg.cmd == IPMI_WDOG_RESET_TIMER &&
-+			msg->msg.data[0] == IPMI_WDOG_TIMER_NOT_INIT_RESP)
-+		pr_info("response: The IPMI controller appears to have been reset, will attempt to reinitialize the watchdog timer\n");
-+	else if (msg->msg.data[0] != 0)
-+		pr_err("response: Error %x on cmd %x\n",
-+		       msg->msg.data[0],
-+		       msg->msg.cmd);
-+
-+	ipmi_free_recv_msg(msg);
-+}
-+
-+static void ipmi_wdog_panic_handler(void *user_data)
-+{
-+	static int panic_event_handled;
-+
-+	/*
-+	 * On a panic, if we have a panic timeout, make sure to extend
-+	 * the watchdog timer to a reasonable value to complete the
-+	 * panic, if the watchdog timer is running.  Plus the
-+	 * pretimeout is meaningless at panic time.
-+	 */
-+	if (watchdog_user && !panic_event_handled &&
-+	    ipmi_watchdog_state != WDOG_TIMEOUT_NONE) {
-+		/* Make sure we do this only once. */
-+		panic_event_handled = 1;
-+
-+		timeout = panic_wdt_timeout;
-+		pretimeout = 0;
-+		panic_halt_ipmi_set_timeout();
-+	}
-+}
-+
-+static const struct ipmi_user_hndl ipmi_hndlrs = {
-+	.ipmi_recv_hndl           = ipmi_wdog_msg_handler,
-+	.ipmi_panic_handler       = ipmi_wdog_panic_handler
-+};
-+
-+static void ipmi_register_watchdog(int ipmi_intf)
-+{
-+	int rv;
-+
-+	if (watchdog_user)
-+		return;
-+
-+	if ((ifnum_to_use >= 0) && (ifnum_to_use != ipmi_intf))
-+		return;
-+
-+	watchdog_ifnum = ipmi_intf;
-+
-+	rv = ipmi_create_user(ipmi_intf, &ipmi_hndlrs, NULL, &watchdog_user);
-+	if (rv < 0) {
-+		pr_crit("Unable to register with ipmi\n");
-+		return;
-+	}
-+
-+	rv = ipmi_get_version(watchdog_user,
-+			      &ipmi_version_major,
-+			      &ipmi_version_minor);
-+	if (rv) {
-+		pr_warn("Unable to get IPMI version, assuming 1.0\n");
-+		ipmi_version_major = 1;
-+		ipmi_version_minor = 0;
-+	}
-+
-+#ifdef HAVE_DIE_NMI
-+	if (test_pretimeout && nmi_handler_registered) {
-+		int old_pretimeout = pretimeout;
-+		int old_timeout = timeout;
-+
-+		/*
-+		 * Set the pretimeout to go off in a second and give
-+		 * ourselves plenty of time to stop the timer.
-+		 */
-+		ipmi_watchdog_state = WDOG_TIMEOUT_RESET;
-+		pretimeout_state = WDOG_PRETIMEOUT_NMI;
-+		pretimeout = 99;
-+		timeout = 100;
-+
-+		testing_nmi = 1;
-+
-+		rv = _ipmi_set_timeout(IPMI_SET_TIMEOUT_FORCE_HB);
-+		if (rv) {
-+			pr_warn("Error starting timer to test NMI: 0x%x.  The NMI pretimeout will likely not work\n",
-+				rv);
-+			rv = 0;
-+			goto out_restore;
-+		}
-+
-+		msleep(1500);
-+
-+		if (testing_nmi != 2)
-+			pr_warn("IPMI NMI didn't seem to occur.  The NMI pretimeout will likely not work\n");
-+		else
-+			pr_info("IPMI NMI is functional\n");
-+
-+out_restore:
-+		testing_nmi = 0;
-+		ipmi_watchdog_state = WDOG_TIMEOUT_NONE;
-+		pretimeout_state = WDOG_PRETIMEOUT_NONE;
-+		pretimeout = old_pretimeout;
-+		timeout = old_timeout;
-+		_ipmi_set_timeout(IPMI_SET_TIMEOUT_NO_HB);
-+	}
-+#endif
-+
-+	ipmi_wdt.timeout = timeout;
-+	ipmi_wdt.pretimeout = pretimeout;
-+	watchdog_set_nowayout(&ipmi_wdt, nowayout);
-+
-+	rv = watchdog_register_device(&ipmi_wdt);
-+	if (rv < 0) {
-+		ipmi_destroy_user(watchdog_user);
-+		watchdog_user = NULL;
-+		pr_crit("Unable to register watchdog handler\n");
-+		return;
-+	}
-+}
-+
-+static void ipmi_unregister_watchdog(int ipmi_intf)
-+{
-+	int rv;
-+	struct ipmi_user *loc_user = watchdog_user;
-+
-+	if (!loc_user)
-+		return;
-+
-+	if (watchdog_ifnum != ipmi_intf)
-+		return;
-+
-+	/* Make sure no one can call us any more. */
-+	watchdog_unregister_device(&ipmi_wdt);
-+
-+	watchdog_user = NULL;
-+
-+	/*
-+	 * Wait to make sure the message makes it out.  The lower layer has
-+	 * pointers to our buffers, we want to make sure they are done before
-+	 * we release our memory.
-+	 */
-+	while (atomic_read(&msg_tofree))
-+		msg_free_smi(NULL);
-+
-+	mutex_lock(&ipmi_watchdog_mutex);
-+
-+	/* Disconnect from IPMI. */
-+	rv = ipmi_destroy_user(loc_user);
-+	if (rv)
-+		pr_warn("error unlinking from IPMI: %d\n",  rv);
-+
-+	mutex_unlock(&ipmi_watchdog_mutex);
-+}
-+
-+#ifdef HAVE_DIE_NMI
-+static int
-+ipmi_nmi(unsigned int val, struct pt_regs *regs)
-+{
-+	/*
-+	 * If we get here, it's an NMI that's not a memory or I/O
-+	 * error.  We can't truly tell if it's from IPMI or not
-+	 * without sending a message, and sending a message is almost
-+	 * impossible because of locking.
-+	 */
-+
-+	if (testing_nmi) {
-+		testing_nmi = 2;
-+		return NMI_HANDLED;
-+	}
-+
-+	/* If we are not expecting a timeout, ignore it. */
-+	if (ipmi_watchdog_state == WDOG_TIMEOUT_NONE)
-+		return NMI_DONE;
-+
-+	if (pretimeout_state != WDOG_PRETIMEOUT_NMI)
-+		return NMI_DONE;
-+
-+	/*
-+	 * If no one else handled the NMI, we assume it was the IPMI
-+	 * watchdog.
-+	 */
-+
-+	/*
-+	 * On some machines, the heartbeat will give an error and not
-+	 * work unless we re-enable the timer.  So do so.
-+	 */
-+	atomic_set(&pretimeout_since_last_heartbeat, 1);
-+
-+	/*
-+	 * Don't call watchdog_notify_pretimeout() here.  You really
-+	 * need to call nmi_panic from an NMI, and that code doesn't
-+	 * do that.
-+	 */
-+	if (atomic_inc_and_test(&preop_panic_excl))
-+		nmi_panic(regs, "ipmi wdt pre-timeout");
-+
-+	return NMI_HANDLED;
-+}
-+#endif
-+
-+static int wdog_reboot_handler(struct notifier_block *this,
-+			       unsigned long         code,
-+			       void                  *unused)
-+{
-+	static int reboot_event_handled;
-+
-+	mutex_lock(&ipmi_watchdog_mutex);
-+	if ((watchdog_user) && (!reboot_event_handled)) {
-+		/* Make sure we only do this once. */
-+		reboot_event_handled = 1;
-+
-+		if (code == SYS_POWER_OFF || code == SYS_HALT) {
-+			/* Disable the WDT if we are shutting down. */
-+			ipmi_watchdog_state = WDOG_TIMEOUT_NONE;
-+			_ipmi_set_timeout(IPMI_SET_TIMEOUT_NO_HB);
-+		} else if (ipmi_watchdog_state != WDOG_TIMEOUT_NONE) {
-+			/*
-+			 * Set a long timer to let the reboot happen or
-+			 * reset if it hangs, but only if the watchdog
-+			 * timer was already running.
-+			 */
-+			if (timeout < 120)
-+				timeout = 120;
-+			pretimeout = 0;
-+			ipmi_watchdog_state = WDOG_TIMEOUT_RESET;
-+			_ipmi_set_timeout(IPMI_SET_TIMEOUT_NO_HB);
-+		}
-+	}
-+	mutex_unlock(&ipmi_watchdog_mutex);
-+	return NOTIFY_OK;
-+}
-+
-+static struct notifier_block wdog_reboot_notifier = {
-+	.notifier_call	= wdog_reboot_handler,
-+	.next		= NULL,
-+	.priority	= 0
-+};
-+
-+static void ipmi_new_smi(int if_num, struct device *device)
-+{
-+	ipmi_register_watchdog(if_num);
-+}
-+
-+static void ipmi_smi_gone(int if_num)
-+{
-+	ipmi_unregister_watchdog(if_num);
-+}
-+
-+static struct ipmi_smi_watcher smi_watcher = {
-+	.owner    = THIS_MODULE,
-+	.new_smi  = ipmi_new_smi,
-+	.smi_gone = ipmi_smi_gone
-+};
-+
-+static int __init ipmi_wdog_init(void)
-+{
-+	int rv;
-+
-+#ifdef HAVE_DIE_NMI
-+	rv = register_nmi_handler(NMI_UNKNOWN, ipmi_nmi, 0, "ipmi");
-+	if (rv)
-+		pr_warn("Can't register nmi handler: %d\n", rv);
-+	else
-+		nmi_handler_registered = 1;
-+#endif
-+
-+	register_reboot_notifier(&wdog_reboot_notifier);
-+
-+	rv = ipmi_smi_watcher_register(&smi_watcher);
-+	if (rv) {
-+#ifdef HAVE_DIE_NMI
-+		if (nmi_handler_registered)
-+			unregister_nmi_handler(NMI_UNKNOWN, "ipmi");
-+#endif
-+		unregister_reboot_notifier(&wdog_reboot_notifier);
-+		pr_warn("can't register smi watcher\n");
-+		return rv;
-+	}
-+
-+	return 0;
-+}
-+
-+static void __exit ipmi_wdog_exit(void)
-+{
-+	ipmi_smi_watcher_unregister(&smi_watcher);
-+	ipmi_unregister_watchdog(watchdog_ifnum);
-+
-+#ifdef HAVE_DIE_NMI
-+	if (nmi_handler_registered)
-+		unregister_nmi_handler(NMI_UNKNOWN, "ipmi");
-+#endif
-+
-+	unregister_reboot_notifier(&wdog_reboot_notifier);
-+}
-+module_exit(ipmi_wdog_exit);
-+module_init(ipmi_wdog_init);
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Corey Minyard <minyard@mvista.com>");
-+MODULE_DESCRIPTION("watchdog timer based upon the IPMI interface.");
--- 
-2.34.1
-
+UGxlYXNlIHNlZSBpbmxpbmUgDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJv
+bTogR3VlbnRlciBSb2VjayA8Z3JvZWNrN0BnbWFpbC5jb20+IE9uIEJlaGFsZiBPZiBHdWVudGVy
+IFJvZWNrDQo+IFNlbnQ6IFNhdHVyZGF5LCBBcHJpbCAyOSwgMjAyMyA4OjQ0IFBNDQo+IFRvOiBC
+aGFyYXQgQmh1c2hhbiA8YmJodXNoYW4yQG1hcnZlbGwuY29tPjsgd2ltQGxpbnV4LXdhdGNoZG9n
+Lm9yZzsNCj4gcm9iaCtkdEBrZXJuZWwub3JnOyBrcnp5c3p0b2Yua296bG93c2tpK2R0QGxpbmFy
+by5vcmc7IGxpbnV4LQ0KPiB3YXRjaGRvZ0B2Z2VyLmtlcm5lbC5vcmc7IGRldmljZXRyZWVAdmdl
+ci5rZXJuZWwub3JnOyBsaW51eC0NCj4ga2VybmVsQHZnZXIua2VybmVsLm9yZzsgU3VuaWwgS292
+dnVyaSBHb3V0aGFtIDxzZ291dGhhbUBtYXJ2ZWxsLmNvbT4NCj4gU3ViamVjdDogW0VYVF0gUmU6
+IFtQQVRDSCAyLzIgdjRdIFdhdGNoZG9nOiBBZGQgbWFydmVsbCBHVEkgd2F0Y2hkb2cgZHJpdmVy
+DQo+IA0KPiBFeHRlcm5hbCBFbWFpbA0KPiANCj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiBPbiA0LzI3LzIz
+IDAwOjE0LCBCaGFyYXQgQmh1c2hhbiB3cm90ZToNCj4gPiBUaGlzIHBhdGNoIGFkZCBzdXBwb3J0
+IGZvciBNYXJ2ZWxsIEdUSSB3YXRjaGRvZy4gIEdsb2JhbCB0aW1lciB1bml0DQo+ID4gKEdUSSkg
+c3VwcG9ydCBoYXJkd2FyZSB3YXRjaGRvZyB0aW1lci4gU29mdHdhcmUgcHJvZ3JhbXMgd2F0Y2hk
+b2cNCj4gPiB0aW1lciB0byBnZW5lcmF0ZSBpbnRlcnJ1cHQgb24gZmlyc3QgdGltZW91dCwgc2Vj
+b25kIHRpbWVvdXQgaXMNCj4gPiBjb25maWd1cmVkIHRvIGJlIGlnbm9yZWQgYW5kIHN5c3RlbSBy
+ZWJvb3RzIG9uIHRoaXJkIHRpbWVvdXQuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBCaGFyYXQg
+Qmh1c2hhbiA8YmJodXNoYW4yQG1hcnZlbGwuY29tPg0KPiA+IC0tLQ0KPiA+IHY0Og0KPiA+ICAg
+LSBVc2UgZ2VuZXJpYyBuYW1lICJHVEkgKEdsb2JhbCBUaW1lcikiIGFuZCByZW1vdmVkIE9jdGVv
+blRYMiBhcyB0aGlzIGRyaXZlcg0KPiA+ICAgICBpcyBhcHBsaWNhYmxlIGZvciBvdGhlciBtYXJ2
+ZWxsIGRldmljZXMgYXMgd2VsbC4NCj4gPg0KPiA+ICAgZHJpdmVycy93YXRjaGRvZy9LY29uZmln
+ICAgICAgICAgICB8ICAxMSArKw0KPiA+ICAgZHJpdmVycy93YXRjaGRvZy9NYWtlZmlsZSAgICAg
+ICAgICB8ICAgMSArDQo+ID4gICBkcml2ZXJzL3dhdGNoZG9nL21hcnZlbGxfZ3RpX3dkdC5jIHwg
+MjcxDQo+ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ID4gICAzIGZpbGVzIGNoYW5n
+ZWQsIDI4MyBpbnNlcnRpb25zKCspDQo+ID4gICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy93
+YXRjaGRvZy9tYXJ2ZWxsX2d0aV93ZHQuYw0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
+d2F0Y2hkb2cvS2NvbmZpZyBiL2RyaXZlcnMvd2F0Y2hkb2cvS2NvbmZpZyBpbmRleA0KPiA+IGYw
+ODcyOTcwZGFmOS4uYTk2ZTdkN2MwYWQyIDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvd2F0Y2hk
+b2cvS2NvbmZpZw0KPiA+ICsrKyBiL2RyaXZlcnMvd2F0Y2hkb2cvS2NvbmZpZw0KPiA+IEBAIC0x
+Nzc5LDYgKzE3NzksMTcgQEAgY29uZmlnIE9DVEVPTl9XRFQNCj4gPiAgIAkgIGZyb20gdGhlIGZp
+cnN0IGludGVycnVwdCwgaXQgaXMgdGhlbiBvbmx5IHBva2VkIHdoZW4gdGhlDQo+ID4gICAJICBk
+ZXZpY2UgaXMgd3JpdHRlbi4NCj4gPg0KPiA+ICtjb25maWcgTUFSVkVMTF9HVElfV0RUDQo+ID4g
+Kwl0cmlzdGF0ZSAiTWFydmVsbCBHVEkgV2F0Y2hkb2cgZHJpdmVyIg0KPiA+ICsJZGVwZW5kcyBv
+biBBUkNIX1RIVU5ERVIgfHwgQ09NUElMRV9URVNUDQo+IA0KPiBBcyAwLWRheSByZXBvcnRlZCwg
+Q09NUElMRV9URVNUIGRvZXMgbm90IHdvcmsgaWYgdGhlcmUgYXJlIGFzbSBpbmNsdWRlcyBpbiB0
+aGUNCj4gY29kZS4NCg0KV2lsbCByZW1vdmUgYXNtIGluY2x1ZGUgZGVwZW5kZW5jeSBpbiBuZXh0
+IHZlcnNpb24NCg0KPiANCj4gPiArCWhlbHANCj4gPiArCSBNYXJ2ZWxsIEdUSSBoYXJkd2FyZSBz
+dXBwb3J0cyB3YXRjaGRvZyB0aW1lci4gRmlyc3QgdGltZW91dA0KPiA+ICsJIHdvcmtzIGFzIHdh
+dGNoZG9nIHByZXRpbWVvdXQgYW5kIGluc3RhbGxlZCBpbnRlcnJ1cHQgaGFuZGxlcg0KPiA+ICsJ
+IHdpbGwgYmUgY2FsbGVkIG9uIGZpcnN0IHRpbWVvdXQuIEhhcmR3YXJlIGNhbiBnZW5lcmF0ZSBp
+bnRlcnJ1cHQNCj4gPiArCSB0byBTQ1Agb24gc2Vjb25kIHRpbWVvdXQgYnV0IGl0IGlzIG5vdCBl
+bmFibGVkLCBTbyBzZWNvbmQNCj4gPiArCSB0aW1lb3V0IGlzIGlnbm9yZWQuIElmIGRldmljZSBw
+b2tlIGRvZXMgbm90IGhhcHBlbiB0aGVuIHN5c3RlbQ0KPiA+ICsJIHdpbGwgcmVib290IG9uIHRo
+aXJkIHRpbWVvdXQuDQo+ID4gKw0KPiA+ICAgY29uZmlnIEJDTTI4MzVfV0RUDQo+ID4gICAJdHJp
+c3RhdGUgIkJyb2FkY29tIEJDTTI4MzUgaGFyZHdhcmUgd2F0Y2hkb2ciDQo+ID4gICAJZGVwZW5k
+cyBvbiBBUkNIX0JDTTI4MzUgfHwgKE9GICYmIENPTVBJTEVfVEVTVCkgZGlmZiAtLWdpdA0KPiA+
+IGEvZHJpdmVycy93YXRjaGRvZy9NYWtlZmlsZSBiL2RyaXZlcnMvd2F0Y2hkb2cvTWFrZWZpbGUg
+aW5kZXgNCj4gPiA5Y2JmNjU4MGYxNmMuLmJkNDI1NDA4ZmNhYSAxMDA2NDQNCj4gPiAtLS0gYS9k
+cml2ZXJzL3dhdGNoZG9nL01ha2VmaWxlDQo+ID4gKysrIGIvZHJpdmVycy93YXRjaGRvZy9NYWtl
+ZmlsZQ0KPiA+IEBAIC05OCw2ICs5OCw3IEBAIG9iai0kKENPTkZJR19WSVNDT05USV9XQVRDSERP
+RykgKz0gdmlzY29udGlfd2R0Lm8NCj4gPiAgIG9iai0kKENPTkZJR19NU0MzMTNFX1dBVENIRE9H
+KSArPSBtc2MzMTNlX3dkdC5vDQo+ID4gICBvYmotJChDT05GSUdfQVBQTEVfV0FUQ0hET0cpICs9
+IGFwcGxlX3dkdC5vDQo+ID4gICBvYmotJChDT05GSUdfU1VOUExVU19XQVRDSERPRykgKz0gc3Vu
+cGx1c193ZHQubw0KPiA+ICtvYmotJChDT05GSUdfTUFSVkVMTF9HVElfV0RUKSArPSBtYXJ2ZWxs
+X2d0aV93ZHQubw0KPiA+DQo+ID4gICAjIFg4NiAoaTM4NiArIGlhNjQgKyB4ODZfNjQpIEFyY2hp
+dGVjdHVyZQ0KPiA+ICAgb2JqLSQoQ09ORklHX0FDUVVJUkVfV0RUKSArPSBhY3F1aXJld2R0Lm8g
+ZGlmZiAtLWdpdA0KPiA+IGEvZHJpdmVycy93YXRjaGRvZy9tYXJ2ZWxsX2d0aV93ZHQuYw0KPiA+
+IGIvZHJpdmVycy93YXRjaGRvZy9tYXJ2ZWxsX2d0aV93ZHQuYw0KPiA+IG5ldyBmaWxlIG1vZGUg
+MTAwNjQ0DQo+ID4gaW5kZXggMDAwMDAwMDAwMDAwLi5hM2YwNzQwZGVkY2ENCj4gPiAtLS0gL2Rl
+di9udWxsDQo+ID4gKysrIGIvZHJpdmVycy93YXRjaGRvZy9tYXJ2ZWxsX2d0aV93ZHQuYw0KPiA+
+IEBAIC0wLDAgKzEsMjcxIEBADQo+ID4gKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwt
+Mi4wDQo+ID4gKy8qIE1hcnZlbGwgR1RJIFdhdGNoZG9nIGRyaXZlcg0KPiA+ICsgKg0KPiA+ICsg
+KiBDb3B5cmlnaHQgKEMpIDIwMjMgTWFydmVsbC4NCj4gPiArICovDQo+ID4gKw0KPiA+ICsjaW5j
+bHVkZSA8bGludXgvbW9kdWxlLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51eC9pbnRlcnJ1cHQuaD4N
+Cj4gPiArI2luY2x1ZGUgPGxpbnV4L29mX3BsYXRmb3JtLmg+DQo+ID4gKyNpbmNsdWRlIDxsaW51
+eC9wbGF0Zm9ybV9kZXZpY2UuaD4NCj4gPiArI2luY2x1ZGUgPGxpbnV4L3dhdGNoZG9nLmg+DQo+
+ID4gKw0KPiA+ICsjaW5jbHVkZSA8YXNtL2FyY2hfdGltZXIuaD4NCj4gPiArDQo+ID4gKy8qDQo+
+ID4gKyAqIEhhcmR3YXJlIHN1cHBvcnRzIGZvbGxvd2luZyBtb2RlIG9mIG9wZXJhdGlvbjoNCj4g
+PiArICogMSkgSW50ZXJydXB0IE9ubHk6DQo+ID4gKyAqICAgIFRoaXMgd2lsbCBnZW5lcmF0ZSB0
+aGUgaW50ZXJydXB0IHRvIGFybSBjb3JlIHdoZW5ldmVyIHRpbWVvdXQgaGFwcGVucy4NCj4gPiAr
+ICoNCj4gPiArICogMikgSW50ZXJydXB0ICsgZGVsM3QgKEludGVycnVwdCB0byBmaXJtd2FyZSAo
+U0NQIHByb2Nlc3NvcikpLg0KPiA+ICsgKiAgICBUaGlzIHdpbGwgZ2VuZXJhdGUgaW50ZXJydXB0
+IHRvIGFybSBjb3JlIG9uIDFzdCB0aW1lb3V0IGhhcHBlbnMNCj4gPiArICogICAgVGhpcyB3aWxs
+IGdlbmVyYXRlIGludGVycnVwdCB0byBTQ1AgcHJvY2Vzc29yIG9uIDJuZCB0aW1lb3V0IGhhcHBl
+bnMNCj4gPiArICoNCj4gPiArICogMykgSW50ZXJydXB0ICsgSW50ZXJydXB0IHRvIFNDUCBwcm9j
+ZXNzb3IgKGNhbGxlZCBkZWx0M3QpICsgcmVib290Lg0KPiA+ICsgKiAgICBUaGlzIHdpbGwgZ2Vu
+ZXJhdGUgaW50ZXJydXB0IHRvIGFybSBjb3JlIG9uIDFzdCB0aW1lb3V0IGhhcHBlbnMNCj4gPiAr
+ICogICAgV2lsbCBnZW5lcmF0ZSBpbnRlcnJ1cHQgdG8gU0NQIHByb2Nlc3NvciBvbiAybmQgdGlt
+ZW91dCBoYXBwZW5zLA0KPiA+ICsgKiAgICBpZiBpbnRlcnJ1cHQgaXMgY29uZmlndXJlZC4NCj4g
+PiArICogICAgUmVib290IG9uIDNyZCB0aW1lb3V0Lg0KPiA+ICsgKg0KPiA+ICsgKiBEcml2ZXIg
+d2lsbCB1c2UgaGFyZHdhcmUgaW4gbW9kZS0zIGFib3ZlIHNvIHRoYXQgc3lzdGVtIGNhbiByZWJv
+b3QNCj4gPiAraW4gY2FzZQ0KPiA+ICsgKiBhIGhhcmR3YXJlIGhhbmcuIEFsc28gaC93IGlzIGNv
+bmZpZ3VyZWQgbm90IHRvIGdlbmVyYXRlIFNDUA0KPiA+ICtpbnRlcnJ1cHQsIHNvDQo+ID4gKyAq
+IGVmZmVjdGl2ZWx5IDJuZCB0aW1lb3V0IGlzIGlnbm9yZWQgd2l0aGluIGhhcmR3YXJlLg0KPiA+
+ICsgKi8NCj4gPiArDQo+ID4gKw0KPiA+ICsvKiBHVEkgQ1dEIFdhdGNoZG9nIFJlZ2lzdGVycyAq
+Lw0KPiA+ICsjZGVmaW5lIEdUSV9DV0RfR0xPQkFMX1dET0dfSURYCQk2Mw0KPiANCj4gSXQgbWln
+aHQgbWFrZSBzZW5zZSB0byBleHBsYWluICI2MyIuDQoNCk9rYXksIHdpbGwgYWRkIGJlbG93IGNv
+bW1lbnQNCi8qIEdUSSBoYXJkd2FyZSBibG9jayBzdXBwb3J0cyB0b3RhbCA2NCB0aW1lcnMgYW5k
+IHRpbWVyIDYzIGlzIHVzZWQgZm9yIHN5c3RlbSB3YXRjaGRvZyAqLw0KDQoiSURYIiBzZWVtcyBj
+b25mdXNpbmcsIHdpbGwgcmVuYW1lIHRvICJHVElfQ1dEX0dMT0JBTF9XRE9HX1RJTUVSIg0KDQo+
+IA0KPiA+ICsjZGVmaW5lIEdUSV9DV0RfV0RPRwkJCSgweDggKg0KPiBHVElfQ1dEX0dMT0JBTF9X
+RE9HX0lEWCkNCj4gPiArI2RlZmluZSBHVElfQ1dEX1dET0dfTU9ERV9JTlRfREVMM1RfUlNUCTB4
+Mw0KPiA+ICsjZGVmaW5lIEdUSV9DV0RfV0RPR19NT0RFX01BU0sJCTB4Mw0KPiA+ICsjZGVmaW5l
+IEdUSV9DV0RfV0RPR19MRU5fU0hJRlQJCTQNCj4gPiArI2RlZmluZSBHVElfQ1dEX1dET0dfQ05U
+X1NISUZUCQkyMA0KPiA+ICsNCj4gPiArLyogR1RJIFBlci1jb3JlIFdhdGNoZG9nIEludGVycnVw
+dCBSZWdpc3RlciAqLw0KPiA+ICsjZGVmaW5lIEdUSV9DV0RfSU5UCQkJMHgyMDANCj4gPiArI2Rl
+ZmluZSBHVElfQ1dEX0lOVF9QRU5ESU5HX1NUQVRVUwkoMVVMTCA8PA0KPiBHVElfQ1dEX0dMT0JB
+TF9XRE9HX0lEWCkNCj4gDQo+IFBsZWFzZSB1c2UgQklUX1VMTCgpLg0KDQpPaw0KDQo+IA0KPiA+
+ICsNCj4gPiArLyogR1RJIFBlci1jb3JlIFdhdGNoZG9nIEludGVycnVwdCBFbmFibGUgQ2xlYXIg
+UmVnaXN0ZXIgKi8NCj4gPiArI2RlZmluZSBHVElfQ1dEX0lOVF9FTkFfQ0xSCQkweDIxMA0KPiA+
+ICsjZGVmaW5lIEdUSV9DV0RfSU5UX0VOQV9DTFJfVkFMCQkoMVVMTCA8PA0KPiBHVElfQ1dEX0dM
+T0JBTF9XRE9HX0lEWCkNCj4gPiArDQo+ID4gKy8qIEdUSSBQZXItY29yZSBXYXRjaGRvZyBJbnRl
+cnJ1cHQgRW5hYmxlIFNldCBSZWdpc3RlciAqLw0KPiA+ICsjZGVmaW5lIEdUSV9DV0RfSU5UX0VO
+QV9TRVQJCTB4MjE4DQo+ID4gKyNkZWZpbmUgR1RJX0NXRF9JTlRfRU5BX1NFVF9WQUwJCSgxVUxM
+IDw8DQo+IEdUSV9DV0RfR0xPQkFMX1dET0dfSURYKQ0KPiA+ICsNCj4gPiArLyogR1RJIFBlci1j
+b3JlIFdhdGNoZG9nIFBva2UgUmVnaXN0ZXJzICovDQo+ID4gKyNkZWZpbmUgR1RJX0NXRF9QT0tF
+CQkoMHgxMDAwMCArIDB4OCAqDQo+IEdUSV9DV0RfR0xPQkFMX1dET0dfSURYKQ0KPiANCj4gVGhl
+cmUgc2hvdWxkIGJlIGEgY29tbWVudCBleHBsYWluaW5nIHRoZSAiOCIuIA0KDQpHVElfQ1dEX1BP
+S0UgaXMgcG9rZSByZWdpc3RlciBmb3Igd2F0Y2hkb2cgY291bnRlciBHVElfQ1dEX0dMT0JBTF9X
+RE9HX1RJTUVSIC4NCkFib3ZlIGNhbGN1bGF0aW9uIGlzIGZvciBnZXR0aW5nIHRoZSByZWdpc3Rl
+ciBhZGRyZXNzIGZvciB3YXRjaGRvZyB0aW1lciBHVElfQ1dEX0dMT0JBTF9XRE9HX1RJTUVSDQpD
+YW4gYWRkIGNvbW1lbnQgDQovKiBFYWNoIFBPS0UgcmVnaXN0ZXIgaXMgNjRiaXQgYW5kIHNvIEdU
+SV9DV0RfUE9LRSBpcyByZWdpc3RlciBhZGRyZXNzIGZvciB3YXRjaGRvZyBjb3VudGVyIEdUSV9D
+V0RfR0xPQkFMX1dET0dfVElNRVIgKi8NCg0KPiBBbHNvLCB0aGVyZSBpcyBhIGRlZmluZSBmb3Ig
+IjB4OCAqDQo+IEdUSV9DV0RfR0xPQkFMX1dET0dfSURYIiBhYm92ZS4NCj4gV2h5IG5vdCB1c2Ug
+aXQgaGVyZSA/DQoNCkdUSV9DV0RfR0xPQkFMX1dET0dfVElNRVIgIGlzIHVzZWQgZm9yIHJlZ2lz
+dGVyIGFkZHJlc3MgY2FsY3VsYXRpb24sIHNvIHdpbGwga2VlcCB0aGVuIHNlcGFyYXRlIHRvIGF2
+b2lkIGFueSBjb25mdXNpb24uDQoNCj4gDQo+ID4gKyNkZWZpbmUgR1RJX0NXRF9QT0tFX1ZBTAko
+MVVMTCA8PCBHVElfQ1dEX0dMT0JBTF9XRE9HX0lEWCkNCj4gDQo+IEkgZG9uJ3QgdGhpbmsgaXQg
+bWFrZXMgc2Vuc2UgdG8gaGF2ZSB0aHJlZSBkZWZpbmVzIHdpdGggdGhlIHNhbWUgdmFsdWUuDQoN
+ClllcyB0aGV5IGFyZSBzYW1lIHZhbHVlLCBidXQgdGhleSBhcmUgYml0IGZpZWxkIGluIGRpZmZl
+cmVudCBoL3cgcmVnaXN0ZXIuIEkgd2FudCB0byBrZWVwIGEgc2VwYXJhdGUgbmFtZSB0byBhdm9p
+ZCBhbnkgY29uZnVzaW9uLg0KDQo+IA0KPiA+ICsNCj4gPiArc3RydWN0IGd0aV93ZHRfcHJpdiB7
+DQo+ID4gKwlzdHJ1Y3Qgd2F0Y2hkb2dfZGV2aWNlIHdkZXY7DQo+ID4gKwl2b2lkIF9faW9tZW0g
+KmJhc2U7DQo+ID4gKwl1NjQgY2xvY2tfZnJlcTsNCj4gPiArCWludCBpcnE7DQo+ID4gK307DQo+
+ID4gKw0KPiA+ICtzdGF0aWMgaXJxcmV0dXJuX3QgZ3RpX3dkdF9pbnRlcnJ1cHQoaW50IGlycSwg
+dm9pZCAqZGF0YSkgew0KPiA+ICsJc3RydWN0IHdhdGNoZG9nX2RldmljZSAqd2RldiA9IGRhdGE7
+DQo+ID4gKwlzdHJ1Y3QgZ3RpX3dkdF9wcml2ICpwcml2ID0gd2F0Y2hkb2dfZ2V0X2RydmRhdGEo
+d2Rldik7DQo+ID4gKw0KPiA+ICsJLyogQ2xlYXIgSW50ZXJydXB0IFBlbmRpbmcgU3RhdHVzICov
+DQo+ID4gKwl3cml0ZXEoR1RJX0NXRF9JTlRfUEVORElOR19TVEFUVVMsIHByaXYtPmJhc2UgKyBH
+VElfQ1dEX0lOVCk7DQo+ID4gKw0KPiA+ICsJd2F0Y2hkb2dfbm90aWZ5X3ByZXRpbWVvdXQod2Rl
+dik7DQo+ID4gKw0KPiA+ICsJcmV0dXJuIElSUV9IQU5ETEVEOw0KPiA+ICt9DQo+ID4gKw0KPiA+
+ICtzdGF0aWMgaW50IGd0aV93ZHRfcGluZyhzdHJ1Y3Qgd2F0Y2hkb2dfZGV2aWNlICp3ZGV2KSB7
+DQo+ID4gKwlzdHJ1Y3QgZ3RpX3dkdF9wcml2ICpwcml2ID0gd2F0Y2hkb2dfZ2V0X2RydmRhdGEo
+d2Rldik7DQo+ID4gKw0KPiA+ICsJd3JpdGVxKEdUSV9DV0RfUE9LRV9WQUwsIHByaXYtPmJhc2Ug
+KyBHVElfQ1dEX1BPS0UpOw0KPiA+ICsNCj4gPiArCXJldHVybiAwOw0KPiA+ICt9DQo+ID4gKw0K
+PiA+ICtzdGF0aWMgaW50IGd0aV93ZHRfc3RhcnQoc3RydWN0IHdhdGNoZG9nX2RldmljZSAqd2Rl
+dikgew0KPiA+ICsJc3RydWN0IGd0aV93ZHRfcHJpdiAqcHJpdiA9IHdhdGNoZG9nX2dldF9kcnZk
+YXRhKHdkZXYpOw0KPiA+ICsJdTY0IHJlZ3ZhbDsNCj4gPiArDQo+ID4gKwlpZiAoIXdkZXYtPnBy
+ZXRpbWVvdXQpDQo+ID4gKwkJcmV0dXJuIC1FSU5WQUw7DQo+ID4gKw0KPiA+ICsJc2V0X2JpdChX
+RE9HX0hXX1JVTk5JTkcsICZ3ZGV2LT5zdGF0dXMpOw0KPiA+ICsNCj4gPiArCS8qIENsZWFyIGFu
+eSBwZW5kaW5nIGludGVycnVwdCAqLw0KPiA+ICsJd3JpdGVxKEdUSV9DV0RfSU5UX1BFTkRJTkdf
+U1RBVFVTLCBwcml2LT5iYXNlICsgR1RJX0NXRF9JTlQpOw0KPiA+ICsNCj4gPiArCS8qIEVuYWJs
+ZSBJbnRlcnJ1cHQgKi8NCj4gPiArCXdyaXRlcShHVElfQ1dEX0lOVF9FTkFfU0VUX1ZBTCwgcHJp
+di0+YmFzZSArDQo+IEdUSV9DV0RfSU5UX0VOQV9TRVQpOw0KPiA+ICsNCj4gPiArCS8qIFNldCAo
+SW50ZXJydXB0ICsgU0NQIGludGVycnVwdCAoREVMM1QpICsgY29yZSBkb21haW4gcmVzZXQpIE1v
+ZGUgKi8NCj4gPiArCXJlZ3ZhbCA9IHJlYWRxKHByaXYtPmJhc2UgKyBHVElfQ1dEX1dET0cpOw0K
+PiA+ICsJcmVndmFsIHw9IEdUSV9DV0RfV0RPR19NT0RFX0lOVF9ERUwzVF9SU1Q7DQo+ID4gKwl3
+cml0ZXEocmVndmFsLCBwcml2LT5iYXNlICsgR1RJX0NXRF9XRE9HKTsNCj4gPiArDQo+ID4gKwly
+ZXR1cm4gMDsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGludCBndGlfd2R0X3N0b3Aoc3Ry
+dWN0IHdhdGNoZG9nX2RldmljZSAqd2Rldikgew0KPiA+ICsJc3RydWN0IGd0aV93ZHRfcHJpdiAq
+cHJpdiA9IHdhdGNoZG9nX2dldF9kcnZkYXRhKHdkZXYpOw0KPiA+ICsJdTY0IHJlZ3ZhbDsNCj4g
+PiArDQo+ID4gKwkvKiBEaXNhYmxlIEludGVycnVwdCAqLw0KPiA+ICsJd3JpdGVxKEdUSV9DV0Rf
+SU5UX0VOQV9DTFJfVkFMLCBwcml2LT5iYXNlICsNCj4gR1RJX0NXRF9JTlRfRU5BX0NMUik7DQo+
+ID4gKw0KPiA+ICsJLyogU2V0IEdUSV9DV0RfV0RPRy5Nb2RlID0gMCB0byBzdG9wIHRoZSB0aW1l
+ciAqLw0KPiA+ICsJcmVndmFsID0gcmVhZHEocHJpdi0+YmFzZSArIEdUSV9DV0RfV0RPRyk7DQo+
+ID4gKwlyZWd2YWwgJj0gfkdUSV9DV0RfV0RPR19NT0RFX01BU0s7DQo+ID4gKwl3cml0ZXEocmVn
+dmFsLCBwcml2LT5iYXNlICsgR1RJX0NXRF9XRE9HKTsNCj4gPiArDQo+ID4gKwlyZXR1cm4gMDsN
+Cj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGludCBndGlfd2R0X3NldHRpbWVvdXQoc3RydWN0
+IHdhdGNoZG9nX2RldmljZSAqd2RldiwNCj4gPiArCQkJCQl1bnNpZ25lZCBpbnQgdGltZW91dCkN
+Cj4gPiArew0KPiA+ICsJc3RydWN0IGd0aV93ZHRfcHJpdiAqcHJpdiA9IHdhdGNoZG9nX2dldF9k
+cnZkYXRhKHdkZXYpOw0KPiA+ICsJdTY0IHRpbWVvdXRfd2RvZywgcmVndmFsOw0KPiA+ICsNCj4g
+PiArCS8qIFVwZGF0ZSBuZXcgdGltZW91dCAqLw0KPiA+ICsJd2Rldi0+dGltZW91dCA9IHRpbWVv
+dXQ7DQo+ID4gKw0KPiA+ICsJLyogUHJldGltZW91dCBpcyAxLzMgb2YgdGltZW91dCAqLw0KPiA+
+ICsJd2Rldi0+cHJldGltZW91dCA9IHRpbWVvdXQgLyAzOw0KPiA+ICsJaWYgKCF3ZGV2LT5wcmV0
+aW1lb3V0KQ0KPiA+ICsJCXJldHVybiAtRUlOVkFMOw0KPiANCj4gU2luY2UgbWluX3RpbWVvdXQg
+aXMgc2V0IHRvIDMgc2Vjb25kcywgdGhpcyBjYW4gbm90IGhhcHBlbiwgYW5kIHRoZSBjaGVjayBp
+cw0KPiB1bm5lY2Vzc2FyeS4NCj4gDQo+ID4gKw0KPiA+ICsJLyogR2V0IGNsb2NrIGN5Y2xlcyBm
+cm9tIHRpbWVvdXQgaW4gc2Vjb25kICovDQo+IA0KPiBmcm9tIHByZXRpbWVvdXQgPw0KDQpZZXMs
+IHdpbGwgY2hhbmdlIGNvbW1lbnQuDQoNCj4gDQo+ID4gKwl0aW1lb3V0X3dkb2cgPSB3ZGV2LT5w
+cmV0aW1lb3V0ICogcHJpdi0+Y2xvY2tfZnJlcTsNCj4gPiArDQo+ID4gKwkvKiBXYXRjaGRvZyBj
+b3VudHMgaW4gMTAyNCBjeWNsZSBzdGVwcyAqLw0KPiA+ICsJdGltZW91dF93ZG9nID0gdGltZW91
+dF93ZG9nID4+IDEwOw0KPiA+ICsNCj4gPiArCXRpbWVvdXRfd2RvZyA9ICh0aW1lb3V0X3dkb2cg
+KyAweGZmKSA+PiA4Ow0KPiA+ICsJaWYgKHRpbWVvdXRfd2RvZyA+PSAweDEwMDAwKQ0KPiA+ICsJ
+CXRpbWVvdXRfd2RvZyA9IDB4ZmZmZjsNCj4gPiArDQo+ID4gKwkvKg0KPiA+ICsJICogR1RJX0NX
+RF9XRE9HLkxFTiBoYXZlIG9ubHkgdXBwZXIgMTYtYml0cyBvZiAyNC1iaXRzDQo+ID4gKwkgKiBH
+VElfQ1dEX1dET0cuQ05ULCBuZWVkIGFkZGl0aW9uIHNoaWZ0IG9mIDguDQo+ID4gKwkgKi8NCj4g
+PiArCXJlZ3ZhbCA9IHJlYWRxKHByaXYtPmJhc2UgKyBHVElfQ1dEX1dET0cpOw0KPiA+ICsJcmVn
+dmFsICY9IEdUSV9DV0RfV0RPR19NT0RFX01BU0s7DQo+ID4gKwlyZWd2YWwgfD0gKHRpbWVvdXRf
+d2RvZyA8PCAoR1RJX0NXRF9XRE9HX0NOVF9TSElGVCArIDgpKSB8DQo+ID4gKwkJICAgKHRpbWVv
+dXRfd2RvZyA8PCBHVElfQ1dEX1dET0dfTEVOX1NISUZUKTsNCj4gPiArCXdyaXRlcShyZWd2YWws
+IHByaXYtPmJhc2UgKyBHVElfQ1dEX1dET0cpOw0KPiA+ICsNCj4gPiArCXJldHVybiAwOw0KPiA+
+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgaW50IGd0aV93ZHRfc2V0X3ByZXRpbWVvdXQoc3RydWN0
+IHdhdGNoZG9nX2RldmljZSAqd2RldiwNCj4gPiArCQkJCQl1bnNpZ25lZCBpbnQgdGltZW91dCkN
+Cj4gPiArew0KPiA+ICsJc3RydWN0IGd0aV93ZHRfcHJpdiAqcHJpdiA9IHdhdGNoZG9nX2dldF9k
+cnZkYXRhKHdkZXYpOw0KPiA+ICsJc3RydWN0IHdhdGNoZG9nX2RldmljZSAqd2RvZ19kZXYgPSAm
+cHJpdi0+d2RldjsNCj4gPiArDQo+ID4gKwkvKiBwcmV0aW1lb3V0IHNob3VsZCAxLzMgb2YgbWF4
+X3RpbWVvdXQgKi8NCj4gPiArCWlmICgodGltZW91dCAqIDMpIDw9IHdkb2dfZGV2LT5tYXhfdGlt
+ZW91dCkNCj4gDQo+IFVubmVjZXNzYXJ5ICgpDQo+IA0KPiA+ICsJCXJldHVybiBndGlfd2R0X3Nl
+dHRpbWVvdXQod2RldiwgdGltZW91dCAqIDMpOw0KPiA+ICsNCj4gPiArCXJldHVybiAtRUlOVkFM
+Ow0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgY29uc3Qgc3RydWN0IHdhdGNoZG9nX2luZm8g
+Z3RpX3dkdF9pZGVudCA9IHsNCj4gPiArCS5pZGVudGl0eSA9ICJNYXJ2ZWxsIEdUSSB3YXRjaGRv
+ZyIsDQo+ID4gKwkub3B0aW9ucyA9IFdESU9GX1NFVFRJTUVPVVQgfCBXRElPRl9QUkVUSU1FT1VU
+IHwNCj4gV0RJT0ZfS0VFUEFMSVZFUElORyB8DQo+ID4gKwkJICAgV0RJT0ZfTUFHSUNDTE9TRSB8
+IFdESU9GX0NBUkRSRVNFVCwgfTsNCj4gPiArDQo+ID4gK3N0YXRpYyBjb25zdCBzdHJ1Y3Qgd2F0
+Y2hkb2dfb3BzIGd0aV93ZHRfb3BzID0gew0KPiA+ICsJLm93bmVyID0gVEhJU19NT0RVTEUsDQo+
+ID4gKwkuc3RhcnQgPSBndGlfd2R0X3N0YXJ0LA0KPiA+ICsJLnN0b3AgPSBndGlfd2R0X3N0b3As
+DQo+ID4gKwkucGluZyA9IGd0aV93ZHRfcGluZywNCj4gPiArCS5zZXRfdGltZW91dCA9IGd0aV93
+ZHRfc2V0dGltZW91dCwNCj4gPiArCS5zZXRfcHJldGltZW91dCA9IGd0aV93ZHRfc2V0X3ByZXRp
+bWVvdXQsIH07DQo+ID4gKw0KPiA+ICtzdGF0aWMgaW50IGd0aV93ZHRfcHJvYmUoc3RydWN0IHBs
+YXRmb3JtX2RldmljZSAqcGRldikgew0KPiA+ICsJc3RydWN0IGd0aV93ZHRfcHJpdiAqcHJpdjsN
+Cj4gPiArCXN0cnVjdCBkZXZpY2UgKmRldiA9ICZwZGV2LT5kZXY7DQo+ID4gKwlzdHJ1Y3Qgd2F0
+Y2hkb2dfZGV2aWNlICp3ZG9nX2RldjsNCj4gPiArCWludCBpcnE7DQo+ID4gKwlpbnQgZXJyOw0K
+PiA+ICsNCj4gPiArCXByaXYgPSBkZXZtX2t6YWxsb2MoJnBkZXYtPmRldiwgc2l6ZW9mKCpwcml2
+KSwgR0ZQX0tFUk5FTCk7DQo+ID4gKwlpZiAoIXByaXYpDQo+ID4gKwkJcmV0dXJuIC1FTk9NRU07
+DQo+ID4gKw0KPiA+ICsJcHJpdi0+YmFzZSA9IGRldm1fcGxhdGZvcm1faW9yZW1hcF9yZXNvdXJj
+ZShwZGV2LCAwKTsNCj4gPiArCWlmIChJU19FUlIocHJpdi0+YmFzZSkpDQo+ID4gKwkJcmV0dXJu
+IGRldl9lcnJfcHJvYmUoJnBkZXYtPmRldiwgUFRSX0VSUihwcml2LT5iYXNlKSwNCj4gPiArCQkJ
+ICAgICAgInJlZyBwcm9wZXJ0eSBub3QgdmFsaWQvZm91bmRcbiIpOw0KPiA+ICsNCj4gPiArCXBy
+aXYtPmNsb2NrX2ZyZXEgPSBhcmNoX3RpbWVyX2dldF9jbnRmcnEoKTsNCj4gDQo+IGFyY2hfdGlt
+ZXJfZ2V0X2NudGZycSgpIHJldHVybnMgdTMyLiBTdG9yaW5nIGl0IGFzIHU2NCB0byBzYXZlIGEg
+Y291cGxlIG9mDQo+IHR5cGVjYXN0cyByZWFsbHkgZG9lc24ndCBhZGQgdmFsdWUuDQo+IA0KPiBO
+b3RlIHRoYXQgdGhpcyBsaW1pdHMgY29tcGlsYWJpbGl0eSB0byBhcm0gYW5kIGFybTY0Lg0KDQpX
+aWxsIHJlbW92ZSB1c2luZyBhcmNoX3RpbWVyX2dldF9jbnRmcnEoKSBhbmQgY2xvY2sgcmVmZXJl
+bmNlIGluIGRldmljZSB0cmVlLg0KDQo+IA0KPiA+ICsNCj4gPiArCXdkb2dfZGV2ID0gJnByaXYt
+PndkZXY7DQo+ID4gKwl3ZG9nX2Rldi0+aW5mbyA9ICZndGlfd2R0X2lkZW50LA0KPiA+ICsJd2Rv
+Z19kZXYtPm9wcyA9ICZndGlfd2R0X29wcywNCj4gPiArCXdkb2dfZGV2LT5wYXJlbnQgPSBkZXY7
+DQo+ID4gKwkvKg0KPiA+ICsJICogV2F0Y2hkb2cgY291bnRlciBpcyAyNCBiaXQgd2hlcmUgbG93
+ZXIgOCBiaXRzIGFyZSB6ZXJvcywgc28gbWF4aW11bQ0KPiA+ICsJICogdmFsdWUgdGhhdCBjYW4g
+YmUgcHJvZ3JhbW1lZCBpbiBoYXJkd2FyZSBpcyAweGZmZmYwMC4gVGhpcyBjb3VudGVyDQo+ID4g
+KwkgKiBkZWNyZW1lbnRzIGV2ZXJ5IG9uZSBtaWNyb3NlYy4NCj4gPiArCSAqIEhhcmR3YXJlIHdp
+bGwgZ2VuZXJhdGUgaW50ZXJydXB0IG9uIGZpcnN0IHRpbWVvdXQgKHByZXRpbWVvdXQpDQo+ID4g
+KwkgKiByZXNldCB0aGUgc3lzdGVtIG9uIDNyZCB0aW1lb3V0Lg0KPiA+ICsJICogTWF4IHdhdGNo
+ZG9nIHByZXRpbWVvdXQgY2FuIGJlIDE2IHNlYywgc28gbWF4IHRpbWVvdXQgaXMgNDggc2VjLg0K
+PiA+ICsJICogTGV0J3MgaGF2ZSBtaW4gcHJldGltZW91dCB0byAxc2VjLCBzbyBtaW4gdGltZW91
+dCBpcyAzc2VjLg0KPiA+ICsJICovDQo+ID4gKwl3ZG9nX2Rldi0+bWF4X3RpbWVvdXQgPSA0ODsN
+Cj4gDQo+IFRoZSBjb2RlIHNldHRpbmcgdGhlIGFjdHVhbCB0aW1lb3V0IGNoZWNrcyBmb3Igb3Zl
+cmZsb3csIHN1Z2dlc3RpbmcgdGhhdCB0aGUNCj4gYWN0dWFsIG1heGltdW0gdGltZW91dCBkZXBl
+bmRzIG9uIHRoZSBjbG9jayBzcGVlZCBhbmQgbWF5IGJlIGxlc3MgdGhhbiA0OA0KPiBzZWNvbmRz
+LiBJZiB0aGF0IGV2ZXIgaGFwcGVucywgdGhlIGFjdHVhbCB0aW1lb3V0IHdvdWxkIGJlIHNldCB0
+byBsZXNzIHRoYW4gNDgNCj4gc2Vjb25kcywgd2hpY2ggY291bGQgY2F1c2UgcmFuZG9tIHJlYm9v
+dHMuDQoNCldpbGwgdXNlIGNsb2NrIGZvciB0aGVzZSBjYWxjdWxhdGlvbi4NCg0KVGhhbmtzDQot
+QmhhcmF0DQoNCj4gDQo+ID4gKwl3ZG9nX2Rldi0+bWluX3RpbWVvdXQgPSAzOw0KPiA+ICsJd2Rv
+Z19kZXYtPnRpbWVvdXQgPSAzMDsNCj4gPiArCXdkb2dfZGV2LT5wcmV0aW1lb3V0ID0gd2RvZ19k
+ZXYtPnRpbWVvdXQgLyAzOw0KPiA+ICsNCj4gPiArCXByaXYtPmlycSA9IGlycTsNCj4gPiArCXdh
+dGNoZG9nX3NldF9kcnZkYXRhKHdkb2dfZGV2LCBwcml2KTsNCj4gPiArCXBsYXRmb3JtX3NldF9k
+cnZkYXRhKHBkZXYsIHByaXYpOw0KPiA+ICsJZ3RpX3dkdF9zZXR0aW1lb3V0KHdkb2dfZGV2LCB3
+ZG9nX2Rldi0+dGltZW91dCk7DQo+ID4gKwl3YXRjaGRvZ19zdG9wX29uX3JlYm9vdCh3ZG9nX2Rl
+dik7DQo+ID4gKwl3YXRjaGRvZ19zdG9wX29uX3VucmVnaXN0ZXIod2RvZ19kZXYpOw0KPiA+ICsN
+Cj4gPiArCWVyciA9IGRldm1fd2F0Y2hkb2dfcmVnaXN0ZXJfZGV2aWNlKGRldiwgd2RvZ19kZXYp
+Ow0KPiA+ICsJaWYgKGVycikNCj4gPiArCQlyZXR1cm4gZXJyOw0KPiA+ICsNCj4gPiArCWlycSA9
+IHBsYXRmb3JtX2dldF9pcnEocGRldiwgMCk7DQo+ID4gKwlpZiAoaXJxIDwgMCkNCj4gPiArCQly
+ZXR1cm4gZGV2X2Vycl9wcm9iZSgmcGRldi0+ZGV2LCBpcnEsICJJUlEgcmVzb3VyY2Ugbm90DQo+
+IGZvdW5kXG4iKTsNCj4gPiArDQo+ID4gKwllcnIgPSBkZXZtX3JlcXVlc3RfaXJxKGRldiwgaXJx
+LCBndGlfd2R0X2ludGVycnVwdCwgMCwNCj4gPiArCQkJICAgICAgIHBkZXYtPm5hbWUsICZwcml2
+LT53ZGV2KTsNCj4gPiArCWlmIChlcnIpDQo+ID4gKwkJcmV0dXJuIGRldl9lcnJfcHJvYmUoZGV2
+LCBlcnIsICJGYWlsZWQgdG8gcmVnaXN0ZXIgaW50ZXJydXB0DQo+ID4gK2hhbmRsZXJcbiIpOw0K
+PiA+ICsNCj4gPiArCWRldl9pbmZvKGRldiwgIldhdGNoZG9nIGVuYWJsZWQgKHRpbWVvdXQ9JWQg
+c2VjKVxuIiwgd2RvZ19kZXYtDQo+ID50aW1lb3V0KTsNCj4gPiArCXJldHVybiAwOw0KPiA+ICt9
+DQo+ID4gKw0KPiA+ICtzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBndGlfd2R0X29m
+X21hdGNoW10gPSB7DQo+ID4gKwl7IC5jb21wYXRpYmxlID0gIm1hcnZlbGwsZ3RpLXdkdCIsIH0s
+DQo+ID4gKwl7IH0sDQo+ID4gK307DQo+ID4gK01PRFVMRV9ERVZJQ0VfVEFCTEUob2YsIGd0aV93
+ZHRfb2ZfbWF0Y2gpOw0KPiA+ICsNCj4gPiArc3RhdGljIHN0cnVjdCBwbGF0Zm9ybV9kcml2ZXIg
+Z3RpX3dkdF9kcml2ZXIgPSB7DQo+ID4gKwkuZHJpdmVyID0gew0KPiA+ICsJCS5uYW1lID0gImd0
+aS13ZHQiLA0KPiA+ICsJCS5vZl9tYXRjaF90YWJsZSA9IGd0aV93ZHRfb2ZfbWF0Y2gsDQo+ID4g
+Kwl9LA0KPiA+ICsJLnByb2JlID0gZ3RpX3dkdF9wcm9iZSwNCj4gPiArfTsNCj4gPiArbW9kdWxl
+X3BsYXRmb3JtX2RyaXZlcihndGlfd2R0X2RyaXZlcik7DQo+ID4gKw0KPiA+ICtNT0RVTEVfQVVU
+SE9SKCJCaGFyYXQgQmh1c2hhbiA8YmJodXNoYW4yQG1hcnZlbGwuY29tPiIpOw0KPiA+ICtNT0RV
+TEVfREVTQ1JJUFRJT04oIk1hcnZlbGwgR1RJIHdhdGNoZG9nIGRyaXZlciIpOw0KDQo=
