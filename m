@@ -2,83 +2,66 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC6E6F2895
-	for <lists+linux-watchdog@lfdr.de>; Sun, 30 Apr 2023 13:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AB06F3D9D
+	for <lists+linux-watchdog@lfdr.de>; Tue,  2 May 2023 08:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjD3Lag (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 30 Apr 2023 07:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
+        id S233588AbjEBGjU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 2 May 2023 02:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjD3Laf (ORCPT
+        with ESMTP id S233577AbjEBGjT (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 30 Apr 2023 07:30:35 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D4526AD
-        for <linux-watchdog@vger.kernel.org>; Sun, 30 Apr 2023 04:30:32 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-959a3e2dd27so307563266b.3
-        for <linux-watchdog@vger.kernel.org>; Sun, 30 Apr 2023 04:30:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682854231; x=1685446231;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BVxAbtgWt8piDuFL2bIM7+Ard0QYLwJUtfo5posTlu8=;
-        b=V48CE5XksJN9W2lqT5IsiEiLKywu0Dx/veB5aLENwl02WSwESfSqDTLgSba8BnAsCB
-         L+1yNbYz47h8/tFGxCNr0nuVCvrosHx1BnSLh2E2nuQtww1wdTlEpKGPlAznliqtpxQ/
-         +6IV3/3CmNbLy+q1UUEzvLGQb+tOMlI0A36F2qmkeY0d5vLF+9ahsDLRnxJo6uwMuPsj
-         BIMaO1TvzZ72buJEbjvkgR4qsvMp+Odn/XlG5Y7iIXBEfiXNbrRsFRz0RIbjqwf/9eEl
-         TjheTQbpTCpZUB9nh2lh2T3Ts18nWlp5y5+wOvCef9anB6yvQliSBApCQubDPzR1zX9B
-         0KwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682854231; x=1685446231;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BVxAbtgWt8piDuFL2bIM7+Ard0QYLwJUtfo5posTlu8=;
-        b=GFOcWyVphESKrRSzfWJvapgrwTDgQboSuMe3Yx+s9t17xMCQRsvFn9MntC4Q21WATT
-         EpsjYxZmH7smJ+vSL9nhyuf2J2dt72hPINXqcO5JRuGad+FeC3xfNKw9utLzGrzr5fKK
-         Nn9IQLy4yiSpSosvd8GlcgJtKuUXgbkUx61E7Q4TPFKIS1rGTmzrPzhcrHbNcym0btU6
-         +01ehyI6rSqgJFpoiuLOwOisHalYs0RalK++r83Jgi0XVjWG1hwhRXrgIu2lcWjk0NhT
-         ORhYcY5zpCZomykJRS7709HRE5LhOHYNWgv1b8CPqTVfIedZ0fFgXnLpEHBjCh6NGHDI
-         s/yw==
-X-Gm-Message-State: AC+VfDxiYqYdXbUP7fBXUrDv3OQGFgta62KQ923+xwf/cT9cGUnSRLyK
-        /QMu0zV0UlJNGo7qdlAXMUpAFw==
-X-Google-Smtp-Source: ACHHUZ7mIWoKHzDSU5Di+4SWLZ6PKI098SuYW2eCN4UKMZ0F2zinCJrzHMsaioh3L9kOGWNKFNJDeQ==
-X-Received: by 2002:a17:907:368d:b0:953:1f45:3ced with SMTP id bi13-20020a170907368d00b009531f453cedmr9744583ejc.8.1682854231272;
-        Sun, 30 Apr 2023 04:30:31 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:4f23:e9a6:a1cf:ebd3? ([2a02:810d:15c0:828:4f23:e9a6:a1cf:ebd3])
-        by smtp.gmail.com with ESMTPSA id o9-20020a1709064f8900b0094f3b18044bsm13473230eju.218.2023.04.30.04.30.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Apr 2023 04:30:30 -0700 (PDT)
-Message-ID: <c981e048-8925-deba-6916-9199844976b9@linaro.org>
-Date:   Sun, 30 Apr 2023 13:30:29 +0200
+        Tue, 2 May 2023 02:39:19 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F5D4497;
+        Mon,  1 May 2023 23:39:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683009557; x=1714545557;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JHmOyhknu72fwCyTp0J5ERbzi4vLQDGwzRbCdXl/ONg=;
+  b=mqIIYCG2Rrcsw9qATlBfmxhAnFhugEsqSbr40FeMP0NXUTwe9NqKaKOv
+   M24cZ/56ynw3QiVdLrOMn7n3CMM2e0VkzdKiaS8l8xJa4n4E/Sq7pvvbd
+   IZYCT1sBcnoWn2BL+dCW6q9hvmeEsNklBhU3USYE5n+knGJjVgdDQY+j9
+   lVQERCt6tjlK1Es0JBiFHj1IIg7z3TAGqaPneDWxXmZqEYBy8poa+oy+I
+   dVH7Yj0qS33ce+UNZb2su4rxwlwOWm/w8vm/HTeFUAdb9IarWg1pbPd8j
+   AXhUHoK9LyAfTHxtNRdiMS3Fez/NXj41gh+akCLCnUItprqDD8rMQpD/g
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="345798439"
+X-IronPort-AV: E=Sophos;i="5.99,243,1677571200"; 
+   d="scan'208";a="345798439"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 May 2023 23:39:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10697"; a="942330850"
+X-IronPort-AV: E=Sophos;i="5.99,243,1677571200"; 
+   d="scan'208";a="942330850"
+Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 01 May 2023 23:39:14 -0700
+Received: from kbuild by e3434d64424d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ptjfO-0000tI-0f;
+        Tue, 02 May 2023 06:39:14 +0000
+Date:   Tue, 2 May 2023 14:38:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sgoutham@marvell.com
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Bharat Bhushan <bbhushan2@marvell.com>
+Subject: Re: [PATCH 2/2 v3] Watchdog: Add marvell octeontx2 watchdog driver
+Message-ID: <202305021447.bgPFpj8n-lkp@intel.com>
+References: <20230425081926.9234-2-bbhushan2@marvell.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 09/43] dt-bindings: watchdog: add DT bindings for Cirrus
- EP93x
-Content-Language: en-US
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230424123522.18302-10-nikita.shubin@maquefel.me>
- <00882340-477b-dc0b-d489-94efdf045f1c@linaro.org>
- <cb0b1779a8bd18212439f9baf70fdb183c9f0fc7.camel@maquefel.me>
- <e73cec19-9ac8-bee2-8c28-c7a40b929e53@linaro.org>
- <c74d958aa1ea38f61cd1db965dce3cadbff530b5.camel@maquefel.me>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c74d958aa1ea38f61cd1db965dce3cadbff530b5.camel@maquefel.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230425081926.9234-2-bbhushan2@marvell.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,107 +69,50 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 28/04/2023 19:42, Nikita Shubin wrote:
-> On Fri, 2023-04-28 at 14:20 +0200, Krzysztof Kozlowski wrote:
->> On 28/04/2023 16:33, Nikita Shubin wrote:
->>> Hello Krzysztof!
->>>
->>> On Tue, 2023-04-25 at 11:31 +0200, Krzysztof Kozlowski wrote:
->>>> On 24/04/2023 14:34, Nikita Shubin wrote:
->>>>> This adds device tree bindings for the Cirrus Logic EP93xx
->>>>> watchdog block used in these SoCs.
->>>>>
->>>>> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
->>>>> ---
->>>>>  .../bindings/watchdog/cirrus,ep93xx-wdt.yaml  | 38
->>>>> +++++++++++++++++++
->>>>>  1 file changed, 38 insertions(+)
->>>>>  create mode 100644
->>>>> Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-
->>>>> wdt.yaml
->>>>>
->>>>> diff --git
->>>>> a/Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-
->>>>> wdt.yaml
->>>>> b/Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-
->>>>> wdt.yaml
->>>>> new file mode 100644
->>>>> index 000000000000..f39d6b14062d
->>>>> --- /dev/null
->>>>> +++ b/Documentation/devicetree/bindings/watchdog/cirrus,ep93xx-
->>>>> wdt.yaml
->>>>> @@ -0,0 +1,38 @@
->>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>>> +%YAML 1.2
->>>>> +---
->>>>> +$id:
->>>>> http://devicetree.org/schemas/watchdog/cirrus,ep93xx-wdt.yaml#
->>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>> +
->>>>> +title: Cirrus Logic EP93xx Watchdog Timer
->>>>
->>>> EP93xx is no EP9301. This does not match your compatible list.
->>>> You
->>>> should probably list all of your devices. With or without
->>>> compatibility
->>>> between them (so with a generic fallback for example).
->>>
->>> I will rename file to cirrus,ep9301-wdt.yaml, all ep93xx SoC family
->>> has
->>> the same watchdog, so there is now reason for other compatible i
->>> think.
->>
->> You should always have dedicated compatibles, even if using one
->> fallback.
->> https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
-> 
-> Krzysztof, sorry to bother you - but i don't quite get, what we should
-> have in compatibles ? 
-> 
-> Should i make an additional fallback compatible like "cirrus,ep-wdt"
-> and then "compatible" will look like:
-> 
-> properties:
->   compatible:
->     - items:
->       - enum:
->         - cirrus,ep9301-wdt
->       - const: cirrus,ep-wdt
-> 
-> Or should i describe every ep93xx SoC variant like:
-> 
-> properties:
->   compatible:
->     - items:
->       - enum:
->         - cirrus,ep9302-wdt
->         - cirrus,ep9307-wdt
->         - cirrus,ep9312-wdt
->         - cirrus,ep9315-wdt
->       - const: cirrus,ep9301-wdt
+Hi Bharat,
 
-This one is preferred. Just don't forget for an entry allowing 9301
-alone (and everything within oneOf)
+kernel test robot noticed the following build errors:
 
-Syntax looks like:
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on groeck-staging/hwmon-next linus/master v6.3 next-20230428]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-https://elixir.bootlin.com/linux/v6.3-rc6/source/Documentation/devicetree/bindings/sound/nvidia,tegra210-ope.yaml#L31
+url:    https://github.com/intel-lab-lkp/linux/commits/Bharat-Bhushan/Watchdog-Add-marvell-octeontx2-watchdog-driver/20230425-162039
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230425081926.9234-2-bbhushan2%40marvell.com
+patch subject: [PATCH 2/2 v3] Watchdog: Add marvell octeontx2 watchdog driver
+config: um-allyesconfig (https://download.01.org/0day-ci/archive/20230502/202305021447.bgPFpj8n-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/5b2d826a13c7553b51784a1fb56606bfda9f81d9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bharat-Bhushan/Watchdog-Add-marvell-octeontx2-watchdog-driver/20230425-162039
+        git checkout 5b2d826a13c7553b51784a1fb56606bfda9f81d9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um olddefconfig
+        make W=1 O=build_dir ARCH=um SHELL=/bin/bash drivers/
 
-> 
-> There are ep9301, ep9302, ep9307, ep9312 and ep9315 SoC variants - all
-> have the same watchdog and rtc implementation without any difference at
-> all.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305021447.bgPFpj8n-lkp@intel.com/
 
-We still prefer to have dedicated compatible, in case some
-bugs/differences are found.
+All errors (new ones prefixed by >>):
 
-> 
-> If on of this is true does the same applies to ep9301-rtc and any other
-> variants where we do have a single compatible ?
-
-Yes, please.
+>> drivers/watchdog/octeontx2_wdt.c:13:10: fatal error: asm/arch_timer.h: No such file or directory
+      13 | #include <asm/arch_timer.h>
+         |          ^~~~~~~~~~~~~~~~~~
+   compilation terminated.
 
 
-Best regards,
-Krzysztof
+vim +13 drivers/watchdog/octeontx2_wdt.c
 
+    12	
+  > 13	#include <asm/arch_timer.h>
+    14	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
