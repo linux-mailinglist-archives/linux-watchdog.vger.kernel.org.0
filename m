@@ -2,145 +2,141 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBFC6F4B89
-	for <lists+linux-watchdog@lfdr.de>; Tue,  2 May 2023 22:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC80C6F57A0
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 May 2023 14:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjEBUmo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 2 May 2023 16:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        id S229902AbjECMKs (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 3 May 2023 08:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjEBUmn (ORCPT
+        with ESMTP id S229916AbjECMKq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 2 May 2023 16:42:43 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BAEC1BDF;
-        Tue,  2 May 2023 13:42:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683060161; x=1714596161;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zuRYtcFHtmVZ+xkOvP47r2QSjBH2/ZdZZctN4FWn8n8=;
-  b=GrGjKlqBGjhcI82SUlLUNJQa68ZUxRB/Tq3zbPKscUJEOfircgXK1JgQ
-   VPwT8JZQTV4pXakGNYxLUy06j5Ed/gwg1PzctqXTh70o8CD8O0R+BUJFa
-   dNV8z/wayEoO7eA2TW6OVfpraiS9QeEJNJQeqwGYbcpMrz+e/co9Qtdsv
-   RCh3G/XLJRnvOVGE1aqRNUDqOgnX4aWNjwfjHEbf/YDS8fVrUECFWgSCN
-   iaVghauyX771z0glKb21BhvCR/kHQcfUyFXavCZp+FpTXhb0483+m+2DA
-   qX/jDazmVW6wn/Lj5MIF95adlRZWw9eB7ZpbUK2kCYQrQKXuj1KsO3nwW
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="337635606"
-X-IronPort-AV: E=Sophos;i="5.99,245,1677571200"; 
-   d="scan'208";a="337635606"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2023 13:42:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10698"; a="690430355"
-X-IronPort-AV: E=Sophos;i="5.99,245,1677571200"; 
-   d="scan'208";a="690430355"
-Received: from lkp-server01.sh.intel.com (HELO e3434d64424d) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 02 May 2023 13:42:38 -0700
-Received: from kbuild by e3434d64424d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ptwpZ-0001H8-1d;
-        Tue, 02 May 2023 20:42:37 +0000
-Date:   Wed, 3 May 2023 04:42:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     minyard@acm.org, im Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        openipmi-developer@lists.sourceforge.net,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Corey Minyard <cminyard@mvista.com>
-Subject: Re: [PATCH] watchdog: Add an IPMI watchdog driver in the watchdog
- framework
-Message-ID: <202305030442.Ug9opjA1-lkp@intel.com>
-References: <20230502150215.1266526-1-minyard@acm.org>
+        Wed, 3 May 2023 08:10:46 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AF25B8E;
+        Wed,  3 May 2023 05:10:44 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 343A6lJ1025999;
+        Wed, 3 May 2023 05:10:27 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=pfpt0220; bh=2vZi8/+FKJsKcT0JofUxO1MegK0+ufo4MiiXJuidI8I=;
+ b=iyKJ4xIWdWi6pPRHmt09HT68mkoNDmcVdOoYH10UU1WG3a6K6Gt7LScqwZ63EQfIyBcf
+ 2cw2BI7qZEEh2CSasEI9s+9Y7z7V0priD+/mRLqfZ5Fm/X93WF79MW/nh8wO+flQ4fiK
+ rm6HuuR3lVt+f4leWT9h1eZk0y3rl7U2N0duqxwYY4SWmetrgmzcYrM1X/9ZlFLYAnkn
+ /iJy8rmVhUMtBHqjx0vncEUht1pnaA/285yavA1uiARRCJwflPlnd6bIItTcasX8cHg2
+ 4zsJunacxk0b51b/IOHQRaTrqG8JMheobsEPldvOIfUXKgpT+Cz1KD/hjMGohl9x7N1z tQ== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3qbnjn0bmf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 03 May 2023 05:10:27 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 3 May
+ 2023 05:10:25 -0700
+Received: from bbhushan2.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Wed, 3 May 2023 05:10:23 -0700
+From:   Bharat Bhushan <bbhushan2@marvell.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>
+CC:     Bharat Bhushan <bbhushan2@marvell.com>
+Subject: [PATCH 1/2 v5] dt-bindings: watchdog: marvell GTI system watchdog driver
+Date:   Wed, 3 May 2023 17:40:15 +0530
+Message-ID: <20230503121016.6093-1-bbhushan2@marvell.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <linux-kernel@vger.kernel.org, sgoutham@marvell.com>
+References: <linux-kernel@vger.kernel.org, sgoutham@marvell.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230502150215.1266526-1-minyard@acm.org>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 0DXz7SRAy0HMyjAw8b6rhsr6KDlo5q5M
+X-Proofpoint-GUID: 0DXz7SRAy0HMyjAw8b6rhsr6KDlo5q5M
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-03_08,2023-05-03_01,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi,
+Add binding documentation for the Marvell GTI system
+watchdog driver.
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+---
+v5:
+ - Added wdt-timer-index property
+ - Get clock frequency from clocks/clock-name device tree property
 
-[auto build test WARNING on cminyard-ipmi/for-next]
-[also build test WARNING on groeck-staging/hwmon-next linus/master v6.3 next-20230428]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ .../bindings/watchdog/marvell,gti-wdt.yaml    | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,gti-wdt.yaml
 
-url:    https://github.com/intel-lab-lkp/linux/commits/minyard-acm-org/watchdog-Add-an-IPMI-watchdog-driver-in-the-watchdog-framework/20230502-230545
-base:   https://github.com/cminyard/linux-ipmi for-next
-patch link:    https://lore.kernel.org/r/20230502150215.1266526-1-minyard%40acm.org
-patch subject: [PATCH] watchdog: Add an IPMI watchdog driver in the watchdog framework
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230503/202305030442.Ug9opjA1-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/3138708f587acacac7e95f3098e7a9587866a66e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review minyard-acm-org/watchdog-Add-an-IPMI-watchdog-driver-in-the-watchdog-framework/20230502-230545
-        git checkout 3138708f587acacac7e95f3098e7a9587866a66e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/watchdog/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305030442.Ug9opjA1-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/watchdog/ipmi_wdt.c:515:5: warning: no previous prototype for 'ipmi_wdt_start' [-Wmissing-prototypes]
-     515 | int ipmi_wdt_start(struct watchdog_device *wd)
-         |     ^~~~~~~~~~~~~~
-   drivers/watchdog/ipmi_wdt.c:529:5: warning: no previous prototype for 'ipmi_wdt_stop' [-Wmissing-prototypes]
-     529 | int ipmi_wdt_stop(struct watchdog_device *wd)
-         |     ^~~~~~~~~~~~~
-   drivers/watchdog/ipmi_wdt.c:539:5: warning: no previous prototype for 'ipmi_wdt_ping' [-Wmissing-prototypes]
-     539 | int ipmi_wdt_ping(struct watchdog_device *wd)
-         |     ^~~~~~~~~~~~~
-   drivers/watchdog/ipmi_wdt.c:550:5: warning: no previous prototype for 'ipmi_wdt_set_timeout' [-Wmissing-prototypes]
-     550 | int ipmi_wdt_set_timeout(struct watchdog_device *wd, unsigned int to)
-         |     ^~~~~~~~~~~~~~~~~~~~
->> drivers/watchdog/ipmi_wdt.c:563:5: warning: no previous prototype for 'ipmi_wdt_set_pretimeout' [-Wmissing-prototypes]
-     563 | int ipmi_wdt_set_pretimeout(struct watchdog_device *wd, unsigned int pto)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/ipmi_wdt_set_pretimeout +563 drivers/watchdog/ipmi_wdt.c
-
-   561	
-   562	#ifdef HAVE_DIE_NMI
- > 563	int ipmi_wdt_set_pretimeout(struct watchdog_device *wd, unsigned int pto)
-   564	{
-   565		int rv;
-   566	
-   567		mutex_lock(&ipmi_watchdog_mutex);
-   568		pretimeout = pto;
-   569		if (pto)
-   570			pretimeout_state = WDOG_PRETIMEOUT_NMI;
-   571		else
-   572			pretimeout_state = WDOG_PRETIMEOUT_NONE;
-   573	
-   574		rv = _ipmi_set_timeout(IPMI_SET_TIMEOUT_HB_IF_NECESSARY);
-   575		mutex_unlock(&ipmi_watchdog_mutex);
-   576	
-   577		return rv;
-   578	}
-   579	#endif
-   580	
-
+diff --git a/Documentation/devicetree/bindings/watchdog/marvell,gti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvell,gti-wdt.yaml
+new file mode 100644
+index 000000000000..e3315653f961
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/marvell,gti-wdt.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/marvell,gti-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Marvell Global Timer (GTI) system watchdog
++
++allOf:
++  - $ref: watchdog.yaml#
++
++maintainers:
++  - Bharat Bhushan <bbhushan2@marvell.com>
++
++properties:
++  compatible:
++    const: marvell,gti-wdt
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  wdt-timer-index:
++    maxItems: 1
++    description:
++      This contains the timer number out of total 64 timers supported
++      by GTI hardware block.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - wdt-timer-index
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        watchdog@802000040000 {
++            compatible = "marvell,gti-wdt";
++            reg = <0x00008020 0x00040000 0x00000000 0x00020000>;
++            interrupts = <0 38 IRQ_TYPE_EDGE_RISING>;
++            wdt-timer-index = <63>;
++        };
++    };
++
++...
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.17.1
+
