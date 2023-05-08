@@ -2,471 +2,186 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E146FB11C
-	for <lists+linux-watchdog@lfdr.de>; Mon,  8 May 2023 15:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 970E76FB183
+	for <lists+linux-watchdog@lfdr.de>; Mon,  8 May 2023 15:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233746AbjEHNPv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 8 May 2023 09:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        id S234282AbjEHN3a (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 8 May 2023 09:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbjEHNPt (ORCPT
+        with ESMTP id S234291AbjEHN3T (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 8 May 2023 09:15:49 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3861FF3;
-        Mon,  8 May 2023 06:15:47 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 348ALPol005229;
-        Mon, 8 May 2023 06:15:26 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=1aaiN7b9Km8TNCLnN2h5KW5uXoJE0R/KUeS1NtNWhjs=;
- b=KQC+o4Q48DcK6cNoFnTGOPTYSf8cblWTPV8eK8EV8D8Mr6OWmWvO+jaKLL7cv6KwJhy2
- dF+fQxh0NJpqMCI4dD851z2ecDAm8+HvzGSwI7a7+zeqejvbO7Vc4KSjJMrYBvJkyPVi
- Tx9udeo8CvyJLGkLOezdkhTa2YJ4vY35cfoDdA0CSHdcm0nqFrIqitd9lwPMXaxwRi/y
- fsanBfMfDxvmkaDIn/nVxrgUEiSmEcbqpVLbQbxK65izk21/binsImVhJXqT5feUCQEh
- RUrHZJKcgKaHJ1BDNGXEfw0Te51XsdqRatYUVxaXqP8lQwtQfvT11Tle8HFkdWX3bADU qg== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3qeuyxh94b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 08 May 2023 06:15:26 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 8 May
- 2023 06:15:24 -0700
-Received: from bbhushan2.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Mon, 8 May 2023 06:15:22 -0700
-From:   Bharat Bhushan <bbhushan2@marvell.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>
-CC:     Bharat Bhushan <bbhushan2@marvell.com>
-Subject: [PATCH 2/2 v7] Watchdog: Add marvell GTI watchdog driver
-Date:   Mon, 8 May 2023 18:45:15 +0530
-Message-ID: <20230508131515.19403-2-bbhushan2@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230508131515.19403-1-bbhushan2@marvell.com>
-References: <20230508131515.19403-1-bbhushan2@marvell.com>
+        Mon, 8 May 2023 09:29:19 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189342BCF0;
+        Mon,  8 May 2023 06:29:12 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1aad6f2be8eso42390825ad.3;
+        Mon, 08 May 2023 06:29:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683552551; x=1686144551;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v3PaC+u4I8/xCvBzjXljSbT+ExOFEPX4hvoclskNFFw=;
+        b=MWzI31C4XaHMcFzzVuAi/60gb6uwvtco6/TBowcdMuXPSg6ouaWHsUC+w3hk0vsXS6
+         oPTulJVX1PGaYLCMzcH3+8oB8oL6BeHvikIF2RUuD8i87DyMG4PNHYh6Z2Ue8r+V/LO4
+         4+SpbLukuQnI/I/HwQtnPFwDtuQ15FAhlMf2Uwry1bPCxSzZ23nAsjh8ONAQObnmWMZ9
+         PYMtxSD454r+qxmt021fSN5+vt7owtGLGVc/NwhGChX6bn9RWyQe6MCrEzPSANGHkeeX
+         em9zjjCOXakgtbHs6pbRHIsAlOQ8q974MBE6f7as19Vz+C21I3sbbgtVOo4hoAnCHtHQ
+         f9mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683552551; x=1686144551;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v3PaC+u4I8/xCvBzjXljSbT+ExOFEPX4hvoclskNFFw=;
+        b=NXQn1n3QVjc9ilpFkgZhS1iMk5wmIsfS2s0nwo1g7iO8ZHXmTquLkiCKL1s+ZqaNHx
+         +zFJag+fGjf2HyT7P0FrYV9G8aTvSLQ8RyJBBuL3rKKzw8wgTkFzv57zSBcYMsGlBiI8
+         LvzwK3hW6UaQNRv5TJh1lvCgz242b8x9WDzy90P/Jn4H+MBWhsazBxOj6G5GsQ+lGtUf
+         OrvRb4pa/KU8UQrj0/liXvJaNp1ntUaSPW3DnMUqtANvfYwYunNF8ZyH58xDkJSVEGZY
+         6/oTEtf4tBRQh+3rT2/prEcbZhKuen7+e/q56A+TSUBWu43tAlQp5IBsPGorUzHHx0Nu
+         fj6g==
+X-Gm-Message-State: AC+VfDzEWlyAZzTJZ/llpri3blYzd4DOMFFkgjWAEUiXzWclnuFPuRvv
+        yTy7R/0fw/C8fu8LfCjSzeo=
+X-Google-Smtp-Source: ACHHUZ7KAFR45h+/U8HBtUfGhPJcOvkhRnZ3gz7CGtsMf4W1x4+mYkZaOv9TKK1YDMVLKRQ2r39hPw==
+X-Received: by 2002:a17:902:8a95:b0:1aa:cddd:57d8 with SMTP id p21-20020a1709028a9500b001aacddd57d8mr9863298plo.30.1683552551322;
+        Mon, 08 May 2023 06:29:11 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v13-20020a170903238d00b001aafdf8063dsm7253193plh.157.2023.05.08.06.29.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 May 2023 06:29:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 8 May 2023 06:29:09 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: Re: [PATCH 1/3] watchdog: rzg2l_wdt: Fix reboot for RZ/V2M
+Message-ID: <7d3b2991-f755-42e5-87ca-727fd8fb9164@roeck-us.net>
+References: <20221103223956.50575-1-fabrizio.castro.jz@renesas.com>
+ <20221103223956.50575-2-fabrizio.castro.jz@renesas.com>
+ <20221115132811.GA4189373@roeck-us.net>
+ <TYWPR01MB87753203F46FA9C744FEF7E6C2069@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+ <20230507153625.GA3135@www.linux-watchdog.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: MlI5Xrrkh9H880PCpioaBczjzXmnwVty
-X-Proofpoint-ORIG-GUID: MlI5Xrrkh9H880PCpioaBczjzXmnwVty
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-08_09,2023-05-05_01,2023-02-09_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230507153625.GA3135@www.linux-watchdog.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This patch add support for Marvell GTI watchdog.  Global timer
-unit (GTI) support hardware watchdog timer. Software programs
-watchdog timer to generate interrupt on first timeout, second
-timeout is configured to be ignored and system reboots on
-third timeout.
+On Sun, May 07, 2023 at 05:36:25PM +0200, Wim Van Sebroeck wrote:
+> Hi Fabrizio,
+> 
+> Based on below e-mail I excluded this patch from the merge window.
+> I saw that Guenter still has it in his branch.
 
-Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
----
-v7:
- - Converted marvell,wdt-timer-index to optional
- - Corrected compatible to have soc names
+Thanks for the note. I'll drop it.
 
- drivers/watchdog/Kconfig           |  13 ++
- drivers/watchdog/Makefile          |   1 +
- drivers/watchdog/marvell_gti_wdt.c | 342 +++++++++++++++++++++++++++++
- 3 files changed, 356 insertions(+)
- create mode 100644 drivers/watchdog/marvell_gti_wdt.c
+Guenter
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index f22138709bf5..0351982b7abf 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1779,6 +1779,19 @@ config OCTEON_WDT
- 	  from the first interrupt, it is then only poked when the
- 	  device is written.
- 
-+config MARVELL_GTI_WDT
-+	tristate "Marvell GTI Watchdog driver"
-+	depends on ARCH_THUNDER || COMPILE_TEST
-+	default y
-+	select WATCHDOG_CORE
-+	help
-+	 Marvell GTI hardware supports watchdog timer. First timeout
-+	 works as watchdog pretimeout and installed interrupt handler
-+	 will be called on first timeout. Hardware can generate interrupt
-+	 to SCP on second timeout but it is not enabled, So second
-+	 timeout is ignored. If device poke does not happen then system
-+	 will reboot on third timeout.
-+
- config BCM2835_WDT
- 	tristate "Broadcom BCM2835 hardware watchdog"
- 	depends on ARCH_BCM2835 || (OF && COMPILE_TEST)
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index b4c4ccf2d703..a164cd161ef3 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -98,6 +98,7 @@ obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
- obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
- obj-$(CONFIG_APPLE_WATCHDOG) += apple_wdt.o
- obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
-+obj-$(CONFIG_MARVELL_GTI_WDT) += marvell_gti_wdt.o
- 
- # X86 (i386 + ia64 + x86_64) Architecture
- obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
-diff --git a/drivers/watchdog/marvell_gti_wdt.c b/drivers/watchdog/marvell_gti_wdt.c
-new file mode 100644
-index 000000000000..43f368e6fb01
---- /dev/null
-+++ b/drivers/watchdog/marvell_gti_wdt.c
-@@ -0,0 +1,342 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Marvell GTI Watchdog driver
-+ *
-+ * Copyright (C) 2023 Marvell.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/interrupt.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/watchdog.h>
-+#include <linux/clk.h>
-+
-+/*
-+ * Hardware supports following mode of operation:
-+ * 1) Interrupt Only:
-+ *    This will generate the interrupt to arm core whenever timeout happens.
-+ *
-+ * 2) Interrupt + del3t (Interrupt to firmware (SCP processor)).
-+ *    This will generate interrupt to arm core on 1st timeout happens
-+ *    This will generate interrupt to SCP processor on 2nd timeout happens
-+ *
-+ * 3) Interrupt + Interrupt to SCP processor (called delt3t) + reboot.
-+ *    This will generate interrupt to arm core on 1st timeout happens
-+ *    Will generate interrupt to SCP processor on 2nd timeout happens,
-+ *    if interrupt is configured.
-+ *    Reboot on 3rd timeout.
-+ *
-+ * Driver will use hardware in mode-3 above so that system can reboot in case
-+ * a hardware hang. Also h/w is configured not to generate SCP interrupt, so
-+ * effectively 2nd timeout is ignored within hardware.
-+ *
-+ * First timeout is effectively watchdog pretimeout.
-+ */
-+
-+/* GTI CWD Watchdog (GTI_CWD_WDOG) Register */
-+#define GTI_CWD_WDOG(reg_offset)	(0x8 * reg_offset)
-+#define GTI_CWD_WDOG_MODE_INT_DEL3T_RST	0x3
-+#define GTI_CWD_WDOG_MODE_MASK		GENMASK_ULL(1, 0)
-+#define GTI_CWD_WDOG_LEN_SHIFT		4
-+#define GTI_CWD_WDOG_LEN_MASK		GENMASK_ULL(19, 4)
-+#define GTI_CWD_WDOG_CNT_SHIFT		20
-+#define GTI_CWD_WDOG_CNT_MASK		GENMASK_ULL(43, 20)
-+
-+/* GTI CWD Watchdog Interrupt (GTI_CWD_INT) Register */
-+#define GTI_CWD_INT			0x200
-+#define GTI_CWD_INT_PENDING_STATUS(bit)	(1 << bit)
-+
-+/* GTI CWD Watchdog Interrupt Enable Clear (GTI_CWD_INT_ENA_CLR) Register */
-+#define GTI_CWD_INT_ENA_CLR		0x210
-+#define GTI_CWD_INT_ENA_CLR_VAL(bit)	(1 << bit)
-+
-+/* GTI CWD Watchdog Interrupt Enable Set (GTI_CWD_INT_ENA_SET) Register */
-+#define GTI_CWD_INT_ENA_SET		0x218
-+#define GTI_CWD_INT_ENA_SET_VAL(bit)	(1 << bit)
-+
-+/* GTI CWD Watchdog Poke (GTI_CWD_POKE) Registers */
-+#define GTI_CWD_POKE(reg_offset)	(0x10000 + 0x8 * reg_offset)
-+#define GTI_CWD_POKE_VAL		1
-+
-+struct gti_match_data {
-+	u32 gti_num_timers;
-+};
-+
-+static const struct gti_match_data match_data_octeontx2 = {
-+	.gti_num_timers = 54,
-+};
-+
-+static const struct gti_match_data match_data_cn10k = {
-+	.gti_num_timers = 64,
-+};
-+
-+struct gti_wdt_priv {
-+	struct watchdog_device wdev;
-+	void __iomem *base;
-+	u32 clock_freq;
-+	struct clk *sclk;
-+	/* wdt_timer_idx used for timer to be used for system watchdog */
-+	u32 wdt_timer_idx;
-+	const struct gti_match_data *data;
-+};
-+
-+static irqreturn_t gti_wdt_interrupt(int irq, void *data)
-+{
-+	struct watchdog_device *wdev = data;
-+	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+
-+	/* Clear Interrupt Pending Status */
-+	writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
-+	       priv->base + GTI_CWD_INT);
-+
-+	watchdog_notify_pretimeout(wdev);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int gti_wdt_ping(struct watchdog_device *wdev)
-+{
-+	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+
-+	writeq(GTI_CWD_POKE_VAL,
-+	       priv->base + GTI_CWD_POKE(priv->wdt_timer_idx));
-+
-+	return 0;
-+}
-+
-+static int gti_wdt_start(struct watchdog_device *wdev)
-+{
-+	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	u64 regval;
-+
-+	if (!wdev->pretimeout)
-+		return -EINVAL;
-+
-+	set_bit(WDOG_HW_RUNNING, &wdev->status);
-+
-+	/* Clear any pending interrupt */
-+	writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
-+	       priv->base + GTI_CWD_INT);
-+
-+	/* Enable Interrupt */
-+	writeq(GTI_CWD_INT_ENA_SET_VAL(priv->wdt_timer_idx),
-+	       priv->base + GTI_CWD_INT_ENA_SET);
-+
-+	/* Set (Interrupt + SCP interrupt (DEL3T) + core domain reset) Mode */
-+	regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-+	regval |= GTI_CWD_WDOG_MODE_INT_DEL3T_RST;
-+	writeq(regval, priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-+
-+	return 0;
-+}
-+
-+static int gti_wdt_stop(struct watchdog_device *wdev)
-+{
-+	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	u64 regval;
-+
-+	/* Disable Interrupt */
-+	writeq(GTI_CWD_INT_ENA_CLR_VAL(priv->wdt_timer_idx),
-+	       priv->base + GTI_CWD_INT_ENA_CLR);
-+
-+	/* Set GTI_CWD_WDOG.Mode = 0 to stop the timer */
-+	regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-+	regval &= ~GTI_CWD_WDOG_MODE_MASK;
-+	writeq(regval, priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-+
-+	return 0;
-+}
-+
-+static int gti_wdt_settimeout(struct watchdog_device *wdev,
-+					unsigned int timeout)
-+{
-+	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	u64 timeout_wdog, regval;
-+
-+	/* Update new timeout */
-+	wdev->timeout = timeout;
-+
-+	/* Pretimeout is 1/3 of timeout */
-+	wdev->pretimeout = timeout / 3;
-+
-+	/* Get clock cycles from pretimeout */
-+	timeout_wdog = (u64)priv->clock_freq * wdev->pretimeout;
-+
-+	/* Watchdog counts in 1024 cycle steps */
-+	timeout_wdog = timeout_wdog >> 10;
-+
-+	/* GTI_CWD_WDOG.CNT: reload counter is 16-bit */
-+	timeout_wdog = (timeout_wdog + 0xff) >> 8;
-+	if (timeout_wdog >= 0x10000)
-+		timeout_wdog = 0xffff;
-+
-+	/*
-+	 * GTI_CWD_WDOG.LEN is 24bit, lower 8-bits should be zero and
-+	 * upper 16-bits are same as GTI_CWD_WDOG.CNT
-+	 */
-+	regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-+	regval &= GTI_CWD_WDOG_MODE_MASK;
-+	regval |= (timeout_wdog << (GTI_CWD_WDOG_CNT_SHIFT + 8)) |
-+		   (timeout_wdog << GTI_CWD_WDOG_LEN_SHIFT);
-+	writeq(regval, priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-+
-+	return 0;
-+}
-+
-+static int gti_wdt_set_pretimeout(struct watchdog_device *wdev,
-+					unsigned int timeout)
-+{
-+	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	struct watchdog_device *wdog_dev = &priv->wdev;
-+
-+	/* pretimeout should 1/3 of max_timeout */
-+	if (timeout * 3 <= wdog_dev->max_timeout)
-+		return gti_wdt_settimeout(wdev, timeout * 3);
-+
-+	return -EINVAL;
-+}
-+
-+static void gti_clk_disable_unprepare(void *data)
-+{
-+	clk_disable_unprepare(data);
-+}
-+
-+static int gti_wdt_get_cntfrq(struct platform_device *pdev,
-+			      struct gti_wdt_priv *priv)
-+{
-+	int err;
-+
-+	priv->sclk = devm_clk_get(&pdev->dev, NULL);
-+	if (IS_ERR(priv->sclk))
-+		return PTR_ERR(priv->sclk);
-+
-+	err = clk_prepare_enable(priv->sclk);
-+	if (err)
-+		return err;
-+
-+	err = devm_add_action_or_reset(&pdev->dev,
-+				       gti_clk_disable_unprepare, priv->sclk);
-+	if (err)
-+		return err;
-+
-+	priv->clock_freq = clk_get_rate(priv->sclk);
-+	if (!priv->clock_freq)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static const struct watchdog_info gti_wdt_ident = {
-+	.identity = "Marvell GTI watchdog",
-+	.options = WDIOF_SETTIMEOUT | WDIOF_PRETIMEOUT | WDIOF_KEEPALIVEPING |
-+		   WDIOF_MAGICCLOSE | WDIOF_CARDRESET,
-+};
-+
-+static const struct watchdog_ops gti_wdt_ops = {
-+	.owner = THIS_MODULE,
-+	.start = gti_wdt_start,
-+	.stop = gti_wdt_stop,
-+	.ping = gti_wdt_ping,
-+	.set_timeout = gti_wdt_settimeout,
-+	.set_pretimeout = gti_wdt_set_pretimeout,
-+};
-+
-+static int gti_wdt_probe(struct platform_device *pdev)
-+{
-+	struct gti_wdt_priv *priv;
-+	struct device *dev = &pdev->dev;
-+	struct watchdog_device *wdog_dev;
-+	u64 max_pretimeout;
-+	u32 wdt_idx;
-+	int irq;
-+	int err;
-+
-+	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(priv->base),
-+			      "reg property not valid/found\n");
-+
-+	err = gti_wdt_get_cntfrq(pdev, priv);
-+	if (err)
-+		return dev_err_probe(&pdev->dev, err,
-+				     "GTI clock frequency not valid/found");
-+
-+	priv->data = of_device_get_match_data(dev);
-+
-+	/* default use last timer for watchdog */
-+	priv->wdt_timer_idx = priv->data->gti_num_timers - 1;
-+
-+	err = of_property_read_u32(dev->of_node, "marvell,wdt-timer-index",
-+				   &wdt_idx);
-+	if (!err) {
-+		if (wdt_idx >= priv->data->gti_num_timers)
-+			return dev_err_probe(&pdev->dev, err,
-+				"GTI wdog timer index not valid");
-+
-+		priv->wdt_timer_idx = wdt_idx;
-+	}
-+
-+	wdog_dev = &priv->wdev;
-+	wdog_dev->info = &gti_wdt_ident,
-+	wdog_dev->ops = &gti_wdt_ops,
-+	wdog_dev->parent = dev;
-+	/*
-+	 * Watchdog counter is 24 bit where lower 8 bits are zeros
-+	 * This counter decrements every 1024 clock cycles.
-+	 */
-+	max_pretimeout = (GTI_CWD_WDOG_CNT_MASK >> GTI_CWD_WDOG_CNT_SHIFT);
-+	max_pretimeout &= ~0xFFUL;
-+	max_pretimeout = (max_pretimeout * 1024) / priv->clock_freq;
-+	wdog_dev->pretimeout = max_pretimeout;
-+
-+	/* Maximum timeout is 3 times the pretimeout */
-+	wdog_dev->max_timeout = max_pretimeout * 3;
-+	/* Minimum first timeout (pretimeout) is 1, so min_timeout as 3 */
-+	wdog_dev->min_timeout = 3;
-+	wdog_dev->timeout = wdog_dev->pretimeout;
-+
-+	watchdog_set_drvdata(wdog_dev, priv);
-+	platform_set_drvdata(pdev, priv);
-+	gti_wdt_settimeout(wdog_dev, wdog_dev->timeout);
-+	watchdog_stop_on_reboot(wdog_dev);
-+	watchdog_stop_on_unregister(wdog_dev);
-+
-+	err = devm_watchdog_register_device(dev, wdog_dev);
-+	if (err)
-+		return err;
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return dev_err_probe(&pdev->dev, irq, "IRQ resource not found\n");
-+
-+	err = devm_request_irq(dev, irq, gti_wdt_interrupt, 0,
-+			       pdev->name, &priv->wdev);
-+	if (err)
-+		return dev_err_probe(dev, err, "Failed to register interrupt handler\n");
-+
-+	dev_info(dev, "Watchdog enabled (timeout=%d sec)\n", wdog_dev->timeout);
-+	return 0;
-+}
-+
-+static const struct of_device_id gti_wdt_of_match[] = {
-+	{ .compatible = "marvell,octeontx2-wdt", .data = &match_data_octeontx2},
-+	{ .compatible = "marvell,cn10k-wdt", .data = &match_data_cn10k},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, gti_wdt_of_match);
-+
-+static struct platform_driver gti_wdt_driver = {
-+	.driver = {
-+		.name = "gti-wdt",
-+		.of_match_table = gti_wdt_of_match,
-+	},
-+	.probe = gti_wdt_probe,
-+};
-+module_platform_driver(gti_wdt_driver);
-+
-+MODULE_AUTHOR("Bharat Bhushan <bbhushan2@marvell.com>");
-+MODULE_DESCRIPTION("Marvell GTI watchdog driver");
--- 
-2.17.1
-
+> So can we have an update on this please?
+> 
+> Thanks in advance,
+> Wim.
+> 
+> > Hi Geert and Guenter,
+> > 
+> > Thank you for your reviews!
+> > 
+> > As it turns out, the rzg2l_wdt driver has some reset related issues
+> > (currently not addressed by the driver) for the RZ/V2M and RZ/Five
+> > SoCs. More specifically to this patch, there is a better way to fix
+> > the restart callback by addressing the way the reset is handled
+> > for the watchdog IP.
+> > 
+> > I am dropping this patch, and I'll send out a series to address
+> > the above concerns (which will tackle the issues with the restart
+> > callback in a better way).
+> > 
+> > 
+> > Thanks,
+> > Fab
+> > 
+> > 
+> > > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
+> > > Sent: 15 November 2022 13:28
+> > > Subject: Re: [PATCH 1/3] watchdog: rzg2l_wdt: Fix reboot for RZ/V2M
+> > > 
+> > > On Thu, Nov 03, 2022 at 10:39:54PM +0000, Fabrizio Castro wrote:
+> > > > The setting for the RZ/V2M watchdog cannot be changed once
+> > > > the watchdog has been enabled, unless the IP gets reset.
+> > > > The current implementation of the restart callback assumes
+> > > > that the watchdog is not enabled, but that's not always the
+> > > > case, and it leads to longer than necessary reboot times if
+> > > > the watchdog is already running.
+> > > >
+> > > > Always reset the RZ/V2M watchdog first, so that we can always
+> > > > restart quickly.
+> > > >
+> > > > Fixes: ec122fd94eeb ("watchdog: rzg2l_wdt: Add rzv2m support")
+> > > > Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> > > 
+> > > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> > > 
+> > > > ---
+> > > >  drivers/watchdog/rzg2l_wdt.c | 11 ++++++++---
+> > > >  1 file changed, 8 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
+> > > > index 974a4194a8fd..00438ceed17a 100644
+> > > > --- a/drivers/watchdog/rzg2l_wdt.c
+> > > > +++ b/drivers/watchdog/rzg2l_wdt.c
+> > > > @@ -145,10 +145,10 @@ static int rzg2l_wdt_restart(struct
+> > > watchdog_device *wdev,
+> > > >  {
+> > > >  	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+> > > >
+> > > > -	clk_prepare_enable(priv->pclk);
+> > > > -	clk_prepare_enable(priv->osc_clk);
+> > > > -
+> > > >  	if (priv->devtype == WDT_RZG2L) {
+> > > > +		clk_prepare_enable(priv->pclk);
+> > > > +		clk_prepare_enable(priv->osc_clk);
+> > > > +
+> > > >  		/* Generate Reset (WDTRSTB) Signal on parity error */
+> > > >  		rzg2l_wdt_write(priv, 0, PECR);
+> > > >
+> > > > @@ -157,6 +157,11 @@ static int rzg2l_wdt_restart(struct watchdog_device
+> > > *wdev,
+> > > >  	} else {
+> > > >  		/* RZ/V2M doesn't have parity error registers */
+> > > >
+> > > > +		reset_control_reset(priv->rstc);
+> > > > +
+> > > > +		clk_prepare_enable(priv->pclk);
+> > > > +		clk_prepare_enable(priv->osc_clk);
+> > > > +
+> > > >  		wdev->timeout = 0;
+> > > >
+> > > >  		/* Initialize time out */
+> > > > --
+> > > > 2.34.1
+> > > >
