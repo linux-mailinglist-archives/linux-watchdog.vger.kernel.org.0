@@ -2,186 +2,172 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970E76FB183
-	for <lists+linux-watchdog@lfdr.de>; Mon,  8 May 2023 15:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9680F6FB5FE
+	for <lists+linux-watchdog@lfdr.de>; Mon,  8 May 2023 19:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234282AbjEHN3a (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 8 May 2023 09:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
+        id S233541AbjEHRgB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 8 May 2023 13:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234291AbjEHN3T (ORCPT
+        with ESMTP id S233491AbjEHRgA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 8 May 2023 09:29:19 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189342BCF0;
-        Mon,  8 May 2023 06:29:12 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1aad6f2be8eso42390825ad.3;
-        Mon, 08 May 2023 06:29:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683552551; x=1686144551;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v3PaC+u4I8/xCvBzjXljSbT+ExOFEPX4hvoclskNFFw=;
-        b=MWzI31C4XaHMcFzzVuAi/60gb6uwvtco6/TBowcdMuXPSg6ouaWHsUC+w3hk0vsXS6
-         oPTulJVX1PGaYLCMzcH3+8oB8oL6BeHvikIF2RUuD8i87DyMG4PNHYh6Z2Ue8r+V/LO4
-         4+SpbLukuQnI/I/HwQtnPFwDtuQ15FAhlMf2Uwry1bPCxSzZ23nAsjh8ONAQObnmWMZ9
-         PYMtxSD454r+qxmt021fSN5+vt7owtGLGVc/NwhGChX6bn9RWyQe6MCrEzPSANGHkeeX
-         em9zjjCOXakgtbHs6pbRHIsAlOQ8q974MBE6f7as19Vz+C21I3sbbgtVOo4hoAnCHtHQ
-         f9mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683552551; x=1686144551;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v3PaC+u4I8/xCvBzjXljSbT+ExOFEPX4hvoclskNFFw=;
-        b=NXQn1n3QVjc9ilpFkgZhS1iMk5wmIsfS2s0nwo1g7iO8ZHXmTquLkiCKL1s+ZqaNHx
-         +zFJag+fGjf2HyT7P0FrYV9G8aTvSLQ8RyJBBuL3rKKzw8wgTkFzv57zSBcYMsGlBiI8
-         LvzwK3hW6UaQNRv5TJh1lvCgz242b8x9WDzy90P/Jn4H+MBWhsazBxOj6G5GsQ+lGtUf
-         OrvRb4pa/KU8UQrj0/liXvJaNp1ntUaSPW3DnMUqtANvfYwYunNF8ZyH58xDkJSVEGZY
-         6/oTEtf4tBRQh+3rT2/prEcbZhKuen7+e/q56A+TSUBWu43tAlQp5IBsPGorUzHHx0Nu
-         fj6g==
-X-Gm-Message-State: AC+VfDzEWlyAZzTJZ/llpri3blYzd4DOMFFkgjWAEUiXzWclnuFPuRvv
-        yTy7R/0fw/C8fu8LfCjSzeo=
-X-Google-Smtp-Source: ACHHUZ7KAFR45h+/U8HBtUfGhPJcOvkhRnZ3gz7CGtsMf4W1x4+mYkZaOv9TKK1YDMVLKRQ2r39hPw==
-X-Received: by 2002:a17:902:8a95:b0:1aa:cddd:57d8 with SMTP id p21-20020a1709028a9500b001aacddd57d8mr9863298plo.30.1683552551322;
-        Mon, 08 May 2023 06:29:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v13-20020a170903238d00b001aafdf8063dsm7253193plh.157.2023.05.08.06.29.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 May 2023 06:29:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 8 May 2023 06:29:09 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: Re: [PATCH 1/3] watchdog: rzg2l_wdt: Fix reboot for RZ/V2M
-Message-ID: <7d3b2991-f755-42e5-87ca-727fd8fb9164@roeck-us.net>
-References: <20221103223956.50575-1-fabrizio.castro.jz@renesas.com>
- <20221103223956.50575-2-fabrizio.castro.jz@renesas.com>
- <20221115132811.GA4189373@roeck-us.net>
- <TYWPR01MB87753203F46FA9C744FEF7E6C2069@TYWPR01MB8775.jpnprd01.prod.outlook.com>
- <20230507153625.GA3135@www.linux-watchdog.org>
+        Mon, 8 May 2023 13:36:00 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C6F5FC3;
+        Mon,  8 May 2023 10:35:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683567359; x=1715103359;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e1JmpXn99KX4PvxeQe9Giaqhj7Jo074wNTWAfE5wjzc=;
+  b=G88Q3z86GauvSEPV3rOLc1+5jx2dejyFsiWD2w9c6Z63kRHq9rYeGr1h
+   KkoXMhtCJnb6bPf4JCJy/+AGlIsUfOSDnttSyzwFnS6y7fZXW+7t/1oan
+   2SlGIJWAm1cbo8eN/hiGjkezmhdQdVxKstOPwDCxmxNUO+34kN11ldAn2
+   hsDPW0dMUhalKjB4IHKcEQaOdDZEhTByEV46Nvt+tkPSAYpdCTGnY4FBA
+   u2VWbrWRlTtLM8WY2cVL8aOBiFxSkUJSzVFDIwK9mGgLP9m8IDWPRw9mG
+   jhAJO0Zfp5fxoTJaNBDUDdW1YiQL7ZM1rkYCWvXnkNlb+xYn6NzKwCB45
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="334156694"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="334156694"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2023 10:35:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="768159934"
+X-IronPort-AV: E=Sophos;i="5.99,259,1677571200"; 
+   d="scan'208";a="768159934"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 08 May 2023 10:35:38 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pw4lt-0001LV-1z;
+        Mon, 08 May 2023 17:35:37 +0000
+Date:   Tue, 9 May 2023 01:35:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sgoutham@marvell.com
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Bharat Bhushan <bbhushan2@marvell.com>
+Subject: Re: [PATCH 2/2 v7] Watchdog: Add marvell GTI watchdog driver
+Message-ID: <202305090120.Ji2xbrTK-lkp@intel.com>
+References: <20230508131515.19403-2-bbhushan2@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230507153625.GA3135@www.linux-watchdog.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230508131515.19403-2-bbhushan2@marvell.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sun, May 07, 2023 at 05:36:25PM +0200, Wim Van Sebroeck wrote:
-> Hi Fabrizio,
-> 
-> Based on below e-mail I excluded this patch from the merge window.
-> I saw that Guenter still has it in his branch.
+Hi Bharat,
 
-Thanks for the note. I'll drop it.
+kernel test robot noticed the following build errors:
 
-Guenter
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on groeck-staging/hwmon-next linus/master v6.4-rc1 next-20230508]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> So can we have an update on this please?
-> 
-> Thanks in advance,
-> Wim.
-> 
-> > Hi Geert and Guenter,
-> > 
-> > Thank you for your reviews!
-> > 
-> > As it turns out, the rzg2l_wdt driver has some reset related issues
-> > (currently not addressed by the driver) for the RZ/V2M and RZ/Five
-> > SoCs. More specifically to this patch, there is a better way to fix
-> > the restart callback by addressing the way the reset is handled
-> > for the watchdog IP.
-> > 
-> > I am dropping this patch, and I'll send out a series to address
-> > the above concerns (which will tackle the issues with the restart
-> > callback in a better way).
-> > 
-> > 
-> > Thanks,
-> > Fab
-> > 
-> > 
-> > > From: Guenter Roeck <groeck7@gmail.com> On Behalf Of Guenter Roeck
-> > > Sent: 15 November 2022 13:28
-> > > Subject: Re: [PATCH 1/3] watchdog: rzg2l_wdt: Fix reboot for RZ/V2M
-> > > 
-> > > On Thu, Nov 03, 2022 at 10:39:54PM +0000, Fabrizio Castro wrote:
-> > > > The setting for the RZ/V2M watchdog cannot be changed once
-> > > > the watchdog has been enabled, unless the IP gets reset.
-> > > > The current implementation of the restart callback assumes
-> > > > that the watchdog is not enabled, but that's not always the
-> > > > case, and it leads to longer than necessary reboot times if
-> > > > the watchdog is already running.
-> > > >
-> > > > Always reset the RZ/V2M watchdog first, so that we can always
-> > > > restart quickly.
-> > > >
-> > > > Fixes: ec122fd94eeb ("watchdog: rzg2l_wdt: Add rzv2m support")
-> > > > Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> > > 
-> > > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> > > 
-> > > > ---
-> > > >  drivers/watchdog/rzg2l_wdt.c | 11 ++++++++---
-> > > >  1 file changed, 8 insertions(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-> > > > index 974a4194a8fd..00438ceed17a 100644
-> > > > --- a/drivers/watchdog/rzg2l_wdt.c
-> > > > +++ b/drivers/watchdog/rzg2l_wdt.c
-> > > > @@ -145,10 +145,10 @@ static int rzg2l_wdt_restart(struct
-> > > watchdog_device *wdev,
-> > > >  {
-> > > >  	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
-> > > >
-> > > > -	clk_prepare_enable(priv->pclk);
-> > > > -	clk_prepare_enable(priv->osc_clk);
-> > > > -
-> > > >  	if (priv->devtype == WDT_RZG2L) {
-> > > > +		clk_prepare_enable(priv->pclk);
-> > > > +		clk_prepare_enable(priv->osc_clk);
-> > > > +
-> > > >  		/* Generate Reset (WDTRSTB) Signal on parity error */
-> > > >  		rzg2l_wdt_write(priv, 0, PECR);
-> > > >
-> > > > @@ -157,6 +157,11 @@ static int rzg2l_wdt_restart(struct watchdog_device
-> > > *wdev,
-> > > >  	} else {
-> > > >  		/* RZ/V2M doesn't have parity error registers */
-> > > >
-> > > > +		reset_control_reset(priv->rstc);
-> > > > +
-> > > > +		clk_prepare_enable(priv->pclk);
-> > > > +		clk_prepare_enable(priv->osc_clk);
-> > > > +
-> > > >  		wdev->timeout = 0;
-> > > >
-> > > >  		/* Initialize time out */
-> > > > --
-> > > > 2.34.1
-> > > >
+url:    https://github.com/intel-lab-lkp/linux/commits/Bharat-Bhushan/Watchdog-Add-marvell-GTI-watchdog-driver/20230508-211645
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230508131515.19403-2-bbhushan2%40marvell.com
+patch subject: [PATCH 2/2 v7] Watchdog: Add marvell GTI watchdog driver
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230509/202305090120.Ji2xbrTK-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0b1fbcf987da442c837b205256c6400adf6d298e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bharat-Bhushan/Watchdog-Add-marvell-GTI-watchdog-driver/20230508-211645
+        git checkout 0b1fbcf987da442c837b205256c6400adf6d298e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305090120.Ji2xbrTK-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/watchdog/marvell_gti_wdt.c: In function 'gti_wdt_interrupt':
+>> drivers/watchdog/marvell_gti_wdt.c:89:9: error: implicit declaration of function 'writeq' [-Werror=implicit-function-declaration]
+      89 |         writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
+         |         ^~~~~~
+   drivers/watchdog/marvell_gti_wdt.c: In function 'gti_wdt_start':
+>> drivers/watchdog/marvell_gti_wdt.c:126:18: error: implicit declaration of function 'readq' [-Werror=implicit-function-declaration]
+     126 |         regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+         |                  ^~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/writeq +89 drivers/watchdog/marvell_gti_wdt.c
+
+    82	
+    83	static irqreturn_t gti_wdt_interrupt(int irq, void *data)
+    84	{
+    85		struct watchdog_device *wdev = data;
+    86		struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+    87	
+    88		/* Clear Interrupt Pending Status */
+  > 89		writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
+    90		       priv->base + GTI_CWD_INT);
+    91	
+    92		watchdog_notify_pretimeout(wdev);
+    93	
+    94		return IRQ_HANDLED;
+    95	}
+    96	
+    97	static int gti_wdt_ping(struct watchdog_device *wdev)
+    98	{
+    99		struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+   100	
+   101		writeq(GTI_CWD_POKE_VAL,
+   102		       priv->base + GTI_CWD_POKE(priv->wdt_timer_idx));
+   103	
+   104		return 0;
+   105	}
+   106	
+   107	static int gti_wdt_start(struct watchdog_device *wdev)
+   108	{
+   109		struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+   110		u64 regval;
+   111	
+   112		if (!wdev->pretimeout)
+   113			return -EINVAL;
+   114	
+   115		set_bit(WDOG_HW_RUNNING, &wdev->status);
+   116	
+   117		/* Clear any pending interrupt */
+   118		writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
+   119		       priv->base + GTI_CWD_INT);
+   120	
+   121		/* Enable Interrupt */
+   122		writeq(GTI_CWD_INT_ENA_SET_VAL(priv->wdt_timer_idx),
+   123		       priv->base + GTI_CWD_INT_ENA_SET);
+   124	
+   125		/* Set (Interrupt + SCP interrupt (DEL3T) + core domain reset) Mode */
+ > 126		regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+   127		regval |= GTI_CWD_WDOG_MODE_INT_DEL3T_RST;
+   128		writeq(regval, priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+   129	
+   130		return 0;
+   131	}
+   132	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
