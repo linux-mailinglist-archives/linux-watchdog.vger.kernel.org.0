@@ -2,236 +2,167 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796BF6FC2F7
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 May 2023 11:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 715FD6FC773
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 May 2023 15:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234622AbjEIJic (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 9 May 2023 05:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55676 "EHLO
+        id S235433AbjEING1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 9 May 2023 09:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234621AbjEIJiV (ORCPT
+        with ESMTP id S235263AbjEINGT (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 9 May 2023 05:38:21 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4F34225;
-        Tue,  9 May 2023 02:38:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683625099; x=1715161099;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U1tu/Ou4injYrbKydLUxfBy7dyxZrBMFc9DZnhXqJmY=;
-  b=iE7+6ttEOB9f0f0h5J1sjbc0YwG7lff7OEwScAgNXk43X5W0HpFLsP2Z
-   DAkCLKTJ4Zy8IRU98c11F05Wxv8zwIJc46d85FaEyhlm9fsTMQNXYktjn
-   8aRTgLsVAj44rqi6Srz1kyR7wpX8BnPvusCKNXalbfM3P5TX23mf4XxTl
-   bbqmK04VCDS+KtkCzl8cLgPCgXf1vd2U15k5IAqn4W6mznl5EwWaMh0Jf
-   gtyokcGkSxGDNDzypu1RDjRthZSoZLNMaA0OrZGQw1aa9Gws0l5OHuqs5
-   a0j4hJlTTtzR09Jo15XfJQ9HZ+FQXN6O1X5b6Se8an6OTXsNOWqSKtZeR
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="436192420"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="436192420"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 02:38:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="768432339"
-X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
-   d="scan'208";a="768432339"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 09 May 2023 02:36:51 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pwJm7-00021I-0F;
-        Tue, 09 May 2023 09:36:51 +0000
-Date:   Tue, 9 May 2023 17:36:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sgoutham@marvell.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Bharat Bhushan <bbhushan2@marvell.com>
-Subject: Re: [PATCH 2/2 v7] Watchdog: Add marvell GTI watchdog driver
-Message-ID: <202305091728.1XZ6IePZ-lkp@intel.com>
-References: <20230508131515.19403-2-bbhushan2@marvell.com>
+        Tue, 9 May 2023 09:06:19 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50ED5590
+        for <linux-watchdog@vger.kernel.org>; Tue,  9 May 2023 06:06:08 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50bdd7b229cso10971061a12.0
+        for <linux-watchdog@vger.kernel.org>; Tue, 09 May 2023 06:06:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683637567; x=1686229567;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dq27aAWxCkL5lh0gQsM04iiHCtmU3UirHOLrJGmxHBw=;
+        b=bTzFElQ0Ijj7Qqx+ITj7N8by0OSLOkJjap0bR5jb2buLViuMHSIwCpg2gPnbNxbiur
+         n33ue596ZSOoRMFmoqk2Nw+qulSAPRl9FFYrxG+D2hBsBpuJ9rzibf7y9hl7H2osQ8GV
+         e9Y2kuXfjDo1FnM7qhu8Xbnp5qKFZZ1JKEy8kyyruikEg+KOZ18yiV3ne2ALwGNSFm2g
+         Y9Pjr9teRy4OQkplB6eGyFeQQ/2RFgxPRgGrgYiTmhV3rK/WmKhBGkahCk3OLdhgtGmn
+         jhA2SRixz7fO3Vq/zMVXv+AT/afuzs+K/HadURIPOpJYvBaEs8iR4BF1A3otPPfzz5ej
+         +hwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683637567; x=1686229567;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dq27aAWxCkL5lh0gQsM04iiHCtmU3UirHOLrJGmxHBw=;
+        b=hVsdOtRVq9VkTT+L1a5BeO/tp42zivBuFF6iKoASBX3RFbqGRMjjlQ3xgTHKQPAgjw
+         HbbW+KRMptSV/IbEKEeAmzRTRLGXCw3hJBy82MkqumHMwAgTjE1q0q6XjbhyWXDszJLU
+         sm8r+a+COTo2Ig1lluLHscBEpY1Nj51obf7/RUBoW9Qln+w+qa6d0NSvl0PAhCrabasE
+         PNpDC9/FsP2FrXoK02yvPorH4GXRmFO1Uyzz8PWFvMnGUm3nlcmoBTx8Qgm35l9tDCC/
+         5D35EmQ/Exsrbd0+MEnS1bm3j81UT1MhfkH5on+GOD7rySxf1OaAiWgjtEg/QjGKFX5X
+         j6DA==
+X-Gm-Message-State: AC+VfDwQK79t0dk7JBWoH3FUVVKYgxOKzgOGFbNoVlpI/BXfV8ogWrBL
+        31oIWhd/MHCHsSJss2TeenauqA==
+X-Google-Smtp-Source: ACHHUZ6HVGeI7Az5TQaNdcCmmaidSWz1zdgkmcirij9gIwYx2Yg390YoZ0P4jiPXBvOB89RSgg60Lw==
+X-Received: by 2002:aa7:c059:0:b0:50d:9b57:842a with SMTP id k25-20020aa7c059000000b0050d9b57842amr5582009edo.9.1683637567393;
+        Tue, 09 May 2023 06:06:07 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
+        by smtp.gmail.com with ESMTPSA id y2-20020a056402134200b00504ecc4fa96sm726424edw.95.2023.05.09.06.06.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 06:06:06 -0700 (PDT)
+Message-ID: <8b540cc2-bc0d-9d8b-45e6-98410322b3f6@linaro.org>
+Date:   Tue, 9 May 2023 15:06:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508131515.19403-2-bbhushan2@marvell.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [EXT] Re: [PATCH 1/2 v7] dt-bindings: watchdog: marvell GTI
+ system watchdog driver
+Content-Language: en-US
+To:     Bharat Bhushan <bbhushan2@marvell.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sunil Kovvuri Goutham <sgoutham@marvell.com>
+References: <20230508131515.19403-1-bbhushan2@marvell.com>
+ <ea9ae4c9-2808-bf22-70a3-bb7e7b1168d0@linaro.org>
+ <DM5PR1801MB1883175A2538B85FEF571B7AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
+ <8119eec8-0190-b6a5-85a7-301bcb81b0c9@linaro.org>
+ <DM5PR1801MB1883A414F47BB56E9537673AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <DM5PR1801MB1883A414F47BB56E9537673AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Bharat,
+On 09/05/2023 11:01, Bharat Bhushan wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Sent: Tuesday, May 9, 2023 1:38 PM
+>> To: Bharat Bhushan <bbhushan2@marvell.com>; wim@linux-watchdog.org;
+>> linux@roeck-us.net; robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+>> linux-watchdog@vger.kernel.org; devicetree@vger.kernel.org; linux-
+>> kernel@vger.kernel.org; Sunil Kovvuri Goutham <sgoutham@marvell.com>
+>> Subject: Re: [EXT] Re: [PATCH 1/2 v7] dt-bindings: watchdog: marvell GTI system
+>> watchdog driver
+>>
+>> On 09/05/2023 09:26, Bharat Bhushan wrote:
+>>
+>>
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    oneOf:
+>>>>> +      - const: marvell,octeontx2-wdt
+>>>>
+>>>> Why is this alone? Judging by the enum below, octeontx2 is not specific.
+>>>>
+>>>>> +      - items:
+>>>>> +          - enum:
+>>>>> +              - marvell,octeontx2-95xx-wdt
+>>>>> +              - marvell,octeontx2-96xx-wdt
+>>>>> +              - marvell,octeontx2-98xx-wdt
+>>>>
+>>>> We don't allow wildcards in general
+>>>
+>>> Marvell have octeontx2 series of processor which have watchdog timer.
+>>> In 95xx,98xx,96xx are the processors in octeontx2 series of processor. So
+>> octeontx2-95xx is on soc, octeontx2-96xx is another and so on.
+>>
+>> No, 95xx is not a processor. Otherwise please point me to exact product
+>> datasheet. Hint: I checked it.
+> 
+> Looks like 95xx data sheet is not public, will remove in that case.
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on groeck-staging/hwmon-next linus/master v6.4-rc1 next-20230509]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bharat-Bhushan/Watchdog-Add-marvell-GTI-watchdog-driver/20230508-211645
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230508131515.19403-2-bbhushan2%40marvell.com
-patch subject: [PATCH 2/2 v7] Watchdog: Add marvell GTI watchdog driver
-config: hexagon-randconfig-r015-20230508 (https://download.01.org/0day-ci/archive/20230509/202305091728.1XZ6IePZ-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0b1fbcf987da442c837b205256c6400adf6d298e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Bharat-Bhushan/Watchdog-Add-marvell-GTI-watchdog-driver/20230508-211645
-        git checkout 0b1fbcf987da442c837b205256c6400adf6d298e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/watchdog/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305091728.1XZ6IePZ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/watchdog/marvell_gti_wdt.c:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/watchdog/marvell_gti_wdt.c:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/watchdog/marvell_gti_wdt.c:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/watchdog/marvell_gti_wdt.c:89:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
-           ^
-   drivers/watchdog/marvell_gti_wdt.c:101:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           writeq(GTI_CWD_POKE_VAL,
-           ^
-   drivers/watchdog/marvell_gti_wdt.c:118:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
-           ^
->> drivers/watchdog/marvell_gti_wdt.c:126:11: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-                    ^
-   drivers/watchdog/marvell_gti_wdt.c:139:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           writeq(GTI_CWD_INT_ENA_CLR_VAL(priv->wdt_timer_idx),
-           ^
-   drivers/watchdog/marvell_gti_wdt.c:143:11: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-                    ^
-   drivers/watchdog/marvell_gti_wdt.c:177:11: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-                    ^
-   drivers/watchdog/marvell_gti_wdt.c:181:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           writeq(regval, priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-           ^
-   6 warnings and 8 errors generated.
+We can talk about 96xx. Can you point me to the SoC named exactly like
+this? Hint: I checked it.
 
 
-vim +/writeq +89 drivers/watchdog/marvell_gti_wdt.c
+> 
+>>
+>>>
+>>>>
+>>>>> +          - const: marvell,octeontx2-wdt
+>>>>> +      - const: marvell,cn10k-wdt
+>>>>
+>>>> Same question - why is this alone?
+>>> Same here, Marvell have cn10k series of processors and cn10kx and cnf10kx are
+>> the processor in this series.
+>>
+>> I don't understand how does it explain my concern. This is alone because there
+>> are series of processors? How is that related?
+> 
+> Tried to make it look like other drivers. Let's keep it simple, we want to enable this only for below ones
 
-    82	
-    83	static irqreturn_t gti_wdt_interrupt(int irq, void *data)
-    84	{
-    85		struct watchdog_device *wdev = data;
-    86		struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-    87	
-    88		/* Clear Interrupt Pending Status */
-  > 89		writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
-    90		       priv->base + GTI_CWD_INT);
-    91	
-    92		watchdog_notify_pretimeout(wdev);
-    93	
-    94		return IRQ_HANDLED;
-    95	}
-    96	
-    97	static int gti_wdt_ping(struct watchdog_device *wdev)
-    98	{
-    99		struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-   100	
-   101		writeq(GTI_CWD_POKE_VAL,
-   102		       priv->base + GTI_CWD_POKE(priv->wdt_timer_idx));
-   103	
-   104		return 0;
-   105	}
-   106	
-   107	static int gti_wdt_start(struct watchdog_device *wdev)
-   108	{
-   109		struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-   110		u64 regval;
-   111	
-   112		if (!wdev->pretimeout)
-   113			return -EINVAL;
-   114	
-   115		set_bit(WDOG_HW_RUNNING, &wdev->status);
-   116	
-   117		/* Clear any pending interrupt */
-   118		writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
-   119		       priv->base + GTI_CWD_INT);
-   120	
-   121		/* Enable Interrupt */
-   122		writeq(GTI_CWD_INT_ENA_SET_VAL(priv->wdt_timer_idx),
-   123		       priv->base + GTI_CWD_INT_ENA_SET);
-   124	
-   125		/* Set (Interrupt + SCP interrupt (DEL3T) + core domain reset) Mode */
- > 126		regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-   127		regval |= GTI_CWD_WDOG_MODE_INT_DEL3T_RST;
-   128		writeq(regval, priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-   129	
-   130		return 0;
-   131	}
-   132	
+Enable what? None of these explains why do you need this entry alone,
+since it is covered by list further.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> 
+> properties:
+>   compatible:
+>     enum:
+>      - marvell,cn10k-wdt
+>      - marvell,octeontx2-wdt
+> 
+> Are you good with that?
+
+Not sure, it sounds like it ignores our entire discussion. What's the
+name of the SoC? I see "OcteonTx2 CN9130", not "OcteonTx2". I linked
+your previously guide how to write bindings. Did you read it?
+
+Best regards,
+Krzysztof
+
