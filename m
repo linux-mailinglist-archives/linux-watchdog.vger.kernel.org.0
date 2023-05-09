@@ -2,341 +2,236 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CD56FC23A
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 May 2023 11:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796BF6FC2F7
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 May 2023 11:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233784AbjEIJCB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 9 May 2023 05:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
+        id S234622AbjEIJic (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 9 May 2023 05:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjEIJCA (ORCPT
+        with ESMTP id S234621AbjEIJiV (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 9 May 2023 05:02:00 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC9CD076;
-        Tue,  9 May 2023 02:01:59 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3498b6EP005581;
-        Tue, 9 May 2023 02:01:43 -0700
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2172.outbound.protection.outlook.com [104.47.57.172])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3qf77s1y9x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 May 2023 02:01:42 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g4zLlYvqFjgyHSVEU+DV528FSwLHbxeP0pH5aywiUNl1l2eLzAQQNJLxXotSg3FgNxNeCTgZp05HY1189mcIXq98baIRgTqLKqX75oFKS5VMubOJ5kyfLKXJrOG23lFlrIlqtmygzwolUvoMnCvOYhLuw1HTFEjDEXUTm6GttTgFffSNT4LB7vVXAaxQh43lk3beNHrUc6IQFG1n/eZoFC/SaTu5ME/dMXtxBzQMZ4hkHvR+fVli4DIXmyP++qWJMXtKd9+JwUr2IOIP6FluZ0wzK0GDLZqVxvY8QCACmgW6srXy4azC0G+nUL3NaeRLcD/ioTj9f07MveudHK2t2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KThWopNZ/3VHxPzmsSPoNqfiR35yv4oWZ2Rz+7T6HYY=;
- b=Xbt0Gl0pcdGF/86Z8G8/iylDTLapok3xOwdVLPs1UWj0em9oraqc24Uv3b+7vAf4qBEDQbH6p4f5SqHm4Dy0glZYLueUEPDF9/qe3MiPY2+NK89nLnwewNnOSpT6ss0sShrhPTckkBAcK9Qd/amTKnlhwy9nZkTH0Zjn+6lGadkUCiOz3EfVeBuJ/ZnSq8A9DTDP27YlZ7nw48Z6GW5CoBBC2LtCEO9jdYPudUnij2g9IAxP5eD8jigxymn0+4/HP0lGrjmV18HTkSQV958QBr10LBAmKIPIsjPoh9UwpU6uH4ppSN5c8rNbU+A7qysUc5kr0zrDWbzjzhjV+cKhUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KThWopNZ/3VHxPzmsSPoNqfiR35yv4oWZ2Rz+7T6HYY=;
- b=XEtLeE5/5G8G/ZoQ/cOhkbmGgYHfPAlThCH2x4OWFiPcH75ykWoEsk2jz1tNeHvu0GNLQ1Fo2gErIEEDmKXf0dyKNGHBMee07RXlQMiz+tsHnQpq+cyczafvyX8gFs7p12mufwU+st+g/f98TZ9ujyUf9DtwPD5TXHEEBelnrnI=
-Received: from DM5PR1801MB1883.namprd18.prod.outlook.com (2603:10b6:4:62::23)
- by BN8PR18MB2593.namprd18.prod.outlook.com (2603:10b6:408:9a::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27; Tue, 9 May
- 2023 09:01:40 +0000
-Received: from DM5PR1801MB1883.namprd18.prod.outlook.com
- ([fe80::fdcb:2476:27c9:8f07]) by DM5PR1801MB1883.namprd18.prod.outlook.com
- ([fe80::fdcb:2476:27c9:8f07%5]) with mapi id 15.20.6363.029; Tue, 9 May 2023
- 09:01:40 +0000
-From:   Bharat Bhushan <bbhushan2@marvell.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sunil Kovvuri Goutham <sgoutham@marvell.com>
-Subject: RE: [EXT] Re: [PATCH 1/2 v7] dt-bindings: watchdog: marvell GTI
- system watchdog driver
-Thread-Topic: [EXT] Re: [PATCH 1/2 v7] dt-bindings: watchdog: marvell GTI
- system watchdog driver
-Thread-Index: AQHZga8oR0WZcCPxYEy1WPWNGBw8HK9RgnQAgAAFuuCAAA8mgIAACYzQ
-Date:   Tue, 9 May 2023 09:01:39 +0000
-Message-ID: <DM5PR1801MB1883A414F47BB56E9537673AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
-References: <20230508131515.19403-1-bbhushan2@marvell.com>
- <ea9ae4c9-2808-bf22-70a3-bb7e7b1168d0@linaro.org>
- <DM5PR1801MB1883175A2538B85FEF571B7AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
- <8119eec8-0190-b6a5-85a7-301bcb81b0c9@linaro.org>
-In-Reply-To: <8119eec8-0190-b6a5-85a7-301bcb81b0c9@linaro.org>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: =?utf-8?B?UEcxbGRHRStQR0YwSUc1dFBTSmliMlI1TG5SNGRDSWdjRDBpWXpwY2RYTmxj?=
- =?utf-8?B?bk5jWW1Kb2RYTm9ZVzR5WEdGd2NHUmhkR0ZjY205aGJXbHVaMXd3T1dRNE5E?=
- =?utf-8?B?bGlOaTB6TW1RekxUUmhOREF0T0RWbFpTMDJZamcwWW1FeU9XVXpOV0pjYlhO?=
- =?utf-8?B?bmMxeHRjMmN0TVRrNU9UQTRZV0V0WldVME9DMHhNV1ZrTFdGbE4yTXRNRFJp?=
- =?utf-8?B?T1dVek16TTRaalpsWEdGdFpTMTBaWE4wWERFNU9Ua3dPR0ZpTFdWbE5EZ3RN?=
- =?utf-8?B?VEZsWkMxaFpUZGpMVEEwWWpsbE16TXpPR1kyWldKdlpIa3VkSGgwSWlCemVq?=
- =?utf-8?B?MGlNams1TUNJZ2REMGlNVE16TWpnd09UWTBPVFkyTWprek9UUTNJaUJvUFNJ?=
- =?utf-8?B?NWEyUlpkMDVxVGxjNGJrSTBWRTB3VFRKSWNtNVpTRWxWYWtFOUlpQnBaRDBp?=
- =?utf-8?B?SWlCaWJEMGlNQ0lnWW04OUlqRWlJR05wUFNKalFVRkJRVVZTU0ZVeFVsTlNW?=
- =?utf-8?B?VVpPUTJkVlFVRkhXVTVCUVVNM1NWTlFZMVpKVEZwQlptcExka2RzV0ZsVlJG?=
- =?utf-8?B?SXJUWEU0WVZaa2FGRk9SVlpCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJTRUZCUVVGRU1rUkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlJVRkJVVVZDUVVGQlFUTm1VVUZaZDBOQlFWRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VW8wUVVGQlFtaEJSMUZCV2tGQ2VVRkhWVUZqZDBKNlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGRlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFXZEJRVUZCUVVGdVowRkJRVWROUVdSUlFucEJTRkZCWW5kQ2RFRkdPRUZq?=
- =?utf-8?B?UVVKc1FVaEpRV04zUW5aQlJ6UkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJV?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVU5CUVVGQlFVRkRaVUZCUVVGWmQwSXhRVWhOUVdSQlFu?=
- =?utf-8?B?WkJSekJCV0hkQ2QwRkhaMEZpZDBKMVFVZFZRV0puUWpGQlJ6QkJXV2RDYkVG?=
- =?utf-8?B?SVNVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUWtGQlFVRkJRVUZCUVVGSlFVRkJRVUZCU2pSQlFVRkNha0ZJ?=
- =?utf-8?B?VlVGamQwSXdRVWM0UVdKUlFtWkJTRTFCWTNkQ2RVRkdPRUZhUVVKb1FVaE5R?=
- =?utf-8?B?V0ZCUW1aQlNGbEJUVUZCZVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?Q?FBQUFB?=
-x-dg-refone: =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVVkJRVUZCUVVGQlFVRkJaMEZCUVVGQlFXNW5RVUZC?=
- =?utf-8?B?UjAxQlpGRkNla0ZJVVVGaWQwSjBRVVk0UVdOM1FucEJSelJCV0hkQ2NrRkhW?=
- =?utf-8?B?VUZsVVVJelFVYzRRV05uUW10QlNFMUJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZSUVVGQlFVRkJRVUZCUTBGQlFV?=
- =?utf-8?B?RkJRVU5sUVVGQlFWbDNRakZCU0UxQlpFRkNka0ZITUVGWWQwSjZRVWhOUVdK?=
- =?utf-8?B?blFtWkJSelJCWW5kQ2EwRkhWVUZpUVVKd1FVY3dRV0ZSUWpCQlIxVkJZMmRD?=
- =?utf-8?B?WmtGSVdVRk5RVUY1UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQ1FVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVbEJRVUZCUVVGS05FRkJRVUpxUVVoVlFXTjNRakJCUnpoQllsRkNa?=
- =?utf-8?B?a0ZJVFVGamQwSjFRVVk0UVdOM1FuZEJSMFZCV1hkQ2JFRkdPRUZrWjBGM1FV?=
- =?utf-8?B?UkpRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJSVUZCUVVGQlFVRkJRVUZuUVVGQlFVRkJibWRCUVVGSFVVRmlRVUozUVVZ?=
- =?utf-8?B?NFFXTjNRbkpCU0d0QlkwRkNiRUZHT0VGWmQwSnZRVWRGUVdSQlFtWkJSekJC?=
- =?utf-8?B?V2xGQ2VrRklUVUZaVVVKdVFVZFZRVmgzUWpKQlJFRkJUV2RCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVZGQlFVRkJRVUZCUVVGRFFVRkJRVUZCUTJWQlFVRkJX?=
- =?utf-8?B?a0ZDYzBGSVFVRllkMEo2UVVkM1FWbFJRbXBCUjNOQldIZENha0ZIWjBGWlVV?=
- =?utf-8?B?SXdRVVk0UVdKUlFteEJTRTFCWTNkQ2FFRkhZMEZhVVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?Q?FBQUFB?=
-x-dg-reftwo: =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVSkJRVUZCUVVGQlFVRkJTVUZCUVVGQlFVbzBR?=
- =?utf-8?B?VUZCUW10QlIzZEJZMEZDWmtGSVVVRmFVVUpvUVVjd1FXTjNRbVpCUnpoQllt?=
- =?utf-8?B?ZENiRUZIVVVGalowSndRVWhaUVZwUlFtWkJSMWxCWVZGQ2MwRkhWVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZGUVVGQlFVRkJRVUZCUVdk?=
- =?utf-8?B?QlFVRkJRVUZ1WjBGQlFVZFZRV0pSUW1oQlIydEJZa0ZDWmtGSFJVRmFRVUpy?=
- =?utf-8?B?UVVoSlFWcFJRbnBCU0UxQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVTm5RVUZCUVVGQlFVRkJRVUZCUVVGQlVVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVTkJRVUZCUVVGRFpVRkJRVUZpVVVKb1FVaEpRV1JuUW14QlIz?=
- =?utf-8?B?ZEJXSGRDZDBGSVNVRmlkMEp4UVVkVlFWbDNRakJCUmpoQlltZENhRUZITUVG?=
- =?utf-8?B?YVVVSjZRVVk0UVdOblFteEJTRTFCWkVGQ2VVRkhhMEZaZDBJd1FVZFZRVnBC?=
- =?utf-8?B?UW1aQlIwVkJZa0ZDZGtGSE5FRmFVVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRa0ZCUVVGQlFVRkJRVUZKUVVGQlFVRkJTalJCUVVGQ2RFRkhSVUZq?=
- =?utf-8?B?WjBJeVFVZFZRV0pCUW1aQlNFRkJZMmRDZGtGSGIwRmFVVUpxUVVoUlFWaDNR?=
- =?utf-8?B?blZCUjBWQllsRkNiRUZJVFVGWWQwSjVRVWRWUVdOM1FqQkJTRWxCWVZGQ2Fr?=
- =?utf-8?B?RklVVUZhVVVKclFVWTRRV0ZCUW14QlNHZEJXWGRDZGtGSFVVRmFVVUo2UVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVWQlFVRkJRVUZCUVVGQlowRkJRVUZCUVc1blFV?=
- =?utf-8?B?RkJSekJCV1ZGQ2VVRklXVUZhVVVKelFVZDNRVmgzUW1oQlNFbEJZbEZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRlJRVUZCUVVGQlFVRkJRMEZC?=
- =?utf-8?B?UVVGQlFVTmxRVUZCUVdKUlFtaEJTRWxCWkdkQ2JFRkhkMEZpUVVKbVFVaEJR?=
- =?utf-8?B?V05uUW5aQlIyOUJXbEZDYWtGSVVVRllkMEpxUVVjNFFWcEJRbXhCU0UxQlFV?=
- =?utf-8?Q?FBQUFB?=
-x-dg-refthree: =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZDUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVsQlFVRkJRVUZLTkVGQlFVSjBRVWRGUVdOblFqSkJSMVZCWWtGQ2MwRkdP?=
- =?utf-8?B?RUZqUVVKNVFVYzRRV0ZuUW14QlIwMUJaRUZDWmtGSFRVRmlkMEpyUVVkVlFX?=
- =?utf-8?B?TjNRbVpCUjFGQllWRkNha0ZJVVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlJV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRm5RVUZCUVVGQmJtZEJRVUZITUVGWlVVSjVRVWhaUVZw?=
- =?utf-8?B?UlFuTkJSM2RCV0hkQ2QwRklTVUZpZDBKeFFVZFZRVmwzUWpCQlJqaEJZbWRD?=
- =?utf-8?B?YUVGSE1FRmFVVUo2UVVZNFFWbDNRblpCUnpSQldtZENjRUZIVVVGYVVVSjFR?=
- =?utf-8?B?VWhSUVdGUlFtaEJSM2RCV0hkQ2RFRkhSVUZqWjBJeVFVZFZRV0pCUW5OQlJq?=
- =?utf-8?B?aEJXVkZDZFVGSFVVRllkMEowUVVkclFXTkJRVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVkZCUVVGQlFVRkJRVUZEUVVGQlFVRkJRMlZCUVVGQllsRkNh?=
- =?utf-8?B?RUZJU1VGa1owSnNRVWQzUVdKQlFtWkJTRUZCWTJkQ2RrRkhiMEZhVVVKcVFV?=
- =?utf-8?B?aFJRVmgzUW5WQlIwVkJZbEZDYkVGSVRVRllkMEo1UVVkVlFXTjNRakJCU0Vs?=
- =?utf-8?B?QllWRkNha0ZJVVVGYVVVSnJRVVk0UVdKUlFtaEJTRWxCWkdkQ2JFRkhkMEZp?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?B?RkJRVUZCUVVGQlFVRkJRVUZCUVVKQlFVRkJRVUZCUVVGQlNVRkJRVUZCUVVv?=
- =?utf-8?B?MFFVRkJRblJCUjBWQlkyZENNa0ZIVlVGaVFVSnpRVVk0UVdOQlFubEJSemhC?=
- =?utf-8?B?WVdkQ2JFRkhUVUZrUVVKbVFVYzBRVmxSUW5SQlIxVkJZM2RDWmtGSVNVRmFV?=
- =?utf-8?B?VUo2UVVoUlFXTm5RbkJCUjAxQlpFRkNiRUZIVVVGWWQwSjBRVWRGUVdOblFq?=
- =?utf-8?B?SkJSMVZCWWtGQ2MwRkdPRUZpZDBKNVFVWTRRVmxSUW5sQlJ6QkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkZRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?V2RCUVVGQlFVRnVaMEZCUVVjd1FWbFJRbmxCU0ZsQldsRkNjMEZIZDBGWWQw?=
- =?utf-8?B?SXdRVWRWUVdOblFuUkJSMnRCWW1kQ01VRklUVUZCUVVGQlFVRkJRVUZCUVVG?=
- =?utf-8?B?QlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZC?=
- =?utf-8?B?UVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJR?=
- =?utf-8?B?VUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFVRkJRVUZCUVVGQlFV?=
- =?utf-8?Q?FBQUFB?=
-x-dg-reffour: QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFBQUFDZUFBQUFiUUJoQUhJQWRnQmxBR3dBYkFCZkFIY0Fid0J5QUdRQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFNQUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBQT09Ii8+PC9tZXRhPg==
-x-dg-rorf: true
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM5PR1801MB1883:EE_|BN8PR18MB2593:EE_
-x-ms-office365-filtering-correlation-id: 35d236e7-5f1e-414d-bda3-08db506c0090
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: o48Mm+zYqDVZvYCPAM9SJ5qggxWOjVbwqtya8PjALD+AqNyMgsJdReyAQ/7GVM7uTnLq9MMZN4DpfcIA5mAjvOIA6f/DW0g6zZE6IWqbYklWvTA4qwEJlc3t5voBPJeYp7yMPKCMoYgu1i2YiO3giQLw7WtkWNX+JGpDRaSysq7/Q7cHvnD5nrbjIzDX4m5X9djS5GxaDYX5hqDdNuee6wbug9QjAXBKUnsUchC90y+l7m7Xb9rHDXrQkQzyPbqaXK+bxpVb6lBjzXojMHrqaHrFWqbiulYARQyTk1t8IZy7Wyeh+2O9zdYMH3PlzTiWhyFRWrcvKwGbyOVjz5pX/C1H9oK1s0oIPbZD8KVqqSJrP81ISRYVTawiFwlsn+JAWdsYprQ69TgzC4OtxfQnwMGdCKpbyOfSR4E8fIOHvaoBSQDkGm59nPu0RaJJiMkz8J5YVuo3lnSEe8yLs93JCiOX9XE2hFDkHWw9wI64pF5n/zNjhtqLzXeweefaNjWVEdQLGAVJC+hXOuN2cT8hP8WzBq5KhhXhWuoQMX0W9H5Imj8l0/vC7nhJ/wX57CTepP8pmgw+8nfXO4oQGIlTYo0/GFpGUGNK7r3hvzNmpMU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR1801MB1883.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(39860400002)(136003)(346002)(376002)(451199021)(41300700001)(66476007)(7696005)(38100700002)(122000001)(38070700005)(6506007)(966005)(186003)(26005)(9686003)(478600001)(53546011)(55236004)(71200400001)(83380400001)(55016003)(33656002)(66946007)(66556008)(76116006)(66446008)(64756008)(5660300002)(316002)(2906002)(6636002)(52536014)(86362001)(110136005)(8676002)(8936002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dUpDSklEZjBhTWNRLzRRQlZncXMySENkRG5CS2hsSllNOXlFN21ZSENiVmRo?=
- =?utf-8?B?dlBZUkpaZXFITW9EWEFKSW9URTBPUkt2L25BNlZQUm1Zck84dk1qWGt2Ulls?=
- =?utf-8?B?a3ZRNEJ1ZXZLbllWUFRTaEd6dzhjRkpva085aHRKcksweUlMblJFRDNldVNn?=
- =?utf-8?B?QkZ1TzAweW4yWWxiQXM3cm44T0NxN1cyWGFDN1JseVFZT0s0c0p5K2NBSmxG?=
- =?utf-8?B?V2ZDSTNLbWtBT1M4LzJMK3V1ZGR1eE9uOUtHSnJWZ0JiNlRldGtGRWY4OUY5?=
- =?utf-8?B?bHEwenU1bnhuU3gvK29rRTFLY01XSE1mRGowRTZ3ZGNHTVAyWXRHL1JZb1lB?=
- =?utf-8?B?UERhZ0FhTHhJVnN3QTJ0Vnd2bUs2TXNKcFRIOEE4WHZ5NU1CbFBNMlVxb25l?=
- =?utf-8?B?Q3JHSVFqTkNHRFdRK2ZZTXNXaFVRc3dIYVVrekU5c0JuMkFWOEw1OU5LcWZD?=
- =?utf-8?B?bEg0amk3bkF0bDl1Z1U2dFhxZUtpaTc1anR2L2tOSjhpZVVoWlFzNFVGL2lU?=
- =?utf-8?B?bUxyLzdVeFJ2RHlJMVZ5RGFySENzVUg4ZnVXWm1sMFRJMkVVZmhxRUdKbTA1?=
- =?utf-8?B?KzBQVjdTbjZoSVVzcmxsYU9OUDFGZFVvTUZYcW9ndDZVaG0zUDdOU2Zsd0Ns?=
- =?utf-8?B?eUxYYXhZNXl6cjc5ZFJJa011VHFMY2IvVU90cnQwT3FPNjNPT0JlTG9yVlR3?=
- =?utf-8?B?Nm0wb2I4WEtnLy9rMy9sdjRwcmZ1QU9UZ0lGd1M3VUdxMDZEMEYwSXZMWVRD?=
- =?utf-8?B?SzhmbmpmWExHczJOWlNHcE0xZGlJZnF4VG9uVy9kV2RnZ2dibzVSdCs5YTRI?=
- =?utf-8?B?WFhMc3NXSFJiZHJydWFmZXNoVVAwRzhyREJ2TmJLTUNrbXNHU0NoMXJxQVo1?=
- =?utf-8?B?QlFKdjRnM0VKMmtqOGdUUFJrakUzd2ZnNVZHMDUvSndKWG1STVQ1eUhBUnJD?=
- =?utf-8?B?RjdzLzN0V0Z1QXl1bHpNcndjVHl5QWVaWG9yWlA0UUdsdHNSWWpRb1lRdXdZ?=
- =?utf-8?B?eWhKTmtvYSsxOG5qYyt0SXl0U0k1UzZvRm5sNTg5WGtPMVdvOFgrRGFJTVEv?=
- =?utf-8?B?OElEOC9mYmFhWitZZXZuYTdFcFBiUFpSanpnQlNaNkgrcERmWXZDekpNaTZK?=
- =?utf-8?B?eGgzZ2NTWnRhd2tvMlhnbnVIN2h5azJGeVR6YUxHSDUxOExmRWF1VmZXVFVm?=
- =?utf-8?B?TktvTHdRSnFQSU50OUs3QjV1QUlVWjJCYXVOcDhtaXprZGhPWUZ2Q3ZtLzYy?=
- =?utf-8?B?bmlnOG5nQXRjdkhhT2VOdm1EUlpMTzEwbHlLTW1GaHl3Q2hKVWh1dkh3MjJT?=
- =?utf-8?B?ZGw1ZUdrVFUydlhSNlhGaktKMzQrT3dQNkQwb21jTDVPeHNPcjh0eXNTY1Nm?=
- =?utf-8?B?RHZKMk1FeTVpSEgrL2Z2bUhsQzVKYlFuRmdsRDVsbGtFR3hRdStjMzhDMGU3?=
- =?utf-8?B?dmN1M2VzVVpWQ2FwYTFjbFV4K1JEeTV3ZjB3Q3Z0Si9hMXNDT0Z1VEdocDFZ?=
- =?utf-8?B?WnVabGZYTVJISThlU3BYKzltNXp5RmlNaHdDL1MzNjhxZk1pa1F5cnJJeG8w?=
- =?utf-8?B?UTNFUkxXUXhoRG9LYXZYRXExS1dvZlRkTTJKcHFwK3NoeFhLK1lVRzBCOWdX?=
- =?utf-8?B?T3ErcGtWeFZRMzJKQytNSktJY2NqS21jTjY1bFlSVkQxWkVMVjI4K0tRNitC?=
- =?utf-8?B?bDF5OWJpbGtRc3hrb2RvbzNVS3Rjb3JxYzV3ZFB4L3U2MThTd3Qwd3p5RUk0?=
- =?utf-8?B?TnJiQ1hSSHBOZnVvNnIzWEtIV1IybzBORGl1UGllRUVTYWF3VWtlcjcyL2NM?=
- =?utf-8?B?a3c4Tmlaay9SOWdVSmxQSVdnZUk1ZG1vb1hYQXltZEVocTBjclZzM3RsUUVv?=
- =?utf-8?B?OWdaRloxeU05cjRUU1UwTkYxYnBWZW1lRHk3WnlaeTZ6WmRmem9RNGJVb3J4?=
- =?utf-8?B?Szh3NVFORkZ5c3QzaGo4MzJHNldpU3ZOTXpWaW9Zd1dzUy9iRmZEV0VxeE1Q?=
- =?utf-8?B?TVR6eDI1Wm5kTXNpdGZzRHlxWG1tSU9OYkZnSEJRbzFJa3Fwam1USURocTY0?=
- =?utf-8?B?SDhNMjVRVnZjZkJKTnhFaGZweVhyMGFTUENhdlhWVVA2dmlGYjNQRXlselVH?=
- =?utf-8?Q?xMdtNr6xDdXxa5zYYxgkiXzxT?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 9 May 2023 05:38:21 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4F34225;
+        Tue,  9 May 2023 02:38:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683625099; x=1715161099;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U1tu/Ou4injYrbKydLUxfBy7dyxZrBMFc9DZnhXqJmY=;
+  b=iE7+6ttEOB9f0f0h5J1sjbc0YwG7lff7OEwScAgNXk43X5W0HpFLsP2Z
+   DAkCLKTJ4Zy8IRU98c11F05Wxv8zwIJc46d85FaEyhlm9fsTMQNXYktjn
+   8aRTgLsVAj44rqi6Srz1kyR7wpX8BnPvusCKNXalbfM3P5TX23mf4XxTl
+   bbqmK04VCDS+KtkCzl8cLgPCgXf1vd2U15k5IAqn4W6mznl5EwWaMh0Jf
+   gtyokcGkSxGDNDzypu1RDjRthZSoZLNMaA0OrZGQw1aa9Gws0l5OHuqs5
+   a0j4hJlTTtzR09Jo15XfJQ9HZ+FQXN6O1X5b6Se8an6OTXsNOWqSKtZeR
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="436192420"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="436192420"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 02:38:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10704"; a="768432339"
+X-IronPort-AV: E=Sophos;i="5.99,261,1677571200"; 
+   d="scan'208";a="768432339"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 09 May 2023 02:36:51 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwJm7-00021I-0F;
+        Tue, 09 May 2023 09:36:51 +0000
+Date:   Tue, 9 May 2023 17:36:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sgoutham@marvell.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Bharat Bhushan <bbhushan2@marvell.com>
+Subject: Re: [PATCH 2/2 v7] Watchdog: Add marvell GTI watchdog driver
+Message-ID: <202305091728.1XZ6IePZ-lkp@intel.com>
+References: <20230508131515.19403-2-bbhushan2@marvell.com>
 MIME-Version: 1.0
-X-OriginatorOrg: marvell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR1801MB1883.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35d236e7-5f1e-414d-bda3-08db506c0090
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 May 2023 09:01:39.8874
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6eUjyJTRL8AajZhWCLfpN2avuveqpYSg+JvEXl6yCuFD4ZzCrJ7cpI7l4AtgUseWV4eJwIfjEq4ICzKX5C8nvg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR18MB2593
-X-Proofpoint-ORIG-GUID: Wed-FOoGdYk0ysVxZ8_10wXgol7bP-99
-X-Proofpoint-GUID: Wed-FOoGdYk0ysVxZ8_10wXgol7bP-99
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-09_05,2023-05-05_01,2023-02-09_01
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508131515.19403-2-bbhushan2@marvell.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS3J6eXN6dG9mIEtvemxv
-d3NraSA8a3J6eXN6dG9mLmtvemxvd3NraUBsaW5hcm8ub3JnPg0KPiBTZW50OiBUdWVzZGF5LCBN
-YXkgOSwgMjAyMyAxOjM4IFBNDQo+IFRvOiBCaGFyYXQgQmh1c2hhbiA8YmJodXNoYW4yQG1hcnZl
-bGwuY29tPjsgd2ltQGxpbnV4LXdhdGNoZG9nLm9yZzsNCj4gbGludXhAcm9lY2stdXMubmV0OyBy
-b2JoK2R0QGtlcm5lbC5vcmc7IGtyenlzenRvZi5rb3psb3dza2krZHRAbGluYXJvLm9yZzsNCj4g
-bGludXgtd2F0Y2hkb2dAdmdlci5rZXJuZWwub3JnOyBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9y
-ZzsgbGludXgtDQo+IGtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IFN1bmlsIEtvdnZ1cmkgR291dGhh
-bSA8c2dvdXRoYW1AbWFydmVsbC5jb20+DQo+IFN1YmplY3Q6IFJlOiBbRVhUXSBSZTogW1BBVENI
-IDEvMiB2N10gZHQtYmluZGluZ3M6IHdhdGNoZG9nOiBtYXJ2ZWxsIEdUSSBzeXN0ZW0NCj4gd2F0
-Y2hkb2cgZHJpdmVyDQo+IA0KPiBPbiAwOS8wNS8yMDIzIDA5OjI2LCBCaGFyYXQgQmh1c2hhbiB3
-cm90ZToNCj4gDQo+IA0KPiA+Pj4gK3Byb3BlcnRpZXM6DQo+ID4+PiArICBjb21wYXRpYmxlOg0K
-PiA+Pj4gKyAgICBvbmVPZjoNCj4gPj4+ICsgICAgICAtIGNvbnN0OiBtYXJ2ZWxsLG9jdGVvbnR4
-Mi13ZHQNCj4gPj4NCj4gPj4gV2h5IGlzIHRoaXMgYWxvbmU/IEp1ZGdpbmcgYnkgdGhlIGVudW0g
-YmVsb3csIG9jdGVvbnR4MiBpcyBub3Qgc3BlY2lmaWMuDQo+ID4+DQo+ID4+PiArICAgICAgLSBp
-dGVtczoNCj4gPj4+ICsgICAgICAgICAgLSBlbnVtOg0KPiA+Pj4gKyAgICAgICAgICAgICAgLSBt
-YXJ2ZWxsLG9jdGVvbnR4Mi05NXh4LXdkdA0KPiA+Pj4gKyAgICAgICAgICAgICAgLSBtYXJ2ZWxs
-LG9jdGVvbnR4Mi05Nnh4LXdkdA0KPiA+Pj4gKyAgICAgICAgICAgICAgLSBtYXJ2ZWxsLG9jdGVv
-bnR4Mi05OHh4LXdkdA0KPiA+Pg0KPiA+PiBXZSBkb24ndCBhbGxvdyB3aWxkY2FyZHMgaW4gZ2Vu
-ZXJhbA0KPiA+DQo+ID4gTWFydmVsbCBoYXZlIG9jdGVvbnR4MiBzZXJpZXMgb2YgcHJvY2Vzc29y
-IHdoaWNoIGhhdmUgd2F0Y2hkb2cgdGltZXIuDQo+ID4gSW4gOTV4eCw5OHh4LDk2eHggYXJlIHRo
-ZSBwcm9jZXNzb3JzIGluIG9jdGVvbnR4MiBzZXJpZXMgb2YgcHJvY2Vzc29yLiBTbw0KPiBvY3Rl
-b250eDItOTV4eCBpcyBvbiBzb2MsIG9jdGVvbnR4Mi05Nnh4IGlzIGFub3RoZXIgYW5kIHNvIG9u
-Lg0KPiANCj4gTm8sIDk1eHggaXMgbm90IGEgcHJvY2Vzc29yLiBPdGhlcndpc2UgcGxlYXNlIHBv
-aW50IG1lIHRvIGV4YWN0IHByb2R1Y3QNCj4gZGF0YXNoZWV0LiBIaW50OiBJIGNoZWNrZWQgaXQu
-DQoNCkxvb2tzIGxpa2UgOTV4eCBkYXRhIHNoZWV0IGlzIG5vdCBwdWJsaWMsIHdpbGwgcmVtb3Zl
-IGluIHRoYXQgY2FzZS4NCg0KPiANCj4gPg0KPiA+Pg0KPiA+Pj4gKyAgICAgICAgICAtIGNvbnN0
-OiBtYXJ2ZWxsLG9jdGVvbnR4Mi13ZHQNCj4gPj4+ICsgICAgICAtIGNvbnN0OiBtYXJ2ZWxsLGNu
-MTBrLXdkdA0KPiA+Pg0KPiA+PiBTYW1lIHF1ZXN0aW9uIC0gd2h5IGlzIHRoaXMgYWxvbmU/DQo+
-ID4gU2FtZSBoZXJlLCBNYXJ2ZWxsIGhhdmUgY24xMGsgc2VyaWVzIG9mIHByb2Nlc3NvcnMgYW5k
-IGNuMTBreCBhbmQgY25mMTBreCBhcmUNCj4gdGhlIHByb2Nlc3NvciBpbiB0aGlzIHNlcmllcy4N
-Cj4gDQo+IEkgZG9uJ3QgdW5kZXJzdGFuZCBob3cgZG9lcyBpdCBleHBsYWluIG15IGNvbmNlcm4u
-IFRoaXMgaXMgYWxvbmUgYmVjYXVzZSB0aGVyZQ0KPiBhcmUgc2VyaWVzIG9mIHByb2Nlc3NvcnM/
-IEhvdyBpcyB0aGF0IHJlbGF0ZWQ/DQoNClRyaWVkIHRvIG1ha2UgaXQgbG9vayBsaWtlIG90aGVy
-IGRyaXZlcnMuIExldCdzIGtlZXAgaXQgc2ltcGxlLCB3ZSB3YW50IHRvIGVuYWJsZSB0aGlzIG9u
-bHkgZm9yIGJlbG93IG9uZXMNCg0KcHJvcGVydGllczoNCiAgY29tcGF0aWJsZToNCiAgICBlbnVt
-Og0KICAgICAtIG1hcnZlbGwsY24xMGstd2R0DQogICAgIC0gbWFydmVsbCxvY3Rlb250eDItd2R0
-DQoNCkFyZSB5b3UgZ29vZCB3aXRoIHRoYXQ/DQoNClRoYW5rcw0KLUJoYXJhdA0KDQo+IA0KPiA+
-DQo+ID4gT25lIG9mIHRoZSBkaWZmZXJlbmNlIGJldHdlZW4gb2N0ZW9udHgyIGFuZCBjbjEwayBz
-ZXJpZXMgcHJvY2Vzc29yIGlzDQo+IG51bWJlciBvZiB0aW1lcnMgYXZhaWxhYmxlLiBXaGljaCB3
-aXRoaW4gdGhlIGF2YWlsYWJsZSBzZXQgb2YgdGltZXJzIG9uZSBvZiB0aGUNCj4gdGltZXIgaXMg
-cHJvZ3JhbW1lZCB0byBiZSB3YXRjaGRvZyB0aW1lci4NCj4gDQo+IFdyYXAgeW91ciByZXBsaWVz
-LiBJdCdzIGRpZmZpY3VsdCB0byByZWFkLg0KPiANCj4gPg0KPiA+IENhbiB5b3UgcGxlYXNlIHBy
-b3Bvc2UgaG93IHlvdSB3YW50IHRoZXNlIGNvbXBhdGlibGUgdG8gYmUgZGVmaW5lZD8NCj4gDQo+
-IGh0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw/dT1odHRwcy0NCj4gM0Ff
-X2VsaXhpci5ib290bGluLmNvbV9saW51eF92Ni40LQ0KPiAyRHJjMV9zb3VyY2VfRG9jdW1lbnRh
-dGlvbl9kZXZpY2V0cmVlX2JpbmRpbmdzX3NvY19xY29tX3Fjb20tDQo+IDJDZXVkLnlhbWwtDQo+
-IDIzTDE5JmQ9RHdJQ2FRJmM9bktqV2VjMmI2UjBtT3lQYXo3eHRmUSZyPVBBQWxXc3dQZTdkOGdI
-bEdiQ0xteQ0KPiAyWWV6eUs3TzNIdl90MmhlR25vdUJ3Jm09c2JEQzlBMTdVTzFsX003eFc1NTQ2
-VFFoQU14b2VqeTZNX3N2DQo+IFBpdE9uXzlzT3hiMHJ1M0g3WDllRVcwMEdxbmEmcz10UXJDb1ZT
-SE5FT2Q5Q2tFZXU2bGVKYm1QMHJ0Ykw1VmQNCj4gV2xFOUdRLUdUSSZlPQ0KPiANCj4gQmVzdCBy
-ZWdhcmRzLA0KPiBLcnp5c3p0b2YNCg0K
+Hi Bharat,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on groeck-staging/hwmon-next linus/master v6.4-rc1 next-20230509]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bharat-Bhushan/Watchdog-Add-marvell-GTI-watchdog-driver/20230508-211645
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230508131515.19403-2-bbhushan2%40marvell.com
+patch subject: [PATCH 2/2 v7] Watchdog: Add marvell GTI watchdog driver
+config: hexagon-randconfig-r015-20230508 (https://download.01.org/0day-ci/archive/20230509/202305091728.1XZ6IePZ-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0b1fbcf987da442c837b205256c6400adf6d298e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Bharat-Bhushan/Watchdog-Add-marvell-GTI-watchdog-driver/20230508-211645
+        git checkout 0b1fbcf987da442c837b205256c6400adf6d298e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/watchdog/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305091728.1XZ6IePZ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/watchdog/marvell_gti_wdt.c:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/watchdog/marvell_gti_wdt.c:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/watchdog/marvell_gti_wdt.c:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/watchdog/marvell_gti_wdt.c:89:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
+           ^
+   drivers/watchdog/marvell_gti_wdt.c:101:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           writeq(GTI_CWD_POKE_VAL,
+           ^
+   drivers/watchdog/marvell_gti_wdt.c:118:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
+           ^
+>> drivers/watchdog/marvell_gti_wdt.c:126:11: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+                    ^
+   drivers/watchdog/marvell_gti_wdt.c:139:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           writeq(GTI_CWD_INT_ENA_CLR_VAL(priv->wdt_timer_idx),
+           ^
+   drivers/watchdog/marvell_gti_wdt.c:143:11: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+                    ^
+   drivers/watchdog/marvell_gti_wdt.c:177:11: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+                    ^
+   drivers/watchdog/marvell_gti_wdt.c:181:2: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           writeq(regval, priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+           ^
+   6 warnings and 8 errors generated.
+
+
+vim +/writeq +89 drivers/watchdog/marvell_gti_wdt.c
+
+    82	
+    83	static irqreturn_t gti_wdt_interrupt(int irq, void *data)
+    84	{
+    85		struct watchdog_device *wdev = data;
+    86		struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+    87	
+    88		/* Clear Interrupt Pending Status */
+  > 89		writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
+    90		       priv->base + GTI_CWD_INT);
+    91	
+    92		watchdog_notify_pretimeout(wdev);
+    93	
+    94		return IRQ_HANDLED;
+    95	}
+    96	
+    97	static int gti_wdt_ping(struct watchdog_device *wdev)
+    98	{
+    99		struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+   100	
+   101		writeq(GTI_CWD_POKE_VAL,
+   102		       priv->base + GTI_CWD_POKE(priv->wdt_timer_idx));
+   103	
+   104		return 0;
+   105	}
+   106	
+   107	static int gti_wdt_start(struct watchdog_device *wdev)
+   108	{
+   109		struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
+   110		u64 regval;
+   111	
+   112		if (!wdev->pretimeout)
+   113			return -EINVAL;
+   114	
+   115		set_bit(WDOG_HW_RUNNING, &wdev->status);
+   116	
+   117		/* Clear any pending interrupt */
+   118		writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
+   119		       priv->base + GTI_CWD_INT);
+   120	
+   121		/* Enable Interrupt */
+   122		writeq(GTI_CWD_INT_ENA_SET_VAL(priv->wdt_timer_idx),
+   123		       priv->base + GTI_CWD_INT_ENA_SET);
+   124	
+   125		/* Set (Interrupt + SCP interrupt (DEL3T) + core domain reset) Mode */
+ > 126		regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+   127		regval |= GTI_CWD_WDOG_MODE_INT_DEL3T_RST;
+   128		writeq(regval, priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
+   129	
+   130		return 0;
+   131	}
+   132	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
