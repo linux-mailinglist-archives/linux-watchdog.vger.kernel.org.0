@@ -2,65 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5FD76FF30B
-	for <lists+linux-watchdog@lfdr.de>; Thu, 11 May 2023 15:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9826FF40D
+	for <lists+linux-watchdog@lfdr.de>; Thu, 11 May 2023 16:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238402AbjEKNf4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 11 May 2023 09:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
+        id S238462AbjEKOZi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 11 May 2023 10:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238036AbjEKNfi (ORCPT
+        with ESMTP id S238470AbjEKOZW (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 11 May 2023 09:35:38 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918C410E69;
-        Thu, 11 May 2023 06:34:20 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-643bb9cdd6eso6252609b3a.1;
-        Thu, 11 May 2023 06:34:20 -0700 (PDT)
+        Thu, 11 May 2023 10:25:22 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2101.outbound.protection.outlook.com [40.107.96.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC05611575;
+        Thu, 11 May 2023 07:24:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eNEZR1V9cicsPIicS3u3akllebJseEm0z6EEGUCSAaE9LCr23X4wrU5xmq1rv3YoqovC+pEfgh22IxL3yOB0ui3osv25aepnAw2ZYdPjhfBk0HR6Fk1gcIm/wTfzy1H0WAhtvuoHfVnXYnKbmLSh7dyMk3Kqsx0cf3S2sMc14kyKC6/aB4baT9v2NAGTUKng0t+qoJfFGDt94Bhth75JfKvQABP1hM2+Kn8yLQcAs6GpIGxpRI+Yx4nHychUSPuuAp7qzOLcJhdpLy8RbHQ74DPg4h1Fhdbn3HlxgWgX7kdajPYFVvsGLr+ZoADiicxV8SL548hYkcf4S5UcYWyGVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7RYmxkQ/ji41+jhyUAH9q4OQql59eG1Qtdit4nAaHJ0=;
+ b=AcEpL3EcPvnepJTN1YSHawQ05MV6ULxAbbXycoavMjIAw/AMOSh0ZfMtSuDS0PipAojo24bU9WW9lTCiZjvTzXG+dOdiWNKTVPlyiccNK4rBeYP0nKPx60WYcybo63/IXodgM9hz9Z3K4SkylMCiMGJRg+atK12buejwWJkzf5YPl0wYhGFqXNJPeXFa+LhD1lov/Y5tfi22nIDEGnbKCcVKtBGpEn5ciqgOQWAiqGbeLVXyL92Wifmh6Ef50qnjHhUYHdU6sofHWOC3zKGpsONOpP9HlhGtZRQRpFp2mJZIpjWP3p870mXrOARpYD+/sS87rzThipmPjPbRny4w7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683812060; x=1686404060;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+qd85DAYUoVARV/UQur45Soj2gLrv6sKgolbKo4DNkY=;
-        b=ZCDul+K7uLaQUZcXDKjVmbjfoExTphoXNgcqea3sH4Mq2pae9JTgDXEapkrH4LBnCh
-         koFeeQfJmQ/FOkKcsWd4DY+MU7XEE8CM9bYo3QzTCAxZj8nHJpu2Ojmzcx4x7dMdaKRi
-         r42UuJpeDO16/vpnGD3bIfCUOHKLECsNnlnSY0IUpA3UjbR/qkFQ37AKt572PdaDlIj+
-         a6jSyVhx6NBA24M+nI19A2Xg/+hij072amXHVqmZNjr2RISKa95pBQKmpVN9s1rSFb93
-         XRkPKcrigM+U77/k7SlYt0i2NmGnpGi8yYDR6z2VXLyJPJQm2duIWIbEZPSeSYNASCoS
-         7bsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683812060; x=1686404060;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+qd85DAYUoVARV/UQur45Soj2gLrv6sKgolbKo4DNkY=;
-        b=A57HjP1itB+zs9RDAKUiH7LO71NU621PTaNSqp/+HHGA7tm7V9LfCL4sLF+GKtfOeU
-         A31J/p/yDk+ag0Zz2abD3nqvxetIwD9fHpElelf5uX2ITBk9W99roHoCmu/qenyuOcPM
-         SFQ3vL3m/MRKmxetPDTm+CT99D75YVRldU1AHUEoAR08HsQfcNUJLU9ePl0amBCOxxas
-         FGv51jvCp7x891eUUVe/QMWIufIPzl2UQkK0rdLe/vSABGRnKJ+PH7odCdjjG13Eexot
-         H0rBE586yHi0iizVWcfqo93sEPcmmpGc2njJSC9NYvvFzQdvtpvH3IGPf7Xe0nqz0v/U
-         0mAQ==
-X-Gm-Message-State: AC+VfDx1UBLJL7/vm6SaJK/pgHVGgVa+1A9QNFHJhCnd97R663PNz6mf
-        K1IOWLjjX6S6Q0cv0Rx8w4E=
-X-Google-Smtp-Source: ACHHUZ6D1SmSibupox7jsjkuLOX/BB/O6IqNdA+Os6V+bkJDhi1wS+hKNMOJm73kAVRAOMQT58zlbA==
-X-Received: by 2002:a05:6a00:248f:b0:634:970e:ca09 with SMTP id c15-20020a056a00248f00b00634970eca09mr26611634pfv.30.1683812059896;
-        Thu, 11 May 2023 06:34:19 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-92.three.co.id. [180.214.232.92])
-        by smtp.gmail.com with ESMTPSA id b26-20020aa7871a000000b00641114ef2dbsm5497963pfo.90.2023.05.11.06.34.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 06:34:18 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id E53961068BF; Thu, 11 May 2023 20:34:11 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7RYmxkQ/ji41+jhyUAH9q4OQql59eG1Qtdit4nAaHJ0=;
+ b=amgmYNBn6odxr/Ufgxx53TbqXMQcjOWtwwLIkIlJGvsvVqg+k/0524ZsE84OR5CI7lQB+xiKV7clVfTzMppBR653B+++eqnwnqBwH2gcsh9Y/ycZ81Zz268QjNQNjKQWnCsamtJ630TA8jR5x+MhBhz6k3MMX3kKn3jW8f6CptY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SJ2PR13MB6522.namprd13.prod.outlook.com (2603:10b6:a03:561::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Thu, 11 May
+ 2023 14:24:48 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Thu, 11 May 2023
+ 14:24:48 +0000
+Date:   Thu, 11 May 2023 16:24:35 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Networking <netdev@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Staging Drivers <linux-staging@lists.linux.dev>,
         Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Actions <linux-actions@lists.infradead.org>
-Cc:     Diederik de Haas <didi.debian@cknow.org>,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>,
+        Diederik de Haas <didi.debian@cknow.org>,
         Kate Stewart <kstewart@linuxfoundation.org>,
         David Airlie <airlied@redhat.com>,
         Karsten Keil <isdn@linux-pingi.de>,
@@ -77,17 +68,15 @@ Cc:     Diederik de Haas <didi.debian@cknow.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
         Manivannan Sadhasivam <mani@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
         Tom Rix <trix@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
         Yang Yingliang <yangyingliang@huawei.com>,
         "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Pavel Machek <pavel@ucw.cz>,
         Minghao Chi <chi.minghao@zte.com.cn>,
         Kalle Valo <kvalo@kernel.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Arnd Bergmann <arnd@arndb.de>, Deepak R Varma <drv@mailo.com>,
@@ -95,53 +84,85 @@ Cc:     Diederik de Haas <didi.debian@cknow.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Jacob Keller <jacob.e.keller@intel.com>,
         Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Dan Carpenter <error27@gmail.com>, Archana <craechal@gmail.com>
-Subject: [PATCH 10/10] include: synclink: Replace GPL license notice with SPDX identifier
-Date:   Thu, 11 May 2023 20:34:06 +0700
-Message-Id: <20230511133406.78155-11-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230511133406.78155-1-bagasdotme@gmail.com>
+        Dan Carpenter <error27@gmail.com>,
+        Archana <craechal@gmail.com>,
+        "David A . Hinds" <dahinds@users.sourceforge.net>,
+        Donald Becker <becker@scyld.com>,
+        Peter De Schrijver <p2@mind.be>,
+        Greg Ungerer <gerg@linux-m68k.org>
+Subject: Re: [PATCH 04/10] net: ethernet: 8390: Replace GPL boilerplate with
+ SPDX identifier
+Message-ID: <ZFz6o4NerIKW/db9@corigine.com>
 References: <20230511133406.78155-1-bagasdotme@gmail.com>
+ <20230511133406.78155-5-bagasdotme@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511133406.78155-5-bagasdotme@gmail.com>
+X-ClientProxiedBy: AM4PR0202CA0012.eurprd02.prod.outlook.com
+ (2603:10a6:200:89::22) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=834; i=bagasdotme@gmail.com; h=from:subject; bh=hknv61wvlrkkgOugXTBTgrVsX3ozvkcF0YqHFnV1tm8=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkx706mnu9+bem1/mXJ3iyvGzNfCv0wiV53KaXoSk6/8 jqzUoPFHaUsDGJcDLJiiiyTEvmaTu8yErnQvtYRZg4rE8gQBi5OAZgIgzkjw6aA6292CMWIVB2c 9u2Mg8RUF/vsKTt1a0IW2F+WdlrdpcTIcGjZ7ygRkU//zwUuvxuUsYZRqtz4vqDKvpnWvMreTmW JPAA=
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ2PR13MB6522:EE_
+X-MS-Office365-Filtering-Correlation-Id: 079f9e82-b533-41d1-0fed-08db522b79a8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HrO3qMY54g7s+R0TY4gShgDySFw43IfO6KpRR+xtG/HFFRTYZOW4LihUwTk+XVMvcHVeEFdReuuaKKCP/KyLEBPk1Knw22J0e8XMeRyt77azpb0D4MD4LWC7jRiXFXHIoOstAZV3xesKrD2gEWQHzFYNUEhocVhEk6YFV2WR5Sz6/k7/xbpN2WvepaAUvJ4VQI+B54Ux1EIM+iMvQE7tK6e/M79j2ThBLAW/bt2gBmY6p/F5Pq7x+XGTleGZTi0TN5z1Bh1xTaW7GwEgXdSFKhKxhp7yNrvVxxjJVqNDwHgDyTGayf+0KlWDndYlNH/+csh8sjK/ogsLGBGQW3f+VYx+DFnzBY31mlEgpkOMqFBYS/m2jaSBecCPJQ68k+hZYbxudBncvrNowNKKaXINGJ3PMQW812NEUC9tlxBj7UtiY3IjhUAsIQgt+QBXUMOGXac05CnW7QLPRErkq3ptO1fbiPY5fippTwIwWdjQqXCLuoWTDVpnLc7WzaM6IHBorIk4IYgq+Wok2pdRg2iHxe9eB+uQx7dRF7yir0SG8og0f0KTZYbZcJb8c8vbY7G/EmU45ldOZw51cbi2HUukZ4wkyDQZ53m2sU1a4Mr0WP2siQ104ucuoCTd9i7uBQuK
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(396003)(39840400004)(376002)(346002)(451199021)(186003)(6506007)(2906002)(41300700001)(4326008)(6512007)(6916009)(66556008)(66476007)(316002)(558084003)(38100700002)(83380400001)(7406005)(7416002)(2616005)(8676002)(86362001)(44832011)(8936002)(36756003)(5660300002)(54906003)(478600001)(6666004)(6486002)(66946007)(41080700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1IW8BJyNoU4F6B3Cw5ECWGrwPpkI7fzqw+DqvlkAdzMXhNp82XKG24BzhXe4?=
+ =?us-ascii?Q?HE699Uj5M2/NNyPRonVMg5B0NBivACNj7PY2hNlbNU8eUzgmBcKt81xvvMz4?=
+ =?us-ascii?Q?WjA7BNVWZ+78c+g8jsy0bjPrrZf1NDOn8yv48JZfHzznVca3AopY4SxMpEvo?=
+ =?us-ascii?Q?Y+HqngUJ3uhCdp5rX8IV4kVLqpQlLkK7P1tQ9fzkk5uMfrv2lbX5SP929+ud?=
+ =?us-ascii?Q?ToCK7+85eWizKEsWddR3nkLd6N6TN/rfGHL+b2i21lrSBG5aXEtGOQwXV8uS?=
+ =?us-ascii?Q?3SUAe7YZljodex9ntwNQskXCnA+P1+NUTXSGz7VgFtJDeYdXaMg8OdimTDvx?=
+ =?us-ascii?Q?vtZ4xUSUe5p4/kZ1WKwuo8RbaMRJ59snhWUwHiybgt8NRrihnl+OfVzsJ4wB?=
+ =?us-ascii?Q?zRGRtZMpaq9h4zGXCsYjKcxlGTiPFTstdKFkiT8ZHj1NCqLLCzwO0GZIrvIi?=
+ =?us-ascii?Q?aSo1TJujNZj5P/M1APR6i6dwmHMBtq75tOXsBrRou5YY8MEK54EzAcePv28U?=
+ =?us-ascii?Q?Y7rxCekp8UGMURQB7uWTGaa9En6EcuwANyVr9C2LvohgrBTcxheUZWxMvFda?=
+ =?us-ascii?Q?IrQ2x409VAsMiYWDy8Erw7glaZFNEhbMIQnFin2cC5wZJgX11s8uWfdUwMgA?=
+ =?us-ascii?Q?oKV9me7NjhSBbv2cLb+k1+Nn8+Y3isiuO3bFtm4ViipBgr9quMTwrfJCfv0c?=
+ =?us-ascii?Q?fsj2T0lyLylElGI/9KjJN3Cgy/Z5o8YhyEUIlN/1ANeDlm3KfetluJu0ryei?=
+ =?us-ascii?Q?5I7GXJkz3bNlsmXuru8lvEsF53t66DFFpZh+2NyANXohmwn387ut0u/13zMi?=
+ =?us-ascii?Q?aEcJErVziXTSyw+hYRwnracOhqbBmrpZunwMnSBY7zMzdqwHbLISN9W9N6hr?=
+ =?us-ascii?Q?U+58OrRs1xMCgdsk8dqkPbGHXITaRx9sGqLmwUMY0RItcPntlxEcYilZ3eP4?=
+ =?us-ascii?Q?j+umMdTFpJKo/X6wALnIUdZx1OrNGZMyvU0UtIgEvVF8UTD5cEOu1Vl5CHIl?=
+ =?us-ascii?Q?E4tz0SoLmiXEP3/yPzMJmbpYEW8JPR/m5pdOt6oeIaSZcGMBHNQ2CkROpNs0?=
+ =?us-ascii?Q?0f7W2QiOzECYO/bQmsl0gLRvEuxnMX8yahd9nGlGMcriCIblWiio2BLpNiec?=
+ =?us-ascii?Q?0bSoY9m8q+4NPND6RsxAKwE3GVvG3HuR52FjHuP8tHjITT1+BE1GQGAXXMUJ?=
+ =?us-ascii?Q?yUnyFlENLpR6DNGTcYhIE2GGafTN0o5nOPPqt61vIA5e2eRLKrZhDJHEaSU0?=
+ =?us-ascii?Q?EBlSy/Zv/9YcWyYc61/D7lcjfBAfOlGw1pwQcjS2B/NEFuAmTD0q8iorovn8?=
+ =?us-ascii?Q?TZRhXZ97P/GxIqVG9riroJcqKd3WfxhS3o1Odk9xyLoNkdixw73HOWdP6cU0?=
+ =?us-ascii?Q?9GFIA5FpZH2bJx5J08v+hOPq13NVH+MA5njcfN+3UKw9YpLADXTf9WjeTk4+?=
+ =?us-ascii?Q?XWAe0nnSFVL9TGjZAOzbyz3dNK9yteJuOmP6KBKc5GlN8ShXGczioxSFSvAz?=
+ =?us-ascii?Q?n6ja/7lKL8+77iCRc0IlnLAt1yE8rRthRCHSLfHjTfuoAnr1w4hiJYjg48E3?=
+ =?us-ascii?Q?FWSwMsAl5uZoshw82UmDyaoUH7iplGdZOu3GbXyGana0+7QTT7+4EQBq60js?=
+ =?us-ascii?Q?aEQgScSLGfbz1dR/4dNz5WgjwRPeJNOd+nj1WCZsEeAvjoC7H+PIOlqWZain?=
+ =?us-ascii?Q?IXJlqA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 079f9e82-b533-41d1-0fed-08db522b79a8
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 14:24:48.4821
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eBYa4i0225d+FWEhZcGlcrSsF4Rw6q8PM3lEkU6283qEywrGDDidvQtc3+5Xnfb2Oua5HZuJYc46tFhAXujJMZqJDxVGnJCURPBtYL0Pa/8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR13MB6522
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Replace unversioned GPL license notice with appropriate SPDX
-identifier, which is GPL 1.0+.
+On Thu, May 11, 2023 at 08:34:00PM +0700, Bagas Sanjaya wrote:
+> Replace GPL boilerplate notice on remaining files with appropriate SPDX
+> tag. For files mentioning COPYING, use GPL 2.0; otherwise GPL 1.0+.
 
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- include/linux/synclink.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/include/linux/synclink.h b/include/linux/synclink.h
-index f1405b1c71ba15..2c8436f08da44a 100644
---- a/include/linux/synclink.h
-+++ b/include/linux/synclink.h
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-1.0-or-later */
- /*
-  * SyncLink Multiprotocol Serial Adapter Driver
-  *
-@@ -5,8 +6,6 @@
-  *
-  * Copyright (C) 1998-2000 by Microgate Corporation
-  *
-- * Redistribution of this file is permitted under
-- * the terms of the GNU Public License (GPL)
-  */
- #ifndef _SYNCLINK_H_
- #define _SYNCLINK_H_
--- 
-An old man doll... just what I always wanted! - Clara
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
