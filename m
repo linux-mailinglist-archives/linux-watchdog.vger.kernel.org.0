@@ -2,167 +2,104 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715FD6FC773
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 May 2023 15:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A6E6FE875
+	for <lists+linux-watchdog@lfdr.de>; Thu, 11 May 2023 02:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235433AbjEING1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 9 May 2023 09:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
+        id S236236AbjEKAUO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 10 May 2023 20:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235263AbjEINGT (ORCPT
+        with ESMTP id S232414AbjEKAUN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 9 May 2023 09:06:19 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50ED5590
-        for <linux-watchdog@vger.kernel.org>; Tue,  9 May 2023 06:06:08 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50bdd7b229cso10971061a12.0
-        for <linux-watchdog@vger.kernel.org>; Tue, 09 May 2023 06:06:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683637567; x=1686229567;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dq27aAWxCkL5lh0gQsM04iiHCtmU3UirHOLrJGmxHBw=;
-        b=bTzFElQ0Ijj7Qqx+ITj7N8by0OSLOkJjap0bR5jb2buLViuMHSIwCpg2gPnbNxbiur
-         n33ue596ZSOoRMFmoqk2Nw+qulSAPRl9FFYrxG+D2hBsBpuJ9rzibf7y9hl7H2osQ8GV
-         e9Y2kuXfjDo1FnM7qhu8Xbnp5qKFZZ1JKEy8kyyruikEg+KOZ18yiV3ne2ALwGNSFm2g
-         Y9Pjr9teRy4OQkplB6eGyFeQQ/2RFgxPRgGrgYiTmhV3rK/WmKhBGkahCk3OLdhgtGmn
-         jhA2SRixz7fO3Vq/zMVXv+AT/afuzs+K/HadURIPOpJYvBaEs8iR4BF1A3otPPfzz5ej
-         +hwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683637567; x=1686229567;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dq27aAWxCkL5lh0gQsM04iiHCtmU3UirHOLrJGmxHBw=;
-        b=hVsdOtRVq9VkTT+L1a5BeO/tp42zivBuFF6iKoASBX3RFbqGRMjjlQ3xgTHKQPAgjw
-         HbbW+KRMptSV/IbEKEeAmzRTRLGXCw3hJBy82MkqumHMwAgTjE1q0q6XjbhyWXDszJLU
-         sm8r+a+COTo2Ig1lluLHscBEpY1Nj51obf7/RUBoW9Qln+w+qa6d0NSvl0PAhCrabasE
-         PNpDC9/FsP2FrXoK02yvPorH4GXRmFO1Uyzz8PWFvMnGUm3nlcmoBTx8Qgm35l9tDCC/
-         5D35EmQ/Exsrbd0+MEnS1bm3j81UT1MhfkH5on+GOD7rySxf1OaAiWgjtEg/QjGKFX5X
-         j6DA==
-X-Gm-Message-State: AC+VfDwQK79t0dk7JBWoH3FUVVKYgxOKzgOGFbNoVlpI/BXfV8ogWrBL
-        31oIWhd/MHCHsSJss2TeenauqA==
-X-Google-Smtp-Source: ACHHUZ6HVGeI7Az5TQaNdcCmmaidSWz1zdgkmcirij9gIwYx2Yg390YoZ0P4jiPXBvOB89RSgg60Lw==
-X-Received: by 2002:aa7:c059:0:b0:50d:9b57:842a with SMTP id k25-20020aa7c059000000b0050d9b57842amr5582009edo.9.1683637567393;
-        Tue, 09 May 2023 06:06:07 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d0d5:7818:2f46:5e76? ([2a02:810d:15c0:828:d0d5:7818:2f46:5e76])
-        by smtp.gmail.com with ESMTPSA id y2-20020a056402134200b00504ecc4fa96sm726424edw.95.2023.05.09.06.06.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 06:06:06 -0700 (PDT)
-Message-ID: <8b540cc2-bc0d-9d8b-45e6-98410322b3f6@linaro.org>
-Date:   Tue, 9 May 2023 15:06:05 +0200
+        Wed, 10 May 2023 20:20:13 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B365266;
+        Wed, 10 May 2023 17:20:11 -0700 (PDT)
+Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 3584D860B0;
+        Thu, 11 May 2023 02:20:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1683764409;
+        bh=eo6OjRKTPtw7KrsHnlEmccaV42o2lfWM/x3sgpUKhVk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pL0gKYmEV4vryPnjk0Sj49GSSnvPfBjKOwG/+E1nL6l6LINjbHI96hMKL/HsXFgsn
+         GpopeUKSuWiqGZrOunET/EWq45ZKvx/z0iwq+DmNvD6E7QAYihpAn/fSIYOvdc3Kd3
+         /leAFVAElIp2Jup1RJ4zdrpUuB2kv/1FrVW6yRw6rqeEYYOYX0uPiJwUyd3ZK3e6D2
+         3kgSKWO9wgng4W13r/9/ueqmKesXDN+zbalKIPiXCp5ZYyC8TywOuoV2t1kqbotcYd
+         RWBiC1Ki5veDdyH7N2zaV26+Q4fQZ+qT3em0BT2/c3mfa6Saipr3e+cX6I8TWF2FWB
+         E+H5r4VU1cJ6g==
+From:   Marek Vasut <marex@denx.de>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marek Vasut <marex@denx.de>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH 1/3] irqchip/stm32-exti: Add STM32MP15xx IWDG2 EXTI to GIC map
+Date:   Thu, 11 May 2023 02:19:47 +0200
+Message-Id: <20230511001949.179521-1-marex@denx.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [EXT] Re: [PATCH 1/2 v7] dt-bindings: watchdog: marvell GTI
- system watchdog driver
-Content-Language: en-US
-To:     Bharat Bhushan <bbhushan2@marvell.com>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sunil Kovvuri Goutham <sgoutham@marvell.com>
-References: <20230508131515.19403-1-bbhushan2@marvell.com>
- <ea9ae4c9-2808-bf22-70a3-bb7e7b1168d0@linaro.org>
- <DM5PR1801MB1883175A2538B85FEF571B7AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
- <8119eec8-0190-b6a5-85a7-301bcb81b0c9@linaro.org>
- <DM5PR1801MB1883A414F47BB56E9537673AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DM5PR1801MB1883A414F47BB56E9537673AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 09/05/2023 11:01, Bharat Bhushan wrote:
-> 
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Tuesday, May 9, 2023 1:38 PM
->> To: Bharat Bhushan <bbhushan2@marvell.com>; wim@linux-watchdog.org;
->> linux@roeck-us.net; robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
->> linux-watchdog@vger.kernel.org; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; Sunil Kovvuri Goutham <sgoutham@marvell.com>
->> Subject: Re: [EXT] Re: [PATCH 1/2 v7] dt-bindings: watchdog: marvell GTI system
->> watchdog driver
->>
->> On 09/05/2023 09:26, Bharat Bhushan wrote:
->>
->>
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    oneOf:
->>>>> +      - const: marvell,octeontx2-wdt
->>>>
->>>> Why is this alone? Judging by the enum below, octeontx2 is not specific.
->>>>
->>>>> +      - items:
->>>>> +          - enum:
->>>>> +              - marvell,octeontx2-95xx-wdt
->>>>> +              - marvell,octeontx2-96xx-wdt
->>>>> +              - marvell,octeontx2-98xx-wdt
->>>>
->>>> We don't allow wildcards in general
->>>
->>> Marvell have octeontx2 series of processor which have watchdog timer.
->>> In 95xx,98xx,96xx are the processors in octeontx2 series of processor. So
->> octeontx2-95xx is on soc, octeontx2-96xx is another and so on.
->>
->> No, 95xx is not a processor. Otherwise please point me to exact product
->> datasheet. Hint: I checked it.
-> 
-> Looks like 95xx data sheet is not public, will remove in that case.
+The EXTI interrupt 46 is mapped to GIC interrupt 151. Add the
+missing mapping, which is used for IWDG2 pretimeout interrupt
+and wake up source.
 
-We can talk about 96xx. Can you point me to the SoC named exactly like
-this? Hint: I checked it.
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Richard Cochran <richardcochran@gmail.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linux-watchdog@vger.kernel.org
+---
+ drivers/irqchip/irq-stm32-exti.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-> 
->>
->>>
->>>>
->>>>> +          - const: marvell,octeontx2-wdt
->>>>> +      - const: marvell,cn10k-wdt
->>>>
->>>> Same question - why is this alone?
->>> Same here, Marvell have cn10k series of processors and cn10kx and cnf10kx are
->> the processor in this series.
->>
->> I don't understand how does it explain my concern. This is alone because there
->> are series of processors? How is that related?
-> 
-> Tried to make it look like other drivers. Let's keep it simple, we want to enable this only for below ones
-
-Enable what? None of these explains why do you need this entry alone,
-since it is covered by list further.
-
-> 
-> properties:
->   compatible:
->     enum:
->      - marvell,cn10k-wdt
->      - marvell,octeontx2-wdt
-> 
-> Are you good with that?
-
-Not sure, it sounds like it ignores our entire discussion. What's the
-name of the SoC? I see "OcteonTx2 CN9130", not "OcteonTx2". I linked
-your previously guide how to write bindings. Did you read it?
-
-Best regards,
-Krzysztof
+diff --git a/drivers/irqchip/irq-stm32-exti.c b/drivers/irqchip/irq-stm32-exti.c
+index 6a3f7498ea8ea..f684be77ba378 100644
+--- a/drivers/irqchip/irq-stm32-exti.c
++++ b/drivers/irqchip/irq-stm32-exti.c
+@@ -208,6 +208,7 @@ static const u8 stm32mp1_desc_irq[] = {
+ 	[31] = 53,
+ 	[32] = 82,
+ 	[33] = 83,
++	[46] = 151,
+ 	[47] = 93,
+ 	[48] = 138,
+ 	[50] = 139,
+-- 
+2.39.2
 
