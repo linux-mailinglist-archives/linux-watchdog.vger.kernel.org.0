@@ -2,135 +2,246 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A166FF14A
-	for <lists+linux-watchdog@lfdr.de>; Thu, 11 May 2023 14:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30716FF308
+	for <lists+linux-watchdog@lfdr.de>; Thu, 11 May 2023 15:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237806AbjEKMNg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 11 May 2023 08:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50326 "EHLO
+        id S238373AbjEKNfw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 11 May 2023 09:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237701AbjEKMNK (ORCPT
+        with ESMTP id S238366AbjEKNfe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 11 May 2023 08:13:10 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B01AD38;
-        Thu, 11 May 2023 05:12:24 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-643bb9cdd6eso6152928b3a.1;
-        Thu, 11 May 2023 05:12:24 -0700 (PDT)
+        Thu, 11 May 2023 09:35:34 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C82A10E48;
+        Thu, 11 May 2023 06:34:17 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-24df6bbf765so7528723a91.0;
+        Thu, 11 May 2023 06:34:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683807133; x=1686399133;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kz2nBW8WdiIk4F8j/i6m8NjQZbdSdX7MIghawAp0rWw=;
-        b=FkbkwpbPgSf5kZapM88YbrP7S64ke8Y6DuKf11L2l7UQiro7rKt2KiANbHbmHK95dW
-         DeTNn3JgkW/5pJirwBiTY29UU0PH026LEserBmivl0iYxF8kyYa26d7jgbjRh35pHqHY
-         HRf6tMwEwcNVUO5JzHqR6zS44WxSQrb/Kmd4uOL+763/aMR7xmzHuUwGsP7KFvGrJJXJ
-         P24Ja7GXwF84rgLOmE7fvXvTK8P2Jr9iaONphXIlTXvy1lcMmR4l58BX+zI7G4o2ya4I
-         9qh7xz3E6/88mYrUNPAwLzfHVFZ5UZBCtANvkRe9IlcNUG9109tZJJryM9awh98yrJoI
-         UQtA==
+        d=gmail.com; s=20221208; t=1683812057; x=1686404057;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OrvYsPVkLlCCG9odWfJ2x1pNp/qnkuVA/7FJ1B7EVu4=;
+        b=NkZFTrbE7vCJT1esmCFX11skYYhjaSLkGz7AMyWI6mFJHsMt5CWX6IYVMSgjHleRxn
+         ttU5m6sHWNutEieWLJEqhcYOqQjr4HM0BzS3ZTeu2vC9PdzIYEi4gZxGR6yIiI5bXq92
+         wc+nDIeMuOJSI3t7qYhFDvxfRlYchl837qgVUhnX02JXpzZGN3dMXpE9EGEW5BX0Zocb
+         gxcw65MuyAXyvabBCf0592Aug/qbQbyKOdjgritjse/Tqi93V9Riuv7UKtLqwiH80PIG
+         xBS4SRQPtIy9GMuLBshASReX3VNMWxqks7JOq0fX0ZKAxEbArMxfNOMUy7gTrPsh1X15
+         zIXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683807133; x=1686399133;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Kz2nBW8WdiIk4F8j/i6m8NjQZbdSdX7MIghawAp0rWw=;
-        b=Qm8/8ho8kuVmUqVl+DxAILgM8TL8CkLHU9+NIBqaANm53IqCM6XpYACLuFNAgHwzKZ
-         Oyei1+cCHHxHN42ms+ApaWfDrcSUscWDFcXPTXuoahyFXLZqtlSCDV1wUlNsrY3wHML1
-         vhL/WmicE9f053TTVLMY5O7j8hvFOyNYipzzCI6HMbjZu8dcQlHzyTsGYVgOZ1G5XzT+
-         7cfyx1fqa/JHRHQBM3kHbMx/Hk+VeJKkNAqfIoqRFuIfE5BoQBdTIvQ2jVOsAeDjGysp
-         WLnSRnizkrrrZ2+lOROJ0XdGk1Yx55YRNsNbjiMOrHR2uUnUtE5RC713MIKe79UeFDz/
-         fRLw==
-X-Gm-Message-State: AC+VfDwMdQHbCi5LYVocV1E29rHT6OmrE9ZyG6AQg1g/XGnl+IYwvV0n
-        5ARXwuSu/f6/pRBM4YQ1FT7/GQ8IpxNJev9n
-X-Google-Smtp-Source: ACHHUZ5LCES57o7ITKxiLkwWKBQ1VUFFKq1mslja/Ps8Wg/UKmabaPXQawVElCz/JemuMAwwRd0HLA==
-X-Received: by 2002:a05:6a00:24c1:b0:637:f1ae:d47 with SMTP id d1-20020a056a0024c100b00637f1ae0d47mr27023742pfv.17.1683807133072;
-        Thu, 11 May 2023 05:12:13 -0700 (PDT)
-Received: from kelvin-ThinkPad-L14-Gen-1.lan ([103.184.129.7])
-        by smtp.gmail.com with ESMTPSA id j10-20020a62e90a000000b0063f16daf7dbsm5134562pfh.55.2023.05.11.05.12.10
+        d=1e100.net; s=20221208; t=1683812057; x=1686404057;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OrvYsPVkLlCCG9odWfJ2x1pNp/qnkuVA/7FJ1B7EVu4=;
+        b=b3oipXXGvmLku3srpeP1xOpP5FZHyh3wHw0W3QXkaUAmzAPlR/OZ2yrevkuyZboadd
+         XvRwQCDboj5nO8Rog0J/L8BVujNxZ1suew1vaTKA/hofdT1oyJ4MjGwtoda7TDRXtw6h
+         4k26oIO9sxsWg+Ux1eJDDX09QHFNL9fqYunTLctjV5FbSAyGEJzVHfRvYzSh2FdtEfe/
+         gATT37yqSXUXazHkiomsYex/x+jYTrXrob6bggWy5Abl4o1HObPEKGw8VYdtZEpgyi7w
+         B3Ao37ZATfzL+YW0zIVyqNd1B9ubIdm8ZVeMVCn2iAEXCKwgKPTwBXby5fNECmMIzyXb
+         Eyig==
+X-Gm-Message-State: AC+VfDxbvFli4L/SHhzCTbPkb/vYhYUfFKpYpN0f2+Q3XwP10lmZV0LK
+        9d9nd0BFGt8ls7P8KQhFolU=
+X-Google-Smtp-Source: ACHHUZ7fjYp9VwcPx9+qBb+lSz7MGEuPHEmA//zdilxU7jrGermCKcX+mpzpH1giJHdqIgkaAkdDMw==
+X-Received: by 2002:a17:90b:2385:b0:237:40a5:7acf with SMTP id mr5-20020a17090b238500b0023740a57acfmr22201327pjb.33.1683812056934;
+        Thu, 11 May 2023 06:34:16 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-92.three.co.id. [180.214.232.92])
+        by smtp.gmail.com with ESMTPSA id p8-20020a17090a930800b0024e1236f599sm18314860pjo.8.2023.05.11.06.34.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 05:12:12 -0700 (PDT)
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-To:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Yang Ling <gnaygnil@gmail.com>,
-        Keguang Zhang <keguang.zhang@gmail.com>
-Subject: [PATCH v2 2/2] watchdog: loongson1_wdt: Add DT support
-Date:   Thu, 11 May 2023 20:11:59 +0800
-Message-Id: <20230511121159.463645-3-keguang.zhang@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230511121159.463645-1-keguang.zhang@gmail.com>
-References: <20230511121159.463645-1-keguang.zhang@gmail.com>
+        Thu, 11 May 2023 06:34:15 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 178C41067D5; Thu, 11 May 2023 20:34:09 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Staging Drivers <linux-staging@lists.linux.dev>,
+        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>
+Cc:     Diederik de Haas <didi.debian@cknow.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        David Airlie <airlied@redhat.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Tom Rix <trix@redhat.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Kalle Valo <kvalo@kernel.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Deepak R Varma <drv@mailo.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Dan Carpenter <error27@gmail.com>, Archana <craechal@gmail.com>
+Subject: [PATCH 00/10] Treewide GPL SPDX conversion (love letter to Didi)
+Date:   Thu, 11 May 2023 20:33:56 +0700
+Message-Id: <20230511133406.78155-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7544; i=bagasdotme@gmail.com; h=from:subject; bh=/yuofc/tOvJfknZ+wKI/sN7nSPM3+b+BthJrqhUt8T0=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkx7w7u+h3mOFE7a6fNkrLjXxk3+BmLM+QcWLyIaVOot nCY7KsfHaUsDGJcDLJiiiyTEvmaTu8yErnQvtYRZg4rE8gQBi5OAZjIlckM/8s+5WbLRqnb/27T XOoU8WDVRaaAY3LXLpV9PujDMrOKUZmR4aKX0JotO2QZ8sWdYg5L/Ytp+lN4Oi3skkBBelFlW9d qXgA=
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This patch adds the of_match_table to enable DT support
-of Loongson-1 watchdog driver.
-And modify the parameter of devm_clk_get_enabled() accordingly.
+I trigger this patch series because of Didi's GPL full name fixes
+attempt [1], for which all of them had been NAKed. In many cases, the
+appropriate correction is to use SPDX license identifier instead.
 
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
----
-V1 -> V2: Change the wildcard compatible string to specific ones
-          Use of_match_ptr() to aviod the build error when CONFIG_OF=n
----
- drivers/watchdog/loongson1_wdt.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+Often, when replacing license notice boilerplates with their equivalent
+SPDX identifier, the notice doesn't mention explicit GPL version. Greg
+[2] replied this question by falling back to GPL 1.0 (more precisely
+GPL 1.0+ in order to be compatible with GPL 2.0 used by Linux kernel),
+although there are exceptions (mostly resolved by inferring from
+older patches covering similar situation).
 
-diff --git a/drivers/watchdog/loongson1_wdt.c b/drivers/watchdog/loongson1_wdt.c
-index 3c651c50a98c..4ac7810a314d 100644
---- a/drivers/watchdog/loongson1_wdt.c
-+++ b/drivers/watchdog/loongson1_wdt.c
-@@ -5,6 +5,7 @@
- 
- #include <linux/clk.h>
- #include <linux/module.h>
-+#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/watchdog.h>
- 
-@@ -112,7 +113,7 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
- 	if (IS_ERR(drvdata->base))
- 		return PTR_ERR(drvdata->base);
- 
--	drvdata->clk = devm_clk_get_enabled(dev, pdev->name);
-+	drvdata->clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(drvdata->clk))
- 		return PTR_ERR(drvdata->clk);
- 
-@@ -144,10 +145,20 @@ static int ls1x_wdt_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
-+#ifdef CONFIG_OF
-+static const struct of_device_id ls1x_wdt_dt_ids[] = {
-+	{ .compatible = "loongson,ls1b-wdt", },
-+	{ .compatible = "loongson,ls1c-wdt", },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ls1x_wdt_dt_ids);
-+#endif
-+
- static struct platform_driver ls1x_wdt_driver = {
- 	.probe = ls1x_wdt_probe,
- 	.driver = {
- 		.name = "ls1x-wdt",
-+		.of_match_table = of_match_ptr(ls1x_wdt_dt_ids),
- 	},
- };
- 
+Happy reviewing!
+
+[1]: https://lore.kernel.org/all/?q=f%3A%22didi.debian%40cknow.org%22+AND+s%3A%22GPL%22+AND+NOT+s%3A%22Re%3A%22
+[2]: https://lore.kernel.org/all/20181028112728.GD8826@kroah.com/ 
+
+Bagas Sanjaya (10):
+  agp/amd64: Remove GPL distribution notice
+  mISDN: Replace GPL notice boilerplate with SPDX identifier
+  net: bonding: Add SPDX identifier to remaining files
+  net: ethernet: 8390: Replace GPL boilerplate with SPDX identifier
+  net: ethernet: i825xx: Replace GPL boilerplate with SPDX identifier
+  pcmcia: Add SPDX identifier
+  drivers: staging: wlan-ng: Remove GPL/MPL boilerplate
+  drivers: watchdog: Replace GPL license notice with SPDX identifier
+  udf: Replace license notice with SPDX identifier
+  include: synclink: Replace GPL license notice with SPDX identifier
+
+ drivers/char/agp/amd64-agp.c               |  1 -
+ drivers/isdn/mISDN/dsp_audio.c             |  4 +---
+ drivers/isdn/mISDN/dsp_blowfish.c          |  4 +---
+ drivers/isdn/mISDN/dsp_cmx.c               |  4 +---
+ drivers/isdn/mISDN/dsp_core.c              |  3 +--
+ drivers/isdn/mISDN/dsp_dtmf.c              |  4 +---
+ drivers/isdn/mISDN/dsp_tones.c             |  4 +---
+ drivers/net/bonding/bond_main.c            |  1 +
+ drivers/net/bonding/bonding_priv.h         |  4 +---
+ drivers/net/ethernet/8390/8390.h           |  2 ++
+ drivers/net/ethernet/8390/apne.c           |  7 +------
+ drivers/net/ethernet/8390/axnet_cs.c       |  6 +++---
+ drivers/net/ethernet/8390/hydra.c          |  6 ++----
+ drivers/net/ethernet/8390/lib8390.c        |  5 ++---
+ drivers/net/ethernet/8390/mac8390.c        |  6 ++----
+ drivers/net/ethernet/8390/mcf8390.c        |  4 +---
+ drivers/net/ethernet/8390/ne.c             |  4 +---
+ drivers/net/ethernet/8390/ne2k-pci.c       |  8 +-------
+ drivers/net/ethernet/8390/pcnet_cs.c       |  5 ++---
+ drivers/net/ethernet/8390/smc-ultra.c      |  4 +---
+ drivers/net/ethernet/8390/stnic.c          |  5 +----
+ drivers/net/ethernet/8390/wd.c             |  4 +---
+ drivers/net/ethernet/8390/zorro8390.c      |  7 +------
+ drivers/net/ethernet/i825xx/82596.c        |  5 ++---
+ drivers/net/ethernet/i825xx/lasi_82596.c   |  5 ++---
+ drivers/net/ethernet/i825xx/lib82596.c     |  5 ++---
+ drivers/net/ethernet/i825xx/sun3_82586.c   |  4 +---
+ drivers/net/ethernet/i825xx/sun3_82586.h   |  4 +---
+ drivers/pcmcia/bcm63xx_pcmcia.c            |  5 +----
+ drivers/pcmcia/cirrus.h                    | 21 +------------------
+ drivers/pcmcia/i82365.c                    | 22 +-------------------
+ drivers/pcmcia/i82365.h                    | 21 +------------------
+ drivers/pcmcia/o2micro.h                   | 21 +------------------
+ drivers/pcmcia/pd6729.c                    |  3 +--
+ drivers/pcmcia/pxa2xx_base.h               |  1 +
+ drivers/pcmcia/ricoh.h                     | 21 +------------------
+ drivers/pcmcia/sa1100_generic.c            | 22 +-------------------
+ drivers/pcmcia/sa11xx_base.c               | 22 +-------------------
+ drivers/pcmcia/sa11xx_base.h               | 22 +-------------------
+ drivers/pcmcia/soc_common.c                | 22 +-------------------
+ drivers/pcmcia/tcic.c                      | 22 +-------------------
+ drivers/pcmcia/tcic.h                      | 21 +------------------
+ drivers/pcmcia/ti113x.h                    | 21 +------------------
+ drivers/pcmcia/topic.h                     | 23 +--------------------
+ drivers/pcmcia/vg468.h                     | 21 +------------------
+ drivers/staging/wlan-ng/hfa384x.h          | 21 -------------------
+ drivers/staging/wlan-ng/hfa384x_usb.c      | 21 -------------------
+ drivers/staging/wlan-ng/p80211conv.c       | 21 -------------------
+ drivers/staging/wlan-ng/p80211conv.h       | 21 -------------------
+ drivers/staging/wlan-ng/p80211hdr.h        | 21 -------------------
+ drivers/staging/wlan-ng/p80211ioctl.h      | 21 -------------------
+ drivers/staging/wlan-ng/p80211metadef.h    | 21 -------------------
+ drivers/staging/wlan-ng/p80211metastruct.h | 21 -------------------
+ drivers/staging/wlan-ng/p80211mgmt.h       | 21 -------------------
+ drivers/staging/wlan-ng/p80211msg.h        | 21 -------------------
+ drivers/staging/wlan-ng/p80211netdev.c     | 21 -------------------
+ drivers/staging/wlan-ng/p80211netdev.h     | 21 -------------------
+ drivers/staging/wlan-ng/p80211req.c        | 21 -------------------
+ drivers/staging/wlan-ng/p80211req.h        | 21 -------------------
+ drivers/staging/wlan-ng/p80211types.h      | 21 -------------------
+ drivers/staging/wlan-ng/p80211wep.c        | 21 -------------------
+ drivers/staging/wlan-ng/prism2fw.c         | 21 -------------------
+ drivers/staging/wlan-ng/prism2mgmt.c       | 21 -------------------
+ drivers/staging/wlan-ng/prism2mgmt.h       | 21 -------------------
+ drivers/staging/wlan-ng/prism2mib.c        | 21 -------------------
+ drivers/staging/wlan-ng/prism2sta.c        | 21 -------------------
+ drivers/watchdog/ep93xx_wdt.c              |  5 +----
+ drivers/watchdog/ibmasr.c                  |  3 +--
+ drivers/watchdog/m54xx_wdt.c               |  4 +---
+ drivers/watchdog/max63xx_wdt.c             |  5 +----
+ drivers/watchdog/moxart_wdt.c              |  4 +---
+ drivers/watchdog/octeon-wdt-nmi.S          |  5 +----
+ drivers/watchdog/orion_wdt.c               |  4 +---
+ drivers/watchdog/rtd119x_wdt.c             |  2 +-
+ drivers/watchdog/sb_wdog.c                 |  5 +----
+ drivers/watchdog/sbc_fitpc2_wdt.c          |  4 +---
+ drivers/watchdog/ts4800_wdt.c              |  4 +---
+ drivers/watchdog/ts72xx_wdt.c              |  4 +---
+ fs/udf/balloc.c                            |  6 +-----
+ fs/udf/dir.c                               |  6 +-----
+ fs/udf/directory.c                         |  6 +-----
+ fs/udf/ecma_167.h                          | 24 +---------------------
+ fs/udf/file.c                              |  6 +-----
+ fs/udf/ialloc.c                            |  6 +-----
+ fs/udf/inode.c                             |  6 +-----
+ fs/udf/lowlevel.c                          |  6 +-----
+ fs/udf/misc.c                              |  6 +-----
+ fs/udf/namei.c                             |  6 +-----
+ fs/udf/osta_udf.h                          | 24 +---------------------
+ fs/udf/partition.c                         |  6 +-----
+ fs/udf/super.c                             |  6 +-----
+ fs/udf/symlink.c                           |  6 +-----
+ fs/udf/truncate.c                          |  6 +-----
+ fs/udf/udftime.c                           | 19 +----------------
+ fs/udf/unicode.c                           |  6 +-----
+ include/linux/synclink.h                   |  3 +--
+ include/net/bonding.h                      |  4 +---
+ 97 files changed, 85 insertions(+), 999 deletions(-)
+
+
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
 -- 
-2.39.2
+An old man doll... just what I always wanted! - Clara
 
