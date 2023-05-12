@@ -2,48 +2,48 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781756FFF8C
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 May 2023 06:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF3A6FFFBA
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 May 2023 06:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239843AbjELEJz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 12 May 2023 00:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
+        id S239790AbjELEut (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 12 May 2023 00:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjELEJr (ORCPT
+        with ESMTP id S239767AbjELEus (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 12 May 2023 00:09:47 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F7459C4;
-        Thu, 11 May 2023 21:09:45 -0700 (PDT)
+        Fri, 12 May 2023 00:50:48 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098CA3C2F;
+        Thu, 11 May 2023 21:50:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683864585; x=1715400585;
+  t=1683867045; x=1715403045;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Ij2TBovyX1fbUGAzCKCpJn+xp0fp35Qx/066/MjPBlg=;
-  b=mJSgBztLpJ+vPETvyFkfop9chIicPHY0WlMvleGgjo3r7KNPeLY9WfsP
-   DlxqB+ahxXX1J8XHPrJjpDRuqoA1O11/a7Mu4fyUCa+jL2WQZbhLSXQ1j
-   ZgOQXUwavCjE83b4T9vew0B4bKgEMSwxQ0e5ySmAAHXCWE8+M7z8IEdBO
-   PHuKShAaVC3vAWbCbabxAWFDv4I5QDJ8HWc+fCeOOYCSakEshKEbfjBCO
-   AkF68fF2+/YFUu7ydzh8aBlucR2qdJ75H+9upueOxnS62EWhvALNgUtx/
-   ERd6OIXd6cgupWOUPoJPuHbZTTK13tViwVIUAK63QQKXjzvaSK8weIWy3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="416324517"
+  bh=qdjOjJcVrE3lu7prNPIyvKFm6ue8Dx9e7CZnAAZO/WM=;
+  b=cmdgctwFQkjAJEsi/xhEovA54t2GNA3RscpxHTN5mbT0UINz5vyLPtWs
+   zC+2s7EJIUEYsQ7R10tNpDrrQdABT2SfiTE2OALfPBTqyiOVCV/qrtW0n
+   U1u98xxLu8eY6IDMx7SjCp6qP0P41tvbjFgcvdZ7PL6feNmECuV4JlCzK
+   OZQwSeptBD/D/KlHj5zhGR3IVgR0epivykfpw1PgcYrh3jbpArfjRrNB0
+   5E+Fi5Ig3ZbFpWNeWhrwW6Gqo+UIQWOH3UkBoC/LPA2AucepwJ7Aqs15D
+   MMIayN84z854epaPLmePJBW+WPbF6jlSbxIdLFzT0scI2Pl6DrKEs/+eM
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="353831802"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="416324517"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 21:09:42 -0700
+   d="scan'208";a="353831802"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 21:50:44 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="732872157"
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="650496052"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="732872157"
+   d="scan'208";a="650496052"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 11 May 2023 21:09:35 -0700
+  by orsmga003.jf.intel.com with ESMTP; 11 May 2023 21:50:37 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pxK63-0004UL-0Y;
-        Fri, 12 May 2023 04:09:35 +0000
-Date:   Fri, 12 May 2023 12:09:12 +0800
+        id 1pxKjk-0004XA-1N;
+        Fri, 12 May 2023 04:50:36 +0000
+Date:   Fri, 12 May 2023 12:50:00 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Bagas Sanjaya <bagasdotme@gmail.com>,
         Linux DRI Development <dri-devel@lists.freedesktop.org>,
@@ -60,33 +60,34 @@ Cc:     oe-kbuild-all@lists.linux.dev,
         Eric Dumazet <edumazet@google.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Bagas Sanjaya <bagasdotme@gmail.com>,
-        "David A . Hinds" <dahinds@users.sourceforge.net>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
         Gaosheng Cui <cuigaosheng1@huawei.com>,
         Andy Gospodarek <andy@greyhouse.net>,
         Dan Carpenter <error27@gmail.com>,
         Davidlohr Bueso <dave@stgolabs.net>,
         Minghao Chi <chi.minghao@zte.com.cn>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Peter De Schrijver <p2@mind.be>,
         Simon Horman <simon.horman@corigine.com>,
         Jacob Keller <jacob.e.keller@intel.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Guenter Roeck <linux@roeck-us.net>,
-        Sam Creasey <sammy@sammy.net>, Donald Becker <becker@scyld.com>
-Subject: Re: [PATCH 04/10] net: ethernet: 8390: Replace GPL boilerplate with
- SPDX identifier
-Message-ID: <202305121107.Au46XZCK-lkp@intel.com>
-References: <20230511133406.78155-5-bagasdotme@gmail.com>
+        Sam Creasey <sammy@sammy.net>,
+        Donald Becker <becker@scyld.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jay Vosburgh <j.vosburgh@gmail.com>
+Subject: Re: [PATCH 05/10] net: ethernet: i825xx: Replace GPL boilerplate
+ with SPDX identifier
+Message-ID: <202305121232.Nt5pBt8w-lkp@intel.com>
+References: <20230511133406.78155-6-bagasdotme@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230511133406.78155-5-bagasdotme@gmail.com>
+In-Reply-To: <20230511133406.78155-6-bagasdotme@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -101,14 +102,14 @@ kernel test robot noticed the following build warnings:
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Bagas-Sanjaya/agp-amd64-Remove-GPL-distribution-notice/20230511-214307
 base:   ac9a78681b921877518763ba0e89202254349d1b
-patch link:    https://lore.kernel.org/r/20230511133406.78155-5-bagasdotme%40gmail.com
-patch subject: [PATCH 04/10] net: ethernet: 8390: Replace GPL boilerplate with SPDX identifier
+patch link:    https://lore.kernel.org/r/20230511133406.78155-6-bagasdotme%40gmail.com
+patch subject: [PATCH 05/10] net: ethernet: i825xx: Replace GPL boilerplate with SPDX identifier
 reproduce:
         scripts/spdxcheck.py
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305121107.Au46XZCK-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305121232.Nt5pBt8w-lkp@intel.com/
 
 spdxcheck warnings: (new ones prefixed by >>)
    include/net/bonding.h: 1:28 Invalid License ID: GPL-1.0-or-later
@@ -120,17 +121,20 @@ spdxcheck warnings: (new ones prefixed by >>)
    drivers/isdn/mISDN/dsp_tones.c: 1:28 Invalid License ID: GPL-1.0-or-later
    drivers/net/bonding/bond_main.c: 1:28 Invalid License ID: GPL-1.0-or-later
    drivers/net/bonding/bonding_priv.h: 1:28 Invalid License ID: GPL-1.0-or-later
->> drivers/net/ethernet/8390/8390.h: 1:28 Invalid License ID: GPL-1.0-or-later
->> drivers/net/ethernet/8390/apne.c: 1:28 Invalid License ID: GPL-1.0-or-later
->> drivers/net/ethernet/8390/axnet_cs.c: 1:28 Invalid License ID: GPL-1.0-or-later
->> drivers/net/ethernet/8390/hydra.c: 1:28 Invalid License ID: GPL-1.0-only
->> drivers/net/ethernet/8390/lib8390.c: 1:28 Invalid License ID: GPL-1.0-or-later
->> drivers/net/ethernet/8390/mac8390.c: 1:28 Invalid License ID: GPL-1.0-or-later
->> drivers/net/ethernet/8390/ne.c: 1:28 Invalid License ID: GPL-1.0-or-later
->> drivers/net/ethernet/8390/ne2k-pci.c: 1:28 Invalid License ID: GPL-1.0-or-later
->> drivers/net/ethernet/8390/pcnet_cs.c: 1:28 Invalid License ID: GPL-1.0-or-later
->> drivers/net/ethernet/8390/smc-ultra.c: 1:28 Invalid License ID: GPL-1.0-or-later
->> drivers/net/ethernet/8390/wd.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/8390.h: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/apne.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/axnet_cs.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/hydra.c: 1:28 Invalid License ID: GPL-1.0-only
+   drivers/net/ethernet/8390/lib8390.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/mac8390.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/ne.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/ne2k-pci.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/pcnet_cs.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/smc-ultra.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/wd.c: 1:28 Invalid License ID: GPL-1.0-or-later
+>> drivers/net/ethernet/i825xx/82596.c: 1:28 Invalid License ID: GPL-1.0-or-later
+>> drivers/net/ethernet/i825xx/lasi_82596.c: 1:28 Invalid License ID: GPL-1.0-or-later
+>> drivers/net/ethernet/i825xx/lib82596.c: 1:28 Invalid License ID: GPL-1.0-or-later
 
 -- 
 0-DAY CI Kernel Test Service
