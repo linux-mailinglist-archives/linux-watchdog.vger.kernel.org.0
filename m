@@ -2,48 +2,48 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638D36FFF4C
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 May 2023 05:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5526FFF75
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 May 2023 05:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239158AbjELD3o (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 11 May 2023 23:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
+        id S239892AbjELDwx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 11 May 2023 23:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239846AbjELD3m (ORCPT
+        with ESMTP id S230325AbjELDwm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 11 May 2023 23:29:42 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4108A468A;
-        Thu, 11 May 2023 20:29:41 -0700 (PDT)
+        Thu, 11 May 2023 23:52:42 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8614EC8;
+        Thu, 11 May 2023 20:52:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683862181; x=1715398181;
+  t=1683863561; x=1715399561;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=OvzogAHeqtJArkfFrwuVlPlMN6TAJPqwHgCuw/bj4WA=;
-  b=c6LQ9iptNz7poXlfU857/mw5migFLWOgH3Q5k3sLB8MBuokCIU48J0qg
-   TaJiVwdjJt2KX3zGarfCYhQcHxy3tkyIPYNG4zoFFPtL36rT1SAClG7Uk
-   D2S5DKA22Y4RDL04unylJosz5ud/jytAM45+R1bUIyeAPbw+lYkAFo2bE
-   ejnB8ed3h1dVRCqXqhp/HxCFrLWTKu90SodyC5tNA6SV3CBwt8oFKVLOI
-   SZUE8Kfsihpa98FK1IZ4FjxvkYcApRuuSr2W/7dCn+FJxW/LjRkFA+qVJ
-   rjKA9kFp3L/MpaR3yJqvaPlbuq+C2j/652WDX0PuQDMyj6+p+VidEuLhE
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="335209095"
+  bh=pmopDKLIc4zl+fq5xL7xMuzECz1xDAHg5SvtSuERXKQ=;
+  b=ksKXnU4Wo2S3a+v+vaGt23Edy4Z4y+YaDzkjtwOr5+S4zAh69CtbqzSu
+   quA2Q/JTH83NxFO+ArVr5bqSpX1Vv76PM3KBbYBqKmpPixE2Nw4Tg75MT
+   adHjeuRTkX5cETaL820k/Uw3+wctM3ODenFahk5BE2ebhe/lHuw3ysMXR
+   i8bZcSGHYnjxTI31KjL2DAaq/JnEiAAkycLRraoOsitBNNQloZN9ekkeM
+   RxuyJetCYqpI1+aLWq/aopdnBcZxTVkyiGhwUfMfm6yKCJ9qZLbaa/y6u
+   xZVW9gp93PWGl8SG+7+CVkI95xUqmj6lFJRrDIjQZmD91dr+Hpt34pprn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="437027746"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="335209095"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 20:29:40 -0700
+   d="scan'208";a="437027746"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 20:52:41 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="844244718"
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="769629426"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="844244718"
+   d="scan'208";a="769629426"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 11 May 2023 20:29:34 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 11 May 2023 20:52:35 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pxJTK-0004S8-0W;
-        Fri, 12 May 2023 03:29:34 +0000
-Date:   Fri, 12 May 2023 11:28:55 +0800
+        id 1pxJpa-0004TA-28;
+        Fri, 12 May 2023 03:52:34 +0000
+Date:   Fri, 12 May 2023 11:52:21 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Bagas Sanjaya <bagasdotme@gmail.com>,
         Linux DRI Development <dri-devel@lists.freedesktop.org>,
@@ -75,18 +75,18 @@ Cc:     oe-kbuild-all@lists.linux.dev,
         Bagas Sanjaya <bagasdotme@gmail.com>,
         Tom Rix <trix@redhat.com>,
         Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH 02/10] mISDN: Replace GPL notice boilerplate with SPDX
- identifier
-Message-ID: <202305121151.UPlaFk6c-lkp@intel.com>
-References: <20230511133406.78155-3-bagasdotme@gmail.com>
+Subject: Re: [PATCH 03/10] net: bonding: Add SPDX identifier to remaining
+ files
+Message-ID: <202305121116.pEUebm1s-lkp@intel.com>
+References: <20230511133406.78155-4-bagasdotme@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230511133406.78155-3-bagasdotme@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230511133406.78155-4-bagasdotme@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -101,22 +101,25 @@ kernel test robot noticed the following build warnings:
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Bagas-Sanjaya/agp-amd64-Remove-GPL-distribution-notice/20230511-214307
 base:   ac9a78681b921877518763ba0e89202254349d1b
-patch link:    https://lore.kernel.org/r/20230511133406.78155-3-bagasdotme%40gmail.com
-patch subject: [PATCH 02/10] mISDN: Replace GPL notice boilerplate with SPDX identifier
+patch link:    https://lore.kernel.org/r/20230511133406.78155-4-bagasdotme%40gmail.com
+patch subject: [PATCH 03/10] net: bonding: Add SPDX identifier to remaining files
 reproduce:
         scripts/spdxcheck.py
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305121151.UPlaFk6c-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305121116.pEUebm1s-lkp@intel.com/
 
 spdxcheck warnings: (new ones prefixed by >>)
->> drivers/isdn/mISDN/dsp_audio.c: 1:28 Invalid License ID: GPL-1.0-or-later
->> drivers/isdn/mISDN/dsp_blowfish.c: 1:28 Invalid License ID: GPL-1.0-or-later
->> drivers/isdn/mISDN/dsp_cmx.c: 1:28 Invalid License ID: GPL-1.0-or-later
->> drivers/isdn/mISDN/dsp_core.c: 1:28 Invalid License ID: GPL-1.0-or-later
->> drivers/isdn/mISDN/dsp_dtmf.c: 1:28 Invalid License ID: GPL-1.0-or-later
->> drivers/isdn/mISDN/dsp_tones.c: 1:28 Invalid License ID: GPL-1.0-or-later
+>> include/net/bonding.h: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/isdn/mISDN/dsp_audio.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/isdn/mISDN/dsp_blowfish.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/isdn/mISDN/dsp_cmx.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/isdn/mISDN/dsp_core.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/isdn/mISDN/dsp_dtmf.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/isdn/mISDN/dsp_tones.c: 1:28 Invalid License ID: GPL-1.0-or-later
+>> drivers/net/bonding/bond_main.c: 1:28 Invalid License ID: GPL-1.0-or-later
+>> drivers/net/bonding/bonding_priv.h: 1:28 Invalid License ID: GPL-1.0-or-later
 
 -- 
 0-DAY CI Kernel Test Service
