@@ -2,62 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6808700352
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 May 2023 11:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 497F470035F
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 May 2023 11:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240307AbjELJGK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 12 May 2023 05:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
+        id S240378AbjELJHt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 12 May 2023 05:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240026AbjELJGJ (ORCPT
+        with ESMTP id S239976AbjELJHs (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 12 May 2023 05:06:09 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C08DD96;
-        Fri, 12 May 2023 02:06:08 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64395e741fcso10010587b3a.2;
-        Fri, 12 May 2023 02:06:08 -0700 (PDT)
+        Fri, 12 May 2023 05:07:48 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B75B100DD;
+        Fri, 12 May 2023 02:07:47 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-24e2b2a27ebso9068043a91.3;
+        Fri, 12 May 2023 02:07:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683882368; x=1686474368;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1683882466; x=1686474466;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BUkwR5dAglmPcY5nHDbrbDUmEm/Czvqol0O0KFuiob8=;
-        b=EsOpvrz8oFiaamtTwXnlCFLbdqUpYc15ryzTzPnULkAUJ5PsxIC2FamepHTQ9vxJUo
-         7hiFmErMgyPGoSAse+smqWasoWMlfVSh9GD2osKdeABJHg67mA/iS8vuIoGsYTfrBRPr
-         5WH6Dw5j5eH+bxMRz4bxS0CwpwjCN4Qqw/CB/ON2fcHX3iht/v64JwKi8JHqb2vltP3z
-         LogBmtroPw5FGg3+H9+h0WXdJKJsbQaY6sUo8vQkr+LpWZmk7bZT0gatzGfQFcbJiJo9
-         k1j0c1nZZLck2LHRMCfiuE+xDGZtdcpoZubsCR3JCv27zPXiBadfozdQhAc1w7smV2PR
-         uBZQ==
+        bh=oseHv6VTSzckslEr5MWLMD1wKR85pm76Ym5jt2vFoxI=;
+        b=XjEIPEkNIvghUZ4sYuX1fCWrgg44BfoxhHVaks66vlF5xl5VUv4r3isABKr/LsYPYw
+         Tly6RKPK9BcyMqYvoSOgRdb9WA1254+yurUnYVBO0DpOoyToddB4r3IDlbeJVvJS+aIS
+         cIU73rW7ZyB8UfQOdcYe9RWtl8aAXPzz839ZP++4bXfB0lpVKXJehz/EqhRzVPYRv+B7
+         z7mpm7xHQaI6a3VIN/7jkY+uvr6L4PuFjgQ3/VPChSlkqopIjEq5foFvjsooPNWZXn2w
+         NREm8Inimbied+1qeFmwZQ/2mm1A2tVHyBhiD6Ze7c52BViC2yJfu7/XZ2TmVWhspGu9
+         +Wyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683882368; x=1686474368;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1683882466; x=1686474466;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BUkwR5dAglmPcY5nHDbrbDUmEm/Czvqol0O0KFuiob8=;
-        b=AcSi5q0oB/RB7LaAxDD20nksQ1eoG15vksts1oMpPMTIz3d8OmKWcT4x8mUr8/WJVN
-         fbM2ud1chLMyZkzPidQCtx3M7Wtrgi+WADUhZitFUNlFwg0YoleCpZ9K/20ImaVXaJpV
-         0Rc78uw20q33+uijGfBAXxnELRw+A6zItHAG28dYVeQhZSd6p6LseFSkxoufFKFjlQvV
-         /XWfwNYTgF64Dfs4oRT+6L68PyfdGVsvG3XF1XUIvxG+hFcj6WFVSF7KYv2ldcmvIVU+
-         Q84bwNLUTeyfWcslWutjhjMqNHdrPC3nOvaj4y1fCtW9QXYUC3jk4C1zhTwwe0j6CcN+
-         LLXQ==
-X-Gm-Message-State: AC+VfDy9GrhhDrUGt3G+Ob5/GT8/4M7ZKGK+CcMaIzy6XhHVOLF7kGl9
-        uPGAn4esmSX3FmliP2T41Jw=
-X-Google-Smtp-Source: ACHHUZ4DD4qzlVtl1MATp+SSQ4wN/DopjFHr357B6Org73qjEYGN3SP7rZVm5nzvAwWRUD4DmIZ0jQ==
-X-Received: by 2002:a05:6a00:1747:b0:644:ad29:fd5a with SMTP id j7-20020a056a00174700b00644ad29fd5amr27781559pfc.21.1683882367855;
-        Fri, 12 May 2023 02:06:07 -0700 (PDT)
+        bh=oseHv6VTSzckslEr5MWLMD1wKR85pm76Ym5jt2vFoxI=;
+        b=Iv003L73fO7XWNhtFJguMYrn/IblOm2DhyhXyKzzMNE95c2B8wPX80UK5BTu0Buqbg
+         9ncCpMA7G97Zly2ekYbMXeavMY2tYby5iS1pXKrd92hcZLsI772ZZE+Xcz0TGSFhTRkR
+         0Q5xB+I+mVdvknj0rIBaJguvcK4lQMUtDKxIeCgg/Pr4sgLDMFrxXoMHl/MekFZHZdZU
+         wKlFeeTaF7geLsX2iTTlMTprs/yDsqMAYRQsncT1LIH1syn1keHLxG2z1z6P7fGdzXC3
+         y3FAY1A9nit3X53hQlO9Uz1f6dAJL7WuxOiKvtMZbUlY1wpm02yShuGvZG7bFpBrdgjJ
+         xKow==
+X-Gm-Message-State: AC+VfDz8J9n/WsdDoT7a2w0jIjYxz1vzRjc2YT7T5qNFLA3o79hmOzl1
+        s/kux0CGZNx5vaFJ+9uzviA=
+X-Google-Smtp-Source: ACHHUZ7+b/oOCYYoASqforqMy2MxURpPVBmI0FXSJlR2iCNI8DK+oJQKKZTGyZQoOcDqitWf1y1ZzA==
+X-Received: by 2002:a17:90a:b317:b0:250:78d0:f797 with SMTP id d23-20020a17090ab31700b0025078d0f797mr18003584pjr.41.1683882466461;
+        Fri, 12 May 2023 02:07:46 -0700 (PDT)
 Received: from [192.168.43.80] (subs32-116-206-28-8.three.co.id. [116.206.28.8])
-        by smtp.gmail.com with ESMTPSA id a4-20020a62bd04000000b006413d1dc4adsm6584368pff.110.2023.05.12.02.05.54
+        by smtp.gmail.com with ESMTPSA id cq2-20020a17090af98200b002508f0ac3edsm8373161pjb.53.2023.05.12.02.07.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 02:06:07 -0700 (PDT)
-Message-ID: <2883e834-eccd-937e-0f3e-2d787994d4cf@gmail.com>
-Date:   Fri, 12 May 2023 16:05:52 +0700
+        Fri, 12 May 2023 02:07:46 -0700 (PDT)
+Message-ID: <51c2577a-b9d9-4f6e-e79b-c2c324b72347@gmail.com>
+Date:   Fri, 12 May 2023 16:07:33 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 08/10] drivers: watchdog: Replace GPL license notice with
- SPDX identifier
-To:     Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 00/10] Treewide GPL SPDX conversion (love letter to Didi)
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Networking <netdev@vger.kernel.org>,
@@ -73,7 +73,6 @@ Cc:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
         Andy Gospodarek <andy@greyhouse.net>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         Daniel Mack <daniel@zonque.org>,
@@ -81,7 +80,7 @@ Cc:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jan Kara <jack@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
         =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
         Manivannan Sadhasivam <mani@kernel.org>,
         Tom Rix <trix@redhat.com>,
@@ -98,22 +97,11 @@ Cc:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Jacob Keller <jacob.e.keller@intel.com>,
         Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Archana <craechal@gmail.com>, Ray Lehtiniemi <rayl@mail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrey Panin <pazke@donpac.ru>, Oleg Drokin <green@crimea.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Jonas Jensen <jonas.jensen@gmail.com>,
-        Sylver Bruneau <sylver.bruneau@googlemail.com>,
-        Andrew Sharp <andy.sharp@lsi.com>,
-        Denis Turischev <denis@compulab.co.il>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
+        Dan Carpenter <error27@gmail.com>, Archana <craechal@gmail.com>
 References: <20230511133406.78155-1-bagasdotme@gmail.com>
- <20230511133406.78155-9-bagasdotme@gmail.com>
- <46c263f6-dd9c-408c-b3e0-bfb2676c6505@roeck-us.net>
-Content-Language: en-US
+ <20230511174105.63b7a6ae@kernel.org>
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <46c263f6-dd9c-408c-b3e0-bfb2676c6505@roeck-us.net>
+In-Reply-To: <20230511174105.63b7a6ae@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -126,23 +114,22 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 5/11/23 22:08, Guenter Roeck wrote:
->> +/* SPDX-License-Identifier: GPL-2.0-only */
+On 5/12/23 07:41, Jakub Kicinski wrote:
+> On Thu, 11 May 2023 20:33:56 +0700 Bagas Sanjaya wrote:
+>> I trigger this patch series because of Didi's GPL full name fixes
+>> attempt [1], for which all of them had been NAKed. In many cases, the
+>> appropriate correction is to use SPDX license identifier instead.
+>>
+>> Often, when replacing license notice boilerplates with their equivalent
+>> SPDX identifier, the notice doesn't mention explicit GPL version. Greg
+>> [2] replied this question by falling back to GPL 1.0 (more precisely
+>> GPL 1.0+ in order to be compatible with GPL 2.0 used by Linux kernel),
+>> although there are exceptions (mostly resolved by inferring from
+>> older patches covering similar situation).
 > 
-> This was supposed to be a C++ style comment for C source files.
-> Has the rule changed ?
-> 
+> Should you be CCing linux-spdx@ on this?
 
-Oops, I don't see checkpatch. Will fix.
-
->> +/* SPDX-License-Identifier: GPL-2.0-only */
-> 
-> The text below suggests that this should be GPL1+.
-> 
-
-OK, will fix.
-
-Thanks for review!
+Oops, I forgot to Cc that list. Will do in v2.
 
 -- 
 An old man doll... just what I always wanted! - Clara
