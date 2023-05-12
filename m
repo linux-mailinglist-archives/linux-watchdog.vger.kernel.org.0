@@ -2,146 +2,148 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8D6700019
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 May 2023 08:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6808700352
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 May 2023 11:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbjELGBw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 12 May 2023 02:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
+        id S240307AbjELJGK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 12 May 2023 05:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239947AbjELGBu (ORCPT
+        with ESMTP id S240026AbjELJGJ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 12 May 2023 02:01:50 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748A649C1;
-        Thu, 11 May 2023 23:01:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683871310; x=1715407310;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iHUv69UyfzxQ3VeWTpR1GT/N/Rvib8OFJmndtMsMloI=;
-  b=JX1mw3b71sLSdr9ly2Mb0WnPc/pORFHg1MRXpmHVJrYGOgpzH1AioToF
-   17OX0p3qn0VsG7nQ3wqTRVHtO36opQNXchEgXrH8j3nMgnpPaG//qLkA+
-   T+f4TPBgU7XY7zdStW8pJ0q4Mj3VaxOEjknU1ffLkE++m38FJMzWiPNKu
-   lEDdCOrt0QAOI5qOs4sTLftNZS6rOh7i432LNJ/M2R3IldUOlrzqKavgf
-   Tejv4PsgIixKsySmMBIZiouCApjaOJ+Evo6PGhXy0X+HGi0H4CZE+4bK3
-   Th25m5OQIP9mVYhB7I4D0kruxj808UbyVBFrs1FBKBkI1bCPLh1LwhS0C
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="353840859"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="353840859"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 23:01:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="730683054"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="730683054"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 11 May 2023 23:01:38 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pxLqU-0004a2-04;
-        Fri, 12 May 2023 06:01:38 +0000
-Date:   Fri, 12 May 2023 14:00:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux DRI Development <dri-devel@lists.freedesktop.org>,
+        Fri, 12 May 2023 05:06:09 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C08DD96;
+        Fri, 12 May 2023 02:06:08 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64395e741fcso10010587b3a.2;
+        Fri, 12 May 2023 02:06:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683882368; x=1686474368;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BUkwR5dAglmPcY5nHDbrbDUmEm/Czvqol0O0KFuiob8=;
+        b=EsOpvrz8oFiaamtTwXnlCFLbdqUpYc15ryzTzPnULkAUJ5PsxIC2FamepHTQ9vxJUo
+         7hiFmErMgyPGoSAse+smqWasoWMlfVSh9GD2osKdeABJHg67mA/iS8vuIoGsYTfrBRPr
+         5WH6Dw5j5eH+bxMRz4bxS0CwpwjCN4Qqw/CB/ON2fcHX3iht/v64JwKi8JHqb2vltP3z
+         LogBmtroPw5FGg3+H9+h0WXdJKJsbQaY6sUo8vQkr+LpWZmk7bZT0gatzGfQFcbJiJo9
+         k1j0c1nZZLck2LHRMCfiuE+xDGZtdcpoZubsCR3JCv27zPXiBadfozdQhAc1w7smV2PR
+         uBZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683882368; x=1686474368;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BUkwR5dAglmPcY5nHDbrbDUmEm/Czvqol0O0KFuiob8=;
+        b=AcSi5q0oB/RB7LaAxDD20nksQ1eoG15vksts1oMpPMTIz3d8OmKWcT4x8mUr8/WJVN
+         fbM2ud1chLMyZkzPidQCtx3M7Wtrgi+WADUhZitFUNlFwg0YoleCpZ9K/20ImaVXaJpV
+         0Rc78uw20q33+uijGfBAXxnELRw+A6zItHAG28dYVeQhZSd6p6LseFSkxoufFKFjlQvV
+         /XWfwNYTgF64Dfs4oRT+6L68PyfdGVsvG3XF1XUIvxG+hFcj6WFVSF7KYv2ldcmvIVU+
+         Q84bwNLUTeyfWcslWutjhjMqNHdrPC3nOvaj4y1fCtW9QXYUC3jk4C1zhTwwe0j6CcN+
+         LLXQ==
+X-Gm-Message-State: AC+VfDy9GrhhDrUGt3G+Ob5/GT8/4M7ZKGK+CcMaIzy6XhHVOLF7kGl9
+        uPGAn4esmSX3FmliP2T41Jw=
+X-Google-Smtp-Source: ACHHUZ4DD4qzlVtl1MATp+SSQ4wN/DopjFHr357B6Org73qjEYGN3SP7rZVm5nzvAwWRUD4DmIZ0jQ==
+X-Received: by 2002:a05:6a00:1747:b0:644:ad29:fd5a with SMTP id j7-20020a056a00174700b00644ad29fd5amr27781559pfc.21.1683882367855;
+        Fri, 12 May 2023 02:06:07 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-8.three.co.id. [116.206.28.8])
+        by smtp.gmail.com with ESMTPSA id a4-20020a62bd04000000b006413d1dc4adsm6584368pff.110.2023.05.12.02.05.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 02:06:07 -0700 (PDT)
+Message-ID: <2883e834-eccd-937e-0f3e-2d787994d4cf@gmail.com>
+Date:   Fri, 12 May 2023 16:05:52 +0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 08/10] drivers: watchdog: Replace GPL license notice with
+ SPDX identifier
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Networking <netdev@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Staging Drivers <linux-staging@lists.linux.dev>,
         Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Actions <linux-actions@lists.infradead.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>,
+        Diederik de Haas <didi.debian@cknow.org>,
         Kate Stewart <kstewart@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>, Tom Rix <trix@redhat.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Dan Carpenter <error27@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Simon Horman <simon.horman@corigine.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sam Creasey <sammy@sammy.net>, Arnd Bergmann <arnd@arndb.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
+        David Airlie <airlied@redhat.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
         Jay Vosburgh <j.vosburgh@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: Re: [PATCH 10/10] include: synclink: Replace GPL license notice with
- SPDX identifier
-Message-ID: <202305121302.dCL8lmbx-lkp@intel.com>
-References: <20230511133406.78155-11-bagasdotme@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511133406.78155-11-bagasdotme@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jan Kara <jack@suse.com>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Kalle Valo <kvalo@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Deepak R Varma <drv@mailo.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Archana <craechal@gmail.com>, Ray Lehtiniemi <rayl@mail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andrey Panin <pazke@donpac.ru>, Oleg Drokin <green@crimea.edu>,
+        Marc Zyngier <maz@kernel.org>,
+        Jonas Jensen <jonas.jensen@gmail.com>,
+        Sylver Bruneau <sylver.bruneau@googlemail.com>,
+        Andrew Sharp <andy.sharp@lsi.com>,
+        Denis Turischev <denis@compulab.co.il>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+References: <20230511133406.78155-1-bagasdotme@gmail.com>
+ <20230511133406.78155-9-bagasdotme@gmail.com>
+ <46c263f6-dd9c-408c-b3e0-bfb2676c6505@roeck-us.net>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <46c263f6-dd9c-408c-b3e0-bfb2676c6505@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Bagas,
+On 5/11/23 22:08, Guenter Roeck wrote:
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+> 
+> This was supposed to be a C++ style comment for C source files.
+> Has the rule changed ?
+> 
 
-kernel test robot noticed the following build warnings:
+Oops, I don't see checkpatch. Will fix.
 
-[auto build test WARNING on ac9a78681b921877518763ba0e89202254349d1b]
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+> 
+> The text below suggests that this should be GPL1+.
+> 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bagas-Sanjaya/agp-amd64-Remove-GPL-distribution-notice/20230511-214307
-base:   ac9a78681b921877518763ba0e89202254349d1b
-patch link:    https://lore.kernel.org/r/20230511133406.78155-11-bagasdotme%40gmail.com
-patch subject: [PATCH 10/10] include: synclink: Replace GPL license notice with SPDX identifier
-reproduce:
-        scripts/spdxcheck.py
+OK, will fix.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305121302.dCL8lmbx-lkp@intel.com/
-
-spdxcheck warnings: (new ones prefixed by >>)
-   drivers/pcmcia/cirrus.h: 1:44 Invalid License ID: MPL
-   drivers/pcmcia/pd6729.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/watchdog/ibmasr.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/watchdog/sb_wdog.c: 1:28 Invalid License ID: GPL-1.0
-   fs/udf/ecma_167.h: 1:44 Invalid License ID: GPL-1.0-only
-   fs/udf/osta_udf.h: 1:44 Invalid License ID: GPL-1.0-only
->> include/linux/synclink.h: 1:28 Invalid License ID: GPL-1.0-or-later
-   include/net/bonding.h: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/isdn/mISDN/dsp_audio.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/isdn/mISDN/dsp_blowfish.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/isdn/mISDN/dsp_cmx.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/isdn/mISDN/dsp_core.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/isdn/mISDN/dsp_dtmf.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/isdn/mISDN/dsp_tones.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/bonding/bond_main.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/bonding/bonding_priv.h: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/8390.h: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/apne.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/axnet_cs.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/hydra.c: 1:28 Invalid License ID: GPL-1.0-only
-   drivers/net/ethernet/8390/lib8390.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/mac8390.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/ne.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/ne2k-pci.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/pcnet_cs.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/smc-ultra.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/wd.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/i825xx/82596.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/i825xx/lasi_82596.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/i825xx/lib82596.c: 1:28 Invalid License ID: GPL-1.0-or-later
+Thanks for review!
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+An old man doll... just what I always wanted! - Clara
+
