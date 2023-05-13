@@ -2,101 +2,69 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E4B700919
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 May 2023 15:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2264470155F
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 May 2023 10:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240848AbjELNWh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 12 May 2023 09:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
+        id S235775AbjEMIwj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 13 May 2023 04:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240401AbjELNWg (ORCPT
+        with ESMTP id S235589AbjEMIwg (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 12 May 2023 09:22:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A13814E67
-        for <linux-watchdog@vger.kernel.org>; Fri, 12 May 2023 06:21:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683897680;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4AlaRyQOy36sXdqy+JwhbCuIDwi8LlxpgbISw/CDPFM=;
-        b=WVuFVWO6/FlQSCVBFPSJC0w1/VEBS0do9vDz6gEOk7BY/kXbJ95LDYOtcqNM3WjHSaCZvw
-        q/dgJfGUO6xLvfizoSIiTsitotncXfuAFLv1jnZRfGTt6H0zQ0NrHOXe6e+urH9J6WHINu
-        +MPeFTCgNTF61UxaqRCOdNs9ZQWVvng=
-Received: from mail-vs1-f71.google.com (mail-vs1-f71.google.com
- [209.85.217.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-407-6a-gMgTOPIKcxJ_g1dLR4Q-1; Fri, 12 May 2023 09:21:19 -0400
-X-MC-Unique: 6a-gMgTOPIKcxJ_g1dLR4Q-1
-Received: by mail-vs1-f71.google.com with SMTP id ada2fe7eead31-434559bb67bso2576395137.1
-        for <linux-watchdog@vger.kernel.org>; Fri, 12 May 2023 06:21:19 -0700 (PDT)
+        Sat, 13 May 2023 04:52:36 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECFB72BA
+        for <linux-watchdog@vger.kernel.org>; Sat, 13 May 2023 01:52:29 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f41dceb93bso54906405e9.1
+        for <linux-watchdog@vger.kernel.org>; Sat, 13 May 2023 01:52:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683967948; x=1686559948;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mFiPsR74mJR9kYLZiNuO/LBpL6tXQD4xr+oUTIlTgpQ=;
+        b=THMT/NzAjks6HbLuMxTD1VS/tKSoTYPk/ztRAK/tJUh3U0B8JqH+6zE/UJWAIDogvV
+         PP/sm97oEu/X++ClABFxoHH/ucLCl9r8bXhBOGiAdMKKnv3Y3lHE1Zo7IId91Sc4v4AB
+         Jq6E3+H1SYz1ilKmcL4f2UegiBG+skROdhrJguSbP9b95oyVuhXhn5A81g2Lx9KXgqyF
+         sVu3ds/3RBtJdXaVVQD0HqJtSmN6r0pKLWa9IZHiuQNnbdIHRjpLCOQRlGXV+txQUmh6
+         TO9NOkqwJvoQCQduMIlBquUOEzTha/j5hC7a4wS1/vAx11qQPV/OU2+fLAWvtliWtJHV
+         X+5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683897678; x=1686489678;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4AlaRyQOy36sXdqy+JwhbCuIDwi8LlxpgbISw/CDPFM=;
-        b=RGpBKHHywIZ0Izn6rGDCu/AWqjfqHMLKUF/AI8KUd1AMnxd/DLkX2QqUAnLiDpKAkD
-         QP+ysCZ4ni5dWyTDf3Xbm/nm6EEc9oJuhank9UoTQ98bkfb8+KIvQYFB8fx0aG/RuHcv
-         HFMX05VmRrmbm7tsomFBv+TO6CUBjZtRcDGuWA6Sf25micVByKWgiQ78opD0jnCOhaLS
-         ccUPVQcsyXcEfeaCl9b2h6d1MX6gClj5kHVdzQOx/dYywVVYWuKqMLXR0+1GJaBDIZRK
-         liA5JsoghcRITwsZTrt5GrBIebDbFIjNtvgVVWDOXdGyUNGomFTmmdQAJf3RNceQEVbQ
-         q0xQ==
-X-Gm-Message-State: AC+VfDytMl+vASg0nqWuCXV6qbRECNElZI9zbz16sOPVvh3DYnN/6PW+
-        1Qk9KzE/P+sMIbGT3sv4O9lYxGrBAeAxFsshVjfesc1Ro6P6bdSRk0JtYWSYn4R/YoJtqaKp+fx
-        sjuaSnWaylAMXqErM+HohDjm/gXMOQEXc52t8PeaQOEY=
-X-Received: by 2002:a67:ffd5:0:b0:434:69be:8495 with SMTP id w21-20020a67ffd5000000b0043469be8495mr9541632vsq.9.1683897678644;
-        Fri, 12 May 2023 06:21:18 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ56EVhPNDeIWeojbtIxhXDW0jsNAxPEwZjDUE5jSg6VIr1fyKKsgmU+sCABqffj01zeSX7annq0Y5IBzbAanRE=
-X-Received: by 2002:a67:ffd5:0:b0:434:69be:8495 with SMTP id
- w21-20020a67ffd5000000b0043469be8495mr9541577vsq.9.1683897678350; Fri, 12 May
- 2023 06:21:18 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683967948; x=1686559948;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mFiPsR74mJR9kYLZiNuO/LBpL6tXQD4xr+oUTIlTgpQ=;
+        b=gc938SyqBPUFer3BDtJPB97WBlqRKbro0+LJ8IzbSEniYbQEqqutEMz0SEEXYX4Ufy
+         Fu9P3XXst+K0VIbHQc/G191qaL/fQU9x40Anh+g6bKmlDqUCCJTl0OR6wO96MWr5Ynh5
+         zp4KrPB5pYX8swNfQPBoBCx/U4SuFNbzJvpAhRK4XE8JE0SkFe3+QqQlWptkuqCqsIop
+         GTPSOfhf3TS4COxTHGlCzYhMFUCwpafgMZyG4sAUEHJV/YsBnTyh6wP9mH+51uNJPhhl
+         7GwwaBVjbxrvqyKmICkMTJubkS5jHVcwimd6SJRGvY0Gt2CKQaBP8wNzcdPwL+7zmBMe
+         UuNw==
+X-Gm-Message-State: AC+VfDywwHNFvmfZd2+PSwtl1s6m7yhEcO0Bp4W1VCxH8yQPdNjPFiAF
+        CY21bHlM0KlMjBtYR35fbVxi5A==
+X-Google-Smtp-Source: ACHHUZ6T+ABMgpDzTYDLlWrTTc79NsejMYs1SyXwyQX+qUUX1r9XQYiujQZu7ve0l+WFFNCZJIljEg==
+X-Received: by 2002:a7b:cb06:0:b0:3f2:5a60:a03e with SMTP id u6-20020a7bcb06000000b003f25a60a03emr19015560wmj.14.1683967947950;
+        Sat, 13 May 2023 01:52:27 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id n19-20020a1c7213000000b003f4268f51f5sm16725978wmc.0.2023.05.13.01.52.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 May 2023 01:52:25 -0700 (PDT)
+Date:   Sat, 13 May 2023 11:52:21 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     oe-kbuild@lists.linux.dev, Oliver Neukum <oneukum@suse.com>,
+        wim@linux-watchdog.org, linux@roeck-us.net,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH 8/8] usb_pcwd: remove superfluous usb_device pointer
+Message-ID: <d65447c3-58d2-4489-9317-f74ba2873108@kili.mountain>
 MIME-Version: 1.0
-References: <20230512100620.36807-1-bagasdotme@gmail.com> <20230512100620.36807-10-bagasdotme@gmail.com>
-In-Reply-To: <20230512100620.36807-10-bagasdotme@gmail.com>
-From:   Richard Fontana <rfontana@redhat.com>
-Date:   Fri, 12 May 2023 09:21:07 -0400
-Message-ID: <CAC1cPGzSpMZC3oJOpzjqiEDvgWUszzSztMri6uxW6vZ7oZtD5w@mail.gmail.com>
-Subject: Re: [PATCH v2 09/10] udf: Replace license notice with SPDX identifier
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
-        Linux DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Staging Drivers <linux-staging@lists.linux.dev>,
-        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Actions <linux-actions@lists.infradead.org>,
-        Diederik de Haas <didi.debian@cknow.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Philippe Ombredanne <pombredanne@nexb.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Airlie <airlied@redhat.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Simon Horman <simon.horman@corigine.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230427133350.31064-9-oneukum@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,147 +72,61 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, May 12, 2023 at 6:07=E2=80=AFAM Bagas Sanjaya <bagasdotme@gmail.com=
-> wrote:
+Hi Oliver,
 
-> diff --git a/fs/udf/ecma_167.h b/fs/udf/ecma_167.h
-> index de17a97e866742..b2b5bca45758df 100644
-> --- a/fs/udf/ecma_167.h
-> +++ b/fs/udf/ecma_167.h
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: BSD-2-Clause OR GPL-1.0+ */
->  /*
->   * ecma_167.h
->   *
-> @@ -8,29 +9,6 @@
->   * Copyright (c) 2017-2019  Pali Roh=C3=A1r <pali@kernel.org>
->   * All rights reserved.
->   *
-> - * Redistribution and use in source and binary forms, with or without
-> - * modification, are permitted provided that the following conditions
-> - * are met:
-> - * 1. Redistributions of source code must retain the above copyright
-> - *    notice, this list of conditions, and the following disclaimer,
-> - *    without modification.
-> - * 2. The name of the author may not be used to endorse or promote produ=
-cts
-> - *    derived from this software without specific prior written permissi=
-on.
-> - *
-> - * Alternatively, this software may be distributed under the terms of th=
-e
-> - * GNU Public License ("GPL").
-> - *
-> - * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AN=
-D
-> - * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-> - * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PU=
-RPOSE
-> - * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABL=
-E FOR
-> - * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIA=
-L
-> - * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOO=
-DS
-> - * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-> - * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, S=
-TRICT
-> - * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY=
- WAY
-> - * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY O=
-F
-> - * SUCH DAMAGE.
->   */
+kernel test robot noticed the following build warnings:
 
-This is not BSD-2-Clause. Ignoring the interior statement about the
-GPL, I think the closest SPDX identifier might be
-https://spdx.org/licenses/BSD-Source-Code.html
-but it doesn't quite match.
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Oliver-Neukum/pcwd_usb-stop-open-race-disconnect/20230427-223413
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230427133350.31064-9-oneukum%40suse.com
+patch subject: [PATCH 8/8] usb_pcwd: remove superfluous usb_device pointer
+config: parisc-randconfig-m041-20230509 (https://download.01.org/0day-ci/archive/20230512/202305122231.n8RlGMhT-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 12.1.0
 
-> diff --git a/fs/udf/osta_udf.h b/fs/udf/osta_udf.h
-> index 157de0ec0cd530..6c09a4cb46f4a7 100644
-> --- a/fs/udf/osta_udf.h
-> +++ b/fs/udf/osta_udf.h
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: BSD-2-Clause OR GPL-1.0+ */
->  /*
->   * osta_udf.h
->   *
-> @@ -8,29 +9,6 @@
->   * Copyright (c) 2017-2019  Pali Roh=C3=A1r <pali@kernel.org>
->   * All rights reserved.
->   *
-> - * Redistribution and use in source and binary forms, with or without
-> - * modification, are permitted provided that the following conditions
-> - * are met:
-> - * 1. Redistributions of source code must retain the above copyright
-> - *    notice, this list of conditions, and the following disclaimer,
-> - *    without modification.
-> - * 2. The name of the author may not be used to endorse or promote produ=
-cts
-> - *    derived from this software without specific prior written permissi=
-on.
-> - *
-> - * Alternatively, this software may be distributed under the terms of th=
-e
-> - * GNU Public License ("GPL").
-> - *
-> - * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AN=
-D
-> - * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-> - * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PU=
-RPOSE
-> - * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABL=
-E FOR
-> - * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIA=
-L
-> - * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOO=
-DS
-> - * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-> - * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, S=
-TRICT
-> - * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY=
- WAY
-> - * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY O=
-F
-> - * SUCH DAMAGE.
->   */
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202305122231.n8RlGMhT-lkp@intel.com/
 
-Same comment - this is not BSD-2-Clause.
+smatch warnings:
+drivers/watchdog/pcwd_usb.c:215 usb_pcwd_send_command() warn: variable dereferenced before check 'usb_pcwd' (see line 211)
 
-> diff --git a/fs/udf/udftime.c b/fs/udf/udftime.c
-> index fce4ad976c8c29..d0fce5348fd3f3 100644
-> --- a/fs/udf/udftime.c
-> +++ b/fs/udf/udftime.c
-> @@ -1,21 +1,4 @@
-> -/* Copyright (C) 1993, 1994, 1995, 1996, 1997 Free Software Foundation, =
-Inc.
-> -   This file is part of the GNU C Library.
-> -   Contributed by Paul Eggert (eggert@twinsun.com).
-> -
-> -   The GNU C Library is free software; you can redistribute it and/or
-> -   modify it under the terms of the GNU Library General Public License a=
-s
-> -   published by the Free Software Foundation; either version 2 of the
-> -   License, or (at your option) any later version.
-> -
-> -   The GNU C Library is distributed in the hope that it will be useful,
-> -   but WITHOUT ANY WARRANTY; without even the implied warranty of
-> -   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> -   Library General Public License for more details.
-> -
-> -   You should have received a copy of the GNU Library General Public
-> -   License along with the GNU C Library; see the file COPYING.LIB.  If n=
-ot,
-> -   write to the Free Software Foundation, Inc., 59 Temple Place - Suite =
-330,
-> -   Boston, MA 02111-1307, USA.  */
-> +// SPDX-License-Identifier: GPL-2.0-only
+vim +/usb_pcwd +215 drivers/watchdog/pcwd_usb.c
 
-Shouldn't this be
-// SPDX-License-Identifier: LGPL-2.0-or-later ?
-(or are you implicitly using the obscure LGPLv2.x section ... 3 mechanism?)
+143a2e54bf5321 drivers/watchdog/pcwd_usb.c      Wim Van Sebroeck   2009-03-18  206  static int usb_pcwd_send_command(struct usb_pcwd_private *usb_pcwd,
+143a2e54bf5321 drivers/watchdog/pcwd_usb.c      Wim Van Sebroeck   2009-03-18  207  		unsigned char cmd, unsigned char *msb, unsigned char *lsb)
+^1da177e4c3f41 drivers/char/watchdog/pcwd_usb.c Linus Torvalds     2005-04-16  208  {
+^1da177e4c3f41 drivers/char/watchdog/pcwd_usb.c Linus Torvalds     2005-04-16  209  	int got_response, count;
+5412df0bda90a2 drivers/watchdog/pcwd_usb.c      Guenter Roeck      2013-10-14  210  	unsigned char *buf;
+41b4f0869562d7 drivers/watchdog/pcwd_usb.c      Oliver Neukum      2023-04-27 @211  	struct usb_device *udev = interface_to_usbdev(usb_pcwd->interface);
+                                                                                                                                      ^^^^^^^^^^
+Dereference.
 
-Richard
+^1da177e4c3f41 drivers/char/watchdog/pcwd_usb.c Linus Torvalds     2005-04-16  212  
+143a2e54bf5321 drivers/watchdog/pcwd_usb.c      Wim Van Sebroeck   2009-03-18  213  	/* We will not send any commands if the USB PCWD device does
+143a2e54bf5321 drivers/watchdog/pcwd_usb.c      Wim Van Sebroeck   2009-03-18  214  	 * not exist */
+^1da177e4c3f41 drivers/char/watchdog/pcwd_usb.c Linus Torvalds     2005-04-16 @215  	if ((!usb_pcwd) || (!usb_pcwd->exists))
+                                                                                            ^^^^^^^^^^^
+Checked too late.
+
+^1da177e4c3f41 drivers/char/watchdog/pcwd_usb.c Linus Torvalds     2005-04-16  216  		return -1;
+^1da177e4c3f41 drivers/char/watchdog/pcwd_usb.c Linus Torvalds     2005-04-16  217  
+5412df0bda90a2 drivers/watchdog/pcwd_usb.c      Guenter Roeck      2013-10-14  218  	buf = kmalloc(6, GFP_KERNEL);
+5412df0bda90a2 drivers/watchdog/pcwd_usb.c      Guenter Roeck      2013-10-14  219  	if (buf == NULL)
+5412df0bda90a2 drivers/watchdog/pcwd_usb.c      Guenter Roeck      2013-10-14  220  		return 0;
+5412df0bda90a2 drivers/watchdog/pcwd_usb.c      Guenter Roeck      2013-10-14  221  
+143a2e54bf5321 drivers/watchdog/pcwd_usb.c      Wim Van Sebroeck   2009-03-18  222  	/* The USB PC Watchdog uses a 6 byte report format.
+143a2e54bf5321 drivers/watchdog/pcwd_usb.c      Wim Van Sebroeck   2009-03-18  223  	 * The board currently uses only 3 of the six bytes of the report. */
+^1da177e4c3f41 drivers/char/watchdog/pcwd_usb.c Linus Torvalds     2005-04-16  224  	buf[0] = cmd;			/* Byte 0 = CMD */
+^1da177e4c3f41 drivers/char/watchdog/pcwd_usb.c Linus Torvalds     2005-04-16  225  	buf[1] = *msb;			/* Byte 1 = Data MSB */
+^1da177e4c3f41 drivers/char/watchdog/pcwd_usb.c Linus Torvalds     2005-04-16  226  	buf[2] = *lsb;			/* Byte 2 = Data LSB */
+^1da177e4c3f41 drivers/char/watchdog/pcwd_usb.c Linus Torvalds     2005-04-16  227  	buf[3] = buf[4] = buf[5] = 0;	/* All other bytes not used */
+^1da177e4c3f41 drivers/char/watchdog/pcwd_usb.c Linus Torvalds     2005-04-16  228  
+d7e92f7f768477 drivers/watchdog/pcwd_usb.c      Greg Kroah-Hartman 2013-12-19  229  	dev_dbg(&usb_pcwd->interface->dev,
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
 
