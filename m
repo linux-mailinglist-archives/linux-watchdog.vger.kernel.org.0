@@ -2,56 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DD1704C89
-	for <lists+linux-watchdog@lfdr.de>; Tue, 16 May 2023 13:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ADCB704D1F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 16 May 2023 13:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232383AbjEPLmN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 16 May 2023 07:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37322 "EHLO
+        id S232821AbjEPLyl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 16 May 2023 07:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232505AbjEPLmM (ORCPT
+        with ESMTP id S232963AbjEPLyb (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 16 May 2023 07:42:12 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA544684
-        for <linux-watchdog@vger.kernel.org>; Tue, 16 May 2023 04:42:10 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9659e9bbff5so2594870066b.1
-        for <linux-watchdog@vger.kernel.org>; Tue, 16 May 2023 04:42:10 -0700 (PDT)
+        Tue, 16 May 2023 07:54:31 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7184698
+        for <linux-watchdog@vger.kernel.org>; Tue, 16 May 2023 04:54:24 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bc040c7b8so21191449a12.2
+        for <linux-watchdog@vger.kernel.org>; Tue, 16 May 2023 04:54:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684237328; x=1686829328;
+        d=linaro.org; s=google; t=1684238063; x=1686830063;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7dd+jxyo01xM6Elj5j3Ewa9arjCRO1A5vQvJrDdMrVA=;
-        b=oaKRhLTOsWr0cp5nS3K+eXyGIZa1ZOqW0/peqp88GZloMpkRP+y+/o3V5Tb4FFXs20
-         fpryACjparz+FPiaYUorHvJOfMEGRf8HDbnNznP5lewpiWbq6jg6JhINSBTMvCYF52WR
-         uQY5cmU2DECoBj4oBX8SEsGz4IM+lA+tvK8nnNKNV7ftxNLTnEe18BZmvlcjQ0UJqFia
-         J/6i7ltd9ctq573ZTTZ2j8i5ai2+yG1TgnQrqKY1AoYcOA+9ugDen5++NCHSxB/zwMvB
-         KtvXqhV8neKX4dmt0I76P++ttxkRF00KcxkNttLCZXFQVXzD7Rt0heggL3vZNpJAOhHG
-         r+Dg==
+        bh=01pGuLaNPZiP/h7oP1bbANfkWz5JoL6SoLLTkcSWbjk=;
+        b=bmOLq/tFxzqJqEwncNw3euD1ztQZuQkH0b/jpx/KbSESUxaVfgpydgf3NLLHaxyxcM
+         FsI6gC+4OGbNTFz6Wh3mWcPCB9wR/3SBXG9Q+9fBJ1PAI3JbK/sFR2WbUlJOEfpBaO6+
+         4gzUSkN4cqYGTA8yMPdnI6TtpFLvRJjoBweKA74crxikW2zdSKPGZ56G5p1vs95CPT95
+         KyG7Bc8Fu+wlZadUyfHCLbRXrKaWsqMVGAERcTr+0VU5iU+TVwD8qfVKSgGKAWcTY2y0
+         79QcBexBKhZ1kYp35VSkNfWoPSO6Z6gZAaatVfJv6hcVLPEnl2AAX5wWoMr/lkMfMwSV
+         SphQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684237328; x=1686829328;
+        d=1e100.net; s=20221208; t=1684238063; x=1686830063;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7dd+jxyo01xM6Elj5j3Ewa9arjCRO1A5vQvJrDdMrVA=;
-        b=hgnBn4deqrT6ms2NCnBc1ZuIaXztlLoxDLWa9H0DQf4z3bGRYMtRyRglOr0CVrxvoS
-         4F51f4fUf4sR2cf7K528nNfL7L48C+U57mkfv1tttwxWqdQ5YEkLKxYeePci2rs6wpv4
-         qX3p6D2Vr5MtYyTTwlqD4E8rGxBy1qz2goyN7fFOWMizxlfX7J/SGj15Y0KGWOu3uajH
-         v3cM1NW+l/yTfKuXIpDnUXwCIu17DS3uv9pqpXjjWxBJY3D+ccmx2bzc99bGmWOn7irb
-         0nUkgOBqeLJpgJvVg2UUGt+Bw8oTI4pSiY9OmQNXatbS1S4FgCtAi/XcBCBst67U24h0
-         fSbA==
-X-Gm-Message-State: AC+VfDyywyUR0+wYFCH0lRP7/ZRvJkiP0LjJrYHD2NG1eSD7bBHLUbnU
-        /r30dVBE4YGJ8kR3LHEf+ETrJg==
-X-Google-Smtp-Source: ACHHUZ5TORQfsqjiqzlCHtscGpUuOUJ0YIj3T/Sqe16I98quxG9QKlegiw2uX92GUEZYHMlRe7JHZA==
-X-Received: by 2002:a17:907:9302:b0:94f:59aa:8a7c with SMTP id bu2-20020a170907930200b0094f59aa8a7cmr30721340ejc.20.1684237328508;
-        Tue, 16 May 2023 04:42:08 -0700 (PDT)
+        bh=01pGuLaNPZiP/h7oP1bbANfkWz5JoL6SoLLTkcSWbjk=;
+        b=dNE2Wb2TyCfHzRxgXOVEgtkG4Hwdfa7rFiMKFDl/hI/P92YvkzVHxfysH9DilnHxt7
+         kvRC7VCCY+eS45LNglhqQAPP0dyzwjXNBCYK7yOhwEFoXIE8p1B9r4X6Nwoen3YFDbEF
+         QPkVeHgp2zUl6SuBqHtUtGJ8/n0R9cw0DAHa+pqgk03YzfmJrBwMhabeBOUGTNbNHOJ3
+         ionkvJAA19Am7Vsvk7eMB7SHKA6UVbTXJ8+8kTrSd9qDsBMqrIAvdFXL2H8Ock5WnuHa
+         XXV1DToQdG5NB5hxUHqQ0wl41s2wELgFE+qJ5Z+zKVsmiAsQAtA/zAhd/dBnKGnIvkbw
+         OOGw==
+X-Gm-Message-State: AC+VfDwpBQTN/N4woGxnhO670USxYzUDEW4FJ/5HnXnF2UpFh9JupkX/
+        jIdYLsyXcmiT2bKG/fvqYtzMWA==
+X-Google-Smtp-Source: ACHHUZ5GO02CbtyRzS64jRe4YwxdoaRpG3D956slM1Mli1XvIZZ9t2Vx85yPErLITgu+TH8VYXXrdg==
+X-Received: by 2002:a17:907:5c6:b0:939:e870:2b37 with SMTP id wg6-20020a17090705c600b00939e8702b37mr34031591ejb.70.1684238063075;
+        Tue, 16 May 2023 04:54:23 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
-        by smtp.gmail.com with ESMTPSA id n12-20020a1709065dac00b009663cf5dc2fsm10928746ejv.66.2023.05.16.04.42.07
+        by smtp.gmail.com with ESMTPSA id e28-20020a170906845c00b0094e84314762sm10878333ejy.187.2023.05.16.04.54.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 04:42:07 -0700 (PDT)
-Message-ID: <f013e9a1-81cd-14ed-0126-6edaee3a73fc@linaro.org>
-Date:   Tue, 16 May 2023 13:42:05 +0200
+        Tue, 16 May 2023 04:54:22 -0700 (PDT)
+Message-ID: <a370f2af-a894-b102-1836-8964c39d7a86@linaro.org>
+Date:   Tue, 16 May 2023 13:54:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
@@ -93,126 +93,18 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 16/05/2023 13:24, Sunil Kovvuri Goutham wrote:
 > 
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Tuesday, May 16, 2023 3:55 PM
->> To: Sunil Kovvuri Goutham <sgoutham@marvell.com>; Bharat Bhushan
->> <bbhushan2@marvell.com>; wim@linux-watchdog.org; linux@roeck-us.net;
->> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org; linux-
->> watchdog@vger.kernel.org; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org
->> Subject: Re: [EXT] Re: [PATCH 1/2 v7] dt-bindings: watchdog: marvell GTI system
->> watchdog driver
->>
->> On 16/05/2023 12:06, Sunil Kovvuri Goutham wrote:
->>
->>
->>>>>>> Marvell have octeontx2 series of processor which have watchdog timer.
->>>>>>> In 95xx,98xx,96xx are the processors in octeontx2 series of
->>>>>>> processor. So
->>>>>> octeontx2-95xx is on soc, octeontx2-96xx is another and so on.
->>>>>>
->>>>>> No, 95xx is not a processor. Otherwise please point me to exact
->>>>>> product datasheet. Hint: I checked it.
->>>>>
->>>>> Looks like 95xx data sheet is not public, will remove in that case.
->>>>
->>>> We can talk about 96xx. Can you point me to the SoC named exactly like this?
->>>> Hint: I checked it.
->>>
->>> To recap what Bharat mentioned before along with references to individual
->> processors.
->>> OcteonTx2 is a family of processors
->>> https://www.marvell.com/products/data-processing-units.html
->>> Please check for "OCTEON TX2 DPUs"
->>> CN96xx and CN98xx are two silicon variants in this family.
->>> https://www.marvell.com/content/dam/marvell/en/public-collateral/embed
->>> ded-processors/marvell-infrastructure-processors-octeon-tx2-cn92xx-cn9
->>> 6xx-cn98xx-product-brief-2020-02.pdf
->>
->> This is a product brief which further suggests CN96xx is a family (or sub-family).
->>
->> "xx" is pretty often used as family, not as product. Otherwise how one product
->> CN92XX can come with 12-18 cores *in the same time*?
-> 
-> "xx" here suggests skews, some 92xx may have 18 cores and some may have
-> few cores fused out resulting in 12cores.
-
-Is the DTSI for them the same? IOW, 12-core and 18-core SoCs have
-exactly the same DTSI with all properties being the same, valid and not
-customized by firmware per skew? If we talk about ARM architecture, DTS
-expects CPUs there, so I really wonder how do you write one DTS which
-has in the same time 12 and 18 enabled CPUs. Remember - the same time
-and not changed by firmware.
-
-> 
->>
->>>
->>> Since the HW block is same in all the variants of silicons in this
->>> family, we would like to use a generic string instead of different
->>> compatible string for each one. ie
->>> - const: marvell,octeontx2-wdt
->>> Hope this is okay.
->>
->> https://urldefense.proofpoint.com/v2/url?u=https-
->> 3A__elixir.bootlin.com_linux_v6.1-
->> 2Drc1_source_Documentation_devicetree_bindings_writing-2Dbindings.rst-
->> 23L42&d=DwIDaQ&c=nKjWec2b6R0mOyPaz7xtfQ&r=q3VKxXQKiboRw_F01ggTz
->> HuhwawxR1P9_tMCN2FODU4&m=GGfz5QI8ldHRqao5OsrfuHZQso5LLNBeBxCZr
->> Ai7Zow-
->> qoKl_S1Yw90OWnSZ3FFx&s=kM0VFY1b15BYvp2EUapQjZ6Eb96aZ_yAE76EKCmA
->> aEQ&e=
->>
->>>
->>> Same with CN10K or Octeon10 family of silicons.
->>> https://www.marvell.com/products/data-processing-units.html
->>> Please check for "OCTEON 10"
->>>
->>> CN103xx and CN106xx are two silicons in this family.
->>
->> Are they? "Up to 8" cores, so how this can be one specific silicon? One customer
->> buys CN10300 with 8 cores, second buys exactly the same CN10300 and has 4
->> cores?
->>
->> You are mixing families and specific devices.
-> 
-> I was making it simple to understand.
-> 
-> OcteonTx2 and Octeon10 (CN10K) are two generations of Octeon processors from Marvell.
-
-I know. I don't think we talk about the same thing...
-
-> Within each generation there are multiple silicon variants.
-> Again for each variant there are multiple skews.
-> 
-> Since the watchdog hardware block functionality is same across all of above
-> generations / variants / families / skews, is it okay to use below compatible strings ?
-
-You got the link which explains it.
-
-We had this discussions for thousands times. Just a few references from
-bookmarks:
-
-https://lore.kernel.org/all/20220822181701.GA89665-robh@kernel.org/
-https://lore.kernel.org/all/78651e07-6b3e-4243-8e1f-fcd1dfb3ffe1@www.fastmail.com/
-https://lore.kernel.org/all/288f56ba9cfad46354203b7698babe91@walle.cc/
-https://lore.kernel.org/all/106e443a-e765-51fe-b556-e4e7e2aa771c@linaro.org/
-
-Explain me how is this different. Please do not repeat the same
-arguments as everywhere else, because we covered them.
-
-> 
-> - const: marvell,octeontx2-wdt
-> - const: marvell,cn10k-wdt
-> 
 > Also this is the same naming we have been using in other drivers as well.
 > drivers/net/ethernet/marvell/octeontx2
 > drivers/net/ethernet/marvell/octeontx2/af/rvu_cn10k.c
+> 
+> drivers/perf/marvell_cn10k_ddr_pmu.c
+> static const struct of_device_id cn10k_ddr_pmu_of_match[] = {
+>         { .compatible = "marvell,cn10k-ddr-pmu", },
+>         { },
 
-Ah, the argument "others did it" or "in the past we did". If the
-approach is buggy, does it mean you should duplicate the same buggy
-approach to new bindings?
+BTW, I don't understand this part. We do not talk about fallback
+compatible, so what does it prove? Of course driver will look like that,
+but we established it some time ago, didn't we?
 
 Best regards,
 Krzysztof
