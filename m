@@ -2,144 +2,123 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11073702BF0
-	for <lists+linux-watchdog@lfdr.de>; Mon, 15 May 2023 13:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 438B17042A3
+	for <lists+linux-watchdog@lfdr.de>; Tue, 16 May 2023 03:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjEOLzv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 15 May 2023 07:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
+        id S1343561AbjEPBIb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 15 May 2023 21:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241056AbjEOLz1 (ORCPT
+        with ESMTP id S1343538AbjEPBI3 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 15 May 2023 07:55:27 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5104198C;
-        Mon, 15 May 2023 04:47:53 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A6C2066031D7;
-        Mon, 15 May 2023 12:47:51 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684151272;
-        bh=gC9khueYFVlcT6fg7HFJBZZwpElbVhh1z3v4MU1CT/M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NKbuU6L7Uz+jyOotfNx5+vzlXJriCbWSdbDVU+1C0lAtivWSdCUF4JqhsYruos4Jx
-         YkJLbqJeQUpv3sVftOzVv7KQgVYTlxw4EksOioiVW+ECdU5okiXXnJPQkKRDjbyqiv
-         OtMF7l86XnSFFNGtV5oR9iHr4OeBrYh67crJU6MmPIbsPADEk92MxzGHSVfQQ4wjXp
-         nOoaam388J03D/qMC01QClwDppFHvjKJTFVPvB0NoIZCPPy69HCRVs9JMxNDB0ZkWt
-         py1thIMwkC2PDGaOPPw4f/ST3a5eMmOQXQ5+uEmJppLSYtq6kM2Un/JJHGPh0uC11s
-         xVFlulKkVJHDA==
-Message-ID: <c6ea1360-9ca7-783e-0d0f-f5100fd8d024@collabora.com>
-Date:   Mon, 15 May 2023 13:47:49 +0200
+        Mon, 15 May 2023 21:08:29 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907385B9F
+        for <linux-watchdog@vger.kernel.org>; Mon, 15 May 2023 18:08:23 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2ac80ed7f26so142975731fa.1
+        for <linux-watchdog@vger.kernel.org>; Mon, 15 May 2023 18:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684199302; x=1686791302;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lyzlb1knfLNloYB6AlxNxhOYp8O4rjeCw8TEVU/6wrs=;
+        b=K+xV7UkWFhHrH+cyZjQLTvXQRg8U+IYM2T2Ap2WI+gjyfg/BUTTzMHFYJ+9h4GZgHJ
+         0Z+bbAhqqeJNocTsBdAVJXVjBxevp1xRjF95LYKnHUoii0QqVrwPbKfxzK93ID1SfUSx
+         NdGZPaBPUyS40nCUOlD6u0vMsvI3ZFVfTzKqhD3e5Hwbeu11I0imt6AxpseuRC5VMVXm
+         nlbjvHP5h28Rkzo/bzg4UL+I95OnJ1G5iFVUB0IVqFUDQ73q1QvOq3Jt0al2cWxEoVAZ
+         0IuHA9+aSCWoZ2bYj2l6X1ae61CfKaswE68J8GNuarGO12ZO3e+q99iSFvNX7kau4Sde
+         gqrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684199302; x=1686791302;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lyzlb1knfLNloYB6AlxNxhOYp8O4rjeCw8TEVU/6wrs=;
+        b=I97mZiYkgSy8ZAGxKHXtFXShcCaTJyXF1KT56K1tmsa+dax/BTK5UdgptLHf8jNBWT
+         1Q0tnKazi6fUpjuLlmKfJSFdPotTQsMXFnXsmMXahLjZobivJwc9qRUj77rAssxQI/yA
+         w5+vH95Mv9EC7i5yUL3mpJQRpY3CqXs2mIBIKMhX0Jsw6E7JDQzQdQPvpJcb06USiZ/J
+         C2Q+/uhKYT70kY1PDb5dQauVjmb6aCukKVbg4bM9zOKyTmzPqnt7Is+AycKzL49ClMwO
+         /FFEwwojdVoExwWGLqw/iQGm0Qu//3aGbqobkRAKAQXUEWrFmA+ACxtJ5BxEROr0EkkW
+         N08Q==
+X-Gm-Message-State: AC+VfDz563enG8uay13GvyBI9yplHNsO8BWGrn3Ob/Hzda4UNSqlt2WB
+        osS5CcV9hWvEv3Z+C1P/FaG/hg==
+X-Google-Smtp-Source: ACHHUZ7Vbb5JZKPQUWR7eE/rFp0x8+WxhI3f0tbA8gkCNyc76Q2iwI2ZhTdlT/f0YKuX7mr9lQRPJw==
+X-Received: by 2002:a2e:9f47:0:b0:2ac:90db:2a3d with SMTP id v7-20020a2e9f47000000b002ac90db2a3dmr7807292ljk.8.1684199301811;
+        Mon, 15 May 2023 18:08:21 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id x15-20020a05651c104f00b002ada919a09asm2577682ljm.73.2023.05.15.18.08.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 18:08:21 -0700 (PDT)
+Message-ID: <8a5d13e2-b06a-417e-5d8b-1db749efb0cd@linaro.org>
+Date:   Tue, 16 May 2023 03:08:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v7 08/11] arm64: dts: mediatek: add ethernet support for
- mt8365-evk
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 6/6] dt-bindings: thermal: tsens: Add QCM2290
 Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>
-References: <20230203-evk-board-support-v7-0-98cbdfac656e@baylibre.com>
- <20230203-evk-board-support-v7-8-98cbdfac656e@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230203-evk-board-support-v7-8-98cbdfac656e@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org>
+ <20230314-topic-2290_compats-v1-6-47e26c3c0365@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230314-topic-2290_compats-v1-6-47e26c3c0365@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Il 11/05/23 18:29, Alexandre Mergnat ha scritto:
-> - Enable "vibr" and "vsim2" regulators to power the ethernet chip.
+
+
+On 14.03.2023 13:53, Konrad Dybcio wrote:
+> Add the TSENS v2.x controller found on QCM2290.
 > 
-> Tested-by: Kevin Hilman <khilman@baylibre.com>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->   arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 57 +++++++++++++++++++++++++++++
->   1 file changed, 57 insertions(+)
+<bump>
+This one got lost!
+
+Konrad
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> index 3a472f620ac0..cf81dace466a 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> @@ -88,6 +88,28 @@ optee_reserved: optee@43200000 {
->   	};
->   };
->   
-> +&ethernet {
-> +	pinctrl-0 = <&ethernet_pins>;
-> +	pinctrl-names = "default";
-> +	phy-handle = <&eth_phy>;
-> +	phy-mode = "rmii";
-> +	/*
-> +	 * Ethernet and HDMI (DSI0) are sharing pins.
-> +	 * Only one can be enabled at a time and require the physical switch
-> +	 * SW2101 to be set on LAN position
-> +	 */
-> +	status = "disabled";
-> +
-> +	mdio {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		eth_phy: ethernet-phy@0 {
-> +			reg = <0>;
-> +		};
-> +	};
-> +};
-> +
->   &i2c0 {
->   	clock-frequency = <100000>;
->   	pinctrl-0 = <&i2c0_pins>;
-> @@ -137,12 +159,47 @@ &mt6357_pmic {
->   	#interrupt-cells = <2>;
->   };
->   
-> +/* Needed by analog switch (multiplexer), HDMI and ethernet */
-
-What part of the ethernet HW needs this regulator?
-
-> +&mt6357_vibr_reg {
-> +	regulator-always-on;
-> +};
-> +
->   /* Needed by MSDC IP */
->   &mt6357_vmc_reg {
->   	regulator-always-on;
->   };
->   
-> +/* Needed by ethernet */
-
-Same question for this one. If a device needs us to turn on a regulator in
-order for it to be powered (read: if the supply is not fixed-on), setting
-that supply as always-on is not beneficial for anyone, as eventually in a
-power-off sleep/idle/whatever-pm state, this device (whole chip or IP) *will*
-leak some amount of power.
-
-If hardware engineers decided to connect a device to a supply that *can be*
-shut down entirely there must be a reason, right? :-)
-
-Regards,
-Angelo
-
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index 926e9c51c93c..1a6ffbf11bcc 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -48,6 +48,7 @@ properties:
+>                - qcom,msm8953-tsens
+>                - qcom,msm8996-tsens
+>                - qcom,msm8998-tsens
+> +              - qcom,qcm2290-tsens
+>                - qcom,sc7180-tsens
+>                - qcom,sc7280-tsens
+>                - qcom,sc8180x-tsens
+> 
