@@ -2,155 +2,161 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28183704A78
-	for <lists+linux-watchdog@lfdr.de>; Tue, 16 May 2023 12:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE54704BBB
+	for <lists+linux-watchdog@lfdr.de>; Tue, 16 May 2023 13:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbjEPK0X (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 16 May 2023 06:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
+        id S232800AbjEPLFj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 16 May 2023 07:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbjEPKZq (ORCPT
+        with ESMTP id S232477AbjEPLEy (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 16 May 2023 06:25:46 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D6C6A6F
-        for <linux-watchdog@vger.kernel.org>; Tue, 16 May 2023 03:25:10 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9659f452148so2550460466b.1
-        for <linux-watchdog@vger.kernel.org>; Tue, 16 May 2023 03:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684232709; x=1686824709;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F2Oe3JB1551Ifyx7cKfdHGYFp9RdJC1mFhFOMst3c+Y=;
-        b=TcQSMAYetCU7XethsGdoMi1IU7K2tphdW8gTMBtGnakEEiqSkZvj0sh92MSZalIf8I
-         WHX42fNRPM7m9mWlEVcoIkD7bdwKDXmegGgn+pmy158YQIMffbgY0LKTQPE6M/GOsY1/
-         ypewFN7+0iu86uXNl/TnXPMNK/xaw9BEEkkg1IHXP7ilDQGOZ0fqeEcy/XfwoF57ICEM
-         2bQikMf5OIpgW21dmtQZJppts77OaB8WuzN5bgGuH2Bf9VWH4MxG8amhznE4Kxc5Sdq+
-         6iubQGN65P4Qbvok8XYB9Lcm9n13k/hPb4DYCMANglYaydXYfgJNB7ePj3C0pLRE1Ldd
-         KLSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684232709; x=1686824709;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F2Oe3JB1551Ifyx7cKfdHGYFp9RdJC1mFhFOMst3c+Y=;
-        b=VaGT3/9FmbfqKakoLlSNPCvumjZLleuLlna9XCJqU9xTXiQ8HtSvV6xm7rDJ22orU7
-         Q7gCYuYvwJkY0EpmYz0VHmb/6RCoasxP4jdP+LtEjf3Qm0f5afIstYoOfk18lYLLQRH3
-         n7U6mXGVI7PYvR2e4x31QW71g273zOQ9x/u1nMXaxcG4z0MrB6AOxsq3PyUaz0UEH+V6
-         v4iNYKgjLGAgOK8t5l5aEZ0wEpliLlkeBabMqmOalyfYZ9pwMpbX0eHtK4eXjBRCVup+
-         Y5reBxWjLZCkSwj3BWPZ3h3oxP2lDYiRh4nOj/Zo+nd+yrggTkVdWfKCYmJ9ArtfZwPo
-         9BNg==
-X-Gm-Message-State: AC+VfDxUKDgArL8BXBCStrIo+RzsN7wBbFXA5flt0PWMwhnv+5pSY6Pf
-        fELyNCjYGM0PItxqhkNW36EYZw==
-X-Google-Smtp-Source: ACHHUZ4B7fCNUMfYrGV8dXmk26j3EQ8WI2HtGXoKigndG71Seq21Cc00mF4ru+7HVvb/XJvJY20DrA==
-X-Received: by 2002:a17:907:9281:b0:960:ddba:e5c5 with SMTP id bw1-20020a170907928100b00960ddbae5c5mr39077044ejc.11.1684232708841;
-        Tue, 16 May 2023 03:25:08 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:77d1:16a1:abe1:84fc? ([2a02:810d:15c0:828:77d1:16a1:abe1:84fc])
-        by smtp.gmail.com with ESMTPSA id d19-20020a1709061f5300b009596e7e0dbasm10695764ejk.162.2023.05.16.03.25.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 May 2023 03:25:08 -0700 (PDT)
-Message-ID: <578a743e-dee4-59b7-2f4e-290b551211e0@linaro.org>
-Date:   Tue, 16 May 2023 12:25:07 +0200
+        Tue, 16 May 2023 07:04:54 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63427ED0;
+        Tue, 16 May 2023 04:02:43 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GB0ZBb006778;
+        Tue, 16 May 2023 11:01:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=RVIzDrAWPiQXR6ffUvucTybwBKlcsI4V8/WTkZjmngU=;
+ b=p1DFTRnKFTAldREx2Ey1h9bJK84EH0yZZRLcEpinduHnTcJcIBsDZZG7HMZ5hPcNrNMg
+ X1/sV51v9CpYHc5BfWrIvX38qOp+4HBMH49mep6Cyc8I8j9vJ02aJaz358/WasKAGBNQ
+ EXidSQFIRI3bKqjZj3ecvjfGdfw6tD3VeNFA3uAOLy6GiEPQNINtoyGAwfSlvffLbPU4
+ /KoRPHc11qQH7+I8bOISBJT+M6oljFd7a+ePijmUmsnHYoFs0uH40vzMZVzslpQ0bWkO
+ actENe6ew+LeesJeRdIhybI2So1Pw2+eFFZ+nyWGGokagmF7srMaVKvG6W3ipfZw7pJL BA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm8fbg743-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 11:01:20 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34GAr100008815;
+        Tue, 16 May 2023 11:01:20 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm8fbg72x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 11:01:19 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G9cQYH029898;
+        Tue, 16 May 2023 11:01:17 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3qj1tdsauw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 11:01:17 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GB1EoZ19792586
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 May 2023 11:01:15 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C78D42004B;
+        Tue, 16 May 2023 11:01:14 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6DC8720043;
+        Tue, 16 May 2023 11:01:14 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 16 May 2023 11:01:14 +0000 (GMT)
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH v4 39/41] watchdog: add HAS_IOPORT dependencies
+Date:   Tue, 16 May 2023 13:00:35 +0200
+Message-Id: <20230516110038.2413224-40-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [EXT] Re: [PATCH 1/2 v7] dt-bindings: watchdog: marvell GTI
- system watchdog driver
-Content-Language: en-US
-To:     Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-        Bharat Bhushan <bbhushan2@marvell.com>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230508131515.19403-1-bbhushan2@marvell.com>
- <ea9ae4c9-2808-bf22-70a3-bb7e7b1168d0@linaro.org>
- <DM5PR1801MB1883175A2538B85FEF571B7AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
- <8119eec8-0190-b6a5-85a7-301bcb81b0c9@linaro.org>
- <DM5PR1801MB1883A414F47BB56E9537673AE3769@DM5PR1801MB1883.namprd18.prod.outlook.com>
- <8b540cc2-bc0d-9d8b-45e6-98410322b3f6@linaro.org>
- <BY3PR18MB4737947E20CB44CE6DAB940DC6799@BY3PR18MB4737.namprd18.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <BY3PR18MB4737947E20CB44CE6DAB940DC6799@BY3PR18MB4737.namprd18.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ICc3xa9c-LhXN9ke-mmQHJSjiGr_z7pI
+X-Proofpoint-GUID: Qr3xvqAz8BNz7FK19AYNEyD5NGMtsBsI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-16_04,2023-05-16_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ mlxscore=0 clxscore=1011 adultscore=0 malwarescore=0 lowpriorityscore=0
+ mlxlogscore=999 impostorscore=0 priorityscore=1501 spamscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305160089
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 16/05/2023 12:06, Sunil Kovvuri Goutham wrote:
+In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+not being declared. We thus need to add HAS_IOPORT as dependency for
+those drivers using them.
 
+Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+---
+Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
+      per-subsystem patches may be applied independently
 
->>>>> Marvell have octeontx2 series of processor which have watchdog timer.
->>>>> In 95xx,98xx,96xx are the processors in octeontx2 series of
->>>>> processor. So
->>>> octeontx2-95xx is on soc, octeontx2-96xx is another and so on.
->>>>
->>>> No, 95xx is not a processor. Otherwise please point me to exact
->>>> product datasheet. Hint: I checked it.
->>>
->>> Looks like 95xx data sheet is not public, will remove in that case.
->>
->> We can talk about 96xx. Can you point me to the SoC named exactly like this?
->> Hint: I checked it.
-> 
-> To recap what Bharat mentioned before along with references to individual processors.
-> OcteonTx2 is a family of processors
-> https://www.marvell.com/products/data-processing-units.html
-> Please check for "OCTEON TX2 DPUs"
-> CN96xx and CN98xx are two silicon variants in this family.
-> https://www.marvell.com/content/dam/marvell/en/public-collateral/embedded-processors/marvell-infrastructure-processors-octeon-tx2-cn92xx-cn96xx-cn98xx-product-brief-2020-02.pdf
+ drivers/watchdog/Kconfig | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-This is a product brief which further suggests CN96xx is a family (or
-sub-family).
-
-"xx" is pretty often used as family, not as product. Otherwise how one
-product CN92XX can come with 12-18 cores *in the same time*?
-
-https://www.marvell.com/company/newsroom/marvell-announces-octeon-tx2-family-of-multi-core-infrastructure-processors.html
-"Marvell’s CN91xx, CN92xx, CN96xx, and CN98xx processor families include:"
-
-https://www.marvell.com/products/data-processing-units.html
-
-
-> And CNF95xx is another silicon variant in the same family.
-> https://www.marvell.com/content/dam/marvell/en/public-collateral/embedded-processors/marvell-infrastructure-processors-octeon-fusion-cnf95xx-product-brief.pdf
-
-Again, unspecific product brief. Your other briefs specify them clearer,
-e.g. CN9130, CN9131
-
-> 
-> Since the HW block is same in all the variants of silicons in this family, we would like to use a
-> generic string instead of different compatible string for each one. ie
-> - const: marvell,octeontx2-wdt
-> Hope this is okay.
-
-https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
-
-> 
-> Same with CN10K or Octeon10 family of silicons.
-> https://www.marvell.com/products/data-processing-units.html
-> Please check for "OCTEON 10"
-> 
-> CN103xx and CN106xx are two silicons in this family.
-
-Are they? "Up to 8" cores, so how this can be one specific silicon? One
-customer buys CN10300 with 8 cores, second buys exactly the same CN10300
-and has 4 cores?
-
-You are mixing families and specific devices.
-
-Best regards,
-Krzysztof
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index f22138709bf5..affe25b96cfe 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -453,6 +453,7 @@ config 21285_WATCHDOG
+ config 977_WATCHDOG
+ 	tristate "NetWinder WB83C977 watchdog"
+ 	depends on (FOOTBRIDGE && ARCH_NETWINDER) || (ARM && COMPILE_TEST)
++	depends on HAS_IOPORT
+ 	help
+ 	  Say Y here to include support for the WB977 watchdog included in
+ 	  NetWinder machines. Alternatively say M to compile the driver as
+@@ -1271,6 +1272,7 @@ config ITCO_WDT
+ 	select WATCHDOG_CORE
+ 	depends on I2C || I2C=n
+ 	depends on MFD_INTEL_PMC_BXT || !MFD_INTEL_PMC_BXT
++	depends on HAS_IOPORT # for I2C_I801
+ 	select LPC_ICH if !EXPERT
+ 	select I2C_I801 if !EXPERT && I2C
+ 	help
+@@ -2159,7 +2161,7 @@ comment "PCI-based Watchdog Cards"
+ 
+ config PCIPCWATCHDOG
+ 	tristate "Berkshire Products PCI-PC Watchdog"
+-	depends on PCI
++	depends on PCI && HAS_IOPORT
+ 	help
+ 	  This is the driver for the Berkshire Products PCI-PC Watchdog card.
+ 	  This card simply watches your kernel to make sure it doesn't freeze,
+@@ -2174,7 +2176,7 @@ config PCIPCWATCHDOG
+ 
+ config WDTPCI
+ 	tristate "PCI-WDT500/501 Watchdog timer"
+-	depends on PCI
++	depends on PCI && HAS_IOPORT
+ 	help
+ 	  If you have a PCI-WDT500/501 watchdog board, say Y here, otherwise N.
+ 
+-- 
+2.39.2
 
