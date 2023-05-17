@@ -2,158 +2,304 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4DF7067BF
-	for <lists+linux-watchdog@lfdr.de>; Wed, 17 May 2023 14:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C827067CA
+	for <lists+linux-watchdog@lfdr.de>; Wed, 17 May 2023 14:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbjEQMMi (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 17 May 2023 08:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56870 "EHLO
+        id S230100AbjEQMPh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 17 May 2023 08:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbjEQMMe (ORCPT
+        with ESMTP id S229670AbjEQMPg (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 17 May 2023 08:12:34 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9213C3B;
-        Wed, 17 May 2023 05:12:16 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so12707041b3a.0;
-        Wed, 17 May 2023 05:12:16 -0700 (PDT)
+        Wed, 17 May 2023 08:15:36 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C703189;
+        Wed, 17 May 2023 05:15:35 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ae51b07338so4143075ad.0;
+        Wed, 17 May 2023 05:15:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684325536; x=1686917536;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jR9QVy06+8kCR0o/MKpVdWGpHv1t5cW3AKmbdvo1Kjc=;
-        b=mMxLZJ5ClWCNLFgj9hpEZpfDu1kAtMtUeeBNuLdH81tH6WbPdHzHkUF+T/nOslsRY9
-         RBh27yg9XsCmkG1aM0eVWFTBrsRzDOMf0T4WOYWA5PbyNP47/T80qU3HpdMfxuQmY0Yz
-         0ndK627AmJ0xWoyY8SKIeEpm8VPtbvwjnufBI7oWWD7xqtOd1d53896dqyjFwWoAUugU
-         HQMY8ok7AMqYSsDFhArRhT2nYB0as1luSohqkYvs5CNqyYaVKsBbPspT20mFYt6If5e3
-         UHxcagAgqk9ClsAVp4OxsJ70b6ifBOONkstfI/LtT3979vHc8VLBsQispsv/S///i2DP
-         7ZHg==
+        d=gmail.com; s=20221208; t=1684325734; x=1686917734;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MroEbOObr/DKh8KoFkk8p+WQrCDqfI7CSroMazxdyRE=;
+        b=DYXpA9j9dx/HRz/hyvlJZKsu78jHP0a3HFg2bkZze+2BDn1NCkoCcpyGK2CNpbeQtZ
+         XetHJhTcBVgLXEnNVT9a9LwDPTbSQ4ZJxhS6n2S5/0E3MYHuYCeS8Qyq54rxhGz6p3ca
+         tCuwusB64vTeNLJ+n02fvfzpeWXzw0xfLTMMt9eVzVLxuR6NNoqw5FRcZu6aFb+9Qc5y
+         24yTOCB44zlWuq++gS2khJ0FpmSA2wkAvQibnMknrrcfQlDdxEPHyK3YJ3bygs78zJL5
+         jRjPj/e4qLaAGA8+Lxp8PKvEcr2aLU1ntNsyoeD+ThtasjElXu+cQm6YArmgZvLKbgx/
+         F9kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684325536; x=1686917536;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jR9QVy06+8kCR0o/MKpVdWGpHv1t5cW3AKmbdvo1Kjc=;
-        b=MnCBUFBWXyjqIBXOA7128NGSEnDm1iDcwP/USfnzBLuB0kL1Q86ZlI6l4p7FAKy3lc
-         3efdNagze1VB0iPDtQFxt9pYgeecc2oYquUUb8Yd5ovo5ewYBYqkh4IwytFXIiXUU3un
-         3phHuDPlaI9a5kT39F9ah0sv2muxBlYJcQg9H+0vYenGn9PrwanSPvYDLW5kBW02zFAa
-         9TjGAfw7BoN1mQJz5CNfx5NE/9GLPmObuRO2fftC92OpDaKzS+YmxFrAaXtGBTZ8yiut
-         EP7EeOUjW3RfNmVoE1aeykpybXYyrbuGecoMb2Uji7WUCgN0E1o0xm5ssQTonxfAZOfI
-         fgew==
-X-Gm-Message-State: AC+VfDxDdL1p8nzdaKDe4AsDkhjLOVqBP9oC/wpZGERPl/d4ygKljHvz
-        SCM2Vp2FpqlRAIR94v+4cg4=
-X-Google-Smtp-Source: ACHHUZ4ZyE/7M5xz4RF4owSSi09+sIdG3gisbl9+Vhh4syqW9Ou10ZCQBp3hmVhBuaWjYlpwSabJgA==
-X-Received: by 2002:a17:90b:120c:b0:253:25c3:7a95 with SMTP id gl12-20020a17090b120c00b0025325c37a95mr2402736pjb.14.1684325535612;
-        Wed, 17 May 2023 05:12:15 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684325734; x=1686917734;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MroEbOObr/DKh8KoFkk8p+WQrCDqfI7CSroMazxdyRE=;
+        b=P8E6olPB9ea9XAV6/oZzRdim7goaUZDcYhPiHQw0erShXsfGdHAsyAIWvI0BAbrTns
+         wqulD6tIUNE+kSfKm74S/HPxPGF7ic9Hsr3B1whkhFlHf6JC/4bCDI90xtvzd5kBypZm
+         cnGcfG42doAVbu5xNb+WC5jedwRcBSx4g3Ad0ntvKmOJxUf0ZTaHTASWYXXGEXvrnXaR
+         ZjnKLYJhARTNLkdZZznMH2TSFcqxOsLc7DHe3ah7ZCon70Vhvis1pZB75SbGuoMmbfnV
+         kzdHu2fT1/Lm6dB+0/pawJ+ufD9rVXsDKDbwi1ZmmWIT3QAV9Vogg+6bXoCDYms9d4yN
+         zf0g==
+X-Gm-Message-State: AC+VfDxDRZQ1X+LOtGo6YxnjsS0GasD5HqGDPegiVMT3m9iJjOpvuoTi
+        hOO8fBgp73W/Ns3pBmIgz1E=
+X-Google-Smtp-Source: ACHHUZ5KjMaxqRo07yEVAmfkYSoHDZlCusPOar9hC7hLyj5JWGFr76acMQuvhwWwPyPd0eT9oqNgBQ==
+X-Received: by 2002:a17:902:db07:b0:1ae:3650:7512 with SMTP id m7-20020a170902db0700b001ae36507512mr5808047plx.20.1684325734442;
+        Wed, 17 May 2023 05:15:34 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j19-20020a17090ae61300b002500df72713sm1445765pjy.7.2023.05.17.05.12.14
+        by smtp.gmail.com with ESMTPSA id g4-20020a1709026b4400b001aaf536b1e3sm15851798plt.123.2023.05.17.05.15.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 05:12:15 -0700 (PDT)
+        Wed, 17 May 2023 05:15:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 17 May 2023 05:12:13 -0700
+Date:   Wed, 17 May 2023 05:15:33 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
-        sai.krishna.potthuri@amd.com, shubhrajyoti.datta@amd.com,
-        vishal.sagar@amd.com, kalyani.akula@amd.com,
-        bharat.kumar.gogada@amd.com, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Jolly Shah <jolly.shah@xilinx.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Rajan Vaja <rajan.vaja@xilinx.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Neeli <srinivas.neeli@amd.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Rix <trix@redhat.com>,
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux Watchdog Drivers <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
-Message-ID: <155bdc43-7606-4279-a6f4-fe6e29a61722@roeck-us.net>
-References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
+        Ray Lehtiniemi <rayl@mail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Deepak Saxena <dsaxena@plexity.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Jonas Jensen <jonas.jensen@gmail.com>,
+        Sylver Bruneau <sylver.bruneau@googlemail.com>,
+        Denis Turischev <denis@compulab.co.il>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>
+Subject: Re: [PATCH 1/2] watchdog: Convert GPL 2.0 notice to SPDX identifier
+Message-ID: <d7947267-b880-4f1f-b440-656e271cf79e@roeck-us.net>
+References: <20230517072140.1086660-1-bagasdotme@gmail.com>
+ <20230517072140.1086660-2-bagasdotme@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230517072140.1086660-2-bagasdotme@gmail.com>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, May 16, 2023 at 03:51:08PM +0200, Michal Simek wrote:
-> @xilinx.com is still working but better to switch to new amd.com after
-> AMD/Xilinx acquisition.
+On Wed, May 17, 2023 at 02:21:39PM +0700, Bagas Sanjaya wrote:
+> Convert the boilerplate to SPDX license identifier. While at it, also
+> move SPDX identifier for drivers/watchdog/rtd119x_wdt.c to the top of
+> file (as in other files).
 > 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> Cc: Ray Lehtiniemi <rayl@mail.com>,
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: H Hartley Sweeten <hsweeten@visionengravers.com>
+> Cc: Deepak Saxena <dsaxena@plexity.net>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Jonas Jensen <jonas.jensen@gmail.com>
+> Cc: Sylver Bruneau <sylver.bruneau@googlemail.com>
+> Cc: Denis Turischev <denis@compulab.co.il>
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Acked-by: Andreas Färber <afaerber@suse.de>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
+>  drivers/watchdog/ep93xx_wdt.c     | 5 +----
+>  drivers/watchdog/m54xx_wdt.c      | 4 +---
+>  drivers/watchdog/max63xx_wdt.c    | 5 +----
+>  drivers/watchdog/moxart_wdt.c     | 4 +---
+>  drivers/watchdog/octeon-wdt-nmi.S | 5 +----
+>  drivers/watchdog/orion_wdt.c      | 4 +---
+>  drivers/watchdog/rtd119x_wdt.c    | 2 +-
+>  drivers/watchdog/sbc_fitpc2_wdt.c | 4 +---
+>  drivers/watchdog/ts4800_wdt.c     | 4 +---
+>  drivers/watchdog/ts72xx_wdt.c     | 4 +---
+>  10 files changed, 10 insertions(+), 31 deletions(-)
 > 
->  Documentation/devicetree/bindings/arm/xilinx.yaml             | 2 +-
->  Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml     | 2 +-
->  .../devicetree/bindings/clock/xlnx,clocking-wizard.yaml       | 2 +-
->  Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml  | 2 +-
->  Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml | 4 ++--
->  .../bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml        | 2 +-
->  .../devicetree/bindings/fpga/xilinx-zynq-fpga-mgr.yaml        | 2 +-
->  Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml  | 2 +-
->  .../devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml       | 2 +-
->  Documentation/devicetree/bindings/gpio/gpio-zynq.yaml         | 2 +-
->  Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml  | 2 +-
->  .../devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml    | 2 +-
->  Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml     | 2 +-
->  .../devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml  | 2 +-
->  .../devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml       | 2 +-
->  .../bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml      | 2 +-
->  .../bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml       | 2 +-
->  Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml  | 2 +-
->  .../devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml        | 2 +-
->  .../devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml      | 2 +-
->  .../devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml    | 2 +-
->  Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml    | 2 +-
->  Documentation/devicetree/bindings/serial/cdns,uart.yaml       | 2 +-
->  Documentation/devicetree/bindings/spi/spi-cadence.yaml        | 2 +-
->  Documentation/devicetree/bindings/spi/spi-xilinx.yaml         | 2 +-
->  Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml    | 2 +-
->  Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml     | 2 +-
->  Documentation/devicetree/bindings/timer/cdns,ttc.yaml         | 2 +-
->  .../devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml   | 4 ++--
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+> diff --git a/drivers/watchdog/ep93xx_wdt.c b/drivers/watchdog/ep93xx_wdt.c
+> index 38e26f160b9a57..59dfd7f6bf0ba1 100644
+> --- a/drivers/watchdog/ep93xx_wdt.c
+> +++ b/drivers/watchdog/ep93xx_wdt.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * Watchdog driver for Cirrus Logic EP93xx family of devices.
+>   *
+> @@ -11,10 +12,6 @@
+>   * Copyright (c) 2012 H Hartley Sweeten <hsweeten@visionengravers.com>
+>   *	Convert to a platform device and use the watchdog framework API
+>   *
+> - * This file is licensed under the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+> - *
+>   * This watchdog fires after 250msec, which is a too short interval
+>   * for us to rely on the user space daemon alone. So we ping the
+>   * wdt each ~200msec and eventually stop doing it if the user space
+> diff --git a/drivers/watchdog/m54xx_wdt.c b/drivers/watchdog/m54xx_wdt.c
+> index f388a769dbd33d..062ea3e6497e52 100644
+> --- a/drivers/watchdog/m54xx_wdt.c
+> +++ b/drivers/watchdog/m54xx_wdt.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * drivers/watchdog/m54xx_wdt.c
+>   *
+> @@ -11,9 +12,6 @@
+>   *  Copyright 2004 (c) MontaVista, Software, Inc.
+>   *  Based on sa1100 driver, Copyright (C) 2000 Oleg Drokin <green@crimea.edu>
+>   *
+> - * This file is licensed under  the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+>   */
+>  
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> diff --git a/drivers/watchdog/max63xx_wdt.c b/drivers/watchdog/max63xx_wdt.c
+> index 9e1541cfae0d89..21935f9620e463 100644
+> --- a/drivers/watchdog/max63xx_wdt.c
+> +++ b/drivers/watchdog/max63xx_wdt.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * drivers/char/watchdog/max63xx_wdt.c
+>   *
+> @@ -5,10 +6,6 @@
+>   *
+>   * Copyright (C) 2009 Marc Zyngier <maz@misterjones.org>
+>   *
+> - * This file is licensed under the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+> - *
+>   * This driver assumes the watchdog pins are memory mapped (as it is
+>   * the case for the Arcom Zeus). Should it be connected over GPIOs or
+>   * another interface, some abstraction will have to be introduced.
+> diff --git a/drivers/watchdog/moxart_wdt.c b/drivers/watchdog/moxart_wdt.c
+> index 6340a1f5f471b2..b7b1da3c932ded 100644
+> --- a/drivers/watchdog/moxart_wdt.c
+> +++ b/drivers/watchdog/moxart_wdt.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * MOXA ART SoCs watchdog driver.
+>   *
+> @@ -5,9 +6,6 @@
+>   *
+>   * Jonas Jensen <jonas.jensen@gmail.com>
+>   *
+> - * This file is licensed under the terms of the GNU General Public
+> - * License version 2.  This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+>   */
+>  
+>  #include <linux/clk.h>
+> diff --git a/drivers/watchdog/octeon-wdt-nmi.S b/drivers/watchdog/octeon-wdt-nmi.S
+> index 97f6eb7b5a8e04..e308cc74392018 100644
+> --- a/drivers/watchdog/octeon-wdt-nmi.S
+> +++ b/drivers/watchdog/octeon-wdt-nmi.S
+> @@ -1,8 +1,5 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+>  /*
+> - * This file is subject to the terms and conditions of the GNU General Public
+> - * License.  See the file "COPYING" in the main directory of this archive
+> - * for more details.
+> - *
+>   * Copyright (C) 2007-2017 Cavium, Inc.
+>   */
+>  #include <asm/asm.h>
+> diff --git a/drivers/watchdog/orion_wdt.c b/drivers/watchdog/orion_wdt.c
+> index 5ec2dd8fd5fa3d..1fe583e8a95b2e 100644
+> --- a/drivers/watchdog/orion_wdt.c
+> +++ b/drivers/watchdog/orion_wdt.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * drivers/watchdog/orion_wdt.c
+>   *
+> @@ -5,9 +6,6 @@
+>   *
+>   * Author: Sylver Bruneau <sylver.bruneau@googlemail.com>
+>   *
+> - * This file is licensed under  the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+>   */
+>  
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> diff --git a/drivers/watchdog/rtd119x_wdt.c b/drivers/watchdog/rtd119x_wdt.c
+> index 95c8d7abce42e6..984905695dde51 100644
+> --- a/drivers/watchdog/rtd119x_wdt.c
+> +++ b/drivers/watchdog/rtd119x_wdt.c
+> @@ -1,9 +1,9 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+>  /*
+>   * Realtek RTD129x watchdog
+>   *
+>   * Copyright (c) 2017 Andreas Färber
+>   *
+> - * SPDX-License-Identifier: GPL-2.0+
+>   */
+>  
+>  #include <linux/bitops.h>
+> diff --git a/drivers/watchdog/sbc_fitpc2_wdt.c b/drivers/watchdog/sbc_fitpc2_wdt.c
+> index 13db71e165836e..b8eb8d5ca1af0c 100644
+> --- a/drivers/watchdog/sbc_fitpc2_wdt.c
+> +++ b/drivers/watchdog/sbc_fitpc2_wdt.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * Watchdog driver for SBC-FITPC2 board
+>   *
+> @@ -5,9 +6,6 @@
+>   *
+>   * Adapted from the IXP2000 watchdog driver by Deepak Saxena.
+>   *
+> - * This file is licensed under  the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+>   */
+>  
+>  #define pr_fmt(fmt) KBUILD_MODNAME " WATCHDOG: " fmt
+> diff --git a/drivers/watchdog/ts4800_wdt.c b/drivers/watchdog/ts4800_wdt.c
+> index 0ea554c7cda579..0099403f49922f 100644
+> --- a/drivers/watchdog/ts4800_wdt.c
+> +++ b/drivers/watchdog/ts4800_wdt.c
+> @@ -1,11 +1,9 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * Watchdog driver for TS-4800 based boards
+>   *
+>   * Copyright (c) 2015 - Savoir-faire Linux
+>   *
+> - * This file is licensed under the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+>   */
+>  
+>  #include <linux/kernel.h>
+> diff --git a/drivers/watchdog/ts72xx_wdt.c b/drivers/watchdog/ts72xx_wdt.c
+> index bf918f5fa13175..3d57670befe1ce 100644
+> --- a/drivers/watchdog/ts72xx_wdt.c
+> +++ b/drivers/watchdog/ts72xx_wdt.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * Watchdog driver for Technologic Systems TS-72xx based SBCs
+>   * (TS-7200, TS-7250 and TS-7260). These boards have external
+> @@ -8,9 +9,6 @@
+>   *
+>   * This driver is based on ep93xx_wdt and wm831x_wdt drivers.
+>   *
+> - * This file is licensed under the terms of the GNU General Public
+> - * License version 2. This program is licensed "as is" without any
+> - * warranty of any kind, whether express or implied.
+>   */
+>  
+>  #include <linux/platform_device.h>
+> -- 
+> An old man doll... just what I always wanted! - Clara
+> 
