@@ -2,87 +2,178 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F427067CD
-	for <lists+linux-watchdog@lfdr.de>; Wed, 17 May 2023 14:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C86CD706ADD
+	for <lists+linux-watchdog@lfdr.de>; Wed, 17 May 2023 16:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjEQMQG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 17 May 2023 08:16:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
+        id S231363AbjEQORA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 17 May 2023 10:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbjEQMQF (ORCPT
+        with ESMTP id S231888AbjEQOQ4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 17 May 2023 08:16:05 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D5FB1;
-        Wed, 17 May 2023 05:16:05 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64395e741fcso620509b3a.2;
-        Wed, 17 May 2023 05:16:05 -0700 (PDT)
+        Wed, 17 May 2023 10:16:56 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9A718C;
+        Wed, 17 May 2023 07:16:54 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9661a1ff1e9so119738366b.1;
+        Wed, 17 May 2023 07:16:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684325764; x=1686917764;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eYx+hQznULbDgHBHhMcBPNNhmUVrymb8gRKQiR95H6E=;
-        b=JuvtaHTgZiIUrrs7dw8OnIyUokf4+jrd8bQ7V8AeRtV1bpbvrK99kZ7w7TJI6IqmSS
-         qaLvKRg0V2TmFmI6CKjRCJx6KUldEL3N9vK4dN4mzFzVX8pGMxiuKc6PlCj8DG1BGR6r
-         QS+slcXDD11htiBu5+PVTekzsgYU1uDuAwFlyQJlMjTxxo2PK9GdyLuggwIYEmu/szEs
-         JwmyQ/CnejxMOqepcW0XffvB53LpZV26THX/sOiaf006MHjn5LoyttIuGolEk2gZUmRu
-         gJrwlQoFPSL1c5wq0XXe3oi/tplrMGzHWfjQZcRXUxFpqmvwpJoWVF/Tb0u4ZJdPn4P+
-         pSdA==
+        d=gmail.com; s=20221208; t=1684333013; x=1686925013;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9mWuBFORINAsgkFiENnuZWACjGF2Zo8AfvFi7n4DTJY=;
+        b=biypyogl/DqZwN8+l2p9gGZMhx1QXp7js5dS6YSXbdcF3ZHK3bAXOKr9bIZ2d5+mvl
+         Qn4Gx8A74tCXzyGwgnn35/7evQqgN/7wXY9AeQJjQf2d0yv+FYmCHdYp8GwNzBMM0M2X
+         RepZrNuNaoOJQYiVZCSiNqbUDnKxLYbuFDB8j4b1yBI/QsVPe3WOIE4R72ZLtO7EIxoT
+         24iEumAIof2PKi6dQYEuyikyK+F0NROw542Ffk8G2rKhOQY1gF3SmvrkEBVbE4TJefAI
+         GSNWr7uxGsud5z6OeWp2cGbBzJ4OT09LPkQaqsMmhTV5gi2hCXnVzgGn3dz+0FxHoXgI
+         VP5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684325764; x=1686917764;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684333013; x=1686925013;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eYx+hQznULbDgHBHhMcBPNNhmUVrymb8gRKQiR95H6E=;
-        b=Z7K606fU2EXKFz7EqeMKuZg+LC23C7ZiPgW0CXyarVKxkVW9tPirRuaMqJqqUlrJLM
-         4Tk2aRri4aLqw6s96DnmkG6EO7OCmdaTS/PGHfx/hQX6k+rQjsO6r0L9r6/vu3JBXrsz
-         KA0IO88Sb6Hy5CMt4rMRmaqk1pnjI8wl2G0kWRXtPB+oEbXAyUE4deneRDoB7fwq+Gah
-         +UQ5w23+aYo4j6VfA/egvc/iyv+BiS7g9pSdd5T+EQgkp3nXAwIxsKX0m4lwbUoV4rxK
-         EcAr6RBZWY19PuzeNgF4Aw+zN/u+nAkkGLzDCcBzbaUsofAThvogOFb+Y7OiOHZcH0F7
-         9GwA==
-X-Gm-Message-State: AC+VfDznAwd/d5tFGDlKc7HmhP+PH4JYB67ufm3xmkv4FkTsl8Jrw9Nq
-        wEd8Pn8fqY6SAIiQ33eqdgE=
-X-Google-Smtp-Source: ACHHUZ5cTnPdAL69Wl3XvxyB46UWDsrusliz/s7CVAloiveaIwzltNt6B2XU/GfdURJimDjaI3DZvw==
-X-Received: by 2002:a05:6a00:1acd:b0:645:fc7b:63d6 with SMTP id f13-20020a056a001acd00b00645fc7b63d6mr691016pfv.6.1684325764484;
-        Wed, 17 May 2023 05:16:04 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j20-20020aa78d14000000b0063d375ca0cbsm15043941pfe.151.2023.05.17.05.16.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 05:16:04 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 17 May 2023 05:16:03 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Linux Watchdog Drivers <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Andrey Panin <pazke@donpac.ru>
-Subject: Re: [PATCH 2/2] watchdog: ibmasr: Replace GPL license notice with
- SPDX identifier
-Message-ID: <15b47d41-af2c-4eba-9cc2-5f72e6a9f976@roeck-us.net>
-References: <20230517072140.1086660-1-bagasdotme@gmail.com>
- <20230517072140.1086660-3-bagasdotme@gmail.com>
+        bh=9mWuBFORINAsgkFiENnuZWACjGF2Zo8AfvFi7n4DTJY=;
+        b=Z+pQ/oqFjWFJrG9+QOfmcz2fk6OWGFRuNpj7cn7shDKRiYpYGRowq2JkVCH+kIFmIE
+         Z+0NVG8IOQUjZKlbbISdY7MjZKegbdAZtLRCoaG1zNR0fgP1TIgmH3N5XFiNQzdHdBnq
+         /abMBpvgJN9Fhoxr2Unjzxbrf982Poi9gPfMU/V+4s8UYXrLNCrOxyg/2ZFPVVdup7oM
+         V2twmI0RsL0z51GbdEiOchF4MggywuQOyDAYGkJlRsqmXHdd7IprC9JGRI2HIlRl0F42
+         5AjgXpG+NqpXRXqQKXbczJ3a9xWbkvy1NFceT+GK4eMZUxXbd6K/9yEmefwohVyZzQ0P
+         lziQ==
+X-Gm-Message-State: AC+VfDwxtRBr8RIE7cgkgUEf6LEFJU/lPfTBEAuqBqM5CSGiYZfEo1KB
+        BXxqVrmLl5g5ht0kVKhEg9+SlUrulB4J1qMrc2c=
+X-Google-Smtp-Source: ACHHUZ5TyNAWL0L+xFq4qCoGU4tNyKIEpqxlZu0ALd+ZVRg36+lSEN4BwR3Z/P1zVEHc2oshTTV+tnv1x2FEG17G5M8=
+X-Received: by 2002:a17:907:36c3:b0:96a:3811:f589 with SMTP id
+ bj3-20020a17090736c300b0096a3811f589mr24647279ejc.10.1684333012989; Wed, 17
+ May 2023 07:16:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230517072140.1086660-3-bagasdotme@gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
+In-Reply-To: <f5b2bd1e78407e4128fc8f0b5874ba723e710a88.1684245058.git.michal.simek@amd.com>
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Wed, 17 May 2023 09:16:41 -0500
+Message-ID: <CABb+yY2JaC8b-HFEU_WnSBSCr2edgEezXJkfMUYqjeLBA1MvYw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     piyush.mehta@amd.com, nava.kishore.manne@amd.com,
+        sai.krishna.potthuri@amd.com, shubhrajyoti.datta@amd.com,
+        vishal.sagar@amd.com, kalyani.akula@amd.com,
+        bharat.kumar.gogada@amd.com, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jolly Shah <jolly.shah@xilinx.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Manish Narani <manish.narani@xilinx.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tom Rix <trix@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wu Hao <hao.wu@intel.com>, Xu Yilun <yilun.xu@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, May 17, 2023 at 02:21:40PM +0700, Bagas Sanjaya wrote:
-> Replace unversioned GPL license notice with appropriate SPDX license
-> identifier, which is GPL 1.0+.
-> 
-> Cc: Andrey Panin <pazke@donpac.ru>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+On Tue, May 16, 2023 at 8:51=E2=80=AFAM Michal Simek <michal.simek@amd.com>=
+ wrote:
+>
+> @xilinx.com is still working but better to switch to new amd.com after
+> AMD/Xilinx acquisition.
+>
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
+>
+>  Documentation/devicetree/bindings/arm/xilinx.yaml             | 2 +-
+>  Documentation/devicetree/bindings/ata/ceva,ahci-1v84.yaml     | 2 +-
+>  .../devicetree/bindings/clock/xlnx,clocking-wizard.yaml       | 2 +-
+>  Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml  | 2 +-
+>  Documentation/devicetree/bindings/crypto/xlnx,zynqmp-aes.yaml | 4 ++--
+>  .../bindings/firmware/xilinx/xlnx,zynqmp-firmware.yaml        | 2 +-
+>  .../devicetree/bindings/fpga/xilinx-zynq-fpga-mgr.yaml        | 2 +-
+>  Documentation/devicetree/bindings/fpga/xlnx,versal-fpga.yaml  | 2 +-
+>  .../devicetree/bindings/fpga/xlnx,zynqmp-pcap-fpga.yaml       | 2 +-
+>  Documentation/devicetree/bindings/gpio/gpio-zynq.yaml         | 2 +-
+>  Documentation/devicetree/bindings/gpio/xlnx,gpio-xilinx.yaml  | 2 +-
+>  .../devicetree/bindings/gpio/xlnx,zynqmp-gpio-modepin.yaml    | 2 +-
+>  Documentation/devicetree/bindings/i2c/cdns,i2c-r1p10.yaml     | 2 +-
+>  .../devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml  | 2 +-
+>  .../devicetree/bindings/media/xilinx/xlnx,csi2rxss.yaml       | 2 +-
+>  .../bindings/memory-controllers/snps,dw-umctl2-ddrc.yaml      | 2 +-
+>  .../bindings/memory-controllers/xlnx,zynq-ddrc-a05.yaml       | 2 +-
+>  Documentation/devicetree/bindings/pci/xilinx-versal-cpm.yaml  | 2 +-
+>  .../devicetree/bindings/pinctrl/xlnx,zynq-pinctrl.yaml        | 2 +-
+>  .../devicetree/bindings/pinctrl/xlnx,zynqmp-pinctrl.yaml      | 2 +-
+>  .../devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml    | 2 +-
+>  Documentation/devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml    | 2 +-
+>  Documentation/devicetree/bindings/serial/cdns,uart.yaml       | 2 +-
+>  Documentation/devicetree/bindings/spi/spi-cadence.yaml        | 2 +-
+>  Documentation/devicetree/bindings/spi/spi-xilinx.yaml         | 2 +-
+>  Documentation/devicetree/bindings/spi/spi-zynqmp-qspi.yaml    | 2 +-
+>  Documentation/devicetree/bindings/spi/xlnx,zynq-qspi.yaml     | 2 +-
+>  Documentation/devicetree/bindings/timer/cdns,ttc.yaml         | 2 +-
+>  .../devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml   | 4 ++--
+>  29 files changed, 31 insertions(+), 31 deletions(-)
+>
+.....
+> diff --git a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-ma=
+ilbox.yaml b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mail=
+box.yaml
+> index 374ffe64016f..aeaddbf574b0 100644
+> --- a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.y=
+aml
+> +++ b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.y=
+aml
+> @@ -33,7 +33,7 @@ description: |
+>                +------------------------------------------+
+>
+>  maintainers:
+> -  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> +  - Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+>
+>  properties:
+>    compatible:
+>
+Acked-by: Jassi Brar <jassisinghbrar@gmail.com>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Just curious, some developers' ids are left unchanged, and not all
+devs have S.O.B.
+
+cheers.
