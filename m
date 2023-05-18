@@ -2,111 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F409370727B
-	for <lists+linux-watchdog@lfdr.de>; Wed, 17 May 2023 21:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B674707B43
+	for <lists+linux-watchdog@lfdr.de>; Thu, 18 May 2023 09:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjEQToJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 17 May 2023 15:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
+        id S229820AbjERHoE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 18 May 2023 03:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjEQToH (ORCPT
+        with ESMTP id S229743AbjERHoC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 17 May 2023 15:44:07 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054811B7;
-        Wed, 17 May 2023 12:44:07 -0700 (PDT)
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id E6C4C8624E;
-        Wed, 17 May 2023 21:44:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1684352645;
-        bh=IE0HGdKCuoH9lgoiitzVjdPvmo8bKfxPWC16LngE2Ek=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EYQj4CHVH/GJDtvMmmjufwX0FtN5j1I/FGHXrvyAA5Y94rmeQulI89AouflwEaSK/
-         8radGsCmSblsxZZd0Jz31Qh5FBNY4I5G7Pv1Odm5k1diI/ZyKwHP/aI0sioP4HJ+zA
-         uP5PSUXKMg52sE8EfjHwrExcSoRGhJ8pctchFNp60Z4xYfVLEAqgo0osMARXkdYU8K
-         M1B8DwZw4MNBIzKnUN7SPHCwPPg8AMjl8Ru+TUtm48a1C79njbw882HLJNXryo2Erf
-         ywvAsYwiWoq2vUg99VaW9ZLpSW0cTiK6JNFklwVkmSiWZmpVXwykQn5jI3ZqXOdpzR
-         JzZqT8bOyb/pA==
-From:   Marek Vasut <marex@denx.de>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marek Vasut <marex@denx.de>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Antonio Borneo <antonio.borneo@foss.st.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-watchdog@vger.kernel.org
-Subject: [PATCH v2 3/3] ARM: dts: stm32: Add IWDG2 EXTI interrupt mapping and mark as wakeup source
-Date:   Wed, 17 May 2023 21:43:49 +0200
-Message-Id: <20230517194349.105745-3-marex@denx.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230517194349.105745-1-marex@denx.de>
-References: <20230517194349.105745-1-marex@denx.de>
+        Thu, 18 May 2023 03:44:02 -0400
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FA52114
+        for <linux-watchdog@vger.kernel.org>; Thu, 18 May 2023 00:44:00 -0700 (PDT)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id DFF5B88636; Thu, 18 May 2023 08:41:23 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1684395683; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=qlIuQgV3diyd/5dhid/mebYcd1RA2FTFE4MKmGN6gUs7NM325nPiKWr41P8Nk+jaO
+         QLyI9Kx+uVG9i4p4wpBlcwxilxiiZPgST2dC++7eWF3TRkzyBr/qbwrLc0SjzwrQh8
+         Vg2fEuQQZ9oGverdl31uy1L7csdT26bwvmqZoZW13ZH2AIXrC+EIHoFLo3qn0ESHS1
+         Uz40pqHDmqQBPYkeMIemAGqqkrCwB0yGCPRruFkmIaiejaL2IL3Yo/oTLiN8qluvtj
+         5hUL9M26WZYsAW3oI+mhjTAyc7hZ1lHSae2fqQ/u9Ex+soFFMRX/iDKz4Htp6h5I0C
+         9NIjg6AJMnMZA==
+Received: by mail.lokoho.com for <linux-watchdog@vger.kernel.org>; Thu, 18 May 2023 07:41:22 GMT
+Message-ID: <20230518074503-0.1.61.29wdi.0.6604sd24hn@lokoho.com>
+Date:   Thu, 18 May 2023 07:41:22 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-watchdog@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The IWDG2 is capable of generating pre-timeout interrupt, which can be used
-to wake the system up from suspend to mem. Add the EXTI interrupt mapping
-and mark the IWDG2 as wake up source.
+Dzie=C5=84 dobry,
 
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Antonio Borneo <antonio.borneo@foss.st.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Richard Cochran <richardcochran@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-stm32@st-md-mailman.stormreply.com
-Cc: linux-watchdog@vger.kernel.org
----
-V2: No change
----
- arch/arm/boot/dts/stm32mp151.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-index 664825418c32c..accbeef4df6da 100644
---- a/arch/arm/boot/dts/stm32mp151.dtsi
-+++ b/arch/arm/boot/dts/stm32mp151.dtsi
-@@ -1541,6 +1541,8 @@ iwdg2: watchdog@5a002000 {
- 			reg = <0x5a002000 0x400>;
- 			clocks = <&rcc IWDG2>, <&rcc CK_LSI>;
- 			clock-names = "pclk", "lsi";
-+			interrupts-extended = <&exti 46 IRQ_TYPE_LEVEL_HIGH>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
--- 
-2.39.2
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+
+
+Pozdrawiam
+Adam Charachuta
