@@ -2,195 +2,159 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617BE7107A1
-	for <lists+linux-watchdog@lfdr.de>; Thu, 25 May 2023 10:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61217107E1
+	for <lists+linux-watchdog@lfdr.de>; Thu, 25 May 2023 10:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240300AbjEYIfM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 25 May 2023 04:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58120 "EHLO
+        id S240429AbjEYItc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 25 May 2023 04:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240317AbjEYIez (ORCPT
+        with ESMTP id S235393AbjEYItb (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 25 May 2023 04:34:55 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01173E73
-        for <linux-watchdog@vger.kernel.org>; Thu, 25 May 2023 01:34:22 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30957dd7640so1223091f8f.3
-        for <linux-watchdog@vger.kernel.org>; Thu, 25 May 2023 01:34:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685003645; x=1687595645;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RRBwEvfGQIrh+pVMdhdSvf8KI6OxPqchD4EYbezjkwM=;
-        b=LlvJ9cdbMMkkz0SdtzRChzXK+JPc/QEtnzQ6LXT+MEYP8Q+rhhivrdbGHE90+Tjnqw
-         x4VCFspM+/fAGxa597+fTZrBuOnw5gS1YN3f8Oaqzvip0qIrfzORTcf/KUI8xlzAUjG1
-         2Pv7cTYsLyNEZxrloY6BXVaRGfzIBNMGB5ETcspuxanhDsr12nwy9HEE5NkWkNzel7Zu
-         xxtxURRTrhBE6gcuInvEdK7e747WbabDDvn9xv3ifqYhCH1FfCMoRcwamjo6n04nO7rg
-         txdifvtj0NgNz3b4aJuoWYHl+YrnJfXJNjdrwdCJ309zDfBMZEKsFczcgYtCnTrnu75O
-         BvBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685003645; x=1687595645;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RRBwEvfGQIrh+pVMdhdSvf8KI6OxPqchD4EYbezjkwM=;
-        b=QoY2ZOhjk7Vpj1CztgC0NDyhwPd/rZhzbG2rKj5f0PoMdqaV2mJ+PlOfucQlNwDKOF
-         mmeg/vuVHGkKT6L12AkaDHQFLXPQ6ITQP6Cg7nDNyAHat1w1/KDqV7a4Fx7miTdOK8XV
-         0JhX6dGgAS64ydpSQIueUBWZDBZ57A5WPtqtDa4mzVmzEw181xatFGgmZwf/etfO3Pew
-         YMUD+J3P1pbVYG9FZ9fps6j8noskS2m5aeYvQg7F8dt/bSuca5YcuZjEF+nsTTuVO1KM
-         8cMurXGWTxJKZeaBYcjh7jy/HoG6FgXd4SvC9mwBe42TzgWJUy2tpQYFYD/vq2Ro0BR3
-         mNdA==
-X-Gm-Message-State: AC+VfDxeoxoQUK5dfIjPBgs+L4egthWIbXoQJ9eM4aRGWUqlhNWEzSwq
-        8fit3cfXPMDzkq8sojYU/znaXg==
-X-Google-Smtp-Source: ACHHUZ4jPcDlm5Oe7/D1Pyf9jOshwayKovAkNLACHESXsWad5CTPI20Ibmfy3F9fav5hkIRXQLtzTA==
-X-Received: by 2002:a5d:404a:0:b0:307:a075:2709 with SMTP id w10-20020a5d404a000000b00307a0752709mr1682576wrp.68.1685003645432;
-        Thu, 25 May 2023 01:34:05 -0700 (PDT)
-Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id o3-20020a5d6843000000b003095a329e90sm945809wrw.97.2023.05.25.01.34.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 01:34:05 -0700 (PDT)
-From:   amergnat@baylibre.com
-Date:   Thu, 25 May 2023 10:33:19 +0200
-Subject: [PATCH v8 10/10] arm64: dts: mediatek: Add CPU Idle support
+        Thu, 25 May 2023 04:49:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8713198;
+        Thu, 25 May 2023 01:49:30 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7313C6601F25;
+        Thu, 25 May 2023 09:49:28 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685004569;
+        bh=EtbcIEsusRHFZTgu8Dex+fRPFWvkGsCdZCUXAljl5dA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=R3Kqq201hrVo9BPurnMzA4ezjYaxoOObvi2g1URGN83ygYowisAzheTdUdqoN8r5n
+         TSPVNXvf2IqTDg6Ua32jPMj5mo3fBXv6Jzp00dpCYtRkUZIBFKRI6Z95fFDvcq9zyB
+         Qmf4i6a4nRyF4Lo8EjOvSFAi7xS9fItyrAASqEHumC9d+L+2iMqekjSs9WuiEvzVgr
+         kqPO/q7IWRwlb7SHqcUp/Q775FHR3XSGYEdGLrJGcoMiI0kG0mYN6GtVrQxhaJszeY
+         PEVm7f/e/4fGzFf7IIwz7zGZD1F44ZMszNcIUEl1DVmOHxBiPP4hdPjndP8BOQ7DIl
+         oElYLmw5vShYA==
+Message-ID: <b80ceed1-0c5a-0875-dab0-309e2318d88e@collabora.com>
+Date:   Thu, 25 May 2023 10:49:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230203-evk-board-support-v8-10-7019f3fd0adf@baylibre.com>
-References: <20230203-evk-board-support-v8-0-7019f3fd0adf@baylibre.com>
-In-Reply-To: <20230203-evk-board-support-v8-0-7019f3fd0adf@baylibre.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v8 07/10] arm64: dts: mediatek: add ethernet support for
+ mt8365-evk
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
         Conor Dooley <conor+dt@kernel.org>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mediatek@lists.infradead.org,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2737; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=vYzOQ2oc5j6ZLGT/M6bLKTIS/chNEplrOLaJKWbM7ds=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkbx1vwwfm1FE2tPgSwzNRmNwwkLok2bisOz/1j0Ht
- xM5kYK2JAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZG8dbwAKCRArRkmdfjHURe6hEA
- CtgM2LWXjgPP5/TBAZ/A8Jg3uvPT49uwSr9+u5wdaLwvCpQcJDlemVP91cnOgJk0yEdYZaaU3TlWiC
- EX1+LeulD9lSiUFaxAdUf1Qrzq6D0rKDJt+9x1uBQ+2JtNRXbHh30eed7kKhXwGcK1jaszwqAY17FP
- LyC+bCmz9eL0Nc8LCMe8yB0zdVio/buNBKl33CRRC8uuTvnL2sUaBWTSwlB0Wsbxh1oTrfs2jaUN/C
- OK1cnqEmduCuFVrqzzxIy5DmWegN1lk6GrgVwcgdYYwb1VNrEIppclJ1+QBV5txM0sZKVRkO2dQRWG
- l+Y/BzsztEFNmgGj06H/2FX2ZWKpT+HEiZd/qZuETguOYQU4Ot1+Z3ybwEe6byMooYgDISpleqy0Kp
- ggiNz5KChGAkv+U4Z5C+mllOzr4QCXtnSQDP6wjMDJqVQdG2sn6H1rxOaAuDK76IRNRWKAMEtxuZ0d
- ofjZ8GA/1lNQIyRKM/Nou6cCQonCwUyCc9DGcFon1u+JAgyUdp4R5xidFjLKryztcbtLDoVwAB4hhj
- jzfwzhn3+ryEwoICdjNgF5tSojag6QuyHGVnQd9njGabSWQwTOEQa35a15FzyuGddZu0t5HbX6ierO
- B8STaKWzGY9v+88nceQrS/WZITiPlzzotX21Hylm0PCQc1jZ4uXUtd1deg1g==
-X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
- fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230203-evk-board-support-v8-0-7019f3fd0adf@baylibre.com>
+ <20230203-evk-board-support-v8-7-7019f3fd0adf@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230203-evk-board-support-v8-7-7019f3fd0adf@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Il 25/05/23 10:33, Alexandre Mergnat ha scritto:
+> - Enable "vibr" and "vsim2" regulators to power the ethernet chip.
+> 
+> Tested-by: Kevin Hilman <khilman@baylibre.com>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 48 +++++++++++++++++++++++++++++
+>   1 file changed, 48 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+> index 1a5769c397c2..86524cbf4354 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+> +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+> @@ -88,6 +88,29 @@ optee_reserved: optee@43200000 {
+>   	};
+>   };
+>   
+> +&ethernet {
+> +	pinctrl-0 = <&ethernet_pins>;
+> +	pinctrl-names = "default";
+> +	phy-handle = <&eth_phy>;
+> +	phy-mode = "rmii";
+> +	/*
+> +	 * Ethernet and HDMI (DSI0) are sharing pins.
+> +	 * Only one can be enabled at a time and require the physical switch
+> +	 * SW2101 to be set on LAN position
+> +	 * mt6357_vibr_reg and mt6357_vsim2_reg are needed to supply ethernet
+> +	 */
+> +	status = "disabled";
 
-MT8365 has 3 CPU Idle states:
-- MCDI_CPU. (Multi-Core-Deep-Idle)
-- MCDI_CLUSTER.
-- DPIDLE. (Deep-Idle)
+Ouh, that's sad :-(
 
-Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+...but you're left with no other choice, so I agree with providing at least
+the full node in case anyone wants to actually enable it by flipping the
+switch on the board, so you get my
+
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Tested-by: Kevin Hilman <khilman@baylibre.com>
-Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
----
- arch/arm64/boot/dts/mediatek/mt8365.dtsi | 35 ++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-index cfe0c67ad61f..413496c92069 100644
---- a/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-@@ -128,6 +128,7 @@ cpu0: cpu@0 {
- 			reg = <0x0>;
- 			#cooling-cells = <2>;
- 			enable-method = "psci";
-+			cpu-idle-states = <&CPU_MCDI &CLUSTER_MCDI &CLUSTER_DPIDLE>;
- 			i-cache-size = <0x8000>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -147,6 +148,7 @@ cpu1: cpu@1 {
- 			reg = <0x1>;
- 			#cooling-cells = <2>;
- 			enable-method = "psci";
-+			cpu-idle-states = <&CPU_MCDI &CLUSTER_MCDI &CLUSTER_DPIDLE>;
- 			i-cache-size = <0x8000>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -166,6 +168,7 @@ cpu2: cpu@2 {
- 			reg = <0x2>;
- 			#cooling-cells = <2>;
- 			enable-method = "psci";
-+			cpu-idle-states = <&CPU_MCDI &CLUSTER_MCDI &CLUSTER_DPIDLE>;
- 			i-cache-size = <0x8000>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -185,6 +188,7 @@ cpu3: cpu@3 {
- 			reg = <0x3>;
- 			#cooling-cells = <2>;
- 			enable-method = "psci";
-+			cpu-idle-states = <&CPU_MCDI &CLUSTER_MCDI &CLUSTER_DPIDLE>;
- 			i-cache-size = <0x8000>;
- 			i-cache-line-size = <64>;
- 			i-cache-sets = <256>;
-@@ -198,6 +202,37 @@ cpu3: cpu@3 {
- 			operating-points-v2 = <&cluster0_opp>;
- 		};
- 
-+		idle-states {
-+			entry-method = "psci";
-+
-+			CPU_MCDI: cpu-mcdi {
-+				compatible = "arm,idle-state";
-+				local-timer-stop;
-+				arm,psci-suspend-param = <0x00010001>;
-+				entry-latency-us = <300>;
-+				exit-latency-us = <200>;
-+				min-residency-us = <1000>;
-+			};
-+
-+			CLUSTER_MCDI: cluster-mcdi {
-+				compatible = "arm,idle-state";
-+				local-timer-stop;
-+				arm,psci-suspend-param = <0x01010001>;
-+				entry-latency-us = <350>;
-+				exit-latency-us = <250>;
-+				min-residency-us = <1200>;
-+			};
-+
-+			CLUSTER_DPIDLE: cluster-dpidle {
-+				compatible = "arm,idle-state";
-+				local-timer-stop;
-+				arm,psci-suspend-param = <0x01010004>;
-+				entry-latency-us = <300>;
-+				exit-latency-us = <800>;
-+				min-residency-us = <3300>;
-+			};
-+		};
-+
- 		l2: l2-cache {
- 			compatible = "cache";
- 			cache-level = <2>;
+Cheers!
 
--- 
-2.25.1
+> +
+> +	mdio {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		eth_phy: ethernet-phy@0 {
+> +			reg = <0>;
+> +		};
+> +	};
+> +};
+> +
+>   &i2c0 {
+>   	clock-frequency = <100000>;
+>   	pinctrl-0 = <&i2c0_pins>;
+> @@ -138,6 +161,31 @@ &mt6357_pmic {
+>   };
+>   
+>   &pio {
+> +	ethernet_pins: ethernet-pins {
+> +		phy_reset_pins {
+> +			pinmux = <MT8365_PIN_133_TDM_TX_DATA1__FUNC_GPIO133>;
+> +		};
+> +
+> +		rmii_pins {
+> +			pinmux = <MT8365_PIN_0_GPIO0__FUNC_EXT_TXD0>,
+> +				 <MT8365_PIN_1_GPIO1__FUNC_EXT_TXD1>,
+> +				 <MT8365_PIN_2_GPIO2__FUNC_EXT_TXD2>,
+> +				 <MT8365_PIN_3_GPIO3__FUNC_EXT_TXD3>,
+> +				 <MT8365_PIN_4_GPIO4__FUNC_EXT_TXC>,
+> +				 <MT8365_PIN_5_GPIO5__FUNC_EXT_RXER>,
+> +				 <MT8365_PIN_6_GPIO6__FUNC_EXT_RXC>,
+> +				 <MT8365_PIN_7_GPIO7__FUNC_EXT_RXDV>,
+> +				 <MT8365_PIN_8_GPIO8__FUNC_EXT_RXD0>,
+> +				 <MT8365_PIN_9_GPIO9__FUNC_EXT_RXD1>,
+> +				 <MT8365_PIN_10_GPIO10__FUNC_EXT_RXD2>,
+> +				 <MT8365_PIN_11_GPIO11__FUNC_EXT_RXD3>,
+> +				 <MT8365_PIN_12_GPIO12__FUNC_EXT_TXEN>,
+> +				 <MT8365_PIN_13_GPIO13__FUNC_EXT_COL>,
+> +				 <MT8365_PIN_14_GPIO14__FUNC_EXT_MDIO>,
+> +				 <MT8365_PIN_15_GPIO15__FUNC_EXT_MDC>;
+> +		};
+> +	};
+> +
+>   	gpio_keys: gpio-keys-pins {
+>   		pins {
+>   			pinmux = <MT8365_PIN_24_KPCOL0__FUNC_KPCOL0>;
+> 
 
