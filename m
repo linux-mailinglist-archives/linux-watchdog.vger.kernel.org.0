@@ -2,39 +2,39 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5927111C5
-	for <lists+linux-watchdog@lfdr.de>; Thu, 25 May 2023 19:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE8E7111CB
+	for <lists+linux-watchdog@lfdr.de>; Thu, 25 May 2023 19:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240717AbjEYRO5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 25 May 2023 13:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        id S240695AbjEYRPx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 25 May 2023 13:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240695AbjEYROz (ORCPT
+        with ESMTP id S233441AbjEYRPw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 25 May 2023 13:14:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35282194;
-        Thu, 25 May 2023 10:14:54 -0700 (PDT)
+        Thu, 25 May 2023 13:15:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F99219C;
+        Thu, 25 May 2023 10:15:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7FBE60FDE;
-        Thu, 25 May 2023 17:14:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A284C4339C;
-        Thu, 25 May 2023 17:14:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AAFE647AC;
+        Thu, 25 May 2023 17:15:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61CDBC433EF;
+        Thu, 25 May 2023 17:15:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685034893;
-        bh=7XFxoozn1cUB7nbYl6jjyZms6i3wLKCvhjTs30+8SU0=;
+        s=k20201202; t=1685034949;
+        bh=TXjQCnAa5THzyIrwuNbT4Dh/meMvaMaqsvTb26bbuzI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vPphEleK2gdXVrBvvHuo365rFdjJxIfYGWa1fvTHrWXEhs79GZuFV8Ot4355Q3/HV
-         Mu6Edrzl0vbcN8fvs5rpV5yoJyxxYqHd2RgWUPcF1uPhf/P/X+wZXxsc4QUxrOUZoL
-         YmGG9tKKgwO8bTQcPuif7TbCJblcf2YiPlCc6mIOKKZ7eZ4xxyIyTHS0WSw3nUFpd9
-         2jbDnt035FNUYCqx9uIMWwfHjERVod1192IBByAGMkmlRayhfQ7iQvex1p9BjX0Emo
-         XK4mlkwJcaOVVBcNse+E9RzWrgPy8A1K9yzpWFPJpsi5DtG4r1nkJd9vtQRJSdCIlL
-         O0V2Tsd5KEygg==
-Date:   Thu, 25 May 2023 18:14:47 +0100
+        b=B5eR9BgPKenKGqomZZBwCcCY5t43JkAdu/9kaqNRakcPH6DNU7PBd4KV7W1mUlwya
+         nLJcFkY1rAyJThZ6XEWDKUI0bgZNDr4Fzger9xEWLC0CEJR+5KVO6AloJq1LuWrVHe
+         VnaL4btQZ9mBS/YcuxkPQoSj1WYpcf+jjl3Etgh+YZICHOILgOCnhnjD7TstVboNcl
+         E/UW8Aw7Ly/n0ZQ0EwesPlIsevT4nEClXCQFDJOrZawlDsSGpFsfz0OlCgiapjzXXH
+         L02ioiaXvLrUJ0jZs5rLzWCCs/WOBqsVnf1OIFiuYW9LQX42dxLrV5+CTqvP4ZWhS2
+         99zRuI+5yA8Yw==
+Date:   Thu, 25 May 2023 18:15:43 +0100
 From:   Conor Dooley <conor@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>, y@spud
 Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         conor+dt@kernel.org, nicolas.ferre@microchip.com,
         alexandre.belloni@bootlin.com, daniel.lezcano@linaro.org,
@@ -42,18 +42,18 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         sebastian.reichel@collabora.com, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 3/5] dt-bindings: timer: microchip,sam9x60-pit64b:
- convert to yaml
-Message-ID: <20230525-straw-fidgeting-4c1099aa16fe@spud>
+Subject: Re: [PATCH 4/5] dt-bindings: watchdog: atmel,at91rm9200-wdt: convert
+ to yaml
+Message-ID: <20230525-union-camping-ceb65a7edc4c@spud>
 References: <20230525125602.640855-1-claudiu.beznea@microchip.com>
- <20230525125602.640855-4-claudiu.beznea@microchip.com>
+ <20230525125602.640855-5-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="6+rOtc5dUp/Ewm0y"
+        protocol="application/pgp-signature"; boundary="3mPePxdRmSeXHm4M"
 Content-Disposition: inline
-In-Reply-To: <20230525125602.640855-4-claudiu.beznea@microchip.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230525125602.640855-5-claudiu.beznea@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,141 +63,97 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 
---6+rOtc5dUp/Ewm0y
+--3mPePxdRmSeXHm4M
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 25, 2023 at 03:56:00PM +0300, Claudiu Beznea wrote:
-> Convert Microchip PIT64B to YAML. Along with it clock-names binding has
-> been added as the driver needs it to get PIT64B clocks.
+On Thu, May 25, 2023 at 03:56:01PM +0300, Claudiu Beznea wrote:
+> Convert Atmel AT91RM9200 system timer watchdog bindings to YAML.
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+>  .../watchdog/atmel,at91rm9200-wdt.yaml        | 29 +++++++++++++++++++
+>  .../watchdog/atmel-at91rm9200-wdt.txt         |  9 ------
+>  2 files changed, 29 insertions(+), 9 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,at91=
+rm9200-wdt.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-at91=
+rm9200-wdt.txt
+>=20
+> diff --git a/Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-=
+wdt.yaml b/Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.=
+yaml
+> new file mode 100644
+> index 000000000000..d05cdf15dc1c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml
+> @@ -0,0 +1,29 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/atmel,at91rm9200-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Atmel AT91RM9200 System Timer Watchdog
+> +
+> +maintainers:
+> +  - Nicolas Ferre <nicolas.ferre@microchip.com>
+> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> +  - Claudiu Beznea <claudiu.beznea@microchip.coam>
+> +
+> +properties:
+> +  compatible:
+> +    const: atmel,at91rm9200-wdt
+> +
+> +required:
+> +  - compatible
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    watchdog {
+> +        compatible =3D "atmel,at91rm9200-wdt";
+> +    }
 
-I don't think both of these PIT things need to have different binding
-files. 90% of it is the same, just the clock-names/number - so you can
-combine the two into one file with an
-allOf:
-  - if:
-     property:
-       compatible:
-         contains:
-	   const: foo
-    then:
-
-    else:
-
-type of construct.
-Gimmie a shout tomorrow if you need a hand w/ it.
+This example is broken, you missed copying the ;
 
 Thanks,
 Conor.
 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
->  .../devicetree/bindings/arm/atmel-sysregs.txt |  6 --
->  .../timer/microchip,sam9x60-pit64b.yaml       | 56 +++++++++++++++++++
->  2 files changed, 56 insertions(+), 6 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/timer/microchip,sam=
-9x60-pit64b.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Do=
-cumentation/devicetree/bindings/arm/atmel-sysregs.txt
-> index 7024839c5da2..54d3f586403e 100644
-> --- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-> +++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-> @@ -4,12 +4,6 @@ Chipid required properties:
->  - compatible: Should be "atmel,sama5d2-chipid" or "microchip,sama7g5-chi=
-pid"
->  - reg : Should contain registers location and length
-> =20
-> -PIT64B Timer required properties:
-> -- compatible: Should be "microchip,sam9x60-pit64b"
-> -- reg: Should contain registers location and length
-> -- interrupts: Should contain interrupt for PIT64B timer
-> -- clocks: Should contain the available clock sources for PIT64B timer.
-> -
->  System Timer (ST) required properties:
->  - compatible: Should be "atmel,at91rm9200-st", "syscon", "simple-mfd"
->  - reg: Should contain registers location and length
-> diff --git a/Documentation/devicetree/bindings/timer/microchip,sam9x60-pi=
-t64b.yaml b/Documentation/devicetree/bindings/timer/microchip,sam9x60-pit64=
-b.yaml
-> new file mode 100644
-> index 000000000000..9378eca38138
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/timer/microchip,sam9x60-pit64b.ya=
-ml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/timer/microchip,sam9x60-pit64b.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Microchip 64-bit Periodic Interval Timer (PIT64B)
-> +
-> +maintainers:
-> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
-> +
-> +description:
-> +  The 64-bit periodic interval timer provides the operating system sched=
-uler
-> +  interrupt. It is designed to offer maximum accuracy and efficient mana=
-gement,
-> +  even for systems with long response times.
-> +
-> +properties:
-> +  compatible:
-> +    const: microchip,sam9x60-pit64b
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    items:
-> +      - const: pclk
-> +      - const: gclk
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/at91.h>
-> +
-> +    pit64b: timer@f0028000 {
-> +        compatible =3D "microchip,sam9x60-pit64b";
-> +        reg =3D <0xf0028000 0x100>;
-> +        interrupts =3D <37 IRQ_TYPE_LEVEL_HIGH 7>;
-> +        clocks =3D <&pmc PMC_TYPE_PERIPHERAL 37>, <&pmc PMC_TYPE_GCK 37>;
-> +        clock-names =3D "pclk", "gclk";
-> +    };
 > +
 > +...
+> diff --git a/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-=
+wdt.txt b/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.t=
+xt
+> deleted file mode 100644
+> index d4d86cf8f9eb..000000000000
+> --- a/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
+> +++ /dev/null
+> @@ -1,9 +0,0 @@
+> -Atmel AT91RM9200 System Timer Watchdog
+> -
+> -Required properties:
+> -- compatible: must be "atmel,at91sam9260-wdt".
+> -
+> -Example:
+> -	watchdog@fffffd00 {
+> -		compatible =3D "atmel,at91rm9200-wdt";
+> -	};
 > --=20
 > 2.34.1
 >=20
 
---6+rOtc5dUp/Ewm0y
+--3mPePxdRmSeXHm4M
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG+XhwAKCRB4tDGHoIJi
-0ol9AP9Ji8eCUpcWSkg6naXZZRcLXw9DpC71sS5nj78Od6gzIgEA1HbvXzKo9VgK
-Y9xjqUWvhZkKd+xm9bORgGAFysfkbAE=
-=y9d8
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG+XvwAKCRB4tDGHoIJi
+0m3yAQCPkatqkx00U98+bRNZhMThHa+pW4rc5LIOS2Dy25zAqgEA9ZW8F0jNB+dl
+2tCAK1FKZoK+u11mnITqEPloSinnjQk=
+=Rk6Q
 -----END PGP SIGNATURE-----
 
---6+rOtc5dUp/Ewm0y--
+--3mPePxdRmSeXHm4M--
