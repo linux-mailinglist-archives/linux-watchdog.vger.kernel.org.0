@@ -2,159 +2,102 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61217107E1
-	for <lists+linux-watchdog@lfdr.de>; Thu, 25 May 2023 10:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BEF710C96
+	for <lists+linux-watchdog@lfdr.de>; Thu, 25 May 2023 14:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240429AbjEYItc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 25 May 2023 04:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
+        id S241063AbjEYM5M (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 25 May 2023 08:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235393AbjEYItb (ORCPT
+        with ESMTP id S241141AbjEYM5K (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 25 May 2023 04:49:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8713198;
-        Thu, 25 May 2023 01:49:30 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7313C6601F25;
-        Thu, 25 May 2023 09:49:28 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685004569;
-        bh=EtbcIEsusRHFZTgu8Dex+fRPFWvkGsCdZCUXAljl5dA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=R3Kqq201hrVo9BPurnMzA4ezjYaxoOObvi2g1URGN83ygYowisAzheTdUdqoN8r5n
-         TSPVNXvf2IqTDg6Ua32jPMj5mo3fBXv6Jzp00dpCYtRkUZIBFKRI6Z95fFDvcq9zyB
-         Qmf4i6a4nRyF4Lo8EjOvSFAi7xS9fItyrAASqEHumC9d+L+2iMqekjSs9WuiEvzVgr
-         kqPO/q7IWRwlb7SHqcUp/Q775FHR3XSGYEdGLrJGcoMiI0kG0mYN6GtVrQxhaJszeY
-         PEVm7f/e/4fGzFf7IIwz7zGZD1F44ZMszNcIUEl1DVmOHxBiPP4hdPjndP8BOQ7DIl
-         oElYLmw5vShYA==
-Message-ID: <b80ceed1-0c5a-0875-dab0-309e2318d88e@collabora.com>
-Date:   Thu, 25 May 2023 10:49:26 +0200
+        Thu, 25 May 2023 08:57:10 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2C7E4A;
+        Thu, 25 May 2023 05:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685019418; x=1716555418;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FUGrDWX/gtkCZPde2wa6CTBiIpMC9IR1HKiXnMzSqbI=;
+  b=ewnrc4rKwd9Em37sSUP3mXYz5ipp+R99khNNNt1lJo/3AYDQVdeK5Sph
+   BtfOeNvz/d0gA7qPGnNGPHZSHKlpkN0JV66EwsLLjTCBYyrHyXvtKxvYi
+   BBV6xO5WOUeGYHS0JWG44npScuywvIq/pM13Z2n0un2Mp6U4FiliSyZkH
+   8a3CjJgLv7s1SzCu6N/2OjBqL9nJaXVzUBhRSWVgdFq07Q2CNbAy/AHwK
+   xjH5ulj1Q/aAT72cH88K6OEuifY9r7YOWBfpLu4IwIjUuploh0rR2QGMW
+   hFnVR3V9fXSfrbHwIICspHyLNb2iLXTochbBLj1p9bhwJdk/l/T4tJkKL
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,191,1681196400"; 
+   d="scan'208";a="217255227"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2023 05:56:49 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 25 May 2023 05:56:49 -0700
+Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Thu, 25 May 2023 05:56:41 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <daniel.lezcano@linaro.org>,
+        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <sebastian.reichel@collabora.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        "Claudiu Beznea" <claudiu.beznea@microchip.com>
+Subject: [PATCH 0/5] dt-bindings: timer: AT91 convert to YAML
+Date:   Thu, 25 May 2023 15:55:57 +0300
+Message-ID: <20230525125602.640855-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v8 07/10] arm64: dts: mediatek: add ethernet support for
- mt8365-evk
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>
-References: <20230203-evk-board-support-v8-0-7019f3fd0adf@baylibre.com>
- <20230203-evk-board-support-v8-7-7019f3fd0adf@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230203-evk-board-support-v8-7-7019f3fd0adf@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Il 25/05/23 10:33, Alexandre Mergnat ha scritto:
-> - Enable "vibr" and "vsim2" regulators to power the ethernet chip.
-> 
-> Tested-by: Kevin Hilman <khilman@baylibre.com>
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 48 +++++++++++++++++++++++++++++
->   1 file changed, 48 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> index 1a5769c397c2..86524cbf4354 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> @@ -88,6 +88,29 @@ optee_reserved: optee@43200000 {
->   	};
->   };
->   
-> +&ethernet {
-> +	pinctrl-0 = <&ethernet_pins>;
-> +	pinctrl-names = "default";
-> +	phy-handle = <&eth_phy>;
-> +	phy-mode = "rmii";
-> +	/*
-> +	 * Ethernet and HDMI (DSI0) are sharing pins.
-> +	 * Only one can be enabled at a time and require the physical switch
-> +	 * SW2101 to be set on LAN position
-> +	 * mt6357_vibr_reg and mt6357_vsim2_reg are needed to supply ethernet
-> +	 */
-> +	status = "disabled";
+Hi,
 
-Ouh, that's sad :-(
+Series converts AT91 timers DT bindings to YAML. Along with it the
+atmel,at91rm9200-wdt has been converted and introduced in this series
+as it is referenced by atmel,at91rm9200-st.
 
-...but you're left with no other choice, so I agree with providing at least
-the full node in case anyone wants to actually enable it by flipping the
-switch on the board, so you get my
+Thank you,
+Claudiu Beznea
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Claudiu Beznea (5):
+  dt-bindings: timer: atmel,at91sam9260-pit: convert to yaml
+  ARM: dts: at91: sama7g5: keep only microchip,sam9x60-pit64b compatible
+    for pit64b
+  dt-bindings: timer: microchip,sam9x60-pit64b: convert to yaml
+  dt-bindings: watchdog: atmel,at91rm9200-wdt: convert to yaml
+  dt-bindings: timer: atmel,at91rm9200-st: convert to yaml
 
-Cheers!
+ .../devicetree/bindings/arm/atmel-sysregs.txt | 21 ------
+ .../bindings/timer/atmel,at91rm9200-st.yaml   | 66 +++++++++++++++++++
+ .../bindings/timer/atmel,at91sam9260-pit.yaml | 51 ++++++++++++++
+ .../timer/microchip,sam9x60-pit64b.yaml       | 56 ++++++++++++++++
+ .../watchdog/atmel,at91rm9200-wdt.yaml        | 29 ++++++++
+ .../watchdog/atmel-at91rm9200-wdt.txt         |  9 ---
+ arch/arm/boot/dts/sama7g5.dtsi                |  4 +-
+ 7 files changed, 204 insertions(+), 32 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml
+ create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
+ create mode 100644 Documentation/devicetree/bindings/timer/microchip,sam9x60-pit64b.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
 
-> +
-> +	mdio {
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +
-> +		eth_phy: ethernet-phy@0 {
-> +			reg = <0>;
-> +		};
-> +	};
-> +};
-> +
->   &i2c0 {
->   	clock-frequency = <100000>;
->   	pinctrl-0 = <&i2c0_pins>;
-> @@ -138,6 +161,31 @@ &mt6357_pmic {
->   };
->   
->   &pio {
-> +	ethernet_pins: ethernet-pins {
-> +		phy_reset_pins {
-> +			pinmux = <MT8365_PIN_133_TDM_TX_DATA1__FUNC_GPIO133>;
-> +		};
-> +
-> +		rmii_pins {
-> +			pinmux = <MT8365_PIN_0_GPIO0__FUNC_EXT_TXD0>,
-> +				 <MT8365_PIN_1_GPIO1__FUNC_EXT_TXD1>,
-> +				 <MT8365_PIN_2_GPIO2__FUNC_EXT_TXD2>,
-> +				 <MT8365_PIN_3_GPIO3__FUNC_EXT_TXD3>,
-> +				 <MT8365_PIN_4_GPIO4__FUNC_EXT_TXC>,
-> +				 <MT8365_PIN_5_GPIO5__FUNC_EXT_RXER>,
-> +				 <MT8365_PIN_6_GPIO6__FUNC_EXT_RXC>,
-> +				 <MT8365_PIN_7_GPIO7__FUNC_EXT_RXDV>,
-> +				 <MT8365_PIN_8_GPIO8__FUNC_EXT_RXD0>,
-> +				 <MT8365_PIN_9_GPIO9__FUNC_EXT_RXD1>,
-> +				 <MT8365_PIN_10_GPIO10__FUNC_EXT_RXD2>,
-> +				 <MT8365_PIN_11_GPIO11__FUNC_EXT_RXD3>,
-> +				 <MT8365_PIN_12_GPIO12__FUNC_EXT_TXEN>,
-> +				 <MT8365_PIN_13_GPIO13__FUNC_EXT_COL>,
-> +				 <MT8365_PIN_14_GPIO14__FUNC_EXT_MDIO>,
-> +				 <MT8365_PIN_15_GPIO15__FUNC_EXT_MDC>;
-> +		};
-> +	};
-> +
->   	gpio_keys: gpio-keys-pins {
->   		pins {
->   			pinmux = <MT8365_PIN_24_KPCOL0__FUNC_KPCOL0>;
-> 
+-- 
+2.34.1
 
