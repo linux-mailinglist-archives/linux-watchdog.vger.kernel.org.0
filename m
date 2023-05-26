@@ -2,477 +2,202 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD558711FED
-	for <lists+linux-watchdog@lfdr.de>; Fri, 26 May 2023 08:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A8771205C
+	for <lists+linux-watchdog@lfdr.de>; Fri, 26 May 2023 08:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240106AbjEZG1S (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 26 May 2023 02:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
+        id S242160AbjEZGls (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 26 May 2023 02:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235975AbjEZG1R (ORCPT
+        with ESMTP id S242141AbjEZGlq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 26 May 2023 02:27:17 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FAEE4D;
-        Thu, 25 May 2023 23:27:08 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34Q1qUiM031978;
-        Thu, 25 May 2023 23:26:51 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0220; bh=ACi/H/ToFssafQRaC9sTG8DFQNbdnu3sxoMrEPwgyYU=;
- b=M1GiqKSvbm26knOdvWtNGNmPhhJ7dJIoZEH7C0qEihDDAKylT/c1oj9LquGjYA6Ey5wR
- Z/P3U4OS3r3yK81/0Gr13eXXMTOFFbmEZSiOrzEgY7PNE/fdY5qj7v2IC/55LUIf6hZa
- b+GcBkbJoU0tXQBgUk2xVEJcXhnEEgtM73za2fjEnwQKasHr97fhAWSXP63TCACCXnjl
- HuCNsVullx3hIyaST3OXQF3PLfqTtHgkDp4XWzPiF7cdWWu8Dz1PHGd3tbqLLkvaRdUa
- +/IStAH9sBWDT1t+/yBZy9QzstzfjVr4FV2jFWBG+mWFYExqut3gSm2/fmNf64XVk1wl QQ== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3qtg6t1hdx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 23:26:50 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 25 May
- 2023 23:26:49 -0700
-Received: from bbhushan2.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Thu, 25 May 2023 23:26:46 -0700
-From:   Bharat Bhushan <bbhushan2@marvell.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>
-CC:     Bharat Bhushan <bbhushan2@marvell.com>
-Subject: [PATCH 2/2 v8] Watchdog: Add marvell GTI watchdog driver
-Date:   Fri, 26 May 2023 11:56:26 +0530
-Message-ID: <20230526062626.1180-2-bbhushan2@marvell.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230526062626.1180-1-bbhushan2@marvell.com>
-References: <20230526062626.1180-1-bbhushan2@marvell.com>
+        Fri, 26 May 2023 02:41:46 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EEA12F;
+        Thu, 25 May 2023 23:41:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685083304; x=1716619304;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=Ofvqqv2Mdo2CN9KNsti+MXhwOGx8unpKccGhNVFykDg=;
+  b=ZjYTZCHcpJVqX4cRhdlDzdFwwmDYmwWSmaoVMOh9AbquuIO02E+vFbxE
+   xWxKf0wgrXqIdec/wzDxjQ/we3MLoamEuHgzLtHx5me9b2EKW/kZSHy/j
+   Eiwm0JdhNwElW6tgZcP/SDZSO/nFKO8A3ilYwJbtBXgtqlT+2ojo3CtH6
+   JOeIU6WXCYk2DMN8MaVMnKRiHbtnYK9blek4XcJ0wPnkis2DO3YQjy789
+   p/ABCohi0DeK448xih7194hy5C5fdF6c+BIZaXTRWti6fc3arb42whDMY
+   4a4l6TFtksmqe70/7s1JrwiIwFKGZfxjAGwohokHyC81FuUAiztYaBX3W
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,193,1681196400"; 
+   d="scan'208";a="217418113"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 May 2023 23:41:42 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 25 May 2023 23:41:42 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 25 May 2023 23:41:42 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HvZNxnxxX2tKY3kkZ4f1jirvpZDyQ2a2faH5bvoV3FdzysOzFsdDowg4Chov40xjS4vhWuUCX+89LLg+aECL+ReFC6DBphlj5VVFfIXxF6KbfsdlJd3N4MPjX1xzcGSBmmJSL2xRyv067iTeHoX2n9Rz/xops55uCmC3oAwNLtVr+Jq4ZS45ZqYqvOa4+eWEr4Ohjb2bUupCRycfEW6KX7pr5LrFBTzeVVGDbfrgFQfwLNCGKBEvCi//tgyTVCLur+VfH97yGIFd9bMgR1MjQrAWaUiiNSliJZ/zQEos38hoIoywrWXtdRWHXLyv9zdu9nIQAzO9Na7wJwcweTouIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ofvqqv2Mdo2CN9KNsti+MXhwOGx8unpKccGhNVFykDg=;
+ b=CQU+9ukvLljL/IWrtPyqc4JF0fSw3ZJtTFRIUaFQLJZduJEHU4dGs1xHbf3zViEVt6QKlfXqoqwO2XGdS7SIkFw/N7S8DQKwlToKY7oBb6T9y62oGfOfxMZ/TlGaXETIeozG4C5yVdcePsDDjnbq60GDw2Drbds+i1km2DkW3vylngXVgY8xTuaBWkF0a2CCamwHCqZ0UCvmJnzlkgT0412ZzLRTPi4or31dtdpd/0ta11sPPfSzWxoCSoaE83HAqJ2i8vDCX7WsQhXrSWm6eqQu40Us8syi7R0IhCR7HbR/7dmSUBAPydbS+UfMBRZ6SlnIKW4IIwKCQyQWWZR7ww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ofvqqv2Mdo2CN9KNsti+MXhwOGx8unpKccGhNVFykDg=;
+ b=oiZcGyXJEmeSzJNiHcS/Z9zQdtbaSswXwThOb0GYYXQ9uU7zDXV5rLRfOrfhJjyrSmu5xGllvx7SZVDS945mB1S9Db/1V04ro9LtR9I1wLs5bjp/pgUK8y26PTgKB2bnMODfmToR0Ge4N5fym4KCRqhEXIDKDHlIDCZbTdhZ2pc=
+Received: from SJ2PR11MB7648.namprd11.prod.outlook.com (2603:10b6:a03:4c3::17)
+ by SA1PR11MB6847.namprd11.prod.outlook.com (2603:10b6:806:29e::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.19; Fri, 26 May
+ 2023 06:41:40 +0000
+Received: from SJ2PR11MB7648.namprd11.prod.outlook.com
+ ([fe80::27bf:a69f:806f:67be]) by SJ2PR11MB7648.namprd11.prod.outlook.com
+ ([fe80::27bf:a69f:806f:67be%5]) with mapi id 15.20.6433.018; Fri, 26 May 2023
+ 06:41:39 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <Conor.Dooley@microchip.com>
+CC:     <devicetree@vger.kernel.org>, <alexandre.belloni@bootlin.com>,
+        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <daniel.lezcano@linaro.org>, <conor+dt@kernel.org>,
+        <conor@kernel.org>, <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <tglx@linutronix.de>,
+        <wim@linux-watchdog.org>, <sebastian.reichel@collabora.com>,
+        <linux@roeck-us.net>
+Subject: Re: [PATCH 3/5] dt-bindings: timer: microchip,sam9x60-pit64b: convert
+ to yaml
+Thread-Topic: [PATCH 3/5] dt-bindings: timer: microchip,sam9x60-pit64b:
+ convert to yaml
+Thread-Index: AQHZj50fp08eOlsluEqhLuQqAw4PCQ==
+Date:   Fri, 26 May 2023 06:41:39 +0000
+Message-ID: <5a5d25a2-e6b5-fd69-f615-cd3d6ed33b9f@microchip.com>
+References: <20230525125602.640855-1-claudiu.beznea@microchip.com>
+ <20230525125602.640855-4-claudiu.beznea@microchip.com>
+ <20230525-straw-fidgeting-4c1099aa16fe@spud>
+ <5edf3d3b-6f59-0af3-6414-940a278962bf@microchip.com>
+ <20230526-knickers-aim-e01220e6a7cd@wendy>
+In-Reply-To: <20230526-knickers-aim-e01220e6a7cd@wendy>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ2PR11MB7648:EE_|SA1PR11MB6847:EE_
+x-ms-office365-filtering-correlation-id: 6eb0d5f8-9504-493f-a6df-08db5db44265
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1M1CHZemiFcEX0j96IbzYzglkJ+rL3lf34pTAfyE+eEu9ztdhwWt2nWw4y5pSNTrYiegqOeuqVf/BRT9CVFLVg3TXRk/Mjx597Gbaz2+d9wIoQqvzd4N1UK+uADxdT0ThQdS49cKMTRycPolzZZmQo8H/OSkpHWGku8vCtNOeePubx+MTGzel0u7YeMVN/BromhgMqQM1SO17sMcqIxo3iLy7uVnGzWgxHxZeb3unQEYJpHsSvTQNp9YqIxWd3MNLhi2My1YGToS1oBZKnrgRWiT7PtwXrF/tjsK9Wdn8Yzf+F98+sLHhMrTbb0N8U9ITeoj+yWSebdOVZ1yA/p5o1oND5Q41OP8aJgndNxVYuv08d2XsHhbplU/HvSJVcMV3hhvxtaS47uSchUu3yHYub2n2Gl7er4o2RKj39qoeVVDHAU6Q3cnfGXu70gr9tvtEwqfrdb57QxtorbUISaj7eY4ZPszXXZXkYqblgkd09bN4pl4rTZhsj7GKzHriE1mMCaXi2peIA4shgNNOcxCc3gNd4MHxwPsaDqq5BI10zDCn7VROInA/Dh81XXeBRdyjxdFkXOjtVykIbM2xvt9JwnjL5D2Ai4FrMOwVpSjc4mi7lJDYuQLUSdZN+pVoSfgFjWD9RGj+Kzqgf5D2HNZL47UFbLcVNoKYSDNx0uXkmI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7648.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(376002)(366004)(39860400002)(136003)(396003)(451199021)(316002)(6486002)(41300700001)(7416002)(6862004)(26005)(53546011)(6512007)(6506007)(8676002)(8936002)(38100700002)(5660300002)(36756003)(31696002)(2616005)(83380400001)(38070700005)(2906002)(186003)(86362001)(966005)(122000001)(6636002)(4326008)(76116006)(66946007)(91956017)(66556008)(66476007)(66446008)(64756008)(37006003)(31686004)(54906003)(478600001)(66899021)(71200400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eEZjZnZ3bzA4YTFYOGR2OEF2dTI0NjY1TE9RbFhMQXdJclJxeEp2MmRFTWJj?=
+ =?utf-8?B?OG5SVER0ZDVWKzJXdDBUYXlBVlJnbWEzMTJnNjZadzcyR255QTdubzJ5WGdt?=
+ =?utf-8?B?cXJuTVVmdXU1QjcyR1hEMDlTZGo0S3BWSkhJRXN1elBQUFNTSlhmaFNkQ2FT?=
+ =?utf-8?B?aDIzRTVMSExLOGJyb3JVZjlPRHprditEekRPUWRCUDJuWm9FYzJEQm5oRis5?=
+ =?utf-8?B?WDIxQW9WUTg1T05iSWFTVWpFdzNXckJxbFdnUjNIQjJVSE9FdzNOTFJ1c3lY?=
+ =?utf-8?B?OFJlUHFKaDhKVEN6cHpNbm52a1RXa1dvVjZ2WnJELzJwalZudGZ2Q25HL3FV?=
+ =?utf-8?B?SXRwTEpPSHhhelMyZXg0MzB6dVNBeHhSUEhTMEhOSjJFamdDWFo2VHR0TDNq?=
+ =?utf-8?B?SDEveGdZcmpXRlVWdURrT2hjbGFTdlE0dlNrYmpYNDB2ZEFmSmJ6MXBqcGs2?=
+ =?utf-8?B?Rm9peHR4cjZBN0wvbkR5cnVjeHMxMlg5ZjViaGo3N2k1YU5xd0Z5cFgrcmda?=
+ =?utf-8?B?ek15MXA1cWtGRjY0SFJZc2N4YVFESVRHYVhBZld3dkx5Nk5Vc2lkOTVNYjkv?=
+ =?utf-8?B?ckR4d1gyKzFmNWlxVWZWNTNzQjlJMjJOczRBZVJBVmhpaHRUS0k1QlFxdUJ5?=
+ =?utf-8?B?bXhwUkJYN29hSEpYRDlESDRpd01DRVF6cTF1a0Jzbm9ZZkt0bEt6V3AxRTg1?=
+ =?utf-8?B?R3FjL1Y4MmJ4V2pWa05Wd1R6b2FaL1VkQ0JyVkhkeHIyZ3pGalJaekZmUnpM?=
+ =?utf-8?B?REswMWFldG52QlU0bElWS1l0YXBjc3FmR0lmRVdpaVVtN3VMdzVOMXFGT0t0?=
+ =?utf-8?B?RjlEZEJ3N0FnYTFhLzRvRVZLYTdGcjY3bnpMMmZUVzJ4c3dVOWlIWGNNWlFj?=
+ =?utf-8?B?VzNBaDJHMWZSNTBIUTd4UGJWZEtqajllazJobFQ2bW1qdGFqTkN2R20xOXlF?=
+ =?utf-8?B?R2xwZVJLYklBdXlEamVodTdVL2xLbWR4MlE2a3dJb1ZTSi9lTHRON1U5aUFt?=
+ =?utf-8?B?VDlVaWIxZG9vSUxVVnpDa041WGxtMEs5NW1JNkkvVlFjNVV6L0Robm15MC9n?=
+ =?utf-8?B?eGt4VGJrTURWQzJQbW5FTkRGQW1VTnRheHUvTUNsQ3NsRm1KUCttUk9WNGNq?=
+ =?utf-8?B?WGR3LzU2RjNOWE54ZUdXZ2lHcEhHRXUwcjIvMnBsVGFBNkNzMWx6L1dRUVNJ?=
+ =?utf-8?B?dFAvYW9lS0FlRXJXb1ptS3dYb1RIT0N5TUhFZitFWDlkNVlVMUlXV3IwYjRR?=
+ =?utf-8?B?TEtPeFRMVnFBUGZNc1F2cFZzNHBBM3d5KzFzeFVONGZYdXpFcUE0ekR4dXA5?=
+ =?utf-8?B?Z1dNc2NIVEJwcnBab2t3TkJSdmpmRlVLYS9XSkVTbW5oWWE2TEJ6aytFcEtp?=
+ =?utf-8?B?MGFweEZKaDhSR1Y4dmxienNLYkhrRGQrZU5yQ3dHdEcvNHBmK1pac2wwbzQz?=
+ =?utf-8?B?cGZac2paYWsrbVkrS3MrVGcrWTNyWmlZeXJETU1hZWVRSndWZm0rV2JEMEZu?=
+ =?utf-8?B?K25aUTZodzM2MWhIY1F4S21PZmR0aExXYU8yZ3FZWG9pMUdleFlWTUdZR0hq?=
+ =?utf-8?B?akp5M2VBL0VpOVd5K2hlU0NsNlFkSEFMRFA5bVZjQldvVXd2ZG9YakY5UjdE?=
+ =?utf-8?B?M2dzRE9zQlhsY2w3UkU2UGtMQVd2cS81Wlh6alBTVlFyZUF6SWxlUVN4TThW?=
+ =?utf-8?B?RUZhdXNMVlc0dE9vWmhubVVCSityME4ySUI3eGFuRDJOenRub3h1VHBiVlBp?=
+ =?utf-8?B?cnlKLzA0NitZWlFxY3FHdHE2NFVrNCtQSTAxQWlZZm1tcmc5Qm0zOEQ2OEFy?=
+ =?utf-8?B?NzJoNGlvd0JQaWJOVnMwOVlKYy9FUWJtN2JXeFJheHovUGJ5MW0rUTNaZFNQ?=
+ =?utf-8?B?M3dIbEhLQXNWR2EvZUc0bXhlOVpqb3I2ZTRkbkZZMnpycERCeDFMOTFHQzZO?=
+ =?utf-8?B?dDJ0eGNyTjl6Y1RybXd3bGFJRnpUclduYzRhK2xJTmlTV0NBYllEd0ZHN2s1?=
+ =?utf-8?B?TmpMTmhOTFJpQVJxckFUY0dmVlRkclZvdWRMVUJhd2ZHR1lIZ3lCbUJTWnk0?=
+ =?utf-8?B?ZkRqR040dVdoYmlEeFZ1Z0JjOHBZN1ZvNjZrZmhFcXd1SE9wUXJtaklqMTlI?=
+ =?utf-8?B?T1dyTFdXOUU5RHpXem4yLytmamViWFQ2TlVyYjFmR1lnRVg1Y2JxR0xHMWZ2?=
+ =?utf-8?B?M0E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <855C4C0D4C0B144C98F017311CE6E2C1@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: YBON8ssyn-9kl0CqC_Bug4TQGpPJcmSa
-X-Proofpoint-GUID: YBON8ssyn-9kl0CqC_Bug4TQGpPJcmSa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-26_01,2023-05-25_03,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7648.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6eb0d5f8-9504-493f-a6df-08db5db44265
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 May 2023 06:41:39.2114
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ia/b1VnGTUU7X96GsunnrL3o2WamTPvL9ohjh7A+anhBQ5p5eNOpmYNQqDEYQ1vZw9c4gvbU1v8s93ZWtS3vTjfO1zu6XioL2Ihx4FlWSXQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6847
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This patch add support for Marvell GTI watchdog.  Global timer
-unit (GTI) support hardware watchdog timer. Software programs
-watchdog timer to generate interrupt on first timeout, second
-timeout is configured to be ignored and system reboots on
-third timeout.
-
-Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
----
-v8:
-  - Compatible names as per soc names
-  - This driver run on ARM64 based architecture, Added 64BIT config
-    dependency to avoid compilation error related to readq/writeq on
-    32 as platform (Hexagon)
- 
- drivers/watchdog/Kconfig           |  13 ++
- drivers/watchdog/Makefile          |   1 +
- drivers/watchdog/marvell_gti_wdt.c | 346 +++++++++++++++++++++++++++++
- 3 files changed, 360 insertions(+)
- create mode 100644 drivers/watchdog/marvell_gti_wdt.c
-
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index f22138709bf5..bbdc20f33dbf 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1779,6 +1779,19 @@ config OCTEON_WDT
- 	  from the first interrupt, it is then only poked when the
- 	  device is written.
- 
-+config MARVELL_GTI_WDT
-+	tristate "Marvell GTI Watchdog driver"
-+	depends on ARCH_THUNDER || (COMPILE_TEST && 64BIT)
-+	default y
-+	select WATCHDOG_CORE
-+	help
-+	 Marvell GTI hardware supports watchdog timer. First timeout
-+	 works as watchdog pretimeout and installed interrupt handler
-+	 will be called on first timeout. Hardware can generate interrupt
-+	 to SCP on second timeout but it is not enabled, So second
-+	 timeout is ignored. If device poke does not happen then system
-+	 will reboot on third timeout.
-+
- config BCM2835_WDT
- 	tristate "Broadcom BCM2835 hardware watchdog"
- 	depends on ARCH_BCM2835 || (OF && COMPILE_TEST)
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index b4c4ccf2d703..a164cd161ef3 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -98,6 +98,7 @@ obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
- obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
- obj-$(CONFIG_APPLE_WATCHDOG) += apple_wdt.o
- obj-$(CONFIG_SUNPLUS_WATCHDOG) += sunplus_wdt.o
-+obj-$(CONFIG_MARVELL_GTI_WDT) += marvell_gti_wdt.o
- 
- # X86 (i386 + ia64 + x86_64) Architecture
- obj-$(CONFIG_ACQUIRE_WDT) += acquirewdt.o
-diff --git a/drivers/watchdog/marvell_gti_wdt.c b/drivers/watchdog/marvell_gti_wdt.c
-new file mode 100644
-index 000000000000..976bb9306115
---- /dev/null
-+++ b/drivers/watchdog/marvell_gti_wdt.c
-@@ -0,0 +1,346 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Marvell GTI Watchdog driver
-+ *
-+ * Copyright (C) 2023 Marvell.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/interrupt.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/watchdog.h>
-+#include <linux/clk.h>
-+
-+/*
-+ * Hardware supports following mode of operation:
-+ * 1) Interrupt Only:
-+ *    This will generate the interrupt to arm core whenever timeout happens.
-+ *
-+ * 2) Interrupt + del3t (Interrupt to firmware (SCP processor)).
-+ *    This will generate interrupt to arm core on 1st timeout happens
-+ *    This will generate interrupt to SCP processor on 2nd timeout happens
-+ *
-+ * 3) Interrupt + Interrupt to SCP processor (called delt3t) + reboot.
-+ *    This will generate interrupt to arm core on 1st timeout happens
-+ *    Will generate interrupt to SCP processor on 2nd timeout happens,
-+ *    if interrupt is configured.
-+ *    Reboot on 3rd timeout.
-+ *
-+ * Driver will use hardware in mode-3 above so that system can reboot in case
-+ * a hardware hang. Also h/w is configured not to generate SCP interrupt, so
-+ * effectively 2nd timeout is ignored within hardware.
-+ *
-+ * First timeout is effectively watchdog pretimeout.
-+ */
-+
-+/* GTI CWD Watchdog (GTI_CWD_WDOG) Register */
-+#define GTI_CWD_WDOG(reg_offset)	(0x8 * reg_offset)
-+#define GTI_CWD_WDOG_MODE_INT_DEL3T_RST	0x3
-+#define GTI_CWD_WDOG_MODE_MASK		GENMASK_ULL(1, 0)
-+#define GTI_CWD_WDOG_LEN_SHIFT		4
-+#define GTI_CWD_WDOG_LEN_MASK		GENMASK_ULL(19, 4)
-+#define GTI_CWD_WDOG_CNT_SHIFT		20
-+#define GTI_CWD_WDOG_CNT_MASK		GENMASK_ULL(43, 20)
-+
-+/* GTI CWD Watchdog Interrupt (GTI_CWD_INT) Register */
-+#define GTI_CWD_INT			0x200
-+#define GTI_CWD_INT_PENDING_STATUS(bit)	(1 << bit)
-+
-+/* GTI CWD Watchdog Interrupt Enable Clear (GTI_CWD_INT_ENA_CLR) Register */
-+#define GTI_CWD_INT_ENA_CLR		0x210
-+#define GTI_CWD_INT_ENA_CLR_VAL(bit)	(1 << bit)
-+
-+/* GTI CWD Watchdog Interrupt Enable Set (GTI_CWD_INT_ENA_SET) Register */
-+#define GTI_CWD_INT_ENA_SET		0x218
-+#define GTI_CWD_INT_ENA_SET_VAL(bit)	(1 << bit)
-+
-+/* GTI CWD Watchdog Poke (GTI_CWD_POKE) Registers */
-+#define GTI_CWD_POKE(reg_offset)	(0x10000 + 0x8 * reg_offset)
-+#define GTI_CWD_POKE_VAL		1
-+
-+struct gti_match_data {
-+	u32 gti_num_timers;
-+};
-+
-+static const struct gti_match_data match_data_octeontx2 = {
-+	.gti_num_timers = 54,
-+};
-+
-+static const struct gti_match_data match_data_cn10k = {
-+	.gti_num_timers = 64,
-+};
-+
-+struct gti_wdt_priv {
-+	struct watchdog_device wdev;
-+	void __iomem *base;
-+	u32 clock_freq;
-+	struct clk *sclk;
-+	/* wdt_timer_idx used for timer to be used for system watchdog */
-+	u32 wdt_timer_idx;
-+	const struct gti_match_data *data;
-+};
-+
-+static irqreturn_t gti_wdt_interrupt(int irq, void *data)
-+{
-+	struct watchdog_device *wdev = data;
-+	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+
-+	/* Clear Interrupt Pending Status */
-+	writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
-+	       priv->base + GTI_CWD_INT);
-+
-+	watchdog_notify_pretimeout(wdev);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int gti_wdt_ping(struct watchdog_device *wdev)
-+{
-+	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+
-+	writeq(GTI_CWD_POKE_VAL,
-+	       priv->base + GTI_CWD_POKE(priv->wdt_timer_idx));
-+
-+	return 0;
-+}
-+
-+static int gti_wdt_start(struct watchdog_device *wdev)
-+{
-+	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	u64 regval;
-+
-+	if (!wdev->pretimeout)
-+		return -EINVAL;
-+
-+	set_bit(WDOG_HW_RUNNING, &wdev->status);
-+
-+	/* Clear any pending interrupt */
-+	writeq(GTI_CWD_INT_PENDING_STATUS(priv->wdt_timer_idx),
-+	       priv->base + GTI_CWD_INT);
-+
-+	/* Enable Interrupt */
-+	writeq(GTI_CWD_INT_ENA_SET_VAL(priv->wdt_timer_idx),
-+	       priv->base + GTI_CWD_INT_ENA_SET);
-+
-+	/* Set (Interrupt + SCP interrupt (DEL3T) + core domain reset) Mode */
-+	regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-+	regval |= GTI_CWD_WDOG_MODE_INT_DEL3T_RST;
-+	writeq(regval, priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-+
-+	return 0;
-+}
-+
-+static int gti_wdt_stop(struct watchdog_device *wdev)
-+{
-+	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	u64 regval;
-+
-+	/* Disable Interrupt */
-+	writeq(GTI_CWD_INT_ENA_CLR_VAL(priv->wdt_timer_idx),
-+	       priv->base + GTI_CWD_INT_ENA_CLR);
-+
-+	/* Set GTI_CWD_WDOG.Mode = 0 to stop the timer */
-+	regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-+	regval &= ~GTI_CWD_WDOG_MODE_MASK;
-+	writeq(regval, priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-+
-+	return 0;
-+}
-+
-+static int gti_wdt_settimeout(struct watchdog_device *wdev,
-+					unsigned int timeout)
-+{
-+	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	u64 timeout_wdog, regval;
-+
-+	/* Update new timeout */
-+	wdev->timeout = timeout;
-+
-+	/* Pretimeout is 1/3 of timeout */
-+	wdev->pretimeout = timeout / 3;
-+
-+	/* Get clock cycles from pretimeout */
-+	timeout_wdog = (u64)priv->clock_freq * wdev->pretimeout;
-+
-+	/* Watchdog counts in 1024 cycle steps */
-+	timeout_wdog = timeout_wdog >> 10;
-+
-+	/* GTI_CWD_WDOG.CNT: reload counter is 16-bit */
-+	timeout_wdog = (timeout_wdog + 0xff) >> 8;
-+	if (timeout_wdog >= 0x10000)
-+		timeout_wdog = 0xffff;
-+
-+	/*
-+	 * GTI_CWD_WDOG.LEN is 24bit, lower 8-bits should be zero and
-+	 * upper 16-bits are same as GTI_CWD_WDOG.CNT
-+	 */
-+	regval = readq(priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-+	regval &= GTI_CWD_WDOG_MODE_MASK;
-+	regval |= (timeout_wdog << (GTI_CWD_WDOG_CNT_SHIFT + 8)) |
-+		   (timeout_wdog << GTI_CWD_WDOG_LEN_SHIFT);
-+	writeq(regval, priv->base + GTI_CWD_WDOG(priv->wdt_timer_idx));
-+
-+	return 0;
-+}
-+
-+static int gti_wdt_set_pretimeout(struct watchdog_device *wdev,
-+					unsigned int timeout)
-+{
-+	struct gti_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	struct watchdog_device *wdog_dev = &priv->wdev;
-+
-+	/* pretimeout should 1/3 of max_timeout */
-+	if (timeout * 3 <= wdog_dev->max_timeout)
-+		return gti_wdt_settimeout(wdev, timeout * 3);
-+
-+	return -EINVAL;
-+}
-+
-+static void gti_clk_disable_unprepare(void *data)
-+{
-+	clk_disable_unprepare(data);
-+}
-+
-+static int gti_wdt_get_cntfrq(struct platform_device *pdev,
-+			      struct gti_wdt_priv *priv)
-+{
-+	int err;
-+
-+	priv->sclk = devm_clk_get(&pdev->dev, NULL);
-+	if (IS_ERR(priv->sclk))
-+		return PTR_ERR(priv->sclk);
-+
-+	err = clk_prepare_enable(priv->sclk);
-+	if (err)
-+		return err;
-+
-+	err = devm_add_action_or_reset(&pdev->dev,
-+				       gti_clk_disable_unprepare, priv->sclk);
-+	if (err)
-+		return err;
-+
-+	priv->clock_freq = clk_get_rate(priv->sclk);
-+	if (!priv->clock_freq)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static const struct watchdog_info gti_wdt_ident = {
-+	.identity = "Marvell GTI watchdog",
-+	.options = WDIOF_SETTIMEOUT | WDIOF_PRETIMEOUT | WDIOF_KEEPALIVEPING |
-+		   WDIOF_MAGICCLOSE | WDIOF_CARDRESET,
-+};
-+
-+static const struct watchdog_ops gti_wdt_ops = {
-+	.owner = THIS_MODULE,
-+	.start = gti_wdt_start,
-+	.stop = gti_wdt_stop,
-+	.ping = gti_wdt_ping,
-+	.set_timeout = gti_wdt_settimeout,
-+	.set_pretimeout = gti_wdt_set_pretimeout,
-+};
-+
-+static int gti_wdt_probe(struct platform_device *pdev)
-+{
-+	struct gti_wdt_priv *priv;
-+	struct device *dev = &pdev->dev;
-+	struct watchdog_device *wdog_dev;
-+	u64 max_pretimeout;
-+	u32 wdt_idx;
-+	int irq;
-+	int err;
-+
-+	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(priv->base),
-+			      "reg property not valid/found\n");
-+
-+	err = gti_wdt_get_cntfrq(pdev, priv);
-+	if (err)
-+		return dev_err_probe(&pdev->dev, err,
-+				     "GTI clock frequency not valid/found");
-+
-+	priv->data = of_device_get_match_data(dev);
-+
-+	/* default use last timer for watchdog */
-+	priv->wdt_timer_idx = priv->data->gti_num_timers - 1;
-+
-+	err = of_property_read_u32(dev->of_node, "marvell,wdt-timer-index",
-+				   &wdt_idx);
-+	if (!err) {
-+		if (wdt_idx >= priv->data->gti_num_timers)
-+			return dev_err_probe(&pdev->dev, err,
-+				"GTI wdog timer index not valid");
-+
-+		priv->wdt_timer_idx = wdt_idx;
-+	}
-+
-+	wdog_dev = &priv->wdev;
-+	wdog_dev->info = &gti_wdt_ident,
-+	wdog_dev->ops = &gti_wdt_ops,
-+	wdog_dev->parent = dev;
-+	/*
-+	 * Watchdog counter is 24 bit where lower 8 bits are zeros
-+	 * This counter decrements every 1024 clock cycles.
-+	 */
-+	max_pretimeout = (GTI_CWD_WDOG_CNT_MASK >> GTI_CWD_WDOG_CNT_SHIFT);
-+	max_pretimeout &= ~0xFFUL;
-+	max_pretimeout = (max_pretimeout * 1024) / priv->clock_freq;
-+	wdog_dev->pretimeout = max_pretimeout;
-+
-+	/* Maximum timeout is 3 times the pretimeout */
-+	wdog_dev->max_timeout = max_pretimeout * 3;
-+	/* Minimum first timeout (pretimeout) is 1, so min_timeout as 3 */
-+	wdog_dev->min_timeout = 3;
-+	wdog_dev->timeout = wdog_dev->pretimeout;
-+
-+	watchdog_set_drvdata(wdog_dev, priv);
-+	platform_set_drvdata(pdev, priv);
-+	gti_wdt_settimeout(wdog_dev, wdog_dev->timeout);
-+	watchdog_stop_on_reboot(wdog_dev);
-+	watchdog_stop_on_unregister(wdog_dev);
-+
-+	err = devm_watchdog_register_device(dev, wdog_dev);
-+	if (err)
-+		return err;
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return dev_err_probe(&pdev->dev, irq, "IRQ resource not found\n");
-+
-+	err = devm_request_irq(dev, irq, gti_wdt_interrupt, 0,
-+			       pdev->name, &priv->wdev);
-+	if (err)
-+		return dev_err_probe(dev, err, "Failed to register interrupt handler\n");
-+
-+	dev_info(dev, "Watchdog enabled (timeout=%d sec)\n", wdog_dev->timeout);
-+	return 0;
-+}
-+
-+static const struct of_device_id gti_wdt_of_match[] = {
-+	{ .compatible = "marvell,cn9670-wdt", .data = &match_data_octeontx2},
-+	{ .compatible = "marvell,cn9880-wdt", .data = &match_data_octeontx2},
-+	{ .compatible = "marvell,cnf9535-wdt", .data = &match_data_octeontx2},
-+	{ .compatible = "marvell,cn10624-wdt", .data = &match_data_cn10k},
-+	{ .compatible = "marvell,cn10308-wdt", .data = &match_data_cn10k},
-+	{ .compatible = "marvell,cnf10518-wdt", .data = &match_data_cn10k},
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, gti_wdt_of_match);
-+
-+static struct platform_driver gti_wdt_driver = {
-+	.driver = {
-+		.name = "gti-wdt",
-+		.of_match_table = gti_wdt_of_match,
-+	},
-+	.probe = gti_wdt_probe,
-+};
-+module_platform_driver(gti_wdt_driver);
-+
-+MODULE_AUTHOR("Bharat Bhushan <bbhushan2@marvell.com>");
-+MODULE_DESCRIPTION("Marvell GTI watchdog driver");
--- 
-2.17.1
-
+T24gMjYuMDUuMjAyMyAwOToyMywgQ29ub3IgRG9vbGV5IHdyb3RlOg0KPiBFWFRFUk5BTCBFTUFJ
+TDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSBrbm93
+IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IEhleSBDbGF1ZGl1LA0KPiANCj4gT24gRnJpLCBN
+YXkgMjYsIDIwMjMgYXQgMDQ6NDc6MjhBTSArMDAwMCwgQ2xhdWRpdS5CZXpuZWFAbWljcm9jaGlw
+LmNvbSB3cm90ZToNCj4+IE9uIDI1LjA1LjIwMjMgMjA6MTQsIENvbm9yIERvb2xleSB3cm90ZToN
+Cj4+Pj4gQ29udmVydCBNaWNyb2NoaXAgUElUNjRCIHRvIFlBTUwuIEFsb25nIHdpdGggaXQgY2xv
+Y2stbmFtZXMgYmluZGluZyBoYXMNCj4+Pj4gYmVlbiBhZGRlZCBhcyB0aGUgZHJpdmVyIG5lZWRz
+IGl0IHRvIGdldCBQSVQ2NEIgY2xvY2tzLg0KPj4+IEkgZG9uJ3QgdGhpbmsgYm90aCBvZiB0aGVz
+ZSBQSVQgdGhpbmdzIG5lZWQgdG8gaGF2ZSBkaWZmZXJlbnQgYmluZGluZw0KPj4+IGZpbGVzLiA5
+MCUgb2YgaXQgaXMgdGhlIHNhbWUsIGp1c3QgdGhlIGNsb2NrLW5hbWVzL251bWJlciAtIHNvIHlv
+dSBjYW4NCj4+DQo+PiBCdXQgdGhlc2UgYXJlIGRpZmZlcmVudCBoYXJkd2FyZSBibG9ja3Mgd2l0
+aCBkaWZmZXJlbnQgZnVuY3Rpb25hbGl0aWVzIGFuZA0KPj4gZGlmZmVyZW50IGRyaXZlcnMuDQo+
+IA0KPiBIYXZpbmcgZGlmZmVyZW50IGRyaXZlcnMgZG9lc24ndCBwcmVjbHVkZSBoYXZpbmcgdGhl
+bSBpbiB0aGUgc2FtZQ0KPiBiaW5kaW5nIHByb3ZpZGVkIHRoZSBmdW5jdGlvbi9kZXNjcmlwdGlv
+biBldGMgYXJlIG1vcmUgb3IgbGVzcw0KPiBpZGVudGljYWwuIEkgd2FzIGNvbmZ1c2VkIGJ5Og0K
+PiANCj4gK2Rlc2NyaXB0aW9uOg0KPiArICBUaGUgNjQtYml0IHBlcmlvZGljIGludGVydmFsIHRp
+bWVyIHByb3ZpZGVzIHRoZSBvcGVyYXRpbmcgc3lzdGVtIHNjaGVkdWxlcg0KPiArICBpbnRlcnJ1
+cHQuIEl0IGlzIGRlc2lnbmVkIHRvIG9mZmVyIG1heGltdW0gYWNjdXJhY3kgYW5kIGVmZmljaWVu
+dCBtYW5hZ2VtZW50LA0KPiArICBldmVuIGZvciBzeXN0ZW1zIHdpdGggbG9uZyByZXNwb25zZSB0
+aW1lcy4NCj4gDQo+ICtkZXNjcmlwdGlvbjoNCj4gKyAgQXRtZWwgcGVyaW9kaWMgaW50ZXJ2YWwg
+dGltZXIgcHJvdmlkZXMgdGhlIG9wZXJhdGluZyBzeXN0ZW3igJlzIHNjaGVkdWxlcg0KPiArICBp
+bnRlcnJ1cHQuIEl0IGlzIGRlc2lnbmVkIHRvIG9mZmVyIG1heGltdW0gYWNjdXJhY3kgYW5kIGVm
+ZmljaWVudCBtYW5hZ2VtZW50LA0KPiArICBldmVuIGZvciBzeXN0ZW1zIHdpdGggbG9uZyByZXNw
+b25zZSB0aW1lLg0KPiANCj4gVGhvc2Ugc2VlbWVkIGxpa2UgdGhleSBkbyB0aGUgc2FtZSB0aGlu
+ZyB0byBtZSENCg0KVGhleSBkbyB0aGUgc2FtZSB0aGluZywgdGhleSBhcmUgdGltZXJzLi4uIEJ1
+dCB0aGUgd2F5IHRoZXkgZG8gaXQgKGZyb20NCmhhcmR3YXJlIHBlcnNwZWN0aXZlKSBpcyB0b3Rh
+bGx5IGRpZmZlcmVudC4gV2l0aCB0aGlzIHdvdWxkIHlvdSBzdGlsbA0KcHJlZmVyIHRvIGhhdmUg
+dGhlbSBtZXJnZWQ/DQoNClRoYW5rIHlvdSwNCkNsYXVkaXUNCg0KPiANCj4gQ2hlZXJzLA0KPiBD
+b25vcg0KPiANCj4+DQo+Pj4gY29tYmluZSB0aGUgdHdvIGludG8gb25lIGZpbGUgd2l0aCBhbg0K
+Pj4NCj4+DQo+PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Xw0KPj4gbGludXgtYXJtLWtlcm5lbCBtYWlsaW5nIGxpc3QNCj4+IGxpbnV4LWFybS1rZXJuZWxA
+bGlzdHMuaW5mcmFkZWFkLm9yZw0KPj4gaHR0cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9saW51eC1hcm0ta2VybmVsDQoNCg==
