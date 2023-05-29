@@ -2,63 +2,66 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888147144CD
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 May 2023 08:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CDE714928
+	for <lists+linux-watchdog@lfdr.de>; Mon, 29 May 2023 14:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbjE2G2s (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 29 May 2023 02:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
+        id S231479AbjE2MNY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 29 May 2023 08:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231682AbjE2G2i (ORCPT
+        with ESMTP id S230512AbjE2MNX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 29 May 2023 02:28:38 -0400
+        Mon, 29 May 2023 08:13:23 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520911BC;
-        Sun, 28 May 2023 23:28:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A525DB;
+        Mon, 29 May 2023 05:13:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685341689; x=1716877689;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dh0EL4hNH/yV6+3G0mpHZLbVKP4ILEfFeFyXC+i3GrQ=;
-  b=2NmnZp6HaVGmrA1AEITvTv7CHjLplUFnxV2vJ07Uz/CNJZt6bKSPZNMc
-   QrBxFPndnvvnwko9++CuagztkyIwGIrcPdg67aozo5Ue2VPxSaTzxEwwb
-   6BJERPcCJsvZZEFW3gu7FoK7DNfb1OOGWoQajTTgpb5glPJaH9iORJ6s0
-   hfohjILa/pyL62kUlML4ENDpuFG/IeUHktcPtY1m59lx4AtXAMij/668H
-   v2lg7H/l6kgvcZTG/1NSOqLsEjA0Y9iYsIdxG9W4BmBT16tRVYg+Rakw5
-   EdHg/sNLwr2O4JM0m+JvUqUGw2siqaOLgu+hjC8iVGAQnEU4PUMf+FZKy
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,200,1681196400"; 
-   d="scan'208";a="215861693"
-X-Amp-Result: SKIPPED(no attachment in message)
+  t=1685362402; x=1716898402;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5md7DbVFXKJzY67OTXJwee5/al1KamlL2Bs37Sy9Ulo=;
+  b=w2WMgFHfJG8qItFm995jMjr9Gt3wkaUeNYrK+qTOIIo129vBxv68Yvxh
+   OxblKVFSVK/am0/a1CaPH1gqLf3WQMKog67uRDKbZDMenHIn3wIfWcwDC
+   so56Yi6PEOAZ+dg3p0WQ4aUpif7UwhGqK52ezQBYv8QGUFehldoOShHgz
+   v2fVhpROCtf50t82nT79EJolUNrLH+aWvWMATGlVS2z3MxfkdMPmwDDr+
+   y70IkwYM0EUj5u3AeM0CJfwAUQKr7gzBvgmY2sNVXsE25V/MUxwi0CsJ7
+   yLLjGOuB4stkViYGNdSjjXScD9nFAsa9VL2dGBkShosa0YtA2K4HXJ80C
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,201,1681196400"; 
+   d="asc'?scan'208";a="227436470"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 May 2023 23:26:44 -0700
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 May 2023 05:13:20 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sun, 28 May 2023 23:26:42 -0700
-Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Sun, 28 May 2023 23:26:37 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+ 15.1.2507.21; Mon, 29 May 2023 05:13:20 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 29 May 2023 05:13:17 -0700
+Date:   Mon, 29 May 2023 13:12:55 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
         <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
         <alexandre.belloni@bootlin.com>, <daniel.lezcano@linaro.org>,
         <tglx@linutronix.de>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>
-CC:     <devicetree@vger.kernel.org>,
+        <linux@roeck-us.net>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        "Claudiu Beznea" <claudiu.beznea@microchip.com>
-Subject: [PATCH v2 4/4] dt-bindings: timer: atmel,at91rm9200-st: convert to yaml
-Date:   Mon, 29 May 2023 09:26:04 +0300
-Message-ID: <20230529062604.1498052-5-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230529062604.1498052-1-claudiu.beznea@microchip.com>
+        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
+Subject: Re: [PATCH v2 1/4] ARM: dts: at91: sama7g5: keep only
+ microchip,sam9x60-pit64b compatible for pit64b
+Message-ID: <20230529-boxcar-magma-ecce8cf747e4@wendy>
 References: <20230529062604.1498052-1-claudiu.beznea@microchip.com>
+ <20230529062604.1498052-2-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="R1SFB4Zdugmnpzbz"
+Content-Disposition: inline
+In-Reply-To: <20230529062604.1498052-2-claudiu.beznea@microchip.com>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,106 +72,65 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Convert Microchip AT91 system timer to YAML.
+--R1SFB4Zdugmnpzbz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- .../devicetree/bindings/arm/atmel-sysregs.txt |  9 ---
- .../bindings/timer/atmel,at91rm9200-st.yaml   | 65 +++++++++++++++++++
- 2 files changed, 65 insertions(+), 9 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml
+Hey Claudiu,
 
-diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-index 54d3f586403e..68c0eacb01ac 100644
---- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-+++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-@@ -4,15 +4,6 @@ Chipid required properties:
- - compatible: Should be "atmel,sama5d2-chipid" or "microchip,sama7g5-chipid"
- - reg : Should contain registers location and length
- 
--System Timer (ST) required properties:
--- compatible: Should be "atmel,at91rm9200-st", "syscon", "simple-mfd"
--- reg: Should contain registers location and length
--- interrupts: Should contain interrupt for the ST which is the IRQ line
--  shared across all System Controller members.
--- clocks: phandle to input clock.
--Its subnodes can be:
--- watchdog: compatible should be "atmel,at91rm9200-wdt"
--
- RAMC SDRAM/DDR Controller required properties:
- - compatible: Should be "atmel,at91rm9200-sdramc", "syscon"
- 			"atmel,at91sam9260-sdramc",
-diff --git a/Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml b/Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml
-new file mode 100644
-index 000000000000..a75644e1a2fe
---- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml
-@@ -0,0 +1,65 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/timer/atmel,at91rm9200-st.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microchip AT91 System Timer (ST)
-+
-+maintainers:
-+  - Nicolas Ferre <nicolas.ferre@microchip.com>
-+  - Alexandre Belloni <alexandre.belloni@microchip.com>
-+  - Claudiu Beznea <claudiu.beznea@microchip.com>
-+
-+description:
-+  Microchip AT91 system timer integrates a period interval timer, a watchdog
-+  timer and a real-time timer.
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: atmel,at91rm9200-st
-+      - const: syscon
-+      - const: simple-mfd
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    description:
-+      Contain interrupt for the ST which is the IRQ line shared across all
-+      system controller members.
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  watchdog:
-+    $ref: ../watchdog/atmel,at91rm9200-wdt.yaml
-+    description:
-+      Child node describing watchdog.
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    st: timer@fffffd00 {
-+        compatible = "atmel,at91rm9200-st", "syscon", "simple-mfd";
-+        reg = <0xfffffd00 0x100>;
-+        interrupts = <1 IRQ_TYPE_LEVEL_HIGH 7>;
-+        clocks = <&slow_xtal>;
-+
-+        watchdog {
-+            compatible = "atmel,at91rm9200-wdt";
-+        };
-+    };
-+
-+...
--- 
-2.34.1
+On Mon, May 29, 2023 at 09:26:01AM +0300, Claudiu Beznea wrote:
+> SAM9X60 and SAMA7G5 PIT64Bs are 1 to 1 compatible. Thus, there is no
+> need for specific compatible string on SAMA7G5.
 
+Generally, soc-specific compatibles are something that we want people to
+add, not remove!
+
+Cheers,
+Conor.
+
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+>  arch/arm/boot/dts/sama7g5.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.d=
+tsi
+> index 886b6209a71e..500b00508621 100644
+> --- a/arch/arm/boot/dts/sama7g5.dtsi
+> +++ b/arch/arm/boot/dts/sama7g5.dtsi
+> @@ -610,7 +610,7 @@ eic: interrupt-controller@e1628000 {
+>  		};
+> =20
+>  		pit64b0: timer@e1800000 {
+> -			compatible =3D "microchip,sama7g5-pit64b", "microchip,sam9x60-pit64b";
+> +			compatible =3D "microchip,sam9x60-pit64b";
+>  			reg =3D <0xe1800000 0x4000>;
+>  			interrupts =3D <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>;
+>  			clocks =3D <&pmc PMC_TYPE_PERIPHERAL 70>, <&pmc PMC_TYPE_GCK 70>;
+> @@ -618,7 +618,7 @@ pit64b0: timer@e1800000 {
+>  		};
+> =20
+>  		pit64b1: timer@e1804000 {
+> -			compatible =3D "microchip,sama7g5-pit64b", "microchip,sam9x60-pit64b";
+> +			compatible =3D "microchip,sam9x60-pit64b";
+>  			reg =3D <0xe1804000 0x4000>;
+>  			interrupts =3D <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
+>  			clocks =3D <&pmc PMC_TYPE_PERIPHERAL 71>, <&pmc PMC_TYPE_GCK 71>;
+> --=20
+> 2.34.1
+>=20
+
+--R1SFB4Zdugmnpzbz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHSWxgAKCRB4tDGHoIJi
+0t+sAP9b1fAG2shXh6XkwndHkKJExcRQb6/ZWd0pNkW+CpffRAEAhlCCUcoKdqOb
+NlQK/6/nZLNE8smgroquBQyIBPiYwwE=
+=S/TJ
+-----END PGP SIGNATURE-----
+
+--R1SFB4Zdugmnpzbz--
