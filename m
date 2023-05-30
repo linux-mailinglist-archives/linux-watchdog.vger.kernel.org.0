@@ -2,115 +2,123 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE69715EB2
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 May 2023 14:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 924BA715F71
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 May 2023 14:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232042AbjE3MPR (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 30 May 2023 08:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45126 "EHLO
+        id S231503AbjE3MaL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 30 May 2023 08:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231702AbjE3MPN (ORCPT
+        with ESMTP id S231627AbjE3M3z (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 30 May 2023 08:15:13 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA8C10E;
-        Tue, 30 May 2023 05:15:06 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b01d912924so34326045ad.1;
-        Tue, 30 May 2023 05:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685448906; x=1688040906;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TSonn1Wj9WYlO2/wi9meZ0Hj4Mrbv3g+ANp9gt9DWKc=;
-        b=D2y1iirxlOA1whLuxkn4Cvr4N0dbHeYrsvnX/+ROgnj6TcH3fOAkZ+A+lXHhJ8pZSr
-         aJQBSHpFiFZtfVwS8ouikmfLrxNuteaojzMBzDMNU0YEdTkl5K26GOpI6p1i001x016y
-         WQP+6qaXhJT+lRPehyDteIoJ+iHVPiPb9sjqfkSM79IMpZxMybLyiSEx3XnodtIaB6AN
-         pZbPr88yxZA1WoSS9odSqdmVYY4ZlPS6kqiEl6wVa8yApoMF1SH1N8FAcwkY9Nrq3ipU
-         vD0awE1EqlVYbQvyvPCw8bd4q8OPkEVa+YlouEdhpt7XrYdWzOKjjoOvucgLx67xIKIf
-         qLbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685448906; x=1688040906;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TSonn1Wj9WYlO2/wi9meZ0Hj4Mrbv3g+ANp9gt9DWKc=;
-        b=AuGKE4ooF+GWHKdSkG+cZCEasEsixsuCfOMEK9HP3meAH507r0d+fylg6RN+2Po7Ow
-         Ft/rkR/5QIf1jvZCSAzEKCjmJouKe0jttUulqJCgUpcGJxiXkx7LLoVnAYQx1wZABvOr
-         1TZjgb/P8eNo4ELEzSLaNfCYvFjeBgqCjVxllZ58z4c7Ik5P/Hq1isbk1M/m3D0ucsJM
-         g4SPCWsYw7SHnSsC/Q+vlKY+L+K9p25hz1Ud1P65URd/R9oKcolF7iOfUA+lMVgACKAY
-         t8rsaVJsWe8bSSE3F5+m+zHwF29qxeEH1GWtqRr6sfn29HZUB4/kpdwQTzMyZgY87RD3
-         nKrw==
-X-Gm-Message-State: AC+VfDwskGk8Fp0XveyAWxoowFgD+opX/99Wr6V+6izamH/cL92L01pk
-        UG4tX8eknQ2u9em6m1wbpHk=
-X-Google-Smtp-Source: ACHHUZ5y59N4Y6nAkf/RppC21TtkyrkJVUslucsvcKbF1weMf1kjkHnotOIfvHjNLnzJYMpVuxbWlw==
-X-Received: by 2002:a17:902:bd8b:b0:1ab:1b8:8a5f with SMTP id q11-20020a170902bd8b00b001ab01b88a5fmr2011127pls.33.1685448905794;
-        Tue, 30 May 2023 05:15:05 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jc12-20020a17090325cc00b001aaef9d0102sm5382021plb.197.2023.05.30.05.15.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 05:15:05 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 30 May 2023 05:15:04 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Srinivas Neeli <srinivas.neeli@amd.com>
-Cc:     shubhrajyoti.datta@amd.com, michal.simek@amd.com,
-        srinivas.goud@amd.com, wim@linux-watchdog.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, git@amd.com, git@xilinx.com,
-        neelisrinivas18@gmail.com
-Subject: Re: [PATCH V4 4/4] MAINTAINERS: Add support for Xilinx versal
- watchdog
-Message-ID: <70f3a218-c4ac-4614-afb8-09e68a4d1e4f@roeck-us.net>
-References: <20230420104231.2243079-1-srinivas.neeli@amd.com>
- <20230420104231.2243079-5-srinivas.neeli@amd.com>
+        Tue, 30 May 2023 08:29:55 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842E11B5;
+        Tue, 30 May 2023 05:29:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1685449781; x=1716985781;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rURsonAWbqRN3vUMqXSgbcSJQ8+RR/S84Z2YjMifaro=;
+  b=m6G8tVd/sP7mpIS6jlPA9kelMUiGbru72hrZ7AdLqxNvNFtaGivMeApj
+   btGRw69O0dqAstsk9LdlGPcs/YKB6vhRu3iUqKozj2rzEn4VxMLFi7Ozr
+   EadN2JP/irPWnf9w/F0PdwrMXqfNFSI0MlFzELYcjm0x+gsKho1xTeq+O
+   P6UED+CA8Xg6s60HcW+STlwaR1ep1MjRcLhKZNgPV+4dlei+ApuRfJzfK
+   A3lL9YDjNqfx4LCIzJum+JvGlqLqoLV+AFEpYPmc9v1uV2UNqC4jN49pD
+   Nbvth3ofzRKgVCxq8sXnJMo2Im+FpoNXacXDZN8yeIv1tMUmqKuJWNy7F
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,204,1681196400"; 
+   d="scan'208";a="217938016"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 May 2023 05:29:28 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 30 May 2023 05:29:17 -0700
+Received: from [10.159.205.49] (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Tue, 30 May 2023 05:29:15 -0700
+Message-ID: <83f32f3a-ed3e-e0d3-f7a0-d137a273c667@microchip.com>
+Date:   Tue, 30 May 2023 14:29:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230420104231.2243079-5-srinivas.neeli@amd.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 0/3] dt-bindings: timer: Microchip AT91 convert to YAML
+Content-Language: en-US
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <alexandre.belloni@bootlin.com>,
+        <daniel.lezcano@linaro.org>, <tglx@linutronix.de>,
+        <wim@linux-watchdog.org>, <linux@roeck-us.net>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
+References: <20230530090758.1652329-1-claudiu.beznea@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20230530090758.1652329-1-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Apr 20, 2023 at 04:12:31PM +0530, Srinivas Neeli wrote:
-> Added entry for Xilinx versal watchdog driver.
+On 30/05/2023 at 11:07, Claudiu Beznea wrote:
+> Hi,
 > 
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
+> Series converts Microchip AT91 timers DT bindings to YAML. Along with it the
+> atmel,at91rm9200-wdt has been converted and introduced in this series
+> as it is referenced by atmel,at91rm9200-st.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+For the whole series:
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-> ---
-> Changes in V4:
-> -None
-> Changes in V3:
-> -None
-> ---
->  MAINTAINERS | 2 ++
->  1 file changed, 2 insertions(+)
+Thanks Claudiu and Conor.
+Best regards,
+   Nicolas
+
+> Changes in v3:
+> - removed patch 1/4 from v2
+> - in patch 1/3 keep interrupt description only for PIT case (not for PIT64b)
+>    and updated interrupt description to emphasize blocks part of the system
+>    controller; note that system controller components may be different b/w
+>    different Microchip AT91 SoCs;
+> - in patch 3/3 updated interrupt description to emphasize blocks part of the
+>    system controller; also, corrected Alexandre's email address
+> - collected tags.
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 327901c9f1d1..388305608418 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -23148,8 +23148,10 @@ M:	Srinivas Neeli <srinivas.neeli@amd.com>
->  R:	Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
->  R:	Michal Simek <michal.simek@amd.com>
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/watchdog/xlnx,versal-wwdt.yaml
->  F:	Documentation/devicetree/bindings/watchdog/xlnx,xps-timebase-wdt.yaml
->  F:	drivers/watchdog/of_xilinx_wdt.c
-> +F:	drivers/watchdog/xilinx_wwdt.c
->  
->  XILINX XDMA DRIVER
->  M:	Lizhi Hou <lizhi.hou@amd.com>
-> -- 
-> 2.25.1
+> Changes in v2:
+> - fixed compilation errors (sorry for that in v1)
+> - moved DTS patch as the 1st patch in series
+> - squash PIT and PIT64B into the same documentation file
+> - use Microchip in titles, descriptions and commit message
+> - in patch 4/4 remove oneOf from compatible section
 > 
+> Claudiu Beznea (3):
+>    dt-bindings: timer: atmel,at91sam9260-pit: convert to yaml
+>    dt-bindings: watchdog: atmel,at91rm9200-wdt: convert to yaml
+>    dt-bindings: timer: atmel,at91rm9200-st: convert to yaml
+> 
+>   .../devicetree/bindings/arm/atmel-sysregs.txt | 21 ----
+>   .../bindings/timer/atmel,at91rm9200-st.yaml   | 66 +++++++++++++
+>   .../bindings/timer/atmel,at91sam9260-pit.yaml | 99 +++++++++++++++++++
+>   .../watchdog/atmel,at91rm9200-wdt.yaml        | 29 ++++++
+>   .../watchdog/atmel-at91rm9200-wdt.txt         |  9 --
+>   5 files changed, 194 insertions(+), 30 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91rm9200-st.yaml
+>   create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
+>   create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml
+>   delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
+> 
+
+-- 
+Nicolas Ferre
+
