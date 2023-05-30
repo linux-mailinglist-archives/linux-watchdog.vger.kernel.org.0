@@ -2,54 +2,54 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362B77164CD
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 May 2023 16:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01887164D2
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 May 2023 16:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbjE3OtF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 30 May 2023 10:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
+        id S232651AbjE3OtG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 30 May 2023 10:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjE3OtC (ORCPT
+        with ESMTP id S232632AbjE3OtF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 30 May 2023 10:49:02 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147F411D
-        for <linux-watchdog@vger.kernel.org>; Tue, 30 May 2023 07:49:01 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2af7081c9ebso48687341fa.1
-        for <linux-watchdog@vger.kernel.org>; Tue, 30 May 2023 07:49:00 -0700 (PDT)
+        Tue, 30 May 2023 10:49:05 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC92EC
+        for <linux-watchdog@vger.kernel.org>; Tue, 30 May 2023 07:49:03 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-5147e8972a1so7307560a12.0
+        for <linux-watchdog@vger.kernel.org>; Tue, 30 May 2023 07:49:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685458139; x=1688050139;
+        d=linaro.org; s=google; t=1685458142; x=1688050142;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hlemkSAZzL/U9gKFtrjPiWNMuzaH3xd08e53mEnq57M=;
-        b=q76h1ZEyA3kflY8T+tAg6eEkOHLYK0YZTFqFbCCKF2K9iyLput/pxGqmVSlGXhqv7P
-         WnAHGN3sBVvANR/w6I/EN92qOLxT7kfA+TYRrbMeQfQ5Ix17P62ma2yKm6N1X7n7zy6a
-         9nl5jWppRRrsIKlusdV7Z4xtzwxXfCbcQGTgabenNUfaXkr6pbTiAq/s44M2sqhPwN5Y
-         aF2N5hQt6Q2QJHKpFbTR/tFqhDOls0J+/KD33Q68HF2m1O8GZk0L7u6CimkvrwEvNDi8
-         9vyiJE+L61MBUJCGSp7RCegRZ1TxnfE/0ySvZZCeQAKuFtx+4L45fUMJd/FEseCp9LT+
-         MzUw==
+        bh=sC1DLYYtBIULk7ShCQFp6sqNI5K0yrBz0U0PM92RpVI=;
+        b=cYj/0UdvnrYRxLWE30Pag0dMjBlnkPhq9SfEVLhSh0h7wesZCsN7ZQbFx9LGd0w0o6
+         p/1LFcwMRXMEa89KQvnwZokxdlcPl1Q6M5yAc7YujbUYgQ+x1MrzbImjdinSrwy2+AC2
+         Odd/VANoBeApcDTBI50o53gAvId28G2cGWCrdZcual2NYoPCgjUgOD3Zi/HCVDNkJF3e
+         fC4YwBfzsEOmebe+lJL+K0fUTmIILgzkJdJ+9zQAivS7vBtvmSy5iDWTeVZUT3qxMhsI
+         ikFqfe7TYZpvhPUiLdoS3ycpGKRL3nP0wOHGf2c76lHh2YHavqCNPWaeAEPAv4Klr0Nb
+         DG7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685458139; x=1688050139;
+        d=1e100.net; s=20221208; t=1685458142; x=1688050142;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hlemkSAZzL/U9gKFtrjPiWNMuzaH3xd08e53mEnq57M=;
-        b=VRk+vUqh576JR6VtVRbBZ0ZnTep/sODw3NsJV/WSTzMn2W+lJk/5QbAj0Zp1QZY8rZ
-         rZKZUJRH65i31OsWUZ2Om1VPSmOPNiTI4EZNrQVOd7TL7jbQfqazn7mq3kOQPTOkviga
-         0oeZ55UCTRjZqQsyUqXaHs6STABoRRR+bCWLN9xNDOi6Bt422P66xkA7ovzqyQNBeho5
-         iwqgUI7nDvPIMJem824O91gKBVRi88cZOlTndYz3Jg03IEdPyBBTCXrbH+hURgc/ktCM
-         vfH44BOMrBGALDUToEhRwBZ6Z92q0cDnqZdElVsoeGMB/S98OnqytKvHJ+38cp5xw7ov
-         PuHQ==
-X-Gm-Message-State: AC+VfDy4NljQ6kL56RpntVN+wWCWcLEn+N8CYbNCAHkXKc4RmaHv8sY3
-        CjdITlVb9IkoBl5ND+1Aq4KvBw==
-X-Google-Smtp-Source: ACHHUZ75iw6ri2Ado2xzCbkAC1E3tQDvSOkgKFSnxjKffw7eTsxcgM6foIzrYPzzNhulhzOltIlCVg==
-X-Received: by 2002:a2e:6a17:0:b0:2ac:b63e:94a6 with SMTP id f23-20020a2e6a17000000b002acb63e94a6mr966165ljc.21.1685458139198;
-        Tue, 30 May 2023 07:48:59 -0700 (PDT)
+        bh=sC1DLYYtBIULk7ShCQFp6sqNI5K0yrBz0U0PM92RpVI=;
+        b=eMeAp+gNMNR1BT/5a08o6vHS9M8qL0xZioOwYQVF88RrnQClpccQGNlzo8+bwOvPfc
+         ctszAkC+lKqLywP4FmE+E1cQxj657ePVOXKr7h+o48hXymbxwnDfZh5/Doc43SzTJ32u
+         fBerOhDe9V3pG1yrscw8QYwlQE2nlMaTdXyikdtzLRevT3KZm/0g5Km6E7ewXEurdg2k
+         pZsj68zqiJvWjxZ6gizgx0xEaetjaNbP6UmoJ9quS07jp0eDR2ef+k78yCBvTiE3Py5z
+         Vt5/fxXRkj6rLA8t7pImPFmJw9CJ1Z8myeLC86o8C5hB+xFePpqjw+gg3KYfNsFI3rDK
+         tNkg==
+X-Gm-Message-State: AC+VfDxkEIKSB/AD3LktVEXtxN847LVvMvtEp7Im5JUAH7rfOnO+hS76
+        k2mYQLV8CSJXllU5PoYUDOEdcw==
+X-Google-Smtp-Source: ACHHUZ5ekV/qA/jutZ5TY0nfdJ3IfVJCe2ml8+qjE57PgMROisWg3g5xJPBlz+bFlKz96buQX6Bymg==
+X-Received: by 2002:a17:906:9b88:b0:970:925:6563 with SMTP id dd8-20020a1709069b8800b0097009256563mr2507516ejc.8.1685458142210;
+        Tue, 30 May 2023 07:49:02 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id q21-20020aa7cc15000000b00514b2717ec6sm631283edt.28.2023.05.30.07.48.56
+        by smtp.gmail.com with ESMTPSA id q21-20020aa7cc15000000b00514b2717ec6sm631283edt.28.2023.05.30.07.48.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 07:48:58 -0700 (PDT)
+        Tue, 30 May 2023 07:49:01 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Vinod Koul <vkoul@kernel.org>,
         Kishon Vijay Abraham I <kishon@kernel.org>,
@@ -76,9 +76,9 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh@kernel.org>,
         Tony Lindgren <tony@atomide.com>,
         Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [PATCH 1/7] dt-bindings: phy: intel,combo-phy: restrict node name suffixes
-Date:   Tue, 30 May 2023 16:48:45 +0200
-Message-Id: <20230530144851.92059-2-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 2/7] dt-bindings: pwm: restrict node name suffixes
+Date:   Tue, 30 May 2023 16:48:46 +0200
+Message-Id: <20230530144851.92059-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
 References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
@@ -87,7 +87,7 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -107,22 +107,22 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: Tony Lindgren <tony@atomide.com>
 Cc: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- Documentation/devicetree/bindings/phy/intel,combo-phy.yaml | 2 +-
+ Documentation/devicetree/bindings/pwm/pwm.yaml | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/phy/intel,combo-phy.yaml b/Documentation/devicetree/bindings/phy/intel,combo-phy.yaml
-index 5d54b0a0e873..7dd6a4d94b48 100644
---- a/Documentation/devicetree/bindings/phy/intel,combo-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/intel,combo-phy.yaml
-@@ -15,7 +15,7 @@ description: |
+diff --git a/Documentation/devicetree/bindings/pwm/pwm.yaml b/Documentation/devicetree/bindings/pwm/pwm.yaml
+index 3c01f85029e5..abd9fa873354 100644
+--- a/Documentation/devicetree/bindings/pwm/pwm.yaml
++++ b/Documentation/devicetree/bindings/pwm/pwm.yaml
+@@ -13,7 +13,7 @@ select: false
  
  properties:
    $nodename:
--    pattern: "combophy(@.*|-[0-9a-f])*$"
-+    pattern: "combophy(@.*|-([0-9]|[1-9][0-9]+))?$"
+-    pattern: "^pwm(@.*|-[0-9a-f])*$"
++    pattern: "^pwm(@.*|-([0-9]|[1-9][0-9]+))?$"
  
-   compatible:
-     items:
+   "#pwm-cells":
+     description:
 -- 
 2.34.1
 
