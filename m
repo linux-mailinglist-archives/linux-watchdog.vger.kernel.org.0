@@ -2,54 +2,54 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D88A7164DD
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 May 2023 16:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB657164E2
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 May 2023 16:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232779AbjE3OtL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 30 May 2023 10:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
+        id S232730AbjE3OtO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 30 May 2023 10:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232683AbjE3OtJ (ORCPT
+        with ESMTP id S232710AbjE3OtN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 30 May 2023 10:49:09 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A5EEC
-        for <linux-watchdog@vger.kernel.org>; Tue, 30 May 2023 07:49:06 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2af2ef0d0daso46807441fa.2
-        for <linux-watchdog@vger.kernel.org>; Tue, 30 May 2023 07:49:06 -0700 (PDT)
+        Tue, 30 May 2023 10:49:13 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4DD10E
+        for <linux-watchdog@vger.kernel.org>; Tue, 30 May 2023 07:49:09 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-5147f4bbfdaso5907683a12.0
+        for <linux-watchdog@vger.kernel.org>; Tue, 30 May 2023 07:49:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685458145; x=1688050145;
+        d=linaro.org; s=google; t=1685458148; x=1688050148;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IYFfkWfA3QoQgVvoKYaWNHgXlyKDc3MLd+zuCLSKJyA=;
-        b=cNmu0nPgKOyLJPsM0EDcisLnunATo7htMuua8fjjb2dhKb/bdEMfj0asRSzmGsuh7P
-         44j7Vq1bzp6YWznZJLTZKq9bX9Z3Y91EY6efqTnbDcYlS+17WXOfAJyDYBBeO0P2PLpY
-         Ew5/3U+6ptw6SD59IJt1h2M8GgCyLrFIuSdA0ZRwApWRnnHYfCd3qwfbTFeLjA8jUcob
-         zagphslihs9ef2gj/4YWtdblbVQEHcZE+ZmFnDSeLxgPfiZfYLR2qh68RjdNaRYaKsgo
-         ydoZ+VXgm0D+DG+h+FoHCLSaTTFTZyv5Wjgaee+3q2hGOMaZfSi14hWdrFXBSP52xi4+
-         P6YA==
+        bh=EDtOZScMEhQcxZ0qCP2mG/VW4cw5TvuSdeS8G5ww6IY=;
+        b=QXG1N9nMirFW5x9su+89Sr2YJxHMWbZ7KcizZ5iER13vf1DLIImohOn0evXipGmnBk
+         e2KrLr9sWalAqVL9rZdCzITLPKLYpYgTu5KVHeJc2PPYQaoA9PnCswuJSsDJifPlH7Iq
+         MivJ36BgLvk8rAGSn63g8E5VzaUbsSVNSzKJ91fAf4BNNBtR85ni5HYHTu8Hy64NX0Hu
+         JYoHtS3br90Trzl+YOkYrkIEVZOsfeAOEUi9GLF9Qkrh5i1yR1snbODHovA8Wp66MyEA
+         w1yfm3AmfAb6N21GieYTVCoXvRpNXIPyrYul8/w2zEjQ4axkaLtK0wR5uP/h0woXs/gW
+         dZag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685458145; x=1688050145;
+        d=1e100.net; s=20221208; t=1685458148; x=1688050148;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IYFfkWfA3QoQgVvoKYaWNHgXlyKDc3MLd+zuCLSKJyA=;
-        b=KutGHuaEkmeoMt4BaacKwLoZPMqpPNKd3FrKnU72PYftg2BfWuf7ZChi3MDgEVCqOw
-         Nk8s31dSYwsmyiyFA479zZPQLFgcAF6wEHGGlqhxz2bOgp1b1Bz8WqwDGUUszwNQA2ld
-         VFOfReiwT4kUS8dAImwSwf66DRHNH5UbS04YHCp2IUisb/3AY7Myd2UQsO56nEpOsM/L
-         6T6eV98JMQ71QcVVtZtGBZ//3vxO74i7J6oSHfmjqisAWyPXf2zm89JOEp6jKYmpUoab
-         5JrwWYNOjENB7y5k5mXv3OOxMrNdKmj1AbXQH7xauSJ7Aw+1QR4Em2El2pPcXyxd/7Ol
-         LeMQ==
-X-Gm-Message-State: AC+VfDzdPlll+KPEl+PBTNMSpesLG6NPnCcJbUlKCTg3sn8xy5m0Ow2a
-        LbgC+24xM44XlT2ukIpV+S2ZiA==
-X-Google-Smtp-Source: ACHHUZ5jvz5LnAumNP/2xr9PcMdbMsGITdxeArnebJmxulNAPz1T+umYnd5f3D0F0Ae9rFUUNWklSw==
-X-Received: by 2002:a05:651c:87:b0:2af:1fd4:9011 with SMTP id 7-20020a05651c008700b002af1fd49011mr906793ljq.34.1685458144944;
-        Tue, 30 May 2023 07:49:04 -0700 (PDT)
+        bh=EDtOZScMEhQcxZ0qCP2mG/VW4cw5TvuSdeS8G5ww6IY=;
+        b=UTCwMNT6W7pKFyCa/TS5OZA3OE43pKYufsmz0V/VL3VNFN9PQABVUjmg3WJk5JS/ya
+         oSQzZS/kMaC8bb0uA4RW6d5SAJpM8C/anjxm0kTZOBX9V6arAoPkggktEMNt2oOlysLK
+         lp5wPlQVHntpUn/7TIs+cx1pUpLUwD2cpinMNP7fi0iON+ArzECXEUMoG1kGN6FIRSOc
+         O6AK4joFe2MIUQHm2gwqL7eRumFkvuLR4FqTRiz9XGF04wjGrukIxlRrr3iqwki/gjiO
+         5p3jxgJ0aofKQu1f/AHeaeCidZBdZt77I1b/skOSOMyIWzYVz2cr2eVTsu0jwKI0IZNp
+         B7Eg==
+X-Gm-Message-State: AC+VfDw+7FEC2LqDOa+9ldaNJ7Ye9+xUdkIeNzjoYOM96XMups7+ZsqA
+        MEwZjOzzkZ9xtcHVQonEMQpHIQ==
+X-Google-Smtp-Source: ACHHUZ5gmAumXj2b1GIfXBoPyWfnVelqgUTij3Kbup650+F2Nc8xc8UrKiGkys3OMi8/buw0FLqxBg==
+X-Received: by 2002:a50:ee04:0:b0:514:90de:423e with SMTP id g4-20020a50ee04000000b0051490de423emr1958340eds.36.1685458147907;
+        Tue, 30 May 2023 07:49:07 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id q21-20020aa7cc15000000b00514b2717ec6sm631283edt.28.2023.05.30.07.49.02
+        by smtp.gmail.com with ESMTPSA id q21-20020aa7cc15000000b00514b2717ec6sm631283edt.28.2023.05.30.07.49.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 07:49:04 -0700 (PDT)
+        Tue, 30 May 2023 07:49:07 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Vinod Koul <vkoul@kernel.org>,
         Kishon Vijay Abraham I <kishon@kernel.org>,
@@ -76,9 +76,9 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh@kernel.org>,
         Tony Lindgren <tony@atomide.com>,
         Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [PATCH 3/7] dt-bindings: rtc: restrict node name suffixes
-Date:   Tue, 30 May 2023 16:48:47 +0200
-Message-Id: <20230530144851.92059-4-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 4/7] dt-bindings: slimbus: restrict node name suffixes
+Date:   Tue, 30 May 2023 16:48:48 +0200
+Message-Id: <20230530144851.92059-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
 References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
@@ -107,22 +107,22 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: Tony Lindgren <tony@atomide.com>
 Cc: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- Documentation/devicetree/bindings/rtc/rtc.yaml | 2 +-
+ Documentation/devicetree/bindings/slimbus/slimbus.yaml | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/rtc/rtc.yaml b/Documentation/devicetree/bindings/rtc/rtc.yaml
-index c6fff5486fe6..efb66df82782 100644
---- a/Documentation/devicetree/bindings/rtc/rtc.yaml
-+++ b/Documentation/devicetree/bindings/rtc/rtc.yaml
-@@ -15,7 +15,7 @@ description: |
+diff --git a/Documentation/devicetree/bindings/slimbus/slimbus.yaml b/Documentation/devicetree/bindings/slimbus/slimbus.yaml
+index 22513fb7c59a..3b8cae9d1016 100644
+--- a/Documentation/devicetree/bindings/slimbus/slimbus.yaml
++++ b/Documentation/devicetree/bindings/slimbus/slimbus.yaml
+@@ -15,7 +15,7 @@ description:
  
  properties:
    $nodename:
--    pattern: "^rtc(@.*|-[0-9a-f])*$"
-+    pattern: "^rtc(@.*|-([0-9]|[1-9][0-9]+))?$"
+-    pattern: "^slim(@.*|-[0-9a-f])*$"
++    pattern: "^slim(@.*|-([0-9]|[1-9][0-9]+))?$"
  
-   aux-voltage-chargeable:
-     $ref: /schemas/types.yaml#/definitions/uint32
+   "#address-cells":
+     const: 2
 -- 
 2.34.1
 
