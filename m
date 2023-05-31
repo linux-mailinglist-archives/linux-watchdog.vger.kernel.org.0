@@ -2,98 +2,213 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C539A717B6F
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 May 2023 11:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A9F717ACA
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 May 2023 10:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235378AbjEaJL4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 31 May 2023 05:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
+        id S232213AbjEaI4D (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 31 May 2023 04:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235399AbjEaJLx (ORCPT
+        with ESMTP id S235137AbjEaIz7 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 31 May 2023 05:11:53 -0400
-X-Greylist: delayed 2874 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 May 2023 02:11:37 PDT
-Received: from mail.ettrick.pl (mail.ettrick.pl [141.94.21.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62BDBE
-        for <linux-watchdog@vger.kernel.org>; Wed, 31 May 2023 02:11:37 -0700 (PDT)
-Received: by mail.ettrick.pl (Postfix, from userid 1002)
-        id 5EDA9A99A3; Wed, 31 May 2023 08:16:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ettrick.pl; s=mail;
-        t=1685521020; bh=ZOVeXw1jXE9TbyZP9aLdRwM96AORcRfum8b+rry5JMw=;
-        h=Date:From:To:Subject:From;
-        b=OlakoRiN2A3f/vwr7uQXCBDdQB26faR4f1ATZdDu84ohy3TypwrHjkAoXO0E7CQGM
-         sug5PLaB3JyiszTlm5Fj/hEQDsLWYYQT3PTjosGaLxbo9NHkBDmBHrXQNP4Bixystq
-         4PaBVUBfNQJx62wiz7MRdFBSSmZkFDVBtPoJfN8EFMTsCfIHtHytP4O5D97m1i0u1d
-         12InGNbwA/nhZ22i2C+Rs6nr7p8aeHzqnMzeZI4lOPlzS+OhINK1xkprmQ6kLSJsfI
-         w5ffWwbiKyzPwTJG1ak1G4aGiGGCvmdZgzro60Dea+Zr03i1LjLIEwNHg/KDlQBGHR
-         hwzfiVaPnqXlg==
-Received: by mail.ettrick.pl for <linux-watchdog@vger.kernel.org>; Wed, 31 May 2023 08:15:40 GMT
-Message-ID: <20230531064500-0.1.ax.4bm88.0.vgcvq9qy5m@ettrick.pl>
-Date:   Wed, 31 May 2023 08:15:40 GMT
-From:   "Norbert Karecki" <norbert.karecki@ettrick.pl>
-To:     <linux-watchdog@vger.kernel.org>
-Subject: Fotowoltaika- propozycja instalacji
-X-Mailer: mail.ettrick.pl
+        Wed, 31 May 2023 04:55:59 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27320122
+        for <linux-watchdog@vger.kernel.org>; Wed, 31 May 2023 01:55:57 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-96fe2a1db26so938756566b.0
+        for <linux-watchdog@vger.kernel.org>; Wed, 31 May 2023 01:55:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685523355; x=1688115355;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6am1AiEAOxoY0UZIv4ELH1CWM+kxqYxNYLZvqz76ssg=;
+        b=KJ9VJqUN4y/AWCB+TmVu/7+Wcfsbf2PMdAZ/EBxXIg0k7ZLBL47iPhc7dlWofUUUZt
+         gRMN8SVOUmjSZPxZDPU02r1Ycf9HDxx+eaJx7pvMQWpOm/hkRlBeB8bbpq+iXRQ17zP5
+         H7OVnccJr4h3PbPplpp9hO4Vi0y/dZ63HTgaaGcuLuOHK0hUoPjrYzLum0W57SmhO6KU
+         o/7luo/H/ErlXIBrnY8cHEpv6p1ueEZ+X+e0ykJufWac7Et3nSM5dwkFDwVUWLnPcFcJ
+         J6nADJ6tW5lw7NNaBRjxQmxqamOilRdkMZnOTYub2bQS+dFv+UMs32TKbgHY/3zcnHcj
+         txlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685523355; x=1688115355;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6am1AiEAOxoY0UZIv4ELH1CWM+kxqYxNYLZvqz76ssg=;
+        b=ESXi1xLWmdmN9ChssftmaR6r5i05iGzWWAFAHmzjZlO9JzHSFdjhq2ou1KQ5t8UkpF
+         9qVuDo6QtAun99vhdjcJ2d2HNoOdEhSW7h/UX3acaQCqOtbXd31PMUKz5sa+B3wcTVs9
+         Bh8h2M1v6vyGsBG5Iby+zrb2OMf5qduUrche7/fpedUQeSUqw2JUDFQlzVrrH2MgEaMR
+         BBaVJ/jcAZ3vFZlYGvbMQRXHR7q8YkLKTYdbVXneNH2+UPyiyhU7R84Mn69RhqoUs+Xj
+         qq3dosbE0JXabR5GxoW54hWuj8Qki1Kep2JXeiNlnfOBBKBldCKBadUalXkKCtZ1WXwT
+         iFyQ==
+X-Gm-Message-State: AC+VfDzXDLd0Jy38Rb2CPjqzQcNYP+HvcEFCVGyPp6ug3AK1rwWfWHZZ
+        d7bKC1t1rTodFecyy/TkV0pWpg==
+X-Google-Smtp-Source: ACHHUZ7bt0BD77gr6LG3aEUlXExVX18Lo4MW6pqODLIuWHO4GmhfSjRNckCop3Gvd4nZktxjemKicQ==
+X-Received: by 2002:a17:907:97c3:b0:974:b15:fcda with SMTP id js3-20020a17090797c300b009740b15fcdamr5145556ejc.54.1685523353731;
+        Wed, 31 May 2023 01:55:53 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id b16-20020a170906151000b0096b15e4ffcesm8577273ejd.85.2023.05.31.01.55.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 01:55:53 -0700 (PDT)
+Message-ID: <46eced08-5bf6-3e4b-7a91-ff4d16c7dab9@linaro.org>
+Date:   Wed, 31 May 2023 10:55:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_ABUSE_SURBL,URIBL_BLOCKED,
-        URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: ettrick.pl]
-        *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
-        *      blocklist
-        *      [URIs: ettrick.pl]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [141.94.21.111 listed in zen.spamhaus.org]
-        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
-        *      blocklist
-        *      [URIs: ettrick.pl]
-        *  1.2 URIBL_ABUSE_SURBL Contains an URL listed in the ABUSE SURBL
-        *      blocklist
-        *      [URIs: ettrick.pl]
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/3] dt-bindings: timer: atmel,at91sam9260-pit: convert
+ to yaml
+Content-Language: en-US
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        wim@linux-watchdog.org, linux@roeck-us.net
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20230530090758.1652329-1-claudiu.beznea@microchip.com>
+ <20230530090758.1652329-2-claudiu.beznea@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230530090758.1652329-2-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Dzie=C5=84 dobry,
-=20
-Czy rozwa=C5=BCali Pa=C5=84stwo monta=C5=BC systemu fotowoltaicznego?
-=20
-Instalacja fotowoltaiczna jest najlepszym sposobem na obni=C5=BCenie wyso=
-ko=C5=9Bci rachunk=C3=B3w za pr=C4=85d (pozostaj=C4=85 tylko op=C5=82aty =
-sta=C5=82e) i zabezpieczenie si=C4=99 przed rosn=C4=85cymi cenami energii=
- elektrycznej. Jest to w pe=C5=82ni odnawialne i bezemisyjne =C5=BAr=C3=B3=
-d=C5=82o energii, dzi=C4=99ki czemu przyczyniamy si=C4=99 do ochrony =C5=9B=
-rodowiska naturalnego.
-=20
-Dzia=C5=82amy od wielu lat na rynku energetycznym. Przygotujemy projekt, =
-wycen=C4=99 oraz kompleksowo wykonamy i zg=C5=82osimy realizacj=C4=99 do =
-zak=C5=82adu energetycznego.=20
-=20
-Czy chc=C4=85 Pa=C5=84stwo pozna=C4=87 nasz=C4=85 propozycj=C4=99? =20
+On 30/05/2023 11:07, Claudiu Beznea wrote:
+> Convert Microchip AT91 PIT bindings to YAML. Along with it clocks and
+> clock-names bindings were added as the drivers needs it to ensure proper
+> hardware functionality.
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+>  .../devicetree/bindings/arm/atmel-sysregs.txt | 12 ---
+>  .../bindings/timer/atmel,at91sam9260-pit.yaml | 99 +++++++++++++++++++
+>  2 files changed, 99 insertions(+), 12 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> index 67a66bf74895..54d3f586403e 100644
+> --- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> +++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> @@ -4,18 +4,6 @@ Chipid required properties:
+>  - compatible: Should be "atmel,sama5d2-chipid" or "microchip,sama7g5-chipid"
+>  - reg : Should contain registers location and length
+>  
+> -PIT Timer required properties:
+> -- compatible: Should be "atmel,at91sam9260-pit"
+> -- reg: Should contain registers location and length
+> -- interrupts: Should contain interrupt for the PIT which is the IRQ line
+> -  shared across all System Controller members.
+> -
+> -PIT64B Timer required properties:
+> -- compatible: Should be "microchip,sam9x60-pit64b"
+> -- reg: Should contain registers location and length
+> -- interrupts: Should contain interrupt for PIT64B timer
+> -- clocks: Should contain the available clock sources for PIT64B timer.
+> -
+>  System Timer (ST) required properties:
+>  - compatible: Should be "atmel,at91rm9200-st", "syscon", "simple-mfd"
+>  - reg: Should contain registers location and length
+> diff --git a/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml b/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
+> new file mode 100644
+> index 000000000000..d0f3f80db4cb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
+> @@ -0,0 +1,99 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/timer/atmel,at91sam9260-pit.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip AT91 Periodic Interval Timer (PIT)
+> +
+> +maintainers:
+> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
+> +
+> +description:
+> +  Microchip AT91 periodic interval timer provides the operating system scheduler
+> +  interrupt. It is designed to offer maximum accuracy and efficient management,
+> +  even for systems with long response time.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: microchip,sama7g5-pit64b
+
+From where do you have this compatible? Wasn't in old binding and commit
+msg does not explain it.
 
 
-Pozdrawiam,
-Norbert Karecki
+> +          - const: microchip,sam9x60-pit64b
+> +      - items:
+> +          enum:
+
+These are not items. Just enum.. Does it even work?
+
+> +            - atmel,at91sam9260-pit
+> +            - microchip,sam9x60-pit64b
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: atmel,at91sam9260-pit
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          description:
+> +            Shared interrupt between all system controller members (power management
+> +            controller, watchdog, PIT, reset controller, real-time timer, real-time
+> +            clock, memory controller, debug unit, system timer).
+> +        clocks:
+> +          maxItems: 1
+> +
+> +    else:
+> +      properties:
+> +        clocks:
+> +          minItems: 2
+> +        clock-names:
+> +          items:
+> +            - const: pclk
+> +            - const: gclk
+
+interrupts? They are still required, so why no description here?
+
+> +      required:
+> +        - clock-names
+> +
+> +unevaluatedProperties: false
+
+additionalProperties:false instead
+
+> +
+
+Best regards,
+Krzysztof
+
