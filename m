@@ -2,61 +2,61 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A9F717ACA
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 May 2023 10:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F2E717AD0
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 May 2023 10:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232213AbjEaI4D (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 31 May 2023 04:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
+        id S235196AbjEaI4p (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 31 May 2023 04:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235137AbjEaIz7 (ORCPT
+        with ESMTP id S235163AbjEaI4o (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 31 May 2023 04:55:59 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27320122
-        for <linux-watchdog@vger.kernel.org>; Wed, 31 May 2023 01:55:57 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-96fe2a1db26so938756566b.0
-        for <linux-watchdog@vger.kernel.org>; Wed, 31 May 2023 01:55:57 -0700 (PDT)
+        Wed, 31 May 2023 04:56:44 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AE410E
+        for <linux-watchdog@vger.kernel.org>; Wed, 31 May 2023 01:56:43 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-96f5685f902so826006766b.2
+        for <linux-watchdog@vger.kernel.org>; Wed, 31 May 2023 01:56:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685523355; x=1688115355;
+        d=linaro.org; s=google; t=1685523401; x=1688115401;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6am1AiEAOxoY0UZIv4ELH1CWM+kxqYxNYLZvqz76ssg=;
-        b=KJ9VJqUN4y/AWCB+TmVu/7+Wcfsbf2PMdAZ/EBxXIg0k7ZLBL47iPhc7dlWofUUUZt
-         gRMN8SVOUmjSZPxZDPU02r1Ycf9HDxx+eaJx7pvMQWpOm/hkRlBeB8bbpq+iXRQ17zP5
-         H7OVnccJr4h3PbPplpp9hO4Vi0y/dZ63HTgaaGcuLuOHK0hUoPjrYzLum0W57SmhO6KU
-         o/7luo/H/ErlXIBrnY8cHEpv6p1ueEZ+X+e0ykJufWac7Et3nSM5dwkFDwVUWLnPcFcJ
-         J6nADJ6tW5lw7NNaBRjxQmxqamOilRdkMZnOTYub2bQS+dFv+UMs32TKbgHY/3zcnHcj
-         txlg==
+        bh=OLwParLUSUQDKzsXo+bv4vprnezgjEtwJoN4LED/HDQ=;
+        b=N6BrHzkysYgJkV16lFb6xqd+HzF/6Bzdx0/Rlrz3dV02A4b+HNOGWm0M2laGlMdfb/
+         xjHvX+lFHMCJYbibR6mTR6cOQkucZOr1tuXDNVVx1gB9iItQbg9hr+JHPtD+zeY7Sa8e
+         jK4MGQ0l4+FgUd9J2Kkeh5Dv5M/CuPZra4v64omcR7510NV2WD55REXWpXcKBoZgVcW0
+         KEXE6x1aoAbyQ5tavyRun1V2qVBkAyz4U0t6Iz9RJhp5Xui+YClR9WZIPcHZ+C1QjStI
+         duTReM8KVnWa4FdC1EOu99Ekk2pEXMCuh8lkiTC7VzOr0BCuZDqTOrq0+NwwBitwIFVV
+         GCxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685523355; x=1688115355;
+        d=1e100.net; s=20221208; t=1685523401; x=1688115401;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6am1AiEAOxoY0UZIv4ELH1CWM+kxqYxNYLZvqz76ssg=;
-        b=ESXi1xLWmdmN9ChssftmaR6r5i05iGzWWAFAHmzjZlO9JzHSFdjhq2ou1KQ5t8UkpF
-         9qVuDo6QtAun99vhdjcJ2d2HNoOdEhSW7h/UX3acaQCqOtbXd31PMUKz5sa+B3wcTVs9
-         Bh8h2M1v6vyGsBG5Iby+zrb2OMf5qduUrche7/fpedUQeSUqw2JUDFQlzVrrH2MgEaMR
-         BBaVJ/jcAZ3vFZlYGvbMQRXHR7q8YkLKTYdbVXneNH2+UPyiyhU7R84Mn69RhqoUs+Xj
-         qq3dosbE0JXabR5GxoW54hWuj8Qki1Kep2JXeiNlnfOBBKBldCKBadUalXkKCtZ1WXwT
-         iFyQ==
-X-Gm-Message-State: AC+VfDzXDLd0Jy38Rb2CPjqzQcNYP+HvcEFCVGyPp6ug3AK1rwWfWHZZ
-        d7bKC1t1rTodFecyy/TkV0pWpg==
-X-Google-Smtp-Source: ACHHUZ7bt0BD77gr6LG3aEUlXExVX18Lo4MW6pqODLIuWHO4GmhfSjRNckCop3Gvd4nZktxjemKicQ==
-X-Received: by 2002:a17:907:97c3:b0:974:b15:fcda with SMTP id js3-20020a17090797c300b009740b15fcdamr5145556ejc.54.1685523353731;
-        Wed, 31 May 2023 01:55:53 -0700 (PDT)
+        bh=OLwParLUSUQDKzsXo+bv4vprnezgjEtwJoN4LED/HDQ=;
+        b=brA7oU1wp2hxxdZZcz7ETpuh2cSRkkbX9/RBqyCDhNPdOawkyGfsFovWB6rb/tuWUH
+         wwgIab3nn8BVh4GGW5XBnR3h1ShLKAtLpvGF0+3ficQh1QOD2oreRnXHU7MVKcc2Qh31
+         dI9pvQAae1pcEtnvF0uSluwzkj6YNWUMGaR41g+IQc1GxXwcAdKGd64QfNYZP19oyPyJ
+         jVALg11nbZhPAZ5xgDvbAR7WRamPiG7ROpV2cFYVNzN3BSWFBq47PscQeI+0WVCn+T5X
+         XcWTfoxu6AsYbI6CVvaSvAsjaOZyPcpD4mJUEVtgW90yIpdN0zDbYHpKIhiMvtkfutDK
+         KP1Q==
+X-Gm-Message-State: AC+VfDw8TyeDRHlc3r2eJ9eVhvsUi6ANl4zeZ0pjSNiAGv6rGhneiKMZ
+        gbN5HFK81ZpFMqw47WraqkZFGA==
+X-Google-Smtp-Source: ACHHUZ7jtK63n0mTLezSDYRYQn5ukUBaIfHv+z5Ria9x9R9U0JuwRNd7r1SfKkx8CdI8QOFwI7CTiw==
+X-Received: by 2002:a17:907:6e8a:b0:96b:559d:ff19 with SMTP id sh10-20020a1709076e8a00b0096b559dff19mr5627117ejc.21.1685523401395;
+        Wed, 31 May 2023 01:56:41 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id b16-20020a170906151000b0096b15e4ffcesm8577273ejd.85.2023.05.31.01.55.51
+        by smtp.gmail.com with ESMTPSA id g5-20020a1709064e4500b0096f6647b5e8sm8662930ejw.64.2023.05.31.01.56.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 01:55:53 -0700 (PDT)
-Message-ID: <46eced08-5bf6-3e4b-7a91-ff4d16c7dab9@linaro.org>
-Date:   Wed, 31 May 2023 10:55:50 +0200
+        Wed, 31 May 2023 01:56:41 -0700 (PDT)
+Message-ID: <d51ea654-da38-34e9-c5ab-ccb0c2d55f9d@linaro.org>
+Date:   Wed, 31 May 2023 10:56:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v3 1/3] dt-bindings: timer: atmel,at91sam9260-pit: convert
- to yaml
+Subject: Re: [PATCH v3 2/3] dt-bindings: watchdog: atmel,at91rm9200-wdt:
+ convert to yaml
 Content-Language: en-US
 To:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
@@ -64,17 +64,18 @@ To:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
         daniel.lezcano@linaro.org, tglx@linutronix.de,
         wim@linux-watchdog.org, linux@roeck-us.net
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>
 References: <20230530090758.1652329-1-claudiu.beznea@microchip.com>
- <20230530090758.1652329-2-claudiu.beznea@microchip.com>
+ <20230530090758.1652329-3-claudiu.beznea@microchip.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230530090758.1652329-2-claudiu.beznea@microchip.com>
+In-Reply-To: <20230530090758.1652329-3-claudiu.beznea@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,132 +83,47 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 30/05/2023 11:07, Claudiu Beznea wrote:
-> Convert Microchip AT91 PIT bindings to YAML. Along with it clocks and
-> clock-names bindings were added as the drivers needs it to ensure proper
-> hardware functionality.
+> Convert Microchip AT91RM9200 system timer watchdog bindings to YAML.
 > 
 > Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
->  .../devicetree/bindings/arm/atmel-sysregs.txt | 12 ---
->  .../bindings/timer/atmel,at91sam9260-pit.yaml | 99 +++++++++++++++++++
->  2 files changed, 99 insertions(+), 12 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
+>  .../watchdog/atmel,at91rm9200-wdt.yaml        | 29 +++++++++++++++++++
+>  .../watchdog/atmel-at91rm9200-wdt.txt         |  9 ------
+>  2 files changed, 29 insertions(+), 9 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-> index 67a66bf74895..54d3f586403e 100644
-> --- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-> +++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
-> @@ -4,18 +4,6 @@ Chipid required properties:
->  - compatible: Should be "atmel,sama5d2-chipid" or "microchip,sama7g5-chipid"
->  - reg : Should contain registers location and length
->  
-> -PIT Timer required properties:
-> -- compatible: Should be "atmel,at91sam9260-pit"
-> -- reg: Should contain registers location and length
-> -- interrupts: Should contain interrupt for the PIT which is the IRQ line
-> -  shared across all System Controller members.
-> -
-> -PIT64B Timer required properties:
-> -- compatible: Should be "microchip,sam9x60-pit64b"
-> -- reg: Should contain registers location and length
-> -- interrupts: Should contain interrupt for PIT64B timer
-> -- clocks: Should contain the available clock sources for PIT64B timer.
-> -
->  System Timer (ST) required properties:
->  - compatible: Should be "atmel,at91rm9200-st", "syscon", "simple-mfd"
->  - reg: Should contain registers location and length
-> diff --git a/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml b/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
+> diff --git a/Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml b/Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml
 > new file mode 100644
-> index 000000000000..d0f3f80db4cb
+> index 000000000000..592e797df4c2
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/timer/atmel,at91sam9260-pit.yaml
-> @@ -0,0 +1,99 @@
+> +++ b/Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml
+> @@ -0,0 +1,29 @@
 > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/timer/atmel,at91sam9260-pit.yaml#
+> +$id: http://devicetree.org/schemas/watchdog/atmel,at91rm9200-wdt.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Microchip AT91 Periodic Interval Timer (PIT)
+> +title: Microchip AT91RM9200 System Timer Watchdog
 > +
 > +maintainers:
-> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
-> +
-> +description:
-> +  Microchip AT91 periodic interval timer provides the operating system scheduler
-> +  interrupt. It is designed to offer maximum accuracy and efficient management,
-> +  even for systems with long response time.
+> +  - Nicolas Ferre <nicolas.ferre@microchip.com>
+> +  - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> +  - Claudiu Beznea <claudiu.beznea@microchip.coam>
 > +
 > +properties:
 > +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: microchip,sama7g5-pit64b
-
-From where do you have this compatible? Wasn't in old binding and commit
-msg does not explain it.
-
-
-> +          - const: microchip,sam9x60-pit64b
-> +      - items:
-> +          enum:
-
-These are not items. Just enum.. Does it even work?
-
-> +            - atmel,at91sam9260-pit
-> +            - microchip,sam9x60-pit64b
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 2
+> +    const: atmel,at91rm9200-wdt
 > +
 > +required:
 > +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: atmel,at91sam9260-pit
-> +    then:
-> +      properties:
-> +        interrupts:
-> +          description:
-> +            Shared interrupt between all system controller members (power management
-> +            controller, watchdog, PIT, reset controller, real-time timer, real-time
-> +            clock, memory controller, debug unit, system timer).
-> +        clocks:
-> +          maxItems: 1
-> +
-> +    else:
-> +      properties:
-> +        clocks:
-> +          minItems: 2
-> +        clock-names:
-> +          items:
-> +            - const: pclk
-> +            - const: gclk
-
-interrupts? They are still required, so why no description here?
-
-> +      required:
-> +        - clock-names
 > +
 > +unevaluatedProperties: false
 
-additionalProperties:false instead
+Missing ref to watchdog. unevaluatedProps do not make sense with it.
 
-> +
 
 Best regards,
 Krzysztof
