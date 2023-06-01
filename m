@@ -2,221 +2,326 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0916B71921E
-	for <lists+linux-watchdog@lfdr.de>; Thu,  1 Jun 2023 07:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6818F719240
+	for <lists+linux-watchdog@lfdr.de>; Thu,  1 Jun 2023 07:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbjFAFWt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 1 Jun 2023 01:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
+        id S231240AbjFAFgl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 1 Jun 2023 01:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjFAFWq (ORCPT
+        with ESMTP id S229553AbjFAFgi (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 1 Jun 2023 01:22:46 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2084.outbound.protection.outlook.com [40.107.244.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA1D129;
-        Wed, 31 May 2023 22:22:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UE+B8+c5Wh4jy4WP27NIJAggDurAjqu+nDUoqRzLljRPqnFiB94Q6vH4zSp9jUpEd8KNsK2OOzIOusKVbGbc51pfnTcJGoDxkPCreTno5NL9k87BtmHxgU1qW1pGtqYxVVri72QhPsaRnDlV9BjaPr+5AhR0K6JqCzRCWuh3NWufrylWPACtjW4I85HoOu6Q0f0sE6NOREVryyMfyTXioRmCNDeDGgWTR3LOmmpCgFATkjsGAF5vk9OmWwA+rfWwUSq91/jOXUgU6l2rvaZNV3HfMR3IKPa+9ULx8RJ6pU4xjeztQ8VAtgqSBAm/o66BIYj3dgFmEaRYOJcHP0C9QQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DCyWc38GkGMKO0jYrgFNsPU3Cum+iixvamrPaW/lKLk=;
- b=hzETGwpYHz2ZC/0IijOc/Sh9lUODjEoV81e0pqDYwJ5S7Fo1mdPJUvU3Nw8R/a3BaCZ46mqE0gwPM7z9F0BX0LHu+rxKIzrlX04LLANOGigbXoK14Wv/im1xL9zX6gAvv0g5QEXKioX8a1aFzGxhVfLk+UxbtYtAyBzGsvxww1ZWjhFCovDp6sHpb6bWBcttrqw+Ykf/85YpPLjWQ/ykUvn4i+MifemExwmZRhDrEmr3ex7c3hJoUhPWZkF0oRXjIkq9zKDUwKMlu88nsZTYXRdQdBuMMqk4Tn2fJDjRDylbNd7y0ppGZDZVlPhA0cispoKtV3EIryfM0yPSvWqL7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux-watchdog.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DCyWc38GkGMKO0jYrgFNsPU3Cum+iixvamrPaW/lKLk=;
- b=K4XuXXMW8viB3NxinmIrchfM8xxidxXFcjUiUvSPBpsOYOYHq6QyjYQc066bCPPpQz+6PvGG6ds7f2N5Sxg8UqOSU/etHr1gMVRAASlIZTL/51BD1olrIjuDFMNhWtXeHdDU2YCs98eSfXmmVy7PhXa0gTfXyFehZebI0Azbk8Q=
-Received: from BN9PR03CA0043.namprd03.prod.outlook.com (2603:10b6:408:fb::18)
- by MN6PR12MB8568.namprd12.prod.outlook.com (2603:10b6:208:471::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Thu, 1 Jun
- 2023 05:22:42 +0000
-Received: from BN8NAM11FT049.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:fb:cafe::3f) by BN9PR03CA0043.outlook.office365.com
- (2603:10b6:408:fb::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.23 via Frontend
- Transport; Thu, 1 Jun 2023 05:22:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT049.mail.protection.outlook.com (10.13.177.157) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6455.23 via Frontend Transport; Thu, 1 Jun 2023 05:22:42 +0000
-Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 1 Jun
- 2023 00:22:41 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
- (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 31 May
- 2023 22:22:41 -0700
-Received: from xhdsneeli40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Thu, 1 Jun 2023 00:22:38 -0500
-From:   Srinivas Neeli <srinivas.neeli@amd.com>
-To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <srinivas.neeli@amd.com>
-CC:     <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <radhey.shyam.pandey@amd.com>,
-        <git@amd.com>, <neelisrinivas18@gmail.com>, <srinivas.goud@amd.com>
-Subject: [PATCH V2] dt-bindings: watchdog: cdns,wdt-r1p2: Convert cadence watchdog to yaml
-Date:   Thu, 1 Jun 2023 10:52:37 +0530
-Message-ID: <20230601052237.2604997-1-srinivas.neeli@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 1 Jun 2023 01:36:38 -0400
+Received: from forward103c.mail.yandex.net (forward103c.mail.yandex.net [178.154.239.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA3B12C;
+        Wed, 31 May 2023 22:36:33 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net [IPv6:2a02:6b8:c14:c83:0:640:84f9:0])
+        by forward103c.mail.yandex.net (Yandex) with ESMTP id 876CE60034;
+        Thu,  1 Jun 2023 08:36:31 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id OaGNfZvWv8c0-rplx70Eu;
+        Thu, 01 Jun 2023 08:36:29 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1685597789;
+        bh=rKQamNImlHihihpCtMqa3NY6MH0zfAt9r9tz/gnwKhU=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=o7eo6GHX+CIkTm9XpERfV5KmgewSkfhAGjpH+qged8wI9HIvSeQK6CKQsunVh2WIS
+         3darRHyfPqrLqK1akxKMExkio1no9yS55iTd0E1JNR6uK3ykW0XZNimKJxx1Xo0JfL
+         qtH6YU9ygcZbO9L8bdSh8KaLkTD+keRMb44jcTrM=
+Authentication-Results: mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+From:   Nikita Shubin <nikita.shubin@maquefel.me>
+To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Jean Delvare <jdelvare@suse.de>, Joel Stanley <joel@jms.id.au>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Le Moal <dlemoal@kernel.org>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Mark Brown <broonie@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Nikita Shubin <nikita.shubin@maquefel.me>,
+        Richard Weinberger <richard@nod.at>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Michael Peters <mpeters@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v1 00/43] ep93xx device tree conversion
+Date:   Thu,  1 Jun 2023 08:33:51 +0300
+Message-Id: <20230601053546.9574-1-nikita.shubin@maquefel.me>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT049:EE_|MN6PR12MB8568:EE_
-X-MS-Office365-Filtering-Correlation-Id: 953d07a6-f5b4-4d83-c472-08db62603950
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Zpp3r8ObLEQ3ZOpPBaSCtvVV1wjiYxO55h8GV9vAdNbTkGmRE6AcposJnay6V7VB+7ZQNjMK88YNRlLtm2JLQNHjVMxxd6DeLq7pR1t40QheLo8WVXRaRAPEKRlKYR6hp+xyXZgT6MSc6lhPsg1yk3pxnPC+nlT/zw33ioRP05uEewOIg+PYq/OC0X5DfIHvKKhatzr82Kyu8y0pxEKvXO1xi4pPpdd2cd1Qif9u9BkbGDUKYfRh68uBNl2197ehAgyclcHuGIzv5yjq3LbEYoRSW0VC/BfdPh4KPWG2MpSzt0nzTjNXdySEhbf+lle2jSgFJG9R8+sJrb2e236u9lsBO1OUBWjoIVcL5crOjwkKhDBxz+Z6yYCdJmayJ6XubTqA9mLEGMFWzRYc8FqAz9g2S6/HBhEIR93P3z6WVRgzRLX/YXF3TdEzWqRopm2Fng3rp0lK+MiyUyE3mw4bIwq7wiEfIValD3JrhSY6vWEfN2IEF1VNpNHv+9aC3z3BaJpvixHaZ3ycDDGOk/Rf3mrV/evn0cuzbUzt5m38OSzAS2Njz76k0kFv9sbUYjPdyq6FBugiAq/OqJ5nzBPBprNQFXjv0LazrtM+nRkPiQn2SCyeBOD1hmeL7dk+/tDvCgGbWm1C3DiUT9DNw2NkGQZA/JuBsX12SzeK0M7bX+J0v1bHdTj1vyNI3hrU7AKKxU070kfEV95jQgJgsBfDx0uPd1WrR/eufzTZ1QSHriXf3sZP+Omh4f7yCpRzxg0YJUWBTHM/m6rIpxVbCS6Xcw4mVFspQNm5BR94q+FaAMM=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(396003)(136003)(39860400002)(451199021)(40470700004)(46966006)(36840700001)(40480700001)(81166007)(356005)(82740400003)(36860700001)(110136005)(47076005)(2616005)(83380400001)(70586007)(70206006)(426003)(54906003)(82310400005)(4326008)(336012)(86362001)(2906002)(316002)(186003)(1076003)(26005)(7049001)(44832011)(36756003)(5660300002)(478600001)(8936002)(966005)(41300700001)(8676002)(40460700003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 05:22:42.0565
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 953d07a6-f5b4-4d83-c472-08db62603950
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT049.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR12MB8568
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Convert cadence watchdog bindings to DT schema format using json-schema.
+This series aims to convert ep93xx from platform to full device tree support.
 
-Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Changes in V2:
-- Added missing mailing list emails.
-  Conor Dooley <conor+dt@kernel.org>
-  devicetree@vger.kernel.org
----
- .../bindings/watchdog/cadence-wdt.txt         | 23 -------
- .../bindings/watchdog/cdns,wdt-r1p2.yaml      | 62 +++++++++++++++++++
- 2 files changed, 62 insertions(+), 23 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/watchdog/cadence-wdt.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/cdns,wdt-r1p2.yaml
+Alexander, Kris - there are some significant changes in clk and pinctrl so can i ask you to tests all once again.
 
-diff --git a/Documentation/devicetree/bindings/watchdog/cadence-wdt.txt b/Documentation/devicetree/bindings/watchdog/cadence-wdt.txt
-deleted file mode 100644
-index 750a87657448..000000000000
---- a/Documentation/devicetree/bindings/watchdog/cadence-wdt.txt
-+++ /dev/null
-@@ -1,23 +0,0 @@
--Zynq Watchdog Device Tree Bindings
---------------------------------------------
--
--Required properties:
--- compatible		: Should be "cdns,wdt-r1p2".
--- clocks		: This is pclk (APB clock).
--- interrupts		: This is wd_irq - watchdog timeout interrupt.
--
--Optional properties
--- reset-on-timeout	: If this property exists, then a reset is done
--			  when watchdog times out.
--- timeout-sec		: Watchdog timeout value (in seconds).
--
--Example:
--	watchdog@f8005000 {
--		compatible = "cdns,wdt-r1p2";
--		clocks = <&clkc 45>;
--		interrupt-parent = <&intc>;
--		interrupts = <0 9 1>;
--		reg = <0xf8005000 0x1000>;
--		reset-on-timeout;
--		timeout-sec = <10>;
--	};
-diff --git a/Documentation/devicetree/bindings/watchdog/cdns,wdt-r1p2.yaml b/Documentation/devicetree/bindings/watchdog/cdns,wdt-r1p2.yaml
-new file mode 100644
-index 000000000000..3c17c5883bce
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/cdns,wdt-r1p2.yaml
-@@ -0,0 +1,62 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/cdns,wdt-r1p2.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cadence watchdog timer controller
-+
-+maintainers:
-+  - Neeli Srinivas <srinivas.neeli@amd.com>
-+
-+description:
-+  The cadence watchdog timer is used to detect and recover from
-+  system malfunctions. This watchdog contains 24 bit counter and
-+  a programmable reset period. The timeout period varies from 1 ms
-+  to 30 seconds while using a 100Mhz clock.
-+
-+allOf:
-+  - $ref: watchdog.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - cdns,wdt-r1p2
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  reset-on-timeout:
-+    type: boolean
-+    description: |
-+      If this property exists, then a reset is done when watchdog
-+      times out.
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    watchdog@f8005000 {
-+        compatible = "cdns,wdt-r1p2";
-+        reg = <0xf8005000 0x1000>;
-+        clocks = <&clkc 45>;
-+        interrupt-parent = <&intc>;
-+        interrupts = <GIC_SPI 9 IRQ_TYPE_EDGE_RISING>;
-+        reset-on-timeout;
-+        timeout-sec = <10>;
-+    };
-+...
+So i am not applying:
+
+Tested-by: Michael Peters <mpeters@embeddedTS.com>
+Reviewed-by: Kris Bahnsen <kris@embeddedTS.com>
+
+Tags yet.
+
+Major changes from v0 to v1:
+
+- I totally forgot to include dts bindings for USB, they are working, including in this version
+- retinkered ep93xx keypad, the stange thing about it that it always used zeroed 
+  platform data from the very beginning - my first impulse was to remove it entirely, espesially 
+  it's ep9307+ variant, which Alexander and me doesn't have
+- major YAML bindings overhaul according to Krzysztof comments
+- nand helper converted to LEGACY nand controller
+- cleanup clk
+- cleanup pinctrl
+
+Sorry if i missed something, first time handling such a big (at least for me) chunk of patches.
+
+Next version should be much faster spin.
+
+Alexandre Belloni:
+ st,m48t86 is totally trivial, but it has 2 regs instead of one, so dt_binding_check doesn't allow it in trivial.yaml,
+ regs should be increased to "maxItems: 2"
+
+Miquel Raynal:
+ Currently made it LEGACY as a more easier way for now, as this series will merge - it will be much 
+ easier to cleanup the rest one by one, i hope it's ok.
+ 
+Stephen Boyd:
+ Majory of issues fixed, but:
+     - removing dma from init section requires converting it from half dt/platform monstrosity 
+       into fully dt compatible
+     - i would like to have ep93xx_clk_data and ep93xx_map global for now - they can be removed 
+       once dma subsys_initcall removed
+
+Andrew Lunn:
+  I've tinkered with the preferred way, however this involves turning on
+     - CONFIG_PHYLIB
+     - CONFIG_MDIO_DEVICE
+
+  And maybe CONFIG_MICREL_PHY (at least for me, unless i can use some
+  common phy driver) which implies a kernel size increase - which is
+  undesirable for us.
+  
+  Can we slip by getting phyid directly from device tree in ep93xx_eth ?
+
+Link: https://lore.kernel.org/all/20230424123522.18302-1-nikita.shubin@maquefel.me/
+  
+Cc: kris@embeddedTS.com
+
+Alexander Sverdlin (3):
+  ARM: dts: ep93xx: Add I2S and AC97 nodes
+  ARM: dts: ep93xx: Add EDB9302 DT
+  ASoC: cirrus: edb93xx: Delete driver
+
+Nikita Shubin (40):
+  gpio: ep93xx: split device in multiple
+  dt-bindings: soc: Add Cirrus EP93xx
+  soc: Add SoC driver for Cirrus ep93xx
+  dt-bindings: clock: Add Cirrus EP93xx
+  clk: ep93xx: add DT support for Cirrus EP93xx
+  dt-bindings: pinctrl: Add Cirrus EP93xx
+  pinctrl: add a Cirrus ep93xx SoC pin controller
+  dt-bindings: timers: Add Cirrus EP93xx
+  clocksource: ep93xx: Add driver for Cirrus Logic EP93xx
+  dt-bindings: rtc: Add Cirrus EP93xx
+  rtc: ep93xx: add DT support for Cirrus EP93xx
+  dt-bindings: watchdog: Add Cirrus EP93x
+  watchdog: ep93xx: add DT support for Cirrus EP93xx
+  power: reset: Add a driver for the ep93xx reset
+  dt-bindings: pwm: Add Cirrus EP93xx
+  pwm: ep93xx: add DT support for Cirrus EP93xx
+  dt-bindings: spi: Add Cirrus EP93xx
+  spi: ep93xx: add DT support for Cirrus EP93xx
+  dt-bindings: net: Add Cirrus EP93xx
+  net: cirrus: add DT support for Cirrus EP93xx
+  dt-bindings: dma: Add Cirrus EP93xx
+  dma: cirrus: add DT support for Cirrus EP93xx
+  dt-bindings: mtd: Add ts7250 nand-controller
+  mtd: nand: add support for ts72xx
+  dt-bindings: ata: Add Cirrus EP93xx
+  pata: cirrus: add DT support for Cirrus EP93xx
+  dt-bindings: input: Add Cirrus EP93xx keypad
+  input: keypad: ep93xx: add DT support for Cirrus EP93xx
+  dt-bindings: rtc: Add ST M48T86
+  rtc: m48t86: add DT support for m48t86
+  dt-bindings: wdt: Add ts72xx
+  wdt: ts72xx: add DT support for ts72xx
+  dt-bindings: gpio: Add Cirrus EP93xx
+  gpio: ep93xx: add DT support for gpio-ep93xx
+  ARM: dts: add device tree for ep93xx Soc
+  ARM: ep93xx: DT for the Cirrus ep93xx SoC platforms
+  pwm: ep93xx: drop legacy pinctrl
+  pata: cirrus: drop legacy pinctrl
+  ARM: ep93xx: delete all boardfiles
+  ARM: ep93xx: soc: drop defines
+
+ .../devicetree/bindings/arm/ep93xx.yaml       |  107 ++
+ .../bindings/ata/cirrus,ep9312-pata.yaml      |   44 +
+ .../bindings/clock/cirrus,ep9301.yaml         |   64 +
+ .../bindings/dma/cirrus,ep9301-dma-m2m.yaml   |   72 +
+ .../bindings/dma/cirrus,ep9301-dma-m2p.yaml   |  124 ++
+ .../devicetree/bindings/gpio/gpio-ep9301.yaml |  154 ++
+ .../bindings/input/cirrus,ep9307-keypad.yaml  |   86 +
+ .../bindings/mtd/technologic,nand.yaml        |   47 +
+ .../bindings/net/cirrus,ep9301-eth.yaml       |   61 +
+ .../pinctrl/cirrus,ep9301-pinctrl.yaml        |   66 +
+ .../bindings/pwm/cirrus,ep9301-pwm.yaml       |   48 +
+ .../bindings/rtc/cirrus,ep9301-rtc.yaml       |   40 +
+ .../bindings/rtc/st,m48t86-rtc.yaml           |   38 +
+ .../devicetree/bindings/spi/spi-ep9301.yaml   |   69 +
+ .../bindings/timer/cirrus,ep9301-timer.yaml   |   49 +
+ .../bindings/watchdog/cirrus,ep9301-wdt.yaml  |   46 +
+ .../watchdog/technologic,ts7200-wdt.yaml      |   46 +
+ arch/arm/Makefile                             |    1 -
+ arch/arm/boot/dts/Makefile                    |    1 +
+ arch/arm/boot/dts/ep93xx-bk3.dts              |  119 ++
+ arch/arm/boot/dts/ep93xx-edb9302.dts          |  160 ++
+ arch/arm/boot/dts/ep93xx-ts7250.dts           |  132 ++
+ arch/arm/boot/dts/ep93xx.dtsi                 |  477 +++++
+ arch/arm/mach-ep93xx/Kconfig                  |   20 +-
+ arch/arm/mach-ep93xx/Makefile                 |   11 -
+ arch/arm/mach-ep93xx/clock.c                  |  733 --------
+ arch/arm/mach-ep93xx/core.c                   | 1017 ----------
+ arch/arm/mach-ep93xx/dma.c                    |  114 --
+ arch/arm/mach-ep93xx/edb93xx.c                |  344 ----
+ arch/arm/mach-ep93xx/ep93xx-regs.h            |   38 -
+ arch/arm/mach-ep93xx/gpio-ep93xx.h            |  111 --
+ arch/arm/mach-ep93xx/hardware.h               |   25 -
+ arch/arm/mach-ep93xx/irqs.h                   |   76 -
+ arch/arm/mach-ep93xx/platform.h               |   42 -
+ arch/arm/mach-ep93xx/soc.h                    |  212 ---
+ arch/arm/mach-ep93xx/ts72xx.c                 |  422 -----
+ arch/arm/mach-ep93xx/ts72xx.h                 |   94 -
+ arch/arm/mach-ep93xx/vision_ep9307.c          |  311 ---
+ drivers/ata/pata_ep93xx.c                     |   33 +-
+ drivers/clk/Kconfig                           |    8 +
+ drivers/clk/Makefile                          |    1 +
+ drivers/clk/clk-ep93xx.c                      |  850 +++++++++
+ drivers/clocksource/Kconfig                   |   11 +
+ drivers/clocksource/Makefile                  |    1 +
+ .../clocksource}/timer-ep93xx.c               |  141 +-
+ drivers/dma/ep93xx_dma.c                      |  136 +-
+ drivers/gpio/gpio-ep93xx.c                    |  329 ++--
+ drivers/input/keyboard/ep93xx_keypad.c        |   78 +-
+ drivers/mtd/nand/raw/Kconfig                  |    7 +
+ drivers/mtd/nand/raw/Makefile                 |    1 +
+ .../nand/raw/technologic-nand-controller.c    |  151 ++
+ drivers/net/ethernet/cirrus/ep93xx_eth.c      |   67 +-
+ drivers/pinctrl/Kconfig                       |    7 +
+ drivers/pinctrl/Makefile                      |    1 +
+ drivers/pinctrl/pinctrl-ep93xx.c              | 1672 +++++++++++++++++
+ drivers/power/reset/Kconfig                   |   10 +
+ drivers/power/reset/Makefile                  |    1 +
+ drivers/power/reset/ep93xx-restart.c          |   65 +
+ drivers/pwm/pwm-ep93xx.c                      |   26 +-
+ drivers/rtc/rtc-ep93xx.c                      |    8 +
+ drivers/rtc/rtc-m48t86.c                      |    8 +
+ drivers/soc/Kconfig                           |    1 +
+ drivers/soc/Makefile                          |    1 +
+ drivers/soc/cirrus/Kconfig                    |   11 +
+ drivers/soc/cirrus/Makefile                   |    2 +
+ drivers/soc/cirrus/soc-ep93xx.c               |  134 ++
+ drivers/spi/spi-ep93xx.c                      |   31 +-
+ drivers/watchdog/ep93xx_wdt.c                 |    8 +
+ drivers/watchdog/ts72xx_wdt.c                 |    8 +
+ .../dt-bindings/clock/cirrus,ep93xx-clock.h   |   53 +
+ include/linux/platform_data/dma-ep93xx.h      |    3 +
+ include/linux/platform_data/eth-ep93xx.h      |   10 -
+ include/linux/platform_data/keypad-ep93xx.h   |   32 -
+ include/linux/soc/cirrus/ep93xx.h             |   40 +-
+ sound/soc/cirrus/Kconfig                      |    9 -
+ sound/soc/cirrus/Makefile                     |    4 -
+ sound/soc/cirrus/edb93xx.c                    |  117 --
+ 77 files changed, 5575 insertions(+), 4122 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/ep93xx.yaml
+ create mode 100644 Documentation/devicetree/bindings/ata/cirrus,ep9312-pata.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/cirrus,ep9301.yaml
+ create mode 100644 Documentation/devicetree/bindings/dma/cirrus,ep9301-dma-m2m.yaml
+ create mode 100644 Documentation/devicetree/bindings/dma/cirrus,ep9301-dma-m2p.yaml
+ create mode 100644 Documentation/devicetree/bindings/gpio/gpio-ep9301.yaml
+ create mode 100644 Documentation/devicetree/bindings/input/cirrus,ep9307-keypad.yaml
+ create mode 100644 Documentation/devicetree/bindings/mtd/technologic,nand.yaml
+ create mode 100644 Documentation/devicetree/bindings/net/cirrus,ep9301-eth.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/cirrus,ep9301-pinctrl.yaml
+ create mode 100644 Documentation/devicetree/bindings/pwm/cirrus,ep9301-pwm.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/cirrus,ep9301-rtc.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/st,m48t86-rtc.yaml
+ create mode 100644 Documentation/devicetree/bindings/spi/spi-ep9301.yaml
+ create mode 100644 Documentation/devicetree/bindings/timer/cirrus,ep9301-timer.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/cirrus,ep9301-wdt.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/technologic,ts7200-wdt.yaml
+ create mode 100644 arch/arm/boot/dts/ep93xx-bk3.dts
+ create mode 100644 arch/arm/boot/dts/ep93xx-edb9302.dts
+ create mode 100644 arch/arm/boot/dts/ep93xx-ts7250.dts
+ create mode 100644 arch/arm/boot/dts/ep93xx.dtsi
+ delete mode 100644 arch/arm/mach-ep93xx/Makefile
+ delete mode 100644 arch/arm/mach-ep93xx/clock.c
+ delete mode 100644 arch/arm/mach-ep93xx/core.c
+ delete mode 100644 arch/arm/mach-ep93xx/dma.c
+ delete mode 100644 arch/arm/mach-ep93xx/edb93xx.c
+ delete mode 100644 arch/arm/mach-ep93xx/ep93xx-regs.h
+ delete mode 100644 arch/arm/mach-ep93xx/gpio-ep93xx.h
+ delete mode 100644 arch/arm/mach-ep93xx/hardware.h
+ delete mode 100644 arch/arm/mach-ep93xx/irqs.h
+ delete mode 100644 arch/arm/mach-ep93xx/platform.h
+ delete mode 100644 arch/arm/mach-ep93xx/soc.h
+ delete mode 100644 arch/arm/mach-ep93xx/ts72xx.c
+ delete mode 100644 arch/arm/mach-ep93xx/ts72xx.h
+ delete mode 100644 arch/arm/mach-ep93xx/vision_ep9307.c
+ create mode 100644 drivers/clk/clk-ep93xx.c
+ rename {arch/arm/mach-ep93xx => drivers/clocksource}/timer-ep93xx.c (52%)
+ create mode 100644 drivers/mtd/nand/raw/technologic-nand-controller.c
+ create mode 100644 drivers/pinctrl/pinctrl-ep93xx.c
+ create mode 100644 drivers/power/reset/ep93xx-restart.c
+ create mode 100644 drivers/soc/cirrus/Kconfig
+ create mode 100644 drivers/soc/cirrus/Makefile
+ create mode 100644 drivers/soc/cirrus/soc-ep93xx.c
+ create mode 100644 include/dt-bindings/clock/cirrus,ep93xx-clock.h
+ delete mode 100644 include/linux/platform_data/eth-ep93xx.h
+ delete mode 100644 include/linux/platform_data/keypad-ep93xx.h
+ delete mode 100644 sound/soc/cirrus/edb93xx.c
+
 -- 
-2.25.1
+2.37.4
 
