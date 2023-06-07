@@ -2,74 +2,69 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65C572552C
-	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Jun 2023 09:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6161F72560D
+	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Jun 2023 09:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238739AbjFGHNr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 7 Jun 2023 03:13:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
+        id S238732AbjFGHlZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 7 Jun 2023 03:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235405AbjFGHNr (ORCPT
+        with ESMTP id S238362AbjFGHkw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:13:47 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782381732
-        for <linux-watchdog@vger.kernel.org>; Wed,  7 Jun 2023 00:13:45 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51640b9ed95so900020a12.2
-        for <linux-watchdog@vger.kernel.org>; Wed, 07 Jun 2023 00:13:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686122024; x=1688714024;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XIDN7SGNAgmTaDACmxzYbK4nm0ku0E334Z45z434qxI=;
-        b=FUGLpMgfWvUcB5HfVjIvsrysPNGk9zKmJ9TF9Z3IV/N8oy228vAGTedg8SGEdXrcch
-         u6gemLT/ulLDVK4h9lrzUUNYDtIWQtXQhvtU4UhKccrIiLu8g/H2MD8NH4LiZ/XES3Bk
-         8Coy8mclP13JrefNXfptFQcf6A98G3zrEyDLo6hOYC5A3jE76bxCdA2VKNO60NBJMjga
-         dwiaTMHs0V2GHztJ0uiu2b4EVdsV7RhJCsi9QcfeQRm1qSDl+oVWI/LC5iNiOGf6i1iq
-         TY0iYp1SQFY3ZMGVZgNOnEdk8Vx+FNMkc3DxN7n+gb6N+UtHlY4fONLTrL27ZZlCeIXa
-         xdbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686122024; x=1688714024;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XIDN7SGNAgmTaDACmxzYbK4nm0ku0E334Z45z434qxI=;
-        b=X+iSlnzA1pMP2xKbEcfggxnJMQpafO6qNDgWpkH9wRT7NEQB9afQZ7xueIp0IZl0RD
-         DZr25OFBoQfEtdqezkGQ93QKXQI0NOJhWDRD46onqaIEUSFObui9NMvx5Ii/ewM0UG4T
-         Qdh4TdTavnFMXwbRIZGOKH5buv2EQmqYmhOdJDCE9ps4gHZk7T5+tPdrJ1sNabNgQGlm
-         vU+l39rJ6DktiaNtJ7oAMyDoGkkx6HF7FZv86oSUOiQUs1Fgea9M/LrpR8f63zrVq5VW
-         /aeXvomDOj07pdRCcrYsSTW944ycfMiNXNxkWd5T7JsA9QrRtbdddj9nwicTiT5WHF6E
-         Ng1w==
-X-Gm-Message-State: AC+VfDz4w4Xsqcfg2WsvHDkLPzqbnkX2dIakdWaW7nQc1kLMpVKObxnL
-        PpnaCdlHxuPYS5PNuyIbjJHItQ==
-X-Google-Smtp-Source: ACHHUZ7ue8QUkbf4LbystMAyp9y0G6QSXOiirtn3D+841TOqHe87HS/FVdskvk+EA6ZSurS/dR3YwQ==
-X-Received: by 2002:aa7:ca4e:0:b0:50d:1e11:eb9 with SMTP id j14-20020aa7ca4e000000b0050d1e110eb9mr3704112edt.1.1686122023997;
-        Wed, 07 Jun 2023 00:13:43 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id d5-20020a50fe85000000b00504ecc4fa96sm5922105edt.95.2023.06.07.00.13.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 00:13:43 -0700 (PDT)
-Message-ID: <24cc82c7-a4b5-e687-5775-208665d915eb@linaro.org>
-Date:   Wed, 7 Jun 2023 09:13:41 +0200
+        Wed, 7 Jun 2023 03:40:52 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEE53A8D
+        for <linux-watchdog@vger.kernel.org>; Wed,  7 Jun 2023 00:38:30 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q6niy-0003Fq-Gk; Wed, 07 Jun 2023 09:36:56 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q6niv-005gu6-Dy; Wed, 07 Jun 2023 09:36:53 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q6niu-00BwY7-5i; Wed, 07 Jun 2023 09:36:52 +0200
+Date:   Wed, 7 Jun 2023 09:36:52 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dilip Kota <eswara.kota@linux.intel.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
+        linux-watchdog@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH 2/7] dt-bindings: pwm: restrict node name suffixes
+Message-ID: <20230607073652.hoyrernfcuoryrqs@pengutronix.de>
+References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+ <20230530144851.92059-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/2 v9] dt-bindings: watchdog: marvell GTI system watchdog
- driver
-Content-Language: en-US
-To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sgoutham@marvell.com
-References: <20230605045945.26262-1-bbhushan2@marvell.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230605045945.26262-1-bbhushan2@marvell.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="53ce3yyaolwya5ci"
+Content-Disposition: inline
+In-Reply-To: <20230530144851.92059-3-krzysztof.kozlowski@linaro.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,17 +73,96 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 05/06/2023 06:59, Bharat Bhushan wrote:
-> Add binding documentation for the Marvell GTI system
-> watchdog driver.
-> 
-> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+
+--53ce3yyaolwya5ci
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, May 30, 2023 at 04:48:46PM +0200, Krzysztof Kozlowski wrote:
+> Make the pattern matching node names a bit stricter to improve DTS
+> consistency.  The pattern is restricted to:
+> 1. Only one unit address or one -N suffix,
+> 2. -N suffixes to decimal numbers.
+>=20
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+>=20
 > ---
-> v9:
+>=20
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  Documentation/devicetree/bindings/pwm/pwm.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/pwm/pwm.yaml b/Documentati=
+on/devicetree/bindings/pwm/pwm.yaml
+> index 3c01f85029e5..abd9fa873354 100644
+> --- a/Documentation/devicetree/bindings/pwm/pwm.yaml
+> +++ b/Documentation/devicetree/bindings/pwm/pwm.yaml
+> @@ -13,7 +13,7 @@ select: false
+> =20
+>  properties:
+>    $nodename:
+> -    pattern: "^pwm(@.*|-[0-9a-f])*$"
+> +    pattern: "^pwm(@.*|-([0-9]|[1-9][0-9]+))?$"
 
+With this patch we forbid now the following patterns:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+	pwm-[0-9a-f][@-].*
+	pwm-0[0-9a-f]+
+	pwm-[a-f]([@-].*)?
 
-Best regards,
-Krzysztof
+Checking for such names:
 
+	$ git grep -oP '\bpwm-([0-9a-f][@-].*|0[0-9a-f]+|[0-9]*[a-f][0-9a-f]*)(*pl=
+a:\s*\{)' arch/*/boot/dts
+	arch/arm/boot/dts/meson8.dtsi:pwm-f-ao
+	arch/arm/boot/dts/meson8.dtsi:pwm-e
+	arch/arm/boot/dts/meson8b.dtsi:pwm-d
+	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-a
+	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-b-x7
+	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-b-x19
+	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-c-c
+	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-c-x5
+	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-c-x8
+	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-d-x3
+	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-d-x6
+	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-e
+	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-z
+	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-a
+	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-x
+	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-h
+	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-a-e
+
+These are all pinmux-settings and no pwm nodes, so the change is fine.
+(But arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi isn't properly
+sorted alphabetically.)
+
+Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Best regards and Thanks
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--53ce3yyaolwya5ci
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSAM5MACgkQj4D7WH0S
+/k7r5ggApZ2+XCI0I3PKhfnhGNckF4ZiCto9+JLH90d1BNst1xY7hWlJ167vUCbC
+mTgPD2HQHlKyPJoKmhRbTRF2ZYtdxN7fkJSqpz5RIhZwpuQjmaC7sfWcLSun07v+
+1XzaZA4WQTsuvIw7mKZD0juHmlOK+kNRYLKyIgnN10uB8CGGHzv2zbG+WUJHxOhG
+vNVwYz4TD1ScNmj9YJm+isi2OOrmsoXW6XeAQO1wxqP6iMUr6fjKcI7dxvirIXm4
+diVZ7dr/5OY+vG0Y9bZKpp43GswLtmqCowdrBtxHr5EYhjR5BUfWMPvwCj4s2JK0
+ta30Rl7GObRgiuLVYr2pbDMZPuVqOw==
+=fGeW
+-----END PGP SIGNATURE-----
+
+--53ce3yyaolwya5ci--
