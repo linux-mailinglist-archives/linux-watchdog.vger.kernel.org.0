@@ -2,174 +2,174 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6BF725621
-	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Jun 2023 09:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2F072721D
+	for <lists+linux-watchdog@lfdr.de>; Thu,  8 Jun 2023 00:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239267AbjFGHoF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 7 Jun 2023 03:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
+        id S233083AbjFGWyk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 7 Jun 2023 18:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234478AbjFGHnh (ORCPT
+        with ESMTP id S232463AbjFGWyi (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:43:37 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54E0421F
-        for <linux-watchdog@vger.kernel.org>; Wed,  7 Jun 2023 00:40:41 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-973f78329e3so1138273066b.3
-        for <linux-watchdog@vger.kernel.org>; Wed, 07 Jun 2023 00:40:41 -0700 (PDT)
+        Wed, 7 Jun 2023 18:54:38 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713EE1FE2
+        for <linux-watchdog@vger.kernel.org>; Wed,  7 Jun 2023 15:54:36 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9788554a8c9so1020766b.2
+        for <linux-watchdog@vger.kernel.org>; Wed, 07 Jun 2023 15:54:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686123640; x=1688715640;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QzNzUxBgctT5U3+gB3td/wPDXx9tt+J9TkByw444vb4=;
-        b=dpiv/lAao6jUqNRWIwDa/t6LO1tyPxkPWni1OUv3MwCcaBvBG9TZJWlQAsTwrpJG8z
-         WiSLr3KTYWPNapPhFe4g/UQTjDvdv2Kh5m3vUHx2Uvn0qhMaWW7936pz4POvuJM/IQsq
-         Nj5IuPvfSkJvvk2/lgKSqanZnlPWCLIWckttk5fd61hIvF0Cv5Sw1t5kE8iZvriviEW+
-         In+gf5HZQY8yoXdiDm/zttqRTvXjVTxgNdcYNhuap4h3KffjSa1/I4wWvgR5nzhKYxNl
-         ilEXGjb2B7MxuIK+KjltPks5gdQ0IXXIg2nLLmfmXMao4M6uuWPsgMMFy1+JhqAIHqER
-         v4DA==
+        d=gmail.com; s=20221208; t=1686178475; x=1688770475;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
+        b=WeqXDhOYObEU4Q4S3JxL3bEVQtplVvNKCfakhFkSuiLBGZe/ef388CiKUayAOmbEOV
+         ZR0I5GAxPbS54gQ7Fi+hG72GeTokI+noW1OPwtavsLtjymUzaeyKWDDpDiOtNBnLq40U
+         hKN8QzuE3yuzJvRNnur8tzVGd/WDVGu93YT1PuP86BcJTXG/Q3+EyiY1Ov5Itgxf9sfV
+         puzj8gFJzfO5zpoPQ0K3fO44i5t5qr504eako4ZleNRX8Z/LIaI8UL0On16+KpM6t7Hk
+         P05xDxotWEktWnY1d5dyENuc5li2l9dXU7CCPzvtyNY2IFMeysO2qVasevOMBOewfS/V
+         nc1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686123640; x=1688715640;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QzNzUxBgctT5U3+gB3td/wPDXx9tt+J9TkByw444vb4=;
-        b=DozZUq84XmYccANywAtdqukYps1H6pipsWRTnavwru/ZADD/Zi4/ndGTe+WHMz8/k7
-         Khrlm86R4cfTCm5GvrylMsqjS5bVqmuhtqZ9UFArqwtODkWPrg7UnQ+eqXej/g9vaJH3
-         s6VuIf0vkCQbRoX8wAxgTk+8nxpv5rwmJ2U5yaHBSTfX6sElFdaqduSQn6DH9s/No3ht
-         dQVisGw9ZILXSHCaWI49uytj/pbrpb2WrHHf8Yu6O+NC0GSrb2kZFtxOwET8w23y910y
-         dFpri36y35TQVM1W/OVy/49gLgTv39suJJcFBIXNgKgcj/EU/qmVW0KLbpFQxbycmt3q
-         pCiw==
-X-Gm-Message-State: AC+VfDx1iTthWNeVdqz7uCggKx2pMVFM4akh4WHArju0W+iSOHBDY0qo
-        udFu3Ig8KCBbWXI9bgqcvAFgOg==
-X-Google-Smtp-Source: ACHHUZ6nIjpeIRlx7fPahFZ5gzxmNl29452UMvG6AuY1y9w+PrjwLC4zGKqXZHhvW+xhYzrUW9v6Ug==
-X-Received: by 2002:a17:907:9403:b0:965:cc76:7716 with SMTP id dk3-20020a170907940300b00965cc767716mr4912526ejc.76.1686123640173;
-        Wed, 07 Jun 2023 00:40:40 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id k16-20020a1709065fd000b00977db7d08cbsm3376124ejv.74.2023.06.07.00.40.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 00:40:39 -0700 (PDT)
-Message-ID: <f141a538-23b8-d10e-227c-5f0ad191c3a6@linaro.org>
-Date:   Wed, 7 Jun 2023 09:40:37 +0200
+        d=1e100.net; s=20221208; t=1686178475; x=1688770475;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
+        b=lLufMGf13oPy3tCRBaroQlk7nCiRbufJnTPgbzpohm+8yuPFQ0iV44BfAnY81+SSAs
+         Pnc5iVGqsDZSV6R55taK0g62TmOS2q+1UK9LHqOJt3jwV3Ic2P4c07YZ97Ia+cA6cEoO
+         AyIukOy0YpvSvElgffperFSI8sMWBhgYkhyQKZ0V6KkPG6/LMa1lWtp+uh/LwjF3EIeu
+         wvjdPpQC7Aj2P+KnlileoyI20x1OarlK1PZzW4GMpuyCapqvgtzbgrfDTGmQer0qjNlU
+         AqJ+z8rQwq8rcoWBoUJw+owwkYted2cWgzWL+tYugnHYM/Hea+sWsrH+iEdFXFQwcl4h
+         dOHg==
+X-Gm-Message-State: AC+VfDwLeb72bHbXF4E2U2AJOzddbnUVnj2YcbX1hfxxNk/VQ7xODNOZ
+        U9e8j6TN5N3c+IKQHpIOC79AdxS9f/AHrz/Gwlo=
+X-Google-Smtp-Source: ACHHUZ7J0yv2Uy0Ff3URHHllMh6dn7geAOftATdUjaOMCSCEm6sdR3gpAsqx+SgrMGXj3gnAhFPKaDZy027dlMN9Xtw=
+X-Received: by 2002:a17:907:783:b0:94a:6de2:ba9 with SMTP id
+ xd3-20020a170907078300b0094a6de20ba9mr6600647ejb.68.1686178474547; Wed, 07
+ Jun 2023 15:54:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 2/7] dt-bindings: pwm: restrict node name suffixes
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dilip Kota <eswara.kota@linux.intel.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
-        linux-watchdog@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
- <20230530144851.92059-3-krzysztof.kozlowski@linaro.org>
- <20230607073652.hoyrernfcuoryrqs@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230607073652.hoyrernfcuoryrqs@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a54:2409:0:b0:217:72a9:f646 with HTTP; Wed, 7 Jun 2023
+ 15:54:33 -0700 (PDT)
+Reply-To: unitednationcompensationcoordinatortreasury@hotmail.com
+From:   "UNITED NATION DEPUTY SECRETARY-GENERAL (U.N)" 
+        <successikolo@gmail.com>
+Date:   Wed, 7 Jun 2023 15:54:33 -0700
+Message-ID: <CADFNGJ9M60ti_yHcUzQD8BP2Qji_qiW+6MK-iYxt_qf8B830+w@mail.gmail.com>
+Subject: CONTACT DHL OFFICE IMMEDIATELY FOR YOUR ATM MASTER CARD 1.5 MILLION,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FORM_FRAUD_5,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FORM,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_FILL_THIS_FORM_LOAN,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:62c listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [successikolo[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
+        *  0.0 MONEY_FORM Lots of money if you fill out a form
+        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
+        *      money
+        *  0.2 MONEY_FRAUD_5 Lots of money and many fraud phrases
+        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 07/06/2023 09:36, Uwe Kleine-König wrote:
-> On Tue, May 30, 2023 at 04:48:46PM +0200, Krzysztof Kozlowski wrote:
->> Make the pattern matching node names a bit stricter to improve DTS
->> consistency.  The pattern is restricted to:
->> 1. Only one unit address or one -N suffix,
->> 2. -N suffixes to decimal numbers.
->>
->> Suggested-by: Rob Herring <robh@kernel.org>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
->>
->> ---
->>
->> Cc: Tony Lindgren <tony@atomide.com>
->> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
->> ---
->>  Documentation/devicetree/bindings/pwm/pwm.yaml | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/pwm/pwm.yaml b/Documentation/devicetree/bindings/pwm/pwm.yaml
->> index 3c01f85029e5..abd9fa873354 100644
->> --- a/Documentation/devicetree/bindings/pwm/pwm.yaml
->> +++ b/Documentation/devicetree/bindings/pwm/pwm.yaml
->> @@ -13,7 +13,7 @@ select: false
->>  
->>  properties:
->>    $nodename:
->> -    pattern: "^pwm(@.*|-[0-9a-f])*$"
->> +    pattern: "^pwm(@.*|-([0-9]|[1-9][0-9]+))?$"
-> 
-> With this patch we forbid now the following patterns:
-> 
-> 	pwm-[0-9a-f][@-].*
-> 	pwm-0[0-9a-f]+
-> 	pwm-[a-f]([@-].*)?
+UNITED NATION DEPUTY SECRETARY-GENERAL.
 
-Yes, this was discussed last time:
-https://lore.kernel.org/all/20221127182232.GA128974-robh@kernel.org/
+This is to official inform you that we have been having meetings for
+the past three (3) weeks which ended two days ago with MR. JIM YONG
+KIM the world bank president and other seven continent presidents on
+the congress we treated on solution to scam victim problems.
 
-> 
-> Checking for such names:
-> 
-> 	$ git grep -oP '\bpwm-([0-9a-f][@-].*|0[0-9a-f]+|[0-9]*[a-f][0-9a-f]*)(*pla:\s*\{)' arch/*/boot/dts
-> 	arch/arm/boot/dts/meson8.dtsi:pwm-f-ao
-> 	arch/arm/boot/dts/meson8.dtsi:pwm-e
-> 	arch/arm/boot/dts/meson8b.dtsi:pwm-d
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-a
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-b-x7
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-b-x19
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-c-c
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-c-x5
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-c-x8
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-d-x3
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-d-x6
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-e
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-z
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-a
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-x
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-h
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-a-e
+ Note: we have decided to contact you following the reports we
+received from anti-fraud international monitoring group your
+name/email has been submitted to us therefore the united nations have
+agreed to compensate you with the sum of (USD$ 1.5 Million) this
+compensation is also including international business that failed you
+in the past due to government problems etc.
 
-Are you sure these are pwms, not pins?
+ We have arranged your payment through our ATM Master Card and
+deposited it in DHL Office to deliver it to you which is the latest
+instruction from the World Bank president MR. JIM YONG KIM, For your
+information=E2=80=99s, the delivery charges already paid by U.N treasury, t=
+he
+only money you will send to DHL office south Korea is
+($500). for security keeping fee, U.N coordinator already paid for
+others charges fees for delivery except the security keeping fee, the
+director of DHL refused to collect the security keeping fee from U.N
+coordinator, the Director of DHL office said that they don=E2=80=99t know
+exactly time you will contact them to reconfirm your details to avoid
+counting demur-rage that is why they refused collecting the ($500) .
+for security keeping fee.
 
-> 
-> These are all pinmux-settings and no pwm nodes, so the change is fine.
-> (But arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi isn't properly
-> sorted alphabetically.)
+ Therefore be advice to contact DHL Office agent south Korea. Rev:John
+Lee Tae-seok
+who is in position to deliver your ATM
+Master Card to your location address, contact DHL Office immediately
+with the bellow email & phone number as listed below.
 
-Exactly...
+ Contact name: John Lee Tae-seok
 
-> 
-> Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+ Email:( dhlgeneralheadquartersrepublic@gmail.com )
 
+ Do not hesitate to Contact Rev: John Lee Tae-seok, as soon as you
 
-Best regards,
-Krzysztof
+ read this message. Email:( dhlgeneralheadquartersrepublic@gmail.com )
 
+ Make sure you reconfirmed DHL Office your details ASAP as stated
+below to avoid wrong delivery.
+
+ Your full name..........
+
+ Home address:.........
+
+ Your country...........
+
+ Your city..............
+
+ Telephone......
+
+ Occupation:.......
+
+ Age:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6..
+
+ Let us know as soon as possible you receive your ATM MasterCard
+for proper verification.
+
+ Regards,
+
+ Mrs Vivian kakadu.
+
+ DEPUTY SECRETARY-GENERAL (U.N)
