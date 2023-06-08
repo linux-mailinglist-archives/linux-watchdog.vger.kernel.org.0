@@ -2,174 +2,116 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2F072721D
-	for <lists+linux-watchdog@lfdr.de>; Thu,  8 Jun 2023 00:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3B2728945
+	for <lists+linux-watchdog@lfdr.de>; Thu,  8 Jun 2023 22:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233083AbjFGWyk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 7 Jun 2023 18:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
+        id S233422AbjFHURn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 8 Jun 2023 16:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbjFGWyi (ORCPT
+        with ESMTP id S229459AbjFHURm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 7 Jun 2023 18:54:38 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713EE1FE2
-        for <linux-watchdog@vger.kernel.org>; Wed,  7 Jun 2023 15:54:36 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9788554a8c9so1020766b.2
-        for <linux-watchdog@vger.kernel.org>; Wed, 07 Jun 2023 15:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686178475; x=1688770475;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
-        b=WeqXDhOYObEU4Q4S3JxL3bEVQtplVvNKCfakhFkSuiLBGZe/ef388CiKUayAOmbEOV
-         ZR0I5GAxPbS54gQ7Fi+hG72GeTokI+noW1OPwtavsLtjymUzaeyKWDDpDiOtNBnLq40U
-         hKN8QzuE3yuzJvRNnur8tzVGd/WDVGu93YT1PuP86BcJTXG/Q3+EyiY1Ov5Itgxf9sfV
-         puzj8gFJzfO5zpoPQ0K3fO44i5t5qr504eako4ZleNRX8Z/LIaI8UL0On16+KpM6t7Hk
-         P05xDxotWEktWnY1d5dyENuc5li2l9dXU7CCPzvtyNY2IFMeysO2qVasevOMBOewfS/V
-         nc1g==
+        Thu, 8 Jun 2023 16:17:42 -0400
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AC330FE;
+        Thu,  8 Jun 2023 13:17:11 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-777a9d7efabso50907939f.0;
+        Thu, 08 Jun 2023 13:17:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686178475; x=1688770475;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
-        b=lLufMGf13oPy3tCRBaroQlk7nCiRbufJnTPgbzpohm+8yuPFQ0iV44BfAnY81+SSAs
-         Pnc5iVGqsDZSV6R55taK0g62TmOS2q+1UK9LHqOJt3jwV3Ic2P4c07YZ97Ia+cA6cEoO
-         AyIukOy0YpvSvElgffperFSI8sMWBhgYkhyQKZ0V6KkPG6/LMa1lWtp+uh/LwjF3EIeu
-         wvjdPpQC7Aj2P+KnlileoyI20x1OarlK1PZzW4GMpuyCapqvgtzbgrfDTGmQer0qjNlU
-         AqJ+z8rQwq8rcoWBoUJw+owwkYted2cWgzWL+tYugnHYM/Hea+sWsrH+iEdFXFQwcl4h
-         dOHg==
-X-Gm-Message-State: AC+VfDwLeb72bHbXF4E2U2AJOzddbnUVnj2YcbX1hfxxNk/VQ7xODNOZ
-        U9e8j6TN5N3c+IKQHpIOC79AdxS9f/AHrz/Gwlo=
-X-Google-Smtp-Source: ACHHUZ7J0yv2Uy0Ff3URHHllMh6dn7geAOftATdUjaOMCSCEm6sdR3gpAsqx+SgrMGXj3gnAhFPKaDZy027dlMN9Xtw=
-X-Received: by 2002:a17:907:783:b0:94a:6de2:ba9 with SMTP id
- xd3-20020a170907078300b0094a6de20ba9mr6600647ejb.68.1686178474547; Wed, 07
- Jun 2023 15:54:34 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686255430; x=1688847430;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s2bzye3qdHnsdMOOpdJS17HW2XawEXF4P/SDFSPJSSg=;
+        b=iJQPKcH3qIdjrAexZDedFvQ8XMuGh4w2rPC6vb804f7EZi1RbQOPI5T+bNtLjTSx+m
+         61k49I5AYGCnwrpP5cncNzXJwqaLoZXCQmsxoj6nSVjX3E/FDN4d0h0KF8Jc3pnUyKK+
+         O0/6uVXnW9NaqOvBOhUyj3AZJWvgFG2ZQ7n1b/LOPys9g24m5kNRJ3NuznS5bdITZ/Xl
+         +qfpNDju/MPcSkJfreEK3Gq1XpDIcwqsKmg3ah8BeZ6izlYsV+437GftMaS1rVT94eUd
+         jQ7b5rM1mD4xAKV/IR7Mknmr946GE8d4t0XRgIb69P4plovtxjR50CM0Z/gXYgW5lVFT
+         6B4Q==
+X-Gm-Message-State: AC+VfDx9vJsCWR6Py/AmM9F9Y1eI2MNkBg9eJIVSp7DCLxy2+yWeMLIX
+        pWhFnD+0f8OlVo59qTJsGg==
+X-Google-Smtp-Source: ACHHUZ7lAstS+N8P/f6NVeo18fgD2XEUFYRJ7Q6a0iUpECaeA9h4PL28CMYx1jrmgNwCjR5rWjUmpw==
+X-Received: by 2002:a5d:8b42:0:b0:77a:c800:5161 with SMTP id c2-20020a5d8b42000000b0077ac8005161mr4512036iot.4.1686255430520;
+        Thu, 08 Jun 2023 13:17:10 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id g3-20020a02c543000000b0040f91a65669sm293961jaj.21.2023.06.08.13.17.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 13:17:09 -0700 (PDT)
+Received: (nullmailer pid 3391292 invoked by uid 1000);
+        Thu, 08 Jun 2023 20:17:07 -0000
+Date:   Thu, 8 Jun 2023 14:17:07 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Claudiu.Beznea@microchip.com, devicetree@vger.kernel.org,
+        alexandre.belloni@bootlin.com, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        conor+dt@kernel.org, conor@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
+        wim@linux-watchdog.org, sebastian.reichel@collabora.com,
+        linux@roeck-us.net
+Subject: Re: [PATCH 3/5] dt-bindings: timer: microchip,sam9x60-pit64b:
+ convert to yaml
+Message-ID: <20230608201707.GA3359628-robh@kernel.org>
+References: <20230525125602.640855-1-claudiu.beznea@microchip.com>
+ <20230525125602.640855-4-claudiu.beznea@microchip.com>
+ <20230525-straw-fidgeting-4c1099aa16fe@spud>
+ <5edf3d3b-6f59-0af3-6414-940a278962bf@microchip.com>
+ <20230526-knickers-aim-e01220e6a7cd@wendy>
+ <5a5d25a2-e6b5-fd69-f615-cd3d6ed33b9f@microchip.com>
+ <20230526-unsubtle-chowtime-ce329d7e5627@wendy>
 MIME-Version: 1.0
-Received: by 2002:a54:2409:0:b0:217:72a9:f646 with HTTP; Wed, 7 Jun 2023
- 15:54:33 -0700 (PDT)
-Reply-To: unitednationcompensationcoordinatortreasury@hotmail.com
-From:   "UNITED NATION DEPUTY SECRETARY-GENERAL (U.N)" 
-        <successikolo@gmail.com>
-Date:   Wed, 7 Jun 2023 15:54:33 -0700
-Message-ID: <CADFNGJ9M60ti_yHcUzQD8BP2Qji_qiW+6MK-iYxt_qf8B830+w@mail.gmail.com>
-Subject: CONTACT DHL OFFICE IMMEDIATELY FOR YOUR ATM MASTER CARD 1.5 MILLION,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FILL_THIS_FORM,FORM_FRAUD_5,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FORM,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_FILL_THIS_FORM_LOAN,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:62c listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [successikolo[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
-        *  0.0 MONEY_FORM Lots of money if you fill out a form
-        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
-        *      money
-        *  0.2 MONEY_FRAUD_5 Lots of money and many fraud phrases
-        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
-X-Spam-Level: ******
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230526-unsubtle-chowtime-ce329d7e5627@wendy>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-UNITED NATION DEPUTY SECRETARY-GENERAL.
+On Fri, May 26, 2023 at 08:55:39AM +0100, Conor Dooley wrote:
+> On Fri, May 26, 2023 at 06:41:39AM +0000, Claudiu.Beznea@microchip.com wrote:
+> > On 26.05.2023 09:23, Conor Dooley wrote:
+> > > On Fri, May 26, 2023 at 04:47:28AM +0000, Claudiu.Beznea@microchip.com wrote:
+> > >> On 25.05.2023 20:14, Conor Dooley wrote:
+> > >>>> Convert Microchip PIT64B to YAML. Along with it clock-names binding has
+> > >>>> been added as the driver needs it to get PIT64B clocks.
+> > >>> I don't think both of these PIT things need to have different binding
+> > >>> files. 90% of it is the same, just the clock-names/number - so you can
+> > >>
+> > >> But these are different hardware blocks with different functionalities and
+> > >> different drivers.
+> > > 
+> > > Having different drivers doesn't preclude having them in the same
+> > > binding provided the function/description etc are more or less
+> > > identical. I was confused by:
+> > > 
+> > > +description:
+> > > +  The 64-bit periodic interval timer provides the operating system scheduler
+> > > +  interrupt. It is designed to offer maximum accuracy and efficient management,
+> > > +  even for systems with long response times.
+> > > 
+> > > +description:
+> > > +  Atmel periodic interval timer provides the operating system’s scheduler
+> > > +  interrupt. It is designed to offer maximum accuracy and efficient management,
+> > > +  even for systems with long response time.
+> > > 
+> > > Those seemed like they do the same thing to me!
+> > 
+> > They do the same thing, they are timers... But the way they do it (from
+> > hardware perspective) is totally different. With this would you still
+> > prefer to have them merged?
+> 
+> Yeah, one binding would be my preference.
 
-This is to official inform you that we have been having meetings for
-the past three (3) weeks which ended two days ago with MR. JIM YONG
-KIM the world bank president and other seven continent presidents on
-the congress we treated on solution to scam victim problems.
+I'd probably just leave them separate if they're pretty much unrelated.
 
- Note: we have decided to contact you following the reports we
-received from anti-fraud international monitoring group your
-name/email has been submitted to us therefore the united nations have
-agreed to compensate you with the sum of (USD$ 1.5 Million) this
-compensation is also including international business that failed you
-in the past due to government problems etc.
-
- We have arranged your payment through our ATM Master Card and
-deposited it in DHL Office to deliver it to you which is the latest
-instruction from the World Bank president MR. JIM YONG KIM, For your
-information=E2=80=99s, the delivery charges already paid by U.N treasury, t=
-he
-only money you will send to DHL office south Korea is
-($500). for security keeping fee, U.N coordinator already paid for
-others charges fees for delivery except the security keeping fee, the
-director of DHL refused to collect the security keeping fee from U.N
-coordinator, the Director of DHL office said that they don=E2=80=99t know
-exactly time you will contact them to reconfirm your details to avoid
-counting demur-rage that is why they refused collecting the ($500) .
-for security keeping fee.
-
- Therefore be advice to contact DHL Office agent south Korea. Rev:John
-Lee Tae-seok
-who is in position to deliver your ATM
-Master Card to your location address, contact DHL Office immediately
-with the bellow email & phone number as listed below.
-
- Contact name: John Lee Tae-seok
-
- Email:( dhlgeneralheadquartersrepublic@gmail.com )
-
- Do not hesitate to Contact Rev: John Lee Tae-seok, as soon as you
-
- read this message. Email:( dhlgeneralheadquartersrepublic@gmail.com )
-
- Make sure you reconfirmed DHL Office your details ASAP as stated
-below to avoid wrong delivery.
-
- Your full name..........
-
- Home address:.........
-
- Your country...........
-
- Your city..............
-
- Telephone......
-
- Occupation:.......
-
- Age:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6..
-
- Let us know as soon as possible you receive your ATM MasterCard
-for proper verification.
-
- Regards,
-
- Mrs Vivian kakadu.
-
- DEPUTY SECRETARY-GENERAL (U.N)
+Rob
