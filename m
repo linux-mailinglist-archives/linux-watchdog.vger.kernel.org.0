@@ -2,74 +2,52 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3B2728945
-	for <lists+linux-watchdog@lfdr.de>; Thu,  8 Jun 2023 22:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E38D729057
+	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Jun 2023 08:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233422AbjFHURn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 8 Jun 2023 16:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
+        id S229808AbjFIGqV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 9 Jun 2023 02:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjFHURm (ORCPT
+        with ESMTP id S230315AbjFIGqU (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 8 Jun 2023 16:17:42 -0400
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AC330FE;
-        Thu,  8 Jun 2023 13:17:11 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-777a9d7efabso50907939f.0;
-        Thu, 08 Jun 2023 13:17:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686255430; x=1688847430;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s2bzye3qdHnsdMOOpdJS17HW2XawEXF4P/SDFSPJSSg=;
-        b=iJQPKcH3qIdjrAexZDedFvQ8XMuGh4w2rPC6vb804f7EZi1RbQOPI5T+bNtLjTSx+m
-         61k49I5AYGCnwrpP5cncNzXJwqaLoZXCQmsxoj6nSVjX3E/FDN4d0h0KF8Jc3pnUyKK+
-         O0/6uVXnW9NaqOvBOhUyj3AZJWvgFG2ZQ7n1b/LOPys9g24m5kNRJ3NuznS5bdITZ/Xl
-         +qfpNDju/MPcSkJfreEK3Gq1XpDIcwqsKmg3ah8BeZ6izlYsV+437GftMaS1rVT94eUd
-         jQ7b5rM1mD4xAKV/IR7Mknmr946GE8d4t0XRgIb69P4plovtxjR50CM0Z/gXYgW5lVFT
-         6B4Q==
-X-Gm-Message-State: AC+VfDx9vJsCWR6Py/AmM9F9Y1eI2MNkBg9eJIVSp7DCLxy2+yWeMLIX
-        pWhFnD+0f8OlVo59qTJsGg==
-X-Google-Smtp-Source: ACHHUZ7lAstS+N8P/f6NVeo18fgD2XEUFYRJ7Q6a0iUpECaeA9h4PL28CMYx1jrmgNwCjR5rWjUmpw==
-X-Received: by 2002:a5d:8b42:0:b0:77a:c800:5161 with SMTP id c2-20020a5d8b42000000b0077ac8005161mr4512036iot.4.1686255430520;
-        Thu, 08 Jun 2023 13:17:10 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id g3-20020a02c543000000b0040f91a65669sm293961jaj.21.2023.06.08.13.17.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 13:17:09 -0700 (PDT)
-Received: (nullmailer pid 3391292 invoked by uid 1000);
-        Thu, 08 Jun 2023 20:17:07 -0000
-Date:   Thu, 8 Jun 2023 14:17:07 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Claudiu.Beznea@microchip.com, devicetree@vger.kernel.org,
-        alexandre.belloni@bootlin.com, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        conor+dt@kernel.org, conor@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
-        wim@linux-watchdog.org, sebastian.reichel@collabora.com,
-        linux@roeck-us.net
-Subject: Re: [PATCH 3/5] dt-bindings: timer: microchip,sam9x60-pit64b:
- convert to yaml
-Message-ID: <20230608201707.GA3359628-robh@kernel.org>
-References: <20230525125602.640855-1-claudiu.beznea@microchip.com>
- <20230525125602.640855-4-claudiu.beznea@microchip.com>
- <20230525-straw-fidgeting-4c1099aa16fe@spud>
- <5edf3d3b-6f59-0af3-6414-940a278962bf@microchip.com>
- <20230526-knickers-aim-e01220e6a7cd@wendy>
- <5a5d25a2-e6b5-fd69-f615-cd3d6ed33b9f@microchip.com>
- <20230526-unsubtle-chowtime-ce329d7e5627@wendy>
+        Fri, 9 Jun 2023 02:46:20 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517C29E;
+        Thu,  8 Jun 2023 23:46:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1686293178;
+  x=1717829178;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:to:cc;
+  bh=ZWYAkALE3Z1DeilPZzKUrfG1wIS0HdnSyXcG9sXjfuM=;
+  b=c7+UJdfm3vRqtA4znFse5B1iDOjeLxWlISdZNYdB54JLe06ly06rOyit
+   4cvwspKAr4kvvaCTQDjSPRAvA92seXz4PvSAJ7aKfHNmAB9tDH2quvWQK
+   34gypziCUb95hN9EKAdODW9tvnWXyeUAaHFesqRzP2ii6VyZxSr/g9gHT
+   aq18WTXy2aP8B+Sek0GmLKqR+jQKKrMGCj14c3g71im/B5kuxzagj1uek
+   pgWB/hHjg4Bm2yQR5CQgN0pnBQXV7KpRrdEHIVHq6wKhoLe2N4mkOIB3a
+   qcQxBLUBIgkKBmKaMGrTUzKOhdFLW9VmAzWzoXYTK1sqroiMoI3BJWpVE
+   A==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+Date:   Fri, 9 Jun 2023 08:45:55 +0200
+Subject: [PATCH] watchdog/mm: Allow dumping memory info in pretimeout
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230526-unsubtle-chowtime-ce329d7e5627@wendy>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20230608-pretimeout-oom-v1-1-542cc91062d7@axis.com>
+X-B4-Tracking: v=1; b=H4sIAKLKgmQC/x3NQQ5AMBCF4avIrE3SIlKuIhbFlFnoSItIxN2V5
+ f+SL++GSIEpQpvdEOjkyOJT6DyDcbF+JuQpNRSqKFWtDG6Bdl5Jjh1FVmwaXZmqNFZPDhIabCQ
+ cgvXj8jEncn1zUo6v/6frn+cF/Rc98HcAAAA=
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,41 +55,191 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, May 26, 2023 at 08:55:39AM +0100, Conor Dooley wrote:
-> On Fri, May 26, 2023 at 06:41:39AM +0000, Claudiu.Beznea@microchip.com wrote:
-> > On 26.05.2023 09:23, Conor Dooley wrote:
-> > > On Fri, May 26, 2023 at 04:47:28AM +0000, Claudiu.Beznea@microchip.com wrote:
-> > >> On 25.05.2023 20:14, Conor Dooley wrote:
-> > >>>> Convert Microchip PIT64B to YAML. Along with it clock-names binding has
-> > >>>> been added as the driver needs it to get PIT64B clocks.
-> > >>> I don't think both of these PIT things need to have different binding
-> > >>> files. 90% of it is the same, just the clock-names/number - so you can
-> > >>
-> > >> But these are different hardware blocks with different functionalities and
-> > >> different drivers.
-> > > 
-> > > Having different drivers doesn't preclude having them in the same
-> > > binding provided the function/description etc are more or less
-> > > identical. I was confused by:
-> > > 
-> > > +description:
-> > > +  The 64-bit periodic interval timer provides the operating system scheduler
-> > > +  interrupt. It is designed to offer maximum accuracy and efficient management,
-> > > +  even for systems with long response times.
-> > > 
-> > > +description:
-> > > +  Atmel periodic interval timer provides the operating system’s scheduler
-> > > +  interrupt. It is designed to offer maximum accuracy and efficient management,
-> > > +  even for systems with long response time.
-> > > 
-> > > Those seemed like they do the same thing to me!
-> > 
-> > They do the same thing, they are timers... But the way they do it (from
-> > hardware perspective) is totally different. With this would you still
-> > prefer to have them merged?
-> 
-> Yeah, one binding would be my preference.
+On my (embedded) systems, the most common cause of hitting the watchdog
+(pre)timeout is due to thrashing.  Diagnosing these problems is hard
+without knowing the memory state at the point of the watchdog hit.  In
+order to make this information available, add a module parameter to the
+watchdog pretimeout panic governor to ask it to dump memory info and the
+OOM task list (using a new helper in the OOM code) before triggering the
+panic.
 
-I'd probably just leave them separate if they're pretty much unrelated.
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+ drivers/watchdog/pretimeout_panic.c | 15 +++++++++++
+ include/linux/oom.h                 |  5 ++++
+ include/linux/sched/task.h          |  5 ++++
+ mm/oom_kill.c                       | 54 ++++++++++++++++++++++++++++++++++++-
+ 4 files changed, 78 insertions(+), 1 deletion(-)
 
-Rob
+diff --git a/drivers/watchdog/pretimeout_panic.c b/drivers/watchdog/pretimeout_panic.c
+index 2cc3c41d2be5b..52d686fa541c7 100644
+--- a/drivers/watchdog/pretimeout_panic.c
++++ b/drivers/watchdog/pretimeout_panic.c
+@@ -5,10 +5,15 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/mm.h>
++#include <linux/oom.h>
+ #include <linux/watchdog.h>
+ 
+ #include "watchdog_pretimeout.h"
+ 
++static unsigned long dump_min_rss_bytes;
++module_param(dump_min_rss_bytes, ulong, 0644);
++
+ /**
+  * pretimeout_panic - Panic on watchdog pretimeout event
+  * @wdd - watchdog_device
+@@ -17,6 +22,16 @@
+  */
+ static void pretimeout_panic(struct watchdog_device *wdd)
+ {
++	/*
++	 * Since the root cause is not certain to be low memory, only print
++	 * tasks with RSS above a configurable limit, to avoid losing
++	 * potentially more important messages from the log.
++	 */
++	if (dump_min_rss_bytes) {
++		show_mem(SHOW_MEM_FILTER_NODES, NULL);
++		oom_dump_tasks(DIV_ROUND_UP(dump_min_rss_bytes, PAGE_SIZE));
++	}
++
+ 	panic("watchdog pretimeout event\n");
+ }
+ 
+diff --git a/include/linux/oom.h b/include/linux/oom.h
+index 7d0c9c48a0c54..1451fe2c38d78 100644
+--- a/include/linux/oom.h
++++ b/include/linux/oom.h
+@@ -52,6 +52,9 @@ struct oom_control {
+ 
+ 	/* Used to print the constraint info. */
+ 	enum oom_constraint constraint;
++
++	bool dump_trylock;
++	unsigned long dump_min_rss_pages;
+ };
+ 
+ extern struct mutex oom_lock;
+@@ -102,6 +105,8 @@ long oom_badness(struct task_struct *p,
+ 
+ extern bool out_of_memory(struct oom_control *oc);
+ 
++extern void oom_dump_tasks(unsigned long min_rss_pages);
++
+ extern void exit_oom_victim(void);
+ 
+ extern int register_oom_notifier(struct notifier_block *nb);
+diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
+index e0f5ac90a228b..e8a68b2a3e829 100644
+--- a/include/linux/sched/task.h
++++ b/include/linux/sched/task.h
+@@ -183,6 +183,11 @@ static inline void task_lock(struct task_struct *p)
+ 	spin_lock(&p->alloc_lock);
+ }
+ 
++static inline int task_trylock(struct task_struct *p)
++{
++	return spin_trylock(&p->alloc_lock);
++}
++
+ static inline void task_unlock(struct task_struct *p)
+ {
+ 	spin_unlock(&p->alloc_lock);
+diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+index 044e1eed720ee..87e554a1c152f 100644
+--- a/mm/oom_kill.c
++++ b/mm/oom_kill.c
+@@ -149,6 +149,30 @@ struct task_struct *find_lock_task_mm(struct task_struct *p)
+ 	return t;
+ }
+ 
++/*
++ * Identical to the above, except that we avoid tasks which we can't lock, to
++ * avoid deadlocks when called from an interrupt handler.
++ */
++struct task_struct *find_trylock_task_mm(struct task_struct *p)
++{
++	struct task_struct *t;
++
++	rcu_read_lock();
++
++	for_each_thread(p, t) {
++		if (!task_trylock(t))
++			continue;
++		if (likely(t->mm))
++			goto found;
++		task_unlock(t);
++	}
++	t = NULL;
++found:
++	rcu_read_unlock();
++
++	return t;
++}
++
+ /*
+  * order == -1 means the oom kill is required by sysrq, otherwise only
+  * for display purposes.
+@@ -390,15 +414,26 @@ static int dump_task(struct task_struct *p, void *arg)
+ 	if (!is_memcg_oom(oc) && !oom_cpuset_eligible(p, oc))
+ 		return 0;
+ 
+-	task = find_lock_task_mm(p);
++	task = oc->dump_trylock ? find_trylock_task_mm(p) :
++				  find_lock_task_mm(p);
+ 	if (!task) {
+ 		/*
+ 		 * All of p's threads have already detached their mm's. There's
+ 		 * no need to report them; they can't be oom killed anyway.
++		 *
++		 * Or we got here from an interrupt and the task lock is
++		 * locked, in which case we're forced to ignore this task to
++		 * avoid deadlocks.
+ 		 */
+ 		return 0;
+ 	}
+ 
++	if (oc->dump_min_rss_pages &&
++	    get_mm_rss(task->mm) < oc->dump_min_rss_pages) {
++		task_unlock(task);
++		return 0;
++	}
++
+ 	pr_info("[%7d] %5d %5d %8lu %8lu %8ld %8lu         %5hd %s\n",
+ 		task->pid, from_kuid(&init_user_ns, task_uid(task)),
+ 		task->tgid, task->mm->total_vm, get_mm_rss(task->mm),
+@@ -437,6 +472,23 @@ static void dump_tasks(struct oom_control *oc)
+ 	}
+ }
+ 
++void oom_dump_tasks(unsigned long min_rss_pages)
++{
++	const gfp_t gfp_mask = GFP_KERNEL;
++	struct oom_control oc = {
++		.zonelist = node_zonelist(first_memory_node, gfp_mask),
++		.nodemask = NULL,
++		.memcg = NULL,
++		.gfp_mask = gfp_mask,
++		.order = -1,
++		.dump_min_rss_pages = min_rss_pages,
++		.dump_trylock = in_interrupt(),
++	};
++
++	dump_tasks(&oc);
++}
++EXPORT_SYMBOL_GPL(oom_dump_tasks);
++
+ static void dump_oom_summary(struct oom_control *oc, struct task_struct *victim)
+ {
+ 	/* one line summary of the oom killer context. */
+
+---
+base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
+change-id: 20230608-pretimeout-oom-99148438a1df
+
+Best regards,
+-- 
+Vincent Whitchurch <vincent.whitchurch@axis.com>
+
