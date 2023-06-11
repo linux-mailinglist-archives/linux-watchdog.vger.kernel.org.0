@@ -2,79 +2,52 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6B1729E12
-	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Jun 2023 17:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 460A372B197
+	for <lists+linux-watchdog@lfdr.de>; Sun, 11 Jun 2023 13:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241145AbjFIPOe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 9 Jun 2023 11:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
+        id S230404AbjFKLNd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 11 Jun 2023 07:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239991AbjFIPOc (ORCPT
+        with ESMTP id S230482AbjFKLNc (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 9 Jun 2023 11:14:32 -0400
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C6030C5;
-        Fri,  9 Jun 2023 08:14:25 -0700 (PDT)
-Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-777a4926555so61146239f.0;
-        Fri, 09 Jun 2023 08:14:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686323665; x=1688915665;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EkAejDhVenOljts+lEgATyY0mjLSL4+xG2fSzob05cU=;
-        b=bGVGUeWa4Q1D4LKrkcF9ZuGmc3n3tBrlOeJy5gJ1pBxfrGPy6NzlCfJxL1sqMMTauN
-         UTHMSCkb20JH2e2WlvXLtwRtH/7LdrCB8VwrKtWCXn2G8nchpv+f9RA4q0BkfNaAaEtk
-         xg6/RhxBbH7tO1JRghWIquAwA/v0P/V7hkANfRyL/3fjWETiIwKuGu2lAeIIt/Yyg4Pd
-         AewBxbb6mtp+sUuMIvSCu/o+CxgPV671of6C9QL8vuTAU9h46Eg/bIvrJZb10Ubgo+fS
-         jB0qRrDyNIg3QWFyG1pFt3aXWyU8BbXApDezMMlhcp8m+lhmdfUDGrvDbJTQIJbQa/ew
-         R4SA==
-X-Gm-Message-State: AC+VfDyrbruJvav+Z1jrbM1BYAmHxMAeTyVQBFLL8t76TR0ym9VTrb2x
-        Iljrvd/L1mUGVaN0ho/azQ==
-X-Google-Smtp-Source: ACHHUZ51hC0FqW26G3ZZ/1x1kW04DJ7QhraHlAzn2ctcSO3HfuegS6P1MdA5ofiYZJ2F6gytcZ0bbw==
-X-Received: by 2002:a5d:8b5a:0:b0:774:8d6c:9fe7 with SMTP id c26-20020a5d8b5a000000b007748d6c9fe7mr3269252iot.3.1686323664873;
-        Fri, 09 Jun 2023 08:14:24 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id eq14-20020a0566384e2e00b0041631393ac9sm1026218jab.18.2023.06.09.08.14.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 08:14:24 -0700 (PDT)
-Received: (nullmailer pid 1011643 invoked by uid 1000);
-        Fri, 09 Jun 2023 15:14:20 -0000
-Date:   Fri, 9 Jun 2023 09:14:20 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-spi@vger.kernel.org, Alessandro Zummo <a.zummo@towertech.it>,
-        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
-        Dilip Kota <eswara.kota@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        linux-pwm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        timestamp@lists.linux.dev, Tony Lindgren <tony@atomide.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-phy@lists.infradead.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [PATCH 7/7] dt-bindings: watchdog: restrict node name suffixes
-Message-ID: <168632366012.1011592.9711699530759737056.robh@kernel.org>
-References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
- <20230530144851.92059-8-krzysztof.kozlowski@linaro.org>
+        Sun, 11 Jun 2023 07:13:32 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77F8198C
+        for <linux-watchdog@vger.kernel.org>; Sun, 11 Jun 2023 04:13:16 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q8J0U-0006RP-Ai; Sun, 11 Jun 2023 13:13:14 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q8J0S-006dpt-TR; Sun, 11 Jun 2023 13:13:12 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q8J0S-00DAxA-9L; Sun, 11 Jun 2023 13:13:12 +0200
+Date:   Sun, 11 Jun 2023 13:13:12 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: [PATCH] watchdog: ziirave_wdt: Switch i2c driver back to use
+ .probe()
+Message-ID: <20230611111312.s4uauybzhqagjmoq@pengutronix.de>
+References: <20230525210837.735447-1-u.kleine-koenig@pengutronix.de>
+ <1a2f452a-14f4-4b29-b1c2-8e69d5d86814@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6lbwc6htqnvqpmrl"
 Content-Disposition: inline
-In-Reply-To: <20230530144851.92059-8-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <1a2f452a-14f4-4b29-b1c2-8e69d5d86814@roeck-us.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,22 +56,50 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 
-On Tue, 30 May 2023 16:48:51 +0200, Krzysztof Kozlowski wrote:
-> Make the pattern matching node names a bit stricter to improve DTS
-> consistency.  The pattern is restricted to -N suffixes to decimal
-> numbers.
-> 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  Documentation/devicetree/bindings/watchdog/watchdog.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
+--6lbwc6htqnvqpmrl
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Rob Herring <robh@kernel.org>
+Hello,
 
+On Fri, May 26, 2023 at 09:55:20AM -0700, Guenter Roeck wrote:
+> On Thu, May 25, 2023 at 11:08:37PM +0200, Uwe Kleine-K=F6nig wrote:
+> > After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+> > call-back type"), all drivers being converted to .probe_new() and then
+> > 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter")
+> > convert back to (the new) .probe() to be able to eventually drop
+> > .probe_new() from struct i2c_driver.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+I assume this is a nice start to get this applied for the next merge
+window. The patch didn't show up in next yet though. Is that because Wim
+didn't start applying patches yet, or is there a problem (like this
+patch being lost in Wim's mailbox)?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--6lbwc6htqnvqpmrl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSFrEcACgkQj4D7WH0S
+/k55nAgAlYeCNMMaYw+TauXlurCc/4j2NtUmxzeVU2goahCP+NO6V0ohUEfR/sb0
+o9iM8px/c4EkJkr0Hoiv47109/Jo27yMVftlWTd9CHuFAqqO77ZkB9P2vJIhUU6l
+xHGoVvHKP8GWevEBK+sHDfQ6cX2fplVIM6WchJIfr2Qy0aGSgFSBcc5cerMy2R70
+QC6GEScoUhlnFuUxwotNIJ9ojsgBVuzg8//E0+/gILw+0d6g8eg5/JiwsVU3yvuJ
+zQtlkX2kDrA7KNBmH+3Fztv/V3uwsCJyUrox3coKPkp0urGE9xdv7N1fRe71sb07
+aFP8nkXWGWG1kr1eBfEg2DhlWu0uFQ==
+=G3T9
+-----END PGP SIGNATURE-----
+
+--6lbwc6htqnvqpmrl--
