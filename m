@@ -2,104 +2,108 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 460A372B197
-	for <lists+linux-watchdog@lfdr.de>; Sun, 11 Jun 2023 13:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9AA972B607
+	for <lists+linux-watchdog@lfdr.de>; Mon, 12 Jun 2023 05:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbjFKLNd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 11 Jun 2023 07:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
+        id S234711AbjFLDVu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 11 Jun 2023 23:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbjFKLNc (ORCPT
+        with ESMTP id S234734AbjFLDVY (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 11 Jun 2023 07:13:32 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77F8198C
-        for <linux-watchdog@vger.kernel.org>; Sun, 11 Jun 2023 04:13:16 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q8J0U-0006RP-Ai; Sun, 11 Jun 2023 13:13:14 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q8J0S-006dpt-TR; Sun, 11 Jun 2023 13:13:12 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q8J0S-00DAxA-9L; Sun, 11 Jun 2023 13:13:12 +0200
-Date:   Sun, 11 Jun 2023 13:13:12 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH] watchdog: ziirave_wdt: Switch i2c driver back to use
- .probe()
-Message-ID: <20230611111312.s4uauybzhqagjmoq@pengutronix.de>
-References: <20230525210837.735447-1-u.kleine-koenig@pengutronix.de>
- <1a2f452a-14f4-4b29-b1c2-8e69d5d86814@roeck-us.net>
+        Sun, 11 Jun 2023 23:21:24 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B338E10D8;
+        Sun, 11 Jun 2023 20:19:18 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-6532671ccc7so4274581b3a.2;
+        Sun, 11 Jun 2023 20:19:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686539958; x=1689131958;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BnwXoTfAjNKtmmu+h2X8viuU0CQTCnF38bCD8KDLgdA=;
+        b=LMla4nCwPUfIHE5Ve5y77UoJzkj9XH/NNStiqa1ATWK8uUlXnJkXquyou0uuO98B/3
+         58fKYILWgnDQRZhI6HePC90rISArwOinDvtCn1littK2LDJtLPernfebjvWJhpypMGqO
+         mEMWeppsX2bcZ3WZxApjiMvetxehh7i31MwoNGDdsBUcmX6AO285YVqLe12jtDMj/BU0
+         AD2qSYJBE40BIBXCocpSTrQbABTeJGTUcDjnqLMRw15qIFkqP9Y5W2UuYH3e8yWlXBbK
+         3STqC0VlGuxDO4eF/okfdOiQBxjiggnDVOzw1kFHeNI19Q1RLTsWunAnsyK9RB7Ow67M
+         g7Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686539958; x=1689131958;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BnwXoTfAjNKtmmu+h2X8viuU0CQTCnF38bCD8KDLgdA=;
+        b=aS1JVSr/EeXeYQ9hLqxHZP16RsdK/tEMgEWOcn3UK46XRFiih+7EsxhHcZzySyk7WV
+         aDFeacdrL2neBvHd2QveExc/fA0UXNhiqT+Di1NWtGg7BXvYA1/qzseEaq46X84H5ThC
+         6vIZ9pOBvEMRNI+IQ34oP30g+f+tSJnNqJX9Wr2pFjQu2ZKjDPvNowF7AMbfGHFdnVae
+         ePp5OiBwK1YVMHzCF8FJS9cNOUN4uaWg6mk84hcTvjGJgjb5cK/achQ1VvsrTxgz1+Zf
+         wMlk8smzmFJhnV6FuvgQty4o4FyT7kixRGZ4dTFDcVDndGibBmKx4HYDDa6OaRQLHKHu
+         35Aw==
+X-Gm-Message-State: AC+VfDzoSKTNy43iN72bVmnrBOhEfiwIKjllwmP4xT990BfLYzP+nGyv
+        9EAKPTlt3YrVoYCzHZZji+YMeVasJitG/VSV8XM=
+X-Google-Smtp-Source: ACHHUZ6N4Nh1SAip/KXj6nE7uF8b9QoD8cUzqaJDuRczmR3ZnWGH+wTchxOPIFoYZe97z99KeWBRdQ==
+X-Received: by 2002:a05:6a00:1a10:b0:652:98e9:fb1 with SMTP id g16-20020a056a001a1000b0065298e90fb1mr10582701pfv.32.1686539958108;
+        Sun, 11 Jun 2023 20:19:18 -0700 (PDT)
+Received: from dmssc64-Default-string.lan (ec2-3-38-176-46.ap-northeast-2.compute.amazonaws.com. [3.38.176.46])
+        by smtp.gmail.com with ESMTPSA id v3-20020aa78503000000b006414289ab69sm5940853pfn.52.2023.06.11.20.19.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Jun 2023 20:19:17 -0700 (PDT)
+From:   a345351830@gmail.com
+To:     345351830@qq.com
+Cc:     amy.shih@advantech.com.tw, oakley.ding@advantech.com.tw,
+        zhijun.hu@advantech.com.cn,
+        Yuechao Zhao <yuechao.zhao@advantech.com.cn>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [v1,1/1] watchdog: sp5100_tco: support Hygon FCH/SCH (Server Controller Hub)
+Date:   Mon, 12 Jun 2023 11:19:07 +0800
+Message-Id: <20230612031907.796461-1-a345351830@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6lbwc6htqnvqpmrl"
-Content-Disposition: inline
-In-Reply-To: <1a2f452a-14f4-4b29-b1c2-8e69d5d86814@roeck-us.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+From: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
 
---6lbwc6htqnvqpmrl
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Add PCI_VENDOR_ID_HYGON(Hygon vendor id [0x1d94]) in this driver
 
-Hello,
+Signed-off-by: Yuechao Zhao <yuechao.zhao@advantech.com.cn>
+---
+ drivers/watchdog/sp5100_tco.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-On Fri, May 26, 2023 at 09:55:20AM -0700, Guenter Roeck wrote:
-> On Thu, May 25, 2023 at 11:08:37PM +0200, Uwe Kleine-K=F6nig wrote:
-> > After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> > call-back type"), all drivers being converted to .probe_new() and then
-> > 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter")
-> > convert back to (the new) .probe() to be able to eventually drop
-> > .probe_new() from struct i2c_driver.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
->=20
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
+index 14f8d8d90920..2bd3dc25cb03 100644
+--- a/drivers/watchdog/sp5100_tco.c
++++ b/drivers/watchdog/sp5100_tco.c
+@@ -96,7 +96,7 @@ static enum tco_reg_layout tco_reg_layout(struct pci_dev *dev)
+ 	    sp5100_tco_pci->device == PCI_DEVICE_ID_AMD_KERNCZ_SMBUS &&
+ 	    sp5100_tco_pci->revision >= AMD_ZEN_SMBUS_PCI_REV) {
+ 		return efch_mmio;
+-	} else if (dev->vendor == PCI_VENDOR_ID_AMD &&
++	} else if ((dev->vendor == PCI_VENDOR_ID_AMD || dev->vendor == PCI_VENDOR_ID_HYGON) &&
+ 	    ((dev->device == PCI_DEVICE_ID_AMD_HUDSON2_SMBUS &&
+ 	     dev->revision >= 0x41) ||
+ 	    (dev->device == PCI_DEVICE_ID_AMD_KERNCZ_SMBUS &&
+@@ -579,6 +579,8 @@ static const struct pci_device_id sp5100_tco_pci_tbl[] = {
+ 	  PCI_ANY_ID, },
+ 	{ PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_KERNCZ_SMBUS, PCI_ANY_ID,
+ 	  PCI_ANY_ID, },
++	{ PCI_VENDOR_ID_HYGON, PCI_DEVICE_ID_AMD_KERNCZ_SMBUS, PCI_ANY_ID,
++	  PCI_ANY_ID, },
+ 	{ 0, },			/* End of list */
+ };
+ MODULE_DEVICE_TABLE(pci, sp5100_tco_pci_tbl);
+-- 
+2.34.1
 
-I assume this is a nice start to get this applied for the next merge
-window. The patch didn't show up in next yet though. Is that because Wim
-didn't start applying patches yet, or is there a problem (like this
-patch being lost in Wim's mailbox)?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---6lbwc6htqnvqpmrl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSFrEcACgkQj4D7WH0S
-/k55nAgAlYeCNMMaYw+TauXlurCc/4j2NtUmxzeVU2goahCP+NO6V0ohUEfR/sb0
-o9iM8px/c4EkJkr0Hoiv47109/Jo27yMVftlWTd9CHuFAqqO77ZkB9P2vJIhUU6l
-xHGoVvHKP8GWevEBK+sHDfQ6cX2fplVIM6WchJIfr2Qy0aGSgFSBcc5cerMy2R70
-QC6GEScoUhlnFuUxwotNIJ9ojsgBVuzg8//E0+/gILw+0d6g8eg5/JiwsVU3yvuJ
-zQtlkX2kDrA7KNBmH+3Fztv/V3uwsCJyUrox3coKPkp0urGE9xdv7N1fRe71sb07
-aFP8nkXWGWG1kr1eBfEg2DhlWu0uFQ==
-=G3T9
------END PGP SIGNATURE-----
-
---6lbwc6htqnvqpmrl--
