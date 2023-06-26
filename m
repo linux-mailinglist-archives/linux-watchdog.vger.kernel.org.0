@@ -2,128 +2,92 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6870173C9F8
-	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Jun 2023 11:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1B073DE50
+	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Jun 2023 13:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbjFXJUB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 24 Jun 2023 05:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
+        id S229649AbjFZL6K (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 26 Jun 2023 07:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232909AbjFXJUA (ORCPT
+        with ESMTP id S229523AbjFZL6I (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 24 Jun 2023 05:20:00 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B10A1BF2
-        for <linux-watchdog@vger.kernel.org>; Sat, 24 Jun 2023 02:19:58 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9889952ed18so185874766b.3
-        for <linux-watchdog@vger.kernel.org>; Sat, 24 Jun 2023 02:19:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687598396; x=1690190396;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KfAcGT4J8pUoMJBGxBaLszgHGiS6c9l8JOpUoHeAAOA=;
-        b=yQVzjTKSXVmVV9dLLVhjlfW4hSkCHaHSkFp8XKDuppCzQpGHvyVttjnWT3sZWadL6G
-         Aptg8K8aHU9euO2VsKWw8w5GNb7iZUmQN6s980dsKNw8bDt/Gg0mjyG+1qbTOWHueIrY
-         /Q6bxSUkrx10KI9Bk3ImA6gPyy5RwRLI1IVUQjGo73WdFwY+k9WU2qYNImsGMRH4LVBY
-         NGoLGDAz09o/yosqduTlRt/bCpwDw40AnKJvyTtb5EsV6kYLtwXhkQO6myiWdEiHilCp
-         eezk0kHCVcUBB/e4mc1VfkMXxJnPCuve2SWX/BdtYwhjQIOCgvko85iNcFXLb/8ecU/N
-         rm6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687598396; x=1690190396;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KfAcGT4J8pUoMJBGxBaLszgHGiS6c9l8JOpUoHeAAOA=;
-        b=TC+hGPEqk7Oo2z38S9tV/tGW3+WlR+QrtOn/jFkflfA/9JvIbPSdR9oxEVN5x8IWHr
-         ftWuSu9CFcYyoj3P8oLf75SlnOOy5orTUjTkkOs+u0SxkjwxQ7tttOmMEKjVebuMkk7z
-         /WYK5+VI4Ps93IXX7V9dFPPZlQKWHi/Mbi0MOcxjbO8f84810eorwLlFOuiL5QdDdxbo
-         3roYDQXwzDxGixfQH1YjtWYK35/wFhsdI3SvCrNAq7fKH5Gz1OeFOao5wzjvnhehz0w1
-         4Q0JSDf2b0QBjPJAOW0BlkqvaYwPQ5VP3keTzdLgxBc2mnReLDWLnwggTlMQcSoByudh
-         8lyQ==
-X-Gm-Message-State: AC+VfDy13SKXpo/s4Lj6fI9Vg6ko43EojsJ9s3dZu3xQMCXTdi1UFZM2
-        nhVHaQd3nNX2qbbEJ9Wseq/4IQ==
-X-Google-Smtp-Source: ACHHUZ5fG8f481PX14S7vktzFZQMA1l6HoKP1yysFPHfBvGgcLJOb2TMBp2polua7/w5jYwHHssrXQ==
-X-Received: by 2002:a17:907:987:b0:987:6372:c31f with SMTP id bf7-20020a170907098700b009876372c31fmr16230436ejc.37.1687598396633;
-        Sat, 24 Jun 2023 02:19:56 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id p13-20020a1709060e8d00b00989065149d0sm663324ejf.86.2023.06.24.02.19.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 02:19:55 -0700 (PDT)
-Message-ID: <ca3b6a75-2811-6013-28cc-9f6a7854b469@linaro.org>
-Date:   Sat, 24 Jun 2023 11:19:49 +0200
+        Mon, 26 Jun 2023 07:58:08 -0400
+X-Greylist: delayed 514 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 26 Jun 2023 04:58:06 PDT
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 060DC1B7
+        for <linux-watchdog@vger.kernel.org>; Mon, 26 Jun 2023 04:58:05 -0700 (PDT)
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id 38E91409F8; Mon, 26 Jun 2023 13:49:30 +0200 (CEST)
+Date:   Mon, 26 Jun 2023 13:49:30 +0200
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH] watchdog: ziirave_wdt: Switch i2c driver back to use
+ .probe()
+Message-ID: <20230626114929.GA14952@www.linux-watchdog.org>
+References: <20230525210837.735447-1-u.kleine-koenig@pengutronix.de>
+ <1a2f452a-14f4-4b29-b1c2-8e69d5d86814@roeck-us.net>
+ <20230611111312.s4uauybzhqagjmoq@pengutronix.de>
+ <2554f83c-2d7a-cdf0-0a84-4addc21073bd@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 01/45] dt-bindings: microchip: atmel,at91rm9200-tcb:
- add sam9x60, sam9x7 compatible
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, lee@kernel.org,
-        ulf.hansson@linaro.org, tudor.ambarus@linaro.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linus.walleij@linaro.org, p.zabel@pengutronix.de,
-        olivia@selenic.com, a.zummo@towertech.it,
-        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-        gregkh@linuxfoundation.org, lgirdwood@gmail.com,
-        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
-        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-        linux@armlinux.org.uk, sre@kernel.org, jerry.ray@microchip.com,
-        horatiu.vultur@microchip.com, durai.manickamkr@microchip.com,
-        andrew@lunn.ch, alain.volmat@foss.st.com,
-        neil.armstrong@linaro.org, mihai.sain@microchip.com,
-        eugen.hristev@collabora.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
-        balamanikandan.gunasundar@microchip.com,
-        manikandan.m@microchip.com, dharma.b@microchip.com,
-        nayabbasha.sayed@microchip.com, balakrishnan.s@microchip.com
-References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
- <20230623203056.689705-2-varshini.rajendran@microchip.com>
- <074048a2-5153-e013-3562-b5cad2ba0954@linaro.org>
-In-Reply-To: <074048a2-5153-e013-3562-b5cad2ba0954@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2554f83c-2d7a-cdf0-0a84-4addc21073bd@roeck-us.net>
+User-Agent: Mutt/1.5.20 (2009-12-10)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 24/06/2023 09:53, Krzysztof Kozlowski wrote:
-> On 23/06/2023 22:30, Varshini Rajendran wrote:
->> Add sam9x60, sam9x7 compatible string support in the schema file.
->>
->> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
->> ---
->>  .../devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml | 
+Hi Guenter,
+
+> On 6/11/23 04:13, Uwe Kleine-König wrote:
+> >Hello,
+> >
+> >On Fri, May 26, 2023 at 09:55:20AM -0700, Guenter Roeck wrote:
+> >>On Thu, May 25, 2023 at 11:08:37PM +0200, Uwe Kleine-König wrote:
+> >>>After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
+> >>>call-back type"), all drivers being converted to .probe_new() and then
+> >>>03c835f498b5 ("i2c: Switch .probe() to not take an id parameter")
+> >>>convert back to (the new) .probe() to be able to eventually drop
+> >>>.probe_new() from struct i2c_driver.
+> >>>
+> >>>Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> >>
+> >>Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> >
+> >I assume this is a nice start to get this applied for the next merge
+> >window. The patch didn't show up in next yet though. Is that because Wim
+> >didn't start applying patches yet, or is there a problem (like this
+> >patch being lost in Wim's mailbox)?
+> >
 > 
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> lack of time on my side, and Wim typically picks up patches quite late into
+> his branch.
 
-Un-acked. Actually NAK.
+Indeed correct. And this time a week to late because my mother in law died the 31st...
+But working on getting patches in now.
 
-This does not match your DTS. Please test your patches before sending.
+This is what I think was reviewed or acked:
+[PATCH v2 2/2] watchdog: loongson1_wdt: Add DT support
+[PATCH] dt-bindings: xilinx: Switch xilinx.com emails to amd.com
+[PATCH 1/2] watchdog: Convert GPL 2.0 notice to SPDX identifier
+[PATCH 2/2] watchdog: ibmasr: Replace GPL license notice with SPDX identifier
+[PATCH] watchdog: ziirave_wdt: Switch i2c driver back to use .probe()
+[PATCH V4 3/4] watchdog: xilinx_wwdt: Add Versal window watchdog support
+[PATCH V4 2/4] dt-bindings: watchdog: xlnx,versal-wwdt: Add versal watchdog
+[PATCH V4 4/4] MAINTAINERS: Add support for Xilinx versal watchdog
+[PATCH 7/7] dt-bindings: watchdog: restrict node name suffixes
+[v1,1/1] watchdog: sp5100_tco: support Hygon FCH/SCH (Server Controller Hub)
 
-Best regards,
-Krzysztof
+Kind regards,
+Wim.
 
