@@ -2,64 +2,80 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77831744103
-	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Jun 2023 19:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D19C74415B
+	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Jun 2023 19:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbjF3RQ5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 30 Jun 2023 13:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
+        id S233106AbjF3RfY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 30 Jun 2023 13:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232956AbjF3RQs (ORCPT
+        with ESMTP id S232834AbjF3RfB (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:16:48 -0400
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531643ABD;
-        Fri, 30 Jun 2023 10:16:44 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-345f1e0abf9so2161425ab.3;
-        Fri, 30 Jun 2023 10:16:44 -0700 (PDT)
+        Fri, 30 Jun 2023 13:35:01 -0400
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F10E4680;
+        Fri, 30 Jun 2023 10:34:39 -0700 (PDT)
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-345d3c10bdfso8967775ab.2;
+        Fri, 30 Jun 2023 10:34:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688145403; x=1690737403;
+        d=1e100.net; s=20221208; t=1688146471; x=1690738471;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9a96p4nXmM7UUxKlVBsq9k7hSMemNxawVrLqd8ipKj8=;
-        b=XhLkM8794V1peo05iful+PhqqlqpCEmn1cYMrRKsdrptsHAPl+cnpqUMT4ZjeobIid
-         Yw8MYxC3n/A2sDQMdlv7bjmBY8qRJ9B+MB99WSZnfbfK5bZ4G8qr7O5OCPQJTedbRTO1
-         HO+S7JrMBW/zP4tPD3dzk9YrHxO2wxETirGi2bS/siAzK00QvR90Fex2oOQd0diFSI4S
-         KZjT6/DfQNn0HD0rwPTIf8fTXX80KnXa+mc0VXDQXjDLlmYLX0Q5UYSjY3Bwbp0AdloR
-         hz3gFlyrTYeE2DHtOGb49Fjty5h+CTWUnbZ3/ZfDs2tjb5JQvZQyBrlpdt99L8/NE3JS
-         6k7w==
-X-Gm-Message-State: AC+VfDxJSE5955G13qJhyBys76imCGiIoEtv2NRb+WqDT9DleQQb8u0X
-        q4WylGdRfJ9NBn1+Sg7fsQ==
-X-Google-Smtp-Source: ACHHUZ4TG0ayJG3EWPbPYbZj3rgrjyxxPMQsTEoDTOyBjbOJkG7vyxBO+XUhNCci0ZX2UdGwi3KqWw==
-X-Received: by 2002:a5d:8f93:0:b0:786:2672:5331 with SMTP id l19-20020a5d8f93000000b0078626725331mr3287816iol.2.1688145403547;
-        Fri, 30 Jun 2023 10:16:43 -0700 (PDT)
+        bh=LQ94kfdEfq9RrPFyhfJUVdunZkyBAVzDUoOb8tFiC9I=;
+        b=DJc9gkx2Qj6nob9kqtEG+l+YwkxBFXyM8CaOh8ba4p4FroqnWH4MLV9xI3ZsjAbiMD
+         koSz7EW5nCy4Rijk07WqybpKcPOEYLXPzehOYJ4bi6c7BwHEFZ3aYvAgsO7ywXjE4f29
+         QMi11B8XmiBmQ39nN2LvSQ6NhgempeoNWS0kyiS5dH1RekkBHqvl+p5Yd0K2IOMu5UEn
+         N5K15JyUyhvE31i9cdFVVILterRo8vr00DDmxqL8ae9K/e/gTN8ZK7dAEj3ZsOi8PzVP
+         xzzqZKkzXa6pNGVnG3oeEQxJKo2c0c1m0WW8xs29+Q9ZnkmMuvrWjbdXewIrIH3MQbIf
+         J2wg==
+X-Gm-Message-State: AC+VfDysE37+dnvW0RJV16jsw1N5xoU4k0x3NKkITmQWpGlkHk9KEEj/
+        1D5bYXOSZ0nm3CWRMn1FcnVTTIB5sA==
+X-Google-Smtp-Source: ACHHUZ4EbUs4PS9q79isRP9O3xuyN3VlPHEnyRoBjVZ32PU31b0maNUtRwGNVSbiOr7AKyybiYfTVQ==
+X-Received: by 2002:a6b:a16:0:b0:783:694f:e791 with SMTP id z22-20020a6b0a16000000b00783694fe791mr3651652ioi.12.1688146471480;
+        Fri, 30 Jun 2023 10:34:31 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id eq16-20020a0566384e3000b0042312dc690csm4475085jab.132.2023.06.30.10.16.41
+        by smtp.gmail.com with ESMTPSA id i17-20020a02ca51000000b0042af069eeefsm1830983jal.50.2023.06.30.10.34.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 10:16:42 -0700 (PDT)
-Received: (nullmailer pid 1984849 invoked by uid 1000);
-        Fri, 30 Jun 2023 17:16:41 -0000
-Date:   Fri, 30 Jun 2023 11:16:41 -0600
+        Fri, 30 Jun 2023 10:34:30 -0700 (PDT)
+Received: (nullmailer pid 2074728 invoked by uid 1000);
+        Fri, 30 Jun 2023 17:34:28 -0000
+Date:   Fri, 30 Jun 2023 11:34:28 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Nikita Bondarenko <n2h9z4@gmail.com>
-Cc:     linux@roeck-us.net, bcm-kernel-feedback-list@broadcom.com,
-        sbranden@broadcom.com, devicetree@vger.kernel.org,
-        wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, f.fainelli@gmail.com,
-        robh+dt@kernel.org, rjui@broadcom.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] dt-bindings: watchdog: brcm,kona-wdt: convert txt
- file to yaml
-Message-ID: <168814537940.1984386.4796056831739397927.robh@kernel.org>
-References: <20230418170341.28805-1-n2h9z4@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-phy@lists.infradead.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-watchdog@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dilip Kota <eswara.kota@linux.intel.com>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        timestamp@lists.linux.dev, Vinod Koul <vkoul@kernel.org>,
+        alsa-devel@alsa-project.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Dipen Patel <dipenp@nvidia.com>,
+        linux-pwm@vger.kernel.org
+Subject: Re: [PATCH 6/7] dt-bindings: timestamp: restrict node name suffixes
+Message-ID: <168814645706.2074491.15762386958786625732.robh@kernel.org>
+References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+ <20230530144851.92059-7-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230418170341.28805-1-n2h9z4@gmail.com>
+In-Reply-To: <20230530144851.92059-7-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,51 +83,22 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, 18 Apr 2023 19:03:41 +0200, Nikita Bondarenko wrote:
-> Converted txt file to yaml. No additional changes.
+
+On Tue, 30 May 2023 16:48:50 +0200, Krzysztof Kozlowski wrote:
+> Make the pattern matching node names a bit stricter to improve DTS
+> consistency.  The pattern is restricted to -N suffixes to decimal
+> numbers.
 > 
-> Signed-off-by: Nikita Bondarenko <n2h9z4@gmail.com>
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
 > ---
 > 
-> Changes in v3:
-> - updated commit message
-> - updated the compatible definition to probably fix "compatible is too long" warning
-> - updated example to how it was in the txt file
-> 
-> 
-> I do not have this warning when I am running
-> make  DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml ARCH=arm dt_binding_check
-> maybe I run it without some additional variable?
-> 
-> But I checked arch/arm/boot/dts/bcm28155-ap.dts, it includes bcm11351.dtsiv which contains
-> compatible = "brcm,bcm11351-wdt", "brcm,kona-wdt";
-> which probably causes a warning
-> This is exact how it was in txt file example.
-> 
-> If I put it in an example in a yaml file, dt_binding_check does not pass.
-> Looks like the issue is in the enum type of compatible. It does not allow multiple strings.
-> Updated to not to use enum. The example with two strings in compatible passes the checks.
-> 
-> make  DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml ARCH=arm dt_binding_check
->   LINT    Documentation/devicetree/bindings
->   CHKDT   Documentation/devicetree/bindings/processed-schema.json
->   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
->   DTEX    Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.example.dts
->   DTC_CHK Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.example.dtb
-> 
-> make  DT_SCHEMA_FILES=Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml ARCH=arm dtbs_check
->   LINT    Documentation/devicetree/bindings
->   CHKDT   Documentation/devicetree/bindings/processed-schema.json
->   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
-> 
-> 
-> v2 patch is here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230402135555.62507-1-n2h9z4@gmail.com/
-> 
->  .../bindings/watchdog/brcm,kona-wdt.txt       | 15 -------
->  .../bindings/watchdog/brcm,kona-wdt.yaml      | 41 +++++++++++++++++++
->  2 files changed, 41 insertions(+), 15 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/brcm,kona-wdt.yaml
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  .../bindings/timestamp/hardware-timestamps-common.yaml          | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 
 Applied, thanks!
