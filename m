@@ -2,184 +2,91 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49307486EE
-	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Jul 2023 16:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E84748E63
+	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Jul 2023 21:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbjGEOxy (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 5 Jul 2023 10:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
+        id S233169AbjGETyP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 5 Jul 2023 15:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231450AbjGEOxx (ORCPT
+        with ESMTP id S232036AbjGETyO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 5 Jul 2023 10:53:53 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F381BFC;
-        Wed,  5 Jul 2023 07:53:25 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-be49ca27e1fso7456347276.3;
-        Wed, 05 Jul 2023 07:53:25 -0700 (PDT)
+        Wed, 5 Jul 2023 15:54:14 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47F81723
+        for <linux-watchdog@vger.kernel.org>; Wed,  5 Jul 2023 12:54:12 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fb5bcb9a28so11063737e87.3
+        for <linux-watchdog@vger.kernel.org>; Wed, 05 Jul 2023 12:54:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688568794; x=1691160794;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=cCxZnqnbc7kbM8222+sFq1akWhUm72mIgcQ0Ba8ScDw=;
-        b=R5V5MPST2/8OlDBWiU72EnSYQ5KCww+ZA4jlpSNe5hg1jjZy+cruj+CWcTVhpnXPbq
-         jpDKwXmflIhQSItvSr6lZtF4jS8ZtJaWsfWHeGC7pzslhxDTzf1Z/g1RXo5Yo/z+aDj9
-         WL+S0+njjLmsBUpK2aicpo8kbDYD2+utIjItET/JnwkGw3Wi5NKjhuicXVL7oOB9qw11
-         nVnYFDCwVHfHE54PPil4ptZIJ6K6D6aThuHk5l29anqQ+WUFGuZi8/v47apx5laLRXJK
-         t4eMA/HzA6BKU3sLL5IYsn56JWSAgUI/cS1QjtgH+UN3bblV/7gxH5uWFrU75Di6xF8s
-         Wbdg==
+        d=linux-foundation.org; s=google; t=1688586851; x=1691178851;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iOuiLENnGJgQP5T14AdW9obiAm8decWJr19hpHUhp5E=;
+        b=OPknQAecTBe/Xh5gFz9jDtpV3Y6WgMyalt02IsNwPhUqagLGAJUkjct/bN7GjNQ90Q
+         Bl4Bj2JGhZj/ioBO6zdwjNz8d3RLmn1FZLNaLRvQAW4n0jRyLpLEkm/0G1RTryTp6P6J
+         SCzZX34M0HlPEjMly4V7c1aK3L1s81ddmwHJU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688568794; x=1691160794;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1688586851; x=1691178851;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cCxZnqnbc7kbM8222+sFq1akWhUm72mIgcQ0Ba8ScDw=;
-        b=MTyTopyw32XLZqV6YBPxL69CIrHI65nND5hfva1OSqnXNN2y0XpjUO6LmZPHEITqs+
-         ZmKKZipfaz6vX6xQAwHC7dsaGA7bfZVxrQqBGLwO0VVZvwdaX50bZajRpJTKXJtiXy8+
-         o8yLxuh5JU3FCbtghR7ZIBDiSk4IN6fzFt593Lb6YsGl6Fu93PCg1d+k90zpl5yal/qB
-         HTfzvjrYatF7XSeEMoWutncxLQ+AM55a3bCwgodf9O4yz2HPvM0XirQAUnyW0RXAP+Ig
-         /U+UHFicXFTp9AD/0UMOKHfiW6nzPmsSBTXdjG8ZRxxTQVH+OnUxnOPMtgTNg3VZlc7i
-         PsIg==
-X-Gm-Message-State: ABy/qLZYS3gi46nPuiAe0gwBz87Y0FCFK0rqbvXnjzAI5pNPuYHVz8Iw
-        dd96eE6k+9sXHDkBm1ujbP8=
-X-Google-Smtp-Source: APBJJlE5twqJnkqjFMt4XaFUinxE0MOHJV00raZ865uvX7xc+uzYea3rDuFyLC6t3xpnTZ6RB9Kzkg==
-X-Received: by 2002:a25:cb03:0:b0:c5f:85f5:a0e3 with SMTP id b3-20020a25cb03000000b00c5f85f5a0e3mr3249364ybg.13.1688568793998;
-        Wed, 05 Jul 2023 07:53:13 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2-20020a254f02000000b00bdd085da648sm5301898ybb.48.2023.07.05.07.53.12
+        bh=iOuiLENnGJgQP5T14AdW9obiAm8decWJr19hpHUhp5E=;
+        b=J1ABUXltjWntqBmNY8jonu1IFHV1oNolrlqnD1QcVlvqU9ZSmpq8xKUL0HXBa+qUdL
+         UPajQLUEHrw7NpOYXi5kbB6qGHp+VWDXh+CukRhAOeF65P5AFB5jpwn6Cz+yk/xnNeRx
+         cQEy0domHbuyA5YpkNeeE7SMO8GKbqMSwjOgRtsnCxzisZx0HxiMv/YM4cDaQ+iXTyqf
+         EB3kzsBE1Gp+TdrZt2vdfIzTLW3HLfvrYemWZr5WxYOmFYDjjbK9F4Xe1niaiCxwUzrV
+         h44cyP6sGcod5782yeV3NndcSaRjWIUKxO3KClMEm6D8aj5G7sXdFqPO8kdcdDjCFSrp
+         zo7Q==
+X-Gm-Message-State: ABy/qLY/M0TUAcEnlkMjN7u/Jt/Ub0zpdSy+k1SzBwff+wn6UM1GKc7p
+        xuu+f94W4vWvwmt57NGXWYpDZ9mVR8E8niGhrovfmKMJ
+X-Google-Smtp-Source: APBJJlGbyk7yVlaR200W7RBmGnECdhUs6soUiCMYVWGlAIR0iEQlrZnsDkHorWUlZklEvBF0rlDX7A==
+X-Received: by 2002:a19:790f:0:b0:4fb:92df:a27b with SMTP id u15-20020a19790f000000b004fb92dfa27bmr9980lfc.39.1688586850853;
+        Wed, 05 Jul 2023 12:54:10 -0700 (PDT)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
+        by smtp.gmail.com with ESMTPSA id w22-20020ac24436000000b004fb7cd9651bsm4644474lfl.98.2023.07.05.12.54.09
+        for <linux-watchdog@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 07:53:13 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7266dc04-8db3-a48b-6844-8530ae7b8adf@roeck-us.net>
-Date:   Wed, 5 Jul 2023 07:53:11 -0700
+        Wed, 05 Jul 2023 12:54:09 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-4fb761efa7aso11077029e87.0
+        for <linux-watchdog@vger.kernel.org>; Wed, 05 Jul 2023 12:54:09 -0700 (PDT)
+X-Received: by 2002:a05:6512:3607:b0:4f6:2317:f387 with SMTP id
+ f7-20020a056512360700b004f62317f387mr12679lfs.35.1688586849377; Wed, 05 Jul
+ 2023 12:54:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3] watchdog: s3c2410: Fix potential deadlock on
- &wdt->lock
-Content-Language: en-US
-To:     Chengfeng Ye <dg573847474@gmail.com>,
-        krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
-        wim@linux-watchdog.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230705090951.63762-1-dg573847474@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230705090951.63762-1-dg573847474@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230705122357.GA14855@www.linux-watchdog.org>
+In-Reply-To: <20230705122357.GA14855@www.linux-watchdog.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 5 Jul 2023 12:53:52 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgu6wv3aMx-p-tapvZ4ui7SSzo3OX_tz7jA4rggCfsk-Q@mail.gmail.com>
+Message-ID: <CAHk-=wgu6wv3aMx-p-tapvZ4ui7SSzo3OX_tz7jA4rggCfsk-Q@mail.gmail.com>
+Subject: Re: [GIT PULL REQUEST] watchdog - v6.5 release cycle.
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Yuechao Zhao <yuechao.zhao@advantech.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/5/23 02:09, Chengfeng Ye wrote:
-> As &wdt->lock is acquired by hard irq s3c2410wdt_irq(),
-> other acquisition of the same lock under process context should
-> disable irq, otherwise deadlock could happen if the
-> irq preempt the execution while the lock is held in process context
-> on the same CPU.
-> 
-> [Deadlock Scenario]
-> s3c2410wdt_suspend()
->      -> s3c2410wdt_stop()
->      -> spin_lock(&wdt->lock)
->          <irq iterrupt>
->          -> s3c2410wdt_irq()
->          -> s3c2410wdt_keepalive()
->          -> spin_lock(&wdt->lock) (deadlock here)
-> 
-> [Deadlock Scenario]
-> s3c2410wdt_probe()
->      -> s3c2410wdt_start()
->      -> spin_lock(&wdt->lock)
->          <irq iterrupt>
->          -> s3c2410wdt_irq()
->          -> s3c2410wdt_keepalive()
->          -> spin_lock(&wdt->lock) (deadlock here)
-> 
-> [Deadlock Scenario]
-> s3c2410wdt_keepalive()
->      -> spin_lock(&wdt->lock)
->          <irq iterrupt>
->          -> s3c2410wdt_irq()
->          -> s3c2410wdt_keepalive()
->          -> spin_lock(&wdt->lock) (deadlock here)
-> 
-> This flaw was found by an experimental static analysis tool I am
-> developing for irq-related deadlock, which reported the above
-> warning when analyzing the linux kernel 6.4-rc7 release.
-> 
-> The tentative patch fix the potential deadlock by spin_lock_irqsave()
-> under process context.
-> 
-> Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
+On Wed, 5 Jul 2023 at 05:24, Wim Van Sebroeck <wim@linux-watchdog.org> wrote:
+>
+>   git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.5-rc1
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+I think that machine is feeling a bit sick. I just get "Connection refused".
 
-> ---
->   drivers/watchdog/s3c2410_wdt.c | 15 +++++++++------
->   1 file changed, 9 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-> index 95416a9bdd4b..e1dc71ece01e 100644
-> --- a/drivers/watchdog/s3c2410_wdt.c
-> +++ b/drivers/watchdog/s3c2410_wdt.c
-> @@ -379,10 +379,11 @@ static int s3c2410wdt_enable(struct s3c2410_wdt *wdt, bool en)
->   static int s3c2410wdt_keepalive(struct watchdog_device *wdd)
->   {
->   	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
-> +	unsigned long flags;
->   
-> -	spin_lock(&wdt->lock);
-> +	spin_lock_irqsave(&wdt->lock, flags);
->   	writel(wdt->count, wdt->reg_base + S3C2410_WTCNT);
-> -	spin_unlock(&wdt->lock);
-> +	spin_unlock_irqrestore(&wdt->lock, flags);
->   
->   	return 0;
->   }
-> @@ -399,10 +400,11 @@ static void __s3c2410wdt_stop(struct s3c2410_wdt *wdt)
->   static int s3c2410wdt_stop(struct watchdog_device *wdd)
->   {
->   	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
-> +	unsigned long flags;
->   
-> -	spin_lock(&wdt->lock);
-> +	spin_lock_irqsave(&wdt->lock, flags);
->   	__s3c2410wdt_stop(wdt);
-> -	spin_unlock(&wdt->lock);
-> +	spin_unlock_irqrestore(&wdt->lock, flags);
->   
->   	return 0;
->   }
-> @@ -411,8 +413,9 @@ static int s3c2410wdt_start(struct watchdog_device *wdd)
->   {
->   	unsigned long wtcon;
->   	struct s3c2410_wdt *wdt = watchdog_get_drvdata(wdd);
-> +	unsigned long flags;
->   
-> -	spin_lock(&wdt->lock);
-> +	spin_lock_irqsave(&wdt->lock, flags);
->   
->   	__s3c2410wdt_stop(wdt);
->   
-> @@ -433,7 +436,7 @@ static int s3c2410wdt_start(struct watchdog_device *wdd)
->   	writel(wdt->count, wdt->reg_base + S3C2410_WTDAT);
->   	writel(wdt->count, wdt->reg_base + S3C2410_WTCNT);
->   	writel(wtcon, wdt->reg_base + S3C2410_WTCON);
-> -	spin_unlock(&wdt->lock);
-> +	spin_unlock_irqrestore(&wdt->lock, flags);
->   
->   	return 0;
->   }
-
+           Linus
