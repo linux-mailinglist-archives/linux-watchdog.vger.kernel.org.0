@@ -2,42 +2,55 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFEC749779
-	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Jul 2023 10:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 852A5749897
+	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Jul 2023 11:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjGFI3k (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 6 Jul 2023 04:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
+        id S229508AbjGFJeZ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 6 Jul 2023 05:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjGFI3j (ORCPT
+        with ESMTP id S231721AbjGFJeY (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 6 Jul 2023 04:29:39 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A048172B;
-        Thu,  6 Jul 2023 01:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1688632175;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=C5ZsjOqtPPGYJFIxPY4zElOVIK+rkHUv8ea5aIS7+R8=;
-        b=JKl+j3vKNg/eW7Ik2efJYb5lOny2bzPXKHYPEG/5xYgAXHtv83U9yljp/qy68vtp6glsPD
-        LVa0jH4/k1CT7YM1O+k6sDFMKGmZvfPnRi75TvMXhvl69gaOf0mfM2dB+mh0W/ef6iWTZ1
-        M0HsxfUVhFSsydQbE6AMQnTVF4T7aFo=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH] watchdog: starfive: Remove #ifdef guards for PM related functions
-Date:   Thu,  6 Jul 2023 10:29:28 +0200
-Message-Id: <20230706082928.10869-1-paul@crapouillou.net>
+        Thu, 6 Jul 2023 05:34:24 -0400
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9534A1725;
+        Thu,  6 Jul 2023 02:34:23 -0700 (PDT)
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id DF9DC40204; Thu,  6 Jul 2023 11:34:20 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org DF9DC40204
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1688636060;
+        bh=7IUX/efmY5qu26AolpxRuBTswD3/yIZVYtuzPfuO3UI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vtwUn8Bx8RHgDP3qB1c2siMUYIwhsy8uslWWby8JljdGrYAWosC567SbHC5z8Xn5X
+         BGiGL9kusKnZ0DGnNlsrMYXtO23Uv1tChK/Yd+293ykT3NB/meKdqmx1bt4vm5z2PP
+         RUn2YxgM/hnFE0XT0VttiEkHVwPEAhMUHzrWFDEE=
+Date:   Thu, 6 Jul 2023 11:34:20 +0200
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Yuechao Zhao <yuechao.zhao@advantech.com.cn>
+Subject: Re: [GIT PULL REQUEST] watchdog - v6.5 release cycle.
+Message-ID: <20230706093420.GA1442@www.linux-watchdog.org>
+References: <20230705122357.GA14855@www.linux-watchdog.org>
+ <CAHk-=wgu6wv3aMx-p-tapvZ4ui7SSzo3OX_tz7jA4rggCfsk-Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgu6wv3aMx-p-tapvZ4ui7SSzo3OX_tz7jA4rggCfsk-Q@mail.gmail.com>
+User-Agent: Mutt/1.5.20 (2009-12-10)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,64 +58,16 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Use the new PM macros for the suspend and resume functions to be
-automatically dropped by the compiler when CONFIG_PM or
-CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
+Hi Linus,
 
-This has the advantage of always compiling these functions in,
-independently of any Kconfig option. Thanks to that, bugs and other
-regressions are subsequently easier to catch.
+> On Wed, 5 Jul 2023 at 05:24, Wim Van Sebroeck <wim@linux-watchdog.org> wrote:
+> >
+> >   git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.5-rc1
+> 
+> I think that machine is feeling a bit sick. I just get "Connection refused".
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/watchdog/starfive-wdt.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+Should be fixed.
 
-diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
-index 8058fca4d05d..7c8a1c5e75be 100644
---- a/drivers/watchdog/starfive-wdt.c
-+++ b/drivers/watchdog/starfive-wdt.c
-@@ -526,7 +526,6 @@ static void starfive_wdt_shutdown(struct platform_device *pdev)
- 	starfive_wdt_pm_stop(&wdt->wdd);
- }
- 
--#ifdef CONFIG_PM_SLEEP
- static int starfive_wdt_suspend(struct device *dev)
- {
- 	struct starfive_wdt *wdt = dev_get_drvdata(dev);
-@@ -556,9 +555,7 @@ static int starfive_wdt_resume(struct device *dev)
- 
- 	return starfive_wdt_start(wdt);
- }
--#endif /* CONFIG_PM_SLEEP */
- 
--#ifdef CONFIG_PM
- static int starfive_wdt_runtime_suspend(struct device *dev)
- {
- 	struct starfive_wdt *wdt = dev_get_drvdata(dev);
-@@ -574,11 +571,10 @@ static int starfive_wdt_runtime_resume(struct device *dev)
- 
- 	return starfive_wdt_enable_clock(wdt);
- }
--#endif /* CONFIG_PM */
- 
- static const struct dev_pm_ops starfive_wdt_pm_ops = {
--	SET_RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
--	SET_SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
-+	RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
-+	SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
- };
- 
- static const struct of_device_id starfive_wdt_match[] = {
-@@ -594,7 +590,7 @@ static struct platform_driver starfive_wdt_driver = {
- 	.shutdown = starfive_wdt_shutdown,
- 	.driver = {
- 		.name = "starfive-wdt",
--		.pm = &starfive_wdt_pm_ops,
-+		.pm = pm_ptr(&starfive_wdt_pm_ops),
- 		.of_match_table = starfive_wdt_match,
- 	},
- };
--- 
-2.40.1
+Kind regards,
+Wim.
 
