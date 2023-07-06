@@ -2,196 +2,145 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2D47498BC
-	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Jul 2023 11:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED416749D2E
+	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Jul 2023 15:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbjGFJwJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 6 Jul 2023 05:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
+        id S230054AbjGFNSK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 6 Jul 2023 09:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232213AbjGFJwI (ORCPT
+        with ESMTP id S229524AbjGFNSK (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 6 Jul 2023 05:52:08 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603CD1BE1
-        for <linux-watchdog@vger.kernel.org>; Thu,  6 Jul 2023 02:51:58 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51e2a6a3768so725394a12.0
-        for <linux-watchdog@vger.kernel.org>; Thu, 06 Jul 2023 02:51:58 -0700 (PDT)
+        Thu, 6 Jul 2023 09:18:10 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3708B1992;
+        Thu,  6 Jul 2023 06:18:09 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-c5c8d00ced3so693272276.2;
+        Thu, 06 Jul 2023 06:18:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688637117; x=1691229117;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jVGkBHunqq0WclHIc25+RfH+0z//VIZucSEpeQRiW8s=;
-        b=VIJlzrjuHuzsA6SW10ItjHtlPPao4pjqTZMxMXsxtahq73i6c6ledJGrmnm42EUmqW
-         GpbVTszkHj0lyt6179dqIv1ZrlFPNJFFqIBxMUfff9Usg/zar0oN9JxHFvqciT3Kx8RU
-         ydCy240/LeLXILmeg9iBBFjlCxbnDSlN5KlTzDdflVnCXf0rphz8KrKyC/iigOEPjwkQ
-         9TJZPwDPIvZq9Lo5QIXY9YS/1AWFnzn9qoCfSbyAsjRcv6S5O1/aHqyXNxY5dsmw7e/P
-         58qhjSrHXXIGz2bWeSStPYrDT4f6QNj3Awa0ttthoOTzSHf+RLagmjRpfyqUgiMjJ0aa
-         R0Nw==
+        d=gmail.com; s=20221208; t=1688649488; x=1691241488;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cgf43GhwD7b0csu2mfmmYfiuYsfy6eO/8hxUqbvqUJ4=;
+        b=cMZFJB67wJDTRGG5QdoThR4MqF/I7e2w3zLRKyOAfDmVQw2liAOGwy7h3lQxm38tK1
+         ZvcySuBmyORycZYLesYh74Pk/CBOm8MOKYAnfHtn+OXbv16l7fJJ2HVqM77NjVEnUa4m
+         QfxqP1Jr/Cr7flT7cK8S6Dhfv9bIpzqCyKtZ4vUrkIFI1u6mZI7nriFRZklMHmo/kcAD
+         28evqx94OXRXSweCYO/tIZLPugWilFzmXBQuTo3F4wj4wp72HQGFDx6yQcNDSo5Y1HEw
+         ALCEZ6BafX5qvtdAFPv5RItZ2MEakqG99qXbNy7/CNSPS1f5NX1oBj3FTKCr4Fsgn2au
+         P31w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688637117; x=1691229117;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jVGkBHunqq0WclHIc25+RfH+0z//VIZucSEpeQRiW8s=;
-        b=f0IzEdygO8aUoRQs+gc2rSBWOqOr0xmAdr6WpO40eER3j+lfc9yK0ExjOD6unUhdYn
-         b7QOR1EjXdNGp3KduK4cCrO3j5Sjd1EqHigo149gzJa44mKWm9tzzARVIRimTsIcoiXF
-         35vN2EW436OnrW6f36Dzira5xRNihoWdAIG9sbzdJWEWABNiY4cBe25LNjT0QRBRnqrZ
-         Kk7OVW4dB9m7RUh06ru0sexo9mEGMBvB5nJJq/GKli21cnPy+PJKEFQ+GjLAzcMlN1Lg
-         qrQCcZ4BsSw3w16paIiw3rwoO1YLuGFcSQFF094BXB8uW/YV7ZKY5QUAWkYYJ/QVNn5Z
-         d5QA==
-X-Gm-Message-State: ABy/qLa5XU9S+1e1QyZKppzkREAhOhaCowd0TYLfQhg6M31GdVoomJDN
-        bumuWIMLCPZZ/2XW+fnOW/DtXdef5kvvjdfO3RfLGp5cA+s=
-X-Google-Smtp-Source: APBJJlEoqUgdXCO3qM/FSFChS6Aw8+u4z254mXnH+H+g/ZLx+v5mWk+yjdO08Z4m6DkOzwexpHFTi1TT/P0kw5K0AQo=
-X-Received: by 2002:aa7:cd8b:0:b0:51e:1656:bb24 with SMTP id
- x11-20020aa7cd8b000000b0051e1656bb24mr1050744edv.26.1688637116620; Thu, 06
- Jul 2023 02:51:56 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688649488; x=1691241488;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Cgf43GhwD7b0csu2mfmmYfiuYsfy6eO/8hxUqbvqUJ4=;
+        b=D5sZkS9yH04astUAfeE1p1GgT/kVM0VKWA2LS2hIF7MYHX4m5ZK2N1Q3JIZsJeXQtS
+         o9ayqQPQztMZDAgUA+Y3uDgyeD6d0fzu1x2+LNVSeQi8ft4tTwJuQ1z35DtFBtwhbRHY
+         I39UIt3+MN3t6fE6u0WOE/lvSWr5GpCdUAtt90OfpIrL1dhq00gKdHRQXhkZ+QYEFt+S
+         PgkMYlBe7CAz+FAB+NDsNJM7v88X/uiL0gn6YTGbvySH7ZCwrCReUkE4w7mmWX4vUsDo
+         74EnNftwlqdwWLKDFxXJFfPLPlnxxJqh0BYIBSleqwogLoTpiwxcZZ54pP5wY1D2Vg71
+         lRnw==
+X-Gm-Message-State: ABy/qLY7y+FixeIAyA39ElXUdRup5gsnzjPMO+9N+4a/PjzMMqPAuGZf
+        lqDyUqeu8nt316G1Gp5is+N/z3l57zg=
+X-Google-Smtp-Source: APBJJlFUDHEL5TcZ5ngPGylwaqkir988G2+TX7Jlrtnxz1bzhCimKfyywmT7eJeoCZUz27mOF/6RZw==
+X-Received: by 2002:a25:b7ca:0:b0:bca:7da8:e37c with SMTP id u10-20020a25b7ca000000b00bca7da8e37cmr1768953ybj.15.1688649488224;
+        Thu, 06 Jul 2023 06:18:08 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b8-20020a5b0088000000b00c6135ffd2fcsm308177ybp.15.2023.07.06.06.18.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Jul 2023 06:18:07 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <02b9ec14-bf69-ce61-4bd5-cac05563b855@roeck-us.net>
+Date:   Thu, 6 Jul 2023 06:18:03 -0700
 MIME-Version: 1.0
-References: <20230705122357.GA14855@www.linux-watchdog.org>
- <CAJhJPsU1LHoTxeekFLZtZpKm0dGysf8U3=rTRwFrEyvR3iA34A@mail.gmail.com> <20230706094236.GB1442@www.linux-watchdog.org>
-In-Reply-To: <20230706094236.GB1442@www.linux-watchdog.org>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Thu, 6 Jul 2023 17:51:40 +0800
-Message-ID: <CAJhJPsXCbwNh5D1CQ5i-kbqTkeqi8Hs2C4vo8PoVkuvYN=fM8g@mail.gmail.com>
-Subject: Re: [GIT PULL REQUEST] watchdog - v6.5 release cycle.
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] watchdog: starfive: Remove #ifdef guards for PM related
+ functions
+Content-Language: en-US
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230706082928.10869-1-paul@crapouillou.net>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230706082928.10869-1-paul@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Thanks very much!
+On 7/6/23 01:29, Paul Cercueil wrote:
+> Use the new PM macros for the suspend and resume functions to be
+> automatically dropped by the compiler when CONFIG_PM or
+> CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
+> 
+> This has the advantage of always compiling these functions in,
+> independently of any Kconfig option. Thanks to that, bugs and other
+> regressions are subsequently easier to catch.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-On Thu, Jul 6, 2023 at 5:42=E2=80=AFPM Wim Van Sebroeck <wim@linux-watchdog=
-.org> wrote:
->
-> Hi Keguang,
->
-> > Hi Wim,
-> > Sorry to bother you.
-> >
-> > On Wed, Jul 5, 2023 at 8:23=E2=80=AFPM Wim Van Sebroeck <wim@linux-watc=
-hdog.org> wrote:
-> > >
-> > >
-> > > Hi Linus,
-> > >
-> > > Please pull following watchdog changes for the v6.5 release cycle.
-> > >
-> > > This series contains:
-> > > * Add Xilinx Versal watchdog
-> > > * support Hygon FCH/SCH (Server Controller Hub)
-> > > * Convert GPL notices to SPDX identifiers
-> > > * Other improvements
-> > >
-> > > The output from git request-pull:
-> > > ----------------------------------------------------------------
-> > > The following changes since commit 547cc9be86f4c51c51fd429ace6c2e1ef9=
-050d15:
-> > >
-> > >   Merge tag 'perf_urgent_for_v6.4' of git://git.kernel.org/pub/scm/li=
-nux/kernel/git/tip/tip (2023-06-25 10:13:17 -0700)
-> > >
-> > > are available in the git repository at:
-> > >
-> > >   git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.5-=
-rc1
-> > >
-> > > for you to fetch changes up to 009637de1f65cff452ad49554d1e8ef9fda99e=
-43:
-> > >
-> > >   watchdog: sp5100_tco: support Hygon FCH/SCH (Server Controller Hub)=
- (2023-06-26 14:30:07 +0200)
-> > >
-> > > ----------------------------------------------------------------
-> > > linux-watchdog 6.5-rc1 tag
-> > >
-> > > ----------------------------------------------------------------
-> > > Bagas Sanjaya (2):
-> > >       watchdog: Convert GPL 2.0 notice to SPDX identifier
-> > >       watchdog: ibmasr: Replace GPL license notice with SPDX identifi=
-er
-> > >
-> > > Keguang Zhang (1):
-> > >       watchdog: loongson1_wdt: Add DT support
-> >
-> > Did you miss the following patch?
-> > dt-bindings: watchdog: Add Loongson-1 watchdog
-> > https://lore.kernel.org/lkml/20230511121159.463645-2-keguang.zhang@gmai=
-l.com/
->
-> Yes I apparently did. I'll add it.
->
-> > >
-> > > Krzysztof Kozlowski (1):
-> > >       dt-bindings: watchdog: restrict node name suffixes
-> > >
-> > > Srinivas Neeli (3):
-> > >       dt-bindings: watchdog: xlnx,versal-wwdt: Add versal watchdog
-> > >       watchdog: xilinx_wwdt: Add Versal window watchdog support
-> > >       MAINTAINERS: Add support for Xilinx versal watchdog
-> > >
-> > > Uwe Kleine-K=C3=B6nig (1):
-> > >       watchdog: ziirave_wdt: Switch i2c driver back to use .probe()
-> > >
-> > > Yuechao Zhao (1):
-> > >       watchdog: sp5100_tco: support Hygon FCH/SCH (Server Controller =
-Hub)
-> > >
-> > >  .../devicetree/bindings/watchdog/watchdog.yaml     |   4 +-
-> > >  .../bindings/watchdog/xlnx,versal-wwdt.yaml        |  50 +++++
-> > >  MAINTAINERS                                        |   2 +
-> > >  drivers/watchdog/Kconfig                           |  18 ++
-> > >  drivers/watchdog/Makefile                          |   1 +
-> > >  drivers/watchdog/ep93xx_wdt.c                      |   5 +-
-> > >  drivers/watchdog/ibmasr.c                          |   3 +-
-> > >  drivers/watchdog/loongson1_wdt.c                   |  13 +-
-> > >  drivers/watchdog/m54xx_wdt.c                       |   4 +-
-> > >  drivers/watchdog/max63xx_wdt.c                     |   5 +-
-> > >  drivers/watchdog/moxart_wdt.c                      |   4 +-
-> > >  drivers/watchdog/octeon-wdt-nmi.S                  |   5 +-
-> > >  drivers/watchdog/orion_wdt.c                       |   4 +-
-> > >  drivers/watchdog/rtd119x_wdt.c                     |   2 +-
-> > >  drivers/watchdog/sbc_fitpc2_wdt.c                  |   4 +-
-> > >  drivers/watchdog/sp5100_tco.c                      |   4 +-
-> > >  drivers/watchdog/ts4800_wdt.c                      |   4 +-
-> > >  drivers/watchdog/ts72xx_wdt.c                      |   4 +-
-> > >  drivers/watchdog/xilinx_wwdt.c                     | 201 +++++++++++=
-++++++++++
-> > >  drivers/watchdog/ziirave_wdt.c                     |   2 +-
-> > >  20 files changed, 301 insertions(+), 38 deletions(-)
-> > >  create mode 100644 Documentation/devicetree/bindings/watchdog/xlnx,v=
-ersal-wwdt.yaml
-> > >  create mode 100644 drivers/watchdog/xilinx_wwdt.c
-> > > ----------------------------------------------------------------
-> > >
-> > > Kind regards,
-> > > Wim.
-> > >
-> >
-> >
-> > --
-> > Best regards,
-> >
-> > Keguang Zhang
->
-> Kind regards,
-> Wim.
->
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
+> ---
+>   drivers/watchdog/starfive-wdt.c | 10 +++-------
+>   1 file changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
+> index 8058fca4d05d..7c8a1c5e75be 100644
+> --- a/drivers/watchdog/starfive-wdt.c
+> +++ b/drivers/watchdog/starfive-wdt.c
+> @@ -526,7 +526,6 @@ static void starfive_wdt_shutdown(struct platform_device *pdev)
+>   	starfive_wdt_pm_stop(&wdt->wdd);
+>   }
+>   
+> -#ifdef CONFIG_PM_SLEEP
+>   static int starfive_wdt_suspend(struct device *dev)
+>   {
+>   	struct starfive_wdt *wdt = dev_get_drvdata(dev);
+> @@ -556,9 +555,7 @@ static int starfive_wdt_resume(struct device *dev)
+>   
+>   	return starfive_wdt_start(wdt);
+>   }
+> -#endif /* CONFIG_PM_SLEEP */
+>   
+> -#ifdef CONFIG_PM
+>   static int starfive_wdt_runtime_suspend(struct device *dev)
+>   {
+>   	struct starfive_wdt *wdt = dev_get_drvdata(dev);
+> @@ -574,11 +571,10 @@ static int starfive_wdt_runtime_resume(struct device *dev)
+>   
+>   	return starfive_wdt_enable_clock(wdt);
+>   }
+> -#endif /* CONFIG_PM */
+>   
+>   static const struct dev_pm_ops starfive_wdt_pm_ops = {
+> -	SET_RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
+> -	SET_SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
+> +	RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
+> +	SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
+>   };
+>   
+>   static const struct of_device_id starfive_wdt_match[] = {
+> @@ -594,7 +590,7 @@ static struct platform_driver starfive_wdt_driver = {
+>   	.shutdown = starfive_wdt_shutdown,
+>   	.driver = {
+>   		.name = "starfive-wdt",
+> -		.pm = &starfive_wdt_pm_ops,
+> +		.pm = pm_ptr(&starfive_wdt_pm_ops),
+>   		.of_match_table = starfive_wdt_match,
+>   	},
+>   };
 
---=20
-Best regards,
-
-Keguang Zhang
