@@ -2,128 +2,85 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C8674A1BC
-	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Jul 2023 18:04:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B71E74A316
+	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Jul 2023 19:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbjGFQD6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 6 Jul 2023 12:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
+        id S232213AbjGFR3T (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 6 Jul 2023 13:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjGFQD6 (ORCPT
+        with ESMTP id S232662AbjGFR3Q (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 6 Jul 2023 12:03:58 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151E1DC;
-        Thu,  6 Jul 2023 09:03:57 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5774098f16eso11415367b3.0;
-        Thu, 06 Jul 2023 09:03:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688659436; x=1691251436;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=kP3pF+XOxlc4Qv9/UJTQvZ314wf1LITEQ/lD6q6M3cs=;
-        b=gf7JwHUDdQKlrqMaznOBPRjtILjUVDkaFMzAsovbd6ohVdpY6MbEtFQWKIRWoXCNKk
-         T7PsTZ+oU5EETlfYxSm1t39vfALhQjOhfQXc8mTo7BPkxSNr6xL815JSq6zeCvkRNcrK
-         Y7r+2ptw+2E1kophi1fPakut7byn6u7zbVgDEZMvI+bVCzJRbYFhk30j3HL2ID1RO0xX
-         bbdl8n2ct/G3IXphx99hhYXH19VSkqaRLvLBlNAc0T++ZSESJn3bHrUFhnFHK4O8Ghfi
-         oNzdsF3oSI2IDq/ESRAcjEvCm34Z2+7ssOnX9JZgL908OMjEPazKeIbH7c4Jjcf/z06I
-         nc4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688659436; x=1691251436;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kP3pF+XOxlc4Qv9/UJTQvZ314wf1LITEQ/lD6q6M3cs=;
-        b=IDCMvcq9UCTkaMYTzkVY4fy8YqUnszCXZePm5FQbqLgp49m6+QwGF3Mbsorcfedffu
-         jDfASSVpsBlx4dECZw52cJQjrv3gX4ok9tsFwX+zobwPkeX999nNwNhlDgdRblhGeAmH
-         ddxse6YdpY6Ew/ksqCHRPiFfYpEFhbxrpF/3Xd1pmoY1xlfGRrWGcihQkG3S+vfsbR5H
-         xbYPp1ydHjSkS+pz9RFNS6JInmpWzCH4XB+7l2e7218aGNFpNaYiZveQA+9YHtFG3Yx8
-         Jx07FIalkj+U/YzMz4oLAme/4jnBLfV30PusWi5jMaBiDPFDrGBQO1b2YhdFizRFMnqw
-         aY3A==
-X-Gm-Message-State: ABy/qLY7t5Rn2K1gQxJvb3H19UrtKbSb6H0aAenpcHGcXEuhoRHD1MMS
-        6Ql0sV6a4bshN2lQ9adm7C0=
-X-Google-Smtp-Source: APBJJlG9MixangRIjPWmQQkjG9G3S//NVdJuf0043UPQkU4lQWM7HhHi5ksGYofdZ3BzvyDm46DfaA==
-X-Received: by 2002:a25:aa28:0:b0:c10:7a9f:a96a with SMTP id s37-20020a25aa28000000b00c107a9fa96amr2266065ybi.16.1688659436153;
-        Thu, 06 Jul 2023 09:03:56 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c12-20020a5b014c000000b00c624de0d9absm393124ybp.5.2023.07.06.09.03.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 09:03:55 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <876f6a08-1850-21cd-83d1-b309e7e1e912@roeck-us.net>
-Date:   Thu, 6 Jul 2023 09:03:53 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] watchdog: simatic-ipc-wdt: make IO region access of
- one model muxed
-Content-Language: en-US
-To:     Henning Schild <henning.schild@siemens.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Tobias Schaffner <tobias.schaffner@siemens.com>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-References: <20230706154831.19100-1-henning.schild@siemens.com>
- <20230706154831.19100-2-henning.schild@siemens.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230706154831.19100-2-henning.schild@siemens.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 6 Jul 2023 13:29:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4F21FC3;
+        Thu,  6 Jul 2023 10:29:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E02161085;
+        Thu,  6 Jul 2023 17:29:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CA34DC433C8;
+        Thu,  6 Jul 2023 17:29:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688664545;
+        bh=oC5zOYYPcSWHZ/Kg2RT67pNLIhkdnLtfr8RPrB+TvH0=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=KKrRM49x234de8FLWT2gOGcQaNTKUC5W3tQZ90ZUpXeV+T3OeJyR35rBt6vZHQeNR
+         y+PJce1UkCPv9NnK+uecfY/mRWWQWqxy+W6WaNIZpBKp0jWp1Gq0izMr7lhz9M65Ef
+         /2LYD63wy7FkrtxJY8JvojI9nAeKX4O62TyR4ZvwRZyyeMZot9MHHpOG3M0wUrD8wl
+         XaiWnak9amWkthDv+oypD99xMYxQjay/hGiSsNA9cDttFMEhUXJ5FzUSJ70n62L9qG
+         PVz/dikHB8DyAZeP3iEhydAXOeSW9DxU6iOcbALiL72+dIuD/0cpUDw12px2f+5nf7
+         z1VZv9LWqBhDQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B774DE5381B;
+        Thu,  6 Jul 2023 17:29:05 +0000 (UTC)
+Subject: Re: [GIT PULL REQUEST] watchdog - v6.5 release cycle.
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230705122357.GA14855@www.linux-watchdog.org>
+References: <20230705122357.GA14855@www.linux-watchdog.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230705122357.GA14855@www.linux-watchdog.org>
+X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.5-rc1
+X-PR-Tracked-Commit-Id: 009637de1f65cff452ad49554d1e8ef9fda99e43
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c91e587be8e2680786cbf0b87fa7ae92c345857f
+Message-Id: <168866454574.8259.8596833359998686243.pr-tracker-bot@kernel.org>
+Date:   Thu, 06 Jul 2023 17:29:05 +0000
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Yuechao Zhao <yuechao.zhao@advantech.com.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/6/23 08:48, Henning Schild wrote:
-> The IO region used for the watchdog also hold CMOS battery monitoring
-> information. Make the access muxed so that a hwmon driver can use the
-> region as well.
-> 
-> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+The pull request you sent on Wed, 5 Jul 2023 14:23:57 +0200:
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+> git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.5-rc1
 
-> ---
->   drivers/watchdog/simatic-ipc-wdt.c | 9 ++++++---
->   1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/watchdog/simatic-ipc-wdt.c b/drivers/watchdog/simatic-ipc-wdt.c
-> index 6599695dc672..cdc1a2e15180 100644
-> --- a/drivers/watchdog/simatic-ipc-wdt.c
-> +++ b/drivers/watchdog/simatic-ipc-wdt.c
-> @@ -155,9 +155,8 @@ static int simatic_ipc_wdt_probe(struct platform_device *pdev)
->   
->   	switch (plat->devmode) {
->   	case SIMATIC_IPC_DEVICE_227E:
-> -		if (!devm_request_region(dev, gp_status_reg_227e_res.start,
-> -					 resource_size(&gp_status_reg_227e_res),
-> -					 KBUILD_MODNAME)) {
-> +		res = &gp_status_reg_227e_res;
-> +		if (!request_muxed_region(res->start, resource_size(res), res->name)) {
->   			dev_err(dev,
->   				"Unable to register IO resource at %pR\n",
->   				&gp_status_reg_227e_res);
-> @@ -210,6 +209,10 @@ static int simatic_ipc_wdt_probe(struct platform_device *pdev)
->   	if (wdd_data.bootstatus)
->   		dev_warn(dev, "last reboot caused by watchdog reset\n");
->   
-> +	if (plat->devmode == SIMATIC_IPC_DEVICE_227E)
-> +		release_region(gp_status_reg_227e_res.start,
-> +			       resource_size(&gp_status_reg_227e_res));
-> +
->   	watchdog_set_nowayout(&wdd_data, nowayout);
->   	watchdog_stop_on_reboot(&wdd_data);
->   	return devm_watchdog_register_device(dev, &wdd_data);
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c91e587be8e2680786cbf0b87fa7ae92c345857f
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
