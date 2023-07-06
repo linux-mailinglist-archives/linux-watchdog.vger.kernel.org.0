@@ -2,78 +2,107 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED416749D2E
-	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Jul 2023 15:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E5674A17B
+	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Jul 2023 17:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjGFNSK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 6 Jul 2023 09:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
+        id S233325AbjGFPtv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 6 Jul 2023 11:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjGFNSK (ORCPT
+        with ESMTP id S232833AbjGFPt1 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 6 Jul 2023 09:18:10 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3708B1992;
-        Thu,  6 Jul 2023 06:18:09 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-c5c8d00ced3so693272276.2;
-        Thu, 06 Jul 2023 06:18:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688649488; x=1691241488;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cgf43GhwD7b0csu2mfmmYfiuYsfy6eO/8hxUqbvqUJ4=;
-        b=cMZFJB67wJDTRGG5QdoThR4MqF/I7e2w3zLRKyOAfDmVQw2liAOGwy7h3lQxm38tK1
-         ZvcySuBmyORycZYLesYh74Pk/CBOm8MOKYAnfHtn+OXbv16l7fJJ2HVqM77NjVEnUa4m
-         QfxqP1Jr/Cr7flT7cK8S6Dhfv9bIpzqCyKtZ4vUrkIFI1u6mZI7nriFRZklMHmo/kcAD
-         28evqx94OXRXSweCYO/tIZLPugWilFzmXBQuTo3F4wj4wp72HQGFDx6yQcNDSo5Y1HEw
-         ALCEZ6BafX5qvtdAFPv5RItZ2MEakqG99qXbNy7/CNSPS1f5NX1oBj3FTKCr4Fsgn2au
-         P31w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688649488; x=1691241488;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Cgf43GhwD7b0csu2mfmmYfiuYsfy6eO/8hxUqbvqUJ4=;
-        b=D5sZkS9yH04astUAfeE1p1GgT/kVM0VKWA2LS2hIF7MYHX4m5ZK2N1Q3JIZsJeXQtS
-         o9ayqQPQztMZDAgUA+Y3uDgyeD6d0fzu1x2+LNVSeQi8ft4tTwJuQ1z35DtFBtwhbRHY
-         I39UIt3+MN3t6fE6u0WOE/lvSWr5GpCdUAtt90OfpIrL1dhq00gKdHRQXhkZ+QYEFt+S
-         PgkMYlBe7CAz+FAB+NDsNJM7v88X/uiL0gn6YTGbvySH7ZCwrCReUkE4w7mmWX4vUsDo
-         74EnNftwlqdwWLKDFxXJFfPLPlnxxJqh0BYIBSleqwogLoTpiwxcZZ54pP5wY1D2Vg71
-         lRnw==
-X-Gm-Message-State: ABy/qLY7y+FixeIAyA39ElXUdRup5gsnzjPMO+9N+4a/PjzMMqPAuGZf
-        lqDyUqeu8nt316G1Gp5is+N/z3l57zg=
-X-Google-Smtp-Source: APBJJlFUDHEL5TcZ5ngPGylwaqkir988G2+TX7Jlrtnxz1bzhCimKfyywmT7eJeoCZUz27mOF/6RZw==
-X-Received: by 2002:a25:b7ca:0:b0:bca:7da8:e37c with SMTP id u10-20020a25b7ca000000b00bca7da8e37cmr1768953ybj.15.1688649488224;
-        Thu, 06 Jul 2023 06:18:08 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b8-20020a5b0088000000b00c6135ffd2fcsm308177ybp.15.2023.07.06.06.18.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Jul 2023 06:18:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <02b9ec14-bf69-ce61-4bd5-cac05563b855@roeck-us.net>
-Date:   Thu, 6 Jul 2023 06:18:03 -0700
+        Thu, 6 Jul 2023 11:49:27 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2085.outbound.protection.outlook.com [40.107.8.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10581FEC;
+        Thu,  6 Jul 2023 08:48:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eB8SgI4vX62yV6lebUeReXwd8qzdralAP45ZKlZNHWad8YwP4CffZdz1Uzrndc4em7okp4DPrJM9/O5hvwVOFJsJLJ1f5KEYosY155KPR4CnEBCA22LvY1Rr8rqBit0OGNM5YRWxv6LAYwZmv3MpIJRPQvV4Br/ojo21bOzOOrunKAwEEyFl/uL00gZzqSk5vAlMXE8MXpPKaxw+GPB/pyYSmnrytl0gVkBGy0WGxoMDARmQXYZxkyOp3YcArxVQaQLUzxXqWZ6LBgId9bbMOn7g9XajV3udyt5O4CToQRLJdjydi/rKJ4dd7hEdQPcsgwAMjka8bDwAye2YZK1f/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kPWxYf/1DJPIp7rYVkzJrg9tSP/HfrkNUGAVNyabubM=;
+ b=GBO8Zp6dU5+DACM908SZQww8/++kOIRNrX0cFrh0cIYCqar07dtFQyh+OB+GypmO1FaeYEQs2pBeBhP/s7SMGCoplPWV7V7uy3s/hWWokB8VWvqXQqoxcbE7o1vmOKvhuJuXRrp8/qeQfe1sdCO6tgdggcHKh1nWnkO9Hao5pPLhuitl+kO24WZQ16JFa5Ui8n+vjj6kKTfFIcE6pdstJIJgzYPzD9gWKl9AOftVg/wAFeO/HzQjegsnh8tLYCjb/kA9UciwaHTeCwBUhHuyvgt/mgNtFymIRhIGP+OA7dueJhWywh6iLEDdLpwNHWB/nsRVWrChOo6lPb7nAQ4bVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.76) smtp.rcpttodomain=redhat.com smtp.mailfrom=siemens.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kPWxYf/1DJPIp7rYVkzJrg9tSP/HfrkNUGAVNyabubM=;
+ b=xryD/oWCw/EAnhk70x+X8u9lmqvliJx+tJaXjjqO7bHP2iIpgsbC9m4xMDNaZc88Q9ufMCctJbDReNnrUf6hzRk02VU5xT1bxyr4FvgOzQ3c2UmJnx5bB5QQyDEcbBdniVXF9YNnGWEHI5uzYgUEi953E6Y5onv9GH7tTDCZQkiJ+yL5GzPCLDbd0BHIYbvWmGNsopKUwRB++KnTJPgxD4Cd0mxULmZzf4IIicid6yBCJRtS0C1Jq5FUzWEEUCGz4nRiWnLBF/Vqj/MTy4dGJ8ggeOPtg+1TrdOy6KILXVrtzHocsN/oKvmXxD3KbCzYzwtoIroEhd716YPA/GfwmQ==
+Received: from DB3PR08CA0022.eurprd08.prod.outlook.com (2603:10a6:8::35) by
+ AS4PR10MB5545.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:4ff::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.17; Thu, 6 Jul
+ 2023 15:48:43 +0000
+Received: from DB5EUR01FT069.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:8:0:cafe::6c) by DB3PR08CA0022.outlook.office365.com
+ (2603:10a6:8::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.18 via Frontend
+ Transport; Thu, 6 Jul 2023 15:48:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.76)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.76 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.76; helo=hybrid.siemens.com; pr=C
+Received: from hybrid.siemens.com (194.138.21.76) by
+ DB5EUR01FT069.mail.protection.outlook.com (10.152.5.140) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6565.24 via Frontend Transport; Thu, 6 Jul 2023 15:48:43 +0000
+Received: from DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) by
+ DEMCHDC8VSA.ad011.siemens.net (194.138.21.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Thu, 6 Jul 2023 17:48:42 +0200
+Received: from md1za8fc.ppmd.siemens.net (139.25.69.40) by
+ DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Thu, 6 Jul 2023 17:48:42 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>
+CC:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        <linux-watchdog@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
+        "Tobias Schaffner" <tobias.schaffner@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: [PATCH 0/2] platform/x86: add CMOS battery monitoring for simatic IPCs 
+Date:   Thu, 6 Jul 2023 17:48:29 +0200
+Message-ID: <20230706154831.19100-1-henning.schild@siemens.com>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] watchdog: starfive: Remove #ifdef guards for PM related
- functions
-Content-Language: en-US
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230706082928.10869-1-paul@crapouillou.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230706082928.10869-1-paul@crapouillou.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [139.25.69.40]
+X-ClientProxiedBy: DEMCHDC8WBA.ad011.siemens.net (139.25.226.105) To
+ DEMCHDC8WAA.ad011.siemens.net (139.25.226.104)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB5EUR01FT069:EE_|AS4PR10MB5545:EE_
+X-MS-Office365-Filtering-Correlation-Id: a3d8d434-4fd7-4d4a-186e-08db7e387a09
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Y+qlFA1ZUgfKj22K71AgU4tDGkweS7lSo1hHy7RKFwpTwxfQAy/qWktJw2XvEXEr2dTJB+xzxoelcxMVW+GTyttZW4tVMZ+te+NGQ0EVI8KDzRWoZN6nFdrmi/Rq7MWxjasliL/tFuv0XHGxXaOK13yWPCQUSYt3pNQflX6f3l1b2QyVOEOU5lf75vIMsTSfI+dt9Kokqvd2vjd7O5Q2E0Qqax5KVWJR55hqnF2qK17W0Kp3pS9OK13etW9eHXHG8TOZlYGOdmbTyT8uB65uDtYJkrIcHKHb0UlXYNynKZm/p2KjMDZh5VTY1evFsF3WBuvrP3/8xjIfSsZZkddCqp8khcmSXGJOj3O+loGLIQT5HGvunmeJYpUMzk1oFrdqJSDWhVwIyt8NfZoIS0LLyQDjbtu3cA3IVagNZON9eFFXXTPCi1woQ448M80xDx39XJs4+ScpW91uT+2fkk0I0VS0AbRKNsJuOv9TGxNUvWlcY5UxhQzVNXWBiG/tyG74HkMzuXdD0zhqpqC8n9eahY1L1uNo6O+Svi1Kg51ugWL9LjNHyyxEMAbBFKP0Horg21OCJLL5y4dIEC9oztu2cjJv1wFm2LPOSGKrNiVcdE5IhNfreyHpHJLcBrvZCS/0owub0eFh68SRszjT5VMVDhkWdeADSdkZMPz6zwGGh6nb4IrkKpnH6kq8qJ6FAkGXcj7tx7Cs1cg4QMz+O6V6TtBeBfA02J06CSrtzLyOj6HGGa0iAKHacjKIGhGXjSz6Po/+zDo93oHyobtFWqaANg==
+X-Forefront-Antispam-Report: CIP:194.138.21.76;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(396003)(39860400002)(451199021)(36840700001)(40470700004)(46966006)(6666004)(478600001)(70586007)(54906003)(110136005)(4743002)(186003)(26005)(70206006)(107886003)(2906002)(1076003)(82310400005)(5660300002)(4326008)(82960400001)(41300700001)(44832011)(8676002)(316002)(82740400003)(81166007)(356005)(8936002)(16526019)(86362001)(36756003)(956004)(47076005)(83380400001)(2616005)(36860700001)(336012)(40460700003)(40480700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 15:48:43.2960
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3d8d434-4fd7-4d4a-186e-08db7e387a09
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.76];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT069.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR10MB5545
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,66 +110,34 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/6/23 01:29, Paul Cercueil wrote:
-> Use the new PM macros for the suspend and resume functions to be
-> automatically dropped by the compiler when CONFIG_PM or
-> CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
-> 
-> This has the advantage of always compiling these functions in,
-> independently of any Kconfig option. Thanks to that, bugs and other
-> regressions are subsequently easier to catch.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+The real change is in p2 and p1 just prepares to multiplex an IO region.
+We introduce a custom driver to read CMOS battery information on several
+of the Industrial PCs.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+This is based on
+ "[PATCH 0/1] leds: simatic-ipc-leds-gpio: add new model BX-21A"
 
-> ---
->   drivers/watchdog/starfive-wdt.c | 10 +++-------
->   1 file changed, 3 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
-> index 8058fca4d05d..7c8a1c5e75be 100644
-> --- a/drivers/watchdog/starfive-wdt.c
-> +++ b/drivers/watchdog/starfive-wdt.c
-> @@ -526,7 +526,6 @@ static void starfive_wdt_shutdown(struct platform_device *pdev)
->   	starfive_wdt_pm_stop(&wdt->wdd);
->   }
->   
-> -#ifdef CONFIG_PM_SLEEP
->   static int starfive_wdt_suspend(struct device *dev)
->   {
->   	struct starfive_wdt *wdt = dev_get_drvdata(dev);
-> @@ -556,9 +555,7 @@ static int starfive_wdt_resume(struct device *dev)
->   
->   	return starfive_wdt_start(wdt);
->   }
-> -#endif /* CONFIG_PM_SLEEP */
->   
-> -#ifdef CONFIG_PM
->   static int starfive_wdt_runtime_suspend(struct device *dev)
->   {
->   	struct starfive_wdt *wdt = dev_get_drvdata(dev);
-> @@ -574,11 +571,10 @@ static int starfive_wdt_runtime_resume(struct device *dev)
->   
->   	return starfive_wdt_enable_clock(wdt);
->   }
-> -#endif /* CONFIG_PM */
->   
->   static const struct dev_pm_ops starfive_wdt_pm_ops = {
-> -	SET_RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
-> -	SET_SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
-> +	RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
-> +	SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
->   };
->   
->   static const struct of_device_id starfive_wdt_match[] = {
-> @@ -594,7 +590,7 @@ static struct platform_driver starfive_wdt_driver = {
->   	.shutdown = starfive_wdt_shutdown,
->   	.driver = {
->   		.name = "starfive-wdt",
-> -		.pm = &starfive_wdt_pm_ops,
-> +		.pm = pm_ptr(&starfive_wdt_pm_ops),
->   		.of_match_table = starfive_wdt_match,
->   	},
->   };
+Henning Schild (2):
+  watchdog: simatic-ipc-wdt: make IO region access of one model muxed
+  platform/x86: add CMOS battery monitoring for simatic IPCs
+
+ drivers/platform/x86/Kconfig                  |  48 ++++
+ drivers/platform/x86/Makefile                 |   6 +-
+ .../x86/simatic-ipc-batt-apollolake.c         |  51 ++++
+ .../x86/simatic-ipc-batt-elkhartlake.c        |  51 ++++
+ .../platform/x86/simatic-ipc-batt-f7188x.c    |  70 +++++
+ drivers/platform/x86/simatic-ipc-batt.c       | 250 ++++++++++++++++++
+ drivers/platform/x86/simatic-ipc-batt.h       |  20 ++
+ drivers/platform/x86/simatic-ipc.c            |  65 ++++-
+ drivers/watchdog/simatic-ipc-wdt.c            |   9 +-
+ .../platform_data/x86/simatic-ipc-base.h      |   1 +
+ 10 files changed, 553 insertions(+), 18 deletions(-)
+ create mode 100644 drivers/platform/x86/simatic-ipc-batt-apollolake.c
+ create mode 100644 drivers/platform/x86/simatic-ipc-batt-elkhartlake.c
+ create mode 100644 drivers/platform/x86/simatic-ipc-batt-f7188x.c
+ create mode 100644 drivers/platform/x86/simatic-ipc-batt.c
+ create mode 100644 drivers/platform/x86/simatic-ipc-batt.h
+
+-- 
+2.39.3
 
