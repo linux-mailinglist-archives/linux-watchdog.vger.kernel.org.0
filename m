@@ -2,68 +2,53 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B71E74A316
-	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Jul 2023 19:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA2674AC09
+	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Jul 2023 09:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232213AbjGFR3T (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 6 Jul 2023 13:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
+        id S229787AbjGGHiG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 7 Jul 2023 03:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232662AbjGFR3Q (ORCPT
+        with ESMTP id S229910AbjGGHiF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 6 Jul 2023 13:29:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4F21FC3;
-        Thu,  6 Jul 2023 10:29:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E02161085;
-        Thu,  6 Jul 2023 17:29:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CA34DC433C8;
-        Thu,  6 Jul 2023 17:29:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688664545;
-        bh=oC5zOYYPcSWHZ/Kg2RT67pNLIhkdnLtfr8RPrB+TvH0=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=KKrRM49x234de8FLWT2gOGcQaNTKUC5W3tQZ90ZUpXeV+T3OeJyR35rBt6vZHQeNR
-         y+PJce1UkCPv9NnK+uecfY/mRWWQWqxy+W6WaNIZpBKp0jWp1Gq0izMr7lhz9M65Ef
-         /2LYD63wy7FkrtxJY8JvojI9nAeKX4O62TyR4ZvwRZyyeMZot9MHHpOG3M0wUrD8wl
-         XaiWnak9amWkthDv+oypD99xMYxQjay/hGiSsNA9cDttFMEhUXJ5FzUSJ70n62L9qG
-         PVz/dikHB8DyAZeP3iEhydAXOeSW9DxU6iOcbALiL72+dIuD/0cpUDw12px2f+5nf7
-         z1VZv9LWqBhDQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B774DE5381B;
-        Thu,  6 Jul 2023 17:29:05 +0000 (UTC)
-Subject: Re: [GIT PULL REQUEST] watchdog - v6.5 release cycle.
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230705122357.GA14855@www.linux-watchdog.org>
-References: <20230705122357.GA14855@www.linux-watchdog.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230705122357.GA14855@www.linux-watchdog.org>
-X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.5-rc1
-X-PR-Tracked-Commit-Id: 009637de1f65cff452ad49554d1e8ef9fda99e43
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c91e587be8e2680786cbf0b87fa7ae92c345857f
-Message-Id: <168866454574.8259.8596833359998686243.pr-tracker-bot@kernel.org>
-Date:   Thu, 06 Jul 2023 17:29:05 +0000
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Fri, 7 Jul 2023 03:38:05 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E7619B2;
+        Fri,  7 Jul 2023 00:38:02 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 5EDF124E1AC;
+        Fri,  7 Jul 2023 15:37:48 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 7 Jul
+ 2023 15:37:48 +0800
+Received: from [192.168.125.128] (113.72.145.114) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 7 Jul
+ 2023 15:37:47 +0800
+Message-ID: <a664ad04-561d-5060-6e69-10f79c1398d0@starfivetech.com>
+Date:   Fri, 7 Jul 2023 15:34:40 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] watchdog: starfive: Remove #ifdef guards for PM related
+ functions
+Content-Language: en-US
+To:     Paul Cercueil <paul@crapouillou.net>
+CC:     Samin Guo <samin.guo@starfivetech.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Keguang Zhang <keguang.zhang@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Srinivas Neeli <srinivas.neeli@amd.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Yuechao Zhao <yuechao.zhao@advantech.com.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230706082928.10869-1-paul@crapouillou.net>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <20230706082928.10869-1-paul@crapouillou.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.114]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,15 +57,67 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The pull request you sent on Wed, 5 Jul 2023 14:23:57 +0200:
+On 2023/7/6 16:29, Paul Cercueil wrote:
+> Use the new PM macros for the suspend and resume functions to be
+> automatically dropped by the compiler when CONFIG_PM or
+> CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
+> 
+> This has the advantage of always compiling these functions in,
+> independently of any Kconfig option. Thanks to that, bugs and other
+> regressions are subsequently easier to catch.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  drivers/watchdog/starfive-wdt.c | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
+> index 8058fca4d05d..7c8a1c5e75be 100644
+> --- a/drivers/watchdog/starfive-wdt.c
+> +++ b/drivers/watchdog/starfive-wdt.c
+> @@ -526,7 +526,6 @@ static void starfive_wdt_shutdown(struct platform_device *pdev)
+>  	starfive_wdt_pm_stop(&wdt->wdd);
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  static int starfive_wdt_suspend(struct device *dev)
+>  {
+>  	struct starfive_wdt *wdt = dev_get_drvdata(dev);
+> @@ -556,9 +555,7 @@ static int starfive_wdt_resume(struct device *dev)
+>  
+>  	return starfive_wdt_start(wdt);
+>  }
+> -#endif /* CONFIG_PM_SLEEP */
+>  
+> -#ifdef CONFIG_PM
+>  static int starfive_wdt_runtime_suspend(struct device *dev)
+>  {
+>  	struct starfive_wdt *wdt = dev_get_drvdata(dev);
+> @@ -574,11 +571,10 @@ static int starfive_wdt_runtime_resume(struct device *dev)
+>  
+>  	return starfive_wdt_enable_clock(wdt);
+>  }
+> -#endif /* CONFIG_PM */
+>  
+>  static const struct dev_pm_ops starfive_wdt_pm_ops = {
+> -	SET_RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
+> -	SET_SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
+> +	RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
+> +	SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
+>  };
+>  
+>  static const struct of_device_id starfive_wdt_match[] = {
+> @@ -594,7 +590,7 @@ static struct platform_driver starfive_wdt_driver = {
+>  	.shutdown = starfive_wdt_shutdown,
+>  	.driver = {
+>  		.name = "starfive-wdt",
+> -		.pm = &starfive_wdt_pm_ops,
+> +		.pm = pm_ptr(&starfive_wdt_pm_ops),
+>  		.of_match_table = starfive_wdt_match,
+>  	},
+>  };
 
-> git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.5-rc1
+Great, Thank you for the improvements.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c91e587be8e2680786cbf0b87fa7ae92c345857f
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Best regards,
+Xingyu Wu
