@@ -2,53 +2,45 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA2674AC09
-	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Jul 2023 09:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE6074D4D1
+	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Jul 2023 13:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjGGHiG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 7 Jul 2023 03:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
+        id S229736AbjGJL5L (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 10 Jul 2023 07:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjGGHiF (ORCPT
+        with ESMTP id S229569AbjGJL5K (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 7 Jul 2023 03:38:05 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E7619B2;
-        Fri,  7 Jul 2023 00:38:02 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 5EDF124E1AC;
-        Fri,  7 Jul 2023 15:37:48 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 7 Jul
- 2023 15:37:48 +0800
-Received: from [192.168.125.128] (113.72.145.114) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 7 Jul
- 2023 15:37:47 +0800
-Message-ID: <a664ad04-561d-5060-6e69-10f79c1398d0@starfivetech.com>
-Date:   Fri, 7 Jul 2023 15:34:40 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] watchdog: starfive: Remove #ifdef guards for PM related
- functions
-Content-Language: en-US
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     Samin Guo <samin.guo@starfivetech.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mon, 10 Jul 2023 07:57:10 -0400
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF86AE2;
+        Mon, 10 Jul 2023 04:57:08 -0700 (PDT)
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id B43BF409CD; Mon, 10 Jul 2023 13:56:53 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org B43BF409CD
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1688990213;
+        bh=LTL/NrSpFN7MDJhqtM5W5ZXMFtcsC+VlRpzl/LC6p74=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Zy+6RLn81QyqdmE3py3uIt1fJWzGfintpuZp37a2aU53fX7vYnJ2+/+z9BpPxCohg
+         hML9kMaa2+0olGUX2h/G8rGwtb2KC/UGLhRb/38gQ8WMhEdReh+T5KqVDjljWhWmF5
+         NQCkN1HRb3r4nre195xEuqyHvfq+/m7qTc+azKsc=
+Date:   Mon, 10 Jul 2023 13:56:53 +0200
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230706082928.10869-1-paul@crapouillou.net>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <20230706082928.10869-1-paul@crapouillou.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.114]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        Keguang Zhang <keguang.zhang@gmail.com>
+Subject: [GIT PULL REQUEST] watchdog - v6.5 release cycle (v6.5-rc2).
+Message-ID: <20230710115653.GA23810@www.linux-watchdog.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.20 (2009-12-10)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,67 +49,39 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2023/7/6 16:29, Paul Cercueil wrote:
-> Use the new PM macros for the suspend and resume functions to be
-> automatically dropped by the compiler when CONFIG_PM or
-> CONFIG_PM_SLEEP are disabled, without having to use #ifdef guards.
-> 
-> This has the advantage of always compiling these functions in,
-> independently of any Kconfig option. Thanks to that, bugs and other
-> regressions are subsequently easier to catch.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  drivers/watchdog/starfive-wdt.c | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
-> index 8058fca4d05d..7c8a1c5e75be 100644
-> --- a/drivers/watchdog/starfive-wdt.c
-> +++ b/drivers/watchdog/starfive-wdt.c
-> @@ -526,7 +526,6 @@ static void starfive_wdt_shutdown(struct platform_device *pdev)
->  	starfive_wdt_pm_stop(&wdt->wdd);
->  }
->  
-> -#ifdef CONFIG_PM_SLEEP
->  static int starfive_wdt_suspend(struct device *dev)
->  {
->  	struct starfive_wdt *wdt = dev_get_drvdata(dev);
-> @@ -556,9 +555,7 @@ static int starfive_wdt_resume(struct device *dev)
->  
->  	return starfive_wdt_start(wdt);
->  }
-> -#endif /* CONFIG_PM_SLEEP */
->  
-> -#ifdef CONFIG_PM
->  static int starfive_wdt_runtime_suspend(struct device *dev)
->  {
->  	struct starfive_wdt *wdt = dev_get_drvdata(dev);
-> @@ -574,11 +571,10 @@ static int starfive_wdt_runtime_resume(struct device *dev)
->  
->  	return starfive_wdt_enable_clock(wdt);
->  }
-> -#endif /* CONFIG_PM */
->  
->  static const struct dev_pm_ops starfive_wdt_pm_ops = {
-> -	SET_RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
-> -	SET_SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
-> +	RUNTIME_PM_OPS(starfive_wdt_runtime_suspend, starfive_wdt_runtime_resume, NULL)
-> +	SYSTEM_SLEEP_PM_OPS(starfive_wdt_suspend, starfive_wdt_resume)
->  };
->  
->  static const struct of_device_id starfive_wdt_match[] = {
-> @@ -594,7 +590,7 @@ static struct platform_driver starfive_wdt_driver = {
->  	.shutdown = starfive_wdt_shutdown,
->  	.driver = {
->  		.name = "starfive-wdt",
-> -		.pm = &starfive_wdt_pm_ops,
-> +		.pm = pm_ptr(&starfive_wdt_pm_ops),
->  		.of_match_table = starfive_wdt_match,
->  	},
->  };
+Hi Linus,
 
-Great, Thank you for the improvements.
+Please pull following watchdog changes for the v6.5 release cycle (v6.5-rc2).
 
-Best regards,
-Xingyu Wu
+This series contains:
+* Add Loongson-1 watchdog dt-bindings
+
+The output from git request-pull:
+----------------------------------------------------------------
+The following changes since commit 009637de1f65cff452ad49554d1e8ef9fda99e43:
+
+  watchdog: sp5100_tco: support Hygon FCH/SCH (Server Controller Hub) (2023-06-26 14:30:07 +0200)
+
+are available in the git repository at:
+
+  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.5-rc2
+
+for you to fetch changes up to 2500df55a615f2f177bacf1a261f927790a137db:
+
+  dt-bindings: watchdog: Add Loongson-1 watchdog (2023-07-06 11:49:53 +0200)
+
+----------------------------------------------------------------
+linux-watchdog 6.5-rc2 tag
+
+----------------------------------------------------------------
+Keguang Zhang (1):
+      dt-bindings: watchdog: Add Loongson-1 watchdog
+
+ .../bindings/watchdog/loongson,ls1x-wdt.yaml       | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/loongson,ls1x-wdt.yaml
+----------------------------------------------------------------
+
+Kind regards,
+Wim.
+
