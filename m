@@ -2,143 +2,89 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67AA9750354
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Jul 2023 11:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82BC751035
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Jul 2023 20:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbjGLJgX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 Jul 2023 05:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
+        id S232257AbjGLSDr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 12 Jul 2023 14:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232025AbjGLJf5 (ORCPT
+        with ESMTP id S231200AbjGLSDr (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 Jul 2023 05:35:57 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2085.outbound.protection.outlook.com [40.107.8.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F17C1FF3;
-        Wed, 12 Jul 2023 02:35:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z6T7lQmjCoPdR1aE6Y9VrYa08PvbG9/Oe1on4ZNZfHM++VyOD34i4qXPhoeI2elb5U6bHcVbQfVhHZz4rj8YGCc+E146qtCigoZIjoZW2feNgRgx2JVEpkD/M8WD8U9crnKo93jBpd2QG8DiCz2NPUPmvRRiRZtn7iojUBm/JdqeK2tkb2YW9Y3dOvJGVsgnra59Cut/qX5rBJAYkabZVy4hYLsC93zw2QcLmNYx4luQzUu8Q4iTC7COh7Ppy9yWk4q93F8kegL7lY0C1NK+wDTd4oWSpKeenf6T0pabwYAGyS+jyZ03yj14gNhdbmfboKktg6dNUUQZgEEld20Elw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cLf6qz+xtBOzajbFrDVBtug35FxP5ZQC5eU36kh6To4=;
- b=FEVadYjTW8qOVzVaM71Z+I8RFDDgLcb84bjQM34lTGkFJqkVheTR85v7jJ5TbHl0iq5Raebb1w59HpRlq1Z1ZB1wJ8Hy4gWPqwfU/FdGRZSXRmXaP3YhLb1AB3UycrZyCzrRA0sJP8iqG/iHLYciwSExMXFwTAHZKQd7UgAPuKAg4kuXhO0FBHv3o+F9RKm3Op/+zwog7/o/gd9OyPhKFqkCUi2h3JT8jurETY1nTZQG6PtCfbPifB+AJTB0LY9sDbuEvdoUn5a45cbqCKVXOCnIL0iKZn6tR6xnN6ofY+DUkshKDBiQtnaPpAttTn7avkeQx1wzJEtTsEKJCKIBlQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cLf6qz+xtBOzajbFrDVBtug35FxP5ZQC5eU36kh6To4=;
- b=qYAcWRrxzPsjHSjYB/gtovWZbwW/Jb/Ehxq4Av9dKDdhPvLeh+6/RUzgwEhFBzsJXebNQRh2A2hmXy627Bsz+FhXcePt8xK3FevV3Ekf3KAeVk3zfehHBVwKmKVrBo0rV/ry9l/hZsKS3Ma+MwR1fIVEgE5Sqe4W6xTbuQpvnNJlDDUeAI/ACX9QeH8nyrzwkkNKoDgAWDlwab0s68RbArp0A1hFiqGbOv8hAEnjOs/FCjp2hMArVB1+qrK9iGj2d9ucuoD4cqAmT9X+4rzz5mNzSgMtPi+ETOawOSG1iz3YbrUeD6WvTOP7D5vuWEugnajT57xJC4/ZieyZu9XeCw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:588::19)
- by DB5PR10MB7871.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:48a::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.30; Wed, 12 Jul
- 2023 09:34:20 +0000
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::f964:e0e9:199:9246]) by AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::f964:e0e9:199:9246%6]) with mapi id 15.20.6565.028; Wed, 12 Jul 2023
- 09:34:20 +0000
-Message-ID: <b0f31712-a20f-f5c9-5b49-7473ef5d8be7@siemens.com>
-Date:   Wed, 12 Jul 2023 11:34:11 +0200
+        Wed, 12 Jul 2023 14:03:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A28A1FED
+        for <linux-watchdog@vger.kernel.org>; Wed, 12 Jul 2023 11:03:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689184979;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7akjMyUHwN9vGsmA+DFD3q/5FAYq7rI0eED2DO07wo4=;
+        b=XTsFebQ/uMAakLBaawd9nyy2ZW/YOmK0alv2hBEkahZLqeTMB6UdHra8w9ZRCkZf/UVox5
+        R8oP+uQ7awe/gmqOxjz1wFv7WUBLhBEcuNKhIE8gy5wdyO7ztWhdMNkWukN3Bilb3VDvLD
+        dUV90UCS/dAxWEKr+iV2zbvWO9oLUxw=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-628-N6TTcDlpPpCjqbj_PQUaQA-1; Wed, 12 Jul 2023 14:02:50 -0400
+X-MC-Unique: N6TTcDlpPpCjqbj_PQUaQA-1
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4f76712f950so6664906e87.0
+        for <linux-watchdog@vger.kernel.org>; Wed, 12 Jul 2023 11:02:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689184960; x=1691776960;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7akjMyUHwN9vGsmA+DFD3q/5FAYq7rI0eED2DO07wo4=;
+        b=iIo4XnS3HXRc/F/SWa7C1/p7CqC/eG7N6G00NrKwNHavUhT9BKOnWdo3DjRIu/gHg5
+         gyVo6r4NBSRjZcMkFKnE6QxK1yhVykXaOzctsRKPxF6LH1edHGXrHmYjfS12HLopVKCA
+         +cn1PTZpVzZTNV4o1w+ephzzTId4ydLdH7HmqrbrloFpuXzL9xFENUyHFo/b6C9uebz8
+         28GWORjHIH5oO4y0mN4u9Bd7oRypWuFGNZ37/OxGfWfomvXIg4R49Rn5TyLyXLTXUben
+         pqQ0A7AfosQgLtToy4KP6he9OuhZLiMp0kuWBOtUqa5pY5Muv8ULpk348PfTEnRWFDdQ
+         aAtg==
+X-Gm-Message-State: ABy/qLYeBX9f/4NQadfMrOi4eVMzo4kvnCs9p/BfI2Kw7Y7U4n6BzLEG
+        hhSRB3KvN0bqhKDypMn3V6BhRfT/2x1Dlu7KL4ByxTFl0krnR3hPp4flJfIcEsSYNYN3tH66Ly5
+        +mp/nNAjAYdTBCtpSqg3t2AM4yn4=
+X-Received: by 2002:a19:381e:0:b0:4f8:70b0:eec6 with SMTP id f30-20020a19381e000000b004f870b0eec6mr13859505lfa.28.1689184959777;
+        Wed, 12 Jul 2023 11:02:39 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlESOQQpORhn/acJKc4G/Ed56z0EcpH0+L8yRbErNs1RxGjEtVhDApRE+7doth7M2DdLlSAgUw==
+X-Received: by 2002:a19:381e:0:b0:4f8:70b0:eec6 with SMTP id f30-20020a19381e000000b004f870b0eec6mr13859479lfa.28.1689184959145;
+        Wed, 12 Jul 2023 11:02:39 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id z26-20020a1709064e1a00b009937dbabbd5sm2836372eju.220.2023.07.12.11.02.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 11:02:38 -0700 (PDT)
+Message-ID: <024d8246-bcc3-75fb-00be-9b611ae238f6@redhat.com>
+Date:   Wed, 12 Jul 2023 20:02:37 +0200
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 3/3] watchdog:rit_wdt: Add support for WDIOF_CARDRESET
-Content-Language: en-US
-To:     "Li, Hua Qian (DI FA CTR IPC CN PRC4)" <HuaQian.Li@siemens.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Cc:     "Su, Bao Cheng (DI FA CTR IPC CN PRC4)" <baocheng.su@siemens.com>,
-        "kristo@kernel.org" <kristo@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "huaqianlee@gmail.com" <huaqianlee@gmail.com>,
-        "nm@ti.com" <nm@ti.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "vigneshr@ti.com" <vigneshr@ti.com>
-References: <20230711091713.1113010-1-huaqian.li@siemens.com>
- <20230711091713.1113010-4-huaqian.li@siemens.com>
- <165cf95b-663b-5dac-b686-a515f2111656@roeck-us.net>
- <0d1b15b1016d451862b895f851c6c6c81472755f.camel@siemens.com>
- <ec89d59b-bb8d-ae7e-2284-1fd6bca22366@roeck-us.net>
- <42d578c52a590f50f90e2378ef3e2a1522038fc2.camel@siemens.com>
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-In-Reply-To: <42d578c52a590f50f90e2378ef3e2a1522038fc2.camel@siemens.com>
+Subject: Re: [PATCH 2/2] platform/x86: add CMOS battery monitoring for simatic
+ IPCs
+Content-Language: en-US, nl
+To:     Henning Schild <henning.schild@siemens.com>,
+        Mark Gross <markgross@kernel.org>,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Tobias Schaffner <tobias.schaffner@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>
+References: <20230706154831.19100-1-henning.schild@siemens.com>
+ <20230706154831.19100-3-henning.schild@siemens.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230706154831.19100-3-henning.schild@siemens.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0112.namprd03.prod.outlook.com
- (2603:10b6:610:cd::27) To AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:588::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS4PR10MB6181:EE_|DB5PR10MB7871:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6966a049-dd00-4ab2-273e-08db82bb2b8a
-X-LD-Processed: 38ae3bcd-9579-4fd4-adda-b42e1495d55a,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: o9KG4poHiahOXKAamX7binMynYdphMixt2O1j7XqVPinI0UihJxgvrWmBFRHFZuEfwofp1yCq3m6qQgQudozM9Toa7dqzT4+TsJptzYAvoOdfvmL82Y/iLXC3K7Mj1wgvUXd6y/RJJti7QdVytfUK5556L7JwhGt2ZrIUN8i20bcP+Dskg4MHDGlmNvyIzP3Xubh/I7lTtnHnmnanxTncYh9RvNTTaKa7ztlvBzWRysfxUYzOZdvLq9L4kYD5sDEr77Myh5nPaSzn63fHwCTkTnenJjebSocXWbkFNY0pZD3bWxBh5bizXjAY/OO4Uq1TrsRlGywFz7z0lKcFRW1D1Z33nKjmRPuJp/etLQp0AL53XkmtJlTXSE0T3CzVEwUK5A6tytkhm3qN/wOFs0b27wU+Sc0DmICKodf3a9IffwrOcAQNSfVzHUetQ/pSz+wPMWXI8kdLEQqV5nNfo7GEsFCt8teflSLVIibA+AtD7K9AnfzV3U25HL9yb0qukdGUHPw+yov+/UeBhxJ8Pb/eKVADTAj5W/rUMEK8iQUTsLPbNzu1WG/RVJXlKR0F8Y9FkZ45i14FWJHk7xuLweomPT4ObNALcErAHFtYbQSAyfJInR99nucJ5JQq819oVno
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(396003)(136003)(376002)(39860400002)(451199021)(38100700002)(31696002)(86362001)(31686004)(36756003)(6666004)(54906003)(110136005)(82960400001)(6486002)(6506007)(26005)(186003)(53546011)(2616005)(6512007)(966005)(5660300002)(2906002)(66556008)(316002)(66946007)(66476007)(8676002)(7416002)(44832011)(8936002)(83380400001)(4326008)(478600001)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Rm1YZjVRaVYwTE52QXYxMnJJbnZpdDRuQVprZkRpOU53UWFIS3RNMXdMd2pa?=
- =?utf-8?B?dG85WTNOdUhpVWd5N1FCeWhKQjZNTU93UGtIUHljdlMzMVpyMytYdmhzenl2?=
- =?utf-8?B?Z0JOK29wbHpscXBrd2s2S2c5QzFvNUZodGgzSTFVRW1VZkFOWmR1aXh6UVd3?=
- =?utf-8?B?TDdMbzhwaDFzMWlKRUhCN1pBVDUvMlIwbjYrVTh0RkZ1NkI1d1dPZXJhaUVC?=
- =?utf-8?B?Q2V3ZWd2WnhncjFJLyt6YTRIU0pKVWl6ZWkwWDZ0OEc3cHlDeUx4ejkwUlhp?=
- =?utf-8?B?VGl0bEZEby9lNUdDaG05cGtwVG5LZitha2U4MGN1M1IySHlUWlFoTkpNeXMz?=
- =?utf-8?B?RzJoNlJGbWF1QVBsRWVPRXdYYW90amdLTHdsZzVjRzBxQ2xhaWdrTU52eHNC?=
- =?utf-8?B?UnFNZ3BBckozQ2lMazFHRW9hcVZyREpVZ2l6R25aQUV1MWJNR1dGancrU1lp?=
- =?utf-8?B?NzF3bDY0cnN1Z3p4bmI4UHR0TUFnSDNaa3ZOalk0RVNuaVZlaGF4RHlSai95?=
- =?utf-8?B?V1NvNCt3blpUdzNZclQ4MzZMOEQ5WkxHOUJyMUl2bk5LdXFVcWVyam5ISzBx?=
- =?utf-8?B?NnFIWTlBUFE5SnRmMkRIOXZUbmZDRG5zWi9RM05hdi9nbDVLbnF5QW51NlhU?=
- =?utf-8?B?OWg4dUpRV3lzclhENkVFd1I1cEFiUGo2TXYwTms1eEk1NlpsK2RKNHB1Q3FM?=
- =?utf-8?B?eVRlMnhBVjluNGFqenJDZldTRW9FU3haUFNqZEVkclhnZUdmcHFDNEJEVndu?=
- =?utf-8?B?QkZneDE5a1BMWU0wb0ZqRnhnY1NGMUJ6RDM4ckg1THJKdVRqdEpVcDY5TERX?=
- =?utf-8?B?bnI0dit3anF1OFBOVFo0SklsUDZQdGttMktVQ2VCN2gxdnVPY29mTWhtc2xN?=
- =?utf-8?B?SXE5NlR5eXdGS2pibkFHSDVSKzZEbENCL0p3N3Rld1lTcDVuSEJxbzI1Q0xp?=
- =?utf-8?B?c1Q1QUNLbmlJZ1MrcVZSQmpUbHNXT0toSXp5TGY2aEdBNk8xTS9JUzRJbEww?=
- =?utf-8?B?ZDdUTEVKaUJjblRydWFxOEdjUW1QQk9KOUdqUWJnMHkrT0h3d28rTDJhdldB?=
- =?utf-8?B?U0ZaditNNWFhNFVSOC8yUmlGVkZDc1JGSWRwOEpjOVBtZmNhaGVBVk5mSis1?=
- =?utf-8?B?Y2ZIRmJOT1BZM1ZZbStkSXEwTGdBcy9lSTJkTFhFM3VQREw4MGhhcnl4VVVM?=
- =?utf-8?B?T21iR3g2Vzg2dzVJV0FLNGMvWldKMDVRakVWaXErY2J4UGZZbVpPNmVGSTlJ?=
- =?utf-8?B?VW9qMSsyTDgzZTlKbDVGTTlkNEZkQWUwRDNCZGFqY1VBdk95SEdZcC9QQ2NJ?=
- =?utf-8?B?bUhIUEdTNHBhVUkzNUM0WTlNcTBnUWVETWY5ZjZMeEJ1bE94ckdhTWE1UEor?=
- =?utf-8?B?NWRVazcycWRvZGxueTNWS0V2bGZJWWtacUdQWi9VOXpXcldIWHp1Y1NXV2xw?=
- =?utf-8?B?QW5RK3hpWXUvblIyOVVKVW5YYUNWc1ZZYjI5WlB2WlhkZGcxcXRzK1pKTlNt?=
- =?utf-8?B?c0ZSR0JSSHRDQ2hIZEo5dDNOKzFZWVJBZHlZYU1jZ2RsTStaYmxWVFpKdVhq?=
- =?utf-8?B?bDVoWGE2V1B0d3BsV04vWHd0aFJYTTNndTJEeDIrNHAyUmprS0ZLUTJQdmE1?=
- =?utf-8?B?aCtyamZZdldxcy8rMTRKZmlkUlU3SVRVMFhoR0VaQzkvVWRHaTJmQklEYUtG?=
- =?utf-8?B?Qys4Wk1RRERSektXaVhlUTI2bzl3UVYvN0laVmJ1RUF3U09ORlFUYmZITmdR?=
- =?utf-8?B?Y0FFNVJEVnZSY29ENlBaTGJTNmRqTzViMmUxcUIybFhPN0pCajFtUEpKbCs3?=
- =?utf-8?B?Q2xQb3djeTN3OC9lM1JQT1RORmJ2bjZYWkVDUG1GN1B6L1FDbkFVK0RPSTNJ?=
- =?utf-8?B?UXBudWsxZW82TExmdWxQMFZXbGxNQUtlM0dWbUEvaFpMcmplTjd6SFVTUi83?=
- =?utf-8?B?ZTBzVStnQnhWTUtUc2ptNmJSMW1VQWpSdUNwa3gwdDAvQmtPWUpXUHUrVVEw?=
- =?utf-8?B?aHpxOWNWVlh6U3VJZDhLQndaVnNhaUJUZUZrQUFIZ0NmTFFQNHp2Q3VHMDFn?=
- =?utf-8?B?NUVPZFBid1RESEZ3Vm1ZSVJFUlVaRnNOWitBUUkwdlJOK0doS3ZRbzRDRnEz?=
- =?utf-8?Q?mgte98eGnvPd7PmlBO35fNzgl?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6966a049-dd00-4ab2-273e-08db82bb2b8a
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jul 2023 09:34:20.5970
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hPAe6B//8vFzJ/LyK6dqhhdvhksjy3MqKrZozF1mqjSBzAXbcJe4CLL7rjWjeF7r5pRuIrz/bS0kSObyBRkP1Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5PR10MB7871
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -146,31 +92,743 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 12.07.23 08:05, Li, Hua Qian (DI FA CTR IPC CN PRC4) wrote:
-> On Tue, 2023-07-11 at 22:01 -0700, Guenter Roeck wrote:
->> On a higher level, the entire code puzzles me. Obviously there
->> must be a means for the BIOS or ROMMON to write PON_REASON_SOF_NUM
->> into some memory area. That means the BIOS/ROMMON must be able
->> to detect that situation. Why not use the same code to detect this
->> in the driver without the complexity of passing it from BIOS/ROMMON
->> to driver in some random memory area ?
->>
-> In TI AM65x cases, the hardware is not capable of issuing a reset on
-> its own, and is not possible to record or detect the watchdog reset
-> situation. So `k3-rit-wdt` firmware which runs in a mcu core was used
-> to detect the watchdog interrupt and reset the Soc. Here I am trying to
-> write the reason in this firmware when watchdog interrupt happens, and
-> read it out in kernel.
+Hi,
 
-See https://github.com/siemens/k3-rti-wdt/issues/1 for where this
-started and where the firmware part comes into play.
+On 7/6/23 17:48, Henning Schild wrote:
+> Siemens Simatic Industrial PCs can monitor the voltage of the CMOS
+> battery with two bits that indicate low or empty state. This can be GPIO
+> or PortIO based.
+> Here we model that as a hwmon voltage. The core driver does the PortIO
+> and provides boilerplate for the GPIO versions. Which are split out to
+> model runtime dependencies while allowing fine-grained kernel
+> configuration.
+> 
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
 
-I still wonder why we couldn't have had a nicer hardware watchdog
-instead but this can't be changed anymore.
+So I tried to merge this, but it does not apply because:
 
-Jan
+"[PATCH 1/1] leds: simatic-ipc-leds-gpio: add new model BX-21A"
+https://lore.kernel.org/platform-driver-x86/20230531155457.31632-2-henning.schild@siemens.com/
 
--- 
-Siemens AG, Technology
-Competence Center Embedded Linux
+has not been merged yet.
+
+I think it would be best to split the:
+
+drivers/platform/x86/simatic-ipc.c
+include/linux/platform_data/x86/simatic-ipc-base.h
+include/linux/platform_data/x86/simatic-ipc.h
+
+bits of https://lore.kernel.org/platform-driver-x86/20230531155457.31632-2-henning.schild@siemens.com/
+
+out into its own prep patch named e.g. :
+"platform/x86: simatic-ipc: add BX-21A model"
+
+And then post a new v2 series for
+"leds: simatic-ipc-leds-gpio: add new model BX-21A"
+consisting of the prep patch + the actual new LED driver.
+
+Then I can do an immutable branch based on 6.5-rc1 with
+the prep patch in there and send a pull-req to Lee Jones
+for that, so that he can apply the LED driver patch on
+top of the immutable branch.
+
+This way we can continue with merging all the pending
+simatic IPC work without being dependent on Lee having
+time to review the LED driver.
+
+Regards,
+
+Hans
+
+
+
+
+
+
+
+> ---
+>  drivers/platform/x86/Kconfig                  |  48 ++++
+>  drivers/platform/x86/Makefile                 |   6 +-
+>  .../x86/simatic-ipc-batt-apollolake.c         |  51 ++++
+>  .../x86/simatic-ipc-batt-elkhartlake.c        |  51 ++++
+>  .../platform/x86/simatic-ipc-batt-f7188x.c    |  70 +++++
+>  drivers/platform/x86/simatic-ipc-batt.c       | 250 ++++++++++++++++++
+>  drivers/platform/x86/simatic-ipc-batt.h       |  20 ++
+>  drivers/platform/x86/simatic-ipc.c            |  65 ++++-
+>  .../platform_data/x86/simatic-ipc-base.h      |   1 +
+>  9 files changed, 547 insertions(+), 15 deletions(-)
+>  create mode 100644 drivers/platform/x86/simatic-ipc-batt-apollolake.c
+>  create mode 100644 drivers/platform/x86/simatic-ipc-batt-elkhartlake.c
+>  create mode 100644 drivers/platform/x86/simatic-ipc-batt-f7188x.c
+>  create mode 100644 drivers/platform/x86/simatic-ipc-batt.c
+>  create mode 100644 drivers/platform/x86/simatic-ipc-batt.h
+> 
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 49c2c4cd8d00..ad15063e1178 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -1086,6 +1086,54 @@ config SIEMENS_SIMATIC_IPC
+>  	  To compile this driver as a module, choose M here: the module
+>  	  will be called simatic-ipc.
+>  
+> +config SIEMENS_SIMATIC_IPC_BATT
+> +	tristate "CMOS battery driver for Siemens Simatic IPCs"
+> +	depends on HWMON
+> +	depends on SIEMENS_SIMATIC_IPC
+> +	default SIEMENS_SIMATIC_IPC
+> +	help
+> +	  This option enables support for monitoring the voltage of the CMOS
+> +	  batteries of several Industrial PCs from Siemens.
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called simatic-ipc-batt.
+> +
+> +config SIEMENS_SIMATIC_IPC_BATT_APOLLOLAKE
+> +	tristate "CMOS Battery monitoring for Simatic IPCs based on Apollo Lake GPIO"
+> +	depends on PINCTRL_BROXTON
+> +	depends on SIEMENS_SIMATIC_IPC_BATT
+> +	default SIEMENS_SIMATIC_IPC_BATT
+> +	help
+> +	  This option enables CMOS battery monitoring for Simatic Industrial PCs
+> +	  from Siemens based on Apollo Lake GPIO.
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called simatic-ipc-batt-apollolake.
+> +
+> +config SIEMENS_SIMATIC_IPC_BATT_ELKHARTLAKE
+> +	tristate "CMOS Battery monitoring for Simatic IPCs based on Elkhart Lake GPIO"
+> +	depends on PINCTRL_ELKHARTLAKE
+> +	depends on SIEMENS_SIMATIC_IPC_BATT
+> +	default SIEMENS_SIMATIC_IPC_BATT
+> +	help
+> +	  This option enables CMOS battery monitoring for Simatic Industrial PCs
+> +	  from Siemens based on Elkhart Lake GPIO.
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called simatic-ipc-batt-elkhartlake.
+> +
+> +config SIEMENS_SIMATIC_IPC_BATT_F7188X
+> +	tristate "CMOS Battery monitoring for Simatic IPCs based on Nuvoton GPIO"
+> +	depends on GPIO_F7188X
+> +	depends on SIEMENS_SIMATIC_IPC_BATT
+> +	default SIEMENS_SIMATIC_IPC_BATT
+> +	help
+> +	  This option enables CMOS battery monitoring for Simatic Industrial PCs
+> +	  from Siemens based on Nuvoton GPIO.
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called simatic-ipc-batt-elkhartlake.
+> +
+>  config WINMATE_FM07_KEYS
+>  	tristate "Winmate FM07/FM07P front-panel keys driver"
+>  	depends on INPUT
+> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+> index 52dfdf574ac2..522da0d1584d 100644
+> --- a/drivers/platform/x86/Makefile
+> +++ b/drivers/platform/x86/Makefile
+> @@ -131,7 +131,11 @@ obj-$(CONFIG_INTEL_SCU_IPC_UTIL)	+= intel_scu_ipcutil.o
+>  obj-$(CONFIG_X86_INTEL_LPSS)		+= pmc_atom.o
+>  
+>  # Siemens Simatic Industrial PCs
+> -obj-$(CONFIG_SIEMENS_SIMATIC_IPC)	+= simatic-ipc.o
+> +obj-$(CONFIG_SIEMENS_SIMATIC_IPC)			+= simatic-ipc.o
+> +obj-$(CONFIG_SIEMENS_SIMATIC_IPC_BATT)			+= simatic-ipc-batt.o
+> +obj-$(CONFIG_SIEMENS_SIMATIC_IPC_BATT_APOLLOLAKE)	+= simatic-ipc-batt-apollolake.o
+> +obj-$(CONFIG_SIEMENS_SIMATIC_IPC_BATT_ELKHARTLAKE)	+= simatic-ipc-batt-elkhartlake.o
+> +obj-$(CONFIG_SIEMENS_SIMATIC_IPC_BATT_F7188X)		+= simatic-ipc-batt-f7188x.o
+>  
+>  # Winmate
+>  obj-$(CONFIG_WINMATE_FM07_KEYS)		+= winmate-fm07-keys.o
+> diff --git a/drivers/platform/x86/simatic-ipc-batt-apollolake.c b/drivers/platform/x86/simatic-ipc-batt-apollolake.c
+> new file mode 100644
+> index 000000000000..0503cb89d8f8
+> --- /dev/null
+> +++ b/drivers/platform/x86/simatic-ipc-batt-apollolake.c
+> @@ -0,0 +1,51 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Siemens SIMATIC IPC driver for CMOS battery monitoring
+> + *
+> + * Copyright (c) Siemens AG, 2023
+> + *
+> + * Authors:
+> + *  Henning Schild <henning.schild@siemens.com>
+> + */
+> +
+> +#include <linux/gpio/machine.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include "simatic-ipc-batt.h"
+> +
+> +struct gpiod_lookup_table simatic_ipc_batt_gpio_table_127e = {
+> +	.table = {
+> +		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 55, NULL, 0, GPIO_ACTIVE_HIGH),
+> +		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 61, NULL, 1, GPIO_ACTIVE_HIGH),
+> +		GPIO_LOOKUP_IDX("apollolake-pinctrl.1", 41, NULL, 2, GPIO_ACTIVE_HIGH),
+> +		{} /* Terminating entry */
+> +	},
+> +};
+> +
+> +static int simatic_ipc_batt_apollolake_remove(struct platform_device *pdev)
+> +{
+> +	return simatic_ipc_batt_remove(pdev, &simatic_ipc_batt_gpio_table_127e);
+> +}
+> +
+> +static int simatic_ipc_batt_apollolake_probe(struct platform_device *pdev)
+> +{
+> +	return simatic_ipc_batt_probe(pdev, &simatic_ipc_batt_gpio_table_127e);
+> +}
+> +
+> +static struct platform_driver simatic_ipc_batt_driver = {
+> +	.probe = simatic_ipc_batt_apollolake_probe,
+> +	.remove = simatic_ipc_batt_apollolake_remove,
+> +	.driver = {
+> +		.name = KBUILD_MODNAME,
+> +	},
+> +};
+> +
+> +module_platform_driver(simatic_ipc_batt_driver);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_ALIAS("platform:" KBUILD_MODNAME);
+> +MODULE_SOFTDEP("pre: simatic-ipc-batt platform:apollolake-pinctrl");
+> +MODULE_AUTHOR("Henning Schild <henning.schild@siemens.com>");
+> diff --git a/drivers/platform/x86/simatic-ipc-batt-elkhartlake.c b/drivers/platform/x86/simatic-ipc-batt-elkhartlake.c
+> new file mode 100644
+> index 000000000000..ecf5ceb167f9
+> --- /dev/null
+> +++ b/drivers/platform/x86/simatic-ipc-batt-elkhartlake.c
+> @@ -0,0 +1,51 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Siemens SIMATIC IPC driver for CMOS battery monitoring
+> + *
+> + * Copyright (c) Siemens AG, 2023
+> + *
+> + * Authors:
+> + *  Henning Schild <henning.schild@siemens.com>
+> + */
+> +
+> +#include <linux/gpio/machine.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include "simatic-ipc-batt.h"
+> +
+> +struct gpiod_lookup_table simatic_ipc_batt_gpio_table_bx_21a = {
+> +	.table = {
+> +		GPIO_LOOKUP_IDX("INTC1020:04", 18, NULL, 0, GPIO_ACTIVE_HIGH),
+> +		GPIO_LOOKUP_IDX("INTC1020:04", 19, NULL, 1, GPIO_ACTIVE_HIGH),
+> +		GPIO_LOOKUP_IDX("INTC1020:01", 66, NULL, 2, GPIO_ACTIVE_HIGH),
+> +		{} /* Terminating entry */
+> +	},
+> +};
+> +
+> +static int simatic_ipc_batt_elkhartlake_remove(struct platform_device *pdev)
+> +{
+> +	return simatic_ipc_batt_remove(pdev, &simatic_ipc_batt_gpio_table_bx_21a);
+> +}
+> +
+> +static int simatic_ipc_batt_elkhartlake_probe(struct platform_device *pdev)
+> +{
+> +	return simatic_ipc_batt_probe(pdev, &simatic_ipc_batt_gpio_table_bx_21a);
+> +}
+> +
+> +static struct platform_driver simatic_ipc_batt_driver = {
+> +	.probe = simatic_ipc_batt_elkhartlake_probe,
+> +	.remove = simatic_ipc_batt_elkhartlake_remove,
+> +	.driver = {
+> +		.name = KBUILD_MODNAME,
+> +	},
+> +};
+> +
+> +module_platform_driver(simatic_ipc_batt_driver);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_ALIAS("platform:" KBUILD_MODNAME);
+> +MODULE_SOFTDEP("pre: simatic-ipc-batt platform:elkhartlake-pinctrl");
+> +MODULE_AUTHOR("Henning Schild <henning.schild@siemens.com>");
+> diff --git a/drivers/platform/x86/simatic-ipc-batt-f7188x.c b/drivers/platform/x86/simatic-ipc-batt-f7188x.c
+> new file mode 100644
+> index 000000000000..a0189b9289f6
+> --- /dev/null
+> +++ b/drivers/platform/x86/simatic-ipc-batt-f7188x.c
+> @@ -0,0 +1,70 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Siemens SIMATIC IPC driver for CMOS battery monitoring
+> + *
+> + * Copyright (c) Siemens AG, 2023
+> + *
+> + * Authors:
+> + *  Henning Schild <henning.schild@siemens.com>
+> + */
+> +
+> +#include <linux/gpio/machine.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/platform_data/x86/simatic-ipc-base.h>
+> +
+> +#include "simatic-ipc-batt.h"
+> +
+> +struct gpiod_lookup_table simatic_ipc_batt_gpio_table_227g = {
+> +	.table = {
+> +		GPIO_LOOKUP_IDX("gpio-f7188x-7", 6, NULL, 0, GPIO_ACTIVE_HIGH),
+> +		GPIO_LOOKUP_IDX("gpio-f7188x-7", 5, NULL, 1, GPIO_ACTIVE_HIGH),
+> +		GPIO_LOOKUP_IDX("INTC1020:01",  66, NULL, 2, GPIO_ACTIVE_HIGH),
+> +		{} /* Terminating entry */
+> +	},
+> +};
+> +
+> +struct gpiod_lookup_table simatic_ipc_batt_gpio_table_bx_39a = {
+> +	.table = {
+> +		GPIO_LOOKUP_IDX("gpio-f7188x-6", 4, NULL, 0, GPIO_ACTIVE_HIGH),
+> +		GPIO_LOOKUP_IDX("gpio-f7188x-6", 3, NULL, 1, GPIO_ACTIVE_HIGH),
+> +		{} /* Terminating entry */
+> +	},
+> +};
+> +
+> +static int simatic_ipc_batt_f7188x_remove(struct platform_device *pdev)
+> +{
+> +	const struct simatic_ipc_platform *plat = pdev->dev.platform_data;
+> +
+> +	if (plat->devmode == SIMATIC_IPC_DEVICE_227G)
+> +		return simatic_ipc_batt_remove(pdev, &simatic_ipc_batt_gpio_table_227g);
+> +
+> +	return simatic_ipc_batt_remove(pdev, &simatic_ipc_batt_gpio_table_bx_39a);
+> +}
+> +
+> +static int simatic_ipc_batt_f7188x_probe(struct platform_device *pdev)
+> +{
+> +	const struct simatic_ipc_platform *plat = pdev->dev.platform_data;
+> +
+> +	if (plat->devmode == SIMATIC_IPC_DEVICE_227G)
+> +		return simatic_ipc_batt_probe(pdev, &simatic_ipc_batt_gpio_table_227g);
+> +
+> +	return simatic_ipc_batt_probe(pdev, &simatic_ipc_batt_gpio_table_bx_39a);
+> +}
+> +
+> +static struct platform_driver simatic_ipc_batt_driver = {
+> +	.probe = simatic_ipc_batt_f7188x_probe,
+> +	.remove = simatic_ipc_batt_f7188x_remove,
+> +	.driver = {
+> +		.name = KBUILD_MODNAME,
+> +	},
+> +};
+> +
+> +module_platform_driver(simatic_ipc_batt_driver);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_ALIAS("platform:" KBUILD_MODNAME);
+> +MODULE_SOFTDEP("pre: simatic-ipc-batt gpio_f7188x platform:elkhartlake-pinctrl");
+> +MODULE_AUTHOR("Henning Schild <henning.schild@siemens.com>");
+> diff --git a/drivers/platform/x86/simatic-ipc-batt.c b/drivers/platform/x86/simatic-ipc-batt.c
+> new file mode 100644
+> index 000000000000..a83272475b9d
+> --- /dev/null
+> +++ b/drivers/platform/x86/simatic-ipc-batt.c
+> @@ -0,0 +1,250 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Siemens SIMATIC IPC driver for CMOS battery monitoring
+> + *
+> + * Copyright (c) Siemens AG, 2023
+> + *
+> + * Authors:
+> + *  Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+> + *  Henning Schild <henning.schild@siemens.com>
+> + */
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/delay.h>
+> +#include <linux/io.h>
+> +#include <linux/ioport.h>
+> +#include <linux/gpio/machine.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
+> +#include <linux/jiffies.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/platform_data/x86/simatic-ipc-base.h>
+> +#include <linux/sizes.h>
+> +
+> +#define BATT_DELAY_MS	(1000 * 60 * 60 * 24)	/* 24 h delay */
+> +
+> +#define SIMATIC_IPC_BATT_LEVEL_FULL	3000
+> +#define SIMATIC_IPC_BATT_LEVEL_CRIT	2750
+> +#define SIMATIC_IPC_BATT_LEVEL_EMPTY	   0
+> +
+> +static struct simatic_ipc_batt {
+> +	u8 devmode;
+> +	long current_state;
+> +	struct gpio_desc *gpios[3];
+> +	unsigned long last_updated_jiffies;
+> +} priv;
+> +
+> +static long simatic_ipc_batt_read_gpio(void)
+> +{
+> +	long r = SIMATIC_IPC_BATT_LEVEL_FULL;
+> +
+> +	if (priv.gpios[2]) {
+> +		gpiod_set_value(priv.gpios[2], 1);
+> +		msleep(150);
+> +	}
+> +
+> +	if (gpiod_get_value_cansleep(priv.gpios[0]))
+> +		r = SIMATIC_IPC_BATT_LEVEL_EMPTY;
+> +	else if (gpiod_get_value_cansleep(priv.gpios[1]))
+> +		r = SIMATIC_IPC_BATT_LEVEL_CRIT;
+> +
+> +	if (priv.gpios[2])
+> +		gpiod_set_value(priv.gpios[2], 0);
+> +
+> +	return r;
+> +}
+> +
+> +#define SIMATIC_IPC_BATT_PORT_BASE	0x404D
+> +static struct resource simatic_ipc_batt_io_res =
+> +	DEFINE_RES_IO_NAMED(SIMATIC_IPC_BATT_PORT_BASE, SZ_1, KBUILD_MODNAME);
+> +
+> +static long simatic_ipc_batt_read_io(struct device *dev)
+> +{
+> +	long r = SIMATIC_IPC_BATT_LEVEL_FULL;
+> +	struct resource *res = &simatic_ipc_batt_io_res;
+> +	u8 val;
+> +
+> +	if (!request_muxed_region(res->start, resource_size(res), res->name)) {
+> +		dev_err(dev, "Unable to register IO resource at %pR\n", res);
+> +		return -EBUSY;
+> +	}
+> +
+> +	val = inb(SIMATIC_IPC_BATT_PORT_BASE);
+> +	release_region(simatic_ipc_batt_io_res.start, resource_size(&simatic_ipc_batt_io_res));
+> +
+> +	if (val & (1 << 7))
+> +		r = SIMATIC_IPC_BATT_LEVEL_EMPTY;
+> +	else if (val & (1 << 6))
+> +		r = SIMATIC_IPC_BATT_LEVEL_CRIT;
+> +
+> +	return r;
+> +}
+> +
+> +static long simatic_ipc_batt_read_value(struct device *dev)
+> +{
+> +	unsigned long next_update;
+> +
+> +	next_update = priv.last_updated_jiffies + msecs_to_jiffies(BATT_DELAY_MS);
+> +	if (time_after(jiffies, next_update) || !priv.last_updated_jiffies) {
+> +		switch (priv.devmode) {
+> +		case SIMATIC_IPC_DEVICE_127E:
+> +		case SIMATIC_IPC_DEVICE_227G:
+> +		case SIMATIC_IPC_DEVICE_BX_39A:
+> +			priv.current_state = simatic_ipc_batt_read_gpio();
+> +			break;
+> +		case SIMATIC_IPC_DEVICE_227E:
+> +			priv.current_state = simatic_ipc_batt_read_io(dev);
+> +			break;
+> +		}
+> +		priv.last_updated_jiffies = jiffies;
+> +		if (priv.current_state < SIMATIC_IPC_BATT_LEVEL_FULL)
+> +			dev_warn(dev, "CMOS battery needs to be replaced.");
+> +	}
+> +
+> +	return priv.current_state;
+> +}
+> +
+> +static int simatic_ipc_batt_read(struct device *dev, enum hwmon_sensor_types type,
+> +				 u32 attr, int channel, long *val)
+> +{
+> +	switch (attr) {
+> +	case hwmon_in_input:
+> +		*val = simatic_ipc_batt_read_value(dev);
+> +		break;
+> +	case hwmon_in_lcrit:
+> +		*val = SIMATIC_IPC_BATT_LEVEL_CRIT;
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static umode_t simatic_ipc_batt_is_visible(const void *data, enum hwmon_sensor_types type,
+> +					   u32 attr, int channel)
+> +{
+> +	if (attr == hwmon_in_input || attr == hwmon_in_lcrit)
+> +		return 0444;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct hwmon_ops simatic_ipc_batt_ops = {
+> +	.is_visible = simatic_ipc_batt_is_visible,
+> +	.read = simatic_ipc_batt_read,
+> +};
+> +
+> +static const struct hwmon_channel_info *simatic_ipc_batt_info[] = {
+> +	HWMON_CHANNEL_INFO(in, HWMON_I_INPUT | HWMON_I_LCRIT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_chip_info simatic_ipc_batt_chip_info = {
+> +	.ops = &simatic_ipc_batt_ops,
+> +	.info = simatic_ipc_batt_info,
+> +};
+> +
+> +int simatic_ipc_batt_remove(struct platform_device *pdev, struct gpiod_lookup_table *table)
+> +{
+> +	gpiod_remove_lookup_table(table);
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(simatic_ipc_batt_remove);
+> +
+> +int simatic_ipc_batt_probe(struct platform_device *pdev, struct gpiod_lookup_table *table)
+> +{
+> +	struct simatic_ipc_platform *plat;
+> +	struct device *dev = &pdev->dev;
+> +	struct device *hwmon_dev;
+> +	int err;
+> +
+> +	plat = pdev->dev.platform_data;
+> +	priv.devmode = plat->devmode;
+> +
+> +	switch (priv.devmode) {
+> +	case SIMATIC_IPC_DEVICE_127E:
+> +	case SIMATIC_IPC_DEVICE_227G:
+> +	case SIMATIC_IPC_DEVICE_BX_39A:
+> +	case SIMATIC_IPC_DEVICE_BX_21A:
+> +		table->dev_id = dev_name(dev);
+> +		gpiod_add_lookup_table(table);
+> +		break;
+> +	case SIMATIC_IPC_DEVICE_227E:
+> +		goto nogpio;
+> +	default:
+> +		return -ENODEV;
+> +	}
+> +
+> +	priv.gpios[0] = devm_gpiod_get_index(dev, "CMOSBattery empty", 0, GPIOD_IN);
+> +	if (IS_ERR(priv.gpios[0])) {
+> +		err = PTR_ERR(priv.gpios[0]);
+> +		priv.gpios[0] = NULL;
+> +		goto out;
+> +	}
+> +	priv.gpios[1] = devm_gpiod_get_index(dev, "CMOSBattery low", 1, GPIOD_IN);
+> +	if (IS_ERR(priv.gpios[1])) {
+> +		err = PTR_ERR(priv.gpios[1]);
+> +		priv.gpios[1] = NULL;
+> +		goto out;
+> +	}
+> +
+> +	if (table->table[2].key) {
+> +		priv.gpios[2] = devm_gpiod_get_index(dev, "CMOSBattery meter", 2, GPIOD_OUT_HIGH);
+> +		if (IS_ERR(priv.gpios[2])) {
+> +			err = PTR_ERR(priv.gpios[1]);
+> +			priv.gpios[2] = NULL;
+> +			goto out;
+> +		}
+> +	} else {
+> +		priv.gpios[2] = NULL;
+> +	}
+> +
+> +nogpio:
+> +	hwmon_dev = devm_hwmon_device_register_with_info(dev, KBUILD_MODNAME,
+> +							 &priv,
+> +							 &simatic_ipc_batt_chip_info,
+> +							 NULL);
+> +	if (IS_ERR(hwmon_dev)) {
+> +		err = PTR_ERR(hwmon_dev);
+> +		goto out;
+> +	}
+> +
+> +	/* warn about aging battery even if userspace never reads hwmon */
+> +	simatic_ipc_batt_read_value(dev);
+> +
+> +	return 0;
+> +out:
+> +	simatic_ipc_batt_remove(pdev, table);
+> +
+> +	return err;
+> +}
+> +EXPORT_SYMBOL_GPL(simatic_ipc_batt_probe);
+> +
+> +static int simatic_ipc_batt_io_remove(struct platform_device *pdev)
+> +{
+> +	return simatic_ipc_batt_remove(pdev, NULL);
+> +}
+> +
+> +static int simatic_ipc_batt_io_probe(struct platform_device *pdev)
+> +{
+> +	return simatic_ipc_batt_probe(pdev, NULL);
+> +}
+> +
+> +static struct platform_driver simatic_ipc_batt_driver = {
+> +	.probe = simatic_ipc_batt_io_probe,
+> +	.remove = simatic_ipc_batt_io_remove,
+> +	.driver = {
+> +		.name = KBUILD_MODNAME,
+> +	},
+> +};
+> +
+> +module_platform_driver(simatic_ipc_batt_driver);
+> +
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_ALIAS("platform:" KBUILD_MODNAME);
+> +MODULE_AUTHOR("Henning Schild <henning.schild@siemens.com>");
+> diff --git a/drivers/platform/x86/simatic-ipc-batt.h b/drivers/platform/x86/simatic-ipc-batt.h
+> new file mode 100644
+> index 000000000000..4545cd3e3026
+> --- /dev/null
+> +++ b/drivers/platform/x86/simatic-ipc-batt.h
+> @@ -0,0 +1,20 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Siemens SIMATIC IPC driver for CMOS battery monitoring
+> + *
+> + * Copyright (c) Siemens AG, 2023
+> + *
+> + * Author:
+> + *  Henning Schild <henning.schild@siemens.com>
+> + */
+> +
+> +#ifndef _SIMATIC_IPC_BATT_H
+> +#define _SIMATIC_IPC_BATT_H
+> +
+> +int simatic_ipc_batt_probe(struct platform_device *pdev,
+> +			   struct gpiod_lookup_table *table);
+> +
+> +int simatic_ipc_batt_remove(struct platform_device *pdev,
+> +			    struct gpiod_lookup_table *table);
+> +
+> +#endif /* _SIMATIC_IPC_BATT_H */
+> diff --git a/drivers/platform/x86/simatic-ipc.c b/drivers/platform/x86/simatic-ipc.c
+> index 4402cd354104..6d2c94c17414 100644
+> --- a/drivers/platform/x86/simatic-ipc.c
+> +++ b/drivers/platform/x86/simatic-ipc.c
+> @@ -21,6 +21,7 @@
+>  
+>  static struct platform_device *ipc_led_platform_device;
+>  static struct platform_device *ipc_wdt_platform_device;
+> +static struct platform_device *ipc_batt_platform_device;
+>  
+>  static const struct dmi_system_id simatic_ipc_whitelist[] = {
+>  	{
+> @@ -37,38 +38,71 @@ static struct {
+>  	u32 station_id;
+>  	u8 led_mode;
+>  	u8 wdt_mode;
+> +	u8 batt_mode;
+>  } device_modes[] = {
+> -	{SIMATIC_IPC_IPC127E, SIMATIC_IPC_DEVICE_127E, SIMATIC_IPC_DEVICE_NONE},
+> -	{SIMATIC_IPC_IPC227D, SIMATIC_IPC_DEVICE_227D, SIMATIC_IPC_DEVICE_NONE},
+> -	{SIMATIC_IPC_IPC227E, SIMATIC_IPC_DEVICE_427E, SIMATIC_IPC_DEVICE_227E},
+> -	{SIMATIC_IPC_IPC227G, SIMATIC_IPC_DEVICE_227G, SIMATIC_IPC_DEVICE_227G},
+> -	{SIMATIC_IPC_IPC277E, SIMATIC_IPC_DEVICE_NONE, SIMATIC_IPC_DEVICE_227E},
+> -	{SIMATIC_IPC_IPC427D, SIMATIC_IPC_DEVICE_427E, SIMATIC_IPC_DEVICE_NONE},
+> -	{SIMATIC_IPC_IPC427E, SIMATIC_IPC_DEVICE_427E, SIMATIC_IPC_DEVICE_427E},
+> -	{SIMATIC_IPC_IPC477E, SIMATIC_IPC_DEVICE_NONE, SIMATIC_IPC_DEVICE_427E},
+> -	{SIMATIC_IPC_IPCBX_39A, SIMATIC_IPC_DEVICE_227G, SIMATIC_IPC_DEVICE_227G},
+> -	{SIMATIC_IPC_IPCPX_39A, SIMATIC_IPC_DEVICE_NONE, SIMATIC_IPC_DEVICE_227G},
+> -	{SIMATIC_IPC_IPCBX_21A, SIMATIC_IPC_DEVICE_BX_21A, SIMATIC_IPC_DEVICE_NONE},
+> +	{SIMATIC_IPC_IPC127E,
+> +		SIMATIC_IPC_DEVICE_127E, SIMATIC_IPC_DEVICE_NONE, SIMATIC_IPC_DEVICE_127E},
+> +	{SIMATIC_IPC_IPC227D,
+> +		SIMATIC_IPC_DEVICE_227D, SIMATIC_IPC_DEVICE_NONE, SIMATIC_IPC_DEVICE_NONE},
+> +	{SIMATIC_IPC_IPC227E,
+> +		SIMATIC_IPC_DEVICE_427E, SIMATIC_IPC_DEVICE_227E, SIMATIC_IPC_DEVICE_227E},
+> +	{SIMATIC_IPC_IPC227G,
+> +		SIMATIC_IPC_DEVICE_227G, SIMATIC_IPC_DEVICE_227G, SIMATIC_IPC_DEVICE_227G},
+> +	{SIMATIC_IPC_IPC277E,
+> +		SIMATIC_IPC_DEVICE_NONE, SIMATIC_IPC_DEVICE_227E, SIMATIC_IPC_DEVICE_227E},
+> +	{SIMATIC_IPC_IPC427D,
+> +		SIMATIC_IPC_DEVICE_427E, SIMATIC_IPC_DEVICE_NONE, SIMATIC_IPC_DEVICE_NONE},
+> +	{SIMATIC_IPC_IPC427E,
+> +		SIMATIC_IPC_DEVICE_427E, SIMATIC_IPC_DEVICE_427E, SIMATIC_IPC_DEVICE_NONE},
+> +	{SIMATIC_IPC_IPC477E,
+> +		SIMATIC_IPC_DEVICE_NONE, SIMATIC_IPC_DEVICE_427E, SIMATIC_IPC_DEVICE_NONE},
+> +	{SIMATIC_IPC_IPCBX_39A,
+> +		SIMATIC_IPC_DEVICE_227G, SIMATIC_IPC_DEVICE_227G, SIMATIC_IPC_DEVICE_BX_39A},
+> +	{SIMATIC_IPC_IPCPX_39A,
+> +		SIMATIC_IPC_DEVICE_NONE, SIMATIC_IPC_DEVICE_227G, SIMATIC_IPC_DEVICE_BX_39A},
+> +	{SIMATIC_IPC_IPCBX_21A,
+> +		SIMATIC_IPC_DEVICE_BX_21A, SIMATIC_IPC_DEVICE_NONE, SIMATIC_IPC_DEVICE_BX_21A},
+>  };
+>  
+>  static int register_platform_devices(u32 station_id)
+>  {
+>  	u8 ledmode = SIMATIC_IPC_DEVICE_NONE;
+>  	u8 wdtmode = SIMATIC_IPC_DEVICE_NONE;
+> -	char *pdevname = KBUILD_MODNAME "_leds";
+> +	u8 battmode = SIMATIC_IPC_DEVICE_NONE;
+> +	char *pdevname;
+>  	int i;
+>  
+> -	platform_data.devmode = SIMATIC_IPC_DEVICE_NONE;
+> -
+>  	for (i = 0; i < ARRAY_SIZE(device_modes); i++) {
+>  		if (device_modes[i].station_id == station_id) {
+>  			ledmode = device_modes[i].led_mode;
+>  			wdtmode = device_modes[i].wdt_mode;
+> +			battmode = device_modes[i].batt_mode;
+>  			break;
+>  		}
+>  	}
+>  
+> +	if (battmode != SIMATIC_IPC_DEVICE_NONE) {
+> +		pdevname = KBUILD_MODNAME "_batt";
+> +		if (battmode == SIMATIC_IPC_DEVICE_127E)
+> +			pdevname = KBUILD_MODNAME "_batt_apollolake";
+> +		if (battmode == SIMATIC_IPC_DEVICE_BX_21A)
+> +			pdevname = KBUILD_MODNAME "_batt_elkhartlake";
+> +		if (battmode == SIMATIC_IPC_DEVICE_227G || battmode == SIMATIC_IPC_DEVICE_BX_39A)
+> +			pdevname = KBUILD_MODNAME "_batt_f7188x";
+> +		platform_data.devmode = battmode;
+> +		ipc_batt_platform_device =
+> +			platform_device_register_data(NULL, pdevname,
+> +				PLATFORM_DEVID_NONE, &platform_data,
+> +				sizeof(struct simatic_ipc_platform));
+> +		if (IS_ERR(ipc_batt_platform_device))
+> +			return PTR_ERR(ipc_batt_platform_device);
+> +
+> +		pr_debug("device=%s created\n",
+> +			 ipc_batt_platform_device->name);
+> +	}
+> +
+>  	if (ledmode != SIMATIC_IPC_DEVICE_NONE) {
+> +		pdevname = KBUILD_MODNAME "_leds";
+>  		if (ledmode == SIMATIC_IPC_DEVICE_127E)
+>  			pdevname = KBUILD_MODNAME "_leds_gpio_apollolake";
+>  		if (ledmode == SIMATIC_IPC_DEVICE_227G)
+> @@ -144,6 +178,9 @@ static void __exit simatic_ipc_exit_module(void)
+>  
+>  	platform_device_unregister(ipc_wdt_platform_device);
+>  	ipc_wdt_platform_device = NULL;
+> +
+> +	platform_device_unregister(ipc_batt_platform_device);
+> +	ipc_batt_platform_device = NULL;
+>  }
+>  
+>  module_init(simatic_ipc_init_module);
+> diff --git a/include/linux/platform_data/x86/simatic-ipc-base.h b/include/linux/platform_data/x86/simatic-ipc-base.h
+> index 00bf18ecb160..1ba47dd6939e 100644
+> --- a/include/linux/platform_data/x86/simatic-ipc-base.h
+> +++ b/include/linux/platform_data/x86/simatic-ipc-base.h
+> @@ -21,6 +21,7 @@
+>  #define SIMATIC_IPC_DEVICE_227E 4
+>  #define SIMATIC_IPC_DEVICE_227G 5
+>  #define SIMATIC_IPC_DEVICE_BX_21A 6
+> +#define SIMATIC_IPC_DEVICE_BX_39A 7
+>  
+>  struct simatic_ipc_platform {
+>  	u8	devmode;
 
