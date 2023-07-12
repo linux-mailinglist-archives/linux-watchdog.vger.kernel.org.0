@@ -2,72 +2,72 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B82BC751035
-	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Jul 2023 20:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF06A75103D
+	for <lists+linux-watchdog@lfdr.de>; Wed, 12 Jul 2023 20:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232257AbjGLSDr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 12 Jul 2023 14:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        id S232011AbjGLSGw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 12 Jul 2023 14:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjGLSDr (ORCPT
+        with ESMTP id S232876AbjGLSGv (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 12 Jul 2023 14:03:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A28A1FED
-        for <linux-watchdog@vger.kernel.org>; Wed, 12 Jul 2023 11:03:00 -0700 (PDT)
+        Wed, 12 Jul 2023 14:06:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAA81FD4
+        for <linux-watchdog@vger.kernel.org>; Wed, 12 Jul 2023 11:06:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689184979;
+        s=mimecast20190719; t=1689185159;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7akjMyUHwN9vGsmA+DFD3q/5FAYq7rI0eED2DO07wo4=;
-        b=XTsFebQ/uMAakLBaawd9nyy2ZW/YOmK0alv2hBEkahZLqeTMB6UdHra8w9ZRCkZf/UVox5
-        R8oP+uQ7awe/gmqOxjz1wFv7WUBLhBEcuNKhIE8gy5wdyO7ztWhdMNkWukN3Bilb3VDvLD
-        dUV90UCS/dAxWEKr+iV2zbvWO9oLUxw=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=EeIGmqmdptBnIHtvv5Ppu3kged11RO+ah7hjJTIpvac=;
+        b=QcurkeZefm0maQ+fDKzrWkyeDEQzcFRD5f3PUIvBoxQejkTQPeaI7YbFlQx4/ZKP9MrHlz
+        qR3v8/ucNTs9XMFL2+bg7GD51ifBG2ucH8Ie6NHnSnqjTSBZl0Q6kdxK8vLsPKJweLf2u5
+        jPpUsblsrVwbGVujVu1qNBglRpuuLHA=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-628-N6TTcDlpPpCjqbj_PQUaQA-1; Wed, 12 Jul 2023 14:02:50 -0400
-X-MC-Unique: N6TTcDlpPpCjqbj_PQUaQA-1
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4f76712f950so6664906e87.0
-        for <linux-watchdog@vger.kernel.org>; Wed, 12 Jul 2023 11:02:41 -0700 (PDT)
+ us-mta-31-l7Ecx4kCNsmytXoNtlwh5w-1; Wed, 12 Jul 2023 14:05:58 -0400
+X-MC-Unique: l7Ecx4kCNsmytXoNtlwh5w-1
+Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-2b70cabc656so60903251fa.0
+        for <linux-watchdog@vger.kernel.org>; Wed, 12 Jul 2023 11:05:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689184960; x=1691776960;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1689185157; x=1691777157;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7akjMyUHwN9vGsmA+DFD3q/5FAYq7rI0eED2DO07wo4=;
-        b=iIo4XnS3HXRc/F/SWa7C1/p7CqC/eG7N6G00NrKwNHavUhT9BKOnWdo3DjRIu/gHg5
-         gyVo6r4NBSRjZcMkFKnE6QxK1yhVykXaOzctsRKPxF6LH1edHGXrHmYjfS12HLopVKCA
-         +cn1PTZpVzZTNV4o1w+ephzzTId4ydLdH7HmqrbrloFpuXzL9xFENUyHFo/b6C9uebz8
-         28GWORjHIH5oO4y0mN4u9Bd7oRypWuFGNZ37/OxGfWfomvXIg4R49Rn5TyLyXLTXUben
-         pqQ0A7AfosQgLtToy4KP6he9OuhZLiMp0kuWBOtUqa5pY5Muv8ULpk348PfTEnRWFDdQ
-         aAtg==
-X-Gm-Message-State: ABy/qLYeBX9f/4NQadfMrOi4eVMzo4kvnCs9p/BfI2Kw7Y7U4n6BzLEG
-        hhSRB3KvN0bqhKDypMn3V6BhRfT/2x1Dlu7KL4ByxTFl0krnR3hPp4flJfIcEsSYNYN3tH66Ly5
-        +mp/nNAjAYdTBCtpSqg3t2AM4yn4=
-X-Received: by 2002:a19:381e:0:b0:4f8:70b0:eec6 with SMTP id f30-20020a19381e000000b004f870b0eec6mr13859505lfa.28.1689184959777;
-        Wed, 12 Jul 2023 11:02:39 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlESOQQpORhn/acJKc4G/Ed56z0EcpH0+L8yRbErNs1RxGjEtVhDApRE+7doth7M2DdLlSAgUw==
-X-Received: by 2002:a19:381e:0:b0:4f8:70b0:eec6 with SMTP id f30-20020a19381e000000b004f870b0eec6mr13859479lfa.28.1689184959145;
-        Wed, 12 Jul 2023 11:02:39 -0700 (PDT)
+        bh=EeIGmqmdptBnIHtvv5Ppu3kged11RO+ah7hjJTIpvac=;
+        b=NnnpHaD4nyn59/YXlNd3rmKiHKB2NzbztZ8Np1iEmE8wXbBHDeZiKYPU1BBb4LKoa9
+         MYIE14hoaMCA+67uYiuFO0gRJwlDeanAyKVnf0Me/MLKFmERr2BuQCoxgqg3JUt81Tco
+         3x+qlImGC8Vu+N+rXP8/N0QFJcnwkg45TcXR1m2HbpPNDcHmYi27FeQkajB5NNlYPURx
+         rCs2LkXxzF0Vmn32exwFMpFZMeCLUi8GNn60/YBSS3U8VJFiDsDLq9lEiUTC0hFQ8OSC
+         dXbuXNN3ndrFUmC9QCxRuqZZRUMqn3AdGIbsKRPMaUnhwk2TNRYj9NYXUzjQayedAetx
+         mURw==
+X-Gm-Message-State: ABy/qLbkXRRFgMXUtSnw3+MonQnuSYjOpMklvtcfcQio3xTDmKnk/1u2
+        ppnAWc1qitrULwxiUOyJJsZVUCvBTy7gWM/Bq15EccPydPhpXW8EDNAOb3EIG5gsSXHGmCwKlif
+        PZnU/YDpYG0Juq7dgBwSLxgjb10A=
+X-Received: by 2002:a2e:8210:0:b0:2b6:dec9:2813 with SMTP id w16-20020a2e8210000000b002b6dec92813mr16436020ljg.29.1689185156774;
+        Wed, 12 Jul 2023 11:05:56 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHwjfG/sUBROplkn142hsW+2gyHUEW28t/F9xyn+M9RWeFX3C3wRiAKV0bAcra2FIrBdWNa8Q==
+X-Received: by 2002:a2e:8210:0:b0:2b6:dec9:2813 with SMTP id w16-20020a2e8210000000b002b6dec92813mr16435994ljg.29.1689185156312;
+        Wed, 12 Jul 2023 11:05:56 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id z26-20020a1709064e1a00b009937dbabbd5sm2836372eju.220.2023.07.12.11.02.37
+        by smtp.gmail.com with ESMTPSA id mj7-20020a170906af8700b0098963eb0c3dsm2882768ejb.26.2023.07.12.11.05.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 11:02:38 -0700 (PDT)
-Message-ID: <024d8246-bcc3-75fb-00be-9b611ae238f6@redhat.com>
-Date:   Wed, 12 Jul 2023 20:02:37 +0200
+        Wed, 12 Jul 2023 11:05:55 -0700 (PDT)
+Message-ID: <3b1dc0a1-94b0-4fba-07e7-b871dfc08e88@redhat.com>
+Date:   Wed, 12 Jul 2023 20:05:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
+From:   Hans de Goede <hdegoede@redhat.com>
 Subject: Re: [PATCH 2/2] platform/x86: add CMOS battery monitoring for simatic
  IPCs
-Content-Language: en-US, nl
 To:     Henning Schild <henning.schild@siemens.com>,
         Mark Gross <markgross@kernel.org>,
         linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>
+        Lee Jones <lee@kernel.org>
 Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Jean Delvare <jdelvare@suse.com>,
@@ -77,20 +77,22 @@ Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Linux LED Subsystem <linux-leds@vger.kernel.org>
 References: <20230706154831.19100-1-henning.schild@siemens.com>
  <20230706154831.19100-3-henning.schild@siemens.com>
-From:   Hans de Goede <hdegoede@redhat.com>
+Content-Language: en-US, nl
 In-Reply-To: <20230706154831.19100-3-henning.schild@siemens.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
+
+<resend with Lee's new email address>
 
 Hi,
 
@@ -831,4 +833,5 @@ Hans
 >  
 >  struct simatic_ipc_platform {
 >  	u8	devmode;
+
 
