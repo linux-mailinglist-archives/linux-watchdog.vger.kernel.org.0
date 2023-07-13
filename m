@@ -2,126 +2,403 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44FFB751E09
-	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Jul 2023 12:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98906751F56
+	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Jul 2023 12:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234321AbjGMJ76 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 13 Jul 2023 05:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43780 "EHLO
+        id S233140AbjGMK6m (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 13 Jul 2023 06:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234320AbjGMJ7g (ORCPT
+        with ESMTP id S233081AbjGMK6l (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 13 Jul 2023 05:59:36 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51B826B3
-        for <linux-watchdog@vger.kernel.org>; Thu, 13 Jul 2023 02:59:18 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fbc1218262so4270805e9.3
-        for <linux-watchdog@vger.kernel.org>; Thu, 13 Jul 2023 02:59:18 -0700 (PDT)
+        Thu, 13 Jul 2023 06:58:41 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365CD1999;
+        Thu, 13 Jul 2023 03:58:40 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-bc379e4c1cbso517145276.2;
+        Thu, 13 Jul 2023 03:58:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689242357; x=1691834357;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EfGF94MMBcItJ6e1QKfjFxJbCT5K/y3Yw5zZ80cqzUo=;
-        b=RX/2R95emqRU0/kqzZOeren1e7sASJz5H3Q+9BX1GCwE9RxNhiPGJgRRnCRXzBkEnF
-         gPERfgVzy2c2BsMA8TvxffL0BRX2q6nAk8BwzqPW6uEVOSMX5InaZ0oWIqG2ti1ofIjG
-         PUpftrLqcd6pswZKvH4qm6DhP3KeBc+RSy82e4xsn1ci4U5iSnAL/nRJ268WVQCjDnpn
-         96qCJFJ57ykJSUcCpqVmJGXORNrxy8Ke0KPXGWcCg1g8ueM/UkDx5nsIxjSSBFFul7tJ
-         SFJRw1ozRDUmp7wOYmdVTvB6cBXxOo0CltAvSdqZ0bmHwVrSKwNY+68QYqCr2Qabsk++
-         cwyg==
+        d=gmail.com; s=20221208; t=1689245919; x=1691837919;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dYVt+VbeLmbZJR0d6mKtXmGKopicziWTKgBNn9JasiU=;
+        b=TLlEqePnpYSdehVxJ6QIo1qV1T5WVN2pFnZEyYjUUg4ULzqoRKTs17NIbGILA1L9Bm
+         Xk//bl1ID1ExHbcDP7CP1qKJZE35vWXWTQp52C3BCpF5IJdedxC3XP+3VCikW3sNSOEX
+         whPdByLgXM+wFgZIlfdTHi8Tki+UE91pQ1lKLMqEQOr/st1XQ9qorIaOPilQNkVPdFcv
+         slBr1S4cmtFcMsV4/J7Y/adOqjHN96b42cSiyupt9Hq7uHkGvapvIbsTIFOS0fLxAyjj
+         5rFWK4uCK9xHD1d2FDER/lCCXLqAdf1UeZFttquHy6bpIdCuHuH7UodgDmequS+IFZfn
+         Xuug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689242357; x=1691834357;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EfGF94MMBcItJ6e1QKfjFxJbCT5K/y3Yw5zZ80cqzUo=;
-        b=BAC0clVD4HkwHkNPnIWd4Medtaxn/v81IHKuzf9VwOKp5zZiusrbYA3SWWkHOFe63x
-         1jCzWMx+L9diqBzYf32KKzZKu6x57LLphsTpXW2gDX7rDbYNluallF0Okjn0ozwma8zH
-         Gm8JsUeePxxFdWXoVx3Eop760JsTe9QIaEsjrgflsDW9r/RWFVD1YRkjUoUa0lf5VciX
-         jQNQdtLpzKtBII/aIgeG3scuIoi3ho48n3b+/2o9Nht45lIcqhj+W5vq5MtLXbO0ArEH
-         6vbBGh7ANe/RE3J3GIZQLmCFSu4Tm0oc63hSEqUc8xcPnPhHJ6HXOtAq8LQUT9PlrXw8
-         fe1A==
-X-Gm-Message-State: ABy/qLabGcbv0DIfAq0K2CWLjqMIOn7PTVHTAvxZMzcYZF+6OJZaaRfN
-        cDR+rYgyO+h8AFxz2QwRGHLppesfA/QcjXgUnvW11w==
-X-Google-Smtp-Source: APBJJlE1vSef8lYrRI74FNpcCNSo3OMLYJY9thlLZ6Vno1ZNvXLJk23M3Ev81CwvC3qVpAPSm/SGww==
-X-Received: by 2002:a05:6000:1189:b0:314:521:ce0a with SMTP id g9-20020a056000118900b003140521ce0amr1072111wrx.40.1689242357177;
-        Thu, 13 Jul 2023 02:59:17 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id k10-20020a5d66ca000000b00313f9085119sm7482114wrw.113.2023.07.13.02.59.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jul 2023 02:59:16 -0700 (PDT)
-Message-ID: <1de2a372-e167-515d-0a0d-6fcad4a1e051@linaro.org>
-Date:   Thu, 13 Jul 2023 11:59:13 +0200
+        d=1e100.net; s=20221208; t=1689245919; x=1691837919;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dYVt+VbeLmbZJR0d6mKtXmGKopicziWTKgBNn9JasiU=;
+        b=N0fnJptEKm7BMfitNKvo9I+rg8lxyzjPf+YJzb5zgDgEwSxbgNmEZONm0uPOhPkfdV
+         NV8xm05uSrfpilfIpl/9sqPzb3Ft1PI7ph22Ia5mtUW5fByNbAfHZqM6GY5fhptoGPJW
+         8tw1K+LcGmc2nUNreHFES7yje3aigoZKPZ9C63uVYWSajXO6mkfO6YsoDoReTytvRJUz
+         6Ey/w55XFaPFLzAuqIW/PbaZlj5xsuPBVsoTjodaNg6dUv524Q2+QJk4sHmA0nPyKCsN
+         lRIoL+RBxsI9rJ/G1aqbwG4jl/WOgbZ2IQHkXm12oJSK06kM88gbmZc92LepOe2SDk9x
+         E1Ww==
+X-Gm-Message-State: ABy/qLbvEw88tzqnoVov3adC6FNVTM2BuLW/GeCabLRCJRlGKahjks4X
+        NynnvKLKq83JgHeJBt5Oanc=
+X-Google-Smtp-Source: APBJJlGWHZpBiSTYIxgNAWG2/JRW+1oQsEsl9aG0jrEz4GbxQyRHc5CRW3YyQ42csRcax/Sx4HQMWA==
+X-Received: by 2002:a0d:d80c:0:b0:56d:40da:1fc2 with SMTP id a12-20020a0dd80c000000b0056d40da1fc2mr1211642ywe.50.1689245919335;
+        Thu, 13 Jul 2023 03:58:39 -0700 (PDT)
+Received: from z-Lenovo-Product.lan ([2605:59c8:6153:ca10:ba85:d572:3a65:9783])
+        by smtp.gmail.com with ESMTPSA id q127-20020a0de785000000b00545a081849esm1709057ywe.46.2023.07.13.03.58.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jul 2023 03:58:38 -0700 (PDT)
+From:   David Ober <dober6023@gmail.com>
+To:     wim@linux-watchdog.org
+Cc:     linux@roeck-us.net, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, mpearson@lenovo.com,
+        dober@lenovo.com, David Ober <dober6023@gmail.com>
+Subject: [PATCH] Watchdog: New module for ITE 5632 watchdog
+Date:   Thu, 13 Jul 2023 06:58:34 -0400
+Message-Id: <20230713105834.65751-1-dober6023@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 1/3] dt-bindings: watchdog: ti,rti-wdt: Add support for
- WDIOF_CARDRESET
-Content-Language: en-US
-To:     huaqian.li@siemens.com, wim@linux-watchdog.org, linux@roeck-us.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org
-Cc:     huaqianlee@gmail.com, nm@ti.com, vigneshr@ti.com,
-        kristo@kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, jan.kiszka@siemens.com,
-        baocheng.su@siemens.com
-References: <20230713095127.1230109-1-huaqian.li@siemens.com>
- <20230713095127.1230109-2-huaqian.li@siemens.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230713095127.1230109-2-huaqian.li@siemens.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 13/07/2023 11:51, huaqian.li@siemens.com wrote:
-> From: Li Hua Qian <huaqian.li@siemens.com>
-> 
-> TI RTI (Real Time Interrupt) Watchdog doesn't support to record the
-> watchdog cause. Add a reserved memory to know the last reboot was caused
-> by the watchdog card. In the reserved memory, some specific info will be
-> saved to indicate whether the watchdog reset was triggered in last
-> boot.
-> 
-> Signed-off-by: Li Hua Qian <huaqian.li@siemens.com>
-> ---
->  .../devicetree/bindings/watchdog/ti,rti-wdt.yaml     | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
-> index fc553211e42d..8c16fd3929ec 100644
-> --- a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
-> @@ -34,6 +34,18 @@ properties:
->    power-domains:
->      maxItems: 1
->  
-> +  memory-region:
-> +    maxItems: 1
-> +    description:
-> +      Contains the watchdog reserved memory. It is optional.
-> +      In the reserved memory, the specified values, which are
-> +      PON_REASON_SOF_NUM(0xBBBBCCCC), PON_REASON_MAGIC_NUM(0xDDDDDDDD),
-> +      and PON_REASON_EOF_NUM(0xCCCCBBBB), are pre-stored at the first
-> +      3 * 4 bytes to tell that last boot was caused by watchdog reset.
-> +      Once the PON reason is captured by driver(rti_wdt.c), the driver
-> +      is supposed to wipe the whole memory region.
-> +
-> +
+This modules is to allow for the new ITE 5632 EC chip
+to support the watchdog for initial use in the Lenovo SE10
 
-If there is going to be new version, only one blank line, not two.
+Signed-off-by: David Ober <dober6023@gmail.com>
+---
+ drivers/watchdog/Kconfig       |  10 ++
+ drivers/watchdog/Makefile      |   1 +
+ drivers/watchdog/ite5632_wdt.c | 279 +++++++++++++++++++++++++++++++++
+ 3 files changed, 290 insertions(+)
+ create mode 100644 drivers/watchdog/ite5632_wdt.c
 
-In any case:
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index ee97d89dfc11..861cc0eff468 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -264,6 +264,16 @@ config MENZ069_WATCHDOG
+ 	  This driver can also be built as a module. If so the module
+ 	  will be called menz069_wdt.
+ 
++config ITE5632_WDT
++        tristate "ITE 5632"
++        select WATCHDOG_CORE
++        help
++          If you say yes here you get support for the watchdog
++          functionality of the ITE 5632 eSIO chip.
++
++          This driver can also be built as a module. If so, the module
++          will be called ite5632_wdt.
++
+ config WDAT_WDT
+ 	tristate "ACPI Watchdog Action Table (WDAT)"
+ 	depends on ACPI
+diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+index 3633f5b98236..32c8340f3175 100644
+--- a/drivers/watchdog/Makefile
++++ b/drivers/watchdog/Makefile
+@@ -119,6 +119,7 @@ obj-$(CONFIG_WAFER_WDT) += wafer5823wdt.o
+ obj-$(CONFIG_I6300ESB_WDT) += i6300esb.o
+ obj-$(CONFIG_IE6XX_WDT) += ie6xx_wdt.o
+ obj-$(CONFIG_ITCO_WDT) += iTCO_wdt.o
++obj-$(CONFIG_ITE5632_WDT) += ite5632_wdt.o
+ ifeq ($(CONFIG_ITCO_VENDOR_SUPPORT),y)
+ obj-$(CONFIG_ITCO_WDT) += iTCO_vendor_support.o
+ endif
+diff --git a/drivers/watchdog/ite5632_wdt.c b/drivers/watchdog/ite5632_wdt.c
+new file mode 100644
+index 000000000000..32a68f16674f
+--- /dev/null
++++ b/drivers/watchdog/ite5632_wdt.c
+@@ -0,0 +1,279 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ *	Customized ITE5632 WDT driver for Lenovo SE10.
++ *
++ */
++
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/delay.h>
++#include <linux/init.h>
++#include <linux/io.h>
++#include <linux/ioport.h>
++#include <linux/module.h>
++#include <linux/moduleparam.h>
++#include <linux/platform_device.h>
++#include <linux/string.h>
++#include <linux/types.h>
++#include <linux/watchdog.h>
++
++#define EC_STATUS_port	0x6C
++#define EC_CMD_port	0x6C
++#define EC_DATA_port	0x68
++#define EC_OBF		0x01
++#define EC_IBF		0x02
++#define CFG_LDN		0x07
++#define CFG_BRAM_LDN	0x10    /* for BRAM Base */
++#define CFG_PORT	0x2E
++
++#define CUS_WDT_SWI		0x1A
++#define CUS_WDT_CFG		0x1B
++#define CUS_WDT_FEED		0xB0
++#define CUS_WDT_CNT		0xB1
++
++#define DRVNAME			"ite5632"
++
++/*The timeout range is 1-255 seconds*/
++#define MIN_TIMEOUT		1
++#define MAX_TIMEOUT		255
++
++#define WATCHDOG_TIMEOUT	60	/* 60 sec default timeout */
++static unsigned short bram_base;
++
++static int timeout;	/* in seconds */
++module_param(timeout, int, 0);
++MODULE_PARM_DESC(timeout,
++		"Watchdog timeout in seconds. 1 <= timeout <= 255, default="
++				__MODULE_STRING(WATCHDOG_TIMEOUT) ".");
++
++static bool nowayout = WATCHDOG_NOWAYOUT;
++module_param(nowayout, bool, 0);
++MODULE_PARM_DESC(nowayout,
++		"Watchdog cannot be stopped once started (default="
++				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
++
++struct ite5632_data_t {
++	struct watchdog_device wdt;
++};
++
++/* Kernel methods. */
++static void set_bram(unsigned char offset, unsigned char val)
++{
++	outb(offset, bram_base);
++	outb(val, bram_base + 1);
++}
++
++/* wait EC output buffer full */
++static void wait_EC_OBF(void)
++{
++	while (1) {
++		if (inb(EC_STATUS_port) & EC_OBF)
++			break;
++		udelay(10);
++	}
++}
++
++/* wait EC input buffer empty */
++static void wait_EC_IBE(void)
++{
++	while (1) {
++		if (!(inb(EC_STATUS_port) & EC_IBF))
++			break;
++		udelay(10);
++	}
++}
++
++static void send_EC_cmd(unsigned char EcCmd)
++{
++	wait_EC_IBE();
++	outb(EcCmd, EC_CMD_port);
++	wait_EC_IBE();
++}
++
++static unsigned char Read_EC_data(void)
++{
++	wait_EC_OBF();
++	return inb(EC_DATA_port);
++}
++
++static void LPC_Write_Byte(unsigned char index, unsigned char data)
++{
++	outb(index, CFG_PORT);
++	outb(data, CFG_PORT + 1);
++}
++
++static unsigned char LPC_Read_Byte(unsigned char index)
++{
++	outb(index, CFG_PORT);
++	return inb(CFG_PORT + 1);
++}
++
++static int GetChipID(void)
++{
++	unsigned short wPortAddr = 0x2E;
++	unsigned char MSB, LSB;
++	unsigned char cmd = (CFG_PORT == 0x2E) ? (0x55) : (0xAA);
++
++	outb(0x87, CFG_PORT);
++	outb(0x01, CFG_PORT);
++	outb(0x55, CFG_PORT);
++	outb(cmd, CFG_PORT);
++	outb(0x20, wPortAddr);
++	MSB = inb(wPortAddr + 1);
++	outb(0x21, wPortAddr);
++	LSB = inb(wPortAddr + 1);
++	return (MSB * 256 + LSB);
++}
++
++static int wdt_start(struct watchdog_device *wdog)
++{
++	set_bram(CUS_WDT_SWI, 0x80);
++	return 0;
++}
++
++static int wdt_set_timeout(struct watchdog_device *wdog, unsigned int timeout)
++{
++	wdog->timeout = timeout;
++	set_bram(CUS_WDT_CFG, wdog->timeout);
++	return 0;
++}
++
++static int wdt_stop(struct watchdog_device *wdog)
++{
++	wdt_set_timeout(wdog, 0);
++	return 0;
++}
++
++static unsigned int wdt_get_time(struct watchdog_device *wdog)
++{
++	unsigned int timeleft;
++	struct ite5632_data_t *data = watchdog_get_drvdata(wdog);
++
++	if (!request_region(EC_DATA_port, 5, "EC")) {
++		dev_err(data->wdt.parent, ":request fail\n");
++		return 0;
++	}
++	send_EC_cmd(CUS_WDT_CNT);
++
++	timeleft = (int)Read_EC_data();
++	release_region(EC_DATA_port, 5);
++	return timeleft;
++}
++
++static int wdt_ping(struct watchdog_device *wdog)
++{
++	struct ite5632_data_t *data = watchdog_get_drvdata(wdog);
++
++	if (!request_region(EC_DATA_port, 5, "EC")) {
++		dev_err(data->wdt.parent, ":request fail\n");
++		return 0;
++	}
++	send_EC_cmd(CUS_WDT_FEED);
++	release_region(EC_DATA_port, 5);
++	return 0;
++}
++
++/* Kernel Interfaces */
++static const struct watchdog_info wdt_info = {
++	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
++	.identity = "5632 Watchdog",
++};
++
++static const struct watchdog_ops wdt_ops = {
++	.owner = THIS_MODULE,
++	.start = wdt_start,
++	.stop = wdt_stop,
++	.ping = wdt_ping,
++	.set_timeout = wdt_set_timeout,
++	.get_timeleft = wdt_get_time,
++};
++
++static int ite5632_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct ite5632_data_t *data = NULL;
++
++	dev_info(&pdev->dev, "Probe ITE5632 called\n");
++
++	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->wdt.info = &wdt_info,
++	data->wdt.ops = &wdt_ops,
++	data->wdt.timeout = WATCHDOG_TIMEOUT; /* Set default timeout */
++	data->wdt.min_timeout = MIN_TIMEOUT;
++	data->wdt.max_timeout = MAX_TIMEOUT;
++	data->wdt.parent = &pdev->dev;
++
++	watchdog_init_timeout(&data->wdt, timeout, &pdev->dev);
++	watchdog_set_drvdata(&data->wdt, data);
++
++	watchdog_set_nowayout(&data->wdt, nowayout);
++	watchdog_stop_on_reboot(&data->wdt);
++	watchdog_stop_on_unregister(&data->wdt);
++
++	dev_info(&pdev->dev, "initialized. timeout=%d sec (nowayout=%d)\n",
++		 data->wdt.timeout, nowayout);
++
++	return devm_watchdog_register_device(dev, &data->wdt);
++}
++
++static struct platform_driver ite5632_driver = {
++	.driver = {
++		.name = DRVNAME,
++	},
++	.probe  = ite5632_probe,
++};
++
++static struct platform_device *pdev;
++
++static int __init wdt_init(void)
++{
++	int ret;
++	int chip;
++
++	chip = GetChipID();
++
++	if (chip == 0x5632)
++		pr_info("Found ITE ChipID= %4X\n", chip);
++	else {
++		pr_info("ITE ChipID 5632 not found\n");
++		return -ENODEV;
++	}
++
++	LPC_Write_Byte(CFG_LDN, CFG_BRAM_LDN);
++	bram_base = ((LPC_Read_Byte(0x60) << 8) | LPC_Read_Byte(0x61));
++
++	platform_driver_register(&ite5632_driver);
++
++	pdev = platform_device_alloc(DRVNAME, bram_base);
++
++	dev_info(&pdev->dev, "ITE5632 device found\n");
++
++	/* platform_device_add calls probe() */
++	ret = platform_device_add(pdev);
++	if (ret) {
++		platform_device_put(pdev);
++		if (pdev)
++			platform_device_unregister(pdev);
++		platform_driver_unregister(&ite5632_driver);
++	}
++	return ret;
++}
++
++static void __exit wdt_exit(void)
++{
++	platform_device_unregister(pdev);
++	platform_driver_unregister(&ite5632_driver);
++
++	outb(0x02, 0x2E);
++	outb(0x02, 0x2E + 1);
++}
++
++module_init(wdt_init);
++module_exit(wdt_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("David Ober<dober@lenovo.com>");
++MODULE_DESCRIPTION("WDT driver for ITE5632");
+-- 
+2.34.1
 
