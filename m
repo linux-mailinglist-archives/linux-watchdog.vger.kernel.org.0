@@ -2,455 +2,165 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F8E752E11
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Jul 2023 01:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A56FB753267
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Jul 2023 09:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233797AbjGMXy7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 13 Jul 2023 19:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
+        id S233677AbjGNHAN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 14 Jul 2023 03:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232193AbjGMXy7 (ORCPT
+        with ESMTP id S234301AbjGNHAK (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 13 Jul 2023 19:54:59 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C62270D;
-        Thu, 13 Jul 2023 16:54:57 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-676f16e0bc4so874743b3a.0;
-        Thu, 13 Jul 2023 16:54:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689292497; x=1691884497;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ab4D31Nu2JiDzHhhgneMf9tsNm/y2gC8AiMuRFMBGy4=;
-        b=dlBsv7F3FHpkQXZjU862P9vWG0Hpt6CUfL1wUGetar2dVtFWlKBWlBNjZyP5m1xlgY
-         glaczfQ9BGcUJslzmUpHwkP/VlAMx0IICNaOX9yn8lshGXHjhfG7ILFWfxww79mdi3g/
-         wEolKTP0wX9n6fMj9qkF1+/pH9QaVaMl5A6dseA60nu2jHTJDbJJ+DjZiVVRVNKCMfXG
-         MSuo7FvevOxbB3ZMQXHOntGyWoV+CT5kes0HR7hcUh7OvGOBf0ltq/UBKpseC8szFMzA
-         DD2oR2iiZyhGNDyK5ugiQhFbqE0jW9TCCXd6Q1LPJZNKu6dR08goJ9voefMdc7ctzdCg
-         V9hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689292497; x=1691884497;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ab4D31Nu2JiDzHhhgneMf9tsNm/y2gC8AiMuRFMBGy4=;
-        b=SLhNUKi9O3Vp8vrRkt+NBPdlTpd32vhg8uuxAigFXosZbKDmFcWJWg6xPTiYQXPcVr
-         1mW9F3u2nv6J7xlJ8mIvHXajm/G9MG022J44SvMxyHYHitjsiCwxwhFRzDJNj5DHCZK0
-         tDOW2V7pM4HTIksEy3smxG35ncm6LiN/8dubQiAAWcaJWe5Bmf+7wybdvhI2mw8SVDoo
-         YcZnbMnSfaNrQoyIDjCXE+ATqg7axolKOYDeQnDTPRXk8SonQzAhSf3J8uTqqnvxDFTt
-         O7Q29sZq6dKkRxBquJMBI1pQjassVefWQcNJUgMQMT3CJHO000z3kv5iPmSV5tCleYHV
-         Z+Kw==
-X-Gm-Message-State: ABy/qLbHl7aZzVSUrBADBQ/F1dkhZ2fVwFCeK+O1KxVrURAZ8FFUqjh2
-        LnL9bx/TLD85gmlNF5/AbEM=
-X-Google-Smtp-Source: APBJJlGqtgzY1hgY95XdueN2iGgbhqBaMkTeHkKo04Ml/HH/oFAmwyFCaqXbDes+sSu4sDcfca/X+Q==
-X-Received: by 2002:a05:6a00:1a51:b0:657:f26e:b01a with SMTP id h17-20020a056a001a5100b00657f26eb01amr2595600pfv.26.1689292496893;
-        Thu, 13 Jul 2023 16:54:56 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p10-20020a62ab0a000000b0063b8ddf77f7sm5908448pff.211.2023.07.13.16.54.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jul 2023 16:54:56 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <20f07b3d-11fe-a236-25db-8ac4763d45f2@roeck-us.net>
-Date:   Thu, 13 Jul 2023 16:54:54 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
+        Fri, 14 Jul 2023 03:00:10 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2068.outbound.protection.outlook.com [40.107.22.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA87C2719;
+        Fri, 14 Jul 2023 00:00:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EPBo8UtjS70tACsur15cXib5aWmIyx5uVNh+WLW3fTL/aJOo9HUhHepSyhYkSgEOHJsz1Qd8FfSHSg2+hOxEtUB8yaomyipD/6GdbIUdwbSeA73O+Q7JjHqiZQSlpgwHQyLEy9DrYybJvcrG5eIbmsRnLc9kKGiIS9Fflgjt7tEYGzawQhtTfi/oQHLnoBuCDNPbIyIixmKQfgjwVKRHV2zJYm6veeP5K4zWREwjSUbL5jQgCMG0uxOhw5c22iVbnnhC094es4PLDtdGRfti/A/nmdJ6uttutpSoB9WiJwg76G/CKT64rxAThRX+5Rg6ZpP2ufAH4VBOOJCyYSTLpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eoXTnf3ubQCz2RfeX1LXpNMKWrwNo8mM22y/fM+kBss=;
+ b=MtwshNOu6+nB38cqG+ouJlBpJB/pnQRsO7cgYT7aKkj+nkKM9qSp4gxRpCUVUOEnmeMZVwYxpwwxAw1atgNZ8w2ytRbXWvoQhb9BtOd/66WM65+fZ9S4BgZCOQOz9Rf3uyfwR2ogqZWjzmFRqQ9neEA6hRg57qptpFc+wub1dLIv85al8Vk7Ml0GbB3qygKMP7crexn/iftJdEuiExfl/eDrV2vLoSMcIKjugGP3J8+1ScBHzsbbWbVSnBk5K41DAzQbvPwugbGLBfd+qzA53pSVZ5eVzuZ7fb2mFm0rRK+uQWVfoM8R11qYMFC9VO/6ZsTVI7O/eNYFfEmi//kykA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.76) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=siemens.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eoXTnf3ubQCz2RfeX1LXpNMKWrwNo8mM22y/fM+kBss=;
+ b=AUD99zFHesxrjmVWky9NLXdvXfFZgQYBP7g2LuiaeeiM1qgipW9Sp+DpmjFQUdux6c+3SASKpPeKhWSEdgO0JGgfyeqZJp+IBSTnwBTT3X7f82DjfaYzFY1yzCxIXBuAHmNRDVQqwaDEMmadZptFdWgNdXrWCeYjYbsJ2uoiylUz6ExTeeiQOlRQgtzUHiQDpSdfVauvp177LBJzfnpPnnyQlpFab58DS1D63ex9qvRHPieCaxsaIQwaKb9wNOV0KiEyWeFKI+caChiQ/kL1HTMoh/d5mTqHhL/LIIgAEkzdI3nv8driD45kxHmtDfojJJ43Us/CzJn4NHDUKxfUKg==
+Received: from FR0P281CA0202.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:ad::17)
+ by AM7PR10MB3857.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:14d::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.31; Fri, 14 Jul
+ 2023 07:00:06 +0000
+Received: from VE1EUR01FT091.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:d10:ad:cafe::82) by FR0P281CA0202.outlook.office365.com
+ (2603:10a6:d10:ad::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.15 via Frontend
+ Transport; Fri, 14 Jul 2023 07:00:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.76)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.76 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.76; helo=hybrid.siemens.com; pr=C
+Received: from hybrid.siemens.com (194.138.21.76) by
+ VE1EUR01FT091.mail.protection.outlook.com (10.152.3.27) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6609.14 via Frontend Transport; Fri, 14 Jul 2023 07:00:05 +0000
+Received: from CNPEK01M05MSX.ad011.siemens.net (139.24.237.222) by
+ DEMCHDC8VSA.ad011.siemens.net (194.138.21.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Fri, 14 Jul 2023 09:00:04 +0200
+Received: from CNPEK01M03MSX.ad011.siemens.net (139.24.237.220) by
+ CNPEK01M05MSX.ad011.siemens.net (139.24.237.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Fri, 14 Jul 2023 15:00:02 +0800
+Received: from CNPEK01M03MSX.ad011.siemens.net ([139.24.237.220]) by
+ CNPEK01M03MSX.ad011.siemens.net ([139.24.237.220]) with mapi id
+ 15.01.2507.027; Fri, 14 Jul 2023 15:00:02 +0800
+From:   "Li, Hua Qian" <HuaQian.Li@siemens.com>
+To:     "linux@roeck-us.net" <linux@roeck-us.net>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+CC:     "kristo@kernel.org" <kristo@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "huaqianlee@gmail.com" <huaqianlee@gmail.com>,
+        "nm@ti.com" <nm@ti.com>, "vigneshr@ti.com" <vigneshr@ti.com>,
+        "Kiszka, Jan" <jan.kiszka@siemens.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "Su, Bao Cheng" <baocheng.su@siemens.com>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Subject: Re: [PATCH v3 0/3] Add support for WDIOF_CARDRESET on TI AM65x
+Thread-Topic: [PATCH v3 0/3] Add support for WDIOF_CARDRESET on TI AM65x
+Thread-Index: AQHZtW+mZ/ETSk0+rU2NBd5Xb9D67q+3a/EAgADkrQA=
+Date:   Fri, 14 Jul 2023 07:00:02 +0000
+Message-ID: <840f5d90fdb794e4d07db3f6fb71a14e144e91b7.camel@siemens.com>
+References: <20230713095127.1230109-1-huaqian.li@siemens.com>
+         <3eec9b79-0505-0b15-f7a0-fcc7f4031c85@roeck-us.net>
+In-Reply-To: <3eec9b79-0505-0b15-f7a0-fcc7f4031c85@roeck-us.net>
+Accept-Language: en-US
 Content-Language: en-US
-To:     David Ober <dober6023@gmail.com>, wim@linux-watchdog.org
-Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        mpearson@lenovo.com, dober@lenovo.com
-References: <20230713105834.65751-1-dober6023@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] Watchdog: New module for ITE 5632 watchdog
-In-Reply-To: <20230713105834.65751-1-dober6023@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [139.24.108.35]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B529882224570447BB7F69C16EC1DF09@siemens.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VE1EUR01FT091:EE_|AM7PR10MB3857:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1688e629-51e2-489b-4dff-08db8437f42e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: r0hoksouxtMTJ6JCnKlUyIrG+EmISMvNfJnX30VTQl25/oUThUKi3i1mXt7uE7sz+9ZWQa1ysLlqvmrS22W3iCJwIUKWGegGCdPci0x8oVngme3T3jkMugLuja6+UcwYKuX7JOP7qvum8pkEs5Ml1WE9FphTiFzaSpIL6JoTKkPu614pQK7ZSbogQacuXlurHaEAGeFlcCKpOX3xzzFlqTDxs3U6wqjOFG/LTw18Ed5/8L5/TBg75n7XD7KxkboxyCzXA/5JVkQ0CTOgV9JdtUA8Pg4WahBOB9WgafKZ3xCmuHzUXUgRqoBc0bk6IS9K0Tv00vsDrY+wxsu/jFxNZRvlBYrS13nUTdooOm/1ceWN+puPe5CtiwlQkpX0l15rNx47TNRrHwuNS1Pf7jI8rzRD0f8kHCsfEJZjJsf7i0HDNiD/YxRiI9om4ZZlXN3gDRUG7K+9acRQnzO3o3XNViCjXnTO7k2yhjpcK6f1pUaThexjSCMidcdrOd5gggmnhtFKLi6VjlEfazEPMu3HAVqlvh9bK1qwN2Zju1XLl9aV25H7UyQcJawnmZiivsnKC60d+fNIogwEDEisnh1nCQHHObPjS3+6JBcXOIIRq67CyLB4usU+rsSE78Az/U4CRTqXXJnX7WTfxHWLByuUdHcW8KnfGCo/Hs7euTFiJLUt73Mz6AfzTmKKcYVfz9Yu6S8QsYeZJhN9GCZdqMdD25csWKDOpeHLb+gzm49LFvDIurMR/KWdq3BNdc87LXc18pqlN1XIlpX0FR7AcMwhyg9nxNZkpK7FhTvPkuyM/EQ=
+X-Forefront-Antispam-Report: CIP:194.138.21.76;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(136003)(346002)(451199021)(36840700001)(40470700004)(46966006)(26005)(82310400005)(41300700001)(4326008)(47076005)(316002)(8676002)(82740400003)(36756003)(5660300002)(8936002)(82960400001)(7416002)(40460700003)(81166007)(40480700001)(356005)(478600001)(966005)(2906002)(956004)(110136005)(2616005)(36860700001)(86362001)(53546011)(186003)(45080400002)(336012)(54906003)(70206006)(70586007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2023 07:00:05.7331
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1688e629-51e2-489b-4dff-08db8437f42e
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.76];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT091.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR10MB3857
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/13/23 03:58, David Ober wrote:
-> This modules is to allow for the new ITE 5632 EC chip
-> to support the watchdog for initial use in the Lenovo SE10
-> 
-> Signed-off-by: David Ober <dober6023@gmail.com>
-> ---
->   drivers/watchdog/Kconfig       |  10 ++
->   drivers/watchdog/Makefile      |   1 +
->   drivers/watchdog/ite5632_wdt.c | 279 +++++++++++++++++++++++++++++++++
->   3 files changed, 290 insertions(+)
->   create mode 100644 drivers/watchdog/ite5632_wdt.c
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index ee97d89dfc11..861cc0eff468 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -264,6 +264,16 @@ config MENZ069_WATCHDOG
->   	  This driver can also be built as a module. If so the module
->   	  will be called menz069_wdt.
->   
-> +config ITE5632_WDT
-> +        tristate "ITE 5632"
-> +        select WATCHDOG_CORE
-> +        help
-> +          If you say yes here you get support for the watchdog
-> +          functionality of the ITE 5632 eSIO chip.
-> +
-> +          This driver can also be built as a module. If so, the module
-> +          will be called ite5632_wdt.
-> +
->   config WDAT_WDT
->   	tristate "ACPI Watchdog Action Table (WDAT)"
->   	depends on ACPI
-> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index 3633f5b98236..32c8340f3175 100644
-> --- a/drivers/watchdog/Makefile
-> +++ b/drivers/watchdog/Makefile
-> @@ -119,6 +119,7 @@ obj-$(CONFIG_WAFER_WDT) += wafer5823wdt.o
->   obj-$(CONFIG_I6300ESB_WDT) += i6300esb.o
->   obj-$(CONFIG_IE6XX_WDT) += ie6xx_wdt.o
->   obj-$(CONFIG_ITCO_WDT) += iTCO_wdt.o
-> +obj-$(CONFIG_ITE5632_WDT) += ite5632_wdt.o
->   ifeq ($(CONFIG_ITCO_VENDOR_SUPPORT),y)
->   obj-$(CONFIG_ITCO_WDT) += iTCO_vendor_support.o
->   endif
-> diff --git a/drivers/watchdog/ite5632_wdt.c b/drivers/watchdog/ite5632_wdt.c
-> new file mode 100644
-> index 000000000000..32a68f16674f
-> --- /dev/null
-> +++ b/drivers/watchdog/ite5632_wdt.c
-> @@ -0,0 +1,279 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + *	Customized ITE5632 WDT driver for Lenovo SE10.
-> + *
-> + */
-> +
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +#include <linux/delay.h>
-> +#include <linux/init.h>
-> +#include <linux/io.h>
-> +#include <linux/ioport.h>
-> +#include <linux/module.h>
-> +#include <linux/moduleparam.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/string.h>
-> +#include <linux/types.h>
-> +#include <linux/watchdog.h>
-> +
-> +#define EC_STATUS_port	0x6C
-> +#define EC_CMD_port	0x6C
-> +#define EC_DATA_port	0x68
-> +#define EC_OBF		0x01
-> +#define EC_IBF		0x02
-> +#define CFG_LDN		0x07
-> +#define CFG_BRAM_LDN	0x10    /* for BRAM Base */
-> +#define CFG_PORT	0x2E
-> +
-> +#define CUS_WDT_SWI		0x1A
-> +#define CUS_WDT_CFG		0x1B
-> +#define CUS_WDT_FEED		0xB0
-> +#define CUS_WDT_CNT		0xB1
-> +
-> +#define DRVNAME			"ite5632"
-> +
-> +/*The timeout range is 1-255 seconds*/
-> +#define MIN_TIMEOUT		1
-> +#define MAX_TIMEOUT		255
-> +
-> +#define WATCHDOG_TIMEOUT	60	/* 60 sec default timeout */
-> +static unsigned short bram_base;
-> +
-> +static int timeout;	/* in seconds */
-> +module_param(timeout, int, 0);
-> +MODULE_PARM_DESC(timeout,
-> +		"Watchdog timeout in seconds. 1 <= timeout <= 255, default="
-> +				__MODULE_STRING(WATCHDOG_TIMEOUT) ".");
-> +
-> +static bool nowayout = WATCHDOG_NOWAYOUT;
-> +module_param(nowayout, bool, 0);
-> +MODULE_PARM_DESC(nowayout,
-> +		"Watchdog cannot be stopped once started (default="
-> +				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-> +
-> +struct ite5632_data_t {
-> +	struct watchdog_device wdt;
-> +};
-
-That structure seems unnecessary since it only has a single object.
-
-> +
-> +/* Kernel methods. */
-> +static void set_bram(unsigned char offset, unsigned char val)
-> +{
-> +	outb(offset, bram_base);
-> +	outb(val, bram_base + 1);
-> +}
-> +
-> +/* wait EC output buffer full */
-> +static void wait_EC_OBF(void)
-> +{
-> +	while (1) {
-> +		if (inb(EC_STATUS_port) & EC_OBF)
-> +			break;
-> +		udelay(10);
-> +	}
-
-This would hang forever if the EC doesn't respond. Please select a
-sensible timeout and return an error if that happens. If the EC often
-takes longer than, say, 100uS to reply, please use usleep_range().
-
-> +}
-> +
-> +/* wait EC input buffer empty */
-> +static void wait_EC_IBE(void)
-> +{
-> +	while (1) {
-> +		if (!(inb(EC_STATUS_port) & EC_IBF))
-> +			break;
-> +		udelay(10);
-> +	}
-
-Same as above.
-
-> +}
-> +
-> +static void send_EC_cmd(unsigned char EcCmd)
-> +{
-> +	wait_EC_IBE();
-> +	outb(EcCmd, EC_CMD_port);
-> +	wait_EC_IBE();
-> +}
-> +
-> +static unsigned char Read_EC_data(void)
-> +{
-> +	wait_EC_OBF();
-> +	return inb(EC_DATA_port);
-> +}
-> +
-> +static void LPC_Write_Byte(unsigned char index, unsigned char data)
-> +{
-> +	outb(index, CFG_PORT);
-> +	outb(data, CFG_PORT + 1);
-> +}
-> +
-> +static unsigned char LPC_Read_Byte(unsigned char index)
-> +{
-> +	outb(index, CFG_PORT);
-> +	return inb(CFG_PORT + 1);
-> +}
-> +
-> +static int GetChipID(void)
-> +{
-> +	unsigned short wPortAddr = 0x2E;
-> +	unsigned char MSB, LSB;
-> +	unsigned char cmd = (CFG_PORT == 0x2E) ? (0x55) : (0xAA);
-
-Please no unnecessary ( ) around constants. Besides, CFG_PORT is a
-constant and the check is pointless.
-
-> +
-> +	outb(0x87, CFG_PORT);
-> +	outb(0x01, CFG_PORT);
-> +	outb(0x55, CFG_PORT);
-> +	outb(cmd, CFG_PORT);
-> +	outb(0x20, wPortAddr);
-
-What is the point of this ? First use CFG_PORT and then suddenly wPortAddr
-which has the same value ? Why ? And why not call LPC_Read_Byte() ?
-
-> +	MSB = inb(wPortAddr + 1);
-> +	outb(0x21, wPortAddr);
-> +	LSB = inb(wPortAddr + 1);
-> +	return (MSB * 256 + LSB);
-> +}
-> +
-> +static int wdt_start(struct watchdog_device *wdog)
-> +{
-> +	set_bram(CUS_WDT_SWI, 0x80);
-> +	return 0;
-> +}
-> +
-> +static int wdt_set_timeout(struct watchdog_device *wdog, unsigned int timeout)
-> +{
-> +	wdog->timeout = timeout;
-> +	set_bram(CUS_WDT_CFG, wdog->timeout);
-> +	return 0;
-> +}
-> +
-> +static int wdt_stop(struct watchdog_device *wdog)
-> +{
-> +	wdt_set_timeout(wdog, 0);
-> +	return 0;
-> +}
-> +
-> +static unsigned int wdt_get_time(struct watchdog_device *wdog)
-> +{
-> +	unsigned int timeleft;
-> +	struct ite5632_data_t *data = watchdog_get_drvdata(wdog);
-> +
-> +	if (!request_region(EC_DATA_port, 5, "EC")) {
-> +		dev_err(data->wdt.parent, ":request fail\n");
-> +		return 0;
-
-Logging noise but ignore the error ? That is unacceptable.
-Please drop the log message and return the error to the caller.
-If you absolutely want log messages, make it dev_dbg().
-Same everywhere else where errors are ignored.
-
-> +	}
-> +	send_EC_cmd(CUS_WDT_CNT);
-> +
-> +	timeleft = (int)Read_EC_data();
-
-Unnecessary typecast.
-
-> +	release_region(EC_DATA_port, 5);
-> +	return timeleft;
-> +}
-> +
-> +static int wdt_ping(struct watchdog_device *wdog)
-> +{
-> +	struct ite5632_data_t *data = watchdog_get_drvdata(wdog);
-> +
-> +	if (!request_region(EC_DATA_port, 5, "EC")) {
-
-Should this be request_muxed_region() ?
-
-Overall, requesting and releasing the memory region for each ping
-is expensive. Is this really necessary ? Why ?
-
-> +		dev_err(data->wdt.parent, ":request fail\n");
-> +		return 0;
-> +	}
-> +	send_EC_cmd(CUS_WDT_FEED);
-> +	release_region(EC_DATA_port, 5);
-> +	return 0;
-> +}
-> +
-> +/* Kernel Interfaces */
-> +static const struct watchdog_info wdt_info = {
-> +	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
-> +	.identity = "5632 Watchdog",
-> +};
-> +
-> +static const struct watchdog_ops wdt_ops = {
-> +	.owner = THIS_MODULE,
-> +	.start = wdt_start,
-> +	.stop = wdt_stop,
-> +	.ping = wdt_ping,
-> +	.set_timeout = wdt_set_timeout,
-> +	.get_timeleft = wdt_get_time,
-> +};
-> +
-> +static int ite5632_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct ite5632_data_t *data = NULL;
-> +
-> +	dev_info(&pdev->dev, "Probe ITE5632 called\n");
-> +
-> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->wdt.info = &wdt_info,
-> +	data->wdt.ops = &wdt_ops,
-> +	data->wdt.timeout = WATCHDOG_TIMEOUT; /* Set default timeout */
-> +	data->wdt.min_timeout = MIN_TIMEOUT;
-> +	data->wdt.max_timeout = MAX_TIMEOUT;
-> +	data->wdt.parent = &pdev->dev;
-> +
-> +	watchdog_init_timeout(&data->wdt, timeout, &pdev->dev);
-> +	watchdog_set_drvdata(&data->wdt, data);
-> +
-> +	watchdog_set_nowayout(&data->wdt, nowayout);
-> +	watchdog_stop_on_reboot(&data->wdt);
-> +	watchdog_stop_on_unregister(&data->wdt);
-> +
-> +	dev_info(&pdev->dev, "initialized. timeout=%d sec (nowayout=%d)\n",
-> +		 data->wdt.timeout, nowayout);
-> +
-> +	return devm_watchdog_register_device(dev, &data->wdt);
-> +}
-> +
-> +static struct platform_driver ite5632_driver = {
-> +	.driver = {
-> +		.name = DRVNAME,
-> +	},
-> +	.probe  = ite5632_probe,
-> +};
-> +
-> +static struct platform_device *pdev;
-> +
-> +static int __init wdt_init(void)
-> +{
-> +	int ret;
-> +	int chip;
-> +
-> +	chip = GetChipID();
-> +
-> +	if (chip == 0x5632)
-> +		pr_info("Found ITE ChipID= %4X\n", chip);
-> +	else {
-> +		pr_info("ITE ChipID 5632 not found\n");
-
-Completely unacceptable. That would create noise on each system which
-doesn't have this chip.
-
-> +		return -ENODEV;
-> +	}
-> +
-Please run checkpatch --strict and fix what it reports.
-
-> +	LPC_Write_Byte(CFG_LDN, CFG_BRAM_LDN);
-> +	bram_base = ((LPC_Read_Byte(0x60) << 8) | LPC_Read_Byte(0x61));
-> +
-> +	platform_driver_register(&ite5632_driver);
-> +
-> +	pdev = platform_device_alloc(DRVNAME, bram_base);
-> +
-> +	dev_info(&pdev->dev, "ITE5632 device found\n");
-
-More than one message is just as unacceptable.
-
-> +
-> +	/* platform_device_add calls probe() */
-> +	ret = platform_device_add(pdev);
-> +	if (ret) {
-> +		platform_device_put(pdev);
-> +		if (pdev)
-> +			platform_device_unregister(pdev);
-> +		platform_driver_unregister(&ite5632_driver);
-> +	}
-> +	return ret;
-> +}
-> +
-> +static void __exit wdt_exit(void)
-> +{
-> +	platform_device_unregister(pdev);
-> +	platform_driver_unregister(&ite5632_driver);
-> +
-> +	outb(0x02, 0x2E);
-> +	outb(0x02, 0x2E + 1);
-
-What does this do ? And, again, why not call the helper function ?
-
-> +}
-> +
-> +module_init(wdt_init);
-> +module_exit(wdt_exit);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("David Ober<dober@lenovo.com>");
-> +MODULE_DESCRIPTION("WDT driver for ITE5632");
-
+T24gVGh1LCAyMDIzLTA3LTEzIGF0IDEwOjIxIC0wNzAwLCBHdWVudGVyIFJvZWNrIHdyb3RlOg0K
+PiBPbiA3LzEzLzIzIDAyOjUxLCBodWFxaWFuLmxpQHNpZW1lbnMuY29twqB3cm90ZToNCj4gPiBG
+cm9tOiBMaSBIdWEgUWlhbiA8aHVhcWlhbi5saUBzaWVtZW5zLmNvbT4NCj4gPiANCj4gPiBUaGUg
+d2F0Y2hkb2cgaGFyZHdhcmUgb2YgVEkgQU02NVggcGxhdGZvcm0gZG9lcyBub3Qgc3VwcG9ydA0K
+PiA+IFdESU9GX0NBUkRSRVNFVCBmZWF0dXJlLCBhZGQgYSByZXNlcnZlZCBtZW1vcnkgdG8gc2F2
+ZSB0aGUgd2F0Y2hkb2cNCj4gPiByZXNldCBjYXVzZSwgdG8ga25vdyBpZiB0aGUgYm9hcmQgcmVi
+b290IGlzIGR1ZSB0byBhIHdhdGNoZG9nDQo+ID4gcmVzZXQuDQo+ID4gDQo+IA0KPiBPbmUgdGhp
+bmcgSSBrZWVwIHdvbmRlcmluZyBhYm91dDogV2hhdCBwcmV2ZW50cyB0aGUgTGludXgga2VybmVs
+IGZyb20NCj4gdHJlYXRpbmcgdGhlIHNwZWNpYWwgbWVtb3J5IGFyZWEgbGlrZSBub3JtYWwgbWVt
+b3J5ID8gSSB3b3VsZCBoYXZlDQo+IGV4cGVjdGVkDQo+IHNvbWUgdXNhZ2Ugbm90ZSwgc3VjaCBh
+cyB0aGF0IHRoZSBtZW1vcnkgYXJlYSBtdXN0IGJlIHJlcG9ydGVkIGFzDQo+IHJlc2VydmVkDQo+
+IHRvIHRoZSBrZXJuZWwsIGJ1dCBJIGRvbid0IHNlZSBhbnl0aGluZyBsaWtlIHRoYXQuDQo+IA0K
+PiBHdWVudGVyDQoNCkNvdWxkIHlvdSBoZWxwIHRvIHN1Z2dlc3QgaG93IHRvIGhhbmRsZSBpdD8g
+DQoNCkkgYW0gbm90IHN1cmUgd2hlcmUgaXMgYSBnb29kIHBsYWNlIHRvIHdyaXRlIHRoZSB1c2Fn
+ZSBub3RlLiBJIGFtDQp0aGlua2luZyB0byBhZGQgaXQgaW4gdjQgdG8gRFQgYmluZGluZy4NCg0K
+QmVzdCByZWdhcmRzLA0KTGkgSHVhIFFpYW4NCj4gDQo+ID4gQ2hhbmdlcyBpbiB2MzoNCj4gPiAt
+IEFkZCBtZW1vcnktcmVnaW9uIGJhY2sgZm9yIHRoZSByZXNlcnZlZCBtZW1vcnksIGFuZCByZW1v
+dmUNCj4gPiByZXNlcnZlZA0KPiA+IMKgwqAgbWVtb3J5IGZyb20gdGhlIHdhdGNoZG9nIElPIGFk
+ZHJlc3Mgc3BhY2UuDQo+ID4gLSBBZGQgY2hhbmdlbG9nLg0KPiA+IC0gTGluayB0byB2MjoNCj4g
+PiDCoMKgDQo+ID4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtd2F0Y2hkb2cvMjAyMzA3
+MTEwOTE3MTMuMTExMzAxMC0xLWh1YXFpYW4ubGlAc2llbWVucy5jb20NCj4gPiANCj4gPiBDaGFu
+Z2VzIGluIHYyOg0KPiA+IC0gUmVtb3ZlIG1lbW9yeS1yZWdpb24gYW5kIG1lbW9yeS1zaXplIHBy
+b3BlcnRpZXMsIGFuZCBiaW5kIHRoZQ0KPiA+IHJlc2VydmVkDQo+ID4gwqDCoCBtZW1vcnkgdG8g
+d2F0Y2hkb2cgSU8gYWRkcmVzcyBzcGFjZS4NCj4gPiAtIFJlbW92ZSB0aGUgdW5uZWNlc3Nhcnkg
+cnRpX3dkdF9pb2N0bC4NCj4gPiAtIEZpeCB0aGUgbWFpbCBsaXN0DQo+ID4gLSBMaW5rIHRvIHYx
+Og0KPiA+IMKgwqANCj4gPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvMzEzN2Q4N2U1NmVm
+NzViYTBiOGE5MjNkNDA3YjJmZWNhY2U2Y2NiZC5jYW1lbEBzaWVtZW5zLmNvbS8NCj4gPiDCoMKg
+IHYxIGhhZCBhIHdyb25nIG1haWwgbGlzdCBhdCB0aGUgYmVnaW5uaW5nLCBhbmQgdGhlIG1haWwg
+dGhyZWFkDQo+ID4gd2FzDQo+ID4gwqDCoCBtZXNzZWQgdXAuDQo+ID4gDQo+ID4gTGkgSHVhIFFp
+YW4gKDMpOg0KPiA+IMKgwqAgZHQtYmluZGluZ3M6IHdhdGNoZG9nOiB0aSxydGktd2R0OiBBZGQg
+c3VwcG9ydCBmb3INCj4gPiBXRElPRl9DQVJEUkVTRVQNCj4gPiDCoMKgIGFybTY0OiBkdHM6IHRp
+OiBBZGQgcmVzZXJ2ZWQgbWVtb3J5IGZvciB3YXRjaGRvZw0KPiA+IMKgwqAgd2F0Y2hkb2c6cml0
+X3dkdDogQWRkIHN1cHBvcnQgZm9yIFdESU9GX0NBUkRSRVNFVA0KPiA+IA0KPiA+IMKgIC4uLi9i
+aW5kaW5ncy93YXRjaGRvZy90aSxydGktd2R0LnlhbWzCoMKgwqDCoMKgwqDCoMKgIHwgMTIgKysr
+KysNCj4gPiDCoCAuLi4vYm9vdC9kdHMvdGkvazMtYW02NS1pb3QyMDUwLWNvbW1vbi5kdHNpwqDC
+oCB8IDEwICsrKysNCj4gPiDCoCBkcml2ZXJzL3dhdGNoZG9nL3J0aV93ZHQuY8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgNTENCj4gPiArKysrKysrKysrKysrKysrKysr
+DQo+ID4gwqAgMyBmaWxlcyBjaGFuZ2VkLCA3MyBpbnNlcnRpb25zKCspDQo+ID4gDQo+IA0KDQo=
