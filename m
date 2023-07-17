@@ -2,29 +2,30 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C8E755BF5
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Jul 2023 08:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0912755C07
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Jul 2023 08:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjGQGmx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 17 Jul 2023 02:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
+        id S229588AbjGQGn5 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 17 Jul 2023 02:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjGQGmq (ORCPT
+        with ESMTP id S229912AbjGQGn4 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 17 Jul 2023 02:42:46 -0400
-Received: from mta-64-225.siemens.flowmailer.net (mta-64-225.siemens.flowmailer.net [185.136.64.225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F23110F9
-        for <linux-watchdog@vger.kernel.org>; Sun, 16 Jul 2023 23:42:36 -0700 (PDT)
-Received: by mta-64-225.siemens.flowmailer.net with ESMTPSA id 20230717064234f9122f3c81ae64602b
+        Mon, 17 Jul 2023 02:43:56 -0400
+X-Greylist: delayed 72 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 16 Jul 2023 23:43:54 PDT
+Received: from mta-65-226.siemens.flowmailer.net (mta-65-226.siemens.flowmailer.net [185.136.65.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C03BE7A
+        for <linux-watchdog@vger.kernel.org>; Sun, 16 Jul 2023 23:43:54 -0700 (PDT)
+Received: by mta-65-226.siemens.flowmailer.net with ESMTPSA id 20230717064239f533b29fe06bac8a1a
         for <linux-watchdog@vger.kernel.org>;
-        Mon, 17 Jul 2023 08:42:34 +0200
+        Mon, 17 Jul 2023 08:42:40 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
  d=siemens.com; i=huaqian.li@siemens.com;
  h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=jnvC6oqf7550vuX04Y+Pl19iCeyz3P0LnhYgz2I4V6w=;
- b=V4MDgfPufjIsk99rIuCKcySwCscCpLokAdMf9J/sCPVwjq5Yuz4n8qXXKz9UuyJGXuDpDl
- AzZaD9cXbWbvO5Wczwcp+pmpXMnogwsRl0nE2eFCpWepDro2gIyF+2ZKoCv2xz/83Z0Y0fmh
- rc+HRKSSp/PTxtMH4YP603pjX/xHI=;
+ bh=P+e4mgQf7YcgATPvUbBvEm5Pd72/FjOAYEsp6bDRqIE=;
+ b=ht4HJ4tEZG0lOx1xwjmDOQf4LuC7z+nRLerQvpuCs8s0BNIkqtfrZUlSn5GlV4BefiRbBu
+ 9ovphg+aNUpv2qjQmiQT/U3VLcrI1WgWzxEc/lZTFCeYe4VEjhiFfTYmoo5f+Yo4xw8KV/na
+ 3mmJpQ+FHnJDbROEhMsZ4J9UfKlbQ=;
 From:   huaqian.li@siemens.com
 To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
@@ -33,9 +34,9 @@ Cc:     huaqianlee@gmail.com, nm@ti.com, vigneshr@ti.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, jan.kiszka@siemens.com,
         baocheng.su@siemens.com, Li Hua Qian <huaqian.li@siemens.com>
-Subject: [DONOTMERGE PATCH v5 2/3] arm64: dts: ti: Add reserved memory for watchdog
-Date:   Mon, 17 Jul 2023 14:41:23 +0800
-Message-Id: <20230717064124.1315746-3-huaqian.li@siemens.com>
+Subject: [PATCH v5 3/3] watchdog:rit_wdt: Add support for WDIOF_CARDRESET
+Date:   Mon, 17 Jul 2023 14:41:24 +0800
+Message-Id: <20230717064124.1315746-4-huaqian.li@siemens.com>
 In-Reply-To: <20230717064124.1315746-1-huaqian.li@siemens.com>
 References: <20230717064124.1315746-1-huaqian.li@siemens.com>
 MIME-Version: 1.0
@@ -54,40 +55,98 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 From: Li Hua Qian <huaqian.li@siemens.com>
 
-This patch adds a reserved memory for the TI AM65X platform watchdog to
-reserve the specific info, triggering the watchdog reset in last boot,
-to know if the board reboot is due to a watchdog reset.
+This patch adds the WDIOF_CARDRESET support for the platform watchdog
+whose hardware does not support this feature, to know if the board
+reboot is due to a watchdog reset.
+
+This is done via reserved memory(RAM), which indicates if specific
+info saved, triggering the watchdog reset in last boot.
 
 Signed-off-by: Li Hua Qian <huaqian.li@siemens.com>
 ---
- arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/watchdog/rti_wdt.c | 48 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-index e26bd988e522..4bb20d493651 100644
---- a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
-@@ -63,6 +63,12 @@ rtos_ipc_memory_region: ipc-memories@a2000000 {
- 			alignment = <0x1000>;
- 			no-map;
- 		};
-+
-+		/* To reserve the power-on(PON) reason for watchdog reset */
-+		wdt_reset_memory_region: wdt-memory@a2200000 {
-+			reg = <0x00 0xa2200000 0x00 0x1000>;
-+			no-map;
-+		};
- 	};
+diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+index ce8f18e93aa9..901109d979f0 100644
+--- a/drivers/watchdog/rti_wdt.c
++++ b/drivers/watchdog/rti_wdt.c
+@@ -14,6 +14,8 @@
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
++#include <linux/of.h>
++#include <linux/of_address.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/types.h>
+@@ -52,6 +54,11 @@
  
- 	leds {
-@@ -718,3 +724,7 @@ &mcu_r5fss0_core1 {
- 			<&mcu_r5fss0_core1_memory_region>;
- 	mboxes = <&mailbox0_cluster1>, <&mbox_mcu_r5fss0_core1>;
- };
+ #define DWDST			BIT(1)
+ 
++#define PON_REASON_SOF_NUM	0xBBBBCCCC
++#define PON_REASON_MAGIC_NUM	0xDDDDDDDD
++#define PON_REASON_EOF_NUM	0xCCCCBBBB
++#define RESERVED_MEM_MIN_SIZE	12
 +
-+&mcu_rti1 {
-+	memory-region = <&wdt_reset_memory_region>;
-+};
+ static int heartbeat = DEFAULT_HEARTBEAT;
+ 
+ /*
+@@ -198,6 +205,11 @@ static int rti_wdt_probe(struct platform_device *pdev)
+ 	struct rti_wdt_device *wdt;
+ 	struct clk *clk;
+ 	u32 last_ping = 0;
++	struct device_node *node;
++	u32 reserved_mem_size;
++	struct resource res;
++	u32 *vaddr;
++	u64 paddr;
+ 
+ 	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+ 	if (!wdt)
+@@ -284,6 +296,42 @@ static int rti_wdt_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
++	node = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
++	if (node) {
++		ret = of_address_to_resource(node, 0, &res);
++		if (ret) {
++			dev_err(dev, "No memory address assigned to the region.\n");
++			goto err_iomap;
++		}
++
++		/*
++		 * If reserved memory is defined for watchdog reset cause.
++		 * Readout the Power-on(PON) reason and pass to bootstatus.
++		 */
++		paddr = res.start;
++		reserved_mem_size = resource_size(&res);
++		if (reserved_mem_size < RESERVED_MEM_MIN_SIZE) {
++			dev_err(dev, "The size of reserved memory is too small.\n");
++			ret = -EINVAL;
++			goto err_iomap;
++		}
++
++		vaddr = memremap(paddr, reserved_mem_size, MEMREMAP_WB);
++		if (vaddr == NULL) {
++			dev_err(dev, "Failed to map memory-region.\n");
++			ret = -ENOMEM;
++			goto err_iomap;
++		}
++
++		if (vaddr[0] == PON_REASON_SOF_NUM &&
++		    vaddr[1] == PON_REASON_MAGIC_NUM &&
++		    vaddr[2] == PON_REASON_EOF_NUM) {
++			wdd->bootstatus |= WDIOF_CARDRESET;
++		}
++		memset(vaddr, 0, reserved_mem_size);
++		memunmap(vaddr);
++	}
++
+ 	watchdog_init_timeout(wdd, heartbeat, dev);
+ 
+ 	ret = watchdog_register_device(wdd);
 -- 
 2.34.1
 
