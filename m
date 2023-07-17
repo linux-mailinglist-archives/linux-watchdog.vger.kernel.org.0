@@ -2,98 +2,97 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C091B7546EC
-	for <lists+linux-watchdog@lfdr.de>; Sat, 15 Jul 2023 07:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3A2755A86
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Jul 2023 06:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjGOFZr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 15 Jul 2023 01:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
+        id S230338AbjGQEJB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 17 Jul 2023 00:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjGOFZq (ORCPT
+        with ESMTP id S229954AbjGQEI7 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 15 Jul 2023 01:25:46 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11D53A9D;
-        Fri, 14 Jul 2023 22:25:44 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36F5PIhO013304;
-        Sat, 15 Jul 2023 00:25:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1689398718;
-        bh=3S2X2tz6GMb/LEBYroRqxU/r/eV423Lk4Fh4pKxefnw=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=tc4+KoWdoUtVFHL9N+ZC03JGG8QCcQ8aF2njTe9lq4puv5HL7ZYKSRbFp7xVFKWy1
-         XnI3pG68uwyauRrfCIitqLDuu1IlCXx9AIxbzBbOzdXPsEPzx6uBoYgX6hpo3l0FPy
-         cfy188fzWuOOtX2FUgBzoiRsgyG+3eXq3Sqlg9Nw=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36F5PISJ024632
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 15 Jul 2023 00:25:18 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sat, 15
- Jul 2023 00:25:17 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Sat, 15 Jul 2023 00:25:17 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36F5PHiI012539;
-        Sat, 15 Jul 2023 00:25:17 -0500
-Date:   Sat, 15 Jul 2023 00:25:17 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     <huaqian.li@siemens.com>, <wim@linux-watchdog.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <huaqianlee@gmail.com>, <vigneshr@ti.com>,
-        <kristo@kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <jan.kiszka@siemens.com>,
-        <baocheng.su@siemens.com>
-Subject: Re: [PATCH v3 2/3] arm64: dts: ti: Add reserved memory for watchdog
-Message-ID: <20230715052517.dinbn25ivsg4ocx2@subtitle>
-References: <20230713095127.1230109-1-huaqian.li@siemens.com>
- <20230713095127.1230109-3-huaqian.li@siemens.com>
- <20230714225240.dvlwqaodp2l3cczm@disfigure>
- <0b0e6961-1211-4765-2a63-4b69789dbbb3@roeck-us.net>
+        Mon, 17 Jul 2023 00:08:59 -0400
+X-Greylist: delayed 72 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 16 Jul 2023 21:08:58 PDT
+Received: from mta-65-225.siemens.flowmailer.net (mta-65-225.siemens.flowmailer.net [185.136.65.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C421B0
+        for <linux-watchdog@vger.kernel.org>; Sun, 16 Jul 2023 21:08:58 -0700 (PDT)
+Received: by mta-65-225.siemens.flowmailer.net with ESMTPSA id 20230717040743bf8ab7b8905a53b6fc
+        for <linux-watchdog@vger.kernel.org>;
+        Mon, 17 Jul 2023 06:07:44 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=huaqian.li@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=2amEu1G12NZIgjsL6jNeeisGyannGfGoc2STnkTzbqA=;
+ b=D18pT6YiMNcSeR9UCwbsLr+w5HCnYhuDWh0Y/kBtWuuMxIDeLmRebcB9+fAdvDR5Nfi7oA
+ wf16rsXR39/6+bmCIHH8GOs+S1j8b8MSY1zwtYiRhfxvfdFi7b9ueZ15Vw91AElxLAYXS1Nk
+ IjoNw1FYfYzVp2tdl5z/6p7gyH4mo=;
+From:   huaqian.li@siemens.com
+To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     huaqianlee@gmail.com, nm@ti.com, vigneshr@ti.com,
+        kristo@kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, jan.kiszka@siemens.com,
+        baocheng.su@siemens.com, Li Hua Qian <huaqian.li@siemens.com>
+Subject: [PATCH v4 0/3] Add support for WDIOF_CARDRESET on TI AM65x
+Date:   Mon, 17 Jul 2023 12:07:20 +0800
+Message-Id: <20230717040723.1306374-1-huaqian.li@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <0b0e6961-1211-4765-2a63-4b69789dbbb3@roeck-us.net>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-959203:519-21489:flowmailer
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 16:27-20230714, Guenter Roeck wrote:
-> On 7/14/23 15:52, Nishanth Menon wrote:
-> > On 17:51-20230713, huaqian.li@siemens.com wrote:
-> > > From: Li Hua Qian <huaqian.li@siemens.com>
-> > 
-> > I guess I should be explicit about this: Lets keep this dts patch as
-> > "DONOTMERGE" in subject line for driver subsystem maintainer (I don't
-> > want a repeat of cpufreq maintainers picking up dts and associated
-> > warnings that are now pending fixes), resubmit at next rc1 and I can
-> > queue up the dts once the maintainers pick up the driver and bindings.
-> > 
-> 
-> FWIW, I never pick up patches outside drivers/hwmon without explicit Ack
-> from responsible maintainers (and most definitely not dts patches unless
-> a maintainer responsible for the file(s) specifically asks me to do it
-> (which I think never happened).
+From: Li Hua Qian <huaqian.li@siemens.com>
 
-Oops Guenter, didn't mean to indicate your tree :( -> just wanted
-to ensure that developers are clearly aware of what happens with
-cross posting series involving multiple maintainers and level set
-their expectations. Saves a bunch of private pings later on :)
+The watchdog hardware of TI AM65X platform does not support
+WDIOF_CARDRESET feature, add a reserved memory to save the watchdog
+reset cause, to know if the board reboot is due to a watchdog reset.
+
+Signed-off-by: Li Hua Qian <huaqian.li@siemens.com>
+---
+Changes in v4:
+- Fix the coding style.
+- Add usage note for the reserved memory.
+- Link to v3:
+  https://lore.kernel.org/linux-watchdog/20230713095127.1230109-1-huaqian.li@siemens.com
+
+Changes in v3:
+- Add memory-region back for the reserved memory, and remove reserved
+  memory from the watchdog IO address space.
+- Add changelog.
+- Link to v2:
+  https://lore.kernel.org/linux-watchdog/20230711091713.1113010-1-huaqian.li@siemens.com
+
+Changes in v2:
+- Remove memory-region and memory-size properties, and bind the reserved
+  memory to watchdog IO address space.
+- Remove the unnecessary rti_wdt_ioctl.
+- Fix the mail list
+- Link to v1:
+  https://lore.kernel.org/all/3137d87e56ef75ba0b8a923d407b2fecace6ccbd.camel@siemens.com
+  v1 had a wrong mail list at the beginning, and the mail thread was
+  messed up.
+
+Li Hua Qian (3):
+  dt-bindings: watchdog: ti,rti-wdt: Add support for WDIOF_CARDRESET
+  arm64: dts: ti: Add reserved memory for watchdog
+  watchdog:rit_wdt: Add support for WDIOF_CARDRESET
+
+ .../bindings/watchdog/ti,rti-wdt.yaml         | 41 ++++++++++++++++
+ .../boot/dts/ti/k3-am65-iot2050-common.dtsi   | 10 ++++
+ drivers/watchdog/rti_wdt.c                    | 48 +++++++++++++++++++
+ 3 files changed, 99 insertions(+)
 
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+2.34.1
+
