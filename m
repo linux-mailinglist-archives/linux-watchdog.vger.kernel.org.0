@@ -2,91 +2,88 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5178A755AD2
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Jul 2023 07:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AD5755B3D
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Jul 2023 08:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbjGQFQC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 17 Jul 2023 01:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
+        id S231246AbjGQGNh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 17 Jul 2023 02:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjGQFQB (ORCPT
+        with ESMTP id S229461AbjGQGNg (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 17 Jul 2023 01:16:01 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E27C113;
-        Sun, 16 Jul 2023 22:16:00 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-577497ec6c6so36351957b3.2;
-        Sun, 16 Jul 2023 22:16:00 -0700 (PDT)
+        Mon, 17 Jul 2023 02:13:36 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6CF1A6
+        for <linux-watchdog@vger.kernel.org>; Sun, 16 Jul 2023 23:13:34 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5217bb5ae05so2101464a12.0
+        for <linux-watchdog@vger.kernel.org>; Sun, 16 Jul 2023 23:13:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689570959; x=1692162959;
+        d=linaro.org; s=google; t=1689574413; x=1692166413;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=16QoQmAKo2qzesmPGTwO8y2pNV60OgC3a0qEHM2+Xyc=;
-        b=GTbM7bJg/Eo6bbnUwazMM2fKux4LrpSuZGiqddjB6R89x7hstmswiGAmgpkk2W7c+h
-         m8lUGCk/jjZ5Yz2rVHDtGykSeAIyrKOv2yDG2R+ZqHzUZkZXSkBBOJ9Xjqf2Q201iX2s
-         xErXAa8A75ndJGjo05PLvCxZyPodxQDnlrH8Uo3f/EI4vYaIzvDXXfLobZofiySTISxS
-         hp7o2SRf0LZVJmCAfa73n1thA2M2vHYaTKhD7kfGxlHq0ZIoqvDAWdg5F5Et07rS0Pz8
-         fS/0WbEat7lhh71b92roc3rusOMih8GuMCUqjXQzM1Vj+OBckzl8bKA5wD4+jQGNxzfR
-         oZ9A==
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KX0bayVx0aeOD1sEoQkoLYBCqaL+9BObNzNA02HtFVo=;
+        b=T+XSj60tDa3Nd+x7EwbocVcliq3Lu2S15NHeUomZ+yOmpYLshhLT35Esp8SnFNFZWs
+         sN4qkGWiPFNHwwh7fBmhN/acOwzB4IOCfR2FpaoJqBRHUMWaUMbLgQu4X1zNjqjkNDSm
+         1WBWZSoG7pJy20ea1i4KbPDg7SphFiYAUc3kpgc4TVo4wJh45bn6RVEzlat8GKR42FZi
+         /MX1ydKxzCUlbsaVvuqf7b6DjoBa1Pjf0ASGOewaP2o6Cq/TgqHNwHQKeuH9QgAw8J5S
+         jOSstcIxJ7Ab8Z1WFKMhhkxoDdbRJCZ3htPoLb54qvZgkKicya40j8jhhAc36sBCnnpX
+         C6mQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689570959; x=1692162959;
+        d=1e100.net; s=20221208; t=1689574413; x=1692166413;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=16QoQmAKo2qzesmPGTwO8y2pNV60OgC3a0qEHM2+Xyc=;
-        b=eteBhkZVC30Jf5Mylq8yUVXr/zo0tFfN6B/4Kyw3zk20Z1Y+WzN1Wn5/ypWXURaTRe
-         H8gVZfllEr8hiS8xvOgcgZSuqT4wiJw9AfDrRQD7E1q0uzhm3rdUb3ZPhS3sXfArnNhi
-         aDjWvZG8VHAJMMho8lx6BDImAcR2pXEt3JJuTt8Q3PuNJUTzvMBVFYO7rR0OLa1lks5E
-         o9D5+FML4EmgttOibfE7qGo1IySNh9MoM8/bBzEURikpV/g6U35npRRn1UpQ9RODdfqX
-         iHyVbFz0CkFdBzzbKYjBcJzCuoUFa6HpYy/IRGutMXpiEsQCPQIxezlt/AW1pFbnJ4Eb
-         i4Mw==
-X-Gm-Message-State: ABy/qLbZY6aZ3Voa6/keL3ir8gEE+hj4tpIbKT/U1JzA2j5eOhsb5UHq
-        doPUct5J3eaj+uglvgyv18Y=
-X-Google-Smtp-Source: APBJJlGSRXtscTMOuOTx1Fiaijx4k1r2uvLjA5KJd9+oEBO7DFRwk1Jzu67JCQgbBwIGEuUOmH1e1w==
-X-Received: by 2002:a0d:f183:0:b0:562:16d7:e6eb with SMTP id a125-20020a0df183000000b0056216d7e6ebmr11297357ywf.40.1689570959207;
-        Sun, 16 Jul 2023 22:15:59 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v123-20020a0dd381000000b00577269ba9e9sm3650724ywd.86.2023.07.16.22.15.55
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KX0bayVx0aeOD1sEoQkoLYBCqaL+9BObNzNA02HtFVo=;
+        b=P2zCNSl4KdW7KiUKVnvQ2bw8+4MjlHJTkXo/e5XlIhL1iZNRe6uMhUrmt76bBgX7D4
+         TulzDiWDkkBMon5zoL1GlxjWaZwD4UKbozHUla9H9U72VVxcaJyDFomP+Pey+pAAxDb9
+         YvQjQCWo6MBGR5YPUjkTaMY/QQv8QwokA5hZMfFWVkUOhS3lGxIznoHOEEh9Ui10wKll
+         wH/IrqB+tBSKevlAblBkBWozszGzT5tMOr8udMYOnRQ6pWiyYIswqVXaLOpNwSc/tlFb
+         0/BQz3ST/ixVuQEmoREGex7yTHoprjaZQJMovflrYCQZjZCTypwymA3+UlYtkFnKAuJB
+         S7MQ==
+X-Gm-Message-State: ABy/qLZsgpSYheyu2AAujJX5de4FIgbnR7cpjKaQvAcIX86KbklALQH1
+        4rFlfMfZYqSYLmj/XVX5e6kkxg==
+X-Google-Smtp-Source: APBJJlG2+ItcbLEp/WFP4gmznNva/Yv4GGL2r7IBi57RTQLW7OnHdrD0NsDzgE1TxvbQjalRJ1Ppnw==
+X-Received: by 2002:a17:907:9541:b0:978:b94e:83dd with SMTP id ex1-20020a170907954100b00978b94e83ddmr8557820ejc.75.1689574413250;
+        Sun, 16 Jul 2023 23:13:33 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id n11-20020a1709061d0b00b00982cfe1fe5dsm8744799ejh.65.2023.07.16.23.13.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jul 2023 22:15:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <43eea233-5024-bc0a-2872-8c037ec1db67@roeck-us.net>
-Date:   Sun, 16 Jul 2023 22:15:54 -0700
+        Sun, 16 Jul 2023 23:13:32 -0700 (PDT)
+Message-ID: <57015d8a-a65a-dd2f-3260-3f78b32db884@linaro.org>
+Date:   Mon, 17 Jul 2023 08:13:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
 Subject: Re: [PATCH v4 1/3] dt-bindings: watchdog: ti,rti-wdt: Add support for
  WDIOF_CARDRESET
 Content-Language: en-US
-To:     huaqian.li@siemens.com, wim@linux-watchdog.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+To:     huaqian.li@siemens.com, wim@linux-watchdog.org, linux@roeck-us.net,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org
 Cc:     huaqianlee@gmail.com, nm@ti.com, vigneshr@ti.com,
         kristo@kernel.org, linux-watchdog@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, jan.kiszka@siemens.com,
-        baocheng.su@siemens.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>
+        baocheng.su@siemens.com, Conor Dooley <conor@kernel.org>,
+        Rob Herring <robh@kernel.org>
 References: <20230717040723.1306374-1-huaqian.li@siemens.com>
  <20230717040723.1306374-2-huaqian.li@siemens.com>
-From:   Guenter Roeck <linux@roeck-us.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 In-Reply-To: <20230717040723.1306374-2-huaqian.li@siemens.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/16/23 21:07, huaqian.li@siemens.com wrote:
+On 17/07/2023 06:07, huaqian.li@siemens.com wrote:
 > From: Li Hua Qian <huaqian.li@siemens.com>
 > 
 > TI RTI (Real Time Interrupt) Watchdog doesn't support to record the
@@ -98,22 +95,22 @@ On 7/16/23 21:07, huaqian.li@siemens.com wrote:
 > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > Reviewed-by: Conor Dooley <conor@kernel.org>
 > Reviewed-by: Rob Herring <robh@kernel.org>
+
+What? Where did these happened? Please provide links.
+
 > Signed-off-by: Li Hua Qian <huaqian.li@siemens.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
 > ---
->   .../bindings/watchdog/ti,rti-wdt.yaml         | 41 +++++++++++++++++++
->   1 file changed, 41 insertions(+)
+>  .../bindings/watchdog/ti,rti-wdt.yaml         | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
 > 
 > diff --git a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
 > index fc553211e42d..4b66c4fcdf35 100644
 > --- a/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
 > +++ b/Documentation/devicetree/bindings/watchdog/ti,rti-wdt.yaml
 > @@ -34,6 +34,20 @@ properties:
->     power-domains:
->       maxItems: 1
->   
+>    power-domains:
+>      maxItems: 1
+>  
 > +  memory-region:
 > +    maxItems: 1
 > +    description:
@@ -128,13 +125,13 @@ Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 > +      specific memory address(0xa220000) should be set. More please
 > +      refer to Example 2.
 > +
->   required:
->     - compatible
->     - reg
+>  required:
+>    - compatible
+>    - reg
 > @@ -59,3 +73,30 @@ examples:
->           assigned-clocks = <&k3_clks 252 1>;
->           assigned-clock-parents = <&k3_clks 252 5>;
->       };
+>          assigned-clocks = <&k3_clks 252 1>;
+>          assigned-clock-parents = <&k3_clks 252 5>;
+>      };
 > +
 > +  - |
 > +    // Example 2 (Add reserved memory for watchdog reset cause):
@@ -153,13 +150,10 @@ Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 > +     *     };
 > +     * }
 > +     */
-> +    watchdog@40610000 {
-> +        compatible = "ti,j7-rti-wdt";
-> +        reg = <0x40610000 0x100>;
-> +        clocks = <&k3_clks 135 1>;
-> +        power-domains = <&k3_pds 135 TI_SCI_PD_EXCLUSIVE>;
-> +        assigned-clocks = <&k3_clks 135 0>;
-> +        assigned-clock-parents = <&k3_clks 135 4>;
-> +        memory-region = <&wdt_reset_memory_region>;
-> +    };
+
+Integrate it with existing binding... there is really no need for new
+example for one new property.
+
+Best regards,
+Krzysztof
 
