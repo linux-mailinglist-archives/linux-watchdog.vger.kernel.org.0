@@ -2,102 +2,146 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA51B755B5E
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Jul 2023 08:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A082755B85
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Jul 2023 08:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbjGQGQj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 17 Jul 2023 02:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
+        id S231583AbjGQGYa (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 17 Jul 2023 02:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbjGQGQi (ORCPT
+        with ESMTP id S231374AbjGQGYQ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 17 Jul 2023 02:16:38 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610A11A4
-        for <linux-watchdog@vger.kernel.org>; Sun, 16 Jul 2023 23:16:37 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-991ef0b464cso1123865666b.0
-        for <linux-watchdog@vger.kernel.org>; Sun, 16 Jul 2023 23:16:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689574596; x=1692166596;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2entuFfzv06LWf7ZDQbfS5AMpEjfwXM5BlDm2xKGsjc=;
-        b=Mw4RODoz4BE+XD5UXyudGlD1SjvpGTrtDS8Nlbz+8NMBgF1UAU+2YZMkj1sMSOHEV3
-         GKMh0FA7PCBGky8bkHzM5/mR55EH3QCQ5ONqhxJOMhxt2/suCeuPdEnWeJeYyGLD7qvK
-         ZduxDYWE8Z19fVC0qOlAIrsK2xE0OpGTX8DGKkfIP/ItdOn4u3+KbSlf87J3yA9r6+2B
-         GE8mcWp+yb/tzcp3cbeD7uqszVS+SvOIKDzf4hmhLisnDWzUzcIK5qr84QRrGofJkUgb
-         sih9Gfhuus0H0+/OdLiN2EQG/DR/0nsvyDk2iIB11GcGtWi9s3Pto1Qjth+4WK5x7fiR
-         U90Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689574596; x=1692166596;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2entuFfzv06LWf7ZDQbfS5AMpEjfwXM5BlDm2xKGsjc=;
-        b=iC+TQPIdnDcy3wF7jeftmhZOVzIBvoDBonPc7nTm6cR6XJttU/szfot9cOTwB06/en
-         6EJepqAxGp4qthC6uc4xAWh3Aph3mxuqkFrrd6bkx4jmrLq0/Kr2uW4m1JyJ1tE2Irfe
-         zrntmrMJXY/y4/mIlwQ+UN6jB46pKHz3luZj1oQiG3wzReXVcZqk3CctqRl/So9gbC7+
-         t8ln9Ywbgpn4bkHlO2Dz/NzYfXbX/s5QYSTrT1kmNgg+4rZZHyWuLVwZ3X61gTrfesqD
-         0QNUSrj/oebLhxbeqj9d4NBzL5S3Ne1DEjc7OO/Dt7l5u7qjrKivrBvj+OWNPYFiWDxE
-         bwGw==
-X-Gm-Message-State: ABy/qLYQTb97bKiyCuz3vvUn8HuVGGn0om1UaADPcr3BnAEBGVQ255gT
-        +xQwNMCMgvQaYvpm/3dVsxZxAA==
-X-Google-Smtp-Source: APBJJlFSRSJ3eceIL2mLhLg4cLl56txNob5VQD1I3l8rZT/MOUjVg+APcNTJdIk8JLaOzJPhmg4Gwg==
-X-Received: by 2002:a17:906:68c9:b0:989:450:e565 with SMTP id y9-20020a17090668c900b009890450e565mr9927308ejr.23.1689574595927;
-        Sun, 16 Jul 2023 23:16:35 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id qt11-20020a170906eceb00b00997c1d125fasm1416803ejb.170.2023.07.16.23.16.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Jul 2023 23:16:35 -0700 (PDT)
-Message-ID: <f5ff9616-c71c-f71e-ce4a-7b9fa7055bb4@linaro.org>
-Date:   Mon, 17 Jul 2023 08:16:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
+        Mon, 17 Jul 2023 02:24:16 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2044.outbound.protection.outlook.com [40.107.6.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AFBE59;
+        Sun, 16 Jul 2023 23:24:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BSgKj/ZxCk4dRHpVQaE8PvIg/xdgemPOI6QdQeEEqyLD2hhlI+VSPoCjkfjcD0J/pRyJAzPGkcNvSrdudI4J4NUS7QWOrUV4CfGS8fi0OhipkB4oKlLCxK+RctPBjmRNf+irb8grJrkAi9uqJFyLWvUAVNWgYVWZJhBRBOiog5/qEeYxcIxr+hkLR2I8hroBU/EY+p4C+zfUrnhFaFImHrHYdKZejeQKF+CMoGawFW2YS0jyUelHQrVc4+Nuw187ED2qskijzkJdwCFCFoBZt07y4Tqkk4AcZHPqmASgBWQFluWb+GR5kL3dB3sI9hUA2ObFcyPwsZFQxhvNu40igA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T9Qb6nPqmsVPuyZY9PDebDW8K3vG/KYaiE90RhsyiuQ=;
+ b=R7H5hjt7M7cHaRmrIg0QfJ8FEgkt59b2kbL0oPN13KuJ6HLSzcxS64KlR3tCAOa9efRJbJohQswmTXt4ybTR0CDEQ+bBuWPlIGKqjBouqL1xgf6p8ng8vH4B999a71EBihPoXLS00vSwR+W/03TWh3nHjOhD4rzH+vB7/JZLGkPa5lBFaox5QdwXGFvJCAC7ClnNNqWwYzvEegSBD0v5W7Xqmi+x/Ofa+KiZ+0lUZupV2Pmt4tOPAkovji2gy6zIJyrC8yioXxUCuk77AKJHIhky5q8lic2TkwnIYS9QkmWKHJiLh+tSiGdhlfFewFqE1QccSQ3qyzAqITBIyS1WMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.75) smtp.rcpttodomain=linux-watchdog.org
+ smtp.mailfrom=siemens.com; dmarc=pass (p=reject sp=reject pct=100)
+ action=none header.from=siemens.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T9Qb6nPqmsVPuyZY9PDebDW8K3vG/KYaiE90RhsyiuQ=;
+ b=g0k3bNWNKpdQMMY9Z0QaC7v1QBPxtzRFqNdWmSWsBWUReQfP2uCUabIK5a8mKV+qEPjxNXwYvXREMMCUaAmzCwbLXneSpLaBmkQJMoOU6HLUxXtrc+13uFSrYp+uWkUINSNWZamGR5R6EGoJnmU5xGVytBwYrwskfcTwK1olI1oDyB87y1E7qAzO+Iuy/c2DB1teYcPxvrxUMHu3Gm9migIQX1Lxpnan7Stx8CV+KnuLgH6+eNhYI520pIJM7zy7ximVZw89TV0+d1yMKRXJcuy8HWSCH5wdQbtMIB8JqDeC6owszgxEyPjXgT6UuT7G6e5NxSVGycLbqrFIhLBClg==
+Received: from FR3P281CA0039.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:4a::11)
+ by AS1PR10MB7958.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:47f::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.32; Mon, 17 Jul
+ 2023 06:24:05 +0000
+Received: from VE1EUR01FT082.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:d10:4a:cafe::d2) by FR3P281CA0039.outlook.office365.com
+ (2603:10a6:d10:4a::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.20 via Frontend
+ Transport; Mon, 17 Jul 2023 06:24:05 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.75)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.75 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.75; helo=hybrid.siemens.com; pr=C
+Received: from hybrid.siemens.com (194.138.21.75) by
+ VE1EUR01FT082.mail.protection.outlook.com (10.152.3.71) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6609.22 via Frontend Transport; Mon, 17 Jul 2023 06:24:05 +0000
+Received: from CNPEK01M10MSX.ad011.siemens.net (139.24.237.228) by
+ DEMCHDC8VRA.ad011.siemens.net (194.138.21.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1118.30; Mon, 17 Jul 2023 08:24:02 +0200
+Received: from CNPEK01M03MSX.ad011.siemens.net (139.24.237.220) by
+ CNPEK01M10MSX.ad011.siemens.net (139.24.237.228) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Mon, 17 Jul 2023 14:24:00 +0800
+Received: from CNPEK01M03MSX.ad011.siemens.net ([139.24.237.220]) by
+ CNPEK01M03MSX.ad011.siemens.net ([139.24.237.220]) with mapi id
+ 15.01.2507.027; Mon, 17 Jul 2023 14:24:00 +0800
+From:   "Li, Hua Qian" <HuaQian.Li@siemens.com>
+To:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+CC:     "kristo@kernel.org" <kristo@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "huaqianlee@gmail.com" <huaqianlee@gmail.com>,
+        "nm@ti.com" <nm@ti.com>, "vigneshr@ti.com" <vigneshr@ti.com>,
+        "Kiszka, Jan" <jan.kiszka@siemens.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "Su, Bao Cheng" <baocheng.su@siemens.com>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
 Subject: Re: [PATCH v4 0/3] Add support for WDIOF_CARDRESET on TI AM65x
-Content-Language: en-US
-To:     huaqian.li@siemens.com, wim@linux-watchdog.org, linux@roeck-us.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org
-Cc:     huaqianlee@gmail.com, nm@ti.com, vigneshr@ti.com,
-        kristo@kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, jan.kiszka@siemens.com,
-        baocheng.su@siemens.com
+Thread-Topic: [PATCH v4 0/3] Add support for WDIOF_CARDRESET on TI AM65x
+Thread-Index: AQHZuGQ+yWzLgdq38k6AjTC46fileq+89ZKAgAACDgA=
+Date:   Mon, 17 Jul 2023 06:24:00 +0000
+Message-ID: <e57e5d8efc3107b5f2c4e66492650b9d0c17b898.camel@siemens.com>
 References: <20230717040723.1306374-1-huaqian.li@siemens.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230717040723.1306374-1-huaqian.li@siemens.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+         <f5ff9616-c71c-f71e-ce4a-7b9fa7055bb4@linaro.org>
+In-Reply-To: <f5ff9616-c71c-f71e-ce4a-7b9fa7055bb4@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [139.24.108.35]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6E95286F8D046C4F91391E9383BB2651@siemens.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VE1EUR01FT082:EE_|AS1PR10MB7958:EE_
+X-MS-Office365-Filtering-Correlation-Id: 116ae190-4acb-4022-60ed-08db868e6bd1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ONbt2x5ZehuCTw8hLKWYW0W+iq1tHWKZY3UNcjOYD931r/y5EyPdidH8PhKMBTeCHRRmfVT3AaHXwVXCfLIzmLD5HioPvbMbtduEynt6g+3m5CVCejljnQlaSswcGXN6DfTeUzNcZmsDXHAQ0wfPzp1+5wITFfgVnQ83PsK/GdmeELzKIRz3Hr0UDIIW2HM81yTQw0Npju7ynOzQNFzP81/Bdhfk38JmwidHHXwE/sCyJUc7qr7jLnaXSsEN4e6nchLKWmJh3KX6hUbu/P0yYNXIBt5rRVZ+XJjOBhLH4IssV79p9nfX+0qs8y97IrS/zwsUAVk6NhkEKYTnHH+gaz5hzN3Kns7kExoOJKN9eJM4+6cTZUagHgv8KSDZvV4G5JtSEhBd47s9gcgcORb9WIhb5e50nDNOdlicp4zhI1CsGdw8vu70epUE6lpO29bNtC3Gs5r0Gaj/FLUupArFTtrqUNc73ggU2paSuJJcDdywj1Zoxg/Mrep2ES/7JjHroVRASV4nWv8JU4pC2LCpdnMRPFR/tKn4ypcW9hmISLS6GKyfNPD4tUfgQYVM4+r3qryV3E0g/umLjs9tYb0gYmMBi75OK9vJDyZVJdyw5PsrU5dons5oZQrleNDhp1KRKEowqP3+79AMVnRiR5+xBGO2dF2eyVogNmjpCSYp4SI8QGh9tSzKvLTXo+ECJiygjHwTVaiCCUmEMW8l8izsgs/JukJXclNkkcVM3JwTPvm6GPTote1082LxTboZagNNXEL07N+6DcHKuisgDgAhig==
+X-Forefront-Antispam-Report: CIP:194.138.21.75;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(136003)(396003)(451199021)(82310400008)(46966006)(40470700004)(36840700001)(40460700003)(26005)(53546011)(966005)(36756003)(36860700001)(47076005)(2616005)(336012)(86362001)(356005)(81166007)(82960400001)(82740400003)(186003)(956004)(40480700001)(8676002)(8936002)(2906002)(41300700001)(478600001)(7416002)(4326008)(5660300002)(316002)(70586007)(70206006)(54906003)(110136005)(45080400002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jul 2023 06:24:05.4425
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 116ae190-4acb-4022-60ed-08db868e6bd1
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.75];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: VE1EUR01FT082.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR10MB7958
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 17/07/2023 06:07, huaqian.li@siemens.com wrote:
-> From: Li Hua Qian <huaqian.li@siemens.com>
-> 
-> The watchdog hardware of TI AM65X platform does not support
-> WDIOF_CARDRESET feature, add a reserved memory to save the watchdog
-> reset cause, to know if the board reboot is due to a watchdog reset.
-> 
-> Signed-off-by: Li Hua Qian <huaqian.li@siemens.com>
-> ---
-> Changes in v4:
-> - Fix the coding style.
-> - Add usage note for the reserved memory.
-> - Link to v3:
->   https://lore.kernel.org/linux-watchdog/20230713095127.1230109-1-huaqian.li@siemens.com
-
-Much more changed. You added example in the bindings which no one asked
-for. Then you added multiple fake review tags to all the patches.
-
-Best regards,
-Krzysztof
-
+T24gTW9uLCAyMDIzLTA3LTE3IGF0IDA4OjE2ICswMjAwLCBLcnp5c3p0b2YgS296bG93c2tpIHdy
+b3RlOg0KPiBPbiAxNy8wNy8yMDIzIDA2OjA3LCBodWFxaWFuLmxpQHNpZW1lbnMuY29twqB3cm90
+ZToNCj4gPiBGcm9tOiBMaSBIdWEgUWlhbiA8aHVhcWlhbi5saUBzaWVtZW5zLmNvbT4NCj4gPiAN
+Cj4gPiBUaGUgd2F0Y2hkb2cgaGFyZHdhcmUgb2YgVEkgQU02NVggcGxhdGZvcm0gZG9lcyBub3Qg
+c3VwcG9ydA0KPiA+IFdESU9GX0NBUkRSRVNFVCBmZWF0dXJlLCBhZGQgYSByZXNlcnZlZCBtZW1v
+cnkgdG8gc2F2ZSB0aGUgd2F0Y2hkb2cNCj4gPiByZXNldCBjYXVzZSwgdG8ga25vdyBpZiB0aGUg
+Ym9hcmQgcmVib290IGlzIGR1ZSB0byBhIHdhdGNoZG9nDQo+ID4gcmVzZXQuDQo+ID4gDQo+ID4g
+U2lnbmVkLW9mZi1ieTogTGkgSHVhIFFpYW4gPGh1YXFpYW4ubGlAc2llbWVucy5jb20+DQo+ID4g
+LS0tDQo+ID4gQ2hhbmdlcyBpbiB2NDoNCj4gPiAtIEZpeCB0aGUgY29kaW5nIHN0eWxlLg0KPiA+
+IC0gQWRkIHVzYWdlIG5vdGUgZm9yIHRoZSByZXNlcnZlZCBtZW1vcnkuDQo+ID4gLSBMaW5rIHRv
+IHYzOg0KPiA+IMKgDQo+ID4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtd2F0Y2hkb2cv
+MjAyMzA3MTMwOTUxMjcuMTIzMDEwOS0xLWh1YXFpYW4ubGlAc2llbWVucy5jb20NCj4gDQo+IE11
+Y2ggbW9yZSBjaGFuZ2VkLiBZb3UgYWRkZWQgZXhhbXBsZSBpbiB0aGUgYmluZGluZ3Mgd2hpY2gg
+bm8gb25lDQo+IGFza2VkDQo+IGZvci4gVGhlbiB5b3UgYWRkZWQgbXVsdGlwbGUgZmFrZSByZXZp
+ZXcgdGFncyB0byBhbGwgdGhlIHBhdGNoZXMuDQo+IA0KPiBCZXN0IHJlZ2FyZHMsDQo+IEtyenlz
+enRvZg0KPiANCkhpLA0KDQpTb3JyeSBmb3IgdGhlIHdyb25nIHN0YXRlbWVudC4gSSBtaXNzZWQg
+c29tZSBrZXkgaW5mb3JtYXRpb24gYW5kDQptaXNzdW5kZXJzdG9vZCBgUmV2aWV3ZWQtYnlgLCBJ
+IHRyZWF0ZWQgYFJldmlld2VkLWJ5YCBhcyBgV2hvDQpoYXMgcmV2aWV3ZWRgLg0KDQpCZXN0IHJl
+Z2FyZHMsDQpMaSBIdWEgUWlhbg0K
