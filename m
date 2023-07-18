@@ -2,121 +2,120 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69ADC758075
-	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Jul 2023 17:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D4575808E
+	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Jul 2023 17:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232565AbjGRPKO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 18 Jul 2023 11:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
+        id S233475AbjGRPPO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 18 Jul 2023 11:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbjGRPKO (ORCPT
+        with ESMTP id S230313AbjGRPPM (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 18 Jul 2023 11:10:14 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BA391;
-        Tue, 18 Jul 2023 08:10:13 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-bad0c4f6f50so8295894276.1;
-        Tue, 18 Jul 2023 08:10:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689693012; x=1692285012;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=8G72SQQvEAGIOu2XhscKjAI4N+s0xdWDLE6O4dTKvKk=;
-        b=g4DqZ0Q+wouW6Y3R5ZID3YLkCbFZYL71juAB+/HBwZhw2W9Yo/Y4/x+vuJw1cLXVRj
-         cRpQlc6HlMj1rWDxb3tMEajCoKju+eyQPMA3HNO6Vlmm7kslf2OC02xzVVJJZ0vstNtP
-         V4mjRwsN1aLC25kK70UTwVYV4SOrmH6g0dQT9OATCAGzc1dr3XDBpgjXfmTEZKqCu31x
-         TzKA31kFD27F7GPwccQo8QrVVaaZIPP2Q8w+RU/VmoWkzwoB6V6PUN/pBKgrInXrMaSs
-         2+WWMSPxNWNuxgE4cbMhtYJh2BozLzonyJRbp46kiL0aeuxWvqmkSnIjRlA1n9CHpus1
-         y8Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689693012; x=1692285012;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8G72SQQvEAGIOu2XhscKjAI4N+s0xdWDLE6O4dTKvKk=;
-        b=KWvZwo0r0DGdKT/JKGVJvzsvwOyJE1q4UNZ5SFa9MDTeH2EzPlrpAlhyI+0ZV7fopl
-         HeUBoWE1A0YsbqNYw9xq/+0ysVZ/JXnasWE1iiOkyefN8YFpi+F6j/BtUKIWe6TSGyMy
-         pttDvfBcohoQHI3ULWKGRHJuAfu8DTYJMoC5o5TBs5I8tueP3WI3DhjWncS6EkBBY5QR
-         vzNH84ljJxEFut22vlx2O+gksWqnkg+uRzBn84bsZZBu6y1np9TtpJ06nvggHsquJ7Bf
-         5KfAyi2eQl+dQVR9qscM1/CDWvZxsR4mHTnQeO2No21Yl4CRzHAo8KFLmAlhZF6CWenA
-         njbw==
-X-Gm-Message-State: ABy/qLaOW4p8euKH1F0+1CeahB6iBoZVjNt+jNBoZS+kCVhlAiXTiQ+v
-        84NlEHvK8C717IuIcV2kfoI=
-X-Google-Smtp-Source: APBJJlG5WwOxAX6LI+YUl4h9lmONGulHjCZNZGbmG958hHvkbXtlNVM4SuR3Oa5zU5VzkwpVVMywGA==
-X-Received: by 2002:a25:ac66:0:b0:cb8:a812:a91 with SMTP id r38-20020a25ac66000000b00cb8a8120a91mr208402ybd.0.1689693012431;
-        Tue, 18 Jul 2023 08:10:12 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z9-20020a056902054900b00be8e8772025sm442631ybs.45.2023.07.18.08.10.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jul 2023 08:10:11 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b1528e3d-15f7-7ab2-b803-917f79efe999@roeck-us.net>
-Date:   Tue, 18 Jul 2023 08:10:09 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 1/3] watchdog: make Siemens Simatic watchdog driver
- default on platform
-Content-Language: en-US
-To:     Henning Schild <henning.schild@siemens.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        Tue, 18 Jul 2023 11:15:12 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7C31702;
+        Tue, 18 Jul 2023 08:15:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689693311; x=1721229311;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iUdiwJf9CrfUfsKDKgfEzvHdxQZKd55P1wdk/zf8PuA=;
+  b=Ok3q07F3Jz6w9lgtlKPABOAd5YzqBE3u/kRmTY3wFYS7ZUHD9WRMVC6t
+   Ru9GODxp4KTcS5bT8rivXGzNaFvtXE5/uMC5fnWwFmVe/Biw5mHhix6hD
+   YpnalfDQ2ZzNWnjW6Y0BcdfREp7mO08WKGI2TMKLlU+qWneJ+GCeIVoIP
+   Igs8bqiP3528e70LoSxvTZAeRFEp7eXVav1V4rQmM2vsT859d/9T1zWOc
+   d3aFoPSbSjuylknkSKIrm4oq1cvAirUjzJBOF4nr9Qp7nA+YKR772wgrl
+   WcdKmy5qCSVJ2UPRq5Zx7Pfv/R2KdR8X34gHW1X0faFD/5r7oH8fzCQML
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="346532894"
+X-IronPort-AV: E=Sophos;i="6.01,214,1684825200"; 
+   d="scan'208";a="346532894"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 08:15:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="700946947"
+X-IronPort-AV: E=Sophos;i="6.01,214,1684825200"; 
+   d="scan'208";a="700946947"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 18 Jul 2023 08:15:08 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qLmPq-0019YS-1v;
+        Tue, 18 Jul 2023 18:15:06 +0300
+Date:   Tue, 18 Jul 2023 18:15:06 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Henning Schild <henning.schild@siemens.com>
 Cc:     Lee Jones <lee@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
         platform-driver-x86@vger.kernel.org,
         linux-watchdog@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
         Mark Gross <markgross@kernel.org>,
         Tobias Schaffner <tobias.schaffner@siemens.com>
+Subject: Re: [PATCH 3/3] platform/x86: Move all simatic ipc drivers to the
+ subdirectory siemens
+Message-ID: <ZLasehsClBD8pkPC@smile.fi.intel.com>
 References: <20230718105213.1275-1-henning.schild@siemens.com>
- <20230718105213.1275-2-henning.schild@siemens.com>
- <ZLafwOPrw+puH+rF@smile.fi.intel.com>
- <20230718164251.13855c47@md1za8fc.ad001.siemens.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230718164251.13855c47@md1za8fc.ad001.siemens.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+ <20230718105213.1275-4-henning.schild@siemens.com>
+ <ZLagYgJT4cz4jZ5r@smile.fi.intel.com>
+ <20230718164727.6a89e3da@md1za8fc.ad001.siemens.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230718164727.6a89e3da@md1za8fc.ad001.siemens.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/18/23 07:42, Henning Schild wrote:
-> Am Tue, 18 Jul 2023 17:20:48 +0300
+On Tue, Jul 18, 2023 at 04:47:27PM +0200, Henning Schild wrote:
+> Am Tue, 18 Jul 2023 17:23:30 +0300
 > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
 > 
->> On Tue, Jul 18, 2023 at 12:52:11PM +0200, Henning Schild wrote:
->>> If a user did choose to enable Siemens Simatic platform support they
->>> likely want that driver to be enabled without having to flip more
->>> config switches. So we make the watchdog driver config switch
->>> default to the platform driver switches value.
->>
->> A nit-pick below.
->>
->> ...
->>
->>>   config SIEMENS_SIMATIC_IPC_WDT
->>>   	tristate "Siemens Simatic IPC Watchdog"
->>>   	depends on SIEMENS_SIMATIC_IPC
->>
->>> +	default SIEMENS_SIMATIC_IPC
->>
->> It's more natural to group tristate and default, vs. depends and
->> select.
-> 
-> Will be ignored unless maintainer insists.
-> 
+> > On Tue, Jul 18, 2023 at 12:52:13PM +0200, Henning Schild wrote:
+> > > Users without a Siemens Simatic IPC will not care about any of these
+> > > drivers. Users who do care can enable the submenu and all drivers
+> > > behind it will be enabled.  
 
-Maintainer wants to know why "default SIEMENS_SIMATIC_IPC" is needed
-or warranted instead of the much simpler and easier to understand
-"default y".
+...
 
-Guenter
+> > >  # Siemens Simatic Industrial PCs
+> > > +obj-$(CONFIG_X86_PLATFORM_DRIVERS_SIEMENS)		+=
+> > > siemens/  
+> > 
+> > Do you need conditional here? We have stumbled over similar for
+> > entire intel subfolder, it might affect the rest as well when you
+> > don't expect it.
+> > 
+> > obj-y		+= siemens/
+> > 
+> > ?
+> 
+> It was requested to be done like that by Hans, he wanted me to do a
+> similar thing that
+
+"Similar" is not the "same". :-)
+
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f1e1ea516721d1ea0b21327ff9e6cb2c2bb86e28
+> is doing.
+> 
+> And that is what i did. If there was a y ... the whole "one switch to
+> rule them all" story would not work out anymore.
+
+See these:
+https://git.kernel.org/torvalds/c/8bd836feb6ca
+https://git.kernel.org/torvalds/c/4f6c131c3c31
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
