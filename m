@@ -2,151 +2,147 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281DE7571A5
-	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Jul 2023 04:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E31C775799D
+	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Jul 2023 12:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjGRCMY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 17 Jul 2023 22:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
+        id S231593AbjGRKwb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 18 Jul 2023 06:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbjGRCMW (ORCPT
+        with ESMTP id S230230AbjGRKwa (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 17 Jul 2023 22:12:22 -0400
-Received: from mta-64-225.siemens.flowmailer.net (mta-64-225.siemens.flowmailer.net [185.136.64.225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7993210F0
-        for <linux-watchdog@vger.kernel.org>; Mon, 17 Jul 2023 19:12:19 -0700 (PDT)
-Received: by mta-64-225.siemens.flowmailer.net with ESMTPSA id 202307180212196ffdfef2bd7415ee35
-        for <linux-watchdog@vger.kernel.org>;
-        Tue, 18 Jul 2023 04:12:19 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=huaqian.li@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=P+e4mgQf7YcgATPvUbBvEm5Pd72/FjOAYEsp6bDRqIE=;
- b=nm92q4mscd4W1AyCnXiVJxwBNnOnefvJdnm4dUNuN6aE2WOJfFs/Q1YaFxQi1LYNe+Pehe
- C5p3DPvwNrd++0fn0+jdZj7EktIhuvqG5GIPmS+XCfJ/o5ebvrMYqzvTeJwDMUVQuFIc6H26
- kD6vPVYTfqeJ6Orkj4A+8yHBeMX4Y=;
-From:   huaqian.li@siemens.com
-To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc:     huaqianlee@gmail.com, nm@ti.com, vigneshr@ti.com,
-        kristo@kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, jan.kiszka@siemens.com,
-        baocheng.su@siemens.com, Li Hua Qian <huaqian.li@siemens.com>
-Subject: [PATCH v6 3/3] watchdog:rit_wdt: Add support for WDIOF_CARDRESET
-Date:   Tue, 18 Jul 2023 10:10:07 +0800
-Message-Id: <20230718021007.1338761-4-huaqian.li@siemens.com>
-In-Reply-To: <20230718021007.1338761-1-huaqian.li@siemens.com>
-References: <20230718021007.1338761-1-huaqian.li@siemens.com>
+        Tue, 18 Jul 2023 06:52:30 -0400
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2056.outbound.protection.outlook.com [40.107.241.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33C9E43;
+        Tue, 18 Jul 2023 03:52:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TSG3c3D+E+h1oTHh8cV2GKS8XqhfA6eN4pIm1qAghxZ03jr/YlweNd/d+5V+04DAZde3ohMCrt4K6ogYtR0PghYdSENiiASJJc7d5yM7Urd+FuPy7SRRgc3O6zpShPhqGHLjgbe6eLuenrkWTUzggyYu5twPY9QOil05SK6t5sMHuEES3mKYtngd2uzZWaZWU6JQDDznxzOaeGwgPhbYBlWoPYCAZuk+4hO01/ZDj2RJwd4dXNACOwqSn5ALdE3xWBxOG60EMZybNtf/PG37LX3JYIcMiC/9KM3CtmykYK28k8vs9hLTvs4zmJ2QodkViYzBUwpebwg+SSDhM+Dg7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+dAzglP96A13C3v7/s8KLnceIOBujvE9nkmsvdQ6wl0=;
+ b=LU7k6Ai9d9hRN0lmkftyXbIrrmqr3yE7oWOQbo0Ri7/uh9WsJg/sOOJlLb7KLe2oW0wQpBPiMLPDW5ynFaj0C/BUsLPlD3faxbJ1EUG/ojXx1l9wZ/N90/kJsBR5i4/4qs7XwuNNfIp+ANRIaSqwvAuAplPyN/EUpGaH/7n3N9l9qzFK2Or2Ut3YMuaYEgv08n/9QfplWTPrbJMDodFdf5e963kdDbcS7bWYrgOS6Pa+ISPOX8h5SxAa/49IjPUQz7p3OOZ+k+2L4vDLBv33jY/X/g/0CFRXFYAV5efj99tHWTGAeOnc7P1rrXWMoUsULcpfCFCjs3lzPH19BC1qDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.76) smtp.rcpttodomain=kernel.org smtp.mailfrom=siemens.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=siemens.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+dAzglP96A13C3v7/s8KLnceIOBujvE9nkmsvdQ6wl0=;
+ b=gEiJdYH5uvNxI8ZcVgIbw/I6tFxUEIrPUdfAQQ2mr4/GXEikAr1YdAFmJQu/IUf7EKT+F3eqp6ZZYrg8G/xg3mSeFh0RN72BW4pGK1/oImDNwmmP3cspLdhZgx2oumc5uqNo2w26vDBTlHHGmVRzYhJxkQQeQg+6rc3+riaZh4tL1KL/dapPLyrCwA2UnZ1E4Zk6oIGPe4O9ZZp+ybNo3ReGawh1FdpPvU+LEdMsfjRajy1CHTELUp/x9F7yeLWAuwNdJ4fhGm95ygQPJgTTGS9rewuQQeGTjH8Om6D9I+yMPuiVMlIIsw/lwE7MHPSt2uf0OUDXVRpQes9q/65C3g==
+Received: from DU2P250CA0001.EURP250.PROD.OUTLOOK.COM (2603:10a6:10:231::6) by
+ AS8PR10MB5806.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:509::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6588.33; Tue, 18 Jul 2023 10:52:26 +0000
+Received: from DB5EUR01FT050.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:10:231:cafe::e3) by DU2P250CA0001.outlook.office365.com
+ (2603:10a6:10:231::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.33 via Frontend
+ Transport; Tue, 18 Jul 2023 10:52:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.76)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.76 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.76; helo=hybrid.siemens.com; pr=C
+Received: from hybrid.siemens.com (194.138.21.76) by
+ DB5EUR01FT050.mail.protection.outlook.com (10.152.5.82) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6609.23 via Frontend Transport; Tue, 18 Jul 2023 10:52:26 +0000
+Received: from DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) by
+ DEMCHDC8VSA.ad011.siemens.net (194.138.21.76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Tue, 18 Jul 2023 12:52:24 +0200
+Received: from md1za8fc.ppmd.siemens.net (139.25.68.216) by
+ DEMCHDC8WAA.ad011.siemens.net (139.25.226.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Tue, 18 Jul 2023 12:52:24 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Lee Jones <lee@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
+        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>
+CC:     Pavel Machek <pavel@ucw.cz>, Mark Gross <markgross@kernel.org>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        Tobias Schaffner <tobias.schaffner@siemens.com>,
+        Henning Schild <henning.schild@siemens.com>
+Subject: [PATCH 0/3] platform/x86: move simatic ipc drivers into subdir
+Date:   Tue, 18 Jul 2023 12:52:10 +0200
+Message-ID: <20230718105213.1275-1-henning.schild@siemens.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-959203:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [139.25.68.216]
+X-ClientProxiedBy: DEMCHDC8WBA.ad011.siemens.net (139.25.226.105) To
+ DEMCHDC8WAA.ad011.siemens.net (139.25.226.104)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB5EUR01FT050:EE_|AS8PR10MB5806:EE_
+X-MS-Office365-Filtering-Correlation-Id: e5a476ff-ce8f-4048-35f8-08db877d12f8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tCEg8tKH61idSTGaRDNmCGKGjaGc93b5T91Rbi/ezdCyg1nlunYhd6op+KHkt7quoHIt3tw3vwQHaWDl3zi8BzV+usA3QzSW17rGisJ2FRDW0m8uyT7dou8FFGrnYvDbiXY+v1sF6TB8LPiH6WsYqFB5rbjuNeXMl2zrJsSX4LWfGs0E0h9rNO53qIBDIOPBHju+epLr52XA10vQDccZ2GaqJndJ6siDm8pUtWqWjKedaA4G0KvrU/ozYd/fnXfu2zCPR7wdST5rmWiyfAiod6rF7EXEAC/H4xj2E8xppYg6sVS534gwu5kB6CvwRsaFK/qPvjS9yVkrmwrFLzMKSi7B43wXH+Fasgr1MZ8j19hOM4smNTACYwCF48Uwn8BM8EEeVjq9Sr+UQPs7ugb8mxg2/WnsrEd8/ZV8iTwx52nhG95Rzaj1AMHVOicV2kBZ+yTEcCwJuM4FUuUPGKV64fMp+wHrvNuJFnpVUD10Ua1sCW64l+zdZuXK7uLSMtSTCiiFljJ0PWKT1qvpkSVNn8GC1bNqrv7yRG+sKZYEY8oucm+cQEIJhsceR2IofJSl+0KHyt0GD3Ht0oJhbahDgxf5bCBPqheJCljYy9U8AX0ryP1lRn3A0b8vZPXL1ozL5e4/MSAoGUS9B4VcTVWjWkR4VPEZFRYIyxK8dxSD7HeHX06iDkI5CAsIpnG19VXaoZ/LHnLXyk1vTYVdYTo05Ccq5h/Z2rcC2/z3VrUXLJNyt/xPX+J6GfsX55k+hTlj5o7LgQMq4jAO4pvMFmODALhOt2thtRMvdD1a9yR4ySw=
+X-Forefront-Antispam-Report: CIP:194.138.21.76;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(376002)(136003)(82310400008)(451199021)(36840700001)(40470700004)(46966006)(47076005)(36860700001)(2616005)(956004)(83380400001)(4326008)(40480700001)(70206006)(70586007)(316002)(6666004)(110136005)(54906003)(16526019)(186003)(336012)(478600001)(1076003)(26005)(107886003)(2906002)(36756003)(40460700003)(86362001)(41300700001)(81166007)(356005)(82960400001)(82740400003)(5660300002)(8676002)(8936002)(7416002)(44832011)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2023 10:52:26.1194
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5a476ff-ce8f-4048-35f8-08db877d12f8
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.76];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT050.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR10MB5806
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Li Hua Qian <huaqian.li@siemens.com>
+This series does two things. It builds up a Kconfig inheritance chain
+for all platform device drivers, namely Watchdog and LED. And then it
+puts all Siemens Simatic IPC drivers in the platform/x86/ directory in
+a subdirectory called "siemens". Where we create a new Kconfig item to
+allow users to centrally enable support for Siemens devices, which will
+pull in the rest.
 
-This patch adds the WDIOF_CARDRESET support for the platform watchdog
-whose hardware does not support this feature, to know if the board
-reboot is due to a watchdog reset.
+Henning Schild (3):
+  watchdog: make Siemens Simatic watchdog driver default on platform
+  leds: simatic-ipc-leds: default config switch to platform switch
+  platform/x86: Move all simatic ipc drivers to the subdirectory siemens
 
-This is done via reserved memory(RAM), which indicates if specific
-info saved, triggering the watchdog reset in last boot.
+ drivers/leds/simple/Kconfig                   |  1 +
+ drivers/platform/x86/Kconfig                  | 59 +-------------
+ drivers/platform/x86/Makefile                 |  6 +-
+ drivers/platform/x86/siemens/Kconfig          | 77 +++++++++++++++++++
+ drivers/platform/x86/siemens/Makefile         | 11 +++
+ .../simatic-ipc-batt-apollolake.c             |  0
+ .../simatic-ipc-batt-elkhartlake.c            |  0
+ .../{ => siemens}/simatic-ipc-batt-f7188x.c   |  0
+ .../x86/{ => siemens}/simatic-ipc-batt.c      |  0
+ .../x86/{ => siemens}/simatic-ipc-batt.h      |  0
+ .../platform/x86/{ => siemens}/simatic-ipc.c  |  0
+ drivers/watchdog/Kconfig                      |  1 +
+ 12 files changed, 92 insertions(+), 63 deletions(-)
+ create mode 100644 drivers/platform/x86/siemens/Kconfig
+ create mode 100644 drivers/platform/x86/siemens/Makefile
+ rename drivers/platform/x86/{ => siemens}/simatic-ipc-batt-apollolake.c (100%)
+ rename drivers/platform/x86/{ => siemens}/simatic-ipc-batt-elkhartlake.c (100%)
+ rename drivers/platform/x86/{ => siemens}/simatic-ipc-batt-f7188x.c (100%)
+ rename drivers/platform/x86/{ => siemens}/simatic-ipc-batt.c (100%)
+ rename drivers/platform/x86/{ => siemens}/simatic-ipc-batt.h (100%)
+ rename drivers/platform/x86/{ => siemens}/simatic-ipc.c (100%)
 
-Signed-off-by: Li Hua Qian <huaqian.li@siemens.com>
----
- drivers/watchdog/rti_wdt.c | 48 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
-
-diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
-index ce8f18e93aa9..901109d979f0 100644
---- a/drivers/watchdog/rti_wdt.c
-+++ b/drivers/watchdog/rti_wdt.c
-@@ -14,6 +14,8 @@
- #include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/moduleparam.h>
-+#include <linux/of.h>
-+#include <linux/of_address.h>
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/types.h>
-@@ -52,6 +54,11 @@
- 
- #define DWDST			BIT(1)
- 
-+#define PON_REASON_SOF_NUM	0xBBBBCCCC
-+#define PON_REASON_MAGIC_NUM	0xDDDDDDDD
-+#define PON_REASON_EOF_NUM	0xCCCCBBBB
-+#define RESERVED_MEM_MIN_SIZE	12
-+
- static int heartbeat = DEFAULT_HEARTBEAT;
- 
- /*
-@@ -198,6 +205,11 @@ static int rti_wdt_probe(struct platform_device *pdev)
- 	struct rti_wdt_device *wdt;
- 	struct clk *clk;
- 	u32 last_ping = 0;
-+	struct device_node *node;
-+	u32 reserved_mem_size;
-+	struct resource res;
-+	u32 *vaddr;
-+	u64 paddr;
- 
- 	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
- 	if (!wdt)
-@@ -284,6 +296,42 @@ static int rti_wdt_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	node = of_parse_phandle(pdev->dev.of_node, "memory-region", 0);
-+	if (node) {
-+		ret = of_address_to_resource(node, 0, &res);
-+		if (ret) {
-+			dev_err(dev, "No memory address assigned to the region.\n");
-+			goto err_iomap;
-+		}
-+
-+		/*
-+		 * If reserved memory is defined for watchdog reset cause.
-+		 * Readout the Power-on(PON) reason and pass to bootstatus.
-+		 */
-+		paddr = res.start;
-+		reserved_mem_size = resource_size(&res);
-+		if (reserved_mem_size < RESERVED_MEM_MIN_SIZE) {
-+			dev_err(dev, "The size of reserved memory is too small.\n");
-+			ret = -EINVAL;
-+			goto err_iomap;
-+		}
-+
-+		vaddr = memremap(paddr, reserved_mem_size, MEMREMAP_WB);
-+		if (vaddr == NULL) {
-+			dev_err(dev, "Failed to map memory-region.\n");
-+			ret = -ENOMEM;
-+			goto err_iomap;
-+		}
-+
-+		if (vaddr[0] == PON_REASON_SOF_NUM &&
-+		    vaddr[1] == PON_REASON_MAGIC_NUM &&
-+		    vaddr[2] == PON_REASON_EOF_NUM) {
-+			wdd->bootstatus |= WDIOF_CARDRESET;
-+		}
-+		memset(vaddr, 0, reserved_mem_size);
-+		memunmap(vaddr);
-+	}
-+
- 	watchdog_init_timeout(wdd, heartbeat, dev);
- 
- 	ret = watchdog_register_device(wdd);
 -- 
-2.34.1
+2.41.0
 
