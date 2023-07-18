@@ -2,46 +2,46 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB433757FE1
-	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Jul 2023 16:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3FB757FFE
+	for <lists+linux-watchdog@lfdr.de>; Tue, 18 Jul 2023 16:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233336AbjGROnX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 18 Jul 2023 10:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
+        id S233389AbjGROrn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 18 Jul 2023 10:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233331AbjGROnX (ORCPT
+        with ESMTP id S233243AbjGROrn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 18 Jul 2023 10:43:23 -0400
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2074.outbound.protection.outlook.com [40.107.247.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E261705;
-        Tue, 18 Jul 2023 07:43:22 -0700 (PDT)
+        Tue, 18 Jul 2023 10:47:43 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2053.outbound.protection.outlook.com [40.107.15.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36550EC;
+        Tue, 18 Jul 2023 07:47:40 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jg4Mcr1Km66iJDivtydH/+btpo6mEmiOhJ7KW2+C0z4BU1YyIw2OGvgpUH5Qq+QFjfvp8PrF+ieeE4nf5a8ywvuJ/trOSLN1+8izw16Vj5MWyMCDguR1Jfbcc6F5A47zuOrLE2wRFImr6nUYAMTX0oLYqtIheBSePHK6Hy28P6/hDBiHXuqnZT2uj6JiNTLW9HYW6jpICdS7YVTkE0xc8pGxoWgM2mxY3vHx46qZgBL8CpGffeGP54d9S5bEz5oPyMhZiN8xs7MKpi8hJjGk1cnZLtjLrEQMiMYROJRFze5+AAbHRc8EbjfLJtxZy2mYafoAeOZZdyMyPfR6gVNNOA==
+ b=C6LP2Nd1bcyDnbYXyuJnjB0OsAB79HuQAQ2XS9j/hFVP4MV68oPxFu+XbFQU/fs43fznSRd3hvnfESK//eD6DLWLiB7A+Kj7DomoeWZ4Q7cQZtwXdttow0jqjbAephqXkn/QsKJXQOb5boNsnCySFxZCeNTl32y2/a1oMbIhHkkOz9VhEcQ0zI9MOYzwZXBMiJHTyLav7sNZDKhuC69R0nniUCeUYXjByNZKejrpPrqgB/BKaMR6798yAnnhQBIVMzeWYYaJOnH/4AxpoczbPHQOVVPsm2aur/xHpQA+7cEmucLKgR8xpSRCD2JkHNBIfhC2iPgDSqknEasXDlwrdw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=53dchQqrB07udqzQvUgySr46of0Kqhl73im9IHKS2II=;
- b=Ij889nR5eIZ7ZS3dU1IdjKsO+j8p08uJMx+WZzSCJdH7i0rqeXhLZUTIHJGiandpaB+hyubFTnHydWBn1diuOr/JGBa4uJNZ23pIrGDozPAImp3VSMvb1Og0EiO0xwvI09+G+tLR7qIVBJO99v68fNCPrZbWa4kXdGHs0ftw7NCJ+yafRJAxyi5UpPzZfPhN/yylkCntauofhYMSTA+Gxd9AKU48SGjEWBddHX2JCJKGaChzpdMavlTumJk+1UojZhh0EY00xEYeXOdZDP5oiyEgpqk+tuJXIbnrsQjXYQWFo8HNuh4lwxLBZO0Pqi81DNzJ/+05h6j79KIVRa6J9A==
+ bh=7Sm0jVsmNt870YUu53mss9e9b/bJqAbyiLG7ear2pQs=;
+ b=Q0cD2Wfd0JuKVVDw9285Ze891R8qyy//znNe1CD4+1OHFnBycmY5RxkPPTBmKeZTEjexpzRWSdGBRxXRsq6mmxSw+GrodYZr/RzBADgkjdVsSzNPQxmRT606x2wx2qR52ezKSviwrAo0FitmtrZgt0IYNI1I6OBPUmgW8v46c2yZyK6QwTSr7DrKszL8vu7Q84GrPCgRAfhKu4ac7+KJa2G18GArT8V9Notz1uUZjINErPVmYqwo9aVgPIMB4/HMSz2oktGIGaUJ+9XqVJrPOOPQIVCLZWT/jplhcmhvhV67m8lzFDUXDWIpOf2hS4mWmbvDVPoZgec0Qi9/RZJU4g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
  dkim=pass header.d=siemens.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=53dchQqrB07udqzQvUgySr46of0Kqhl73im9IHKS2II=;
- b=aLCdC2c6E4SKGVr//HUrWLG9mePbscygwKpEEWdrZtFK7eBQkY3hGmlQh7wbN3v+O3NYrI+/iMW2D98iPkxz//0CynYeWpDRreoodz6bcxqr7kiCTUoyDa0Qkt6ySUaYC4oXIHcm+EhQw/mBJDUybJsPIemZqnI9pJr4hNfecalzQxmmAaEw1sMKn5LKX5FvTyRvWKIgkAD0Xnp2projEDT19Oq5naFnZLgyvD0f+KC5Y5vAOnsNWYWiKcwa/EM878bDzk3xDDAXJellYo24gehdS8dZkTCs4cT1nJ8HYsDU3lYAZm7PcZf20oRP9euoxyh1ad29lO0viw1NHtSm7Q==
+ bh=7Sm0jVsmNt870YUu53mss9e9b/bJqAbyiLG7ear2pQs=;
+ b=bcemxl/qIgBCnQSZO9yqpAX/xawWweq4whxRPHyeZ3zUagy8wqei+CLfiQd526q2Qm+I5Wqn5TouI/Q6K1g6EzQgww5TNcekfJWx+cWmguPAYbh4RNCJC9P4fa7qbTvKQ7XViADEkVhIQ+toOXbYNVWJh7BqzS8OczYTZ2VknW16ILqQKfXqtPoRNSOoLOFMkV5CKjBmt0gX3PXbY0MokC0PARA6zr7iFTO0NXCOr9iDLL0lEbhO0QGXxrNqfcYbJgKfmKoZrA7ASWQmcv3xatgc5B6IXKPODuby+Eaq9QbIZkObi4Q9cO2Y9MwCOZcHiMSMmJUzSV55hrm4tiNosg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=siemens.com;
 Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
- by GV1PR10MB5913.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:58::19) with
+ by VI1PR10MB7909.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:800:1bc::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.31; Tue, 18 Jul
- 2023 14:43:19 +0000
+ 2023 14:47:37 +0000
 Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::a171:a3f2:99b7:5f29]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::a171:a3f2:99b7:5f29%6]) with mapi id 15.20.6588.031; Tue, 18 Jul 2023
- 14:43:19 +0000
-Date:   Tue, 18 Jul 2023 16:43:08 +0200
+ 14:47:37 +0000
+Date:   Tue, 18 Jul 2023 16:47:27 +0200
 From:   Henning Schild <henning.schild@siemens.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Lee Jones <lee@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
@@ -52,69 +52,69 @@ Cc:     Lee Jones <lee@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
         linux-watchdog@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
         Mark Gross <markgross@kernel.org>,
         Tobias Schaffner <tobias.schaffner@siemens.com>
-Subject: Re: [PATCH 2/3] leds: simatic-ipc-leds: default config switch to
- platform switch
-Message-ID: <20230718164308.6b7d875a@md1za8fc.ad001.siemens.net>
-In-Reply-To: <ZLaf0Cn2kfb0qxJJ@smile.fi.intel.com>
+Subject: Re: [PATCH 3/3] platform/x86: Move all simatic ipc drivers to the
+ subdirectory siemens
+Message-ID: <20230718164727.6a89e3da@md1za8fc.ad001.siemens.net>
+In-Reply-To: <ZLagYgJT4cz4jZ5r@smile.fi.intel.com>
 References: <20230718105213.1275-1-henning.schild@siemens.com>
-        <20230718105213.1275-3-henning.schild@siemens.com>
-        <ZLaf0Cn2kfb0qxJJ@smile.fi.intel.com>
+        <20230718105213.1275-4-henning.schild@siemens.com>
+        <ZLagYgJT4cz4jZ5r@smile.fi.intel.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR03CA0026.namprd03.prod.outlook.com
- (2603:10b6:610:59::36) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+X-ClientProxiedBy: CH0PR13CA0031.namprd13.prod.outlook.com
+ (2603:10b6:610:b2::6) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
  (2603:10a6:102:269::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR10MB5780:EE_|GV1PR10MB5913:EE_
-X-MS-Office365-Filtering-Correlation-Id: f2aec05a-d326-409a-e595-08db879d53d8
+X-MS-TrafficTypeDiagnostic: PA4PR10MB5780:EE_|VI1PR10MB7909:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3b2af034-8376-4bb9-86a9-08db879dedae
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: T5/sHsBGYL3rzbfx2dDL9qkrMn5M9HAbTob4CCocNFjprRdi0tzZWwK0noKXmq1kBJZ5Mesif/jP7okoxbKt/pf41jeRTaIHFFD+YzXe9YpewZ0IsOD5323uteiuRHpC08BH6R6RI4YXJP69iMdM1YfOWqNOIPs1z0878wa+xa+V+SCLR9Us8SN4M7+l63C4XAah1gjiN1BU/v1uZTCjKnNcgjBU1ubbwclMiwsq8JoJKJLv/DdzraFo9D2CScL3LqCRFWC8Qb86erQbe4Spn2xenSNdQfcfOmC8YvhVT5GSllRHWElE1vEt07AA5O2suUOiUp2HA++y9/2Sazr7e4VCZN0PbZ4JNl7MYrEQe10MlI5CYop+wpOCuNoziIkopUcJ7h6W/Ea5s0vP6Bfx/iWhGuKge6r2e7lPxRKS8s7rBpOuSDkbiny4+Fl3BWsXoo4VPTvytWsHVr8zMoTuyXjpwVQL5wByM61mmT6ZhOkPgg9xpZWElyr+dJKpGN2ylIxxju+coSfDuRLPHU9U6Y/EKtj6X/ygQfgid088jd1xoOunAW02Qh5ciVKw0bcE
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(366004)(39860400002)(346002)(376002)(451199021)(478600001)(6486002)(6666004)(54906003)(1076003)(186003)(6506007)(6512007)(107886003)(9686003)(2906002)(4744005)(44832011)(4326008)(316002)(6916009)(66946007)(66556008)(41300700001)(7416002)(8676002)(8936002)(5660300002)(82960400001)(38100700002)(66476007)(86362001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: uw64/MxOUMeuX2/0Qbj/y3p1QT/pbu7TKtMiWVzskyoYqSB8LjiqMeprw8f0R55Iqf3jpymNWepLDfyex5Bi18dhnoi3ckjkiNQ/IxSBtq63jNJv4EaZI39oVG7egCupyCA235TdqS0Dhrmiw0eXFDOkIXNRPryRGBnrJtfwYVQk0rw53mSmmhEvCXH5QoE3gJBpLgxmT6iariHMD4ANPVo1MMXB2iXH4RtHP0ate2Gr1WTLDT8gpG22QMP9b0P9SfTnJgkK7Db67iISWV4ExB9mVI/lSxnPwpyRWTBo956iXox6r4VdmcAqYHd/LY15Nxm5XyAXGA+DgPWHVU4frsAnQ8F/j8g0PDlSyCdagF7T4dKzWJUbTaUk6+APRMpcv6ww0ltZ4FTW05My1Nct7XHdW/IThCUvR5OALT6HqK9p5xwmQfKxSJoKm0rbSv78+copGnjXqCP3+zBKcZ4THl5/OBtxULHtJbWvq9YP/3jqtKB3WYHJg766VO3GKFuO18v8fky033+TSb6Qe6J/s1lmExxcs2OtrKnekGpoZnw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(396003)(346002)(366004)(39860400002)(451199021)(966005)(2906002)(9686003)(107886003)(6512007)(6506007)(82960400001)(6916009)(8676002)(316002)(5660300002)(8936002)(4326008)(44832011)(41300700001)(7416002)(38100700002)(6666004)(66946007)(54906003)(66476007)(66556008)(1076003)(478600001)(83380400001)(86362001)(6486002)(186003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZdnLbXLb9esC67T/FxQrJ48mJ9TtkWGx5sDgaSNFlqr4rRC1mefd78lodiQb?=
- =?us-ascii?Q?Dw/OxNDyqiaqYK1dyl8/sYBGMKPBZICNhNS+Kggq3gphezNQhungTkqkvC1s?=
- =?us-ascii?Q?C/Z4n1lNK6lkScgptNrTUPSlJItpKgTwK2fEtM9gMUU5zetPOJRTVK4xtWJU?=
- =?us-ascii?Q?HJmGQJRcg9oZPV1wpFxrUCAx/9EYjaVpvgSVllAuF4VVMkjpXMd1aZ6p59uh?=
- =?us-ascii?Q?kOrc/Uhz8gi9Q5GyaNjmCc0mdXvEMI+24OZf2SivY9FLcqkGTQUQOSpASafx?=
- =?us-ascii?Q?mbuEn2g912KwclyNdaV1gWdA24rooTNE3o8CekA4r/UF4qQmcFsX7GrsPviE?=
- =?us-ascii?Q?/TagK60Bibp7zj12hRA87xu0SEiMjJ0Iiq4DoHIyeayGtW4Owa3VfGl3aKpq?=
- =?us-ascii?Q?/C86BNKyc5Df7S3YX3BkXKRmroBK8TycuBi4UL+vPV7asbe4OrVYFXaGylgD?=
- =?us-ascii?Q?bMMeulXerkkzzaudCdtqccqnQKTtMYpDaXeTGqL+AOzxhZYvueYkRrG+6vAd?=
- =?us-ascii?Q?7u0qo17D2dkiRv7Nm9ejtfCb3bSW8W2/OiFpdohZnv7xlP4/A2NI/5elt/yL?=
- =?us-ascii?Q?QL/JHeImE+n90Fbl0/x2jB5Pq7s3GEPNzWZ48NY9xM+ZGSgFUvBNoyWaTsBN?=
- =?us-ascii?Q?RC5OWAU96uD2Gc0v+AVFysrczoRjc1G/e7k3wQqNFYdrilHfoLo+1FFQYGw4?=
- =?us-ascii?Q?yNObrGin2TfeAzs6G4/YkpONwBmgPhx8Y5GGF2wzq1g3g/JivDaH4ueqwD9+?=
- =?us-ascii?Q?vswUAEj2FJ9DPH7PP8RblDwUqOvbeojXqcOpTQ3pzwsX6Zvz0GeMJGidp4sj?=
- =?us-ascii?Q?GCBjN2XJ5EYp9h9s+jG/blJ6kG3mHrpOqIhGwhfG7Lvnvb9BR/cPg3TrHRjm?=
- =?us-ascii?Q?v7T9mBsB697gTrYpMuvQZEUGXEXSTGM1ay2L/E5A6acQ5ddHt61vucGR2e/z?=
- =?us-ascii?Q?ogxTFEwPzkkXZJdxFXOb+I9LLdD+GFlLJJwG9ICc+hvxFG+v8J8r6BBAF/5I?=
- =?us-ascii?Q?2cV5QqJBBIOLwgXLyGPwVMJL7EmtRwgKHDkXNFBkHwoBvaxMTpBQVn1q5k5t?=
- =?us-ascii?Q?MhIAEyT+CwvNVxOQMqcAvZ7ZpXY1QWfVKUBeF8ntEIoPZG5SeG6xckQarvr7?=
- =?us-ascii?Q?sTmQR4Q8g2GtIbva6KZ6KNmt0zkEGNzuMA7FCtaWhXJGcideT+dEER3z6GhL?=
- =?us-ascii?Q?8Yxqw613ON/2bD1k2Y+iZAZco6R2H2AztTph/EJU0OnXN9SFi1t3J72ktAFC?=
- =?us-ascii?Q?vruIIQjPPvb3b2I8I9+5J9KBF2UUQ+ILMmRvOulMAyzEdJ93k0bGCCt0Rzqe?=
- =?us-ascii?Q?qVhFcfxXAjA6vlwpyrqI5dya2VCC9wHiWc3Q5bMtcqOVNTdGhC3ZutwO272p?=
- =?us-ascii?Q?x6gq4Y6jFsE231EkbkXzRkMlAKWFnayCkx2BxQS1KQuDgmXp1cBb+6bKluKO?=
- =?us-ascii?Q?s+53JgO9savg1sHbsZZOsPHz7aPhgavfiRwQJQTrcR86vtlpD3RNC4KlMu40?=
- =?us-ascii?Q?fcfyb0ZADASwLHSNERBbNFsb+w+NHegqnxrM2QXGC3NvtXZhS6l1G04LxKd1?=
- =?us-ascii?Q?8MpZPFuKoL17P3O2vVPxuGVv9CzdSFF4ov5+2F9ZmvVAbo4y7BKUYdD4c3TV?=
- =?us-ascii?Q?7dJ1U9MIkOw2hrrZjCooeCMMo2NE9+TeRGTIXDEdFpYU8A51w2lzxaHov7Sp?=
- =?us-ascii?Q?gLl1bw=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wzoJzuOBvfzHhfoJnLD6GtnWXXb7fc3d9irQKJC0iiLAM300MzP4wwEoPcLw?=
+ =?us-ascii?Q?uG483entzeVyDDrzvyG9ZxqZZONegY6FHmCGhEUyXEa1hWSCmZHofGXKp9UF?=
+ =?us-ascii?Q?Gl1kTeLl6qzATL5UGjmu8AmtUvTrsNC8xg3YOWEsVwGEZPvEnjQ/rScWvS86?=
+ =?us-ascii?Q?pvoepoiiverE52k/fromLYifsH7csZ57Ofn/SgQhb4+WHoKPQcVSg0gN81kU?=
+ =?us-ascii?Q?kPEY1YFbx66nQn12MLVqUiln/yai4XNuKt2+5rxt1+oclkbPuGycYiBtWOjU?=
+ =?us-ascii?Q?gaQ7nHWO8NfsPAlVspwpOHKrZEtvIDhqz2V1r97xfifApkBlm73+04x7LFNF?=
+ =?us-ascii?Q?cQ94PIMZOpCV4iHWt0F66GALQFcuZQsvkjJz3HUNrCYpIKdxkzC3+Fq5WERs?=
+ =?us-ascii?Q?+ZQx1HBDmKLZREGrLOXtFSM0X7/TnPjTsFkpUrjhUrHWDWv7ToJkToCbkJjf?=
+ =?us-ascii?Q?bizBBy/oMHA68c9iBQ9lhLb0obCFplZsKFmMfLJ2wLHUXOLizoTza3TjYjq+?=
+ =?us-ascii?Q?JjocQo3De27Gs9dsM5HiA5FgOAglaFp6dLERtDE/tNq+HD38Fp+nSx2bR/I6?=
+ =?us-ascii?Q?eUenuoc8d7ZShYcDUK0GJRIuFWCi9C0yWGiKYhuV5IvZslo5JZrKbjCeFQUF?=
+ =?us-ascii?Q?vFtItVQ1wVkfFRBj5A1KLoUDf+moSCsff6z44p8tOZwSjuegLevMVXpPtVqs?=
+ =?us-ascii?Q?yLjfbgS/TNDvXoWseWODfDDxQOegbO6sWaSVe2wSv2JkTGoJA4Ouk1/JKTtY?=
+ =?us-ascii?Q?AksQyz0m/WFso+OslcWVx8Ikpa9O2hB7wKseHsNU//x+ShR8obO2vyNwGzJ8?=
+ =?us-ascii?Q?Dvv+uPJdQ8yiT50L83DwM7vLn5kx7zCmv+kglLYz2QjGbc00TPJdKcdPn3Ls?=
+ =?us-ascii?Q?5jbmewcefYBaOMMudc9rT7vpV6sLntLA1aGusmMtwYSMDWMVreHV7lMa8uqD?=
+ =?us-ascii?Q?jFLk+ss85bcuEwhVvm4z2q/55nWLGOzXJGWxtS9NVFTLUxbszlQ333WOGVYT?=
+ =?us-ascii?Q?4LDfqvqM5TV/Ld2ITzg/DY0fD0LvFZP2k2DTpRjO6Davm7/L+XSpi9ONdAN6?=
+ =?us-ascii?Q?nRZ+l+dnQBvVl3OKWqOdptK4g2krn4Q0FdtcVSV7cSIFYuEor1qYEB7Lil+5?=
+ =?us-ascii?Q?eO0NLko2TU/JMpzPHGA11T/6QuLazWIVIJ75G4Xdom3QsZntGfQN6NXDS/Bk?=
+ =?us-ascii?Q?lQeIfek2GX+sejpWrCkJoYzaXwLJLRr6J66Sa57mrokhQy13uJ/Rmd2f5i/K?=
+ =?us-ascii?Q?Fe1gIy1Yyny0Bdhtuebky/rxmbbr0evKuNjV5kA9hfIL4RsVc15NrIn6wuCB?=
+ =?us-ascii?Q?WdqOT/yPHsatp/SpF3YoOl3y8YMbMYd6rN4Af1jwB/vabMywDoWDz0HauMXc?=
+ =?us-ascii?Q?qiF9iusuWFNA8jF+IY9oymGM8D9ruXv9Wf3ngnkQ8aUNNnRhOSqzOsRz120H?=
+ =?us-ascii?Q?vHunUsUe7oKCLlVRn+c0UxZimh8+8IZtrpawumr3M/KBzTi1OZNrnidffist?=
+ =?us-ascii?Q?ltLlH9Vent3gdiX4APjeGJiwwx/Rm2Cqs4l5QxT9VQywfRkF4X2RzEZ4d9dz?=
+ =?us-ascii?Q?a92ICnj8ohLymonAQkbPu9ynEQYd7pa7+NJTXw52VFMQPIueH9fIwf2GnkZy?=
+ =?us-ascii?Q?DeaKFS6ZQB6wSvIplTZE4n7BRJ4d10aFtkP5fS78RxVPTAFoJIVjhd9keqq8?=
+ =?us-ascii?Q?Q8H17A=3D=3D?=
 X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f2aec05a-d326-409a-e595-08db879d53d8
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3b2af034-8376-4bb9-86a9-08db879dedae
 X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2023 14:43:19.1743
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2023 14:47:37.2887
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uqTNBHN96Mjhuvv2sJSHN5uoBHvlJgq63RxMT23phfg3WAOvlMUwvqcLRraoBvXuJYqEQ2+u/DLKzpPAA4olcIIlQEPxh3EYsfx61u1PbTs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR10MB5913
+X-MS-Exchange-CrossTenant-UserPrincipalName: yejYs4eKLVoCVCC5WfV80e/M8sqD8Ol1wXl8Z+ZKXQReNlFbtXM4M0LkRpsRdZYh8SRCyET1n+I3oGOlp6Zt8UpB5CoNTZZ5IbxSOmzzTLg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB7909
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -126,16 +126,37 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Am Tue, 18 Jul 2023 17:21:04 +0300
+Am Tue, 18 Jul 2023 17:23:30 +0300
 schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
 
-> On Tue, Jul 18, 2023 at 12:52:12PM +0200, Henning Schild wrote:
-> > If a user did choose to enable Siemens Simatic platform support they
-> > likely want the LED drivers to be enabled without having to flip
-> > more config switches. So we make the LED drivers config switch
-> > default to the platform driver switches value.  
+> On Tue, Jul 18, 2023 at 12:52:13PM +0200, Henning Schild wrote:
+> > Users without a Siemens Simatic IPC will not care about any of these
+> > drivers. Users who do care can enable the submenu and all drivers
+> > behind it will be enabled.  
 > 
-> Same as per previous patch.
+> ...
+> 
+> >  # Siemens Simatic Industrial PCs
+> > +obj-$(CONFIG_X86_PLATFORM_DRIVERS_SIEMENS)		+=
+> > siemens/  
+> 
+> Do you need conditional here? We have stumbled over similar for
+> entire intel subfolder, it might affect the rest as well when you
+> don't expect it.
+> 
+> obj-y		+= siemens/
+> 
+> ?
 > 
 
-Same as per previous patch.
+It was requested to be done like that by Hans, he wanted me to do a
+similar thing that
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f1e1ea516721d1ea0b21327ff9e6cb2c2bb86e28
+is doing.
+
+And that is what i did. If there was a y ... the whole "one switch to
+rule them all" story would not work out anymore.
+
+Thanks for the review though.
+
+Henning
