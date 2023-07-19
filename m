@@ -2,97 +2,114 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94CA5759A7B
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Jul 2023 18:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C909B759AD2
+	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Jul 2023 18:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjGSQJp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 19 Jul 2023 12:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S229646AbjGSQdY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 19 Jul 2023 12:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjGSQJp (ORCPT
+        with ESMTP id S229624AbjGSQdX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 19 Jul 2023 12:09:45 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607EA113;
-        Wed, 19 Jul 2023 09:09:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689782984; x=1721318984;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bfmNxrSOSuOKyNBS+iuM0AhQyIpxlWUsNNWHaPn1DrQ=;
-  b=MMiqb4ahPGRrPldVkBfeQtmyBY5lk5w2qhLFzObq3JJ64RaJhUcQk2iq
-   QdWNFWYL4lW1Gz6gvO9QbBQiTOkY+7k1u6ewCxecygQyC6A8kPzu43JC4
-   FeKILvJB6hh4RlVdMSJVbYCb8V+3m06FOlDz4eihBFEMJhB8Ww76+5k0/
-   s5Y+uVNTTbGdZ0/eIx+bugpUbKCrrksISTUKNYl0d1g8X3JDqHgEjH9Jf
-   cHU83+WyxKXml1VTKnPq5GDRUX2QkQFcJtnzaicBGsJrEA9wLW3+3hrLH
-   FYMl5sOkMnFZeGHyZDImPGWZAi/9tEBRRhNQ/RYcFSnVVntRrLc4afl+a
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="356464764"
-X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
-   d="scan'208";a="356464764"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2023 09:06:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="674352133"
-X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
-   d="scan'208";a="674352133"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003.jf.intel.com with ESMTP; 19 Jul 2023 09:06:06 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qM9gj-00HVG2-0p;
-        Wed, 19 Jul 2023 19:06:05 +0300
-Date:   Wed, 19 Jul 2023 19:06:04 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Lee Jones <lee@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Mark Gross <markgross@kernel.org>,
-        Tobias Schaffner <tobias.schaffner@siemens.com>
-Subject: Re: [PATCH v2 0/3] platform/x86: move simatic drivers into subdir
-Message-ID: <ZLgJ7Oz1XlicGzEn@smile.fi.intel.com>
-References: <20230719153518.13073-1-henning.schild@siemens.com>
+        Wed, 19 Jul 2023 12:33:23 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0A91BB;
+        Wed, 19 Jul 2023 09:33:22 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6686708c986so7149081b3a.0;
+        Wed, 19 Jul 2023 09:33:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689784402; x=1692376402;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=rkgwj3RYm4LsR2kUFzce9c9w0vDBqvLHq+ZZijTomMQ=;
+        b=d44nzLV9XOWH2OtdXgxFZUSlte1CnWFuUZ84jB+QYfpM/E9KUebT2DGdsDhOy7Y1tj
+         B8sH/1zD6/pt+iYVEpEU6Pyhpvx0jHVMuuQF+wltYfJvSXzAw3FEBO0pii5MqD/eY5R2
+         X5AwWv/0GsxkEbbnRuCXZCpKTJJmr5yxGeaB15gRMzsKIRja7KKRi7tCQvbGtsEGxhcq
+         kndXtAC38Vx7On7RcWcisloBUOQ/Ar1inybmFUid90Chxdq6oXXc2ED/s2ljrFGUZkAB
+         gjKVWA1W4JpMu1cBMUwaDr2DV3tdvghA1si8/2CU4rtJEk1ky8XTq9HpJq7uXl8Obkn6
+         vmoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689784402; x=1692376402;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rkgwj3RYm4LsR2kUFzce9c9w0vDBqvLHq+ZZijTomMQ=;
+        b=d3JFbULlHyZE9oqk4ihTILWAKr2+4fogvCv8m9/TqNRHtaUI0kr2Ee20ZL3qJmNaHU
+         h4fujp6afLFz09gmu3qP8QtwuYafzTvqbLds7rwZyhw5WoEnqs1Src5mudDus6D/oBug
+         COFHpNtelMSroKQb+IS+QJkpFwvMqrO/mzoOFh9WQ0O442XcOX7CvJOWAiJk54sn88yL
+         HujQ+S+VY+PZSw19YLxjl+EAnoDY4SIsI2Kr/wJgP6/mescPLc4MDcEiA4iMf/cOpVhN
+         9xRWjkxwx+rXxxAbtjTzRAqHYH3PKbnY7AmssOkH0m9NrK/X6gN16Y7zCedHsxR2Oh8H
+         fhNQ==
+X-Gm-Message-State: ABy/qLZKZ+d1dj8fNJEwxKVjq9cWCs6QDhWXbOyPjuwhSl9CYiSGtDwu
+        SfeB5TeJtBy698USm69LUOsk3Tj0ibE=
+X-Google-Smtp-Source: APBJJlGTjg0V9Geix6gFBaSKQkZs41vPcky5XH8Lu7X8hlUWJ0ALyN3gqhZAqnV//KSFOJjQa6lH5g==
+X-Received: by 2002:a05:6a20:7f9f:b0:12e:5f07:7ede with SMTP id d31-20020a056a207f9f00b0012e5f077edemr25162748pzj.41.1689784401803;
+        Wed, 19 Jul 2023 09:33:21 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n8-20020a170902e54800b001acae9734c0sm4195351plf.266.2023.07.19.09.33.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jul 2023 09:33:21 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <7fd7dbd0-23f7-228a-2645-ada0a60102fd@roeck-us.net>
+Date:   Wed, 19 Jul 2023 09:33:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230719153518.13073-1-henning.schild@siemens.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 1/3] watchdog: make Siemens Simatic watchdog driver
+ default on platform
+Content-Language: en-US
+To:     Henning Schild <henning.schild@siemens.com>,
+        Lee Jones <lee@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-watchdog@vger.kernel.org
+Cc:     Pavel Machek <pavel@ucw.cz>, Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tobias Schaffner <tobias.schaffner@siemens.com>
+References: <20230719153518.13073-1-henning.schild@siemens.com>
+ <20230719153518.13073-2-henning.schild@siemens.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230719153518.13073-2-henning.schild@siemens.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jul 19, 2023 at 05:35:15PM +0200, Henning Schild wrote:
-> change since v1:
->  - switch LED/wdt Kconfig to "default y"
->  - remove guard which could hide whole siemens submenu, and default m
+On 7/19/23 08:35, Henning Schild wrote:
+> If a user did choose to enable Siemens Simatic platform support they
+> likely want that driver to be enabled without having to flip more config
+> switches. So we make the watchdog driver config switch default to the
+> platform driver switches value.
 > 
-> This series does two things. It builds up a Kconfig inheritance chain
-> for all platform device drivers, namely Watchdog and LED. And then it
-> puts all Siemens Simatic IPC drivers in the platform/x86/ directory in
-> a subdirectory called "siemens".
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>   drivers/watchdog/Kconfig | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> That is so that users have to flip less config switches, and to ease
-> maintenance.
-
-All three good enough, although I prefer the ordering that 'tristate'
-followed by 'default' without interleaved 'depends on'. I leave it
-to Hans. Other that that,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index ee97d89dfc11..04e9b40cf7d5 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -1681,6 +1681,7 @@ config NIC7018_WDT
+>   config SIEMENS_SIMATIC_IPC_WDT
+>   	tristate "Siemens Simatic IPC Watchdog"
+>   	depends on SIEMENS_SIMATIC_IPC
+> +	default y
+>   	select WATCHDOG_CORE
+>   	select P2SB
+>   	help
 
