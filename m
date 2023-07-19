@@ -2,114 +2,77 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C909B759AD2
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Jul 2023 18:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26461759D8D
+	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Jul 2023 20:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbjGSQdY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 19 Jul 2023 12:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
+        id S229535AbjGSSjk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 19 Jul 2023 14:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjGSQdX (ORCPT
+        with ESMTP id S229894AbjGSSjj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 19 Jul 2023 12:33:23 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0A91BB;
-        Wed, 19 Jul 2023 09:33:22 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6686708c986so7149081b3a.0;
-        Wed, 19 Jul 2023 09:33:22 -0700 (PDT)
+        Wed, 19 Jul 2023 14:39:39 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC27F0;
+        Wed, 19 Jul 2023 11:39:38 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-31427ddd3fbso6677142f8f.0;
+        Wed, 19 Jul 2023 11:39:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689784402; x=1692376402;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rkgwj3RYm4LsR2kUFzce9c9w0vDBqvLHq+ZZijTomMQ=;
-        b=d44nzLV9XOWH2OtdXgxFZUSlte1CnWFuUZ84jB+QYfpM/E9KUebT2DGdsDhOy7Y1tj
-         B8sH/1zD6/pt+iYVEpEU6Pyhpvx0jHVMuuQF+wltYfJvSXzAw3FEBO0pii5MqD/eY5R2
-         X5AwWv/0GsxkEbbnRuCXZCpKTJJmr5yxGeaB15gRMzsKIRja7KKRi7tCQvbGtsEGxhcq
-         kndXtAC38Vx7On7RcWcisloBUOQ/Ar1inybmFUid90Chxdq6oXXc2ED/s2ljrFGUZkAB
-         gjKVWA1W4JpMu1cBMUwaDr2DV3tdvghA1si8/2CU4rtJEk1ky8XTq9HpJq7uXl8Obkn6
-         vmoQ==
+        d=gmail.com; s=20221208; t=1689791977; x=1692383977;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QzzhHUMsEPca1REXinNBty7qrU/8lOnoSAoDZgJ76hk=;
+        b=qBwFTggRpkj+jX6aVXXFeRKWjGvyH+s2zwyHsO8x4OwE36yuPr/YWDg0sB9FDZGOZA
+         COVEaLg1lypqvCy1NhWKHWr/fFShKH/oRzRrVVEPZNuZrdJ51kh9ZvjUlsgXIiDkiBaa
+         tIkHqJaAGX8rtax7s7wRpMbAUgreVL5TXfl8uRkwaaTfc2mj9Di9+SCSOv0HC/0vL+Te
+         o6EvSiOLwE+LNdQjBiwwugiKf3mXbCKntldwGrw7bFvW4WN6JWmiZVjSZiVs5y8Eiyy2
+         EF8HxjaUs9eu4iRmKHG/hTpacyzRbBembvnWO3Vhz5IbLRQhKI13lkV7HXeQSDh0PRvB
+         M/6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689784402; x=1692376402;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1689791977; x=1692383977;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rkgwj3RYm4LsR2kUFzce9c9w0vDBqvLHq+ZZijTomMQ=;
-        b=d3JFbULlHyZE9oqk4ihTILWAKr2+4fogvCv8m9/TqNRHtaUI0kr2Ee20ZL3qJmNaHU
-         h4fujp6afLFz09gmu3qP8QtwuYafzTvqbLds7rwZyhw5WoEnqs1Src5mudDus6D/oBug
-         COFHpNtelMSroKQb+IS+QJkpFwvMqrO/mzoOFh9WQ0O442XcOX7CvJOWAiJk54sn88yL
-         HujQ+S+VY+PZSw19YLxjl+EAnoDY4SIsI2Kr/wJgP6/mescPLc4MDcEiA4iMf/cOpVhN
-         9xRWjkxwx+rXxxAbtjTzRAqHYH3PKbnY7AmssOkH0m9NrK/X6gN16Y7zCedHsxR2Oh8H
-         fhNQ==
-X-Gm-Message-State: ABy/qLZKZ+d1dj8fNJEwxKVjq9cWCs6QDhWXbOyPjuwhSl9CYiSGtDwu
-        SfeB5TeJtBy698USm69LUOsk3Tj0ibE=
-X-Google-Smtp-Source: APBJJlGTjg0V9Geix6gFBaSKQkZs41vPcky5XH8Lu7X8hlUWJ0ALyN3gqhZAqnV//KSFOJjQa6lH5g==
-X-Received: by 2002:a05:6a20:7f9f:b0:12e:5f07:7ede with SMTP id d31-20020a056a207f9f00b0012e5f077edemr25162748pzj.41.1689784401803;
-        Wed, 19 Jul 2023 09:33:21 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n8-20020a170902e54800b001acae9734c0sm4195351plf.266.2023.07.19.09.33.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jul 2023 09:33:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7fd7dbd0-23f7-228a-2645-ada0a60102fd@roeck-us.net>
-Date:   Wed, 19 Jul 2023 09:33:19 -0700
+        bh=QzzhHUMsEPca1REXinNBty7qrU/8lOnoSAoDZgJ76hk=;
+        b=WiHdriZVS9g5/cZ7ekyiOKiF9KRUailOcG1qHk5QjaPJuYPBI1sKgqjOF+CZn6DiW7
+         MYzlG4n7cLk6gkV157Hm92neL+bmBlbxNbVgyQRD2WKAho1wcaphdK1Bu6UkL2ugt60b
+         9x6HTPrP0brw+yvg47wV3UePN7yrqif7YsRKTOxki9rcDx5HVCpF7iAxzUTeHlqSxRe3
+         5jCj7hOtv+FiFaAbUeVMp6jFKkpuzlbsr6LeqBoIhk/4ytdebUu/PW3ctNicRo3WRFj1
+         lMBpOhvnyi5Z4K6xnqu7yhEgVi6MSQCiQkXbZl3D596pRK/u5wEXYK+KkcNc7w2SHmQe
+         DeNg==
+X-Gm-Message-State: ABy/qLYDBLAOVLXyRwB31HGzeItAMxDGJVZzVW9Oy9JfYVTTK5WmB7M6
+        uSM2hOSvli2CoCLGD0ZoFxhlZhf9IE1CSUrsOj0=
+X-Google-Smtp-Source: APBJJlFejtxmv7imev+zeanVVRwqOImooJH6ndEfKqWAZjWaMbgyBEzzpOgezaGNdUJq3NIBmbFkAxhPTwAGJLJhp8M=
+X-Received: by 2002:adf:e104:0:b0:316:d887:624a with SMTP id
+ t4-20020adfe104000000b00316d887624amr495707wrz.15.1689791976882; Wed, 19 Jul
+ 2023 11:39:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 1/3] watchdog: make Siemens Simatic watchdog driver
- default on platform
-Content-Language: en-US
-To:     Henning Schild <henning.schild@siemens.com>,
-        Lee Jones <lee@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-watchdog@vger.kernel.org
-Cc:     Pavel Machek <pavel@ucw.cz>, Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Tobias Schaffner <tobias.schaffner@siemens.com>
-References: <20230719153518.13073-1-henning.schild@siemens.com>
- <20230719153518.13073-2-henning.schild@siemens.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230719153518.13073-2-henning.schild@siemens.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230705090951.63762-1-dg573847474@gmail.com> <7266dc04-8db3-a48b-6844-8530ae7b8adf@roeck-us.net>
+In-Reply-To: <7266dc04-8db3-a48b-6844-8530ae7b8adf@roeck-us.net>
+From:   Chengfeng Ye <dg573847474@gmail.com>
+Date:   Thu, 20 Jul 2023 02:39:25 +0800
+Message-ID: <CAAo+4rVh4+VX3_EQyFasmfe4aC1aMN1nJmniMs+poUA63OTqFg@mail.gmail.com>
+Subject: Re: [PATCH v3] watchdog: s3c2410: Fix potential deadlock on &wdt->lock
+To:     Guenter Roeck <linux@roeck-us.net>, krzysztof.kozlowski@linaro.org,
+        alim.akhtar@samsung.com, wim@linux-watchdog.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 7/19/23 08:35, Henning Schild wrote:
-> If a user did choose to enable Siemens Simatic platform support they
-> likely want that driver to be enabled without having to flip more config
-> switches. So we make the watchdog driver config switch default to the
-> platform driver switches value.
-> 
-> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Thanks much for your time in reviewing the patch :)
 
-> ---
->   drivers/watchdog/Kconfig | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index ee97d89dfc11..04e9b40cf7d5 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1681,6 +1681,7 @@ config NIC7018_WDT
->   config SIEMENS_SIMATIC_IPC_WDT
->   	tristate "Siemens Simatic IPC Watchdog"
->   	depends on SIEMENS_SIMATIC_IPC
-> +	default y
->   	select WATCHDOG_CORE
->   	select P2SB
->   	help
-
+Best Regards,
+Chengfeng
