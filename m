@@ -2,77 +2,138 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26461759D8D
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Jul 2023 20:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D084C75AA2D
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Jul 2023 10:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjGSSjk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 19 Jul 2023 14:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
+        id S231285AbjGTI6h (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 20 Jul 2023 04:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbjGSSjj (ORCPT
+        with ESMTP id S231409AbjGTIyX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 19 Jul 2023 14:39:39 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC27F0;
-        Wed, 19 Jul 2023 11:39:38 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-31427ddd3fbso6677142f8f.0;
-        Wed, 19 Jul 2023 11:39:38 -0700 (PDT)
+        Thu, 20 Jul 2023 04:54:23 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB1F26A0
+        for <linux-watchdog@vger.kernel.org>; Thu, 20 Jul 2023 01:54:20 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fb863edcb6so808042e87.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 20 Jul 2023 01:54:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689791977; x=1692383977;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QzzhHUMsEPca1REXinNBty7qrU/8lOnoSAoDZgJ76hk=;
-        b=qBwFTggRpkj+jX6aVXXFeRKWjGvyH+s2zwyHsO8x4OwE36yuPr/YWDg0sB9FDZGOZA
-         COVEaLg1lypqvCy1NhWKHWr/fFShKH/oRzRrVVEPZNuZrdJ51kh9ZvjUlsgXIiDkiBaa
-         tIkHqJaAGX8rtax7s7wRpMbAUgreVL5TXfl8uRkwaaTfc2mj9Di9+SCSOv0HC/0vL+Te
-         o6EvSiOLwE+LNdQjBiwwugiKf3mXbCKntldwGrw7bFvW4WN6JWmiZVjSZiVs5y8Eiyy2
-         EF8HxjaUs9eu4iRmKHG/hTpacyzRbBembvnWO3Vhz5IbLRQhKI13lkV7HXeQSDh0PRvB
-         M/6A==
+        d=linaro.org; s=google; t=1689843258; x=1692435258;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hr3GYuI4RGrQA8MLYXyJLt2ld5PTqpatMnFPkHbCrNI=;
+        b=Shpu1expb9UmeNTzkrqLpZgKTTgNTFnWaaLHFYEs8X9t52qsEc2qqYzhSS1wKDUyy1
+         n4EpvR8sgcpL9FLYrJpRYmBpPkbJYzeu10lN6wdKe7Ba3JMVPmK04th61cyw1jW0vioh
+         2k3CoD0TVIieY7nwHyzHbt5z0gDLKPnvLw6UMDKlMyXki3gNfYPvuUq+SrKIZ7RFQuBd
+         Px9Xf/3N008B/kEnqXS6fqGuDaol6sbJt4f/XDWyLT7f7F4gTOg0Y1UdNeEYpRgxFEy7
+         DaXKvwDjYnKA9he3hNDcHOhrri5jmEMFtNNli0s0ezLRD1kzQDFHIjgsiSo66GqPF4gC
+         ZR0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689791977; x=1692383977;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QzzhHUMsEPca1REXinNBty7qrU/8lOnoSAoDZgJ76hk=;
-        b=WiHdriZVS9g5/cZ7ekyiOKiF9KRUailOcG1qHk5QjaPJuYPBI1sKgqjOF+CZn6DiW7
-         MYzlG4n7cLk6gkV157Hm92neL+bmBlbxNbVgyQRD2WKAho1wcaphdK1Bu6UkL2ugt60b
-         9x6HTPrP0brw+yvg47wV3UePN7yrqif7YsRKTOxki9rcDx5HVCpF7iAxzUTeHlqSxRe3
-         5jCj7hOtv+FiFaAbUeVMp6jFKkpuzlbsr6LeqBoIhk/4ytdebUu/PW3ctNicRo3WRFj1
-         lMBpOhvnyi5Z4K6xnqu7yhEgVi6MSQCiQkXbZl3D596pRK/u5wEXYK+KkcNc7w2SHmQe
-         DeNg==
-X-Gm-Message-State: ABy/qLYDBLAOVLXyRwB31HGzeItAMxDGJVZzVW9Oy9JfYVTTK5WmB7M6
-        uSM2hOSvli2CoCLGD0ZoFxhlZhf9IE1CSUrsOj0=
-X-Google-Smtp-Source: APBJJlFejtxmv7imev+zeanVVRwqOImooJH6ndEfKqWAZjWaMbgyBEzzpOgezaGNdUJq3NIBmbFkAxhPTwAGJLJhp8M=
-X-Received: by 2002:adf:e104:0:b0:316:d887:624a with SMTP id
- t4-20020adfe104000000b00316d887624amr495707wrz.15.1689791976882; Wed, 19 Jul
- 2023 11:39:36 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689843258; x=1692435258;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hr3GYuI4RGrQA8MLYXyJLt2ld5PTqpatMnFPkHbCrNI=;
+        b=F4T03XP+oex2Zy5K/vLFo7le6L5+KHomlzl+byVlCDd0iIcN4zfEVOveJ4GAMo49Hk
+         7KjxIglBO3KIb8mAoDUE9dTBui5Ahl/e/qMoy/SlSTPwrAgJBw3UB098hfsD1y7lZqxk
+         jjLNUaGwXlqueBLg/mhoguW21YPfUPMscnawX7Mu5LKUUEVizt9ONKhK1GOVK1d65naI
+         fh3DKZoTikwvbhnJO5JL0DCQc7Y5Vz1pzpRgZPTQiFSQ9aqHX/3JbVuhcShMU7qlzE/y
+         dkkZ4C9+sUob9i0ClyitAuoFZmfJnsrGia5r5bCtgnYypA2XjphFE6wRn1LA03od480r
+         KH6g==
+X-Gm-Message-State: ABy/qLZRrqC9dcXiOQ1xSWA7UM+0y2of4T2FAFBrGUfOVkw7gJ+tx/GR
+        BRU3HuLTjyjmloA/wGMCcJ4E0w==
+X-Google-Smtp-Source: APBJJlEh3NvNHBbbxheUFFyvpgKd2C0hcz7XJqCW4yZ6/zAz5ujRsINO2b569mPpxzPaezD6Arr+tg==
+X-Received: by 2002:a19:ca4a:0:b0:4fb:8dcc:59e5 with SMTP id h10-20020a19ca4a000000b004fb8dcc59e5mr1681346lfj.39.1689843258307;
+        Thu, 20 Jul 2023 01:54:18 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id a12-20020a5d53cc000000b00313f9a0c521sm657889wrw.107.2023.07.20.01.54.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jul 2023 01:54:17 -0700 (PDT)
+Message-ID: <a6006558-5eca-a8a0-ed61-dfa746f223ae@linaro.org>
+Date:   Thu, 20 Jul 2023 10:54:12 +0200
 MIME-Version: 1.0
-References: <20230705090951.63762-1-dg573847474@gmail.com> <7266dc04-8db3-a48b-6844-8530ae7b8adf@roeck-us.net>
-In-Reply-To: <7266dc04-8db3-a48b-6844-8530ae7b8adf@roeck-us.net>
-From:   Chengfeng Ye <dg573847474@gmail.com>
-Date:   Thu, 20 Jul 2023 02:39:25 +0800
-Message-ID: <CAAo+4rVh4+VX3_EQyFasmfe4aC1aMN1nJmniMs+poUA63OTqFg@mail.gmail.com>
-Subject: Re: [PATCH v3] watchdog: s3c2410: Fix potential deadlock on &wdt->lock
-To:     Guenter Roeck <linux@roeck-us.net>, krzysztof.kozlowski@linaro.org,
-        alim.akhtar@samsung.com, wim@linux-watchdog.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3 00/42] ep93xx device tree conversion
+Content-Language: en-US
+To:     nikita.shubin@maquefel.me,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lennert Buytenhek <kernel@wantstofly.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Michael Peters <mpeters@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, alsa-devel@alsa-project.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+On 20/07/2023 13:29, Nikita Shubin via B4 Relay wrote:
+> This series aims to convert ep93xx from platform to full device tree support.
+> 
+> The main goal is to receive ACK's to take it via Arnd's arm-soc branch.
+> 
+> I've moved to b4, tricking it to consider v0 as v1, so it consider's
+> this version to be v3, this exactly the third version.
 
-Thanks much for your time in reviewing the patch :)
+Fix your clock/timezone, so your patches are not sent in the future.
+Unfortunately this will stay at top of my queue, which is unfair, so I
+will just ignore for now.
 
-Best Regards,
-Chengfeng
+Best regards,
+Krzysztof
+
