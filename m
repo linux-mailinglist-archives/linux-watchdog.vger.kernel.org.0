@@ -2,94 +2,72 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3100F75C78B
-	for <lists+linux-watchdog@lfdr.de>; Fri, 21 Jul 2023 15:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD77C75C80B
+	for <lists+linux-watchdog@lfdr.de>; Fri, 21 Jul 2023 15:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbjGUNTY (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 21 Jul 2023 09:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
+        id S230136AbjGUNmF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 21 Jul 2023 09:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbjGUNTV (ORCPT
+        with ESMTP id S229887AbjGUNmE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 21 Jul 2023 09:19:21 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4463595;
-        Fri, 21 Jul 2023 06:19:09 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="347313899"
-X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
-   d="scan'208";a="347313899"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 06:19:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="702053539"
-X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
-   d="scan'208";a="702053539"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 21 Jul 2023 06:18:54 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@kernel.org>)
-        id 1qMq1x-005vpD-13;
-        Fri, 21 Jul 2023 16:18:49 +0300
-Date:   Fri, 21 Jul 2023 16:18:49 +0300
-From:   Andy Shevchenko <andy@kernel.org>
-To:     nikita.shubin@maquefel.me
-Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
-        Lennert Buytenhek <kernel@wantstofly.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Lukasz Majewski <lukma@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Michael Peters <mpeters@embeddedts.com>,
-        Kris Bahnsen <kris@embeddedts.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v3 01/42] gpio: ep93xx: split device in multiple
-Message-ID: <ZLqFuWsxhdiP4ZjA@smile.fi.intel.com>
-References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
- <20230605-ep93xx-v3-1-3d63a5f1103e@maquefel.me>
+        Fri, 21 Jul 2023 09:42:04 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABEA1722;
+        Fri, 21 Jul 2023 06:42:03 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-666edfc50deso1357135b3a.0;
+        Fri, 21 Jul 2023 06:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689946923; x=1690551723;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ma570Bdn3cwknPzORB+8tE1TTAnqybBCYnCZYlb551M=;
+        b=VnV7fhqoF241mX8uDGONkp94/HXy7GAlBoDoyvwMIKlvRhap7jfh7SQ1xYZj3kVq99
+         tVz+h2pQvNWukDQ87fWSraVkmfHMWHlJpxO3CBQEXBOQ0iqRyQCH2yFESclQwT8rhRDE
+         i05xwzjhsx6AIkUPSyCL6nKjNy76RdUZEH/F5euQ9u3lags3uJoUcbmF9NJkPA7eF5Lh
+         RjjKXBnxy4RKdNnd0UvGXtxu8fCojahHQP7C/YgXml/Uts42Tekx4uHxpDe201y+EoDO
+         fgSwYXdo9WGis7Urm5WukiDpbPZ/2eXAdiN6hBU9xWmxlll15V3X/qdQ+xJNOjfLaBSu
+         EyKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689946923; x=1690551723;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ma570Bdn3cwknPzORB+8tE1TTAnqybBCYnCZYlb551M=;
+        b=ftBGGHYq2UTR8SpWa6ffT8xzQGygGsrLB2ZhfV0Xm5qXSmV+2bvCl22zYvbMnDewQb
+         HB/fU+NDIPw08/KbESeiFOQuTYVL6rayWxWrEOArmPMjgSiGnaqr3dzBDFLS6jJ2p9BY
+         kfGZ2i7Q7Cmts39m+Fgc6oA+Iy/rJOy/D5xvEzKXgb2lBzp7vYtiXCKmbv3t5+PiK7rA
+         Z4JjpYLeqprJhY4fklUmNg8ZXw1Qoy2G5glpIOKU12fPl7Q+OuUEIsjESLbvnDCQEkpo
+         OX+zQMgGppiSCP2guHlo6Y1tW2jBFochmXYd48BIE3faVkUJKxKw82apdKm5drWZ8NZf
+         ms/g==
+X-Gm-Message-State: ABy/qLZ9/J5U2keiumGITAH2La4EJKLT7VCaaHrLiWjcLjWFSgcJ44YT
+        5J4wud63MnYwSG0w9D+AoPk=
+X-Google-Smtp-Source: APBJJlHMePiTjCA/IB4qRQ04dKomcs4sSzWZbyZzg8ESqUPVIgOvkgYhO5BBmrQp5HJkqJ8m+mToBw==
+X-Received: by 2002:a05:6a20:4411:b0:132:f926:5891 with SMTP id ce17-20020a056a20441100b00132f9265891mr2701504pzb.4.1689946922654;
+        Fri, 21 Jul 2023 06:42:02 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 3-20020aa79243000000b006732786b5f1sm2952576pfp.213.2023.07.21.06.42.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Jul 2023 06:42:01 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 21 Jul 2023 06:42:00 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Florent CARLI <fcarli@gmail.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yoann Congal <yoann.congal@smile.fr>
+Subject: Re: [PATCH] watchdog: advantech_ec_wdt: fix Kconfig dependencies
+Message-ID: <3ea7f3f3-c153-4ee9-98e4-5f01de0ac88c@roeck-us.net>
+References: <20230721081347.52069-1-fcarli@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230605-ep93xx-v3-1-3d63a5f1103e@maquefel.me>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20230721081347.52069-1-fcarli@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,144 +75,32 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 02:29:01PM +0300, Nikita Shubin via B4 Relay wrote:
-> From: Nikita Shubin <nikita.shubin@maquefel.me>
+On Fri, Jul 21, 2023 at 10:13:47AM +0200, Florent CARLI wrote:
+> This driver uses the WATCHDOG_CORE framework and ISA_BUS_API.
+> This commit has these dependencies correctly selected.
 > 
-> This prepares ep93xx SOC gpio to convert into device tree driver:
-> - dropped banks and legacy defines
-> - split AB IRQ and make it shared
+> Signed-off-by: Florent CARLI <fcarli@gmail.com>
+> Co-authored-by: Yoann Congal <yoann.congal@smile.fr>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+> ---
+>  drivers/watchdog/Kconfig | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> We are relying on IRQ number information A, B ports have single shared
-> IRQ, while F port have dedicated IRQ for each line.
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index ee97d89dfc11..2108283b438c 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -1075,6 +1075,8 @@ config ADVANTECH_WDT
+>  config ADVANTECH_EC_WDT
+>  	tristate "Advantech Embedded Controller Watchdog Timer"
+>  	depends on X86
+> +	select ISA_BUS_API
+> +	select WATCHDOG_CORE
+>  	help
+>  		This driver supports Advantech products with ITE based Embedded Controller.
+>  		It does not support Advantech products with other ECs or without EC.
+> -- 
+> 2.39.2 (Apple Git-143)
 > 
-> Also we had to split single ep93xx platform_device into multiple, one
-> for each port, without this we can't do a full working transition from
-> legacy platform code into device tree capable. All GPIO_LOOKUP were
-> change to match new chip namings.
-
-...
-
-> -static void ep93xx_gpio_ab_irq_handler(struct irq_desc *desc)
-> +static u32 ep93xx_gpio_ab_irq_handler(struct gpio_chip *gc)
->  {
-> -	struct gpio_chip *gc = irq_desc_get_handler_data(desc);
-> -	struct ep93xx_gpio *epg = gpiochip_get_data(gc);
-> -	struct irq_chip *irqchip = irq_desc_get_chip(desc);
-> +	struct ep93xx_gpio_irq_chip *eic = to_ep93xx_gpio_irq_chip(gc);
->  	unsigned long stat;
->  	int offset;
->  
-> -	chained_irq_enter(irqchip, desc);
-> -
-> -	/*
-> -	 * Dispatch the IRQs to the irqdomain of each A and B
-> -	 * gpiochip irqdomains depending on what has fired.
-> -	 * The tricky part is that the IRQ line is shared
-> -	 * between bank A and B and each has their own gpiochip.
-> -	 */
-> -	stat = readb(epg->base + EP93XX_GPIO_A_INT_STATUS);
-> +	stat = readb(eic->base + EP93XX_INT_STATUS_OFFSET);
->  	for_each_set_bit(offset, &stat, 8)
-> -		generic_handle_domain_irq(epg->gc[0].gc.irq.domain,
-> -					  offset);
-> +		generic_handle_domain_irq(gc->irq.domain, offset);
->  
-> -	stat = readb(epg->base + EP93XX_GPIO_B_INT_STATUS);
-> -	for_each_set_bit(offset, &stat, 8)
-> -		generic_handle_domain_irq(epg->gc[1].gc.irq.domain,
-> -					  offset);
-> +	return stat;
-> +}
->  
-> -	chained_irq_exit(irqchip, desc);
-> +static irqreturn_t ep93xx_ab_irq_handler(int irq, void *dev_id)
-> +{
-> +	return IRQ_RETVAL(ep93xx_gpio_ab_irq_handler(dev_id));
->  }
->  
->  static void ep93xx_gpio_f_irq_handler(struct irq_desc *desc)
->  {
-> -	/*
-> -	 * map discontiguous hw irq range to continuous sw irq range:
-> -	 *
-> -	 *  IRQ_EP93XX_GPIO{0..7}MUX -> EP93XX_GPIO_LINE_F{0..7}
-> -	 */
->  	struct irq_chip *irqchip = irq_desc_get_chip(desc);
-> -	unsigned int irq = irq_desc_get_irq(desc);
-> -	int port_f_idx = (irq & 7) ^ 4; /* {20..23,48..51} -> {0..7} */
-> -	int gpio_irq = EP93XX_GPIO_F_IRQ_BASE + port_f_idx;
-> +	struct gpio_chip *gc = irq_desc_get_handler_data(desc);
-> +	struct gpio_irq_chip *gic = &gc->irq;
-> +	unsigned int parent = irq_desc_get_irq(desc);
-> +	unsigned int i;
->  
->  	chained_irq_enter(irqchip, desc);
-> -	generic_handle_irq(gpio_irq);
-> +	for (i = 0; i < gic->num_parents; i++)
-> +		if (gic->parents[i] == parent)
-> +			break;
-> +
-> +	if (i < gic->num_parents)
-> +		generic_handle_irq(irq_find_mapping(gc->irq.domain, i));
-
-Can we use
-
-		generic_handle_domain_irq(gc->irq.domain, i);
-
-here as well?
-
->  	chained_irq_exit(irqchip, desc);
->  }
-
-...
-
-> -	int offset = d->irq & 7;
-> +	int offset = irqd_to_hwirq(d);
-
-	irq_hw_number_t ?
-
->  	irq_flow_handler_t handler;
-
-...
-
-> +	int ret, irq, i = 0;
-
-What do you need this assignment for?
-
-...
-
-> +		ret = devm_request_irq(dev, irq,
-> +				ep93xx_ab_irq_handler,
-
-It can be located on the previous line.
-
-> +				IRQF_SHARED, gc->label, gc);
-> +		if (ret)
-> +			return dev_err_probe(dev, ret, "error requesting IRQ : %d\n", irq);
-
-Drop duplicating word 'error' in the message.
-Space is not needed before colon.
-
-...
-
-> +	/* TODO: replace with handle_bad_irq once we are fully hierarchical */
-
-To be pedantic: handle_bad_irq()
-
-> +	gc->label = dev_name(&pdev->dev);
-> +	if (platform_irq_count(pdev) > 0) {
-> +		dev_dbg(&pdev->dev, "setting up irqs for %s\n", dev_name(&pdev->dev));
-> +		ret = ep93xx_setup_irqs(pdev, egc);
-> +		if (ret)
-
-> +			dev_err(&pdev->dev, "setup irqs failed for %s\n", dev_name(&pdev->dev));
-
-What's the point to print dev name twice? Esp. taking into account
-gc->label assignment above. Why not use dev_err_probe() to unify
-the format of the messages from ->probe()?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
