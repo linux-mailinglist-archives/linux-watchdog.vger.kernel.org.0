@@ -2,97 +2,62 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E93EB75EC3A
-	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Jul 2023 09:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2334575EEE6
+	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Jul 2023 11:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjGXHJV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 24 Jul 2023 03:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
+        id S232211AbjGXJSQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 24 Jul 2023 05:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjGXHJT (ORCPT
+        with ESMTP id S232208AbjGXJR7 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 24 Jul 2023 03:09:19 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22C6138;
-        Mon, 24 Jul 2023 00:09:14 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6C2E524000E;
-        Mon, 24 Jul 2023 07:09:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1690182552;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0OTdgWQ6Vo/4tl1ZM7En0YdjITPLKGIP2IIxkkPFJRM=;
-        b=iC5ZIY44VFrCSUNoeMIdYmOyqSrlrW7N4tyY+Hq53oXBVph3jCQ5ij8fsDynsYh6NybKfF
-        47iBUwR964ggu52YB13yaU1E18wok2aDQAXdbpXfZnCVzqeybMcvNBEm04M8MJv49vz912
-        60p20TKBhztddQMV6EZbSo0vTLzFb3Ok+FWErn92iDiDFjDyPmqRh1JKdYw5xT3hwpwVlV
-        u4k2GthKUnBFuRNrRP/XoPSerupU1HIaiVySzO/QpWk35FaiLI3dwdIhQ2brWGTyOPPUCM
-        8E3/Ier83smwYkYCv/LsZ20OWFpB5I2g8A5epoX659Pa/Omr3Rckh60nqnZ+5A==
-Date:   Mon, 24 Jul 2023 09:09:02 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Andy Shevchenko <andy@kernel.org>
-Cc:     nikita.shubin@maquefel.me,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Lennert Buytenhek <kernel@wantstofly.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Lukasz Majewski <lukma@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Mon, 24 Jul 2023 05:17:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C093A6;
+        Mon, 24 Jul 2023 02:17:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92DE461000;
+        Mon, 24 Jul 2023 09:17:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E051C433C7;
+        Mon, 24 Jul 2023 09:17:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690190276;
+        bh=8a29HgSLoVm9OT+3DOAGJKF4MS3J2IMMxQ4wA9HJO4I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q7mDhZF6QyCJBUWj+rU0z2Z4B0dMWl2PQGQaPeq5SGN3vmEKhgJc3qaWb311TrJlt
+         d4J9J6icXBk/54Z1FsejZvX3LTVOa34QSr7tgkZdanmiqoydW0kp+KszNzwXS0RZQF
+         mcZZ/eaMUHA2MkMkybmnGGXh1BeAhzrVwnHFCb3LvqXFo8jFIG7KPx9zED/w5DY2r+
+         gNP/FsoGyz/5qlH5U/84iDNQF8APFAWiVlgZd7K/LaCT+AdaCanbwxokbAr1oUTukE
+         MX+a1BQhDkgjdCSv9ppRWZZ0Q9zriBr8QlS9EZPmbbg1CZLv3ygPf2YF6c3WpdzL7M
+         X6SfJJB1XuKew==
+Date:   Mon, 24 Jul 2023 10:17:51 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Michael Peters <mpeters@embeddedts.com>,
-        Kris Bahnsen <kris@embeddedts.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v3 24/42] mtd: nand: add support for ts72xx
-Message-ID: <20230724090902.679ea56d@xps-13>
-In-Reply-To: <ZLqx+Osn3gcHjUph@smile.fi.intel.com>
-References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
-        <20230605-ep93xx-v3-24-3d63a5f1103e@maquefel.me>
-        <ZLqx+Osn3gcHjUph@smile.fi.intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tobias Schaffner <tobias.schaffner@siemens.com>
+Subject: Re: [PATCH v2 2/3] leds: simatic-ipc-leds: default config switch to
+ platform switch
+Message-ID: <20230724091751.GA11203@google.com>
+References: <20230719153518.13073-1-henning.schild@siemens.com>
+ <20230719153518.13073-3-henning.schild@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230719153518.13073-3-henning.schild@siemens.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,53 +65,19 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Andy,
+On Wed, 19 Jul 2023, Henning Schild wrote:
 
-> > +static int ts72xx_nand_attach_chip(struct nand_chip *chip)
-> > +{
-> > +	switch (chip->ecc.engine_type) {
-> > +	case NAND_ECC_ENGINE_TYPE_SOFT:
-> > +		if (chip->ecc.algo =3D=3D NAND_ECC_ALGO_UNKNOWN)
-> > +			chip->ecc.algo =3D NAND_ECC_ALGO_HAMMING;
-> > +		break;
-> > +	case NAND_ECC_ENGINE_TYPE_ON_HOST:
-> > +		return -EINVAL;
-> > +	default: =20
->=20
-> > +		break; =20
->=20
-> Here it will return 0, is it a problem?
+> If a user did choose to enable Siemens Simatic platform support they
+> likely want the LED drivers to be enabled without having to flip more
+> config switches. So we make the LED drivers config switch default to
+> the platform driver switches value.
+> 
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> ---
+>  drivers/leds/simple/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 
-Seems ok, there are two other situations: on-die ECC engine and no ECC
-engine, both do not require any specific handling on the controller
-side.
+Acked-by: Lee Jones <lee@kernel.org>
 
->=20
-> > +	}
-> > +
-> > +	return 0;
-> > +} =20
->=20
-> ...
->=20
-> > +static void ts72xx_nand_remove(struct platform_device *pdev)
-> > +{
-> > +	struct ts72xx_nand_data *data =3D platform_get_drvdata(pdev);
-> > +	struct nand_chip *chip =3D &data->chip;
-> > +	int ret;
-> > +
-> > +	ret =3D mtd_device_unregister(nand_to_mtd(chip)); =20
->=20
-> > +	WARN_ON(ret); =20
->=20
-> Why?!  Is it like this in other MTD drivers?
-
-Yes, we did not yet change the internal machinery to return void, and
-we don't want people to think getting errors there is normal.
-
-> > +	nand_cleanup(chip);
-> > +} =20
->=20
-
-Thanks,
-Miqu=C3=A8l
+-- 
+Lee Jones [李琼斯]
