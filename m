@@ -2,37 +2,37 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017E475E888
-	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Jul 2023 03:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D392A75E8D4
+	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Jul 2023 03:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232178AbjGXBmK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 23 Jul 2023 21:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
+        id S232438AbjGXBop (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 23 Jul 2023 21:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232176AbjGXBlT (ORCPT
+        with ESMTP id S232556AbjGXBn0 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 23 Jul 2023 21:41:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B3949F6;
-        Sun, 23 Jul 2023 18:36:44 -0700 (PDT)
+        Sun, 23 Jul 2023 21:43:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6777310E4;
+        Sun, 23 Jul 2023 18:38:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 767AD60F4D;
-        Mon, 24 Jul 2023 01:33:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 203BDC433CC;
-        Mon, 24 Jul 2023 01:33:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4430061009;
+        Mon, 24 Jul 2023 01:33:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D542EC433CC;
+        Mon, 24 Jul 2023 01:33:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690162382;
-        bh=/lMwOp/a1X9GwFsBiE54ajNyp1XZhnGLosgfOspcy28=;
+        s=k20201202; t=1690162424;
+        bh=AHgF04TxtWofMRMSxe0sJ1P6IGN9b/9+eTDxb/KKrLc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eOJpAEFhSTz8CawKiV5t1rAKFhHqbjKzBpVSeEESV3h8CHEl9dfmgOoWCK/PTwxrt
-         yfxjJdjAYWqFUmnlf+4GKNC0O7Ek6VNJ42IX9pTeg5cS9pJcY+C+TLzArZkMVtNcSK
-         Ytp/oOjrFlN2u0ap2W/wRNd5jI9Cz/XIsPE+48szlPoXP87B32PAQ5pSby32t4y7jZ
-         LwC5ae786zBrCuLShsc74X00RdE5/r7xvBJBvYoYK2IrDBksqf1ggv1xvs/8C4S357
-         +XMFfSBEo/2mgfyMcOP45c7YsvS80LSjTjX322HZXfPypQFFqtpopSRTWCpyYPR8rE
-         0HCTbRZXVVtQg==
+        b=Frt7visT5vIbOCzQODKG0ROG9Jg89cj4hbg3ziQBWWLqEACO7ldFs3aR8iHvGYJOX
+         Rsc0xnvAGU6pL6o+U4aBdCohwb8XQkT/oWi4CKiEj77gFFRKMXiXn8p159IF/Aj1eL
+         bKQoScNckaQc1hF44AU6bucyBKHiB+Xj+MS5iGJ+kllbw4E44miIoqoiILz84HVYuc
+         ojJ//Ue/szh3vsn1hSOL0bEXTIkXC+USf7lbwoTQC97rGZTsVWb0uVzpcw56909PRI
+         VtpPM/NuxRuTMI91Aeu2QPY+988bhMPI9vryZOZIL0WFIwwF72WzPI4obpSyB/xgOF
+         Q0OL/EPtzO6tw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yuechao Zhao <yuechao.zhao@advantech.com.cn>,
@@ -40,19 +40,19 @@ Cc:     Yuechao Zhao <yuechao.zhao@advantech.com.cn>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Sasha Levin <sashal@kernel.org>, wim@iguana.be,
         linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 18/34] watchdog: sp5100_tco: support Hygon FCH/SCH (Server Controller Hub)
-Date:   Sun, 23 Jul 2023 21:32:21 -0400
-Message-Id: <20230724013238.2329166-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 13/24] watchdog: sp5100_tco: support Hygon FCH/SCH (Server Controller Hub)
+Date:   Sun, 23 Jul 2023 21:33:14 -0400
+Message-Id: <20230724013325.2332084-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230724013238.2329166-1-sashal@kernel.org>
-References: <20230724013238.2329166-1-sashal@kernel.org>
+In-Reply-To: <20230724013325.2332084-1-sashal@kernel.org>
+References: <20230724013325.2332084-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.40
+X-stable-base: Linux 5.15.121
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,10 +78,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/watchdog/sp5100_tco.c b/drivers/watchdog/sp5100_tco.c
-index 14f8d8d90920f..2bd3dc25cb030 100644
+index 1e327fb1ad202..0141858188c56 100644
 --- a/drivers/watchdog/sp5100_tco.c
 +++ b/drivers/watchdog/sp5100_tco.c
-@@ -96,7 +96,7 @@ static enum tco_reg_layout tco_reg_layout(struct pci_dev *dev)
+@@ -89,7 +89,7 @@ static enum tco_reg_layout tco_reg_layout(struct pci_dev *dev)
  	    sp5100_tco_pci->device == PCI_DEVICE_ID_AMD_KERNCZ_SMBUS &&
  	    sp5100_tco_pci->revision >= AMD_ZEN_SMBUS_PCI_REV) {
  		return efch_mmio;
@@ -90,7 +90,7 @@ index 14f8d8d90920f..2bd3dc25cb030 100644
  	    ((dev->device == PCI_DEVICE_ID_AMD_HUDSON2_SMBUS &&
  	     dev->revision >= 0x41) ||
  	    (dev->device == PCI_DEVICE_ID_AMD_KERNCZ_SMBUS &&
-@@ -579,6 +579,8 @@ static const struct pci_device_id sp5100_tco_pci_tbl[] = {
+@@ -561,6 +561,8 @@ static const struct pci_device_id sp5100_tco_pci_tbl[] = {
  	  PCI_ANY_ID, },
  	{ PCI_VENDOR_ID_AMD, PCI_DEVICE_ID_AMD_KERNCZ_SMBUS, PCI_ANY_ID,
  	  PCI_ANY_ID, },
