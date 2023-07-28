@@ -2,128 +2,164 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2DAE766518
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Jul 2023 09:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3167666FA
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Jul 2023 10:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233797AbjG1HRm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 28 Jul 2023 03:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
+        id S233961AbjG1IZL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 28 Jul 2023 04:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234043AbjG1HR0 (ORCPT
+        with ESMTP id S234972AbjG1IYb (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 28 Jul 2023 03:17:26 -0400
-Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04053ABE;
-        Fri, 28 Jul 2023 00:17:23 -0700 (PDT)
-Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id 8423910000B;
-        Fri, 28 Jul 2023 10:17:22 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 8423910000B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1690528642;
-        bh=THLBRWDsl5iTK9u472zi5OUc76M58zPFkwRfjKmJhec=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
-        b=kqdd3nJVJhpGdhuCZrTZfWzI2s2RabtHQlb8otG6RJY97QX5bdQ2Q+jKgjiVNlFP1
-         48JhFTI6TwMXPZ6sBnB1AuXHASXmYNkDtAdVpru68MxcIFVz6KRqZ3g4yLdbmQe24J
-         86Ss7J4oQEgMTRaXQE99fEbVSDM6vnpADX4hgrL4SFFvIK0LeOIhoE74jA4zHXNvY0
-         eHalq5fueMzU7c2UVgOKYPFgmrApiQUFlBPqoagNbg7qXH8oZVi/DYuvwYjIQegOLS
-         4oH0yV9fSdyuqZAz8dS1HSU0tf4fcYj+DzHEgNEzdmfRAsdnUJpgUh8GY6lI5AUZoP
-         46ZQU3FHOBkTw==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Fri, 28 Jul 2023 10:17:22 +0300 (MSK)
-Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
- (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Fri, 28 Jul
- 2023 10:16:59 +0300
-Date:   Fri, 28 Jul 2023 10:17:22 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Huqiang Qin <huqiang.qin@amlogic.com>
-CC:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <neil.armstrong@linaro.org>,
-        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>,
-        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/4] arm64: dts: Add watchdog node for Amlogic-T7 SoCs
-Message-ID: <20230728071722.dpytlujrzosb7owa@CAB-WSD-L081021>
-References: <20230726112146.1127145-1-huqiang.qin@amlogic.com>
- <20230726112146.1127145-5-huqiang.qin@amlogic.com>
+        Fri, 28 Jul 2023 04:24:31 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D95C49C2;
+        Fri, 28 Jul 2023 01:23:34 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fe1b00fce2so2211975e87.3;
+        Fri, 28 Jul 2023 01:23:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690532612; x=1691137412;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a0xhbAiUbjd2h8hrbYvNKZ3J3fpbP+0wJ7Vc6YuSc5c=;
+        b=jrdmr35Ma2osjBpAw3b9zN2kpLkQsvLEfbCx5UHTMTNqBNBjhTPut7YAnI1ip2Me9E
+         yzozyIliQB4+szgNhW0g0Q4bblCOsZLbMn4ryQ95yGJCoL71J5dZ42Q3M2xBLvGVTNPp
+         LcyNALkje5B3N3kOTp2uN8zdRm7YP7l6y4qwUPR4u9PL8kKPH3sKDTUnYikFKf8ptMsq
+         YU1jL/0+FPTbtIWCnpf3Tbek+0YJvm2JFtIgL9QUnlg6OqEfX6FF3e2xh1CCKQo2r81+
+         hrKsVO1ierOOMs4LcFnOlzmEcHpJSZYhMstv5dGnsH0pXMmC2Y7WpIGZ1x6muN8i1vm7
+         qoEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690532612; x=1691137412;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a0xhbAiUbjd2h8hrbYvNKZ3J3fpbP+0wJ7Vc6YuSc5c=;
+        b=KSIRjIfu6lXfXAt3R8zmjPTMOgzO5rWvNdVUxYEKFmj7B5NOy4lLBwKxzLCIlQNiHW
+         WFMtInuRb4Co7VwJGQONgaHbtvkdQHMpOiOYWrweIGJxPKuSbzFVVlypXOBBQYeEEskX
+         JiGKOdXp6xGbfwWlnX+cZqAv9G4AQAIdnCJGc6A8mFRvNjRJCW4qAjOd5ZROekhfte79
+         /0yRQftJJnIBpzFv4AW5KdlvaOsaDZOcBIP8VwAwoAixZOh0FoK6aMCIeb1rPx98pRNj
+         xK7g22WcQAisIa53A2UZaenjK1u947b8C4YGejK1TdrUcfE4pDO8qNS/Gl1Lea/8DhSv
+         QB+g==
+X-Gm-Message-State: ABy/qLboI3a2GQMc2UjPA2oG5Nuf3xgsIorWzLP2L6U0lsYxvYuCaPGw
+        3/7tCxlA1A2yYPEYxJXpqFQ=
+X-Google-Smtp-Source: APBJJlFYN35PMSaGWFsU7bOEaiX1P6f6+mU/fUJluxRlPtCVWghClcGBDgOqdbqj5ReW0PmnIoHbWg==
+X-Received: by 2002:a05:6512:3256:b0:4fb:9e1a:e592 with SMTP id c22-20020a056512325600b004fb9e1ae592mr1042977lfr.4.1690532612150;
+        Fri, 28 Jul 2023 01:23:32 -0700 (PDT)
+Received: from orome (p200300e41f1bd600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1b:d600:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id p17-20020aa7d311000000b005224f840130sm1528577edq.60.2023.07.28.01.23.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jul 2023 01:23:31 -0700 (PDT)
+Date:   Fri, 28 Jul 2023 10:23:29 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     nikita.shubin@maquefel.me
+Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lennert Buytenhek <kernel@wantstofly.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Michael Peters <mpeters@embeddedts.com>,
+        Kris Bahnsen <kris@embeddedts.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v3 37/42] pwm: ep93xx: drop legacy pinctrl
+Message-ID: <ZMN7AQozKJ-WvEtD@orome>
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+ <20230605-ep93xx-v3-37-3d63a5f1103e@maquefel.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="wGJHzmMJDSXZkkT2"
 Content-Disposition: inline
-In-Reply-To: <20230726112146.1127145-5-huqiang.qin@amlogic.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 178796 [Jul 22 2023]
-X-KSMG-AntiSpam-Version: 5.9.59.0
-X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 525 525 723604743bfbdb7e16728748c3fa45e9eba05f7d, {Tracking_uf_ne_domains}, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, FromAlignment: s, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean, bases: 2023/07/23 10:45:00
-X-KSMG-LinksScanning: Clean, bases: 2023/07/23 10:46:00
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/23 08:49:00 #21663637
-X-KSMG-AntiVirus-Status: Clean, skipped
+In-Reply-To: <20230605-ep93xx-v3-37-3d63a5f1103e@maquefel.me>
+User-Agent: Mutt/2.2.10 (2023-03-25)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Jul 26, 2023 at 07:21:46PM +0800, Huqiang Qin wrote:
-> Add watchdog device.
-> 
-> Signed-off-by: Huqiang Qin <huqiang.qin@amlogic.com>
 
-Reviewed-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+--wGJHzmMJDSXZkkT2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Jul 20, 2023 at 02:29:37PM +0300, Nikita Shubin via B4 Relay wrote:
+> From: Nikita Shubin <nikita.shubin@maquefel.me>
+>=20
+> Drop legacy gpio request/free since we are using
+> pinctrl for this now.
+>=20
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> Acked-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 > ---
->  arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi b/arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi
-> index 1423d4a79156..6e34d11214b7 100644
-> --- a/arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi
-> @@ -143,6 +143,12 @@ apb4: bus@fe000000 {
->  			#size-cells = <2>;
->  			ranges = <0x0 0x0 0x0 0xfe000000 0x0 0x480000>;
->  
-> +			watchdog@2100 {
-> +				compatible = "amlogic,t7-wdt";
-> +				reg = <0x0 0x2100 0x0 0x10>;
-> +				clocks = <&xtal>;
-> +			};
-> +
->  			uart_a: serial@78000 {
->  				compatible = "amlogic,t7-uart", "amlogic,meson-s4-uart";
->  				reg = <0x0 0x78000 0x0 0x18>;
-> -- 
-> 2.37.1
-> 
-> 
-> _______________________________________________
-> linux-amlogic mailing list
-> linux-amlogic@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-amlogic
+>  arch/arm/mach-ep93xx/core.c       | 42 ---------------------------------=
+------
+>  drivers/pwm/pwm-ep93xx.c          | 18 -----------------
+>  include/linux/soc/cirrus/ep93xx.h |  4 ----
+>  3 files changed, 64 deletions(-)
 
--- 
-Thank you,
-Dmitry
+Acked-by: Thierry Reding <thierry.reding@gmail.com>
+
+--wGJHzmMJDSXZkkT2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmTDewAACgkQ3SOs138+
+s6Fe1xAAmWGPXd//baY5gEQfFUeoZOB6tksL9wdhNTccZsdUbLbxDijfBzSgF8LC
+4mvLpGWCiVebT2hMwacsnHquq26aZ3xvnlVRB/0ic5Y2kxa86bm12Y4pBsVjTSJJ
+G4lOWY+DsW30C6I5FsCrnXfk0WQBj41lSHodIBmwHL9qac0hyJfTytGObyLB5oiF
+ac/Jss8xCi9FzacqnbKVCcWJQp070a/ptFCyXiXkc5sCZUii5eVbVyvjNvvuxUml
+BBdPYMMs4C+kocreEgCn7FI6anxgJ+IpqdxtMTwxUmocdA93Fif8XS75ystxbrRv
+SN0WMNlM6br95MU2Y/M0B21LivCfGu4PMreELcuoabHDN+TJwZk3AJzv6dv1hmhb
+Yy5Ptu2ZrR8xaV5LnHv1sDI5+RxSp1Pvt0Y8ap5MDHQDuL5oyzqBPVhhtPijSy1J
+qTZ3+vNGJAHWTGl5o748veQ8cu5tAdKANos5DSk1ihUcgdjopOrNVbAwpbStloRb
+1XGCOp8jBHitHVIibWOzq1iYX39CGqTR4IGzoPaE4vC7MwbJ/3gHxfMoyVLwpuEj
++XLcWlwcAfKINSGGx4yLHXAJF0bUbwHwom7p61rS8GeN0FCzkMO8ydTI6ZTh06lj
+sMd10ehwOllaHRNRjzZ8l3IozZoq+jDoPJPkeDuS8lTmKu2PKNk=
+=Y8RN
+-----END PGP SIGNATURE-----
+
+--wGJHzmMJDSXZkkT2--
