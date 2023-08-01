@@ -2,76 +2,181 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF38676A104
-	for <lists+linux-watchdog@lfdr.de>; Mon, 31 Jul 2023 21:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0241076A7FC
+	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Aug 2023 06:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbjGaTUO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 31 Jul 2023 15:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52762 "EHLO
+        id S229665AbjHAEqv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 1 Aug 2023 00:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjGaTUN (ORCPT
+        with ESMTP id S229660AbjHAEqt (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 31 Jul 2023 15:20:13 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6978B139
-        for <linux-watchdog@vger.kernel.org>; Mon, 31 Jul 2023 12:20:12 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-55c993e26ffso2908878a12.0
-        for <linux-watchdog@vger.kernel.org>; Mon, 31 Jul 2023 12:20:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690831212; x=1691436012;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AGAYQ6rkGNakus8aaZ27EffaPf8koLaE5zk7B3NOHKA=;
-        b=GqB/qdhTxxyrpfgSKIpQh97Dk1UMHlEa6GMjIym1JR9gaxNdxDyTaOb+1j6YPM+RAj
-         wE1c0gqZ1WTzXyVxGj3Zrtwhn3pCJmNXA6/P5ZJFm8uPywxskWxY/LvN6Te6q6L0yPCZ
-         ZDxtAKINDmFEqEX2z5OH3bbFBTiIMl/7pgV9fL6ekXIZ0EzKKNLaPCO88YektkU4vB12
-         QC4x+6FrJEDN0KVGAwi7ILcOwjN0OgsdSC5PTZ82SyiInHiQMGjQeKTZHMhyLtcxzqDm
-         xjWSAkas0iJdFCGFj08qVu69OS3ytUfJKu9bc79AFsS/2zsPu1eAxr/xnEzHittALpvR
-         T3kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690831212; x=1691436012;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AGAYQ6rkGNakus8aaZ27EffaPf8koLaE5zk7B3NOHKA=;
-        b=ZF15nomhdYV9tE7YtCThljiTJ74oWfdGROwhSEv+pZKH471Cfy9xS8erNPObbvap3R
-         uFB/jffusUnJ0OLfu1emCiaKvQZ8TCaQBTQBIUsNCafvnUJrll2zIylJo7rHnoc3H6tj
-         aRqpeTKXEp9DkrjW87EbGyepeHklK/E50f5T7CY9b3f/IMYmR4L+AdB08cxaQ0V3Y0CW
-         9QBB9XFqwvOWAyFim/AOlioZQ7yJajx3idHyGO2MjjlvtNjc/MV4bDpS18MOJU+Cv8jQ
-         Njywo3zBVvkn35/xCReYDzXWtzVA/n14H8dR30+u82/245N+a1luHGZs5XjVnnW9Ubor
-         xMYA==
-X-Gm-Message-State: ABy/qLYfT0vx8wfNmjhx0Hr/pP4ZxRJseCPlU1dtWSghxU0tgcv0OGxz
-        e5PzWqXleEa/0wRtG7CWtPXt8vPQaw+2gxwdiyo=
-X-Google-Smtp-Source: APBJJlE9tXomkGDl6B+X5zzVamRr+k1A1H3T9g5qwZex8PsTkCtguD+GC8pFCyYdLyNmkGr4Ebb3T4QphnooKOSf4oM=
-X-Received: by 2002:a17:90a:f318:b0:263:9661:a35c with SMTP id
- ca24-20020a17090af31800b002639661a35cmr10000687pjb.8.1690831211934; Mon, 31
- Jul 2023 12:20:11 -0700 (PDT)
+        Tue, 1 Aug 2023 00:46:49 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DF210C7;
+        Mon, 31 Jul 2023 21:46:48 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3712XAD7021689;
+        Mon, 31 Jul 2023 21:46:31 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=ewKtmKa73JfXtQvdkvNowev2HAcGMB8AogjqYSMc2io=;
+ b=hKzYQSAMmIYeo6HHr6RTO4aFzkqups18oAvv+FMfdS4j3EX82EJ4nkgY937U7D+aHGza
+ dWfLWpVUlXk8kdfk92OJp5gORAsrjukSUOM/cy24qNylUIuMW2Mto5TpS+Ini3ygvDdO
+ t4B7j5yUZOZaWGMbzr0XslDLBHrXPhywtJAFi1jO+HNlsLvzvXdh0edINzGMJnckisAu
+ f9HMh3rPixZTfHmZ9MjM/BaN2mV0WyuprlLOFM/fyP1gX+tkX7+fBObUkdFt+//+JNX0
+ TOl7/2YDqc4iz8mYzmRLbuWkzq284pLrEQrY7BJ2m6UgQ715nx5ZpHDFrBG9zgii0ekP ag== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3s6du0aw1s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jul 2023 21:46:31 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 31 Jul
+ 2023 21:46:29 -0700
+Received: from bbhushan2.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Mon, 31 Jul 2023 21:46:26 -0700
+From:   Bharat Bhushan <bbhushan2@marvell.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sgoutham@marvell.com>
+CC:     Bharat Bhushan <bbhushan2@marvell.com>
+Subject: [PATCH 1/2 v10] dt-bindings: watchdog: marvell GTI system watchdog driver
+Date:   Tue, 1 Aug 2023 10:16:22 +0530
+Message-ID: <20230801044623.9275-1-bbhushan2@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Received: by 2002:a05:7300:7492:b0:dc:d560:dc43 with HTTP; Mon, 31 Jul 2023
- 12:20:11 -0700 (PDT)
-Reply-To: Dr.catherine_chan@hotmail.com
-From:   catherine chan <williamsoscar698@gmail.com>
-Date:   Mon, 31 Jul 2023 21:20:11 +0200
-Message-ID: <CAM8NFUTFmqT-kq4q6JLKSBrz-uVg6sMQbmoDTZLYeQUnfNKN9A@mail.gmail.com>
-Subject: Re:Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain
+X-Proofpoint-GUID: hkVvKA2_BIyXE3tI1uxqPjy9BMgOGvfs
+X-Proofpoint-ORIG-GUID: hkVvKA2_BIyXE3tI1uxqPjy9BMgOGvfs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-01_02,2023-07-31_02,2023-05-22_02
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
--- 
- Hello! How are you? Please forgive me if my application is not
-acceptable by your kind person, I saw your email and I want to talk to
-you directly by mail. I would appreciate it if you could send me an
-email when you receive it.
+Add binding documentation for the Marvell GTI system
+watchdog driver.
 
-Waiting for your prompt response
-Greetings,
+Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+v10:
+ - Added Reviewed by Krzysztof Kozlowski
+
+v9:
+ - Rename binding file name from marvell,octeontx2-wdt.yaml to
+   marvell,cn10624-wdt.yaml
+ - "allOf: - $ref: watchdog.yaml#" moved after maintainers
+ - clocks have maxItems rather than minItems
+ - Added "clock-names" name defination
+ - Added Fallback to compatible
+
+v8:
+  - Compatible name as per soc name
+
+ .../watchdog/marvell,cn10624-wdt.yaml         | 83 +++++++++++++++++++
+ 1 file changed, 83 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,cn10624-wdt.yaml
+
+diff --git a/Documentation/devicetree/bindings/watchdog/marvell,cn10624-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvell,cn10624-wdt.yaml
+new file mode 100644
+index 000000000000..1b583f232e53
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/marvell,cn10624-wdt.yaml
+@@ -0,0 +1,83 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/marvell,cn10624-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Marvell Global Timer (GTI) system watchdog
++
++maintainers:
++  - Bharat Bhushan <bbhushan2@marvell.com>
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - enum:
++          - marvell,cn9670-wdt
++          - marvell,cn10624-wdt
++
++      - items:
++          - enum:
++              - marvell,cn9880-wdt
++              - marvell,cnf9535-wdt
++          - const: marvell,cn9670-wdt
++
++      - items:
++          - enum:
++              - marvell,cn10308-wdt
++              - marvell,cnf10518-wdt
++          - const: marvell,cn10624-wdt
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: refclk
++
++  marvell,wdt-timer-index:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 0
++    maximum: 63
++    description:
++      An SoC have many timers (up to 64), firmware can reserve one or more timer
++      for some other use case and configures one of the global timer as watchdog
++      timer. Firmware will update this field with the timer number configured
++      as watchdog timer.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        watchdog@802000040000 {
++            compatible = "marvell,cn9670-wdt";
++            reg = <0x00008020 0x00040000 0x00000000 0x00020000>;
++            interrupts = <GIC_SPI 38 IRQ_TYPE_EDGE_RISING>;
++            clocks = <&sclk>;
++            clock-names = "refclk";
++            marvell,wdt-timer-index = <63>;
++        };
++    };
++
++...
+-- 
+2.17.1
+
