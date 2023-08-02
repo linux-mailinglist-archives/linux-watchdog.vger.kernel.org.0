@@ -2,43 +2,43 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A988676C6E8
-	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Aug 2023 09:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF8176C707
+	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Aug 2023 09:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbjHBHed (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 2 Aug 2023 03:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
+        id S233113AbjHBHhL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 2 Aug 2023 03:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbjHBHed (ORCPT
+        with ESMTP id S232959AbjHBHgm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 2 Aug 2023 03:34:33 -0400
+        Wed, 2 Aug 2023 03:36:42 -0400
 Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FECEEA;
-        Wed,  2 Aug 2023 00:34:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB7C30EB;
+        Wed,  2 Aug 2023 00:36:39 -0700 (PDT)
 Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id 23D05100020;
-        Wed,  2 Aug 2023 10:34:26 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 23D05100020
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 9CB3E100020;
+        Wed,  2 Aug 2023 10:36:37 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 9CB3E100020
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1690961666;
-        bh=WEU63Mnt7xTNDDQGjM0C7uIxpJ9fktvAmk1Do9eEtOY=;
+        s=mail; t=1690961797;
+        bh=b/D/LJ/JEmhps4l5xrKdBZ4JUoOucTGmiH6sdU6vmSw=;
         h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
-        b=RPPs93NQIPNcaOI+7A6n755i37dFmijxDygr3TMHsVr5s5JVd+FMEOQ6IisJR+vf8
-         LM2VYm8c4ozNhSacvvhTV/D/A3yUQbHEB8gHWfseVM7tR3r/nh60AgaFXei+GAlKzI
-         7+S4sOnn3TmIHpFj5I1U23/VmA51zeWjw1coj6QNEzmwLFCFtJHLz9XmFPpUULfRlm
-         KKEfKXPDgaLZ7qdRMbSDuLcS9D+HhasNwxRqPmPk1mFNCszgvtDUCkL1A9obrk6L0t
-         UMcTexsG0OE/xG8nhkYV4CP62XRWGO8TqcGyPzV6RyNWirYvl1HfAceVAN90hSSKZa
-         iCQ/NMK4UIzLA==
+        b=asQkXlnrZwtQb8EjKdJdbn87doPjxw8ZkcF0jXGFDNEUolgpT3dW/UJ9/NaMxNmth
+         z+0OtccyG9yCK9ivH1JtmahlrBpXc6LtQLbZbJNMkoq683PhRHPlaFDiR5NfFKn/6S
+         IHGBHsPy2W5bNkQKx74WyYde6Iiqge71INBwIr5x9FAd5qdxqQnVM7T9KsT9EMNX52
+         68cBxdyEWA+cLb7KqrHodbxxBx4LraFGnzyOpjqCyGKyyOmLAUnb5zH1WCXTWvyqz6
+         WbA5XPj8IswtfpSzyOkxHEnyP1bKVUKnB60m6IN3V3Hk9IQcOGT/iForslYKU26KQv
+         zkLBgQ8FY03pw==
 Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Wed,  2 Aug 2023 10:34:26 +0300 (MSK)
+        Wed,  2 Aug 2023 10:36:37 +0300 (MSK)
 Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
  (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 2 Aug
- 2023 10:34:25 +0300
-Date:   Wed, 2 Aug 2023 10:34:25 +0300
+ 2023 10:36:37 +0300
+Date:   Wed, 2 Aug 2023 10:36:37 +0300
 From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
 To:     Huqiang Qin <huqiang.qin@amlogic.com>
 CC:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
@@ -48,17 +48,18 @@ CC:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
         <martin.blumenstingl@googlemail.com>,
         <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/4] watchdog: Add a new struct for Amlogic-GXBB driver
-Message-ID: <20230802073425.urdu3xtoxm6ob3aa@CAB-WSD-L081021>
-References: <20230726112146.1127145-1-huqiang.qin@amlogic.com>
- <20230726112146.1127145-3-huqiang.qin@amlogic.com>
- <20230728071558.xoa3sdku3zkuhtug@CAB-WSD-L081021>
- <01357346-59f3-5c5a-d456-8e64381fe611@amlogic.com>
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH V2 1/4] dt-bindings: watchdog: Add support for Amlogic-T7
+ SoCs
+Message-ID: <20230802073637.4dy22fdh5kxukylo@CAB-WSD-L081021>
+References: <20230802033222.4024946-1-huqiang.qin@amlogic.com>
+ <20230802033222.4024946-2-huqiang.qin@amlogic.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <01357346-59f3-5c5a-d456-8e64381fe611@amlogic.com>
+In-Reply-To: <20230802033222.4024946-2-huqiang.qin@amlogic.com>
 User-Agent: NeoMutt/20220415
 X-Originating-IP: [100.64.160.123]
 X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
@@ -72,11 +73,11 @@ X-KSMG-AntiSpam-Rate: 0
 X-KSMG-AntiSpam-Status: not_detected
 X-KSMG-AntiSpam-Method: none
 X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 525 525 723604743bfbdb7e16728748c3fa45e9eba05f7d, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-KSMG-AntiSpam-Info: LuaCore: 525 525 723604743bfbdb7e16728748c3fa45e9eba05f7d, {Tracking_uf_ne_domains}, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, FromAlignment: s, ApMailHostAddress: 100.64.160.123
 X-MS-Exchange-Organization-SCL: -1
 X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
+X-KSMG-AntiPhishing: Clean, bases: 2023/07/23 10:45:00
+X-KSMG-LinksScanning: Clean, bases: 2023/07/23 10:46:00
 X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/23 08:49:00 #21663637
 X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,50 +90,41 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Aug 01, 2023 at 08:51:30PM +0800, Huqiang Qin wrote:
-> Hi Dmitry,
+On Wed, Aug 02, 2023 at 11:32:19AM +0800, Huqiang Qin wrote:
+> Update dt-binding document for watchdog of Amlogic-T7 SoCs.
 > 
-> On 2023/7/28 15:15, Dmitry Rokosov wrote:
-> > [ EXTERNAL EMAIL ]
-> > 
-> > Hello Huqiang,
-> > 
-> > Thank you for the patch series!
-> > 
-> > Please include a cover letter in future patch submissions if possible.
-> > It will help to better understand the theme of the patch series and
-> > group all patch sets together in one email thread.
-> 
-> Thank you for your suggestion. In fact, this patch series contains
-> a cover letter. It may be due to network reasons that it was not
-> sent to your mailbox correctly :)
-> 
+> Signed-off-by: Huqiang Qin <huqiang.qin@amlogic.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Ah, sorry, you are right... Now I see your cover letter on the
-lore.kernel.org... My mail server makes a magic...
+Reviewed-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 
-> ...
-> >>  static int meson_gxbb_wdt_start(struct watchdog_device *wdt_dev)
-> >>  {
-> >>       struct meson_gxbb_wdt *data = watchdog_get_drvdata(wdt_dev);
-> >> @@ -140,8 +143,12 @@ static const struct dev_pm_ops meson_gxbb_wdt_pm_ops = {
-> >>       SET_SYSTEM_SLEEP_PM_OPS(meson_gxbb_wdt_suspend, meson_gxbb_wdt_resume)
-> >>  };
-> >>
-> >> +static const struct wdt_params gxbb_params = {
-> >> +     .rst_shift = 21,
-> > 
-> > Maybe it's better to declare rst with the BIT() macro already applied,
-> > and use it in wdt_probe() as is. And name 'rst' without 'shift' is
-> > looking more brief.
+> ---
 > 
-> Okay, I will change it in the next version.
+> V1 -> V2: Unchanged.
+> 
+>  .../devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml     | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml b/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml
+> index f5cc7aa1b93b..443e2e7ab467 100644
+> --- a/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml
+> @@ -17,6 +17,7 @@ properties:
+>    compatible:
+>      enum:
+>        - amlogic,meson-gxbb-wdt
+> +      - amlogic,t7-wdt
+>  
+>    reg:
+>      maxItems: 1
+> -- 
+> 2.37.1
 > 
 > 
-> Thanks
-> 
-> Best Regards,
-> Huqiang Qin
+> _______________________________________________
+> linux-amlogic mailing list
+> linux-amlogic@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-amlogic
 
 -- 
 Thank you,
