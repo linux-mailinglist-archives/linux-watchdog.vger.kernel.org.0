@@ -2,179 +2,184 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F7876C727
-	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Aug 2023 09:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07AD76DEF4
+	for <lists+linux-watchdog@lfdr.de>; Thu,  3 Aug 2023 05:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbjHBHkh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 2 Aug 2023 03:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
+        id S233120AbjHCD0t (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 2 Aug 2023 23:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233169AbjHBHkR (ORCPT
+        with ESMTP id S233618AbjHCD0M (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 2 Aug 2023 03:40:17 -0400
-Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA3C4C0E;
-        Wed,  2 Aug 2023 00:38:19 -0700 (PDT)
-Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id 8F4CB100020;
-        Wed,  2 Aug 2023 10:38:09 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 8F4CB100020
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1690961889;
-        bh=2YBD3HHCpBblCigCemMGFithywGJOmmTUaqFXjxfdm8=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
-        b=VKlloV2M5Qg1ORESM9UJVizuOXCx2LfG+VMrBS7kBzWZ+7e/8gBKaHEGZyrBwzR7u
-         0ENIbJ40Fs11rwhAXIy5Ko1GFkbCy1lBT30uk5BS4afBI/3VvEykCk0BqwsudwSMCN
-         KaLugvIWGoTMl+7wqq0baA2AdwT9KmkZNIvJB4EO2pQwYg7G8wHbf/5Yxvl2482+tL
-         37wcpv1ongXLCrTbIoy7JZUTZu6oP+MfUUTZLynlAUMbV1EQ7FZup9GHvZVYrBg/md
-         bciFfbiPXdPmkIDimtW+fJ9owUDFf6aQWjWSI9iGSqApLL9p1cvLIMeN/nU8p1PX8R
-         AG+APObH51o5w==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Wed,  2 Aug 2023 10:38:09 +0300 (MSK)
-Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
- (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 2 Aug
- 2023 10:38:08 +0300
-Date:   Wed, 2 Aug 2023 10:38:04 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Huqiang Qin <huqiang.qin@amlogic.com>
-CC:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
+        Wed, 2 Aug 2023 23:26:12 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D75E48;
+        Wed,  2 Aug 2023 20:26:06 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 372KAiUh027910;
+        Wed, 2 Aug 2023 20:25:32 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0220;
+ bh=pgeiXyQcl8l6nxlmc6V1x/0TUeKAwueu6QJhgyTSr4w=;
+ b=Sz1lod6TY0TcRgKjjIi8e/OP7wWtdTDj5H7h1Fk5+hRBKM+UPCgFnBYDOCVH/YmcJbUZ
+ hHnHzJu9iGQJEU/cDmRMBI6H6p2AvmAexx835novA+qVvpQjGLtoBG5IYX7IQjF8ZNQo
+ AJdPyLffGB8Q6dkG309CrwqTl4EnpCfpbOguwffGSJlF7NGUwiy731qnW+PsQ4aV8pO+
+ 58PsOsFDHCN+xx+qXMlONJPPWFW3TDSfTBG3eGJ4Y4hcw/AMHmCWAbLK0+tv6wfuuqae
+ oR/QEzxwdhKUDmWINdyrH9hGkKFIvAJ2JiKOwlZhKlqUYMvhGCbiKqU418dAzOOl6H4M KQ== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3s529kewcd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 02 Aug 2023 20:25:31 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 2 Aug
+ 2023 20:25:29 -0700
+Received: from bbhushan2.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Wed, 2 Aug 2023 20:25:26 -0700
+From:   Bharat Bhushan <bbhushan2@marvell.com>
+To:     <wim@linux-watchdog.org>, <linux@roeck-us.net>,
         <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <neil.armstrong@linaro.org>,
-        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>,
         <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2 2/4] watchdog: Add a new struct for Amlogic-GXBB driver
-Message-ID: <20230802073804.7r4uofuutgwj6zmw@CAB-WSD-L081021>
-References: <20230802033222.4024946-1-huqiang.qin@amlogic.com>
- <20230802033222.4024946-3-huqiang.qin@amlogic.com>
+        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>
+CC:     Bharat Bhushan <bbhushan2@marvell.com>
+Subject: [PATCH 1/2 v11] dt-bindings: watchdog: marvell GTI system watchdog driver
+Date:   Thu, 3 Aug 2023 08:55:22 +0530
+Message-ID: <20230803032523.6242-1-bbhushan2@marvell.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230802033222.4024946-3-huqiang.qin@amlogic.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 178796 [Jul 22 2023]
-X-KSMG-AntiSpam-Version: 5.9.59.0
-X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 525 525 723604743bfbdb7e16728748c3fa45e9eba05f7d, {Tracking_uf_ne_domains}, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, FromAlignment: s, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean, bases: 2023/07/23 10:45:00
-X-KSMG-LinksScanning: Clean, bases: 2023/07/23 10:46:00
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/07/23 08:49:00 #21663637
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-GUID: sbCgDsPkGbawrDq1O728Wfr2DY03A_hI
+X-Proofpoint-ORIG-GUID: sbCgDsPkGbawrDq1O728Wfr2DY03A_hI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-02_21,2023-08-01_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Aug 02, 2023 at 11:32:20AM +0800, Huqiang Qin wrote:
-> Add a new structure wdt_params to describe the watchdog difference
-> of different chips.
-> 
-> Signed-off-by: Huqiang Qin <huqiang.qin@amlogic.com>
+Add binding documentation for the Marvell GTI system
+watchdog driver.
 
-Reviewed-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+v11:
+ - No change
 
-> ---
-> 
-> V1 -> V2: Rename rst_shift to rst and use the BIT() macro to build
->           its initial value.
-> 
->  drivers/watchdog/meson_gxbb_wdt.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/watchdog/meson_gxbb_wdt.c b/drivers/watchdog/meson_gxbb_wdt.c
-> index 35d80cb39856..18180d91543e 100644
-> --- a/drivers/watchdog/meson_gxbb_wdt.c
-> +++ b/drivers/watchdog/meson_gxbb_wdt.c
-> @@ -22,7 +22,6 @@
->  
->  #define GXBB_WDT_CTRL_CLKDIV_EN			BIT(25)
->  #define GXBB_WDT_CTRL_CLK_EN			BIT(24)
-> -#define GXBB_WDT_CTRL_EE_RESET			BIT(21)
->  #define GXBB_WDT_CTRL_EN			BIT(18)
->  #define GXBB_WDT_CTRL_DIV_MASK			(BIT(18) - 1)
->  
-> @@ -45,6 +44,10 @@ struct meson_gxbb_wdt {
->  	struct clk *clk;
->  };
->  
-> +struct wdt_params {
-> +	u32 rst;
-> +};
-> +
->  static int meson_gxbb_wdt_start(struct watchdog_device *wdt_dev)
->  {
->  	struct meson_gxbb_wdt *data = watchdog_get_drvdata(wdt_dev);
-> @@ -140,8 +143,12 @@ static const struct dev_pm_ops meson_gxbb_wdt_pm_ops = {
->  	SET_SYSTEM_SLEEP_PM_OPS(meson_gxbb_wdt_suspend, meson_gxbb_wdt_resume)
->  };
->  
-> +static const struct wdt_params gxbb_params = {
-> +	.rst = BIT(21),
-> +};
-> +
->  static const struct of_device_id meson_gxbb_wdt_dt_ids[] = {
-> -	 { .compatible = "amlogic,meson-gxbb-wdt", },
-> +	 { .compatible = "amlogic,meson-gxbb-wdt", .data = &gxbb_params, },
->  	 { /* sentinel */ },
->  };
->  MODULE_DEVICE_TABLE(of, meson_gxbb_wdt_dt_ids);
-> @@ -150,6 +157,7 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct meson_gxbb_wdt *data;
-> +	struct wdt_params *params;
->  	u32 ctrl_reg;
->  
->  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> @@ -164,6 +172,8 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
->  	if (IS_ERR(data->clk))
->  		return PTR_ERR(data->clk);
->  
-> +	params = (struct wdt_params *)of_device_get_match_data(dev);
-> +
->  	platform_set_drvdata(pdev, data);
->  
->  	data->wdt_dev.parent = dev;
-> @@ -191,7 +201,7 @@ static int meson_gxbb_wdt_probe(struct platform_device *pdev)
->  	/* Setup with 1ms timebase */
->  	ctrl_reg |= ((clk_get_rate(data->clk) / 1000) &
->  			GXBB_WDT_CTRL_DIV_MASK) |
-> -			GXBB_WDT_CTRL_EE_RESET |
-> +			params->rst |
->  			GXBB_WDT_CTRL_CLK_EN |
->  			GXBB_WDT_CTRL_CLKDIV_EN;
->  
-> -- 
-> 2.37.1
-> 
-> 
-> _______________________________________________
-> linux-amlogic mailing list
-> linux-amlogic@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-amlogic
+v10:
+ - Added Reviewed by Krzysztof Kozlowski
 
+v9:
+ - Rename binding file name from marvell,octeontx2-wdt.yaml to
+   marvell,cn10624-wdt.yaml
+ - "allOf: - $ref: watchdog.yaml#" moved after maintainers
+ - clocks have maxItems rather than minItems
+ - Added "clock-names" name defination
+ - Added Fallback to compatible
+
+v8:
+  - Compatible name as per soc name
+
+ .../watchdog/marvell,cn10624-wdt.yaml         | 83 +++++++++++++++++++
+ .../watchdog/marvell,cn10624-wdt.yaml         | 83 +++++++++++++++++++
+ 1 file changed, 83 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,cn10624-wdt.yaml
+
+diff --git a/Documentation/devicetree/bindings/watchdog/marvell,cn10624-wdt.yaml b/Documentation/devicetree/bindings/watchdog/marvell,cn10624-wdt.yaml
+new file mode 100644
+index 000000000000..1b583f232e53
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/marvell,cn10624-wdt.yaml
+@@ -0,0 +1,83 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/marvell,cn10624-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Marvell Global Timer (GTI) system watchdog
++
++maintainers:
++  - Bharat Bhushan <bbhushan2@marvell.com>
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - enum:
++          - marvell,cn9670-wdt
++          - marvell,cn10624-wdt
++
++      - items:
++          - enum:
++              - marvell,cn9880-wdt
++              - marvell,cnf9535-wdt
++          - const: marvell,cn9670-wdt
++
++      - items:
++          - enum:
++              - marvell,cn10308-wdt
++              - marvell,cnf10518-wdt
++          - const: marvell,cn10624-wdt
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: refclk
++
++  marvell,wdt-timer-index:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 0
++    maximum: 63
++    description:
++      An SoC have many timers (up to 64), firmware can reserve one or more timer
++      for some other use case and configures one of the global timer as watchdog
++      timer. Firmware will update this field with the timer number configured
++      as watchdog timer.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        watchdog@802000040000 {
++            compatible = "marvell,cn9670-wdt";
++            reg = <0x00008020 0x00040000 0x00000000 0x00020000>;
++            interrupts = <GIC_SPI 38 IRQ_TYPE_EDGE_RISING>;
++            clocks = <&sclk>;
++            clock-names = "refclk";
++            marvell,wdt-timer-index = <63>;
++        };
++    };
++
++...
 -- 
-Thank you,
-Dmitry
+2.17.1
+
