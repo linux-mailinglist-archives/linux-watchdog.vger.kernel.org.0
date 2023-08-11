@@ -2,71 +2,70 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E706778F33
-	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Aug 2023 14:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80FC2778F42
+	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Aug 2023 14:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbjHKMUj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 11 Aug 2023 08:20:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
+        id S235733AbjHKMVz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 11 Aug 2023 08:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbjHKMUi (ORCPT
+        with ESMTP id S229683AbjHKMVy (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 11 Aug 2023 08:20:38 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F1D2D5B;
-        Fri, 11 Aug 2023 05:20:26 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-3492c49c649so6573305ab.3;
-        Fri, 11 Aug 2023 05:20:26 -0700 (PDT)
+        Fri, 11 Aug 2023 08:21:54 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8515019E
+        for <linux-watchdog@vger.kernel.org>; Fri, 11 Aug 2023 05:21:54 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-34914684b62so6890495ab.3
+        for <linux-watchdog@vger.kernel.org>; Fri, 11 Aug 2023 05:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691756426; x=1692361226;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=gmail.com; s=20221208; t=1691756514; x=1692361314;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=x0F8MyZgKmrxC30NzYBMK7jS58cwODqoqE9WYpVxgGs=;
-        b=WuqUO3tLXXBMBp/NkmwPRYtiBS6WdU0uYUfp5IyXcZNlqBFyiiyiubH3tqqfOGkitO
-         9PtxUV3lp0fF6ZqGVh5jnlZfUji7ELVU77HnczXeU6LrjkjvSuihONFpLeakqIDapydS
-         rU7l0+g/3XE5NiKyaF1pzNBbti0a1kYTRZ6jetxNkdFFTskKc0S4bEEjIe2GD6FnQvLF
-         L7mbI2Gu7Y0nKC2IU4PvljV5+1vCI2d0K8lf23tKzjkFYPyh1OroMDtAen948pIAxoMB
-         hbZS6ugOfTRDP4FSKtkpSg4/KEGAZAm83FYQNe27fWf3mJjKwrUa6eOjZ/5w+0Mn7lLl
-         J2Lw==
+        bh=Sf3LAHgsmpuoSPu9jH7OskaQzJ3HX2ZrTwSruvwIxfc=;
+        b=D3sSvrYAKtYJVkc3IusKZEEGiJdfKf8V/BufnHHa2lRNijVh9SfRo8e1GLC1mDb5ZF
+         ouzlg3mtBYzTzxpYpG4cMp59GdR2Lxbp38jgVEnwLI0Hl4z58l+pm3UmJWqVdtIOlBgI
+         RZSCs6dzmu8dxUoqKO2fwTNDs0DmxEVaqQLwiqGYM1QLrKBREphtfjqew1pQY5DthgOT
+         yMTeSKQMuwFzMuhFtVvmXUJocegDUds8vjBmYl+S8dcROSu9sMf6c2RLSqXq4U9y43iH
+         sVyIXBEgA+E17n7G6kIrTv8GFfSiIAOyJ9ZmDuFwSUz1AFdvLMzlcS0E1LESCDaHAsXX
+         BnXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691756426; x=1692361226;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1691756514; x=1692361314;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=x0F8MyZgKmrxC30NzYBMK7jS58cwODqoqE9WYpVxgGs=;
-        b=PlkK84NECxFZky19jU2ag5XB/Hsb8iq9pjnRAXwQHIsjYg0ykHVK6IX4FfLhfaFp+V
-         aGJcSJ+5GHDDpSqsFqI9TPMreuPwFyStTnoCzHo0bAn7cHH1LZIebtt6zOkG+n25FC8D
-         0v7xT/d3thipdJyzLwgiJjmIjeZroSd+9mIaDGZVyCbZdHSBz0nLG9vVaMuX8BisdsG+
-         bDEdRJWDScuAhF3K7HjsElrCge53ZeZ7G3KBCX4m5Ia67tcNde8AJa6O9XfAI2Liv4hC
-         LU1Hsv3abj7hFcZQksDHam1U9tCjI+k0sjbPJREhoVXSjbFXfCxOKeR46ArnDRk/AQWk
-         u0+w==
-X-Gm-Message-State: AOJu0YyWwBSG+HLblnR/tHRDeAmagO2embzGNiaPbgddqSl3H8dFu8GO
-        deFIUt8XKGY0Je8xbsBlhKM=
-X-Google-Smtp-Source: AGHT+IEVUDVMgJQown+w1I0KKunVY5CYM2NbbPCe76Af7tAvE7Cl7Ntaouzlg5sWaCbj0q9Z/4+9Ug==
-X-Received: by 2002:a05:6e02:1907:b0:349:849d:bdf7 with SMTP id w7-20020a056e02190700b00349849dbdf7mr2366982ilu.17.1691756425913;
-        Fri, 11 Aug 2023 05:20:25 -0700 (PDT)
+        bh=Sf3LAHgsmpuoSPu9jH7OskaQzJ3HX2ZrTwSruvwIxfc=;
+        b=HNC5yUL40AtRSPGpHXiLZM6yGXyfKx/SIMBX/R4j+NzY2Z5k4Br+Q/VILxq8Mzr3ub
+         +OGMO+lCMihxwqGG/xxu6DjVj4C9f2mIEY0ZupweCcPZTufMUv+8PlLLpLZjBOPnOV7W
+         etKP3RFW2W3V1cc5IUSIFawO4IxnSK+2CqfK8nndpcz0ZJ8slKfYFDjfI0aynnS1NZRv
+         FjpN3nkfH2Rw41KzhObomC6ogRBL7ZAjGkgxLMCnm5iIAxwiQqZWXJKDbAWK6s5ge/ZT
+         fZby6lSz4VF1ZWKNWYOHVKBgvdkyp1vB84MynIUrcuwRuRyFehuHHrkAl3Wjn53xqEec
+         1eqg==
+X-Gm-Message-State: AOJu0YyGZNrdB6Q7uutcL08dKxdO7h3VzdcphYCMfShEykmy83N+9Msd
+        G5mMh8KgnCYVKruVn0oQbfKbs81jAF4=
+X-Google-Smtp-Source: AGHT+IGkzoKAipIOqJqZY48D7UxmAFFDkwJk1P203aKK5fjV1iE5Fo+vuMU3pF9oyH80UMK7kq9LSw==
+X-Received: by 2002:a05:6e02:1bcd:b0:349:7832:5d8 with SMTP id x13-20020a056e021bcd00b00349783205d8mr2283297ilv.5.1691756513825;
+        Fri, 11 Aug 2023 05:21:53 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b23-20020a02a597000000b0042b1cd4c096sm989699jam.74.2023.08.11.05.20.24
+        by smtp.gmail.com with ESMTPSA id c18-20020a92cf52000000b00348d2e9701csm1088674ilr.63.2023.08.11.05.21.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Aug 2023 05:20:25 -0700 (PDT)
+        Fri, 11 Aug 2023 05:21:53 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a1974520-8341-cca1-866c-c24777b3ae0a@roeck-us.net>
-Date:   Fri, 11 Aug 2023 05:20:23 -0700
+Message-ID: <3a663190-155e-af5d-22b9-fa13da5f972e@roeck-us.net>
+Date:   Fri, 11 Aug 2023 05:21:52 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH v1] watchdog: intel-mid_wdt: add MODULE_ALIAS() to allow
- auto-load
+Subject: Re: [PATCH -next] watchdog: pm8916_wdt: Remove redundant
+ of_match_ptr()
 Content-Language: en-US
-To:     Raag Jadav <raag.jadav@intel.com>, wim@linux-watchdog.org,
-        mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com
-References: <20230811120220.31578-1-raag.jadav@intel.com>
+To:     Ruan Jinjie <ruanjinjie@huawei.com>,
+        linux-watchdog@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+References: <20230811062707.2301583-1-ruanjinjie@huawei.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230811120220.31578-1-raag.jadav@intel.com>
+In-Reply-To: <20230811062707.2301583-1-ruanjinjie@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,31 +79,29 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/11/23 05:02, Raag Jadav wrote:
-> When built with CONFIG_INTEL_MID_WATCHDOG=m, currently the driver
-> needs to be loaded manually, for the lack of module alias.
-> This causes unintended resets in cases where watchdog timer is
-> set-up by bootloader and the driver is not explicitly loaded.
-> Add MODULE_ALIAS() to load the driver automatically at boot and
-> avoid this issue.
+On 8/10/23 23:27, Ruan Jinjie wrote:
+> The driver depends on CONFIG_OF, it is not necessary to use
+> of_match_ptr() here.
 > 
-> Fixes: 87a1ef8058d9 ("watchdog: add Intel MID watchdog driver support")
-> Signed-off-by: Raag Jadav <raag.jadav@intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->   drivers/watchdog/intel-mid_wdt.c | 1 +
->   1 file changed, 1 insertion(+)
+>   drivers/watchdog/pm8916_wdt.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/watchdog/intel-mid_wdt.c b/drivers/watchdog/intel-mid_wdt.c
-> index 9b2173f765c8..fb7fae750181 100644
-> --- a/drivers/watchdog/intel-mid_wdt.c
-> +++ b/drivers/watchdog/intel-mid_wdt.c
-> @@ -203,3 +203,4 @@ module_platform_driver(mid_wdt_driver);
->   MODULE_AUTHOR("David Cohen <david.a.cohen@linux.intel.com>");
->   MODULE_DESCRIPTION("Watchdog Driver for Intel MID platform");
->   MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:intel_mid_wdt");
+> diff --git a/drivers/watchdog/pm8916_wdt.c b/drivers/watchdog/pm8916_wdt.c
+> index f4bfbffaf49c..f3fcbeb0852c 100644
+> --- a/drivers/watchdog/pm8916_wdt.c
+> +++ b/drivers/watchdog/pm8916_wdt.c
+> @@ -266,7 +266,7 @@ static struct platform_driver pm8916_wdt_driver = {
+>   	.probe = pm8916_wdt_probe,
+>   	.driver = {
+>   		.name = "pm8916-wdt",
+> -		.of_match_table = of_match_ptr(pm8916_wdt_id_table),
+> +		.of_match_table = pm8916_wdt_id_table,
+>   		.pm = &pm8916_wdt_pm_ops,
+>   	},
+>   };
 
