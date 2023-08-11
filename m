@@ -2,72 +2,85 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934EF77876A
-	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Aug 2023 08:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CA5778E96
+	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Aug 2023 14:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjHKG1l (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 11 Aug 2023 02:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        id S233761AbjHKMCf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 11 Aug 2023 08:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjHKG1l (ORCPT
+        with ESMTP id S229683AbjHKMCe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 11 Aug 2023 02:27:41 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5F22D4F
-        for <linux-watchdog@vger.kernel.org>; Thu, 10 Aug 2023 23:27:40 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RMYh45k3rzVk7x;
-        Fri, 11 Aug 2023 14:25:40 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 11 Aug
- 2023 14:27:38 +0800
-From:   Ruan Jinjie <ruanjinjie@huawei.com>
-To:     <linux-watchdog@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH -next] watchdog: pm8916_wdt: Remove redundant of_match_ptr()
-Date:   Fri, 11 Aug 2023 14:27:07 +0800
-Message-ID: <20230811062707.2301583-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Aug 2023 08:02:34 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535AE273E;
+        Fri, 11 Aug 2023 05:02:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691755354; x=1723291354;
+  h=from:to:cc:subject:date:message-id;
+  bh=B0O4hi7hQYoBUUzuAn//fKEUpIesDWRIrAPu2Jc+J+w=;
+  b=QgmhZyq/G2Ew4KsGooG5O+DvswBWYvdrzE3fmWDSOP4iyxYNNSRHjKVp
+   RayLQmumS7xa3vuSoq+Q0fa+gNn/0Y24sM/XXLnItZXqReD38pJf2kPGI
+   n3D5/rjxSoDg22GT0b2rDqA0vXiui8u/zLd4nSmVVtK68C2PW9cK2EaTE
+   K4TGhPnkuk4d+mMDNUcjWaogpm+gxHwStaCCPZCnd644l/8v4sb7RW4qK
+   VEGvC+c3RWznKCWGBMmTXySURWfNTlSbgfjP0fyVeliKL+CrIaArGlgmH
+   K2nHHrv6s5Ds+cwAVxSBNTBkXEzIF60i88cH4gaJdDz4QPZ/UXBdyX8e9
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="438000649"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="438000649"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 05:02:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10798"; a="906420504"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="906420504"
+Received: from inlubt0316.iind.intel.com ([10.191.20.213])
+  by orsmga005.jf.intel.com with ESMTP; 11 Aug 2023 05:02:30 -0700
+From:   Raag Jadav <raag.jadav@intel.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net,
+        mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com,
+        Raag Jadav <raag.jadav@intel.com>
+Subject: [PATCH v1] watchdog: intel-mid_wdt: add MODULE_ALIAS() to allow auto-load
+Date:   Fri, 11 Aug 2023 17:32:20 +0530
+Message-Id: <20230811120220.31578-1-raag.jadav@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The driver depends on CONFIG_OF, it is not necessary to use
-of_match_ptr() here.
+When built with CONFIG_INTEL_MID_WATCHDOG=m, currently the driver
+needs to be loaded manually, for the lack of module alias.
+This causes unintended resets in cases where watchdog timer is
+set-up by bootloader and the driver is not explicitly loaded.
+Add MODULE_ALIAS() to load the driver automatically at boot and
+avoid this issue.
 
-Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+Fixes: 87a1ef8058d9 ("watchdog: add Intel MID watchdog driver support")
+Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/watchdog/pm8916_wdt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/watchdog/intel-mid_wdt.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/watchdog/pm8916_wdt.c b/drivers/watchdog/pm8916_wdt.c
-index f4bfbffaf49c..f3fcbeb0852c 100644
---- a/drivers/watchdog/pm8916_wdt.c
-+++ b/drivers/watchdog/pm8916_wdt.c
-@@ -266,7 +266,7 @@ static struct platform_driver pm8916_wdt_driver = {
- 	.probe = pm8916_wdt_probe,
- 	.driver = {
- 		.name = "pm8916-wdt",
--		.of_match_table = of_match_ptr(pm8916_wdt_id_table),
-+		.of_match_table = pm8916_wdt_id_table,
- 		.pm = &pm8916_wdt_pm_ops,
- 	},
- };
+diff --git a/drivers/watchdog/intel-mid_wdt.c b/drivers/watchdog/intel-mid_wdt.c
+index 9b2173f765c8..fb7fae750181 100644
+--- a/drivers/watchdog/intel-mid_wdt.c
++++ b/drivers/watchdog/intel-mid_wdt.c
+@@ -203,3 +203,4 @@ module_platform_driver(mid_wdt_driver);
+ MODULE_AUTHOR("David Cohen <david.a.cohen@linux.intel.com>");
+ MODULE_DESCRIPTION("Watchdog Driver for Intel MID platform");
+ MODULE_LICENSE("GPL");
++MODULE_ALIAS("platform:intel_mid_wdt");
 -- 
-2.34.1
+2.17.1
 
