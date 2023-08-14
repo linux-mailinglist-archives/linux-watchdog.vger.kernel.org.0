@@ -2,71 +2,71 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D0077BA8A
-	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Aug 2023 15:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C1877BA95
+	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Aug 2023 15:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjHNNqc (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 14 Aug 2023 09:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
+        id S231652AbjHNNtM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 14 Aug 2023 09:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbjHNNqS (ORCPT
+        with ESMTP id S231643AbjHNNsn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 14 Aug 2023 09:46:18 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B64B106;
-        Mon, 14 Aug 2023 06:46:17 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-34aa2883f1cso2893845ab.3;
-        Mon, 14 Aug 2023 06:46:17 -0700 (PDT)
+        Mon, 14 Aug 2023 09:48:43 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A86A810DE;
+        Mon, 14 Aug 2023 06:48:42 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1bba7717d3bso3292206fac.1;
+        Mon, 14 Aug 2023 06:48:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692020777; x=1692625577;
+        d=gmail.com; s=20221208; t=1692020922; x=1692625722;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9yKMPxUGe84xvNf8pYF68HzMRRk71stM/ItQSRJOA3k=;
-        b=sX+Sbzaeg5OOm/s+UizNkCgX2zeHA5HPploXfuUVhikqDqFfRm23IwYoX3/jPH8lsS
-         KD0YbGTDaAS/zDnKlvAqYwmzMBszYiFlLNKpCabd6x0rjhPNw4PwheGvhYRYtcNqR5q7
-         PcbWBhEdfvYdLLNQmHWRjHuCDPpuZGwynTbwi1w/zVaBC3XAtpEQNu6/3+3ZbNUweWfx
-         VDFara0unQ+olJ4ptNYY66tT4/l0mlo/nvsNdlFLcFXoXMgFWW33BN2inJ7ILVOrYZdS
-         zC/+frcGxM9VH0+IuvZIA5ghcHmavTHWzACH5nDugUtUUWzOPGqruuMjeSzYmPc15EVN
-         Q3HQ==
+        bh=Hl1VWJqwbRtkVZU9kxa+Wp4UzmA2hPMJtxFbWtnID98=;
+        b=Ls97xeRr3iWacANUr7IlnehraFHOXYkh1gQ8FryFhWk7ej/49Mmk2Kdibx+TrgOjKt
+         0mePgV53dQUULlO6+ZkhXsXYVWIGJeD/whzVXkjeXIE/1gpCM6/j/nFgHqFEF8XuZ44Q
+         HUP8F+Jt8vvEtGtDsW1CKRpps/C8Ul7uqPdDairHyC+AujitHeSftFeXwcpWfbbEIrXP
+         dDoMhDV4uqhU72t+Qgg2g3VRItrGUovlRF34JTUxTIJrHooLUPcILwfvrLChYVcLfQuR
+         far5t+79sHpKNVw6oRcAryE0Q4LTHLj6RKt3yoFzh4/krBS8L2eYKRhT7nUk6pKruFD1
+         lp7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692020777; x=1692625577;
+        d=1e100.net; s=20221208; t=1692020922; x=1692625722;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9yKMPxUGe84xvNf8pYF68HzMRRk71stM/ItQSRJOA3k=;
-        b=Bv/6/BdSPZ6TdagmbZnkisRFGfo+v6tGU92O6UaJvpffR5CmXegIFE6O/9C6WNIIBj
-         IqtmcIeVUC/unT3dpZ+UbVQrEDEEVuwWzCHKPWn6Bm/2VR69Z5QtCwV4PuSxySLoamfe
-         K3Z1lKRC/AEYxI6a0cyE5u7CSG4sb5CtxifqIhovnkvJ9gfiXq1vwhfEj554hNVz0evg
-         KHZ1Bpk7iA5jpx6DiY/daMxKmso4f6KjvS2UWzTMrviWyVkEbXtLeh8nZVwQFKMu5GHM
-         6CKkIE2Wo9yLm+tC3kcXwwhbayISdcvyU//nW7EDI0d9zUxh/tknXWt93Ir7Rd3okUw4
-         piHw==
-X-Gm-Message-State: AOJu0Yz+PjUJVprDYJpOXSKOC/kBB2vAHqAThTbAutL4LosEaCAEDXjn
-        GkOaoip4wIP/t5UeI0xVs3I=
-X-Google-Smtp-Source: AGHT+IF1ZkjHYTAqORYWQkSZckevSGpcdYvx95BZ20yXmvWcSuKnv1NxDwAsmCC/O3CxhjfPqm0Stw==
-X-Received: by 2002:a05:6e02:20e7:b0:348:8576:15b5 with SMTP id q7-20020a056e0220e700b00348857615b5mr13574235ilv.3.1692020776945;
-        Mon, 14 Aug 2023 06:46:16 -0700 (PDT)
+        bh=Hl1VWJqwbRtkVZU9kxa+Wp4UzmA2hPMJtxFbWtnID98=;
+        b=lkoy5Cs+extGMDfaCrXXFltKRRMNQNsqcC00XNqrEeOphchiiwTUIzeRm/mtVGz3CH
+         G2Zd3qQ1WaPnRmq0J9+iy7toFlwMLoi87l7p5sYgAsXR5WGYPfMKxo1yDaNq4lPf+CGt
+         Lniln3SZ5bEG9U9KRf4O00JSHNSv99/ie+x4VhLrxdAds2lypVBLyg97W/+hlTI4HG4o
+         CbQBjCkltgi/mwAWiehOt/HaAdfRuBUtiO9NJK7tz1fO9dbBQfFtP4xugtp/Wokhx0ZS
+         k7kHZ1Z1iri7y3psFT06qfT21OLvntY0/JNgNy6qxxtNxjG1oFChRF6UJc8gbQIyevy4
+         o64A==
+X-Gm-Message-State: AOJu0YxMSwnhDWAyhW0qXyJXgEHyBADNOPFbQl2/3Le3N60BX4Ixp8D+
+        dFaN9AioW5nqtfHcIEmceVQ=
+X-Google-Smtp-Source: AGHT+IHFjIKjHNQ/FKFkRPUsszVzx+JdDwSl+Ib78UhwTqBmxLcpZVkuxyM3BXKuB449gteDVszb9g==
+X-Received: by 2002:a05:6870:c6a5:b0:1bb:b025:3e87 with SMTP id cv37-20020a056870c6a500b001bbb0253e87mr10045294oab.58.1692020921896;
+        Mon, 14 Aug 2023 06:48:41 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z6-20020a92d186000000b0034a921bc93asm1538168ilz.1.2023.08.14.06.46.16
+        by smtp.gmail.com with ESMTPSA id t4-20020a02c484000000b0042b6cb44429sm3042211jam.46.2023.08.14.06.48.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Aug 2023 06:46:16 -0700 (PDT)
+        Mon, 14 Aug 2023 06:48:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 14 Aug 2023 06:46:15 -0700
+Date:   Mon, 14 Aug 2023 06:48:40 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Gerd Haeussler <haeussler.gerd@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        linux-leds@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Tobias Schaffner <tobias.schaffner@siemens.com>,
-        Xing Tong Wu <xingtong.wu@siemens.com>,
-        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-Subject: Re: [PATCH] MAINTAINERS: Add entries for Siemens IPC modules
-Message-ID: <5f072764-b4c5-49cb-b880-a735f6d152b6@roeck-us.net>
-References: <20230814073114.2885-1-haeussler.gerd@gmail.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Henning Schild <henning.schild@siemens.com>,
+        "xingtong . wu" <xingtong_wu@163.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog: simatic: add PCI dependency
+Message-ID: <cf7f3934-b81b-4629-b124-cf7a15c83481@roeck-us.net>
+References: <20230814073924.1066390-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230814073114.2885-1-haeussler.gerd@gmail.com>
+In-Reply-To: <20230814073924.1066390-1-arnd@kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -78,33 +78,45 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Aug 14, 2023 at 09:31:14AM +0200, Gerd Haeussler wrote:
-> From: Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+On Mon, Aug 14, 2023 at 09:38:50AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> There are different IPC driver modules in the kernel that are actively
-> maintained by Siemens but not yet listed in the MAINTAINERS file.
-> Add the missing entries.
+> The simatic-ipc driver no longer depends on PCI, but its watchdog portion
+> still needs it, otherwise P2SB runs into a build  failure:
 > 
-> Signed-off-by: Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+> WARNING: unmet direct dependencies detected for P2SB
+>   Depends on [n]: PCI [=n] && X86 [=y]
+>   Selected by [m]:
+>   - SIEMENS_SIMATIC_IPC_WDT [=m] && WATCHDOG [=y] && SIEMENS_SIMATIC_IPC [=y]
+> 
+> drivers/platform/x86/p2sb.c:121:3: error: call to undeclared function 'pci_bus_write_config_dword'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>                 pci_bus_write_config_dword(bus, devfn_p2sb, P2SBC, 0);
+> 
+> Add back the minimum dependendency to make it build in random configurations
+> again.
+> 
+> Fixes: b72da71ce24b0 ("platform/x86: simatic-ipc: drop PCI runtime depends and header")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  MAINTAINERS | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
+>  drivers/watchdog/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 0f966f05fb0d..6ca5564a4f8c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-[ ... ]
-> +
-> +SIEMENS IPC WATCHDOG DRIVERS
-> +M:	Gerd Haeussler <gerd.haeussler.ext@siemens.com>
-> +M:	Xing Tong Wu <xingtong.wu@siemens.com>
-> +M:	Tobias Schaffner <tobias.schaffner@siemens.com>
-> +L:	linux-watchdog@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/watchdog/simatic-ipc-wdt.c
-> +
-
-For watchdog:
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 04e9b40cf7d53..09452384221a4 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -1680,7 +1680,7 @@ config NIC7018_WDT
+>  
+>  config SIEMENS_SIMATIC_IPC_WDT
+>  	tristate "Siemens Simatic IPC Watchdog"
+> -	depends on SIEMENS_SIMATIC_IPC
+> +	depends on SIEMENS_SIMATIC_IPC && PCI
+>  	default y
+>  	select WATCHDOG_CORE
+>  	select P2SB
+> -- 
+> 2.39.2
+> 
