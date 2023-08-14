@@ -2,106 +2,124 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80FC2778F42
-	for <lists+linux-watchdog@lfdr.de>; Fri, 11 Aug 2023 14:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 536FB77B282
+	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Aug 2023 09:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235733AbjHKMVz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 11 Aug 2023 08:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
+        id S232982AbjHNHby (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 14 Aug 2023 03:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjHKMVy (ORCPT
+        with ESMTP id S234052AbjHNHbr (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 11 Aug 2023 08:21:54 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8515019E
-        for <linux-watchdog@vger.kernel.org>; Fri, 11 Aug 2023 05:21:54 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-34914684b62so6890495ab.3
-        for <linux-watchdog@vger.kernel.org>; Fri, 11 Aug 2023 05:21:54 -0700 (PDT)
+        Mon, 14 Aug 2023 03:31:47 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DF618F;
+        Mon, 14 Aug 2023 00:31:46 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fe457ec6e7so6318650e87.3;
+        Mon, 14 Aug 2023 00:31:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691756514; x=1692361314;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sf3LAHgsmpuoSPu9jH7OskaQzJ3HX2ZrTwSruvwIxfc=;
-        b=D3sSvrYAKtYJVkc3IusKZEEGiJdfKf8V/BufnHHa2lRNijVh9SfRo8e1GLC1mDb5ZF
-         ouzlg3mtBYzTzxpYpG4cMp59GdR2Lxbp38jgVEnwLI0Hl4z58l+pm3UmJWqVdtIOlBgI
-         RZSCs6dzmu8dxUoqKO2fwTNDs0DmxEVaqQLwiqGYM1QLrKBREphtfjqew1pQY5DthgOT
-         yMTeSKQMuwFzMuhFtVvmXUJocegDUds8vjBmYl+S8dcROSu9sMf6c2RLSqXq4U9y43iH
-         sVyIXBEgA+E17n7G6kIrTv8GFfSiIAOyJ9ZmDuFwSUz1AFdvLMzlcS0E1LESCDaHAsXX
-         BnXg==
+        d=gmail.com; s=20221208; t=1691998305; x=1692603105;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ixpphlS+lzvOkktfW5pGEx4frnWlNln3Xa4giRpZV6I=;
+        b=ClJhCCmZUVe7TpvcdR5MllqvVL++z6CitaMZq7e3IlNYQrcgNvITZTmOsJ6Bgn1o1V
+         QFikyoG3wJB02RGGRGzgjoVnAV3KwhLh/LA2XeStl5l/DO+N2v7x0qSAtFJxvr5Rs0k+
+         WKgh+DOdMXnAVOI0DkrTRpElSnQ15qHVME8UvXiofMSf5iuj+bGwRdJzzfu6TNdtl20o
+         P9kkY+ZXiBc1XhfipiGIkwg0xU5VfSN++Zh1hhsne9o5UCs9jzrtfA08rTzwN8AQ680G
+         jHp3HH1JPmm/8MSgQCd0iHh0kdXRZQwBv43GurYkO2WcC5NVS3aMyrWfMoVgUWqwXmjr
+         VmnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691756514; x=1692361314;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1691998305; x=1692603105;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Sf3LAHgsmpuoSPu9jH7OskaQzJ3HX2ZrTwSruvwIxfc=;
-        b=HNC5yUL40AtRSPGpHXiLZM6yGXyfKx/SIMBX/R4j+NzY2Z5k4Br+Q/VILxq8Mzr3ub
-         +OGMO+lCMihxwqGG/xxu6DjVj4C9f2mIEY0ZupweCcPZTufMUv+8PlLLpLZjBOPnOV7W
-         etKP3RFW2W3V1cc5IUSIFawO4IxnSK+2CqfK8nndpcz0ZJ8slKfYFDjfI0aynnS1NZRv
-         FjpN3nkfH2Rw41KzhObomC6ogRBL7ZAjGkgxLMCnm5iIAxwiQqZWXJKDbAWK6s5ge/ZT
-         fZby6lSz4VF1ZWKNWYOHVKBgvdkyp1vB84MynIUrcuwRuRyFehuHHrkAl3Wjn53xqEec
-         1eqg==
-X-Gm-Message-State: AOJu0YyGZNrdB6Q7uutcL08dKxdO7h3VzdcphYCMfShEykmy83N+9Msd
-        G5mMh8KgnCYVKruVn0oQbfKbs81jAF4=
-X-Google-Smtp-Source: AGHT+IGkzoKAipIOqJqZY48D7UxmAFFDkwJk1P203aKK5fjV1iE5Fo+vuMU3pF9oyH80UMK7kq9LSw==
-X-Received: by 2002:a05:6e02:1bcd:b0:349:7832:5d8 with SMTP id x13-20020a056e021bcd00b00349783205d8mr2283297ilv.5.1691756513825;
-        Fri, 11 Aug 2023 05:21:53 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c18-20020a92cf52000000b00348d2e9701csm1088674ilr.63.2023.08.11.05.21.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Aug 2023 05:21:53 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3a663190-155e-af5d-22b9-fa13da5f972e@roeck-us.net>
-Date:   Fri, 11 Aug 2023 05:21:52 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH -next] watchdog: pm8916_wdt: Remove redundant
- of_match_ptr()
-Content-Language: en-US
-To:     Ruan Jinjie <ruanjinjie@huawei.com>,
+        bh=ixpphlS+lzvOkktfW5pGEx4frnWlNln3Xa4giRpZV6I=;
+        b=iXerW4BbDpSaLH+PKZH3VeaCvMe7jW91YJYRCdHOv3iZPErJLjGoV2qq+Lnxu0oG7g
+         V5WYW4xLXBcc1kq7YhaTG2Z3Jau9TIHCEck29D/xxhzFwvPfsDs+8V8AATzflKpfPQrX
+         FGjUSkB1YzxnHWkZY49o8mJgQPqTsBfw/rTwrZ0eNnbyMUwKnRpa6AhI1JvFNeJ+Jeo6
+         KOC0jaewLs501SDONHcvWdKUtqHCZTuGULp3/YkfoU7HDQpio6aBkZxsVIDexwHdbDff
+         M/xvkQXdTbJM78ZkdA91pOLXlbWEYbuZbEs/FEqAMnA+qYBxfVdIeLJVsg1t/X+2LyOD
+         Zouw==
+X-Gm-Message-State: AOJu0YzChskCgC6ofYgoay1BD4/oraeSZvBWlK80ME28hGIEdcqQR2x8
+        gqHo1z5ozERhQ+wily3JmM37qtCr1YN2ZA==
+X-Google-Smtp-Source: AGHT+IFJyPcsbqpLS8ia463YpUO5wOtqc+4CdEpeMoN5A7nk3MjvUAeDsuD9OTqkghOnDbZyC9ps9w==
+X-Received: by 2002:a05:6512:3b0f:b0:4fc:4f3e:9cbf with SMTP id f15-20020a0565123b0f00b004fc4f3e9cbfmr7161373lfv.50.1691998304535;
+        Mon, 14 Aug 2023 00:31:44 -0700 (PDT)
+Received: from localhost.localdomain (ip-085-216-017-139.um25.pools.vodafone-ip.de. [85.216.17.139])
+        by smtp.gmail.com with ESMTPSA id r13-20020aa7d14d000000b005256ae8494asm451962edo.17.2023.08.14.00.31.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Aug 2023 00:31:44 -0700 (PDT)
+From:   Gerd Haeussler <haeussler.gerd@gmail.com>
+To:     linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-leds@vger.kernel.org, platform-driver-x86@vger.kernel.org,
         linux-watchdog@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-References: <20230811062707.2301583-1-ruanjinjie@huawei.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230811062707.2301583-1-ruanjinjie@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tobias Schaffner <tobias.schaffner@siemens.com>,
+        Xing Tong Wu <xingtong.wu@siemens.com>,
+        Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+Subject: [PATCH] MAINTAINERS: Add entries for Siemens IPC modules
+Date:   Mon, 14 Aug 2023 09:31:14 +0200
+Message-Id: <20230814073114.2885-1-haeussler.gerd@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 8/10/23 23:27, Ruan Jinjie wrote:
-> The driver depends on CONFIG_OF, it is not necessary to use
-> of_match_ptr() here.
-> 
-> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+From: Gerd Haeussler <gerd.haeussler.ext@siemens.com>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+There are different IPC driver modules in the kernel that are actively
+maintained by Siemens but not yet listed in the MAINTAINERS file.
+Add the missing entries.
 
-> ---
->   drivers/watchdog/pm8916_wdt.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/pm8916_wdt.c b/drivers/watchdog/pm8916_wdt.c
-> index f4bfbffaf49c..f3fcbeb0852c 100644
-> --- a/drivers/watchdog/pm8916_wdt.c
-> +++ b/drivers/watchdog/pm8916_wdt.c
-> @@ -266,7 +266,7 @@ static struct platform_driver pm8916_wdt_driver = {
->   	.probe = pm8916_wdt_probe,
->   	.driver = {
->   		.name = "pm8916-wdt",
-> -		.of_match_table = of_match_ptr(pm8916_wdt_id_table),
-> +		.of_match_table = pm8916_wdt_id_table,
->   		.pm = &pm8916_wdt_pm_ops,
->   	},
->   };
+Signed-off-by: Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+---
+ MAINTAINERS | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 0f966f05fb0d..6ca5564a4f8c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19402,6 +19402,32 @@ F:	drivers/media/mmc/siano/
+ F:	drivers/media/usb/siano/
+ F:	drivers/media/usb/siano/
+ 
++SIEMENS IPC LED DRIVERS
++M:	Gerd Haeussler <gerd.haeussler.ext@siemens.com>
++M:	Xing Tong Wu <xingtong.wu@siemens.com>
++M:	Tobias Schaffner <tobias.schaffner@siemens.com>
++L:	linux-leds@vger.kernel.org
++S:	Maintained
++F:	drivers/leds/simple/
++
++SIEMENS IPC PLATFORM DRIVERS
++M:	Gerd Haeussler <gerd.haeussler.ext@siemens.com>
++M:	Xing Tong Wu <xingtong.wu@siemens.com>
++M:	Tobias Schaffner <tobias.schaffner@siemens.com>
++L:	platform-driver-x86@vger.kernel.org
++S:	Maintained
++F:	drivers/platform/x86/siemens/
++F:	include/linux/platform_data/x86/simatic-ipc-base.h
++F:	include/linux/platform_data/x86/simatic-ipc.h
++
++SIEMENS IPC WATCHDOG DRIVERS
++M:	Gerd Haeussler <gerd.haeussler.ext@siemens.com>
++M:	Xing Tong Wu <xingtong.wu@siemens.com>
++M:	Tobias Schaffner <tobias.schaffner@siemens.com>
++L:	linux-watchdog@vger.kernel.org
++S:	Maintained
++F:	drivers/watchdog/simatic-ipc-wdt.c
++
+ SIFIVE DRIVERS
+ M:	Palmer Dabbelt <palmer@dabbelt.com>
+ M:	Paul Walmsley <paul.walmsley@sifive.com>
+-- 
+2.20.1
 
