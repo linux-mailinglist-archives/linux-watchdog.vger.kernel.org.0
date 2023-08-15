@@ -2,71 +2,66 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57AA977BCF9
-	for <lists+linux-watchdog@lfdr.de>; Mon, 14 Aug 2023 17:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52DB777CDF3
+	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Aug 2023 16:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232605AbjHNP3D (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 14 Aug 2023 11:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
+        id S237540AbjHOOTd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 15 Aug 2023 10:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232997AbjHNP2t (ORCPT
+        with ESMTP id S237565AbjHOOTO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 14 Aug 2023 11:28:49 -0400
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B336F10CE;
-        Mon, 14 Aug 2023 08:28:48 -0700 (PDT)
-Received: by mail-oo1-xc29.google.com with SMTP id 006d021491bc7-56d0d7300d9so3407210eaf.1;
-        Mon, 14 Aug 2023 08:28:48 -0700 (PDT)
+        Tue, 15 Aug 2023 10:19:14 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAA5173F;
+        Tue, 15 Aug 2023 07:19:13 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-99bfcf4c814so728419466b.0;
+        Tue, 15 Aug 2023 07:19:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692026928; x=1692631728;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZCvHBwn8CD2knwCB3WcjLa+i49354PVrQZORJ/R7fww=;
-        b=WWCj667pWIPBS80FaFiXp3HGyT7gRYNopLWlbsklMerG5TtrFzbhgvtSFy1q4YEBWH
-         OVdiLwOA+dvYblrcvZt0+tXailL5/aBp7sTpWI+EhMCjUSL6M5GKRbhgRjqyZGV6ZtTY
-         lzHgi6yHvTLdfz2KiD0EKSfFIEW7b7taj/NUACjXgGIftuVA10Z0DGxn7E/hxQPi0fwR
-         l2asn14MA0Xsob26qICK1PjmuLK1RSSfZuxXwdmVKjq/vu1NgSaYuL/ZcMhL19HWSxJc
-         /8DhfiGu7P1QSUXFjv2zRQZRcjtb4N355L7rWXivjXKgFQjQrsE39WU6eGnJYZqf26Qy
-         LBJw==
+        d=gmail.com; s=20221208; t=1692109151; x=1692713951;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nhmVvg06wbI8jqCZG20CjBaE/opAQ91Hl7ndYxBDBhQ=;
+        b=f37BCx5cn3Ke5BGSr8QDfFO5rmMbMw7eoJnI2c6Y9SMyGZBTlXxnupL/hM4G34rHEZ
+         nT4XrOZA0GX6F9kUArQLnPYgT3rN5vY4cZyg6T6odxf0y9byEfo4l9fbTkaNLXgKqybh
+         EJBOKAHtbIyhRu7kjv395V5VWchcZSAm78kJ5SenkuUv57B5pr+5XgrQvLHxb9Awg6cH
+         feUBew6pe4AdEDkPBBVAlKOJ3PjP8Tb3InAVXCCYonucmzIW4Rf7OQ/Ei4+7lLAFo64j
+         ckiOG1H1lRf5vTHLiQZ5b4biVB+QcnWAB81H7mQnulIZ2ovIb5iQYIBYPuQRW2J81bv6
+         YGXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692026928; x=1692631728;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZCvHBwn8CD2knwCB3WcjLa+i49354PVrQZORJ/R7fww=;
-        b=JefqFVjHiIgwrt1QhBC+lQf62kyP8Vx4Yl3+x5scju7VwzbrZwmg2hkaPK0qy6nWft
-         h/694Y5C91Ffl++cVEsskOc8QYQ8A23Imq2FVb37CxWB7YbQCerhzKNWcjrSuNN/dHQD
-         rwxcW9yhrV7KtLplKtvxCBp7LdFIrxLzN1N6GpRmojMORDGAymB7ZImfJhhTw0cSXF11
-         yop0d3EXLNHV26vfOvz+dDnbUxVxdkRIRtgg+pDX5FEYzWjxcOvRv5MgrzrminRsnxed
-         2stZn0LztBXmMxqOXFyuJlNVr2hhrsru3U6OPB7NTrz8DrgpMj2rj5dDCs8HA1wmXumk
-         mDuw==
-X-Gm-Message-State: AOJu0YyjKhgCBCSrV37dQLPFTwQI342cgei3czb/LlFhM0cCweB2bb+k
-        RM5Iw7Wxc3GXuWCX3UHBTy/Ry+iHmrT00HM4FgY=
-X-Google-Smtp-Source: AGHT+IGISBrg3aobCyozkZXvvOgi+agc5YUmPvbQpaXwwjPo0coUaZI8wHsySCLw5oNfPPu4pieuC/gPF7XqXFX2SlE=
-X-Received: by 2002:a4a:6557:0:b0:560:ac0f:b87c with SMTP id
- z23-20020a4a6557000000b00560ac0fb87cmr7695073oog.8.1692026927978; Mon, 14 Aug
- 2023 08:28:47 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692109151; x=1692713951;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nhmVvg06wbI8jqCZG20CjBaE/opAQ91Hl7ndYxBDBhQ=;
+        b=fsIRaPy1xZOPE9Uq+JSUsL2CkssKylx3gEQVBxsuERTnRtZjAPTcGVAWc5rFoEc6H8
+         uzXq2oBuBUCN+R0XKwfMgFZOqGG75rGG3ylK510Cl+zAziUXuSW3ihCqJGq/fjLJxcny
+         7pgqFp0IYYO2aEj5IRnYXiofujPafKUQbXsaM4LAt59W2VmgXWmPAPnIS1+UgE9e08Hc
+         IDF09jPCPRnG7jSElM1u5GXoM1NZK3EPhiMLP/rUXXrpZsrF4cHeYr4cQZ7i+u+gHCN/
+         UHlMx7WanEAiOBg68/cl86s8razhj18Z9NZZvNbFVDO7ue4wjmRbwzFvmBJpNyjwyFj6
+         LbgA==
+X-Gm-Message-State: AOJu0Yyq3P516n7Lm7mk1tq5xxCO41dVqV0/Ozu73cYUJ+5k4/0ZLq+B
+        4L77GmitD2dHzseLpuRtf1g=
+X-Google-Smtp-Source: AGHT+IFhEEj+3Bu5Z3UwjEfEbtPfZLCwxJ1ns6kTyOOhp+h1AhvwBTnbkEkbhItRwiu18ULe5xTOTQ==
+X-Received: by 2002:a17:907:b1a:b0:99c:e38d:a824 with SMTP id h26-20020a1709070b1a00b0099ce38da824mr10170567ejl.37.1692109151491;
+        Tue, 15 Aug 2023 07:19:11 -0700 (PDT)
+Received: from fedora.. (dh207-96-14.xnet.hr. [88.207.96.14])
+        by smtp.googlemail.com with ESMTPSA id j15-20020a170906278f00b009926928d486sm7078743ejc.35.2023.08.15.07.19.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Aug 2023 07:19:10 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        quic_saipraka@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH 1/2] dt-bindings: watchdog: qcom-wdt: document IPQ5018
+Date:   Tue, 15 Aug 2023 16:17:50 +0200
+Message-ID: <20230815141908.1084893-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <20230814073924.1066390-1-arnd@kernel.org> <a6c2f193-ef7c-54a0-dfbb-13915be259a1@163.com>
- <1834eee9-3fbd-4bea-9e22-960ca993303c@app.fastmail.com> <672725bc-6ebf-0a35-96ab-8862be7de193@redhat.com>
-In-Reply-To: <672725bc-6ebf-0a35-96ab-8862be7de193@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 14 Aug 2023 18:28:12 +0300
-Message-ID: <CAHp75VcR2k=ko4esuO=KNeZRQxeGojTxKeozRGCB+EXrGXgoSQ@mail.gmail.com>
-Subject: Re: [PATCH] watchdog: simatic: add PCI dependency
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, "xingtong.wu" <xingtong_wu@163.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andy@kernel.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Haeussler, Gerd" <gerd.haeussler.ext@siemens.com>,
-        "Schaffner, Tobias" <tobias.schaffner@siemens.com>,
-        "xingtong.wu" <XingTong.Wu@siemens.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -77,22 +72,25 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Aug 14, 2023 at 11:51=E2=80=AFAM Hans de Goede <hdegoede@redhat.com=
-> wrote:
-> On 8/14/23 10:48, Arnd Bergmann wrote:
+Document the IPQ5018 watchdog compatible.
 
-...
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Right P2SB would benefit from being changed into a hidden
-> symbol.
+diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+index 6d0fe6abd06a..5046dfa55f13 100644
+--- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+@@ -18,6 +18,7 @@ properties:
+       - items:
+           - enum:
+               - qcom,kpss-wdt-ipq4019
++              - qcom,apss-wdt-ipq5018
+               - qcom,apss-wdt-ipq5332
+               - qcom,apss-wdt-ipq9574
+               - qcom,apss-wdt-msm8994
+-- 
+2.41.0
 
-Yes, I dunno why it wasn't that way from day 1. Perhaps due to the
-original contribution done by somebody else...
-
-> Andy, any comments on making P2SB a hidden symbol ?
-
-I'm fine with that.
-
---=20
-With Best Regards,
-Andy Shevchenko
