@@ -2,122 +2,117 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5027B77CF57
-	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Aug 2023 17:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F4A77D302
+	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Aug 2023 21:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233584AbjHOPjU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 15 Aug 2023 11:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
+        id S236565AbjHOTJK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 15 Aug 2023 15:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238160AbjHOPi5 (ORCPT
+        with ESMTP id S239750AbjHOTIo (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 15 Aug 2023 11:38:57 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D928F1986;
-        Tue, 15 Aug 2023 08:38:47 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1bdc243d62bso22474325ad.3;
-        Tue, 15 Aug 2023 08:38:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692113927; x=1692718727;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oPVA47bevwgKTndnRmaH+7HpYMRSlD2dI+EPjmMsVKY=;
-        b=aG+N74rQXAjtpCKcHyWJdAeEtS20suYrX9q+zGyM6UQ/Nhp022HuVxaqetnKAE8hua
-         nUB3hFKMnfz0r+ltmhK8S7I8CLRuRPnNmgidsRCYK/2hLLaIGM5MRnLBMGUsMYlslkvr
-         xT23sB4D6CR5/ewPA7hDzYQ4b1sWoJtDy2FMn+dFgG3KLovi93MGxvziJDV8JcAlXgmd
-         6BYUwVymM3U9d1eXuNjyTssD5YJB1tWRnaLw37SvSBTJ//OyQ/NKpNmwdqQJhwxyAq5G
-         doh5ZvyiiFmetTw+NYJ1ouhlyhV/vT/sUQzV6fsQJfzSZ4haz9OMhqjj0SmTxXaLCuTJ
-         PrTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692113927; x=1692718727;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oPVA47bevwgKTndnRmaH+7HpYMRSlD2dI+EPjmMsVKY=;
-        b=Ri9EDgwKginoLS7Y1vDHCl2pYljct54UkOnjS+taDPJMc+Qb25U7dE/x4q+yzoa0U9
-         H3tqslxPJ/mOe93GJ/vISG2g0M1PhNbgZktC6MNleKxb3OMXGNeFXmBBW5KXvM3HCN0i
-         SbVhlnwp0V5fX2ndo9O6P7Sl6wnKkmeQogoXaI4wLpz1xqM1bhUCLnweCE+gpvul9QNE
-         4RmGg7jFWtyrl5yFEj89zGMltJUBd6FEZYogi90K79Rif/rO69UWRENL+kphqT1oMVM5
-         F8+qyuYYDjPXNig/hY9kw8UUj3O1/71PTve626cd50JmUlv/T0FNd44g+S/o441tA9eS
-         ufEQ==
-X-Gm-Message-State: AOJu0YxzgQjcx/8JVwUVZxsS0jyhGez+ckDx74jlSmv8cTB92Y1D4W07
-        C8pLGqf/Q7s4s1XXAV2WvNqaOsLR1EE6JzVe+O4=
-X-Google-Smtp-Source: AGHT+IHlydyjtSV8QiF0UBTRISSH4+kZdt0Y9kwaL5fvh+plBjEHnzegcQyHd2HIPS3NUEbTNHwU/HA/mqplLmLyExs=
-X-Received: by 2002:a17:90b:23c7:b0:269:1c2:f5c7 with SMTP id
- md7-20020a17090b23c700b0026901c2f5c7mr9651653pjb.21.1692113927155; Tue, 15
- Aug 2023 08:38:47 -0700 (PDT)
+        Tue, 15 Aug 2023 15:08:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8832111
+        for <linux-watchdog@vger.kernel.org>; Tue, 15 Aug 2023 12:08:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5950360CA4
+        for <linux-watchdog@vger.kernel.org>; Tue, 15 Aug 2023 19:07:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F710C433C7;
+        Tue, 15 Aug 2023 19:07:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692126427;
+        bh=MJRTsKjJrCqgZBHh3ucJktBplP659QkvtPqpYoiAoQY=;
+        h=From:Date:Subject:To:Cc:From;
+        b=e5wIKX0EVRDwQ8ztXhcobA5K0H7FetEp9rCkWJCAkGOuVzNaswxxaDMkJDz/5BLUY
+         p3U2fSmikJ/+yYR6zf1Q6hSqg9Na159AiTm9D8+F4NfGfrNd/fjsWuAfUamHcAgdtD
+         040pJTC/tEnDHObPF0x37dC+WZgYZmbgstlFKPwIN/q7/aHumtMsf+/j8tSZ85dkCS
+         +NDmXcKdcGPYoy51TznvaaItdBvpwDhBP8NWjDoRDZCugP3GKy1OUGc8dU4bGVv0DP
+         gaI5fSECd5w3krOG+Uy6QDTpYLf8MbfR8f5RuopIr4q7asAcbHuBxAoViW2z1WJryr
+         seDIlPdcvkBmg==
+From:   Nathan Chancellor <nathan@kernel.org>
+Date:   Tue, 15 Aug 2023 12:06:50 -0700
+Subject: [PATCH] watchdog: xilinx_wwdt: Use div_u64() in
+ xilinx_wwdt_start()
 MIME-Version: 1.0
-References: <20230815141908.1084893-1-robimarko@gmail.com> <20230815141908.1084893-2-robimarko@gmail.com>
- <3174c398-a19a-3b59-c2fc-3ec9a5e1a9df@linaro.org>
-In-Reply-To: <3174c398-a19a-3b59-c2fc-3ec9a5e1a9df@linaro.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Tue, 15 Aug 2023 17:38:36 +0200
-Message-ID: <CAOX2RU6HYBzhh0TBdsFj5AJPwqdv2xQ=XsA=L-BaCwNUxTx2Vg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: ipq5018: add WDT
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        quic_saipraka@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230815-watchdog-xilinx-div_u64-v1-1-20b0b5a65c2e@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAMnM22QC/x3MywqAIBBA0V+JWTdglr1+JSJCpxoIC+0hRP+et
+ DyLex/w5Jg8tMkDji72vNmILE1AL6OdCdlEgxQyF3Wm8B4PvZhtxsAr24CGr+EsC6yVlpUulSi
+ aHGK9O5o4/Oeuf98PnGt1FGkAAAA=
+To:     srinivas.neeli@amd.com, wim@linux-watchdog.org
+Cc:     shubhrajyoti.datta@amd.com, michal.simek@amd.com,
+        linux@roeck-us.net, ndesaulniers@google.com, trix@redhat.com,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, patches@lists.linux.dev,
+        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1840; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=MJRTsKjJrCqgZBHh3ucJktBplP659QkvtPqpYoiAoQY=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCm3z9za46s+3+aG7cQa/fs105dt+eAvter+059nAv7Xp
+ og5zpNt7ShlYRDjYJAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQAT2bmUkaHTbNGCHMVL139w
+ r5namNxs7dgxv8peou6PmCW32LuiSy0M/+uEYhQn/lDSj7JOLxBh8zn4u3xJ2Y5qx4bjS/lvGTh
+ PZQQA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, 15 Aug 2023 at 16:40, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 15/08/2023 16:17, Robert Marko wrote:
-> > Add the required DT node for WDT operation.
-> >
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > ---
-> >  arch/arm64/boot/dts/qcom/ipq5018.dtsi | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-> > index 3285c86824cf..168322bfb11c 100644
-> > --- a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
-> > @@ -182,6 +182,13 @@ v2m1: v2m@1000 {
-> >                       };
-> >               };
-> >
-> > +             watchdog: watchdog@b017000 {
-> > +                     compatible = "qcom,apss-wdt-ipq5018", "qcom,kpss-wdt";
-> > +                     interrupts = <GIC_SPI 3 IRQ_TYPE_EDGE_RISING>;
->
-> I think all GIC_SPI interrupts are level high.
+After commit f1a43aadb5a6 ("watchdog: Enable COMPILE_TEST for more
+drivers"), it is possible to enable this driver on 32-bit architectures.
+When building for those architectures with clang, there is an error due
+to a 64-bit division in xilinx_wwdt_start():
 
-They are most probably using GIC-500 which supports rising edge or
-active high interrupts.
-Both the older GIC-400 and newer GIC-600 also support the same.
+  ERROR: modpost: "__aeabi_uldivmod" [drivers/watchdog/xilinx_wwdt.ko] undefined!
 
-Vendor DTS indicates this level, IPQ8074 and IPQ6018 which use the
-same core, and it
-seems the same WDT IP use the rising edge IRQ.
+Use div_u64() to fix this, which takes a 64-bit dividend and 32-bit
+divisor. GCC likely avoids the same error due to optimizations it
+employs to transform division by a constant into other equivalent
+operations, which may be different than what is implemented in clang.
 
->
-> > +                     reg = <0x0b017000 0x40>;
->
-> Keep the reg as second property.
+Link: https://github.com/ClangBuiltLinux/linux/issues/1915
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/watchdog/xilinx_wwdt.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Ok,
-will do.
+diff --git a/drivers/watchdog/xilinx_wwdt.c b/drivers/watchdog/xilinx_wwdt.c
+index 1d998db41533..d271e2e8d6e2 100644
+--- a/drivers/watchdog/xilinx_wwdt.c
++++ b/drivers/watchdog/xilinx_wwdt.c
+@@ -9,6 +9,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/ioport.h>
++#include <linux/math64.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+@@ -71,7 +72,7 @@ static int xilinx_wwdt_start(struct watchdog_device *wdd)
+ 
+ 	/* Calculate timeout count */
+ 	time_out = xdev->freq * wdd->timeout;
+-	closed_timeout = (time_out * xdev->close_percent) / 100;
++	closed_timeout = div_u64(time_out * xdev->close_percent, 100);
+ 	open_timeout = time_out - closed_timeout;
+ 	wdd->min_hw_heartbeat_ms = xdev->close_percent * 10 * wdd->timeout;
+ 
 
-Regards,
-Robert
->
-> > +                     clocks = <&sleep_clk>;
-> > +             };
->
-> Best regards,
-> Krzysztof
->
+---
+base-commit: 8a504bd61ec7b3ddd72680e15775f2c7c0f9e894
+change-id: 20230815-watchdog-xilinx-div_u64-85c27c650493
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
