@@ -2,88 +2,117 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F21F781884
-	for <lists+linux-watchdog@lfdr.de>; Sat, 19 Aug 2023 10:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91923781979
+	for <lists+linux-watchdog@lfdr.de>; Sat, 19 Aug 2023 14:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbjHSIxM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 19 Aug 2023 04:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
+        id S232163AbjHSMLG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 19 Aug 2023 08:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjHSIxM (ORCPT
+        with ESMTP id S230289AbjHSMLF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 19 Aug 2023 04:53:12 -0400
-Received: from eggs.gnu.org (eggs.gnu.org [IPv6:2001:470:142:3::10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C30F1DDE;
-        Sat, 19 Aug 2023 01:48:35 -0700 (PDT)
-Received: from fencepost.gnu.org ([2001:470:142:3::e])
-        by eggs.gnu.org with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <othacehe@gnu.org>)
-        id 1qXHd2-0001kJ-8j; Sat, 19 Aug 2023 04:48:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=gnu.org;
-        s=fencepost-gnu-org; h=MIME-Version:Date:Subject:To:From:in-reply-to:
-        references; bh=C+Jcu5bdm+iP02HYx68cgDC8fIORgJcECFprqrGAkIs=; b=PFRUC1cL0PO/hF
-        M+H0QR58LezzbxnW346SGQY2DIwQ19k6nQAkzOjKrAPqEF52mY7Lz6yHcMoDQMsmy48QdGDGXxww9
-        arRXJKc5csOOJ3JlVMF3wNY/Xz6G3NULXMUp+mxeIHzcSf4tSZ/+j7JH44lfDmvwblxIvrs8IYD3y
-        LKzbAAz2glvza134oJrX0wKaJESoN6tR7kSKtZtpPTkZcB4keAL+QPhJ6YvgB6tCiCf19gmCHcm/l
-        ctaf7HH9SuiOV5aU73n7/taRvQZ9bbalbkBmUZaU/s1ylTHtMjMkjJzS4yUcPZWng+qmjJn+cwjgE
-        jmrGecyuP4CU/ANhD8AQ==;
-From:   Mathieu Othacehe <othacehe@gnu.org>
-To:     nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        Sat, 19 Aug 2023 08:11:05 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830722408E;
+        Sat, 19 Aug 2023 05:09:20 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1bbc87ded50so12859895ad.1;
+        Sat, 19 Aug 2023 05:09:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692446960; x=1693051760;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DCcTJ6Tm7LuQQrCoSymLgiPyZVV3vddfh8DXO175zX4=;
+        b=aOhkAVOGIRygHZ5n9XjRV/xznCr6Ow3FVuntPCw3uV7272Ww+LBOHkPNptdFTsJF22
+         /vhrkUNxdo9D3Q9kYgTZtWrtc3gllfJGQ+XBZNCwrz2/G0XGL41xhFj0ALXueBBVPcHZ
+         4adf836ke8Cc5aNJq6jNcq/79eOBjj4Jy4FclW/Vrn69xNss6+QkV10IJfxl2FuL77d2
+         HXFToL0oVvbcnttmWGXEAqYb+wl8C4cTkY3dZbbC7HTg+CNnAr0rboRZ5XUyG7TyNpFF
+         8gdI+r2Wv9uZ5TyJ+lMmQcd7ufzxUkesqknWoiMepkFl2eDZp9hB5xWMSXSS9mAIFXUX
+         KN/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692446960; x=1693051760;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DCcTJ6Tm7LuQQrCoSymLgiPyZVV3vddfh8DXO175zX4=;
+        b=kUoCgRCKS2ZW/9d6M2HJouT6a+Cq4jcY3qI2LJRKfkikgiAOd7TVKU+oE72aI3VHOI
+         Vl6tg4qJAAlrpQwH6TAw24eDGUWGYZ5UKTRsduVlI2U17CHSIHwTvQ7k8eBH/TP2ATJr
+         GiFyZQAilTnjWwKTm9P3tG+ARmD/8NIlakVHFaV0e5MuRy9bhr4CzHQJSzc7Nwo9ZRkO
+         oiE+Oqaib6huCWDqF2IhsFrtLn/kYZU5tQF0qzfD/VtH5Av8cb+evt0qyFmnncvcI8NO
+         k2gmjLAde0WfFkpDeG9EveKljudAA6kOo0gRRikfrU0QgcLy/MAOnamJNS0fyGfSF+Mj
+         7yyg==
+X-Gm-Message-State: AOJu0Yxj5wbASDdMNuglXiEdMTH8vrJ1PV8N5x2A3QMhC5ycRCoa0X3h
+        GESQAXxacbu3IBUK2PcytjE=
+X-Google-Smtp-Source: AGHT+IEl5OnZZn6MUTEd7rT34iadzdi4h+2cN4RhW414axiB6l5c8YBOhZ0f5YsreCs7rOjjRiF8dg==
+X-Received: by 2002:a17:902:f805:b0:1bb:d045:ae8 with SMTP id ix5-20020a170902f80500b001bbd0450ae8mr1406460plb.7.1692446959628;
+        Sat, 19 Aug 2023 05:09:19 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j24-20020a170902759800b001b8b6a19bd6sm3518651pll.63.2023.08.19.05.09.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Aug 2023 05:09:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 19 Aug 2023 05:09:17 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Mathieu Othacehe <othacehe@gnu.org>
+Cc:     nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
         claudiu.beznea@tuxon.dev, wim@linux-watchdog.org,
-        linux@roeck-us.net
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mathieu Othacehe <othacehe@gnu.org>
-Subject: [PATCH] watchdog: sama5d4: readout initial state
-Date:   Sat, 19 Aug 2023 10:47:26 +0200
-Message-ID: <20230819084726.11037-1-othacehe@gnu.org>
-X-Mailer: git-send-email 2.41.0
+        linux-arm-kernel@lists.infradead.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog: sama5d4: readout initial state
+Message-ID: <1cceb853-a844-494a-9f87-bf81159cb6ea@roeck-us.net>
+References: <20230819084726.11037-1-othacehe@gnu.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230819084726.11037-1-othacehe@gnu.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Readout the AT91_WDT_MR bit at probe so that it becomes possible to get the
-pre-userspace handler working.
+On Sat, Aug 19, 2023 at 10:47:26AM +0200, Mathieu Othacehe wrote:
+> Readout the AT91_WDT_MR bit at probe so that it becomes possible to get the
+> pre-userspace handler working.
+> 
+> Signed-off-by: Mathieu Othacehe <othacehe@gnu.org>
 
-Signed-off-by: Mathieu Othacehe <othacehe@gnu.org>
----
- drivers/watchdog/sama5d4_wdt.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/drivers/watchdog/sama5d4_wdt.c b/drivers/watchdog/sama5d4_wdt.c
-index aeee934ca51b..7d31bb6f6204 100644
---- a/drivers/watchdog/sama5d4_wdt.c
-+++ b/drivers/watchdog/sama5d4_wdt.c
-@@ -255,6 +255,7 @@ static int sama5d4_wdt_probe(struct platform_device *pdev)
- 	struct sama5d4_wdt *wdt;
- 	void __iomem *regs;
- 	u32 irq = 0;
-+	u32 reg;
- 	int ret;
- 
- 	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
-@@ -305,6 +306,12 @@ static int sama5d4_wdt_probe(struct platform_device *pdev)
- 
- 	watchdog_init_timeout(wdd, wdt_timeout, dev);
- 
-+	reg = wdt_read(wdt, AT91_WDT_MR);
-+	if (!(reg & AT91_WDT_WDDIS)) {
-+		wdt->mr &= ~AT91_WDT_WDDIS;
-+		set_bit(WDOG_HW_RUNNING, &wdd->status);
-+	}
-+
- 	ret = sama5d4_wdt_init(wdt);
- 	if (ret)
- 		return ret;
--- 
-2.41.0
-
+> ---
+>  drivers/watchdog/sama5d4_wdt.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/watchdog/sama5d4_wdt.c b/drivers/watchdog/sama5d4_wdt.c
+> index aeee934ca51b..7d31bb6f6204 100644
+> --- a/drivers/watchdog/sama5d4_wdt.c
+> +++ b/drivers/watchdog/sama5d4_wdt.c
+> @@ -255,6 +255,7 @@ static int sama5d4_wdt_probe(struct platform_device *pdev)
+>  	struct sama5d4_wdt *wdt;
+>  	void __iomem *regs;
+>  	u32 irq = 0;
+> +	u32 reg;
+>  	int ret;
+>  
+>  	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+> @@ -305,6 +306,12 @@ static int sama5d4_wdt_probe(struct platform_device *pdev)
+>  
+>  	watchdog_init_timeout(wdd, wdt_timeout, dev);
+>  
+> +	reg = wdt_read(wdt, AT91_WDT_MR);
+> +	if (!(reg & AT91_WDT_WDDIS)) {
+> +		wdt->mr &= ~AT91_WDT_WDDIS;
+> +		set_bit(WDOG_HW_RUNNING, &wdd->status);
+> +	}
+> +
+>  	ret = sama5d4_wdt_init(wdt);
+>  	if (ret)
+>  		return ret;
+> -- 
+> 2.41.0
+> 
