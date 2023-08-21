@@ -2,117 +2,117 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91923781979
-	for <lists+linux-watchdog@lfdr.de>; Sat, 19 Aug 2023 14:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC1978279E
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Aug 2023 13:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbjHSMLG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 19 Aug 2023 08:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
+        id S229801AbjHULMn (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 21 Aug 2023 07:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbjHSMLF (ORCPT
+        with ESMTP id S231357AbjHULMm (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 19 Aug 2023 08:11:05 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830722408E;
-        Sat, 19 Aug 2023 05:09:20 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1bbc87ded50so12859895ad.1;
-        Sat, 19 Aug 2023 05:09:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692446960; x=1693051760;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DCcTJ6Tm7LuQQrCoSymLgiPyZVV3vddfh8DXO175zX4=;
-        b=aOhkAVOGIRygHZ5n9XjRV/xznCr6Ow3FVuntPCw3uV7272Ww+LBOHkPNptdFTsJF22
-         /vhrkUNxdo9D3Q9kYgTZtWrtc3gllfJGQ+XBZNCwrz2/G0XGL41xhFj0ALXueBBVPcHZ
-         4adf836ke8Cc5aNJq6jNcq/79eOBjj4Jy4FclW/Vrn69xNss6+QkV10IJfxl2FuL77d2
-         HXFToL0oVvbcnttmWGXEAqYb+wl8C4cTkY3dZbbC7HTg+CNnAr0rboRZ5XUyG7TyNpFF
-         8gdI+r2Wv9uZ5TyJ+lMmQcd7ufzxUkesqknWoiMepkFl2eDZp9hB5xWMSXSS9mAIFXUX
-         KN/g==
+        Mon, 21 Aug 2023 07:12:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06C7DF
+        for <linux-watchdog@vger.kernel.org>; Mon, 21 Aug 2023 04:11:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1692616314;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4kKWxVwDIa0LoG6kc8lkH3kYCQkEyAxI4MOchqwkxyI=;
+        b=UF96Zwyd4O34NkqkakXY0En68Epwr5J0dcjZn0lMcswaczBsu8CikDonA96aTHDuViP/ME
+        jGQN6dM6M0FBXbkne0CIeV4yTVUtEcmczL7A/lp5c7toTfTYPIbJ3Hca6DCFUnx1N6bebx
+        oSGZjO/lx2mGfr0GYjIHxhzBoQ+ShkM=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-280-EvrESUNNNNSQbgCbRWbhzQ-1; Mon, 21 Aug 2023 07:11:52 -0400
+X-MC-Unique: EvrESUNNNNSQbgCbRWbhzQ-1
+Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2b9d0b3a572so35350741fa.1
+        for <linux-watchdog@vger.kernel.org>; Mon, 21 Aug 2023 04:11:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692446960; x=1693051760;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DCcTJ6Tm7LuQQrCoSymLgiPyZVV3vddfh8DXO175zX4=;
-        b=kUoCgRCKS2ZW/9d6M2HJouT6a+Cq4jcY3qI2LJRKfkikgiAOd7TVKU+oE72aI3VHOI
-         Vl6tg4qJAAlrpQwH6TAw24eDGUWGYZ5UKTRsduVlI2U17CHSIHwTvQ7k8eBH/TP2ATJr
-         GiFyZQAilTnjWwKTm9P3tG+ARmD/8NIlakVHFaV0e5MuRy9bhr4CzHQJSzc7Nwo9ZRkO
-         oiE+Oqaib6huCWDqF2IhsFrtLn/kYZU5tQF0qzfD/VtH5Av8cb+evt0qyFmnncvcI8NO
-         k2gmjLAde0WfFkpDeG9EveKljudAA6kOo0gRRikfrU0QgcLy/MAOnamJNS0fyGfSF+Mj
-         7yyg==
-X-Gm-Message-State: AOJu0Yxj5wbASDdMNuglXiEdMTH8vrJ1PV8N5x2A3QMhC5ycRCoa0X3h
-        GESQAXxacbu3IBUK2PcytjE=
-X-Google-Smtp-Source: AGHT+IEl5OnZZn6MUTEd7rT34iadzdi4h+2cN4RhW414axiB6l5c8YBOhZ0f5YsreCs7rOjjRiF8dg==
-X-Received: by 2002:a17:902:f805:b0:1bb:d045:ae8 with SMTP id ix5-20020a170902f80500b001bbd0450ae8mr1406460plb.7.1692446959628;
-        Sat, 19 Aug 2023 05:09:19 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j24-20020a170902759800b001b8b6a19bd6sm3518651pll.63.2023.08.19.05.09.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Aug 2023 05:09:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 19 Aug 2023 05:09:17 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Mathieu Othacehe <othacehe@gnu.org>
-Cc:     nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@tuxon.dev, wim@linux-watchdog.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: sama5d4: readout initial state
-Message-ID: <1cceb853-a844-494a-9f87-bf81159cb6ea@roeck-us.net>
-References: <20230819084726.11037-1-othacehe@gnu.org>
+        d=1e100.net; s=20221208; t=1692616311; x=1693221111;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4kKWxVwDIa0LoG6kc8lkH3kYCQkEyAxI4MOchqwkxyI=;
+        b=DDHilYgdsF/EN85euQr8kY+gf55hBjcsQlb/8XSfDDTrYIHyNPU4TAfXdvitfqfRXX
+         yrDK3AfIQGubqEvGGOj1sZlG8EG/kGSR06mjWOjfbwPbyqxhzKyXyBWY1VcVTDrwLNFb
+         JuwSpPoelztmKMqI2PciNQ24NRDPYf3HRA/8SABwqBPcAtfKk54dEQoocBPNG3sDMUnK
+         a9uofuoe2L0REj11JqwQWGralim5FFpEchGH+rqy/JJJHyeus1p1GGFS65Yh/G7hrmF/
+         wtAaN/DjXBnfBUAHtZkjPytWlW9ycy0pLaMmYbXYy5KJKTitT+wePr54PiFK4YoD4XJl
+         Fksg==
+X-Gm-Message-State: AOJu0Yy0wjrMAgIFWWzphWcZe9Rj+QhDwlTX5yd/C0ex9LtBpBoYEnz4
+        gT6vKOrEToxolpR24lHIbjDsr3ejOOx11rv+tgg7hjiwB1ydknBg85GzcWzPrUWou1IkNdtK4/o
+        AoOcWNk8al2H6fSDWsF0z79qZuds=
+X-Received: by 2002:a2e:9a88:0:b0:2bb:bfb0:7b66 with SMTP id p8-20020a2e9a88000000b002bbbfb07b66mr4869241lji.1.1692616311199;
+        Mon, 21 Aug 2023 04:11:51 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFIVcK22dC2fwcb0OYio9nfaSYFutOwgY1sZdX45PlJZDV4VuM1nue2vcvI4KJTEJ1CG9nxxQ==
+X-Received: by 2002:a2e:9a88:0:b0:2bb:bfb0:7b66 with SMTP id p8-20020a2e9a88000000b002bbbfb07b66mr4869226lji.1.1692616310897;
+        Mon, 21 Aug 2023 04:11:50 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id y13-20020a170906470d00b00993928e4d1bsm6395157ejq.24.2023.08.21.04.11.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Aug 2023 04:11:50 -0700 (PDT)
+Message-ID: <6a9b4199-cf2b-9653-5643-89a64a81916c@redhat.com>
+Date:   Mon, 21 Aug 2023 13:11:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230819084726.11037-1-othacehe@gnu.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] watchdog: simatic: add PCI dependency
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, "xingtong.wu" <xingtong_wu@163.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andy@kernel.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Haeussler, Gerd" <gerd.haeussler.ext@siemens.com>,
+        "Schaffner, Tobias" <tobias.schaffner@siemens.com>,
+        "xingtong.wu" <XingTong.Wu@siemens.com>
+References: <20230814073924.1066390-1-arnd@kernel.org>
+ <a6c2f193-ef7c-54a0-dfbb-13915be259a1@163.com>
+ <1834eee9-3fbd-4bea-9e22-960ca993303c@app.fastmail.com>
+ <672725bc-6ebf-0a35-96ab-8862be7de193@redhat.com>
+ <CAHp75VcR2k=ko4esuO=KNeZRQxeGojTxKeozRGCB+EXrGXgoSQ@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHp75VcR2k=ko4esuO=KNeZRQxeGojTxKeozRGCB+EXrGXgoSQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Aug 19, 2023 at 10:47:26AM +0200, Mathieu Othacehe wrote:
-> Readout the AT91_WDT_MR bit at probe so that it becomes possible to get the
-> pre-userspace handler working.
-> 
-> Signed-off-by: Mathieu Othacehe <othacehe@gnu.org>
+Hi,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+On 8/14/23 17:28, Andy Shevchenko wrote:
+> On Mon, Aug 14, 2023 at 11:51 AM Hans de Goede <hdegoede@redhat.com> wrote:
+>> On 8/14/23 10:48, Arnd Bergmann wrote:
+> 
+> ...
+> 
+>> Right P2SB would benefit from being changed into a hidden
+>> symbol.
+> 
+> Yes, I dunno why it wasn't that way from day 1. Perhaps due to the
+> original contribution done by somebody else...
+> 
+>> Andy, any comments on making P2SB a hidden symbol ?
+> 
+> I'm fine with that.
 
-> ---
->  drivers/watchdog/sama5d4_wdt.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/watchdog/sama5d4_wdt.c b/drivers/watchdog/sama5d4_wdt.c
-> index aeee934ca51b..7d31bb6f6204 100644
-> --- a/drivers/watchdog/sama5d4_wdt.c
-> +++ b/drivers/watchdog/sama5d4_wdt.c
-> @@ -255,6 +255,7 @@ static int sama5d4_wdt_probe(struct platform_device *pdev)
->  	struct sama5d4_wdt *wdt;
->  	void __iomem *regs;
->  	u32 irq = 0;
-> +	u32 reg;
->  	int ret;
->  
->  	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
-> @@ -305,6 +306,12 @@ static int sama5d4_wdt_probe(struct platform_device *pdev)
->  
->  	watchdog_init_timeout(wdd, wdt_timeout, dev);
->  
-> +	reg = wdt_read(wdt, AT91_WDT_MR);
-> +	if (!(reg & AT91_WDT_WDDIS)) {
-> +		wdt->mr &= ~AT91_WDT_WDDIS;
-> +		set_bit(WDOG_HW_RUNNING, &wdd->status);
-> +	}
-> +
->  	ret = sama5d4_wdt_init(wdt);
->  	if (ret)
->  		return ret;
-> -- 
-> 2.41.0
-> 
+Ok, can you submit a patch for this please ?
+
+Regards,
+
+Hans
+
