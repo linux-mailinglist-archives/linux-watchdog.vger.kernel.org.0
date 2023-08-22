@@ -2,117 +2,91 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB93B78437F
-	for <lists+linux-watchdog@lfdr.de>; Tue, 22 Aug 2023 16:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0097843E9
+	for <lists+linux-watchdog@lfdr.de>; Tue, 22 Aug 2023 16:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbjHVOKF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 22 Aug 2023 10:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S235081AbjHVOXJ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 22 Aug 2023 10:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233354AbjHVOKE (ORCPT
+        with ESMTP id S233184AbjHVOXJ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 22 Aug 2023 10:10:04 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A942CEB;
-        Tue, 22 Aug 2023 07:09:38 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-68a68d23f51so919076b3a.2;
-        Tue, 22 Aug 2023 07:09:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692713315; x=1693318115;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=66PozHNDvh/miQcrv08kMaTHrwFW+whkzko67cfaVXM=;
-        b=KXPacQPhSZfaP5VbfGz22Af3EDfuMvGZEcLcQPaAeF7msJjijYUDwzrQAUgFX2wyrc
-         VY2aJSAuZaOjQmSNS7S3ntYcp0+GVWGgb1MCYEtwYR1luHkSGPTab+Extdp9pUSVMSt8
-         WkxcuN+dEcPZgUv7Sx4zeJJWDG2X8ll+E1+V6U0Bj86aqxYHXY7hejesr7TuIQAup4MB
-         Hn3pCoY7KnkngTlphODXlL1sytKm9qbiaWF6aHEHs9DGxMGDX71fMNnqx50qaQkA52KI
-         6kbRWkGbLbwUc05g+zLsYtyW0pOmySscasvsr1cxkUz58pwpF6xl2GsX20irZ/ZTosCf
-         ma4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692713315; x=1693318115;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=66PozHNDvh/miQcrv08kMaTHrwFW+whkzko67cfaVXM=;
-        b=SeIqnoMHM++8o/Xl4Q1rgoF01hPrG5uirnhWOWa8OGxaTRCz5bGdPLL4jkmyT/R6ev
-         yIGfvGaMijSPZyuEicjTAReEL/3vqODPu/Oo4NKbs6Hyf1TZawnGwvaBynQ2HG2VSfGn
-         v3T/bItgQ4baed8PVhdzxmZkCVDk1w8DF22/Jr9cmafxronLFPHhpXv1JdEP5SFEc0XS
-         TGQ7uMWi+Fbfg8c9dgXIoZvBv0n1GYxu+/OpV5PUfHcOUWC5Y2cdrlxcWIrKVU+DIWGn
-         c7jDHt5XqyoKTmOoFicIMfnZF8xpRzf61MCvSoFXQu4COn6yUYqrfJnQ3sDPnAdg4oJE
-         dSIg==
-X-Gm-Message-State: AOJu0Yzo5G7aTzxcdyNzH0UBzv7X5RFLrNZBH9VXTKKX2odZXH0v3FrS
-        LQU+EZcLkYz2XPJXSyq/UTQ=
-X-Google-Smtp-Source: AGHT+IGwBcGEzMNvmZP3MWGhyYXJ9xMMvQjKJWpLgaZ8NJrUrfGxCaj416i4JqFWInh0XGeVtq4BSA==
-X-Received: by 2002:a05:6a00:1994:b0:688:49e6:d113 with SMTP id d20-20020a056a00199400b0068849e6d113mr11963647pfl.34.1692713314838;
-        Tue, 22 Aug 2023 07:08:34 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s5-20020aa78285000000b0067ab572c72fsm7744851pfm.84.2023.08.22.07.08.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Aug 2023 07:08:34 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 22 Aug 2023 07:08:32 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Fabio Estevam <festevam@denx.de>
-Subject: Re: [PATCH] watchdog: imx2_wdt: Improve dev_crit() message
-Message-ID: <37f5e3d0-c841-4270-8424-7b4a8c16de7c@roeck-us.net>
-References: <20230822135255.1013981-1-festevam@gmail.com>
+        Tue, 22 Aug 2023 10:23:09 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F40CCA;
+        Tue, 22 Aug 2023 07:23:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692714187; x=1724250187;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3W+VSWBhicURFSXhHWrLL5SZA2vWllHOyZnE2Gl01JM=;
+  b=nE9OHfio9BDHsd1Mw5/76433OGYtRoh4mLdfHW+zdj4ZuYgpTcoNx21E
+   0v4+FGbermHHCB53/JbCsx4VCQepf8gB42u8ckJ7ixRlVFj4VqY1YfNkW
+   IRTLPgZFmmIZ4xkr6Gs9S7tIkhzAORnd99qk73vY5EUd0jgNF7SR7+n5o
+   so7nsvDDjT/W2XbDZlj9Fjzoqca99Q7z9LfrxiZOoar+l1tPaKVexUrnB
+   qLYnVKlk21W7vl0rfJRUNivIWL7MFFCpUCGPb8pvUXub0esB9WraqINaM
+   sdfb9DTwzViw5yqAzEErOwfhI2PkaS2UB/AT7zWxBo3RVAjX74Qx14AAH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="364061949"
+X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
+   d="scan'208";a="364061949"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 07:19:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="765749248"
+X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
+   d="scan'208";a="765749248"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 22 Aug 2023 07:19:02 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 84B92379; Tue, 22 Aug 2023 17:19:01 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] watchdog: simatic: Use idiomatic selection of P2SB
+Date:   Tue, 22 Aug 2023 17:18:59 +0300
+Message-Id: <20230822141859.2139630-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230822135255.1013981-1-festevam@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Aug 22, 2023 at 10:52:55AM -0300, Fabio Estevam wrote:
-> From: Fabio Estevam <festevam@denx.de>
-> 
-> After issuing a "poweroff" command the board goes through the
-> expected power-off sequence and turns it off completely:
-> 
-> systemd-shutdown[1]: Powering off.
-> imx2-wdt 30280000.watchdog: Device shutdown: Expect reboot!
-> reboot: Power down
-> 
-> The "Expect reboot!" message is misleading because in the
-> power-off case, no reboot is expected to happen at all.
-> 
-> Avoid the confusion by removing the "Expect reboot!" message.
-> 
-> Signed-off-by: Fabio Estevam <festevam@denx.de>
+While it's pretty much theoretical to be otherwise, make sure
+that P2SB is selected only for X86. This is idiomatic dependency
+which is used by all others who select it. Use it for Simatic
+as well.
 
-Not sure if the message should be there in the first place.
-Anyway,
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/watchdog/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index a75f6acb986b..751458959411 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -1685,7 +1685,7 @@ config SIEMENS_SIMATIC_IPC_WDT
+ 	depends on SIEMENS_SIMATIC_IPC && PCI
+ 	default y
+ 	select WATCHDOG_CORE
+-	select P2SB
++	select P2SB if X86
+ 	help
+ 	  This driver adds support for several watchdogs found in Industrial
+ 	  PCs from Siemens.
+-- 
+2.40.0.1.gaa8946217a0b
 
-> ---
->  drivers/watchdog/imx2_wdt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
-> index 1a27665a2f53..42e8ffae18dd 100644
-> --- a/drivers/watchdog/imx2_wdt.c
-> +++ b/drivers/watchdog/imx2_wdt.c
-> @@ -374,7 +374,7 @@ static void imx2_wdt_shutdown(struct platform_device *pdev)
->  		 */
->  		imx2_wdt_set_timeout(wdog, IMX2_WDT_MAX_TIME);
->  		imx2_wdt_ping(wdog);
-> -		dev_crit(&pdev->dev, "Device shutdown: Expect reboot!\n");
-> +		dev_crit(&pdev->dev, "Device shutdown.\n");
->  	}
->  }
->  
-> -- 
-> 2.34.1
-> 
