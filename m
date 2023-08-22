@@ -2,113 +2,140 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 470467847DB
-	for <lists+linux-watchdog@lfdr.de>; Tue, 22 Aug 2023 18:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9466784847
+	for <lists+linux-watchdog@lfdr.de>; Tue, 22 Aug 2023 19:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237173AbjHVQjo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 22 Aug 2023 12:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S229551AbjHVRQC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 22 Aug 2023 13:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232859AbjHVQjo (ORCPT
+        with ESMTP id S229819AbjHVRQC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 22 Aug 2023 12:39:44 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917C71BE;
-        Tue, 22 Aug 2023 09:39:42 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-68a3f1d8be2so2144119b3a.3;
-        Tue, 22 Aug 2023 09:39:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692722382; x=1693327182;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xIZD1wHA6+5KOjBvCb5coNIt9as6PZ9mXi9uNciQwzQ=;
-        b=f8HWCjpZB13n4B+lbsQdY/Z2K55x+wL/VHE6WqmDH4yW3NKrtpVA2uOBBIfeEU+ikg
-         Qvt56pYOIrcJhezMxFVqBLo6zntGdSNIIeHUIRk/c44cjvAWfBht9TaUhngpkhDIJyq/
-         lQzHId4QnYfvsYX1jkE0so0+DfYN0exUPWpIe/0WqBijplGUxGHfFlkY6VgTSw8ch57Z
-         n2FQFHVm3wR/Xr3OEbPLMFwx4OfCF/BPMMtGWjByyCebW0DfLoX7gY1QVgAjllO/KJJA
-         Bg94GKgQNg6mN11qxU+dy76pFNx3As6rtrSPwala+bv2GPH4KCa4OonEH759QplqItCk
-         056A==
+        Tue, 22 Aug 2023 13:16:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4983A3AA2
+        for <linux-watchdog@vger.kernel.org>; Tue, 22 Aug 2023 10:15:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1692724518;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uX3hEgT9OaTc56WxcxfgV39D2MhUSnY7cY3oVqgL/Pg=;
+        b=fp4HeX7d4oSzUTIfR2VR5PhEsugkc2pdYieZF158F7aAt9u3EE2WT2TShPmJNC7Ckkg9PV
+        nryipzRMEtu1C18WUEO16A5lQp8rmG3O9aJJH2tnUp8nt/oR0KLrsV48ZzuRXWNy3qE+AY
+        qGOgvg8m/NhKeg5smCISte3i4TI9ga4=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-675-iFW-gkPCM8WB23H_HV6ZGA-1; Tue, 22 Aug 2023 13:15:17 -0400
+X-MC-Unique: iFW-gkPCM8WB23H_HV6ZGA-1
+Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-2ba1949656bso48907421fa.0
+        for <linux-watchdog@vger.kernel.org>; Tue, 22 Aug 2023 10:15:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692722382; x=1693327182;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xIZD1wHA6+5KOjBvCb5coNIt9as6PZ9mXi9uNciQwzQ=;
-        b=LJTMmrJUaiboFtI95ovKYObAD2bH9YYBCEYSkUQrPXgYOq0ZeSQP54DpH6qQCNAvhS
-         aSzAQ/XvA21ZeVt59dB4tdzqbv0zJPXIXsSIyXPwVuQij28TXt5lrVxcardNqZy7oa6S
-         IVS1CpI5DD0es/HqDFYBGb7lJ1BAX7y+7t/GAMZaBw89rWtpSYxmeKbJHoRMbPe8KxSI
-         dDJQDGImedqInQvj/3ApCoeQH5N++JLMgYR1Du7MtI9HsMS5eNtPTOTJpDRwtrW32OX/
-         e9tiGqiE+QJWbYEONuiSAeo1NhFoYLdD67GAqAZMD+U18I5rW/OPtoy0UJwjiOpsFYvw
-         Z44Q==
-X-Gm-Message-State: AOJu0YxsRWKl6OuZVuYBO3zkv36Z1N0gPfror2kAwsLhFDlOqaE6mHCk
-        phMoP1BZqREfmdscpW7KNQcI2c73ZbI=
-X-Google-Smtp-Source: AGHT+IFrmiT6RsoUKY2m2tWMQn6lowky7TSCwaS8elzF0vu8OaK2QArogWLdBf5g6KB5/I+d0ngTeA==
-X-Received: by 2002:a05:6a20:7da9:b0:140:6fa9:7004 with SMTP id v41-20020a056a207da900b001406fa97004mr13033357pzj.46.1692722381802;
-        Tue, 22 Aug 2023 09:39:41 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m18-20020a637d52000000b005649cee408fsm8294680pgn.0.2023.08.22.09.39.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Aug 2023 09:39:41 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 22 Aug 2023 09:39:39 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        d=1e100.net; s=20221208; t=1692724515; x=1693329315;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uX3hEgT9OaTc56WxcxfgV39D2MhUSnY7cY3oVqgL/Pg=;
+        b=k7dgOFfIwB/D0Rk6K1cJixlp81W8GRxkBb+XKnOUxzZkP4LJto4Ugq5xazzeop5fkh
+         gTwgOO5/FTZobEwfi4gL63sFlIpZF0Kn1+DPt1p+f9q8XjbWTofa+R2oa250rkWT8vNq
+         ZaThIyyrHxRajAr1F9b1a1+CLXmwI6+7B7ZpHBCmdbKl+xU9vqzBDul8Rq9zGcZKToJj
+         a739tJTRac/rDKktibqI6wGqFgAbSNF6U+44ogXNgxzSAgCqb8wikf0kFHOwGR57zU9q
+         5arcQuC2kv5u6kQN2MLjmue773Hjeb5mojzOzbp/AEWu374GoXjM2a9uohOdUWyP43jy
+         Om/A==
+X-Gm-Message-State: AOJu0YzLb2CPv1/iM253JIVT9zSGUgNTSA/F4WLiy3NplAjdI4HXNMsr
+        Uf31ulFRekJH6XT7d2Yh5DWdwqSuvcenXWOobi2FQzuUwoosX8uMgO0amRwe9wgEb743jAaW8G/
+        l/qkZQvJN54YId43XlNHEfR2DpvXaDAmFgMc=
+X-Received: by 2002:a2e:2c05:0:b0:2b9:f13b:613c with SMTP id s5-20020a2e2c05000000b002b9f13b613cmr8497907ljs.2.1692724515190;
+        Tue, 22 Aug 2023 10:15:15 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGTN5fVmP5BIKTyzLWBlSk4YFGPvgFKCPUnjP+nbGthtBmH6ALa59LF61kjvpYaIpJaGOBorw==
+X-Received: by 2002:a2e:2c05:0:b0:2b9:f13b:613c with SMTP id s5-20020a2e2c05000000b002b9f13b613cmr8497891ljs.2.1692724514886;
+        Tue, 22 Aug 2023 10:15:14 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:2a07:3a01:67e5:daf9:cec0:df6? (2001-1c00-2a07-3a01-67e5-daf9-cec0-0df6.cable.dynamic.v6.ziggo.nl. [2001:1c00:2a07:3a01:67e5:daf9:cec0:df6])
+        by smtp.gmail.com with ESMTPSA id p25-20020a170906839900b0098884f86e41sm8509499ejx.123.2023.08.22.10.15.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Aug 2023 10:15:14 -0700 (PDT)
+Message-ID: <38c2d9b2-304e-f1b2-af74-94c1f2eb3d52@redhat.com>
+Date:   Tue, 22 Aug 2023 19:15:13 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v1 1/1] watchdog: simatic: Use idiomatic selection of P2SB
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Rob Herring <robh@kernel.org>, linux-watchdog@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Hans de Goede <hdegoede@redhat.com>,
         Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v1 1/1] watchdog: simatic: Use idiomatic selection of P2SB
-Message-ID: <499aeb3a-f6cc-46b8-826f-237e6c5ace31@roeck-us.net>
 References: <20230822141859.2139630-1-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230822141859.2139630-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+ <499aeb3a-f6cc-46b8-826f-237e6c5ace31@roeck-us.net>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <499aeb3a-f6cc-46b8-826f-237e6c5ace31@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Aug 22, 2023 at 05:18:59PM +0300, Andy Shevchenko wrote:
-> While it's pretty much theoretical to be otherwise, make sure
-> that P2SB is selected only for X86. This is idiomatic dependency
-> which is used by all others who select it. Use it for Simatic
-> as well.
+Hi,
+
+On 8/22/23 18:39, Guenter Roeck wrote:
+> On Tue, Aug 22, 2023 at 05:18:59PM +0300, Andy Shevchenko wrote:
+>> While it's pretty much theoretical to be otherwise, make sure
+>> that P2SB is selected only for X86. This is idiomatic dependency
+>> which is used by all others who select it. Use it for Simatic
+>> as well.
+>>
+>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-Hans, can you take this one as well ?
-
-Thanks,
-Guenter
-
-> ---
->  drivers/watchdog/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
 > 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index a75f6acb986b..751458959411 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1685,7 +1685,7 @@ config SIEMENS_SIMATIC_IPC_WDT
->  	depends on SIEMENS_SIMATIC_IPC && PCI
->  	default y
->  	select WATCHDOG_CORE
-> -	select P2SB
-> +	select P2SB if X86
->  	help
->  	  This driver adds support for several watchdogs found in Industrial
->  	  PCs from Siemens.
-> -- 
-> 2.40.0.1.gaa8946217a0b
+> Hans, can you take this one as well ?
+
+Yes, done:
+
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+
+
+>> ---
+>>  drivers/watchdog/Kconfig | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+>> index a75f6acb986b..751458959411 100644
+>> --- a/drivers/watchdog/Kconfig
+>> +++ b/drivers/watchdog/Kconfig
+>> @@ -1685,7 +1685,7 @@ config SIEMENS_SIMATIC_IPC_WDT
+>>  	depends on SIEMENS_SIMATIC_IPC && PCI
+>>  	default y
+>>  	select WATCHDOG_CORE
+>> -	select P2SB
+>> +	select P2SB if X86
+>>  	help
+>>  	  This driver adds support for several watchdogs found in Industrial
+>>  	  PCs from Siemens.
+>> -- 
+>> 2.40.0.1.gaa8946217a0b
+>>
 > 
+
