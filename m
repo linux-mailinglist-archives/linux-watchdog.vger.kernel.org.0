@@ -2,72 +2,72 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0519D785C45
-	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Aug 2023 17:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA2C785C68
+	for <lists+linux-watchdog@lfdr.de>; Wed, 23 Aug 2023 17:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237280AbjHWPiL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 23 Aug 2023 11:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
+        id S236915AbjHWPqO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 23 Aug 2023 11:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237278AbjHWPiL (ORCPT
+        with ESMTP id S236949AbjHWPqN (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 23 Aug 2023 11:38:11 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81599E50;
-        Wed, 23 Aug 2023 08:38:09 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6bc886d1504so4381831a34.0;
-        Wed, 23 Aug 2023 08:38:09 -0700 (PDT)
+        Wed, 23 Aug 2023 11:46:13 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C571717;
+        Wed, 23 Aug 2023 08:45:33 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1bf55a81eeaso26878265ad.0;
+        Wed, 23 Aug 2023 08:45:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692805089; x=1693409889;
+        d=gmail.com; s=20221208; t=1692805522; x=1693410322;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=b4SkKlAbqJpn3W9mREOS7xdidgwXt26+Nc2zXplGeHM=;
-        b=D3j+jtASsvw3oke8XXXeyrK5llBEgvl5isUWuMzWxMymFNaa10eJZPCl/WFl5UmCmT
-         ARkI86XYumfasFLi9MCQKAFd+vV2g2xPPc5Wc26RLOWIgNaXY92kiocVAoVCcFxuUypS
-         5yFbM5osKf0erPayZYbXXIyLGkDQWuUkNIvhKo56/PNYIGChjZgV5WsqCCLJthl6flTB
-         4IvhDDG78OvABM7jTj9CdCrczGuHelz2BtL6rpUSDn1kYBYJlAwgYPRjdIpkEOif61wF
-         xclKxq1b1p94bEb1FWcPcxGC1eYCYvlT6wMXhHG5D8axEKX8bjaLvF7OT5hOrAEV2C3N
-         C+RA==
+        bh=rgyeGdbslhNv497sxSi9T9F8ibgrZruUJHbypuA4l6Y=;
+        b=jixuxBy6dLyqzAugK26aoYw0LHQTx9DCcGP9ZOAzYpSmA3crvbg6NPiyoC4P6lFTgU
+         R1w8rNe43s2U/PV3ehvtlmAeDWIE93dhMXJNiyRUmM8K6B7jp71JoTE3AMMXa/EojZr+
+         vGR3WY2zfn6q1ZOZVMfixe6WWpWpf6Pl+c+EFBx0GILy52cD4x3zaQUOQvwNs0nrhBbe
+         oku0F6PnEUZbaI8P3rhWH6XeZJ9FUhB+B7AidlpWhG0gpd1fNu3nhZZQgPaHgBG6u/jG
+         JLPeiKY3z7GfzEfSd4UKGr0AIsHoxbd1l9vX1V8It7YLtECvMoxBfUqu5oTCFp9YGfaB
+         TK6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692805089; x=1693409889;
+        d=1e100.net; s=20221208; t=1692805522; x=1693410322;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b4SkKlAbqJpn3W9mREOS7xdidgwXt26+Nc2zXplGeHM=;
-        b=epNWMeOxcXxZeDSE5IVFgIqe2zrVE36sOZEbxl59FMWZ+OGx7Ylh9rqcNSan/2t3O1
-         YNCDJdyZ/dQtKF1wSHtxtuLP8ap4CIZoM9+tRMHr4bvlK2fuQ794KFczExs0t+Fin0B8
-         QyKt+5tZplVmt0g4mX9FTJOyzqbzyfFcNw6U+WbeU+HTBFRUYIE26OCMv657JmVIg1Ld
-         Sy5XqIUbZ7EfWDmfPh5oCsaIrAQwySU7vZxLAwjo7B9A4BfHpmGYCCPj9CCh0awJlnSg
-         q41l1usJlAUSUKMwf037ZKO54djXCIN/vCzmSmY34Eh7ASFwKfeWCpZfxMF+sNwqnzfq
-         G+5A==
-X-Gm-Message-State: AOJu0Yz3eFq/CTVffL7/OSp2cTDwZNkjIu1tIkEfgo+X4J1xGoAUEpzH
-        L3psgUQWtZ09Agsv4voAoOw=
-X-Google-Smtp-Source: AGHT+IGDtTWQriiaiDHkSAZKWgk7OvDpXpVUuf0KtOeULPl1ptD4cv0ietjjTEiml/7ncCSA/eRZLQ==
-X-Received: by 2002:a9d:6c45:0:b0:6b9:b665:7f with SMTP id g5-20020a9d6c45000000b006b9b665007fmr12824092otq.17.1692805088733;
-        Wed, 23 Aug 2023 08:38:08 -0700 (PDT)
+        bh=rgyeGdbslhNv497sxSi9T9F8ibgrZruUJHbypuA4l6Y=;
+        b=LRVLsp6B7C/wRunb6NvQNioIWAEQ1rplyQhzlC6P9iWxMPxYVyFtNplBi4NU8VrxZU
+         4bnHUACq05gjoz/lqZZN5IgiHtGsPLQAyE2Wpb8RcKROu3iT84fwKlAhdu2gYJLtP+gD
+         zmh12XsHHqyq/h7RWp8n3dm4TkX69Di58uevfTSywMvH17eppHgSd58GWXT66MR+/M5B
+         ea0BNW0lKBGvC39Ev6tY36H9sDxbQeeCvKANze1TZSkRSjYy+nBrUBUIrd+uXPDZq9nk
+         DuhuT+k02jGWAaE/PJNSv8p62uZx7l6OFxeKDd/8pS5ofWnIGHgrfbiVM27UwAIhbGDa
+         hu9g==
+X-Gm-Message-State: AOJu0YynSDDiYIhWkDKhJMnnnx9lpFXXHXNfL21n9Kkaxmpug9quAy99
+        avrC3oQ/kJXz5nIYAZ/W5/8=
+X-Google-Smtp-Source: AGHT+IHoxUe6KTbUqRFXtM8YgfcSwLH7IdrqQeJIEYuWOh354lKGc750/NspA/0hl92k8FhJo7DrrQ==
+X-Received: by 2002:a17:902:b617:b0:1be:f76e:7664 with SMTP id b23-20020a170902b61700b001bef76e7664mr9480732pls.29.1692805522050;
+        Wed, 23 Aug 2023 08:45:22 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bt18-20020a632912000000b0056b920051b3sm6267366pgb.7.2023.08.23.08.38.07
+        by smtp.gmail.com with ESMTPSA id e5-20020a170902744500b001bdc5023783sm11131773plt.179.2023.08.23.08.45.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Aug 2023 08:38:08 -0700 (PDT)
+        Wed, 23 Aug 2023 08:45:21 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 23 Aug 2023 08:38:06 -0700
+Date:   Wed, 23 Aug 2023 08:45:20 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-watchdog@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: stm32: Drop unnecessary of_match_ptr()
-Message-ID: <970cbe44-9958-4315-b112-74f34bf97740@roeck-us.net>
-References: <20230823151059.2356881-1-robh@kernel.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        wim@linux-watchdog.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        quic_saipraka@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: qcom-wdt: document IPQ5018
+Message-ID: <79414186-3c5f-4166-a81a-6b346e544253@roeck-us.net>
+References: <20230816161455.3310629-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230823151059.2356881-1-robh@kernel.org>
+In-Reply-To: <20230816161455.3310629-1-robimarko@gmail.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -79,36 +79,27 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 10:10:59AM -0500, Rob Herring wrote:
-> With COMPILE_TEST recently enabled, 0-day reports a warning:
+On Wed, Aug 16, 2023 at 06:13:59PM +0200, Robert Marko wrote:
+> Document the IPQ5018 watchdog compatible.
 > 
-> drivers/watchdog/stm32_iwdg.c:215:34: warning: 'stm32_iwdg_of_match' defined but not used [-Wunused-const-variable=]
-> 
-> As STM32 platforms are always used with DT, drop the of_match_ptr().
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202308211837.4VBSUAtZ-lkp@intel.com/
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/stm32_iwdg.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
-> index 570a71509d2a..9a554a3db4e2 100644
-> --- a/drivers/watchdog/stm32_iwdg.c
-> +++ b/drivers/watchdog/stm32_iwdg.c
-> @@ -288,7 +288,7 @@ static struct platform_driver stm32_iwdg_driver = {
->  	.probe		= stm32_iwdg_probe,
->  	.driver = {
->  		.name	= "iwdg",
-> -		.of_match_table = of_match_ptr(stm32_iwdg_of_match),
-> +		.of_match_table = stm32_iwdg_of_match,
->  	},
->  };
->  module_platform_driver(stm32_iwdg_driver);
-> -- 
-> 2.40.1
-> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> index 6d0fe6abd06a..5046dfa55f13 100644
+> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> @@ -18,6 +18,7 @@ properties:
+>        - items:
+>            - enum:
+>                - qcom,kpss-wdt-ipq4019
+> +              - qcom,apss-wdt-ipq5018
+>                - qcom,apss-wdt-ipq5332
+>                - qcom,apss-wdt-ipq9574
+>                - qcom,apss-wdt-msm8994
