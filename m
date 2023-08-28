@@ -2,176 +2,157 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BEDC78A8D6
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Aug 2023 11:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F3078A907
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Aug 2023 11:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbjH1JWm (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 28 Aug 2023 05:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
+        id S230071AbjH1Jhv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 28 Aug 2023 05:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjH1JWN (ORCPT
+        with ESMTP id S230148AbjH1Jhl (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 28 Aug 2023 05:22:13 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2085.outbound.protection.outlook.com [40.107.92.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B770CFD;
-        Mon, 28 Aug 2023 02:21:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a5W1I1eEkbAXOpmY999rTIvPkDBscg/av5a4pYqm7LgpR8HO3ZmrYlwgFocUphXhZ32xClEJKTer1U32VV54B/jqtTklg6WMFIRv8RR90JveK1qUp2f4OWORCtPOdoJehkebLOydmPvQFpFDB9Ilw5t2GKGFe9lqR1QEH8Uvr17POt9Fx7cXpPQ9IebQc7ldCNyVvu/ggShbo2rwB3qK5sIQvQaBuvn78HjLf9z0a0JyZEyP0+Tf8hMgWRqngay/tGH8LH6wPxwnHfLj3fqx1N2+ucV5B0gK2Zk5jwafhqncX6XnJsGSoByLsgJ953MZumotLWRPtNBQ0fijX681GA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=X0r1Q4xQEdPajeBodpkju+NYa9bWPKUjXuDuAoc6q/0=;
- b=GJad7lEW0mDEWPCT4H4ZqWYTcK1Fn5RgucM5YXch2I5s/SdN/KzV2k67SaDNmPfRxPo7+jJq30sZ8QD1XTp3Zz+BHTjr1h0L5/nvd9gtBOqNsdKnMuN3bV4BUgSWRwKD4VqiMimhXmTJlzUylHhjmTySHtU96OCu0EXPnSPKBgj+WpbJKKS5s4DwtOpen+QuBaZ95tPHyE/kMFur44eDoV4he6BeCaAkLXTXEIt3UQoKEKLgXj20+sJgsRbcZpOcMuh9ysM5owEGW7RJtgGjxC5B4M8sPcw3ew2GhFzaDVncu4oEu6B+efmnlKfCq6I3VMlxZYVSQZ5tpKoU1/U97A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux-watchdog.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=X0r1Q4xQEdPajeBodpkju+NYa9bWPKUjXuDuAoc6q/0=;
- b=34AXYwcP6MYKzpFJeu68o1qBP8gDwATn0XNjm888xEXVuxXliuJlej0tNwSEYws64ZImxdr55UEI9IS3/oHDFB5CUGkAr7IEdqMsdM8Il2aKW1ZvrJb9ikiZLD6jXMP9seUdYzzjcYQehMtHudslzogZopUJLii4rPnRDXyuVF4=
-Received: from SA0PR11CA0144.namprd11.prod.outlook.com (2603:10b6:806:131::29)
- by PH7PR12MB7796.namprd12.prod.outlook.com (2603:10b6:510:275::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.34; Mon, 28 Aug
- 2023 09:21:24 +0000
-Received: from SA2PEPF000015C8.namprd03.prod.outlook.com
- (2603:10b6:806:131:cafe::ee) by SA0PR11CA0144.outlook.office365.com
- (2603:10b6:806:131::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.34 via Frontend
- Transport; Mon, 28 Aug 2023 09:21:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SA2PEPF000015C8.mail.protection.outlook.com (10.167.241.198) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6745.17 via Frontend Transport; Mon, 28 Aug 2023 09:21:23 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 28 Aug
- 2023 04:21:20 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 28 Aug
- 2023 04:21:19 -0500
-Received: from xhdsneeli40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.27 via Frontend
- Transport; Mon, 28 Aug 2023 04:21:16 -0500
-From:   Srinivas Neeli <srinivas.neeli@amd.com>
-To:     <shubhrajyoti.datta@amd.com>, <michal.simek@amd.com>,
-        <wim@linux-watchdog.org>, <linux@roeck-us.ne>,
-        <christophe.jaillet@wanadoo.fr>
-CC:     <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <git@amd.com>,
-        <neelisrinivas18@gmail.com>,
-        Srinivas Neeli <srinivas.neeli@amd.com>
-Subject: [PATCH] watchdog: of_xilinx_wdt: Remove unnecessary clock disable call in the remove path
-Date:   Mon, 28 Aug 2023 14:50:44 +0530
-Message-ID: <20230828092044.3597916-1-srinivas.neeli@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 28 Aug 2023 05:37:41 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF88FF;
+        Mon, 28 Aug 2023 02:37:39 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-68a3ced3ec6so2366934b3a.1;
+        Mon, 28 Aug 2023 02:37:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693215459; x=1693820259;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=vxzRBflxUntFnaa2MuzMKnmbng7MzpJTLHAop0crHuk=;
+        b=LEr4V8Mnnl5uxmet/mfPG4jmjuSzCCvO3CqsgyYHIaLYJ/coVTRZI2vOf+XywEEeUq
+         WJcAzCN/lrWW2c7vLa9TCTmXj40DtWd45nUd1GRmzptKdRwxJQPVIyWaBNxf8hFK6+nq
+         9Lr6HViMG4Qtq4JRuFqWkkWg1tOmDL6/TrNHqsljiSO1Rbi+Lq08Parw6FWuoQLDnZDK
+         mXRswMFcOPjwr+mhTb+Z+nXNF360/7CaHZlfq+5+2OlZbII67AMApaWBv3V8yTPpdhzl
+         jgAAQMO+noN0V6mb3zM1MMO7FdVjNWuABz3w0/q25o1mOrDVTsTcO0/MmuoP6z8b7+nl
+         HGDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693215459; x=1693820259;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vxzRBflxUntFnaa2MuzMKnmbng7MzpJTLHAop0crHuk=;
+        b=Rf0zlZ0u1IHDTiP3RLdFM4wnDxRWsWW1PnV8zecanN0XYBG0kDdGV5KqQbtkX54rik
+         /jpY08USyfhIGhVa0LGyfBMyq/D9JMMUy8zbUZ3dxmRGX0Q8ZZhu4YySAZZyI6jWqiR8
+         LuvsLSM+GQltI94ML+Sn56H8BlQXvD7bgqBUBxVrZbMXfiD6yOjpDzBhjLkMEcFGY4PF
+         Wd5Ef+RWytuC+O8JcWNpDl5NFHZqbGN2jzZS7qOmRtBCjKJIRbtUZBLcWxjTeUFDJWG5
+         i+qc8/9D2RQOw+1ue0+doV/7e2lAdbpObDDLh1NFlJnQMYuZrDjgsO3TQpj3HU/ab9oX
+         MLLQ==
+X-Gm-Message-State: AOJu0YxJdv8iv/NJbaKfBRsT7KN+rfq+hJknXCYfu9L0+QUNK7j2sy3Z
+        k8ljIEN+G59xnxcnXovZQg8=
+X-Google-Smtp-Source: AGHT+IF7T9hma0qTMikAluYwOOEqf/UcyYsX1MWFgu9rlDp3E0ZtSFm2Hv+0HWGgfJJzdCrAROWRIQ==
+X-Received: by 2002:a05:6a00:2da2:b0:68a:49bc:e0af with SMTP id fb34-20020a056a002da200b0068a49bce0afmr23564650pfb.1.1693215458781;
+        Mon, 28 Aug 2023 02:37:38 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m14-20020aa78a0e000000b0062cf75a9e6bsm6218852pfa.131.2023.08.28.02.37.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Aug 2023 02:37:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <09d7be2d-c3ee-286c-7035-5a253d033278@roeck-us.net>
+Date:   Mon, 28 Aug 2023 02:37:36 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF000015C8:EE_|PH7PR12MB7796:EE_
-X-MS-Office365-Filtering-Correlation-Id: e0d3900b-c231-4096-3dba-08dba7a825d5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CW6W3zMBA9tu/D3iHmUUmeZppZzUlKPz38FwhqzlbCNgJ1wBqrG5icMUhFfwTkBYEjttIC7U/T39ZqCYkjt91Rr6pUyFjHhP1biAmeeQFh2UKp+UhcYSmHl5jCSPpOQXunZXB/29HsiFJir84GAIlvkRjnGHQ3Fe9gMm0IFvRCs7uIWmXBcCNJHA+NBEpYp4LRnzAjltMVfpivMQcN35Aut2BWaRkw5SXTnhaWn8zXQkLVjq5Qkrv+Khd1bAUDs8UI9pq86uU+yS4gd+8dFLZldqO+qmbWo8B5IyUHQiV4FkyUiPoF16KBgKGdM1losPoUwYlPeu6hWO6IcunWO/IAk930JMjci99VQcrybakC+PK4BAjDincK+64NLyyE8qHhQU2gqAFc9KNaymjAs942SCx9MvxlAnp76hnnqr4qj3zYAOSN93Vu8ysYaAcZu7vcsVkyOCRw1oQNRjU+ce4hkNg0CF6sRmgShdO9e3sHfcEDZa6Gs1S0oVAbKDN8ig1fuI2Bp28kyoq0pZykS9Uq7XqpYHs6FRdTpCmjzBvXs1TzUynLqBaqAy5TzU2vDzGlTSZQaqQ7+NtEGdnecYl5jrKt3VwlzIHhxwBa3J91vuMF/OG8tkBtPgBuKrSFVPteX7bE0SD5vtc+jBS92j32KdRSKD4btjQyAHTcllw9cqNPRwnklI4MgN+OKXvdctCsTGZrCFPVfshx/JETOvEmnVgXAdlJQ4b1TPLbVxmVnFn6kkBV+DRglwIz1jPRcu19WbvFgBuCF+0PBeBU20Iw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(346002)(396003)(39860400002)(376002)(186009)(451199024)(1800799009)(82310400011)(36840700001)(40470700004)(46966006)(6666004)(2616005)(86362001)(36756003)(40480700001)(40460700003)(82740400003)(356005)(47076005)(81166007)(36860700001)(83380400001)(1076003)(2906002)(426003)(26005)(478600001)(70586007)(110136005)(8676002)(4326008)(44832011)(8936002)(5660300002)(316002)(70206006)(54906003)(41300700001)(336012)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2023 09:21:23.3508
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e0d3900b-c231-4096-3dba-08dba7a825d5
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF000015C8.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7796
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] watchdog: of_xilinx_wdt: Remove unnecessary clock disable
+ call in the remove path
+To:     Srinivas Neeli <srinivas.neeli@amd.com>,
+        shubhrajyoti.datta@amd.com, michal.simek@amd.com,
+        wim@linux-watchdog.org, linux@roeck-us.ne,
+        christophe.jaillet@wanadoo.fr
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        git@amd.com, neelisrinivas18@gmail.com
+References: <20230828092044.3597916-1-srinivas.neeli@amd.com>
+Content-Language: en-US
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230828092044.3597916-1-srinivas.neeli@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-There is a mismatch in axi clock enable and disable calls.
-The axi clock is enabled and disabled by the probe function,
-then it is again disabled in the remove path.
-So observed the call trace while removing the module.
-Use the clk_enable() and devm_clk_get_prepared() functions
-instead of devm_clk_get_enable() to avoid an extra clock disable
-call from the remove path.
+On 8/28/23 02:20, Srinivas Neeli wrote:
+> There is a mismatch in axi clock enable and disable calls.
+> The axi clock is enabled and disabled by the probe function,
+> then it is again disabled in the remove path.
+> So observed the call trace while removing the module.
+> Use the clk_enable() and devm_clk_get_prepared() functions
+> instead of devm_clk_get_enable() to avoid an extra clock disable
+> call from the remove path.
+> 
+>   Call trace:
+>    clk_core_disable+0xb0/0xc0
+>    clk_disable+0x30/0x4c
+>    clk_disable_unprepare+0x18/0x30
+>    devm_clk_release+0x24/0x40
+>    devres_release_all+0xc8/0x190
+>    device_unbind_cleanup+0x18/0x6c
+>    device_release_driver_internal+0x20c/0x250
+>    device_release_driver+0x18/0x24
+>    bus_remove_device+0x124/0x130
+>    device_del+0x174/0x440
+> 
+> Fixes: 4de0224c6fbe ("watchdog: of_xilinx_wdt: Use devm_clk_get_enabled() helper")
+> Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
+> ---
+>   drivers/watchdog/of_xilinx_wdt.c | 12 +++++++++---
+>   1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
+> index 05657dc1d36a..777272f7d326 100644
+> --- a/drivers/watchdog/of_xilinx_wdt.c
+> +++ b/drivers/watchdog/of_xilinx_wdt.c
+> @@ -187,7 +187,7 @@ static int xwdt_probe(struct platform_device *pdev)
+>   
+>   	watchdog_set_nowayout(xilinx_wdt_wdd, enable_once);
+>   
+> -	xdev->clk = devm_clk_get_enabled(dev, NULL);
+> +	xdev->clk = devm_clk_get_prepared(dev, NULL);
+>   	if (IS_ERR(xdev->clk)) {
+>   		if (PTR_ERR(xdev->clk) != -ENOENT)
+>   			return PTR_ERR(xdev->clk);
+> @@ -218,18 +218,24 @@ static int xwdt_probe(struct platform_device *pdev)
+>   	spin_lock_init(&xdev->spinlock);
+>   	watchdog_set_drvdata(xilinx_wdt_wdd, xdev);
+>   
+> +	rc = clk_enable(xdev->clk);
+> +	if (rc) {
+> +		dev_err(dev, "unable to enable clock\n");
+> +		return rc;
+> +	}
+> +
+>   	rc = xwdt_selftest(xdev);
+>   	if (rc == XWT_TIMER_FAILED) {
+>   		dev_err(dev, "SelfTest routine error\n");
 
- Call trace:
-  clk_core_disable+0xb0/0xc0
-  clk_disable+0x30/0x4c
-  clk_disable_unprepare+0x18/0x30
-  devm_clk_release+0x24/0x40
-  devres_release_all+0xc8/0x190
-  device_unbind_cleanup+0x18/0x6c
-  device_release_driver_internal+0x20c/0x250
-  device_release_driver+0x18/0x24
-  bus_remove_device+0x124/0x130
-  device_del+0x174/0x440
+Needs clk_disable() here as well.
 
-Fixes: 4de0224c6fbe ("watchdog: of_xilinx_wdt: Use devm_clk_get_enabled() helper")
-Signed-off-by: Srinivas Neeli <srinivas.neeli@amd.com>
----
- drivers/watchdog/of_xilinx_wdt.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+Guenter
 
-diff --git a/drivers/watchdog/of_xilinx_wdt.c b/drivers/watchdog/of_xilinx_wdt.c
-index 05657dc1d36a..777272f7d326 100644
---- a/drivers/watchdog/of_xilinx_wdt.c
-+++ b/drivers/watchdog/of_xilinx_wdt.c
-@@ -187,7 +187,7 @@ static int xwdt_probe(struct platform_device *pdev)
- 
- 	watchdog_set_nowayout(xilinx_wdt_wdd, enable_once);
- 
--	xdev->clk = devm_clk_get_enabled(dev, NULL);
-+	xdev->clk = devm_clk_get_prepared(dev, NULL);
- 	if (IS_ERR(xdev->clk)) {
- 		if (PTR_ERR(xdev->clk) != -ENOENT)
- 			return PTR_ERR(xdev->clk);
-@@ -218,18 +218,24 @@ static int xwdt_probe(struct platform_device *pdev)
- 	spin_lock_init(&xdev->spinlock);
- 	watchdog_set_drvdata(xilinx_wdt_wdd, xdev);
- 
-+	rc = clk_enable(xdev->clk);
-+	if (rc) {
-+		dev_err(dev, "unable to enable clock\n");
-+		return rc;
-+	}
-+
- 	rc = xwdt_selftest(xdev);
- 	if (rc == XWT_TIMER_FAILED) {
- 		dev_err(dev, "SelfTest routine error\n");
- 		return rc;
- 	}
- 
-+	clk_disable(xdev->clk);
-+
- 	rc = devm_watchdog_register_device(dev, xilinx_wdt_wdd);
- 	if (rc)
- 		return rc;
- 
--	clk_disable(xdev->clk);
--
- 	dev_info(dev, "Xilinx Watchdog Timer with timeout %ds\n",
- 		 xilinx_wdt_wdd->timeout);
- 
--- 
-2.25.1
+>   		return rc;
+>   	}
+>   
+> +	clk_disable(xdev->clk);
+> +
+>   	rc = devm_watchdog_register_device(dev, xilinx_wdt_wdd);
+>   	if (rc)
+>   		return rc;
+>   
+> -	clk_disable(xdev->clk);
+> -
+>   	dev_info(dev, "Xilinx Watchdog Timer with timeout %ds\n",
+>   		 xilinx_wdt_wdd->timeout);
+>   
 
