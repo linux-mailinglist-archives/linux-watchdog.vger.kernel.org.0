@@ -2,71 +2,194 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF03C792A40
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Sep 2023 18:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F97792FE6
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Sep 2023 22:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239731AbjIEQei (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 5 Sep 2023 12:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
+        id S235836AbjIEUYI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 5 Sep 2023 16:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354063AbjIEJds (ORCPT
+        with ESMTP id S231629AbjIEUYH (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 5 Sep 2023 05:33:48 -0400
-X-Greylist: delayed 4141 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Sep 2023 02:33:45 PDT
-Received: from mail.equinoxrise.pl (mail.equinoxrise.pl [217.61.112.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD281AB
-        for <linux-watchdog@vger.kernel.org>; Tue,  5 Sep 2023 02:33:45 -0700 (PDT)
-Received: by mail.equinoxrise.pl (Postfix, from userid 1002)
-        id 6886783612; Mon,  4 Sep 2023 09:41:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=equinoxrise.pl;
-        s=mail; t=1693813334;
-        bh=v6OgBfK5dN7P5dQ0wCu59rOfZaiqziJeLNblJ8dOcGI=;
-        h=Date:From:To:Subject:From;
-        b=tsuXZuanjTbQL140x+xqvbV1DR4Ji5r0B6QJg8yo+2N8FDSoSEpsYSKfAlIsclZ3y
-         gWXy9Vo7zjWwIFkoSB8SZH15tGPDVhg1VTSE26q9Oy1eXq4KSaFPaWYpeyce3QcvLw
-         7eDb3unjuoKFC5EOvj4mB+Co804iuDAbTlbSp+3vijRplaAHUYClQ5bsMQjNNnDAyB
-         cBjRA5XHZULR/lGZ9K6RmktxnnLWxf28Lz28mylr/akwcpnper/UJKGVkwZAry02Ec
-         ku7mApIhPfFzpToHd8paR+n79SVAvg/3fFQbD0wryM7PxUOij7YpwkXGlX89do0XrE
-         87lOg3BeP+KAQ==
-Received: by mail.equinoxrise.pl for <linux-watchdog@vger.kernel.org>; Mon,  4 Sep 2023 07:40:34 GMT
-Message-ID: <20230904084500-0.1.7.r22.0.j9zeln4ahf@equinoxrise.pl>
-Date:   Mon,  4 Sep 2023 07:40:34 GMT
-From:   "Mateusz Talaga" <mateusz.talaga@equinoxrise.pl>
-To:     <linux-watchdog@vger.kernel.org>
-Subject: Prezentacja
-X-Mailer: mail.equinoxrise.pl
+        Tue, 5 Sep 2023 16:24:07 -0400
+X-Greylist: delayed 374 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Sep 2023 13:24:01 PDT
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB450F4;
+        Tue,  5 Sep 2023 13:24:01 -0700 (PDT)
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id E2EEC409FE; Tue,  5 Sep 2023 22:13:27 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org E2EEC409FE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1693944807;
+        bh=UV5JmUshUZIHsvrl8TvZV8/cDSxmgS4+Z4Dn8PYNMVc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fW/ieQs3m1aKtkIlEDnMTpUT4/v3JSVKDbnL1f+RDL/aSGxqhW7eGXk8W7HQ9qn/e
+         S4Gx2osQ+dGRoBfP9DYsrp3tSL+Zg5dE7fLqXkRJlrt3X7ZfMIs8kgiVty6wDTbPED
+         VMZZ1u5nk6hG2M7jTR4N7R+VVSaAf8YOPLOHyRwM=
+Date:   Tue, 5 Sep 2023 22:13:27 +0200
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        Chengfeng Ye <dg573847474@gmail.com>,
+        Fabio Estevam <festevam@denx.de>,
+        Florent CARLI <fcarli@gmail.com>,
+        Huqiang Qin <huqiang.qin@amlogic.com>,
+        Li Hua Qian <huaqian.li@siemens.com>,
+        Li Zetao <lizetao1@huawei.com>,
+        Mathieu Othacehe <othacehe@gnu.org>,
+        Meng Li <meng.li@windriver.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Raag Jadav <raag.jadav@intel.com>,
+        Robert Marko <robimarko@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Ruan Jinjie <ruanjinjie@huawei.com>
+Subject: [GIT PULL REQUEST] watchdog - v6.6 release cycle.
+Message-ID: <20230905201327.GA31462@www.linux-watchdog.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.20 (2009-12-10)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Dzie=C5=84 dobry!
+Hi Linus,
 
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 rozwi=C4=85zanie, kt=C3=B3re umo=C5=
-=BCliwia monitoring ka=C5=BCdego auta w czasie rzeczywistym w tym jego po=
-zycj=C4=99, zu=C5=BCycie paliwa i przebieg?
+Please pull following watchdog changes for the v5.19 release cycle.
 
-Dodatkowo nasze narz=C4=99dzie minimalizuje koszty utrzymania samochod=C3=
-=B3w, skraca czas przejazd=C3=B3w, a tak=C5=BCe tworzenie planu tras czy =
-dostaw.
+This series contains:
+* Add marvell GTI watchdog driver
+* Add support for Amlogic-T7 SoCs
+* Document the IPQ5018 watchdog compatible
+* Enable COMPILE_TEST for more watchdog device drivers
+* core: stop watchdog when executing poweroff command
+* Other small improvements and fixes
 
-Z naszej wiedzy i do=C5=9Bwiadczenia korzysta ju=C5=BC ponad 49 tys. Klie=
-nt=C3=B3w. Monitorujemy 809 000 pojazd=C3=B3w na ca=C5=82ym =C5=9Bwiecie,=
- co jest nasz=C4=85 najlepsz=C4=85 wizyt=C3=B3wk=C4=85.
+The output from git request-pull:
+----------------------------------------------------------------
+The following changes since commit 52a93d39b17dc7eb98b6aa3edb93943248e03b2f:
 
-Bardzo prosz=C4=99 o e-maila zwrotnego, je=C5=9Bli mogliby=C5=9Bmy wsp=C3=
-=B3lnie om=C3=B3wi=C4=87 potencja=C5=82 wykorzystania takiego rozwi=C4=85=
-zania w Pa=C5=84stwa firmie.
+  Linux 6.5-rc5 (2023-08-06 15:07:51 -0700)
 
+are available in the git repository at:
 
-Pozdrawiam
-Mateusz Talaga
+  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.6-rc1
+
+for you to fetch changes up to 8c776a0401f1dcfcfc8e5549c5260668bec59c0e:
+
+  watchdog: Add support for Amlogic-T7 SoCs (2023-08-25 16:19:15 +0200)
+
+----------------------------------------------------------------
+linux-watchdog 6.6-rc1 tag
+
+----------------------------------------------------------------
+Bharat Bhushan (2):
+      dt-bindings: watchdog: marvell GTI system watchdog driver
+      Watchdog: Add marvell GTI watchdog driver
+
+Chengfeng Ye (1):
+      watchdog: s3c2410: Fix potential deadlock on &wdt->lock
+
+Fabio Estevam (1):
+      watchdog: imx2_wdt: Improve dev_crit() message
+
+Florent CARLI (1):
+      watchdog: advantech_ec_wdt: fix Kconfig dependencies
+
+Huqiang Qin (3):
+      dt-bindings: watchdog: Add support for Amlogic-T7 SoCs
+      watchdog: Add a new struct for Amlogic-GXBB driver
+      watchdog: Add support for Amlogic-T7 SoCs
+
+Li Hua Qian (2):
+      dt-bindings: watchdog: ti,rti-wdt: Add support for WDIOF_CARDRESET
+      watchdog:rit_wdt: Add support for WDIOF_CARDRESET
+
+Li Zetao (1):
+      watchdog: menz069_wdt: Remove redundant initialization owner in men_z069_driver
+
+Mathieu Othacehe (1):
+      watchdog: sama5d4: readout initial state
+
+Meng Li (1):
+      watchdog: core: stop watchdog when executing poweroff command
+
+Nathan Chancellor (1):
+      watchdog: xilinx_wwdt: Use div_u64() in xilinx_wwdt_start()
+
+Paul Cercueil (1):
+      watchdog: starfive: Remove #ifdef guards for PM related functions
+
+Raag Jadav (1):
+      watchdog: intel-mid_wdt: add MODULE_ALIAS() to allow auto-load
+
+Rob Herring (3):
+      watchdog: Explicitly include correct DT includes
+      watchdog: Enable COMPILE_TEST for more drivers
+      watchdog: stm32: Drop unnecessary of_match_ptr()
+
+Robert Marko (1):
+      dt-bindings: watchdog: qcom-wdt: document IPQ5018
+
+Ruan Jinjie (1):
+      watchdog: pm8916_wdt: Remove redundant of_match_ptr()
+
+ .../bindings/watchdog/amlogic,meson-gxbb-wdt.yaml  |   1 +
+ .../bindings/watchdog/marvell,cn10624-wdt.yaml     |  83 +++++
+ .../devicetree/bindings/watchdog/qcom-wdt.yaml     |   1 +
+ .../devicetree/bindings/watchdog/ti,rti-wdt.yaml   |  28 +-
+ drivers/watchdog/Kconfig                           |  95 +++---
+ drivers/watchdog/Makefile                          |   1 +
+ drivers/watchdog/armada_37xx_wdt.c                 |   1 -
+ drivers/watchdog/at91rm9200_wdt.c                  |   3 +-
+ drivers/watchdog/cpwd.c                            |   2 +-
+ drivers/watchdog/ftwdt010_wdt.c                    |   6 +-
+ drivers/watchdog/gef_wdt.c                         |   2 +-
+ drivers/watchdog/imx2_wdt.c                        |   5 +-
+ drivers/watchdog/imx7ulp_wdt.c                     |   1 -
+ drivers/watchdog/intel-mid_wdt.c                   |   1 +
+ drivers/watchdog/lantiq_wdt.c                      |   3 +-
+ drivers/watchdog/loongson1_wdt.c                   |   1 +
+ drivers/watchdog/marvell_gti_wdt.c                 | 340 +++++++++++++++++++++
+ drivers/watchdog/menz69_wdt.c                      |   1 -
+ drivers/watchdog/meson_gxbb_wdt.c                  |  21 +-
+ drivers/watchdog/meson_wdt.c                       |   4 +-
+ drivers/watchdog/mpc8xxx_wdt.c                     |   4 +-
+ drivers/watchdog/mtk_wdt.c                         |   1 -
+ drivers/watchdog/of_xilinx_wdt.c                   |   3 +-
+ drivers/watchdog/pic32-dmt.c                       |   1 -
+ drivers/watchdog/pic32-wdt.c                       |   1 -
+ drivers/watchdog/pika_wdt.c                        |   2 +-
+ drivers/watchdog/pm8916_wdt.c                      |   2 +-
+ drivers/watchdog/qcom-wdt.c                        |   1 -
+ drivers/watchdog/rave-sp-wdt.c                     |   2 +-
+ drivers/watchdog/riowd.c                           |   2 +-
+ drivers/watchdog/rti_wdt.c                         |  48 +++
+ drivers/watchdog/rza_wdt.c                         |   4 +-
+ drivers/watchdog/rzg2l_wdt.c                       |   2 +-
+ drivers/watchdog/s3c2410_wdt.c                     |  16 +-
+ drivers/watchdog/sama5d4_wdt.c                     |   8 +-
+ drivers/watchdog/sbsa_gwdt.c                       |   3 +-
+ drivers/watchdog/starfive-wdt.c                    |  13 +-
+ drivers/watchdog/stm32_iwdg.c                      |   3 +-
+ drivers/watchdog/sunxi_wdt.c                       |   1 -
+ drivers/watchdog/watchdog_core.c                   |   2 +-
+ drivers/watchdog/xilinx_wwdt.c                     |   7 +-
+ 41 files changed, 625 insertions(+), 101 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/marvell,cn10624-wdt.yaml
+ create mode 100644 drivers/watchdog/marvell_gti_wdt.c
+----------------------------------------------------------------
+
+Kind regards,
+Wim.
+
