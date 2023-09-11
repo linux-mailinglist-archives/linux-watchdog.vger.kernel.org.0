@@ -2,177 +2,124 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B22A579894D
-	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Sep 2023 16:55:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2D179BE7C
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Sep 2023 02:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238184AbjIHOz1 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 8 Sep 2023 10:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
+        id S235244AbjIKV4Y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 11 Sep 2023 17:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235426AbjIHOz1 (ORCPT
+        with ESMTP id S235933AbjIKJqj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 8 Sep 2023 10:55:27 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B67F1BF1;
-        Fri,  8 Sep 2023 07:55:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694184913; x=1725720913;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0oPQGn9VNNhKld4xDCFy6ahkwNcYXJKmcT+cnd6zuM0=;
-  b=TDJqdjcbE+IZGOQwQFRig2mLBTSIdW3ZiLas7717u2oIWxzNPWHYyHR+
-   EqyWPh5zaiv6xXH00wh/2otxsiA/G4ZyJBTfQaZX6qqZ6aJWnjsMwB5Px
-   u68xI2QLOtolz+xdBK59eQbZiVcuF8TID0uFNgd060yh/E948fHm0zLIQ
-   l6XuP6CsnV4cva6E+JIj3jq/ZV+OdiJSHUAzQESEsBE0s3+rtu49PjxcU
-   grN/oJZP8f2/M5v1Nvijmfz4DZWpjf9DWEbol5/bjW7+ALM5cwSwKC2oX
-   n2mmfI2w0mOO/wAkO7fxfCqgaQoHKk2m62VxBk75RGJgZ9X/3JXti78tz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="357969715"
-X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
-   d="scan'208";a="357969715"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 07:55:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="1073339874"
-X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
-   d="scan'208";a="1073339874"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Sep 2023 07:55:10 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qect2-0002Mt-2E;
-        Fri, 08 Sep 2023 14:55:08 +0000
-Date:   Fri, 8 Sep 2023 22:54:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Ober <dober6023@gmail.com>, wim@linux-watchdog.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux@roeck-us.net, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, mpearson@lenovo.com,
-        dober@lenovo.com, David Ober <dober6023@gmail.com>
-Subject: Re: [PATCH] watchdog: add in watchdog for nct6686
-Message-ID: <202309082202.ZRLExbNG-lkp@intel.com>
-References: <20230907113517.31147-1-dober6023@gmail.com>
+        Mon, 11 Sep 2023 05:46:39 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC2DE50
+        for <linux-watchdog@vger.kernel.org>; Mon, 11 Sep 2023 02:46:34 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-31adc5c899fso4459953f8f.2
+        for <linux-watchdog@vger.kernel.org>; Mon, 11 Sep 2023 02:46:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694425593; x=1695030393; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gpfWGrPSBuBG7+U0dwFU/lJOZNNMxd815XPw6Rgs8Vs=;
+        b=T3SL7uV5AdPFFeLBv1F2qq1NgAEXjkNRT4PFB+zScyqt0fZvOv7XSflZI9AnLomHVs
+         jZulrZ3Lnj3CMR2xVzCdezXaUJ4sPGo/fZxEV5oU67GZV77vOPdwuscq41oj7rEHxlZR
+         4bweWT3qB7v1ROEK6+by62Vo1U0COpzbXR0RLSf+lks7SotLB7Pic2abQcU4rooHj3Q9
+         tdBA/FDKWkhCCvX7Jdxhw5DoE5lBCMKQYBL96YRl+5HZY4f62+Td7iDxlEtojJaCWtv6
+         tJ0s5Uf2VjNbGvsPfJS2weOtNGaqtajx69kexBc0iYk/rjLhvr3bxi1VJ7TWsNe04Jky
+         nPHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694425593; x=1695030393;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gpfWGrPSBuBG7+U0dwFU/lJOZNNMxd815XPw6Rgs8Vs=;
+        b=P42PoAJnQrpEORIh7sitKMXrUWwUXzTToxfEcoz6nA4tWYYhbhbPfmOM/l4S2cmdPh
+         /VUVDgruXTofeU0fTqxHUpqowTMwV5kRND5Zn7hUwD1z/wHbHXyYL5HdyJMnOvRagnaH
+         DJdt7CzGRauDSeocpWlz+mm79dIxylI9tLk1k7x/Ef27+JjkK0kIJK5wzZ+kQ/Y1EtZ4
+         4zsxASObg0AWU/mahDEeYujaIpFEDK0a0Pz66EQ/kDL0s/w0TnUosgh6uIv5W/xGu/oA
+         YGtk9Pv+gCM6huEc1YTPyBnJuHlfDTFcWzDLnNmD5H2sPq+bOg71mKPtX3s0Wtvue1Ou
+         utBA==
+X-Gm-Message-State: AOJu0YyW9VzGTM4vY0gVvZeDeXAW9spdz3T67klXTOjzDNjbGq09co3R
+        bCodcJdTEN6QGo4eHaeeLhU3kA==
+X-Google-Smtp-Source: AGHT+IFB2NUgPRCR1E53L1RZWLMIv4pvvpcenAmQmhAg3oTkQvuSqfR80muGqdBVaRCoXOqcPSinSw==
+X-Received: by 2002:adf:b345:0:b0:31f:9838:dfc4 with SMTP id k5-20020adfb345000000b0031f9838dfc4mr3521960wrd.33.1694425592923;
+        Mon, 11 Sep 2023 02:46:32 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id d13-20020adff84d000000b00317909f9985sm9503496wrq.113.2023.09.11.02.46.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Sep 2023 02:46:32 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com,
+        Huqiang Qin <huqiang.qin@amlogic.com>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230802033222.4024946-1-huqiang.qin@amlogic.com>
+References: <20230802033222.4024946-1-huqiang.qin@amlogic.com>
+Subject: Re: (subset) [PATCH V2 0/4] Add watchdog support for Amlogic-T7
+ SoCs
+Message-Id: <169442559190.3235506.16709679651395559880.b4-ty@linaro.org>
+Date:   Mon, 11 Sep 2023 11:46:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230907113517.31147-1-dober6023@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi David,
+Hi,
 
-kernel test robot noticed the following build warnings:
+On Wed, 02 Aug 2023 11:32:18 +0800, Huqiang Qin wrote:
+> Based on the original Amlogic-GXBB watchdog driver, support
+> for Amlogic-T7 watchdog is added.
+> 
+> [PATCH 1/4]:
+>   V1 -> V2: Unchanged.
+> 
+> [PATCH 2/4]:
+>   V1 -> V2: Rename rst_shift to rst and use the BIT() macro
+>             to build its initial value.
+> 
+> [...]
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.5 next-20230908]
-[cannot apply to groeck-staging/hwmon-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.7/arm64-dt)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Ober/watchdog-add-in-watchdog-for-nct6686/20230907-235048
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230907113517.31147-1-dober6023%40gmail.com
-patch subject: [PATCH] watchdog: add in watchdog for nct6686
-config: powerpc64-allyesconfig (https://download.01.org/0day-ci/archive/20230908/202309082202.ZRLExbNG-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230908/202309082202.ZRLExbNG-lkp@intel.com/reproduce)
+[4/4] arm64: dts: Add watchdog node for Amlogic-T7 SoCs
+      https://git.kernel.org/amlogic/c/8a63d22183d0d96d742e34730430cc1f286c7092
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309082202.ZRLExbNG-lkp@intel.com/
+These changes has been applied on the intermediate git tree [1].
 
-All warnings (new ones prefixed by >>):
+The v6.7/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
 
->> drivers/watchdog/nct6686_wdt.c:352:3: warning: variable 'wdt' is uninitialized when used here [-Wuninitialized]
-     352 |                 wdt->timeout, nowayout);
-         |                 ^~~
-   include/linux/dev_printk.h:155:39: note: expanded from macro 'dev_dbg'
-     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                              ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:274:19: note: expanded from macro 'dynamic_dev_dbg'
-     274 |                            dev, fmt, ##__VA_ARGS__)
-         |                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
-     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
-     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
-     224 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   drivers/watchdog/nct6686_wdt.c:309:29: note: initialize the variable 'wdt' to silence this warning
-     309 |         struct watchdog_device *wdt;
-         |                                    ^
-         |                                     = NULL
-   1 warning generated.
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
 
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
 
-vim +/wdt +352 drivers/watchdog/nct6686_wdt.c
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
 
-   305	
-   306	static int nct6686_probe(struct platform_device *pdev)
-   307	{
-   308		struct device *dev = &pdev->dev;
-   309		struct watchdog_device *wdt;
-   310		struct resource *res;
-   311		struct nct6686_data *data;
-   312		struct nct6686_sio_data *sio_data = dev->platform_data;
-   313		int ret;
-   314		u_char reg;
-   315	
-   316		dev_dbg(&pdev->dev, "Probe NCT6686 called\n");
-   317		res = platform_get_resource(pdev, IORESOURCE_IO, 0);
-   318		if (!devm_request_region(dev, res->start, IOREGION_LENGTH, DRVNAME))
-   319			return -EBUSY;
-   320	
-   321		data = devm_kzalloc(dev, sizeof(struct nct6686_data), GFP_KERNEL);
-   322		if (!data)
-   323			return -ENOMEM;
-   324	
-   325		data->sio_data.sioreg = sio_data->sioreg;
-   326		data->addr = res->start;
-   327		mutex_init(&data->update_lock);
-   328		platform_set_drvdata(pdev, data);
-   329	
-   330		/* Watchdog initialization */
-   331		data->wdt.ops = &nct6686_wdt_ops;
-   332		data->wdt.info = &nct6686_wdt_info;
-   333	
-   334		data->wdt.timeout = WATCHDOG_TIMEOUT; /* Set default timeout */
-   335		data->wdt.min_timeout = MIN_TIMEOUT;
-   336		data->wdt.max_timeout = MAX_TIMEOUT;
-   337		data->wdt.parent = &pdev->dev;
-   338	
-   339		watchdog_init_timeout(&data->wdt, timeout, &pdev->dev);
-   340		watchdog_set_nowayout(&data->wdt, nowayout);
-   341		watchdog_set_drvdata(&data->wdt, data);
-   342	
-   343		/* reset trigger status */
-   344		reg = nct6686_read(data, WDT_STS);
-   345		nct6686_write(data, WDT_STS, reg & ~WDT_STS_EVT_MSK);
-   346	
-   347		watchdog_stop_on_unregister(&data->wdt);
-   348	
-   349		ret = devm_watchdog_register_device(dev, &data->wdt);
-   350	
-   351		dev_dbg(&pdev->dev, "initialized. timeout=%d sec (nowayout=%d)\n",
- > 352			wdt->timeout, nowayout);
-   353	
-   354		return ret;
-   355	}
-   356	
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Neil
+
