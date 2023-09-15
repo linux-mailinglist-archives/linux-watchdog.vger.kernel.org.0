@@ -2,56 +2,59 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D94CF7A1824
-	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Sep 2023 10:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A6D7A1846
+	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Sep 2023 10:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232894AbjIOIMo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 15 Sep 2023 04:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
+        id S233143AbjIOINE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 15 Sep 2023 04:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232954AbjIOIMc (ORCPT
+        with ESMTP id S233007AbjIOIMn (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 15 Sep 2023 04:12:32 -0400
+        Fri, 15 Sep 2023 04:12:43 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153B12726;
-        Fri, 15 Sep 2023 01:12:12 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E054C116A7;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558A02735;
+        Fri, 15 Sep 2023 01:12:14 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EF610C4AF75;
         Fri, 15 Sep 2023 08:12:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694765529;
-        bh=VdUAHU9tFQOmwqM3kgp5k4XWoMeX6TyGYVyOQqw5ado=;
+        s=k20201202; t=1694765530;
+        bh=2lu5EzJp8GgAHbOGtBIqxlFSHhFU/8mjEZ8eKO8JATw=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-        b=pYLLG/rUEUTv/i5J8Sz4FDdJsuyNmMF5SIqzioZF2XxuC2rpO3EGQ3rgMlp1sc56x
-         Y6YrviClbNb6XGTGLylhrg+/a2dOwPNSJan2zbXEQSJ6XawniT+VWDKF8XxaShO7Bd
-         SOKHVtst9b86H7ItI7v1DtxWGakiOVtB/iYuYNjmzTC817iicthTmy+wmyWHROV5TP
-         vO9c+AR12fntY55hnFNYPUmejUOUlEhe/MTmxPSItEvspBkDiBqmNTmjywMOg5pQtc
-         q1hvaQeot0KsgY38GTNOQemKVDO2S3nXy10vclgd9Nc96aTXKX2ke3hRpr6vR6Up9o
-         rytr4OUkGav+g==
+        b=Gzzxhr8WDTKuZYSQod5y5uik77q7GcdUUE8f3x+XnPBDiVpAOmV/XjEapa+AqQGn/
+         +NuIlmtY14ODJ6wt46ofR28kksQRlsUlY6eVQVjnsEVZkqbIiU3FTWplngfvtoQvS1
+         x7Ez5/EoJBGyPl1HKIwvxODqgV1P7advgqPXQf4GLzIbTTfYjZ4lMYgwO/OTmgH1Lj
+         MFdYJwO+ukCK0OxoMiqh1utylXDOg8QBJkW1Pj48JNQ86Ye7Syy5DaHx4hILOjLV4n
+         CQiBhlMS7gaqYI7yKxdkGLlbFzW4225OPOE6ed0i8VsrufMGJVDddwjMlqduM4cSiR
+         JY6jUoBx/RgBA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id F2A05EE643C;
-        Fri, 15 Sep 2023 08:12:08 +0000 (UTC)
+        by smtp.lore.kernel.org (Postfix) with ESMTP id DB5BBEE6441;
+        Fri, 15 Sep 2023 08:12:09 +0000 (UTC)
 From:   Nikita Shubin via B4 Relay 
         <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date:   Fri, 15 Sep 2023 11:10:58 +0300
-Subject: [PATCH v4 16/42] watchdog: ep93xx: add DT support for Cirrus
- EP93xx
+Date:   Fri, 15 Sep 2023 11:11:13 +0300
+Subject: [PATCH v4 31/42] dt-bindings: wdt: Add ts72xx
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230915-ep93xx-v4-16-a1d779dcec10@maquefel.me>
+Message-Id: <20230915-ep93xx-v4-31-a1d779dcec10@maquefel.me>
 References: <20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me>
 In-Reply-To: <20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         Alexander Sverdlin <alexander.sverdlin@gmail.com>
 X-Mailer: b4 0.13-dev-e3e53
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694765525; l=1127;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694765525; l=1618;
  i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=CPD83DmlHSPxMgJXS1dukm1IsOMF9b07nZLLBHA0btc=; =?utf-8?q?b=3DhIr1gCCBk1oD?=
- =?utf-8?q?ovw4QtDhubQdcJWz55wRaqbjjs7mL+r9yzZBloPy9jseFk6npwPRafUxbZZnBI4P?=
- GoNQf9UECJqqdOjoG97VJGAy+9JD56EnOaS5fvgh8ukZ6ejJ0tc6
+ bh=RU7BGPJdygzLxD9nFWrzFwn5EiUB5p7KsaAjUEvthxc=; =?utf-8?q?b=3D9/inJrUTu3vA?=
+ =?utf-8?q?qYIQHoNTHYl4Zrw/sih1PaakLy8UueZLlnKgAdqfNOiElOg9HMW5oKNXJFxpUAVu?=
+ 7Ln1mKxqCFy0c92qVlcOItuOwPNakPEUA8fErTSMDN2uiyPTHcK3
 X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
  pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
 X-Endpoint-Received: by B4 Relay for nikita.shubin@maquefel.me/20230718 with auth_id=65
@@ -69,44 +72,64 @@ X-Mailing-List: linux-watchdog@vger.kernel.org
 
 From: Nikita Shubin <nikita.shubin@maquefel.me>
 
-Add OF ID match table.
+Add DT binding for Technologic Systems TS-72xx watchdog.
 
-Tested-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 ---
- drivers/watchdog/ep93xx_wdt.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../bindings/watchdog/technologic,ts7200-wdt.yaml  | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/drivers/watchdog/ep93xx_wdt.c b/drivers/watchdog/ep93xx_wdt.c
-index 59dfd7f6bf0b..af89b7bb8f66 100644
---- a/drivers/watchdog/ep93xx_wdt.c
-+++ b/drivers/watchdog/ep93xx_wdt.c
-@@ -19,6 +19,7 @@
-  */
- 
- #include <linux/platform_device.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/watchdog.h>
- #include <linux/io.h>
-@@ -127,9 +128,16 @@ static int ep93xx_wdt_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct of_device_id ep93xx_wdt_of_ids[] = {
-+	{ .compatible = "cirrus,ep9301-wdt" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ep93xx_wdt_of_ids);
+diff --git a/Documentation/devicetree/bindings/watchdog/technologic,ts7200-wdt.yaml b/Documentation/devicetree/bindings/watchdog/technologic,ts7200-wdt.yaml
+new file mode 100644
+index 000000000000..7e4bfef152f8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/technologic,ts7200-wdt.yaml
+@@ -0,0 +1,45 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/technologic,ts7200-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- static struct platform_driver ep93xx_wdt_driver = {
- 	.driver		= {
- 		.name	= "ep93xx-wdt",
-+		.of_match_table = ep93xx_wdt_of_ids,
- 	},
- 	.probe		= ep93xx_wdt_probe,
- };
++title: Technologic Systems TS-72xx based SBCs watchdog
++
++maintainers:
++  - Nikita Shubin <nikita.shubin@maquefel.me>
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - const: technologic,ts7200-wdt
++      - items:
++          - enum:
++              - technologic,ts7300-wdt
++              - technologic,ts7260-wdt
++              - technologic,ts7250-wdt
++          - const: technologic,ts7200-wdt
++
++  reg:
++    items:
++      - description: control register
++      - description: feed register
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    watchdog@23800000 {
++      compatible = "technologic,ts7200-wdt";
++      reg = <0x23800000 0x01>, <0x23c00000 0x01>;
++      timeout-sec = <30>;
++    };
++
++...
 
 -- 
 2.39.2
