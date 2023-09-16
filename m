@@ -2,95 +2,100 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98C57A1D49
-	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Sep 2023 13:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90ECE7A3175
+	for <lists+linux-watchdog@lfdr.de>; Sat, 16 Sep 2023 18:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbjIOLSg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 15 Sep 2023 07:18:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
+        id S231942AbjIPQjG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 16 Sep 2023 12:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232147AbjIOLSf (ORCPT
+        with ESMTP id S229699AbjIPQis (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 15 Sep 2023 07:18:35 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DB21B9
-        for <linux-watchdog@vger.kernel.org>; Fri, 15 Sep 2023 04:18:25 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-31dca134c83so1982091f8f.3
-        for <linux-watchdog@vger.kernel.org>; Fri, 15 Sep 2023 04:18:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694776703; x=1695381503; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ziVc+rtn+8qCfab0pW6dHdwsWNPjZ4WKT9IYLhgHUbs=;
-        b=Qr4PENK69EPGv/oguyeWKmN26fML2ukFJwolGFuTw8S0zD46EU+ANjPv1ZbXKWb43q
-         B7PUIgeSxHj+fHNkvC/9yyaoGv6JyCPZ1mCKJ0JYCcCS7DW6ekqKA2BFkrPIt6QAFd4t
-         2FY4oB/6bOJkKquva2Qr/wscao6g9yoJ27PgSMNoVd35lQcvBLTCRZMAn0qN6ZfMtr6C
-         r5n8U14mE5gvlY5wzXLlAwpEpPFMeB87c7tckg5atxFdwHUQNV5iZ/4ZCxYvQb203+91
-         hkDAha0kp8ZxAjbBKkKUvZPBBkczP2CEQHts5IhGig7gvkg/HiUvcNs8klNTH/xZrXXT
-         5awA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694776703; x=1695381503;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ziVc+rtn+8qCfab0pW6dHdwsWNPjZ4WKT9IYLhgHUbs=;
-        b=jRJKb1up3FZmrbXm8q9wOkCFtTm4ne/O9veXiX+B3krhP7bk6qPYKtW9IITPwCmyOe
-         QvyZKNBImYSpe8Ax/nrghTSoq09rLoez/JegmOQJCu+0HiyadP0rZIDFBojEtiNZMi+v
-         276VUsQgwV5bL5Pl+ZMzfc1DinIPp/0Z6QZVpc0PNczRiNWOOEfMTmXnQhtVIhEt5oTm
-         WCdRXGFobSzgodN1Ru8A2zOcMdLZzG12YtPwR9CCI6eyLk82JaLXWLIWu9q46WRb6joi
-         w5o/LajuPfy//YLcR0q9f9bCwOQo1OgBLWdqjAIrj16DzBkDiOrA9eKRGQlpH4mGheIf
-         Wuqg==
-X-Gm-Message-State: AOJu0Yzq10iZfJOSN7EXG6NkQmgHA5obb5XCI8bVxKHzYffztAvVonA5
-        XTWVazbA6ZEVmvFfIbnVkVFq4A==
-X-Google-Smtp-Source: AGHT+IEKQn+nZjBWSB3TGQyOP/D1nrIbfCnlJO1lZ0KeXdDZvnXyjSj7LFWoSMjG2My6gei9PoYuCQ==
-X-Received: by 2002:adf:f842:0:b0:31f:e19e:a2c with SMTP id d2-20020adff842000000b0031fe19e0a2cmr1180771wrq.32.1694776703692;
-        Fri, 15 Sep 2023 04:18:23 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id e17-20020adffc51000000b0031435731dfasm4159793wrs.35.2023.09.15.04.18.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Sep 2023 04:18:23 -0700 (PDT)
-Message-ID: <880d17f8-ee9b-fc7a-114f-542962022b2a@linaro.org>
-Date:   Fri, 15 Sep 2023 13:18:21 +0200
+        Sat, 16 Sep 2023 12:38:48 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2245ECCF;
+        Sat, 16 Sep 2023 09:38:43 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F8BCC433C7;
+        Sat, 16 Sep 2023 16:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694882322;
+        bh=6SPj+HdHBFzYMOMmUZucBRA7B/JCBx1i85djDAa249Q=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=CP6pXwtMal2ssNHOgotH69SEARQaIw2JS32NemWhEb0DF1XrOEA8rnGBbtsL3oT2n
+         VrHrVnunzEx7P45Yd58EXmq3x4q0N/Xnz2PoGJR92kvYweQCn5buavpjjQjCXKPWbR
+         59j+SbTbYeXB7eNGmUq0xJzr58BqUoYH6TPzsS5oVayv4bqIGs1L/EUe/HfhVRKi2Y
+         AmgI0JojDIAQe8GhqERl2r5usKYhSa4oi0mRMnQMi4BJNAK7DdGxgEdKodhL7yFzKK
+         hbYog2AnwMSG7rnK2RMVqvCWyvp1196qdiXOpyh4jOSZHtWeD2V+SuLg9fRtvIO5p5
+         Fc68HlaDFcGOA==
+Received: (nullmailer pid 1755274 invoked by uid 1000);
+        Sat, 16 Sep 2023 16:38:40 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v4 31/42] dt-bindings: wdt: Add ts72xx
-Content-Language: en-US
-To:     nikita.shubin@maquefel.me,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>
-References: <20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me>
- <20230915-ep93xx-v4-31-a1d779dcec10@maquefel.me>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230915-ep93xx-v4-31-a1d779dcec10@maquefel.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Nik Bune <n3q5u8@yahoo.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, nicolas.ferre@microchip.com,
+        conor+dt@kernel.org, robh+dt@kernel.org,
+        alexandre.belloni@bootlin.com, linux-watchdog@vger.kernel.org,
+        linux@roeck-us.net, wim@linux-watchdog.org,
+        krzysztof.kozlowski+dt@linaro.org, claudiu.beznea@microchip.com
+In-Reply-To: <20230916154826.84925-1-n3q5u8@yahoo.com>
+References: <20230916154826.84925-1-n3q5u8.ref@yahoo.com>
+ <20230916154826.84925-1-n3q5u8@yahoo.com>
+Message-Id: <169488232023.1755258.3313315475687372959.robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: watchdog: atmel,at91rm9200-wdt: convert
+ txt to yaml
+Date:   Sat, 16 Sep 2023 11:38:40 -0500
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 15/09/2023 10:11, Nikita Shubin via B4 Relay wrote:
-> From: Nikita Shubin <nikita.shubin@maquefel.me>
-> 
-> Add DT binding for Technologic Systems TS-72xx watchdog.
-> 
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Sat, 16 Sep 2023 17:48:26 +0200, Nik Bune wrote:
+> Convert txt file to yaml.
+> Add reg to the list of required properties.
+> Add mainteiners from ./scripts/get_maintainer.pl output.
+> 
+> Signed-off-by: Nik Bune <n3q5u8@yahoo.com>
+> ---
+>  .../watchdog/atmel,at91rm9200-wdt.yaml        | 31 +++++++++++++++++++
+>  .../watchdog/atmel-at91rm9200-wdt.txt         |  9 ------
+>  2 files changed, 31 insertions(+), 9 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
+> 
 
-Best regards,
-Krzysztof
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/watchdog/atmel,at91sam9-wdt.example.dtb: watchdog@fffffd40: Unevaluated properties are not allowed ('atmel,dbg-halt', 'atmel,idle-halt', 'atmel,max-heartbeat-sec', 'atmel,min-heartbeat-sec', 'atmel,reset-type', 'atmel,watchdog-type', 'clocks', 'interrupts', 'timeout-sec' were unexpected)
+	from schema $id: http://devicetree.org/schemas/watchdog/atmel,at91rm9200-wdt.yaml#
+Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.example.dtb: /example-0/watchdog@fffffd00: failed to match any schema with compatible: ['atmel,at91rm9200-wdt']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230916154826.84925-1-n3q5u8@yahoo.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
