@@ -2,58 +2,56 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF287A8DA1
-	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Sep 2023 22:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C00A7A8E64
+	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Sep 2023 23:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbjITUOz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 20 Sep 2023 16:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
+        id S229538AbjITV0u (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 20 Sep 2023 17:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjITUOy (ORCPT
+        with ESMTP id S229546AbjITV0t (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 20 Sep 2023 16:14:54 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE23A9;
-        Wed, 20 Sep 2023 13:14:48 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1c3d6d88231so1656475ad.0;
-        Wed, 20 Sep 2023 13:14:48 -0700 (PDT)
+        Wed, 20 Sep 2023 17:26:49 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F4AC2;
+        Wed, 20 Sep 2023 14:26:44 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1c451541f23so1971905ad.2;
+        Wed, 20 Sep 2023 14:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695240888; x=1695845688; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1695245203; x=1695850003; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=iBAkISg4liJpMSv79ebj2TeKhgO/99XxEW65IYWMigQ=;
-        b=MdjFWySsnCCx6jy//SfWXKUVvYIWNmGWBHU2BV9hFd8KrNplYqiobZwWieUIn8tomf
-         1Vf8s93XEF4iLgUin1QBLwTpfBWH+IuwRsqUnR/7H9TfA4fu8zuP+1uLQ3A7skeaW1tn
-         6P8SFfQ/26WGNN5+yL6dBeymRWrHo0f9s+q1nD1Y4nNvIXwFYQ8QaFc+yVhU15hv6Td3
-         qGyyUmMGljhIOm7KdWSRQ2oGjsJBlEuJ6ba0ZIsSBrY2etYXh32QhnjM23pMWEquk0nP
-         n4ZkqiyhfVFBvIniy/7HwrK9GEblMKucIMjwV6IexkXVtZ4qDcKuCrukJutnG0HQIGNN
-         W7Qg==
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=th/9vupS9N7HihfI0m/+P7N+XsjQ36n+EjQPTEIq14I=;
+        b=CPUsygF6zqdih2nh2wcY3coUu84LOU8sRYZ07S8bK8DLWFdZ3GKiXwOez+5KWG0Szb
+         ycIYrIDK2USTS6AiXkS9o0sMYIBvSfa1GnpqHiJZOHPZfgGOcd4zP/unfhxzxOpGCaEe
+         u8AjOkok1yV9sbgfOjJxErfjjGnSe2V9P3eMFIgBB1e5fibIefm0BXkcT1JzNow0qqrB
+         1po9rqADrbNGvk+Im5rtHbHTdPnMODLExcQ2URj8f9cD7WFUUc4v1FBYua6Fo+oKAbSQ
+         CSeB442Aso6fAnK5j2nRsctN7x+89drkHRI6Hhqm32NEd38WsP3RI3gopPncBYNxEedc
+         s9Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695240888; x=1695845688;
+        d=1e100.net; s=20230601; t=1695245203; x=1695850003;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iBAkISg4liJpMSv79ebj2TeKhgO/99XxEW65IYWMigQ=;
-        b=FTdWeV7uZKoevf1ozSrR3ul9Q+swQEdnpTm1IlwGWJuQPEGvgnp4nuzY9XDoTdmK82
-         oMVYmPVCggcaYyMytsLkoaKu0eZMFYwziTUvwrv1agjqFnsTkstONIM4OlddRvNQGJmq
-         UnxhvVtwngkPL8YW0S+XsnuJDLcCJiSqg9ueUVwhkrVgIe0mx95zx3L8BY2HAq9GZKNH
-         k71/1YBjYoDse/R9TFZmSUcLnQSEHZdXRKama2mEtgBTtLsvHqbu4vuoqKkTSdvrp+Om
-         b95U0VGgVOlVMGD52sLfy/a6ktUrbzGCHVsWs8dG1XWNZ57gK86jLMB6JVtySqKhpTlD
-         GwXg==
-X-Gm-Message-State: AOJu0YzdMW2DNdEn6BOUHgA0qixE2ERIy6E6ejAvzbIQdtgc38gLxfFY
-        daBzVUFkZTZrjRmcZ39gjPN1AtlcskU=
-X-Google-Smtp-Source: AGHT+IEmCDf8b3mlYUNXqLfFkKrJ9PDxO9NjeDkIOVQFK/O/Z5JIlGM1JSxzUBcTuFaxCR1315FDQw==
-X-Received: by 2002:a17:903:1211:b0:1c3:61d9:2b32 with SMTP id l17-20020a170903121100b001c361d92b32mr2187662plh.45.1695240887675;
-        Wed, 20 Sep 2023 13:14:47 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e12-20020a170902d38c00b001b9de4fb749sm1311015pld.20.2023.09.20.13.14.46
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=th/9vupS9N7HihfI0m/+P7N+XsjQ36n+EjQPTEIq14I=;
+        b=DYPPAsknFxzRYmBHge1zkexlsWL2odrAVXMZgg4tHSgKccaUses6a64y6g85pDXhmu
+         FGfwGYnhJYKuA+RFThiCIsOXPVbAF+zR9d39s5k8VFF40w2AE28zvCxVMyRJlHPSGYeU
+         V/mF+6dp7p74W5JT9yGxede6Hvcdm/UBcB3M6fvHbrtubjS6U3bls8HPst6CNJgTmoTM
+         LRCwFl05Q5KvE7nPW2eE4IF02L+WOQ5QYLd6VuKnMGzGwSJFumkql3cn5zFotgrS2wQr
+         4BHh0tNy7wqsGaUwOtc5/SqRQ5T7GHvR3/YpqZJYkNmjR8/YDeZJ3whNoIFkMMGYNak4
+         xiZg==
+X-Gm-Message-State: AOJu0YxckqhH6L7cXlY9iFK3uHbZkzIN5a/rmkakau+fibkPHUhSWyup
+        zhYjItKK7NQjXBuPqADYZAw=
+X-Google-Smtp-Source: AGHT+IEOsqM6Xh264zpMWkX1cDMJLNbPPNEIJ+IJqNX1hlerdUWDS0HXlHp89YL8w/V87LAf2MOU5A==
+X-Received: by 2002:a17:902:e811:b0:1b5:1467:c4e8 with SMTP id u17-20020a170902e81100b001b51467c4e8mr4358490plg.15.1695245203607;
+        Wed, 20 Sep 2023 14:26:43 -0700 (PDT)
+Received: from [10.67.49.139] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id t3-20020a170902e84300b001c3721897fcsm12195575plg.277.2023.09.20.14.26.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Sep 2023 13:14:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f1abf571-c903-ad51-10eb-1e20d2b3ab75@roeck-us.net>
-Date:   Wed, 20 Sep 2023 13:14:45 -0700
+        Wed, 20 Sep 2023 14:26:40 -0700 (PDT)
+Message-ID: <8b9355d7-a5b4-2138-0d23-a1511ec677d8@gmail.com>
+Date:   Wed, 20 Sep 2023 14:26:39 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
@@ -63,19 +61,18 @@ Content-Language: en-US
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-mips@vger.kernel.org
 Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
         linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20230920201035.3445-1-wsa+renesas@sang-engineering.com>
  <20230920201035.3445-5-wsa+renesas@sang-engineering.com>
-From:   Guenter Roeck <linux@roeck-us.net>
+From:   Florian Fainelli <f.fainelli@gmail.com>
 In-Reply-To: <20230920201035.3445-5-wsa+renesas@sang-engineering.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,45 +87,7 @@ On 9/20/23 13:10, Wolfram Sang wrote:
 > 
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->   drivers/watchdog/Kconfig   |   6 -
->   drivers/watchdog/Makefile  |   1 -
->   drivers/watchdog/ar7_wdt.c | 315 -------------------------------------
->   3 files changed, 322 deletions(-)
->   delete mode 100644 drivers/watchdog/ar7_wdt.c
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 751458959411..b9f715d73fe8 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1768,12 +1768,6 @@ config SIBYTE_WDOG
->   	  To compile this driver as a loadable module, choose M here.
->   	  The module will be called sb_wdog.
->   
-> -config AR7_WDT
-> -	tristate "TI AR7 Watchdog Timer"
-> -	depends on AR7 || (MIPS && 32BIT && COMPILE_TEST)
-> -	help
-> -	  Hardware driver for the TI AR7 Watchdog Timer.
-> -
->   config TXX9_WDT
->   	tristate "Toshiba TXx9 Watchdog Timer"
->   	depends on CPU_TX49XX || (MIPS && COMPILE_TEST)
-> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-> index 7eab9de311cb..7cbc34514ec1 100644
-> --- a/drivers/watchdog/Makefile
-> +++ b/drivers/watchdog/Makefile
-> @@ -168,7 +168,6 @@ obj-$(CONFIG_INDYDOG) += indydog.o
->   obj-$(CONFIG_JZ4740_WDT) += jz4740_wdt.o
->   obj-$(CONFIG_WDT_MTX1) += mtx-1_wdt.o
->   obj-$(CONFIG_SIBYTE_WDOG) += sb_wdog.o
-> -obj-$(CONFIG_AR7_WDT) += ar7_wdt.o
->   obj-$(CONFIG_TXX9_WDT) += txx9wdt.o
->   obj-$(CONFIG_OCTEON_WDT) += octeon-wdt.o
->   octeon-wdt-y := octeon-wdt-main.o octeon-wdt-nmi.o
-> diff --git a/drivers/watchdog/ar7_wdt.c b/drivers/watchdog/ar7_wdt.c
-> deleted file mode 100644
-> index cdcaeb0961ac..000000000000
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
