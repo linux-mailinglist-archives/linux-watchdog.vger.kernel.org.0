@@ -2,93 +2,102 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2EF7A7475
-	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Sep 2023 09:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22CA27A8783
+	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Sep 2023 16:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbjITHmt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 20 Sep 2023 03:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
+        id S236658AbjITOsI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 20 Sep 2023 10:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233793AbjITHmt (ORCPT
+        with ESMTP id S234330AbjITOry (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 20 Sep 2023 03:42:49 -0400
-X-Greylist: delayed 383 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 20 Sep 2023 00:42:43 PDT
-Received: from mail.venturelinkage.com (mail.venturelinkage.com [80.211.143.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A0CC9
-        for <linux-watchdog@vger.kernel.org>; Wed, 20 Sep 2023 00:42:43 -0700 (PDT)
-Received: by mail.venturelinkage.com (Postfix, from userid 1002)
-        id 644E1826D6; Wed, 20 Sep 2023 09:36:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=venturelinkage.com;
-        s=mail; t=1695195379;
-        bh=7iowqdzve/IIiUUjcEwx8j3uMrVqqiE7R9zbOCKRV9Q=;
-        h=Date:From:To:Subject:From;
-        b=l6RnfQXVrvGrlaqIFSVpAD6tYtxfQpFZjeJex8Qd6V1KBo9jx28r/bRBdxyqYzSb/
-         y5D5L4FP8IGTAmwmXGdNLgUUjeJE3hLDqa04lPaWpXiymVDocEGQgj6kaYSR9dQLty
-         ww8MUa+R6NrNEXKJOtFM2Kh8F+5ETaTc6IldXunJ3BP3YPi4htK/BqzgfxbDqNWnIg
-         b71tg4uxwg1Yi0wxI/kcMaZnssoGtX0DcpGTC73WVpZ8pRcqA06fDX709qQRnAhxED
-         TIvmS/aweh2OqbMDIAIISdikDucuKrLhJMOvxtRypUX1Ej/99I4YzOXTbb2AATT9Mc
-         bd4+Vwd/iGDjg==
-Received: by mail.venturelinkage.com for <linux-watchdog@vger.kernel.org>; Wed, 20 Sep 2023 07:36:09 GMT
-Message-ID: <20230920084500-0.1.l.11er.0.cl5oeqhzym@venturelinkage.com>
-Date:   Wed, 20 Sep 2023 07:36:09 GMT
-From:   "Lukas Varga" <lukas.varga@venturelinkage.com>
-To:     <linux-watchdog@vger.kernel.org>
-Subject: =?UTF-8?Q?Popt=C3=A1vka?=
-X-Mailer: mail.venturelinkage.com
+        Wed, 20 Sep 2023 10:47:54 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973521B5;
+        Wed, 20 Sep 2023 07:47:22 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="384082608"
+X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
+   d="scan'208";a="384082608"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 07:47:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="870403133"
+X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
+   d="scan'208";a="870403133"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 07:47:17 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
+        (envelope-from <andy@kernel.org>)
+        id 1qiyTw-0000000G0eB-3vo6;
+        Wed, 20 Sep 2023 17:47:12 +0300
+Date:   Wed, 20 Sep 2023 17:47:12 +0300
+From:   Andy Shevchenko <andy@kernel.org>
+To:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Cc:     Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-gpio@vger.kernel.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v2 2/7] platform: cznic: Add preliminary support for
+ Turris Omnia MCU
+Message-ID: <ZQsF8FWwfAuT26yE@smile.fi.intel.com>
+References: <20230919103815.16818-1-kabel@kernel.org>
+ <20230919103815.16818-3-kabel@kernel.org>
+ <ZQmUFPvIx91+ps6k@smile.fi.intel.com>
+ <20230919171638.19bc1619@dellmb>
+ <ZQnn+Gi0xVlsGCYA@smile.fi.intel.com>
+ <20230920161953.6d952392@dellmb>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
-        *      blocklist
-        *      [URIs: venturelinkage.com]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [80.211.143.151 listed in zen.spamhaus.org]
-        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
-        *      blocklist
-        *      [URIs: venturelinkage.com]
-        *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
-        *      DNSWL was blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [80.211.143.151 listed in list.dnswl.org]
-        * -0.5 BAYES_05 BODY: Bayes spam probability is 1 to 5%
-        *      [score: 0.0197]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.8 FROM_FMBLA_NEWDOM28 From domain was registered in last 14-28
-        *      days
-X-Spam-Level: ******
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230920161953.6d952392@dellmb>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Dobr=C3=A9 r=C3=A1no,
+On Wed, Sep 20, 2023 at 04:19:53PM +0200, Marek Behún wrote:
+> On Tue, 19 Sep 2023 21:27:04 +0300
+> Andy Shevchenko <andy@kernel.org> wrote:
+> > On Tue, Sep 19, 2023 at 05:16:38PM +0200, Marek Behún wrote:
+> > > On Tue, 19 Sep 2023 15:29:08 +0300
+> > > Andy Shevchenko <andy@kernel.org> wrote:  
+> > > > On Tue, Sep 19, 2023 at 12:38:10PM +0200, Marek Behún wrote:  
 
-Dovolil jsem si V=C3=A1s kontaktovat, proto=C5=BEe m=C3=A1m z=C3=A1jem ov=
-=C4=9B=C5=99it mo=C5=BEnost nav=C3=A1z=C3=A1n=C3=AD spolupr=C3=A1ce.
+...
 
-Podporujeme firmy p=C5=99i z=C3=ADsk=C3=A1v=C3=A1n=C3=AD nov=C3=BDch obch=
-odn=C3=ADch z=C3=A1kazn=C3=ADk=C5=AF.
+> > > > > +	if (likely(ret == ARRAY_SIZE(msgs)))    
+> > > > 
+> > > > Why likely()? Please, justify.  
+> > > 
+> > > Becuase it is unlikely the I2C transaction will fail. In most cases, it
+> > > does not.  
+> > 
+> > Yes, but why likely() is needed? So, i.o.w. what's the benefit in _this_ case?
+> 
+> Compiler optimization (one branch avoided). But I guess this isn't a
+> hot path, since I2C is insanely slow anyway. OK, I shall remove the
+> likely() usage.
 
-M=C5=AF=C5=BEeme si promluvit a poskytnout podrobnosti?
+Have you seen the difference in the generated code, btw?
 
-V p=C5=99=C3=ADpad=C4=9B z=C3=A1jmu V=C3=A1s bude kontaktovat n=C3=A1=C5=A1=
- anglicky mluv=C3=ADc=C3=AD z=C3=A1stupce.
+I don't think it will get you one independently on the hot/slow
+path.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-Pozdravy
-Lukas Varga
