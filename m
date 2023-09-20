@@ -2,65 +2,48 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CA27A8783
-	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Sep 2023 16:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD417A8D7F
+	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Sep 2023 22:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236658AbjITOsI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 20 Sep 2023 10:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
+        id S229842AbjITUKx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 20 Sep 2023 16:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234330AbjITOry (ORCPT
+        with ESMTP id S229647AbjITUKw (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 20 Sep 2023 10:47:54 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973521B5;
-        Wed, 20 Sep 2023 07:47:22 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="384082608"
-X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="384082608"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 07:47:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="870403133"
-X-IronPort-AV: E=Sophos;i="6.03,162,1694761200"; 
-   d="scan'208";a="870403133"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2023 07:47:17 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
-        (envelope-from <andy@kernel.org>)
-        id 1qiyTw-0000000G0eB-3vo6;
-        Wed, 20 Sep 2023 17:47:12 +0300
-Date:   Wed, 20 Sep 2023 17:47:12 +0300
-From:   Andy Shevchenko <andy@kernel.org>
-To:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Cc:     Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v2 2/7] platform: cznic: Add preliminary support for
- Turris Omnia MCU
-Message-ID: <ZQsF8FWwfAuT26yE@smile.fi.intel.com>
-References: <20230919103815.16818-1-kabel@kernel.org>
- <20230919103815.16818-3-kabel@kernel.org>
- <ZQmUFPvIx91+ps6k@smile.fi.intel.com>
- <20230919171638.19bc1619@dellmb>
- <ZQnn+Gi0xVlsGCYA@smile.fi.intel.com>
- <20230920161953.6d952392@dellmb>
+        Wed, 20 Sep 2023 16:10:52 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC888B9
+        for <linux-watchdog@vger.kernel.org>; Wed, 20 Sep 2023 13:10:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sang-engineering.com; h=from:to:cc:subject:date:message-id
+        :mime-version:content-transfer-encoding; s=k1; bh=kBFMB175NoIB33
+        tUumJsDoFOA+ejFSobf6NIE+jj4Ug=; b=Uc733YxYosbjm/XEn89UsBRFOBGt1D
+        wtaJ/BXK403VVpQDNaEHxKrKojSA4FFSKMYLOgDdfhsKJ/fLaQUl6oYWSgL0kjxP
+        TjgQp1ebp9cnXOFYCGu92pW1/uFVDDjD92SyXcYt7CH+IEiDDo7JY7lZPY/W5kgV
+        K/WjWWafTRpNlvZysZM+Ey7us60jP/Qx1+1CLzQ0qWGr9L0UlEDWpY6jXTg0e4E2
+        VK6WuEnnj4ecYOJ8G5U+ks86MJOx3wyAEDrOt9aNEZJz7/pTzLfI81YT2opm3aha
+        Sn+CPpC43sMqQqmLNTySIY29gMgvxKQJW48ogG6E3SOz+QL/P6C2joyw==
+Received: (qmail 720124 invoked from network); 20 Sep 2023 22:10:40 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Sep 2023 22:10:40 +0200
+X-UD-Smtp-Session: l3s3148p1@Nuf9988FxNgujntX
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-mips@vger.kernel.org
+Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH 0/6] remove AR7 platform and associated drivers
+Date:   Wed, 20 Sep 2023 22:10:26 +0200
+Message-Id: <20230920201035.3445-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230920161953.6d952392@dellmb>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,36 +51,101 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 04:19:53PM +0200, Marek Behún wrote:
-> On Tue, 19 Sep 2023 21:27:04 +0300
-> Andy Shevchenko <andy@kernel.org> wrote:
-> > On Tue, Sep 19, 2023 at 05:16:38PM +0200, Marek Behún wrote:
-> > > On Tue, 19 Sep 2023 15:29:08 +0300
-> > > Andy Shevchenko <andy@kernel.org> wrote:  
-> > > > On Tue, Sep 19, 2023 at 12:38:10PM +0200, Marek Behún wrote:  
+When trying to get rid of the obsolete VLYNQ bus, Jonas and Florian
+pointed out that its only user, the AR7 platform can probaly go entirely
+[1]. This series does exactly that. Even OpenWRT has removed support
+because these devices are "stuck with 3.18" [2].
 
-...
+It removes the drivers first, because watchdog and network include
+platform specific headers. Once the drivers are gone, we remove the
+platform. The patches are based on 6.6-rc2 and created with
+"--irreversible-delete" to save some space.
 
-> > > > > +	if (likely(ret == ARRAY_SIZE(msgs)))    
-> > > > 
-> > > > Why likely()? Please, justify.  
-> > > 
-> > > Becuase it is unlikely the I2C transaction will fail. In most cases, it
-> > > does not.  
-> > 
-> > Yes, but why likely() is needed? So, i.o.w. what's the benefit in _this_ case?
-> 
-> Compiler optimization (one branch avoided). But I guess this isn't a
-> hot path, since I2C is insanely slow anyway. OK, I shall remove the
-> likely() usage.
+My suggestion is that everything is merged via the MIPS tree in one go,
+so we don't have broken drivers because of missing platform headers. But
+maybe there are reasons for a two-cycle removal with the drivers first
+and the platform later?
 
-Have you seen the difference in the generated code, btw?
+Looking forward to comments.
 
-I don't think it will get you one independently on the hot/slow
-path.
+Happy hacking,
+
+   Wolfram
+
+
+[1] https://lore.kernel.org/r/3395161f-2543-46f0-83d9-b918800305e1@gmail.com
+[2] https://openwrt.org/docs/techref/targets/ar7
+
+
+Wolfram Sang (6):
+  serial: 8250: remove AR7 support
+  mtd: parsers: ar7: remove support
+  vlynq: remove bus driver
+  watchdog: ar7_wdt: remove driver to prepare for platform removal
+  net: cpmac: remove driver to prepare for platform removal
+  MIPS: AR7: remove platform
+
+ MAINTAINERS                             |   13 -
+ arch/arm/configs/pxa_defconfig          |    1 -
+ arch/mips/Kbuild.platforms              |    1 -
+ arch/mips/Kconfig                       |   22 -
+ arch/mips/ar7/Makefile                  |   11 -
+ arch/mips/ar7/Platform                  |    5 -
+ arch/mips/ar7/clock.c                   |  439 --------
+ arch/mips/ar7/gpio.c                    |  332 ------
+ arch/mips/ar7/irq.c                     |  165 ---
+ arch/mips/ar7/memory.c                  |   51 -
+ arch/mips/ar7/platform.c                |  722 -------------
+ arch/mips/ar7/prom.c                    |  256 -----
+ arch/mips/ar7/setup.c                   |   93 --
+ arch/mips/ar7/time.c                    |   31 -
+ arch/mips/boot/compressed/uart-16550.c  |    5 -
+ arch/mips/configs/ar7_defconfig         |  119 ---
+ arch/mips/include/asm/mach-ar7/ar7.h    |  191 ----
+ arch/mips/include/asm/mach-ar7/irq.h    |   16 -
+ arch/mips/include/asm/mach-ar7/prom.h   |   12 -
+ arch/mips/include/asm/mach-ar7/spaces.h |   22 -
+ drivers/Kconfig                         |    2 -
+ drivers/Makefile                        |    1 -
+ drivers/mtd/parsers/Kconfig             |    5 -
+ drivers/mtd/parsers/Makefile            |    1 -
+ drivers/mtd/parsers/ar7part.c           |  129 ---
+ drivers/net/ethernet/ti/Kconfig         |    9 +-
+ drivers/net/ethernet/ti/Makefile        |    1 -
+ drivers/net/ethernet/ti/cpmac.c         | 1251 -----------------------
+ drivers/tty/serial/8250/8250_port.c     |    7 -
+ drivers/vlynq/Kconfig                   |   21 -
+ drivers/vlynq/Makefile                  |    6 -
+ drivers/vlynq/vlynq.c                   |  799 ---------------
+ drivers/watchdog/Kconfig                |    6 -
+ drivers/watchdog/Makefile               |    1 -
+ drivers/watchdog/ar7_wdt.c              |  315 ------
+ include/linux/vlynq.h                   |  149 ---
+ include/uapi/linux/serial_core.h        |    1 -
+ 37 files changed, 1 insertion(+), 5210 deletions(-)
+ delete mode 100644 arch/mips/ar7/Makefile
+ delete mode 100644 arch/mips/ar7/Platform
+ delete mode 100644 arch/mips/ar7/clock.c
+ delete mode 100644 arch/mips/ar7/gpio.c
+ delete mode 100644 arch/mips/ar7/irq.c
+ delete mode 100644 arch/mips/ar7/memory.c
+ delete mode 100644 arch/mips/ar7/platform.c
+ delete mode 100644 arch/mips/ar7/prom.c
+ delete mode 100644 arch/mips/ar7/setup.c
+ delete mode 100644 arch/mips/ar7/time.c
+ delete mode 100644 arch/mips/configs/ar7_defconfig
+ delete mode 100644 arch/mips/include/asm/mach-ar7/ar7.h
+ delete mode 100644 arch/mips/include/asm/mach-ar7/irq.h
+ delete mode 100644 arch/mips/include/asm/mach-ar7/prom.h
+ delete mode 100644 arch/mips/include/asm/mach-ar7/spaces.h
+ delete mode 100644 drivers/mtd/parsers/ar7part.c
+ delete mode 100644 drivers/net/ethernet/ti/cpmac.c
+ delete mode 100644 drivers/vlynq/Kconfig
+ delete mode 100644 drivers/vlynq/Makefile
+ delete mode 100644 drivers/vlynq/vlynq.c
+ delete mode 100644 drivers/watchdog/ar7_wdt.c
+ delete mode 100644 include/linux/vlynq.h
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.1
 
