@@ -2,110 +2,96 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCA87AAFD1
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Sep 2023 12:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CB747ABA68
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Sep 2023 22:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233530AbjIVKnP (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Sep 2023 06:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
+        id S231743AbjIVUM4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Sep 2023 16:12:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233483AbjIVKm7 (ORCPT
+        with ESMTP id S231535AbjIVUMz (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Sep 2023 06:42:59 -0400
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4608FCDA;
-        Fri, 22 Sep 2023 03:42:52 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (unknown [IPv6:2602:61:7e5d:5300::2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 81BE0E07;
-        Fri, 22 Sep 2023 03:42:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1695379371;
-        bh=JYm8BcM9/KAma3UN/bNDkHDqNyw66K9b6awe2AtcQjo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UGHTXYEs8gbpqvzfMndMgkQ9wWOq1AhrAGJjzFZ0nswSX1vxNIOrQqDM1Vb9BQAV7
-         MTKYrynqAphAyL8XxfMfG3k+QtGytjBuU0AiBw0KNvJKlAjG7JsJo0yPKTRaqTinIp
-         735t2vjgusXhwz8uTOUzCTZzv+jdsLrYmOpUo9BI=
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Andrew Jeffery <andrew@aj.id.au>,
+        Fri, 22 Sep 2023 16:12:55 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADB0A9;
+        Fri, 22 Sep 2023 13:12:49 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9b11cc499c2so75849566b.2;
+        Fri, 22 Sep 2023 13:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695413568; x=1696018368; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oLN4bH4coEcvi6teZvOLHVyuO9WrCZeFHK+MQxHhiSE=;
+        b=Q+MDi79B34rn0IDIq1eh/yY2iHVurOgFyUiqsg/xPtxsnFofbZbLvqldyT2ctgUX1y
+         W7caN0KeXe2/qDZWnveUDcyXS/ngusLxMrXj4aJwJewp4XS+AtXQKy4NoND3RmQu4VPG
+         kyX34p+7LHpG/P5GqTuSzZX3H+uCP9Nfdj64tPNT5wB9750761OkCH9XGtt1oZee1Ylh
+         s3tCL/71yYNu4T8j/mtDT8W0U0TveMZpO8fLyIMUpx70n/hAz/MGofFLQitdhP6wzshg
+         3C0Zm8FEDihdWoGXl4L8IaSAUTbJbrvSR2DiAUvhx5v6BIhMdIGdTS52HcPATmCbKN1t
+         Oj2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695413568; x=1696018368;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oLN4bH4coEcvi6teZvOLHVyuO9WrCZeFHK+MQxHhiSE=;
+        b=twT8Bv4NFQ1BqicyOBp6QMNPc7Lh2bJGws5JnsaFdxHjrBHqfpeV/whrWcb7eGkxAm
+         DvSeTbIikr8I3eBu1ujw5B4+Ewx4TCzXndIXzPk0btSIYGBGDmmON5q03xhMN1vGIUJ1
+         oPw+O8GfHsR+qH/KVH673AJwCnSbyMd4rSss0uLNg97Z70CiZe8+PMr43NlUBUX1HuAW
+         GWnvxwvyfL1bRDEy3jsHhRkQLgs8mIwGHDJ453CNmbzIKatSLTD0wl9rQGRR/ne+pJFk
+         k4GXuLAisr8DKVsS5XS5b8PT/Q9NNspc95t6YVsH2XpO+xuEu7L7lnkya89j2FSlT9Tt
+         jtJw==
+X-Gm-Message-State: AOJu0YzVBbUuEO4yDgQUpfgb0Q1UfhFYJjjolNn+75d3g71x4bZ6wSqU
+        QZXvEpImIuz8y/VA7hVKBy8=
+X-Google-Smtp-Source: AGHT+IF7G+E5H3ZPGE5wynI5t2ubz7n8rEDRMyWSsuis7DkkkZP6qj1ZyGy+rEZaWqQCRHQKvfooLQ==
+X-Received: by 2002:a17:906:5a5d:b0:9ae:699d:8a29 with SMTP id my29-20020a1709065a5d00b009ae699d8a29mr299359ejc.6.1695413567731;
+        Fri, 22 Sep 2023 13:12:47 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5af6b6.dynamic.kabel-deutschland.de. [95.90.246.182])
+        by smtp.gmail.com with ESMTPSA id k3-20020a17090646c300b009ae57888718sm3101778ejs.207.2023.09.22.13.12.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Sep 2023 13:12:47 -0700 (PDT)
+From:   Nikita Bune <w1s2d5@gmail.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
-        Joel Stanley <joel@jms.id.au>,
-        "Milton D. Miller II" <mdmii@outlook.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, openbmc@lists.ozlabs.org
-Cc:     Zev Weiss <zev@bewilderbeest.net>,
-        Eddie James <eajames@linux.ibm.com>,
-        Ivan Mikhaylov <i.mikhaylov@yadro.com>,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 2/2] watchdog: aspeed: Add support for aspeed,reset-mask DT property
-Date:   Fri, 22 Sep 2023 03:42:34 -0700
-Message-ID: <20230922104231.1434-6-zev@bewilderbeest.net>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230922104231.1434-4-zev@bewilderbeest.net>
-References: <20230922104231.1434-4-zev@bewilderbeest.net>
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Nikita Bune <w1s2d5@gmail.com>, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers/watchdog: fix checkpatch error
+Date:   Fri, 22 Sep 2023 22:10:25 +0200
+Message-Id: <20230922201025.64164-1-w1s2d5@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-This property allows the device-tree to specify how the Aspeed
-watchdog timer's reset mask register(s) should be set, so that
-peripherals can be individually exempted from (or opted in to) being
-reset when the watchdog timer expires.
+Fix checkpatch ERROR: do not initialise statics to 0
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+Signed-off-by: Nikita Bune <w1s2d5@gmail.com>
 ---
- drivers/watchdog/aspeed_wdt.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/watchdog/uniphier_wdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
-index b72a858bbac7..b4773a6aaf8c 100644
---- a/drivers/watchdog/aspeed_wdt.c
-+++ b/drivers/watchdog/aspeed_wdt.c
-@@ -79,6 +79,8 @@ MODULE_DEVICE_TABLE(of, aspeed_wdt_of_table);
- #define   WDT_TIMEOUT_STATUS_BOOT_SECONDARY	BIT(1)
- #define WDT_CLEAR_TIMEOUT_STATUS	0x14
- #define   WDT_CLEAR_TIMEOUT_AND_BOOT_CODE_SELECTION	BIT(0)
-+#define WDT_RESET_MASK1		0x1c
-+#define WDT_RESET_MASK2		0x20
+diff --git a/drivers/watchdog/uniphier_wdt.c b/drivers/watchdog/uniphier_wdt.c
+index 8e9242c23022..7a080600d865 100644
+--- a/drivers/watchdog/uniphier_wdt.c
++++ b/drivers/watchdog/uniphier_wdt.c
+@@ -41,7 +41,7 @@
+ #define WDT_PERIOD_MIN			1
+ #define WDT_PERIOD_MAX			128
  
- /*
-  * WDT_RESET_WIDTH controls the characteristics of the external pulse (if
-@@ -402,6 +404,8 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
+-static unsigned int timeout = 0;
++static unsigned int timeout;
+ static bool nowayout = WATCHDOG_NOWAYOUT;
  
- 	if ((of_device_is_compatible(np, "aspeed,ast2500-wdt")) ||
- 		(of_device_is_compatible(np, "aspeed,ast2600-wdt"))) {
-+		u32 reset_mask[2];
-+		size_t nrstmask = of_device_is_compatible(np, "aspeed,ast2600-wdt") ? 2 : 1;
- 		u32 reg = readl(wdt->base + WDT_RESET_WIDTH);
- 
- 		reg &= wdt->cfg->ext_pulse_width_mask;
-@@ -419,6 +423,13 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
- 			reg |= WDT_OPEN_DRAIN_MAGIC;
- 
- 		writel(reg, wdt->base + WDT_RESET_WIDTH);
-+
-+		ret = of_property_read_u32_array(np, "aspeed,reset-mask", reset_mask, nrstmask);
-+		if (!ret) {
-+			writel(reset_mask[0], wdt->base + WDT_RESET_MASK1);
-+			if (nrstmask > 1)
-+				writel(reset_mask[1], wdt->base + WDT_RESET_MASK2);
-+		}
- 	}
- 
- 	if (!of_property_read_u32(np, "aspeed,ext-pulse-duration", &duration)) {
+ struct uniphier_wdt_dev {
 -- 
-2.40.0.5.gf6e3b97ba6d2.dirty
+2.34.1
 
