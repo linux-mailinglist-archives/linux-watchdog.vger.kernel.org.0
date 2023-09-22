@@ -2,107 +2,95 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC8A7AA8DD
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Sep 2023 08:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F86E7AAFCE
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Sep 2023 12:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbjIVGQF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Sep 2023 02:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45948 "EHLO
+        id S233460AbjIVKnO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Sep 2023 06:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbjIVGPy (ORCPT
+        with ESMTP id S233571AbjIVKm7 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Sep 2023 02:15:54 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D16195
-        for <linux-watchdog@vger.kernel.org>; Thu, 21 Sep 2023 23:15:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        sang-engineering.com; h=from:to:cc:subject:date:message-id
-        :in-reply-to:references:mime-version:content-transfer-encoding;
-         s=k1; bh=yfSDdpMikY6RdTRHwRz19gb4YLp7sQdL2g88bLD8aGA=; b=fXB84Y
-        r058X3ZL0xIV2NEufI0dOgAKFlt51zIv6FKySijSMmAEnc4GDULW1aiww/ohFpxe
-        4MLfaSCjidQvKdVdWz3x+XRwOuVFDoEurTDG5P5cKliMJN1KYAs06Zy+w138RgIM
-        7qMiRqAwLHWNgYN8r6BJWg7eAFlhZ6II32FSsEBvctG68G4kxHIUYQehxL2WwOPb
-        EbvVVBYX1X8zF1xAt6nch3NAnF7bLv00PA/h2+tSHwRcpgcltjQSNpx565b4W8Jz
-        cxNHhC1YLVkNEw9TJBhOhjhQID9nX/0IkM6OliGMzrgUD/1/JrWTU4fbx4PTD06C
-        Y/0ECBTbiFzAkEQQ==
-Received: (qmail 1269152 invoked from network); 22 Sep 2023 08:15:43 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Sep 2023 08:15:43 +0200
-X-UD-Smtp-Session: l3s3148p1@l4bQiewFBpoujntX
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-mips@vger.kernel.org
-Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Fri, 22 Sep 2023 06:42:59 -0400
+Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D485CD7;
+        Fri, 22 Sep 2023 03:42:51 -0700 (PDT)
+Received: from hatter.bewilderbeest.net (unknown [IPv6:2602:61:7e5d:5300::2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: zev)
+        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 6859F71B;
+        Fri, 22 Sep 2023 03:42:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
+        s=thorn; t=1695379370;
+        bh=38Kbb7gGkyqodA4KPBC9VNUY13Zo33fOgrid7RcPgZk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HYc56Al+GgE8ZqC0VehhO511PydhQ4g4f5KY6ViILEw0QgrT2tblOlRIzu0eUZHGa
+         7fraUyodeYrjrGDHc6K/tF7pQyj6TifG6UbfnIi3QllNLMaCNKGia/7HQAtQrmuYF4
+         0/JyPoFfJ92u+7u5RNG7qbRzDTYPrlEOouyh66Oo=
+From:   Zev Weiss <zev@bewilderbeest.net>
+To:     Andrew Jeffery <andrew@aj.id.au>,
+        Conor Dooley <conor+dt@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
+        Joel Stanley <joel@jms.id.au>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Milton D. Miller II" <mdmii@outlook.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/6] watchdog: ar7_wdt: remove driver to prepare for platform removal
-Date:   Fri, 22 Sep 2023 08:15:25 +0200
-Message-Id: <20230922061530.3121-5-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
-References: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     Zev Weiss <zev@bewilderbeest.net>,
+        Eddie James <eajames@linux.ibm.com>,
+        Ivan Mikhaylov <i.mikhaylov@yadro.com>,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH 0/2] watchdog: aspeed: Add aspeed,reset-mask property
+Date:   Fri, 22 Sep 2023 03:42:32 -0700
+Message-ID: <20230922104231.1434-4-zev@bewilderbeest.net>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-AR7 is going to be removed from the Kernel, so remove its watchdog
-support. This allows us to remove the platform because this driver
-includes a platform specific header.
+Hello,
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
----
-Changes since v1:
-* added acks
+These patches add a new aspeed,reset-mask DT property for the Aspeed
+watchdog timer, which specifies exactly which peripherals should be
+reset by the watchdog timer.
 
- drivers/watchdog/Kconfig   |   6 -
- drivers/watchdog/Makefile  |   1 -
- drivers/watchdog/ar7_wdt.c | 315 -------------------------------------
- 3 files changed, 322 deletions(-)
- delete mode 100644 drivers/watchdog/ar7_wdt.c
+This series is a replacement for a patch I sent earlier [0], though
+using an entirely different (DT-based) approach and hence not exactly
+a v2.
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 751458959411..b9f715d73fe8 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1768,12 +1768,6 @@ config SIBYTE_WDOG
- 	  To compile this driver as a loadable module, choose M here.
- 	  The module will be called sb_wdog.
- 
--config AR7_WDT
--	tristate "TI AR7 Watchdog Timer"
--	depends on AR7 || (MIPS && 32BIT && COMPILE_TEST)
--	help
--	  Hardware driver for the TI AR7 Watchdog Timer.
--
- config TXX9_WDT
- 	tristate "Toshiba TXx9 Watchdog Timer"
- 	depends on CPU_TX49XX || (MIPS && COMPILE_TEST)
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 7eab9de311cb..7cbc34514ec1 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -168,7 +168,6 @@ obj-$(CONFIG_INDYDOG) += indydog.o
- obj-$(CONFIG_JZ4740_WDT) += jz4740_wdt.o
- obj-$(CONFIG_WDT_MTX1) += mtx-1_wdt.o
- obj-$(CONFIG_SIBYTE_WDOG) += sb_wdog.o
--obj-$(CONFIG_AR7_WDT) += ar7_wdt.o
- obj-$(CONFIG_TXX9_WDT) += txx9wdt.o
- obj-$(CONFIG_OCTEON_WDT) += octeon-wdt.o
- octeon-wdt-y := octeon-wdt-main.o octeon-wdt-nmi.o
-diff --git a/drivers/watchdog/ar7_wdt.c b/drivers/watchdog/ar7_wdt.c
-deleted file mode 100644
-index cdcaeb0961ac..000000000000
+I've tested these patches on ast2500 hardware and a qemu ast2600
+model; test results on actual ast2600 hardware would be welcome.
+
+
+Thanks,
+Zev
+
+
+[0] https://lore.kernel.org/linux-watchdog/20230922013542.29136-2-zev@bewilderbeest.net/
+
+Zev Weiss (2):
+  dt-bindings: watchdog: aspeed-wdt: Add aspeed,reset-mask property
+  watchdog: aspeed: Add support for aspeed,reset-mask DT property
+
+ .../bindings/watchdog/aspeed-wdt.txt          | 18 +++-
+ drivers/watchdog/aspeed_wdt.c                 | 11 +++
+ include/dt-bindings/watchdog/aspeed-wdt.h     | 92 +++++++++++++++++++
+ 3 files changed, 120 insertions(+), 1 deletion(-)
+ create mode 100644 include/dt-bindings/watchdog/aspeed-wdt.h
+
 -- 
-2.35.1
+2.40.0.5.gf6e3b97ba6d2.dirty
 
