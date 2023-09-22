@@ -2,110 +2,83 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F6D7ABA8D
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Sep 2023 22:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDBA7ABBFC
+	for <lists+linux-watchdog@lfdr.de>; Sat, 23 Sep 2023 00:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjIVUd4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Sep 2023 16:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52996 "EHLO
+        id S230141AbjIVWvW (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Sep 2023 18:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjIVUdz (ORCPT
+        with ESMTP id S230081AbjIVWvW (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Sep 2023 16:33:55 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0691419E;
-        Fri, 22 Sep 2023 13:33:50 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6910ea9cca1so2343825b3a.1;
-        Fri, 22 Sep 2023 13:33:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695414829; x=1696019629; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ujQqofflbFhC3FlZSdBu24bDcXpPxDmw20FYLc0vm1g=;
-        b=ZkSdPnOwRFMn4pfDQDM+lpxF/8olEDpn8iDFhcw5HjCTl6vqGYWHTwPsCpEDY7TWf2
-         AkNlJo/NjaAl/AVAg854Lcj1mGQMQHnE03MN7M+OVRvW0bLBzOn8Q3DEzCxBkoGVWXw7
-         31aiSqr+Vbu3lnrnukUYwvqC5b2FWPzu+y3gJ/kzQeTRbTDesf9DZJSjZRwIWzMrp/w3
-         IIPKugiF8WvOaY4+ln9jvWR6G9dTWVljYiCnZeMkd14t59r7d7dJhMd0N58hINIO6OWc
-         +/S3QNE89DQEdR3UgprUSA3DEXRv45TCaUqQO/cHCAY25+J5k/Iom3oWmgoqxBzFL2/g
-         12vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695414829; x=1696019629;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ujQqofflbFhC3FlZSdBu24bDcXpPxDmw20FYLc0vm1g=;
-        b=t1EUmW6iI6y0UI5xFl+2fsZocFuAHOHXfo5XIS6qf+W8j4b0spKgTjzPzfnpyHr1jn
-         sDQDsdvxcN28hBgMbaCr0qymvlqrVEDTqFUwsd2XbB9Mq3lVwmhTVcfArfEwLJcMI2Rs
-         vLTbfXPGYJ5v0k9vw3qDK3KYgM8VQoUlRZpCRimAjosjSAxoYfuIkXqb6intQlW3bUIJ
-         QRWyYo0vSdfQB+aL0czXl5kjySTU6iv7t1A/as+D6GXyJvZnUYifOH94kdnv1Ax9gcaj
-         ntQUOA3LZYfUh3ph4N5uhcpKGDvhzciQI1LZ7Tu7RrX5OE79lxGLoECEz1TzcCN/qk8g
-         rUxA==
-X-Gm-Message-State: AOJu0YzVmJH6Ah85nYNT31z3t0rj5p4EnxSDUHOH5nv93Wn21Dm+Vm4B
-        VIZj+1+07Ihon+sHrvbayjU=
-X-Google-Smtp-Source: AGHT+IE0lp8OaTdfzen/WbpBiyQzw9e5TOrxAMJXZilMdPabykphOZO4LjZQmAUOIjNf2KlBWGsIOA==
-X-Received: by 2002:a05:6a20:5659:b0:155:6e4f:8c1a with SMTP id is25-20020a056a20565900b001556e4f8c1amr537181pzc.25.1695414829391;
-        Fri, 22 Sep 2023 13:33:49 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bb18-20020a17090b009200b0026fb228fafasm5311783pjb.18.2023.09.22.13.33.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Sep 2023 13:33:48 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4067f87f-c982-05c7-a198-49482da22817@roeck-us.net>
-Date:   Fri, 22 Sep 2023 13:33:47 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] drivers/watchdog: fix checkpatch error
-Content-Language: en-US
-To:     Nikita Bune <w1s2d5@gmail.com>,
+        Fri, 22 Sep 2023 18:51:22 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62ED0AB;
+        Fri, 22 Sep 2023 15:51:16 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB70C433C8;
+        Fri, 22 Sep 2023 22:51:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695423076;
+        bh=+IgQHS0uZ5whJ86T+o1t0MM1hBYBpdeCcn6J2sibHpA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tRYz0gV96XVqgdZIDZIECV4fPJq4hhVnvurXeBnWxH95oT4N9BoPVUW+WqK9Onc/k
+         0VoSthzX8qL7QAvEQOquiwoSD/RxihT7BrZJpLipPABvym5/03+cc8FGa7z9Rp++KD
+         D2qvsX94BKWZj4MaF1cu0FNVYJV0c/O8zjY8SpcgVEY4MsS0xs2mOjT00j3q3BI6zA
+         yDWlSrx9PAvnaXpJFpiyPp8Q5TziPN7ozaoUwga6T4ayEoXReqrw2JBpTIBJVrtUFm
+         hBEom1FGZvoeJhKjzef6RLFAe76R4FQQoXAxNuQSX2c/5pLb0qHuNqWpGT6KBJk9KW
+         e4i+y7sZTpHuA==
+Received: (nullmailer pid 4076004 invoked by uid 1000);
+        Fri, 22 Sep 2023 22:51:11 -0000
+Date:   Fri, 22 Sep 2023 17:51:11 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Eddie James <eajames@linux.ibm.com>,
+        "Milton D. Miller II" <mdmii@outlook.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230922201025.64164-1-w1s2d5@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230922201025.64164-1-w1s2d5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        openbmc@lists.ozlabs.org,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        linux-aspeed@lists.ozlabs.org,
+        Ivan Mikhaylov <i.mikhaylov@yadro.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: aspeed-wdt: Add
+ aspeed,reset-mask property
+Message-ID: <169542307112.4075948.15645605897080315437.robh@kernel.org>
+References: <20230922104231.1434-4-zev@bewilderbeest.net>
+ <20230922104231.1434-5-zev@bewilderbeest.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230922104231.1434-5-zev@bewilderbeest.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 9/22/23 13:10, Nikita Bune wrote:
-> Fix checkpatch ERROR: do not initialise statics to 0
+
+On Fri, 22 Sep 2023 03:42:33 -0700, Zev Weiss wrote:
+> This property configures the Aspeed watchdog timer's reset mask, which
+> controls which peripherals are reset when the watchdog timer expires.
+> Some platforms require that certain devices be left untouched across a
+> reboot; aspeed,reset-mask can now be used to express such constraints.
 > 
-> Signed-off-by: Nikita Bune <w1s2d5@gmail.com>
-
-Not applying. Please stop submitting such cosmetic patches.
-Also please note that the subject should start with "<subsystem>: <driver>:".
-
-Guenter
-
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 > ---
->   drivers/watchdog/uniphier_wdt.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../bindings/watchdog/aspeed-wdt.txt          | 18 +++-
+>  include/dt-bindings/watchdog/aspeed-wdt.h     | 92 +++++++++++++++++++
+>  2 files changed, 109 insertions(+), 1 deletion(-)
+>  create mode 100644 include/dt-bindings/watchdog/aspeed-wdt.h
 > 
-> diff --git a/drivers/watchdog/uniphier_wdt.c b/drivers/watchdog/uniphier_wdt.c
-> index 8e9242c23022..7a080600d865 100644
-> --- a/drivers/watchdog/uniphier_wdt.c
-> +++ b/drivers/watchdog/uniphier_wdt.c
-> @@ -41,7 +41,7 @@
->   #define WDT_PERIOD_MIN			1
->   #define WDT_PERIOD_MAX			128
->   
-> -static unsigned int timeout = 0;
-> +static unsigned int timeout;
->   static bool nowayout = WATCHDOG_NOWAYOUT;
->   
->   struct uniphier_wdt_dev {
+
+Reviewed-by: Rob Herring <robh@kernel.org>
 
