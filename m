@@ -2,59 +2,48 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DA07AA7D8
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Sep 2023 06:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BA17AA8D1
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Sep 2023 08:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbjIVEdN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Sep 2023 00:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
+        id S231258AbjIVGPw (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Sep 2023 02:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjIVEdL (ORCPT
+        with ESMTP id S230509AbjIVGPv (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Sep 2023 00:33:11 -0400
-X-Greylist: delayed 10626 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Sep 2023 21:33:05 PDT
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [71.19.156.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B714F1;
-        Thu, 21 Sep 2023 21:33:04 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (unknown [IPv6:2602:61:7e5d:5300::2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 7504A71B;
-        Thu, 21 Sep 2023 21:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1695357184;
-        bh=8YhJXVZbP6dpiyW7g8fmW82LVz5b6CyHIGSx77XYF/o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R+K7lrPyYUJBRH6oCed7c7Uh3zR6NY2mxFM8Jzu3HDl0p58goA/QDt3biPMGB5JtD
-         Uh7UbkX66lCSsd3zUVDwcRhpuXJ/LLTlXKEoLMMwBJ00M0u1CqngDB+Vz1PpDjEbTY
-         Hd+28RTTMeDZkSeVpVLJc+mYhfZYLQjF5ifG+FEY=
-Date:   Thu, 21 Sep 2023 21:33:03 -0700
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Andrew Jeffery <andrew@codeconstruct.com.au>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        linux-watchdog@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        Fri, 22 Sep 2023 02:15:51 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FB5FB
+        for <linux-watchdog@vger.kernel.org>; Thu, 21 Sep 2023 23:15:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sang-engineering.com; h=from:to:cc:subject:date:message-id
+        :mime-version:content-transfer-encoding; s=k1; bh=RMnnVl4Ql662w9
+        OZiZW5LKuXonrd4+xLFQeCaWKnYkw=; b=Gp0ZeSxfOZ6uc1qoJJALavCNtjrzhf
+        7Jk3hL22FXDCdzjM0KHFgEs8t4QZiYf/5p/Z4C+YLfffoFwHezrTQmxSEd9vP97n
+        ad7+EvOuhu5Y7eAh4SnHGi9CS6UTIe5jL+sCqNSbmejEkpod8tjBn6sxA9I83Xsa
+        rgfjZeNUNFtQ7JJGvBiO5eORynTrDWCRmwBnV5kyNa/9Pl3BQrFjHOf7tXZwkr4E
+        pleJeU235eenle7hff/L3pobiF/bC8XdrEmjwA1cmxgge++XkT1j9MXv2irkFSpP
+        PsKyBHAOV5XmBE3gjIepBn6AcLgiZZ8R7J2SgG4UUE/ysOJglb4Xp9Fg==
+Received: (qmail 1268966 invoked from network); 22 Sep 2023 08:15:39 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 22 Sep 2023 08:15:39 +0200
+X-UD-Smtp-Session: l3s3148p1@OqhriewF5pkujntX
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-mips@vger.kernel.org
+Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Eddie James <eajames@linux.ibm.com>,
-        Ivan Mikhaylov <i.mikhaylov@yadro.com>
-Subject: Re: [PATCH] watchdog: aspeed: Add sysfs attributes for reset mask
- bits
-Message-ID: <06a2428d-e1f3-4ecd-bd42-f3e25ffdbced@hatter.bewilderbeest.net>
-References: <20230922013542.29136-2-zev@bewilderbeest.net>
- <91be26169ebbddf3c05cd19626478246cb72a72a.camel@codeconstruct.com.au>
- <85ddf493-934f-75c4-7a3a-728289c1ee09@roeck-us.net>
+        linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v2 0/6] remove AR7 platform and associated drivers
+Date:   Fri, 22 Sep 2023 08:15:21 +0200
+Message-Id: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <85ddf493-934f-75c4-7a3a-728289c1ee09@roeck-us.net>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,48 +51,106 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Sep 21, 2023 at 09:24:40PM PDT, Guenter Roeck wrote:
->On 9/21/23 21:16, Andrew Jeffery wrote:
->>On Thu, 2023-09-21 at 18:35 -0700, Zev Weiss wrote:
->>>The AST2500 and AST2600 watchdog timers provide the ability to control
->>>which devices are reset by the watchdog timer via a reset mask
->>>resgister.  Previously the driver ignored that register, leaving
->>>whatever configuration it found at boot and offering no way of
->>>altering its settings.  Add a 'reset_ctrl' sysfs subdirectory with a
->>>file per bit so that userspace can determine which devices the reset
->>>is applied to.
->>>
->>>Note that not all bits in the hardware register are exposed -- in
->>>particular, the ARM CPU and SOC/misc reset bits are left hidden since
->>>clearing them can render the system unable to reboot.
->>>
->>>Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
->>>---
->>>
->>>I'm porting OpenBMC to a platform that requires that the LPC controller remain
->>>un-reset by a BMC reboot.  With this patch userspace can control the reset
->>>mask of the Aspeed watchdog timer, with a few bits remaining unexposed so as
->>>to prevent some almost-certainly undesirable situations.  If there are other
->>>bits that people feel shouldn't be exposed (or conversely if someone feels
->>>strongly that the "dangerous" bits _should_ be exposed) I can adjust
->>>accordingly.
->>
->>
->>Is there a reason this has to be managed by userspace? It sounds a lot
->>like a property of platform design, in which case exposing this feature
->>in the devicetree might be a better approach.
->>
->
->Same sentiment here.
->
->Guenter
->
->
+Changes since v1:
+* kept uapi define for for serial port type
+* added acks
 
-Yes, and indeed the same thing occurred to me, too, though unfortunately 
-not until just *after* I sent the patch...I'll rework it as a DT thing 
-instead.
+Still valid cover letter from v1:
 
-Thanks,
-Zev
+When trying to get rid of the obsolete VLYNQ bus, Jonas and Florian
+pointed out that its only user, the AR7 platform can probaly go entirely
+[1]. This series does exactly that. Even OpenWRT has removed support
+because these devices are "stuck with 3.18" [2].
+
+It removes the drivers first, because watchdog and network include
+platform specific headers. Once the drivers are gone, we remove the
+platform. The patches are based on 6.6-rc2 and created with
+"--irreversible-delete" to save some space.
+
+My suggestion is that everything is merged via the MIPS tree in one go,
+so we don't have broken drivers because of missing platform headers. But
+maybe there are reasons for a two-cycle removal with the drivers first
+and the platform later?
+
+Looking forward to comments.
+
+Happy hacking,
+
+   Wolfram
+
+
+[1] https://lore.kernel.org/r/3395161f-2543-46f0-83d9-b918800305e1@gmail.com
+[2] https://openwrt.org/docs/techref/targets/ar7
+
+
+Wolfram Sang (6):
+  serial: 8250: remove AR7 support
+  mtd: parsers: ar7: remove support
+  vlynq: remove bus driver
+  watchdog: ar7_wdt: remove driver to prepare for platform removal
+  net: cpmac: remove driver to prepare for platform removal
+  MIPS: AR7: remove platform
+
+ MAINTAINERS                             |   13 -
+ arch/arm/configs/pxa_defconfig          |    1 -
+ arch/mips/Kbuild.platforms              |    1 -
+ arch/mips/Kconfig                       |   22 -
+ arch/mips/ar7/Makefile                  |   11 -
+ arch/mips/ar7/Platform                  |    5 -
+ arch/mips/ar7/clock.c                   |  439 --------
+ arch/mips/ar7/gpio.c                    |  332 ------
+ arch/mips/ar7/irq.c                     |  165 ---
+ arch/mips/ar7/memory.c                  |   51 -
+ arch/mips/ar7/platform.c                |  722 -------------
+ arch/mips/ar7/prom.c                    |  256 -----
+ arch/mips/ar7/setup.c                   |   93 --
+ arch/mips/ar7/time.c                    |   31 -
+ arch/mips/boot/compressed/uart-16550.c  |    5 -
+ arch/mips/configs/ar7_defconfig         |  119 ---
+ arch/mips/include/asm/mach-ar7/ar7.h    |  191 ----
+ arch/mips/include/asm/mach-ar7/irq.h    |   16 -
+ arch/mips/include/asm/mach-ar7/prom.h   |   12 -
+ arch/mips/include/asm/mach-ar7/spaces.h |   22 -
+ drivers/Kconfig                         |    2 -
+ drivers/Makefile                        |    1 -
+ drivers/mtd/parsers/Kconfig             |    5 -
+ drivers/mtd/parsers/Makefile            |    1 -
+ drivers/mtd/parsers/ar7part.c           |  129 ---
+ drivers/net/ethernet/ti/Kconfig         |    9 +-
+ drivers/net/ethernet/ti/Makefile        |    1 -
+ drivers/net/ethernet/ti/cpmac.c         | 1251 -----------------------
+ drivers/tty/serial/8250/8250_port.c     |    7 -
+ drivers/vlynq/Kconfig                   |   21 -
+ drivers/vlynq/Makefile                  |    6 -
+ drivers/vlynq/vlynq.c                   |  799 ---------------
+ drivers/watchdog/Kconfig                |    6 -
+ drivers/watchdog/Makefile               |    1 -
+ drivers/watchdog/ar7_wdt.c              |  315 ------
+ include/linux/vlynq.h                   |  149 ---
+ 36 files changed, 1 insertion(+), 5209 deletions(-)
+ delete mode 100644 arch/mips/ar7/Makefile
+ delete mode 100644 arch/mips/ar7/Platform
+ delete mode 100644 arch/mips/ar7/clock.c
+ delete mode 100644 arch/mips/ar7/gpio.c
+ delete mode 100644 arch/mips/ar7/irq.c
+ delete mode 100644 arch/mips/ar7/memory.c
+ delete mode 100644 arch/mips/ar7/platform.c
+ delete mode 100644 arch/mips/ar7/prom.c
+ delete mode 100644 arch/mips/ar7/setup.c
+ delete mode 100644 arch/mips/ar7/time.c
+ delete mode 100644 arch/mips/configs/ar7_defconfig
+ delete mode 100644 arch/mips/include/asm/mach-ar7/ar7.h
+ delete mode 100644 arch/mips/include/asm/mach-ar7/irq.h
+ delete mode 100644 arch/mips/include/asm/mach-ar7/prom.h
+ delete mode 100644 arch/mips/include/asm/mach-ar7/spaces.h
+ delete mode 100644 drivers/mtd/parsers/ar7part.c
+ delete mode 100644 drivers/net/ethernet/ti/cpmac.c
+ delete mode 100644 drivers/vlynq/Kconfig
+ delete mode 100644 drivers/vlynq/Makefile
+ delete mode 100644 drivers/vlynq/vlynq.c
+ delete mode 100644 drivers/watchdog/ar7_wdt.c
+ delete mode 100644 include/linux/vlynq.h
+
+-- 
+2.35.1
 
