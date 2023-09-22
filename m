@@ -2,96 +2,110 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB747ABA68
-	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Sep 2023 22:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F6D7ABA8D
+	for <lists+linux-watchdog@lfdr.de>; Fri, 22 Sep 2023 22:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbjIVUM4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 22 Sep 2023 16:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52148 "EHLO
+        id S229520AbjIVUd4 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 22 Sep 2023 16:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231535AbjIVUMz (ORCPT
+        with ESMTP id S229498AbjIVUdz (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 22 Sep 2023 16:12:55 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADB0A9;
-        Fri, 22 Sep 2023 13:12:49 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9b11cc499c2so75849566b.2;
-        Fri, 22 Sep 2023 13:12:49 -0700 (PDT)
+        Fri, 22 Sep 2023 16:33:55 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0691419E;
+        Fri, 22 Sep 2023 13:33:50 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6910ea9cca1so2343825b3a.1;
+        Fri, 22 Sep 2023 13:33:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695413568; x=1696018368; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oLN4bH4coEcvi6teZvOLHVyuO9WrCZeFHK+MQxHhiSE=;
-        b=Q+MDi79B34rn0IDIq1eh/yY2iHVurOgFyUiqsg/xPtxsnFofbZbLvqldyT2ctgUX1y
-         W7caN0KeXe2/qDZWnveUDcyXS/ngusLxMrXj4aJwJewp4XS+AtXQKy4NoND3RmQu4VPG
-         kyX34p+7LHpG/P5GqTuSzZX3H+uCP9Nfdj64tPNT5wB9750761OkCH9XGtt1oZee1Ylh
-         s3tCL/71yYNu4T8j/mtDT8W0U0TveMZpO8fLyIMUpx70n/hAz/MGofFLQitdhP6wzshg
-         3C0Zm8FEDihdWoGXl4L8IaSAUTbJbrvSR2DiAUvhx5v6BIhMdIGdTS52HcPATmCbKN1t
-         Oj2g==
+        d=gmail.com; s=20230601; t=1695414829; x=1696019629; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ujQqofflbFhC3FlZSdBu24bDcXpPxDmw20FYLc0vm1g=;
+        b=ZkSdPnOwRFMn4pfDQDM+lpxF/8olEDpn8iDFhcw5HjCTl6vqGYWHTwPsCpEDY7TWf2
+         AkNlJo/NjaAl/AVAg854Lcj1mGQMQHnE03MN7M+OVRvW0bLBzOn8Q3DEzCxBkoGVWXw7
+         31aiSqr+Vbu3lnrnukUYwvqC5b2FWPzu+y3gJ/kzQeTRbTDesf9DZJSjZRwIWzMrp/w3
+         IIPKugiF8WvOaY4+ln9jvWR6G9dTWVljYiCnZeMkd14t59r7d7dJhMd0N58hINIO6OWc
+         +/S3QNE89DQEdR3UgprUSA3DEXRv45TCaUqQO/cHCAY25+J5k/Iom3oWmgoqxBzFL2/g
+         12vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695413568; x=1696018368;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1695414829; x=1696019629;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oLN4bH4coEcvi6teZvOLHVyuO9WrCZeFHK+MQxHhiSE=;
-        b=twT8Bv4NFQ1BqicyOBp6QMNPc7Lh2bJGws5JnsaFdxHjrBHqfpeV/whrWcb7eGkxAm
-         DvSeTbIikr8I3eBu1ujw5B4+Ewx4TCzXndIXzPk0btSIYGBGDmmON5q03xhMN1vGIUJ1
-         oPw+O8GfHsR+qH/KVH673AJwCnSbyMd4rSss0uLNg97Z70CiZe8+PMr43NlUBUX1HuAW
-         GWnvxwvyfL1bRDEy3jsHhRkQLgs8mIwGHDJ453CNmbzIKatSLTD0wl9rQGRR/ne+pJFk
-         k4GXuLAisr8DKVsS5XS5b8PT/Q9NNspc95t6YVsH2XpO+xuEu7L7lnkya89j2FSlT9Tt
-         jtJw==
-X-Gm-Message-State: AOJu0YzVBbUuEO4yDgQUpfgb0Q1UfhFYJjjolNn+75d3g71x4bZ6wSqU
-        QZXvEpImIuz8y/VA7hVKBy8=
-X-Google-Smtp-Source: AGHT+IF7G+E5H3ZPGE5wynI5t2ubz7n8rEDRMyWSsuis7DkkkZP6qj1ZyGy+rEZaWqQCRHQKvfooLQ==
-X-Received: by 2002:a17:906:5a5d:b0:9ae:699d:8a29 with SMTP id my29-20020a1709065a5d00b009ae699d8a29mr299359ejc.6.1695413567731;
-        Fri, 22 Sep 2023 13:12:47 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5af6b6.dynamic.kabel-deutschland.de. [95.90.246.182])
-        by smtp.gmail.com with ESMTPSA id k3-20020a17090646c300b009ae57888718sm3101778ejs.207.2023.09.22.13.12.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 13:12:47 -0700 (PDT)
-From:   Nikita Bune <w1s2d5@gmail.com>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+        bh=ujQqofflbFhC3FlZSdBu24bDcXpPxDmw20FYLc0vm1g=;
+        b=t1EUmW6iI6y0UI5xFl+2fsZocFuAHOHXfo5XIS6qf+W8j4b0spKgTjzPzfnpyHr1jn
+         sDQDsdvxcN28hBgMbaCr0qymvlqrVEDTqFUwsd2XbB9Mq3lVwmhTVcfArfEwLJcMI2Rs
+         vLTbfXPGYJ5v0k9vw3qDK3KYgM8VQoUlRZpCRimAjosjSAxoYfuIkXqb6intQlW3bUIJ
+         QRWyYo0vSdfQB+aL0czXl5kjySTU6iv7t1A/as+D6GXyJvZnUYifOH94kdnv1Ax9gcaj
+         ntQUOA3LZYfUh3ph4N5uhcpKGDvhzciQI1LZ7Tu7RrX5OE79lxGLoECEz1TzcCN/qk8g
+         rUxA==
+X-Gm-Message-State: AOJu0YzVmJH6Ah85nYNT31z3t0rj5p4EnxSDUHOH5nv93Wn21Dm+Vm4B
+        VIZj+1+07Ihon+sHrvbayjU=
+X-Google-Smtp-Source: AGHT+IE0lp8OaTdfzen/WbpBiyQzw9e5TOrxAMJXZilMdPabykphOZO4LjZQmAUOIjNf2KlBWGsIOA==
+X-Received: by 2002:a05:6a20:5659:b0:155:6e4f:8c1a with SMTP id is25-20020a056a20565900b001556e4f8c1amr537181pzc.25.1695414829391;
+        Fri, 22 Sep 2023 13:33:49 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bb18-20020a17090b009200b0026fb228fafasm5311783pjb.18.2023.09.22.13.33.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Sep 2023 13:33:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4067f87f-c982-05c7-a198-49482da22817@roeck-us.net>
+Date:   Fri, 22 Sep 2023 13:33:47 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH] drivers/watchdog: fix checkpatch error
+Content-Language: en-US
+To:     Nikita Bune <w1s2d5@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Nikita Bune <w1s2d5@gmail.com>, linux-watchdog@vger.kernel.org,
+Cc:     linux-watchdog@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers/watchdog: fix checkpatch error
-Date:   Fri, 22 Sep 2023 22:10:25 +0200
-Message-Id: <20230922201025.64164-1-w1s2d5@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230922201025.64164-1-w1s2d5@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230922201025.64164-1-w1s2d5@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Fix checkpatch ERROR: do not initialise statics to 0
+On 9/22/23 13:10, Nikita Bune wrote:
+> Fix checkpatch ERROR: do not initialise statics to 0
+> 
+> Signed-off-by: Nikita Bune <w1s2d5@gmail.com>
 
-Signed-off-by: Nikita Bune <w1s2d5@gmail.com>
----
- drivers/watchdog/uniphier_wdt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Not applying. Please stop submitting such cosmetic patches.
+Also please note that the subject should start with "<subsystem>: <driver>:".
 
-diff --git a/drivers/watchdog/uniphier_wdt.c b/drivers/watchdog/uniphier_wdt.c
-index 8e9242c23022..7a080600d865 100644
---- a/drivers/watchdog/uniphier_wdt.c
-+++ b/drivers/watchdog/uniphier_wdt.c
-@@ -41,7 +41,7 @@
- #define WDT_PERIOD_MIN			1
- #define WDT_PERIOD_MAX			128
- 
--static unsigned int timeout = 0;
-+static unsigned int timeout;
- static bool nowayout = WATCHDOG_NOWAYOUT;
- 
- struct uniphier_wdt_dev {
--- 
-2.34.1
+Guenter
+
+> ---
+>   drivers/watchdog/uniphier_wdt.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/uniphier_wdt.c b/drivers/watchdog/uniphier_wdt.c
+> index 8e9242c23022..7a080600d865 100644
+> --- a/drivers/watchdog/uniphier_wdt.c
+> +++ b/drivers/watchdog/uniphier_wdt.c
+> @@ -41,7 +41,7 @@
+>   #define WDT_PERIOD_MIN			1
+>   #define WDT_PERIOD_MAX			128
+>   
+> -static unsigned int timeout = 0;
+> +static unsigned int timeout;
+>   static bool nowayout = WATCHDOG_NOWAYOUT;
+>   
+>   struct uniphier_wdt_dev {
 
