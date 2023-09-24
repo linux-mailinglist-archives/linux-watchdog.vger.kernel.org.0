@@ -2,58 +2,42 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0AD7AC5D0
-	for <lists+linux-watchdog@lfdr.de>; Sun, 24 Sep 2023 01:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 039827AC70B
+	for <lists+linux-watchdog@lfdr.de>; Sun, 24 Sep 2023 09:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjIWXLX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 23 Sep 2023 19:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
+        id S229958AbjIXHwv (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 24 Sep 2023 03:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjIWXLW (ORCPT
+        with ESMTP id S229699AbjIXHwv (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 23 Sep 2023 19:11:22 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786C983;
-        Sat, 23 Sep 2023 16:11:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695510676; x=1727046676;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iP6hYCKOBexc8AVWr4kAh1Iv4qVnYnMqC7Y/Tlnd+yk=;
-  b=Faq4EH4pKi8/2hMngrAS70PG4W6halgGXghWRl+FBVTPFk6IvaB2xXUj
-   I+3/nLANui3C4khTAoiRmMq9H5texDZMAkuO4vS+LaIpeMQPc0ofLWK5P
-   0SJWFUYC337HjX3bdnAWIcw98twfz0w3o/RGVihKbyd238HlNuiiJZpQQ
-   Sx0FnUn7CvfmVsyDm/LS3EN17k3cegAPGLJnoNU++9G1qvTca0DXbSWsw
-   VSue/HCOoewQZVKdfVwRvqQ8gHVbEoqHi35EHbcQLIzxqHo0pSVEFbM1k
-   b7C5Dwq7cApMpAtHAJHKpyYf+Q31d3JfNUQUqPmoBeoI2gbMCBFzuBXls
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10842"; a="360453148"
-X-IronPort-AV: E=Sophos;i="6.03,171,1694761200"; 
-   d="scan'208";a="360453148"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2023 16:11:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10842"; a="1078790376"
-X-IronPort-AV: E=Sophos;i="6.03,171,1694761200"; 
-   d="scan'208";a="1078790376"
-Received: from lkp-server02.sh.intel.com (HELO 493f6c7fed5d) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Sep 2023 16:11:10 -0700
-Received: from kbuild by 493f6c7fed5d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qkBmF-0002yn-3B;
-        Sat, 23 Sep 2023 23:11:08 +0000
-Date:   Sun, 24 Sep 2023 07:11:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Sun, 24 Sep 2023 03:52:51 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50EA0109;
+        Sun, 24 Sep 2023 00:52:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+ t=1695541918; x=1696146718; i=j.neuschaefer@gmx.net;
+ bh=l762rpL78XJX6kJZnEmaPG5CMPXGEcWFqwe5ttBK0r8=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+ b=YpFDgI6h/z+QyCVPCCDi/zKyUeTBlS/nGbSI2K7R99GYwz2fPg1iegitN57/RyxtXCqQLSI/RM5
+ kwpBTkRtqLmCwMAhRby29OwfHxllkI0YWYUAJKpC5l4jpqTUKQYQ5uGhMiBtcqTyfswZUEwXuGh1H
+ +olWxxZVRZHEExoSX2nZKJgOW1ao5BB0x3zHjHWrhrIKStFLe/9583O/Ibhb3iiquWvqMwomv0RUn
+ F4RgVsxPJX51Xs/64s5LdPuVAsN4xZhrZeSZMHVBdD1EGS30PRaQB+bNILyN9Ia27apmZcrSNdQAa
+ w+8WSf08umwiLn6NuFDg0yajl3RrXxvFDO5w==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([89.0.47.152]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MaJ3t-1rDfAJ29Yb-00WCWT; Sun, 24
+ Sep 2023 09:51:58 +0200
+Date:   Sun, 24 Sep 2023 09:51:55 +0200
+From:   =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Avi Fishman <avifishman70@gmail.com>,
         Tomer Maimon <tmaimon77@gmail.com>,
         Tali Perry <tali.perry1@gmail.com>,
@@ -68,55 +52,112 @@ Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Conor Dooley <conor+dt@kernel.org>,
         Joel Stanley <joel@jms.id.au>, Arnd Bergmann <arnd@arndb.de>,
-        Jacky Huang <ychuang3@nuvoton.com>
+        Jacky Huang <ychuang3@nuvoton.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Subject: Re: [PATCH v9 3/3] clk: wpcm450: Add Nuvoton WPCM450 clock/reset
  controller driver
-Message-ID: <202309240640.6iNEdfCX-lkp@intel.com>
-References: <20230923143438.1895461-4-j.neuschaefer@gmx.net>
+Message-ID: <ZQ/qm2QH0kbz+2Vx@probook>
+References: <20230923143438.1895461-1-j.neuschaefer@gmx.net>
+ <20230923143438.1895461-4-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pBFYjzjBf1TpgkI2"
 Content-Disposition: inline
 In-Reply-To: <20230923143438.1895461-4-j.neuschaefer@gmx.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:UrCyJY5yKXyKetG4NIlBC/9FZ3CNGXjUHb2ZVmhgA1GCm6ilD0x
+ IxDyp6S6rVpCvSXbwgO9GrzOBV4sKQ/OAaAi4d57UW1+JkUn+bFtPrtTxwtKlH22rg8YP0N
+ vc+GVX+XTmM1BegsDCVctoZKP2iE4YIZdV5j2Plg5K22Pzd2vV2qc0pwvwrZvX63bRNBK+I
+ J4AXUWaEv6fDZ0NS4eNnA==
+UI-OutboundReport: notjunk:1;M01:P0:8FTVNRtf2kg=;UaoUthIli/bLoGv10ARCskyds6F
+ Ykp1XreM4CWzIAbcbGdJZqoaJq+aKfSH5To3wb248/JLJda8zu90HsGGJqzcdTjLlg4v8wc5a
+ vjM2Tw8QTNTTWEwCB0lubvDQJK4DcmpSrhiCTr85bjsD0W5NOiPtFE3RpFyAfERyy0Zn4BOXN
+ fVWqOBxr7zFRO96M1iTlaC5DDLhsr5bJ4RmbO1FJ9TFpQrpbp5kZrHxRhTLy6gOAvIZVzYLNp
+ PIn1bvM8oNqHPjrxCN80SxLKaqdZ+LU1c06oC1B1alApiTVAP8eMzD5//MOTkEcrxWxG2vk7v
+ UYxvb4XKGqt9hf9mKKFV4wE/VrH2MGzOFWtOOGRxCP7lvzbs/DGp5E4Fck4ZELSHHpdusljqg
+ ENa7k8opDEuNt9R7GIsDH8U1lFN9TK0Qe/JToM1Y5f6cqVEIcrTlLmo+OF6jQOemWrfynWYqB
+ 9VymakxI1+4cpcLfZ5TghB3Ztd8vjQcevEjLj3er+lkl9CYns2uSPbhsFC9nmsxQant1OmAUZ
+ iONnAGoIhb/D5fMIfacelzBSrl8BLpDFA/DAKRJiHd4a4S4WFFVtjVX0rDNTGRIS20ALEyctd
+ ZwOSiZqJplTIMBnBv774X3z4s9x9L3CvGOjSDNEimhbmXE2TaRW8odTvq2czuteU+9I/bAY0G
+ stO6PuvjwbQjFLsUzskpIUG3kDnNLFP91AE5DHXNRQuuwYMmhbaSlnlItREbkMu5VDLoo4PBo
+ kBR1VqIhBG8LQooUPnH1Qc/t/MXEiph1i59aL6tKE6yjvnfFJvdZ+n0LEawFDu7BIi3TLkJSG
+ yypBLalJeLKeT/6S/Ono8+BeHmrCDOWIYzMS0A4JdsT0kUVGf2EwpefknMnNxoeNcbBUIKUQK
+ ZN9EeaC4fk2tzXlgdNom9+6B68wONyRcaVrYmG2V0/ytx3sijXgrYk82EhbYhZyMQq6LZ1z/B
+ b1+hpw==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Jonathan,
 
-kernel test robot noticed the following build errors:
+--pBFYjzjBf1TpgkI2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test ERROR on clk/clk-next]
-[also build test ERROR on robh/for-next pza/reset/next linus/master v6.6-rc2 next-20230921]
-[cannot apply to pza/imx-drm/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Sat, Sep 23, 2023 at 04:34:38PM +0200, Jonathan Neusch=C3=A4fer wrote:
+> This driver implements the following features w.r.t. the clock and reset
+> controller in the WPCM450 SoC:
+>=20
+> - It calculates the rates for all clocks managed by the clock controller
+> - It leaves the clock tree mostly unchanged, except that it enables/
+>   disables clock gates based on usage.
+> - It exposes the reset lines managed by the controller using the
+>   Generic Reset Controller subsystem
+>=20
+> NOTE: If the driver and the corresponding devicetree node are present,
+>       the driver will disable "unused" clocks. This is problem until
+>       the clock relations are properly declared in the devicetree (in a
+>       later patch). Until then, the clk_ignore_unused kernel parameter
+>       can be used as a workaround.
+>=20
+> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+> ---
+[...]
+> +config CLK_WPCM450
+> +	bool "Nuvoton WPCM450 clock/reset controller support"
+> +	default y
+> +	help
+> +	  Build the clock and reset controller driver for the WPCM450 SoC.
+> +
+[...]
+>  config RESET_SIMPLE
+>  	bool "Simple Reset Controller Driver" if COMPILE_TEST || EXPERT
+> -	default ARCH_ASPEED || ARCH_BCMBCA || ARCH_BITMAIN || ARCH_REALTEK || A=
+RCH_STM32 || (ARCH_INTEL_SOCFPGA && ARM64) || ARCH_SUNXI || ARC
+> +	default ARCH_ASPEED || ARCH_BCMBCA || ARCH_BITMAIN || ARCH_REALTEK || A=
+RCH_STM32 || (ARCH_INTEL_SOCFPGA && ARM64) || ARCH_SUNXI || ARC || ARCH_WPC=
+M450
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Neusch-fer/dt-bindings-clock-Add-Nuvoton-WPCM450-clock-reset-controller/20230923-223751
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/20230923143438.1895461-4-j.neuschaefer%40gmx.net
-patch subject: [PATCH v9 3/3] clk: wpcm450: Add Nuvoton WPCM450 clock/reset controller driver
-config: nios2-randconfig-002-20230924 (https://download.01.org/0day-ci/archive/20230924/202309240640.6iNEdfCX-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230924/202309240640.6iNEdfCX-lkp@intel.com/reproduce)
+Considering the build bot failures and the fragility of adding tons of
+platforms to this "default" line, I think I'll just select RESET_CONTROLLER
+and RESET_SIMPLE from CLK_WPCM450.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309240640.6iNEdfCX-lkp@intel.com/
+Jonathan
 
-All errors (new ones prefixed by >>):
+--pBFYjzjBf1TpgkI2
+Content-Type: application/pgp-signature; name="signature.asc"
 
-   nios2-linux-ld: drivers/clk/nuvoton/clk-wpcm450.o: in function `wpcm450_clk_init':
-   clk-wpcm450.c:(.init.text+0x384): undefined reference to `reset_simple_ops'
->> nios2-linux-ld: clk-wpcm450.c:(.init.text+0x388): undefined reference to `reset_simple_ops'
+-----BEGIN PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmUP6m4ACgkQCDBEmo7z
+X9s7NA/+Kb7kcTcnrZ5q9OcEGS0N4Gl5A8Zn58D+GlGntd/3PFbp4EIq+wZJKrrh
+eiIuAP6NToGOQbEBfFFBcUU+4qloCorKoQcWeY5rgoBLntU2Lyj9BTk4Mcj3YhH9
+Lm11A3S0QJQqkYmbHZD6xgAYKA+oP9bMQJd6gz2y7o8dAiXYGP1uNuRI7c58ArKD
+EmBQ3HaGiT2vwxuK0Gg1cc8EsCC1ygaKTf2B5tr/jopZb0sc21fA6cWb++iDVipk
+chYyGTroDuUI8ClBOUzAvVDK2/AMps85WPqCndf2WAva6z6BT3EnJp8O6biguSrw
+lf/yHeMBeIuHFOfD1ZNdEw7cpH9wQGn4adIuLGjIt10a5Bi9tVIX1eCKIJs1JGn6
+AkRFgkw6/SYvEdF1q28x3oxLIsFFy2N1rJ1troUUaNUFTC0pyzC7S96tf/uva3fg
+nLb/+X1qO0WSHIQQ9D4C+CuQ//KfRvWflX0cFY7H60MO+LaD0cNc3tmVrJpCb32B
+Io/2VV2p0OfuSPaRd8dVgGSHfXpC3ncZOUGnSMGfSyrbLyRlq2VtsRrROD1kqOoW
+amLSqiskO9amsmn3IXzbD9Hd/ytUwy4zXpk6R/TaK4X9GMJ1fA0g8sx7CH2KafV4
+gunw8+m8zQMM53M/IaymQqYdEIISme1PsyiJA/9Et6bih2IL5sI=
+=Dm6m
+-----END PGP SIGNATURE-----
+
+--pBFYjzjBf1TpgkI2--
