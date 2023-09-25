@@ -2,71 +2,94 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575E67ACB4E
-	for <lists+linux-watchdog@lfdr.de>; Sun, 24 Sep 2023 20:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11EF07ACE66
+	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Sep 2023 04:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjIXSUU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 24 Sep 2023 14:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54450 "EHLO
+        id S231775AbjIYCnU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 24 Sep 2023 22:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjIXSUT (ORCPT
+        with ESMTP id S231720AbjIYCnU (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 24 Sep 2023 14:20:19 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7486BFC;
-        Sun, 24 Sep 2023 11:20:13 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9b27bc8b65eso91450466b.0;
-        Sun, 24 Sep 2023 11:20:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695579612; x=1696184412; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=a0W+/trWwbu/NCVII0SDu5FGXg+mV5jiZFYz95bx/6g=;
-        b=O1017DMeB7e4IyOLE1zRSXZ2yQPXejz3LZNeQqqcMhfVn2aVCEUshik2ASpREF1hao
-         ymKesFo1zDr60jy+R37+qS942KPbOLPcG1ofg08C62jYBL2z35PmX7KbGzn3XNm5aMtG
-         XwlBfk7q9B/hQNLQCb/yKsYg4hn8li+hprKlA4LatiHzjkHYI3M6oYz4RBY/OMnx/90I
-         /sAd2aw5P2U4IZqgT3TlAhVV7mBmdXs+LFmMB9HaZrzWeEGHMTXM4syWMdoYSOHPKraA
-         HlqtMxUrmARdmX7XT/y1OfHQzgP7pmdOyB4T39YkYSuDIc850nJjeHsyEukEnMtpEonA
-         ozRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695579612; x=1696184412;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a0W+/trWwbu/NCVII0SDu5FGXg+mV5jiZFYz95bx/6g=;
-        b=rPvf4xhJcojFqvE+ChSbVGBZjDpPE4iVBqhQ+0zgs7Z0EiM6eBDTD7nMiKDtwygnwe
-         igt/TYEe5Y5hmk7o1tViPV4mm8jC8WQDINwSjYhcX63+bs0rOYm/1DUHNFc+yTT9h602
-         sSnw/N/62tvOXMPAR+TdsT0iVVsYXqOZxXgg6qJ7OVRAkdVFb9clk5XAzL8+Res7/svr
-         62oa9jj6QE3HKopsPxFydhD/C+cWkB0m06XOaAB/qBSInt6ZTiq3JUy7/urp8dYnSrSH
-         Th6nr5o17CBeYgK3uw8y0Nd7d+dn4SvFH42x/h0LgWzTgeMzOmvhUdVbOl8gvisi4MIp
-         TPTg==
-X-Gm-Message-State: AOJu0YzXihYSDweb5ST3IP2Tn9r1KPT/adNIvzITLPtKENcqzQiTx3Ap
-        f7akDms8ubVItiV1SJgRSxk=
-X-Google-Smtp-Source: AGHT+IFUlRTZ1QgAlngEAHo+92fSn9CMPMRh4wWpOlzkRUyyzEgCeFe3JMjYONjMQbQRm2YFLIKh5g==
-X-Received: by 2002:a17:906:3189:b0:9ae:3ee3:dc5a with SMTP id 9-20020a170906318900b009ae3ee3dc5amr4003581ejy.73.1695579611581;
-        Sun, 24 Sep 2023 11:20:11 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:8109:8c00:3664:78ff:216e:b54c:1933])
-        by smtp.gmail.com with ESMTPSA id p20-20020a1709060e9400b009ae587ce135sm5249659ejf.223.2023.09.24.11.20.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Sep 2023 11:20:11 -0700 (PDT)
-From:   Nik Bune <n2h9z4@gmail.com>
-To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        skhan@linuxfoundation.org, claudiu.beznea@microchip.com
-Cc:     Nik Bune <n2h9z4@gmail.com>, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3] dt-bindings: watchdog: atmel,at91rm9200-wdt: convert txt to yaml
-Date:   Sun, 24 Sep 2023 20:19:59 +0200
-Message-Id: <20230924181959.64264-1-n2h9z4@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 24 Sep 2023 22:43:20 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A68692;
+        Sun, 24 Sep 2023 19:43:12 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 707CF32009E2;
+        Sun, 24 Sep 2023 22:43:07 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute6.internal (MEProxy); Sun, 24 Sep 2023 22:43:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1695609786; x=1695696186; bh=Uq
+        jDrarA+shRfC8ltMwHAr+TUFm7nNOSDNsd970tbLw=; b=RcK132xuzObTUxcJHj
+        mtGTHR8mL/CpJNmGrJByJFEQZ0Ifrln/vtjoUSEnPyumebLrZsOfpBz4CVzrqXL1
+        JSqtLwbn9Vuy/bwrvU/0/nvMvzQstLMrASo0YKkjPTq6+FOuFoGcDvnYcdMnRbdg
+        lnrGVRU/tp1sXO/kaUi2aGs0+v0REVCggPushe5k+id/VEH7trEfsBrzhgYqPN0t
+        Auov+5t7haL4VvAX+DOn0RmsOc7+QpVKrKIIoWsK9BvFvsIkkyWnjvhW3Klpcqmc
+        G9LnsUrwU/XHTCMG4clVWZOPq4h2cSdzN9Nq28nCdRQdBmKtCPhzKNcRs9QIWO6l
+        mncw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1695609786; x=1695696186; bh=UqjDrarA+shRf
+        C8ltMwHAr+TUFm7nNOSDNsd970tbLw=; b=b6SNUx6Zq9Bd/AlDRQxfxa630kKvx
+        wi3BsWPfm5OPxf+tK4hoafLUs+Hm71TpohijG9w+4AMtciNcPsROigv54FJMtlYl
+        046taGoiYYhNFg6GB6+frndhQggqUAexQoBmphd723CQ8AXZo4rz/YugZgBUxm9L
+        Q7P/1blq1Sqe31CIFsmS+a7baWPGCLajU61eeYRvX1li/Z//jAQ9ICipnqdY0L3P
+        34AbfD7nPTIJTCHcYvkF31u6HjGl2mMNLugkUKAtQckeKlGeQPGgThhiprveLibp
+        LHeie6Fhu9NHRWYinzta/snfiCzdcvBSvC3/rcx4iyVU7EM38svgFsAGQ==
+X-ME-Sender: <xms:ufMQZQwYYayUQhLi9Yn5f6270PhrGkYiwtYO0LTrkFg4Mi33iTSvHA>
+    <xme:ufMQZUQh-Ht4wo777KGBlXOBfb2JiandNG948u4Bot5c3OfScfGyyGRATqYD1deNM
+    kcMZXenB9fy580rFA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudelfedgieefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
+    frrghtthgvrhhnpeekvdekjeekgfejudffteetgeejkeetteduvedtffdtledutdfhheev
+    feetkeeiteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhgurhgvfiesrghjrdhiugdrrghu
+X-ME-Proxy: <xmx:ufMQZSWamVBQ5SZlQlh3m3x79FXuTIZhC5gNJp3Tu51JsN9assMxtg>
+    <xmx:ufMQZehL48Yik-Qnd78EfYrN4SB0svmrgKI2NRDygVd3tQgD0RgMgw>
+    <xmx:ufMQZSCGHUtY1vZi9RxmRbNEEg35P5GKxtAat6WqB8c1q6e_ykR4ag>
+    <xmx:uvMQZaZc87wi0MoakXrq8nH4hs4cWEHOUTKF-JPKC0f8FuT9yDIb_A>
+Feedback-ID: idfb84289:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B7A451700090; Sun, 24 Sep 2023 22:43:05 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-761-gece9e40c48-fm-20230913.001-gece9e40c
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+Message-Id: <6df088a6-75ab-42f2-ba39-3f155714ed2d@app.fastmail.com>
+In-Reply-To: <20230922104231.1434-5-zev@bewilderbeest.net>
+References: <20230922104231.1434-4-zev@bewilderbeest.net>
+ <20230922104231.1434-5-zev@bewilderbeest.net>
+Date:   Mon, 25 Sep 2023 12:12:45 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Zev Weiss" <zev@bewilderbeest.net>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Guenter Roeck" <linux@roeck-us.net>,
+        "Joel Stanley" <joel@jms.id.au>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Milton D. Miller II" <mdmii@outlook.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, openbmc@lists.ozlabs.org
+Cc:     "Eddie James" <eajames@linux.ibm.com>,
+        "Ivan Mikhaylov" <i.mikhaylov@yadro.com>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: aspeed-wdt: Add aspeed,reset-mask
+ property
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,77 +97,170 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Convert txt file to yaml.
 
-Signed-off-by: Nik Bune <n2h9z4@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
 
-Changes in v3:
-- Removed trailing whitespace in an element of the maintainers list.
+On Fri, 22 Sep 2023, at 20:12, Zev Weiss wrote:
+> This property configures the Aspeed watchdog timer's reset mask, which
+> controls which peripherals are reset when the watchdog timer expires.
+> Some platforms require that certain devices be left untouched across a
+> reboot; aspeed,reset-mask can now be used to express such constraints.
+>
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
+> ---
+>  .../bindings/watchdog/aspeed-wdt.txt          | 18 +++-
+>  include/dt-bindings/watchdog/aspeed-wdt.h     | 92 +++++++++++++++++++
+>  2 files changed, 109 insertions(+), 1 deletion(-)
+>  create mode 100644 include/dt-bindings/watchdog/aspeed-wdt.h
+>
+> diff --git a/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt 
+> b/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
+> index a8197632d6d2..3208adb3e52e 100644
+> --- a/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
+> +++ b/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
+> @@ -47,7 +47,15 @@ Optional properties for AST2500-compatible watchdogs:
+>  			   is configured as push-pull, then set the pulse
+>  			   polarity to active-high. The default is active-low.
+> 
+> -Example:
+> +Optional properties for AST2500- and AST2600-compatible watchdogs:
+> + - aspeed,reset-mask: A bitmask indicating which peripherals will be reset if
+> +		      the watchdog timer expires.  On AST2500 this should be a
+> +		      single word defined using the AST2500_WDT_RESET_* macros;
+> +		      on AST2600 this should be a two-word array with the first
+> +		      word defined using the AST2600_WDT_RESET1_* macros and the
+> +		      second word defined using the AST2600_WDT_RESET2_* macros.
+> +
+> +Examples:
+> 
+>  	wdt1: watchdog@1e785000 {
+>  		compatible = "aspeed,ast2400-wdt";
+> @@ -55,3 +63,11 @@ Example:
+>  		aspeed,reset-type = "system";
+>  		aspeed,external-signal;
+>  	};
+> +
+> +	#include <dt-bindings/watchdog/aspeed-wdt.h>
+> +	wdt2: watchdog@1e785040 {
+> +		compatible = "aspeed,ast2600-wdt";
+> +		reg = <0x1e785040 0x40>;
+> +		aspeed,reset-mask = <AST2600_WDT_RESET1_DEFAULT
+> +				     (AST2600_WDT_RESET2_DEFAULT & ~AST2600_WDT_RESET2_LPC)>;
+> +	};
 
-v2 patch: https://lore.kernel.org/linux-devicetree/20230924172004.59208-1-n2h9z4@gmail.com/ 
+Rob has acked your current approach already, but I do wonder about an alternative that aligns more with the clock/reset/interrupt properties. Essentially, define a new generic watchdog property that is specified on the controllers to be reset by the watchdog (or even on just the watchdog node itself, emulating what you've proposed here):
 
- .../watchdog/atmel,at91rm9200-wdt.yaml        | 33 +++++++++++++++++++
- .../watchdog/atmel-at91rm9200-wdt.txt         |  9 -----
- 2 files changed, 33 insertions(+), 9 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
+watchdog-resets = <phandle index>;
 
-diff --git a/Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml b/Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml
-new file mode 100644
-index 000000000000..7af3571d89f2
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml
-@@ -0,0 +1,33 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/atmel,at91rm9200-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Atmel AT91RM9200 System Timer Watchdog
-+
-+maintainers:
-+  - Nicolas Ferre <nicolas.ferre@microchip.com>
-+
-+allOf:
-+  - $ref: watchdog.yaml#
-+
-+properties:
-+  compatible:
-+    const: atmel,at91rm9200-wdt
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    watchdog@fffffd00 {
-+        compatible = "atmel,at91rm9200-wdt";
-+        reg = <0xfffffd00 0x10>;
-+    };
-diff --git a/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt b/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
-deleted file mode 100644
-index d4d86cf8f9eb..000000000000
---- a/Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
-+++ /dev/null
-@@ -1,9 +0,0 @@
--Atmel AT91RM9200 System Timer Watchdog
--
--Required properties:
--- compatible: must be "atmel,at91sam9260-wdt".
--
--Example:
--	watchdog@fffffd00 {
--		compatible = "atmel,at91rm9200-wdt";
--	};
--- 
-2.34.1
+The phandle links to the watchdog of interest, and the index specifies the controller associated with the configuration. It might even be useful to do:
 
+watchdog-resets = <phandle index enable>;
+
+"enable" could provide explicit control over whether somethings should be reset or not (as a way to prevent reset if the controller targeted by the provided index would otherwise be reset in accordance with the default reset value in the watchdog controller).
+
+The macros from the dt-bindings header can then use macros to name the indexes rather than define a mask tied to the register layout. The index may still in some way represent the mask position. This has the benefit of hiding the issue of one vs two configuration registers between the AST2500 and AST2600 while also allowing other controllers to exploit the binding (Nuvoton BMCs? Though maybe it's generalising too early?).
+
+It'd probably need a new function exported from the watchdog subsystem for the drivers to call through, though I don't think that's too much of a hurdle?
+
+Andrew
+
+> diff --git a/include/dt-bindings/watchdog/aspeed-wdt.h 
+> b/include/dt-bindings/watchdog/aspeed-wdt.h
+> new file mode 100644
+> index 000000000000..7ae6d84b2bd9
+> --- /dev/null
+> +++ b/include/dt-bindings/watchdog/aspeed-wdt.h
+> @@ -0,0 +1,92 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +
+> +#ifndef DT_BINDINGS_ASPEED_WDT_H
+> +#define DT_BINDINGS_ASPEED_WDT_H
+> +
+> +#define AST2500_WDT_RESET_CPU		(1 << 0)
+> +#define AST2500_WDT_RESET_COPROC	(1 << 1)
+> +#define AST2500_WDT_RESET_SDRAM		(1 << 2)
+> +#define AST2500_WDT_RESET_AHB		(1 << 3)
+> +#define AST2500_WDT_RESET_I2C		(1 << 4)
+> +#define AST2500_WDT_RESET_MAC0		(1 << 5)
+> +#define AST2500_WDT_RESET_MAC1		(1 << 6)
+> +#define AST2500_WDT_RESET_GRAPHICS	(1 << 7)
+> +#define AST2500_WDT_RESET_USB2_HOST_HUB	(1 << 8)
+> +#define AST2500_WDT_RESET_USB_HOST	(1 << 9)
+> +#define AST2500_WDT_RESET_HID_EHCI	(1 << 10)
+> +#define AST2500_WDT_RESET_VIDEO		(1 << 11)
+> +#define AST2500_WDT_RESET_HAC		(1 << 12)
+> +#define AST2500_WDT_RESET_LPC		(1 << 13)
+> +#define AST2500_WDT_RESET_SDIO		(1 << 14)
+> +#define AST2500_WDT_RESET_MIC		(1 << 15)
+> +#define AST2500_WDT_RESET_CRT		(1 << 16)
+> +#define AST2500_WDT_RESET_PWM		(1 << 17)
+> +#define AST2500_WDT_RESET_PECI		(1 << 18)
+> +#define AST2500_WDT_RESET_JTAG		(1 << 19)
+> +#define AST2500_WDT_RESET_ADC		(1 << 20)
+> +#define AST2500_WDT_RESET_GPIO		(1 << 21)
+> +#define AST2500_WDT_RESET_MCTP		(1 << 22)
+> +#define AST2500_WDT_RESET_XDMA		(1 << 23)
+> +#define AST2500_WDT_RESET_SPI		(1 << 24)
+> +#define AST2500_WDT_RESET_SOC_MISC	(1 << 25)
+> +
+> +#define AST2500_WDT_RESET_DEFAULT 0x023ffff3
+> +
+> +#define AST2600_WDT_RESET1_CPU		(1 << 0)
+> +#define AST2600_WDT_RESET1_SDRAM	(1 << 1)
+> +#define AST2600_WDT_RESET1_AHB		(1 << 2)
+> +#define AST2600_WDT_RESET1_SLI		(1 << 3)
+> +#define AST2600_WDT_RESET1_SOC_MISC0	(1 << 4)
+> +#define AST2600_WDT_RESET1_COPROC	(1 << 5)
+> +#define AST2600_WDT_RESET1_USB_A	(1 << 6)
+> +#define AST2600_WDT_RESET1_USB_B	(1 << 7)
+> +#define AST2600_WDT_RESET1_UHCI		(1 << 8)
+> +#define AST2600_WDT_RESET1_GRAPHICS	(1 << 9)
+> +#define AST2600_WDT_RESET1_CRT		(1 << 10)
+> +#define AST2600_WDT_RESET1_VIDEO	(1 << 11)
+> +#define AST2600_WDT_RESET1_HAC		(1 << 12)
+> +#define AST2600_WDT_RESET1_DP		(1 << 13)
+> +#define AST2600_WDT_RESET1_DP_MCU	(1 << 14)
+> +#define AST2600_WDT_RESET1_GP_MCU	(1 << 15)
+> +#define AST2600_WDT_RESET1_MAC0		(1 << 16)
+> +#define AST2600_WDT_RESET1_MAC1		(1 << 17)
+> +#define AST2600_WDT_RESET1_SDIO0	(1 << 18)
+> +#define AST2600_WDT_RESET1_JTAG0	(1 << 19)
+> +#define AST2600_WDT_RESET1_MCTP0	(1 << 20)
+> +#define AST2600_WDT_RESET1_MCTP1	(1 << 21)
+> +#define AST2600_WDT_RESET1_XDMA0	(1 << 22)
+> +#define AST2600_WDT_RESET1_XDMA1	(1 << 23)
+> +#define AST2600_WDT_RESET1_GPIO0	(1 << 24)
+> +#define AST2600_WDT_RESET1_RVAS		(1 << 25)
+> +
+> +#define AST2600_WDT_RESET1_DEFAULT 0x030f1ff1
+> +
+> +#define AST2600_WDT_RESET2_CPU		(1 << 0)
+> +#define AST2600_WDT_RESET2_SPI		(1 << 1)
+> +#define AST2600_WDT_RESET2_AHB2		(1 << 2)
+> +#define AST2600_WDT_RESET2_SLI2		(1 << 3)
+> +#define AST2600_WDT_RESET2_SOC_MISC1	(1 << 4)
+> +#define AST2600_WDT_RESET2_MAC2		(1 << 5)
+> +#define AST2600_WDT_RESET2_MAC3		(1 << 6)
+> +#define AST2600_WDT_RESET2_SDIO1	(1 << 7)
+> +#define AST2600_WDT_RESET2_JTAG1	(1 << 8)
+> +#define AST2600_WDT_RESET2_GPIO1	(1 << 9)
+> +#define AST2600_WDT_RESET2_MDIO		(1 << 10)
+> +#define AST2600_WDT_RESET2_LPC		(1 << 11)
+> +#define AST2600_WDT_RESET2_PECI		(1 << 12)
+> +#define AST2600_WDT_RESET2_PWM		(1 << 13)
+> +#define AST2600_WDT_RESET2_ADC		(1 << 14)
+> +#define AST2600_WDT_RESET2_FSI		(1 << 15)
+> +#define AST2600_WDT_RESET2_I2C		(1 << 16)
+> +#define AST2600_WDT_RESET2_I3C_GLOBAL	(1 << 17)
+> +#define AST2600_WDT_RESET2_I3C0		(1 << 18)
+> +#define AST2600_WDT_RESET2_I3C1		(1 << 19)
+> +#define AST2600_WDT_RESET2_I3C2		(1 << 20)
+> +#define AST2600_WDT_RESET2_I3C3		(1 << 21)
+> +#define AST2600_WDT_RESET2_I3C4		(1 << 22)
+> +#define AST2600_WDT_RESET2_I3C5		(1 << 23)
+> +#define AST2600_WDT_RESET2_ESPI		(1 << 26)
+> +
+> +#define AST2600_WDT_RESET2_DEFAULT 0x03fffff1
+> +
+> +#endif
+> -- 
+> 2.40.0.5.gf6e3b97ba6d2.dirty
