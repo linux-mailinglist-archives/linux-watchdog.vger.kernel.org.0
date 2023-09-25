@@ -2,265 +2,160 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11EF07ACE66
-	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Sep 2023 04:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6D97AD144
+	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Sep 2023 09:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231775AbjIYCnU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 24 Sep 2023 22:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
+        id S229874AbjIYHUS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 25 Sep 2023 03:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231720AbjIYCnU (ORCPT
+        with ESMTP id S230136AbjIYHUR (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 24 Sep 2023 22:43:20 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A68692;
-        Sun, 24 Sep 2023 19:43:12 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 707CF32009E2;
-        Sun, 24 Sep 2023 22:43:07 -0400 (EDT)
-Received: from imap50 ([10.202.2.100])
-  by compute6.internal (MEProxy); Sun, 24 Sep 2023 22:43:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1695609786; x=1695696186; bh=Uq
-        jDrarA+shRfC8ltMwHAr+TUFm7nNOSDNsd970tbLw=; b=RcK132xuzObTUxcJHj
-        mtGTHR8mL/CpJNmGrJByJFEQZ0Ifrln/vtjoUSEnPyumebLrZsOfpBz4CVzrqXL1
-        JSqtLwbn9Vuy/bwrvU/0/nvMvzQstLMrASo0YKkjPTq6+FOuFoGcDvnYcdMnRbdg
-        lnrGVRU/tp1sXO/kaUi2aGs0+v0REVCggPushe5k+id/VEH7trEfsBrzhgYqPN0t
-        Auov+5t7haL4VvAX+DOn0RmsOc7+QpVKrKIIoWsK9BvFvsIkkyWnjvhW3Klpcqmc
-        G9LnsUrwU/XHTCMG4clVWZOPq4h2cSdzN9Nq28nCdRQdBmKtCPhzKNcRs9QIWO6l
-        mncw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1695609786; x=1695696186; bh=UqjDrarA+shRf
-        C8ltMwHAr+TUFm7nNOSDNsd970tbLw=; b=b6SNUx6Zq9Bd/AlDRQxfxa630kKvx
-        wi3BsWPfm5OPxf+tK4hoafLUs+Hm71TpohijG9w+4AMtciNcPsROigv54FJMtlYl
-        046taGoiYYhNFg6GB6+frndhQggqUAexQoBmphd723CQ8AXZo4rz/YugZgBUxm9L
-        Q7P/1blq1Sqe31CIFsmS+a7baWPGCLajU61eeYRvX1li/Z//jAQ9ICipnqdY0L3P
-        34AbfD7nPTIJTCHcYvkF31u6HjGl2mMNLugkUKAtQckeKlGeQPGgThhiprveLibp
-        LHeie6Fhu9NHRWYinzta/snfiCzdcvBSvC3/rcx4iyVU7EM38svgFsAGQ==
-X-ME-Sender: <xms:ufMQZQwYYayUQhLi9Yn5f6270PhrGkYiwtYO0LTrkFg4Mi33iTSvHA>
-    <xme:ufMQZUQh-Ht4wo777KGBlXOBfb2JiandNG948u4Bot5c3OfScfGyyGRATqYD1deNM
-    kcMZXenB9fy580rFA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudelfedgieefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
-    ughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrdhiugdrrghuqeenucggtf
-    frrghtthgvrhhnpeekvdekjeekgfejudffteetgeejkeetteduvedtffdtledutdfhheev
-    feetkeeiteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrnhgurhgvfiesrghjrdhiugdrrghu
-X-ME-Proxy: <xmx:ufMQZSWamVBQ5SZlQlh3m3x79FXuTIZhC5gNJp3Tu51JsN9assMxtg>
-    <xmx:ufMQZehL48Yik-Qnd78EfYrN4SB0svmrgKI2NRDygVd3tQgD0RgMgw>
-    <xmx:ufMQZSCGHUtY1vZi9RxmRbNEEg35P5GKxtAat6WqB8c1q6e_ykR4ag>
-    <xmx:uvMQZaZc87wi0MoakXrq8nH4hs4cWEHOUTKF-JPKC0f8FuT9yDIb_A>
-Feedback-ID: idfb84289:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B7A451700090; Sun, 24 Sep 2023 22:43:05 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-761-gece9e40c48-fm-20230913.001-gece9e40c
+        Mon, 25 Sep 2023 03:20:17 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B326A10A
+        for <linux-watchdog@vger.kernel.org>; Mon, 25 Sep 2023 00:20:07 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b9d07a8d84so92927161fa.3
+        for <linux-watchdog@vger.kernel.org>; Mon, 25 Sep 2023 00:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695626406; x=1696231206; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bxM9GVR4VSyyuE43awaZA1Wf9nkVTXawgZ7CU1WHNlk=;
+        b=QHfa9thXAP8hbolUZ3uR7e+tTwQEAdB3+Ym8szSQSFnWqNyxNdIVEydIYtqslqTjmZ
+         97+NyqIIVufa5W3hTkTJ/r/JqCnSHqEVSsvHC0UecsVVknupUG6YkZFCKLlt82C4Jsy6
+         SWIfzuuVsinAxXydqfYwR+RSphaZQ5JXTFyyECYCM1Kkqs2+92xLcrJmyiTdbovBQ9+g
+         /yipWL1c0wbM27DlOE3HgajaSjMbHbrLB2n/2Zs9qC795Q9jCpF7okOhIByWAu1KF3Vd
+         sdGyhsqoIxm/AOB08hFSvZlBU4WkrUwZOdKkJQZlzJe2pdK96gxVhLSAIYHEXbpIq8KL
+         NIcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695626406; x=1696231206;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bxM9GVR4VSyyuE43awaZA1Wf9nkVTXawgZ7CU1WHNlk=;
+        b=XhRVxxj9AC0ij8CdLJMGPkNy1ESbWowhC8efoF0nO8czeqotPTNgsvkK7/uzacF0fT
+         ZAtyvJoUDkhk8U7MDK8Wpp+4chSOt+WzKOY3SFVlZpi3x86DfEgJLdt5PLqk0yp73J6g
+         pf6r2IfIDkG7/7ECjKn65Y9ot6EZbg/1h00Z6G332Mlgn7KUJY5nLXRtRpqaPB23n1GF
+         5rJGG0ETAc9A1YjOGED7+MLd36D8/OX/+ZWBnfKSSJpj+Drk4bVDxTJQ+q511kpvOArJ
+         3ynUuXaEQX+HBivSPLEowQ92QNxU1toC5dLGk3KkMTiB0uzwXCqYRHXdxsr866K1GvP2
+         Bgvg==
+X-Gm-Message-State: AOJu0YxCFoJMkSUcnEeJzGMdNWuBECyi5UnjPC0AKlHj1HYWH5OsGby4
+        AgUcBamTnqNKsaoNSIEyq6HwQw==
+X-Google-Smtp-Source: AGHT+IH9RYHbsNVG2GTkCHs4fYdFHNC+MasCDWLJCCpp7bAXAoYxyYMpn94cn7HTlmva8cvMQcpUoQ==
+X-Received: by 2002:a05:6512:2812:b0:503:1913:ed8e with SMTP id cf18-20020a056512281200b005031913ed8emr5445725lfb.61.1695626405907;
+        Mon, 25 Sep 2023 00:20:05 -0700 (PDT)
+Received: from [192.168.1.2] (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
+        by smtp.gmail.com with ESMTPSA id b11-20020ac2562b000000b0050096cc3ba1sm1722178lff.255.2023.09.25.00.20.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Sep 2023 00:20:05 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 25 Sep 2023 09:20:05 +0200
+Subject: [PATCH] watchdog: ixp4xx: Make sure restart always works
 MIME-Version: 1.0
-Message-Id: <6df088a6-75ab-42f2-ba39-3f155714ed2d@app.fastmail.com>
-In-Reply-To: <20230922104231.1434-5-zev@bewilderbeest.net>
-References: <20230922104231.1434-4-zev@bewilderbeest.net>
- <20230922104231.1434-5-zev@bewilderbeest.net>
-Date:   Mon, 25 Sep 2023 12:12:45 +0930
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     "Zev Weiss" <zev@bewilderbeest.net>,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        "Guenter Roeck" <linux@roeck-us.net>,
-        "Joel Stanley" <joel@jms.id.au>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Milton D. Miller II" <mdmii@outlook.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, openbmc@lists.ozlabs.org
-Cc:     "Eddie James" <eajames@linux.ibm.com>,
-        "Ivan Mikhaylov" <i.mikhaylov@yadro.com>,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: aspeed-wdt: Add aspeed,reset-mask
- property
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230925-ixp4xx-wdt-restart-v1-1-fe2b9b131dbf@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAKQ0EWUC/x3MPQqAMAxA4atIZgPaFv+uIg5qU82ikhYtSO9uc
+ fyG917wJEwehuIFoZs9n0dGXRaw7vOxEbLNBlUpXfXKIMfLxIiPDSjkwywBbbM41Zle162GHF5
+ CjuM/HaeUPpERByZkAAAA
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+X-Mailer: b4 0.12.3
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+The IXP4xx watchdog in early "A0" silicon is unreliable and
+cannot be registered, however for some systems such as the
+USRobotics USR8200 the watchdog is the only restart option,
+so implement a "dummy" watchdog that can only support restart
+in this case.
 
+Fixes: 1aea522809e6 ("watchdog: ixp4xx: Implement restart")
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+Other solutions like implementing a pure restart notifier
+callback catch in the driver is possible, but this method
+will minimize the amount of code and reuse infrastructure
+in the core.
+---
+ drivers/watchdog/ixp4xx_wdt.c | 28 +++++++++++++++++++++++++---
+ 1 file changed, 25 insertions(+), 3 deletions(-)
 
-On Fri, 22 Sep 2023, at 20:12, Zev Weiss wrote:
-> This property configures the Aspeed watchdog timer's reset mask, which
-> controls which peripherals are reset when the watchdog timer expires.
-> Some platforms require that certain devices be left untouched across a
-> reboot; aspeed,reset-mask can now be used to express such constraints.
->
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> ---
->  .../bindings/watchdog/aspeed-wdt.txt          | 18 +++-
->  include/dt-bindings/watchdog/aspeed-wdt.h     | 92 +++++++++++++++++++
->  2 files changed, 109 insertions(+), 1 deletion(-)
->  create mode 100644 include/dt-bindings/watchdog/aspeed-wdt.h
->
-> diff --git a/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt 
-> b/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
-> index a8197632d6d2..3208adb3e52e 100644
-> --- a/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
-> +++ b/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
-> @@ -47,7 +47,15 @@ Optional properties for AST2500-compatible watchdogs:
->  			   is configured as push-pull, then set the pulse
->  			   polarity to active-high. The default is active-low.
-> 
-> -Example:
-> +Optional properties for AST2500- and AST2600-compatible watchdogs:
-> + - aspeed,reset-mask: A bitmask indicating which peripherals will be reset if
-> +		      the watchdog timer expires.  On AST2500 this should be a
-> +		      single word defined using the AST2500_WDT_RESET_* macros;
-> +		      on AST2600 this should be a two-word array with the first
-> +		      word defined using the AST2600_WDT_RESET1_* macros and the
-> +		      second word defined using the AST2600_WDT_RESET2_* macros.
-> +
-> +Examples:
-> 
->  	wdt1: watchdog@1e785000 {
->  		compatible = "aspeed,ast2400-wdt";
-> @@ -55,3 +63,11 @@ Example:
->  		aspeed,reset-type = "system";
->  		aspeed,external-signal;
->  	};
-> +
-> +	#include <dt-bindings/watchdog/aspeed-wdt.h>
-> +	wdt2: watchdog@1e785040 {
-> +		compatible = "aspeed,ast2600-wdt";
-> +		reg = <0x1e785040 0x40>;
-> +		aspeed,reset-mask = <AST2600_WDT_RESET1_DEFAULT
-> +				     (AST2600_WDT_RESET2_DEFAULT & ~AST2600_WDT_RESET2_LPC)>;
-> +	};
+diff --git a/drivers/watchdog/ixp4xx_wdt.c b/drivers/watchdog/ixp4xx_wdt.c
+index 607ce4b8df57..c0bf03125ec8 100644
+--- a/drivers/watchdog/ixp4xx_wdt.c
++++ b/drivers/watchdog/ixp4xx_wdt.c
+@@ -105,6 +105,25 @@ static const struct watchdog_ops ixp4xx_wdt_ops = {
+ 	.owner = THIS_MODULE,
+ };
+ 
++/*
++ * The A0 version of the IXP422 had a bug in the watchdog making
++ * is useless, but we still need to use it to restart the system
++ * as it is the only way, so in this special case we register a
++ * "dummy" watchdog that doesn't really work, but will support
++ * the restart operation.
++ */
++static int ixp4xx_wdt_dummy(struct watchdog_device *wdd)
++{
++	return 0;
++}
++
++static const struct watchdog_ops ixp4xx_wdt_restart_only_ops = {
++	.start = ixp4xx_wdt_dummy,
++	.stop = ixp4xx_wdt_dummy,
++	.restart = ixp4xx_wdt_restart,
++	.owner = THIS_MODULE,
++};
++
+ static const struct watchdog_info ixp4xx_wdt_info = {
+ 	.options = WDIOF_KEEPALIVEPING
+ 		| WDIOF_MAGICCLOSE
+@@ -114,14 +133,17 @@ static const struct watchdog_info ixp4xx_wdt_info = {
+ 
+ static int ixp4xx_wdt_probe(struct platform_device *pdev)
+ {
++	static const struct watchdog_ops *iwdt_ops;
+ 	struct device *dev = &pdev->dev;
+ 	struct ixp4xx_wdt *iwdt;
+ 	struct clk *clk;
+ 	int ret;
+ 
+ 	if (!(read_cpuid_id() & 0xf) && !cpu_is_ixp46x()) {
+-		dev_err(dev, "Rev. A0 IXP42x CPU detected - watchdog disabled\n");
+-		return -ENODEV;
++		dev_err(dev, "Rev. A0 IXP42x CPU detected - only restart supported\n");
++		iwdt_ops = &ixp4xx_wdt_restart_only_ops;
++	} else {
++		iwdt_ops = &ixp4xx_wdt_ops;
+ 	}
+ 
+ 	iwdt = devm_kzalloc(dev, sizeof(*iwdt), GFP_KERNEL);
+@@ -141,7 +163,7 @@ static int ixp4xx_wdt_probe(struct platform_device *pdev)
+ 		iwdt->rate = IXP4XX_TIMER_FREQ;
+ 
+ 	iwdt->wdd.info = &ixp4xx_wdt_info;
+-	iwdt->wdd.ops = &ixp4xx_wdt_ops;
++	iwdt->wdd.ops = iwdt_ops;
+ 	iwdt->wdd.min_timeout = 1;
+ 	iwdt->wdd.max_timeout = U32_MAX / iwdt->rate;
+ 	iwdt->wdd.parent = dev;
 
-Rob has acked your current approach already, but I do wonder about an alternative that aligns more with the clock/reset/interrupt properties. Essentially, define a new generic watchdog property that is specified on the controllers to be reset by the watchdog (or even on just the watchdog node itself, emulating what you've proposed here):
+---
+base-commit: 0bb80ecc33a8fb5a682236443c1e740d5c917d1d
+change-id: 20230924-ixp4xx-wdt-restart-d6bf28493173
 
-watchdog-resets = <phandle index>;
+Best regards,
+-- 
+Linus Walleij <linus.walleij@linaro.org>
 
-The phandle links to the watchdog of interest, and the index specifies the controller associated with the configuration. It might even be useful to do:
-
-watchdog-resets = <phandle index enable>;
-
-"enable" could provide explicit control over whether somethings should be reset or not (as a way to prevent reset if the controller targeted by the provided index would otherwise be reset in accordance with the default reset value in the watchdog controller).
-
-The macros from the dt-bindings header can then use macros to name the indexes rather than define a mask tied to the register layout. The index may still in some way represent the mask position. This has the benefit of hiding the issue of one vs two configuration registers between the AST2500 and AST2600 while also allowing other controllers to exploit the binding (Nuvoton BMCs? Though maybe it's generalising too early?).
-
-It'd probably need a new function exported from the watchdog subsystem for the drivers to call through, though I don't think that's too much of a hurdle?
-
-Andrew
-
-> diff --git a/include/dt-bindings/watchdog/aspeed-wdt.h 
-> b/include/dt-bindings/watchdog/aspeed-wdt.h
-> new file mode 100644
-> index 000000000000..7ae6d84b2bd9
-> --- /dev/null
-> +++ b/include/dt-bindings/watchdog/aspeed-wdt.h
-> @@ -0,0 +1,92 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +
-> +#ifndef DT_BINDINGS_ASPEED_WDT_H
-> +#define DT_BINDINGS_ASPEED_WDT_H
-> +
-> +#define AST2500_WDT_RESET_CPU		(1 << 0)
-> +#define AST2500_WDT_RESET_COPROC	(1 << 1)
-> +#define AST2500_WDT_RESET_SDRAM		(1 << 2)
-> +#define AST2500_WDT_RESET_AHB		(1 << 3)
-> +#define AST2500_WDT_RESET_I2C		(1 << 4)
-> +#define AST2500_WDT_RESET_MAC0		(1 << 5)
-> +#define AST2500_WDT_RESET_MAC1		(1 << 6)
-> +#define AST2500_WDT_RESET_GRAPHICS	(1 << 7)
-> +#define AST2500_WDT_RESET_USB2_HOST_HUB	(1 << 8)
-> +#define AST2500_WDT_RESET_USB_HOST	(1 << 9)
-> +#define AST2500_WDT_RESET_HID_EHCI	(1 << 10)
-> +#define AST2500_WDT_RESET_VIDEO		(1 << 11)
-> +#define AST2500_WDT_RESET_HAC		(1 << 12)
-> +#define AST2500_WDT_RESET_LPC		(1 << 13)
-> +#define AST2500_WDT_RESET_SDIO		(1 << 14)
-> +#define AST2500_WDT_RESET_MIC		(1 << 15)
-> +#define AST2500_WDT_RESET_CRT		(1 << 16)
-> +#define AST2500_WDT_RESET_PWM		(1 << 17)
-> +#define AST2500_WDT_RESET_PECI		(1 << 18)
-> +#define AST2500_WDT_RESET_JTAG		(1 << 19)
-> +#define AST2500_WDT_RESET_ADC		(1 << 20)
-> +#define AST2500_WDT_RESET_GPIO		(1 << 21)
-> +#define AST2500_WDT_RESET_MCTP		(1 << 22)
-> +#define AST2500_WDT_RESET_XDMA		(1 << 23)
-> +#define AST2500_WDT_RESET_SPI		(1 << 24)
-> +#define AST2500_WDT_RESET_SOC_MISC	(1 << 25)
-> +
-> +#define AST2500_WDT_RESET_DEFAULT 0x023ffff3
-> +
-> +#define AST2600_WDT_RESET1_CPU		(1 << 0)
-> +#define AST2600_WDT_RESET1_SDRAM	(1 << 1)
-> +#define AST2600_WDT_RESET1_AHB		(1 << 2)
-> +#define AST2600_WDT_RESET1_SLI		(1 << 3)
-> +#define AST2600_WDT_RESET1_SOC_MISC0	(1 << 4)
-> +#define AST2600_WDT_RESET1_COPROC	(1 << 5)
-> +#define AST2600_WDT_RESET1_USB_A	(1 << 6)
-> +#define AST2600_WDT_RESET1_USB_B	(1 << 7)
-> +#define AST2600_WDT_RESET1_UHCI		(1 << 8)
-> +#define AST2600_WDT_RESET1_GRAPHICS	(1 << 9)
-> +#define AST2600_WDT_RESET1_CRT		(1 << 10)
-> +#define AST2600_WDT_RESET1_VIDEO	(1 << 11)
-> +#define AST2600_WDT_RESET1_HAC		(1 << 12)
-> +#define AST2600_WDT_RESET1_DP		(1 << 13)
-> +#define AST2600_WDT_RESET1_DP_MCU	(1 << 14)
-> +#define AST2600_WDT_RESET1_GP_MCU	(1 << 15)
-> +#define AST2600_WDT_RESET1_MAC0		(1 << 16)
-> +#define AST2600_WDT_RESET1_MAC1		(1 << 17)
-> +#define AST2600_WDT_RESET1_SDIO0	(1 << 18)
-> +#define AST2600_WDT_RESET1_JTAG0	(1 << 19)
-> +#define AST2600_WDT_RESET1_MCTP0	(1 << 20)
-> +#define AST2600_WDT_RESET1_MCTP1	(1 << 21)
-> +#define AST2600_WDT_RESET1_XDMA0	(1 << 22)
-> +#define AST2600_WDT_RESET1_XDMA1	(1 << 23)
-> +#define AST2600_WDT_RESET1_GPIO0	(1 << 24)
-> +#define AST2600_WDT_RESET1_RVAS		(1 << 25)
-> +
-> +#define AST2600_WDT_RESET1_DEFAULT 0x030f1ff1
-> +
-> +#define AST2600_WDT_RESET2_CPU		(1 << 0)
-> +#define AST2600_WDT_RESET2_SPI		(1 << 1)
-> +#define AST2600_WDT_RESET2_AHB2		(1 << 2)
-> +#define AST2600_WDT_RESET2_SLI2		(1 << 3)
-> +#define AST2600_WDT_RESET2_SOC_MISC1	(1 << 4)
-> +#define AST2600_WDT_RESET2_MAC2		(1 << 5)
-> +#define AST2600_WDT_RESET2_MAC3		(1 << 6)
-> +#define AST2600_WDT_RESET2_SDIO1	(1 << 7)
-> +#define AST2600_WDT_RESET2_JTAG1	(1 << 8)
-> +#define AST2600_WDT_RESET2_GPIO1	(1 << 9)
-> +#define AST2600_WDT_RESET2_MDIO		(1 << 10)
-> +#define AST2600_WDT_RESET2_LPC		(1 << 11)
-> +#define AST2600_WDT_RESET2_PECI		(1 << 12)
-> +#define AST2600_WDT_RESET2_PWM		(1 << 13)
-> +#define AST2600_WDT_RESET2_ADC		(1 << 14)
-> +#define AST2600_WDT_RESET2_FSI		(1 << 15)
-> +#define AST2600_WDT_RESET2_I2C		(1 << 16)
-> +#define AST2600_WDT_RESET2_I3C_GLOBAL	(1 << 17)
-> +#define AST2600_WDT_RESET2_I3C0		(1 << 18)
-> +#define AST2600_WDT_RESET2_I3C1		(1 << 19)
-> +#define AST2600_WDT_RESET2_I3C2		(1 << 20)
-> +#define AST2600_WDT_RESET2_I3C3		(1 << 21)
-> +#define AST2600_WDT_RESET2_I3C4		(1 << 22)
-> +#define AST2600_WDT_RESET2_I3C5		(1 << 23)
-> +#define AST2600_WDT_RESET2_ESPI		(1 << 26)
-> +
-> +#define AST2600_WDT_RESET2_DEFAULT 0x03fffff1
-> +
-> +#endif
-> -- 
-> 2.40.0.5.gf6e3b97ba6d2.dirty
