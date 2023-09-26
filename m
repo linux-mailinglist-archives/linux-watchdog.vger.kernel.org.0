@@ -2,70 +2,67 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7B87AED18
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Sep 2023 14:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07957AED2B
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Sep 2023 14:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234363AbjIZMpX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 26 Sep 2023 08:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
+        id S234036AbjIZMrt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 26 Sep 2023 08:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233754AbjIZMpW (ORCPT
+        with ESMTP id S233739AbjIZMrs (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 26 Sep 2023 08:45:22 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECFDC9;
-        Tue, 26 Sep 2023 05:45:15 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-35142c4cbbdso11101845ab.0;
-        Tue, 26 Sep 2023 05:45:15 -0700 (PDT)
+        Tue, 26 Sep 2023 08:47:48 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2DCC9;
+        Tue, 26 Sep 2023 05:47:42 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-35156de5404so2247335ab.2;
+        Tue, 26 Sep 2023 05:47:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695732315; x=1696337115; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1695732461; x=1696337261; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=u8GtOh0Ea37C8rlqo/82aa01wybzYgEjYTXnLH9cgHo=;
-        b=FP08doYd+cMWA49N6cyDx8aRkrh9Cl3pM3Nq+uh4nUnQhXXwGLNJ9ucCAheUUZWvxW
-         1+Gm/ZUR7IEA3RvXhrF3JyrsHWHXqyRodQxvwRNrnJsQosp2PalX1FWkCRKUI5DUi8np
-         g72MWIQMlQI3xe/pAUkYW713YsySY+ThYUrl7ez7mLcVwuc4C2E0VTYOtKYWld3yHUoO
-         YSqhJl10KVQrzGJsKSY/KojSMg91tD4Gec/LmuaHBk1L+3R0BQQFW4KuNr+7yJ5ArAgx
-         agPfU/SFychya6YwG+SP53o8dGmxe4EaYrc7ZqeCy4z46fWa/ijuOLV7jyjba9OpTEjn
-         foyw==
+        bh=5Po1UgbM+4WAxANqKIvCI07RBqF+k+8sm8Tm1iyFobo=;
+        b=c4ZUwCZaNo5N6w+GjyQPflRcKNOZmPNgevnUDvQDSQhtfiw+Di8xSJhoNIkQ2vOE9g
+         FrbBCr4cHKKov0/wIWBqP5HN6BigDMbOej5AtED9f74Whj2AKRajI4Su1BzqowZsJ6sn
+         fi7AXjOSFkfQ+dxouzck5xqT77tgft39HyihTPa9hmcUkLMuzyzknzrBCJHu2Not5PXy
+         fvw1bZt1JjS22m6L+S3NZoYh/nZegved2FwMRafbkueAuGA+89nhsH8SAvYl7jzPAA6C
+         YZRcZgGoMcozW8MvJDokSwtJsDjIWOhL4qc50hEWa4HktmAFB5m+ARXTor+vFpb3NyS8
+         p5OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695732315; x=1696337115;
+        d=1e100.net; s=20230601; t=1695732461; x=1696337261;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=u8GtOh0Ea37C8rlqo/82aa01wybzYgEjYTXnLH9cgHo=;
-        b=ewU3uvMVhohLoxpClV6cxMoQjFI1FeY6R9s8azgzxI1yQlIqqAwuIAC9RhELOJKzMA
-         95eCo7uL/7M6lA+o5JUsCZILVKcxTMbfCpxMXZq0bjqyv4pAvXnbpzUDPWnUdu8ne7ze
-         Tr5wkLNruRRaLtBWyBAdLEOyW7bUJRbBCLtc45Urs3UDGrp6rcVwpUPs/RBlCR2JUcB9
-         MD6tTEyTNgv47qplvZ1T8C8oAcYwlR5GOHcVay0JQ6p0nOfFGFBkPhutFp0QYPuWAk7H
-         kPM+PifKAL3GGvPsy4QgX0iyrfMoOfTYgl3PJLaK3pOUA3nZvTBSd3VXs5GfCj7h//km
-         BiiA==
-X-Gm-Message-State: AOJu0YykIMqSAAtOZ/Zi/QbVF4KR3l9J7M00i09D0ltp6eAhVIex1RqU
-        L3V77oG4KFu3xGH587xfEWA3+1OVKYU=
-X-Google-Smtp-Source: AGHT+IGOkGqvY6ZKVWlX8YrrjA6IKC/U4gLUzFzY2FohU7Dfm+rQoM3VnISIWiO8CisnCPcCLwc0nA==
-X-Received: by 2002:a05:6e02:2149:b0:34a:a4a5:3f93 with SMTP id d9-20020a056e02214900b0034aa4a53f93mr12753468ilv.5.1695732315064;
-        Tue, 26 Sep 2023 05:45:15 -0700 (PDT)
+        bh=5Po1UgbM+4WAxANqKIvCI07RBqF+k+8sm8Tm1iyFobo=;
+        b=l+f86nPrCojFt33CR4Em0NZxa5EznkPK+tElF2d8rnVW/vAeSStYXVcLKQhEAJ06dU
+         ya9AkSMBAk8cpeoII0vdsxvNzMj8qpM1ovmhPQKkkbLTlNDVIdRLSqOcroJuss77yoEs
+         VljGqOUzX2tjhUcNg0HiABD+mYica1rKuvtg1BGGJGRMM8APrDEgDGHAjlDl4OfZxoC6
+         +bLvGqbvAVkqn6uZNuRFDe2G57d81tR5L/+7QytMz5pOMIqUKaajPFKfNvnd9Vg+HPpG
+         BI1CghzWkbb7l+DdznPOVxFkhOO9iBRUDW4zZ9wMohA3y6gOj2G6eJU09lbKW2dyN5uw
+         DHZw==
+X-Gm-Message-State: AOJu0YzJ6x9Z65k3cNIW1HY9r+AaVZGR4Te1edOkJfgsCGc87CpTDKie
+        Ayml+mUO7IzC6QPhsjxDRKE=
+X-Google-Smtp-Source: AGHT+IE/WxnBOFt31/pepOYHNbOwk2m1BpvlHdCdIzuQmwCrzwSbMwEafgnS8C67S0AtJ616UQu0mg==
+X-Received: by 2002:a05:6e02:1092:b0:351:1311:c282 with SMTP id r18-20020a056e02109200b003511311c282mr8710113ilj.9.1695732461382;
+        Tue, 26 Sep 2023 05:47:41 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a17-20020a056638005100b0043a180a7a94sm3321904jap.121.2023.09.26.05.45.14
+        by smtp.gmail.com with ESMTPSA id l14-20020a056e021c0e00b0035129b9c61bsm2230212ilh.45.2023.09.26.05.47.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Sep 2023 05:45:14 -0700 (PDT)
+        Tue, 26 Sep 2023 05:47:41 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 26 Sep 2023 05:45:13 -0700
+Date:   Tue, 26 Sep 2023 05:47:39 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Darren Hart <darren@os.amperecomputing.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Vanshidhar Konda <vanshikonda@os.amperecomputing.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
-Subject: Re: [PATCH] sbsa_gwdt: Calculate timeout with 64-bit math
-Message-ID: <bcc41311-075c-44fe-b0f7-30564d7ac58c@roeck-us.net>
-References: <7d1713c5ffab19b0f3de796d82df19e8b1f340de.1695286124.git.darren@os.amperecomputing.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Subject: Re: [PATCH v1 1/1] watchdog: gpio_wdt: Make use of device properties
+Message-ID: <09644d52-3023-42ce-9106-1c625c49790d@roeck-us.net>
+References: <20230925123543.2945710-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7d1713c5ffab19b0f3de796d82df19e8b1f340de.1695286124.git.darren@os.amperecomputing.com>
+In-Reply-To: <20230925123543.2945710-1-andriy.shevchenko@linux.intel.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -77,59 +74,78 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Thu, Sep 21, 2023 at 02:02:36AM -0700, Darren Hart wrote:
-> Commit abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
-> introduced new timer math for watchdog revision 1 with the 48 bit offset
-> register.
+On Mon, Sep 25, 2023 at 03:35:43PM +0300, Andy Shevchenko wrote:
+> Convert the module to be property provider agnostic and allow
+> it to be used on non-OF platforms.
 > 
-> The gwdt->clk and timeout are u32, but the argument being calculated is
-> u64. Without a cast, the compiler performs u32 operations, truncating
-> intermediate steps, resulting in incorrect values.
+> Include mod_devicetable.h explicitly to replace the dropped of.h
+> which included mod_devicetable.h indirectly.
 > 
-> A watchdog revision 1 implementation with a gwdt->clk of 1GHz and a
-> timeout of 600s writes 3647256576 to the one shot watchdog instead of
-> 300000000000, resulting in the watchdog firing in 3.6s instead of 600s.
-> 
-> Force u64 math by casting the first argument (gwdt->clk) as a u64. Make
-> the order of operations explicit with parenthesis.
-> 
-> Fixes: abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
-> Reported-by: Vanshidhar Konda <vanshikonda@os.amperecomputing.com>
-> Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: linux-watchdog@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: <stable@vger.kernel.org> # 5.14.x
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/sbsa_gwdt.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/watchdog/gpio_wdt.c | 16 +++++++---------
+>  1 file changed, 7 insertions(+), 9 deletions(-)
 > 
-> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
-> index fd3cfdda4949..76527324b63c 100644
-> --- a/drivers/watchdog/sbsa_gwdt.c
-> +++ b/drivers/watchdog/sbsa_gwdt.c
-> @@ -153,14 +153,14 @@ static int sbsa_gwdt_set_timeout(struct watchdog_device *wdd,
->  	timeout = clamp_t(unsigned int, timeout, 1, wdd->max_hw_heartbeat_ms / 1000);
+> diff --git a/drivers/watchdog/gpio_wdt.c b/drivers/watchdog/gpio_wdt.c
+> index 0923201ce874..a7b814ea740b 100644
+> --- a/drivers/watchdog/gpio_wdt.c
+> +++ b/drivers/watchdog/gpio_wdt.c
+> @@ -5,12 +5,13 @@
+>   * Author: 2013, Alexander Shiyan <shc_work@mail.ru>
+>   */
 >  
->  	if (action)
-> -		sbsa_gwdt_reg_write(gwdt->clk * timeout, gwdt);
-> +		sbsa_gwdt_reg_write((u64)gwdt->clk * timeout, gwdt);
->  	else
->  		/*
->  		 * In the single stage mode, The first signal (WS0) is ignored,
->  		 * the timeout is (WOR * 2), so the WOR should be configured
->  		 * to half value of timeout.
->  		 */
-> -		sbsa_gwdt_reg_write(gwdt->clk / 2 * timeout, gwdt);
-> +		sbsa_gwdt_reg_write(((u64)gwdt->clk / 2) * timeout, gwdt);
+> -#include <linux/err.h>
+>  #include <linux/delay.h>
+> -#include <linux/module.h>
+> +#include <linux/err.h>
+>  #include <linux/gpio/consumer.h>
+> -#include <linux/of.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/property.h>
+>  #include <linux/watchdog.h>
 >  
->  	return 0;
->  }
+>  static bool nowayout = WATCHDOG_NOWAYOUT;
+> @@ -106,7 +107,6 @@ static const struct watchdog_ops gpio_wdt_ops = {
+>  static int gpio_wdt_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> -	struct device_node *np = dev->of_node;
+>  	struct gpio_wdt_priv *priv;
+>  	enum gpiod_flags gflags;
+>  	unsigned int hw_margin;
+> @@ -119,7 +119,7 @@ static int gpio_wdt_probe(struct platform_device *pdev)
+>  
+>  	platform_set_drvdata(pdev, priv);
+>  
+> -	ret = of_property_read_string(np, "hw_algo", &algo);
+> +	ret = device_property_read_string(dev, "hw_algo", &algo);
+>  	if (ret)
+>  		return ret;
+>  	if (!strcmp(algo, "toggle")) {
+> @@ -136,16 +136,14 @@ static int gpio_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(priv->gpiod))
+>  		return PTR_ERR(priv->gpiod);
+>  
+> -	ret = of_property_read_u32(np,
+> -				   "hw_margin_ms", &hw_margin);
+> +	ret = device_property_read_u32(dev, "hw_margin_ms", &hw_margin);
+>  	if (ret)
+>  		return ret;
+>  	/* Disallow values lower than 2 and higher than 65535 ms */
+>  	if (hw_margin < 2 || hw_margin > 65535)
+>  		return -EINVAL;
+>  
+> -	priv->always_running = of_property_read_bool(np,
+> -						     "always-running");
+> +	priv->always_running = device_property_read_bool(dev, "always-running");
+>  
+>  	watchdog_set_drvdata(&priv->wdd, priv);
+>  
 > -- 
-> 2.41.0
+> 2.40.0.1.gaa8946217a0b
 > 
