@@ -2,156 +2,75 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F837B402B
-	for <lists+linux-watchdog@lfdr.de>; Sat, 30 Sep 2023 13:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD3F7B4C38
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Oct 2023 09:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjI3L6V (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 30 Sep 2023 07:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S235626AbjJBHGp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 2 Oct 2023 03:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjI3L6V (ORCPT
+        with ESMTP id S229519AbjJBHGo (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 30 Sep 2023 07:58:21 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10640D6;
-        Sat, 30 Sep 2023 04:58:19 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-3513c435465so3772715ab.0;
-        Sat, 30 Sep 2023 04:58:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696075098; x=1696679898; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U4B8cqh/E8dvMkxyYDZyl7ZQqxhx7sl7i0aMKMFX1cc=;
-        b=YyeaufnBSFIDMckrtNx7qIhq2XMXZD63Z7NQKyOvypoc6LquZDwSYKvZtqOhYjt5Zb
-         6BE8Cn8pl0hNZgWTh9ZwHowNLaDClDZW+cpq6TsKhvo72Rwi8X/s7uemZkac1FaXXd5d
-         i8QUz6gBb+6HAfufAeZ3v6MYLtXwB6BEkKdHx2PI2gdTcyZBUG0cTWYnm27GYmdjSoHN
-         zElWlPg2t2eH0OxK959TOTbPnnR3L+tAMU3j49qJeKvmZcXwgJzP8n3DRiKlnhAYnF7W
-         tqbfqjGtmxQgkPeS6pMKnhFRju/UrnzKddgd/zwqGQP9cFZUu2VcjhhFZd7ADKJAbkUB
-         hnrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696075098; x=1696679898;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U4B8cqh/E8dvMkxyYDZyl7ZQqxhx7sl7i0aMKMFX1cc=;
-        b=dEAHuhGMnB7GKlnsIbRjrA7uAwlEZVwryU9517HobXtdafSD7yxgHuLV7s+NeQZjDk
-         tVnE51VpzI9C1ZCbTWELxvCM4BKO1BrDGqirDiS2ib2jlKk8lGB6ua3vAB5r9v5C8ll0
-         S6PQf4EpfqwBqEsLxOYuDxreHqy5bhab4k5O6KVjUKmyc/pKayZ++ARa1dAvuv7pO5Ct
-         BxsPXIe22+GR/Kj+XtBI97VguHDxsaCXDBTXffYHd8IFN0+XwyItoHutktkic5fzKiHm
-         5c2QP56R6nRKbTRDRXx/H+77YfLhUknWTZ1VQ7zvXsdyQC9v8sqrL4/H26yTp/juodoE
-         XmbA==
-X-Gm-Message-State: AOJu0YyRM2V6668r9f5liQZoOiXgPDm3A7WIAsXjaG/ntr73XuvVOG+H
-        tuXtCgSMi8+p0yOjOgEvyJXcb5kCmjo=
-X-Google-Smtp-Source: AGHT+IFL9BXm3OjXoEc4q3qMpme4S27UurE4+d4CiPM6lBLR5DAmOgKh529unCKKqYs5hUwLo0WcvA==
-X-Received: by 2002:a05:6e02:974:b0:352:682c:1b91 with SMTP id q20-20020a056e02097400b00352682c1b91mr2764724ilt.4.1696075098275;
-        Sat, 30 Sep 2023 04:58:18 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q14-20020a056e02078e00b003514edd0415sm3330299ils.67.2023.09.30.04.58.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Sep 2023 04:58:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 30 Sep 2023 04:58:15 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     j@jannau.net
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: apple: Deactivate on suspend
-Message-ID: <e0a6f9f3-b472-4fda-829c-5d8f29234a4f@roeck-us.net>
-References: <20230930-apple-watchdog-suspend-v1-1-1998c0be9fd7@jannau.net>
+        Mon, 2 Oct 2023 03:06:44 -0400
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 02 Oct 2023 00:06:41 PDT
+Received: from mta-65-227.siemens.flowmailer.net (mta-65-227.siemens.flowmailer.net [185.136.65.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56CD49F
+        for <linux-watchdog@vger.kernel.org>; Mon,  2 Oct 2023 00:06:41 -0700 (PDT)
+Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 202310020705368fcf151d817ce2a810
+        for <linux-watchdog@vger.kernel.org>;
+        Mon, 02 Oct 2023 09:05:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=jan.kiszka@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=/IgVjBUMAeo/4uEi1m0I1ujdMkN59bp7lD5QlXFXGBc=;
+ b=YjdOO2ISq/3orS9BPOGhZipAXksXDh/yvUzxC4F5Yc4BgSY0zqw8uAeJCwJ6fWIlOGQnRJ
+ 5njo0c0IK3uaxxqdjNAYpNx2MTzgGoAFHxK53GhWAh26KoEr/djLWwOo7SEwtXsOC+hRDRfw
+ jYlhsCPVhHkf98Qd1gCIZGPaPj64c=;
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+To:     stable@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-watchdog@vger.kernel.org,
+        =?UTF-8?q?Daniel=20P=20=2E=20Berrang=C3=A9?= <berrange@redhat.com>,
+        Malin Jonsson <malin.jonsson@ericsson.com>
+Subject: [PATCH 0/2] [5.15, 5.10, 5,4] watchdog: iTCO: Backport of handle_boot_enabled=0 fix
+Date:   Mon,  2 Oct 2023 09:05:33 +0200
+Message-Id: <cover.1696230335.git.jan.kiszka@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230930-apple-watchdog-suspend-v1-1-1998c0be9fd7@jannau.net>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-294854:519-21489:flowmailer
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Sat, Sep 30, 2023 at 10:19:26AM +0200, Janne Grunau via B4 Relay wrote:
-> From: Janne Grunau <j@jannau.net>
-> 
-> The watchdog remains active after putting the system into suspend. Add
-> PM callbacks to deactivate the watchdog on suspend an re-activate it on
-> resume.
-> 
-> Signed-off-by: Janne Grunau <j@jannau.net>
-> ---
->  drivers/watchdog/apple_wdt.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
-> 
-> diff --git a/drivers/watchdog/apple_wdt.c b/drivers/watchdog/apple_wdt.c
-> index eddeb0fede89..2167e0ba705e 100644
-> --- a/drivers/watchdog/apple_wdt.c
-> +++ b/drivers/watchdog/apple_wdt.c
-> @@ -173,6 +173,8 @@ static int apple_wdt_probe(struct platform_device *pdev)
->  	if (!wdt->clk_rate)
->  		return -EINVAL;
->  
-> +	platform_set_drvdata(pdev, wdt);
-> +
->  	wdt->wdd.ops = &apple_wdt_ops;
->  	wdt->wdd.info = &apple_wdt_info;
->  	wdt->wdd.max_timeout = U32_MAX / wdt->clk_rate;
-> @@ -190,6 +192,28 @@ static int apple_wdt_probe(struct platform_device *pdev)
->  	return devm_watchdog_register_device(dev, &wdt->wdd);
->  }
->  
-> +static int __maybe_unused apple_wdt_resume(struct device *dev)
-> +{
-> +	struct apple_wdt *wdt = dev_get_drvdata(dev);
-> +
-> +	if (watchdog_active(&wdt->wdd) || watchdog_hw_running(&wdt->wdd))
-> +		apple_wdt_start(&wdt->wdd);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused apple_wdt_suspend(struct device *dev)
-> +{
-> +	struct apple_wdt *wdt = dev_get_drvdata(dev);
-> +
-> +	if (watchdog_active(&wdt->wdd) || watchdog_hw_running(&wdt->wdd))
-> +		apple_wdt_stop(&wdt->wdd);
-> +
-> +	return 0;
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(apple_wdt_pm_ops, apple_wdt_suspend, apple_wdt_resume);
+This suggests a commit (and a follow-up fix for it) from 5.16+ for stable
+because it fixes the usage of watchdog.handle_boot_enabled=0 for iTCO,
+closing a monitoring gap in OTA update scenarios.
 
-Comments above that define say
+These patches are applicable to and have been tested with 5.15, 5.10 and
+5.4 stable heads.
 
-/* Deprecated. Use DEFINE_SIMPLE_DEV_PM_OPS() instead. */
+Jan
 
-and with that the __maybe_unused is no longer necessary.
+Cc: Malin Jonsson <malin.jonsson@ericsson.com>
 
-> +
->  static const struct of_device_id apple_wdt_of_match[] = {
->  	{ .compatible = "apple,wdt" },
->  	{},
-> @@ -200,6 +224,7 @@ static struct platform_driver apple_wdt_driver = {
->  	.driver = {
->  		.name = "apple-watchdog",
->  		.of_match_table = apple_wdt_of_match,
-> +		.pm = pm_sleep_ptr(&apple_wdt_pm_ops),
->  	},
->  	.probe = apple_wdt_probe,
->  };
-> 
-> ---
-> base-commit: 0bb80ecc33a8fb5a682236443c1e740d5c917d1d
-> change-id: 20230930-apple-watchdog-suspend-7f73831130fb
-> 
-> Best regards,
-> -- 
-> Janne Grunau <j@jannau.net>
-> 
+Mika Westerberg (2):
+  watchdog: iTCO_wdt: No need to stop the timer in probe
+  watchdog: iTCO_wdt: Set NO_REBOOT if the watchdog is not already
+    running
+
+ drivers/watchdog/iTCO_wdt.c | 26 +++++++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
+
+-- 
+2.35.3
+
