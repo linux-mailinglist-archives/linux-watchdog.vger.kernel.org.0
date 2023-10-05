@@ -2,60 +2,60 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2505C7BA5DB
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Oct 2023 18:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE847BA5D8
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Oct 2023 18:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232570AbjJEQUo (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 5 Oct 2023 12:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
+        id S241775AbjJEQUk (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 5 Oct 2023 12:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242532AbjJEQSM (ORCPT
+        with ESMTP id S242546AbjJEQSO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 5 Oct 2023 12:18:12 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E57A5C9
-        for <linux-watchdog@vger.kernel.org>; Thu,  5 Oct 2023 09:07:53 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-538e8eca9c1so2039784a12.3
-        for <linux-watchdog@vger.kernel.org>; Thu, 05 Oct 2023 09:07:52 -0700 (PDT)
+        Thu, 5 Oct 2023 12:18:14 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A433CE16
+        for <linux-watchdog@vger.kernel.org>; Thu,  5 Oct 2023 09:08:15 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-536b39daec1so2015317a12.2
+        for <linux-watchdog@vger.kernel.org>; Thu, 05 Oct 2023 09:08:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696522071; x=1697126871; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1696522093; x=1697126893; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=A9d7j0cYZDsIK9/MC/sZKybXO+oQ0zJyvFJ3Yr4FRco=;
-        b=N3tWq/5w6PYkmVxLN0+/E4dQ+Ch2UbQy8drKpdpMv/BS/DhIaZ+cs2rD//GrgjxczL
-         zKGJWr2yzYZyDOwAQtkZTKflAYBuCOovDBRbjG1ODUGBKB9FQVM9pEyTCQDo7jQn8QZI
-         C51OkE1Pmk+bRR9hxGPL4A5hpLpbOvMrzPF68b3SRBFbCQil9OAhvQZZ758vxwsnh7ag
-         XBCoaR+0qI9EgbEIO4q254iLlylBSbBdvWWn6Mr6nBd9VTBV+703aL7I8ExeH3qFSKti
-         0DW37XBjoENo8Ot1buflEVmHJYj2UfH5ulcB4cLeF0qb6RDVbgVeFf7hEwthhlc4uVsu
-         7qaw==
+        bh=uI05/q5mcVCOgeH4iLAoYvKVHId2bMB8DvjW9ucdTxg=;
+        b=xmQlKDeLEIq8wH0jlTwIYMtzDx2uFJWHGhAhiHCwvHnBevcj/FRDwt9D7TtHlT1qAE
+         L499pzEQegPmEFD5+EG9gLc2ihQlZfox53M0dNXNeRiNGBOjdZSsqeHE1wJe4DJkklEj
+         ckr72IHv4Gqb48emSMsKHFox6qNtgn+Po+EfPa7JZrCItNVQli9MQogSw/lygSJ55uGa
+         MLfMfH8+E2dKu9eTEcwEBq1+sZLUtvNQv7eiBteCePXwLWkuXeDl/KNrjk8SXAKVTFD2
+         P7n9SNlpuO+sFUB4L+6p3/8fCGf7SJFUw/nlKWEb/5lwt/Cu9vFbyxvfgEw8QgpscKuo
+         eiHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696522071; x=1697126871;
+        d=1e100.net; s=20230601; t=1696522093; x=1697126893;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A9d7j0cYZDsIK9/MC/sZKybXO+oQ0zJyvFJ3Yr4FRco=;
-        b=NCa5dyyRSwRsT2jLcROYghLE2RKh4yuDvDaUDW0nWFJdnsRkrZ58K9U+gNtjpJrfGA
-         J+p69JmfYiCPCh7r2w/9Y0yAYXB1JIsK7w6+xy1LWOHn7aT92Dct8xabCU70O0schPH7
-         QtJkjEEUEYhNg6zwN7CquQy9sYfc2w3LhvmWSejEW8LIqceGdVzb8uiMEz1+SIu1kuBA
-         LFbQWpDxAmlITH7Lvwd+abMPwlBZBxEkNTKn8v5Nuy+OGCSDIMO23RTJxBNruq+JVUCU
-         klX7SzbTCcOMNNcB+pENEVmCkxnFnHDc50eUy4+qAXsowzOLHrib6s+eQ46KUQ0EGyuB
-         dlvA==
-X-Gm-Message-State: AOJu0Yx1pUustaNht80tKmiXL9MHLNF/zrATfSoN10H7MuOwo++yuLV2
-        ys1Lw8vsZcvtBQI+1+eIFooJ+Q==
-X-Google-Smtp-Source: AGHT+IFnG+SZs3IDSCXOJSAJ+vJQT9juwlVzYZDKjmMBVRNUOXbrO3Ff4JPb47IziseOqAiusbxhTQ==
-X-Received: by 2002:aa7:c6c4:0:b0:532:ec54:bfff with SMTP id b4-20020aa7c6c4000000b00532ec54bfffmr4972794eds.16.1696522071287;
-        Thu, 05 Oct 2023 09:07:51 -0700 (PDT)
+        bh=uI05/q5mcVCOgeH4iLAoYvKVHId2bMB8DvjW9ucdTxg=;
+        b=kJLu9tOx2oo8i9PTGnD1TOxznsIb22FCI/V54Jv6BOTWqIYT2fVbk57DKcJOinNfY8
+         PsUa92N3L6I/1hW9H/NchJ5IhtqlMwdrIy6wwFlqySF68kU4zvHcZ7OmvUWowyt8WRQs
+         WZk1yGVnUvKpy3m1qPQFd0xpkOe2ce8oXKu/EbT/incoMVxBccECdFHP03fR4X8p6EoK
+         VlCSUpNleGZhO0Ua8xv7Lq8h+gCCyV6DvG9CXZT4wdU71DwzHhQx6p9q64cfOGxXZ3HF
+         C/O+UDh19uJDv+ygp3UE92AGVV9ZupaDqDCaRFZeKU5wh/37m9y9AZKMF0CM/DRLWkO3
+         4gsA==
+X-Gm-Message-State: AOJu0Yzvbx27evob+c/Xot+/17FJZLSeFZNupA0ruhwqVVrrEn9agrX1
+        22e43rIqSKa2Rj69NJ5EVsy8zQ==
+X-Google-Smtp-Source: AGHT+IGfAG67LY1/H1huLH8l0uFHwS0gFArke2lGS2nKxaeBBfRyncv8+kwP9ayMFA0j7hUihIWfVA==
+X-Received: by 2002:a05:6402:134a:b0:534:63e:d0b7 with SMTP id y10-20020a056402134a00b00534063ed0b7mr5966839edw.23.1696522092871;
+        Thu, 05 Oct 2023 09:08:12 -0700 (PDT)
 Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id n19-20020a056402515300b0053495596f42sm1278344edd.30.2023.10.05.09.07.49
+        by smtp.gmail.com with ESMTPSA id n19-20020a056402515300b0053495596f42sm1278344edd.30.2023.10.05.09.08.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Oct 2023 09:07:50 -0700 (PDT)
-Message-ID: <f997c21d-d85b-4ad1-ad5b-999524fc72ac@linaro.org>
-Date:   Thu, 5 Oct 2023 18:07:48 +0200
+        Thu, 05 Oct 2023 09:08:12 -0700 (PDT)
+Message-ID: <ea3e9b01-0698-42b2-b702-3dd001f237b3@linaro.org>
+Date:   Thu, 5 Oct 2023 18:08:10 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/21] dt-bindings: soc: google: exynos-sysreg: add
- dedicated SYSREG compatibles to GS101
+Subject: Re: [PATCH 05/21] dt-bindings: watchdog: Document Google gs101 &
+ gs201 watchdog bindings
 Content-Language: en-US
 To:     Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
@@ -70,7 +70,7 @@ Cc:     tudor.ambarus@linaro.org, andre.draszik@linaro.org,
         linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
 References: <20231005155618.700312-1-peter.griffin@linaro.org>
- <20231005155618.700312-5-peter.griffin@linaro.org>
+ <20231005155618.700312-6-peter.griffin@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -116,7 +116,7 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231005155618.700312-5-peter.griffin@linaro.org>
+In-Reply-To: <20231005155618.700312-6-peter.griffin@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -130,40 +130,32 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 05/10/2023 17:56, Peter Griffin wrote:
-> GS101 has three different SYSREG controllers, add dedicated
-> compatibles for them to the documentation.
+> Add the "google,gs101-wdt" and "google,gs201-wdt" compatibles to the
+> dt-schema documentation.
+> 
+> gs101 SoC has two CPU clusters and each cluster has its own dedicated
+> watchdog timer (similar to exynos850 and exynosautov9 SoCs).
+> 
+> These WDT instances are controlled using different bits in PMU
+> registers.
 > 
 > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 > ---
->  .../bindings/soc/samsung/samsung,exynos-sysreg.yaml        | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  .../devicetree/bindings/watchdog/samsung-wdt.yaml      | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> index 163e912e9cad..02f580d6489b 100644
-> --- a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> +++ b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
-> @@ -50,6 +50,13 @@ properties:
->                - samsung,exynosautov9-peric1-sysreg
->            - const: samsung,exynosautov9-sysreg
->            - const: syscon
-> +      - items:
-> +          - enum:
-> +              - google,gs101-peric0-sysreg
-> +              - google,gs101-peric1-sysreg
-> +              - google,gs101-apm-sysreg
-> +          - const: google,gs101-sysreg
+> diff --git a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
+> index 8fb6656ba0c2..30f5949037fc 100644
+> --- a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
+> @@ -24,6 +24,8 @@ properties:
+>        - samsung,exynos7-wdt                   # for Exynos7
+>        - samsung,exynos850-wdt                 # for Exynos850
+>        - samsung,exynosautov9-wdt              # for Exynosautov9
+> +      - google,gs101-wdt                      # for Google gs101
+> +      - google,gs201-wdt                      # for Google gs101
 
-Please drop this one compatible. Exynos has it only for backwards
-compatibility.
-
-Also, please put entire list ("items") before such entry for
-samsung,exynos5433-sysreg, so everything is more-or-less ordered
-alphabetically, by the fallback compatible.
-
-> +          - const: syscon
->  
->    reg:
->      maxItems: 1
+Alphanumerical order.
 
 Best regards,
 Krzysztof
