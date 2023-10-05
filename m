@@ -2,431 +2,176 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04107BA0A3
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Oct 2023 16:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B739D7BA53A
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Oct 2023 18:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235389AbjJEOiS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 5 Oct 2023 10:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
+        id S240911AbjJEQPh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 5 Oct 2023 12:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235569AbjJEOfo (ORCPT
+        with ESMTP id S240773AbjJEQNj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 5 Oct 2023 10:35:44 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABFD93D7;
-        Thu,  5 Oct 2023 01:52:26 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-690f7bf73ddso534514b3a.2;
-        Thu, 05 Oct 2023 01:52:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696495945; x=1697100745; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PUkS6wMtaxA5uunPctyTHaq2tck/+416ywTiH4ESHuo=;
-        b=TTsqWI78oOJtzCRYVOYSCP3Xha/LC8LB5iNwb1tkhlfAmpD88c4z5WnznfPWK1PB26
-         eJnl/4T/zYdDnmhz4p8BxdoSvWgbY4ndPGwVH+mV2kjJiozphBmPtuMYFzm0OExEXwh2
-         hmQwWse+X2jw7FBpaHM2ZupS0LOV/efnWe88DSTgjQfnf3EsEDxld3iH4ggRU9OcnFSn
-         ZuL5FAvswBPZIUCQC5rZGpOup7vi2Ks6QaHWpV/M5ifVtZLimblBYRnu9Zi4fYs21b8v
-         nQjBExGN8bBhRYdxKGK87HQt/EiSpj6Arf0uvCl7e7yFUMqbfSfiwf9YSQ/4rcPjU0I+
-         j2xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696495945; x=1697100745;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PUkS6wMtaxA5uunPctyTHaq2tck/+416ywTiH4ESHuo=;
-        b=Apl6IHARVYXHoHop97P/IPL1g/XXT4SvPV63Scty791mmHj+AkhsIexmUe/pZ1NrvW
-         H27xS/j+hSPzlPZ/hZIGPHQPLrd9JQ2qZ1q8r2uuMaaG16tjPtsAJ0cGf9bTagKpo+gO
-         rAanKuMVAxHXgHH/nz5bflM86sSvFHsJ9/XJUl72iJ3Tjjz4UzFGEtWKwWD8SmpPFAsO
-         +AYXwotLlv8VsKIFcXzZnqjchMFKbt79VAAKnU8+5XS42WfNgSkIbNB5rb9hh12cax3q
-         h6hKuLwc8Knypzl5SshSCGBCjSCREs7qOXBBF+owb1EHXI/i96O7edv+hVDgCJMrfIxp
-         AyAA==
-X-Gm-Message-State: AOJu0YxTiNZjkVky1REL1F7M+XJp76Q+KWJAnuHl7FLwOqWE+cElscdA
-        UYh5AXXazPba/VoPXhOkZZZtWqh7mLsuTg==
-X-Google-Smtp-Source: AGHT+IGSDhxxF/QhqslmQbhj6F5951BdKdtUFUCEty2MOQx/wlntJDKMgJRjMW8MSUvGSCr4SZ8Pfw==
-X-Received: by 2002:a05:6a00:23ce:b0:68e:3eb6:d45 with SMTP id g14-20020a056a0023ce00b0068e3eb60d45mr5052132pfc.30.1696495945126;
-        Thu, 05 Oct 2023 01:52:25 -0700 (PDT)
-Received: from wenkaidev (118-163-147-182.hinet-ip.hinet.net. [118.163.147.182])
-        by smtp.gmail.com with ESMTPSA id e18-20020aa78c52000000b0068fb8080939sm865701pfd.65.2023.10.05.01.52.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Oct 2023 01:52:24 -0700 (PDT)
-From:   advantech.susiteam@gmail.com
-To:     advantech.susiteam@gmail.com
-Cc:     wenkai.chung@advantech.com.tw, Susi.Driver@advantech.com,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: [PATCH 5/5] watchdog: eiois200_wdt: Enhanced IRQ trigger behavior
-Date:   Thu,  5 Oct 2023 16:51:23 +0800
-Message-Id: <0ddce182fa353592979be2a6762e89a1dc436985.1696495372.git.advantech.susiteam@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1696495372.git.advantech.susiteam@gmail.com>
-References: <cover.1696495372.git.advantech.susiteam@gmail.com>
+        Thu, 5 Oct 2023 12:13:39 -0400
+Received: from mail1.bemta33.messagelabs.com (mail1.bemta33.messagelabs.com [67.219.247.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401D92755C;
+        Thu,  5 Oct 2023 08:37:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lenovo.com;
+        s=Selector; t=1696508336; i=@lenovo.com;
+        bh=v1+aAx47a4VG6qc3iGIn7MkK5wiJwZrqulAxguRoTEQ=;
+        h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+         Content-Type:Content-Transfer-Encoding:MIME-Version;
+        b=J4nnFeLwJaHCcnqAh63cReGrLByuPnZO92bOsZvjPtCr8zPSKox1hjqB7+/LNbMl2
+         dyH+E/RBdBSVLT03A3jj4AjtkgebNUGoJkE7s9Ws2zUpKIwPzPcB5VzWy4D5PKCpU5
+         MH3wxMGo+tXiA1PuUAX2f5UTwyqDaQCRIWja9D+o3/3CEM53SD1gvGhrRPcR0xjgek
+         0XGdaI6wcIOz4r0K4T5ORV0KSPthUOTXkxXfuh8MUdOGPMB7/cIiWwntiFkMuLmwMF
+         XZ3n0GZzoNpSoSK1wssSJFZI9ryu+c6BjXSif+5dXPJYQqBZR94CGlQQaGX1Ee6Xf2
+         neyHdyTXB4aDg==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDJsWRWlGSWpSXmKPExsWSoS+Vobt+pVy
+  qwYR2dYvLu+awWdxYt4/d4snCM0wWj1/+Y3Zg8Vi5Zg2rx87vDewenzfJBTBHsWbmJeVXJLBm
+  nHp5k7FgP0fFo2vX2RoYN3B0MXJxMAosZZZ4OGUpM4SziFXiWMM3JghnA6NE96/PjCCOkMBcJ
+  olNfd+ZIZx7jBLL+3cCOZwcbALKEl1Nj9lAbBEBNYnmUy1sIEXMAjsZJW7secICkhAW0JFYOe
+  8aI0SRrsTEHZdZIGwriesvJrKD2CwCKhJz528Fi/MKxErM2LKNCWLbJEaJlvVtYAlOAQeJFxe
+  XsoLYjAJiEt9PrWECsZkFxCVuPZkPZksICEgs2XOeGcIWlXj5+B9UfYnErZfr2SDishKX5ncz
+  Qtj2Ekd3b4Cq95VomjIRKi4nsar3IQuELS8xbdF7dghbRuLBje1gX0oIXGCV+Pj3CAuE85xF4
+  uT8N1BXGEjM+3YEqmqrqMT/GbuBxnIAnaopsX6XPsTVihJTuh+yT2DUnoXkiVkIVbOQVM0CB4
+  ygxMmZT1gWMLKsYjQrTi0qSy3SNbTUSyrKTM8oyU3MzNFLrNJN1Cst1k1NLC7RNdJLLC/WSy0
+  u1iuuzE3OSdHLSy3ZxAhMSClFLkw7GP91/dM7xCjJwaQkypvbK5cqxJeUn1KZkVicEV9UmpNa
+  fIhRhoNDSYLXbzlQTrAoNT21Ii0zB5gcYdISHDxKIrwzZwCleYsLEnOLM9MhUqcYdTmubNu7l
+  1mIJS8/L1VKnFdhBVCRAEhRRmke3AhYor7EKCslzMvIwMAgxFOQWpSbWYIq/4pRnINRSZhXBJ
+  j2hXgy80rgNr0COoIJ6Ah/VbAjShIRUlINTMcLuoN6uD6K8J+QuHwxrkXwgxnTPQ79L0maV6q
+  u9pZcsjz82fR2S2xm7+pPW15XrD+qFFS/atGDY4X9ac71ld3/EvUdlvss0LbtO7R+wpvOz6u8
+  tyvVzW4tPhin0RDxXf7O3/sbVn15v2G5bMra14faHCY7zhLLOvfp15ddmcuFOz63xHIcmh6zL
+  /g76+ugfwbCpsZVPUu5Nc5WJzEKq+w+z2C3OlsxVP2wiHxV8O95J/ctY2yTEPFjC316KSWbxf
+  LnNcsWzsPBvJ2P5LJU7s4IWn1vx1I+yfCGFxtWLf1zfOV6qdR172dVujQI3XpXZvZpwYSkFfb
+  2lxNboj8KMGlVtr8x8KtW4v/EJqtkpsRSnJFoqMVcVJwIAMhXHj1PBAAA
+X-Env-Sender: dober@lenovo.com
+X-Msg-Ref: server-2.tower-715.messagelabs.com!1696508333!16171!1
+X-Originating-IP: [104.47.26.104]
+X-SYMC-ESS-Client-Auth: mailfrom-relay-check=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.107.4; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 4291 invoked from network); 5 Oct 2023 12:18:55 -0000
+Received: from mail-sgaapc01lp2104.outbound.protection.outlook.com (HELO APC01-SG2-obe.outbound.protection.outlook.com) (104.47.26.104)
+  by server-2.tower-715.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 5 Oct 2023 12:18:55 -0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EPjW2GxcKlgfsq7p3N48clF9jh2MXXU2Vkhd9s4zTW8I9zGYi+FJdPneZZIUIGpLUZrW+BKuRjI35VdmEFAfiwff9z7Zs+Hv15ezxe3NRPGa7Enzxtsm35YXhejG681AE6konc2wTqcE23pi65NMk7PRgmMdoyITVID51FwgHx9HGcF/I7A6Yxm8auoCW+iMAaeGtrW8KJjJkKCycKum9/ufJsV2lOrpsluEbws4pvaYi1P4CJWROAMS6ISEGjFqvVYUYeJV24sgsZDChBuGuKF2/81CkDRpdTwj0l1tjMGEUW9HhyqJWrW8BGaTxog7CjJwzUd08iq5Zilq6ZSVUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=v1+aAx47a4VG6qc3iGIn7MkK5wiJwZrqulAxguRoTEQ=;
+ b=eXn6AdVfPO3XR7+T/HndOFlfB9WpCiREZIc70NTNyMi2uvr4n2jTPjNfu20NfWpxRhexq41Hj9AKEwLbutepcAk/A1LZoKxTZgKcHb16dCfo333Iu5g2xe22wOQARJDDwh+3SDopk6IJzpSqFkCAiBNEoqBowZFdM8H+wNzRJd+vUrkJ3rdTISt+2W2x0yTeICYE1hLg4wzjISXbwqqfrjB8iyUy0GN5Nwj4V+7+fztE43NiarcP7NPsQ+EWs0E19kVVFsnbrQD2yMUtFs8INJhBa93Zf4Wck5+d9jB5dInEyuaXFUwbbCcL/XuzmVXE5tt+B8yQvXmS9sYIHQx7Ww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=lenovo.com; dmarc=pass action=none header.from=lenovo.com;
+ dkim=pass header.d=lenovo.com; arc=none
+Received: from SEYPR03MB7192.apcprd03.prod.outlook.com (2603:1096:101:d5::9)
+ by SEYPR03MB7861.apcprd03.prod.outlook.com (2603:1096:101:178::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.35; Thu, 5 Oct
+ 2023 12:18:51 +0000
+Received: from SEYPR03MB7192.apcprd03.prod.outlook.com
+ ([fe80::fe3b:d5ca:39f8:eae8]) by SEYPR03MB7192.apcprd03.prod.outlook.com
+ ([fe80::fe3b:d5ca:39f8:eae8%3]) with mapi id 15.20.6813.027; Thu, 5 Oct 2023
+ 12:18:51 +0000
+From:   David Ober <dober@lenovo.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Subject: RE: [External] Re: Watchdog patches
+Thread-Topic: [External] Re: Watchdog patches
+Thread-Index: AdnGuYfve3Nj/PKLTa+mTLIbzcubzgBuI+OAC8TWz0A=
+Date:   Thu, 5 Oct 2023 12:18:50 +0000
+Message-ID: <SEYPR03MB719214D0CFFAA04B17748321DACAA@SEYPR03MB7192.apcprd03.prod.outlook.com>
+References: <SEYPR03MB7192579DF7D0130F699CB7D1DA09A@SEYPR03MB7192.apcprd03.prod.outlook.com>
+ <3c51b285-6691-14e7-e3e3-9e111e8561a8@roeck-us.net>
+In-Reply-To: <3c51b285-6691-14e7-e3e3-9e111e8561a8@roeck-us.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SEYPR03MB7192:EE_|SEYPR03MB7861:EE_
+x-ms-office365-filtering-correlation-id: 87ef788a-10f9-4a7e-2e8c-08dbc59d3bf7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nJeA/zwwOs+s1M8y/MABiAm+k/9trw8YBqnFBTTO/nKonPpYBgkemw426QjbfkwfP6rVCY+/qTK2kV53mG7t1SSxJ0i1fIrUls8nBzBTS2xYq8scJAPhfZLaiKgJb1+DQebwZZ8eutxq+BhMq/f/J3eD1IgSnpKpQigflpgI4VZ0Gf6Q5ang+EMHx0fpO41w6ePomWrqO11qRv1UyWgcXnVCeFALr42B2iKColgM3oMfdgbBC5H+NW/tPFZ+KJEIt8pb5fjKtLbwEFQMi83+S/EtwzGVRsrc9hqITCF2cfhlyB47KNfAwiWu18qEk6EmYOyEJpmUeG5NG1emepk/YmpdF7i001dE3pGz6oit+WlAGOyhgud5z2uOxeym6oajOKEu9QjscVVM3nSygcNh3NtaPM5ZNwSWx6oOeIQA4GXGl8cd+32vfCDbRSmai/1apqMHvVf2VLQQZao1mQnIAxydU5U5A4ZFyNINkHdo7h7sEZY/jjszN6cf65HSaDihka248sznMkxNLkQ8T02Vuhp77ORdXVDVricPxRxFMFzwKfvpjvJQitskeTkA2c0/x8wrHvCknEW4qv5/zdV2dk8aeelCgAX8Ul1k6bDo5LICmsUywuMi+df/R4nmitdAdbHUUbjlJjvuL+2N9hi4Uv0bxwTESRVkZK3ecAFzj44=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEYPR03MB7192.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(366004)(376002)(39860400002)(346002)(136003)(230922051799003)(451199024)(64100799003)(1800799009)(186009)(55016003)(7696005)(6506007)(71200400001)(478600001)(53546011)(86362001)(38100700002)(38070700005)(122000001)(82960400001)(4744005)(2906002)(41300700001)(83380400001)(9686003)(5660300002)(33656002)(8676002)(66556008)(66476007)(66446008)(54906003)(64756008)(316002)(76116006)(6916009)(66946007)(4326008)(52536014)(8936002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QURCcmw5ekZTbUp4Tng4Mlgyai91MGFGUThnYzZ3N0picElDeWJHODNjdklY?=
+ =?utf-8?B?aS9FSWJJM2I3SXdxbm1wdjhBUllSb0R5MzBhR1NSdUdqMkdEVjVsVFhuNHZX?=
+ =?utf-8?B?bzNYT0xMYkVHZDdIclZLQi82RXNjRERmaXE3RVhUOU1Tc0NpczB5cXZSVmRS?=
+ =?utf-8?B?YnI5YVJaU0tsdUdIcmtZenQyZG9mMko0MkJvVU9mTDZldERqQjhCMWFmbkVL?=
+ =?utf-8?B?ZnNtRXd6Z0RpZURqY2VmM0YxaVJmRklreXZmQlh1WHhwbTdRZm9oNzNENzh3?=
+ =?utf-8?B?N3ZvNDZ4VU9rbTZnalRiaGtFSDY5c3NOK3plSW8ra1p0eWJ5WXFzYk8zQld0?=
+ =?utf-8?B?T3A3eXh3WGJRL1FEOVF5ejFnRDM5aHV0empuLzFnRFFMZ0g2N05Cbm5adXRZ?=
+ =?utf-8?B?ZFhaY2FwaDJqNXZpVzloT0ROcE1rbjRKWlhBSUd5TXVEeUxDQnhNT0ptbFhn?=
+ =?utf-8?B?aGFpbDlvcGQ1RGRqRm1MQU9iaXgwSXhMRWZna1NEbDFmRTNtc0VaVjdKM1Mx?=
+ =?utf-8?B?RTJEM1NZUkFpY3ZzNzNaZExrL3k0alhJWmJ5OENrTnBtbGJ4Z0lzdUlORllM?=
+ =?utf-8?B?dWtQaDFrQ1FXWFc0aExsaUpkZlpveUpHZzcrQk5HTEkxMUZyd1dMOC9qckZD?=
+ =?utf-8?B?M1NaN2Z3SUhETTVqeFJ0U21uc29KOUg1MUZ0Rnl1emUvbnkxZGNreVZRaWFO?=
+ =?utf-8?B?QXVteSt2VlJvL3ZRYXkwZy9YNU9mSmtNcTVqb013eDRhdmg3dW9FVnJ4Nys5?=
+ =?utf-8?B?a1RYZS9zRFBmcndkWll3NDI5Q1g1RmY3QUtVRGNFYjRXa3ZuNWp5T2hqOTNH?=
+ =?utf-8?B?d1A3WEcyT3F5UWV5ZEtPamxkMU9MVm5VNlp2MmF0Q0p6WkRkR2taQ3hiNzYy?=
+ =?utf-8?B?cXBuR282TGR4ZnJxQVh0U0NHc2Q1dXJicmVSdzJqYU5SRW9WZkVNeXVTSkVI?=
+ =?utf-8?B?dUNSUHJNVWhEK2kvczF3b2ZVWHlSOHd5Z1FjRGMybGVUQWFTSVkxZVpPTW1P?=
+ =?utf-8?B?RXUvcWpEdm1JUzF0cXd5cmxiKzA5TERhaFZ0dnlZMFRsZ0tXRG45dDA3NDBE?=
+ =?utf-8?B?RlJFdjVRNGtTdFhiVStqbXg3U2pNR1p1WS91N2Q5WS9UTGppSlBlVUVvU2Ja?=
+ =?utf-8?B?OWFyQVFLczArVFBBQWZSRk5OdWEvc0E5U1I1QjBtMXVGV3dKeEJqOUdRYzhW?=
+ =?utf-8?B?TEhHSGdWaDExdmFuNmVrMWM1WkJYaEVCUlBxOFB0YkJxSGI5ZGsrWU0zbnZy?=
+ =?utf-8?B?ZGFYcmk5L055QTZYK1VETlk5ZTNjOTZheEhUQVZ0SDRaOTk5VGtVYUxBWHpR?=
+ =?utf-8?B?RDZUVEs4NFdKY3pKZWc5c3NsNmp5K1ZMdThiNUJPNys2N3F4aVRlbDFMWEN1?=
+ =?utf-8?B?N05ieGkyTS85R015cHJrODBIdXpUQkhXNXZkOWQvVi9TVVd0dEZFS1BxbU1O?=
+ =?utf-8?B?RFpBVVp3VWpXZGFqNXBaL1h3ZHc2VEZuNkF0T0lzcEw5VjhObkxnb2t6TFpM?=
+ =?utf-8?B?R09qMnJkaVNWSFM5Wlo0WFg1OG44SmtQNkdRSVk4bUVKY05xSjJHamNuZERS?=
+ =?utf-8?B?UXlBNGZ0YlphTEFQZXpDN0QzTVVlZXBYRnY1akI1YXZRektTVDhCOTNWM1pp?=
+ =?utf-8?B?cW53Uk52U0xUQjl3MGEwK09PSm9KN1h2eFZQV1dvUjMzTVRjME95ejlKQzJ4?=
+ =?utf-8?B?WXhVY09xWDQydHlXVWFpV0tyazlCMDZFeEZab3dlcmJPOWxWNEswaHZlUlRX?=
+ =?utf-8?B?TXFiZDRYVS85WUVXb3p5N3QrMk5Zcy9hU3U3RG12NU1sWTRTUDlobjRiS296?=
+ =?utf-8?B?QTZsMUJPdFlNMGZUTXAvOWhiWDNOOGpqdHdzNzhubUFqbExBYnlwbDRMZGMr?=
+ =?utf-8?B?aFFqSUZ1RUdOdFFKNDlZUER0NlFWZklYUjJaSWpCaUoxbzk1c2xvUnhQbWoy?=
+ =?utf-8?B?ZE1WN0RKM3cwelBES2tGdEN2WjRncGFyZGZuWkptMktlbFlwZEtRUThpTGJ0?=
+ =?utf-8?B?L0grMzdqK280UkR6L3hCOWhSemN0bkJGc0Z0QjRzUzdQNHRSUHo2MlJyVHZJ?=
+ =?utf-8?B?VnhRWDh6UVVJYWNkd0JtejNxRWdJNUk0Z1JycTFDdmhiR3pYSUV4NTVHWEI3?=
+ =?utf-8?B?ejhIVTZFeTZlWXVNeU1jVnJJSWNJMEczSXdGQ3duY21wMGp2YW9nUjJDdlRh?=
+ =?utf-8?Q?WCLbcc2ua85Ti8As7NovSGI=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-OriginatorOrg: lenovo.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SEYPR03MB7192.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87ef788a-10f9-4a7e-2e8c-08dbc59d3bf7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Oct 2023 12:18:50.9029
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5c7d0b28-bdf8-410c-aa93-4df372b16203
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: r6WAyhDE1+xROovLqIws1zVYSxwS5B5X5DEHaB2NjL4hvBiNGqTPnUl5mGwjvZmN28ylrYFmzzWXjCICLOKBUg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR03MB7861
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-From: Wenkai <advantech.susiteam@gmail.com>
-
-This patch improved functionality when IRQ is used as the trigger event.
-
-When the IRQ event selected. If the pretimeout is specified, when the
-pretimeout time expires, it will trigger the associated IRQ event and
-invoke the pretimeout governor's actions.
-
-And, if the pretimeout is not specified, when the timeout time expires,
-the driver initiates an emergency system restart.
-
-Signed-off-by: Wenkai <advantech.susiteam@gmail.com>
----
- drivers/watchdog/eiois200_wdt.c | 237 ++++++++++++++++++++++++++++++--
- 1 file changed, 228 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/watchdog/eiois200_wdt.c b/drivers/watchdog/eiois200_wdt.c
-index 85179806ab7e..c9acb63b1152 100644
---- a/drivers/watchdog/eiois200_wdt.c
-+++ b/drivers/watchdog/eiois200_wdt.c
-@@ -2,10 +2,34 @@
- /*
-  * Advantech EIO-IS200 Watchdog Driver
-  *
-+ * This driver enables watchdog functionality for the Advantech EIO-IS200
-+ * embedded controller. Its has a dependency on the eiois200_core module.
-+ * It allows the specification of a timeout or pretimeout associated trigger
-+ * event, which can be one of the following pins:
-+ * - PWRBTN (Power button)
-+ * - SCI (ACPI System Control Interrupt)
-+ * - IRQ
-+ * - GPIO
-+ *
-+ * If the pretimeout is specified, when the pretimeout time expires, it
-+ * triggers the associated pin; if the timeout expires, it always triggers
-+ * a reset. If the associated pin is IRQ, the IRQ will trigger the system's
-+ * original pretimeout behavior through the pretimeout governor.
-+ *
-+ * If the pretimeout is not specified, the timeout expiration triggers the
-+ * associated pin only. If the associated pin is IRQ, it triggers a system
-+ * emergency restart.
-+ *
-+ * NOTE: Advantech machines are shipped with proper IRQ and related event
-+ * configurations. If you are unsure about these settings, just keep the
-+ * device's default settings, and load this module without specifying any
-+ * parameters.
-+ *
-  * Copyright (C) 2023 Advantech Co., Ltd.
-  * Author: wenkai <advantech.susiteam@gmail.com>
-  */
- 
-+#include <linux/interrupt.h>
- #include <linux/mfd/core.h>
- #include <linux/reboot.h>
- #include <linux/uaccess.h>
-@@ -59,7 +83,7 @@
- #define PMC_READ(cmd, data)	pmc(CMD_WDT_READ, cmd, data)
- 
- /* Mapping event type to supported bit */
--#define EVENT_BIT(type)   	BIT(type + 2)
-+#define EVENT_BIT(type)	BIT(type + 2)
- 
- enum event_type {
- 	EVENT_NONE,
-@@ -72,6 +96,7 @@ enum event_type {
- static struct _wdt {
- 	u32	event_type;
- 	u32	support;
-+	u32	irq;
- 	long	last_time;
- 	struct	regmap  *iomap;
- 	struct	device *dev;
-@@ -101,6 +126,12 @@ static char *event_type = "NONE";
- module_param(event_type, charp, 0);
- MODULE_PARM_DESC(event_type,
- 		 "Watchdog timeout event type (RESET, PWRBTN, SCI, IRQ, GPIO)");
-+
-+/* Specify the IRQ number when the IRQ event is triggered */
-+static int irq;
-+module_param(irq, int, 0);
-+MODULE_PARM_DESC(irq, "The IRQ number for IRQ event");
-+
- static struct watchdog_info wdinfo = {
- 	.identity = KBUILD_MODNAME,
- 	.options  = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
-@@ -145,8 +176,8 @@ static int wdt_get_type(void)
- 				return -EINVAL;
- 			}
- 
--			dev_info(wdt.dev, "Trigger type is %d:%s\n", 
--					  i, type_strs[i]);
-+			dev_info(wdt.dev, "Trigger type is %d:%s\n",
-+				 i, type_strs[i]);
- 			wdt.event_type = i;
- 
- 			return 0;
-@@ -204,7 +235,7 @@ static int wdt_set_config(void)
- 		if (wddev.timeout < wddev.pretimeout)
- 			return -EINVAL;
- 
--	reset_time = wddev.timeout;
-+		reset_time = wddev.timeout;
- 		event_time = wddev.timeout - wddev.pretimeout;
- 
- 	} else if (wddev.timeout) {
-@@ -228,7 +259,7 @@ static int wdt_set_config(void)
- 	dev_dbg(wdt.dev, "Config wdt reset time %d\n", reset_time);
- 	dev_dbg(wdt.dev, "Config wdt event time %d\n", event_time);
- 	dev_dbg(wdt.dev, "Config wdt event type %s\n",
--			  type_strs[wdt.event_type]);
-+		type_strs[wdt.event_type]);
- 
- 	return ret;
- }
-@@ -261,11 +292,11 @@ static int wdt_get_config(void)
- 			if (reset_time < event_time)
- 				continue;
- 
--	wddev.timeout	 = reset_time;
-+			wddev.timeout = reset_time;
- 			wddev.pretimeout = reset_time - event_time;
- 
- 			dev_dbg(wdt.dev, "Pretimeout H/W enabled with event %s of %d secs\n",
--				 type_strs[type], wddev.pretimeout);
-+				type_strs[type], wddev.pretimeout);
- 		} else {
- 			wddev.timeout = event_time;
- 			wddev.pretimeout = 0;
-@@ -274,7 +305,7 @@ static int wdt_get_config(void)
- 		wdt.event_type = type;
- 
- 		dev_dbg(wdt.dev, "Timeout H/W enabled of %d secs\n",
--				  wddev.timeout);
-+			wddev.timeout);
- 		return 0;
- 	}
- 
-@@ -359,6 +390,180 @@ static int wdt_support(void)
- 	return 0;
- }
- 
-+static int wdt_get_irq_io(void)
-+{
-+	int ret  = 0;
-+	int idx  = EIOIS200_PNP_INDEX;
-+	int data = EIOIS200_PNP_DATA;
-+	struct regmap *map = wdt.iomap;
-+
-+	mutex_lock(&eiois200_dev->mutex);
-+
-+	/* Unlock EC IO port */
-+	ret |= regmap_write(map, idx,  IOREG_UNLOCK);
-+	ret |= regmap_write(map, idx,  IOREG_UNLOCK);
-+
-+	/* Select logical device to PMC */
-+	ret |= regmap_write(map, idx,  IOREG_LDN);
-+	ret |= regmap_write(map, data, IOREG_LDN_PMCIO);
-+
-+	/* Get IRQ number */
-+	ret |= regmap_write(map, idx,  IOREG_IRQ);
-+	ret |= regmap_read(map, data, &wdt.irq);
-+
-+	/* Lock up */
-+	ret |= regmap_write(map, idx,  IOREG_LOCK);
-+
-+	mutex_unlock(&eiois200_dev->mutex);
-+
-+	return ret ? -EIO : 0;
-+}
-+
-+static int wdt_get_irq_pmc(void)
-+{
-+	return PMC_READ(REG_IRQ_NUMBER, &wdt.irq);
-+}
-+
-+static int wdt_get_irq(struct device *dev)
-+{
-+	int ret;
-+
-+	if ((wdt.support & BIT(EVENT_IRQ)) == 0)
-+		return -ENODEV;
-+
-+	/* Get IRQ number through PMC */
-+	ret = wdt_get_irq_pmc();
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Error get irq by pmc\n");
-+
-+	if (wdt.irq)
-+		return 0;
-+
-+	/* Get IRQ number from the watchdog device in EC */
-+	ret = wdt_get_irq_io();
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Error get irq by io\n");
-+
-+	if (wdt.irq == 0)
-+		return dev_err_probe(dev, ret, "Error IRQ number = 0\n");
-+
-+	return ret;
-+}
-+
-+static int wdt_set_irq_io(void)
-+{
-+	int ret  = 0;
-+	int idx  = EIOIS200_PNP_INDEX;
-+	int data = EIOIS200_PNP_DATA;
-+	struct regmap *map = wdt.iomap;
-+
-+	mutex_lock(&eiois200_dev->mutex);
-+
-+	/* Unlock EC IO port */
-+	ret |= regmap_write(map, idx,  IOREG_UNLOCK);
-+	ret |= regmap_write(map, idx,  IOREG_UNLOCK);
-+
-+	/* Select logical device to PMC */
-+	ret |= regmap_write(map, idx,  IOREG_LDN);
-+	ret |= regmap_write(map, data, IOREG_LDN_PMCIO);
-+
-+	/* Enable WDT */
-+	ret |= regmap_write(map, idx,  IOREG_WDT_STATUS);
-+	ret |= regmap_write(map, data, FLAG_WDT_ENABLED);
-+
-+	/* Set IRQ number */
-+	ret |= regmap_write(map, idx,  IOREG_IRQ);
-+	ret |= regmap_write(map, data, wdt.irq);
-+
-+	/* Lock up */
-+	ret |= regmap_write(map, idx,  IOREG_LOCK);
-+
-+	mutex_unlock(&eiois200_dev->mutex);
-+
-+	return ret ? -EIO : 0;
-+}
-+
-+static int wdt_set_irq_pmc(void)
-+{
-+	return PMC_WRITE(REG_IRQ_NUMBER, &wdt.irq);
-+}
-+
-+static int wdt_set_irq(struct device *dev)
-+{
-+	int ret;
-+
-+	if ((wdt.support & BIT(EVENT_IRQ)) == 0)
-+		return -ENODEV;
-+
-+	/* Set IRQ number to the watchdog device in EC */
-+	ret = wdt_set_irq_io();
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "Error set irq by io\n");
-+
-+	/* Notice EC that watchdog IRQ changed */
-+	ret = wdt_set_irq_pmc();
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				     "Error set irq by pmc\n");
-+
-+	return ret;
-+}
-+
-+/**
-+ * wdt_get_irq_event - Check if IRQ been triggered
-+ * Returns:	The current status read from the PMC,
-+ *		or 0 if there was an error.
-+ */
-+static int wdt_get_irq_event(void)
-+{
-+	u8 status;
-+
-+	if (PMC_READ(REG_EVENT, &status))
-+		return 0;
-+
-+	return status;
-+}
-+
-+static irqreturn_t wdt_isr(int irq, void *arg)
-+{
-+	return IRQ_WAKE_THREAD;
-+}
-+
-+static irqreturn_t wdt_threaded_isr(int irq, void *arg)
-+{
-+	u8 status = wdt_get_irq_event() & FLAG_TRIGGER_IRQ;
-+
-+	if (!status)
-+		return IRQ_NONE;
-+
-+	if (wddev.pretimeout) {
-+		watchdog_notify_pretimeout(&wddev);
-+	} else {
-+		pr_crit("Watchdog Timer expired. Initiating system reboot\n");
-+		emergency_restart();
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int query_irq(struct device *dev)
-+{
-+	int ret;
-+
-+	if (irq) {
-+		wdt.irq = irq;
-+	} else {
-+		ret = wdt_get_irq(dev);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	dev_dbg(wdt.dev, "IRQ = %d\n", wdt.irq);
-+
-+	return wdt_set_irq(dev);
-+}
-+
- static int wdt_init(struct device *dev)
- {
- 	int ret = 0;
-@@ -374,6 +579,10 @@ static int wdt_init(struct device *dev)
- 	ret = wdt_get_type();
- 	if (ret)
- 		return ret;
-+
-+	if (wdt.event_type == EVENT_IRQ)
-+		ret = query_irq(dev);
-+
- 	return ret;
- }
- 
-@@ -402,11 +611,21 @@ static int wdt_probe(struct platform_device *pdev)
- 	wdt.iomap = dev_get_regmap(dev->parent, NULL);
- 	if (!wdt.iomap)
- 		return dev_err_probe(dev, -ENOMEM, "Query parent regmap fail\n");
--	
-+
- 	/* Initialize EC watchdog */
- 	if (wdt_init(dev))
- 		return dev_err_probe(dev, -EIO, "wdt_init fail\n");
- 
-+	/* Request IRQ */
-+	if (wdt.event_type == EVENT_IRQ)
-+		ret = devm_request_threaded_irq(dev, wdt.irq, wdt_isr,
-+						wdt_threaded_isr,
-+						IRQF_SHARED, pdev->name, dev);
-+	if (ret)
-+		return dev_err_probe(dev, ret,
-+				    "IRQ %d request fail:%d. Disabled.\n",
-+				    wdt.irq, ret);
-+
- 	/* Inform watchdog info */
- 	wddev.ops = &wdt_ops;
- 	ret = watchdog_init_timeout(&wddev, wddev.timeout, dev);
--- 
-2.34.1
-
+TnVkZ2UsIEkgbm93IGhhdmUgdGhyZWUgd2F0Y2hkb2cgcGF0Y2hlcyBwZW5kaW5nIGFuZCBubyB1
+cGRhdGVzIG9uIHdoYXQgbWF5IG5lZWQgdG8gYmUgY2hhbmdlZCBmb3IgYW55IG9mIHRoZW0sIGFu
+eSB1cGRhdGUgb24gd2hhdCBuZWVkcyBjaGFuZ2VkIGFzIHRvIHdoeSB0aGV5IGNhbiBub3QgYmUg
+cHJvbW90ZWQgdG8gdGhlIG1haW4gbGluZSBrZXJuZWwuDQoNCkRhdmlkDQoNCi0tLS0tT3JpZ2lu
+YWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBHdWVudGVyIFJvZWNrIDxncm9lY2s3QGdtYWlsLmNvbT4g
+T24gQmVoYWxmIE9mIEd1ZW50ZXIgUm9lY2sNClNlbnQ6IFN1bmRheSwgQXVndXN0IDYsIDIwMjMg
+MTA6MjcgQU0NClRvOiBEYXZpZCBPYmVyIDxkb2JlckBsZW5vdm8uY29tPg0KU3ViamVjdDogW0V4
+dGVybmFsXSBSZTogV2F0Y2hkb2cgcGF0Y2hlcw0KDQpPbiA4LzQvMjMgMDI6NTUsIERhdmlkIE9i
+ZXIgd3JvdGU6DQo+IEd1ZW50ZXINCj4gDQo+ICDCoCBIYXZlIHdhcyBsb29raW5nIHRvIHNlZSBp
+ZiB0aGVyZSBpcyBzb21ldGhpbmcgZWxzZSwgSSBuZWVkIHRvIGRvIGFzIEkgaGF2ZSB0d28gcGF0
+Y2hlcyBpbiB0aGUgcGF0Y2h3b3JrcyBzdHJlYW0gdGhhdCB5b3UgaGF2ZSByZXZpZXdlZCBidXQg
+dGhleSBoYXZlIHlldCB0byBtYWtlIGl0IGludG8gdGhlIGtlcm5lbD8NCj4gDQo+IERhdmlkDQo+
+IA0KDQpCb3RoIHN0aWxsIG5lZWQgY2hhbmdlcywgYW5kIHRoZSBkcml2ZXIgZm9yIE5DVDY2OTJE
+IGdvdCBsb3N0IGluIHRoZSB3YXRjaGRvZyB2cy4gaHdtb24gY29uZnVzaW9uLg0KDQpHdWVudGVy
+DQoNCg==
