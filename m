@@ -2,60 +2,60 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD257BA5B9
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Oct 2023 18:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9C37BA5D9
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Oct 2023 18:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241809AbjJEQTH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 5 Oct 2023 12:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
+        id S242188AbjJEQUl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 5 Oct 2023 12:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242149AbjJEQQ5 (ORCPT
+        with ESMTP id S242231AbjJEQRR (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 5 Oct 2023 12:16:57 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2121018BBF
-        for <linux-watchdog@vger.kernel.org>; Thu,  5 Oct 2023 09:04:20 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-536071e79deso2638878a12.1
-        for <linux-watchdog@vger.kernel.org>; Thu, 05 Oct 2023 09:04:19 -0700 (PDT)
+        Thu, 5 Oct 2023 12:17:17 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959192EA9F
+        for <linux-watchdog@vger.kernel.org>; Thu,  5 Oct 2023 09:05:05 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-533c8f8f91dso2076157a12.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 05 Oct 2023 09:05:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696521858; x=1697126658; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1696521904; x=1697126704; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KfU8LZJfGanhRhGiSst4h+v18HcAUwEyfYmlvT10K+g=;
-        b=wPT0SlBfaZNcH2ARAB2U7+U8svgxPouGXuQgGR3MSe6F0qW3Rxh50IGOl3l29yZBPq
-         semFRmvx2TRnzJQdfk4M9AIP0CuNNgxc8ABqtcat1Ad7KSDKfmc46YkuLzyNBWKVM2c8
-         6z+HKYdNrxubOsyHP8/wQH/quHoymnx41gUSC96AXfalxPsA29z6O0ZOfDo72tmtxw3A
-         NItJzOHOT63Z9W4VYYrq6o49LES3oKkWEvglnA9WXM5nkMRlmcQLYlaeRFOabO2BLsb0
-         mj+ryIRDC7fDtoxF3h1tCKyrP7a+0ouJIlsMJyBSCbZynYiJfmAgF1itGRw0jSbv7Wn9
-         Z+0A==
+        bh=h1TgxVmkfQ+b2Nbm93qQ2NJMYecSSa1Mo81mMnld2fA=;
+        b=uFaVPJ9fgquUdZQq3LKDGaDz1rKpYy/pEzYx97E2LsXZiWbU77xRsL7sfJQQcsHoQB
+         yBWFBeTbCvRGuvcD5LufYM5kZbFcpN7vjAh3LjUwRvjyosOQPCfi4VzfK8/ycrMyTKwH
+         MOFSUHRBdPiJtleVJtmzPbYUNaQ1FiIvK1HIbtwFsGF4M5Tawzh4jMeknbzEZlEmI0Md
+         HdvQdfPaGpiV7r39GdQU1kZ0Dk83Ib77UwJBR03xoP4rewXertfLmfDkFtqC/lD2MQsE
+         ubvVRyPmlW0eZeSdODU6AbEwgLjWp6QkrF6EG1rv+/5Rg51Ca+0dUQM098CUxLTSx9nD
+         r1kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696521858; x=1697126658;
+        d=1e100.net; s=20230601; t=1696521904; x=1697126704;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KfU8LZJfGanhRhGiSst4h+v18HcAUwEyfYmlvT10K+g=;
-        b=jzwW/UltuGXYmJl3+Or2/aV/MdoawM/8Itd0WAPIkkIEqhDBdw1vkwnS18H6M9APru
-         Qn6k+PXqGXSlMxljoc9aPy3DtCuuRxV4a3WD7uQ7lQMPcovKV+PbU/+HAQsseOspYm0o
-         JF8gg0i0eu0MryhLemcr3q4BnehExm9ygRCCRpijE/qA4brtqVVdYWfb7FXlRHbvQ66Q
-         IUyE4owmAkDp7n1DDmOq51E1SMM1YV9EhAHBjUa3W+iO84G54bEXnoqOvCAu3U7QAMSm
-         Sb4WZw+M6O5XK2eZKr9lYadxVo4BvbuZo6Nd7jlKjTDy5d6cdCxgnBBEQEyWGfBp6Adc
-         fKmQ==
-X-Gm-Message-State: AOJu0YzRrdCKgR1eJ0b0JDw3S0C+7QidmOFdLSp2Ixh8dQXOpySJXRur
-        j5TKUdXSNfJGFAPvEtLbGUFhmw==
-X-Google-Smtp-Source: AGHT+IE2IUIhqPL8MeLG9G+5wr3NaYBG0Yp9GEL8ttgXRTZOmgq7PTyMy7Go7zBaISn2XPbgCZEm0w==
-X-Received: by 2002:a05:6402:4314:b0:525:4d74:be8c with SMTP id m20-20020a056402431400b005254d74be8cmr1720833edc.14.1696521858249;
-        Thu, 05 Oct 2023 09:04:18 -0700 (PDT)
+        bh=h1TgxVmkfQ+b2Nbm93qQ2NJMYecSSa1Mo81mMnld2fA=;
+        b=UXY5uwl17IgW7LbFtz/8fQo+wzKw1uqqBBpxDPKgbhJ2XRIkzgYOFTpvVQyG+3dpLg
+         m3qCJ7JVTvIY96I1T7atRHX386t/hf4oyeTfyRuPKcF0t3xcnn/7yVt1E7dR7LRzKI34
+         5vYIty7xEWusvtMPjgyWBKGqBGh1D9msHsjvZmtMPrXBz8qixzfBUZ0OIlToHHB5Salp
+         NTiYRCrVBQYBMQ0VjLtbCXX5fPhuj/D8nKRXPQRVn1EhY67PwG/Quj2ARYaQi/JIqjF6
+         9jpKePy/AKEXjsgCRpZTQnADRFZRdCVfELVhTb4pJi6FEg2LhhbPm2rx/CqWx2zijCkL
+         OKYg==
+X-Gm-Message-State: AOJu0YwYh2SAJS/eskRy7xZiUX8x930RPmSPe/X7np6gfbbZvq2fHexD
+        0BHRGFYyOiY50jS8eFW7CaNhqw==
+X-Google-Smtp-Source: AGHT+IE8j8lbSILzx4L6l97Tl3KS0FWaGHC3eRE1MQafJb3IfS6Vs99agRvm/+8zz0jTvT7SCGiWvg==
+X-Received: by 2002:aa7:da84:0:b0:536:2b33:83ed with SMTP id q4-20020aa7da84000000b005362b3383edmr6136972eds.24.1696521903850;
+        Thu, 05 Oct 2023 09:05:03 -0700 (PDT)
 Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id n19-20020a056402515300b0053495596f42sm1278344edd.30.2023.10.05.09.04.15
+        by smtp.gmail.com with ESMTPSA id n19-20020a056402515300b0053495596f42sm1278344edd.30.2023.10.05.09.05.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Oct 2023 09:04:17 -0700 (PDT)
-Message-ID: <419f823c-2476-4aec-b25d-7e6a2994555a@linaro.org>
-Date:   Thu, 5 Oct 2023 18:04:14 +0200
+        Thu, 05 Oct 2023 09:05:02 -0700 (PDT)
+Message-ID: <bb5389cb-8385-4436-b32b-312cf466dc18@linaro.org>
+Date:   Thu, 5 Oct 2023 18:05:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/21] dt-bindings: interrupt-controller: Add gs101
- interrupt controller
+Subject: Re: [PATCH 02/21] dt-bindings: soc: samsung: exynos-pmu: Add gs101
+ compatible
 Content-Language: en-US
 To:     Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
@@ -70,7 +70,7 @@ Cc:     tudor.ambarus@linaro.org, andre.draszik@linaro.org,
         linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
 References: <20231005155618.700312-1-peter.griffin@linaro.org>
- <20231005155618.700312-2-peter.griffin@linaro.org>
+ <20231005155618.700312-3-peter.griffin@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -116,7 +116,7 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231005155618.700312-2-peter.griffin@linaro.org>
+In-Reply-To: <20231005155618.700312-3-peter.griffin@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -130,46 +130,24 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 05/10/2023 17:55, Peter Griffin wrote:
-> Add the gs101 SoC interrupt header that provides human readable
-> constants for all the IRQs in the SoC.
+> Add gs101-pmu compatible to the bindings documentation.
 > 
 > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 > ---
->  .../dt-bindings/interrupt-controller/gs101.h  | 758 ++++++++++++++++++
->  1 file changed, 758 insertions(+)
->  create mode 100644 include/dt-bindings/interrupt-controller/gs101.h
+>  Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/include/dt-bindings/interrupt-controller/gs101.h b/include/dt-bindings/interrupt-controller/gs101.h
-> new file mode 100644
-> index 000000000000..51c8eb54eca2
-> --- /dev/null
-> +++ b/include/dt-bindings/interrupt-controller/gs101.h
-> @@ -0,0 +1,758 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * This header provides constants for gs101 interrupt controller.
-> + *
-> + * Copyright 2019-2023 Google LLC
-> + *
-> + */
-> +
-> +#ifndef _DT_BINDINGS_INTERRUPT_CONTROLLER_GS101_H
-> +#define _DT_BINDINGS_INTERRUPT_CONTROLLER_GS101_H
-> +
-> +#define ITNO	IRQ_TYPE_NONE
-> +#define ITER	IRQ_TYPE_EDGE_RISING
-> +#define ITEF	IRQ_TYPE_EDGE_FALLING
-> +#define ITEB	IRQ_TYPE_EDGE_BOTH
-> +#define ITLH	IRQ_TYPE_LEVEL_HIGH
-> +#define ITLL	IRQ_TYPE_LEVEL_LOW
+> diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+> index e1d716df5dfa..e6abf7b55909 100644
+> --- a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+> +++ b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
+> @@ -27,6 +27,7 @@ select:
+>            - samsung,exynos7-pmu
+>            - samsung,exynos850-pmu
+>            - samsung-s5pv210-pmu
+> +          - google,gs101-pmu
 
-No, these are not bindings.
-
-> +
-> +#define IRQ_ALIVE_EINT0		0
-> +#define IRQ_ALIVE_EINT1		1
-
-We do not keep interrupt numbers as bindings. Please drop entire file.
+Keep alphabetical order.
 
 Best regards,
 Krzysztof
