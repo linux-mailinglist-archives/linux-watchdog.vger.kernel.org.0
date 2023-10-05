@@ -2,179 +2,107 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A601D7BAF51
-	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Oct 2023 01:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B945A7BAF57
+	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Oct 2023 01:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbjJEX2k (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 5 Oct 2023 19:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
+        id S229503AbjJEXfN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 5 Oct 2023 19:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjJEX1I (ORCPT
+        with ESMTP id S229534AbjJEXeF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 5 Oct 2023 19:27:08 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB342724
-        for <linux-watchdog@vger.kernel.org>; Thu,  5 Oct 2023 16:20:01 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1c6185cafb3so37015ad.1
-        for <linux-watchdog@vger.kernel.org>; Thu, 05 Oct 2023 16:20:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696548000; x=1697152800; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g9+/T8jL1FueuqbJWbDBnW4JHhnHC6qNQT3btWThJAA=;
-        b=v+UouYNuHRJZLn6qa9pJlSug21LceqYMP5xJLBs9AV3PUI6CY9ziCJvFykObqwWyZI
-         93HL2qRPazgPcjnAqexgNvuIaSVfnlvgzFDZscbBOeCwL2y26LlCy7Fc501aHKwe/bIU
-         xzBXd8VCKDpYeict0m6yZtkzqiobtvwhJrnc18eD0QPziGC0YVN5ykkAYcklcpcnlqNl
-         eu0rKyhDl5cuZKlyNCsN8pq+JtkEV8u49VyWRqAeOI7MUuSxjrHO0/XqvTFSqxKeEFfz
-         V4PV2sV92v40eI0by02BJttTmjFBd+K6BPQ4oV5brWXrSmtrdnitnLQylHgXN5gBFwhg
-         qK2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696548000; x=1697152800;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g9+/T8jL1FueuqbJWbDBnW4JHhnHC6qNQT3btWThJAA=;
-        b=JGneXSxEeWhH7fmuOzM91ud9frHYc9/Ec4BOLp+tzvB9zn2dOtGLp0Wv3rl7sqdM5R
-         vtyn9LwR4378PIMXwWTEhEGuBPRlK0ze47YyNmlpagpjXVuK0biKRestEX6sakPIa1k0
-         COi6IT5JQN8PIgIYzoNuAtTo8JchIXHrn4xVpG7m73sLazU4tqo+lrXcUoMHUMxZkjTR
-         0hDNI/ffUjGTquMQEHsG+UxZx40tZTppJfNMwLjq+dhktTV7uJFfX9hWfPValIGFoyVZ
-         sKjspockG4y+jZl4CrnKI+Rfh7KjG7312FD5f9qyOknwDtSvCgtvTN4LcDFMjg/T8sYv
-         kBAQ==
-X-Gm-Message-State: AOJu0Yw0G0n3RV6hjZ5dZcPkorTZ9A6hEZ9qJDCYT5ko40qTk6tjmycb
-        1M3bJM+yByA3yZ9Ibl3i83ZHwA==
-X-Google-Smtp-Source: AGHT+IG6SUbZdWjUlwVKgWGyn2h7w47kdQ+sEw89YZgLkBjRn4vrO6PiIxtJlw/+S61vF8DHpPNtxw==
-X-Received: by 2002:a17:902:d506:b0:1c4:4470:bfa7 with SMTP id b6-20020a170902d50600b001c44470bfa7mr232458plg.29.1696548000224;
-        Thu, 05 Oct 2023 16:20:00 -0700 (PDT)
-Received: from google.com (13.65.82.34.bc.googleusercontent.com. [34.82.65.13])
-        by smtp.gmail.com with ESMTPSA id rm10-20020a17090b3eca00b0026d214a2b33sm4130541pjb.7.2023.10.05.16.19.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Oct 2023 16:19:59 -0700 (PDT)
-Date:   Thu, 5 Oct 2023 16:19:56 -0700
-From:   William McVicker <willmcvicker@google.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
-        s.nawrocki@samsung.com, linus.walleij@linaro.org,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, cw00.choi@samsung.com, tudor.ambarus@linaro.org,
-        andre.draszik@linaro.org, semen.protsenko@linaro.org,
-        soc@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH 18/21] arm64: dts: google: Add initial Google gs101 SoC
- support
-Message-ID: <ZR9EnFw3vB92vlYM@google.com>
-References: <20231005155618.700312-1-peter.griffin@linaro.org>
- <20231005155618.700312-19-peter.griffin@linaro.org>
- <ZR75cIvnQS2cqTT3@google.com>
- <2023100520-cleaver-sinless-fbae@gregkh>
- <99419159-cab0-4c79-a4a0-12229bfad3c0@linaro.org>
- <2023100513-mashing-scrubber-ea59@gregkh>
- <efc9f099-9c97-460b-b0c8-9891aa3b772a@linaro.org>
+        Thu, 5 Oct 2023 19:34:05 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F150B119;
+        Thu,  5 Oct 2023 16:34:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696548845; x=1728084845;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kNlsRW4WFlGXVfge1WJ6meHpmVQjd3H9vQAlCblm87s=;
+  b=TmFzloG5ZC30MDcy4w+JXkKfGh7lKE2S3tPFfdeXJT04tEjIC4jezcx8
+   xIWpRkbc3UQtR+VuKOURtNk9uXVAa9StSfcWW7DHI8Sx6m3YycjrCk2Dg
+   mkRjzkXFgILsw79b0bJgOys2Y7F9aWBfy6GJCOOBhMs7zhwTAPy9lrlx7
+   0bfESTvytyu6jLDCPox/1AjufX32xGNBuOhTJSbRntYku6n0OUby6ktJY
+   /8QIF8e54T6wrkPefhZbHg+5aehfTkteTOaKvIoKQif1B3FmmOblfXykk
+   ieXdq3lX9q2D74YsfIla7ZzwgktGCl6XrY9QnjbmOQoUylIfvOPhduPPz
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="373995508"
+X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
+   d="scan'208";a="373995508"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 16:34:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10854"; a="822306557"
+X-IronPort-AV: E=Sophos;i="6.03,203,1694761200"; 
+   d="scan'208";a="822306557"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Oct 2023 16:34:02 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qoXqy-000M1c-0y;
+        Thu, 05 Oct 2023 23:34:00 +0000
+Date:   Fri, 6 Oct 2023 07:33:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     advantech.susiteam@gmail.com
+Cc:     oe-kbuild-all@lists.linux.dev, wenkai.chung@advantech.com.tw,
+        Susi.Driver@advantech.com,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 1/5] watchdog: eiois200_wdt: Constructing Advantech
+ EIO-IS200 watchdog driver
+Message-ID: <202310060719.v6gRNpBq-lkp@intel.com>
+References: <b627f827d13514c1746beb31bb80db71023e9bb1.1696495372.git.advantech.susiteam@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <efc9f099-9c97-460b-b0c8-9891aa3b772a@linaro.org>
-X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+In-Reply-To: <b627f827d13514c1746beb31bb80db71023e9bb1.1696495372.git.advantech.susiteam@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 10/05/2023, Krzysztof Kozlowski wrote:
-> On 05/10/2023 21:23, Greg KH wrote:
-> > On Thu, Oct 05, 2023 at 09:18:48PM +0200, Krzysztof Kozlowski wrote:
-> >>>> I'd like to bring up this thread and discuss the option of not introducing
-> >>>> another ARCH_* config:
-> >>>>
-> >>>>   https://lore.kernel.org/all/20200306103652.GA3634389@kroah.com/
-> >>>
-> >>> I agree, PLEASE don't add platform config options as that makes it
-> >>> impossible to make a unified kernel image that works for more than one
-> >>> platform at the same time.
-> >>
-> >> There is no single problem in making unified image as we were doing
-> >> since beginning of ARM64. The ARCH_* is not a obstacle for this.
-> > 
-> > Then why are the ARCH_* options needed at all?  What does this help out
-> > with?
-> 
-> It helps all the people and distros who do not want to build/package
-> drivers or modules for unrelated hardware or architectures.
-> 
-> Let's take Samsung Exynos UART driver. It will never, 100% never, work
-> on x86, x86_64. There is no single need to package it for kernels build
-> for these products. It will not work on nVidia Tegra ARM64, Qualcomm
-> ARM64 SoC, so if you do not want to run on Exynos, then you do no select
-> ARCH_EXYNOS and have significantly smaller image.
-> 
-> Now, there is no problem to have one kernel for nVidia Tegra + Qualcomm
-> + Samsung Exynos with everything you need. The ARCH_EXYNOS or SOC_EXYNOS
-> or SOC_GOOGLE serves only the purpose to allow distros and people
-> customize build for specific hardware.
-> 
-> It does not limit anyone on anything.
+Hi,
 
-I'm glad you brought up Exynos UART because this is where one of the
-limitations is introduced. For example, if you want to modularize out all the
-vendor specific drivers from the core kernel to create a common arm64 kernel
-binary that works on all ARM64 devices, you will not be able to build in the
-early console UART drivers without enabling the respective ARCH_* configs.
-Being able to include SERIAL_SAMSUNG and SERIAL_MSM without all the vendor
-specific drivers that ARCH_EXYNOS and ARCH_QCOM select is very valuable for
-debugging early boot issues.
+kernel test robot noticed the following build errors:
 
-I understand that ARCH_* configs are used to selectively pick which device tree
-blobs are built, but forcing developers to pick all or nothing is where I have
-a problem.
+[auto build test ERROR on 9aab92bc3a8922d4b2e24d10271dfe3034cbf5c2]
 
-Regards,
-Will
+url:    https://github.com/intel-lab-lkp/linux/commits/advantech-susiteam-gmail-com/watchdog-eiois200_wdt-Constructing-Advantech-EIO-IS200-watchdog-driver/20231005-231419
+base:   9aab92bc3a8922d4b2e24d10271dfe3034cbf5c2
+patch link:    https://lore.kernel.org/r/b627f827d13514c1746beb31bb80db71023e9bb1.1696495372.git.advantech.susiteam%40gmail.com
+patch subject: [PATCH 1/5] watchdog: eiois200_wdt: Constructing Advantech EIO-IS200 watchdog driver
+config: i386-randconfig-003-20231006 (https://download.01.org/0day-ci/archive/20231006/202310060719.v6gRNpBq-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231006/202310060719.v6gRNpBq-lkp@intel.com/reproduce)
 
-> 
-> 
-> 
-> > 
-> >>>> I especially don't like the "depends on ARCH_EXYNOS" because that forces one to
-> >>>> include all the other Exynos drivers that ARCH_EXYNOS selects that Google
-> >>>> Tensor SoCs don't need. Can we consider using SOC_GOOGLE instead and for all
-> >>>> drivers that actually depend on the SoC hardware, we can just add "depends on
-> >>>> SOC_GOOGLE"?
-> >>>
-> >>> Why do any of this at all?  It should not be needed.
-> >>>
-> >>>> The idea is that drivers should be tied to hardware -- not a specific vendor.
-> >>>
-> >>> And drivers should be auto-loaded.
-> >>>
-> >>> All of these drivers are not vendor-specific at all, they are based on
-> >>> the same IP blocks as others, so that is how they should be unified.
-> >>
-> >> They are vendor specific. All of them are specifically for Exynos
-> >> hardwre, because this is Exynos. We call it Google GS/Tensor SoC just
-> >> for fancy convenience, but this just Exynos.
-> > 
-> > Ok, then why is this ARCH_ option needed if these IP blocks really are
-> > from something else and are part of other drivers?
-> 
-> For the same reason above, because if I want to build kernel for
-> Qualcomm, I want to drop easily anything not related. If I want to build
-> kernel without I2C, I disable I2C bus which effectively disables all
-> drivers which work on I2C. If I want to build kernel without Exynos, I
-> disable ARCH_EXYNOS which effectively disables entire Exynos hardware.
-> 
-> Think of SoC as a bus or interface.
-> 
-> Best regards,
-> Krzysztof
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310060719.v6gRNpBq-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/watchdog/eiois200_wdt.c:14:10: fatal error: ../mfd/eiois200.h: No such file or directory
+      14 | #include "../mfd/eiois200.h"
+         |          ^~~~~~~~~~~~~~~~~~~
+   compilation terminated.
+
+
+vim +14 drivers/watchdog/eiois200_wdt.c
+
+    13	
+  > 14	#include "../mfd/eiois200.h"
+    15	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
