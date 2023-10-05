@@ -2,59 +2,59 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382587BA65A
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Oct 2023 18:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301917BA6AC
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Oct 2023 18:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231730AbjJEQdj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 5 Oct 2023 12:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
+        id S233053AbjJEQke (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 5 Oct 2023 12:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232820AbjJEQck (ORCPT
+        with ESMTP id S234742AbjJEQjV (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 5 Oct 2023 12:32:40 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215B926BB
-        for <linux-watchdog@vger.kernel.org>; Thu,  5 Oct 2023 09:11:45 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-522bd411679so1958965a12.0
-        for <linux-watchdog@vger.kernel.org>; Thu, 05 Oct 2023 09:11:45 -0700 (PDT)
+        Thu, 5 Oct 2023 12:39:21 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFEF3879
+        for <linux-watchdog@vger.kernel.org>; Thu,  5 Oct 2023 09:12:03 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-5363227cc80so1928078a12.3
+        for <linux-watchdog@vger.kernel.org>; Thu, 05 Oct 2023 09:12:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696522304; x=1697127104; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1696522322; x=1697127122; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0O5FdMEjI2AitxA1SslmIPPgMaTqESzX6TEk7dD7d5k=;
-        b=Po/HUAGBSuTrY3mV+rvEpU1BPg6VC7kO3nMC/ng4as9KG9SMxQ7xrVVtbTySDZlH2M
-         EBw2Uq88OYrQR09/Gv953LrwdPMta6N7BenhTLFs/cDTGic4ttD+bOhYYqBs4d/UVtlr
-         WOM9RnR/+idWU7TuTKrX7IgpKg0WsVEJ4STeHKbToiD6QHa8xw/UALx5eJ6/YAbQnzEI
-         c7CCqglNkpUHaMD57YzMDk73fGJBodcO63AliWko+zSLdsKmmvCzyD6vAkdFBp3rK0vi
-         NLMUV8yQBRyIbsJJ1+3SGjg4nLbn+E/jAy5CGvxTCB/69xt5EkF/tydvjJk3xLGFP4RL
-         LurA==
+        bh=9lxM4OiGaB4e3uq2pWffPreokXzaYO67D0mgzpzgon8=;
+        b=a/r53c5IAuWC7liI9ugDKYX8rtsQBZrFvQ2vgS0sHLUs6vr3VhtksZrkO/O1T0xmkV
+         lpM0bbL7PkP6GuQv5wwhCUYFz2uSjkIgUEvmS0fvn0rftiXm6d5n7DF72iBr/D89E5ML
+         R9Qw7jDyA9xeszpSxIURxYkwjGywo/6jSNIAKPrPYroGeAtZOSn5MJqMbx7OtfZZVeUT
+         v7OvFgWsaTs+k9qgrqYQCI33PAHfncG3jAYzXBZk9ITUhdOYwIuC8rw2rSOLQou0DUGa
+         VhVRTDJpFk0F1WuXXVMiSlntZf7k9w0foOtLdTQ2HFL0S0tcXSS9ogmdjI4/Q1S9mFgq
+         xpOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696522304; x=1697127104;
+        d=1e100.net; s=20230601; t=1696522322; x=1697127122;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0O5FdMEjI2AitxA1SslmIPPgMaTqESzX6TEk7dD7d5k=;
-        b=PNv2RnBOghgU0WdHVMC5EDcgrnsgX+VZs4zUw9HREMIy15CXdwLs7l035Hs7mbeolN
-         QhH7PhOSD7sCnG1oEKkXMuLAKLodr1I4Y5EPz8kjmP7jsmtyFyn+y10Vib7W2aReVuQh
-         9WkXT0Ayjq30KeCvt/UwIPDlaIgkGmN+E/NScY1bhTTBc8aD18/IeQL0+gLdDGUtWbBW
-         vLstIu0ye7TldtnKe9FnMEn1Mu/md4Rjc8F6r03Y6eGgvty5LRgq2wyUd2Qi5fmUSnPR
-         VPZGFW65qBN4sZOnNnv3jyon3P9j5mVkMZwFB08IeuvycsZ2X3bYCKvAT4L1ABFMEGXV
-         ik6w==
-X-Gm-Message-State: AOJu0YyDhh/7rW51CozjKOmm5oltMWjkqFtcOtJqJ9yvtMxHU1k0dx9t
-        b+VyisKJ0uvozuSChGCOwdiWyA==
-X-Google-Smtp-Source: AGHT+IG4MEtuagvRCLMRUpJlXPomS8iBJDxtG9g1tyH0aeTWICfB7VrkfDj0VNb+2+Lhgr78SQXt1A==
-X-Received: by 2002:aa7:d947:0:b0:531:9c1:8271 with SMTP id l7-20020aa7d947000000b0053109c18271mr5363562eds.14.1696522304327;
-        Thu, 05 Oct 2023 09:11:44 -0700 (PDT)
+        bh=9lxM4OiGaB4e3uq2pWffPreokXzaYO67D0mgzpzgon8=;
+        b=YQlYsKNl9gfn5CsO9uwePKdlNUvB90fzeYDOvmBpqHJrhO88AWbDihucC8cU5HeJkE
+         7jC+WdEkzVkzZplWXDModY8hMtPm7AGRzgcZXgvG2XDqpRebFCgXVBZunijDQCuEvHU7
+         n3rpNHgAsr5rRIabN7xWSKyl4zYZrRkYeX6y9/W4CdEfEbtzJiuBFg0R2KZQKQd5xY4q
+         GAsCp7IbvKl1c5dyhVgfx/TGVSVs4upUcn1BdpSU/1aNQ1QbPadPU1aN6UCUFJIBEDpN
+         arohFDiENZAFsf5ExHLP6ErwjCMW3tk6Fq2jz2mN2uP6EbctJmXswgQZZ62clAe8HvD3
+         bm8Q==
+X-Gm-Message-State: AOJu0Ywqs8v5uA51I1JHpLDbFyuiDDSXasD1KnDGxdsf9jf36/gSmvfr
+        CQMYHnZz9b8Zg/wrJQyzB6EJ/w==
+X-Google-Smtp-Source: AGHT+IFZJthaVaTYewEeZJtni3cSipAL+gy8tpIe3TbQsRdvHNdhR212iy3ddLH56ot/orPcub/dwg==
+X-Received: by 2002:aa7:db45:0:b0:533:520:a5a8 with SMTP id n5-20020aa7db45000000b005330520a5a8mr5184779edt.29.1696522322395;
+        Thu, 05 Oct 2023 09:12:02 -0700 (PDT)
 Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id u1-20020a05640207c100b005311e934765sm1278866edy.27.2023.10.05.09.11.41
+        by smtp.gmail.com with ESMTPSA id u1-20020a05640207c100b005311e934765sm1278866edy.27.2023.10.05.09.11.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Oct 2023 09:11:43 -0700 (PDT)
-Message-ID: <331ebdbd-bd38-4b64-9cc0-5bb75d983717@linaro.org>
-Date:   Thu, 5 Oct 2023 18:11:41 +0200
+        Thu, 05 Oct 2023 09:12:01 -0700 (PDT)
+Message-ID: <103c7112-d469-48bf-bdbe-fb6608b97a64@linaro.org>
+Date:   Thu, 5 Oct 2023 18:11:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/21] dt-bindings: clock: gs101: Add cmu_top clock
+Subject: Re: [PATCH 10/21] dt-bindings: clock: gs101: Add cmu_apm clock
  indices
 Content-Language: en-US
 To:     Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
@@ -70,7 +70,7 @@ Cc:     tudor.ambarus@linaro.org, andre.draszik@linaro.org,
         linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
 References: <20231005155618.700312-1-peter.griffin@linaro.org>
- <20231005155618.700312-10-peter.griffin@linaro.org>
+ <20231005155618.700312-11-peter.griffin@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -116,7 +116,7 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231005155618.700312-10-peter.griffin@linaro.org>
+In-Reply-To: <20231005155618.700312-11-peter.griffin@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -130,29 +130,16 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 On 05/10/2023 17:56, Peter Griffin wrote:
-> CMU_TOP geneerates clocks for all the other CMU units. Add clock
-> indices for those PLLs, muxes, dividers and gates.
+> CMU_APM generates clocks for the Active Power Management
+> controller. Add clock indices for those muxs, dividers and
+> gates.
 > 
 > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 > ---
->  include/dt-bindings/clock/gs101.h | 204 ++++++++++++++++++++++++++++++
->  1 file changed, 204 insertions(+)
->  create mode 100644 include/dt-bindings/clock/gs101.h
+>  include/dt-bindings/clock/gs101.h | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 
-This patch should be squashed with bindings for this clock. Header on
-its own makes little sense.
-
-Also, filename should match compatible (vendor prefix, Soc-clock etc).
-
-> 
-> diff --git a/include/dt-bindings/clock/gs101.h b/include/dt-bindings/clock/gs101.h
-> new file mode 100644
-> index 000000000000..d1e216a33aeb
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/gs101.h
-> @@ -0,0 +1,204 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +/*
+Please squash it with previous patch.
 
 Best regards,
 Krzysztof
