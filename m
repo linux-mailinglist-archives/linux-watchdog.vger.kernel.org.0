@@ -2,74 +2,68 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC967BB428
-	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Oct 2023 11:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8AF7BB602
+	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Oct 2023 13:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbjJFJ1y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 6 Oct 2023 05:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
+        id S231916AbjJFLLl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 6 Oct 2023 07:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbjJFJ1x (ORCPT
+        with ESMTP id S232005AbjJFLLj (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 6 Oct 2023 05:27:53 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9C895;
-        Fri,  6 Oct 2023 02:27:51 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1c735473d1aso14932225ad.1;
-        Fri, 06 Oct 2023 02:27:51 -0700 (PDT)
+        Fri, 6 Oct 2023 07:11:39 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2AEF7;
+        Fri,  6 Oct 2023 04:11:28 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5363227cc80so3285198a12.3;
+        Fri, 06 Oct 2023 04:11:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696584471; x=1697189271; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qd8PELAk6On3fpApQm8hLN5EGlr4n91DxF8C8aXw5Uk=;
-        b=P9Nl687RnKNOMgNwaDAya9QiCOKu7pLhhheuZkVnL3OtkN8bAGi/VtVLvB6sFmJtl3
-         LF8Y5KCSm7CRz1itGXPBgr1aN1aMou4ZbRbFNYM/zyDKMVLWH649lPR52dAuaW4hK6Ez
-         RA8c6duxCDvPGozL2i8ojJtqc4uWBsT56nP27ploFvig312ce9n095v9I+/cD4hRdUfD
-         dySlGxHTmeiXz28yJh6k8yFtOelO+hlXYaQEkQAWN9T7mdiUjgxXm3jNZjnBa+XbaUJa
-         3/Uir4c4jVZnxDk7Hd/XmycpDt6T28evHauvaTm9Q4fWQ31oaKekU4YIc6v5OMCrVOth
-         FzJQ==
+        d=gmail.com; s=20230601; t=1696590686; x=1697195486; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qqqheVrn2dvVzhKiqfN3c2tbsXwOeqR190xBlY1dKRs=;
+        b=S/4/ZLCWN3x4hFUdObyDVuFvbSKxCO9ymgi9N3kqa7CmG6DtM+BTsxuBmtOzSoUQRd
+         bSIeYw7Fgg7w4uEYf+wCSxxD3qEIQ0JrpyFOlRYMd/LqqQ15AjDAfbl+MGQeN3qlyEYN
+         ZhVtaLAKYu6hnJ+F4ZYalAc4hH8ujB/5chSbeUAWPq/Ya+i0y9GgLzg7SJRZ+ROFt45+
+         HcJXDjIVgwj89OMaPFW8KE1iigr+UEOonShita4kWKwd3tXSUWbxxjwTIFAjpkiaJB0Z
+         IWyzhn1kdRc/Y6sxxYKLTD1r97BdTuHud6MBmzeXpCtxox/vxebb0SepfXJE9xbX7Afa
+         FKKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696584471; x=1697189271;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qd8PELAk6On3fpApQm8hLN5EGlr4n91DxF8C8aXw5Uk=;
-        b=NlVj9SaiUK5AQQO4B2yHFLJ/33YCdThaMdSo7dcXFK2nXy3PU8X7GnGsMEkTT6A75d
-         m2EHrZkLQmq4ULwQq3i8oqy7PEUG3dZjUPSLa8ud1xHd9iNzkxWdBxAyvk1fawCETN3K
-         jlrrYQptOF8Nv1U76PvtACHzALmyErmaxJW5Hf+RZ3F0VMBXIuCbO6mCa/77BHTr/cEV
-         LT4o2RFuPvEjKktnj+IBZquurbOFsM+iB4WeSWRCK/iJyKtxMQsZ9oob5woA1kUBwWK4
-         LPAQsEGZQkgdXSfB1uHzPVWX8JFrXiXD+gw1rCbSmcefBmeK3/ZHuFgv6WHx1Mrjz94f
-         pAHw==
-X-Gm-Message-State: AOJu0YxdFmTmegmPDg0tvgQHWXiY6dq7cYDHE1A3fNtoClxL7KKrgHBA
-        PvFIRrZ1B168oNVb4SH7JyE=
-X-Google-Smtp-Source: AGHT+IFE3+eJ4cgE1olPLOlFYEDjaAcXkz86sb6eE2ajYLliRdanEX9PMpRbM09FPQsCy2nHMOSeeQ==
-X-Received: by 2002:a17:902:7790:b0:1c4:56c8:27f8 with SMTP id o16-20020a170902779000b001c456c827f8mr6052803pll.68.1696584470813;
-        Fri, 06 Oct 2023 02:27:50 -0700 (PDT)
-Received: from [172.22.12.30] ([123.51.235.123])
-        by smtp.gmail.com with ESMTPSA id f8-20020a170902ce8800b001c76fcccee8sm3303741plg.156.2023.10.06.02.27.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Oct 2023 02:27:50 -0700 (PDT)
-Message-ID: <b08d6cf6-cd48-86d7-a959-290fc4de092c@gmail.com>
-Date:   Fri, 6 Oct 2023 17:27:48 +0800
+        d=1e100.net; s=20230601; t=1696590686; x=1697195486;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qqqheVrn2dvVzhKiqfN3c2tbsXwOeqR190xBlY1dKRs=;
+        b=ig/3Piql10ING7OsL91Jdql3iB2QGZzqKxUDSnmfFayCwgtXFEGZevbDHv/i40uNFq
+         3LoCn5XB71c93M46mgKBA4f/QY7u5LOOBtEBWrxNDrf32v511hOud26MXLR3itbXZjfD
+         oS2SYnaz3h0Jhv9zdqbe4eoFO2bn9bDfXwjXzolezoiIL6FVdcvneTECeZbOxqf2uiVW
+         Xx35iWRHOamY69QM6UHFQtbEyqdzsVbZGDuXWoRJHm7o4O7opuqXQvmkgJafldVVZ3pB
+         EirTOdcHgcpXvYV3O0TA5OdevTLoXVik6oC+oSsP0LdXAd++53ilVk0nYbzSXa4eJpLx
+         fqAQ==
+X-Gm-Message-State: AOJu0Yy4JxS9dK4hjv+HOdDn0GZfHbNNfSR+AQFHi8/mfhdBaeiDTNXu
+        UDkE28H3UlN8DUqpJxpT9VA=
+X-Google-Smtp-Source: AGHT+IH9bdRhaUPtGb3TVkE1F7pYW0uRNFzODCbu7DYR3kgSW+gPF7F+RCLnreqWvUiBmACu8ExWag==
+X-Received: by 2002:a05:6402:3448:b0:522:cef7:83c3 with SMTP id l8-20020a056402344800b00522cef783c3mr7927693edc.8.1696590686125;
+        Fri, 06 Oct 2023 04:11:26 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:8109:8c00:3664:3943:fa67:3eb4:21c3])
+        by smtp.gmail.com with ESMTPSA id bf14-20020a0564021a4e00b005362bcc089csm2354119edb.67.2023.10.06.04.11.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Oct 2023 04:11:25 -0700 (PDT)
+From:   Nik Bune <n2h9z4@gmail.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        skhan@linuxfoundation.org, stwiss.opensource@diasemi.com
+Cc:     Nik Bune <n2h9z4@gmail.com>, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: watchdog: da9062-wdt: convert txt to yaml
+Date:   Fri,  6 Oct 2023 13:11:04 +0200
+Message-Id: <20231006111104.11105-1-n2h9z4@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH 0/5] watchdog: eiois200_wdt: Add EIO-IS200 Watchdog Driver
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     wenkai.chung@advantech.com.tw, Susi.Driver@advantech.com,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <cover.1696495372.git.advantech.susiteam@gmail.com>
- <d7df3c7b-730a-4d09-8f15-3cc8591c8092@roeck-us.net>
-Content-Language: en-US
-From:   Wenkai <advantech.susiteam@gmail.com>
-In-Reply-To: <d7df3c7b-730a-4d09-8f15-3cc8591c8092@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,51 +71,114 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Convert txt file to yaml.
 
+Signed-off-by: Nik Bune <n2h9z4@gmail.com>
+---
+ .../bindings/watchdog/da9062-wdt.txt          | 34 ------------
+ .../bindings/watchdog/da9062-wdt.yaml         | 52 +++++++++++++++++++
+ 2 files changed, 52 insertions(+), 34 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/da9062-wdt.yaml
 
-Guenter Roeck 於 10/6/2023 11:02 AM 寫道:
-> On Thu, Oct 05, 2023 at 04:51:18PM +0800, advantech.susiteam@gmail.com wrote:
->> From: Wenkai <advantech.susiteam@gmail.com>
->>
->> This patch series aims to add support for the Advantech EIO-IS200
->> Embedded Controller's watchdog timer to the Linux kernel. The EIO-IS200
->> is a widely used embedded controller, and this series introduces a
->> native driver for its watchdog timer functionality within the Linux
->> ecosystem.
->>
-> I am not going to review this patch series. This is just ne watchdog driver.
-> One patch is sufficient.
->
-> Guenter
-Hi Guenter,
-
-Advantech's EIO-IS200 watchdog supports 5 output pins: RESET, Power
-Button, SCI, IRQ, and GPIO. The most traditional scenario is that the
-Pretimeout triggers IRQ, and the timeout triggers RESET.
-
-However, unfortunately, for industrial usages, there are various use
-cases, which require certain mechanisms and logic to manage which signal
-is output when Pretimeout and timeout expire. I am concerned that
-consolidating all these features into a single patch for upstream may
-lead to confusion and make the source code less readable and
-understandable.
-
-Therefore, I have divided the implementation into 5 separate patches,
-aiming to make the code more comprehensible and acceptable. If it's
-acceptable to you, I am more than willing to provide a single patch as
-per your preference.
-
-I would also like to note that this watchdog driver is part of the
-EIO-IS200 MFD (Multi-Function Device) driver family. It serves as one
-of the child-drivers of the drivers/mfd/eiois200_core core driver. It's
-important to mention that without the presence of
-drivers/mfd/eiois200_core, this child-driver eiois200_wdt cannot be
-compiled or used.
-
-Should we wait until the core driver (drivers/mfd/eiois200_core) is
-successfully incorporated before upstreaming the watchdog child-driver,
-or would you prefer to proceed with these patches independently?
-
-Best regards,
-Wenkai
+diff --git a/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt b/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
+deleted file mode 100644
+index 354314d854ef..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
++++ /dev/null
+@@ -1,34 +0,0 @@
+-* Dialog Semiconductor DA9062/61 Watchdog Timer
+-
+-Required properties:
+-
+-- compatible: should be one of the following valid compatible string lines:
+-	"dlg,da9061-watchdog", "dlg,da9062-watchdog"
+-	"dlg,da9062-watchdog"
+-
+-Optional properties:
+-- dlg,use-sw-pm: Add this property to disable the watchdog during suspend.
+-	Only use this option if you can't use the watchdog automatic suspend
+-	function during a suspend (see register CONTROL_B).
+-- dlg,wdt-sd: Set what happens on watchdog timeout. If this bit is set the
+-	watchdog timeout triggers SHUTDOWN, if cleared the watchdog triggers
+-	POWERDOWN. Can be 0 or 1. Only use this option if you want to change the
+-	default chip's OTP setting for WATCHDOG_SD bit. If this property is NOT
+-	set the WATCHDOG_SD bit and on timeout watchdog behavior will match the
+-	chip's OTP settings.
+-
+-Example: DA9062
+-
+-	pmic0: da9062@58 {
+-		watchdog {
+-			compatible = "dlg,da9062-watchdog";
+-		};
+-	};
+-
+-Example: DA9061 using a fall-back compatible for the DA9062 watchdog driver
+-
+-	pmic0: da9061@58 {
+-		watchdog {
+-			compatible = "dlg,da9061-watchdog", "dlg,da9062-watchdog";
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/watchdog/da9062-wdt.yaml b/Documentation/devicetree/bindings/watchdog/da9062-wdt.yaml
+new file mode 100644
+index 000000000000..9911cc3068cf
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/da9062-wdt.yaml
+@@ -0,0 +1,52 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/da9062-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Dialog Semiconductor DA9062/61 Watchdog Timer
++
++maintainers:
++  - Steve Twiss <stwiss.opensource@diasemi.com>
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    enum: 
++      - dlg,da9061-watchdog
++      - dlg,da9062-watchdog
++
++  reg:
++    maxItems: 1
++
++  dlg,use-sw-pm:
++    type: boolean
++    description: >
++      Add this property to disable the watchdog during suspend.
++      Only use this option if you can't use the watchdog automatic suspend
++      function during a suspend (see register CONTROL_B).
++  
++  dlg,wdt-sd:
++    type: boolean
++    description: >
++      Set what happens on watchdog timeout. If this bit is set the
++      watchdog timeout triggers SHUTDOWN, if cleared the watchdog triggers
++      POWERDOWN. Can be 0 or 1. Only use this option if you want to change the
++      default chip's OTP setting for WATCHDOG_SD bit. If this property is NOT
++      set the WATCHDOG_SD bit and on timeout watchdog behavior will match the
++      chip's OTP settings.
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    watchdog@fffffd00 {
++      compatible = "dlg,da9062-watchdog";
++      reg = <0xfffffd00 0x10>;
++    };
+-- 
+2.34.1
 
