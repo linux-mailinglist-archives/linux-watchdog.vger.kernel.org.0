@@ -2,162 +2,126 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F297BB37B
-	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Oct 2023 10:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC967BB428
+	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Oct 2023 11:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjJFIta (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 6 Oct 2023 04:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51108 "EHLO
+        id S231171AbjJFJ1y (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 6 Oct 2023 05:27:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbjJFIt3 (ORCPT
+        with ESMTP id S230484AbjJFJ1x (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 6 Oct 2023 04:49:29 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E142B83;
-        Fri,  6 Oct 2023 01:49:27 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 553463200B27;
-        Fri,  6 Oct 2023 04:49:22 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 06 Oct 2023 04:49:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1696582161; x=1696668561; bh=fq
-        7jUTQDYY98nWZgnWeYl6Cagk6XWBLFE67pLot1gWo=; b=kBZzKMgJZsyJhJ4jkw
-        jQU20dAsOX6gV5+9PEwOC6EDKw7Yrab03w7x2jeKDOi5U8sb/zmQ8Do9RTmngNC8
-        yW1XTJd1bUm/rTmNlB9F9TExc3icsyP1glN07DJTwfqW+FzA7E339NrTeU5sRc/L
-        n3VnfG7n+yfSNcSvAHPhilUJEguUWvbqXhCccmjZaMBvxEY4yFK+ZSL9Gp0LtFha
-        cZ0A9UoKYcf32ekNsano2pLPsmc54RzW/g3tPBuRro7L3uPt90fH3hIN8BzDhNze
-        p9rH9D8bX843QRBOTm7lQAd41lszXDeeJikGphg72AEiyROyBJHPvmCE3IgtC1B8
-        I8xw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1696582161; x=1696668561; bh=fq7jUTQDYY98n
-        WZgnWeYl6Cagk6XWBLFE67pLot1gWo=; b=Z9wduYnbaSjO4hO9z4ThmB4lkJ+ww
-        qv48JvZetC68Oy7Cwu1FZTuWCiNrKWgPVlC3WfLZq9CQAtRwtR+Hgmm5hm7ogHvR
-        g0HhACHoO4MLD7fxHHWj2C3pZU6RASeeLf/9XyNP46PxJ9+Wl/0D6WC9DBYJNVUx
-        mtNhY7IAXC9PqRSim+iZ7rzPLHV0BIft9I6alaUUj3XxUqUv5l7FauuYS80Rf78F
-        T7iw5HeL/xcklmoBHAfAZMLxvFOyUulgeZzpl67xGf0yowfKAw8nWtTXzHAQ8HCE
-        psBkN+QRkt9PJmeDlBFt3h9VAeNTcJJeZFH8l8liepztop+DKATVvf2XQ==
-X-ME-Sender: <xms:EMofZT2i-9GISWVnjxgMhlfr_K0J1DDCikeZffdfaxxvS-c9ZvWmTA>
-    <xme:EMofZSH-GDrTlbKrOc09JAu6xzst-K08JW-bRaweoc7LuQJp4GgEj665KOBjFQo1J
-    Ga257VUxycRUUCsOyk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrgeeigddtjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:EMofZT4ywgzN7LkzmXzXPySCJeAKjukN8v43qGhqwxizLsQRUilCXg>
-    <xmx:EMofZY2E3kF4qLgYpdHd4RbTBZENJnE3pcBjp3j1fIuAPC4cUrEcNA>
-    <xmx:EMofZWHiFKv5E0Dvozm7fdb71mAiOQ7Sue59rxI-niu4_MbVJRdtNw>
-    <xmx:EcofZZYKcoYBWJfaMLlaG0rL0xmTDuYDJQLE8dL3BH9l1IWy6uP6mQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id ABDB6B60089; Fri,  6 Oct 2023 04:49:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-958-g1b1b911df8-fm-20230927.002-g1b1b911d
+        Fri, 6 Oct 2023 05:27:53 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9C895;
+        Fri,  6 Oct 2023 02:27:51 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1c735473d1aso14932225ad.1;
+        Fri, 06 Oct 2023 02:27:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696584471; x=1697189271; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qd8PELAk6On3fpApQm8hLN5EGlr4n91DxF8C8aXw5Uk=;
+        b=P9Nl687RnKNOMgNwaDAya9QiCOKu7pLhhheuZkVnL3OtkN8bAGi/VtVLvB6sFmJtl3
+         LF8Y5KCSm7CRz1itGXPBgr1aN1aMou4ZbRbFNYM/zyDKMVLWH649lPR52dAuaW4hK6Ez
+         RA8c6duxCDvPGozL2i8ojJtqc4uWBsT56nP27ploFvig312ce9n095v9I+/cD4hRdUfD
+         dySlGxHTmeiXz28yJh6k8yFtOelO+hlXYaQEkQAWN9T7mdiUjgxXm3jNZjnBa+XbaUJa
+         3/Uir4c4jVZnxDk7Hd/XmycpDt6T28evHauvaTm9Q4fWQ31oaKekU4YIc6v5OMCrVOth
+         FzJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696584471; x=1697189271;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qd8PELAk6On3fpApQm8hLN5EGlr4n91DxF8C8aXw5Uk=;
+        b=NlVj9SaiUK5AQQO4B2yHFLJ/33YCdThaMdSo7dcXFK2nXy3PU8X7GnGsMEkTT6A75d
+         m2EHrZkLQmq4ULwQq3i8oqy7PEUG3dZjUPSLa8ud1xHd9iNzkxWdBxAyvk1fawCETN3K
+         jlrrYQptOF8Nv1U76PvtACHzALmyErmaxJW5Hf+RZ3F0VMBXIuCbO6mCa/77BHTr/cEV
+         LT4o2RFuPvEjKktnj+IBZquurbOFsM+iB4WeSWRCK/iJyKtxMQsZ9oob5woA1kUBwWK4
+         LPAQsEGZQkgdXSfB1uHzPVWX8JFrXiXD+gw1rCbSmcefBmeK3/ZHuFgv6WHx1Mrjz94f
+         pAHw==
+X-Gm-Message-State: AOJu0YxdFmTmegmPDg0tvgQHWXiY6dq7cYDHE1A3fNtoClxL7KKrgHBA
+        PvFIRrZ1B168oNVb4SH7JyE=
+X-Google-Smtp-Source: AGHT+IFE3+eJ4cgE1olPLOlFYEDjaAcXkz86sb6eE2ajYLliRdanEX9PMpRbM09FPQsCy2nHMOSeeQ==
+X-Received: by 2002:a17:902:7790:b0:1c4:56c8:27f8 with SMTP id o16-20020a170902779000b001c456c827f8mr6052803pll.68.1696584470813;
+        Fri, 06 Oct 2023 02:27:50 -0700 (PDT)
+Received: from [172.22.12.30] ([123.51.235.123])
+        by smtp.gmail.com with ESMTPSA id f8-20020a170902ce8800b001c76fcccee8sm3303741plg.156.2023.10.06.02.27.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Oct 2023 02:27:50 -0700 (PDT)
+Message-ID: <b08d6cf6-cd48-86d7-a959-290fc4de092c@gmail.com>
+Date:   Fri, 6 Oct 2023 17:27:48 +0800
 MIME-Version: 1.0
-Message-Id: <e8b23683-36ac-4547-9386-935a1b211d7d@app.fastmail.com>
-In-Reply-To: <44816879-a3a7-4bd0-bb20-19a645107b4b@linaro.org>
-References: <20231005155618.700312-1-peter.griffin@linaro.org>
- <20231005155618.700312-19-peter.griffin@linaro.org>
- <ZR75cIvnQS2cqTT3@google.com> <2023100520-cleaver-sinless-fbae@gregkh>
- <99419159-cab0-4c79-a4a0-12229bfad3c0@linaro.org>
- <2023100513-mashing-scrubber-ea59@gregkh>
- <efc9f099-9c97-460b-b0c8-9891aa3b772a@linaro.org>
- <ZR9EnFw3vB92vlYM@google.com>
- <44816879-a3a7-4bd0-bb20-19a645107b4b@linaro.org>
-Date:   Fri, 06 Oct 2023 10:48:58 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "William McVicker" <willmcvicker@google.com>
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Peter Griffin" <peter.griffin@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        "Tomasz Figa" <tomasz.figa@gmail.com>,
-        "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
-        "Guenter Roeck" <linux@roeck-us.net>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>, "Olof Johansson" <olof@lixom.net>,
-        "Chanwoo Choi" <cw00.choi@samsung.com>,
-        "Tudor Ambarus" <tudor.ambarus@linaro.org>,
-        andre.draszik@linaro.org, semen.protsenko@linaro.org,
-        soc@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH 18/21] arm64: dts: google: Add initial Google gs101 SoC support
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH 0/5] watchdog: eiois200_wdt: Add EIO-IS200 Watchdog Driver
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     wenkai.chung@advantech.com.tw, Susi.Driver@advantech.com,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <cover.1696495372.git.advantech.susiteam@gmail.com>
+ <d7df3c7b-730a-4d09-8f15-3cc8591c8092@roeck-us.net>
+Content-Language: en-US
+From:   Wenkai <advantech.susiteam@gmail.com>
+In-Reply-To: <d7df3c7b-730a-4d09-8f15-3cc8591c8092@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Oct 6, 2023, at 08:06, Krzysztof Kozlowski wrote:
-> On 06/10/2023 01:19, William McVicker wrote:
->> On 10/05/2023, Krzysztof Kozlowski wrote:
->>> On 05/10/2023 21:23, Greg KH wrote:
+
+
+Guenter Roeck 於 10/6/2023 11:02 AM 寫道:
+> On Thu, Oct 05, 2023 at 04:51:18PM +0800, advantech.susiteam@gmail.com wrote:
+>> From: Wenkai <advantech.susiteam@gmail.com>
 >>
->> Being able to include SERIAL_SAMSUNG and SERIAL_MSM without all the vendor> specific drivers that ARCH_EXYNOS and ARCH_QCOM select is very
-> valuable for
->> debugging early boot issues.
+>> This patch series aims to add support for the Advantech EIO-IS200
+>> Embedded Controller's watchdog timer to the Linux kernel. The EIO-IS200
+>> is a widely used embedded controller, and this series introduces a
+>> native driver for its watchdog timer functionality within the Linux
+>> ecosystem.
+>>
+> I am not going to review this patch series. This is just ne watchdog driver.
+> One patch is sufficient.
 >
-> Really? How related? The drivers are independent. You describe some
-> out-of-tree development process which we never needed for upstream work.
-> And we did here quite a lot of upstream, specially if you look at ARCH_QCOM.
+> Guenter
+Hi Guenter,
 
-Right: in general, all drivers are independent of the platform
-besides the typical 'depends on ARCH_FOO || COMPILE_TEST' dependency,
-but I think it's worth mentioning the known exceptions, so Greg and
-Will can take that fight to the respective places rather than
-discussing it in the platform submission:
+Advantech's EIO-IS200 watchdog supports 5 output pins: RESET, Power
+Button, SCI, IRQ, and GPIO. The most traditional scenario is that the
+Pretimeout triggers IRQ, and the timeout triggers RESET.
 
-- Some subsystems are considered 'special' and the maintainers
-  prefer the drivers to be automatically selected based on the
-  ARCH_* settings instead of having user-visible options. This is
-  traditionally true for large chunks of drivers/irqchip,
-  drivers/clocksource and drivers/pinctrl, though it has gotten
-  better over time on all of them.
+However, unfortunately, for industrial usages, there are various use
+cases, which require certain mechanisms and logic to manage which signal
+is output when Pretimeout and timeout expire. I am concerned that
+consolidating all these features into a single patch for upstream may
+lead to confusion and make the source code less readable and
+understandable.
 
-- Some older 32-bit platforms are still not as modular as we'd
-  like them to be, especially the StrongARM (ARMv4) platforms that
-  require a custom kernel build, and some of ARMv4T and ARMv5
-  boards that are still missing DT support. These tend to require
-  drivers they directly link to from board code, so disabling
-  the drivers would cause a link failure until this gets
-  cleaned up.
+Therefore, I have divided the implementation into 5 separate patches,
+aiming to make the code more comprehensible and acceptable. If it's
+acceptable to you, I am more than willing to provide a single patch as
+per your preference.
 
-- A couple of drivers are force-enabled based on the ARCH_*
-  options because booting without these drivers would risk
-  permanent damage to hardware, e.g. in overtemp or overcurrent
-  scenarios.
+I would also like to note that this watchdog driver is part of the
+EIO-IS200 MFD (Multi-Function Device) driver family. It serves as one
+of the child-drivers of the drivers/mfd/eiois200_core core driver. It's
+important to mention that without the presence of
+drivers/mfd/eiois200_core, this child-driver eiois200_wdt cannot be
+compiled or used.
 
-- ACPI based platforms require the PCI host bridge driver to
-  be built-in rather than a loadable module because ACPI
-  needs to probe PCI devices during early boot.
+Should we wait until the core driver (drivers/mfd/eiois200_core) is
+successfully incorporated before upstreaming the watchdog child-driver,
+or would you prefer to proceed with these patches independently?
 
-- Some subsystems (notably drivers/gpu/, but others as well)
-  have an excessive number of 'select' statements, so you
-  end up surprise-enabling a number of additional drivers
-  and subsystems by enabling certain less important platform
-  specific drivers.
+Best regards,
+Wenkai
 
-      Arnd
