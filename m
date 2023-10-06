@@ -2,148 +2,162 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C764A7BB1F2
-	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Oct 2023 09:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F297BB37B
+	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Oct 2023 10:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbjJFHI7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 6 Oct 2023 03:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
+        id S231136AbjJFIta (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 6 Oct 2023 04:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbjJFHI6 (ORCPT
+        with ESMTP id S230434AbjJFIt3 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 6 Oct 2023 03:08:58 -0400
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3D7EB;
-        Fri,  6 Oct 2023 00:08:55 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-59f82ad1e09so21831857b3.0;
-        Fri, 06 Oct 2023 00:08:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696576135; x=1697180935;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bDvOGTbwmYKB4yj3dggVQge2NMSHumJx3EfGcewWqNg=;
-        b=P8PqJC3G4xGo2+ilG1ft2/Fvof8Lb9RvotJJWcCR3e3+cfi+17OQFjLia0vWd8OGqP
-         veIej9+m/+D1C+r63oFOplgNuVO/zw0sXdBVAdenYsYb6m02Eg/OwGZCLQb+zPvTRk4O
-         2ysBmddfNkWTWe1Zfz6PJhkSGVlFKY1b45BF59lLwUy+0NDp7J/5xEOMCzIcO/83sRym
-         QZo5wiPKaoZMnWJYYSqXSpYFzrsAzIKfoazD6nSEoJa4+5OBOaH93WUEFQAyOVpQf/HR
-         s/OriPE924HzA3N8s33ZtMew23Fidj2N2Z3cR8H/9NlRs2mcmq5f4ujeLenGzX3iY9BY
-         Vobw==
-X-Gm-Message-State: AOJu0YzmlpjW4rnsDfxKejp16M6y1Vz2gByJMyZbaTZp1lnYw8OFV2cM
-        bz7BWBgztb6VviPOGNt8Af7y0hxoWkh4iQ==
-X-Google-Smtp-Source: AGHT+IEzHd2u+JyGUA1VxiF3B0cNwRjyZsMoyah2KMOfTfFEXGCZr9IfDNYyZvfkFLKQKb+xtrobBg==
-X-Received: by 2002:a81:9289:0:b0:5a2:4409:2124 with SMTP id j131-20020a819289000000b005a244092124mr7760070ywg.35.1696576134761;
-        Fri, 06 Oct 2023 00:08:54 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id u195-20020a8184cc000000b0059f4f30a32bsm1086046ywf.24.2023.10.06.00.08.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Oct 2023 00:08:53 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-59f55c276c3so21557857b3.2;
-        Fri, 06 Oct 2023 00:08:53 -0700 (PDT)
-X-Received: by 2002:a81:4a55:0:b0:599:8bd:5bdf with SMTP id
- x82-20020a814a55000000b0059908bd5bdfmr7486809ywa.50.1696576133283; Fri, 06
- Oct 2023 00:08:53 -0700 (PDT)
+        Fri, 6 Oct 2023 04:49:29 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E142B83;
+        Fri,  6 Oct 2023 01:49:27 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 553463200B27;
+        Fri,  6 Oct 2023 04:49:22 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 06 Oct 2023 04:49:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1696582161; x=1696668561; bh=fq
+        7jUTQDYY98nWZgnWeYl6Cagk6XWBLFE67pLot1gWo=; b=kBZzKMgJZsyJhJ4jkw
+        jQU20dAsOX6gV5+9PEwOC6EDKw7Yrab03w7x2jeKDOi5U8sb/zmQ8Do9RTmngNC8
+        yW1XTJd1bUm/rTmNlB9F9TExc3icsyP1glN07DJTwfqW+FzA7E339NrTeU5sRc/L
+        n3VnfG7n+yfSNcSvAHPhilUJEguUWvbqXhCccmjZaMBvxEY4yFK+ZSL9Gp0LtFha
+        cZ0A9UoKYcf32ekNsano2pLPsmc54RzW/g3tPBuRro7L3uPt90fH3hIN8BzDhNze
+        p9rH9D8bX843QRBOTm7lQAd41lszXDeeJikGphg72AEiyROyBJHPvmCE3IgtC1B8
+        I8xw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1696582161; x=1696668561; bh=fq7jUTQDYY98n
+        WZgnWeYl6Cagk6XWBLFE67pLot1gWo=; b=Z9wduYnbaSjO4hO9z4ThmB4lkJ+ww
+        qv48JvZetC68Oy7Cwu1FZTuWCiNrKWgPVlC3WfLZq9CQAtRwtR+Hgmm5hm7ogHvR
+        g0HhACHoO4MLD7fxHHWj2C3pZU6RASeeLf/9XyNP46PxJ9+Wl/0D6WC9DBYJNVUx
+        mtNhY7IAXC9PqRSim+iZ7rzPLHV0BIft9I6alaUUj3XxUqUv5l7FauuYS80Rf78F
+        T7iw5HeL/xcklmoBHAfAZMLxvFOyUulgeZzpl67xGf0yowfKAw8nWtTXzHAQ8HCE
+        psBkN+QRkt9PJmeDlBFt3h9VAeNTcJJeZFH8l8liepztop+DKATVvf2XQ==
+X-ME-Sender: <xms:EMofZT2i-9GISWVnjxgMhlfr_K0J1DDCikeZffdfaxxvS-c9ZvWmTA>
+    <xme:EMofZSH-GDrTlbKrOc09JAu6xzst-K08JW-bRaweoc7LuQJp4GgEj665KOBjFQo1J
+    Ga257VUxycRUUCsOyk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrgeeigddtjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:EMofZT4ywgzN7LkzmXzXPySCJeAKjukN8v43qGhqwxizLsQRUilCXg>
+    <xmx:EMofZY2E3kF4qLgYpdHd4RbTBZENJnE3pcBjp3j1fIuAPC4cUrEcNA>
+    <xmx:EMofZWHiFKv5E0Dvozm7fdb71mAiOQ7Sue59rxI-niu4_MbVJRdtNw>
+    <xmx:EcofZZYKcoYBWJfaMLlaG0rL0xmTDuYDJQLE8dL3BH9l1IWy6uP6mQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id ABDB6B60089; Fri,  6 Oct 2023 04:49:20 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-958-g1b1b911df8-fm-20230927.002-g1b1b911d
 MIME-Version: 1.0
-References: <20231005155618.700312-1-peter.griffin@linaro.org> <20231005155618.700312-20-peter.griffin@linaro.org>
-In-Reply-To: <20231005155618.700312-20-peter.griffin@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 6 Oct 2023 09:08:41 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUgW1qx-7ADh89BRE4Hhk7-+R7o5VrswcBMymxh7zWUnQ@mail.gmail.com>
-Message-ID: <CAMuHMdUgW1qx-7ADh89BRE4Hhk7-+R7o5VrswcBMymxh7zWUnQ@mail.gmail.com>
-Subject: Re: [PATCH 19/21] google/gs101: Add dt overlay for oriole board
-To:     Peter Griffin <peter.griffin@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
-        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
-        linus.walleij@linaro.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, olof@lixom.net, cw00.choi@samsung.com,
-        tudor.ambarus@linaro.org, andre.draszik@linaro.org,
-        semen.protsenko@linaro.org, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+Message-Id: <e8b23683-36ac-4547-9386-935a1b211d7d@app.fastmail.com>
+In-Reply-To: <44816879-a3a7-4bd0-bb20-19a645107b4b@linaro.org>
+References: <20231005155618.700312-1-peter.griffin@linaro.org>
+ <20231005155618.700312-19-peter.griffin@linaro.org>
+ <ZR75cIvnQS2cqTT3@google.com> <2023100520-cleaver-sinless-fbae@gregkh>
+ <99419159-cab0-4c79-a4a0-12229bfad3c0@linaro.org>
+ <2023100513-mashing-scrubber-ea59@gregkh>
+ <efc9f099-9c97-460b-b0c8-9891aa3b772a@linaro.org>
+ <ZR9EnFw3vB92vlYM@google.com>
+ <44816879-a3a7-4bd0-bb20-19a645107b4b@linaro.org>
+Date:   Fri, 06 Oct 2023 10:48:58 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "William McVicker" <willmcvicker@google.com>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Peter Griffin" <peter.griffin@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Tomasz Figa" <tomasz.figa@gmail.com>,
+        "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+        "Guenter Roeck" <linux@roeck-us.net>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>, "Olof Johansson" <olof@lixom.net>,
+        "Chanwoo Choi" <cw00.choi@samsung.com>,
+        "Tudor Ambarus" <tudor.ambarus@linaro.org>,
+        andre.draszik@linaro.org, semen.protsenko@linaro.org,
+        soc@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 18/21] arm64: dts: google: Add initial Google gs101 SoC support
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Peter,
-
-On Thu, Oct 5, 2023 at 5:58 PM Peter Griffin <peter.griffin@linaro.org> wrote:
-> The LK bootloader on Pixel6 searches for a dt overlay in the
-> dtbo partition with a board_id and board_rev that matches
-> what is baked into the device. If this overlay is not present
-> then the phone will bootloop in fastboot and you can't boot
-> the upstream kernel.
+On Fri, Oct 6, 2023, at 08:06, Krzysztof Kozlowski wrote:
+> On 06/10/2023 01:19, William McVicker wrote:
+>> On 10/05/2023, Krzysztof Kozlowski wrote:
+>>> On 05/10/2023 21:23, Greg KH wrote:
+>>
+>> Being able to include SERIAL_SAMSUNG and SERIAL_MSM without all the vendor> specific drivers that ARCH_EXYNOS and ARCH_QCOM select is very
+> valuable for
+>> debugging early boot issues.
 >
-> This commit adds a dtbo for the production oriole variant.
-> The other pre-production board overlays are not included
-> at this time.
->
-> Adding the dtbo here allows for a better experience when
-> building/booting the upstream kernel on Pixel devices
-> as all the DT required to boot the device will be created
-> as part of the kernel build process. Rather than having to
-> fetch the dtbo from some other repo.
->
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> Really? How related? The drivers are independent. You describe some
+> out-of-tree development process which we never needed for upstream work.
+> And we did here quite a lot of upstream, specially if you look at ARCH_QCOM.
 
-Thanks for your patch!
+Right: in general, all drivers are independent of the platform
+besides the typical 'depends on ARCH_FOO || COMPILE_TEST' dependency,
+but I think it's worth mentioning the known exceptions, so Greg and
+Will can take that fight to the respective places rather than
+discussing it in the platform submission:
 
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/google/gs101-oriole.dtso
-> @@ -0,0 +1,21 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Oriole DVT Device Tree
-> + *
-> + * Copyright 2021-2023 Google,LLC
-> + */
-> +
-> +/dts-v1/;
-> +/plugin/;
-> +
-> +/ {
-> +       board_id = <0x20304>;
-> +       board_rev = <0x10000>;
-> +       fragment@boardbase {
-> +               target-path="/";
-> +               __overlay__ {
-> +                       model = "Oriole DVT";
-> +                       compatible = "google,gs101-oriole";
-> +               };
-> +       };
+- Some subsystems are considered 'special' and the maintainers
+  prefer the drivers to be automatically selected based on the
+  ARCH_* settings instead of having user-visible options. This is
+  traditionally true for large chunks of drivers/irqchip,
+  drivers/clocksource and drivers/pinctrl, though it has gotten
+  better over time on all of them.
 
-Please use sugar-syntax instead of manually defining
-fragment/target-path/__overlay__ constructs.
-You can override these properties in the root node of the base DTS
-using the much simpler:
+- Some older 32-bit platforms are still not as modular as we'd
+  like them to be, especially the StrongARM (ARMv4) platforms that
+  require a custom kernel build, and some of ARMv4T and ARMv5
+  boards that are still missing DT support. These tend to require
+  drivers they directly link to from board code, so disabling
+  the drivers would cause a link failure until this gets
+  cleaned up.
 
-    &{/} {
-            model = "Oriole DVT";
-            compatible = "google,gs101-oriole";
-    };
+- A couple of drivers are force-enabled based on the ARCH_*
+  options because booting without these drivers would risk
+  permanent damage to hardware, e.g. in overtemp or overcurrent
+  scenarios.
 
-The generated DTBO should be identical (modulo naming).
+- ACPI based platforms require the PCI host bridge driver to
+  be built-in rather than a loadable module because ACPI
+  needs to probe PCI devices during early boot.
 
-> +};
+- Some subsystems (notably drivers/gpu/, but others as well)
+  have an excessive number of 'select' statements, so you
+  end up surprise-enabling a number of additional drivers
+  and subsystems by enabling certain less important platform
+  specific drivers.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+      Arnd
