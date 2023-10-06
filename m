@@ -2,129 +2,196 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126A47BBA0E
-	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Oct 2023 16:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9837BBCCF
+	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Oct 2023 18:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjJFOQu (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 6 Oct 2023 10:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
+        id S232848AbjJFQeB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 6 Oct 2023 12:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjJFOQt (ORCPT
+        with ESMTP id S232885AbjJFQd7 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 6 Oct 2023 10:16:49 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68656C5;
-        Fri,  6 Oct 2023 07:16:48 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-352a1d77fa4so9253175ab.3;
-        Fri, 06 Oct 2023 07:16:48 -0700 (PDT)
+        Fri, 6 Oct 2023 12:33:59 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D04DE
+        for <linux-watchdog@vger.kernel.org>; Fri,  6 Oct 2023 09:33:57 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1c60128d3f6so445ad.0
+        for <linux-watchdog@vger.kernel.org>; Fri, 06 Oct 2023 09:33:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696601808; x=1697206608; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rlFqNr400oUmo86LhhjzRRwWWVe1as4xD/8YyVt9kKk=;
-        b=NzY80zchDbXkuq0StA/l1IyqjhY6DJSunIGGSmG7XsV7FjPk/76ATuEdinl+QSagUg
-         1+naWDgEGhRFfSPGBjB6LkaGKGK6ACWLk6gTBrwv92bPX3tCqJ/q1aoeckeQTdiRtk4P
-         UU+wOWXP6ARydfxmlQtdOOisedqUBk6VXX5tbmqWTZOND1xVlImCbmhqu//VBtABhoxj
-         GfzJXbAL9tb3yDrqezZLTTLdwU/zK6yp46TEtdgPXZhKd++TE0mVQkd9h0Z/ayjTvdIk
-         wQkGszI5wkpo51PDj+nX4XncHIS4fRi8Vh2LRIQDFHoPRabm9H4JSdDBblveNnB2T06w
-         bIbg==
+        d=google.com; s=20230601; t=1696610036; x=1697214836; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hTvdrZFmq0hYxp77EcKvOnGpN0oCW3xY/AiFjsTxtTU=;
+        b=1cH8qcBLbYdVmyJgImfP4kPooyszqdpDDthXV10khKxOsscBnVV3NVbQKLvLbvxpMO
+         fHuFzPq8TQdY/uGy/u2NON+aYcSKUcYAazbz3YZ3KSDLDm3GSD+rP2mR8S8Glbt07Kb0
+         7A5a49SYPvi9/b1g50QgirZreJsXES4IRiUp0GEzEw66wp/Q7G6GfLEvcSRoOy8cDMVC
+         oyvq+1tJ8NU9qKSqigDolMELM0AEmHqdWsJAzcy5mV6TCdzukP5Yv9SxTHQrT9llVCzj
+         jaIwVe6yRVaJa8K3mrN8ZYfIVvFLcTSx/Q9Q5rbHIQ8W4JqZ87/ZOzBiqlJK+ngA/TgG
+         Ghog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696601808; x=1697206608;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rlFqNr400oUmo86LhhjzRRwWWVe1as4xD/8YyVt9kKk=;
-        b=o3NvR4KaWqP1srOWkohFBm4Y0yk47FLiUX/V/mY99JPWNnPB8xDL/J2ekGaMQbuHSJ
-         JZZiUsb1fjQELY2LnrmS0dqDMoYOpCLUwxGRyY6Lhw2teJhQ+WqRv3XcnO/Gd3BM5Mm0
-         AlNrBI+1nNlxkHJlvZTPKcTJhNb0QYhczOgKDJxGdNNFpJDliKfpiZ89YuoLWX2EbN8N
-         6pW0lq/6VOVPsvYZuJyy0/jVcIOwqorAXl0iaQzis5P9/0RVyWPtCI1exKIqsWHUpTu5
-         M9nm8WR0eiYI2nRvB1XdVevQ51S13TfiGgjbShEud1+rQRz8c96lpis1J3HGV/+k/imB
-         4Aqg==
-X-Gm-Message-State: AOJu0YyH5woM27PAvJUFE6PBY9i45fZrIM0c9nGOqlm/hHghE1qJdLuk
-        ObdiCy+9u0KCmmEWv+Lf7fiUds1270k=
-X-Google-Smtp-Source: AGHT+IFr8XQMKMskr7PRnKb9gzN64Tp+/S3W0BqldLDGTmi01DtlauD/kgzrG+/reT6ocmMO70tINA==
-X-Received: by 2002:a6b:f319:0:b0:783:63d6:4c5 with SMTP id m25-20020a6bf319000000b0078363d604c5mr9701877ioh.12.1696601807648;
-        Fri, 06 Oct 2023 07:16:47 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h1-20020a02b601000000b0043978165d54sm435756jam.104.2023.10.06.07.16.46
+        d=1e100.net; s=20230601; t=1696610036; x=1697214836;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hTvdrZFmq0hYxp77EcKvOnGpN0oCW3xY/AiFjsTxtTU=;
+        b=gbrNosRc6AJfeTf086dMVquYG+Df52gH+VqeJoiAI+cSxwFq4Z6H0IVhBSWiCQItOx
+         AOqle6XfC2LRxj/W/7Xdt+UDxZIC/3NZll/cvVsx6caCe67rXQrgT5Ny6EoxNB8APupQ
+         Kca8vxz+tyAB3+MsnceNZ16smTQiJTsBZemAoz1MrBqW65nvRUmAC1JEMYFlOW4Xv7O2
+         Fpt5rQp/doH4N5lyKVbmkP+vd5AMs1VmBeePQlXo2lbO8j61hCjZUI1/vKqQq9X4RVp7
+         uy/PcC6KySDOUb0siRjuc1XZRbRaMVyMZmBKbCAXVyC3jHW1euWCt4Nwxp4AXzlSz8Mt
+         1/EQ==
+X-Gm-Message-State: AOJu0YwSK1ew+nH7RU7mG+qrm7JijL+1SKP9eBZ2gHbiYnFONkkqiKCP
+        oZaJ3WZE8O7WBw4AkMTmR2yEIA==
+X-Google-Smtp-Source: AGHT+IHgejsiy4SZfD/kIaiCo2p5a5GHbtVsqXoNRUJ/kjAOpzjKyLWuXfdo9k7lkUWRMBwV75Nd+w==
+X-Received: by 2002:a17:902:e805:b0:1c7:3224:913a with SMTP id u5-20020a170902e80500b001c73224913amr382708plg.27.1696610036323;
+        Fri, 06 Oct 2023 09:33:56 -0700 (PDT)
+Received: from google.com (13.65.82.34.bc.googleusercontent.com. [34.82.65.13])
+        by smtp.gmail.com with ESMTPSA id l4-20020a170902eb0400b001b9d7c8f44dsm4113036plb.182.2023.10.06.09.33.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Oct 2023 07:16:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 6 Oct 2023 07:16:44 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wenkai <advantech.susiteam@gmail.com>
-Cc:     wenkai.chung@advantech.com.tw, Susi.Driver@advantech.com,
+        Fri, 06 Oct 2023 09:33:55 -0700 (PDT)
+Date:   Fri, 6 Oct 2023 09:33:51 -0700
+From:   William McVicker <willmcvicker@google.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Griffin <peter.griffin@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 0/5] watchdog: eiois200_wdt: Add EIO-IS200 Watchdog Driver
-Message-ID: <ce810ce8-f93c-4a9c-9d14-1e8f8f8c3e2b@roeck-us.net>
-References: <cover.1696495372.git.advantech.susiteam@gmail.com>
- <d7df3c7b-730a-4d09-8f15-3cc8591c8092@roeck-us.net>
- <b08d6cf6-cd48-86d7-a959-290fc4de092c@gmail.com>
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Olof Johansson <olof@lixom.net>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        andre.draszik@linaro.org, semen.protsenko@linaro.org,
+        soc@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 18/21] arm64: dts: google: Add initial Google gs101 SoC
+ support
+Message-ID: <ZSA27y5CVs4yQC4a@google.com>
+References: <20231005155618.700312-1-peter.griffin@linaro.org>
+ <20231005155618.700312-19-peter.griffin@linaro.org>
+ <ZR75cIvnQS2cqTT3@google.com>
+ <2023100520-cleaver-sinless-fbae@gregkh>
+ <99419159-cab0-4c79-a4a0-12229bfad3c0@linaro.org>
+ <2023100513-mashing-scrubber-ea59@gregkh>
+ <efc9f099-9c97-460b-b0c8-9891aa3b772a@linaro.org>
+ <ZR9EnFw3vB92vlYM@google.com>
+ <44816879-a3a7-4bd0-bb20-19a645107b4b@linaro.org>
+ <e8b23683-36ac-4547-9386-935a1b211d7d@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b08d6cf6-cd48-86d7-a959-290fc4de092c@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e8b23683-36ac-4547-9386-935a1b211d7d@app.fastmail.com>
+X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Oct 06, 2023 at 05:27:48PM +0800, Wenkai wrote:
+On 10/06/2023, Arnd Bergmann wrote:
+> On Fri, Oct 6, 2023, at 08:06, Krzysztof Kozlowski wrote:
+> > On 06/10/2023 01:19, William McVicker wrote:
+> >> On 10/05/2023, Krzysztof Kozlowski wrote:
+> >>> On 05/10/2023 21:23, Greg KH wrote:
+> >>
+> >> Being able to include SERIAL_SAMSUNG and SERIAL_MSM without all the vendor> specific drivers that ARCH_EXYNOS and ARCH_QCOM select is very
+> > valuable for
+> >> debugging early boot issues.
+> >
+> > Really? How related? The drivers are independent. You describe some
+> > out-of-tree development process which we never needed for upstream work.
+> > And we did here quite a lot of upstream, specially if you look at ARCH_QCOM.
 > 
+> Right: in general, all drivers are independent of the platform
+> besides the typical 'depends on ARCH_FOO || COMPILE_TEST' dependency,
+> but I think it's worth mentioning the known exceptions, so Greg and
+> Will can take that fight to the respective places rather than
+> discussing it in the platform submission:
 > 
-> Guenter Roeck 於 10/6/2023 11:02 AM 寫道:
-> > On Thu, Oct 05, 2023 at 04:51:18PM +0800, advantech.susiteam@gmail.com wrote:
-> > > From: Wenkai <advantech.susiteam@gmail.com>
-> > > 
-> > > This patch series aims to add support for the Advantech EIO-IS200
-> > > Embedded Controller's watchdog timer to the Linux kernel. The EIO-IS200
-> > > is a widely used embedded controller, and this series introduces a
-> > > native driver for its watchdog timer functionality within the Linux
-> > > ecosystem.
-> > > 
-> > I am not going to review this patch series. This is just ne watchdog driver.
-> > One patch is sufficient.
-> > 
-> > Guenter
-> Hi Guenter,
+> - Some subsystems are considered 'special' and the maintainers
+>   prefer the drivers to be automatically selected based on the
+>   ARCH_* settings instead of having user-visible options. This is
+>   traditionally true for large chunks of drivers/irqchip,
+>   drivers/clocksource and drivers/pinctrl, though it has gotten
+>   better over time on all of them.
 > 
-> Advantech's EIO-IS200 watchdog supports 5 output pins: RESET, Power
-> Button, SCI, IRQ, and GPIO. The most traditional scenario is that the
-> Pretimeout triggers IRQ, and the timeout triggers RESET.
+> - Some older 32-bit platforms are still not as modular as we'd
+>   like them to be, especially the StrongARM (ARMv4) platforms that
+>   require a custom kernel build, and some of ARMv4T and ARMv5
+>   boards that are still missing DT support. These tend to require
+>   drivers they directly link to from board code, so disabling
+>   the drivers would cause a link failure until this gets
+>   cleaned up.
 > 
-> However, unfortunately, for industrial usages, there are various use
-> cases, which require certain mechanisms and logic to manage which signal
-> is output when Pretimeout and timeout expire. I am concerned that
-> consolidating all these features into a single patch for upstream may
-> lead to confusion and make the source code less readable and
-> understandable.
+> - A couple of drivers are force-enabled based on the ARCH_*
+>   options because booting without these drivers would risk
+>   permanent damage to hardware, e.g. in overtemp or overcurrent
+>   scenarios.
 > 
+> - ACPI based platforms require the PCI host bridge driver to
+>   be built-in rather than a loadable module because ACPI
+>   needs to probe PCI devices during early boot.
+> 
+> - Some subsystems (notably drivers/gpu/, but others as well)
+>   have an excessive number of 'select' statements, so you
+>   end up surprise-enabling a number of additional drivers
+>   and subsystems by enabling certain less important platform
+>   specific drivers.
+> 
+>       Arnd
 
-The 1st patch in your series doesn't even compile. I don't call that
-understandable.
+So if the argument is that the existing upstream Exynos platforms are required
+to have these drivers built-in to the kernel to boot:
+    COMMON_CLK_SAMSUNG
+    CLKSRC_EXYNOS_MCT
+    EXYNOS_PM_DOMAINS if PM_GENERIC_DOMAINS
+    EXYNOS_PMU
+    PINCTRL
+    PINCTRL_EXYNOS
+    PM_GENERIC_DOMAINS if PM
+    SOC_SAMSUNG
 
-Oh, it fails to compile because you include a non-existing file from
-../mfd directly and because you select a non-existing configuration option
-instead of depending on it.
+...then that is understandable and we can work to fix that.
 
-None of those is even remotely acceptable. Are you seriously sending me
-a series of patches that don't even build to review ?
+My last question then is -- why do we need a new ARCH_GOOGLE_TENSOR config in
+the platform Kconfig? For example, I don't really like this:
 
-> Therefore, I have divided the implementation into 5 separate patches,
-> aiming to make the code more comprehensible and acceptable. If it's
-> acceptable to you, I am more than willing to provide a single patch as
-> per your preference.
-> 
-Frankly, your series is one more nail in the coffin. I am now seriously
-considering to resign as co-maintainer of the watchdog subsystem.
+diff --git a/drivers/clk/samsung/Kconfig b/drivers/clk/samsung/Kconfig
+index 76a494e95027..4c8f173c4dec 100644
+--- a/drivers/clk/samsung/Kconfig
++++ b/drivers/clk/samsung/Kconfig
+@@ -13,6 +13,7 @@ config COMMON_CLK_SAMSUNG
+        select EXYNOS_5420_COMMON_CLK if ARM && SOC_EXYNOS5420
+        select EXYNOS_ARM64_COMMON_CLK if ARM64 && ARCH_EXYNOS
+        select TESLA_FSD_COMMON_CLK if ARM64 && ARCH_TESLA_FSD
++       select GOOGLE_GS101_COMMON_CLK if ARM64 && ARCH_GOOGLE_TENSOR
 
-Guenter
+What happens when we have GOOGLE_GS101_COMMON_CLK, GOOGLE_GS201_COMMON_CLK, and
+so on? How are we going to pick the right driver when we have a generic
+ARCH_GOOGLE_TENSOR config? Ideally, we should have one Exynos clock driver that
+can detect what hardware is running (using the DT) to determine what it needs
+to do. If you really want to compile out the other vendor's clock drivers using
+some configs, then we should do that with SOC_GS101, SOC_GS201, SOC_TESLA_FSD
+configs (not ideal though). With that approach, we could drop the platform
+ARCH_GOOGLE_TENSOR config and create an SOC_GS101 config that can be used for
+things like the COMMON_CLK_SAMSUNG driver (for now) and building the GS101 dtb.
+
+Let me know your thoughts.
+
+Thanks,
+Will
