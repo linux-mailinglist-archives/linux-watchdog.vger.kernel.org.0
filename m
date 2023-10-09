@@ -2,67 +2,74 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7A27BD5F7
-	for <lists+linux-watchdog@lfdr.de>; Mon,  9 Oct 2023 10:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F1D7BD941
+	for <lists+linux-watchdog@lfdr.de>; Mon,  9 Oct 2023 13:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345595AbjJII7c (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 9 Oct 2023 04:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42948 "EHLO
+        id S1346176AbjJILKO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 9 Oct 2023 07:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345562AbjJII7b (ORCPT
+        with ESMTP id S1346172AbjJILKM (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 9 Oct 2023 04:59:31 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C927D6
-        for <linux-watchdog@vger.kernel.org>; Mon,  9 Oct 2023 01:59:29 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-3296a998234so2429403f8f.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 09 Oct 2023 01:59:28 -0700 (PDT)
+        Mon, 9 Oct 2023 07:10:12 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F15B4
+        for <linux-watchdog@vger.kernel.org>; Mon,  9 Oct 2023 04:10:10 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-40651a72807so42752045e9.1
+        for <linux-watchdog@vger.kernel.org>; Mon, 09 Oct 2023 04:10:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696841967; x=1697446767; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1696849809; x=1697454609; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4ShYikb9cSe8u3igb5BJ1QIbt5aUV5TPk6yNfqKle5Q=;
-        b=RYDbWxfc8eF+fR77fM2IzLzR4uylQvF7s+dJqAogsDJLE1cqzfrk58HZz7RVFwPJe5
-         naic847j5DR/864wPbskOjZF7a0CHh0MDqjAiQegSDSqL2P9eP/NTswijlFarBSVOWPy
-         aOLve4eGVf3y8UomeUKSudcyMvPEMPq9d7nyzJUbTd4NoQTCeTID8QIbsetAGFQg4uiA
-         MPRjWLHnc9JvJUTsk6pH+r9l34GXSCD48dcYKBSk8NXmc+ZgFJmkNhOAwhq2MZj7QiEE
-         UzDwsZli4bkgBM3FaW84MffxuHYpJJcUAKiXJGzzT4XCUtpAV1fFDHrlC53u4hw6KGK/
-         ZtLw==
+        bh=eha32mCPIw9If1HKwS4OR6beDUwOcpUGc/ezh4Z+F3o=;
+        b=YQTjZcpMzH0heTag3hC4QVg3GzKbujR7KaDCcV3RJNLMLL7yt0zHT4sORSnfhOU74n
+         30go9FXNUR5h2i3Pp/uDmMa8hyknoS/VZuG4B6u+SXIKqiYo0L9d5fpWcX6XTN4Kdj8H
+         rXo1TjGTwGnekE9tLv2eCXFtvJXbOmNI9vC6AqRui+n3mfD6xPwViX/qaZm0EobvCi7w
+         hpxJUBMBrIFR1sDrNsOkscl1J9twwdaLyoDqbfGtxAfMCKtTdneB5/z3lhdQzbGvrtpt
+         f1rrRddl4yoshJZ+TEm7Vrx/rwC33xYC0GVBg0Wm4qDwe46hpllNn127TmNrZd00ul60
+         silw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696841967; x=1697446767;
+        d=1e100.net; s=20230601; t=1696849809; x=1697454609;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ShYikb9cSe8u3igb5BJ1QIbt5aUV5TPk6yNfqKle5Q=;
-        b=bz0i0VlEtd3xO8SmYcR0l5teCFlGYaGhHFPqEq1e2MNPDITO1MsitnVs5Zv7vz47wY
-         8kw/GHw/o6CjUi3V8UKxeVmOt4xWqT4wFnPAZZlWGIzW6lOmgVJJ6LOGbUP0g55xKJxr
-         g80mNqMHBErBehGqiRKyYrbIEKjwbvl7DIGV/7QrXMVr6vQiU6liZytkBe6/Q2Fpn3ms
-         WGPkem0R72aEf8tVUpLNxjNMq34zEsLraSAdt/joVyaUel4B5BuCaKZ1AvD5CHyA2/PW
-         mbaDdJjqMBkHlXcJOzWCpNceVPLECKmSb8yehfn2FKQCjFiRc/ST98A3pdL7w4XlM/E7
-         5mvQ==
-X-Gm-Message-State: AOJu0YxZTFYLm8+GuVsQyRU3b08x5UVu2ZzgFKU43KcsUKpsCZq6q+s/
-        YMvBmM8W+m7Uz+lR7SaM6LIU8g==
-X-Google-Smtp-Source: AGHT+IFQWMber2vVYCdoBKcy9gb9kS82LDgOz1h5z4rWRSyxHWvKiOJKDS9fe7zCxAkx2bFBRMPh1g==
-X-Received: by 2002:a5d:4486:0:b0:321:6bae:f764 with SMTP id j6-20020a5d4486000000b003216baef764mr12765494wrq.23.1696841967452;
-        Mon, 09 Oct 2023 01:59:27 -0700 (PDT)
+        bh=eha32mCPIw9If1HKwS4OR6beDUwOcpUGc/ezh4Z+F3o=;
+        b=UOXPhRb7WrpMcUcWiKPyDNmAxee/UVSoqTmKcJkzduJ11hhukh+7cVcfE/11wS7fbq
+         lxxu5P0y8XsuVApzgfrDz2g6EAvoWWpb7csK+GJcqe237ivD0om/AY7pMMNWulaIjjXW
+         bvAOtKko6KyUqJ5Nhf5PKWlwDhspW0js4eAWPYyKSIFlyjA4zARPcrZkwCDHzGLKNR7F
+         Y1If/AfI7rhQj7JMoO7Vf1GpcQ8W6HXZ0/r0GBPBKb279JYkT9YUQ4Hg9/5PT/r0JbDP
+         JMgn3bBWflvaTpvagB9HhJMMdu5tVRV5UImnYi77ynsJSvgl16TVGKVvydl3x2iIonP4
+         AFPA==
+X-Gm-Message-State: AOJu0Yy2TYEk+hjN64cOpjMiIIKT3+4vB7zlQg+mmGf7H2yHx3eUOoxq
+        hggywj7IErspBNEaqJAgaMesCQ==
+X-Google-Smtp-Source: AGHT+IFUMduUe1nocHMD+9yyCcjTn3pL41KH2vr1uDlbCU3nqDUA4+eDKPOvnYvxHpPJeCS6jafteg==
+X-Received: by 2002:a7b:cb89:0:b0:3fe:15f0:dfbc with SMTP id m9-20020a7bcb89000000b003fe15f0dfbcmr13735507wmi.12.1696849808982;
+        Mon, 09 Oct 2023 04:10:08 -0700 (PDT)
 Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id q9-20020adfcd89000000b00317f70240afsm8893294wrj.27.2023.10.09.01.59.25
+        by smtp.gmail.com with ESMTPSA id u6-20020a05600c00c600b00402ff8d6086sm10839385wmm.18.2023.10.09.04.10.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Oct 2023 01:59:26 -0700 (PDT)
-Message-ID: <2064318a-ffbb-4268-b6f3-2a8546984925@linaro.org>
-Date:   Mon, 9 Oct 2023 10:59:22 +0200
+        Mon, 09 Oct 2023 04:10:08 -0700 (PDT)
+Message-ID: <5c9cc513-c826-4493-8255-1ec45047c403@linaro.org>
+Date:   Mon, 9 Oct 2023 13:10:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: watchdog: da9062-wdt: convert txt to yaml
+Subject: Re: [PATCH 00/21] Add minimal Tensor/GS101 SoC support and
+ Oriole/Pixel6 board
 Content-Language: en-US
-To:     Nik Bune <n2h9z4@gmail.com>, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        skhan@linuxfoundation.org, stwiss.opensource@diasemi.com
-Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20231006111104.11105-1-n2h9z4@gmail.com>
+To:     Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
+        s.nawrocki@samsung.com, linus.walleij@linaro.org,
+        wim@linux-watchdog.org, linux@roeck-us.net,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, cw00.choi@samsung.com
+Cc:     tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+        semen.protsenko@linaro.org, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20231005155618.700312-1-peter.griffin@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -108,7 +115,7 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231006111104.11105-1-n2h9z4@gmail.com>
+In-Reply-To: <20231005155618.700312-1-peter.griffin@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -121,88 +128,28 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 06/10/2023 13:11, Nik Bune wrote:
-> Convert txt file to yaml.
-
-Please mention changes done during conversion with justification (e.g.
-adding reg already used by something).
-
+On 05/10/2023 17:55, Peter Griffin wrote:
+> Hi folks,
 > 
+> This series adds initial SoC support for the GS101 SoC and also initial board
+> support for Pixel 6 phone (Oriole).
+> 
+> The gs101 / Tensor SoC is also used in Pixel6a (bluejay) and Pixel 6 Pro (raven).
+> Currently DT is just added for the gs101 SoC and Oriole.
+> 
+> The support added in this series consists of:
+> * cpus
+> * pinctrl
+> * some CCF clock implementation
+> * watchdog
+> * uart
+> * gpio
 
-...
+Hi Peter,
 
-> diff --git a/Documentation/devicetree/bindings/watchdog/da9062-wdt.yaml b/Documentation/devicetree/bindings/watchdog/da9062-wdt.yaml
-> new file mode 100644
-> index 000000000000..9911cc3068cf
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/da9062-wdt.yaml
-
-Filename based on compatible, so:
-dlg,da9062-watchdog.yaml
-
-
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/da9062-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Dialog Semiconductor DA9062/61 Watchdog Timer
-> +
-> +maintainers:
-> +  - Steve Twiss <stwiss.opensource@diasemi.com>
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum: 
-> +      - dlg,da9061-watchdog
-> +      - dlg,da9062-watchdog
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  dlg,use-sw-pm:
-> +    type: boolean
-> +    description: >
-
-No need for >
-
-> +      Add this property to disable the watchdog during suspend.
-> +      Only use this option if you can't use the watchdog automatic suspend
-> +      function during a suspend (see register CONTROL_B).
-> +  
-> +  dlg,wdt-sd:
-> +    type: boolean
-> +    description: >
-
-No need for >
-
-> +      Set what happens on watchdog timeout. If this bit is set the
-> +      watchdog timeout triggers SHUTDOWN, if cleared the watchdog triggers
-> +      POWERDOWN. Can be 0 or 1. Only use this option if you want to change the
-> +      default chip's OTP setting for WATCHDOG_SD bit. If this property is NOT
-> +      set the WATCHDOG_SD bit and on timeout watchdog behavior will match the
-> +      chip's OTP settings.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    watchdog@fffffd00 {
-> +      compatible = "dlg,da9062-watchdog";
-> +      reg = <0xfffffd00 0x10>;
-
-It's nice to add here some properties to make example complete.
-
-> +    };
+Heads up, in case you are not aware Arm SoC timeframes: we are at rc5,
+so it means that anything targeting v6.7 should be applied this working
+week, before rc6. At least as ARM SoC is concerned.
 
 Best regards,
 Krzysztof
