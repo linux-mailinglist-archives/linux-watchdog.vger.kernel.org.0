@@ -2,166 +2,146 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4E47BEB29
-	for <lists+linux-watchdog@lfdr.de>; Mon,  9 Oct 2023 22:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73377BEB33
+	for <lists+linux-watchdog@lfdr.de>; Mon,  9 Oct 2023 22:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378397AbjJIUEG (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 9 Oct 2023 16:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
+        id S234540AbjJIUGL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 9 Oct 2023 16:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376628AbjJIUEG (ORCPT
+        with ESMTP id S234583AbjJIUGK (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 9 Oct 2023 16:04:06 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FC794
-        for <linux-watchdog@vger.kernel.org>; Mon,  9 Oct 2023 13:04:04 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1c9ad9473d7so40975ad.1
-        for <linux-watchdog@vger.kernel.org>; Mon, 09 Oct 2023 13:04:04 -0700 (PDT)
+        Mon, 9 Oct 2023 16:06:10 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649CCCA
+        for <linux-watchdog@vger.kernel.org>; Mon,  9 Oct 2023 13:06:08 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2c27d653856so71665421fa.0
+        for <linux-watchdog@vger.kernel.org>; Mon, 09 Oct 2023 13:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696881843; x=1697486643; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=792ACGhD6QjX3gm4sl6mN1ZnGztud0zoUVjrdn9K8C0=;
-        b=ZHALqsmkzhqOYDFJcfu/axPofTffo1dsrCiTTswHYNc4mVcvVN02tocv8qEfvHkKw8
-         qBSg8z9vnU8sfbN+pyeWDtW5XstfK5EvKWOkeZR5M5RRx2uKBA+z21o04gfADMqsyNND
-         Y3+Rx2HUg2gksU4kdhsC+dYLMMn3FwnlxQdGhqFqaKHx2t64rqOsy+APdJeuZoxm/f8z
-         VoeeRgN9Bp9rq0YYvsU/2ebqteY14M53iq4CTJ0cFN3FQqxyiXqVNdzv5dvkj4Vkld3o
-         SivdRaHbtlR7kBrHNO9Gw3TMh6RevjJk14h+o1QGie5SwINSbfwUM2XiR3afwia6iqJf
-         gFDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696881843; x=1697486643;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=ionos.com; s=google; t=1696881966; x=1697486766; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=792ACGhD6QjX3gm4sl6mN1ZnGztud0zoUVjrdn9K8C0=;
-        b=ZDE3pwMTUXNgWEDMVLckjhXOAR7Y1qZmQ025rRF0V11zN6bfYp3RqGn59vCB3ImmGY
-         bJot/oYVsDgP7u40bv2/pFkXJESiqPRUKCq1chcal29EKFeiUgHFYjrs/WDSw0oOyOqO
-         x1V11DIiioGbRF7eUR56v9zqC1SHvgdR1ppY+NTgot72KAVOxxRWgxfkJBEQk59QecCD
-         uNXM0A74rcngxvBZtTjiwG4QQkV2Kbi3efldr5xv1icZiBDuyClAnoNgmiS6l/BcoRQo
-         EjI0eNTIBBZ2B5yuoInRvemLVL7tHZ9BM3C1j2dRoEnNc425xobnfd+6YJMSZGgtJLFF
-         HqcQ==
-X-Gm-Message-State: AOJu0YxtQVT21FgQIpHhBGWIOz3oDJ+IGlObooxuGAt+dhJt/EHPvF0x
-        A4TGZgCCT7KmQOlUGoADsk71gg==
-X-Google-Smtp-Source: AGHT+IGoDE0HuNMIvb5i2H0sYSVhJ0lPtrnwVtRl9vcbmzHn2Ebn09gMy1XHI6WbiXHnD9jwHuRR6Q==
-X-Received: by 2002:a17:902:ec8b:b0:1c6:c41:679c with SMTP id x11-20020a170902ec8b00b001c60c41679cmr803671plg.4.1696881843213;
-        Mon, 09 Oct 2023 13:04:03 -0700 (PDT)
-Received: from google.com (13.65.82.34.bc.googleusercontent.com. [34.82.65.13])
-        by smtp.gmail.com with ESMTPSA id k3-20020a63ab43000000b0050f85ef50d1sm8838631pgp.26.2023.10.09.13.04.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Oct 2023 13:04:02 -0700 (PDT)
-Date:   Mon, 9 Oct 2023 13:03:59 -0700
-From:   William McVicker <willmcvicker@google.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
-        s.nawrocki@samsung.com, linus.walleij@linaro.org,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, cw00.choi@samsung.com, tudor.ambarus@linaro.org,
-        andre.draszik@linaro.org, semen.protsenko@linaro.org,
-        soc@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH 19/21] google/gs101: Add dt overlay for oriole board
-Message-ID: <ZSRcr6JRbj-wZf7R@google.com>
-References: <20231005155618.700312-1-peter.griffin@linaro.org>
- <20231005155618.700312-20-peter.griffin@linaro.org>
- <7f2032c2-812a-46b5-8914-056cd53c37cb@linaro.org>
+        bh=vntWR/EJpWFamZ/9NMXVbCLlV4xDhJbERcnlqbMN6Xk=;
+        b=BFuMz3FMbhLgkIJi/HkkmJ1VkLf2I7vqp4svyIwG2+yDE+U4S96EGEikgUcb8O02Uo
+         8j8iLlfo7vmxsfcwVcs/qIKkl99xa5dmEeJRo1cSF6V+ygbEal7iO3+v912NQA+dawBz
+         Soy5yco9XA4Rbc4rDCwVGkioAfXZalXRitmVvyF0C2rWZ0Ewe2//XA3FBEsbn52apGZL
+         aRFt/c7Wzbg6QpYPQ0dm8EJR8fe2x3S+duZuFSIP/H5VlRW/FVRYn5HxOETlTJKz3xcb
+         BMDmJLPjWEXQ8IaDm9bc5q/71Ibv+h4ffhs1BXiaAk1KUwUk/S2rUW6zLyroy1Lm1kJC
+         OAGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696881966; x=1697486766;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vntWR/EJpWFamZ/9NMXVbCLlV4xDhJbERcnlqbMN6Xk=;
+        b=ADJcMXn4Q0f+31ivdawTw/JDvmB/gVeqWywwAMXr6L7xZx7RERngCOGGX8rzQPYiMm
+         skZpQef62tCfaORIH1yOv1cBzM0DhdLHjnIpdiZQBhd6VxO5zONre7oGD19LB5zx+iEK
+         CcuRSc6oBnackXwAn5idXi0wDZZTlUnS8KscRapdFlD/A2Anp0texIQ6cVvgzKfFHnpp
+         dbry1OSSGiivjvOWSVANDUdTRz9l4FXf3nG5QsnEqZREIhM3iR9uE8oCHuWCibhB6c3o
+         MmF4yGfrFxjGkMEHwE73qSTL1pB3s5crcC2tAcP0ZNiCXdQuDUi1yWtRPcv18eSUlchg
+         2+nA==
+X-Gm-Message-State: AOJu0YxWa5CHC4VKoE1adqxmifo7XxuiRh08c9sgmXOKQeHU6ZOTAwz3
+        jAfTWRzsPzryqKjNAqC2geBIrz9YgqJms0Qk7AYjkg==
+X-Google-Smtp-Source: AGHT+IFghqg7b3VfDVvZ+soPEwEaIfxhrwarlOcz2b03PC3KagC0O9BH1UGRNCP79pJ8yT5JMzxC/VoYSKvtKG/y1ws=
+X-Received: by 2002:a2e:870c:0:b0:2b6:cbdb:790c with SMTP id
+ m12-20020a2e870c000000b002b6cbdb790cmr11535962lji.1.1696881966432; Mon, 09
+ Oct 2023 13:06:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7f2032c2-812a-46b5-8914-056cd53c37cb@linaro.org>
-X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+References: <20231009165741.746184-1-max.kellermann@ionos.com>
+ <20231009165741.746184-6-max.kellermann@ionos.com> <264fa39d-aed6-4a54-a085-107997078f8d@roeck-us.net>
+In-Reply-To: <264fa39d-aed6-4a54-a085-107997078f8d@roeck-us.net>
+From:   Max Kellermann <max.kellermann@ionos.com>
+Date:   Mon, 9 Oct 2023 22:05:55 +0200
+Message-ID: <CAKPOu+8k2x1CucWSzoouts0AfMJk+srJXWWf3iWVOeY+fWkOpQ@mail.gmail.com>
+Subject: Re: [PATCH 6/7] fs/sysfs/group: make attribute_group pointers const
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        James Clark <james.clark@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-rdma@vger.kernel.org, iommu@lists.linux.dev,
+        nvdimm@lists.linux.dev, linux-nvme@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-leds@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 10/05/2023, Krzysztof Kozlowski wrote:
-> On 05/10/2023 17:56, Peter Griffin wrote:
-> > The LK bootloader on Pixel6 searches for a dt overlay in the
-> > dtbo partition with a board_id and board_rev that matches
-> > what is baked into the device. If this overlay is not present
-> > then the phone will bootloop in fastboot and you can't boot
-> > the upstream kernel.
-> > 
-> > This commit adds a dtbo for the production oriole variant.
-> > The other pre-production board overlays are not included
-> > at this time.
-> > 
-> > Adding the dtbo here allows for a better experience when
-> > building/booting the upstream kernel on Pixel devices
-> > as all the DT required to boot the device will be created
-> > as part of the kernel build process. Rather than having to
-> > fetch the dtbo from some other repo.
-> > 
-> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/google/Makefile          |  1 +
-> >  arch/arm64/boot/dts/google/gs101-oriole.dtso | 21 ++++++++++++++++++++
-> >  2 files changed, 22 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/google/gs101-oriole.dtso
-> > 
-> > diff --git a/arch/arm64/boot/dts/google/Makefile b/arch/arm64/boot/dts/google/Makefile
-> > index 6d2026a767d4..3f1761f8daa9 100644
-> > --- a/arch/arm64/boot/dts/google/Makefile
-> > +++ b/arch/arm64/boot/dts/google/Makefile
-> > @@ -2,5 +2,6 @@
-> >  
-> >  dtb-$(CONFIG_ARCH_GOOGLE_TENSOR) += \
-> >  	gs101-oriole.dtb \
-> > +	gs101-oriole.dtbo
-> >  
-> >  
-> > diff --git a/arch/arm64/boot/dts/google/gs101-oriole.dtso b/arch/arm64/boot/dts/google/gs101-oriole.dtso
-> > new file mode 100644
-> > index 000000000000..50832fd94204
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/google/gs101-oriole.dtso
-> > @@ -0,0 +1,21 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Oriole DVT Device Tree
-> > + *
-> > + * Copyright 2021-2023 Google,LLC
-> > + */
-> > +
-> > +/dts-v1/;
-> > +/plugin/;
-> > +
-> > +/ {
-> > +	board_id = <0x20304>;
-> > +	board_rev = <0x10000>;
-> 
-> Undocumented properties. Please propose bindings... Also, underscores
-> are not allowed, so in this form it is a no-go... although I understand
-> the pain of not being able to change the bootloader.
-> 
-> For reference:
-> https://lore.kernel.org/all/20220605150747.GA3465286-robh@kernel.org/
-> https://lore.kernel.org/all/20220610163343.GA1787330-robh@kernel.org/
+On Mon, Oct 9, 2023 at 7:24=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
+rote:
+> Also, I don't know why checkpatch is happy with all the
+>
+>         const struct attribute_group *const*groups;
+>
+> instead of
+>
+>         const struct attribute_group *const *groups;
 
-These names are actually arbitrary and don't depend on the bootloader. They are
-passed into the mkdtimg tool [1] using --id and --rev and used to create the
-dt_table_entries. The bootloader traverses the table and picks the overlay
-based on these properties. So we can use whatever property names we want
-without changing the bootloader.
+I found out that checkpatch has no check for this at all; it does
+complain about such lines, but only for local variables. But that
+warning is actually a bug, because this is a check for unary
+operators: it thinks the asterisk is a dereference operator, not a
+pointer declaration, and complains that the unary operator must be
+preceded by a space. Thus warnings on local variable are only correct
+by coincidence, not by design.
 
-[1] https://android.googlesource.com/platform/system/libufdt/+/refs/heads/main/utils/
-
-Thanks,
-Will
-
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+Inside structs or parameters (where my coding style violations can be
+found), it's a different context and thus checkpatch doesn't apply the
+rules for unary operators.
