@@ -2,145 +2,80 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFED07BFAD4
-	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Oct 2023 14:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7AF7BFD7C
+	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Oct 2023 15:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231603AbjJJMJq (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 10 Oct 2023 08:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47042 "EHLO
+        id S232072AbjJJN30 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 10 Oct 2023 09:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231550AbjJJMJp (ORCPT
+        with ESMTP id S231897AbjJJN3Z (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 10 Oct 2023 08:09:45 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5F2B4
-        for <linux-watchdog@vger.kernel.org>; Tue, 10 Oct 2023 05:09:43 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-65b2463d663so29579556d6.0
-        for <linux-watchdog@vger.kernel.org>; Tue, 10 Oct 2023 05:09:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696939782; x=1697544582; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DgSEBJcUi7PZ5OXedvwInXaFNURNqtsaL0h7wFFXk5g=;
-        b=Df3KmV6NzyoruKmJufGdyQeVIeM94xePXheDrzzm9/krPQ0jAEIvv5Ien2F0RrmPkc
-         uKtla/0xPvuSxqAgH3p7HrD1gT5kWUMhkFfSaj2ib46V3FRNFcTfUaSMQCuPpFR8yOY3
-         ixA9gJeTCoBtX65NfpE1VpxFHHWM1IdKP+fgDyZFX/UGcvBbWstNlDicBgxoYFenAWBj
-         G+VdxULEkMAl7xmCRg6IDmZ1apVCjQz4IXjBbkj+kPs1eOuakvTCAqcIKrqoHV+PT5rb
-         dhg1fPXp3J9LipxYR2CpFtPNfBMnW3oIB2gC/ElJ0ChXIvUEDMcqENyf/3GxkwMykgQM
-         FIfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696939782; x=1697544582;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DgSEBJcUi7PZ5OXedvwInXaFNURNqtsaL0h7wFFXk5g=;
-        b=fccOTB8cyok/RJxVlzH1+6FK3JD9jqnOXAn3V78dmZrl35WJ/gD+rZJIDu20fPLqSg
-         r4FLJC9LgQYP0N3Pq4sSmOqW9GZCHwfquaWd6ryYDM7mp6vxM4E7PubNJjpkreT5sJhN
-         uf3VFLu7cnP5ILh1gHdvHAWHHbXa/VywadHKy/1KGbA1Ro4Pl9OYZXiwBhkk/XFFHqy1
-         vIvUQpDknibPG/TizoOL2/sr9JrZ+LJ0F/xssMW770NpL+7taNLbgFUVGiHrpKKuNl0P
-         wUCnKYrfh/mA+EkXiwxyUi6jiJ+vwRrFB51+NC7Ih98q4fMNySqXuTShpauj6CjYE+Ek
-         hqVQ==
-X-Gm-Message-State: AOJu0Yzrw00RdKW5yB7eAIMJ1+E6PHwQcNHh96sws3D8tHjAqtNUREI5
-        Cj96nIffqA8lcMUl/cutqTT1jv3P3Yg+vT2PpdFmoQ==
-X-Google-Smtp-Source: AGHT+IEkobWfRAv+hk9GeXAgYbAsdwwHInRJB4q4A/k6gLUZyJCTapOQUejfM/de0SvYVTlXeCdNVMlVoHapdH1mpY8=
-X-Received: by 2002:ad4:5cc7:0:b0:65d:dcc:9754 with SMTP id
- iu7-20020ad45cc7000000b0065d0dcc9754mr22900149qvb.30.1696939782310; Tue, 10
- Oct 2023 05:09:42 -0700 (PDT)
+        Tue, 10 Oct 2023 09:29:25 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4867B0;
+        Tue, 10 Oct 2023 06:29:23 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B583C433C7;
+        Tue, 10 Oct 2023 13:29:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696944563;
+        bh=oXg4rj2otetPYJ6T13k9X1CS147vwxf2ulCrsyT4wYE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IQfwUGGXsKAEQTAHxbbnFIMA0eEFZGWH2ZkJIPF00NVyZDOsOF27XQupUQ6REiZR+
+         j40UD9mKvDUoJfT71MOEo7xxaBP5vD8ZE919w51mJ+rFojER4RmezHU2bzhiwYcmhE
+         uAjQUo70Xxjq3/AIu1LgBfDuHSZ3UXA6gb2F7ytrBmA1e+Gl6NwCs0FaYmbVje2c1I
+         LJlsN0Gs7sk8OIuqDOhd0BiFpe2gewP4nwANE+ZzVK5i0u+GWqysREW2rcazj3WlV4
+         1SIQTfBGPFHoW7VjsaRyme2nRpzfxZ7HoSLxuo4XXZpnFPzM3J4lRJIeJ76PdR+DLw
+         PkmIEzkwP5ABA==
+Received: (nullmailer pid 631157 invoked by uid 1000);
+        Tue, 10 Oct 2023 13:29:21 -0000
+Date:   Tue, 10 Oct 2023 08:29:21 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Nik Bune <n2h9z4@gmail.com>, wim@linux-watchdog.org,
+        linux@roeck-us.net
+Cc:     krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        skhan@linuxfoundation.org, claudiu.beznea@microchip.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3] dt-bindings: watchdog: atmel,at91rm9200-wdt: convert
+ txt to yaml
+Message-ID: <20231010132921.GA628810-robh@kernel.org>
+References: <20230924181959.64264-1-n2h9z4@gmail.com>
 MIME-Version: 1.0
-References: <20231005155618.700312-1-peter.griffin@linaro.org>
- <20231005155618.700312-20-peter.griffin@linaro.org> <20231006205204.GA269353-robh@kernel.org>
-In-Reply-To: <20231006205204.GA269353-robh@kernel.org>
-From:   Peter Griffin <peter.griffin@linaro.org>
-Date:   Tue, 10 Oct 2023 13:09:31 +0100
-Message-ID: <CADrjBPpEFo4gRTsWau+xGoBAr2j7srhbxYefJGDer+PRu9QxBg@mail.gmail.com>
-Subject: Re: [PATCH 19/21] google/gs101: Add dt overlay for oriole board
-To:     Rob Herring <robh@kernel.org>
-Cc:     krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
-        s.nawrocki@samsung.com, linus.walleij@linaro.org,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, cw00.choi@samsung.com, tudor.ambarus@linaro.org,
-        andre.draszik@linaro.org, semen.protsenko@linaro.org,
-        soc@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230924181959.64264-1-n2h9z4@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Rob,
+On Sun, Sep 24, 2023 at 08:19:59PM +0200, Nik Bune wrote:
+> Convert txt file to yaml.
+> 
+> Signed-off-by: Nik Bune <n2h9z4@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> 
+> Changes in v3:
+> - Removed trailing whitespace in an element of the maintainers list.
+> 
+> v2 patch: https://lore.kernel.org/linux-devicetree/20230924172004.59208-1-n2h9z4@gmail.com/ 
+> 
+>  .../watchdog/atmel,at91rm9200-wdt.yaml        | 33 +++++++++++++++++++
+>  .../watchdog/atmel-at91rm9200-wdt.txt         |  9 -----
+>  2 files changed, 33 insertions(+), 9 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
 
-Thanks for your review!
+Are the watchdog maintainers going to pick up this and other watchdog 
+bindings?
 
-On Fri, 6 Oct 2023 at 21:52, Rob Herring <robh@kernel.org> wrote:
->
-> On Thu, Oct 05, 2023 at 04:56:16PM +0100, Peter Griffin wrote:
-> > The LK bootloader on Pixel6 searches for a dt overlay in the
-> > dtbo partition with a board_id and board_rev that matches
-> > what is baked into the device. If this overlay is not present
-> > then the phone will bootloop in fastboot and you can't boot
-> > the upstream kernel.
-> >
-> > This commit adds a dtbo for the production oriole variant.
-> > The other pre-production board overlays are not included
-> > at this time.
-> >
-> > Adding the dtbo here allows for a better experience when
-> > building/booting the upstream kernel on Pixel devices
-> > as all the DT required to boot the device will be created
-> > as part of the kernel build process. Rather than having to
-> > fetch the dtbo from some other repo.
-> >
-> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/google/Makefile          |  1 +
-> >  arch/arm64/boot/dts/google/gs101-oriole.dtso | 21 ++++++++++++++++++++
-> >  2 files changed, 22 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/google/gs101-oriole.dtso
-> >
-> > diff --git a/arch/arm64/boot/dts/google/Makefile b/arch/arm64/boot/dts/google/Makefile
-> > index 6d2026a767d4..3f1761f8daa9 100644
-> > --- a/arch/arm64/boot/dts/google/Makefile
-> > +++ b/arch/arm64/boot/dts/google/Makefile
-> > @@ -2,5 +2,6 @@
-> >
-> >  dtb-$(CONFIG_ARCH_GOOGLE_TENSOR) += \
-> >       gs101-oriole.dtb \
-> > +     gs101-oriole.dtbo
->
-> Overlays in the kernel must be able to be applied to a base DT in the
-> kernel. Add a rule to apply this (hint: a '-dtbs' variable does this
-> similar to -objs variables).
-
-Ok will do, thanks for the hint
-
->
-> > diff --git a/arch/arm64/boot/dts/google/gs101-oriole.dtso b/arch/arm64/boot/dts/google/gs101-oriole.dtso
-> > new file mode 100644
-> > index 000000000000..50832fd94204
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/google/gs101-oriole.dtso
-> > @@ -0,0 +1,21 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Oriole DVT Device Tree
->
-> Doesn't DVT mean pre-production?
-
-Yes, DVT stands for Design Verification Testing. I can remove that
-DVT suffix for v2.
-I suppose that means there were no changes between DVT and production as this
-is the overlay used by the production devices.
-
-regards,
-
-Peter
+Rob
