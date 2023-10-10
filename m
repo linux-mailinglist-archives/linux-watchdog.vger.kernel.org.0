@@ -2,69 +2,69 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A112F7BFD98
-	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Oct 2023 15:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 973547BFE52
+	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Oct 2023 15:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbjJJNfb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 10 Oct 2023 09:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
+        id S232367AbjJJNrU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 10 Oct 2023 09:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbjJJNfa (ORCPT
+        with ESMTP id S232500AbjJJNrG (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 10 Oct 2023 09:35:30 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0292E6;
-        Tue, 10 Oct 2023 06:35:27 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1c63164a2b6so49318605ad.0;
-        Tue, 10 Oct 2023 06:35:27 -0700 (PDT)
+        Tue, 10 Oct 2023 09:47:06 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E731BE
+        for <linux-watchdog@vger.kernel.org>; Tue, 10 Oct 2023 06:46:58 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-692c02adeefso4126515b3a.3
+        for <linux-watchdog@vger.kernel.org>; Tue, 10 Oct 2023 06:46:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696944927; x=1697549727; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1696945618; x=1697550418; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JHLDfXtxyGaUv3XXenlR1vVP+uZsDR7fcvOl6PBIf54=;
-        b=lRhLobZnOxSo4ma7raN3QNdLwG9Y0hwsgkdlR9TJKz68Q3EXzZa1aj79UlyFkccV6h
-         wNHn1x0oPIzRXCLZLYQJfGr9DTwxGFX2M9wTcuRB+ZM+rNLyZjLE/NMyufPD7AaB3RB0
-         lvH360stZARX+szehyeu4D3z4Q+LLl2/OXvAhDRuo+TOnyKOvpAE4pEuRyTK6hauZJCS
-         Hal4Pvur5YKVJRaeUUQLLGIP5czgjhQfogzWa62rVRCrWWPrO27ArSIfmHjkBremVYQn
-         WFixvwp5kZuYhHSZpFhLJKtZxfsRKH7XyNPW+f6fejHev1N77aVz23J2H8X3zr2X1+XE
-         v8sg==
+        bh=SYmGcipAhHUMHsqzlD4tfPIdzeoL/sOS8/eVu4ybFDg=;
+        b=jtnsITXrORYoeo3XPbdcKnO2Em5O//w48mH0JJyfaN5F2kbt3gRs7icSyJZ5M88j7e
+         9QWrvbzmI2FDsWDpzzKwwkz36LMhlEWfmKGP9UKD3JjYQoUckVPTBnDkp1Jd6daVmHXM
+         JOYs/mYpQw76OK4zSY1s9Ld0UB1in21L4ucNNokTZixdAnhLrzzs3CFLZPmQcFWr0Udz
+         /buqPcHATBoPGvTRBwkVCKmBAgLRpsRu8eJVlMmxOrzsbAM7E/Rltf9V3uMVEoHxwr7l
+         y1eC3g+cWzSbgc5KTWbiRSg6jQiPPsgeeLuA/XuQITw4+XkrHH1GIoPWELs8hV6E2xb4
+         PowA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696944927; x=1697549727;
+        d=1e100.net; s=20230601; t=1696945618; x=1697550418;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JHLDfXtxyGaUv3XXenlR1vVP+uZsDR7fcvOl6PBIf54=;
-        b=N2LuKj9tUaUU2R8ClOhPHND0sUfGhVJbGMi7du05GQfX04jEg3Rh5XG16cNxeeVoP0
-         HlrD/T6dLV2ljELDaEtuh0QXINVrqqsS+xw73mwSdhcMUfXe7br3JuxHhDvHRLxE3NoI
-         HYL6xboN3DtqVFhbOZ+yxnCsbfUY107Gkkzb44RwYHi3So4CXQRifnB4kx+44/9BYauq
-         TfAdF/QU36ZAluC6YGlu+kT0SgUeUv1qOwbV3gi3tTDulYwqxH+cgboIpDJbGgiYhfuY
-         HajFQZyNfMBjIaWGJvf/7Zu1cAW5DfQD9UEZ8lMOI1S2yz04l9xh2lIjTjaPFWIb50zY
-         5iTQ==
-X-Gm-Message-State: AOJu0Yzz46UlYacbdUezMckkZdvk4WY+DCl4aXRpWG5AMoxjibHXJcQY
-        x01Za1MRG+pZTg7pAIat25SL7JW+xQk=
-X-Google-Smtp-Source: AGHT+IF+h/dNgRzdSb7qR5hGuHp56Tqltxlew00GLSvqHTyWo62d5G5PqUNn27vHeBQwvs7nSLW2Eg==
-X-Received: by 2002:a17:903:1c6:b0:1c5:9d00:be84 with SMTP id e6-20020a17090301c600b001c59d00be84mr22977315plh.33.1696944927040;
-        Tue, 10 Oct 2023 06:35:27 -0700 (PDT)
+        bh=SYmGcipAhHUMHsqzlD4tfPIdzeoL/sOS8/eVu4ybFDg=;
+        b=EmvFuQZTFvVLqrZ0HV882XiZtubI2kLzmh2ZRU/lWeVOuMznEgbf6IWo+rAOXedPs+
+         2bjeJV8tJkOIxo1SIZkrLyBXcutgvURwO32JBxGXmxXW18rzo+sIqMIyji1R2sCmvVxd
+         LzrtZCD9A8wSUbsbjwQ4dfPSuDWjfjAw6P5Iyyydi5+3F98wvBsZKFAi0rO2AIlBni+U
+         R8dsZ4tWjFTU/XvRJmkpiDK9Z8uZX022QZiLNpQGNNyIbRmG5QawWV1jltnWhEb+74hI
+         CLAxajaHok0EOURiphB/dYAwsUgu44kq0f2Fejr9Z4ZXnUXMwmkPo/lNmvySjdb2znVP
+         mvcw==
+X-Gm-Message-State: AOJu0YxDLWTrl5mkcOLCjRdzew15DSLXGfEjJdjJHEcIjruvRSJPwbEd
+        Fqg3/viKKpNSuAzsZJjF6mM=
+X-Google-Smtp-Source: AGHT+IHqg8Iw3GN1eMmoP82XpvrS4Rz0/QLrAlJVCu/Jasid5VOnviz3vok9mXUYa+/+LHNBVwx+4A==
+X-Received: by 2002:a05:6a20:a11f:b0:16b:b0ea:b0a1 with SMTP id q31-20020a056a20a11f00b0016bb0eab0a1mr11745530pzk.34.1696945617633;
+        Tue, 10 Oct 2023 06:46:57 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170902c21100b001bbc8d65de0sm1531321pll.67.2023.10.10.06.35.25
+        by smtp.gmail.com with ESMTPSA id x20-20020a62fb14000000b00682d79199e7sm8212935pfm.200.2023.10.10.06.46.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Oct 2023 06:35:26 -0700 (PDT)
+        Tue, 10 Oct 2023 06:46:57 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 10 Oct 2023 06:35:24 -0700
+Date:   Tue, 10 Oct 2023 06:46:56 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: st_lpc: Use device_get_match_data()
-Message-ID: <d8e0403e-503a-4c85-b50e-eee48db68c89@roeck-us.net>
-References: <20231009211356.3242037-18-robh@kernel.org>
+To:     Jacky Bai <ping.bai@nxp.com>
+Cc:     wim@linux-watchdog.org, shawnguo@kernel.org, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] watchdog: imx_sc_wdt: continue if the wdog already
+ enabled
+Message-ID: <cab39dae-cd1a-4ec0-9ed5-19a71344b488@roeck-us.net>
+References: <20231010074626.2787383-1-ping.bai@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231009211356.3242037-18-robh@kernel.org>
+In-Reply-To: <20231010074626.2787383-1-ping.bai@nxp.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -76,62 +76,43 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Oct 09, 2023 at 04:13:48PM -0500, Rob Herring wrote:
-> Use preferred device_get_match_data() instead of of_match_device() to
-> get the driver match data. With this, adjust the includes to explicitly
-> include the correct headers.
+On Tue, Oct 10, 2023 at 03:46:26PM +0800, Jacky Bai wrote:
+> if the wdog is already enabled, and try to enabled it again,
+> we should ignore the error and continue, rather than return
+> error.
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+> Reviewed-by: Peng Fan <peng.fan@nxp.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/watchdog/st_lpc_wdt.c | 11 ++---------
->  1 file changed, 2 insertions(+), 9 deletions(-)
+>  drivers/watchdog/imx_sc_wdt.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/watchdog/st_lpc_wdt.c b/drivers/watchdog/st_lpc_wdt.c
-> index d2aa43c00221..4c5b8d98a4f3 100644
-> --- a/drivers/watchdog/st_lpc_wdt.c
-> +++ b/drivers/watchdog/st_lpc_wdt.c
-> @@ -15,7 +15,6 @@
->  #include <linux/mfd/syscon.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> -#include <linux/of_platform.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
->  #include <linux/watchdog.h>
-> @@ -42,7 +41,7 @@ struct st_wdog {
->  	void __iomem *base;
->  	struct device *dev;
->  	struct regmap *regmap;
-> -	struct st_wdog_syscfg *syscfg;
-> +	const struct st_wdog_syscfg *syscfg;
->  	struct clk *clk;
->  	unsigned long clkrate;
->  	bool warm_reset;
-> @@ -150,7 +149,6 @@ static void st_clk_disable_unprepare(void *data)
->  static int st_wdog_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> -	const struct of_device_id *match;
->  	struct device_node *np = dev->of_node;
->  	struct st_wdog *st_wdog;
->  	struct regmap *regmap;
-> @@ -173,12 +171,7 @@ static int st_wdog_probe(struct platform_device *pdev)
->  	if (!st_wdog)
->  		return -ENOMEM;
+> diff --git a/drivers/watchdog/imx_sc_wdt.c b/drivers/watchdog/imx_sc_wdt.c
+> index 8ac021748d16..e51fe1b78518 100644
+> --- a/drivers/watchdog/imx_sc_wdt.c
+> +++ b/drivers/watchdog/imx_sc_wdt.c
+> @@ -34,6 +34,7 @@
 >  
-> -	match = of_match_device(st_wdog_match, dev);
-> -	if (!match) {
-> -		dev_err(dev, "Couldn't match device\n");
-> -		return -ENODEV;
-> -	}
-> -	st_wdog->syscfg	= (struct st_wdog_syscfg *)match->data;
-> +	st_wdog->syscfg	= (struct st_wdog_syscfg *)device_get_match_data(dev);
+>  #define SC_IRQ_WDOG			1
+>  #define SC_IRQ_GROUP_WDOG		1
+> +#define SC_TIMER_ERR_BUSY		10
 >  
->  	base = devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(base))
+>  static bool nowayout = WATCHDOG_NOWAYOUT;
+>  module_param(nowayout, bool, 0000);
+> @@ -61,7 +62,9 @@ static int imx_sc_wdt_start(struct watchdog_device *wdog)
+>  
+>  	arm_smccc_smc(IMX_SIP_TIMER, IMX_SIP_TIMER_START_WDOG,
+>  		      0, 0, 0, 0, 0, 0, &res);
+> -	if (res.a0)
+> +
+> +	/* Ignore if already enabled(SC_TIMER_ERR_BUSY) */
+> +	if (res.a0 && res.a0 != SC_TIMER_ERR_BUSY)
+>  		return -EACCES;
+>  
+>  	arm_smccc_smc(IMX_SIP_TIMER, IMX_SIP_TIMER_SET_WDOG_ACT,
 > -- 
-> 2.42.0
+> 2.34.1
 > 
