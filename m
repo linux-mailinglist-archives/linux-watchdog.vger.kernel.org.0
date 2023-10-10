@@ -2,83 +2,189 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1020E7C41ED
-	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Oct 2023 22:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 262767C4229
+	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Oct 2023 23:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbjJJU4u (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 10 Oct 2023 16:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
+        id S1343879AbjJJVPB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 10 Oct 2023 17:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjJJU4t (ORCPT
+        with ESMTP id S1343923AbjJJVPA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 10 Oct 2023 16:56:49 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3838F;
-        Tue, 10 Oct 2023 13:56:48 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06A61C433C7;
-        Tue, 10 Oct 2023 20:56:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696971408;
-        bh=y2fTlo3zezzxE1nBSUjqMG6g4xIuKutp9SXd4X2X+Kc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=utaB4KpVk23rFwgM5Yy71oSXCTNJZgBsgCHOmI/kMUozWzGChFLGVrgvgXd/pgroz
-         Wv8vhfa30/p3Wu1iyvuqIGF1Iy6SjJO1f3SIte3MA1j+YBRt+G/Nte5kGsKUuB1NNv
-         rlyzwmDTSkMFoOA8xMd6OIxALCxY0GwTfoU2OI//6MrWhs/lAmf4CwyTn+7QlWawkv
-         oDE81a1K1aRJJQ6r+Ur6ON5qCyChjn7Kpt26xNCCL5o7yhmmc0VLxzH5DqRH3jd5nZ
-         UGgB+0V7FnC9nbMk7OhafqmeP+OXDUJG0jBxje/5ne8EXrmmPWSera9QsLojLRih8w
-         in4WKa/SfYjQA==
-Received: (nullmailer pid 1584728 invoked by uid 1000);
-        Tue, 10 Oct 2023 20:56:46 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] watchdog: marvell_gti: Replace of_platform.h with explicit includes
-Date:   Tue, 10 Oct 2023 15:56:36 -0500
-Message-ID: <20231010205636.1584480-1-robh@kernel.org>
-X-Mailer: git-send-email 2.42.0
+        Tue, 10 Oct 2023 17:15:00 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A6B91;
+        Tue, 10 Oct 2023 14:14:58 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9ba081173a3so669283266b.1;
+        Tue, 10 Oct 2023 14:14:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696972497; x=1697577297; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oujABCSZJNk2IyD5lN5ZvORKGcKBX/k42s5CPJt8qtE=;
+        b=GNJW8o7rwFZJFgElDaZLwlpzr0BIBOsLawbmWKEvFIBk1zKoJawF0Lkl7GlMcJwqHB
+         OGuVgW4w9n/VfAKIe3b0dIC2MCHXaAKzByykO1x124a8m+uldRlZ0praFC4hqgZ9wwQF
+         7L97tpc1Z+ZJrCTni2eXv7v1Sa6Jh190bO7/vQDTD79sLyDQaWUvdmWfFIeNblVeiYMS
+         rxtnG+BZcQqbQsR6h7mLEaJ+l9YOFuWRcu52iSuGHGaKW6Fs//H2n0prZAb9TuRMSexc
+         LUuwv9voQFAbeGfI1ZNVPCmEogkfCxhVvbiyeDTdZsoBvRCmtsXXUX3Qba5rMWXaIIyU
+         19vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696972497; x=1697577297;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oujABCSZJNk2IyD5lN5ZvORKGcKBX/k42s5CPJt8qtE=;
+        b=RidCRGSCuGZLGIdQqQfZ+voCdql5HVDnbLDxN2DXX11tlg17LfcQnAJUnhfWIkKULU
+         +kFXPBByF32OFcNnJkRKWbRaiy3+2nLhYMb90Ovywl87u2Y4jLbgVpnEI40x7bWmQdON
+         nPuJMsGHWfnzgjUuv2p4iUCCAfBGUHOngL+8rq1GngJdoIKC9XFNeUgTJuMYdsK0L4Kt
+         D07OSMDXyQzY77YcBAF99KMccni411d2IOgRySFAaevmzTNRyf2UZ8et/Wx0XMQaOr8L
+         JGUmgkSRcz7/tXhwYvxNB9PRHmZCstNI3ZEEajWicVgGJOOukPmFRkz1FCRjiSIByBZs
+         RWug==
+X-Gm-Message-State: AOJu0YwwNq9qRahX7NOo62qxOLMrziXNDBL0QXGr4hEEn0uz1wrtUm11
+        laDKkz2WU5L+IzDuTkELKdk=
+X-Google-Smtp-Source: AGHT+IFAQkkMmq60a6tXrYlsvOraSSOPfxHSylqM0IAALDYvo60rpktWiXaBYMY+u6BmJ9y3N7a9kg==
+X-Received: by 2002:a17:906:844a:b0:9bd:7a9f:a02 with SMTP id e10-20020a170906844a00b009bd7a9f0a02mr317217ejy.4.1696972496481;
+        Tue, 10 Oct 2023 14:14:56 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:8109:8c00:3664:7a05:7dcc:abce:3c83])
+        by smtp.gmail.com with ESMTPSA id o18-20020a1709061b1200b009b9977867fbsm8905883ejg.109.2023.10.10.14.14.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Oct 2023 14:14:55 -0700 (PDT)
+From:   Nik Bune <n2h9z4@gmail.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        skhan@linuxfoundation.org, stwiss.opensource@diasemi.com
+Cc:     Nik Bune <n2h9z4@gmail.com>, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [v2 PATCH] dt-bindings: watchdog: da9062-wdt: convert txt to yaml
+Date:   Tue, 10 Oct 2023 23:14:39 +0200
+Message-Id: <20231010211439.98458-1-n2h9z4@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-The DT of_device.h and of_platform.h date back to the separate
-of_platform_bus_type before it as merged into the regular platform bus.
-As part of that merge prepping Arm DT support 13 years ago, they
-"temporarily" include each other and pull in various other headers. In
-preparation to fix this, adjust the includes for what is actually needed.
+Convert txt file to yaml.
+Add a mainterner block. Took a value from dlg,da9063 PMIC.
 
-of_platform.h isn't needed, but of.h was implicitly included by it (via
-of_device.h).
-
-Signed-off-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Nik Bune <n2h9z4@gmail.com>
 ---
-Note this was added in the merge window and missed the last round.
----
- drivers/watchdog/marvell_gti_wdt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/marvell_gti_wdt.c b/drivers/watchdog/marvell_gti_wdt.c
-index d7eb8286e11e..01e9177cbf20 100644
---- a/drivers/watchdog/marvell_gti_wdt.c
-+++ b/drivers/watchdog/marvell_gti_wdt.c
-@@ -8,8 +8,8 @@
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/module.h>
--#include <linux/of_platform.h>
- #include <linux/platform_device.h>
-+#include <linux/of.h>
- #include <linux/watchdog.h>
- 
- /*
+Changes in v2:
+- Updated filename to be equal to compatible value.
+- Removed ">" in description fields. 
+- Added optional properties to the example. 
+- Removed reg property, as it is not present in the txt version. 
+
+
+ .../bindings/watchdog/da9062-wdt.txt          | 34 -------------
+ .../watchdog/dlg,da9062-watchdog.yaml         | 49 +++++++++++++++++++
+ 2 files changed, 49 insertions(+), 34 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
+
+diff --git a/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt b/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
+deleted file mode 100644
+index 354314d854ef..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
++++ /dev/null
+@@ -1,34 +0,0 @@
+-* Dialog Semiconductor DA9062/61 Watchdog Timer
+-
+-Required properties:
+-
+-- compatible: should be one of the following valid compatible string lines:
+-	"dlg,da9061-watchdog", "dlg,da9062-watchdog"
+-	"dlg,da9062-watchdog"
+-
+-Optional properties:
+-- dlg,use-sw-pm: Add this property to disable the watchdog during suspend.
+-	Only use this option if you can't use the watchdog automatic suspend
+-	function during a suspend (see register CONTROL_B).
+-- dlg,wdt-sd: Set what happens on watchdog timeout. If this bit is set the
+-	watchdog timeout triggers SHUTDOWN, if cleared the watchdog triggers
+-	POWERDOWN. Can be 0 or 1. Only use this option if you want to change the
+-	default chip's OTP setting for WATCHDOG_SD bit. If this property is NOT
+-	set the WATCHDOG_SD bit and on timeout watchdog behavior will match the
+-	chip's OTP settings.
+-
+-Example: DA9062
+-
+-	pmic0: da9062@58 {
+-		watchdog {
+-			compatible = "dlg,da9062-watchdog";
+-		};
+-	};
+-
+-Example: DA9061 using a fall-back compatible for the DA9062 watchdog driver
+-
+-	pmic0: da9061@58 {
+-		watchdog {
+-			compatible = "dlg,da9061-watchdog", "dlg,da9062-watchdog";
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml b/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
+new file mode 100644
+index 000000000000..9b7ffdb01da0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/dlg,da9062-watchdog.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Dialog Semiconductor DA9062/61 Watchdog Timer
++
++maintainers:
++  - Steve Twiss <stwiss.opensource@diasemi.com>
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    enum: 
++      - dlg,da9061-watchdog
++      - dlg,da9062-watchdog
++
++  dlg,use-sw-pm:
++    type: boolean
++    description:
++      Add this property to disable the watchdog during suspend.
++      Only use this option if you can't use the watchdog automatic suspend
++      function during a suspend (see register CONTROL_B).
++  
++  dlg,wdt-sd:
++    type: boolean
++    description:
++      Set what happens on watchdog timeout. If this bit is set the
++      watchdog timeout triggers SHUTDOWN, if cleared the watchdog triggers
++      POWERDOWN. Can be 0 or 1. Only use this option if you want to change the
++      default chip's OTP setting for WATCHDOG_SD bit. If this property is NOT
++      set the WATCHDOG_SD bit and on timeout watchdog behavior will match the
++      chip's OTP settings.
++
++required:
++  - compatible
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    watchdog {
++      compatible = "dlg,da9062-watchdog";
++      dlg,use-sw-pm;
++      dlg,wdt-sd;
++    };
 -- 
-2.42.0
+2.34.1
 
