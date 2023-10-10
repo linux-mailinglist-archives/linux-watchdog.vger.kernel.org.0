@@ -2,79 +2,72 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 702987C450B
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Oct 2023 00:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309AF7C45AC
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Oct 2023 01:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344381AbjJJWvE (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 10 Oct 2023 18:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
+        id S229484AbjJJXsI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 10 Oct 2023 19:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344341AbjJJWua (ORCPT
+        with ESMTP id S229456AbjJJXsH (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 10 Oct 2023 18:50:30 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4F91AB
-        for <linux-watchdog@vger.kernel.org>; Tue, 10 Oct 2023 15:50:17 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-32caaa1c493so1108922f8f.3
-        for <linux-watchdog@vger.kernel.org>; Tue, 10 Oct 2023 15:50:17 -0700 (PDT)
+        Tue, 10 Oct 2023 19:48:07 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022E394;
+        Tue, 10 Oct 2023 16:48:06 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id 71dfb90a1353d-49d55b90a5aso251260e0c.0;
+        Tue, 10 Oct 2023 16:48:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696978215; x=1697583015; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s37SUcPotioxZcjEHmhq7GzFTfw04ERbXr6RSb1B27c=;
-        b=YLflrFqBNoeyMQu4V1GkkHdtxG9kaosjv+MB38MkhKDT1STbCHbvuO1/XAHB58CVHo
-         yeHIWoHJdykr3+pxcRY0yaQ/h6a8jyDE4y0UD0vVrNVKjmurwkTe5tpgIf7VH5uNDw8j
-         eu/vfjjG7fuCIZo/KFu14RZ0Y/lMSiKDd2U/TeA4SIn0lpfLPAA+HHGILEJdokfnEIxo
-         +3s7s0dZAZg6Qpfo7Ne/wLrpwNaRzjTeFojWAZYNIkhlCmNN8+pacwCslnefZiw/7tay
-         qsPZ/XlOM+MQz9Sueam/yYbA7zRPIbB0PNWHX0Eom5ugKIgUedc0qzFen/YouEOP/Cbn
-         QdGQ==
+        d=gmail.com; s=20230601; t=1696981685; x=1697586485; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9QviIRuDzheQ8CzniSPUXGfTmlt7tS6/YvDRgmfhztA=;
+        b=QvTwp2FAhN82j3lzdF7PqkxXSCCNmzWTbKUnPWw5El3AdX6hCVZoEHDGzVQn8VvlmU
+         mGO7K/XCkiOU6/e2fkj3S4XRO2YiXe0lVTzTHBWkQmjtprCwE5hCfYD/kLA+ZsMatJTe
+         ls8eJooTmmusLce/+7xUYjLjZoS6Tawz8xZ/0z18djixkf6Xan7vIjBEkZZ7cN1I+IuP
+         PZfJcP8sNUQFEaYMIdTGmlvEgzU5xhUtL/bEmdAupT92FvD+Fc/Nx6jFQsJOTGpLrAHE
+         9vNyKvAKQUyW66wKTD5G3QvbgHd0nE0z1TZp0uf1Cm2ISqfNtsArPyYF43k0VGfEBlj8
+         215A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696978215; x=1697583015;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1696981685; x=1697586485;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=s37SUcPotioxZcjEHmhq7GzFTfw04ERbXr6RSb1B27c=;
-        b=jqBz3dHnDxeGgqFaGB/+TUaGXJWu2GfJSlL/WYj32Wrx+tBZ20QuHffSrBHV1+HeT+
-         T3E9WcAwR48GjkqVmvdVhqMs8+Kt2CEN0AnBF6sThbY0nUd6xHSSgKfyjTi1cfsQb03D
-         w7Avtj46LxLNgGUxNNAYAWQThQq67Km9+JPHDT7OGLaAL2unA5SPXBCt4E8wC3jzak7D
-         dumBSJTJapjpwQJFcxt5iQXV9RgaIM/ZQOVGt/66/BsQpcuIeGC8P9XSyr29mln6UZtD
-         fzK63uG3HbX1hOBXUbGHHuVk7HRG6kWsvtG+1MuzOJfZEIk3DgsyNxTnk+Ju2IVBHyYT
-         TSnw==
-X-Gm-Message-State: AOJu0YwNH/vDQTyqDky+8bdMC4nMRczNh7qTtMBB3IT9RG5N4REcR4Mj
-        ubWEQK9kZ6jVtJnrW0F1FvDyBA==
-X-Google-Smtp-Source: AGHT+IHJw3S0mLbaumsobRC5IL/pZDMQtHIFgcBqimA/C5vlsITA5NsDBJI4cgvehYn3duSLLOm7Lg==
-X-Received: by 2002:adf:f84e:0:b0:324:8353:6e51 with SMTP id d14-20020adff84e000000b0032483536e51mr18255367wrq.45.1696978215668;
-        Tue, 10 Oct 2023 15:50:15 -0700 (PDT)
-Received: from gpeter-l.lan (host-92-12-225-146.as13285.net. [92.12.225.146])
-        by smtp.gmail.com with ESMTPSA id j13-20020adfe50d000000b003196b1bb528sm13689547wrm.64.2023.10.10.15.50.14
+        bh=9QviIRuDzheQ8CzniSPUXGfTmlt7tS6/YvDRgmfhztA=;
+        b=R13vqA/AdAnL6xfCv0CNoyIV+8ggHJToCBo29wwblUKMcy2Nup86BMw5ZfkepKJ0Bg
+         JBa1vKDTFg13gFW+S/dqn71pMY6Vl+XOuJJfJhIGFeic4Ju+3rqOuXmqWyUMu9XqVepQ
+         +nb/fmjTLNl4k7lge8Vgpjbxlbbiq2n87cVkkR58S8C6qMWIqrSCVbm5d+wBnXtREl8k
+         a0Wd9kyDP0ie5NdhT7wUcEFu0zhhtHANksdg41yhUPb1eIdjXHvRqPGZx74CGka/qRLw
+         AJfXNd6kt75USRaw7NqCifq2LWAs8PehXblHSfbe8LeZ6YSV5Hj0HZbn0HTVlOj4qAdU
+         4IQg==
+X-Gm-Message-State: AOJu0Yy8nt5mGIkeLU6IPACD71LFxxee8LCRH2jVFcIUoDs6yCsy3/iB
+        I0LBH7S8UCIlEwGPxPq28brhP2WdHeE=
+X-Google-Smtp-Source: AGHT+IEuzXuz33vaWkVbhjpdApypb50wJ2C29fX9oNneNNfmfPT8cyQbfwG6/7Bn3a7HiqEPEiLTTg==
+X-Received: by 2002:a1f:e7c4:0:b0:49a:9f99:bb03 with SMTP id e187-20020a1fe7c4000000b0049a9f99bb03mr9860723vkh.1.1696981684927;
+        Tue, 10 Oct 2023 16:48:04 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s2-20020a05612204c200b0049ab44fce7esm2273841vkn.50.2023.10.10.16.48.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Oct 2023 15:50:15 -0700 (PDT)
-From:   Peter Griffin <peter.griffin@linaro.org>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
-        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
-        linus.walleij@linaro.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, olof@lixom.net, cw00.choi@samsung.com
-Cc:     peter.griffin@linaro.org, tudor.ambarus@linaro.org,
-        andre.draszik@linaro.org, semen.protsenko@linaro.org,
-        saravanak@google.com, willmcvicker@google.com, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        kernel-team@android.com, linux-serial@vger.kernel.org
-Subject: [PATCH v2 20/20] MAINTAINERS: add entry for Google Tensor SoC
-Date:   Tue, 10 Oct 2023 23:49:28 +0100
-Message-ID: <20231010224928.2296997-21-peter.griffin@linaro.org>
-X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
-In-Reply-To: <20231010224928.2296997-1-peter.griffin@linaro.org>
-References: <20231010224928.2296997-1-peter.griffin@linaro.org>
+        Tue, 10 Oct 2023 16:48:04 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 10 Oct 2023 16:48:03 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog: marvell_gti: Replace of_platform.h with
+ explicit includes
+Message-ID: <4e5b2282-5c96-48cc-9271-11932df63cf3@roeck-us.net>
+References: <20231010205636.1584480-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231010205636.1584480-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,35 +75,40 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Add maintainers entry for the Google tensor SoC based
-platforms.
+On Tue, Oct 10, 2023 at 03:56:36PM -0500, Rob Herring wrote:
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other and pull in various other headers. In
+> preparation to fix this, adjust the includes for what is actually needed.
+> 
+> of_platform.h isn't needed, but of.h was implicitly included by it (via
+> of_device.h).
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
----
- MAINTAINERS | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 90f13281d297..149a0c364309 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8836,6 +8836,16 @@ S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git
- F:	drivers/firmware/google/
- 
-+GOOGLE TENSOR SoC SUPPORT
-+M:	Peter Griffin <peter.griffin@linaro.org>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+L:	linux-samsung-soc@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
-+F:	arch/arm64/boot/dts/google/
-+F:	drivers/clk/samsung/clk-gs101.c
-+F:	include/dt-bindings/clock/google,clk-gs101.h
-+
- GPD POCKET FAN DRIVER
- M:	Hans de Goede <hdegoede@redhat.com>
- L:	platform-driver-x86@vger.kernel.org
--- 
-2.42.0.609.gbb76f46606-goog
-
+> ---
+> Note this was added in the merge window and missed the last round.
+> ---
+>  drivers/watchdog/marvell_gti_wdt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/marvell_gti_wdt.c b/drivers/watchdog/marvell_gti_wdt.c
+> index d7eb8286e11e..01e9177cbf20 100644
+> --- a/drivers/watchdog/marvell_gti_wdt.c
+> +++ b/drivers/watchdog/marvell_gti_wdt.c
+> @@ -8,8 +8,8 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/module.h>
+> -#include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/of.h>
+>  #include <linux/watchdog.h>
+>  
+>  /*
+> -- 
+> 2.42.0
+> 
