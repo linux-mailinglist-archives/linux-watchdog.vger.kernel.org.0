@@ -2,75 +2,130 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 208317C52A7
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Oct 2023 13:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9FC7C52E7
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Oct 2023 14:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234745AbjJKL6v (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 Oct 2023 07:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
+        id S234928AbjJKMIC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 Oct 2023 08:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232075AbjJKL6u (ORCPT
+        with ESMTP id S234821AbjJKMIA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 Oct 2023 07:58:50 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD17B6
-        for <linux-watchdog@vger.kernel.org>; Wed, 11 Oct 2023 04:58:47 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5a2536adaf3so83488337b3.2
-        for <linux-watchdog@vger.kernel.org>; Wed, 11 Oct 2023 04:58:47 -0700 (PDT)
+        Wed, 11 Oct 2023 08:08:00 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121EEAF
+        for <linux-watchdog@vger.kernel.org>; Wed, 11 Oct 2023 05:07:56 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-4054f790190so66577695e9.2
+        for <linux-watchdog@vger.kernel.org>; Wed, 11 Oct 2023 05:07:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697025527; x=1697630327; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dcZX87bVMqxb05uB6AITFLlBPsFoCe5WSTHnOrtHLWk=;
-        b=PCMwqTGTQSOdLQ5tzB4LsBush06zF9Zytml2uVqQkmENIq1Anj3QU+O/JMLl5UsA9O
-         CRbAFcOwQT0RPu+6/7RLcQ5TrfwJHGs7VdDD14IaWsOnPwYE+OANIc7ibaSyn98ltawr
-         pkEfoE/+K09sQdCV0je8/kBBvH6sZ1c0sumoDBXIjZrrGQKUFZUmXKqlAsnMucWux04+
-         ALpHIOj69o21eamlYt6rE013p0AM/etYpPlkAazk09YPXC3g9A0VEmIcmKhwYsFDTd4d
-         Sff5IkEAnKB6JpOir1RF++S0ZeHLahrAg7dCONmokRf0iwnYS2RqZb0VTdin48DSn+80
-         pHQw==
+        d=linaro.org; s=google; t=1697026074; x=1697630874; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=zXRuIlwacuOdYyOFKIMg2z15au/UO9GrOGt9xxSfLUg=;
+        b=hI3U2xkGEEXIbnjc+tktJU8ystImHvJZI7uhCSPN5N6bvxHFZ3C/Snb2ORyKrWkV3m
+         1vfoHfOjjsf2qJJbMqW9rcBgsPbwHSez2Us69aK7AjISvn4sp/0uwX5a2FZbsLdlfwUS
+         Ln5O/+fmG5vXBrTpaNw2xmOII7EGVInwM/BhiTBBYsBBm97P5TfwPfN2DVOkpaJ1RTyA
+         nrAI9EblEurWFRxuEQmAEn/wE0DyhxulvfEFFOB10449jPVfZ4Rn5zFgl4+FNoJJ1jQQ
+         q2aEit0d+On5B3B0uuI2MvbMr58ZSzkeeDAFHbCuSazpDtMbcnlE40L8+njGJtb+YWNI
+         6+Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697025527; x=1697630327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dcZX87bVMqxb05uB6AITFLlBPsFoCe5WSTHnOrtHLWk=;
-        b=a3W7Re21CEhDtegLAciF4PLrIqGjfCYl7zefH+xkFQPPI8bBya6XdcT3zTlqcfXlKA
-         3/J7gY5P0mo69UZGU6of4BU74hSBCQkoXeAuvAOqXHhEo6gI3CYx6KHXqVoIkTuZSz0z
-         5f8odrcD4beGvPkTiB1PvPr1YvUQ2kv7hNcayJVcVD2HLNjnQtpSIhHeweGd2lIfCd9S
-         ybVeGW+Za1b1MTF99vh0PqXKwSJKKuJM8IAGy7LiknaxPuOQ+PdEiJHAQKNZ6LEjw6sd
-         S+SC4AOL7R4bsV6jooqWXdePjvQI1sFVgavHHk9HKx+qH6tNBHK6Yqiyt3IKEuv/EkVz
-         E9yw==
-X-Gm-Message-State: AOJu0YyVRSZl+60Z1xRG8PCmRXC2OdbsqRq+D8Vuh8DJBi1TM4XurPJt
-        Z4ClNB2BU7uQ+XvIiJDontre5hTW11+UYz5z7qppdA==
-X-Google-Smtp-Source: AGHT+IEMT7FKO0GU0LYWIJk61ZoZMd77YWiVGpHr+v/XgAesZ5a9ZC1QYGCxEuGoxQsKfMhFwWDDkXPOv2GeSnJqJoE=
-X-Received: by 2002:a81:5c86:0:b0:59f:4f56:59bc with SMTP id
- q128-20020a815c86000000b0059f4f5659bcmr22662562ywb.42.1697025526803; Wed, 11
- Oct 2023 04:58:46 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697026074; x=1697630874;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zXRuIlwacuOdYyOFKIMg2z15au/UO9GrOGt9xxSfLUg=;
+        b=XbchxkHAP4317zkzyTM778QqxkrlJaiBjQ9dMPg19dAae/Rmew6msQic4oJ205H4Gc
+         JA8hBGAKG70BofOtnRpA5d1/cNraM9u8yUFfQFRFNtTUVfW66CiUDZc3gn5KTRi9bz9b
+         4gfecZLqCtdLtZv4PsKmRdurqJHREPyVGCpibs286SX7RPSihy8l+LUfeqZhDGTmsyQs
+         P7Gk0NKuniscZ80K5eMjDS/fyQFN6h3OFwsaSx4AkeO9rZeKi7d81G3lbQrJTp2lLzAU
+         CjbKEBoSNQ//tM4Lf3dAXzdjIDMop+mbCpgdZi5Yd/djQ34ze2Z66o5mRzN1mERaj6fz
+         4T7A==
+X-Gm-Message-State: AOJu0YwvA+MjMM/XcrQm02fcioxShWDOqB4DvXyEMmv8bgapxGcWqRU/
+        xVfxcae+qC/APU7NNnVofQAF8w==
+X-Google-Smtp-Source: AGHT+IGjEutPppYkL0YhjPcCtpI9vIs+tY+Thj66MkeS8HxckWZbm+0GoHU8ZWsKs4frxVPm/OnS0Q==
+X-Received: by 2002:a7b:ca57:0:b0:405:34e4:14cf with SMTP id m23-20020a7bca57000000b0040534e414cfmr18886359wml.4.1697026074383;
+        Wed, 11 Oct 2023 05:07:54 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.100])
+        by smtp.gmail.com with ESMTPSA id e24-20020a05600c219800b004013797efb6sm18902138wme.9.2023.10.11.05.07.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Oct 2023 05:07:53 -0700 (PDT)
+Message-ID: <513b1049-3cc5-43ad-9ab4-8b90d79d13e8@linaro.org>
+Date:   Wed, 11 Oct 2023 14:07:50 +0200
 MIME-Version: 1.0
-References: <20231010224928.2296997-1-peter.griffin@linaro.org>
- <20231010224928.2296997-9-peter.griffin@linaro.org> <2023101111-banknote-satin-1f77@gregkh>
-In-Reply-To: <2023101111-banknote-satin-1f77@gregkh>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 11 Oct 2023 13:58:35 +0200
-Message-ID: <CACRpkdbsP5B2=5QRNidsPGyGn8gDPJPMMLyJ7U=nhhohff8UiQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 08/20] dt-bindings: serial: samsung: Add
  google-gs101-uart compatible
-To:     Greg KH <gregkh@linuxfoundation.org>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>
 Cc:     Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
         conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
-        s.nawrocki@samsung.com, wim@linux-watchdog.org, linux@roeck-us.net,
+        s.nawrocki@samsung.com, linus.walleij@linaro.org,
+        wim@linux-watchdog.org, linux@roeck-us.net,
         catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, cw00.choi@samsung.com, tudor.ambarus@linaro.org,
-        andre.draszik@linaro.org, semen.protsenko@linaro.org,
-        saravanak@google.com, willmcvicker@google.com, soc@kernel.org,
+        olof@lixom.net, cw00.choi@samsung.com, andre.draszik@linaro.org,
+        semen.protsenko@linaro.org, saravanak@google.com,
+        willmcvicker@google.com, soc@kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
         kernel-team@android.com, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20231010224928.2296997-1-peter.griffin@linaro.org>
+ <20231010224928.2296997-9-peter.griffin@linaro.org>
+ <2023101111-banknote-satin-1f77@gregkh>
+ <a6c57156-d3a5-4524-8ef8-6f27cf0a2c97@linaro.org>
+ <2023101137-fester-rerun-5c39@gregkh>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <2023101137-fester-rerun-5c39@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
@@ -81,41 +136,54 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Oct 11, 2023 at 9:48=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
+On 11/10/2023 10:57, Greg KH wrote:
+> On Wed, Oct 11, 2023 at 09:49:07AM +0100, Tudor Ambarus wrote:
+>> Hi, Greg,
+>>
+>> On 10/11/23 08:48, Greg KH wrote:
+>>> On Tue, Oct 10, 2023 at 11:49:16PM +0100, Peter Griffin wrote:
+>>>> Add dedicated google-gs101-uart compatible to the dt-schema for
+>>>> representing uart of the Google Tensor gs101 SoC.
+>>>>
+>>>> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+>>>> ---
+>>>>  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 2 ++
+>>>>  1 file changed, 2 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+>>>> index 8bd88d5cbb11..72471ebe5734 100644
+>>>> --- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+>>>> +++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+>>>> @@ -19,11 +19,13 @@ properties:
+>>>>    compatible:
+>>>>      oneOf:
+>>>>        - items:
+>>>> +          - const: google,gs101-uart
+>>>>            - const: samsung,exynosautov9-uart
+>>>>            - const: samsung,exynos850-uart
+>>>>        - enum:
+>>>>            - apple,s5l-uart
+>>>>            - axis,artpec8-uart
+>>>> +          - google,gs101-uart
+>>>
+>>> These shouldn't be needed, just declare the device as the same as what
+>>
+>> We should have SoC specific compatibles so that any further quirks or
+>> incompatibilities can be easily addressed.
+> 
+> "further" work on quirks or incompatibilities can be added when they are
+> found and needed.  We don't add stuff for no good reason to the kernel.
 
-> >        - enum:
-> >            - apple,s5l-uart
-> >            - axis,artpec8-uart
-> > +          - google,gs101-uart
->
-> These shouldn't be needed, just declare the device as the same as what
-> the chip really is (i.e. a samsung uart), that way no .yaml or kernel
-> driver changes are needed at all.
+With a Devicetree bindings maintainer hat:
+We expect the device-specific compatible in all bindings, followed by
+fallback. The fallback is used by the driver, the device-specific for
+any future needs.
 
-We strive to have these as unique as possible, as it is a hardware
-description. It is fine to write drivers in Linux or any other OS just
-being aware of a "courser" idea of what UART this is, in this case
-would have looked something like this:
+This is the practice we follow everywhere and recommend everywhere since
+some time. It is also documented here:
 
-    compatible =3D "google,gs101-uart", "samsung-uart";
+https://elixir.bootlin.com/linux/v6.6-rc5/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
 
-And the driver would be able to match to just the latter string
-(these are listed in "particularity order").
+Best regards,
+Krzysztof
 
-BUT! The binding authors chose not to go that path, instead they
-have one unique compatible string per hardware/integration version,
-essentially per-SoC. So in this case it is just:
-
-    compatible =3D "google,gs101-uart";
-
-It is kind of impossible to fix now as well, because these bindings
-are already deployed. So they are like a BIOS: written in stone.
-
-It is possible to add dual compatibles for this *and following*
-variants, but I don't know how Krzysztof feels about that, and as
-others point out, probably knowledge of the exact SoC is
-necessary.
-
-Yours,
-Linus Walleij
