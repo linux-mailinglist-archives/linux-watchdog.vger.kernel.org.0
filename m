@@ -2,244 +2,428 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25CF7C5FBC
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Oct 2023 23:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37037C608E
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Oct 2023 00:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235186AbjJKV7C (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 Oct 2023 17:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
+        id S233559AbjJKWrb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 Oct 2023 18:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235179AbjJKV6w (ORCPT
+        with ESMTP id S233631AbjJKWr2 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 Oct 2023 17:58:52 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C89D8
-        for <linux-watchdog@vger.kernel.org>; Wed, 11 Oct 2023 14:58:49 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1c9b70b9671so28305ad.1
-        for <linux-watchdog@vger.kernel.org>; Wed, 11 Oct 2023 14:58:49 -0700 (PDT)
+        Wed, 11 Oct 2023 18:47:28 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4739DB8
+        for <linux-watchdog@vger.kernel.org>; Wed, 11 Oct 2023 15:47:24 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-5a1d88165a3so278670a12.0
+        for <linux-watchdog@vger.kernel.org>; Wed, 11 Oct 2023 15:47:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697061528; x=1697666328; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=84Uf9uELl6ZUNY1fM8dZqGWxG/vDPtGz8bCxaFhiGFg=;
-        b=S8xRHp1eeQoeLTxAEXLfVmJR6TNQ3xqS9sv+Tq7T2Dp4SGn9xSoT05qTeRRQup5rrh
-         ueDXFzaWWHUYbXDzkZ9359RGgS3lkMeedK2Yy9fflkvXstGLebEvVBUnP/lOYs/QVPs7
-         edhw8ZeNGnTTWcW3vvGDmXaDrzmBcvs5ALBCLU0N/VQ5XF4qT13BvuqJoTPCYGBVlUf+
-         FSeKU7j/+itiePbkV79NGCwtC+B9n5WQa/ok8+Cphrce5n8emkrNusvZ77b9H5G7gi/n
-         f25SxdtGSiDaXX8nYeJZJs/ECdBqgvlD/LGl+Dmjx4r1gy9F7K6ITJrQc2YmLryu7WF+
-         XQeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697061528; x=1697666328;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1697064444; x=1697669244; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=84Uf9uELl6ZUNY1fM8dZqGWxG/vDPtGz8bCxaFhiGFg=;
-        b=mo2B/+HDBRRJxqBnsCGoT7dPQoZGWxD0qz9D7biNcTOIcLt+uZbwXFNqxm6ZCPsX0H
-         Nwfkc7Du5dbDn53ceUQLYQgsOlv5pOcGz98uJ6KGjYTLh+Qk9SXtIGuni40eR2eNmF14
-         H8gSQCyivKm26qjBMyYBj8xqtFWWdykPLEYYcekqCbqC4fYrNOdub/zE8lmlcK/8t5ie
-         9N8bI1Rt2BXmtizBFHClgl8tm5zDYgAI3vMF7nppssqvQXoVd1q5Uhp5L78OXefsaVfu
-         XRE5nHVoZLb2+5nknZSY0VdD8zN5p9Q2rVRoHdiAwiKrC2lxWxZ1sLP/Zcqy7WElhjcH
-         Z7ZA==
-X-Gm-Message-State: AOJu0YyR8V86ro661cc2OZukGUP4WMW771meepEKKtbfjdo0p8WjrjXK
-        xhwrmB2nVBIxbwWg0kRZ/g76QA==
-X-Google-Smtp-Source: AGHT+IGizLr+HXYXT7Fe7nzJBHeo3JXLm3dQ9IRSvebWQzrtbzJLQAny19NC+mTlXml8nrFrWFn/JA==
-X-Received: by 2002:a17:902:cecc:b0:1c9:b786:4e3d with SMTP id d12-20020a170902cecc00b001c9b7864e3dmr362630plg.24.1697061528346;
-        Wed, 11 Oct 2023 14:58:48 -0700 (PDT)
-Received: from google.com (13.65.82.34.bc.googleusercontent.com. [34.82.65.13])
-        by smtp.gmail.com with ESMTPSA id iw19-20020a170903045300b001c44dbc92a2sm322770plb.184.2023.10.11.14.58.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Oct 2023 14:58:47 -0700 (PDT)
-Date:   Wed, 11 Oct 2023 14:58:44 -0700
-From:   William McVicker <willmcvicker@google.com>
-To:     Peter Griffin <peter.griffin@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
-        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
+        bh=TJjpPlrTA7gt5OOjUByIlzSzMV5BWHvidaObW0xkHOs=;
+        b=uBHlBfOj3FR0vLB5pJq48lFBNJmY3JNHOX+jNJeb1/y9/o2u5HIRBu+d0KZOFuym2Y
+         tmC51SuDzbKnupNSwn9KlXfKiwwOh4dWNxNn+X/iLJzfwc+FJ+kmLlHH2jJR5SRvLDg7
+         fsGI60W9jCXavbPhpKp8tAsAy19OfuSBabxBDV8BFrc+8rYTrSQqbkOjFxHtZwKt7SRf
+         4Uba8x//1MAJHr75TCcSHQt0TGFgGvueVD+36ziSxgT/SQLU7YtWzZw3JLKOam0q+fmW
+         y+KYvY9IuliiXvi4AD/Rp4zmtyoOkEig9hgXai1SBZG/fl7e+oAEK6dQI6V49EpCqWo4
+         FicQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697064444; x=1697669244;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TJjpPlrTA7gt5OOjUByIlzSzMV5BWHvidaObW0xkHOs=;
+        b=PXGPHjWZOyNIBDRP5P9hHQW4GjFXqXvnLbx32zcdEsJkND9PFB7zh96mnEFIFrDWWw
+         7PDKT6OQnbE/jw3A4WMzA0+CUq5cbm80XQPkhD9PJTv3ePAYRit0ZLGDLHCSnLo98V0d
+         vmHXzgAYqPo0jb1jT9hQ6yzphCbVnXUCIb5bqII+HC4VIC2jlyTrWhbWlEUz6OIViB6H
+         pqNSOoJMNR8rgnic5HyD32weMFpBQsP2z+ISiZi6AWPErrHBXaogDQktAOlx95PEcsPL
+         y+jDS2X/hrg2nU7zMAdwIvSlizWQHvZIKa/KcykDGiqi4wlnU6fnF7sjPYw2ezAZfIX6
+         3nvA==
+X-Gm-Message-State: AOJu0Yxa53gqJ5Uy+l43duEK6WWFBtGIcSzfOQrZZJdfwmTlzDSKCpyW
+        qjsXqumFsHbni9DC60On9iV0iKejGnaX6CWgzp6GNg==
+X-Google-Smtp-Source: AGHT+IHW7erGEhJpn4pqxfGZQIK9COm8/18UGtTL88Wsnz412tIEuuJCd/HF0Q4FmkAEKFkBM0bgHeO1EOafbzB6354=
+X-Received: by 2002:a17:90a:d386:b0:27d:9ed:96fc with SMTP id
+ q6-20020a17090ad38600b0027d09ed96fcmr2547852pju.29.1697064443582; Wed, 11 Oct
+ 2023 15:47:23 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231011184823.443959-1-peter.griffin@linaro.org> <20231011184823.443959-14-peter.griffin@linaro.org>
+In-Reply-To: <20231011184823.443959-14-peter.griffin@linaro.org>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Wed, 11 Oct 2023 17:47:12 -0500
+Message-ID: <CAPLW+4nVKXrW3q8d+Lm7p=s9n92Viw2SZLsXV1E4vBxP7cWRwg@mail.gmail.com>
+Subject: Re: [PATCH v3 13/20] pinctrl: samsung: Add filter selection support
+ for alive banks
+To:     Peter Griffin <peter.griffin@linaro.org>,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     robh+dt@kernel.org, mturquette@baylibre.com, conor+dt@kernel.org,
+        sboyd@kernel.org, tomasz.figa@gmail.com, s.nawrocki@samsung.com,
         linus.walleij@linaro.org, wim@linux-watchdog.org,
         linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
         arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org,
         cw00.choi@samsung.com, tudor.ambarus@linaro.org,
-        andre.draszik@linaro.org, semen.protsenko@linaro.org,
-        saravanak@google.com, soc@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        andre.draszik@linaro.org, saravanak@google.com,
+        willmcvicker@google.com, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
         kernel-team@android.com, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v3 00/20] Add minimal Tensor/GS101 SoC support and
- Oriole/Pixel6 board
-Message-ID: <ZScalKHMRq9gaGOh@google.com>
-References: <20231011184823.443959-1-peter.griffin@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231011184823.443959-1-peter.griffin@linaro.org>
-X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 10/11/2023, Peter Griffin wrote:
-> Hi folks,
-> 
-> Firstly, thanks to everyone who reviewed the v2/V1 series! V3 incorporates
-> all the review feedback received so far.
-> 
-> As this series spans multiple subsytems the expectation is that Krzysztof
-> will apply the whole series through the Samsung SoC tree. If the relevant
-> subsystem maintainers can give a acked-by or reviewed-by on the relevant
-> patches that would be most appreciated!
-> 
-> This series adds initial SoC support for the GS101 SoC and also initial board
-> support for Pixel 6 phone (Oriole).
-> 
-> The gs101 / Tensor SoC is also used in Pixel6a (bluejay) and Pixel 6 Pro
-> (raven) phones. Currently DT is added for the gs101 SoC and Oriole.
-> As you can see from the patches the SoC is based on a Samsung Exynos SoC,
-> and therefore lots of the low level Exynos drivers and bindings can be
-> re-used.
-> 
-> The support added in this series consists of:
-> * cpus
-> * pinctrl
-> * some CCF implementation
-> * watchdog
-> * uart
-> * gpio
-> 
-> This is enough to boot through to a busybox initramfs and shell using an
-> upstream kernel though :) More platform support will be added over the
-> following weeks and months.
-> 
-> For further information on how to build and flash the upstream kernel on your
-> Pixel 6, with a prebuilt busybox initramfs please refer to the script and
-> README.md here:
-> 
-> https://git.codelinaro.org/linaro/googlelt/pixelscripts
-> 
-> Note 1: I've removed the dtbo overlay from v2 and later submissions and
-> will re-submit once I have appropriate documentation for it.
-> 
-> Note 2: I've left the bootargs in dts with earlycon for now, for two reasons.
-> 1) The bootloader hangs if bootargs isn't present in the dtb as it tries to
-> re-write this with additional bootargs.
-> 2) there is a issue whereby the full serial console doesn't come up properly
-> if earlycon isn't also specified. This issue needs further investigation.
-> 
-> kind regards,
-> 
-> Peter.
+On Wed, Oct 11, 2023 at 1:49=E2=80=AFPM Peter Griffin <peter.griffin@linaro=
+.org> wrote:
+>
+> Newer Exynos SoCs have a filter selection register on alive bank pins.
+> This allows the selection of a digital or delay filter for each pin. If
+> the filter selection register is not available then the default filter
+> (digital) is applied.
+>
 
-Thanks Peter for sending the series out and for the quick turn around in
-addressing the feedback! I've tested the v3 patch series on my oriole device by
-following your README. I was able to successfully boot to the busybox console.
+I wonder if that solves any particular issue. For Exynos850 I decided
+against adding this feature because I failed to find any benefits of
+it. Didn't even come up with the way to test it. Is it really needed
+for this SoC functioning? In case you have some more details on why
+it's needed and how it can be tested, please add that info to the
+commit message as well.
 
-Thanks,
-Will
+> On suspend we apply the analog filter to all pins in the bank, and on
+> resume the digital filter is reapplied to all pins in the bank.
+>
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> ---
 
-> 
-> Changes since v2:
->  - Fixup pinctrl@174d0000: interrupts: [..] is too long DTC warning (Tudor)
->  - Add missing windowed watchdog code (Guenter)
->  - Fixup UART YAML bindings error (Krzysztof)
->  - gs101.dtsi add missing serial_0 alias (me)
->  - samsung_tty.c: fixup gs101_serial_drv_data so fifosize os obtained from DT
->  
-> Changes since v1:
->  - Remove irq/gs101.h and replace macros with irq numbers globally
->  - exynos-pmu - keep alphabetical order
->  - add cmu_apm to clock bindings documentation
->  - sysreg bindings - remove superfluous `google,gs101-sysreg`
->  - watchdog bindings - Alphanumerical order, update gs201 comment
->  - samsung,pinctrl.yaml - add new "if:then:else:" to narrow for google SoC
->  - samsung,pinctrl-wakeup-interrupt.yaml - Alphanumerical order
->  - samsung,pinctrl- add google,gs101-wakeup-eint compatible
->  - clk-pll: fixup typos
->  - clk-gs101: fix kernel test robot warnings (add 2 new clocks,dividers,gate)
->  - clk-gs101: fix alphabetical order
->  - clk-gs101: cmu_apm: fixup typo and missing empty entry
->  - clk-gs101: cmu_misc: remove clocks that were being registerred twice
->  - pinctrl: filter sel: rename/reorder variables, add comment for FLTCON bitfield
->  - pinctrl: filter sel: avoid setting reserved bits by loop over FLTCON1 pins as well
->  - pinctrl: gs101: rename bank_type_6/7 structs to be more specific, split from filter
->  - watchdog: s3c2410_wdt: remove dev_info prints
->  - gs101.dtsi/oriole.dts: order by unit node, remove underscores from node name, blank lines
->    add SoC node, split dts and dtsi into separate patches, remove 'DVT' suffix
->  - gs101-oriole.dtso: Remove overlay until board_id is documented properly
->  - Add GS101_PIN_* macros to gs101-pinctrl.h instead of using Exynos ones
->  - gpio-keys: update linux,code to use input-event-code macros
->  - add dedicated gs101-uart compatible
-> 
-> Peter Griffin (20):
->   dt-bindings: soc: samsung: exynos-pmu: Add gs101 compatible
->   dt-bindings: clock: Add Google gs101 clock management unit bindings
->   dt-bindings: soc: google: exynos-sysreg: add dedicated SYSREG
->     compatibles to GS101
->   dt-bindings: watchdog: Document Google gs101 & gs201 watchdog bindings
->   dt-bindings: arm: google: Add bindings for Google ARM platforms
->   dt-bindings: pinctrl: samsung: add google,gs101-pinctrl compatible
->   dt-bindings: pinctrl: samsung: add gs101-wakeup-eint compatible
->   dt-bindings: serial: samsung: Add google-gs101-uart compatible
->   clk: samsung: clk-pll: Add support for pll_{0516,0517,518}
->   clk: samsung: clk-gs101: Add cmu_top registers, plls, mux and gates
->   clk: samsung: clk-gs101: add CMU_APM support
->   clk: samsung: clk-gs101: Add support for CMU_MISC clock unit
->   pinctrl: samsung: Add filter selection support for alive banks
->   pinctrl: samsung: Add gs101 SoC pinctrl configuration
->   watchdog: s3c2410_wdt: Add support for Google tensor SoCs
->   tty: serial: samsung: Add gs101 compatible and SoC data
->   arm64: dts: google: Add initial Google gs101 SoC support
->   arm64: dts: google: Add initial Oriole/pixel 6 board support
->   arm64: defconfig: Enable Google Tensor SoC
->   MAINTAINERS: add entry for Google Tensor SoC
-> 
->  .../devicetree/bindings/arm/google.yaml       |   46 +
->  .../bindings/clock/google,gs101-clock.yaml    |  125 +
->  .../samsung,pinctrl-wakeup-interrupt.yaml     |    2 +
->  .../bindings/pinctrl/samsung,pinctrl.yaml     |   22 +-
->  .../bindings/serial/samsung_uart.yaml         |    1 +
->  .../bindings/soc/samsung/exynos-pmu.yaml      |    2 +
->  .../soc/samsung/samsung,exynos-sysreg.yaml    |    6 +
->  .../bindings/watchdog/samsung-wdt.yaml        |   10 +-
->  MAINTAINERS                                   |   10 +
->  arch/arm64/Kconfig.platforms                  |    6 +
->  arch/arm64/boot/dts/Makefile                  |    1 +
->  arch/arm64/boot/dts/google/Makefile           |    4 +
->  arch/arm64/boot/dts/google/gs101-oriole.dts   |   79 +
->  arch/arm64/boot/dts/google/gs101-pinctrl.dtsi | 1275 ++++++++++
->  arch/arm64/boot/dts/google/gs101-pinctrl.h    |   32 +
->  arch/arm64/boot/dts/google/gs101.dtsi         |  504 ++++
->  arch/arm64/configs/defconfig                  |    1 +
->  drivers/clk/samsung/Kconfig                   |    9 +
->  drivers/clk/samsung/Makefile                  |    2 +
->  drivers/clk/samsung/clk-gs101.c               | 2164 +++++++++++++++++
->  drivers/clk/samsung/clk-pll.c                 |    9 +-
->  drivers/clk/samsung/clk-pll.h                 |    3 +
->  .../pinctrl/samsung/pinctrl-exynos-arm64.c    |  163 ++
->  drivers/pinctrl/samsung/pinctrl-exynos.c      |   84 +-
->  drivers/pinctrl/samsung/pinctrl-exynos.h      |   41 +
->  drivers/pinctrl/samsung/pinctrl-samsung.c     |    4 +
->  drivers/pinctrl/samsung/pinctrl-samsung.h     |   24 +
->  drivers/tty/serial/samsung_tty.c              |   13 +
->  drivers/watchdog/s3c2410_wdt.c                |  127 +-
->  include/dt-bindings/clock/google,gs101.h      |  232 ++
->  30 files changed, 4985 insertions(+), 16 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/arm/google.yaml
->  create mode 100644 Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
->  create mode 100644 arch/arm64/boot/dts/google/Makefile
->  create mode 100644 arch/arm64/boot/dts/google/gs101-oriole.dts
->  create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.dtsi
->  create mode 100644 arch/arm64/boot/dts/google/gs101-pinctrl.h
->  create mode 100644 arch/arm64/boot/dts/google/gs101.dtsi
->  create mode 100644 drivers/clk/samsung/clk-gs101.c
->  create mode 100644 include/dt-bindings/clock/google,gs101.h
-> 
-> -- 
+Heads up: I noticed some merge warnings when applying this patch onto
+the most recent linux-next, like so:
+
+8<---------------------------------------------------------------------->8
+    Applying: pinctrl: samsung: Add filter selection support for alive bank=
+s
+    Using index info to reconstruct a base tree...
+    M    drivers/pinctrl/samsung/pinctrl-exynos.c
+    M    drivers/pinctrl/samsung/pinctrl-exynos.h
+    M    drivers/pinctrl/samsung/pinctrl-samsung.c
+    M    drivers/pinctrl/samsung/pinctrl-samsung.h
+    Falling back to patching base and 3-way merge...
+    Auto-merging drivers/pinctrl/samsung/pinctrl-samsung.h
+    Auto-merging drivers/pinctrl/samsung/pinctrl-samsung.c
+    Auto-merging drivers/pinctrl/samsung/pinctrl-exynos.h
+    Auto-merging drivers/pinctrl/samsung/pinctrl-exynos.c
+8<---------------------------------------------------------------------->8
+
+It was still applied, but maybe if you are going to send v4 try to
+rebase your series on top of linux-next first.
+
+Below are pretty minor comments for the code.
+
+>  drivers/pinctrl/samsung/pinctrl-exynos.c  | 82 ++++++++++++++++++++++-
+>  drivers/pinctrl/samsung/pinctrl-exynos.h  |  7 ++
+>  drivers/pinctrl/samsung/pinctrl-samsung.c |  2 +
+>  drivers/pinctrl/samsung/pinctrl-samsung.h | 23 +++++++
+>  4 files changed, 113 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.c b/drivers/pinctrl/s=
+amsung/pinctrl-exynos.c
+> index a8212fc126bf..800831aa8357 100644
+> --- a/drivers/pinctrl/samsung/pinctrl-exynos.c
+> +++ b/drivers/pinctrl/samsung/pinctrl-exynos.c
+> @@ -269,6 +269,68 @@ struct exynos_eint_gpio_save {
+>         u32 eint_mask;
+>  };
+>
+> +static void exynos_eint_flt_config(struct samsung_pinctrl_drv_data *d,
+> +                                  struct samsung_pin_bank *bank, int fil=
+ter)
+> +{
+> +       unsigned int flt_reg, flt_con =3D 0;
+> +       unsigned int val, shift;
+> +       int i;
+> +       int loop_cnt;
+> +
+> +       /*
+> +        * This function sets the desired filter (digital or delay) to
+> +        * every pin in the bank. Note the filter selection bitfield is
+> +        * only found on alive banks. The FLTCON register has the
+> +        * following layout
+> +        *
+> +        * BitfieldName[PinNum][Bit:Bit]
+> +        *
+> +        * FLT_EN[3][31] FLT_SEL[3][30] FLT_WIDTH[3][29:24]
+> +        * FLT_EN[2][23] FLT_SEL[2][22] FLT_WIDTH[2][21:16]
+> +        * FLT_EN[1][15] FLT_SEL[1][14] FLT_WIDTH[1][13:8]
+> +        * FLT_EN[0][7]  FLT_SEL[0][6]  FLT_WIDTH[0][5:0]
+> +        */
+
+Maybe move this comment above this function? Or split it in two parts:
+function doc, and 'flt_con' variable doc.
+
+> +
+> +       flt_con |=3D EXYNOS9_FLTCON_EN;
+> +
+> +       if (filter)
+
+Different values are passed as a 'filter' param to this function. But
+here it's only used as a boolean value. Something doesn't feel right.
+
+> +               flt_con |=3D EXYNOS9_FLTCON_SEL_DIGITAL;
+> +
+> +       flt_reg =3D EXYNOS_GPIO_EFLTCON_OFFSET + bank->fltcon_offset;
+> +
+> +       if (bank->nr_pins > EXYNOS9_FLTCON_NR_PIN)
+> +               /*
+> +                * if nr_pins > 4, we should set FLTCON0 register fully.
+> +                * (pin0 ~ 3). So loop 4 times in case of FLTCON0.
+> +                */
+
+Maybe move this comment above 'if' block? And start with capital
+letter, for consistency with other multi-line comments.
+
+> +               loop_cnt =3D EXYNOS9_FLTCON_NR_PIN;
+> +       else
+> +               loop_cnt =3D bank->nr_pins;
+> +
+> +       val =3D readl(d->virt_base + flt_reg);
+> +
+
+Maybe remove this empty line to make RMW block the whole?
+
+> +       for (i =3D 0; i < loop_cnt; i++) {
+> +               shift =3D i * EXYNOS9_FLTCON_LEN;
+> +               val &=3D ~(EXYNOS9_FLTCON_MASK << shift);
+> +               val |=3D (flt_con << shift);
+> +       }
+> +
+
+Ditto.
+
+> +       writel(val, d->virt_base + flt_reg);
+> +
+> +       /* loop for FLTCON1 pin 4 ~ 7 */
+
+Start with a capital letter for consistency.
+
+> +       if (bank->nr_pins > EXYNOS9_FLTCON_NR_PIN) {
+> +               val =3D readl(d->virt_base + flt_reg + 0x4);
+> +               loop_cnt =3D (bank->nr_pins - EXYNOS9_FLTCON_NR_PIN);
+> +
+> +               for (i =3D 0; i < loop_cnt; i++) {
+> +                       shift =3D i * EXYNOS9_FLTCON_LEN;
+> +                       val &=3D ~(EXYNOS9_FLTCON_MASK << shift);
+> +                       val |=3D (flt_con << shift);
+> +               }
+
+Code duplication, but it's minor.
+
+> +               writel(val, d->virt_base + flt_reg + 0x4);
+> +       }
+> +}
+> +
+>  /*
+>   * exynos_eint_gpio_init() - setup handling of external gpio interrupts.
+>   * @d: driver data of samsung pinctrl driver.
+> @@ -321,6 +383,9 @@ __init int exynos_eint_gpio_init(struct samsung_pinct=
+rl_drv_data *d)
+>                         goto err_domains;
+>                 }
+>
+> +               /* Set Delay Analog Filter */
+> +               if (bank->fltcon_type !=3D FLT_DEFAULT)
+> +                       exynos_eint_flt_config(d, bank, EXYNOS9_FLTCON_SE=
+L_DELAY);
+>         }
+>
+>         return 0;
+> @@ -555,6 +620,10 @@ __init int exynos_eint_wkup_init(struct samsung_pinc=
+trl_drv_data *d)
+>                 if (bank->eint_type !=3D EINT_TYPE_WKUP)
+>                         continue;
+>
+> +               /* Set Digital Filter */
+> +               if (bank->fltcon_type !=3D FLT_DEFAULT)
+> +                       exynos_eint_flt_config(d, bank, EXYNOS9_FLTCON_SE=
+L_DIGITAL);
+
+Please stick to 80 characters per line when possible.
+
+> +
+>                 bank->irq_chip =3D devm_kmemdup(dev, irq_chip, sizeof(*ir=
+q_chip),
+>                                               GFP_KERNEL);
+>                 if (!bank->irq_chip) {
+> @@ -658,6 +727,7 @@ static void exynos_pinctrl_suspend_bank(
+>  void exynos_pinctrl_suspend(struct samsung_pinctrl_drv_data *drvdata)
+>  {
+>         struct samsung_pin_bank *bank =3D drvdata->pin_banks;
+> +       struct samsung_pinctrl_drv_data *d =3D bank->drvdata;
+>         struct exynos_irq_chip *irq_chip =3D NULL;
+>         int i;
+>
+> @@ -665,6 +735,9 @@ void exynos_pinctrl_suspend(struct samsung_pinctrl_dr=
+v_data *drvdata)
+>                 if (bank->eint_type =3D=3D EINT_TYPE_GPIO)
+>                         exynos_pinctrl_suspend_bank(drvdata, bank);
+>                 else if (bank->eint_type =3D=3D EINT_TYPE_WKUP) {
+> +                       /* Setting Delay (Analog) Filter */
+> +                       if (bank->fltcon_type !=3D FLT_DEFAULT)
+> +                               exynos_eint_flt_config(d, bank, EXYNOS9_F=
+LTCON_SEL_DELAY);
+
+Please stick to 80 characters per line when possible.
+
+>                         if (!irq_chip) {
+>                                 irq_chip =3D bank->irq_chip;
+>                                 irq_chip->set_eint_wakeup_mask(drvdata,
+> @@ -707,11 +780,18 @@ static void exynos_pinctrl_resume_bank(
+>  void exynos_pinctrl_resume(struct samsung_pinctrl_drv_data *drvdata)
+>  {
+>         struct samsung_pin_bank *bank =3D drvdata->pin_banks;
+> +       struct samsung_pinctrl_drv_data *d =3D bank->drvdata;
+>         int i;
+>
+>         for (i =3D 0; i < drvdata->nr_banks; ++i, ++bank)
+> -               if (bank->eint_type =3D=3D EINT_TYPE_GPIO)
+> +               if (bank->eint_type =3D=3D EINT_TYPE_GPIO) {
+>                         exynos_pinctrl_resume_bank(drvdata, bank);
+> +               } else if (bank->eint_type =3D=3D EINT_TYPE_WKUP ||
+> +                       bank->eint_type =3D=3D EINT_TYPE_WKUP_MUX) {
+
+Indent it to be under the open bracket on the previous line.
+
+> +                       /* Set Digital Filter */
+> +                       if (bank->fltcon_type !=3D FLT_DEFAULT)
+> +                               exynos_eint_flt_config(d, bank, EXYNOS9_F=
+LTCON_SEL_DIGITAL);
+
+Please stick to 80 characters per line when possible.
+
+> +               }
+>  }
+>
+>  static void exynos_retention_enable(struct samsung_pinctrl_drv_data *drv=
+data)
+> diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.h b/drivers/pinctrl/s=
+amsung/pinctrl-exynos.h
+> index 7bd6d82c9f36..63b2426ad5d6 100644
+> --- a/drivers/pinctrl/samsung/pinctrl-exynos.h
+> +++ b/drivers/pinctrl/samsung/pinctrl-exynos.h
+> @@ -50,6 +50,13 @@
+>
+>  #define EXYNOS_EINT_MAX_PER_BANK       8
+>  #define EXYNOS_EINT_NR_WKUP_EINT
+> +/* EINT filter configuration */
+> +#define EXYNOS9_FLTCON_EN              BIT(7)
+> +#define EXYNOS9_FLTCON_SEL_DIGITAL     BIT(6)
+> +#define EXYNOS9_FLTCON_SEL_DELAY       0
+> +#define EXYNOS9_FLTCON_MASK            0xff
+> +#define EXYNOS9_FLTCON_LEN             8
+> +#define EXYNOS9_FLTCON_NR_PIN          4
+>
+
+I guess we discussed using EXYNOS9 prefix during the review of
+Exynos850 initial submission, and decided against it. But in case of
+this SoC (which is obviously Exynos, but is called Google), I'm not
+even sure which name would be appropriate. I mean, if it's ok to use
+EXYNOS9 prefix, then maybe I should go ahead and rename existing
+EXYNOS850 definitions to EXYNOS9 too, as it belongs to the same
+platform family, to avoid any confusion.
+
+Krzysztof, what's your take on this?
+
+>  #define EXYNOS_PIN_BANK_EINTN(pins, reg, id)           \
+>         {                                               \
+> diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/=
+samsung/pinctrl-samsung.c
+> index e54847040b4a..449f8109d8b5 100644
+> --- a/drivers/pinctrl/samsung/pinctrl-samsung.c
+> +++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
+> @@ -1104,6 +1104,8 @@ samsung_pinctrl_get_soc_data(struct samsung_pinctrl=
+_drv_data *d,
+>                 bank->eint_func =3D bdata->eint_func;
+>                 bank->eint_type =3D bdata->eint_type;
+>                 bank->eint_mask =3D bdata->eint_mask;
+> +               bank->fltcon_type =3D bdata->fltcon_type;
+> +               bank->fltcon_offset =3D bdata->fltcon_offset;
+>                 bank->eint_offset =3D bdata->eint_offset;
+>                 bank->name =3D bdata->name;
+>
+> diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.h b/drivers/pinctrl/=
+samsung/pinctrl-samsung.h
+> index 9af93e3d8d9f..de2ca8e8b378 100644
+> --- a/drivers/pinctrl/samsung/pinctrl-samsung.h
+> +++ b/drivers/pinctrl/samsung/pinctrl-samsung.h
+> @@ -82,6 +82,21 @@ enum eint_type {
+>         EINT_TYPE_WKUP_MUX,
+>  };
+>
+> +/**
+> + * enum fltcon_type - filter selection
+> + * @FLT_DEFAULT: filter not selectable, default digital filter
+> + * @FLT_SELECT: filter selectable (digital or delay)
+> + *
+> + * Some banks on some SoCs (gs101 and possibly others) have a selectable
+> + * filter on alive banks of 'delay/analog' or 'digital'. If the filter
+> + * selection is not available then the default filter is used (digital).
+> + */
+> +
+
+Maybe remove this empty line?
+
+> +enum fltcon_type {
+> +       FLT_DEFAULT,
+> +       FLT_SELECTABLE,
+> +};
+> +
+>  /* maximum length of a pin in pin descriptor (example: "gpa0-0") */
+>  #define PIN_NAME_LENGTH        10
+>
+> @@ -122,6 +137,8 @@ struct samsung_pin_bank_type {
+>   * @eint_type: type of the external interrupt supported by the bank.
+>   * @eint_mask: bit mask of pins which support EINT function.
+>   * @eint_offset: SoC-specific EINT register or interrupt offset of bank.
+> + * @fltcon_type: whether the filter (delay/digital) is selectable
+> + * @fltcon_offset: SoC-specific EINT filter control register offset of b=
+ank.
+>   * @name: name to be prefixed for each pin in this pin bank.
+>   */
+>  struct samsung_pin_bank_data {
+> @@ -133,6 +150,8 @@ struct samsung_pin_bank_data {
+>         enum eint_type  eint_type;
+>         u32             eint_mask;
+>         u32             eint_offset;
+> +       enum fltcon_type fltcon_type;
+> +       u32             fltcon_offset;
+>         const char      *name;
+>  };
+>
+> @@ -147,6 +166,8 @@ struct samsung_pin_bank_data {
+>   * @eint_type: type of the external interrupt supported by the bank.
+>   * @eint_mask: bit mask of pins which support EINT function.
+>   * @eint_offset: SoC-specific EINT register or interrupt offset of bank.
+> + * @fltcon_type: whether the filter (delay/digital) is selectable
+> + * @fltcon_offset: SoC-specific EINT filter control register offset of b=
+ank.
+>   * @name: name to be prefixed for each pin in this pin bank.
+>   * @pin_base: starting pin number of the bank.
+>   * @soc_priv: per-bank private data for SoC-specific code.
+> @@ -169,6 +190,8 @@ struct samsung_pin_bank {
+>         enum eint_type  eint_type;
+>         u32             eint_mask;
+>         u32             eint_offset;
+> +       enum fltcon_type fltcon_type;
+> +       u32             fltcon_offset;
+>         const char      *name;
+>
+>         u32             pin_base;
+> --
 > 2.42.0.655.g421f12c284-goog
-> 
+>
