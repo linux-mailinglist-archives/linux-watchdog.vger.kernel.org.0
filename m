@@ -2,130 +2,138 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A806A7C4E6A
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Oct 2023 11:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 594227C4E8F
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Oct 2023 11:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbjJKJWd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 Oct 2023 05:22:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
+        id S231157AbjJKJ0t (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 Oct 2023 05:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbjJKJWc (ORCPT
+        with ESMTP id S230398AbjJKJ0r (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 Oct 2023 05:22:32 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF3594
-        for <linux-watchdog@vger.kernel.org>; Wed, 11 Oct 2023 02:22:31 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-66d0169cf43so6105936d6.3
-        for <linux-watchdog@vger.kernel.org>; Wed, 11 Oct 2023 02:22:31 -0700 (PDT)
+        Wed, 11 Oct 2023 05:26:47 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DF29E;
+        Wed, 11 Oct 2023 02:26:45 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-99357737980so1143024966b.2;
+        Wed, 11 Oct 2023 02:26:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697016150; x=1697620950; darn=vger.kernel.org;
+        d=jms.id.au; s=google; t=1697016404; x=1697621204; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NiamZOqOZZtzzPmQsOXA8/LTPZNpfaNzuK4lw0f8SzI=;
-        b=gxy18m7Av/Q8aEU/b2eCmmflWWfvgMf3WN/2kq2fTaslkb4BHq0OAyqAu+q0uHbChH
-         F1V3lv/A2vl6cmffGoxr35ZB1zCHormL1/vVwNsvSK70ferS8CE/1JzFO9zkOdsUcBtr
-         VsclXiaRdqtkPCZA7KKuktYfW/9PD/56l/hXVPS8OppKAuc38BjdqQkdgMmnuGQJ1/13
-         2bdM1Qzgr5yDv7sqUmLlhreYvci42QUm1bgk9lVsVTAogcXJd0hMYZIbndqds5FsAol3
-         RxYWtvlqKIp+a3QYySGm+f9047QShXb/lzQoRwZJIuIDL6IHRLhuqv+tPBL1aEmf8VFK
-         Q2Tg==
+        bh=+gXxCxi6vp030i+agdceTeSycONQUjyDJd68wM+eSmw=;
+        b=hH4ZAk8GBQuWvOuaQs8u+SAYGqoBk+k/NPadLSFWpJzh1k2E27d1K9Hj8BadhivUpB
+         pIW6zgTaM4pp8Pvi697w0XlLr6YEB1IrGqNArKNi05o03wlaUs+bbjW1eu0vXqfjwGG0
+         oPB/gcKXnfRePefAikpGpVQpC2Zh1Mv9T0eJ0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697016150; x=1697620950;
+        d=1e100.net; s=20230601; t=1697016404; x=1697621204;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NiamZOqOZZtzzPmQsOXA8/LTPZNpfaNzuK4lw0f8SzI=;
-        b=h04ULhK4QGSlu2dpVUkQyqleoTa0O6eIlMw4/1Y1EAuJAMxqNN5nVwgqAz8yJeV0Ah
-         WlRBUF6baLEd2jM+AdlhUqUfRb5iNcGG53VnjcODHZMnQ+q4Wr9aL/ujgNqfeTC1RhRv
-         0cX9nNUTJ3YEp4g4eIap39MdB1cXEn0P0Xnx+omMiwdpJpI//iQeZiijkV6k1agY/PA6
-         PN+IrqTA1LDt9eANk9uGi9gXDUQR84bLZmPmWTtjtITJCYIyOjdFD5jgqfkrn1lHWGcM
-         ToXye3PXexPHEPZAsfK73wocR32g5Tb1LNgjwRNKSfzCgtk6f+/Z9nKvIwVt7Km3zxHZ
-         Ck3A==
-X-Gm-Message-State: AOJu0YxZ+DKiyrB+305fGbQinGOEPcV2ucZjzZIzV4SMpw/+E5GlvJeW
-        rfUqkSVPEPL0I7/tT2Coxlu6h9kEChtv3oi5VJY27w==
-X-Google-Smtp-Source: AGHT+IFerUNHewgiE5tLLCx5HV3nwVhXkhxt2EIfdccX23DiuelsSBZdOsEH+KJvuaEUMPXd2xPPokchSF+FbYADBnI=
-X-Received: by 2002:a0c:e30d:0:b0:66d:343:3512 with SMTP id
- s13-20020a0ce30d000000b0066d03433512mr1954964qvl.63.1697016150324; Wed, 11
- Oct 2023 02:22:30 -0700 (PDT)
+        bh=+gXxCxi6vp030i+agdceTeSycONQUjyDJd68wM+eSmw=;
+        b=WaGrpNASuKF9rMO6JNNhuGuCiYCNc2dFqPzvI3wGKTuP4bvwvHJPthefJCIcyJiN98
+         IyUykVQM6l/AfJ+LEUTqu/zmq3LBI94EEBDR6D0ojuq5RI++Pgx+GOidvL31mob4FAcJ
+         UTG1HS7wrOO0MURukUwQCJ5UjSrLpmfL5cIUeFwJC4cKDvbpWEpUHVmCLovg0bj84dQB
+         myTdVfD9q7jN65ZXSZA1t6rr2WyNJi5kDgPQiigW+rV+bLo8+/C4S9QrC1LhxrrGjgZs
+         jw4pxoK2g+1bMDb0Y6ga4hcT6eoVhSjef+JCYPlS7oYpcK39ZdBhWYVcZHp3ceNQsCfY
+         kHAg==
+X-Gm-Message-State: AOJu0YyMvWcHc1Pyv8UGDvnVeEDSk4LalqSEfdfoRZzOoGpip4Q6/h1N
+        vvaMdsTkG7PWhac0KSkznv4OS5Ex0VUHSrXKSz0=
+X-Google-Smtp-Source: AGHT+IHApwH+q9IPC29LKXoGHb2xdanm+kml7BeaRr/3PjuQ3NKQJoVq6Zhgzq28/yAtLmjZHjvfQbxoOnsjY+1Rl5M=
+X-Received: by 2002:a17:907:7817:b0:9ad:e17c:464e with SMTP id
+ la23-20020a170907781700b009ade17c464emr17132987ejc.68.1697016403957; Wed, 11
+ Oct 2023 02:26:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231010224928.2296997-1-peter.griffin@linaro.org>
- <20231010224928.2296997-9-peter.griffin@linaro.org> <2023101111-banknote-satin-1f77@gregkh>
-In-Reply-To: <2023101111-banknote-satin-1f77@gregkh>
-From:   Peter Griffin <peter.griffin@linaro.org>
-Date:   Wed, 11 Oct 2023 10:22:19 +0100
-Message-ID: <CADrjBPqGkAh9YauwDTTrjBqx1fYmXEE4FwqDoPEy1+=Stf24QA@mail.gmail.com>
-Subject: Re: [PATCH v2 08/20] dt-bindings: serial: samsung: Add
- google-gs101-uart compatible
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
-        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
-        linus.walleij@linaro.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, olof@lixom.net, cw00.choi@samsung.com,
-        tudor.ambarus@linaro.org, andre.draszik@linaro.org,
-        semen.protsenko@linaro.org, saravanak@google.com,
-        willmcvicker@google.com, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        kernel-team@android.com, linux-serial@vger.kernel.org
+References: <20230922104231.1434-4-zev@bewilderbeest.net> <20230922104231.1434-6-zev@bewilderbeest.net>
+In-Reply-To: <20230922104231.1434-6-zev@bewilderbeest.net>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 11 Oct 2023 19:56:32 +1030
+Message-ID: <CACPK8Xe5UEDt+ko_FtF-fi1TZDNZeZMtzaU_ZBxt6CO+UHJEpg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] watchdog: aspeed: Add support for aspeed,reset-mask
+ DT property
+To:     Zev Weiss <zev@bewilderbeest.net>
+Cc:     Andrew Jeffery <andrew@aj.id.au>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Milton D. Miller II" <mdmii@outlook.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Eddie James <eajames@linux.ibm.com>,
+        Ivan Mikhaylov <i.mikhaylov@yadro.com>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Greg,
-
-Thanks for your review feedback!
-
-On Wed, 11 Oct 2023 at 08:48, Greg KH <gregkh@linuxfoundation.org> wrote:
+On Fri, 22 Sept 2023 at 20:12, Zev Weiss <zev@bewilderbeest.net> wrote:
 >
-> On Tue, Oct 10, 2023 at 11:49:16PM +0100, Peter Griffin wrote:
-> > Add dedicated google-gs101-uart compatible to the dt-schema for
-> > representing uart of the Google Tensor gs101 SoC.
-> >
-> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> > ---
-> >  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> > index 8bd88d5cbb11..72471ebe5734 100644
-> > --- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> > +++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-> > @@ -19,11 +19,13 @@ properties:
-> >    compatible:
-> >      oneOf:
-> >        - items:
-> > +          - const: google,gs101-uart
-> >            - const: samsung,exynosautov9-uart
-> >            - const: samsung,exynos850-uart
-> >        - enum:
-> >            - apple,s5l-uart
-> >            - axis,artpec8-uart
-> > +          - google,gs101-uart
+> This property allows the device-tree to specify how the Aspeed
+> watchdog timer's reset mask register(s) should be set, so that
+> peripherals can be individually exempted from (or opted in to) being
+> reset when the watchdog timer expires.
 >
-> These shouldn't be needed, just declare the device as the same as what
-> the chip really is (i.e. a samsung uart), that way no .yaml or kernel
-> driver changes are needed at all.
+> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
 
-What you describe is actually how I had it in the v1 submission, which is also
-similar to what exynosautov9.dtsi is doing by re-using the
-"samsung,exynos850-uart" compatible, and associated data in the driver.
+Reviewed-by: Joel Stanley <joel@jms.id.au>
 
-However the review feedback in v1 from Krzysztof and Tudor was to add a
-dedicated compatible for it. I guess I could have re-used the existing
-EXYNOS850_SERIAL_DRV_DATA structure though rather than duplicating
-that as well.
+A note below.
 
-I'll let Krzysztof comment on why a dedicated compatible is required.
+> ---
+>  drivers/watchdog/aspeed_wdt.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
+> index b72a858bbac7..b4773a6aaf8c 100644
+> --- a/drivers/watchdog/aspeed_wdt.c
+> +++ b/drivers/watchdog/aspeed_wdt.c
+> @@ -79,6 +79,8 @@ MODULE_DEVICE_TABLE(of, aspeed_wdt_of_table);
+>  #define   WDT_TIMEOUT_STATUS_BOOT_SECONDARY    BIT(1)
+>  #define WDT_CLEAR_TIMEOUT_STATUS       0x14
+>  #define   WDT_CLEAR_TIMEOUT_AND_BOOT_CODE_SELECTION    BIT(0)
+> +#define WDT_RESET_MASK1                0x1c
+> +#define WDT_RESET_MASK2                0x20
+>
+>  /*
+>   * WDT_RESET_WIDTH controls the characteristics of the external pulse (if
+> @@ -402,6 +404,8 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
+>
+>         if ((of_device_is_compatible(np, "aspeed,ast2500-wdt")) ||
+>                 (of_device_is_compatible(np, "aspeed,ast2600-wdt"))) {
+> +               u32 reset_mask[2];
+> +               size_t nrstmask = of_device_is_compatible(np, "aspeed,ast2600-wdt") ? 2 : 1;
+>                 u32 reg = readl(wdt->base + WDT_RESET_WIDTH);
+>
+>                 reg &= wdt->cfg->ext_pulse_width_mask;
+> @@ -419,6 +423,13 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
+>                         reg |= WDT_OPEN_DRAIN_MAGIC;
+>
+>                 writel(reg, wdt->base + WDT_RESET_WIDTH);
+> +
+> +               ret = of_property_read_u32_array(np, "aspeed,reset-mask", reset_mask, nrstmask);
+> +               if (!ret) {
+> +                       writel(reset_mask[0], wdt->base + WDT_RESET_MASK1);
+> +                       if (nrstmask > 1)
+> +                               writel(reset_mask[1], wdt->base + WDT_RESET_MASK2);
+> +               }
 
-regards,
+This will do funky things if someone is careless enough to put the
+property in an ast2400 device tree.
 
-Peter
+The ast2700 has four reset mask registers. Not really your problem at
+this point, but we might need to move to a per-soc callback in the
+platform data or similar.
+
+>         }
+>
+>         if (!of_property_read_u32(np, "aspeed,ext-pulse-duration", &duration)) {
+> --
+> 2.40.0.5.gf6e3b97ba6d2.dirty
+>
