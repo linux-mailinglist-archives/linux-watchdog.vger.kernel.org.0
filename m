@@ -2,105 +2,137 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E19CD7C57B8
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Oct 2023 17:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7AE57C581A
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Oct 2023 17:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232023AbjJKPFI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 Oct 2023 11:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41888 "EHLO
+        id S232868AbjJKPaA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 Oct 2023 11:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232415AbjJKPFH (ORCPT
+        with ESMTP id S232741AbjJKPaA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 Oct 2023 11:05:07 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E7092;
-        Wed, 11 Oct 2023 08:05:06 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1e10507a4d6so5134112fac.1;
-        Wed, 11 Oct 2023 08:05:06 -0700 (PDT)
+        Wed, 11 Oct 2023 11:30:00 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C4192;
+        Wed, 11 Oct 2023 08:29:59 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id a1e0cc1a2514c-7b102a6565eso2443691241.0;
+        Wed, 11 Oct 2023 08:29:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697036705; x=1697641505; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1697038198; x=1697642998; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kXDjoDbzwlWXfPA8MMIol0GtkAvJKfQiWOLtIt+2v7A=;
-        b=UB6elFJDZgNOejRwqHpPK2cPsDa6X3GROQ6Qz3IQvAZsWjzPJcKXx/SDa1ifnVgyL8
-         YjzdKM70wSnMmVkqJxNJzYETZCNqCfEGzTFmjjVQCKyRSTpc9wMRPdgRUqC0vpnmttM+
-         Yie3eukZ6BpfGryp08JEZI2cmisMe8AY+whGDN303uN2X29OM5zr91uZd1NIJYUm/ObC
-         hKWYUTrtLpks/vNpl2/RT27rT1ap7mCxYqrTY1AxOQN5hV4kM4YnJnVNxKRktGsaWdwp
-         NZ6WvxM/JuItLd0ObV9TFGyO9Tdwst6OPpqFK0wDM/YSuinh5n4ObhjC5JVfTK7NIwA4
-         B+OQ==
+        bh=Xv1kYdGHJEu/8xSIHscJQ1hEvpIhACaiAxShcFHXWMo=;
+        b=afcLE1sElITcNKLCuwsYA1jSxA3D2bvlmI4VVckKjW/SaW9pA6EgH7Zw11VmE3sHqz
+         w7OUM7sP/XJ5nT6fyTiVsHKfG4cnSJNSThhsKfUovogYfRrXxYp14pgutuSBHVra84LH
+         TpeLQzPEcnO9MER8AtH9utQSzKQcdPrsVB25NNAWQCPb2czhoxeZV5NNSJyizNl4KX6t
+         wQ4zYePj5AwuNTPLEc5hlNCN84+M3F0uT/A/w2G5FstLUZsDuRH5I1JV65WD57MMckzF
+         ecC2/SQlcKymgP6/nsORTioZRxs597rlqk9KWhqsAQS2MB/gNWxEfZ6FuA7VTtxeEg6e
+         TFbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697036705; x=1697641505;
+        d=1e100.net; s=20230601; t=1697038198; x=1697642998;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kXDjoDbzwlWXfPA8MMIol0GtkAvJKfQiWOLtIt+2v7A=;
-        b=wsxnfZoAk0JgbP1o7kmuUz+3efCtWZjnTGV8cvwNDOeqppGFW7h857LjFIOQ2t9YP6
-         H7uVM33xi2OmDPcfpSBDKbxtBsqQleqVFb1VpPjCzoxweGgYMQ7D1lHMPkHs/baoQAp9
-         W/juYhiAM38t+W+mgl/GdltWpSgZAAzQptcOMqo/6tBdyKCsndcvJq7Fz5Qo1vaJobrl
-         ll8orzSgoRzLbVV+BgG+XvsNy45q3t86GKzVkecleDyGRolio+1qwdduVSKXvFBeLgmc
-         PzqDerUPNvRWYoTw9HFNd4LP3XneaqC0B295u5BEil5h0xp97QAoWgu0dKK1wT2FRynm
-         85eQ==
-X-Gm-Message-State: AOJu0YzoITdWB2iMGHa9W+MWTam5y7MFn919KX8HKm32LOKz1y+VzoTQ
-        gPF7sdDqoZ2gyrKvTu1yN73+ESrwi/o=
-X-Google-Smtp-Source: AGHT+IEWAfUTXKko2dJOn1AyhJ3fD1Rnv1Dh69yzNg8LaTiMgSS12SATQz9JBFiqPAcgoJmJqiYq+Q==
-X-Received: by 2002:a05:6870:898c:b0:1d7:1533:6869 with SMTP id f12-20020a056870898c00b001d715336869mr25351025oaq.31.1697036705519;
-        Wed, 11 Oct 2023 08:05:05 -0700 (PDT)
+        bh=Xv1kYdGHJEu/8xSIHscJQ1hEvpIhACaiAxShcFHXWMo=;
+        b=eIDQlcrQWwEnbKZpXucUrC+q3NRpgAhAxguql2FgiMFxd7JjhK/iWWrYNLn4vtypsk
+         m4jc/Rj64RSMyMKZTn1R6uFCo9o3IuGaK09tk1iQcQ/SsWw57jZ3a/AbSqk9/enhv39U
+         YswicoeM1iSvL0Wphyw/q4x35erdxZ5vBUpO+nQQerCezMgQCoVsUKBQM82y98n/FYeo
+         kc8jSjFFpStII+sko1H+KwhGdMFuoQnfGneqNw7Ic4eW89/GyYqi5VZtDxgqe4i/16T6
+         QfpSRF0mGY9yrjZfHWb1/1IrOtEqibmC/K3ZttN3HGdsqEtsyxkLzMkZ6tu+WEEWrOWD
+         PlsQ==
+X-Gm-Message-State: AOJu0YxR7OTNaTlMlJc4eFWsBl9xWEsSGp6Bdz9VncitcpvJK5QEXgB9
+        G1go6AZ2FkJ9YQUjK6YqeJDUiXmBAio=
+X-Google-Smtp-Source: AGHT+IFxGuvSUutocYGjgF3CNBIaceI4qqpXL7t01NoCI6VBWU0eV75WwdEkW3KiYkgZpm/Y/a1JFQ==
+X-Received: by 2002:a05:6102:4429:b0:457:6602:497b with SMTP id df41-20020a056102442900b004576602497bmr13079198vsb.0.1697038198089;
+        Wed, 11 Oct 2023 08:29:58 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g4-20020ab016c4000000b007aba00406a4sm2740773uaf.7.2023.10.11.08.05.04
+        by smtp.gmail.com with ESMTPSA id h18-20020a67cb92000000b0045765b2ec50sm14338vsl.20.2023.10.11.08.29.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Oct 2023 08:05:05 -0700 (PDT)
+        Wed, 11 Oct 2023 08:29:57 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 11 Oct 2023 08:05:03 -0700
+Date:   Wed, 11 Oct 2023 08:29:55 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
-To:     Wenkai <advantech.susiteam@gmail.com>
-Cc:     wenkai.chung@advantech.com.tw, Susi.Driver@advantech.com,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 0/5] watchdog: eiois200_wdt: Add EIO-IS200 Watchdog Driver
-Message-ID: <655945a4-fc45-4d01-954b-88aa6fb7231f@roeck-us.net>
-References: <cover.1696495372.git.advantech.susiteam@gmail.com>
- <d7df3c7b-730a-4d09-8f15-3cc8591c8092@roeck-us.net>
- <b08d6cf6-cd48-86d7-a959-290fc4de092c@gmail.com>
- <ce810ce8-f93c-4a9c-9d14-1e8f8f8c3e2b@roeck-us.net>
- <88ffe7b3-fa62-e879-b9d6-6e229cfdab7d@gmail.com>
+To:     "xingtong.wu" <xingtong_wu@163.com>
+Cc:     linux-watchdog@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Wu, Xing Tong" <XingTong.Wu@siemens.com>, jan.kiszka@siemens.com,
+        tobias.schaffner@siemens.com, cedric.hombourger@siemens.com,
+        gerd.haeussler.ext@siemens.com
+Subject: Re: wdat_wdt: Problem with WDAT using shared registers
+Message-ID: <df8d53db-0056-434d-953b-991025e6cd34@roeck-us.net>
+References: <bef5a084-9a6c-daaf-dad9-89cb5fc32bf9@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <88ffe7b3-fa62-e879-b9d6-6e229cfdab7d@gmail.com>
+In-Reply-To: <bef5a084-9a6c-daaf-dad9-89cb5fc32bf9@163.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Oct 11, 2023 at 12:08:57PM +0800, Wenkai wrote:
+On Fri, Aug 28, 2043 at 01:17:41AM +0800, xingtong.wu wrote:
+> Hi
 > 
-> I understand that the patches don't meet the expected quality standards.
-> The compile issue is due to my MFD core driver, which is currently under
-> review and has not been merged yet.
+> I want to use the wdat_wdt to support a watchdog of SIONCT (a multi-function device
+> (mfd)), and I register instructions for wdat_wdt in BIOS, it need registers 0x2e-0x2f
+> to access the watchdog, then register 0x2e-0x2f will be forever occupied by platform
+> device wdat_wdt, see the code: https://elixir.bootlin.com/linux/v6.6-rc5/source/drivers/acpi/acpi_watchdog.c#L180
 > 
-> I would also like to seek your advice on how to best proceed with the
-> sub-drivers like the watchdog driver. Should I wait for my core MFD
-> driver to be successfully merged before submitting the sub-drivers, or
-> let Jones Lee review my core MFD driver and all its sub-drivers, or is
-> there another approach that you recommend?
+> but the 0x2e-0x2f are special, they are used for a multi-function device --SIONCT, the
+> device have many pins can not only support features for watchdog, but also other
+> features like leds, fans, temperature monitor... there are drivers for these pins, e.g.
+> gpio-f7188x, nct6775, w83627hf... these driver use the shared register 0x2e-0x2f. 
+> 
+> So the issue happened, the wdat_wdt occupied the shared register 0x2e-0x2f, then
+> the other driver can not load.
+> 
+> Here is the msg I collected from my device:
+> 
+> root@ipc-SIMATIC-IPC-BX-21A:/home/ipc# cat /proc/ioports 
+> 0000-0cf7 : PCI Bus 0000:00
+>   0000-001f : dma1
+>   0020-0021 : pic1
+>   002e-002e : wdat_wdt
+>   002f-002f : wdat_wdt
+> 
+> It will cause other SIONCT drivers can not load, e.g.
+> root@ipc-SIMATIC-IPC-BX-21A:/home/ipc# modprobe gpio-f7188x
+> modprobe: ERROR: could not insert 'gpio_f7188x': No such device
+> 
+> And dmesg info is:
+> [  213.559168] gpio-f7188xI/O address 0x002e already in use
+> 
+> Same reason for other drivers:
+> root@ipc-SIMATIC-IPC-BX-21A:/home/ipc# modprobe nct6775
+> modprobe: ERROR: could not insert 'nct6775': No such device
+> 
+> Do you have any idea for the wdat_wdt to add support for multi-function device?
+> 
 
-If the sub-drivers depend on the mfd driver, at least provide a reference
-to the patch or patch series introducing that driver. Either case, a direct
-include from "../mfd" is simply unacceptable. include/linux/mfd/ does exist
-for a reason, after all.
+In general, it would need to request the 0x2e-0x2f space temporarily
+and release it when it isn't used. Many other drivers do the same.
+Look for request_muxed_region() and release_region() in, for example,
+drivers/watchdog/w83627hf_wdt.c.
 
-I don't know the best solution for reviewing all the drivers. I didn't
-(and do not plan to) look into the driver-driver API. If the interface
-is regmap, reviewing sub-drivers on their own should be straightforward.
-If the API is with function calls, things get more complicated because
-the API needs the sub-drivers to be tested and everything needs to be
-reviewed together.
+However, this is more difficult with ACPI. Device access should either
+be all through ACPI, or all direct. It doesn't really make much if any
+sense to access one of the sub-devices through ACPI and others directly
+because there is no automatic synchronization mechanism between ACPI
+and the rest of the kernel. If ACPI reserves the 0x2e-0x2f space, it
+owns it, period.
+
+Note: There can only be one device at 0x2e/0x2f. I don't really understand
+the reference to both nct6775 and f7188 because it is simply not possible
+that both reside at that address at the same time. And if there is a nct6775
+or f7188 compatible chip in the system, it would make much more sense to
+use the chip specific watchdog drivers instead of wdat_wdt - again, ACPI
+takes it all, and doesn't like competition.
 
 Guenter
