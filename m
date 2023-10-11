@@ -2,137 +2,109 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AE57C581A
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Oct 2023 17:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141A77C592F
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Oct 2023 18:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbjJKPaA (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 Oct 2023 11:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42658 "EHLO
+        id S235079AbjJKQdp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 Oct 2023 12:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232741AbjJKPaA (ORCPT
+        with ESMTP id S232718AbjJKQdf (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 Oct 2023 11:30:00 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C4192;
-        Wed, 11 Oct 2023 08:29:59 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id a1e0cc1a2514c-7b102a6565eso2443691241.0;
-        Wed, 11 Oct 2023 08:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697038198; x=1697642998; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xv1kYdGHJEu/8xSIHscJQ1hEvpIhACaiAxShcFHXWMo=;
-        b=afcLE1sElITcNKLCuwsYA1jSxA3D2bvlmI4VVckKjW/SaW9pA6EgH7Zw11VmE3sHqz
-         w7OUM7sP/XJ5nT6fyTiVsHKfG4cnSJNSThhsKfUovogYfRrXxYp14pgutuSBHVra84LH
-         TpeLQzPEcnO9MER8AtH9utQSzKQcdPrsVB25NNAWQCPb2czhoxeZV5NNSJyizNl4KX6t
-         wQ4zYePj5AwuNTPLEc5hlNCN84+M3F0uT/A/w2G5FstLUZsDuRH5I1JV65WD57MMckzF
-         ecC2/SQlcKymgP6/nsORTioZRxs597rlqk9KWhqsAQS2MB/gNWxEfZ6FuA7VTtxeEg6e
-         TFbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697038198; x=1697642998;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xv1kYdGHJEu/8xSIHscJQ1hEvpIhACaiAxShcFHXWMo=;
-        b=eIDQlcrQWwEnbKZpXucUrC+q3NRpgAhAxguql2FgiMFxd7JjhK/iWWrYNLn4vtypsk
-         m4jc/Rj64RSMyMKZTn1R6uFCo9o3IuGaK09tk1iQcQ/SsWw57jZ3a/AbSqk9/enhv39U
-         YswicoeM1iSvL0Wphyw/q4x35erdxZ5vBUpO+nQQerCezMgQCoVsUKBQM82y98n/FYeo
-         kc8jSjFFpStII+sko1H+KwhGdMFuoQnfGneqNw7Ic4eW89/GyYqi5VZtDxgqe4i/16T6
-         QfpSRF0mGY9yrjZfHWb1/1IrOtEqibmC/K3ZttN3HGdsqEtsyxkLzMkZ6tu+WEEWrOWD
-         PlsQ==
-X-Gm-Message-State: AOJu0YxR7OTNaTlMlJc4eFWsBl9xWEsSGp6Bdz9VncitcpvJK5QEXgB9
-        G1go6AZ2FkJ9YQUjK6YqeJDUiXmBAio=
-X-Google-Smtp-Source: AGHT+IFxGuvSUutocYGjgF3CNBIaceI4qqpXL7t01NoCI6VBWU0eV75WwdEkW3KiYkgZpm/Y/a1JFQ==
-X-Received: by 2002:a05:6102:4429:b0:457:6602:497b with SMTP id df41-20020a056102442900b004576602497bmr13079198vsb.0.1697038198089;
-        Wed, 11 Oct 2023 08:29:58 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h18-20020a67cb92000000b0045765b2ec50sm14338vsl.20.2023.10.11.08.29.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Oct 2023 08:29:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 11 Oct 2023 08:29:55 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "xingtong.wu" <xingtong_wu@163.com>
-Cc:     linux-watchdog@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Wu, Xing Tong" <XingTong.Wu@siemens.com>, jan.kiszka@siemens.com,
-        tobias.schaffner@siemens.com, cedric.hombourger@siemens.com,
-        gerd.haeussler.ext@siemens.com
-Subject: Re: wdat_wdt: Problem with WDAT using shared registers
-Message-ID: <df8d53db-0056-434d-953b-991025e6cd34@roeck-us.net>
-References: <bef5a084-9a6c-daaf-dad9-89cb5fc32bf9@163.com>
+        Wed, 11 Oct 2023 12:33:35 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EBFB0;
+        Wed, 11 Oct 2023 09:33:31 -0700 (PDT)
+Received: from [192.168.178.23] (k10064.upc-k.chello.nl [62.108.10.64])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id F38A6C88E9;
+        Wed, 11 Oct 2023 16:33:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1697042009; bh=qhKCT4xrkgikeWF4fbn1jxq8p8MIe5Q6C2l6e3PNY5U=;
+        h=From:Subject:Date:To:Cc;
+        b=JJHjEFTh/7Ebx5nZwH0dWU5pvi+UQhKvL++lM41KjvgR2JTNA7Dt9EP7fgPz8qhtO
+         WTxeRSc/x7b2HfNRiOjR4XouAQxXcY7YMz1bspN26XAcU4whLMYgi9lxaEHYWkvzS8
+         7bBYPqNkyZreyHfa2dk2idNQBemcQ1H282bGogSw=
+From:   Luca Weiss <luca@z3ntu.xyz>
+Subject: [PATCH 0/3] Add watchdog nodes to msm8226 & msm8974
+Date:   Wed, 11 Oct 2023 18:33:12 +0200
+Message-Id: <20231011-msm8226-msm8974-watchdog-v1-0-2c472818fbce@z3ntu.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bef5a084-9a6c-daaf-dad9-89cb5fc32bf9@163.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAEjOJmUC/x2MQQqAIBAAvxJ7TsjNyvpKdJDacg9WaFQg/j3pN
+ MxhJkIgzxRgKCJ4ujnwsWeRZQGzNftGgpfsgBXWspJSuOA0Yvuz75R4zDXb5diE0ZpUsypCoyD
+ np6eV3389Til9TGLaR2oAAAA=
+To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luca Weiss <luca@z3ntu.xyz>,
+        =?utf-8?q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1366; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=qhKCT4xrkgikeWF4fbn1jxq8p8MIe5Q6C2l6e3PNY5U=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBlJs5TOneAtkZj1F5CsZKdsfrGSrlcZ3qmg2NP5
+ +G8AI9e782JAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZSbOUwAKCRBy2EO4nU3X
+ Vpx8D/4+FIELvM73S2A7NuOX0vSGtsp1r0yatMMV1Wch3QQ7mRCmUf/QYAUXzzHRMSndwTbSZoP
+ 4IlopG7Mehr9CmJDXnb5UqvQtUS2y9mtuhTqSi46h6MkeOKahnFzaKgg+CIwgCNtLPPLS/dNn7e
+ rTYWQsHj71XNTSEiMVOZa4p7bZkwHHBno0j471u+50B5OWCcsk+rjCKHZO191L0TlMgCDX9i5MT
+ N95M5MKc+0nBXzApPjgQjpr4fBPwMeaeEOo10CqEUbkWboQhMHB9X0uDePeZDZ2h0HgqIfRpwbn
+ sglh3bU3ZV7ylQfyn0Mx1l2TEhG5c+mNZ+d5r8FCIk2Z107FwGoPJq/JnMoHUR33sfhe9NaSO7h
+ QsH4CEgRqA1KDD5ivFB/fuZiWwcSzrZGlmXRH/3+eS9tnrsFmlR1ZBEMawYu8W8pPdBjgI5Rw7U
+ FML49dcMYg6wxgNFWlSOPP/b+Gz1Bjn5ggdTU3jDs8OGKb43caFM9qzFWu9B1XFYM5rQRLQ1VD8
+ 2p4jaWaLtkMjbEfdVv5OGkuIxQsMshoak9exWbYgXAJTxDbUpkYxLFOTWNDeynfy2prxeksjtPP
+ Xao+3N2cDUm1VqZBiXCODR/XuWfy83zk7FxoCWBSfJFooi0SgyuAc8J2HRaouZJipkhOPVLj/H6
+ Uv2pB34Thbld2uA==
+X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
+ fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Aug 28, 2043 at 01:17:41AM +0800, xingtong.wu wrote:
-> Hi
-> 
-> I want to use the wdat_wdt to support a watchdog of SIONCT (a multi-function device
-> (mfd)), and I register instructions for wdat_wdt in BIOS, it need registers 0x2e-0x2f
-> to access the watchdog, then register 0x2e-0x2f will be forever occupied by platform
-> device wdat_wdt, see the code: https://elixir.bootlin.com/linux/v6.6-rc5/source/drivers/acpi/acpi_watchdog.c#L180
-> 
-> but the 0x2e-0x2f are special, they are used for a multi-function device --SIONCT, the
-> device have many pins can not only support features for watchdog, but also other
-> features like leds, fans, temperature monitor... there are drivers for these pins, e.g.
-> gpio-f7188x, nct6775, w83627hf... these driver use the shared register 0x2e-0x2f. 
-> 
-> So the issue happened, the wdat_wdt occupied the shared register 0x2e-0x2f, then
-> the other driver can not load.
-> 
-> Here is the msg I collected from my device:
-> 
-> root@ipc-SIMATIC-IPC-BX-21A:/home/ipc# cat /proc/ioports 
-> 0000-0cf7 : PCI Bus 0000:00
->   0000-001f : dma1
->   0020-0021 : pic1
->   002e-002e : wdat_wdt
->   002f-002f : wdat_wdt
-> 
-> It will cause other SIONCT drivers can not load, e.g.
-> root@ipc-SIMATIC-IPC-BX-21A:/home/ipc# modprobe gpio-f7188x
-> modprobe: ERROR: could not insert 'gpio_f7188x': No such device
-> 
-> And dmesg info is:
-> [  213.559168] gpio-f7188xI/O address 0x002e already in use
-> 
-> Same reason for other drivers:
-> root@ipc-SIMATIC-IPC-BX-21A:/home/ipc# modprobe nct6775
-> modprobe: ERROR: could not insert 'nct6775': No such device
-> 
-> Do you have any idea for the wdat_wdt to add support for multi-function device?
-> 
+Document the compatible for the watchdog found on both SoCs, and add
+them to the SoC dtsi file. And especially for the case where the
+bootloader has already enabled the watchdog we need to start petting it
+on time, otherwise the system gets rebooted.
 
-In general, it would need to request the 0x2e-0x2f space temporarily
-and release it when it isn't used. Many other drivers do the same.
-Look for request_muxed_region() and release_region() in, for example,
-drivers/watchdog/w83627hf_wdt.c.
+It's worth noting that the watchdog behaves a bit unexpectedly.
+It appears the watchdog counts down significantly slower when there's no
+load on the system and can last far longer than 30 seconds until they
+bark. Only when putting load on the system, e.g. with stress-ng does the
+watchdog interrupt fire and kill the system within an expected amount of
+time.
 
-However, this is more difficult with ACPI. Device access should either
-be all through ACPI, or all direct. It doesn't really make much if any
-sense to access one of the sub-devices through ACPI and others directly
-because there is no automatic synchronization mechanism between ACPI
-and the rest of the kernel. If ACPI reserves the 0x2e-0x2f space, it
-owns it, period.
+This behavior has been observed on both msm8974 and msm8226 smartphones.
 
-Note: There can only be one device at 0x2e/0x2f. I don't really understand
-the reference to both nct6775 and f7188 because it is simply not possible
-that both reside at that address at the same time. And if there is a nct6775
-or f7188 compatible chip in the system, it would make much more sense to
-use the chip specific watchdog drivers instead of wdat_wdt - again, ACPI
-takes it all, and doesn't like competition.
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+Matti Lehtimäki (3):
+      dt-bindings: watchdog: qcom-wdt: Add MSM8226 and MSM8974 compatibles
+      ARM: dts: qcom: msm8226: Add watchdog node
+      ARM: dts: qcom: msm8974: Add watchdog node
 
-Guenter
+ Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 2 ++
+ arch/arm/boot/dts/qcom/qcom-msm8226.dtsi                 | 8 ++++++++
+ arch/arm/boot/dts/qcom/qcom-msm8974.dtsi                 | 8 ++++++++
+ 3 files changed, 18 insertions(+)
+---
+base-commit: 2933a1156742d8c47550493a77af8e2d81cf3c84
+change-id: 20231011-msm8226-msm8974-watchdog-a88e45f4e2a4
+
+Best regards,
+-- 
+Luca Weiss <luca@z3ntu.xyz>
+
