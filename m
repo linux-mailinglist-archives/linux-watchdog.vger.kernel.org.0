@@ -2,77 +2,84 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131137C5D16
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Oct 2023 20:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9677C5EE9
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Oct 2023 23:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbjJKSyt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 11 Oct 2023 14:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
+        id S233288AbjJKVMD (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 11 Oct 2023 17:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232997AbjJKSys (ORCPT
+        with ESMTP id S231912AbjJKVMC (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 11 Oct 2023 14:54:48 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA499A4
-        for <linux-watchdog@vger.kernel.org>; Wed, 11 Oct 2023 11:54:45 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-58907163519so108674a12.1
-        for <linux-watchdog@vger.kernel.org>; Wed, 11 Oct 2023 11:54:45 -0700 (PDT)
+        Wed, 11 Oct 2023 17:12:02 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1516F90;
+        Wed, 11 Oct 2023 14:12:01 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id ada2fe7eead31-4547428694dso139115137.3;
+        Wed, 11 Oct 2023 14:12:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697050485; x=1697655285; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1yAITkA43oBRq5wNnpQLBgM5d0bUs6osx3goAerw1Zs=;
-        b=rQ5Jrcwch8pt1L2WORz6CKZE7I+oPyNscJf1fRpjvlCE33Q2ktuDovKYdEVV8tDBSt
-         VH7QOeQZfduPNGIYbNZPzfMoXTE/VyULkOiUM1xoyEeqr8qSQzoY83VNRrArNfvOR8fw
-         TVZVNwrFkOuParsjeM/21+Ho01opcGNBRxJUq1Qt9s91ZnhIBCHvJ5NY5aZ1cNjzWXTY
-         FTA1NP9aDnKKMYoDjc/O3B9dPCh3sN39EL9SIm/mf70Kj2vw7OUIWWTneZCiG6jLVkoM
-         +btr339vF61praR2UNfAOTFC1DW0sozrMWL5EV46APu9G95r+rQ+37ieozkGwIBq7dUB
-         2z+g==
+        d=gmail.com; s=20230601; t=1697058720; x=1697663520; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YTJgUBsEDgw3EwITvedxgQnZju+WIdhLKpc2sUgYqNQ=;
+        b=cVV9h7EEGGCAYywa/DmknV04wUu6h1ooEyoN5zozoM960obFmvg7bye6Pq5am/GHaU
+         b2RCXyvsoP/i9zCqcamZThoy85n1T6DbQdAgcjzNR8zTr72JgFfqVcuLfYft4errsDOy
+         ELQrIgKevxdl7tMkR3ROWjhivmqe93Q6BAilQL4eq9kSpl9Ec5q+DU4C6n4V5hRmntAQ
+         094Pwlb0prvZW0ViOcet2Et3hEawQfiw9qKupJzPl8GnpXwAhKwwpYg/bIG6y5CUJDHv
+         UlZG/hMEvz3nPslt7FiBanpe2NwAZB6xGfmb+HJbPLYWd6VsPhd7LJhU1ne/GojMASFh
+         ISpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697050485; x=1697655285;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1yAITkA43oBRq5wNnpQLBgM5d0bUs6osx3goAerw1Zs=;
-        b=fg657XXFEmRNP4sETlUoW46KauZwGiVDnYlFZYcGdhQuaPQENksxYLJpwYGk1Xe/7r
-         lLQrrBs/x2UvXJ7oFNNsKJ49vksCHl15+AWT8bBsdd0i9Hrh5ceGZUfHiiF4bBIBLW0v
-         pTNTUJUi1qWaAsd0D7glBMo3evh5xebHPlTWyf16BAuBKX7nnzw0Nba6PNXXhqgjDM8x
-         lqfrw6qRoj3cz7TZOYnEvl8LIrkTr6OMSE6kKEEN+uHlax2R8Rb+S7ymsOyYjuZEI3OG
-         TQzAoYEN062B9ScHOu9XhvsCRk7SCdvHmBaRZR7eE5KsiADl10QQQ38vf5BDUijdYkoa
-         rcHA==
-X-Gm-Message-State: AOJu0YxWR+nrGegIZjnI+TmI5gLoe7QnoYXf3XNXWriNmkbYu6PXR6et
-        7yZBJ85XQqKhS349ALOnn+HQ01WC0bZIz33jAmYt1g==
-X-Google-Smtp-Source: AGHT+IF2ZH9G5DtfhwrC1grow9snCHgNZ9i9qEm+hDBJbApMW0zlGdoIB5EmMSZ9fCki9SJLAlPeNOp5FVB21fst9pw=
-X-Received: by 2002:a17:90b:46c7:b0:277:4b68:b93c with SMTP id
- jx7-20020a17090b46c700b002774b68b93cmr20814772pjb.4.1697050485416; Wed, 11
- Oct 2023 11:54:45 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697058720; x=1697663520;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YTJgUBsEDgw3EwITvedxgQnZju+WIdhLKpc2sUgYqNQ=;
+        b=v1Ap2wVZHKGJ6bQkv1cF0UC6iRh+IH7eY303rKeiTTLm6Bb4grRoE6e5jppP7W5IVD
+         tiUvRRZACtOl6LiW52EqSiN7nU9u9Iq8i5mW50WJ2yVgSHXW5oNW5i1A/ZmTXmC3vrLE
+         fJUuG0pQ/eR42jKVqP6cQ0t167Q/eEDjYUDQdjGz0OKqQLBgM1gBjAH7Hw1BHLGzPjsQ
+         2iyeKNPpo0ixMJFJaqhnKDFEBqQ5BhuY8p/9l9xVn14iTvLUwDmFrn1KDsujtPT2c+2N
+         8G9MxHNpCzC+1YoZKgU1X/bANGhoV50Ji+mm4yAver5BSkSbblyhkVQmf6Eg2sHevuK/
+         LA1g==
+X-Gm-Message-State: AOJu0YzcU8QphLaqRx/MGG1jfShZ929b/5QD/dbQC2CR5FMlSryx49Ia
+        4IlYyYdTCRyatM0ez5kkvFA=
+X-Google-Smtp-Source: AGHT+IEhzL9pYbprvKsWEvifTi+UPyiYXdxsRjmaYhVJCJqENioxoFav5oMfnynC3Vjvy6gewz0dFQ==
+X-Received: by 2002:a67:f78b:0:b0:44e:89bd:9a5c with SMTP id j11-20020a67f78b000000b0044e89bd9a5cmr21664572vso.10.1697058720124;
+        Wed, 11 Oct 2023 14:12:00 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i7-20020a67c207000000b004546cebc078sm137359vsj.12.2023.10.11.14.11.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Oct 2023 14:11:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 11 Oct 2023 14:11:57 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matti =?iso-8859-1?Q?Lehtim=E4ki?= <matti.lehtimaki@gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: watchdog: qcom-wdt: Add MSM8226 and
+ MSM8974 compatibles
+Message-ID: <8f6c897d-d835-46eb-b2b6-dc4561c62749@roeck-us.net>
+References: <20231011-msm8226-msm8974-watchdog-v1-0-2c472818fbce@z3ntu.xyz>
+ <20231011-msm8226-msm8974-watchdog-v1-1-2c472818fbce@z3ntu.xyz>
 MIME-Version: 1.0
-References: <20231011184823.443959-1-peter.griffin@linaro.org> <20231011184823.443959-2-peter.griffin@linaro.org>
-In-Reply-To: <20231011184823.443959-2-peter.griffin@linaro.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Wed, 11 Oct 2023 13:54:34 -0500
-Message-ID: <CAPLW+4nipk9sae2UP6Jp_XXtHQMKbNpjGC4F7RW8GTuF3EtRBQ@mail.gmail.com>
-Subject: Re: [PATCH v3 01/20] dt-bindings: soc: samsung: exynos-pmu: Add gs101 compatible
-To:     Peter Griffin <peter.griffin@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
-        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
-        linus.walleij@linaro.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org,
-        cw00.choi@samsung.com, tudor.ambarus@linaro.org,
-        andre.draszik@linaro.org, saravanak@google.com,
-        willmcvicker@google.com, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        kernel-team@android.com, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231011-msm8226-msm8974-watchdog-v1-1-2c472818fbce@z3ntu.xyz>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,40 +87,35 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Oct 11, 2023 at 1:49=E2=80=AFPM Peter Griffin <peter.griffin@linaro=
-.org> wrote:
->
-> Add gs101-pmu compatible to the bindings documentation.
->
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+On Wed, Oct 11, 2023 at 06:33:13PM +0200, Luca Weiss wrote:
+> From: Matti Lehtimäki <matti.lehtimaki@gmail.com>
+> 
+> Add compatibles for the MSM8226 and MSM8974 platforms to the Qualcomm
+> watchdog binding.
+> 
+> Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
-
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-
->  Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml | 2 ++
+>  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 2 ++
 >  1 file changed, 2 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yam=
-l b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
-> index e1d716df5dfa..9e497c310532 100644
-> --- a/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
-> +++ b/Documentation/devicetree/bindings/soc/samsung/exynos-pmu.yaml
-> @@ -15,6 +15,7 @@ select:
->      compatible:
->        contains:
->          enum:
-> +          - google,gs101-pmu
->            - samsung,exynos3250-pmu
->            - samsung,exynos4210-pmu
->            - samsung,exynos4212-pmu
-> @@ -35,6 +36,7 @@ properties:
->      oneOf:
->        - items:
->            - enum:
-> +              - google,gs101-pmu
->                - samsung,exynos3250-pmu
->                - samsung,exynos4210-pmu
->                - samsung,exynos4212-pmu
-> --
-> 2.42.0.655.g421f12c284-goog
->
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> index 5046dfa55f13..c12bc852aedc 100644
+> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> @@ -21,6 +21,8 @@ properties:
+>                - qcom,apss-wdt-ipq5018
+>                - qcom,apss-wdt-ipq5332
+>                - qcom,apss-wdt-ipq9574
+> +              - qcom,apss-wdt-msm8226
+> +              - qcom,apss-wdt-msm8974
+>                - qcom,apss-wdt-msm8994
+>                - qcom,apss-wdt-qcm2290
+>                - qcom,apss-wdt-qcs404
+> 
+> -- 
+> 2.42.0
+> 
