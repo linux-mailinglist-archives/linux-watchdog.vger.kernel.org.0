@@ -2,70 +2,71 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445457C6B48
-	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Oct 2023 12:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 831237C6B5E
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Oct 2023 12:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235661AbjJLKjQ (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 12 Oct 2023 06:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
+        id S235674AbjJLKpt (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 12 Oct 2023 06:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235644AbjJLKjQ (ORCPT
+        with ESMTP id S235662AbjJLKps (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 12 Oct 2023 06:39:16 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904E790
-        for <linux-watchdog@vger.kernel.org>; Thu, 12 Oct 2023 03:39:14 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5a7af20c488so9811517b3.1
-        for <linux-watchdog@vger.kernel.org>; Thu, 12 Oct 2023 03:39:14 -0700 (PDT)
+        Thu, 12 Oct 2023 06:45:48 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF5294
+        for <linux-watchdog@vger.kernel.org>; Thu, 12 Oct 2023 03:45:47 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5a7a7e9357eso10067177b3.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 12 Oct 2023 03:45:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697107154; x=1697711954; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1697107546; x=1697712346; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3oDNI1r5lnQu4SogBoFfe1dTr8U9qrvg3JFlPaLZjkQ=;
-        b=LK2f9TlDxZQqnPHOx1U47WxtdbhAz7vLn5+qYFUF/S8FNDry6+lFmYKTii8hJhvWsT
-         58nqmlUVlPDQBpAlMjxfB3CD0jF+OLonuhwntv1ATsDFPH6wJiLzWCuUP5rTORjLbl7z
-         FE6GQtrm1B+EVqqpUFoulmNsoKgaMAO3uA6Kz97YIpt866VrRbJCvpmAQ8RrkUAftEr4
-         7R48jQbf21S3ptvL8BXK9InGptB4wUeeiXeVLmNlJceIHliDfm/d9DVBWyk4wWYpt/mt
-         sVZzEEzCWq4pj1delCQYza9b6uRlbDtNzTWAtw6RbhbgPJZrI0qkN8HkgQWLBFruyERf
-         6HbA==
+        bh=1Y1HcKX9gLg/2u91PTGxysXLbI09E4OA7x2vijjT4oo=;
+        b=MkBV1PGU6ITEclP07GUvtvRscL427hCkMvhgCt/0j+IEpjJ8okKZ9Z0Psd4m0/7UMK
+         VnBPmJwdZfONRlhmwsj5EsKqvVkWk1nTX2l1cQ1lzrpovlMRuQnDxyLsZYKty7fRlfqF
+         ICXH1QklmNoCj4ebcFO4ja2U4vBPcgGlql2aBb/tO0vx5JFXfDspcKGb33Hs8NMEj4hr
+         nTF0jRiSAmfBzHo1zTAXU8Iu9W3+eDekcj6r2quOWkFebN051DwbYtoODU+LdoISxwl0
+         ZDt1WBgAhSch0/UJgFXGAws2k4Dbzs3JRwodxskWcEpkqJ82V/nLY3PyI9t3aYCnwdfY
+         49Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697107154; x=1697711954;
+        d=1e100.net; s=20230601; t=1697107546; x=1697712346;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3oDNI1r5lnQu4SogBoFfe1dTr8U9qrvg3JFlPaLZjkQ=;
-        b=q3CqRh9n7HbL31JiFiN6pXFb8z5F3vWyjXp3OJSiNCNRs7LhS3gcODNtqnFneMltSU
-         x2ID4mZ9jH+/4lYiGjuJfNXIZ9ct/K06nH2qFNNOz1aTfEosnexSsj2dhszeE6mikKyd
-         /2pCkJPS/cs+S5BXmwh9t+hDennYURxw48RUr3WyIHO+yqfMsUNmZzX5lWsFtaNnGO9J
-         dNOWkc49+oRu5ETahwsejqV/ch4ZaGAZadiyiaSky5hlxwDWJARdT34I+1quFgV112IE
-         2WyZaKD2V97aVS9n9Br5OtHAtqezuHPL/BzP5+DxTvhEsPNEccRg03qEOhVMXPjYl96i
-         /YMw==
-X-Gm-Message-State: AOJu0YyNaLP6yR84DtMMgyaoB4WbQfo32XRqBVKqp8OlPBIERdChoELA
-        kDv/UCqF2F6MysmvqvyPSQPHP6KTpbRcNvAUZIweAw==
-X-Google-Smtp-Source: AGHT+IFxRHuALoKeSjfKb3H4CN2bFTSSU2Bt+HgqEZX9jtOl6oxsdLqG69us8msuH/TRvisud8wxsgY5xod/E0gS4Uc=
-X-Received: by 2002:a0d:f204:0:b0:569:479f:6d7f with SMTP id
- b4-20020a0df204000000b00569479f6d7fmr22902098ywf.43.1697107153677; Thu, 12
- Oct 2023 03:39:13 -0700 (PDT)
+        bh=1Y1HcKX9gLg/2u91PTGxysXLbI09E4OA7x2vijjT4oo=;
+        b=Ai0J4zBFimwGw0AaNYptppF8UWQoJCvFwBy+FP9ptH+dgBZc3U9X5ns5yjBwIYRe8u
+         7QdUT/dmapv0CKvSzJjZYkSUlCRjyAZmzVo157QIDhbhN7SmmvyxlzX7teI9pmzrLKxT
+         4nfeq+1vc0fxmEGO7lpzJHQqaplI0jsW8wjC5hjryXwT1sH/NpOqNvRV6hZAg04Ckon3
+         dTWxLxXWnts1/nZQmhxYFyW/2DK3Ts4ZpiQ5f4kSk/S5T106EKl/95sNhwjp8YNZcMSC
+         Dio6ub+G20LJPfHu30ovJQZafoBtG/omplfOmuVxitnLB4tkLWCMTow1aM92ALFQZpj6
+         qMnA==
+X-Gm-Message-State: AOJu0YxTzn+uZ9oC2UhUEC4sfC63LuTkQQtlQJqyZHM2Xqy/Q5nxCTzB
+        xHdZPK0cbJT7dxn4PmpTOliRaEnX5N7JAjGvJB84Xw==
+X-Google-Smtp-Source: AGHT+IGB+FxE7ccc2MEU8WMKyKb6JfbaLjOX2/doWAHH3NmtLFyPGOAqUKNJex39lRrnodJof8jLL2wunY4kkN6We6s=
+X-Received: by 2002:a0d:ee01:0:b0:59b:c6a4:15c7 with SMTP id
+ x1-20020a0dee01000000b0059bc6a415c7mr21411976ywe.46.1697107546553; Thu, 12
+ Oct 2023 03:45:46 -0700 (PDT)
 MIME-Version: 1.0
 References: <20231011184823.443959-1-peter.griffin@linaro.org>
- <20231011184823.443959-3-peter.griffin@linaro.org> <5907e2b3-9a0b-4871-be08-6ca42200b8ec@linaro.org>
- <CADrjBPqF67bcTnssQO8cN2n1ZbevziVNa+gA5azEDz_1wXzaNQ@mail.gmail.com> <809be13a-74b7-4934-8319-17330febc1b7@linaro.org>
-In-Reply-To: <809be13a-74b7-4934-8319-17330febc1b7@linaro.org>
+ <20231011184823.443959-3-peter.griffin@linaro.org> <ZScYOUi7qhvGmMIF@google.com>
+ <e4523fc3-e1dd-4791-b950-98dfc6dce1f5@linaro.org> <CADrjBPpntJMsxb6oGQ7zuX3f0dgE3oYFepL4OdxamBz=_or7kw@mail.gmail.com>
+ <21742fbf-8484-42ab-aba1-379305091946@linaro.org>
+In-Reply-To: <21742fbf-8484-42ab-aba1-379305091946@linaro.org>
 From:   Peter Griffin <peter.griffin@linaro.org>
-Date:   Thu, 12 Oct 2023 11:39:02 +0100
-Message-ID: <CADrjBPpzfOmmr4sVDSXCM_RyVK1GKM+nVN6Cm=eMSBfN3sMciA@mail.gmail.com>
+Date:   Thu, 12 Oct 2023 11:45:35 +0100
+Message-ID: <CADrjBPpF3Ta67QzUqyXD1YSFV_kFWqujCxPAjKbvRNhgXeMmOg@mail.gmail.com>
 Subject: Re: [PATCH v3 02/20] dt-bindings: clock: Add Google gs101 clock
  management unit bindings
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
-        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
-        linus.walleij@linaro.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org,
-        cw00.choi@samsung.com, tudor.ambarus@linaro.org,
-        andre.draszik@linaro.org, semen.protsenko@linaro.org,
-        saravanak@google.com, willmcvicker@google.com, soc@kernel.org,
+Cc:     William McVicker <willmcvicker@google.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
+        s.nawrocki@samsung.com, linus.walleij@linaro.org,
+        wim@linux-watchdog.org, linux@roeck-us.net,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, gregkh@linuxfoundation.org, cw00.choi@samsung.com,
+        tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+        semen.protsenko@linaro.org, saravanak@google.com, soc@kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
@@ -80,51 +81,42 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Krzysztof
+Hi Krzysztof,
 
-On Thu, 12 Oct 2023 at 11:20, Krzysztof Kozlowski
+On Thu, 12 Oct 2023 at 10:36, Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
 >
-> On 12/10/2023 12:15, Peter Griffin wrote:
->
-> >>> +  - if:
-> >>> +      properties:
-> >>> +        compatible:
-> >>> +          contains:
-> >>> +            const: google,gs101-cmu-top
-> >>> +
-> >>> +    then:
-> >>> +      properties:
-> >>> +        clocks:
-> >>> +          items:
-> >>> +            - description: External reference clock (24.576 MHz)
-> >>> +
-> >>> +        clock-names:
-> >>> +          items:
-> >>> +            - const: oscclk
-> >>> +
-> >>> +  - if:
-> >>> +      properties:
-> >>> +        compatible:
-> >>> +          contains:
+> On 12/10/2023 10:56, Peter Griffin wrote:
+> > Hi Krzysztof,
+> >
+> > On Thu, 12 Oct 2023 at 07:07, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
 > >>
-> >> enum:
-> >>   - google,gs101-cmu-apm
-> >>   - google,gs101-cmu-misc
+> >> On 11/10/2023 23:48, William McVicker wrote:
+> >>> On 10/11/2023, Peter Griffin wrote:
+> >>>> Provide dt-schema documentation for Google gs101 SoC clock controller.
+> >>>> Currently this adds support for cmu_top, cmu_misc and cmu_apm.
+> >>>>
+> >>>> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> >>>
+> >>> Tested-by: Will McVicker <willmcvicker@google.com>
+> >>
+> >> And how do you perform testing of a binding?
 > >
-> > Ok just to be clear, are you saying I should have it like this?
+> > I guess if William is using my script to build and flash the kernel it actually
+> > runs the DTC checks as part of the build process.
 > >
-> >   - if:
-> >       properties:
-> >         compatible:
-> >           contains:
-> >             enum:
-> >               - google,gs101-cmu-misc
+> > See https://git.codelinaro.org/linaro/googlelt/pixelscripts/-/blob/clo/main/buildp21upstream.sh#L44
 >
-> No, my bad, I meant apm + google,gs101-cmu-top
->
-> >               - google,gs101-cmu-apm
+> So it is a build test? We do not consider building as a test procedure,
+> otherwise I should add my and robots tested-by to many other patches.
 
-Ah OK, yes that makes more sense. Thanks for the clarification :)
+Ok so I should only add the Tested-by on the .c patches?
+
+> Shall I consider other Tested-by tags here also as build-tested only?
+
+No. William indicated here
+https://lore.kernel.org/linux-arm-kernel/ZScZu-QB2LmB4CSM@google.com/T/#mbd96a26b725d6c85eb4193de8cd70ff277bc728e
+that he booted it on his Oriole device.
 
 Peter.
