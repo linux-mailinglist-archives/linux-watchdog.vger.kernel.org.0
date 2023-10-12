@@ -2,158 +2,217 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BD97C7341
-	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Oct 2023 18:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635677C73F7
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Oct 2023 19:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344003AbjJLQlL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 12 Oct 2023 12:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
+        id S1344129AbjJLRSb (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 12 Oct 2023 13:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347311AbjJLQlK (ORCPT
+        with ESMTP id S1344077AbjJLRSb (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 12 Oct 2023 12:41:10 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C384CD3
-        for <linux-watchdog@vger.kernel.org>; Thu, 12 Oct 2023 09:41:05 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1c9d4f08d7cso2795ad.0
-        for <linux-watchdog@vger.kernel.org>; Thu, 12 Oct 2023 09:41:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697128865; x=1697733665; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cSKjALH7K6gqrT2RIcyszQs/ymuQ9k0jAbQvHQpJcQA=;
-        b=CdiVfbCXvfWqv8mkRE4NkVfrWQNrE3h9EzzNhv2rdreG3Rw7byj6e3OAFBHdHvYdo0
-         HLJzoSmcK1o/Pm2vQ5UGVlDdlmTAvI//2rEt8DYfanRPGLMogz1ZsNcCMrq7by9V4SDp
-         tjCMAD6RI/rkTjOiKwLndGJGzP/r2Ci819U9S2VEoKst0Zc1sORnoFAX2IwrG7DNkXnC
-         I2zswzY6L6S5lN3g8bD+Wey+B4YjibOeh7rQXtcZS+sovZjOxnanVMILQytE1MozuEd5
-         3+OQqu6vx14ijZkiBZ9xs0y0nFOaUMFjnbOd42y7A6WgOZyUB3hXENzdb+8H2hNWhoA/
-         HSTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697128865; x=1697733665;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cSKjALH7K6gqrT2RIcyszQs/ymuQ9k0jAbQvHQpJcQA=;
-        b=k1yhVZuhTtH309tTUJYx90OE/30Du0w2bC2RC8c2goEMYp2bAZCYPQD+isVapYP07s
-         N+aL16TcttBOivjKb/Ca+iaJVMPR8JL4z+8kdkcLr9MN7a3zEGBRbvIv2IRTSZidEOSy
-         QNoR3nmis9+oWadT8Vx8LMk2GDYOdjC3sOaVhzE59Gw65rI8UQu7ydbFcNflW7+Fojfy
-         5egm1Al77Sb48/ATR1F4+QGi0+wgmjBNjqTL00/QeNFdKpDRxUZP9g9zPIiiMLC+JhkD
-         cBYdncevWTzNIk47Yf4NNr0FIoKspSKSC+cbc5mFu9jWNItXk6QcpO16lDxvNrSmQmmL
-         6UYQ==
-X-Gm-Message-State: AOJu0YwxwIuOGLjxBWuQ+aBY8NBy2MA2K+wK+JRZ6QCOlDZJHX4e1RDj
-        eQXnFaO+hF5qmMIzhhXA9BrkKg==
-X-Google-Smtp-Source: AGHT+IGbop51QjWpgXb5pkCyl9/yUmkBYSbumMYF7aG+hEKDNgoq4+8TkErlkAcvF9Oq1e+uxKOYXQ==
-X-Received: by 2002:a17:902:f54e:b0:1c1:e54a:3971 with SMTP id h14-20020a170902f54e00b001c1e54a3971mr478238plf.1.1697128864785;
-        Thu, 12 Oct 2023 09:41:04 -0700 (PDT)
-Received: from google.com (137.22.168.34.bc.googleusercontent.com. [34.168.22.137])
-        by smtp.gmail.com with ESMTPSA id 9-20020a17090a190900b002792b7182dcsm2224617pjg.49.2023.10.12.09.41.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Oct 2023 09:41:04 -0700 (PDT)
-Date:   Thu, 12 Oct 2023 09:41:01 -0700
-From:   William McVicker <willmcvicker@google.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
-        s.nawrocki@samsung.com, linus.walleij@linaro.org,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, gregkh@linuxfoundation.org, cw00.choi@samsung.com,
-        tudor.ambarus@linaro.org, andre.draszik@linaro.org,
-        semen.protsenko@linaro.org, saravanak@google.com, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        kernel-team@android.com, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v3 02/20] dt-bindings: clock: Add Google gs101 clock
- management unit bindings
-Message-ID: <ZSghnUygaF5ReC4Y@google.com>
-References: <20231011184823.443959-1-peter.griffin@linaro.org>
- <20231011184823.443959-3-peter.griffin@linaro.org>
- <ZScYOUi7qhvGmMIF@google.com>
- <e4523fc3-e1dd-4791-b950-98dfc6dce1f5@linaro.org>
- <CADrjBPpntJMsxb6oGQ7zuX3f0dgE3oYFepL4OdxamBz=_or7kw@mail.gmail.com>
- <21742fbf-8484-42ab-aba1-379305091946@linaro.org>
- <CADrjBPpF3Ta67QzUqyXD1YSFV_kFWqujCxPAjKbvRNhgXeMmOg@mail.gmail.com>
- <67ce052e-ac78-492f-9a36-6947ce161951@linaro.org>
+        Thu, 12 Oct 2023 13:18:31 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A952CBB;
+        Thu, 12 Oct 2023 10:18:28 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13BACC433C7;
+        Thu, 12 Oct 2023 17:18:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697131108;
+        bh=8WQ9WakSvt0JZ1o1r9TPQaTSax9+Eye313WbhUWk1EQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Kl8LkNA5ef1H6uTBtWbtzIF1HUfk2o9uojzT2FId2a0LPq4wUbg5HLCCBup4tqfg3
+         MgfZd3BZLPSnF4AYYvsuiwsHT4fnhks+zBnlj89BPB/jmVRJKNegXtoLVwhGK44Tqt
+         IrmI9JAz96wnyYR3HK2KZLH/j/t68ZgSAMlBN6sE0vymx/6uA+jfs3CEPKeqfZTYlO
+         8dLFdcN5bD5MvkuTn+vOS7lXjuVuYE5rpDjmKjEhMF8WfRqSmPmVQQcb0GY8+zokJH
+         wKTPe0+CblOGkNsXx97tn/lnGjiL4tHnnwQ+vidKTT4MSnrEnvOpm7825WAoQFTdbK
+         KSfPvXbTIq/WA==
+Date:   Thu, 12 Oct 2023 18:18:23 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Nik Bune <n2h9z4@gmail.com>
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        skhan@linuxfoundation.org, stwiss.opensource@diasemi.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [v2 PATCH] dt-bindings: watchdog: da9062-wdt: convert txt to yaml
+Message-ID: <20231012-flaky-humvee-0a0532621940@spud>
+References: <20231010211439.98458-1-n2h9z4@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="rTv/DG15mkuu5z6g"
 Content-Disposition: inline
-In-Reply-To: <67ce052e-ac78-492f-9a36-6947ce161951@linaro.org>
-X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20231010211439.98458-1-n2h9z4@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Krzysztof,
 
-On 10/12/2023, Krzysztof Kozlowski wrote:
-> On 12/10/2023 12:45, Peter Griffin wrote:
-> > Hi Krzysztof,
-> > 
-> > On Thu, 12 Oct 2023 at 10:36, Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 12/10/2023 10:56, Peter Griffin wrote:
-> >>> Hi Krzysztof,
-> >>>
-> >>> On Thu, 12 Oct 2023 at 07:07, Krzysztof Kozlowski
-> >>> <krzysztof.kozlowski@linaro.org> wrote:
-> >>>>
-> >>>> On 11/10/2023 23:48, William McVicker wrote:
-> >>>>> On 10/11/2023, Peter Griffin wrote:
-> >>>>>> Provide dt-schema documentation for Google gs101 SoC clock controller.
-> >>>>>> Currently this adds support for cmu_top, cmu_misc and cmu_apm.
-> >>>>>>
-> >>>>>> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> >>>>>
-> >>>>> Tested-by: Will McVicker <willmcvicker@google.com>
-> >>>>
-> >>>> And how do you perform testing of a binding?
-> >>>
-> >>> I guess if William is using my script to build and flash the kernel it actually
-> >>> runs the DTC checks as part of the build process.
-> >>>
-> >>> See https://git.codelinaro.org/linaro/googlelt/pixelscripts/-/blob/clo/main/buildp21upstream.sh#L44
-> >>
-> >> So it is a build test? We do not consider building as a test procedure,
-> >> otherwise I should add my and robots tested-by to many other patches.
-> > 
-> > Ok so I should only add the Tested-by on the .c patches?
-> 
-> In my opinion, if someone performs only build testing, it is not a
-> testing. You cannot test the bindings other way than build testing, at
-> least I do not know such way. Of course other code like C or DTS affects
-> hardware so it can be tested.
+--rTv/DG15mkuu5z6g
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-What additional testing beside building and booting do you prefer at this
-stage? I put my Tested-by for this patch because it includes the google,gs101.h
-header which is used by the DT and clock controller driver during boot. Maybe
-I should have been more clear on what I tested in each patch instead of only
-mentioning how I tested in the cover letter?
+On Tue, Oct 10, 2023 at 11:14:39PM +0200, Nik Bune wrote:
+> Convert txt file to yaml.
+> Add a mainterner block. Took a value from dlg,da9063 PMIC.
+>=20
+> Signed-off-by: Nik Bune <n2h9z4@gmail.com>
+> ---
+>=20
+> Changes in v2:
+> - Updated filename to be equal to compatible value.
+> - Removed ">" in description fields.=20
+> - Added optional properties to the example.=20
+> - Removed reg property, as it is not present in the txt version.=20
+>=20
+>=20
+>  .../bindings/watchdog/da9062-wdt.txt          | 34 -------------
+>  .../watchdog/dlg,da9062-watchdog.yaml         | 49 +++++++++++++++++++
+>  2 files changed, 49 insertions(+), 34 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/da9062-wdt=
+=2Etxt
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/dlg,da9062=
+-watchdog.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt b/=
+Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
+> deleted file mode 100644
+> index 354314d854ef..000000000000
+> --- a/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
+> +++ /dev/null
+> @@ -1,34 +0,0 @@
+> -* Dialog Semiconductor DA9062/61 Watchdog Timer
+> -
+> -Required properties:
+> -
+> -- compatible: should be one of the following valid compatible string lin=
+es:
+> -	"dlg,da9061-watchdog", "dlg,da9062-watchdog"
+> -	"dlg,da9062-watchdog"
+> -
+> -Optional properties:
+> -- dlg,use-sw-pm: Add this property to disable the watchdog during suspen=
+d.
+> -	Only use this option if you can't use the watchdog automatic suspend
+> -	function during a suspend (see register CONTROL_B).
+> -- dlg,wdt-sd: Set what happens on watchdog timeout. If this bit is set t=
+he
+> -	watchdog timeout triggers SHUTDOWN, if cleared the watchdog triggers
+> -	POWERDOWN. Can be 0 or 1. Only use this option if you want to change the
+> -	default chip's OTP setting for WATCHDOG_SD bit. If this property is NOT
+> -	set the WATCHDOG_SD bit and on timeout watchdog behavior will match the
+> -	chip's OTP settings.
+> -
+> -Example: DA9062
+> -
+> -	pmic0: da9062@58 {
+> -		watchdog {
+> -			compatible =3D "dlg,da9062-watchdog";
+> -		};
+> -	};
+> -
+> -Example: DA9061 using a fall-back compatible for the DA9062 watchdog dri=
+ver
+> -
+> -	pmic0: da9061@58 {
+> -		watchdog {
+> -			compatible =3D "dlg,da9061-watchdog", "dlg,da9062-watchdog";
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchd=
+og.yaml b/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.ya=
+ml
+> new file mode 100644
+> index 000000000000..9b7ffdb01da0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
+> @@ -0,0 +1,49 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/dlg,da9062-watchdog.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Dialog Semiconductor DA9062/61 Watchdog Timer
+> +
+> +maintainers:
+> +  - Steve Twiss <stwiss.opensource@diasemi.com>
+> +
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:=20
+> +      - dlg,da9061-watchdog
+> +      - dlg,da9062-watchdog
+> +
+> +  dlg,use-sw-pm:
+> +    type: boolean
+> +    description:
+> +      Add this property to disable the watchdog during suspend.
+> +      Only use this option if you can't use the watchdog automatic suspe=
+nd
+> +      function during a suspend (see register CONTROL_B).
+> + =20
+> +  dlg,wdt-sd:
+> +    type: boolean
 
-Sorry for the confusion.
+This property is a boolean...
+
+> +    description:
+> +      Set what happens on watchdog timeout. If this bit is set the
+> +      watchdog timeout triggers SHUTDOWN, if cleared the watchdog trigge=
+rs
+> +      POWERDOWN. Can be 0 or 1.
+
+=2E.. but you say "can be 0 or 1". Does this refer to the bit value, or
+the property? There are no in-kernel users of this property as far as a
+quick grep shows so it is a bi hard to tell.
+
+Otherwise, I'm happy with this.
 
 Thanks,
-Will
+Conor.
 
-> 
-> > 
-> >> Shall I consider other Tested-by tags here also as build-tested only?
-> > 
-> > No. William indicated here
-> > https://lore.kernel.org/linux-arm-kernel/ZScZu-QB2LmB4CSM@google.com/T/#mbd96a26b725d6c85eb4193de8cd70ff277bc728e
-> > that he booted it on his Oriole device.
-> 
-> 
-> OK, I was just a bit confused.
-> 
-> Best regards,
-> Krzysztof
-> 
+> Only use this option if you want to change the
+> +      default chip's OTP setting for WATCHDOG_SD bit. If this property i=
+s NOT
+> +      set the WATCHDOG_SD bit and on timeout watchdog behavior will matc=
+h the
+> +      chip's OTP settings.
+> +
+> +required:
+> +  - compatible
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    watchdog {
+> +      compatible =3D "dlg,da9062-watchdog";
+> +      dlg,use-sw-pm;
+> +      dlg,wdt-sd;
+> +    };
+> --=20
+> 2.34.1
+>=20
+
+--rTv/DG15mkuu5z6g
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZSgqXwAKCRB4tDGHoIJi
+0ggqAQCkoZx9c6Yh77TrRv7mNju5mBSXOD4Jza5NVnKIvTQlxAD/Tquzix7jblNL
+/bhL9kUfDSrutdB3WihQbqRy+mYzuQ4=
+=tJk+
+-----END PGP SIGNATURE-----
+
+--rTv/DG15mkuu5z6g--
