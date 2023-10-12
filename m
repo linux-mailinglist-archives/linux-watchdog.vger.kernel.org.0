@@ -2,221 +2,122 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC947C6736
-	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Oct 2023 09:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C857D7C6745
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Oct 2023 09:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235344AbjJLHk0 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 12 Oct 2023 03:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
+        id S1347190AbjJLH46 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 12 Oct 2023 03:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235330AbjJLHkW (ORCPT
+        with ESMTP id S1347191AbjJLH45 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 12 Oct 2023 03:40:22 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBD5CC
-        for <linux-watchdog@vger.kernel.org>; Thu, 12 Oct 2023 00:40:20 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-694ed84c981so533588b3a.3
-        for <linux-watchdog@vger.kernel.org>; Thu, 12 Oct 2023 00:40:20 -0700 (PDT)
+        Thu, 12 Oct 2023 03:56:57 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421F5CC;
+        Thu, 12 Oct 2023 00:56:55 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-692a885f129so565352b3a.0;
+        Thu, 12 Oct 2023 00:56:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697096420; x=1697701220; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WeyFnsq7kj9nc73z+mJcYj/SpiIQNbMhSQED5EpeFnk=;
-        b=J2YsdFYQ2M8Nck2NuIb55XvT7ouEU99gTX4h7OsZE8vL7D6pwGoK60bwO2T9BJXbG8
-         JMNo062PU3Cc/fUPbDKWoblALxERXIlGXz/95ioDPWKGk8zE0xuqZXe7VqTXFofxncQ2
-         25z4J9nW5vDhCkYUMWfFanRyG6YFUeV2At7B/k/4FbcTTYx+ABDS6qNu7a/iC1WTF6Ud
-         o1ZUZ4vAvLQspjUMSl+reTDAqkgw1wrlelzXINM2IMONcV+F88uaehpjRnOpFotNMHfN
-         mEFDcQoUCmxZy0O3SXOcNDlxOV/avXxkAGukvubRWpPeyE5Gpmc7yxE7JPai1lDhSWYk
-         Nb0Q==
+        d=gmail.com; s=20230601; t=1697097415; x=1697702215; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KY0ypPMouC/gc/fShPGord6YxNIg4wjSjV68xFY4qM8=;
+        b=DchKo9A3e7kaAvWnf8UWc6HXv9rcocQkpjMcXeeg/5iBgfNpTERfE+F+IaOuFO47Y/
+         o6CTV41QrzFLteD5XGelFcAIN+OpsTuBZkRNkoqumkazkgnvGhzaO2zSwEeIpVcX9n3Y
+         RYsewEBt1o27W1PQjeByj58kKmgwvyCWNPFoA5KG8M2/V9N3bxXeUA1J6ViXN375aROS
+         m6sWOTeddSXmzIAY8u+SnuOYQShIaCCYWwjoJzb0UIXPrEt9qnRxM3GTv8+sK4gbtTXi
+         /JWPMIrFgFooVS8OXukpeex8AfoQfhbBSH64sSkICcxSjLt2bJW6MKvS4RbNwrozDPyy
+         Ug+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697096420; x=1697701220;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WeyFnsq7kj9nc73z+mJcYj/SpiIQNbMhSQED5EpeFnk=;
-        b=uexVlXEWWS9n2qcaglFlQ5l+HSR+0Z0sof+/+irzbsO1h3Hi4Zj7xF1VSOiqogfftj
-         n45Z6YQpG0B2q3+gpjwy4pE2Ao+dRSKvSx9Ww/eNwjaoVweyigIsmmLqMeSucs9OK5Bv
-         GWYECPU/tPxrBiq5ir4j2HeyMhI8R/FyZSCrkD5Op9N8fxpcUiHutloaznVopaCvN8lE
-         XIjBhx0U30f+VC/y/puG6ZUZ6L6k++oQJW+Z//4fvWNoecm/pQwAlZd2X+krFSvldFdy
-         JaoaXrV+M4zkdLCypOzwsucgA8hSSRinYohLG5LZXfNfuXBHmXZM5NLheDf+6EANKoeZ
-         qN7Q==
-X-Gm-Message-State: AOJu0YxI73K8ufjxlPi57qFBhcEZmU5vpy9pAJDsIx/XQSEr9LlaO6Fp
-        PEvd5tb/2OwakFBmovDow7hSyPzF07gxnq9SzBryAugfZ+UR1Qjy13fbhg==
-X-Google-Smtp-Source: AGHT+IH/pqOJSGAUpimWG1P472lbC+Hea49S/OE3uBkgKRUitvR9pB1D0mSrJquRil0M1gwvWAx/gEyoiscMqY9skRo=
-X-Received: by 2002:a05:6a20:4286:b0:159:e0b9:bd02 with SMTP id
- o6-20020a056a20428600b00159e0b9bd02mr25980791pzj.40.1697096419671; Thu, 12
- Oct 2023 00:40:19 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697097415; x=1697702215;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KY0ypPMouC/gc/fShPGord6YxNIg4wjSjV68xFY4qM8=;
+        b=UU6A4VQRHP4hd+doXqy6SrsPiFZJodNf2R+0IsE3tePe76vQ/rluPkhKPsa3NXsSQN
+         DOZhZ6Lu/8tR6NKVszO5XE5C4OoXRZAQuy5xXg3MWptrS0YMCDikJXUODxrKGRgtszTT
+         LdqjsE1KNUl4lyf+17jBmx1n4CYefQ1rzjvb8tT1Dea6YM6705GPov6+BxIxh6IC3b3w
+         HLJTQ96EcJDlW0t/CGXi4+jOB+8EL6adZatkkr5ZjHDovqR+Fs+qJJMv+6b8phl5qR5S
+         NiR0BaM+ltchKRagXJyq+JmQGm+9qkt8kHXg/D/dFqfvQYCkQil+9dABEheJ5zYnb3qf
+         pqgg==
+X-Gm-Message-State: AOJu0Yw9jxUVnYxBMyWP6VWeiqmUWvXjAwQp+PdRXamfXILaaUAIh33R
+        SJ0PlTMRj5y9WcGjg27WD/k=
+X-Google-Smtp-Source: AGHT+IHV4CR21UOUBHuemm1nSHilgQwolLdmRc5oq1FyDnKdlzYKHLfW/oMQSSCqwFIFMiLNpBzntg==
+X-Received: by 2002:a05:6a21:3289:b0:174:d189:2f93 with SMTP id yt9-20020a056a21328900b00174d1892f93mr1538024pzb.59.1697097414647;
+        Thu, 12 Oct 2023 00:56:54 -0700 (PDT)
+Received: from [172.22.12.30] (118-163-147-182.hinet-ip.hinet.net. [118.163.147.182])
+        by smtp.gmail.com with ESMTPSA id p10-20020a17090a930a00b0026d4100e0e8sm1188408pjo.10.2023.10.12.00.56.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Oct 2023 00:56:54 -0700 (PDT)
+Message-ID: <6348ae7e-21f3-51ef-e60a-b3ceccc38be4@gmail.com>
+Date:   Thu, 12 Oct 2023 15:56:52 +0800
 MIME-Version: 1.0
-References: <20231011184823.443959-1-peter.griffin@linaro.org> <20231011184823.443959-19-peter.griffin@linaro.org>
-In-Reply-To: <20231011184823.443959-19-peter.griffin@linaro.org>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Thu, 12 Oct 2023 02:40:07 -0500
-Message-ID: <CAPLW+4mX5bK7zxpxS_1a5Gi1gG8UFRDpMehnSxxXibTFCn_Txg@mail.gmail.com>
-Subject: Re: [PATCH v3 18/20] arm64: dts: google: Add initial Oriole/pixel 6
- board support
-To:     Peter Griffin <peter.griffin@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
-        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
-        linus.walleij@linaro.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org,
-        cw00.choi@samsung.com, tudor.ambarus@linaro.org,
-        andre.draszik@linaro.org, saravanak@google.com,
-        willmcvicker@google.com, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        kernel-team@android.com, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH 0/5] watchdog: eiois200_wdt: Add EIO-IS200 Watchdog Driver
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     wenkai.chung@advantech.com.tw, Susi.Driver@advantech.com,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <cover.1696495372.git.advantech.susiteam@gmail.com>
+ <d7df3c7b-730a-4d09-8f15-3cc8591c8092@roeck-us.net>
+ <b08d6cf6-cd48-86d7-a959-290fc4de092c@gmail.com>
+ <ce810ce8-f93c-4a9c-9d14-1e8f8f8c3e2b@roeck-us.net>
+ <88ffe7b3-fa62-e879-b9d6-6e229cfdab7d@gmail.com>
+ <655945a4-fc45-4d01-954b-88aa6fb7231f@roeck-us.net>
+Content-Language: en-US
+From:   Wenkai <advantech.susiteam@gmail.com>
+In-Reply-To: <655945a4-fc45-4d01-954b-88aa6fb7231f@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Oct 11, 2023 at 1:49=E2=80=AFPM Peter Griffin <peter.griffin@linaro=
-.org> wrote:
+Guenter Roeck 於 10/11/2023 11:05 PM 寫道:
+> On Wed, Oct 11, 2023 at 12:08:57PM +0800, Wenkai wrote:
+>> I understand that the patches don't meet the expected quality standards.
+>> The compile issue is due to my MFD core driver, which is currently under
+>> review and has not been merged yet.
+>>
+>> I would also like to seek your advice on how to best proceed with the
+>> sub-drivers like the watchdog driver. Should I wait for my core MFD
+>> driver to be successfully merged before submitting the sub-drivers, or
+>> let Jones Lee review my core MFD driver and all its sub-drivers, or is
+>> there another approach that you recommend?
+> If the sub-drivers depend on the mfd driver, at least provide a reference
+> to the patch or patch series introducing that driver. Either case, a direct
+> include from "../mfd" is simply unacceptable. include/linux/mfd/ does exist
+> for a reason, after all.
+
+The LKML link is https://lkml.org/lkml/2023/9/6/1245. Is this link to 
+the patch
+sufficient?
+
+And, I'll move the "eiois200.h" to "include/linux/mfd/".
+
+> I don't know the best solution for reviewing all the drivers. I didn't
+> (and do not plan to) look into the driver-driver API. If the interface
+> is regmap, reviewing sub-drivers on their own should be straightforward.
+> If the API is with function calls, things get more complicated because
+> the API needs the sub-drivers to be tested and everything needs to be
+> reviewed together.
 >
-> Add initial board support for the Pixel 6 phone code named Oriole. This
-> has been tested with a minimal busybox initramfs and boots to a shell.
->
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> ---
->  arch/arm64/boot/dts/google/Makefile         |  4 ++
->  arch/arm64/boot/dts/google/gs101-oriole.dts | 79 +++++++++++++++++++++
->  2 files changed, 83 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/google/Makefile
->  create mode 100644 arch/arm64/boot/dts/google/gs101-oriole.dts
->
-> diff --git a/arch/arm64/boot/dts/google/Makefile b/arch/arm64/boot/dts/go=
-ogle/Makefile
-> new file mode 100644
-> index 000000000000..5cea8ff27141
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/google/Makefile
-> @@ -0,0 +1,4 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +dtb-$(CONFIG_ARCH_GOOGLE_TENSOR) +=3D \
-> +       gs101-oriole.dtb \
-> diff --git a/arch/arm64/boot/dts/google/gs101-oriole.dts b/arch/arm64/boo=
-t/dts/google/gs101-oriole.dts
-> new file mode 100644
-> index 000000000000..3bebca989d34
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/google/gs101-oriole.dts
-> @@ -0,0 +1,79 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Oriole Device Tree
-> + *
-> + * Copyright 2021-2023 Google,LLC
-> + */
-> +
-> +/dts-v1/;
-> +/plugin/;
+> Guenter
 
-Why is this needed? Is that really not possible to build this board
-dts as actual dtb, not dtbo (and remove this 'plugin' line)? If GS
-bootloader is similar to Exynos850 bootloader, it should be possible
-to only use dtb, and flash empty dtbo image. Just a thought.
+Unfortunately, all sub-drivers mostly communicate with the EC firmware
+through the MFD core driver's driver-driver API, only a few uses regmap.
+So should the MFD core driver and its sub-drivers be reviewed by the same
+maintainers?
 
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
-> +#include "gs101-pinctrl.h"
-> +#include "gs101.dtsi"
-> +
-> +/ {
-> +       model =3D "Oriole";
-> +       compatible =3D "google,gs101-oriole", "google,gs101";
-> +
-> +       chosen {
-> +               bootargs =3D "earlycon=3Dexynos4210,mmio32,0x10A00000 con=
-sole=3DttySAC0";
+Best regards,
+Wenkai
 
-Why is that earlycon is needed here? The serial should work fine (and
-actually even better) without that. Might be very useful for debugging
-though, but in production dts I'd remove that bit. Also, not sure why
-console is needed. Isn't it enough to just have something like:
 
-        stdout-path =3D &serial_0;
-
-inside of /chosen node?
-
-Btw, why isn't serial node enabled somewhere in this dts?
-
-> +       };
-> +
-> +       gpio-keys {
-> +               compatible =3D "gpio-keys";
-> +               pinctrl-names =3D "default";
-> +               pinctrl-0 =3D <&key_voldown &key_volup &key_power>;
-> +
-> +               button-vol-down {
-> +                       label =3D "KEY_VOLUMEDOWN";
-> +                       linux,code =3D <KEY_VOLUMEDOWN>;
-> +                       gpios =3D <&gpa7 3 GPIO_ACTIVE_LOW>;
-> +                       wakeup-source;
-> +               };
-> +
-> +               button-vol-up {
-> +                       label =3D "KEY_VOLUMEUP";
-> +                       linux,code =3D <KEY_VOLUMEUP>;
-> +                       gpios =3D <&gpa8 1 GPIO_ACTIVE_LOW>;
-> +                       wakeup-source;
-> +               };
-> +
-> +               button-power {
-> +                       label =3D "KEY_POWER";
-> +                       linux,code =3D <KEY_POWER>;
-> +                       gpios =3D <&gpa10 1 GPIO_ACTIVE_LOW>;
-> +                       wakeup-source;
-> +               };
-> +       };
-> +};
-> +
-> +&pinctrl_1 {
-> +       key_voldown: key-voldown-pins {
-> +               samsung,pins =3D "gpa7-3";
-> +               samsung,pin-function =3D <0xf>;
-> +               samsung,pin-pud =3D <0>;
-
-Here and further: maybe replace pid-function and pin-pud hard-coded
-values with corresponding named constants?
-
-> +               samsung,pin-drv =3D <GS101_PIN_DRV_2_5_MA>;
-> +       };
-> +
-> +       key_volup: key-volup-pins {
-> +               samsung,pins =3D "gpa8-1";
-> +               samsung,pin-function =3D <0xf>;
-> +               samsung,pin-pud =3D <0>;
-> +               samsung,pin-drv =3D <GS101_PIN_DRV_2_5_MA>;
-> +       };
-> +};
-> +
-> +&pinctrl_0 {
-> +       key_power: key-power-pins {
-> +               samsung,pins =3D "gpa10-1";
-> +               samsung,pin-function =3D <0xf>;
-> +               samsung,pin-pud =3D <0>;
-> +               samsung,pin-drv =3D <GS101_PIN_DRV_2_5_MA>;
-> +       };
-> +};
-> +
-> +&watchdog_cl0 {
-> +       timeout-sec =3D <30>;
-
-No status =3D "okay" here? The same question goes for wdt_cl1.
-
-> +};
-> --
-> 2.42.0.655.g421f12c284-goog
->
