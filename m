@@ -2,147 +2,115 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D517CA9EC
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Oct 2023 15:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BCC7CC16B
+	for <lists+linux-watchdog@lfdr.de>; Tue, 17 Oct 2023 13:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234056AbjJPNla (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 16 Oct 2023 09:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
+        id S1343758AbjJQLCl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 17 Oct 2023 07:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234085AbjJPNlN (ORCPT
+        with ESMTP id S1343755AbjJQLCh (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 16 Oct 2023 09:41:13 -0400
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241C810DD;
-        Mon, 16 Oct 2023 06:41:10 -0700 (PDT)
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-6c4bf619b57so3121960a34.1;
-        Mon, 16 Oct 2023 06:41:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697463669; x=1698068469;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NQ/G/Xth0D6auFNQK3nHPPfnMBEhXE0kDfRXlTn6UOY=;
-        b=eLwgFyt5DikRmvW7Fm6aHwG9TWBtTqL1kvC0FjL5uD0cVFzQvkySagRSQI92HT/fJc
-         iSiB1JPIsOzr9+f4ea0le9X/JDjsUXHP8H5aPKReG7b3wngCsduLX7IKNZeEhGIJaiuH
-         qaL0cyKnb4bN75N17SnlOgEx1gO/yUxXBnzSZdG+qa/BMpym1IOacde4zpCdqaNtjqX3
-         Ztt8XixWdSXZCPKRbtZ2lLB4hlxfHn4D3TH7UiwF6v4u8O2j6jY+zgX3Pp074xu73IbP
-         FNu3TtTKwkO2BKJzd5kD8wpAw5jS2et6Y0yy3XoXioOWvOjmHnrd0hhwlPN1jD/W6M6b
-         f7Eg==
-X-Gm-Message-State: AOJu0Ywv2OCl841qP/RiUR3nNz5IFAJZL83Xd0vcIZuuBWwBdRi396pf
-        Bjck5i700LOXzmImkyf3JA==
-X-Google-Smtp-Source: AGHT+IGL1M0GWp//j3qCJFUvTJjD9rn+kXQBERESjCk07ye3/whM/gGvUfOfSpVq8l85kMc+xe7a6g==
-X-Received: by 2002:a9d:6398:0:b0:6bd:a82:8edb with SMTP id w24-20020a9d6398000000b006bd0a828edbmr32048175otk.10.1697463669404;
-        Mon, 16 Oct 2023 06:41:09 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w6-20020a9d6386000000b006b96384ba1csm1689759otk.77.2023.10.16.06.41.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Oct 2023 06:41:08 -0700 (PDT)
-Received: (nullmailer pid 2647360 invoked by uid 1000);
-        Mon, 16 Oct 2023 13:41:06 -0000
-Date:   Mon, 16 Oct 2023 08:41:06 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Peter Griffin <peter.griffin@linaro.org>
-Cc:     krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
-        s.nawrocki@samsung.com, linus.walleij@linaro.org,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, gregkh@linuxfoundation.org, cw00.choi@samsung.com,
-        tudor.ambarus@linaro.org, andre.draszik@linaro.org,
-        semen.protsenko@linaro.org, saravanak@google.com,
-        willmcvicker@google.com, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        kernel-team@android.com, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v3 06/20] dt-bindings: pinctrl: samsung: add
- google,gs101-pinctrl compatible
-Message-ID: <20231016134106.GA2643742-robh@kernel.org>
-References: <20231011184823.443959-1-peter.griffin@linaro.org>
- <20231011184823.443959-7-peter.griffin@linaro.org>
+        Tue, 17 Oct 2023 07:02:37 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915DCF5;
+        Tue, 17 Oct 2023 04:02:36 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03BB0C433C8;
+        Tue, 17 Oct 2023 11:02:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697540556;
+        bh=kfOljpmUeVLUNn5bQwDqyoFFMYqfHS7AT/5JQ2FpBV8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MU9haWBNsqryNCw//fK2aS3/NLu+uGWV3Z6/ii9SkOOjnAT0nYMcVgdFs0UC+8lXf
+         B3VkUR1/zzsLk+vlcig4KfmlIQFB6vMM38vdDrewrw2An8eI4eBHktScXOL3PBey0a
+         1deh6EgO1PCDmgOyCFS5k6WBIOgmxpjrJbtpI3Ck1zIieZTWCHH1O5errFRFH6MX07
+         0XGPaFweEKsCQ5jWodNrBtrgdd48kSgpFpBNjcVptQqALbOVZmSUwr/Ie1KGk369FD
+         DY6odmIbfjTm1SwsyHs9jn012U++es/DTFUYqzcZHcPN0VjSWVucrvAuVADI5qKlqf
+         PPBAQl8CWy/JA==
+Date:   Tue, 17 Oct 2023 12:02:30 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Nik Bune <n2h9z4@gmail.com>
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        skhan@linuxfoundation.org, stwiss.opensource@diasemi.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [v2 PATCH] dt-bindings: watchdog: da9062-wdt: convert txt to yaml
+Message-ID: <20231017-able-unedited-b91872768fbd@spud>
+References: <20231012-flaky-humvee-0a0532621940@spud>
+ <20231014164942.154468-1-n2h9z4@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="H9If0aFZImYCFheU"
 Content-Disposition: inline
-In-Reply-To: <20231011184823.443959-7-peter.griffin@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20231014164942.154468-1-n2h9z4@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Wed, Oct 11, 2023 at 07:48:09PM +0100, Peter Griffin wrote:
-> Add the "google,gs101-pinctrl" compatible to the dt-schema bindings
-> documentation.
-> 
-> Add maxItems of 50 for the interrupts property as gs101 can have
-> multiple irqs.
-> 
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> ---
->  .../bindings/pinctrl/samsung,pinctrl.yaml     | 22 ++++++++++++++++++-
->  1 file changed, 21 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml
-> index 26614621774a..6dc648490668 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/samsung,pinctrl.yaml
-> @@ -35,6 +35,7 @@ properties:
->  
->    compatible:
->      enum:
-> +      - google,gs101-pinctrl
->        - samsung,s3c2412-pinctrl
->        - samsung,s3c2416-pinctrl
->        - samsung,s3c2440-pinctrl
-> @@ -58,7 +59,8 @@ properties:
->    interrupts:
->      description:
->        Required for GPIO banks supporting external GPIO interrupts.
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 50
->  
->    power-domains:
->      maxItems: 1
-> @@ -134,6 +136,24 @@ allOf:
->            minItems: 1
->            maxItems: 1
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: google,gs101-pinctrl
-> +    then:
-> +      properties:
-> +        interrupts:
-> +          description:
-> +            Required for external wakeup interrupts. List all external
 
-Is it external GPIO interrupts or wakeup interrupts?
+--H9If0aFZImYCFheU
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +            wakeup interrupts supported by this bank.
-> +          minItems: 1
-> +          maxItems: 50
+On Sat, Oct 14, 2023 at 06:49:42PM +0200, Nik Bune wrote:
+> >This property is a boolean...
+> >
+> >> +    description:
+> >> +      Set what happens on watchdog timeout. If this bit is set the
+> >> +      watchdog timeout triggers SHUTDOWN, if cleared the watchdog tri=
+ggers
+> >> +      POWERDOWN. Can be 0 or 1.
+> >
+> >... but you say "can be 0 or 1". Does this refer to the bit value, or
+> >the property? There are no in-kernel users of this property as far as a
+> >quick grep shows so it is a bi hard to tell.
+> >
+> >Otherwise, I'm happy with this.
+> >
+> >Thanks,
+> >Conor.
+>=20
+> Hello, thank you for your review!
+>=20
+> Good point.=20
+> It looks like it is related to property itself.=20
+>=20
+> I checked other bindings, like https://www.kernel.org/doc/Documentation/d=
+evicetree/bindings/iio/adc/adi%2Cad7192.yaml . They have fields of type boo=
+lean with description =E2=80=9CWhen this bit is set to 1=E2=80=9D.
+> So I put it as boolean.
+>=20
+> I have just checked a couple more, and looks like they are mostly uint32 =
+types with enum, when it goes about 0, 1 bit value in a description. =20
+> $ref: /schemas/types.yaml#/definitions/uint32
+> enum: [0, 1]
 
-For a given SoC, I don't see how this is variable? If it is variable, 
-how do you know which entry is what?
+It _seems_ like the intention was for this to be an enum, now that I
+re-read the description, since it is being used to override the
+behaviour from the OTP.
 
+With that changed
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-> +    else:
-> +      properties:
-> +        interrupts:
-> +          maxItems: 1
-> +
->  additionalProperties: false
->  
->  examples:
-> -- 
-> 2.42.0.655.g421f12c284-goog
-> 
+Thanks,
+Conor.
+
+--H9If0aFZImYCFheU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZS5pxgAKCRB4tDGHoIJi
+0vDdAP9xUcabNaj3GHiQRWdCIChrWv/+Uensqug6xHSbCVt8FAD/ZxFMRrqarqId
+945rEZAeqpZy7W9HJKmkV7fbu9U91gQ=
+=HqZ4
+-----END PGP SIGNATURE-----
+
+--H9If0aFZImYCFheU--
