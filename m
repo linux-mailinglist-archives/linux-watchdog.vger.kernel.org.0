@@ -2,152 +2,113 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15DDA7CF33B
-	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Oct 2023 10:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2429A7CFA7A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Oct 2023 15:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232908AbjJSIw2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Thu, 19 Oct 2023 04:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
+        id S233193AbjJSNLK (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 19 Oct 2023 09:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232865AbjJSIw1 (ORCPT
+        with ESMTP id S235383AbjJSNLJ (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Thu, 19 Oct 2023 04:52:27 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FDEEAB;
-        Thu, 19 Oct 2023 01:52:22 -0700 (PDT)
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-        id 1qtOlP-0004JJ-00; Thu, 19 Oct 2023 10:52:19 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 81227C0198; Thu, 19 Oct 2023 10:50:05 +0200 (CEST)
-Date:   Thu, 19 Oct 2023 10:50:05 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-mips@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] remove AR7 platform and associated drivers
-Message-ID: <ZTDtvR732kzchtxF@alpha.franken.de>
-References: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
+        Thu, 19 Oct 2023 09:11:09 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF78115
+        for <linux-watchdog@vger.kernel.org>; Thu, 19 Oct 2023 06:11:06 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6ce2bcb131fso279309a34.1
+        for <linux-watchdog@vger.kernel.org>; Thu, 19 Oct 2023 06:11:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697721065; x=1698325865; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jm6DMSO8fMKHAOH/Ts5yTawuQ5qbJzgnz2SgvPmjiJE=;
+        b=BB/ERAskv535SK29Cyt2aDn+ySYPGvQFbp+h+u9LxFu/8gF4N1X/xK3KXw4yVlS+Gm
+         9mVXBQQecNRr7cmLDiqp0pjz9m2OOz4BaZIiXW9+2SR6uGPmwmBo3xq6zAPOs3pXvFMY
+         ACc84rVcih8wFCf02VlgNOu9JpEcAfALwipSV3O8mytmS4fMHj2stlXv7Q2GSW8uAPAQ
+         KrXPq0hccZIn5nS/38wW2ZQ2qOcnDog6yzezxvrOXh2UysktarYAGSw5w1Uhyx/4C9yI
+         0v+JJYTi/6elWx2YJwXqUxSA9HsUbez+Jpmu25nCy4KzqnaJlp+sYhKXo3XvGpyOMxwe
+         Yovg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697721065; x=1698325865;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jm6DMSO8fMKHAOH/Ts5yTawuQ5qbJzgnz2SgvPmjiJE=;
+        b=Bv9ruJVwE7T6BsuCBiV/w/yb7qqmfP4MEX1u5JFRTf4V9AF2rGjE/3O4IVZhs+oat8
+         QJ4hj7kkjXogbxyGzmT8ahMFdHXPvdNCxFUvLEmrXBaampkjklOsc6+AHcCs5TigYQ0v
+         7tJR6o7E32wO+VUaY3baee9kLNW4aM2LHhBx5eY2zBaH10GMgBTj4kPrFYveiCDzcSKE
+         5lTDLxXD9SiWQ5eSnSUGQDXClummIZ06622jrn8xD1kcdtSu8ST3lxb43vabg4kMhE0O
+         sQ+EF5mYljXon27pxuEIIqSFxVy3vOeFwm8ih1qeUOEaWUJdTqTl3gOoClpz8985FlbE
+         wlnw==
+X-Gm-Message-State: AOJu0YwhaiU7e+MxOfEtp49hXDVbfAFGygiiMy5KHKHUbRTfC/rWWbrm
+        tXV1+C5cEWw3IQRbvTttGGJu62VWcTnGjP1aM7oDDg==
+X-Google-Smtp-Source: AGHT+IE/jHTUAAR6nIMpfuFVHDcoOayI4LJaNRr2xjsoB7z11oXnUYLoafVN7xD+i6Z21o/jjAiy3LIc6fQpznqcdbw=
+X-Received: by 2002:a05:6830:438c:b0:6c0:f451:ab6a with SMTP id
+ s12-20020a056830438c00b006c0f451ab6amr2505339otv.8.1697721065336; Thu, 19 Oct
+ 2023 06:11:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_PASS,T_SPF_HELO_TEMPERROR,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20231011184823.443959-1-peter.griffin@linaro.org>
+ <20231011184823.443959-4-peter.griffin@linaro.org> <20231016133649.GA2641997-robh@kernel.org>
+In-Reply-To: <20231016133649.GA2641997-robh@kernel.org>
+From:   Peter Griffin <peter.griffin@linaro.org>
+Date:   Thu, 19 Oct 2023 14:10:54 +0100
+Message-ID: <CADrjBPo8xYQtR5qyLPgcUU4VKE9Ecfrb3XGKX4BV8CBLggJE0g@mail.gmail.com>
+Subject: Re: [PATCH v3 03/20] dt-bindings: soc: google: exynos-sysreg: add
+ dedicated SYSREG compatibles to GS101
+To:     Rob Herring <robh@kernel.org>
+Cc:     krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
+        s.nawrocki@samsung.com, linus.walleij@linaro.org,
+        wim@linux-watchdog.org, linux@roeck-us.net,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        olof@lixom.net, gregkh@linuxfoundation.org, cw00.choi@samsung.com,
+        tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+        semen.protsenko@linaro.org, saravanak@google.com,
+        willmcvicker@google.com, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        kernel-team@android.com, linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Sep 22, 2023 at 08:15:21AM +0200, Wolfram Sang wrote:
-> Changes since v1:
-> * kept uapi define for for serial port type
-> * added acks
-> 
-> Still valid cover letter from v1:
-> 
-> When trying to get rid of the obsolete VLYNQ bus, Jonas and Florian
-> pointed out that its only user, the AR7 platform can probaly go entirely
-> [1]. This series does exactly that. Even OpenWRT has removed support
-> because these devices are "stuck with 3.18" [2].
-> 
-> It removes the drivers first, because watchdog and network include
-> platform specific headers. Once the drivers are gone, we remove the
-> platform. The patches are based on 6.6-rc2 and created with
-> "--irreversible-delete" to save some space.
-> 
-> My suggestion is that everything is merged via the MIPS tree in one go,
-> so we don't have broken drivers because of missing platform headers. But
-> maybe there are reasons for a two-cycle removal with the drivers first
-> and the platform later?
-> 
-> Looking forward to comments.
-> 
-> Happy hacking,
-> 
->    Wolfram
-> 
-> 
-> [1] https://lore.kernel.org/r/3395161f-2543-46f0-83d9-b918800305e1@gmail.com
-> [2] https://openwrt.org/docs/techref/targets/ar7
-> 
-> 
-> Wolfram Sang (6):
->   serial: 8250: remove AR7 support
->   mtd: parsers: ar7: remove support
->   vlynq: remove bus driver
->   watchdog: ar7_wdt: remove driver to prepare for platform removal
->   net: cpmac: remove driver to prepare for platform removal
->   MIPS: AR7: remove platform
-> 
->  MAINTAINERS                             |   13 -
->  arch/arm/configs/pxa_defconfig          |    1 -
->  arch/mips/Kbuild.platforms              |    1 -
->  arch/mips/Kconfig                       |   22 -
->  arch/mips/ar7/Makefile                  |   11 -
->  arch/mips/ar7/Platform                  |    5 -
->  arch/mips/ar7/clock.c                   |  439 --------
->  arch/mips/ar7/gpio.c                    |  332 ------
->  arch/mips/ar7/irq.c                     |  165 ---
->  arch/mips/ar7/memory.c                  |   51 -
->  arch/mips/ar7/platform.c                |  722 -------------
->  arch/mips/ar7/prom.c                    |  256 -----
->  arch/mips/ar7/setup.c                   |   93 --
->  arch/mips/ar7/time.c                    |   31 -
->  arch/mips/boot/compressed/uart-16550.c  |    5 -
->  arch/mips/configs/ar7_defconfig         |  119 ---
->  arch/mips/include/asm/mach-ar7/ar7.h    |  191 ----
->  arch/mips/include/asm/mach-ar7/irq.h    |   16 -
->  arch/mips/include/asm/mach-ar7/prom.h   |   12 -
->  arch/mips/include/asm/mach-ar7/spaces.h |   22 -
->  drivers/Kconfig                         |    2 -
->  drivers/Makefile                        |    1 -
->  drivers/mtd/parsers/Kconfig             |    5 -
->  drivers/mtd/parsers/Makefile            |    1 -
->  drivers/mtd/parsers/ar7part.c           |  129 ---
->  drivers/net/ethernet/ti/Kconfig         |    9 +-
->  drivers/net/ethernet/ti/Makefile        |    1 -
->  drivers/net/ethernet/ti/cpmac.c         | 1251 -----------------------
->  drivers/tty/serial/8250/8250_port.c     |    7 -
->  drivers/vlynq/Kconfig                   |   21 -
->  drivers/vlynq/Makefile                  |    6 -
->  drivers/vlynq/vlynq.c                   |  799 ---------------
->  drivers/watchdog/Kconfig                |    6 -
->  drivers/watchdog/Makefile               |    1 -
->  drivers/watchdog/ar7_wdt.c              |  315 ------
->  include/linux/vlynq.h                   |  149 ---
->  36 files changed, 1 insertion(+), 5209 deletions(-)
->  delete mode 100644 arch/mips/ar7/Makefile
->  delete mode 100644 arch/mips/ar7/Platform
->  delete mode 100644 arch/mips/ar7/clock.c
->  delete mode 100644 arch/mips/ar7/gpio.c
->  delete mode 100644 arch/mips/ar7/irq.c
->  delete mode 100644 arch/mips/ar7/memory.c
->  delete mode 100644 arch/mips/ar7/platform.c
->  delete mode 100644 arch/mips/ar7/prom.c
->  delete mode 100644 arch/mips/ar7/setup.c
->  delete mode 100644 arch/mips/ar7/time.c
->  delete mode 100644 arch/mips/configs/ar7_defconfig
->  delete mode 100644 arch/mips/include/asm/mach-ar7/ar7.h
->  delete mode 100644 arch/mips/include/asm/mach-ar7/irq.h
->  delete mode 100644 arch/mips/include/asm/mach-ar7/prom.h
->  delete mode 100644 arch/mips/include/asm/mach-ar7/spaces.h
->  delete mode 100644 drivers/mtd/parsers/ar7part.c
->  delete mode 100644 drivers/net/ethernet/ti/cpmac.c
->  delete mode 100644 drivers/vlynq/Kconfig
->  delete mode 100644 drivers/vlynq/Makefile
->  delete mode 100644 drivers/vlynq/vlynq.c
->  delete mode 100644 drivers/watchdog/ar7_wdt.c
->  delete mode 100644 include/linux/vlynq.h
+Hi Rob,
 
-applied to mips-next, minus patch 5, which is already applied to net-next.
+On Mon, 16 Oct 2023 at 14:36, Rob Herring <robh@kernel.org> wrote:
+>
+> On Wed, Oct 11, 2023 at 07:48:06PM +0100, Peter Griffin wrote:
+> > GS101 has three different SYSREG controllers, add dedicated
+> > compatibles for them to the documentation.
+> >
+> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> > ---
+> >  .../bindings/soc/samsung/samsung,exynos-sysreg.yaml         | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
+> > index 163e912e9cad..dbd12a97faad 100644
+> > --- a/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
+> > +++ b/Documentation/devicetree/bindings/soc/samsung/samsung,exynos-sysreg.yaml
+> > @@ -30,6 +30,12 @@ properties:
+> >                - samsung,exynos5433-fsys-sysreg
+> >            - const: samsung,exynos5433-sysreg
+> >            - const: syscon
+> > +      - items:
+> > +          - enum:
+> > +              - google,gs101-peric0-sysreg
+> > +              - google,gs101-peric1-sysreg
+> > +              - google,gs101-apm-sysreg
+>
+> Alphabetical order.
 
-Thomas.
+Will fix
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Peter
