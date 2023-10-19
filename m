@@ -2,465 +2,152 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC257CCF64
-	for <lists+linux-watchdog@lfdr.de>; Tue, 17 Oct 2023 23:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DDA7CF33B
+	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Oct 2023 10:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234922AbjJQVjr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 17 Oct 2023 17:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42184 "EHLO
+        id S232908AbjJSIw2 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 19 Oct 2023 04:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234787AbjJQVjq (ORCPT
+        with ESMTP id S232865AbjJSIw1 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 17 Oct 2023 17:39:46 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6395BED
-        for <linux-watchdog@vger.kernel.org>; Tue, 17 Oct 2023 14:39:42 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5a7ac4c3666so76034187b3.3
-        for <linux-watchdog@vger.kernel.org>; Tue, 17 Oct 2023 14:39:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697578781; x=1698183581; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mmISP2S8U1A5twlDYRxsFXqdw+RtYQyX+R3AByezHEM=;
-        b=DKFweqmRdoHKrn2UckBOigJ/iS0PZBtS+rM+3W6wW2ix2zxFWzh2ynZosG3+1x3MvD
-         +IoSuMj444rYZZVjI6CMSssheMuIZIUz5F9XBR3QJgQgMYYU7dM6nzrZPHXN8yGcuzO3
-         DxA9Hb7Z60KRZ1tkNrvOburHBmaP1Bj6HWEVC4rgb1NJkJ+LO7rboIS4uMcIZmFin3AV
-         MLBgSk9o9V/GAVa7elEwo1+/s67ovVrEcybhNT8mIob1m3NMmLTjzxaVoJj5wdc8Nnky
-         pOz0GKc9mnolpCE3uKtefuI2K9M3LIkdRCqRXgW8CK+RocNMjmVodrVnBtjX1uyfwXnq
-         ADdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697578781; x=1698183581;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mmISP2S8U1A5twlDYRxsFXqdw+RtYQyX+R3AByezHEM=;
-        b=nP80dZxc9f/Z1rlg0xVsFDqjJiEL5CVqdjjk4VNLx8Y8uUqZaW7O00pK2zU//8GmCr
-         NR1yf6DGgIE8LMVBgqpKg0fYK0A7/AV95RRPmy+qoK3m9ZBJ6Ba6IGgBc3L1PQF5tPu0
-         zrsrNRpGLvrFzb0As6I5h9G3n7KfnsyQ4QUMbbwzjZAZ2Y0JU8YMOUntW5XILHP9r9n+
-         TqFli4BZTNapo2B9G6/JEBXD+4i73mYUwrW/QdSxjdF4gQRylXODNdxOIfiz4YTnNWGo
-         KaYK5+q03B627bkASWptL9kEKFModtVoY4YM6o2iaDHkw2PBQT6nOIXSR37FVvSCThZ0
-         J70w==
-X-Gm-Message-State: AOJu0Yx2QM0TBApNpwZdhUutjkB3z8G9MP/u0SSl9E/ahV3NMNIiTSWW
-        C/OkrhP87xbslYtEipvDDhp4sNyautVQsNY4U3u/lQ==
-X-Google-Smtp-Source: AGHT+IHua/KltsnqqGjl3PvYG28PrHHlXxn+OmvGp5scpAbn4tVbTxqp1NobPsPoOTBmA4Wh42mpIvAp9W/VQNZupVI=
-X-Received: by 2002:a81:4996:0:b0:592:ffc:c787 with SMTP id
- w144-20020a814996000000b005920ffcc787mr3741095ywa.30.1697578781124; Tue, 17
- Oct 2023 14:39:41 -0700 (PDT)
+        Thu, 19 Oct 2023 04:52:27 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FDEEAB;
+        Thu, 19 Oct 2023 01:52:22 -0700 (PDT)
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+        id 1qtOlP-0004JJ-00; Thu, 19 Oct 2023 10:52:19 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 81227C0198; Thu, 19 Oct 2023 10:50:05 +0200 (CEST)
+Date:   Thu, 19 Oct 2023 10:50:05 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-mips@vger.kernel.org, Jonas Gorski <jonas.gorski@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] remove AR7 platform and associated drivers
+Message-ID: <ZTDtvR732kzchtxF@alpha.franken.de>
+References: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-References: <20231011184823.443959-1-peter.griffin@linaro.org>
- <20231011184823.443959-16-peter.griffin@linaro.org> <CAPLW+4njAN595m_BEXXG4ykyY=BYWKOX8dxqKSGPRi9_FSMJgQ@mail.gmail.com>
-In-Reply-To: <CAPLW+4njAN595m_BEXXG4ykyY=BYWKOX8dxqKSGPRi9_FSMJgQ@mail.gmail.com>
-From:   Peter Griffin <peter.griffin@linaro.org>
-Date:   Tue, 17 Oct 2023 22:39:30 +0100
-Message-ID: <CADrjBPoCaOCf9TrxXgNKAPgbG0x+Qt4UfN0UJqXtnbv79w4JsA@mail.gmail.com>
-Subject: Re: [PATCH v3 15/20] watchdog: s3c2410_wdt: Add support for Google
- tensor SoCs
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
-        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
-        linus.walleij@linaro.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org,
-        cw00.choi@samsung.com, tudor.ambarus@linaro.org,
-        andre.draszik@linaro.org, saravanak@google.com,
-        willmcvicker@google.com, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        kernel-team@android.com, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230922061530.3121-1-wsa+renesas@sang-engineering.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_PASS,T_SPF_HELO_TEMPERROR,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Sam,
+On Fri, Sep 22, 2023 at 08:15:21AM +0200, Wolfram Sang wrote:
+> Changes since v1:
+> * kept uapi define for for serial port type
+> * added acks
+> 
+> Still valid cover letter from v1:
+> 
+> When trying to get rid of the obsolete VLYNQ bus, Jonas and Florian
+> pointed out that its only user, the AR7 platform can probaly go entirely
+> [1]. This series does exactly that. Even OpenWRT has removed support
+> because these devices are "stuck with 3.18" [2].
+> 
+> It removes the drivers first, because watchdog and network include
+> platform specific headers. Once the drivers are gone, we remove the
+> platform. The patches are based on 6.6-rc2 and created with
+> "--irreversible-delete" to save some space.
+> 
+> My suggestion is that everything is merged via the MIPS tree in one go,
+> so we don't have broken drivers because of missing platform headers. But
+> maybe there are reasons for a two-cycle removal with the drivers first
+> and the platform later?
+> 
+> Looking forward to comments.
+> 
+> Happy hacking,
+> 
+>    Wolfram
+> 
+> 
+> [1] https://lore.kernel.org/r/3395161f-2543-46f0-83d9-b918800305e1@gmail.com
+> [2] https://openwrt.org/docs/techref/targets/ar7
+> 
+> 
+> Wolfram Sang (6):
+>   serial: 8250: remove AR7 support
+>   mtd: parsers: ar7: remove support
+>   vlynq: remove bus driver
+>   watchdog: ar7_wdt: remove driver to prepare for platform removal
+>   net: cpmac: remove driver to prepare for platform removal
+>   MIPS: AR7: remove platform
+> 
+>  MAINTAINERS                             |   13 -
+>  arch/arm/configs/pxa_defconfig          |    1 -
+>  arch/mips/Kbuild.platforms              |    1 -
+>  arch/mips/Kconfig                       |   22 -
+>  arch/mips/ar7/Makefile                  |   11 -
+>  arch/mips/ar7/Platform                  |    5 -
+>  arch/mips/ar7/clock.c                   |  439 --------
+>  arch/mips/ar7/gpio.c                    |  332 ------
+>  arch/mips/ar7/irq.c                     |  165 ---
+>  arch/mips/ar7/memory.c                  |   51 -
+>  arch/mips/ar7/platform.c                |  722 -------------
+>  arch/mips/ar7/prom.c                    |  256 -----
+>  arch/mips/ar7/setup.c                   |   93 --
+>  arch/mips/ar7/time.c                    |   31 -
+>  arch/mips/boot/compressed/uart-16550.c  |    5 -
+>  arch/mips/configs/ar7_defconfig         |  119 ---
+>  arch/mips/include/asm/mach-ar7/ar7.h    |  191 ----
+>  arch/mips/include/asm/mach-ar7/irq.h    |   16 -
+>  arch/mips/include/asm/mach-ar7/prom.h   |   12 -
+>  arch/mips/include/asm/mach-ar7/spaces.h |   22 -
+>  drivers/Kconfig                         |    2 -
+>  drivers/Makefile                        |    1 -
+>  drivers/mtd/parsers/Kconfig             |    5 -
+>  drivers/mtd/parsers/Makefile            |    1 -
+>  drivers/mtd/parsers/ar7part.c           |  129 ---
+>  drivers/net/ethernet/ti/Kconfig         |    9 +-
+>  drivers/net/ethernet/ti/Makefile        |    1 -
+>  drivers/net/ethernet/ti/cpmac.c         | 1251 -----------------------
+>  drivers/tty/serial/8250/8250_port.c     |    7 -
+>  drivers/vlynq/Kconfig                   |   21 -
+>  drivers/vlynq/Makefile                  |    6 -
+>  drivers/vlynq/vlynq.c                   |  799 ---------------
+>  drivers/watchdog/Kconfig                |    6 -
+>  drivers/watchdog/Makefile               |    1 -
+>  drivers/watchdog/ar7_wdt.c              |  315 ------
+>  include/linux/vlynq.h                   |  149 ---
+>  36 files changed, 1 insertion(+), 5209 deletions(-)
+>  delete mode 100644 arch/mips/ar7/Makefile
+>  delete mode 100644 arch/mips/ar7/Platform
+>  delete mode 100644 arch/mips/ar7/clock.c
+>  delete mode 100644 arch/mips/ar7/gpio.c
+>  delete mode 100644 arch/mips/ar7/irq.c
+>  delete mode 100644 arch/mips/ar7/memory.c
+>  delete mode 100644 arch/mips/ar7/platform.c
+>  delete mode 100644 arch/mips/ar7/prom.c
+>  delete mode 100644 arch/mips/ar7/setup.c
+>  delete mode 100644 arch/mips/ar7/time.c
+>  delete mode 100644 arch/mips/configs/ar7_defconfig
+>  delete mode 100644 arch/mips/include/asm/mach-ar7/ar7.h
+>  delete mode 100644 arch/mips/include/asm/mach-ar7/irq.h
+>  delete mode 100644 arch/mips/include/asm/mach-ar7/prom.h
+>  delete mode 100644 arch/mips/include/asm/mach-ar7/spaces.h
+>  delete mode 100644 drivers/mtd/parsers/ar7part.c
+>  delete mode 100644 drivers/net/ethernet/ti/cpmac.c
+>  delete mode 100644 drivers/vlynq/Kconfig
+>  delete mode 100644 drivers/vlynq/Makefile
+>  delete mode 100644 drivers/vlynq/vlynq.c
+>  delete mode 100644 drivers/watchdog/ar7_wdt.c
+>  delete mode 100644 include/linux/vlynq.h
 
-Thanks for your review.
+applied to mips-next, minus patch 5, which is already applied to net-next.
 
-On Thu, 12 Oct 2023 at 03:32, Sam Protsenko <semen.protsenko@linaro.org> wr=
-ote:
->
-> On Wed, Oct 11, 2023 at 1:49=E2=80=AFPM Peter Griffin <peter.griffin@lina=
-ro.org> wrote:
-> >
-> > This patch adds the compatibles and drvdata for the Google
-> > gs101 & gs201 SoCs found in Pixel 6 and Pixel 7 phones. Similar
-> > to Exynos850 it has two watchdog instances, one for each cluster
-> > and has some control bits in PMU registers.
-> >
-> > The watchdog IP found in gs101 SoCs also supports a few
-> > additional bits/features in the WTCON register which we add
-> > support for and an additional register detailed below.
-> >
-> > dbgack-mask - Enables masking WDT interrupt and reset request
-> > according to asserted DBGACK input
-> >
-> > windowed-mode - Enabled Windowed watchdog mode
-> >
-> > Windowed watchdog mode also has an additional register WTMINCNT.
-> > If windowed watchdog is enabled and you reload WTCNT when the
-> > value is greater than WTMINCNT, it prompts interrupt or reset
-> > request as if the watchdog time has expired.
-> >
->
-> A couple of thoughts in addition to what Guenter said.
->
-> From the description it looks like this patch should be split into 3 patc=
-hes:
->   1. Add "dbgack" feature
->   2. Add "windowed mode" feature
->   3. Enable gsX01 support
+Thomas.
 
-Sure I can split it up like that in v4 if that is preferable. The most impo=
-rtant
-part atm is SoC support, as the watchdog is left enabled by the bootloader
-so without this, the system resets after ~ 1 minute.
-
-> Also, it's not clear if those features are mandatory for gsX01 wdt to
-> function properly, or optional?
-
-The features aren't mandatory, the watchdog works fine with windowed
-mode disabled and the "dback" feature just affects the watchdog reset
-behaviour when an external debug agent is used.
-
-> From the code it looks like both
-> dbgack and windowed mode will only affect gsX01 variants (because of
-> quirk flags), but maybe the commit message should be more clear about
-> that.
-
-Sure I will be more verbose in the commit messages when I split it out into
-separate patches
-
->
-> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> > ---
-> >  drivers/watchdog/s3c2410_wdt.c | 127 ++++++++++++++++++++++++++++++---
-> >  1 file changed, 116 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_=
-wdt.c
-> > index 0b4bd883ff28..36c170047180 100644
-> > --- a/drivers/watchdog/s3c2410_wdt.c
-> > +++ b/drivers/watchdog/s3c2410_wdt.c
-> > @@ -31,12 +31,14 @@
-> >  #define S3C2410_WTDAT          0x04
-> >  #define S3C2410_WTCNT          0x08
-> >  #define S3C2410_WTCLRINT       0x0c
-> > -
-> > +#define S3C2410_WTMINCNT       0x10
-> >  #define S3C2410_WTCNT_MAXCNT   0xffff
-> >
-> > -#define S3C2410_WTCON_RSTEN    (1 << 0)
-> > -#define S3C2410_WTCON_INTEN    (1 << 2)
-> > -#define S3C2410_WTCON_ENABLE   (1 << 5)
-> > +#define S3C2410_WTCON_RSTEN            (1 << 0)
-> > +#define S3C2410_WTCON_INTEN            (1 << 2)
-> > +#define S3C2410_WTCON_ENABLE           (1 << 5)
-> > +#define S3C2410_WTCON_DBGACK_MASK      (1 << 16)
-> > +#define S3C2410_WTCON_WINDOWED_WD      (1 << 20)
->
-> Maybe use BIT() macro here?
-
-I didn't use the BIT macro for my changes, as the rest of the driver
-isn't currently using the BIT macro.
-
->
-> >
-> >  #define S3C2410_WTCON_DIV16    (0 << 3)
-> >  #define S3C2410_WTCON_DIV32    (1 << 3)
-> > @@ -51,6 +53,7 @@
-> >
-> >  #define S3C2410_WATCHDOG_ATBOOT                (0)
-> >  #define S3C2410_WATCHDOG_DEFAULT_TIME  (15)
-> > +#define S3C2410_WINDOW_MULTIPLIER      2
-> >
-> >  #define EXYNOS5_RST_STAT_REG_OFFSET            0x0404
-> >  #define EXYNOS5_WDT_DISABLE_REG_OFFSET         0x0408
-> > @@ -67,6 +70,13 @@
-> >  #define EXYNOSAUTOV9_CLUSTER0_WDTRESET_BIT     25
-> >  #define EXYNOSAUTOV9_CLUSTER1_WDTRESET_BIT     24
-> >
-> > +#define GS_CLUSTER0_NONCPU_OUT                 0x1220
-> > +#define GS_CLUSTER1_NONCPU_OUT                 0x1420
-> > +#define GS_CLUSTER0_NONCPU_INT_EN              0x1244
-> > +#define GS_CLUSTER1_NONCPU_INT_EN              0x1444
-> > +#define GS_CLUSTER2_NONCPU_INT_EN              0x1644
-> > +#define GS_RST_STAT_REG_OFFSET                 0x3B44
->
-> Please move those to the section above, where similar registers are
-> described for other SoCs.
-
-Will fix.
-
->
-> > +
-> >  /**
-> >   * DOC: Quirk flags for different Samsung watchdog IP-cores
-> >   *
-> > @@ -106,6 +116,8 @@
-> >  #define QUIRK_HAS_PMU_RST_STAT                 (1 << 2)
-> >  #define QUIRK_HAS_PMU_AUTO_DISABLE             (1 << 3)
-> >  #define QUIRK_HAS_PMU_CNT_EN                   (1 << 4)
-> > +#define QUIRK_HAS_DBGACK_BIT                   (1 << 5)
-> > +#define QUIRK_HAS_WTMINCNT_REG                 (1 << 6)
->
-> Please also document those two quirks in the kernel-doc comment above.
-> Btw, the comment correctness can be checked like this:
->
->     $ scripts/kernel-doc -v -none drivers/watchdog/s3c2410_wdt.c
->
-> or without "-none" option to see how the comment is parsed by kernel-doc.
-
-Will do, and thanks for the kernel-doc hint!
-
->
-> >
-> >  /* These quirks require that we have a PMU register map */
-> >  #define QUIRKS_HAVE_PMUREG \
-> > @@ -263,6 +275,54 @@ static const struct s3c2410_wdt_variant drv_data_e=
-xynosautov9_cl1 =3D {
-> >                   QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN,
-> >  };
-> >
-> > +static const struct s3c2410_wdt_variant drv_data_gs101_cl0 =3D {
-> > +       .mask_reset_reg =3D GS_CLUSTER0_NONCPU_INT_EN,
-> > +       .mask_bit =3D 2,
-> > +       .mask_reset_inv =3D true,
-> > +       .rst_stat_reg =3D GS_RST_STAT_REG_OFFSET,
-> > +       .rst_stat_bit =3D 0,
-> > +       .cnt_en_reg =3D GS_CLUSTER0_NONCPU_OUT,
-> > +       .cnt_en_bit =3D 8,
-> > +       .quirks =3D QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET |=
- QUIRK_HAS_PMU_CNT_EN |
->
-> Here and further: please stick to 80 characters per line when possible.
-
-Will fix
-
->
-> > +                 QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_DBGACK_BIT | QUIRK=
-_HAS_WTMINCNT_REG,
-> > +};
-> > +
-> > +static const struct s3c2410_wdt_variant drv_data_gs101_cl1 =3D {
-> > +       .mask_reset_reg =3D GS_CLUSTER1_NONCPU_INT_EN,
-> > +       .mask_bit =3D 2,
-> > +       .mask_reset_inv =3D true,
-> > +       .rst_stat_reg =3D GS_RST_STAT_REG_OFFSET,
-> > +       .rst_stat_bit =3D 1,
-> > +       .cnt_en_reg =3D GS_CLUSTER1_NONCPU_OUT,
-> > +       .cnt_en_bit =3D 7,
-> > +       .quirks =3D QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET |=
- QUIRK_HAS_PMU_CNT_EN |
-> > +                 QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_DBGACK_BIT | QUIRK=
-_HAS_WTMINCNT_REG,
-> > +};
-> > +
-> > +static const struct s3c2410_wdt_variant drv_data_gs201_cl0 =3D {
-> > +       .mask_reset_reg =3D GS_CLUSTER0_NONCPU_INT_EN,
-> > +       .mask_bit =3D 2,
-> > +       .mask_reset_inv =3D true,
-> > +       .rst_stat_reg =3D GS_RST_STAT_REG_OFFSET,
-> > +       .rst_stat_bit =3D 0,
-> > +       .cnt_en_reg =3D GS_CLUSTER0_NONCPU_OUT,
-> > +       .cnt_en_bit =3D 8,
-> > +       .quirks =3D QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET |=
- QUIRK_HAS_PMU_CNT_EN |
-> > +                 QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_DBGACK_BIT | QUIRK=
-_HAS_WTMINCNT_REG,
-> > +};
-> > +
-> > +static const struct s3c2410_wdt_variant drv_data_gs201_cl1 =3D {
-> > +       .mask_reset_reg =3D GS_CLUSTER1_NONCPU_INT_EN,
-> > +       .mask_bit =3D 2,
-> > +       .mask_reset_inv =3D true,
-> > +       .rst_stat_reg =3D GS_RST_STAT_REG_OFFSET,
-> > +       .rst_stat_bit =3D 1,
-> > +       .cnt_en_reg =3D GS_CLUSTER1_NONCPU_OUT,
-> > +       .cnt_en_bit =3D 7,
-> > +       .quirks =3D QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_MASK_RESET |=
- QUIRK_HAS_PMU_CNT_EN |
-> > +                 QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_DBGACK_BIT | QUIRK=
-_HAS_WTMINCNT_REG,
-> > +};
-> > +
-> >  static const struct of_device_id s3c2410_wdt_match[] =3D {
-> >         { .compatible =3D "samsung,s3c2410-wdt",
-> >           .data =3D &drv_data_s3c2410 },
-> > @@ -278,6 +338,10 @@ static const struct of_device_id s3c2410_wdt_match=
-[] =3D {
-> >           .data =3D &drv_data_exynos850_cl0 },
-> >         { .compatible =3D "samsung,exynosautov9-wdt",
-> >           .data =3D &drv_data_exynosautov9_cl0 },
-> > +       { .compatible =3D "google,gs101-wdt",
-> > +         .data =3D &drv_data_gs101_cl0 },
-> > +       { .compatible =3D "google,gs201-wdt",
-> > +         .data =3D &drv_data_gs201_cl0 },
-> >         {},
-> >  };
-> >  MODULE_DEVICE_TABLE(of, s3c2410_wdt_match);
-> > @@ -375,6 +439,21 @@ static int s3c2410wdt_enable(struct s3c2410_wdt *w=
-dt, bool en)
-> >         return 0;
-> >  }
-> >
-> > +static void s3c2410wdt_mask_dbgack(struct s3c2410_wdt *wdt, bool mask)
-> > +{
-> > +       unsigned long wtcon;
-> > +
-> > +       if (!(wdt->drv_data->quirks & QUIRK_HAS_DBGACK_BIT))
-> > +               return;
-> > +
-> > +       wtcon =3D readl(wdt->reg_base + S3C2410_WTCON);
-> > +       if (mask)
-> > +               wtcon |=3D S3C2410_WTCON_DBGACK_MASK;
-> > +       else
-> > +               wtcon &=3D ~S3C2410_WTCON_DBGACK_MASK;
-> > +       writel(wtcon, wdt->reg_base + S3C2410_WTCON);
-> > +}
-> > +
-> >  static int s3c2410wdt_keepalive(struct watchdog_device *wdd)
-> >  {
-> >         struct s3c2410_wdt *wdt =3D watchdog_get_drvdata(wdd);
-> > @@ -410,7 +489,7 @@ static int s3c2410wdt_stop(struct watchdog_device *=
-wdd)
-> >
-> >  static int s3c2410wdt_start(struct watchdog_device *wdd)
-> >  {
-> > -       unsigned long wtcon;
-> > +       unsigned long wtcon, wtmincnt;
-> >         struct s3c2410_wdt *wdt =3D watchdog_get_drvdata(wdd);
-> >         unsigned long flags;
-> >
-> > @@ -432,6 +511,12 @@ static int s3c2410wdt_start(struct watchdog_device=
- *wdd)
-> >         dev_dbg(wdt->dev, "Starting watchdog: count=3D0x%08x, wtcon=3D%=
-08lx\n",
-> >                 wdt->count, wtcon);
-> >
-> > +       if (wdt->drv_data->quirks & QUIRK_HAS_WTMINCNT_REG) {
-> > +               wtcon |=3D S3C2410_WTCON_WINDOWED_WD;
-> > +               wtmincnt =3D wdt->count * S3C2410_WINDOW_MULTIPLIER;
-> > +               writel(wtmincnt, wdt->reg_base + S3C2410_WTMINCNT);
-> > +       }
-> > +
-> >         writel(wdt->count, wdt->reg_base + S3C2410_WTDAT);
-> >         writel(wdt->count, wdt->reg_base + S3C2410_WTCNT);
-> >         writel(wtcon, wdt->reg_base + S3C2410_WTCON);
-> > @@ -447,7 +532,7 @@ static int s3c2410wdt_set_heartbeat(struct watchdog=
-_device *wdd,
-> >         unsigned long freq =3D s3c2410wdt_get_freq(wdt);
-> >         unsigned int count;
-> >         unsigned int divisor =3D 1;
-> > -       unsigned long wtcon;
-> > +       unsigned long wtcon, wtmincnt;
-> >
-> >         if (timeout < 1)
-> >                 return -EINVAL;
-> > @@ -478,6 +563,11 @@ static int s3c2410wdt_set_heartbeat(struct watchdo=
-g_device *wdd,
-> >         count =3D DIV_ROUND_UP(count, divisor);
-> >         wdt->count =3D count;
-> >
-> > +       if (wdt->drv_data->quirks & QUIRK_HAS_WTMINCNT_REG) {
-> > +               wtmincnt =3D count * S3C2410_WINDOW_MULTIPLIER;
-> > +               writel(wtmincnt, wdt->reg_base + S3C2410_WTMINCNT);
-> > +       }
-> > +
-> >         /* update the pre-scaler */
-> >         wtcon =3D readl(wdt->reg_base + S3C2410_WTCON);
-> >         wtcon &=3D ~S3C2410_WTCON_PRESCALE_MASK;
-> > @@ -496,14 +586,20 @@ static int s3c2410wdt_restart(struct watchdog_dev=
-ice *wdd, unsigned long action,
-> >  {
-> >         struct s3c2410_wdt *wdt =3D watchdog_get_drvdata(wdd);
-> >         void __iomem *wdt_base =3D wdt->reg_base;
-> > +       unsigned long wtcon;
-> >
-> >         /* disable watchdog, to be safe  */
-> >         writel(0, wdt_base + S3C2410_WTCON);
-> >
-> >         /* put initial values into count and data */
-> > +       if (wdt->drv_data->quirks & QUIRK_HAS_WTMINCNT_REG)
-> > +               writel(0x100, wdt_base + S3C2410_WTMINCNT);
-> >         writel(0x80, wdt_base + S3C2410_WTCNT);
-> >         writel(0x80, wdt_base + S3C2410_WTDAT);
-> >
-> > +       if (wdt->drv_data->quirks & QUIRK_HAS_WTMINCNT_REG)
-> > +               wtcon |=3D S3C2410_WTCON_WINDOWED_WD;
-> > +
-> >         /* set the watchdog to go and reset... */
-> >         writel(S3C2410_WTCON_ENABLE | S3C2410_WTCON_DIV16 |
-> >                 S3C2410_WTCON_RSTEN | S3C2410_WTCON_PRESCALE(0x20),
-> > @@ -585,9 +681,11 @@ s3c2410_get_wdt_drv_data(struct platform_device *p=
-dev, struct s3c2410_wdt *wdt)
-> >         }
-> >
-> >  #ifdef CONFIG_OF
-> > -       /* Choose Exynos850/ExynosAutov9 driver data w.r.t. cluster ind=
-ex */
-> > +       /* Choose Exynos850/ExynosAutov9/gsx01 driver data w.r.t. clust=
-er index */
->
-> Please keep 80 characters per line.
-
-Will fix
-
-regards,
-
-Peter
->
-> >         if (variant =3D=3D &drv_data_exynos850_cl0 ||
-> > -           variant =3D=3D &drv_data_exynosautov9_cl0) {
-> > +           variant =3D=3D &drv_data_exynosautov9_cl0 ||
-> > +           variant =3D=3D &drv_data_gs101_cl0 ||
-> > +           variant =3D=3D &drv_data_gs201_cl0) {
-> >                 u32 index;
-> >                 int err;
-> >
-> > @@ -600,9 +698,14 @@ s3c2410_get_wdt_drv_data(struct platform_device *p=
-dev, struct s3c2410_wdt *wdt)
-> >                 case 0:
-> >                         break;
-> >                 case 1:
-> > -                       variant =3D (variant =3D=3D &drv_data_exynos850=
-_cl0) ?
-> > -                               &drv_data_exynos850_cl1 :
-> > -                               &drv_data_exynosautov9_cl1;
-> > +                       if (variant =3D=3D &drv_data_exynos850_cl0)
-> > +                               variant =3D &drv_data_exynos850_cl1;
-> > +                       else if (variant =3D=3D &drv_data_exynosautov9_=
-cl0)
-> > +                               variant =3D &drv_data_exynosautov9_cl1;
-> > +                       else if (variant =3D=3D &drv_data_gs101_cl0)
-> > +                               variant =3D &drv_data_gs101_cl1;
-> > +                       else if (variant =3D=3D &drv_data_gs201_cl0)
-> > +                               variant =3D &drv_data_gs201_cl1;
-> >                         break;
-> >                 default:
-> >                         return dev_err_probe(dev, -EINVAL, "wrong clust=
-er index: %u\n", index);
-> > @@ -700,6 +803,8 @@ static int s3c2410wdt_probe(struct platform_device =
-*pdev)
-> >         wdt->wdt_device.bootstatus =3D s3c2410wdt_get_bootstatus(wdt);
-> >         wdt->wdt_device.parent =3D dev;
-> >
-> > +       s3c2410wdt_mask_dbgack(wdt, true);
-> > +
-> >         /*
-> >          * If "tmr_atboot" param is non-zero, start the watchdog right =
-now. Also
-> >          * set WDOG_HW_RUNNING bit, so that watchdog core can kick the =
-watchdog.
-> > --
-> > 2.42.0.655.g421f12c284-goog
-> >
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
