@@ -2,31 +2,31 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11667D1C9D
-	for <lists+linux-watchdog@lfdr.de>; Sat, 21 Oct 2023 12:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 527007D1CA9
+	for <lists+linux-watchdog@lfdr.de>; Sat, 21 Oct 2023 13:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbjJUK6Q (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 21 Oct 2023 06:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
+        id S229623AbjJULGB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sat, 21 Oct 2023 07:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjJUK6Q (ORCPT
+        with ESMTP id S229574AbjJULGA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 21 Oct 2023 06:58:16 -0400
+        Sat, 21 Oct 2023 07:06:00 -0400
 Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id ECC0E99;
-        Sat, 21 Oct 2023 03:58:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 43FB5D65;
+        Sat, 21 Oct 2023 04:05:56 -0700 (PDT)
 Received: from localhost.localdomain (unknown [219.141.250.2])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id C813C604DAB8B;
-        Sat, 21 Oct 2023 18:58:03 +0800 (CST)
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 4B149604DAB88;
+        Sat, 21 Oct 2023 19:05:52 +0800 (CST)
 X-MD-Sfrom: fenghui@nfschina.com
 X-MD-SrcIP: 219.141.250.2
 From:   fenghui <fenghui@nfschina.com>
 To:     wim@linux-watchdog.org, linux@roeck-us.net
 Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
         fenghui <fenghui@nfschina.com>
-Subject: [PATCH] =?UTF-8?q?watchdog=5Fcore:=20Remove=20unnecessary=20?= =?UTF-8?q?=E2=80=980=E2=80=99=20values=20from=20ret?=
-Date:   Sat, 21 Oct 2023 18:57:48 +0800
-Message-Id: <20231021105748.18280-1-fenghui@nfschina.com>
+Subject: [PATCH] =?UTF-8?q?watchdog=5Fdev:=20Remove=20unnecessary=20?= =?UTF-8?q?=E2=80=980=E2=80=99=20values=20from=20err?=
+Date:   Sat, 21 Oct 2023 19:05:38 +0800
+Message-Id: <20231021110538.441-1-fenghui@nfschina.com>
 X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -40,26 +40,26 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-ret is assigned first, so it does not need to initialize the assignment.
+err is assigned first, so it does not need to initialize the assignment.
 
 Signed-off-by: fenghui <fenghui@nfschina.com>
 ---
- drivers/watchdog/watchdog_core.c | 2 +-
+ drivers/watchdog/watchdog_dev.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
-index 5b55ccae06d4..dceaf5cc89fd 100644
---- a/drivers/watchdog/watchdog_core.c
-+++ b/drivers/watchdog/watchdog_core.c
-@@ -194,7 +194,7 @@ static int watchdog_pm_notifier(struct notifier_block *nb, unsigned long mode,
- 				void *data)
+diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+index 15df74e11a59..0868ccbcf92b 100644
+--- a/drivers/watchdog/watchdog_dev.c
++++ b/drivers/watchdog/watchdog_dev.c
+@@ -291,7 +291,7 @@ static int watchdog_start(struct watchdog_device *wdd)
+  */
+ static int watchdog_stop(struct watchdog_device *wdd)
  {
- 	struct watchdog_device *wdd;
--	int ret = 0;
-+	int ret;
+-	int err = 0;
++	int err;
  
- 	wdd = container_of(nb, struct watchdog_device, pm_nb);
- 
+ 	if (!watchdog_active(wdd))
+ 		return 0;
 -- 
 2.11.0
 
