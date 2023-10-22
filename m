@@ -2,69 +2,78 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66527D230B
-	for <lists+linux-watchdog@lfdr.de>; Sun, 22 Oct 2023 14:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD9A7D24A2
+	for <lists+linux-watchdog@lfdr.de>; Sun, 22 Oct 2023 18:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjJVMDr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 22 Oct 2023 08:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49908 "EHLO
+        id S229588AbjJVQsM (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 22 Oct 2023 12:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjJVMDq (ORCPT
+        with ESMTP id S229586AbjJVQsL (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 22 Oct 2023 08:03:46 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BBBA3;
-        Sun, 22 Oct 2023 05:03:44 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9be02fcf268so343704166b.3;
-        Sun, 22 Oct 2023 05:03:44 -0700 (PDT)
+        Sun, 22 Oct 2023 12:48:11 -0400
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81610E7;
+        Sun, 22 Oct 2023 09:48:09 -0700 (PDT)
+Received: by mail-oo1-xc2c.google.com with SMTP id 006d021491bc7-5842c251d7cso1181177eaf.1;
+        Sun, 22 Oct 2023 09:48:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697976223; x=1698581023; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LV4D2DnniG5y0BqTHFZQB1MGn4Ao69hJ2NYsUwg1XoA=;
-        b=Pz1x6n/2KrcylN5fR5PbATiRbk0lvQCMaulynwhdsc7IPJvjpPPn6Ec0aE+qEwaVl8
-         cT9Q9q1hLsBD/ZaT7flsRJvELU6Q1OA9hXLnm1ccVAYiMCLQX0Mc2htXGJvtGhwPr6gA
-         8FChjyZXoeKvR7tnmYJcYir2rrq6DVpMRJvOf0ggMMzurUPOboijdVxctor2jEnBJOkk
-         Vsb2GmAzII/fKTyX41prqbWcoY18ExrBxSbSFDiQHMh/c6HQhzZ7mSW2m44W9NqJCqua
-         oM/pEkj6ulyeybq9wq+8fZfBHtDL+LK/ME/8OhDa0mbk+nPXLcqxqgRhHgKr+DCMv9w2
-         8paQ==
+        d=gmail.com; s=20230601; t=1697993289; x=1698598089; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=zaC0k6XVBVVgzv+xMwI1MNbASVkxCUyoOYu0hkRSSx8=;
+        b=ko0wuXCQLb659lUWo00baA+xGDMeyfhIb9NiQWn+Ubz6bDEUS4NowLJ1lBl84Dfjv+
+         LtdBtijul0bJRD7UKms9MlkT7BhngDhqrkbm2Edx0cKWVjVuhssbEUyRpAK9mhtyCcKD
+         ZwqXUMPjfxvbyl4aOIC0SVrhjZTtlrbYuOXGS3c6swT52z3wdx6caiF4WhIjIo8fTd9z
+         swiImy2ROSi/k0d03pwN10Sv1hB/NNuaH1eh1dDf88qwrrw03IndX1UcEWR0zCqP8Tnn
+         9fE3+6XxRZgp8mgamGZyYUXHJ3MlSV4XiflZACTG+v366/9N0VmOzjFREWFC2nQuY8EF
+         fOMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697976223; x=1698581023;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1697993289; x=1698598089;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LV4D2DnniG5y0BqTHFZQB1MGn4Ao69hJ2NYsUwg1XoA=;
-        b=d0hAOc5LJsxsU+t05Y8vRzTagoawuRWX8WpOuNBr0ZJjvVdGP5BVmDdhd/9VSGGWZZ
-         Mv5BLaa4KenMblnSMAEkn1ejydkOfYGJsIW3t6rNk02jwVbmpK6XfOv4/ySoZLzRW+xj
-         ZLs90lQ0pGXnhlzG13QFgBb51YF98CDOHybhLbm1tJXi0rQqBEf6AlBMCO/5CK7YdtVf
-         KEHkNa4IW/dCO8dRVPSZtOxjupyi4XdljErrJP5GRZl3z8FbCNecJ6YFR8amVeL/Jh/1
-         eQ84b6g+xOHloO20ouyQBOUUl0jSkB+VlQJ/K3J+52akT8fv9FyIZdcoa/d4yVVkGlUN
-         JJPg==
-X-Gm-Message-State: AOJu0YyBjHXnUf+mRaqs0i0IAoJNximVfjYXPwpaVR//0W79NymU9z+J
-        phSTMe6xYwhA7ntc1XExsnY=
-X-Google-Smtp-Source: AGHT+IH1iiAQaekK8D5v5zJkhVAmQ58w+d+CKS4qxxgJ8PwvgrnrO1pQzOeT/Qw0m+iwgCLYdQWeOw==
-X-Received: by 2002:a17:907:1b0a:b0:99d:e8da:c20b with SMTP id mp10-20020a1709071b0a00b0099de8dac20bmr5049091ejc.24.1697976222823;
-        Sun, 22 Oct 2023 05:03:42 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:8109:8c00:3664:5c63:7da:9756:9320])
-        by smtp.gmail.com with ESMTPSA id q24-20020a170906361800b009b2ba067b37sm4870012ejb.202.2023.10.22.05.03.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Oct 2023 05:03:42 -0700 (PDT)
-From:   Nik Bune <n2h9z4@gmail.com>
-To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        skhan@linuxfoundation.org, baruch@tkos.co.il
-Cc:     Nik Bune <n2h9z4@gmail.com>, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: watchdog: cnxt,cx92755-wdt: convert txt to yaml
-Date:   Sun, 22 Oct 2023 14:03:28 +0200
-Message-Id: <20231022120328.137788-1-n2h9z4@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=zaC0k6XVBVVgzv+xMwI1MNbASVkxCUyoOYu0hkRSSx8=;
+        b=G7hWE5zvKEayydFxnZylsIxqsvxWwlRQ4ADMhgHUatmA7QgjHMzNTR977bwbvSM6Ay
+         WVvC/bOuAja8RlnfEp3JhdfdoQvDvgGz9lxzo1KGi0A03oirzHQ2rqGV2tcOa1y1lKN3
+         KXZlkqEzj6DDuFORjOXGyFlICg9SXpJq9EVS6UZsUwXAdejEfbeaFolP8Bv6EPx29wNx
+         ZRgP2t7W0hr5QEKzPbNh9i6jd9l1ucBs6YJ73M7yDUg6mk9nw4gYXgBeX4rOBoNvmssz
+         qU4IRvIzjTzhOuae2yL+KoKhNOJN+UG6gU3bFtzRcurcDild6cGKAI4VeynNcjeowfeX
+         9ZwA==
+X-Gm-Message-State: AOJu0YxExdIVAfgD1A9Yv74vF4qGAmJbaHoT9wq1qmYYr5E0nDl5GCat
+        +P+rL8joj9KpXsVP99gbds4=
+X-Google-Smtp-Source: AGHT+IGpkNvGgZVMKkF8ZxGYFUTvP28BBBEKhlGAJdl1GmJbCGwO7rIiSfOHfkeIf2OwE4ATpvi6Ig==
+X-Received: by 2002:a05:6358:9146:b0:140:f6ab:b11e with SMTP id r6-20020a056358914600b00140f6abb11emr8468882rwr.28.1697993288607;
+        Sun, 22 Oct 2023 09:48:08 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f10-20020a631f0a000000b0056b27af8715sm4456037pgf.43.2023.10.22.09.48.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Oct 2023 09:48:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c6149f04-4cf6-8dcc-3aca-d926f49a34d7@roeck-us.net>
+Date:   Sun, 22 Oct 2023 09:48:07 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v2] watchdog: apple: Deactivate on suspend
+Content-Language: en-US
+To:     j@jannau.net, Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231016-apple-watchdog-suspend-v2-1-7ffff8042dbc@jannau.net>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20231016-apple-watchdog-suspend-v2-1-7ffff8042dbc@jannau.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,103 +81,79 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Convert txt file to yaml.
-Add maintainers list. Took from Documentation/devicetree/bindings/arm/digicolor.yaml file. 
+On 10/15/23 23:58, Janne Grunau via B4 Relay wrote:
+> From: Janne Grunau <j@jannau.net>
+> 
+> The watchdog remains active after putting the system into suspend. Add
+> PM callbacks to deactivate the watchdog on suspend an re-activate it on
+> resume.
+> 
+> Signed-off-by: Janne Grunau <j@jannau.net>
 
-Signed-off-by: Nik Bune <n2h9z4@gmail.com>
----
- .../bindings/watchdog/cnxt,cx92755-wdt.yaml   | 49 +++++++++++++++++++
- .../bindings/watchdog/digicolor-wdt.txt       | 25 ----------
- 2 files changed, 49 insertions(+), 25 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/watchdog/cnxt,cx92755-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/digicolor-wdt.txt
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/Documentation/devicetree/bindings/watchdog/cnxt,cx92755-wdt.yaml b/Documentation/devicetree/bindings/watchdog/cnxt,cx92755-wdt.yaml
-new file mode 100644
-index 000000000000..acd2d30b20f3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/cnxt,cx92755-wdt.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/cnxt,cx92755-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Conexant Digicolor SoCs Watchdog timer
-+
-+description: |
-+  The watchdog functionality in Conexant Digicolor SoCs relies on the so called
-+  "Agent Communication" block. This block includes the eight programmable system
-+  timer counters. The first timer (called "Timer A") is the only one that can be
-+  used as watchdog.
-+
-+allOf:
-+  - $ref: watchdog.yaml#
-+
-+maintainers:
-+  - Baruch Siach <baruch@tkos.co.il>
-+
-+properties:
-+  compatible:
-+    const: cnxt,cx92755-wdt
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      specifies the clock that drives the timer
-+
-+  timeout-sec: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    watchdog@f0000fc0 {
-+        compatible = "cnxt,cx92755-wdt";
-+        reg = <0xf0000fc0 0x8>;
-+        clocks = <&main_clk>;
-+        timeout-sec = <15>;
-+    };
-diff --git a/Documentation/devicetree/bindings/watchdog/digicolor-wdt.txt b/Documentation/devicetree/bindings/watchdog/digicolor-wdt.txt
-deleted file mode 100644
-index a882967e17d4..000000000000
---- a/Documentation/devicetree/bindings/watchdog/digicolor-wdt.txt
-+++ /dev/null
-@@ -1,25 +0,0 @@
--Conexant Digicolor SoCs Watchdog timer
--
--The watchdog functionality in Conexant Digicolor SoCs relies on the so called
--"Agent Communication" block. This block includes the eight programmable system
--timer counters. The first timer (called "Timer A") is the only one that can be
--used as watchdog.
--
--Required properties:
--
--- compatible : Should be "cnxt,cx92755-wdt"
--- reg : Specifies base physical address and size of the registers
--- clocks : phandle; specifies the clock that drives the timer
--
--Optional properties:
--
--- timeout-sec : Contains the watchdog timeout in seconds
--
--Example:
--
--	watchdog@f0000fc0 {
--		compatible = "cnxt,cx92755-wdt";
--		reg = <0xf0000fc0 0x8>;
--		clocks = <&main_clk>;
--		timeout-sec = <15>;
--	};
--- 
-2.34.1
+> ---
+> Changes in v2:
+> - use DEFINE_SIMPLE_DEV_PM_OPS
+> - Link to v1: https://lore.kernel.org/r/20230930-apple-watchdog-suspend-v1-1-1998c0be9fd7@jannau.net
+> ---
+>   drivers/watchdog/apple_wdt.c | 25 +++++++++++++++++++++++++
+>   1 file changed, 25 insertions(+)
+> 
+> diff --git a/drivers/watchdog/apple_wdt.c b/drivers/watchdog/apple_wdt.c
+> index eddeb0fede89..d4f739932f0b 100644
+> --- a/drivers/watchdog/apple_wdt.c
+> +++ b/drivers/watchdog/apple_wdt.c
+> @@ -173,6 +173,8 @@ static int apple_wdt_probe(struct platform_device *pdev)
+>   	if (!wdt->clk_rate)
+>   		return -EINVAL;
+>   
+> +	platform_set_drvdata(pdev, wdt);
+> +
+>   	wdt->wdd.ops = &apple_wdt_ops;
+>   	wdt->wdd.info = &apple_wdt_info;
+>   	wdt->wdd.max_timeout = U32_MAX / wdt->clk_rate;
+> @@ -190,6 +192,28 @@ static int apple_wdt_probe(struct platform_device *pdev)
+>   	return devm_watchdog_register_device(dev, &wdt->wdd);
+>   }
+>   
+> +static int apple_wdt_resume(struct device *dev)
+> +{
+> +	struct apple_wdt *wdt = dev_get_drvdata(dev);
+> +
+> +	if (watchdog_active(&wdt->wdd) || watchdog_hw_running(&wdt->wdd))
+> +		apple_wdt_start(&wdt->wdd);
+> +
+> +	return 0;
+> +}
+> +
+> +static int apple_wdt_suspend(struct device *dev)
+> +{
+> +	struct apple_wdt *wdt = dev_get_drvdata(dev);
+> +
+> +	if (watchdog_active(&wdt->wdd) || watchdog_hw_running(&wdt->wdd))
+> +		apple_wdt_stop(&wdt->wdd);
+> +
+> +	return 0;
+> +}
+> +
+> +static DEFINE_SIMPLE_DEV_PM_OPS(apple_wdt_pm_ops, apple_wdt_suspend, apple_wdt_resume);
+> +
+>   static const struct of_device_id apple_wdt_of_match[] = {
+>   	{ .compatible = "apple,wdt" },
+>   	{},
+> @@ -200,6 +224,7 @@ static struct platform_driver apple_wdt_driver = {
+>   	.driver = {
+>   		.name = "apple-watchdog",
+>   		.of_match_table = apple_wdt_of_match,
+> +		.pm = pm_sleep_ptr(&apple_wdt_pm_ops),
+>   	},
+>   	.probe = apple_wdt_probe,
+>   };
+> 
+> ---
+> base-commit: 0bb80ecc33a8fb5a682236443c1e740d5c917d1d
+> change-id: 20230930-apple-watchdog-suspend-7f73831130fb
+> 
+> Best regards,
 
