@@ -2,62 +2,63 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FFAF7D1E86
-	for <lists+linux-watchdog@lfdr.de>; Sat, 21 Oct 2023 19:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66527D230B
+	for <lists+linux-watchdog@lfdr.de>; Sun, 22 Oct 2023 14:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbjJURPx (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 21 Oct 2023 13:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
+        id S229588AbjJVMDr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 22 Oct 2023 08:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbjJURPw (ORCPT
+        with ESMTP id S229472AbjJVMDq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 21 Oct 2023 13:15:52 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C639124;
-        Sat, 21 Oct 2023 10:15:47 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9becde9ea7bso632539566b.0;
-        Sat, 21 Oct 2023 10:15:47 -0700 (PDT)
+        Sun, 22 Oct 2023 08:03:46 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BBBA3;
+        Sun, 22 Oct 2023 05:03:44 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9be02fcf268so343704166b.3;
+        Sun, 22 Oct 2023 05:03:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697908546; x=1698513346; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1697976223; x=1698581023; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SYVq2ZPazJDWbniLyYRNjUBhJddUsd8744HXa1msGVw=;
-        b=TIK1rH0+zDgIJDMw8gvdqSTo7G9/BwIrkWep/wMxuR00xE7MOCtflMptMin43S8jVs
-         DWVZBVcx9jD/UdhkvVFnbo3mFAhvR7vgI0FYg5wgo/Bw+5SZqB0TBO27EsusQn2uwnzu
-         oDuLgMKilvNpr1anzZIsTjh52K8VAWlTKk2YKKC1n1FHw4Z33N7hAu1GTcqU/kQdySPA
-         4ftLrvnjVse4Nsaf38Hhtfuut9nzIH5RUeTGby0fJFXmOTAgclxhWDSw/4zPghL/pohh
-         AItGh1Z4hALCjVRfNdFY5P3KxRX389NQSAR9juFL+9rdHNMGdy4Pqr311foKwOBKDo7J
-         kESw==
+        bh=LV4D2DnniG5y0BqTHFZQB1MGn4Ao69hJ2NYsUwg1XoA=;
+        b=Pz1x6n/2KrcylN5fR5PbATiRbk0lvQCMaulynwhdsc7IPJvjpPPn6Ec0aE+qEwaVl8
+         cT9Q9q1hLsBD/ZaT7flsRJvELU6Q1OA9hXLnm1ccVAYiMCLQX0Mc2htXGJvtGhwPr6gA
+         8FChjyZXoeKvR7tnmYJcYir2rrq6DVpMRJvOf0ggMMzurUPOboijdVxctor2jEnBJOkk
+         Vsb2GmAzII/fKTyX41prqbWcoY18ExrBxSbSFDiQHMh/c6HQhzZ7mSW2m44W9NqJCqua
+         oM/pEkj6ulyeybq9wq+8fZfBHtDL+LK/ME/8OhDa0mbk+nPXLcqxqgRhHgKr+DCMv9w2
+         8paQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697908546; x=1698513346;
+        d=1e100.net; s=20230601; t=1697976223; x=1698581023;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SYVq2ZPazJDWbniLyYRNjUBhJddUsd8744HXa1msGVw=;
-        b=Z558oVuaQv1faDmwG6PbJvNoxYKoO6w3x/NCupUM4WnmC6thJ8M3BGuzbIY+hJsoRl
-         vL948vE82kO5HAzL7FltnYgnZchIqzt+9ylbF+EMz4PDLuRLKP/q82SkvMSX4ZqbhyeV
-         6GKa0p6xPL/A1Gxum8REqmG6mJntMZGivB23CpSp06ErHRKtF3gFD5K98jMIObGEce6b
-         6qJ7IrxzamK2fujYuzBNFa5SlrPSdWU4FRzQhD9Felhi7Jrf2az8gSmuXp4YI2fqNd87
-         j+vE5+I02hVWIQaVgkI1r8kjYYjLyO635rhmDTc3EDncRXvEG5iA4eD2Cjt0Mpw5Au1l
-         EGyg==
-X-Gm-Message-State: AOJu0Yw9INj2XmbOXhhukpgBkJzNLUSYCQx+ZSPHtB2o7jApqhDHhsv2
-        6dLieCbTVIFK+2UCayzIt4jDCl3pUFtglA==
-X-Google-Smtp-Source: AGHT+IEh/1SUOV+kWD84qsjX/cvZMRrPM3Yt1mkdcpK7e8t2yu8K8/cQQ1lkh7VcRyns7yK5FRBpNA==
-X-Received: by 2002:a17:906:4fc7:b0:9bf:c00f:654a with SMTP id i7-20020a1709064fc700b009bfc00f654amr4311336ejw.24.1697908545586;
-        Sat, 21 Oct 2023 10:15:45 -0700 (PDT)
-Received: from localhost.localdomain ([95.90.240.24])
-        by smtp.gmail.com with ESMTPSA id f20-20020a17090660d400b009a1c05bd672sm3823964ejk.127.2023.10.21.10.15.44
+        bh=LV4D2DnniG5y0BqTHFZQB1MGn4Ao69hJ2NYsUwg1XoA=;
+        b=d0hAOc5LJsxsU+t05Y8vRzTagoawuRWX8WpOuNBr0ZJjvVdGP5BVmDdhd/9VSGGWZZ
+         Mv5BLaa4KenMblnSMAEkn1ejydkOfYGJsIW3t6rNk02jwVbmpK6XfOv4/ySoZLzRW+xj
+         ZLs90lQ0pGXnhlzG13QFgBb51YF98CDOHybhLbm1tJXi0rQqBEf6AlBMCO/5CK7YdtVf
+         KEHkNa4IW/dCO8dRVPSZtOxjupyi4XdljErrJP5GRZl3z8FbCNecJ6YFR8amVeL/Jh/1
+         eQ84b6g+xOHloO20ouyQBOUUl0jSkB+VlQJ/K3J+52akT8fv9FyIZdcoa/d4yVVkGlUN
+         JJPg==
+X-Gm-Message-State: AOJu0YyBjHXnUf+mRaqs0i0IAoJNximVfjYXPwpaVR//0W79NymU9z+J
+        phSTMe6xYwhA7ntc1XExsnY=
+X-Google-Smtp-Source: AGHT+IH1iiAQaekK8D5v5zJkhVAmQ58w+d+CKS4qxxgJ8PwvgrnrO1pQzOeT/Qw0m+iwgCLYdQWeOw==
+X-Received: by 2002:a17:907:1b0a:b0:99d:e8da:c20b with SMTP id mp10-20020a1709071b0a00b0099de8dac20bmr5049091ejc.24.1697976222823;
+        Sun, 22 Oct 2023 05:03:42 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:8109:8c00:3664:5c63:7da:9756:9320])
+        by smtp.gmail.com with ESMTPSA id q24-20020a170906361800b009b2ba067b37sm4870012ejb.202.2023.10.22.05.03.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Oct 2023 10:15:44 -0700 (PDT)
+        Sun, 22 Oct 2023 05:03:42 -0700 (PDT)
 From:   Nik Bune <n2h9z4@gmail.com>
 To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        skhan@linuxfoundation.org, t-kristo@ti.com
+        skhan@linuxfoundation.org, baruch@tkos.co.il
 Cc:     Nik Bune <n2h9z4@gmail.com>, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: watchdog: davinci-wdt: convert txt to yaml
-Date:   Sat, 21 Oct 2023 19:13:23 +0200
-Message-Id: <20231021171323.113208-1-n2h9z4@gmail.com>
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: watchdog: cnxt,cx92755-wdt: convert txt to yaml
+Date:   Sun, 22 Oct 2023 14:03:28 +0200
+Message-Id: <20231022120328.137788-1-n2h9z4@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,101 +73,102 @@ List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
 Convert txt file to yaml.
-Add maintainers list. Took from ti,rti-wdt.yaml file. 
+Add maintainers list. Took from Documentation/devicetree/bindings/arm/digicolor.yaml file. 
 
 Signed-off-by: Nik Bune <n2h9z4@gmail.com>
 ---
- .../bindings/watchdog/davinci-wdt.txt         | 24 ---------
- .../bindings/watchdog/ti,davinci-wdt.yaml     | 50 +++++++++++++++++++
- 2 files changed, 50 insertions(+), 24 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/watchdog/davinci-wdt.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/ti,davinci-wdt.yaml
+ .../bindings/watchdog/cnxt,cx92755-wdt.yaml   | 49 +++++++++++++++++++
+ .../bindings/watchdog/digicolor-wdt.txt       | 25 ----------
+ 2 files changed, 49 insertions(+), 25 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/cnxt,cx92755-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/digicolor-wdt.txt
 
-diff --git a/Documentation/devicetree/bindings/watchdog/davinci-wdt.txt b/Documentation/devicetree/bindings/watchdog/davinci-wdt.txt
-deleted file mode 100644
-index aa10b8ec36e2..000000000000
---- a/Documentation/devicetree/bindings/watchdog/davinci-wdt.txt
-+++ /dev/null
-@@ -1,24 +0,0 @@
--Texas Instruments DaVinci/Keystone Watchdog Timer (WDT) Controller
--
--Required properties:
--- compatible : Should be "ti,davinci-wdt", "ti,keystone-wdt"
--- reg : Should contain WDT registers location and length
--
--Optional properties:
--- timeout-sec : Contains the watchdog timeout in seconds
--- clocks : the clock feeding the watchdog timer.
--	   Needed if platform uses clocks.
--	   See clock-bindings.txt
--
--Documentation:
--Davinci DM646x - https://www.ti.com/lit/ug/spruer5b/spruer5b.pdf
--Keystone - https://www.ti.com/lit/ug/sprugv5a/sprugv5a.pdf
--
--Examples:
--
--wdt: wdt@2320000 {
--	compatible = "ti,davinci-wdt";
--	reg = <0x02320000 0x80>;
--	timeout-sec = <30>;
--	clocks = <&clkwdtimer0>;
--};
-diff --git a/Documentation/devicetree/bindings/watchdog/ti,davinci-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ti,davinci-wdt.yaml
+diff --git a/Documentation/devicetree/bindings/watchdog/cnxt,cx92755-wdt.yaml b/Documentation/devicetree/bindings/watchdog/cnxt,cx92755-wdt.yaml
 new file mode 100644
-index 000000000000..357c1effff49
+index 000000000000..acd2d30b20f3
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/ti,davinci-wdt.yaml
-@@ -0,0 +1,50 @@
++++ b/Documentation/devicetree/bindings/watchdog/cnxt,cx92755-wdt.yaml
+@@ -0,0 +1,49 @@
 +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/watchdog/ti,davinci-wdt.yaml#
++$id: http://devicetree.org/schemas/watchdog/cnxt,cx92755-wdt.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Texas Instruments DaVinci/Keystone Watchdog Timer (WDT) Controller
++title: Conexant Digicolor SoCs Watchdog timer
 +
 +description: |
-+  Documentation:
-+  Davinci DM646x - https://www.ti.com/lit/ug/spruer5b/spruer5b.pdf
-+  Keystone - https://www.ti.com/lit/ug/sprugv5a/sprugv5a
-+
-+maintainers:
-+  - Tero Kristo <t-kristo@ti.com>
++  The watchdog functionality in Conexant Digicolor SoCs relies on the so called
++  "Agent Communication" block. This block includes the eight programmable system
++  timer counters. The first timer (called "Timer A") is the only one that can be
++  used as watchdog.
 +
 +allOf:
 +  - $ref: watchdog.yaml#
 +
++maintainers:
++  - Baruch Siach <baruch@tkos.co.il>
++
 +properties:
 +  compatible:
-+    enum:
-+      - ti,davinci-wdt
-+      - ti,keystone-wdt
++    const: cnxt,cx92755-wdt
 +
 +  reg:
 +    maxItems: 1
 +
-+  timeout-sec: true
-+
 +  clocks:
++    $ref: /schemas/types.yaml#/definitions/phandle
 +    description:
-+      the clock feeding the watchdog timer.
-+      Needed if platform uses clocks.
-+      See clock-bindings.txt
++      specifies the clock that drives the timer
++
++  timeout-sec: true
 +
 +required:
 +  - compatible
 +  - reg
++  - clocks
 +
 +unevaluatedProperties: false
 +
 +examples:
 +  - |
-+    watchdog@2320000 {
-+        compatible = "ti,davinci-wdt";
-+        reg = <0x02320000 0x80>;
-+        timeout-sec = <30>;
-+        clocks = <&clkwdtimer0>;
++    watchdog@f0000fc0 {
++        compatible = "cnxt,cx92755-wdt";
++        reg = <0xf0000fc0 0x8>;
++        clocks = <&main_clk>;
++        timeout-sec = <15>;
 +    };
+diff --git a/Documentation/devicetree/bindings/watchdog/digicolor-wdt.txt b/Documentation/devicetree/bindings/watchdog/digicolor-wdt.txt
+deleted file mode 100644
+index a882967e17d4..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/digicolor-wdt.txt
++++ /dev/null
+@@ -1,25 +0,0 @@
+-Conexant Digicolor SoCs Watchdog timer
+-
+-The watchdog functionality in Conexant Digicolor SoCs relies on the so called
+-"Agent Communication" block. This block includes the eight programmable system
+-timer counters. The first timer (called "Timer A") is the only one that can be
+-used as watchdog.
+-
+-Required properties:
+-
+-- compatible : Should be "cnxt,cx92755-wdt"
+-- reg : Specifies base physical address and size of the registers
+-- clocks : phandle; specifies the clock that drives the timer
+-
+-Optional properties:
+-
+-- timeout-sec : Contains the watchdog timeout in seconds
+-
+-Example:
+-
+-	watchdog@f0000fc0 {
+-		compatible = "cnxt,cx92755-wdt";
+-		reg = <0xf0000fc0 0x8>;
+-		clocks = <&main_clk>;
+-		timeout-sec = <15>;
+-	};
 -- 
 2.34.1
+
