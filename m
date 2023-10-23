@@ -2,210 +2,114 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB07A7D2508
-	for <lists+linux-watchdog@lfdr.de>; Sun, 22 Oct 2023 19:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 912B27D2762
+	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Oct 2023 02:03:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbjJVRpf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 22 Oct 2023 13:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
+        id S229574AbjJWADX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 22 Oct 2023 20:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjJVRpe (ORCPT
+        with ESMTP id S229500AbjJWADX (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 22 Oct 2023 13:45:34 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6089FF2;
-        Sun, 22 Oct 2023 10:45:32 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B21C433C7;
-        Sun, 22 Oct 2023 17:45:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697996732;
-        bh=JbZ2PzZZaBxejkHJXLSRADkSCgcvTSdrxEHIJ1m9eV0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XvpT/NLpgZkczSyfPrskKpofp0dlSEU3xmWYAez6L6fRaisdVuEzE3nL4W6Sv7QVM
-         Nkg0iXn9VbogSgGhsBTob5e+0Zxh2SGOgzIFX4zwOMRhNrrelmF/+5L9cKjiQoJvwe
-         NLMr8eUAXLM3H9r7UAFJmJuNQOJjUWUNlq0zLj5tTsETINq69Jo8ShEK9f67qdU5dy
-         10UBiixEuEOYmR4awpm+1IUnAifvcI0viaEcN3B2EOp+TUC8UQk8+podqKzqS1x5AE
-         QZTN+gZBp4jrceqWjtauiVMHcICViC9ne+SPONuOeG3JQJgJXLp4+ccwR97ZucCL1Q
-         +jr48wOZC5+bQ==
-Date:   Sun, 22 Oct 2023 18:45:27 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Nik Bune <n2h9z4@gmail.com>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        skhan@linuxfoundation.org, baruch@tkos.co.il,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: watchdog: cnxt,cx92755-wdt: convert txt to
- yaml
-Message-ID: <20231022-sequence-munchkin-099ebb5b0573@spud>
-References: <20231022120328.137788-1-n2h9z4@gmail.com>
- <20231022-perish-ample-e8c009664a19@spud>
+        Sun, 22 Oct 2023 20:03:23 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B08AC;
+        Sun, 22 Oct 2023 17:03:21 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6b26a3163acso1917978b3a.2;
+        Sun, 22 Oct 2023 17:03:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698019401; x=1698624201; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=P0ZezZHBJgb9AA98w6pDydPHiJld1JFNGUsoHtLjS4g=;
+        b=LKzBk1s9BJXAT6i+x1aUCVaL3/IZPxZv4FxQLTQF7pX54EkwIxbW0mx11iotFqEorK
+         Ao9PzU5JZGqezYY8naqO+giV0nJqJoDFCgYZ8cDAI5IoH7A+ov9LEEaWHZT/8GjmOla4
+         huUfPM15m47OL1CoSh8KTHQX6NpG+JdXIkgarPvyGAdlMkseFDq848or3UQMilnUIjaG
+         sYyGZ03tmTI5pG5jwZhZ+xQiM0119WinGvR9007V/EQ+SiJSMPA+koLY8aeTvEHQL/++
+         cJBN+b/QMB/5CI8brP1+SxL4ZjHYm5qDVnml5b1rkhchmV53GEVIc8MS1/5lqwkF3Ohc
+         4lAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698019401; x=1698624201;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P0ZezZHBJgb9AA98w6pDydPHiJld1JFNGUsoHtLjS4g=;
+        b=oMPqoAp1uT/x8714iDmvzmd5WUvP47PtoDgXDTuFrAp+v8NIkOXNrOOztD9Zy3aTEP
+         qBwZB6hmCn/cQc/OBJC4Cy6MYu4/YNmuWH60ds3hfZNyKdu4Y+pWGwE7J54RkLHnSkBa
+         Yo0aNWQljLX+XS44zUGYEriWfrQS9mqsY2MsdfvdSuellKhmRkvBTgf9EG3W+P6M4b8K
+         YBb0Vi74uYyOQJHQWkdoLgTBVUSuFyRH81SRM8Or2PF+4W+1j56pc9v3qFXIBVrAsDj7
+         4ajFGWtJSbvq6kRAsro5mpDc6tE5OzsMpL0kpBShE7bMjldaXTfMl2ZZLtEIYWo8Xj+3
+         OfgQ==
+X-Gm-Message-State: AOJu0YywIGA1p57prf1joNoHNiEVXCBT6+M/o10QS8eOm7uTtj065gwX
+        LCFbXeP1WAOwfNgya2EFcQ0abemxjsY=
+X-Google-Smtp-Source: AGHT+IGvibV/0iLpWnIQcpz0tjvzmkOjml/FAB8FNjwP8h3+cw19g0ygNq2EfrSqj9Jnb50HuyVAwg==
+X-Received: by 2002:a05:6a00:1743:b0:6b1:bf32:4fb5 with SMTP id j3-20020a056a00174300b006b1bf324fb5mr5849024pfc.28.1698019400835;
+        Sun, 22 Oct 2023 17:03:20 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w187-20020a6262c4000000b0068feb378b89sm5448267pfb.171.2023.10.22.17.03.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Oct 2023 17:03:20 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <9d1b96a2-6709-819f-23aa-f91e9741a54d@roeck-us.net>
+Date:   Sun, 22 Oct 2023 17:03:19 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="kjXWxpFUU9GUqHjc"
-Content-Disposition: inline
-In-Reply-To: <20231022-perish-ample-e8c009664a19@spud>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: =?UTF-8?Q?Re=3a_=5bPATCH=5d_watchdog=5fdev=3a_Remove_unnecessary_?=
+ =?UTF-8?B?4oCYMOKAmSB2YWx1ZXMgZnJvbSBlcnI=?=
+Content-Language: en-US
+To:     fenghui <fenghui@nfschina.com>, wim@linux-watchdog.org
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231021110538.441-1-fenghui@nfschina.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20231021110538.441-1-fenghui@nfschina.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On 10/21/23 04:05, fenghui wrote:
+> err is assigned first, so it does not need to initialize the assignment.
+> 
+> Signed-off-by: fenghui <fenghui@nfschina.com>
+> ---
+>   drivers/watchdog/watchdog_dev.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
+> index 15df74e11a59..0868ccbcf92b 100644
+> --- a/drivers/watchdog/watchdog_dev.c
+> +++ b/drivers/watchdog/watchdog_dev.c
+> @@ -291,7 +291,7 @@ static int watchdog_start(struct watchdog_device *wdd)
+>    */
+>   static int watchdog_stop(struct watchdog_device *wdd)
+>   {
+> -	int err = 0;
+> +	int err;
+>   
+>   	if (!watchdog_active(wdd))
+>   		return 0;
 
---kjXWxpFUU9GUqHjc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+NACK
 
-On Sun, Oct 22, 2023 at 06:30:04PM +0100, Conor Dooley wrote:
-> On Sun, Oct 22, 2023 at 02:03:28PM +0200, Nik Bune wrote:
-> > Convert txt file to yaml.
-> > Add maintainers list. Took from Documentation/devicetree/bindings/arm/d=
-igicolor.yaml file.=20
->=20
-> That seems like a bit of an odd reasoning, but Baruch was the submitter
-> for the original txt form binding for this watchdog , per the git history.
->=20
-> >=20
-> > Signed-off-by: Nik Bune <n2h9z4@gmail.com>
-> > ---
-> >  .../bindings/watchdog/cnxt,cx92755-wdt.yaml   | 49 +++++++++++++++++++
-> >  .../bindings/watchdog/digicolor-wdt.txt       | 25 ----------
-> >  2 files changed, 49 insertions(+), 25 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/watchdog/cnxt,cx9=
-2755-wdt.yaml
-> >  delete mode 100644 Documentation/devicetree/bindings/watchdog/digicolo=
-r-wdt.txt
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/watchdog/cnxt,cx92755-wd=
-t.yaml b/Documentation/devicetree/bindings/watchdog/cnxt,cx92755-wdt.yaml
-> > new file mode 100644
-> > index 000000000000..acd2d30b20f3
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/watchdog/cnxt,cx92755-wdt.yaml
-> > @@ -0,0 +1,49 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/watchdog/cnxt,cx92755-wdt.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Conexant Digicolor SoCs Watchdog timer
-> > +
-> > +description: |
-> > +  The watchdog functionality in Conexant Digicolor SoCs relies on the =
-so called
-> > +  "Agent Communication" block. This block includes the eight programma=
-ble system
-> > +  timer counters. The first timer (called "Timer A") is the only one t=
-hat can be
-> > +  used as watchdog.
-> > +
-> > +allOf:
-> > +  - $ref: watchdog.yaml#
-> > +
-> > +maintainers:
-> > +  - Baruch Siach <baruch@tkos.co.il>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: cnxt,cx92755-wdt
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description:
-> > +      specifies the clock that drives the timer
->=20
-> This can just be:
->   clocks:
->     maxItems: 1
->=20
-> as clocks is a generic property & if there's only one clock, describing
-> it is usually needless.
->=20
-> Otherwise this conversion looks okay to me.
+...
 
-> > +
-> > +  timeout-sec: true
-
-While looking at your other wd conversion I noticed this, which should
-not be needed since you are referencing watchdog.yaml.
-
-Cheers,
-Conor.
-
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    watchdog@f0000fc0 {
-> > +        compatible =3D "cnxt,cx92755-wdt";
-> > +        reg =3D <0xf0000fc0 0x8>;
-> > +        clocks =3D <&main_clk>;
-> > +        timeout-sec =3D <15>;
-> > +    };
-> > diff --git a/Documentation/devicetree/bindings/watchdog/digicolor-wdt.t=
-xt b/Documentation/devicetree/bindings/watchdog/digicolor-wdt.txt
-> > deleted file mode 100644
-> > index a882967e17d4..000000000000
-> > --- a/Documentation/devicetree/bindings/watchdog/digicolor-wdt.txt
-> > +++ /dev/null
-> > @@ -1,25 +0,0 @@
-> > -Conexant Digicolor SoCs Watchdog timer
-> > -
-> > -The watchdog functionality in Conexant Digicolor SoCs relies on the so=
- called
-> > -"Agent Communication" block. This block includes the eight programmabl=
-e system
-> > -timer counters. The first timer (called "Timer A") is the only one tha=
-t can be
-> > -used as watchdog.
-> > -
-> > -Required properties:
-> > -
-> > -- compatible : Should be "cnxt,cx92755-wdt"
-> > -- reg : Specifies base physical address and size of the registers
-> > -- clocks : phandle; specifies the clock that drives the timer
-> > -
-> > -Optional properties:
-> > -
-> > -- timeout-sec : Contains the watchdog timeout in seconds
-> > -
-> > -Example:
-> > -
-> > -	watchdog@f0000fc0 {
-> > -		compatible =3D "cnxt,cx92755-wdt";
-> > -		reg =3D <0xf0000fc0 0x8>;
-> > -		clocks =3D <&main_clk>;
-> > -		timeout-sec =3D <15>;
-> > -	};
-> > --=20
-> > 2.34.1
-> >=20
+        if (wdd->ops->stop) {
+                 clear_bit(WDOG_HW_RUNNING, &wdd->status);
+                 err = wdd->ops->stop(wdd);
+                 trace_watchdog_stop(wdd, err);
+         } else {
+                 set_bit(WDOG_HW_RUNNING, &wdd->status);		<-- err is not set in this path
+         }
 
 
-
---kjXWxpFUU9GUqHjc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZTVftwAKCRB4tDGHoIJi
-0m3oAP4+LnvE5nMD2qev8lpNQ6cWNAz+Yn6FUYt1ELYdCc7d5wD+NF/HvIgpnGrw
-Uj3eZKfJY6zgaE6k4by1WJ/2V/5yhAo=
-=uMnr
------END PGP SIGNATURE-----
-
---kjXWxpFUU9GUqHjc--
