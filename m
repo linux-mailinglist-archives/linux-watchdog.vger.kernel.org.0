@@ -2,189 +2,94 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B55C7D5CB6
-	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Oct 2023 22:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CCDC7D7505
+	for <lists+linux-watchdog@lfdr.de>; Wed, 25 Oct 2023 22:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344237AbjJXUz6 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 24 Oct 2023 16:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
+        id S229875AbjJYUA7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 25 Oct 2023 16:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344401AbjJXUzv (ORCPT
+        with ESMTP id S229629AbjJYUA6 (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 24 Oct 2023 16:55:51 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90BD170A;
-        Tue, 24 Oct 2023 13:55:44 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 39OKtOpR128045;
-        Tue, 24 Oct 2023 15:55:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1698180924;
-        bh=YdsC+VFRvEfUM56FQgYznvXwnR2rOdnu72PbP3mIbbw=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=YZ2w8E6g10yzwkwiGBpj0/8BK2mc18+KRKe5ZaTSzpsFjUqKpwweHcpRgX+agqWAR
-         pVJkJL1lQZ4feijGAOF5tupT4s+6wIGy6Jwg2eh7oLR6ylBJrdxDcCdElRafH5Rh4u
-         XTZ/6NRZsprnn7afZLDfJMTt/TEGG9spCaK1+mSk=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 39OKtO6r072122
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 24 Oct 2023 15:55:24 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 24
- Oct 2023 15:55:24 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 24 Oct 2023 15:55:24 -0500
-Received: from [10.250.38.120] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 39OKtNUo002203;
-        Tue, 24 Oct 2023 15:55:23 -0500
-Message-ID: <41408db6-89f9-4e0b-b407-96c6c922e8a4@ti.com>
-Date:   Tue, 24 Oct 2023 15:55:23 -0500
+        Wed, 25 Oct 2023 16:00:58 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FB0136;
+        Wed, 25 Oct 2023 13:00:55 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3b2ec5ee2e4so52675b6e.3;
+        Wed, 25 Oct 2023 13:00:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698264055; x=1698868855;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uoMt90OKcFXpIeFo/05qurlurQ+/MEMSAJc4nHZV4uY=;
+        b=lWlnOm56wckLEctqMH5CQjgZOuz9wjbuz0R5Vhfi2QnuYfnLmqOI93dEOtZ6LwTVT7
+         NihxS3bhvNkjyjbMFrUTJJ4hcnfzFBLr/vUROAy8BaoCNhNB0EWE19Hfl671j+ZyHQca
+         DcjIN7StdqxjpZyNb4Hobb/VjEnk/2MZa/wSAoSbWVAEHTQ/kd9ZNDjOjk3NZDOpBXfb
+         JMBuFalkc8LT0BjXlxFz2rAYvkiO4kny7hLao7Grss0t2kGWB4SjfNnax1A34GHUUtbB
+         Cq2l/OZYwnxVQAJR1UVBNl887D03dVLFq9oGT8/VK5d9TYnmXvLS3W8xLxtSKE/vVIhZ
+         JkIw==
+X-Gm-Message-State: AOJu0Yyvfj/yvrB0WHaArcwKZ4LdgS/NO9CMj2aArjQ6XLZpXV+RZnha
+        XD+5mevsD/Rzsb7joltglg==
+X-Google-Smtp-Source: AGHT+IGd+HFEO0LVcA30PIFwVUYPF81oIVG6w5idnhTj/UqzaoeLqG0DvBSh13xSTR8P9OsfI6q/qg==
+X-Received: by 2002:a05:6808:64d:b0:3a8:80ea:f0c6 with SMTP id z13-20020a056808064d00b003a880eaf0c6mr14961768oih.29.1698264055123;
+        Wed, 25 Oct 2023 13:00:55 -0700 (PDT)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s15-20020a056830124f00b006c4727812fdsm2380249otp.15.2023.10.25.13.00.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Oct 2023 13:00:54 -0700 (PDT)
+Received: (nullmailer pid 1066090 invoked by uid 1000);
+        Wed, 25 Oct 2023 20:00:53 -0000
+Date:   Wed, 25 Oct 2023 15:00:53 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Nik Bune <n2h9z4@gmail.com>
+Cc:     conor+dt@kernel.org, wim@linux-watchdog.org,
+        krzysztof.kozlowski+dt@linaro.org, skhan@linuxfoundation.org,
+        devicetree@vger.kernel.org, linux@roeck-us.net,
+        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
+        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, alexandre.belloni@bootlin.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v3] dt-bindings: watchdog: atmel,at91rm9200-wdt: convert
+ txt to yaml
+Message-ID: <169826359217.1053485.16654434281057363682.robh@kernel.org>
+References: <20230924181959.64264-1-n2h9z4@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: watchdog: davinci-wdt: convert txt to
- yaml
-To:     Nik Bune <n2h9z4@gmail.com>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <skhan@linuxfoundation.org>, <m-karicheri2@ti.com>,
-        <ivan.khoronzhuk@ti.com>
-CC:     <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20231024195839.49607-1-n2h9z4@gmail.com>
-Content-Language: en-US
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20231024195839.49607-1-n2h9z4@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230924181959.64264-1-n2h9z4@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 10/24/23 2:58 PM, Nik Bune wrote:
+
+On Sun, 24 Sep 2023 20:19:59 +0200, Nik Bune wrote:
 > Convert txt file to yaml.
-> Add maintainers list, based on the git history.
-> Mark clock as required property, by reviewer's suggestion.
 > 
 > Signed-off-by: Nik Bune <n2h9z4@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
 > 
-> Changes in v2 (according to review comments):
-> - Added clocks to the list of required properties.
-> - Updated clocks property to have only maxItems without $ref and description.
-> - Removed timeout-sec explicit definition, as it is defined in watchdog.yaml.
-> - Updated maintainers list from the git history.
+> Changes in v3:
+> - Removed trailing whitespace in an element of the maintainers list.
 > 
-> v1 patch: https://lore.kernel.org/all/20231021171323.113208-1-n2h9z4@gmail.com/
+> v2 patch: https://lore.kernel.org/linux-devicetree/20230924172004.59208-1-n2h9z4@gmail.com/
 > 
->   .../bindings/watchdog/davinci-wdt.txt         | 24 ----------
->   .../bindings/watchdog/ti,davinci-wdt.yaml     | 47 +++++++++++++++++++
->   2 files changed, 47 insertions(+), 24 deletions(-)
->   delete mode 100644 Documentation/devicetree/bindings/watchdog/davinci-wdt.txt
->   create mode 100644 Documentation/devicetree/bindings/watchdog/ti,davinci-wdt.yaml
+>  .../watchdog/atmel,at91rm9200-wdt.yaml        | 33 +++++++++++++++++++
+>  .../watchdog/atmel-at91rm9200-wdt.txt         |  9 -----
+>  2 files changed, 33 insertions(+), 9 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/davinci-wdt.txt b/Documentation/devicetree/bindings/watchdog/davinci-wdt.txt
-> deleted file mode 100644
-> index aa10b8ec36e2..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/davinci-wdt.txt
-> +++ /dev/null
-> @@ -1,24 +0,0 @@
-> -Texas Instruments DaVinci/Keystone Watchdog Timer (WDT) Controller
-> -
-> -Required properties:
-> -- compatible : Should be "ti,davinci-wdt", "ti,keystone-wdt"
-> -- reg : Should contain WDT registers location and length
-> -
-> -Optional properties:
-> -- timeout-sec : Contains the watchdog timeout in seconds
-> -- clocks : the clock feeding the watchdog timer.
-> -	   Needed if platform uses clocks.
-> -	   See clock-bindings.txt
-> -
-> -Documentation:
-> -Davinci DM646x - https://www.ti.com/lit/ug/spruer5b/spruer5b.pdf
-> -Keystone - https://www.ti.com/lit/ug/sprugv5a/sprugv5a.pdf
-> -
-> -Examples:
-> -
-> -wdt: wdt@2320000 {
-> -	compatible = "ti,davinci-wdt";
-> -	reg = <0x02320000 0x80>;
-> -	timeout-sec = <30>;
-> -	clocks = <&clkwdtimer0>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/watchdog/ti,davinci-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ti,davinci-wdt.yaml
-> new file mode 100644
-> index 000000000000..4747be98b7d9
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/ti,davinci-wdt.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/ti,davinci-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments DaVinci/Keystone Watchdog Timer (WDT) Controller
-> +
-> +description: |
-> +  Documentation:
-> +  Davinci DM646x - https://www.ti.com/lit/ug/spruer5b/spruer5b.pdf
-> +  Keystone - https://www.ti.com/lit/ug/sprugv5a/sprugv5a
-> +
-> +maintainers:
-> +  - Murali Karicheri <m-karicheri2@ti.com>
-> +  - Ivan Khoronzhuk <ivan.khoronzhuk@ti.com>
 
-Neither of these folks will be available for this, you can use me if
-you want an email that won't bounce for now.
+It seems watchdog bindings aren't getting applied, so I've applied it. 
+Wim, please take watchdog bindings in the future unless noted otherwise.
 
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,davinci-wdt
-> +      - ti,keystone-wdt
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-
-We also have some instances with an optional power-domains prop.
-
-   power-domains:
-     description: A phandle and PM domain specifier as defined by bindings of
-       the power controller specified by phandle. See
-       Documentation/devicetree/bindings/power/power-domain.yaml for details.
-
-Andrew
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    watchdog@2320000 {
-> +        compatible = "ti,davinci-wdt";
-> +        reg = <0x02320000 0x80>;
-> +        timeout-sec = <30>;
-> +        clocks = <&clkwdtimer0>;
-> +    };
+Rob
