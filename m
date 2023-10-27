@@ -2,103 +2,122 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C7F7D95DD
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Oct 2023 13:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC347D9AAC
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Oct 2023 16:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231461AbjJ0LAz (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 27 Oct 2023 07:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
+        id S1345999AbjJ0ODS (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 27 Oct 2023 10:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbjJ0LAw (ORCPT
+        with ESMTP id S1345943AbjJ0ODR (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 27 Oct 2023 07:00:52 -0400
-Received: from thorn.bewilderbeest.net (thorn.bewilderbeest.net [IPv6:2605:2700:0:5::4713:9cab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DED191;
-        Fri, 27 Oct 2023 04:00:49 -0700 (PDT)
-Received: from hatter.bewilderbeest.net (unknown [IPv6:2602:61:7e5d:5300::2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: zev)
-        by thorn.bewilderbeest.net (Postfix) with ESMTPSA id 1871F912;
-        Fri, 27 Oct 2023 04:00:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bewilderbeest.net;
-        s=thorn; t=1698404449;
-        bh=46CI2348zLuWGtq6JcTrLbZwqAqPdJ4oLHt47Q46BLU=;
+        Fri, 27 Oct 2023 10:03:17 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DECAC0;
+        Fri, 27 Oct 2023 07:03:16 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC91AC433C8;
+        Fri, 27 Oct 2023 14:03:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698415395;
+        bh=I8Lf1lGqEIBiRLLQKY+WAnwAUTOu+8uX5WfQ5AedY3o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gvYXJhSfFqFnNUZNLH6mGrPgpLf5hM+XUJqMFmDnq4vz+FXeaqBzpT57FN/cpXgC6
-         CW0MDbyUQXnYZEFiyKVzv0eIeg3oCh6m/ZuFuBgDa+vkhfXYyWgxybN42GIr5s4sz1
-         kcR5PICg9oa5uPjczQH5kX3MM7VI8FE5gyfcbPko=
-Date:   Fri, 27 Oct 2023 04:00:47 -0700
-From:   Zev Weiss <zev@bewilderbeest.net>
-To:     Andrew Jeffery <andrew@aj.id.au>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Joel Stanley <joel@jms.id.au>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Milton D. Miller II" <mdmii@outlook.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, openbmc@lists.ozlabs.org
-Cc:     Eddie James <eajames@linux.ibm.com>,
-        Ivan Mikhaylov <i.mikhaylov@yadro.com>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Subject: Re: [PATCH 0/2] watchdog: aspeed: Add aspeed,reset-mask property
-Message-ID: <5db80b63-65da-407c-a019-048dea8c1a89@hatter.bewilderbeest.net>
-References: <20230922104231.1434-4-zev@bewilderbeest.net>
+        b=n6qs5A2IS8RYWjkZkmBdOFmRpzRDPB4vGqqJNRgnXGIwr90Z77tdwFfC6PPsP6N+P
+         AsUBtmX/jZFnaed61069Xbm1DBc5RlKrvqJFOnjSaUwU185VsBEgW1OI8zCPIDHooP
+         rLEP9pnL5HTE2fo2nOwDroZEOj+oivRU9/3lUNhIiNEt6FSVItekn6hwDbKzR/HrIM
+         rXuXfwK3wYqrTgOtB2P9HfYR9yqBSVMA4nHzXS2fW9m/i7NDfXkUf+UJuWLX7Bs+3w
+         EJpijWkb4VZKW0S0pb+ukZaxCDd1osapre6lYpnvK6eQs7wDzJ62ltSuOeBh3u/gPM
+         /70zy5P2bVLtA==
+Date:   Fri, 27 Oct 2023 15:03:10 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Huqiang Qin <huqiang.qin@amlogic.com>
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        neil.armstrong@linaro.org, khilman@baylibre.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V3 1/3] dt-bindings: watchdog: Add support for Amlogic C3
+ and S4 SoCs
+Message-ID: <20231027-dandy-remote-7cdbb721f95c@spud>
+References: <20231027104358.342861-1-huqiang.qin@amlogic.com>
+ <20231027104358.342861-2-huqiang.qin@amlogic.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="oM/wQgfGbne7U64P"
 Content-Disposition: inline
-In-Reply-To: <20230922104231.1434-4-zev@bewilderbeest.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20231027104358.342861-2-huqiang.qin@amlogic.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Fri, Sep 22, 2023 at 03:42:32AM PDT, Zev Weiss wrote:
->Hello,
->
->These patches add a new aspeed,reset-mask DT property for the Aspeed
->watchdog timer, which specifies exactly which peripherals should be
->reset by the watchdog timer.
->
->This series is a replacement for a patch I sent earlier [0], though
->using an entirely different (DT-based) approach and hence not exactly
->a v2.
->
->I've tested these patches on ast2500 hardware and a qemu ast2600
->model; test results on actual ast2600 hardware would be welcome.
->
->
->Thanks,
->Zev
->
->
->[0] https://lore.kernel.org/linux-watchdog/20230922013542.29136-2-zev@bewilderbeest.net/
->
->Zev Weiss (2):
->  dt-bindings: watchdog: aspeed-wdt: Add aspeed,reset-mask property
->  watchdog: aspeed: Add support for aspeed,reset-mask DT property
->
-> .../bindings/watchdog/aspeed-wdt.txt          | 18 +++-
-> drivers/watchdog/aspeed_wdt.c                 | 11 +++
-> include/dt-bindings/watchdog/aspeed-wdt.h     | 92 +++++++++++++++++++
-> 3 files changed, 120 insertions(+), 1 deletion(-)
-> create mode 100644 include/dt-bindings/watchdog/aspeed-wdt.h
->
 
-Ping...Guenter, if we stick with the simpler approach in this version of 
-the patches (which I'm fine with and seems to have passed muster with 
-Rob & Joel) does this look okay as is?
+--oM/wQgfGbne7U64P
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Oct 27, 2023 at 06:43:56PM +0800, Huqiang Qin wrote:
+> Update dt-binding document for watchdog of Amlogic C3 and S4 SoCs.
+>=20
+> Signed-off-by: Huqiang Qin <huqiang.qin@amlogic.com>
+
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
 Thanks,
-Zev
+Conor.
 
+> ---
+>  .../bindings/watchdog/amlogic,meson-gxbb-wdt.yaml    | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxb=
+b-wdt.yaml b/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-=
+wdt.yaml
+> index 443e2e7ab467..69845ec32e81 100644
+> --- a/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.y=
+aml
+> +++ b/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.y=
+aml
+> @@ -15,9 +15,15 @@ allOf:
+> =20
+>  properties:
+>    compatible:
+> -    enum:
+> -      - amlogic,meson-gxbb-wdt
+> -      - amlogic,t7-wdt
+> +    oneOf:
+> +      - enum:
+> +          - amlogic,meson-gxbb-wdt
+> +          - amlogic,t7-wdt
+> +      - items:
+> +          - enum:
+> +              - amlogic,c3-wdt
+> +              - amlogic,s4-wdt
+> +          - const: amlogic,t7-wdt
+> =20
+>    reg:
+>      maxItems: 1
+> --=20
+> 2.42.0
+>=20
+>=20
+
+--oM/wQgfGbne7U64P
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZTvDHgAKCRB4tDGHoIJi
+0qcvAP9SGLIcv30IzHPU1l4xfEzLR3YQ9/vjV8fAu2jJcj0fDwEAm6Yhi73ZKy1E
+vjagBd0uQzS1m25Urmv+KT1LmSVVKQY=
+=qbQP
+-----END PGP SIGNATURE-----
+
+--oM/wQgfGbne7U64P--
