@@ -2,203 +2,121 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C818F7D9AF0
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Oct 2023 16:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 098A07D9B6A
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Oct 2023 16:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbjJ0OOj (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 27 Oct 2023 10:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43982 "EHLO
+        id S1346003AbjJ0OaB (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 27 Oct 2023 10:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjJ0OOi (ORCPT
+        with ESMTP id S1346021AbjJ0OaA (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 27 Oct 2023 10:14:38 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE4FDE;
-        Fri, 27 Oct 2023 07:14:35 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 667A1C433C9;
-        Fri, 27 Oct 2023 14:14:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698416075;
-        bh=CbkKydCIGPDLCe+45cMey/d5S+QwoAAmRoHQEvlUMtA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ecF+1Ji8+LIiXPTTMg2TTEgHLQikYo4DwWhtqLYOY+dg1Ks1yhSsjdyqwtCW05lFx
-         bI3kg0xCDtfYE648J/YtD8mUqdUjfmWXjwi24yD1SRyGVWDtqJAfKSqXx0ZLFDPfHj
-         fG0lzF8C8WIOV0Ut+lxWhrOVEolZSekD9+iX89XdildENp4i6kKpoctCV5WfNwJKAZ
-         SbOAWvkanZttVglDVm7Pod5lqYoNQUmXm2RknhkWQMJBZKB6tquCCiMjlsou4saRt7
-         GMGkRZCwXSXfGb8uGPu1berWbIRQMCvm9tPE83sF7+ZpsqoFhLZxQKmUaYKCPWcMub
-         ZGs1XpcIR8JiQ==
-Date:   Fri, 27 Oct 2023 15:14:31 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Nik Bune <n2h9z4@gmail.com>
-Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        skhan@linuxfoundation.org, afd@ti.com,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] dt-bindings: watchdog: davinci-wdt: convert txt to
- yaml
-Message-ID: <20231027-antennae-aftermath-b11ede90737f@spud>
-References: <20231026195313.76756-1-n2h9z4@gmail.com>
+        Fri, 27 Oct 2023 10:30:00 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA8310E;
+        Fri, 27 Oct 2023 07:29:57 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-d9b9adaf291so1477027276.1;
+        Fri, 27 Oct 2023 07:29:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698416997; x=1699021797; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=DsECeWRXR89HquHY2eBzhSO85aem0sul0hD01HYxWCs=;
+        b=HckviKaMtdRcX28oeuBNPjBnX6JfZBtnjIiSyUhL3PKNGWj27kD34JKgZ81jqyIo9x
+         fWOoIqJyjAPr4KeH/rDW0D+R8nHrsXSA5x3FkdiWTKEQ8VoQJq5h0bP3XC+T55BotZt9
+         aCO42SBCEOsFK7RhI5caSa9GUY8HF3pNSFSSJ2cGL11cr2m69LbI6uq+9tUv8kBknUQP
+         ZpBnRoftU1HR/XSecR+FYWFLIn9i9rhyuHel0ht2vw2A2uMy+SUkQgzlXT37KoBUdFKy
+         3x4/mpeShlu1vITJLykuu/4BTDBYAUGu8LKF4+UgZNvOUmILoOUXE5jSPaQAiOinYOIm
+         lxYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698416997; x=1699021797;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DsECeWRXR89HquHY2eBzhSO85aem0sul0hD01HYxWCs=;
+        b=lx/wZhqiX9Nel25kC7fwnQVVKtje4EdYEolJBWORHk0EHTwAiHL6DKE5wmp2ET0PvG
+         2/Ou7d61hx+Au4KmGQ2nf5gxwQ8wFzU90IIuODbF3eiQ7lQ7fMWe6GN19Jl5DHMubsnG
+         r456Ocr6jSdn04LCnjdSw8m7KUFl0BHeDn0/TE5/25dv2EcVgGLDRfV5ErJ+jmbeJ3hw
+         is/igCYG/BMWwyzcGEeq5/L1zFIX66MEbGar5C4Q1AuM2Yurj7YzI9sKPcCC7kpfDktL
+         3hCjO5c/sZYVGQtoD7InYKo9EXMjQ4l4pr+mSVSSHB26HYSJJDxPQFv3yturLPE1PXVR
+         aORg==
+X-Gm-Message-State: AOJu0YyONR/rIs7H+p/2UZ6gsuF/HnE/3Ku9ok+yqqnBv1rnS22H4Rwt
+        V8aNNsHsT1LBTpHs9cwxZ70=
+X-Google-Smtp-Source: AGHT+IE+e7aahuYfkt8PuZLyOBf8LvAfP9OR+nHTcDMy4WWLm+0UB+YDT6d/Ux5sTeabyzZQ8Mns3w==
+X-Received: by 2002:a25:f81e:0:b0:da2:8250:9725 with SMTP id u30-20020a25f81e000000b00da282509725mr557698ybd.12.1698416996952;
+        Fri, 27 Oct 2023 07:29:56 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o189-20020a2573c6000000b00da0c63aa9f1sm697470ybc.20.2023.10.27.07.29.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Oct 2023 07:29:56 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <84252d01-6fee-26f9-d127-8b344108fc43@roeck-us.net>
+Date:   Fri, 27 Oct 2023 07:29:54 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ixTGx6tVsBXIMcLW"
-Content-Disposition: inline
-In-Reply-To: <20231026195313.76756-1-n2h9z4@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH V3 1/3] dt-bindings: watchdog: Add support for Amlogic C3
+ and S4 SoCs
+Content-Language: en-US
+To:     Huqiang Qin <huqiang.qin@amlogic.com>, wim@linux-watchdog.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, neil.armstrong@linaro.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com
+Cc:     linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20231027104358.342861-1-huqiang.qin@amlogic.com>
+ <20231027104358.342861-2-huqiang.qin@amlogic.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20231027104358.342861-2-huqiang.qin@amlogic.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+On 10/27/23 03:43, Huqiang Qin wrote:
+> Update dt-binding document for watchdog of Amlogic C3 and S4 SoCs.
+> 
+> Signed-off-by: Huqiang Qin <huqiang.qin@amlogic.com>
 
---ixTGx6tVsBXIMcLW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Hey,
-
-On Thu, Oct 26, 2023 at 09:53:13PM +0200, Nik Bune wrote:
-> Convert txt file to yaml.
-> Add maintainers list.
-> Mark clock as required property, by reviewer's suggestion.
-> Add power-domains as optional property, by reviewer's suggestion.=20
->=20
-> Signed-off-by: Nik Bune <n2h9z4@gmail.com>
 > ---
->=20
-> Changes in 3 (according to review comments):
-> - Added Andrew Davis <afd@ti.com> into maintainers list.
-> - Added power-domains property.
->=20
-> v2 patch: https://lore.kernel.org/all/20231024195839.49607-1-n2h9z4@gmail=
-=2Ecom/
->=20
->=20
->  .../bindings/watchdog/davinci-wdt.txt         | 24 ---------
->  .../bindings/watchdog/ti,davinci-wdt.yaml     | 52 +++++++++++++++++++
->  2 files changed, 52 insertions(+), 24 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/davinci-wd=
-t.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/ti,davinci=
--wdt.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/watchdog/davinci-wdt.txt b=
-/Documentation/devicetree/bindings/watchdog/davinci-wdt.txt
-> deleted file mode 100644
-> index aa10b8ec36e2..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/davinci-wdt.txt
-> +++ /dev/null
-> @@ -1,24 +0,0 @@
-> -Texas Instruments DaVinci/Keystone Watchdog Timer (WDT) Controller
-> -
-> -Required properties:
-> -- compatible : Should be "ti,davinci-wdt", "ti,keystone-wdt"
-> -- reg : Should contain WDT registers location and length
-> -
-> -Optional properties:
-> -- timeout-sec : Contains the watchdog timeout in seconds
-> -- clocks : the clock feeding the watchdog timer.
-> -	   Needed if platform uses clocks.
-> -	   See clock-bindings.txt
-> -
-> -Documentation:
-> -Davinci DM646x - https://www.ti.com/lit/ug/spruer5b/spruer5b.pdf
-> -Keystone - https://www.ti.com/lit/ug/sprugv5a/sprugv5a.pdf
-> -
-> -Examples:
-> -
-> -wdt: wdt@2320000 {
-> -	compatible =3D "ti,davinci-wdt";
-> -	reg =3D <0x02320000 0x80>;
-> -	timeout-sec =3D <30>;
-> -	clocks =3D <&clkwdtimer0>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/watchdog/ti,davinci-wdt.ya=
-ml b/Documentation/devicetree/bindings/watchdog/ti,davinci-wdt.yaml
-> new file mode 100644
-> index 000000000000..17c824f2fc7d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/ti,davinci-wdt.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/ti,davinci-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments DaVinci/Keystone Watchdog Timer (WDT) Controller
-> +
-> +description: |
-> +  Documentation:
-> +  Davinci DM646x - https://www.ti.com/lit/ug/spruer5b/spruer5b.pdf
-> +  Keystone - https://www.ti.com/lit/ug/sprugv5a/sprugv5a
-> +
-> +maintainers:
-> +  - Andrew Davis <afd@ti.com>
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,davinci-wdt
-> +      - ti,keystone-wdt
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  power-domains:
-> +    description:
-> +      A phandle and PM domain specifier as defined by bindings of=20
-> +      the power controller specified by phandle.=20
-> +      See Documentation/devicetree/bindings/power/power-domain.yaml for =
-details.
+>   .../bindings/watchdog/amlogic,meson-gxbb-wdt.yaml    | 12 +++++++++---
+>   1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml b/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml
+> index 443e2e7ab467..69845ec32e81 100644
+> --- a/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/amlogic,meson-gxbb-wdt.yaml
+> @@ -15,9 +15,15 @@ allOf:
+>   
+>   properties:
+>     compatible:
+> -    enum:
+> -      - amlogic,meson-gxbb-wdt
+> -      - amlogic,t7-wdt
+> +    oneOf:
+> +      - enum:
+> +          - amlogic,meson-gxbb-wdt
+> +          - amlogic,t7-wdt
+> +      - items:
+> +          - enum:
+> +              - amlogic,c3-wdt
+> +              - amlogic,s4-wdt
+> +          - const: amlogic,t7-wdt
+>   
+>     reg:
+>       maxItems: 1
 
-I think you missed Rob's comment in reply to Andrew, about constraining
-and ordering the power-domains:
-https://lore.kernel.org/all/20231026203037.GA327324-robh@kernel.org/
-
-Cheers,
-Conor.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    watchdog@2320000 {
-> +        compatible =3D "ti,davinci-wdt";
-> +        reg =3D <0x02320000 0x80>;
-> +        timeout-sec =3D <30>;
-> +        clocks =3D <&clkwdtimer0>;
-> +    };
-> --=20
-> 2.34.1
->=20
-
---ixTGx6tVsBXIMcLW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZTvFxgAKCRB4tDGHoIJi
-0g/NAQDyI6k3NfH6Gtz3jrfdKhsERSZfTUEuPaRJugULbfqFNwEArZQ+vTqb22CM
-WH8KAtU7U7Nr3wFy8r2rpTGo6CGRBQg=
-=9UY6
------END PGP SIGNATURE-----
-
---ixTGx6tVsBXIMcLW--
