@@ -2,162 +2,182 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C3A7DB495
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Oct 2023 08:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F1C7DBDA8
+	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Oct 2023 17:21:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbjJ3HsU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 30 Oct 2023 03:48:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
+        id S233812AbjJ3QVU (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 30 Oct 2023 12:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231690AbjJ3HsT (ORCPT
+        with ESMTP id S229514AbjJ3QVT (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 30 Oct 2023 03:48:19 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B111A7
-        for <linux-watchdog@vger.kernel.org>; Mon, 30 Oct 2023 00:48:17 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-53db360294fso6905328a12.3
-        for <linux-watchdog@vger.kernel.org>; Mon, 30 Oct 2023 00:48:16 -0700 (PDT)
+        Mon, 30 Oct 2023 12:21:19 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2100.outbound.protection.outlook.com [40.107.244.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2657C2;
+        Mon, 30 Oct 2023 09:21:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iNtg0Yl8Hz1G0dYGxunmlZWu3fFmqmcrw24zcAEs8qtN0x9MdFNNvPS8rgzz+ed7Ke0d4ewNk2URe4sM9szl5YVpEf9JVVXJM9gG47mTdPXV4PHzNZgQk9vrzSVGQW8gBtbrKiguTjFfGphvQKQH76IBhR+4bUvRR2wIIglh/RPWeLi1LFKDeti8XrnSaEORJuQ/OCcNnRzKk7BptyuL88gQBaRvL/gflyYMb/r6e1LoOG5SaaQhUmPRGXvlf5m3RpYek7JSBDtE3f9aZ1C/ON9mBXYxx3TPON8O2CiyP3lsYb9zfrmqVhLfb0xST6W6rEiqoY6eNVK8sDuk6rMCSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QHST0a99aEpiCs2qSrEQ8Her7o0qDNow3ACUNKwsJXY=;
+ b=D8oYWGD9CYkAWTGqnQar3Rk8iWX7vMTXS5LCSoS2IFsoIWJ+Kxjx8nKqsxiEAgIzoPzieUaEUcVVvm7qaYZWHu2IK7/hwNY+LMOFHRy4mohAvtncwV+y7aDuZw1uxDh8t+JOnkSIwhtDv21zsK+io758tsqyTJ1kstUpdM3KWhipmtDZIKJus55s+7IkpVGMHwr3AydiuFQ1O3RU2OIX/fyzyaPO043bHozB5VvZ6s9erp8CAiu7ni1kxwqUHWJ1LtEfdZ3P71oymkZBmHVIr5+AxSrtc82x3xCSExKe2PJEsy4z1GzgX/ZUv3YXl4IM4CTI/HnM6GtP5sGLknuGLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698652095; x=1699256895; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NC9LdB6rOaJ1FTuQeMV3euxRWDgGo8XewT7yIfD9Ex4=;
-        b=fgEh86kXdyp5z6OLmgY0Zzs8L9NyVq/UKvXiHBlMiPhgJaIspPCEml/ziX1kz0xoDt
-         CsX1w0zheM7xvodvLFzDeVr1UVXN2hqDLu8DdavxDEPy5asUxysHrTqhUajkXtX7MCJ2
-         mz0TlPLih74sgcixGX7HgDU0PS2coIraiG/0Xb2dEqyr4ZRldmrypWKonjLfphMutnXH
-         XYcqMJpHqYV7j+NRYqPqDLRjaHGLj5w6BfprWeavLUtVmfL9fqoLKldf7sRr6t9liMVt
-         M9g5twXPyljMTGo9H/dc+rzAZjcFvCgQcPA6lZ3uIDJTQHZzCsacPt4V0DAkbkwYcz1x
-         O4Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698652095; x=1699256895;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NC9LdB6rOaJ1FTuQeMV3euxRWDgGo8XewT7yIfD9Ex4=;
-        b=ZUKMVPnwYFv0EulVKRuYpYLaeJJv/iwfXqRuymKpm7HR3tmaPdctQ0ncugidNukbVb
-         v1zXYLVQn8r0xWhtpiCOZ7eCKKQBBR9UeGhCjzp/a+TH4Umb59Jmu7sFe0JXJy/GCKdQ
-         0x1nyPPFJjBw9z+5XbavZRvELB8jUGPW749R71L2+s9B0KPLV3DjTmc6/O9dreW9qy8a
-         duHtsru4K1adqwJ9DVFh9vUpGjva6fEJtLNHWCC9QW2x4dTqXEcNF94xPgBgRTkiWocK
-         dEK0AckhzIgBtW/ICB/aMXudjMykniTqgDXSS9DMw7yF/X7NFpfDWTXPxIzZC3zszipM
-         HCpQ==
-X-Gm-Message-State: AOJu0YyO8Aqza72hbe0cdKh3rLYvWAvlCiChUVx19xUiZUqMaXKZJhlr
-        EINEyANOd34DObGssGeORxjdtw==
-X-Google-Smtp-Source: AGHT+IF1p3iuRLtvaydHkGC2t+41Fg73dm72nquHIT9LT1j8n7C6PgqClmc8pAje9B82b6aTErYBXQ==
-X-Received: by 2002:aa7:cf1a:0:b0:53f:6ee5:2cea with SMTP id a26-20020aa7cf1a000000b0053f6ee52ceamr6838271edy.17.1698652095616;
-        Mon, 30 Oct 2023 00:48:15 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id 16-20020a508750000000b00534e791296bsm5798173edv.37.2023.10.30.00.48.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Oct 2023 00:48:15 -0700 (PDT)
-Message-ID: <0668589d-e986-4364-b27f-475013c961af@linaro.org>
-Date:   Mon, 30 Oct 2023 08:48:13 +0100
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QHST0a99aEpiCs2qSrEQ8Her7o0qDNow3ACUNKwsJXY=;
+ b=W5Zq/iSn/doHmzzegm5d389w9MM3fHEPns//XHguWtb6I9iJAutLeKHqtSxx8DRunePXNSjT1Ag7I8TB7OgqcZkK9oAoWqeMaPYY3x7meIMRXXGeKj8rwkvZvryZn4yfDo8LEfOc8Z/2eR04H2oEV2j6YgSlFmX1WydD4KpVUUQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from PH0PR01MB6795.prod.exchangelabs.com (2603:10b6:510:91::18) by
+ DM8PR01MB7109.prod.exchangelabs.com (2603:10b6:8:a::6) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.33; Mon, 30 Oct 2023 16:21:11 +0000
+Received: from PH0PR01MB6795.prod.exchangelabs.com
+ ([fe80::9da1:e537:76d7:8a52]) by PH0PR01MB6795.prod.exchangelabs.com
+ ([fe80::9da1:e537:76d7:8a52%5]) with mapi id 15.20.6907.032; Mon, 30 Oct 2023
+ 16:21:11 +0000
+Date:   Mon, 30 Oct 2023 09:21:10 -0700
+From:   Darren Hart <darren@os.amperecomputing.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org,
+        Vanshidhar Konda <vanshikonda@os.amperecomputing.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org
+Subject: Re: [PATCH] sbsa_gwdt: Calculate timeout with 64-bit math
+Message-ID: <ZT/X9viGhNc9NoCY@Fedora>
+References: <7d1713c5ffab19b0f3de796d82df19e8b1f340de.1695286124.git.darren@os.amperecomputing.com>
+ <bcc41311-075c-44fe-b0f7-30564d7ac58c@roeck-us.net>
+ <ZSpbfXzFeaoUJRZ3@Fedora>
+ <1fae4d2c-4bc7-f169-7b84-501674a82ee4@roeck-us.net>
+ <20231029161056.GB5887@www.linux-watchdog.org>
+ <750ec6f7-f075-4075-ba9d-eb67f69239ec@roeck-us.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <750ec6f7-f075-4075-ba9d-eb67f69239ec@roeck-us.net>
+X-ClientProxiedBy: MW4PR04CA0267.namprd04.prod.outlook.com
+ (2603:10b6:303:88::32) To PH0PR01MB6795.prod.exchangelabs.com
+ (2603:10b6:510:91::18)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] dt-bindings: watchdog: atmel,at91rm9200-wdt: convert
- txt to yaml
-Content-Language: en-US
-To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Nik Bune <n2h9z4@gmail.com>, conor+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, skhan@linuxfoundation.org,
-        devicetree@vger.kernel.org, linux@roeck-us.net,
-        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
-        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, alexandre.belloni@bootlin.com,
-        linux-watchdog@vger.kernel.org
-References: <20230924181959.64264-1-n2h9z4@gmail.com>
- <169826359217.1053485.16654434281057363682.robh@kernel.org>
- <20231029162226.GC5887@www.linux-watchdog.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231029162226.GC5887@www.linux-watchdog.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR01MB6795:EE_|DM8PR01MB7109:EE_
+X-MS-Office365-Filtering-Correlation-Id: 60b732ea-7e08-4047-4fa2-08dbd9643b1c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xMbqwOA5lxd4stY3fmogyJHnwiLbdE3W7SWmugbLGTSVOt1Dp0v48HbZL26TwY53VUFwsvJOFtHFP2dfIC+dpSqZUc3DD1Jliw6BKwSZWUQGbAIxckJmO/EMcYg6lRodXwd3Zw7fmfl+b9b4W1J2YW2sMz1TwXXixsbjMaDy3j/8PeLOJNT2TYMC30JvWx0jFTA3BHUy4ayMfx9nDDaBfzjlXOr6FSs7yeWFPD5R4uz78ohQe3eRIRimNYRE4hKTT9Dug+XshT52AqXk7IE+VPRa5MYIg/5ZuQBoi7Q/aJGdK55EeswwMiFtAjk2/IcHFUC2B8cSRY+bHr2oVS/13XveojQNiMxZYig7NzptjBFT6AU3ZpH7tx8LGqFOZft0PuNWAJnPbIn+j8SVCo1FGiJs4tVQDmfxv/+9h6Ir5Ym3KjsFv+fDn7QLpI4UOE+C8YkvuPRJNGOMTb/6ygtjK5OqyUCeLsSu53IIWCl2WUw9y5e0pOy3x+gCT9I0P9dj5b1o4eX+oMtAwvbzdVK3DFRUtL2M/X3AxuAl6AU3pfxXCISKV4A9SPfw5BKV0NMhHtT7JizWk/hipT3k83gEs8JpUOA77umBHGttrUthyEs7Z14WZanN1ZjbihnKht32
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR01MB6795.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(366004)(39850400004)(346002)(376002)(136003)(396003)(230922051799003)(451199024)(64100799003)(1800799009)(186009)(38350700005)(26005)(33716001)(66899024)(41300700001)(2906002)(86362001)(38100700002)(5660300002)(4326008)(8936002)(8676002)(66556008)(478600001)(6916009)(83380400001)(66476007)(6506007)(54906003)(66946007)(316002)(52116002)(9686003)(6486002)(6512007)(53546011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tdJ1mqxcYW5LN4DpttrLz6bLFAHGSF3hLTVJtk68t7gnT1cuU2bdk0nTFHQI?=
+ =?us-ascii?Q?7KnKv3B74FUFL+pDGSn9C3dpWIMrzBcro9InHjMssetJ99JTfdHa1gLWNkTR?=
+ =?us-ascii?Q?V45JfckY0Y8CBLIwOiv54jHYmm2YOoFKEwdWhreL7bEc4n1uCONXPeZXaoI8?=
+ =?us-ascii?Q?V3DfWbnbafkoESxoFExgPeyeeDBwjjaH0gLlmlHx/kgSz0j4AFyeE6fKTqRR?=
+ =?us-ascii?Q?hkePh1XoE2BBiOjZgez4aEBCe0rDYL6GqCNpmub4nAlwGJkXvK76fvDCPVKz?=
+ =?us-ascii?Q?A97WNFkI+VO3u+tqCMnKLPUcHtWYuVcbCgHGxU8NJZPeskSIMJIJ67y6c8dS?=
+ =?us-ascii?Q?oyIV6osRjdMZT+ngo+0TGFu3wTYCcuu7czdi6AndJQatA74LwWO3VT3nm2/W?=
+ =?us-ascii?Q?5QMb9MqZb6Dho1eneUiMzF8VZR/1CJRqR8ybfDXfM8+NmHj7rWZ4qaBv4FxS?=
+ =?us-ascii?Q?5kywZMvC3wIInzUtPzeYxs/V+w1hvvtn3NfTZZeR8IWJesqxkj7aqo+cVTAP?=
+ =?us-ascii?Q?dSFMPOuWMXcgFUVxJAwocTtmrTIR9gRBb+3HFtYdv5079XKyvKLM7XK14Zl1?=
+ =?us-ascii?Q?JIeKK/53xs/TjySFpUbQVvOsHRrNpdptUilVmzt/9KhqZio30+FzFGwtDdRK?=
+ =?us-ascii?Q?8qLsspbaQ2pEM4vWd0l2sM3E3viPlM7ebk/CGwEFmvy9BNQX8OI6lvpCAKIk?=
+ =?us-ascii?Q?/49K9D5aAcs18FS6UOtPrGnfFwLUbeCbuIuJ9DznR6Wq6YeoIbBy891L4Efz?=
+ =?us-ascii?Q?6VpXQyD2VOP6pQTnk4cy+TzRIKW2sfvcpXfP06zfRsbKO0s3l7IaL+U7+Xcn?=
+ =?us-ascii?Q?MKfSQGmKDeg8ovO88IqJebdzXyVJKA6PKv5woPNUsIAhfPc2c0X8a0GKlqJq?=
+ =?us-ascii?Q?c16PCZbDnIs1TBDhHaz2UIgxq/x5Lq0iJd03H63e1UgcKYufCiacCsI1JEMK?=
+ =?us-ascii?Q?ipi4Bmzs1HYellIOSeTY9Fez1cvzObCmrKFZ8plG68mr9EA/UV5qRcPSebUc?=
+ =?us-ascii?Q?N0e22fnNeOSjSOvIFzJJ5dxuu9AzvHLxmFxOMyjTy0ntuZBTp7K1149QhA71?=
+ =?us-ascii?Q?yskPiFhWYLYUyQI/F/DjY5/EdenRTsj/rIKI037tO6lkWoYxKIyWREDJBvHZ?=
+ =?us-ascii?Q?WG48r54Cs74HR3kqMHricURhK45KZjbuu++9SA7Wy2Jn5n+Mj8bd9f9aDJMv?=
+ =?us-ascii?Q?jTLK4rHqoUKiWwY2Zo0dSe9++q3G2UaREXdOcbFcrZGqHUesZRGdaVWTrGJJ?=
+ =?us-ascii?Q?ir/ABt3sUN2KLoE6SShXlwILhehFWrlxEFv6nR17H6hd3mXUFPHImIhddlKD?=
+ =?us-ascii?Q?s70ut2yeo1M2bwt+Tn0hm5T6g/KgG+xF6QpE6uX7NHh8DsHzRIo1f6RmpzjZ?=
+ =?us-ascii?Q?7i0UVz6g5jg7y49Ds+PDmp/zmLLPFixE746VkjT7fEQMU4kUmCVcBtzVNNYY?=
+ =?us-ascii?Q?3FByGg0fSb+qIdkURINI/QYiVUYYGYROJssFtmkWWyGkunzG6JL6VCnpOzRO?=
+ =?us-ascii?Q?8WNU2h5audJn2Rkb+E+l7k16aOQWOffqHsMYuC3AknM72O5aRe6fPEN6yPW3?=
+ =?us-ascii?Q?5crAsw+z9RnISGYVInvbZBfAtb3RHkOgY+p57Ov9vbrYvXpW95mONm6gv3Qg?=
+ =?us-ascii?Q?+hWkBrOC7Gox7ebbl3iTZrY=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 60b732ea-7e08-4047-4fa2-08dbd9643b1c
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR01MB6795.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2023 16:21:11.6202
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dEgAjK+LOMEvgrCIvePaRzmHv/8RLystE+1GDoMxVdQqVgjUajLlMSRA/x3fQeaS//LpgE5rBiGBkn8OwSm4rp8yOLYXMziheAwaWjwS9DDOus4MfNo0NAoUAByLo0jh
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR01MB7109
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 29/10/2023 17:22, Wim Van Sebroeck wrote:
-> Hi Rob,
+On Sun, Oct 29, 2023 at 10:00:54AM -0700, Guenter Roeck wrote:
+> On 10/29/23 09:10, Wim Van Sebroeck wrote:
+> > Hi Guenter,
+> > 
+> > > On 10/14/23 02:12, Darren Hart wrote:
+> > > > On Tue, Sep 26, 2023 at 05:45:13AM -0700, Guenter Roeck wrote:
+> > > > > On Thu, Sep 21, 2023 at 02:02:36AM -0700, Darren Hart wrote:
+> > > > > > Commit abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
+> > > > > > introduced new timer math for watchdog revision 1 with the 48 bit offset
+> > > > > > register.
+> > > > > > 
+> > > > > > The gwdt->clk and timeout are u32, but the argument being calculated is
+> > > > > > u64. Without a cast, the compiler performs u32 operations, truncating
+> > > > > > intermediate steps, resulting in incorrect values.
+> > > > > > 
+> > > > > > A watchdog revision 1 implementation with a gwdt->clk of 1GHz and a
+> > > > > > timeout of 600s writes 3647256576 to the one shot watchdog instead of
+> > > > > > 300000000000, resulting in the watchdog firing in 3.6s instead of 600s.
+> > > > > > 
+> > > > > > Force u64 math by casting the first argument (gwdt->clk) as a u64. Make
+> > > > > > the order of operations explicit with parenthesis.
+> > > > > > 
+> > > > > > Fixes: abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
+> > > > > > Reported-by: Vanshidhar Konda <vanshikonda@os.amperecomputing.com>
+> > > > > > Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
+> > > > > > Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> > > > > > Cc: Guenter Roeck <linux@roeck-us.net>
+> > > > > > Cc: linux-watchdog@vger.kernel.org
+> > > > > > Cc: linux-kernel@vger.kernel.org
+> > > > > > Cc: linux-arm-kernel@lists.infradead.org
+> > > > > > Cc: <stable@vger.kernel.org> # 5.14.x
+> > > > > 
+> > > > > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> > > > 
+> > > > Guenter or Wim, I haven't seen this land in the RCs or in next yet. Have
+> > > > you already picked it up? Anything more needed from me?
+> > > > 
+> > > > Thanks,
+> > > > 
+> > > 
+> > > Sorry, I am suffering from what I can only describe as a severe case of
+> > > maintainer/reviewer PTSD, and I have yet to find a way of dealing with that.
+> > 
+> > I can imagine what it is like. And I do know that if you wouldn't have been there,
+> > that I would have allready stopped being a maintainer. So I hope you can find the
+> > right cooping mechanisms. I also had to work non-stop the last 4 to 5 weeks and it was hell.
+> > So I wish you all the best.
+> > 
+> > PS: picking up all patches that have your review-by tag on it as we speack.
+> > 
 > 
->>
->> On Sun, 24 Sep 2023 20:19:59 +0200, Nik Bune wrote:
->>> Convert txt file to yaml.
->>>
->>> Signed-off-by: Nik Bune <n2h9z4@gmail.com>
->>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> ---
->>>
->>> Changes in v3:
->>> - Removed trailing whitespace in an element of the maintainers list.
->>>
->>> v2 patch: https://lore.kernel.org/linux-devicetree/20230924172004.59208-1-n2h9z4@gmail.com/
->>>
->>>  .../watchdog/atmel,at91rm9200-wdt.yaml        | 33 +++++++++++++++++++
->>>  .../watchdog/atmel-at91rm9200-wdt.txt         |  9 -----
->>>  2 files changed, 33 insertions(+), 9 deletions(-)
->>>  create mode 100644 Documentation/devicetree/bindings/watchdog/atmel,at91rm9200-wdt.yaml
->>>  delete mode 100644 Documentation/devicetree/bindings/watchdog/atmel-at91rm9200-wdt.txt
->>>
->>
->> It seems watchdog bindings aren't getting applied, so I've applied it. 
->> Wim, please take watchdog bindings in the future unless noted otherwise.
-> 
-> I was going to add them now, but since you allready applied them, I will leave them out this time.
+> Thanks,
+> Guenter
 
-Now is merge window and patches are supposed to be in next much before
-the window (if possible).
+Thanks for the support Wim and Guenter. Appreciate the work you do and the
+pressures of maintainership.
 
-Best regards,
-Krzysztof
-
+-- 
+Darren Hart
+Ampere Computing / Linux Enabling
