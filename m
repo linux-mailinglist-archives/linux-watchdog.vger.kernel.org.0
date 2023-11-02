@@ -2,143 +2,153 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CD27DE72D
-	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Nov 2023 22:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B83597DF28F
+	for <lists+linux-watchdog@lfdr.de>; Thu,  2 Nov 2023 13:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233981AbjKAVDX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 1 Nov 2023 17:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
+        id S1376344AbjKBMhl (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Thu, 2 Nov 2023 08:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232713AbjKAVDW (ORCPT
+        with ESMTP id S1347632AbjKBMhF (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 1 Nov 2023 17:03:22 -0400
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809F010D;
-        Wed,  1 Nov 2023 14:03:16 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id 006d021491bc7-58706a0309dso117382eaf.1;
-        Wed, 01 Nov 2023 14:03:16 -0700 (PDT)
+        Thu, 2 Nov 2023 08:37:05 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54BC19A9;
+        Thu,  2 Nov 2023 05:34:39 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9adca291f99so130471066b.2;
+        Thu, 02 Nov 2023 05:34:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698872596; x=1699477396; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RScx1qr66w5tZeJKoWwKJE6rPcUWsAS1JE62t0G4k7Y=;
-        b=Cj1PRtb/7ZJXFAFCGloXeQnpnMzA6/ngMFMmIanSTUjdDbO6cCZfiKEHczp4p/o57M
-         1EhSEXOrXs9keFQOR99Wb1VdCHUs8gdKmbQvIyhnPFTcQFRGFFsbKPBp5ZGMRDKNPAIw
-         l7Urvt7p/ga28AIJxU+7JnDqf8R6uvPzet/lnYlMrULQ3sWvsJGgG5Bx7rOAK7YJCXOf
-         1MF6IHwr9mIDAGMlVB+nXjeKa/haAJHSSRogxfmvpA6tLEusNADyAbdsQRS0it17ieXQ
-         pKcyYC2p+DjgENKhVnA9y505snSh4VJrbjgAF6TIB2wIEaFELQGBR6XBzaQ1FJuwPjBn
-         opWQ==
+        d=gmail.com; s=20230601; t=1698928478; x=1699533278; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rsKFZV3nMxQi1oiVGFdNfQgyygad1bdQB+o4P9tAijg=;
+        b=SKSSv3HwjZP8vOFHQv6vFz/05iCay0wI6WE4oLkfCkSCB/Q1wIj/PzLg15HlFnzeIA
+         GnD6QYMbOg7JGz/iFQkxLz2DyF1yfOM4aLWThgenrCYuz36AVsiJOn+Ao1+tUoBVjlth
+         5JnEbSpso0avKMHiUdzDdObcD+vEYSKHO2jXrei1nT2OEkZlIXoFBCAYhb6IkHb7D0Rn
+         YS1cKTDyf23/MMknCy0CxG7VAauEIQc08avX7FfkJWS38kS442bTAOycM3WNvX2GwD+k
+         3E0CjdnJeDh8wkuVbOmC7klU+3OhiWo5avAwi6IiBFSE5jZwe6jaVyFZS+9Tx4f9CEc+
+         rr3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698872596; x=1699477396;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1698928478; x=1699533278;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RScx1qr66w5tZeJKoWwKJE6rPcUWsAS1JE62t0G4k7Y=;
-        b=f7Tabf4NvA/A5I8/TLbZFJqxO67FMB7jvo+OvZAOE/CTFRhTTNjEJwtnU44ocw34fe
-         20e7/BV4zSlCgdIDbM8mURF1RP9iizXuw6psKW2ozRB1jV4Ft2jZ4S1uHowSKhumQu2o
-         NiJZrPO7n0jCqXJ983VfVCSgIPbLOwbpyXmDpX3L8zDbTmPSrBrMMZMxw66TyZCuJfTA
-         puLW6pjavDRaMZqyulxJFdeo8rLQvhciTH7J84MMP3rX7BGE/XEbc98ywF7o8BzyHyWv
-         5b024t5k2C+Sv4OrDKtth4WSePQseU7aIIjn07az0cLbIPxcEQabqAqIC4W8BRxQrRCK
-         xrXw==
-X-Gm-Message-State: AOJu0YyonYPjVerAUkMze3YVzl6x9ZA8K05PO9JMxU//ichc61MH3rLf
-        ADI9uDk5whAnWDAiEFGjdJg=
-X-Google-Smtp-Source: AGHT+IFimFIKEcKyxyBwVaK6WGCqQP39TPNh5fD3DjU6Nt8md4PIXCYxBzuPKbfyRqqRdYRed42agQ==
-X-Received: by 2002:a4a:da4f:0:b0:57b:ed7b:29cb with SMTP id f15-20020a4ada4f000000b0057bed7b29cbmr17036531oou.6.1698872595706;
-        Wed, 01 Nov 2023 14:03:15 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 2-20020a4a1a02000000b00581daa5c5fdsm751025oof.29.2023.11.01.14.03.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Nov 2023 14:03:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <74c8dd58-f4b8-41fa-b5da-d4e32326ffd1@roeck-us.net>
-Date:   Wed, 1 Nov 2023 14:03:12 -0700
+        bh=rsKFZV3nMxQi1oiVGFdNfQgyygad1bdQB+o4P9tAijg=;
+        b=j9EmVFkU1v2GJxMnXxzI9ykCKOVgzxkgx24Qw5uzjf58hhmmeB6TzNsowxZSV/xqr1
+         AoaqTD3gKbUet+oBfBpDwgYPAYm8Hgbxng9PIs+QOyB8NT4Sphmu8FsAkVB8rYX3ITgJ
+         E4Nc8J18y2Ur7fZALHNZ1KDhZ0Uxv2qWZQmC74b03W8SaSUfi806GhOaqpYlkTHWG8Sj
+         cwFQZQKGwD9VcAWZO7x6B5OL+I03Ap7Ax+OcSZ0s+czoRF7r3AvVPnNoJg2/dER05LNf
+         CdGyAu5ZjHUo6Jiqo6LJH4SW8KaTGIWinujp8w0dgCdrz8BoOfmnytqJ3uLMF+7AvRr1
+         Zjyg==
+X-Gm-Message-State: AOJu0YxWAFHLd5PRXxVIvU1ZYlEY1cBnpeEkdoMpnR1/xF0EniIdw/IR
+        TNDBcMeOeBPnMIm2KE/k8TCJ0LT7C5Myuw==
+X-Google-Smtp-Source: AGHT+IHbCh/IJZSGzt0gIABJ7y9ndea7qZv4B5H5UEA37VyBzCW20YKU9oOhMj55kNmOINPQ9aPzcA==
+X-Received: by 2002:a17:907:25c6:b0:9d1:a628:3e4f with SMTP id ae6-20020a17090725c600b009d1a6283e4fmr4065531ejc.32.1698928478015;
+        Thu, 02 Nov 2023 05:34:38 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5af678.dynamic.kabel-deutschland.de. [95.90.246.120])
+        by smtp.gmail.com with ESMTPSA id e10-20020a1709067e0a00b009c921a8aae2sm1100112ejr.7.2023.11.02.05.34.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Nov 2023 05:34:37 -0700 (PDT)
+From:   Nik Bune <n2h9z4@gmail.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        skhan@linuxfoundation.org, juhosg@openwrt.org
+Cc:     Nik Bune <n2h9z4@gmail.com>, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] dt-bindings: watchdog: qca,ar7130-wdt: convert txt to yaml
+Date:   Thu,  2 Nov 2023 13:32:34 +0100
+Message-Id: <20231102123234.62350-1-n2h9z4@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: watchdog: qca,ar7130-wdt: convert txt to
- yaml
-Content-Language: en-US
-To:     Nik Bune <n2h9z4@gmail.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, robh@kernel.org,
-        conor+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        skhan@linuxfoundation.org, wim@linux-watchdog.org
-References: <20231101202722.48056-1-n2h9z4@gmail.com>
- <20231101203357.48478-1-n2h9z4@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231101203357.48478-1-n2h9z4@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 11/1/23 13:33, Nik Bune wrote:
-> Changes in v2: updated commit message.
-> 
-> v1 patch: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20231031201602.28827-1-n2h9z4@gmail.com/
+Convert txt file to yaml. Add maintainers from git blame. 
+Drop qca,ar9330-wdt from example of compatible property
+and leave only qca,ar7130-wdt, as description of property
+mentioned must be qca,ar7130-wdt.
 
+Signed-off-by: Nik Bune <n2h9z4@gmail.com>
+---
 
-Unfortunately, you didn't run checkpatch on your uudate, meaning it missed
+Changes in v3:
+Did run checkpatch and updated the commit message accordingly. 
 
-WARNING: Prefer a maximum 75 chars per line (possible unwrapped commit description?)
+v2 patch: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20231101202722.48056-1-n2h9z4@gmail.com/ 
 
-Indeed, your patch now provides a single-line commit description with more than
-200 characters.
+ .../bindings/watchdog/qca,ar7130-wdt.yaml     | 33 +++++++++++++++++++
+ .../bindings/watchdog/qca-ar7130-wdt.txt      | 13 --------
+ 2 files changed, 33 insertions(+), 13 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/qca,ar7130-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/qca-ar7130-wdt.txt
 
-I don't think "Keep it in one line" was meant to ask you to do that.
-The original description was substantially shorter and did fit into 75 characters.
-
-Guenter
+diff --git a/Documentation/devicetree/bindings/watchdog/qca,ar7130-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qca,ar7130-wdt.yaml
+new file mode 100644
+index 000000000000..82040ca10eda
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/qca,ar7130-wdt.yaml
+@@ -0,0 +1,33 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/qca,ar7130-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Atheros AR7130 Watchdog Timer (WDT) Controller
++
++maintainers:
++  - Gabor Juhos <juhosg@openwrt.org>
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    const: qca,ar7130-wdt
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    watchdog@18060008 {
++        compatible = "qca,ar7130-wdt";
++        reg = <0x18060008 0x8>;
++    };
+diff --git a/Documentation/devicetree/bindings/watchdog/qca-ar7130-wdt.txt b/Documentation/devicetree/bindings/watchdog/qca-ar7130-wdt.txt
+deleted file mode 100644
+index 7a89e5f85415..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/qca-ar7130-wdt.txt
++++ /dev/null
+@@ -1,13 +0,0 @@
+-* Qualcomm Atheros AR7130 Watchdog Timer (WDT) Controller
+-
+-Required properties:
+-- compatible: must be "qca,ar7130-wdt"
+-- reg: physical base address of the controller and length of memory mapped
+-  region.
+-
+-Example:
+-
+-wdt@18060008 {
+-	compatible = "qca,ar9330-wdt", "qca,ar7130-wdt";
+-	reg = <0x18060008 0x8>;
+-};
+-- 
+2.34.1
 
