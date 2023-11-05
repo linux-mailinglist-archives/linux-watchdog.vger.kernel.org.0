@@ -2,86 +2,75 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3D87E1391
-	for <lists+linux-watchdog@lfdr.de>; Sun,  5 Nov 2023 14:14:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 149197E13AB
+	for <lists+linux-watchdog@lfdr.de>; Sun,  5 Nov 2023 14:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjKENOf (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 5 Nov 2023 08:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
+        id S229970AbjKENd7 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 5 Nov 2023 08:33:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjKENOe (ORCPT
+        with ESMTP id S230395AbjKENdz (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 5 Nov 2023 08:14:34 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6C4E9
-        for <linux-watchdog@vger.kernel.org>; Sun,  5 Nov 2023 05:14:31 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2c5039d4e88so50002211fa.3
-        for <linux-watchdog@vger.kernel.org>; Sun, 05 Nov 2023 05:14:31 -0800 (PST)
+        Sun, 5 Nov 2023 08:33:55 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA1CD3
+        for <linux-watchdog@vger.kernel.org>; Sun,  5 Nov 2023 05:33:52 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2c6efcef4eeso42944021fa.1
+        for <linux-watchdog@vger.kernel.org>; Sun, 05 Nov 2023 05:33:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699190069; x=1699794869; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1699191231; x=1699796031; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=yqSv2UnZ+U1pe5KGwf29GbAFTynYSNuIgS0ilx1Gh6k=;
-        b=uiNdfudBiCcsNQNDXsk+cinHgAvz74PPBwjQ8AgBK8+Ok4/cSY/xJCETjpaKBMtFMx
-         RdjKw8d5QfudrCtWNB82U0RjNJmFoufxnrt0AJfGNAfJDCviawRk1ldDRIkR9oFpDYnz
-         jkgm2WGcQD/2t6WUMCwSmypXf2olRfcq3g8xZPqanu6WN8qsqLDx6FiuYr8FJM5G7lur
-         6T9OBtNQHlg7m33W1U0yhecAcCs8OCPUVyAwPV6c9pMv0o0wLiZBUQw3YjxwDz0aI9kO
-         s0mAceMcdlFMKbAUwKcua7JcK9snqjsnyHQG6VjzBkYmoBf1i5b+ZHlVpQbz7LZyG3WV
-         dv+g==
+        bh=i71VLtyGXnfgqlxiaczDIdWu43BdqWayucGi7/Xq0uw=;
+        b=Da/9tVM9nBi4zAkpzSqE9Huvev20kSGvKwYmJgmzKoZJQA1HcS9EyKmGGxZTZnA61s
+         cdPSorfIfF9lb9ZKVA29INmYVOjG3S4O2F9138f5gav+2zvaxidG53XJi9bu31EEBPSD
+         jRAY9gGbYWQqImIJgDstTSKjRdUMpTDuPXir8Bx+H7eIASlo7z/YT6IDA12CVq7Ql3Eh
+         i3ETcj+U4xIBBq4W+27vBq5KSS+nrlUzC3cwQ31jJ7q7IKb4LjVzpbwks1JoNlHYM5zA
+         G0yZMQ+MDzSW0l9lCVGEP7U0lfB04at8ZgJF70MCZG7p3YpWsvXe3iO693ia/FHdUu0c
+         /VRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699190069; x=1699794869;
+        d=1e100.net; s=20230601; t=1699191231; x=1699796031;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yqSv2UnZ+U1pe5KGwf29GbAFTynYSNuIgS0ilx1Gh6k=;
-        b=knI/Gzv85NWU78N1lAAm+hE5Q8vNK9cbr4j2Dc0kt0tV9jR4gkPn55PfFq55m3adla
-         LBkQJ53pLf6j9E4qJlOMEj8cptf860usjFV0HqEuw9W8HGUd3CTUR5g+S3M2R3jzvorC
-         CotU/jZC65HA6M5U4hAEvVenr95IjFmKzWcwFhePLNKVqOkCIK50zofI2Z140NsPZOxX
-         v3Dfu2r2Ceux4Y35Eh6WuHliGzELxxjzT1mG9osmBau9hkjTLCGx9WXnHvG12A9CdE5l
-         W7ph2dMPofB/agMraMJL4CAxZ7CV7c8N9yz+tquNBKKB6QfoV8MkUG1/z86h68j/2fUG
-         PDWA==
-X-Gm-Message-State: AOJu0YzlvRjPJ2tluknboLaDbE3mClaSPluiwdtH1FlqFxlDhlCBECY3
-        V5lehuorZJ2hUylm1DCujizYpQ==
-X-Google-Smtp-Source: AGHT+IGnKSMKqoVLMGiYGZbCupSjzNBC45bZJAUhZDif0PqgX/r7v34/Obqmw9T2Y6euojIAW4UL7A==
-X-Received: by 2002:a2e:9246:0:b0:2c5:724:fd64 with SMTP id v6-20020a2e9246000000b002c50724fd64mr20383790ljg.46.1699190069521;
-        Sun, 05 Nov 2023 05:14:29 -0800 (PST)
+        bh=i71VLtyGXnfgqlxiaczDIdWu43BdqWayucGi7/Xq0uw=;
+        b=khQsUh74OGP5/SegmDdVl61NlxnPodTcQpJp8vFXnnk3pFjMUYlEevhZWSyplL3Y0S
+         y7+jULdhEXDIPKDiQtvT/M1zBBfoXxounHBqM228ePo7jUzx3ht7qXTwddp2pcWpa10O
+         qFEXIocjoNKn/9KZdJ4hW5uK1p69kxetgaEQTcntf+BPvpoM5WCJv8orGF8CYK/gKSJv
+         u/3aQ8ivb2d20wnkleHpThOr9q1JCR9JX/iE9RCxl6DFgg5Mcf587shxC/HbimwF1d/t
+         mKVSw3Lo2cb8lii/JC9vYqbpcadoSJ2FpgVZKlF4Ojg8TF9laOGuOnAq6nt9jfENt3Zd
+         5uwQ==
+X-Gm-Message-State: AOJu0YxOlxgYj0mveKEuHZgIbxm0Uo6ZoeureLRJj/qGcEu+8Spr7sz7
+        bVmxe37vjK5AXvn9DHfHyvRipQ==
+X-Google-Smtp-Source: AGHT+IG9cyYh8pZ/6MjaYjvx53/tv0yPcpPPyzkKeVGh6nhbrgVfREbLF7nDazwBlWie0DF8vFHPvg==
+X-Received: by 2002:a2e:be10:0:b0:2c4:fdc9:c8a3 with SMTP id z16-20020a2ebe10000000b002c4fdc9c8a3mr24349326ljq.50.1699191231138;
+        Sun, 05 Nov 2023 05:33:51 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id ay8-20020a05600c1e0800b0040772138bb7sm9025518wmb.2.2023.11.05.05.14.26
+        by smtp.gmail.com with ESMTPSA id f20-20020a05600c43d400b003fbe4cecc3bsm8718488wmn.16.2023.11.05.05.33.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Nov 2023 05:14:29 -0800 (PST)
-Message-ID: <17aed57a-5e40-494b-a1d6-293533498804@linaro.org>
-Date:   Sun, 5 Nov 2023 14:14:25 +0100
+        Sun, 05 Nov 2023 05:33:50 -0800 (PST)
+Message-ID: <a3679c0a-0c74-42d9-a31f-e3a99407f1d7@linaro.org>
+Date:   Sun, 5 Nov 2023 14:33:48 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/20] Add minimal Tensor/GS101 SoC support and
- Oriole/Pixel6 board
+Subject: Re: [PATCH 9/9] dt-bindings: watchdog: qcom-wdt: Make the interrupt
+ example edge triggered
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     William McVicker <willmcvicker@google.com>,
-        Maksym Holovach <maksym.holovach.an.2022@lpnu.ua>,
-        Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
-        s.nawrocki@samsung.com, linus.walleij@linaro.org,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, cw00.choi@samsung.com, tudor.ambarus@linaro.org,
-        andre.draszik@linaro.org, semen.protsenko@linaro.org,
-        saravanak@google.com, soc@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        kernel-team@android.com, linux-serial@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>
-References: <20231010224928.2296997-1-peter.griffin@linaro.org>
- <3d489d6c-2098-4f0c-9ec4-f6040665753e@lpnu.ua>
- <CADrjBPp+fyNoPdix6=Wp4cDCRFq2Mui8NS6WENejcHn+H1M-jA@mail.gmail.com>
- <48e1c0bd-9518-4927-b490-f3206256bbd4@lpnu.ua>
- <c0b8f356-0f26-459d-850d-ec0fa1fd3987@linaro.org>
- <ZUUvp3kqM7NPlyZ_@google.com>
- <cee1b28d-5bd9-46eb-b9f4-facbad10b5d7@linaro.org>
- <2023110535-rare-underdone-b508@gregkh>
+To:     Douglas Anderson <dianders@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-watchdog@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        swboyd@chromium.org, Andy Gross <agross@kernel.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231103163434.1.Ic7577567baff921347d423b722de8b857602efb1@changeid>
+ <20231103163434.9.Ie30c1d3f780666f6906fd2fd7c437632c229d987@changeid>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -127,67 +116,30 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <2023110535-rare-underdone-b508@gregkh>
+In-Reply-To: <20231103163434.9.Ie30c1d3f780666f6906fd2fd7c437632c229d987@changeid>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 05/11/2023 14:08, Greg KH wrote:
-> On Sun, Nov 05, 2023 at 01:52:22PM +0100, Krzysztof Kozlowski wrote:
->> On 03/11/2023 18:36, William McVicker wrote:
->>
->>>>
->>>> That's indeed a problem. Future Tesla SoC might have just few pieces
->>>> similar to FSD. There would be no common SoC part, except the actual
->>>> Tesla IP.
->>>>
->>>> Same for Google. Future GSXXX, if done by Qualcomm, will be absolutely
->>>> different than GS101 and the only common part would be the TPU (Tensor).
->>>>
->>>> So now let's decide what is the common denominator:
->>>> 1. Core SoC architecture, like buses, pinctrl, clocks, timers, serial,
->>>> and many IP blocks, which constitute 95% of Devicetree bindings and drivers,
->>>> 2. The one, big piece made by Samsung's customer: TPU, NPU or whatever.
->>>
->>> As mentioned above, I think this should be based on how the DTBs and DTBOs are
->>> used and distributed.
->>
->> None of existing platforms do it. Nowhere. All chromebooks are split per
->> SoC, not "how DTBs should be used and distributed". There is no google,
->> no Chromebook directory. None of Samsung phones have it. No
->> Samsung-phone directory. None of Google phones have Pixel directory.
+On 04/11/2023 00:34, Douglas Anderson wrote:
+> As described in the patch ("arm64: dts: qcom: sc7180: Make watchdog
+> bark interrupt edge triggered"), the Qualcomm watchdog timer's bark
+> interrupt should be configured as edge triggered.
 > 
-> but for code we have:
-> 	drivers/patform/chrome/
-> 	drivers/firmware/google/
-> 	drivers/net/ethernet/google/
+> Update the example in the bindings.
 > 
-> don't know if that matters or not, but thought I would mention it...
-
-Yes, for the drivers for the similar hardware we have it. We have
-drivers for Chromebook's Embedded Controller - let's put it in one
-place, so that maintenance and review will be easier.
-
-Now for DTS, the common hardware is not "Samsung phones", but "Samsung
-SoC". We organize it like:
-1. Samsung phones with Samsung SoC -> arm64/dts/samsung
-2. Samsung phones with Qualcomm SoC -> arm64/dts/qcom
-
-because the main common part is the SoC, not the rest of the phone.
-There is no reviewer or maintainer for Samsung phones. There is no need
-for such. No benefits, almost not many common parts except some touchscreen.
-
-Why Google Pixel suddenly should be exception from the way we handle DTS
-of all ARM64 platforms?
-
+> Fixes: 7c631cdff391 ("dt-bindings: watchdog: qcom-wdt: allow interrupts")
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Best regards,
 Krzysztof
 
