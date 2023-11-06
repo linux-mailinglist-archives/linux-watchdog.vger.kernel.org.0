@@ -2,51 +2,51 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0BD7E2FFE
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Nov 2023 23:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1AA7E3000
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Nov 2023 23:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233310AbjKFWoV (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Nov 2023 17:44:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
+        id S233322AbjKFWoX (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 6 Nov 2023 17:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232478AbjKFWoU (ORCPT
+        with ESMTP id S233314AbjKFWoV (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Nov 2023 17:44:20 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5225D77
-        for <linux-watchdog@vger.kernel.org>; Mon,  6 Nov 2023 14:44:16 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1e9bb3a0bfeso3079644fac.3
-        for <linux-watchdog@vger.kernel.org>; Mon, 06 Nov 2023 14:44:16 -0800 (PST)
+        Mon, 6 Nov 2023 17:44:21 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E78DD79
+        for <linux-watchdog@vger.kernel.org>; Mon,  6 Nov 2023 14:44:18 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6b20577ef7bso4652527b3a.3
+        for <linux-watchdog@vger.kernel.org>; Mon, 06 Nov 2023 14:44:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1699310656; x=1699915456; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1699310658; x=1699915458; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LEa1YhaI6E/DSKEdiY/yJdz0Wh7Ldi/F7Q44NLO+PJQ=;
-        b=C1dZ9i1P+3RfPTZUX+eTvGxc7Tpd+jjxUfclljveuPnvWnh8sG9Od3eypO7w4gHGL8
-         45Gw+n6Gdk+EXZ4Im1G/n6hHw7oE0GzlH/GzRDVSzwD/+ReQO6j/zLiVROfXtmSTJfC/
-         RYiaCABXHaYOn6JJI8stLZ9P1/y+sUbWpUL10=
+        bh=HeV56VEkVxBLKgE3tH5Ot8a67/WG+4GGqoNJQCZhnGc=;
+        b=j2ZhQFJuRuGyG30PPkN2LDH00bCrzelyQL1tCMYjP7m7phs5m5XrBLL8k8USMuTcFh
+         CS4rQTKEMZlze9RibEfJWmC/fDqURHFAxLIr0w5ys8SVPsunkZ7KyoLvgRSC1bobD9fd
+         JJGCGd4Xm6ISGdBFVS33sz0zmyYukmHGr6Lbo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699310656; x=1699915456;
+        d=1e100.net; s=20230601; t=1699310658; x=1699915458;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LEa1YhaI6E/DSKEdiY/yJdz0Wh7Ldi/F7Q44NLO+PJQ=;
-        b=wCzFF5Zr0Ug1zkon75UskYTHO4vMLNuF3MmIiMNJcuJHRo4dQjqbc2V4+9yS41Xfwc
-         wmHpiSyIz7Zd7aI2cLb3XKoNElrD6VdvJujc1rAp2C6cINu8+W23JghSkSTdOGundwDU
-         vLOHnl9jnXdHdKwfNj3Cfo4HfXY3xDjDUc5FIHfBw9kyVvGEWIQifuq4ZV9/QOooJLWW
-         9un3lKwI2LLCgTXnCUnjPKK6f8+YkOZxQzBA0e6vFKMuUczxBudS8fT0ZBEThlOevWHp
-         XzmgnoP3fQ9DqBeN269oU+f5RUDLIOJRnek376GwmL0gCWXty1d8n2MayvgLFrLlpllt
-         CmLA==
-X-Gm-Message-State: AOJu0YzJybYY1loMpL1hfXT0YvcNFt4w0RSA0SC/tfAA04Xfb4smSQp1
-        X2sFgKb2sLvSsJ16FdHVAQBfOQ==
-X-Google-Smtp-Source: AGHT+IFh7/H41PW/ppGqA6uqFtTneJWaryTFy923BZ7uQQOrznF8C+prk0YJps9r/dnHPHRhuKcniw==
-X-Received: by 2002:a05:6870:10d6:b0:1d0:d9e2:985f with SMTP id 22-20020a05687010d600b001d0d9e2985fmr973799oar.57.1699310656018;
-        Mon, 06 Nov 2023 14:44:16 -0800 (PST)
+        bh=HeV56VEkVxBLKgE3tH5Ot8a67/WG+4GGqoNJQCZhnGc=;
+        b=RbM4/d8CtKMEawOxBKkEcJVvxFrLv27VBXKNGy2FYwHzjqW3aasKEqpdVYcjLQ7XcL
+         Ref+Cnh6C1rA3WK9eGeVBv+iiL9kR7Gu4LEoK1V6qjMg1Y3vrjP43fvq6Q9y7CqHrcf9
+         ImX+0/sa3KzexDPSZVcKTowSTXOlfCWoI+Y4cNGTsY5VXgud5S9PR6Zkv//4SmnTTjAw
+         LpwQfgMuPW4k+xI74xGIo2UUVB2Y8WWu4b9Ia+UCjjTU+xyC7gSoighAmqCGJyVzq+hA
+         x2oxfUVDVWnk1UfjBuFjEE9qiZwJVC56ie/vrCxylrRvRBYJHdaVSleXS/rZfsKqUQ6Q
+         LwGQ==
+X-Gm-Message-State: AOJu0Yw0HrwulWdfbMO/rv8KvkmA0AAif7ajM4cwAriPWjzCEXVWZva1
+        YZ3kCuCAzH5ie/ZJu0wW7TmfZA==
+X-Google-Smtp-Source: AGHT+IEIXQgziQ3zL7lElwnEoydeiE6VJUQiW2+JzEfF+aRZV0sKWTC30e0/G5mAwH/Lhd2P5d9yJQ==
+X-Received: by 2002:a05:6a00:190b:b0:6c3:69b9:44db with SMTP id y11-20020a056a00190b00b006c369b944dbmr10357674pfi.22.1699310657851;
+        Mon, 06 Nov 2023 14:44:17 -0800 (PST)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:16a7:2c01:9126:36a4])
-        by smtp.gmail.com with ESMTPSA id c10-20020a056a00248a00b006b725b2158bsm6043402pfv.41.2023.11.06.14.44.14
+        by smtp.gmail.com with ESMTPSA id c10-20020a056a00248a00b006b725b2158bsm6043402pfv.41.2023.11.06.14.44.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Nov 2023 14:44:15 -0800 (PST)
+        Mon, 06 Nov 2023 14:44:17 -0800 (PST)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
@@ -59,13 +59,11 @@ Cc:     swboyd@chromium.org, linux-watchdog@vger.kernel.org,
         linux-arm-msm@vger.kernel.org,
         Douglas Anderson <dianders@chromium.org>,
         Andy Gross <agross@kernel.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
         Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        cros-qcom-dts-watchers@chromium.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/9] arm64: dts: qcom: sc7280: Make watchdog bark interrupt edge triggered
-Date:   Mon,  6 Nov 2023 14:43:29 -0800
-Message-ID: <20231106144335.v2.2.I11f77956d2492c88aca0ef5462123f225caf4fb4@changeid>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 3/9] arm64: dts: qcom: sdm845: Make watchdog bark interrupt edge triggered
+Date:   Mon,  6 Nov 2023 14:43:30 -0800
+Message-ID: <20231106144335.v2.3.I16675ebe5517c68453a1bd7f4334ff885f806c03@changeid>
 X-Mailer: git-send-email 2.42.0.869.gea05f2083d-goog
 In-Reply-To: <20231106144335.v2.1.Ic7577567baff921347d423b722de8b857602efb1@changeid>
 References: <20231106144335.v2.1.Ic7577567baff921347d423b722de8b857602efb1@changeid>
@@ -85,7 +83,7 @@ As described in the patch ("arm64: dts: qcom: sc7180: Make watchdog
 bark interrupt edge triggered"), the Qualcomm watchdog timer's bark
 interrupt should be configured as edge triggered. Make the change.
 
-Fixes: 0e51f883daa9 ("arm64: dts: qcom: sc7280: Add APSS watchdog node")
+Fixes: 36c436b03c58 ("arm64: dts: qcom: sdm845: Add watchdog bark interrupt")
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
@@ -93,22 +91,22 @@ Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
 (no changes since v1)
 
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 04bf85b0399a..1964ef66492f 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -5389,7 +5389,7 @@ watchdog: watchdog@17c10000 {
- 			compatible = "qcom,apss-wdt-sc7280", "qcom,kpss-wdt";
- 			reg = <0 0x17c10000 0 0x1000>;
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index bf5e6eb9d313..9648505644ff 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -5088,7 +5088,7 @@ watchdog@17980000 {
+ 			compatible = "qcom,apss-wdt-sdm845", "qcom,kpss-wdt";
+ 			reg = <0 0x17980000 0 0x1000>;
  			clocks = <&sleep_clk>;
 -			interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
 +			interrupts = <GIC_SPI 0 IRQ_TYPE_EDGE_RISING>;
- 			status = "reserved"; /* Owned by Gunyah hyp */
  		};
  
+ 		apss_shared: mailbox@17990000 {
 -- 
 2.42.0.869.gea05f2083d-goog
 
