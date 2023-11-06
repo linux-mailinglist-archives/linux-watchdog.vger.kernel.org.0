@@ -2,103 +2,104 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591697E1D2B
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Nov 2023 10:27:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1ED37E1D92
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Nov 2023 10:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbjKFJ1D (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Nov 2023 04:27:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
+        id S230146AbjKFJyH (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 6 Nov 2023 04:54:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbjKFJ0z (ORCPT
+        with ESMTP id S229478AbjKFJyG (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Nov 2023 04:26:55 -0500
-X-Greylist: delayed 4560 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Nov 2023 01:26:51 PST
-Received: from 6.mo576.mail-out.ovh.net (6.mo576.mail-out.ovh.net [46.105.50.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C77E1
-        for <linux-watchdog@vger.kernel.org>; Mon,  6 Nov 2023 01:26:51 -0800 (PST)
-Received: from director2.ghost.mail-out.ovh.net (unknown [10.108.1.170])
-        by mo576.mail-out.ovh.net (Postfix) with ESMTP id 14E0829BFB
-        for <linux-watchdog@vger.kernel.org>; Mon,  6 Nov 2023 08:10:49 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-wwxds (unknown [10.110.103.14])
-        by director2.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 3C6D81FEB6;
-        Mon,  6 Nov 2023 08:10:45 +0000 (UTC)
-Received: from RCM-web8.webmail.mail.ovh.net ([151.80.29.22])
-        by ghost-submission-6684bf9d7b-wwxds with ESMTPSA
-        id 7H6TDIWfSGVAfQQAGogUGA
-        (envelope-from <rafal@milecki.pl>); Mon, 06 Nov 2023 08:10:45 +0000
-MIME-Version: 1.0
-Date:   Mon, 06 Nov 2023 09:10:44 +0100
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Mon, 6 Nov 2023 04:54:06 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CF5B6;
+        Mon,  6 Nov 2023 01:54:03 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9d267605ceeso620158166b.2;
+        Mon, 06 Nov 2023 01:54:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699264442; x=1699869242; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=otIX8+idMS2A1yjtMOT40Sxj9HPBhYuyJPN9t9t9cSU=;
+        b=EHcUx1ukOxbDPHnTrT//Ek7SZ/fyDELBgRjzV41dFnXLrmpgcbf0p5ZuJGixtQ+gwt
+         jvXh4dpkB1FROOUo3JSP5Y7KKl7h5P520nnyrKp5dLqUtIxa1KbLvBH2NwXaM6WysXtU
+         qB8k+w499eDbMCVHiMNM+NknZGCJg2A/39nWYBAI/mIhSA88EVoEOtPanevZmaFH7ELi
+         6t4Sx5Y4BqMg5pV0NS4AuCTEL1D0Tbaeo5/FEN6zx6nOGyNXFA6ZevSH2WcSqih9n7FM
+         cXQDGYhCbpSvI8WAuueTk0TQt8FKU8LGMsBGq3prhPMXZeA92i+DbhMifYDQ9R6scAXi
+         aTCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699264442; x=1699869242;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=otIX8+idMS2A1yjtMOT40Sxj9HPBhYuyJPN9t9t9cSU=;
+        b=cEs2h+kREJcgEZodifaTVXUwcWp8pXwnSbd57YNK2SOIJ3PrUzOpxnH3A8p2nJSqNy
+         NOuWWhg3jJTVDcoK9mkGg1ydyVO2pft0lL30paWfREUf3Qp7Kyoe0qNIrqCI5ACIHd1q
+         KmSklb8RfJ+j7eWVxN0q/V/m17CMwkVdWqpgbx3f58NFVMqNpU7tJufCoIHxAvBFPAZX
+         ASqn1eMgu+8nHIZAXgeOWaV7i8hli8WsJBYcXJCTM+P9HMYXWtFtc6mag+Xj4yuwzZ5L
+         Ucae6tIZyucYr/aiCmiRc9v4KadbYYbGyjM1Kwz1wIgeSndz5DSWGbZw0D7b07EQErZd
+         epfQ==
+X-Gm-Message-State: AOJu0YwMbdmRYLNS+8GIUPjSTLGvLz/RfwRNrSafnjFZOeAC+8N0hg1I
+        VSIujTFFPxsfKJPMqsbfzWU=
+X-Google-Smtp-Source: AGHT+IEa/iGSQXVfW4lCHwK5pPS3XxlZeD5ZwgxpdBfFYaqagOnnjZDZjh8ZU9LX+MWw6I95hlcrpQ==
+X-Received: by 2002:a17:907:72d6:b0:9b8:e670:657b with SMTP id du22-20020a17090772d600b009b8e670657bmr12498126ejc.64.1699264441587;
+        Mon, 06 Nov 2023 01:54:01 -0800 (PST)
+Received: from felia.fritz.box ([2a02:810d:7e40:14b0:c1b6:41cb:bf88:2048])
+        by smtp.gmail.com with ESMTPSA id h26-20020a1709063c1a00b009b97aa5a3aesm3895568ejg.34.2023.11.06.01.54.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Nov 2023 01:54:01 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Nik Bune <n2h9z4@gmail.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Julius Werner <jwerner@chromium.org>,
-        Evan Benn <evanbenn@chromium.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Justin Chen <justinpopo6@gmail.com>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jamie Iles <jamie@jamieiles.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: re-order entries to match
- coding convention
-In-Reply-To: <20231105184154.43700-1-krzysztof.kozlowski@linaro.org>
-References: <20231105184154.43700-1-krzysztof.kozlowski@linaro.org>
-User-Agent: Roundcube Webmail/1.4.15
-Message-ID: <300293570c0d29d5d4a39762121b5bef@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 31.11.218.106
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 11495438051932285714
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedruddufedgudduiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeggfffhvfevufgjfhgfkfigihgtgfesthekjhdttderjeenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepjedvlefguedthfefleehgeeftdeludeluedvgfeffeevhfevtdehteejteefheegnecukfhppeduvdejrddtrddtrddupdefuddruddurddvudekrddutdeipdduhedurdektddrvdelrddvvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehrrghfrghlsehmihhlvggtkhhirdhplheqpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqfigrthgthhguohhgsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehjeeipdhmohguvgepshhmthhpohhuth
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: rectify entry for DIALOG SEMICONDUCTOR DRIVERS
+Date:   Mon,  6 Nov 2023 10:53:49 +0100
+Message-Id: <20231106095349.9564-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 2023-11-05 19:41, Krzysztof Kozlowski wrote:
-> The Devicetree bindings coding convention, as used in most of the files
-> and expressed in Documentation/devicetree/bindings/example-schema.yaml,
-> expects:
-> 1. "allOf:" block just before "properties:" (or after "required:" for
->    more complex cases),
-> 2. additionalProperties/unevaluatedProperties at the end of the file,
->    just before the examples section.
-> 
-> Re-order few schemas to match the convention to avoid repeating review
-> comments for new patches using existing code as template.  No 
-> functional
-> changes.
+Commit bd888a4377ae ("dt-bindings: watchdog: da9062-wdt: convert txt to
+yaml") converts da9062-wdt.txt to dlg,da9062-watchdog.yaml, but misses to
+adjust its reference in MAINTAINERS.
 
-It's surely going to help a bit but for a long time solution maybe you
-could consider adding proper check to Rob's bot and/or checkpatch.pl.
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+broken reference.
 
+Repair this file pattern in DIALOG SEMICONDUCTOR DRIVERS.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 0410322b740a..bd9077b1fd41 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6123,7 +6123,7 @@ F:	Documentation/devicetree/bindings/regulator/dlg,da9*.yaml
+ F:	Documentation/devicetree/bindings/regulator/dlg,slg51000.yaml
+ F:	Documentation/devicetree/bindings/sound/da[79]*.txt
+ F:	Documentation/devicetree/bindings/thermal/da90??-thermal.txt
+-F:	Documentation/devicetree/bindings/watchdog/da90??-wdt.txt
++F:	Documentation/devicetree/bindings/watchdog/dlg,da90??-watchdog.yaml
+ F:	Documentation/hwmon/da90??.rst
+ F:	drivers/gpio/gpio-da90??.c
+ F:	drivers/hwmon/da90??-hwmon.c
 -- 
-Rafał Miłecki
+2.17.1
+
