@@ -2,96 +2,156 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC747E2955
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Nov 2023 17:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E767E2B7E
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Nov 2023 18:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbjKFQDI (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Nov 2023 11:03:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
+        id S229567AbjKFRyg (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 6 Nov 2023 12:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbjKFQDI (ORCPT
+        with ESMTP id S231940AbjKFRyg (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Nov 2023 11:03:08 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4A51BF
-        for <linux-watchdog@vger.kernel.org>; Mon,  6 Nov 2023 08:03:01 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1cc5b6d6228so29688605ad.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 06 Nov 2023 08:03:01 -0800 (PST)
+        Mon, 6 Nov 2023 12:54:36 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598CD99;
+        Mon,  6 Nov 2023 09:54:33 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9d216597f64so719142766b.3;
+        Mon, 06 Nov 2023 09:54:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699286581; x=1699891381; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t/qoJs+A1lXUTYUPFlaW/rf8AJ823vaWyENtX91KFj8=;
-        b=feH4n/QfeoygsSjJ52fENkYZHgpSjYv0jRy/CqhM77Hozc4HA5LMCS/k3jFWWKpq6T
-         TvSX4gBgUH6Le91FVru4IeIGpalsqsPW3ovdtn+rEelqDUWlOLs8Nztb9ljk9nvnrRH5
-         PiJZjLriq4ACb2IosaEtBRzfxwg0+3CcUm+ktleEhXaSejw38ZjGowjMu/WG3j1kaarh
-         AchrQLLVZM8TqUGNwiws1/U7y8d8VM9hv1kbxZP9eIZdByd+yTP+ougXMiPHGDFFRa7Z
-         XCasQKTw5KDvtGU3X+gpzMPn0ozFtT0a23qvG3DxC/Sr8Qcx222gM2+F28OfGSbnRvx4
-         s1Rg==
+        d=gmail.com; s=20230601; t=1699293272; x=1699898072; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IzKV7qWrlJmcquvKy+a5u08BQoeMEeArYOHGsnCX41Q=;
+        b=GrvqLEQv1v2dUwM7sFYuMjXccaGR85URCxR+FytrEQTxDduref6KkzQsJfgNv5ElKO
+         VPZSy8bpCR8WbU+x6rMGdK2IRqDO2B/JNz4PtFau6cq04GN62y08AMQeUx8dAT0wKWUA
+         r6lRhJSjLvc2y7LWQkushvMSsCymw4/ZosZl8LraWGq3EbNVTI3HILnsH/Zx1B7wyanE
+         25c5ZeANAXK6VMrK/fCAVjzesWFwluLKdhrTbkfmBwfQJ6pPLB5DDExoFwW9gU0D4H2T
+         6Z5Q574sYVHSbSAZU8dFjMkVO+ODemc9ugjVeH4XIpz0uVpnA6ssZibI2cIf+rJf1aS4
+         HsGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699286581; x=1699891381;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t/qoJs+A1lXUTYUPFlaW/rf8AJ823vaWyENtX91KFj8=;
-        b=efi4IeoQPMWFkpDGbDf8DB/KMaXYGVY4+pCyksCSOHVbqBIW72fU28T6+8lKMjTu0s
-         cFSpAsBNN82Di22F9kfxfwLFwS67xnkP8RCXylZoP9r+OPou/+Z4K5l5+oqWgDIHzxmT
-         llIl8+OVY6vLXrZX3zjgFuFS3kx2wokDr+nLE/n3g3OgGrUBAcTeXxYefmdLNHzXtMHv
-         rAUIegP4luwL53rhi4xj64tWw4+zF9qMvaNHWgRj4gkGWRz2Dna6MQpXvUXhtSLGr6kd
-         5ebIJBsekYowbm39HOEScAfz1t8XHM8ocaqmuPNY7ZFKTf4jNJJqbl9w6J1qUyabdh/y
-         nsVA==
-X-Gm-Message-State: AOJu0Yw9j3ZgjpNWh1rAaQuvvlsP99EhSUt6VSvk1J+I7ySJvDfuhtXW
-        AYWCyV4HJs6uIOhso/nMHD8=
-X-Google-Smtp-Source: AGHT+IHpX+T0C1ELk8bYGAtWIkFKu9hKv08ULUF/UAeQ4bA5/C862T5lhPkMaMHjYPRmrG9Lh/zgIw==
-X-Received: by 2002:a17:902:ce81:b0:1cc:53ed:cc78 with SMTP id f1-20020a170902ce8100b001cc53edcc78mr21641910plg.15.1699286580969;
-        Mon, 06 Nov 2023 08:03:00 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 2-20020a170902ee4200b001cc1465a6f3sm6125073plo.91.2023.11.06.08.03.00
+        d=1e100.net; s=20230601; t=1699293272; x=1699898072;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IzKV7qWrlJmcquvKy+a5u08BQoeMEeArYOHGsnCX41Q=;
+        b=W0m9YB7qEPBBydhlp6Iv4TSk1sukM1AGWIUo2TVD4wYrkrC0NfKn7PgTTCVeHUlpVK
+         bDio14E38m91bjXG3BTkqDVkPYx0tsfRrQ69aqIdr4Hl/vwLCQn0ryia7Fom6Q7VQpSb
+         FkuV6em/y1+AVHkEAS7+tf+1ArVl6tsPuzv2WotNzNihwcNVUPjtbFZdJ7Sh5Vz0XLxm
+         JcEK73Vuw5Kr7sab56gEuWpEIFn64McmZvg9OCFyr+bPqOmUH1IigcO/1qQS8dmVktoa
+         Xs1oloPyAfUQI/c5mfM5mCm1VQ9sHBVnTLjT02EA5zyuviiUMUJACjzOAn/M65q/uNS4
+         R9Lw==
+X-Gm-Message-State: AOJu0YxWIDPOBJrEMeVryMteJQOeMudBlS1e1Vfu4QHkEH/T2IcxuG5V
+        8seF9GjvaPzyUhgZN1ZPrbg=
+X-Google-Smtp-Source: AGHT+IFceGCqz7uGeasJ8d+wxWR0+0eyyS86xlfc4B2mo//mWBCxuzkcbi0iaMx+rshovbvyruvywA==
+X-Received: by 2002:a17:907:2d1e:b0:9c0:1d65:68d9 with SMTP id gs30-20020a1709072d1e00b009c01d6568d9mr14416837ejc.7.1699293271544;
+        Mon, 06 Nov 2023 09:54:31 -0800 (PST)
+Received: from localhost.localdomain ([2a02:8109:8c00:3664:6811:f78e:de5c:331])
+        by smtp.gmail.com with ESMTPSA id dx15-20020a170906a84f00b0098e34446464sm91217ejb.25.2023.11.06.09.54.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Nov 2023 08:03:00 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 6 Nov 2023 08:02:59 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 5/5] watchdog: txx9wdt: Convert to platform remove
- callback returning void
-Message-ID: <d6c1d3f5-777c-462e-bdda-5dfa7294799e@roeck-us.net>
-References: <20231106154807.3866712-1-u.kleine-koenig@pengutronix.de>
- <20231106154807.3866712-6-u.kleine-koenig@pengutronix.de>
+        Mon, 06 Nov 2023 09:54:31 -0800 (PST)
+From:   Nik Bune <n2h9z4@gmail.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        skhan@linuxfoundation.org, stigge@antcom.de
+Cc:     Nik Bune <n2h9z4@gmail.com>, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: watchdog: nxp,pnx4008-wdt: convert txt to yaml
+Date:   Mon,  6 Nov 2023 18:54:28 +0100
+Message-Id: <20231106175428.162256-1-n2h9z4@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231106154807.3866712-6-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, Nov 06, 2023 at 04:48:13PM +0100, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is ignored (apart
-> from emitting a warning) and this typically results in resource leaks.
-> 
-> To improve here there is a quest to make the remove callback return
-> void. In the first step of this quest all drivers are converted to
-> .remove_new(), which already returns void. Eventually after all drivers
-> are converted, .remove_new() will be renamed to .remove().
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Convert txt file to yaml. Add maintainers from git blame.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Nik Bune <n2h9z4@gmail.com>
+---
+
+Changes in v2 (according to review comments):
+- Put allOf: after maintainers: block.
+- Put unevaluatedProperties: after required: block.
+- Updated example to use lower-case hex.
+
+v1 patch: https://lore.kernel.org/all/20231104182813.80055-1-n2h9z4@gmail.com/
+
+ .../bindings/watchdog/nxp,pnx4008-wdt.yaml    | 34 +++++++++++++++++++
+ .../bindings/watchdog/pnx4008-wdt.txt         | 17 ----------
+ 2 files changed, 34 insertions(+), 17 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/nxp,pnx4008-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/pnx4008-wdt.txt
+
+diff --git a/Documentation/devicetree/bindings/watchdog/nxp,pnx4008-wdt.yaml b/Documentation/devicetree/bindings/watchdog/nxp,pnx4008-wdt.yaml
+new file mode 100644
+index 000000000000..35ef940cbabe
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/nxp,pnx4008-wdt.yaml
+@@ -0,0 +1,34 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/nxp,pnx4008-wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP PNX watchdog timer
++
++maintainers:
++  - Roland Stigge <stigge@antcom.de>
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    const: nxp,pnx4008-wdt
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    watchdog@4003c000 {
++        compatible = "nxp,pnx4008-wdt";
++        reg = <0x4003c000 0x1000>;
++        timeout-sec = <10>;
++    };
+diff --git a/Documentation/devicetree/bindings/watchdog/pnx4008-wdt.txt b/Documentation/devicetree/bindings/watchdog/pnx4008-wdt.txt
+deleted file mode 100644
+index 4b76bec62af9..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/pnx4008-wdt.txt
++++ /dev/null
+@@ -1,17 +0,0 @@
+-* NXP PNX watchdog timer
+-
+-Required properties:
+-- compatible: must be "nxp,pnx4008-wdt"
+-- reg: physical base address of the controller and length of memory mapped
+-  region.
+-
+-Optional properties:
+-- timeout-sec: contains the watchdog timeout in seconds.
+-
+-Example:
+-
+-	watchdog@4003c000 {
+-		compatible = "nxp,pnx4008-wdt";
+-		reg = <0x4003C000 0x1000>;
+-		timeout-sec = <10>;
+-	};
+-- 
+2.34.1
+
