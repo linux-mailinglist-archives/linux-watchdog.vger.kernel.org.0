@@ -2,48 +2,46 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEFF7E2904
-	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Nov 2023 16:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D6C7E28FC
+	for <lists+linux-watchdog@lfdr.de>; Mon,  6 Nov 2023 16:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbjKFPtN (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 6 Nov 2023 10:49:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
+        id S232178AbjKFPsp (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Mon, 6 Nov 2023 10:48:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232064AbjKFPtM (ORCPT
+        with ESMTP id S232201AbjKFPso (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 6 Nov 2023 10:49:12 -0500
+        Mon, 6 Nov 2023 10:48:44 -0500
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB06C9
-        for <linux-watchdog@vger.kernel.org>; Mon,  6 Nov 2023 07:49:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12121B2
+        for <linux-watchdog@vger.kernel.org>; Mon,  6 Nov 2023 07:48:41 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r01qD-0007hB-4V; Mon, 06 Nov 2023 16:48:41 +0100
+        id 1r01qB-0007hI-QI; Mon, 06 Nov 2023 16:48:39 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r01qB-0074pU-8R; Mon, 06 Nov 2023 16:48:39 +0100
+        id 1r01qB-0074pX-Da; Mon, 06 Nov 2023 16:48:39 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r01qA-00Dn80-VD; Mon, 06 Nov 2023 16:48:38 +0100
+        id 1r01qB-00Dn83-4S; Mon, 06 Nov 2023 16:48:39 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
         Guenter Roeck <linux@roeck-us.net>
-Cc:     Xingyu Wu <xingyu.wu@starfivetech.com>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        linux-watchdog@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 4/5] watchdog: starfive-wdt: Convert to platform remove callback returning void
-Date:   Mon,  6 Nov 2023 16:48:12 +0100
-Message-ID: <20231106154807.3866712-5-u.kleine-koenig@pengutronix.de>
+Cc:     linux-watchdog@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 5/5] watchdog: txx9wdt: Convert to platform remove callback returning void
+Date:   Mon,  6 Nov 2023 16:48:13 +0100
+Message-ID: <20231106154807.3866712-6-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0.586.gbc5204569f7d.dirty
 In-Reply-To: <20231106154807.3866712-1-u.kleine-koenig@pengutronix.de>
 References: <20231106154807.3866712-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1916; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=IWsge4pWEmraTjNs4H8MWqhiFMh0+iEDsY6CQF+OpCs=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlSQq8u4xRZ377Ik7MUa4G3P63cSZYfQ3qdQB7h CR3kyqmMmaJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZUkKvAAKCRCPgPtYfRL+ ToZ0B/0eXogruJGjFriMGcr36AUn+Kn/rj0PfZbY6QlQmEA9w3o6rIqpaYYPJ7BQKAp9eZq0sfS 7KBSmEukG9yLRVus1fO+G3ityAOanv0iroi8OOx03Yi6bic0S5OTcRR3AU1kjXKlunyLGTbYaEb p5j99rk6E3X3YDOelYQe8j+Gsox0arFqyug1/xaODXJfjlrK85TKMRci0RWrvzJWd7t+IuBWqXQ 8JwY7oPDdCIRC/iOFLO5FQIk3vWuJQufCZIHXgY6tstARSyQkStGy6rBkJb3z2OPJjU+zM5lmTt yyGqYGdswdT8QkSo4ReIK+O4somBCJAwnahAyGfP7nCi0GTA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1728; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=19R16HoTkmoGz3FYqRvLDwotxo52jJV5gvceAFUBBmU=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlSQq998W8PY09AzIIrXsySLVoFqxg+8cVy4Yux 3zp+rNrKC2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZUkKvQAKCRCPgPtYfRL+ TsS9CACzleuDrOxjwLKoa0klPlzgic/kon1lfCG0/a9zZRYE7luRbFoOqXOyfmvifF/2RtjKU93 c8Qxik0/xG7uNn+AkfRI7gObLiQpWozjiX3EoIMdZDyD7s/fmzENtYsHRCfD2ToOxMTVKwe4fXc z7tdwy0GjjNH8f8HHZOOwsA34plxshQnnLkLg7hcSjgFVRbvzCLnGIPn8Oq+QMyf+sPQgEMh+6y ib/17pZP25IG+GBsPeEBm5MEPBSFInnZnRpuXPT/Dl8BGipkMMNAak2wK3K8a2X4vx6i4Dd0g+X y3aigi7xFgpHWDysLhCq3vJGmymuenT4Ui96nl80cSAtluoY
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -74,40 +72,36 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/watchdog/starfive-wdt.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/watchdog/txx9wdt.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
-index 5f501b41faf9..16df92837c5d 100644
---- a/drivers/watchdog/starfive-wdt.c
-+++ b/drivers/watchdog/starfive-wdt.c
-@@ -504,7 +504,7 @@ static int starfive_wdt_probe(struct platform_device *pdev)
+diff --git a/drivers/watchdog/txx9wdt.c b/drivers/watchdog/txx9wdt.c
+index f900c519ed63..8d5f67acbff2 100644
+--- a/drivers/watchdog/txx9wdt.c
++++ b/drivers/watchdog/txx9wdt.c
+@@ -145,12 +145,11 @@ static int txx9wdt_probe(struct platform_device *dev)
  	return ret;
  }
  
--static int starfive_wdt_remove(struct platform_device *pdev)
-+static void starfive_wdt_remove(struct platform_device *pdev)
+-static int txx9wdt_remove(struct platform_device *dev)
++static void txx9wdt_remove(struct platform_device *dev)
  {
- 	struct starfive_wdt *wdt = platform_get_drvdata(pdev);
- 
-@@ -516,8 +516,6 @@ static int starfive_wdt_remove(struct platform_device *pdev)
- 	else
- 		/* disable clock without PM */
- 		starfive_wdt_disable_clock(wdt);
--
+ 	watchdog_unregister_device(&txx9wdt);
+ 	clk_disable_unprepare(txx9_imclk);
+ 	clk_put(txx9_imclk);
 -	return 0;
  }
  
- static void starfive_wdt_shutdown(struct platform_device *pdev)
-@@ -587,7 +585,7 @@ MODULE_DEVICE_TABLE(of, starfive_wdt_match);
+ static void txx9wdt_shutdown(struct platform_device *dev)
+@@ -160,7 +159,7 @@ static void txx9wdt_shutdown(struct platform_device *dev)
  
- static struct platform_driver starfive_wdt_driver = {
- 	.probe = starfive_wdt_probe,
--	.remove = starfive_wdt_remove,
-+	.remove_new = starfive_wdt_remove,
- 	.shutdown = starfive_wdt_shutdown,
+ static struct platform_driver txx9wdt_driver = {
+ 	.probe = txx9wdt_probe,
+-	.remove = txx9wdt_remove,
++	.remove_new = txx9wdt_remove,
+ 	.shutdown = txx9wdt_shutdown,
  	.driver = {
- 		.name = "starfive-wdt",
+ 		.name = "txx9wdt",
 -- 
 2.42.0
 
