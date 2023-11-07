@@ -2,121 +2,252 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C937E3FEA
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Nov 2023 14:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A1C7E4150
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Nov 2023 14:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234079AbjKGNUY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Nov 2023 08:20:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
+        id S232017AbjKGN51 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Nov 2023 08:57:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234025AbjKGNUN (ORCPT
+        with ESMTP id S229643AbjKGN5Z (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Nov 2023 08:20:13 -0500
-Received: from srv.wefi.net (srv.wefi.net [80.66.63.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FE91F3
-        for <linux-watchdog@vger.kernel.org>; Tue,  7 Nov 2023 05:18:39 -0800 (PST)
-Received: from [172.16.0.112] (unknown [91.223.201.37])
-        by srv.wefi.net (Postfix) with ESMTPSA id DE7205A3500;
-        Tue,  7 Nov 2023 14:18:36 +0100 (CET)
-Message-ID: <fdc9d9c1cb641441cf8e0cc9d7c902951bb32115.camel@wefi.net>
-Subject: Re: [RFC] improve it87_wdt (IT8784/IT8786) / keeping WDTCTRL
- unchanged / deactivate watchdog by setting WDTVALLSB/WDTVALMSB 0
-From:   Werner Fischer <devlists@wefi.net>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Hanspeter Portner <dev@open-music-kontrollers.ch>
-Cc:     linux-watchdog@vger.kernel.org
-Date:   Tue, 07 Nov 2023 14:18:35 +0100
-In-Reply-To: <87b1c97177c43eeec640483cc2f83f5f4d7b1060.camel@wefi.net>
-References: <87b1c97177c43eeec640483cc2f83f5f4d7b1060.camel@wefi.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4-2 
+        Tue, 7 Nov 2023 08:57:25 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F5EEA
+        for <linux-watchdog@vger.kernel.org>; Tue,  7 Nov 2023 05:57:21 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-66d134a019cso39555966d6.3
+        for <linux-watchdog@vger.kernel.org>; Tue, 07 Nov 2023 05:57:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1699365440; x=1699970240; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CbqpJ5gw9GOJ91Wt05ZBQ3B3ajCS3+ZL+yYMKlVS/7w=;
+        b=IjbOo4faoEMViNBUpWlV1QZx/HopQt16gv26gV9X86KEP+BznglaZRA2Kyg+2RcgIa
+         kB2tYLVfGWnyV1RRKFQgjLg4FIFYiYYLL808Vj7ABZrkZhv7UjnCvy8zIFHYlfzFCjEr
+         6f3AyfnEoZNDcEWae0QE/xQJkjv3nspH8oUtzJ6qDyVuKsc680CMk+LS1RsSOdromTek
+         w0RTpbaWmoYMiPXafccIL482Sg+cXP06FSClyO2WvGrRCBq4u4m8v7BSRuqnJeT7fAOb
+         nhMlVfrKYvTBcEHYLbHT1Mi+chI1SEcRmgS9xkx/cM7TgmPOv+8qOiPhwJBvz/KGVDEg
+         GBHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699365440; x=1699970240;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CbqpJ5gw9GOJ91Wt05ZBQ3B3ajCS3+ZL+yYMKlVS/7w=;
+        b=msaRt1niKIshEOx93t+97/V274QWuBqsgOiBlOTouGMnqh5Mx9Mo2OijuKyAq9SShq
+         vSBRnpXy8hfFWdJ2oY+g6gNChZ+rd1igwR2COphNCXO/OsEI8ZCkfRsDtDyJV40HEAKl
+         dh2qnFtNLGlNNpvxUn8cegm9oPkoptJ78ZOddwjncJ1Cqrs2Nm0cxdUl9kPRODFKsNSW
+         PS7lT3uKx+KlwwFMlz/MX8xUcG5n1fe8cQcJlS79whFltEWa63jwvUUHPjL9s4iJ7/1b
+         n692Br8VmlD4B1GFCdfLGHOOafdHKAEK1fYbqZJTcLmLwWoucDdocZlZTcSuGdr2r330
+         T7YQ==
+X-Gm-Message-State: AOJu0Yz7cnpc3ThmSWV3+kOlsF2kqDoJmSLT0SYFUuFfdoYtKcYt+YnR
+        yFG1LWBvDKVgMz8XfjDePJXsx1niRNkIMfxWPftrGA==
+X-Google-Smtp-Source: AGHT+IFPmCDJWmXuqEspf2Hkzm+uYMa/h3WFcFn4tmvryaRRUPo6gpp0HW4f25qoMF9Xg4paJyLmxWpEpUjIXDfQnzY=
+X-Received: by 2002:a05:6214:529b:b0:66d:3474:a93a with SMTP id
+ kj27-20020a056214529b00b0066d3474a93amr37508496qvb.30.1699365440438; Tue, 07
+ Nov 2023 05:57:20 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20231011184823.443959-1-peter.griffin@linaro.org>
+ <20231011184823.443959-11-peter.griffin@linaro.org> <aae4e6cd-dcfc-442d-9ed7-d5a73c419ba8@kernel.org>
+In-Reply-To: <aae4e6cd-dcfc-442d-9ed7-d5a73c419ba8@kernel.org>
+From:   Peter Griffin <peter.griffin@linaro.org>
+Date:   Tue, 7 Nov 2023 13:57:09 +0000
+Message-ID: <CADrjBPrUsSigThoLU9thmZiaG4690B9-BcZYrBn44K9Fc8z3vg@mail.gmail.com>
+Subject: Re: [PATCH v3 10/20] clk: samsung: clk-gs101: Add cmu_top registers,
+ plls, mux and gates
+To:     Chanwoo Choi <chanwoo@kernel.org>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
+        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
+        linus.walleij@linaro.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org,
+        cw00.choi@samsung.com, tudor.ambarus@linaro.org,
+        andre.draszik@linaro.org, semen.protsenko@linaro.org,
+        saravanak@google.com, willmcvicker@google.com, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        kernel-team@android.com, linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Guenter, hi Wim, hi Hanspeter,
+Hi Chanwoo,
 
-On Mon, 2023-10-16 at 15:16 +0200, Werner Fischer wrote:
-> Hi Guenter, hi Hanspeter,
-> 
-> I currently testing two devices with IT8784 and IT8786 watchdog
-> timers.
-> Although the chips are supported by it87_wdt.c after Hanspeter's
-> patches back in 2020, the watchdog functionality does not work in my
-> following test:
-> - Debian 12 using Kernel 6.1.58 or current 6.6-rc
-> - loading module it87_wdt
-> - starting wd_keepalive Deamon
-> - killing wd_keepalive using signal 9
-> -> system keeps on running even after the configured watchdog timeout
-> 
-> For debugging purposes, I have used the patch below to report the
-> content of the watchdog registers 0x71 (WDTCTRL), 0x72 (WDTCFG), 0x73
-> (WDTVALLSB), and 0x74 (WDTVALMSB) to the system log.
-> 
-> It turned out, that 0x71 (WDTCTRL) has initially the following value
-> set (before the module changes it to 0x00):
-> - 8 decimal (IT8784 / IT8786)
-> - 4 decimal (IT8613)
-> 
-> I figured out, that the following code line makes the watchdog of
-> IT8784 and IT8786 non-functional for me:
->   superio_outb(0x00, WDTCTRL);
-> I have removed this code in my patch below, then the watchdog works
-> for IT8784 and IT8786.
-> 
-> I'm not sure, why the WDTCTRL register is set to 0x00 in the code. As
-> it seems, the register can have different meanings for differnt
-> IT8xxx chips. Accoring to [1] it seems sufficient to set both
-> WDTVALLSB and WDTVALMSB to 0x00 to deactivate the watchdog timer:
-> "When the WDT Time-out Value register is set to a non-zero value, the
-> WDT loads the value and begin counting down from the value."
-> This happens e.g. also when wd_keepalive is stopped cleanly.
-> 
-> I am open to support to improve the it87_wdt code.
-> 
-> But before I'm writing and sending a patch, I have the following
-> question:
-> * What is the reason, why WDTCTRL is set to 0x00 in the code? and
-> * Could we think about removing this (at least for IT8784/8786)?
-It seems to me that setting WDTCTRL to 0x00 has been in the code from
-the beginning.
+Thanks for your review!
 
-For my test systems with IT8784 and IT8786 I got the following
-information from the system vendor:
-"71H bit 3 is the mode choice for the clock input of the IT8784/IT8786
-chip. This bit is set to 1 (= PCICLK mode) and can not be set to 0."
-Setting it to 0 breaks the watchdog functionality.
+On Wed, 18 Oct 2023 at 17:51, Chanwoo Choi <chanwoo@kernel.org> wrote:
+>
+> Hi Peter,
+>
+> On 23. 10. 12. 03:48, Peter Griffin wrote:
+> > CMU_TOP is the top level clock management unit which contains PLLs, muxes
+> > and gates that feed the other clock management units.
+> >
+> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> > ---
+> >  drivers/clk/samsung/Kconfig     |    9 +
+> >  drivers/clk/samsung/Makefile    |    2 +
+> >  drivers/clk/samsung/clk-gs101.c | 1551 +++++++++++++++++++++++++++++++
+> >  3 files changed, 1562 insertions(+)
+> >  create mode 100644 drivers/clk/samsung/clk-gs101.c
+> >
+> > diff --git a/drivers/clk/samsung/Kconfig b/drivers/clk/samsung/Kconfig
+> > index 76a494e95027..14362ec9c543 100644
+> > --- a/drivers/clk/samsung/Kconfig
+> > +++ b/drivers/clk/samsung/Kconfig
+> > @@ -12,6 +12,7 @@ config COMMON_CLK_SAMSUNG
+> >       select EXYNOS_5410_COMMON_CLK if ARM && SOC_EXYNOS5410
+> >       select EXYNOS_5420_COMMON_CLK if ARM && SOC_EXYNOS5420
+> >       select EXYNOS_ARM64_COMMON_CLK if ARM64 && ARCH_EXYNOS
+> > +     select GOOGLE_GS101_COMMON_CLK if ARM64 && ARCH_GOOGLE_TENSOR
+> >       select TESLA_FSD_COMMON_CLK if ARM64 && ARCH_TESLA_FSD
+> >
+> >  config S3C64XX_COMMON_CLK
+> > @@ -95,6 +96,14 @@ config EXYNOS_CLKOUT
+> >         status of the certains clocks from SoC, but it could also be tied to
+> >         other devices as an input clock.
+> >
+> > +config GOOGLE_GS101_COMMON_CLK
+> > +     bool "Google gs101 clock controller support" if COMPILE_TEST
+> > +     depends on COMMON_CLK_SAMSUNG
+> > +     depends on EXYNOS_ARM64_COMMON_CLK
+> > +     help
+> > +       Support for the clock controller present on the Google gs101 SoC.
+> > +       Choose Y here only if you build for this SoC.
+> > +
+>
+> (snip)
+>
+> > +
+> > +/* gs101 */
+> > +static const struct samsung_mux_clock cmu_top_mux_clks[] __initconst = {
+> > +     /* CMU_TOP_PURECLKCOMP */
+> > +     MUX(CLK_MOUT_SHARED0_PLL, "mout_shared0_pll", mout_shared0_pll_p,
+> > +         PLL_CON0_PLL_SHARED0, 4, 1),
+> > +     MUX(CLK_MOUT_SHARED1_PLL, "mout_shared1_pll", mout_shared1_pll_p,
+> > +         PLL_CON0_PLL_SHARED1, 4, 1),
+> > +     MUX(CLK_MOUT_SHARED2_PLL, "mout_shared2_pll", mout_shared2_pll_p,
+> > +         PLL_CON0_PLL_SHARED2, 4, 1),
+> > +     MUX(CLK_MOUT_SHARED3_PLL, "mout_shared3_pll", mout_shared3_pll_p,
+> > +         PLL_CON0_PLL_SHARED3, 4, 1),
+> > +     MUX(CLK_MOUT_SPARE_PLL, "mout_spare_pll", mout_spare_pll_p,
+> > +         PLL_CON0_PLL_SPARE, 4, 1),
+> > +
+> > +     /* BUS0 */
+> > +     MUX(CLK_MOUT_BUS0_BUS, "mout_cmu_bus0_bus", mout_cmu_bus0_bus_p,
+> > +         CLK_CON_MUX_MUX_CLKCMU_BUS0_BUS, 0, 2),
+> > +     MUX(CLK_MOUT_CMU_BOOST, "mout_cmu_boost", mout_cmu_cmu_boost_p,
+>
+> In order to keep the consistent naming style,
+> I think that need to change from 'mout_cmu_boost' to 'mout_cmu_cmu_boost'.
 
-Unfortunately, ITE does not provide the specifications PDFs publicly
-anymore. But the documentation at [2] provides details regarding the
-Watchdog Timer Control Register (71h) of an ITE chip, which has the
-description "External CLK_IN Select: 1: PCICLK" for bit 3, too.
+Yes, that's a good point, and a good spot! Will fix it in v4.
 
-As it seems system-dependent, removing
-  superio_outb(0x00, WDTCTRL);
-from the code may lead to problems with other ITE chips, which maybe
-could need WDTCTRL set to 0x00.
+>
+> > +         CLK_CON_MUX_MUX_CLKCMU_CMU_BOOST, 0, 2),
+> > +
+> > +     /* BUS1 */
+> > +     MUX(CLK_MOUT_BUS1_BUS, "mout_cmu_bus1_bus", mout_cmu_bus1_bus_p,
+> > +         CLK_CON_MUX_MUX_CLKCMU_BUS1_BUS, 0, 2),
+> > +
+> > +     /* BUS2 */
+> > +     MUX(CLK_MOUT_BUS2_BUS, "mout_cmu_bus2_bus", mout_cmu_bus2_bus_p,
+> > +         CLK_CON_MUX_MUX_CLKCMU_BUS2_BUS, 0, 2),
+> > +
+> > +     /* CORE */
+> > +     MUX(CLK_MOUT_CORE_BUS, "mout_cmu_core_bus", mout_cmu_core_bus_p,
+> > +         CLK_CON_MUX_MUX_CLKCMU_CORE_BUS, 0, 2),
+> > +
+> > +     /* EH */
+> > +     MUX(CLK_MOUT_EH_BUS, "mout_cmu_eh_bus", mout_cmu_eh_bus_p,
+> > +         CLK_CON_MUX_MUX_CLKCMU_CORE_BUS, 0, 2),
+>
+> 'mout_cmu_core_bus' and 'mout_cmu_eh_bus' uses the same register/shift/width information.
+> I think it should be modified by changing the regiter or changing the shift/width information.
 
-So my idea to be on the safe side for exiting users of it87_wdt, too:
-* What do you think about an optional module parameter to let the user
-  choose to leave WDTCTRL untouched? (this would make the watchdog work
-  e.g. with my test systems with IT8784 and IT8786, too)
+It should be using the CLK_CON_MUX_MUX_CLKCMU_EH_BUS register.
+Will fix it in v4.
 
-In case you would support such a code change, I would be happy to write
-a patch (including some other minor/cosmetic code fixes/addition of
-further ITE chips).
+>
+> > +
+> > +     /* CPUCL{0,1,2,} */
+> > +     MUX(CLK_MOUT_CPUCL2_SWITCH, "mout_cmu_cpucl2_switch", mout_cmu_cpucl2_switch_p,
+> > +         CLK_CON_MUX_MUX_CLKCMU_CPUCL2_SWITCH, 0, 2),
+> > +
+> > +     MUX(CLK_MOUT_CPUCL1_SWITCH, "mout_cmu_cpucl1_switch", mout_cmu_cpucl1_switch_p,
+> > +         CLK_CON_MUX_MUX_CLKCMU_CPUCL1_SWITCH, 0, 2),
+> > +
+> > +     MUX(CLK_MOUT_CPUCL0_SWITCH, "mout_cmu_cpucl0_switch", mout_cmu_cpucl0_switch_p,
+> > +         CLK_CON_MUX_MUX_CLKCMU_CPUCL0_SWITCH, 0, 2),
+> > +
+> > +     MUX(CLK_MOUT_CPUCL0_DBG, "mout_cmu_cpucl0_dbg", mout_cmu_cpucl0_dbg_p,
+> > +         CLK_CON_DIV_CLKCMU_CPUCL0_DBG, 0, 2),
+> > +
+> > +     MUX(CLK_MOUT_CMU_HPM, "mout_cmu_hpm", mout_cmu_hpm_p,
+> > +         CLK_CON_MUX_MUX_CLKCMU_HPM, 0, 2),
+> >
+>
+> (snip)
+>
+> > +     /* PDP */
+> > +     MUX(CLK_MOUT_PDP_BUS, "mout_cmu_pdp_bus", mout_cmu_pdp_bus_p,
+> > +         CLK_CON_MUX_MUX_CLKCMU_PDP_BUS, 0, 2),
+> > +
+> > +     /* PDP */
+> > +     MUX(CLK_MOUT_PDP_VRA, "mout_cmu_pdp_vra", mout_cmu_pdp_vra_p,
+> > +         CLK_CON_MUX_MUX_CLKCMU_PDP_VRA, 0, 2),
+> > +
+> > +     /* IPP */
+> > +     MUX(CLK_MOUT_IPP_BUS, "mout_cmu_ipp_bus", mout_cmu_ipp_bus_p,
+> > +         CLK_CON_MUX_MUX_CLKCMU_IPP_BUS, 0, 2),
+> > +
+> > +     /* G3AA */
+> > +     MUX(CLK_MOUT_G3AA, "mout_cmu_g3aa", mout_cmu_g3aa_p,
+> > +         CLK_CON_MUX_MUX_CLKCMU_G3AA_G3AA, 0, 2),
+>
+> I think that need to change the mux name and mux parent name
+> because other mux name use the twice word according to the register name
+> even if use the same work such as 'mout_cmu_g2d_g2d', 'mout_cmu_mcsc_mcsc' and 'mout_cmu_mfc_mfc'.
+> - mout_cmu_g3aa -> mout_cmu_g3aa_g3aa
+> - mout_cmu_g3aa_p -> mount_cmu_g3aa_g3aa_p
 
-Best regards,
-Werner
+Will fix in v4
 
-[2] http://files.nexcom.com/Driver/NDiSB425/User_Manual_NDiSB425-SI3_170111.pdf
+>
+> (snip)
+>
+> > +     /* CSIS */
+> > +     GATE(CLK_GOUT_CSIS, "gout_cmu_csis_bus", "mout_cmu_csis_bus",
+> > +          CLK_CON_GAT_GATE_CLKCMU_CSIS_BUS, 21, 0, 0),
+> > +     /* PDP */
+> > +     GATE(CLK_GOUT_PDP_BUS, "gout_cmu_pdp_bus", "mout_cmu_pdp_bus",
+> > +          CLK_CON_GAT_GATE_CLKCMU_PDP_BUS, 21, 0, 0),
+> > +
+> > +     GATE(CLK_GOUT_PDP_VRA, "gout_cmu_pdp_vra", "mout_cmu_pdp_vra",
+> > +          CLK_CON_GAT_GATE_CLKCMU_PDP_BUS, 21, 0, 0),
+> > +
+> > +     /* IPP */
+> > +     GATE(CLK_GOUT_IPP_BUS, "gout_cmu_ipp_bus", "mout_cmu_ipp_bus",
+> > +          CLK_CON_GAT_GATE_CLKCMU_IPP_BUS, 21, 0, 0),
+> > +     /* G3AA */
+> > +     GATE(CLK_GOUT_G3AA, "gout_cmu_g3aa", "mout_cmu_g3aa",
+> > +          CLK_CON_MUX_MUX_CLKCMU_G3AA_G3AA, 21, 0, 0),
+>
+> ditto.
+> gout_cmu_g3aa -> gout_cmu_g3aa_g3aa
+> mout_cmu_g3aa -> mout_cmu_g3aa_g3aa
+
+Will fix in V4
+
+regards,
+
+Peter.
