@@ -2,252 +2,216 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A1C7E4150
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Nov 2023 14:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E21E7E41E4
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Nov 2023 15:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbjKGN51 (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Nov 2023 08:57:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
+        id S229738AbjKGOfF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Nov 2023 09:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjKGN5Z (ORCPT
+        with ESMTP id S229737AbjKGOfE (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Nov 2023 08:57:25 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F5EEA
-        for <linux-watchdog@vger.kernel.org>; Tue,  7 Nov 2023 05:57:21 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-66d134a019cso39555966d6.3
-        for <linux-watchdog@vger.kernel.org>; Tue, 07 Nov 2023 05:57:21 -0800 (PST)
+        Tue, 7 Nov 2023 09:35:04 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CB598
+        for <linux-watchdog@vger.kernel.org>; Tue,  7 Nov 2023 06:35:01 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5a90d6ab962so67218247b3.2
+        for <linux-watchdog@vger.kernel.org>; Tue, 07 Nov 2023 06:35:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699365440; x=1699970240; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CbqpJ5gw9GOJ91Wt05ZBQ3B3ajCS3+ZL+yYMKlVS/7w=;
-        b=IjbOo4faoEMViNBUpWlV1QZx/HopQt16gv26gV9X86KEP+BznglaZRA2Kyg+2RcgIa
-         kB2tYLVfGWnyV1RRKFQgjLg4FIFYiYYLL808Vj7ABZrkZhv7UjnCvy8zIFHYlfzFCjEr
-         6f3AyfnEoZNDcEWae0QE/xQJkjv3nspH8oUtzJ6qDyVuKsc680CMk+LS1RsSOdromTek
-         w0RTpbaWmoYMiPXafccIL482Sg+cXP06FSClyO2WvGrRCBq4u4m8v7BSRuqnJeT7fAOb
-         nhMlVfrKYvTBcEHYLbHT1Mi+chI1SEcRmgS9xkx/cM7TgmPOv+8qOiPhwJBvz/KGVDEg
-         GBHA==
+        d=gmail.com; s=20230601; t=1699367700; x=1699972500; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=yOrH/ReyHc7tsTPrnyaKQaed5Nb9j2/ZSpWBSo9L+k0=;
+        b=jnm7KwSZZb7VA7xmf/SuqzCNmT1YUC47SbCSeT+SqD4tHK0TrSKdfgRMxyHI7WM7Ma
+         Z6GqX97xEF+tr1AQo+a2+wZb56CohUEXukC0vzLE/jMHf888fZuqAYSTg/Q4MxJvyPJ+
+         2z8+r5+0c2b1fZhoCtwt6jcqrVBSKLCvKALWE4UKUQKI8diZ/Bwf0rrRucYRGO/0l9/c
+         yD6UixnI5XHgJLPS/QvunyNCTktqnharJ86Taw2t2pg8FOcUB7Mij1LfZr46TB9dbOEO
+         paUOgXLZ/5F3hvE3OaU5iBtJHHN4oeMaHm1Mn4kNhbtmhUeeHxL32Fk5wsePNJzVgZQ+
+         4Slg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699365440; x=1699970240;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1699367700; x=1699972500;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CbqpJ5gw9GOJ91Wt05ZBQ3B3ajCS3+ZL+yYMKlVS/7w=;
-        b=msaRt1niKIshEOx93t+97/V274QWuBqsgOiBlOTouGMnqh5Mx9Mo2OijuKyAq9SShq
-         vSBRnpXy8hfFWdJ2oY+g6gNChZ+rd1igwR2COphNCXO/OsEI8ZCkfRsDtDyJV40HEAKl
-         dh2qnFtNLGlNNpvxUn8cegm9oPkoptJ78ZOddwjncJ1Cqrs2Nm0cxdUl9kPRODFKsNSW
-         PS7lT3uKx+KlwwFMlz/MX8xUcG5n1fe8cQcJlS79whFltEWa63jwvUUHPjL9s4iJ7/1b
-         n692Br8VmlD4B1GFCdfLGHOOafdHKAEK1fYbqZJTcLmLwWoucDdocZlZTcSuGdr2r330
-         T7YQ==
-X-Gm-Message-State: AOJu0Yz7cnpc3ThmSWV3+kOlsF2kqDoJmSLT0SYFUuFfdoYtKcYt+YnR
-        yFG1LWBvDKVgMz8XfjDePJXsx1niRNkIMfxWPftrGA==
-X-Google-Smtp-Source: AGHT+IFPmCDJWmXuqEspf2Hkzm+uYMa/h3WFcFn4tmvryaRRUPo6gpp0HW4f25qoMF9Xg4paJyLmxWpEpUjIXDfQnzY=
-X-Received: by 2002:a05:6214:529b:b0:66d:3474:a93a with SMTP id
- kj27-20020a056214529b00b0066d3474a93amr37508496qvb.30.1699365440438; Tue, 07
- Nov 2023 05:57:20 -0800 (PST)
+        bh=yOrH/ReyHc7tsTPrnyaKQaed5Nb9j2/ZSpWBSo9L+k0=;
+        b=MnqGdHXX3ba6qRajj7RdZeKggr84seK44cDm8uuTpi8i743EHNf1rUWzpmRfG8703C
+         nhwvMttAURsP1Vc8IqiMxOaaAKMXM12Fq2iEbqlHV5Izk+TpxjGZFs8TNcwllhqua4qO
+         WVyIHXqYpa46yGhkzhDVMCRokB9H66Z9XMmSWvPAMWKmk601GYuH0/I48UmKLPn6A4h8
+         FZC+m1jc3vltulf6L7S+XCzgEFaPxuzlF7hMJfuXBhcvMP/9d4u2hhPN3c2QNtRihmwh
+         qSF7bsv4dwGFZCLN26EhZ50og8CDghknf/JGGiO271hKZq1SDjISUpIORRyb82UfdNkZ
+         PhqA==
+X-Gm-Message-State: AOJu0YwsOHGyNDE2v2VJ4SNtr44lYuBJ8DwmyuBuJBNhoESklPSjg0Yi
+        6sD/ONLLHruE+XQdtzyMaFw=
+X-Google-Smtp-Source: AGHT+IGB4uE01L1xHSYq7jlK2XrXYmwKVFFLEGb9KueYf9FPXGGARj0yhIZUPFur7tmYwMANZF7msQ==
+X-Received: by 2002:a05:690c:101:b0:5b3:60c2:5781 with SMTP id bd1-20020a05690c010100b005b360c25781mr15146725ywb.32.1699367700284;
+        Tue, 07 Nov 2023 06:35:00 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j68-20020a0df947000000b00582b239674esm5646836ywf.129.2023.11.07.06.34.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Nov 2023 06:34:59 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <140b264d-341f-465b-8715-dacfe84b3f71@roeck-us.net>
+Date:   Tue, 7 Nov 2023 06:34:58 -0800
 MIME-Version: 1.0
-References: <20231011184823.443959-1-peter.griffin@linaro.org>
- <20231011184823.443959-11-peter.griffin@linaro.org> <aae4e6cd-dcfc-442d-9ed7-d5a73c419ba8@kernel.org>
-In-Reply-To: <aae4e6cd-dcfc-442d-9ed7-d5a73c419ba8@kernel.org>
-From:   Peter Griffin <peter.griffin@linaro.org>
-Date:   Tue, 7 Nov 2023 13:57:09 +0000
-Message-ID: <CADrjBPrUsSigThoLU9thmZiaG4690B9-BcZYrBn44K9Fc8z3vg@mail.gmail.com>
-Subject: Re: [PATCH v3 10/20] clk: samsung: clk-gs101: Add cmu_top registers,
- plls, mux and gates
-To:     Chanwoo Choi <chanwoo@kernel.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
-        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
-        linus.walleij@linaro.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org,
-        cw00.choi@samsung.com, tudor.ambarus@linaro.org,
-        andre.draszik@linaro.org, semen.protsenko@linaro.org,
-        saravanak@google.com, willmcvicker@google.com, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        kernel-team@android.com, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC] improve it87_wdt (IT8784/IT8786) / keeping WDTCTRL
+ unchanged / deactivate watchdog by setting WDTVALLSB/WDTVALMSB 0
+Content-Language: en-US
+To:     Werner Fischer <devlists@wefi.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Hanspeter Portner <dev@open-music-kontrollers.ch>
+Cc:     linux-watchdog@vger.kernel.org
+References: <87b1c97177c43eeec640483cc2f83f5f4d7b1060.camel@wefi.net>
+ <fdc9d9c1cb641441cf8e0cc9d7c902951bb32115.camel@wefi.net>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <fdc9d9c1cb641441cf8e0cc9d7c902951bb32115.camel@wefi.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hi Chanwoo,
+On 11/7/23 05:18, Werner Fischer wrote:
+> Hi Guenter, hi Wim, hi Hanspeter,
+> 
+> On Mon, 2023-10-16 at 15:16 +0200, Werner Fischer wrote:
+>> Hi Guenter, hi Hanspeter,
+>>
+>> I currently testing two devices with IT8784 and IT8786 watchdog
+>> timers.
+>> Although the chips are supported by it87_wdt.c after Hanspeter's
+>> patches back in 2020, the watchdog functionality does not work in my
+>> following test:
+>> - Debian 12 using Kernel 6.1.58 or current 6.6-rc
+>> - loading module it87_wdt
+>> - starting wd_keepalive Deamon
+>> - killing wd_keepalive using signal 9
+>> -> system keeps on running even after the configured watchdog timeout
+>>
+>> For debugging purposes, I have used the patch below to report the
+>> content of the watchdog registers 0x71 (WDTCTRL), 0x72 (WDTCFG), 0x73
+>> (WDTVALLSB), and 0x74 (WDTVALMSB) to the system log.
+>>
+>> It turned out, that 0x71 (WDTCTRL) has initially the following value
+>> set (before the module changes it to 0x00):
+>> - 8 decimal (IT8784 / IT8786)
+>> - 4 decimal (IT8613)
+>>
+>> I figured out, that the following code line makes the watchdog of
+>> IT8784 and IT8786 non-functional for me:
+>>    superio_outb(0x00, WDTCTRL);
+>> I have removed this code in my patch below, then the watchdog works
+>> for IT8784 and IT8786.
+>>
+>> I'm not sure, why the WDTCTRL register is set to 0x00 in the code. As
+>> it seems, the register can have different meanings for differnt
+>> IT8xxx chips. Accoring to [1] it seems sufficient to set both
+>> WDTVALLSB and WDTVALMSB to 0x00 to deactivate the watchdog timer:
+>> "When the WDT Time-out Value register is set to a non-zero value, the
+>> WDT loads the value and begin counting down from the value."
+>> This happens e.g. also when wd_keepalive is stopped cleanly.
+>>
+>> I am open to support to improve the it87_wdt code.
+>>
+>> But before I'm writing and sending a patch, I have the following
+>> question:
+>> * What is the reason, why WDTCTRL is set to 0x00 in the code? and
+>> * Could we think about removing this (at least for IT8784/8786)?
+> It seems to me that setting WDTCTRL to 0x00 has been in the code from
+> the beginning.
+> 
+> For my test systems with IT8784 and IT8786 I got the following
+> information from the system vendor:
+> "71H bit 3 is the mode choice for the clock input of the IT8784/IT8786
+> chip. This bit is set to 1 (= PCICLK mode) and can not be set to 0."
+> Setting it to 0 breaks the watchdog functionality.
+> 
+> Unfortunately, ITE does not provide the specifications PDFs publicly
+> anymore. But the documentation at [2] provides details regarding the
 
-Thanks for your review!
+They really never did, or at least not for a long time. Some board
+vendors used to be Linux-friendly and provided datasheets on request,
+but that is no longer the case. My recommendation used to be, and still is,
+not to use boards with Super-IO chips from ITE to run Linux. This is not
+only due to lack of datasheets, but also due to the lack of support from
+both chip and board vendors if there are any issues when trying to support
+the chips in Linux.
 
-On Wed, 18 Oct 2023 at 17:51, Chanwoo Choi <chanwoo@kernel.org> wrote:
->
-> Hi Peter,
->
-> On 23. 10. 12. 03:48, Peter Griffin wrote:
-> > CMU_TOP is the top level clock management unit which contains PLLs, muxes
-> > and gates that feed the other clock management units.
-> >
-> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> > ---
-> >  drivers/clk/samsung/Kconfig     |    9 +
-> >  drivers/clk/samsung/Makefile    |    2 +
-> >  drivers/clk/samsung/clk-gs101.c | 1551 +++++++++++++++++++++++++++++++
-> >  3 files changed, 1562 insertions(+)
-> >  create mode 100644 drivers/clk/samsung/clk-gs101.c
-> >
-> > diff --git a/drivers/clk/samsung/Kconfig b/drivers/clk/samsung/Kconfig
-> > index 76a494e95027..14362ec9c543 100644
-> > --- a/drivers/clk/samsung/Kconfig
-> > +++ b/drivers/clk/samsung/Kconfig
-> > @@ -12,6 +12,7 @@ config COMMON_CLK_SAMSUNG
-> >       select EXYNOS_5410_COMMON_CLK if ARM && SOC_EXYNOS5410
-> >       select EXYNOS_5420_COMMON_CLK if ARM && SOC_EXYNOS5420
-> >       select EXYNOS_ARM64_COMMON_CLK if ARM64 && ARCH_EXYNOS
-> > +     select GOOGLE_GS101_COMMON_CLK if ARM64 && ARCH_GOOGLE_TENSOR
-> >       select TESLA_FSD_COMMON_CLK if ARM64 && ARCH_TESLA_FSD
-> >
-> >  config S3C64XX_COMMON_CLK
-> > @@ -95,6 +96,14 @@ config EXYNOS_CLKOUT
-> >         status of the certains clocks from SoC, but it could also be tied to
-> >         other devices as an input clock.
-> >
-> > +config GOOGLE_GS101_COMMON_CLK
-> > +     bool "Google gs101 clock controller support" if COMPILE_TEST
-> > +     depends on COMMON_CLK_SAMSUNG
-> > +     depends on EXYNOS_ARM64_COMMON_CLK
-> > +     help
-> > +       Support for the clock controller present on the Google gs101 SoC.
-> > +       Choose Y here only if you build for this SoC.
-> > +
->
-> (snip)
->
-> > +
-> > +/* gs101 */
-> > +static const struct samsung_mux_clock cmu_top_mux_clks[] __initconst = {
-> > +     /* CMU_TOP_PURECLKCOMP */
-> > +     MUX(CLK_MOUT_SHARED0_PLL, "mout_shared0_pll", mout_shared0_pll_p,
-> > +         PLL_CON0_PLL_SHARED0, 4, 1),
-> > +     MUX(CLK_MOUT_SHARED1_PLL, "mout_shared1_pll", mout_shared1_pll_p,
-> > +         PLL_CON0_PLL_SHARED1, 4, 1),
-> > +     MUX(CLK_MOUT_SHARED2_PLL, "mout_shared2_pll", mout_shared2_pll_p,
-> > +         PLL_CON0_PLL_SHARED2, 4, 1),
-> > +     MUX(CLK_MOUT_SHARED3_PLL, "mout_shared3_pll", mout_shared3_pll_p,
-> > +         PLL_CON0_PLL_SHARED3, 4, 1),
-> > +     MUX(CLK_MOUT_SPARE_PLL, "mout_spare_pll", mout_spare_pll_p,
-> > +         PLL_CON0_PLL_SPARE, 4, 1),
-> > +
-> > +     /* BUS0 */
-> > +     MUX(CLK_MOUT_BUS0_BUS, "mout_cmu_bus0_bus", mout_cmu_bus0_bus_p,
-> > +         CLK_CON_MUX_MUX_CLKCMU_BUS0_BUS, 0, 2),
-> > +     MUX(CLK_MOUT_CMU_BOOST, "mout_cmu_boost", mout_cmu_cmu_boost_p,
->
-> In order to keep the consistent naming style,
-> I think that need to change from 'mout_cmu_boost' to 'mout_cmu_cmu_boost'.
+> Watchdog Timer Control Register (71h) of an ITE chip, which has the
+> description "External CLK_IN Select: 1: PCICLK" for bit 3, too.
+> 
+> As it seems system-dependent, removing
+>    superio_outb(0x00, WDTCTRL);
+> from the code may lead to problems with other ITE chips, which maybe
+> could need WDTCTRL set to 0x00.
+> 
 
-Yes, that's a good point, and a good spot! Will fix it in v4.
+Bit 4..7 of the register are used to control watchdog timer resets (pings).
+Skipping the write entirely is therefore unacceptable even for IT8784/IT8786
+because we _don't_ want activity on a (legacy) keyboard, mouse, game,
+or infrared port to reset the watchdog timer.
 
->
-> > +         CLK_CON_MUX_MUX_CLKCMU_CMU_BOOST, 0, 2),
-> > +
-> > +     /* BUS1 */
-> > +     MUX(CLK_MOUT_BUS1_BUS, "mout_cmu_bus1_bus", mout_cmu_bus1_bus_p,
-> > +         CLK_CON_MUX_MUX_CLKCMU_BUS1_BUS, 0, 2),
-> > +
-> > +     /* BUS2 */
-> > +     MUX(CLK_MOUT_BUS2_BUS, "mout_cmu_bus2_bus", mout_cmu_bus2_bus_p,
-> > +         CLK_CON_MUX_MUX_CLKCMU_BUS2_BUS, 0, 2),
-> > +
-> > +     /* CORE */
-> > +     MUX(CLK_MOUT_CORE_BUS, "mout_cmu_core_bus", mout_cmu_core_bus_p,
-> > +         CLK_CON_MUX_MUX_CLKCMU_CORE_BUS, 0, 2),
-> > +
-> > +     /* EH */
-> > +     MUX(CLK_MOUT_EH_BUS, "mout_cmu_eh_bus", mout_cmu_eh_bus_p,
-> > +         CLK_CON_MUX_MUX_CLKCMU_CORE_BUS, 0, 2),
->
-> 'mout_cmu_core_bus' and 'mout_cmu_eh_bus' uses the same register/shift/width information.
-> I think it should be modified by changing the regiter or changing the shift/width information.
+> So my idea to be on the safe side for exiting users of it87_wdt, too:
+> * What do you think about an optional module parameter to let the user
+>    choose to leave WDTCTRL untouched? (this would make the watchdog work
+>    e.g. with my test systems with IT8784 and IT8786, too)
+> 
 
-It should be using the CLK_CON_MUX_MUX_CLKCMU_EH_BUS register.
-Will fix it in v4.
+Make it conditional for IT8784/IT8786: On those chips, read the value from
+the chip and clear all but bit 3. This is the safest we can do. Future
+chips can be added as needed.
 
->
-> > +
-> > +     /* CPUCL{0,1,2,} */
-> > +     MUX(CLK_MOUT_CPUCL2_SWITCH, "mout_cmu_cpucl2_switch", mout_cmu_cpucl2_switch_p,
-> > +         CLK_CON_MUX_MUX_CLKCMU_CPUCL2_SWITCH, 0, 2),
-> > +
-> > +     MUX(CLK_MOUT_CPUCL1_SWITCH, "mout_cmu_cpucl1_switch", mout_cmu_cpucl1_switch_p,
-> > +         CLK_CON_MUX_MUX_CLKCMU_CPUCL1_SWITCH, 0, 2),
-> > +
-> > +     MUX(CLK_MOUT_CPUCL0_SWITCH, "mout_cmu_cpucl0_switch", mout_cmu_cpucl0_switch_p,
-> > +         CLK_CON_MUX_MUX_CLKCMU_CPUCL0_SWITCH, 0, 2),
-> > +
-> > +     MUX(CLK_MOUT_CPUCL0_DBG, "mout_cmu_cpucl0_dbg", mout_cmu_cpucl0_dbg_p,
-> > +         CLK_CON_DIV_CLKCMU_CPUCL0_DBG, 0, 2),
-> > +
-> > +     MUX(CLK_MOUT_CMU_HPM, "mout_cmu_hpm", mout_cmu_hpm_p,
-> > +         CLK_CON_MUX_MUX_CLKCMU_HPM, 0, 2),
-> >
->
-> (snip)
->
-> > +     /* PDP */
-> > +     MUX(CLK_MOUT_PDP_BUS, "mout_cmu_pdp_bus", mout_cmu_pdp_bus_p,
-> > +         CLK_CON_MUX_MUX_CLKCMU_PDP_BUS, 0, 2),
-> > +
-> > +     /* PDP */
-> > +     MUX(CLK_MOUT_PDP_VRA, "mout_cmu_pdp_vra", mout_cmu_pdp_vra_p,
-> > +         CLK_CON_MUX_MUX_CLKCMU_PDP_VRA, 0, 2),
-> > +
-> > +     /* IPP */
-> > +     MUX(CLK_MOUT_IPP_BUS, "mout_cmu_ipp_bus", mout_cmu_ipp_bus_p,
-> > +         CLK_CON_MUX_MUX_CLKCMU_IPP_BUS, 0, 2),
-> > +
-> > +     /* G3AA */
-> > +     MUX(CLK_MOUT_G3AA, "mout_cmu_g3aa", mout_cmu_g3aa_p,
-> > +         CLK_CON_MUX_MUX_CLKCMU_G3AA_G3AA, 0, 2),
->
-> I think that need to change the mux name and mux parent name
-> because other mux name use the twice word according to the register name
-> even if use the same work such as 'mout_cmu_g2d_g2d', 'mout_cmu_mcsc_mcsc' and 'mout_cmu_mfc_mfc'.
-> - mout_cmu_g3aa -> mout_cmu_g3aa_g3aa
-> - mout_cmu_g3aa_p -> mount_cmu_g3aa_g3aa_p
+Guenter
 
-Will fix in v4
-
->
-> (snip)
->
-> > +     /* CSIS */
-> > +     GATE(CLK_GOUT_CSIS, "gout_cmu_csis_bus", "mout_cmu_csis_bus",
-> > +          CLK_CON_GAT_GATE_CLKCMU_CSIS_BUS, 21, 0, 0),
-> > +     /* PDP */
-> > +     GATE(CLK_GOUT_PDP_BUS, "gout_cmu_pdp_bus", "mout_cmu_pdp_bus",
-> > +          CLK_CON_GAT_GATE_CLKCMU_PDP_BUS, 21, 0, 0),
-> > +
-> > +     GATE(CLK_GOUT_PDP_VRA, "gout_cmu_pdp_vra", "mout_cmu_pdp_vra",
-> > +          CLK_CON_GAT_GATE_CLKCMU_PDP_BUS, 21, 0, 0),
-> > +
-> > +     /* IPP */
-> > +     GATE(CLK_GOUT_IPP_BUS, "gout_cmu_ipp_bus", "mout_cmu_ipp_bus",
-> > +          CLK_CON_GAT_GATE_CLKCMU_IPP_BUS, 21, 0, 0),
-> > +     /* G3AA */
-> > +     GATE(CLK_GOUT_G3AA, "gout_cmu_g3aa", "mout_cmu_g3aa",
-> > +          CLK_CON_MUX_MUX_CLKCMU_G3AA_G3AA, 21, 0, 0),
->
-> ditto.
-> gout_cmu_g3aa -> gout_cmu_g3aa_g3aa
-> mout_cmu_g3aa -> mout_cmu_g3aa_g3aa
-
-Will fix in V4
-
-regards,
-
-Peter.
