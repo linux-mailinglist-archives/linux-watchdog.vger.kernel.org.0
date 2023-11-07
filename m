@@ -2,73 +2,73 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D08267E35FE
-	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Nov 2023 08:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28EB17E376F
+	for <lists+linux-watchdog@lfdr.de>; Tue,  7 Nov 2023 10:20:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233481AbjKGHkd (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Tue, 7 Nov 2023 02:40:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57450 "EHLO
+        id S233823AbjKGJUh (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 7 Nov 2023 04:20:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233439AbjKGHkd (ORCPT
+        with ESMTP id S233933AbjKGJUe (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Tue, 7 Nov 2023 02:40:33 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB8CC6
-        for <linux-watchdog@vger.kernel.org>; Mon,  6 Nov 2023 23:40:30 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-da3b4b7c6bdso5489463276.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 06 Nov 2023 23:40:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699342829; x=1699947629; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fmjk2S1gx+Mc5+ahgQ713WeG4CHwIeelidOIJhG+yrU=;
-        b=gpbngZQoHZASwVRGuasiLGM2AJsGXd8wIwBhG3LDz013w6XGvRpn3XyuHQa6XKlvEL
-         gt8itovHaqH3V0PDyvhQB3Z1SI2f3Z/FQBKKTNqddgydE5KNiwOoOpJTlliKqZnBKGOu
-         30KX4mJbzoWSq5e4F5cnaErudG8FHVd1iN1V8QKljHU+Ss7DruYxEtQY9K5qBfCZnQtw
-         KrbIJUwx23E4CHOxNvdKM3Y3kcXJ1FQ7sDlk0ShFeQN6A7Km4pnJAJ6pZa9ClynnTYHO
-         qcDEd2iP3SCojjOpxjyGKhqa/IbvHOs6hM5xaHzS1vFv0e/uY5dP8rz8r6NBLeKQ0efu
-         IfBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699342829; x=1699947629;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fmjk2S1gx+Mc5+ahgQ713WeG4CHwIeelidOIJhG+yrU=;
-        b=mjF34Fq2YewJddXmZOfM0sr86GXfiA1n+Fyf9v5qfpGdGqsjSL6HPD/ujIsG6Eco7v
-         xa/ABgk92mExeZSBSUJck60Yl1zbwbG8sGXdZ/N1gq3cfD7mqKHLOU/n1GOJOxhPyASy
-         rUwP2wBQLa/QTyK48wJbyEDKrUUxoFNXK7azVsI0MXHOAJSjRwJhcFK/iahCKse1DcNl
-         0kxiTI46P1UQBE/CzqEwMEww8Hn+dKAUnnJH3AmT3YXOgRSPnaNmgcizbjwZ1a8AlxJ9
-         gJYbVSDvs6F93RWyxcTdtAnvcWz0q31cEcT0GLyEH1uEvLfyBjXQ4MIbHmpd2vaTLWJX
-         JohA==
-X-Gm-Message-State: AOJu0Yy8OccxrN/1Ib3S6ETaR6VfGIR0gdVL+tZA1OtXLp4iN/tLzqJO
-        pDQGbabRdvsZs1n9jf86Rbsf6RILojW/gWM+ulMAcA==
-X-Google-Smtp-Source: AGHT+IEkezaO3xn+bZBw5zU5yiH9kZRM2ERBEPQaE0eEGpN1fDLHKGTNDxCLoAWK+RBxtSNwmsD3XxAQ4jHLyeMD6ow=
-X-Received: by 2002:a25:25cd:0:b0:d9a:f949:45d1 with SMTP id
- l196-20020a2525cd000000b00d9af94945d1mr29426309ybl.13.1699342829481; Mon, 06
- Nov 2023 23:40:29 -0800 (PST)
+        Tue, 7 Nov 2023 04:20:34 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1157B10A;
+        Tue,  7 Nov 2023 01:20:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1699348833; x=1730884833;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ty6/O6J9ZeOHNpcRydrxpthEDYq+jEaqT+wwfhl3Yaw=;
+  b=iV6jjimwN+9ecMbamVoiVtxRrHwhx/rAEU01riDylYzsUS3gSVERLeRf
+   od1RqlCRH5xhKj6MayxlbLMlrc4AgtoHJDTVu9QKPZJW1oIc90ZXrOMm5
+   Jmdp9EVWySe2Z3g8EXgPWCtv8oa7mcDwdiXDJn07tP6d6LNzcJM2ANrEW
+   eUBx5xQYBXqGlDgBAdoiA8ik7CFBnM/v6j0L5YiZ4KcZ1sQ32gHn/lb2b
+   /BbYxnpvDUovcuboaTvOAz0n3HV6EAvoa40VwmONmJ6SS07vECsuTkZNV
+   iO/qeRRBQGDcuUEwolWBV/VGbCsCvxGBf0aCzb0NpOU8/Fs4RDaRPhFOV
+   w==;
+X-CSE-ConnectionGUID: a6ClygnyScu//yMtsjnvfQ==
+X-CSE-MsgGUID: GfA5zt2BRASIffjZ0lOfPA==
+X-ThreatScanner-Verdict: Negative
+X-IronPort-AV: E=Sophos;i="6.03,283,1694761200"; 
+   d="scan'208";a="11316970"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Nov 2023 02:20:32 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 7 Nov 2023 02:20:19 -0700
+Received: from [10.159.245.205] (10.10.85.11) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Tue, 7 Nov 2023 02:20:17 -0700
+Message-ID: <b946ef1d-b367-4ecf-92b8-349505517d86@microchip.com>
+Date:   Tue, 7 Nov 2023 10:19:47 +0100
 MIME-Version: 1.0
-References: <20231106144335.v2.1.Ic7577567baff921347d423b722de8b857602efb1@changeid>
- <20231106144335.v2.6.I909b7c4453d7b7fb0db4b6e49aa21666279d827d@changeid>
-In-Reply-To: <20231106144335.v2.6.I909b7c4453d7b7fb0db4b6e49aa21666279d827d@changeid>
-From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date:   Tue, 7 Nov 2023 08:40:18 +0100
-Message-ID: <CACMJSeupvs4zkz9GiBwL5r+fN9qiqdpbcRgnifsBrZrQiFEaQg@mail.gmail.com>
-Subject: Re: [PATCH v2 6/9] arm64: dts: qcom: sa8775p: Make watchdog bark
- interrupt edge triggered
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/5] watchdog: at91sam9: Stop using
+ module_platform_driver_probe()
+Content-Language: en-US, fr-FR
+To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, swboyd@chromium.org,
-        linux-watchdog@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Guenter Roeck <linux@roeck-us.net>
+CC:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+        <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <kernel@pengutronix.de>,
+        <linux-kbuild@vger.kernel.org>
+References: <20231106154807.3866712-1-u.kleine-koenig@pengutronix.de>
+ <20231106154807.3866712-2-u.kleine-koenig@pengutronix.de>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20231106154807.3866712-2-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,38 +76,29 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Mon, 6 Nov 2023 at 23:44, Douglas Anderson <dianders@chromium.org> wrote:
->
-> As described in the patch ("arm64: dts: qcom: sc7180: Make watchdog
-> bark interrupt edge triggered"), the Qualcomm watchdog timer's bark
-> interrupt should be configured as edge triggered. Make the change.
->
-> Fixes: 09b701b89a76 ("arm64: dts: qcom: sa8775p: add the watchdog node")
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
->
-> (no changes since v1)
->
->  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> index 13dd44dd9ed1..6b92f9083104 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> @@ -2235,7 +2235,7 @@ watchdog@17c10000 {
->                         compatible = "qcom,apss-wdt-sa8775p", "qcom,kpss-wdt";
->                         reg = <0x0 0x17c10000 0x0 0x1000>;
->                         clocks = <&sleep_clk>;
-> -                       interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
-> +                       interrupts = <GIC_SPI 0 IRQ_TYPE_EDGE_RISING>;
->                 };
->
->                 memtimer: timer@17c20000 {
-> --
-> 2.42.0.869.gea05f2083d-goog
->
+On 06/11/2023 at 16:48, Uwe Kleine-König wrote:
+> On today's platforms the benefit of platform_driver_probe() isn't that
+> relevant any more. It allows to drop some code after booting (or module
+> loading) for .probe() and discard the .remove() function completely if
+> the driver is built-in. This typically saves a few 100k.
+> 
+> The downside of platform_driver_probe() is that the driver cannot be
+> bound and unbound at runtime which is ancient and also slightly
+> complicates testing. There are also thoughts to deprecate
+> platform_driver_probe() because it adds some complexity in the driver
+> core for little gain. Also many drivers don't use it correctly. This
+> driver for example misses to mark the driver struct with __refdata which
+> is needed to suppress a (W=1) modpost warning:
+> 
+>          WARNING: modpost: drivers/watchdog/at91sam9_wdt: section mismatch in reference: at91wdt_driver+0x4 (section: .data) -> at91wdt_remove (section: .exit.text)
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+
+> ---
+>   drivers/watchdog/at91sam9_wdt.c | 10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
+
+[..]
+
