@@ -2,301 +2,174 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63677E5C6F
-	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Nov 2023 18:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB247E5EE3
+	for <lists+linux-watchdog@lfdr.de>; Wed,  8 Nov 2023 20:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjKHReC (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Wed, 8 Nov 2023 12:34:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50104 "EHLO
+        id S229640AbjKHTyO (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Wed, 8 Nov 2023 14:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjKHReB (ORCPT
+        with ESMTP id S229566AbjKHTyO (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Wed, 8 Nov 2023 12:34:01 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2021FDF
-        for <linux-watchdog@vger.kernel.org>; Wed,  8 Nov 2023 09:33:59 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-2809fb0027cso5504898a91.2
-        for <linux-watchdog@vger.kernel.org>; Wed, 08 Nov 2023 09:33:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699464838; x=1700069638; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sAWSOoeAjfBbJekhTKUv9QwV6bzlMliXHO1btit3MQo=;
-        b=PAs55n9UN0Tt4azZuzlN/v4fOpAQkVUhX1VuQsYZhU0jHvGaVLULti+ZZd2hhS1CPg
-         lcJPvfGofMpQ8x8KjEyqQ37WRb0aeqwbmSt7r8bLqRFOxeKkAxsZiPgH2AVJn6Pfnfnf
-         ROZxj/y8NDoH0G/VUip3RR9Jqnc2sOyGKuQhcfj7mF/DVB9ybWbBzx9rQG/Nj9GxVExg
-         N8U4TR5MAvenuZMFnJOsSS3CBJX7ob6xMg7AV4QDqMEtUZbKLOfMf2Onc/Zpmv2dOcr9
-         iYOEJGKcz897YYDG3ynCmFFDcmU3euYGFCU5QOi6XwttWgO46PIBpu4HalMhZ5RdSYgw
-         jJeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699464838; x=1700069638;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sAWSOoeAjfBbJekhTKUv9QwV6bzlMliXHO1btit3MQo=;
-        b=l/MR+63JM8qmxp+ssGqOIlmL1Pj0ugQkvIoAOb4NrvfqA9ywGVr0DI0KxxGD4Z6A22
-         MLbRKYfc4BN9b7hFu22yew1H1ZcHX9qI3UyMxARgbi2VNG1vV+oSH1B9dMkTy9Zd2L9K
-         qRT4cLyIVLpnSaPVftOURpodWbFYaiJAgblgg8tyZgHK37DDWDiQPoWJYx6D/5ahe0SV
-         Cbg7eGzPWNsK2Y13hynz9i+NpIGRJO51DvZN1rbpHGH1u9GDydNWARuA8a89HKoYVMjk
-         v7DyTtdDjYwUk7BrwS2F/WzxBs5Yq1dvyZT8LAUVASclBRFDWNZ2Vgl3Jp2ulSWDu3c5
-         plDw==
-X-Gm-Message-State: AOJu0Yz6T9EXlj9JIdIcM994oOskt4sXGRymfAWANI5eShOp6sZSs9pr
-        1WHg1Co8S3bYDBJO7KVRUGa2xd+LlilSnWUfO8poAA==
-X-Google-Smtp-Source: AGHT+IGY4VBAJ38xlUtcmXFmIEhynykPBn3dfo+SVZRmQxxurhZcoKtbYoXN1XDKnlHvImSQIH0q75kjXSAbWt8IHAw=
-X-Received: by 2002:a17:90a:6888:b0:281:da1:4b96 with SMTP id
- a8-20020a17090a688800b002810da14b96mr2347498pjd.22.1699464838284; Wed, 08 Nov
- 2023 09:33:58 -0800 (PST)
+        Wed, 8 Nov 2023 14:54:14 -0500
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3ED9C2118;
+        Wed,  8 Nov 2023 11:54:11 -0800 (PST)
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+        id E639740A00; Wed,  8 Nov 2023 20:46:40 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org E639740A00
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+        s=odk20180602; t=1699472801;
+        bh=DmRwMD5Bdcf33AGivhY3dMfmO2YURcEG4E+f3SDwjfY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=s6o1CZwY9IiPhoU5WZ0hlzVeCPJVG61ihJNt2H/6dFtJhrG7smNpH6CtlG9QVkwMf
+         Lpa1x99BjeGp3LIt6Pr79ihdvvpl+8D6rHxz2VYZPx4eEFDBcc/nNM0mxSDphWJpea
+         /mLYHeXTZYkPcbE/3P/YGOWlewmbSwbzbDeDZvgo=
+Date:   Wed, 8 Nov 2023 20:46:39 +0100
+From:   Wim Van Sebroeck <wim@linux-watchdog.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bharat Bhushan <bbhushan2@marvell.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Darren Hart <darren@os.amperecomputing.com>,
+        George Cherian <george.cherian@marvell.com>,
+        Huqiang Qin <huqiang.qin@amlogic.com>,
+        Jacky Bai <ping.bai@nxp.com>, Janne Grunau <j@jannau.net>,
+        Jinjie Ruan <ruanjinjie@huawei.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matti =?iso-8859-1?Q?Lehtim=E4ki?= <matti.lehtimaki@gmail.com>,
+        Michael Shych <michaelsh@nvidia.com>,
+        Rob Herring <robh@kernel.org>,
+        Srinivas Neeli <srinivas.neeli@amd.com>,
+        Werner Fischer <devlists@wefi.net>,
+        Xing Tong Wu <xingtong.wu@siemens.com>,
+        Zev Weiss <zev@bewilderbeest.net>
+Subject: [GIT PULL REQUEST] watchdog - v6.7 release cycle.
+Message-ID: <20231108194639.GA29922@www.linux-watchdog.org>
 MIME-Version: 1.0
-References: <20231011184823.443959-1-peter.griffin@linaro.org>
- <20231011184823.443959-11-peter.griffin@linaro.org> <aae4e6cd-dcfc-442d-9ed7-d5a73c419ba8@kernel.org>
- <CADrjBPrUsSigThoLU9thmZiaG4690B9-BcZYrBn44K9Fc8z3vg@mail.gmail.com>
-In-Reply-To: <CADrjBPrUsSigThoLU9thmZiaG4690B9-BcZYrBn44K9Fc8z3vg@mail.gmail.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Wed, 8 Nov 2023 11:33:46 -0600
-Message-ID: <CAPLW+4m+n-U4cAkJZTeCsoE_e6r1j8srYmVjSLawPWwHi6SEAw@mail.gmail.com>
-Subject: Re: [PATCH v3 10/20] clk: samsung: clk-gs101: Add cmu_top registers,
- plls, mux and gates
-To:     Peter Griffin <peter.griffin@linaro.org>
-Cc:     Chanwoo Choi <chanwoo@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
-        s.nawrocki@samsung.com, linus.walleij@linaro.org,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, gregkh@linuxfoundation.org, cw00.choi@samsung.com,
-        tudor.ambarus@linaro.org, andre.draszik@linaro.org,
-        saravanak@google.com, willmcvicker@google.com, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        kernel-team@android.com, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.5.20 (2009-12-10)
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On Tue, Nov 7, 2023 at 7:57=E2=80=AFAM Peter Griffin <peter.griffin@linaro.=
-org> wrote:
->
-> Hi Chanwoo,
->
-> Thanks for your review!
->
-> On Wed, 18 Oct 2023 at 17:51, Chanwoo Choi <chanwoo@kernel.org> wrote:
-> >
-> > Hi Peter,
-> >
-> > On 23. 10. 12. 03:48, Peter Griffin wrote:
-> > > CMU_TOP is the top level clock management unit which contains PLLs, m=
-uxes
-> > > and gates that feed the other clock management units.
-> > >
-> > > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> > > ---
-> > >  drivers/clk/samsung/Kconfig     |    9 +
-> > >  drivers/clk/samsung/Makefile    |    2 +
-> > >  drivers/clk/samsung/clk-gs101.c | 1551 +++++++++++++++++++++++++++++=
-++
-> > >  3 files changed, 1562 insertions(+)
-> > >  create mode 100644 drivers/clk/samsung/clk-gs101.c
-> > >
-> > > diff --git a/drivers/clk/samsung/Kconfig b/drivers/clk/samsung/Kconfi=
-g
-> > > index 76a494e95027..14362ec9c543 100644
-> > > --- a/drivers/clk/samsung/Kconfig
-> > > +++ b/drivers/clk/samsung/Kconfig
-> > > @@ -12,6 +12,7 @@ config COMMON_CLK_SAMSUNG
-> > >       select EXYNOS_5410_COMMON_CLK if ARM && SOC_EXYNOS5410
-> > >       select EXYNOS_5420_COMMON_CLK if ARM && SOC_EXYNOS5420
-> > >       select EXYNOS_ARM64_COMMON_CLK if ARM64 && ARCH_EXYNOS
-> > > +     select GOOGLE_GS101_COMMON_CLK if ARM64 && ARCH_GOOGLE_TENSOR
-> > >       select TESLA_FSD_COMMON_CLK if ARM64 && ARCH_TESLA_FSD
-> > >
-> > >  config S3C64XX_COMMON_CLK
-> > > @@ -95,6 +96,14 @@ config EXYNOS_CLKOUT
-> > >         status of the certains clocks from SoC, but it could also be =
-tied to
-> > >         other devices as an input clock.
-> > >
-> > > +config GOOGLE_GS101_COMMON_CLK
-> > > +     bool "Google gs101 clock controller support" if COMPILE_TEST
-> > > +     depends on COMMON_CLK_SAMSUNG
-> > > +     depends on EXYNOS_ARM64_COMMON_CLK
-> > > +     help
-> > > +       Support for the clock controller present on the Google gs101 =
-SoC.
-> > > +       Choose Y here only if you build for this SoC.
-> > > +
-> >
-> > (snip)
-> >
-> > > +
-> > > +/* gs101 */
-> > > +static const struct samsung_mux_clock cmu_top_mux_clks[] __initconst=
- =3D {
-> > > +     /* CMU_TOP_PURECLKCOMP */
-> > > +     MUX(CLK_MOUT_SHARED0_PLL, "mout_shared0_pll", mout_shared0_pll_=
-p,
-> > > +         PLL_CON0_PLL_SHARED0, 4, 1),
-> > > +     MUX(CLK_MOUT_SHARED1_PLL, "mout_shared1_pll", mout_shared1_pll_=
-p,
-> > > +         PLL_CON0_PLL_SHARED1, 4, 1),
-> > > +     MUX(CLK_MOUT_SHARED2_PLL, "mout_shared2_pll", mout_shared2_pll_=
-p,
-> > > +         PLL_CON0_PLL_SHARED2, 4, 1),
-> > > +     MUX(CLK_MOUT_SHARED3_PLL, "mout_shared3_pll", mout_shared3_pll_=
-p,
-> > > +         PLL_CON0_PLL_SHARED3, 4, 1),
-> > > +     MUX(CLK_MOUT_SPARE_PLL, "mout_spare_pll", mout_spare_pll_p,
-> > > +         PLL_CON0_PLL_SPARE, 4, 1),
-> > > +
-> > > +     /* BUS0 */
-> > > +     MUX(CLK_MOUT_BUS0_BUS, "mout_cmu_bus0_bus", mout_cmu_bus0_bus_p=
-,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_BUS0_BUS, 0, 2),
-> > > +     MUX(CLK_MOUT_CMU_BOOST, "mout_cmu_boost", mout_cmu_cmu_boost_p,
-> >
-> > In order to keep the consistent naming style,
-> > I think that need to change from 'mout_cmu_boost' to 'mout_cmu_cmu_boos=
-t'.
->
-> Yes, that's a good point, and a good spot! Will fix it in v4.
->
+Hi Linus,
 
-Why do we need cmu_cmu part at all? From the look of it, renaming all
-*_cmu_cmu_* clocks to just cmu wouldn't cause any naming conflicts. So
-I don't see any benefit of double cmu prefix really.
+Please pull following watchdog changes for the v6.7 release cycle.
 
-> >
-> > > +         CLK_CON_MUX_MUX_CLKCMU_CMU_BOOST, 0, 2),
-> > > +
-> > > +     /* BUS1 */
-> > > +     MUX(CLK_MOUT_BUS1_BUS, "mout_cmu_bus1_bus", mout_cmu_bus1_bus_p=
-,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_BUS1_BUS, 0, 2),
-> > > +
-> > > +     /* BUS2 */
-> > > +     MUX(CLK_MOUT_BUS2_BUS, "mout_cmu_bus2_bus", mout_cmu_bus2_bus_p=
-,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_BUS2_BUS, 0, 2),
-> > > +
-> > > +     /* CORE */
-> > > +     MUX(CLK_MOUT_CORE_BUS, "mout_cmu_core_bus", mout_cmu_core_bus_p=
-,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_CORE_BUS, 0, 2),
-> > > +
-> > > +     /* EH */
-> > > +     MUX(CLK_MOUT_EH_BUS, "mout_cmu_eh_bus", mout_cmu_eh_bus_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_CORE_BUS, 0, 2),
-> >
-> > 'mout_cmu_core_bus' and 'mout_cmu_eh_bus' uses the same register/shift/=
-width information.
-> > I think it should be modified by changing the regiter or changing the s=
-hift/width information.
->
-> It should be using the CLK_CON_MUX_MUX_CLKCMU_EH_BUS register.
-> Will fix it in v4.
->
-> >
-> > > +
-> > > +     /* CPUCL{0,1,2,} */
-> > > +     MUX(CLK_MOUT_CPUCL2_SWITCH, "mout_cmu_cpucl2_switch", mout_cmu_=
-cpucl2_switch_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_CPUCL2_SWITCH, 0, 2),
-> > > +
-> > > +     MUX(CLK_MOUT_CPUCL1_SWITCH, "mout_cmu_cpucl1_switch", mout_cmu_=
-cpucl1_switch_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_CPUCL1_SWITCH, 0, 2),
-> > > +
-> > > +     MUX(CLK_MOUT_CPUCL0_SWITCH, "mout_cmu_cpucl0_switch", mout_cmu_=
-cpucl0_switch_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_CPUCL0_SWITCH, 0, 2),
-> > > +
-> > > +     MUX(CLK_MOUT_CPUCL0_DBG, "mout_cmu_cpucl0_dbg", mout_cmu_cpucl0=
-_dbg_p,
-> > > +         CLK_CON_DIV_CLKCMU_CPUCL0_DBG, 0, 2),
-> > > +
-> > > +     MUX(CLK_MOUT_CMU_HPM, "mout_cmu_hpm", mout_cmu_hpm_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_HPM, 0, 2),
-> > >
-> >
-> > (snip)
-> >
-> > > +     /* PDP */
-> > > +     MUX(CLK_MOUT_PDP_BUS, "mout_cmu_pdp_bus", mout_cmu_pdp_bus_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_PDP_BUS, 0, 2),
-> > > +
-> > > +     /* PDP */
-> > > +     MUX(CLK_MOUT_PDP_VRA, "mout_cmu_pdp_vra", mout_cmu_pdp_vra_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_PDP_VRA, 0, 2),
-> > > +
-> > > +     /* IPP */
-> > > +     MUX(CLK_MOUT_IPP_BUS, "mout_cmu_ipp_bus", mout_cmu_ipp_bus_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_IPP_BUS, 0, 2),
-> > > +
-> > > +     /* G3AA */
-> > > +     MUX(CLK_MOUT_G3AA, "mout_cmu_g3aa", mout_cmu_g3aa_p,
-> > > +         CLK_CON_MUX_MUX_CLKCMU_G3AA_G3AA, 0, 2),
-> >
-> > I think that need to change the mux name and mux parent name
-> > because other mux name use the twice word according to the register nam=
-e
-> > even if use the same work such as 'mout_cmu_g2d_g2d', 'mout_cmu_mcsc_mc=
-sc' and 'mout_cmu_mfc_mfc'.
-> > - mout_cmu_g3aa -> mout_cmu_g3aa_g3aa
-> > - mout_cmu_g3aa_p -> mount_cmu_g3aa_g3aa_p
->
-> Will fix in v4
->
+This series contains:
+* Add support for Amlogic C3 and S4 SoCs
+* add IT8613 ID
+* Add MSM8226 and MSM8974 compatibles
+* Other small fixes and improvements
 
-That consistent name duplication, while not causing any conflicts when
-being removed, looks suspicious to me. That's probably some internal
-scheme which doesn't make much sense for us and doesn't bring any
-value, in terms of clock drivers. Maybe it'll be better to instead get
-rid of such duplication throughout the driver, at least for clock name
-strings? I mention this, because that's what I did in clk-exynos850.
-With the only exception being the main domain clocks, which basically
-enables/disables the whole unit internally, e.g.
+The output from git request-pull:
+----------------------------------------------------------------
+The following changes since commit ce9ecca0238b140b88f43859b211c9fdfd8e5b70:
 
-    GATE(CLK_GOUT_G3D_CMU_G3D_PCLK, "gout_g3d_cmu_g3d_pclk", ...
+  Linux 6.6-rc2 (2023-09-17 14:40:24 -0700)
 
-which "G3D domain gate clock that enables/disables G3D", or something
-like that. But clk-exynos850 doesn't have any duplicating bits like
-"cmu_cmu" or "g3d_g3d". And the reason why I did that is I wanted
-those clock names appear short and nice in device tree, as there were
-no benefits in those duplicating bits.
+are available in the git repository at:
 
-> >
-> > (snip)
-> >
-> > > +     /* CSIS */
-> > > +     GATE(CLK_GOUT_CSIS, "gout_cmu_csis_bus", "mout_cmu_csis_bus",
-> > > +          CLK_CON_GAT_GATE_CLKCMU_CSIS_BUS, 21, 0, 0),
-> > > +     /* PDP */
-> > > +     GATE(CLK_GOUT_PDP_BUS, "gout_cmu_pdp_bus", "mout_cmu_pdp_bus",
-> > > +          CLK_CON_GAT_GATE_CLKCMU_PDP_BUS, 21, 0, 0),
-> > > +
-> > > +     GATE(CLK_GOUT_PDP_VRA, "gout_cmu_pdp_vra", "mout_cmu_pdp_vra",
-> > > +          CLK_CON_GAT_GATE_CLKCMU_PDP_BUS, 21, 0, 0),
-> > > +
-> > > +     /* IPP */
-> > > +     GATE(CLK_GOUT_IPP_BUS, "gout_cmu_ipp_bus", "mout_cmu_ipp_bus",
-> > > +          CLK_CON_GAT_GATE_CLKCMU_IPP_BUS, 21, 0, 0),
-> > > +     /* G3AA */
-> > > +     GATE(CLK_GOUT_G3AA, "gout_cmu_g3aa", "mout_cmu_g3aa",
-> > > +          CLK_CON_MUX_MUX_CLKCMU_G3AA_G3AA, 21, 0, 0),
-> >
-> > ditto.
-> > gout_cmu_g3aa -> gout_cmu_g3aa_g3aa
-> > mout_cmu_g3aa -> mout_cmu_g3aa_g3aa
->
+  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.7-rc1
 
-Ditto.
+for you to fetch changes up to 9d08e5909c81188eb1df26ef9d1c8df58ea5a44d:
 
-> Will fix in V4
->
-> regards,
->
-> Peter.
+  dt-bindings: watchdog: Add support for Amlogic C3 and S4 SoCs (2023-10-29 19:45:12 +0100)
+
+----------------------------------------------------------------
+linux-watchdog 6.7-rc1 tag
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      watchdog: gpio_wdt: Make use of device properties
+
+Bharat Bhushan (1):
+      drivers: watchdog: marvell_gti: fix zero pretimeout handling
+
+Dan Carpenter (1):
+      watchdog: marvell_gti_wdt: Fix error code in probe()
+
+Darren Hart (1):
+      sbsa_gwdt: Calculate timeout with 64-bit math
+
+George Cherian (1):
+      drivers: watchdog: marvell_gti: Program the max_hw_heartbeat_ms
+
+Huqiang Qin (1):
+      dt-bindings: watchdog: Add support for Amlogic C3 and S4 SoCs
+
+Jacky Bai (3):
+      watchdog: imx_sc_wdt: continue if the wdog already enabled
+      wdog: imx7ulp: Enable wdog int_en bit for watchdog any reset
+      dt-bindings: watchdog: fsl-imx7ulp-wdt: Add 'fsl,ext-reset-output'
+
+Janne Grunau (1):
+      watchdog: apple: Deactivate on suspend
+
+Jinjie Ruan (4):
+      watchdog: at91sam9_wdt: Use the devm_clk_get_enabled() helper function
+      watchdog: ath79_wdt: Use the devm_clk_get_enabled() helper function
+      watchdog: sunplus: Use the devm_clk_get_enabled() helper function
+      Watchdog: marvell_gti_wdt: Remove redundant dev_err_probe() for platform_get_irq()
+
+Linus Walleij (1):
+      watchdog: ixp4xx: Make sure restart always works
+
+Matti Lehtimäki (1):
+      dt-bindings: watchdog: qcom-wdt: Add MSM8226 and MSM8974 compatibles
+
+Michael Shych (1):
+      watchdog: mlx-wdt: Parameter desctiption warning fix
+
+Rob Herring (2):
+      watchdog: st_lpc: Use device_get_match_data()
+      watchdog: marvell_gti: Replace of_platform.h with explicit includes
+
+Srinivas Neeli (1):
+      watchdog: of_xilinx_wdt: Remove unnecessary clock disable call in the remove path
+
+Werner Fischer (1):
+      watchdog: it87_wdt: add IT8613 ID
+
+Xing Tong Wu (1):
+      watchdog: wdat_wdt: Add timeout value as a param in ping method
+
+Zev Weiss (2):
+      dt-bindings: watchdog: aspeed-wdt: Add aspeed,reset-mask property
+      watchdog: aspeed: Add support for aspeed,reset-mask DT property
+
+ .../bindings/watchdog/amlogic,meson-gxbb-wdt.yaml  | 12 ++-
+ .../devicetree/bindings/watchdog/aspeed-wdt.txt    | 18 ++++-
+ .../bindings/watchdog/fsl-imx7ulp-wdt.yaml         |  5 ++
+ .../devicetree/bindings/watchdog/qcom-wdt.yaml     |  2 +
+ drivers/watchdog/apple_wdt.c                       | 25 ++++++
+ drivers/watchdog/aspeed_wdt.c                      | 11 +++
+ drivers/watchdog/at91sam9_wdt.c                    | 20 ++---
+ drivers/watchdog/ath79_wdt.c                       | 19 +----
+ drivers/watchdog/gpio_wdt.c                        | 16 ++--
+ drivers/watchdog/imx7ulp_wdt.c                     |  8 ++
+ drivers/watchdog/imx_sc_wdt.c                      |  5 +-
+ drivers/watchdog/it87_wdt.c                        |  8 +-
+ drivers/watchdog/ixp4xx_wdt.c                      | 28 ++++++-
+ drivers/watchdog/marvell_gti_wdt.c                 | 14 +++-
+ drivers/watchdog/mlx_wdt.c                         |  1 +
+ drivers/watchdog/of_xilinx_wdt.c                   | 13 ++-
+ drivers/watchdog/sbsa_gwdt.c                       |  4 +-
+ drivers/watchdog/st_lpc_wdt.c                      | 11 +--
+ drivers/watchdog/sunplus_wdt.c                     | 17 +---
+ drivers/watchdog/wdat_wdt.c                        |  2 +-
+ include/dt-bindings/watchdog/aspeed-wdt.h          | 92 ++++++++++++++++++++++
+ 21 files changed, 248 insertions(+), 83 deletions(-)
+ create mode 100644 include/dt-bindings/watchdog/aspeed-wdt.h
+----------------------------------------------------------------
+
+Kind regards,
+Wim.
+
