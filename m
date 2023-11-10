@@ -2,87 +2,79 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131287E8357
-	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Nov 2023 21:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EED787E834D
+	for <lists+linux-watchdog@lfdr.de>; Fri, 10 Nov 2023 21:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235750AbjKJT7J (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Fri, 10 Nov 2023 14:59:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55666 "EHLO
+        id S230107AbjKJUAe (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Fri, 10 Nov 2023 15:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjKJT7E (ORCPT
+        with ESMTP id S229577AbjKJUAd (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Fri, 10 Nov 2023 14:59:04 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD90D1
-        for <linux-watchdog@vger.kernel.org>; Fri, 10 Nov 2023 11:59:01 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9becde9ea7bso724924466b.0
-        for <linux-watchdog@vger.kernel.org>; Fri, 10 Nov 2023 11:59:01 -0800 (PST)
+        Fri, 10 Nov 2023 15:00:33 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B97DC
+        for <linux-watchdog@vger.kernel.org>; Fri, 10 Nov 2023 12:00:29 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9e623356d5dso160395166b.3
+        for <linux-watchdog@vger.kernel.org>; Fri, 10 Nov 2023 12:00:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699646340; x=1700251140; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=R8cn+VJG8Pr0dfxLT+np0Cpc2PKRfJh+uwOoxIwTEjg=;
-        b=r7LfKSBTi14sdlyoYOYrPeJToQW1Dnv8Fa/t3R3RBi41GDUozIC1OMudUR6pLHfzCs
-         uLHJlvBTHqm1acbg/szUNIGQzCLErgmS/XPQN6EuEDYAXMxhxgAd62f2EXgF0QU94CUV
-         EirZxcQky8V5y/LV+AjR9iYNCHSL1RG1tsLzkBy/HIWfzIITEe6ur9mqMkOh0Cu07CyW
-         RqGkTz2u7kXtSNQwjf4kdIdBnDrGqVCNPhdhIw7Ggphbkj9cVtpC7dwpyglnboAygi3I
-         nc5IExTQZNwpK6ZHQ9ssTRBcoKmC9zKH0egegaWp/AtJ8C3KgTDou2Of2+aRyVnUzYmY
-         D3sQ==
+        d=linaro.org; s=google; t=1699646428; x=1700251228; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:cc:references:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=6wLl3TQiE//Hykecbrp7H3QwA1yHbZyFV7FnauhpUkA=;
+        b=k0JlIbgfg2V688dLXeZgVtm+DY3K2oby/5Y5lsfzEsZd1o3RbbFzhpRc8Iz1LnpaBn
+         pwJe3cVnstf8yYYbJ4eSDWWsX3Ht1mfJUqUytiDaBcg0y7XBiaOWk8SdvmSFcvAjt7ex
+         5xqsYc1NrXm0KikrhgiKtN6tHA7fSFPY1kdT36kOXPmAS3ZdqD1tm1blq6E76CElHz+k
+         cQPTzg3xITrvAxLLC9cluhQ090+acJZ54l454K2323mYhoSHcApQGSCFJ3tJw2O37/7i
+         XbV6gWqy351dfpOJnVOZwzEbNgkiFv9H+i81+hwessBgRKkDeB5zqqKuWueFLM2/6Lc5
+         wE5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699646340; x=1700251140;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R8cn+VJG8Pr0dfxLT+np0Cpc2PKRfJh+uwOoxIwTEjg=;
-        b=Iz+M9J82TFjup5B2pf7+Fifgh/7YNQlevVX+y0jqxqQExqg0XhITwy3XwgguJ1t26n
-         v6hfw2foxFIc14IdxCyp5cNZNAvURGXW6UHlkFHzLEEc1HjCMclfWlyHh/aG78SGNHKz
-         pmZcnFVHSiYJ+KEQ0hG7jfKSR9bWqGeJ4SFBpUWyu3EcFxBx6a51VwXja9sNlnyduGcI
-         MzYpc31KmZbNpOetDB3aSk7+MApXjudqU1XxIw6nHF2bPssZu3XymTwQZY4UTdjBtPgA
-         u2IkvlWmbHSDodthu/q91kUI09ZV893Xd673fbW1CI+MpIBFQPYV7jpVzUY1H+gQstmT
-         IjpA==
-X-Gm-Message-State: AOJu0Yz43JAlVCFaweu6kk+K74Y/+29PNR4WvBkvrK9NdlFBxeVBBdAS
-        2l806m/q8rgonlgri4CyPcsJRA==
-X-Google-Smtp-Source: AGHT+IHei+7ZbC5KkewDhMCHfScGn96Z1oERkUul6+q+W4O+tbGD/2YHzDZdNvHQ+F8IQ9LkMvdT7w==
-X-Received: by 2002:a17:907:7f27:b0:9da:de23:738e with SMTP id qf39-20020a1709077f2700b009dade23738emr3955561ejc.37.1699646339719;
-        Fri, 10 Nov 2023 11:58:59 -0800 (PST)
+        d=1e100.net; s=20230601; t=1699646428; x=1700251228;
+        h=content-transfer-encoding:in-reply-to:autocrypt:cc:references:to
+         :from:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6wLl3TQiE//Hykecbrp7H3QwA1yHbZyFV7FnauhpUkA=;
+        b=CAy7rJsMlWRxD3PVzrtqER6GYLh5crLpH+hUgwhCYlUCoIr15fFM9MUoYg+kIh3rXX
+         ZMiQWyeKxDouLKeUO5kgBikpEnCjCfV97CrIzozAIlvL0EwNvLod5FDjKVAPe2DUoB6G
+         oSYm88rmJHXtFNsQJcdJ38hC0ptw4iRhVtRq5N40mldDe7pdJy1FGAwx7Lml3xnbQD5q
+         WJJHjXSlnnUzjAZB2zhBaxCWPXl/1sB9VHJGIHxqwdwpVh/brndFNjT1zt2nkBBCG7c4
+         FJj4FJEQwN3d8YgZsUjcwT9eCNx22iA5HX5nHRTB1l9j/EV4adMrXlSCSYEzm86U9NTb
+         DCng==
+X-Gm-Message-State: AOJu0YxORFwbrNsZV3uUlQTZ6l62LrKa9HMBRyQvYVpr6i3MoKPNkCqK
+        57/ZCCcid39r0TDnK/7sF/yTfw==
+X-Google-Smtp-Source: AGHT+IEkiQDe5VrZ5xgHcNkqmVmqmyiGUOr8kMleEv485q+KiilU63izA8vmx97wQcEaI+IGGnHJdA==
+X-Received: by 2002:a17:906:24d4:b0:9dd:902a:797d with SMTP id f20-20020a17090624d400b009dd902a797dmr33122ejb.1.1699646428198;
+        Fri, 10 Nov 2023 12:00:28 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id u7-20020a1709063b8700b009b9a1714524sm25127ejf.12.2023.11.10.11.58.58
+        by smtp.gmail.com with ESMTPSA id u7-20020a1709063b8700b009b9a1714524sm25127ejf.12.2023.11.10.12.00.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Nov 2023 11:58:59 -0800 (PST)
-Message-ID: <8846adad-9504-4ffd-b9c3-f5e78082d261@linaro.org>
-Date:   Fri, 10 Nov 2023 20:58:57 +0100
+        Fri, 10 Nov 2023 12:00:27 -0800 (PST)
+Message-ID: <49cd75fd-962f-417c-9196-3c9edd42e4d5@linaro.org>
+Date:   Fri, 10 Nov 2023 21:00:26 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/2] dt-bindings: watchdog: mediatek,mtk-wdt: add MT7988
  watchdog and toprgu
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <2678cb48-1d2b-47bc-9272-06d9aa140c58@collabora.com>
- <ZU47hV1i66WN8nZJ@makrotopia.org>
- <d7b72b3e-c8f4-4675-ae62-26f5ae576f0a@linaro.org>
- <ZU5A59KO8Y_Q97IG@makrotopia.org>
- <a56cfe76-ab03-4187-b6f1-04a5c3414e64@linaro.org>
- <ZU5DVNOmtyFwUTdC@makrotopia.org>
- <708046ae-a821-420c-959a-ab5cb712aa9e@linaro.org>
- <ZU5IcrjqQpwMopJC@makrotopia.org>
- <6576d4a6-31fa-4780-9a8a-5a1d1974836f@linaro.org>
- <bb0ed593-082b-4edd-9a1e-78cccf796677@linaro.org>
- <ZU5jU-T0m5QW4ZeF@makrotopia.org>
 Content-Language: en-US
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Daniel Golle <daniel@makrotopia.org>
+References: <6912f6f406bc45674020681184f3eeca2f2cb63f.1699576174.git.daniel@makrotopia.org>
+ <59629ec1-cc0c-4c5a-87cc-ea30d64ec191@linaro.org>
+ <fc52c1df-e414-49a9-a3a7-7a4ce45c403e@linaro.org>
+Cc:     devicetree@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-watchdog@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -127,12 +119,12 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <ZU5jU-T0m5QW4ZeF@makrotopia.org>
+In-Reply-To: <fc52c1df-e414-49a9-a3a7-7a4ce45c403e@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -140,88 +132,57 @@ Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-On 10/11/2023 18:07, Daniel Golle wrote:
-> On Fri, Nov 10, 2023 at 04:21:35PM +0100, Krzysztof Kozlowski wrote:
->> On 10/11/2023 16:15, Krzysztof Kozlowski wrote:
->>>>>> So adding the file to include/dt-bindings/reset/ should go into a
->>>>>> seperate patch? Because including it with the driver itself gave me
->>>>>> a checkpath warning telling me that dt-bindings should go seperate,
->>>>>> which is why I included it with the binding docs.
->>>>>
->>>>> No, I said the hunk should be dropped. Removed.
->>>>
->>>> I guess we are somehow misunderstanding each other.
->>>> Lets go with an example. I can put the header into a commit of its own,
->>>> just like commit
->>>> 5794dda109fc8 dt-bindings: reset: mt7986: Add reset-controller header file
->>>> https://lore.kernel.org/r/20220105100456.7126-2-sam.shih@mediatek.com
->>>>
->>>> Would that be acceptable? And if not, why?
+On 10/11/2023 16:20, Krzysztof Kozlowski wrote:
+> On 10/11/2023 09:09, Krzysztof Kozlowski wrote:
+>> On 10/11/2023 01:30, Daniel Golle wrote:
+>>> Add binding description for mediatek,mt7988-wdt.
 >>>
->>> ...this question.
-> 
-> ... which you didn't answer. Sorry, but it's not helpful to be polemic
-> or ironic in a code review involving non-native English speakers
-> trying to understand each others.
-
-Why do you keep skipping - third time - my earlier reply? The earlier
-paragraph?
-
-Cutting lines out of context is not how this should be discussed.
-
-So let me bring it:
-
->> FOO
-> Here is the answer to...
-
->> BAR
-> ...this question.
-
-The "FOO" Is the answer. Go open the emails and read the answer.
-
-
-
-> 
->>>
->>> Again, whether this is separate patch - it is still hunk which I think
->>> should be removed. I gave the reason "why" in this mail thread and in
->>> multiple other discussions.
+>>> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+>>> ---
 >>
->> I gave you clear reasoning 7 hours ago:
->> https://lore.kernel.org/all/59629ec1-cc0c-4c5a-87cc-ea30d64ec191@linaro.org/
->> to which you did not respond.
+>> ...
+>>
+>>> diff --git a/include/dt-bindings/reset/mediatek,mt7988-resets.h b/include/dt-bindings/reset/mediatek,mt7988-resets.h
+>>> new file mode 100644
+>>> index 0000000000000..fa7c937505e08
+>>> --- /dev/null
+>>> +++ b/include/dt-bindings/reset/mediatek,mt7988-resets.h
+>>> @@ -0,0 +1,12 @@
+>>> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+>>> +
+>>> +/* TOPRGU resets */
+>>> +#define MT7988_TOPRGU_SGMII0_GRST		1
+>>> +#define MT7988_TOPRGU_SGMII1_GRST		2
+>>> +#define MT7988_TOPRGU_XFI0_GRST			12
+>>> +#define MT7988_TOPRGU_XFI1_GRST			13
+>>> +#define MT7988_TOPRGU_XFI_PEXTP0_GRST		14
+>>> +#define MT7988_TOPRGU_XFI_PEXTP1_GRST		15
+>>> +#define MT7988_TOPRGU_XFI_PLL_GRST		16
+>>
+>> IDs should start from 0 or 1 and increment by 1. If these are not IDs,
+>> then you do not need them in the bindings.
+>>
+>> Where is the driver change using these IDs?
 > 
-> Because it doesn't match anything existing regarding MediaTek reset
-> drivers, and I was assuming there must be some kind of misunderstanding,
-> which is why I replied to your later email in the same thread.
+> You nicely skipped my email and keep pushing the idea of putting this
+> into separate patch.
 > 
-> My assumption that the problem was merely having documentation and
-> header combined in a single commit stems from the fact that a very
-> similar patch for MT7986[1] was Ack'ed by Rob Herring about a year and
-> a half ago; hence the rule you apply here may have always existed, but
-> apparently then hasn't been applied in the past.
+> No. Respond to received comments.
 > 
-> Literally *all* existing dt-binding headers for MediaTek SoCs follow a
-> direct 1:1 mapping of reset bit in hardware and reset number in the
-> header files. The driver is simple, all it cares about is the maximum
-> number defined in the header (and I like that, because it makes it very
-> easy to add new SoCs). At this point the abstraction needed to
-> fulfill your request doesn't exist, not for any of the SoCs using
-> mtk_wdt.c. It can be implemented, surely, it's a problem computers can
-> solve. If that's what you (and current maintainers of that driver)
-> would want me to implement, please say so clearly and spell it out.
+>>
+>>> +
+>>> +#define MT7988_TOPRGU_SW_RST_NUM		24
+>>
+>> Why 24? I see 7. Why having it in the bindings in the first place.
+>>
+>> It's quite likely I asked the same question about other bindings for
+>> Mediatek. I will be asking every time till this is fixed.
 > 
-> Also be clear about if all the other existing headers need to be
-> converted, mappings for all SoCs created in the driver, ... all before
-> support for MT7988 can go in?
-> Or should the existing headers for other MediaTek SoCs remain
-> untouched because they are already considered stable API or something?
+> No response to this, either.
 
-I am repeating myself... but I don't know how to put it other way. I did
-not ask you to rewrite your driver. I asked to drop the change to
-bindings, because it is entirely pointless.
-
-Drop this change, only this. No need to rewrite drivers, they stay the same.
+You still did not respond here. To none of the points here. It's my
+third ping because I want this to be resolved. But ignoring my emails,
+and skipping paragraphs of my replies will not lead anywhere.
 
 Best regards,
 Krzysztof
