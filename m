@@ -2,154 +2,120 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC487E919E
-	for <lists+linux-watchdog@lfdr.de>; Sun, 12 Nov 2023 17:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99CFB7E91CA
+	for <lists+linux-watchdog@lfdr.de>; Sun, 12 Nov 2023 18:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbjKLQVL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sun, 12 Nov 2023 11:21:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
+        id S229804AbjKLRdr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 12 Nov 2023 12:33:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231552AbjKLQVK (ORCPT
+        with ESMTP id S229535AbjKLRdq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sun, 12 Nov 2023 11:21:10 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D750D10F;
-        Sun, 12 Nov 2023 08:21:05 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9c41e95efcbso549071866b.3;
-        Sun, 12 Nov 2023 08:21:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699806064; x=1700410864; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1OrXFo0vPGL3hX7Hm59m5vH+8jZa+Ui82KckLq8z0Qk=;
-        b=Xy8wqJkWpRyA/r+Uf4bkb3xr37101c5MZ/+c2Bc1ajGl+34fGGIO7Ed5v20sdAhFIr
-         vaaphRwSxhHdlYFmbruAg8ahIDRtFfCDHEZa8AQdcTjF3I9Tqek7doSCbImRVuBrmviB
-         2SuvkEbxL9QRbHDpSf1ArjiE/LIf4eZU93JzRVVOCsRDu07O+wFX0zO+OoEDXOYK3AKg
-         64oWjarKAQh9VPtjtV4wFrG1CSPk5JcCLsKpqmxUt8PIOQ+I/01vq9jSJpofswEdBIOI
-         CThPSscDgROH/XwTaQiNM9Ig2C2EZOQvDG9XbebJPp9j2A2DwqkEGc2jqZ8/AyR84GX+
-         3Sag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699806064; x=1700410864;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1OrXFo0vPGL3hX7Hm59m5vH+8jZa+Ui82KckLq8z0Qk=;
-        b=QUeygmj8NsEN1eWaIR+/viVvtWXfXX3kj6GWolJG5jEyB3dS+0jn2lXjJ/GcFm68LD
-         P3MAodSd2veOj3iCYM0wPY1wmGIzkDlAoIz3ei3H3GV9bWjwV4LaniDfC5KS7cEX2qau
-         lI0zVqpuhL4uVd3zfS6k26odf6mczghpQiniLAb+jUDRTYpcV7svFGG6ivQbMhvHmZdI
-         GPLXBnKIQjhEi+OsesoIZ/4PFNsYbdmGDX4zKNTpXru8dWs97GK8jz578gOlb++HlwyI
-         ELN/5zBOSLXZxJ72sIrHT3dKVtYyGUZ++/fn6OcQExTHwrYsL2U8UvMlMhaugXlCFBoH
-         5uvg==
-X-Gm-Message-State: AOJu0Yw7o+uNpqDp+deR5MgGgd2ZHVB6caJ2EeKgXtZdB3J5DX2DZiDp
-        fJtImEkuTGT1gi7eAf4h/LY=
-X-Google-Smtp-Source: AGHT+IFWP1pZm7xQalD2dDe1I+aO4QjZCS/JCYouj88INnSLsVsC7z3DjkwWXEIXM1x1umSEi7tJwg==
-X-Received: by 2002:a17:906:5fc7:b0:9b2:aa2f:ab69 with SMTP id k7-20020a1709065fc700b009b2aa2fab69mr2712176ejv.30.1699806063828;
-        Sun, 12 Nov 2023 08:21:03 -0800 (PST)
-Received: from localhost.localdomain ([2a02:8109:8c00:3664:c3d6:f005:2a2d:87db])
-        by smtp.gmail.com with ESMTPSA id a5-20020a1709062b0500b009ae69c303aasm2731662ejg.137.2023.11.12.08.21.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Nov 2023 08:21:03 -0800 (PST)
-From:   Nik Bune <n2h9z4@gmail.com>
-To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        skhan@linuxfoundation.org, afaerber@suse.de
-Cc:     Nik Bune <n2h9z4@gmail.com>, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: watchdog: realtek,rtd1295-watchdog: convert txt to yaml
-Date:   Sun, 12 Nov 2023 17:20:49 +0100
-Message-Id: <20231112162049.12633-1-n2h9z4@gmail.com>
+        Sun, 12 Nov 2023 12:33:46 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A89E211B
+        for <linux-watchdog@vger.kernel.org>; Sun, 12 Nov 2023 09:33:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=s31663417; t=1699810395; x=1700415195; i=wahrenst@gmx.net;
+        bh=mMXqRGkNbsNAPyh+mZIVYkEDyUy+h/05R/ZCmUhYpaQ=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=Koglhbcf1VusTISTtF0qojVN/3dYJqXZPfxSY38lSqs2Fp7olgEXCgR+NQQb18Xo
+         4rnvHL8UQZTIgj4/sXo4EcTp4kxdHBqmx9NxFlDEVS8aZavZowHt3gKXpz1615meu
+         eT6bHAQyhZPhdbhQdsGJZG/FvFRf4I2EfCRchTYlMyWGFCJ+t/h+tSWnzLkex0Qni
+         HzXoQg6Qlv7Tq2I4K91uCZ92v8HcLd/TzVgSEWtHND5A30M1L39JJpTrpYKs+BG2o
+         YF/qy8T6mI0y2aTO23lhTkoyGf/BuM8j9Va4uLEHea3FRC4phXR/Ow+LNEh1WPOi9
+         bx2zyR0/2LyGbVH81g==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MAONd-1rDX8q0Dvf-00BvId; Sun, 12
+ Nov 2023 18:33:15 +0100
+From:   Stefan Wahren <wahrenst@gmx.net>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Phil Elwell <phil@raspberrypi.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Stefan Wahren <wahrenst@gmx.net>
+Subject: [PATCH] watchdog: bcm2835_wdt: Fix WDIOC_SETTIMEOUT handling
+Date:   Sun, 12 Nov 2023 18:32:51 +0100
+Message-Id: <20231112173251.4827-1-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:sbZESrDRWb2XWLh/kHHG5W4mvv8TYRGXn2cNVbxM5dwP4BxT6dj
+ tFwTpRdfDyTHa2vDZlfET9pRajUwTsPITt+evC+oB+Jc8L6XbUVLrmpgEgZBjt8uGbFG8+5
+ ymOPazxYLcp1tIA8CaAH9LxVHvDLKSAvp+2RTF1z44R6/LZaxNxN9c2dt5gU2cU65dkJ5dy
+ bh/hOtn7OV61EmRtCuc1g==
+UI-OutboundReport: notjunk:1;M01:P0:zbiHTpjLsj4=;gDvwUOJ3VILVIkBpicPu+JUgjPX
+ QdfTFpQ23YcVCGvEPtAANcSrSNTKLOpwJDUjI98ki+uw2lJNZYGUXjvh8vNdMWxhJq8DbtmZH
+ nFPvo97hp069jwYhCvg4qXoJ0s+olBBpqhTps0e+ZP869XDfmpEGLMJBm7lpD1rdVghdO+KAt
+ XXpcRId8izZ02XPPi2BICUjzWRAI+Sz1bKxl9rGhl36lwJJPp1AbORuKhmDFnbN56NkaWnFQq
+ M/PzQTdfYlE19WkybM1ePr9gx9iCI+3pGFZ/d5UlFY4YhqOHV4h9rFVlMBhm0HQZtEcEEG6Gn
+ jBjIqieQ4pDiJynZT/4Zo6K6xkIXXSeqqi2Up/Gg/V8IaE+3BRYAvxlIubu6W8JPtsM1VGT7M
+ p4sM3y2RhqdxWIvFRYVPWF3HQlFkBPYSdiZdK8wNs7HqP8WwUlCt8yTRnGHjFfVhtxYodUo/A
+ 7SWv2D2qykIVFOs14tjWq+j3LC9eWojBzlnGHff8rd1UTUapaTW1tdl5mO2NlhBkfUnmaaHFv
+ amq//ZMg4kFAbqbfP727ypFXjNZzCBP8Tve/bXP4OiWEkLU8rBJ5AbRZuEUpLnPjiJGCwB2lW
+ Zn/01DznVIBwn7FARvahqPaYbIsuniBkif42ZpLuUF2Q8YAI9dJ4z8lLrFB+PAeal6lQCkqf4
+ J6uSlQL6dHObE0ubxNps/8/n8UNPAntw8sUt1NqiBrGxdT+TbFF+/NoXhapabWIT4gUvyZJwG
+ 6A/hPe3W9BxGTKuDFlevpYkxuzkwNN4jkWEgpT/i1EOw8LV0GqJxz8LTKFFbrcw37q7u2Z7xh
+ YFre4uQMRKl0uGAtA5u/hAWNnm59f0KenyYn8EN1+sHjqQxBOcQTnZv1hqVC9yBBoRwC2diUT
+ Frz10jbC6A57yieQPehwT1VnIxE3aXxDKspyBlpGSoUgMNbatyv9DwcU9HECy6+7NW1JvrEUY
+ AxQ/5g==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Convert txt file to yaml. Add maintainers from git blame.
+Users report about the unexpected behavior for setting timeouts above
+15 sec on Raspberry Pi. According to watchdog-api.rst the ioctl
+WDIOC_SETTIMEOUT shouldn't fail because of hardware limitations.
+But looking at the code shows that max_timeout based on the
+register value PM_WDOG_TIME_SET, which is the maximum.
 
-Signed-off-by: Nik Bune <n2h9z4@gmail.com>
----
- .../bindings/watchdog/realtek,rtd119x.txt     | 17 ---------
- .../watchdog/realtek,rtd1295-watchdog.yaml    | 38 +++++++++++++++++++
- 2 files changed, 38 insertions(+), 17 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/watchdog/realtek,rtd119x.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/realtek,rtd1295-watchdog.yaml
+Since 664a39236e71 ("watchdog: Introduce hardware maximum heartbeat
+in watchdog core") the watchdog core is able to handle this problem.
 
-diff --git a/Documentation/devicetree/bindings/watchdog/realtek,rtd119x.txt b/Documentation/devicetree/bindings/watchdog/realtek,rtd119x.txt
-deleted file mode 100644
-index 05653054bd5b..000000000000
---- a/Documentation/devicetree/bindings/watchdog/realtek,rtd119x.txt
-+++ /dev/null
-@@ -1,17 +0,0 @@
--Realtek RTD1295 Watchdog
--========================
--
--Required properties:
--
--- compatible :  Should be "realtek,rtd1295-watchdog"
--- reg        :  Specifies the physical base address and size of registers
--- clocks     :  Specifies one clock input
--
--
--Example:
--
--	watchdog@98007680 {
--		compatible = "realtek,rtd1295-watchdog";
--		reg = <0x98007680 0x100>;
--		clocks = <&osc27M>;
--	};
-diff --git a/Documentation/devicetree/bindings/watchdog/realtek,rtd1295-watchdog.yaml b/Documentation/devicetree/bindings/watchdog/realtek,rtd1295-watchdog.yaml
-new file mode 100644
-index 000000000000..2a0ea1696317
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/realtek,rtd1295-watchdog.yaml
-@@ -0,0 +1,38 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/realtek,rtd1295-watchdog.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Realtek RTD1295 Watchdog
-+
-+maintainers:
-+  - Andreas Färber <afaerber@suse.de>
-+
-+allOf:
-+  - $ref: watchdog.yaml#
-+
-+properties:
-+  compatible:
-+    const: realtek,rtd1295-watchdog
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    watchdog@98007680 {
-+        compatible = "realtek,rtd1295-watchdog";
-+        reg = <0x98007680 0x100>;
-+        clocks = <&osc27M>;
-+    };
--- 
+This fix has been tested with watchdog-test from selftests.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217374
+Fixes: 664a39236e71 ("watchdog: Introduce hardware maximum heartbeat in wa=
+tchdog core")
+Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+=2D--
+ drivers/watchdog/bcm2835_wdt.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/watchdog/bcm2835_wdt.c b/drivers/watchdog/bcm2835_wdt=
+.c
+index 7a855289ff5e..bb001c5d7f17 100644
+=2D-- a/drivers/watchdog/bcm2835_wdt.c
++++ b/drivers/watchdog/bcm2835_wdt.c
+@@ -42,6 +42,7 @@
+
+ #define SECS_TO_WDOG_TICKS(x) ((x) << 16)
+ #define WDOG_TICKS_TO_SECS(x) ((x) >> 16)
++#define WDOG_TICKS_TO_MSECS(x) ((x) * 1000 >> 16)
+
+ struct bcm2835_wdt {
+ 	void __iomem		*base;
+@@ -140,7 +141,7 @@ static struct watchdog_device bcm2835_wdt_wdd =3D {
+ 	.info =3D		&bcm2835_wdt_info,
+ 	.ops =3D		&bcm2835_wdt_ops,
+ 	.min_timeout =3D	1,
+-	.max_timeout =3D	WDOG_TICKS_TO_SECS(PM_WDOG_TIME_SET),
++	.max_hw_heartbeat_ms =3D	WDOG_TICKS_TO_MSECS(PM_WDOG_TIME_SET),
+ 	.timeout =3D	WDOG_TICKS_TO_SECS(PM_WDOG_TIME_SET),
+ };
+
+=2D-
 2.34.1
 
