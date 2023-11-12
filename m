@@ -2,166 +2,154 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9556D7E8CE1
-	for <lists+linux-watchdog@lfdr.de>; Sat, 11 Nov 2023 22:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC487E919E
+	for <lists+linux-watchdog@lfdr.de>; Sun, 12 Nov 2023 17:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjKKVds (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Sat, 11 Nov 2023 16:33:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
+        id S231553AbjKLQVL (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Sun, 12 Nov 2023 11:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjKKVdr (ORCPT
+        with ESMTP id S231552AbjKLQVK (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Sat, 11 Nov 2023 16:33:47 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2125430CF;
-        Sat, 11 Nov 2023 13:33:44 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-408382da7f0so25426505e9.0;
-        Sat, 11 Nov 2023 13:33:44 -0800 (PST)
+        Sun, 12 Nov 2023 11:21:10 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D750D10F;
+        Sun, 12 Nov 2023 08:21:05 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9c41e95efcbso549071866b.3;
+        Sun, 12 Nov 2023 08:21:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699738422; x=1700343222; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=BjJpwKGCecxdkQ5LjdaCff64J4ZeBO10oL7F7MwcVn4=;
-        b=SoWDJ6UfBqwi53zUN3lqwjEzqeoNaEv5zsc4CMeWzz/pa4MGPZdI9VOIJcxPXDIBXK
-         4ROP0Y0M+5dKmB770QtNeBIstJv2T2waq9KvTEA62oWBNLEK3tn6EpFOzyw9GGtWBiLl
-         +8vMVriKMxML9XTHzs99pBrGIJ2pgUCzNsC/krpkJ4DW+67LIIV033QhiAk/h407sekN
-         7dgneR81A4ZJ6qzpDw/G/X3nhtSAj4wbdrjGmNn7/etm16KaC2w2VT3uteyhr9X8XKNo
-         VPPLSZOuhkiIuszK4PUfU7/99L+ack9ienSwmJqXLSvM4HY0Dmhy8QMLdcAI/ce86wQO
-         Tkrg==
+        d=gmail.com; s=20230601; t=1699806064; x=1700410864; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1OrXFo0vPGL3hX7Hm59m5vH+8jZa+Ui82KckLq8z0Qk=;
+        b=Xy8wqJkWpRyA/r+Uf4bkb3xr37101c5MZ/+c2Bc1ajGl+34fGGIO7Ed5v20sdAhFIr
+         vaaphRwSxhHdlYFmbruAg8ahIDRtFfCDHEZa8AQdcTjF3I9Tqek7doSCbImRVuBrmviB
+         2SuvkEbxL9QRbHDpSf1ArjiE/LIf4eZU93JzRVVOCsRDu07O+wFX0zO+OoEDXOYK3AKg
+         64oWjarKAQh9VPtjtV4wFrG1CSPk5JcCLsKpqmxUt8PIOQ+I/01vq9jSJpofswEdBIOI
+         CThPSscDgROH/XwTaQiNM9Ig2C2EZOQvDG9XbebJPp9j2A2DwqkEGc2jqZ8/AyR84GX+
+         3Sag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699738422; x=1700343222;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BjJpwKGCecxdkQ5LjdaCff64J4ZeBO10oL7F7MwcVn4=;
-        b=Hybfyddn3YmL+/eG1Hy+/BMvI3TvTEEYmHeNCUtg5U2fRYWSBljdO3ZgK1vMAd11wk
-         lK04hoaBRwRdCtkCZmUbRh2k307tlfFi5piLK1vfsZRCpSTfXgK31v9T7aJhXh8+a9gy
-         MW/KQyohXQqn1yD4S57z5WCrpWaw6jC/kp8b30IPQqrAV6Fs8DcGN6SILyCsaVNX6tEb
-         uffx9UByCp04rFBnBtOBL6BLTxgMGkm4j6tbSRWvxffFkBv7QuMZVeGtZBm3VZO9VEpV
-         /KnoSMS9k+3kGx8Xwxmr4g7S8Qn76qAItG7IWvjUZv16LtI3qdLTk2QWYWKKdLONWuql
-         P/IA==
-X-Gm-Message-State: AOJu0YwoZRU81bKYCH1So5JLMZQuMV2nYYu4IAh/NCi/ynapwAdf0Thl
-        WteHhhvVGc7pI36hlmTi4/A=
-X-Google-Smtp-Source: AGHT+IGcspAIBmQE8uECroiT5zYPxAfvcuIKjKOjZDZOhwNchFn+oYO8zOgLHmFyk1hPD+Lg8347oA==
-X-Received: by 2002:a05:600c:5121:b0:408:57bb:ef96 with SMTP id o33-20020a05600c512100b0040857bbef96mr2147252wms.30.1699738422278;
-        Sat, 11 Nov 2023 13:33:42 -0800 (PST)
-Received: from giga-mm.home ([2a02:1210:8629:800:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id be14-20020a05600c1e8e00b00401b242e2e6sm8935242wmb.47.2023.11.11.13.33.40
+        d=1e100.net; s=20230601; t=1699806064; x=1700410864;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1OrXFo0vPGL3hX7Hm59m5vH+8jZa+Ui82KckLq8z0Qk=;
+        b=QUeygmj8NsEN1eWaIR+/viVvtWXfXX3kj6GWolJG5jEyB3dS+0jn2lXjJ/GcFm68LD
+         P3MAodSd2veOj3iCYM0wPY1wmGIzkDlAoIz3ei3H3GV9bWjwV4LaniDfC5KS7cEX2qau
+         lI0zVqpuhL4uVd3zfS6k26odf6mczghpQiniLAb+jUDRTYpcV7svFGG6ivQbMhvHmZdI
+         GPLXBnKIQjhEi+OsesoIZ/4PFNsYbdmGDX4zKNTpXru8dWs97GK8jz578gOlb++HlwyI
+         ELN/5zBOSLXZxJ72sIrHT3dKVtYyGUZ++/fn6OcQExTHwrYsL2U8UvMlMhaugXlCFBoH
+         5uvg==
+X-Gm-Message-State: AOJu0Yw7o+uNpqDp+deR5MgGgd2ZHVB6caJ2EeKgXtZdB3J5DX2DZiDp
+        fJtImEkuTGT1gi7eAf4h/LY=
+X-Google-Smtp-Source: AGHT+IFWP1pZm7xQalD2dDe1I+aO4QjZCS/JCYouj88INnSLsVsC7z3DjkwWXEIXM1x1umSEi7tJwg==
+X-Received: by 2002:a17:906:5fc7:b0:9b2:aa2f:ab69 with SMTP id k7-20020a1709065fc700b009b2aa2fab69mr2712176ejv.30.1699806063828;
+        Sun, 12 Nov 2023 08:21:03 -0800 (PST)
+Received: from localhost.localdomain ([2a02:8109:8c00:3664:c3d6:f005:2a2d:87db])
+        by smtp.gmail.com with ESMTPSA id a5-20020a1709062b0500b009ae69c303aasm2731662ejg.137.2023.11.12.08.21.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Nov 2023 13:33:41 -0800 (PST)
-Message-ID: <c49f77492cacc5a30079720af58a9f2fca761609.camel@gmail.com>
-Subject: Re: [PATCH v3 07/42] soc: Add SoC driver for Cirrus ep93xx
-From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To:     Andy Shevchenko <andy@kernel.org>, nikita.shubin@maquefel.me
-Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
-        Lennert Buytenhek <kernel@wantstofly.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Lukasz Majewski <lukma@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Michael Peters <mpeters@embeddedts.com>,
-        Kris Bahnsen <kris@embeddedts.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
-Date:   Sat, 11 Nov 2023 22:33:38 +0100
-In-Reply-To: <ZLqSo6B5cJXVRJS/@smile.fi.intel.com>
-References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
-         <20230605-ep93xx-v3-7-3d63a5f1103e@maquefel.me>
-         <ZLqSo6B5cJXVRJS/@smile.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 
+        Sun, 12 Nov 2023 08:21:03 -0800 (PST)
+From:   Nik Bune <n2h9z4@gmail.com>
+To:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        skhan@linuxfoundation.org, afaerber@suse.de
+Cc:     Nik Bune <n2h9z4@gmail.com>, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: watchdog: realtek,rtd1295-watchdog: convert txt to yaml
+Date:   Sun, 12 Nov 2023 17:20:49 +0100
+Message-Id: <20231112162049.12633-1-n2h9z4@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
-Hello Andy,
+Convert txt file to yaml. Add maintainers from git blame.
 
-On Fri, 2023-07-21 at 17:13 +0300, Andy Shevchenko wrote:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0spin_lock_irqsave(&ep93xx_sw=
-lock, flags);
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap_read(map, EP93XX_SYSC=
-ON_DEVCFG, &val);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0val &=3D ~clear_bits;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0val |=3D set_bits;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap_write(map, EP93XX_SYS=
-CON_SWLOCK, EP93XX_SWLOCK_MAGICK);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0regmap_write(map, EP93XX_SYS=
-CON_DEVCFG, val);
->=20
-> Is this sequence a must?
-> I.o.w. can you first supply magic and then update devcfg?
->=20
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0spin_unlock_irqrestore(&ep93=
-xx_swlock, flags);
->=20
-> ...
->=20
-> > +void ep93xx_swlocked_update_bits(struct regmap *map, unsigned int reg,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int mask, unsigned int =
-val)
-> > +{
->=20
-> Same Q as above.
+Signed-off-by: Nik Bune <n2h9z4@gmail.com>
+---
+ .../bindings/watchdog/realtek,rtd119x.txt     | 17 ---------
+ .../watchdog/realtek,rtd1295-watchdog.yaml    | 38 +++++++++++++++++++
+ 2 files changed, 38 insertions(+), 17 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/realtek,rtd119x.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/realtek,rtd1295-watchdog.yaml
 
-EP93xx User Manual [1] has most verbose description of SWLock for ADC
-block:
-"Writing 0xAA to this register will unlock all locked registers until the
-next block access. The ARM lock instruction prefix should be used for the
-two consequtive write cycles when writing to locked chip registers."
-
-One may conclude that RmW (two accesses to the particular block) sequence
-is not appropriate.
-
-[1]=C2=A0https://cdn.embeddedts.com/resource-attachments/ts-7000_ep9301-ug.=
-pdf=20
-
---=20
-Alexander Sverdlin.
+diff --git a/Documentation/devicetree/bindings/watchdog/realtek,rtd119x.txt b/Documentation/devicetree/bindings/watchdog/realtek,rtd119x.txt
+deleted file mode 100644
+index 05653054bd5b..000000000000
+--- a/Documentation/devicetree/bindings/watchdog/realtek,rtd119x.txt
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Realtek RTD1295 Watchdog
+-========================
+-
+-Required properties:
+-
+-- compatible :  Should be "realtek,rtd1295-watchdog"
+-- reg        :  Specifies the physical base address and size of registers
+-- clocks     :  Specifies one clock input
+-
+-
+-Example:
+-
+-	watchdog@98007680 {
+-		compatible = "realtek,rtd1295-watchdog";
+-		reg = <0x98007680 0x100>;
+-		clocks = <&osc27M>;
+-	};
+diff --git a/Documentation/devicetree/bindings/watchdog/realtek,rtd1295-watchdog.yaml b/Documentation/devicetree/bindings/watchdog/realtek,rtd1295-watchdog.yaml
+new file mode 100644
+index 000000000000..2a0ea1696317
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/realtek,rtd1295-watchdog.yaml
+@@ -0,0 +1,38 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/realtek,rtd1295-watchdog.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Realtek RTD1295 Watchdog
++
++maintainers:
++  - Andreas Färber <afaerber@suse.de>
++
++allOf:
++  - $ref: watchdog.yaml#
++
++properties:
++  compatible:
++    const: realtek,rtd1295-watchdog
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    watchdog@98007680 {
++        compatible = "realtek,rtd1295-watchdog";
++        reg = <0x98007680 0x100>;
++        clocks = <&osc27M>;
++    };
+-- 
+2.34.1
 
