@@ -2,111 +2,106 @@ Return-Path: <linux-watchdog-owner@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5AE7EA40D
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Nov 2023 20:54:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65E77EAC55
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Nov 2023 10:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbjKMTyF (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
-        Mon, 13 Nov 2023 14:54:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36430 "EHLO
+        id S231382AbjKNJAr (ORCPT <rfc822;lists+linux-watchdog@lfdr.de>);
+        Tue, 14 Nov 2023 04:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231924AbjKMTxv (ORCPT
+        with ESMTP id S232224AbjKNJAq (ORCPT
         <rfc822;linux-watchdog@vger.kernel.org>);
-        Mon, 13 Nov 2023 14:53:51 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5620A10CE;
-        Mon, 13 Nov 2023 11:53:30 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3C2AC433C8;
-        Mon, 13 Nov 2023 19:53:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699905210;
-        bh=emrTx/dM/O1+auWw5mA0LhsDE35tCu8mEN5lB2h0qcU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qWcoHXchhVS/XJD8JwE8HDZGXI97JEStuv5rRHgPgI46bK3IoWhKDgnf2Fm2yZuBr
-         dQ9Uakb9CFFsHtD9Scq9/zMEhRWGeX8WSMLPxfJb3jSMy8oHb9G/xyjjmZDh59UsqC
-         yiAxHKqduNwiKNx14yP6LGnvOXP/UcUJVTLPA/ltWoHU//mb43m5O3jnrnHSqrb4Iy
-         6PkY6FQJ91kEzI8hi4ItyDZU4B2N1z5NzjX5m74VQLp6BdTcUoEdcvDv9OtExQamCt
-         AvQG0LHFTydEaCR6GBJVbjplNBfdwvn0ST0R2Pzp4dt3Y7/QRV8QV+EHuwSLJzNqSP
-         EJyanll7JbEOw==
-Date:   Mon, 13 Nov 2023 19:53:26 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: mediatek,mtk-wdt: add
- MT7988 watchdog and toprgu
-Message-ID: <20231113-pug-treading-630646dc7ff6@squawk>
-References: <e26a98fd0b7b7b431922405732275bac01eaf220.1699890006.git.daniel@makrotopia.org>
+        Tue, 14 Nov 2023 04:00:46 -0500
+Received: from mail.venturelinkbiz.com (mail.venturelinkbiz.com [51.195.119.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBFA31A5
+        for <linux-watchdog@vger.kernel.org>; Tue, 14 Nov 2023 01:00:41 -0800 (PST)
+Received: by mail.venturelinkbiz.com (Postfix, from userid 1002)
+        id 72AD846FE0; Tue, 14 Nov 2023 09:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=venturelinkbiz.com;
+        s=mail; t=1699952440;
+        bh=JBV4b8UUo1MSngn/QBoedt1Dv52bT8rWeq4R22MtJMs=;
+        h=Date:From:To:Subject:From;
+        b=tK59lQDwiECYMspUhCpeZnU2bJuZppfUMXWkwXUWCxvs+nwOYsje4myHAmBrEMQhh
+         2dQmGpm/WCfPaRskeLpmMxCWyzpcOgzAXbzCke8B04THe88rflOHB8zh/yEkEpsZpa
+         bKtfBXI9+OAZSf2Ok8+GOMlME0TrFe/i+TS3fExH+6g+5rZQUn2a8gYtWTPrz649kE
+         td9siDueeWzQSgkNBgKmoQdEY7tYNntRxGyFMsq70YecZe/RPOwrvv39WZpFSvGkMG
+         Ez+4Dmih7A1JvtG4ViQJvpIz6EkYp/Y6FjfHTVh9QYZAKg87SK3W4eZ+BBmIyVeGQM
+         jn5H+QUHSGTWQ==
+Received: by mail.venturelinkbiz.com for <linux-watchdog@vger.kernel.org>; Tue, 14 Nov 2023 09:00:10 GMT
+Message-ID: <20231114074500-0.1.3k.9yno.0.6nj9a72rd6@venturelinkbiz.com>
+Date:   Tue, 14 Nov 2023 09:00:10 GMT
+From:   "Michal Rmoutil" <michal.rmoutil@venturelinkbiz.com>
+To:     <linux-watchdog@vger.kernel.org>
+Subject: =?UTF-8?Q?Efektivn=C3=AD_sledov=C3=A1n=C3=AD_a_optimalizace_v=C3=BDroby_pro_va=C5=A1i_spole=C4=8Dnost?=
+X-Mailer: mail.venturelinkbiz.com
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v+4d4Ab1VeqFRJZg"
-Content-Disposition: inline
-In-Reply-To: <e26a98fd0b7b7b431922405732275bac01eaf220.1699890006.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL_CSS,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
+        *      DNSWL was blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [51.195.119.142 listed in list.dnswl.org]
+        *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: venturelinkbiz.com]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [51.195.119.142 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: venturelinkbiz.com]
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [51.195.119.142 listed in bl.score.senderscore.com]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [51.195.119.142 listed in wl.mailspike.net]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-watchdog.vger.kernel.org>
 X-Mailing-List: linux-watchdog@vger.kernel.org
 
+Dobr=C3=A9 r=C3=A1no,
 
---v+4d4Ab1VeqFRJZg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+m=C3=A1te mo=C5=BEnost sledovat stav ka=C5=BEd=C3=A9ho stroje a v=C3=BDro=
+bn=C3=ADho procesu z kancel=C3=A1=C5=99e, konferen=C4=8Dn=C3=AD m=C3=ADst=
+nosti nebo dokonce z domova =C4=8Di na cest=C3=A1ch =E2=80=93 na va=C5=A1=
+em telefonu?
 
-On Mon, Nov 13, 2023 at 03:43:24PM +0000, Daniel Golle wrote:
-> Add compatible mediatek,mt7988-wdt.
->=20
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+Poskytujeme rychle implementovateln=C3=BD a snadno pou=C5=BEiteln=C3=BD n=
+=C3=A1stroj, kter=C3=BD zachyt=C3=AD i n=C4=9Bkolikasekundov=C3=BD mikrop=
+rostoj a okam=C5=BEit=C4=9B p=C5=99epo=C4=8D=C3=ADt=C3=A1 vyu=C5=BEit=C3=AD=
+ stroje v kontextu dan=C3=A9 v=C3=BDrobn=C3=AD zak=C3=A1zky.
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Thanks,
-Conor.
+Kdykoli vid=C3=ADte stav objedn=C3=A1vky a jste informov=C3=A1ni o p=C5=99=
+=C3=ADpadn=C3=A9m sn=C3=AD=C5=BEen=C3=AD efektivity. Syst=C3=A9m s=C3=A1m=
+ analyzuje data a p=C5=99ipravuje cenn=C3=A9 reporty, co=C5=BE oper=C3=A1=
+tor=C5=AFm umo=C5=BE=C5=88uje soust=C5=99edit se na v=C3=BDrobn=C3=AD c=C3=
+=ADl.
 
-> ---
-> v2: Drop adding include/dt-binding/mt7988-resets.h as that header is not
->     actually a binding header.
->=20
->  Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.=
-yaml b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
-> index cc502838bc398..8d2520241e37f 100644
-> --- a/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
-> @@ -25,6 +25,7 @@ properties:
->            - mediatek,mt6735-wdt
->            - mediatek,mt6795-wdt
->            - mediatek,mt7986-wdt
-> +          - mediatek,mt7988-wdt
->            - mediatek,mt8183-wdt
->            - mediatek,mt8186-wdt
->            - mediatek,mt8188-wdt
-> --=20
-> 2.42.1
+C=C3=ADl je jednoduch=C3=BD: jeden pohled =E2=80=93 cel=C3=A1 tov=C3=A1rn=
+a. =C4=8Cek=C3=A1m na odpov=C4=9B=C4=8F, jestli vid=C3=ADte mo=C5=BEnost =
+vyu=C5=BEit=C3=AD takov=C3=A9ho n=C3=A1stroje ve va=C5=A1=C3=AD firm=C4=9B=
+=2E
 
---v+4d4Ab1VeqFRJZg
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZVJ+swAKCRB4tDGHoIJi
-0ipjAQC7wiCmdGPVV4FvUrbXgyRDZl0xBkSLB9OgdHHHNbRTkQD/XmNHtljnCSiv
-Mbh6563hwEBuk9L2hgIJcHQY6wvKiw0=
-=oAgM
------END PGP SIGNATURE-----
-
---v+4d4Ab1VeqFRJZg--
+Pozdravy
+Michal Rmoutil
