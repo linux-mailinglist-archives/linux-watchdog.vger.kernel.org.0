@@ -1,99 +1,158 @@
-Return-Path: <linux-watchdog+bounces-31-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-32-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8E927F4499
-	for <lists+linux-watchdog@lfdr.de>; Wed, 22 Nov 2023 12:02:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11C6F7F4988
+	for <lists+linux-watchdog@lfdr.de>; Wed, 22 Nov 2023 15:58:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48D6BB20F5D
-	for <lists+linux-watchdog@lfdr.de>; Wed, 22 Nov 2023 11:02:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 345751C2084B
+	for <lists+linux-watchdog@lfdr.de>; Wed, 22 Nov 2023 14:58:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE6922136C;
-	Wed, 22 Nov 2023 11:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D0DA4C3D0;
+	Wed, 22 Nov 2023 14:58:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BGjrkRTH"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B95C1;
-	Wed, 22 Nov 2023 03:02:37 -0800 (PST)
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-7b074e318b5so18762039f.0;
-        Wed, 22 Nov 2023 03:02:37 -0800 (PST)
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C2992;
+	Wed, 22 Nov 2023 06:58:45 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5cb5248a21fso8094297b3.1;
+        Wed, 22 Nov 2023 06:58:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700665125; x=1701269925; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=gLUH9VRtYoY3AbMiFDMwADpfDgn46e/c/woEd/BrTwk=;
+        b=BGjrkRTHhBnhBNnc/XINYJAtuqfUSJmIKn5UZINOiAFw792kTg6Ihi07xCp6Mqj6mb
+         yHNdhE7k7JAwhaYEkqMxhm821XTxWB2+0HsbBfdFjoXUZOWtMLKxdTHfRmKk5er9r+hh
+         zc6sREDKVqPY3qdn/ax7LGDaY9p15SnzY8CLLb05ISF3FOp6lr3t5NoVYwdjsvNKnsEj
+         TEwPjJG4Z7lFuPUgi8Gx/gmhaqeV3GWB9fQb/ZIOOKL/dE7+FMQ/RCSrl/bqIT+mgsmk
+         KqCTY6x0PLQMEPVx2LWl0zmNVQgvEVwaQem83ovqhl40dwf9iY7LFSGX9h7J3u01GYAY
+         4EWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700650956; x=1701255756;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=c+/qnfzDFPUj6iI5uqp92qqd4Zj2Z3933483ozJajHs=;
-        b=fGvaDkwYrt+hwpE5HAAxypxh41VMAXRuJBYHmNTxZWgfJkCvprbTqhsxDPX9L9COKk
-         g/VHCQd/3VOrjS2nNNPc1eEhqFZ/87Yn3RD2C/zS6ZkH3P4KrWGWOpbpnInP3KVJSCSd
-         C8TCVQvgK8jKEcKRwJ7SUhLiCBLTZFk1zT8dLi7gIwV89zreLfcTduYd/z/73f5vbUuK
-         nHvQCQQ2NIdEmfJj1MOb1/P7RW0mrGlzvO9nEryYAEe1rPyWhJWKFCgqarZLYN+ouiBd
-         vI6H+0tjz15F9VxgPCgk7gYOAxykQQFD6xQUgV8U++SZvm/ZZlYEe+UzD9jWcbqbQU8m
-         9+Dw==
-X-Gm-Message-State: AOJu0Yx7lIi8GNKk8yHPk76Erv1A36D4rSkLo9JDUdonjAVGs1snJSlj
-	fW+DOKUvvWEUMokBkF7MNw==
-X-Google-Smtp-Source: AGHT+IFtY2cET50yT6zSy5JzZ/L7TrNO7ts4wvPPMbE8WDkspdiasUwij2+Q1+HdRjru9x7pvwRgyQ==
-X-Received: by 2002:a05:6602:36c6:b0:79f:e800:ea95 with SMTP id bg6-20020a05660236c600b0079fe800ea95mr2005732iob.3.1700650956320;
-        Wed, 22 Nov 2023 03:02:36 -0800 (PST)
-Received: from herring.priv ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id gh12-20020a056638698c00b004646280da51sm3148708jab.88.2023.11.22.03.02.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Nov 2023 03:02:35 -0800 (PST)
-Received: (nullmailer pid 116326 invoked by uid 1000);
-	Wed, 22 Nov 2023 11:02:29 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20230601; t=1700665125; x=1701269925;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gLUH9VRtYoY3AbMiFDMwADpfDgn46e/c/woEd/BrTwk=;
+        b=vry0muSZFFAklYZlq0wnYaZcrF+VQvVsGLddDrcB81geyL+gZ2/ETDhMqvzjj444r4
+         RfPNUlGk7Xkh9YxRj+uJM35ReCqeX9TMAsC+Z6SVdODZ1nv/avWVdZEZ+rXJWUpYUwwo
+         JVCtWKG2orAZk7Uie16P9ZAIpls3RHGQyUJ+uzBGSVeLqHydUlQTeGgITN8foBb5qRqA
+         7fdxb9rrevhlRvx14rd25X+KpIN6bVb1HbKXcUVrzBDrQyU7EJED/KI7mKGjpDUbJRvc
+         Q5+/fHQfhPt3gkOv1xtfrhrr0+nsKi9pGAS7if+y7C2h3OmOiIxRcq0ZA0/QP52/jPAC
+         4m/Q==
+X-Gm-Message-State: AOJu0YwZAwZjDiNnDWzGFaXW072aiBzxYdsMgJhzmeiAxuotK/WtJpPs
+	GD0yTA4LDr1eB7ivTs9DCCo+AhqDXxU=
+X-Google-Smtp-Source: AGHT+IFqthOa6AA4cNgGUR/KB3AfjQNwqcVFb8F79hchbyNao8ZLxACCYG1IaP2lyRmd2cbXVPOxrQ==
+X-Received: by 2002:a81:6cd3:0:b0:5cc:9ef4:b01d with SMTP id h202-20020a816cd3000000b005cc9ef4b01dmr846648ywc.21.1700665124979;
+        Wed, 22 Nov 2023 06:58:44 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s8-20020a817708000000b0059af121d0b8sm3780744ywc.52.2023.11.22.06.58.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Nov 2023 06:58:44 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f95c53d5-f88f-47b9-abcc-78a644cf7a7b@roeck-us.net>
+Date: Wed, 22 Nov 2023 06:58:41 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Rob Herring <robh@kernel.org>
-To: Nikita Shubin <nikita.shubin@maquefel.me>
-Cc: Guenter Roeck <linux@roeck-us.net>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alexander Sverdlin <alexander.sverdlin@gmail.com>, Wim Van Sebroeck <wim@linux-watchdog.org>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Rob Herring <robh+dt@kernel.org>, linux-watchdog@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>
-In-Reply-To: <20231122-ep93xx-v5-24-d59a76d5df29@maquefel.me>
-References: <20231122-ep93xx-v5-0-d59a76d5df29@maquefel.me>
- <20231122-ep93xx-v5-24-d59a76d5df29@maquefel.me>
-Message-Id: <170065094485.116162.12375225214962321921.robh@kernel.org>
-Subject: Re: [PATCH v5 24/39] dt-bindings: wdt: Add ts72xx
-Date: Wed, 22 Nov 2023 04:02:29 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] watchdog: starfive: add lock annotations to fix context
+ imbalances
+Content-Language: en-US
+To: Ben Dooks <ben.dooks@codethink.co.uk>, linux-watchdog@vger.kernel.org
+Cc: wim@linux-watchdog.org, samin.guo@starfivetech.com,
+ xingyu.wu@starfivetech.com, linux-kernel@vger.kernel.org
+References: <20231122085118.177589-1-ben.dooks@codethink.co.uk>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20231122085118.177589-1-ben.dooks@codethink.co.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-On Wed, 22 Nov 2023 12:00:02 +0300, Nikita Shubin wrote:
-> Add DT binding for Technologic Systems TS-72xx watchdog.
+On 11/22/23 00:51, Ben Dooks wrote:
+> Add the necessary __acquires() and __releases() to the functions
+> that take and release the wdt lock to avoid the following sparse
+> warnings:
 > 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> drivers/watchdog/starfive-wdt.c:204:13: warning: context imbalance in 'starfive_wdt_unlock' - wrong count at exit
+> drivers/watchdog/starfive-wdt.c:212:9: warning: context imbalance in 'starfive_wdt_lock' - unexpected unlock
+> 
+> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  .../bindings/watchdog/technologic,ts7200-wdt.yaml  | 45 ++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
+>   drivers/watchdog/starfive-wdt.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20231122-ep93xx-v5-24-d59a76d5df29@maquefel.me
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
+> index 5f501b41faf9..49b38ecc092d 100644
+> --- a/drivers/watchdog/starfive-wdt.c
+> +++ b/drivers/watchdog/starfive-wdt.c
+> @@ -202,12 +202,14 @@ static u32 starfive_wdt_ticks_to_sec(struct starfive_wdt *wdt, u32 ticks)
+>   
+>   /* Write unlock-key to unlock. Write other value to lock. */
+>   static void starfive_wdt_unlock(struct starfive_wdt *wdt)
+> +	__acquires(&wdt->lock)
+>   {
+>   	spin_lock(&wdt->lock);
+>   	writel(wdt->variant->unlock_key, wdt->base + wdt->variant->unlock);
+>   }
+>   
+>   static void starfive_wdt_lock(struct starfive_wdt *wdt)
+> +	__releases(&wdt->lock)
+>   {
+>   	writel(~wdt->variant->unlock_key, wdt->base + wdt->variant->unlock);
+>   	spin_unlock(&wdt->lock);
 
 
