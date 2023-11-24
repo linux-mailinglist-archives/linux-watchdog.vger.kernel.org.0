@@ -1,34 +1,34 @@
-Return-Path: <linux-watchdog+bounces-37-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-38-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC8497F7FAB
-	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Nov 2023 19:43:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51FBE7F8171
+	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Nov 2023 19:58:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F053B20A42
-	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Nov 2023 18:43:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8455A1C216B0
+	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Nov 2023 18:58:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E745633CCA;
-	Fri, 24 Nov 2023 18:43:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6DF1364A7;
+	Fri, 24 Nov 2023 18:58:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Ve48GbvA"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eNqfbAea"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46F3381DE;
-	Fri, 24 Nov 2023 18:43:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D27C433C7;
-	Fri, 24 Nov 2023 18:43:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05502FC21;
+	Fri, 24 Nov 2023 18:58:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31834C433C7;
+	Fri, 24 Nov 2023 18:58:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1700851401;
-	bh=qPFgpIJdtbbBvCFIcN5xlfCkNLi7b8AG0LUsO/Jp8sg=;
+	s=korg; t=1700852320;
+	bh=OitIkk/KczZ9zjgXU6gXEQ2EjaKX9udOFK3h89gF5YE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ve48GbvAmt0DkFDD2kuqIL/3lQ7UgF4v9wZY15h0zzxOzQb7eOUKs2V/9rRfZw0/C
-	 71lvk4fLid/+mOnn7OxScV8tizhGUWzyL5H4kW3cd8Pxq3CLu2Reqy+kUGXsSBDexg
-	 M0AnkQFyz/X3cyCfxIuVpU0MEB1ga6PAKbvQAmW8=
+	b=eNqfbAeag13st+486XDBof9rvnQy75hXQeJw/3dcHKTC4iIN2GqtH+r4q4dYshuU7
+	 5IGDIdY6dkMwVK/RvyhqwzJlp605vE+l4swMAu5ht4p/hAor1dvKD+pe6QmKuONrb1
+	 L8gTlPs4NZBgLI5tKqLo9Otjiqj2od5Rt/NSREEc=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -40,12 +40,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-watchdog@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 6.5 409/491] sbsa_gwdt: Calculate timeout with 64-bit math
-Date: Fri, 24 Nov 2023 17:50:45 +0000
-Message-ID: <20231124172036.895936071@linuxfoundation.org>
+Subject: [PATCH 6.1 309/372] sbsa_gwdt: Calculate timeout with 64-bit math
+Date: Fri, 24 Nov 2023 17:51:36 +0000
+Message-ID: <20231124172020.703826908@linuxfoundation.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231124172024.664207345@linuxfoundation.org>
-References: <20231124172024.664207345@linuxfoundation.org>
+In-Reply-To: <20231124172010.413667921@linuxfoundation.org>
+References: <20231124172010.413667921@linuxfoundation.org>
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.5-stable review patch.  If anyone has any objections, please let me know.
+6.1-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
