@@ -1,80 +1,122 @@
-Return-Path: <linux-watchdog+bounces-35-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-36-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72D0A7F67C8
-	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Nov 2023 20:48:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B8587F7D1C
+	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Nov 2023 19:21:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE22CB20F35
-	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Nov 2023 19:48:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD9941C211D0
+	for <lists+linux-watchdog@lfdr.de>; Fri, 24 Nov 2023 18:21:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F0792556C;
-	Thu, 23 Nov 2023 19:48:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D71D039FF8;
+	Fri, 24 Nov 2023 18:21:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="dFmyOE20"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NpTYWCQc"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B82044CE0C;
-	Thu, 23 Nov 2023 19:47:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EF38C433C8;
-	Thu, 23 Nov 2023 19:47:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8394934197;
+	Fri, 24 Nov 2023 18:21:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3CF0C433C7;
+	Fri, 24 Nov 2023 18:21:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1700768879;
-	bh=2TtoXB0PIrwOLtz3SYKRVHyvGICWs9Ipxsyoj3bA2AM=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=dFmyOE20xa1FcdBElYVSdD3dTZ78t6CF+MeAK67lUUdyi3caegKqKt5JQCjhwOcVv
-	 rlVq7CG4NxWGNvm+o6J8nASeStwm2HLOqgHYBbVidSqi73Em/A/hcD5C9emnwuJd/a
-	 kLcZaTtl26cmX4b3IPAv5noVU8sHHbhifQXgk2Kc=
-Date: Thu, 23 Nov 2023 19:47:56 +0000
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Peter Griffin <peter.griffin@linaro.org>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
-	tomasz.figa@gmail.com, s.nawrocki@samsung.com,
-	linus.walleij@linaro.org, wim@linux-watchdog.org,
-	linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
-	arnd@arndb.de, olof@lixom.net, jirislaby@kernel.org,
-	cw00.choi@samsung.com, alim.akhtar@samsung.com,
-	tudor.ambarus@linaro.org, andre.draszik@linaro.org,
-	semen.protsenko@linaro.org, saravanak@google.com,
-	willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	kernel-team@android.com, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v4 16/19] tty: serial: samsung: Add gs101 compatible and
- common fifoszdt_serial_drv_data
-Message-ID: <2023112347-hazelnut-plethora-9823@gregkh>
-References: <20231120212037.911774-1-peter.griffin@linaro.org>
- <20231120212037.911774-17-peter.griffin@linaro.org>
+	s=korg; t=1700850092;
+	bh=xi/B/K1H8OvKVsxH1/1c5JnIHvryKND5dQUNfJeOLY4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=NpTYWCQc4kFWOXmHMtKEgLlY5wKgKU/cEBbyuCxBj9/K/0UdB7z+8FyartXTlRDSI
+	 BJFcK41qX6KcyJ5WbXvJ8fh5fCCfWZaRedPNzPuYe1X9Y4PkDX0fslGDsm2e0rVhZI
+	 pJYLVn9ppfaQFzUK/+uIJsKd1ET/4YXlw6doSFes=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Vanshidhar Konda <vanshikonda@os.amperecomputing.com>,
+	Darren Hart <darren@os.amperecomputing.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 6.6 442/530] sbsa_gwdt: Calculate timeout with 64-bit math
+Date: Fri, 24 Nov 2023 17:50:08 +0000
+Message-ID: <20231124172041.551376645@linuxfoundation.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231124172028.107505484@linuxfoundation.org>
+References: <20231124172028.107505484@linuxfoundation.org>
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231120212037.911774-17-peter.griffin@linaro.org>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 20, 2023 at 09:20:34PM +0000, Peter Griffin wrote:
-> Add serial driver data for Google Tensor gs101 SoC and a common
-> fifoszdt_serial_drv_data that can be used by platforms that specify the
-> samsung,uart-fifosize DT property.
-> 
-> A corresponding dt-bindings patch updates the yaml to ensure
-> samsung,uart-fifosize is a required property.
-> 
-> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> ---
->  drivers/tty/serial/samsung_tty.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+6.6-stable review patch.  If anyone has any objections, please let me know.
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+------------------
+
+From: Darren Hart <darren@os.amperecomputing.com>
+
+commit 5d6aa89bba5bd6af2580f872b57f438dab883738 upstream.
+
+Commit abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
+introduced new timer math for watchdog revision 1 with the 48 bit offset
+register.
+
+The gwdt->clk and timeout are u32, but the argument being calculated is
+u64. Without a cast, the compiler performs u32 operations, truncating
+intermediate steps, resulting in incorrect values.
+
+A watchdog revision 1 implementation with a gwdt->clk of 1GHz and a
+timeout of 600s writes 3647256576 to the one shot watchdog instead of
+300000000000, resulting in the watchdog firing in 3.6s instead of 600s.
+
+Force u64 math by casting the first argument (gwdt->clk) as a u64. Make
+the order of operations explicit with parenthesis.
+
+Fixes: abd3ac7902fb ("watchdog: sbsa: Support architecture version 1")
+Reported-by: Vanshidhar Konda <vanshikonda@os.amperecomputing.com>
+Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-watchdog@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: <stable@vger.kernel.org> # 5.14.x
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/7d1713c5ffab19b0f3de796d82df19e8b1f340de.1695286124.git.darren@os.amperecomputing.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/watchdog/sbsa_gwdt.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+--- a/drivers/watchdog/sbsa_gwdt.c
++++ b/drivers/watchdog/sbsa_gwdt.c
+@@ -152,14 +152,14 @@ static int sbsa_gwdt_set_timeout(struct
+ 	timeout = clamp_t(unsigned int, timeout, 1, wdd->max_hw_heartbeat_ms / 1000);
+ 
+ 	if (action)
+-		sbsa_gwdt_reg_write(gwdt->clk * timeout, gwdt);
++		sbsa_gwdt_reg_write((u64)gwdt->clk * timeout, gwdt);
+ 	else
+ 		/*
+ 		 * In the single stage mode, The first signal (WS0) is ignored,
+ 		 * the timeout is (WOR * 2), so the WOR should be configured
+ 		 * to half value of timeout.
+ 		 */
+-		sbsa_gwdt_reg_write(gwdt->clk / 2 * timeout, gwdt);
++		sbsa_gwdt_reg_write(((u64)gwdt->clk / 2) * timeout, gwdt);
+ 
+ 	return 0;
+ }
+
+
 
