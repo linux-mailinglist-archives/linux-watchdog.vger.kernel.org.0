@@ -1,122 +1,125 @@
-Return-Path: <linux-watchdog+bounces-45-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-46-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 939717F97E2
-	for <lists+linux-watchdog@lfdr.de>; Mon, 27 Nov 2023 04:17:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D71D27F9B85
+	for <lists+linux-watchdog@lfdr.de>; Mon, 27 Nov 2023 09:19:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 34160B209C6
-	for <lists+linux-watchdog@lfdr.de>; Mon, 27 Nov 2023 03:17:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 924C1280E2F
+	for <lists+linux-watchdog@lfdr.de>; Mon, 27 Nov 2023 08:19:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1A6220E0;
-	Mon, 27 Nov 2023 03:16:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC5CD11CBE;
+	Mon, 27 Nov 2023 08:19:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="V94KWZqJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Hzh2TU5o"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF08B8F;
-	Sun, 26 Nov 2023 19:16:54 -0800 (PST)
-Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AR3ChHq032419;
-	Mon, 27 Nov 2023 03:16:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : mime-version : content-type
- : in-reply-to; s=pps0720; bh=yciHcAiftOcRr1ySq/QGngV039j46vkGQN6g9LT5awA=;
- b=V94KWZqJbQ7Aypz9cepuigfE93djZB/2ccqcAff2n1boSjYlCo69fGCs19JxDsxBWR+p
- hBkjAjC+tedRcUWVUQCztMtiH9KUm5nt3buHUo0MHJlm+taT53uJH61rV/Ph5ryCSyjX
- O4408Yyb7g0uLgSJPgo2JgL88/pmDSW6EiOlfX8wLp6hDlhhC0879xZyx1AMADQyyAiE
- tFs39LM4P1hQ55mlooaAdYYcpaDTW0UndU46SgzVBj9jvi2RWPvuuGr+YPBx4wL2G8St
- N6DChayrMUHxvEihgnOKp73hS1852Nf6tY28mjVt4D3XN1rDN6WF97sotBcE1Bz3Iry1 5Q== 
-Received: from p1lg14880.it.hpe.com ([16.230.97.201])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3uk6ea5p92-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Nov 2023 03:16:40 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by p1lg14880.it.hpe.com (Postfix) with ESMTPS id CD028800461;
-	Mon, 27 Nov 2023 03:16:39 +0000 (UTC)
-Received: from perchik (unknown [16.231.227.39])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 19F0680A0F7;
-	Mon, 27 Nov 2023 03:16:38 +0000 (UTC)
-Date: Sun, 26 Nov 2023 20:16:37 -0700
-From: Jerry Hoemann <jerry.hoemann@hpe.com>
-To: linux@roeck-us.net, wim@linux-watchdog.org
-Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] watchdog/hpwdt: Cleanup Claiming NMI
-Message-ID: <20231127031637.GA1267@perchik>
-Reply-To: Jerry.Hoemann@hpe.com
-References: <20231109024407.120856-1-jerry.hoemann@hpe.com>
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E55A187
+	for <linux-watchdog@vger.kernel.org>; Mon, 27 Nov 2023 00:19:04 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-507adc3381cso5306103e87.3
+        for <linux-watchdog@vger.kernel.org>; Mon, 27 Nov 2023 00:19:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701073142; x=1701677942; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DatyrqYzt7l09gkz3RwGC/LqPoXrHevVF//yl/kf7UA=;
+        b=Hzh2TU5ozKbylr4SU7TyFalocW0TtCwMdUYu+Kjw4+pBJuN9k7xpjTcyg0oazgtrDI
+         J+sava6bF/OgRONY+4GFmeiuCDQKQwrhoCOEK0rKgpSiqkwYuwWYIvl8KiQQhcW8Klun
+         gG7+8zeAFAM8IMWJCHChNQGODU1KegFWdzP8n0IUvbRLBGiQ5AcZznAvZ9lCI6DVXuoe
+         e8JaPdu3+LOO3NM9Dv7fWl4QH2ZziDmGxy1tG67T8vQokeIn1qPmZrdtH1f8+36EqN/B
+         fZ27WNsMnecx8TS9N4BLI2NUGgKIHhPyHHgZEZVCMld65hjodNOgX468ldUwhWAFymvd
+         OKfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701073142; x=1701677942;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DatyrqYzt7l09gkz3RwGC/LqPoXrHevVF//yl/kf7UA=;
+        b=Y8G4t8rcvePJiZgdjP+kIuoixxY4np92aG5U+xQ9jw4Pm6BuPeOG7Sdg/T4f4kTC71
+         gaJjPyZ8Kh87CoGWWa+pH+Is5xh25kaHPEZeRLBGclccLM2Sj6ButvyAeIBJ5JTCttbv
+         idX18QFQOm8FWN+1SZZTAfxYyGje6Leu6PLSCGLKRcfpBe6/vhxMp2nDfp0ZSbUyAO9+
+         iUMnkiEN3cPr8rnht1NBWOgZ8pnFXdHdybeDcuT+frYz/cnHiqY5EKhqJMu4uHALLPOB
+         9nAh1jXVCdF2WeWwXl4EVwEMd9PavOAiPNr958zRRcZBHfahRtnCrKox55zAhQALZtt9
+         AHFQ==
+X-Gm-Message-State: AOJu0YysJaNDYyjQo1D3z8CSAIi4qplvahjZRRxhMAWUXike3291ykdT
+	kfOqy+po4UPNfw5Avmro7iaMCQ==
+X-Google-Smtp-Source: AGHT+IGo5481lkWUQv34iJL0VQEkk+omxRs5PmyZo2My6DNUSZUJm3rCn/6nN4sI8ZpCCdAy1HtiIA==
+X-Received: by 2002:a05:6512:3751:b0:509:4c7b:c734 with SMTP id a17-20020a056512375100b005094c7bc734mr5900453lfs.20.1701073142535;
+        Mon, 27 Nov 2023 00:19:02 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id be7-20020a05600c1e8700b00405442edc69sm13516568wmb.14.2023.11.27.00.19.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Nov 2023 00:19:02 -0800 (PST)
+From: Neil Armstrong <neil.armstrong@linaro.org>
+To: wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org, 
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+ khilman@baylibre.com, jbrunet@baylibre.com, 
+ martin.blumenstingl@googlemail.com, Huqiang Qin <huqiang.qin@amlogic.com>
+Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20231027104358.342861-1-huqiang.qin@amlogic.com>
+References: <20231027104358.342861-1-huqiang.qin@amlogic.com>
+Subject: Re: (subset) [PATCH V3 0/3] Add watchdog support for Amlogic C3
+ and S4 SoCs
+Message-Id: <170107314169.1083800.14516457377836864819.b4-ty@linaro.org>
+Date: Mon, 27 Nov 2023 09:19:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231109024407.120856-1-jerry.hoemann@hpe.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Proofpoint-GUID: ke6WRTkPJMpB3eNfeh1b-QYZ-I_Al_Jx
-X-Proofpoint-ORIG-GUID: ke6WRTkPJMpB3eNfeh1b-QYZ-I_Al_Jx
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-26_25,2023-11-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 phishscore=0 adultscore=0 clxscore=1011 malwarescore=0
- lowpriorityscore=0 spamscore=0 mlxlogscore=999 impostorscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311270023
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.3
 
-On Wed, Nov 08, 2023 at 07:44:05PM -0700, Jerry Hoemann wrote:
-> In addition to being a watchdog, hpwdt participates in error
-> containmnet on ProLiant systems.
-> 
-> On legacy platforms (Gen 8/Gen 9 and earlier) Fatal IO errors would be
-> signaled as an IO CHECK NMI with expectation that hpwdt would be present
-> to receive the NMI and crash the systems thus containing the error.
-> 
-> A problem was that hwpdt did not discriminate enough in accepting NMIs.
-> This could lead to problems if an NMI generated for another subsystems
-> was not claimed by that subsystem and became UNKNOWN and was claimed
-> by hpwdt.  Application profiling was such an example.  While, profiling
-> issue was fixed, hpwdt should avoid claiming NMI not intended for it.
-> 
-> In iLO 5 time frame, checks were added to make hpwdt more selective
-> in claiming NMI.  This patchset cleans up the checks and enables it
-> for future versions of iLO.
-> 
+Hi,
 
-Hi Guenter,
-
-Was there a problem with this patch set?
-
-Thanks
-
-Jerry
-
-
+On Fri, 27 Oct 2023 18:43:55 +0800, Huqiang Qin wrote:
+> Amlogic C3 and S4 has the same watchdog controller as Amlogic T7.
 > 
-> Jerry Hoemann (2):
->   watchdog/hpwdt: Only claim UNKNOWN NMI if from iLO
->   watchdog/hpwdt: Remove checks on ilo5
+> Changes since V2 [2]:
+> - Modified yaml document to ensure that dtbs_check passes.
+> - Added a patch for watchdog support for S4.
 > 
->  drivers/watchdog/hpwdt.c | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
+> Changes since V1 [1]:
+> - Added C3 compatibles, with T7 compatibles list as fallback.
 > 
-> -- 
-> 2.41.0
+> [...]
+
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.8/arm64-dt)
+
+[2/3] arm64: dts: Add watchdog node for Amlogic C3 SoCs
+      https://git.kernel.org/amlogic/c/a30c7a73b0ad50c40c01811fa23e74764c3ba007
+[3/3] arm64: dts: Add watchdog node for Amlogic S4 SoCs
+      https://git.kernel.org/amlogic/c/2d66f91208d1174eb8ad29706e8bdfb587a34d5c
+
+These changes has been applied on the intermediate git tree [1].
+
+The v6.8/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
+
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
+
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
+
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 
 -- 
+Neil
 
------------------------------------------------------------------------------
-Jerry Hoemann                  Software Engineer   Hewlett Packard Enterprise
------------------------------------------------------------------------------
 
