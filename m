@@ -1,99 +1,125 @@
-Return-Path: <linux-watchdog+bounces-49-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-50-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64A3C7FEE60
-	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Nov 2023 12:58:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A79287FF89B
+	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Nov 2023 18:43:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 054E2B20CA3
-	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Nov 2023 11:58:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4764AB20CA8
+	for <lists+linux-watchdog@lfdr.de>; Thu, 30 Nov 2023 17:43:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 862043D3AA;
-	Thu, 30 Nov 2023 11:58:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8C5A58132;
+	Thu, 30 Nov 2023 17:43:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="RxgD1U1V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BycyN/3C"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE761721
-	for <linux-watchdog@vger.kernel.org>; Thu, 30 Nov 2023 03:57:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-	s=s31663417; t=1701345452; x=1701950252; i=wahrenst@gmx.net;
-	bh=/C4rT09lyMFrxRi4GA6wRvI8mGinpee4/EGnSwHOt7I=;
-	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
-	 In-Reply-To;
-	b=RxgD1U1VSZNS1UwuIysUZLNjnW+Qu4uMEcxdDsq7QUxqfpZyDsxl67qtu4E3aARt
-	 yThGyyR8n5SWr8+tbcVdHhB5uTHKYai+KmoGc/LKo1MkTVsIw0kCzvCENaeluXB3I
-	 I5ZpcVFnnsNe8MpuIcKrc+MXoLfv4Wz6VzRo6Gr+lEFUrNtElkfDEn8s/o4lpezuB
-	 g8RdiUik9tipeyrM7gF2IeHddQcw/4MnRshUQ8HX2nvhOPikJo7r3Ewp5javEGsRo
-	 h0Qd+0p+PMomydxTVCVcrEoSs87xOan69Dyx4BrP2/2L+d8AyI3sQyMqpNUN6CUt0
-	 zmIGGC9Mp6G/RjoINA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.130] ([37.4.248.43]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MSt8Q-1qhcME2zdO-00UFeI; Thu, 30
- Nov 2023 12:57:32 +0100
-Message-ID: <f0354dc4-e6f1-41c5-9a99-9847c96a15c2@gmx.net>
-Date: Thu, 30 Nov 2023 12:57:31 +0100
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F1558104;
+	Thu, 30 Nov 2023 17:43:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 315EAC433C8;
+	Thu, 30 Nov 2023 17:43:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701366187;
+	bh=glQ7vJRlyzl2+xsSW7kn8lsuhF+aXhOL0FI2Li/dzJk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=BycyN/3CtipNGEFpKS82OrkkVPuTUAkQiUdpIRgj/4Gw3br5xOTlEU/iPVrraDfDu
+	 Qgx66TtMjgMK4XjfVS2HF4/15P8ix09cu1WftYFAy5Mf0IMvANYm4wCJUBWDu6qVUs
+	 5znw/3ERkJOzV2U7EAgidCzyFzgKO5UnYXcrKlnrgIrrh7s+e/2GDbkIE1eX7ZFI1A
+	 ROYZE3QuYHRpDhhRErNp+EOCSx9tFui+NdNZlee2l43bk8vriTcqu2gEIiwV4xRNaT
+	 VytoRtXTEi4qLOjjUfO2CYWlK4BEVQKFcUsws5vWCY9+Swl55HYHSRdJl8WUwMS7/A
+	 FYASVBZAngr2Q==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan+linaro@kernel.org>)
+	id 1r8l4e-0003Qw-1m;
+	Thu, 30 Nov 2023 18:43:40 +0100
+From: Johan Hovold <johan+linaro@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-arm-msm@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH] dt-bindings: watchdog: qcom,pm8916-wdt: add parent spmi node to example
+Date: Thu, 30 Nov 2023 18:42:54 +0100
+Message-ID: <20231130174254.13180-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: bcm2835_wdt: Fix WDIOC_SETTIMEOUT handling
-Content-Language: en-US
-To: Guenter Roeck <linux@roeck-us.net>,
- Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
- bcm-kernel-feedback-list@broadcom.com, Phil Elwell <phil@raspberrypi.com>,
- Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20231112173251.4827-1-wahrenst@gmx.net>
- <cce852fd-618c-44f5-aa86-1cd33bd97351@roeck-us.net>
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <cce852fd-618c-44f5-aa86-1cd33bd97351@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:Qyyf5wWn/HU2CBr1RWinDJWx9HjhEQ50agsf1/5A2kK4NsNFSGC
- HivXlljcLHzQ4P1c02p/oPEnt1XLBzvckPj/NSb0A5LYnMBVVkcLEk0YsXcUP7PJ6DkEnuk
- zIWgvuglt/UE7hb8JdKMlLx2XDaxEEZcbVcfJgZF5srHUldAoOw1klWYPgJj94NYHfZLPwR
- ed1pZiLqvPzIUlxXbLHCA==
-UI-OutboundReport: notjunk:1;M01:P0:MTpt/NARV8I=;sxiBNJWkixwTsFmdCxnMxBqQgHy
- DJR5uue6lkrCfQrqaHY4pE1yX57ui0/tUNITdSgF0knSQ7Bixfhq1gtNKTCkEZ3NIIWuncT0D
- K7L3yuML3ViDcLx+xoO1szK1AblXvhK5QySe7zTG4Jgaj536V6k5q+qLhmSaBx0WFm2ro286b
- gLsk7R63xA5oajuZCuc6ry2wwt3PrwaB67O3/XiC34SAywVIKYq5t3P9xpnnZ8nz+30vVJPbO
- lGBe1z0dPJMrdeV4bCR/1mDCMl7+OZrVUNUxkVSVR7oIhjOKeX8YrgBS4kH1DRjbovUEMyul6
- gfk/o2ZoO5N0Hqf59kTXLpO21raMyHZRFQXOiLTj7AwErSr8bGtXHrQ60FKh3dcAxR+wvhFrw
- a6v313kbbSWw/nO4OZdD61A7TPdStwdLUZC6w+FwcRznPFa0MFF4u0GRcFtwY4L4HEx3l2xo9
- BD6/F8+7BpfZGPvn6GDkxWcWE8cqoAw7tTG1O9a7U/1CrCtRglUjY1y5eufw9qN/oHCDpeUkH
- YPfAr5qgMCNR6STZwfiNxANgle3Jkt9+JYlWnL1ykz4hW7I0TDBKrBMWn49VOf3Q0h75zGy3n
- GRMBZMJK+1Ylum6pOwn0xSOHydM1ZC6tWIYXE2zcpjMzmSku/ymz311vATTndVrPPaP/H2J6s
- uKRtfIu3XvLnpHpAEPt73OMv43V4QMikaTdEZtQfP0w7rq5axtc3dXRvQ9+yoNJZsUlHp3nWY
- ElgYhmzub9W3lv09IX3oZU8j39adHZjVPld0Ix3lypKO9qQwu3d1PPaOtanUT1znQuAbidihe
- Nn9jElLV02eAE4ELlVL8reId5LpU9e8oEO8Hl9hXTwaQRPDEgCu8AJUIxMgwI45L5y7SeHKtE
- iZRZaR9ZukPGuj27a4bLxy3Sa9lUl318ftX/oNJYtF8vSS5XcBiMyBE2vpfyvwTLj6tHNmm6e
- YKy8zg==
+Content-Transfer-Encoding: 8bit
 
-Hi,
+The PM8916 watchdog is part of an SPMI PMIC, which lives on an SPMI bus.
 
-Am 13.11.23 um 15:31 schrieb Guenter Roeck:
-> On Sun, Nov 12, 2023 at 06:32:51PM +0100, Stefan Wahren wrote:
->> Users report about the unexpected behavior for setting timeouts above
->> 15 sec on Raspberry Pi. According to watchdog-api.rst the ioctl
->> WDIOC_SETTIMEOUT shouldn't fail because of hardware limitations.
->> But looking at the code shows that max_timeout based on the
->> register value PM_WDOG_TIME_SET, which is the maximum.
->>
->> Since 664a39236e71 ("watchdog: Introduce hardware maximum heartbeat
->> in watchdog core") the watchdog core is able to handle this problem.
->>
->> This fix has been tested with watchdog-test from selftests.
->>
->> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217374
->> Fixes: 664a39236e71 ("watchdog: Introduce hardware maximum heartbeat in watchdog core")
->> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-who takes care of this patch?
+Add a parent SPMI bus node with an '#address-cells' of 2 and
+'#size-cells' of 0 instead of relying on the fact that the default
+number of register cells happen to match (i.e. 1 + 1).
+
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ .../bindings/watchdog/qcom,pm8916-wdt.yaml    | 33 +++++++++++--------
+ 1 file changed, 19 insertions(+), 14 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.yaml
+index 568eb8480fc3..dc6af204e8af 100644
+--- a/Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/qcom,pm8916-wdt.yaml
+@@ -30,22 +30,27 @@ examples:
+     #include <dt-bindings/interrupt-controller/irq.h>
+     #include <dt-bindings/spmi/spmi.h>
+ 
+-    pmic@0 {
+-        compatible = "qcom,pm8916", "qcom,spmi-pmic";
+-        reg = <0x0 SPMI_USID>;
+-        #address-cells = <1>;
++    spmi {
++        #address-cells = <2>;
+         #size-cells = <0>;
+ 
+-        pon@800 {
+-            compatible = "qcom,pm8916-pon";
+-            reg = <0x800>;
+-            mode-bootloader = <0x2>;
+-            mode-recovery = <0x1>;
+-
+-            watchdog {
+-                compatible = "qcom,pm8916-wdt";
+-                interrupts = <0x0 0x8 6 IRQ_TYPE_EDGE_RISING>;
+-                timeout-sec = <60>;
++        pmic@0 {
++            compatible = "qcom,pm8916", "qcom,spmi-pmic";
++            reg = <0x0 SPMI_USID>;
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            pon@800 {
++                compatible = "qcom,pm8916-pon";
++                reg = <0x800>;
++                mode-bootloader = <0x2>;
++                mode-recovery = <0x1>;
++
++                watchdog {
++                    compatible = "qcom,pm8916-wdt";
++                    interrupts = <0x0 0x8 6 IRQ_TYPE_EDGE_RISING>;
++                    timeout-sec = <60>;
++                };
+             };
+         };
+     };
+-- 
+2.41.0
+
 
