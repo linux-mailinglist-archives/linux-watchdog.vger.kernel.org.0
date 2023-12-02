@@ -1,254 +1,107 @@
-Return-Path: <linux-watchdog+bounces-98-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-99-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE76D801A06
-	for <lists+linux-watchdog@lfdr.de>; Sat,  2 Dec 2023 03:28:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1336C801E3B
+	for <lists+linux-watchdog@lfdr.de>; Sat,  2 Dec 2023 20:26:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13F2EB20E28
-	for <lists+linux-watchdog@lfdr.de>; Sat,  2 Dec 2023 02:28:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA975280FB2
+	for <lists+linux-watchdog@lfdr.de>; Sat,  2 Dec 2023 19:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2B155246;
-	Sat,  2 Dec 2023 02:28:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yKWht4e5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4986208BE;
+	Sat,  2 Dec 2023 19:25:55 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3A810EF
-	for <linux-watchdog@vger.kernel.org>; Fri,  1 Dec 2023 18:28:13 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1d065be370aso7446795ad.3
-        for <linux-watchdog@vger.kernel.org>; Fri, 01 Dec 2023 18:28:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701484092; x=1702088892; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=76O+RH8qZeRuRBc1mT4uLTZ6BfSO4LNymM/dQ6nxNw0=;
-        b=yKWht4e5yaJE+X0VoshDNHA2ZFevnp7O1QNMpBtDzUZyVIHC7MifoYl5qzKcgU8i97
-         PfUnfOU87kh9E6lJ96SZYO35wgOpSl3mwxq60MHEMROkI9mbNsDEQiwVZaVay4Vi8Ml+
-         69KvmqssN9uacMwIpY9GNKtWJPZ0Kxw4GyXQGk8Tr3QamVymarg5C7NYa5eR6g4ZvBIu
-         bL7anQUkkGuVQlKDRefyvD+Vzr9mRUvXHYxlzC7SWpoubsu/twlM9sYoi5HV+DkAvTQ8
-         CcKE6owz/F7gh+9bj5xIRTS6Ypm8U7SSf83B1C7jaCn4nxCdrj7v97hb5wmWLWeC7qee
-         j3bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701484092; x=1702088892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=76O+RH8qZeRuRBc1mT4uLTZ6BfSO4LNymM/dQ6nxNw0=;
-        b=S926q48/VZDYhvy1pxC6XVk9pI9YVGXI1qr5QA7eXo5zA0Jd01tmUuLrpXkxjBQgU4
-         o616IuRkcx8pihFWTx2VzWuB+J6eT2G7n6gpslhTp1T5Rk0ahNUCaQnDwKWFlc2z0Wkz
-         WjEKFoMK9AjUPk9eCCM0pGJMt6K2OQvo9VzpeaV1HCxwlYXBfVYW4wSSUztAkbzFIqCh
-         nddzJulG0/RI/RZGSuxbb3dwtGU1PjViuIi41vJlta1z2FDrRu5AT/z+lpbD5WcOcvy/
-         cUFUOUYOlqhJ310lSbhIoyFRtN7vGuE8pfx1Cxus0xp9XBfo+Ay48Bo35/OOzE47pENv
-         +0Ng==
-X-Gm-Message-State: AOJu0YyK8nEYADLhfYnTiq1ZKPZXhFGz6ebbTZuhM6WztMkOprqHba3w
-	DLvGFvplyZu+bKHecHJtluEXezME9aFeUUL1KZT1rQ==
-X-Google-Smtp-Source: AGHT+IG1dE3nOssFf65P5OHRfkzUuH2N8dYYyAJ+WlkyZbyjQVISgvPG3LWKb2DVruVskMVXo7/YNmnqp8LpAD6HLwQ=
-X-Received: by 2002:a17:903:41c1:b0:1ca:7f91:aa5d with SMTP id
- u1-20020a17090341c100b001ca7f91aa5dmr660536ple.16.1701484092499; Fri, 01 Dec
- 2023 18:28:12 -0800 (PST)
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FA6811A;
+	Sat,  2 Dec 2023 11:25:51 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="6.04,246,1695654000"; 
+   d="scan'208";a="185089874"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 03 Dec 2023 04:25:49 +0900
+Received: from localhost.localdomain (unknown [10.226.92.28])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 2369340764EE;
+	Sun,  3 Dec 2023 04:25:40 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Lee Jones <lee@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Steve Twiss <stwiss.opensource@diasemi.com>,
+	Support Opensource <support.opensource@diasemi.com>,
+	linux-watchdog@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>,
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v2 00/11] Convert DA906{1,2} bindings to json-schema
+Date: Sat,  2 Dec 2023 19:25:24 +0000
+Message-Id: <20231202192536.266885-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231201160925.3136868-1-peter.griffin@linaro.org> <20231201160925.3136868-20-peter.griffin@linaro.org>
-In-Reply-To: <20231201160925.3136868-20-peter.griffin@linaro.org>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Fri, 1 Dec 2023 20:28:01 -0600
-Message-ID: <CAPLW+4mOmQM+Hy-kUKn9onU25-ycgj4CWfAK+-vZVH+yw=FhtQ@mail.gmail.com>
-Subject: Re: [PATCH v5 19/20] arm64: dts: exynos: google: Add initial
- Oriole/pixel 6 board support
-To: Peter Griffin <peter.griffin@linaro.org>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
-	tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org, 
-	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org, 
-	jirislaby@kernel.org, cw00.choi@samsung.com, alim.akhtar@samsung.com, 
-	tudor.ambarus@linaro.org, andre.draszik@linaro.org, saravanak@google.com, 
-	willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
-	linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 1, 2023 at 10:11=E2=80=AFAM Peter Griffin <peter.griffin@linaro=
-.org> wrote:
->
-> Add initial board support for the Pixel 6 phone code named Oriole. This
-> has been tested with a minimal busybox initramfs and boots to a shell.
->
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> ---
->  arch/arm64/boot/dts/exynos/Makefile           |   2 +
->  arch/arm64/boot/dts/exynos/google/Makefile    |   4 +
->  .../boot/dts/exynos/google/gs101-oriole.dts   | 105 ++++++++++++++++++
->  3 files changed, 111 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/exynos/google/Makefile
->  create mode 100644 arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
->
-> diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/ex=
-ynos/Makefile
-> index 6e4ba69268e5..44c24a8ad9e1 100644
-> --- a/arch/arm64/boot/dts/exynos/Makefile
-> +++ b/arch/arm64/boot/dts/exynos/Makefile
-> @@ -1,4 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
-> +subdir-y +=3D google
-> +
->  dtb-$(CONFIG_ARCH_EXYNOS) +=3D \
->         exynos5433-tm2.dtb              \
->         exynos5433-tm2e.dtb             \
-> diff --git a/arch/arm64/boot/dts/exynos/google/Makefile b/arch/arm64/boot=
-/dts/exynos/google/Makefile
-> new file mode 100644
-> index 000000000000..0a6d5e1fe4ee
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/exynos/google/Makefile
-> @@ -0,0 +1,4 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +dtb-$(CONFIG_ARCH_EXYNOS) +=3D \
-> +       gs101-oriole.dtb \
-> diff --git a/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts b/arch/ar=
-m64/boot/dts/exynos/google/gs101-oriole.dts
-> new file mode 100644
-> index 000000000000..6abd00fa337e
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
-> @@ -0,0 +1,105 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Oriole Device Tree
-> + *
-> + * Copyright 2021-2023 Google,LLC
+Convert the below bindings to json-schema
+1) DA906{1,2} mfd bindings
+2) DA906{1,2,3} onkey bindings
+3) DA906{1,2,3} thermal bindings
 
-Space after comma. Maybe also make this line consistent for all added
-files. Checking existing files, it's usually spelled "Copyright (C)
-<years>, Google LLC."
+Also add fallback for DA9061 watchdog device and document
+DA9063 watchdog device.
 
-Btw, I forgot to mention in my review for PATCH #18: please double
-check the commit message, there are some issues with punctuation
-there.
+v1->v2:
+ Ref : https://lore.kernel.org/all/20231201110840.37408-5-biju.das.jz@bp.renesas.com/
+ * Made as a separate series
+ * DA9062 and DA9061 merged with DA9063
+ * Sorted the child devices
+ * mfd,onkey and thermal are pointing to child bindings
+ 
+Biju Das (11):
+  dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for DA9061
+    watchdog
+  dt-bindings: watchdog: dlg,da9062-watchdog: Document DA9063 watchdog
+  dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
+  dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
+  dt-bindings: mfd: dlg,da9063: Update watchdog property
+  dt-bindings: mfd: dlg,da9063: Update onkey property
+  dt-bindings: mfd: dlg,da9063: Sort child devices
+  dt-bindings: mfd: da9062: Update watchdog description
+  dt-bindings: mfd: da9062: Update onkey description
+  dt-bindings: mfd: da9062: Update thermal description
+  dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
 
-> + * Copyright 2023 Linaro Ltd - <peter.griffin@linaro.org>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
-> +#include "gs101-pinctrl.h"
-> +#include "gs101.dtsi"
-> +
-> +/ {
-> +       model =3D "Oriole";
-> +       compatible =3D "google,gs101-oriole", "google,gs101";
-> +
-> +       aliases {
-> +               serial0 =3D &serial_0;
-> +       };
-> +
-> +       chosen {
-> +               /* Bootloader expects bootargs specified otherwise it cra=
-shes */
+ .../bindings/input/da9062-onkey.txt           |  47 ----
+ .../bindings/input/dlg,da9062-onkey.yaml      |  61 +++++
+ .../devicetree/bindings/mfd/da9062.txt        | 124 ----------
+ .../devicetree/bindings/mfd/dlg,da9063.yaml   | 220 +++++++++++++++---
+ .../bindings/thermal/da9062-thermal.txt       |  36 ---
+ .../bindings/thermal/dlg,da9062-thermal.yaml  |  58 +++++
+ .../watchdog/dlg,da9062-watchdog.yaml         |  12 +-
+ 7 files changed, 313 insertions(+), 245 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/da9062-onkey.txt
+ create mode 100644 Documentation/devicetree/bindings/input/dlg,da9062-onkey.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/da9062.txt
+ delete mode 100644 Documentation/devicetree/bindings/thermal/da9062-thermal.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml
 
-Just wanted to say: I think you are doing a great job with this
-platform, and I can only imagine how hard it can be when you can't
-actually tinker with the bootloader source code. But I do appreciate
-that you was able to minimize stuff like earlycon, ect, etc :) And
-this one actually LGTM.
+-- 
+2.39.2
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-
-> +               bootargs =3D "";
-> +               stdout-path =3D &serial_0;
-> +       };
-> +
-> +       gpio-keys {
-> +               compatible =3D "gpio-keys";
-> +               pinctrl-names =3D "default";
-> +               pinctrl-0 =3D <&key_voldown>, <&key_volup>, <&key_power>;
-> +
-> +               button-vol-down {
-> +                       label =3D "KEY_VOLUMEDOWN";
-> +                       linux,code =3D <KEY_VOLUMEDOWN>;
-> +                       gpios =3D <&gpa7 3 GPIO_ACTIVE_LOW>;
-> +                       wakeup-source;
-> +               };
-> +
-> +               button-vol-up {
-> +                       label =3D "KEY_VOLUMEUP";
-> +                       linux,code =3D <KEY_VOLUMEUP>;
-> +                       gpios =3D <&gpa8 1 GPIO_ACTIVE_LOW>;
-> +                       wakeup-source;
-> +               };
-> +
-> +               button-power {
-> +                       label =3D "KEY_POWER";
-> +                       linux,code =3D <KEY_POWER>;
-> +                       gpios =3D <&gpa10 1 GPIO_ACTIVE_LOW>;
-> +                       wakeup-source;
-> +               };
-> +       };
-> +};
-> +
-> +&ext_24_5m {
-> +       clock-frequency =3D <24576000>;
-> +};
-> +
-> +&ext_200m {
-> +       clock-frequency =3D <200000000>;
-> +};
-> +
-> +&pinctrl_far_alive {
-> +       key_voldown: key-voldown-pins {
-> +               samsung,pins =3D "gpa7-3";
-> +               samsung,pin-function =3D <GS101_PIN_FUNC_EINT>;
-> +               samsung,pin-pud =3D <GS101_PIN_PULL_NONE>;
-> +               samsung,pin-drv =3D <GS101_PIN_DRV_2_5_MA>;
-> +       };
-> +
-> +       key_volup: key-volup-pins {
-> +               samsung,pins =3D "gpa8-1";
-> +               samsung,pin-function =3D <GS101_PIN_FUNC_EINT>;
-> +               samsung,pin-pud =3D <GS101_PIN_PULL_NONE>;
-> +               samsung,pin-drv =3D <GS101_PIN_DRV_2_5_MA>;
-> +       };
-> +};
-> +
-> +&pinctrl_gpio_alive {
-> +       key_power: key-power-pins {
-> +               samsung,pins =3D "gpa10-1";
-> +               samsung,pin-function =3D <GS101_PIN_FUNC_EINT>;
-> +               samsung,pin-pud =3D <GS101_PIN_PULL_NONE>;
-> +               samsung,pin-drv =3D <GS101_PIN_DRV_2_5_MA>;
-> +       };
-> +};
-> +
-> +&serial_0 {
-> +       status =3D "okay";
-> +       pinctrl-names =3D "default";
-> +       pinctrl-0 =3D <&uart0_bus>;
-> +};
-> +
-> +&usi_uart {
-> +       status =3D "okay";
-> +       samsung,clkreq-on; /* needed for UART mode */
-> +};
-> +
-> +&watchdog_cl0 {
-> +       timeout-sec =3D <30>;
-> +       status =3D "okay";
-> +};
-> --
-> 2.43.0.rc2.451.g8631bc7472-goog
->
 
