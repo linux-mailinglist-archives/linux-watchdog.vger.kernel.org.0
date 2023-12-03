@@ -1,91 +1,94 @@
-Return-Path: <linux-watchdog+bounces-103-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-104-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45F0B802265
-	for <lists+linux-watchdog@lfdr.de>; Sun,  3 Dec 2023 11:12:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D221802310
+	for <lists+linux-watchdog@lfdr.de>; Sun,  3 Dec 2023 12:32:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ECB301F21033
-	for <lists+linux-watchdog@lfdr.de>; Sun,  3 Dec 2023 10:12:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCCF91C208E8
+	for <lists+linux-watchdog@lfdr.de>; Sun,  3 Dec 2023 11:32:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D7888F55;
-	Sun,  3 Dec 2023 10:12:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=z3ntu.xyz header.i=@z3ntu.xyz header.b="YVpST0YX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E615BA39;
+	Sun,  3 Dec 2023 11:32:21 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from ahti.lucaweiss.eu (ahti.lucaweiss.eu [128.199.32.197])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEC1F3;
-	Sun,  3 Dec 2023 02:12:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=s1;
-	t=1701598336; bh=D98OLD1PzU0av069+SEqgQFkN/5n2xG9ugwljKPGRv4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=YVpST0YXbsjwdBdARgyDVsq31Bsq3mJCmHCXc43oKUXYpvhJymXCPUSHgVxUoSSS7
-	 MwmEdqKh5KpfwnKvd9+51+IoQdn7H+ERRpBUQZrRYvtEtT0A+EbWfo8r49po5ZQENi
-	 2zGTEIj0lViDIFGbCY4dlpMpozKltr4ik5wieMYw=
-From: Luca Weiss <luca@z3ntu.xyz>
-To: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
- Andy Gross <agross@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>,
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Matti =?ISO-8859-1?Q?Lehtim=E4ki?= <matti.lehtimaki@gmail.com>
-Subject: Re: (subset) [PATCH 0/3] Add watchdog nodes to msm8226 & msm8974
-Date: Sun, 03 Dec 2023 11:12:15 +0100
-Message-ID: <8630951.T7Z3S40VBb@z3ntu.xyz>
-In-Reply-To: <170157925797.1717511.7301998654173050568.b4-ty@kernel.org>
-References:
- <20231011-msm8226-msm8974-watchdog-v1-0-2c472818fbce@z3ntu.xyz>
- <170157925797.1717511.7301998654173050568.b4-ty@kernel.org>
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48E20C1;
+	Sun,  3 Dec 2023 03:32:17 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="6.04,247,1695654000"; 
+   d="scan'208";a="185128637"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 03 Dec 2023 20:32:16 +0900
+Received: from localhost.localdomain (unknown [10.226.92.30])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 0C0EF403E66D;
+	Sun,  3 Dec 2023 20:32:11 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Support Opensource <support.opensource@diasemi.com>,
+	Steve Twiss <stwiss.opensource@diasemi.com>,
+	linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>,
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v3 02/11] dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for DA9061 watchdog
+Date: Sun,  3 Dec 2023 11:31:50 +0000
+Message-Id: <20231203113159.92316-3-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231203113159.92316-1-biju.das.jz@bp.renesas.com>
+References: <20231203113159.92316-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 
-On Sonntag, 3. Dezember 2023 05:54:39 CET Bjorn Andersson wrote:
-> On Wed, 11 Oct 2023 18:33:12 +0200, Luca Weiss wrote:
-> > Document the compatible for the watchdog found on both SoCs, and add
-> > them to the SoC dtsi file. And especially for the case where the
-> > bootloader has already enabled the watchdog we need to start petting it
-> > on time, otherwise the system gets rebooted.
-> > 
-> > It's worth noting that the watchdog behaves a bit unexpectedly.
-> > It appears the watchdog counts down significantly slower when there's no
-> > load on the system and can last far longer than 30 seconds until they
-> > bark. Only when putting load on the system, e.g. with stress-ng does the
-> > watchdog interrupt fire and kill the system within an expected amount of
-> > time.
-> > 
-> > [...]
-> 
-> Applied, thanks!
-> 
-> [3/3] ARM: dts: qcom: msm8974: Add watchdog node
->       commit: 95053f6bc8ffca438a261400d7c06bd74e3f106e
+The DA9061 watchdog is identical to DA9062 watchdog, so no driver changes
+are required. The fallback compatible string "dlg,da9062-watchdog" will be
+used on DA9061 watchdog.
 
-Hi Bjorn,
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
+v2->v3:
+ * No change
+v2:
+ * New patch
+---
+ .../bindings/watchdog/dlg,da9062-watchdog.yaml        | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-Any reason you didn't pick up the msm8226 patch? Doesn't seem to be just your
-ty email, I only see the msm8974 patch in 
-https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/log/?h=arm32-for-6.8
-
-Regards
-Luca
-
-> 
-> Best regards,
-
-
-
+diff --git a/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml b/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
+index f058628bb632..2b71fdb9251c 100644
+--- a/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
++++ b/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
+@@ -14,9 +14,14 @@ allOf:
+ 
+ properties:
+   compatible:
+-    enum: 
+-      - dlg,da9061-watchdog
+-      - dlg,da9062-watchdog
++    oneOf:
++      - items:
++          - enum:
++              - dlg,da9062-watchdog
++      - items:
++          - enum:
++              - dlg,da9061-watchdog
++          - const: dlg,da9062-watchdog # da9062-watchdog fallback
+ 
+   dlg,use-sw-pm:
+     type: boolean
+-- 
+2.39.2
 
 
