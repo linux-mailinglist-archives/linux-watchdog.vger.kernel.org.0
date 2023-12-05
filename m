@@ -1,58 +1,58 @@
-Return-Path: <linux-watchdog+bounces-131-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-132-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47409804D91
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Dec 2023 10:22:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45B07804D98
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Dec 2023 10:23:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F148A1F213F1
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Dec 2023 09:22:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0124B28162E
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Dec 2023 09:22:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 478973F8E3;
-	Tue,  5 Dec 2023 09:22:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 651BA3E47E;
+	Tue,  5 Dec 2023 09:22:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="g0HxNWHl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tlTfOHi0"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2B2C6
-	for <linux-watchdog@vger.kernel.org>; Tue,  5 Dec 2023 01:22:42 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-40c09dfa03cso23617005e9.2
-        for <linux-watchdog@vger.kernel.org>; Tue, 05 Dec 2023 01:22:41 -0800 (PST)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3412283
+	for <linux-watchdog@vger.kernel.org>; Tue,  5 Dec 2023 01:22:44 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-40c0a0d068bso20239555e9.3
+        for <linux-watchdog@vger.kernel.org>; Tue, 05 Dec 2023 01:22:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701768160; x=1702372960; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1701768162; x=1702372962; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XqatM4kM7wKwmicGW+gEqjAkzatGSFvjDGMOBx55ZZQ=;
-        b=g0HxNWHllGCPgVSvlHjmBBOVKuOhGsi3mnEC2ux9hWSPzA1cGSifernzpJz46lrinF
-         YCAEPXnhEDFpJnfuLlXD/ErOCVViixO2Hya/f2NbReLz+L5nDoo0jywHTMdhSjFi9EV5
-         /ZLGrlW7c8i1YoG3mwQGayfp+0hiOrzzNNrEkoWWj3nerZBbZHWBdpw3oCCHdqbEh2ew
-         XBL5B4ayRSzS1tP3Iz/D9dD/S2fZMOHLA9jTG71Z5y8gFtkzt1b4ytR7/d4DsST7vZ06
-         uQF/vERrbsP3BroOUr+1h9vjg7QT+iCdauZunoecXciLbQk2uuw1Xa6Lj4fNyd+QiqYy
-         GxHA==
+        bh=zJh8YfrYN4aMg7OwYeFzWAOVUVx0rMNzMAodPuvKkaY=;
+        b=tlTfOHi0sv822V6yfJDh0mWZG5PQHDpLLhbcUjESBS1oIbaL/g3nDzmMqTCgmnc3v1
+         QR4PFL89lG5IWJxLa0NOQ52jFgvS5UWGKlY0S0YYue1Zo823qOmN/4yCRuViGKbFDUVw
+         7zrT0wmrfAwqUEbeaL/F8GMg020vFn7PtVyES4twas9J6w5FVQlxSiJ5tG7bAjtUICVU
+         IYcSTIUq4tZQ71FS4Gh1V/WjQXerHZZDTiuWHpAuSiVn4vYkUCiIKFGy3qwm5ThAFL9y
+         cA8M8NRAH/LMqO2l3PhylYo7dJepnprAoRjlrxP3waXf8I+U/rpNXrGJx7RT4GfISw24
+         KnSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701768160; x=1702372960;
+        d=1e100.net; s=20230601; t=1701768162; x=1702372962;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XqatM4kM7wKwmicGW+gEqjAkzatGSFvjDGMOBx55ZZQ=;
-        b=n5ewZ3NbQjZWqxPQpmr26CYz/FmezU2o7EypK/yHfsWdDx95w0NqTxQePqMM8rAcRL
-         UQqiHSXIwaou1ttVra95XSp1m8AiI+ccpy7RRJ9MT/x/HGnQMnnNIw8AnhQjuE48A7Lq
-         rxzQ3fwsv/CxaSaGUX0Y6R6HXk/4uf2DR6splYVBpuYxoiaReosu376pLJSCRgrTni+6
-         eG52vDu0KxnIg63KN1nEw7C2gwyH+watt/3CH44KDLbry43jUPGjgaDqcc7muWzopgfd
-         D8W0R2b6icxdnCRYs38Pi5jcupu9f1UT3hDp7fiNUIudD9j9Vnzxrn0+2+lCD9bvzSTG
-         Cd0A==
-X-Gm-Message-State: AOJu0Ywi17JvuRAoCTikBVO1KRu5PU4ecHbezxs85sGd5mOphAxxblYx
-	bhzVKTzZxJ1mfeqA7U7+3X0tFQ==
-X-Google-Smtp-Source: AGHT+IHqyN8tJW4uNXwX8E44R4xlrs75N7Gnw2ZbdArJtH83tIrCDBScW+hJB9uRKBPtLaYT5LHlCw==
-X-Received: by 2002:a05:600c:4508:b0:40b:47f0:66b5 with SMTP id t8-20020a05600c450800b0040b47f066b5mr294797wmo.26.1701768160649;
-        Tue, 05 Dec 2023 01:22:40 -0800 (PST)
+        bh=zJh8YfrYN4aMg7OwYeFzWAOVUVx0rMNzMAodPuvKkaY=;
+        b=gazWBDJK7436MZC7PTgs509fG3nQrzoaGz+gcmmiZBuMdOXm4RRAF3jQfntyHtXOHs
+         dZTU+L+kbydyyhBYFhV/Vq+mMauelWnASY+ZZB+u9K5VmDY0LuBp1Uz8KcguZl4DfIhz
+         snfq+z2SPnMFIOK8Wwmj0FyGl/b98/+ZOf0cbZD4UHci7GYj8RPMVMvhxNQMck1mt5ww
+         gtUq2XNEESsVKpRKHNOdQYzDVfojb+HjcuM6ryO9ui06S1y53LFX5CrluMa35wZm/EXB
+         NX0cxt26CINqJW8dvUx+3OT4CsjBkymslRdw5dcaEeLA4AP/h0A2YRK6Cl/0EypzXs4O
+         AhWg==
+X-Gm-Message-State: AOJu0YzP7IiDX26GAFrBY2aBKkgEH/j9nFIiNxhzfZKwgcE0uCEWC1Or
+	1M1TRspQNPbp7w2mcaUaTtPfFw==
+X-Google-Smtp-Source: AGHT+IEQb3rHaV3TPRV3lXtPvhHPSOgrz+olhZYbewsa9RJkFJDQq9Qj+DmR1Dk9Y8Zn/uJ/on8Fug==
+X-Received: by 2002:a05:600c:6026:b0:40c:87d:a27 with SMTP id az38-20020a05600c602600b0040c087d0a27mr2244281wmb.101.1701768162784;
+        Tue, 05 Dec 2023 01:22:42 -0800 (PST)
 Received: from krzk-bin.. ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id g10-20020a05600c4eca00b0040596352951sm21692287wmq.5.2023.12.05.01.22.38
+        by smtp.gmail.com with ESMTPSA id g10-20020a05600c4eca00b0040596352951sm21692287wmq.5.2023.12.05.01.22.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Dec 2023 01:22:40 -0800 (PST)
+        Tue, 05 Dec 2023 01:22:42 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Andi Shyti <andi.shyti@kernel.org>,
 	Rob Herring <robh+dt@kernel.org>,
@@ -75,9 +75,9 @@ To: Andi Shyti <andi.shyti@kernel.org>,
 	linux-serial@vger.kernel.org,
 	linux-watchdog@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/6] dt-bindings: pwm: samsung: add specific compatible for Tesla FSD
-Date: Tue,  5 Dec 2023 10:22:25 +0100
-Message-Id: <20231205092229.19135-3-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 3/6] dt-bindings: serial: samsung: add specific compatible for Tesla FSD
+Date: Tue,  5 Dec 2023 10:22:26 +0100
+Message-Id: <20231205092229.19135-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231205092229.19135-1-krzysztof.kozlowski@linaro.org>
 References: <20231205092229.19135-1-krzysztof.kozlowski@linaro.org>
@@ -106,21 +106,21 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 I propose to take the patch through Samsung SoC (me). See cover letter
 for explanation.
 ---
- Documentation/devicetree/bindings/pwm/pwm-samsung.yaml | 1 +
+ Documentation/devicetree/bindings/serial/samsung_uart.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml b/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml
-index 16de6434693b..17a2b927af33 100644
---- a/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml
-+++ b/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml
-@@ -33,6 +33,7 @@ properties:
-               - samsung,exynos7-pwm
-               - samsung,exynosautov9-pwm
-               - samsung,exynosautov920-pwm
-+              - tesla,fsd-pwm
-           - const: samsung,exynos4210-pwm
- 
-   reg:
+diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+index e32c1b462836..4b6fc82c2edf 100644
+--- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
++++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+@@ -29,6 +29,7 @@ properties:
+       - items:
+           - enum:
+               - samsung,exynos7-uart
++              - tesla,fsd-uart
+           - const: samsung,exynos4210-uart
+       - items:
+           - enum:
 -- 
 2.34.1
 
