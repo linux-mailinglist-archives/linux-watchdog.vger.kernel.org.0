@@ -1,119 +1,170 @@
-Return-Path: <linux-watchdog+bounces-170-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-171-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87D5080A782
-	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Dec 2023 16:34:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B18780AEA5
+	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Dec 2023 22:14:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D23C1F213EF
-	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Dec 2023 15:34:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C42FA281AA1
+	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Dec 2023 21:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24A8B31A71;
-	Fri,  8 Dec 2023 15:34:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72DE35733B;
+	Fri,  8 Dec 2023 21:14:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SupUWkl5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BRTtM8Hy"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCD210F1
-	for <linux-watchdog@vger.kernel.org>; Fri,  8 Dec 2023 07:34:49 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-332c46d5988so2341645f8f.1
-        for <linux-watchdog@vger.kernel.org>; Fri, 08 Dec 2023 07:34:48 -0800 (PST)
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7814C172B
+	for <linux-watchdog@vger.kernel.org>; Fri,  8 Dec 2023 13:14:33 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-67a338dfca7so14305346d6.2
+        for <linux-watchdog@vger.kernel.org>; Fri, 08 Dec 2023 13:14:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1702049686; x=1702654486; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702070072; x=1702674872; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0smOkN0JwIYP/mQNjuHR8QDcn+P+VGLbn6lLRSQdlCM=;
-        b=SupUWkl5+WKbC539iz9TsBtvH252/eXg66O3Uat5KPQCBYxcg0ihnzN2/vFqnwr/Ly
-         4R6K1Y9lSwvdqhZ9rWibENFsrzdO9gl4wQ2yCMZNdHHrSuhyotjeWCNiJXCfuuUiK65R
-         4gH6+MtHSDy4GjvXW3Iee2OpD7Ln348lPnkhg=
+        bh=eMdZYz3DPUe4bdT/CXZ3OjIbw+BdLseGOOZQ+mLDsoY=;
+        b=BRTtM8HyZ5oo26RBVqVnaW3H4dNEwvwuMf+/k9lwAuSiUTnsWtOgwS+NZ74gHzFQPl
+         c3JxqVdVi+6KZAJq2mgSsWdF1+Nk4GyjYyL/YQHeup3LwJc/5Hw7tLRKHM7JbdrHNwEp
+         pzjjtKICWNTqRya+iSwgtad2E0CcLE0lgZ79M0A/g2E/ZY9zui9IocEztLq38IIOZW5x
+         J4f9K0ZeEIr3P/5zMaEtaDx+MbfW5lPwWoBcvsjoJuSrYk95tsfUw662AhPq3c5vBAXw
+         VE0KOtTXNrKmqT1Mi1cKea8OORceEUpi/tlYsHVRd0N8/Lro1X/snnfWoTHp+HMBCDk/
+         Xs8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702049686; x=1702654486;
+        d=1e100.net; s=20230601; t=1702070072; x=1702674872;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0smOkN0JwIYP/mQNjuHR8QDcn+P+VGLbn6lLRSQdlCM=;
-        b=Pb96RecAInUs2eFDYLVqRHP8dhHM6NTgmjnPfPWsLZC82uSHc7wXLs2CuVSSLQrl8l
-         +iyn/Pnrc+YjyDYFSGifTRxgKzD5/RZ8LPqvqu6A5gWtTPtB8uAJ3bnFVo3ZZbl7ew81
-         OoF/cm2CzfZOdW/kyp4ToXOfyC840ZrY2cmRN7/OeQ1Yu8EqDLnbJ2sM7eQ29rj/wZnR
-         44600ThlxZJiBmBI3Tii7qkzHBm72wJLln5856qMZ+aBVCs5G2PVTu54Qk86E7PmFp0z
-         9Z38dr2QLf8KtzSnwv6s2JCwrzpS5yZXd+Cz5u+p9yl2Is2OjWC9VOQ5pYAa9nozUyJV
-         LPTA==
-X-Gm-Message-State: AOJu0Yy2WM72+Ft7gwIOlajPHnccr84tsA1qnsIJeW3ozJXkglNUJaKW
-	3QE5DmkxXz+XldqI2Mx0ix28A5gkY8/qdlz71eElbA==
-X-Google-Smtp-Source: AGHT+IEbZ3IhfVV2cUYwreRXvChalglQWE/NZdgoLiIm9Kpvb/W3+IeQcRhPdiOw+U0PSW1TQBIA2g==
-X-Received: by 2002:adf:e54a:0:b0:333:3d0a:504f with SMTP id z10-20020adfe54a000000b003333d0a504fmr147454wrm.25.1702049686448;
-        Fri, 08 Dec 2023 07:34:46 -0800 (PST)
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
-        by smtp.gmail.com with ESMTPSA id fj17-20020a1709069c9100b00a1e4cae6b22sm1129512ejc.41.2023.12.08.07.34.45
-        for <linux-watchdog@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Dec 2023 07:34:45 -0800 (PST)
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-40c3963f9fcso3685e9.1
-        for <linux-watchdog@vger.kernel.org>; Fri, 08 Dec 2023 07:34:45 -0800 (PST)
-X-Received: by 2002:a05:600c:b92:b0:40c:2399:d861 with SMTP id
- fl18-20020a05600c0b9200b0040c2399d861mr61604wmb.6.1702049685373; Fri, 08 Dec
- 2023 07:34:45 -0800 (PST)
+        bh=eMdZYz3DPUe4bdT/CXZ3OjIbw+BdLseGOOZQ+mLDsoY=;
+        b=YnpgPNQhkBycqErw4huD3sSvXxxlHgRoouTNrCyHZDnzIqqgpGDMaS0+HhXO0WylXv
+         y6HVUCvFw7/o4YXcGpV7C/hqx8aY3RHLdFyyBBts4IJFWxp86FGIhL0AjbYnfuWDPqkM
+         CKIH/VwpSqd8+RieQ2S2Eu91bsY2d94T33PK4ZI6Dd673DFo7++wTA3iszGENLh29BOY
+         mCoyG8ntwktnpDTdFlFo4QD8R2LODXY74eoXzfDezV3FC2hzCEBZcrySlBgCbqk+DIn/
+         +ZdIcNy5h85xbFENaC1OKDmci2ziQARin6r83JWfE9kCD8Oa3oQ8jVcx+1ZDIkedbkS8
+         IC4Q==
+X-Gm-Message-State: AOJu0YxuwdrEaE+TlBHV7cTw1S13B6ANR2sHefdShBd34fGgWm9x7IVR
+	S/jzQZXN7EfIzEsiMTOpOPUS31ma63VzO2vamFBAww==
+X-Google-Smtp-Source: AGHT+IGpulKyZ3OIbS0DyP2qkU03il9CmjBCOxhzoGEpedDhT+htnC+NzAmQyXg4CgZlNXYQiSL6lZrAvMlkclzO+XA=
+X-Received: by 2002:a05:6214:a91:b0:67a:a721:f304 with SMTP id
+ ev17-20020a0562140a9100b0067aa721f304mr526927qvb.68.1702070072556; Fri, 08
+ Dec 2023 13:14:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231106144335.v2.1.Ic7577567baff921347d423b722de8b857602efb1@changeid>
- <20231106144335.v2.9.Ie30c1d3f780666f6906fd2fd7c437632c229d987@changeid>
-In-Reply-To: <20231106144335.v2.9.Ie30c1d3f780666f6906fd2fd7c437632c229d987@changeid>
-From: Doug Anderson <dianders@chromium.org>
-Date: Fri, 8 Dec 2023 07:34:28 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XsPGvNggpJPCpF=xhkm3dOHsStycZvuVttA=ZH6=EUmw@mail.gmail.com>
-Message-ID: <CAD=FV=XsPGvNggpJPCpF=xhkm3dOHsStycZvuVttA=ZH6=EUmw@mail.gmail.com>
-Subject: Re: [PATCH v2 9/9] dt-bindings: watchdog: qcom-wdt: Make the
- interrupt example edge triggered
-To: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>
-Cc: swboyd@chromium.org, linux-watchdog@vger.kernel.org, 
-	Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Andy Gross <agross@kernel.org>, 
-	Sai Prakash Ranjan <quic_saipraka@quicinc.com>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <20231201160925.3136868-1-peter.griffin@linaro.org>
+ <20231201160925.3136868-13-peter.griffin@linaro.org> <5e9c0b1c5885775a7bc32ef59cb09a2a93d4cbe1.camel@linaro.org>
+In-Reply-To: <5e9c0b1c5885775a7bc32ef59cb09a2a93d4cbe1.camel@linaro.org>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Fri, 8 Dec 2023 21:14:21 +0000
+Message-ID: <CADrjBPqAjqW27TvvT3BpEovOsouRedsnB49qdkkgSto=z0jM3Q@mail.gmail.com>
+Subject: Re: [PATCH v5 12/20] clk: samsung: clk-gs101: Add cmu_top, cmu_misc
+ and cmu_apm support
+To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
+	tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org, 
+	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com, 
+	will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org, 
+	jirislaby@kernel.org, cw00.choi@samsung.com, alim.akhtar@samsung.com, 
+	tudor.ambarus@linaro.org, semen.protsenko@linaro.org, saravanak@google.com, 
+	willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
+	linux-serial@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi Andr=C3=A9
 
-On Mon, Nov 6, 2023 at 2:44=E2=80=AFPM Douglas Anderson <dianders@chromium.=
-org> wrote:
+On Tue, 5 Dec 2023 at 07:52, Andr=C3=A9 Draszik <andre.draszik@linaro.org> =
+wrote:
 >
-> As described in the patch ("arm64: dts: qcom: sc7180: Make watchdog
-> bark interrupt edge triggered"), the Qualcomm watchdog timer's bark
-> interrupt should be configured as edge triggered.
+> Hi Pete,
 >
-> Update the example in the bindings.
+> On Fri, 2023-12-01 at 16:09 +0000, Peter Griffin wrote:
+> > cmu_top is the top level clock management unit which contains PLLs, mux=
+es,
+> > dividers and gates that feed the other clock management units.
+> >
+> > cmu_misc clocks IPs such as Watchdog and cmu_apm clocks ips part of the
+> > APM module.
+> >
+> > Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> > Tested-by: Will McVicker <willmcvicker@google.com>
+> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> > ---
+> >  drivers/clk/samsung/Makefile    |    1 +
+> >  drivers/clk/samsung/clk-gs101.c | 2495 +++++++++++++++++++++++++++++++
+> >  2 files changed, 2496 insertions(+)
+> >  create mode 100644 drivers/clk/samsung/clk-gs101.c
+> >
+> > diff --git a/drivers/clk/samsung/Makefile b/drivers/clk/samsung/Makefil=
+e
+> > index ebbeacabe88f..3056944a5a54 100644
+> > --- a/drivers/clk/samsung/Makefile
+> > +++ b/drivers/clk/samsung/Makefile
+> > @@ -21,6 +21,7 @@ obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)       +=3D clk-=
+exynos7.o
+> >  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)        +=3D clk-exynos7885.o
+> >  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)        +=3D clk-exynos850.o
+> >  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)        +=3D clk-exynosautov9.o
+> > +obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)        +=3D clk-gs101.o
+> >  obj-$(CONFIG_S3C64XX_COMMON_CLK)     +=3D clk-s3c64xx.o
+> >  obj-$(CONFIG_S5PV210_COMMON_CLK)     +=3D clk-s5pv210.o clk-s5pv210-au=
+dss.o
+> >  obj-$(CONFIG_TESLA_FSD_COMMON_CLK)   +=3D clk-fsd.o
+> > diff --git a/drivers/clk/samsung/clk-gs101.c b/drivers/clk/samsung/clk-=
+gs101.c
+> > new file mode 100644
+> > index 000000000000..6bd233a7ab63
+> > --- /dev/null
+> > +++ b/drivers/clk/samsung/clk-gs101.c
+> > @@ -0,0 +1,2495 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (C) 2023 Linaro Ltd.
+> > + * Author: Peter Griffin <peter.griffin@linaro.org>
+> > + *
+> > + * Common Clock Framework support for GS101.
+> > + */
+> > +
+> > +#include <linux/clk.h>
+> > +#include <linux/clk-provider.h>
+> > +#include <linux/of.h>
+> > +#include <linux/of_device.h>
+> > +#include <linux/platform_device.h>
+> > +
+> > +#include <dt-bindings/clock/google,gs101.h>
+> > +
+> > +#include "clk.h"
+> > +#include "clk-exynos-arm64.h"
+> > +
+> > +/* NOTE: Must be equal to the last clock ID increased by one */
+> > +#define TOP_NR_CLK   (CLK_GOUT_TPU_UART + 1)
+> > +#define APM_NR_CLK   (CLK_APM_PLL_DIV16_APM + 1)
+> > +#define MISC_NR_CLK  (CLK_GOUT_MISC_XIU_D_MISC_IPCLKPORT_ACLK + 1)
+> > +
+> > +/* ---- CMU_TOP ------------------------------------------------------=
+------- */
+> > +
+> > [...]
+> > +
+> > +/* ---- CMU_APM ------------------------------------------------------=
+------- */
+> > [..]
+> > +
+> > +/* ---- CMU_MISC -----------------------------------------------------=
+-------- */
 >
-> Fixes: 7c631cdff391 ("dt-bindings: watchdog: qcom-wdt: allow interrupts")
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
->
-> (no changes since v1)
->
->  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> nit - the CMU_MISC comment here is an outlier.
 
-I saw Bjorn landed all of the dts patches from this series but it
-looks like the bindings patch got left behind. Anyone want to claim it
-for their tree, or Ack it saying that you'd prefer for it to go
-through someone else's tree? I assume Krzysztof's Ack means he's not
-intending for it to go through the DT tree and Bjorn doesn't seem to
-intend for it to go through the Qualcomm tree. Guenter/Wim: it feels
-like this could go in the watchdog tree?
+Will fix.
 
-Thanks!
-
--Doug
+Peter.
 
