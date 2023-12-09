@@ -1,155 +1,189 @@
-Return-Path: <linux-watchdog+bounces-177-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-178-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79A9680B4FD
-	for <lists+linux-watchdog@lfdr.de>; Sat,  9 Dec 2023 16:06:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B939280B6AE
+	for <lists+linux-watchdog@lfdr.de>; Sat,  9 Dec 2023 23:04:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB2631F20F74
-	for <lists+linux-watchdog@lfdr.de>; Sat,  9 Dec 2023 15:06:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5D9A1C2088D
+	for <lists+linux-watchdog@lfdr.de>; Sat,  9 Dec 2023 22:04:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46BED15AFA;
-	Sat,  9 Dec 2023 15:06:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 694B51D688;
+	Sat,  9 Dec 2023 22:04:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SZnXm0Ng"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="khakoc0C"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD66010D8;
-	Sat,  9 Dec 2023 07:06:45 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-53fa455cd94so1920285a12.2;
-        Sat, 09 Dec 2023 07:06:45 -0800 (PST)
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E3010D
+	for <linux-watchdog@vger.kernel.org>; Sat,  9 Dec 2023 14:04:13 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-77db736aae5so160128985a.0
+        for <linux-watchdog@vger.kernel.org>; Sat, 09 Dec 2023 14:04:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702134405; x=1702739205; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=F983dFt78ZOHoy5eCj0EHS6toe7juZPFTBRYmTXTkyE=;
-        b=SZnXm0Ngb9/FkX0NBDkVNBAVrAOkmCC+Ll2aljK965tGnHZ6xKF5Qd2TMaLLPYtuDl
-         ucVisuujCCgeCPYR1LxFtGfb6t+D/9PjQw1zopB2TllOZmb63LooRi7DjZUhnMdppy77
-         +cuNHljIl/MmlLoHQ6NMpIROO6Jw/tGEVB8IfGEvyC9QfwvSD1LJK/pJjD21qe6ZiOLQ
-         m/F+35rlQJ8e4XfVUu9MXl5pqwGZBnX87CjW0Nspsb9WE1grliMooGFk1JTtbTD8dQNL
-         fmH49airq8qllDyzyJyfEXgv8Wp6NqiT6OEoTxEO1+um5I8U/bfA/A5rjWsEBuwo3SzX
-         DG2w==
+        d=linaro.org; s=google; t=1702159453; x=1702764253; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DDeZCYtXqn2cs2JrwzvomIoxvwFGKvb0D6cCKP3KGx0=;
+        b=khakoc0Cvcr0Ldg58PpaEygTdHWRtTnX8olUjpvUMXkvg0qL+g0/kMMeym6TQROgwV
+         NcajvFh0m++/TJoFoMGrJk4IX7rQQ6Qsulljepzl/4HJyQZ+FCUYgiebbcdC2yb2F/7m
+         oFJrLFPEms7v/FrtYkSbwwl2MdfIlAb9oCUjekWj2LEezJjVBlBrQxq5M32QbEikZRn7
+         PFkE74JYiG3PZF92iLkYBS2eGLj9MFByASo0saDBKZv/5iUmsvQ4xAM2JLyiZY3GZjxD
+         qHsXYcR31sDY6WsPXiAtH2vXAu+RxQaBaOs1id0CfBgg1Uys+EQgnKuRSA1ij1aR3+8D
+         iu8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702134405; x=1702739205;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F983dFt78ZOHoy5eCj0EHS6toe7juZPFTBRYmTXTkyE=;
-        b=an7G+BdZ1xJjUfhGXN9iUWI/ffzUuPa8U4xH9cIY+lm2HUTiV1rJ97RIFLuptP/T9N
-         nAp0bJqVU6io5OXMqZxYyW3WhD02ArhKer5+iHfjZDa35BcUNY2DgwtjcUmv1QsBExyR
-         304MPsKvbthdYplkf3Vju9CHR585yPBHRpTUDRKakHU7bsbTlTEHOvvvoNBkvgkOx/qx
-         peGhRE2zMjQqO/qD847zsXacmca90sgj0DB4xsE5e5je4ldn3RACbUbDvDoll+JrBNiT
-         4FOxPa8Jieg6kVza4xfqBkGxBKOErKsS7l6SdI1MU3fXh3xAe3Z0AorH5eZMB1oiEvNO
-         oRMQ==
-X-Gm-Message-State: AOJu0Yw30U/FNQNuxmtytqJOUskmD3ovScJ+9OxNii9nQL91koO5A9GG
-	Im+cVR5OHeBC0hAYDuMwgGw=
-X-Google-Smtp-Source: AGHT+IGFUV0jUzXlGZySORawhyIrAa5D589zxqUKpw7YhDtllg5pqVmDj/wPuUOgYRrflqIImb/BDg==
-X-Received: by 2002:a17:902:650c:b0:1d2:f458:b9e with SMTP id b12-20020a170902650c00b001d2f4580b9emr736649plk.135.1702134404897;
-        Sat, 09 Dec 2023 07:06:44 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j3-20020a170902c08300b001cfc68125desm3498778pld.203.2023.12.09.07.06.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Dec 2023 07:06:44 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <12803a09-8723-4049-921f-738244aae83c@roeck-us.net>
-Date: Sat, 9 Dec 2023 07:06:41 -0800
+        d=1e100.net; s=20230601; t=1702159453; x=1702764253;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DDeZCYtXqn2cs2JrwzvomIoxvwFGKvb0D6cCKP3KGx0=;
+        b=teNJvuqFvJQNVOz8gfd9MyXYRRzwR/Bv94CJM9xJInuuUbAS43ycgR4WNlg4I51xfQ
+         5HyuTbwQB1L3LB8NnFvjvg1JogMtO9KH3c4LRe7r+odWsCTFAoIl6vxZd2wtCtgy0jJw
+         /+3x8XcXSbA5ZvPHBNEa9LHaVn6YkYGnRIDCUMatw1wqr4EKu992fJ4Sr4C00vOdUXbK
+         aL5I10OAGpx5dfKaGOjChC07dyujVM+FdDGaOx2blgCsoa5vZ1omVcp/Ti7gQJHfQGf7
+         J9bC6mKNa+gstk4+G6ruCcJ1qkYs6Cqlf3mx6/KAjCOO/iQVPi63O/A/1F+CZK5LYW05
+         YoYw==
+X-Gm-Message-State: AOJu0YzVlGAdMTvXKCwtmIu6ZAFFSpYO/NpU60oeQxQkNmNVfG0HaNEG
+	F4AnW0myZZSLl5lSoUpXad6ESFYnws7U6gIRpiUuRA==
+X-Google-Smtp-Source: AGHT+IGShvGwLPhyao8X9Dj8VhmyqZQEkFRbj4Ak+KHDxcWKcLLYf+Q6tnP2alm19gFUubHvpWgjIuI0akR6N4sAeiY=
+X-Received: by 2002:a0c:c782:0:b0:67a:21aa:6505 with SMTP id
+ k2-20020a0cc782000000b0067a21aa6505mr2131602qvj.45.1702159452795; Sat, 09 Dec
+ 2023 14:04:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] watchdog: starfive-wdt: Add JH8100 watchdog
- compatible string
-Content-Language: en-US
-To: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>,
- Xingyu Wu <xingyu.wu@starfivetech.com>,
- Samin Guo <samin.guo@starfivetech.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: Ley Foon Tan <leyfoon.tan@starfivetech.com>,
- linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20231209142723.2060196-1-jisheng.teoh@starfivetech.com>
- <20231209142723.2060196-2-jisheng.teoh@starfivetech.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231209142723.2060196-2-jisheng.teoh@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20231201160925.3136868-1-peter.griffin@linaro.org>
+ <20231201160925.3136868-20-peter.griffin@linaro.org> <CAPLW+4mOmQM+Hy-kUKn9onU25-ycgj4CWfAK+-vZVH+yw=FhtQ@mail.gmail.com>
+In-Reply-To: <CAPLW+4mOmQM+Hy-kUKn9onU25-ycgj4CWfAK+-vZVH+yw=FhtQ@mail.gmail.com>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Sat, 9 Dec 2023 22:04:01 +0000
+Message-ID: <CADrjBPqWimgbPUZoW1cTs0grL2Kv3rpNMhz=z-c+MUx6h6mTAQ@mail.gmail.com>
+Subject: Re: [PATCH v5 19/20] arm64: dts: exynos: google: Add initial
+ Oriole/pixel 6 board support
+To: Sam Protsenko <semen.protsenko@linaro.org>
+Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
+	tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org, 
+	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com, 
+	will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org, 
+	jirislaby@kernel.org, cw00.choi@samsung.com, alim.akhtar@samsung.com, 
+	tudor.ambarus@linaro.org, andre.draszik@linaro.org, saravanak@google.com, 
+	willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
+	linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 12/9/23 06:27, Ji Sheng Teoh wrote:
-> Add "starfive,jh8100-wdt" compatible for StarFive's JH8100 watchdog.
-> JH8100 watchdog reuses JH7110 register mapping.
-> 
-> Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-> Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+Hi Sam,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+On Sat, 2 Dec 2023 at 02:28, Sam Protsenko <semen.protsenko@linaro.org> wro=
+te:
+>
+> On Fri, Dec 1, 2023 at 10:11=E2=80=AFAM Peter Griffin <peter.griffin@lina=
+ro.org> wrote:
+> >
+> > Add initial board support for the Pixel 6 phone code named Oriole. This
+> > has been tested with a minimal busybox initramfs and boots to a shell.
+> >
+> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/exynos/Makefile           |   2 +
+> >  arch/arm64/boot/dts/exynos/google/Makefile    |   4 +
+> >  .../boot/dts/exynos/google/gs101-oriole.dts   | 105 ++++++++++++++++++
+> >  3 files changed, 111 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/exynos/google/Makefile
+> >  create mode 100644 arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
+> >
+> > diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/=
+exynos/Makefile
+> > index 6e4ba69268e5..44c24a8ad9e1 100644
+> > --- a/arch/arm64/boot/dts/exynos/Makefile
+> > +++ b/arch/arm64/boot/dts/exynos/Makefile
+> > @@ -1,4 +1,6 @@
+> >  # SPDX-License-Identifier: GPL-2.0
+> > +subdir-y +=3D google
+> > +
+> >  dtb-$(CONFIG_ARCH_EXYNOS) +=3D \
+> >         exynos5433-tm2.dtb              \
+> >         exynos5433-tm2e.dtb             \
+> > diff --git a/arch/arm64/boot/dts/exynos/google/Makefile b/arch/arm64/bo=
+ot/dts/exynos/google/Makefile
+> > new file mode 100644
+> > index 000000000000..0a6d5e1fe4ee
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/exynos/google/Makefile
+> > @@ -0,0 +1,4 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +
+> > +dtb-$(CONFIG_ARCH_EXYNOS) +=3D \
+> > +       gs101-oriole.dtb \
+> > diff --git a/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts b/arch/=
+arm64/boot/dts/exynos/google/gs101-oriole.dts
+> > new file mode 100644
+> > index 000000000000..6abd00fa337e
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
+> > @@ -0,0 +1,105 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Oriole Device Tree
+> > + *
+> > + * Copyright 2021-2023 Google,LLC
+>
+> Space after comma. Maybe also make this line consistent for all added
+> files. Checking existing files, it's usually spelled "Copyright (C)
+> <years>, Google LLC."
 
-> ---
->   drivers/watchdog/starfive-wdt.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
-> index 5f501b41faf9..31785bb373d5 100644
-> --- a/drivers/watchdog/starfive-wdt.c
-> +++ b/drivers/watchdog/starfive-wdt.c
-> @@ -581,6 +581,7 @@ static const struct dev_pm_ops starfive_wdt_pm_ops = {
->   static const struct of_device_id starfive_wdt_match[] = {
->   	{ .compatible = "starfive,jh7100-wdt", .data = &starfive_wdt_jh7100_variant },
->   	{ .compatible = "starfive,jh7110-wdt", .data = &starfive_wdt_jh7110_variant },
-> +	{ .compatible = "starfive,jh8100-wdt", .data = &starfive_wdt_jh7110_variant },
->   	{ /* sentinel */ }
->   };
->   MODULE_DEVICE_TABLE(of, starfive_wdt_match);
+I've made it match the other files I've added in v6 (by removing the
+,). There seems to be a lot of variation upstream as to whether a . is
+used at the end or not so I've left that as it was.
+>
+> Btw, I forgot to mention in my review for PATCH #18: please double
+> check the commit message, there are some issues with punctuation
+> there.
 
+Ok, I will check it.
+
+>
+> > + * Copyright 2023 Linaro Ltd - <peter.griffin@linaro.org>
+> > + */
+> > +
+> > +/dts-v1/;
+> > +
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +#include <dt-bindings/input/input.h>
+> > +#include "gs101-pinctrl.h"
+> > +#include "gs101.dtsi"
+> > +
+> > +/ {
+> > +       model =3D "Oriole";
+> > +       compatible =3D "google,gs101-oriole", "google,gs101";
+> > +
+> > +       aliases {
+> > +               serial0 =3D &serial_0;
+> > +       };
+> > +
+> > +       chosen {
+> > +               /* Bootloader expects bootargs specified otherwise it c=
+rashes */
+>
+> Just wanted to say: I think you are doing a great job with this
+> platform, and I can only imagine how hard it can be when you can't
+> actually tinker with the bootloader source code. But I do appreciate
+> that you was able to minimize stuff like earlycon, ect, etc :) And
+> this one actually LGTM.
+>
+> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+
+Thanks, much appreciated!
+
+regards,
+
+Peter.
 
