@@ -1,58 +1,58 @@
-Return-Path: <linux-watchdog+bounces-209-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-210-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0D5980BB6F
-	for <lists+linux-watchdog@lfdr.de>; Sun, 10 Dec 2023 15:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ED9F280BB78
+	for <lists+linux-watchdog@lfdr.de>; Sun, 10 Dec 2023 15:02:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B2A8B20A36
-	for <lists+linux-watchdog@lfdr.de>; Sun, 10 Dec 2023 14:01:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E144B20CA5
+	for <lists+linux-watchdog@lfdr.de>; Sun, 10 Dec 2023 14:02:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBF0C125B5;
-	Sun, 10 Dec 2023 14:01:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09E66125C2;
+	Sun, 10 Dec 2023 14:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Glt93t2i"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="N/qWSjbv"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D640FF
-	for <linux-watchdog@vger.kernel.org>; Sun, 10 Dec 2023 06:01:46 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2c9fe0b5b28so45268541fa.1
-        for <linux-watchdog@vger.kernel.org>; Sun, 10 Dec 2023 06:01:46 -0800 (PST)
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76C9101
+	for <linux-watchdog@vger.kernel.org>; Sun, 10 Dec 2023 06:01:49 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-54cdef4c913so9656186a12.1
+        for <linux-watchdog@vger.kernel.org>; Sun, 10 Dec 2023 06:01:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702216905; x=1702821705; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702216908; x=1702821708; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=509ouQXj36I5/HmX907dzCDtwty3xLRM03HHWK4ixvQ=;
-        b=Glt93t2iUOJW1gB7zGNRZwZbsx6UlKNwW9zM/VbtaJxPqKQUElAMx1dn8ZwlizR1ed
-         tBpxGCtHWk9CM2EQU2HX9EXuwtea9ASyK0gtgBYgpTDiR6TLSPmYTuxzUZEdgHd5sTXr
-         kzJjOSHhrlb2JCAKQiSHp6LjdznYhCoS5+VlizqXhHWyUVP23LAwiLwz93cRCiZpZpg5
-         AyPBkdkbvfEwA2magQtBdGgMF2tlqvoGqWhqKwLngWYFb4L4N6+Jvjh++PceTP7V+q/X
-         QYbo0/FdT0m9rXYJmazkSQZLsq/TyU2sYQ3OcYBE8l/ADi+7i5kN7res7/u3s2YncoC6
-         7DRg==
+        bh=SrhZNFmRkf5QkANQC+uz36bgjgb8UZO2KJuZBL7fznE=;
+        b=N/qWSjbvFFjOENa3partdG9d5jVQF7dvvhnZDzjL67UimfXQJ/2i8ScxfNyKpZ40ZZ
+         JKmzhCKpYn4h2ZvquOeqTb0ayH1CDRFlEkIPt9CjaxamnZ44zO6/gBPx8mNA9aAf15AX
+         AShkYJTYoNGr0yQuMSv8yLVKH7OLfY2I+kOCq1lihpB82Sb32lUYT1yWcWO210HZ/Tc8
+         w3bgJbXZMXbPyM2+O+Q1u47OVrpqRehc7KGNmcQTHNbPTG9Vi3aq2hVAOz/gWT9OhVvp
+         ljGmAJYqT1UQrBWyPWGRTd7/P5KOvD6AGEtUs0R5T/BJ3ER7xFBpqw03lNMX3HdAp7Zt
+         oqUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702216905; x=1702821705;
+        d=1e100.net; s=20230601; t=1702216908; x=1702821708;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=509ouQXj36I5/HmX907dzCDtwty3xLRM03HHWK4ixvQ=;
-        b=piunxEHvVeL+HzRVHba6Da6ujdn68r3y7yRo3nRBpA15WdGTL69rhYTjCXXlwAelJ6
-         oWb613YfKJT/UTgWTvFY2+xyXzrGIOBOMXKyetgZ9xaBWT5YHYBBZrh04pEstoZMHvPj
-         lpl+ZPwMfRiAGLg9dGZqPLQe83q/R7/VYOMXS2Z0J7lbCzWD37Fb5PDFDrCtxmg3DSOi
-         C77M9PcjCB2lm48E3JDZqLaMM/5kMqsqvP+wLPWmf9cnsD72bsPhTzbW5oHbHzBovzR8
-         GEKE6UUcbDUhhzzXGfDEV8eM0+H70iqMD/DZmPNOyQfbSVLKWwqwrAfU/dhb/cRHEMd5
-         gtgQ==
-X-Gm-Message-State: AOJu0Yyb1Wa4H4nSKtg4r56a40tZoWkZx5FFgB5yT8eqLxc8SIuVtAd4
-	EsAS1LE5qIaHbw51UWvmn0NvFQ==
-X-Google-Smtp-Source: AGHT+IEZmhO9bfzbn9JehG5hOmeoOZbTHQz/rhyB/WkPhsdghbEEi7AQ8p1xd7LZWL25BdUtRojVkA==
-X-Received: by 2002:a05:651c:10b6:b0:2cc:2189:7f5a with SMTP id k22-20020a05651c10b600b002cc21897f5amr36215ljn.93.1702216905124;
-        Sun, 10 Dec 2023 06:01:45 -0800 (PST)
+        bh=SrhZNFmRkf5QkANQC+uz36bgjgb8UZO2KJuZBL7fznE=;
+        b=bWXPu8entI8PvS4mxTLt1N9huGB54R+dqtxJIGNp2sdPInhcjZRGb+vIFgcDu6ydsa
+         OzU1Vj59TZzRGmpy2FiH/+Pp+9LC1nzxJOyJEfgarSfG5Dxn4GpVDW8IztAQRS+MvQ8s
+         1Jj73uKggJhk6I8mUCjf4b2kTEJja/xW4QmANF/Sr8gSSXKRzusNwoHcG8PCuvX+Eo6b
+         FUA9qbChqlzeEbKnaUPlntdOtd9ACH+XsGlFcotpnbEOdR3KpRwoeCxWhLOr5XZvjoZJ
+         QHja4ZBnDWp8t3yInkXhsg19A1xRyPdFUCz790SUquq/W1jS2hCC+kcgflig/39xTfTo
+         +IUA==
+X-Gm-Message-State: AOJu0YyCpoXqkMLkBjjURt6YlvJ8Ph9wWmc348B9R+dbDAq5G2hilSze
+	UglHuUGvVRpz/1ZBGaEs3DbApA==
+X-Google-Smtp-Source: AGHT+IGD245LrSk0xYctz3uy/kk2KvcUmnSUKmb1u8fAYEK0Zu2DWqkA0Pi8IyNUK3s5IFZQRvE6Bw==
+X-Received: by 2002:a17:907:280f:b0:a1f:4d21:301a with SMTP id eb15-20020a170907280f00b00a1f4d21301amr3987023ejc.13.1702216908355;
+        Sun, 10 Dec 2023 06:01:48 -0800 (PST)
 Received: from [127.0.1.1] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id tg10-20020a1709078dca00b00a178b965899sm3458691ejc.100.2023.12.10.06.01.42
+        by smtp.gmail.com with ESMTPSA id tg10-20020a1709078dca00b00a178b965899sm3458691ejc.100.2023.12.10.06.01.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Dec 2023 06:01:44 -0800 (PST)
+        Sun, 10 Dec 2023 06:01:48 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
  mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
@@ -68,13 +68,13 @@ Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
  linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
  linux-watchdog@vger.kernel.org, kernel-team@android.com, 
  linux-serial@vger.kernel.org
-In-Reply-To: <20231209233106.147416-2-peter.griffin@linaro.org>
+In-Reply-To: <20231209233106.147416-3-peter.griffin@linaro.org>
 References: <20231209233106.147416-1-peter.griffin@linaro.org>
- <20231209233106.147416-2-peter.griffin@linaro.org>
-Subject: Re: (subset) [PATCH v6 01/20] dt-bindings: soc: samsung:
- exynos-pmu: Add gs101 compatible
-Message-Id: <170221690211.46013.5711996168125251211.b4-ty@linaro.org>
-Date: Sun, 10 Dec 2023 15:01:42 +0100
+ <20231209233106.147416-3-peter.griffin@linaro.org>
+Subject: Re: (subset) [PATCH v6 02/20] dt-bindings: clock: Add Google gs101
+ clock management unit bindings
+Message-Id: <170221690550.46013.13677086533521441233.b4-ty@linaro.org>
+Date: Sun, 10 Dec 2023 15:01:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -86,15 +86,16 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.12.3
 
 
-On Sat, 09 Dec 2023 23:30:47 +0000, Peter Griffin wrote:
-> Add gs101-pmu compatible to the bindings documentation.
+On Sat, 09 Dec 2023 23:30:48 +0000, Peter Griffin wrote:
+> Provide dt-schema documentation for Google gs101 SoC clock controller.
+> Currently this adds support for cmu_top, cmu_misc and cmu_apm.
 > 
 > 
 
 Applied, thanks!
 
-[01/20] dt-bindings: soc: samsung: exynos-pmu: Add gs101 compatible
-        https://git.kernel.org/krzk/linux/c/fdd78ff04ccc96f628c2f93e0d48ab0a74bf34ef
+[02/20] dt-bindings: clock: Add Google gs101 clock management unit bindings
+        https://git.kernel.org/krzk/linux/c/0a910f1606384a5886a045e36b1fc80a7fa6706b
 
 Best regards,
 -- 
