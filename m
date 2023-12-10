@@ -1,60 +1,62 @@
-Return-Path: <linux-watchdog+bounces-217-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-218-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6282880BBD5
-	for <lists+linux-watchdog@lfdr.de>; Sun, 10 Dec 2023 15:40:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99CB380BBE5
+	for <lists+linux-watchdog@lfdr.de>; Sun, 10 Dec 2023 16:20:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9092A1C2085C
-	for <lists+linux-watchdog@lfdr.de>; Sun, 10 Dec 2023 14:39:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A1A51F20FBF
+	for <lists+linux-watchdog@lfdr.de>; Sun, 10 Dec 2023 15:20:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D6B7156E7;
-	Sun, 10 Dec 2023 14:39:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E074E15AE6;
+	Sun, 10 Dec 2023 15:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="o/3gNj0T"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hTTXU7oC"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC46D6
-	for <linux-watchdog@vger.kernel.org>; Sun, 10 Dec 2023 06:39:49 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40c0fc1cf3dso39124255e9.0
-        for <linux-watchdog@vger.kernel.org>; Sun, 10 Dec 2023 06:39:49 -0800 (PST)
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFB9F2;
+	Sun, 10 Dec 2023 07:20:42 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1d2f1cecf89so7478365ad.1;
+        Sun, 10 Dec 2023 07:20:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702219187; x=1702823987; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702221641; x=1702826441; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4olIfzv8+CE0T9ZvAYOAuLXm4NQ6WzulwrX04TTGgoA=;
-        b=o/3gNj0TKU5H6RetvJiysIR/LmcQPdzmcKgGSjNJMdtKMgqRlKmz1RhdQKk88k804m
-         PqaRcQCnd+Qif0aRJ5518S4EMixNBMZcWPxFoFDnlIfp1/ZgV/tfXvPIGI1KnWIt5WZS
-         KeC6YHS6Ymd7Dg9j2BIHdR0jwk8W8Vufu4+EvChAyhsFY4cvpbTg99DKputaENvR84gR
-         XbYimIZDjc0WvgEeGg+DoaweJWeY0/v3j6hqzbhdZ7osuuUmVQGbSYr7DhpBxS6G8qXR
-         8UCaMlE63DButxMt0zltJ0u3FiyqtOLLGdhrLOBpNrHrHdIUlGQp7o7MjNsSfNyIiL71
-         ZXfA==
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=I5BNZyJBLBAtxYbKcnrAr3C7HJ9Y4YDOmJvXVGJ4zvs=;
+        b=hTTXU7oCApjtvRtbP079vrYMOwlrpivqYyPWZH8VTL6tUv9KUaF/IqV4IEPAlJX9Fs
+         spPqaOvn032psliB3sbWgmS6vowcyth8/FaZWLQEA8uKMoV9QKWNeK1Y7ZeTMivWGpkF
+         xSiMg/fUpZNruXsgbvDVrcXAdSIKFREGmosoK9wd1BfGeIAo/aRh2yyAUby0hGUgAKRS
+         wMo+qkM2u14au0OxHOKjqoTDTPA4jBQmxdmdZ0U+Paeitmrt10o5oAW3jcgfJteq0mpR
+         sSdvGoCl0o0+43JHNE+RlAIwCVDbiGvs7ZnRy4TOlBUccLvGWuyZeWzdGXsMr3eKyMeN
+         juSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702219187; x=1702823987;
+        d=1e100.net; s=20230601; t=1702221641; x=1702826441;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4olIfzv8+CE0T9ZvAYOAuLXm4NQ6WzulwrX04TTGgoA=;
-        b=aRBrPXwN0drQVSGVuf25eMvPxJMPzpwXdd/VIPwo1db6MDK5snQd6KNtAg8yyZrJD4
-         CN20U0WEju6sE0ZQ0ntcMb/dj5XF619bYNJHgdOCO+ai5HYwN5TidViEA3OE7aAgDUCp
-         QYwksEKQNqOePVvKIbR09cFNxDhhubKtFK2gnj9bdpOjLwpAZJHvZfoIIzwxWvRKvpY3
-         a1LW/CljR/VXU4dibcf4v8pOYmUe/82FVPFfdz5lrwRnXGtNuNJF0Az2CvPwf/URq6H7
-         xWlMcojkyo7XJ+vBCANA0fJWhQjBJm52L1JKewdfZo89BEd0L/hZrfSPrYgLVo3uWRhi
-         AXIg==
-X-Gm-Message-State: AOJu0YxySMsjRHzn2dSO3cBEPAHE9k5dx8oMcUvuDrUysEzxbgfhzU+Z
-	jnPU7chm/unOzlxl2if/M72H7A==
-X-Google-Smtp-Source: AGHT+IFvybAlZh88008xCYXkZoX9NRRz3zADQ3QP8VGMlgcL+JPxSw79BfNh9WL9LN9LH/95Ww6k1A==
-X-Received: by 2002:a05:600c:3b26:b0:40c:de2:148c with SMTP id m38-20020a05600c3b2600b0040c0de2148cmr1479813wms.47.1702219187415;
-        Sun, 10 Dec 2023 06:39:47 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id fm14-20020a05600c0c0e00b00407b93d8085sm12119612wmb.27.2023.12.10.06.39.45
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I5BNZyJBLBAtxYbKcnrAr3C7HJ9Y4YDOmJvXVGJ4zvs=;
+        b=TDgLFAYv2h6rvLU2vKkZEBQq+TSd43M3Swx70JuOgi7aiKweF/Aj4w4eAZE5/bcVCk
+         MQQwWV9fNnIuOxrAeNuJ4ZV3mvAkbH0JzFqnDhd65SAwsoCxNPPUoji6g6eZG5U2N7Fh
+         xl8ORiHRm7iDdh4QDyi1cH+i+hiBL8nmwZm3F5k6h5f41Xf7GwPpi+6BZHLrK86clQzm
+         +4altZInKUxF/HBkRp655eFKljeo6WEicWR+CbIT9K02ZxMjTbt815TfsPawV/yCx7pw
+         8MdGucZ/CjFGXotdbgctTH67bPnIBq0oXXzacO1EjFXIMi0tpKpOMcTZZPl3wfUt+8cl
+         ik/w==
+X-Gm-Message-State: AOJu0Yx9qY9Z0hoyzGoCp/8QU5Pu6mT9JbLYcATIaKkH5wu9QQUNwpvU
+	UBcH0FQZwbBXB0cRLpg5romqoFV4yxI=
+X-Google-Smtp-Source: AGHT+IGs6gycjkov1g0J3a26ISu7HZqUmgavgCSTtH5V5n/zkC9H1FbUPhxFQuoc2PgCAUQ1XbISPw==
+X-Received: by 2002:a17:902:c40d:b0:1d0:6ffd:837d with SMTP id k13-20020a170902c40d00b001d06ffd837dmr1397860plk.136.1702221641464;
+        Sun, 10 Dec 2023 07:20:41 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o12-20020a170902bccc00b001d0696e9237sm4867108pls.118.2023.12.10.07.20.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Dec 2023 06:39:47 -0800 (PST)
-Message-ID: <03603f37-ec3d-456c-95a4-e543d1df4801@linaro.org>
-Date: Sun, 10 Dec 2023 15:39:45 +0100
+        Sun, 10 Dec 2023 07:20:41 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0edea4d9-a498-420b-b01c-bca51c619fb7@roeck-us.net>
+Date: Sun, 10 Dec 2023 07:20:39 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -62,109 +64,115 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 19/20] arm64: dts: exynos: google: Add initial
- Oriole/pixel 6 board support
+Subject: Re: [PATCH v5 2/8] dt-bindings: watchdog: dlg,da9062-watchdog: Add
+ fallback for DA9061 watchdog
 Content-Language: en-US
-To: Peter Griffin <peter.griffin@linaro.org>, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
- conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com,
- s.nawrocki@samsung.com, linus.walleij@linaro.org, wim@linux-watchdog.org,
- linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
- olof@lixom.net, gregkh@linuxfoundation.org, jirislaby@kernel.org,
- cw00.choi@samsung.com, alim.akhtar@samsung.com
-Cc: tudor.ambarus@linaro.org, andre.draszik@linaro.org,
- semen.protsenko@linaro.org, saravanak@google.com, willmcvicker@google.com,
- soc@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-watchdog@vger.kernel.org, kernel-team@android.com,
- linux-serial@vger.kernel.org
-References: <20231209233106.147416-1-peter.griffin@linaro.org>
- <20231209233106.147416-20-peter.griffin@linaro.org>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231209233106.147416-20-peter.griffin@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To: Biju Das <biju.das.jz@bp.renesas.com>, Lee Jones <lee@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: Support Opensource <support.opensource@diasemi.com>,
+ Steve Twiss <stwiss.opensource@diasemi.com>, linux-watchdog@vger.kernel.org,
+ devicetree@vger.kernel.org, Geert Uytterhoeven <geert+renesas@glider.be>,
+ Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org,
+ Conor Dooley <conor.dooley@microchip.com>
+References: <20231210134717.94020-1-biju.das.jz@bp.renesas.com>
+ <20231210134717.94020-3-biju.das.jz@bp.renesas.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
+ nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
+ hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
+ c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
+ 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
+ GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
+ sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
+ Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
+ HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
+ BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
+ l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
+ J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
+ cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
+ wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
+ hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
+ nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
+ QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
+ trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
+ WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
+ HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20231210134717.94020-3-biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 10/12/2023 00:31, Peter Griffin wrote:
-> Add initial board support for the Pixel 6 phone code named Oriole. This
-> has been tested with a minimal busybox initramfs and boots to a shell.
+On 12/10/23 05:47, Biju Das wrote:
+> The DA9061 watchdog is identical to DA9062 watchdog, so no driver changes
+> are required. The fallback compatible string "dlg,da9062-watchdog" will be
+> used on DA9061 watchdog.
 > 
-> Tested-by: Will McVicker <willmcvicker@google.com>
-> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  arch/arm64/boot/dts/exynos/Makefile           |   2 +
-
-...
-
-> +&serial_0 {
-> +	status = "okay";
-
-Keep status the last
-
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&uart0_bus>;
-> +};
-> +
-> +&usi_uart {
-> +	status = "okay";
-
-Keep status the last
-
-> +	samsung,clkreq-on; /* needed for UART mode */
-> +};
-> +
-> +&watchdog_cl0 {
-> +	timeout-sec = <30>;
-> +	status = "okay";
-> +};
-
-Best regards,
-Krzysztof
+> v4->v5:
+>   * Added Rb tag from Geert and Ack from Conor
+>   * Drop items and just use enum as it is easier to read for compatibles.
+>   * Retained the tags as it is trivial change.
+> v3->v4:
+>   * Dropped comment for d9061 watchdog fallback.
+>   * Replaced enum->const for dlg,da9061-watchdog and its fallback.
+> v2->v3:
+>   * No change
+> v2:
+>   * New patch
+> ---
+>   .../bindings/watchdog/dlg,da9062-watchdog.yaml           | 9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml b/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
+> index f058628bb632..9192315e559d 100644
+> --- a/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
+> @@ -14,9 +14,12 @@ allOf:
+>   
+>   properties:
+>     compatible:
+> -    enum:
+> -      - dlg,da9061-watchdog
+> -      - dlg,da9062-watchdog
+> +    oneOf:
+> +      - enum:
+> +          - dlg,da9062-watchdog
+> +      - items:
+> +          - const: dlg,da9061-watchdog
+> +          - const: dlg,da9062-watchdog
+>   
+>     dlg,use-sw-pm:
+>       type: boolean
 
 
