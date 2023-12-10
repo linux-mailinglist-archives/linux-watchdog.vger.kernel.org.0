@@ -1,62 +1,62 @@
-Return-Path: <linux-watchdog+bounces-218-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-219-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99CB380BBE5
-	for <lists+linux-watchdog@lfdr.de>; Sun, 10 Dec 2023 16:20:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC5A980BBEA
+	for <lists+linux-watchdog@lfdr.de>; Sun, 10 Dec 2023 16:21:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A1A51F20FBF
-	for <lists+linux-watchdog@lfdr.de>; Sun, 10 Dec 2023 15:20:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 640FE1C20473
+	for <lists+linux-watchdog@lfdr.de>; Sun, 10 Dec 2023 15:21:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E074E15AE6;
-	Sun, 10 Dec 2023 15:20:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F2E315AE6;
+	Sun, 10 Dec 2023 15:21:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hTTXU7oC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Do/IC0x/"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFB9F2;
-	Sun, 10 Dec 2023 07:20:42 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1d2f1cecf89so7478365ad.1;
-        Sun, 10 Dec 2023 07:20:42 -0800 (PST)
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D08F2;
+	Sun, 10 Dec 2023 07:21:04 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1d0c94397c0so21372885ad.2;
+        Sun, 10 Dec 2023 07:21:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702221641; x=1702826441; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702221664; x=1702826464; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=I5BNZyJBLBAtxYbKcnrAr3C7HJ9Y4YDOmJvXVGJ4zvs=;
-        b=hTTXU7oCApjtvRtbP079vrYMOwlrpivqYyPWZH8VTL6tUv9KUaF/IqV4IEPAlJX9Fs
-         spPqaOvn032psliB3sbWgmS6vowcyth8/FaZWLQEA8uKMoV9QKWNeK1Y7ZeTMivWGpkF
-         xSiMg/fUpZNruXsgbvDVrcXAdSIKFREGmosoK9wd1BfGeIAo/aRh2yyAUby0hGUgAKRS
-         wMo+qkM2u14au0OxHOKjqoTDTPA4jBQmxdmdZ0U+Paeitmrt10o5oAW3jcgfJteq0mpR
-         sSdvGoCl0o0+43JHNE+RlAIwCVDbiGvs7ZnRy4TOlBUccLvGWuyZeWzdGXsMr3eKyMeN
-         juSw==
+        bh=qYvV+iHoaGM0eaJTdeL4EGahcDnug3+O6P/N1QVY38s=;
+        b=Do/IC0x/T1T8SsRGzrEIzHi6d9i7ntVo1oPj2adQ8j0HLI5gM796VH2EHRxhUzIywH
+         x4jkRLM/x3TOzNPDi7WOBhWIhiEQrhTjLFU/HcU+5EKOFRKqBPDyBaaHTVROi0i704ZX
+         p3Q+y3wwm9LdI1n6BUPpaeBOX6U34h83FJ9Lc+VcNNrovOTz/gmuDJbq1hlWXvALAZsR
+         dHPArHvNm1hA7nsnWJZzP3gwT7k0y5IgO+twwcDRRn2zHs8PAQYncKCmyKcardv4jNjM
+         fqywurG8aqODJuoWM5Z4rNF+GvjmAr0ExtuDxiQPqwYu+BlHH/jiFSrr7jJ8PJQkjvUH
+         yz1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702221641; x=1702826441;
+        d=1e100.net; s=20230601; t=1702221664; x=1702826464;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=I5BNZyJBLBAtxYbKcnrAr3C7HJ9Y4YDOmJvXVGJ4zvs=;
-        b=TDgLFAYv2h6rvLU2vKkZEBQq+TSd43M3Swx70JuOgi7aiKweF/Aj4w4eAZE5/bcVCk
-         MQQwWV9fNnIuOxrAeNuJ4ZV3mvAkbH0JzFqnDhd65SAwsoCxNPPUoji6g6eZG5U2N7Fh
-         xl8ORiHRm7iDdh4QDyi1cH+i+hiBL8nmwZm3F5k6h5f41Xf7GwPpi+6BZHLrK86clQzm
-         +4altZInKUxF/HBkRp655eFKljeo6WEicWR+CbIT9K02ZxMjTbt815TfsPawV/yCx7pw
-         8MdGucZ/CjFGXotdbgctTH67bPnIBq0oXXzacO1EjFXIMi0tpKpOMcTZZPl3wfUt+8cl
-         ik/w==
-X-Gm-Message-State: AOJu0Yx9qY9Z0hoyzGoCp/8QU5Pu6mT9JbLYcATIaKkH5wu9QQUNwpvU
-	UBcH0FQZwbBXB0cRLpg5romqoFV4yxI=
-X-Google-Smtp-Source: AGHT+IGs6gycjkov1g0J3a26ISu7HZqUmgavgCSTtH5V5n/zkC9H1FbUPhxFQuoc2PgCAUQ1XbISPw==
-X-Received: by 2002:a17:902:c40d:b0:1d0:6ffd:837d with SMTP id k13-20020a170902c40d00b001d06ffd837dmr1397860plk.136.1702221641464;
-        Sun, 10 Dec 2023 07:20:41 -0800 (PST)
+        bh=qYvV+iHoaGM0eaJTdeL4EGahcDnug3+O6P/N1QVY38s=;
+        b=mKGLxd116xjaOeLBw6l7UCT7r8VRH40Skr265VHHZWKcZcx8/Y5XjK62CPxseN8ugh
+         fbdDBCC715A0uOJiB2SRYVgD0S8wOKJ6nS930Slspu9ROKoDvPMiPX+Q4eedL6suBbrs
+         PVWxz4O6ZDenFF0Gxfb+95mB0S0Tr2vJRjn4qLeS6XGmnvtlHzWl5SgoK22JbQKCuPQx
+         Cg1wb+FsnzvCs6mfdrWfWWS91w2rdyf/r8xzv9LtX5+UtJlkMWU6VgDUbXPoWmUENnS8
+         LTCXc40Hvp4YQzAm0AxB/oIlJTFEFdt9RLL9vzLV1R62QRWLFBeO1wQ79QCLM3amdl2U
+         inmQ==
+X-Gm-Message-State: AOJu0YyDmurf9kOAD6ApoXcoqeEHYMlGOlHcNqQVuCUQTJFrZR6Y5wGs
+	zxhCvXJrWYOctyYKL93XiC8=
+X-Google-Smtp-Source: AGHT+IE70FBMukkWF3U+I8JVCW1m9fjc3/nezoCtyoEXv68tIqEF/5KtdmZzbDw6u3oY2Xl8U0PKEw==
+X-Received: by 2002:a17:902:ab86:b0:1d1:c917:2e57 with SMTP id f6-20020a170902ab8600b001d1c9172e57mr1227375plr.6.1702221664213;
+        Sun, 10 Dec 2023 07:21:04 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o12-20020a170902bccc00b001d0696e9237sm4867108pls.118.2023.12.10.07.20.40
+        by smtp.gmail.com with ESMTPSA id o12-20020a170902bccc00b001d0696e9237sm4867108pls.118.2023.12.10.07.21.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Dec 2023 07:20:41 -0800 (PST)
+        Sun, 10 Dec 2023 07:21:03 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0edea4d9-a498-420b-b01c-bca51c619fb7@roeck-us.net>
-Date: Sun, 10 Dec 2023 07:20:39 -0800
+Message-ID: <c46b6684-7a51-4fd7-96cb-547722acda2b@roeck-us.net>
+Date: Sun, 10 Dec 2023 07:21:02 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -64,8 +64,8 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/8] dt-bindings: watchdog: dlg,da9062-watchdog: Add
- fallback for DA9061 watchdog
+Subject: Re: [PATCH v5 3/8] dt-bindings: watchdog: dlg,da9062-watchdog:
+ Document DA9063 watchdog
 Content-Language: en-US
 To: Biju Das <biju.das.jz@bp.renesas.com>, Lee Jones <lee@kernel.org>,
  Wim Van Sebroeck <wim@linux-watchdog.org>, Rob Herring <robh+dt@kernel.org>,
@@ -78,7 +78,7 @@ Cc: Support Opensource <support.opensource@diasemi.com>,
  Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org,
  Conor Dooley <conor.dooley@microchip.com>
 References: <20231210134717.94020-1-biju.das.jz@bp.renesas.com>
- <20231210134717.94020-3-biju.das.jz@bp.renesas.com>
+ <20231210134717.94020-4-biju.das.jz@bp.renesas.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -123,56 +123,54 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231210134717.94020-3-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20231210134717.94020-4-biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 12/10/23 05:47, Biju Das wrote:
-> The DA9061 watchdog is identical to DA9062 watchdog, so no driver changes
-> are required. The fallback compatible string "dlg,da9062-watchdog" will be
-> used on DA9061 watchdog.
+> Document DA9063 watchdog device as it is similar to DA9062 watchdog.
 > 
 > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
 > v4->v5:
->   * Added Rb tag from Geert and Ack from Conor
->   * Drop items and just use enum as it is easier to read for compatibles.
->   * Retained the tags as it is trivial change.
+>   * Added Rb tag from Geert.
 > v3->v4:
->   * Dropped comment for d9061 watchdog fallback.
->   * Replaced enum->const for dlg,da9061-watchdog and its fallback.
+>   * Added Ack from Conor Dooley.
+>   * Updated title DA9062/61->DA906{1,2,3} as it supports DA9063.
+>   * Retained Rb tag since the changes are trivial.
 > v2->v3:
 >   * No change
 > v2:
 >   * New patch
 > ---
->   .../bindings/watchdog/dlg,da9062-watchdog.yaml           | 9 ++++++---
->   1 file changed, 6 insertions(+), 3 deletions(-)
+>   .../devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml      | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 > 
 > diff --git a/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml b/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
-> index f058628bb632..9192315e559d 100644
+> index 9192315e559d..c8f698120597 100644
 > --- a/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
 > +++ b/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
-> @@ -14,9 +14,12 @@ allOf:
+> @@ -4,7 +4,7 @@
+>   $id: http://devicetree.org/schemas/watchdog/dlg,da9062-watchdog.yaml#
+>   $schema: http://devicetree.org/meta-schemas/core.yaml#
 >   
->   properties:
->     compatible:
-> -    enum:
-> -      - dlg,da9061-watchdog
-> -      - dlg,da9062-watchdog
-> +    oneOf:
-> +      - enum:
-> +          - dlg,da9062-watchdog
-> +      - items:
-> +          - const: dlg,da9061-watchdog
-> +          - const: dlg,da9062-watchdog
+> -title: Dialog Semiconductor DA9062/61 Watchdog Timer
+> +title: Dialog Semiconductor DA906{1,2,3} Watchdog Timer
 >   
->     dlg,use-sw-pm:
->       type: boolean
+>   maintainers:
+>     - Steve Twiss <stwiss.opensource@diasemi.com>
+> @@ -17,6 +17,7 @@ properties:
+>       oneOf:
+>         - enum:
+>             - dlg,da9062-watchdog
+> +          - dlg,da9063-watchdog
+>         - items:
+>             - const: dlg,da9061-watchdog
+>             - const: dlg,da9062-watchdog
 
 
