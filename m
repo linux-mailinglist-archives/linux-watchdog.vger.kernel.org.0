@@ -1,131 +1,92 @@
-Return-Path: <linux-watchdog+bounces-254-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-255-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E471F80D284
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 17:43:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58DEA80D2B0
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 17:47:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A12C8281996
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 16:43:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1497C2817C8
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 16:47:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F5773B785;
-	Mon, 11 Dec 2023 16:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YDgwPGeu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 163CC487A8;
+	Mon, 11 Dec 2023 16:47:36 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D692A6128;
-	Mon, 11 Dec 2023 16:43:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DB72C43395;
-	Mon, 11 Dec 2023 16:43:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702312983;
-	bh=O42VfB6B/NKT45YG7/w+tzHV+vFk/9ubv9SFczzG5L0=;
-	h=References:In-Reply-To:From:Date:Subject:To:List-Id:Cc:From;
-	b=YDgwPGeue5DBU6BcGt8oAMWNp2wU0ujmkYoY5HoVVqcv0hphcrNSDbI1E48AbdsdX
-	 FJchg2BAjmX8HT/GBLQOKBNLWUCChP0fxRtsmLNoqGpy4hKuo5beQ1TEBlr65CmiMX
-	 R2HK47cTKoJEVFw6DSRm6en8DzIOqLJFrrPMsyejWaEqrOnkHxljf4/WBrrQPjpSu5
-	 iz+Zp1LFVIS5X4AQliUoSx/0P8UIXSKDLdU1caNc8vlDAzllZ19so7ob4lTOIa5U+K
-	 TOU/av5PLIxQsFcB23MnJefK1GdwqKeB1jkrJe+jKnSsOt7IJ3mvGV/0nKfkKkaxSx
-	 PJjYPLIyTAZkA==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-50be03cc8a3so6129224e87.1;
-        Mon, 11 Dec 2023 08:43:03 -0800 (PST)
-X-Gm-Message-State: AOJu0Yyqj2jN4i60rkh+PLbJIyJveIfeF5x3tparC614v0ft25uqZ4Cg
-	f8aNlG+8bpO+iWQXvB2o/9xrZlDN8B8tEqr9rQ==
-X-Google-Smtp-Source: AGHT+IE+BuXwI7UD9Kku6Z+7AFIfpY5y8FXvZ7fPoyMcKoLOwdUc9Eno1NvK829t1ShWBDdZ9wMmEuPLOErAklj5W88=
-X-Received: by 2002:a05:6512:ad5:b0:50d:1eb3:7bfd with SMTP id
- n21-20020a0565120ad500b0050d1eb37bfdmr1914116lfu.13.1702312981546; Mon, 11
- Dec 2023 08:43:01 -0800 (PST)
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C0F98;
+	Mon, 11 Dec 2023 08:47:29 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+	(Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+	by fd01.gateway.ufhost.com (Postfix) with ESMTP id 0FE9F7FD3;
+	Tue, 12 Dec 2023 00:47:26 +0800 (CST)
+Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 12 Dec
+ 2023 00:47:26 +0800
+Received: from localhost.localdomain (202.188.176.82) by EXMBX072.cuchost.com
+ (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 12 Dec
+ 2023 00:47:20 +0800
+From: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+To: <krzysztof.kozlowski@linaro.org>
+CC: <conor+dt@kernel.org>, <devicetree@vger.kernel.org>,
+	<jisheng.teoh@starfivetech.com>, <krzysztof.kozlowski+dt@linaro.org>,
+	<leyfoon.tan@starfivetech.com>, <linux-kernel@vger.kernel.org>,
+	<linux-watchdog@vger.kernel.org>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+	<samin.guo@starfivetech.com>, <wim@linux-watchdog.org>,
+	<xingyu.wu@starfivetech.com>
+Subject: Re: [PATCH v1 1/2] watchdog: starfive-wdt: Add JH8100 watchdog compatible string
+Date: Tue, 12 Dec 2023 00:47:00 +0800
+Message-ID: <20231211164700.1590908-1-jisheng.teoh@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <84145eba-7877-4dc0-a221-2debb5a40d40@linaro.org>
+References: <84145eba-7877-4dc0-a221-2debb5a40d40@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231211162331.435900-1-peter.griffin@linaro.org> <20231211162331.435900-9-peter.griffin@linaro.org>
-In-Reply-To: <20231211162331.435900-9-peter.griffin@linaro.org>
-From: Rob Herring <robh+dt@kernel.org>
-Date: Mon, 11 Dec 2023 10:42:49 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJ_NUajmQs8ZYiE2GpvNxBwtkLRE2jvWDU3hKtztt92Ug@mail.gmail.com>
-Message-ID: <CAL_JsqJ_NUajmQs8ZYiE2GpvNxBwtkLRE2jvWDU3hKtztt92Ug@mail.gmail.com>
-Subject: Re: [PATCH v7 08/16] clk: samsung: clk-gs101: Add cmu_top, cmu_misc
- and cmu_apm support
-To: Peter Griffin <peter.griffin@linaro.org>
-Cc: krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com, 
-	conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com, 
-	s.nawrocki@samsung.com, linus.walleij@linaro.org, wim@linux-watchdog.org, 
-	linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, 
-	olof@lixom.net, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
-	cw00.choi@samsung.com, alim.akhtar@samsung.com, tudor.ambarus@linaro.org, 
-	andre.draszik@linaro.org, semen.protsenko@linaro.org, saravanak@google.com, 
-	willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
-	linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX072.cuchost.com
+ (172.16.6.82)
+X-YovoleRuleAgent: yovoleflag
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 11, 2023 at 10:24=E2=80=AFAM Peter Griffin <peter.griffin@linar=
-o.org> wrote:
->
-> cmu_top is the top level clock management unit which contains PLLs, muxes=
-,
-> dividers and gates that feed the other clock management units.
->
-> cmu_misc clocks IPs such as Watchdog and cmu_apm clocks ips part of the
-> APM module.
->
-> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Reviewed-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
-> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-> Tested-by: Will McVicker <willmcvicker@google.com>
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> ---
->  drivers/clk/samsung/Makefile    |    1 +
->  drivers/clk/samsung/clk-gs101.c | 2512 +++++++++++++++++++++++++++++++
->  2 files changed, 2513 insertions(+)
->  create mode 100644 drivers/clk/samsung/clk-gs101.c
->
-> diff --git a/drivers/clk/samsung/Makefile b/drivers/clk/samsung/Makefile
-> index ebbeacabe88f..3056944a5a54 100644
-> --- a/drivers/clk/samsung/Makefile
-> +++ b/drivers/clk/samsung/Makefile
-> @@ -21,6 +21,7 @@ obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK) +=3D clk-exynos7.=
-o
->  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)  +=3D clk-exynos7885.o
->  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)  +=3D clk-exynos850.o
->  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)  +=3D clk-exynosautov9.o
-> +obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)  +=3D clk-gs101.o
->  obj-$(CONFIG_S3C64XX_COMMON_CLK)       +=3D clk-s3c64xx.o
->  obj-$(CONFIG_S5PV210_COMMON_CLK)       +=3D clk-s5pv210.o clk-s5pv210-au=
-dss.o
->  obj-$(CONFIG_TESLA_FSD_COMMON_CLK)     +=3D clk-fsd.o
-> diff --git a/drivers/clk/samsung/clk-gs101.c b/drivers/clk/samsung/clk-gs=
-101.c
-> new file mode 100644
-> index 000000000000..05361fce3c6f
-> --- /dev/null
-> +++ b/drivers/clk/samsung/clk-gs101.c
-> @@ -0,0 +1,2512 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2023 Linaro Ltd.
-> + * Author: Peter Griffin <peter.griffin@linaro.org>
-> + *
-> + * Common Clock Framework support for GS101.
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
+On Mon, 11 Dec 2023 11:06:42 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-You probably don't need this header. Please check.
+> On 09/12/2023 15:27, Ji Sheng Teoh wrote:
+> > Add "starfive,jh8100-wdt" compatible for StarFive's JH8100 watchdog.
+> > JH8100 watchdog reuses JH7110 register mapping.
+> >=20
+> > Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
+> > Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+> > ---
+> >  drivers/watchdog/starfive-wdt.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/drivers/watchdog/starfive-wdt.c
+> > b/drivers/watchdog/starfive-wdt.c index 5f501b41faf9..31785bb373d5
+> > 100644 --- a/drivers/watchdog/starfive-wdt.c
+> > +++ b/drivers/watchdog/starfive-wdt.c
+> > @@ -581,6 +581,7 @@ static const struct dev_pm_ops
+> > starfive_wdt_pm_ops =3D { static const struct of_device_id
+> > starfive_wdt_match[] =3D { { .compatible =3D "starfive,jh7100-wdt",
+> > .data =3D &starfive_wdt_jh7100_variant }, { .compatible =3D
+> > "starfive,jh7110-wdt", .data =3D &starfive_wdt_jh7110_variant },
+> > +	{ .compatible =3D "starfive,jh8100-wdt", .data =3D
+> > &starfive_wdt_jh7110_variant }, =20
+>=20
+> Device is compatible, so why not expressing it in the bindings and
+> dropping this change?
+>=20
+> Best regards,
+> Krzysztof
+>=20
 
-> +#include <linux/platform_device.h>
+Ok, will drop this change.
+
+Thanks,
+Ji Sheng
 
