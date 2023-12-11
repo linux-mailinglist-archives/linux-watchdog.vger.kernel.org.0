@@ -1,135 +1,109 @@
-Return-Path: <linux-watchdog+bounces-256-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-257-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69FAE80D309
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 17:58:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 518C980D5A3
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 19:26:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F5E51F21693
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 16:58:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C5BE282357
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 18:26:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42FBF4CB45;
-	Mon, 11 Dec 2023 16:58:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04D905102F;
+	Mon, 11 Dec 2023 18:26:44 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F6B8E;
-	Mon, 11 Dec 2023 08:58:04 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-	(Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-	by fd01.gateway.ufhost.com (Postfix) with ESMTP id 85DF47FD3;
-	Tue, 12 Dec 2023 00:58:03 +0800 (CST)
-Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 12 Dec
- 2023 00:58:03 +0800
-Received: from localhost.localdomain (202.188.176.82) by EXMBX072.cuchost.com
- (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 12 Dec
- 2023 00:57:58 +0800
-From: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
-To: <krzysztof.kozlowski@linaro.org>
-CC: <conor+dt@kernel.org>, <devicetree@vger.kernel.org>,
-	<jisheng.teoh@starfivetech.com>, <krzysztof.kozlowski+dt@linaro.org>,
-	<leyfoon.tan@starfivetech.com>, <linux-kernel@vger.kernel.org>,
-	<linux-watchdog@vger.kernel.org>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
-	<samin.guo@starfivetech.com>, <wim@linux-watchdog.org>,
-	<xingyu.wu@starfivetech.com>
-Subject: Re: [PATCH v1 2/2] dt-bindings: watchdog: starfive,jh7100-wdt: Add compatible for JH8100
-Date: Tue, 12 Dec 2023 00:57:31 +0800
-Message-ID: <20231211165731.1604004-1-jisheng.teoh@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <3b53b6c4-96e6-4129-912e-82b8ab9b2269@linaro.org>
-References: <3b53b6c4-96e6-4129-912e-82b8ab9b2269@linaro.org>
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3030DB;
+	Mon, 11 Dec 2023 10:26:39 -0800 (PST)
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-6da16eab6fcso864590a34.3;
+        Mon, 11 Dec 2023 10:26:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702319199; x=1702923999;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pIsWkgcgh+iryiOw2ckITXN971M9P/rGXpk4uklSnJ4=;
+        b=FUOf1Xz2C8fYGfWm3h06C4cohTdV96zMnyA2hTzJDvEADpr085IucRvA8dqrTIsmxs
+         ItVDm7mD+Q1m3FW75yb4tNVtfzFVC8gBSX3+O+6PZvulbOAkLFTTiYhcTBpg5vUpaFbl
+         J9sYEA1sA8pV8UUrd7xiFfk0v1nMv5TxVocYJnutkuyHzgZmKGRQM7Y9A7l+TWfduYDb
+         LxlDAbWo89/oJZ1X/w3kUfT++mWdMfrtWClYZXZDHqPIUWS4YxQHLM+cHeQRPsM6c+ir
+         doBJboMTAla7PfPjOfjSKkAhxAmQCznY9ILRHH1Rc+34AWn2+uG5V9k9SKRtS65upzDf
+         IeIw==
+X-Gm-Message-State: AOJu0YxC0Haq+kLQdwfmeKRFvuPoCxYE3u5pzO8TZDnEovdocoqmFOpa
+	Hm/kb8cvqRoGdQWp03ejkiwkGGXfFg==
+X-Google-Smtp-Source: AGHT+IEeiVS/4EbZYPFhn0tgt9W90eW5liw+bo1KTROUv5Qfw1SPIbJZbqhh1GSmu2/aNwicB7rJEw==
+X-Received: by 2002:a9d:6c17:0:b0:6d9:ece7:a3fc with SMTP id f23-20020a9d6c17000000b006d9ece7a3fcmr4260019otq.55.1702319199167;
+        Mon, 11 Dec 2023 10:26:39 -0800 (PST)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e7-20020a0568301e4700b006d87df1c53dsm1795031otj.65.2023.12.11.10.26.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Dec 2023 10:26:38 -0800 (PST)
+Received: (nullmailer pid 2663219 invoked by uid 1000);
+	Mon, 11 Dec 2023 18:26:36 -0000
+Date: Mon, 11 Dec 2023 12:26:36 -0600
+From: Rob Herring <robh@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Peter Griffin <peter.griffin@linaro.org>, krzysztof.kozlowski+dt@linaro.org, 
+	Michael Turquette <mturquette@baylibre.com>, Conor Dooley <conor+dt@kernel.org>, 
+	Stephen Boyd <sboyd@kernel.org>, Tomasz Figa <tomasz.figa@gmail.com>, 
+	Sylwester Nawrocki <s.nawrocki@samsung.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Olof Johansson <olof@lixom.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	Alim Akhtar <alim.akhtar@samsung.com>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
+	=?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	Sam Protsenko <semen.protsenko@linaro.org>, saravanak@google.com, 
+	William McVicker <willmcvicker@google.com>, soc@kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, 
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, linux-watchdog@vger.kernel.org, 
+	kernel-team@android.com, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v5 09/20] dt-bindings: serial: samsung: Make
+ samsung,uart-fifosize required property
+Message-ID: <20231211182636.GA2657319-robh@kernel.org>
+References: <20231201160925.3136868-1-peter.griffin@linaro.org>
+ <20231201160925.3136868-10-peter.griffin@linaro.org>
+ <59b949a0-5aeb-4f01-8789-cb305513b626@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX072.cuchost.com
- (172.16.6.82)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <59b949a0-5aeb-4f01-8789-cb305513b626@app.fastmail.com>
 
-On Mon, 11 Dec 2023 11:06:09 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-
-> On 09/12/2023 15:27, Ji Sheng Teoh wrote:
-> > Add "starfive,jh8100-wdt" compatible string for StarFive's JH8100
-> > watchdog.
-> > Since JH8100 watchdog only has 1 reset signal, update binding
-> > document to support one reset for "starfive,jh8100-wdt" compatible.
-> >=20
-> > Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-> > Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
-> > ---
-> >  .../watchdog/starfive,jh7100-wdt.yaml         | 29
-> > ++++++++++++++----- 1 file changed, 21 insertions(+), 8 deletions(-)
-> >=20
-> > diff --git
-> > a/Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml
-> > b/Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml
-> > index 68f3f6fd08a6..eec182317219 100644 ---
-> > a/Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml
-> > +++
-> > b/Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml
-> > @@ -19,14 +19,12 @@ description: isn't cleared, the watchdog will
-> > reset the system unless the watchdog reset is disabled. -allOf:
-> > -  - $ref: watchdog.yaml#
-> > -
-> >  properties:
-> >    compatible:
-> >      enum:
-> >        - starfive,jh7100-wdt
-> >        - starfive,jh7110-wdt
-> > +      - starfive,jh8100-wdt
-> > =20
-> >    reg:
-> >      maxItems: 1
-> > @@ -44,11 +42,6 @@ properties:
-> >        - const: apb
-> >        - const: core
-> > =20
-> > -  resets: =20
->=20
-> No, keep it here with min/maxItems.
->=20
-
-Ok, will change it up to use min/maxItems.
-
-> > -    items:
-> > -      - description: APB reset
-> > -      - description: Core reset
-> > -
-> >  required:
-> >    - compatible
-> >    - reg
-> > @@ -56,6 +49,26 @@ required:
-> >    - clock-names
-> >    - resets
-> > =20
-> > +allOf:
-> > +  - $ref: watchdog.yaml#
+On Fri, Dec 01, 2023 at 05:39:33PM +0100, Arnd Bergmann wrote:
+> On Fri, Dec 1, 2023, at 17:09, Peter Griffin wrote:
+> > 
 > > +  - if:
 > > +      properties:
 > > +        compatible:
 > > +          contains:
 > > +            enum:
-> > +              - starfive,jh8100-wdt
+> > +              - google,gs101-uart
 > > +    then:
-> > +      properties:
-> > +        resets:
-> > +          items:
-> > +            - description: Watchdog reset =20
->=20
-> Why is it called "Watchdog"? How is it different from "Core"?
+> > +      required:
+> > +        - samsung,uart-fifosize
+> > +
+> 
+> Is there a way to reverse the list and make the property
+> required for anything that is not explicitly enumerated?
 
-Will standardize them to use "Core" instead. Thanks.
+if:
+  properties:
+    compatible:
+      not: 
+        contains:
+          enum:
+            - optional-compatibles
 
->=20
-> Best regards,
-> Krzysztof
->=20
+
+Either way is fine with me. Anything new has to add their compatible 
+anyways, so not a big deal to adjust it here, too.
+
+Rob
 
