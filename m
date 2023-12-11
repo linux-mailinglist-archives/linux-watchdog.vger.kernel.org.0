@@ -1,109 +1,166 @@
-Return-Path: <linux-watchdog+bounces-257-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-258-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 518C980D5A3
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 19:26:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A08B480DB0F
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 20:46:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C5BE282357
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 18:26:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C93D1F21B71
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 19:46:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04D905102F;
-	Mon, 11 Dec 2023 18:26:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADE8548CCD;
+	Mon, 11 Dec 2023 19:46:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sAbEa9vS"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3030DB;
-	Mon, 11 Dec 2023 10:26:39 -0800 (PST)
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-6da16eab6fcso864590a34.3;
-        Mon, 11 Dec 2023 10:26:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702319199; x=1702923999;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D71F2
+	for <linux-watchdog@vger.kernel.org>; Mon, 11 Dec 2023 11:46:18 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-dbcae1e53bcso694426276.3
+        for <linux-watchdog@vger.kernel.org>; Mon, 11 Dec 2023 11:46:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702323978; x=1702928778; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pIsWkgcgh+iryiOw2ckITXN971M9P/rGXpk4uklSnJ4=;
-        b=FUOf1Xz2C8fYGfWm3h06C4cohTdV96zMnyA2hTzJDvEADpr085IucRvA8dqrTIsmxs
-         ItVDm7mD+Q1m3FW75yb4tNVtfzFVC8gBSX3+O+6PZvulbOAkLFTTiYhcTBpg5vUpaFbl
-         J9sYEA1sA8pV8UUrd7xiFfk0v1nMv5TxVocYJnutkuyHzgZmKGRQM7Y9A7l+TWfduYDb
-         LxlDAbWo89/oJZ1X/w3kUfT++mWdMfrtWClYZXZDHqPIUWS4YxQHLM+cHeQRPsM6c+ir
-         doBJboMTAla7PfPjOfjSKkAhxAmQCznY9ILRHH1Rc+34AWn2+uG5V9k9SKRtS65upzDf
-         IeIw==
-X-Gm-Message-State: AOJu0YxC0Haq+kLQdwfmeKRFvuPoCxYE3u5pzO8TZDnEovdocoqmFOpa
-	Hm/kb8cvqRoGdQWp03ejkiwkGGXfFg==
-X-Google-Smtp-Source: AGHT+IEeiVS/4EbZYPFhn0tgt9W90eW5liw+bo1KTROUv5Qfw1SPIbJZbqhh1GSmu2/aNwicB7rJEw==
-X-Received: by 2002:a9d:6c17:0:b0:6d9:ece7:a3fc with SMTP id f23-20020a9d6c17000000b006d9ece7a3fcmr4260019otq.55.1702319199167;
-        Mon, 11 Dec 2023 10:26:39 -0800 (PST)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e7-20020a0568301e4700b006d87df1c53dsm1795031otj.65.2023.12.11.10.26.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 10:26:38 -0800 (PST)
-Received: (nullmailer pid 2663219 invoked by uid 1000);
-	Mon, 11 Dec 2023 18:26:36 -0000
-Date: Mon, 11 Dec 2023 12:26:36 -0600
-From: Rob Herring <robh@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Peter Griffin <peter.griffin@linaro.org>, krzysztof.kozlowski+dt@linaro.org, 
-	Michael Turquette <mturquette@baylibre.com>, Conor Dooley <conor+dt@kernel.org>, 
-	Stephen Boyd <sboyd@kernel.org>, Tomasz Figa <tomasz.figa@gmail.com>, 
-	Sylwester Nawrocki <s.nawrocki@samsung.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Olof Johansson <olof@lixom.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
-	=?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
-	Sam Protsenko <semen.protsenko@linaro.org>, saravanak@google.com, 
-	William McVicker <willmcvicker@google.com>, soc@kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, 
-	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, linux-watchdog@vger.kernel.org, 
-	kernel-team@android.com, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v5 09/20] dt-bindings: serial: samsung: Make
- samsung,uart-fifosize required property
-Message-ID: <20231211182636.GA2657319-robh@kernel.org>
-References: <20231201160925.3136868-1-peter.griffin@linaro.org>
- <20231201160925.3136868-10-peter.griffin@linaro.org>
- <59b949a0-5aeb-4f01-8789-cb305513b626@app.fastmail.com>
+        bh=FTeSUxrSykIw7I7YvDs4Fui8ab3WCE1QDiM2/J6ViGI=;
+        b=sAbEa9vSlobiZVMv4bvdIKju2ekymZrovB9Cr2BmTzbeYTwfbU7lBsETJt9u5SlsEA
+         JabymgWaYWtQrkx8vQ68nxwDwjh1ojpXAxAC6XgSHCY+EHep2ck7t15anjxTnMw0MXrA
+         NJgOSjtm50r0kw4DMHaB/nUR9HQm/WM42An/Nn/1MOAmvnG7ewmmM/XVo98WnTvPbF4L
+         B9LaC3TojYLg+5RnotjCcg6C/V/uRH1K4d2wsIJ4phbaU5WgIPiIchHciokNg4mt7co3
+         DVq5tOh8hdsyCwNE/MNSoFc6DeHc6sA4MqcOUqLX6734h+thJ1+rtLFRQhjK4ryoRI9y
+         uNGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702323978; x=1702928778;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FTeSUxrSykIw7I7YvDs4Fui8ab3WCE1QDiM2/J6ViGI=;
+        b=bHpyNTNvP6Uk/8cWRl1qqbpVdDHbyzuMM2kMb1uYFyeThL8t6Ci/nhz5BMco1DjF7T
+         S/SX3ldkKv1oE3WB1IrSuHoewt2dnVyb/vuDTqB3PSc387WtE3+4I3efp/N1EroWZFJC
+         KKKXQ8FKOdsMd8CU5Kgir3P1KaiXvYNlm7YYpW/sxZ/tZuloacOBpxvVF7MKoMJnAmMm
+         0eDMxcD3K0sTtfESFJ16uqSdTCfUI+03nP8zMfCy+s6EiWB1kmi1/r3BuuMlz3HoQuey
+         oHJ6W+WsgtDAtEgWYH+l9y/QYBmlNnZ2dPhdJcHUkBTnYEnyV9BbFtkbBWhSW1DQVLgn
+         L0OA==
+X-Gm-Message-State: AOJu0YxorsGux58U7vuhlsu0t78DTFvOKLaf6wSVNPSeZ9d+lX4MA0zo
+	Y+V4helLvqry26naeorOlrluvwlCjOp1Y9ZVrsQsQw==
+X-Google-Smtp-Source: AGHT+IHswS/zKdRCASUc9ie39QTavfGoVLFXGgY+/DITpsMOqyQNhT0tlQm6Qgrmdxlk1QdkPO5OCc3GD+qSIcfxiqE=
+X-Received: by 2002:a25:ea4a:0:b0:da1:b041:70ac with SMTP id
+ o10-20020a25ea4a000000b00da1b04170acmr2938062ybe.10.1702323977703; Mon, 11
+ Dec 2023 11:46:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <59b949a0-5aeb-4f01-8789-cb305513b626@app.fastmail.com>
+References: <20231211162331.435900-1-peter.griffin@linaro.org>
+ <20231211162331.435900-9-peter.griffin@linaro.org> <CAL_JsqJ_NUajmQs8ZYiE2GpvNxBwtkLRE2jvWDU3hKtztt92Ug@mail.gmail.com>
+In-Reply-To: <CAL_JsqJ_NUajmQs8ZYiE2GpvNxBwtkLRE2jvWDU3hKtztt92Ug@mail.gmail.com>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Mon, 11 Dec 2023 19:46:06 +0000
+Message-ID: <CADrjBPrkso2cM8zKq-WU8WC3P3A9YoS6nqX-f6XvSNS-EofK9g@mail.gmail.com>
+Subject: Re: [PATCH v7 08/16] clk: samsung: clk-gs101: Add cmu_top, cmu_misc
+ and cmu_apm support
+To: Rob Herring <robh+dt@kernel.org>
+Cc: krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com, 
+	conor+dt@kernel.org, sboyd@kernel.org, tomasz.figa@gmail.com, 
+	s.nawrocki@samsung.com, linus.walleij@linaro.org, wim@linux-watchdog.org, 
+	linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de, 
+	olof@lixom.net, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
+	cw00.choi@samsung.com, alim.akhtar@samsung.com, tudor.ambarus@linaro.org, 
+	andre.draszik@linaro.org, semen.protsenko@linaro.org, saravanak@google.com, 
+	willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
+	linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 01, 2023 at 05:39:33PM +0100, Arnd Bergmann wrote:
-> On Fri, Dec 1, 2023, at 17:09, Peter Griffin wrote:
-> > 
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - google,gs101-uart
-> > +    then:
-> > +      required:
-> > +        - samsung,uart-fifosize
+Hi Rob,
+
+Thanks for your review.
+
+On Mon, 11 Dec 2023 at 16:43, Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Mon, Dec 11, 2023 at 10:24=E2=80=AFAM Peter Griffin <peter.griffin@lin=
+aro.org> wrote:
+> >
+> > cmu_top is the top level clock management unit which contains PLLs, mux=
+es,
+> > dividers and gates that feed the other clock management units.
+> >
+> > cmu_misc clocks IPs such as Watchdog and cmu_apm clocks ips part of the
+> > APM module.
+> >
+> > Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > Reviewed-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
+> > Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> > Tested-by: Will McVicker <willmcvicker@google.com>
+> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> > ---
+> >  drivers/clk/samsung/Makefile    |    1 +
+> >  drivers/clk/samsung/clk-gs101.c | 2512 +++++++++++++++++++++++++++++++
+> >  2 files changed, 2513 insertions(+)
+> >  create mode 100644 drivers/clk/samsung/clk-gs101.c
+> >
+> > diff --git a/drivers/clk/samsung/Makefile b/drivers/clk/samsung/Makefil=
+e
+> > index ebbeacabe88f..3056944a5a54 100644
+> > --- a/drivers/clk/samsung/Makefile
+> > +++ b/drivers/clk/samsung/Makefile
+> > @@ -21,6 +21,7 @@ obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK) +=3D clk-exynos=
+7.o
+> >  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)  +=3D clk-exynos7885.o
+> >  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)  +=3D clk-exynos850.o
+> >  obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)  +=3D clk-exynosautov9.o
+> > +obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)  +=3D clk-gs101.o
+> >  obj-$(CONFIG_S3C64XX_COMMON_CLK)       +=3D clk-s3c64xx.o
+> >  obj-$(CONFIG_S5PV210_COMMON_CLK)       +=3D clk-s5pv210.o clk-s5pv210-=
+audss.o
+> >  obj-$(CONFIG_TESLA_FSD_COMMON_CLK)     +=3D clk-fsd.o
+> > diff --git a/drivers/clk/samsung/clk-gs101.c b/drivers/clk/samsung/clk-=
+gs101.c
+> > new file mode 100644
+> > index 000000000000..05361fce3c6f
+> > --- /dev/null
+> > +++ b/drivers/clk/samsung/clk-gs101.c
+> > @@ -0,0 +1,2512 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (C) 2023 Linaro Ltd.
+> > + * Author: Peter Griffin <peter.griffin@linaro.org>
+> > + *
+> > + * Common Clock Framework support for GS101.
+> > + */
 > > +
-> 
-> Is there a way to reverse the list and make the property
-> required for anything that is not explicitly enumerated?
+> > +#include <linux/clk.h>
+> > +#include <linux/clk-provider.h>
+> > +#include <linux/of.h>
+> > +#include <linux/of_device.h>
+>
+> You probably don't need this header. Please check.
+>
+> > +#include <linux/platform_device.h>
 
-if:
-  properties:
-    compatible:
-      not: 
-        contains:
-          enum:
-            - optional-compatibles
+You are correct, this header isn't required. If a new series is
+required I will remove it.
 
+Whilst you're here I'd like to draw your attention to [PATCH 2/16]
+where I've removed your reviewed-by tag in v7 because I added the ect
+node documentation in google.yaml. The empty ect node is required to
+be present by the bootloader or the device will boot loop. Can you
+re-review that patch?
 
-Either way is fine with me. Anything new has to add their compatible 
-anyways, so not a big deal to adjust it here, too.
+The alternative is to remove the empty ect node, and the binding
+documentation for it and add your Reviewed-by tag back again. But then
+an upstream kernel won't boot 'out the box' on a pixel 6 which seems
+less than ideal default behaviour.
 
-Rob
+regards,
+
+Peter.
 
