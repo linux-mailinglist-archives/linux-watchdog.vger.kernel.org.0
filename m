@@ -1,60 +1,60 @@
-Return-Path: <linux-watchdog+bounces-229-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-230-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 745D580C597
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 11:06:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 977E580C59E
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 11:06:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A7651F20CD4
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 10:06:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DCF0281709
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 10:06:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6625421A1F;
-	Mon, 11 Dec 2023 10:06:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFAA322095;
+	Mon, 11 Dec 2023 10:06:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BPCTv0x5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qfEMTiWM"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3743DCB
-	for <linux-watchdog@vger.kernel.org>; Mon, 11 Dec 2023 02:06:13 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-40c3fe6c08fso19008345e9.1
-        for <linux-watchdog@vger.kernel.org>; Mon, 11 Dec 2023 02:06:13 -0800 (PST)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E023B8
+	for <linux-watchdog@vger.kernel.org>; Mon, 11 Dec 2023 02:06:45 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40c38de1ee4so23738245e9.0
+        for <linux-watchdog@vger.kernel.org>; Mon, 11 Dec 2023 02:06:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702289171; x=1702893971; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702289204; x=1702894004; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=dweN6hcC4xdtDuh2HCZYd5ulQCZ11ggf8uho7v/8KPs=;
-        b=BPCTv0x5JMJFEEI5Yc8SWu20bmdR9UYR+oq6hJH4JuHzrDp1cUeLDu1dBmiei3G+Tp
-         5t4cfTBGswSaLyg6+CNh/lMQ8bOJ1n1qQc9Ys0JLjvGSSekxucS9SlcI1H6Too3Z+zoP
-         4S6U0d8x0b3+of3cdKhtrTRw27HKqaMkKpzkOSInUNawlVl1KPAJD/4qAFDtswr5W3xL
-         WF3yMmT3xQIGg6Yl6WkxAI0kge8OjvFjg/bgjbtdimn+9AaBOAqp6f/idKqK+aEGeNcN
-         Lmt3seak6VmuDeKm4n+toYQeIOF5+L+vNen5tknHNFpJYPSZl9VzB1q+KEHBbvENB2JH
-         x3Tw==
+        bh=pQ6efSrDFx/CIc63TrRUts6RZCaFzwMYY5yHENygzQk=;
+        b=qfEMTiWMVpLi1W0QQgilaiX5iXk9HQhBlG8wUZH54hHaoy0tYwt8ymPKHI22LfdTii
+         9tjZcVlhwGL8WSE64lMNsOyX99ukfgP2T86kuL87WALMGHXCByvATqWhqCBj3C7ZUbGX
+         mXgIKZsL3OS7Gv4P+qs8ksalM7Ga23PqomKMLXfpsc5unLieRdaSqbOSQQTB61UZaCvp
+         ieIbMzAHT2AcrahXHzIxMrCdts6HYPj7Jb2rthkuPRg1vwbyR6hZUgAx626WoQjwzlz2
+         XESc6Y/HQuvZPKyF863HUL3CzhCEma4vBUdXjR7/nYYWs/KHmEo1NAt9e5TBiZx2/PDu
+         PLWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702289171; x=1702893971;
+        d=1e100.net; s=20230601; t=1702289204; x=1702894004;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dweN6hcC4xdtDuh2HCZYd5ulQCZ11ggf8uho7v/8KPs=;
-        b=wRoJspDYUENb3QBNMWmODQAO86SBoJ7o1drrG+2Hl3YgM1LYqUpBFHU7fF+y2SgTar
-         AYydk0ASLft5Uj+lm4aT9ieGfTrwNA70htEBoBVSjCs0LQvF+RiETOMAWSjOgsi5HYtg
-         VpjrmzdW+NOPNmmWecbyc3liA3r9RFdXYYRKEq32nUvmrr0Urf1LjPmdWI7cpmw/Tma9
-         ZG49FBLVboJResjeXFC9kjB3QJCsNsAUPCe4n0R4ZXH4N3pLGqjXoVLe8iyTQ7WWK+MT
-         Ro8+UQCTq2JaaoP5az0mMtAY/hNArIBOQn0ZGhOdcC+Bk2Bd2dCEtiRVuICoueLjLdYY
-         6c5A==
-X-Gm-Message-State: AOJu0YwTe9EOFaxJTHckpdZFAV/nXJ62IYLIS9PQ9NAw7L/Reo1FBIuT
-	nT5gDjEO8Hoyz/FvYUshA2HLiQ==
-X-Google-Smtp-Source: AGHT+IH41AsduGCPUUvheD1DhHvD5Y2tiqJlr5B9J9DeZzXNU11RyjwG9G7beGY528cPspH8RLueeQ==
-X-Received: by 2002:a05:600c:1e20:b0:40c:3daf:52f4 with SMTP id ay32-20020a05600c1e2000b0040c3daf52f4mr1356923wmb.185.1702289171642;
-        Mon, 11 Dec 2023 02:06:11 -0800 (PST)
+        bh=pQ6efSrDFx/CIc63TrRUts6RZCaFzwMYY5yHENygzQk=;
+        b=xMLz8pRi0u+WQ+bPOY9er01ZIJ/3iGliTCExx8GmEM87rU+T04CtUYcZeRtkSWWCqX
+         A8LIenXoEpnhtrE/RAe8rntIRZRZQvptt7adfh7fBZ3vBHr1VGMfmsrhjBj0Y4gWy+63
+         Ri1PjFHTdBzRVHtKISobP/1yzHNcQFWV6Dh7RFdt1JWkFTI5XtZnEPZehK+ss/5EPYz9
+         AG+Iv6WdnW9RfvFbQ65izd9aG1TTYzXXRVHtieB/Z7RFf3MEXGPBanTfZgWDynqytLbW
+         sK2S4D5wRl4L09glYKavcK1sDeGUkZQ3CijaNYtWtJCREUlAh0gioEg6h++Wc1PCRViO
+         PeDg==
+X-Gm-Message-State: AOJu0YyFZkmg+RnnPLfgpUG+gx8pQ2NXbVIWpTqS3uVgHxw9hC93yvv4
+	9Hw/CzzjSDTsgqV0R8/GuCB2rw==
+X-Google-Smtp-Source: AGHT+IFJQR2I7siesY88vM54Rcjt96fYo1snFMA66kIXayfI4tpcIslyWmN6xFultJJtVCGbMhSP+Q==
+X-Received: by 2002:a05:600c:3147:b0:40c:3fa7:bba8 with SMTP id h7-20020a05600c314700b0040c3fa7bba8mr1372696wmo.155.1702289203838;
+        Mon, 11 Dec 2023 02:06:43 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id j25-20020a05600c1c1900b004076f522058sm14781799wms.0.2023.12.11.02.06.10
+        by smtp.gmail.com with ESMTPSA id j25-20020a05600c1c1900b004076f522058sm14781799wms.0.2023.12.11.02.06.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Dec 2023 02:06:11 -0800 (PST)
-Message-ID: <3b53b6c4-96e6-4129-912e-82b8ab9b2269@linaro.org>
-Date: Mon, 11 Dec 2023 11:06:09 +0100
+        Mon, 11 Dec 2023 02:06:43 -0800 (PST)
+Message-ID: <84145eba-7877-4dc0-a221-2debb5a40d40@linaro.org>
+Date: Mon, 11 Dec 2023 11:06:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -62,8 +62,8 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/2] dt-bindings: watchdog: starfive,jh7100-wdt: Add
- compatible for JH8100
+Subject: Re: [PATCH v1 1/2] watchdog: starfive-wdt: Add JH8100 watchdog
+ compatible string
 Content-Language: en-US
 To: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>,
  Xingyu Wu <xingyu.wu@starfivetech.com>,
@@ -76,7 +76,7 @@ Cc: Ley Foon Tan <leyfoon.tan@starfivetech.com>,
  linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20231209142723.2060196-1-jisheng.teoh@starfivetech.com>
- <20231209142723.2060196-3-jisheng.teoh@starfivetech.com>
+ <20231209142723.2060196-2-jisheng.teoh@starfivetech.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -122,76 +122,32 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231209142723.2060196-3-jisheng.teoh@starfivetech.com>
+In-Reply-To: <20231209142723.2060196-2-jisheng.teoh@starfivetech.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 09/12/2023 15:27, Ji Sheng Teoh wrote:
-> Add "starfive,jh8100-wdt" compatible string for StarFive's JH8100
-> watchdog.
-> Since JH8100 watchdog only has 1 reset signal, update binding
-> document to support one reset for "starfive,jh8100-wdt" compatible.
+> Add "starfive,jh8100-wdt" compatible for StarFive's JH8100 watchdog.
+> JH8100 watchdog reuses JH7110 register mapping.
 > 
 > Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
 > Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
 > ---
->  .../watchdog/starfive,jh7100-wdt.yaml         | 29 ++++++++++++++-----
->  1 file changed, 21 insertions(+), 8 deletions(-)
+>  drivers/watchdog/starfive-wdt.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml b/Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml
-> index 68f3f6fd08a6..eec182317219 100644
-> --- a/Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml
-> @@ -19,14 +19,12 @@ description:
->    isn't cleared, the watchdog will reset the system unless the watchdog
->    reset is disabled.
->  
-> -allOf:
-> -  - $ref: watchdog.yaml#
-> -
->  properties:
->    compatible:
->      enum:
->        - starfive,jh7100-wdt
->        - starfive,jh7110-wdt
-> +      - starfive,jh8100-wdt
->  
->    reg:
->      maxItems: 1
-> @@ -44,11 +42,6 @@ properties:
->        - const: apb
->        - const: core
->  
-> -  resets:
+> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
+> index 5f501b41faf9..31785bb373d5 100644
+> --- a/drivers/watchdog/starfive-wdt.c
+> +++ b/drivers/watchdog/starfive-wdt.c
+> @@ -581,6 +581,7 @@ static const struct dev_pm_ops starfive_wdt_pm_ops = {
+>  static const struct of_device_id starfive_wdt_match[] = {
+>  	{ .compatible = "starfive,jh7100-wdt", .data = &starfive_wdt_jh7100_variant },
+>  	{ .compatible = "starfive,jh7110-wdt", .data = &starfive_wdt_jh7110_variant },
+> +	{ .compatible = "starfive,jh8100-wdt", .data = &starfive_wdt_jh7110_variant },
 
-No, keep it here with min/maxItems.
-
-> -    items:
-> -      - description: APB reset
-> -      - description: Core reset
-> -
->  required:
->    - compatible
->    - reg
-> @@ -56,6 +49,26 @@ required:
->    - clock-names
->    - resets
->  
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - starfive,jh8100-wdt
-> +    then:
-> +      properties:
-> +        resets:
-> +          items:
-> +            - description: Watchdog reset
-
-Why is it called "Watchdog"? How is it different from "Core"?
+Device is compatible, so why not expressing it in the bindings and
+dropping this change?
 
 Best regards,
 Krzysztof
