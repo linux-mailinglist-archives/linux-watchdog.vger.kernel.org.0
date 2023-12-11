@@ -1,245 +1,193 @@
-Return-Path: <linux-watchdog+bounces-260-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-261-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 427CD80DE5D
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 23:38:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 170DA80DFC1
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Dec 2023 00:57:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F063428254C
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 22:38:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 335071C21676
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Dec 2023 23:57:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E4A155C10;
-	Mon, 11 Dec 2023 22:38:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5474256B80;
+	Mon, 11 Dec 2023 23:57:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pv2MtWby"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="PUT/0HrM"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11C3BE
-	for <linux-watchdog@vger.kernel.org>; Mon, 11 Dec 2023 14:38:23 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-35d67870032so32673545ab.2
-        for <linux-watchdog@vger.kernel.org>; Mon, 11 Dec 2023 14:38:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702334303; x=1702939103; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TY7M7VI0b23VfSNBUphc5DNOoLaA5qEDPHAJE+WTF1M=;
-        b=pv2MtWbyPmwV1gTpFCd3BOxDr5FX6pBQ68KiN4ObAOeXJUdwermojbFUDT4wpk6/58
-         u68G6XLXzAo5h9epk8xJ6IlYRJmWXXcKiBZzHBX6K8K7BmCDkCkXeFOpXZr6aG2XUP9z
-         f48+9JQFgkgIE9YTdNVasGJbwvGf38RW6BireHIJTz54cFoZ7GM/d//wJgEVxsnuudqJ
-         Mdfi9zfwGFmP0fcwCKCk6wsh+dLq8YggtZmmAqanMwA+ADdRWnbXJGoonqwDYzp14goU
-         PiV24JEADNlxVhce/i0yIj/1mGbw1YVgRGC9iBzTgD/rkLJig0yf3Z3bnYD/1QK9/7pH
-         BnxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702334303; x=1702939103;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TY7M7VI0b23VfSNBUphc5DNOoLaA5qEDPHAJE+WTF1M=;
-        b=RZt1qdcBFea2scJsP913KmsU34bBaF6E+3kdg1JKe7UwCKEaA2601yAcb91+F5VSTj
-         tP4ouEt9eLmuH/IDSQ1KzfM4gCBeuyl4+1PwuU3bbCr3siEJvDmDN8i+CmZno47veeNU
-         TECR5mYNWXFxz8sr1caYqGH3L5NEm/EF43NUpeeFIcF+93xaHFX6MI12X9KNAMLk+yWF
-         48VyEzCtWFFpV75e3OoMMIWlMrgcmJU/PYLpk0xebsutaCMYpcVCDYXjIwxRRenbiOEx
-         t1FJagR1D1C4FBjj+9ry3zKO2mDNzT00A6ZbJf0dJgtM1g9TByKi4kKUZQ2evyQ0HXKB
-         ngDg==
-X-Gm-Message-State: AOJu0YxsAKmDraKX4PM18o/IrcHU+iAI0ml8EAxXeTPmuQJIFN8LSU1I
-	ny3cB5Mex2YWGp8v4N6arC5fdvSM6/etTjKRg80bAQ==
-X-Google-Smtp-Source: AGHT+IF9eaWmvj4u/srhRRq9CTCdKPjk6WVZk/VKIy6O2tBvQMwItNxp5mzYuxsCWvi0j5RUPj7IVfObbPNVyCc5+Ho=
-X-Received: by 2002:a05:6e02:158b:b0:35d:59a2:2ce with SMTP id
- m11-20020a056e02158b00b0035d59a202cemr9749660ilu.110.1702334302756; Mon, 11
- Dec 2023 14:38:22 -0800 (PST)
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8439B;
+	Mon, 11 Dec 2023 15:57:17 -0800 (PST)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20231211235712epoutp02fc6492c306a0c87b00f73d2b96eaddb1~f7FS22I-N1560215602epoutp02X;
+	Mon, 11 Dec 2023 23:57:12 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20231211235712epoutp02fc6492c306a0c87b00f73d2b96eaddb1~f7FS22I-N1560215602epoutp02X
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1702339032;
+	bh=bBw6NK33ONaSuHSNqwie2fG1DfnIrR8z9bBcfqRccco=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=PUT/0HrMIoBxCMk8iXdgFD0X2Sg28os0ByEf6vCuabil4sWM0oFEYVseZv4lSYqGa
+	 LsccOknD0Dn8ODSwTq9QpwtT39Vp0wonnBzyqeETRPkUJk0S10LW+thNOiM5+ibXmp
+	 AU+1O/H/t6/tRSNZdApzyfnLCAzYAFg6AXeuaPOU=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+	20231211235712epcas1p39dede76e04ae14189f0260fca7d7d07a~f7FSfcmRd2517825178epcas1p3Y;
+	Mon, 11 Dec 2023 23:57:12 +0000 (GMT)
+Received: from epsmgec1p1-new.samsung.com (unknown [182.195.36.144]) by
+	epsnrtp2.localdomain (Postfix) with ESMTP id 4SpzF30zJRz4x9Q1; Mon, 11 Dec
+	2023 23:57:11 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+	epsmgec1p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	40.C5.19104.6D1A7756; Tue, 12 Dec 2023 08:57:11 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+	20231211235710epcas1p314c62a7abccf937bd63907c3c8166efc~f7FQ4CCEp2515825158epcas1p3o;
+	Mon, 11 Dec 2023 23:57:10 +0000 (GMT)
+Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20231211235710epsmtrp27050d1763a3b4c4daa8ddc76689a55d1~f7FQ2wCih2834428344epsmtrp2m;
+	Mon, 11 Dec 2023 23:57:10 +0000 (GMT)
+X-AuditID: b6c32a4c-80dff70000004aa0-47-6577a1d65ccb
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	5D.68.07368.6D1A7756; Tue, 12 Dec 2023 08:57:10 +0900 (KST)
+Received: from cw00choi03 (unknown [10.113.111.106]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20231211235710epsmtip18f3770cc7713786a97d3d0f4185e114d~f7FQUXaxH1746317463epsmtip1G;
+	Mon, 11 Dec 2023 23:57:10 +0000 (GMT)
+From: "Chanwoo Choi" <cw00.choi@samsung.com>
+To: "'Peter Griffin'" <peter.griffin@linaro.org>, <robh+dt@kernel.org>,
+	<krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+	<conor+dt@kernel.org>, <sboyd@kernel.org>, <tomasz.figa@gmail.com>,
+	<s.nawrocki@samsung.com>, <linus.walleij@linaro.org>,
+	<wim@linux-watchdog.org>, <linux@roeck-us.net>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <arnd@arndb.de>, <olof@lixom.net>,
+	<gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+	<alim.akhtar@samsung.com>
+Cc: <tudor.ambarus@linaro.org>, <andre.draszik@linaro.org>,
+	<semen.protsenko@linaro.org>, <saravanak@google.com>,
+	<willmcvicker@google.com>, <soc@kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-samsung-soc@vger.kernel.org>,
+	<linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+	<linux-watchdog@vger.kernel.org>, <kernel-team@android.com>,
+	<linux-serial@vger.kernel.org>
+In-Reply-To: <20231211162331.435900-7-peter.griffin@linaro.org>
+Subject: RE: [PATCH v7 06/16] dt-bindings: clock: google,gs101: fix
+ incorrect numbering and DGB suffix
+Date: Tue, 12 Dec 2023 08:57:09 +0900
+Message-ID: <0ecc01da2c8d$c129e490$437dadb0$@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231211162331.435900-1-peter.griffin@linaro.org> <20231211162331.435900-7-peter.griffin@linaro.org>
-In-Reply-To: <20231211162331.435900-7-peter.griffin@linaro.org>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Mon, 11 Dec 2023 16:38:11 -0600
-Message-ID: <CAPLW+4=ZCyyQpzt-QRVeLeORdir99e311WxoY+q1DP9GzU7s4A@mail.gmail.com>
-Subject: Re: [PATCH v7 06/16] dt-bindings: clock: google,gs101: fix incorrect
- numbering and DGB suffix
-To: Peter Griffin <peter.griffin@linaro.org>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org, 
-	tomasz.figa@gmail.com, s.nawrocki@samsung.com, linus.walleij@linaro.org, 
-	wim@linux-watchdog.org, linux@roeck-us.net, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org, 
-	jirislaby@kernel.org, cw00.choi@samsung.com, alim.akhtar@samsung.com, 
-	tudor.ambarus@linaro.org, andre.draszik@linaro.org, saravanak@google.com, 
-	willmcvicker@google.com, soc@kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, kernel-team@android.com, 
-	linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: ko
+Thread-Index: AQEeDlMUs+qnFg95EVUf+Z9FZqMuEwIO8XO4Aj/o0Sqx+ofWIA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xbVRz29La3hQ28KzWcIWFdjS5DCxQoHshw6hi5GZiQoeCMDhq4UkJp
+	mz4ANWbEPRgPCRsQoZPBwkTA8n6/xiiMDUTcskFR2AYWB4xZBIIbg4Itlyn/fb/vfN/vdfLj
+	YNwbbBdOvFxDqeQSmQC3Zzb3HvQUGq8kU163lxlo8nIzjhofNzCR5WI/Gy2UZQGk7xpmoOK+
+	YRY6XVqDI3ORK2pt4aHs2SkM5a3/yED1plEWWsx6wEINxesAFfx6jYGGSr9lo7Hqa2w0fWWI
+	ge4MHkWDxmUc1RZsMNHZrj426n2SxkIZBguONkbrmGgm2+oyGddxVNluTbL0+0l0ZkKMKpc2
+	ATLNbWDv8snmjmYWqb+sB+Ta84uAXBg7yybbdPfZZEm9lqyvTMfJidFOnKzQ61lkd5GeTTZc
+	PUXeu/UNi2x7msomsxsrAblc7xb28icJh6SUJJZS8Sl5jCI2Xh4XKAgJjzoSJfbzEglF/uht
+	AV8uSaQCBUGhYcLgeJl1XQJ+kkSmtVJhErVa4PnOIZVCq6H4UoVaEyiglLEypVjpoZYkqrXy
+	OA85pQkQeXl5i63C6ARpz4MLbGWjY4pxKikVtOzOAHYcSPjCkqYWdgaw53CJTgCLxywYHSwB
+	2HKpA6eDfwCs7s/DXliKh0oB/dAF4FrrPJMO5gBMvTppVXE4OPEWLHn2kc3AIyYx2JVnZ9Ng
+	hB6Dq5sTW5nsiMNwrCuVacNOhBROmsu3eCbxOlzMKcJt2IHwh+3V/Swa74EDhdNbeozYB1v+
+	+n67Iz5c/bOMRfM8eCn9HEYXfh8+HC1g2ApDIt8ejlWtsGlDELQsDbNo7AQf32zc5l3gsrkL
+	pw25AN6Zn8fooAbAuooz2+V8YPcPuQzbmBhxENa0e9L0fti2VgToLhyheSWLZZNAwgGeP8el
+	Ja/Bu5P3GTTeC0vT0vEcINDtmE23Yzbdjnl0/xcrAcxK4EIp1YlxVIxIKRLKqeT/vjxGkVgP
+	tu7JPbQVPK2xeBgAgwMMAHIwAc/BtU9NcR1iJV98SakUUSqtjFIbgNi68QuYyysxCutByjVR
+	Il9/L18/bx9fJPITCZwdhu4lUVwiTqKhEihKSale+BgcO5dURuG4wJkbohAmGTLtlPExCTdK
+	onXy/bzdAcnhP9UYuj/46jtqc5yXfCsenxl42EQWvKk9/+y97LvtsRXD3ZbstM58t2nxqONh
+	QwrgJ7XxnGqdgqOTmv7+xXRkSusXODcyN1Pce6D1WM5vhaFCc6QUKBJz43qYox+fqLPfNC3l
+	D2QOwD1uE4O1DQufPRefTnX8XK3K7vMZ3+e0Ykkxyma/No9M1UasRxuH+t0OSL0fhWTCXe03
+	J6TOp9449vPxhiBRd3mhMau36mREMOuEynfcHPfk9qOEYPdF18Jd4WXXj2dwZ6tGcvcarq+W
+	j3/4amT9HwUdJpfIgD5PYYRF1hP2KfMlAVMtlYjcMZVa8i8FxU6q2AQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sb0xTVxyGc+6/XpqBl9K5U8YY62JG3FYpzu3MGCUsS26yxJHhPogZ2MC1
+	GKCQVtAuY1QcVYsQhhspZVgMiuFSRUoH0lL+tEwRkdmGFMKUaQpBHOgEE8RBGaVZxrf3PL/f
+	+5zz4dC4qJmMpo+qjnFqlSJXSgmJDrc09kPfxeNcwuy4BD280EEh25N2Aq1W3xSgZ03nALI4
+	RzBkHhgh0anGVgo9rY9BNzrFqPLxIxz9tHIFQ1a/j0TPz02SqN28ApDx9x4MDTdWCND4tR4B
+	mro4jCHP0OdoaGyRQteNAQKVOQcEyD13mkQG1yqFAr42As1Urrf8YysU4u3rkoWJdPTD/V2I
+	X1gDyD8bwJPi2A5HB8laLlgA+8+rasA+Gy8TsF2mBwK2wVrIWvmzFHvf102xzRYLyfbWWwRs
+	+6USdnSwlGS7lnQCttLGA3bRGpuyJU24J4vLPVrEqXfsPSzM7p/8UVBgizgx9qhIBzpfM4Aw
+	GjIfQfNwIzAAIS1iHAB6WhxkaCCBNZ7fcAOg13MUdLs1oZ0ZAO/8VY4FOcV8ABtefh3kYuYF
+	Dvkzy1jwgDN2HI7o9GSo4QbQ52+hgtYwZh8cd+qIYI5ijkBvTQ0WzASzDT6vqt/YCWc+hfZr
+	N8lQjoS3a6eI4G04I4P6NhDEOPM27Jz/BQ89NA4uTzeRIS6GdWf1G1zMJMM/fUasCkSZNplM
+	/5tMm0ymTe0GQPBAwhVo8pR5mfICuYo7LtMo8jSFKqUsMz/PCjZ+0/b4G2DSHJC5AEYDF4A0
+	LhWHxwxoOFF4lkL7LafOz1AX5nIaF3iTJqRvhMuNdVkiRqk4xuVwXAGn/m+K0WHROux7+9Wr
+	ezOe1qWW7dvzyiZL8bRsPZDaVjrnuuXw9CrfT5p8oD15K/HQnb4rVF1i9VfqmlHzZ+9VvEVL
+	17zf/IFNxyfm/GxIbb1X+mVgd0l/SqSxb3m6L3lL8b14yimUL+3cKuku1zmaGXPsdxMv/Ky+
+	9YTXe+A6//iTXQ8zLqkjlxUV8w5YX2zvGZpaLUy//W5CX/7r/KxWX5Sf0G7PTIpbTFOF7b+c
+	TPe+FGqravX8RO1aSWzE0oDmi3Rbv69p4e6TrkGt/dcdimhMdNiLV6gaD/49f3Iu+4zNtDvt
+	/PlyOklSlHMk+uPLztMGZluxcnSn/FTbIB+xMH/3nZmY7pJqKaHJVsi342qN4l/cq8GFvAMA
+	AA==
+X-CMS-MailID: 20231211235710epcas1p314c62a7abccf937bd63907c3c8166efc
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20231211162506epcas1p290e6adbb82f27ebade65376f298f7fd3
+References: <20231211162331.435900-1-peter.griffin@linaro.org>
+	<CGME20231211162506epcas1p290e6adbb82f27ebade65376f298f7fd3@epcas1p2.samsung.com>
+	<20231211162331.435900-7-peter.griffin@linaro.org>
 
-On Mon, Dec 11, 2023 at 10:24=E2=80=AFAM Peter Griffin <peter.griffin@linar=
-o.org> wrote:
->
+
+
+> -----Original Message-----
+> From: Peter Griffin <peter.griffin@linaro.org>
+> Sent: Tuesday, December 12, 2023 1:23 AM
+> To: robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
+> mturquette@baylibre.com; conor+dt@kernel.org; sboyd@kernel.org;
+> tomasz.figa@gmail.com; s.nawrocki@samsung.com; linus.walleij@linaro.org;
+> wim@linux-watchdog.org; linux@roeck-us.net; catalin.marinas@arm.com;
+> will@kernel.org; arnd@arndb.de; olof@lixom.net;
+gregkh@linuxfoundation.org;
+> jirislaby@kernel.org; cw00.choi@samsung.com; alim.akhtar@samsung.com
+> Cc: peter.griffin@linaro.org; tudor.ambarus@linaro.org;
+> andre.draszik@linaro.org; semen.protsenko@linaro.org;
+saravanak@google.com;
+> willmcvicker@google.com; soc@kernel.org; devicetree@vger.kernel.org;
+linux-
+> arm-kernel@lists.infradead.org; linux-samsung-soc@vger.kernel.org; linux-
+> clk@vger.kernel.org; linux-gpio@vger.kernel.org; linux-
+> watchdog@vger.kernel.org; kernel-team@android.com; linux-
+> serial@vger.kernel.org
+> Subject: [PATCH v7 06/16] dt-bindings: clock: google,gs101: fix incorrect
+> numbering and DGB suffix
+> 
 > 166 was skipped by mistake and two clocks:
 > * CLK_MOUT_CMU_HSI0_USBDPDGB
 > * CLK_GOUT_HSI0_USBDPDGB
->
+> 
 > Have an incorrect DGB ending instead of DBG.
->
+> 
 > This is an ABI break, but as the patch was only applied yesterday this
-> header has never been in an actual release so it seems better to fix
-> this early than ignore it.
->
-> Fixes: 0a910f160638 ("dt-bindings: clock: Add Google gs101 clock manageme=
-nt unit bindings")
+header
+> has never been in an actual release so it seems better to fix this early
+than
+> ignore it.
+> 
+> Fixes: 0a910f160638 ("dt-bindings: clock: Add Google gs101 clock
+management
+> unit bindings")
 > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 > ---
-
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-
 >  include/dt-bindings/clock/google,gs101.h | 118 +++++++++++------------
 >  1 file changed, 59 insertions(+), 59 deletions(-)
->
-> diff --git a/include/dt-bindings/clock/google,gs101.h b/include/dt-bindin=
-gs/clock/google,gs101.h
-> index 5d2c2d907a7b..9761c0b24e66 100644
-> --- a/include/dt-bindings/clock/google,gs101.h
-> +++ b/include/dt-bindings/clock/google,gs101.h
-> @@ -59,7 +59,7 @@
->  #define CLK_MOUT_CMU_HSI0_BUS          45
->  #define CLK_MOUT_CMU_HSI0_DPGTC                46
->  #define CLK_MOUT_CMU_HSI0_USB31DRD     47
-> -#define CLK_MOUT_CMU_HSI0_USBDPDGB     48
-> +#define CLK_MOUT_CMU_HSI0_USBDPDBG     48
->  #define CLK_MOUT_CMU_HSI1_BUS          49
->  #define CLK_MOUT_CMU_HSI1_PCIE         50
->  #define CLK_MOUT_CMU_HSI2_BUS          51
-> @@ -181,64 +181,64 @@
->  #define CLK_GOUT_BUS2_BUS              163
->  #define CLK_GOUT_CIS_CLK0              164
->  #define CLK_GOUT_CIS_CLK1              165
-> -#define CLK_GOUT_CIS_CLK2              167
-> -#define CLK_GOUT_CIS_CLK3              168
-> -#define CLK_GOUT_CIS_CLK4              169
-> -#define CLK_GOUT_CIS_CLK5              170
-> -#define CLK_GOUT_CIS_CLK6              171
-> -#define CLK_GOUT_CIS_CLK7              172
-> -#define CLK_GOUT_CMU_BOOST             173
-> -#define CLK_GOUT_CORE_BUS              174
-> -#define CLK_GOUT_CPUCL0_DBG            175
-> -#define CLK_GOUT_CPUCL0_SWITCH         176
-> -#define CLK_GOUT_CPUCL1_SWITCH         177
-> -#define CLK_GOUT_CPUCL2_SWITCH         178
-> -#define CLK_GOUT_CSIS_BUS              179
-> -#define CLK_GOUT_DISP_BUS              180
-> -#define CLK_GOUT_DNS_BUS               181
-> -#define CLK_GOUT_DPU_BUS               182
-> -#define CLK_GOUT_EH_BUS                        183
-> -#define CLK_GOUT_G2D_G2D               184
-> -#define CLK_GOUT_G2D_MSCL              185
-> -#define CLK_GOUT_G3AA_G3AA             186
-> -#define CLK_GOUT_G3D_BUSD              187
-> -#define CLK_GOUT_G3D_GLB               188
-> -#define CLK_GOUT_G3D_SWITCH            189
-> -#define CLK_GOUT_GDC_GDC0              190
-> -#define CLK_GOUT_GDC_GDC1              191
-> -#define CLK_GOUT_GDC_SCSC              192
-> -#define CLK_GOUT_CMU_HPM               193
-> -#define CLK_GOUT_HSI0_BUS              194
-> -#define CLK_GOUT_HSI0_DPGTC            195
-> -#define CLK_GOUT_HSI0_USB31DRD         196
-> -#define CLK_GOUT_HSI0_USBDPDGB         197
-> -#define CLK_GOUT_HSI1_BUS              198
-> -#define CLK_GOUT_HSI1_PCIE             199
-> -#define CLK_GOUT_HSI2_BUS              200
-> -#define CLK_GOUT_HSI2_MMC_CARD         201
-> -#define CLK_GOUT_HSI2_PCIE             202
-> -#define CLK_GOUT_HSI2_UFS_EMBD         203
-> -#define CLK_GOUT_IPP_BUS               204
-> -#define CLK_GOUT_ITP_BUS               205
-> -#define CLK_GOUT_MCSC_ITSC             206
-> -#define CLK_GOUT_MCSC_MCSC             207
-> -#define CLK_GOUT_MFC_MFC               208
-> -#define CLK_GOUT_MIF_BUSP              209
-> -#define CLK_GOUT_MISC_BUS              210
-> -#define CLK_GOUT_MISC_SSS              211
-> -#define CLK_GOUT_PDP_BUS               212
-> -#define CLK_GOUT_PDP_VRA               213
-> -#define CLK_GOUT_G3AA                  214
-> -#define CLK_GOUT_PERIC0_BUS            215
-> -#define CLK_GOUT_PERIC0_IP             216
-> -#define CLK_GOUT_PERIC1_BUS            217
-> -#define CLK_GOUT_PERIC1_IP             218
-> -#define CLK_GOUT_TNR_BUS               219
-> -#define CLK_GOUT_TOP_CMUREF            220
-> -#define CLK_GOUT_TPU_BUS               221
-> -#define CLK_GOUT_TPU_TPU               222
-> -#define CLK_GOUT_TPU_TPUCTL            223
-> -#define CLK_GOUT_TPU_UART              224
-> +#define CLK_GOUT_CIS_CLK2              166
-> +#define CLK_GOUT_CIS_CLK3              167
-> +#define CLK_GOUT_CIS_CLK4              168
-> +#define CLK_GOUT_CIS_CLK5              169
-> +#define CLK_GOUT_CIS_CLK6              170
-> +#define CLK_GOUT_CIS_CLK7              171
-> +#define CLK_GOUT_CMU_BOOST             172
-> +#define CLK_GOUT_CORE_BUS              173
-> +#define CLK_GOUT_CPUCL0_DBG            174
-> +#define CLK_GOUT_CPUCL0_SWITCH         175
-> +#define CLK_GOUT_CPUCL1_SWITCH         176
-> +#define CLK_GOUT_CPUCL2_SWITCH         177
-> +#define CLK_GOUT_CSIS_BUS              178
-> +#define CLK_GOUT_DISP_BUS              179
-> +#define CLK_GOUT_DNS_BUS               180
-> +#define CLK_GOUT_DPU_BUS               181
-> +#define CLK_GOUT_EH_BUS                        182
-> +#define CLK_GOUT_G2D_G2D               183
-> +#define CLK_GOUT_G2D_MSCL              184
-> +#define CLK_GOUT_G3AA_G3AA             185
-> +#define CLK_GOUT_G3D_BUSD              186
-> +#define CLK_GOUT_G3D_GLB               187
-> +#define CLK_GOUT_G3D_SWITCH            188
-> +#define CLK_GOUT_GDC_GDC0              189
-> +#define CLK_GOUT_GDC_GDC1              190
-> +#define CLK_GOUT_GDC_SCSC              191
-> +#define CLK_GOUT_CMU_HPM               192
-> +#define CLK_GOUT_HSI0_BUS              193
-> +#define CLK_GOUT_HSI0_DPGTC            194
-> +#define CLK_GOUT_HSI0_USB31DRD         195
-> +#define CLK_GOUT_HSI0_USBDPDBG         196
-> +#define CLK_GOUT_HSI1_BUS              197
-> +#define CLK_GOUT_HSI1_PCIE             198
-> +#define CLK_GOUT_HSI2_BUS              199
-> +#define CLK_GOUT_HSI2_MMC_CARD         200
-> +#define CLK_GOUT_HSI2_PCIE             201
-> +#define CLK_GOUT_HSI2_UFS_EMBD         202
-> +#define CLK_GOUT_IPP_BUS               203
-> +#define CLK_GOUT_ITP_BUS               204
-> +#define CLK_GOUT_MCSC_ITSC             205
-> +#define CLK_GOUT_MCSC_MCSC             206
-> +#define CLK_GOUT_MFC_MFC               207
-> +#define CLK_GOUT_MIF_BUSP              208
-> +#define CLK_GOUT_MISC_BUS              209
-> +#define CLK_GOUT_MISC_SSS              210
-> +#define CLK_GOUT_PDP_BUS               211
-> +#define CLK_GOUT_PDP_VRA               212
-> +#define CLK_GOUT_G3AA                  213
-> +#define CLK_GOUT_PERIC0_BUS            214
-> +#define CLK_GOUT_PERIC0_IP             215
-> +#define CLK_GOUT_PERIC1_BUS            216
-> +#define CLK_GOUT_PERIC1_IP             217
-> +#define CLK_GOUT_TNR_BUS               218
-> +#define CLK_GOUT_TOP_CMUREF            219
-> +#define CLK_GOUT_TPU_BUS               220
-> +#define CLK_GOUT_TPU_TPU               221
-> +#define CLK_GOUT_TPU_TPUCTL            222
-> +#define CLK_GOUT_TPU_UART              223
->
->  /* CMU_APM */
->  #define CLK_MOUT_APM_FUNC                              1
-> --
-> 2.43.0.472.g3155946c3a-goog
->
+> 
+
+(snip)
+
+Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+
+Best Regards,
+Chanwoo Choi
+
+
 
