@@ -1,114 +1,148 @@
-Return-Path: <linux-watchdog+bounces-270-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-271-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A5EF80E5F3
-	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Dec 2023 09:23:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73BA680E8BB
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Dec 2023 11:10:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6E6C1C21204
-	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Dec 2023 08:23:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A55061C20B84
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Dec 2023 10:10:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77AAD4A9AE;
-	Tue, 12 Dec 2023 08:22:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F14A25A101;
+	Tue, 12 Dec 2023 10:10:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UMPBvyQJ"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="dYUjpGYn"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F422F24B5A
-	for <linux-watchdog@vger.kernel.org>; Tue, 12 Dec 2023 08:22:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D8611C2BCFE;
-	Tue, 12 Dec 2023 08:22:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702369325;
-	bh=cItpiaed6CHjtfWMX5r54YQgAsVa3z6RG4hF/yvQPYs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=UMPBvyQJMLhyJ8VHFt2ODzBzOUeWN3LbLMJQ5PYgP7IndVopraetGRXGBuvwJCtOd
-	 AzguAXyxh24HOc0uZcPmuSYRATDF+6xHUkkn/VQ2B2YKOrC8M2Ufc4gCsretPrROoU
-	 aYFAXNXKfgUnifT7rFMfdWxfhHFddS3r/j4Fmppo2YojT3II6mbOK/oW088kgJuUo1
-	 lXczGdCecwoxNsX+9l1DXaQATtSRLHGUb/LIk2yi+JCeRQNTpitclk7FJEpElajHr9
-	 1QpSs8SzgUWtjx0LxZ74iBQzvQNE+WVwQLNefHA8evM+i202HsI1x9UcJKu8fB8wY/
-	 Pde8Dfn1bD9wg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C83B8C4167D;
-	Tue, 12 Dec 2023 08:22:05 +0000 (UTC)
-From:
- Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date: Tue, 12 Dec 2023 11:20:43 +0300
-Subject: [PATCH v6 26/40] wdt: ts72xx: add DT support for ts72xx
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBC5AC;
+	Tue, 12 Dec 2023 02:09:45 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3BCA9MtG032172;
+	Tue, 12 Dec 2023 04:09:22 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1702375762;
+	bh=3E28BIhAcMlfJBxKwzHjZKYVki+pv/1ePwSlsPJFXqA=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=dYUjpGYnCWMwtwO2vXRWaabk7M3/0Mx1dRZiDbmHNZyxS5c4hPIoF/O9yFc7BD6D9
+	 6Lv6h4kO2b2z0uAudu6ulU9ASp9Rbmy+p9q9/s+uWuaqpOW2wKG5Imvjixwkp8peAt
+	 zrshnmQ1vldj1rY8zNlfmbZwFnY6c/oQQ5FBkHWg=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3BCA9MdL127284
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 12 Dec 2023 04:09:22 -0600
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 12
+ Dec 2023 04:09:22 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 12 Dec 2023 04:09:22 -0600
+Received: from localhost (uda0497581.dhcp.ti.com [10.24.69.44])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3BCA9Lvx017052;
+	Tue, 12 Dec 2023 04:09:22 -0600
+Date: Tue, 12 Dec 2023 15:39:20 +0530
+From: Manorit Chawdhry <m-chawdhry@ti.com>
+To: Vignesh Raghavendra <vigneshr@ti.com>
+CC: Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck
+	<linux@roeck-us.net>, Tero Kristo <kristo@kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <afd@ti.com>
+Subject: Re: [PATCH v2] watchdog: rti_wdt: Drop RPM count when unused
+Message-ID: <20231212100920.wq26mylvn5qsms6w@uda0497581>
+References: <20231122041642.2015936-1-vigneshr@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231212-ep93xx-v6-26-c307b8ac9aa8@maquefel.me>
-References: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
-In-Reply-To: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Guenter Roeck <linux@roeck-us.net>
-Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Arnd Bergmann <arnd@arndb.de>
-X-Mailer: b4 0.13-dev-e3e53
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1702369322; l=1074;
- i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=qivA2YWGEli1TcieCOkZGWqUUq9ysPIVFCcdW9sMfp0=; =?utf-8?q?b=3DjR55+J56hZUC?=
- =?utf-8?q?HKMvY9Ahz66ui8eybOOk1MHTfYP17Klr7SImmZh8dlTG49XjO0eEc2gI5Hw6X5qJ?=
- xUkVnzi8DrouzAO5Pw/VmvBGblqaT+QPHuCQS9ytpXc4q8Zgnio9
-X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
- pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
-X-Endpoint-Received:
- by B4 Relay for nikita.shubin@maquefel.me/20230718 with auth_id=65
-X-Original-From: Nikita Shubin <nikita.shubin@maquefel.me>
-Reply-To: <nikita.shubin@maquefel.me>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20231122041642.2015936-1-vigneshr@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-From: Nikita Shubin <nikita.shubin@maquefel.me>
+Hi Vignesh,
 
-Add OF ID match table.
+On 09:46-20231122, Vignesh Raghavendra wrote:
+> Do a RPM put if watchdog is not already started during probe and re
+> enable it in watchdog start.
+> 
+> On K3 SoCs, watchdogs and their corresponding CPUs are under same PD, so
+> if the reference count of unused watchdogs aren't dropped, it will lead
+> to CPU hotplug failures as Device Management firmware won't allow to
+> turn off the PD due to dangling reference count.
+> 
+> Fixes: 2d63908bdbfb ("watchdog: Add K3 RTI watchdog support")
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+> ---
+> 
+> v2:
+> * Drop 1/2 (will be posted along with runtime_pm callbacks)
+> * Use pm_runtime_resume_and_get() instead of pm_runtime_get_sync() which
+>  takes care of err handling
+> 
+> v1: lore.kernel.org/r/20231110100726.2930218-1-vigneshr@ti.com
+> 
+>  drivers/watchdog/rti_wdt.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+> index 8e1be7ba0103..9215793a1c81 100644
+> --- a/drivers/watchdog/rti_wdt.c
+> +++ b/drivers/watchdog/rti_wdt.c
+> @@ -77,6 +77,11 @@ static int rti_wdt_start(struct watchdog_device *wdd)
+>  {
+>  	u32 timer_margin;
+>  	struct rti_wdt_device *wdt = watchdog_get_drvdata(wdd);
+> +	int ret;
+> +
+> +	ret = pm_runtime_resume_and_get(wdd->parent);
+> +	if (ret)
+> +		return ret;
+>  
+>  	/* set timeout period */
+>  	timer_margin = (u64)wdd->timeout * wdt->freq;
+> @@ -343,6 +348,9 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>  	if (last_ping)
+>  		watchdog_set_last_hw_keepalive(wdd, last_ping);
+>  
+> +	if (!watchdog_hw_running(wdd))
+> +		pm_runtime_put_sync(&pdev->dev);
+> +
+>  	return 0;
+>  
+>  err_iomap:
+> @@ -357,7 +365,10 @@ static void rti_wdt_remove(struct platform_device *pdev)
+>  	struct rti_wdt_device *wdt = platform_get_drvdata(pdev);
+>  
+>  	watchdog_unregister_device(&wdt->wdd);
+> -	pm_runtime_put(&pdev->dev);
+> +
+> +	if (!pm_runtime_suspended(&pdev->dev))
+> +		pm_runtime_put(&pdev->dev);
+> +
+>  	pm_runtime_disable(&pdev->dev);
+>  }
+>  
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
----
- drivers/watchdog/ts72xx_wdt.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Tested the following on j721s2 evm.
+https://gist.github.com/manorit2001/05a85582fea670d39cc3cfb2df1e5328
 
-diff --git a/drivers/watchdog/ts72xx_wdt.c b/drivers/watchdog/ts72xx_wdt.c
-index 3d57670befe1..ac709dc31a65 100644
---- a/drivers/watchdog/ts72xx_wdt.c
-+++ b/drivers/watchdog/ts72xx_wdt.c
-@@ -12,6 +12,7 @@
-  */
- 
- #include <linux/platform_device.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/watchdog.h>
- #include <linux/io.h>
-@@ -160,10 +161,17 @@ static int ts72xx_wdt_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct of_device_id ts72xx_wdt_of_ids[] = {
-+	{ .compatible = "technologic,ts7200-wdt" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ts72xx_wdt_of_ids);
-+
- static struct platform_driver ts72xx_wdt_driver = {
- 	.probe		= ts72xx_wdt_probe,
- 	.driver		= {
- 		.name	= "ts72xx-wdt",
-+		.of_match_table = ts72xx_wdt_of_ids,
- 	},
- };
- 
+Tested-by: Manorit Chawdhry <m-chawdhry@ti.com>
 
--- 
-2.41.0
+Regards,
+Manorit
 
+> -- 
+> 2.42.0
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
