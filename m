@@ -1,127 +1,116 @@
-Return-Path: <linux-watchdog+bounces-276-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-277-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5936080F382
-	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Dec 2023 17:48:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F59980F3AB
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Dec 2023 17:54:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 848FC1C20CFB
-	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Dec 2023 16:48:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF1A8281B63
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Dec 2023 16:54:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE61D7A235;
-	Tue, 12 Dec 2023 16:48:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA97E7A23B;
+	Tue, 12 Dec 2023 16:54:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eFYe3wPM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WaewN0hw"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5A47A234;
-	Tue, 12 Dec 2023 16:48:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A676C433C7;
-	Tue, 12 Dec 2023 16:48:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702399684;
-	bh=aNHGA0+OP2YXIV3jh4hVPbn2PRXP966VFGwAlUTm6OE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eFYe3wPMn3Lg3ndIIfcU5/QNd4Hro7G6QeuPLJluyf9mGilUtpinEgnsnB+fDHv+D
-	 7l/2bca7V3e5KvIzg/hfVHk4ZSqfZDNDnzEgF0BV6B3DdcYxGNXRL/CPyQtuNsJddh
-	 MzflMEUzxV1Hjt+tk6kWy4IoUjd+3xgAw3/mAtA5YasDuIIQmi77Vaho3sgMTkKyjL
-	 4Qh97xnK4IZH/FOZVFrwn4RClguppq0gSuG0kXGhcs/yzsNahmIM9tHOon1OJc6nbu
-	 MA7ep0eoK2Vz25gl0AQNtSgye3/5yRtw8vlwpzIGxAnCx61hHaVUF/92fjbLPQuWeD
-	 K+wAFGSyStZLA==
-Date: Tue, 12 Dec 2023 16:47:59 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
-Cc: Xingyu Wu <xingyu.wu@starfivetech.com>,
-	Samin Guo <samin.guo@starfivetech.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3AA95;
+	Tue, 12 Dec 2023 08:54:49 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id 5614622812f47-3ba10647a19so1473441b6e.3;
+        Tue, 12 Dec 2023 08:54:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702400088; x=1703004888; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GZ+S0orBz6C1ng5onoO/NzTMLdkN0FeeuOcfpzewD3s=;
+        b=WaewN0hwLeWTTwkFfzwHkDGymCE7FrqMoqsQ5pLQya6IJJYJ6PWJj+9MgurHpC43US
+         mKtoHo5lAPXhwbJ+qOnSe50usi5364iQFOmVwdCbVwiT9spo3CZgfBZAvjQDUSgcIs57
+         TcJNrGA9PUlSxtb/YVNovsRrDEM9TSaT9TUZc7ufpZNhOn+VesbPJEzhfhdOzBLe+Tup
+         OyxmMxvCF/lSbC6XNucEfb9uWZt09aP1gaegA7DVMk4iWBcjFCNah1omVk/b6w/NFD9C
+         PuIYpstPIRuQygmM3gBCg5H+WGUTjCX1mkIinDOLcxehsZImuPEIfEdFOQPoF/c2/wzj
+         WHLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702400088; x=1703004888;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GZ+S0orBz6C1ng5onoO/NzTMLdkN0FeeuOcfpzewD3s=;
+        b=gdkD7LXZmmFNUmfpkUyGmEoApMJ8n2TZ5eOaCJb6pDY1c78QMhmXwuccUHiteSnMIF
+         xWE97PtfY2X0rXOftCvur6LWLPJMAIRBqi5nvyZ9eYFEqPch20ZyCdfSScvizipW4kfV
+         ePeNYG3wc/XwJuoGm38aFJDByk0XFWPBnZXMMhI9+UCdHLVeXGABVt0H6Oqp3GzHnpYu
+         rihagKeU/UGBN9iR8sk+llSh7Ni6VYF3cXakqG5bAsdlUyYtVBF7APc5T2WzFdNzem/D
+         Erx6HnpaDhRYVbGdi+d+fU1z2CRENxXaVqzOLcC68nPFhwEZzXV6bnHRj+riyWnNvA/f
+         UkZA==
+X-Gm-Message-State: AOJu0Yw7biIFJ7GA8RC5kPE0ZHHUJ9yCSJ5Kq+otRrE7xaCcxidkyxm/
+	d4bhKnDqq0N5LU93wuYI5Mw=
+X-Google-Smtp-Source: AGHT+IGJ2u/eLfuLHjm7rOZQXRm7UyYQB4WC6Nc4Q5fBFWnt8iBIvRvKdqdc9NEQZrDNte02vEFkRA==
+X-Received: by 2002:a05:6870:d18c:b0:1fb:75a:de85 with SMTP id a12-20020a056870d18c00b001fb075ade85mr7948203oac.115.1702400088572;
+        Tue, 12 Dec 2023 08:54:48 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id lu10-20020a056871314a00b001fb08477cf3sm3259833oac.47.2023.12.12.08.54.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Dec 2023 08:54:47 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 12 Dec 2023 08:54:45 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Ben Dooks <ben.dooks@codethink.co.uk>
+Cc: linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+	samin.guo@starfivetech.com, xingyu.wu@starfivetech.com,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] dt-bindings: watchdog: starfive,jh7100-wdt: Add
- compatible for JH8100
-Message-ID: <20231212-shout-bazooka-714aeda42ec1@spud>
-References: <20231212031731.2498584-1-jisheng.teoh@starfivetech.com>
- <20231212031731.2498584-2-jisheng.teoh@starfivetech.com>
- <20231212-reverb-daisy-4574734ae84f@spud>
+Subject: Re: [PATCH] watchdog: starfive: add lock annotations to fix context
+ imbalances
+Message-ID: <794a9aa8-b948-4479-98fd-4417c0f08965@roeck-us.net>
+References: <20231122085118.177589-1-ben.dooks@codethink.co.uk>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="lo0V+T4OZHJunVRD"
-Content-Disposition: inline
-In-Reply-To: <20231212-reverb-daisy-4574734ae84f@spud>
-
-
---lo0V+T4OZHJunVRD
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20231122085118.177589-1-ben.dooks@codethink.co.uk>
 
-On Tue, Dec 12, 2023 at 04:46:00PM +0000, Conor Dooley wrote:
-> On Tue, Dec 12, 2023 at 11:17:31AM +0800, Ji Sheng Teoh wrote:
-> > Add "starfive,jh8100-wdt" compatible string for StarFive's JH8100
-> > watchdog.
-> > Since JH8100 watchdog only has 1 reset signal, update binding
-> > document to support one reset for "starfive,jh8100-wdt" compatible.
-> >=20
-> > Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-> > Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
-> > ---
-> >  .../devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml       | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/watchdog/starfive,jh7100=
--wdt.yaml b/Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.=
-yaml
-> > index 68f3f6fd08a6..02572b16ac08 100644
-> > --- a/Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.ya=
-ml
-> > +++ b/Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.ya=
-ml
-> > @@ -27,6 +27,7 @@ properties:
-> >      enum:
-> >        - starfive,jh7100-wdt
-> >        - starfive,jh7110-wdt
-> > +      - starfive,jh8100-wdt
-> > =20
-> >    reg:
-> >      maxItems: 1
-> > @@ -45,6 +46,7 @@ properties:
-> >        - const: core
-> > =20
-> >    resets:
-> > +    minItems: 1
-> >      items:
-> >        - description: APB reset
-> >        - description: Core reset
->=20
-> This relaxes the constraints for the existing devices, please add per
-> compatible constraints to avoid doing so.
+On Wed, Nov 22, 2023 at 08:51:18AM +0000, Ben Dooks wrote:
+> Add the necessary __acquires() and __releases() to the functions
+> that take and release the wdt lock to avoid the following sparse
+> warnings:
+> 
+> drivers/watchdog/starfive-wdt.c:204:13: warning: context imbalance in 'starfive_wdt_unlock' - wrong count at exit
+> drivers/watchdog/starfive-wdt.c:212:9: warning: context imbalance in 'starfive_wdt_lock' - unexpected unlock
+> 
+> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
 
-Also, you do not appear to have implemented the request from Krzysztof
-to express compatibility with the jh7110.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
---lo0V+T4OZHJunVRD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZXiOvwAKCRB4tDGHoIJi
-0herAQCODs736+Qe5j/hkbfNeI7xdVcGRKkurOrjX+4lQhNvpAEA6MN/UHKEuQ7A
-3lki7S8WsCrF5mWZkZpNa9mg7laccgM=
-=4sul
------END PGP SIGNATURE-----
-
---lo0V+T4OZHJunVRD--
+> ---
+>  drivers/watchdog/starfive-wdt.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
+> index 5f501b41faf9..49b38ecc092d 100644
+> --- a/drivers/watchdog/starfive-wdt.c
+> +++ b/drivers/watchdog/starfive-wdt.c
+> @@ -202,12 +202,14 @@ static u32 starfive_wdt_ticks_to_sec(struct starfive_wdt *wdt, u32 ticks)
+>  
+>  /* Write unlock-key to unlock. Write other value to lock. */
+>  static void starfive_wdt_unlock(struct starfive_wdt *wdt)
+> +	__acquires(&wdt->lock)
+>  {
+>  	spin_lock(&wdt->lock);
+>  	writel(wdt->variant->unlock_key, wdt->base + wdt->variant->unlock);
+>  }
+>  
+>  static void starfive_wdt_lock(struct starfive_wdt *wdt)
+> +	__releases(&wdt->lock)
+>  {
+>  	writel(~wdt->variant->unlock_key, wdt->base + wdt->variant->unlock);
+>  	spin_unlock(&wdt->lock);
+> -- 
+> 2.37.2.352.g3c44437643
+> 
+> 
 
