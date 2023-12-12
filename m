@@ -1,62 +1,62 @@
-Return-Path: <linux-watchdog+bounces-273-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-274-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 062E680EF92
-	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Dec 2023 16:03:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49D9E80F0EB
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Dec 2023 16:30:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89CB81F21519
-	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Dec 2023 15:03:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 765291C20DBE
+	for <lists+linux-watchdog@lfdr.de>; Tue, 12 Dec 2023 15:30:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F0D3745D3;
-	Tue, 12 Dec 2023 15:03:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5686475424;
+	Tue, 12 Dec 2023 15:28:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ngs6za1A"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bdWOjDCb"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51256C3;
-	Tue, 12 Dec 2023 07:03:22 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-202ffc46e15so194373fac.1;
-        Tue, 12 Dec 2023 07:03:22 -0800 (PST)
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108231A3;
+	Tue, 12 Dec 2023 07:28:00 -0800 (PST)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1f5bd86ceb3so4226081fac.2;
+        Tue, 12 Dec 2023 07:28:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702393401; x=1702998201; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702394879; x=1702999679; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ju9rueF2PotEwm0eZg/Kqk1OqiLaL4rS3ekndb8uu94=;
-        b=ngs6za1AY0PLjNiMdQtnvCpCPHHfsYt4r2+3JKY/j4UV4+fLYEUb6tAuCiejOkB6eZ
-         krdJN7M3PQSb9txZngvjigXu0LofKI/PnE35moPdMjxcOkNauA13v309+O89E9XMWRZh
-         E36xxUIL1baOfDnrVmg17rmae4/kjpvLgQB3enBHoVuLzoHnLRV84oQhh1gAT5WGgmNw
-         JK8oki0PpNKX3bPatRQ3p1mEHAFk0He7O7CIV5Cx/+u3B5UXNvjiZ/58pJjeHEYC6aZ5
-         qoQii8yJxtffG5I12o2i/iDnfJzxyd4a8mzUB1NY7v8pzPLkHIarmi5kDUusrqzo/G2t
-         JFBw==
+        bh=6H53BKvDgIjuz9qtU0tZmiwuVpetLxgmBOBJ+s5ugaY=;
+        b=bdWOjDCbE58+pYUZktX7dDqLwZIjGE39pN03KoLqD2Wvk/RU31i0NghuOWo/yyrOVx
+         5YkOm8SR7RY0smEjP4sOdUTo/RW5ducLslHe+N5uLRZ1JwVXPonfSA2sLMrACfvDEr6l
+         lZ1RkNjNAyj3KzA8bUozgeJZrTAbAKELlzS5yJr7Je9TFIEu/P4/7cn6ncsZ5gZCdoPk
+         /TiTv6Od86Od/laPWYqIv9XGStAsMZpMhfIDDqGvbJBQgVb3Cdja22lJ/wqu+FxHcVIx
+         hfk0eaKcOD7b2Gf1Jnbe4sZ9LySxLlq7m+GhIiCIg30YiXz/tH7sL6lv0lyWArEaL4FA
+         k85g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702393401; x=1702998201;
+        d=1e100.net; s=20230601; t=1702394879; x=1702999679;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Ju9rueF2PotEwm0eZg/Kqk1OqiLaL4rS3ekndb8uu94=;
-        b=lQBboSNBzYge9p1T85qlU3XPA37N8YfDnsV4yyexs3Dp0dSlxlDVEy3CYAFBkAv3Hh
-         6ycgdPPC4F6dZzuW6Uh7s1Ngo/KANKvB65fJ7NtHwBE/PzpGpHyjrjsENN2dJrdqaeRn
-         xd41rjzMTGR06KNr2gwVE0ucGwqzprSdJIUzYXq6goRQUU8u1VEqVp84JsA7QKNdVh69
-         lespiFJEVB4TbZOowxT137vzwE3O/LBN2ZW9m3LTb88lSEY2wmBd4Ve9N3OmLHWkmM0H
-         YKsJ1bilwELoxF26eJ0+vlxJ425l/b4ZysQGQoSBODZxj06Fjv5Csa995RWTnbUM5Ex9
-         SwIQ==
-X-Gm-Message-State: AOJu0YzLhkG1NhctzfGv7Hj7USqLR2leV/ALk7J0ICkaCjAVY2WZgnMJ
-	achTOyLsSbfrKIIGjw3QIrY=
-X-Google-Smtp-Source: AGHT+IGBU7XwGj6P0fbCYb0qVKryFfY3CrAr4OK1gjc8uoZYIw5nGbV17mIDSz/aXA1ULJeKTfPErg==
-X-Received: by 2002:a05:6870:d208:b0:1ff:1cf1:766a with SMTP id g8-20020a056870d20800b001ff1cf1766amr4026151oac.114.1702393401494;
-        Tue, 12 Dec 2023 07:03:21 -0800 (PST)
+        bh=6H53BKvDgIjuz9qtU0tZmiwuVpetLxgmBOBJ+s5ugaY=;
+        b=kxaO5aRkuJgKO4IiWgE5nAXR33ONxjmF8jtgWFdbQxieaH9+NUwCOoEy48MzaowWWf
+         4sEuR/iMvWx/E3cz2C9xfaeow8SCZ9o/HmXTKT7L7xZjPG83BYyeqTwVRoflD42Z+5y4
+         jrfRF3I12fzdURtWC+qGyieZf5nZ8+qp//AS+7lmZuFPbbBmPEi7W+h4xI3/UIS8JZ/W
+         X2HApq7SDD+BvO26jhep32KpTvqGXUZwZxtUrhA11b1ipB/SUzD+OXVz1HmzuiwTY9nX
+         W8JcCWPRqQgESY+1qBrkbagQC9QdewduiKcBnRqeYvCrRnfPGmXbnY2A3mV6fsFRtVfU
+         tMwQ==
+X-Gm-Message-State: AOJu0YypLZfA1Fr9A0gOCSC2Lqoz+JWP+XytIJ2UGXseKn4l4dITQcnj
+	/3qf7QqrLlGFxrEoVqOaO7g=
+X-Google-Smtp-Source: AGHT+IFSsVgJcdQ7v48Xdi2beLRICJsp+br9GWoax5e4NyXXHPX2/6sYtxXMOlOQpQcWJa6Pg09HXA==
+X-Received: by 2002:a05:6870:b14a:b0:1fb:22f9:17ac with SMTP id a10-20020a056870b14a00b001fb22f917acmr6865996oal.8.1702394879336;
+        Tue, 12 Dec 2023 07:27:59 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id pb11-20020a0568701e8b00b001fad96b0264sm3207330oab.10.2023.12.12.07.03.19
+        by smtp.gmail.com with ESMTPSA id dy9-20020a056830210900b006d9fb0458cdsm46275otb.39.2023.12.12.07.27.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Dec 2023 07:03:20 -0800 (PST)
+        Tue, 12 Dec 2023 07:27:59 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6cf5c6fa-78ad-44ae-ba4b-064274e7f34a@roeck-us.net>
-Date: Tue, 12 Dec 2023 07:03:18 -0800
+Message-ID: <98c12c55-1f9f-4529-ae34-cb9f22471dbe@roeck-us.net>
+Date: Tue, 12 Dec 2023 07:27:57 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -64,17 +64,14 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 25/40] dt-bindings: wdt: Add ts72xx
+Subject: Re: [PATCH v2] watchdog: rti_wdt: Drop RPM count when unused
 Content-Language: en-US
-To: nikita.shubin@maquefel.me, Wim Van Sebroeck <wim@linux-watchdog.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
- <20231212-ep93xx-v6-25-c307b8ac9aa8@maquefel.me>
+To: Vignesh Raghavendra <vigneshr@ti.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Tero Kristo <kristo@kernel.org>, linux-watchdog@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ afd@ti.com
+References: <20231122041642.2015936-1-vigneshr@ti.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -119,18 +116,30 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231212-ep93xx-v6-25-c307b8ac9aa8@maquefel.me>
+In-Reply-To: <20231122041642.2015936-1-vigneshr@ti.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 12/12/23 00:20, Nikita Shubin via B4 Relay wrote:
-> From: Nikita Shubin <nikita.shubin@maquefel.me>
+On 11/21/23 20:16, Vignesh Raghavendra wrote:
+> Do a RPM put if watchdog is not already started during probe and re
+> enable it in watchdog start.
 > 
-> Add DT binding for Technologic Systems TS-72xx watchdog.
+> On K3 SoCs, watchdogs and their corresponding CPUs are under same PD, so
+> if the reference count of unused watchdogs aren't dropped, it will lead
+> to CPU hotplug failures as Device Management firmware won't allow to
+> turn off the PD due to dangling reference count.
 > 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> Fixes: 2d63908bdbfb ("watchdog: Add K3 RTI watchdog support")
+> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+
+I always find it amazing that people think everyone would understand the TLAs
+(three-letter-acronyms) they use. While those who don't might find it confusing
+why a watchdog driver would need or want to drop rotation-per-minute counts,
+and what that has to do with police departments, that isn't worth
+arguing about
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
 
 
