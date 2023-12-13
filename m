@@ -1,84 +1,105 @@
-Return-Path: <linux-watchdog+bounces-302-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-303-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A7378114A9
-	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Dec 2023 15:32:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D147E8114BC
+	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Dec 2023 15:35:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0D0A4B210E0
-	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Dec 2023 14:32:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB89D1C210CE
+	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Dec 2023 14:35:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5F142E832;
-	Wed, 13 Dec 2023 14:32:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DED02EAF0;
+	Wed, 13 Dec 2023 14:35:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sg+541+8"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33293CF;
-	Wed, 13 Dec 2023 06:32:46 -0800 (PST)
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-6d9fdbcec6eso3521982a34.1;
-        Wed, 13 Dec 2023 06:32:46 -0800 (PST)
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C692BF3
+	for <linux-watchdog@vger.kernel.org>; Wed, 13 Dec 2023 06:35:10 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id 6a1803df08f44-67ad531686eso62716876d6.1
+        for <linux-watchdog@vger.kernel.org>; Wed, 13 Dec 2023 06:35:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702478110; x=1703082910; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KTNi7dR+svtLHr9EuyRcDA6UpdWYvTWzjT4RYlMslAc=;
+        b=sg+541+8zoRqfCoVuuIghcwZCGZAVzR+QvKWoNdUAkV3UR3j2Htv6zggzTw/6BtkZV
+         D6Fz3VvD/wwNPs8TBpH4UCukTtp8g0V+kxNyWaZ79Al9+5szwuxdZsQ2dERr+l7SDXZE
+         umAoyKWkAsuGmNpP7TAGrY7Mqw8hA0XHJRdb7WCjHSbWHWXngUVl0e0N1kfx/u9Sdn6q
+         FL1bT5WFMUJwdjDYcC9+R3ao+LY6xUqMhLknyz9NUaRlNcXjfySly7DZZQRLKX5fCSUx
+         mPwGsVHwFbAFSpNx8m6LRYCXd0ZRQhCVsIMLeUbhfb6BQTtJWlluzRTGfcBllr1rCAv+
+         R+DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702477965; x=1703082765;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z0kWneZU0gge6lamU79WOa8q8MUgTJ3s6CXlsPKbl1w=;
-        b=FyNim23zynxG3N6xA4bc/o/jLotwbc7Hb+nLUZEEgJt+IbkMPm9pQWPzqlafCkPVn9
-         Pm+S8li22NhyDP06n6OUVS+eS+25+GI3gN1BYx63X+B9Kgdgmuab/LxU+fqdNOJ8XHMa
-         wqaf+XhiRMBis7F+Mh267RDXRzAFw+IFQPsSwfiKQFul2BmzwE7uAewTos4jlYQAzrn5
-         YE/AyhY2ov162yMnaWzEnjA5YECMWrdwfx4smiGXw6nu5fdq8HuGSMmUhDOiObJhDZlO
-         9sq8HTZ4ul9TVdm9gcdMIZEgTc6IbjbN+jKgYNvLsR2xnMMTshKmH6LzH8Z5diJgEZxm
-         OJpg==
-X-Gm-Message-State: AOJu0YzmpK+Q8wjv6QTmTUrUPt/AfCQkPuY/zNlYoVWYyljn09/s6hUI
-	hF52q0Uu1p3mo2F6yP3HN/nhDAn4MA==
-X-Google-Smtp-Source: AGHT+IFWkvHfseSXYTYT3uKdOPAB8K0URkVWZMX3xZ7xanO9ooySMDAjcPKjyJvnnmKaV3WR/fUj1g==
-X-Received: by 2002:a05:6830:1b64:b0:6d9:da9f:ab2f with SMTP id d4-20020a0568301b6400b006d9da9fab2fmr7327230ote.27.1702477965392;
-        Wed, 13 Dec 2023 06:32:45 -0800 (PST)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p26-20020a9d695a000000b006d85518ae62sm2776323oto.76.2023.12.13.06.32.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Dec 2023 06:32:44 -0800 (PST)
-Received: (nullmailer pid 1093516 invoked by uid 1000);
-	Wed, 13 Dec 2023 14:32:43 -0000
-Date: Wed, 13 Dec 2023 08:32:42 -0600
-From: Rob Herring <robh@kernel.org>
-To: Peter Griffin <peter.griffin@linaro.org>
-Cc: linux-samsung-soc@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com, s.nawrocki@samsung.com, willmcvicker@google.com, gregkh@linuxfoundation.org, linux@roeck-us.net, linux-arm-kernel@lists.infradead.org, kernel-team@android.com, olof@lixom.net, linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org, alim.akhtar@samsung.com, saravanak@google.com, will@kernel.org, cw00.choi@samsung.com, tudor.ambarus@linaro.org, linus.walleij@linaro.org, mturquette@baylibre.com, soc@kernel.org, conor+dt@kernel.org, wim@linux-watchdog.org, sboyd@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org, linux-serial@vger.kernel.org, tomasz.figa@gmail.com, linux-gpio@vger.kernel.org, jirislaby@kernel.org, semen.protsenko@linaro.org, krzysztof.kozlowski+dt@linaro.org, andre.draszik@linaro.org
-Subject: Re: [PATCH v7 02/16] dt-bindings: arm: google: Add bindings for
- Google ARM platforms
-Message-ID: <170247795662.1093374.11352509671907840697.robh@kernel.org>
-References: <20231211162331.435900-1-peter.griffin@linaro.org>
- <20231211162331.435900-3-peter.griffin@linaro.org>
+        d=1e100.net; s=20230601; t=1702478110; x=1703082910;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KTNi7dR+svtLHr9EuyRcDA6UpdWYvTWzjT4RYlMslAc=;
+        b=cKS7EawgO0+bGVLIa9vAV3nCDrWHdhVZXo7c/PSRJO1Ioxpjo+xLFfLsMMk5fxOcDG
+         wjPIfgIy7dApx1x+jpL/0JN6zQ2omuJoArmrtAotgfD+Cn8LIzDBLX+IUbD9oM7t5gfq
+         U8NyF1tD5iUCXqNei5NkiqiiALlyohEYUDc91W5NjIn6tWnO0BFrIJOhG2ZEH+CiWDm6
+         7ZXNJYav2nfY8dZUPZPn1QimGRFtbJI0fisyhsOLmufuDzjQm29GxPGGsSkPgR2aCaY1
+         skj3Rb8l2BQddUrn59q1+keICT/plM/Hk4Hfdv01F7qKlLok3XqDopUk6xTDO5VvZBBq
+         MhSQ==
+X-Gm-Message-State: AOJu0YyzD/6ieZzrr2lvs9upEegAhRqzw8RFsy46L+AQl4e4ht9eprvG
+	e6Sk+DGOe6ke+K4ASnpm5MLkTD8WmA2pWNBqxIpCkw==
+X-Google-Smtp-Source: AGHT+IH6ErSqj4HVtA2uJPaby1dJ9yyZlKr4jTaQrX7sGd+lhiiTWLXuE/j7czQuoLQh4Qis/8Wg8Qzn43NmjP/zrwU=
+X-Received: by 2002:a0c:f992:0:b0:67a:d9f5:19fc with SMTP id
+ t18-20020a0cf992000000b0067ad9f519fcmr11200900qvn.28.1702478109905; Wed, 13
+ Dec 2023 06:35:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231211162331.435900-3-peter.griffin@linaro.org>
+References: <20231211162331.435900-1-peter.griffin@linaro.org>
+ <20231211162331.435900-3-peter.griffin@linaro.org> <170247795662.1093374.11352509671907840697.robh@kernel.org>
+In-Reply-To: <170247795662.1093374.11352509671907840697.robh@kernel.org>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Wed, 13 Dec 2023 14:34:58 +0000
+Message-ID: <CADrjBPqqTtimdR_twqqvvzyMAZ=Z4YoVKm80LT_utqcO6LAgOA@mail.gmail.com>
+Subject: Re: [PATCH v7 02/16] dt-bindings: arm: google: Add bindings for
+ Google ARM platforms
+To: Rob Herring <robh@kernel.org>
+Cc: linux-samsung-soc@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com, 
+	s.nawrocki@samsung.com, willmcvicker@google.com, gregkh@linuxfoundation.org, 
+	linux@roeck-us.net, linux-arm-kernel@lists.infradead.org, 
+	kernel-team@android.com, olof@lixom.net, linux-watchdog@vger.kernel.org, 
+	linux-clk@vger.kernel.org, alim.akhtar@samsung.com, saravanak@google.com, 
+	will@kernel.org, cw00.choi@samsung.com, tudor.ambarus@linaro.org, 
+	linus.walleij@linaro.org, mturquette@baylibre.com, soc@kernel.org, 
+	conor+dt@kernel.org, wim@linux-watchdog.org, sboyd@kernel.org, 
+	robh+dt@kernel.org, devicetree@vger.kernel.org, linux-serial@vger.kernel.org, 
+	tomasz.figa@gmail.com, linux-gpio@vger.kernel.org, jirislaby@kernel.org, 
+	semen.protsenko@linaro.org, krzysztof.kozlowski+dt@linaro.org, 
+	andre.draszik@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 
+On Wed, 13 Dec 2023 at 14:32, Rob Herring <robh@kernel.org> wrote:
+>
+>
+> On Mon, 11 Dec 2023 16:23:17 +0000, Peter Griffin wrote:
+> > This introduces bindings and dt-schema for the Google Tensor SoCs.
+> > Currently just gs101 and pixel 6 are supported.
+> >
+> > Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+> > ---
+> > @RobH I removed your 'Reviewed-by: Rob Herring <robh@kernel.org>' tag
+> > as since you reviewed this I added the empty ect node. Can you please
+> > do the review again?
+> >
+> > x# Please enter the commit message for your changes. Lines starting
+> > ---
+> >  .../devicetree/bindings/arm/google.yaml       | 53 +++++++++++++++++++
+> >  1 file changed, 53 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/arm/google.yaml
+> >
+>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-On Mon, 11 Dec 2023 16:23:17 +0000, Peter Griffin wrote:
-> This introduces bindings and dt-schema for the Google Tensor SoCs.
-> Currently just gs101 and pixel 6 are supported.
-> 
-> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> ---
-> @RobH I removed your 'Reviewed-by: Rob Herring <robh@kernel.org>' tag
-> as since you reviewed this I added the empty ect node. Can you please
-> do the review again?
-> 
-> x# Please enter the commit message for your changes. Lines starting
-> ---
->  .../devicetree/bindings/arm/google.yaml       | 53 +++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/google.yaml
-> 
-
-Reviewed-by: Rob Herring <robh@kernel.org>
-
+Thanks Rob :)
 
