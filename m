@@ -1,108 +1,117 @@
-Return-Path: <linux-watchdog+bounces-332-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-333-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5FA78120ED
-	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Dec 2023 22:54:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DC91812142
+	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Dec 2023 23:14:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D86B282790
-	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Dec 2023 21:54:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9ECA41C20EAC
+	for <lists+linux-watchdog@lfdr.de>; Wed, 13 Dec 2023 22:14:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 569CF7FBB2;
-	Wed, 13 Dec 2023 21:54:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D0557FBDA;
+	Wed, 13 Dec 2023 22:14:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="epAiYqZf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SNdirChu"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAD4E0;
-	Wed, 13 Dec 2023 13:54:08 -0800 (PST)
-Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BDL2GXH020125;
-	Wed, 13 Dec 2023 21:53:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pps0720;
- bh=F3XM/iTwy0EIQD79Zi6C9dxzthptKdfMe5DQ9M3l66U=;
- b=epAiYqZfvq/mAyPq7GdEl4rp6c7sBAVQ1kLbcWeajoVz7nK+YduvQAdr4277bB+lfbv4
- 9o6Kn8TKf1lyjl/uuiWvAcUoLcG9YjySYbAF/hiavECbEjwZrL7rOA6mPLSJbezj5bby
- TyNiv1L2Va+S46ABJ6qTGb+ivZ9gGxhuUoKNWfV8N8miJvzzB/jXwiX5a8WOm3ufCNhw
- aoDFTROPsYnG8pn6RZvMVf7nvqNeGun1P1djcYFtAbpO9aN/jQdSiA2YSXlaqCyNsbxQ
- nuuOllDPRbrduRufOpgEWEq5GMSi2gQG0B7OrX4+veUvyJWj2Lt8cZvGnjuFg3SUQeRH 0Q== 
-Received: from p1lg14878.it.hpe.com ([16.230.97.204])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3uy89nffwd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Dec 2023 21:53:53 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by p1lg14878.it.hpe.com (Postfix) with ESMTPS id E7542131A9;
-	Wed, 13 Dec 2023 21:53:52 +0000 (UTC)
-Received: from anatevka.americas.hpqcorp.net (unknown [16.231.227.39])
-	by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 81A40800472;
-	Wed, 13 Dec 2023 21:53:52 +0000 (UTC)
-From: Jerry Hoemann <jerry.hoemann@hpe.com>
-To: linux@roeck-us.net
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644ABAC;
+	Wed, 13 Dec 2023 14:14:11 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6d9dadc3dc0so5760104a34.1;
+        Wed, 13 Dec 2023 14:14:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702505650; x=1703110450; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kUOnuYPNNImTr05uNyh+XqTTfSm5CyCumIyly8xyq6A=;
+        b=SNdirChuLu8QJ8oubJL7Uzg18dHyT+gupDes1MJ2PjkvwkCjfPM8u3KXHKfIjsIOUZ
+         zQmk0JXYv+9Km/zsBIE4V4Rew60l3KNSwu8NGPCsWjnHYFg5rfoJwIfPUuL6XYyztJkv
+         iDkexcRAUxtRBz92h/j6JxAfLOir9NPjx3F223osoQv2cJtobfl6kW1rwR686QkJ1C2T
+         klCMO/Jkg0r3y7u+pKcvGmTrcDXzeVc/ayxK+GjvbBWClDhRW5kT6OWpG0IZLfiOsTlX
+         RNCJYXp2JofSO6QasWWnstbaAN+aH3FV7dHxHTtdBot6TjReiVf8QOTaZUEanMBQ6z0K
+         +Rwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702505650; x=1703110450;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kUOnuYPNNImTr05uNyh+XqTTfSm5CyCumIyly8xyq6A=;
+        b=E4OmmJ2buWrSCV6R9SXXbHRdUmYislda3hZeXf3MOQ9k3bcUJO2gfhRue9kMyyBwXj
+         2j6O+J/xrLF2tuvJlXrnooKX9iymtUueWdnjlz5SpQBimhLKRYJI7lolA1CJ4rp9duFJ
+         f0AC61C35KbXlHMalGAz2DWF2cAIFyrBcbbqaeFsLwmZbTI0wvyLBGKJguLefh+EzDiw
+         AjY5UBLS/1LZlRg+D5VdM7K8Ic0DitAPBdpCDcBl9Orv+fDRLOJv2xoARKXSw4MNlV6O
+         kX8+FzT9B1zB5sZBMjLTPO0dniEjg5IV0NmLkgHGknZLAKqXZXKbqiszT2OwVec3TMUb
+         jrlw==
+X-Gm-Message-State: AOJu0YzEvUPpmJGhECZZeGaD5jcYV9pi31+X9S5Lyr+WjiGEjJkgpaZI
+	QoONluCRiEVEvxJ94xbl+KCdcJFx/6M=
+X-Google-Smtp-Source: AGHT+IGzeWMpPCS0h2eAUQFLsaql0jYjbgEVxLLgH+tJTNK0dUXnWNocmWmBASPdYKv+VBy8CXQ13w==
+X-Received: by 2002:a9d:7f8c:0:b0:6d9:f4a3:aece with SMTP id t12-20020a9d7f8c000000b006d9f4a3aecemr8913972otp.49.1702505650512;
+        Wed, 13 Dec 2023 14:14:10 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c11-20020a630d0b000000b005c2185be2basm10368437pgl.54.2023.12.13.14.14.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Dec 2023 14:14:09 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 13 Dec 2023 14:14:08 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Jerry Hoemann <jerry.hoemann@hpe.com>
 Cc: wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jerry Hoemann <jerry.hoemann@hpe.com>
-Subject: [PATCH v2 3/3] watchdog/hpwdt: Remove unused variable
-Date: Wed, 13 Dec 2023 14:53:40 -0700
-Message-ID: <20231213215340.495734-4-jerry.hoemann@hpe.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231213215340.495734-1-jerry.hoemann@hpe.com>
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] watchdog/hpwdt: Only claim UNKNOWN NMI if from iLO
+Message-ID: <9c7c6ba4-2140-4d1c-b2de-705b9f6b9e2e@roeck-us.net>
 References: <20231213215340.495734-1-jerry.hoemann@hpe.com>
+ <20231213215340.495734-2-jerry.hoemann@hpe.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: LIEevNw-2-8NirO5KXYar8IAuEU3V1In
-X-Proofpoint-ORIG-GUID: LIEevNw-2-8NirO5KXYar8IAuEU3V1In
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-13_14,2023-12-13_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 spamscore=0 suspectscore=0 bulkscore=0
- priorityscore=1501 mlxscore=0 impostorscore=0 mlxlogscore=977
- clxscore=1015 malwarescore=0 phishscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2312130154
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231213215340.495734-2-jerry.hoemann@hpe.com>
 
-Remove the unused variable ilo5.
+On Wed, Dec 13, 2023 at 02:53:38PM -0700, Jerry Hoemann wrote:
+> Avoid unnecessary crashes by claiming only NMIs that are due to
+> ERROR signalling or generated by the hpwdt hardware device.
+> 
+> The code does this, but only for iLO5.
+> 
+> The intent was to preserve legacy, Gen9 and earlier, semantics of
+> using hpwdt for error containtment as hardware/firmware would signal
+> fatal IO errors as an NMI with the expectation of hpwdt crashing
+> the system.  Howerver, these IO errors should be received by hpwdt
+> as an NMI_IO_CHECK.  So the test is overly permissive and should
+> not be limited to only ilo5.
+> 
+> We need to enable this protection for future iLOs not matching the
+> current PCI IDs.
+> 
+> Fixes: 62290a5c194b ("watchdog: hpwdt: Claim NMIs generated by iLO5")
+> Signed-off-by: Jerry Hoemann <jerry.hoemann@hpe.com>
 
-Signed-off-by: Jerry Hoemann <jerry.hoemann@hpe.com>
----
- drivers/watchdog/hpwdt.c | 4 ----
- 1 file changed, 4 deletions(-)
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/drivers/watchdog/hpwdt.c b/drivers/watchdog/hpwdt.c
-index d5c0aa3ef069..138dc8d8ca3d 100644
---- a/drivers/watchdog/hpwdt.c
-+++ b/drivers/watchdog/hpwdt.c
-@@ -33,7 +33,6 @@
- #define DEFAULT_MARGIN			30
- #define PRETIMEOUT_SEC			9
- 
--static bool ilo5;
- static unsigned int soft_margin = DEFAULT_MARGIN;	/* in seconds */
- static bool nowayout = WATCHDOG_NOWAYOUT;
- static bool pretimeout = IS_ENABLED(CONFIG_HPWDT_NMI_DECODING);
-@@ -360,9 +359,6 @@ static int hpwdt_init_one(struct pci_dev *dev,
- 				pretimeout ? "on" : "off");
- 	dev_info(&dev->dev, "kdumptimeout: %d.\n", kdumptimeout);
- 
--	if (dev->subsystem_vendor == PCI_VENDOR_ID_HP_3PAR)
--		ilo5 = true;
--
- 	return 0;
- 
- error_wd_register:
--- 
-2.41.0
-
+> ---
+>  drivers/watchdog/hpwdt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/hpwdt.c b/drivers/watchdog/hpwdt.c
+> index f79f932bca14..79ed1626d8ea 100644
+> --- a/drivers/watchdog/hpwdt.c
+> +++ b/drivers/watchdog/hpwdt.c
+> @@ -178,7 +178,7 @@ static int hpwdt_pretimeout(unsigned int ulReason, struct pt_regs *regs)
+>  		"3. OA Forward Progress Log\n"
+>  		"4. iLO Event Log";
+>  
+> -	if (ilo5 && ulReason == NMI_UNKNOWN && !mynmi)
+> +	if (ulReason == NMI_UNKNOWN && !mynmi)
+>  		return NMI_DONE;
+>  
+>  	if (ilo5 && !pretimeout && !mynmi)
+> -- 
+> 2.41.0
+> 
 
