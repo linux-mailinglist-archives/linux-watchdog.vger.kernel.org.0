@@ -1,60 +1,60 @@
-Return-Path: <linux-watchdog+bounces-347-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-348-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA7DF813455
-	for <lists+linux-watchdog@lfdr.de>; Thu, 14 Dec 2023 16:13:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C3F2813466
+	for <lists+linux-watchdog@lfdr.de>; Thu, 14 Dec 2023 16:15:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 189C91C2091D
-	for <lists+linux-watchdog@lfdr.de>; Thu, 14 Dec 2023 15:13:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 181B21F2223E
+	for <lists+linux-watchdog@lfdr.de>; Thu, 14 Dec 2023 15:15:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 631055C8E3;
-	Thu, 14 Dec 2023 15:13:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB6B55C8F4;
+	Thu, 14 Dec 2023 15:15:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fQ7fs9AF"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EHIIzRMV"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04067137
-	for <linux-watchdog@vger.kernel.org>; Thu, 14 Dec 2023 07:13:41 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-a22fb5f71d9so146471266b.0
-        for <linux-watchdog@vger.kernel.org>; Thu, 14 Dec 2023 07:13:40 -0800 (PST)
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA3410E9
+	for <linux-watchdog@vger.kernel.org>; Thu, 14 Dec 2023 07:15:11 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-50be3611794so9659029e87.0
+        for <linux-watchdog@vger.kernel.org>; Thu, 14 Dec 2023 07:15:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702566819; x=1703171619; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702566909; x=1703171709; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gvtun0x8vkG6VtfItcIBsM/hEbrzkxfGGKszvTd1N68=;
-        b=fQ7fs9AFf3nSYL9Ybhg0qZwdYIZSega3j8BZkNqTLiSH8UWIRfrIsdg/5UveUkPWA4
-         v3SdXg79D/1TE0c6F8Hy8cnsvnJOC3kBkGbbTBuQisSlXEWFuBEjHSLfsFxFZ1Hc3A2/
-         fY2VIRNi/OjqCrsHmJ/g7HEbReNP+8Ys0qzDk+mSGCpOpqssc9byqOMl2MVFkS5gl+ng
-         cBPLGIhlzzbSSbUoNSWb7zVIvlmmKHgDkSWPrh4pJR1HPJRm8WjBI4nzoNkQB6Ej+lBS
-         mLXsbTf3cYmOU3ZEk+v1QeOaXYCn+hxdSMz81pNIXDSvKXXS0oOzfDYvFSCNohVB+7HV
-         l+Eg==
+        bh=mjygnYLv9wPWREwrNBcftV6uG5X/vCKXcTO+yxGG9tI=;
+        b=EHIIzRMVK9mQN2DQR2HLh5gwr2aLytRHR0/cp7SB3hTB5RiQa3RN4YJRx6UjGR5KyN
+         bWidQlv+oRopXBWaWdS/YVADK/FVZeMDCMVHlYFceUQ+n8wnThzEU8nB/IxhkPfGVKyT
+         ie4mv5YeozybAIiCO3p4KnjeGO47uND11grCrOVsaoMebuMIkYIAPCM5qj0QaHIpoEX5
+         mmXGzw9PIQj+7ldihuP8HH9eErg7jqkpFRVs5R4sJ57Hmi/HSsJ3gUSzH52jN9yRsoBV
+         xoUnuKSlc5kHAgTvpiBFUIFulpXh3Dn0EcybTEpN/W0DRBI6tuvH8NFwbjVmnP/cR+25
+         AtNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702566819; x=1703171619;
+        d=1e100.net; s=20230601; t=1702566909; x=1703171709;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gvtun0x8vkG6VtfItcIBsM/hEbrzkxfGGKszvTd1N68=;
-        b=DLDmcUl1tfJAJa6puij6oEyOkKWG14bOr4aYarBQXYwmNo+99lOxeEtHTPNJARTBd+
-         ebvvmnaYlHR2LAauQ9RANuJbcv2Az9meBCNJnBA4AIvVBa0sSnhNNzSUU6b+wl0eBjxG
-         eBMxJ+Yh8+/nJZX7za447M98GdDlfTM5kTW6T9P0CakqzDoaE06cQzci1lKkd+Echaqd
-         Tn8CKXtpjMZPKVamNihdFTYPTMMoe74jhHuW8BKfG+W1/QB/dv88Zh885OVKq+nss548
-         x1PzX3QDQuG6RsGnuUX5I+JlxrX3UgnWKmEHt5e43LVWMWbmc215QplhGyXAVV7fbWcX
-         aEcA==
-X-Gm-Message-State: AOJu0YwbrJ4s9I5C7Me8KI6TdGQWHOgkMAcCzEUgpckmzrweBvb3j8BD
-	CgKmoVQyrFm5OMaAW9/F075RCg==
-X-Google-Smtp-Source: AGHT+IGZlCK/VE6KO7MumtXE2h19ILCBdjwgYnwikNv8XezVz7EdnXEJNlMQPggaj5ERPCE0tHAQ8w==
-X-Received: by 2002:a17:906:f142:b0:a1d:5483:d152 with SMTP id gw2-20020a170906f14200b00a1d5483d152mr9625965ejb.68.1702566819361;
-        Thu, 14 Dec 2023 07:13:39 -0800 (PST)
+        bh=mjygnYLv9wPWREwrNBcftV6uG5X/vCKXcTO+yxGG9tI=;
+        b=PdD9UNjt/axoeEw3xaCdNJsPhrdfkkTC5tILtpT0OOJiObIuni9Wwz/MtaiNjxA3zr
+         enUSmiaitBMQnHt6lIbDwLAUhX9mSwJPG628qVBL0iW73PbOxOZ/AqRGklK99Ejn/w2J
+         noJnEKpT31+mfDL+iHlLba4yHgxd/q04zdbjGLuc9DfvNV4+8NRuATOrxzI661BfD6SM
+         uIsUoVSlIHtSUuXWYm2n0jojr+/4drw1kgQ+qo6kqBdvhA+8dbfvVNhh8+1EjG/dmfX9
+         E2aekBNpB4pzhvKhoI+bG2/sw2a82mTGrUzIwngtn+RcohAWEl4sGbj0OeVPnOZPJMWb
+         Ewpg==
+X-Gm-Message-State: AOJu0YxxgQFbVF0B3mTMh5qA/cKZuMO+q0VI7XIbf/05o0cjAPwBfL8H
+	azAtq8MW+3ebg+ReYYSC6EYCng==
+X-Google-Smtp-Source: AGHT+IFmF2d1GfyhDY7+ubTis/rqA0ZTNlxWngYJM1dyNZjeauBRktJr8J6Kn59wuDXnygSZLbuNcQ==
+X-Received: by 2002:a05:6512:314d:b0:50b:fd4a:f788 with SMTP id s13-20020a056512314d00b0050bfd4af788mr2709089lfi.33.1702566909420;
+        Thu, 14 Dec 2023 07:15:09 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id tp25-20020a170907c49900b00a1f7c502736sm8235915ejc.164.2023.12.14.07.13.37
+        by smtp.gmail.com with ESMTPSA id tp25-20020a170907c49900b00a1f7c502736sm8235915ejc.164.2023.12.14.07.15.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Dec 2023 07:13:38 -0800 (PST)
-Message-ID: <fda32450-d83a-4ef9-bc24-1c2f8416ae45@linaro.org>
-Date: Thu, 14 Dec 2023 16:13:36 +0100
+        Thu, 14 Dec 2023 07:15:09 -0800 (PST)
+Message-ID: <d647ca03-3f28-4c94-a86b-c191ed801e4f@linaro.org>
+Date: Thu, 14 Dec 2023 16:15:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: watchdog: add Marvell AC5 watchdog
+Subject: Re: [PATCH 2/3] arm64: dts: ac5: add watchdog nodes
 Content-Language: en-US
 To: Elad Nachman <enachman@marvell.com>, wim@linux-watchdog.org,
  linux@roeck-us.net, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -73,7 +73,7 @@ To: Elad Nachman <enachman@marvell.com>, wim@linux-watchdog.org,
  linux-kernel@vger.kernel.org
 Cc: cyuval@marvell.com
 References: <20231214150414.1849058-1-enachman@marvell.com>
- <20231214150414.1849058-2-enachman@marvell.com>
+ <20231214150414.1849058-3-enachman@marvell.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -119,117 +119,48 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231214150414.1849058-2-enachman@marvell.com>
+In-Reply-To: <20231214150414.1849058-3-enachman@marvell.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 14/12/2023 16:04, Elad Nachman wrote:
 > From: Elad Nachman <enachman@marvell.com>
 > 
-> Add definitions and examples for Marvell AC5 variant
-> of the sbsa watchdog.
-> Marvell variant requires more memory definitions,
-> since the initialization is more complex, and involves
-> several register sets.
-
-Please wrap commit message according to Linux coding style / submission
-process (neither too early nor over the limit):
-https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
-
+> Add watchdog nodes to ac5 and ac5x device tree files
 > 
 > Signed-off-by: Elad Nachman <enachman@marvell.com>
 > ---
->  .../bindings/watchdog/arm,sbsa-gwdt.yaml      | 52 ++++++++++++++++++-
->  1 file changed, 50 insertions(+), 2 deletions(-)
+>  arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi | 14 ++++++++++++++
+>  arch/arm64/boot/dts/marvell/ac5-98dx35xx.dtsi |  8 ++++++++
+>  2 files changed, 22 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/arm,sbsa-gwdt.yaml b/Documentation/devicetree/bindings/watchdog/arm,sbsa-gwdt.yaml
-> index aa804f96acba..331e9aa7c2f7 100644
-> --- a/Documentation/devicetree/bindings/watchdog/arm,sbsa-gwdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/arm,sbsa-gwdt.yaml
-> @@ -20,12 +20,17 @@ allOf:
+> diff --git a/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi b/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
+> index b5e042b8e929..e898c6bd31f0 100644
+> --- a/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
+> +++ b/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
+> @@ -307,6 +307,20 @@ nand: nand-controller@805b0000 {
+>  			status = "disabled";
+>  		};
 >  
->  properties:
->    compatible:
-> -    const: arm,sbsa-gwdt
-> +    enum:
-> +      - arm,sbsa-gwdt
-> +      - marvell,ac5-wd
->  
->    reg:
->      items:
->        - description: Watchdog control frame
->        - description: Refresh frame
-> +      - description: Marvell CPU control frame
-> +      - description: Marvell Management frame
-> +      - description: Marvell reset control unit frame
+> +/*
+> + * Global Watchdog:
+> + */
 
-You just broke all the users... I doubt this was tested on ARM platforms.
+Messed indentation. Also unnecessary line breaks around comment, unless
+you have some KPI per lines of code. If it is the only watchdog, why
+even commenting on it?
 
->  
->    interrupts:
->      description: The Watchdog Signal 0 (WS0) SPI (Shared Peripheral Interrupt)
-> @@ -39,12 +44,55 @@ required:
->  unevaluatedProperties: false
->  
->  examples:
-> +  # First example is for generic ARM one
-> +  # Next examples are for Marvell.
+> +		watchdog: watchdog@80216000 {
+> +			compatible = "marvell,ac5-wd";
+> +			reg = <0x0 0x80216000 0 0x1000>,
+> +			      <0x0 0x80215000 0 0x1000>,
+> +			      <0x0 0x80210000 0 0x1000>,
+> +			      <0x0 0x7f900000 0 0x1000>,
+> +			      <0x0 0x840F8000 0 0x1000>;
 
-One new example could be enough... but if it differs with one property,
-also not that much of benefit.
+Lowercase hex.
 
-> +  # They are organized as three sets:
-> +  # first set is for global watchdog, then CPU core #0 private watchdog,
-> +  # and finally CPU core #1 private watchdog
-> +  # Examples are given for AC5 or Ironman. For AC5X SOC, the last
-> +  # reg item's low address (0x840F8000) should be replaced with 0x944F8000
->    - |
->      watchdog@2a440000 {
->          compatible = "arm,sbsa-gwdt";
->          reg = <0x2a440000 0x1000>,
-> -              <0x2a450000 0x1000>;
-> +              <0x2a450000 0x1000>,
-> +              <0x0 0x0>,
-> +              <0x0 0x0>,
-> +              <0x0 0x0>;
 
-No, drop.
-
->          interrupts = <0 27 4>;
->          timeout-sec = <30>;
->      };
-> +  - |
-> +    watchdog@80216000 {
-> +        compatible = "marvell,ac5-wd";
-> +        reg = <0x80216000 0x1000>,
-> +              <0x80215000 0x1000>,
-> +              <0x80210000 0x1000>,
-> +              <0x7f900000 0x1000>,
-> +              <0x840F8000 0x1000>;
-> +        interrupts = <0 124 4>;
-
-Use proper defines.
-
-> +        timeout-sec = <30>;
-> +    };
-> +  - |
-> +    watchdog@80212000 {
-
-Drop example.
-
-> +        compatible = "marvell,ac5-wd";
-> +        reg = <0x80212000 0x1000>,
-> +              <0x80211000 0x1000>,
-> +              <0x80210000 0x1000>,
-> +              <0x7f900000 0x1000>,
-> +              <0x840F8000 0x1000>;
-> +        interrupts = <0 122 4>;
-> +        timeout-sec = <30>;
-> +    };
-> +  - |
-> +    watchdog@80214000 {
-
-Drop example.
 
 Best regards,
 Krzysztof
