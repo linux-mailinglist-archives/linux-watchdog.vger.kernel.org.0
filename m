@@ -1,28 +1,28 @@
-Return-Path: <linux-watchdog+bounces-341-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-342-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 431078129FE
-	for <lists+linux-watchdog@lfdr.de>; Thu, 14 Dec 2023 09:09:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE083812A00
+	for <lists+linux-watchdog@lfdr.de>; Thu, 14 Dec 2023 09:09:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3FBF281613
-	for <lists+linux-watchdog@lfdr.de>; Thu, 14 Dec 2023 08:09:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DAB531C20A92
+	for <lists+linux-watchdog@lfdr.de>; Thu, 14 Dec 2023 08:09:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3E2B15EBD;
-	Thu, 14 Dec 2023 08:09:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4124815EB0;
+	Thu, 14 Dec 2023 08:09:39 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2417CB9;
-	Thu, 14 Dec 2023 00:09:30 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4215E0;
+	Thu, 14 Dec 2023 00:09:35 -0800 (PST)
 X-IronPort-AV: E=Sophos;i="6.04,274,1695654000"; 
-   d="scan'208";a="186463847"
+   d="scan'208";a="186463884"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 14 Dec 2023 17:09:30 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 14 Dec 2023 17:09:35 +0900
 Received: from localhost.localdomain (unknown [10.226.92.242])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 803944006DC9;
-	Thu, 14 Dec 2023 17:09:25 +0900 (JST)
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id DDB9C4004CEE;
+	Thu, 14 Dec 2023 17:09:30 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
 To: Lee Jones <lee@kernel.org>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
@@ -40,9 +40,9 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>,
 	linux-renesas-soc@vger.kernel.org,
 	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v6 2/8] dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for DA9061 watchdog
-Date: Thu, 14 Dec 2023 08:09:05 +0000
-Message-Id: <20231214080911.23359-3-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v6 3/8] dt-bindings: watchdog: dlg,da9062-watchdog: Document DA9063 watchdog
+Date: Thu, 14 Dec 2023 08:09:06 +0000
+Message-Id: <20231214080911.23359-4-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231214080911.23359-1-biju.das.jz@bp.renesas.com>
 References: <20231214080911.23359-1-biju.das.jz@bp.renesas.com>
@@ -54,52 +54,50 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The DA9061 watchdog is identical to DA9062 watchdog, so no driver changes
-are required. The fallback compatible string "dlg,da9062-watchdog" will be
-used on DA9061 watchdog.
+Document DA9063 watchdog device as it is similar to DA9062 watchdog.
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
 v5->v6:
  * Added Rb tag from Guenter Roeck.
 v4->v5:
- * Added Rb tag from Geert and Ack from Conor
- * Drop items and just use enum as it is easier to read for compatibles.
- * Retained the tags as it is trivial change.
+ * Added Rb tag from Geert.
 v3->v4:
- * Dropped comment for d9061 watchdog fallback.
- * Replaced enum->const for dlg,da9061-watchdog and its fallback.
+ * Added Ack from Conor Dooley.
+ * Updated title DA9062/61->DA906{1,2,3} as it supports DA9063.
+ * Retained Rb tag since the changes are trivial.
 v2->v3:
  * No change
 v2:
  * New patch
 ---
- .../bindings/watchdog/dlg,da9062-watchdog.yaml           | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ .../devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml      | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml b/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
-index f058628bb632..9192315e559d 100644
+index 9192315e559d..c8f698120597 100644
 --- a/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
 +++ b/Documentation/devicetree/bindings/watchdog/dlg,da9062-watchdog.yaml
-@@ -14,9 +14,12 @@ allOf:
+@@ -4,7 +4,7 @@
+ $id: http://devicetree.org/schemas/watchdog/dlg,da9062-watchdog.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
  
- properties:
-   compatible:
--    enum: 
--      - dlg,da9061-watchdog
--      - dlg,da9062-watchdog
-+    oneOf:
-+      - enum:
-+          - dlg,da9062-watchdog
-+      - items:
-+          - const: dlg,da9061-watchdog
-+          - const: dlg,da9062-watchdog
+-title: Dialog Semiconductor DA9062/61 Watchdog Timer
++title: Dialog Semiconductor DA906{1,2,3} Watchdog Timer
  
-   dlg,use-sw-pm:
-     type: boolean
+ maintainers:
+   - Steve Twiss <stwiss.opensource@diasemi.com>
+@@ -17,6 +17,7 @@ properties:
+     oneOf:
+       - enum:
+           - dlg,da9062-watchdog
++          - dlg,da9063-watchdog
+       - items:
+           - const: dlg,da9061-watchdog
+           - const: dlg,da9062-watchdog
 -- 
 2.39.2
 
