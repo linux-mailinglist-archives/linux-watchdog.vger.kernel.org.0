@@ -1,165 +1,275 @@
-Return-Path: <linux-watchdog+bounces-355-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-356-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 923A6815007
-	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Dec 2023 20:13:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06A8E8153C2
+	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Dec 2023 23:36:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2AC1B21C28
-	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Dec 2023 19:13:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85CCD1F26874
+	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Dec 2023 22:36:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F40FF3FB11;
-	Fri, 15 Dec 2023 19:13:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 223E715AD2;
+	Fri, 15 Dec 2023 22:36:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PHCXvTmY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iXFuaSqL"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5058E3EA71;
-	Fri, 15 Dec 2023 19:13:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-db99bad7745so852376276.0;
-        Fri, 15 Dec 2023 11:13:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702667581; x=1703272381; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=lLFpd5y805Nps4s2XX5uixG/NjQY/nNvAtSKCIs9Bl8=;
-        b=PHCXvTmY1MYic2tXzmdqjN/gqNKA3/3GgMLFBKxCIZQjdPXZLXGhPsXdTND2h1X23H
-         rWw1w7guOk7Oibfp21pdMdwZ0yuKIChJkXBtAXQGRloSkEVS88syczYpmU2kxOduLatJ
-         yPY1j1oIkm9D6Hm6+adc1RU8OpLHV6JadMoUh6vfPk4SIxEy7bBCT0S0BgEqhUkcIUcG
-         QYqnAdJ2EKWgGKFjKhTnZ1rc7ke0qPpPViR55CNmNiYRgSkIvMwEGufUCwIR+DPu6gq4
-         6by+/fcu5WdlG8kA4pSDua3NAmqwtcGHUHRSSRtSAaNnjPwq01XI7Vx1ymrsyLmyneQ5
-         Vebw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702667581; x=1703272381;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lLFpd5y805Nps4s2XX5uixG/NjQY/nNvAtSKCIs9Bl8=;
-        b=ZFOa8JqCYF1mACRMcW2F1zO2YXo54/8wSJvYXh1P9xuKJVIM4QHMzdQoCY5PbCC54p
-         pfEDP5wGHIECGyoxEtlXcgz/UiEk+goUJpwQGpcS3s+clfZYyzfJGXa/yfaiD2ImsCf1
-         /F5pGLwYoiqW65ZVeDKlkRYABoxcVsop4YzuHACQitqllSCnWnMwE3CbHOItx2ZllGmh
-         /Souoi1h5H5/2n2G/6vCQo8JREswUwnijNzgz24CkAZuorLGWygq7reHCu0cvizvEUZw
-         gmyID5kN/teLQ4mAhKrdOciDKwshMHnZhIr1+ag8ceXHajSPMo/06JkKFQ37VfNnopKn
-         tMfw==
-X-Gm-Message-State: AOJu0YwDQ+C0O4xlzBDn4D8aHhkazaoVIiyO1ZM2471flgEh7iSSRi3M
-	1ir1PCN1DGVtw8MI8xfhlE8=
-X-Google-Smtp-Source: AGHT+IGt67eGD9roiP3bQK6okpeM3fYNWdM+zlOx2EA2pnKlg+S5/yA4jXNcg0kR5zCKdhJKHfja8A==
-X-Received: by 2002:a5b:786:0:b0:db5:4680:ceb3 with SMTP id b6-20020a5b0786000000b00db54680ceb3mr8523533ybq.0.1702667581169;
-        Fri, 15 Dec 2023 11:13:01 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o12-20020a258d8c000000b00dbcb622b2e9sm2941010ybl.53.2023.12.15.11.12.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Dec 2023 11:13:00 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <db04551a-0eff-4089-8a5b-026783f2afc7@roeck-us.net>
-Date: Fri, 15 Dec 2023 11:12:57 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCDF318EBF;
+	Fri, 15 Dec 2023 22:36:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702679794; x=1734215794;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=81ICkebormZ0Z0Ct1dTYfN2Re+TIgDgSB9gIT28pAKg=;
+  b=iXFuaSqLd1s2hyXfHgq8AZegeGD8JmnE0qmwz0D3pG4LbVSp/mirfLUB
+   qeZlfp+1j5xWa+KRmfawDFlkIq5MDuQL8DTBXeIwyooDQEVLZhWbOAg0D
+   odrNwhcpqa8tqAYzH+VVgiZt8N+wkCGbqd5oYT8akdzsRcOsEyQ8RaJ9K
+   WYvzvENJN6EJmhuCcdkQOrFs7Sf0ntPZdHS4LNRFIuRKKxrKl/T3TGhx9
+   2YR713Rtb3BYsLErOnwr+XzuhzZIF2f76Z5NE2SR8wQFSolcwJNpPZK5S
+   P9zoldvuqldRX6YPEE1C3FcDg+krJieNnzqRhCi3Ovvgl+XlHQpatLCqr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="16891900"
+X-IronPort-AV: E=Sophos;i="6.04,280,1695711600"; 
+   d="scan'208";a="16891900"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 14:36:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10925"; a="768144404"
+X-IronPort-AV: E=Sophos;i="6.04,280,1695711600"; 
+   d="scan'208";a="768144404"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 15 Dec 2023 14:36:26 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rEGnA-0000r2-15;
+	Fri, 15 Dec 2023 22:36:24 +0000
+Date: Sat, 16 Dec 2023 06:35:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Elad Nachman <enachman@marvell.com>, wim@linux-watchdog.org,
+	linux@roeck-us.net, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	gregory.clement@bootlin.com, chris.packham@alliedtelesis.co.nz,
+	andrew@lunn.ch, fu.wei@linaro.org, Suravee.Suthikulpanit@amd.com,
+	al.stone@linaro.org, timur@codeaurora.org,
+	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	enachman@marvell.com, cyuval@marvell.com
+Subject: Re: [PATCH 3/3] watchdog: sbsa_gwdt: add support for Marvell ac5
+Message-ID: <202312160648.h1CrZxtx-lkp@intel.com>
+References: <20231214150414.1849058-4-enachman@marvell.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] watchdog: sbsa_gwdt: add support for Marvell ac5
-Content-Language: en-US
-To: Rob Herring <robh@kernel.org>, Elad Nachman <enachman@marvell.com>
-Cc: wim@linux-watchdog.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, gregory.clement@bootlin.com,
- chris.packham@alliedtelesis.co.nz, andrew@lunn.ch, fu.wei@linaro.org,
- Suravee.Suthikulpanit@amd.com, al.stone@linaro.org, timur@codeaurora.org,
- linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, cyuval@marvell.com
-References: <20231214150414.1849058-1-enachman@marvell.com>
- <20231214150414.1849058-4-enachman@marvell.com>
- <20231215180127.GB52386-robh@kernel.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231215180127.GB52386-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231214150414.1849058-4-enachman@marvell.com>
 
-On 12/15/23 10:01, Rob Herring wrote:
-> On Thu, Dec 14, 2023 at 05:04:14PM +0200, Elad Nachman wrote:
->> From: Elad Nachman <enachman@marvell.com>
->>
->> Add support for Marvell ac5/x variant of the ARM
->> sbsa global watchdog. This watchdog deviates from
->> the standard driver by the following items:
->>
->> 1. Registers reside in secure register section.
->>     hence access is only possible via SMC calls to ATF.
->>
->> 2. There are couple more registers which reside in
->>     other register areas, which needs to be configured
->>     in order for the watchdog to properly generate
->>     reset through the SOC.
->>
->> The new Marvell compatibility string differentiates between
->> the original sbsa mode of operation and the Marvell mode of
->> operation.
->>
->> Signed-off-by: Elad Nachman <enachman@marvell.com>
->> ---
->>   drivers/watchdog/sbsa_gwdt.c | 247 ++++++++++++++++++++++++++++++++---
-> 
-> That's more than half the existing driver...
-> 
+Hi Elad,
 
-... which makes me really unhappy and wonder if it is appropriate
-to hack up the existing driver that much. it doesn't look like
-Marvell ac5/x really implements SBSA. Given the large number of
-device specific deviations, a separate driver may be more appropriate.
+kernel test robot noticed the following build errors:
 
-Guenter
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on groeck-staging/hwmon-next linus/master v6.7-rc5 next-20231215]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Elad-Nachman/dt-bindings-watchdog-add-Marvell-AC5-watchdog/20231214-230812
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20231214150414.1849058-4-enachman%40marvell.com
+patch subject: [PATCH 3/3] watchdog: sbsa_gwdt: add support for Marvell ac5
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20231216/202312160648.h1CrZxtx-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231216/202312160648.h1CrZxtx-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312160648.h1CrZxtx-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/watchdog/sbsa_gwdt.c:434:11: error: incompatible integer to pointer conversion assigning to 'void *' from 'resource_size_t' (aka 'unsigned long long') [-Wint-conversion]
+     434 |                 cf_base = res->start;
+         |                         ^ ~~~~~~~~~~
+   drivers/watchdog/sbsa_gwdt.c:439:11: error: incompatible integer to pointer conversion assigning to 'void *' from 'resource_size_t' (aka 'unsigned long long') [-Wint-conversion]
+     439 |                 rf_base = res->start;
+         |                         ^ ~~~~~~~~~~
+   drivers/watchdog/sbsa_gwdt.c:444:17: error: incompatible integer to pointer conversion assigning to 'void *' from 'resource_size_t' (aka 'unsigned long long') [-Wint-conversion]
+     444 |                 cpu_ctrl_base = res->start;
+         |                               ^ ~~~~~~~~~~
+   3 errors generated.
+
+
+vim +434 drivers/watchdog/sbsa_gwdt.c
+
+   408	
+   409	static int sbsa_gwdt_probe(struct platform_device *pdev)
+   410	{
+   411		void __iomem *rf_base, *cf_base;
+   412		void __iomem *cpu_ctrl_base = NULL, *mng_base = NULL,
+   413			     *rst_ctrl_base = NULL;
+   414		struct device *dev = &pdev->dev;
+   415		struct device_node *np = pdev->dev.of_node;
+   416		struct watchdog_device *wdd;
+   417		struct sbsa_gwdt *gwdt;
+   418		struct resource *res;
+   419		int ret, irq;
+   420		bool marvell = false;
+   421		u32 status, id, val;
+   422	
+   423		gwdt = devm_kzalloc(dev, sizeof(*gwdt), GFP_KERNEL);
+   424		if (!gwdt)
+   425			return -ENOMEM;
+   426		platform_set_drvdata(pdev, gwdt);
+   427	
+   428		if (of_device_is_compatible(np, "marvell,ac5-wd")) {
+   429			marvell = true;
+   430			gwdt->soc_reg_ops = &smc_reg_ops;
+   431			res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+   432			if (IS_ERR(res))
+   433				return PTR_ERR(res);
+ > 434			cf_base = res->start;
+   435	
+   436			res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+   437			if (IS_ERR(res))
+   438				return PTR_ERR(res);
+   439			rf_base = res->start;
+   440	
+   441			res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
+   442			if (IS_ERR(res))
+   443				return PTR_ERR(res);
+   444			cpu_ctrl_base = res->start;
+   445			mng_base = devm_platform_ioremap_resource(pdev, 3);
+   446			if (IS_ERR(mng_base))
+   447				return PTR_ERR(mng_base);
+   448			rst_ctrl_base = devm_platform_ioremap_resource(pdev, 4);
+   449			if (IS_ERR(rst_ctrl_base))
+   450				return PTR_ERR(rst_ctrl_base);
+   451		} else {
+   452			gwdt->soc_reg_ops = &direct_reg_ops;
+   453			cf_base = devm_platform_ioremap_resource(pdev, 0);
+   454			if (IS_ERR(cf_base))
+   455				return PTR_ERR(cf_base);
+   456	
+   457			rf_base = devm_platform_ioremap_resource(pdev, 1);
+   458			if (IS_ERR(rf_base))
+   459				return PTR_ERR(rf_base);
+   460		}
+   461	
+   462		/*
+   463		 * Get the frequency of system counter from the cp15 interface of ARM
+   464		 * Generic timer. We don't need to check it, because if it returns "0",
+   465		 * system would panic in very early stage.
+   466		 */
+   467		gwdt->clk = arch_timer_get_cntfrq();
+   468		gwdt->refresh_base = rf_base;
+   469		gwdt->control_base = cf_base;
+   470	
+   471		wdd = &gwdt->wdd;
+   472		wdd->parent = dev;
+   473		wdd->info = &sbsa_gwdt_info;
+   474		wdd->ops = &sbsa_gwdt_ops;
+   475		wdd->min_timeout = 1;
+   476		wdd->timeout = DEFAULT_TIMEOUT;
+   477		watchdog_set_drvdata(wdd, gwdt);
+   478		watchdog_set_nowayout(wdd, nowayout);
+   479		sbsa_gwdt_get_version(wdd);
+   480		if (gwdt->version == 0)
+   481			wdd->max_hw_heartbeat_ms = U32_MAX / gwdt->clk * 1000;
+   482		else
+   483			wdd->max_hw_heartbeat_ms = GENMASK_ULL(47, 0) / gwdt->clk * 1000;
+   484	
+   485		status = gwdt->soc_reg_ops->reg_read32(cf_base + SBSA_GWDT_WCS);
+   486		if (status & SBSA_GWDT_WCS_WS1) {
+   487			dev_warn(dev, "System reset by WDT.\n");
+   488			wdd->bootstatus |= WDIOF_CARDRESET;
+   489		}
+   490		if (status & SBSA_GWDT_WCS_EN)
+   491			set_bit(WDOG_HW_RUNNING, &wdd->status);
+   492	
+   493		if (action) {
+   494			irq = platform_get_irq(pdev, 0);
+   495			if (irq < 0) {
+   496				action = 0;
+   497				dev_warn(dev, "unable to get ws0 interrupt.\n");
+   498			} else {
+   499				/*
+   500				 * In case there is a pending ws0 interrupt, just ping
+   501				 * the watchdog before registering the interrupt routine
+   502				 */
+   503				gwdt->soc_reg_ops->reg_write32(0, rf_base + SBSA_GWDT_WRR);
+   504				if (devm_request_irq(dev, irq, sbsa_gwdt_interrupt, 0,
+   505						     pdev->name, gwdt)) {
+   506					action = 0;
+   507					dev_warn(dev, "unable to request IRQ %d.\n",
+   508						 irq);
+   509				}
+   510			}
+   511			if (!action)
+   512				dev_warn(dev, "falling back to single stage mode.\n");
+   513		}
+   514		/*
+   515		 * In the single stage mode, The first signal (WS0) is ignored,
+   516		 * the timeout is (WOR * 2), so the maximum timeout should be doubled.
+   517		 */
+   518		if (!action)
+   519			wdd->max_hw_heartbeat_ms *= 2;
+   520	
+   521		watchdog_init_timeout(wdd, timeout, dev);
+   522		/*
+   523		 * Update timeout to WOR.
+   524		 * Because of the explicit watchdog refresh mechanism,
+   525		 * it's also a ping, if watchdog is enabled.
+   526		 */
+   527		sbsa_gwdt_set_timeout(wdd, wdd->timeout);
+   528	
+   529		watchdog_stop_on_reboot(wdd);
+   530		ret = devm_watchdog_register_device(dev, wdd);
+   531		if (ret)
+   532			return ret;
+   533		/*
+   534		 * Marvell AC5/X/IM: need to configure the watchdog
+   535		 * HW to trigger reset on WS1 (Watchdog Signal 1):
+   536		 *
+   537		 * 1. Configure the watchdog signal enable (routing)
+   538		 *    according to configuration
+   539		 * 2. Unmask the wd_rst input signal to the reset unit
+   540		 */
+   541		if (marvell) {
+   542			gwdt->soc_reg_ops->reg_write32(reset, cpu_ctrl_base +
+   543						       SBSA_GWDT_MARVELL_CPU_WD_RST_EN_REG);
+   544			id = readl(mng_base + SBSA_GWDT_MARVELL_MNG_ID_REG) &
+   545				   SBSA_GWDT_MARVELL_ID_MASK;
+   546	
+   547			if (id == SBSA_GWDT_MARVELL_AC5_ID)
+   548				val = SBSA_GWDT_MARVELL_AC5_RST_UNIT_WD_BIT;
+   549			else
+   550				val = SBSA_GWDT_MARVELL_IRONMAN_RST_UNIT_WD_BIT;
+   551	
+   552			writel(readl(rst_ctrl_base + SBSA_GWDT_MARVELL_RST_CTRL_REG) & ~val,
+   553			       rst_ctrl_base + SBSA_GWDT_MARVELL_RST_CTRL_REG);
+   554		}
+   555		dev_info(dev, "Initialized with %ds timeout @ %u Hz, action=%d.%s\n",
+   556			 wdd->timeout, gwdt->clk, action,
+   557			 status & SBSA_GWDT_WCS_EN ? " [enabled]" : "");
+   558	
+   559		return 0;
+   560	}
+   561	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
