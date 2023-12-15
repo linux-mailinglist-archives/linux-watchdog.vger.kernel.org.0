@@ -1,57 +1,58 @@
-Return-Path: <linux-watchdog+bounces-353-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-354-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E72A814F30
-	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Dec 2023 18:51:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBA68814F6B
+	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Dec 2023 19:01:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 339E11F212F1
-	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Dec 2023 17:51:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2AA63B231B5
+	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Dec 2023 18:01:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 480FC82EF9;
-	Fri, 15 Dec 2023 17:48:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C1C43012A;
+	Fri, 15 Dec 2023 18:01:32 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ACD83010D;
-	Fri, 15 Dec 2023 17:48:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6215830123;
+	Fri, 15 Dec 2023 18:01:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3b9fd7b14cdso870180b6e.0;
-        Fri, 15 Dec 2023 09:48:29 -0800 (PST)
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6d9fdbcec6eso759135a34.1;
+        Fri, 15 Dec 2023 10:01:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702662508; x=1703267308;
+        d=1e100.net; s=20230601; t=1702663289; x=1703268089;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pm/gpkQ1YGAavxKNC+pdEshVFcIOLkmf7mOBxigLrOk=;
-        b=VE0EaXjJQcv3ljGrrbgRSf6DgfZ2au302M/hK8e4ay5858MQSy2hhFFgH9rLvNNGo3
-         DYJtJdg6z3O7c66I9j9GOqK8bpRLGgcNZlhr92BjdWNAyCORFW0q+xSfTPYeqx4dVRgy
-         7sJTeOJm2s8bb/u6DEC/AFRaLKdzxhICFdUMKnq8jqjuLv0D+9dhvAcjCQ60HWFMTdSg
-         mOXv9nVN/xTFXypPPY6na/e9cqHM5OE2xNRY7yfFB/gLVQCqttGqXRJNUqw6ArFB4D6O
-         vc3lesjK3y7yJN1dkKVPR7iCQMmc/aT6DLyTkJJWrkWhdCxOEp5ubC6YtZVbbdbYvtCV
-         YXmw==
-X-Gm-Message-State: AOJu0YyGWub41m4KvBbRDPPlzO5qsIhre0rYt3xNDLKK7SgkQycAvxt4
-	jdSrjy56xvGD8yLFH2C4CA==
-X-Google-Smtp-Source: AGHT+IEZLXJyqXyPRgWYWbfmviLO9Q74kt/U8wStSaiATFLHpZQMquwLAHUQQTfppTSVgC00iNsCNw==
-X-Received: by 2002:a05:6808:140f:b0:3b9:d6ca:2ff4 with SMTP id w15-20020a056808140f00b003b9d6ca2ff4mr6592541oiv.3.1702662508215;
-        Fri, 15 Dec 2023 09:48:28 -0800 (PST)
+        bh=FwhfhLoea/LkKgoi0mLBe9P7KahaQu7FDHdJKf8LJgU=;
+        b=SIGvPVDDSczR85hhSWYilY9erlx4VI5L0sPbdczmU2vhTjFXxjo80QVj5MYU8MqWDM
+         Ggztts14DLriQFxUnTyArQHdxj/hcavTKRwK1CGje/DKLbojx9nNurw/JoacoSO3BWLw
+         SyOhLWIYE26Wm3NlNTrA1xvKOIeUmH8TSzKWMHF7l7Mtxh83CSgOpJikTHu/4ut2Hr5A
+         cAcdqD2RBVG8wz87Lw7vBdBmKFZZINIS3yWCQChFqkvL3qWlieOMDj0cbNQbBN6iF6Z7
+         9//RX4JdgieU64xEa7Ng2tsE6A43pDGx/NM//mQwmUkbFkjw4nx0nk3NWpOlhhhY8Np6
+         CmjQ==
+X-Gm-Message-State: AOJu0YyLoOBDLvseVZMuVy8hxCZGemnXOMJacQAJoy5ehCCGrjxmajPa
+	F1Ae0wFxuxnKvf1R7un6kSsi/ex/0A==
+X-Google-Smtp-Source: AGHT+IFBVtSlNj4mEdxRUTvAkzNHT26WzYQ91wVxCFvuBV9Wksc+Fbs0T/BWPQFC8ecIzZAV0zpmkw==
+X-Received: by 2002:a9d:7a94:0:b0:6d8:74e2:6f32 with SMTP id l20-20020a9d7a94000000b006d874e26f32mr9226013otn.46.1702663289382;
+        Fri, 15 Dec 2023 10:01:29 -0800 (PST)
 Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id ct7-20020a056808360700b003b9fd2af1f1sm3215689oib.32.2023.12.15.09.48.27
+        by smtp.gmail.com with ESMTPSA id y7-20020a056830108700b006d811e1d91dsm3628236oto.72.2023.12.15.10.01.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Dec 2023 09:48:27 -0800 (PST)
-Received: (nullmailer pid 57648 invoked by uid 1000);
-	Fri, 15 Dec 2023 17:48:26 -0000
-Date: Fri, 15 Dec 2023 11:48:26 -0600
+        Fri, 15 Dec 2023 10:01:28 -0800 (PST)
+Received: (nullmailer pid 74784 invoked by uid 1000);
+	Fri, 15 Dec 2023 18:01:27 -0000
+Date: Fri, 15 Dec 2023 12:01:27 -0600
 From: Rob Herring <robh@kernel.org>
 To: Elad Nachman <enachman@marvell.com>
 Cc: wim@linux-watchdog.org, linux@roeck-us.net, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, gregory.clement@bootlin.com, chris.packham@alliedtelesis.co.nz, andrew@lunn.ch, fu.wei@linaro.org, Suravee.Suthikulpanit@amd.com, al.stone@linaro.org, timur@codeaurora.org, linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, cyuval@marvell.com
-Subject: Re: [PATCH 0/3] watchdog: sbsa_gwdt: add support for Marvell ac5
-Message-ID: <20231215174826.GA52386-robh@kernel.org>
+Subject: Re: [PATCH 3/3] watchdog: sbsa_gwdt: add support for Marvell ac5
+Message-ID: <20231215180127.GB52386-robh@kernel.org>
 References: <20231214150414.1849058-1-enachman@marvell.com>
+ <20231214150414.1849058-4-enachman@marvell.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -60,9 +61,9 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231214150414.1849058-1-enachman@marvell.com>
+In-Reply-To: <20231214150414.1849058-4-enachman@marvell.com>
 
-On Thu, Dec 14, 2023 at 05:04:11PM +0200, Elad Nachman wrote:
+On Thu, Dec 14, 2023 at 05:04:14PM +0200, Elad Nachman wrote:
 > From: Elad Nachman <enachman@marvell.com>
 > 
 > Add support for Marvell ac5/x variant of the ARM
@@ -71,34 +72,228 @@ On Thu, Dec 14, 2023 at 05:04:11PM +0200, Elad Nachman wrote:
 > 
 > 1. Registers reside in secure register section.
 >    hence access is only possible via SMC calls to ATF.
-
-Oops.
-
+> 
 > 2. There are couple more registers which reside in
 >    other register areas, which needs to be configured
 >    in order for the watchdog to properly generate
 >    reset through the SOC.
+> 
+> The new Marvell compatibility string differentiates between
+> the original sbsa mode of operation and the Marvell mode of
+> operation.
+> 
+> Signed-off-by: Elad Nachman <enachman@marvell.com>
+> ---
+>  drivers/watchdog/sbsa_gwdt.c | 247 ++++++++++++++++++++++++++++++++---
 
-Your firmware should configure these.
+That's more than half the existing driver...
 
+>  1 file changed, 226 insertions(+), 21 deletions(-)
 > 
->    The new Marvell compatibility string differentiates between
->    the original sbsa mode of operation and the Marvell mode of
->    operation.
-> 
-> 
-> Elad Nachman (3):
->   dt-bindings: watchdog: add Marvell AC5 watchdog
->   arm64: dts: ac5: add watchdog nodes
->   watchdog: sbsa_gwdt: add support for Marvell ac5
-> 
->  .../bindings/watchdog/arm,sbsa-gwdt.yaml      |  52 +++-
->  arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi |  14 +
->  arch/arm64/boot/dts/marvell/ac5-98dx35xx.dtsi |   8 +
->  drivers/watchdog/sbsa_gwdt.c                  | 247 ++++++++++++++++--
->  4 files changed, 298 insertions(+), 23 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
+> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
+> index 5f23913ce3b4..0bc6f53f0968 100644
+> --- a/drivers/watchdog/sbsa_gwdt.c
+> +++ b/drivers/watchdog/sbsa_gwdt.c
+> @@ -46,10 +46,13 @@
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+>  #include <linux/moduleparam.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/watchdog.h>
+>  #include <asm/arch_timer.h>
+> +#include <linux/arm-smccc.h>
+>  
+>  #define DRV_NAME		"sbsa-gwdt"
+>  #define WATCHDOG_NAME		"SBSA Generic Watchdog"
+> @@ -75,6 +78,68 @@
+>  #define SBSA_GWDT_VERSION_MASK  0xF
+>  #define SBSA_GWDT_VERSION_SHIFT 16
+>  
+> +/* Marvell AC5/X SMCs, taken from arm trusted firmware */
+> +#define SMC_FID_READ_REG	0x80007FFE
+> +#define SMC_FID_WRITE_REG	0x80007FFD
+> +
+> +/* Marvell registers offsets: */
+> +#define SBSA_GWDT_MARVELL_CPU_WD_RST_EN_REG	0x30
+> +#define SBSA_GWDT_MARVELL_MNG_ID_REG		0x4C
+> +#define SBSA_GWDT_MARVELL_RST_CTRL_REG		0x0C
+> +
+> +#define SBSA_GWDT_MARVELL_ID_MASK	GENMASK(19, 12)
+> +#define SBSA_GWDT_MARVELL_AC5_ID	0xB4000
+> +#define SBSA_GWDT_MARVELL_AC5X_ID	0x98000
+> +#define SBSA_GWDT_MARVELL_IML_ID	0xA0000
+> +#define SBSA_GWDT_MARVELL_IMM_ID	0xA2000
+> +
+> +#define SBSA_GWDT_MARVELL_AC5_RST_UNIT_WD_BIT		BIT(6)
+> +/* The following applies to AC5X, IronMan L and M: */
+> +#define SBSA_GWDT_MARVELL_IRONMAN_RST_UNIT_WD_BIT	BIT(7)
+> +
+> +/*
+> + * Action to perform after watchdog gets WS1 (watchdog signal 1) interrupt
+> + * PWD = Private Watchdog, GWD - Global Watchdog, mpp - multi purpose pin
+> + *
+> + * 0 = Enable  1 = Disable (Default)
+> + *
+> + * BIT  0: CPU 0 reset by PWD 0
+> + * BIT  1: CPU 1 reset by PWD 1
+> + * BIT  2: CPU 0 reset by GWD
+> + * BIT  3: CPU 1 reset by GWD
+> + * BIT  4: PWD 0 sys reset out
+> + * BIT  5: PWD 1 sys reset out
+> + * BIT  6: GWD sys reset out
+> + * BIT  7: Reserved
+> + * BIT  8: PWD 0 mpp reset out
+> + * BIT  9: PWD 1 mpp reset out
+> + * BIT 10: GWD mpp reset out
+> + *
+> + */
+> +#define SBSA_GWDT_MARVELL_RST_CPU0_BY_PWD0	BIT(0)
+> +#define SBSA_GWDT_MARVELL_RST_CPU1_BY_PWD1	BIT(1)
+> +#define SBSA_GWDT_MARVELL_RST_CPU0_BY_GWD	BIT(2)
+> +#define SBSA_GWDT_MARVELL_RST_CPU1_BY_GWD	BIT(3)
+> +#define SBSA_GWDT_MARVELL_RST_SYSRST_BY_PWD0	BIT(4)
+> +#define SBSA_GWDT_MARVELL_RST_SYSRST_BY_PWD1	BIT(5)
+> +#define SBSA_GWDT_MARVELL_RST_SYSRST_BY_GWD	BIT(6)
+> +#define SBSA_GWDT_MARVELL_RST_RESERVED		BIT(7)
+> +#define SBSA_GWDT_MARVELL_RST_MPP_BY_PWD0	BIT(8)
+> +#define SBSA_GWDT_MARVELL_RST_MPP_BY_PWD1	BIT(9)
+> +#define SBSA_GWDT_MARVELL_RST_MPP_BY_GWD	BIT(10)
+> +
+> +/**
+> + * struct sbsa_gwdt_regs_ops - ops for register read/write, depending on SOC
+> + * @reg_read:			register read ops function
+> + * @read_write:			register write ops function
+> + */
+> +struct sbsa_gwdt_regs_ops {
+> +	u32 (*reg_read32)(void __iomem *ptr);
+> +	__u64 (*reg_read64)(void __iomem *ptr);
+> +	void (*reg_write32)(u32 val, void __iomem *ptr);
+> +	void (*reg_write64)(__u64 val, void __iomem *ptr);
+> +};
+> +
+>  /**
+>   * struct sbsa_gwdt - Internal representation of the SBSA GWDT
+>   * @wdd:		kernel watchdog_device structure
+> @@ -89,6 +154,7 @@ struct sbsa_gwdt {
+>  	int			version;
+>  	void __iomem		*refresh_base;
+>  	void __iomem		*control_base;
+> +	const struct sbsa_gwdt_regs_ops *soc_reg_ops;
+>  };
+>  
+>  #define DEFAULT_TIMEOUT		10 /* seconds */
+> @@ -116,6 +182,91 @@ MODULE_PARM_DESC(nowayout,
+>  		 "Watchdog cannot be stopped once started (default="
+>  		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+>  
+> +/*
+> + * By default, have the Global watchdog cause System Reset:
+> + */
+> +static unsigned int reset = 0xFFFFFFFF ^ SBSA_GWDT_MARVELL_RST_SYSRST_BY_GWD;
+> +module_param(reset, uint, 0);
+> +MODULE_PARM_DESC(reset, "Action to perform after watchdog gets WS1 interrupt");
+> +
+> +/*
+> + * Marvell AC5/X use SMC, while others use direct register access
+> + */
+> +static u32 sbsa_gwdt_smc_readl(void __iomem *addr)
+> +{
+> +	struct arm_smccc_res smc_res;
+> +
+> +	arm_smccc_smc(SMC_FID_READ_REG, (unsigned long)addr,
+> +		      0, 0, 0, 0, 0, 0, &smc_res);
+> +	return (u32)smc_res.a0;
+> +}
+> +
+> +static void sbsa_gwdt_smc_writel(u32 val, void __iomem *addr)
+> +{
+> +	struct arm_smccc_res smc_res;
+> +
+> +	arm_smccc_smc(SMC_FID_WRITE_REG, (unsigned long)addr,
+> +		      (unsigned long)val, 0, 0, 0, 0, 0, &smc_res);
+> +}
+> +
+> +static inline u64 sbsa_gwdt_lo_hi_smc_readq(void __iomem *addr)
+> +{
+> +	u32 low, high;
+> +
+> +	low = sbsa_gwdt_smc_readl(addr);
+> +	high = sbsa_gwdt_smc_readl(addr + 4);
+> +	/* read twice, as a workaround to HW limitation */
+> +	low = sbsa_gwdt_smc_readl(addr);
+> +
+> +	return low + ((u64)high << 32);
+> +}
+> +
+> +static inline void sbsa_gwdt_lo_hi_smc_writeq(__u64 val, void __iomem *addr)
+> +{
+> +	u32 low, high;
+> +
+> +	low = val & 0xffffffff;
+> +	high = val >> 32;
+> +	sbsa_gwdt_smc_writel(low, addr);
+> +	sbsa_gwdt_smc_writel(high, addr + 4);
+> +	/* write twice, as a workaround to HW limitation */
+> +	sbsa_gwdt_smc_writel(low, addr);
+> +}
+> +
+> +static u32 sbsa_gwdt_direct_reg_readl(void __iomem *addr)
+> +{
+> +	return readl(addr);
+> +}
+> +
+> +static void sbsa_gwdt_direct_reg_writel(u32 val, void __iomem *addr)
+> +{
+> +	writel(val, addr);
+> +}
+> +
+> +static inline u64 sbsa_gwdt_lo_hi_direct_readq(void __iomem *addr)
+> +{
+> +	return lo_hi_readq(addr);
+> +}
+> +
+> +static inline void sbsa_gwdt_lo_hi_direct_writeq(__u64 val, void __iomem *addr)
+> +{
+> +	lo_hi_writeq(val, addr);
+> +}
+> +
+> +static const struct sbsa_gwdt_regs_ops smc_reg_ops = {
+> +	.reg_read32 = sbsa_gwdt_smc_readl,
+> +	.reg_read64 = sbsa_gwdt_lo_hi_smc_readq,
+> +	.reg_write32 = sbsa_gwdt_smc_writel,
+> +	.reg_write64 = sbsa_gwdt_lo_hi_smc_writeq
+> +};
+> +
+> +static const struct sbsa_gwdt_regs_ops direct_reg_ops = {
+> +	.reg_read32 = sbsa_gwdt_direct_reg_readl,
+> +	.reg_read64 = sbsa_gwdt_lo_hi_direct_readq,
+> +	.reg_write32 = sbsa_gwdt_direct_reg_writel,
+> +	.reg_write64 = sbsa_gwdt_lo_hi_smc_writeq
+> +};
+
+The watchdog_ops are already practically not much more than a register 
+read or write. Do we really need 2 levels of ops here?
+
+> +
+>  /*
+>   * Arm Base System Architecture 1.0 introduces watchdog v1 which
+>   * increases the length watchdog offset register to 48 bits.
+> @@ -127,17 +278,17 @@ MODULE_PARM_DESC(nowayout,
+>  static u64 sbsa_gwdt_reg_read(struct sbsa_gwdt *gwdt)
+>  {
+>  	if (gwdt->version == 0)
+> -		return readl(gwdt->control_base + SBSA_GWDT_WOR);
+> +		return gwdt->soc_reg_ops->reg_read32(gwdt->control_base + SBSA_GWDT_WOR);
+>  	else
+> -		return lo_hi_readq(gwdt->control_base + SBSA_GWDT_WOR);
+> +		return gwdt->soc_reg_ops->reg_read64(gwdt->control_base + SBSA_GWDT_WOR);
+>  }
+
+Here we already have a different way to abstract register accesses. 
+Probably should have something that works for all 3 cases...
+
+Rob
 
