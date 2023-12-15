@@ -1,113 +1,177 @@
-Return-Path: <linux-watchdog+bounces-351-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-352-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E42FF8140ED
-	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Dec 2023 05:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DEE0814253
+	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Dec 2023 08:25:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89DA81F22644
-	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Dec 2023 04:27:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10DD11F22A53
+	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Dec 2023 07:25:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CB45566C;
-	Fri, 15 Dec 2023 04:27:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="0XwQS7wt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29EE6D292;
+	Fri, 15 Dec 2023 07:25:50 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD59569C
-	for <linux-watchdog@vger.kernel.org>; Fri, 15 Dec 2023 04:27:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 470E12C0381;
-	Fri, 15 Dec 2023 17:21:58 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1702614118;
-	bh=SVUOOR0rCQvpdqTF1+SbvUi+Db5NcfNoL6CdiMFlLV4=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=0XwQS7wtY455IRqvSdYmrZyxK25QiEh6tNCgbfG+xU6M9FiyUr1DAG1A2GPNGS1O+
-	 qYqUaPzsJXWsUrnQIKAABIXp2GrQhgI0KYP2FMuJDcgVObFr5yh5T+SVsV3EDX10zb
-	 FCFVLTyFV2IR52mSwwwH2j8uheLSBnNw9Q94YjBikMgbT+b08NOFMIv/muh1gpPZPe
-	 UPR4vg7AfdCyz3GX+ZFWr0kX+x//DeAJ5+mc4W1Lq3GJ4+EYq67/wBh+AHoXSDTog4
-	 PfwC7fXg2CAd3KnFJYHx2bPP2XymZNcJuFr0Z+7j3GrR3erl/Gkp8NwKUJhmFt/H7U
-	 UDScGFPB2Tedw==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B657bd4660001>; Fri, 15 Dec 2023 17:21:58 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.40; Fri, 15 Dec 2023 17:21:58 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
- SMTP Server (TLS) id 15.0.1497.48; Fri, 15 Dec 2023 17:21:57 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.040; Fri, 15 Dec 2023 17:21:57 +1300
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Elad Nachman <enachman@marvell.com>, "wim@linux-watchdog.org"
-	<wim@linux-watchdog.org>, "linux@roeck-us.net" <linux@roeck-us.net>,
-	"robh+dt@kernel.org" <robh+dt@kernel.org>,
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, "gregory.clement@bootlin.com"
-	<gregory.clement@bootlin.com>, "andrew@lunn.ch" <andrew@lunn.ch>,
-	"fu.wei@linaro.org" <fu.wei@linaro.org>, "Suravee.Suthikulpanit@amd.com"
-	<Suravee.Suthikulpanit@amd.com>, "al.stone@linaro.org" <al.stone@linaro.org>,
-	"timur@codeaurora.org" <timur@codeaurora.org>,
-	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC: "cyuval@marvell.com" <cyuval@marvell.com>
-Subject: Re: [PATCH 0/3] watchdog: sbsa_gwdt: add support for Marvell ac5
-Thread-Topic: [PATCH 0/3] watchdog: sbsa_gwdt: add support for Marvell ac5
-Thread-Index: AQHaLp7UhCt7s/9TXkCz5F6TLW3ne7Co5U+A
-Date: Fri, 15 Dec 2023 04:21:57 +0000
-Message-ID: <cdfee2e1-8a94-4e44-b81b-0ade384fa481@alliedtelesis.co.nz>
-References: <20231214150414.1849058-1-enachman@marvell.com>
-In-Reply-To: <20231214150414.1849058-1-enachman@marvell.com>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A5162494EBD49B49BA2701D403EFDFFB@atlnz.lc>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA46D16418;
+	Fri, 15 Dec 2023 07:25:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+	(Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+	by fd01.gateway.ufhost.com (Postfix) with ESMTP id D06EC7FE2;
+	Fri, 15 Dec 2023 15:25:36 +0800 (CST)
+Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 15 Dec
+ 2023 15:25:36 +0800
+Received: from localhost.localdomain (202.188.176.82) by EXMBX072.cuchost.com
+ (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 15 Dec
+ 2023 15:25:32 +0800
+From: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+To: <krzysztof.kozlowski@linaro.org>
+CC: <conor+dt@kernel.org>, <devicetree@vger.kernel.org>,
+	<jisheng.teoh@starfivetech.com>, <krzysztof.kozlowski+dt@linaro.org>,
+	<leyfoon.tan@starfivetech.com>, <linux-kernel@vger.kernel.org>,
+	<linux-watchdog@vger.kernel.org>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+	<samin.guo@starfivetech.com>, <wim@linux-watchdog.org>,
+	<xingyu.wu@starfivetech.com>
+Subject: Re: [PATCH v3 1/1] dt-bindings: watchdog: starfive,jh7100-wdt: Add compatible for JH8100
+Date: Fri, 15 Dec 2023 15:25:08 +0800
+Message-ID: <20231215072508.3498476-1-jisheng.teoh@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <40b5d1a8-37d2-4c68-8d16-33c92c3e5716@linaro.org>
+References: <40b5d1a8-37d2-4c68-8d16-33c92c3e5716@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=CYB2G4jl c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=e2cXIFwxEfEA:10 a=M5GUcnROAAAA:8 a=K2GjWCfgx9wMK7TpFYYA:9 a=QEXdDO2ut3YA:10 a=OBjm3rFKGHvpk9ecZwUJ:22
-X-SEG-SpamProfiler-Score: 0
+Content-Type: text/plain
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX072.cuchost.com
+ (172.16.6.82)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: quoted-printable
 
-DQpPbiAxNS8xMi8yMyAwNDowNCwgRWxhZCBOYWNobWFuIHdyb3RlOg0KPiBGcm9tOiBFbGFkIE5h
-Y2htYW4gPGVuYWNobWFuQG1hcnZlbGwuY29tPg0KPg0KPiBBZGQgc3VwcG9ydCBmb3IgTWFydmVs
-bCBhYzUveCB2YXJpYW50IG9mIHRoZSBBUk0NCj4gc2JzYSBnbG9iYWwgd2F0Y2hkb2cuIFRoaXMg
-d2F0Y2hkb2cgZGV2aWF0ZXMgZnJvbQ0KPiB0aGUgc3RhbmRhcmQgZHJpdmVyIGJ5IHRoZSBmb2xs
-b3dpbmcgaXRlbXM6DQo+DQo+IDEuIFJlZ2lzdGVycyByZXNpZGUgaW4gc2VjdXJlIHJlZ2lzdGVy
-IHNlY3Rpb24uDQo+ICAgICBoZW5jZSBhY2Nlc3MgaXMgb25seSBwb3NzaWJsZSB2aWEgU01DIGNh
-bGxzIHRvIEFURi4NCj4NCj4gMi4gVGhlcmUgYXJlIGNvdXBsZSBtb3JlIHJlZ2lzdGVycyB3aGlj
-aCByZXNpZGUgaW4NCj4gICAgIG90aGVyIHJlZ2lzdGVyIGFyZWFzLCB3aGljaCBuZWVkcyB0byBi
-ZSBjb25maWd1cmVkDQo+ICAgICBpbiBvcmRlciBmb3IgdGhlIHdhdGNoZG9nIHRvIHByb3Blcmx5
-IGdlbmVyYXRlDQo+ICAgICByZXNldCB0aHJvdWdoIHRoZSBTT0MuDQo+DQo+ICAgICBUaGUgbmV3
-IE1hcnZlbGwgY29tcGF0aWJpbGl0eSBzdHJpbmcgZGlmZmVyZW50aWF0ZXMgYmV0d2Vlbg0KPiAg
-ICAgdGhlIG9yaWdpbmFsIHNic2EgbW9kZSBvZiBvcGVyYXRpb24gYW5kIHRoZSBNYXJ2ZWxsIG1v
-ZGUgb2YNCj4gICAgIG9wZXJhdGlvbi4NCg0KSSBnYXZlIHRoaXMgYSBxdWljayB0cnkgb24gb3Vy
-IEFDNVggYmFzZWQgYm9hcmQgYW5kIGl0IHdvcmtlZCB3ZWxsIHdpdGggDQpib3RoIGFjdGlvbj0w
-L2FjdGlvbj0xDQoNCj4gRWxhZCBOYWNobWFuICgzKToNCj4gICAgZHQtYmluZGluZ3M6IHdhdGNo
-ZG9nOiBhZGQgTWFydmVsbCBBQzUgd2F0Y2hkb2cNCj4gICAgYXJtNjQ6IGR0czogYWM1OiBhZGQg
-d2F0Y2hkb2cgbm9kZXMNCj4gICAgd2F0Y2hkb2c6IHNic2FfZ3dkdDogYWRkIHN1cHBvcnQgZm9y
-IE1hcnZlbGwgYWM1DQo+DQo+ICAgLi4uL2JpbmRpbmdzL3dhdGNoZG9nL2FybSxzYnNhLWd3ZHQu
-eWFtbCAgICAgIHwgIDUyICsrKy0NCj4gICBhcmNoL2FybTY0L2Jvb3QvZHRzL21hcnZlbGwvYWM1
-LTk4ZHgyNXh4LmR0c2kgfCAgMTQgKw0KPiAgIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWFydmVsbC9h
-YzUtOThkeDM1eHguZHRzaSB8ICAgOCArDQo+ICAgZHJpdmVycy93YXRjaGRvZy9zYnNhX2d3ZHQu
-YyAgICAgICAgICAgICAgICAgIHwgMjQ3ICsrKysrKysrKysrKysrKystLQ0KPiAgIDQgZmlsZXMg
-Y2hhbmdlZCwgMjk4IGluc2VydGlvbnMoKyksIDIzIGRlbGV0aW9ucygtKQ0KPg==
+On Thu, 14 Dec 2023 08:39:46 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+
+> On 14/12/2023 04:30, Ji Sheng Teoh wrote:
+> > Add "starfive,jh8100-wdt" compatible string for StarFive's JH8100
+> > watchdog.
+> > Since JH8100 watchdog only has 1 reset signal, update binding
+> > document to support one reset for "starfive,jh8100-wdt" compatible.
+> >=20
+> > Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
+> > Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+> > ---
+> >  .../watchdog/starfive,jh7100-wdt.yaml         | 48
+> > ++++++++++++++++--- 1 file changed, 42 insertions(+), 6 deletions(-)
+> >=20
+> > diff --git
+> > a/Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml
+> > b/Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml
+> > index 68f3f6fd08a6..79082c5f9971 100644 ---
+> > a/Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml
+> > +++
+> > b/Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml
+> > @@ -19,14 +19,17 @@ description: isn't cleared, the watchdog will
+> > reset the system unless the watchdog reset is disabled. -allOf:
+> > -  - $ref: watchdog.yaml#
+> > -
+> >  properties:
+> >    compatible:
+> > -    enum:
+> > -      - starfive,jh7100-wdt
+> > -      - starfive,jh7110-wdt
+> > +    oneOf:
+> > +      - items: =20
+>=20
+> Drop items, it wasn't here in the first place.
+
+Ok, will drop.
+>=20
+> > +          - enum:
+> > +              - starfive,jh7100-wdt
+> > +              - starfive,jh7110-wdt
+> > +      - items:
+> > +          - enum:
+> > +              - starfive,jh8100-wdt
+> > +          - const: starfive,jh7110-wdt
+> > =20
+> >    reg:
+> >      maxItems: 1
+> > @@ -45,10 +48,33 @@ properties:
+> >        - const: core
+> > =20
+> >    resets:
+> > +    minItems: 1
+> >      items:
+> >        - description: APB reset
+> >        - description: Core reset =20
+>=20
+> This is not valid for jh8100. Move it to else: part. Here maxItems: 2.
+>
+Sure, will replace with maxItems.
+=20
+> > =20
+> > +allOf: =20
+>=20
+> allOf goes after required:, see example-schema
+>=20
+Ok, will move it after required.
+
+> > +  - $ref: watchdog.yaml#
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - starfive,jh8100-wdt
+> > +    then:
+> > +      properties:
+> > +        resets:
+> > +          description: |
+> > +            Must contain Core reset entry.
+> > +          maxItems: 1 =20
+>=20
+> Instead of both, items: with description.
+>=20
+Sure, will use items instead.
+
+> > +    else:
+> > +      properties:
+> > +        resets:
+> > +          description: |
+> > +            Must contain APB reset and Core reset entry.
+> > +          minItems: 2
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+> > @@ -69,3 +95,13 @@ examples:
+> >          resets =3D <&rst 99>,
+> >                   <&rst 100>;
+> >      };
+> > +
+> > +  - |
+> > +    watchdog@12270000 {
+> > +        compatible =3D "starfive,jh8100-wdt", "starfive,jh7110-wdt";
+> > +        reg =3D <0x12270000 0x10000>;
+> > +        clocks =3D <&clk 78>,
+> > +                 <&clk 79>; =20
+>=20
+> No need for new example with difference in one property.
+
+Ok, will drop the new example. Thanks
+>=20
+> Best regards,
+> Krzysztof
+>=20
+
 
