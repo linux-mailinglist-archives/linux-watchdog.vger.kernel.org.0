@@ -1,101 +1,86 @@
-Return-Path: <linux-watchdog+bounces-361-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-360-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 460BC816041
-	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Dec 2023 16:50:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C58C981603A
+	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Dec 2023 16:44:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0335228365E
-	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Dec 2023 15:50:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F41C01C20CEA
+	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Dec 2023 15:44:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3205844C99;
-	Sun, 17 Dec 2023 15:50:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A6CC446B2;
+	Sun, 17 Dec 2023 15:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="A5nmn24K"
+	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="c65JLxqb"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFF4844C88;
-	Sun, 17 Dec 2023 15:50:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5FE545BE4
+	for <linux-watchdog@vger.kernel.org>; Sun, 17 Dec 2023 15:43:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
 Received: by www.linux-watchdog.org (Postfix, from userid 500)
-	id AE07240A00; Sun, 17 Dec 2023 16:33:18 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org AE07240A00
+	id 2C40740A42; Sun, 17 Dec 2023 16:34:48 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 2C40740A42
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-	s=odk20180602; t=1702827198;
-	bh=+l0EOLKa0Bl3ZTWz3jGKaliU0ki9maj1BDrJAnID99w=;
+	s=odk20180602; t=1702827288;
+	bh=f8FMduk32J5mDv1FWQOJ4O+W0eVJwGdxtVr779KbgCA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A5nmn24KcJNSDhVfY9QidGiyMapfWTt138hl4+Oj//u0GhFO0wjHMJ3zVi0sUypae
-	 w7RC7V1Xl+ZjfbhpSVFKJdbQ3yfmIXDjEiH+W7ugZvdBMqRMvqtqZeYsvlT3u8fsA0
-	 JmnVrAAgFogL1Jj9qDNW6hJhRh2kFdRO7x3Oat7M=
-Date: Sun, 17 Dec 2023 16:33:18 +0100
+	b=c65JLxqbBryj5L5Cjk6qXkAeeqZjYi1ctWs52vEW93G7yXBnEqRDnH3fVRFjIlJZr
+	 Rb7TYDjopF/iOVsxq85TLogiFR/KRPUjaCb+PyzNUCZLHdtfc8kKJO0f/fDfAMUS9Z
+	 8X7405lWqJEazTU+m1WPu9Xd2dLgNgxC5KYd65eY=
+Date: Sun, 17 Dec 2023 16:34:48 +0100
 From: Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Doug Anderson <dianders@chromium.org>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
+To: Stefan Wahren <wahrenst@gmx.net>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, swboyd@chromium.org,
-	linux-watchdog@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-	linux-arm-msm@vger.kernel.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Andy Gross <agross@kernel.org>,
-	Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 9/9] dt-bindings: watchdog: qcom-wdt: Make the
- interrupt example edge triggered
-Message-ID: <20231217153318.GA6196@www.linux-watchdog.org>
-References: <20231106144335.v2.1.Ic7577567baff921347d423b722de8b857602efb1@changeid>
- <20231106144335.v2.9.Ie30c1d3f780666f6906fd2fd7c437632c229d987@changeid>
- <CAD=FV=XsPGvNggpJPCpF=xhkm3dOHsStycZvuVttA=ZH6=EUmw@mail.gmail.com>
+	bcm-kernel-feedback-list@broadcom.com,
+	Phil Elwell <phil@raspberrypi.com>, Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	linux-watchdog@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] watchdog: bcm2835_wdt: Fix WDIOC_SETTIMEOUT handling
+Message-ID: <20231217153448.GB6196@www.linux-watchdog.org>
+References: <20231112173251.4827-1-wahrenst@gmx.net>
+ <cce852fd-618c-44f5-aa86-1cd33bd97351@roeck-us.net>
+ <f0354dc4-e6f1-41c5-9a99-9847c96a15c2@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=XsPGvNggpJPCpF=xhkm3dOHsStycZvuVttA=ZH6=EUmw@mail.gmail.com>
+In-Reply-To: <f0354dc4-e6f1-41c5-9a99-9847c96a15c2@gmx.net>
 User-Agent: Mutt/1.5.20 (2009-12-10)
 
-Hi Doug,
+Hi Stefan,
 
 > Hi,
 > 
-> On Mon, Nov 6, 2023 at 2:44 PM Douglas Anderson <dianders@chromium.org> wrote:
-> >
-> > As described in the patch ("arm64: dts: qcom: sc7180: Make watchdog
-> > bark interrupt edge triggered"), the Qualcomm watchdog timer's bark
-> > interrupt should be configured as edge triggered.
-> >
-> > Update the example in the bindings.
-> >
-> > Fixes: 7c631cdff391 ("dt-bindings: watchdog: qcom-wdt: allow interrupts")
-> > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> >
-> > (no changes since v1)
-> >
-> >  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> I saw Bjorn landed all of the dts patches from this series but it
-> looks like the bindings patch got left behind. Anyone want to claim it
-> for their tree, or Ack it saying that you'd prefer for it to go
-> through someone else's tree? I assume Krzysztof's Ack means he's not
-> intending for it to go through the DT tree and Bjorn doesn't seem to
-> intend for it to go through the Qualcomm tree. Guenter/Wim: it feels
-> like this could go in the watchdog tree?
+> Am 13.11.23 um 15:31 schrieb Guenter Roeck:
+> >On Sun, Nov 12, 2023 at 06:32:51PM +0100, Stefan Wahren wrote:
+> >>Users report about the unexpected behavior for setting timeouts above
+> >>15 sec on Raspberry Pi. According to watchdog-api.rst the ioctl
+> >>WDIOC_SETTIMEOUT shouldn't fail because of hardware limitations.
+> >>But looking at the code shows that max_timeout based on the
+> >>register value PM_WDOG_TIME_SET, which is the maximum.
+> >>
+> >>Since 664a39236e71 ("watchdog: Introduce hardware maximum heartbeat
+> >>in watchdog core") the watchdog core is able to handle this problem.
+> >>
+> >>This fix has been tested with watchdog-test from selftests.
+> >>
+> >>Link: https://bugzilla.kernel.org/show_bug.cgi?id=217374
+> >>Fixes: 664a39236e71 ("watchdog: Introduce hardware maximum heartbeat in watchdog core")
+> >>Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+> >Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> who takes care of this patch?
 
-I picked it up in the watchdog tree.
+I did.
 
 Kind regards,
 Wim.
