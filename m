@@ -1,88 +1,99 @@
-Return-Path: <linux-watchdog+bounces-360-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-362-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C58C981603A
-	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Dec 2023 16:44:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD6E481667B
+	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Dec 2023 07:27:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F41C01C20CEA
-	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Dec 2023 15:44:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 414C51F21941
+	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Dec 2023 06:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A6CC446B2;
-	Sun, 17 Dec 2023 15:44:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 292BC6FA4;
+	Mon, 18 Dec 2023 06:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="c65JLxqb"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="5AOlFKkU"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5FE545BE4
-	for <linux-watchdog@vger.kernel.org>; Sun, 17 Dec 2023 15:43:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-	id 2C40740A42; Sun, 17 Dec 2023 16:34:48 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 2C40740A42
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-	s=odk20180602; t=1702827288;
-	bh=f8FMduk32J5mDv1FWQOJ4O+W0eVJwGdxtVr779KbgCA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=c65JLxqbBryj5L5Cjk6qXkAeeqZjYi1ctWs52vEW93G7yXBnEqRDnH3fVRFjIlJZr
-	 Rb7TYDjopF/iOVsxq85TLogiFR/KRPUjaCb+PyzNUCZLHdtfc8kKJO0f/fDfAMUS9Z
-	 8X7405lWqJEazTU+m1WPu9Xd2dLgNgxC5KYd65eY=
-Date: Sun, 17 Dec 2023 16:34:48 +0100
-From: Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Stefan Wahren <wahrenst@gmx.net>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89EEC8F3;
+	Mon, 18 Dec 2023 06:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=yd59uGEg1d9Q50uiK6BFpTRDUTndrVdBp8wWSlMKviQ=; b=5AOlFKkUY8zEhGiMEqCk5zyVrm
+	r3BRHXeoTHeGuUqiY/9fn1/ofA4PB7aaMiJD1lDdoTtZA4sRZZDv3RnK9l97Ale3paO2uJhW7PmK7
+	dK1UXiKyaCiOaJSK3SP1aslqPZU6RKTpanulUKu0Ib6Vs6beQSdN4QgPpT5GZUr4v5AfgTfqDgcTT
+	j59jUnKfw/B/VCda1hLjKd8nxoOR/Q0gSzJrZ+JWdTXsfBKhZpnL+TnK6hKcMqmHdpsjS38BZDLZe
+	cDrzB02JiSSHOw+xGEHrp1mJDKBs2pmi/lzkLapvQMbK7qRJB2LnA7uqijm+O7SSVkT/gbwoSpo6N
+	xrdVOZ0w==;
+Received: from [50.53.46.231] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1rF75g-009DcO-0k;
+	Mon, 18 Dec 2023 06:27:00 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	kernel test robot <lkp@intel.com>,
+	Michael Shych <michaelsh@nvidia.com>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	bcm-kernel-feedback-list@broadcom.com,
-	Phil Elwell <phil@raspberrypi.com>, Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	linux-watchdog@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] watchdog: bcm2835_wdt: Fix WDIOC_SETTIMEOUT handling
-Message-ID: <20231217153448.GB6196@www.linux-watchdog.org>
-References: <20231112173251.4827-1-wahrenst@gmx.net>
- <cce852fd-618c-44f5-aa86-1cd33bd97351@roeck-us.net>
- <f0354dc4-e6f1-41c5-9a99-9847c96a15c2@gmx.net>
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-watchdog@vger.kernel.org
+Subject: [PATCH] watchdog: mlx_wdt: fix all kernel-doc warnings
+Date: Sun, 17 Dec 2023 22:26:59 -0800
+Message-ID: <20231218062659.26916-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f0354dc4-e6f1-41c5-9a99-9847c96a15c2@gmx.net>
-User-Agent: Mutt/1.5.20 (2009-12-10)
+Content-Transfer-Encoding: 8bit
 
-Hi Stefan,
+Correct kernel-doc warnings as reported by kernel test robot:
 
-> Hi,
-> 
-> Am 13.11.23 um 15:31 schrieb Guenter Roeck:
-> >On Sun, Nov 12, 2023 at 06:32:51PM +0100, Stefan Wahren wrote:
-> >>Users report about the unexpected behavior for setting timeouts above
-> >>15 sec on Raspberry Pi. According to watchdog-api.rst the ioctl
-> >>WDIOC_SETTIMEOUT shouldn't fail because of hardware limitations.
-> >>But looking at the code shows that max_timeout based on the
-> >>register value PM_WDOG_TIME_SET, which is the maximum.
-> >>
-> >>Since 664a39236e71 ("watchdog: Introduce hardware maximum heartbeat
-> >>in watchdog core") the watchdog core is able to handle this problem.
-> >>
-> >>This fix has been tested with watchdog-test from selftests.
-> >>
-> >>Link: https://bugzilla.kernel.org/show_bug.cgi?id=217374
-> >>Fixes: 664a39236e71 ("watchdog: Introduce hardware maximum heartbeat in watchdog core")
-> >>Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> >Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> who takes care of this patch?
+mlx_wdt.c:56: warning: Function parameter or member 'wdt_type' not described in 'mlxreg_wdt'
+mlx_wdt.c:56: warning: Excess struct member 'device' description in 'mlxreg_wdt'
+mlx_wdt.c:56: warning: Excess struct member 'timeout' description in 'mlxreg_wdt'
+mlx_wdt.c:56: warning: Excess struct member 'wd_type' description in 'mlxreg_wdt'
 
-I did.
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202312171701.xNkzdgdi-lkp@intel.com/
+Cc: Michael Shych <michaelsh@nvidia.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-watchdog@vger.kernel.org
+---
+ drivers/watchdog/mlx_wdt.c |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Kind regards,
-Wim.
-
+diff -- a/drivers/watchdog/mlx_wdt.c b/drivers/watchdog/mlx_wdt.c
+--- a/drivers/watchdog/mlx_wdt.c
++++ b/drivers/watchdog/mlx_wdt.c
+@@ -30,17 +30,15 @@
+  * struct mlxreg_wdt - wd private data:
+  *
+  * @wdd:	watchdog device;
+- * @device:	basic device;
+  * @pdata:	data received from platform driver;
+  * @regmap:	register map of parent device;
+- * @timeout:	defined timeout in sec.;
+  * @action_idx:	index for direct access to action register;
+  * @timeout_idx:index for direct access to TO register;
+  * @tleft_idx:	index for direct access to time left register;
+  * @ping_idx:	index for direct access to ping register;
+  * @reset_idx:	index for direct access to reset cause register;
+  * @regmap_val_sz: size of value in register map;
+- * @wd_type:	watchdog HW type;
++ * @wdt_type:	watchdog HW type;
+  */
+ struct mlxreg_wdt {
+ 	struct watchdog_device wdd;
 
