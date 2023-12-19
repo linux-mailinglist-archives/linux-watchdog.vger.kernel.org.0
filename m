@@ -1,130 +1,103 @@
-Return-Path: <linux-watchdog+bounces-368-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-369-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D30CA818536
-	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Dec 2023 11:21:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 970AA818B76
+	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Dec 2023 16:43:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F0991F2252B
-	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Dec 2023 10:21:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 362A0B22A46
+	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Dec 2023 15:43:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2026114A8F;
-	Tue, 19 Dec 2023 10:21:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB89A1CF9B;
+	Tue, 19 Dec 2023 15:43:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bvponOVs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ruy+D2B+"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8BBE1429B;
-	Tue, 19 Dec 2023 10:21:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FF72C433C7;
-	Tue, 19 Dec 2023 10:21:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D191D140;
+	Tue, 19 Dec 2023 15:43:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44529C433CB;
+	Tue, 19 Dec 2023 15:43:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702981280;
-	bh=gZeK5clkD/uu2z40FQVqIntH9HPz1O4KCvUi/zNGLMQ=;
+	s=k20201202; t=1703000593;
+	bh=NyVtTMnS4rpOkdtnXq7yeFUBVSUwdAoPi+FuPOJPfOE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bvponOVsqh9GkVQ/7+K8rhxhBFN7YG7FKUsOyD2XR/y41ysT0uBpcakdessirTzvg
-	 iKrjv4Xc01Wuz6C3Hfl8JcSG4RdaskhvxX6ia5UKrotuHCyKORNv7jdZCeWirD9Ca7
-	 Wg+gej2zwMBXtSDRdEdPM+BKqS/n4o8LFICXT4Mr7XNeIRtuTpkDy3/P6D+AvNBKla
-	 XiUW6vUmv2jZhQ5/LQE1pmiLxfTnu8tMz9f4Xchqug2oyZEC6d72eDNTNSQw23U8Uc
-	 iSOvH6TT97yGaIpF5CO06ecnhgbBZCzkt8su5mBEMSukRNF+hKAMHwc6Vpjaa710wA
-	 m8hjDsd10DIkA==
-Date: Tue, 19 Dec 2023 11:21:16 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Andi Shyti <andi.shyti@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-fsd@tesla.com,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-	linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 1/6] dt-bindings: i2c: exynos5: add specific compatible
- for Tesla FSD
-Message-ID: <ZYFunIR3WTWEQZ27@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-fsd@tesla.com,
-	linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-	linux-watchdog@vger.kernel.org
-References: <20231205092229.19135-1-krzysztof.kozlowski@linaro.org>
- <20231205092229.19135-2-krzysztof.kozlowski@linaro.org>
+	b=Ruy+D2B+a3xGnqI4RafDT7LFrPb4m8ifwlm8/VtvaC7/Wyck5hmSIY7ZVkPMlhsRE
+	 Shc+2aDkeDNXa2A8DQstzJ8BskzN8s6Vk/XQMGFi20MMR7Z5BhbcI4UylLpkf2Eip8
+	 j/DHUfqYwJMQT8gjFp9Yf409U277m3SpIic+mScWAQDiKVHYo6Z8q7wNuX+Ww4++5j
+	 6YV7gUPmZWo5R7U0OhvqfhIYwUQlh5hu7+NTg2a00aVDS9qIxVWXmp9LNWkmPg1LmV
+	 DrtvOz23HaRdS5vtCoZWQLVbNjD6kdt9SWt9KUSjaaFf2C/GqQ1BpLhHROJ0qhZSD2
+	 02ijDkYPsIVpA==
+Date: Tue, 19 Dec 2023 15:43:07 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+Cc: krzysztof.kozlowski@linaro.org, conor+dt@kernel.org,
+	devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	leyfoon.tan@starfivetech.com, linux-kernel@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux@roeck-us.net,
+	robh+dt@kernel.org, samin.guo@starfivetech.com,
+	wim@linux-watchdog.org, xingyu.wu@starfivetech.com
+Subject: Re: [PATCH v4 1/1] dt-bindings: watchdog: starfive,jh7100-wdt: Add
+ compatible for JH8100
+Message-ID: <20231219-hankering-console-7de049490dab@spud>
+References: <1d7f9cbe-9ca1-4ccb-b90f-6e474c0740ad@linaro.org>
+ <20231218153738.1054393-1-jisheng.teoh@starfivetech.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="e0jaSCCZf1PJUyzj"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="lh67mthVTQWcRrez"
 Content-Disposition: inline
-In-Reply-To: <20231205092229.19135-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20231218153738.1054393-1-jisheng.teoh@starfivetech.com>
 
 
---e0jaSCCZf1PJUyzj
+--lh67mthVTQWcRrez
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 05, 2023 at 10:22:24AM +0100, Krzysztof Kozlowski wrote:
-> Tesla FSD is a derivative of Samsung Exynos SoC, thus just like the
-> others it reuses several devices from older designs.  Historically we
-> kept the old (block's) compatible only.  This works fine and there is no
-> bug here, however guidelines expressed in
-> Documentation/devicetree/bindings/writing-bindings.rst state that:
-> 1. Compatibles should be specific.
-> 2. We should add new compatibles in case of bugs or features.
+On Mon, Dec 18, 2023 at 11:37:38PM +0800, Ji Sheng Teoh wrote:
+> On Mon, 18 Dec 2023 15:41:37 +0100
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 >=20
-> Add Tesla FSD compatible specific to be used with an existing fallback.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > On 18/12/2023 15:27, Ji Sheng Teoh wrote:
+> > >>
+> > >> I have real doubts that you ever tested your entire solution with
+> > >> this binding. Where is the DTS?
+> > >> =20
+> > >=20
+> > > Currently, the DTS is still in internal and yet to upstream as it
+> > > depends on [1]. =20
+> >=20
+> > Yeah, so you send untested code which cannot work or pass tests.  If
+> > you do not test your code, we need to be able to at least verify it,
+> > so send your DTS. Otherwise I cannot trust that this works at all.
+> >
+> Will submit it with DTS once things have cleared up.
+> Thanks for the comment.=20
 
-Acked-by: Wolfram Sang <wsa@kernel.org>
+[1] is not going to applied for a while since the SoC doesn't actually
+exist yet and is pre-tapeout on an FPGA. I would just send the dts patch
+adding the watchdog alongside the series, or else you'll be waiting for
+quite a while. Or even link to the node on github or whatever.
 
-
---e0jaSCCZf1PJUyzj
+--lh67mthVTQWcRrez
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWBbpgACgkQFA3kzBSg
-Kbay8BAAl6hb97thKirgRbgydIp3RV6plHUmPsCCvb1syX83MRmXvfuFpK0q3XHM
-Q2LO216TmVPqOtoX9njmTJBgQevTK3UhRCiQ/sY6o08iq0zMLUPdWAVvnQZbZJzm
-I8cTKXU23K/nxWnccup5WbVcJIyklvDIK/+U8RsLD9+Rgzj/feynWuh7dMTTBdQf
-LXmxSiw3e0EKQlov6CYi+cGrRthDSZ1cC0g2aQ909cNz4/jAZMFrn2MAW1X5xrRc
-VNUlqK09MfNSSpH8RmBC1K8bxYrMiX5VElOZvE+9iFvjfvb2kfuoHK/TiWAv/HTM
-z9ATejmPxB15c7MY5hJIjE4W0SWQvWqTG38n2AXNVydat0ZNWYs+2aSgMlu8L2R+
-pI+35+Weehn18Zl0ajcXEfjTfVmx9s+7CA80S4b2ieRWXbS0IGFdCT55plW2ojWQ
-kQe/wql3+EPmih8QW32laDFVguvrfIUgRFEBpf9XeORSygcQuquN3m5Lt1KVFdUW
-k/EZ+rN9ecZ3h8g6zGaCOVUdWRjTW2hU9RrW0fJpZjGAiwyXqbdQK+yDDgAXIh4e
-o5XrhxtySQmVSmR06WGkUwPVBxYUWiwST5ImOEJlMaJcobX8ldTCwhpcgOr6iJiO
-pY9lpfcicVqh6SZLv/Vqh/Ph0EQcdY/5/i4jBhOr6pTuHFKLMBY=
-=0p7B
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZYG6CwAKCRB4tDGHoIJi
+0v//AP9ptXXWLaTpbN1hfhivvCOkAxz9G8QvhBald6lq3UuxxAEA3Vzl0QyXQqLJ
+JBFmGXsq8799LeODq0XILF9lAsnwRgw=
+=esPB
 -----END PGP SIGNATURE-----
 
---e0jaSCCZf1PJUyzj--
+--lh67mthVTQWcRrez--
 
