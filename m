@@ -1,126 +1,106 @@
-Return-Path: <linux-watchdog+bounces-372-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-373-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DEE081A0A2
-	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Dec 2023 15:04:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E7E181B086
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Dec 2023 09:44:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AAB228C278
-	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Dec 2023 14:04:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04E711F237CE
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Dec 2023 08:44:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CCAA374F0;
-	Wed, 20 Dec 2023 14:04:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S4KEoNhx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64EEB179A4;
+	Thu, 21 Dec 2023 08:44:27 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19ADB38DD9;
-	Wed, 20 Dec 2023 14:04:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DE02C43391;
-	Wed, 20 Dec 2023 14:04:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703081052;
-	bh=hah0c3+gkGhXsPh3PM6IJDMdLkqSuCgWXu2oMY2gaWE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=S4KEoNhxLnr0OZYvdrVxgO+PSzhs8vLSmwHTUI0snloPRCR7BGVC4ia15p5yPgQ0I
-	 LAZVYXGsm24RJfLoVKdIVrN11p6aN0uHICTNQBycTiIk00Xq1EW5ePIWMmYkjqJ76L
-	 hkml+KahNV4EyzgdxxWXNmUqmlU643DknKQJsMvTlAMLL+fAqUgk9XLoMkwSSwvgr7
-	 vxhdTFFQ5TlmhBORm84xUiQxsst/1bD9Gu5LG7svBU1ODAEjO+s70JFcBUnYMlBesc
-	 jIMTv7o/DO+/I2pfM9dsyreS0WSJfKKXzFKOs+Y3ZKA43vKaFcvHzqsttkEw45R0Pc
-	 QhxmeVrX/uiDA==
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2cc4029dc6eso68869911fa.1;
-        Wed, 20 Dec 2023 06:04:12 -0800 (PST)
-X-Gm-Message-State: AOJu0YwD4FUPeqWLKrnR06jpk1sPrwumS+JtuAK0Fg2xze+JXxWd2rNM
-	pn6riC1RsiNmO5oQTy5QwY2r1ixjJX0bEqWA0A==
-X-Google-Smtp-Source: AGHT+IF4V66pNioiIeRxiat5Fr8KLMNxzNTtoL4Nx1F/4UDthtQsb0MQBvBoGrl3w0HSrJN6pljqmPMH5nPiyvd+njo=
-X-Received: by 2002:a2e:3a15:0:b0:2cc:7125:fa86 with SMTP id
- h21-20020a2e3a15000000b002cc7125fa86mr2628132lja.54.1703081050612; Wed, 20
- Dec 2023 06:04:10 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1AD18026;
+	Thu, 21 Dec 2023 08:44:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+	(Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+	by fd01.gateway.ufhost.com (Postfix) with ESMTP id 04923807B;
+	Thu, 21 Dec 2023 16:44:24 +0800 (CST)
+Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 21 Dec
+ 2023 16:44:23 +0800
+Received: from localhost.localdomain (202.188.176.82) by EXMBX072.cuchost.com
+ (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 21 Dec
+ 2023 16:44:17 +0800
+From: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+To: Xingyu Wu <xingyu.wu@starfivetech.com>, Samin Guo
+	<samin.guo@starfivetech.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+	<conor+dt@kernel.org>, Emil Renner Berthing <kernel@esmil.dk>, Paul Walmsley
+	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+	<aou@eecs.berkeley.edu>
+CC: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>, Ley Foon Tan
+	<leyfoon.tan@starfivetech.com>, <linux-watchdog@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>
+Subject: [PATCH v5 0/2] Add StarFive JH8100 watchdog
+Date: Thu, 21 Dec 2023 16:43:56 +0800
+Message-ID: <20231221084358.3458713-1-jisheng.teoh@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231214150414.1849058-1-enachman@marvell.com> <20231214150414.1849058-4-enachman@marvell.com>
-In-Reply-To: <20231214150414.1849058-4-enachman@marvell.com>
-From: Rob Herring <robh+dt@kernel.org>
-Date: Wed, 20 Dec 2023 08:03:58 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+YacBooMe75dHO3mfwQHapPB+opP7zU+0o_2cmpbv19w@mail.gmail.com>
-Message-ID: <CAL_Jsq+YacBooMe75dHO3mfwQHapPB+opP7zU+0o_2cmpbv19w@mail.gmail.com>
-Subject: Re: [PATCH 3/3] watchdog: sbsa_gwdt: add support for Marvell ac5
-To: Elad Nachman <enachman@marvell.com>
-Cc: wim@linux-watchdog.org, linux@roeck-us.net, 
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	gregory.clement@bootlin.com, chris.packham@alliedtelesis.co.nz, 
-	andrew@lunn.ch, fu.wei@linaro.org, Suravee.Suthikulpanit@amd.com, 
-	al.stone@linaro.org, timur@codeaurora.org, linux-watchdog@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, cyuval@marvell.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX072.cuchost.com
+ (172.16.6.82)
+X-YovoleRuleAgent: yovoleflag
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 14, 2023 at 9:05=E2=80=AFAM Elad Nachman <enachman@marvell.com>=
- wrote:
->
-> From: Elad Nachman <enachman@marvell.com>
->
-> Add support for Marvell ac5/x variant of the ARM
-> sbsa global watchdog. This watchdog deviates from
-> the standard driver by the following items:
->
-> 1. Registers reside in secure register section.
->    hence access is only possible via SMC calls to ATF.
->
-> 2. There are couple more registers which reside in
->    other register areas, which needs to be configured
->    in order for the watchdog to properly generate
->    reset through the SOC.
->
-> The new Marvell compatibility string differentiates between
-> the original sbsa mode of operation and the Marvell mode of
-> operation.
->
-> Signed-off-by: Elad Nachman <enachman@marvell.com>
-> ---
->  drivers/watchdog/sbsa_gwdt.c | 247 ++++++++++++++++++++++++++++++++---
->  1 file changed, 226 insertions(+), 21 deletions(-)
->
-> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
-> index 5f23913ce3b4..0bc6f53f0968 100644
-> --- a/drivers/watchdog/sbsa_gwdt.c
-> +++ b/drivers/watchdog/sbsa_gwdt.c
-> @@ -46,10 +46,13 @@
->  #include <linux/mod_devicetable.h>
->  #include <linux/module.h>
->  #include <linux/moduleparam.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/uaccess.h>
->  #include <linux/watchdog.h>
->  #include <asm/arch_timer.h>
-> +#include <linux/arm-smccc.h>
->
->  #define DRV_NAME               "sbsa-gwdt"
->  #define WATCHDOG_NAME          "SBSA Generic Watchdog"
-> @@ -75,6 +78,68 @@
->  #define SBSA_GWDT_VERSION_MASK  0xF
->  #define SBSA_GWDT_VERSION_SHIFT 16
->
-> +/* Marvell AC5/X SMCs, taken from arm trusted firmware */
-> +#define SMC_FID_READ_REG       0x80007FFE
-> +#define SMC_FID_WRITE_REG      0x80007FFD
+Changes since v4:
+- Patch(1/2) expresses JH8100 compatibility to JH7110 in dt-binding,
+  and adds minItems to constrain reset property.
+- Patch(2/2) adds watchdog node in jh8100.dtsi. This patch depends on
+  patch series [1] and [2].
+[1]: Initial device tree support for StarFive JH8100 SoC
+https://lore.kernel.org/all/20231201121410.95298-7-jeeheng.sia@starfivete=
+ch.com/
+[2]: Basic clock and reset support for StarFive JH8100 RISC-V SoC
+https://lore.kernel.org/all/20231206115000.295825-17-jeeheng.sia@starfive=
+tech.com/
 
-One more thing, these IDs are part of the Arm arch range and can't be
-used. You should be using the SIP range AIUI.
+Changes since v3:
+- Drop items in compatible field.
+- Replace items with maxItems in reset field.
+- Replace maxItems with items: -description in if else reset field
 
-Perhaps you should look at arm_smc_wdt.c and make that work on your
-system. Despite the name, my understanding is it is a ChromeOS defined
-watchdog, not an Arm (Ltd) one.
+Changes since v2:
+- Express JH8100 compatibility to JH7110 in dt-bindings.
+- Rework min/maxItems constraint for JH8100 resets property.
 
-Rob
+Changes since v1:
+- Drop "starfive,jh8100-wdt" compatible field in starfive-wdt.c,
+  and express them in dt-bindings.
+- Use minItems in resets field to cater for single reset signal
+  in JH8100.
+- Reword Watchdog reset to Core reset for JH8100.
+
+StarFive's JH8100 watchdog reuses JH7100 register mapping.
+DT-binding of JH7100 watchdog is extended to support JH8100.
+Since JH8100 only uses 1 reset signal, update the binding to
+support one reset for "starfive,jh8100-wdt" compatible.
+
+Ji Sheng Teoh (2):
+  dt-bindings: watchdog: starfive,jh7100-wdt: Add compatible for JH8100
+  riscv: dts: starfive: jh8100: Add watchdog node
+
+ .../watchdog/starfive,jh7100-wdt.yaml         | 40 ++++++++++++++-----
+ arch/riscv/boot/dts/starfive/jh8100.dtsi      |  9 +++++
+ 2 files changed, 40 insertions(+), 9 deletions(-)
+
+--=20
+2.25.1
+
 
