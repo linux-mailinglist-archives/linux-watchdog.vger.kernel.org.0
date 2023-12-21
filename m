@@ -1,96 +1,100 @@
-Return-Path: <linux-watchdog+bounces-375-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-376-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35AD881B08C
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Dec 2023 09:45:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E73B281B961
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Dec 2023 15:15:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6965286502
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Dec 2023 08:45:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86B561F217F5
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Dec 2023 14:15:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B055317984;
-	Thu, 21 Dec 2023 08:44:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8A116D6F9;
+	Thu, 21 Dec 2023 14:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P1YH6bo7"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67BA1A5A4;
-	Thu, 21 Dec 2023 08:44:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-	(using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-	(Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-	by fd01.gateway.ufhost.com (Postfix) with ESMTP id 2B36E7FFE;
-	Thu, 21 Dec 2023 16:44:36 +0800 (CST)
-Received: from EXMBX072.cuchost.com (172.16.6.82) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 21 Dec
- 2023 16:44:36 +0800
-Received: from localhost.localdomain (202.188.176.82) by EXMBX072.cuchost.com
- (172.16.6.82) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 21 Dec
- 2023 16:44:29 +0800
-From: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
-To: Xingyu Wu <xingyu.wu@starfivetech.com>, Samin Guo
-	<samin.guo@starfivetech.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
-	<conor+dt@kernel.org>, Emil Renner Berthing <kernel@esmil.dk>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
-	<aou@eecs.berkeley.edu>
-CC: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>, Ley Foon Tan
-	<leyfoon.tan@starfivetech.com>, <linux-watchdog@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>
-Subject: [PATCH v5 2/2] riscv: dts: starfive: jh8100: Add watchdog node
-Date: Thu, 21 Dec 2023 16:43:58 +0800
-Message-ID: <20231221084358.3458713-3-jisheng.teoh@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231221084358.3458713-1-jisheng.teoh@starfivetech.com>
-References: <20231221084358.3458713-1-jisheng.teoh@starfivetech.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 779D336092;
+	Thu, 21 Dec 2023 14:15:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03050C433C7;
+	Thu, 21 Dec 2023 14:15:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703168134;
+	bh=0Kp0Knum5nW0ubKqJywkKSyyqRAdac4k7KD62giHD3Q=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=P1YH6bo7hN5LLoRg2u+mYG/Myr8x+w7JdsgbYmBc4Iei8x1VzhXUvejitbiCa5jHV
+	 lFYAeW53sJMawSJ4tcrHc/KfX0IHd394kOIrPy8JHEJQBsC9r9jTwxENv17CQF+fUf
+	 Qz7D/ATk56Ik3uPXUxVugCnrj7bvxZ/rqKzOr/nNKk1ZEezgrjIphoSbfYUyoqbs1n
+	 HN359hz8uyvc2QiRQHdAEv6Z4ppLilWf2Oh/cbP5kXe+cQjxmY85QZrxRR2srr/tMr
+	 M3iLA33sIJE5TZdKdjqcCDoURpn37Usylq/x6pbk3jz8E1yM85R1dKi9JGho0S4FdD
+	 d0F1bIE2Cjm6Q==
+From: Lee Jones <lee@kernel.org>
+To: Lee Jones <lee@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Support Opensource <support.opensource@diasemi.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, 
+ Steve Twiss <stwiss.opensource@diasemi.com>, linux-input@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-watchdog@vger.kernel.org, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+ Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org
+In-Reply-To: <20231214080911.23359-1-biju.das.jz@bp.renesas.com>
+References: <20231214080911.23359-1-biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH v6 0/8] Convert DA906{1,2} bindings to json-schema
+Message-Id: <170316812973.586675.6248412029985031979.b4-ty@kernel.org>
+Date: Thu, 21 Dec 2023 14:15:29 +0000
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX072.cuchost.com
- (172.16.6.82)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.12.3
 
-StarFive's JH8100 watchdog is based on JH7110, with JH8100 watchdog only
-requiring one reset signal.
+On Thu, 14 Dec 2023 08:09:03 +0000, Biju Das wrote:
+> Convert the below bindings to json-schema
+> 1) DA906{1,2} mfd bindings
+> 2) DA906{1,2,3} onkey bindings
+> 3) DA906{1,2,3} thermal bindings
+> 
+> Also add fallback for DA9061 watchdog device and document
+> DA9063 watchdog device.
+> 
+> [...]
 
-Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
----
- arch/riscv/boot/dts/starfive/jh8100.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Applied, thanks!
 
-diff --git a/arch/riscv/boot/dts/starfive/jh8100.dtsi b/arch/riscv/boot/d=
-ts/starfive/jh8100.dtsi
-index 9863c61324a0..657d8b79e708 100644
---- a/arch/riscv/boot/dts/starfive/jh8100.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh8100.dtsi
-@@ -360,6 +360,15 @@ uart4: serial@121a0000  {
- 			status =3D "disabled";
- 		};
-=20
-+		watchdog@12270000 {
-+			compatible =3D "starfive,jh8100-wdt", "starfive,jh7110-wdt";
-+			reg =3D <0x0 0x12270000 0x0 0x10000>;
-+			clocks =3D <&syscrg_ne SYSCRG_NE_CLK_WDT_APB>,
-+				 <&syscrg_ne SYSCRG_NE_CLK_WDT>;
-+			clock-names =3D "apb", "core";
-+			resets =3D <&syscrg_ne SYSCRG_NE_RSTN_WDT0>;
-+		};
-+
- 		syscrg_ne: syscrg_ne@12320000 {
- 			compatible =3D "starfive,jh8100-syscrg-ne";
- 			reg =3D <0x0 0x12320000 0x0 0x10000>;
---=20
-2.25.1
+[1/8] dt-bindings: mfd: da9062: Update watchdog description
+      commit: 9e7b13b805bcbe5335c2936d4c7ea0323ac69a81
+[2/8] dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for DA9061 watchdog
+      commit: 28d34db7772f18490b52328f04a3bf69ed5390d2
+[3/8] dt-bindings: watchdog: dlg,da9062-watchdog: Document DA9063 watchdog
+      commit: d2a7dbb808870c17cffa2749ea877f61f298d098
+[4/8] dt-bindings: mfd: dlg,da9063: Update watchdog child node
+      commit: d4018547a15a94c7e865b2cef82bff1cd43a32b3
+[5/8] dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
+      commit: db459d3da7bb9c37cb86897c7b321a49f8e40968
+[6/8] dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
+      commit: 998f499c843e360bcd9ee1fe9addc3b5d32f1234
+[7/8] dt-bindings: mfd: dlg,da9063: Sort child devices
+      commit: 2bbf9d2a8e3bc933703dfda87cac953bed458496
+[8/8] dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
+      commit: 522225161830f6a93f2aaabda99226c1ffddc8c4
+
+--
+Lee Jones [李琼斯]
 
 
