@@ -1,105 +1,72 @@
-Return-Path: <linux-watchdog+bounces-377-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-378-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B9B981B99B
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Dec 2023 15:33:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 331C781BFD4
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Dec 2023 22:03:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0951BB24238
-	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Dec 2023 14:33:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6591D1C24848
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Dec 2023 21:02:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32414EDC;
-	Thu, 21 Dec 2023 14:33:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B2FD7691B;
+	Thu, 21 Dec 2023 21:02:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="inMr4kvO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KlyodUzc"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02CE61DFD1;
-	Thu, 21 Dec 2023 14:33:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E524C433C8;
-	Thu, 21 Dec 2023 14:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0980B6280F;
+	Thu, 21 Dec 2023 21:02:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA92EC433C7;
+	Thu, 21 Dec 2023 21:02:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703169205;
-	bh=1gBzheN4S/wQ0NJRWGAPZm1B8jW93y3bbdZ6s3dg2MA=;
+	s=k20201202; t=1703192574;
+	bh=Pch3cUPPm9M2grj1J1SCcBO1AYY7StPUOGyR6OF+oHw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=inMr4kvOzDU80kjBEt1gVj7l3xcguO/scSWCZjpb6SlIZnoe1bDUh7lYy3hRk3dqW
-	 VrczdADhPwXgGkBdKylLYtzQOBJ8pyD3t0rDR2jt6OPzFjoQoc8898njAmYgwFvZgd
-	 vr3E9ttnAcEgRn83qg488LqA3CVRcO+xBZKHxjYqkwQjYYo3SOTXffWKVDH0WNw6tb
-	 RGhC1CC7zO4ADcmFhE5KIOKLanv6fFdLpfZ9hCiqGE3uhnpItpIKLZcOW0ldr+XDIp
-	 33mlFuohOu52O8psohKt+FhoPSWQyKAn+LCHb3DGOj75ZVFjVkzuAMznwvivhiGzxF
-	 a7PR0fuGRDTEw==
-Date: Thu, 21 Dec 2023 14:33:18 +0000
-From: Lee Jones <lee@kernel.org>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Support Opensource <support.opensource@diasemi.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Steve Twiss <stwiss.opensource@diasemi.com>,
-	linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v6 0/8] Convert DA906{1,2} bindings to json-schema
-Message-ID: <20231221143318.GH10102@google.com>
-References: <20231214080911.23359-1-biju.das.jz@bp.renesas.com>
- <170316812973.586675.6248412029985031979.b4-ty@kernel.org>
+	b=KlyodUzc/Wan56wBQ5rCTP9uWqL+Gs7D/9jGZ840oOnuCGjVJXRQs/pgoIhpNmBuS
+	 UBg/IcR4MZN1Jn6+M/+HguLkz9R1f4pZghLUwcdOhfdxNwrsaPLKNDcKCzRqnmyDwd
+	 EmuCGEOzYGYvJuBOedtzQtVdjBqpShPcFNO9/rFEpNjiclsNQm+Pp5Twu4vjLRLNOP
+	 CdG52mNlz1/pYzQqIdtKXxAHKwq1TkyK5uS+PaoXGaGWdqk/o/axrkNVGwAyKjDifY
+	 bTGfba4bnOu53QFmEtceCEH7fkCdDPfK/JTGw4KbGrCBZFccTCNk2oyO2jRrCR7SZq
+	 wJgadbNSMB+UA==
+Received: (nullmailer pid 88422 invoked by uid 1000);
+	Thu, 21 Dec 2023 21:02:51 -0000
+Date: Thu, 21 Dec 2023 15:02:51 -0600
+From: Rob Herring <robh@kernel.org>
+To: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+Cc: linux-watchdog@vger.kernel.org, Ley Foon Tan <leyfoon.tan@starfivetech.com>, Samin Guo <samin.guo@starfivetech.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Palmer Dabbelt <palmer@dabbelt.com>, Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org, Emil Renner Berthing <kernel@esmil.dk>, Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor+dt@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, devicetree@vger.kernel.org, Xingyu Wu <xingyu.wu@starfivetech.com>, Guenter Roeck <linux@roeck-us.net>, Wim Van Sebroeck <wim@linux-watchdog.org>, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: watchdog: starfive,jh7100-wdt: Add
+ compatible for JH8100
+Message-ID: <170319257135.88357.1722653226891421278.robh@kernel.org>
+References: <20231221084358.3458713-1-jisheng.teoh@starfivetech.com>
+ <20231221084358.3458713-2-jisheng.teoh@starfivetech.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <170316812973.586675.6248412029985031979.b4-ty@kernel.org>
+In-Reply-To: <20231221084358.3458713-2-jisheng.teoh@starfivetech.com>
 
-On Thu, 21 Dec 2023, Lee Jones wrote:
 
-> On Thu, 14 Dec 2023 08:09:03 +0000, Biju Das wrote:
-> > Convert the below bindings to json-schema
-> > 1) DA906{1,2} mfd bindings
-> > 2) DA906{1,2,3} onkey bindings
-> > 3) DA906{1,2,3} thermal bindings
-> > 
-> > Also add fallback for DA9061 watchdog device and document
-> > DA9063 watchdog device.
-> > 
-> > [...]
+On Thu, 21 Dec 2023 16:43:57 +0800, Ji Sheng Teoh wrote:
+> Add "starfive,jh8100-wdt" compatible string for StarFive's JH8100
+> watchdog.
+> Since JH8100 watchdog only has 1 reset signal, update binding
+> document to support one reset for "starfive,jh8100-wdt" compatible.
 > 
-> Applied, thanks!
+> Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
+> Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+> ---
+>  .../watchdog/starfive,jh7100-wdt.yaml         | 40 ++++++++++++++-----
+>  1 file changed, 31 insertions(+), 9 deletions(-)
 > 
-> [1/8] dt-bindings: mfd: da9062: Update watchdog description
->       commit: 9e7b13b805bcbe5335c2936d4c7ea0323ac69a81
-> [2/8] dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for DA9061 watchdog
->       commit: 28d34db7772f18490b52328f04a3bf69ed5390d2
-> [3/8] dt-bindings: watchdog: dlg,da9062-watchdog: Document DA9063 watchdog
->       commit: d2a7dbb808870c17cffa2749ea877f61f298d098
-> [4/8] dt-bindings: mfd: dlg,da9063: Update watchdog child node
->       commit: d4018547a15a94c7e865b2cef82bff1cd43a32b3
-> [5/8] dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
->       commit: db459d3da7bb9c37cb86897c7b321a49f8e40968
-> [6/8] dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
->       commit: 998f499c843e360bcd9ee1fe9addc3b5d32f1234
-> [7/8] dt-bindings: mfd: dlg,da9063: Sort child devices
->       commit: 2bbf9d2a8e3bc933703dfda87cac953bed458496
-> [8/8] dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
->       commit: 522225161830f6a93f2aaabda99226c1ffddc8c4
 
-Submitted for testing.  Pull-request to follow.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
--- 
-Lee Jones [李琼斯]
 
