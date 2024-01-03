@@ -1,116 +1,77 @@
-Return-Path: <linux-watchdog+bounces-380-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-381-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80ED581E232
-	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Dec 2023 20:56:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE51B8229C0
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Jan 2024 09:51:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 02FB7B2176A
-	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Dec 2023 19:56:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B1E11F23CAD
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Jan 2024 08:51:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6AC653808;
-	Mon, 25 Dec 2023 19:55:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0869D18032;
+	Wed,  3 Jan 2024 08:51:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NxYtli9Z"
+	dkim=pass (2048-bit key) header.d=severnouse.com header.i=@severnouse.com header.b="bj9itUM/"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.severnouse.com (mail.severnouse.com [141.95.160.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A9D537F1;
-	Mon, 25 Dec 2023 19:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-67f9fac086bso25831486d6.3;
-        Mon, 25 Dec 2023 11:55:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703534157; x=1704138957; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v+5mdzcIi0J0U/jyti3PngFAcX/L3/DjChGGJD4WjO0=;
-        b=NxYtli9ZFO+nMhFI9jJM7AmM0UEQP1AYBBIsOQxfutncfFzrXXCl15MO/db7qTycZK
-         E+BH/bT9aSglTtOFm3KR2+eZigo1JECteRjB+Lf6D4H+VUekocZzQOW9kNtiT6vNAEdu
-         eyULYF4OpMBf9aO1e3D6n6vle9kAczFQsb+PP3Gpcj0oNr7p6TzgdohHThbsm/UKZGkI
-         b7vElq1p6YB//aONShEDs/fdGYpRWY/CXq75zdr+SSC1pzI1Yeu71uwlTIlo01Fasmfd
-         zmN59m49OnC7ZyKAwFOtXPoIG+DlBtpEIU1qiuOKJ3GnObSqiIA8sdeJ/CFmjuNqHnfP
-         vTTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703534157; x=1704138957;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v+5mdzcIi0J0U/jyti3PngFAcX/L3/DjChGGJD4WjO0=;
-        b=MfRAV5ecmWVJGgpiky0hi3GmiB0RSj+818pzkavsUq3u4xlw+Whbpcbc4NR5ck1qNu
-         mzcma0jmC70uzLWUrPKdfEreDwKq/4KUHcuv50N6x93Ea0w6D5niLKf+VqYbmmktx+dR
-         p/wzOi9BfKKdLdt4VCrQiHo7gACGfG9umiT0lEHhZ5QJd1G1H52wPrcp25SfIZSe3LJu
-         qsrKc7seUPyYM3N5xNz4c1jHqGLQbBsDPt3yFtFm9t9Evr+B6lr0lA9cg6lXJbFBJxGZ
-         N7io5fHfSC5x1GBHnVGrxyrUjEKl7ebN4OVw9EPlUrU//1Fuw8ySkFOPhyunRP3aN9l5
-         Q0KQ==
-X-Gm-Message-State: AOJu0YzROFql4ZIsbY1+HX9/cPP1tbA3e8CECrK5NuBBHPpoHCInyVBG
-	ikQqfEgCpEjx2AuIkPwvZPFRqML9CAnc1JlNO8I=
-X-Google-Smtp-Source: AGHT+IGXQ1DzDW/z7mbnW1aKOma9kP1mZ08AqBa7wFFHcRRfcWmagU8jQFFGhrorFhUOmpGd2hGTlBhrmy9h8xA7nx4=
-X-Received: by 2002:ad4:5c49:0:b0:67f:6982:edb4 with SMTP id
- a9-20020ad45c49000000b0067f6982edb4mr13149244qva.14.1703534157222; Mon, 25
- Dec 2023 11:55:57 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE76D18049
+	for <linux-watchdog@vger.kernel.org>; Wed,  3 Jan 2024 08:50:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=severnouse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=severnouse.com
+Received: by mail.severnouse.com (Postfix, from userid 1002)
+	id EB694A2A22; Wed,  3 Jan 2024 08:50:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=severnouse.com;
+	s=mail; t=1704271847;
+	bh=waaYxUsyRtmB2zEBuWcqRuRHSoYd8sJFCtgHO/3AHKE=;
+	h=Date:From:To:Subject:From;
+	b=bj9itUM/KtmyQfC2y/jWsKjX0zNdk+kXPmrytM/xX9n9xWKtmEGpCv/A+FHRzwpiI
+	 kMlhfWxCF1AFM0E2jOSErD8Bn+l5rWFtzgC+O/o8g6s52oGc9jDl25ZsSLGFl6yeQF
+	 gynjvkasHF3tD9aglAVRVzFwrMcV9u76c2GYGu+w4XJs2iYTZ+9iuFVdJNXZLzxKJI
+	 gR6e9wooBxLIiNexbO6Fa3WDQ30svQ8Y9Q40nE9fvs9iyv+8nbXnP1AvGHzELlYcrw
+	 mZ2C00UyMO5t8tTGhCqA1FSD2r0DaOaZ8Kk3CS1SdATTQb5pyr6SAVIHUR22FsRzKi
+	 UYJf+0jCSk5iw==
+Received: by mail.severnouse.com for <linux-watchdog@vger.kernel.org>; Wed,  3 Jan 2024 08:50:38 GMT
+Message-ID: <20240103074500-0.1.b7.nv1y.0.78oplix233@severnouse.com>
+Date: Wed,  3 Jan 2024 08:50:38 GMT
+From: "Ray Galt" <ray.galt@severnouse.com>
+To: <linux-watchdog@vger.kernel.org>
+Subject: Meeting with the Development Team
+X-Mailer: mail.severnouse.com
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
- <ZXnxBtqbneUMbvwq@smile.fi.intel.com> <d6e898200b96e816ea8c8c9a847307088ec5821c.camel@maquefel.me>
-In-Reply-To: <d6e898200b96e816ea8c8c9a847307088ec5821c.camel@maquefel.me>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Mon, 25 Dec 2023 21:55:20 +0200
-Message-ID: <CAHp75Vcx8oviLiCu=cnzKcdXjEq9wG=PCiBuPTBYe6FFfUcz7Q@mail.gmail.com>
-Subject: Re: [PATCH v6 00/40] ep93xx device tree conversion
-To: Nikita Shubin <nikita.shubin@maquefel.me>
-Cc: Andy Shevchenko <andy@kernel.org>, Hartley Sweeten <hsweeten@visionengravers.com>, 
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	Lukasz Majewski <lukma@denx.de>, Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Vinod Koul <vkoul@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Thierry Reding <thierry.reding@gmail.com>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	Mark Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Damien Le Moal <dlemoal@kernel.org>, 
-	Sergey Shtylyov <s.shtylyov@omp.ru>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
-	linux-input@vger.kernel.org, linux-sound@vger.kernel.org, 
-	Arnd Bergmann <arnd@arndb.de>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Andrew Lunn <andrew@lunn.ch>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Dec 23, 2023 at 11:13=E2=80=AFAM Nikita Shubin
-<nikita.shubin@maquefel.me> wrote:
-> On Wed, 2023-12-13 at 19:59 +0200, Andy Shevchenko wrote:
+Hello,
 
-...
+I would like to reach out to the decision-maker in the IT environment wit=
+hin your company.
 
-> I haven't found any missing tags, that b4 didn't apply, the ones above
-> refer to a very old iteration and were given to cover letter and i
-> don't feel like they need to be included.
+We are a well-established digital agency in the European market. Our solu=
+tions eliminate the need to build and maintain in-house IT and programmin=
+g departments, hire interface designers, or employ user experience specia=
+lists.
 
-When somebody gives you a tag against a cover letter, it means the
-entire series (if not spelled differently). `b4` even has a parameter
--t for that IIRC.
+We take responsibility for IT functions while simultaneously reducing the=
+ costs of maintenance. We provide support that ensures access to high-qua=
+lity specialists and continuous maintenance of efficient hardware and sof=
+tware infrastructure.
+
+Companies that thrive are those that leverage market opportunities faster=
+ than their competitors. Guided by this principle, we support gaining a c=
+ompetitive advantage by providing comprehensive IT support.
+
+May I present what we can do for you?
 
 
---=20
-With Best Regards,
-Andy Shevchenko
+Best regards
+Ray Galt
 
