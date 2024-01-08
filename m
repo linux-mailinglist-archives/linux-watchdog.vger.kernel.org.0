@@ -1,204 +1,216 @@
-Return-Path: <linux-watchdog+bounces-382-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-383-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6C96825FC2
-	for <lists+linux-watchdog@lfdr.de>; Sat,  6 Jan 2024 15:04:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B1B8826942
+	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Jan 2024 09:16:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 30330B212CD
-	for <lists+linux-watchdog@lfdr.de>; Sat,  6 Jan 2024 14:04:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 008D8280EF7
+	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Jan 2024 08:16:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 440A97468;
-	Sat,  6 Jan 2024 14:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45F2A8F66;
+	Mon,  8 Jan 2024 08:16:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="XDlqgqcS"
+	dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b="irIuub+K"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17AA48C0A;
-	Sat,  6 Jan 2024 14:04:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-	id 0A668409F1; Sat,  6 Jan 2024 14:44:16 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 0A668409F1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-	s=odk20180602; t=1704548667;
-	bh=3wXHJ5X0Y/5UXPZ+cSSBwup9eb5KfXFSoUe6hAGQfEo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=XDlqgqcSKAuuaZtp6IM02qFkinnhHJF/rqpkVnrrDx3gvW9VkcYdbqnOSibkYCXQi
-	 uSlrZF1s0ShjcvtdK531vxgDACVcojL77mchveENsuyHw5WeaD5PmMQmb4IKx06Fqp
-	 WlEJZ07DbYDHQcqh7bHFgqhUhJbAm5LjNBq9GuKk=
-Date: Sat, 6 Jan 2024 14:44:11 +0100
-From: Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Ben Dooks <ben.dooks@codethink.co.uk>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Curtis Klein <curtis.klein@hpe.com>,
-	Daniel Golle <daniel@makrotopia.org>,
-	Douglas Anderson <dianders@chromium.org>,
-	Jerry Hoemann <jerry.hoemann@hpe.com>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-	Nik Bune <n2h9z4@gmail.com>,
-	Nikita Shubin <nikita.shubin@maquefel.me>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Stefan Wahren <wahrenst@gmx.net>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Werner Fischer <devlists@wefi.net>
-Subject: [GIT PULL REQUEST] watchdog - v6.8 release cycle.
-Message-ID: <20240106134410.GA19394@www.linux-watchdog.org>
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2047.outbound.protection.outlook.com [40.107.22.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8F89467;
+	Mon,  8 Jan 2024 08:16:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siemens.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VNI2MmnW5LPi00i+HtO7BbKtXG+chUPGs6sW3aIMMA2M8On6So/rD2+tKpAGGBGKFfT6tOiq12oIzEBh6g2sxihboa+NQYLxx8AuWa3iMrs26rs23tRtyUOe37jxjuqrNzegFHkWGR64r73LTuTg0MGmRH0pjQZmX0wzazIZkqVzib7ORDZ3hAH8jMlUBwVrf4eNUCMBr7PRncIdHOF9As+OAIp3NUxRV2IKyhT5GLWrTcPtKfogULzeaYverr6NimZEMnHYsW3nS9CUeFs5wE5TGxKQ6EQe/XNv6A8zub7pLiabTEkXD2dNQn5LmZJhY1RkXEtPqK0kLckqcFXXuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wD4l+bs1YMwoezaICyxoPVf1G8bh5/2Rd4/8Q0noj0s=;
+ b=oCqCK5wbJHUH0yjGAdgCBgtbm4spoy1tcWo4MK7yqbwGZjSS6PVePGsiBZ0m5GTUMdURiAMyX40q6MiUGdIxpkmMt3KP7J62Vec/XU1J3WFj34IxDHzbe2v4BH6hjwI+zHf1QcJ63arQwIhUHTgGnhfR3Q4K+AgXiq21wqPvbDjaOqhy78lPXuEDCcNv05hC5LIwZT0uxgRXRZGbvB+z/iT2A4W5PSbx5lyxhcAcV+J/b8ZX+tE9nWnQON1xTYF9K+VyCD7wOOMa2cyZdMyuVzxXiBHqVkb1NdJxaPZIrSE8k4tYlRcNynPtZIywHBKWpaQEi4u3KlFR1mTJ6AYNtw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wD4l+bs1YMwoezaICyxoPVf1G8bh5/2Rd4/8Q0noj0s=;
+ b=irIuub+KV4DM5fNedplyqu+u7eDMyrDZ8dOObvPHB4j29wtWUEmb8GGqMeI1Wdp76GelOVlbSlkWZnx4yADwjyDC1PD/EJyyEpBWpbmZMymjflo/Hd5nkKd8f4815b6YGrj9AKp/Dgx8OBtaRftbMKBEXhTFg0Em6ZI5RrqIKdgybhDmGfrIG0+QKk9Z6Yil6NiU7PNKDDMDPf+CWy6LXSdMw3nEiW8Yt26mTJ8hiQZCF6HihKiuv21He7rGliLLdwgAHAy3jBWIeliMjT7Q5CP3VLDIETMF3xRsfw/zYrIX/hn8DxPZxPw3tL/a5TeB0kYkIq2pIHuPl80tTKvPuw==
+Received: from AS8PR10MB6993.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:5a4::10)
+ by AM9PR10MB4055.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:1cd::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.21; Mon, 8 Jan
+ 2024 08:16:15 +0000
+Received: from AS8PR10MB6993.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::11a5:fa0:85c9:ad4f]) by AS8PR10MB6993.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::11a5:fa0:85c9:ad4f%7]) with mapi id 15.20.7159.020; Mon, 8 Jan 2024
+ 08:16:15 +0000
+From: "Li, Hua Qian" <HuaQian.Li@siemens.com>
+To: Nishanth Menon <nm@ti.com>
+CC: "wim@linux-watchdog.org" <wim@linux-watchdog.org>, "linux@roeck-us.net"
+	<linux@roeck-us.net>, "robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>, "huaqianlee@gmail.com"
+	<huaqianlee@gmail.com>, "vigneshr@ti.com" <vigneshr@ti.com>,
+	"kristo@kernel.org" <kristo@kernel.org>, "linux-watchdog@vger.kernel.org"
+	<linux-watchdog@vger.kernel.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "Kiszka, Jan"
+	<jan.kiszka@siemens.com>, "Su, Bao Cheng" <baocheng.su@siemens.com>
+Subject: RE: [PATCH v3 2/3] arm64: dts: ti: Add reserved memory for watchdog
+Thread-Topic: [PATCH v3 2/3] arm64: dts: ti: Add reserved memory for watchdog
+Thread-Index: AQHZtW+sFYwpuU0uCECG57sNkPRn36+5WswAgRdN6nA=
+Date: Mon, 8 Jan 2024 08:16:15 +0000
+Message-ID:
+ <AS8PR10MB6993F047652F40675BDA689D9F6B2@AS8PR10MB6993.EURPRD10.PROD.OUTLOOK.COM>
+References: <20230713095127.1230109-1-huaqian.li@siemens.com>
+ <20230713095127.1230109-3-huaqian.li@siemens.com>
+ <20230714225240.dvlwqaodp2l3cczm@disfigure>
+In-Reply-To: <20230714225240.dvlwqaodp2l3cczm@disfigure>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_ActionId=44f9358b-b336-4736-818a-7324bf52d61f;MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_ContentBits=0;MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_Enabled=true;MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_Method=Standard;MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_Name=restricted;MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_SetDate=2024-01-08T08:07:58Z;MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_SiteId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS8PR10MB6993:EE_|AM9PR10MB4055:EE_
+x-ms-office365-filtering-correlation-id: cd1f3c1b-772d-4ca1-42c5-08dc10221542
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ 6lMZPOzA+7q2JjrizCF9q4xRsM3dF43dNRqNz+B8Iuf6DLgnMqBmUUwXX7o+Rhwfrxud289Y8ptxcS0EtmQw/kn/eBPrXnjNWSCAem2SmKpCpe2FxRpBW5Om9uZQx2JF3owkZkr76joEoqWaHTZdQ/Y1JFJOG86rZ0EsovnDPgTT2K8M1kDYJ8RDZm4u2xLatXb/bXNljOhlDxxk5prgFc2SNCbPYtu5/lDXXBgSuRCErohWGjyLJLOhWURo0jIjOCVaIm2aWMIud8RMviNtQnnFrhAIisgj2erRgU1rBb3hgx1bd1YrtciWHAiy/9az+mM5FiL678s96Sq7vwulvOmQ1aSCkK92bGhKCEcrLt1OOV+dr6+TIRAbc60zQXJ/rFGLbu0JLHjh7VrIln4rQVP7ke8W64HQFNZKK1RZyT8aULTK6ShmalaMZRxcO3QKE4qHEKaw4ieRSgbicJES1sWL0qr6EIXRIBVMijeFL26AEa7Fnw5TUukFxbCTMGEA0wkX73mhA3VA0LmNHfbmxXuuYTHbrsWtIRQs6787p6duNJ7chiE0Pc0dnkjEjFoPkYkXT1Gh19iTiFFcU2E2iGzPI+LHIBEpxVyyNfTHgPdHr0P1Ibs2WSf3/9otNJMZo4Ug4PFO8WWz37d2SoR3gDruIbiCMHNajAFGgAk4CpA=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR10MB6993.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(366004)(39860400002)(376002)(346002)(396003)(136003)(230922051799003)(230173577357003)(230273577357003)(451199024)(186009)(64100799003)(1800799012)(122000001)(38100700002)(4326008)(7416002)(5660300002)(2906002)(38070700009)(9686003)(478600001)(71200400001)(7696005)(6506007)(53546011)(966005)(83380400001)(33656002)(26005)(107886003)(54906003)(316002)(52536014)(76116006)(66946007)(66476007)(66446008)(64756008)(6916009)(66556008)(8936002)(8676002)(45080400002)(86362001)(41300700001)(82960400001)(55016003)(171213001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?TaAC/HZYMeFRBF90R5wR+rkpv43WW1/yuuycKSV7HEjM0KiIw+8uhhZT76ZY?=
+ =?us-ascii?Q?Iw7kAIMaQW3bVnJ3bLTPZufcXuQd2qiDKCXlNMFEgFBbWrQ9Q7dHCf33g7N5?=
+ =?us-ascii?Q?hZedaS98s+8Awgodd4EX+t7wbPYhYi6tWKmVTo76lKgo3qB/eO1c2MooihPb?=
+ =?us-ascii?Q?RJv0kwlnG2OowP46/7NPb5KbU4msq6hTuiQXw1SodONEllE95NksfnZnRUp7?=
+ =?us-ascii?Q?ABWjwjiv2UZkujPg+jYy5CQHG2JlBiz+oSkIDXWaqxP1DfZVAe+prK6efE9S?=
+ =?us-ascii?Q?rf55bLUOzM9Q/H1p/fWWHtMt3/x+T0P5DOl0R2SPWT4b3I6QpJNvwTscOJAd?=
+ =?us-ascii?Q?Csi/kbm+a8u1msHQlmHNuva/IG6liDBUk5wCADyd2i2dP5ofM9+F+uQRsTQ0?=
+ =?us-ascii?Q?iSk9l6wGp4g5qI0jl4dXLUIcpvbxV80OI08VN3fK7E3oFWHfUxEnuCgT8V0v?=
+ =?us-ascii?Q?+gMlUAEpXkYXJiau/vdyWefR5eOTdbcEVqJH4HLRxLOe5IPhQvK3E45S/EQc?=
+ =?us-ascii?Q?Ttg2S8rBNBOoh6Qx/94K0uzteqKRgB3pyPpOuAez/wowmE6cwFS0aiXbe7Hd?=
+ =?us-ascii?Q?bKmq6F9PzqN8wk6CcZCDYpZXQw5FUiSQo5tPH5lKttVCug1N/KNUG42Hc+Yr?=
+ =?us-ascii?Q?KsqUAQASMj/Vos6Zo/kg/Ks0eD09knsd3ASv8bdoEJlZKjI6Jsqy2k7ogCtr?=
+ =?us-ascii?Q?e94KQr3dfQLKkrWlgn7cRJm6RmcYo4+gba012YhMiMccIc3Gm3SzmnnGhEu5?=
+ =?us-ascii?Q?QCCdu1DLRO0q7Qq1FH5gqc26DFOK/rIK1pbbQNH75Ry8yMLNKapR+ECtmXsP?=
+ =?us-ascii?Q?rSo4byRNeDLbAbnQPCb6WmRh2O6x5k/0sukVFnGTf9IRHFCeQHXo1IShhsep?=
+ =?us-ascii?Q?l187/bJxgC4L/PO1sjadLno7AGo3Fp8L7AHSUBtXdLXnNzaAdGa0WvoHpP2k?=
+ =?us-ascii?Q?C1eAGlHU50mToqDc03IM7EEPR5KTSLsng9vRx/zgjPBD1tUkFAGt1/o92BNM?=
+ =?us-ascii?Q?wAeUUsT9sytVyScT2bBWO5xhWsQxcXZ2O8Nsgq9O8fCCJafXqTHGAQFsjKzp?=
+ =?us-ascii?Q?idbGHSqIAum8J2WTNYOF/qSiLwMyhs7T7Ja8lkAO7IQVGaGPqgAogI+l+4qP?=
+ =?us-ascii?Q?Z9rjka5lYLe2tjxolLlfV/XuD8eszuaSsjOU/w9pLPAVeEwtoPxFAaqOicCx?=
+ =?us-ascii?Q?6LCByJQZg7wAgKzwYMY2d0oeRF1myZU/hiGe0nSWkYlQpfzSsBR36wwqEjIP?=
+ =?us-ascii?Q?sW6ILj6HjcOpTR5ev6Ucx0griaUOQb+SqG0D8qKgQw9ZfVgeDH6vqBIGGYze?=
+ =?us-ascii?Q?QQ73DrPhaNZxZkiW6mD6CsHXu9JOENjeRv45xFiIRaSMbpDd7cJMY61DxjP+?=
+ =?us-ascii?Q?ugQdX0VZn6As4jFv4r+0PoS2Qvgu292rsaXzk+2DcCOHOHWGiV0fjohcyv6H?=
+ =?us-ascii?Q?mWGTGD4ljDY/Yz6y08n75tPUuSicQGHcfUCkEy3aPoYkIIkaafIR4KDltRkj?=
+ =?us-ascii?Q?dgNTtN5hIvfP6QvVxk4PIfQtyj1VnxE+O1K2hG+bD9oPKmBu5kuI+M23WvUc?=
+ =?us-ascii?Q?qaIM89FLLJyiHOf9w06hpct174L0Xv1x7yAH2rcd?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.5.20 (2009-12-10)
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR10MB6993.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd1f3c1b-772d-4ca1-42c5-08dc10221542
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jan 2024 08:16:15.0941
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Fp4qLb/JJ+55C3r7I8IaknHiz+fUE1rDVMeMWvpTFCjc71yrzAGBx+2OWq2t9o4fXkFgVmL9WXQm6mmm4v14dg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR10MB4055
 
-Hi Linus,
+Hi Nishanth,
 
-Please pull following watchdog changes for the v6.8 release cycle (once the window is open :-) ).
+The maintainers have picked up the driver and bindings, as follows:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
+id=3D29057cc5bddc785ea0a11534d7ad2546fa0872d3
 
-This series contains:
-* Add Mediatek MT7988 watchdog
-* Add IT8659 watchdog
-* watchdog: set cdev owner before adding
-* hpwdt: Only claim UNKNOWN NMI if from iLO
-* Various other fixes and improvements
+Do you have time to work on the "DONOTMERGE" dts patch?
 
-The output from git request-pull:
-----------------------------------------------------------------
-The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
+-----Original Message-----
+From: Nishanth Menon <nm@ti.com>
+Sent: Saturday, July 15, 2023 6:53 AM
+To: Li, Hua Qian (DI FA CTR IPC CN PRC4) <HuaQian.Li@siemens.com>
+Cc: wim@linux-watchdog.org; linux@roeck-us.net; robh+dt@kernel.org; krzyszt=
+of.kozlowski+dt@linaro.org; conor+dt@kernel.org; huaqianlee@gmail.com; vign=
+eshr@ti.com; kristo@kernel.org; linux-watchdog@vger.kernel.org; devicetree@=
+vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-kernel@lists.infra=
+dead.org; Kiszka, Jan (T CED) <jan.kiszka@siemens.com>; Su, Bao Cheng (DI F=
+A CTR IPC CN PRC4) <baocheng.su@siemens.com>
+Subject: Re: [PATCH v3 2/3] arm64: dts: ti: Add reserved memory for watchdo=
+g
 
-  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+On 17:51-20230713, huaqian.li@siemens.com wrote:
+> From: Li Hua Qian <huaqian.li@siemens.com>
 
-are available in the git repository at:
+I guess I should be explicit about this: Lets keep this dts patch as "DONOT=
+MERGE" in subject line for driver subsystem maintainer (I don't want a repe=
+at of cpufreq maintainers picking up dts and associated warnings that are n=
+ow pending fixes), resubmit at next rc1 and I can queue up the dts once the=
+ maintainers pick up the driver and bindings.
 
-  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.8-rc1
+Ref: https://lore.kernel.org/all/20230714084725.27847-1-krzysztof.kozlowski=
+@linaro.org/
 
-for you to fetch changes up to 9546b21ea672aa961d5a89ea754214afed013f02:
+>
+> This patch adds a reserved memory for the TI AM65X platform watchdog
+> to reserve the specific info, triggering the watchdog reset in last
+> boot, to know if the board reboot is due to a watchdog reset.
+>
+> Signed-off-by: Li Hua Qian <huaqian.li@siemens.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
+> b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
+> index e26bd988e522..4bb20d493651 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am65-iot2050-common.dtsi
+> @@ -63,6 +63,12 @@ rtos_ipc_memory_region: ipc-memories@a2000000 {
+>                       alignment =3D <0x1000>;
+>                       no-map;
+>               };
+> +
+> +             /* To reserve the power-on(PON) reason for watchdog reset *=
+/
+> +             wdt_reset_memory_region: wdt-memory@a2200000 {
+> +                     reg =3D <0x00 0xa2200000 0x00 0x1000>;
+> +                     no-map;
+> +             };
+>       };
+>
+>       leds {
+> @@ -718,3 +724,7 @@ &mcu_r5fss0_core1 {
+>                       <&mcu_r5fss0_core1_memory_region>;
+>       mboxes =3D <&mailbox0_cluster1>, <&mbox_mcu_r5fss0_core1>;  };
+> +
+> +&mcu_rti1 {
+> +     memory-region =3D <&wdt_reset_memory_region>; };
+> --
+> 2.34.1
+>
 
-  watchdog: mlx_wdt: fix all kernel-doc warnings (2023-12-24 10:44:40 +0100)
-
-----------------------------------------------------------------
-linux-watchdog 6.8-rc1 tag
-
-----------------------------------------------------------------
-Ben Dooks (1):
-      watchdog: starfive: add lock annotations to fix context imbalances
-
-Biju Das (2):
-      dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for DA9061 watchdog
-      dt-bindings: watchdog: dlg,da9062-watchdog: Document DA9063 watchdog
-
-Curtis Klein (1):
-      watchdog: set cdev owner before adding
-
-Daniel Golle (2):
-      dt-bindings: watchdog: mediatek,mtk-wdt: add MT7988 watchdog and toprgu
-      watchdog: mediatek: mt7988: add wdt support
-
-Douglas Anderson (1):
-      dt-bindings: watchdog: qcom-wdt: Make the interrupt example edge triggered
-
-Jerry Hoemann (3):
-      watchdog/hpwdt: Only claim UNKNOWN NMI if from iLO
-      watchdog/hpwdt: Remove redundant test.
-      watchdog/hpwdt: Remove unused variable
-
-Johan Hovold (1):
-      dt-bindings: watchdog: qcom,pm8916-wdt: add parent spmi node to example
-
-Krzysztof Kozlowski (2):
-      dt-bindings: watchdog: re-order entries to match coding convention
-      dt-bindings: watchdog: intel,keembay: reference common watchdog schema
-
-Lukas Bulwahn (1):
-      MAINTAINERS: rectify entry for DIALOG SEMICONDUCTOR DRIVERS
-
-Nik Bune (3):
-      dt-bindings: watchdog: realtek,rtd1295-watchdog: convert txt to yaml
-      dt-bindings: watchdog: qca,ar7130-wdt: convert txt to yaml
-      dt-bindings: watchdog: nxp,pnx4008-wdt: convert txt to yaml
-
-Nikita Shubin (1):
-      dt-bindings: wdt: Add ts72xx
-
-Randy Dunlap (1):
-      watchdog: mlx_wdt: fix all kernel-doc warnings
-
-Stefan Wahren (1):
-      watchdog: bcm2835_wdt: Fix WDIOC_SETTIMEOUT handling
-
-Uwe Kleine-König (5):
-      watchdog: at91sam9: Stop using module_platform_driver_probe()
-      watchdog: txx9: Stop using module_platform_driver_probe()
-      watchdog: at91sam9_wdt: Convert to platform remove callback returning void
-      watchdog: starfive-wdt: Convert to platform remove callback returning void
-      watchdog: txx9wdt: Convert to platform remove callback returning void
-
-Vignesh Raghavendra (1):
-      watchdog: rti_wdt: Drop runtime pm reference count when watchdog is unused
-
-Werner Fischer (4):
-      watchdog: it87_wdt: add blank line after variable declaration
-      watchdog: it87_wdt: Remove redundant max_units setting
-      watchdog: it87_wdt: Add IT8659 ID
-      watchdog: it87_wdt: Keep WDTCTRL bit 3 unmodified for IT8784/IT8786
-
- .../bindings/watchdog/allwinner,sun4i-a10-wdt.yaml |  6 +--
- .../bindings/watchdog/alphascale,asm9260-wdt.yaml  |  6 +--
- .../devicetree/bindings/watchdog/apple,wdt.yaml    |  6 +--
- .../devicetree/bindings/watchdog/arm-smc-wdt.yaml  |  6 +--
- .../bindings/watchdog/brcm,bcm7038-wdt.yaml        | 10 ++---
- .../bindings/watchdog/cnxt,cx92755-wdt.yaml        |  6 +--
- .../bindings/watchdog/dlg,da9062-watchdog.yaml     | 12 ++++--
- .../bindings/watchdog/intel,keembay-wdt.yaml       |  5 ++-
- .../bindings/watchdog/maxim,max63xx.yaml           |  8 ++--
- .../bindings/watchdog/mediatek,mtk-wdt.yaml        |  1 +
- .../bindings/watchdog/nxp,pnx4008-wdt.yaml         | 34 ++++++++++++++++
- .../devicetree/bindings/watchdog/pnx4008-wdt.txt   | 17 --------
- .../bindings/watchdog/qca,ar7130-wdt.yaml          | 33 ++++++++++++++++
- .../bindings/watchdog/qca-ar7130-wdt.txt           | 13 -------
- .../bindings/watchdog/qcom,pm8916-wdt.yaml         | 33 +++++++++-------
- .../devicetree/bindings/watchdog/qcom-wdt.yaml     |  2 +-
- .../bindings/watchdog/realtek,rtd119x.txt          | 17 --------
- .../watchdog/realtek,rtd1295-watchdog.yaml         | 38 ++++++++++++++++++
- .../devicetree/bindings/watchdog/snps,dw-wdt.yaml  | 10 ++---
- .../bindings/watchdog/technologic,ts7200-wdt.yaml  | 45 ++++++++++++++++++++++
- MAINTAINERS                                        |  2 +-
- drivers/watchdog/at91sam9_wdt.c                    | 12 +++---
- drivers/watchdog/bcm2835_wdt.c                     |  3 +-
- drivers/watchdog/hpwdt.c                           |  9 +----
- drivers/watchdog/it87_wdt.c                        | 29 ++++++++++----
- drivers/watchdog/mlx_wdt.c                         |  4 +-
- drivers/watchdog/mtk_wdt.c                         | 42 ++++++++++++++++++++
- drivers/watchdog/rti_wdt.c                         | 13 ++++++-
- drivers/watchdog/starfive-wdt.c                    |  8 ++--
- drivers/watchdog/txx9wdt.c                         | 11 +++---
- drivers/watchdog/watchdog_dev.c                    |  3 +-
- 31 files changed, 307 insertions(+), 137 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/watchdog/nxp,pnx4008-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/pnx4008-wdt.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/qca,ar7130-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/qca-ar7130-wdt.txt
- delete mode 100644 Documentation/devicetree/bindings/watchdog/realtek,rtd119x.txt
- create mode 100644 Documentation/devicetree/bindings/watchdog/realtek,rtd1295-watchdog.yaml
- create mode 100644 Documentation/devicetree/bindings/watchdog/technologic,ts7200-wdt.yaml
-----------------------------------------------------------------
-
-Kind regards,
-Wim.
-
+--
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5=
+ 849D 1736 249D
 
