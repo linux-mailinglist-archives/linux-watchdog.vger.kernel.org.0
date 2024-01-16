@@ -1,71 +1,185 @@
-Return-Path: <linux-watchdog+bounces-390-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-391-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98CDA82C728
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Jan 2024 23:21:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D18A782EAD4
+	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Jan 2024 09:23:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4B4F1C22199
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Jan 2024 22:21:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69221285261
+	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Jan 2024 08:23:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB4E3182D4;
-	Fri, 12 Jan 2024 22:20:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05BB311725;
+	Tue, 16 Jan 2024 08:23:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qMW7x0+n"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="TcGROJY1"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DBB61773A;
-	Fri, 12 Jan 2024 22:20:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 58C30C433F1;
-	Fri, 12 Jan 2024 22:20:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705098027;
-	bh=V+G4IWzoepIpnAE6rOw3u+FcMwmZeMNw+UwQuh4yBEI=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=qMW7x0+nZgrtJNS9k8oYKJBRSlmoas7JbWWb98dw5LYB9PuFZJ2FAxnq97o7qDjwo
-	 ZwdSc4bFZ/Tf9S+mAkmwtq8NCBfKKjUvVJzBvCPWv9lwPHYme0w7Bo8hUdj+j6O+Og
-	 +JGtiEfgZIIYOjSdWt+7mCj1znrJpI751f6b5upH0Y6Qfo8YmYorj2VDlOWArImKGF
-	 crm+gKkzmgqBPP9VWwHQa/fhk4Q5NA4Qandnl9p3O4Ajfhw4AExEb8lQ7NKbunut2s
-	 keMIPzO+h5cD7YWrRsvMyeK1eLq5FIQHb4WEjEvMK9ZOnG1Uc3oVa6jaJNq22IzbpE
-	 XZbaWnPOwib7g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 43303DFC697;
-	Fri, 12 Jan 2024 22:20:27 +0000 (UTC)
-Subject: Re: [GIT PULL REQUEST] watchdog - v6.8 release cycle.
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20240106134410.GA19394@www.linux-watchdog.org>
-References: <20240106134410.GA19394@www.linux-watchdog.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20240106134410.GA19394@www.linux-watchdog.org>
-X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.8-rc1
-X-PR-Tracked-Commit-Id: 9546b21ea672aa961d5a89ea754214afed013f02
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 61f4c3e6711477b8a347ca5fe89e5e6613e0a147
-Message-Id: <170509802726.4331.3286600777776918013.pr-tracker-bot@kernel.org>
-Date: Fri, 12 Jan 2024 22:20:27 +0000
-To: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, LKML <linux-kernel@vger.kernel.org>, Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>, Guenter Roeck <linux@roeck-us.net>, Ben Dooks <ben.dooks@codethink.co.uk>, Biju Das <biju.das.jz@bp.renesas.com>, Curtis Klein <curtis.klein@hpe.com>, Daniel Golle <daniel@makrotopia.org>, Douglas Anderson <dianders@chromium.org>, Jerry Hoemann <jerry.hoemann@hpe.com>, Johan Hovold <johan+linaro@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Lukas Bulwahn <lukas.bulwahn@gmail.com>, Nik Bune <n2h9z4@gmail.com>, Nikita Shubin <nikita.shubin@maquefel.me>, Randy Dunlap <rdunlap@infradead.org>, Stefan Wahren <wahrenst@gmx.net>, Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>, Vignesh Raghavendra <vigneshr@ti.com>, Werner Fischer <devlists@wefi.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5D011713;
+	Tue, 16 Jan 2024 08:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40G7cIYE014536;
+	Tue, 16 Jan 2024 08:22:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:date:subject:mime-version:content-type
+	:content-transfer-encoding:message-id:to:cc; s=qcppdkim1; bh=FL4
+	8iBa/xVcNymrl9/scuXQ7SEn9fK0L2qjW48jo/4c=; b=TcGROJY121C660nL0lR
+	waW4SCxdKMtImdlQhleWRoBabJ+MZT6dLIrbl02K7ri7kTpdGSKwVwl9JNyJnAPs
+	5zNOyEst+elHW7sPCyI9jNodKhAO+BwM7kB4AMO6WLshF1OeIdhnok5NXBts7VMJ
+	YlYaU2UH9ZA6llTJkm7I/ons4UdJDQNcivHq2lxjySPrlsLqrv3zuYBFi/mJy6HD
+	cRvf6SWMronkzGZ+NNbR+/Xo8WgnYbyIpiNv9d7FhxF0hmmJTxrUNljyBRNhadPV
+	bXxix9YNhUJc2PIzYy/3TmAZVDcgrqkzzOhPUuljE0a2u/FFlAO+HrJbnwV2kWTs
+	nig==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vn02ctgkc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Jan 2024 08:22:54 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40G8MrPI032168
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Jan 2024 08:22:53 GMT
+Received: from hu-kathirav-blr.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Tue, 16 Jan 2024 00:22:50 -0800
+From: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+Date: Tue, 16 Jan 2024 13:52:43 +0530
+Subject: [PATCH v2] watchdog: qcom: fine tune the max timeout value
+ calculation
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20240116-wdt-v2-1-501c7694c3f0@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIANI8pmUC/1WMMRLCIBBFr5LZWhyWRI1W3sNJIQuYLYQIEXUy3
+ F1MZ/n+/PcWSDayTXBqFog2c+LgK6hNAzRe/c0KNpVBSdVJRBQvM4udNvJwtOSwM1CfU7SO32v
+ lMlQeOc0hftZoxt/672cUKFRP+67XrUbXnh9PJva0pXCHoZTyBdAndvWYAAAA
+To: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Kathiravan Thirumoorthy
+	<quic_kathirav@quicinc.com>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1705393370; l=2953;
+ i=quic_kathirav@quicinc.com; s=20230906; h=from:subject:message-id;
+ bh=0E/oeE5cR5fOcIhs2f0ENHP4k2jRmTCCFZ4ckVyUzCo=;
+ b=jJsT3SUMzzIJiY3mc3+LXbHSqbqXrxsEy5VzZ2SUxNzIz1JQGLO9hIpaNFcTJRPTtTyYqiVNH
+ vB1R2eJHZmzB4ztdvZkovFAoa3EoOtiEyawb8+ooaEOY2H0K372Lv9p
+X-Developer-Key: i=quic_kathirav@quicinc.com; a=ed25519;
+ pk=xWsR7pL6ch+vdZ9MoFGEaP61JUaRf0XaZYWztbQsIiM=
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: RA0-pmIoHGiVuqWsaSev1jzvoI9L16_p
+X-Proofpoint-GUID: RA0-pmIoHGiVuqWsaSev1jzvoI9L16_p
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ spamscore=0 impostorscore=0 phishscore=0 suspectscore=0 priorityscore=1501
+ bulkscore=0 clxscore=1015 mlxlogscore=999 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2401160066
 
-The pull request you sent on Sat, 6 Jan 2024 14:44:11 +0100:
+To determine the max_timeout value, the below calculation is used.
 
-> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.8-rc1
+	max_timeout = 0x10000000 / clk_rate
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/61f4c3e6711477b8a347ca5fe89e5e6613e0a147
+cat /sys/devices/platform/soc@0/b017000.watchdog/watchdog/watchdog0/max_timeout
+8388
 
-Thank you!
+However, this is not valid for all the platforms. IPQ SoCs starting from
+IPQ40xx and recent Snapdragron SoCs also has the bark and bite time field
+length of 20bits, which can hold max up to 32 seconds if the clk_rate is
+32KHz.
 
+If the user tries to configure the timeout more than 32s, then the value
+will be truncated and the actual value will not be reflected in the HW.
+
+To avoid this, lets add a variable called max_tick_count in the device data,
+which defines max counter value of the WDT controller. Using this, max-timeout
+will be calculated in runtime for various WDT contorllers.
+
+With this change, we get the proper max_timeout as below and restricts
+the user from configuring the timeout higher than this.
+
+cat /sys/devices/platform/soc@0/b017000.watchdog/watchdog/watchdog0/max_timeout
+32
+
+Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+---
+Changes in v2:
+- drop the minimum timeout change from 30s to 32s
+- Link to v1: https://lore.kernel.org/r/20240111-wdt-v1-1-28c648b3b1f3@quicinc.com
+---
+ drivers/watchdog/qcom-wdt.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
+index 9e790f0c2096..006f9c61aa64 100644
+--- a/drivers/watchdog/qcom-wdt.c
++++ b/drivers/watchdog/qcom-wdt.c
+@@ -41,6 +41,7 @@ static const u32 reg_offset_data_kpss[] = {
+ struct qcom_wdt_match_data {
+ 	const u32 *offset;
+ 	bool pretimeout;
++	u32 max_tick_count;
+ };
+ 
+ struct qcom_wdt {
+@@ -177,11 +178,13 @@ static const struct watchdog_info qcom_wdt_pt_info = {
+ static const struct qcom_wdt_match_data match_data_apcs_tmr = {
+ 	.offset = reg_offset_data_apcs_tmr,
+ 	.pretimeout = false,
++	.max_tick_count = 0x10000000U,
+ };
+ 
+ static const struct qcom_wdt_match_data match_data_kpss = {
+ 	.offset = reg_offset_data_kpss,
+ 	.pretimeout = true,
++	.max_tick_count = 0xFFFFFU,
+ };
+ 
+ static int qcom_wdt_probe(struct platform_device *pdev)
+@@ -236,7 +239,7 @@ static int qcom_wdt_probe(struct platform_device *pdev)
+ 	 */
+ 	wdt->rate = clk_get_rate(clk);
+ 	if (wdt->rate == 0 ||
+-	    wdt->rate > 0x10000000U) {
++	    wdt->rate > data->max_tick_count) {
+ 		dev_err(dev, "invalid clock rate\n");
+ 		return -EINVAL;
+ 	}
+@@ -260,7 +263,7 @@ static int qcom_wdt_probe(struct platform_device *pdev)
+ 
+ 	wdt->wdd.ops = &qcom_wdt_ops;
+ 	wdt->wdd.min_timeout = 1;
+-	wdt->wdd.max_timeout = 0x10000000U / wdt->rate;
++	wdt->wdd.max_timeout = data->max_tick_count / wdt->rate;
+ 	wdt->wdd.parent = dev;
+ 	wdt->layout = data->offset;
+ 
+
+---
+base-commit: 9e21984d62c56a0f6d1fc6f76b646212cfd7fe88
+change-id: 20240111-wdt-5bd079ecf14d
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+
 
