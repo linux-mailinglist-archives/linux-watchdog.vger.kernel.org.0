@@ -1,163 +1,162 @@
-Return-Path: <linux-watchdog+bounces-423-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-424-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9896832736
-	for <lists+linux-watchdog@lfdr.de>; Fri, 19 Jan 2024 11:05:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DA0A8329B1
+	for <lists+linux-watchdog@lfdr.de>; Fri, 19 Jan 2024 13:50:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C88EAB230BD
-	for <lists+linux-watchdog@lfdr.de>; Fri, 19 Jan 2024 10:04:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 435F11C20DE5
+	for <lists+linux-watchdog@lfdr.de>; Fri, 19 Jan 2024 12:50:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07AB52CA7;
-	Fri, 19 Jan 2024 10:04:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34D3051C34;
+	Fri, 19 Jan 2024 12:50:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aRhmNKJd"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2077.outbound.protection.partner.outlook.cn [139.219.146.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2AE13CF48;
-	Fri, 19 Jan 2024 10:04:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705658690; cv=fail; b=GUHWN01nz7Qla6G8D3JYc0HTFQKn1k6fACJQ4SykQ+9N4AXEMlnwZbS0JZGhXckDtZFcqLTVPbQHBce+0pRIDKzE6gRCsiH2JEO6GSXu2cnASllZhMYiR9+ZdtGz2801QPiw7la8CpkzAjhE++cC+CcwdxtQHxWQsNcb85+Kkq8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705658690; c=relaxed/simple;
-	bh=JvM2TnLMJqemG/ss0T5f+1QkF//6fjRt4DImr7AwVuI=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=oLaee09sfOzN7riQYPIcSNbBcq8kb174yNiNeN3ZYuO3P64GIZlNGx8csYJcruPTzUodQsp7lNPVK2T+0nS7fLVIxAMngv9Nqs3fAuZhdizYmRM9uO3YSZuxerYMaGVM+M6ffRrPjcKqN2fVMw/dbTDKDjwMVUitPnSxqVwVK94=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a6D+XG6QuoaDvQSFmW4R/203jTTQmpJGdniSdzJceqqIK5VBSY2rXwUwZ+juVE3U6WXUogzOlz9AGaCRCdK+uo7uQGqnHJjgxUkf7CuKV5631GObTvr6cQUukOhOz/4oVtBKtZCG1/nSsUIf99htGqBQNT1BguGElnO7dCeBUn+gZu4Ofdzaxszqwq4UZTqWMH4bEQM5KfhbqYRqjMY07o96xGMA5mErpWRdpb9M3APG93qsvwkNrUR0vS+Fsx3s9WSc6+kbalepbyn+ymGw2xWU+Zh6RRDffHi2XE6ZHFMn0WwnKkECRHLkCGudLuIUtNwxz3zJr9SG0auzNce+dQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sb3kU7bz2UqiQTqnmPL8Qn2dRS3LwgbpCk8/GDJppW8=;
- b=N07/TwHEMLa68qCy5M8iyw6uW0csxnXQSz8c0b3nsZbVsRHLMgs91ntDAo5f+OmBwTqYap6oJhY9kO9b5naMHDE0vMpzw96kuOnkwtlURoawt1/ZpRiuRFgcLM2noOP+aXE0rPU4rcS0Y0xlwHNRGGRQAAVxifi55UyuEnM9d21+qlvfLDJjeRcMjXjuuDmkITZjFXF54cuhgFAF89ACgIpJyHNhp7iaWBVmyUUXllTe3vfZvvR/g653ah/94U/HsoYppfz5n+M2cvWjpgzq+BOaAAJWMUsIVl/4mzBL2QTrjSPRvhcFVopq4EgN6k9vgFpsNp8n/+jIfyORrKvwtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-Received: from ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:19::6) by ZQ0PR01MB1045.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:1::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.30; Fri, 19 Jan
- 2024 08:29:28 +0000
-Received: from ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
- ([fe80::1dbb:b090:7d89:4e22]) by
- ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn ([fe80::1dbb:b090:7d89:4e22%4])
- with mapi id 15.20.7181.032; Fri, 19 Jan 2024 08:29:28 +0000
-From: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
-To: Xingyu Wu <xingyu.wu@starfivetech.com>,
-	Samin Guo <samin.guo@starfivetech.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc: Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-	linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] watchdog: starfive: Check pm_runtime_enabled() before decrementing usage counter
-Date: Fri, 19 Jan 2024 16:27:21 +0800
-Message-ID: <20240119082722.1133024-1-jisheng.teoh@starfivetech.com>
-X-Mailer: git-send-email 2.43.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BJXPR01CA0060.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c211:12::27) To ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:19::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB0694EB5B;
+	Fri, 19 Jan 2024 12:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705668614; cv=none; b=E83UV+rwvm3eCIkmfTSnNz/o2fib+bQgQ/0hmcZm1Yz0xyiMoJBLUY06yxaCqaONz91kRL/7AVzjv9WdXKT4xakVOKjpR3RBbkuZgqqJN2wAq6yfycbfjd3VC2eOuagi/v8eJbTUNJoXKetkx71Gyx9MCCyum7KHms14Wc67At8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705668614; c=relaxed/simple;
+	bh=N18tcbjt+jAmVjru1N5qmw5jvAztjh+G5p7GzgVAbSo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=a3lhP1chEyJzbay0LeMaccZvVoSFlyuiDMSxVwNdUpR7srNqNPT/Q967XvGu+B8py303aFb63dAGYRLmIl6h3I/YRbufGRrUZmarvkvuXUG56m9H7a1SmAdvC7bRqHZh/n6DaxmieAUv7u6TxCGPywfqqcZZtA/OWlkQ4hOwvpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aRhmNKJd; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1d41bb4da91so5154745ad.0;
+        Fri, 19 Jan 2024 04:50:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705668612; x=1706273412; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=mNsrr+WJ2bS8iXmZ8AqwqU7pHwlr0kwVT4SnS9h2JZ4=;
+        b=aRhmNKJdfSnVkQULauzXxBeYDUenAr/pDfbW4dKICQAAvUt7kQ5Gp+e9YZ1myvXYG1
+         PDlvUyfPxCxF56RxaAjzX4OsxqSqNrJvK3GGTO5dHLNarEoK0zLfJKzYNASqCq57Hqz+
+         qbmnGFV7HQ+klC3xGQoXFTrPwkEOZ98dqPyrmQBvHvtKaHONoRPxrqwZwYNSBiEjcUMv
+         VDjNV4Sfgw89em3IWyxWzrL5f7xQk3v6yGZJvtpuIa7TbUuf6KiDvEUTywSQAPPQIAqm
+         oxgXs8UE4nz0k94p+VOmzvuxbJywKoVb3MKG4XYmcohrT2vnb+fML+Y0n+vjua4SAKzy
+         coBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705668612; x=1706273412;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mNsrr+WJ2bS8iXmZ8AqwqU7pHwlr0kwVT4SnS9h2JZ4=;
+        b=av7EAmeoOycILUhMM6p2aZABKO/IbHxx9hP+6EfqN4nzq7l4SIPtmN16n1TSW52s4D
+         y1Z/KL8FB2jncoC6/KiGPlK/ccdM17K8DUU46zK04fwbBBv8gh8r/akZQdkPIYx6F0Sg
+         /rq6WCSbULGRmia9mjfSc1/w8BlpM+W3Poid8t7Fq+oJ142jWw9PI+QjTtAQJcbUk5kt
+         FsNm+58XEMeuz2CO/bSNZqCEb0YUGEaa/JA6A8HXv5pLcCCdv0ymlS5DBRB1T/YQGOAy
+         3EmFJkAUtgzZ/UnARR3yO0aujaXNa9+IUHBIkCcGScIKiZpZ2HXkRtsb//AMXPnTuq5H
+         vIAQ==
+X-Gm-Message-State: AOJu0YysMVO9+ITqbsVnyO4Z6dBLKYSu8ockfur4VePldtao8sSMe8OI
+	grXXGS+4R+tRthDzhdJ++nz+U8NyvItVk+JC58lnDEAUrysYYIci
+X-Google-Smtp-Source: AGHT+IG0MiBvF8Arv6AR+dEO3rmv/biOYpu5Wy2zO2qAVjJBsru/W1K/7Hl28H+TBZxdULcgNThcgQ==
+X-Received: by 2002:a17:902:9302:b0:1d4:a179:e6ac with SMTP id bc2-20020a170902930200b001d4a179e6acmr2132625plb.4.1705668611917;
+        Fri, 19 Jan 2024 04:50:11 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q23-20020a170902edd700b001d3c27e00f2sm2968810plk.284.2024.01.19.04.50.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 Jan 2024 04:50:11 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <d2329494-2c57-41bb-a9ea-2c9903500d1e@roeck-us.net>
+Date: Fri, 19 Jan 2024 04:50:09 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: ZQ0PR01MB1160:EE_|ZQ0PR01MB1045:EE_
-X-MS-Office365-Filtering-Correlation-Id: 87153ce2-c8d4-4f31-4279-08dc18c8c06a
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Oo6P6RzX6IZ0spIeyu9oWfM0OSlRWV0+a2Vhn+yPn6CIyixjv5FjUdAyKr2XRbpcnrepMdCJU44gisqFGl9sgpiYWPhZT9tBd/IXL1HSoD2XGNwteMmTg9kJfzyuHUp49b3s9V4XSp4tWHXZscUBuA4yrIDg4YV4lEbo0SpzbLew4GqsQoqsJRV8l3UO8iFjIZrSzxM1osaa/BrqK65yAfzB9AdeIbIkC7jzyHJXa2qbPOL5Bt64hIxJCCLG3NBAChm/GdqyC2J0DwWlKEawkickkS+NjQkbnpCbFaRt3pEdpF4rWjlW1qbLO1ccfD++U/IEwyE+SAMGzJ7I1Z2fQGYhOa3dHOC4tLqDrZ1yzYR+Ehxu1THOCRrtTkYOTad6gMNxWGyGKJCEEOPpPceXgz99XKLoFKki2j2hRs2CDVzIFFgXHPi9s8XhTC/HHFyCymBkRCR9hK4NNSzqMAEF2TjW+A+dKF+3Ggli8xh26jstQZ90kj1AojOPs275yfu9SqBcTeQb9GP0nHUiPwDXJCxcDXST+35TJp1u9OpmLbSsm3LieU4VWMEtpxYyaD0f
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(366004)(230922051799003)(451199024)(186009)(1800799012)(52116002)(1076003)(83380400001)(26005)(6666004)(2616005)(38100700002)(4326008)(8676002)(5660300002)(2906002)(8936002)(508600001)(66556008)(66946007)(66476007)(110136005)(40180700001)(86362001)(36756003)(40160700002)(38350700005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?YwIxyFZ5lt78OAmR/zhl0SDRHoDqYbN8McGDMR2pAe9xN1cJ2gdSpQR1nk5v?=
- =?us-ascii?Q?tNoC0oFsikRoDKjWybSTbAI/p6TpXjRNSrTmNPaaGFRKmqm/6rslEcSZHNiB?=
- =?us-ascii?Q?IfIUY07BoFmbn81dSb4/e1Z7jdLRvaNbHrJt4m8uM5hb/Edm2b81yz5087E9?=
- =?us-ascii?Q?F915fUD58fXei46wuddliubiCD5fnbbdupOUbwF4hxonAgyyu711WlMQh0IW?=
- =?us-ascii?Q?+Dlgmj1bdNtJAyzi9XjO22MrqvvCxtA8J6Vd6w60SHrKkg7QLtqRlGAYlMKF?=
- =?us-ascii?Q?H7H9pfg2Oi46yK7UJwi0QatrK79eh7N0S6M2zC8/vVfe1g/7Tbs3ytqCfUy6?=
- =?us-ascii?Q?4bQa6mSvqF0nRVCHnI4R2K7YSh7IS7o2pE2+eTi4H7/v8HaR2OUeo6DB3Pg5?=
- =?us-ascii?Q?ji7ZkzdV3J1d0DpDtZ+azArbcuWLOR354ua+OaK+bktmt1LRV7JvsA6zV8eu?=
- =?us-ascii?Q?hN2p+E7JKPXhfd7pe6PjAtDsMrBCOu189MaCzsj266I5wdEJgqHm1wvYF0xn?=
- =?us-ascii?Q?zTAU2uuU6wdXq6wV8ec1V7y7qlEqHOL+2qo/EHZHC2RO34ZIc4kkRJXKNNX+?=
- =?us-ascii?Q?RFiY6HZeM/VKDi3czPFdHww35Fvwr/2pS9zGaxmG8I0Y9E3qvcQtsKdXPprN?=
- =?us-ascii?Q?JWsCMqmqLhVh87uymGfTMHmgWJU9eW7bLPIXCY1FYU0ED4elHe3mJvV7LkTi?=
- =?us-ascii?Q?C2OpRvvhPG+ogRCuWhNYNzixRFOR0GeMS3F6r5PSGVcCiXh1cYptCYD+xfdF?=
- =?us-ascii?Q?tCUxOSMYE47/T/CplRW0/JOGgQw31UGxfRzYPH4Ki579IUCtA6sXme1wPDwA?=
- =?us-ascii?Q?kCpyLdwuBCmKafoVEi38lruFISAy5+mkxG5QORYYqisrfrLnfa2IXSqTBKuK?=
- =?us-ascii?Q?sBhWBtxNgqYnujMbh4aCuJKdXFuRAX8yelTUVqzPFoGW2eIJgF+BqakLVjhR?=
- =?us-ascii?Q?LUACys4Mn0Z7WBdFZmwQyZdLTjuNA3Q9WWgXjkceFH6LRaMrSbDsWdD9v5Vd?=
- =?us-ascii?Q?HJU8LVItNyoqXx+iusvI+D0jsRtcrhFkeEYLuVR7SOxsBZTDCWnc3kvgygKv?=
- =?us-ascii?Q?yzWISg2+D3WLw+OHP3HNd8dUXBE4mGUJXFv0QicneYOBXceXYS66ZAWiKvGH?=
- =?us-ascii?Q?OuCfwOnEV95/o8LaWrxur0sfPyrbtLbLFs4NVQZwhq033GCYAgkpduDRsLQC?=
- =?us-ascii?Q?sJpogZiF21nxW21xwxoKInRcLq2uFpoqcFnVlHSVTLEExO8CldbTrvLvu7H3?=
- =?us-ascii?Q?UGSXQAp1bWoTfiztXEDoxZklzQj56Q2Umtqe0d8XLy6XJgrTOfTyOb63Bz7E?=
- =?us-ascii?Q?LCwMyBvyX11sySOrVtUOUhdpHotnpg3xWvbJRIZX3gcdaFNaXqz0tyaOZOSM?=
- =?us-ascii?Q?Zg1dagimYJQt7B8t581mzWGusWwJblF6KQVFrvZdhkqMoNp2JGJFvXnGtmxu?=
- =?us-ascii?Q?2FnFMzAa8TR9gx4nMR39BDgNsqwQgjOLAmGp79NAYX0wquDNz+Gb0v0tSePR?=
- =?us-ascii?Q?baBoeslZFp9UhBqZjFP840YyQqjwc0Z9aqiOI4sAdCb96225YtDZO9N5h/k2?=
- =?us-ascii?Q?BxL4Zhv4bhKPz0FuhlJg+f//fU2J6cLA0lh29QXzV9+yMhGI17Ium1v3VZ6m?=
- =?us-ascii?Q?RA=3D=3D?=
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87153ce2-c8d4-4f31-4279-08dc18c8c06a
-X-MS-Exchange-CrossTenant-AuthSource: ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2024 08:29:28.2625
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zg8m/sAzXPs9zvn82+cAbMAO1e3rWRZ1NGbF+I4bdbkRAiemRqq+51ugsehwzTZlt4Sqvs+oPeLHfAcpm8eKD+yz5RT1IW/fFzAJUB+KgNQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ0PR01MB1045
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/3] Introduce EC-based watchdog
+Content-Language: en-US
+To: Lukasz Majczak <lma@chromium.org>, Gwendal Grignou
+ <gwendal@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
+ Radoslaw Biernacki <biernacki@google.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Lee Jones <lee@kernel.org>,
+ Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>, linux-watchdog@vger.kernel.org,
+ linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
+References: <20240119084328.3135503-1-lma@chromium.org>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240119084328.3135503-1-lma@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-In the probe function, pm_runtime_put_sync() will fail on platform with
-runtime PM disabled.
-Check if runtime PM is enabled before calling pm_runtime_put_sync() to
-fix it.
+On 1/19/24 00:43, Lukasz Majczak wrote:
+> Chromeos devices are equipped with the embedded controller (EC)
+> that can be used as a watchdog. The following patches
+> updates the structures and definitions required to
+> communicate with EC-based watchdog and implements the
+> driver itself.
+> 
+> The previous version of this patch was sent here:
+> https://patchwork.kernel.org/project/linux-watchdog/list/?series=817925
+> 
+> Changelog
+> V2->V3:
+> * drop "-drv" from driver name
+> * use format #define<space>NAME<tab>value
+> 
 
-Fixes: db728ea9c7be ("drivers: watchdog: Add StarFive Watchdog driver")
-Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
----
- drivers/watchdog/starfive-wdt.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+I am a bit lost here. You dropped my Reviewed-by: tags, even though
+I specifically said that they applied with those changes made.
+Also, according to the above patch 1/3 was not changed at all.
 
-diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
-index e28ead24c520..df68ae4acbd7 100644
---- a/drivers/watchdog/starfive-wdt.c
-+++ b/drivers/watchdog/starfive-wdt.c
-@@ -494,8 +494,13 @@ static int starfive_wdt_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_exit;
- 
--	if (!early_enable)
--		pm_runtime_put_sync(&pdev->dev);
-+	if (!early_enable) {
-+		if (pm_runtime_enabled(&pdev->dev)) {
-+			ret = pm_runtime_put_sync(&pdev->dev);
-+			if (ret)
-+				goto err_exit;
-+		}
-+	}
- 
- 	return 0;
- 
--- 
-2.43.0
+What else did you change that warrants dropping the tags ?
+
+Guenter
 
 
