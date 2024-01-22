@@ -1,46 +1,46 @@
-Return-Path: <linux-watchdog+bounces-445-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-447-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D63E8368FB
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 16:51:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41A768369B7
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 17:09:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46B252834F9
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 15:51:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D82D81F240AE
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 16:09:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F41B36EB55;
-	Mon, 22 Jan 2024 15:07:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BBC112A17B;
+	Mon, 22 Jan 2024 15:11:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pAd9sbtn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZatEiKc2"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3D74A990;
-	Mon, 22 Jan 2024 15:07:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5176612A177;
+	Mon, 22 Jan 2024 15:11:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705936039; cv=none; b=KMXQbE047NP7Th6pFVQM9/izyMhU2K8LZA/BO001pXiRxGr4/a8bEUdqw6yV72VyNcO2u7NLr/uHKep3kH6hxaGeEeAOE1NE9CkuF6ebcIG4BGXBG/iHIU7LnZXsaTMd8l8QvU2RJtyO2okk830hO5tuiDrEf+Vmcs1rqRNCuWM=
+	t=1705936309; cv=none; b=SNwwE6R5N6B5No4/CTtHycpLo1mN+aaIKnMNItHiqWnLHoKTd95KXVhLp2piYxvkbPFmAvsrCqK10nEqj1z6YdGn7BrjuSFHFQbykRJRB59ZNWDmulAMSXEPyp7DQv36ewWks/5vvliQqowxBYDK2+DKkp25zgJkC2T2yNGT55U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705936039; c=relaxed/simple;
+	s=arc-20240116; t=1705936309; c=relaxed/simple;
 	bh=iixuK5k7tZTGX4UWwRqmbV7O4zWm8JoQ9r2t5AgM3zM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YQYg5RQ9l6ju+7XHhVMgE925trg9OjHg5D0Z7PPgyOmm042EaoRmUDvqfUUHgAQkFAsWw+NBhznuput9Pjfk51Qarog6quQLfEaePAr8qPefvi6O2LC1uwGD/heWEfquWae3a6vOXtbMO8lPQ0sYmw3F5U+O7WT95w/DS9nAjvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pAd9sbtn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7583C43399;
-	Mon, 22 Jan 2024 15:07:18 +0000 (UTC)
+	 MIME-Version; b=MeuG5/0Y79HfbLf1PKrJ9zdiTMHrsP/RM/2nEUtAwQtVsuLct/oEUbg+FZCiE7k7mXYO0A/fHEdxf4mSyWC1+q79qu4FEPRCabhHTTpwDcKqBpPzU0cm6JL3pebgkD7vkDgitzGrZm8xDe9qTR42ZdM7FkVejLNSoyT4T5OMRSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZatEiKc2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A074C433F1;
+	Mon, 22 Jan 2024 15:11:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705936039;
+	s=k20201202; t=1705936309;
 	bh=iixuK5k7tZTGX4UWwRqmbV7O4zWm8JoQ9r2t5AgM3zM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pAd9sbtn8dy3B9709YqXyr44ANVD+WEAiiHil1Xb+vZD5vQtr66lg56nQPQ99E7gd
-	 TI/Ir1b2z08KO64BwrJq4zosejSFq+A367nEexCdyUkP/F0dY2qz01WTS98yRYG/EG
-	 j8y9mjRx5l6TMjg2f8v/Mfm9Jyk9sJmjNqtDyixoMDpU6/vPWj4aFA1cjpVDzw1gME
-	 xZE0clUjJhsqHNgXXu2SrLlIAB6zJ/elU9slgRxwEt7cLRLlHchsyzvho4GN3Xh+8W
-	 xrv5u8nNcT2cI7hkl2PK2brEi57NffX9X+/Oz9j6Mot77SVtmVXyfN0yMxYd+8xs6O
-	 BstIfokDUHEOA==
+	b=ZatEiKc26VBMCDa9SSw1nFs0vwBEfHlzEbKXr47LCgWEYvDCterx3u4cBeoBlrAkh
+	 9tEXMHcM9nanI5Z216ZEFBYhp6gtbFkeJ9LOA5E2kOXVJ8+/odp49tNfqEEpUFOZ+E
+	 lcZ98WBPtm0oDb5zDk/vliij+hGSHXQsYJwQscPQkS+k6xyPDIIfjR4upK+FEAU/f2
+	 eu4c4KAqY9TUc/0yWcKrOeYlxii/YgkbTkr8Oq/nRQ/g2w3cq568itdcE6nhoe7ROu
+	 VQbW+GPSuVU/I460dFtFR1i/+xHEHmXTwqjPTIVICTu0LPhmTetVLIxC4Mrx9lrRvU
+	 QXCOCbBwDZCcQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,12 +49,12 @@ Cc: Werner Fischer <devlists@wefi.net>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 54/73] watchdog: it87_wdt: Keep WDTCTRL bit 3 unmodified for IT8784/IT8786
-Date: Mon, 22 Jan 2024 10:02:08 -0500
-Message-ID: <20240122150432.992458-54-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 41/53] watchdog: it87_wdt: Keep WDTCTRL bit 3 unmodified for IT8784/IT8786
+Date: Mon, 22 Jan 2024 10:08:42 -0500
+Message-ID: <20240122150949.994249-41-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240122150432.992458-1-sashal@kernel.org>
-References: <20240122150432.992458-1-sashal@kernel.org>
+In-Reply-To: <20240122150949.994249-1-sashal@kernel.org>
+References: <20240122150949.994249-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.13
+X-stable-base: Linux 6.1.74
 Content-Transfer-Encoding: 8bit
 
 From: Werner Fischer <devlists@wefi.net>
