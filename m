@@ -1,75 +1,75 @@
-Return-Path: <linux-watchdog+bounces-453-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-454-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38907836F06
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 19:07:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD8F7836F70
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 19:15:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D58432813C2
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 18:07:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E091C1C28861
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 18:15:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6876B55C36;
-	Mon, 22 Jan 2024 17:32:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F8A741777;
+	Mon, 22 Jan 2024 17:39:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WMMM/Gej"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yog+BDAp"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE51665BA3;
-	Mon, 22 Jan 2024 17:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D104F4642C;
+	Mon, 22 Jan 2024 17:39:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705944724; cv=none; b=BsEWzRktE7prQruUvozpdGpYQv4bE/bkIMam0ggB8Dw74vC2Qu99c5NtyItubygFhA3DvRRarl4a3grTadGyAzEpIK6F8rEHyNLF8/nU+2loBH6cSvYVl0VfSjh9OeblTQ5g1V+hMxjuDHlbwwdY1zSlRMuG8htesONru8upQRA=
+	t=1705945172; cv=none; b=iPn+4zrKq9hIzR4DRxtkbY5V9X/bYxXq/HtLTM98RetPqebqeBe0oHLhufLcAty2qeacnTAZbLsLpKe+MlHNGGdf6nYcn0f+PYqJhhlSQhTMtxe1srJxjXTMvtw8cLJuYPe78Uqspy851Caz4YIThxSNnUUKA+wb1KyIy4vwpxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705944724; c=relaxed/simple;
-	bh=PLLdunxeYvO/kADnB7/MVmlZyft705svQ9X6HGOvVyg=;
+	s=arc-20240116; t=1705945172; c=relaxed/simple;
+	bh=hfCd1Y5oYmxXeZ+dlaZix8KLaxz5lElV/rFBFaBiI98=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GxW+0DR6hvw1WRus3hmIH/BysVwbDLYPBzKaJRDYHnwFC9pJxV0dJV4SArVQsrX7uomfK/ijcuveL4aaJpqF1WrSTZVOpklcmHSWwyNVIyBoFVnH3T8zoLaYrsQo/Eg9uXjqEU44aWrFyP5ZLcGckS4c6VqBgsuNy4AXmfsBpIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WMMM/Gej; arc=none smtp.client-ip=209.85.214.177
+	 In-Reply-To:Content-Type; b=GuLw/iJZ9jcN3QUBvqA5CVOh5wwND/OsG6NN0wQPYeeWUdQ7i2LBvoq+6BlU3MERV8a7C1RvEwgZhvUmfw+Mx/V5tILbs6kxKX2NQaXQhc3uvAXAKv8+Z3VQpMjxaKkkUlx9SPBVYVbAkxKdYoW231U5yjUy0RdTQpDyWXrvR7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yog+BDAp; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1d70a986c4aso12284725ad.2;
-        Mon, 22 Jan 2024 09:32:02 -0800 (PST)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1d74dce86f7so10233225ad.2;
+        Mon, 22 Jan 2024 09:39:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705944722; x=1706549522; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1705945170; x=1706549970; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7yb9FdfO6K0ON4aZtJnJ2ZytMkXhmFGKBCJMdJaPFRo=;
-        b=WMMM/GejdB7HfqD8j9tKqtZqXHQQrCTfcVj4yLNsGuBkoUuVX6wYk7BpgBi7KZVkv0
-         j3jV78UbEfWn1l8jSBUJRUT4KnaPAbNoClEuTdyAkx/IfJD0DOt/MGecziyPvSackW7H
-         kEgNdEKSV/feb9OLSj6hNVLyzrZunIcZ8ZrjQ/A8OeX2O4vh4Iidfg1YmopkW+Os6txZ
-         2SezNQy0gkJesHuVaP2BbADOO7bRst/vVlOqF8lAfBLXiCMdySvUOqKpmTLr+fi+FuTg
-         HAjZjJEvUn1XZ8pXFWmZr6cG5p8peHiNsRF5R6er8te07ru4xZWFxbmdGsg2IXsZ/dGe
-         UFKw==
+        bh=iRlYTVmwRF54QEgOCDB+moTbTPswdx4GRYVGmNIHl68=;
+        b=Yog+BDAp9WKLRGP3QHvNKVUpxA5sGv1LmgSBhB/nDyV0JuOL9lieXlK5yEgTXpZwVm
+         MzQjyRkmlrBfbBihDY1zbi5Z1V5vLgblztnAMwjUpLo0mveaK/N0zPSAuL1Rkj4XIJw4
+         CvklL654x0b8YKmb6dpzRVWfD7bWXZ4ddbZC/QsIaRlMXG9djUslDBhUaawKLArXn8O5
+         15NE3C/ah38VvVYbNQvd5XBnWrfOwL7cMlMXlXkDo5Q/nEKmBRBNJrHCMsUY+mCqQ04+
+         1e6SR9letSfo9T9izEdwiYMUAlkXNoKxWzA4sce3W7ovU6/vthuEG5zKHR70TDCCUW4G
+         QCDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705944722; x=1706549522;
+        d=1e100.net; s=20230601; t=1705945170; x=1706549970;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7yb9FdfO6K0ON4aZtJnJ2ZytMkXhmFGKBCJMdJaPFRo=;
-        b=w+MUKwT1JE0ZU6VwfXY+zJhraYt1bmpQq6/X/2O1fC/RBfnVT7wSxJir4mra9YQzKk
-         MEGx81bPEXeNT+KbDx15g5IlRlZcRB1yCMwxJbtv6n9WxenlGAwDlJPLe3w4uj3u2XZg
-         kEXsdHqldZfRbFUmrGDqhl/MutvGK/9eQTkdZwdcuwLUknTOW8SZxIdqf6u6Iy4jL+F/
-         GLQclGD/CHly33JUZKXOtfLLvBpWyJKZhLIVkHsOorZ2zJDiuIMjb8qwQNe2CG97Ozc9
-         A90O72Gs9yi0n9caFjtdEKYWA0ZEygdeSw+uWPjlhuB4QNT1zaxFxRjjrq6jGk9q772k
-         ftCw==
-X-Gm-Message-State: AOJu0YxOyCTJA0Dth6wbdY95OXOEi5iyNiz63J7nc6wSHEZo/55Xgn5Q
-	+e5sO2dPvCJmvMcKSTrOD5UWPe2A3THgDG40aiJcAgeY6R8o4qId
-X-Google-Smtp-Source: AGHT+IHgrcFz7P82ixmtguteJa3w8fRJDNyyha+XDeGEaz1Bk3ts/ZtLlcizCJ3WP9J9jTc89X+JRg==
-X-Received: by 2002:a17:902:da91:b0:1d7:4e2:592b with SMTP id j17-20020a170902da9100b001d704e2592bmr2616895plx.103.1705944722171;
-        Mon, 22 Jan 2024 09:32:02 -0800 (PST)
+        bh=iRlYTVmwRF54QEgOCDB+moTbTPswdx4GRYVGmNIHl68=;
+        b=WSgBpLU3Y+yU9DY4OkC6XbhvRxGX50KEyH+4mojTWZ+7RSzi4KfFwC5xBc7QGdBxp4
+         MD5DOkFZ1GBVPLdUnlbh7YMNp30VEeofu7M6cfo0P1BN8XhqvB1ZU1tdsHeYfYa9mGSy
+         3Tg4FZBSXuiiPJ8qnju8LoFVIlDT4lyS0Gr1CpzdMSQ+xCaEEVSE9A8IzY9l+LxdPbh9
+         wcaN3klzpqx+EH/D3TkGd1GVCYGl3mcNS8EqXzV+EmE/qq1cJQBunfSX807qoytG0KG1
+         4MwZ8pdS0Dvwh4iasE43vEKr2BYk9ErDdt/olU12tXl6+sCKeC9bX465v1F4jbufGi5w
+         PXSg==
+X-Gm-Message-State: AOJu0Yx+zHKjBc3RHANpcOV3ll1mfTvFAumGcoL3zbY1hDixHo+DaHPe
+	MEQxROeqpIBUT83L6B16zkFYIGlmym4oeKKJqXGMBdAc1najlw1L
+X-Google-Smtp-Source: AGHT+IFdOn4FdPrIQ0ppWcJpcTrHrmkNQ2x1tWtSGsVJVEb3zvx0+1VfIsNOGwNuwwtazqcsdF25Kw==
+X-Received: by 2002:a17:903:25d1:b0:1d7:ebe:9d4e with SMTP id jc17-20020a17090325d100b001d70ebe9d4emr4423977plb.92.1705945170002;
+        Mon, 22 Jan 2024 09:39:30 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t3-20020a170902a5c300b001d755ec4bc0sm1770461plq.241.2024.01.22.09.32.00
+        by smtp.gmail.com with ESMTPSA id v20-20020a170902f0d400b001d74cee458asm2317033pla.107.2024.01.22.09.39.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Jan 2024 09:32:01 -0800 (PST)
+        Mon, 22 Jan 2024 09:39:29 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c857cdd4-459b-41ae-b4bb-0da45e461335@roeck-us.net>
-Date: Mon, 22 Jan 2024 09:31:59 -0800
+Message-ID: <a5a807c1-76ef-4cf7-a2cf-bc432c420ded@roeck-us.net>
+Date: Mon, 22 Jan 2024 09:39:27 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -77,8 +77,7 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/10] watchdog: rzg2l_wdt: Check return status of
- pm_runtime_put()
+Subject: Re: [PATCH 07/10] watchdog: rzg2l_wdt: Add suspend/resume support
 Content-Language: en-US
 To: Claudiu <claudiu.beznea@tuxon.dev>, wim@linux-watchdog.org,
  robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
@@ -88,7 +87,7 @@ Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
  linux-clk@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 References: <20240122111115.2861835-1-claudiu.beznea.uj@bp.renesas.com>
- <20240122111115.2861835-4-claudiu.beznea.uj@bp.renesas.com>
+ <20240122111115.2861835-8-claudiu.beznea.uj@bp.renesas.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -133,52 +132,82 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240122111115.2861835-4-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240122111115.2861835-8-claudiu.beznea.uj@bp.renesas.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 1/22/24 03:11, Claudiu wrote:
 > From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > 
-> pm_runtime_put() may return an error code. Check its return status.
+> The RZ/G3S supports deep sleep states where power to most of the IP blocks
+> is cut off. To ensure proper working of the watchdog when resuming from
+> such states, the suspend function is stopping the watchdog and the resume
+> function is starting it. There is no need to configure the watchdog
+> in case the watchdog was stopped prior to starting suspend.
 > 
-> Fixes: 2cbc5cd0b55f ("watchdog: Add Watchdog Timer driver for RZ/G2L")
 > Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > ---
->   drivers/watchdog/rzg2l_wdt.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
+>   drivers/watchdog/rzg2l_wdt.c | 26 ++++++++++++++++++++++++++
+>   1 file changed, 26 insertions(+)
 > 
 > diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-> index 4ab9e7c5e771..0554965027cd 100644
+> index 9333dc1a75ab..186796b739f7 100644
 > --- a/drivers/watchdog/rzg2l_wdt.c
 > +++ b/drivers/watchdog/rzg2l_wdt.c
-> @@ -144,9 +144,13 @@ static int rzg2l_wdt_start(struct watchdog_device *wdev)
->   static int rzg2l_wdt_stop(struct watchdog_device *wdev)
->   {
->   	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
-> +	int ret;
+> @@ -279,6 +279,7 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
+>   	priv->wdev.timeout = WDT_DEFAULT_TIMEOUT;
 >   
->   	rzg2l_wdt_reset(priv);
-> -	pm_runtime_put(wdev->parent);
+>   	watchdog_set_drvdata(&priv->wdev, priv);
+> +	dev_set_drvdata(dev, priv);
+>   	ret = devm_add_action_or_reset(&pdev->dev, rzg2l_wdt_pm_disable, &priv->wdev);
+>   	if (ret)
+>   		return ret;
+> @@ -300,10 +301,35 @@ static const struct of_device_id rzg2l_wdt_ids[] = {
+>   };
+>   MODULE_DEVICE_TABLE(of, rzg2l_wdt_ids);
+>   
+> +static int rzg2l_wdt_suspend_late(struct device *dev)
+> +{
+> +	struct rzg2l_wdt_priv *priv = dev_get_drvdata(dev);
 > +
-> +	ret = pm_runtime_put(wdev->parent);
-> +	if (ret < 0)
-> +		return ret;
->   
->   	return 0;
->   }
+> +	if (!watchdog_active(&priv->wdev))
+> +		return 0;
+> +
+> +	return rzg2l_wdt_stop(&priv->wdev);
+> +}
+> +
+> +static int rzg2l_wdt_resume_early(struct device *dev)
+> +{
+> +	struct rzg2l_wdt_priv *priv = dev_get_drvdata(dev);
+> +
+> +	if (!watchdog_active(&priv->wdev))
+> +		return 0;
+> +
+> +	return rzg2l_wdt_start(&priv->wdev);
+> +}
+> +
+> +static const struct dev_pm_ops rzg2l_wdt_pm_ops = {
+> +	LATE_SYSTEM_SLEEP_PM_OPS(rzg2l_wdt_suspend_late, rzg2l_wdt_resume_early)
+> +};
+> +
+>   static struct platform_driver rzg2l_wdt_driver = {
+>   	.driver = {
+>   		.name = "rzg2l_wdt",
+>   		.of_match_table = rzg2l_wdt_ids,
+> +		.pm = pm_ptr(&rzg2l_wdt_pm_ops),
 
-A simple
-	return pm_runtime_put();
-might do.
+I think this will create a build error if CONFIG_PM=n because rzg2l_wdt_pm_ops
+will be unused but is not marked with __maybe_unused. But then the driver won't be
+operational with CONFIG_PM=n, so I really wonder if it makes sense to include any
+such conditional code instead of making the driver depend on CONFIG_PM.
 
-However, one question: Given that pm_runtime_put() returns -ENOSYS if
-CONFIG_PM is disabled, that means the driver will depend on CONFIG_PM=y.
-Assuming this is intentional, would it make sense to explicitly declare
-that dependency in Kconfig ? It doesn't seem to make any sense to build
-the driver if it won't work anyway.
+I really don't think it is desirable to suggest that the driver would work with
+CONFIG_PM=n if that isn't really true.
 
-Thanks,
 Guenter
+
+>   	},
+>   	.probe = rzg2l_wdt_probe,
+>   };
 
 
