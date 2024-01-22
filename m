@@ -1,46 +1,46 @@
-Return-Path: <linux-watchdog+bounces-448-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-449-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 594A9836A3D
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 17:22:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7E63836AA9
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 17:32:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C5F31C24CB7
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 16:22:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA83D1C23C13
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 16:32:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8BBE13664F;
-	Mon, 22 Jan 2024 15:14:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12E87144630;
+	Mon, 22 Jan 2024 15:16:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AJJKFBy5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WpF/EgAK"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1AD213664D;
-	Mon, 22 Jan 2024 15:14:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFDA014462E;
+	Mon, 22 Jan 2024 15:16:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705936475; cv=none; b=fcz7i6jz4RNajPVWS6FF3wJdNjeFJBsswwvijNkGpNm2or4rQXqjivTtJUtSN2v6R3fVyrcw/LUnhhzNJlRE+lXzRZMN4U8+eyrv6ZKwKqyx28foW+4CEf1JuUkAYfse4VMDNQv/riw2SadZaexX1BzUAhtMZl9ljZL5lhEyqNk=
+	t=1705936588; cv=none; b=sTA2K2JPMUm+e2vayryb4a7zZGLlyEeHktBbwqNkzirYlwjbT4xPIy6PVKygYGH3qtHY3Zw+WsaE2rBBY77IgXAf8ln+EKcnY76UivNyEC3N4gLHkZdHgaY+lO0wYPF2s8VpxYk58N6TWaPr+L+yczX9mYTW4TeE8x0Aac8kmlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705936475; c=relaxed/simple;
-	bh=iixuK5k7tZTGX4UWwRqmbV7O4zWm8JoQ9r2t5AgM3zM=;
+	s=arc-20240116; t=1705936588; c=relaxed/simple;
+	bh=dpF652h/RhEB/QU5aKRU+m7DwyUEfrdiM/kueyndIjA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GHaMZykh7dE/HrbCd3eTbLmhdmqKh1YTpC99zRLTt/3sILkEl6bSeY6Wbeim/7gGtYrVQhNzo6FC0P64xzD00QmyulwRQwFYMpRaayfkwvBnDP+ANu1CQqdwwMtYzbJnsGkI0JGQUM9SPC1GSP9MATm22iNfBtlcEbJ0UIblBg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AJJKFBy5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2694C433B1;
-	Mon, 22 Jan 2024 15:14:34 +0000 (UTC)
+	 MIME-Version; b=etKZy1i9zEsOLAa0caPSBwgTa7bOmkkrVvE+n1Y4b4MMusFUUooWdYDxnQ/3u7JcYrbb3VoSI242y0WCLwRo8xKB3dESB5qbVyWpkSQY+mmtMhDzWNMGsbEU0CyKP8jc/q+7KlWyX+XK0qSEaurK9/qE72/C89PvUta2dJQamS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WpF/EgAK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8034C43601;
+	Mon, 22 Jan 2024 15:16:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705936475;
-	bh=iixuK5k7tZTGX4UWwRqmbV7O4zWm8JoQ9r2t5AgM3zM=;
+	s=k20201202; t=1705936587;
+	bh=dpF652h/RhEB/QU5aKRU+m7DwyUEfrdiM/kueyndIjA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AJJKFBy5EKSkZmyX58giaj5BMCsoS+RTcj6b3I7acNeZ143tSk8Z3HuMsSGBnRQvy
-	 DUwMiAhKBx7kEbkU9KlmSX1ZkqpKzBxoS/UcdMsVHlLO9OE4PYl/nBRsiWlE8cJBkX
-	 tpo6oE9SULvCFmdpxpECI0DF3s2+pMai3F/HAYnnMy4UT3FwRAIn8+Gi1TMOr6T0xP
-	 gsdYAZNdJa3Jjy1S6auBPF9eEvE0QX2TOunlS3qQSA8WEa9DL/EKN1LJDsBP8uwOJb
-	 sX8uuqagqdhmmk6JXX+FHbkytCyHfg+iTJUmuXV8Kq0xfjHLXYHa17TS1fuv2rM039
-	 E65X7q12zbX+Q==
+	b=WpF/EgAKOyyQzJ+nP8Vy09QkKNKa/nSMYvbGu5sSeOjQ4OD+qsQOTkLNBipu6odfp
+	 kwGjuPxq4wXAdOtD/ZXFOFFjEVWJBhi/T44Kxq0sShUUSrYhX5zrKdcE7W9Wl/dpnp
+	 QknPqFEbeYOh8/qanKw4wRmUq38D4zbNX8PJrn8BqF8W0jEfXFvLlbIMwtOsnvQ5gW
+	 LxmCWLcBoPjqcD/gINuq/gqZHkHZhWLch2J7AqBSjipI358/W5LGtH1Lg8spAIFZeJ
+	 opmmruDCKjo5FFZqEXMv+PYyXCv/wJ9NborxkuqKmIsNH3ZifZCPxg5MAqrv54/TRP
+	 /LV0wBIZaWydg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,12 +49,12 @@ Cc: Werner Fischer <devlists@wefi.net>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 29/35] watchdog: it87_wdt: Keep WDTCTRL bit 3 unmodified for IT8784/IT8786
-Date: Mon, 22 Jan 2024 10:12:26 -0500
-Message-ID: <20240122151302.995456-29-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 25/28] watchdog: it87_wdt: Keep WDTCTRL bit 3 unmodified for IT8784/IT8786
+Date: Mon, 22 Jan 2024 10:14:51 -0500
+Message-ID: <20240122151521.996443-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240122151302.995456-1-sashal@kernel.org>
-References: <20240122151302.995456-1-sashal@kernel.org>
+In-Reply-To: <20240122151521.996443-1-sashal@kernel.org>
+References: <20240122151521.996443-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.147
+X-stable-base: Linux 5.10.208
 Content-Transfer-Encoding: 8bit
 
 From: Werner Fischer <devlists@wefi.net>
@@ -98,10 +98,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/watchdog/it87_wdt.c b/drivers/watchdog/it87_wdt.c
-index bb1122909396..843f9f8e3917 100644
+index 2b4831842162..6340ca058f89 100644
 --- a/drivers/watchdog/it87_wdt.c
 +++ b/drivers/watchdog/it87_wdt.c
-@@ -255,6 +255,7 @@ static struct watchdog_device wdt_dev = {
+@@ -263,6 +263,7 @@ static struct watchdog_device wdt_dev = {
  static int __init it87_wdt_init(void)
  {
  	u8  chip_rev;
@@ -109,7 +109,7 @@ index bb1122909396..843f9f8e3917 100644
  	int rc;
  
  	rc = superio_enter();
-@@ -313,7 +314,18 @@ static int __init it87_wdt_init(void)
+@@ -321,7 +322,18 @@ static int __init it87_wdt_init(void)
  
  	superio_select(GPIO);
  	superio_outb(WDT_TOV1, WDTCFG);
