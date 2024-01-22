@@ -1,212 +1,141 @@
-Return-Path: <linux-watchdog+bounces-430-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-431-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FA4C835FBB
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 11:32:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C884836135
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 12:23:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 945411C21CB5
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 10:31:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA2072874EA
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 11:23:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E395E208DD;
-	Mon, 22 Jan 2024 10:31:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 922253B190;
+	Mon, 22 Jan 2024 11:11:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rCu0/mcs"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="aqNLgk52"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B878A3A262;
-	Mon, 22 Jan 2024 10:31:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13723B18F
+	for <linux-watchdog@vger.kernel.org>; Mon, 22 Jan 2024 11:11:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705919515; cv=none; b=AnTRGq3HEHpb0Fs3dBJpVwmveZ2F3EaT5pP8cqTvH5FYKABHmRM8TmIEPI5QsCSVr2Kh1UGi2cWU9cXl6wGB/X7v27youXsuLl2A052fLx3AmGvYStSjKKrqzTPrgW9jYilcr/2uZj2rkdysfgQKYjpDcW//6To0RZ4uOsO31DA=
+	t=1705921903; cv=none; b=ZaWiGUiUusHBwVU9vKrN6zQsjhM0u5e5SBzrIIVKYnlTpkwDzL+gAbsrPAMdthlqm8i1RMze5of2uwXNxD4hDJ49tzX3nBtORRpzqZI9dyF94KfVGoN3FASNSH566090M+b5x86U5LSrjIdxgKduMybAHtH/wiBSGIjEnq1RUV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705919515; c=relaxed/simple;
-	bh=3MlX9iGWyIhVvgtO5vkH1utrGmEPUsa+siylSAZ+4FE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=pRNQF/BAz8y1rRyMUC4uiyKy9OVVzNp9KjkN0NIL4JiEkB5S6EoNqkdEBNZ+4xDj4KdLnA6KMgspUS4Ocr5JJhDMIGcRAO3ydUz3iVR5Zdewd1Ln4euUIRsNtWNXoo3cxvQ9rZjJkK3lfzGRMMbP2RDCMDtZ7RUwC2qC5CbBkbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rCu0/mcs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64BA2C433F1;
-	Mon, 22 Jan 2024 10:31:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705919515;
-	bh=3MlX9iGWyIhVvgtO5vkH1utrGmEPUsa+siylSAZ+4FE=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=rCu0/mcsmI0Ix8l017V62+/Elst5qRKhRr/59QLPK9ERjpJ+q8N8YY1RpBAw6NsOT
-	 b5OqMB1FoXP9+S7e/LWXMMqQS+EEOn4SizRrzRil/xYA0YFW6hotcSLm3J5FuEA2hr
-	 9cZxuzxGVe6t19KWiLPDKMT7iu0dwdmI7TlbOofJZFYSF6BoqFFp1DXcXT5y3c8hGB
-	 hILUnPVGg0TSflYoV0VBDCAYoIFL4fUrUG1Ka+41Q/Pzguxfk++k3t1sGUj/H7EZoK
-	 KHPNVPWk8NWXlhJTan+SODgvd674q+pcc9fhechF2jScASGfpmWEKvkZePOny9KVrL
-	 MmFyBHyIA5C7Q==
-Message-ID: <1e7b8590-7dc7-47a8-8105-6d01db627f85@kernel.org>
-Date: Mon, 22 Jan 2024 11:31:47 +0100
+	s=arc-20240116; t=1705921903; c=relaxed/simple;
+	bh=UxyTRYJrjqQ5DKtv4x7xt8N6ofKWsaiz0ZFqC7P9iQA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SI770tgAjAEIlvPxuLgbXV+DvmOyMupyFvFf+FtqA1gZa9jQG4vVCAXJ3WZgh/Y0KsN6DMGDeSLxtVjV84nnNO6oR84fBuooVXxDw2JHh9SdypUnVqC5+/nbB6hSHuStktpNMuSRrP18eUXnqhrV3C6toXDcoSRIPsYFpv9Z4mM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=aqNLgk52; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-559edcee47eso2504980a12.0
+        for <linux-watchdog@vger.kernel.org>; Mon, 22 Jan 2024 03:11:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1705921899; x=1706526699; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2+NuF+IrheqV39DhurkeC/NdqjCC1Krg29+Aw27A90o=;
+        b=aqNLgk5275sDX48SHiN/znMn0nYhbuic4/hP5/FA/YaBtKuZ4/P3q/fT6ZwvhH1W65
+         rfJTwX0UwvOl6iedQ2JoKWw+THqznadPcRevqKCXVp2sM6lLGAAgiAl4gsp2ieDWfSZ4
+         OpsuDDBjks/qq8E/q+1NlJws5QX92jzKFhcMPfCUZVPulSXb/cSr8gMi8PhNyBBhFVXE
+         gjWD+gEGkYqdsQjPPYn5sTRB9uxbc3hWF5AJoVGdhFYnPuSc2gfiC0w99HRzuDCrHCIJ
+         oxqhSgZYK1ZT5IL+Ho68Si0XmB9tBjZYiv5txVqL3JttSqTAnjonY25tFEDDKxAFveeN
+         LTtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705921899; x=1706526699;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2+NuF+IrheqV39DhurkeC/NdqjCC1Krg29+Aw27A90o=;
+        b=QAM0z+0ikq/rMJPkOFQHYO3URJgd2Y5PaIR2GzFArsWTg1AYjbGHU0NIckbSEi5C7b
+         3IhqENAJ0c8lWBr1xRPUlm5B7aRDzmwHHdJlVLoOJOTJJeNzJO62VogNXTNbOJ/2CwpV
+         6LTpwB/VY8S+ixJzI4WUmhkZeQ9gaRq6RYkeSwNDAlLiOsoeR81riQ67SEeqGA09qaTM
+         UxtvjrMcc+WhvXWhBTUMYXhi9GcQGQBsxa05lneazNMd8WIJA/SezC2Z3EKsZyFctqFW
+         4oYB/gNekr+d5OVDNeQ5CHaVEEdZyLzFZqSisD26Jey/Q4m+lYpYv6b40fcgWSYOReGF
+         JUHA==
+X-Gm-Message-State: AOJu0YxZe/0APkhj3nUbVe/tl3T45M0YG4z9IXjXFrXRhkYkoXRxTk90
+	HW9Pze5691s4Dxkes7PI8A4OXeWdaxmHXHM68UD/RY8gfrAxGRUYJdTdy+93IUw=
+X-Google-Smtp-Source: AGHT+IHTI3lS82Shzhgaq78IcSLYXJWf0bXqAjyhj0u6OR9ZSFyNceOlihdHtJoisQ6VBe9RQdQutw==
+X-Received: by 2002:aa7:c618:0:b0:55a:8430:834d with SMTP id h24-20020aa7c618000000b0055a8430834dmr1650512edq.65.1705921898698;
+        Mon, 22 Jan 2024 03:11:38 -0800 (PST)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.135])
+        by smtp.gmail.com with ESMTPSA id t34-20020a056402242200b0055823c2ae17sm14194241eda.64.2024.01.22.03.11.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jan 2024 03:11:38 -0800 (PST)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	geert+renesas@glider.be,
+	magnus.damm@gmail.com,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	p.zabel@pengutronix.de,
+	biju.das.jz@bp.renesas.com
+Cc: linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	claudiu.beznea@tuxon.dev,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH 00/10] watchdog: rzg2l_wdt: Add support for RZ/G3S
+Date: Mon, 22 Jan 2024 13:11:05 +0200
+Message-Id: <20240122111115.2861835-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] watchdog: Add ChromeOS EC-based watchdog driver
-Content-Language: en-US
-To: Lukasz Majczak <lma@chromium.org>, Gwendal Grignou
- <gwendal@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
- Radoslaw Biernacki <biernacki@google.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Lee Jones <lee@kernel.org>,
- Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
- linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
- chrome-platform@lists.linux.dev
-References: <20240119084328.3135503-1-lma@chromium.org>
- <20240119084328.3135503-3-lma@chromium.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240119084328.3135503-3-lma@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 19/01/2024 09:43, Lukasz Majczak wrote:
-> Embedded Controller (EC) present on Chromebook devices
-> can be used as a watchdog.
-> Implement a driver to support it.
-> 
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
+Hi,
 
-...
+Series adds watchdog support for Renesas RZ/G3S (R9A08G045) SoC.
 
-> +static int cros_ec_wdt_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct cros_ec_dev *ec_dev = dev_get_drvdata(dev->parent);
-> +	struct cros_ec_device *cros_ec = ec_dev->ec_dev;
-> +	struct watchdog_device *wdd;
-> +	union cros_ec_wdt_data arg;
-> +	int ret = 0;
-> +
-> +	wdd = devm_kzalloc(&pdev->dev, sizeof(struct watchdog_device), GFP_KERNEL);
+Patches do the following:
+- patch 1/10 adds clock and reset support for watchdog
+- patches 2-6/10 adds fixes and cleanup for the watchdog driver
+- patch 7/10 adds suspend to RAM to the watchdog driver (to be used by
+  RZ/G3S)
+- patch 8/10 documents the RZ/G3S support
+- patches 9-10/10 add device tree support
 
-sizeof(*)
+It is expected that the clock and device tree support will go through
+Geert's tree while the rest of the patches through the watchdog tree.
 
-> +	if (!wdd)
-> +		return -ENOMEM;
-> +
-> +	arg.req.command = EC_HANG_DETECT_CMD_GET_STATUS;
-> +	ret = cros_ec_wdt_send_cmd(cros_ec, &arg);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "Failed to get watchdog bootstatus");
-> +
-> +	wdd->parent = &pdev->dev;
-> +	wdd->info = &cros_ec_wdt_ident;
-> +	wdd->ops = &cros_ec_wdt_ops;
-> +	wdd->timeout = CROS_EC_WATCHDOG_DEFAULT_TIME;
-> +	wdd->min_timeout = EC_HANG_DETECT_MIN_TIMEOUT;
-> +	wdd->max_timeout = EC_HANG_DETECT_MAX_TIMEOUT;
-> +	if (arg.resp.status == EC_HANG_DETECT_AP_BOOT_EC_WDT)
-> +		wdd->bootstatus = WDIOF_CARDRESET;
-> +
-> +	arg.req.command = EC_HANG_DETECT_CMD_CLEAR_STATUS;
-> +	ret = cros_ec_wdt_send_cmd(cros_ec, &arg);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "Failed to clear watchdog bootstatus");
-> +
-> +	watchdog_stop_on_reboot(wdd);
-> +	watchdog_stop_on_unregister(wdd);
-> +	watchdog_set_drvdata(wdd, cros_ec);
-> +	platform_set_drvdata(pdev, wdd);
-> +
-> +	return devm_watchdog_register_device(dev, wdd);
-> +}
-> +
-> +static int __maybe_unused cros_ec_wdt_suspend(struct platform_device *pdev, pm_message_t state)
-> +{
-> +	struct watchdog_device *wdd = platform_get_drvdata(pdev);
-> +	int ret = 0;
-> +
-> +	if (watchdog_active(wdd))
-> +		ret = cros_ec_wdt_stop(wdd);
-> +
-> +	return ret;
-> +}
-> +
-> +static int __maybe_unused cros_ec_wdt_resume(struct platform_device *pdev)
-> +{
-> +	struct watchdog_device *wdd = platform_get_drvdata(pdev);
-> +	int ret = 0;
-> +
-> +	if (watchdog_active(wdd))
-> +		ret = cros_ec_wdt_start(wdd);
-> +
-> +	return ret;
-> +}
-> +
-> +static struct platform_driver cros_ec_wdt_driver = {
-> +	.probe		= cros_ec_wdt_probe,
-> +	.suspend	= pm_ptr(cros_ec_wdt_suspend),
-> +	.resume		= pm_ptr(cros_ec_wdt_resume),
-> +	.driver		= {
-> +		.name	= DRV_NAME,
-> +	},
-> +};
-> +
-> +module_platform_driver(cros_ec_wdt_driver);
-> +
-> +static const struct platform_device_id cros_ec_wdt_id[] = {
-> +	{ DRV_NAME, 0 },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(platform, cros_ec_wdt_id);
+Thank you,
+Claudiu Beznea
 
-device_id is not placed here, please open existing drivers for
-reference. Why this isn't referenced in driver structure?
+Claudiu Beznea (10):
+  clk: renesas: r9a08g045: Add clock and reset support for watchdog
+  watchdog: rzg2l_wdt: Use pm_runtime_resume_and_get()
+  watchdog: rzg2l_wdt: Check return status of pm_runtime_put()
+  watchdog: rzg2l_wdt: Remove reset de-assert on probe/stop
+  watchdog: rzg2l_wdt: Remove comparison with zero
+  watchdog: rzg2l_wdt: Rely on the reset driver for doing proper reset
+  watchdog: rzg2l_wdt: Add suspend/resume support
+  dt-bindings: watchdog: renesas,wdt: Document RZ/G3S support
+  arm64: dts: renesas: r9a08g045: Add watchdog node
+  arm64: dts: renesas: rzg3s-smarc-som: Enable the watchdog interface
 
-> +MODULE_DESCRIPTION("Cros EC Watchdog Device Driver");
-> +MODULE_LICENSE("GPL");
+ .../bindings/watchdog/renesas,wdt.yaml        |   1 +
+ arch/arm64/boot/dts/renesas/r9a08g045.dtsi    |  14 +++
+ .../boot/dts/renesas/rzg3s-smarc-som.dtsi     |   5 +
+ drivers/clk/renesas/r9a08g045-cpg.c           |   3 +
+ drivers/watchdog/rzg2l_wdt.c                  | 100 ++++++++++--------
+ 5 files changed, 76 insertions(+), 47 deletions(-)
 
-Best regards,
-Krzysztof
+-- 
+2.39.2
 
 
