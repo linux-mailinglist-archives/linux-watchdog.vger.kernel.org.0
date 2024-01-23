@@ -1,152 +1,255 @@
-Return-Path: <linux-watchdog+bounces-470-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-471-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92AA8838891
-	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Jan 2024 09:11:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36CEF838B49
+	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Jan 2024 11:00:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4C61B22985
-	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Jan 2024 08:11:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BE881C21DB7
+	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Jan 2024 10:00:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBCFF56452;
-	Tue, 23 Jan 2024 08:11:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46F645A109;
+	Tue, 23 Jan 2024 10:00:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="kb9tyox9";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ikD6gGQq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GS5ysBOp"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0A88C04;
-	Tue, 23 Jan 2024 08:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E705A0F4;
+	Tue, 23 Jan 2024 10:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705997466; cv=none; b=GbQPPWo9mDNAd4aFTLvL4VZMOOpJsFTPgNZyA20QmZNQ1Puvl2fkkwpLWs0IM7C6fn3aM2ZMyTs09fngI7bJ0+1DLX5CfWAt/vwFYeeIEpdQPYmZeOCY5zIyT+2x4UAOEvQ25WH/O8jkCjKe0USXdvX1F6viwOqs+qQhl9DtdQA=
+	t=1706004028; cv=none; b=fcBUMcSy2q03y3iqTd2AazL9mBW/UMALEFTKfFiUk9lgS1JFb4XCHz7qJSi/on0hCpvdMVTaqRTpTUv+VJsGH95ev8XFTD20Zm4pYBlO2wDM0bvC+/uqKDxuefh0EFD5+QILdlCEsfq96tA0wW1W2av3FPK1aHbUtNQNurNmx0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705997466; c=relaxed/simple;
-	bh=bPCy7tEnsrV1/R4RxhVq/TTlUTKFwD4Yndpfv5J8heY=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=SwnmK8jG/f4Pgq2WmZIkcPpTNwosod6ofreJhQluBrecPkQKHsLZzp3B9RH+dUtB3TRMxKBdn0ZnZqapFay/IUa0juUpfi7zQKt486cwWx/02YGbsn+GGkR9hYrbUfq0ndAmeYLHcF41O+7+qk5jcXkQP0b2abftkpC/Lv7UbTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=kb9tyox9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ikD6gGQq; arc=none smtp.client-ip=64.147.123.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id E7E053200AC7;
-	Tue, 23 Jan 2024 03:10:58 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 23 Jan 2024 03:11:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1705997458; x=1706083858; bh=8GW7Ys4hJn
-	ST61kBAZS3rGpqnAP7hlhrw5R1Bh3T8ww=; b=kb9tyox9sC8LX4vvUW6Cl3tie5
-	GEjSeraUi+YDFtWxtzz1dBB49Q7snKx7PRapGHnK559ubVuRf+diSA3Fcxjwwofy
-	rL67E17qTnu8kSkyE/1e2wubWQtNHWPvO3utGUGRB9N830o5EVYv/j51C+4WzhHV
-	+PMSADJ5M5qeMIrC+1EF9NWx+tE8+3O0KCXPWW/hPKHbjVloSoHWcDwzezmghDIW
-	KK+qnjoMW0zNOc8lFmTMYW9Xuu4rhiBDwPJHH9iHU5KjapShGBbCjOm0zEzkhYMw
-	KlLEWBcgflzfCdvv7diRxCR0HQNq6VbywNA1/VIhYHGg4jmMLdDvdTNfEIBg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1705997458; x=1706083858; bh=8GW7Ys4hJnST61kBAZS3rGpqnAP7
-	hlhrw5R1Bh3T8ww=; b=ikD6gGQqdQQJgaZWnkOFLIu9nGcs8/pDgiQd4NCc0cx6
-	qvYTCMhGlRUm72OQo1KFjzQBa8QHWi/vQm1bBHW3mSfVDrDslDAH0BVB8sedNQSe
-	y9mKr8t6lOc9a/rvxFEkD2z3jtT2orFeZtmCvGO5cnBFZ4V3+fqgNyRUHqsUSFMJ
-	KvU+zPtA1R9AgGtVOIFJbKnzfnqTn8dLDw5Gmr46d6JpMe3CZSRtlzjxz962PVS8
-	h9VRcL2wJ4ISaPX1xGEWiiYEOTwkvcAqXh1qZzjLGqg4Hk6BS+E1rIgm+tYTD882
-	0v798k4YNR+UNv74FNPurqeb93NW+JFHhRMQAUfLzg==
-X-ME-Sender: <xms:knSvZePcH4JgvX9k-cJ9tI41EuG6ee5eNwMt7mF0cvxRBBQeXTdlvg>
-    <xme:knSvZc8aP8vVIbDKZKdWvrTpCPJvU4gCDPEcPgjkZd7ApeDUcXETPg4yDNm_uGcF-
-    UBxkLNYIIgkLDI1gFs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdekjedguddugecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:knSvZVS8KGzEADrrHfFT_wlfw5OYuTbaf89tuySLNIwM4X-1fATWpQ>
-    <xmx:knSvZesT32AOqITVP8J6Ym-UoB2W3vyvyoRH_ubIOXmV3cWhZuFw8Q>
-    <xmx:knSvZWdhyA0vc3SZH-Dz39ckd3oPpeihZpxhn6deDveDKoZOwPDmaw>
-    <xmx:knSvZZUmNfn7ZkduDwUNZsN58HMFGk43W7hVZKZxQ8lj293vkdh3WQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id E487FB6008D; Tue, 23 Jan 2024 03:10:57 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-119-ga8b98d1bd8-fm-20240108.001-ga8b98d1b
+	s=arc-20240116; t=1706004028; c=relaxed/simple;
+	bh=tWtM0aRE7gi8J0xM0NngvsObtVXPw8EzFJdj7ZUJtEY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CfsCZFEOPBITo0nU1WHLK3Hr9IZggK2MJ8t5wZ5pJoMyQDWxzWQxDkk3hG3z8EAVD1F+CPiRDA6SBC7a/l+2AjBPBCYw8dTZKP/2OFo5Esw8Ac+iW618To/WV4tKEdKiuPVRgg6TFsjpU9FWADhnf7Ikbql/35Iq4+r9PPuH8gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GS5ysBOp; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5cf1f4f6c3dso1964893a12.2;
+        Tue, 23 Jan 2024 02:00:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706004025; x=1706608825; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=F+ctDPNeFBq/VjlK1sIBZskqA0s3m7Q2NTDa1byxa0M=;
+        b=GS5ysBOp4OboGgT1pk+B91RmHTPE8YaCUZeVdlsPzZBluEznHcXvWH02MFqLIXZ6bO
+         BCoa6qKiSqbAhueMS2kUKpCY6A4EtFwvEP7pBxCarTMJp/g+OpmX7+foIxQbgyDqyJaM
+         TBVkHdApNGcH1N53Nns2nP7zZxRGPN9QLYmSa7eKa/snmx0ht/FQ6CafZyfVJHtU7DZz
+         9c0HGF3Dig5vgdN6q61Cz2TEcE4RS/MTmsuzjRN0v11FKQXRaD9YXAVbindNaem34vrx
+         U69FjhUWN95DJaHa/m+dIKf+07AZAEyIokAw/4MHzIkO6/bwojQdNtiIaew3q6VagtN8
+         H5Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706004025; x=1706608825;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F+ctDPNeFBq/VjlK1sIBZskqA0s3m7Q2NTDa1byxa0M=;
+        b=DD2hqWPLATy1KRQ2RB8IJOSdfgKG7cJ+zm+hKYxi6G01m5xKsScYAZoTO4FIBGwGvi
+         qJMpGc1tHgC+r4RXGtXvOq88ZzrbCsh/cKdmdxaVn4Yw5it5IwINqqvyKhywi9GHQUT0
+         rHZlirvfwU3PB1bv8rKrGQvZsaxHeYymw/6Of0WMnfJufJZcv45V50C5YMg+SkTxyQCi
+         xZhYJYweZYCKZrVmyVbUTkgSmhWEtewftdFn0h4oWK23WSYyfksWFQBCSmEfE4NS3rWl
+         qq4yAH360VPjSXuU07ZAKmPsITyl6pI5U+/DA9vRHnQDZ4tH/lELhBslxgPD0/WAb6N2
+         5iAw==
+X-Gm-Message-State: AOJu0Yz4gPP0gwCzHscnVShtz08palbAISibOhUw2RC7CSq/x9Gfo2Ci
+	gZ470aaU9yo6/2RbYwFc7P68tr/unf0dn/N4zHCwKSKEgoIma60O
+X-Google-Smtp-Source: AGHT+IFhl6oGMpu/Q2RixaDZx/DlJFHiVeGGPWYCGCf11/ly5Pxkq/dWyQ7cXN7oG4ew+lJWTJrwKw==
+X-Received: by 2002:a17:90b:88e:b0:290:8a26:248 with SMTP id bj14-20020a17090b088e00b002908a260248mr1772945pjb.17.1706004025346;
+        Tue, 23 Jan 2024 02:00:25 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q6-20020a17090ac10600b00290b567b27csm2781206pjt.46.2024.01.23.02.00.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Jan 2024 02:00:24 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <1fbd3b4d-620f-4d2f-852a-e3a275bb425d@roeck-us.net>
+Date: Tue, 23 Jan 2024 02:00:22 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <dd8402e7-f8cc-4ddd-a748-e176b6b534a9@app.fastmail.com>
-In-Reply-To: <20240122225710.1952066-3-peter.griffin@linaro.org>
-References: <20240122225710.1952066-1-peter.griffin@linaro.org>
- <20240122225710.1952066-3-peter.griffin@linaro.org>
-Date: Tue, 23 Jan 2024 09:10:36 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Peter Griffin" <peter.griffin@linaro.org>,
- "Rob Herring" <robh+dt@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
- "Guenter Roeck" <linux@roeck-us.net>,
- "Wim Van Sebroeck" <wim@linux-watchdog.org>,
- "Conor Dooley" <conor+dt@kernel.org>,
- "Alim Akhtar" <alim.akhtar@samsung.com>, jaewon02.kim@samsung.com,
- chanho61.park@samsung.com, "Sam Protsenko" <semen.protsenko@linaro.org>
-Cc: kernel-team@android.com, "Tudor Ambarus" <tudor.ambarus@linaro.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- saravanak@google.com, "William McVicker" <willmcvicker@google.com>,
- linux-fsd@tesla.com, linux-watchdog@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 2/9] soc: samsung: exynos-pmu: Add exynos_pmu_update/read/write
- APIs and SoC quirks
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 03/10] watchdog: rzg2l_wdt: Check return status of
+ pm_runtime_put()
+Content-Language: en-US
+To: claudiu beznea <claudiu.beznea@tuxon.dev>, wim@linux-watchdog.org,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ geert+renesas@glider.be, magnus.damm@gmail.com, mturquette@baylibre.com,
+ sboyd@kernel.org, p.zabel@pengutronix.de, biju.das.jz@bp.renesas.com
+Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-clk@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240122111115.2861835-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240122111115.2861835-4-claudiu.beznea.uj@bp.renesas.com>
+ <c857cdd4-459b-41ae-b4bb-0da45e461335@roeck-us.net>
+ <92db308f-075c-4799-9777-5bc14438ce68@tuxon.dev>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <92db308f-075c-4799-9777-5bc14438ce68@tuxon.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 22, 2024, at 23:57, Peter Griffin wrote:
+On 1/22/24 23:02, claudiu beznea wrote:
+> 
+> 
+> On 22.01.2024 19:31, Guenter Roeck wrote:
+>> On 1/22/24 03:11, Claudiu wrote:
+>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>
+>>> pm_runtime_put() may return an error code. Check its return status.
+>>>
+>>> Fixes: 2cbc5cd0b55f ("watchdog: Add Watchdog Timer driver for RZ/G2L")
+>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>> ---
+>>>    drivers/watchdog/rzg2l_wdt.c | 6 +++++-
+>>>    1 file changed, 5 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
+>>> index 4ab9e7c5e771..0554965027cd 100644
+>>> --- a/drivers/watchdog/rzg2l_wdt.c
+>>> +++ b/drivers/watchdog/rzg2l_wdt.c
+>>> @@ -144,9 +144,13 @@ static int rzg2l_wdt_start(struct watchdog_device
+>>> *wdev)
+>>>    static int rzg2l_wdt_stop(struct watchdog_device *wdev)
+>>>    {
+>>>        struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+>>> +    int ret;
+>>>          rzg2l_wdt_reset(priv);
+>>> -    pm_runtime_put(wdev->parent);
+>>> +
+>>> +    ret = pm_runtime_put(wdev->parent);
+>>> +    if (ret < 0)
+>>> +        return ret;
+>>>          return 0;
+>>>    }
+>>
+>> A simple
+>>      return pm_runtime_put();
+>> might do.
+> 
+> pm_runtime_put() may return 1 if the device is already suspended though
+> this call trace:
+> 
+> pm_runtime_put() ->
+>     __pm_runtime_idle() ->
+>         rpm_idle() ->
+>             rpm_suspend() ->
+>                 rpm_check_suspend_allowed() [1]
+> 
+> That return value is not considered error thus I wanted to consider it
+> here, too.
+> 
+Good point.
 
-> --- a/include/linux/soc/samsung/exynos-pmu.h
-> +++ b/include/linux/soc/samsung/exynos-pmu.h
-> @@ -21,11 +21,39 @@ enum sys_powerdown {
->  extern void exynos_sys_powerdown_conf(enum sys_powerdown mode);
->  #ifdef CONFIG_EXYNOS_PMU
->  extern struct regmap *exynos_get_pmu_regmap(void);
-> +extern int exynos_pmu_update_bits(unsigned int offset, unsigned int 
-> mask,
-> +				  unsigned int val);
-> +extern int exynos_pmu_update(unsigned int offset, unsigned int mask,
-> +			     unsigned int val);
-> +extern int exynos_pmu_write(unsigned int offset, unsigned int val);
-> +extern int exynos_pmu_read(unsigned int offset, unsigned int *val);
->  #else
->  static inline struct regmap *exynos_get_pmu_regmap(void)
->  {
->  	return ERR_PTR(-ENODEV);
->  }
-> +
-> +static inline int exynos_pmu_update_bits(unsigned int offset, unsigned 
-> int mask,
-> +					 unsigned int val);
-> +{
-> +	return ERR_PTR(-ENODEV);
-> +}
-> +
-> +static inline int exynos_pmu_update(unsigned int offset, unsigned int 
-> mask,
-> +				    unsigned int val);
-> +{
-> +	return ERR_PTR(-ENODEV);
-> +}
+> [1]
+> https://elixir.bootlin.com/linux/latest/source/drivers/base/power/runtime.c#L278
+> 
+>>
+>> However, one question: Given that pm_runtime_put() returns -ENOSYS if
+>> CONFIG_PM is disabled, that means the driver will depend on CONFIG_PM=y.
+> 
+> Indeed, the driver depends on CONFIG_PM=y for proper working. It is for
+> devices selecting ARCH_RZG2L and RZ/V2M (ARM64 based uarch) which select
+> CONFIG_PM=y:
+> https://elixir.bootlin.com/linux/latest/source/drivers/soc/renesas/Kconfig#L45
+> 
+> The driver is written with CONFIG_PM=y dependency in mind (e.g. the clocks
+> are enabled though runtime PM APIs).
+> 
+>> Assuming this is intentional, would it make sense to explicitly declare
+>> that dependency in Kconfig ? It doesn't seem to make any sense to build
+>> the driver if it won't work anyway.
+> 
+> The dependency exists there for ARCH_RZG2L and RZ/V2M devices but not
+> directly and it is not strict (in the sense that we allow to build the
+> driver w/o CONFIG_PM (I think this is good to check build on different
+> configurations, the COMPILE_TEST is there anyway in [1]) ). E.g.:
+> 
+> RENESAS_RZG2LWDT depends on ARCH_RENESAS [1]
+> ARCH_RENESAS is the ARMv8 uarch flag [2]
+> SOC_RENESAS is set if ARCH_RENESAS [3]
+> ARCH_RZG2L is visible only if SOC_RENESAS [4]
+> ARCH_RZG2L selects PM [5]
+> RZ/V2M selects PM [6]
+> 
+> Please let me know what do you think about it?
+> 
+If the driver indeed depends on CONFIG_PM, that should be made explicit.
 
-This won't build since you have the wrong return type.
-I would suggest you just remove the #ifdef check entirely
-and instead require drivers using this to have correct
-dependencies.
+Guenter
 
-    Arnd
+> Thank you,
+> Claudiu Beznea
+> 
+> 
+> [1]
+> https://elixir.bootlin.com/linux/latest/source/drivers/watchdog/Kconfig#L913
+> [2]
+> https://elixir.bootlin.com/linux/latest/source/arch/arm64/Kconfig.platforms#L273
+> [3]
+> https://elixir.bootlin.com/linux/latest/source/drivers/soc/renesas/Kconfig#L2
+> [4]
+> https://elixir.bootlin.com/linux/latest/source/drivers/soc/renesas/Kconfig#L9
+> [5]
+> https://elixir.bootlin.com/linux/latest/source/drivers/soc/renesas/Kconfig#L45
+> [6]
+> https://elixir.bootlin.com/linux/latest/source/drivers/soc/renesas/Kconfig#L328
+> 
+> 
+>>
+>> Thanks,
+>> Guenter
+>>
+> 
+
 
