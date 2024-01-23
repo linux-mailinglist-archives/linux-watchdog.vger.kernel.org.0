@@ -1,129 +1,200 @@
-Return-Path: <linux-watchdog+bounces-466-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-467-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AEC78376E8
-	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Jan 2024 00:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C6E68387BF
+	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Jan 2024 08:03:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B01CA289A9F
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jan 2024 22:59:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC2212869FC
+	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Jan 2024 07:03:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D52C34BAAF;
-	Mon, 22 Jan 2024 22:57:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C93B3E491;
+	Tue, 23 Jan 2024 07:02:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jKiFJ1GC"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Q5XO73gX"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D8DA4A991
-	for <linux-watchdog@vger.kernel.org>; Mon, 22 Jan 2024 22:57:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5763B55E62
+	for <linux-watchdog@vger.kernel.org>; Tue, 23 Jan 2024 07:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705964263; cv=none; b=WWOSPkk1beF72RbB6i9TVLACsmFVODv3jQgHPYF7V6pPCV1jR90H34v58U2F/Scs8foqLNjy6ezhasucVDWxwVkXK0O/cSX9DDuoZEpBn+1p++G1nJcDHp28s3Ue+izAwuQxJykuonjtxUjJPIteX4Xt/YzqHGM0bBK13ItDIqU=
+	t=1705993362; cv=none; b=kkBeK8mYIIjITYuWIO/y+gsL4r4V1OJh1f82+plsdH+X1cRZhuR7GY1moo4fpGerTdjVWAWTgn6iMRAlppa1rKVtETUzDwr2JFp0/gVLYfNPvF5aiU0Q0Z1MBPwI2glQJSiFF4lhUHb7RVf+q/XTpTj3QZn1tarr2daebwsyS8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705964263; c=relaxed/simple;
-	bh=6Fww45r8KMq9qH9gjFBGszYrLznUeDKKB4S+eDk2dqU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IEjnGDnRVLLx6JnGE8Xgv5Iur7kU4yWNlNWF3UP15/C8ykUNxkGy4R1pwKGHi/ZIBFYic7J6FByt8saI/uW+riDZI3b0JNamDijCgxOOgnpxINDlvk1RBZSgkM3CNEYsbU7t3SWOVQnl7ifESExajXpZFcamoRlltIEp0RrABGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jKiFJ1GC; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-40e80046264so47533615e9.0
-        for <linux-watchdog@vger.kernel.org>; Mon, 22 Jan 2024 14:57:41 -0800 (PST)
+	s=arc-20240116; t=1705993362; c=relaxed/simple;
+	bh=umk0ZPnWTL0b4WUNFY7XpYAosoBwjT3rA5b6SOxM+0U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eidDyF8BkYpsKM2KCcaSXpWkkFSJeYuEhr4/3enJX5BpkiIRhXTLJYQ4rP2W09lEsMN3yIcaldOG+k6lQxTR9DtfRMoFxcq7+NwZ6XYZADLaNlL2mVLCZOMUYcG5HbfATCbWhHETrbPvMpbsXDpxz1ejbRApt9++Ef7aAgkNjoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Q5XO73gX; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-337d99f9cdfso3505572f8f.0
+        for <linux-watchdog@vger.kernel.org>; Mon, 22 Jan 2024 23:02:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705964260; x=1706569060; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yR0AO5T3Lm52GetAuhWGDlBbvPmAefipWgZrjsJSJcM=;
-        b=jKiFJ1GCKKlFtDaECgZa64YK1ExR9aWypvp9vvl5lhUd3K49tl7R+MojlpME9pL3kq
-         kw8ZdngSy98q2b2gXYSYMe8q27mIlvuHx6AuErBItlaEVq7tNhQDYianBmVG3OqxIaBw
-         gQ9G1Ls1UhJ0gP25eqJT5lh2JyYYXJTcdb8AC1aIzgfHb78kaIhG4CP+J8lojdYa7hkP
-         UhO6PqcWlXyAzRb68oBZfnI5SOC582eMaQ8GRL06xtO7EgB2Urtv70hFKDsAKHnURPM0
-         JO2ahBDkOViF8pBzCm0/tBNkketXwBEvDzynQpYUCC3DM+vnmUDQokXnaCUYU8UdLxlv
-         CdsQ==
+        d=tuxon.dev; s=google; t=1705993358; x=1706598158; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0HA3HgAJbahgUJBX1gJ3AzroSL9tqmUD02YJ2gg4LNI=;
+        b=Q5XO73gX+U2nlb9u59i4ZhawUFU0/aOalOflTpE5G0EqqxrXQ0v119F96LsSe7ohiC
+         w/u4kj1Ci8lLFZNqnUFSbrr4b80XzBdUisbIdwRPNJ+ZdJIeOGK6XmwimsLH6on8A6mI
+         xBI0d5TqhipvbFwbkY1JL2jHKJtJ8pMmJLxuhriz+B92AlYnYzNE6Foqkg9vyE+lRqOw
+         KHAz4gKoqrm3bqJfo5ytjZF3LT3tr2C0ukmbzPNEPhGMfEaH39UviY+WeHnIiT/F/dZz
+         qXH3kz08EjJ25wWvXLGhAdgdDJcGdCBYraNWjWqo265YOsxQNQk88Ij3bYh0Otz/eiK1
+         3dWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705964260; x=1706569060;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yR0AO5T3Lm52GetAuhWGDlBbvPmAefipWgZrjsJSJcM=;
-        b=oKY/dp35sHoB3j1+aUMPji33uAzx3Xa051XQHlps3YqYrVEHuVkraNQUboC+O868L1
-         5IM2gett7yTf6WFtFBwh92Do/+8KDHnWPTSA3x5idX++E6LalFttWkW1j0o2kLIVZYFS
-         lpWzEYGHcZViJXHtTxTWv8SQNl3dZ0pDBggignnKbFLrJrrXzw2QERPxnfPmgqrQC9fW
-         MTlH6o1zK7++afl7jaEuFDwOpge2KK1tLAYNkXSqKLYCvC9vxc3JZrsXZMqxopNTaxQv
-         WToHhH2FNd5UMO3BoumEjtmHshUn2lfkonO6wTUyeH4OC8u+JG180EUPbp4lDTX9MZkS
-         +Wvg==
-X-Gm-Message-State: AOJu0Yxlp3HRfsucyjVr75NTPIIu34AkDqZNXON4nHaCWdUYPmU5mWYK
-	cgHTwM4g1I3dq9Vs4VZGo5QzHOAOla7LefvNDAfN2a4yjazC0EQiX6UryRFF6kQ=
-X-Google-Smtp-Source: AGHT+IE/3oSYmQaHmUVIEZrmPeRaKj7ezaMnrpX2IRhfyS/TY5XiBAOhqPClwNkExF4LwyWJ4DWvjA==
-X-Received: by 2002:a05:600c:a43:b0:40e:62aa:fa7b with SMTP id c3-20020a05600c0a4300b0040e62aafa7bmr2887046wmq.111.1705964260529;
-        Mon, 22 Jan 2024 14:57:40 -0800 (PST)
-Received: from gpeter-l.lan (host-92-18-76-30.as13285.net. [92.18.76.30])
-        by smtp.gmail.com with ESMTPSA id fa26-20020a05600c519a00b0040e89ff10f5sm19776847wmb.1.2024.01.22.14.57.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jan 2024 14:57:38 -0800 (PST)
-From: Peter Griffin <peter.griffin@linaro.org>
-To: arnd@arndb.de,
-	robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	linux@roeck-us.net,
-	wim@linux-watchdog.org,
-	conor+dt@kernel.org,
-	alim.akhtar@samsung.com,
-	jaewon02.kim@samsung.com,
-	chanho61.park@samsung.com,
-	semen.protsenko@linaro.org
-Cc: kernel-team@android.com,
-	peter.griffin@linaro.org,
-	tudor.ambarus@linaro.org,
-	andre.draszik@linaro.org,
-	saravanak@google.com,
-	willmcvicker@google.com,
-	linux-fsd@tesla.com,
-	linux-watchdog@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 9/9] ARM: dts: exynos5250: remove deprecated samsung,syscon-phandle
-Date: Mon, 22 Jan 2024 22:57:10 +0000
-Message-ID: <20240122225710.1952066-10-peter.griffin@linaro.org>
-X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-In-Reply-To: <20240122225710.1952066-1-peter.griffin@linaro.org>
-References: <20240122225710.1952066-1-peter.griffin@linaro.org>
+        d=1e100.net; s=20230601; t=1705993358; x=1706598158;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0HA3HgAJbahgUJBX1gJ3AzroSL9tqmUD02YJ2gg4LNI=;
+        b=Qa0nc6FrVC6+F9bbbB+EPgyCvj6cIUYo4i7L7HqX9Q/UjrfOwKS6lcneV7eH+Vn3Zt
+         CXJo97YDG2xBbEsjWW3N7zVmcyW0euQJHydX/d4G/SXEKwDl9IuhWQiWT9a030kTtQ4B
+         46b0y14FjNxUFAm4n+5x/hnW1L7Wa08tzBccp5rzNGmm5xK2vmOeLCKUHEyOQP/cZA19
+         lbOMZB4eFGYQi6i6q37bMrhH8psSUTEXuw3TGnGBtTAMVy/fcR6nM++cNNCTjUM163hd
+         UF7qHAfeFzI0SItj0wL1Qd68eD0N2l/BQBQW5dzjX3E7IqwYgcBmB8JnwGTxlcmzI1+g
+         Yocg==
+X-Gm-Message-State: AOJu0Yzp7X1/anON/U6r3zLfLa9+WUlLpJXCqTIObGM0NXA7ovYmt8DQ
+	LSwY/EkUXfxmJTgeXycDPw1O092/U/lBrMSvb/RGXvizOe3IZvppQ7H1cFqinho=
+X-Google-Smtp-Source: AGHT+IFS5K2uIygufmipIXH0vhHz5DAndNr0whIooxvibYTJnGVc1IlHqA+kcq/xwxH4E4Cnt7O3Xg==
+X-Received: by 2002:a05:6000:4cc:b0:339:35a4:7caa with SMTP id h12-20020a05600004cc00b0033935a47caamr1569042wri.54.1705993358156;
+        Mon, 22 Jan 2024 23:02:38 -0800 (PST)
+Received: from [192.168.50.4] ([82.78.167.135])
+        by smtp.gmail.com with ESMTPSA id q7-20020adffec7000000b0033926505eafsm8410992wrs.32.2024.01.22.23.02.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jan 2024 23:02:37 -0800 (PST)
+Message-ID: <92db308f-075c-4799-9777-5bc14438ce68@tuxon.dev>
+Date: Tue, 23 Jan 2024 09:02:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 03/10] watchdog: rzg2l_wdt: Check return status of
+ pm_runtime_put()
+Content-Language: en-US
+To: Guenter Roeck <linux@roeck-us.net>, wim@linux-watchdog.org,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ geert+renesas@glider.be, magnus.damm@gmail.com, mturquette@baylibre.com,
+ sboyd@kernel.org, p.zabel@pengutronix.de, biju.das.jz@bp.renesas.com
+Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-clk@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240122111115.2861835-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240122111115.2861835-4-claudiu.beznea.uj@bp.renesas.com>
+ <c857cdd4-459b-41ae-b4bb-0da45e461335@roeck-us.net>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <c857cdd4-459b-41ae-b4bb-0da45e461335@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-samsung,syscon-phandle is no longer used by the Samsung watchdog driver
-to access PMU registers.
 
-Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
----
- arch/arm/boot/dts/samsung/exynos5250.dtsi | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/samsung/exynos5250.dtsi b/arch/arm/boot/dts/samsung/exynos5250.dtsi
-index 99c84bebf25a..2bbeb0f0d898 100644
---- a/arch/arm/boot/dts/samsung/exynos5250.dtsi
-+++ b/arch/arm/boot/dts/samsung/exynos5250.dtsi
-@@ -312,7 +312,6 @@ watchdog@101d0000 {
- 			interrupts = <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&clock CLK_WDT>;
- 			clock-names = "watchdog";
--			samsung,syscon-phandle = <&pmu_system_controller>;
- 		};
- 
- 		mfc: codec@11000000 {
--- 
-2.43.0.429.g432eaa2c6b-goog
+On 22.01.2024 19:31, Guenter Roeck wrote:
+> On 1/22/24 03:11, Claudiu wrote:
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>
+>> pm_runtime_put() may return an error code. Check its return status.
+>>
+>> Fixes: 2cbc5cd0b55f ("watchdog: Add Watchdog Timer driver for RZ/G2L")
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>> ---
+>>   drivers/watchdog/rzg2l_wdt.c | 6 +++++-
+>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
+>> index 4ab9e7c5e771..0554965027cd 100644
+>> --- a/drivers/watchdog/rzg2l_wdt.c
+>> +++ b/drivers/watchdog/rzg2l_wdt.c
+>> @@ -144,9 +144,13 @@ static int rzg2l_wdt_start(struct watchdog_device
+>> *wdev)
+>>   static int rzg2l_wdt_stop(struct watchdog_device *wdev)
+>>   {
+>>       struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+>> +    int ret;
+>>         rzg2l_wdt_reset(priv);
+>> -    pm_runtime_put(wdev->parent);
+>> +
+>> +    ret = pm_runtime_put(wdev->parent);
+>> +    if (ret < 0)
+>> +        return ret;
+>>         return 0;
+>>   }
+> 
+> A simple
+>     return pm_runtime_put();
+> might do.
 
+pm_runtime_put() may return 1 if the device is already suspended though
+this call trace:
+
+pm_runtime_put() ->
+   __pm_runtime_idle() ->
+       rpm_idle() ->
+           rpm_suspend() ->
+               rpm_check_suspend_allowed() [1]
+
+That return value is not considered error thus I wanted to consider it
+here, too.
+
+[1]
+https://elixir.bootlin.com/linux/latest/source/drivers/base/power/runtime.c#L278
+
+> 
+> However, one question: Given that pm_runtime_put() returns -ENOSYS if
+> CONFIG_PM is disabled, that means the driver will depend on CONFIG_PM=y.
+
+Indeed, the driver depends on CONFIG_PM=y for proper working. It is for
+devices selecting ARCH_RZG2L and RZ/V2M (ARM64 based uarch) which select
+CONFIG_PM=y:
+https://elixir.bootlin.com/linux/latest/source/drivers/soc/renesas/Kconfig#L45
+
+The driver is written with CONFIG_PM=y dependency in mind (e.g. the clocks
+are enabled though runtime PM APIs).
+
+> Assuming this is intentional, would it make sense to explicitly declare
+> that dependency in Kconfig ? It doesn't seem to make any sense to build
+> the driver if it won't work anyway.
+
+The dependency exists there for ARCH_RZG2L and RZ/V2M devices but not
+directly and it is not strict (in the sense that we allow to build the
+driver w/o CONFIG_PM (I think this is good to check build on different
+configurations, the COMPILE_TEST is there anyway in [1]) ). E.g.:
+
+RENESAS_RZG2LWDT depends on ARCH_RENESAS [1]
+ARCH_RENESAS is the ARMv8 uarch flag [2]
+SOC_RENESAS is set if ARCH_RENESAS [3]
+ARCH_RZG2L is visible only if SOC_RENESAS [4]
+ARCH_RZG2L selects PM [5]
+RZ/V2M selects PM [6]
+
+Please let me know what do you think about it?
+
+Thank you,
+Claudiu Beznea
+
+
+[1]
+https://elixir.bootlin.com/linux/latest/source/drivers/watchdog/Kconfig#L913
+[2]
+https://elixir.bootlin.com/linux/latest/source/arch/arm64/Kconfig.platforms#L273
+[3]
+https://elixir.bootlin.com/linux/latest/source/drivers/soc/renesas/Kconfig#L2
+[4]
+https://elixir.bootlin.com/linux/latest/source/drivers/soc/renesas/Kconfig#L9
+[5]
+https://elixir.bootlin.com/linux/latest/source/drivers/soc/renesas/Kconfig#L45
+[6]
+https://elixir.bootlin.com/linux/latest/source/drivers/soc/renesas/Kconfig#L328
+
+
+> 
+> Thanks,
+> Guenter
+> 
 
