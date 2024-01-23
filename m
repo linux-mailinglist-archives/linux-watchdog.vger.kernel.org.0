@@ -1,75 +1,75 @@
-Return-Path: <linux-watchdog+bounces-471-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-472-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36CEF838B49
-	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Jan 2024 11:00:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAB45838B68
+	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Jan 2024 11:09:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BE881C21DB7
-	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Jan 2024 10:00:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46AD61F27094
+	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Jan 2024 10:09:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46F645A109;
-	Tue, 23 Jan 2024 10:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C11B05BAF1;
+	Tue, 23 Jan 2024 10:09:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GS5ysBOp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FCwqVxRq"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70E705A0F4;
-	Tue, 23 Jan 2024 10:00:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2570E57311;
+	Tue, 23 Jan 2024 10:09:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706004028; cv=none; b=fcBUMcSy2q03y3iqTd2AazL9mBW/UMALEFTKfFiUk9lgS1JFb4XCHz7qJSi/on0hCpvdMVTaqRTpTUv+VJsGH95ev8XFTD20Zm4pYBlO2wDM0bvC+/uqKDxuefh0EFD5+QILdlCEsfq96tA0wW1W2av3FPK1aHbUtNQNurNmx0c=
+	t=1706004573; cv=none; b=dLzRgHyjTqfQerL6l7OHJESviE/texYLA60atC7gcNbAVslVr8z+PHa9SN9JFD9TUG32N82HchSJ4a0nO1Sd4xy9GPx8RzVENCW7NpEK66KOLrlaQcH/e5SrlGPF8mbOyh0GOJ2Mrw0Idj57SA4h1toV5fbSlu6qibjtDBuFV74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706004028; c=relaxed/simple;
-	bh=tWtM0aRE7gi8J0xM0NngvsObtVXPw8EzFJdj7ZUJtEY=;
+	s=arc-20240116; t=1706004573; c=relaxed/simple;
+	bh=bkc6dtM8tWOn6AoyPD8ER51XkxCtb7qLJw9BAEpIsDU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CfsCZFEOPBITo0nU1WHLK3Hr9IZggK2MJ8t5wZ5pJoMyQDWxzWQxDkk3hG3z8EAVD1F+CPiRDA6SBC7a/l+2AjBPBCYw8dTZKP/2OFo5Esw8Ac+iW618To/WV4tKEdKiuPVRgg6TFsjpU9FWADhnf7Ikbql/35Iq4+r9PPuH8gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GS5ysBOp; arc=none smtp.client-ip=209.85.215.173
+	 In-Reply-To:Content-Type; b=V0Au1YvHgwT6EfG25H5Nrwf+rFXN4HpFH+HlaX4KZVM5La3k20aWUHJBBgBAAnHq7kStq4B1bQw85JzClFMFtR+RhCy9/+6uE7n8xQ23LHtpLmtd1XKFLiyxESVbhzw56bdfWHqrGt5WIYDEYxphzGvYwLv7CYq4dMIY+/st4fA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FCwqVxRq; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5cf1f4f6c3dso1964893a12.2;
-        Tue, 23 Jan 2024 02:00:26 -0800 (PST)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6d9b37f4804so3058666b3a.1;
+        Tue, 23 Jan 2024 02:09:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706004025; x=1706608825; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706004570; x=1706609370; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=F+ctDPNeFBq/VjlK1sIBZskqA0s3m7Q2NTDa1byxa0M=;
-        b=GS5ysBOp4OboGgT1pk+B91RmHTPE8YaCUZeVdlsPzZBluEznHcXvWH02MFqLIXZ6bO
-         BCoa6qKiSqbAhueMS2kUKpCY6A4EtFwvEP7pBxCarTMJp/g+OpmX7+foIxQbgyDqyJaM
-         TBVkHdApNGcH1N53Nns2nP7zZxRGPN9QLYmSa7eKa/snmx0ht/FQ6CafZyfVJHtU7DZz
-         9c0HGF3Dig5vgdN6q61Cz2TEcE4RS/MTmsuzjRN0v11FKQXRaD9YXAVbindNaem34vrx
-         U69FjhUWN95DJaHa/m+dIKf+07AZAEyIokAw/4MHzIkO6/bwojQdNtiIaew3q6VagtN8
-         H5Fw==
+        bh=vF3YAHXTJJCMn28KdzwGiFf2RissWmiYZiWxD+NZ6vM=;
+        b=FCwqVxRqp8BR3oGRU32hmgkbS5LWeC+XnhztlkLtp8r8Rn+T2/51tVIKZ5TCbumW6y
+         7bBNOxDDHnjq9ADxQg8NLTKojzWZMtFtfhSaNM22ScAnHEu/berGofyZJY0m732409Hv
+         GmgjME/z6UsZxAX2JtoOpFEw7CkGZNxedZs11+lVO36xBwLxOKcTopR/0g98KGqzNyQY
+         NFtvC3mN/H5pUBaYxENkPiQsewv1pw2bwkvg4hCvVOnjwkJBGeOTwTgcUzmQJvBuIRBe
+         d9LBi+ATcGYSd8oXZ4L2MsAqkqZ7zVxrFQ2zdxMG1vT72PW9zmsMXrqhYutNhRuMLP6W
+         m7Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706004025; x=1706608825;
+        d=1e100.net; s=20230601; t=1706004570; x=1706609370;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=F+ctDPNeFBq/VjlK1sIBZskqA0s3m7Q2NTDa1byxa0M=;
-        b=DD2hqWPLATy1KRQ2RB8IJOSdfgKG7cJ+zm+hKYxi6G01m5xKsScYAZoTO4FIBGwGvi
-         qJMpGc1tHgC+r4RXGtXvOq88ZzrbCsh/cKdmdxaVn4Yw5it5IwINqqvyKhywi9GHQUT0
-         rHZlirvfwU3PB1bv8rKrGQvZsaxHeYymw/6Of0WMnfJufJZcv45V50C5YMg+SkTxyQCi
-         xZhYJYweZYCKZrVmyVbUTkgSmhWEtewftdFn0h4oWK23WSYyfksWFQBCSmEfE4NS3rWl
-         qq4yAH360VPjSXuU07ZAKmPsITyl6pI5U+/DA9vRHnQDZ4tH/lELhBslxgPD0/WAb6N2
-         5iAw==
-X-Gm-Message-State: AOJu0Yz4gPP0gwCzHscnVShtz08palbAISibOhUw2RC7CSq/x9Gfo2Ci
-	gZ470aaU9yo6/2RbYwFc7P68tr/unf0dn/N4zHCwKSKEgoIma60O
-X-Google-Smtp-Source: AGHT+IFhl6oGMpu/Q2RixaDZx/DlJFHiVeGGPWYCGCf11/ly5Pxkq/dWyQ7cXN7oG4ew+lJWTJrwKw==
-X-Received: by 2002:a17:90b:88e:b0:290:8a26:248 with SMTP id bj14-20020a17090b088e00b002908a260248mr1772945pjb.17.1706004025346;
-        Tue, 23 Jan 2024 02:00:25 -0800 (PST)
+        bh=vF3YAHXTJJCMn28KdzwGiFf2RissWmiYZiWxD+NZ6vM=;
+        b=aRtj2/SM6cEc60l0s75P02kwKZWgK9RrPwKxMg0meGL3T1afiLSBxxgYGb8RPsvYdp
+         HHMvuBYVnXEUOCAwj9YXpz8bARVlC6mjj1PYB3rFKAzqs1cy8wOJqZnmjwZV1cqoJegu
+         b5B78An3tizTaNK3+aE9k8zOrNZ3wRgYH/7L2SvReRIuDDtfxoUBCWOH677Z3VnupjPM
+         tWV2QOVRFmRLsQSVro6AkTBLGuV8UZQo9CGOk/xfTpuucKNhbVcvL9mW2QicZuhcNAMK
+         Dlr/JlOr8XXpi+gu6SjdNhQrea+66fXHxionUoLl5bq+TVe7F4xe1+G/mS8c73kMVAHA
+         ZjWw==
+X-Gm-Message-State: AOJu0YwH0oVsuAsiQhXn4lMntw9bRoq6UGNdk2jv3gNApxQrEMxnyJWe
+	g0LSFOqH296AzoQfMfGTG+nmQzdd7IgtdaSLi9lFQUwLFL0O1k9S
+X-Google-Smtp-Source: AGHT+IHIAWmYLuWi422JcyW3PtuAK24g0dKpE66t9z7rcaaTrk3zHZtgNgaldXuzgg7lQzJgv++RUg==
+X-Received: by 2002:a05:6a21:3399:b0:19a:fe9c:e870 with SMTP id yy25-20020a056a21339900b0019afe9ce870mr7692900pzb.12.1706004570347;
+        Tue, 23 Jan 2024 02:09:30 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q6-20020a17090ac10600b00290b567b27csm2781206pjt.46.2024.01.23.02.00.23
+        by smtp.gmail.com with ESMTPSA id y2-20020a63e242000000b005cd78f13608sm9752654pgj.13.2024.01.23.02.09.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jan 2024 02:00:24 -0800 (PST)
+        Tue, 23 Jan 2024 02:09:29 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1fbd3b4d-620f-4d2f-852a-e3a275bb425d@roeck-us.net>
-Date: Tue, 23 Jan 2024 02:00:22 -0800
+Message-ID: <d879634e-c329-4eef-928f-f296535f8838@roeck-us.net>
+Date: Tue, 23 Jan 2024 02:09:27 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -77,8 +77,7 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 03/10] watchdog: rzg2l_wdt: Check return status of
- pm_runtime_put()
+Subject: Re: [PATCH 07/10] watchdog: rzg2l_wdt: Add suspend/resume support
 Content-Language: en-US
 To: claudiu beznea <claudiu.beznea@tuxon.dev>, wim@linux-watchdog.org,
  robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
@@ -88,9 +87,9 @@ Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
  linux-clk@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 References: <20240122111115.2861835-1-claudiu.beznea.uj@bp.renesas.com>
- <20240122111115.2861835-4-claudiu.beznea.uj@bp.renesas.com>
- <c857cdd4-459b-41ae-b4bb-0da45e461335@roeck-us.net>
- <92db308f-075c-4799-9777-5bc14438ce68@tuxon.dev>
+ <20240122111115.2861835-8-claudiu.beznea.uj@bp.renesas.com>
+ <a5a807c1-76ef-4cf7-a2cf-bc432c420ded@roeck-us.net>
+ <2af40ace-2779-45a0-a244-e7e9e5cc510c@tuxon.dev>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -135,121 +134,130 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <92db308f-075c-4799-9777-5bc14438ce68@tuxon.dev>
+In-Reply-To: <2af40ace-2779-45a0-a244-e7e9e5cc510c@tuxon.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 1/22/24 23:02, claudiu beznea wrote:
+On 1/22/24 23:13, claudiu beznea wrote:
 > 
 > 
-> On 22.01.2024 19:31, Guenter Roeck wrote:
+> On 22.01.2024 19:39, Guenter Roeck wrote:
 >> On 1/22/24 03:11, Claudiu wrote:
 >>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 >>>
->>> pm_runtime_put() may return an error code. Check its return status.
+>>> The RZ/G3S supports deep sleep states where power to most of the IP blocks
+>>> is cut off. To ensure proper working of the watchdog when resuming from
+>>> such states, the suspend function is stopping the watchdog and the resume
+>>> function is starting it. There is no need to configure the watchdog
+>>> in case the watchdog was stopped prior to starting suspend.
 >>>
->>> Fixes: 2cbc5cd0b55f ("watchdog: Add Watchdog Timer driver for RZ/G2L")
 >>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 >>> ---
->>>    drivers/watchdog/rzg2l_wdt.c | 6 +++++-
->>>    1 file changed, 5 insertions(+), 1 deletion(-)
+>>>    drivers/watchdog/rzg2l_wdt.c | 26 ++++++++++++++++++++++++++
+>>>    1 file changed, 26 insertions(+)
 >>>
 >>> diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
->>> index 4ab9e7c5e771..0554965027cd 100644
+>>> index 9333dc1a75ab..186796b739f7 100644
 >>> --- a/drivers/watchdog/rzg2l_wdt.c
 >>> +++ b/drivers/watchdog/rzg2l_wdt.c
->>> @@ -144,9 +144,13 @@ static int rzg2l_wdt_start(struct watchdog_device
->>> *wdev)
->>>    static int rzg2l_wdt_stop(struct watchdog_device *wdev)
->>>    {
->>>        struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
->>> +    int ret;
->>>          rzg2l_wdt_reset(priv);
->>> -    pm_runtime_put(wdev->parent);
+>>> @@ -279,6 +279,7 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
+>>>        priv->wdev.timeout = WDT_DEFAULT_TIMEOUT;
+>>>          watchdog_set_drvdata(&priv->wdev, priv);
+>>> +    dev_set_drvdata(dev, priv);
+>>>        ret = devm_add_action_or_reset(&pdev->dev, rzg2l_wdt_pm_disable,
+>>> &priv->wdev);
+>>>        if (ret)
+>>>            return ret;
+>>> @@ -300,10 +301,35 @@ static const struct of_device_id rzg2l_wdt_ids[] = {
+>>>    };
+>>>    MODULE_DEVICE_TABLE(of, rzg2l_wdt_ids);
+>>>    +static int rzg2l_wdt_suspend_late(struct device *dev)
+>>> +{
+>>> +    struct rzg2l_wdt_priv *priv = dev_get_drvdata(dev);
 >>> +
->>> +    ret = pm_runtime_put(wdev->parent);
->>> +    if (ret < 0)
->>> +        return ret;
->>>          return 0;
->>>    }
+>>> +    if (!watchdog_active(&priv->wdev))
+>>> +        return 0;
+>>> +
+>>> +    return rzg2l_wdt_stop(&priv->wdev);
+>>> +}
+>>> +
+>>> +static int rzg2l_wdt_resume_early(struct device *dev)
+>>> +{
+>>> +    struct rzg2l_wdt_priv *priv = dev_get_drvdata(dev);
+>>> +
+>>> +    if (!watchdog_active(&priv->wdev))
+>>> +        return 0;
+>>> +
+>>> +    return rzg2l_wdt_start(&priv->wdev);
+>>> +}
+>>> +
+>>> +static const struct dev_pm_ops rzg2l_wdt_pm_ops = {
+>>> +    LATE_SYSTEM_SLEEP_PM_OPS(rzg2l_wdt_suspend_late,
+>>> rzg2l_wdt_resume_early)
+>>> +};
+>>> +
+>>>    static struct platform_driver rzg2l_wdt_driver = {
+>>>        .driver = {
+>>>            .name = "rzg2l_wdt",
+>>>            .of_match_table = rzg2l_wdt_ids,
+>>> +        .pm = pm_ptr(&rzg2l_wdt_pm_ops),
 >>
->> A simple
->>      return pm_runtime_put();
->> might do.
+>> I think this will create a build error if CONFIG_PM=n because rzg2l_wdt_pm_ops
+>> will be unused but is not marked with __maybe_unused.
 > 
-> pm_runtime_put() may return 1 if the device is already suspended though
-> this call trace:
+> The necessity of __maybe_unused has been removed along with the
+> introduction of LATE_SYSTEM_SLEEP_PM_OPS() and friends (and
+> *SET_*LATE_SYSTEM_SLEEP_PM_OPS along with the other helpers were marked
+> deprecated for that) and we can use pm_ptr() along with
+> LATE_SYSTEM_SLEEP_PM_OPS() to avoid build errors you mentioned.
 > 
-> pm_runtime_put() ->
->     __pm_runtime_idle() ->
->         rpm_idle() ->
->             rpm_suspend() ->
->                 rpm_check_suspend_allowed() [1]
+> FYI, I just build the driver with CONFIG_PM=n and all good.
 > 
-> That return value is not considered error thus I wanted to consider it
-> here, too.
-> 
-Good point.
 
-> [1]
-> https://elixir.bootlin.com/linux/latest/source/drivers/base/power/runtime.c#L278
-> 
->>
->> However, one question: Given that pm_runtime_put() returns -ENOSYS if
->> CONFIG_PM is disabled, that means the driver will depend on CONFIG_PM=y.
-> 
-> Indeed, the driver depends on CONFIG_PM=y for proper working. It is for
-> devices selecting ARCH_RZG2L and RZ/V2M (ARM64 based uarch) which select
-> CONFIG_PM=y:
-> https://elixir.bootlin.com/linux/latest/source/drivers/soc/renesas/Kconfig#L45
-> 
-> The driver is written with CONFIG_PM=y dependency in mind (e.g. the clocks
-> are enabled though runtime PM APIs).
-> 
->> Assuming this is intentional, would it make sense to explicitly declare
->> that dependency in Kconfig ? It doesn't seem to make any sense to build
->> the driver if it won't work anyway.
-> 
-> The dependency exists there for ARCH_RZG2L and RZ/V2M devices but not
-> directly and it is not strict (in the sense that we allow to build the
-> driver w/o CONFIG_PM (I think this is good to check build on different
-> configurations, the COMPILE_TEST is there anyway in [1]) ). E.g.:
-> 
-> RENESAS_RZG2LWDT depends on ARCH_RENESAS [1]
-> ARCH_RENESAS is the ARMv8 uarch flag [2]
-> SOC_RENESAS is set if ARCH_RENESAS [3]
-> ARCH_RZG2L is visible only if SOC_RENESAS [4]
-> ARCH_RZG2L selects PM [5]
-> RZ/V2M selects PM [6]
-> 
-> Please let me know what do you think about it?
-> 
-If the driver indeed depends on CONFIG_PM, that should be made explicit.
+Ok, but are you sure you did ? You just mentioned earlier that CONFIG_PM
+is set automatically through ARCH_RZG2L.
 
+>> But then the driver
+>> won't be
+>> operational with CONFIG_PM=n, so I really wonder if it makes sense to
+>> include any
+>> such conditional code instead of making the driver depend on CONFIG_PM.
+> 
+> That's true. The driver wouldn't work if the CONFIG_PM=n but then it
+> depends on COMPILE_TEST which is exactly for this (just to compile test it
+> for platforms that don't support it). I see many watchdog drivers depends
+> on COMPILE_TEST.
+> 
+> Give this, please let me know would you like me to proceed with it.
+> 
+
+FWIW, COMPILE_TEST dependencies on watchdog drivers fails for most of them.
+Regarding pm_ptr(), it is there for practical reasons and not associated with
+COMPILE_TEST. Again, if the driver depends on CONFIG_PM to work, using constructs
+such as pm_ptr() just hides that and creates the impression that it would work
+without it. I do not think that is a good idea. You can use something like
+
+	depends on (ARCH_RENESAS && PM) || COMPILE_TEST
+
+to make that explicit. Even if not, I _really_ don't see the point in using
+pm_ptr() even without above dependency. What do you see as its benefit ?
+
+Thanks,
 Guenter
 
 > Thank you,
 > Claudiu Beznea
 > 
-> 
-> [1]
-> https://elixir.bootlin.com/linux/latest/source/drivers/watchdog/Kconfig#L913
-> [2]
-> https://elixir.bootlin.com/linux/latest/source/arch/arm64/Kconfig.platforms#L273
-> [3]
-> https://elixir.bootlin.com/linux/latest/source/drivers/soc/renesas/Kconfig#L2
-> [4]
-> https://elixir.bootlin.com/linux/latest/source/drivers/soc/renesas/Kconfig#L9
-> [5]
-> https://elixir.bootlin.com/linux/latest/source/drivers/soc/renesas/Kconfig#L45
-> [6]
-> https://elixir.bootlin.com/linux/latest/source/drivers/soc/renesas/Kconfig#L328
-> 
-> 
 >>
->> Thanks,
+>> I really don't think it is desirable to suggest that the driver would work
+>> with
+>> CONFIG_PM=n if that isn't really true.
+>>
 >> Guenter
 >>
-> 
+>>>        },
+>>>        .probe = rzg2l_wdt_probe,
+>>>    };
+>>
 
 
