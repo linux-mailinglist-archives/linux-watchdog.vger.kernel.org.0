@@ -1,69 +1,69 @@
-Return-Path: <linux-watchdog+bounces-487-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-488-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED33283B2FA
-	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Jan 2024 21:23:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D1DF83B3E7
+	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Jan 2024 22:27:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5E7A282672
-	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Jan 2024 20:23:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF3131C2276B
+	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Jan 2024 21:27:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D308213342B;
-	Wed, 24 Jan 2024 20:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F84B1353ED;
+	Wed, 24 Jan 2024 21:27:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XmCEc++6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U76+FhmA"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F9E131E53
-	for <linux-watchdog@vger.kernel.org>; Wed, 24 Jan 2024 20:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7FC1350FE
+	for <linux-watchdog@vger.kernel.org>; Wed, 24 Jan 2024 21:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706127818; cv=none; b=PDC0EFmXHdii3ts6NGn1SRdSQDZ10TYrBrjJ8utuqX96sZAC8AgF1uDBKJkO3K+AxC9/vrj9W+GYb8x84z0ZwsQ78dRygscIgaJtX+p+uE49BzaA1SVJXSTVUzOAZm3xZuq7jRQeCCLItEQWulzemxqOuEpi5cWIP8JtSPaij+0=
+	t=1706131660; cv=none; b=kocVn3/72owKB4L9hcA8f5ZIkyqt/Q5bjOgIrdMwoXVSg/iyzLjhGvRWDiNeahgaHdxbcH7q25nJ/2lS/EOJPdlb0u6UwP5bSaLOgLBNK72Ph53fEglsZ9Me2+D2OJ+FW3BXjc5rysWh46JI688jkuZlbcmUrjFNkSVpNYa5M58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706127818; c=relaxed/simple;
-	bh=TjAqpdsT083fhHAEKJvt5yNIUpYUwxwS06SACyk0hzk=;
+	s=arc-20240116; t=1706131660; c=relaxed/simple;
+	bh=LWNwA7ukVrj+d7v6MIv5EzJo8y49TqMJStEePkkmQ/0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Uvqu4m2rJRq2v6rKub0RADKODF+X8fxd4U2FOqXFhmExZRImgpZpn+QjGj8rIgYg8ZIDyDMr7e1R2ilVunkBr+58GlCYLuqhgqm6SEKmTEDTolr571K01v/DK0et3nce1KPHKoHu637b0i7skhEOssg+X/IMacCvYWrAI4f8t8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XmCEc++6; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1d73066880eso37136095ad.3
-        for <linux-watchdog@vger.kernel.org>; Wed, 24 Jan 2024 12:23:36 -0800 (PST)
+	 To:Cc:Content-Type; b=FoGqXnrSI7ys1qypQeJl3cpzLwJjgP4k8hMa77fjLQcZ3C7zvTStXG8t3vL7qlxUllMevKjPTGl6csHR1GgyB20bgLh5QukPTsHPstR2tQqK5XT2/Vd2bpuOtegzn/59hnkxKdzsYEUhWxRHa4mWGXQ5cYRjq8F4VLde1VSkcYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U76+FhmA; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-428405a0205so10051cf.1
+        for <linux-watchdog@vger.kernel.org>; Wed, 24 Jan 2024 13:27:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706127816; x=1706732616; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1706131658; x=1706736458; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1hmcP/QQeHaGkE3qc5AwUJsU9CmjS1G7i7dszRGZnLA=;
-        b=XmCEc++6pzH0LZUhFDm+Z3Wq3gcOOLwwA8ZuvJVZpEgTlS3K/Q66RIPNMykAXAdU0F
-         7u0fqoK28k5IMHS6wIbOcFVlNXyz59YQHiIbnNKUk+wanT78cGXKagKEg+57yOCtcFxF
-         WIq3IofJcmkA8zx4qBVHVjRs7kr/XZnx68Jgi8Fh+gQBLqmD+qgLyNs7OafCLZsEA6w/
-         N1LQCGQkU8XhJObjCo4FM+bnxkryTC70cLNXyKIciBxy+f+og21VWke0Ee+Wl0GYVRRB
-         NdFQJh48JbA5dzDL9RNsigPUL4sXHn58kSDmnba7AOPop4RsVpttxn1/cZtszCzZdP2a
-         0iew==
+        bh=b5SzYBWThLP29YqBiKV1/oGuFwlfjpxBatfd0d5rA2w=;
+        b=U76+FhmAASPMcI/XGIlJnnHiDExFE9LQD9Jv5/uUE9L0CSvuU3S9+jhWgTPvfnD9wu
+         xCDOplcZxQ6KhXbQexJ3JvTpZBugujfaflg/K6aga2gEFG8oLoInRcCG5sz/C2c7NsdW
+         x4k9k2Ajfi3GCWUMVsylWyc2ooUySsCciXJmku2fms5AVl52NKotRQAAtc1JXspfJVCC
+         Wkjt5siDjbagraCGAEBNMuvWEbnqoLGTQ3SLGUCGeI72fydKQeXuf7MTL+Xi2LVtLjSp
+         AMKIWJGxNgzjykv1M38pKeclZv7NnSvn6Pm2tsSKwbARnFppAy2hbHDtUArYkS0VYfHg
+         IwRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706127816; x=1706732616;
+        d=1e100.net; s=20230601; t=1706131658; x=1706736458;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1hmcP/QQeHaGkE3qc5AwUJsU9CmjS1G7i7dszRGZnLA=;
-        b=pOOwsXHbmyIzEu6IXVlP6m6mZfICvzdo3I4nmiCCwHVet6T3cq1Dkc6QSuD8skVGwk
-         89zaOVnmVr30isBHRNaRozVftoMIGlgy+Evn3fTKlfeQLMM82I0to/BCZKjzaUqi+IZt
-         UB7uAOId2+BMGl/BQSVYe9O0Pyl7APb+l3K8xlHWbR9wQyU3fYxhWAHUXiZXuPtjHiDe
-         dwoMEixxat7TRYJtN+yc+qI9c1d5HbO0hIo/HThzu04ziElS4elP3g/ecGYNn08OE2CP
-         ubx3CMlE3fmBQftV/5WsdF3SP6DHImd1RPUPJGo2z2H0M86ifVVvZcIwRQVB47fdULW3
-         jOWQ==
-X-Gm-Message-State: AOJu0YyymEs1UMMZj4M6x76UnQdie87Fz8tFt94zqQacaUs/8T8dYRHf
-	TGq87BvrE9sAFoSAFBKeupJTyCC+/IUL1Znpupp3nZayP7/H400jZ0jTNSIy8t8G2YU8Sck+4T+
-	wBAj4Xx/OOJEgIN5U7xy16KBXvNigy7Mw2iP2sw==
-X-Google-Smtp-Source: AGHT+IGjSUG97VtcSprWmDph87pKYkTflh1fXOYMFNCL6uA4yn/LTCIGlCNQsdB8V/Us8yTWcZd6qjpc5NSp9PW5580=
-X-Received: by 2002:a17:90a:c685:b0:28b:6b90:3d69 with SMTP id
- n5-20020a17090ac68500b0028b6b903d69mr90245pjt.76.1706127816537; Wed, 24 Jan
- 2024 12:23:36 -0800 (PST)
+        bh=b5SzYBWThLP29YqBiKV1/oGuFwlfjpxBatfd0d5rA2w=;
+        b=vFuWbktXzGGi7TSh+bMFNOKb0NJp8KUwLuM7POmClklL0Ibg3q0cfSUEFFgkUeVHKc
+         JKEzEi2yimtp8Bk5xP8uK3RD0h5XWbZEIsznyUlgJl9FIUaPTsBoEjObusUMr5EtG4h3
+         wjsvNGaxjn3hGmbB7vsodbiBU8R8lcGSTsvhXKm2U89/xINjvAOSyIN9SEVKp3yUc6yJ
+         kDeavATCFVFXNepuRmyAW4Q8w7/y9qtD35IR7iHsAxmDwCzgWI+OpYy28p5sXNntQQuq
+         KdnE3+EFCqQJ9Cm4z87msqIywEBQASwsUy36bsXjs4+cAqFibe2UPFUFEr5Gct6sHQAD
+         esVw==
+X-Gm-Message-State: AOJu0YztpNDFtLDeStH/xF4etpjJGifgM9YyxR9QiULnCrYkQbfZ7XhY
+	JQOoHHTQkHW6YiaK1me/RWdaMJeKPG0eWC3iHw+9Qrs/9vDOHzG6uHcGxSLmjfCxOCKKSwis2tn
+	2ur4GeQet8D32Nk+TempSDU9t8JgE0UzApddE
+X-Google-Smtp-Source: AGHT+IHLUxnD+S8k/LidOhPXZetpLg/bV14wMev6SS1Cx+xwnEmGuy2SmETlMwfJ9REVi3suaTskX1DPqrs38ZFhjKw=
+X-Received: by 2002:a05:622a:229e:b0:42a:5fe1:e8d1 with SMTP id
+ ay30-20020a05622a229e00b0042a5fe1e8d1mr67647qtb.4.1706131657624; Wed, 24 Jan
+ 2024 13:27:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -71,130 +71,133 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240122225710.1952066-1-peter.griffin@linaro.org>
- <20240122225710.1952066-3-peter.griffin@linaro.org> <CAPLW+4=G5YiTZaZ5k=H1YciUwOEjKSF0w9Hd8rwymA71UmJnRQ@mail.gmail.com>
- <CADrjBPqbToXYUBx=reE5_W4U4aUUJRFs+FC5AHsrQ6mRYB9iAA@mail.gmail.com>
-In-Reply-To: <CADrjBPqbToXYUBx=reE5_W4U4aUUJRFs+FC5AHsrQ6mRYB9iAA@mail.gmail.com>
-From: Sam Protsenko <semen.protsenko@linaro.org>
-Date: Wed, 24 Jan 2024 14:23:25 -0600
-Message-ID: <CAPLW+4=2dx3T=Snn-WstAQXhrDNE3as1Qgjr+LK+xwscHivBBQ@mail.gmail.com>
-Subject: Re: [PATCH 2/9] soc: samsung: exynos-pmu: Add exynos_pmu_update/read/write
- APIs and SoC quirks
-To: Peter Griffin <peter.griffin@linaro.org>
-Cc: arnd@arndb.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
-	linux@roeck-us.net, wim@linux-watchdog.org, conor+dt@kernel.org, 
-	alim.akhtar@samsung.com, jaewon02.kim@samsung.com, chanho61.park@samsung.com, 
+ <20240122225710.1952066-4-peter.griffin@linaro.org> <da30a68a-e29f-45c8-aa73-02955255a457@linaro.org>
+ <CADrjBPor5tMY4r0jOy7GH36auCU7dWn6Qn4ct89bsSMW4vAQOA@mail.gmail.com>
+ <6c72a521-1048-42eb-ac74-d8f718a90723@linaro.org> <CAGETcx-CCpaV7R0O0HpDpoX6KxQBuJiMmKdWA8nDE-5Qj2Sa7g@mail.gmail.com>
+ <f4d3aa5a-e01d-4ef3-8004-b6eac4461184@linaro.org>
+In-Reply-To: <f4d3aa5a-e01d-4ef3-8004-b6eac4461184@linaro.org>
+From: Saravana Kannan <saravanak@google.com>
+Date: Wed, 24 Jan 2024 13:27:01 -0800
+Message-ID: <CAGETcx_HGcuGQTO11tzX0EvnuLEaKYc4vBse1CRP0JwPqMJdQQ@mail.gmail.com>
+Subject: Re: [PATCH 3/9] watchdog: s3c2410_wdt: update to use new
+ exynos_pmu_*() apis
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Peter Griffin <peter.griffin@linaro.org>, arnd@arndb.de, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net, wim@linux-watchdog.org, 
+	conor+dt@kernel.org, alim.akhtar@samsung.com, jaewon02.kim@samsung.com, 
+	chanho61.park@samsung.com, semen.protsenko@linaro.org, 
 	kernel-team@android.com, tudor.ambarus@linaro.org, andre.draszik@linaro.org, 
-	saravanak@google.com, willmcvicker@google.com, linux-fsd@tesla.com, 
-	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org
+	willmcvicker@google.com, linux-fsd@tesla.com, linux-watchdog@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 24, 2024 at 4:02=E2=80=AFAM Peter Griffin <peter.griffin@linaro=
-.org> wrote:
+On Tue, Jan 23, 2024 at 10:27=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> Hi Sam,
->
-> Thanks for the review feedback.
->
-> On Tue, 23 Jan 2024 at 18:56, Sam Protsenko <semen.protsenko@linaro.org> =
-wrote:
+> On 24/01/2024 04:37, Saravana Kannan wrote:
+> > On Tue, Jan 23, 2024 at 10:12=E2=80=AFAM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 23/01/2024 18:30, Peter Griffin wrote:
+> >>>>>               dev_warn(wdt->dev, "Couldn't get RST_STAT register\n"=
+);
+> >>>>>       else if (rst_stat & BIT(wdt->drv_data->rst_stat_bit))
+> >>>>> @@ -698,14 +699,6 @@ static int s3c2410wdt_probe(struct platform_de=
+vice *pdev)
+> >>>>>       if (ret)
+> >>>>>               return ret;
+> >>>>>
+> >>>>> -     if (wdt->drv_data->quirks & QUIRKS_HAVE_PMUREG) {
+> >>>>> -             wdt->pmureg =3D syscon_regmap_lookup_by_phandle(dev->=
+of_node,
+> >>>>> -                                             "samsung,syscon-phand=
+le");
+> >>>>> -             if (IS_ERR(wdt->pmureg))
+> >>>>> -                     return dev_err_probe(dev, PTR_ERR(wdt->pmureg=
+),
+> >>>>> -                                          "syscon regmap lookup fa=
+iled.\n");
+> >>>>
+> >>>>
+> >>>> Continuing topic from the binding: I don't see how you handle probe
+> >>>> deferral, suspend ordering.
+> >>>
+> >>> The current implementation is simply relying on exynos-pmu being
+> >>> postcore_initcall level.
+> >>>
+> >>> I was just looking around for any existing Linux APIs that could be a
+> >>> more robust solution. It looks like
+> >>>
+> >>> of_parse_phandle()
+> >>> and
+> >>> of_find_device_by_node();
+> >>>
+> >>> Are often used to solve this type of probe deferral issue between
+> >>> devices. Is that what you would recommend using? Or is there somethin=
+g
+> >>> even better?
+> >>
+> >> I think you should keep the phandle and then set device link based on
+> >> of_find_device_by_node(). This would actually improve the code, becaus=
+e
+> >> syscon_regmap_lookup_by_phandle() does not create device links.
 > >
-> > On Mon, Jan 22, 2024 at 4:57=E2=80=AFPM Peter Griffin <peter.griffin@li=
-naro.org> wrote:
-> > >
-> > > Newer Exynos SoCs have atomic set/clear bit hardware for PMU register=
-s as
-> > > these registers can be accessed by multiple masters. Some platforms a=
-lso
-> > > protect the PMU registers for security hardening reasons so they can'=
-t be
-> > > written by normal world and are only write acessible in el3 via a SMC=
- call.
-> > >
-> > > Add support for both of these usecases using SoC specific quirks that=
- are
-> > > determined from the DT compatible string.
-> > >
-> > > Drivers which need to read and write PMU registers should now use the=
-se
-> > > new exynos_pmu_*() APIs instead of obtaining a regmap using
-> > > syscon_regmap_lookup_by_phandle()
-> > >
-> > > Depending on the SoC specific quirks, the exynos_pmu_*() APIs will ac=
-cess
-> > > the PMU register in the appropriate way.
-> > >
-> > > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> > > ---
-> > >  drivers/soc/samsung/exynos-pmu.c       | 209 +++++++++++++++++++++++=
-+-
-> > >  drivers/soc/samsung/exynos-pmu.h       |   4 +
-> > >  include/linux/soc/samsung/exynos-pmu.h |  28 ++++
-> > >  3 files changed, 234 insertions(+), 7 deletions(-)
-> > >
+> > I kinda agree with this. Just because we no longer use a syscon API to
+> > find the PMU register address doesn't mean the WDT doesn't depend on
+> > the PMU.
 > >
-> > [snip]
+> > However, I think we should move to a generic "syscon" property. Then I
+> > can add support for "syscon" property to fw_devlink and then things
+> > will just work in terms of probe ordering, suspend/resume and also
+> > showing the dependency in DT even if you don't use the syscon APIs.
 > >
-> > > +
-> > > +int exynos_pmu_update_bits(unsigned int offset, unsigned int mask,
-> > > +                          unsigned int val)
-> > > +{
-> > > +       if (pmu_context->pmu_data &&
-> > > +           pmu_context->pmu_data->quirks & QUIRK_PMU_ALIVE_WRITE_SEC=
-)
-> > > +               return rmw_priv_reg(pmu_context->pmu_base_pa + offset=
-,
-> > > +                                   mask, val);
-> > > +
-> > > +       return regmap_update_bits(pmu_context->pmureg, offset, mask, =
-val);
-> > > +}
-> > > +EXPORT_SYMBOL(exynos_pmu_update_bits);
-> > > +
+> > Side note 1:
 > >
-> > This seems a bit hacky, from the design perspective. This way the user
-> > will have to worry about things like driver dependencies, making sure
-> > everything is instantiated in a correct order, etc. It also hides the
-> > details otherwise visible through "syscon-phandle" property in the
-> > device tree.
+> > I think we really should officially document a generic syscon DT
+> > property similar to how we have a generic "clocks" or "dmas" property.
+> > Then we can have a syscon_get_regmap() that's like so:
+> >
+> > struct regmap *syscon_get_regmap(struct device *dev)
+> > {
+> >         return syscon_regmap_lookup_by_phandle(dev->of_node, "syscon");
+> > }
+> >
+> > Instead of every device defining its own bespoke DT property to do the
+> > exact same thing. I did a quick "back of the envelope" grep on this
+> > and I get about 143 unique properties just to get the syscon regmap.
+> > $ git grep -A1 syscon_regmap_lookup_by_phandle | grep '"' | sed -e
+> > 's/^[^"]*//' -e 's/"[^"]*$/"/' | sort | uniq | wc -l
+> > 143
 >
-> In v2 I will keep the phandle to pmu_system_controller in DT, and add
-> some -EPROBE_DEFER logic (See my email with Krzysztof).
+> Sorry, generic "syscon" property won't fly with DT maintainers, because
+> there is no such thing as syscon in any of hardware.
+
+Then why do we allow a "syscon" compatible string and nodes? If the
+"syscon" property isn't clear enough, we can make it something like
+gpios and have it be <whatever>-syscon or have syscon-names property
+if you want to give it a name.
+143 bespoke properties all to say "here are some registers I need to
+twiddle that's outside my regmap" doesn't seem great.
+
+> >
+> > Side note 2:
+> >
+> > How are we making sure that it's the exynos-pmu driver that ends up
+> > probing the PMU and not the generic syscon driver? Both of these are
+> > platform drivers. And the exynos PMU device lists both the exynos
+> > compatible string and the syscon property. Is it purely a link order
+> > coincidence?
 >
-> > Can we instead rework it by overriding regmap
-> > implementation for Exynos specifics, and then continue to use it in
-> > the leaf drivers via "syscon-phandle" property?
->
-> I did look at that possibility first, as like you say it would avoid
-> updating the leaf drivers to use the new API. Unfortunately a SMC
-> backend to regmap was already tried and nacked upstream pretty hard.
-> See here https://lore.kernel.org/lkml/20210723163759.GI5221@sirena.org.uk=
-/T/
->
+> initcall ordering
 
-Oh, I didn't mean creating a new regmap implementation :) To
-illustrate what I meant, please look at these:
+Both these drivers usr postcore_initcall(). So it's purely because
+soc/ is listed earlier in drivers/Makefile than mfd/. And as soon as
+drivers are made into modules this is going to break. This is
+terrible. If you want to have a modular system, this is going to throw
+in a wrench.
 
-  - drivers/mfd/altera-sysmgr.c
-  - altr_sysmgr_regmap_lookup_by_phandle()
-  - arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi
-  - drivers/mmc/host/dw_mmc-pltfm.c
-
-They basically implement their own regmap operations (with smcc too)
-in their syscon implementation. So they can actually reference that
-syscon as phandle in device tree and avoid exporting and calling
-read/write operations (which I think looks hacky). Instead they use
-altr_sysmgr_regmap_lookup_by_phandle() to get their regmap (which
-performs smcc), and then they just use regular regmap_read() /
-regmap_write or whatever functions to operate on their regmap object.
-That's what I meant by "overriding" the regmap.
-
-Do you think this approach would be clearer and more "productizable"
-so to speak? Just a thought.
-
-> regards,
->
-> Peter.
+-Saravana
 
