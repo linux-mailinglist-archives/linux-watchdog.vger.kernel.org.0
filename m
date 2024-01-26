@@ -1,371 +1,135 @@
-Return-Path: <linux-watchdog+bounces-501-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-502-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40AFE83D7E0
-	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Jan 2024 11:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D9AAB83DF73
+	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Jan 2024 18:05:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F036297FBE
-	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Jan 2024 10:22:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93AB02841CE
+	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Jan 2024 17:05:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 474AA56466;
-	Fri, 26 Jan 2024 09:57:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D82E1EA7D;
+	Fri, 26 Jan 2024 17:05:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Z7m/No9/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="An4ezcik"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DCD45677D
-	for <linux-watchdog@vger.kernel.org>; Fri, 26 Jan 2024 09:57:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4421D54B;
+	Fri, 26 Jan 2024 17:05:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706263053; cv=none; b=OVpquj0+0TXQRTCo19g2UspXa3LwnRBnBBlrTD2q2LIidBK6c3cTkXU/ycBwlp03cB5bX6C/A/Ju68Rr4fu3b/p83FkAznqMm1nNN7flRCDqNNv9pDPMywn9ApSwtutUx64SKkLZsDGi2yM1jSwpJmktnLMNSq6+S/tAJvUMG4c=
+	t=1706288711; cv=none; b=aP64nYi6COeJldGhi6DVyqe2ZFbrrQ6ZNtnAYIiPPJP/ftqVy2PE44+p9FobqaAi1m+mGCc265v6xra/TYCMN3dtRXdtuuIOUyv2Ujju/HA5euJiVgKSwhITlyq9MUSyG83r/jDBuY/L72bvLi2aHBQufwMNN/mMx9PfSAApBe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706263053; c=relaxed/simple;
-	bh=7Fyi/QS44P8HncFn1cyKX4frA3CvgsJ21VAd9AVke0k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bK55SYNfN2o0+S4jmNtVnWCVGl8bSs/mBatFdObaLH4CCKl8Zhjsbg9vRfW1aZqPwsTRbBTXqH5Z0hUxNDsTYjm3TKI0zRMBwkx2w0ZrOoZofu20wygA2BdTr1v32p+Gw+loCzNG/Z0bBecC49nLnTRfvKgqMgDsgG2Acto+WYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Z7m/No9/; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-51022133a84so219274e87.3
-        for <linux-watchdog@vger.kernel.org>; Fri, 26 Jan 2024 01:57:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1706263049; x=1706867849; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ADAeAiuz2kl457QW/qJtcIJbI3upkBxpKZcTk3uuIsY=;
-        b=Z7m/No9/YPhB/U30DZq8wCZfxNmpo+3LN27wn8jKIJMnxi94dP7vB++AL7MGe4Of5L
-         FwrTSqYdtIMqa7Uyz4/SjgNJGXMhZGnDlEbXHiD/aupJIH+z5aHB5mgBZPWnHQG1IRRN
-         rrDutOo7+0w/r5VvMGLkkxczC6YX9guoGs4RY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706263049; x=1706867849;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ADAeAiuz2kl457QW/qJtcIJbI3upkBxpKZcTk3uuIsY=;
-        b=LGpenPjsCKkPWi+nQyfD0+NaQD+l8mXYhxjJ2L/FcQ27vxoP98uJZ//j8gIlcjN3BK
-         w8IJySsOFZr6SyMqhAHdCP8jsQUpN8eHD53Q6GTLZ/E0wnIINn4lQki7iTPlrSFTBbGY
-         W9u9aeLBoQzMvjzW6OdAT2jwx1oYmWm1YcD/U837QSqT8EUjrjcEfMQb6ElY8Gp4g83e
-         9ZXIwD/s436gCAqlIL7Ln1HeZ2y9y2NE9lKzmO34MGFIpUOFwyPoXbIWhlsj1W7T6kw9
-         uD9BWNl6Gn8pfmMy89QTp8HRg5qIapuZ1MA1nBxO+PRmEmPXIT++R8jK2JYutYbMaWd8
-         jIkg==
-X-Gm-Message-State: AOJu0YyJhqGxZdK+qZlheolISaJdkakPpU/+OL4LIROGYdZyECRYYqFJ
-	gGK7athu1KH47q349pw8uYDSWAVq+ZjtMQA6OaS69UlCCXOV63w9RntKI+2GOg==
-X-Google-Smtp-Source: AGHT+IGD25liiUHtquJUFdXngW8rT2M65JqLwwLYOqB7TmbEngCxTWSq5QXv6OBGsy1rtJAm2MB0NA==
-X-Received: by 2002:ac2:5922:0:b0:510:272c:d011 with SMTP id v2-20020ac25922000000b00510272cd011mr639632lfi.69.1706263049244;
-        Fri, 26 Jan 2024 01:57:29 -0800 (PST)
-Received: from cracow.c.googlers.com.com (138.58.228.35.bc.googleusercontent.com. [35.228.58.138])
-        by smtp.gmail.com with ESMTPSA id b16-20020a056512071000b0050ecae41c51sm129041lfs.135.2024.01.26.01.57.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jan 2024 01:57:28 -0800 (PST)
-From: Lukasz Majczak <lma@chromium.org>
-To: Gwendal Grignou <gwendal@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>,
-	Radoslaw Biernacki <biernacki@google.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Lee Jones <lee@kernel.org>,
-	Benson Leung <bleung@chromium.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	chrome-platform@lists.linux.dev
-Cc: Lukasz Majczak <lma@chromium.org>
-Subject: [PATCH v4 2/3] watchdog: Add ChromeOS EC-based watchdog driver
-Date: Fri, 26 Jan 2024 09:57:20 +0000
-Message-ID: <20240126095721.782782-3-lma@chromium.org>
-X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-In-Reply-To: <20240126095721.782782-1-lma@chromium.org>
-References: <20240126095721.782782-1-lma@chromium.org>
+	s=arc-20240116; t=1706288711; c=relaxed/simple;
+	bh=B2eTgBCFVQKRYm7Y4FhNIecDMa1S3RJPllkOTJs5j3E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ls42hD7vyJ56axJNXbNFyYmZwwEiLpgsagA0faFWvowAsjYaf97hK0S/ElCInr7eGJZ+1ztvK1E1rVC/Klme1em44Yju7Lgt3i/vVXyQ/l5HTxNPkJC8Nz3h+xljTEFJCI2a0TUmmra3JbkSeuUtnPy5Er4cwgPDYtdFXY3s8qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=An4ezcik; arc=none smtp.client-ip=134.134.136.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706288709; x=1737824709;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=B2eTgBCFVQKRYm7Y4FhNIecDMa1S3RJPllkOTJs5j3E=;
+  b=An4ezcikvMXYQbN5MQWuLr+t6fu80AA3MZFlnxhoiegDkebB84/+FN82
+   L0kIf9eBPvdj9HLw8whejN6Vojgb9M+yZrOkrDDBCTP8QSrJFsjkaeNT5
+   9UlCTGYvJfbZ+5NGZC96mI9oWJhA19FAiXpBVZt1n5Jvl6uS8nBsW/q4y
+   FwUFvAYos66P59vxpYOvL0ebyA2ImbsIltxVtArL8dd1OYVoP4Kq13Un9
+   +zp9iOggZoYd3p3nRJgIbcA6hEeOrr+s1BA5pkbziGg3U6uRT1e74FvnC
+   nakF6Kb0fDfYzZZnZbmqcPXZ0izKl0LEfWcXEJ2GepB7abmuj0/wmfxcc
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="392954082"
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="392954082"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 09:05:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
+   d="scan'208";a="21432338"
+Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 26 Jan 2024 09:05:01 -0800
+Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rTPdT-0001Dy-0X;
+	Fri, 26 Jan 2024 17:04:59 +0000
+Date: Sat, 27 Jan 2024 01:04:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Griffin <peter.griffin@linaro.org>, arnd@arndb.de,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	linux@roeck-us.net, wim@linux-watchdog.org, conor+dt@kernel.org,
+	alim.akhtar@samsung.com, jaewon02.kim@samsung.com,
+	chanho61.park@samsung.com, semen.protsenko@linaro.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kernel-team@android.com, peter.griffin@linaro.org,
+	tudor.ambarus@linaro.org, andre.draszik@linaro.org,
+	saravanak@google.com, willmcvicker@google.com, linux-fsd@tesla.com,
+	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH 3/9] watchdog: s3c2410_wdt: update to use new
+ exynos_pmu_*() apis
+Message-ID: <202401270001.630IWRta-lkp@intel.com>
+References: <20240122225710.1952066-4-peter.griffin@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240122225710.1952066-4-peter.griffin@linaro.org>
 
-Embedded Controller (EC) present on Chromebook devices
-can be used as a watchdog.
-Implement a driver to support it.
+Hi Peter,
 
-Signed-off-by: Lukasz Majczak <lma@chromium.org>
----
- MAINTAINERS                    |   6 +
- drivers/watchdog/Kconfig       |  11 ++
- drivers/watchdog/Makefile      |   1 +
- drivers/watchdog/cros_ec_wdt.c | 204 +++++++++++++++++++++++++++++++++
- 4 files changed, 222 insertions(+)
- create mode 100644 drivers/watchdog/cros_ec_wdt.c
+kernel test robot noticed the following build errors:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ef90ddc0fda6..aaae581aae70 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -4981,6 +4981,12 @@ R:	Sami Kyöstilä <skyostil@chromium.org>
- S:	Maintained
- F:	drivers/platform/chrome/cros_hps_i2c.c
- 
-+CHROMEOS EC WATCHDOG
-+M:	Lukasz Majczak <lma@chromium.org>
-+L:	chrome-platform@lists.linux.dev
-+S:	Maintained
-+F:	drivers/watchdog/cros_ec_wdt.c
-+
- CHRONTEL CH7322 CEC DRIVER
- M:	Joe Tessler <jrt@google.com>
- L:	linux-media@vger.kernel.org
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index 7d22051b15a2..4700b218340f 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -181,6 +181,17 @@ config BD957XMUF_WATCHDOG
- 	  watchdog. Alternatively say M to compile the driver as a module,
- 	  which will be called bd9576_wdt.
- 
-+config CROS_EC_WATCHDOG
-+	tristate "ChromeOS EC-based watchdog"
-+	select WATCHDOG_CORE
-+	depends on CROS_EC
-+	help
-+	  Watchdog driver for Chromebook devices equipped with embedded controller.
-+	  Trigger event is recorded in EC and checked on the subsequent boot.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called cros_ec_wdt.
-+
- config DA9052_WATCHDOG
- 	tristate "Dialog DA9052 Watchdog"
- 	depends on PMIC_DA9052 || COMPILE_TEST
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index 7cbc34514ec1..3710c218f05e 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -217,6 +217,7 @@ obj-$(CONFIG_XEN_WDT) += xen_wdt.o
- 
- # Architecture Independent
- obj-$(CONFIG_BD957XMUF_WATCHDOG) += bd9576_wdt.o
-+obj-$(CONFIG_CROS_EC_WATCHDOG) += cros_ec_wdt.o
- obj-$(CONFIG_DA9052_WATCHDOG) += da9052_wdt.o
- obj-$(CONFIG_DA9055_WATCHDOG) += da9055_wdt.o
- obj-$(CONFIG_DA9062_WATCHDOG) += da9062_wdt.o
-diff --git a/drivers/watchdog/cros_ec_wdt.c b/drivers/watchdog/cros_ec_wdt.c
-new file mode 100644
-index 000000000000..ba045e29f9a5
---- /dev/null
-+++ b/drivers/watchdog/cros_ec_wdt.c
-@@ -0,0 +1,204 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright 2024 Google LLC.
-+ * Author: Lukasz Majczak <lma@chromium.com>
-+ */
-+
-+#include <linux/err.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_data/cros_ec_commands.h>
-+#include <linux/platform_data/cros_ec_proto.h>
-+#include <linux/platform_device.h>
-+#include <linux/watchdog.h>
-+
-+#define CROS_EC_WATCHDOG_DEFAULT_TIME	30 /* seconds */
-+#define DRV_NAME	"cros-ec-wdt"
-+
-+union cros_ec_wdt_data {
-+	struct ec_params_hang_detect req;
-+	struct ec_response_hang_detect resp;
-+} __packed;
-+
-+static int cros_ec_wdt_send_cmd(struct cros_ec_device *cros_ec,
-+				union cros_ec_wdt_data *arg)
-+{
-+	int ret;
-+	struct {
-+		struct cros_ec_command msg;
-+		union cros_ec_wdt_data data;
-+	} __packed buf = {
-+		.msg = {
-+			.version = 0,
-+			.command = EC_CMD_HANG_DETECT,
-+			.insize  = (arg->req.command == EC_HANG_DETECT_CMD_GET_STATUS) ?
-+				   sizeof(struct ec_response_hang_detect) :
-+				   0,
-+			.outsize = sizeof(struct ec_params_hang_detect),
-+		},
-+		.data.req = arg->req
-+	};
-+
-+	ret = cros_ec_cmd_xfer_status(cros_ec, &buf.msg);
-+	if (ret < 0)
-+		return ret;
-+
-+	arg->resp = buf.data.resp;
-+
-+	return 0;
-+}
-+
-+static int cros_ec_wdt_ping(struct watchdog_device *wdd)
-+{
-+	struct cros_ec_device *cros_ec = watchdog_get_drvdata(wdd);
-+	union cros_ec_wdt_data arg;
-+	int ret;
-+
-+	arg.req.command = EC_HANG_DETECT_CMD_RELOAD;
-+	ret = cros_ec_wdt_send_cmd(cros_ec, &arg);
-+	if (ret < 0)
-+		dev_dbg(wdd->parent, "Failed to ping watchdog (%d)", ret);
-+
-+	return ret;
-+}
-+
-+static int cros_ec_wdt_start(struct watchdog_device *wdd)
-+{
-+	struct cros_ec_device *cros_ec = watchdog_get_drvdata(wdd);
-+	union cros_ec_wdt_data arg;
-+	int ret;
-+
-+	/* Prepare watchdog on EC side */
-+	arg.req.command = EC_HANG_DETECT_CMD_SET_TIMEOUT;
-+	arg.req.reboot_timeout_sec = wdd->timeout;
-+	ret = cros_ec_wdt_send_cmd(cros_ec, &arg);
-+	if (ret < 0)
-+		dev_dbg(wdd->parent, "Failed to start watchdog (%d)", ret);
-+
-+	return ret;
-+}
-+
-+static int cros_ec_wdt_stop(struct watchdog_device *wdd)
-+{
-+	struct cros_ec_device *cros_ec = watchdog_get_drvdata(wdd);
-+	union cros_ec_wdt_data arg;
-+	int ret;
-+
-+	arg.req.command = EC_HANG_DETECT_CMD_CANCEL;
-+	ret = cros_ec_wdt_send_cmd(cros_ec, &arg);
-+	if (ret < 0)
-+		dev_dbg(wdd->parent, "Failed to stop watchdog (%d)", ret);
-+
-+	return ret;
-+}
-+
-+static int cros_ec_wdt_set_timeout(struct watchdog_device *wdd, unsigned int t)
-+{
-+	unsigned int old_timeout = wdd->timeout;
-+	int ret;
-+
-+	wdd->timeout = t;
-+	ret = cros_ec_wdt_start(wdd);
-+	if (ret < 0)
-+		wdd->timeout = old_timeout;
-+
-+	return ret;
-+}
-+
-+static const struct watchdog_info cros_ec_wdt_ident = {
-+	.options          = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
-+	.firmware_version = 0,
-+	.identity         = DRV_NAME,
-+};
-+
-+static const struct watchdog_ops cros_ec_wdt_ops = {
-+	.owner		 = THIS_MODULE,
-+	.ping		 = cros_ec_wdt_ping,
-+	.start		 = cros_ec_wdt_start,
-+	.stop		 = cros_ec_wdt_stop,
-+	.set_timeout = cros_ec_wdt_set_timeout,
-+};
-+
-+static int cros_ec_wdt_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct cros_ec_dev *ec_dev = dev_get_drvdata(dev->parent);
-+	struct cros_ec_device *cros_ec = ec_dev->ec_dev;
-+	struct watchdog_device *wdd;
-+	union cros_ec_wdt_data arg;
-+	int ret = 0;
-+
-+	wdd = devm_kzalloc(&pdev->dev, sizeof(*wdd), GFP_KERNEL);
-+	if (!wdd)
-+		return -ENOMEM;
-+
-+	arg.req.command = EC_HANG_DETECT_CMD_GET_STATUS;
-+	ret = cros_ec_wdt_send_cmd(cros_ec, &arg);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "Failed to get watchdog bootstatus");
-+
-+	wdd->parent = &pdev->dev;
-+	wdd->info = &cros_ec_wdt_ident;
-+	wdd->ops = &cros_ec_wdt_ops;
-+	wdd->timeout = CROS_EC_WATCHDOG_DEFAULT_TIME;
-+	wdd->min_timeout = EC_HANG_DETECT_MIN_TIMEOUT;
-+	wdd->max_timeout = EC_HANG_DETECT_MAX_TIMEOUT;
-+	if (arg.resp.status == EC_HANG_DETECT_AP_BOOT_EC_WDT)
-+		wdd->bootstatus = WDIOF_CARDRESET;
-+
-+	arg.req.command = EC_HANG_DETECT_CMD_CLEAR_STATUS;
-+	ret = cros_ec_wdt_send_cmd(cros_ec, &arg);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "Failed to clear watchdog bootstatus");
-+
-+	watchdog_stop_on_reboot(wdd);
-+	watchdog_stop_on_unregister(wdd);
-+	watchdog_set_drvdata(wdd, cros_ec);
-+	platform_set_drvdata(pdev, wdd);
-+
-+	return devm_watchdog_register_device(dev, wdd);
-+}
-+
-+static int __maybe_unused cros_ec_wdt_suspend(struct platform_device *pdev, pm_message_t state)
-+{
-+	struct watchdog_device *wdd = platform_get_drvdata(pdev);
-+	int ret = 0;
-+
-+	if (watchdog_active(wdd))
-+		ret = cros_ec_wdt_stop(wdd);
-+
-+	return ret;
-+}
-+
-+static int __maybe_unused cros_ec_wdt_resume(struct platform_device *pdev)
-+{
-+	struct watchdog_device *wdd = platform_get_drvdata(pdev);
-+	int ret = 0;
-+
-+	if (watchdog_active(wdd))
-+		ret = cros_ec_wdt_start(wdd);
-+
-+	return ret;
-+}
-+
-+static const struct platform_device_id cros_ec_wdt_id[] = {
-+	{ DRV_NAME, 0 },
-+	{}
-+};
-+
-+static struct platform_driver cros_ec_wdt_driver = {
-+	.probe		= cros_ec_wdt_probe,
-+	.suspend	= pm_ptr(cros_ec_wdt_suspend),
-+	.resume		= pm_ptr(cros_ec_wdt_resume),
-+	.driver		= {
-+		.name	= DRV_NAME,
-+	},
-+	.id_table	= cros_ec_wdt_id,
-+};
-+
-+module_platform_driver(cros_ec_wdt_driver);
-+
-+MODULE_DEVICE_TABLE(platform, cros_ec_wdt_id);
-+MODULE_DESCRIPTION("Cros EC Watchdog Device Driver");
-+MODULE_LICENSE("GPL");
+[auto build test ERROR on krzk/for-next]
+[also build test ERROR on robh/for-next soc/for-next linus/master v6.8-rc1 next-20240125]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Griffin/dt-bindings-watchdog-samsung-wdt-deprecate-samsung-syscon-phandle/20240123-070052
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240122225710.1952066-4-peter.griffin%40linaro.org
+patch subject: [PATCH 3/9] watchdog: s3c2410_wdt: update to use new exynos_pmu_*() apis
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240127/202401270001.630IWRta-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240127/202401270001.630IWRta-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401270001.630IWRta-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/soc/samsung/exynos5420-pmu.c:12:10: fatal error: 'asm/cputype.h' file not found
+      12 | #include <asm/cputype.h>
+         |          ^~~~~~~~~~~~~~~
+   1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for EXYNOS_PMU
+   Depends on [n]: SOC_SAMSUNG [=y] && (ARCH_EXYNOS || (ARM || ARM64) && COMPILE_TEST [=y])
+   Selected by [y]:
+   - S3C2410_WATCHDOG [=y] && WATCHDOG [=y] && (ARCH_S3C64XX || ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST [=y])
+
+
+vim +12 drivers/soc/samsung/exynos5420-pmu.c
+
+92c4bf04735130 arch/arm/mach-exynos/exynos5420-pmu.c Pankaj Dubey 2015-12-18  11  
+92c4bf04735130 arch/arm/mach-exynos/exynos5420-pmu.c Pankaj Dubey 2015-12-18 @12  #include <asm/cputype.h>
+92c4bf04735130 arch/arm/mach-exynos/exynos5420-pmu.c Pankaj Dubey 2015-12-18  13  
+
 -- 
-2.43.0.429.g432eaa2c6b-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
