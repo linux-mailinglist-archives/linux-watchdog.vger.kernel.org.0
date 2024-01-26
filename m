@@ -1,65 +1,65 @@
-Return-Path: <linux-watchdog+bounces-503-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-504-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D82683DFFE
-	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Jan 2024 18:27:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92CA883E636
+	for <lists+linux-watchdog@lfdr.de>; Sat, 27 Jan 2024 00:07:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D06B41C20E0A
-	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Jan 2024 17:27:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48C111F22E19
+	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Jan 2024 23:07:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BE462031C;
-	Fri, 26 Jan 2024 17:27:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A59A056B70;
+	Fri, 26 Jan 2024 23:07:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fgsaCKwE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K2wz7WX2"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0722E20312;
-	Fri, 26 Jan 2024 17:27:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A911156756;
+	Fri, 26 Jan 2024 23:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706290033; cv=none; b=SUOy1rt9yNeyZRUKTrdk5lYYxI87mJoTy0sckqynzzMnZQOLu3RDEliNVvNh+LvN5+gJFRk4DBEeyl5BNeKebdoV2tBeyk5lusU/Xo4gY1oOrBkXZz+PkPwVT8A7yT4Yw9snx3LfT0fmyn/U7a0KaeuEKkbE4uR5fac+uKRAm0I=
+	t=1706310464; cv=none; b=LWJZEbvSZF1eGZ6pGPrzTXM5WtB1ynEwoM8DYUA3g6hjn2cEVtXAFwQZjxjziNU/D6ReN/x99yNlG92Ff81vgPsuaDisQiyfV1F67EJj/dZknqiRmBQ2pNeZ7Zsb+MGh3UW3QgVBhAUhbvOPM/PvFhnEEyR4U9y3F1NlrJTPr1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706290033; c=relaxed/simple;
-	bh=ExosIx/Tv+HMtpYZXXx/Nr7K+HPt5okvEH3K8cRZO8M=;
+	s=arc-20240116; t=1706310464; c=relaxed/simple;
+	bh=CCBlNiRHutaSOIy4eCuqmtmhS4a3fOQYcAmNjzl5BgY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j/E53RH2zcq1oDQ4lRx3PS2K2OHXJL35OJ2kd91VpK8xyF9RPOGVx2lPOf+x/CS0NbTtAlsmcQxUjdfQFR+1wEqnk0E4DRDBkq4/H7z2tfVnxfEGuBV5oTUutsK5sjO11sxTHa7kmiGuyemhHhlCTeEQpg4NnVtPg5F3KWPadBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fgsaCKwE; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=hl9Rg7v6YINaPvTTaLHVkvJU9PDokWj12wbjALT25ZBhO9ZJbYY+j73DIUFTEPgWeladA4x+mhXZIFM0w8xtjGNHTVzVRyIdJSUcXaePsRRXcOYKnXe8XFrSdN2A4bx5RBzokS4j07CGfmA1yrlVbou14ebj46+BwOiZRHQPMtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K2wz7WX2; arc=none smtp.client-ip=192.55.52.93
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706290030; x=1737826030;
+  t=1706310462; x=1737846462;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ExosIx/Tv+HMtpYZXXx/Nr7K+HPt5okvEH3K8cRZO8M=;
-  b=fgsaCKwEBtdt4hmubdpzvo99h8ndm7j0lT2SER30rNvFK6YN5qWL4HRw
-   CdBIVkXe//2Y9ADbuJe6YMGBuCKBaVPpw/alzLTGNA0LolIK96Maupk2B
-   pbdgsya/v3T08pgiSzs/3BR2JTyfZBfwDdKApK3Jk6uXxGrSgKZ3a8ggi
-   6vMMVXfZZsLPM4h5yOyLV5JB4hXBqo8FWLZXX+euMuz6BrLym7YSMA+yS
-   RVeLhmeceHxV+o5VZkqq4M581Gx6ifhXXgbCPgMj80x4opTCA/grjL44G
-   d95B2e7JpncSM9ymuG27HIDtMYFHOd0I5pI3gk5ZHQwIOopRnQPdTsUzj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="23989055"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="23989055"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 09:27:09 -0800
+  bh=CCBlNiRHutaSOIy4eCuqmtmhS4a3fOQYcAmNjzl5BgY=;
+  b=K2wz7WX2a69IRzJFOaANDD2mv0IPNXiEyg2n+uDOeK3mtCMV53dkW3yy
+   D63VgC5WlCxkHIsvz7rq/GLGru9ZSomi2RJExK8oAT3ERZUYGw34zGxYp
+   UPpKS6KGxbLDBkYJzNZWbOJfpLdDpDcNlXAtO31eGr7GQJWb//d1MunCB
+   qlt7G6aPNUYn71DT9udD2Ya5uLGZ3YbbHQYkK+Wd9f2xbw29dIvpxKqaR
+   NrbMYB/GE+kWmrWypA644mGAiQfXlM9vp1ms5RcSp5UwoV8cFqJ8OrPoP
+   9b9dPm2h7quHt70BNkNtTHvYM8PQ75DVC27CUl96W6JHdKU7+qzWXAOg0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="399760656"
+X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
+   d="scan'208";a="399760656"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 15:07:41 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="787172240"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="787172240"
+X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="930501808"
+X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
+   d="scan'208";a="930501808"
 Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 26 Jan 2024 09:27:04 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 26 Jan 2024 15:07:36 -0800
 Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rTPyo-0001Ew-1L;
-	Fri, 26 Jan 2024 17:27:02 +0000
-Date: Sat, 27 Jan 2024 01:26:21 +0800
+	id 1rTVIM-0001R4-1N;
+	Fri, 26 Jan 2024 23:07:34 +0000
+Date: Sat, 27 Jan 2024 07:07:23 +0800
 From: kernel test robot <lkp@intel.com>
 To: Peter Griffin <peter.griffin@linaro.org>, arnd@arndb.de,
 	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -75,7 +75,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-samsung-soc@vger.kernel.org
 Subject: Re: [PATCH 2/9] soc: samsung: exynos-pmu: Add
  exynos_pmu_update/read/write APIs and SoC quirks
-Message-ID: <202401270110.YlAvkNYL-lkp@intel.com>
+Message-ID: <202401270633.VorEna6q-lkp@intel.com>
 References: <20240122225710.1952066-3-peter.griffin@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
@@ -101,25 +101,53 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Griffin/dt-bindings
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
 patch link:    https://lore.kernel.org/r/20240122225710.1952066-3-peter.griffin%40linaro.org
 patch subject: [PATCH 2/9] soc: samsung: exynos-pmu: Add exynos_pmu_update/read/write APIs and SoC quirks
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240127/202401270110.YlAvkNYL-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240127/202401270110.YlAvkNYL-lkp@intel.com/reproduce)
+config: x86_64-buildonly-randconfig-006-20240126 (https://download.01.org/0day-ci/archive/20240127/202401270633.VorEna6q-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240127/202401270633.VorEna6q-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401270110.YlAvkNYL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401270633.VorEna6q-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: pmu_base_addr
-   >>> referenced by exynos.c
-   >>>               arch/arm/mach-exynos/exynos.o:(exynos_set_delayed_reset_assertion) in archive vmlinux.a
-   >>> referenced by exynos.c
-   >>>               arch/arm/mach-exynos/exynos.o:(exynos_set_delayed_reset_assertion) in archive vmlinux.a
-   >>> referenced by exynos.c
-   >>>               arch/arm/mach-exynos/exynos.o:(exynos_init_irq) in archive vmlinux.a
-   >>> referenced 75 more times
+   In file included from drivers/pinctrl/samsung/pinctrl-exynos.c:27:
+>> include/linux/soc/samsung/exynos-pmu.h:38:1: error: expected identifier or '('
+      38 | {
+         | ^
+   include/linux/soc/samsung/exynos-pmu.h:44:1: error: expected identifier or '('
+      44 | {
+         | ^
+>> include/linux/soc/samsung/exynos-pmu.h:50:9: error: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
+      50 |         return ERR_PTR(-ENODEV);
+         |                ^~~~~~~~~~~~~~~~
+   include/linux/soc/samsung/exynos-pmu.h:55:9: error: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
+      55 |         return ERR_PTR(-ENODEV);
+         |                ^~~~~~~~~~~~~~~~
+   4 errors generated.
+
+
+vim +38 include/linux/soc/samsung/exynos-pmu.h
+
+    35	
+    36	static inline int exynos_pmu_update_bits(unsigned int offset, unsigned int mask,
+    37						 unsigned int val);
+  > 38	{
+    39		return ERR_PTR(-ENODEV);
+    40	}
+    41	
+    42	static inline int exynos_pmu_update(unsigned int offset, unsigned int mask,
+    43					    unsigned int val);
+    44	{
+    45		return ERR_PTR(-ENODEV);
+    46	}
+    47	
+    48	static inline int exynos_pmu_write(unsigned int offset, unsigned int val)
+    49	{
+  > 50		return ERR_PTR(-ENODEV);
+    51	}
+    52	
 
 -- 
 0-DAY CI Kernel Test Service
