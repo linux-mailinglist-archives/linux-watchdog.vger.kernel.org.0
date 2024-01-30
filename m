@@ -1,219 +1,158 @@
-Return-Path: <linux-watchdog+bounces-516-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-517-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DB7E841BF1
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jan 2024 07:27:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94270841C8E
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jan 2024 08:27:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76798281B7C
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jan 2024 06:26:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B77A91C24651
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jan 2024 07:27:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3718426AC7;
-	Tue, 30 Jan 2024 06:26:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bVmUGSad"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4665D4C610;
+	Tue, 30 Jan 2024 07:27:13 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2073.outbound.protection.partner.outlook.cn [139.219.146.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F3A8381DA;
-	Tue, 30 Jan 2024 06:26:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706596016; cv=none; b=ksEhBWr3DmwBnzXUcjuPa4zrWd3HJHXiLezbff5cIku8oYLPw13b0KCK6zdf8RIwH+PimM/p9+u9bwihtT9qwm9AR4SYzP+e7+6WXlJlybI2dsoulukYdSlUt/p+Oc2Df+f4j/p3nWD9NTK8l8oxExSa6C1910W5D27DpfCtkpc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706596016; c=relaxed/simple;
-	bh=G2H09HbRT8UUC7XVD9zqeo3oMqIO8alWBLi2zEm9YfQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ogqB8Np0RDkFAETPZ1L/rJ+WrAwtZLWnDNSJRWcdrjzEdtky5jyZdGPnjMnzDy5Av1qIL18jR5/fm4/jdHcuAMRiaZDXTyMjckCTgMUn07hHJUeSiTqtd2fnPIV+kiY8Af8ANqR8v43L0Or7ehqozu/x00ZhixInW5hLGWw1EL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bVmUGSad; arc=none smtp.client-ip=209.85.167.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3be9e11ee59so30543b6e.1;
-        Mon, 29 Jan 2024 22:26:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706596013; x=1707200813; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=GImDz5i38hz7JEhUDVGxtycDpAZ5nzC1980oJpg3sA8=;
-        b=bVmUGSadTjkT4JIMOS0VgpJVEpyy/oGsHl2G3Xy23G4VsvylZX4O9l6u1N1Rcjnnm1
-         M7IGaSO83HcWureFMPUBxA0STWTYFroP5JCbpp8WdlqqizNdkAD5j6lynihOZ/vRFvbV
-         n7DmM7k+Y1JunXPRchZ38wTnnDBAr+9358+TCcBYFgv4CsmfUZq2e3OtcFUmSYNV1Tz5
-         BI8K4hREONLABuLKQAiWA5aW4BGs/SEm5D6Z9qpi4duAvr8Wv6SPqJkecFxG+UJqqwJg
-         jJSZiIffp3qPQIUGOlWuC/v8KppE7mhC0BiRfzhZeVz5QiDuBS4KjTAF0zruvA7wAnnI
-         vWLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706596013; x=1707200813;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GImDz5i38hz7JEhUDVGxtycDpAZ5nzC1980oJpg3sA8=;
-        b=rr82K14Hz1Kd7p6j6rOqnB0+mlbPTd6jWZfwyBoOY+nEVrCrTwcjTHnmLBzwKfVzAz
-         U1zSXh93bmE5SKDT+4LeyAbUDNxf/BezgIS+Ad12mxCudrKnKmwbaoK7HYG91le0MB8N
-         7zeeWK1KfSl91hB8+/k0+Ct+koCiUkd7jzbtKTpjEVvNfBUJFLP0EN5KuDIl0KZ6PEdP
-         iGArBX2xgacGgQN3uANp7oF32iXvWzOkIi6fNafcB0lWnTO5zrhyFIWHju7Xya4HGd7P
-         K2bEOjzFxyUeg6lI3HUiHKpKF11mLDCx6ubNmSswqhNwjrnHwDTlnkkXAKlJuywcMGVQ
-         3WTg==
-X-Gm-Message-State: AOJu0YwUmJVQulZQVQ40OyenjPFUgD1+X9sB3595sBz7QI3Qul8KnmGF
-	XGi9JkVHhvX8nZmHAZ1jMJlYDgFrAlcJRiHPQR1MYmj3f9iWNJET
-X-Google-Smtp-Source: AGHT+IEy53pi0RbR8AMV6653iDgAfcpn/6UteGHZoIL0l7mHNLWYwkNPjTd+pbpeY+PyFXR1HXTgIw==
-X-Received: by 2002:a05:6808:ecc:b0:3be:685e:b209 with SMTP id q12-20020a0568080ecc00b003be685eb209mr2571227oiv.35.1706596013369;
-        Mon, 29 Jan 2024 22:26:53 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x129-20020a626387000000b006ddda3d854bsm7239672pfb.79.2024.01.29.22.26.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jan 2024 22:26:52 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <b1798b8a-5794-4c79-a1d3-50259fa3ba81@roeck-us.net>
-Date: Mon, 29 Jan 2024 22:26:50 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8351654F8E;
+	Tue, 30 Jan 2024 07:27:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.73
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706599633; cv=fail; b=TXiZkgOoaU9SJhDsfCFVikAyK2tTrwhKtiayAV0mkH1jhaauN799jQfrMlAAGxgNhqWs33hRUVX6rln5Pu/uvbnOBYf9dUWMpM/J7eyezPSgzH9lyBmI2Lh8LPm4NApPl/zlapg013RAWGBkt7R/7shQtuapmgpfJr0o5OnKB8k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706599633; c=relaxed/simple;
+	bh=Y3PD+8QcDf6qI2LEORL0jEvnkGwlhauiTgMBDrDA1QY=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=MVaC5burYS+e6HB/KanBc2g7OT+7ZKdjT++xkLTkw0u7rA228z1a9Jrc7XHTDAh7gxLpDZYgOLHETAS6ZH3a2Z7vKw1v6/fSHlQ/gzLqq65G57S+UNpyujEHNzYS2/ID/UBIhWN+fW5lmnSTbRlC3dSnn8O77MgBDTTtxxwTLL8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nYliVV75UxpqEA2mrgmvaNLnIRie6QTqf+AJ8Z/TmPE0rZttntVGrJGB74MYSmqd6Z0+h11vXsg7S07gLAQ2SmIZCfGYvK4Tfp8hKi7qSst17jpC9ssISqwF8Qc8PYNR7b2AKezaZmq49kx9sd5RKIgck/Cnz8zVH1P08rHb1y/xfNdNWghLSnWdNs8Tss1a01Ml1SosZQ9ZO0Xtvbf2tj2652jm3NNeR/cTjPss6sLW/udEa/a9MitaRxC3jFznO859ImuLla0BUbmt2wnQm93oZQVDJrfO2TVhJpTYqnvbaDC19PHE5t7s3mGxPSzEFwDu/k9LW5dfn4c7Y/CKUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5/ym4ARTvOcck4XoGLMmghS3yD7nmIPcdnZFLZ/b/3Y=;
+ b=hulUf/sERJWt+FIZ8QT63ovd1PuGvNGKe23YLJtSkI3gwwJ/QxAn3ppIKJ4OuzG5VQD4LayVifAUXZrZpVBJiiBqvAbVP0OQ0H+C1eC+2rH51uuHF2MFcQ0ZSl2k5K8a65/yHvIALls8IIz4D8Zg/1iXUWq0+XmVETklz1icfkZEURopOKFgJkUv/+mIXSjVJ/aHshXuw55w4a4uS28kwelZMALJSb5Lov7cDSouKIjdfHtQHPa4FxzgnCkMi+uh0nH3sU/DVglrKfiAf0WK6v9qJpL44/hpVrjqXfELllfggvdiVCc1Rnsj0BwWPrBGKIAjV6+PWhik2AiE4vQyjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+Received: from ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:19::6) by ZQ0PR01MB1208.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:19::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.32; Tue, 30 Jan
+ 2024 05:54:01 +0000
+Received: from ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
+ ([fe80::1dbb:b090:7d89:4e22]) by
+ ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn ([fe80::1dbb:b090:7d89:4e22%4])
+ with mapi id 15.20.7228.028; Tue, 30 Jan 2024 05:54:01 +0000
+From: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+To: Xingyu Wu <xingyu.wu@starfivetech.com>,
+	Samin Guo <samin.guo@starfivetech.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Cc: Ley Foon Tan <leyfoon.tan@starfivetech.com>,
+	linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sia Jee Heng <jeeheng.sia@starfivetech.com>
+Subject: [PATCH] watchdog: starfive: check watchdog status before enabling in system resume
+Date: Tue, 30 Jan 2024 13:51:18 +0800
+Message-ID: <20240130055118.1917086-1-jisheng.teoh@starfivetech.com>
+X-Mailer: git-send-email 2.43.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SH0PR01CA0016.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c311:5::28) To ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:19::6)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] soc: samsung: exynos-pmu: Add regmap support for
- SoCs that protect PMU regs
-Content-Language: en-US
-To: Peter Griffin <peter.griffin@linaro.org>, arnd@arndb.de,
- krzysztof.kozlowski@linaro.org, wim@linux-watchdog.org,
- alim.akhtar@samsung.com, jaewon02.kim@samsung.com, semen.protsenko@linaro.org
-Cc: kernel-team@android.com, tudor.ambarus@linaro.org,
- andre.draszik@linaro.org, saravanak@google.com, willmcvicker@google.com,
- linux-fsd@tesla.com, linux-watchdog@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org
-References: <20240129211912.3068411-1-peter.griffin@linaro.org>
- <20240129211912.3068411-2-peter.griffin@linaro.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
- nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
- hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
- c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
- 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
- GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
- sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
- Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
- HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
- BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
- l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
- J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
- cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
- wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
- hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
- nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
- QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
- trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
- WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
- HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240129211912.3068411-2-peter.griffin@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: ZQ0PR01MB1160:EE_|ZQ0PR01MB1208:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4e3c1082-7173-4489-dbae-08dc2157dbcf
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	OSQhLHrMC/Tp/4kdNIgOmz93WB4oapAZDe1CTa/8E6BP+VU8WirvbLIkQkowHeG/Ha3Og7pkWAk3I+T9rZyLOJDLV3YOy4P41gW0IK8jg2FyoQ252TxIjIBRomAcsE18MROb1ZmAuQkEEw3FKb3aLDf/lxnh80ZtNhtnRAkx7aCIAB3HJ/OPehxYjtEAHcquJ57Ln0Q5m3/9ZXKNwdI5cmfVWDCNKz9/gZd+DKgj0R6BxHtOYGnsuJ5Ju+yqVGuSpbWJm5fYoJ38mm55d9a2aeIYQ+uGMgxrEZHGAHPQ9/rDJauYcv3ZCN5mvFsGjykwVgo5S495SogUEl4fjb4a9x/X9wvvwatbWFMk0Im6uu22yODnG7oiqT9VJLrMIHqI0pvx5yz3tFaDjVzGieVFzDGdrxr+YOE3ApDtHYAGkfI3Lp8iGKCjATcd+pjLYVsbTupisP+aHH/umDP/ib1Pn7QLdgeNxEPmR0TYHXU62qlfiuKqukrNySj/dW4WrbW17DZ9lec+UGqc4dokGlbxzoE8wYhM7i99FrSf83JnHOIiiFtwiBhzp47IL40vQ5JH
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(366004)(230922051799003)(1800799012)(186009)(451199024)(38100700002)(4326008)(40180700001)(5660300002)(8676002)(86362001)(54906003)(38350700005)(8936002)(66556008)(110136005)(66476007)(66946007)(4744005)(26005)(36756003)(508600001)(2906002)(52116002)(2616005)(83380400001)(1076003)(6666004)(40160700002)(107886003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?GorqAkK5GxqYS1JRZRms8H20NHPsztzaWpFi4kaM45S0rFtxX/ZrwEbqiP/b?=
+ =?us-ascii?Q?ub7yedZoc+tWXzlW2YTxGgfR4vnVvDl6ERPXZb27oNvuUggvmGRAVDd/3aWo?=
+ =?us-ascii?Q?6Fit9so9+OcUkWe+0CO5/HUSDCdlZzlkAow62sjjQ8drvwQNQLpXWD/lZMKE?=
+ =?us-ascii?Q?7vLhUNC3NnKaFJ9/uxou5/ykTH7Yj3oEhS4QSjUv9welR7UpRFWirjuNMtYQ?=
+ =?us-ascii?Q?Wzi+6bm3c4qDDySA1L/FCfPAwQBu6EJ8J0/TsSpHrvQXuFF8VSVMJASnC6ix?=
+ =?us-ascii?Q?0P8zyL0RsXnBUHWAgWKQmZ0Y+rqujr4CRHKSk8q68qgeKn1fheUk4fA2BuVq?=
+ =?us-ascii?Q?70CMiemYIJSG0yDOG6hF4ZQSgvAPtPTixj08S6Zf/6mZtjwbZqwiOYIRm0yO?=
+ =?us-ascii?Q?+4v6mHWfx9TEIJ3kA7bOy/94ldmYgFn/+UdPVqdekma1762XY42Wb1yENpJc?=
+ =?us-ascii?Q?dNRlPgQEBUPvR/aCWDGj1tXlLiJMCYqy8g5ww97WLdSN78d+bd3WSwmeRlVY?=
+ =?us-ascii?Q?f3BlFRBWU2kLir4w1sb0J2C8zCM3i8wl0L0jv0iOsGcRPGukzWmOPsKit9zD?=
+ =?us-ascii?Q?+UHqBn5BaSSQDXE+Ee4q7bhSxIqSoC54ajJLsiPTreAOWAf8WCOWw94NVXby?=
+ =?us-ascii?Q?KE82CZabrKRnDydrq7zqRcg1iBZzv4SvyB5eNME3fmAk2CyAaB9gbUNz+KhW?=
+ =?us-ascii?Q?ssafAHaqkIXEmrOnH+h8w1aKTFem9g4CIJXfaiEzajqSU4fkt4Bo1FgLMtZ1?=
+ =?us-ascii?Q?E4RyhrPiepfcQIheZxOTL1Q4dV2uAi9Mc3MMukSQ9VsENAUfg/Sll2KB9dTn?=
+ =?us-ascii?Q?KL1Oe26NEV7viLwXm3ieQwoMcnTmpXkm04g3OH01+reCASPbH8GyG7awUVlM?=
+ =?us-ascii?Q?utNyDDuVzWrQ+QSd/lCZb4qmItbZl+Yx/oi3KBlKJlhpENTirMebfdIRCeWG?=
+ =?us-ascii?Q?oJ0rXxGRMAj9AGe851hKip2H7/XBBX51Kamrh7p9skQPWk7DwHiMFjCHGwVm?=
+ =?us-ascii?Q?PC7uvRNiPZjS6Jnmh3wC19Yty5AgJJ1oAC9RqHg+37nuSggbKJx7HpzL/BZf?=
+ =?us-ascii?Q?TE+ZU+rYDNFQenOQ4LkUgOVJfDyds3SzcxOSvPdIonhjGy6LJygS4JTxuWuC?=
+ =?us-ascii?Q?FUS7rT84wk2JdylqZiEsh25CO1eH0h9VTLuuULvWTv2O3baw4p3KWmziCI8m?=
+ =?us-ascii?Q?gV8hBvtinmpMz0pO/yDhXQIXFkpqKzLmTy64doMxtfBYMCEojKkxQu4/o70X?=
+ =?us-ascii?Q?xfeosOVKEoUrJj/aqb0yWaiLxyTSXKcd2+qOwfwLFC6pFyMR3KhbqF0+eKIr?=
+ =?us-ascii?Q?P1omLM6VkioRy225JIc/JS6bisJ3iy3PYf1XGn/CZGiQULdvNACzkcaf8iu8?=
+ =?us-ascii?Q?BIQO2CMJjUIH2rYKr0+W3RahLC+vBVg540X+TVMrGrsoiuk0VKH9EnpXKn+9?=
+ =?us-ascii?Q?DldL4wN22+DLjB8YGojIDPJepm+LwZP581/47gHTFWDLVmbbRA0kk8Kcn8Ua?=
+ =?us-ascii?Q?xmtn/+kfoEUd3gba43olSxc9XAFp+Ls7h4Md2dos9LsiQDsJCrg1vA8fYoq8?=
+ =?us-ascii?Q?f91Ag2nK7hUj8b0RlT2N3fRd6CnD7ibruPX4EPyphAXZK36EJW6QeohvRquG?=
+ =?us-ascii?Q?Ww=3D=3D?=
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e3c1082-7173-4489-dbae-08dc2157dbcf
+X-MS-Exchange-CrossTenant-AuthSource: ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2024 05:54:01.5641
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: U0O/3fARYv4+GoJk5/D2hldEoLuprgNP3w09PRduSVJjks4lfxwmeXyKMpbKTF6RwqfJ07/IG8kZiD1GpYs1CL1PXWceziuyVIklKvoqwbE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ0PR01MB1208
 
-On 1/29/24 13:19, Peter Griffin wrote:
-> Some Exynos based SoCs like Tensor gs101 protect the PMU registers for
-> security hardening reasons so that they are only accessible in el3 via an
-> SMC call.
-> 
-> As most Exynos drivers that need to write PMU registers currently obtain a
-> regmap via syscon (phys, pinctrl, watchdog). Support for the above usecase
-> is implemented in this driver using a custom regmap similar to syscon to
-> handle the SMC call. Platforms that don't secure PMU registers, get a mmio
-> regmap like before. As regmaps abstract out the underlying register access
-> changes to the leaf drivers are minimal.
-> 
-> A new API exynos_get_pmu_regmap_by_phandle() is provided for leaf drivers
-> that currently use syscon_regmap_lookup_by_phandle(). This also handles
-> deferred probing.
-> 
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> ---
-[ ... ]
+System resume will start and enable watchdog regardless of whether the
+watchdog is enabled/disabled during a system suspend.
+Add a check to the watchdog status and only start and enable the
+watchdog if the watchdog status is running/active.
 
-> +/**
-> + * exynos_get_pmu_regmap
-> + * Find the pmureg previously configured in probe() and return regmap property.
-> + * Return: regmap if found or error if not found.
-> + */
->   struct regmap *exynos_get_pmu_regmap(void)
->   {
->   	struct device_node *np = of_find_matching_node(NULL,
->   						      exynos_pmu_of_device_ids);
->   	if (np)
-> -		return syscon_node_to_regmap(np);
-> +		return exynos_get_pmu_regmap_by_phandle(np, NULL);
->   	return ERR_PTR(-ENODEV);
->   }
->   EXPORT_SYMBOL_GPL(exynos_get_pmu_regmap);
->   
-> +/**
-> + * exynos_get_pmu_regmap_by_phandle
-> + * Find the pmureg previously configured in probe() and return regmap property.
-> + * Return: regmap if found or error if not found.
-> + *
-> + * @np: Pointer to device's Device Tree node
-> + * @property: Device Tree property name which references the pmu
-> + */
-> +struct regmap *exynos_get_pmu_regmap_by_phandle(struct device_node *np,
-> +						const char *property)
-> +{
-> +	struct device *dev;
-> +	struct exynos_pmu_context *ctx;
-> +	struct device_node *pmu_np;
-> +
-> +	if (property)
-> +		pmu_np = of_parse_phandle(np, property, 0);
-> +	else
-> +		pmu_np = np;
-> +
-> +	if (!pmu_np)
-> +		return ERR_PTR(-ENODEV);
-> +
-> +	dev = driver_find_device_by_of_node(&exynos_pmu_driver.driver,
-> +					    (void *)pmu_np);
-> +	of_node_put(pmu_np);
-> +	if (!dev)
-> +		return ERR_PTR(-EPROBE_DEFER);
-> +
-> +	ctx = dev_get_drvdata(dev);
-> +
-> +	return ctx->pmureg;
-> +}
-> +EXPORT_SYMBOL_GPL(exynos_get_pmu_regmap_by_phandle);
-> +
+Signed-off-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
+Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+---
+ drivers/watchdog/starfive-wdt.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-I think there should be a detailed comment explaining why the complexity
-is necessary instead of just returning pmu_context->pmureg.
-
-Thanks,
-Guenter
+diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
+index e28ead24c520..f72fc38a41f8 100644
+--- a/drivers/watchdog/starfive-wdt.c
++++ b/drivers/watchdog/starfive-wdt.c
+@@ -554,7 +554,10 @@ static int starfive_wdt_resume(struct device *dev)
+ 	starfive_wdt_set_reload_count(wdt, wdt->reload);
+ 	starfive_wdt_lock(wdt);
+ 
+-	return starfive_wdt_start(wdt);
++	if (watchdog_active(&wdt->wdd))
++		return starfive_wdt_start(wdt);
++
++	return 0;
+ }
+ 
+ static int starfive_wdt_runtime_suspend(struct device *dev)
+-- 
+2.43.0
 
 
