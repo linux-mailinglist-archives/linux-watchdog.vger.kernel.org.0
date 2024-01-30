@@ -1,75 +1,75 @@
-Return-Path: <linux-watchdog+bounces-515-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-516-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2A0F841BBA
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jan 2024 07:07:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DB7E841BF1
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jan 2024 07:27:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 829F9B22F7E
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jan 2024 06:07:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76798281B7C
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jan 2024 06:26:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4928381B6;
-	Tue, 30 Jan 2024 06:07:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3718426AC7;
+	Tue, 30 Jan 2024 06:26:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LtEOIGfX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bVmUGSad"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA065381B0;
-	Tue, 30 Jan 2024 06:07:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F3A8381DA;
+	Tue, 30 Jan 2024 06:26:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706594841; cv=none; b=g7lLzz4sp2/VMxw2HyYiU0YuB87qYl1RWO8tv59lox1W7RfsR9+CdzKKDyrU7yW7ehUL4ezhIl6k/Zt9MG4GMDNqC0r1ajvUgV+7ReFVmgpeoXA0WJYsTO2USu0yjX3LjD/x9HyksSztJiMqgBlpyN1NK8LRcw+V+HfHEEK4hCs=
+	t=1706596016; cv=none; b=ksEhBWr3DmwBnzXUcjuPa4zrWd3HJHXiLezbff5cIku8oYLPw13b0KCK6zdf8RIwH+PimM/p9+u9bwihtT9qwm9AR4SYzP+e7+6WXlJlybI2dsoulukYdSlUt/p+Oc2Df+f4j/p3nWD9NTK8l8oxExSa6C1910W5D27DpfCtkpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706594841; c=relaxed/simple;
-	bh=EC8EZ78YHBSGzH3r8Amq5D8JXo7GjzDPE4jwcU3lXr8=;
+	s=arc-20240116; t=1706596016; c=relaxed/simple;
+	bh=G2H09HbRT8UUC7XVD9zqeo3oMqIO8alWBLi2zEm9YfQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cmy+2daFLE+0swko911sm54nCdp7t/jn4Go5G1Qs/pwe2bQa/Uge/7OQvFjFwzL8CKKTRwxlFz6R+SbI82DaVQ4UiJgkMCwICQUdDw3fP8/TlvOeWZz0Fa1Et0NlkAjlK5UcNxjWAwYT0t8YaM/uOd+I/TqMAOm8rLKdHGMjfaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LtEOIGfX; arc=none smtp.client-ip=209.85.214.173
+	 In-Reply-To:Content-Type; b=ogqB8Np0RDkFAETPZ1L/rJ+WrAwtZLWnDNSJRWcdrjzEdtky5jyZdGPnjMnzDy5Av1qIL18jR5/fm4/jdHcuAMRiaZDXTyMjckCTgMUn07hHJUeSiTqtd2fnPIV+kiY8Af8ANqR8v43L0Or7ehqozu/x00ZhixInW5hLGWw1EL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bVmUGSad; arc=none smtp.client-ip=209.85.167.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1d751bc0c15so30948135ad.2;
-        Mon, 29 Jan 2024 22:07:19 -0800 (PST)
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3be9e11ee59so30543b6e.1;
+        Mon, 29 Jan 2024 22:26:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706594839; x=1707199639; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706596013; x=1707200813; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=gxgNDYCea6QO5exMfLo4bcw4R5KeT5JyaOsUNJoRBLo=;
-        b=LtEOIGfXgda6eq9Y0uM3yYjYBudscA4bE3bPJCD1RfMAWHy8u0OH7wTr/HLH2XM1dU
-         tGY2I2uXaADXhF+boyT9+M2YsSBaj84uUfmChau3ijx/Re3xiJs+wZi2cWlYmyvCWron
-         +f6O7W3gHxYTqgIu/izIndfa1rKYiMk+4ZDFygL+TOHFd918WC+i64G1xxiAJyBGFnfQ
-         eX1ad/sQ6JDkDBEdQe6ovoASZTEGywyP37JCE/89+20oExi+2lhjHsWPDxTlYhG5IazX
-         3/BimubH+onPsZFJC1xPI9OqhQJOBOAgWeia01B0mb8384E9YmGiOtASr4V87mYfu8TY
-         Dn/g==
+        bh=GImDz5i38hz7JEhUDVGxtycDpAZ5nzC1980oJpg3sA8=;
+        b=bVmUGSadTjkT4JIMOS0VgpJVEpyy/oGsHl2G3Xy23G4VsvylZX4O9l6u1N1Rcjnnm1
+         M7IGaSO83HcWureFMPUBxA0STWTYFroP5JCbpp8WdlqqizNdkAD5j6lynihOZ/vRFvbV
+         n7DmM7k+Y1JunXPRchZ38wTnnDBAr+9358+TCcBYFgv4CsmfUZq2e3OtcFUmSYNV1Tz5
+         BI8K4hREONLABuLKQAiWA5aW4BGs/SEm5D6Z9qpi4duAvr8Wv6SPqJkecFxG+UJqqwJg
+         jJSZiIffp3qPQIUGOlWuC/v8KppE7mhC0BiRfzhZeVz5QiDuBS4KjTAF0zruvA7wAnnI
+         vWLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706594839; x=1707199639;
+        d=1e100.net; s=20230601; t=1706596013; x=1707200813;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gxgNDYCea6QO5exMfLo4bcw4R5KeT5JyaOsUNJoRBLo=;
-        b=i4x5GQv0L6d7OckEarM6iSWTC8fZgY4bvhRaWjY9X2m5EhJnkwN5kbB90kuHLMqSV9
-         Q+hIZATQsLCqR5/8Q52l21DPED4P8wkQrE2NpC8WZ5ud493oUdlLa4K9ft2swPFnz7As
-         7agRLYmITx1fQ7dkWs82+Ad7ILRvvxh1asdHDlFYWMd6XP9JoeZ2AeA2tRqAGoTttFQ+
-         zoWf42QlwbV10CgIrthZv/N2Q4g7lYezEHW6mp2Z+sQHlaKSdd6xaWEQAldBCpb6rQ5D
-         wpEeBT/y4X6AEFnfIT5WZvmHNSHvw8/xg+jr5mVDt0ktuAkneiLXOgvRI3U5EqUzyaJt
-         Rtig==
-X-Gm-Message-State: AOJu0YwSE0uE+9PeNIf5evBf8OGXgFgprXQV5UQQmMuCho86XR3TES/5
-	jO7/6X5ev7JjfI7qRWoXL4Ssyv8ieMkWGHWVTHyIt8PcXwdOmpARijP6k6It
-X-Google-Smtp-Source: AGHT+IE3MdHxzCA0O4fr4KF3wU0Cbo/GXjek97o4Gv6R24rsxqgTCOVCLGHwliP5I7xEMenlMEG6NQ==
-X-Received: by 2002:a17:902:c943:b0:1d8:e06a:3d16 with SMTP id i3-20020a170902c94300b001d8e06a3d16mr5068402pla.38.1706594838902;
-        Mon, 29 Jan 2024 22:07:18 -0800 (PST)
+        bh=GImDz5i38hz7JEhUDVGxtycDpAZ5nzC1980oJpg3sA8=;
+        b=rr82K14Hz1Kd7p6j6rOqnB0+mlbPTd6jWZfwyBoOY+nEVrCrTwcjTHnmLBzwKfVzAz
+         U1zSXh93bmE5SKDT+4LeyAbUDNxf/BezgIS+Ad12mxCudrKnKmwbaoK7HYG91le0MB8N
+         7zeeWK1KfSl91hB8+/k0+Ct+koCiUkd7jzbtKTpjEVvNfBUJFLP0EN5KuDIl0KZ6PEdP
+         iGArBX2xgacGgQN3uANp7oF32iXvWzOkIi6fNafcB0lWnTO5zrhyFIWHju7Xya4HGd7P
+         K2bEOjzFxyUeg6lI3HUiHKpKF11mLDCx6ubNmSswqhNwjrnHwDTlnkkXAKlJuywcMGVQ
+         3WTg==
+X-Gm-Message-State: AOJu0YwUmJVQulZQVQ40OyenjPFUgD1+X9sB3595sBz7QI3Qul8KnmGF
+	XGi9JkVHhvX8nZmHAZ1jMJlYDgFrAlcJRiHPQR1MYmj3f9iWNJET
+X-Google-Smtp-Source: AGHT+IEy53pi0RbR8AMV6653iDgAfcpn/6UteGHZoIL0l7mHNLWYwkNPjTd+pbpeY+PyFXR1HXTgIw==
+X-Received: by 2002:a05:6808:ecc:b0:3be:685e:b209 with SMTP id q12-20020a0568080ecc00b003be685eb209mr2571227oiv.35.1706596013369;
+        Mon, 29 Jan 2024 22:26:53 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j12-20020a170902c3cc00b001d8ed27c78fsm2312222plj.87.2024.01.29.22.07.17
+        by smtp.gmail.com with ESMTPSA id x129-20020a626387000000b006ddda3d854bsm7239672pfb.79.2024.01.29.22.26.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jan 2024 22:07:18 -0800 (PST)
+        Mon, 29 Jan 2024 22:26:52 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d967e5f3-6431-4fa0-8df8-345b8bbe9073@roeck-us.net>
-Date: Mon, 29 Jan 2024 22:07:16 -0800
+Message-ID: <b1798b8a-5794-4c79-a1d3-50259fa3ba81@roeck-us.net>
+Date: Mon, 29 Jan 2024 22:26:50 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -77,18 +77,19 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: starfive: check watchdog status before enabling
- in system resume
+Subject: Re: [PATCH v2 1/2] soc: samsung: exynos-pmu: Add regmap support for
+ SoCs that protect PMU regs
 Content-Language: en-US
-To: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>,
- Xingyu Wu <xingyu.wu@starfivetech.com>,
- Samin Guo <samin.guo@starfivetech.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>,
- Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Cc: Ley Foon Tan <leyfoon.tan@starfivetech.com>,
- linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
- Sia Jee Heng <jeeheng.sia@starfivetech.com>
-References: <20240130055118.1917086-1-jisheng.teoh@starfivetech.com>
+To: Peter Griffin <peter.griffin@linaro.org>, arnd@arndb.de,
+ krzysztof.kozlowski@linaro.org, wim@linux-watchdog.org,
+ alim.akhtar@samsung.com, jaewon02.kim@samsung.com, semen.protsenko@linaro.org
+Cc: kernel-team@android.com, tudor.ambarus@linaro.org,
+ andre.draszik@linaro.org, saravanak@google.com, willmcvicker@google.com,
+ linux-fsd@tesla.com, linux-watchdog@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org
+References: <20240129211912.3068411-1-peter.griffin@linaro.org>
+ <20240129211912.3068411-2-peter.griffin@linaro.org>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -133,40 +134,86 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240130055118.1917086-1-jisheng.teoh@starfivetech.com>
+In-Reply-To: <20240129211912.3068411-2-peter.griffin@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/29/24 21:51, Ji Sheng Teoh wrote:
-> System resume will start and enable watchdog regardless of whether the
-> watchdog is enabled/disabled during a system suspend.
-> Add a check to the watchdog status and only start and enable the
-> watchdog if the watchdog status is running/active.
+On 1/29/24 13:19, Peter Griffin wrote:
+> Some Exynos based SoCs like Tensor gs101 protect the PMU registers for
+> security hardening reasons so that they are only accessible in el3 via an
+> SMC call.
 > 
-> Signed-off-by: Sia Jee Heng <jeeheng.sia@starfivetech.com>
-> Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+> As most Exynos drivers that need to write PMU registers currently obtain a
+> regmap via syscon (phys, pinctrl, watchdog). Support for the above usecase
+> is implemented in this driver using a custom regmap similar to syscon to
+> handle the SMC call. Platforms that don't secure PMU registers, get a mmio
+> regmap like before. As regmaps abstract out the underlying register access
+> changes to the leaf drivers are minimal.
+> 
+> A new API exynos_get_pmu_regmap_by_phandle() is provided for leaf drivers
+> that currently use syscon_regmap_lookup_by_phandle(). This also handles
+> deferred probing.
+> 
+> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 > ---
->   drivers/watchdog/starfive-wdt.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-wdt.c
-> index e28ead24c520..f72fc38a41f8 100644
-> --- a/drivers/watchdog/starfive-wdt.c
-> +++ b/drivers/watchdog/starfive-wdt.c
-> @@ -554,7 +554,10 @@ static int starfive_wdt_resume(struct device *dev)
->   	starfive_wdt_set_reload_count(wdt, wdt->reload);
->   	starfive_wdt_lock(wdt);
->   
-> -	return starfive_wdt_start(wdt);
-> +	if (watchdog_active(&wdt->wdd))
-> +		return starfive_wdt_start(wdt);
-> +
-> +	return 0;
+[ ... ]
+
+> +/**
+> + * exynos_get_pmu_regmap
+> + * Find the pmureg previously configured in probe() and return regmap property.
+> + * Return: regmap if found or error if not found.
+> + */
+>   struct regmap *exynos_get_pmu_regmap(void)
+>   {
+>   	struct device_node *np = of_find_matching_node(NULL,
+>   						      exynos_pmu_of_device_ids);
+>   	if (np)
+> -		return syscon_node_to_regmap(np);
+> +		return exynos_get_pmu_regmap_by_phandle(np, NULL);
+>   	return ERR_PTR(-ENODEV);
 >   }
+>   EXPORT_SYMBOL_GPL(exynos_get_pmu_regmap);
 >   
->   static int starfive_wdt_runtime_suspend(struct device *dev)
+> +/**
+> + * exynos_get_pmu_regmap_by_phandle
+> + * Find the pmureg previously configured in probe() and return regmap property.
+> + * Return: regmap if found or error if not found.
+> + *
+> + * @np: Pointer to device's Device Tree node
+> + * @property: Device Tree property name which references the pmu
+> + */
+> +struct regmap *exynos_get_pmu_regmap_by_phandle(struct device_node *np,
+> +						const char *property)
+> +{
+> +	struct device *dev;
+> +	struct exynos_pmu_context *ctx;
+> +	struct device_node *pmu_np;
+> +
+> +	if (property)
+> +		pmu_np = of_parse_phandle(np, property, 0);
+> +	else
+> +		pmu_np = np;
+> +
+> +	if (!pmu_np)
+> +		return ERR_PTR(-ENODEV);
+> +
+> +	dev = driver_find_device_by_of_node(&exynos_pmu_driver.driver,
+> +					    (void *)pmu_np);
+> +	of_node_put(pmu_np);
+> +	if (!dev)
+> +		return ERR_PTR(-EPROBE_DEFER);
+> +
+> +	ctx = dev_get_drvdata(dev);
+> +
+> +	return ctx->pmureg;
+> +}
+> +EXPORT_SYMBOL_GPL(exynos_get_pmu_regmap_by_phandle);
+> +
+
+I think there should be a detailed comment explaining why the complexity
+is necessary instead of just returning pmu_context->pmureg.
+
+Thanks,
+Guenter
 
 
