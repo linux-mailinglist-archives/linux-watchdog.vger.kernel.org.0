@@ -1,146 +1,156 @@
-Return-Path: <linux-watchdog+bounces-533-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-534-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FD778439DA
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 09:55:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A165843C15
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 11:20:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D48571F2C1CE
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 08:55:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6131291F37
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 10:20:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBB155D91D;
-	Wed, 31 Jan 2024 08:49:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F0D569964;
+	Wed, 31 Jan 2024 10:20:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e78gPVkS"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="OIsnyWfX"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9425A69DF0;
-	Wed, 31 Jan 2024 08:49:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC8669D01
+	for <linux-watchdog@vger.kernel.org>; Wed, 31 Jan 2024 10:20:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706690971; cv=none; b=ryhUjxMZR7IBNSBvzish2VZ53PW3r0WdViaDvCy234ioZxhs8ZOecpYbb7pDKO6760ZZjx26QLwROEQDRKRZUt4UBiRfcrSh6F8pgS7ckYHmxsywPaY4WxzaT/WwiaI7TQWjJ6Z7oqBEnM67x/a4LsrUgh6u8Ao4WSj+eKOlIcs=
+	t=1706696430; cv=none; b=tm/f+vHJ3B8T1Sp35w0AcdJIgJWb03Rr0sf2SbZI20aEva37G+ZPCQtT3GhHMUIpxbRFMr71w6P/nQB+2JBU2MUDksikKmUrxI5Xq7hWoqwTGqQLROZdNGmyNQFefn6tspKaXB/lzZza5K7j3wZHvrxOstofBiyLxuioTHcSmW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706690971; c=relaxed/simple;
-	bh=DfZcsWA9ZiJQJnhw+Dlmf+rz4QBaLMOI1TuUkGh7YpY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HcYeZbMw0P3j4Io0ST+Ky7cRUzcVrqoZdrQgwAR9Y+sgs+9PQL1610B6jH6jT/LaqbhQWgyG6q7iNCTblCNw5tfUMd8AbbocPsInLNYt5X/dibSR2zuqVMvViXiqHBIbb6NDI0a6RTzZX+Nu3vcclGSCx1qVy4nbIkLQnAClLz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e78gPVkS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 242BFC433F1;
-	Wed, 31 Jan 2024 08:49:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706690971;
-	bh=DfZcsWA9ZiJQJnhw+Dlmf+rz4QBaLMOI1TuUkGh7YpY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e78gPVkSswXNVxrTpgc3uqnClcHNOzUx0e+TnHsysfypkrDC7guPj7rnKflIizUtN
-	 NUiJaN1GtNrkmmJLGqaaT0TUv+U5ep074UDrDzt+gZe1LtLowojHTMOeYz001u9gk2
-	 3OUf70GW/bZCCPY+xd4+lf7eExvmEiMYsQltxViaAwgoiOzsvHBQ+RE9Q4pwqwLA6M
-	 CG5xYe5/LHMrt6bP9qs8t1VNW891rQdiDtrsw+NrdI8BT/RAoELujxl2CCMLDWQYKt
-	 Wpb5JnjbQaNrrzW/Xgm+Z2QNPhqQQ7xzgGXms59nifzufP/bOgsIa9W78U0el6J7oH
-	 werrdYsUuNm6w==
-Date: Wed, 31 Jan 2024 08:49:24 +0000
-From: Lee Jones <lee@kernel.org>
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Support Opensource <support.opensource@diasemi.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Steve Twiss <stwiss.opensource@diasemi.com>,
-	"linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	"biju.das.au" <biju.das.au@gmail.com>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v6 0/8] Convert DA906{1,2} bindings to json-schema
-Message-ID: <20240131084924.GD8551@google.com>
-References: <20231214080911.23359-1-biju.das.jz@bp.renesas.com>
- <170316812973.586675.6248412029985031979.b4-ty@kernel.org>
- <20231221143318.GH10102@google.com>
- <TYCPR01MB1126921A54B9260CC33505FCA867E2@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+	s=arc-20240116; t=1706696430; c=relaxed/simple;
+	bh=UiORm6wg+ND2g1timUzZOpcyVuU+9hkkKah588hb8I0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TSG4xKWFP4XvbZto3S+EbArAz6sq+ztLZS/Aoq1hiC/PP7D6pbJ39FEhd0mUC1/4x01EFYu2We3nleT5R6oxydNym6Sbil+7T4/T7yDEWiNrojfetxHHi2kzXhPqkeC9VuefVY0u5amriDsLdyoAf6mYZ4fhmxQE3H/g66tAbFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=OIsnyWfX; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a359446b57dso425052366b.3
+        for <linux-watchdog@vger.kernel.org>; Wed, 31 Jan 2024 02:20:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1706696427; x=1707301227; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T5kJFKr5iTOo1U31zyzdDHRoKpUWs/L5KPoOuxNE44c=;
+        b=OIsnyWfX2TvfrJaoCw5HUFgjtWkv93KI62j96xZDFbDwr3BRHuWErO7SLxTwd3/f1Z
+         WCsax3b9rfowTCbC7GtqFbHdIMLBq4J9gMzJCOguMsLVezW9/ipuV5uaMXEG3CxAmwSc
+         +nsR/a+hx2W4igRpMPRVkwAPg7P3vFS8G9EMl4/Orywc1ISmT03ScgAMvs/QST8J8Vbb
+         mV5/fnzjLV2SXNgZ5XFsi1QHJYw6Uzz5WG1xxV+2Pa3911SPKHgbKU0xuhWtp0Tl5Ugh
+         3N6gMpcfEVNfSE2QzknYEV2N7IBuQZeKfyt3pYKwjr4Jjh6S1qsvaaHTQsOTCtRYU4Jv
+         xNCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706696427; x=1707301227;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T5kJFKr5iTOo1U31zyzdDHRoKpUWs/L5KPoOuxNE44c=;
+        b=C/r3lxvLQNxDs/GByPJKJgbY2XoFn5F9OX7k0FIWksPuaN6XRxXAuGS7ySXp06PemY
+         dct+FJ56BgEPEvSvaaa1C3qvXUBKckdlsMUBWd3wEoCVnoVb1Hvj3E9QjZnc+JeMUlFQ
+         I8VKJhrDhc6H4aPaRm3LB1FSuGi3yx+TeL7M395w86sGMlsFE/F0/Rd36Fps6xEAFi1P
+         hCsK5L0bsjJihQ4iWUL73xfJc9cS1r0/2V4O/wWiFfruA5MdAUw+3p8DMDYPqYyU8KUt
+         7/pXXxc3OeL8JBPRTnrQit2qNynjoxbSMCWp3KOthlKTs2XBzXsLTjl53A2EYWNVkESt
+         EUzA==
+X-Gm-Message-State: AOJu0YzQ4UBevLZnADmJRztkaH4vDxwmHB8GsKtV9ebx8A0QU+AvB62X
+	5Vn3FtuGRFajVA3L9QCKh38mBxafF1rYi/gPWa6P7IOHGwmb2FgEdkk1GVgOYww=
+X-Google-Smtp-Source: AGHT+IGsS1EVCz9f1k8KuUptnP8yNx0ak7r9DfqvZR6JCmobFGB5IciSh4lafL4wf8HZCeB9WD+/NA==
+X-Received: by 2002:a17:906:4f10:b0:a31:81e9:dbbb with SMTP id t16-20020a1709064f1000b00a3181e9dbbbmr744774eju.52.1706696426805;
+        Wed, 31 Jan 2024 02:20:26 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWqb/5dxkuvkTtbLVQaq3G8f1oqCG6PQKLkgRSnq4U7gFpJvcncDYg0Qe7BZGgD6TVGQ1r1WeZIkouY0CmEC6vX9wDZFXFx9xvkchCCpGkggbnXguZftsvVMixwWixVS3rnDH+MjN5WbaUtSjvVGhNDJ8xv9LpM5iTzQ/BdIjbfmJdnIO8n5tLe52NG8Ci3LIBNdOli73YkQGsqhUE0pEemxPOcoFULibOJuqhRffOBy7jcww4hzC1dd0YqkrpU7+otl4/l9JgruqvTe6AXaxyPA8Dw6oJY+5FyrEJNjZ1vAgJLAOYoHEIPSi6PN/ofn+6BQgfSL+1c2yRCpXHEEhUG8KpwUwvcoUZlLxBrqyNquEynepYij6zUAw8f1ArUi7oCHT5Te14N7sJSfTVQAclxBPXs5LajiqQQ16WQdNuy9v3R2RUytKdDqMgAmQ2dIAHKHeEm6VnCIrrIMULqLjkTaPV7NK49B1R0sdsAvlBXMCzBlXCXa5VCO8s6D4juUWilW4bwkwjx4bbWxJyCxcbIZStAvSalZo1uD+HRNykWJvN2DwtSq8D1Xg/fIw4ca4BiPQELfFmQRv6ymBh0uwAmgYsxa+u4pCUe2RJfZ2J2B6E=
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.87])
+        by smtp.gmail.com with ESMTPSA id vk6-20020a170907cbc600b00a3524be5a86sm5212966ejc.103.2024.01.31.02.20.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Jan 2024 02:20:26 -0800 (PST)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	geert+renesas@glider.be,
+	magnus.damm@gmail.com,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	p.zabel@pengutronix.de,
+	biju.das.jz@bp.renesas.com
+Cc: linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	claudiu.beznea@tuxon.dev,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH v2 00/11] watchdog: rzg2l_wdt: Add support for RZ/G3S
+Date: Wed, 31 Jan 2024 12:20:06 +0200
+Message-Id: <20240131102017.1841495-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <TYCPR01MB1126921A54B9260CC33505FCA867E2@TYCPR01MB11269.jpnprd01.prod.outlook.com>
 
-On Mon, 29 Jan 2024, Biju Das wrote:
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-> Hi Lee Jones,
-> 
-> > -----Original Message-----
-> > From: Lee Jones <lee@kernel.org>
-> > Sent: Thursday, December 21, 2023 2:33 PM
-> > Subject: Re: [PATCH v6 0/8] Convert DA906{1,2} bindings to json-schema
-> > 
-> > On Thu, 21 Dec 2023, Lee Jones wrote:
-> > 
-> > > On Thu, 14 Dec 2023 08:09:03 +0000, Biju Das wrote:
-> > > > Convert the below bindings to json-schema
-> > > > 1) DA906{1,2} mfd bindings
-> > > > 2) DA906{1,2,3} onkey bindings
-> > > > 3) DA906{1,2,3} thermal bindings
-> > > >
-> > > > Also add fallback for DA9061 watchdog device and document
-> > > > DA9063 watchdog device.
-> > > >
-> > > > [...]
-> > >
-> > > Applied, thanks!
-> > >
-> > > [1/8] dt-bindings: mfd: da9062: Update watchdog description
-> > >       commit: 9e7b13b805bcbe5335c2936d4c7ea0323ac69a81
-> > > [2/8] dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for
-> > DA9061 watchdog
-> > >       commit: 28d34db7772f18490b52328f04a3bf69ed5390d2
-> > > [3/8] dt-bindings: watchdog: dlg,da9062-watchdog: Document DA9063
-> > watchdog
-> > >       commit: d2a7dbb808870c17cffa2749ea877f61f298d098
-> > > [4/8] dt-bindings: mfd: dlg,da9063: Update watchdog child node
-> > >       commit: d4018547a15a94c7e865b2cef82bff1cd43a32b3
-> > > [5/8] dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
-> > >       commit: db459d3da7bb9c37cb86897c7b321a49f8e40968
-> > > [6/8] dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
-> > >       commit: 998f499c843e360bcd9ee1fe9addc3b5d32f1234
-> > > [7/8] dt-bindings: mfd: dlg,da9063: Sort child devices
-> > >       commit: 2bbf9d2a8e3bc933703dfda87cac953bed458496
-> > > [8/8] dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
-> > >       commit: 522225161830f6a93f2aaabda99226c1ffddc8c4
-> > 
-> > Submitted for testing.  Pull-request to follow.
-> 
-> The commit dc805ea058c0e ("MAINTAINERS: rectify entry for DIALOG SEMICONDUCTOR DRIVERS")
-> in mainline will give a conflict for patch#1.
-> 
-> Patch#2 and patch#3 are already in mainline.
-> 
-> 
-> Please let me know if you want me to rebase and resend the patch series
 
-That would be helpful, thanks.
+Hi,
 
-Please ensure all of the patches have my:
+Series adds watchdog support for Renesas RZ/G3S (R9A08G045) SoC.
 
-Acked-by: Lee Jones <lee@kernel.org>
+Patches do the following:
+- patch 1/11 selects CONFIG_PM for the watchdog driver
+- patch 2/11 adds clock and reset support for watchdog
+- patches 3-7/11 adds fixes and cleanup for the watchdog driver
+- patch 8/11 adds suspend to RAM to the watchdog driver (to be used by
+  RZ/G3S)
+- patch 9/11 documents the RZ/G3S support
+- patches 10-11/11 add device tree support
 
-... applied, then I'll know to just apply them again.
+It is expected that the clock and device tree support will go through
+Geert's tree while the rest of the patches through the watchdog tree.
+
+Thank you,
+Claudiu Beznea
+
+Changes in v2:
+- added patch "watchdog: rzg2l_wdt: Select PM"
+- propagate the return status of rzg2l_wdt_start() to it's callers
+  in patch "watchdog: rzg2l_wdt: Use pm_runtime_resume_and_get()" 
+- propagate the return status of rzg2l_wdt_stop() to it's callers
+  in patch "watchdog: rzg2l_wdt: Check return status of pm_runtime_put()" 
+- removed pm_ptr() from patch "watchdog: rzg2l_wdt: Add suspend/resume support"
+- s/G2UL/G2L in patch "dt-bindings: watchdog: renesas,wdt: Document RZ/G3S support"
+- collected tags
+
+Claudiu Beznea (11):
+  clk: renesas: r9a08g045: Add clock and reset support for watchdog
+  watchdog: rzg2l_wdt: Select PM
+  watchdog: rzg2l_wdt: Use pm_runtime_resume_and_get()
+  watchdog: rzg2l_wdt: Check return status of pm_runtime_put()
+  watchdog: rzg2l_wdt: Remove reset de-assert on probe/stop
+  watchdog: rzg2l_wdt: Remove comparison with zero
+  watchdog: rzg2l_wdt: Rely on the reset driver for doing proper reset
+  watchdog: rzg2l_wdt: Add suspend/resume support
+  dt-bindings: watchdog: renesas,wdt: Document RZ/G3S support
+  arm64: dts: renesas: r9a08g045: Add watchdog node
+  arm64: dts: renesas: rzg3s-smarc-som: Enable the watchdog interface
+
+ .../bindings/watchdog/renesas,wdt.yaml        |   1 +
+ arch/arm64/boot/dts/renesas/r9a08g045.dtsi    |  14 +++
+ .../boot/dts/renesas/rzg3s-smarc-som.dtsi     |   5 +
+ drivers/clk/renesas/r9a08g045-cpg.c           |   3 +
+ drivers/watchdog/Kconfig                      |   1 +
+ drivers/watchdog/rzg2l_wdt.c                  | 111 ++++++++++--------
+ 6 files changed, 85 insertions(+), 50 deletions(-)
 
 -- 
-Lee Jones [李琼斯]
+2.39.2
+
 
