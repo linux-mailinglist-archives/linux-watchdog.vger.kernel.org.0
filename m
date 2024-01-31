@@ -1,98 +1,65 @@
-Return-Path: <linux-watchdog+bounces-545-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-546-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 870BE843C5E
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 11:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EC42843C8A
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 11:28:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 278741F30042
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 10:24:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F5501F30B61
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 10:28:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBCB37F477;
-	Wed, 31 Jan 2024 10:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="fcUhICZP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 341F56DD1F;
+	Wed, 31 Jan 2024 10:27:11 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB6967BB09
-	for <linux-watchdog@vger.kernel.org>; Wed, 31 Jan 2024 10:20:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAF226DD00;
+	Wed, 31 Jan 2024 10:27:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706696449; cv=none; b=OjZqOljm+RsOyyUK2+meNsvUI64CwlKGic1qJqFWe/RAaCx9gzDN/c87oNjZftifkxHRt0Iju5wx0cCHddBCWL6dtMuvPvkmKjoLLfYu5V1tL2x6S20CWzwHiwNPwOBlV7J6sf42zWpPu/eQhAgcnHsBnzRd03I7uR4fXRZ+ilk=
+	t=1706696831; cv=none; b=YvKIxNo5LwYmHOrLCktWOlhZaAI735V5s6/sx89qrjcqYjZ1cWWmXGN2zqN224R0x2v1SDPJ8gqcmaCvUdtPOQpMuM3yeSqX8lHcwcAlPkvLMbCb/K6BOEQ0bQSSorqhOG/5z8NRG6KHxNftoVQKzaiKp+XT7eQcdLHVInRcBp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706696449; c=relaxed/simple;
-	bh=wT2twA9lBFQ9GfBDBM65zJOM0hifl2dwZasWPoBrtWk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sJmJGIDoudAenUsKzJ9a9mvANOdZRCEHiik0ypQuWWXPUYbsf7mSZI/tnKGHPcpV7QJ59zClJiAkJYj19Cyeo3E/5IBYlel0sX683qoCu2GL1FgHhz+WCkPUGaQF2idbRFvHt+GGGURgdH8YZVyFrmhHj7ljwH/nKuN7KFUDbOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=fcUhICZP; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a3566c0309fso448001366b.1
-        for <linux-watchdog@vger.kernel.org>; Wed, 31 Jan 2024 02:20:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1706696446; x=1707301246; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4cEqK4k1A7PVq0QJziHE6k8iVWTQh9yIWRh++Qn1t9A=;
-        b=fcUhICZPGSIa82MpzbXwIBdXgsWC7+x2I4AZ5wlTGDTDBqZ8xNRjmri13y/afrmhLP
-         M1gcAvsGMKf6cZAV4bg7hProNb9znfoCxhg5cv2Y2yfOBLfL3u6Rw++jostXa1eEV+1V
-         mqWbz4Z767YqdAFIMmIjWYkl39Itqa3nV642LOv8Mmu7HbwbX7i48SoF0OOP0mZgdCup
-         kcI6CUkMwOwMWPOYm9JpwqFhPkKYZH2WSLlG99UWQIhUSJFJbK0xu+eskCxsGIHub/0m
-         kH9itJegyjZZkzCmkFLtyG/T9NMizoPFPIBrxXOnRC7+5HYSocIdpK4zI62K3McRdhG6
-         fweA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706696446; x=1707301246;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4cEqK4k1A7PVq0QJziHE6k8iVWTQh9yIWRh++Qn1t9A=;
-        b=InC4s/sPalNELvlmjxXS/Ci+rzR7k/jfusNFX+WzSZjUFDi60qnkikjUvocwwCKuUv
-         RbmXCdwH2Hzbb8iczI9n3/XrRn8siq3sUlvxfg0Er3qITvDgLMM3OqF+grPMtB7/qIlZ
-         AVK+0mjj85zFJbIh9bj7zkL0pcuUgvRReInz8lfbcf9quwN2EeS7yq73xip0VibWiWOX
-         yk/8L5cYkPJa+XqEG9h7xiYS4TrGtSRXoytgJesvcnQwe8PS1jo1jCcoVjHxTMvvHomo
-         zAE4uzdA679ILzCptKclRwtzYHhQbnoTeDck+icg31tuOAuct9ezDRlNh8SmsyMmO+Mr
-         ZAmw==
-X-Gm-Message-State: AOJu0YxyyIRgsMuNHr8bkKXkLF9X9LCuL0J3Q0f1i1uJZVElr/bruFBG
-	xpJzpdr/VZQXx3/zi9uYX5oSn1omc1zGEQo8Z4NFdpCIlHoOBI+xZ/eztkRSK7Q=
-X-Google-Smtp-Source: AGHT+IHaruO06vu0kGjs4fVXjxYqlkZO5gWImdkgO8i59fTy0v8FKtn34c2CwaOEyfCvlfz6+Bu/Zg==
-X-Received: by 2002:a17:906:7fc9:b0:a36:8b9b:bc1c with SMTP id r9-20020a1709067fc900b00a368b9bbc1cmr354388ejs.71.1706696446075;
-        Wed, 31 Jan 2024 02:20:46 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXkZpikAZ1gjM9N3uZkKy1KiYWhb+LW7nmrtHggi4T1YOS7pUcDxpKM9MasBpWNrR+lGhTEpNuGopVk2ok3CAS53EIKVQZXGVcpznPZUixLv9TlBJhb3BYdr54gqaDVxKESFTHQLZ2Zfde3FGRday4OCNKe5mYc9/JzGyJzPWbSgyhUOwW87KidZI5I1B5K14Q+C8NHTp6vDUNIyWDm4jlP3ugSG41QidEE13lsai097p/TvfbYp2keUynLLFSVrdiIyntAkmNcWv38GCGtvUKlTqA+SYsLpWokEDKL6viW35iObmZ4PV5SowHz4up/ujXFuo5qshCbLZu4Q6icGJa7nmq5idcqhj/dGo+AZY6TxAS+8xxUoTT3ExcXGkBK8kUqVYncL/LgievwmEO92f4Rye/s8c4gYngEc1Kw6xfv4AqXmuiYAy+qFX58nNogufN3ATFIoFnK+NbnAOan2wWfDsjbI1oknZ+COywXK1S8iwPC7mSbK7zc7SxdGWpTeKsaDTWzKrdyzLmNZ2YndKiFWocd1iD96Hm8/CazyJBYBJQGHvDWtpq0NHvUiAw/Fa1PfbodEn/Is2CxP5tNbjPQqhkeqEapy0LKTsziHWdYarU=
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.87])
-        by smtp.gmail.com with ESMTPSA id vk6-20020a170907cbc600b00a3524be5a86sm5212966ejc.103.2024.01.31.02.20.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jan 2024 02:20:45 -0800 (PST)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: wim@linux-watchdog.org,
-	linux@roeck-us.net,
-	robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org,
-	geert+renesas@glider.be,
-	magnus.damm@gmail.com,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	p.zabel@pengutronix.de,
-	biju.das.jz@bp.renesas.com
-Cc: linux-watchdog@vger.kernel.org,
+	s=arc-20240116; t=1706696831; c=relaxed/simple;
+	bh=3tOOKEFDglSKDgxDOhWsj9U4KNMdCRxM9r4EgNb2MZI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mABcI/vTZJa3PxRaQDQDYNYspBNJJYNfYD0AAJHEDM415M6EJI5ycoquGvZ8x3dnqZqT/EV3G+nqT2q/1eR6nN6BhNgTusNbeRtTK6J3Wp5gHYe26ai7NJYIdBPSSiTDbJqSlXfCgkg7JU8HZPS9cVyS+VIicU1d7ddd150fVao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-IronPort-AV: E=Sophos;i="6.05,231,1701097200"; 
+   d="scan'208";a="192377752"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 31 Jan 2024 19:27:06 +0900
+Received: from localhost.localdomain (unknown [10.226.92.227])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 8E50F41DF0AB;
+	Wed, 31 Jan 2024 19:26:59 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Lee Jones <lee@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Support Opensource <support.opensource@diasemi.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Steve Twiss <stwiss.opensource@diasemi.com>,
+	linux-input@vger.kernel.org,
 	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	claudiu.beznea@tuxon.dev,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v2 11/11] arm64: dts: renesas: rzg3s-smarc-som: Enable the watchdog interface
-Date: Wed, 31 Jan 2024 12:20:17 +0200
-Message-Id: <20240131102017.1841495-12-claudiu.beznea.uj@bp.renesas.com>
+	linux-pm@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>,
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v6 RESEND 0/6] Convert DA906{1,2} bindings to json-schema
+Date: Wed, 31 Jan 2024 10:26:50 +0000
+Message-Id: <20240131102656.3379-1-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240131102017.1841495-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20240131102017.1841495-1-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -101,34 +68,105 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Convert the below bindings to json-schema
+1) DA906{1,2} mfd bindings
+2) DA906{1,2,3} onkey bindings
+3) DA906{1,2,3} thermal bindings
 
-Enable the watchdog interface (accessible by Cortex-A of RZ/G3S SoC) on
-RZ/G3S SMARC SoM.
+Document missing gpio child node for da9062 and update MAINTAINERS entries.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
+Merge strategy:
+Since there is binding dependency between input, thermal and MFD
+subsystem. it is decided that this series will go through the MFD tree.
+So once the respective subsystem maintainers, DT and Renesas are happy
+with the patch they can give an ack/rb tag, so that it can be applied to
+MFD tree.
 
-Changes in v2:
-- collected tags
+v6->v6 Resend:
+ * Dropped Patch#2 and patch#3 from this series as it hits mainline.
+ * Added Ack from Lee Jones for all the patches.
+ * Fixed merge conflict on MAINTAINERS file for patch#1
+ * Added Rb tag from Conor for patch#6.
+v5->v6:
+ * Added Rb tag from Guenter Roeck for watchdog binding patches.
+ * Updated commit description related to "gpio-controller" and
+   "#gpio-cells" properties defined in parent node.
+ * Added Rb tag from Krzysztof Kozlowski for patch#8.
+v4->v5:
+ * Updated cover letter with merging strategy.
+ * Added fixes tag for patch#1
+ * Added Rb tags from Geert and Krzysztof for patch#1
+ * Added Ack from Conor for patch#1
+ * Added Rb tag from Geert and Ack from Conor for patch#2
+ * Drop items and just use enum as it is easier to read for compatibles.
+ * Retained the tags for patch#2 as it is trivial change.
+ * Added Rb tag from Geert for patch#3
+ * Updated commit header and description by replacing
+   'watchdog property'->'watchdog child node'
+ * Added Rb tag from Geert for patch#4.
+ * Added Rb tag from Krzysztof and Conor for patch#5
+ * Dropped Items, Just enum as it is easier to read compatibles.
+ * Retained tags for patch#5 as the changes are trivial.
+ * Updated commit description for patch#8
+ * Dropped unnecessary ref from gpio child node.
+ * Added gpio-hog pattern property
+ * Moved gpio-controller,gpio-cells above child nodes
+ * Sorted compatible in rtc child node.
+ * Dropped status from example.
+ * Updated the example.
+v3->v4:
+ * Patch#1 is merge of patch#1 from v2 + patch#8 from v2.
+ * Dropped comment for d9061 watchdog fallback
+ * Replaced enum->const for dlg,da9061-watchdog and its fallback.
+ * Restored patch#4 in series 1 and dropped the thermal example
+ * Added Ack from Conor Dooley for da9063 watchdog binding support.
+ * Updated title DA9062/61->DA906{1,2,3} as it supports DA9063.
+ * Retained Rb tag since the changes are trivial.
+ * Added Ack from Conor for updating watchdog property
+ * Dropped link to product information.
+ * Patch#5(onkey) is squashed with patch#6 and patch#9 from v2.
+ * Replaced enum->const for dlg,da9061-onkey and its fallback.
+ * Dropped example
+ * Restored the thermal binding patch from v2.
+ * Dropped example
+ * Replaced enum->const for compatible property.
+ * Added Rb tag from Rob and retained Rb tag as changes are trivial.
+ * Added Ack from Conor Dooley for patch#7.
+ * Split the thermal binding patch separate
+ * Updated the description
+v2->v3:
+ * Updated Maintainer entries for watchdog,onkey and thermal bindings
+ * Fixed bot errors related to MAINTAINERS entry, invalid doc
+   references and thermal examples by merging patch#4. 
 
- arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+v1->v2:
+ Link: https://lore.kernel.org/all/20231201110840.37408-5-biju.das.jz@bp.renesas.com/
+ * DA9062 and DA9061 merged with DA9063
+ * Sorted the child devices
+ * mfd,onkey and thermal are pointing to child bindings
 
-diff --git a/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi b/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
-index f062d4ad78b7..2b7fa5817d58 100644
---- a/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
-+++ b/arch/arm64/boot/dts/renesas/rzg3s-smarc-som.dtsi
-@@ -336,3 +336,8 @@ mux {
- 		};
- 	};
- };
-+
-+&wdt0 {
-+	timeout-sec = <60>;
-+	status = "okay";
-+};
+Biju Das (6):
+  dt-bindings: mfd: da9062: Update watchdog description
+  dt-bindings: mfd: dlg,da9063: Update watchdog child node
+  dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
+  dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
+  dt-bindings: mfd: dlg,da9063: Sort child devices
+  dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
+
+ .../bindings/input/da9062-onkey.txt           |  47 ----
+ .../bindings/input/dlg,da9062-onkey.yaml      |  38 +++
+ .../devicetree/bindings/mfd/da9062.txt        | 124 ---------
+ .../devicetree/bindings/mfd/dlg,da9063.yaml   | 248 +++++++++++++++---
+ .../bindings/thermal/da9062-thermal.txt       |  36 ---
+ .../bindings/thermal/dlg,da9062-thermal.yaml  |  35 +++
+ MAINTAINERS                                   |   6 +-
+ 7 files changed, 290 insertions(+), 244 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/da9062-onkey.txt
+ create mode 100644 Documentation/devicetree/bindings/input/dlg,da9062-onkey.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/da9062.txt
+ delete mode 100644 Documentation/devicetree/bindings/thermal/da9062-thermal.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml
+
 -- 
 2.39.2
 
