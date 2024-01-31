@@ -1,167 +1,146 @@
-Return-Path: <linux-watchdog+bounces-532-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-533-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 648818436FA
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 07:52:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FD778439DA
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 09:55:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCD4128562F
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 06:52:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D48571F2C1CE
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 08:55:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7531FC17;
-	Wed, 31 Jan 2024 06:52:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBB155D91D;
+	Wed, 31 Jan 2024 08:49:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="L0thNyrU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e78gPVkS"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F403F53E25;
-	Wed, 31 Jan 2024 06:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9425A69DF0;
+	Wed, 31 Jan 2024 08:49:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706683928; cv=none; b=qPIYp6hCnX2wFmSGcAAcanAlJ1nhS9dVJkMyJKeE2WijZg51iLLCZO7TsyrEP14tBKtbg61I5Oj+On0Tl26xZl3cEuYmmEvE3aU+HbKfFyf1ygQ86Dx+mVtpPDe7TqkhMWLNoUv2cPtK3cFpYmPnVVuUkvUY0oUucL4+2ppJ3fg=
+	t=1706690971; cv=none; b=ryhUjxMZR7IBNSBvzish2VZ53PW3r0WdViaDvCy234ioZxhs8ZOecpYbb7pDKO6760ZZjx26QLwROEQDRKRZUt4UBiRfcrSh6F8pgS7ckYHmxsywPaY4WxzaT/WwiaI7TQWjJ6Z7oqBEnM67x/a4LsrUgh6u8Ao4WSj+eKOlIcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706683928; c=relaxed/simple;
-	bh=AyL/KhP/HPP4upzed4m2SWG+KUTVwHmJxnBFBU6C+8c=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PGb9GbvtALryy86/Dszmlt7SEXig0PDygYg/6M2mTj2GvQ1jRW2nHIl2iiI96NEBwP+vZIFQlc/xaP0ohEnMBeD0Af8etsTSQ+Pr0G1numi+aNwbm6bbVuER2Dn8X9tBJgSjmkzIMepggOSP1LFFUj98xfStXFu1YzQCNNHuvkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=L0thNyrU; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40V54ljx023208;
-	Wed, 31 Jan 2024 06:51:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=CftI+Lys/8CRlMkhsd2f7
-	8hD8i/Bez1eefh+WebX7n8=; b=L0thNyrUR35qgullDQI/qlrqL1ReHvByvrVca
-	MIhACUp7+gf8jWIds9o+m27T8v4Ev89SHspy7tnN6KhXMp5JDkePiDph6XBJwnzN
-	Z0+8kJe1sR0K3HbPL7sY5OffdSecWzCjDZcRa/JHWBa4OZwfLyFONB2iaf1OLhV/
-	9buyyx7jMTpFzxgdjXOFPEybYPF38SwY88QbV8i5f8UCdsk44EH1W8a9P9sg+ecg
-	KAO1K8P1lVlC1/nufSYDzXNUZZvmIp/AFw9QH3pLsGuumvYN527pJtE7L80TA+G6
-	IBS/O8GCn1ocaSleAX6srqLg3y5B83dHh6NiGPMokMt486dXg==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vyfr30a7m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 31 Jan 2024 06:51:39 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40V6pdwp011752
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 31 Jan 2024 06:51:39 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Tue, 30 Jan 2024 22:51:35 -0800
-Date: Wed, 31 Jan 2024 12:21:33 +0530
-From: Pavan Kondeti <quic_pkondeti@quicinc.com>
-To: Guenter Roeck <linux@roeck-us.net>
-CC: Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Wim Van
- Sebroeck" <wim@linux-watchdog.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Mukesh Ojha
-	<quic_mojha@quicinc.com>
-Subject: Re: [PATCH] watchdog: qcom: Start the watchdog in probe
-Message-ID: <22141056-bc6b-48bf-a4af-405f747aaa29@quicinc.com>
-References: <20240131-qcom-wdt-start-probe-v1-1-bee0a86e2bba@quicinc.com>
- <1a996038-bcc7-4c0f-8f27-ca36a2eb9d3d@roeck-us.net>
- <cfaaed23-8f59-4447-af0b-b94b35ce68ba@quicinc.com>
- <a908d04b-8068-4831-87ef-44175250c226@roeck-us.net>
+	s=arc-20240116; t=1706690971; c=relaxed/simple;
+	bh=DfZcsWA9ZiJQJnhw+Dlmf+rz4QBaLMOI1TuUkGh7YpY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HcYeZbMw0P3j4Io0ST+Ky7cRUzcVrqoZdrQgwAR9Y+sgs+9PQL1610B6jH6jT/LaqbhQWgyG6q7iNCTblCNw5tfUMd8AbbocPsInLNYt5X/dibSR2zuqVMvViXiqHBIbb6NDI0a6RTzZX+Nu3vcclGSCx1qVy4nbIkLQnAClLz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e78gPVkS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 242BFC433F1;
+	Wed, 31 Jan 2024 08:49:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706690971;
+	bh=DfZcsWA9ZiJQJnhw+Dlmf+rz4QBaLMOI1TuUkGh7YpY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e78gPVkSswXNVxrTpgc3uqnClcHNOzUx0e+TnHsysfypkrDC7guPj7rnKflIizUtN
+	 NUiJaN1GtNrkmmJLGqaaT0TUv+U5ep074UDrDzt+gZe1LtLowojHTMOeYz001u9gk2
+	 3OUf70GW/bZCCPY+xd4+lf7eExvmEiMYsQltxViaAwgoiOzsvHBQ+RE9Q4pwqwLA6M
+	 CG5xYe5/LHMrt6bP9qs8t1VNW891rQdiDtrsw+NrdI8BT/RAoELujxl2CCMLDWQYKt
+	 Wpb5JnjbQaNrrzW/Xgm+Z2QNPhqQQ7xzgGXms59nifzufP/bOgsIa9W78U0el6J7oH
+	 werrdYsUuNm6w==
+Date: Wed, 31 Jan 2024 08:49:24 +0000
+From: Lee Jones <lee@kernel.org>
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Support Opensource <support.opensource@diasemi.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Steve Twiss <stwiss.opensource@diasemi.com>,
+	"linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	"biju.das.au" <biju.das.au@gmail.com>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v6 0/8] Convert DA906{1,2} bindings to json-schema
+Message-ID: <20240131084924.GD8551@google.com>
+References: <20231214080911.23359-1-biju.das.jz@bp.renesas.com>
+ <170316812973.586675.6248412029985031979.b4-ty@kernel.org>
+ <20231221143318.GH10102@google.com>
+ <TYCPR01MB1126921A54B9260CC33505FCA867E2@TYCPR01MB11269.jpnprd01.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <a908d04b-8068-4831-87ef-44175250c226@roeck-us.net>
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: tpOrUK483pRbQF9jmoYq4-F4ocrVEmaW
-X-Proofpoint-ORIG-GUID: tpOrUK483pRbQF9jmoYq4-F4ocrVEmaW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-31_02,2024-01-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- mlxlogscore=999 lowpriorityscore=0 adultscore=0 phishscore=0
- priorityscore=1501 malwarescore=0 mlxscore=0 suspectscore=0
- impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2401190000 definitions=main-2401310051
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <TYCPR01MB1126921A54B9260CC33505FCA867E2@TYCPR01MB11269.jpnprd01.prod.outlook.com>
 
-On Tue, Jan 30, 2024 at 10:37:50PM -0800, Guenter Roeck wrote:
-> On 1/30/24 22:16, Pavan Kondeti wrote:
-> > On Tue, Jan 30, 2024 at 10:01:15PM -0800, Guenter Roeck wrote:
-> > > On 1/30/24 20:15, Pavankumar Kondeti wrote:
-> > > > When CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is enabled, kernel can pet the
-> > > > watchdog until user space takes over. Make use of this feature and
-> > > > start the watchdog in probe.
-> > > > 
-> > > > Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-> > > > ---
-> > > >    drivers/watchdog/qcom-wdt.c | 6 +++++-
-> > > >    1 file changed, 5 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
-> > > > index 9e790f0c2096..4fb5dbf5faee 100644
-> > > > --- a/drivers/watchdog/qcom-wdt.c
-> > > > +++ b/drivers/watchdog/qcom-wdt.c
-> > > > @@ -276,12 +276,16 @@ static int qcom_wdt_probe(struct platform_device *pdev)
-> > > >    	watchdog_init_timeout(&wdt->wdd, 0, dev);
-> > > >    	/*
-> > > > +	 * Kernel can pet the watchdog until user space takes over.
-> > > > +	 * Start the watchdog here to make use of this feature.
-> > > > +	
-> > > 
-> > > No, that is not what CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is about.
-> > > Please see its description.
-> > > 
-> > > NACK.
-> > > 
-> > Thanks for taking a look Guenter. I thought of using
-> > WATCHDOG_HANDLE_BOOT_ENABLED and infiniite open timeout as a hint to start
-> > the watchdog in probe. After seeing your NACK for this patch, I guess
-> > that would also would have been rejected.
+On Mon, 29 Jan 2024, Biju Das wrote:
+
+> Hi Lee Jones,
+> 
+> > -----Original Message-----
+> > From: Lee Jones <lee@kernel.org>
+> > Sent: Thursday, December 21, 2023 2:33 PM
+> > Subject: Re: [PATCH v6 0/8] Convert DA906{1,2} bindings to json-schema
 > > 
-> WATCHDOG_HANDLE_BOOT_ENABLED is not supposed to be used in drivers.
-> It is a flag for the watchdog core. Before you bring it up, stm32_iwdg.c
-> is a corner case because (presumably) the driver can not determine
-> if the watchdog is running.
-> 
-> > Do you think we can revive this [1] to add support for watchdog pet from
-> > the kernel? It would be helpful in cases where the user space has no
-> > support for watchdog pet (say minimal ramdisk).
+> > On Thu, 21 Dec 2023, Lee Jones wrote:
 > > 
+> > > On Thu, 14 Dec 2023 08:09:03 +0000, Biju Das wrote:
+> > > > Convert the below bindings to json-schema
+> > > > 1) DA906{1,2} mfd bindings
+> > > > 2) DA906{1,2,3} onkey bindings
+> > > > 3) DA906{1,2,3} thermal bindings
+> > > >
+> > > > Also add fallback for DA9061 watchdog device and document
+> > > > DA9063 watchdog device.
+> > > >
+> > > > [...]
+> > >
+> > > Applied, thanks!
+> > >
+> > > [1/8] dt-bindings: mfd: da9062: Update watchdog description
+> > >       commit: 9e7b13b805bcbe5335c2936d4c7ea0323ac69a81
+> > > [2/8] dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for
+> > DA9061 watchdog
+> > >       commit: 28d34db7772f18490b52328f04a3bf69ed5390d2
+> > > [3/8] dt-bindings: watchdog: dlg,da9062-watchdog: Document DA9063
+> > watchdog
+> > >       commit: d2a7dbb808870c17cffa2749ea877f61f298d098
+> > > [4/8] dt-bindings: mfd: dlg,da9063: Update watchdog child node
+> > >       commit: d4018547a15a94c7e865b2cef82bff1cd43a32b3
+> > > [5/8] dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
+> > >       commit: db459d3da7bb9c37cb86897c7b321a49f8e40968
+> > > [6/8] dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
+> > >       commit: 998f499c843e360bcd9ee1fe9addc3b5d32f1234
+> > > [7/8] dt-bindings: mfd: dlg,da9063: Sort child devices
+> > >       commit: 2bbf9d2a8e3bc933703dfda87cac953bed458496
+> > > [8/8] dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
+> > >       commit: 522225161830f6a93f2aaabda99226c1ffddc8c4
+> > 
+> > Submitted for testing.  Pull-request to follow.
 > 
-> If done properly, sure. Looking at the exchange, the patch still had issues
-> which I don't think were ever resolved.
-
-Thanks. I will take a look at your review feedback on the series and
-address them before sending the next revision.
-
+> The commit dc805ea058c0e ("MAINTAINERS: rectify entry for DIALOG SEMICONDUCTOR DRIVERS")
+> in mainline will give a conflict for patch#1.
 > 
-> Personally I would not want to rely on this, though. It won't address situations
-> where userspace hangs but low level kernel interrupts still work. I think
-> it is mostly useful to cover the time from loading the watchdog driver
-> to starting the watchdog daemon, but even that would better be solved by
-> starting the watchdog in the ROM monitor or BIOS. A minimal watchdog daemon
-> would not consume that much memory, so I don't think "user space has no
-> support for watchdog pet (say minimal ramdisk)" would ever be a real problem.
-> Such a minimal system would probably (hopefully) be based on busybox which
-> does support a watchdog.
+> Patch#2 and patch#3 are already in mainline.
 > 
+> 
+> Please let me know if you want me to rebase and resend the patch series
 
-Got it. I will find ways to start the watchdog in firmware so that we
-don't need anything special handling.
+That would be helpful, thanks.
 
-Thanks,
-Pavan
+Please ensure all of the patches have my:
+
+Acked-by: Lee Jones <lee@kernel.org>
+
+... applied, then I'll know to just apply them again.
+
+-- 
+Lee Jones [李琼斯]
 
