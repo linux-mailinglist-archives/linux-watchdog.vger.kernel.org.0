@@ -1,75 +1,75 @@
-Return-Path: <linux-watchdog+bounces-552-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-553-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4082F84403D
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 14:14:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FEDF844048
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 14:17:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49730B23865
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 13:14:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7939A1F26753
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 13:17:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C6727A716;
-	Wed, 31 Jan 2024 13:14:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D9727B3E5;
+	Wed, 31 Jan 2024 13:16:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SYLeWyYc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WHyyDLsa"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC4E79DD0;
-	Wed, 31 Jan 2024 13:14:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD2A47AE47;
+	Wed, 31 Jan 2024 13:16:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706706854; cv=none; b=ai22HjM+qDqQ9qh75ANYzWkQXeTY/FxvJR+cYppT0wBApmKGSmZzIxOHirgQmbFAc4bsK6SuTdQdGMt9rqd+FHxNU8cchmBJj0GPCRTSNbMh7wIMM8Ik9F+lAumD58agMo5d1zJ8pywhZ7kJbMLw781HC0Lj322DaS+dOdh9yWE=
+	t=1706707015; cv=none; b=pfsGkQPUGcMXiuV9ARUpuHuDMExpuRPZgW34fKbgMRE9vLymuvPvhHbnmZT9Wda6EL+qphNZijQywJiuUBRVc/0k+PSrPfgmpcdXWsmCMj2cEx+/YC9qvitZmUkSXnHsiafYcTCNDCqHYOhbxBeSTyF67LjLhOUz0vFOucLDjqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706706854; c=relaxed/simple;
-	bh=CIoNWqd6M+hQVXYvItsgUvIEkP6QIav4idAL5Wa4dWg=;
+	s=arc-20240116; t=1706707015; c=relaxed/simple;
+	bh=AW4f6dw+zidICyXZgjwIu41kdHjOtjxCRAic489hQXo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mdynwTYiQPYiMKbI1uq4L+75R+zC0F9vpvdatC6UWM8HsMv9GnirlGhLPgRbZGcAb1M1zF73shXPjQSaPG1jK5S6qHekvO4KL93d+FLKZ8Swn/Sbq6c4QV2sQ7jAj7wqTrcWVRyTrU0UbhMM0l5wEmtZ06x5+K11DU+hcoeWNgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SYLeWyYc; arc=none smtp.client-ip=209.85.210.169
+	 In-Reply-To:Content-Type; b=lj6VOXbMNSGluWoTvD/2jvYgJV4ZSPvW8xhyishzP60Lc8kyr9n4F4XNIn7m/tidkUlaNxC8wCE1GS0TwnNjCnp4PJRoN3q24UEzZcjJ10wKlVHrwDzvz/axhvyr8ta9FYipsRq6T2LNFgQTXA/q6V078WePVKUL6Jr7/6kE7C0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WHyyDLsa; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6de0f53f8e8so708126b3a.0;
-        Wed, 31 Jan 2024 05:14:12 -0800 (PST)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1d928a8dee8so5110715ad.1;
+        Wed, 31 Jan 2024 05:16:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1706706852; x=1707311652; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1706707013; x=1707311813; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=cyQTQCAwcgO1XS+KBRjMHmKhoGL5WnQbolSZvV0q3F4=;
-        b=SYLeWyYcboG37pSKUZWQobh/G/FLk609EPKgk1fCamjE9Pr3f+yLfE1xmk6i0hAhvj
-         H0jAaXNW4p2OvzqfaWa++tVfSqNfIk/ZUpeTQqtr1LY7E3p2dvFfGF4tcw+2g9B/lhFq
-         C4xt4MQ+XSuKap8bd3AwRxRkbgw1DiRXeuo+I9rzSZ6KZFgmaIqwOK43fTyEeGLnPSBm
-         uK7b1i513G0ey/DCrWKpi57rBVrBo9VMyYSQb3knVm21eZAa2hBby3mgxpPby2/27Yqr
-         7Vv5AvQ2wcW6CofYA+3q1NKfrokEHbpvYAT10H8MrmI0Ix1sSLRyxJJg7DR0MZf8+TAL
-         sTrQ==
+        bh=MD6YCJseT7Z8Ach4Jqdsb6hrlt+6cO4c5ma7tx+4HwE=;
+        b=WHyyDLsaGGUPPeaarqTlHUq9ElfRO5j8V4cRsSlpioR6AR2WPByIJEXQ/LGFFqf84a
+         dCe+/EQuSPHQIQw20MQwRRWwSidnl7+9rQAzi0DnbtrFL3mPVCnq1hy8TxaknaCl1kvH
+         qjyDcNHzrDIV3WeLyH5JBuN7o8eMLzJTi5exkUPAH59w39bgwxkNp8+ZbKVTnscieFNo
+         wU/aMRT8sC9glh0elo3+N5Xxm37bwEGzN8PhMgVRmeQn8Z15JzIee763HBRewiwYtbqY
+         6GS0QamqWKokRKcb2Ar9FrIkr1bDPp0+h5RKi3RVkpI4U9g4MyOFByxu9kY6bPOXLaKq
+         sDPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706706852; x=1707311652;
+        d=1e100.net; s=20230601; t=1706707013; x=1707311813;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cyQTQCAwcgO1XS+KBRjMHmKhoGL5WnQbolSZvV0q3F4=;
-        b=I1eK5HCzatCNXa7JNYPY/XBblZCh/o/pvsapyns9TgELc5KTUPwAlxu42NeG0HQtAv
-         kHAtwtf3zZo9UF6YvUO6TM3Bk6Uu2dUhxNttLupqTJfacD+vtvj8TMtFi+JL9/e9xGa/
-         RuIug37oeAb+Lm2PyVfU54AwjL5SAiRUkIvZUk1EDz02D+QrE5wFQJT2DmkbDKmTYamH
-         x6i36e21v6ItVod4aHBLWWz0VC6rMKeHjXxC8jfnYOKhznwNibvXJLEJVv0i0raUw1nb
-         uIlPuARc/+ilHfbJfezAW0xpkh4WUBGiah11lNQNYU4ma38x2bsNZ3kmch8DdZI7HgTy
-         +blg==
-X-Gm-Message-State: AOJu0Yye6HNSx/bZw4syfOstPutQBI54xOFVr2Na8r0jw1lvFSsiXJwl
-	I5HjadCcUd+KvXY9PPruNB/jmv+rBFOIgbzC0OoRNIzKVulcJTqd
-X-Google-Smtp-Source: AGHT+IGrZ43dFsSf1oXRfFhDyUEbMelY1yUpJ6vWQT2e5OX9RXYowqCdG3NCRWl/26k52BknG9OXZg==
-X-Received: by 2002:a05:6a20:4997:b0:19b:6424:cd7d with SMTP id fs23-20020a056a20499700b0019b6424cd7dmr1291291pzb.27.1706706851699;
-        Wed, 31 Jan 2024 05:14:11 -0800 (PST)
+        bh=MD6YCJseT7Z8Ach4Jqdsb6hrlt+6cO4c5ma7tx+4HwE=;
+        b=ZR+43PUGVdNpj8J0y/QNIZ/Ul2rp8x38MQY/TxQF/z/lUQvk4TxsXPuXf0CXYSlsrK
+         iZSQSvmcXu8uvOSgnWY1i8M/cB+l74Qd8jQOgqJ65wEcdokEmO5XbGE1VHldB6PvsH6i
+         lAs2sA6zOyOQrYRnYiFI82FFrQKcEib4QAarBIpkLHIfoKzmpYTyZvxWMHfS36idjRRV
+         nlNH9y2UHpNck7NE3wNvgtlLbYdg1dUG8BJApUX2+clOkpRfyNYKw24YWJT8L8vpoQVW
+         AFOmsGyqGBJ8NirehWOMmVGLzkmQeKnpGFmFslTn0e81k0Lk4GRTZAayS19UKEWNxbDB
+         2yDA==
+X-Gm-Message-State: AOJu0Yzd9rzat2zHAVky+fMRAxxx4j4wUArdE5JGAWN7sN72tZCGfq7/
+	X4oddZiKiA9DCC3Aw/mNnyhIzUVNw07TxTTTyyjl0gk8YB6skQMy
+X-Google-Smtp-Source: AGHT+IH94B9t+SXxYqXc1gbnAmIbR/323RWPyZTqnDV6fuxYFFCORSLA6qKwxUnFVZ8L6JAiGwE15A==
+X-Received: by 2002:a17:90b:188d:b0:28f:fa9d:ebdf with SMTP id mn13-20020a17090b188d00b0028ffa9debdfmr4518600pjb.3.1706707012810;
+        Wed, 31 Jan 2024 05:16:52 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o15-20020a63e34f000000b005c2420fb198sm10464784pgj.37.2024.01.31.05.14.09
+        by smtp.gmail.com with ESMTPSA id r8-20020a170902be0800b001d7405022ecsm9009768pls.159.2024.01.31.05.16.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Jan 2024 05:14:10 -0800 (PST)
+        Wed, 31 Jan 2024 05:16:52 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <247dcdfa-3761-4745-bdc8-88edf8cd06ea@roeck-us.net>
-Date: Wed, 31 Jan 2024 05:14:08 -0800
+Message-ID: <4ea02224-e9fa-4ee9-9210-bc7a7ae9e86b@roeck-us.net>
+Date: Wed, 31 Jan 2024 05:16:50 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -80,8 +80,8 @@ User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 04/11] watchdog: rzg2l_wdt: Check return status of
  pm_runtime_put()
 Content-Language: en-US
-To: Biju Das <biju.das.jz@bp.renesas.com>,
- "Claudiu.Beznea" <claudiu.beznea@tuxon.dev>,
+To: claudiu beznea <claudiu.beznea@tuxon.dev>,
+ Biju Das <biju.das.jz@bp.renesas.com>,
  "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
  "robh+dt@kernel.org" <robh+dt@kernel.org>,
  "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
@@ -102,6 +102,7 @@ References: <20240131102017.1841495-1-claudiu.beznea.uj@bp.renesas.com>
  <TYCPR01MB11269AD7463C9C7C0A09A43A9867C2@TYCPR01MB11269.jpnprd01.prod.outlook.com>
  <ddc0b42c-bf88-4c0d-b938-8bd7ff7b329a@tuxon.dev>
  <TYCPR01MB11269BFC2DB457049A2B8C0C8867C2@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+ <12f458b1-f963-43f4-afcf-715abf635e54@tuxon.dev>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -146,94 +147,101 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <TYCPR01MB11269BFC2DB457049A2B8C0C8867C2@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+In-Reply-To: <12f458b1-f963-43f4-afcf-715abf635e54@tuxon.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/31/24 02:41, Biju Das wrote:
-> Hi Claudiu,
+On 1/31/24 03:00, claudiu beznea wrote:
 > 
->> -----Original Message-----
->> From: claudiu beznea <claudiu.beznea@tuxon.dev>
->> Sent: Wednesday, January 31, 2024 10:36 AM
->> Subject: Re: [PATCH v2 04/11] watchdog: rzg2l_wdt: Check return status of
->> pm_runtime_put()
->>
->> Hi, Biju,
->>
->> On 31.01.2024 12:32, Biju Das wrote:
->>> Hi Claudiu,
->>>
->>> Thanks for the feedback.
->>>
->>>> -----Original Message-----
->>>> From: Claudiu <claudiu.beznea@tuxon.dev>
->>>> Sent: Wednesday, January 31, 2024 10:20 AM
->>>> Subject: [PATCH v2 04/11] watchdog: rzg2l_wdt: Check return status of
->>>> pm_runtime_put()
->>>>
->>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>>>
->>>> pm_runtime_put() may return an error code. Check its return status.
->>>>
->>>> Along with it the rzg2l_wdt_set_timeout() function was updated to
->>>> propagate the result of rzg2l_wdt_stop() to its caller.
->>>>
->>>> Fixes: 2cbc5cd0b55f ("watchdog: Add Watchdog Timer driver for
->>>> RZ/G2L")
->>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>>> ---
->>>>
->>>> Changes in v2:
->>>> - propagate the return code of rzg2l_wdt_stop() to it's callers
->>>>
->>>>   drivers/watchdog/rzg2l_wdt.c | 11 +++++++++--
->>>>   1 file changed, 9 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/watchdog/rzg2l_wdt.c
->>>> b/drivers/watchdog/rzg2l_wdt.c index d87d4f50180c..7bce093316c4
->>>> 100644
->>>> --- a/drivers/watchdog/rzg2l_wdt.c
->>>> +++ b/drivers/watchdog/rzg2l_wdt.c
->>>> @@ -144,9 +144,13 @@ static int rzg2l_wdt_start(struct
->>>> watchdog_device
->>>> *wdev)  static int rzg2l_wdt_stop(struct watchdog_device *wdev)  {
->>>>   	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
->>>> +	int ret;
->>>>
->>>>   	rzg2l_wdt_reset(priv);
->>>> -	pm_runtime_put(wdev->parent);
->>>> +
->>>> +	ret = pm_runtime_put(wdev->parent);
->>>> +	if (ret < 0)
->>>> +		return ret;
->>>
->>> Do we need to check the return code? So far we didn't hit this
->> condition.
->>> If you are planning to do it, then just
->>>
->>> return pm_runtime_put(wdev->parent);
->>
->> pm_runtime_put() may return 1 if the device is suspended (which is not
->> considered error) as explained here:
 > 
-> Oops, I missed that discussion. Out of curiosity,
-> What watchdog framework/consumer is going to do with a
-> Non-error return value of 1?
+> On 31.01.2024 12:41, Biju Das wrote:
+>> Hi Claudiu,
+>>
+>>> -----Original Message-----
+>>> From: claudiu beznea <claudiu.beznea@tuxon.dev>
+>>> Sent: Wednesday, January 31, 2024 10:36 AM
+>>> Subject: Re: [PATCH v2 04/11] watchdog: rzg2l_wdt: Check return status of
+>>> pm_runtime_put()
+>>>
+>>> Hi, Biju,
+>>>
+>>> On 31.01.2024 12:32, Biju Das wrote:
+>>>> Hi Claudiu,
+>>>>
+>>>> Thanks for the feedback.
+>>>>
+>>>>> -----Original Message-----
+>>>>> From: Claudiu <claudiu.beznea@tuxon.dev>
+>>>>> Sent: Wednesday, January 31, 2024 10:20 AM
+>>>>> Subject: [PATCH v2 04/11] watchdog: rzg2l_wdt: Check return status of
+>>>>> pm_runtime_put()
+>>>>>
+>>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>>>
+>>>>> pm_runtime_put() may return an error code. Check its return status.
+>>>>>
+>>>>> Along with it the rzg2l_wdt_set_timeout() function was updated to
+>>>>> propagate the result of rzg2l_wdt_stop() to its caller.
+>>>>>
+>>>>> Fixes: 2cbc5cd0b55f ("watchdog: Add Watchdog Timer driver for
+>>>>> RZ/G2L")
+>>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>>> ---
+>>>>>
+>>>>> Changes in v2:
+>>>>> - propagate the return code of rzg2l_wdt_stop() to it's callers
+>>>>>
+>>>>>   drivers/watchdog/rzg2l_wdt.c | 11 +++++++++--
+>>>>>   1 file changed, 9 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/watchdog/rzg2l_wdt.c
+>>>>> b/drivers/watchdog/rzg2l_wdt.c index d87d4f50180c..7bce093316c4
+>>>>> 100644
+>>>>> --- a/drivers/watchdog/rzg2l_wdt.c
+>>>>> +++ b/drivers/watchdog/rzg2l_wdt.c
+>>>>> @@ -144,9 +144,13 @@ static int rzg2l_wdt_start(struct
+>>>>> watchdog_device
+>>>>> *wdev)  static int rzg2l_wdt_stop(struct watchdog_device *wdev)  {
+>>>>>   	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
+>>>>> +	int ret;
+>>>>>
+>>>>>   	rzg2l_wdt_reset(priv);
+>>>>> -	pm_runtime_put(wdev->parent);
+>>>>> +
+>>>>> +	ret = pm_runtime_put(wdev->parent);
+>>>>> +	if (ret < 0)
+>>>>> +		return ret;
+>>>>
+>>>> Do we need to check the return code? So far we didn't hit this
+>>> condition.
+>>>> If you are planning to do it, then just
+>>>>
+>>>> return pm_runtime_put(wdev->parent);
+>>>
+>>> pm_runtime_put() may return 1 if the device is suspended (which is not
+>>> considered error) as explained here:
+>>
+>> Oops, I missed that discussion. Out of curiosity,
+>> What watchdog framework/consumer is going to do with a
+>> Non-error return value of 1?
+> 
+> Looking at this:
+> https://elixir.bootlin.com/linux/latest/source/drivers/watchdog/watchdog_dev.c#L809
+> 
+> it seems that the positive values are not considered errors thus, indeed,
+> we may return directly:
+> 
+> return pm_runtime_put();
+> 
+> Guenter,
+> 
+> With this (and previous discussion from [1]), are you OK to change it like:
+> 
+> return pm_runtime_put();
 > 
 
-You mean what the watchdog subsystem does if a driver violates its API ?
-That is undefined. The API says:
+Instead of looking at the source, I would kindly ask you to look at the API.
 
-* start: this is a pointer to the routine that starts the watchdog timer
-   device.
-   The routine needs a pointer to the watchdog timer device structure as a
-   parameter. It returns zero on success or a negative errno code for failure.
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-We are not going to change the API, if that is what you are suggesting.
-
-Thanks,
 Guenter
 
 
