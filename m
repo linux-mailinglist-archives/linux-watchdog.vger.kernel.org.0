@@ -1,173 +1,224 @@
-Return-Path: <linux-watchdog+bounces-546-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-547-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EC42843C8A
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 11:28:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B245843CC7
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 11:32:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F5501F30B61
-	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 10:28:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5F992847E7
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 10:32:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 341F56DD1F;
-	Wed, 31 Jan 2024 10:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4F3867E7A;
+	Wed, 31 Jan 2024 10:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="gjF2iIng"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAF226DD00;
-	Wed, 31 Jan 2024 10:27:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706696831; cv=none; b=YvKIxNo5LwYmHOrLCktWOlhZaAI735V5s6/sx89qrjcqYjZ1cWWmXGN2zqN224R0x2v1SDPJ8gqcmaCvUdtPOQpMuM3yeSqX8lHcwcAlPkvLMbCb/K6BOEQ0bQSSorqhOG/5z8NRG6KHxNftoVQKzaiKp+XT7eQcdLHVInRcBp8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706696831; c=relaxed/simple;
-	bh=3tOOKEFDglSKDgxDOhWsj9U4KNMdCRxM9r4EgNb2MZI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mABcI/vTZJa3PxRaQDQDYNYspBNJJYNfYD0AAJHEDM415M6EJI5ycoquGvZ8x3dnqZqT/EV3G+nqT2q/1eR6nN6BhNgTusNbeRtTK6J3Wp5gHYe26ai7NJYIdBPSSiTDbJqSlXfCgkg7JU8HZPS9cVyS+VIicU1d7ddd150fVao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2113.outbound.protection.outlook.com [40.107.114.113])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A5B55785;
+	Wed, 31 Jan 2024 10:32:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.114.113
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706697163; cv=fail; b=sxIMZsVEOpU7zIlefbr2POMZOkdmaewQAM40/qBpCpufIjVHvkbP6Di5DsDlnLhDNBbylCGC/ayDXczg527awyPZ/7G98YDsRX+fhXWmENkCOLfodbRIQ7aP2eiLgOwpARuyKTSd+z1wyH7zpl+KA6cql2BT6K9Csyq3CvrMN0I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706697163; c=relaxed/simple;
+	bh=lXaaWmSVdC2n7xFiY0OYy6AiDIW9bU4gZTblx70q9TM=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=sXTMCbG9hHGm08olI4C8xwN+jXJzYjUsu5WApGd1oeG6WhusUqPppfDJJ084LXH/vSH9KPbTqzNNDdC9PhOP9ktUZvD8omZH1xVa5xSlUcRaxSVf9dN3UZa58lvoGAYqRPphEqwSYNyxwKGes3MM1AiCubkPICwRLBR0rRz7meg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=gjF2iIng; arc=fail smtp.client-ip=40.107.114.113
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-IronPort-AV: E=Sophos;i="6.05,231,1701097200"; 
-   d="scan'208";a="192377752"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 31 Jan 2024 19:27:06 +0900
-Received: from localhost.localdomain (unknown [10.226.92.227])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 8E50F41DF0AB;
-	Wed, 31 Jan 2024 19:26:59 +0900 (JST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I7BVdBZ/WiBA7QE//oyMcRl92T+VEljk9BS/mXKGYmb/dIIWQVOHDksJnAtg/uYdkZo0yErGgIF0vykPV6CB11gLjuVW1lX7ScsxWDvbhgKVMeJjef/CLEXS128p6VbqwmAesgGrQaaY/llKlw8y3mrox9zQWv1bdoWlvs4pDjuXG0egpqPqafxkNd7edxynTtusa2hZEuhnnga/NNoCa7OAn+ym/6FxApd7RGrYzm9m/p8dhvhZ3rzRh7heDNFMMZDYaAQtd+igNROJ/vVqgIej6uYJvXaVuaoe+ROgz0/EYmJEiPTSch6M4LZQyGl5IsNUYCd5Fpig1GEcyrmMvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cVrHWtTAF4b4ZhQDsOAefrD6HfGEu4JHO732nhYOMTI=;
+ b=O5/1bV6CfEQHlq6gpsR/RnonjRyphs96FXi7BVaGd1bxsA+jr+c3oi5RhOP7nPFeWP5+eiYSpZjdyI+SVnYa8oPYGpGnKtoWeBamE1ZmFb+AagU/VYTUQtQS843A8jW1VzOB7EB2OzdcQw0qb7C18JcRvDjabxzifDPzwtv2TJYbJhVDVgaQjXXGULp7iG9wSExzP4qEW/k5UTUcAn0IVOoDymicHGrE8CcpgnBWsQg8g/IIHBJOFEFDTzu33IodWVKCVRxl0qk9AnV2oygl7Zhq4OG8t2+LtEficRgpAyxtLDM5PkExMTtJrF7WW+ecK+JG8HYRI8A5J4MY6WHVHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cVrHWtTAF4b4ZhQDsOAefrD6HfGEu4JHO732nhYOMTI=;
+ b=gjF2iIngNbGg4qQVGHcaJ4VNq9PWP9neRAZ79s6L9Oqc17xU3nzr0neXyGBRb1D+wSLS8N3Hxqgy40XF0Vo5uZxvO8/JlL46+AoxVlK9mO4agdc/jrezmfmYXTqTX70yS5ZR0i57W5PLIlvaGjmHEpVT/TDjPc66QnH6jcEYs70=
+Received: from TYCPR01MB11269.jpnprd01.prod.outlook.com
+ (2603:1096:400:3c0::10) by TYYPR01MB10595.jpnprd01.prod.outlook.com
+ (2603:1096:400:30a::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.22; Wed, 31 Jan
+ 2024 10:32:37 +0000
+Received: from TYCPR01MB11269.jpnprd01.prod.outlook.com
+ ([fe80::8d12:a02a:9fdc:9c78]) by TYCPR01MB11269.jpnprd01.prod.outlook.com
+ ([fe80::8d12:a02a:9fdc:9c78%5]) with mapi id 15.20.7249.023; Wed, 31 Jan 2024
+ 10:32:37 +0000
 From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Lee Jones <lee@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: Biju Das <biju.das.jz@bp.renesas.com>,
-	Support Opensource <support.opensource@diasemi.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Steve Twiss <stwiss.opensource@diasemi.com>,
-	linux-input@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>,
-	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v6 RESEND 0/6] Convert DA906{1,2} bindings to json-schema
-Date: Wed, 31 Jan 2024 10:26:50 +0000
-Message-Id: <20240131102656.3379-1-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.39.2
+To: Claudiu.Beznea <claudiu.beznea@tuxon.dev>, "wim@linux-watchdog.org"
+	<wim@linux-watchdog.org>, "linux@roeck-us.net" <linux@roeck-us.net>,
+	"robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>, "geert+renesas@glider.be"
+	<geert+renesas@glider.be>, "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
+	"mturquette@baylibre.com" <mturquette@baylibre.com>, "sboyd@kernel.org"
+	<sboyd@kernel.org>, "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
+CC: "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>, Claudiu.Beznea
+	<claudiu.beznea@tuxon.dev>, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: RE: [PATCH v2 04/11] watchdog: rzg2l_wdt: Check return status of
+ pm_runtime_put()
+Thread-Topic: [PATCH v2 04/11] watchdog: rzg2l_wdt: Check return status of
+ pm_runtime_put()
+Thread-Index: AQHaVC8iXcXSbumPXUOI0ciCmgv5kLDzuJVQ
+Date: Wed, 31 Jan 2024 10:32:37 +0000
+Message-ID:
+ <TYCPR01MB11269AD7463C9C7C0A09A43A9867C2@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+References: <20240131102017.1841495-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240131102017.1841495-5-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240131102017.1841495-5-claudiu.beznea.uj@bp.renesas.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYCPR01MB11269:EE_|TYYPR01MB10595:EE_
+x-ms-office365-filtering-correlation-id: ee248fe1-459c-4081-0e76-08dc2247f19f
+x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ buu0K786TbU/bsHp5Rx7ICxBAIytfhZu6f6adDwK7VNd9JW9oaAbEgFJtNGHBN2+Tqgg2EmX7nIbizsQI5fJzPjAAfg7TFBN1EOb5XdB07nJFSGQOmeDf58WhJ0MuXOZoPZcBjFK677I5z/x+osR2iX2p5DbRMW8CthcFlkyGQE5XR3IKLcuV/b/62Pl+oFVullVeRGYTW/nS9pvJFniBL/9XCk0bG5RqwFXSfno/d3BACP7Fd7TwskC6OQ9zM6MnJ2hCLygJvwjxCjechF01Qa6Zsf9AJrXR5CGk9TmEjxWjfufhp1Hf0OwS0TmyKqspS+405o1w8Lufk89w+tuMp74TTWKy0nA9xiaL2HzqJkLIsQt379YemyerbNQPevk5RutIoVudhNbFi9A8tiP0gpVdyHUoDaQ1vF57aueQHsUQX8D3Nmx+YrAamRJw8RwgoLXWu6Tn1rC3M0hWe3Cz+Dm1Jd627xcnvdKG+cW3FVehDtEqaVrQuIA8a19Bkr5xJt8juiGHzA4Wrf9SRABTUxf2V4l60Yoi8tWe7qLedqguhhuy+YzJspg2MGdVTRinPxMIaTs6BP34AJc/Q87ny4B0gxGzpI6hMTwfwIi3oj3uUzBl45CLU446RdYW68x9VeITo3ggtFWUOkIKOH0XQ==
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB11269.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(136003)(396003)(366004)(346002)(376002)(230922051799003)(186009)(451199024)(1800799012)(64100799003)(8936002)(2906002)(5660300002)(7416002)(26005)(4326008)(33656002)(8676002)(107886003)(55016003)(122000001)(38100700002)(86362001)(41300700001)(83380400001)(7696005)(110136005)(9686003)(66446008)(66946007)(76116006)(38070700009)(66476007)(64756008)(66556008)(54906003)(316002)(53546011)(921011)(52536014)(6506007)(71200400001)(478600001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?HaUhnPIPrvWifMn2W8IplW5mCkhT1d04VxhCzHVMfc8I6TDeFcDq5eCGkAT2?=
+ =?us-ascii?Q?V9PQLHNlD18gGs10SWqdh1eBiRviJyfucItQEUxwlo+h7ZPYKZ0c00ORbk5E?=
+ =?us-ascii?Q?dmJUHgaVN6FXBHAlFnhCW+G0jtavmTpol3M1wS/UYuoRdN8zaRko3holo1pR?=
+ =?us-ascii?Q?C0SRnfgd583nTQcUtyUhTzUEsRTzmeEsCn52AXYHQM5axix/glRTo0+3Yov/?=
+ =?us-ascii?Q?omlF7dRjQsATZL5J27sI4GI+65qAFj1FiO1OtthfzAgFuufVjIpWl+9RjzGE?=
+ =?us-ascii?Q?0ctUkyuIDi3OFCUnwvFoyx0cX2mp6gV+zGsnOmlwW05+meVelwwtCbcgt7EY?=
+ =?us-ascii?Q?A2aI66eOGDUYV4HhupJKcEEcUW6VLEJlFyC9ayLYkq3bYGxSF5g6VKpZheYe?=
+ =?us-ascii?Q?iqqugJEhw2c8UC9Cv8B/pj02FArMYPuVKvTXgRKTqsASxl5wx1TJmBLqIQvI?=
+ =?us-ascii?Q?liBYvagF7VMSWAC3nVRKxLhh4j2TR10y3w7kQ/faXs7G/uGNIqdPoNcgCesn?=
+ =?us-ascii?Q?WGUN7J8lL9Xdqz3bpydoGhflYW4hmh7eEtFzwJFVua6LV5b+A7ipNTNiqhFl?=
+ =?us-ascii?Q?6ZBuro51W06l2nFnC1Y8edvA0klxU4TK3bcdNjZZmk4VrmMsik/E3Xpkbui1?=
+ =?us-ascii?Q?Go/ZKBr851y0HE/2bqLJC2iAiS1rO40wXeVOxB+GeWUaOq6AYTE/AgXGS+MI?=
+ =?us-ascii?Q?SX/t8XRw5t2Mgcshyv2irFkhFN9SwWdcQesyca1vLUEaIbUd4HtNJpF4ZdOF?=
+ =?us-ascii?Q?AElPfHpD1pgleXrCsuiR2PpyiZYUiQCxDwo6fwzTmKWiwjqXLt1P7dVqcb3W?=
+ =?us-ascii?Q?5onlIAvL00eC4oyj0lXCvXZREoR47kxtdNHgU4FUHobw1IEp1InZNS8Um5et?=
+ =?us-ascii?Q?qyYmXlQ54RmxAXSwmKFHiNuy6mNwDguf1wk+N1cSCBYu5D422IB04o5nnZ67?=
+ =?us-ascii?Q?Srqam2v0yZM8xDk9Q9WxpfQDz1fh2mIuB3QO/MPBXfOM8o8aCYf8rCa7wzi1?=
+ =?us-ascii?Q?I0Aj8JlhTCF2lLFh+s+2xxy0/3CFnjrosKMMkeCqhYWGBGYBBMRyMjzbaKOn?=
+ =?us-ascii?Q?6hdY29o/dfJqz3+RijsPOl6BgxQP2iTsydouPmoRCtW/Eq8bAgTI3PxRyeq8?=
+ =?us-ascii?Q?eh8A9+rI9Q6E+ms5YsySQo2bwcUT40roij2s0YlEzSSCaZ9gKhir1bC2aemU?=
+ =?us-ascii?Q?gFDMn133L/H7zu+gkYbqUQk1AqKpyGeQEuyT1HopHfDgAbdvr+HF7F8bRG5U?=
+ =?us-ascii?Q?Ng45ADliSfM9TXl8h97jRBFQaqb9HqUTtkwYCBCTZg2dtU6L3IN6HqBbP99N?=
+ =?us-ascii?Q?zzgTyBeUphB7/45Ciw6Mmf7Cc8/lQ8zHcffQ1DonpQyRT4h6fgSxqPHDwd4J?=
+ =?us-ascii?Q?DQBwJTWUlLxRaxfYcUunvHXWlSlpAwjTUklHrONCJNiV4nV6kF1FOZUkR1e6?=
+ =?us-ascii?Q?HQaKqtuQlFr0IXGgbkE4u2G4a3M/ZZ94/5uY5iSG10GbtAFp4mKVZaN9oHRi?=
+ =?us-ascii?Q?IJNKPnScG3b0vL84gc/XAjBg+vCpfvzPxG+XQvzmTSlUstaQh6CNR7Nq/2ls?=
+ =?us-ascii?Q?dUHl01mWRPUgf2qv0PSy8/SYm/ZRWkiQDKYhANekctQ/C8q7tjOpIMH3oTN9?=
+ =?us-ascii?Q?VA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB11269.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee248fe1-459c-4081-0e76-08dc2247f19f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2024 10:32:37.1240
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 84JPnMe2MCSMQP6dhlEt5CCkhLJRTmBErtkJXSO39MmJ9C5KKnr73CoRW1/cYNPfUaDxV2I5IMevIiwD7KvhpfNe3M/2Jg2UG1AXEuO/RJ8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYPR01MB10595
 
-Convert the below bindings to json-schema
-1) DA906{1,2} mfd bindings
-2) DA906{1,2,3} onkey bindings
-3) DA906{1,2,3} thermal bindings
+Hi Claudiu,
 
-Document missing gpio child node for da9062 and update MAINTAINERS entries.
+Thanks for the feedback.
 
-Merge strategy:
-Since there is binding dependency between input, thermal and MFD
-subsystem. it is decided that this series will go through the MFD tree.
-So once the respective subsystem maintainers, DT and Renesas are happy
-with the patch they can give an ack/rb tag, so that it can be applied to
-MFD tree.
+> -----Original Message-----
+> From: Claudiu <claudiu.beznea@tuxon.dev>
+> Sent: Wednesday, January 31, 2024 10:20 AM
+> Subject: [PATCH v2 04/11] watchdog: rzg2l_wdt: Check return status of
+> pm_runtime_put()
+>=20
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>=20
+> pm_runtime_put() may return an error code. Check its return status.
+>=20
+> Along with it the rzg2l_wdt_set_timeout() function was updated to
+> propagate the result of rzg2l_wdt_stop() to its caller.
+>=20
+> Fixes: 2cbc5cd0b55f ("watchdog: Add Watchdog Timer driver for RZ/G2L")
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> ---
+>=20
+> Changes in v2:
+> - propagate the return code of rzg2l_wdt_stop() to it's callers
+>=20
+>  drivers/watchdog/rzg2l_wdt.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
+> index d87d4f50180c..7bce093316c4 100644
+> --- a/drivers/watchdog/rzg2l_wdt.c
+> +++ b/drivers/watchdog/rzg2l_wdt.c
+> @@ -144,9 +144,13 @@ static int rzg2l_wdt_start(struct watchdog_device
+> *wdev)  static int rzg2l_wdt_stop(struct watchdog_device *wdev)  {
+>  	struct rzg2l_wdt_priv *priv =3D watchdog_get_drvdata(wdev);
+> +	int ret;
+>=20
+>  	rzg2l_wdt_reset(priv);
+> -	pm_runtime_put(wdev->parent);
+> +
+> +	ret =3D pm_runtime_put(wdev->parent);
+> +	if (ret < 0)
+> +		return ret;
 
-v6->v6 Resend:
- * Dropped Patch#2 and patch#3 from this series as it hits mainline.
- * Added Ack from Lee Jones for all the patches.
- * Fixed merge conflict on MAINTAINERS file for patch#1
- * Added Rb tag from Conor for patch#6.
-v5->v6:
- * Added Rb tag from Guenter Roeck for watchdog binding patches.
- * Updated commit description related to "gpio-controller" and
-   "#gpio-cells" properties defined in parent node.
- * Added Rb tag from Krzysztof Kozlowski for patch#8.
-v4->v5:
- * Updated cover letter with merging strategy.
- * Added fixes tag for patch#1
- * Added Rb tags from Geert and Krzysztof for patch#1
- * Added Ack from Conor for patch#1
- * Added Rb tag from Geert and Ack from Conor for patch#2
- * Drop items and just use enum as it is easier to read for compatibles.
- * Retained the tags for patch#2 as it is trivial change.
- * Added Rb tag from Geert for patch#3
- * Updated commit header and description by replacing
-   'watchdog property'->'watchdog child node'
- * Added Rb tag from Geert for patch#4.
- * Added Rb tag from Krzysztof and Conor for patch#5
- * Dropped Items, Just enum as it is easier to read compatibles.
- * Retained tags for patch#5 as the changes are trivial.
- * Updated commit description for patch#8
- * Dropped unnecessary ref from gpio child node.
- * Added gpio-hog pattern property
- * Moved gpio-controller,gpio-cells above child nodes
- * Sorted compatible in rtc child node.
- * Dropped status from example.
- * Updated the example.
-v3->v4:
- * Patch#1 is merge of patch#1 from v2 + patch#8 from v2.
- * Dropped comment for d9061 watchdog fallback
- * Replaced enum->const for dlg,da9061-watchdog and its fallback.
- * Restored patch#4 in series 1 and dropped the thermal example
- * Added Ack from Conor Dooley for da9063 watchdog binding support.
- * Updated title DA9062/61->DA906{1,2,3} as it supports DA9063.
- * Retained Rb tag since the changes are trivial.
- * Added Ack from Conor for updating watchdog property
- * Dropped link to product information.
- * Patch#5(onkey) is squashed with patch#6 and patch#9 from v2.
- * Replaced enum->const for dlg,da9061-onkey and its fallback.
- * Dropped example
- * Restored the thermal binding patch from v2.
- * Dropped example
- * Replaced enum->const for compatible property.
- * Added Rb tag from Rob and retained Rb tag as changes are trivial.
- * Added Ack from Conor Dooley for patch#7.
- * Split the thermal binding patch separate
- * Updated the description
-v2->v3:
- * Updated Maintainer entries for watchdog,onkey and thermal bindings
- * Fixed bot errors related to MAINTAINERS entry, invalid doc
-   references and thermal examples by merging patch#4. 
+Do we need to check the return code? So far we didn't hit this condition.
+If you are planning to do it, then just=20
 
-v1->v2:
- Link: https://lore.kernel.org/all/20231201110840.37408-5-biju.das.jz@bp.renesas.com/
- * DA9062 and DA9061 merged with DA9063
- * Sorted the child devices
- * mfd,onkey and thermal are pointing to child bindings
+return pm_runtime_put(wdev->parent);
 
-Biju Das (6):
-  dt-bindings: mfd: da9062: Update watchdog description
-  dt-bindings: mfd: dlg,da9063: Update watchdog child node
-  dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
-  dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
-  dt-bindings: mfd: dlg,da9063: Sort child devices
-  dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
+Cheers,
+Biju
 
- .../bindings/input/da9062-onkey.txt           |  47 ----
- .../bindings/input/dlg,da9062-onkey.yaml      |  38 +++
- .../devicetree/bindings/mfd/da9062.txt        | 124 ---------
- .../devicetree/bindings/mfd/dlg,da9063.yaml   | 248 +++++++++++++++---
- .../bindings/thermal/da9062-thermal.txt       |  36 ---
- .../bindings/thermal/dlg,da9062-thermal.yaml  |  35 +++
- MAINTAINERS                                   |   6 +-
- 7 files changed, 290 insertions(+), 244 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/input/da9062-onkey.txt
- create mode 100644 Documentation/devicetree/bindings/input/dlg,da9062-onkey.yaml
- delete mode 100644 Documentation/devicetree/bindings/mfd/da9062.txt
- delete mode 100644 Documentation/devicetree/bindings/thermal/da9062-thermal.txt
- create mode 100644 Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml
+>=20
+>  	return 0;
 
--- 
-2.39.2
+
+>  }
+> @@ -163,7 +167,10 @@ static int rzg2l_wdt_set_timeout(struct
+> watchdog_device *wdev, unsigned int time
+>  	 * to reset the module) so that it is updated with new timeout
+> values.
+>  	 */
+>  	if (watchdog_active(wdev)) {
+> -		rzg2l_wdt_stop(wdev);
+> +		ret =3D rzg2l_wdt_stop(wdev);
+> +		if (ret)
+> +			return ret;
+> +
+>  		ret =3D rzg2l_wdt_start(wdev);
+>  	}
+>=20
+> --
+> 2.39.2
 
 
