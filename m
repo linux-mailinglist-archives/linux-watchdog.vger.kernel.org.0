@@ -1,200 +1,137 @@
-Return-Path: <linux-watchdog+bounces-527-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-528-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A93C842DC4
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jan 2024 21:28:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3075A8434C2
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 05:16:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB7971F2623C
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Jan 2024 20:28:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BEA9D286166
+	for <lists+linux-watchdog@lfdr.de>; Wed, 31 Jan 2024 04:16:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B892571B52;
-	Tue, 30 Jan 2024 20:28:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1854115485;
+	Wed, 31 Jan 2024 04:16:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AYnG2/su"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="GE+YHipP"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85D7071B46;
-	Tue, 30 Jan 2024 20:28:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66D2C1642A;
+	Wed, 31 Jan 2024 04:16:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706646481; cv=none; b=up3+V6AHNuG8PxcdWQso8fZil4F0xkg7EPZRtDvyQQ6mL2WIyPjhCkyF4ZJW3hnD2UlPMeLYWcRqyvwVZcWlWi9jmj49P1xl8u2Zt0wPDrpiuEhsqzyxlFw511oLsAIWSj2kN3W09bMKtIIY5CHCjugU3sMraPQdRIM2NoFuYmI=
+	t=1706674578; cv=none; b=CLt1mAeC0zrz8IEEf+/IrYyujl8JhUymBxUdck8+4r66YoroiYW3ZrGG9WVF3w7YRF+HzoT2ExqEZZietpbiRMJKFriugIYAm/uYk9i4D0xgDoLd8JeRyzQ7RF6deet2TQ2FEa6IbKfPz7WLLY+NtrcbrxCFn8if1vFg8Yc+AYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706646481; c=relaxed/simple;
-	bh=f8ZYd/m4g8k5qSL4jcMpv2BFLuBv2/ih8nBsDbbrmcc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q8BwjY3dvAo9VKEb/tKiZ0YkL2yQaS/+djp23vkWxhLztzJ40/38HBVhZcmG02a6kETxeycrCATTYTPNJ1cQUJ/nBPGuFEto7k4XlKvrBoRtXTuAzztCeBxkdhwBtyIlU12GXpVb2CSTqUw6v5pX8elGUl+WFuLVihpnTo1+TRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AYnG2/su; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9175C433C7;
-	Tue, 30 Jan 2024 20:28:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706646481;
-	bh=f8ZYd/m4g8k5qSL4jcMpv2BFLuBv2/ih8nBsDbbrmcc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AYnG2/su8b0tWxPMCgTKFeab0yZ4Gv08nGflRtzlcX9Fe47LS+vYkAKmHACAHfqBY
-	 cYIDpVXCO4L1PCd0TStF+aLdoXC4O1+g/7Dp4gzmxA4XWT0mM9YUumfAVwksJN6Qbi
-	 YkPuu7x0Cq2xaG+ktiLImKtmAZ2D4Tm9EZYNzOefGcu3UxuAx9zF7NUah5pmaGj/+D
-	 Wa2ns5MKD63QvR82EbBZ7rwu8aWJT5WwFoGb9b6PYxQyhCnyMcB6Ui0TkQhO3HNIqo
-	 uswf0ZCCgt/2NIaJC0AqW2t1FD0ghEd+2ICBSKFRoUovNAEf4lJw7S/gb/KPX3lxVj
-	 t42n071vwoNHw==
-Date: Tue, 30 Jan 2024 14:27:58 -0600
-From: Rob Herring <robh@kernel.org>
-To: Saravana Kannan <saravanak@google.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Peter Griffin <peter.griffin@linaro.org>, arnd@arndb.de,
-	krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net,
-	wim@linux-watchdog.org, conor+dt@kernel.org,
-	alim.akhtar@samsung.com, jaewon02.kim@samsung.com,
-	chanho61.park@samsung.com, semen.protsenko@linaro.org,
-	kernel-team@android.com, tudor.ambarus@linaro.org,
-	andre.draszik@linaro.org, willmcvicker@google.com,
-	linux-fsd@tesla.com, linux-watchdog@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 3/9] watchdog: s3c2410_wdt: update to use new
- exynos_pmu_*() apis
-Message-ID: <20240130202758.GA2237959-robh@kernel.org>
-References: <20240122225710.1952066-1-peter.griffin@linaro.org>
- <20240122225710.1952066-4-peter.griffin@linaro.org>
- <da30a68a-e29f-45c8-aa73-02955255a457@linaro.org>
- <CADrjBPor5tMY4r0jOy7GH36auCU7dWn6Qn4ct89bsSMW4vAQOA@mail.gmail.com>
- <6c72a521-1048-42eb-ac74-d8f718a90723@linaro.org>
- <CAGETcx-CCpaV7R0O0HpDpoX6KxQBuJiMmKdWA8nDE-5Qj2Sa7g@mail.gmail.com>
- <f4d3aa5a-e01d-4ef3-8004-b6eac4461184@linaro.org>
- <CAGETcx_HGcuGQTO11tzX0EvnuLEaKYc4vBse1CRP0JwPqMJdQQ@mail.gmail.com>
+	s=arc-20240116; t=1706674578; c=relaxed/simple;
+	bh=7UqosF6/dQF0CDaGJw9WFy6Rab7GGyn/FKeQvoamwG0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=W2SxdBUDJ0W8NAOB9w1KN5kUWNZVIhBqR/t5WGqnMfugpt7VlM/Jv7ptFnGz5mGJ9vJrC8mBHpVNiwA5fzPNBk2kxLTr4zVb5eQu2wB8xy600rT45UPmyXZWkwkGwhuVubmf3qEElU2iRcj70OcW7d5qBf0eQ+1rL62cInTQfkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=GE+YHipP; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40V3HgV2003205;
+	Wed, 31 Jan 2024 04:15:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:date:subject:mime-version:content-type
+	:content-transfer-encoding:message-id:to:cc; s=qcppdkim1; bh=YHv
+	VC7NpPcSbURPZzsXH6yGrnE3u3gKgjl1HSqxfmvs=; b=GE+YHipPs3z6zN8Jval
+	4QievWxeUBiROefQR2p6wiMnGsAS8BPW3XjsvelQ2CTWpXVQjlkMfJavzHHlY/jX
+	4dwYaKVAzK281R0X4SO9dWoZ3g5tdyigd3ymrFjXn2LG2W2c0N2XgSe/kkAKTDjX
+	2kinkER+N4ASUhYWeguBRzCTPzVAenX9HbP/9oKHAvXX6A5170snUfk2adlWqROQ
+	QEF7lkVwmCKYESrYXFqNRhbV88KPhEV9o4TDdHdlIwrB9plR4Mi3urKCSVsyj9dV
+	jEpoK8ayfuOj/fpGa4PlfttDiRsiiIH/9Ouq3gg7Oj/WFJZtezJRqqmIuXur53tH
+	n4A==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vy9nk8kqb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 31 Jan 2024 04:15:56 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40V4FtQD011236
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 31 Jan 2024 04:15:55 GMT
+Received: from [10.213.108.6] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 30 Jan
+ 2024 20:15:52 -0800
+From: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+Date: Wed, 31 Jan 2024 09:45:40 +0530
+Subject: [PATCH] watchdog: qcom: Start the watchdog in probe
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGETcx_HGcuGQTO11tzX0EvnuLEaKYc4vBse1CRP0JwPqMJdQQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20240131-qcom-wdt-start-probe-v1-1-bee0a86e2bba@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAGzJuWUC/x3MTQ5AMBBA4avIrE3S+o+riEXpYBaUaYNE3F1j+
+ S3ee8CTMHlokweETvbstgidJjAuZpsJ2UZDprJC6VzjMboVLxvQByMBd3ED4dCQKitlaKotxHQ
+ Xmvj+t13/vh/luDHAZgAAAA==
+To: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Mukesh Ojha <quic_mojha@quicinc.com>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+X-Mailer: b4 0.13-dev-83828
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 9Nd7n9wQmaiUB0aaaei3Bi1dxvZV-N77
+X-Proofpoint-ORIG-GUID: 9Nd7n9wQmaiUB0aaaei3Bi1dxvZV-N77
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-30_14,2024-01-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 spamscore=0
+ mlxscore=0 malwarescore=0 suspectscore=0 mlxlogscore=993 clxscore=1011
+ adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401190000 definitions=main-2401310032
 
-On Wed, Jan 24, 2024 at 01:27:01PM -0800, Saravana Kannan wrote:
-> On Tue, Jan 23, 2024 at 10:27 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> >
-> > On 24/01/2024 04:37, Saravana Kannan wrote:
-> > > On Tue, Jan 23, 2024 at 10:12 AM Krzysztof Kozlowski
-> > > <krzysztof.kozlowski@linaro.org> wrote:
-> > >>
-> > >> On 23/01/2024 18:30, Peter Griffin wrote:
-> > >>>>>               dev_warn(wdt->dev, "Couldn't get RST_STAT register\n");
-> > >>>>>       else if (rst_stat & BIT(wdt->drv_data->rst_stat_bit))
-> > >>>>> @@ -698,14 +699,6 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
-> > >>>>>       if (ret)
-> > >>>>>               return ret;
-> > >>>>>
-> > >>>>> -     if (wdt->drv_data->quirks & QUIRKS_HAVE_PMUREG) {
-> > >>>>> -             wdt->pmureg = syscon_regmap_lookup_by_phandle(dev->of_node,
-> > >>>>> -                                             "samsung,syscon-phandle");
-> > >>>>> -             if (IS_ERR(wdt->pmureg))
-> > >>>>> -                     return dev_err_probe(dev, PTR_ERR(wdt->pmureg),
-> > >>>>> -                                          "syscon regmap lookup failed.\n");
-> > >>>>
-> > >>>>
-> > >>>> Continuing topic from the binding: I don't see how you handle probe
-> > >>>> deferral, suspend ordering.
-> > >>>
-> > >>> The current implementation is simply relying on exynos-pmu being
-> > >>> postcore_initcall level.
-> > >>>
-> > >>> I was just looking around for any existing Linux APIs that could be a
-> > >>> more robust solution. It looks like
-> > >>>
-> > >>> of_parse_phandle()
-> > >>> and
-> > >>> of_find_device_by_node();
-> > >>>
-> > >>> Are often used to solve this type of probe deferral issue between
-> > >>> devices. Is that what you would recommend using? Or is there something
-> > >>> even better?
-> > >>
-> > >> I think you should keep the phandle and then set device link based on
-> > >> of_find_device_by_node(). This would actually improve the code, because
-> > >> syscon_regmap_lookup_by_phandle() does not create device links.
-> > >
-> > > I kinda agree with this. Just because we no longer use a syscon API to
-> > > find the PMU register address doesn't mean the WDT doesn't depend on
-> > > the PMU.
-> > >
-> > > However, I think we should move to a generic "syscon" property. Then I
-> > > can add support for "syscon" property to fw_devlink and then things
-> > > will just work in terms of probe ordering, suspend/resume and also
-> > > showing the dependency in DT even if you don't use the syscon APIs.
-> > >
-> > > Side note 1:
-> > >
-> > > I think we really should officially document a generic syscon DT
-> > > property similar to how we have a generic "clocks" or "dmas" property.
-> > > Then we can have a syscon_get_regmap() that's like so:
+When CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is enabled, kernel can pet the
+watchdog until user space takes over. Make use of this feature and
+start the watchdog in probe.
 
-The difference is we know what to do with clocks, dma, etc. The only 
-thing we know from "syscon" is it's random register bits.
+Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+---
+ drivers/watchdog/qcom-wdt.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-> > >
-> > > struct regmap *syscon_get_regmap(struct device *dev)
-> > > {
-> > >         return syscon_regmap_lookup_by_phandle(dev->of_node, "syscon");
-> > > }
-> > >
-> > > Instead of every device defining its own bespoke DT property to do the
-> > > exact same thing. I did a quick "back of the envelope" grep on this
-> > > and I get about 143 unique properties just to get the syscon regmap.
-> > > $ git grep -A1 syscon_regmap_lookup_by_phandle | grep '"' | sed -e
-> > > 's/^[^"]*//' -e 's/"[^"]*$/"/' | sort | uniq | wc -l
-> > > 143
-> >
-> > Sorry, generic "syscon" property won't fly with DT maintainers, because
-> > there is no such thing as syscon in any of hardware.
-> 
-> Then why do we allow a "syscon" compatible string and nodes? If the
-> "syscon" property isn't clear enough, we can make it something like
-> gpios and have it be <whatever>-syscon or have syscon-names property
-> if you want to give it a name.
+diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
+index 9e790f0c2096..4fb5dbf5faee 100644
+--- a/drivers/watchdog/qcom-wdt.c
++++ b/drivers/watchdog/qcom-wdt.c
+@@ -276,12 +276,16 @@ static int qcom_wdt_probe(struct platform_device *pdev)
+ 	watchdog_init_timeout(&wdt->wdd, 0, dev);
+ 
+ 	/*
++	 * Kernel can pet the watchdog until user space takes over.
++	 * Start the watchdog here to make use of this feature.
++	 *
+ 	 * If WDT is already running, call WDT start which
+ 	 * will stop the WDT, set timeouts as bootloader
+ 	 * might use different ones and set running bit
+ 	 * to inform the WDT subsystem to ping the WDT
+ 	 */
+-	if (qcom_wdt_is_running(&wdt->wdd)) {
++	if (IS_ENABLED(CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED) ||
++	    qcom_wdt_is_running(&wdt->wdd)) {
+ 		qcom_wdt_start(&wdt->wdd);
+ 		set_bit(WDOG_HW_RUNNING, &wdt->wdd.status);
+ 	}
 
-I'm pretty hesistant to expand anything syscon related. Really, I'd like 
-to get rid of "syscon" compatible. It's just a hint to create a regmap.
+---
+base-commit: 41bccc98fb7931d63d03f326a746ac4d429c1dd3
+change-id: 20240131-qcom-wdt-start-probe-b8e0560aef7d
 
-> 143 bespoke properties all to say "here are some registers I need to
-> twiddle that's outside my regmap" doesn't seem great.
+Best regards,
+-- 
+Pavankumar Kondeti <quic_pkondeti@quicinc.com>
 
-I wonder how many aren't outside of the node's main registers, but are 
-the only registers. That's quite common, but that would have largely 
-been before we started saying to make those a child node of the syscon.
-
-Changing wouldn't do anything to get rid of the bespoke strings. It just 
-shifts them from property names to property name prefix or -names 
-string.
-
-> 
-> > >
-> > > Side note 2:
-> > >
-> > > How are we making sure that it's the exynos-pmu driver that ends up
-> > > probing the PMU and not the generic syscon driver? Both of these are
-> > > platform drivers. And the exynos PMU device lists both the exynos
-> > > compatible string and the syscon property. Is it purely a link order
-> > > coincidence?
-> >
-> > initcall ordering
-> 
-> Both these drivers usr postcore_initcall(). So it's purely because
-> soc/ is listed earlier in drivers/Makefile than mfd/. And as soon as
-> drivers are made into modules this is going to break. This is
-> terrible. If you want to have a modular system, this is going to throw
-> in a wrench.
-
-IMO, a "syscon" shouldn't be a module. It's just a regmap.
-
-Rob
 
