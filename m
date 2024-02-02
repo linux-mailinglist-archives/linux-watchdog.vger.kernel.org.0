@@ -1,136 +1,127 @@
-Return-Path: <linux-watchdog+bounces-578-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-579-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE85184709E
-	for <lists+linux-watchdog@lfdr.de>; Fri,  2 Feb 2024 13:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C2148470A6
+	for <lists+linux-watchdog@lfdr.de>; Fri,  2 Feb 2024 13:50:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 718841F2BA58
-	for <lists+linux-watchdog@lfdr.de>; Fri,  2 Feb 2024 12:47:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B51941F27A95
+	for <lists+linux-watchdog@lfdr.de>; Fri,  2 Feb 2024 12:50:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C7A1186A;
-	Fri,  2 Feb 2024 12:47:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF4FD20F4;
+	Fri,  2 Feb 2024 12:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ibtDvv3k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QIgXy3Nn"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0697B17F3
-	for <linux-watchdog@vger.kernel.org>; Fri,  2 Feb 2024 12:47:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5385187A;
+	Fri,  2 Feb 2024 12:50:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706878063; cv=none; b=lbsQVlPwhi9yoRG3g7/F9V6sXuqQg8/jMUa1IF5VZiaCh33z1OvqlqNR50VNyhRUfJntKpxxOtlX2VEvkgRHy6dfVDxkOEn7wQ5JIEO/3HMO1C2LPcRsBccWp20yBiml47DBxqXj8oL8qn6qNhOF+TZe0N4U9kZXfAJnlLdHW6E=
+	t=1706878235; cv=none; b=XVKBNYXhtX3O1Yf+sZXVBWEvrei+nVtUU5DgCgRXcxPTnMwo1/vlyg7HlOqb18pTo6diRcBpAuGtrnf84PhfKdyX+thyrgOmlF0KAYx7SDXj/3IZhNUUDN3fb922ZILFrEkFs1zxg+8Sqpf8IDf9+jIeXqJLssJZK3o7/sSVnK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706878063; c=relaxed/simple;
-	bh=1wyJXQnKtxG5KcQLBuLXfN9nPIzxAbbDUplVjEvd6Ks=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VbBJAsILF5tId3R+Kua4vyvC7IPAGqJgMhObsGuTNJSVIkQeLN1FefBTUQ3nAY5hbnHiHQbv1YWsMych+YCsYYhDxosqfujzyLiu0QpeNKDWDFpoUOCcpkNAQmo4+dPU+cf+QJh5LfK3pXEb+XdT8EXknuXZmnpIEfWOl7w1Iqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ibtDvv3k; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5100cb238bcso3846319e87.3
-        for <linux-watchdog@vger.kernel.org>; Fri, 02 Feb 2024 04:47:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1706878058; x=1707482858; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UOWIy2zvMPH1XH46d4jTRJkw9n61PEb1vxh49lVP0XQ=;
-        b=ibtDvv3kKv7bpvYjDP7xxV4KkpaoyLjUalNr32bFbuVwIdiNdCk3czM4qlrcrZOCIU
-         HjPAp98Qi8+EP6winpZGr9AdZv9qumuoA8fdxMVZYQBE5kufoAb1DPHzGDj7POrIYxs2
-         3eaXIkMZtfIQVGvh36ss6NlI/QGt+iH/JEcmI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706878058; x=1707482858;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UOWIy2zvMPH1XH46d4jTRJkw9n61PEb1vxh49lVP0XQ=;
-        b=eNgMQo01jAC8LZ74p6uiUkkjkoLV2NyWsqoFB586pn7wEY9IANlnM9fZUkkCPAKrj3
-         wjW9bjBfcwW5zTv959r/3LVz5OuknomQFumjaQGt7VX4tmcAkY/XXkVFVOTSJK1t8W3w
-         agY8vpRpnHzyitYjeBby7oVioaKk0PlOY57yDww6jQsccOFKEo3qacqlTCBkNXys9P//
-         TP1Noo2hDD+QtbBSeM4VUNuH6R5O/yH6WuIp4lldxWuiFHkfs220mfPMXaPF+NbU95rD
-         B08oFRnJkfHLQnHd+lDx/KsW9I/ybqKZ9DENlkJB2p6la5y8sZuyRrkiyh2vBZPt7k0M
-         yMEw==
-X-Gm-Message-State: AOJu0YxEb2EDNdyjHXsNePqJNOXPEjMAlq/k3RSDJnRlvRNRox+ECgpT
-	taeQmTfKH1k/Bqg67hkiFvHYTaAQFk4aYnBKNg1s4mUAk3LA1uerIwu0vDk0mxCSDnQbzi5zNvQ
-	Colx0c1mHjytia0qJcwJL+S1ZlWIppMMERoQE
-X-Google-Smtp-Source: AGHT+IF0s/5ZKFtzhTR4j6QPvRkkJqWsYRXpAF/+v59PGjiQFmrY1yExMhIMTdn4RO+aKhe4pUPeTW5cDnEklfQlqh8=
-X-Received: by 2002:a2e:bc08:0:b0:2d0:7572:458c with SMTP id
- b8-20020a2ebc08000000b002d07572458cmr1827253ljf.1.1706878057840; Fri, 02 Feb
- 2024 04:47:37 -0800 (PST)
+	s=arc-20240116; t=1706878235; c=relaxed/simple;
+	bh=MUt23Gm5Um0r+18DNeEyeX8W05sw6uZOpoRJqsW7R90=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R8d7RyoktKdU5GYvit5tHT7CHpxwiOrEc76CxrC3pe7Cx0EIMIltU9n/wYuNe09JuDXcS7Wo5O1KPVqaw8yRVGFCjV60bdZ6bz4x+8HuOvOIYZp/nS28WhqK5A7+We/Pl9AXm0YNrTq3tzjY4nAG/ma+JoECptiCEcl8Ia+ri4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QIgXy3Nn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D6A6C433C7;
+	Fri,  2 Feb 2024 12:50:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706878235;
+	bh=MUt23Gm5Um0r+18DNeEyeX8W05sw6uZOpoRJqsW7R90=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QIgXy3NnxiAX+gnaRoY9+y0udhw50VMCHCTHPdgN6J2Cvb54cc7g/v69t8XGeaC2d
+	 y7jdZdk11r5bhsoaMgIB7TEv0PxaCZ+ddj16Vchx74WQ2KkLrv/FqhQmoYqX6et0xS
+	 tzkNBu3x2/iH2gj+iL1HADLArAZ8rajTVeX59L+2TGjepa5ExyCtG/7y1ge+xUwbJ2
+	 jG86xeaBZ5xlud5MTEsGk5Pwpg4RpHcGDv1sEJSVtkiH7VnEIvwReZfR64zeBZ832s
+	 q3pbVEqV3NbxHjVYZiPzfitqGLRAUPm7cTVEpJdpvzf/HxLSxSxBZV0nFzXQo4qzv5
+	 L7rwE1ODkONeQ==
+Date: Fri, 2 Feb 2024 12:50:30 +0000
+From: Lee Jones <lee@kernel.org>
+To: =?utf-8?Q?=C5=81ukasz?= Majczak <lma@chromium.org>
+Cc: Gwendal Grignou <gwendal@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Radoslaw Biernacki <biernacki@google.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Benson Leung <bleung@chromium.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+	chrome-platform@lists.linux.dev
+Subject: Re: [GIT PULL] Immutable branch between MFD, CROS and Watchdog due
+ for the v6.9 merge window
+Message-ID: <20240202125030.GF1379817@google.com>
+References: <20240126095721.782782-1-lma@chromium.org>
+ <20240201130605.GA1379817@google.com>
+ <CAE5UKNqNR7869EqjNRdn_osnxLLtJma=eMmsYBE1fvzA0g_ybg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240126095721.782782-1-lma@chromium.org> <20240201130605.GA1379817@google.com>
-In-Reply-To: <20240201130605.GA1379817@google.com>
-From: =?UTF-8?Q?=C5=81ukasz_Majczak?= <lma@chromium.org>
-Date: Fri, 2 Feb 2024 13:47:26 +0100
-Message-ID: <CAE5UKNqNR7869EqjNRdn_osnxLLtJma=eMmsYBE1fvzA0g_ybg@mail.gmail.com>
-Subject: Re: [GIT PULL] Immutable branch between MFD, CROS and Watchdog due
- for the v6.9 merge window
-To: Lee Jones <lee@kernel.org>
-Cc: Gwendal Grignou <gwendal@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Radoslaw Biernacki <biernacki@google.com>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, linux-watchdog@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAE5UKNqNR7869EqjNRdn_osnxLLtJma=eMmsYBE1fvzA0g_ybg@mail.gmail.com>
 
-On Thu, Feb 1, 2024 at 2:06=E2=80=AFPM Lee Jones <lee@kernel.org> wrote:
->
-> Good afternoon,
->
-> The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd3=
-3d:
->
->   Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-cros-w=
-atchdog-v6.9
->
-> for you to fetch changes up to 843dac4d3687f7628ba4f76e1481ee3838b27a35:
->
->   watchdog: Add ChromeOS EC-based watchdog driver (2024-02-01 11:49:30 +0=
-000)
->
-> ----------------------------------------------------------------
-> Immutable branch between MFD, CROS and Watchdog due for the v6.9 merge wi=
-ndow
->
-> ----------------------------------------------------------------
-> Lukasz Majczak (2):
->       platform/chrome: Update binary interface for EC-based watchdog
->       watchdog: Add ChromeOS EC-based watchdog driver
->
->  MAINTAINERS                                    |   6 +
->  drivers/watchdog/Kconfig                       |  11 ++
->  drivers/watchdog/Makefile                      |   1 +
->  drivers/watchdog/cros_ec_wdt.c                 | 204 +++++++++++++++++++=
-++++++
->  include/linux/platform_data/cros_ec_commands.h |  78 +++++-----
->  5 files changed, 257 insertions(+), 43 deletions(-)
->  create mode 100644 drivers/watchdog/cros_ec_wdt.c
->
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+On Fri, 02 Feb 2024, Łukasz Majczak wrote:
 
-Hi Lee,
+> On Thu, Feb 1, 2024 at 2:06 PM Lee Jones <lee@kernel.org> wrote:
+> >
+> > Good afternoon,
+> >
+> > The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
+> >
+> >   Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+> >
+> > are available in the Git repository at:
+> >
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-cros-watchdog-v6.9
+> >
+> > for you to fetch changes up to 843dac4d3687f7628ba4f76e1481ee3838b27a35:
+> >
+> >   watchdog: Add ChromeOS EC-based watchdog driver (2024-02-01 11:49:30 +0000)
+> >
+> > ----------------------------------------------------------------
+> > Immutable branch between MFD, CROS and Watchdog due for the v6.9 merge window
+> >
+> > ----------------------------------------------------------------
+> > Lukasz Majczak (2):
+> >       platform/chrome: Update binary interface for EC-based watchdog
+> >       watchdog: Add ChromeOS EC-based watchdog driver
+> >
+> >  MAINTAINERS                                    |   6 +
+> >  drivers/watchdog/Kconfig                       |  11 ++
+> >  drivers/watchdog/Makefile                      |   1 +
+> >  drivers/watchdog/cros_ec_wdt.c                 | 204 +++++++++++++++++++++++++
+> >  include/linux/platform_data/cros_ec_commands.h |  78 +++++-----
+> >  5 files changed, 257 insertions(+), 43 deletions(-)
+> >  create mode 100644 drivers/watchdog/cros_ec_wdt.c
+> >
+> > --
+> > Lee Jones [李琼斯]
+> 
+> Hi Lee,
+> 
+> I'm about to sent V5 of patches:
+> * watchdog: Add ChromeOS EC-based watchdog driver
+> * platform/chrome: Update binary interface for EC-based watchdog
 
-I'm about to sent V5 of patches:
-* watchdog: Add ChromeOS EC-based watchdog driver
-* platform/chrome: Update binary interface for EC-based watchdog
-but I'm not sure how I should proceed - can I base those on the master
-branch or shall I rebase on top of  ib-mfd-cros-watchdog-v6.9?
+These patches are applied, you cannot resend them.
 
-Best regards,
-Lukasz
+If you need to make adjustments, please submit incremental changes.
+
+> but I'm not sure how I should proceed - can I base those on the master
+> branch or shall I rebase on top of  ib-mfd-cros-watchdog-v6.9?
+
+Unless it causes issues, I tend to work on Linux next.
+
+-- 
+Lee Jones [李琼斯]
 
