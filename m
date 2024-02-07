@@ -1,194 +1,159 @@
-Return-Path: <linux-watchdog+bounces-607-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-608-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93C3184C9D0
-	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Feb 2024 12:43:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6461C84CB04
+	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Feb 2024 14:08:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B17E28B0F5
-	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Feb 2024 11:43:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC4E11F25147
+	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Feb 2024 13:08:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17C8F1B7E3;
-	Wed,  7 Feb 2024 11:42:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4167E76C71;
+	Wed,  7 Feb 2024 13:07:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QOzWSE12"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Cph3DwTB"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3138425620
-	for <linux-watchdog@vger.kernel.org>; Wed,  7 Feb 2024 11:42:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6A976C6B
+	for <linux-watchdog@vger.kernel.org>; Wed,  7 Feb 2024 13:07:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707306138; cv=none; b=JOPFNZcOavfk4uOrC6nqcfaIItzcyTJzVLiklRfw/7r34ulqA2bdVDx8OAWajcx31TVMvSfzKlAmdJmHyrQxoEUL1A/ksGBLVSMTdRA4OPLTNe4MJ5DEjsjRmkNoYwOkVICin6U8s4f65E2j6j8rRSwm0lXE6Rn20eAScKk5Plk=
+	t=1707311279; cv=none; b=K++r/UYP955lepkz2U+2PYfWhFPyY7fA9f5iav00dCQlaoWcmP7oeqjWklG1bY6bsnx5OM7eTa6dRNjA1EprQv62wCPac2EipRW6mPwczR6oaTg3sOkY5G8gJZOyMpQkh5JrY+jJRiWxbou36BLx5RPlfYUC7You2ipAy8lXYWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707306138; c=relaxed/simple;
-	bh=yXMP0S/lszIS82Cm3HVooHmFHezs5svv3J4mLhiJ6Bk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AiY8fZBVZTv1ySBDlSAoaqMlnr1N9jo5OXfkDTwGtblDYt6igUcwSgeO9i/wu3U9rD+l8D9p1fwMflU4lmx7SKhqdjiV9dvKuQo3k4xUfI2IAAWJBJ7qCwrk4nfaxP1H8p7hMaP+R9IB6dl+mzw6f6FRiGoO0Yr0eaYiH0yXqGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QOzWSE12; arc=none smtp.client-ip=209.85.217.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-46d239a4655so86757137.2
-        for <linux-watchdog@vger.kernel.org>; Wed, 07 Feb 2024 03:42:15 -0800 (PST)
+	s=arc-20240116; t=1707311279; c=relaxed/simple;
+	bh=cnUYyVs5/vC7vebIv9+mS88wVxIV0SdJzuzMN/NHZ3Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=G4qVXXJTauJTx2t3CITd2H11dQhN+eqJ8rHwnjZmPD5OiXeq9IIs58hfU/wjIvYMxNPvcF0xTMPuaMLr74TKPFIpgLLtw3oLRjMLDdquMEBxLgS8uSUi1ncgj6itvtEHVCYbk+RG1Gd0lxx5KJ1sDgnCTrbDqR7Ihuh+vDeNUEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Cph3DwTB; arc=none smtp.client-ip=209.85.210.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6e12b917df2so328780a34.1
+        for <linux-watchdog@vger.kernel.org>; Wed, 07 Feb 2024 05:07:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707306135; x=1707910935; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mDRI0QBrap0H2clNIo68wfgCeGsVyFFKlUnFyl+O8Oc=;
-        b=QOzWSE12voIqeyO/a4pMbo0EmmfnQqAspa+MUnvkSVl+eNCu2cmoD8nK7SmRAOeu5M
-         Wd/3Q3bw6x1Xrv3+Bx/Y/vCNzYzY9WmY3PSEMMT5HfAaqZ8/SzNpVIuQn87AgG30jmao
-         egXjdJ2khLyXeF1uWiZ7uZ/OG+5Z8wsYHSG7h6IJTPQyHFH+gGKmlCLll+L+s+EUTG/u
-         Xw/j0rD8mOY4bedHwxgHChVyHRyyTBrrIKGg5uUyg3ySs1FKHO87H20Lxt/ERqCw/0iR
-         F0Flv+syVxiBX57frV5ItsLgcm92k9FvEY2F9wTAebJBGAapg/Krl1PjpiVeTRjlZWnw
-         KVzA==
+        d=tuxon.dev; s=google; t=1707311275; x=1707916075; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cgZxjoWrT1AZAxZIzQbeXNN5B4NUExBzEhcUQwx7T6M=;
+        b=Cph3DwTBukllsxqRfOjoNMLbVy+BrSiWUJHXNm/MMVC0N1x+1qhe/TAPddTvp6MPVB
+         UcV1MIYys+ueNkCO+9cRvtUqdRFJhKaudl++opXhKButacdjpkilsSQic1Y0TI01XWkx
+         019IK3QxZp8IoCTAmg23XmUnbHpBhhXAUwUNSot0Pt6ZSUze2Z/+AJrtCg6hUgR/ufzs
+         UI0c6THi+8YKg7QD0XWqwwTZ1ojJRcaDGcHZHgnU9D9AYeKfriwjjDiGTdPxWEP/xGqh
+         uKP8pChyuAOVvf3hrLjc32p4VSXMeAJV9SKHvy8S27GknQeEnBmQ+Xhzvq6MIYW45L3j
+         2XTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707306135; x=1707910935;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1707311275; x=1707916075;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mDRI0QBrap0H2clNIo68wfgCeGsVyFFKlUnFyl+O8Oc=;
-        b=XFWV+Q6/t13/hpwgEjeE5kgiYJMmmUCd9OTO0JXcaKAwsieJ6L0v6Fn5+Gvfrluioh
-         HI9Ac6EOaNGWDoO49lSWD0J1gop+zvsQ2nwEkaer/30PjT0XPMh2jz6UdX6qMNfl5r3E
-         aEZgV7owo1QUYP596WXrocGhUF6xEBVbEJgkFulQN/QSWzToA7kc7Sw2dRGWp1bV/KZn
-         2dxpfAme6NnYYVAk7UvfvTZaZYd9F6p0FS9rHWlrAC5gh6i0seGy0EL5sTH9b4c5yRqJ
-         EXy9qQs7CO7ozUcv9GHyv92eavH8PTma827+mJxKKCQf+y/JB6751PvOdZz8ENVJu9Bg
-         LNaA==
-X-Gm-Message-State: AOJu0YxhCDdw+1MXzWaXu224AuYlTqCNzhycFQ4R0g4eSqtKbGGaU62B
-	x+MhRAcnSRfr2MBt5Lqvs8cHswFAyKOu9koV5CKh2pZFbwix12bqaK1dd4W/wbInKRknu8om+rh
-	e41xRtmMcn4d5QTcIE+36OdtDIJko3oCwKDuK3Q==
-X-Google-Smtp-Source: AGHT+IHoMW8WW+GpljHTnzFyz3kSgmn7XI5t1uaHPVo5k3VCt1621bR0+WnHEryNiztIQSbbTGgK2JIA0gGHVkMneKQ=
-X-Received: by 2002:a05:6102:3231:b0:46d:1c65:bc13 with SMTP id
- x17-20020a056102323100b0046d1c65bc13mr2322228vsf.24.1707306134913; Wed, 07
- Feb 2024 03:42:14 -0800 (PST)
+        bh=cgZxjoWrT1AZAxZIzQbeXNN5B4NUExBzEhcUQwx7T6M=;
+        b=bP+mRq1esFvRnx92MnyjxMgLBs3fl7np3RRsO7XFoU/fZ25W+NECknoNsnbdmbbFmn
+         ixBii4ZEXpCVX1oVpYl1JWA2EKDIOyadY1TiG2RyllF9jr+c6p4POG6IVrA+VYFMypWs
+         2jSfC/RmM9R0T408kUTwYl/12DmCKCBychzGPnOFgeTjXK2QHysAVEN3BFqqe+9JJ03I
+         zwq+zwSJtw2a6n81NCi0t1ILGjZ49k2MS9BrpXOiLHvn1cPEXSOPThG9mSFA7kDthdDw
+         WXVeDl5mrRMXor3P7Q1eeuwInUIpbZAoFfX9wd0QMVfmmUDx6A/71QM8BgPG5L8Ij8YD
+         5k1A==
+X-Gm-Message-State: AOJu0YznPOJ64aA05BTxUS8z0lvp6AKixhGqjHFvdxFQV5/bdSpmnOAw
+	eAF1oPDUW7Sgb95XGkzCer7ou0ZQYtOVSEFpD/0F5Rs8AQZmVoZiFtFH7G21u9k=
+X-Google-Smtp-Source: AGHT+IGN3NF79eAyEr+25oA68ij44eKtiXaEuQSz0jscK3NPCNE+n65Z6eFMP6e1JcIgHQCGfmqIqg==
+X-Received: by 2002:a05:6830:3a88:b0:6dd:cd73:3b0e with SMTP id dj8-20020a0568303a8800b006ddcd733b0emr5678654otb.23.1707311275538;
+        Wed, 07 Feb 2024 05:07:55 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXqCDZDDBRDbsXqT1ey9HzXOkExZvunGlbVwR85X02+RML9qzTmXaasE8bMz95+CJqyJuDdjUU7X9NSSdPFs6u4B/AWUp18Ziek6W7WmFahz/Y9bhmywcXigdcQK83JMVOzlxD38ThZFceT/k9sH93EMJoRlvnvVWB3K1aWSCPFXiKEpycfUvxXwG/G5g1zrMmqlGL8m4vcyxsnr33K8BtM+ftBrAq9mSnC013gk1IuqVTZ7uUhYiJzKAgOQZEs5/cflyl7YXklzWZBHyV7SrJ1oZ2jC5GXiW/2Bf8r3uFhFHx306TyTLk39IaICzhaPsn+9KsbeZeITYVJGNLZ8tQuzS2PsEbC1nrFqoMMq/vnDFChRJrtfcKLgKAa7qod/Xy5uJ8J3+/Ti9VP+lhyS2U6BBOgmp/wDHtwNQMPF4gd36FdVc1ZYU6gdfdp/cdeuFZxrcpJrwpZTQ0JrBnrbqADrEKLaf5wFOklZB5ggDQITRmhYutPfPuWHFp8vYvumvsmI3nODM3r3Q==
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.114])
+        by smtp.gmail.com with ESMTPSA id a17-20020a0ca991000000b0068c9cd2cf88sm565455qvb.60.2024.02.07.05.07.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Feb 2024 05:07:55 -0800 (PST)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	robh@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	p.zabel@pengutronix.de,
+	geert+renesas@glider.be,
+	magnus.damm@gmail.com,
+	biju.das.jz@bp.renesas.com
+Cc: linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	claudiu.beznea@tuxon.dev,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH v5 0/9] watchdog: rzg2l_wdt: Add support for RZ/G3S
+Date: Wed,  7 Feb 2024 15:07:36 +0200
+Message-Id: <20240207130745.1783198-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240129211912.3068411-1-peter.griffin@linaro.org>
- <20240129211912.3068411-2-peter.griffin@linaro.org> <fb530eb8-e32b-4faf-81f3-efc334ebf241@linaro.org>
- <CADrjBPoQmTRsFYRtxBxdvAoKK816O8XN3=hOJ3vBt8wbbbk-=Q@mail.gmail.com> <99828589-c0b5-456d-b250-6ad3e6085a91@linaro.org>
-In-Reply-To: <99828589-c0b5-456d-b250-6ad3e6085a91@linaro.org>
-From: Peter Griffin <peter.griffin@linaro.org>
-Date: Wed, 7 Feb 2024 11:42:03 +0000
-Message-ID: <CADrjBPrWH8uFrFmn_CZpr+fAnPrzbDT4i9XuMXJqKfzeouPpKg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] soc: samsung: exynos-pmu: Add regmap support for
- SoCs that protect PMU regs
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: arnd@arndb.de, linux@roeck-us.net, wim@linux-watchdog.org, 
-	alim.akhtar@samsung.com, jaewon02.kim@samsung.com, semen.protsenko@linaro.org, 
-	kernel-team@android.com, tudor.ambarus@linaro.org, andre.draszik@linaro.org, 
-	saravanak@google.com, willmcvicker@google.com, linux-fsd@tesla.com, 
-	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Krzysztof,
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Thanks for your review feedback.
+Hi,
 
-On Mon, 5 Feb 2024 at 13:13, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 01/02/2024 13:51, Peter Griffin wrote:
-> > Hi Krzysztof,
-> >
-> > On Tue, 30 Jan 2024 at 16:01, Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 29/01/2024 22:19, Peter Griffin wrote:
-> >>> Some Exynos based SoCs like Tensor gs101 protect the PMU registers for
-> >>> security hardening reasons so that they are only accessible in el3 via an
-> >>> SMC call.
-> >>>
-> >>> As most Exynos drivers that need to write PMU registers currently obtain a
-> >>> regmap via syscon (phys, pinctrl, watchdog). Support for the above usecase
-> >>> is implemented in this driver using a custom regmap similar to syscon to
-> >>> handle the SMC call. Platforms that don't secure PMU registers, get a mmio
-> >>> regmap like before. As regmaps abstract out the underlying register access
-> >>> changes to the leaf drivers are minimal.
-> >>>
-> >>> A new API exynos_get_pmu_regmap_by_phandle() is provided for leaf drivers
-> >>> that currently use syscon_regmap_lookup_by_phandle(). This also handles
-> >>> deferred probing.
-> >>>
-> >>> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
-> >>> ---
-> >>>  drivers/soc/samsung/exynos-pmu.c       | 227 ++++++++++++++++++++++++-
-> >>>  include/linux/soc/samsung/exynos-pmu.h |  10 ++
-> >>>  2 files changed, 236 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/soc/samsung/exynos-pmu.c b/drivers/soc/samsung/exynos-pmu.c
-> >>> index 250537d7cfd6..7bcc144e53a2 100644
-> >>> --- a/drivers/soc/samsung/exynos-pmu.c
-> >>> +++ b/drivers/soc/samsung/exynos-pmu.c
-> >>> @@ -5,6 +5,7 @@
-> >>>  //
-> >>>  // Exynos - CPU PMU(Power Management Unit) support
-> >>>
-> >>> +#include <linux/arm-smccc.h>
-> >>>  #include <linux/of.h>
-> >>>  #include <linux/of_address.h>
-> >>>  #include <linux/mfd/core.h>
-> >>> @@ -12,20 +13,159 @@
-> >>>  #include <linux/of_platform.h>
-> >>>  #include <linux/platform_device.h>
-> >>>  #include <linux/delay.h>
-> >>> +#include <linux/regmap.h>
-> >>>
-> >>>  #include <linux/soc/samsung/exynos-regs-pmu.h>
-> >>>  #include <linux/soc/samsung/exynos-pmu.h>
-> >>>
-> >>>  #include "exynos-pmu.h"
-> >>>
-> >>> +static struct platform_driver exynos_pmu_driver;
-> >>
-> >> I don't understand why do you need it. You can have only one
-> >> pmu_context. The moment you probe second one, previous becomes invalid.
-> >>
-> >> I guess you want to parse phandle and check if just in case if it points
-> >> to the right device, but still the original code is not ready for two
-> >> PMU devices. I say either this problem should be solved entirely,
-> >> allowing two devices, or just compare device node from phandle with
-> >> device node of exynos_pmu_context->dev and return -EINVAL on mismatches.
-> >
-> > Apologies I didn't answer your original question. This wasn't about
-> > having partial support for multiple pmu devices. It is being used by
-> > driver_find_device_by_of_node() in exynos_get_pmu_regmap_by_phandle()
-> > to determine that the exynos-pmu device has probed and therefore a
-> > pmu_context exists and a regmap has been created and can be returned
-> > to the caller (as opposed to doing a -EPROBE_DEFER).
-> >
-> > Is there some better/other API you recommend for this purpose? Just
-> > checking pmu_context directly seems racy, so I don't think we should
-> > do that.
->
-> Hm, I don't quite get why you cannot use of_find_device_by_node()?
+Series adds watchdog support for Renesas RZ/G3S (R9A08G045) SoC.
 
-of_find_device_by_node() returns a platform_device, even if the driver
-hasn't probed. Whereas driver_find_device_by_of_node() iterates
-devices bound to a driver.
+Patches do the following:
+- patch 1/9 makes the driver depend on ARCH_RZG2L || ARCH_R9A09G011
+- patch 2/9 makes the driver depend on PM
+- patches 3-7/9 adds fixes and cleanups for the watchdog driver
+- patch 8/9 adds suspend to RAM to the watchdog driver (to be used by
+  RZ/G3S)
+- patch 9/9 documents the RZ/G3S support
 
-If using of_find_device_by_node() API I could check the result of
-platform_get_drvdata(), and -EPROBE_DEFER if NULL (that pattern seems
-to be used by a few drivers). But that AFAIK only guarantees you
-reached the platform_set_drvdata() call in your driver probe()
-function, not that it has completed.
+Thank you,
+Claudiu Beznea
 
-IMHO the drivers using driver_find_device_by_of_node() for probe
-deferral are doing it more robustly than those using
-of_find_device_by_node()  and checking if platform_get_drvdata() is
-NULL.
+Changes in v5:
+- updated description of patch 2/9
+- simplify the code in patch 2/9 by using on a new line:
+  depends on PM || COMPILE_TEST
 
-Or is there some other way you had in mind of using
-of_find_device_by_node() I've not thought of to implement this?
+Changes in v4:
+- added patch "watchdog: rzg2l_wdt: Restrict the driver to ARCH_RZG2L and
+  ARCH_R9A09G011"
+- collected tags
 
-Thanks,
+Changes in v3:
+- make driver depend on PM not select it
+- drop patches already accepted (patches 1, 10, 11 from v2)
+- re-arranged the tags in patch 8/8 as they were messed by b4 am/shazam
 
-Peter.
+Changes in v2:
+- added patch "watchdog: rzg2l_wdt: Select PM"
+- propagate the return status of rzg2l_wdt_start() to it's callers
+  in patch "watchdog: rzg2l_wdt: Use pm_runtime_resume_and_get()" 
+- propagate the return status of rzg2l_wdt_stop() to it's callers
+  in patch "watchdog: rzg2l_wdt: Check return status of pm_runtime_put()" 
+- removed pm_ptr() from patch "watchdog: rzg2l_wdt: Add suspend/resume support"
+- s/G2UL/G2L in patch "dt-bindings: watchdog: renesas,wdt: Document RZ/G3S support"
+- collected tags
+
+Claudiu Beznea (9):
+  watchdog: rzg2l_wdt: Restrict the driver to ARCH_RZG2L and
+    ARCH_R9A09G011
+  watchdog: rzg2l_wdt: Make the driver depend on PM
+  watchdog: rzg2l_wdt: Use pm_runtime_resume_and_get()
+  watchdog: rzg2l_wdt: Check return status of pm_runtime_put()
+  watchdog: rzg2l_wdt: Remove reset de-assert on probe/stop
+  watchdog: rzg2l_wdt: Remove comparison with zero
+  watchdog: rzg2l_wdt: Rely on the reset driver for doing proper reset
+  watchdog: rzg2l_wdt: Add suspend/resume support
+  dt-bindings: watchdog: renesas,wdt: Document RZ/G3S support
+
+ .../bindings/watchdog/renesas,wdt.yaml        |   1 +
+ drivers/watchdog/Kconfig                      |   3 +-
+ drivers/watchdog/rzg2l_wdt.c                  | 111 ++++++++++--------
+ 3 files changed, 64 insertions(+), 51 deletions(-)
+
+-- 
+2.39.2
+
 
