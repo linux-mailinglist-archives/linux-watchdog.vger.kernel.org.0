@@ -1,72 +1,72 @@
-Return-Path: <linux-watchdog+bounces-616-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-617-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18C8484CB23
-	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Feb 2024 14:10:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A77784CB29
+	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Feb 2024 14:10:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A6271F26640
-	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Feb 2024 13:10:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC9761C262B4
+	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Feb 2024 13:10:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE8787E595;
-	Wed,  7 Feb 2024 13:08:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 304287E768;
+	Wed,  7 Feb 2024 13:08:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="n/hryBJ9"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="CNoFYJt4"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C767E0F3
-	for <linux-watchdog@vger.kernel.org>; Wed,  7 Feb 2024 13:08:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82BDE7E76F
+	for <linux-watchdog@vger.kernel.org>; Wed,  7 Feb 2024 13:08:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707311308; cv=none; b=TFgjR4hPRy3YREqAxfDi1gy/gioYTbO6lHUm9Q3XMzagxXH4+I+1/qQU/lw8hZCbsFs/7HFuVj+bMOjg8yiHETopcNEy20AQQKaxXaP2oPPw+P5tGfgoFKRBVvJEQdK1TNa0LGdL7/pTaB+otku8SjKnHVEX2SLmvM8vvKOqHww=
+	t=1707311313; cv=none; b=dPMJ7FPHQ9WjVCuc3vD99V1jxIbC4okRqlojGmlpqxrZBDhgElrA0Tucw4kiG6VWX6uwMOK/iU0yjGl4+W9u0hlkS/YBIkWqHplbXbQ7BAyxsXBzLNzdyjyXwt57ePbGYf+Uyp5eLsF9RqdCJ+T5WA4mFMq8dVyuZx0V5Jolbyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707311308; c=relaxed/simple;
-	bh=nAmedCW/ZC03QdOpqI4vfMDgm+rkTWV8JGUP9rO0OUQ=;
+	s=arc-20240116; t=1707311313; c=relaxed/simple;
+	bh=EBT/o5fj1f+aOOhaga/UA54ow99OuFMlbr0SqdGDEkM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=KpFpQVaSI6KmDS3zTZkPLRhUyJ+CD/hSVMU4Hp5HMhMRHIDZYq4ZZWKwF76EHYtSaOKPUEry8v5OMvaCZSAaFC7HDcKVIkIQqrfwYH15A2uvVoqhL2bHLVLf8vHuyTHHbzyFfX3xGSiT8+8mHpZf3ynw9AZSUvYAiArs1Zy3ALI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=n/hryBJ9; arc=none smtp.client-ip=209.85.219.46
+	 MIME-Version; b=JPVEJdvTetMOv8HADvBaRtK9t7dzbFSEK2KWsCKHs4H1iWC0NJ2LrxcXidyE1h/EEYDzEKb53xYUsatsJ9Idq4aCLeYGsseRasfelUCMuYg81RP3tIIMYq/hf9RVaBRGq8XQhz9KMNC3lLPdxf+n/UbhrS7KNwGddEP6s42uTB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=CNoFYJt4; arc=none smtp.client-ip=209.85.219.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6818aa08a33so4772266d6.0
-        for <linux-watchdog@vger.kernel.org>; Wed, 07 Feb 2024 05:08:26 -0800 (PST)
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-68c427136b0so2727996d6.1
+        for <linux-watchdog@vger.kernel.org>; Wed, 07 Feb 2024 05:08:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1707311306; x=1707916106; darn=vger.kernel.org;
+        d=tuxon.dev; s=google; t=1707311310; x=1707916110; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XJ9VMSq8dCJ7LcLYsUSqAogT7VEVHvmzpU/dJCFCZP4=;
-        b=n/hryBJ9yXntghd+/I20VJfGrJxUtnksFoYhvaBLqXOrCu/yYngN/dAey2uo+PqiQD
-         7vTuGUhWj3dPmxX+HgU6k+Hlbn8nNE6dbrWfbHNplMz/YlNyi02eWsKBpjQmzRkLike/
-         M+0khLVe8ohlC12RwtBb45E5KA6fz0UEvdgD04k5KUaU4MxhTiFSpXLdnuOERZTklOw7
-         0FaEchZNjagg9w1ZkTHo5ggRrBTbLAl92oojwGyzOy9fOqqg+YWZkB1FIUk3F5X9q/u9
-         FrFsrUGTYokJFhSgJiXu6JY5k2kEZP5GMtzKYTjfGj1YuPDzd1t/8H5B7IvCLDwlxyRP
-         OqXg==
+        bh=gOdegQKiWMRLxYnVG69/8bl7NYnyCDQ503xbXTJ4Mqg=;
+        b=CNoFYJt4bCXL8yVb8DBhTRHk5+eBLyNcTFpX+TJ3hcBDZZEcPtx83dW8tOebCCWYkK
+         BIW/MESRltd+GgGgfwsxaNbF9WGm3Oj8ZohMUEKjJ/YN6i2sNRI0DqAQ7Ao/e5aOgOcw
+         qbbb/yeznzKvkiF9k/JHL9eYJ+/1P6F3dyDSuWBm0ZMdb97Hjl5tP/1Hfd8ZP/dEPEmm
+         2QncFfqT66QmVe76HsAljuQzZ6V2zke4pUidISSEtcjessVmZn6E2Lo4l5m0zO1BmDNz
+         8USDLABv2CMwee/jC8VnvHJ9oQDIXqMun/dkBDz/KlpALBb+39o54czwjvCRFu/9qY83
+         OSFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707311306; x=1707916106;
+        d=1e100.net; s=20230601; t=1707311310; x=1707916110;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XJ9VMSq8dCJ7LcLYsUSqAogT7VEVHvmzpU/dJCFCZP4=;
-        b=JfOe7GUKqABdFIyyNqdbiVO9E3LdzEqA6aCj8yvN67iCOOYZcP9nOmrPjYSNbhAoCW
-         RFCpWAHpZDmYCd7ZB/CEe7c/y9gh1OQ2vksBOPOAvJ3rS8GVItzlpb7vKKP3qJENDKCx
-         PGCo+kVkmi6LWLuZhGrLLup5pO66zN3VmecKsh2iEtAYReK4WESttmUnNHdXVN9tIyOd
-         +ov5APEM0eLz8zspuH9oe0vX33E9q/5hbbSnpCb1rxY3/pWkwnfUJfvk/DVYOcuyb74G
-         Abn0aItO2SZJ5SxSpA9zG1UsSndOfm3Vp1RypMqDeGxMgRTu8AQyfpnBju6BSYBwfYBj
-         ncFg==
-X-Gm-Message-State: AOJu0YzWce0moCzl/Q67EUuJqDtwMyyn+t9bkPbXFZDwv4AqC+97IItB
-	A/EWihBJI/DL9QtKjaOS6RFBA+IXE3C+c1eaUsq7cWZ7IGjDz9LXqtqZd67E/1k=
-X-Google-Smtp-Source: AGHT+IE2pXJX7Ad/VbjGXgoT2QtCd7B9+mf58olJKTHH61Xyrg56ReH4axFmtC38kPLDrjk1ajEIPg==
-X-Received: by 2002:ad4:5fc8:0:b0:68c:b9a8:a41b with SMTP id jq8-20020ad45fc8000000b0068cb9a8a41bmr4622016qvb.6.1707311305856;
-        Wed, 07 Feb 2024 05:08:25 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWdlQMnNUTAmKLGNAj7w8l6QHQQft3c1TPgl9je2tKKrAWPD8vpg4x5LJWQt1rHgYr1KEE8wdAH7or5V4I55d65V9Sq2BfZCDQDTTM/4AuDKGD2HmGa38u9SWpImRAmX4/aTaEQpNKSMLj1Sl2Q4c3G/7otIU2c8m5c6Sm8nw5T6V04V3w/7KkWcO1PGXoX1ah2GsMCrzp9b8DeGaJQITf9YxP6QlvDVFaZReR+dFFuCMlUZ2Qz3wdPYxA+lYKe9231tPGXt0Pz9TcsG4mYOnexV5BZLEQp70LQ8CzH52ShnCMCT8IF+T8IEGx3ohtBU2mtB0QbJgOBt9yfCnEv0u+s/OdtPWRS2+3zoMZZyLEzaSIWGGPlJV6IQI4kFKFxwfwU2nJ/RBu51GgJnVEgWV9u+ytP+eULjiXMBozEQKtuZAj0IsIH21TXUU5dw+wL/bLWmkhiOXUOJeF8tlgHHTfL9kM71x+ZHBupNgBvYe0htYhtir1fgyEPpaBHuwdPQAC9sFG/7oBakw==
+        bh=gOdegQKiWMRLxYnVG69/8bl7NYnyCDQ503xbXTJ4Mqg=;
+        b=EvciJ3nAC9gFdj2BtJuw7iuCXYnZb2N6We0CyCYp0SULznicgz4MvMVQYybkJtpRK3
+         RNPCbqe8FwLstoMIqWB0uuimR+ZV3SrRcTuXuzUJh3n2/ilX5XMB11KkhiLJexse+uqv
+         eLmj6j6DHhjPh+4XKc5J1NQ64zP3qmg3Yi4FDh7cEzURoG3EihpQYISwOk5AGnf1KgWN
+         +jJY9B7zWtr8ZCVfUeQYK4riM9OSCyL337urn/b1nTimEOy836AoWYzMJve+PfAkYDUK
+         f4VgXbstbcjsq256hCZZ7iQCG58ps95T0BN6e1RmRxt7ppgTx+C+I1CwBf3P29QGgb/7
+         oetw==
+X-Gm-Message-State: AOJu0Yw42xQXlxoMvz12J9K+3VCuY+W+QWLULZPRXCIEfkWS6rUlqETP
+	BTK3X7gbB1Y/qdEcXOqWcVe5tu8WGUACrSketuWfmUPvQx/C7jrgjPXIC8fmsmQ=
+X-Google-Smtp-Source: AGHT+IHHCcDI2dErkIQ8G2e9uYmc6icsnTSr8Y7LomjfWM/BrqxviD7XPu2Pl+WHcxuB0htYmsOeGw==
+X-Received: by 2002:a05:6214:19ec:b0:681:9ea:b99f with SMTP id q12-20020a05621419ec00b0068109eab99fmr6857265qvc.57.1707311309982;
+        Wed, 07 Feb 2024 05:08:29 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW5ND3WhNKoyXcJyyfmtS++THXmakhK7DoKyn0LS/tQPuo9CPOV+QF4LG87VmNX3hJE9EOmzIEbvE5fV8PV846WsEEXfaxQg/tPeSyi2nWTP17lW6vbJqCs+mMZ9zrkqlZKoREyJfvfH9c5fr4sEZ7Fnhozzb82CPGQ3LwnaWMb2lHUJH3W6eXoQgqN4B8BA6tsOSG5ABuD+ZXCekg8YsFTTpg3bx404YM1UW9Fe/FB/2IoTqyAHJPx7SGwBzn2m2AeyFdZRabfTm+4Z3/MK5Ts7PuMnNtzrtZAAn/7jFgX2VkEDFVlMJnIYRFDn9vwS5tuJk/hRqMGYkPaOkJfFpGCNgO6zl/dv4VhTS2ocKvoozhV39X2FckWZbL6TbGVZutiaFbHexksSOWT6c1ZV1O7FQOElKga7QszClFhC+/hOz/a0PHvzyLUr3+K1rQrgZxKy6TkGtyQqowp/Ir47iA9i4/cKC660bXI7IyjJUbC2BQDmBMf89ICKVmwN20w59G29ZmpeevyDo9BizIU61y23uO8Xj/KsOuTOCC8CK/SCVwMeGU=
 Received: from claudiu-X670E-Pro-RS.. ([82.78.167.114])
-        by smtp.gmail.com with ESMTPSA id a17-20020a0ca991000000b0068c9cd2cf88sm565455qvb.60.2024.02.07.05.08.22
+        by smtp.gmail.com with ESMTPSA id a17-20020a0ca991000000b0068c9cd2cf88sm565455qvb.60.2024.02.07.05.08.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Feb 2024 05:08:25 -0800 (PST)
+        Wed, 07 Feb 2024 05:08:29 -0800 (PST)
 From: Claudiu <claudiu.beznea@tuxon.dev>
 X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
 To: wim@linux-watchdog.org,
@@ -83,10 +83,11 @@ Cc: linux-watchdog@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	claudiu.beznea@tuxon.dev,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v5 8/9] watchdog: rzg2l_wdt: Add suspend/resume support
-Date: Wed,  7 Feb 2024 15:07:44 +0200
-Message-Id: <20240207130745.1783198-9-claudiu.beznea.uj@bp.renesas.com>
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v5 9/9] dt-bindings: watchdog: renesas,wdt: Document RZ/G3S support
+Date: Wed,  7 Feb 2024 15:07:45 +0200
+Message-Id: <20240207130745.1783198-10-claudiu.beznea.uj@bp.renesas.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240207130745.1783198-1-claudiu.beznea.uj@bp.renesas.com>
 References: <20240207130745.1783198-1-claudiu.beznea.uj@bp.renesas.com>
@@ -100,13 +101,13 @@ Content-Transfer-Encoding: 8bit
 
 From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-The RZ/G3S supports deep sleep states where power to most of the IP blocks
-is cut off. To ensure proper working of the watchdog when resuming from
-such states, the suspend function is stopping the watchdog and the resume
-function is starting it. There is no need to configure the watchdog
-in case the watchdog was stopped prior to starting suspend.
+Document the support for the watchdog IP available on RZ/G3S SoC. The
+watchdog IP available on RZ/G3S SoC is identical to the one found on
+RZ/G2L SoC.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
 
 Changes in v5:
@@ -116,63 +117,28 @@ Changes in v4:
 - none
 
 Changes in v3:
-- none
+- re-arranged the tags as my b4 am/shazam placed previously the
+  Ab, Rb tags before the author's Sob
 
 Changes in v2:
-- remove the usage of pm_ptr()
+- collected tags
+- s/G2UL/G2L in patch description
 
+ Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
- drivers/watchdog/rzg2l_wdt.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
-diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-index 42f1d5d6f07e..c8c20cfb97a3 100644
---- a/drivers/watchdog/rzg2l_wdt.c
-+++ b/drivers/watchdog/rzg2l_wdt.c
-@@ -284,6 +284,7 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
- 	priv->wdev.timeout = WDT_DEFAULT_TIMEOUT;
+diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+index 951a7d54135a..220763838df0 100644
+--- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+@@ -29,6 +29,7 @@ properties:
+               - renesas,r9a07g043-wdt    # RZ/G2UL and RZ/Five
+               - renesas,r9a07g044-wdt    # RZ/G2{L,LC}
+               - renesas,r9a07g054-wdt    # RZ/V2L
++              - renesas,r9a08g045-wdt    # RZ/G3S
+           - const: renesas,rzg2l-wdt
  
- 	watchdog_set_drvdata(&priv->wdev, priv);
-+	dev_set_drvdata(dev, priv);
- 	ret = devm_add_action_or_reset(&pdev->dev, rzg2l_wdt_pm_disable, &priv->wdev);
- 	if (ret)
- 		return ret;
-@@ -305,10 +306,35 @@ static const struct of_device_id rzg2l_wdt_ids[] = {
- };
- MODULE_DEVICE_TABLE(of, rzg2l_wdt_ids);
- 
-+static int rzg2l_wdt_suspend_late(struct device *dev)
-+{
-+	struct rzg2l_wdt_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!watchdog_active(&priv->wdev))
-+		return 0;
-+
-+	return rzg2l_wdt_stop(&priv->wdev);
-+}
-+
-+static int rzg2l_wdt_resume_early(struct device *dev)
-+{
-+	struct rzg2l_wdt_priv *priv = dev_get_drvdata(dev);
-+
-+	if (!watchdog_active(&priv->wdev))
-+		return 0;
-+
-+	return rzg2l_wdt_start(&priv->wdev);
-+}
-+
-+static const struct dev_pm_ops rzg2l_wdt_pm_ops = {
-+	LATE_SYSTEM_SLEEP_PM_OPS(rzg2l_wdt_suspend_late, rzg2l_wdt_resume_early)
-+};
-+
- static struct platform_driver rzg2l_wdt_driver = {
- 	.driver = {
- 		.name = "rzg2l_wdt",
- 		.of_match_table = rzg2l_wdt_ids,
-+		.pm = &rzg2l_wdt_pm_ops,
- 	},
- 	.probe = rzg2l_wdt_probe,
- };
+       - items:
 -- 
 2.39.2
 
