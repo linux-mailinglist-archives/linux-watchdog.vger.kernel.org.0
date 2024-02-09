@@ -1,81 +1,81 @@
-Return-Path: <linux-watchdog+bounces-639-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-640-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCD2784F382
-	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Feb 2024 11:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CCDE984F7EE
+	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Feb 2024 15:52:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8294E2836CA
-	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Feb 2024 10:35:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43893286C98
+	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Feb 2024 14:52:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8705D17C65;
-	Fri,  9 Feb 2024 10:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 080B745BE2;
+	Fri,  9 Feb 2024 14:52:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Yy4r/7GI"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nDj4fRU8"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8F61D557
-	for <linux-watchdog@vger.kernel.org>; Fri,  9 Feb 2024 10:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EEF4D112
+	for <linux-watchdog@vger.kernel.org>; Fri,  9 Feb 2024 14:52:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707474949; cv=none; b=m5YmRdNNZq8Tc1kjxqvsr1ja2BK4FE49wsnQbADOG1l+wD1ibh8y05QL2pYO5pmwDnD/dAO0kqbKNeKOLFgyDt3H4LVaH/gW3iyLt5u6ajpIUfKmH8Q/ZFb4iuKh+dJAdn1diSwSq9/VBNjPCa/1GeLZiz1eCwxgNm6nS271yiM=
+	t=1707490353; cv=none; b=q0nOU2jFQ2WLqJZ5MvmP+S3MZyVM1lIMxDTYndC8KZguSEfxR03WbwTrbP4LMM1vz+POtvI1vB79hNy9ckZMemnUsF3g8kOC0Z9skXunZ8WwDPTJmj3bRqnJq5LWuVcNX7UYGWxm/anBYA0wiY0Gbzt4F0bbM/El82mL1lRMmKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707474949; c=relaxed/simple;
-	bh=Mh1E9PeJjOSqtWbFh8Fz3144DuBxk5lGa2WIC0FhKC4=;
+	s=arc-20240116; t=1707490353; c=relaxed/simple;
+	bh=byUSXn1CBT+qucWO0Diq0c+JAjJggUINmXXOxd3wzhE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TZ3W0dOTzuhWjSGBwiGXFZJsjfbDhwbFR1tqZmwaG7PY3EEBM0vWziShmcEUWEryyu+5D1RiiQ4TaEyMlQtJjCVR73IFguS/fHTm49HTnZEY68klv3gLl0/21RNBr6bhynDTAX8QBbrG5Gexvrz89gf5D2RqncH5VdzNOKVdUFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Yy4r/7GI; arc=none smtp.client-ip=209.85.222.52
+	 To:Cc:Content-Type; b=Bqx4r3gGebHF55IVyTtWh5bfGaYieFJFIitKHAHBxM9NxKEfLqyyf9XUph4DxfvagiMf9Xl+lVyPlRD7ub7IswbnZeCjgpRCIGcTg9f3vnLk2MoZrOjyQgo7zj4PFMt4RFYeA1nPeRc0u9yWjxObYaWd22l/B8yj0zwtPUgAUDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nDj4fRU8; arc=none smtp.client-ip=209.85.128.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-7d5c2502ea2so329255241.1
-        for <linux-watchdog@vger.kernel.org>; Fri, 09 Feb 2024 02:35:47 -0800 (PST)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-604b23fc6a7so11532227b3.0
+        for <linux-watchdog@vger.kernel.org>; Fri, 09 Feb 2024 06:52:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707474946; x=1708079746; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1707490351; x=1708095151; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=C0AaPX0aZcuXGu3S0z1IdEkLhaMcgiZgBjdGD9S23tA=;
-        b=Yy4r/7GIDScXh0YKhQ+K+7/UDlksVqIZSC/3XkNdbh0jR2n0ivk7AHz/vCdahltYA4
-         nCl5kpQR628ANHMInbKrsuUNAJ0IeRJhHTWGJ5lRptaPLZBUY3CDpsUQ4IBW13yKlghC
-         hNGOXAv11z/5BFoYVWKG3kVtOfzPudNQVxcZWOijsha4n7r8k1HkKZhoFeQvHZ98vKGA
-         Ljoue7aHfqoGt+FUtm4ATV3Lwdhp0g6zRni9txWfXP6i/xF+PKdCA7wJthN4FGZmFy+0
-         Rap9p7qieMK1M2hts5nf8R2IDie/DRgbKdySYqJRcpLoBPd6RTwaZ4rgDLi45DeqACou
-         ZW4A==
+        bh=ZvSzfugfRa5xaGbubugy0cL8Ne5sgTH61y58yWXb1N8=;
+        b=nDj4fRU8OAuuqqxq4bCapaC1rIrLIER9v4Au8Rg68yXQoVBn93fxTDAWddEiii9cYc
+         xvPK7mjRqjPKz6r8rooplmyITClcPNecl6S2eeb9ZJvzzvctFRqoJA2s4G4JCedtiJQz
+         KnpSQyxYpP8Ss5mUcoHIcoaiUFN+cdvS/quW3VrAcIKFTV1jLbkZfmlH3VdG3LlZYJna
+         i8emUeH4S/Q1iFy2NcPO2SNFMwf1HzTQ6xXfs2I7bMedq/i1hfBUXAaUY4uebcUz0lkD
+         GPMyLvt8pCNmZSM1tm4Jb3zoag49O8b2RAhfyjayO8V0glKu44HTL0sRiS802yjQQL2o
+         PoCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707474946; x=1708079746;
+        d=1e100.net; s=20230601; t=1707490351; x=1708095151;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=C0AaPX0aZcuXGu3S0z1IdEkLhaMcgiZgBjdGD9S23tA=;
-        b=BtdKs3xoZmsNAKpnv6/phddlGqhDR7TdRcXxin/nW/x3/59oKaMl0in89/oWjQHyNW
-         SiUA3NV4DMdhplFAZHcvNefGHBH2HIJg1djc4KzPy54455ISoCN8Pa3GNI8kLuAZ6Alw
-         0WMWos3IpVURiE9tqlfEJ+At0AAg3ygqxqkB6BRhqPLMKVFsMeYn7RipULp5rynbNMcT
-         Ha81uSxdf2u8n80Q6T+XcLhrRY/yG9k+QZ0oUOpEWHDMUkpefIS8RUjNsUV/oUhIiA+m
-         lplzY8PUngxzFiPpfEbQB9EJ1AeKcLg68JDifii4ythE6JNRQb1lpFzzFgxl5INm/YqU
-         zV9w==
-X-Gm-Message-State: AOJu0Yx7LA5gP2j6H7t0gRLbdFY6Mp+CncQiqoY0yJvLH6Z+v81USBdF
-	TOn/4BEJSbgBspHDR2JOQvn85MumEfmQjK+Ewv2co63gPdKYNXyJ7JvKmSD4Wma0M02LOnoYacQ
-	anBq+nk1Ct4rfEFEXOW+nnbtkZLcyrBVBGPQNSg==
-X-Google-Smtp-Source: AGHT+IFp9wZFp7PGu0RcR1uD2IpDXLMQRWQla3gRj8qRezXJyFyxHkmQv5rHnuraGHJB+dMlsRycHuckgzpTuB99yYs=
-X-Received: by 2002:a05:6102:ccb:b0:46c:fb37:393b with SMTP id
- g11-20020a0561020ccb00b0046cfb37393bmr1104868vst.11.1707474946599; Fri, 09
- Feb 2024 02:35:46 -0800 (PST)
+        bh=ZvSzfugfRa5xaGbubugy0cL8Ne5sgTH61y58yWXb1N8=;
+        b=n3eS/2mKRfk4hfzAxUXjeDBnUj4q+l23zCJYH1vLjSWQ61U4wFmCmeR3FaN/GWx0Aa
+         Z/g+bq5Z7skzC/S18p0ljhdcSQpvNHtV8ZE3aHN17b+Ddi2HqXk8hGMf/2MaDc+X3eNF
+         iArQFcs/qT1JvDcm4soZbSkIcjg0PRVzxd8jLTyt12EH+su/z/moRNX85gi7z4Ta1xhH
+         ire6AgWprwmNXSBNBnpdJfbeCm+pmVRx+L+Ti9ySHF0HIn2EpcYuUlTbXFzodwgHjK7b
+         3wyHKTs/nFFZxGS2V5r/PWhCY57mV1MikY9muBLrJGWOBb5oLaOwwJgPXhGHn9VRLsAi
+         Bwqg==
+X-Gm-Message-State: AOJu0YwqFGEmB2gPA8el0B8M4rYTnVhIK+uf/UNdAZCms+OzgabD+Ivq
+	b2SCts2GvcMlLdgvYpTnSMWgULaJQrU2IAjIV2Lu1ZY3qsMsLi3RNNIdvFTqZ3QYT40db4aGmyN
+	cBPGHvdRNDq72bxejn+sg0vLPbLbv7I7ZlNxpEg==
+X-Google-Smtp-Source: AGHT+IGNGpV2dAOJ1roKWNaPkfmJ7IwBlppVZizxMiwadARMvHVBZZR+vznEFtx+LiP3R/KfEq3g8Uhvd7c0h8926OE=
+X-Received: by 2002:a0d:df16:0:b0:602:b21e:876f with SMTP id
+ i22-20020a0ddf16000000b00602b21e876fmr1761503ywe.0.1707490351229; Fri, 09 Feb
+ 2024 06:52:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240208161700.268570-1-peter.griffin@linaro.org> <20240208161700.268570-3-peter.griffin@linaro.org>
-In-Reply-To: <20240208161700.268570-3-peter.griffin@linaro.org>
+References: <20240208161700.268570-1-peter.griffin@linaro.org> <20240208161700.268570-2-peter.griffin@linaro.org>
+In-Reply-To: <20240208161700.268570-2-peter.griffin@linaro.org>
 From: Alexey Klimov <alexey.klimov@linaro.org>
-Date: Fri, 9 Feb 2024 10:35:35 +0000
-Message-ID: <CANgGJDoaxDLxPBxc=2kFO+omF8FcTf_3et1=J3h1BF8X27XbaQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] watchdog: s3c2410_wdt: use exynos_get_pmu_regmap_by_phandle()
- for PMU regs
+Date: Fri, 9 Feb 2024 14:52:20 +0000
+Message-ID: <CANgGJDpJX+ji1U3SN+2Q21FyckFQhmwb-Z2Qcx4-+GQ2ijmfCg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] soc: samsung: exynos-pmu: Add regmap support for
+ SoCs that protect PMU regs
 To: Peter Griffin <peter.griffin@linaro.org>
 Cc: arnd@arndb.de, krzysztof.kozlowski@linaro.org, linux@roeck-us.net, 
 	wim@linux-watchdog.org, alim.akhtar@samsung.com, jaewon02.kim@samsung.com, 
@@ -88,66 +88,44 @@ Content-Type: text/plain; charset="UTF-8"
 
 On Thu, 8 Feb 2024 at 16:21, Peter Griffin <peter.griffin@linaro.org> wrote:
 >
-> Obtain the PMU regmap using the new API added to exynos-pmu driver rather
-> than syscon_regmap_lookup_by_phandle(). As this driver no longer depends
-> on mfd syscon remove that header and Kconfig dependency.
+> Some Exynos based SoCs like Tensor gs101 protect the PMU registers for
+> security hardening reasons so that they are only write accessible in el3
+> via an SMC call.
 >
-> Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+> As most Exynos drivers that need to write PMU registers currently obtain a
+> regmap via syscon (phys, pinctrl, watchdog). Support for the above usecase
+> is implemented in this driver using a custom regmap similar to syscon to
+> handle the SMC call. Platforms that don't secure PMU registers, get a mmio
+> regmap like before. As regmaps abstract out the underlying register access
+> changes to the leaf drivers are minimal.
+>
+> A new API exynos_get_pmu_regmap_by_phandle() is provided for leaf drivers
+> that currently use syscon_regmap_lookup_by_phandle(). This also handles
+> deferred probing.
+>
 > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 
 Tested-by: Alexey Klimov <alexey.klimov@linaro.org>
 
-Tested on odroid xu3 (exynos5422). Watchdog works as expected and can
-reset the system.
+Apparently it seems tested-by should be provided for both patches. This was
+also tested on odroid xu3 and I also have WIP code that depends on this
+SMC-based regmap. No issues are observed and behaves as expected.
 
 > ---
->  drivers/watchdog/Kconfig       | 1 -
->  drivers/watchdog/s3c2410_wdt.c | 8 ++++----
->  2 files changed, 4 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 7d22051b15a2..d78fe7137799 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -512,7 +512,6 @@ config S3C2410_WATCHDOG
->         tristate "S3C6410/S5Pv210/Exynos Watchdog"
->         depends on ARCH_S3C64XX || ARCH_S5PV210 || ARCH_EXYNOS || COMPILE_TEST
->         select WATCHDOG_CORE
-> -       select MFD_SYSCON if ARCH_EXYNOS
->         help
->           Watchdog timer block in the Samsung S3C64xx, S5Pv210 and Exynos
->           SoCs. This will reboot the system when the timer expires with
-> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-> index 349d30462c8c..686cf544d0ae 100644
-> --- a/drivers/watchdog/s3c2410_wdt.c
-> +++ b/drivers/watchdog/s3c2410_wdt.c
-> @@ -24,9 +24,9 @@
->  #include <linux/slab.h>
->  #include <linux/err.h>
->  #include <linux/of.h>
-> -#include <linux/mfd/syscon.h>
->  #include <linux/regmap.h>
->  #include <linux/delay.h>
-> +#include <linux/soc/samsung/exynos-pmu.h>
->
->  #define S3C2410_WTCON          0x00
->  #define S3C2410_WTDAT          0x04
-> @@ -699,11 +699,11 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
->                 return ret;
->
->         if (wdt->drv_data->quirks & QUIRKS_HAVE_PMUREG) {
-> -               wdt->pmureg = syscon_regmap_lookup_by_phandle(dev->of_node,
-> -                                               "samsung,syscon-phandle");
-> +               wdt->pmureg = exynos_get_pmu_regmap_by_phandle(dev->of_node,
-> +                                                "samsung,syscon-phandle");
->                 if (IS_ERR(wdt->pmureg))
->                         return dev_err_probe(dev, PTR_ERR(wdt->pmureg),
-> -                                            "syscon regmap lookup failed.\n");
-> +                                            "PMU regmap lookup failed.\n");
->         }
->
->         wdt_irq = platform_get_irq(pdev, 0);
-> --
-> 2.43.0.594.gd9cf4e227d-goog
->
+> Changes since v3:
+>  - Fix PMUALIVE_MASK
+>  - Add TENSOR_ prefix
+>  - clear SET_BITS bits on each loop iteration
+>  - change set_bit to set_bits in func name
+>  - Fix some alignment
+>  - Add missing return on dev_err_probe
+>  - Reduce indentation in loop
+
+I no longer see the compilation warning related to struct device_node declared
+inside parameter list with v4, I guess one line change addition in exynos-pmu.h
+does the job.
+
+Thank you!
+BR,
+Alexey
 
