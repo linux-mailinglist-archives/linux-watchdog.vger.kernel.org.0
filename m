@@ -1,146 +1,120 @@
-Return-Path: <linux-watchdog+bounces-641-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-642-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F85684F85E
-	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Feb 2024 16:19:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2550E84F977
+	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Feb 2024 17:18:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5BF11F26E9A
-	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Feb 2024 15:19:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5837A1C21270
+	for <lists+linux-watchdog@lfdr.de>; Fri,  9 Feb 2024 16:18:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAD9973177;
-	Fri,  9 Feb 2024 15:19:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40AA5762C3;
+	Fri,  9 Feb 2024 16:18:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="j4e8/vBi"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="o9Du5kxk"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4036EB4E
-	for <linux-watchdog@vger.kernel.org>; Fri,  9 Feb 2024 15:19:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7E674E2B;
+	Fri,  9 Feb 2024 16:18:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707491977; cv=none; b=mWjyjHJ/tSugDo/EfwPyJMxq4nWtKbo6c/Xpt8zfbR7WDwcF4FuYK5QPIWPpYp/A1TxxfQIUXgsQO8brkZ+ZWgNi2qkU5N0BfquusVS64vc6IZdyW/+dEgyYzPpN0aPJkP5ZbFOTQ8tYAuddjzfNcMXxxDI9zLlKIXeeRFwznFw=
+	t=1707495516; cv=none; b=tDb3FB7IgFtbZMS6YFXkqN/+CmuuXKNQsckn7EYRwZS6vUa9KZmSl6irkA8RnC/21kwXfJAWkD4Er8QbDB83jrYLFNacL53hW96gYGsyioC7Z9vDVQc1dbdVfzHlg02iFiYj2Ibne5LuHfc3TRPoWkxJKJwn8ut32YCuoqtOa+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707491977; c=relaxed/simple;
-	bh=eicFE24E2v83UgvSx/21HwdVSLPvUclZ8hDg9gz+Ifg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Kq5B1CUYibvtcNKlbNBztOJa2qKSqclG3KpDdrqIIxocgtPfHvu/7oyEPBHPB4EjmjOlY456fKZze9Eqj2hjkhVm5hzVoDXD6c68zCfppzDXe57dNUKA81wC5zVKGRxdlXBgCo57VmQvIafkSR4SHvTXKqtUIJMNARhYOCvCeY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=j4e8/vBi; arc=none smtp.client-ip=209.85.160.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-2185d368211so531148fac.3
-        for <linux-watchdog@vger.kernel.org>; Fri, 09 Feb 2024 07:19:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707491975; x=1708096775; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VMsj7PALpNEPLf6iF4Dtv8Du3TIV+N98OxOoenWPal4=;
-        b=j4e8/vBiZgO1Y8VAoVpYaWkU42pyQZ0X1W2jk8ay5a+YQ/KcLIgGloag/APL6SedIg
-         5mYvDf7n4kx+1uWDerNUhA3fE1PoI0Ibb7W5KEghoDGzw4EZ01l2h7yfK0JuiVv3Lj6q
-         i/COOAd12jCcdhd1LVNun1WyvG0JyWX0g8tUAXth0zG56G6BS98ez0TS5Rg9LWO6tNIh
-         DYXyE5U+QUrQOy2XOkdrqbKbjkOfNxY3wwUJO3YCWNw85W7E9meCF3XJs31UTWv1OznJ
-         VNVhKAOGlxdtIzd7bZ2j+mUQ+IMSjparGc2RoklbuxArBIYcpPwvt+jFykq43rXUITld
-         MVTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707491975; x=1708096775;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VMsj7PALpNEPLf6iF4Dtv8Du3TIV+N98OxOoenWPal4=;
-        b=UkW2tRHn3ZU1mjfzi+2zv58nWyQBi4lZ+IkwBwBS/K4eB5usyt2cFgjQc5WXqmAUW2
-         fuTZviBPu9ZHg5SmF/zJlN+vqqmnIDjPP9L2ky3Q3ugVH05Xyz77Zfqc49IljQL7nie1
-         shOAf0SnUgQaD0ogzcdBweQr2+0lUn4+2DIZrQ2KB6YwEptqBJ6QAHtYg8o1beR1ZwJO
-         F8ZjYE3jPJZL4AuqVhG1rfKurMsHubS1zAH7femQXTrAw/gr/c5zdFrSfKTCelbkXgnl
-         wEpPSvagBB/yYlbfRQU7hvh6aIBbte8SK4OQu5L0CyDHJ6ji30BMAHnSGwk49NLtwpmN
-         PGkg==
-X-Gm-Message-State: AOJu0Yz7nD40dv67mNU2L50ibjeVEpj/9VrWGytsFW6lBzknTlmPw+Kv
-	qDtqorp7Hac4nWpvLYsut6GvhLJ/0hVP2TJOKXiDM3QqS0uHUdEtWjXRs3mhK8NTYcvgWStHXZt
-	rTblb41bEpHXxSntO7qlePb2iO7FEnL0tOmEZfA==
-X-Google-Smtp-Source: AGHT+IF0dIOHBU71xLJmPjDOFo0UjOkdUUwP49pCiNub3OkD2jd3EAMo4qvPH0D8UIF5eqpiNOnWVLUITyl5ZvYltFI=
-X-Received: by 2002:a05:6870:8093:b0:219:2259:b961 with SMTP id
- q19-20020a056870809300b002192259b961mr2186589oab.46.1707491974990; Fri, 09
- Feb 2024 07:19:34 -0800 (PST)
+	s=arc-20240116; t=1707495516; c=relaxed/simple;
+	bh=T2AfydLIYm7P7v0jVs0AD6Xigpk5QM18sacEyvHtS9o=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FgHgqAUk8g5KCM8Vu2ji/LPGp+Q4ivDIY2VPG9pfSWklhIiNuo+p0foDeUrP3tTmhu0pbwGE3xQ7Qv3bjP2tgV0rx57QFaSLvzx4/dDt7gRhr+YKEqJHL5tAVU+94rSlMbF0z4zcVnRyI+TygY8wd+V/AkaJSqvU0qv0wP+hYoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=o9Du5kxk; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 419FQ6VM012051;
+	Fri, 9 Feb 2024 16:18:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=FDudMkc
+	BnrHHsBx06brnVBQgTQBahGVuiHXHp0oAYrA=; b=o9Du5kxkPcRqsTsLIKOX+aA
+	GYIvfoZ/6XGKFlsb7vn9D6iWDJqEaDoyFbDwgroqODuFKOJD2RI6GFn9aY1SQUh0
+	o+qW8S95xjeEZfvFT77BQzZaQcj5RHEepRsU2ACjXnOwo/1WFiocXWvnqnJYC78m
+	XlbAlU+QaY0vAp3hgM6D1PRRmQnXct/p6LM3RjaSc3byh1O2DxGV7nI/zi6bcXvP
+	U6jfu5i2RFEL5LQ7TQ26inyRXvueLS1/g15+4rT1Y4lt159nKMPY4dtxeAjDfEaJ
+	1I1wFWy8289QhoOLrr3xu7wIoOdn7iHt0F1RHUstAUKVtBZKw+wpRQ6RuE+QGTw=
+	=
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w4wbvkhqr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 09 Feb 2024 16:18:16 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 419GIFoj027267
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 9 Feb 2024 16:18:15 GMT
+Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Fri, 9 Feb 2024 08:18:14 -0800
+From: Jeffrey Hugo <quic_jhugo@quicinc.com>
+To: <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <wim@linux-watchdog.org>, <linux@roeck-us.net>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <quic_rjendra@quicinc.com>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jeffrey Hugo
+	<quic_jhugo@quicinc.com>
+Subject: [PATCH] dt-bindings: watchdog: qcom-wdt: Update maintainer to Rajendra Nayak
+Date: Fri, 9 Feb 2024 09:18:00 -0700
+Message-ID: <20240209161800.3872964-1-quic_jhugo@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240208161700.268570-1-peter.griffin@linaro.org>
- <20240208161700.268570-2-peter.griffin@linaro.org> <CANgGJDpJX+ji1U3SN+2Q21FyckFQhmwb-Z2Qcx4-+GQ2ijmfCg@mail.gmail.com>
-In-Reply-To: <CANgGJDpJX+ji1U3SN+2Q21FyckFQhmwb-Z2Qcx4-+GQ2ijmfCg@mail.gmail.com>
-From: Peter Griffin <peter.griffin@linaro.org>
-Date: Fri, 9 Feb 2024 15:19:23 +0000
-Message-ID: <CADrjBPqaUQXjkXLN8JagjF=HG6moXTRMULzKU93BCGo5iAqi-A@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] soc: samsung: exynos-pmu: Add regmap support for
- SoCs that protect PMU regs
-To: Alexey Klimov <alexey.klimov@linaro.org>
-Cc: arnd@arndb.de, krzysztof.kozlowski@linaro.org, linux@roeck-us.net, 
-	wim@linux-watchdog.org, alim.akhtar@samsung.com, jaewon02.kim@samsung.com, 
-	semen.protsenko@linaro.org, kernel-team@android.com, tudor.ambarus@linaro.org, 
-	andre.draszik@linaro.org, saravanak@google.com, willmcvicker@google.com, 
-	linux-fsd@tesla.com, linux-watchdog@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: nw2lAVp0wTIXFXzoSZxk-MU6i4UY9kmc
+X-Proofpoint-ORIG-GUID: nw2lAVp0wTIXFXzoSZxk-MU6i4UY9kmc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-09_14,2024-02-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 phishscore=0 adultscore=0 bulkscore=0 clxscore=1011
+ priorityscore=1501 malwarescore=0 suspectscore=0 mlxlogscore=775
+ spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402090120
 
-Hi Alexey,
+The servers for the @codeaurora domain are long retired and any messages
+sent there will bounce. Sai has left the company and appears no longer
+active in the community which leaves this binding orphaned. Rajendra Nayak
+has volunteered to take over as maintainer.
 
-On Fri, 9 Feb 2024 at 14:52, Alexey Klimov <alexey.klimov@linaro.org> wrote:
->
-> On Thu, 8 Feb 2024 at 16:21, Peter Griffin <peter.griffin@linaro.org> wrote:
-> >
-> > Some Exynos based SoCs like Tensor gs101 protect the PMU registers for
-> > security hardening reasons so that they are only write accessible in el3
-> > via an SMC call.
-> >
-> > As most Exynos drivers that need to write PMU registers currently obtain a
-> > regmap via syscon (phys, pinctrl, watchdog). Support for the above usecase
-> > is implemented in this driver using a custom regmap similar to syscon to
-> > handle the SMC call. Platforms that don't secure PMU registers, get a mmio
-> > regmap like before. As regmaps abstract out the underlying register access
-> > changes to the leaf drivers are minimal.
-> >
-> > A new API exynos_get_pmu_regmap_by_phandle() is provided for leaf drivers
-> > that currently use syscon_regmap_lookup_by_phandle(). This also handles
-> > deferred probing.
-> >
-> > Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
->
-> Tested-by: Alexey Klimov <alexey.klimov@linaro.org>
+Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+---
+ Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for testing this on odroid xu3 hardware!
+diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+index a4f35c598cdb..47587971fb0b 100644
+--- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Qualcomm Krait Processor Sub-system (KPSS) Watchdog timer
+ 
+ maintainers:
+-  - Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
++  - Rajendra Nayak <quic_rjendra@quicinc.com>
+ 
+ properties:
+   $nodename:
+-- 
+2.34.1
 
->
-> Apparently it seems tested-by should be provided for both patches. This was
-> also tested on odroid xu3 and I also have WIP code that depends on this
-> SMC-based regmap. No issues are observed and behaves as expected.
->
-> > ---
-> > Changes since v3:
-> >  - Fix PMUALIVE_MASK
-> >  - Add TENSOR_ prefix
-> >  - clear SET_BITS bits on each loop iteration
-> >  - change set_bit to set_bits in func name
-> >  - Fix some alignment
-> >  - Add missing return on dev_err_probe
-> >  - Reduce indentation in loop
->
-> I no longer see the compilation warning related to struct device_node declared
-> inside parameter list with v4, I guess one line change addition in exynos-pmu.h
-> does the job.
-
-I added a forward declaration in the header to get rid of that
-compiler warning in v4, but it's not explicitly mentioned in the above
-changelog.
-
-Thanks,
-
-Peter.
-
-
-Peter
 
