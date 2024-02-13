@@ -1,145 +1,149 @@
-Return-Path: <linux-watchdog+bounces-648-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-649-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1590852D31
-	for <lists+linux-watchdog@lfdr.de>; Tue, 13 Feb 2024 10:57:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 227A38535BC
+	for <lists+linux-watchdog@lfdr.de>; Tue, 13 Feb 2024 17:13:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37D84B284AC
-	for <lists+linux-watchdog@lfdr.de>; Tue, 13 Feb 2024 09:57:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3C751F24475
+	for <lists+linux-watchdog@lfdr.de>; Tue, 13 Feb 2024 16:13:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AF11224E7;
-	Tue, 13 Feb 2024 09:56:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DC6F5F577;
+	Tue, 13 Feb 2024 16:13:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b="tHSpq6lL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C7n8wCn3"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from forward500b.mail.yandex.net (forward500b.mail.yandex.net [178.154.239.144])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD0924B23;
-	Tue, 13 Feb 2024 09:56:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B485F564;
+	Tue, 13 Feb 2024 16:13:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707818186; cv=none; b=QI7nBdzTdNc4W0bA9jmM5hHsnvmhg/HKtoT/6Mk+y/tZUirFBIeCclB//pfVQ611ADmfF7v6xH9FzT8c58o77YDIlvvwYWCrkLXTnt6FAZ74wFdfDMe8h/q/aE3diqXcuKWLcwh26l9aMUT/sBRi8udWRZEXGW67LNluUaYk9tM=
+	t=1707840782; cv=none; b=glnDb1YNQTk6lITG7o1t7uSfMJTO1ADQ5FAcMCBsq+OHazCVoTwnL/Qm/8kd6w6+BdWLxxj2KCYEC+dtbXIhWOGrMVPmvntRdEcILy3V8Fx8P8SAI9d1C0oR+4IV9U/yg7FYY3osMBSRX5pOGnvnIexh2wIHMfobLyTjBce22B4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707818186; c=relaxed/simple;
-	bh=BNSX9WQo4fdZixPgrChnndimSE1LeUip7SbHQG3EiRk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lnVHOfnO/tsUVI4Dqx9fzVPhFcYxDlxJLDe7xuZgHe1Ld7yh54uLGNwD6EeINwBugvtkNZw1W36Tt2BL9uErg9apphFAj82+QqqWfQ50RFTi9oTJYxTD/7iT7t31xoNP/L1/fI9zk6scWUsKoD/hRAkc1QDXr2UYPgfZ6FdX6Yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me; spf=pass smtp.mailfrom=maquefel.me; dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b=tHSpq6lL; arc=none smtp.client-ip=178.154.239.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=maquefel.me
-Received: from mail-nwsmtp-smtp-production-main-91.myt.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-91.myt.yp-c.yandex.net [IPv6:2a02:6b8:c12:3019:0:640:a0d4:0])
-	by forward500b.mail.yandex.net (Yandex) with ESMTPS id 9CCD561154;
-	Tue, 13 Feb 2024 12:48:16 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-91.myt.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id Amja449YvOs0-Ohe7AJJt;
-	Tue, 13 Feb 2024 12:48:14 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail;
-	t=1707817694; bh=BNSX9WQo4fdZixPgrChnndimSE1LeUip7SbHQG3EiRk=;
-	h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
-	b=tHSpq6lLbJRzMUl5S+AQdH+yFWqgLs5dAvYesqMe255xcZfmaDSgVPRqcA1r0bzrw
-	 TkfIPDSLR62NkdUlPI+s/lCQcEhokM08txNkwukmx6USimZGbDh66EHaLNxEHxEu27
-	 3BeQU0snEq2nQPzdmEknsfQ0A1hkYVGjcAylct3Y=
-Authentication-Results: mail-nwsmtp-smtp-production-main-91.myt.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
-Message-ID: <84444657b86c7a25ea2e6031ea85978917f33342.camel@maquefel.me>
-Subject: Re: [PATCH v7 00/39] ep93xx device tree conversion
-From: Nikita Shubin <nikita.shubin@maquefel.me>
-To: andy.shevchenko@gmail.com, Vinod Koul <vkoul@kernel.org>, Stephen Boyd
-	 <sboyd@kernel.org>
-Cc: Hartley Sweeten <hsweeten@visionengravers.com>, Alexander Sverdlin
- <alexander.sverdlin@gmail.com>, Russell King <linux@armlinux.org.uk>,
- Lukasz Majewski <lukma@denx.de>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
- Vinod Koul <vkoul@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
- Guenter Roeck <linux@roeck-us.net>, Thierry Reding
- <thierry.reding@gmail.com>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
- <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
- Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>, Miquel Raynal
- <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, Vignesh
- Raghavendra <vigneshr@ti.com>, Damien Le Moal <dlemoal@kernel.org>, Sergey
- Shtylyov <s.shtylyov@omp.ru>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>, Ralf Baechle <ralf@linux-mips.org>,  "Wu,
- Aaron" <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, Olof Johansson
- <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-pm@vger.kernel.org,  devicetree@vger.kernel.org,
- dmaengine@vger.kernel.org,  linux-watchdog@vger.kernel.org,
- linux-pwm@vger.kernel.org,  linux-spi@vger.kernel.org,
- netdev@vger.kernel.org, linux-mtd@lists.infradead.org, 
- linux-ide@vger.kernel.org, linux-input@vger.kernel.org, 
- linux-sound@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, Andy Shevchenko
- <andriy.shevchenko@intel.com>, Bartosz Golaszewski
- <bartosz.golaszewski@linaro.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski@linaro.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>
-Date: Tue, 13 Feb 2024 12:48:11 +0300
-In-Reply-To: <Zb_DfISgoNyTKWMp@surfacebook.localdomain>
-References: <20240118-ep93xx-v7-0-d953846ae771@maquefel.me>
-	 <Zb_DfISgoNyTKWMp@surfacebook.localdomain>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 
+	s=arc-20240116; t=1707840782; c=relaxed/simple;
+	bh=N2yP66lwtVP62oiiX2anPJqTkl4LISR2GidqocTTxCA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bpMsDtFpdouVDhdDrGLZWxCBV0fyB73ovvjV6PzgCPGSjj6wHB3TeypFkD/ikq2UygT18/yGY0cJ4ns/JiEEDLs6HMuMGDC6ePA5piBZcyxj4hBRemyl8NCOi+V1KFZCp1QR3UqihPkUrllD5hbQZGu+48IxCQr6jqzNLsu4ltw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C7n8wCn3; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6e0dcf0a936so1171746b3a.0;
+        Tue, 13 Feb 2024 08:13:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707840780; x=1708445580; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=D8rkZbyPYFgVx8KHNAMihfBeoKM5d9jXNM0RcMpsSfI=;
+        b=C7n8wCn3W0bNDWKQA/qHgIG3iJ3gMxIfU2y99zfcwyi19a513M4evQYUjABjmOr1sb
+         WxCiDicTSubxhCuWktH54FuqL+6UKZuviPsgSZJWfh+S2D3wfG9YyeeeA/lV5NgzfljM
+         W/DD+Xqma+QstZwdk6GPitygDrvpkaDH7luxesE6aRtSDV940YVAMhMMVN7LFN4lZAux
+         LpmV+RcpgL+V7vUt1QsijZyCEbprE0FmnxT1QIp5mbQnj7OCN2aLU1XCIXivuOS4vDDt
+         euZ8VrD0lGYO6wyFkFZlsmOY0kH3oqAYYioTnl8Ir2zIPVa7HcVoH8wJqYjG0rnD2N9S
+         hqDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707840780; x=1708445580;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D8rkZbyPYFgVx8KHNAMihfBeoKM5d9jXNM0RcMpsSfI=;
+        b=jCch/O7lzITGAfLAox2H5CG0FU8jZOn+YzN5S7JumlqcU1DbHi4f7F8GAQa1uYl5xO
+         BkdzxqLvgUrPmcd4oHhpoqEbIZ+rwHWTq8jr1b8FGt+BdMuniSXa+qrFckNnWQ85gwEO
+         tDjUkJ0SJPtixS2f6LtCdCwXvwRC2Zl014O6mvbys3ww6e2eXsStJViFX08yD5vlOSbL
+         fInaQQSTk+TPY3CMxWXv2/sDUgoQcfLVl0N2Mn8NMqbVmy+SnU3l7oda6MggxBmng6b7
+         xhFdjOHF7zl0vA7+em/v7W9tjtDRaXoaZ8jsRgpTcoL1qMHddUiEQFXB+fAIsPutbx43
+         uy7w==
+X-Forwarded-Encrypted: i=1; AJvYcCWgUZjRVgJEYFNSRBWjcgKmKBwqH/vWAgf5r0i6ykGyovhCH/tl5YwywpKzZIC8DV0dNpv5q+S0opvTnWvZ6aDDY4Brp6n1bGgBX7mBJ9OveRKqWcSGYqLtx9niCO9D4AOz8flnsvu2NH98R2Y=
+X-Gm-Message-State: AOJu0YxT7quRATtvDj+o2EPQnPKEyflSnaTWb9bdgMr7R1u8QvtcCSo9
+	GzP6evKKYvJDXLPgqg3H0eAwhNwl9/SPIBtyjBLNcqJXVbboMhUR
+X-Google-Smtp-Source: AGHT+IHMP26wViJ7ERRA42zcu46txodbm4V/VTyhCmMLAlvjMo6LWm+C4Kihu0MT1/wpeFNr4GOZjQ==
+X-Received: by 2002:a62:cd45:0:b0:6e0:384e:c6ce with SMTP id o66-20020a62cd45000000b006e0384ec6cemr3409319pfg.7.1707840779793;
+        Tue, 13 Feb 2024 08:12:59 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWldg6+ZQSDlHfSIR7hksr6KNW0RUzroLd4GaRLwWY/zargZ7lbGeYtlvI2fMzGboyYTOoVJz1OD5AhC0+PinjmTmIwNZ1+zpbhD5RzLEZvsPyBCD9TmFyWcTjO1mV6vZOxZxWePUquWbCs5v0=
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id lm17-20020a056a003c9100b006e080d792acsm7486815pfb.184.2024.02.13.08.12.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Feb 2024 08:12:58 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 13 Feb 2024 08:12:57 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Jerry Hoemann <jerry.hoemann@hpe.com>
+Cc: wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog/hpwdt: Support Suspend and Resume
+Message-ID: <7b70a8e7-10ce-4835-891c-b854919fa3cb@roeck-us.net>
+References: <20240213070203.489846-1-jerry.hoemann@hpe.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240213070203.489846-1-jerry.hoemann@hpe.com>
 
-On Sun, 2024-02-04 at 19:03 +0200, andy.shevchenko@gmail.com wrote:
-> Thu, Jan 18, 2024 at 11:20:43AM +0300, Nikita Shubin kirjoitti:
-> > The goal is to recieve ACKs for all patches in series to merge it
-> > via Arnd branch.
-> >=20
-> > No major changes since last version (v6) all changes are cometic.
-> >=20
-> > Following patches require attention from Stephen Boyd, as they were
-> > converted to aux_dev as suggested:
-> >=20
-> > - ARM: ep93xx: add regmap aux_dev
-> > - clk: ep93xx: add DT support for Cirrus EP93xx
-> >=20
-> > Following patches require attention from Vinod Koul:
-> >=20
-> > - dma: cirrus: Convert to DT for Cirrus EP93xx
-> > - dma: cirrus: remove platform code
-> >=20
-> > Following patches are dropped:
-> > - dt-bindings: wdt: Add ts72xx (pulled requested by Wim Van
-> > Sebroeck)
-> >=20
-> > Big Thanks to Andy Shevchenko once again.
->=20
-> You're welcome!
->=20
+On Tue, Feb 13, 2024 at 12:02:03AM -0700, Jerry Hoemann wrote:
+> Add call backs to support suspend and resume.
+> 
 
-Thank you Andy!
+That makes me wonder if we should add something like
+	watchdog_stop_on_suspend()
+to the watchdog core. Almost every watchdog driver supporting
+suspend/resume repeats the same sequence (except for the debug
+message). That is a separate question, though.
 
-> I have a few minor comments, I believe if you send a new version it
-> will be
-> final (at least from my p.o.v.).
->=20
+> Signed-off-by: Jerry Hoemann <jerry.hoemann@hpe.com>
+> ---
+>  drivers/watchdog/hpwdt.c | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+> 
+> diff --git a/drivers/watchdog/hpwdt.c b/drivers/watchdog/hpwdt.c
+> index 138dc8d8ca3d..6565cfaa8e57 100644
+> --- a/drivers/watchdog/hpwdt.c
+> +++ b/drivers/watchdog/hpwdt.c
+> @@ -378,11 +378,38 @@ static void hpwdt_exit(struct pci_dev *dev)
+>  	pci_disable_device(dev);
+>  }
+>  
+> +static int hpwdt_suspend(struct device *dev)
+> +{
+> +	dev_dbg(dev, "Suspend watchdog\n");
+> +
 
-Still waiting for some comment from Stephen Boyd and Vinod Koul on:
+Doesn't the suspend / resume code already display such debug messages ?
 
-- ARM: ep93xx: add regmap aux_dev
-- clk: ep93xx: add DT support for Cirrus EP93xx
+> +	if (watchdog_active(&hpwdt_dev))
+> +		hpwdt_stop();
+> +
+> +	return 0;
+> +}
+> +
+> +static int hpwdt_resume(struct device *dev)
+> +{
+> +	dev_dbg(dev, "Resume watchdog\n");
+> +
+> +	if (watchdog_active(&hpwdt_dev))
+> +		hpwdt_start(&hpwdt_dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static DEFINE_SIMPLE_DEV_PM_OPS(hpwdt_pm_ops, hpwdt_suspend, hpwdt_resume);
 
-- dma: cirrus: Convert to DT for Cirrus EP93xx
-- dma: cirrus: remove platform code
+That disables / enables the watchdog as part of regular suspend/resume
+handling, meaning any hang during suspend/resume that happens later will
+hang the system. Sure you don't want to use SET_LATE_SYSTEM_SLEEP_PM_OPS()
+instead ?
 
+Never mind, though. Your call, obviously.
 
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-
-
+Thanks,
+Guenter
 
