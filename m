@@ -1,126 +1,137 @@
-Return-Path: <linux-watchdog+bounces-646-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-647-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB803850CFD
-	for <lists+linux-watchdog@lfdr.de>; Mon, 12 Feb 2024 04:01:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26B7885298B
+	for <lists+linux-watchdog@lfdr.de>; Tue, 13 Feb 2024 08:04:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59DE4B2270A
-	for <lists+linux-watchdog@lfdr.de>; Mon, 12 Feb 2024 03:01:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B69201F22D89
+	for <lists+linux-watchdog@lfdr.de>; Tue, 13 Feb 2024 07:04:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 659DD1848;
-	Mon, 12 Feb 2024 03:01:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57A6C14A96;
+	Tue, 13 Feb 2024 07:04:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DaBLuR2q"
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="aouEfcPz"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4073C0B;
-	Mon, 12 Feb 2024 03:01:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E058914296;
+	Tue, 13 Feb 2024 07:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.147.86
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707706896; cv=none; b=o1JxiPOeePxMd28Ujlw/s4KXvvsst1m8H08O1Pq8/1lQ0e2whmwYLrAPXi5ZI+dX6B51w0XjLgpG38cYcFT0uo3tu0HZEGj6NXwGZOZaGJaCsFfAl0thiRwEj4b6i2j3W09WxZQmNTu81FIswfFDCr0P1Kq9GqF1/zt7woycxCs=
+	t=1707807871; cv=none; b=V2jqXxfS7iqedeTWahsZqceOnA6avBdoLHdUgLtYfFCQk76aVLwqv3Uy2XyFPC9plBa1+o6tC7Lbcm8xPcvosMLqb6jeYBpg3759XA+lOEHz77lmcYjC7L4dDAhDdQI4fBC/jLGi1m+o158EmXrlRZ861XPRO7t8GQ1oed1DQVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707706896; c=relaxed/simple;
-	bh=4jxNxqbbPkOSw8ue3Nyb20xACqDs10FTDEVUKIMb1w4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=t+4r5mr0E3eGb2mQ9nOXZDhqr/ynSpMdqRkr6BWTbxsnyr8pVHXMTmzBcyVU1CjPkZUebCcYcPE5ZwYZkIkR+2eo+FQ3HLetiadcG46vtZK/Kvr07ZuV7Qruv8Y41+EE2Vf8B7+8ougSTjIGp8w5dHmRflyQbF0p8dnfSzYjBzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DaBLuR2q; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41C2kaKt007373;
-	Mon, 12 Feb 2024 03:01:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=HbyEud8oCRMq2ig6tJgd3FsKNUjDeJrJ85T3IXPqjBQ=; b=Da
-	BLuR2q/W+4mXnc4vKyu282ayH6XJfyKMt+GAMx/rQ4I2DQ2Rjp2TYrDAPcEhqDyE
-	n/KVq9TBYwEr8fdpObgZPIUfzwdFSI0YrMl2sfHjv1zBD5eDy6LfWVYJKugGy2K7
-	DJb9Y8LFQ+wL0AwB+r4FXTylOT+DGgBV/t9LNJpISJphi58DHlmFarRUdq1LnHqV
-	pw8mToXUb0+TmUCWq2YOEdjQi62qXcUyb7N3kNX+ZX1y2KtrZIVG5UDMxa5EV7rI
-	djRoF/XFh+l3EeMFvO3VKZg1ibzqYiggW03tbzQx7+kSnhxonAmQYh3k4ukcAqYZ
-	XT/lEGdWgh6r4V2/GjdA==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w62q2tbpm-1
+	s=arc-20240116; t=1707807871; c=relaxed/simple;
+	bh=E+QR563gX4hLxvs7YXfuwIMnx6zZm7FGrlrZu5sSaCk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tNLpQ6gCPGCBrfpxUqaqUuN4ccPVLiOS4xEMfMyopMwfS9ycwAaeYt+Lv6hsddK62dksu0BskkDpvEtTLu2wQAphFWKNkL527nxNzdZu89Ok1IhNh3Pqbp2Et0+dVxkwapMbxbFzhdZmePi3PcLZkR/RKNdoFLrOv9L8T7CUw6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=aouEfcPz; arc=none smtp.client-ip=148.163.147.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
+	by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41D5J2pv006063;
+	Tue, 13 Feb 2024 07:04:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pps0720;
+ bh=ZGCUbwQrOfaJeluWHwCgQ75rPKumNutfMnfqnj/tllA=;
+ b=aouEfcPzk3/G9SabiCcwa7lmww9jKr2+aBjuFx9VoNIwoWw6ym2aBWOA9NaGP1tkRsUD
+ yIRxNU1+JOxPZF9to2XSxcsRmrDeoc3V06GSKSRS2HwGrUq/9IRznwRzNuwmOWNBWiTq
+ COS7Ah8cNcJLpj2xijwZ0+2yNp3/Y0lBhTyx/+UwpB1oB79J79iA1YQZmC92jrW1Jz41
+ yt5teGS8JcAdVRHs4QfHwCOWynSMwK5uV5sOwIODjT4hMkuBHQp49ztYo4c7ujmdtE+O
+ 0FkZ8cbavE8GgPYb+Tavxnjrmx/6ef6MvYJ9ApXRdMwGdQ7z1kYv+0r086y3buXMQnAz mQ== 
+Received: from p1lg14878.it.hpe.com ([16.230.97.204])
+	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3w7vf0538d-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Feb 2024 03:01:04 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41C313T4018081
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Feb 2024 03:01:03 GMT
-Received: from [10.131.116.149] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Sun, 11 Feb
- 2024 19:01:00 -0800
-Message-ID: <06abbdc3-266b-47a9-8d08-fe90311269d3@quicinc.com>
-Date: Mon, 12 Feb 2024 08:30:49 +0530
+	Tue, 13 Feb 2024 07:04:09 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by p1lg14878.it.hpe.com (Postfix) with ESMTPS id CE28C1378D;
+	Tue, 13 Feb 2024 07:03:58 +0000 (UTC)
+Received: from anatevka.americas.hpqcorp.net (unknown [16.231.227.36])
+	by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 9425F80AD9F;
+	Tue, 13 Feb 2024 07:03:57 +0000 (UTC)
+From: Jerry Hoemann <jerry.hoemann@hpe.com>
+To: linux@roeck-us.net
+Cc: wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jerry Hoemann <jerry.hoemann@hpe.com>
+Subject: [PATCH] watchdog/hpwdt: Support Suspend and Resume
+Date: Tue, 13 Feb 2024 00:02:03 -0700
+Message-ID: <20240213070203.489846-1-jerry.hoemann@hpe.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: watchdog: qcom-wdt: Update maintainer to
- Rajendra Nayak
-Content-Language: en-US
-To: Jeffrey Hugo <quic_jhugo@quicinc.com>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <robh@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20240209161800.3872964-1-quic_jhugo@quicinc.com>
-From: Rajendra Nayak <quic_rjendra@quicinc.com>
-In-Reply-To: <20240209161800.3872964-1-quic_jhugo@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: TT6eLdPACJTuM5n9TB48ItyazQY26F8V
-X-Proofpoint-GUID: TT6eLdPACJTuM5n9TB48ItyazQY26F8V
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: RuPWc8ZjGihonCsa0ZSqFaSOSvqLDwP1
+X-Proofpoint-GUID: RuPWc8ZjGihonCsa0ZSqFaSOSvqLDwP1
+X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-11_23,2024-02-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 lowpriorityscore=0 adultscore=0 suspectscore=0
- impostorscore=0 phishscore=0 mlxscore=0 mlxlogscore=832 clxscore=1011
- malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2401310000 definitions=main-2402120022
+ definitions=2024-02-13_03,2024-02-12_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 phishscore=0 bulkscore=0 adultscore=0 priorityscore=1501
+ mlxscore=0 clxscore=1011 mlxlogscore=765 spamscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402130053
 
+Add call backs to support suspend and resume.
 
+Signed-off-by: Jerry Hoemann <jerry.hoemann@hpe.com>
+---
+ drivers/watchdog/hpwdt.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-On 2/9/2024 9:48 PM, Jeffrey Hugo wrote:
-> The servers for the @codeaurora domain are long retired and any messages
-> sent there will bounce. Sai has left the company and appears no longer
-> active in the community which leaves this binding orphaned. Rajendra Nayak
-> has volunteered to take over as maintainer.
-> 
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+diff --git a/drivers/watchdog/hpwdt.c b/drivers/watchdog/hpwdt.c
+index 138dc8d8ca3d..6565cfaa8e57 100644
+--- a/drivers/watchdog/hpwdt.c
++++ b/drivers/watchdog/hpwdt.c
+@@ -378,11 +378,38 @@ static void hpwdt_exit(struct pci_dev *dev)
+ 	pci_disable_device(dev);
+ }
+ 
++static int hpwdt_suspend(struct device *dev)
++{
++	dev_dbg(dev, "Suspend watchdog\n");
++
++	if (watchdog_active(&hpwdt_dev))
++		hpwdt_stop();
++
++	return 0;
++}
++
++static int hpwdt_resume(struct device *dev)
++{
++	dev_dbg(dev, "Resume watchdog\n");
++
++	if (watchdog_active(&hpwdt_dev))
++		hpwdt_start(&hpwdt_dev);
++
++	return 0;
++}
++
++static DEFINE_SIMPLE_DEV_PM_OPS(hpwdt_pm_ops, hpwdt_suspend, hpwdt_resume);
++
+ static struct pci_driver hpwdt_driver = {
+ 	.name = "hpwdt",
+ 	.id_table = hpwdt_devices,
+ 	.probe = hpwdt_init_one,
+ 	.remove = hpwdt_exit,
++
++	.driver = {
++		.name = "hpwdt",
++		.pm = &hpwdt_pm_ops,
++	}
+ };
+ 
+ MODULE_AUTHOR("Tom Mingarelli");
+-- 
+2.43.0
 
-Acked-by: Rajendra Nayak <quic_rjendra@quicinc.com>
-
-> ---
->   Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> index a4f35c598cdb..47587971fb0b 100644
-> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->   title: Qualcomm Krait Processor Sub-system (KPSS) Watchdog timer
->   
->   maintainers:
-> -  - Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-> +  - Rajendra Nayak <quic_rjendra@quicinc.com>
->   
->   properties:
->     $nodename:
 
