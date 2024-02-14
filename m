@@ -1,82 +1,73 @@
-Return-Path: <linux-watchdog+bounces-649-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-650-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 227A38535BC
-	for <lists+linux-watchdog@lfdr.de>; Tue, 13 Feb 2024 17:13:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14C738541B8
+	for <lists+linux-watchdog@lfdr.de>; Wed, 14 Feb 2024 04:16:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3C751F24475
-	for <lists+linux-watchdog@lfdr.de>; Tue, 13 Feb 2024 16:13:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BEF802818EC
+	for <lists+linux-watchdog@lfdr.de>; Wed, 14 Feb 2024 03:16:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DC6F5F577;
-	Tue, 13 Feb 2024 16:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 291208F40;
+	Wed, 14 Feb 2024 03:16:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C7n8wCn3"
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="UzTr5fn/"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B485F564;
-	Tue, 13 Feb 2024 16:13:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEEB833EA;
+	Wed, 14 Feb 2024 03:16:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.143.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707840782; cv=none; b=glnDb1YNQTk6lITG7o1t7uSfMJTO1ADQ5FAcMCBsq+OHazCVoTwnL/Qm/8kd6w6+BdWLxxj2KCYEC+dtbXIhWOGrMVPmvntRdEcILy3V8Fx8P8SAI9d1C0oR+4IV9U/yg7FYY3osMBSRX5pOGnvnIexh2wIHMfobLyTjBce22B4=
+	t=1707880571; cv=none; b=ut98f2PqJtWsFiHkmQZNLWpw/Tl0CdO3ilsuc5Ng/gOTfiaMUvQPlFn8pMr8mKsGwHV3eZjuMKJ4ySXhfyi7Rnavs4kmQ4OSbF7O+p4JbStYY6Ex4qyd7VJ1BcE2szKCvVH0jfHDA2exsZCR0CfTPjiKaP37sNeBdr57kECGCek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707840782; c=relaxed/simple;
-	bh=N2yP66lwtVP62oiiX2anPJqTkl4LISR2GidqocTTxCA=;
+	s=arc-20240116; t=1707880571; c=relaxed/simple;
+	bh=+Q9XMabLHtXXcLBCri2MEt+Zj8W3nhrTULyowOO0Mg4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bpMsDtFpdouVDhdDrGLZWxCBV0fyB73ovvjV6PzgCPGSjj6wHB3TeypFkD/ikq2UygT18/yGY0cJ4ns/JiEEDLs6HMuMGDC6ePA5piBZcyxj4hBRemyl8NCOi+V1KFZCp1QR3UqihPkUrllD5hbQZGu+48IxCQr6jqzNLsu4ltw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C7n8wCn3; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6e0dcf0a936so1171746b3a.0;
-        Tue, 13 Feb 2024 08:13:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707840780; x=1708445580; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D8rkZbyPYFgVx8KHNAMihfBeoKM5d9jXNM0RcMpsSfI=;
-        b=C7n8wCn3W0bNDWKQA/qHgIG3iJ3gMxIfU2y99zfcwyi19a513M4evQYUjABjmOr1sb
-         WxCiDicTSubxhCuWktH54FuqL+6UKZuviPsgSZJWfh+S2D3wfG9YyeeeA/lV5NgzfljM
-         W/DD+Xqma+QstZwdk6GPitygDrvpkaDH7luxesE6aRtSDV940YVAMhMMVN7LFN4lZAux
-         LpmV+RcpgL+V7vUt1QsijZyCEbprE0FmnxT1QIp5mbQnj7OCN2aLU1XCIXivuOS4vDDt
-         euZ8VrD0lGYO6wyFkFZlsmOY0kH3oqAYYioTnl8Ir2zIPVa7HcVoH8wJqYjG0rnD2N9S
-         hqDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707840780; x=1708445580;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D8rkZbyPYFgVx8KHNAMihfBeoKM5d9jXNM0RcMpsSfI=;
-        b=jCch/O7lzITGAfLAox2H5CG0FU8jZOn+YzN5S7JumlqcU1DbHi4f7F8GAQa1uYl5xO
-         BkdzxqLvgUrPmcd4oHhpoqEbIZ+rwHWTq8jr1b8FGt+BdMuniSXa+qrFckNnWQ85gwEO
-         tDjUkJ0SJPtixS2f6LtCdCwXvwRC2Zl014O6mvbys3ww6e2eXsStJViFX08yD5vlOSbL
-         fInaQQSTk+TPY3CMxWXv2/sDUgoQcfLVl0N2Mn8NMqbVmy+SnU3l7oda6MggxBmng6b7
-         xhFdjOHF7zl0vA7+em/v7W9tjtDRaXoaZ8jsRgpTcoL1qMHddUiEQFXB+fAIsPutbx43
-         uy7w==
-X-Forwarded-Encrypted: i=1; AJvYcCWgUZjRVgJEYFNSRBWjcgKmKBwqH/vWAgf5r0i6ykGyovhCH/tl5YwywpKzZIC8DV0dNpv5q+S0opvTnWvZ6aDDY4Brp6n1bGgBX7mBJ9OveRKqWcSGYqLtx9niCO9D4AOz8flnsvu2NH98R2Y=
-X-Gm-Message-State: AOJu0YxT7quRATtvDj+o2EPQnPKEyflSnaTWb9bdgMr7R1u8QvtcCSo9
-	GzP6evKKYvJDXLPgqg3H0eAwhNwl9/SPIBtyjBLNcqJXVbboMhUR
-X-Google-Smtp-Source: AGHT+IHMP26wViJ7ERRA42zcu46txodbm4V/VTyhCmMLAlvjMo6LWm+C4Kihu0MT1/wpeFNr4GOZjQ==
-X-Received: by 2002:a62:cd45:0:b0:6e0:384e:c6ce with SMTP id o66-20020a62cd45000000b006e0384ec6cemr3409319pfg.7.1707840779793;
-        Tue, 13 Feb 2024 08:12:59 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWldg6+ZQSDlHfSIR7hksr6KNW0RUzroLd4GaRLwWY/zargZ7lbGeYtlvI2fMzGboyYTOoVJz1OD5AhC0+PinjmTmIwNZ1+zpbhD5RzLEZvsPyBCD9TmFyWcTjO1mV6vZOxZxWePUquWbCs5v0=
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id lm17-20020a056a003c9100b006e080d792acsm7486815pfb.184.2024.02.13.08.12.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Feb 2024 08:12:58 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 13 Feb 2024 08:12:57 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Jerry Hoemann <jerry.hoemann@hpe.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=IufBaoFe4//khmV2XVzw5U6cFhjQL10rkYsTx9e+elLMenTNmx9Y5YywY/3PeZvRB9uxjuIVfJJarSaOpu+uxQrIkGzJxuT1TsqLlGdPI7LO/LBNLod1TlGL+SDKl1QCgCCdXb318Xp9haQOvWmOZi39KZKmNDmsiW8no4Bmq8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=UzTr5fn/; arc=none smtp.client-ip=148.163.143.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
+	by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41DNXX9s020343;
+	Wed, 14 Feb 2024 03:15:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : mime-version : content-type
+ : in-reply-to; s=pps0720; bh=fwHI8IKkaHcLSD5H8fNp0S1R+2+9iuvqdEoEGjw4yZg=;
+ b=UzTr5fn/JAIxvRdjIkgN+khKuX7EnZVl7BBIdz7hQHZcpX0os8ltT4xYtyBYrNE+OIfT
+ dlen7SOmHy1+H8lqH9SS1IwClL4eaqcdYk0nIK2zZSIld8mJzY2iKUhJlIHlrFULioXd
+ UT0nC8EN2TGM0OTQSRbwLb/dcoxn2LuHD2F09hTbGN4aDiw6ZHGEUBhBIKoHMonoox10
+ o41mgMUVY+mVbfbjbDHKrUuIxLENJ13OkZsX3OEHXJdsMEI4Z/KM4kKu1JEjMvPy3fZq
+ /LjzJDSw6d2uqHLdKKewlgkbxPCjim2hfkuhh9eCCn1TXbLDKbNVXlHf8OQ/EyEmzhZk 8A== 
+Received: from p1lg14880.it.hpe.com ([16.230.97.201])
+	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3w8fqtv4bc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 03:15:47 +0000
+Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by p1lg14880.it.hpe.com (Postfix) with ESMTPS id D834580036D;
+	Wed, 14 Feb 2024 03:15:38 +0000 (UTC)
+Received: from perchik (unknown [16.231.227.39])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTPS id 49270800378;
+	Wed, 14 Feb 2024 03:15:37 +0000 (UTC)
+Date: Tue, 13 Feb 2024 20:15:35 -0700
+From: Jerry Hoemann <jerry.hoemann@hpe.com>
+To: Guenter Roeck <linux@roeck-us.net>
 Cc: wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] watchdog/hpwdt: Support Suspend and Resume
-Message-ID: <7b70a8e7-10ce-4835-891c-b854919fa3cb@roeck-us.net>
+Message-ID: <20240214031535.GH2879@perchik>
+Reply-To: Jerry.Hoemann@hpe.com
 References: <20240213070203.489846-1-jerry.hoemann@hpe.com>
+ <7b70a8e7-10ce-4835-891c-b854919fa3cb@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -85,65 +76,100 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240213070203.489846-1-jerry.hoemann@hpe.com>
+In-Reply-To: <7b70a8e7-10ce-4835-891c-b854919fa3cb@roeck-us.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-ORIG-GUID: Kxcod8UR9wrfdgtdks4RCp3rzXbt6u0L
+X-Proofpoint-GUID: Kxcod8UR9wrfdgtdks4RCp3rzXbt6u0L
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-13_16,2024-02-12_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 clxscore=1015
+ spamscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2402140024
 
-On Tue, Feb 13, 2024 at 12:02:03AM -0700, Jerry Hoemann wrote:
-> Add call backs to support suspend and resume.
+On Tue, Feb 13, 2024 at 08:12:57AM -0800, Guenter Roeck wrote:
+> On Tue, Feb 13, 2024 at 12:02:03AM -0700, Jerry Hoemann wrote:
+> > Add call backs to support suspend and resume.
+> > 
 > 
+> That makes me wonder if we should add something like
+> 	watchdog_stop_on_suspend()
+> to the watchdog core. Almost every watchdog driver supporting
+> suspend/resume repeats the same sequence (except for the debug
+> message). That is a separate question, though.
 
-That makes me wonder if we should add something like
-	watchdog_stop_on_suspend()
-to the watchdog core. Almost every watchdog driver supporting
-suspend/resume repeats the same sequence (except for the debug
-message). That is a separate question, though.
+I think that is a good idea.
 
-> Signed-off-by: Jerry Hoemann <jerry.hoemann@hpe.com>
-> ---
->  drivers/watchdog/hpwdt.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
 > 
-> diff --git a/drivers/watchdog/hpwdt.c b/drivers/watchdog/hpwdt.c
-> index 138dc8d8ca3d..6565cfaa8e57 100644
-> --- a/drivers/watchdog/hpwdt.c
-> +++ b/drivers/watchdog/hpwdt.c
-> @@ -378,11 +378,38 @@ static void hpwdt_exit(struct pci_dev *dev)
->  	pci_disable_device(dev);
->  }
->  
-> +static int hpwdt_suspend(struct device *dev)
-> +{
-> +	dev_dbg(dev, "Suspend watchdog\n");
-> +
+> > Signed-off-by: Jerry Hoemann <jerry.hoemann@hpe.com>
+> > ---
+> >  drivers/watchdog/hpwdt.c | 27 +++++++++++++++++++++++++++
+> >  1 file changed, 27 insertions(+)
+> > 
+> > diff --git a/drivers/watchdog/hpwdt.c b/drivers/watchdog/hpwdt.c
+> > index 138dc8d8ca3d..6565cfaa8e57 100644
+> > --- a/drivers/watchdog/hpwdt.c
+> > +++ b/drivers/watchdog/hpwdt.c
+> > @@ -378,11 +378,38 @@ static void hpwdt_exit(struct pci_dev *dev)
+> >  	pci_disable_device(dev);
+> >  }
+> >  
+> > +static int hpwdt_suspend(struct device *dev)
+> > +{
+> > +	dev_dbg(dev, "Suspend watchdog\n");
+> > +
+> 
+> Doesn't the suspend / resume code already display such debug messages ?
 
-Doesn't the suspend / resume code already display such debug messages ?
+It displays some.  I mostly was using to make sure that the
+callback was being called.  I can drop it.
 
-> +	if (watchdog_active(&hpwdt_dev))
-> +		hpwdt_stop();
-> +
-> +	return 0;
-> +}
-> +
-> +static int hpwdt_resume(struct device *dev)
-> +{
-> +	dev_dbg(dev, "Resume watchdog\n");
-> +
-> +	if (watchdog_active(&hpwdt_dev))
-> +		hpwdt_start(&hpwdt_dev);
-> +
-> +	return 0;
-> +}
-> +
-> +static DEFINE_SIMPLE_DEV_PM_OPS(hpwdt_pm_ops, hpwdt_suspend, hpwdt_resume);
 
-That disables / enables the watchdog as part of regular suspend/resume
-handling, meaning any hang during suspend/resume that happens later will
-hang the system. Sure you don't want to use SET_LATE_SYSTEM_SLEEP_PM_OPS()
-instead ?
+> 
+> > +	if (watchdog_active(&hpwdt_dev))
+> > +		hpwdt_stop();
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int hpwdt_resume(struct device *dev)
+> > +{
+> > +	dev_dbg(dev, "Resume watchdog\n");
+> > +
+> > +	if (watchdog_active(&hpwdt_dev))
+> > +		hpwdt_start(&hpwdt_dev);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static DEFINE_SIMPLE_DEV_PM_OPS(hpwdt_pm_ops, hpwdt_suspend, hpwdt_resume);
+> 
+> That disables / enables the watchdog as part of regular suspend/resume
+> handling, meaning any hang during suspend/resume that happens later will
+> hang the system. Sure you don't want to use SET_LATE_SYSTEM_SLEEP_PM_OPS()
+> instead ?
+> 
+> Never mind, though. Your call, obviously.
 
-Never mind, though. Your call, obviously.
+Your suggestion would be an improvement.
+Will change in version 2 of patch.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Thanks,
-Guenter
+Thanks for the help.
+
+
+> 
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> Thanks,
+> Guenter
+
+-- 
+
+-----------------------------------------------------------------------------
+Jerry Hoemann                  Software Engineer   Hewlett Packard Enterprise
+-----------------------------------------------------------------------------
 
