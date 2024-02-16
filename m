@@ -1,109 +1,90 @@
-Return-Path: <linux-watchdog+bounces-669-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-670-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83F8F858262
-	for <lists+linux-watchdog@lfdr.de>; Fri, 16 Feb 2024 17:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F6858589ED
+	for <lists+linux-watchdog@lfdr.de>; Sat, 17 Feb 2024 00:12:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5CA61C21D8B
-	for <lists+linux-watchdog@lfdr.de>; Fri, 16 Feb 2024 16:25:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 826181C2088F
+	for <lists+linux-watchdog@lfdr.de>; Fri, 16 Feb 2024 23:12:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D7BE12FF6F;
-	Fri, 16 Feb 2024 16:24:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82D1514C5BA;
+	Fri, 16 Feb 2024 23:10:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="XTmMXY2k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WF3Y680+"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B8D12FF6B;
-	Fri, 16 Feb 2024 16:24:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7D014C5B1;
+	Fri, 16 Feb 2024 23:10:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708100696; cv=none; b=kXCuZuEn1jJqnsTwrfhcPBTuTwL4FPD6pZYCmDZLakztrv94HOSm9FwOnchBQKwl3SpgQdq9kS/6hNaMpNPcJUM0ff0eie14va1Kf/fJpecRNq63fWa8P1UpZyfsrBMA/gnm43NZcjbA3CuM0qNX9q/XALPM91KdyDk+vPXRIwQ=
+	t=1708125059; cv=none; b=ZiMVXMdCLvWYSY5VFTqrcvq1nI/cJyKVLpQv/rV2298tNqkSybGZYKYleQVWMEzaRB4vg+MhmG08osLJLKNmEDKpyWk2WztTFGpJJxeiqXN21kPKfi6rieLwUfWHQIErAvmoLnWAUxddAFNd3BNYRoT8ge3sUYRnCSMyfn1XSSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708100696; c=relaxed/simple;
-	bh=4s1vWTaBK1a7eErd0aZR00tw4M/zLRbeF4g7c5F3osE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=LjaJqEBlVhvVhrcH3T+V7axmCtzJh0V2U+Et0wzQN5+DfI0IpaTeINNOsTpz2DYF3sp30sKmY7p+L0QTUPRaj3+kcp/XsPeagStrJpaQk2j0Vu8Jm6NIkB1VJcIrVnm+zOVjQa2h2uTvhBCec6/WTP8KIVGiZoAVXfPejKARwvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=XTmMXY2k; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41GEvcuj023701;
-	Fri, 16 Feb 2024 16:24:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=FZCRCQA7RDFeOV8/PzhAWCk5baSbdABuUVo9ZHC8ppY=; b=XT
-	mMXY2k0PAZb5W9EbakthNgBITfByqkpGG7Vmq5VJEI9t2I++skpgchR2eStsxZBQ
-	Y3VtUUjohe0QZi5JhMr1HRly1p9nnVGlKAXtTS70ytPblDQqNX4YqNeEIINZOIOl
-	4SSKBSA02iR7wukJK1JlpJZFZw9Kpl+Roe2bQx4rKAKm92mdXIdDmEhUwTvkGDBs
-	zt7cgp5PH9EtQi2Rfa9LCtaJdRlDwNgmDNDp2I2xFG3Pid9jHOm9wiaaULqKOGnR
-	rn6i8rB9pAGNlSoUNd18TtL1+280TaWY0XpOMarIMpuW1Bgl9iAyRU9E59O6FiXz
-	PhyGbuYNCONHxZEi01jg==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wa61ngmrm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Feb 2024 16:24:36 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41GGOZt0029956
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Feb 2024 16:24:35 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 16 Feb
- 2024 08:24:34 -0800
-Message-ID: <f0414c84-d4b4-2c9c-5737-6f4fa9259adf@quicinc.com>
-Date: Fri, 16 Feb 2024 09:24:33 -0700
+	s=arc-20240116; t=1708125059; c=relaxed/simple;
+	bh=htT7sHbL8qUuTypciKRHHCC140E3Pxqzt02b5htuv9g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UTH+l1xh60YzGZ5O73+NMUmCT1m1PrF068P85h8JdNaGX6o3Hk56eDFA3W/NBUnaGeoVMlhiZ8MyGQr1ktMeDuJ1flmK2PkLsXtFw36jSUpqL+OoJettO49PASwM36ONze12LqK6EvhaaJP3a7v797H8eWJTzkayJQMugH874GQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WF3Y680+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59729C43143;
+	Fri, 16 Feb 2024 23:10:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708125058;
+	bh=htT7sHbL8qUuTypciKRHHCC140E3Pxqzt02b5htuv9g=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=WF3Y680+0Lh+CqETIhq2lRbbVTG/aRjIVZRVn+W7X8k32OgXyLjAYkmm6kYCLeUUz
+	 8yngs1FpBa4m/IDBr6MnPL6IPwVmvMZv8VI98mDA5UQBY3sfjuuK7TGDbXoWLWzaML
+	 O7rf8pn7pqzjYuXFkP8SGkvpLO87tk0fcVkfgzgIyZ1a5JRew91V9ySN1N/qCy0oZ7
+	 Z9F5cuFPYUnA8+rS4iS9QlI4PlZuMbovpj87Y7GIZ5keq8PIFjSkfabZeAs7gpLeD1
+	 T6Jv2lWTILZlOOSPuuBWcFcz+TQbZrffB1CGn+gOb8HBhBHj7SGjrJZEQKaF4s/KlS
+	 Q1fU29zVGAjeg==
+From: Bjorn Andersson <andersson@kernel.org>
+To: ~postmarketos/upstreaming@lists.sr.ht,
+	phone-devel@vger.kernel.org,
+	Andy Gross <agross@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+	Luca Weiss <luca@z3ntu.xyz>
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
+Subject: Re: [PATCH v2] ARM: dts: qcom: msm8226: Add watchdog node
+Date: Fri, 16 Feb 2024 17:10:41 -0600
+Message-ID: <170812504015.18043.2294852608737825089.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240214-msm8226-msm8974-watchdog-v2-1-a6b2f27a7e28@z3ntu.xyz>
+References: <20240214-msm8226-msm8974-watchdog-v2-1-a6b2f27a7e28@z3ntu.xyz>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] dt-bindings: watchdog: qcom-wdt: Update maintainer to
- Rajendra Nayak
-Content-Language: en-US
-To: <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <wim@linux-watchdog.org>, <linux@roeck-us.net>, <robh@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <quic_rjendra@quicinc.com>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20240209161800.3872964-1-quic_jhugo@quicinc.com>
-From: Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20240209161800.3872964-1-quic_jhugo@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: mmZwq7mxpncIZEjCQepWB6g0fZ45Jt36
-X-Proofpoint-ORIG-GUID: mmZwq7mxpncIZEjCQepWB6g0fZ45Jt36
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-16_15,2024-02-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- clxscore=1015 bulkscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
- adultscore=0 spamscore=0 suspectscore=0 priorityscore=1501 mlxlogscore=632
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2401310000
- definitions=main-2402160130
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On 2/9/2024 9:18 AM, Jeffrey Hugo wrote:
-> The servers for the @codeaurora domain are long retired and any messages
-> sent there will bounce. Sai has left the company and appears no longer
-> active in the community which leaves this binding orphaned. Rajendra Nayak
-> has volunteered to take over as maintainer.
+
+On Wed, 14 Feb 2024 22:46:28 +0100, Luca Weiss wrote:
+> Add watchdog for MSM8226 platform.
 > 
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> 
 
-Guenter/Wim, will you take this change?
+Applied, thanks!
 
--Jeff
+[1/1] ARM: dts: qcom: msm8226: Add watchdog node
+      commit: 9e9c906ede3b7dcf7bf7df61ac712613c7d6c2da
+
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
