@@ -1,69 +1,52 @@
-Return-Path: <linux-watchdog+bounces-670-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-671-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F6858589ED
-	for <lists+linux-watchdog@lfdr.de>; Sat, 17 Feb 2024 00:12:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77401858D30
+	for <lists+linux-watchdog@lfdr.de>; Sat, 17 Feb 2024 05:40:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 826181C2088F
-	for <lists+linux-watchdog@lfdr.de>; Fri, 16 Feb 2024 23:12:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C75A7B22052
+	for <lists+linux-watchdog@lfdr.de>; Sat, 17 Feb 2024 04:40:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82D1514C5BA;
-	Fri, 16 Feb 2024 23:10:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30A9014281;
+	Sat, 17 Feb 2024 04:40:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WF3Y680+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qY59KLK4"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7D014C5B1;
-	Fri, 16 Feb 2024 23:10:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024581CA86;
+	Sat, 17 Feb 2024 04:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708125059; cv=none; b=ZiMVXMdCLvWYSY5VFTqrcvq1nI/cJyKVLpQv/rV2298tNqkSybGZYKYleQVWMEzaRB4vg+MhmG08osLJLKNmEDKpyWk2WztTFGpJJxeiqXN21kPKfi6rieLwUfWHQIErAvmoLnWAUxddAFNd3BNYRoT8ge3sUYRnCSMyfn1XSSY=
+	t=1708144834; cv=none; b=tJrpfMwKFS3B/vgFohEjNDOWydVXnaojmRKfFmZFSWUOGtzhp4FmILTOhLzBLPUvJl5DPRz2DL+ggZ2QrQb94mvkQsi7K6RKrRQwbwTxNjw7b7GiicngoZcNTdEN2dYV3eSvtR23AHEo8WKDHACAo176/hweYiDAsjIl59R/7zE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708125059; c=relaxed/simple;
-	bh=htT7sHbL8qUuTypciKRHHCC140E3Pxqzt02b5htuv9g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UTH+l1xh60YzGZ5O73+NMUmCT1m1PrF068P85h8JdNaGX6o3Hk56eDFA3W/NBUnaGeoVMlhiZ8MyGQr1ktMeDuJ1flmK2PkLsXtFw36jSUpqL+OoJettO49PASwM36ONze12LqK6EvhaaJP3a7v797H8eWJTzkayJQMugH874GQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WF3Y680+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59729C43143;
-	Fri, 16 Feb 2024 23:10:57 +0000 (UTC)
+	s=arc-20240116; t=1708144834; c=relaxed/simple;
+	bh=LUJDC/VfEayPO/LNjl7p0MlBSOcC2kOdKtdoDYyCuiY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=SSZ1hYB5pn5kRMVvGTs92wARFVvvNId/eIvIvXmDh/LVg2Z+vkQUKsLAJfTl+PgOAQ72kr+VqseqiPvw6MtfCNvuCL9pLHwBdNqg+4UJpDz5JEVTNgDYm1utokPFeJevPyZJDf7RVHAkUMOpL0i0yFBKwoMA4CZG2kD8hO+HMlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qY59KLK4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7B524C433F1;
+	Sat, 17 Feb 2024 04:40:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708125058;
-	bh=htT7sHbL8qUuTypciKRHHCC140E3Pxqzt02b5htuv9g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WF3Y680+0Lh+CqETIhq2lRbbVTG/aRjIVZRVn+W7X8k32OgXyLjAYkmm6kYCLeUUz
-	 8yngs1FpBa4m/IDBr6MnPL6IPwVmvMZv8VI98mDA5UQBY3sfjuuK7TGDbXoWLWzaML
-	 O7rf8pn7pqzjYuXFkP8SGkvpLO87tk0fcVkfgzgIyZ1a5JRew91V9ySN1N/qCy0oZ7
-	 Z9F5cuFPYUnA8+rS4iS9QlI4PlZuMbovpj87Y7GIZ5keq8PIFjSkfabZeAs7gpLeD1
-	 T6Jv2lWTILZlOOSPuuBWcFcz+TQbZrffB1CGn+gOb8HBhBHj7SGjrJZEQKaF4s/KlS
-	 Q1fU29zVGAjeg==
-From: Bjorn Andersson <andersson@kernel.org>
-To: ~postmarketos/upstreaming@lists.sr.ht,
-	phone-devel@vger.kernel.org,
-	Andy Gross <agross@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-	Luca Weiss <luca@z3ntu.xyz>
-Cc: linux-arm-msm@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
-Subject: Re: [PATCH v2] ARM: dts: qcom: msm8226: Add watchdog node
-Date: Fri, 16 Feb 2024 17:10:41 -0600
-Message-ID: <170812504015.18043.2294852608737825089.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240214-msm8226-msm8974-watchdog-v2-1-a6b2f27a7e28@z3ntu.xyz>
-References: <20240214-msm8226-msm8974-watchdog-v2-1-a6b2f27a7e28@z3ntu.xyz>
+	s=k20201202; t=1708144833;
+	bh=LUJDC/VfEayPO/LNjl7p0MlBSOcC2kOdKtdoDYyCuiY=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=qY59KLK4H+KZVWQWakhsfsXav41jKBUuDbm/I2fYb9p/rvTTug5Xk5yv3pmbIKIWH
+	 zVHgzG56xc0iU4GE8KedLKYvOF8kI8u5ceuJG8j4xD5EiCDiF71GwDbLCD+BZ8lCf4
+	 dXSELR0nElsZ1ZsHcwEZ0HuPF8tpplJDTP8KtIqKNq7H8eiR/0dKbwTdiy8ofFukfw
+	 XjAQFzqpLDW2hoqzc0ahGnIAbzuvxOE6l8w4HGze0zKlZwoPhmLw6895sv0hGeqaYA
+	 /D+TZev/PftbuuPss7XIwsVTGBu2lQWoX6IFGe855n7nIgDmozfHts/Enx/I3FdzJg
+	 CbKXV/0Ok57qA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61D0EC48BC3;
+	Sat, 17 Feb 2024 04:40:33 +0000 (UTC)
+From: Yang Xiwen via B4 Relay <devnull+forbidden405.outlook.com@kernel.org>
+Subject: [PATCH 0/2] watchdog: sp805: add reset control support
+Date: Sat, 17 Feb 2024 12:40:33 +0800
+Message-Id: <20240217-hisi-wdt-v1-0-cdb9ddcab968@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -71,20 +54,47 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAME40GUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDI0Nz3QygEt3ylBJd4yRTI0tzw0QzU0tDJaDygqLUtMwKsFHRsbW1AAF
+ SbwlaAAAA
+To: Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, Philipp Zabel <p.zabel@pengutronix.de>, 
+ Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Viresh Kumar <vireshk@kernel.org>
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, Yang Xiwen <forbidden405@outlook.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1708144833; l=590;
+ i=forbidden405@outlook.com; s=20230724; h=from:subject:message-id;
+ bh=LUJDC/VfEayPO/LNjl7p0MlBSOcC2kOdKtdoDYyCuiY=;
+ b=0rqqZcArxThG2yX3Hq+rdGLGQsJvuKSoEyteZdrJRyKY14vkNn89yYUJ5TWBgd/TfYi+SFcIs
+ JTK/0/6wGJmCEg6DdJ/6ICqR6ZfE6wCIjivmGUiPNshX7xFWzwOt3oX
+X-Developer-Key: i=forbidden405@outlook.com; a=ed25519;
+ pk=qOD5jhp891/Xzc+H/PZ8LWVSWE3O/XCQnAg+5vdU2IU=
+X-Endpoint-Received:
+ by B4 Relay for forbidden405@outlook.com/20230724 with auth_id=67
+X-Original-From: Yang Xiwen <forbidden405@outlook.com>
+Reply-To: <forbidden405@outlook.com>
 
+Deassert the reset if it's available.
 
-On Wed, 14 Feb 2024 22:46:28 +0100, Luca Weiss wrote:
-> Add watchdog for MSM8226 platform.
-> 
-> 
+Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
+---
+Yang Xiwen (2):
+      watchdog: sp805_wdt: deassert the reset if available
+      dt-binding: watchdog: arm,sp805: document the reset signal
 
-Applied, thanks!
-
-[1/1] ARM: dts: qcom: msm8226: Add watchdog node
-      commit: 9e9c906ede3b7dcf7bf7df61ac712613c7d6c2da
+ Documentation/devicetree/bindings/watchdog/arm,sp805.yaml | 6 ++++++
+ drivers/watchdog/sp805_wdt.c                              | 9 +++++++++
+ 2 files changed, 15 insertions(+)
+---
+base-commit: 8d3dea210042f54b952b481838c1e7dfc4ec751d
+change-id: 20240217-hisi-wdt-3b52971a6591
 
 Best regards,
 -- 
-Bjorn Andersson <andersson@kernel.org>
+Yang Xiwen <forbidden405@outlook.com>
+
 
