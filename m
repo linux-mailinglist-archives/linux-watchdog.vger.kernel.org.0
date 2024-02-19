@@ -1,204 +1,153 @@
-Return-Path: <linux-watchdog+bounces-678-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-679-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1682E859BBD
-	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Feb 2024 06:41:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15406859C90
+	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Feb 2024 08:09:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9DF3B21506
-	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Feb 2024 05:41:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1AA2C1C21860
+	for <lists+linux-watchdog@lfdr.de>; Mon, 19 Feb 2024 07:09:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F13F1E514;
-	Mon, 19 Feb 2024 05:41:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AE871CD1C;
+	Mon, 19 Feb 2024 07:09:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E4vojcHJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RtglCwzS"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF17D33C0;
-	Mon, 19 Feb 2024 05:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C994620328
+	for <linux-watchdog@vger.kernel.org>; Mon, 19 Feb 2024 07:09:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708321291; cv=none; b=XEr9AkYIcOvTR8ppD/pzlh6sczH2WBouRpwaZXSywqcsQpAHKAdmk9XohczP0w9eIVVDCsM8OfV0UUFPliDcRdhDcg/pjBb0F7uU2EWPLydbcViboDemTYPMliCrzxwSxvK4lH4TUQROZ2W+DQLxJMsEF/PufkARUSJOwdtGp7g=
+	t=1708326582; cv=none; b=Fx8Ugjwtz4DT3m12py8TFrUkpQ4fEtr6OTpnUGiDViKhmNJII4AsUuqU/v+0F5Xln+4YYbH8T/kxUv7A1pIdkPheFgeXl+2DhpTONA/v7Am4uK7UBokx7vzUdUTwqP3tIGibt5yYIn1tx0m3JBm6ThZMpva+ta8bvvm6bcZyaoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708321291; c=relaxed/simple;
-	bh=8mEJQgrUvxiuH5nR2L9KBll39m4IslQHc7+DMvdhRgo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JZPHgQ690gpS7sS7Q33PybAdJLF4823LkacsKi/vLHS9D3/49tU2G/bD/Vq6E49X79I2BtJzS8iaOX7azclolIeqzg7SCTMXr+ixlSuOvkNbP5gGnSKauUxrwbYp+5Ky0cKMRMxhtA2I/eSezD4tsaBk1PQMm3n4xWuCcTgHr9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E4vojcHJ; arc=none smtp.client-ip=209.85.167.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3c135913200so1787268b6e.1;
-        Sun, 18 Feb 2024 21:41:29 -0800 (PST)
+	s=arc-20240116; t=1708326582; c=relaxed/simple;
+	bh=mWavodQSH/q9NqdUEvCVd+4Up4ME9BoSGflH+RQ9ojo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IBka1frJ48ESvU7oMBC3ypGZlxT2P6sKEvyuwh8shVWqr6p/6MTiD+BvK9dH+cpGj/upaUSMBEKf0JWhlr1Q0nuw/pep+ltWHoL/xQx3yccqvIyuaC5+NGAToa3QB7CzT+hexBDzTCTKQRZFGs1nTzpvEUtTLQatemDoL0dgr6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RtglCwzS; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2d094bc2244so56125611fa.1
+        for <linux-watchdog@vger.kernel.org>; Sun, 18 Feb 2024 23:09:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708321289; x=1708926089; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dINrekbO9OyEoiamG9kRG6vqUkZ7GX4ftWbHSVqA3UE=;
-        b=E4vojcHJZ5PqM1yqD1gV4IEfBX/D1V1bATJ6P/MCdAZAG+8jjy6gDmzo+kX4SZWkNg
-         A/aSQzKrsdTpFHp6m1rH7shfPa3V4DAFu5tNnjcosKUGW5aftBQNMbfRNg5eqwfKJTG9
-         0jqK2OwLoAt5G2B/e9AKEpvlLE+gomaiGJyndUgVxkWjVD8ajhou1X4vMT8vwGAeqPvt
-         QCNo/K958qRVgp0sU9VhMX4qmRKDOsrTy7gg+FJ7rQ+fElHlMTpLZGL2cJxkYhx0XlX5
-         cL03IBSmhuNibSruZRZSd2oqQ3BxSTqP/p2flHzvCJyk0y/7eCUWef9yZExP1fxhOubm
-         RrKg==
+        d=linaro.org; s=google; t=1708326579; x=1708931379; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=siDNtCO6/B2uORDKLIIyi/KpHQsoDF6He103KJwinBA=;
+        b=RtglCwzSOfLrZ2giX1BXYN9kCDLO3MhmIx6qVvJd1e6QL3ua/ywWLebAe7Br2uNxZ5
+         YuQ8eMUbKb14QwShrGuKFtdlbP/IxDpqz+UmHNUahwVvVeaTtr3TVzb5DjHZoBXlGtLB
+         6i9pW/lahz9KE/8sWMMBiqdDZmpPICaUnsafGVQEOz9IPcdZRqLA5nZ2QatFU3m6dut4
+         TWXiJs53aKruabotlY5jef8AsJFO54r0YBpOnAEczkm1RpIuzwFZ8Mb228tJcXh20tOI
+         wFQgDNn0GKkpEU6OBhXVwm5NkVSyT8sNf/pfldP2JPm4CLKyIx4gqUaIWt218YeDyDUZ
+         hoCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708321289; x=1708926089;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dINrekbO9OyEoiamG9kRG6vqUkZ7GX4ftWbHSVqA3UE=;
-        b=Q4z0rRbeMX/nundMSoeekWw/Zs8Vpq6A76oDVtd0U1T2O1zExefPaWNkWYUYJ4Xte5
-         jXZckCPraAgHI0iBSGvB/eUDNMni0pmgzujlQ0KNNh5j2zh/oQL4Ioht7Y4aGJxsu1Hw
-         Vi222RnvTGFuORYFDoEV98UiAAFVf6gN5dcglICY05FbWQuPc9DDUMnDAExT2IXX/wWY
-         UCZ+yy+Ze5JxzftPgUSV9Rrxe6FNxqRGrMyOreSdcKDNE1hmtPparTMD/mnK6Zxv+E0J
-         qoQPS4bnFBBUsW/ksEczx64lfTkFs2qENCrxwpdoNxltfGx2YCzPmvWS3HxBobzobqw0
-         KgAg==
-X-Forwarded-Encrypted: i=1; AJvYcCUPu/c27LsKiHmviFkI90ZAqAMIfuxEYNVXPvom5nb9FfX9+1OizGInEmEX6z+lytLI/iNVr6u9haxwXsOVMxy4/IOXbms9BxOmF/LkiCtBO5SgxH1E6fa4azEeoV28mGrgRcZFk9ApDvbf75DPQMScQD7Gphjv9kx3/eGBOoiB6tQPlsKGL1Ok
-X-Gm-Message-State: AOJu0Yz7F3BdlmvBDJigaFXSigz7opWcWGbQj+cV3q2sNIGktzY4hJ3t
-	SrgytYZsmvbuWxNXmfr30nQFAlZvBeL2Da8pJnxxf+r0kZhzYVCWJ/JoWdhJ5lrS1angLcPKOzd
-	RaAZM3cyuDoZF6UoRwhJQBYz3zEc=
-X-Google-Smtp-Source: AGHT+IH240GseuofeGUUGoETnTg17gf1crOfxs6ekv2X5XnZiWsZ5Hl1SqxYsjbhiiDRX63D86bTP4RysYJCr6YOiQI=
-X-Received: by 2002:a05:6870:f154:b0:21e:9c76:9578 with SMTP id
- l20-20020a056870f15400b0021e9c769578mr5200551oac.21.1708321288855; Sun, 18
- Feb 2024 21:41:28 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708326579; x=1708931379;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=siDNtCO6/B2uORDKLIIyi/KpHQsoDF6He103KJwinBA=;
+        b=hgUl2v9AHju9Y7GnanI7exUiqi1hAp8L46PBV60nUENtPnQNP/ZgFetM+A7RaUy7hj
+         V8H4EHjWazF831N/I11g84GUNIX8gfyyvGn/YEBRj46nXDCfya/AGJ9yrA8MELQnXP6Y
+         71f+NFbqohxmFDMKkse5hhlKUx3EvaD9PN5RrJEAKksx5vtPv6bR29i2KDFWDuJotwRf
+         hYj+O/vx+WNP5Wu8N0NhY1cu2vrbYIWRJAjLKtUBUQOadp9GgO4moRKHX2fSqXimfxQB
+         SfVVjsCTR6u8H54gtJxYpeYyNbM2nidV+2dFC3mAxx/b/PF65WrOgGFz82j4tjAKb/mT
+         jOXA==
+X-Gm-Message-State: AOJu0YyOdf78/eTIipDObD9wzjyGKWOhq5NSr+SWCIWLAR3YY8csOwak
+	ZTqIsQfpy0X336pSmjXDoe1mf5tvEuAt9eVa1HetWCch0crnp1v+jGFEulW8Js/Z7fxWEPNSshr
+	8
+X-Google-Smtp-Source: AGHT+IEjQrjeAzC9o6MfWVbaei4WvtVkG+RlMZueWWfU8saeNOsosh4p5Q8PC1/Ule+mobw590mKGg==
+X-Received: by 2002:a2e:9848:0:b0:2d2:414c:751e with SMTP id e8-20020a2e9848000000b002d2414c751emr227586ljj.47.1708326578929;
+        Sun, 18 Feb 2024 23:09:38 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.222.116])
+        by smtp.gmail.com with ESMTPSA id je11-20020a05600c1f8b00b0040fdf5e6d40sm10488570wmb.20.2024.02.18.23.09.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Feb 2024 23:09:38 -0800 (PST)
+Message-ID: <010a0130-bbd7-4a8e-afcc-30c4db1260d4@linaro.org>
+Date: Mon, 19 Feb 2024 08:09:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZdDUlGdqH7Qv3SDu@standask-GA-A55M-S2HP>
-In-Reply-To: <ZdDUlGdqH7Qv3SDu@standask-GA-A55M-S2HP>
-From: Chunyan Zhang <zhang.lyra@gmail.com>
-Date: Mon, 19 Feb 2024 13:40:52 +0800
-Message-ID: <CAAfSe-sTARE6pr3g-vQ2MuaSLhWg8_bNhMcfosYjFxrAikwHHg@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] dt-bindings: watchdog: sprd,sp9860-wdt: convert to YAML
-To: Stanislav Jakubek <stano.jakubek@gmail.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, 
-	Baolin Wang <baolin.wang7@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Language: en-US
+To: Stanislav Jakubek <stano.jakubek@gmail.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
+ Baolin Wang <baolin.wang7@gmail.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Chunyan Zhang <zhang.lyra@gmail.com>
+Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <ZdDUlGdqH7Qv3SDu@standask-GA-A55M-S2HP>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <ZdDUlGdqH7Qv3SDu@standask-GA-A55M-S2HP>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, 17 Feb 2024 at 23:45, Stanislav Jakubek <stano.jakubek@gmail.com> wrote:
->
+On 17/02/2024 16:45, Stanislav Jakubek wrote:
 > Convert Spreadtrum SP9860 watchdog timer bindings to DT schema.
 > Adjust file name to match compatible.
->
+> 
 > Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-
-Thanks for the patch.
-
-Acked-by: Chunyan Zhang <zhang.lyra@gmail.com>
-
 > ---
->  .../bindings/watchdog/sprd,sp9860-wdt.yaml    | 64 +++++++++++++++++++
->  .../devicetree/bindings/watchdog/sprd-wdt.txt | 19 ------
->  2 files changed, 64 insertions(+), 19 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/sprd,sp9860-wdt.yaml
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/sprd-wdt.txt
->
-> diff --git a/Documentation/devicetree/bindings/watchdog/sprd,sp9860-wdt.yaml b/Documentation/devicetree/bindings/watchdog/sprd,sp9860-wdt.yaml
-> new file mode 100644
-> index 000000000000..730d9a3a3cc5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/watchdog/sprd,sp9860-wdt.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/watchdog/sprd,sp9860-wdt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Spreadtrum SP9860 watchdog timer
-> +
-> +maintainers:
-> +  - Orson Zhai <orsonzhai@gmail.com>
-> +  - Baolin Wang <baolin.wang7@gmail.com>
-> +  - Chunyan Zhang <zhang.lyra@gmail.com>
-> +
-> +allOf:
-> +  - $ref: watchdog.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: sprd,sp9860-wdt
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    items:
-> +      - const: enable
-> +      - const: rtc_enable
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - timeout-sec
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/sprd,sc9860-clk.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        watchdog@40310000 {
-> +            compatible = "sprd,sp9860-wdt";
-> +            reg = <0 0x40310000 0 0x1000>;
-> +            interrupts = <GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>;
-> +            clocks = <&aon_gate CLK_APCPU_WDG_EB>, <&aon_gate CLK_AP_WDG_RTC_EB>;
-> +            clock-names = "enable", "rtc_enable";
-> +            timeout-sec = <12>;
-> +        };
-> +    };
-> +...
-> diff --git a/Documentation/devicetree/bindings/watchdog/sprd-wdt.txt b/Documentation/devicetree/bindings/watchdog/sprd-wdt.txt
-> deleted file mode 100644
-> index aeaf3e0caf47..000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/sprd-wdt.txt
-> +++ /dev/null
-> @@ -1,19 +0,0 @@
-> -Spreadtrum SoCs Watchdog timer
-> -
-> -Required properties:
-> -- compatible : Should be "sprd,sp9860-wdt".
-> -- reg : Specifies base physical address and size of the registers.
-> -- interrupts : Exactly one interrupt specifier.
-> -- timeout-sec : Contain the default watchdog timeout in seconds.
-> -- clock-names : Contain the input clock names.
-> -- clocks : Phandles to input clocks.
-> -
-> -Example:
-> -       watchdog: watchdog@40310000 {
-> -               compatible = "sprd,sp9860-wdt";
-> -               reg = <0 0x40310000 0 0x1000>;
-> -               interrupts = <GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>;
-> -               timeout-sec = <12>;
-> -               clock-names = "enable", "rtc_enable";
-> -               clocks = <&clk_aon_apb_gates1 8>, <&clk_aon_apb_rtc_gates 9>;
-> -       };
-> --
-> 2.34.1
->
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
 
