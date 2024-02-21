@@ -1,87 +1,148 @@
-Return-Path: <linux-watchdog+bounces-702-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-703-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 871B385D7E6
-	for <lists+linux-watchdog@lfdr.de>; Wed, 21 Feb 2024 13:29:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B382E85D872
+	for <lists+linux-watchdog@lfdr.de>; Wed, 21 Feb 2024 13:55:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33D13282E46
-	for <lists+linux-watchdog@lfdr.de>; Wed, 21 Feb 2024 12:29:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64DC0286C2D
+	for <lists+linux-watchdog@lfdr.de>; Wed, 21 Feb 2024 12:55:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F074551C30;
-	Wed, 21 Feb 2024 12:29:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C55716A35F;
+	Wed, 21 Feb 2024 12:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JpzJnbgd"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1532B4E1A8
-	for <linux-watchdog@vger.kernel.org>; Wed, 21 Feb 2024 12:29:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19296930F;
+	Wed, 21 Feb 2024 12:55:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708518555; cv=none; b=d295nyDjneO+NI5P+H73a2vI8iK0GzrHnly+z4luP/So7XP99gUekY4tyVZjYAZ9+ptKmVzW3TqDyXlq6DwojquToEjrIwKz3IS+BpZ4vVWhULNmXHSjr0KVT7sZ1PsKIjIzX+vtHLAFXqhQgfMF9ZvKxaAMqlViGGuUFHl3v3o=
+	t=1708520121; cv=none; b=Sr34OQq3z1vd6o28amm6iDjL3D88+hKQzsRDVNAl+AA6IoVbZscXmyVW/W+hML0eWbVHntTkJfi0xhMYQys+Q35I/qxY0w/cKdbxljjfVCJ1vO6Ih0zM6TRnuSHSntZcoJUYlfGQVYtIZB/67u5y+//hQpgOT/eqm7bb/iVqqyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708518555; c=relaxed/simple;
-	bh=i7x1ydrz3cbt7Ni3188JEFCNDYRhNl0E4xbcGnSvR7o=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Q5p6lWmNjDQt9u+nsy5oPsLeE1NuosbXOBIBFeB9xdMI4Xtdyb0dPDwTF42Ug7r4WLx4XAbTxziS3jUPcJcd81xJ1EiKOh/A4HBj7uOoz0wMLxbxZbQTGIRQCi7bJ+R7j0gENalPp9m0tJdeTuJKbkvAZUBWIozppQQQij8sQ9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rclib-0001Wa-FI; Wed, 21 Feb 2024 13:28:57 +0100
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rclia-0022Lk-Do; Wed, 21 Feb 2024 13:28:56 +0100
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rclia-0007Qt-1B;
-	Wed, 21 Feb 2024 13:28:56 +0100
-Message-ID: <ca0c0955df301b28d26ead4da27f48296fef640a.camel@pengutronix.de>
+	s=arc-20240116; t=1708520121; c=relaxed/simple;
+	bh=GdiYV6wsr4EXwoXzZq3jKtYq6R298hyFdhnVeW4EdHw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DDA2gvZZ+fvYK1J3mhJPb3qyCbaHqXMuiKdkJGlt9xsW8hpYynKRJsn39GfDxUtFf33YUrc56InxRZLJH9A80gbHJ2rWm/flbdQ77P+SMV0KIOS5zf/FzLoX7Uly6OZrmLvF/eU4HO9H2F81zUU6ADs2KpJ7W/fR8lw3lM3lEiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JpzJnbgd; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5d8b276979aso5060121a12.2;
+        Wed, 21 Feb 2024 04:55:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708520119; x=1709124919; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ry5MLE8fdfKGpRekU3VbZpIvbs3UzBTVWXCqh6a6iiU=;
+        b=JpzJnbgdoRV7O/+wyZ2Leoqyn6rsj3DJ8wyRboxM0O3n0d41Rtpq5luht6Irve09BC
+         f9y5Y+9IcEVQ7S+l/xtxguMmbDx9IJCBnnMt/m0Q5vqb9wjNT1xHAs/cH1Ny5z7+4Bff
+         KIT5TpiJXu4jhAJdICfmgoJaSf2at7KcTa/9JdGr4svKNkfGAs+tZz9gipHUZ4Xxlnmz
+         obs9amrzOXvgMoWX8IgR4F8efnfUCkcQ6nCFjVnmnlkn4bunlAqN2hM+iyX0s6pJ1htf
+         epsnLs8YdcF430ARk8nI0p75bHzR2f8Q+3q1KJDEaRk/gPrMh/ZSg3Oq3ikHCE1GWyQJ
+         x7ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708520119; x=1709124919;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ry5MLE8fdfKGpRekU3VbZpIvbs3UzBTVWXCqh6a6iiU=;
+        b=n/I+70k2qbei1Ksts35K+fs+K6hrv8KuUjF+Qh6y55JxIBJAXTPb2FRYS9Hx5aUHII
+         nm6NfTZEzk/a/yPbioED31VZvlFxPQVrtnmTKpHn67CqGw/I7UBLRi9iZGeXefCkQ2L1
+         fh4s48O1yNDjsXpJqpQrDzMDjqHKdSIH8cuu8mTTiKNsIjKYPzopsVm23BuMmQAN8T5s
+         bsEmFkJvdfEHUu4WBqxLVgRaDhTEq9w94UAeIw9CX8jMx+JiP1t4DYCke1FZ8c/j0Aee
+         mO3izf/pz59KfqEbGo6qAYtpOSx/UUpOtwyYPk/EhV7LHOP/Ct31eL9urkzyFdWrfSRv
+         3wGA==
+X-Forwarded-Encrypted: i=1; AJvYcCWVcjCfQP8eSs9fE2+/JaTLSm0PAOQvyNg9wwhViJ6PG6tkXKGC6BsVf7fYaj8KVzKFwWU0G4ZiO5DL81zoJirvog3VNiqwoAnVnV/M+sbxbLV07KOBwdPJlFGTeH0bE2tgPOcPoBUNPe6qn4qknhXH1Y4Cjw/fo6rcgDozTUCStPk61r1E9Lij
+X-Gm-Message-State: AOJu0YwM5zdYcvyFYK2Q74nPCUVS9gccSwugFXUXJeGPzDHbNJ719hHU
+	S7Ca+kTs6pkr6nzmo4tpYMXAnzRI3v8iWfPiCcKk3FNKmc1zFMQo
+X-Google-Smtp-Source: AGHT+IHLrLFSSc6fZHMtNHfKAVemaBpDk5FTLqVIp+18M27GOK/iRJsTJJvJizh/K9D3vhRQWhh2Jg==
+X-Received: by 2002:a05:6a21:3a82:b0:1a0:cb1b:390d with SMTP id zv2-20020a056a213a8200b001a0cb1b390dmr685189pzb.52.1708520119170;
+        Wed, 21 Feb 2024 04:55:19 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x16-20020aa79a50000000b006e471ade144sm4573360pfj.188.2024.02.21.04.55.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Feb 2024 04:55:18 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 21 Feb 2024 04:55:17 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: forbidden405@outlook.com
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Viresh Kumar <vireshk@kernel.org>, linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 Subject: Re: [PATCH v3 1/2] watchdog: sp805_wdt: deassert the reset if
  available
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: forbidden405@outlook.com, Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
- <conor+dt@kernel.org>,  Viresh Kumar <vireshk@kernel.org>
-Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Date: Wed, 21 Feb 2024 13:28:56 +0100
-In-Reply-To: <20240221-hisi-wdt-v3-1-9642613dc2e6@outlook.com>
+Message-ID: <93e75a27-5676-4ce7-9860-258d9019977d@roeck-us.net>
 References: <20240221-hisi-wdt-v3-0-9642613dc2e6@outlook.com>
-	 <20240221-hisi-wdt-v3-1-9642613dc2e6@outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+ <20240221-hisi-wdt-v3-1-9642613dc2e6@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240221-hisi-wdt-v3-1-9642613dc2e6@outlook.com>
 
-On Mi, 2024-02-21 at 19:56 +0800, Yang Xiwen via B4 Relay wrote:
+On Wed, Feb 21, 2024 at 07:56:41PM +0800, Yang Xiwen via B4 Relay wrote:
 > From: Yang Xiwen <forbidden405@outlook.com>
->=20
+> 
 > According to the datasheet, the core has an WDOGRESn input signal that
 > needs to be deasserted before being operational. Implement it in the
 > driver.
->=20
+> 
 > Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-regards
-Philipp
+> ---
+>  drivers/watchdog/sp805_wdt.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wdt.c
+> index 2756ed54ca3d..109e2e37e8f0 100644
+> --- a/drivers/watchdog/sp805_wdt.c
+> +++ b/drivers/watchdog/sp805_wdt.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/moduleparam.h>
+>  #include <linux/pm.h>
+>  #include <linux/property.h>
+> +#include <linux/reset.h>
+>  #include <linux/slab.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/types.h>
+> @@ -232,6 +233,7 @@ static int
+>  sp805_wdt_probe(struct amba_device *adev, const struct amba_id *id)
+>  {
+>  	struct sp805_wdt *wdt;
+> +	struct reset_control *rst;
+>  	u64 rate = 0;
+>  	int ret = 0;
+>  
+> @@ -264,6 +266,12 @@ sp805_wdt_probe(struct amba_device *adev, const struct amba_id *id)
+>  		return -ENODEV;
+>  	}
+>  
+> +	rst = devm_reset_control_get_optional_exclusive(&adev->dev, NULL);
+> +	if (IS_ERR(rst))
+> +		return dev_err_probe(&adev->dev, PTR_ERR(rst), "Can not get reset\n");
+> +
+> +	reset_control_deassert(rst);
+> +
+>  	wdt->adev = adev;
+>  	wdt->wdd.info = &wdt_info;
+>  	wdt->wdd.ops = &wdt_ops;
+> 
+> -- 
+> 2.43.0
+> 
 
