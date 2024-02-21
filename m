@@ -1,31 +1,31 @@
-Return-Path: <linux-watchdog+bounces-701-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-702-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76B6E85D789
-	for <lists+linux-watchdog@lfdr.de>; Wed, 21 Feb 2024 13:01:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 871B385D7E6
+	for <lists+linux-watchdog@lfdr.de>; Wed, 21 Feb 2024 13:29:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A86101C210DD
-	for <lists+linux-watchdog@lfdr.de>; Wed, 21 Feb 2024 12:01:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33D13282E46
+	for <lists+linux-watchdog@lfdr.de>; Wed, 21 Feb 2024 12:29:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8220F4CB28;
-	Wed, 21 Feb 2024 12:00:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F074551C30;
+	Wed, 21 Feb 2024 12:29:15 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4DB94D59B
-	for <linux-watchdog@vger.kernel.org>; Wed, 21 Feb 2024 12:00:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1532B4E1A8
+	for <linux-watchdog@vger.kernel.org>; Wed, 21 Feb 2024 12:29:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708516848; cv=none; b=cS0703bxJ7zap1KC3K5hXorn/KRBokRn7B9euZJAxQ0p6svGZbL4tSp6ZRTQUP0ZLSdp6c8KT5uQCCE9NORyQgCo/F7UuhBIshoTLzxOxNxTn4Izrulb6hkuuArtMHHd72cuKNvY4sjFSGBA7nWzvdlAN4OkkUxWVBDB0kpIKTI=
+	t=1708518555; cv=none; b=d295nyDjneO+NI5P+H73a2vI8iK0GzrHnly+z4luP/So7XP99gUekY4tyVZjYAZ9+ptKmVzW3TqDyXlq6DwojquToEjrIwKz3IS+BpZ4vVWhULNmXHSjr0KVT7sZ1PsKIjIzX+vtHLAFXqhQgfMF9ZvKxaAMqlViGGuUFHl3v3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708516848; c=relaxed/simple;
-	bh=2+UX+kaYx6D1K2QYMIDl553xTn5OQ0uFsYztVdwDLLc=;
+	s=arc-20240116; t=1708518555; c=relaxed/simple;
+	bh=i7x1ydrz3cbt7Ni3188JEFCNDYRhNl0E4xbcGnSvR7o=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RwUejxE5UTK5F+FYowglqNatXBhcgBrQxM8dy4h2gGOymVZ2Jeq2aDuV+KiLMzqDrdEWrGafT+yaV9KSJizhNdedMT4uoCmnR/hgA0lVUgQH4ZEF8MRrZuXFMDh2GV4zHSlgSAgxymPKyf/5pD3/6q3qBAkCvQklkdQO2Eh4lfA=
+	 Content-Type:MIME-Version; b=Q5p6lWmNjDQt9u+nsy5oPsLeE1NuosbXOBIBFeB9xdMI4Xtdyb0dPDwTF42Ug7r4WLx4XAbTxziS3jUPcJcd81xJ1EiKOh/A4HBj7uOoz0wMLxbxZbQTGIRQCi7bJ+R7j0gENalPp9m0tJdeTuJKbkvAZUBWIozppQQQij8sQ9A=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,32 +33,30 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rclHD-0005u4-DT; Wed, 21 Feb 2024 13:00:39 +0100
+	id 1rclib-0001Wa-FI; Wed, 21 Feb 2024 13:28:57 +0100
 Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rclHC-0021xW-JH; Wed, 21 Feb 2024 13:00:38 +0100
+	id 1rclia-0022Lk-Do; Wed, 21 Feb 2024 13:28:56 +0100
 Received: from pza by lupine with local (Exim 4.96)
 	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rclHC-0006a8-1i;
-	Wed, 21 Feb 2024 13:00:38 +0100
-Message-ID: <ddecea158d5ea0cd2d682f8f9577ee0c78a755d9.camel@pengutronix.de>
-Subject: Re: [PATCH v2 1/2] watchdog: sp805_wdt: deassert the reset if
+	id 1rclia-0007Qt-1B;
+	Wed, 21 Feb 2024 13:28:56 +0100
+Message-ID: <ca0c0955df301b28d26ead4da27f48296fef640a.camel@pengutronix.de>
+Subject: Re: [PATCH v3 1/2] watchdog: sp805_wdt: deassert the reset if
  available
 From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Yang Xiwen <forbidden405@outlook.com>, Christophe JAILLET
-	 <christophe.jaillet@wanadoo.fr>
-Cc: conor+dt@kernel.org, devicetree@vger.kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux@roeck-us.net, robh+dt@kernel.org, 
-	vireshk@kernel.org, wim@linux-watchdog.org
-Date: Wed, 21 Feb 2024 13:00:38 +0100
-In-Reply-To: <SEZPR06MB6959D4BEC90745D94BF02BF596512@SEZPR06MB6959.apcprd06.prod.outlook.com>
-References: <20240220-hisi-wdt-v2-0-63edc4965b4c@outlook.com>
-	 <20240220-hisi-wdt-v2-1-63edc4965b4c@outlook.com>
-	 <534b62dc-3874-407f-a5c9-f67d366107dc@wanadoo.fr>
-	 <SEZPR06MB6959D4BEC90745D94BF02BF596512@SEZPR06MB6959.apcprd06.prod.outlook.com>
+To: forbidden405@outlook.com, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+ <conor+dt@kernel.org>,  Viresh Kumar <vireshk@kernel.org>
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Date: Wed, 21 Feb 2024 13:28:56 +0100
+In-Reply-To: <20240221-hisi-wdt-v3-1-9642613dc2e6@outlook.com>
+References: <20240221-hisi-wdt-v3-0-9642613dc2e6@outlook.com>
+	 <20240221-hisi-wdt-v3-1-9642613dc2e6@outlook.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.46.4-2 
@@ -73,93 +71,16 @@ X-SA-Exim-Mail-From: p.zabel@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 
-On Di, 2024-02-20 at 03:00 +0800, Yang Xiwen wrote:
-> On 2/20/2024 2:22 AM, Christophe JAILLET wrote:
-> > Le 19/02/2024 =C3=A0 19:14, Yang Xiwen via B4 Relay a =C3=A9crit=C2=A0:
-> > > From: Yang Xiwen <forbidden405-1ViLX0X+lBJBDgjK7y7TUQ@public.gmane.or=
-g>
-> > >=20
-> > > According to the datasheet, the core has an WDOGRESn input signal tha=
-t
-> > > needs to be deasserted before being operational. Implement it in the
-> > > driver.
-> > >=20
-> > > Signed-off-by: Yang Xiwen=20
-> > > <forbidden405-1ViLX0X+lBJBDgjK7y7TUQ@public.gmane.org>
-> > > ---
-> > > =C2=A0 drivers/watchdog/sp805_wdt.c | 9 +++++++++
-> > > =C2=A0 1 file changed, 9 insertions(+)
-> > >=20
-> > > diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wd=
-t.c
-> > > index 2756ed54ca3d..b4bcfdeb39e6 100644
-> > > --- a/drivers/watchdog/sp805_wdt.c
-> > > +++ b/drivers/watchdog/sp805_wdt.c
-> > > @@ -25,6 +25,7 @@
-> > > =C2=A0 #include <linux/moduleparam.h>
-> > > =C2=A0 #include <linux/pm.h>
-> > > =C2=A0 #include <linux/property.h>
-> > > +#include <linux/reset.h>
-> > > =C2=A0 #include <linux/slab.h>
-> > > =C2=A0 #include <linux/spinlock.h>
-> > > =C2=A0 #include <linux/types.h>
-> > > @@ -59,6 +60,7 @@
-> > > =C2=A0=C2=A0 * @lock: spin lock protecting dev structure and io acces=
-s
-> > > =C2=A0=C2=A0 * @base: base address of wdt
-> > > =C2=A0=C2=A0 * @clk: (optional) clock structure of wdt
-> > > + * @rst: (optional) reset control signal of wdt
-> > > =C2=A0=C2=A0 * @rate: (optional) clock rate when provided via propert=
-ies
-> > > =C2=A0=C2=A0 * @adev: amba device structure of wdt
-> > > =C2=A0=C2=A0 * @status: current status of wdt
-> > > @@ -69,6 +71,7 @@ struct sp805_wdt {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spinlock_t=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 lock;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 void __iomem=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *base;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct clk=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *clk;
-> > > +=C2=A0=C2=A0=C2=A0 struct reset_control=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 *rst;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rate;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct amba_device=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 *adev;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 load_val;
-> > > @@ -264,6 +267,12 @@ sp805_wdt_probe(struct amba_device *adev, const=
-=20
-> > > struct amba_id *id)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -ENODEV=
-;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > > =C2=A0 +=C2=A0=C2=A0=C2=A0 wdt->rst =3D devm_reset_control_get_option=
-al(&adev->dev, NULL);
-> > > +=C2=A0=C2=A0=C2=A0 if (IS_ERR(wdt->rst))
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return dev_err_probe(&ade=
-v->dev, PTR_ERR(wdt->rst), "Can not=20
-> > > get reset\n");
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0 reset_control_deassert(wdt->rst);
-> > > +
-> >=20
-> > Hi,
-> >=20
-> > Is a corresponding reset_control_assert() needed in the remove function=
-?
+On Mi, 2024-02-21 at 19:56 +0800, Yang Xiwen via B4 Relay wrote:
+> From: Yang Xiwen <forbidden405@outlook.com>
 >=20
-> I don't think it makes much sense. Many drivers in kernel does not=20
-> reassert the resets in their driver's remove callback too.
+> According to the datasheet, the core has an WDOGRESn input signal that
+> needs to be deasserted before being operational. Implement it in the
+> driver.
+>=20
+> Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
 
-In general, balancing deassert/assert is only required for shared reset
-controls.
-
-For exclusive reset controls, it depends on whether the driver has any
-expectations that the reset was asserted at some point before deassert
-is called, possibly to reset registers or some internal state.
-E.g., if this driver is unbound and then bound again, the deassert
-during second probe is a no-op.
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
 regards
 Philipp
