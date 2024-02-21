@@ -1,138 +1,112 @@
-Return-Path: <linux-watchdog+bounces-697-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-698-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FFEE85D764
-	for <lists+linux-watchdog@lfdr.de>; Wed, 21 Feb 2024 12:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2069285D77F
+	for <lists+linux-watchdog@lfdr.de>; Wed, 21 Feb 2024 12:56:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E4E1FB248A2
-	for <lists+linux-watchdog@lfdr.de>; Wed, 21 Feb 2024 11:49:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99E6CB22B6D
+	for <lists+linux-watchdog@lfdr.de>; Wed, 21 Feb 2024 11:56:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC5E43F9C8;
-	Wed, 21 Feb 2024 11:49:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69EF0487B0;
+	Wed, 21 Feb 2024 11:56:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VX2NLF7N"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E307A446DE
-	for <linux-watchdog@vger.kernel.org>; Wed, 21 Feb 2024 11:49:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF0E482C1;
+	Wed, 21 Feb 2024 11:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708516145; cv=none; b=isJRougVzo/bSI0s8BUjNRszdXAf9osCye+mCU3ANXaIVt0GgmQdhxP+izAVUpJmt1K1ZIjbvUH3Fhpqg0wWQOahLTgFvc+m929Me7VkfaJv+IsF/0OV/csgEPL+gkeDxMcrUkD1P5QB5AgsJQbOXR88jsenOb/OKlKP30X6/NE=
+	t=1708516606; cv=none; b=BxQwdomUoVJjn4cgheNp0ayvt83ODclqcINRA3tebXoiUEqiyd1IIoXpZ+3+iNgD5871sJtjppopwgfmhT/aAAw6zGvnBxSK5hmwZrAOP8jYvSqE8/kBPssIv7pqi+uRuoE3CI6C3gmONpATdywOh4Uhc59FwYExw/tXjKdf7B8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708516145; c=relaxed/simple;
-	bh=MqAtX4r3evQnuc0+Z+SGH7wwaQmeoU0VpHKlY7UeihQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=e/qZGUpsJ9GJIZVReECNo+5AkQrQlZhO/SyYlgjRngNcT2574EdFEOnzJxu5JBZ7aFET9qS2vH3HtjJeaUnqxagKoqPFCZcxhcYEThiwVbHiX8G4kMUWPcmi3TRxt7uIRnAXs/4EpYjnFN7ZitR6nP7oXs8uPuxJfY5LIjzAhn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rcl5k-0003zo-5c; Wed, 21 Feb 2024 12:48:48 +0100
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rcl5i-0021w0-CM; Wed, 21 Feb 2024 12:48:46 +0100
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rcl5i-0006MR-10;
-	Wed, 21 Feb 2024 12:48:46 +0100
-Message-ID: <7c3246e94de0fdad3f9bed50d46f70327ef30ef9.camel@pengutronix.de>
-Subject: Re: [PATCH v2 1/2] watchdog: sp805_wdt: deassert the reset if
- available
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: forbidden405@outlook.com, Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
- <conor+dt@kernel.org>,  Viresh Kumar <vireshk@kernel.org>
-Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Date: Wed, 21 Feb 2024 12:48:46 +0100
-In-Reply-To: <20240220-hisi-wdt-v2-1-63edc4965b4c@outlook.com>
-References: <20240220-hisi-wdt-v2-0-63edc4965b4c@outlook.com>
-	 <20240220-hisi-wdt-v2-1-63edc4965b4c@outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1708516606; c=relaxed/simple;
+	bh=cVP9oDcFqMe3HIWN3U9hzMH6sEfnqnfkj+cc6SDEDc4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=uiiOKS59NBDLk4HA1m7qI6uRGHb+JiyhAxWFQB89uDI5x0ez+ivJDxLHT75QerWKuD2B/1KFkKiLiuAz2ayse/dVjmiigPjxpAsgSV885CznFjXGToXA2yAJcAOQisD1pVvlmLBPJu3zh4eY8LADooomhIMkMOdxc1orVFLPIno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VX2NLF7N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B71A7C433C7;
+	Wed, 21 Feb 2024 11:56:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708516605;
+	bh=cVP9oDcFqMe3HIWN3U9hzMH6sEfnqnfkj+cc6SDEDc4=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=VX2NLF7NT/k0riswUv+ozEtEs5Tmuz0vQTBtwd3VL0Y4dtoenK8m5dEo0nPy/Fr1b
+	 U5fL1nL4EpxaMZWzRv3TiYqeJks8tJD9XnyJJFI52glsOqrvYMdbj39h2n8fl3Yb4d
+	 LwkMdjNtq4QPZ1bj/yfZ5R7JmYIt4eKKYdtgwCijIqBJGC3FAhMzshRSXGtbZ/HQFZ
+	 CqX3e11lEIFSu86HUuQ8mxvHn8fIRfOMfc6w1IowPyVEI8surusfZ0xb72EC7wtkM2
+	 S9d9TY1JTwRanWhCR1XjB4HLgoPrLmJbCzZGDspfNJc4USluujcpNdmV18p0D2n63u
+	 AyNuK7D/xtCog==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90848C48BC3;
+	Wed, 21 Feb 2024 11:56:45 +0000 (UTC)
+From: Yang Xiwen via B4 Relay <devnull+forbidden405.outlook.com@kernel.org>
+Subject: [PATCH v3 0/2] watchdog: sp805: add reset control support
+Date: Wed, 21 Feb 2024 19:56:40 +0800
+Message-Id: <20240221-hisi-wdt-v3-0-9642613dc2e6@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPjk1WUC/22Myw6CMBBFf4XM2pp2gGJd+R/GBX0ojUpNwaoh/
+ XcHVpi4PDf3nAkGF70bYF9MEF3ygw89QbkpwHRtf3HMW2JAjhVH0bCOLuxlR1bqGlUjWlkrAXR
+ /RHf27yV1PBHTcQzxs5STmNc/kSQYZ8ZqZa1ptZK7Q3iOtxCuWxPuMGcSrlTkKxVJlaWzplKy1
+ pX5VXPOX5MVvqLdAAAA
+To: Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, Philipp Zabel <p.zabel@pengutronix.de>, 
+ Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Viresh Kumar <vireshk@kernel.org>
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, Yang Xiwen <forbidden405@outlook.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1708516604; l=1002;
+ i=forbidden405@outlook.com; s=20230724; h=from:subject:message-id;
+ bh=cVP9oDcFqMe3HIWN3U9hzMH6sEfnqnfkj+cc6SDEDc4=;
+ b=OF1L8JvpFPNieb8IzziAiUU/l2TgBSIHHY+WX5+VPGsxwuQ2zJ3cXaqgEPm4geb0nX4u3ynVi
+ fvcIG6wx3DsBTZvCcsahf5yDbT2cOVcM3vy/2s2uhVx+JEZZbpepCnb
+X-Developer-Key: i=forbidden405@outlook.com; a=ed25519;
+ pk=qOD5jhp891/Xzc+H/PZ8LWVSWE3O/XCQnAg+5vdU2IU=
+X-Endpoint-Received:
+ by B4 Relay for forbidden405@outlook.com/20230724 with auth_id=67
+X-Original-From: Yang Xiwen <forbidden405@outlook.com>
+Reply-To: <forbidden405@outlook.com>
 
-On Di, 2024-02-20 at 02:14 +0800, Yang Xiwen via B4 Relay wrote:
-> From: Yang Xiwen <forbidden405@outlook.com>
->=20
-> According to the datasheet, the core has an WDOGRESn input signal that
-> needs to be deasserted before being operational. Implement it in the
-> driver.
->=20
-> Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
-> ---
->  drivers/watchdog/sp805_wdt.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->=20
-> diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wdt.c
-> index 2756ed54ca3d..b4bcfdeb39e6 100644
-> --- a/drivers/watchdog/sp805_wdt.c
-> +++ b/drivers/watchdog/sp805_wdt.c
-> @@ -25,6 +25,7 @@
->  #include <linux/moduleparam.h>
->  #include <linux/pm.h>
->  #include <linux/property.h>
-> +#include <linux/reset.h>
->  #include <linux/slab.h>
->  #include <linux/spinlock.h>
->  #include <linux/types.h>
-> @@ -59,6 +60,7 @@
->   * @lock: spin lock protecting dev structure and io access
->   * @base: base address of wdt
->   * @clk: (optional) clock structure of wdt
-> + * @rst: (optional) reset control signal of wdt
->   * @rate: (optional) clock rate when provided via properties
->   * @adev: amba device structure of wdt
->   * @status: current status of wdt
-> @@ -69,6 +71,7 @@ struct sp805_wdt {
->  	spinlock_t			lock;
->  	void __iomem			*base;
->  	struct clk			*clk;
-> +	struct reset_control		*rst;
+Deassert the reset if it's available.
 
-This can be a local variable in sp805_wdt_probe().
+Signed-off-by: Yang Xiwen <forbidden405@outlook.com>
+---
+Changes in v3:
+- move reset to local variable, get reset exclusively (Philipp Zabel)
+- Link to v2: https://lore.kernel.org/r/20240220-hisi-wdt-v2-0-63edc4965b4c@outlook.com
 
->  	u64				rate;
->  	struct amba_device		*adev;
->  	unsigned int			load_val;
-> @@ -264,6 +267,12 @@ sp805_wdt_probe(struct amba_device *adev, const stru=
-ct amba_id *id)
->  		return -ENODEV;
->  	}
-> =20
-> +	wdt->rst =3D devm_reset_control_get_optional(&adev->dev, NULL);
+Changes in v2:
+- commit log: dt-binding->dt-bindings (Krzysztof Kozlowski)
+- binding: remove "|", join two lines. (Krzysztof Kozlowski)
+- Link to v1: https://lore.kernel.org/r/20240217-hisi-wdt-v1-0-cdb9ddcab968@outlook.com
 
-Please use devm_reset_control_get_optional_exclusive() directly.
+---
+Yang Xiwen (2):
+      watchdog: sp805_wdt: deassert the reset if available
+      dt-bindings: watchdog: arm,sp805: document the reset signal
 
-> +	if (IS_ERR(wdt->rst))
-> +		return dev_err_probe(&adev->dev, PTR_ERR(wdt->rst), "Can not get reset=
-\n");
-> +
-> +	reset_control_deassert(wdt->rst);
-> +
->  	wdt->adev =3D adev;
->  	wdt->wdd.info =3D &wdt_info;
->  	wdt->wdd.ops =3D &wdt_ops;
+ Documentation/devicetree/bindings/watchdog/arm,sp805.yaml | 5 +++++
+ drivers/watchdog/sp805_wdt.c                              | 8 ++++++++
+ 2 files changed, 13 insertions(+)
+---
+base-commit: 8d3dea210042f54b952b481838c1e7dfc4ec751d
+change-id: 20240217-hisi-wdt-3b52971a6591
 
-regards
-Philipp
+Best regards,
+-- 
+Yang Xiwen <forbidden405@outlook.com>
+
 
