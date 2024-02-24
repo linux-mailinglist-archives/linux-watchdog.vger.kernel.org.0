@@ -1,168 +1,128 @@
-Return-Path: <linux-watchdog+bounces-712-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-713-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CD2F86214A
-	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Feb 2024 01:43:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6264F8621D2
+	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Feb 2024 02:19:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A12261C24F2A
-	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Feb 2024 00:43:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F1DC2869F8
+	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Feb 2024 01:19:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E2F7138A;
-	Sat, 24 Feb 2024 00:43:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D04976107;
+	Sat, 24 Feb 2024 01:19:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b="iSoXZxje";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Hf/nqDL6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ff/ekrVk"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0FAF139D;
-	Sat, 24 Feb 2024 00:43:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7579F23BF;
+	Sat, 24 Feb 2024 01:19:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708735432; cv=none; b=ELGqf+pZVpKEF4axPW0wrgUQDPJSM/76+DzkKPklziI4mvZFVTZPOJy75vKcWiy0EOAQNmZvo2cBgG/OHWZidK8pvdkGmZfLCJibZN/4rL4eNcG4D1CtJDznJDAeZpuyG5exbo04t0mPTHSdoBzAVtBSi3uYFTn+0J2E+Z4dPJI=
+	t=1708737553; cv=none; b=e7378TQsdXd1L6BUxPy62hU37FMkHsrV+sn/NCr9JeZBOCl3zWs4SBtxJczkefvKOS7S2d1xbonxItQYlyG9WPi4vNEwMGicoT3p7tT0KZB/9akoEZ5YJqr4RDN6yUF6FgnoMkFm6H7uBFhNhbfWvhrvKA1lK+KYYX79aLOSN5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708735432; c=relaxed/simple;
-	bh=aHe/z2RQP8KthhPa74vKrrkE3v1GYWNO/gq7pW9BWAE=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=HeNU5OgDHMAiqYmf0y1s40r3XZ/CW6b/R7giw+ZpfF3+6hTWyEdkNnQI3YTZHbLo+OCJHBuFjNIxSclV8kKRNxrRYVdR6caELoIwS7fLRUeY2qkwA0gSlu6qaSTrhQ0c3U9Dgc2TrMGMnCdYFtGlHA6kITv6Fqy2NBS4pU2Mcjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca; spf=pass smtp.mailfrom=squebb.ca; dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b=iSoXZxje; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Hf/nqDL6; arc=none smtp.client-ip=64.147.123.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailout.west.internal (Postfix) with ESMTP id 683093200A00;
-	Fri, 23 Feb 2024 19:43:48 -0500 (EST)
-Received: from imap52 ([10.202.2.102])
-  by compute3.internal (MEProxy); Fri, 23 Feb 2024 19:43:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1708735427; x=1708821827; bh=HuXJ6x1LTn
-	c+2ceV2FyaIIS3r2dfwL/DtfsGQmv8C0M=; b=iSoXZxjeYvh42TZwU58FQOhpas
-	G0A3uBL0ydUdbY2GOLKxLX0sNT4Uo78nbDKoYj7IQnXUq0kl0SC7ZyJU1+laFFaO
-	/Z19GnkhO3AvetJsUvcpKozQTQGgwydBna7sYARhPG8Mcoj5Ayb2MWTgs4tHCqEM
-	+JNdR4auvR8ZUcZfumPsjrlQbk62pW9KEg1e8sllE4pPYWgw6Krf1BwwGhx0NFkk
-	fWROG7lx3+50gKfKnJMhrgW/ccunhxKrbArh6+hFY44N/+Aw21Awn+SadOVbXTvt
-	4gnyhzjMWFbpoSremRAsgzkWLj3u1E6r47kvX2KRgnmN8vwyZRRjNZRKjfRA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1708735427; x=1708821827; bh=HuXJ6x1LTnc+2ceV2FyaIIS3r2df
-	wL/DtfsGQmv8C0M=; b=Hf/nqDL6xfO3XFk/nby17+UyncTCv5tChLdt9OYX6sw7
-	bXoSe3aRzbemwpCq4MhPf6RSdQ9MmoMR9cm49pMLP/ZpsVxFkR/xXUy/Vd6diaxS
-	3u5TkR6tJrokz90GG4Q5JrlJbU+tYNnkDwomz8+b2f068vUNUn0pQQ32WEyvABUA
-	Bt6VvI7qjaGpISbMxBPveA9xi3Sj7OCL3WduRxmm3oX0270xTS+30HN5KC6dro8/
-	+d0SAp0iO/tl941v8TSH37M0U9OS0N9VwjVM25LKmHw4T8F+MbMtt4QA5qg67z72
-	evoHnetBJtssofx1ZV/DTqcnGusGB2OsPD9y//VGOA==
-X-ME-Sender: <xms:wzvZZZbTydxOIXy-icSy8FkXytjqZ1tcokugEMzA7sIz3oGPsSxIeQ>
-    <xme:wzvZZQb3RcDJOe0pb3SaQ3oAfXD7leHT9KegjU-wOlzcAXWxDTL2s71CCcRL_4_RU
-    e7h24eGwmdGgsqjygg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeejgddvhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdforghr
-    khcurfgvrghrshhonhdfuceomhhpvggrrhhsohhnsehsqhhuvggssgdrtggrqeenucggtf
-    frrghtthgvrhhnpeeuvefftdefjeevveejheehhfevfeelffehfefgheffjeetvddvhfdu
-    ffegheefieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehmphgvrghrshhonhesshhquhgvsggsrdgtrg
-X-ME-Proxy: <xmx:wzvZZb_poZ6k8Zpnk98vYp5lD8cnH1gscm3y6Mw1C1iQojp0hRvjhQ>
-    <xmx:wzvZZXqM6WWxivVGGTIa1APK-vd7_LSMJVaT19ZyuAw7tQcrfDNk9w>
-    <xmx:wzvZZUowYsG0wABCB3SlAnR7r9I_mhhdxM2PGxmMhORzH7yEX-2KgA>
-    <xmx:wzvZZfWzzfVHbu2gNm8cPJDM5DlVTXmoDn52NLqOpSL0iX03neuekw>
-Feedback-ID: ic2b14614:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 67A1DC60097; Fri, 23 Feb 2024 19:43:47 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-153-g7e3bb84806-fm-20240215.007-g7e3bb848
+	s=arc-20240116; t=1708737553; c=relaxed/simple;
+	bh=0W8qjJDpYcgYroDsZAHS1ygwFOJj7ZrezH6oMeip5ik=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Iwd8YPN/o0YuuBIpQjzcHLXtDfkR+tePZNQDip86CpbBpF7CaGHo09oTkQektsAjM3ldm3qRb4FOehMgtvqwRr8R8SGar3qyQ5Muoxl2nDLTaLD5HMlqicP8TuN73nxkj9tuS7hbHKh97D5S7Hxhw9yOOJvDLaV/G2kxWMfB0g4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ff/ekrVk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 506E6C433C7;
+	Sat, 24 Feb 2024 01:18:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708737553;
+	bh=0W8qjJDpYcgYroDsZAHS1ygwFOJj7ZrezH6oMeip5ik=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=Ff/ekrVkMNWJBDGkpsP/ovqQh2yy1ijB5ftoTK+/UMaqJWDxNbNOKDQ24y0qlURiT
+	 N86GGDRMnW5AEO+3RHaO2XaXOYxDA4ibfnVDmk9OplY/pQbkQdRWg0E13BTRhyo/Ey
+	 E7GKyzybhjWoin88WA6LDL8n39i41+9gmBImeMju6zTBmw38Z6z8mKdPpWm1Cai1Dh
+	 tLR7TBInqGjbW6nemQL6B37MrpxV1aa2e6/jocEVz4mmQME8ahbk6OREfwpjeHQwqx
+	 7OGusmZWog/eiFdepXGySC4Gi90Xc7Qb6ZzLMm5U/Vj7pI5DjSk+10zDXroo9bbYdH
+	 4E1uvU+UVBQNg==
+From: Mark Brown <broonie@kernel.org>
+To: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+ conor+dt@kernel.org, nicolas.ferre@microchip.com, 
+ alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
+ mturquette@baylibre.com, sboyd@kernel.org, herbert@gondor.apana.org.au, 
+ davem@davemloft.net, andi.shyti@kernel.org, tglx@linutronix.de, 
+ tudor.ambarus@linaro.org, miquel.raynal@bootlin.com, richard@nod.at, 
+ vigneshr@ti.com, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+ linus.walleij@linaro.org, sre@kernel.org, u.kleine-koenig@pengutronix.de, 
+ p.zabel@pengutronix.de, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
+ richard.genoud@gmail.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
+ lgirdwood@gmail.com, wim@linux-watchdog.org, linux@roeck-us.net, 
+ linux@armlinux.org.uk, andrei.simion@microchip.com, 
+ mihai.sain@microchip.com, andre.przywara@arm.com, neil.armstrong@linaro.org, 
+ tony@atomide.com, durai.manickamkr@microchip.com, geert+renesas@glider.be, 
+ arnd@arndb.de, Jason@zx2c4.com, rdunlap@infradead.org, rientjes@google.com, 
+ vbabka@suse.cz, mripard@kernel.org, codrin.ciubotariu@microchip.com, 
+ eugen.hristev@collabora.com, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org, 
+ linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org, 
+ linux-serial@vger.kernel.org, alsa-devel@alsa-project.org, 
+ linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ Varshini Rajendran <varshini.rajendran@microchip.com>
+In-Reply-To: <20240223171342.669133-1-varshini.rajendran@microchip.com>
+References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
+Subject: Re: (subset) [PATCH v4 00/39] Add support for sam9x7 SoC family
+Message-Id: <170873753899.4074329.1874365978346259745.b4-ty@kernel.org>
+Date: Sat, 24 Feb 2024 01:18:58 +0000
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <4209014c-1730-4c31-87d8-4192d68bcbc6@app.fastmail.com>
-In-Reply-To: <6b0373a2-7750-4d57-8839-95c6fa30c6b8@roeck-us.net>
-References: <20230721122931.505957-1-dober6023@gmail.com>
- <a361ce91-beba-43d8-b969-285063658da5@app.fastmail.com>
- <6b0373a2-7750-4d57-8839-95c6fa30c6b8@roeck-us.net>
-Date: Fri, 23 Feb 2024 19:43:17 -0500
-From: "Mark Pearson" <mpearson@squebb.ca>
-To: "Guenter Roeck" <linux@roeck-us.net>, "David Ober" <dober6023@gmail.com>,
- wim@linux-watchdog.org
-Cc: linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
- "David Ober" <dober@lenovo.com>
-Subject: Re: [PATCH v3] Watchdog: New module for ITE 5632 watchdog
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-0438c
 
-Thanks Guenter
+On Fri, 23 Feb 2024 22:43:42 +0530, Varshini Rajendran wrote:
+> This patch series adds support for the new SoC family - sam9x7.
+>  - The device tree, configs and drivers are added
+>  - Clock driver for sam9x7 is added
+>  - Support for basic peripherals is added
+>  - Target board SAM9X75 Curiosity is added
+> 
+>  Changes in v4:
+>  --------------
+> 
+> [...]
 
-On Fri, Feb 23, 2024, at 3:21 PM, Guenter Roeck wrote:
-> On 2/23/24 11:58, Mark Pearson wrote:
->> On Fri, Jul 21, 2023, at 8:29 AM, David Ober wrote:
->>> This modules is to allow for the new ITE 5632 EC chip
->>> to support the watchdog for initial use in the Lenovo SE10
->>>
->>> Signed-off-by: David Ober <dober6023@gmail.com>
->>>
->>> V2 Fix stop to deactivate wdog on unload of module
->>> V2 Remove extra logging that is not needed
->>> V2 change udelays to usleep_range
->>> V2 Changed to now request region on start and release on stop instead
->>>     of for every ping and read/write
->>> V3 add counter to while loops so it will not hang
->>> V3 rework code to use platform_device_register_simple
->>> V3 rework getting the Chip ID to remove duplicate code and close IO
->>> V3 change some extra logging to be debug only
->>> ---
-> [ ... ]
->>> +config ITE5632_WDT
->>> +        tristate "ITE 5632"
->>> +        select WATCHDOG_CORE
->>> +        help
->>> +          If you say yes here you get support for the watchdog
->>> +          functionality of the ITE 5632 eSIO chip.
->>> +
->>> +          This driver can also be built as a module. If so, the module
->>> +          will be called ite5632_wdt.
->>> +
->
-> [ ... ]
->
->>
->> 
->> Please let us know if there is anything else needed to get this accepted. Happy to address any feedback.
->> 
->
-> I am sure I commented on this before. The fact that the Lenovo SE10 uses an
-> ITE 5632 controller is completely irrelevant. Lenovo could decide tomorrow to
-> replace the ITE chip with a Nuvoton chip, use the same API to talk with it,
-> and the watchdog would work perfectly fine.
->
-> This is a driver for the watchdog implemented in the embedded controller
-> on Lenovo SE10. It is not a watchdog driver for ITE5632. Again, the EC chip
-> used in that Lenovo system is completely irrelevant, even more so since
-> this seems to be one of those undocumented ITE chips which officially
-> don't even exist. Claiming that this would be a watchdog driver for ITE5632
-> would be not only misleading but simply wrong.
->
-> It seems that we can not agree on this. That means that, from my perspective,
-> there is no real path to move forward. Wim will have to decide if and how
-> to proceed.
->
-My apologies - I hadn't realised that was the issue (my fault for missing it). Appreciate the clarification.
+Applied to
 
-Is this as simple as renaming this driver as (for example) a lenovo_se_wdt device, and adding in the appropriate checking during the init that it is only used on Lenovo SE10 platforms?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-I don't understand the concern if a different chip was used - wouldn't that need a different driver at that point?
+Thanks!
 
-If it's more subtle than that, is there something you propose instead?
+[13/39] ASoC: dt-bindings: atmel-classd: add sam9x7 compatible
+        commit: 89f3180d5915d4ea40e044ee102cd5c1ec81e7ef
+[17/39] ASoC: dt-bindings: microchip: add sam9x7
+        commit: c06a7a8e885753a024163bbb0dfd7349e8054643
 
-Thanks
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
 Mark
 
 
