@@ -1,110 +1,97 @@
-Return-Path: <linux-watchdog+bounces-717-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-718-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C4ED86264B
-	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Feb 2024 18:26:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EF00862734
+	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Feb 2024 21:04:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91E621C212AC
-	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Feb 2024 17:26:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 505731C20D5A
+	for <lists+linux-watchdog@lfdr.de>; Sat, 24 Feb 2024 20:04:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 353781119C;
-	Sat, 24 Feb 2024 17:25:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16C5A4C63D;
+	Sat, 24 Feb 2024 20:04:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ePDxcQG7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l2j6suK+"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5E33D97D;
-	Sat, 24 Feb 2024 17:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E161D4879B;
+	Sat, 24 Feb 2024 20:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708795558; cv=none; b=Lpagb/XKcpJ+CgL65NW7sKD6VA+opobU0Snrty+MCYKpwc8PNPhMrq+kg/wnyaMxWxRDQFwS+CmiX4fsix+aIfmjuzlWcJHTOxStvG35S27Oeiph0s+FXVI57gn8u7EugIUx1qQ5CN1le68WLuWqmkPMjOAoIDWDJt51wPs+nWA=
+	t=1708805047; cv=none; b=m/HxGKHOwZegfGWsK8sbWzkFWjgPUBQ4k39mEJqqllYrvV2zqKWfzF2qTCo7EbzCxEe5x6HMVpIVWZT2CkMQMpj5FZOxRU+RD8dhekcoiUNSdp9y0bOUvSy0wGmdcoWvLpPfeqfLZE12Q244wvA8VSxYItI/syGi6dpzTyyqjFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708795558; c=relaxed/simple;
-	bh=LKdxKMRX99gZWFFua9mb0elqag115969gvdZU7QCa4Q=;
+	s=arc-20240116; t=1708805047; c=relaxed/simple;
+	bh=QQt7ewCTYNG2n3qgf2FwZvSl3Jiu92dblSUDYtxymas=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TUWb5ish6muy1iGCgz5PNbSOz2b52hLze+NXn3AKdRFUdiLR10iW6cop3WIKPUE6IO7DQQYL/HPXB8lLTLcyn/z3yYqjgnG+7Ikvu3fcsi9RBOZGnMWPjkvqEDpoXgG+xFvmhMBjFJVUYQR0OmvB6XRydBeLq+qfk3Ji5RKbxCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ePDxcQG7; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6e4670921a4so890562b3a.0;
-        Sat, 24 Feb 2024 09:25:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708795556; x=1709400356; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uAeCo/AcYCYLlxx+rUC55TzelkJiG1qBUO3+Q6Qt12M=;
-        b=ePDxcQG7upTVkbX2vitIODqgA0a4V5Z219yFaRVoiyRX3jycb8DMlC7IuuF31WDcs+
-         RhipKKiMjySCkeAaDOGPXolKRGQ2sf0U+g/TePGN6Ss2nK8ra8EHlMB6YSLjF/EZVZtw
-         d/bEulWwP1QzFoiCNrj4S1tjxlH6TD5Oo1ETbALppGFiRdeFwOaN+UEkhPbBVQiy+2WC
-         jV9oYIdMFrLlNRxl7Tmt6zcZhVo5drKzifIej37coyTy5qEQ09oJP5Rw8wfRHeqjGZ32
-         4q/dAa4HT+h6C+S7qBjl0XAli/oozijDxJr3lnQ4iizyz/fyv9hH0arFC9HsPRyALgr1
-         Z9hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708795556; x=1709400356;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uAeCo/AcYCYLlxx+rUC55TzelkJiG1qBUO3+Q6Qt12M=;
-        b=gzXQx3Uw06l3Z53BE4GzoIJLYStZKyELb2MYCx8OAy4fRHWiArw/n2YOmERl76A5/S
-         YKEkfB76XrK6HrNtKse5VjkmDnJE6z1kAwO936WgqQiloJY2lcBHiwE3V6ZCw8Tiktug
-         RKXIi1XlX/fPozkctlIF1KOrmGqE785mMzcRZSiMnGTXH3zAeD2QPcm8vk3/mKVmfmzC
-         XSWSJMLgOasWeP7Ys2pVP++gymAvruO+JOwG5vd2zl+g7iOtn8hg5y97IOOk8NyyBzfx
-         ufPOK32ZdOtw59Ld+MAJ4bl/2ffB1gCJkr0gKmynDWZdr0FgQ0+Ow9AyV+jWj8BfEtu1
-         U46Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWfhhmWGv7oQmYtO2VGGKnikevzmfSReZoTam+sQ/kNtGnfBLTGA818YlQ+opuvhu8W98dVjNQNE2f5XtsfOHZ2aAWT5Hsx3i/AahOkXYvRVd1PLQHbUlgQQAtDFkrgWmM43+8sjTqEHw2kVdU=
-X-Gm-Message-State: AOJu0YzlocIji6U6NZ2CWo1AH059h/I+1S1/Hi70blW4lo0BijQnq+xg
-	5prcKhu5kj2I21gmvv1yvEvzRn5tyTPy2r55rXzyl0PXXelyBDx2BAlIx43E
-X-Google-Smtp-Source: AGHT+IFHAZ6Onc4/jz06fLhmV7F5y4tSzKDk0ZvOW3DZTlJYxFVdIJvW2CRUWn9iUEj173ih0xR5MA==
-X-Received: by 2002:a05:6a00:290c:b0:6e4:8ffc:e31f with SMTP id cg12-20020a056a00290c00b006e48ffce31fmr4024068pfb.20.1708795555765;
-        Sat, 24 Feb 2024 09:25:55 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ks1-20020a056a004b8100b006e471ade144sm1324264pfb.188.2024.02.24.09.25.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Feb 2024 09:25:55 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 24 Feb 2024 09:25:54 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: David Ober <dober@lenovo.com>
-Cc: Mark Pearson <mpearson-lenovo@squebb.ca>,
-	David Ober <dober6023@gmail.com>,
-	"wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Subject: Re: [External] Re: [PATCH v2] watchdog: add in watchdog for nct6686
-Message-ID: <9d670c24-4897-4a02-87c1-98e366075e83@roeck-us.net>
-References: <20230912112747.285393-1-dober6023@gmail.com>
- <78da7ad0-cc11-4e6f-bf25-12bd5ec247a0@app.fastmail.com>
- <8458d626-8862-44ed-8966-2f60852c92bb@app.fastmail.com>
- <e6d0fda7-09db-4955-92dd-def2df768da6@roeck-us.net>
- <SEYPR03MB7192ED993D9A15244EF22D9FDA542@SEYPR03MB7192.apcprd03.prod.outlook.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ENJlFs6ZUojgucYp8pLnkKI/5kEOSHrw+8e9tfI6tX4Q0ZICy4Z0uBQ7xTIeuCzMPFyVECRJSpNZKu9hVNvfpk3nKhZ6a6nB+b5KfgGCZbGDg3g9TqAKNrf3IZncDrgIltAs/3PF9ubqV9b5hTnHCUYWX+G4aeew45KelJsRgrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l2j6suK+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93EBBC433F1;
+	Sat, 24 Feb 2024 20:04:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708805046;
+	bh=QQt7ewCTYNG2n3qgf2FwZvSl3Jiu92dblSUDYtxymas=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=l2j6suK+FIAMgWZWlYyIf66Ynb2aWkrPMg63SagYT1M20Iwu6QGFyyXYRmIT8hiZe
+	 2f6z9bo1MKPNdXhWEFtvqPwKKw/4Sir13mwD5E2Mo+rG5vSEC+P/Gij8eSgtWhkaVP
+	 q+Vz71yWO4RNfwfv3wX4ijcZsl38mVZtV6ncqnWQM2V36aCzRaqAaXHSOiFyYhNAf0
+	 pSK0p6vYyRCsLZYWWVPLj7Y+TyhFWWYkzGfKNHf4F3GPcTy7XmCRpwF6xdsdst1Upk
+	 kZD379VLQOW47lCXR6m+yJakCmBKMMvPF8tHN/qHNL3/mzCzpWincyFXlQybo0Rsnl
+	 gc8vNBhPTmGmQ==
+Date: Sat, 24 Feb 2024 20:04:01 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Varshini Rajendran <varshini.rajendran@microchip.com>
+Cc: wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+	claudiu.beznea@tuxon.dev, eugen.hristev@collabora.com,
+	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 15/39] dt-bindings: watchdog: sama5d4-wdt: add
+ compatible for sam9x7-wdt
+Message-ID: <20240224-runway-seventy-18c05d9017d2@spud>
+References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
+ <20240223172627.672316-1-varshini.rajendran@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="MCL1PDjEzHWh/lOV"
+Content-Disposition: inline
+In-Reply-To: <20240223172627.672316-1-varshini.rajendran@microchip.com>
+
+
+--MCL1PDjEzHWh/lOV
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <SEYPR03MB7192ED993D9A15244EF22D9FDA542@SEYPR03MB7192.apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Feb 24, 2024 at 05:00:04PM +0000, David Ober wrote:
-> Hi
-> 
->    I understand the issue of the first come first grab but when I attempted to add this to the hwmon you insisted that that was not the correct place and to create a watchdog module so if both can not be loaded then would it have not been better to add it to the hwmon like some of the other chips.
-> 
+On Fri, Feb 23, 2024 at 10:56:27PM +0530, Varshini Rajendran wrote:
+> Add compatible microchip,sam9x7-wdt to DT bindings documentation.
+>=20
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 
-Two options:
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-- Add it to the hwmon driver. Not a preferred solution.
-- Implement a mfd driver which controls access to the chip
-  (preferrably through regmap) and instantiates both the hwmon
-  driver and the watchdog driver.
+Cheers,
+Conor.
 
-Guenter
+--MCL1PDjEzHWh/lOV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZdpLsQAKCRB4tDGHoIJi
+0hIqAP9kYsyM/YK3cpEQzpTJxA9CBgfV+9cmesaYky6zgK2UxAD/UrckegCYyIKZ
+MNg+hmDjQg76dZfYNeQdT328+3zi2wo=
+=9lnG
+-----END PGP SIGNATURE-----
+
+--MCL1PDjEzHWh/lOV--
 
