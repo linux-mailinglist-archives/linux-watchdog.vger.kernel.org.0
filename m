@@ -1,54 +1,53 @@
-Return-Path: <linux-watchdog+bounces-724-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-725-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2B23866AC0
-	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Feb 2024 08:32:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADBEC866AC7
+	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Feb 2024 08:32:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 834BD1F22B9C
-	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Feb 2024 07:32:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF89C1C215FC
+	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Feb 2024 07:32:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF28D1C69E;
-	Mon, 26 Feb 2024 07:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C3561CD3B;
+	Mon, 26 Feb 2024 07:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ApmiFZVy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oCbpG3vO"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87C141C2B2;
-	Mon, 26 Feb 2024 07:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669C51CD19;
+	Mon, 26 Feb 2024 07:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708932682; cv=none; b=UzAC4LU98NLVQI65YraP+LcJ9GBg/VehfPb2mZNu3xrKmvGvTq4ZGV123f5MQzpI9hv7OkBvbyymY3V1+gB8Jkxf2zX9OtNjGXN+G08lMzCOagS9fv1ofDSEo4CUyILaAEnvvh+PfUwdjiCh5/jPQlsYIAKagCPRrcDkRvKeQ18=
+	t=1708932683; cv=none; b=NCtddm+/HK0Byw2zw/O4eTu2iEVwmJsKCq0jqCVusI0mh+WZfWJIy3k/vgd6IxSh0rzaHGyDG3zXtPkOq0tDNXcV+ppfkEveyu/D2GPAUzH0XObu0UEd/Nb92D63KeYXMmMVGLvAL3/F8hmmYe1YzzwhZpbYe1G0kMTt+HVFFuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708932682; c=relaxed/simple;
-	bh=r5b5AEVCSYZ5mC7ion+JuijTW0hSH+qXbQTw9BAVvjI=;
+	s=arc-20240116; t=1708932683; c=relaxed/simple;
+	bh=axzOW/bLfk48A9ZCiMw4d+If5yhSQO0oy0KThVKKlAA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YWaZChbXZUEReU2h4an//ktbLcV5opdJ7XHik1+FouhXPzEy8jdwMm+XwrokI/LIbGe/yomL9FTmk6SCEMN+2nMoRfPuXyHSw9xstXSb9JPypEChJ6UNLApOlc1q5tF5/sP19vPgOCXStRXhjA6tV+z8obvHxqiOKktm03pOF1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ApmiFZVy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 622DEC32786;
-	Mon, 26 Feb 2024 07:31:22 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=nwDrmlxFlZ14LKufnYaU2kyLClVcnLE+R081UK0PQ7v6/Ec0ylUpTwlKGFhblAHdlGU7NPQjXgxyHvA9e9ggkyArCFJcboWbq55n0XO/jiyTPZ4yZkCM5LDhtkdbTicHxZTxh6eG/rQYTcjdpDZccUmdMFzODJ+8AFMbfKWuO+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oCbpG3vO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 40184C4166B;
+	Mon, 26 Feb 2024 07:31:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708932682;
-	bh=r5b5AEVCSYZ5mC7ion+JuijTW0hSH+qXbQTw9BAVvjI=;
+	s=k20201202; t=1708932683;
+	bh=axzOW/bLfk48A9ZCiMw4d+If5yhSQO0oy0KThVKKlAA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=ApmiFZVy3BZ9aZoaf56S6nH3v4Pe+BYL0Al8hhKj9aOqHwUnhpvljRRyqfWMBo/Ed
-	 wz3kR1zw2UIC9jmsLPnsU8T9/kmy8+jWbuAbPR0fNZ8Of5Rrrid5REkKCSk6VWuJnK
-	 W3KuVZ1sjkw+HZf93W1iKXCnuZWtnl9QEVHksLCtgBjekmmeiPclYNy3IIifZiFok0
-	 tZh8KJTZj5/HIhChWKIwIHzGn7Qkg4q2MWpIjTff5CIak+p+vFxF6NbOlcR7SVnFHt
-	 1/cCd5RWc8LpAsd2o7BxHFg0bay1Hipgm4l1lKyMy5cD8h13/dLTMOOfhVo2OAVRKE
-	 d8tNePWVcfxRg==
+	b=oCbpG3vO8se88wi/DwNL00jV9O/HJgUSK5nDIzHFhQRKPi3UojTUuihksSbjo8fR6
+	 pZfVF20hIejkGqO53lPb+D2+T8GKlbif9dpJ9WLOwBieKBMPVgtX8mW3Lhe76GqusM
+	 F32sKCFfWI5zDMRiKiWRO6eVAt/dQvlT/uKrB9yAACM7zT5FxrH71Mf6kYn315wAIM
+	 A9xgSkudEqKVoE9l+imy5hizzudr3wy2ijVdSkklkGUD1N1vL2xRmWVzYCDGVt8Dhc
+	 nLzFOZuVMtEoCnw5QpkYmPCjxvXzVqR3ErHHKzmh7Jl0Hd8N01dvBUDIQIQmWfNW/a
+	 bhNoixLCvzcxg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F7D4C54E4F;
-	Mon, 26 Feb 2024 07:31:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DC1BC48BF6;
+	Mon, 26 Feb 2024 07:31:23 +0000 (UTC)
 From:
  Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date: Mon, 26 Feb 2024 10:30:07 +0300
-Subject: [PATCH v8 11/38] watchdog: ep93xx: add DT support for Cirrus
- EP93xx
+Date: Mon, 26 Feb 2024 10:30:20 +0300
+Subject: [PATCH v8 24/38] wdt: ts72xx: add DT support for ts72xx
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -57,7 +56,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240226-ep93xx-v8-11-3136dca7238f@maquefel.me>
+Message-Id: <20240226-ep93xx-v8-24-3136dca7238f@maquefel.me>
 References: <20240226-ep93xx-v8-0-3136dca7238f@maquefel.me>
 In-Reply-To: <20240226-ep93xx-v8-0-3136dca7238f@maquefel.me>
 To: Wim Van Sebroeck <wim@linux-watchdog.org>, 
@@ -66,11 +65,11 @@ Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
  Arnd Bergmann <arnd@arndb.de>, 
  Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 X-Mailer: b4 0.13-dev-e3e53
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1708932678; l=1193;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1708932678; l=1140;
  i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=vpQ5XpDs4mC6MjpYUOCLjEKX9upQoF4eyWW0iqon84s=; =?utf-8?q?b=3DzudkFc4p/VJx?=
- =?utf-8?q?BJoDE4nLTeBY86C4/TnNPxGKL+YoRuxBurVlWTVmV1gswdu6Ahl5wTpbiSDaU0WS?=
- gDMIBb/6BHP0SiTkBGJkxa/7DticBXk9jzJH3dKkkaCHugO0EZDJ
+ bh=1rWEe31MzZtFeQGF9K/nSefILZAuLYwUQNOfnETpfJQ=; =?utf-8?q?b=3DNWQLpVoBpfL9?=
+ =?utf-8?q?gQI+O05wzm22KdiT6nG5iWLCWRzc1cdbYQkJvnvBjJyNai7GZUmhpey0wbtUU4/W?=
+ IoxCiTcKCIici6gpa4xotksu4nZLvZplZHl8DG5QTEAaifusGN/h
 X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
  pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
 X-Endpoint-Received:
@@ -82,19 +81,18 @@ From: Nikita Shubin <nikita.shubin@maquefel.me>
 
 Add OF ID match table.
 
-Tested-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
 ---
- drivers/watchdog/ep93xx_wdt.c | 8 ++++++++
+ drivers/watchdog/ts72xx_wdt.c | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/drivers/watchdog/ep93xx_wdt.c b/drivers/watchdog/ep93xx_wdt.c
-index 59dfd7f6bf0b..af89b7bb8f66 100644
---- a/drivers/watchdog/ep93xx_wdt.c
-+++ b/drivers/watchdog/ep93xx_wdt.c
-@@ -19,6 +19,7 @@
+diff --git a/drivers/watchdog/ts72xx_wdt.c b/drivers/watchdog/ts72xx_wdt.c
+index 3d57670befe1..ac709dc31a65 100644
+--- a/drivers/watchdog/ts72xx_wdt.c
++++ b/drivers/watchdog/ts72xx_wdt.c
+@@ -12,6 +12,7 @@
   */
  
  #include <linux/platform_device.h>
@@ -102,23 +100,24 @@ index 59dfd7f6bf0b..af89b7bb8f66 100644
  #include <linux/module.h>
  #include <linux/watchdog.h>
  #include <linux/io.h>
-@@ -127,9 +128,16 @@ static int ep93xx_wdt_probe(struct platform_device *pdev)
+@@ -160,10 +161,17 @@ static int ts72xx_wdt_probe(struct platform_device *pdev)
  	return 0;
  }
  
-+static const struct of_device_id ep93xx_wdt_of_ids[] = {
-+	{ .compatible = "cirrus,ep9301-wdt" },
++static const struct of_device_id ts72xx_wdt_of_ids[] = {
++	{ .compatible = "technologic,ts7200-wdt" },
 +	{ /* sentinel */ }
 +};
-+MODULE_DEVICE_TABLE(of, ep93xx_wdt_of_ids);
++MODULE_DEVICE_TABLE(of, ts72xx_wdt_of_ids);
 +
- static struct platform_driver ep93xx_wdt_driver = {
+ static struct platform_driver ts72xx_wdt_driver = {
+ 	.probe		= ts72xx_wdt_probe,
  	.driver		= {
- 		.name	= "ep93xx-wdt",
-+		.of_match_table = ep93xx_wdt_of_ids,
+ 		.name	= "ts72xx-wdt",
++		.of_match_table = ts72xx_wdt_of_ids,
  	},
- 	.probe		= ep93xx_wdt_probe,
  };
+ 
 
 -- 
 2.41.0
