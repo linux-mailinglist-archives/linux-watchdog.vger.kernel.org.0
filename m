@@ -1,115 +1,139 @@
-Return-Path: <linux-watchdog+bounces-728-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-731-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 274A48687BD
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Feb 2024 04:20:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5425E868B5F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Feb 2024 09:55:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A469DB27123
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Feb 2024 03:20:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9AA61F266D4
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Feb 2024 08:55:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 615F521104;
-	Tue, 27 Feb 2024 03:20:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1960A136660;
+	Tue, 27 Feb 2024 08:55:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GGZalQiN"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="1UT8AN/A"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82DE1B7E9;
-	Tue, 27 Feb 2024 03:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF757BAE7;
+	Tue, 27 Feb 2024 08:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709004031; cv=none; b=IxOTh+BGCwLXRjyeSUUJ+fwuC9FS+tvqptP0Z0GB66+ezn9s+klu1NofDh7doMEljRFM7pxAg7rb655uPrPDDKw5iQHFpq9E9pAUTYBRg8d5zsZGzlcmqMYhBzRG6YvGqIQmOvS+wXVGrN4ISPHCSi3eS1OtpWsTIvkrJ2J1rXk=
+	t=1709024109; cv=none; b=pHKzFIdHBQyxsIDKh1bMVbgx5g/T6DWrnsWGqdRE8GaY2QG0In1pe9h9YXsGZ2ia/CJKbbc9bXNDQYYPR2WtDzQ195dzAI8C+/zn+feefqL8zJMYTsMqxiy8CPHYTSCwrA4LjBgOYlkKyBwLOWZVofk0dw0FgYDRWvpR7Fl04LA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709004031; c=relaxed/simple;
-	bh=aEWeFJ2eAgzcvr+OaHdaIiM7TBOw2JHpdO912FAxBrQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=HiDNt3fnVXuGP2LZk9qZX6eq0d0c0aHWyi4s/80M34OXbJbLQ0J+BReyCNw8eAKY9rCvr6VjJ7pN8M4WAekOtB54cMsOofMp24ivlAhmBNBf5UmI1QFYq+WU5u3l5DwZNV0a4VpiDqu6rL8hyOpmG68YqCbm5Pz0yNEydiltP6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GGZalQiN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 601C6C433F1;
-	Tue, 27 Feb 2024 03:20:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709004030;
-	bh=aEWeFJ2eAgzcvr+OaHdaIiM7TBOw2JHpdO912FAxBrQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=GGZalQiNOWNgvr31MEFJ81Scx/q8IuKaZAqiPFZE+SD8pSdQWwG3CioqZpDlRQUAD
-	 jKvVifURv7BOpc25WdOU3fYy6BfTMtetonGpoamgfDO3hXxtvjNyuDx94vkioJxfvV
-	 MubNjVgf5u85jr4mrAuCzosl1CeEkeDYgrDKshVma4vowdYyZfX9/uNolq5oS00HY6
-	 VdQ/8vtg8n+7bDwLjb5y8Yg2i9Qutge32EjMjVf5A2q9l0zWeu9yL5HgzRZ4UWdsvX
-	 1U/1FgMqGQhy/VrktEoQPhkUCFsQrCXfoN9l9KW3KzU1jxRXAX9mECe7VQa53IR0gn
-	 sUUzlKI2AvVrA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3DB28D88FB2;
-	Tue, 27 Feb 2024 03:20:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1709024109; c=relaxed/simple;
+	bh=WoJYGL2TCnkr2w1VlrLBVfG92mEtbt6KEliQlVa4KHQ=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ISDZx+QJiBnj8CtVVKrxtI4FanTIsc8SB1Da2HcqYo2MI4PWPmPTtyniOrE1GOsPNQkRt+iWQedZYJOKYdJ1B9fvGyaTZgSZDCPIXY2X3YVs00B611svbIaiYv6iMrxgNQiT6P+L9i8rFt8fNaYI/1mwYR6Dj0jqd+/2UsdH6fc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=1UT8AN/A; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1709024108; x=1740560108;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WoJYGL2TCnkr2w1VlrLBVfG92mEtbt6KEliQlVa4KHQ=;
+  b=1UT8AN/AnsMhR7Nwq6MSV7adnExMBihos/+JW3t8FDl5u3Kpg092vPxR
+   oINp5VWK7v7U4uJJ6gYJ0hMn1ayEdIru7aQ59Lm9UPqL3zQ27HKiZ+Omv
+   nkVUClQhaoak/Do/isO7SFD9s91jcMUiVohQTDO6Vh0vBC9UR2YXMEPco
+   QO0ifMOJ4Lli0gj2XIhU9xgmEAjZ8ELrrpeFuTm7hNpvF2WwWnXe7g/zt
+   pPNm1jx5eIjB202krE79MBP1/MIz7zpxQ1ix2kdDIT7GbJHacfBhq/fI8
+   7kOBYBK/2ZN2V7o3MGgXrxCXVFv4xorsHviotOFJq22KOEY68lBue90ba
+   g==;
+X-CSE-ConnectionGUID: qD79kU+kQWmT4/4KcnQg6g==
+X-CSE-MsgGUID: cXEwV6uyTb+fwDN6W0wmcg==
+X-IronPort-AV: E=Sophos;i="6.06,187,1705388400"; 
+   d="asc'?scan'208";a="16875102"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Feb 2024 01:55:00 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 27 Feb 2024 01:54:46 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex03.mchp-main.com (10.10.85.151)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Tue, 27 Feb 2024 01:54:43 -0700
+Date: Tue, 27 Feb 2024 08:54:01 +0000
+From: Conor Dooley <conor.dooley@microchip.com>
+To: JiSheng Teoh <jisheng.teoh@starfivetech.com>
+CC: Conor Dooley <conor+dt@kernel.org>, Rob Herring <robh@kernel.org>,
+	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>, Leyfoon
+ Tan <leyfoon.tan@starfivetech.com>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Palmer Dabbelt <palmer@dabbelt.com>, Rob
+ Herring <robh+dt@kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, Emil Renner Berthing <kernel@esmil.dk>,
+	Albert Ou <aou@eecs.berkeley.edu>, Paul Walmsley <paul.walmsley@sifive.com>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, Xingyu Wu
+	<xingyu.wu@starfivetech.com>, Guenter Roeck <linux@roeck-us.net>, Wim Van
+ Sebroeck <wim@linux-watchdog.org>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v5 1/2] dt-bindings: watchdog: starfive,jh7100-wdt: Add
+ compatible for JH8100
+Message-ID: <20240227-arrange-theft-021133800c24@wendy>
+References: <20231221084358.3458713-1-jisheng.teoh@starfivetech.com>
+ <20231221084358.3458713-2-jisheng.teoh@starfivetech.com>
+ <170319257135.88357.1722653226891421278.robh@kernel.org>
+ <ZQ0PR01MB11603A15E27E344ADA11AC43EB59A@ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 00/39] Add support for sam9x7 SoC family
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170900403024.25082.9031028983461362329.git-patchwork-notify@kernel.org>
-Date: Tue, 27 Feb 2024 03:20:30 +0000
-References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
-In-Reply-To: <20240223171342.669133-1-varshini.rajendran@microchip.com>
-To: Varshini Rajendran <varshini.rajendran@microchip.com>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, nicolas.ferre@microchip.com,
- alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev,
- mturquette@baylibre.com, sboyd@kernel.org, herbert@gondor.apana.org.au,
- davem@davemloft.net, andi.shyti@kernel.org, tglx@linutronix.de,
- tudor.ambarus@linaro.org, miquel.raynal@bootlin.com, richard@nod.at,
- vigneshr@ti.com, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- linus.walleij@linaro.org, sre@kernel.org, u.kleine-koenig@pengutronix.de,
- p.zabel@pengutronix.de, olivia@selenic.com, radu_nicolae.pirea@upb.ro,
- richard.genoud@gmail.com, gregkh@linuxfoundation.org, jirislaby@kernel.org,
- lgirdwood@gmail.com, broonie@kernel.org, wim@linux-watchdog.org,
- linux@roeck-us.net, linux@armlinux.org.uk, andrei.simion@microchip.com,
- mihai.sain@microchip.com, andre.przywara@arm.com, neil.armstrong@linaro.org,
- tony@atomide.com, durai.manickamkr@microchip.com, geert+renesas@glider.be,
- arnd@arndb.de, Jason@zx2c4.com, rdunlap@infradead.org, rientjes@google.com,
- vbabka@suse.cz, mripard@kernel.org, codrin.ciubotariu@microchip.com,
- eugen.hristev@collabora.com, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org,
- netdev@vger.kernel.org, linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
- alsa-devel@alsa-project.org, linux-sound@vger.kernel.org,
- linux-watchdog@vger.kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="5/NNhPt6yL350ZtX"
+Content-Disposition: inline
+In-Reply-To: <ZQ0PR01MB11603A15E27E344ADA11AC43EB59A@ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn>
 
-Hello:
+--5/NNhPt6yL350ZtX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+On Tue, Feb 27, 2024 at 01:57:43AM +0000, JiSheng Teoh wrote:
+> > On Thu, 21 Dec 2023 16:43:57 +0800, Ji Sheng Teoh wrote:
+> > > Add "starfive,jh8100-wdt" compatible string for StarFive's JH8100
+> > > watchdog.
+> > > Since JH8100 watchdog only has 1 reset signal, update binding document
+> > > to support one reset for "starfive,jh8100-wdt" compatible.
+> > >
+> > > Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
+> > > Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
+> > > ---
+> > >  .../watchdog/starfive,jh7100-wdt.yaml         | 40 ++++++++++++++---=
+--
+> > >  1 file changed, 31 insertions(+), 9 deletions(-)
+> > >
+> >=20
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+>=20
+> Hi Conor, since this patch is reviewed, could you help to pick this
+> dt-bindings patch for riscv-dt-for-next branch?
 
-On Fri, 23 Feb 2024 22:43:42 +0530 you wrote:
-> This patch series adds support for the new SoC family - sam9x7.
->  - The device tree, configs and drivers are added
->  - Clock driver for sam9x7 is added
->  - Support for basic peripherals is added
->  - Target board SAM9X75 Curiosity is added
-> 
->  Changes in v4:
-> 
-> [...]
+Ideally I would not and it would go via the watchdog tree.
 
-Here is the summary with links:
-  - [v4,01/39] dt-bindings: net: cdns,macb: add sam9x7 ethernet interface
-    https://git.kernel.org/netdev/net-next/c/5c237967e632
+Failing that, I'd rather Rob take it.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks,
+Conor.
 
+--5/NNhPt6yL350ZtX
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZd2jGwAKCRB4tDGHoIJi
+0o02AQDUgzrn6JnUOaFQ4y/ICrPh1DIxb6FFKMBBGx82o4xb8QEA2JRBmceCzOh8
+/YRRWMvcMwl2ARgGcFNuZBE0hbOttgU=
+=x9oX
+-----END PGP SIGNATURE-----
+
+--5/NNhPt6yL350ZtX--
 
