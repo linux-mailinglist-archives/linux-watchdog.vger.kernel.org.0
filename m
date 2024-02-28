@@ -1,126 +1,137 @@
-Return-Path: <linux-watchdog+bounces-745-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-746-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ECA286B3CD
-	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Feb 2024 16:53:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96CA986B721
+	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Feb 2024 19:28:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9FA9CB23FC7
-	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Feb 2024 15:53:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8D791C23BF8
+	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Feb 2024 18:28:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38A9C15D5B2;
-	Wed, 28 Feb 2024 15:53:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB05340864;
+	Wed, 28 Feb 2024 18:28:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fH/VpNsC"
+	dkim=pass (2048-bit key) header.d=hefring-com.20230601.gappssmtp.com header.i=@hefring-com.20230601.gappssmtp.com header.b="xnM34M7c"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDCE615CD6E;
-	Wed, 28 Feb 2024 15:53:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A2020DD5
+	for <linux-watchdog@vger.kernel.org>; Wed, 28 Feb 2024 18:27:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709135630; cv=none; b=Rc0iRWJ8YCDxdaHLxX9hgYK8K709KlFkfOAISTfaQjH7oN0+j8Ij4fEv1EilEi6MSwi4eAwJTo7vzhjbjwYAn5/h2Z9unKzPvj8adcZHinh4IYDYY5ItE9k3IfBE6lPv5WCfIYGIvsaoZWw0fzwfPXH1SqQepR4YS1/KJpNy6T0=
+	t=1709144882; cv=none; b=Sc3jxJ9nFKKcYmt3XvEKLC7GP/+ZcPDurKMXxl94RwSStYDAisJXWb7DF4c74elRTvIO43qBl18POhIBLcZMr0C67M0TkcPnMp3kMZQEa6SHyoAeL97cxkCOs33aY0kV6FrxxeyqBmEpXo+AwxVMgfALshEGCVYoBadaPIJp0vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709135630; c=relaxed/simple;
-	bh=vxRLRVprDDB/c/3M41BNMbhxG1UwYXmCdbjUbmB3KKE=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=N9Wr/wmzXUbn8xDF9Uds8NtC7iTGnjmBuOuTOtXQX0ugoeRjV7PBjhdjyNXpsuLa91uqToBkLDkAqehOi2OFTWKgSPvRZ2mtn/PRVqb4oU54k7tLY/DgghAzgw0VwOZFXs+MSs489mwhE8zxum4BwtJzHm4oo/Q3KyVWaaGHA7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fH/VpNsC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1C4CC433F1;
-	Wed, 28 Feb 2024 15:53:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709135629;
-	bh=vxRLRVprDDB/c/3M41BNMbhxG1UwYXmCdbjUbmB3KKE=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=fH/VpNsCC6yrehn5cwmf2mjsgU1Ga7kLFvddPlrtSi5Jr4CqpQYnnimGO6HSWNh3O
-	 P1sksEi+taf0EXpKgvTWOTnRbkQja9l+bSOOMPcaOGxOgSq88KAUk6A8OE94ZgekUk
-	 PKdQLGs/2dsH+cPT3ecRVpohSJXMsiWDkMudBu1wj0oL9BuvtO87S4FKrMnmaXAGxp
-	 SG4Uzyv1B5O67FmVmHVGx4IRrSCy5EQ9LvQB1aqs1ZQfSHMSBrY3mVj+nFOJNScIHn
-	 h/H6FZUVqL4iXcGgFr9D757QehRG1OTvDYME//d5Zi8AqSrdF6Nofkun3/EW0W2f+w
-	 hJcYB3olR0OOg==
-From: Mark Brown <broonie@kernel.org>
-To: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
- conor+dt@kernel.org, nicolas.ferre@microchip.com, 
- alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
- mturquette@baylibre.com, sboyd@kernel.org, herbert@gondor.apana.org.au, 
- davem@davemloft.net, andi.shyti@kernel.org, tglx@linutronix.de, 
- tudor.ambarus@linaro.org, miquel.raynal@bootlin.com, richard@nod.at, 
- vigneshr@ti.com, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
- linus.walleij@linaro.org, sre@kernel.org, u.kleine-koenig@pengutronix.de, 
- p.zabel@pengutronix.de, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
- richard.genoud@gmail.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
- lgirdwood@gmail.com, wim@linux-watchdog.org, linux@roeck-us.net, 
- linux@armlinux.org.uk, andrei.simion@microchip.com, 
- mihai.sain@microchip.com, andre.przywara@arm.com, neil.armstrong@linaro.org, 
- tony@atomide.com, durai.manickamkr@microchip.com, geert+renesas@glider.be, 
- arnd@arndb.de, Jason@zx2c4.com, rdunlap@infradead.org, rientjes@google.com, 
- vbabka@suse.cz, mripard@kernel.org, codrin.ciubotariu@microchip.com, 
- eugen.hristev@collabora.com, devicetree@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org, 
- linux-i2c@vger.kernel.org, linux-mtd@lists.infradead.org, 
- netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org, 
- linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org, 
- linux-serial@vger.kernel.org, alsa-devel@alsa-project.org, 
- linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org, 
- Varshini Rajendran <varshini.rajendran@microchip.com>
-In-Reply-To: <20240223171342.669133-1-varshini.rajendran@microchip.com>
-References: <20240223171342.669133-1-varshini.rajendran@microchip.com>
-Subject: Re: (subset) [PATCH v4 00/39] Add support for sam9x7 SoC family
-Message-Id: <170913561744.333382.15677696645878162142.b4-ty@kernel.org>
-Date: Wed, 28 Feb 2024 15:53:37 +0000
+	s=arc-20240116; t=1709144882; c=relaxed/simple;
+	bh=k4xyia0piuIcKuFqrg4Vvg1MChuit3EZ7ASf2pglsMc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dvIf/6Nmr2z254PkjuI6BgS2EjNWEETDN/OBD/qXyTIHdM0aoH8J+jUKNu+mKNSZURQDQGoCOq7XJ7z2G5RtdJKFJhzvDM7YTRFnsCzzwhJslN+uFSwJbVVY84ccHvVYKVKtg24iUszxP0qeaKJlIC09agcS5latVSX7KySyL0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hefring.com; spf=none smtp.mailfrom=hefring.com; dkim=pass (2048-bit key) header.d=hefring-com.20230601.gappssmtp.com header.i=@hefring-com.20230601.gappssmtp.com header.b=xnM34M7c; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hefring.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=hefring.com
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dcc80d6006aso122409276.0
+        for <linux-watchdog@vger.kernel.org>; Wed, 28 Feb 2024 10:27:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=hefring-com.20230601.gappssmtp.com; s=20230601; t=1709144878; x=1709749678; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EF1KPzXNNkHhE7yYlv+hV5FrLPYFNCzXyE0ge4E72Xc=;
+        b=xnM34M7cCjaHquzBGHYfE/gb6Zi719cfhzCqjktyCvCcdKHeQVQJdZXfRRaTSAXILF
+         /SKByzv5s5E5/xhLiUNRqjceyUwGSaxsb0IlfxHCfPXkyqjP9dBTgvZs10XxLjvw4Kh1
+         ljWVTGEZKJAGjOFYty7jscH7p9Dojk/SosUjD1owQ9qHlquXazMf1bWEMAn/PT6KciEP
+         o0Skd2unAC7+05nVXyj3Dk44L5ti54dtGLTsOjxHH29FotSPb3rqznup0ZAFLpp2wrJR
+         ECQn/65BeKjl1/3IsbUzxCyx9PTN1eD4BBzX5qqDTNYiIo/Wzt9hP56yK9BpNZ/JVovH
+         Hidg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1709144878; x=1709749678;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EF1KPzXNNkHhE7yYlv+hV5FrLPYFNCzXyE0ge4E72Xc=;
+        b=Vn7nLLMY3TvRzkON0LstBc6f8VvmfPjIzGqMe6HGyQ1aIuhLwv1Loh2twUCczyvjWH
+         zzVDVAjL+duoqGcNpW7oYkObBJRkBBnIKP4OgY5+k1Ih8IJN8afoj+/C0E0Fi1lY2Vk9
+         O+c/gGREZs8FZI1mt/Q3khmDrRRGTZPqxZ8t1K+gNX8aiZW23fsxtrhbthxt0+iqVFm4
+         xv+kPd/yBq/lO55QzmRNSJxxa25rrgCI5AHCMERHk8ncNHvYM4uqEePqSqKXZQSGXWy6
+         wBH+9H9UKmhMKX5E4chCtS1TwcoR88S3ZeqoejYaHxTDqSSHejWgWB82fgnyrdAA/ysq
+         OQrg==
+X-Forwarded-Encrypted: i=1; AJvYcCUgOu21jXZ+DreyTltIkpeXruCAw3Ac08MKBjmTe3iVSkVT1keQlNGLGftwubCEg0nEigL9Xd0gveZNzioXOt5POGNArwaC7+RiJ+XoHsA=
+X-Gm-Message-State: AOJu0Yw79OhroCGIXlC8V6bQziPiLhR6LOOOgKc29xogwBBjHf5AhT6+
+	algaiXUJcPZQnKKglb8bAmFnKtQi8PZ6CydW5uxzWGRYwyn3sQm4HhlLnK9TKpVDbsrY2/GvkkX
+	D
+X-Google-Smtp-Source: AGHT+IGGIUcPNLaPDD97/JSUYoRXanewPna4Nbjsv7a0TEzYLDOhtOT2egjmszbqhcM+oGhhhvzNHQ==
+X-Received: by 2002:a05:6902:136e:b0:dc5:f51e:6a60 with SMTP id bt14-20020a056902136e00b00dc5f51e6a60mr22948ybb.6.1709144878346;
+        Wed, 28 Feb 2024 10:27:58 -0800 (PST)
+Received: from localhost.localdomain ([50.212.55.90])
+        by smtp.gmail.com with ESMTPSA id x4-20020ac87a84000000b0042e390c9804sm8355qtr.6.2024.02.28.10.27.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Feb 2024 10:27:57 -0800 (PST)
+From: Ben Wolsieffer <ben.wolsieffer@hefring.com>
+To: linux-kernel@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Christophe Roullier <christophe.roullier@st.com>,
+	Ben Wolsieffer <ben.wolsieffer@hefring.com>
+Subject: [PATCH] watchdog: stm32_iwdg: initialize default timeout
+Date: Wed, 28 Feb 2024 13:27:23 -0500
+Message-ID: <20240228182723.12855-1-ben.wolsieffer@hefring.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-a684c
+Content-Transfer-Encoding: 8bit
 
-On Fri, 23 Feb 2024 22:43:42 +0530, Varshini Rajendran wrote:
-> This patch series adds support for the new SoC family - sam9x7.
->  - The device tree, configs and drivers are added
->  - Clock driver for sam9x7 is added
->  - Support for basic peripherals is added
->  - Target board SAM9X75 Curiosity is added
-> 
->  Changes in v4:
->  --------------
-> 
-> [...]
+The driver never sets a default timeout value, therefore it is
+initialized to zero. When CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is
+enabled, the watchdog is started during probe. The kernel is supposed to
+automatically ping the watchdog from this point until userspace takes
+over, but this does not happen if the configured timeout is zero. A zero
+timeout causes watchdog_need_worker() to return false, so the heartbeat
+worker does not run and the system therefore resets soon after the
+driver is probed.
 
-Applied to
+This patch fixes this by setting an arbitrary non-zero default timeout.
+The default could be read from the hardware instead, but I didn't see
+any reason to add this complexity.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+This has been tested on an STM32F746.
 
-Thanks!
+Fixes: 85fdc63fe256 ("drivers: watchdog: stm32_iwdg: set WDOG_HW_RUNNING at probe")
+Signed-off-by: Ben Wolsieffer <ben.wolsieffer@hefring.com>
+---
+ drivers/watchdog/stm32_iwdg.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-[16/39] spi: dt-bindings: atmel,at91rm9200-spi: remove 9x60 compatible from list
-        commit: 666db8fd4265f938795004838d2a9335ce7b9da1
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
+index d9fd50df9802..5404e0387620 100644
+--- a/drivers/watchdog/stm32_iwdg.c
++++ b/drivers/watchdog/stm32_iwdg.c
+@@ -20,6 +20,8 @@
+ #include <linux/platform_device.h>
+ #include <linux/watchdog.h>
+ 
++#define DEFAULT_TIMEOUT 10
++
+ /* IWDG registers */
+ #define IWDG_KR		0x00 /* Key register */
+ #define IWDG_PR		0x04 /* Prescaler Register */
+@@ -248,6 +250,7 @@ static int stm32_iwdg_probe(struct platform_device *pdev)
+ 	wdd->parent = dev;
+ 	wdd->info = &stm32_iwdg_info;
+ 	wdd->ops = &stm32_iwdg_ops;
++	wdd->timeout = DEFAULT_TIMEOUT;
+ 	wdd->min_timeout = DIV_ROUND_UP((RLR_MIN + 1) * PR_MIN, wdt->rate);
+ 	wdd->max_hw_heartbeat_ms = ((RLR_MAX + 1) * wdt->data->max_prescaler *
+ 				    1000) / wdt->rate;
+-- 
+2.43.0
 
 
