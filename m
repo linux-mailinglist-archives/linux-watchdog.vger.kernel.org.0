@@ -1,211 +1,119 @@
-Return-Path: <linux-watchdog+bounces-732-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-733-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52D4C8699E7
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Feb 2024 16:10:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 571EB86A9E4
+	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Feb 2024 09:28:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF48028644A
-	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Feb 2024 15:10:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 922201C21B24
+	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Feb 2024 08:28:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7AAF14A0BE;
-	Tue, 27 Feb 2024 15:07:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E40B02D03B;
+	Wed, 28 Feb 2024 08:28:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="LlOiVQRF"
+	dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b="EalO3ZTM"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from forward501a.mail.yandex.net (forward501a.mail.yandex.net [178.154.239.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 436CF14A4C1;
-	Tue, 27 Feb 2024 15:07:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EAE2C842;
+	Wed, 28 Feb 2024 08:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709046453; cv=none; b=fJUv12b8Gu/pqU87vm84gEsFlRozl4u4InuNjv7LW7ORiyvaYsIrsZn43cHyDUHoNWeIJ76XvYaXpoEyeaRIIXSha9suvnN3Mobd74KM+h+FziEkljmt22XU4cOXk45GzvO348oZoOiGA/1pBWdvPVKdNNT++SmZMTuEF4d8iZ0=
+	t=1709108928; cv=none; b=p7n6Q4/bj5Epbu/Gpo2xybAjoIH8/m4FBG0lDVDP8R3ci8QPDnQV8kYVYlq+hvSE9F31RcYFKWuypxMykdiK6NEC8eftIT+eAwKEW473AsT7czqZAPARjswycb04RPQOOtAMyNIYqmRpk7NSe81EmQ5bkGmMhTedQBTqRP2fHj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709046453; c=relaxed/simple;
-	bh=nbBHPd7hWnt+9fYQpHo+4Cb/SCBb82djYs8mBUn7M3s=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=b0NmLj+y1MXJOXdSHAPBv12ugay1lig64DKfyosXwmMXIoe4OYl9ELHJgodfDJUE0Zkor0K/JPtnscrEeuAO6WdLbyjw5kVqlLuoZGResu1eQCVjcK0Je/EPq9yp5H6Nw7QlU0Ev1im93JuXpqf5K5QlJsFh1I63cErQLSjGXoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=LlOiVQRF; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41RBjuWF011343;
-	Tue, 27 Feb 2024 15:07:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:from:to:cc:references
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=u9sTptxpOGNQHmo+HL35UVlPPUynBEERtiX8yI981Ko=; b=Ll
-	OiVQRFHPm/nyxkkAPb8BD/BVtUdTA1VVFij/PheD0+xu8Ux2Yr3p7L2C9gTL3SQF
-	KSBhl+k8G1Y1DbD4T4BsJw3C/3Zw6c29fuLBhENUtWqsyZh6xDHT9528ELrR1+r5
-	YR4fPZrz8biPemT4XkP0cu76Vs+k+pkQhbjkNUfVCz+xrLL6rf9RAAO+n4btn03y
-	6Y7RQHgA9S/Ezlsnl78Hm5zQrqtGZWUc6g05dmnWV8ohPEXkTv05ut92bIkCipMI
-	+cmBR+GekmpJCwsbpYc7Oct6TamabQ0HtQ/iQRNJvc/z+yhw4tUAfaSlzBLGu7qU
-	XK+oLcfqntKWmreJo0+g==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3whd7b0s58-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Feb 2024 15:07:15 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41RF74Pp021840
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Feb 2024 15:07:04 GMT
-Received: from [10.216.43.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 27 Feb
- 2024 07:07:01 -0800
-Message-ID: <9f084781-2233-4b36-8b1c-db1fa9a9db49@quicinc.com>
-Date: Tue, 27 Feb 2024 20:36:56 +0530
+	s=arc-20240116; t=1709108928; c=relaxed/simple;
+	bh=5C6vD/fRuXGe615n6PpX9VIOEIZkOgWqNNFadbqmy4M=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=KR25EONeFJRXlMbm6own874XiOPOzSDXw3ZTFIfzn5HUca4cEO9ydIRC/v495/2AfayPp25dI/9h+qaQiZYrLbUlVcikg09RErBJZQy0GNwXPy2o3vk0OJWSZQ4DCPc7uUUaA/Wue8jdItUxE1PVIVKDPGDhHWi1u6fJkbUEvlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me; spf=pass smtp.mailfrom=maquefel.me; dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b=EalO3ZTM; arc=none smtp.client-ip=178.154.239.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=maquefel.me
+Received: from mail-nwsmtp-smtp-production-main-18.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-18.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:8c9b:0:640:8c33:0])
+	by forward501a.mail.yandex.net (Yandex) with ESMTPS id 7184B61680;
+	Wed, 28 Feb 2024 11:23:10 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-18.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id 2NUOVYANd8c0-nNSnKwOK;
+	Wed, 28 Feb 2024 11:23:08 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail;
+	t=1709108588; bh=5C6vD/fRuXGe615n6PpX9VIOEIZkOgWqNNFadbqmy4M=;
+	h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
+	b=EalO3ZTMGKQby2mNKqzwTBWhRSR2vOdtx+YGi+0dATxHc9Ne404mREzk3ONsmowJQ
+	 Sbt6ELQEiXojAyllpQkuQc6yuKN4UbpwNHkcrWbSfpHM6co896dWu7EcWBkPxvOZZi
+	 FlkHZDOUFmF5J3w7ul6ZRoH0jf1AGJ+fqIZrkwaY=
+Authentication-Results: mail-nwsmtp-smtp-production-main-18.iva.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <154df7fd17dd05fdb6ba21d5f4d84ecfdb476091.camel@maquefel.me>
+Subject: Re: [PATCH v8 00/38] ep93xx device tree conversion
+From: Nikita Shubin <nikita.shubin@maquefel.me>
+To: Mark Brown <broonie@kernel.org>
+Cc: Hartley Sweeten <hsweeten@visionengravers.com>, Alexander Sverdlin
+ <alexander.sverdlin@gmail.com>, Russell King <linux@armlinux.org.uk>,
+ Lukasz Majewski <lukma@denx.de>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+ Vinod Koul <vkoul@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Guenter Roeck <linux@roeck-us.net>, Thierry Reding
+ <thierry.reding@gmail.com>, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
+ <u.kleine-koenig@pengutronix.de>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>,  Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Damien Le Moal <dlemoal@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Liam Girdwood
+ <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai
+ <tiwai@suse.com>, Ralf Baechle <ralf@linux-mips.org>, "Wu, Aaron"
+ <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, Olof Johansson
+ <olof@lixom.net>,  Niklas Cassel <cassel@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-pm@vger.kernel.org,  devicetree@vger.kernel.org,
+ dmaengine@vger.kernel.org,  linux-watchdog@vger.kernel.org,
+ linux-pwm@vger.kernel.org,  linux-spi@vger.kernel.org,
+ netdev@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ linux-ide@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-sound@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, Bartosz
+ Golaszewski <bartosz.golaszewski@linaro.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>, Andy
+ Shevchenko <andy.shevchenko@gmail.com>
+Date: Wed, 28 Feb 2024 11:23:02 +0300
+In-Reply-To: <168fd3d7-d1e9-467e-bdd0-36c12aa81b68@sirena.org.uk>
+References: <20240226-ep93xx-v8-0-3136dca7238f@maquefel.me>
+	 <168fd3d7-d1e9-467e-bdd0-36c12aa81b68@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] watchdog: qcom: fine tune the max timeout value
- calculation
-Content-Language: en-US
-From: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Wim Van
- Sebroeck <wim@linux-watchdog.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20240116-wdt-v2-1-501c7694c3f0@quicinc.com>
- <2c4f9829-138d-41a5-8810-d13cf749fded@roeck-us.net>
- <67ed3805-40cb-4f00-9d0d-b0fd012d6221@quicinc.com>
-In-Reply-To: <67ed3805-40cb-4f00-9d0d-b0fd012d6221@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: eq9d10-VwcsDL5E0n_LL7x96ZGksmBKy
-X-Proofpoint-ORIG-GUID: eq9d10-VwcsDL5E0n_LL7x96ZGksmBKy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-27_01,2024-02-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
- mlxlogscore=999 priorityscore=1501 spamscore=0 adultscore=0 malwarescore=0
- mlxscore=0 lowpriorityscore=0 phishscore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2402120000
- definitions=main-2402270117
 
+Hello Mark!
 
+On Mon, 2024-02-26 at 13:34 +0000, Mark Brown wrote:
+> On Mon, Feb 26, 2024 at 10:29:56AM +0300, Nikita Shubin via B4 Relay
+> wrote:
+>=20
+> > The goal is to receive ACKs for all patches in series to merge it
+> > via Arnd branch.
+>=20
+> What are the actual dependencies here?
 
-On 2/3/2024 12:07 PM, Kathiravan Thirumoorthy wrote:
-> 
-> 
-> On 1/16/2024 8:32 PM, Guenter Roeck wrote:
->> On 1/16/24 00:22, Kathiravan Thirumoorthy wrote:
->>> To determine the max_timeout value, the below calculation is used.
->>>
->>>     max_timeout = 0x10000000 / clk_rate
->>>
->>> cat 
->>> /sys/devices/platform/soc@0/b017000.watchdog/watchdog/watchdog0/max_timeout
->>> 8388
->>>
->>> However, this is not valid for all the platforms. IPQ SoCs starting from
->>> IPQ40xx and recent Snapdragron SoCs also has the bark and bite time 
->>> field
->>> length of 20bits, which can hold max up to 32 seconds if the clk_rate is
->>> 32KHz.
->>>
->>> If the user tries to configure the timeout more than 32s, then the value
->>> will be truncated and the actual value will not be reflected in the HW.
->>>
->>> To avoid this, lets add a variable called max_tick_count in the 
->>> device data,
->>> which defines max counter value of the WDT controller. Using this, 
->>> max-timeout
->>> will be calculated in runtime for various WDT contorllers.
->>>
->>> With this change, we get the proper max_timeout as below and restricts
->>> the user from configuring the timeout higher than this.
->>>
->>> cat 
->>> /sys/devices/platform/soc@0/b017000.watchdog/watchdog/watchdog0/max_timeout
->>> 32
->>>
->>> Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
->>
->> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> 
-> Guenter / Will, Can this be picked for v6.9? I don't see this in linux- 
-> next yet, so please consider this as a gentle reminder!
+More than a half of patches makes device drivers incompatible with
+"platform" approach, this is intentionally cause we don't want any
+leftovers - ep93xx should be fully converted to dt or left as is.
 
+Currently only 4 patches that require review/ack left:
 
-Guenter / Will, Gentle Reminder... is this change queued for v6.9?
-
-
-> 
->>
->>> ---
->>> Changes in v2:
->>> - drop the minimum timeout change from 30s to 32s
->>> - Link to v1: 
->>> https://lore.kernel.org/r/20240111-wdt-v1-1-28c648b3b1f3@quicinc.com
->>> ---
->>>   drivers/watchdog/qcom-wdt.c | 7 +++++--
->>>   1 file changed, 5 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
->>> index 9e790f0c2096..006f9c61aa64 100644
->>> --- a/drivers/watchdog/qcom-wdt.c
->>> +++ b/drivers/watchdog/qcom-wdt.c
->>> @@ -41,6 +41,7 @@ static const u32 reg_offset_data_kpss[] = {
->>>   struct qcom_wdt_match_data {
->>>       const u32 *offset;
->>>       bool pretimeout;
->>> +    u32 max_tick_count;
->>>   };
->>>   struct qcom_wdt {
->>> @@ -177,11 +178,13 @@ static const struct watchdog_info 
->>> qcom_wdt_pt_info = {
->>>   static const struct qcom_wdt_match_data match_data_apcs_tmr = {
->>>       .offset = reg_offset_data_apcs_tmr,
->>>       .pretimeout = false,
->>> +    .max_tick_count = 0x10000000U,
->>>   };
->>>   static const struct qcom_wdt_match_data match_data_kpss = {
->>>       .offset = reg_offset_data_kpss,
->>>       .pretimeout = true,
->>> +    .max_tick_count = 0xFFFFFU,
->>>   };
->>>   static int qcom_wdt_probe(struct platform_device *pdev)
->>> @@ -236,7 +239,7 @@ static int qcom_wdt_probe(struct platform_device 
->>> *pdev)
->>>        */
->>>       wdt->rate = clk_get_rate(clk);
->>>       if (wdt->rate == 0 ||
->>> -        wdt->rate > 0x10000000U) {
->>> +        wdt->rate > data->max_tick_count) {
->>>           dev_err(dev, "invalid clock rate\n");
->>>           return -EINVAL;
->>>       }
->>> @@ -260,7 +263,7 @@ static int qcom_wdt_probe(struct platform_device 
->>> *pdev)
->>>       wdt->wdd.ops = &qcom_wdt_ops;
->>>       wdt->wdd.min_timeout = 1;
->>> -    wdt->wdd.max_timeout = 0x10000000U / wdt->rate;
->>> +    wdt->wdd.max_timeout = data->max_tick_count / wdt->rate;
->>>       wdt->wdd.parent = dev;
->>>       wdt->layout = data->offset;
->>>
->>> ---
->>> base-commit: 9e21984d62c56a0f6d1fc6f76b646212cfd7fe88
->>> change-id: 20240111-wdt-5bd079ecf14d
->>>
->>> Best regards,
->>
-> 
+- ARM: ep93xx: add regmap aux_dev
+- clk: ep93xx: add DT support for Cirrus EP93xx
+- dma: cirrus: Convert to DT for Cirrus EP93xx
+- dma: cirrus: remove platform code
 
