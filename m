@@ -1,187 +1,300 @@
-Return-Path: <linux-watchdog+bounces-747-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-748-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA7DD86B73F
-	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Feb 2024 19:36:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E22B186CF75
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Feb 2024 17:40:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EC1B2864AD
-	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Feb 2024 18:36:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1AA991C2175A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Feb 2024 16:40:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D971479B7A;
-	Wed, 28 Feb 2024 18:36:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 265391E48A;
+	Thu, 29 Feb 2024 16:40:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RK1Wjar1"
+	dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b="M0IzrafH";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WauvDIkB"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19E2879B79;
-	Wed, 28 Feb 2024 18:36:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16EB16063B;
+	Thu, 29 Feb 2024 16:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709145395; cv=none; b=MopgS+xqalh/ywyEwK6ldLeWuIifZx32kkvRukTV4lvEEQ1dNK0O0Soej2huLhjlEV/uYzOdh1mg4G9GsdaFy3JPwS4C5dV4PshwUOKnRZUrol9IIAo/NfFES5mpOgTIZaAbG2T/ElLPI+GafAXQzx+9YCgn3nD/xuGVUWoMQsY=
+	t=1709224851; cv=none; b=gqMI/mLZ7a7BkQ1iSb8y52G2rLQ1fPWQ4XvsWLudzOsYNZ9vpepLe4k3bUwVqGSFz40xcvOz4vBKLJeRVfe8TUFK1+WiCoBaB1NvXMnWUOt6nCBBZuPb8xeEmrFm+uCZpanmUgqHRjE2sWEniFngsML+2ojL2u71IGbU2zxAxPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709145395; c=relaxed/simple;
-	bh=2Fxp9LD6R5+6ET9F/QGoLG6UJcEbLU/dVHJcQg5DpGo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s2BpuDLnbiVULKig5Uj/F09GxMdgOQtICuL4OjzeT1OUOeJvNMHD1Ft6cj0u7y5Ou29Wd2WV+MGHmyNF3LG25Qn1APJ48a9d4bjWkly2oxRoUVhu5B/gKx8eCSDFdQuLjW9mmWbKi/1IRwIATvYJE3ZKca97ZIGQc70aOu9xHZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RK1Wjar1; arc=none smtp.client-ip=209.85.166.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-7c7c9846910so161992139f.1;
-        Wed, 28 Feb 2024 10:36:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709145393; x=1709750193; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=i0qHuF8v5L5+UifsJbzCUW28nUptTePFPyiO2bCX6ks=;
-        b=RK1Wjar1JeNUB2GmgP7RmiZmJOS5RzTmiKwSljp7BseMNHvfz8DWIk2+yb9tZL6dsv
-         rZrTNsCJm3S71eqvJyrhu8sSGOc9Tne4OWjADiUIHE/H9Nq/ywFmAw9RArqmkkuHvZtB
-         da6S90RuOVe9z718hXily+DirPCpnqkhFLzRLYKk527vF+uneF8clbiohLENuaU3PowV
-         DiUF7ZjUES0rza2Jr0gIL8IjYAmaHtR5+TAUojudCt7WV108eeNHxDsm03OelusmFSF4
-         113PwwlO89jjuNW4lna5e8ETezMZ0qtU8xghxHNooa8myFoiOTh0+BvLHCh//ToO1Dxl
-         OhRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709145393; x=1709750193;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i0qHuF8v5L5+UifsJbzCUW28nUptTePFPyiO2bCX6ks=;
-        b=eVjZznvcLLvUpS9JDpHTdfwxsYrPPuatLump28Op//j0JmCOn/WuxZcnWIV8SVkAAC
-         2EYVc/kOKp6om2c72exJ8xLIQtQKgSQrJJRXgtEq7TfQLGZtXEJ0nD6Jh2XUlG/8N90m
-         gXJNEHEjXPePwL31qDCm/u9d3yAuAglIjHQAdndS8v80gQ4Fm1quYRisJMXbcYIlHG9F
-         kTWz31oEpSzxLJIAqYAhk/3LQmouKBbvwMI2JRPve5bMMmpVVoNyh6GXuslx6fMwvJBp
-         RCmTDPj9PSJDa1OGcJ8Ec10z8lJUl4W/KCEccD/h0i9E/eg5ei6eqG2zvFI71TzxVnrx
-         7e9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU0pDft3yS/ExEEdQJB9PnH5PicT0UivLjsB4ufI8w7ORJX5J79OLzDg4bELB5KajTP4/BAdruBinwpitbO4buF2Hz/EgjUdUhodtdbtiLQKqUHL050Doi47SsQF1+C3ytEyPaWiPtlrEIVNRk=
-X-Gm-Message-State: AOJu0Yyx7S0VwWowLvXlq2p0JnK0xeWfQWsP1sXWOhQiSBdU30NJ84EY
-	pErR9QqqWj1FSOX7fSHugJ6g635yEWwsnZDqojerUq1p8kKEsH+2
-X-Google-Smtp-Source: AGHT+IFDZMMcmuBvVmAObjRdoqBHh0wc0R00rw745aI8/xyv00qLKbeH6c2EI5Ey7tACKdY1PTDGiw==
-X-Received: by 2002:a5e:a911:0:b0:7c7:9185:e58e with SMTP id c17-20020a5ea911000000b007c79185e58emr317643iod.12.1709145393249;
-        Wed, 28 Feb 2024 10:36:33 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p1-20020a056602304100b007c782f6d55csm19518ioy.24.2024.02.28.10.36.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Feb 2024 10:36:32 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f147ed12-8b7f-43c8-9b55-3000b6e4fd27@roeck-us.net>
-Date: Wed, 28 Feb 2024 10:36:31 -0800
+	s=arc-20240116; t=1709224851; c=relaxed/simple;
+	bh=ePCn4XnhHaFRLyatuuvyTZkc5ZMjQEibdQic1+zd0ZU=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=nJ2ls1YfOTEuCRjH4/iCN5kMHIFhWlWyU/gOyaxuULUW4hVCeRNNdB5oV3gKcSwcbh7qRMeR7vjsDsgasA22+Kb+Z8DLSvTuXl28719+BeZEXTncm3p9K2GYW6snQx/LfZ+idvXA5PSTMqa1MdFCFwuJUeJGb0MyvMf6D2L5E5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca; spf=pass smtp.mailfrom=squebb.ca; dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b=M0IzrafH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WauvDIkB; arc=none smtp.client-ip=64.147.123.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.west.internal (Postfix) with ESMTP id 7A4EF32002E8;
+	Thu, 29 Feb 2024 11:40:46 -0500 (EST)
+Received: from imap52 ([10.202.2.102])
+  by compute3.internal (MEProxy); Thu, 29 Feb 2024 11:40:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1709224846; x=1709311246; bh=Pvs8f5fEST
+	H/z6VhQ8sfrxl+kB+NceOSW26LHCi7jCY=; b=M0IzrafH/9GCWf+7WRJNhU75dq
+	RI7V+9KcRQ2r6ADD71kb+GVtSYivvzehDGbeXZXI2HFiWsB3abcaxanJjNcg+vme
+	wgudOe4S0lkNmWYi38UUYo+UyPaiHiYPlTZNIYAQVcGa26zZ5nfhl5/mEV6rL+pp
+	+/3fuV60q5XhBMMkxmIPRD29vAPuQ5ERkfXyDqlomwnxkFfNYijuYAfjru7AbSMH
+	w2TF2P3dIDfF62K3NCyedJ+kIXh6bJoi7Byp/hc3htpDUbqHoJ4CdBPKOEsVoiuZ
+	c1Ytr0RWhwU9OTRzgZMRxFsmmm8Ou2B9JLWGB4hnwXdspzmyPcqSne+99ngQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1709224846; x=1709311246; bh=Pvs8f5fESTH/z6VhQ8sfrxl+kB+N
+	ceOSW26LHCi7jCY=; b=WauvDIkBmQjhEFmWyZNNNdQFcxOQvAf7G5xhlddSDFbY
+	sVJLCeNe+qJE78x44bObmmbUxVSBX3TVXs6NfZKibu0kvmvQuVe097mnQzonWB38
+	MVOlwSe7QqPEd5r7XpwXAhpTGh2L0xLUx31MRILUsi/iE0uNY/+tUl5fMJGGR/Hd
+	zBODn2C92NJsKY/RHN1UphW26KmCWw5V0XLFVtiRMiEpxzBUswLUDyi0Ik+fUXZR
+	+Nc5edjiq6Qnyf8Lj3kYcPe1Jsz4yQNw71dhZQalNVXupfUmg5cli6+7bHwUYj3d
+	cOFaXcwi9UuBezW172ShdnUIv3a+G5XsCYLY2YEciQ==
+X-ME-Sender: <xms:jbPgZQwcBOefhGD77B6uXe4V0pF4UhvBw_wqlKv8o_o4b7XrLYeanA>
+    <xme:jbPgZUTV-Jg-YZv_WtfCJTMiHOQrZXiJcML4X03vK9mmoTS8eJPmXJsxZ1k7mihOM
+    igUfrsbdZKKw-98QRg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrgeelgdeltdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdforghr
+    khcurfgvrghrshhonhdfuceomhhpvggrrhhsohhnsehsqhhuvggssgdrtggrqeenucggtf
+    frrghtthgvrhhnpeeuvefftdefjeevveejheehhfevfeelffehfefgheffjeetvddvhfdu
+    ffegheefieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehmphgvrghrshhonhesshhquhgvsggsrdgtrg
+X-ME-Proxy: <xmx:jbPgZSU-njvT07tyPySe2LYKynGykpnSL6AHJOt9FTEhuxL9RU0EUQ>
+    <xmx:jbPgZegfNTNXkSM_pqlHdjRaBiPcDt8rGPiYGfl0Ppnl_B_aAjz9DQ>
+    <xmx:jbPgZSDKbF4diN5oMRpUPjW1AqB5a4_CPfpNjqTd6SnHYw4TAOx87w>
+    <xmx:jrPgZV9k4oMYVuRBgWbODSD781xOLgroSgCINVq8KkConQMXvIIDTQ>
+Feedback-ID: ic2b14614:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 63207C60097; Thu, 29 Feb 2024 11:40:45 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-182-gaab6630818-fm-20240222.002-gaab66308
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: stm32_iwdg: initialize default timeout
-Content-Language: en-US
-To: Ben Wolsieffer <ben.wolsieffer@hefring.com>,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Christophe Roullier <christophe.roullier@st.com>
-References: <20240228182723.12855-1-ben.wolsieffer@hefring.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240228182723.12855-1-ben.wolsieffer@hefring.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Message-Id: <45490a63-e46a-4eb3-a55d-2e2642588ccd@app.fastmail.com>
+In-Reply-To: <74a39cd0-cee3-49a2-a47b-92a9cf9ca008@app.fastmail.com>
+References: <20230721122931.505957-1-dober6023@gmail.com>
+ <a361ce91-beba-43d8-b969-285063658da5@app.fastmail.com>
+ <6b0373a2-7750-4d57-8839-95c6fa30c6b8@roeck-us.net>
+ <4209014c-1730-4c31-87d8-4192d68bcbc6@app.fastmail.com>
+ <6615ab2a-3267-477c-ad1b-a72d5a4244e0@roeck-us.net>
+ <412acdd3-6b1f-4c45-966f-c493b6fc3ddf@app.fastmail.com>
+ <42a7e7e9-01b0-4d41-8af1-328de90934ef@roeck-us.net>
+ <74a39cd0-cee3-49a2-a47b-92a9cf9ca008@app.fastmail.com>
+Date: Thu, 29 Feb 2024 11:40:40 -0500
+From: "Mark Pearson" <mpearson@squebb.ca>
+To: "Guenter Roeck" <linux@roeck-us.net>, "David Ober" <dober6023@gmail.com>,
+ wim@linux-watchdog.org
+Cc: linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ "David Ober" <dober@lenovo.com>
+Subject: Re: [PATCH v3] Watchdog: New module for ITE 5632 watchdog
+Content-Type: text/plain
 
-On 2/28/24 10:27, Ben Wolsieffer wrote:
-> The driver never sets a default timeout value, therefore it is
-> initialized to zero. When CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED is
-> enabled, the watchdog is started during probe. The kernel is supposed to
-> automatically ping the watchdog from this point until userspace takes
-> over, but this does not happen if the configured timeout is zero. A zero
-> timeout causes watchdog_need_worker() to return false, so the heartbeat
-> worker does not run and the system therefore resets soon after the
-> driver is probed.
-> 
-> This patch fixes this by setting an arbitrary non-zero default timeout.
-> The default could be read from the hardware instead, but I didn't see
-> any reason to add this complexity.
-> 
-> This has been tested on an STM32F746.
-> 
-> Fixes: 85fdc63fe256 ("drivers: watchdog: stm32_iwdg: set WDOG_HW_RUNNING at probe")
-> Signed-off-by: Ben Wolsieffer <ben.wolsieffer@hefring.com>
+Hi Guenter,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+On Mon, Feb 26, 2024, at 11:23 AM, Mark Pearson wrote:
+> Thanks!
+>
+> On Sun, Feb 25, 2024, at 1:43 AM, Guenter Roeck wrote:
+>> On 2/24/24 12:19, Mark Pearson wrote:
+>>> Thanks Guenter,
+>>> 
+>>> On Sat, Feb 24, 2024, at 10:49 AM, Guenter Roeck wrote:
+>>>> On 2/23/24 16:43, Mark Pearson wrote:
+>>>>> Thanks Guenter
+>>>>>
+>>>>> On Fri, Feb 23, 2024, at 3:21 PM, Guenter Roeck wrote:
+>>>>>> On 2/23/24 11:58, Mark Pearson wrote:
+>>>>>>> On Fri, Jul 21, 2023, at 8:29 AM, David Ober wrote:
+>>>>>>>> This modules is to allow for the new ITE 5632 EC chip
+>>>>>>>> to support the watchdog for initial use in the Lenovo SE10
+>>>>>>>>
+>>>>>>>> Signed-off-by: David Ober <dober6023@gmail.com>
+>>>>>>>>
+>>>>>>>> V2 Fix stop to deactivate wdog on unload of module
+>>>>>>>> V2 Remove extra logging that is not needed
+>>>>>>>> V2 change udelays to usleep_range
+>>>>>>>> V2 Changed to now request region on start and release on stop instead
+>>>>>>>>       of for every ping and read/write
+>>>>>>>> V3 add counter to while loops so it will not hang
+>>>>>>>> V3 rework code to use platform_device_register_simple
+>>>>>>>> V3 rework getting the Chip ID to remove duplicate code and close IO
+>>>>>>>> V3 change some extra logging to be debug only
+>>>>>>>> ---
+>>>>>> [ ... ]
+>>>>>>>> +config ITE5632_WDT
+>>>>>>>> +        tristate "ITE 5632"
+>>>>>>>> +        select WATCHDOG_CORE
+>>>>>>>> +        help
+>>>>>>>> +          If you say yes here you get support for the watchdog
+>>>>>>>> +          functionality of the ITE 5632 eSIO chip.
+>>>>>>>> +
+>>>>>>>> +          This driver can also be built as a module. If so, the module
+>>>>>>>> +          will be called ite5632_wdt.
+>>>>>>>> +
+>>>>>>
+>>>>>> [ ... ]
+>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> Please let us know if there is anything else needed to get this accepted. Happy to address any feedback.
+>>>>>>>
+>>>>>>
+>>>>>> I am sure I commented on this before. The fact that the Lenovo SE10 uses an
+>>>>>> ITE 5632 controller is completely irrelevant. Lenovo could decide tomorrow to
+>>>>>> replace the ITE chip with a Nuvoton chip, use the same API to talk with it,
+>>>>>> and the watchdog would work perfectly fine.
+>>>>>>
+>>>>>> This is a driver for the watchdog implemented in the embedded controller
+>>>>>> on Lenovo SE10. It is not a watchdog driver for ITE5632. Again, the EC chip
+>>>>>> used in that Lenovo system is completely irrelevant, even more so since
+>>>>>> this seems to be one of those undocumented ITE chips which officially
+>>>>>> don't even exist. Claiming that this would be a watchdog driver for ITE5632
+>>>>>> would be not only misleading but simply wrong.
+>>>>>>
+>>>>>> It seems that we can not agree on this. That means that, from my perspective,
+>>>>>> there is no real path to move forward. Wim will have to decide if and how
+>>>>>> to proceed.
+>>>>>>
+>>>>> My apologies - I hadn't realised that was the issue (my fault for missing it). Appreciate the clarification.
+>>>>>
+>>>>> Is this as simple as renaming this driver as (for example) a lenovo_se_wdt device, and adding in the appropriate checking during the init that it is only used on Lenovo SE10 platforms?
+>>>>>
+>>>>
+>>>> There would have to be additional changes. For example, the driver does not
+>>>> return errors if its wait loops time out, and it doesn't reserve the IO address
+>>>> range used by the chip. Tying the wait time to the number of wait loops
+>>>> and not to the elapsed time is also something that would need to be explained.
+>>>>
+>>> Ack - we can look at those. Thanks for the feedback.
+>>> 
+>>>> Also, I notice that the communication is similar to the communication with
+>>>> Super-IO chips from ITE, but not the same. Specifically, the unlock key is
+>>>> the same, but the lock key is different. This means that the code may unlock
+>>>> other chips from ITE in a given system, but not lock them. Some of those chips
+>>>> are ... let's call it less then perfect. They will act oddly on the bus if left
+>>>> unlocked. Some of those chips will act oddly if an attempt is made to lock them
+>>>> after unlocking them, and they have to remain unlocked to avoid corrupting
+>>>> communication with other chips on the same bus. The impact on other chips
+>>>> from the same vendor will have to be explored further.
+>>> 
+>>> Afraid I'm still missing something here. If we make it so this driver is only used on the SE10 platform, then does that remove the concern? At that point it's specific to that HW platform and no HW changes are planned.
+>>
+>> Yes.
+>>
+>>> Agreed that having this available generically is not a good idea.
+>>> 
+>>>>
+>>>>> I don't understand the concern if a different chip was used - wouldn't that need a different driver at that point?
+>>>>>
+>>>>
+>>>> Why would that be the case ?
+>>>>
+>>>> Maybe I am missing something essential. If you insist to tie this driver to the
+>>>> ITE5632 and not to the system, you will have to provide additional information.
+>>> 
+>>> I'm in agreement we should tie this to the platform - we'll make that change. No insistence implied :)
+>>> 
+>>>> The chip does not even exist in public, so no one but you and ITE really knows
+>>>> what its capabilities are. Is this is a chip which is used, or is going to be
+>>>> used, in a variety of systems, possibly including systems from other vendors ?
+>>>> Is the communication between main CPU and the chip tied to the chip and will/may
+>>>> only be used with this chip or variants of it ? Is the ITE5632 a SuperIO-like
+>>>> chip with fixed capabilities, or is it a programmed micro-controller ?
+>>>>
+>>> 
+>>> Afraid I don't understand the point about the chip not existing in public - do you just mean publicly available datasheets? At the risk of being repetitive, if this driver is locked to the Lenovo SE10 platform does that address the concerns?
+>>> 
+>>
+>> Just try to find information about this chip anywhere. The only 
+>> evidence that the
+>> chip even exists appears to be this submission.
+>>
+>>>> To a large degree all that is due to ITE and its customers not
+>>>> providing information
+>>>> about their chips to the public. Due to that lack of information, my
+>>>> assumption was
+>>>> that it is a programmed micro-controller. The code itself suggests,
+>>>> through the
+>>>> use of the term "EC" in the driver, that it is an embedded controller,
+>>>> not a Suoer-IO
+>>>> or other fixed-capability chip. If that is not the case, and if the
+>>>> communication
+>>>> with the chip is fixed and not programmable, you'll have to explain
+>>>> that.
+>>> 
+>>> Yeah, ack to that - and in that's something we need to address going forward in contracts we set for platforms that will have Linux support. I can't change what has already been done I'm afraid. We do have access, under NDA, to more details - but we're also limited in what we can disclose.
+>>> I need to go look at the details for this again, with David, and see what we can do to address any questions; but there are going to be some limits I'm afraid and I'm hoping they aren't blockers.
+>>
+>> I can't say that I am surprised. It is quite common for chips from ITE.
+>> Most of them seem to be custom builds made for specific customers/boards,
+>> with little if any information available. People providing tools for Windows
+>> can often sign NDAs with board vendors to get the information they need to
+>> implement support in those tools. Unfortunately that isn't an option for
+>> Linux kernel maintainers.
+>>
+>>> The aim is to get a driver working for this platform in shape enough to get accepted upstream and be useful.
+>>> 
+>>>>
+>>>> If it is an EC, the protocol is defined by its microcode, and the
+>>>> driver needs
+>>>> to be tied to the systems using that microcode. If it is a
+>>>> fixed-capability chip,
+>>>> the driver should not suggest that it communicates with an embedded
+>>>> controller
+>>>> but with a fixed-capability chip.
+>>>>
+>>> 
+>>> OK - we may also have used some incorrect terminology inadvertently, so I don't want to jump to too many conclusions. Will look into this.
+>>> 
+>>> Thanks for the detailed notes - we weren't sure what had been missing from the driver since the last submission so it's helpful to know where improvements are needed.
+>>> Appreciate the patience as this is a learning experience for us for this kernel sub-tree.
+>>> 
+>> And I still have no idea if this an EC or not ;-). My best guess would
+>> be that it is an NDS32 based micro-controller, related to IT5671.
+>>
+>> Of course, the next question would be if this chip has additional
+>> functionality, such as hardware monitoring. I guess I'll see that
+>> when I get a patch introducing its hwmon driver.
+>>
+> We believe it is only providing watchdog functionality, but we're 
+> double checking with the HW team to be sure.
+>
+> Afraid I don't have the details on what it is based on to be able to 
+> answer that.
+>
 
-> ---
->   drivers/watchdog/stm32_iwdg.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
-> index d9fd50df9802..5404e0387620 100644
-> --- a/drivers/watchdog/stm32_iwdg.c
-> +++ b/drivers/watchdog/stm32_iwdg.c
-> @@ -20,6 +20,8 @@
->   #include <linux/platform_device.h>
->   #include <linux/watchdog.h>
->   
-> +#define DEFAULT_TIMEOUT 10
-> +
->   /* IWDG registers */
->   #define IWDG_KR		0x00 /* Key register */
->   #define IWDG_PR		0x04 /* Prescaler Register */
-> @@ -248,6 +250,7 @@ static int stm32_iwdg_probe(struct platform_device *pdev)
->   	wdd->parent = dev;
->   	wdd->info = &stm32_iwdg_info;
->   	wdd->ops = &stm32_iwdg_ops;
-> +	wdd->timeout = DEFAULT_TIMEOUT;
->   	wdd->min_timeout = DIV_ROUND_UP((RLR_MIN + 1) * PR_MIN, wdt->rate);
->   	wdd->max_hw_heartbeat_ms = ((RLR_MAX + 1) * wdt->data->max_prescaler *
->   				    1000) / wdt->rate;
+I got some answers - and I was wrong. This device is capable of more than watchdog functionality. On this platform it does provide some temperature sensors (it could do fan control but the device is fanless so that's moot).
 
+My understanding is this means the right way forward is to create a MFD driver. I played with this a bit, and think I understand what is involved - but wanted to check if there were any recommendations on the following plan:
+
+ - Create a lenovo-think-mfd driver. We'd use this to probe the system (DMI) and then match it up with our platforms and use appropriate mfd_cells.
+ - Initially we'd target the device on the SE10. We also have the watchdog driver for the SE30 (NCT6692D device) that I think may be a good candidate too.
+ - Create a new lenovo-se10-wdt watchdog driver, that would be linked to the MFD driver. 
+ - (Once confirmed) do the same for the lenovo-se30-wdt driver.
+ - I'm going to look at the temp sensors for the SE10, but don't plan on having that in the initial patchset. It's something we'd add at a later date.
+
+If that's all logical - are there any preferences as to how these come in as commits?
+I'm guessing one for the mfd driver, one for the SE10 watchdog, one for the SE30 watchdog?
+Documentation would need to be updated as well.
+Anything else that would be important?
+
+Would appreciate if you can let me know if I'm missing anything or if I'm heading in the wrong direction.
+
+Thanks
+Mark
 
