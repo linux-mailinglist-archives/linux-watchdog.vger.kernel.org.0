@@ -1,85 +1,113 @@
-Return-Path: <linux-watchdog+bounces-756-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-757-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7820586EB50
-	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Mar 2024 22:40:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C75A86F527
+	for <lists+linux-watchdog@lfdr.de>; Sun,  3 Mar 2024 14:35:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C536285E34
-	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Mar 2024 21:40:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C1B31C210D7
+	for <lists+linux-watchdog@lfdr.de>; Sun,  3 Mar 2024 13:35:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94C5F5823B;
-	Fri,  1 Mar 2024 21:40:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t6hlLE5P"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48912F9CD;
+	Sun,  3 Mar 2024 13:35:57 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AAA857322;
-	Fri,  1 Mar 2024 21:40:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F54DF62;
+	Sun,  3 Mar 2024 13:35:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709329245; cv=none; b=WBpgq7uAVr1JjiXU+RDzqBAFU+rHbmQqJhoSVU0IbLOlIKdwLUe8A2mhPCfz3PVLcJlTDPwAxmioPK7VaGeLcenceRYP+UYEpYGDrHVp17oYnjE9ANcvSRKZh0kro2CRUanLQcTp8sGAIo/JkFKk2sNiKcaoeIojaPSjopRHnfw=
+	t=1709472957; cv=none; b=ZK+VobdZqtDMmtj9Mw6mSxl/KmP4ueHlwZOsAl+OrFsCk7Khb+brVC9a7ZEVnROt3SmpMx3wY9M0OZ4cSE2kGrQLlB71ffuQFBGGpH9HrUf+uFRuQWxxgZ8arsNizgAvYuIXF/Cet1D7+JcPWyADUnQHigCwmSZn6+ZyuBsb1vQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709329245; c=relaxed/simple;
-	bh=OPt9YrG608K2PQV++2Xf4keOzrbh3bwdN+8dBbJmau4=;
+	s=arc-20240116; t=1709472957; c=relaxed/simple;
+	bh=rxQYtttE67pvhkuGigdqMY8sxIQ+TwJZKtUgdqVMvOU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GV4zfIpPDp17ZTaveaJcbubwWpTyKwYEY7zOdu0Hzkh9Hgh0kEz7z1KkLV6wFHWTJ0AhQvC5HWBg8cBdJCFdhGWI9yG8cKMG+N+Jj0YFNB5p9T9rmhH0nhXpvr9eVg77nsaMk8qmoBrSRSw/WP3qjbfxJcVsH5qe+uSqXEXAl/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t6hlLE5P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DAAFC433F1;
-	Fri,  1 Mar 2024 21:40:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1709329244;
-	bh=OPt9YrG608K2PQV++2Xf4keOzrbh3bwdN+8dBbJmau4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=t6hlLE5PDnXjx11h+2nyJKwGscKjBwsosUtarO/URJs3680HGsTunNklcC4I1kntr
-	 TVAdr4Ela2sGRssCB4P6+k35abFydeSLLtmbPdog13G1l1OvinsrQCezHppl9f98KK
-	 Co3368z0OiHo6Jr3kVdiJOR1xr7dqY3MEBg30loPwzE8cYIfADqHIfjC77VG76saRV
-	 RVXumgXgn2oIfxbfbgr19K0+l3ixk7lvlfmwBb5CHmQ6LEG78rpmqkC2+ENlFuvjpU
-	 WGrGX6jHFGjt4pzRt7K0prQjcPYj0IMOxo79JDiG1/CWzBxX0t2L078zRv2WKM/jAj
-	 SJIaQnxstde0Q==
-Date: Fri, 1 Mar 2024 15:40:42 -0600
-From: Rob Herring <robh@kernel.org>
-To: Stanislav Jakubek <stano.jakubek@gmail.com>
-Cc: bcm-kernel-feedback-list@broadcom.com, Rob Herring <robh+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-rpi-kernel@lists.infradead.org,
-	Guenter Roeck <linux@roeck-us.net>, Ray Jui <rjui@broadcom.com>,
-	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=bB4m3tMcXDarDHsgNRNYEumvlvasUmlzc4HvyOVlX5x11RXkGrkxs1hdSOTTsyOjjNq59bu592d3ds1dAsEpf4EGBOEoGkIuHJA/OpqeS1nd6hKTi2JD3ig/HXCIfVERyKyJLkPxDyUxTk3kLLRzL6bMJsxBeMfiERbW0fsYSs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=www.linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; arc=none smtp.client-ip=185.87.125.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=www.linux-watchdog.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
+Received: by www.linux-watchdog.org (Postfix, from userid 502)
+	id 8C47F40A06; Sun,  3 Mar 2024 14:15:22 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 8C47F40A06
+Date: Sun, 3 Mar 2024 14:15:22 +0100
+From: gituser@www.linux-watchdog.org
+To: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+Cc: Guenter Roeck <linux@roeck-us.net>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Scott Branden <sbranden@broadcom.com>
-Subject: Re: [PATCH] dt-bindings: watchdog: drop obsolete brcm,bcm2835-pm-wdt
- bindings
-Message-ID: <170932923974.3089013.6309801588871599823.robh@kernel.org>
-References: <ZdC/624d1c8O3NRG@standask-GA-A55M-S2HP>
+	linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] watchdog: qcom: fine tune the max timeout value
+ calculation
+Message-ID: <20240303131522.GA28319@www.linux-watchdog.org>
+References: <20240116-wdt-v2-1-501c7694c3f0@quicinc.com>
+ <2c4f9829-138d-41a5-8810-d13cf749fded@roeck-us.net>
+ <67ed3805-40cb-4f00-9d0d-b0fd012d6221@quicinc.com>
+ <9f084781-2233-4b36-8b1c-db1fa9a9db49@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ZdC/624d1c8O3NRG@standask-GA-A55M-S2HP>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9f084781-2233-4b36-8b1c-db1fa9a9db49@quicinc.com>
+User-Agent: Mutt/1.5.20 (2009-12-10)
 
+Ji Kathiravan,
 
-On Sat, 17 Feb 2024 15:17:15 +0100, Stanislav Jakubek wrote:
-> These bindings are already (better) described in soc/bcm/brcm,bcm2835-pm.
-> Drop these obsolete bindings.
 > 
-> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
-> ---
->  .../bindings/watchdog/brcm,bcm2835-pm-wdog.txt | 18 ------------------
->  1 file changed, 18 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/brcm,bcm2835-pm-wdog.txt
+> On 2/3/2024 12:07 PM, Kathiravan Thirumoorthy wrote:
+> >
+> >
+> >On 1/16/2024 8:32 PM, Guenter Roeck wrote:
+> >>On 1/16/24 00:22, Kathiravan Thirumoorthy wrote:
+> >>>To determine the max_timeout value, the below calculation is used.
+> >>>
+> >>>    max_timeout = 0x10000000 / clk_rate
+> >>>
+> >>>cat /sys/devices/platform/soc@0/b017000.watchdog/watchdog/watchdog0/max_timeout
+> >>>8388
+> >>>
+> >>>However, this is not valid for all the platforms. IPQ SoCs starting from
+> >>>IPQ40xx and recent Snapdragron SoCs also has the bark and bite
+> >>>time field
+> >>>length of 20bits, which can hold max up to 32 seconds if the clk_rate is
+> >>>32KHz.
+> >>>
+> >>>If the user tries to configure the timeout more than 32s, then the value
+> >>>will be truncated and the actual value will not be reflected in the HW.
+> >>>
+> >>>To avoid this, lets add a variable called max_tick_count in
+> >>>the device data,
+> >>>which defines max counter value of the WDT controller. Using
+> >>>this, max-timeout
+> >>>will be calculated in runtime for various WDT contorllers.
+> >>>
+> >>>With this change, we get the proper max_timeout as below and restricts
+> >>>the user from configuring the timeout higher than this.
+> >>>
+> >>>cat /sys/devices/platform/soc@0/b017000.watchdog/watchdog/watchdog0/max_timeout
+> >>>32
+> >>>
+> >>>Signed-off-by: Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>
+> >>
+> >>Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> >
+> >
+> >Guenter / Will, Can this be picked for v6.9? I don't see this in
+> >linux- next yet, so please consider this as a gentle reminder!
 > 
+> 
+> Guenter / Will, Gentle Reminder... is this change queued for v6.9?
 
-Applied, thanks!
+Yes, it is.
+
+Kind regards,
+Wim.
 
 
