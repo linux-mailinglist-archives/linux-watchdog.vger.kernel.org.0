@@ -1,176 +1,91 @@
-Return-Path: <linux-watchdog+bounces-758-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-761-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DA8A86F886
-	for <lists+linux-watchdog@lfdr.de>; Mon,  4 Mar 2024 03:24:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 207A78724E3
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Mar 2024 17:53:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 847571F212C3
-	for <lists+linux-watchdog@lfdr.de>; Mon,  4 Mar 2024 02:24:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C981C1F2221C
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Mar 2024 16:53:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A13515D1;
-	Mon,  4 Mar 2024 02:24:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B27414AB8;
+	Tue,  5 Mar 2024 16:53:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FWKMHhQ0"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2121.outbound.protection.partner.outlook.cn [139.219.17.121])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 959694C69;
-	Mon,  4 Mar 2024 02:24:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.121
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709519091; cv=fail; b=IN/URmcDNC56Tp/MTtBsh+xIffQKk0eaECX0lrW9gilcCDRBICI1Avy40BUAWu1C2ZwbhNF0ksR8xsV3t5QKboMmeqrzX9rairPAOge7UlPxsEuzCTBVW/izvIFbC011TltqLXWap1ukYLpeLWDM2z/IBYPcj+GlSGPTPVyurkc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709519091; c=relaxed/simple;
-	bh=wKR1abWYr/s7PYvaEh0HLGJ72xILNi+ZJS6AjRDAkyo=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=tNEResVmFdQZmQ4snPsV3L9IdrLeNbn2/NFX8JDUaAIpFmczX91/opC6Dii5u+k5hDnwj4F2n+D6RzYp1LFhtKYTVIbWNdRGLrB8bQzGUgF1KgQvFxyw0TaRzBn80DpSNIZ8D101+yV8cVAk5c1Pa5KKmF6wFT01g48XBxyC7yA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.121
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VG/IT2VugIx4j2FjyF7DXI9iYzPlDuoXKlnGbNmk7dwNEfoG7ZIU8UyeserEnQ0wqgA3grpZgeg2jDPDTmDQHDeP0udmSR5+CgqafEnVcHZWNFpLkUaUCOSedu39k6L+WTSVblsbCMEBIZatX5Rfy3VconuUnLnIqjKdMfcppq67EYoLKqyOlAGGGoBtVvLcL7vZWZZnCWie89NiEKzOmx0qisbqRBr5BzYtiHQFYXYC98QcehVQgMzj7TwpoTcmY6wy/w0JByELDqrqZL991IpWyB0vEylVHEX/RCULVQry/8kGtIN20M4QxPvgA+XvIC2VvrINhTnrxIyJmVPJkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tPZ6FaH92mlgjEZLIlZs5CM1RjDR9z8yE5cVea7V2zI=;
- b=kCoI8L9EivxkJqcXAKcs3e/KY3tE3NaiuEyqIoOq0Jwqd73pViu18DbAv52I1pAvMBYjpXNT2K0eiRiEqt2Vs9JeUqomNJSu9uaq+ObrnYLxyVrqo2DsV99/CqEuuxBm1J0QZJMQ1byZohKbnS1EDgjwN7dgavac69cJSkCLAgEFJBXGaYSHkIV0VgG15G8RxlhLafLT7KMjR5MOstKgJLTCX5aVuYW7NOQ3dZUyjL///Ct0rQSyvQZKEzE3nicGMa7v1zwTJObSO7v38O95eREDaxfKtwaGQNPNj2KnjlQZ3bcCuMVn7ePb68D1Bc6j+6RGbwUYIhrLkSB2S5429A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Received: from ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:19::6) by ZQ0PR01MB1032.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:c::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.41; Mon, 4 Mar
- 2024 02:09:10 +0000
-Received: from ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
- ([fe80::2f41:68f:6f07:6c8b]) by ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
- ([fe80::2f41:68f:6f07:6c8b%4]) with mapi id 15.20.7316.046; Mon, 4 Mar 2024
- 02:09:10 +0000
-From: JiSheng Teoh <jisheng.teoh@starfivetech.com>
-To: Rob Herring <robh@kernel.org>
-CC: Conor Dooley <conor.dooley@microchip.com>, Conor Dooley
-	<conor+dt@kernel.org>, "linux-watchdog@vger.kernel.org"
-	<linux-watchdog@vger.kernel.org>, Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Palmer Dabbelt
-	<palmer@dabbelt.com>, Rob Herring <robh+dt@kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Emil Renner
- Berthing <kernel@esmil.dk>, Albert Ou <aou@eecs.berkeley.edu>, Paul Walmsley
-	<paul.walmsley@sifive.com>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, Xingyu Wu <xingyu.wu@starfivetech.com>, Guenter
- Roeck <linux@roeck-us.net>, Wim Van Sebroeck <wim@linux-watchdog.org>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: RE: [PATCH v5 1/2] dt-bindings: watchdog: starfive,jh7100-wdt: Add
- compatible for JH8100
-Thread-Topic: [PATCH v5 1/2] dt-bindings: watchdog: starfive,jh7100-wdt: Add
- compatible for JH8100
-Thread-Index: AQHaM+np7f+IGJ0kT0O4532Km3V6i7CztC2AgGoiq+CAAHZYgIAI+hNA
-Date: Mon, 4 Mar 2024 02:09:10 +0000
-Message-ID:
- <ZQ0PR01MB1160B71B7A13C9DDAD8C0DFEEB23A@ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn>
-References: <20231221084358.3458713-1-jisheng.teoh@starfivetech.com>
- <20231221084358.3458713-2-jisheng.teoh@starfivetech.com>
- <170319257135.88357.1722653226891421278.robh@kernel.org>
- <ZQ0PR01MB11603A15E27E344ADA11AC43EB59A@ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn>
- <20240227-arrange-theft-021133800c24@wendy>
-In-Reply-To: <20240227-arrange-theft-021133800c24@wendy>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: ZQ0PR01MB1160:EE_|ZQ0PR01MB1032:EE_
-x-ms-office365-filtering-correlation-id: 623edd69-ae4c-4769-e5e0-08dc3bf014a3
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- mmlkko2goNTUbmBzJRz2ymgJUhhoWAGOwaWLIzHtjJpL31e9G84ma89ivuyRP3E64HKGNHAxnqWY5tnBoaLLg+yzgj+xTuvInAcUeT4OWtmCj7cTTm7Ht/wkV3hkaRphShYEvtJFhaNJxnHSsEA8VbLsg3PSBCbpgpSjHLQP6m19YxZA6Uyfrwjnz0ZfM7gvdIjOzCRw4Ou9tBOqBIwPEwqepkKuNXn/qCVDb1ITj7U6hMSjh7uK3x25LL10cFUgwT2tfrEs6bS9AsaIiHlWBFJrRU2vyTWc/cmN8YiM9/Ozc85KNRWf7ptKnbsxndq/5//rFFL4Oa3qcNpPzzOmuEtpQ5AWOFpxuv7L6wmicAKeq4M5SvLpeqFmRyrrPXThZDsQEUbluAQOnfaZDhA5kCsCenscifL1V1zA9nZK3qma9xumtbYKFrI3eJu1aAchcyaDKdPHtPzzWOe0Qr/1xLkcqaouHww3Q775r8Zlja4bPFjwARIiiT0PbZdlhFFzSLDkOdMTatHltDO3XnoHDR9CqgqUMzx+Wqrsvw99qSHzWQOywWUOJT9Ki6FpuOaVK8ZvSuooRnzj7HaRMwY0D51xkHHtHql/yQNaSDIf4AZwwbqG4nReu1kHThUyzfdv
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(41320700004)(38070700009);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?pFYP/GCLI/nDwEqchd8AFEwZNydVQFQwiPff8pBYzcYFw8HpBLmltVisBWtD?=
- =?us-ascii?Q?60TyRMxYTfd8Xfxc/ztFqkL2TvCGc56KpET1Ti96KB6SbCofrqdduqARskKq?=
- =?us-ascii?Q?EOYXAVv71FBMP8ZqZrlPxPJLJbAr/jfwZ/k2JHWTSMuwbWROUpsCeys5SyqQ?=
- =?us-ascii?Q?4q8q5oViFSju/Wfzfjjxer4SFMC4CDVp++VnRugiNZz8tB4b52Ylz8hIOhFf?=
- =?us-ascii?Q?/EvScJeXG6/eLcYtZr9Y5DZzmxD7Jm4n+krhzfROt4znr5UVujSA8lnnzv+H?=
- =?us-ascii?Q?5UtQHw9mq34E5LP78W8qmKBY5Jbd8c2jHG/3USqkx/2vtSiBRwrv21s5X8ft?=
- =?us-ascii?Q?2e9mn2wpu3v89/aFkMe7PVPAajW2XhYi07s6Zz5SUjO2C8PRXRF2VLdmDlob?=
- =?us-ascii?Q?FvYm3kD79MgXxhuyWNYsv1VNtIurNzR8y6F3Z4f6wNQqWIC3DTGjhIkzAHfa?=
- =?us-ascii?Q?+keyJGxfP00tHYcSulX7t+bK5pfUjolMLXEKQe7jwPWLByGEmmLNu5zBcBIT?=
- =?us-ascii?Q?JQVio//MFFitXroxVveGimJzAwdC11kjPtzPgDGpp2fA32GDIK6qYt1NsiAt?=
- =?us-ascii?Q?M+mb5NCgvQw+liRLskbTESD0+cZsKlLkecepWa54tZEAUsj0gn/nPuLOGNgs?=
- =?us-ascii?Q?rgK6Q4oxxQGuKp4tlZ+Y19ujVsir26yNoyXJaiE7j8YF4CLx87rT6llzIdF0?=
- =?us-ascii?Q?ZDN72Z+l95RXcQNNxkEBCV9kSVt2x/e0HbhhRKVZsXfNSRYYXOm2MZmvqGQN?=
- =?us-ascii?Q?CJ5IdCpxGNhUy1qziNRrHJvobziLmuB0O+W5Fa9qs3ZJrsddqDw1+I53/9UA?=
- =?us-ascii?Q?QFe6LtglWp960RccqYh3wyXBQUG1FH81aAOCrD3PzNC9/fyjgvyPceiUBKjK?=
- =?us-ascii?Q?I4Y7kXt0toFAzKM2fzD1RWJHxjwd0akldgbRVOnSVsF7eKsJcLajPOWHZKSN?=
- =?us-ascii?Q?R19WB4aTIoNPNNShf1RP6wi9ygKUbU0TL+X+DMvPZwiPXtR02K0I6r8jVje8?=
- =?us-ascii?Q?R2Lwy8ifb10YkJEHn+ta/ob9pwO04F/2DpCRNcSgAQPvLT2Yhb444B/YznJT?=
- =?us-ascii?Q?HvNORyWUA/ejFUUt6kZY5IndJXxxdhwglSITAApb2NwltDZK7YJA+dtNXUBI?=
- =?us-ascii?Q?GlJ9aMNs8fY2UvDFoVsY3wXoez6UQq4WIB74jYnhurOuUAdhjGW3PjQam7pc?=
- =?us-ascii?Q?RqbJiFBw28RRkiqUAF5u/Mal28Ibgkj3h/Geehwk+Z5B4Hs734PzXJxAoYze?=
- =?us-ascii?Q?Z8bH1YrsWiEM6Ttd2TTcgqeNjn1UwQovFVcjMFeQEiMA6h1H0R1vqTZ9+RHA?=
- =?us-ascii?Q?KGmUIREBRzbjrhbFN1dkMIALq8rIUNRwNU8gOlO1SumaDYBbRC5Yyutq385M?=
- =?us-ascii?Q?PSV5cXMNngff7An8p5xAiN75agDtlHk54woaWMA3kMPnZAjpiiB4pSKRUlkp?=
- =?us-ascii?Q?qxlA8gGjzFKcyj/gygf+hi3bhCkadvFMtlAED5GaVilMl2bDo2Glvfe6jVer?=
- =?us-ascii?Q?bfeHVJ0ZU/Dawq4t14q4QddhthzGj4AIDTqokzHhD0R69LgF9lhvYzSasw5j?=
- =?us-ascii?Q?rUlB1j4KPVFCXp7/4IikCzNdzhzhstL/gikVdlr24dqBk4zz2l3bN0L/xyw3?=
- =?us-ascii?Q?KQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C6DDDA1;
+	Tue,  5 Mar 2024 16:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1709657595; cv=none; b=LD/TqJp1Go9XSsaXF+YzIOVjtywiXysTiohwM2mxKNk3PSvRIV7JB9W/NjIwst9DgGGk147xhx6SVu6M/bdADdG9BsHOeNyQIR7boSozZyNtHxYTRzTBI5/IJMzZNDAQDVNhc0xLe9xtZaR9RVO3+edTcaVW/7GFOdeElUZnOyM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1709657595; c=relaxed/simple;
+	bh=hLKYxNXf66Yo5bSdnZap/TeucSUeZz8DTJtzZ7PHN3g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tkah7hgvq9sksbArYs9Lvr7uez2ZXE1wIJgPkO2kK19V5Vf6hZGqI/pw3bjJpLW5bfOz3n0JKswN4sox0NCUDliSYZG8fNeVw/06feIY55KKzNESpXV1Hmb5K52qtyimbTlMeziRh3Ww2HkBoQE1SOPUGUaZructGLsAMjYFAWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FWKMHhQ0; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1709657594; x=1741193594;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hLKYxNXf66Yo5bSdnZap/TeucSUeZz8DTJtzZ7PHN3g=;
+  b=FWKMHhQ04TnV6ICcuvvKTHOtka6fzppdEmJBBG33ObeTDgwktkSml5lE
+   QM8V6OQ3fd6Kr72I4o+0RdQRjpW4t9rfKxip0LY5kfgb18OV388rIY1u7
+   L7o5o0QfXJhQrV2KIx6mnbiC+i3XoiFUOGKb8QFE1TvSEwS3gHQy/sDC4
+   ZngatQjQ5VRRtTAJXJX67EBO91UUurGb8zff4UJWMsG5qNa9SU0AM9dwV
+   +xbHcdmyLXd1QdxOa1NQaKZ5XCylK5kL4kQur6K10miSCJ+IuCS1DREne
+   +GQUtERU/HUCL9swmWWKjZJ2Q+QJ6fR/DfNVhnMYfRA49IfG6RvCu112b
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,11003"; a="7992142"
+X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
+   d="scan'208";a="7992142"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2024 08:53:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11003"; a="937042727"
+X-IronPort-AV: E=Sophos;i="6.06,205,1705392000"; 
+   d="scan'208";a="937042727"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 05 Mar 2024 08:53:08 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 991911A6; Tue,  5 Mar 2024 18:53:07 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v1 0/3] watchdog: intel-mid_wdt: header and code cleanups
+Date: Tue,  5 Mar 2024 18:52:17 +0200
+Message-ID: <20240305165306.1366823-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: ZQ0PR01MB1160.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-Network-Message-Id: 623edd69-ae4c-4769-e5e0-08dc3bf014a3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Mar 2024 02:09:10.3605
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bo2NSehdyj+yDAA4orLTK2hCo5xVpn3nwVn+v6MtvfmQum97mce6WoyDkW8qi7VZV/KqftF8Tz4pXkXml877jwTSIixGTloxDyl2yhG+MPQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ0PR01MB1032
+Content-Transfer-Encoding: 8bit
 
-Hi Rob,
-> On Tue, Feb 27, 2024 at 01:57:43AM +0000, JiSheng Teoh wrote:
-> > > On Thu, 21 Dec 2023 16:43:57 +0800, Ji Sheng Teoh wrote:
-> > > > Add "starfive,jh8100-wdt" compatible string for StarFive's JH8100
-> > > > watchdog.
-> > > > Since JH8100 watchdog only has 1 reset signal, update binding
-> > > > document to support one reset for "starfive,jh8100-wdt" compatible.
-> > > >
-> > > > Signed-off-by: Ley Foon Tan <leyfoon.tan@starfivetech.com>
-> > > > Signed-off-by: Ji Sheng Teoh <jisheng.teoh@starfivetech.com>
-> > > > ---
-> > > >  .../watchdog/starfive,jh7100-wdt.yaml         | 40 ++++++++++++++-=
-----
-> > > >  1 file changed, 31 insertions(+), 9 deletions(-)
-> > > >
-> > >
-> > > Reviewed-by: Rob Herring <robh@kernel.org>
-> >
-> > Hi Conor, since this patch is reviewed, could you help to pick this
-> > dt-bindings patch for riscv-dt-for-next branch?
->=20
-> Ideally I would not and it would go via the watchdog tree.
->=20
-> Failing that, I'd rather Rob take it.
+A few cleanups against the driver, mostly making an order in the header
+inclusions.
 
-Could you help to pick this dt-bindings patch for dt/next branch?
+Andy Shevchenko (3):
+  watchdog: intel-mid_wdt: Remove unused intel-mid.h
+  watchdog: intel-mid_wdt: Don't use "proxy" headers
+  watchdog: intel-mid_wdt: Get platform data via dev_get_platdata()
 
-Thanks,
-JiSheng
+ drivers/watchdog/intel-mid_wdt.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
->=20
-> Thanks,
-> Conor.
+-- 
+2.43.0.rc1.1.gbec44491f096
+
 
