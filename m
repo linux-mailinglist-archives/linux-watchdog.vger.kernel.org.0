@@ -1,118 +1,113 @@
-Return-Path: <linux-watchdog+bounces-765-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-766-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8622A872615
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Mar 2024 18:57:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 016A1872ED8
+	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Mar 2024 07:24:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38A051F2210B
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Mar 2024 17:57:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95E2A1F25C95
+	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Mar 2024 06:24:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D2BD17BB7;
-	Tue,  5 Mar 2024 17:57:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8BC51CAB5;
+	Wed,  6 Mar 2024 06:24:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mVSUjqmt"
+	dkim=pass (2048-bit key) header.d=quicklyemailsend77.com header.i=@quicklyemailsend77.com header.b="uXFxCz7l"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from quicklyemailsend77.com (quicklyemailsend77.com [57.128.172.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8EC817BAA;
-	Tue,  5 Mar 2024 17:57:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8EDB1C6A5
+	for <linux-watchdog@vger.kernel.org>; Wed,  6 Mar 2024 06:24:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.128.172.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709661466; cv=none; b=FU2MPp5tpH21THSyPj9sIqAmA+bz2Ja/fSk/yZlhuX0rVGRgPeuReCw8Era8s0qQG/bzRtonPMPVnnn7nBIlZiCoE/uS48c1YAJ0FIErs8TFL5N14DJJ4RtBYoXFRTLBvtoF96Ll6/O7q78XByFfTCZaXLmSY2GTb2a122s7f6k=
+	t=1709706246; cv=none; b=OzDj2HZvZ4E4Nirv6bs0O0Uysvkl//DFMVzZS2KmLtH5bS9miapXK9y44lCGx4OKkMy4xZWErFYRTk6Cfy9rB5rCYHEnHceY9cg7Rt2SHa1IVKCfzCMay4qyC1eyCtmu55io5gOfnZ0tF7Tq0Qnsima50BvBpEv5dz9aD552l9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709661466; c=relaxed/simple;
-	bh=VEcXA+Hkd7aAdPoYFblDeKTFLE/HfWUJ5wdzlkK3xrc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tJ5g/pGQ/Gv5Yu6IMjkKi2w3I+7vgNdvRC/MJODRBHRQIGvseB2GNvrriWJGaugTFIOsuaxYrsPr4XGU5I1Kmn1mnH2VWlIMrAsFEZMHBHAsWhMpBrQsnm8RFxNmRzMI3lNsHsjcu75tcm6aZsOb1MYSBD5FTFpK5MZD/cORYjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mVSUjqmt; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6e09143c7bdso4066486b3a.3;
-        Tue, 05 Mar 2024 09:57:44 -0800 (PST)
+	s=arc-20240116; t=1709706246; c=relaxed/simple;
+	bh=UkCnC3hxyWUR811IY5T5PlAQFaHotSY7xhHSl4hh88I=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UvouvY1qCsj0XLwkR2NF4j1yFRu9JuwPj7KM8t5XVbJkYakm86NAHTliYO3fHil/rh2T6uV69SgXRukoQHhlJ9dcWDEpga90apIoBqom4vnwR5sT0qAWSoeY2XIYngQ8qUv8FJj//T+QM15k6XTINYUZbVFU0dgJYUWcPHkxas4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicklyemailsend77.com; spf=pass smtp.mailfrom=quicklyemailsend77.com; dkim=pass (2048-bit key) header.d=quicklyemailsend77.com header.i=@quicklyemailsend77.com header.b=uXFxCz7l; arc=none smtp.client-ip=57.128.172.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicklyemailsend77.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicklyemailsend77.com
+Received: from quicklyemailsend77.com (unknown [185.255.114.95])
+	by quicklyemailsend77.com (Postfix) with ESMTPA id BED2A3977AB
+	for <linux-watchdog@vger.kernel.org>; Wed,  6 Mar 2024 03:51:48 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 quicklyemailsend77.com BED2A3977AB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709661464; x=1710266264; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MzyoyKTGuNCPrSsPdt0ZKOh/RAgUaTRrGSTgK1o1fRk=;
-        b=mVSUjqmtV16/sCnRxeTuOuRdwSq22TnNzGmbLkksHMrHmCV1xm053atHtv7AzaMslr
-         zYEbm26kDgOERhIndJQhYMWA9/yHgLZOXa+rmv4md3QeuidU/isjRab59jM75OaTwnmb
-         AsPxnCHaD9AjhUJ2HBnzQLCyjVtJ1wxj+o6eL6jCpNYGonWqfEibUtyP80YYbJdI/x2B
-         PHRbdqf5M7TLtHVWyeW97QNRklpLKlsm5K+HAOwQaaqs71vg6extW6v1cDgeQJjV8E/O
-         fTXAe1ShJ37UbZ6LsPgSY8/lAZw5pHh1OXVhXqC6G/aPz/wV1tTZ4sFyy+/9BFsceALr
-         zmzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709661464; x=1710266264;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MzyoyKTGuNCPrSsPdt0ZKOh/RAgUaTRrGSTgK1o1fRk=;
-        b=Wb2BxcSPi+XllYdyxC8S//TM0fhKKqIHjms/u1S57K5KI5ngJb2kIpsScd1mefbKVY
-         C4mPMbfPXF7w7u8w24zACObdsXKpZUYKoT2JMN9DFBEpbaE7HdwUzvmr7YjB0itvXmb0
-         tI3wSS0kMauMOFxPwjXFjmozOvhdDPfo4sNjd1axt+LpYBC6Izx5NMIRsKYDq+7rrkc3
-         7sRcmcsbEj9HvGraIfW6Y6Rn7HZ5X1S72nA3blOUTiAr+c2Z2yIdNNJc92wg6qdRkheg
-         FXUZTDL1VQso6mKupfti7m8gOjw4o6aimq3uFnzHbhlzkToL7XLimGRLv7w6zH0g1c9A
-         5pGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU5EYvMm4lcewZc58C3mDxQHLNrdzXCqrMYtVcgjNyXOsJ8ZPYeDkqDJGEYozugywoNHCcrftC7A0oc7Dch7rlbKjR/iREetTsEYeOf
-X-Gm-Message-State: AOJu0Yxik0igtq4tnkc4YE+MXJHEdsxrcW0s2TaTKwwayncpJopzAyhS
-	E50cIpCQAeJO1sEoPMGJo4bf5res/vx3wj1CY54VNpweaRV9b93q
-X-Google-Smtp-Source: AGHT+IEmMavf8VVr2Mlv1y1G4q+rltJNpYRi+SiqQ7eLGMd9IOCULRJeu9DJTlC33KBzCpFq5xsK9g==
-X-Received: by 2002:a05:6a00:1492:b0:6e6:2df4:198b with SMTP id v18-20020a056a00149200b006e62df4198bmr5606395pfu.4.1709661464040;
-        Tue, 05 Mar 2024 09:57:44 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i4-20020a056a00004400b006e5ed7c0b35sm5760866pfk.67.2024.03.05.09.57.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Mar 2024 09:57:43 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 5 Mar 2024 09:57:42 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Wim Van Sebroeck <wim@linux-watchdog.org>
-Subject: Re: [PATCH v1 3/3] watchdog: intel-mid_wdt: Get platform data via
- dev_get_platdata()
-Message-ID: <47e6a7a9-e98f-43a5-a7f8-816f2277d7da@roeck-us.net>
-References: <20240305165306.1366823-1-andriy.shevchenko@linux.intel.com>
- <20240305165306.1366823-4-andriy.shevchenko@linux.intel.com>
+	d=quicklyemailsend77.com; s=default; t=1709697109;
+	bh=eefLZdwY5mr6nwq86b3d+rtsxGUHJntuGmXl+R35AcQ=;
+	h=Reply-To:From:To:Subject:Date:From;
+	b=uXFxCz7l4Wk5TwU/WSrMDlgY7NK2QPNSkZqHD9cxvnGkURSgpvSk4DzatrLivfUV+
+	 CA7OVF86t3bAjxjYhnwBn5TrSIrQMCuFQRZiXh8Vu9HfpcoBqA06y7Wrg0VpR+Svm5
+	 RLkUnEjdQrZhrpnpr12Jsv4E0f3EEIn7T7+tl0cBU4NXQEUSMfHd89JN4zRLKJoCIi
+	 E+LO1RGE0rIhf+tYAkzsoVxcNT+PSxAzR3URl9rfhX8YEQ7X6IpKO3jyDwqp1Aya40
+	 CPY/OyB7Vdd1bWjyqSFvwjUsV/QHmXpoIXi6aglE2ZKdvvMK8aX3kWmN+JW6MW4FHH
+	 5UAL+vTXqjeuw==
+Reply-To: joakimlarson@skendiaelevator.com
+From: info@quicklyemailsend77.com
+To: linux-watchdog@vger.kernel.org
+Subject: =?UTF-8?B?7YyQ66ekIOusuOydmCAyMDI0?=
+Date: 05 Mar 2024 19:51:48 -0800
+Message-ID: <20240305195148.085FBF3DC7F87736@quicklyemailsend77.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240305165306.1366823-4-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 05, 2024 at 06:52:20PM +0200, Andy Shevchenko wrote:
-> Access to platform data via dev_get_platdata() getter to make code cleaner.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+=EC=95=88=EB=85=95=ED=95=98=EC=84=B8=EC=9A=94
+=20
+=EC=8A=A4=EC=9B=A8=EB=8D=B4 =EC=8A=A4=EC=B9=B8=EB=94=94=EC=95=84 =EC=97=98=
+=EB=A0=88=EB=B0=94=ED=86=A0(Skandia Elevato)=EC=97=90=EC=84=9C =EC=98=A8 =
+=EC=9A=94=EC=95=84=ED=82=B4 =EB=9D=BC=EB=A5=B4=EC=86=90(JOAKIM LARSSON) .
+=20
+=EC=9A=B0=EB=A6=AC=EB=8A=94 =EA=B8=B4=EA=B8=89=ED=95=98=EA=B2=8C =EA=B7=80=
+=ED=95=98=EC=9D=98 =EC=A0=9C=ED=92=88=EC=9D=84 =ED=95=84=EC=9A=94=EB=A1=9C =
+=ED=95=98=EB=A9=B0 =EA=B0=80=EB=8A=A5=ED=95=9C =ED=95=9C =EB=B9=A8=EB=A6=AC=
+ =EC=8B=9C=ED=97=98 =EC=A3=BC=EB=AC=B8=EC=9D=84 =ED=95=98=EA=B3=A0 =EC=8B=
+=B6=EC=8A=B5=EB=8B=88=EB=8B=A4. 
+=20
+=EC=98=A8=EB=9D=BC=EC=9D=B8=EC=9C=BC=EB=A1=9C =EC=A0=9C=ED=92=88=EC=97=90 =
+=EB=8C=80=ED=95=9C =EC=A0=95=EB=B3=B4=EB=A5=BC =EC=88=98=EC=A7=91=ED=95=98=
+=EA=B3=A0 =EC=9E=88=EC=8A=B5=EB=8B=88=EB=8B=A4. 
+=20
+=EA=B7=B8=EB=A6=AC=EA=B3=A0 =EB=82=B4 =EB=AA=A8=EC=9E=84=EC=97=90=EC=84=9C =
+=EB=82=98=EB=8A=94 =EC=9A=B0=EB=A6=AC=EA=B0=80 =EB=8B=B9=EC=8B=A0=EC=9D=98 =
+=EC=A0=9C=ED=92=88=EC=9D=84 =EC=A3=BC=EB=AC=B8=ED=95=A0 =EA=B2=83=EC=9D=B4=
+=EB=9D=BC=EA=B3=A0 =EC=83=9D=EA=B0=81=ED=95=A9=EB=8B=88=EB=8B=A4.
+=20
+1. =EC=B5=9C=EC=8B=A0 Catalouge=EB=A5=BC =EB=B3=B4=EB=82=BC =EC=88=98 =EC=
+=9E=88=EC=8A=B5=EB=8B=88=EA=B9=8C?
+=20
+2. =EC=9A=B0=EB=A6=AC=EA=B0=80 =EC=A3=BC=EB=AC=B8=ED=95=A0 =EC=88=98 =EC=9E=
+=88=EB=8A=94 =EC=B5=9C=EC=86=8C=ED=95=9C=EC=9D=80 =EB=AC=B4=EC=97=87=EC=9D=
+=B4=EA=B3=A0 =EB=98=90=ED=95=9C =EA=B8=B0=EA=B0=84=EC=9D=84 =EB=B3=B4=EB=82=
+=B4=EC=8B=AD=EC=8B=9C=EC=98=A4=20
+=EB=B0=8F =EC=A1=B0=EA=B1=B4.
+3. =EC=9A=B0=EB=A6=AC=EA=B0=80 =EC=A3=BC=EB=AC=B8=ED=95=98=EB=8A=94 =EA=B2=
+=BD=EC=9A=B0 =EC=A7=80=EB=B6=88=EC=9D=84 =EC=96=B4=EB=96=BB=EA=B2=8C =ED=95=
+=B4=EA=B2=B0=ED=95=98=EA=B8=B0=EB=A5=BC =EC=9B=90=ED=95=98=EC=8B=AD=EB=8B=
+=88=EA=B9=8C?
+=20
+=EA=B7=80=ED=95=98=EC=9D=98 =ED=9A=8C=EC=8B=A0 =EB=8C=80=EA=B8=B0 =EC=A4=91=
 
-> ---
->  drivers/watchdog/intel-mid_wdt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/intel-mid_wdt.c b/drivers/watchdog/intel-mid_wdt.c
-> index 06d5d207a065..8d71f6a2236b 100644
-> --- a/drivers/watchdog/intel-mid_wdt.c
-> +++ b/drivers/watchdog/intel-mid_wdt.c
-> @@ -127,7 +127,7 @@ static int mid_wdt_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct watchdog_device *wdt_dev;
-> -	struct intel_mid_wdt_pdata *pdata = dev->platform_data;
-> +	struct intel_mid_wdt_pdata *pdata = dev_get_platdata(dev);
->  	struct mid_wdt *mid;
->  	int ret;
->  
-> -- 
-> 2.43.0.rc1.1.gbec44491f096
-> 
+
+Mr Joakim larssonv(=EB=B6=80=EC=82=AC=EC=9E=A5/=EC=98=81=EC=97=85 =EA=B4=80=
+=EB=A6=AC=EC=9E=90)
+
+=EB=B0=A9=EB=AC=B8=EC=9E=90 =EC=A3=BC=EC=86=8C: Kedumsv=C3=A4gen 14, SE-534=
+ 94 Vara, Sweden
+
+=EB=B0=B0=EC=86=A1 =EC=A3=BC=EC=86=8C: Industriv=C3=A4gen, SE-534 94 Vara, =
+Sweden
+
+joakimlarson@skendiaelevator.com
+https://skandiaelevator.com
+
 
