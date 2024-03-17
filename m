@@ -1,120 +1,160 @@
-Return-Path: <linux-watchdog+bounces-781-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-782-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4016687D5F3
-	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Mar 2024 22:13:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95CD887DD15
+	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Mar 2024 12:48:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 720131C20BC9
-	for <lists+linux-watchdog@lfdr.de>; Fri, 15 Mar 2024 21:13:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F956281614
+	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Mar 2024 11:48:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BED8A4CB4E;
-	Fri, 15 Mar 2024 21:13:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 847AE18EB0;
+	Sun, 17 Mar 2024 11:48:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b="vAdRHLBF";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="QrmC1J83"
+	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="IlRw+Vju"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E179E38F91;
-	Fri, 15 Mar 2024 21:13:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BFE112E68;
+	Sun, 17 Mar 2024 11:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710537197; cv=none; b=oEgNU/H3ni5CZDyNcHUZEHnW9l5Ktw+cVROXoD18N8UKtZybLSD95JxG5aephM+aNyB7jmP/4BLjdF7BPDi1YOdy220zBypW6GuRGdgY2n8TI1IeicVjYHktNy5hmS7Ywg1e5zPOdtehu8REXqxSva2Ue/tMTQOFTXQA4fZ4Kbs=
+	t=1710676121; cv=none; b=RLhuO/XS/TKX2dBwRjtz3kALv8QcqSIsfh/SY90ta+rZIMx0cfBn7bLTke/gAHDK/ghtGVXbwWRNml9g6UokJXsUMZZqq2Tyb8NhxYQUj2ICPt6ps1jdMdZVO+e8eDzHCbv11hBFMuItBKssnPZMLPzWVYU9FlaTplI9FXY92M4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710537197; c=relaxed/simple;
-	bh=Qe14ES57LnDJMzNgiulgnbt3HkhIrulW+OUOvIcqjlo=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=QkPWbxedxYPcOZOfDBc+HigzI43MZ9FN+epSbMnTRZ1BfyYGGsF47GZFPYLsrF1rhFrxRCWZo0x/YNJIiZxNyWFjFxaC8nHDv56KFh4ZZ2L5YasR6neGZorbj9NUO6TxKnxzXv6PCOflrDmHjVLm8S25Y1xNd0JDfKdCaHWouEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca; spf=pass smtp.mailfrom=squebb.ca; dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b=vAdRHLBF; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=QrmC1J83; arc=none smtp.client-ip=103.168.172.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id B664511400BE;
-	Fri, 15 Mar 2024 17:13:12 -0400 (EDT)
-Received: from imap52 ([10.202.2.102])
-  by compute3.internal (MEProxy); Fri, 15 Mar 2024 17:13:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1710537192; x=1710623592; bh=oRGEn3mS1/
-	2ZP8orTOHuju7iTXXOg6ii/BcgsBUPnN8=; b=vAdRHLBFZEbpour7B+orQbBq+c
-	zhXjMcxUE7Svlzr72JxjIVGuQdgw2+1nWeUU9ALiIM58oNpO3SlpADw6DUgMKtEM
-	rhonNlpxlaZSEye1E9XqlMd6rGQN8xTuE6bWSrT1faXS0WoOrKXxFZmwHtwJcx/h
-	GNesBO7KoytzIcxmEBW02mMruk0PMWTszYp35zlDfWjkSVZRQ73wUBQJAQah1Fji
-	QVdZhRtKdfXzYdftwqrecWjNgLP2Y938/3zwqdu2Q8sqF+GDhdjX3Ngojb4j8lug
-	vIbu1jq2xbpj1Pseh75IXDhe+cWbZJTn0uqREK1oa178CvWufw4yf8b0jEEA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1710537192; x=1710623592; bh=oRGEn3mS1/2ZP8orTOHuju7iTXXO
-	g6ii/BcgsBUPnN8=; b=QrmC1J83Grbsm1u2R276V/Ru+q8Dc1aC9NHkSzH3GFx1
-	3nkoil/fP2jEhmXHSgLlA5nkYcCrKYe2KQD5uH9QjQVjgOPawPJ+7rvUFbXD0lCK
-	L2SLAQww8pvXF9xtEf7nenLep33A3QZw8iGbxYTACgEwEqOOPsB7Z/Zrljse2t9+
-	jkNhzI3G7Md7TQgJHgydbpqrBI0fJEU3O7eRk2zT+bVFzS12H1JPVvbqmUEB1KsY
-	Nfl2FAapVx2ZCMMCteayZQKYYgwGvHiIdeJ0XOo/YhSSTQMGGK+8ES92u0UXxDQp
-	15/hVnaN2f8ShYFMZa/ikfs5YV4y6x6U7eTLj+JWjA==
-X-ME-Sender: <xms:57n0ZbWNg5dNsT58tJEuzh-4MWUVLW8d28E7gla6yVdoRyBfn0SmjA>
-    <xme:57n0ZTkQJpWToQUlkTMfNKnGKooiMqAMz0hpwqq0RC8jioizlHAlqEolu2zpd4tpe
-    3Qbq_JRfbQTeEdm0Kc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrjeelgddugeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfofgr
-    rhhkucfrvggrrhhsohhnfdcuoehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssg
-    drtggrqeenucggtffrrghtthgvrhhnpeeiueefjeeiveetuddvkeetfeeltdevffevudeh
-    ffefjedufedvieejgedugeekhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehmphgvrghrshhonhdqlhgvnhhovhhosehsqhhuvggssgdrtggr
-X-ME-Proxy: <xmx:57n0ZXZ2tA3xjGm64dr5fl8n-DRAbb_UetAMp-R2iZwNPWF4ZupKWw>
-    <xmx:57n0ZWXg78WoYuHz4qb9FonKNuRf9QPl9qVqmNOMBkoTHIFM1GQF_g>
-    <xmx:57n0ZVkNHXpIlsfC8N6-RC0uExagNBzTaij--qEhRBefCZbYd1m8mA>
-    <xmx:57n0ZTdBTxVDwvhfEgLMWlD0iyMf4NnG897ropIc4htg_qqast97qQ>
-    <xmx:6Ln0ZYt06_DwUFEk_pLveVxgn9bpBFpVWizc0DBQ6jNoTZ_6VH11Lw>
-Feedback-ID: ibe194615:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 745B9C60098; Fri, 15 Mar 2024 17:13:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-300-gdee1775a43-fm-20240315.001-gdee1775a
+	s=arc-20240116; t=1710676121; c=relaxed/simple;
+	bh=Xd3HVK9KzLr6UudVs0ql/FdH/WPlFteVyG3/uzLUdPQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=o5GyuATF+wdknT7yARkhRfkIIW68tYtmANxXH64gonpbmHNcU5BFp+vkZWJrIYAzJisdyoq7bE2EmSuwmePXDokjHa3I3b/ytBQDdrx9sLKvyv/3LSwY6uCHcSsxk2u+bAw5UU9GMAQzsnFefR3qYaapEwg/KdUdjekaFNpqg8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=IlRw+Vju; arc=none smtp.client-ip=185.87.125.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+	id 714F6409FE; Sun, 17 Mar 2024 12:24:37 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 714F6409FE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+	s=odk20180602; t=1710674677;
+	bh=Xd3HVK9KzLr6UudVs0ql/FdH/WPlFteVyG3/uzLUdPQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=IlRw+Vjulq7/UpwLcdljtarCO/nackaNnBpp/r/wlOSBoop32/Jw+sZUS8gf4A4F0
+	 qZCmsoedikIiOY79unmOuebjznheHMR33mCPqpDp8JCv3VOru0OWceM+mh5k5+7RIT
+	 M3TPdm1+utPwb+sTH4/Xoe41fShHPRDteYwZT2js=
+Date: Sun, 17 Mar 2024 12:24:37 +0100
+From: Wim Van Sebroeck <wim@linux-watchdog.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Ben Wolsieffer <ben.wolsieffer@hefring.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Jerry Hoemann <jerry.hoemann@hpe.com>,
+	Ji Sheng Teoh <jisheng.teoh@starfivetech.com>,
+	Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>,
+	Minh Le <minh.le.aj@renesas.com>,
+	Stanislav Jakubek <stano.jakubek@gmail.com>,
+	Varshini Rajendran <varshini.rajendran@microchip.com>,
+	Yang Li <yang.lee@linux.alibaba.com>,
+	Yang Xiwen <forbidden405@outlook.com>
+Subject: [GIT PULL REQUEST] watchdog - v6.9 release cycle.
+Message-ID: <20240317112437.GA9174@www.linux-watchdog.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d8529238-8e3e-4d70-a1d4-40dc134f3d97@app.fastmail.com>
-In-Reply-To: <75b89923-f78b-4661-bc6a-fee6c15367da@roeck-us.net>
-References: <mpearson-lenovo@squebb.ca>
- <20240315195227.91282-1-mpearson-lenovo@squebb.ca>
- <75b89923-f78b-4661-bc6a-fee6c15367da@roeck-us.net>
-Date: Fri, 15 Mar 2024 17:12:51 -0400
-From: "Mark Pearson" <mpearson-lenovo@squebb.ca>
-To: "Guenter Roeck" <linux@roeck-us.net>
-Cc: wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
- linux-kernel@vger.kernel.org, "David Ober" <dober@lenovo.com>
-Subject: Re: [PATCH] watchdog: lenovo_se10_wdt: Watchdog driver for Lenovo SE10
- platform
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.20 (2009-12-10)
 
-On Fri, Mar 15, 2024, at 4:05 PM, Guenter Roeck wrote:
-> On 3/15/24 12:52, Mark Pearson wrote:
->> Watchdog driver implementation for Lenovo SE10 platform.
->> 
->> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
->> Signed-off-by: David Ober <dober@lenovo.com>
->
-> I don't like the "Found Lenovo SE10" noise in the probe function,
-> but that isn't worth arguing about.
->
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
->
-If I get any other feedback, and need to do a v2, I will remove that.
+Hi Linus,
 
-Many thanks for the review.
+Please pull following watchdog changes for the v6.9 release cycle.
 
-Mark
+This series contains:
+* core: Remove usage of the deprecated ida_simple_xx() API
+* Add kernel-doc for wdt_set_timeout()
+* Add support for R-Car V4M,  StarFive's JH8100 and sam9x7-wdt
+* Fixes and small improvements
+
+The output from git request-pull:
+----------------------------------------------------------------
+The following changes since commit 41bccc98fb7931d63d03f326a746ac4d429c1dd3:
+
+  Linux 6.8-rc2 (2024-01-28 17:01:12 -0800)
+
+are available in the git repository at:
+
+  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.9-rc1
+
+for you to fetch changes up to 6fe5aabf7fc645562faec50c79c7a21a4dd1cab6:
+
+  watchdog: intel-mid_wdt: Get platform data via dev_get_platdata() (2024-03-10 11:14:46 +0100)
+
+----------------------------------------------------------------
+linux-watchdog 6.9-rc1 tag
+
+----------------------------------------------------------------
+Andy Shevchenko (3):
+      watchdog: intel-mid_wdt: Remove unused intel-mid.h
+      watchdog: intel-mid_wdt: Don't use "proxy" headers
+      watchdog: intel-mid_wdt: Get platform data via dev_get_platdata()
+
+Ben Wolsieffer (1):
+      watchdog: stm32_iwdg: initialize default timeout
+
+Christophe JAILLET (1):
+      watchdog: core: Remove usage of the deprecated ida_simple_xx() API
+
+Jerry Hoemann (1):
+      watchdog/hpwdt: Support Suspend and Resume
+
+Ji Sheng Teoh (3):
+      watchdog: starfive: Check pm_runtime_enabled() before decrementing usage counter
+      watchdog: starfive: check watchdog status before enabling in system resume
+      dt-bindings: watchdog: starfive,jh7100-wdt: Add compatible for JH8100
+
+Kathiravan Thirumoorthy (1):
+      watchdog: qcom: fine tune the max timeout value calculation
+
+Minh Le (1):
+      dt-bindings: watchdog: renesas-wdt: Add support for R-Car V4M
+
+Stanislav Jakubek (1):
+      dt-bindings: watchdog: sprd,sp9860-wdt: convert to YAML
+
+Varshini Rajendran (1):
+      dt-bindings: watchdog: sama5d4-wdt: add compatible for sam9x7-wdt
+
+Yang Li (1):
+      watchdog: Add kernel-doc for wdt_set_timeout()
+
+Yang Xiwen (2):
+      watchdog: sp805_wdt: deassert the reset if available
+      dt-bindings: watchdog: arm,sp805: document the reset signal
+
+ .../devicetree/bindings/watchdog/arm,sp805.yaml    |  5 ++
+ .../bindings/watchdog/atmel,sama5d4-wdt.yaml       | 12 ++--
+ .../devicetree/bindings/watchdog/renesas,wdt.yaml  |  1 +
+ .../bindings/watchdog/sprd,sp9860-wdt.yaml         | 64 ++++++++++++++++++++++
+ .../devicetree/bindings/watchdog/sprd-wdt.txt      | 19 -------
+ .../bindings/watchdog/starfive,jh7100-wdt.yaml     | 40 +++++++++++---
+ drivers/watchdog/hpwdt.c                           | 25 +++++++++
+ drivers/watchdog/intel-mid_wdt.c                   | 11 +++-
+ drivers/watchdog/it87_wdt.c                        |  4 ++
+ drivers/watchdog/qcom-wdt.c                        |  7 ++-
+ drivers/watchdog/sp805_wdt.c                       |  8 +++
+ drivers/watchdog/starfive-wdt.c                    | 14 ++++-
+ drivers/watchdog/stm32_iwdg.c                      |  3 +
+ drivers/watchdog/watchdog_core.c                   | 17 +++---
+ 14 files changed, 182 insertions(+), 48 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/sprd,sp9860-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/sprd-wdt.txt
+----------------------------------------------------------------
+
+Kind regards,
+Wim.
+
 
