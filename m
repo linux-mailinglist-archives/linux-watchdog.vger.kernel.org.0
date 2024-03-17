@@ -1,160 +1,79 @@
-Return-Path: <linux-watchdog+bounces-782-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-783-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95CD887DD15
-	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Mar 2024 12:48:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B70E87DFA7
+	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Mar 2024 20:34:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F956281614
-	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Mar 2024 11:48:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B7091C208F0
+	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Mar 2024 19:34:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 847AE18EB0;
-	Sun, 17 Mar 2024 11:48:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A3851EA6E;
+	Sun, 17 Mar 2024 19:34:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="IlRw+Vju"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gx1U78B/"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BFE112E68;
-	Sun, 17 Mar 2024 11:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7453B1F947;
+	Sun, 17 Mar 2024 19:34:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710676121; cv=none; b=RLhuO/XS/TKX2dBwRjtz3kALv8QcqSIsfh/SY90ta+rZIMx0cfBn7bLTke/gAHDK/ghtGVXbwWRNml9g6UokJXsUMZZqq2Tyb8NhxYQUj2ICPt6ps1jdMdZVO+e8eDzHCbv11hBFMuItBKssnPZMLPzWVYU9FlaTplI9FXY92M4=
+	t=1710704047; cv=none; b=XwWFmIcG5ur1TkumHkTaKGqo37VorYXOdw9MCDscaKckWs3SE2KrJtwYjctj2A69JHBsIhnH+FJ/Dx93/k5NH9U5XuTe5SYfHrygMglEAGrrrtMG21Vgj3uyc3ZqzZ8hHWm5s+XYCV3YrQRazR76UK2lSWha5bGFLFp/onknv5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710676121; c=relaxed/simple;
-	bh=Xd3HVK9KzLr6UudVs0ql/FdH/WPlFteVyG3/uzLUdPQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=o5GyuATF+wdknT7yARkhRfkIIW68tYtmANxXH64gonpbmHNcU5BFp+vkZWJrIYAzJisdyoq7bE2EmSuwmePXDokjHa3I3b/ytBQDdrx9sLKvyv/3LSwY6uCHcSsxk2u+bAw5UU9GMAQzsnFefR3qYaapEwg/KdUdjekaFNpqg8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=IlRw+Vju; arc=none smtp.client-ip=185.87.125.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-	id 714F6409FE; Sun, 17 Mar 2024 12:24:37 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 714F6409FE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-	s=odk20180602; t=1710674677;
-	bh=Xd3HVK9KzLr6UudVs0ql/FdH/WPlFteVyG3/uzLUdPQ=;
-	h=Date:From:To:Cc:Subject:From;
-	b=IlRw+Vjulq7/UpwLcdljtarCO/nackaNnBpp/r/wlOSBoop32/Jw+sZUS8gf4A4F0
-	 qZCmsoedikIiOY79unmOuebjznheHMR33mCPqpDp8JCv3VOru0OWceM+mh5k5+7RIT
-	 M3TPdm1+utPwb+sTH4/Xoe41fShHPRDteYwZT2js=
-Date: Sun, 17 Mar 2024 12:24:37 +0100
-From: Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Ben Wolsieffer <ben.wolsieffer@hefring.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Jerry Hoemann <jerry.hoemann@hpe.com>,
-	Ji Sheng Teoh <jisheng.teoh@starfivetech.com>,
-	Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>,
-	Minh Le <minh.le.aj@renesas.com>,
-	Stanislav Jakubek <stano.jakubek@gmail.com>,
-	Varshini Rajendran <varshini.rajendran@microchip.com>,
-	Yang Li <yang.lee@linux.alibaba.com>,
-	Yang Xiwen <forbidden405@outlook.com>
-Subject: [GIT PULL REQUEST] watchdog - v6.9 release cycle.
-Message-ID: <20240317112437.GA9174@www.linux-watchdog.org>
+	s=arc-20240116; t=1710704047; c=relaxed/simple;
+	bh=Qt0tf6IJBhCU+85vFfK3nPwFLq0q3bAnMHqSePJuzP4=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=SH7GHfTiabzeGLV3wQdg+UKQo9BX8mDdxgqVsQgD+QoYWq+3G3eXDMugh8/0GnVXXHpb7zYLCq6FFyx4oyy0Ww81FwS+UgHx/3stdUHOv9CVxkrt5FNrXqJHCicGKlQPnO2QNX//e4jp4VGHfcpyLDQ6o7ANTzvu2G+ZzvaG09w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gx1U78B/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5045BC43394;
+	Sun, 17 Mar 2024 19:34:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710704047;
+	bh=Qt0tf6IJBhCU+85vFfK3nPwFLq0q3bAnMHqSePJuzP4=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=Gx1U78B/lr5gsX/juNWoESuDqoYNJZlTWQsZRJkYzc/wYk91ITIZnqDEIzLK2xDgg
+	 qTwtxSciNRF5uzzSz0yrVc1oDnNtcG6pxk10teZkUMluKwpLcikBpikNO/Sy1YPd7f
+	 qwQJDtv4ftdz3qTkLF2psAxIa6oaue5mF8s/JV8IUeH0Rj1ds4lXuEePWiIgjmJq25
+	 9jib7HfPQV6NentoWTCZhZtb4/Os6IBgHGYfy+GJsFdXSx3pJNqkjTufuDbjBkQpm1
+	 H+GfZAxslGebHPI58rj9QXbDqyS+gmT2xCy37usJ6WlI6zQ+ku8ZQAUVOjjRxP7Ig8
+	 PDCyHHStjqNRA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 42558D95060;
+	Sun, 17 Mar 2024 19:34:07 +0000 (UTC)
+Subject: Re: [GIT PULL REQUEST] watchdog - v6.9 release cycle.
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20240317112437.GA9174@www.linux-watchdog.org>
+References: <20240317112437.GA9174@www.linux-watchdog.org>
+X-PR-Tracked-List-Id: <linux-watchdog.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20240317112437.GA9174@www.linux-watchdog.org>
+X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.9-rc1
+X-PR-Tracked-Commit-Id: 6fe5aabf7fc645562faec50c79c7a21a4dd1cab6
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 032e22febfce848f913a1162b12028fc847f3f8e
+Message-Id: <171070404726.21222.13677654908053946275.pr-tracker-bot@kernel.org>
+Date: Sun, 17 Mar 2024 19:34:07 +0000
+To: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, LKML <linux-kernel@vger.kernel.org>, Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>, Guenter Roeck <linux@roeck-us.net>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Ben Wolsieffer <ben.wolsieffer@hefring.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Jerry Hoemann <jerry.hoemann@hpe.com>, Ji Sheng Teoh <jisheng.teoh@starfivetech.com>, Kathiravan Thirumoorthy <quic_kathirav@quicinc.com>, Minh Le <minh.le.aj@renesas.com>, Stanislav Jakubek <stano.jakubek@gmail.com>, Varshini Rajendran <varshini.rajendran@microchip.com>, Yang Li <yang.lee@linux.alibaba.com>, Yang Xiwen <forbidden405@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.20 (2009-12-10)
 
-Hi Linus,
+The pull request you sent on Sun, 17 Mar 2024 12:24:37 +0100:
 
-Please pull following watchdog changes for the v6.9 release cycle.
+> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.9-rc1
 
-This series contains:
-* core: Remove usage of the deprecated ida_simple_xx() API
-* Add kernel-doc for wdt_set_timeout()
-* Add support for R-Car V4M,  StarFive's JH8100 and sam9x7-wdt
-* Fixes and small improvements
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/032e22febfce848f913a1162b12028fc847f3f8e
 
-The output from git request-pull:
-----------------------------------------------------------------
-The following changes since commit 41bccc98fb7931d63d03f326a746ac4d429c1dd3:
+Thank you!
 
-  Linux 6.8-rc2 (2024-01-28 17:01:12 -0800)
-
-are available in the git repository at:
-
-  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.9-rc1
-
-for you to fetch changes up to 6fe5aabf7fc645562faec50c79c7a21a4dd1cab6:
-
-  watchdog: intel-mid_wdt: Get platform data via dev_get_platdata() (2024-03-10 11:14:46 +0100)
-
-----------------------------------------------------------------
-linux-watchdog 6.9-rc1 tag
-
-----------------------------------------------------------------
-Andy Shevchenko (3):
-      watchdog: intel-mid_wdt: Remove unused intel-mid.h
-      watchdog: intel-mid_wdt: Don't use "proxy" headers
-      watchdog: intel-mid_wdt: Get platform data via dev_get_platdata()
-
-Ben Wolsieffer (1):
-      watchdog: stm32_iwdg: initialize default timeout
-
-Christophe JAILLET (1):
-      watchdog: core: Remove usage of the deprecated ida_simple_xx() API
-
-Jerry Hoemann (1):
-      watchdog/hpwdt: Support Suspend and Resume
-
-Ji Sheng Teoh (3):
-      watchdog: starfive: Check pm_runtime_enabled() before decrementing usage counter
-      watchdog: starfive: check watchdog status before enabling in system resume
-      dt-bindings: watchdog: starfive,jh7100-wdt: Add compatible for JH8100
-
-Kathiravan Thirumoorthy (1):
-      watchdog: qcom: fine tune the max timeout value calculation
-
-Minh Le (1):
-      dt-bindings: watchdog: renesas-wdt: Add support for R-Car V4M
-
-Stanislav Jakubek (1):
-      dt-bindings: watchdog: sprd,sp9860-wdt: convert to YAML
-
-Varshini Rajendran (1):
-      dt-bindings: watchdog: sama5d4-wdt: add compatible for sam9x7-wdt
-
-Yang Li (1):
-      watchdog: Add kernel-doc for wdt_set_timeout()
-
-Yang Xiwen (2):
-      watchdog: sp805_wdt: deassert the reset if available
-      dt-bindings: watchdog: arm,sp805: document the reset signal
-
- .../devicetree/bindings/watchdog/arm,sp805.yaml    |  5 ++
- .../bindings/watchdog/atmel,sama5d4-wdt.yaml       | 12 ++--
- .../devicetree/bindings/watchdog/renesas,wdt.yaml  |  1 +
- .../bindings/watchdog/sprd,sp9860-wdt.yaml         | 64 ++++++++++++++++++++++
- .../devicetree/bindings/watchdog/sprd-wdt.txt      | 19 -------
- .../bindings/watchdog/starfive,jh7100-wdt.yaml     | 40 +++++++++++---
- drivers/watchdog/hpwdt.c                           | 25 +++++++++
- drivers/watchdog/intel-mid_wdt.c                   | 11 +++-
- drivers/watchdog/it87_wdt.c                        |  4 ++
- drivers/watchdog/qcom-wdt.c                        |  7 ++-
- drivers/watchdog/sp805_wdt.c                       |  8 +++
- drivers/watchdog/starfive-wdt.c                    | 14 ++++-
- drivers/watchdog/stm32_iwdg.c                      |  3 +
- drivers/watchdog/watchdog_core.c                   | 17 +++---
- 14 files changed, 182 insertions(+), 48 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/watchdog/sprd,sp9860-wdt.yaml
- delete mode 100644 Documentation/devicetree/bindings/watchdog/sprd-wdt.txt
-----------------------------------------------------------------
-
-Kind regards,
-Wim.
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
