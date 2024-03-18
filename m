@@ -1,255 +1,254 @@
-Return-Path: <linux-watchdog+bounces-785-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-787-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8365C87E482
-	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Mar 2024 08:58:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C69F87E9B2
+	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Mar 2024 14:02:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A37781C20E87
-	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Mar 2024 07:58:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECE11282750
+	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Mar 2024 13:02:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 894462421D;
-	Mon, 18 Mar 2024 07:58:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EB2C39AEB;
+	Mon, 18 Mar 2024 13:02:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GsJEdQr4"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="tNHXVlmL"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB22524205
-	for <linux-watchdog@vger.kernel.org>; Mon, 18 Mar 2024 07:58:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725F238FA0;
+	Mon, 18 Mar 2024 13:02:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710748710; cv=none; b=kqZBMZsW4pXS+vo7lUiUvolHHu3TpdMon1HSbhdkI03pHyeM845qmxOT67Hk/FQwwHAzAZu4f/z9cgluYXELYvgB5teEC6gYOQ/RLTTWNFp0DiXIh51pzDqoTeG928aGDeCAVr4KMYkTrhCXBLVR/BcgQiiG1jtlwByTSxMddGI=
+	t=1710766938; cv=none; b=qJPDcEtJiBMXrcg39ZUJaXiu91R9fmeZfu6iRc/8/t+JrkzGTaXjc3sGcgOm0O8wQ5bcQxEQ8CV3N+VGl17aebBOo7OXroeFsFg3zJ7abErI+FyUPW4g1njMn/PQi6QwpXbehnaHKeXGTOaBHyZW+HLuYT3n+9ryNI0E1W2feXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710748710; c=relaxed/simple;
-	bh=Fst39intlKRDb/8ggxNIhAICJfqxINb4emMiCTbBLds=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Vg2OG44rUHqUEhilPrhHYgz1WnkTDB89Clj0lN7Xk7icui7yldTtColZR+90TVVJ9xDQLd7IhGg8tOM1co/mr+G/gI1ESN4C02ylSWg2SR3EWuterBLvwYK1ZGN9j6gXMR4WBGyMPzGyVuaLAE1YD8wAoBxKgod8otY0YWPKMg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GsJEdQr4; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-568aa3096e9so4600650a12.0
-        for <linux-watchdog@vger.kernel.org>; Mon, 18 Mar 2024 00:58:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710748707; x=1711353507; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QFGE95RVCnIMXh4rzBbheQjJCqPcx4uOp3c9aQsSW7U=;
-        b=GsJEdQr4pKSPUuMOlGATSqcAlohQXnjQkW5DYFwKGpdU3TJ9iyz1ji6RdkTSchhfsS
-         HO/+034C6HtKofXuq+w9LeROKzScenFuZGGlibOl8flfH8ykMcnda61D//kdPBR9eOfq
-         IqmtzRHCJkJpwgwylTgsqtde/TZz/WnvYC9KVmM6ve5xPBX+pF+BoSXFvL0upeN01n7l
-         a4U06OpxLa67YRTeAR6SWawgoRIBoPeTDj2ildHVUsAH+CNGE3Vbr9NTfUDcJ3nqTMrd
-         qRaoqqbGLQFjdZNVw0U6aAmc3tq0MKp7P27DPQwapjeYL3XsHoDowHby1WznImFpmOSV
-         p3nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710748707; x=1711353507;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QFGE95RVCnIMXh4rzBbheQjJCqPcx4uOp3c9aQsSW7U=;
-        b=UU0hTFm0pv1aNv7AyY/KhWeetncOp5yHuP/Dv7DHEUoOYkc6wbW+m9mBDhSspqQGB3
-         xzo446wn3+58QKG6V11nNHIukWpKsYnP0Ym7dy6heyVOitCLiJFo1safd6SiQ3czh3hD
-         t2JMiIRWQ4YFCQsi5U7HwprrdmpMxtbrW86ijlOhtJ4g7Zqc00YsuYPu3vPU5fKC0VuO
-         LpfR8WJhd1FqBROf6FWwSjVAVZUjtr9yUNWnGPDROAueyl/664wY5UQ3Wimx61DDae0a
-         mQ1gWqjHdVzxqiMOSNJgWDHrR38IFUBEANSQs3fj1Z16z8MOnR23wizmdL0+OHPKiwRH
-         vi8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWSnJn8QY3+mASuKoSp2jd1s92nxWLseV4gfqA+lzGYjHV5NmN2hZew54RdXLb9kH4DmE8Q8eKgxfP08E6/lGWRdkDoq/l6+CMD5yPHxmY=
-X-Gm-Message-State: AOJu0YzpKPKEdZ7x+LTQhqAUBNShlJCXLkvmIOIkrCnYzHIBxBSaRrYk
-	gXtAXvtp+EUSYr0NEgfo4YJc5Bx+upXyT2d9lDcKtNyBCzyoL6Vpt5f/2GvhVAU=
-X-Google-Smtp-Source: AGHT+IGWsAI8IE05B16HXMG4BE0mLPO5bP9vn+BWp97d0rV7EEb40TJsYMYSTg3wKa+JjrRBguKLGA==
-X-Received: by 2002:a50:cccd:0:b0:568:b71a:5954 with SMTP id b13-20020a50cccd000000b00568b71a5954mr1822684edj.10.1710748707006;
-        Mon, 18 Mar 2024 00:58:27 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.97])
-        by smtp.gmail.com with ESMTPSA id co24-20020a0564020c1800b00568c613570dsm1911155edb.79.2024.03.18.00.58.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Mar 2024 00:58:26 -0700 (PDT)
-Message-ID: <d94a4833-3fe2-4dfa-be88-9508971d12bd@linaro.org>
-Date: Mon, 18 Mar 2024 08:58:24 +0100
+	s=arc-20240116; t=1710766938; c=relaxed/simple;
+	bh=Xeh3Xh85wAPq6QKrTjMMaqZtUieeXwfUZQqVI4BpdR0=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=RZNgZyUCEQqnwxfSnIcSGjtD7QWVEKJFY36rlt8fx3r1zEn8sm2CvlEHEeO3MM7o36dyFniJ88rTyc50HynWPjWybY3k6WDed7h5SVkvM7OHARrB3ledmYUpjGrB92WmOQc1Du9K8JtzOuPA2s5/0HKR/xjeIcYYMvo4LNSfqeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=tNHXVlmL; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
+	Message-Id:Date:Subject:To:From:Sender:Reply-To:Cc:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=9sfZOx2DCTn54LYO3IjAwhuh25pOQkcCf5EGt7OZU20=; b=tNHXVlmLU/vIQ1W5czs79Ux/VF
+	yq/UDFl5wKMH3L1pBMJoZI7L7iC17AJl9/8JLiJioS7x73i7HthN0LrXTBLVbBTL3zdal70GTMK2m
+	y8nsbnZNGeR2uskiIWOOFzpevXgvI3qWfUxaaefL4l5b6My8T4Bo8kFEF+9cvq8tQOiLpvT2lm6Tw
+	uJMCjLNf4Xyz7zRMj6Sv+dp1AZYBfN+xhpicn5bqekLHwzHb+vJFWxRneR9I0xaUtlJDU4hG3XNjc
+	LSxWwEGN4pjRY8XctouvXQwemtHSBblfw57A+a2/vBCmjFlsa0C+zyaEOy0cElk33hxJijQNELYZ2
+	WQp/ZgjQ==;
+Received: from p200301077701e8001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:107:7701:e800:1a3d:a2ff:febf:d33a] helo=aktux)
+	by mail.andi.de1.cc with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <andreas@kemnade.info>)
+	id 1rmCIV-000LTn-JD; Mon, 18 Mar 2024 13:40:59 +0100
+Received: from andi by aktux with local (Exim 4.96)
+	(envelope-from <andreas@kemnade.info>)
+	id 1rmCIU-00HTpq-0T;
+	Mon, 18 Mar 2024 13:40:58 +0100
+From: Andreas Kemnade <andreas@kemnade.info>
+To: dmitry.torokhov@gmail.com,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	lee@kernel.org,
+	alexandre.belloni@bootlin.com,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	andreas@kemnade.info,
+	linux-input@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	sre@kernel.org
+Subject: [PATCH] dt-bindings: mfd: twl: Convert trivial subdevices to json-schema
+Date: Mon, 18 Mar 2024 13:40:50 +0100
+Message-Id: <20240318124051.4166253-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] drivers: watchdog: ast2600 support bootstatus
-Content-Language: en-US
-To: Peter Yin <peteryin.openbmc@gmail.com>, patrick@stwcx.xyz,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <20240318055219.3460121-1-peteryin.openbmc@gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240318055219.3460121-1-peteryin.openbmc@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 18/03/2024 06:52, Peter Yin wrote:
-> Add WDIOF_EXTERN1 and WDIOF_CARDRESET bootstatus in ast2600
-> 
-> Regarding the AST2600 specification, the WDTn Timeout Status Register
-> (WDT10) has bit 1 reserved. To verify the second boot source,
-> we need to check SEC14 bit 12 and bit 13.
-> The bits 8-23 in the WDTn Timeout Status Register are the Watchdog
-> Event Count, which we can use to verify WDIOF_EXTERN1.
-> 
-> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
-> ---
-> Change log:
-> 
-> v1 -> v2
->   - Add comment and support WDIOF_CARDRESET in ast2600
-> 
-> v1
->   - Patch 0001 - Add WDIOF_EXTERN1 bootstatus
-> ---
->  arch/arm/boot/dts/aspeed/aspeed-g6.dtsi |  8 ++---
+Convert subdevices with just an interrupt and compatbile to
+json-schema and wire up already converted subdevices.
+RTC is available in all variants, so allow it unconditionally
+GPADC binding for TWL603X uses two different compatibles, so
+specify just the compatible and not include it.
 
-No, DTS is always separate patchset.
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+---
+Well, my name is in that yaml file, so I should take care of my sheep,
+in case a step-by-step approach is acceptable this is at least a
+checkpoint for me that I understand multi file binding mechanics
+properly.
 
->  drivers/watchdog/aspeed_wdt.c           | 45 ++++++++++++++++++++++---
->  2 files changed, 44 insertions(+), 9 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
-> index e0b44498269f..23ae7f0430e9 100644
-> --- a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
-> +++ b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
-> @@ -556,24 +556,24 @@ uart5: serial@1e784000 {
->  
->  			wdt1: watchdog@1e785000 {
->  				compatible = "aspeed,ast2600-wdt";
-> -				reg = <0x1e785000 0x40>;
-> +				reg = <0x1e785000 0x40>, <0x1e6f2000 0x20>;
+ .../bindings/input/twl4030-pwrbutton.txt      | 21 ------
+ .../devicetree/bindings/mfd/ti,twl.yaml       | 68 +++++++++++++++++++
+ .../devicetree/bindings/rtc/twl-rtc.txt       | 11 ---
+ .../bindings/watchdog/twl4030-wdt.txt         | 10 ---
+ 4 files changed, 68 insertions(+), 42 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt
+ delete mode 100644 Documentation/devicetree/bindings/rtc/twl-rtc.txt
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/twl4030-wdt.txt
 
-And how does it pass dtbs_check? Where did you update the bindings?
-
->  			};
->  
->  			wdt2: watchdog@1e785040 {
->  				compatible = "aspeed,ast2600-wdt";
-> -				reg = <0x1e785040 0x40>;
-> +				reg = <0x1e785040 0x40>, <0x1e6f2000 0x020>;
->  				status = "disabled";
->  			};
->  
->  			wdt3: watchdog@1e785080 {
->  				compatible = "aspeed,ast2600-wdt";
-> -				reg = <0x1e785080 0x40>;
-> +				reg = <0x1e785080 0x40>, <0x1e6f2000 0x020>;
->  				status = "disabled";
->  			};
->  
->  			wdt4: watchdog@1e7850c0 {
->  				compatible = "aspeed,ast2600-wdt";
-> -				reg = <0x1e7850C0 0x40>;
-> +				reg = <0x1e7850C0 0x40>, <0x1e6f2000 0x020>;
->  				status = "disabled";
->  			};
->  
-> diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
-> index b4773a6aaf8c..65118e461130 100644
-> --- a/drivers/watchdog/aspeed_wdt.c
-> +++ b/drivers/watchdog/aspeed_wdt.c
-> @@ -33,6 +33,7 @@ struct aspeed_wdt {
->  	void __iomem		*base;
->  	u32			ctrl;
->  	const struct aspeed_wdt_config *cfg;
-> +	void __iomem		*sec_base;
->  };
->  
->  static const struct aspeed_wdt_config ast2400_config = {
-> @@ -82,6 +83,15 @@ MODULE_DEVICE_TABLE(of, aspeed_wdt_of_table);
->  #define WDT_RESET_MASK1		0x1c
->  #define WDT_RESET_MASK2		0x20
->  
-> +/*
-> + * Only Ast2600 support
-> + */
-> +#define   WDT_EVENT_COUNTER_MASK	(0xFFF << 8)
-> +#define   WDT_SECURE_ENGINE_STATUS	(0x14)
-> +#define   ABR_IMAGE_SOURCE		BIT(12)
-> +#define   ABR_IMAGE_SOURCE_SPI		BIT(13)
-> +#define   SECOND_BOOT_ENABLE		BIT(14)
-> +
->  /*
->   * WDT_RESET_WIDTH controls the characteristics of the external pulse (if
->   * enabled), specifically:
-> @@ -313,6 +323,7 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
->  	const char *reset_type;
->  	u32 duration;
->  	u32 status;
-> +	u32 sec_st;
->  	int ret;
->  
->  	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
-> @@ -330,6 +341,12 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
->  	if (IS_ERR(wdt->base))
->  		return PTR_ERR(wdt->base);
->  
-> +	if (of_device_is_compatible(np, "aspeed,ast2600-wdt")) {
-
-
-> +		wdt->sec_base = devm_platform_ioremap_resource(pdev, 1);
-> +		if (IS_ERR(wdt->sec_base))
-> +			return PTR_ERR(wdt->sec_base);
-> +	}
-
-NAK, ABI break without clear reason.
-
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt b/Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt
+deleted file mode 100644
+index 6c201a2ba8acf..0000000000000
+--- a/Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt
++++ /dev/null
+@@ -1,21 +0,0 @@
+-Texas Instruments TWL family (twl4030) pwrbutton module
+-
+-This module is part of the TWL4030. For more details about the whole
+-chip see Documentation/devicetree/bindings/mfd/ti,twl.yaml.
+-
+-This module provides a simple power button event via an Interrupt.
+-
+-Required properties:
+-- compatible: should be one of the following
+-   - "ti,twl4030-pwrbutton": For controllers compatible with twl4030
+-- interrupts: should be one of the following
+-   - <8>: For controllers compatible with twl4030
+-
+-Example:
+-
+-&twl {
+-	twl_pwrbutton: pwrbutton {
+-		compatible = "ti,twl4030-pwrbutton";
+-		interrupts = <8>;
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/mfd/ti,twl.yaml b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
+index 52ed228fb1e7e..03d725d5294db 100644
+--- a/Documentation/devicetree/bindings/mfd/ti,twl.yaml
++++ b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
+@@ -15,6 +15,65 @@ description: |
+   USB transceiver or Audio amplifier.
+   These chips are connected to an i2c bus.
+ 
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: ti,twl4030
++    then:
++      properties:
++        madc:
++          type: object
++          $ref: ../iio/adc/ti,twl4030-madc.yaml
++
++          unevaluatedProperties: false
++        bci:
++          type: object
++          $ref: ../power/supply/twl4030-charger.yaml
++
++          unevaluatedProperties: false
++        pwrbutton:
++          type: object
++          properties:
++            compatible:
++              const: ti,twl4030-pwrbutton
++            interrupts:
++              const: 8
++
++          additionalProperties: false
++        watchdog:
++          type: object
++          properties:
++            compatible:
++              const: ti,twl4030-wdt
++
++          additionalProperties: false
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: ti,twl6030
++    then:
++      properties:
++        gpadc:
++          type: object
++          properties:
++            compatible:
++              const: ti,twl6030-gpadc
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: ti,twl6032
++    then:
++      properties:
++        gpadc:
++          type: object
++          properties:
++            compatible:
++              const: ti,twl6032-gpadc
++
+ properties:
+   compatible:
+     description:
+@@ -42,6 +101,15 @@ properties:
+   "#clock-cells":
+     const: 1
+ 
++  rtc:
++    type: object
++    properties:
++      compatible:
++        const: ti,twl4030-rtc
++      interrupts:
++        maxItems: 1
++    additionalProperties: false
++
+ additionalProperties: false
+ 
+ required:
+diff --git a/Documentation/devicetree/bindings/rtc/twl-rtc.txt b/Documentation/devicetree/bindings/rtc/twl-rtc.txt
+deleted file mode 100644
+index 8f9a94f2f8969..0000000000000
+--- a/Documentation/devicetree/bindings/rtc/twl-rtc.txt
++++ /dev/null
+@@ -1,11 +0,0 @@
+-* Texas Instruments TWL4030/6030 RTC
+-
+-Required properties:
+-- compatible : Should be "ti,twl4030-rtc"
+-- interrupts : Should be the interrupt number.
+-
+-Example:
+-	rtc {
+-		compatible = "ti,twl4030-rtc";
+-		interrupts = <11>;
+-	};
+diff --git a/Documentation/devicetree/bindings/watchdog/twl4030-wdt.txt b/Documentation/devicetree/bindings/watchdog/twl4030-wdt.txt
+deleted file mode 100644
+index 80a37193c0b86..0000000000000
+--- a/Documentation/devicetree/bindings/watchdog/twl4030-wdt.txt
++++ /dev/null
+@@ -1,10 +0,0 @@
+-Device tree bindings for twl4030-wdt driver (TWL4030 watchdog)
+-
+-Required properties:
+-	compatible = "ti,twl4030-wdt";
+-
+-Example:
+-
+-watchdog {
+-	compatible = "ti,twl4030-wdt";
+-};
+-- 
+2.39.2
 
 
