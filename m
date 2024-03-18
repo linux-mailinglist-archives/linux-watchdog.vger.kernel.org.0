@@ -1,175 +1,224 @@
-Return-Path: <linux-watchdog+bounces-786-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-788-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F87787E985
-	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Mar 2024 13:44:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE1BE87EBAA
+	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Mar 2024 16:08:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08FFE2839C7
-	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Mar 2024 12:44:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCD1C1C20159
+	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Mar 2024 15:08:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF64431A76;
-	Mon, 18 Mar 2024 12:44:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15FA24EB46;
+	Mon, 18 Mar 2024 15:07:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="clt9CshJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KTvddIHQ"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11623383BB
-	for <linux-watchdog@vger.kernel.org>; Mon, 18 Mar 2024 12:44:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD334F5F9;
+	Mon, 18 Mar 2024 15:07:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710765844; cv=none; b=bKke7z3FJGOykhTV5xUrvqIicWpi6P+EbaA0/Zy8Q76SsMCoKHnV/5zRVttvyS/kyM0Pvgj0Aehj3DHXjnEfVbxuT3H9jy2cQYZXmvIvhJ0TyMCrJ7E+OaCFjss9OyA+XLuJqrMJ86fwI0t21uFrvxGgfIm+unHegOGI6eNVtpg=
+	t=1710774473; cv=none; b=Pz9tn2KSYxfSPUAW/gFvOn9so4mxsOZJ2n3uqRf7ee2PlT9fYyIGLUNwmdNOAdLFWECNbCoQLPf2U9DVER+pozkOE4ipkbgsheQ1rDmTq2L14jqtWR5YMG0uAvT/uOQ+PRuTwLzbUdysajyTUwmvdVSojGcr9/Ajh1jK055BmMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710765844; c=relaxed/simple;
-	bh=I/StjgYxY54i3qrqizFVS+ZVZGXO7voYj+tMDs/VK+k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GSXYkU417d17cmZwnUkkXYKd3KvIT9GmqEuIt+MpEKAaghZZatpKi+Eg85TgX0P8Y3MMiX1/1yVoyC8JUK6WmPqZrsiKyGVBOHSt62dN0oacnl0Pr4AohKvXnBvLGD1VLuyGU/I/aUfCytHxuHQNAZm8AxZdCbKd42g3vmIDWNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=clt9CshJ; arc=none smtp.client-ip=209.85.166.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3662feb90a8so31913855ab.3
-        for <linux-watchdog@vger.kernel.org>; Mon, 18 Mar 2024 05:44:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1710765841; x=1711370641; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z9/R+AwvLdTfbyPtGNAFf8lwxhBDbcyxnP7XTzrdj8M=;
-        b=clt9CshJB75qoEf/uqU5JZJYzaJG/PeZ/OckxeFOHhmDZs4msWv4Xamu2mV8h5V2dQ
-         qCpj7zxMG79UqTreVYiTanTrXRTTiLNU0az3ONnFJWpG7Luivm5Slf3RaCu0jvOzUJQT
-         A5hZ95rNYCWYfP5+QFOMBLxVaHH5BekxMCtIOQZ99m54lz5jipBDJBuhg1NuPh20B693
-         VwJ6Ujif4RYJIzC5OLE/EOyn0D1GBquM4Yt/QbGrXpfkfhCdjJPLBtuvaIRrF/pb7816
-         IlttZ0fzVILd2dxtKmBFlj4i2xYTmS2W3q9SWGDXstTyB9v0BMlvBGOvqf57bXSmYc6I
-         P93g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710765841; x=1711370641;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z9/R+AwvLdTfbyPtGNAFf8lwxhBDbcyxnP7XTzrdj8M=;
-        b=dXxI/ntyL1nXHQ+bK6sACh6nuzA+hmzs3hGADfOSTpbiTP7D3576MQjDOBphprBy1L
-         RI5+kSFItYzU7u/dHFT8GthWPyaLokOjmdUHLCCREAB24il+9ut92Qt8mBuLCO0w4FU6
-         /8kpawWZT1zI9Xruz3qNsn2x0qNHDXDgAoc0Qo/iCa58ZbAqP4kM7pWBeW5lCuMKZ6uL
-         ONP9vU2FhK3kjk+jk/+oybKsu2/fj5gIfcPTqP4TAsMhI6lj76c5puOYRm2lKxTkoKCf
-         XQ5Hote2Ni77D5+koKrMDtM1gv1veYrTlKdpWfT30sOVolKbKSBH/fGqpF2innyZJxfJ
-         807w==
-X-Gm-Message-State: AOJu0Yy6bkbWGZ04LwAUC+KDL9ZR/4iqUmo85eInvMprvDM1+6rucnNa
-	VMVLKshfzeKgKyP81cum/048L+g6y0jXZzvgvnxvOOSU2/y/WjI9ljqXYRX414k=
-X-Google-Smtp-Source: AGHT+IFd/VLWRtpMUVSANFKMQW/VYdSJwvCjT+iIGGkS0+WNUO9K+meWeto7Xra2Cy2akuW+w8wS+Q==
-X-Received: by 2002:a92:d391:0:b0:366:94aa:ec24 with SMTP id o17-20020a92d391000000b0036694aaec24mr10865222ilo.10.1710765840962;
-        Mon, 18 Mar 2024 05:44:00 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.144])
-        by smtp.gmail.com with ESMTPSA id e4-20020a926904000000b00363c0669450sm2285889ilc.19.2024.03.18.05.43.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Mar 2024 05:44:00 -0700 (PDT)
-Message-ID: <352ced93-ae80-44b3-8bc2-050dc195ac37@tuxon.dev>
-Date: Mon, 18 Mar 2024 14:43:55 +0200
+	s=arc-20240116; t=1710774473; c=relaxed/simple;
+	bh=b6jIKK6IF/UBDD/2p5Ab01jRH32PNiTjuD4LIO3HBnE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gWaC0uhj8QpAZbQlV3z0zBHLuplni4kNbb1+7EhkCgYfRJtMGICHNhV7wyyX30rbI5JiTcaj4BR6NQdLjKAM+0mlbx1sDOUt7G8x7FFBK3hAdo8X4g1IBOmYviPOXHgp1a+9GHhIpSG8CEsRBy4Pe2V7GKOZRDMkZQ1lZFZMM/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KTvddIHQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17EA8C433C7;
+	Mon, 18 Mar 2024 15:07:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1710774472;
+	bh=b6jIKK6IF/UBDD/2p5Ab01jRH32PNiTjuD4LIO3HBnE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KTvddIHQty8QyZBWziR57LP012BCa/gAgEr/+x88Fh2GQF82FhOy/XekROmZJHr3W
+	 PJGeujPI6eYqlFV1ofbTXVxidIrpdsWn+7t+lokdweWXiA1OpEhh7H6CuCoWJTy1C+
+	 dqNTZD1kpTHWkYwy9kyQ5+4FhVywqsLINg+1NZZJaR1uNLl8UkmZ9Wpl2I6UTvF/DX
+	 K9/+6WUfA+wrsfihMeAg2tig/6lCvHoG8KU4VzT1niKvBwjWKB23dQRJwK9gtrvvEz
+	 4rOIN2O/R6yWIY+vdA19W+2zlReCbRo89Jb+0z099wNYTqrYzBQ4r1T0f70BoXi6vw
+	 GsUshDY4pTRhw==
+Date: Mon, 18 Mar 2024 10:07:50 -0500
+From: Rob Herring <robh@kernel.org>
+To: Andreas Kemnade <andreas@kemnade.info>
+Cc: dmitry.torokhov@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, lee@kernel.org, alexandre.belloni@bootlin.com,
+	wim@linux-watchdog.org, linux@roeck-us.net,
+	linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-omap@vger.kernel.org,
+	sre@kernel.org
+Subject: Re: [PATCH] dt-bindings: mfd: twl: Convert trivial subdevices to
+ json-schema
+Message-ID: <20240318150750.GA4000895-robh@kernel.org>
+References: <20240318124051.4166253-1-andreas@kemnade.info>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 00/10] watchdog: rzg2l_wdt: Add support for RZ/G3S
-Content-Language: en-US
-To: wim@linux-watchdog.org, linux@roeck-us.net, robh@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- p.zabel@pengutronix.de, geert+renesas@glider.be, magnus.damm@gmail.com,
- biju.das.jz@bp.renesas.com
-Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20240228083253.2640997-1-claudiu.beznea.uj@bp.renesas.com>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <20240228083253.2640997-1-claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240318124051.4166253-1-andreas@kemnade.info>
 
-Hi,
+On Mon, Mar 18, 2024 at 01:40:50PM +0100, Andreas Kemnade wrote:
+> Convert subdevices with just an interrupt and compatbile to
+> json-schema and wire up already converted subdevices.
+> RTC is available in all variants, so allow it unconditionally
+> GPADC binding for TWL603X uses two different compatibles, so
+> specify just the compatible and not include it.
+> 
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> ---
+> Well, my name is in that yaml file, so I should take care of my sheep,
+> in case a step-by-step approach is acceptable this is at least a
+> checkpoint for me that I understand multi file binding mechanics
+> properly.
+> 
+>  .../bindings/input/twl4030-pwrbutton.txt      | 21 ------
+>  .../devicetree/bindings/mfd/ti,twl.yaml       | 68 +++++++++++++++++++
+>  .../devicetree/bindings/rtc/twl-rtc.txt       | 11 ---
+>  .../bindings/watchdog/twl4030-wdt.txt         | 10 ---
+>  4 files changed, 68 insertions(+), 42 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt
+>  delete mode 100644 Documentation/devicetree/bindings/rtc/twl-rtc.txt
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/twl4030-wdt.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt b/Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt
+> deleted file mode 100644
+> index 6c201a2ba8acf..0000000000000
+> --- a/Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt
+> +++ /dev/null
+> @@ -1,21 +0,0 @@
+> -Texas Instruments TWL family (twl4030) pwrbutton module
+> -
+> -This module is part of the TWL4030. For more details about the whole
+> -chip see Documentation/devicetree/bindings/mfd/ti,twl.yaml.
+> -
+> -This module provides a simple power button event via an Interrupt.
+> -
+> -Required properties:
+> -- compatible: should be one of the following
+> -   - "ti,twl4030-pwrbutton": For controllers compatible with twl4030
+> -- interrupts: should be one of the following
+> -   - <8>: For controllers compatible with twl4030
+> -
+> -Example:
+> -
+> -&twl {
+> -	twl_pwrbutton: pwrbutton {
+> -		compatible = "ti,twl4030-pwrbutton";
+> -		interrupts = <8>;
+> -	};
+> -};
+> diff --git a/Documentation/devicetree/bindings/mfd/ti,twl.yaml b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
+> index 52ed228fb1e7e..03d725d5294db 100644
+> --- a/Documentation/devicetree/bindings/mfd/ti,twl.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
+> @@ -15,6 +15,65 @@ description: |
+>    USB transceiver or Audio amplifier.
+>    These chips are connected to an i2c bus.
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: ti,twl4030
+> +    then:
+> +      properties:
+> +        madc:
+> +          type: object
+> +          $ref: ../iio/adc/ti,twl4030-madc.yaml
 
-Gentle ping!
+Use 'absolute' paths: /schemas/iio/...
 
-Thank you,
-Claudiu Beznea
+> +
 
-On 28.02.2024 10:32, Claudiu wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> 
-> Hi,
-> 
-> Series adds watchdog support for Renesas RZ/G3S (R9A08G045) SoC.
-> 
-> Patches do the following:
-> - patch 1/10 makes the driver depend on ARCH_RZG2L || ARCH_R9A09G011
-> - patch 2/10 makes the driver depend on PM
-> - patches 3-7/10 adds fixes and cleanups for the watchdog driver
-> - patch 8/10 adds suspend to RAM to the watchdog driver (to be used by
->   RZ/G3S)
-> - patch 9/10 adapt for power domain support
-> - patch 10/10 documents the RZ/G3S support
-> 
-> Thank you,
-> Claudiu Beznea
-> 
-> Changes in v8:
-> - added patch 9
-> - collected tags
-> 
-> Changes in v7:
-> - updated the dependency on patch 2/9
-> 
-> Changes in v6:
-> - update patch 2/9 description
-> - fixed the dependency on COMPILE_TEST previously introduced in patch
->   2/9
-> 
-> Changes in v5:
-> - updated description of patch 2/9
-> - simplify the code in patch 2/9 by using on a new line:
->   depends on PM || COMPILE_TEST
-> 
-> Changes in v4:
-> - added patch "watchdog: rzg2l_wdt: Restrict the driver to ARCH_RZG2L and
->   ARCH_R9A09G011"
-> - collected tags
-> 
-> Changes in v3:
-> - make driver depend on PM not select it
-> - drop patches already accepted (patches 1, 10, 11 from v2)
-> - re-arranged the tags in patch 8/8 as they were messed by b4 am/shazam
-> 
-> Changes in v2:
-> - added patch "watchdog: rzg2l_wdt: Select PM"
-> - propagate the return status of rzg2l_wdt_start() to it's callers
->   in patch "watchdog: rzg2l_wdt: Use pm_runtime_resume_and_get()" 
-> - propagate the return status of rzg2l_wdt_stop() to it's callers
->   in patch "watchdog: rzg2l_wdt: Check return status of pm_runtime_put()" 
-> - removed pm_ptr() from patch "watchdog: rzg2l_wdt: Add suspend/resume support"
-> - s/G2UL/G2L in patch "dt-bindings: watchdog: renesas,wdt: Document RZ/G3S support"
-> - collected tags
-> 
-> 
-> Claudiu Beznea (10):
->   watchdog: rzg2l_wdt: Restrict the driver to ARCH_RZG2L and
->     ARCH_R9A09G011
->   watchdog: rzg2l_wdt: Make the driver depend on PM
->   watchdog: rzg2l_wdt: Use pm_runtime_resume_and_get()
->   watchdog: rzg2l_wdt: Check return status of pm_runtime_put()
->   watchdog: rzg2l_wdt: Remove reset de-assert from probe
->   watchdog: rzg2l_wdt: Remove comparison with zero
->   watchdog: rzg2l_wdt: Rely on the reset driver for doing proper reset
->   watchdog: rzg2l_wdt: Add suspend/resume support
->   watchdog: rzg2l_wdt: Power on the PM domain in rzg2l_wdt_restart()
->   dt-bindings: watchdog: renesas,wdt: Document RZ/G3S support
-> 
->  .../bindings/watchdog/renesas,wdt.yaml        |   1 +
->  drivers/watchdog/Kconfig                      |   3 +-
->  drivers/watchdog/rzg2l_wdt.c                  | 123 +++++++++++-------
->  3 files changed, 76 insertions(+), 51 deletions(-)
-> 
+Drop blank line
+
+> +          unevaluatedProperties: false
+
+blank line between DT properties
+
+> +        bci:
+> +          type: object
+> +          $ref: ../power/supply/twl4030-charger.yaml
+> +
+> +          unevaluatedProperties: false
+> +        pwrbutton:
+> +          type: object
+> +          properties:
+> +            compatible:
+> +              const: ti,twl4030-pwrbutton
+> +            interrupts:
+> +              const: 8
+
+As 'interrupts' is a matrix, this needs to be:
+
+interrupts:
+  items:
+    - items:
+        - const: 8
+
+> +
+> +          additionalProperties: false
+
+In the indented cases, it is preferred to put this before 'properties'.
+
+> +        watchdog:
+> +          type: object
+> +          properties:
+> +            compatible:
+> +              const: ti,twl4030-wdt
+> +
+> +          additionalProperties: false
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: ti,twl6030
+> +    then:
+> +      properties:
+> +        gpadc:
+> +          type: object
+> +          properties:
+> +            compatible:
+> +              const: ti,twl6030-gpadc
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: ti,twl6032
+> +    then:
+> +      properties:
+> +        gpadc:
+> +          type: object
+> +          properties:
+> +            compatible:
+> +              const: ti,twl6032-gpadc
+> +
+>  properties:
+>    compatible:
+>      description:
+> @@ -42,6 +101,15 @@ properties:
+>    "#clock-cells":
+>      const: 1
+>  
+> +  rtc:
+> +    type: object
+> +    properties:
+> +      compatible:
+> +        const: ti,twl4030-rtc
+> +      interrupts:
+> +        maxItems: 1
+> +    additionalProperties: false
+> +
+>  additionalProperties: false
+>  
+>  required:
 
