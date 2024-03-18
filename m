@@ -1,236 +1,255 @@
-Return-Path: <linux-watchdog+bounces-784-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-785-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B5DA87E35E
-	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Mar 2024 06:52:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8365C87E482
+	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Mar 2024 08:58:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF188281071
-	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Mar 2024 05:52:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A37781C20E87
+	for <lists+linux-watchdog@lfdr.de>; Mon, 18 Mar 2024 07:58:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECF3821A19;
-	Mon, 18 Mar 2024 05:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 894462421D;
+	Mon, 18 Mar 2024 07:58:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ssq9KoyX"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GsJEdQr4"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 653E5219E4;
-	Mon, 18 Mar 2024 05:52:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB22524205
+	for <linux-watchdog@vger.kernel.org>; Mon, 18 Mar 2024 07:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710741147; cv=none; b=nV4GbPX4AQDkBG0NIdk/KWBJNi86xz0TCu0eVLqsQ77lFMbJFfxPIOACkxUSK+O+rKOWYbLbq79+y5MY9dnACCEEhZ989WhN/xH/Ei8TWXzb4UkSr/pAzlbY8gmDeecEfDgL/g5oF7IvJFNkfxgfcWzykMgVn+tk1/TQUpDc2ik=
+	t=1710748710; cv=none; b=kqZBMZsW4pXS+vo7lUiUvolHHu3TpdMon1HSbhdkI03pHyeM845qmxOT67Hk/FQwwHAzAZu4f/z9cgluYXELYvgB5teEC6gYOQ/RLTTWNFp0DiXIh51pzDqoTeG928aGDeCAVr4KMYkTrhCXBLVR/BcgQiiG1jtlwByTSxMddGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710741147; c=relaxed/simple;
-	bh=kVtWJwmgGzGWFvVb5ZU5qxatxchEdFKYX19+Ui8XHf8=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version; b=fmWRUarBsM6jwRLYhwKcpshxRccp9rYF9dMiNJZUnT986t0Dlyh7teOa//vfi6vn/9ys5GvTdSqld8LY6JogzbfCZBeoabCpnmjpgg+TPttwd/NF7f1OyxSIIdlYiTJtLKQ1VAJolJBoXD9o7b4K4S6co5arWVXpvQAfJn10COM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ssq9KoyX; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1deefb08b9eso13489335ad.3;
-        Sun, 17 Mar 2024 22:52:26 -0700 (PDT)
+	s=arc-20240116; t=1710748710; c=relaxed/simple;
+	bh=Fst39intlKRDb/8ggxNIhAICJfqxINb4emMiCTbBLds=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Vg2OG44rUHqUEhilPrhHYgz1WnkTDB89Clj0lN7Xk7icui7yldTtColZR+90TVVJ9xDQLd7IhGg8tOM1co/mr+G/gI1ESN4C02ylSWg2SR3EWuterBLvwYK1ZGN9j6gXMR4WBGyMPzGyVuaLAE1YD8wAoBxKgod8otY0YWPKMg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GsJEdQr4; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-568aa3096e9so4600650a12.0
+        for <linux-watchdog@vger.kernel.org>; Mon, 18 Mar 2024 00:58:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710741145; x=1711345945; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=90ypWIse8KDEw4JedjK1HuYEeI8yW2/WFlhRVCHxDPE=;
-        b=Ssq9KoyXvSNwFSNBZvq3TNUjNZ20FHtZe0n0Yl31PW3giYPWC0pCNjysxf+GOB6QOQ
-         EEC7mOa10jMilQ/nr6KyQ6kcl4sxwP3x3PlDLZKwHmdMxWxbQWTqse5etFzMDKB/aFwi
-         OGmk5JmLEG6Ob2ljR72ELBwbwkYGxuJidgFIsL/OLyTpoNtpoN1X2G/HrLGt4ZPQOAEc
-         yHYvML9yvJg6OPJ0qJS7YgPcuhSm0ZOu6fp7c9nQBOCEl6tWq7zolR5aEjcg9+mPCpg7
-         g3zvLNEUted+sd3JZvOLTfzAinRRNvPBcEMXnSIqEPCXbkcBP5yJ6ZaJbZL3qq3RvY6S
-         Odfw==
+        d=linaro.org; s=google; t=1710748707; x=1711353507; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QFGE95RVCnIMXh4rzBbheQjJCqPcx4uOp3c9aQsSW7U=;
+        b=GsJEdQr4pKSPUuMOlGATSqcAlohQXnjQkW5DYFwKGpdU3TJ9iyz1ji6RdkTSchhfsS
+         HO/+034C6HtKofXuq+w9LeROKzScenFuZGGlibOl8flfH8ykMcnda61D//kdPBR9eOfq
+         IqmtzRHCJkJpwgwylTgsqtde/TZz/WnvYC9KVmM6ve5xPBX+pF+BoSXFvL0upeN01n7l
+         a4U06OpxLa67YRTeAR6SWawgoRIBoPeTDj2ildHVUsAH+CNGE3Vbr9NTfUDcJ3nqTMrd
+         qRaoqqbGLQFjdZNVw0U6aAmc3tq0MKp7P27DPQwapjeYL3XsHoDowHby1WznImFpmOSV
+         p3nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710741145; x=1711345945;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=90ypWIse8KDEw4JedjK1HuYEeI8yW2/WFlhRVCHxDPE=;
-        b=I5O5l6NnOHhDZDKgyYPCq5LrxVoq0CA95I61cWxihHzgiGAtzOzln+5WQIGhCPCCqz
-         9Xd9wyQ316LscHs/15XePIDu+1n79E2QFNh3ScU0BORjxUEPp2x8qHrgckWtFMiVdRYF
-         bJQBHYDLO2rcyizoxSigCbyzf6EBP08PUCZWuLXTxs2sDQxgxt1ZiWB4H1+AHXoXgSQI
-         5BiVOfnvI0gSHbMdPhSBJa1ZUUDgbsj85ntcuTriZn+giUp5Md//BChxXSmGk9AZr52T
-         SpJ0Q9X9bZwdpGTO7BJiWaF21Z/4EGvgcXYs+RyJauPgJvvzswi6+WSVy22sXiZ69vZN
-         EB9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVIH5d1h69IWRFZ2WK6n2CYbT58pCPD2vyQb0mU+cnvMvjGgWMCxoiJML/P1/YwxfuT2MhZ909GSiB5w+fDE0mOwglSelfgB+BXifjeNIaKNSnhPFOYS3S+X+2Fiw19o9/3p4UNrdHIg9qjtY60YYbf9CiINFVG8HpgkyuOtp6nSCEjFMV4ij8n
-X-Gm-Message-State: AOJu0YzGL2qCDBLlDLOsVaZc55ILflfXncGTqRepUXjn+tEZV45tcUOQ
-	FeHyhxPX+3okXXSVdVRj7ZdBhMrbailRY5eJnNCa8lWWo9HBRD4VLBFFZd0j
-X-Google-Smtp-Source: AGHT+IEzjVGGcpD2wdQdh4nNr8UA/bFIGmLYxCfglYwg6FzxomdZCRU5LfqgjRQaFqyKaDckZNH2Sg==
-X-Received: by 2002:a17:902:c412:b0:1dd:76f0:4455 with SMTP id k18-20020a170902c41200b001dd76f04455mr13656970plk.49.1710741145494;
-        Sun, 17 Mar 2024 22:52:25 -0700 (PDT)
-Received: from peter-bmc.dhcpserver.bu9bmc.local (2001-b400-e454-a466-01a3-78b9-4898-3442.emome-ip6.hinet.net. [2001:b400:e454:a466:1a3:78b9:4898:3442])
-        by smtp.gmail.com with ESMTPSA id j9-20020a170902da8900b001dd6c0800b4sm3975907plx.188.2024.03.17.22.52.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Mar 2024 22:52:25 -0700 (PDT)
-From: Peter Yin <peteryin.openbmc@gmail.com>
-To: patrick@stwcx.xyz,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org,
-	linux-watchdog@vger.kernel.org
-Subject: [PATCH v2] drivers: watchdog: ast2600 support bootstatus
-Date: Mon, 18 Mar 2024 13:52:19 +0800
-Message-Id: <20240318055219.3460121-1-peteryin.openbmc@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20230601; t=1710748707; x=1711353507;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QFGE95RVCnIMXh4rzBbheQjJCqPcx4uOp3c9aQsSW7U=;
+        b=UU0hTFm0pv1aNv7AyY/KhWeetncOp5yHuP/Dv7DHEUoOYkc6wbW+m9mBDhSspqQGB3
+         xzo446wn3+58QKG6V11nNHIukWpKsYnP0Ym7dy6heyVOitCLiJFo1safd6SiQ3czh3hD
+         t2JMiIRWQ4YFCQsi5U7HwprrdmpMxtbrW86ijlOhtJ4g7Zqc00YsuYPu3vPU5fKC0VuO
+         LpfR8WJhd1FqBROf6FWwSjVAVZUjtr9yUNWnGPDROAueyl/664wY5UQ3Wimx61DDae0a
+         mQ1gWqjHdVzxqiMOSNJgWDHrR38IFUBEANSQs3fj1Z16z8MOnR23wizmdL0+OHPKiwRH
+         vi8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWSnJn8QY3+mASuKoSp2jd1s92nxWLseV4gfqA+lzGYjHV5NmN2hZew54RdXLb9kH4DmE8Q8eKgxfP08E6/lGWRdkDoq/l6+CMD5yPHxmY=
+X-Gm-Message-State: AOJu0YzpKPKEdZ7x+LTQhqAUBNShlJCXLkvmIOIkrCnYzHIBxBSaRrYk
+	gXtAXvtp+EUSYr0NEgfo4YJc5Bx+upXyT2d9lDcKtNyBCzyoL6Vpt5f/2GvhVAU=
+X-Google-Smtp-Source: AGHT+IGWsAI8IE05B16HXMG4BE0mLPO5bP9vn+BWp97d0rV7EEb40TJsYMYSTg3wKa+JjrRBguKLGA==
+X-Received: by 2002:a50:cccd:0:b0:568:b71a:5954 with SMTP id b13-20020a50cccd000000b00568b71a5954mr1822684edj.10.1710748707006;
+        Mon, 18 Mar 2024 00:58:27 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.222.97])
+        by smtp.gmail.com with ESMTPSA id co24-20020a0564020c1800b00568c613570dsm1911155edb.79.2024.03.18.00.58.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Mar 2024 00:58:26 -0700 (PDT)
+Message-ID: <d94a4833-3fe2-4dfa-be88-9508971d12bd@linaro.org>
+Date: Mon, 18 Mar 2024 08:58:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] drivers: watchdog: ast2600 support bootstatus
+Content-Language: en-US
+To: Peter Yin <peteryin.openbmc@gmail.com>, patrick@stwcx.xyz,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20240318055219.3460121-1-peteryin.openbmc@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240318055219.3460121-1-peteryin.openbmc@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add WDIOF_EXTERN1 and WDIOF_CARDRESET bootstatus in ast2600
+On 18/03/2024 06:52, Peter Yin wrote:
+> Add WDIOF_EXTERN1 and WDIOF_CARDRESET bootstatus in ast2600
+> 
+> Regarding the AST2600 specification, the WDTn Timeout Status Register
+> (WDT10) has bit 1 reserved. To verify the second boot source,
+> we need to check SEC14 bit 12 and bit 13.
+> The bits 8-23 in the WDTn Timeout Status Register are the Watchdog
+> Event Count, which we can use to verify WDIOF_EXTERN1.
+> 
+> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
+> ---
+> Change log:
+> 
+> v1 -> v2
+>   - Add comment and support WDIOF_CARDRESET in ast2600
+> 
+> v1
+>   - Patch 0001 - Add WDIOF_EXTERN1 bootstatus
+> ---
+>  arch/arm/boot/dts/aspeed/aspeed-g6.dtsi |  8 ++---
 
-Regarding the AST2600 specification, the WDTn Timeout Status Register
-(WDT10) has bit 1 reserved. To verify the second boot source,
-we need to check SEC14 bit 12 and bit 13.
-The bits 8-23 in the WDTn Timeout Status Register are the Watchdog
-Event Count, which we can use to verify WDIOF_EXTERN1.
+No, DTS is always separate patchset.
 
-Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
----
-Change log:
+>  drivers/watchdog/aspeed_wdt.c           | 45 ++++++++++++++++++++++---
+>  2 files changed, 44 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
+> index e0b44498269f..23ae7f0430e9 100644
+> --- a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
+> +++ b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
+> @@ -556,24 +556,24 @@ uart5: serial@1e784000 {
+>  
+>  			wdt1: watchdog@1e785000 {
+>  				compatible = "aspeed,ast2600-wdt";
+> -				reg = <0x1e785000 0x40>;
+> +				reg = <0x1e785000 0x40>, <0x1e6f2000 0x20>;
 
-v1 -> v2
-  - Add comment and support WDIOF_CARDRESET in ast2600
+And how does it pass dtbs_check? Where did you update the bindings?
 
-v1
-  - Patch 0001 - Add WDIOF_EXTERN1 bootstatus
----
- arch/arm/boot/dts/aspeed/aspeed-g6.dtsi |  8 ++---
- drivers/watchdog/aspeed_wdt.c           | 45 ++++++++++++++++++++++---
- 2 files changed, 44 insertions(+), 9 deletions(-)
+>  			};
+>  
+>  			wdt2: watchdog@1e785040 {
+>  				compatible = "aspeed,ast2600-wdt";
+> -				reg = <0x1e785040 0x40>;
+> +				reg = <0x1e785040 0x40>, <0x1e6f2000 0x020>;
+>  				status = "disabled";
+>  			};
+>  
+>  			wdt3: watchdog@1e785080 {
+>  				compatible = "aspeed,ast2600-wdt";
+> -				reg = <0x1e785080 0x40>;
+> +				reg = <0x1e785080 0x40>, <0x1e6f2000 0x020>;
+>  				status = "disabled";
+>  			};
+>  
+>  			wdt4: watchdog@1e7850c0 {
+>  				compatible = "aspeed,ast2600-wdt";
+> -				reg = <0x1e7850C0 0x40>;
+> +				reg = <0x1e7850C0 0x40>, <0x1e6f2000 0x020>;
+>  				status = "disabled";
+>  			};
+>  
+> diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
+> index b4773a6aaf8c..65118e461130 100644
+> --- a/drivers/watchdog/aspeed_wdt.c
+> +++ b/drivers/watchdog/aspeed_wdt.c
+> @@ -33,6 +33,7 @@ struct aspeed_wdt {
+>  	void __iomem		*base;
+>  	u32			ctrl;
+>  	const struct aspeed_wdt_config *cfg;
+> +	void __iomem		*sec_base;
+>  };
+>  
+>  static const struct aspeed_wdt_config ast2400_config = {
+> @@ -82,6 +83,15 @@ MODULE_DEVICE_TABLE(of, aspeed_wdt_of_table);
+>  #define WDT_RESET_MASK1		0x1c
+>  #define WDT_RESET_MASK2		0x20
+>  
+> +/*
+> + * Only Ast2600 support
+> + */
+> +#define   WDT_EVENT_COUNTER_MASK	(0xFFF << 8)
+> +#define   WDT_SECURE_ENGINE_STATUS	(0x14)
+> +#define   ABR_IMAGE_SOURCE		BIT(12)
+> +#define   ABR_IMAGE_SOURCE_SPI		BIT(13)
+> +#define   SECOND_BOOT_ENABLE		BIT(14)
+> +
+>  /*
+>   * WDT_RESET_WIDTH controls the characteristics of the external pulse (if
+>   * enabled), specifically:
+> @@ -313,6 +323,7 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
+>  	const char *reset_type;
+>  	u32 duration;
+>  	u32 status;
+> +	u32 sec_st;
+>  	int ret;
+>  
+>  	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+> @@ -330,6 +341,12 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
+>  	if (IS_ERR(wdt->base))
+>  		return PTR_ERR(wdt->base);
+>  
+> +	if (of_device_is_compatible(np, "aspeed,ast2600-wdt")) {
 
-diff --git a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
-index e0b44498269f..23ae7f0430e9 100644
---- a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
-+++ b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
-@@ -556,24 +556,24 @@ uart5: serial@1e784000 {
- 
- 			wdt1: watchdog@1e785000 {
- 				compatible = "aspeed,ast2600-wdt";
--				reg = <0x1e785000 0x40>;
-+				reg = <0x1e785000 0x40>, <0x1e6f2000 0x20>;
- 			};
- 
- 			wdt2: watchdog@1e785040 {
- 				compatible = "aspeed,ast2600-wdt";
--				reg = <0x1e785040 0x40>;
-+				reg = <0x1e785040 0x40>, <0x1e6f2000 0x020>;
- 				status = "disabled";
- 			};
- 
- 			wdt3: watchdog@1e785080 {
- 				compatible = "aspeed,ast2600-wdt";
--				reg = <0x1e785080 0x40>;
-+				reg = <0x1e785080 0x40>, <0x1e6f2000 0x020>;
- 				status = "disabled";
- 			};
- 
- 			wdt4: watchdog@1e7850c0 {
- 				compatible = "aspeed,ast2600-wdt";
--				reg = <0x1e7850C0 0x40>;
-+				reg = <0x1e7850C0 0x40>, <0x1e6f2000 0x020>;
- 				status = "disabled";
- 			};
- 
-diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
-index b4773a6aaf8c..65118e461130 100644
---- a/drivers/watchdog/aspeed_wdt.c
-+++ b/drivers/watchdog/aspeed_wdt.c
-@@ -33,6 +33,7 @@ struct aspeed_wdt {
- 	void __iomem		*base;
- 	u32			ctrl;
- 	const struct aspeed_wdt_config *cfg;
-+	void __iomem		*sec_base;
- };
- 
- static const struct aspeed_wdt_config ast2400_config = {
-@@ -82,6 +83,15 @@ MODULE_DEVICE_TABLE(of, aspeed_wdt_of_table);
- #define WDT_RESET_MASK1		0x1c
- #define WDT_RESET_MASK2		0x20
- 
-+/*
-+ * Only Ast2600 support
-+ */
-+#define   WDT_EVENT_COUNTER_MASK	(0xFFF << 8)
-+#define   WDT_SECURE_ENGINE_STATUS	(0x14)
-+#define   ABR_IMAGE_SOURCE		BIT(12)
-+#define   ABR_IMAGE_SOURCE_SPI		BIT(13)
-+#define   SECOND_BOOT_ENABLE		BIT(14)
-+
- /*
-  * WDT_RESET_WIDTH controls the characteristics of the external pulse (if
-  * enabled), specifically:
-@@ -313,6 +323,7 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
- 	const char *reset_type;
- 	u32 duration;
- 	u32 status;
-+	u32 sec_st;
- 	int ret;
- 
- 	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
-@@ -330,6 +341,12 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
- 	if (IS_ERR(wdt->base))
- 		return PTR_ERR(wdt->base);
- 
-+	if (of_device_is_compatible(np, "aspeed,ast2600-wdt")) {
-+		wdt->sec_base = devm_platform_ioremap_resource(pdev, 1);
-+		if (IS_ERR(wdt->sec_base))
-+			return PTR_ERR(wdt->sec_base);
-+	}
-+
- 	wdt->wdd.info = &aspeed_wdt_info;
- 
- 	if (wdt->cfg->irq_mask) {
-@@ -459,12 +476,30 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
- 	}
- 
- 	status = readl(wdt->base + WDT_TIMEOUT_STATUS);
--	if (status & WDT_TIMEOUT_STATUS_BOOT_SECONDARY) {
--		wdt->wdd.bootstatus = WDIOF_CARDRESET;
- 
--		if (of_device_is_compatible(np, "aspeed,ast2400-wdt") ||
--		    of_device_is_compatible(np, "aspeed,ast2500-wdt"))
--			wdt->wdd.groups = bswitch_groups;
-+	if (of_device_is_compatible(np, "aspeed,ast2600-wdt")) {
-+		/*
-+		 * The WDTn Timeout Status Register bit 1 is reserved.
-+		 * To verify the second boot source,
-+		 * we need to check SEC14 bit 12 and bit 13.
-+		 */
-+		sec_st = readl(wdt->sec_base + WDT_SECURE_ENGINE_STATUS);
-+		if( sec_st & SECOND_BOOT_ENABLE)
-+			if (sec_st & ABR_IMAGE_SOURCE ||
-+			    sec_st & ABR_IMAGE_SOURCE_SPI)
-+				wdt->wdd.bootstatus |= WDIOF_CARDRESET;
-+
-+		/*
-+		 * To check Watchdog Event Count for WDIOF_EXTERN1
-+		 */
-+		if (status & WDT_EVENT_COUNTER_MASK) {
-+			wdt->wdd.bootstatus |= WDIOF_EXTERN1;
-+		}
-+	} else {
-+		wdt->wdd.groups = bswitch_groups;
-+
-+		if (status & WDT_TIMEOUT_STATUS_BOOT_SECONDARY)
-+			wdt->wdd.bootstatus = WDIOF_CARDRESET;
- 	}
- 
- 	dev_set_drvdata(dev, wdt);
--- 
-2.25.1
+
+> +		wdt->sec_base = devm_platform_ioremap_resource(pdev, 1);
+> +		if (IS_ERR(wdt->sec_base))
+> +			return PTR_ERR(wdt->sec_base);
+> +	}
+
+NAK, ABI break without clear reason.
+
+Best regards,
+Krzysztof
 
 
