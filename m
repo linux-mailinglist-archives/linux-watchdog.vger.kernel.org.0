@@ -1,205 +1,239 @@
-Return-Path: <linux-watchdog+bounces-790-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-791-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C59D87FC9D
-	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Mar 2024 12:12:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B844F87FF50
+	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Mar 2024 15:07:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A20B280E39
-	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Mar 2024 11:12:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2EDF1C2205B
+	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Mar 2024 14:07:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F172F7E571;
-	Tue, 19 Mar 2024 11:12:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 373B681731;
+	Tue, 19 Mar 2024 14:07:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="K2d+yESc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QboZVeOC"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2049.outbound.protection.outlook.com [40.107.220.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7B97B3F6;
-	Tue, 19 Mar 2024 11:12:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710846757; cv=fail; b=mxJLYbXAy3+i+sYgBMkr03hOsF41AhJwxVl7/N5IYQ49HQbb7Zp4xUZX8RvzD5JHmiRufgeXJkfl9jPJrmjA6CmO7PjKBb00ftPebPtwB0MOkAJKyVMc8Wst0xNjs6QtQaMhwIoyxw9ZR+dATqjyZ0RjfiQXygFtenJ7kiON9a0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710846757; c=relaxed/simple;
-	bh=czYLowt8c1HD7oJ0FENl8yiCqT/BjcBp1sGcoSndosE=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Dn2OEveJwCdfKG0tVvMRcrMF5sbC9UERab3i5eTGNl9dzICAqmPvkmRKXJny0L0sF0E/sKTFn5y2VHpzt8EwXUzHIOxRDd99MbRJY8bcQNK9YTiysfgAR/Qfvu42JSFezNB7LdQ1eWM6j7X3U9NGCcB7JB5K39cf3uNlAPYnQXQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=K2d+yESc; arc=fail smtp.client-ip=40.107.220.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MBpU3+zc574kc+u1hs1AhLEn4ti6FfbfOYBwsiE9LAFi/REtdvnKbzWSgUYvFY3xFk6az9lJdyIfdz2eTiszJ//rJwCclaxEmy+GLzGFa6jjD2ECVKWbd8YRyyHndNRQd9o3bPGS6Jk/ycaa9O9n6MepZUuM99yJVBoL9hIvD5WO8JL1nRvEQN4m6A5wtf2PBeJL8xJ4vDG15W90od3ex27VUGgRONNqLqZ1E8cGIcGDoVnT30ivDgZxI7KNnhvD5bKarq8CCJsgESQP8Y/JYRxxpQfk2Bg9W44xMh1bQZu9c2xi3MyBRtwyB8m2QSlNIywP3cRHvv0vaQzsLhi/zA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fOBwLDUfWw5joAJeQlWwsHK40AUXwyJN2xSxCNQWWzs=;
- b=CkKsEpVOOsw7dVcztI/Li6HowDe7ReigkkCKbdkCE2V0AqOuvqgoRcqrqcVKVyvVjRaJY9ZbmByrYtQgnnECMEkvm58SlnKS4LYYu8nvVxzLM/vonMeFbgg2smlzX2OvoKzgTd5gEgCUuwHqTRRyid/VrjpnMVjuWRZWDiUt2J3wSh4Wb7mc+209Ldv2B7SqFVnU/pryRp5sHiw3F1Dh1fmWFcV+ehpSa4B8FbKvzHzdR8JKMX/1XkdiEWhU3ODocurKx0BALiSWMEB/d4Prhhbg+IaAcHM0SACQgV3neGLX1xr8ZJhIEi0d+qN2ZkOrMaDiCVL8n4Iab6FA0GcEzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fOBwLDUfWw5joAJeQlWwsHK40AUXwyJN2xSxCNQWWzs=;
- b=K2d+yEScc/PG1fa+GW67k7dEus9nxI7R5VV9MV2dNdjBrGH+V+aVaF2P3+jFfWWlrbABjPU8w5eSShqqSMktqKnuQoEMsL2dy6RNI/4Px0ow8NqeOPAYrpNLy10PFIV8hJ9v0L6Clpdt6OYQK/XtZFDDSQJohqdPh2qGO4F82JA=
-Received: from MW4PR04CA0279.namprd04.prod.outlook.com (2603:10b6:303:89::14)
- by SA3PR12MB7950.namprd12.prod.outlook.com (2603:10b6:806:31c::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.26; Tue, 19 Mar
- 2024 11:12:33 +0000
-Received: from MWH0EPF000A672E.namprd04.prod.outlook.com
- (2603:10b6:303:89:cafe::96) by MW4PR04CA0279.outlook.office365.com
- (2603:10b6:303:89::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7386.26 via Frontend
- Transport; Tue, 19 Mar 2024 11:12:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- MWH0EPF000A672E.mail.protection.outlook.com (10.167.249.20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7409.10 via Frontend Transport; Tue, 19 Mar 2024 11:12:32 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 19 Mar
- 2024 06:12:25 -0500
-Received: from xhdharinik40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Tue, 19 Mar 2024 06:12:22 -0500
-From: Harini T <harini.t@amd.com>
-To: <linux@roeck-us.net>, <michal.simek@amd.com>, <srinivas.neeli@amd.com>,
-	<shubhrajyoti.datta@amd.com>
-CC: <srinivas.goud@amd.com>, <wim@linux-watchdog.org>,
-	<linux-watchdog@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <git@amd.com>, Harini T <harini.t@amd.com>
-Subject: [PATCH] watchdog: xilinx_wwdt: Add check for timeout limit and set maximum value if exceeded
-Date: Tue, 19 Mar 2024 16:42:19 +0530
-Message-ID: <20240319111219.21094-1-harini.t@amd.com>
-X-Mailer: git-send-email 2.17.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691517D3EA;
+	Tue, 19 Mar 2024 14:07:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1710857230; cv=none; b=lgKV2KPlYuNhe8GRFVYFZPWeuBTE2gKG4h0GFXc4OcnpYJZ1tSG8bAfpIbLz123nR3SXIyPt+n0GMr8TkuLoCCYc4L/VgRYZMRv9IQLZGkePEdxBR8Ob1uVWQCil3hwejzPnDnP3j41MhMtiID+IcZK+9JrYtPNRuBXLDvm4wUI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1710857230; c=relaxed/simple;
+	bh=pRuZMlLOvOCtBUHG6gDGRpdoz38rFmiYXsWOnKTa1PU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hkANvn8X3LGw0gNq/bnRmzNgRKEGiEGNsVRRQKAdKDHewMMMPh8qqXl84Icg70AApDSQsJHgz2g0NpPvhUTzXJ7lF75N6sFRoACa9ZGrQDThisxvjEnJZEgjrKc/cJHYOI9cDUAfV9Q6eqghv/YOhhFuv9RRZiBOBessA99/qvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QboZVeOC; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1df01161b39so28765475ad.3;
+        Tue, 19 Mar 2024 07:07:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1710857228; x=1711462028; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=RREg2igfyHsUB9UVUQWGd5w14ea5dynh8ZqR2r9I7Ow=;
+        b=QboZVeOCY6lcYOu5uJ77SU999TKl1rEuEH3h2LOUSJCEo1bhZQTS8Rhfmvrbhvg7Mm
+         DtGiSOuDgxiD1ToAriNvR1O2wj9SoiewQVcVFJOAF7ZIGR3xGSNJHHo4nb4qcUVz4aWW
+         MupASjjrhO06/Ou8C9JNiHwVJbPLvSxV1uL+4HeY170pLfpLG1bUOCS2NQ4pr/yjhwYn
+         RcECzY68axfjd/DSfviSexaN+JOGkA+41TBsr9Q8V7Nh/raed41eKjinStFGemzDAB99
+         /tFkJIqkFE16PQz9K1smTn/aL4K1xYIKEJ1LxEqVSH6sXgTFW7YtbZI++JIMSUaaUZjg
+         Ji1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1710857228; x=1711462028;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RREg2igfyHsUB9UVUQWGd5w14ea5dynh8ZqR2r9I7Ow=;
+        b=SS+NOLh7BT4lLK6/zb0mVXB/o7E7Xd2DNc9PtwPvC67D+13ZUhIPSXYiJnBfwJBYKX
+         3yeai6f7QBcZsxzQCFo+jBpKubSGnpzNuKGmZ/TwwpHO0oQw9EZuFdx3EyGXdEWTk7oW
+         TLukC75L1DBAHS04B+n5ddAj2RK6n51vL9p6k3dXa/tYO6D3TZmyw3bg0jdsDwihAhPC
+         FNHTG9uP7ee6U8XL68emrgtsQsa/RDeeNhAsQ5rOTp4vQ0DKRkM5+pCR8OBox2wQdjrL
+         vdW9D08SBw0Hr+Ds5Db4s5jxF7f24nRLtcTVNEG9NgJ8XHONU+7ezZ8N4mGTwCAaMBTt
+         4uSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXupOJ+tNN1K7VBU70R45Z/cn/p0n3uaAXKjHTkBvw028OSLiBvg8C8/Y+LXgKYezOBp1MF0bTRhiDr/eXGgHR+u9jwq102FymxhCGxGvLerMwgRqrDthJYgAf8au+jPNd+F5DLINpwkFnyTmw=
+X-Gm-Message-State: AOJu0YySTBL9Ftdekve0kB8V7dcZdCa5Xfh8Xcoo+EQvMQq4rC/o0fy7
+	MQr5JJBdsUjcYcKNXf8/FcchmFSeO1DCqXWNL9mY8qAglpGWu7cP
+X-Google-Smtp-Source: AGHT+IEXfyZYvUe4BW5f4SBetB2P3H5AzqMYAtH46gSwzFC4nX3Ud7Wc30Tvvd4cJoM83cmWFvH7cw==
+X-Received: by 2002:a17:903:244c:b0:1e0:444:5f55 with SMTP id l12-20020a170903244c00b001e004445f55mr12945718pls.47.1710857226659;
+        Tue, 19 Mar 2024 07:07:06 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id jj4-20020a170903048400b001dd4b1fb72csm11433192plb.189.2024.03.19.07.07.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Mar 2024 07:07:06 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <8e4c2d5a-9f28-4946-b69d-63f5af3bc3da@roeck-us.net>
+Date: Tue, 19 Mar 2024 07:07:04 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-Received-SPF: None (SATLEXMB04.amd.com: harini.t@amd.com does not designate
- permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000A672E:EE_|SA3PR12MB7950:EE_
-X-MS-Office365-Filtering-Correlation-Id: af3f675e-6ad7-46cc-5b01-08dc48057998
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	lf0FlLdYa4ayzHD4qCvRMRtvLziOj9owRBI3u82vl89BYlFVMRJqKlqwq6Y6s6o/mje8c1j+ldcXqg5i39vp535ugi4AcMwplWrEDWi9YrZhhqipPT87yamvOWp124OrU5ILf8fHXi6xIBe3pvW3WREwkx074CFQI2y9w0/lNa6hQtk8DYrAgTnex5Al4MrPSALZZQVPoXZF2ede0eKE/PF3ORXO8FKDCEFKjKnvrNYIpJZdeH3unsUqp4Ndhn0tQ/w3DuHqr5aGKgP/taMFMSzUzUsX6s6LQpI3wIb32EqPCtkFXuWskx7NcqPbUNS8yjKiUXpOqVA8ocn7tYsciIPk86ryhhfIuyLjMYGMu8Il5dkUgIp/t3BGOjY9bClxoqqvXDOWq/JRB83CDwxKUgGBcXNu/x4RNjEc59yuTQ21dwQMH0nV3mzY7soEMxhHcsFAduHYubaInJee+ulfH1rRHIgUOLYsju3Rh7FUhjXfdOTHmd2xXKEDIkfOVd7a2QiNBGdTohdHfuNd5jjS3jYxsO84CnAdINK/LZscOn9Zm/fXMHPJLVyaTedBwn7B8NVF2byWzCG9ZE4saYGDdfP2Ok8FWQUWf9f3hgSr2IAMy1Mze9gMxYDWqT81SK/rorxdX49qLUNU5Ft8NyVKk8kEDEbM5HHrIbaKImzmokIvofzBmEJYz7gfFDhHZDMyDI+o7bDwbvkEmeQMPcSZk+zyN8zAT1ltesNQZ5h15MgXgO2THjb8Y+Pz7QXSwMIu
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(376005)(1800799015)(82310400014)(36860700004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Mar 2024 11:12:32.8707
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: af3f675e-6ad7-46cc-5b01-08dc48057998
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000A672E.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7950
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] watchdog: xilinx_wwdt: Add check for timeout limit and
+ set maximum value if exceeded
+Content-Language: en-US
+To: Harini T <harini.t@amd.com>, michal.simek@amd.com,
+ srinivas.neeli@amd.com, shubhrajyoti.datta@amd.com
+Cc: srinivas.goud@amd.com, wim@linux-watchdog.org,
+ linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, git@amd.com
+References: <20240319111219.21094-1-harini.t@amd.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240319111219.21094-1-harini.t@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Current implementation fails to verify if the user input such as timeout
-or closed window percentage exceeds the maximum value that the hardware
-supports.
+On 3/19/24 04:12, Harini T wrote:
+> Current implementation fails to verify if the user input such as timeout
+> or closed window percentage exceeds the maximum value that the hardware
+> supports.
+> 
+> Maximum timeout is derived based on input clock frequency.
+> If the user input timeout exceeds the maximum timeout supported, limit
+> the timeout to maximum supported value.
+> Limit the close and open window percent to hardware supported value.
+> 
+> Signed-off-by: Harini T <harini.t@amd.com>
+> ---
+>   drivers/watchdog/xilinx_wwdt.c | 30 +++++++++++++++++++++++++++++-
+>   1 file changed, 29 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/xilinx_wwdt.c b/drivers/watchdog/xilinx_wwdt.c
+> index d271e2e8d6e2..86e2edc4f3c7 100644
+> --- a/drivers/watchdog/xilinx_wwdt.c
+> +++ b/drivers/watchdog/xilinx_wwdt.c
+> @@ -36,6 +36,12 @@
+>   
+>   #define XWWDT_CLOSE_WINDOW_PERCENT	50
+>   
+> +/* Maximum count value of each 32 bit window */
+> +#define XWWDT_MAX_COUNT_WINDOW		GENMASK(31, 0)
+> +
+> +/* Maximum count value of closed and open window combined*/
+> +#define XWWDT_MAX_COUNT_WINDOW_COMBINED GENMASK_ULL(32, 1)
+> +
+>   static int wwdt_timeout;
+>   static int closed_window_percent;
+>   
+> @@ -73,6 +79,24 @@ static int xilinx_wwdt_start(struct watchdog_device *wdd)
+>   	/* Calculate timeout count */
+>   	time_out = xdev->freq * wdd->timeout;
+>   	closed_timeout = div_u64(time_out * xdev->close_percent, 100);
+> +
+> +	if (time_out > XWWDT_MAX_COUNT_WINDOW) {
+> +		u64 min_close_timeout = time_out - XWWDT_MAX_COUNT_WINDOW;
+> +		u64 max_close_timeout = XWWDT_MAX_COUNT_WINDOW;
+> +
+> +		if (closed_timeout > max_close_timeout) {
+> +			dev_info(xilinx_wwdt_wdd->parent,
+> +				 "Closed window cannot be set to %d%%. Using maximum supported value.\n",
+> +				 xdev->close_percent);
+> +			closed_timeout = max_close_timeout;
+> +		} else if (closed_timeout < min_close_timeout) {
+> +			dev_info(xilinx_wwdt_wdd->parent,
+> +				 "Closed window cannot be set to %d%%. Using minimum supported value.\n",
+> +				 xdev->close_percent);
+> +			closed_timeout = min_close_timeout;
+> +		}
+> +	}
+> +
+>   	open_timeout = time_out - closed_timeout;
+>   	wdd->min_hw_heartbeat_ms = xdev->close_percent * 10 * wdd->timeout;
+>   
+> @@ -132,6 +156,7 @@ static int xwwdt_probe(struct platform_device *pdev)
+>   {
+>   	struct watchdog_device *xilinx_wwdt_wdd;
+>   	struct device *dev = &pdev->dev;
+> +	unsigned int max_hw_heartbeat;
+>   	struct xwwdt_device *xdev;
+>   	struct clk *clk;
+>   	int ret;
+> @@ -157,9 +182,11 @@ static int xwwdt_probe(struct platform_device *pdev)
+>   	if (!xdev->freq)
+>   		return -EINVAL;
+>   
+> +	max_hw_heartbeat = div64_u64(XWWDT_MAX_COUNT_WINDOW_COMBINED, xdev->freq);
+> +
+>   	xilinx_wwdt_wdd->min_timeout = XWWDT_MIN_TIMEOUT;
+>   	xilinx_wwdt_wdd->timeout = XWWDT_DEFAULT_TIMEOUT;
+> -	xilinx_wwdt_wdd->max_hw_heartbeat_ms = 1000 * xilinx_wwdt_wdd->timeout;
+> +	xilinx_wwdt_wdd->max_hw_heartbeat_ms = 1000 * max_hw_heartbeat;
+>   
+>   	if (closed_window_percent == 0 || closed_window_percent >= 100)
+>   		xdev->close_percent = XWWDT_CLOSE_WINDOW_PERCENT;
+> @@ -167,6 +194,7 @@ static int xwwdt_probe(struct platform_device *pdev)
+>   		xdev->close_percent = closed_window_percent;
+>   
+>   	watchdog_init_timeout(xilinx_wwdt_wdd, wwdt_timeout, &pdev->dev);
+> +	xilinx_wwdt_wdd->timeout = min_not_zero(xilinx_wwdt_wdd->timeout, max_hw_heartbeat);
 
-Maximum timeout is derived based on input clock frequency.
-If the user input timeout exceeds the maximum timeout supported, limit
-the timeout to maximum supported value.
-Limit the close and open window percent to hardware supported value.
+I have not tried to understand the rest of the code, but this is just wrong.
+The whole point of having max_hw_heartbeat_ms is to make the actual timeout
+independent of the maximum hardware timeout.
 
-Signed-off-by: Harini T <harini.t@amd.com>
----
- drivers/watchdog/xilinx_wwdt.c | 30 +++++++++++++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
+As for the rest of the changes, max_hw_heartbeat_ms should be set to the
+maximum hardware timeout. Similar, the minimum timeout should be set
+to the minimum timeout possible. As such, the checks added above should
+not be necessary. Something looks wrong, but I won't spend time trying to
+understand this because, again, limiting the actual timeout to
+max_hw_heartbeat is just wrong.
 
-diff --git a/drivers/watchdog/xilinx_wwdt.c b/drivers/watchdog/xilinx_wwdt.c
-index d271e2e8d6e2..86e2edc4f3c7 100644
---- a/drivers/watchdog/xilinx_wwdt.c
-+++ b/drivers/watchdog/xilinx_wwdt.c
-@@ -36,6 +36,12 @@
- 
- #define XWWDT_CLOSE_WINDOW_PERCENT	50
- 
-+/* Maximum count value of each 32 bit window */
-+#define XWWDT_MAX_COUNT_WINDOW		GENMASK(31, 0)
-+
-+/* Maximum count value of closed and open window combined*/
-+#define XWWDT_MAX_COUNT_WINDOW_COMBINED GENMASK_ULL(32, 1)
-+
- static int wwdt_timeout;
- static int closed_window_percent;
- 
-@@ -73,6 +79,24 @@ static int xilinx_wwdt_start(struct watchdog_device *wdd)
- 	/* Calculate timeout count */
- 	time_out = xdev->freq * wdd->timeout;
- 	closed_timeout = div_u64(time_out * xdev->close_percent, 100);
-+
-+	if (time_out > XWWDT_MAX_COUNT_WINDOW) {
-+		u64 min_close_timeout = time_out - XWWDT_MAX_COUNT_WINDOW;
-+		u64 max_close_timeout = XWWDT_MAX_COUNT_WINDOW;
-+
-+		if (closed_timeout > max_close_timeout) {
-+			dev_info(xilinx_wwdt_wdd->parent,
-+				 "Closed window cannot be set to %d%%. Using maximum supported value.\n",
-+				 xdev->close_percent);
-+			closed_timeout = max_close_timeout;
-+		} else if (closed_timeout < min_close_timeout) {
-+			dev_info(xilinx_wwdt_wdd->parent,
-+				 "Closed window cannot be set to %d%%. Using minimum supported value.\n",
-+				 xdev->close_percent);
-+			closed_timeout = min_close_timeout;
-+		}
-+	}
-+
- 	open_timeout = time_out - closed_timeout;
- 	wdd->min_hw_heartbeat_ms = xdev->close_percent * 10 * wdd->timeout;
- 
-@@ -132,6 +156,7 @@ static int xwwdt_probe(struct platform_device *pdev)
- {
- 	struct watchdog_device *xilinx_wwdt_wdd;
- 	struct device *dev = &pdev->dev;
-+	unsigned int max_hw_heartbeat;
- 	struct xwwdt_device *xdev;
- 	struct clk *clk;
- 	int ret;
-@@ -157,9 +182,11 @@ static int xwwdt_probe(struct platform_device *pdev)
- 	if (!xdev->freq)
- 		return -EINVAL;
- 
-+	max_hw_heartbeat = div64_u64(XWWDT_MAX_COUNT_WINDOW_COMBINED, xdev->freq);
-+
- 	xilinx_wwdt_wdd->min_timeout = XWWDT_MIN_TIMEOUT;
- 	xilinx_wwdt_wdd->timeout = XWWDT_DEFAULT_TIMEOUT;
--	xilinx_wwdt_wdd->max_hw_heartbeat_ms = 1000 * xilinx_wwdt_wdd->timeout;
-+	xilinx_wwdt_wdd->max_hw_heartbeat_ms = 1000 * max_hw_heartbeat;
- 
- 	if (closed_window_percent == 0 || closed_window_percent >= 100)
- 		xdev->close_percent = XWWDT_CLOSE_WINDOW_PERCENT;
-@@ -167,6 +194,7 @@ static int xwwdt_probe(struct platform_device *pdev)
- 		xdev->close_percent = closed_window_percent;
- 
- 	watchdog_init_timeout(xilinx_wwdt_wdd, wwdt_timeout, &pdev->dev);
-+	xilinx_wwdt_wdd->timeout = min_not_zero(xilinx_wwdt_wdd->timeout, max_hw_heartbeat);
- 	spin_lock_init(&xdev->spinlock);
- 	watchdog_set_drvdata(xilinx_wwdt_wdd, xdev);
- 	watchdog_set_nowayout(xilinx_wwdt_wdd, 1);
--- 
-2.17.1
+Guenter
+
+>   	spin_lock_init(&xdev->spinlock);
+>   	watchdog_set_drvdata(xilinx_wwdt_wdd, xdev);
+>   	watchdog_set_nowayout(xilinx_wwdt_wdd, 1);
 
 
