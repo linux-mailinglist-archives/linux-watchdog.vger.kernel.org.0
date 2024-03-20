@@ -1,76 +1,74 @@
-Return-Path: <linux-watchdog+bounces-791-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-792-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B844F87FF50
-	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Mar 2024 15:07:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B572880E41
+	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Mar 2024 10:05:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2EDF1C2205B
-	for <lists+linux-watchdog@lfdr.de>; Tue, 19 Mar 2024 14:07:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 627B12837A7
+	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Mar 2024 09:05:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 373B681731;
-	Tue, 19 Mar 2024 14:07:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D297638F82;
+	Wed, 20 Mar 2024 09:05:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QboZVeOC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="By09qNdT"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691517D3EA;
-	Tue, 19 Mar 2024 14:07:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89633AC25;
+	Wed, 20 Mar 2024 09:05:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710857230; cv=none; b=lgKV2KPlYuNhe8GRFVYFZPWeuBTE2gKG4h0GFXc4OcnpYJZ1tSG8bAfpIbLz123nR3SXIyPt+n0GMr8TkuLoCCYc4L/VgRYZMRv9IQLZGkePEdxBR8Ob1uVWQCil3hwejzPnDnP3j41MhMtiID+IcZK+9JrYtPNRuBXLDvm4wUI=
+	t=1710925536; cv=none; b=MklJL+F+6kJFYxALti4eC1QfzGnktXpyj+T7jXXCOQkAvqZu0mwTweIIOY06M5kpacPvHYnpANMRX/WY+6/mcTL2W+s7pmYqnkLwYSeRai5WRoc0OCJoxHFnCqsr/nQiIQakrQ8LP9xcYGJIM2QnBFLDmzs9l6vqa2sATuNLNH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710857230; c=relaxed/simple;
-	bh=pRuZMlLOvOCtBUHG6gDGRpdoz38rFmiYXsWOnKTa1PU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hkANvn8X3LGw0gNq/bnRmzNgRKEGiEGNsVRRQKAdKDHewMMMPh8qqXl84Icg70AApDSQsJHgz2g0NpPvhUTzXJ7lF75N6sFRoACa9ZGrQDThisxvjEnJZEgjrKc/cJHYOI9cDUAfV9Q6eqghv/YOhhFuv9RRZiBOBessA99/qvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QboZVeOC; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1710925536; c=relaxed/simple;
+	bh=6Qgf/NpiPbzxVmqwhe1v3Rspvjzp2MmQAb5Ad1EHDwQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=OdzJv82+gc6COrc4/g+2U8I/I2fO14TMUmuourMA5r3iqztbUapZeSrxo3npwgGiOcEuJBWOg4eilNtZNIq7GJssWUNVMTeoEdNhkvKNpCT+atEGv+IXLAWW6DBGXJMsaFoKnNMxHB+EaKL6xZ/v64iIf+8jT3VMcr9Xwleax0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=By09qNdT; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1df01161b39so28765475ad.3;
-        Tue, 19 Mar 2024 07:07:08 -0700 (PDT)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1dddb160a37so46896475ad.2;
+        Wed, 20 Mar 2024 02:05:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710857228; x=1711462028; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RREg2igfyHsUB9UVUQWGd5w14ea5dynh8ZqR2r9I7Ow=;
-        b=QboZVeOCY6lcYOu5uJ77SU999TKl1rEuEH3h2LOUSJCEo1bhZQTS8Rhfmvrbhvg7Mm
-         DtGiSOuDgxiD1ToAriNvR1O2wj9SoiewQVcVFJOAF7ZIGR3xGSNJHHo4nb4qcUVz4aWW
-         MupASjjrhO06/Ou8C9JNiHwVJbPLvSxV1uL+4HeY170pLfpLG1bUOCS2NQ4pr/yjhwYn
-         RcECzY68axfjd/DSfviSexaN+JOGkA+41TBsr9Q8V7Nh/raed41eKjinStFGemzDAB99
-         /tFkJIqkFE16PQz9K1smTn/aL4K1xYIKEJ1LxEqVSH6sXgTFW7YtbZI++JIMSUaaUZjg
-         Ji1A==
+        d=gmail.com; s=20230601; t=1710925534; x=1711530334; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q9AnhsV1I63p1VhmH5I/CTh8F8noEyIobCtBN/qPBug=;
+        b=By09qNdTJ0L+rjauTKZ/AninSv3YUJhoBsYXtP402u3aeqz79KYhM99qKBCcDBDFWl
+         WXRp7kI0A8YkEGEntEWACmAkGg9tv8crK9mYRS/EDfxrwv+n6UCYxkXsqdzvIXWAtWeT
+         p4NynY0JUbWdgayv3EeKAPasKyZ2iPaVSs4VXN6XMgv/sA7HiEHi2zq8YaiR9admOA4e
+         i7YJhgi91Ukb30AicV3uaV/vyJiPqJr2FPyrl+OrL8jyOkr0St4GsjtWfug+1vOVb8F4
+         3gqCqPkrPCgDjnnJZxtbj9rJfMSxB+ltec3BjUfMl4BGZQbcRzKRZ4cIS7CBm24FCGNc
+         TK7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710857228; x=1711462028;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RREg2igfyHsUB9UVUQWGd5w14ea5dynh8ZqR2r9I7Ow=;
-        b=SS+NOLh7BT4lLK6/zb0mVXB/o7E7Xd2DNc9PtwPvC67D+13ZUhIPSXYiJnBfwJBYKX
-         3yeai6f7QBcZsxzQCFo+jBpKubSGnpzNuKGmZ/TwwpHO0oQw9EZuFdx3EyGXdEWTk7oW
-         TLukC75L1DBAHS04B+n5ddAj2RK6n51vL9p6k3dXa/tYO6D3TZmyw3bg0jdsDwihAhPC
-         FNHTG9uP7ee6U8XL68emrgtsQsa/RDeeNhAsQ5rOTp4vQ0DKRkM5+pCR8OBox2wQdjrL
-         vdW9D08SBw0Hr+Ds5Db4s5jxF7f24nRLtcTVNEG9NgJ8XHONU+7ezZ8N4mGTwCAaMBTt
-         4uSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXupOJ+tNN1K7VBU70R45Z/cn/p0n3uaAXKjHTkBvw028OSLiBvg8C8/Y+LXgKYezOBp1MF0bTRhiDr/eXGgHR+u9jwq102FymxhCGxGvLerMwgRqrDthJYgAf8au+jPNd+F5DLINpwkFnyTmw=
-X-Gm-Message-State: AOJu0YySTBL9Ftdekve0kB8V7dcZdCa5Xfh8Xcoo+EQvMQq4rC/o0fy7
-	MQr5JJBdsUjcYcKNXf8/FcchmFSeO1DCqXWNL9mY8qAglpGWu7cP
-X-Google-Smtp-Source: AGHT+IEXfyZYvUe4BW5f4SBetB2P3H5AzqMYAtH46gSwzFC4nX3Ud7Wc30Tvvd4cJoM83cmWFvH7cw==
-X-Received: by 2002:a17:903:244c:b0:1e0:444:5f55 with SMTP id l12-20020a170903244c00b001e004445f55mr12945718pls.47.1710857226659;
-        Tue, 19 Mar 2024 07:07:06 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jj4-20020a170903048400b001dd4b1fb72csm11433192plb.189.2024.03.19.07.07.05
+        d=1e100.net; s=20230601; t=1710925534; x=1711530334;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q9AnhsV1I63p1VhmH5I/CTh8F8noEyIobCtBN/qPBug=;
+        b=BLhmmFbc9D1JofrJLFYHgwZtgBsxwKprG1YGg+PCMNVIwcWT4DhgnsqZq8sU0Q7TDa
+         sNGsmtqRnx48h55/RyOCriNhFhL1gdqHicMILdqiciCZ4gxsbvtXz72GaUSu+7C+jCB4
+         fIyCjb5UruZfJtfbBEDaIaaN5nZfzyDrwTjGfXLjNoP4ArmSm2to3yR76SoC1B9D2wAJ
+         BencVAR2Zniekx89MKViPNEllKOUnEW02j8lPcqNH5IwI0QUke75Bb2SB17Vsq87J2w0
+         iZHOw0BbVmMWNjRaMQY8HGcmHeYa5vtU6PyIcIK560Ooq0vDHtuRiWHzhzeptJzHdLfT
+         sdIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVEVXDIfZB84+Fa6y8fB/3F6oJsCsntQl+9DnnejF+Tn3jRu6/YHcKENZFKnHmRDfQaQLOJGy0y+BmQBwy1XUpqLUzdqe8adbXMIIBPqB3f28KjvBBLZH3n9Temkb2XW9xxJDC874P3dzeM3/Oy+szSjEoqSrMY0M+z2WFsqLR6Oegl5E+MnPlb
+X-Gm-Message-State: AOJu0Yz9e5FK1cBdOVN4SvPBMcQENWIRESUFhf9xfJVyKInzxoV58ZMN
+	9/tFNWITjvKm7EIUSXkPkV1lvMwfjL8J8g9Z3RguFHNsBdoZewhB
+X-Google-Smtp-Source: AGHT+IGQN51HBV2eG4je+v7GXoz9GezzFu7dyWQoCjgBxUNs4bPN7xeScFwS6s6WwuunnB3tWKBKpA==
+X-Received: by 2002:a17:902:ea10:b0:1e0:1496:91ec with SMTP id s16-20020a170902ea1000b001e0149691ecmr6421247plg.20.1710925533894;
+        Wed, 20 Mar 2024 02:05:33 -0700 (PDT)
+Received: from ?IPV6:2001:b400:e38c:634d:c9ce:74d1:b790:4f66? (2001-b400-e38c-634d-c9ce-74d1-b790-4f66.emome-ip6.hinet.net. [2001:b400:e38c:634d:c9ce:74d1:b790:4f66])
+        by smtp.gmail.com with ESMTPSA id j11-20020a17090276cb00b001dd88a5dc47sm3261282plt.290.2024.03.20.02.05.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Mar 2024 07:07:06 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8e4c2d5a-9f28-4946-b69d-63f5af3bc3da@roeck-us.net>
-Date: Tue, 19 Mar 2024 07:07:04 -0700
+        Wed, 20 Mar 2024 02:05:33 -0700 (PDT)
+Message-ID: <924c4402-af14-4b7a-9a4e-4317c50482cd@gmail.com>
+Date: Wed, 20 Mar 2024 17:05:28 +0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -78,162 +76,220 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: xilinx_wwdt: Add check for timeout limit and
- set maximum value if exceeded
+Subject: Re: [PATCH v2] drivers: watchdog: ast2600 support bootstatus
 Content-Language: en-US
-To: Harini T <harini.t@amd.com>, michal.simek@amd.com,
- srinivas.neeli@amd.com, shubhrajyoti.datta@amd.com
-Cc: srinivas.goud@amd.com, wim@linux-watchdog.org,
- linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, git@amd.com
-References: <20240319111219.21094-1-harini.t@amd.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240319111219.21094-1-harini.t@amd.com>
+To: Guenter Roeck <linux@roeck-us.net>, patrick@stwcx.xyz,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20240318055219.3460121-1-peteryin.openbmc@gmail.com>
+ <13640a07-7395-4521-9c5d-748599202361@roeck-us.net>
+From: PeterYin <peteryin.openbmc@gmail.com>
+In-Reply-To: <13640a07-7395-4521-9c5d-748599202361@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/19/24 04:12, Harini T wrote:
-> Current implementation fails to verify if the user input such as timeout
-> or closed window percentage exceeds the maximum value that the hardware
-> supports.
+
+
+Guenter Roeck 於 3/19/24 08:46 寫道:
+> On 3/17/24 22:52, Peter Yin wrote:
+>> Add WDIOF_EXTERN1 and WDIOF_CARDRESET bootstatus in ast2600
+>>
+>> Regarding the AST2600 specification, the WDTn Timeout Status Register
+>> (WDT10) has bit 1 reserved. To verify the second boot source,
+>> we need to check SEC14 bit 12 and bit 13.
+>> The bits 8-23 in the WDTn Timeout Status Register are the Watchdog
+>> Event Count, which we can use to verify WDIOF_EXTERN1.
+>>
+>> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
 > 
-> Maximum timeout is derived based on input clock frequency.
-> If the user input timeout exceeds the maximum timeout supported, limit
-> the timeout to maximum supported value.
-> Limit the close and open window percent to hardware supported value.
+> You'll have to separate dts and yaml file changes from driver changes.
 > 
-> Signed-off-by: Harini T <harini.t@amd.com>
-> ---
->   drivers/watchdog/xilinx_wwdt.c | 30 +++++++++++++++++++++++++++++-
->   1 file changed, 29 insertions(+), 1 deletion(-)
+>> ---
+>> Change log:
+>>
+>> v1 -> v2
+>>    - Add comment and support WDIOF_CARDRESET in ast2600
+>>
+>> v1
+>>    - Patch 0001 - Add WDIOF_EXTERN1 bootstatus
+>> ---
+>>   arch/arm/boot/dts/aspeed/aspeed-g6.dtsi |  8 ++---
+>>   drivers/watchdog/aspeed_wdt.c           | 45 ++++++++++++++++++++++---
+>>   2 files changed, 44 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi 
+>> b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
+>> index e0b44498269f..23ae7f0430e9 100644
+>> --- a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
+>> +++ b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
+>> @@ -556,24 +556,24 @@ uart5: serial@1e784000 {
+>>               wdt1: watchdog@1e785000 {
+>>                   compatible = "aspeed,ast2600-wdt";
+>> -                reg = <0x1e785000 0x40>;
+>> +                reg = <0x1e785000 0x40>, <0x1e6f2000 0x20>;
+>>               };
+>>               wdt2: watchdog@1e785040 {
+>>                   compatible = "aspeed,ast2600-wdt";
+>> -                reg = <0x1e785040 0x40>;
+>> +                reg = <0x1e785040 0x40>, <0x1e6f2000 0x020>;
+>>                   status = "disabled";
+>>               };
+>>               wdt3: watchdog@1e785080 {
+>>                   compatible = "aspeed,ast2600-wdt";
+>> -                reg = <0x1e785080 0x40>;
+>> +                reg = <0x1e785080 0x40>, <0x1e6f2000 0x020>;
+>>                   status = "disabled";
+>>               };
+>>               wdt4: watchdog@1e7850c0 {
+>>                   compatible = "aspeed,ast2600-wdt";
+>> -                reg = <0x1e7850C0 0x40>;
+>> +                reg = <0x1e7850C0 0x40>, <0x1e6f2000 0x020>;
+>>                   status = "disabled";
+>>               };
+>> diff --git a/drivers/watchdog/aspeed_wdt.c 
+>> b/drivers/watchdog/aspeed_wdt.c
+>> index b4773a6aaf8c..65118e461130 100644
+>> --- a/drivers/watchdog/aspeed_wdt.c
+>> +++ b/drivers/watchdog/aspeed_wdt.c
+>> @@ -33,6 +33,7 @@ struct aspeed_wdt {
+>>       void __iomem        *base;
+>>       u32            ctrl;
+>>       const struct aspeed_wdt_config *cfg;
+>> +    void __iomem        *sec_base;
+>>   };
+>>   static const struct aspeed_wdt_config ast2400_config = {
+>> @@ -82,6 +83,15 @@ MODULE_DEVICE_TABLE(of, aspeed_wdt_of_table);
+>>   #define WDT_RESET_MASK1        0x1c
+>>   #define WDT_RESET_MASK2        0x20
+>> +/*
+>> + * Only Ast2600 support
+>> + */
+>> +#define   WDT_EVENT_COUNTER_MASK    (0xFFF << 8)
+>> +#define   WDT_SECURE_ENGINE_STATUS    (0x14)
+>> +#define   ABR_IMAGE_SOURCE        BIT(12)
+>> +#define   ABR_IMAGE_SOURCE_SPI        BIT(13)
+>> +#define   SECOND_BOOT_ENABLE        BIT(14)
+>> +
+>>   /*
+>>    * WDT_RESET_WIDTH controls the characteristics of the external 
+>> pulse (if
+>>    * enabled), specifically:
+>> @@ -313,6 +323,7 @@ static int aspeed_wdt_probe(struct platform_device 
+>> *pdev)
+>>       const char *reset_type;
+>>       u32 duration;
+>>       u32 status;
+>> +    u32 sec_st;
+>>       int ret;
+>>       wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+>> @@ -330,6 +341,12 @@ static int aspeed_wdt_probe(struct 
+>> platform_device *pdev)
+>>       if (IS_ERR(wdt->base))
+>>           return PTR_ERR(wdt->base);
+>> +    if (of_device_is_compatible(np, "aspeed,ast2600-wdt")) {
+>> +        wdt->sec_base = devm_platform_ioremap_resource(pdev, 1);
+>> +        if (IS_ERR(wdt->sec_base))
+>> +            return PTR_ERR(wdt->sec_base);
+>> +    }
+>> +
+>>       wdt->wdd.info = &aspeed_wdt_info;
+>>       if (wdt->cfg->irq_mask) {
+>> @@ -459,12 +476,30 @@ static int aspeed_wdt_probe(struct 
+>> platform_device *pdev)
+>>       }
+>>       status = readl(wdt->base + WDT_TIMEOUT_STATUS);
+>> -    if (status & WDT_TIMEOUT_STATUS_BOOT_SECONDARY) {
+>> -        wdt->wdd.bootstatus = WDIOF_CARDRESET;
+>> -        if (of_device_is_compatible(np, "aspeed,ast2400-wdt") ||
+>> -            of_device_is_compatible(np, "aspeed,ast2500-wdt"))
+>> -            wdt->wdd.groups = bswitch_groups;
+>> +    if (of_device_is_compatible(np, "aspeed,ast2600-wdt")) {
+>> +        /*
+>> +         * The WDTn Timeout Status Register bit 1 is reserved.
+>> +         * To verify the second boot source,
+>> +         * we need to check SEC14 bit 12 and bit 13.
+>> +         */
+>> +        sec_st = readl(wdt->sec_base + WDT_SECURE_ENGINE_STATUS);
+>> +        if( sec_st & SECOND_BOOT_ENABLE)
+>> +            if (sec_st & ABR_IMAGE_SOURCE ||
+>> +                sec_st & ABR_IMAGE_SOURCE_SPI)
 > 
-> diff --git a/drivers/watchdog/xilinx_wwdt.c b/drivers/watchdog/xilinx_wwdt.c
-> index d271e2e8d6e2..86e2edc4f3c7 100644
-> --- a/drivers/watchdog/xilinx_wwdt.c
-> +++ b/drivers/watchdog/xilinx_wwdt.c
-> @@ -36,6 +36,12 @@
->   
->   #define XWWDT_CLOSE_WINDOW_PERCENT	50
->   
-> +/* Maximum count value of each 32 bit window */
-> +#define XWWDT_MAX_COUNT_WINDOW		GENMASK(31, 0)
-> +
-> +/* Maximum count value of closed and open window combined*/
-> +#define XWWDT_MAX_COUNT_WINDOW_COMBINED GENMASK_ULL(32, 1)
-> +
->   static int wwdt_timeout;
->   static int closed_window_percent;
->   
-> @@ -73,6 +79,24 @@ static int xilinx_wwdt_start(struct watchdog_device *wdd)
->   	/* Calculate timeout count */
->   	time_out = xdev->freq * wdd->timeout;
->   	closed_timeout = div_u64(time_out * xdev->close_percent, 100);
-> +
-> +	if (time_out > XWWDT_MAX_COUNT_WINDOW) {
-> +		u64 min_close_timeout = time_out - XWWDT_MAX_COUNT_WINDOW;
-> +		u64 max_close_timeout = XWWDT_MAX_COUNT_WINDOW;
-> +
-> +		if (closed_timeout > max_close_timeout) {
-> +			dev_info(xilinx_wwdt_wdd->parent,
-> +				 "Closed window cannot be set to %d%%. Using maximum supported value.\n",
-> +				 xdev->close_percent);
-> +			closed_timeout = max_close_timeout;
-> +		} else if (closed_timeout < min_close_timeout) {
-> +			dev_info(xilinx_wwdt_wdd->parent,
-> +				 "Closed window cannot be set to %d%%. Using minimum supported value.\n",
-> +				 xdev->close_percent);
-> +			closed_timeout = min_close_timeout;
-> +		}
-> +	}
-> +
->   	open_timeout = time_out - closed_timeout;
->   	wdd->min_hw_heartbeat_ms = xdev->close_percent * 10 * wdd->timeout;
->   
-> @@ -132,6 +156,7 @@ static int xwwdt_probe(struct platform_device *pdev)
->   {
->   	struct watchdog_device *xilinx_wwdt_wdd;
->   	struct device *dev = &pdev->dev;
-> +	unsigned int max_hw_heartbeat;
->   	struct xwwdt_device *xdev;
->   	struct clk *clk;
->   	int ret;
-> @@ -157,9 +182,11 @@ static int xwwdt_probe(struct platform_device *pdev)
->   	if (!xdev->freq)
->   		return -EINVAL;
->   
-> +	max_hw_heartbeat = div64_u64(XWWDT_MAX_COUNT_WINDOW_COMBINED, xdev->freq);
-> +
->   	xilinx_wwdt_wdd->min_timeout = XWWDT_MIN_TIMEOUT;
->   	xilinx_wwdt_wdd->timeout = XWWDT_DEFAULT_TIMEOUT;
-> -	xilinx_wwdt_wdd->max_hw_heartbeat_ms = 1000 * xilinx_wwdt_wdd->timeout;
-> +	xilinx_wwdt_wdd->max_hw_heartbeat_ms = 1000 * max_hw_heartbeat;
->   
->   	if (closed_window_percent == 0 || closed_window_percent >= 100)
->   		xdev->close_percent = XWWDT_CLOSE_WINDOW_PERCENT;
-> @@ -167,6 +194,7 @@ static int xwwdt_probe(struct platform_device *pdev)
->   		xdev->close_percent = closed_window_percent;
->   
->   	watchdog_init_timeout(xilinx_wwdt_wdd, wwdt_timeout, &pdev->dev);
-> +	xilinx_wwdt_wdd->timeout = min_not_zero(xilinx_wwdt_wdd->timeout, max_hw_heartbeat);
+> I am sure that checkpatch as something to say here. Either case, I would 
+> very
+> much prefer a single if() statement such as
+> 
+>          if (sec_st & SECOND_BOOT_ENABLE &&
+>              sec_st & (ABR_IMAGE_SOURCE | ABR_IMAGE_SOURCE_SPI))
+> 
+>> +                wdt->wdd.bootstatus |= WDIOF_CARDRESET;
+>> +
+>> +        /*
+>> +         * To check Watchdog Event Count for WDIOF_EXTERN1
+>> +         */
+>> +        if (status & WDT_EVENT_COUNTER_MASK) {
+>> +            wdt->wdd.bootstatus |= WDIOF_EXTERN1;
+>> +        }
+> 
+> Unnecessary { }
+> 
+> ... but does this really indicate that there was a reset due to some 
+> event ?
+> This reads three 8-bit counters. Wouldn't it make more sense to check bit 0
+> instead ?
+> 
+> I am also not sure if reading the watchdog status from 
+> WDT_SECURE_ENGINE_STATUS
+> adds any value over the status reported in the watchdog status register.
+> You'll have to explain why the added complexity is necessary or even adds
+> value.
+> 
+> Never mind, though ...
+> 
+> Looking into the datasheets, the current code is quite completely wrong 
+> anyway.
+> Bit 1 of the status register indicates on ast2500 if the boot was from 
+> the second
+> boot source. It does not indicate that the most recent reset was 
+> triggered by
+> the watchdog. The code should just be changed to set WDIOF_CARDRESET if 
+> bit 0
+> of the status register is set. The boot source is out of scope for the 
+> watchdog
+> status bits.
+> 
+> Thanks,
+> Guenter
+> 
+Ast2600 has external reset flag on scu74 bit 1
+Can I modify the code like this?
 
-I have not tried to understand the rest of the code, but this is just wrong.
-The whole point of having max_hw_heartbeat_ms is to make the actual timeout
-independent of the maximum hardware timeout.
+To set WDIOF_EXTERN1 if EXTERN_RESET_FLAG is set,
+To set WDIOF_CARDRESET if WDT_TIMEOUT_STATUS_EVENT(bit0) is set
 
-As for the rest of the changes, max_hw_heartbeat_ms should be set to the
-maximum hardware timeout. Similar, the minimum timeout should be set
-to the minimum timeout possible. As such, the checks added above should
-not be necessary. Something looks wrong, but I won't spend time trying to
-understand this because, again, limiting the actual timeout to
-max_hw_heartbeat is just wrong.
 
-Guenter
+#define   WDT_TIMEOUT_STATUS_EVENT	BIT(0)
+#define   EXTERN_RESET_FLAG		BIT(1)
+#define   ASPEED_SYSTEM_RESET_EVENT	(0x74)
 
->   	spin_lock_init(&xdev->spinlock);
->   	watchdog_set_drvdata(xilinx_wwdt_wdd, xdev);
->   	watchdog_set_nowayout(xilinx_wwdt_wdd, 1);
+	status = readl(wdt->base + WDT_TIMEOUT_STATUS);
+	if (status & WDT_TIMEOUT_STATUS_EVENT)
+		wdt->wdd.bootstatus = WDIOF_CARDRESET;
 
+	if (of_device_is_compatible(np, "aspeed,ast2600-wdt")) {
+		status = readl(wdt->scu_base + ASPEED_SYSTEM_RESET_EVENT);
+		if (status & EXTERN_RESET_FLAG)
+			/*
+			 * Reset cause by Extern Reset
+			 */
+			wdt->wdd.bootstatus |= WDIOF_EXTERN1;
+	} else {
+			wdt->wdd.groups = bswitch_groups;
+	}
+Thanks,
+Peter.
 
