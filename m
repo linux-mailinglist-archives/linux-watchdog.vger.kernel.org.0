@@ -1,295 +1,301 @@
-Return-Path: <linux-watchdog+bounces-792-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-793-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B572880E41
-	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Mar 2024 10:05:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28407881A94
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Mar 2024 02:12:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 627B12837A7
-	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Mar 2024 09:05:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CBFE1F217FB
+	for <lists+linux-watchdog@lfdr.de>; Thu, 21 Mar 2024 01:12:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D297638F82;
-	Wed, 20 Mar 2024 09:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B42457EC;
+	Thu, 21 Mar 2024 01:12:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="By09qNdT"
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="iVgKc0p2"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89633AC25;
-	Wed, 20 Mar 2024 09:05:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB81EC3
+	for <linux-watchdog@vger.kernel.org>; Thu, 21 Mar 2024 01:12:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710925536; cv=none; b=MklJL+F+6kJFYxALti4eC1QfzGnktXpyj+T7jXXCOQkAvqZu0mwTweIIOY06M5kpacPvHYnpANMRX/WY+6/mcTL2W+s7pmYqnkLwYSeRai5WRoc0OCJoxHFnCqsr/nQiIQakrQ8LP9xcYGJIM2QnBFLDmzs9l6vqa2sATuNLNH0=
+	t=1710983557; cv=none; b=VbAikS+FXkRYwp61i2gHihVHxZCBVzlSVBm4UPiJkRIgyBkABALyfl3H9AnN8WF4IBRuoyS8L6NN4h49zn200DXU2mL478ZkIq0N5Da+6tk1OYgTiruTmP39iIuCKBmtZ9lUYYfRirOF4aAAT3iblEJrmSB9pyV3djjZrmW1FpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710925536; c=relaxed/simple;
-	bh=6Qgf/NpiPbzxVmqwhe1v3Rspvjzp2MmQAb5Ad1EHDwQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=OdzJv82+gc6COrc4/g+2U8I/I2fO14TMUmuourMA5r3iqztbUapZeSrxo3npwgGiOcEuJBWOg4eilNtZNIq7GJssWUNVMTeoEdNhkvKNpCT+atEGv+IXLAWW6DBGXJMsaFoKnNMxHB+EaKL6xZ/v64iIf+8jT3VMcr9Xwleax0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=By09qNdT; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1dddb160a37so46896475ad.2;
-        Wed, 20 Mar 2024 02:05:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710925534; x=1711530334; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q9AnhsV1I63p1VhmH5I/CTh8F8noEyIobCtBN/qPBug=;
-        b=By09qNdTJ0L+rjauTKZ/AninSv3YUJhoBsYXtP402u3aeqz79KYhM99qKBCcDBDFWl
-         WXRp7kI0A8YkEGEntEWACmAkGg9tv8crK9mYRS/EDfxrwv+n6UCYxkXsqdzvIXWAtWeT
-         p4NynY0JUbWdgayv3EeKAPasKyZ2iPaVSs4VXN6XMgv/sA7HiEHi2zq8YaiR9admOA4e
-         i7YJhgi91Ukb30AicV3uaV/vyJiPqJr2FPyrl+OrL8jyOkr0St4GsjtWfug+1vOVb8F4
-         3gqCqPkrPCgDjnnJZxtbj9rJfMSxB+ltec3BjUfMl4BGZQbcRzKRZ4cIS7CBm24FCGNc
-         TK7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710925534; x=1711530334;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q9AnhsV1I63p1VhmH5I/CTh8F8noEyIobCtBN/qPBug=;
-        b=BLhmmFbc9D1JofrJLFYHgwZtgBsxwKprG1YGg+PCMNVIwcWT4DhgnsqZq8sU0Q7TDa
-         sNGsmtqRnx48h55/RyOCriNhFhL1gdqHicMILdqiciCZ4gxsbvtXz72GaUSu+7C+jCB4
-         fIyCjb5UruZfJtfbBEDaIaaN5nZfzyDrwTjGfXLjNoP4ArmSm2to3yR76SoC1B9D2wAJ
-         BencVAR2Zniekx89MKViPNEllKOUnEW02j8lPcqNH5IwI0QUke75Bb2SB17Vsq87J2w0
-         iZHOw0BbVmMWNjRaMQY8HGcmHeYa5vtU6PyIcIK560Ooq0vDHtuRiWHzhzeptJzHdLfT
-         sdIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVEVXDIfZB84+Fa6y8fB/3F6oJsCsntQl+9DnnejF+Tn3jRu6/YHcKENZFKnHmRDfQaQLOJGy0y+BmQBwy1XUpqLUzdqe8adbXMIIBPqB3f28KjvBBLZH3n9Temkb2XW9xxJDC874P3dzeM3/Oy+szSjEoqSrMY0M+z2WFsqLR6Oegl5E+MnPlb
-X-Gm-Message-State: AOJu0Yz9e5FK1cBdOVN4SvPBMcQENWIRESUFhf9xfJVyKInzxoV58ZMN
-	9/tFNWITjvKm7EIUSXkPkV1lvMwfjL8J8g9Z3RguFHNsBdoZewhB
-X-Google-Smtp-Source: AGHT+IGQN51HBV2eG4je+v7GXoz9GezzFu7dyWQoCjgBxUNs4bPN7xeScFwS6s6WwuunnB3tWKBKpA==
-X-Received: by 2002:a17:902:ea10:b0:1e0:1496:91ec with SMTP id s16-20020a170902ea1000b001e0149691ecmr6421247plg.20.1710925533894;
-        Wed, 20 Mar 2024 02:05:33 -0700 (PDT)
-Received: from ?IPV6:2001:b400:e38c:634d:c9ce:74d1:b790:4f66? (2001-b400-e38c-634d-c9ce-74d1-b790-4f66.emome-ip6.hinet.net. [2001:b400:e38c:634d:c9ce:74d1:b790:4f66])
-        by smtp.gmail.com with ESMTPSA id j11-20020a17090276cb00b001dd88a5dc47sm3261282plt.290.2024.03.20.02.05.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Mar 2024 02:05:33 -0700 (PDT)
-Message-ID: <924c4402-af14-4b7a-9a4e-4317c50482cd@gmail.com>
-Date: Wed, 20 Mar 2024 17:05:28 +0800
+	s=arc-20240116; t=1710983557; c=relaxed/simple;
+	bh=X5xXNUINnFO9vPlHB291CO20aJIVcIZP3FbdW+KRAN4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uZfbxqH5ZCtfXMnRDFlZktjGDqYJR9bY9MBf0lcD4jZJYiA7ouXtKTMQs1XWGRfIAQmvkequyXU1FGTD1QKppWbQ3m14uKrabIj6RrhIm1pvlSB5cxGU6k5ciKMx0u6TUVEeXON71pGhm9/eBgMIzTLnPVF5eGKUEGzkOg1q2gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=iVgKc0p2; arc=none smtp.client-ip=85.214.62.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(No client certificate requested)
+	(Authenticated sender: marex@denx.de)
+	by phobos.denx.de (Postfix) with ESMTPSA id 6760387F3F;
+	Thu, 21 Mar 2024 02:12:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+	s=phobos-20191101; t=1710983553;
+	bh=ghEmQ/2k58GxFaDacJCmeN+aS/CuhEQtrc5z5YAU/1o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iVgKc0p2XL7RqlUb9HTN0vAHjsGM0tU/8e8CHe2jYOaDb035ZMBLE/8ROHnR/VAS6
+	 C6dBGELuwFR8NVMQkgUV/ykampd3jDx7VFR9ePzssF43WFxFaqjVQsHFwNskRs6D8R
+	 kQteg5AtkUj0LPxKcoT84lNBfa+xDffvmp+Xkrk6MvZ95K+gp2BIAp4VuMcQLSWVqY
+	 zkbtYbN3/9sJV4170zZWgcZ4myFIEKNmX+NYQoGsL/NNDy2bLSaDgz6zqnjWmtJmFT
+	 bfLJ+ke8UXFG6IW8CNOVSmE/wzzCoskF+bo6Jv/i4IPe+zIreB/4JsKANSEWSLiMhp
+	 WlYJzTbxj33zg==
+From: Marek Vasut <marex@denx.de>
+To: linux-watchdog@vger.kernel.org
+Cc: Marek Vasut <marex@denx.de>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH v3] watchdog: stm32_iwdg: Add pretimeout support
+Date: Thu, 21 Mar 2024 02:11:40 +0100
+Message-ID: <20240321011207.45388-1-marex@denx.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] drivers: watchdog: ast2600 support bootstatus
-Content-Language: en-US
-To: Guenter Roeck <linux@roeck-us.net>, patrick@stwcx.xyz,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <20240318055219.3460121-1-peteryin.openbmc@gmail.com>
- <13640a07-7395-4521-9c5d-748599202361@roeck-us.net>
-From: PeterYin <peteryin.openbmc@gmail.com>
-In-Reply-To: <13640a07-7395-4521-9c5d-748599202361@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
 
+The STM32MP15xx IWDG adds registers which permit this IP to generate
+pretimeout interrupt. This interrupt can also be used to wake the CPU
+from suspend. Implement support for generating this interrupt and let
+userspace configure the pretimeout. In case the pretimeout is not
+configured by user, set pretimeout to half of the WDT timeout cycle.
 
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linux-watchdog@vger.kernel.org
+---
+V2: - Subtract the pretimeout value from timeout value before writing it
+      into the IWDG pretimeout register, because the watchdog counter
+      register is counting down, and the pretimeout interrupt triggers
+      when watchdog counter register matches the pretimeout register
+      content.
+    - Set default pretimeout to 3/4 of timeout .
+V3: - Use dev instead of pdev->dev
+    - Swap order of ret/return 0
+    - Split this from the DT changes, which are orthogonal
+    - Uh, this patch got stuck in upstreaming queue, sorry
+---
+ drivers/watchdog/stm32_iwdg.c | 95 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 94 insertions(+), 1 deletion(-)
 
-Guenter Roeck 於 3/19/24 08:46 寫道:
-> On 3/17/24 22:52, Peter Yin wrote:
->> Add WDIOF_EXTERN1 and WDIOF_CARDRESET bootstatus in ast2600
->>
->> Regarding the AST2600 specification, the WDTn Timeout Status Register
->> (WDT10) has bit 1 reserved. To verify the second boot source,
->> we need to check SEC14 bit 12 and bit 13.
->> The bits 8-23 in the WDTn Timeout Status Register are the Watchdog
->> Event Count, which we can use to verify WDIOF_EXTERN1.
->>
->> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
-> 
-> You'll have to separate dts and yaml file changes from driver changes.
-> 
->> ---
->> Change log:
->>
->> v1 -> v2
->>    - Add comment and support WDIOF_CARDRESET in ast2600
->>
->> v1
->>    - Patch 0001 - Add WDIOF_EXTERN1 bootstatus
->> ---
->>   arch/arm/boot/dts/aspeed/aspeed-g6.dtsi |  8 ++---
->>   drivers/watchdog/aspeed_wdt.c           | 45 ++++++++++++++++++++++---
->>   2 files changed, 44 insertions(+), 9 deletions(-)
->>
->> diff --git a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi 
->> b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
->> index e0b44498269f..23ae7f0430e9 100644
->> --- a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
->> +++ b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
->> @@ -556,24 +556,24 @@ uart5: serial@1e784000 {
->>               wdt1: watchdog@1e785000 {
->>                   compatible = "aspeed,ast2600-wdt";
->> -                reg = <0x1e785000 0x40>;
->> +                reg = <0x1e785000 0x40>, <0x1e6f2000 0x20>;
->>               };
->>               wdt2: watchdog@1e785040 {
->>                   compatible = "aspeed,ast2600-wdt";
->> -                reg = <0x1e785040 0x40>;
->> +                reg = <0x1e785040 0x40>, <0x1e6f2000 0x020>;
->>                   status = "disabled";
->>               };
->>               wdt3: watchdog@1e785080 {
->>                   compatible = "aspeed,ast2600-wdt";
->> -                reg = <0x1e785080 0x40>;
->> +                reg = <0x1e785080 0x40>, <0x1e6f2000 0x020>;
->>                   status = "disabled";
->>               };
->>               wdt4: watchdog@1e7850c0 {
->>                   compatible = "aspeed,ast2600-wdt";
->> -                reg = <0x1e7850C0 0x40>;
->> +                reg = <0x1e7850C0 0x40>, <0x1e6f2000 0x020>;
->>                   status = "disabled";
->>               };
->> diff --git a/drivers/watchdog/aspeed_wdt.c 
->> b/drivers/watchdog/aspeed_wdt.c
->> index b4773a6aaf8c..65118e461130 100644
->> --- a/drivers/watchdog/aspeed_wdt.c
->> +++ b/drivers/watchdog/aspeed_wdt.c
->> @@ -33,6 +33,7 @@ struct aspeed_wdt {
->>       void __iomem        *base;
->>       u32            ctrl;
->>       const struct aspeed_wdt_config *cfg;
->> +    void __iomem        *sec_base;
->>   };
->>   static const struct aspeed_wdt_config ast2400_config = {
->> @@ -82,6 +83,15 @@ MODULE_DEVICE_TABLE(of, aspeed_wdt_of_table);
->>   #define WDT_RESET_MASK1        0x1c
->>   #define WDT_RESET_MASK2        0x20
->> +/*
->> + * Only Ast2600 support
->> + */
->> +#define   WDT_EVENT_COUNTER_MASK    (0xFFF << 8)
->> +#define   WDT_SECURE_ENGINE_STATUS    (0x14)
->> +#define   ABR_IMAGE_SOURCE        BIT(12)
->> +#define   ABR_IMAGE_SOURCE_SPI        BIT(13)
->> +#define   SECOND_BOOT_ENABLE        BIT(14)
->> +
->>   /*
->>    * WDT_RESET_WIDTH controls the characteristics of the external 
->> pulse (if
->>    * enabled), specifically:
->> @@ -313,6 +323,7 @@ static int aspeed_wdt_probe(struct platform_device 
->> *pdev)
->>       const char *reset_type;
->>       u32 duration;
->>       u32 status;
->> +    u32 sec_st;
->>       int ret;
->>       wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
->> @@ -330,6 +341,12 @@ static int aspeed_wdt_probe(struct 
->> platform_device *pdev)
->>       if (IS_ERR(wdt->base))
->>           return PTR_ERR(wdt->base);
->> +    if (of_device_is_compatible(np, "aspeed,ast2600-wdt")) {
->> +        wdt->sec_base = devm_platform_ioremap_resource(pdev, 1);
->> +        if (IS_ERR(wdt->sec_base))
->> +            return PTR_ERR(wdt->sec_base);
->> +    }
->> +
->>       wdt->wdd.info = &aspeed_wdt_info;
->>       if (wdt->cfg->irq_mask) {
->> @@ -459,12 +476,30 @@ static int aspeed_wdt_probe(struct 
->> platform_device *pdev)
->>       }
->>       status = readl(wdt->base + WDT_TIMEOUT_STATUS);
->> -    if (status & WDT_TIMEOUT_STATUS_BOOT_SECONDARY) {
->> -        wdt->wdd.bootstatus = WDIOF_CARDRESET;
->> -        if (of_device_is_compatible(np, "aspeed,ast2400-wdt") ||
->> -            of_device_is_compatible(np, "aspeed,ast2500-wdt"))
->> -            wdt->wdd.groups = bswitch_groups;
->> +    if (of_device_is_compatible(np, "aspeed,ast2600-wdt")) {
->> +        /*
->> +         * The WDTn Timeout Status Register bit 1 is reserved.
->> +         * To verify the second boot source,
->> +         * we need to check SEC14 bit 12 and bit 13.
->> +         */
->> +        sec_st = readl(wdt->sec_base + WDT_SECURE_ENGINE_STATUS);
->> +        if( sec_st & SECOND_BOOT_ENABLE)
->> +            if (sec_st & ABR_IMAGE_SOURCE ||
->> +                sec_st & ABR_IMAGE_SOURCE_SPI)
-> 
-> I am sure that checkpatch as something to say here. Either case, I would 
-> very
-> much prefer a single if() statement such as
-> 
->          if (sec_st & SECOND_BOOT_ENABLE &&
->              sec_st & (ABR_IMAGE_SOURCE | ABR_IMAGE_SOURCE_SPI))
-> 
->> +                wdt->wdd.bootstatus |= WDIOF_CARDRESET;
->> +
->> +        /*
->> +         * To check Watchdog Event Count for WDIOF_EXTERN1
->> +         */
->> +        if (status & WDT_EVENT_COUNTER_MASK) {
->> +            wdt->wdd.bootstatus |= WDIOF_EXTERN1;
->> +        }
-> 
-> Unnecessary { }
-> 
-> ... but does this really indicate that there was a reset due to some 
-> event ?
-> This reads three 8-bit counters. Wouldn't it make more sense to check bit 0
-> instead ?
-> 
-> I am also not sure if reading the watchdog status from 
-> WDT_SECURE_ENGINE_STATUS
-> adds any value over the status reported in the watchdog status register.
-> You'll have to explain why the added complexity is necessary or even adds
-> value.
-> 
-> Never mind, though ...
-> 
-> Looking into the datasheets, the current code is quite completely wrong 
-> anyway.
-> Bit 1 of the status register indicates on ast2500 if the boot was from 
-> the second
-> boot source. It does not indicate that the most recent reset was 
-> triggered by
-> the watchdog. The code should just be changed to set WDIOF_CARDRESET if 
-> bit 0
-> of the status register is set. The boot source is out of scope for the 
-> watchdog
-> status bits.
-> 
-> Thanks,
-> Guenter
-> 
-Ast2600 has external reset flag on scu74 bit 1
-Can I modify the code like this?
+diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
+index 5404e03876202..d700e0d49bb95 100644
+--- a/drivers/watchdog/stm32_iwdg.c
++++ b/drivers/watchdog/stm32_iwdg.c
+@@ -18,6 +18,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_wakeirq.h>
+ #include <linux/watchdog.h>
+ 
+ #define DEFAULT_TIMEOUT 10
+@@ -28,6 +29,7 @@
+ #define IWDG_RLR	0x08 /* ReLoad Register */
+ #define IWDG_SR		0x0C /* Status Register */
+ #define IWDG_WINR	0x10 /* Windows Register */
++#define IWDG_EWCR	0x14 /* Early Wake-up Register */
+ 
+ /* IWDG_KR register bit mask */
+ #define KR_KEY_RELOAD	0xAAAA /* reload counter enable */
+@@ -47,22 +49,29 @@
+ #define SR_PVU	BIT(0) /* Watchdog prescaler value update */
+ #define SR_RVU	BIT(1) /* Watchdog counter reload value update */
+ 
++#define EWCR_EWIT	GENMASK(11, 0) /* Watchdog counter window value */
++#define EWCR_EWIC	BIT(14) /* Watchdog early interrupt acknowledge */
++#define EWCR_EWIE	BIT(15) /* Watchdog early interrupt enable */
++
+ /* set timeout to 100000 us */
+ #define TIMEOUT_US	100000
+ #define SLEEP_US	1000
+ 
+ struct stm32_iwdg_data {
+ 	bool has_pclk;
++	bool has_early_wakeup;
+ 	u32 max_prescaler;
+ };
+ 
+ static const struct stm32_iwdg_data stm32_iwdg_data = {
+ 	.has_pclk = false,
++	.has_early_wakeup = false,
+ 	.max_prescaler = 256,
+ };
+ 
+ static const struct stm32_iwdg_data stm32mp1_iwdg_data = {
+ 	.has_pclk = true,
++	.has_early_wakeup = true,
+ 	.max_prescaler = 1024,
+ };
+ 
+@@ -88,13 +97,18 @@ static inline void reg_write(void __iomem *base, u32 reg, u32 val)
+ static int stm32_iwdg_start(struct watchdog_device *wdd)
+ {
+ 	struct stm32_iwdg *wdt = watchdog_get_drvdata(wdd);
+-	u32 tout, presc, iwdg_rlr, iwdg_pr, iwdg_sr;
++	u32 tout, ptot, presc, iwdg_rlr, iwdg_ewcr, iwdg_pr, iwdg_sr;
+ 	int ret;
+ 
+ 	dev_dbg(wdd->parent, "%s\n", __func__);
+ 
++	if (!wdd->pretimeout)
++		wdd->pretimeout = 3 * wdd->timeout / 4;
++
+ 	tout = clamp_t(unsigned int, wdd->timeout,
+ 		       wdd->min_timeout, wdd->max_hw_heartbeat_ms / 1000);
++	ptot = clamp_t(unsigned int, tout - wdd->pretimeout,
++		       wdd->min_timeout, tout);
+ 
+ 	presc = DIV_ROUND_UP(tout * wdt->rate, RLR_MAX + 1);
+ 
+@@ -102,6 +116,7 @@ static int stm32_iwdg_start(struct watchdog_device *wdd)
+ 	presc = roundup_pow_of_two(presc);
+ 	iwdg_pr = presc <= 1 << PR_SHIFT ? 0 : ilog2(presc) - PR_SHIFT;
+ 	iwdg_rlr = ((tout * wdt->rate) / presc) - 1;
++	iwdg_ewcr = ((ptot * wdt->rate) / presc) - 1;
+ 
+ 	/* enable write access */
+ 	reg_write(wdt->regs, IWDG_KR, KR_KEY_EWA);
+@@ -109,6 +124,8 @@ static int stm32_iwdg_start(struct watchdog_device *wdd)
+ 	/* set prescaler & reload registers */
+ 	reg_write(wdt->regs, IWDG_PR, iwdg_pr);
+ 	reg_write(wdt->regs, IWDG_RLR, iwdg_rlr);
++	if (wdt->data->has_early_wakeup)
++		reg_write(wdt->regs, IWDG_EWCR, iwdg_ewcr | EWCR_EWIE);
+ 	reg_write(wdt->regs, IWDG_KR, KR_KEY_ENABLE);
+ 
+ 	/* wait for the registers to be updated (max 100ms) */
+@@ -151,6 +168,34 @@ static int stm32_iwdg_set_timeout(struct watchdog_device *wdd,
+ 	return 0;
+ }
+ 
++static int stm32_iwdg_set_pretimeout(struct watchdog_device *wdd,
++				     unsigned int pretimeout)
++{
++	dev_dbg(wdd->parent, "%s pretimeout: %d sec\n", __func__, pretimeout);
++
++	wdd->pretimeout = pretimeout;
++
++	if (watchdog_active(wdd))
++		return stm32_iwdg_start(wdd);
++
++	return 0;
++}
++
++static irqreturn_t stm32_iwdg_isr(int irq, void *wdog_arg)
++{
++	struct watchdog_device *wdd = wdog_arg;
++	struct stm32_iwdg *wdt = watchdog_get_drvdata(wdd);
++	u32 reg;
++
++	reg = reg_read(wdt->regs, IWDG_EWCR);
++	reg |= EWCR_EWIC;
++	reg_write(wdt->regs, IWDG_EWCR, reg);
++
++	watchdog_notify_pretimeout(wdd);
++
++	return IRQ_HANDLED;
++}
++
+ static void stm32_clk_disable_unprepare(void *data)
+ {
+ 	clk_disable_unprepare(data);
+@@ -207,11 +252,20 @@ static const struct watchdog_info stm32_iwdg_info = {
+ 	.identity	= "STM32 Independent Watchdog",
+ };
+ 
++static const struct watchdog_info stm32_iwdg_preinfo = {
++	.options	= WDIOF_SETTIMEOUT |
++			  WDIOF_MAGICCLOSE |
++			  WDIOF_KEEPALIVEPING |
++			  WDIOF_PRETIMEOUT,
++	.identity	= "STM32 Independent Watchdog",
++};
++
+ static const struct watchdog_ops stm32_iwdg_ops = {
+ 	.owner		= THIS_MODULE,
+ 	.start		= stm32_iwdg_start,
+ 	.ping		= stm32_iwdg_ping,
+ 	.set_timeout	= stm32_iwdg_set_timeout,
++	.set_pretimeout	= stm32_iwdg_set_pretimeout,
+ };
+ 
+ static const struct of_device_id stm32_iwdg_of_match[] = {
+@@ -221,6 +275,40 @@ static const struct of_device_id stm32_iwdg_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, stm32_iwdg_of_match);
+ 
++static int stm32_iwdg_irq_init(struct platform_device *pdev,
++			       struct stm32_iwdg *wdt)
++{
++	struct device_node *np = pdev->dev.of_node;
++	struct watchdog_device *wdd = &wdt->wdd;
++	struct device *dev = &pdev->dev;
++	int irq, ret;
++
++	if (!wdt->data->has_early_wakeup)
++		return 0;
++
++	irq = platform_get_irq(pdev, 0);
++	if (irq <= 0)
++		return 0;
++
++	if (of_property_read_bool(np, "wakeup-source")) {
++		ret = device_init_wakeup(dev, true);
++		if (ret)
++			return ret;
++
++		ret = dev_pm_set_wake_irq(dev, irq);
++		if (ret)
++			return ret;
++	}
++
++	ret = devm_request_irq(dev, irq, stm32_iwdg_isr, 0,
++			       dev_name(dev), wdd);
++	if (ret)
++		return ret;
++
++	wdd->info = &stm32_iwdg_preinfo;
++	return 0;
++}
++
+ static int stm32_iwdg_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -255,6 +343,11 @@ static int stm32_iwdg_probe(struct platform_device *pdev)
+ 	wdd->max_hw_heartbeat_ms = ((RLR_MAX + 1) * wdt->data->max_prescaler *
+ 				    1000) / wdt->rate;
+ 
++	/* Initialize IRQ, this might override wdd->info, hence it is here. */
++	ret = stm32_iwdg_irq_init(pdev, wdt);
++	if (ret)
++		return ret;
++
+ 	watchdog_set_drvdata(wdd, wdt);
+ 	watchdog_set_nowayout(wdd, WATCHDOG_NOWAYOUT);
+ 	watchdog_init_timeout(wdd, 0, dev);
+-- 
+2.43.0
 
-To set WDIOF_EXTERN1 if EXTERN_RESET_FLAG is set,
-To set WDIOF_CARDRESET if WDT_TIMEOUT_STATUS_EVENT(bit0) is set
-
-
-#define   WDT_TIMEOUT_STATUS_EVENT	BIT(0)
-#define   EXTERN_RESET_FLAG		BIT(1)
-#define   ASPEED_SYSTEM_RESET_EVENT	(0x74)
-
-	status = readl(wdt->base + WDT_TIMEOUT_STATUS);
-	if (status & WDT_TIMEOUT_STATUS_EVENT)
-		wdt->wdd.bootstatus = WDIOF_CARDRESET;
-
-	if (of_device_is_compatible(np, "aspeed,ast2600-wdt")) {
-		status = readl(wdt->scu_base + ASPEED_SYSTEM_RESET_EVENT);
-		if (status & EXTERN_RESET_FLAG)
-			/*
-			 * Reset cause by Extern Reset
-			 */
-			wdt->wdd.bootstatus |= WDIOF_EXTERN1;
-	} else {
-			wdt->wdd.groups = bswitch_groups;
-	}
-Thanks,
-Peter.
 
