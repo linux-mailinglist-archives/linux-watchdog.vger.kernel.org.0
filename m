@@ -1,216 +1,169 @@
-Return-Path: <linux-watchdog+bounces-800-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-801-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 856A9887D7A
-	for <lists+linux-watchdog@lfdr.de>; Sun, 24 Mar 2024 16:31:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45FB5887E23
+	for <lists+linux-watchdog@lfdr.de>; Sun, 24 Mar 2024 18:25:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13BEC1F21335
-	for <lists+linux-watchdog@lfdr.de>; Sun, 24 Mar 2024 15:31:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EC031C2061C
+	for <lists+linux-watchdog@lfdr.de>; Sun, 24 Mar 2024 17:25:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C87718641;
-	Sun, 24 Mar 2024 15:31:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52C318E29;
+	Sun, 24 Mar 2024 17:25:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BWS84ImU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YALZs97A"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569062107;
-	Sun, 24 Mar 2024 15:31:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C449F156C2;
+	Sun, 24 Mar 2024 17:25:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711294280; cv=none; b=irHRMUcXW7xLWtkcZvNAlJGVQzydcCZ80krqLxqrmYtZ4785vIpD804Xvv1ywQjUVVdF8ausox+7/0kkXxzE0t5XGQuZSNYEunflmJPmCObCf0SQ4avnSq7NCJsQ7uyrYNu+BxSfNKJMwz00tWQk3MjlHu/JbdaUSqfRj5kvmvI=
+	t=1711301152; cv=none; b=heSqkWe/78ybzNBEamgkrzYsNSsw1vYCCBDmCabWu2wZXU36VeREIwncWTjwObBUN8VB2ANhhFgxsGtr4LAk06CRS/4Is07Z0Bj6KjHGVGUewxqIcNXqBaedeQV9ahTQE5rCFXE9ZjyESk4R8RlrU3k5rAf7yH2JiH/zL1/YH2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711294280; c=relaxed/simple;
-	bh=S+GaQjrNb/EhjPXJ+uajhzrduqSzJCgI9RRxr1vo4zg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FJ2pGq6qPTKKdTEVkDMoOIoCFx3n7R3UGW2H7ZHuJS/l91FQuFbrmEVnCIfiiIdFXoSaA/nAc0ZNYRoOADhEQSFaCWisFofH0ugEkGKaG93XE6yI+KayenvPxvbBs6EHR4njwAJQgqmd2AlR2LiIEcBBQsdTmIJl2tF7pBvyw98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BWS84ImU; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1711301152; c=relaxed/simple;
+	bh=q+szx7jpSkgIelN9HKFrYdDXEUPrK1kQq9fG2zi8Oo4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k9zOCkwadnS5AsshCyR9gxkaWtBnL/CB5aEsPumXcKnfCnh8oIqq9mL5xSJF/2fhlZw45zzfzXLqbnVpXdI8IPUL69pKZTLOGNAVetGZ204Yn5X1qSiQKH0h5FRgHhwb1JeKQCv+2WjCqptO+txjhj+Ezvww27GzKO7tDIUQgdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YALZs97A; arc=none smtp.client-ip=209.85.161.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-513d212f818so4100915e87.2;
-        Sun, 24 Mar 2024 08:31:18 -0700 (PDT)
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5a46b28a77dso2106636eaf.1;
+        Sun, 24 Mar 2024 10:25:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711294276; x=1711899076; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0h9CkCjrhT3P+set+37h9vZa3QRZIGn/XuauQXUeDHQ=;
-        b=BWS84ImUgkSE7b0RNhVmlqbE7vBliEw434moMSHbZPy08ge/G7MYYob0hFUO2NvVJt
-         0SZMq9pQBtNOP7zYMXE+MvrohTLudkdF3XlKqREnerQLW30k1/AL62ZWg7dxXcyCi9Zq
-         AsQ/h4QEo7JvIRbgAZ/0GnXALeGpsFCQkiHoPDuYRsufa2xNfByVOgGIHxcKcQ6ep0rP
-         tRHxpP3QDODgHswkeo6txMthIaycXktveYcsNpr7N2nYvplLOX8fNutDPaWUYQgPt1L0
-         MLFeemboT0l6R1SIsCz4J8uFLfFlRxT5yIbIK1SBZmyg0eq8CwK99Av+OmshpLqO1bmG
-         Skgw==
+        d=gmail.com; s=20230601; t=1711301150; x=1711905950; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cjhy1j6ng415mWwClf3r6vogHFOUJqIaXdUO0FgD+ps=;
+        b=YALZs97A7BHOQNPpffNymdcerLWmqLOFZwVpmgwuhGc5kvBvo/mrdNkXYlAMLQwuhH
+         yGH5o2PypqUUvPM+fmT9gIsFBKrdUZ+qKTDzlVYZnXAah8aIyXkZ+6PzUBcR/SomqEKU
+         ibCUqcBYcTEvnlLgkZCKqEfVsit+YqycqsVvlDb3x7Qh2UEZSupT/dbxYXK3/Mqjg0pR
+         d8Oj+9B0yE4r1fnBhxu9Jos7lINrO8JJMmgM0kP/K2i+tyvHW1w55MAjcu/nlybwMrIJ
+         o/wGb0EKDqdKTATjcn44nfLe9SPEXdHVZz+M6rI/QtfFpcuGQxELTDXqfcEO62c1HtPV
+         lAsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711294276; x=1711899076;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0h9CkCjrhT3P+set+37h9vZa3QRZIGn/XuauQXUeDHQ=;
-        b=LlFuGF/qvTWZdBFgJK4JRt1xCEkre9VN2a0zQaiCKXgdx+9k7h9B+NG4abaCGe8g9g
-         n58xs1zIs9Nd4/meMjfQw2vpjrvkvxK8PqUqLhVVLS+jF4EeZBhEZ29mbR41SWrzlaHX
-         ITU9WtuNqWfADDuJ3Nyk0cOpjCwwJyv+tfkK0YoeIliUMQ4+BtHmsHyAIeBrNPh4Hd55
-         BhdXTP9ms0bOsbO5gBi2IuVpEXu9m3y/dn/Ba9UitQmfI8YzTtgy3MBy27USyjM+YoRQ
-         nmBc4M9ESjz/xii0JZWQX9lwDz+oU23CDgHnrunJHe3FlZ3lUkkv9F0UGqJvF+96ceaA
-         s2sw==
-X-Forwarded-Encrypted: i=1; AJvYcCU6CrLFUPIeuAsldYhVPzbSGDYnHIAgO5uj+SS+ojaZ+TV8FtmQtwlX1+dtPxtsSeznZtj6XJ19ONE4pTtCEGSmGvYwljODhOWzyuQliI+3i1deENqyG9/tSicvV1BG6qTUOkM1xfF71XLAjyG+95tC/ZNiIjqjvqaNeiYv+9F9KF5ETC7i
-X-Gm-Message-State: AOJu0Yxq0pWKbx5g48fIxPWjBfOZQsF3h6CMlWjK4rfh1MqDmUa7c9Cc
-	CeEzePy1cpoFnVBkzKIM5h7c9vQhGA0X5+PlITlv4woGrCfvG9dJO/hRchXNYMyu/VZPWqXqnut
-	G9MFW67O7AcwAowtoheYBVkAMyNo=
-X-Google-Smtp-Source: AGHT+IF1hgt89EHgXPEmK77BTi70jUOCk3tAdabwBOn4F1ZNKwy73xPE4h3/tpPQKJQSRKtU/HT7oaL8f7mcIJopj70=
-X-Received: by 2002:ac2:4d95:0:b0:513:5bdb:10f7 with SMTP id
- g21-20020ac24d95000000b005135bdb10f7mr2979461lfe.14.1711294276178; Sun, 24
- Mar 2024 08:31:16 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1711301150; x=1711905950;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Cjhy1j6ng415mWwClf3r6vogHFOUJqIaXdUO0FgD+ps=;
+        b=cXXFrV/vhXfDEgGr4e0DQbkAv7Jiga+58k7N43P7yyTofKBuBQBp9r5mEXljsXO4fY
+         83yPn9mTxpfziuvEy2OFB0WRFQgGyrEGB8W9n+cEiqTzr4mqBcI3JV7QZD9NW69FnbbY
+         2edx7sFPaTRmuzLeh3wnaE95hE87BJK+460gXjEhK/UslFlpG/4A+Ulw9TuOSwyLT9ST
+         Mrfc9PxxKJ4eBabS6AwgQ1wIYhFKznbzWWMC18TqS9/lKCOvajLCtdHHVqvk+Jo4twn3
+         PSdNSGtDsXj6fCMvwezEw+z3QZqJPYqxNaFwM/fp/WX58kAi2vr1fslOUiAonBbGOkgC
+         r/oA==
+X-Forwarded-Encrypted: i=1; AJvYcCWfR8jGInKDFDeK5TK4rKhn+1gxHgfHzBFumRTTSBwYMRV0WMfLa1TtySCQtOLBwiG19JNwMx6kuP3pUG7b8EcnhBGd9arqGuUyhKMX/OM=
+X-Gm-Message-State: AOJu0YxT+r8KnnJGn9GktjxJe5wXnYfxLgwIDxs6g8N6bhyfXsXchc6s
+	wISg/HM9XaCv7oi8U4rxn5KCfI1pAEtnD7OJmTEjk1iH453RgRJx+pliY+0C
+X-Google-Smtp-Source: AGHT+IGQmBJhmQAMoI+lhC+lDM0jsJ5hBpO6hJaAQHvZKQjaP3fjU2rVr9rEtQ/I9C8dyeJBdmDZFA==
+X-Received: by 2002:a05:6358:2813:b0:17e:b695:de64 with SMTP id k19-20020a056358281300b0017eb695de64mr6272557rwb.21.1711301149755;
+        Sun, 24 Mar 2024 10:25:49 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id gl3-20020a17090b120300b00298cc4c56cdsm8710632pjb.22.2024.03.24.10.25.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 24 Mar 2024 10:25:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b46d249a-e22c-469e-b83e-7cf5eb3042c5@roeck-us.net>
+Date: Sun, 24 Mar 2024 10:25:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240323164359.21642-1-kabel@kernel.org> <20240323164359.21642-3-kabel@kernel.org>
- <ZgAII1B03bLUisWr@surfacebook.localdomain> <20240324160408.77c8574e@thinkpad>
-In-Reply-To: <20240324160408.77c8574e@thinkpad>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Sun, 24 Mar 2024 17:30:39 +0200
-Message-ID: <CAHp75VesxrOdm4H3TYUtfEJx=i3Zpd6a=yzbkUFismnzW=nE-g@mail.gmail.com>
-Subject: Re: [PATCH v5 02/11] platform: cznic: Add preliminary support for
- Turris Omnia MCU
-To: =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Gregory CLEMENT <gregory.clement@bootlin.com>, soc@kernel.org, 
-	arm@kernel.org, Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>, linux-gpio@vger.kernel.org, 
-	Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	linux-rtc@vger.kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] watchdog: cpu5wdt.c: Fix use-after-free bug caused by
+ cpu5wdt_trigger
+Content-Language: en-US
+To: Duoming Zhou <duoming@zju.edu.cn>, linux-watchdog@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, wim@linux-watchdog.org
+References: <20240324140444.119584-1-duoming@zju.edu.cn>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240324140444.119584-1-duoming@zju.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sun, Mar 24, 2024 at 5:04=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.org>=
- wrote:
->
-> Hi Andy,
->
-> thank you very much for the review. I have some notes and some
-> questions, see below.
+On 3/24/24 07:04, Duoming Zhou wrote:
+> When the cpu5wdt module is removing, the origin code uses del_timer() to
+> de-activate the timer. If the timer handler is running, del_timer() could
+> not stop it and will return directly. If the port region is released by
+> release_region() and then the timer handler cpu5wdt_trigger() calls outb()
+> to write into the region that is released, the use-after-free bug will
+> happen.
+> 
+> Change del_timer() to timer_shutdown_sync() in order that the timer handler
+> could be finished before the port region is released.
+> 
+> Fixes: e09d9c3e9f85 ("watchdog: cpu5wdt.c: add missing del_timer call")
+> Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
 
-Btw, I'll look into other patches next week.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> On Sun, 24 Mar 2024 13:01:55 +0200
-> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > Sat, Mar 23, 2024 at 05:43:50PM +0100, Marek Beh=C3=BAn kirjoitti:
+> ---
+>   drivers/watchdog/cpu5wdt.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/cpu5wdt.c b/drivers/watchdog/cpu5wdt.c
+> index 688b112e712..9f279c0e13a 100644
+> --- a/drivers/watchdog/cpu5wdt.c
+> +++ b/drivers/watchdog/cpu5wdt.c
+> @@ -252,7 +252,7 @@ static void cpu5wdt_exit(void)
+>   	if (cpu5wdt_device.queue) {
+>   		cpu5wdt_device.queue = 0;
+>   		wait_for_completion(&cpu5wdt_device.stop);
+> -		del_timer(&cpu5wdt_device.timer);
+> +		timer_shutdown_sync(&cpu5wdt_device.timer);
+>   	}
+>   
+>   	misc_deregister(&cpu5wdt_misc);
 
-...
-
-> > > +   err =3D omnia_cmd_read(mcu->client, bootloader ? CMD_GET_FW_VERSI=
-ON_BOOT :
-> > > +                                                  CMD_GET_FW_VERSION=
-_APP,
-> > > +                        reply, sizeof(reply));
-> >
-> > Wouldn't be better to have a logical split?
-> >
-> >       err =3D omnia_cmd_read(mcu->client,
-> >                            bootloader ? CMD_GET_FW_VERSION_BOOT : CMD_G=
-ET_FW_VERSION_APP,
-> >                            reply, sizeof(reply));
->
-> Changed for v6 to
->
-> >       err =3D omnia_cmd_read(mcu->client,
-> >                            bootloader ? CMD_GET_FW_VERSION_BOOT
-> >                                       : CMD_GET_FW_VERSION_APP,
-> >                            reply, sizeof(reply));
->
-> There are still some people wanting only 80 columns, and the whole
-> driver is written that way.
-
-Hmm... Is it still a hard limit for drivers/platform/cznic for the _new_ co=
-de?
-
-> > ?
-
-...
-
-> > > +static ssize_t fw_features_show(struct device *dev, struct device_at=
-tribute *a,
-> > > +                           char *buf)
-> >
-> > One line?
->
-> 80 columns...
-
-Ditto.
-
-...
-
-> > > +static const struct attribute_group *omnia_mcu_groups[] =3D {
-> > > +   &omnia_mcu_base_group,
-> > > +   NULL
-> > > +};
-> >
-> > __ATTRIBUTE_GROUPS()
->
-> The next patches add more groups into this array, after the whole
-> series it looks like this:
->
-> static const struct attribute_group *omnia_mcu_groups[] =3D {
->         &omnia_mcu_base_group,
->         &omnia_mcu_gpio_group,
->         &omnia_mcu_poweroff_group,
->         NULL
-> };
->
-> There is no macro for that.
-
-Good point.
-
-> Should I still use __ATTRIBUTE_GROUPS() in
-> the first patch and than change it in the next one?
-
-...
-
-> > > +static inline int omnia_cmd_read(const struct i2c_client *client, u8=
- cmd,
-> > > +                            void *reply, unsigned int len)
-> > > +{
-> >
-> > Why is this in the header?
->
-> I considered it a helper function that should be defined in the header
-> file, like the rest of the cmd helpers in this file. If you disagree, I
-> will put it into the -base.c file.
-
-I don't see the technical justification to hold it in the *.h rather
-than *.c. To me this one is big enough in C and likely in assembly to
-be copied to each user. Besides that aspect, it slows down the build a
-lot (mostly due to i2c.h inclusion which otherwise is not needed).
-
-> > > +   struct i2c_msg msgs[2];
-> > > +   int ret;
-> > > +
-> > > +   msgs[0].addr =3D client->addr;
-> > > +   msgs[0].flags =3D 0;
-> > > +   msgs[0].len =3D 1;
-> > > +   msgs[0].buf =3D &cmd;
-> > > +   msgs[1].addr =3D client->addr;
-> > > +   msgs[1].flags =3D I2C_M_RD;
-> > > +   msgs[1].len =3D len;
-> > > +   msgs[1].buf =3D reply;
-> > > +
-> > > +   ret =3D i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
-> > > +   if (ret < 0)
-> > > +           return ret;
-> > > +   if (ret !=3D ARRAY_SIZE(msgs))
-> > > +           return -EIO;
-> > > +
-> > > +   return 0;
-> > > +}
-
---=20
-With Best Regards,
-Andy Shevchenko
 
