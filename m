@@ -1,98 +1,267 @@
-Return-Path: <linux-watchdog+bounces-798-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-799-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 586C1887D2B
-	for <lists+linux-watchdog@lfdr.de>; Sun, 24 Mar 2024 15:05:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBF93887D62
+	for <lists+linux-watchdog@lfdr.de>; Sun, 24 Mar 2024 16:04:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08B1B1F210EA
-	for <lists+linux-watchdog@lfdr.de>; Sun, 24 Mar 2024 14:05:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 298D61C20A54
+	for <lists+linux-watchdog@lfdr.de>; Sun, 24 Mar 2024 15:04:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CB8C1802A;
-	Sun, 24 Mar 2024 14:05:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE10418622;
+	Sun, 24 Mar 2024 15:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rgZW4C6i"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from zg8tmja5ljk3lje4ms43mwaa.icoremail.net (zg8tmja5ljk3lje4ms43mwaa.icoremail.net [209.97.181.73])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E9BD17BD6;
-	Sun, 24 Mar 2024 14:05:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.181.73
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EB26182BF;
+	Sun, 24 Mar 2024 15:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711289139; cv=none; b=kMduMSdv6izfx0BCe32zk+dJGJtvndH+kfHWD8AS9nj7HeNu8Kyq0xWqFziJFu6QNofKZeVCUR8z1LW7Eqzwp3U64kwG3c11GTDUgSq4pe9WU6qjKOZrYueWmWVcpjcNfJV2kbxBbwVMDm/YwV3eBhaalPS/JlrOF9Q/lVSDy9A=
+	t=1711292663; cv=none; b=P/B4e4mVJw1KQQYcZDW2didvV3JRgxfeaHumGSykd8eooLc99/rCbcG7BIO31IuLBVwLeFAEzQRpOY330vJffw3C7P2JWRmbMnMJ2ZsVpmP+eDUDuMyDfHVKbFLJGcb2XXVabYjUZ0chHzYOUBgmpq+0GQJ54TiiV7RjSSwM4oU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711289139; c=relaxed/simple;
-	bh=o2gfx2M0LqqtCFmcmwNJmkgj/vYb5MeMt7l5rcKqAlM=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=VNougTvSzbYxU2oZjf+kbdfyfnMB56h/isGYH3Y7iu72/+zIrvNqetq8BDxL5VEnjbpzsKgIEwc5GWj7yObUPF9f+AMY6OU70EW4dr6pgOutKZVtufOTwcGtNsPaRAXe87KNE346xzaUSIvaNowxYeA4Gx+l/QrZ1+HrP3RDi6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=209.97.181.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from ubuntu.localdomain (unknown [106.117.100.135])
-	by mail-app3 (Coremail) with SMTP id cC_KCgDX18H8MgBmd0YTAQ--.13126S2;
-	Sun, 24 Mar 2024 22:05:00 +0800 (CST)
-From: Duoming Zhou <duoming@zju.edu.cn>
-To: linux-watchdog@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	wim@linux-watchdog.org,
-	linux@roeck-us.net,
-	Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH] watchdog: cpu5wdt.c: Fix use-after-free bug caused by cpu5wdt_trigger
-Date: Sun, 24 Mar 2024 22:04:44 +0800
-Message-Id: <20240324140444.119584-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID:cC_KCgDX18H8MgBmd0YTAQ--.13126S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Jw4DAF4kJry8Xr15Ww1Utrb_yoW8JryUpr
-	W8Jry2kryktrW293Z7ZFn8ZFW8u3sxAa4IkF1UC39a9Fs3Xr1fCFWrKr4jgFZrtFZ5J3y3
-	Xr10q345W34rXrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_
-	JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67
-	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIY
-	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
-	v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
-	JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUSNtxUUU
-	UU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAwMJAWX+3hkBYwA5sP
+	s=arc-20240116; t=1711292663; c=relaxed/simple;
+	bh=rf3b26KuECC9MTFW/pddYxruswZh6tBWvG0s53kSfzQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RwVoAfoBOKh1sRAWmkunIlmRY5oqdj1pJQbKRWXU1DbcUNI2I9Ta1udirNF1ry/OHXlsHbvglX3Z3a5lfB78kswANxHAbbzaL1o4CCa1Nh23aKaJnkdvI3OxS1lXJpEBQ+0kZTOVExXoaiXkkI0z7xowUEKQcMXhB2ai/lrMltU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rgZW4C6i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 113AEC433F1;
+	Sun, 24 Mar 2024 15:04:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711292663;
+	bh=rf3b26KuECC9MTFW/pddYxruswZh6tBWvG0s53kSfzQ=;
+	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
+	b=rgZW4C6iXaOLkEa+zKmkO76TnGVu1vqFEV1NHyarlK01d+Dh4DgoA1NdrvSMuzEkb
+	 eeIMQ3zfm0SbxPIPhF7LKfQImYKUlSy/GxMHUDA8EaW7ih2vQSO6CaWPu108XT2mum
+	 SM6nE2PwD5XPS0EcAgfHmdyHTC/ppv8jNY3Rq7gqbZGql3ziYSZrvDzZ8VVn5oJ5z0
+	 WT3eT3MZyRjJz4gc7pKmHEla/gOk+StjmzwD3H698CFd5BKsqCePolVQ/Fe3w75FOs
+	 dvgyxMVfqKwBolJ8XXJS0SydynGR4nALWDJ4vIA3H68DP3UPsRoSqyeGMDYkTN5bNG
+	 J10G//JxY1zkg==
+Date: Sun, 24 Mar 2024 16:04:08 +0100
+From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Gregory CLEMENT
+ <gregory.clement@bootlin.com>, soc@kernel.org, arm@kernel.org, Linus
+ Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Andy Shevchenko <andy@kernel.org>, linux-gpio@vger.kernel.org, Alessandro
+ Zummo <a.zummo@towertech.it>, Alexandre Belloni
+ <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org, Wim Van
+ Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>,
+ linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v5 02/11] platform: cznic: Add preliminary support for
+ Turris Omnia MCU
+Message-ID: <20240324160408.77c8574e@thinkpad>
+In-Reply-To: <ZgAII1B03bLUisWr@surfacebook.localdomain>
+References: <20240323164359.21642-1-kabel@kernel.org>
+	<20240323164359.21642-3-kabel@kernel.org>
+	<ZgAII1B03bLUisWr@surfacebook.localdomain>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.39; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-When the cpu5wdt module is removing, the origin code uses del_timer() to
-de-activate the timer. If the timer handler is running, del_timer() could
-not stop it and will return directly. If the port region is released by
-release_region() and then the timer handler cpu5wdt_trigger() calls outb()
-to write into the region that is released, the use-after-free bug will
-happen.
+Hi Andy,
 
-Change del_timer() to timer_shutdown_sync() in order that the timer handler
-could be finished before the port region is released.
+thank you very much for the review. I have some notes and some
+questions, see below.
 
-Fixes: e09d9c3e9f85 ("watchdog: cpu5wdt.c: add missing del_timer call")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- drivers/watchdog/cpu5wdt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, 24 Mar 2024 13:01:55 +0200
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-diff --git a/drivers/watchdog/cpu5wdt.c b/drivers/watchdog/cpu5wdt.c
-index 688b112e712..9f279c0e13a 100644
---- a/drivers/watchdog/cpu5wdt.c
-+++ b/drivers/watchdog/cpu5wdt.c
-@@ -252,7 +252,7 @@ static void cpu5wdt_exit(void)
- 	if (cpu5wdt_device.queue) {
- 		cpu5wdt_device.queue = 0;
- 		wait_for_completion(&cpu5wdt_device.stop);
--		del_timer(&cpu5wdt_device.timer);
-+		timer_shutdown_sync(&cpu5wdt_device.timer);
- 	}
- 
- 	misc_deregister(&cpu5wdt_misc);
--- 
-2.17.1
+> Sat, Mar 23, 2024 at 05:43:50PM +0100, Marek Beh=C3=BAn kirjoitti:
+> > Add the basic skeleton for a new platform driver for the microcontroller
+> > found on the Turris Omnia board. =20
+>=20
+> ...
+>=20
+> > +++ b/drivers/platform/cznic/Makefile
+> > @@ -0,0 +1,4 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only
+> > +
+> > +obj-$(CONFIG_TURRIS_OMNIA_MCU)	+=3D turris-omnia-mcu.o
+> > +turris-omnia-mcu-objs		:=3D turris-omnia-mcu-base.o =20
+>=20
+> 'objs' is for user space. You need to use 'y'. Same applies to the entire
+> series.
+
+Fixed for v6.
+
+>=20
+> + array_size.h
+> + bits.h
+
+Fixed for v6. Is there some tool for this?
+
+> + string.h
+
+Fixed for v6.
+>=20
+> > +#include <linux/sysfs.h> =20
+>=20
+> ...
+>=20
+> > +	err =3D omnia_cmd_read(mcu->client, bootloader ? CMD_GET_FW_VERSION_B=
+OOT :
+> > +						       CMD_GET_FW_VERSION_APP,
+> > +			     reply, sizeof(reply)); =20
+>=20
+> Wouldn't be better to have a logical split?
+>=20
+> 	err =3D omnia_cmd_read(mcu->client,
+> 			     bootloader ? CMD_GET_FW_VERSION_BOOT : CMD_GET_FW_VERSION_APP,
+> 			     reply, sizeof(reply));
+
+Changed for v6 to
+
+> 	err =3D omnia_cmd_read(mcu->client,
+> 			     bootloader ? CMD_GET_FW_VERSION_BOOT
+> 					: CMD_GET_FW_VERSION_APP,
+> 			     reply, sizeof(reply));
+
+There are still some people wanting only 80 columns, and the whole
+driver is written that way.
+
+>=20
+> ?
+>=20
+> ...
+>=20
+> > +	struct omnia_mcu *mcu =3D i2c_get_clientdata(to_i2c_client(dev)); =20
+>=20
+> What's wrong with dev_get_drvdata()?
+
+Fixed for v6.
+
+> ...
+>=20
+> > +static ssize_t fw_features_show(struct device *dev, struct device_attr=
+ibute *a,
+> > +				char *buf) =20
+>=20
+> One line?
+
+80 columns...
+
+...
+
+> > +static const struct attribute_group omnia_mcu_base_group =3D {
+> > +	.attrs =3D omnia_mcu_base_attrs,
+> > +	.is_visible =3D omnia_mcu_base_attrs_visible,
+> > +};
+> > +
+> > +static const struct attribute_group *omnia_mcu_groups[] =3D {
+> > +	&omnia_mcu_base_group,
+> > +	NULL
+> > +}; =20
+>=20
+> __ATTRIBUTE_GROUPS()
+
+The next patches add more groups into this array, after the whole
+series it looks like this:
+
+static const struct attribute_group *omnia_mcu_groups[] =3D {
+	&omnia_mcu_base_group,
+	&omnia_mcu_gpio_group,
+	&omnia_mcu_poweroff_group,
+	NULL
+};
+
+There is no macro for that. Should I still use __ATTRIBUTE_GROUPS() in
+the first patch and than change it in the next one?
+
+>=20
+> ...
+>=20
+> > +static struct i2c_driver omnia_mcu_driver =3D {
+> > +	.probe		=3D omnia_mcu_probe,
+> > +	.driver		=3D {
+> > +		.name	=3D "turris-omnia-mcu",
+> > +		.of_match_table =3D of_omnia_mcu_match,
+> > +		.dev_groups =3D omnia_mcu_groups,
+> > +	},
+> > +}; =20
+>=20
+> > + =20
+>=20
+> Redundant blank line.
+>=20
+
+Fixed for v6.
+
+> > +module_i2c_driver(omnia_mcu_driver); =20
+>=20
+> ...
+>=20
+> > +#ifndef __TURRIS_OMNIA_MCU_H
+> > +#define __TURRIS_OMNIA_MCU_H =20
+>=20
+> + array_size.h
+
+Fixed for v6.
+
+>=20
+> > +#include <linux/i2c.h>
+> > +#include <linux/if_ether.h>
+> > +#include <linux/types.h>
+> > +#include <asm/byteorder.h> =20
+>=20
+> ...
+>=20
+> > +static inline int omnia_cmd_read(const struct i2c_client *client, u8 c=
+md,
+> > +				 void *reply, unsigned int len)
+> > +{ =20
+>=20
+> Why is this in the header?
+
+I considered it a helper function that should be defined in the header
+file, like the rest of the cmd helpers in this file. If you disagree, I
+will put it into the -base.c file.
+
+>=20
+> > +	struct i2c_msg msgs[2];
+> > +	int ret;
+> > +
+> > +	msgs[0].addr =3D client->addr;
+> > +	msgs[0].flags =3D 0;
+> > +	msgs[0].len =3D 1;
+> > +	msgs[0].buf =3D &cmd;
+> > +	msgs[1].addr =3D client->addr;
+> > +	msgs[1].flags =3D I2C_M_RD;
+> > +	msgs[1].len =3D len;
+> > +	msgs[1].buf =3D reply;
+> > +
+> > +	ret =3D i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
+> > +	if (ret < 0)
+> > +		return ret;
+> > +	if (ret !=3D ARRAY_SIZE(msgs))
+> > +		return -EIO;
+> > +
+> > +	return 0;
+> > +} =20
+>=20
+> ...
+>=20
+> > +#ifndef __TURRIS_OMNIA_MCU_INTERFACE_H
+> > +#define __TURRIS_OMNIA_MCU_INTERFACE_H
+> > +
+> > +#include <linux/bits.h> =20
+>=20
+> + bitfield.h
+
+Fixed for v6.
+
+>=20
+> > +#endif /* __TURRIS_OMNIA_MCU_INTERFACE_H */ =20
+>=20
 
 
