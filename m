@@ -1,76 +1,76 @@
-Return-Path: <linux-watchdog+bounces-807-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-808-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFBEA88ABEF
-	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Mar 2024 18:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CFA6988AC68
+	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Mar 2024 18:52:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8F5D1C3C14F
-	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Mar 2024 17:39:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E76A51C60457
+	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Mar 2024 17:52:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C679148852;
-	Mon, 25 Mar 2024 16:42:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E5D512C52D;
+	Mon, 25 Mar 2024 17:06:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TMIimtAT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="krO36OZ+"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A031B5B1;
-	Mon, 25 Mar 2024 16:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7047143C47;
+	Mon, 25 Mar 2024 17:06:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711384969; cv=none; b=Bnc7PWgXk9J214ziPaeT02HKT5PuE6KNlmZp+yViFVGSTLNj6cWU9a6x4t+u31zfGgeDx64AWvvFZTCYxkcU0vOX81heEBxCIyQpmWm9v+1Kdh+VSTmfYsF57smnkOriipbfpcGnakdcW9Wv0VLfhMA8DaP+XqXjLP4eFVPGa1U=
+	t=1711386399; cv=none; b=FgBnQcHaddYb6ogacW0XBtFJrDlZIxAweO1eoxr/10fL16ZUSiNXTaehjhRV/pkLsoorlLUDjPpK+6Z76IWnP5ibj/3WtmAhPYEUJYW1c3F/RJ4jiPXYXeQqy1IPh5QmhEgu9iwvUZmXbBsAiDcBWHKqTH3S0OW+S4JDs3bAWk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711384969; c=relaxed/simple;
-	bh=BsOG0zlpUuIaqZ5XWJcrPCv0aTbo8dN5dmZPSdYyRz8=;
+	s=arc-20240116; t=1711386399; c=relaxed/simple;
+	bh=t3ot0dRKsro4fOCKaONc7R6jLHZoXDEiJAF7nhV80e8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=s4j/PU/gs5HlGauqIGvJQCjdVdUIt5Z66jupi+muLlgcAkw9QshA7OpZ4K752mbyGSXL9yHm6DJ8cp/0SGpguPAM1TGxeLjiDaCrswDx305Ti/LU5d9PGq5lsN2ouai2OnRIFuVozoGK4pQhkXiTg1ACHerLf2HCLbp7NUw00mA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TMIimtAT; arc=none smtp.client-ip=209.85.210.177
+	 In-Reply-To:Content-Type; b=t9G8XGC5ihTK0Er0nd18cq0SnDQeC9WvHSl1PyZlq57hMJdZRTbd3SN1+1154B2Nnw4nb3FRRLPWK+O5edKbLfCGMM4dLnsIiMfbLhzOO9njKQQaw0gkj/g6TpCZAdxZ0iJYxuX9ajZMbHJQQr3PdiX/1TuIufe7QU1f81FGLHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=krO36OZ+; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6ea9a60f7f5so1582420b3a.3;
-        Mon, 25 Mar 2024 09:42:47 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6e6f69e850bso3936154b3a.0;
+        Mon, 25 Mar 2024 10:06:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711384967; x=1711989767; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1711386397; x=1711991197; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=i6zXI16W5U44j+CqavsDltFFlmUoDY+2ezEvYOwd6U0=;
-        b=TMIimtATt/70zAz5V9HyibxpLnui9dJA7+d84kmTN62yJW8YyGRoowcjTESt3EmUq4
-         70nRdH1yPORifsgvUiq1Gz5cYZnqBPmWrLa3fSQV6XBvITUECmggmfXT6w+xOUMobMJw
-         F+cnmmApyHCaJnphBV/TdOBacpxUhqPZSiJWycb62LDpm7+EkR9nQEW0ju+X9+vU7bah
-         rXwteozskjQkMMa/Am+OO8aup8m99Nlk8Putzb2JQtLeD5v5L8h7uY2yL/ugzOIwHXUG
-         nbFHgZC2b61FL049xQeePZWsDid23P9ODZVpocMnHeKmwxBPKb0G8PY3CBsMLIyJ5JUA
-         iImQ==
+        bh=lURQxy/Kj/7mCvaaS4L12WpsGGJsAgAEK7Ux3Z4xfwo=;
+        b=krO36OZ+09KZ0aXtV1G+39FL/Ao/eIe7FBq6iX8XaKoBFPdCmGcLTm2zsfwJ/Ynx2q
+         bhbinuWH67aBjsiimUMQmkujR3eOaindK5eERaeB62vuSVL7ewGOCEW+RzbcpA2SdhAQ
+         oawpdL+o1ZQfUFRan7Rtczkx49rtaDARvH5rMFrK0cY/GLgtcNBnjXm7TMVMYCqu4isC
+         XooA4Dl8WbJzZQxSuAP6e+8U3RhnoJ59bGEQbn8aEKGy0ohEDQKpu9KyaKTSX/Ky0+Bg
+         4jWQrOzUqxOb48DxaJ3yGOKM8mwwnJZ7UMMByoWdGuyie6S9YrqYprfJj1uyokHcpkuT
+         Xyhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711384967; x=1711989767;
+        d=1e100.net; s=20230601; t=1711386397; x=1711991197;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=i6zXI16W5U44j+CqavsDltFFlmUoDY+2ezEvYOwd6U0=;
-        b=fypp8unFxXSatdswZMSetQv6n7w6yOTNec5CGwWMKlHedlBOX1I45tsr4dt+ND4tkE
-         pmKLT7f+n+u7AG2ElK0gJxFvCWf/9JcHM1tDTGkGDGX1v5BQmCAUQQ+pGRIHcg6Fqkbj
-         FuAzE0fyud7NY8AXtbiyIC0GsrM/mazyMqxpqzPGpGFDFnkntZ3VJKC3OdS6hfZA1mCS
-         fWUlBN0FgXQQrY43QkM+Q8uwIeJmC95R1wNkMS1ct56aYm6XM/rUYlzniNlZklFaolJx
-         Xy8A4bpt8iANOe7nu0cKgG3oa+KMLZejhDPXOMWRbJeR85KP8KgjsR1WopF8RuuYsS66
-         fGHg==
-X-Forwarded-Encrypted: i=1; AJvYcCUlgFW0MDlj8NQbBnqwNfBkSkpiN5Q4w1aZMfrIM79idkbBr4wwXQQ1FdViZ6a+BEeMQPH4Xp+G+mjzzJ4rQ8VddWTvY2H3R1HYs6jvZZ7m5CMoFCJEOmdkqSmSnf1n7UomQyJtUzHBkYSYbv/t7IS7D+fOoOLMH9QFA9RIMqd2PTxBYi4P3Dx7vKi8Kcrd4dsXP0QK2q0E4Ds0C+Puqr29LSoHI6jocAcl8q7MLN6Hu2poa/jHDJYyxfEEHLhhC8TNE9SuliZNM1uXWTIEVgxhnHMiOfDeec8LLrq1
-X-Gm-Message-State: AOJu0YwmwBSbnVWn48hXo0AL+mtrkeHr7G/V8+SsNIpeqSbj8wJVB570
-	gqPCUfzcPs9YfRO5daV18NJ2HQamRdtaM/p3ZeRoQVxECDH3ZT3S
-X-Google-Smtp-Source: AGHT+IHj7ORNV5iZfjrVaD+IH53ca5TYr9gaePxoGGGxAS6Ra9dP48GahfdY7D/gO4FmqY617Z/bTw==
-X-Received: by 2002:a05:6a20:6a9e:b0:1a3:52ef:cc84 with SMTP id bi30-20020a056a206a9e00b001a352efcc84mr4743932pzb.60.1711384966727;
-        Mon, 25 Mar 2024 09:42:46 -0700 (PDT)
+        bh=lURQxy/Kj/7mCvaaS4L12WpsGGJsAgAEK7Ux3Z4xfwo=;
+        b=hF/mH4eLnHX8Yw5QLIrJOy9Ymmc8DEIPlG9x+GVdvf5PknII32LuNT3zPLZV1RH6fA
+         2yPQTW6RN7i+SsbLiKiYTb5xbggVLAwFm00N+ChKEvWUFEHMyQ6T20zeWHOnTZc0GJxE
+         kfOA4/ka7irU9dHJdzvAgRNtauYbgZloPvrMOTaFqPC37qTX2mkMeqZo/Kqf20fz1aRG
+         9+aCD2lOPwaT0rBgRv+hTiwm3xR/cSAvyC6xbWS1UcVic6g9bYO06e40sCrj3KyxkiaS
+         6Ss13g7mE1KFXkcHFjVigeG3+1rCL53+8iUhmsKbJy+Z/a3xM4KCgKfuODtnnXTQKOLU
+         NVDQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXzVLI8oRmTisESjlWSBjYPRC3oo5LXAyFj1Gx75OyhxfNpSqs6J/Sv0d0aixpuoCU/WXo4s4Moykq4CCX16eAjMgqioQg6z2np88A10vGL0+swiHlUhATaCHcjxoto67RV0gr0sHlDGD+LGmIFXVzHpbE/ss5kzeMzQDeKs3o+pkGmgFzOh2L+
+X-Gm-Message-State: AOJu0YzcrYCvgXeZzrtCT0uwbE4e1cHjibfx94bzPaXOIG0iYR315SvB
+	gS5ZScXVXEkDleyb3t6p0cQMhfcvAJFsTmakY9rRmccMQrqxa+7f
+X-Google-Smtp-Source: AGHT+IFB0Zx5HB4eAeO7TlMCW4Ry9iykhiOD0RLW1hkUlKfz4r0vbUfOrlh7NndtPGPSatDIaOwX/Q==
+X-Received: by 2002:a17:902:8218:b0:1e0:7bbf:bef4 with SMTP id x24-20020a170902821800b001e07bbfbef4mr8019922pln.41.1711386396930;
+        Mon, 25 Mar 2024 10:06:36 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h10-20020a170902f54a00b001dd7a97a266sm4858839plf.282.2024.03.25.09.42.45
+        by smtp.gmail.com with ESMTPSA id p16-20020a1709027ed000b001e0b5f9fb02sm2947255plb.26.2024.03.25.10.06.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Mar 2024 09:42:46 -0700 (PDT)
+        Mon, 25 Mar 2024 10:06:35 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a238b9dd-9251-4241-81ef-461081c1c4be@roeck-us.net>
-Date: Mon, 25 Mar 2024 09:42:45 -0700
+Message-ID: <c6646c7a-6e80-4dce-a166-2beaf5030387@roeck-us.net>
+Date: Mon, 25 Mar 2024 10:06:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -78,16 +78,19 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: mfd: twl: Convert trivial subdevices to
- json-schema
+Subject: Re: [PATCH v2] drivers: watchdog: ast2600 support bootstatus
 Content-Language: en-US
-To: Andreas Kemnade <andreas@kemnade.info>, dmitry.torokhov@gmail.com,
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- lee@kernel.org, alexandre.belloni@bootlin.com, wim@linux-watchdog.org,
- linux-input@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-watchdog@vger.kernel.org, linux-omap@vger.kernel.org, sre@kernel.org
-References: <20240324183727.206384-1-andreas@kemnade.info>
+To: PeterYin <peteryin.openbmc@gmail.com>, patrick@stwcx.xyz,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20240318055219.3460121-1-peteryin.openbmc@gmail.com>
+ <13640a07-7395-4521-9c5d-748599202361@roeck-us.net>
+ <924c4402-af14-4b7a-9a4e-4317c50482cd@gmail.com>
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -132,188 +135,200 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240324183727.206384-1-andreas@kemnade.info>
+In-Reply-To: <924c4402-af14-4b7a-9a4e-4317c50482cd@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/24/24 11:37, Andreas Kemnade wrote:
-> Convert subdevices with just an interrupt and compatbile to
-> json-schema and wire up already converted subdevices.
-> RTC is available in all variants, so allow it unconditionally.
-> GPADC binding for TWL603X uses two different compatibles, so
-> specify just the compatible and do not include it.
+On 3/20/24 02:05, PeterYin wrote:
 > 
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-
-For watchdog:
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
-> Changes in v2:
-> - style cleanup
-> - absolute paths
-> - unevalutedProperties instead of additionalProperties
->    due to not accepting things in if: clauses without it
 > 
->   .../bindings/input/twl4030-pwrbutton.txt      | 21 ------
->   .../devicetree/bindings/mfd/ti,twl.yaml       | 72 ++++++++++++++++++-
->   .../devicetree/bindings/rtc/twl-rtc.txt       | 11 ---
->   .../bindings/watchdog/twl4030-wdt.txt         | 10 ---
->   4 files changed, 71 insertions(+), 43 deletions(-)
->   delete mode 100644 Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt
->   delete mode 100644 Documentation/devicetree/bindings/rtc/twl-rtc.txt
->   delete mode 100644 Documentation/devicetree/bindings/watchdog/twl4030-wdt.txt
+> Guenter Roeck 於 3/19/24 08:46 寫道:
+>> On 3/17/24 22:52, Peter Yin wrote:
+>>> Add WDIOF_EXTERN1 and WDIOF_CARDRESET bootstatus in ast2600
+>>>
+>>> Regarding the AST2600 specification, the WDTn Timeout Status Register
+>>> (WDT10) has bit 1 reserved. To verify the second boot source,
+>>> we need to check SEC14 bit 12 and bit 13.
+>>> The bits 8-23 in the WDTn Timeout Status Register are the Watchdog
+>>> Event Count, which we can use to verify WDIOF_EXTERN1.
+>>>
+>>> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
+>>
+>> You'll have to separate dts and yaml file changes from driver changes.
+>>
+>>> ---
+>>> Change log:
+>>>
+>>> v1 -> v2
+>>>    - Add comment and support WDIOF_CARDRESET in ast2600
+>>>
+>>> v1
+>>>    - Patch 0001 - Add WDIOF_EXTERN1 bootstatus
+>>> ---
+>>>   arch/arm/boot/dts/aspeed/aspeed-g6.dtsi |  8 ++---
+>>>   drivers/watchdog/aspeed_wdt.c           | 45 ++++++++++++++++++++++---
+>>>   2 files changed, 44 insertions(+), 9 deletions(-)
+>>>
+>>> diff --git a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
+>>> index e0b44498269f..23ae7f0430e9 100644
+>>> --- a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
+>>> +++ b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
+>>> @@ -556,24 +556,24 @@ uart5: serial@1e784000 {
+>>>               wdt1: watchdog@1e785000 {
+>>>                   compatible = "aspeed,ast2600-wdt";
+>>> -                reg = <0x1e785000 0x40>;
+>>> +                reg = <0x1e785000 0x40>, <0x1e6f2000 0x20>;
+>>>               };
+>>>               wdt2: watchdog@1e785040 {
+>>>                   compatible = "aspeed,ast2600-wdt";
+>>> -                reg = <0x1e785040 0x40>;
+>>> +                reg = <0x1e785040 0x40>, <0x1e6f2000 0x020>;
+>>>                   status = "disabled";
+>>>               };
+>>>               wdt3: watchdog@1e785080 {
+>>>                   compatible = "aspeed,ast2600-wdt";
+>>> -                reg = <0x1e785080 0x40>;
+>>> +                reg = <0x1e785080 0x40>, <0x1e6f2000 0x020>;
+>>>                   status = "disabled";
+>>>               };
+>>>               wdt4: watchdog@1e7850c0 {
+>>>                   compatible = "aspeed,ast2600-wdt";
+>>> -                reg = <0x1e7850C0 0x40>;
+>>> +                reg = <0x1e7850C0 0x40>, <0x1e6f2000 0x020>;
+>>>                   status = "disabled";
+>>>               };
+>>> diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
+>>> index b4773a6aaf8c..65118e461130 100644
+>>> --- a/drivers/watchdog/aspeed_wdt.c
+>>> +++ b/drivers/watchdog/aspeed_wdt.c
+>>> @@ -33,6 +33,7 @@ struct aspeed_wdt {
+>>>       void __iomem        *base;
+>>>       u32            ctrl;
+>>>       const struct aspeed_wdt_config *cfg;
+>>> +    void __iomem        *sec_base;
+>>>   };
+>>>   static const struct aspeed_wdt_config ast2400_config = {
+>>> @@ -82,6 +83,15 @@ MODULE_DEVICE_TABLE(of, aspeed_wdt_of_table);
+>>>   #define WDT_RESET_MASK1        0x1c
+>>>   #define WDT_RESET_MASK2        0x20
+>>> +/*
+>>> + * Only Ast2600 support
+>>> + */
+>>> +#define   WDT_EVENT_COUNTER_MASK    (0xFFF << 8)
+>>> +#define   WDT_SECURE_ENGINE_STATUS    (0x14)
+>>> +#define   ABR_IMAGE_SOURCE        BIT(12)
+>>> +#define   ABR_IMAGE_SOURCE_SPI        BIT(13)
+>>> +#define   SECOND_BOOT_ENABLE        BIT(14)
+>>> +
+>>>   /*
+>>>    * WDT_RESET_WIDTH controls the characteristics of the external pulse (if
+>>>    * enabled), specifically:
+>>> @@ -313,6 +323,7 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
+>>>       const char *reset_type;
+>>>       u32 duration;
+>>>       u32 status;
+>>> +    u32 sec_st;
+>>>       int ret;
+>>>       wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+>>> @@ -330,6 +341,12 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
+>>>       if (IS_ERR(wdt->base))
+>>>           return PTR_ERR(wdt->base);
+>>> +    if (of_device_is_compatible(np, "aspeed,ast2600-wdt")) {
+>>> +        wdt->sec_base = devm_platform_ioremap_resource(pdev, 1);
+>>> +        if (IS_ERR(wdt->sec_base))
+>>> +            return PTR_ERR(wdt->sec_base);
+>>> +    }
+>>> +
+>>>       wdt->wdd.info = &aspeed_wdt_info;
+>>>       if (wdt->cfg->irq_mask) {
+>>> @@ -459,12 +476,30 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
+>>>       }
+>>>       status = readl(wdt->base + WDT_TIMEOUT_STATUS);
+>>> -    if (status & WDT_TIMEOUT_STATUS_BOOT_SECONDARY) {
+>>> -        wdt->wdd.bootstatus = WDIOF_CARDRESET;
+>>> -        if (of_device_is_compatible(np, "aspeed,ast2400-wdt") ||
+>>> -            of_device_is_compatible(np, "aspeed,ast2500-wdt"))
+>>> -            wdt->wdd.groups = bswitch_groups;
+>>> +    if (of_device_is_compatible(np, "aspeed,ast2600-wdt")) {
+>>> +        /*
+>>> +         * The WDTn Timeout Status Register bit 1 is reserved.
+>>> +         * To verify the second boot source,
+>>> +         * we need to check SEC14 bit 12 and bit 13.
+>>> +         */
+>>> +        sec_st = readl(wdt->sec_base + WDT_SECURE_ENGINE_STATUS);
+>>> +        if( sec_st & SECOND_BOOT_ENABLE)
+>>> +            if (sec_st & ABR_IMAGE_SOURCE ||
+>>> +                sec_st & ABR_IMAGE_SOURCE_SPI)
+>>
+>> I am sure that checkpatch as something to say here. Either case, I would very
+>> much prefer a single if() statement such as
+>>
+>>          if (sec_st & SECOND_BOOT_ENABLE &&
+>>              sec_st & (ABR_IMAGE_SOURCE | ABR_IMAGE_SOURCE_SPI))
+>>
+>>> +                wdt->wdd.bootstatus |= WDIOF_CARDRESET;
+>>> +
+>>> +        /*
+>>> +         * To check Watchdog Event Count for WDIOF_EXTERN1
+>>> +         */
+>>> +        if (status & WDT_EVENT_COUNTER_MASK) {
+>>> +            wdt->wdd.bootstatus |= WDIOF_EXTERN1;
+>>> +        }
+>>
+>> Unnecessary { }
+>>
+>> ... but does this really indicate that there was a reset due to some event ?
+>> This reads three 8-bit counters. Wouldn't it make more sense to check bit 0
+>> instead ?
+>>
+>> I am also not sure if reading the watchdog status from WDT_SECURE_ENGINE_STATUS
+>> adds any value over the status reported in the watchdog status register.
+>> You'll have to explain why the added complexity is necessary or even adds
+>> value.
+>>
+>> Never mind, though ...
+>>
+>> Looking into the datasheets, the current code is quite completely wrong anyway.
+>> Bit 1 of the status register indicates on ast2500 if the boot was from the second
+>> boot source. It does not indicate that the most recent reset was triggered by
+>> the watchdog. The code should just be changed to set WDIOF_CARDRESET if bit 0
+>> of the status register is set. The boot source is out of scope for the watchdog
+>> status bits.
+>>
+>> Thanks,
+>> Guenter
+>>
+> Ast2600 has external reset flag on scu74 bit 1
+> Can I modify the code like this?
 > 
-> diff --git a/Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt b/Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt
-> deleted file mode 100644
-> index 6c201a2ba8acf..0000000000000
-> --- a/Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt
-> +++ /dev/null
-> @@ -1,21 +0,0 @@
-> -Texas Instruments TWL family (twl4030) pwrbutton module
-> -
-> -This module is part of the TWL4030. For more details about the whole
-> -chip see Documentation/devicetree/bindings/mfd/ti,twl.yaml.
-> -
-> -This module provides a simple power button event via an Interrupt.
-> -
-> -Required properties:
-> -- compatible: should be one of the following
-> -   - "ti,twl4030-pwrbutton": For controllers compatible with twl4030
-> -- interrupts: should be one of the following
-> -   - <8>: For controllers compatible with twl4030
-> -
-> -Example:
-> -
-> -&twl {
-> -	twl_pwrbutton: pwrbutton {
-> -		compatible = "ti,twl4030-pwrbutton";
-> -		interrupts = <8>;
-> -	};
-> -};
-> diff --git a/Documentation/devicetree/bindings/mfd/ti,twl.yaml b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
-> index 52ed228fb1e7e..c2357fecb56cc 100644
-> --- a/Documentation/devicetree/bindings/mfd/ti,twl.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/ti,twl.yaml
-> @@ -15,6 +15,67 @@ description: |
->     USB transceiver or Audio amplifier.
->     These chips are connected to an i2c bus.
->   
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: ti,twl4030
-> +    then:
-> +      properties:
-> +        madc:
-> +          type: object
-> +          $ref: /schemas/iio/adc/ti,twl4030-madc.yaml
-> +          unevaluatedProperties: false
-> +
-> +        bci:
-> +          type: object
-> +          $ref: /schemas/power/supply/twl4030-charger.yaml
-> +          unevaluatedProperties: false
-> +
-> +        pwrbutton:
-> +          type: object
-> +          additionalProperties: false
-> +          properties:
-> +            compatible:
-> +              const: ti,twl4030-pwrbutton
-> +            interrupts:
-> +              items:
-> +                - items:
-> +                    const: 8
-> +
-> +        watchdog:
-> +          type: object
-> +          additionalProperties: false
-> +          properties:
-> +            compatible:
-> +              const: ti,twl4030-wdt
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: ti,twl6030
-> +    then:
-> +      properties:
-> +        gpadc:
-> +          type: object
-> +          properties:
-> +            compatible:
-> +              const: ti,twl6030-gpadc
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: ti,twl6032
-> +    then:
-> +      properties:
-> +        gpadc:
-> +          type: object
-> +          properties:
-> +            compatible:
-> +              const: ti,twl6032-gpadc
-> +
->   properties:
->     compatible:
->       description:
-> @@ -42,7 +103,16 @@ properties:
->     "#clock-cells":
->       const: 1
->   
-> -additionalProperties: false
-> +  rtc:
-> +    type: object
-> +    additionalProperties: false
-> +    properties:
-> +      compatible:
-> +        const: ti,twl4030-rtc
-> +      interrupts:
-> +        maxItems: 1
-> +
-> +unevaluatedProperties: false
->   
->   required:
->     - compatible
-> diff --git a/Documentation/devicetree/bindings/rtc/twl-rtc.txt b/Documentation/devicetree/bindings/rtc/twl-rtc.txt
-> deleted file mode 100644
-> index 8f9a94f2f8969..0000000000000
-> --- a/Documentation/devicetree/bindings/rtc/twl-rtc.txt
-> +++ /dev/null
-> @@ -1,11 +0,0 @@
-> -* Texas Instruments TWL4030/6030 RTC
-> -
-> -Required properties:
-> -- compatible : Should be "ti,twl4030-rtc"
-> -- interrupts : Should be the interrupt number.
-> -
-> -Example:
-> -	rtc {
-> -		compatible = "ti,twl4030-rtc";
-> -		interrupts = <11>;
-> -	};
-> diff --git a/Documentation/devicetree/bindings/watchdog/twl4030-wdt.txt b/Documentation/devicetree/bindings/watchdog/twl4030-wdt.txt
-> deleted file mode 100644
-> index 80a37193c0b86..0000000000000
-> --- a/Documentation/devicetree/bindings/watchdog/twl4030-wdt.txt
-> +++ /dev/null
-> @@ -1,10 +0,0 @@
-> -Device tree bindings for twl4030-wdt driver (TWL4030 watchdog)
-> -
-> -Required properties:
-> -	compatible = "ti,twl4030-wdt";
-> -
-> -Example:
-> -
-> -watchdog {
-> -	compatible = "ti,twl4030-wdt";
-> -};
+> To set WDIOF_EXTERN1 if EXTERN_RESET_FLAG is set,
+> To set WDIOF_CARDRESET if WDT_TIMEOUT_STATUS_EVENT(bit0) is set
+> 
+> 
+> #define   WDT_TIMEOUT_STATUS_EVENT    BIT(0)
+> #define   EXTERN_RESET_FLAG        BIT(1)
+> #define   ASPEED_SYSTEM_RESET_EVENT    (0x74)
+> 
+>      status = readl(wdt->base + WDT_TIMEOUT_STATUS);
+>      if (status & WDT_TIMEOUT_STATUS_EVENT)
+>          wdt->wdd.bootstatus = WDIOF_CARDRESET;
+> 
+>      if (of_device_is_compatible(np, "aspeed,ast2600-wdt")) {
+>          status = readl(wdt->scu_base + ASPEED_SYSTEM_RESET_EVENT);
+
+ASPEED_SYSTEM_RESET_EVENT is at offset 0x74, but the devicetree nodes
+for "aspeed,ast2600-wdt" only request 0x20 bytes for scu. I don't really
+understand, though, how this is supposed to work in the first place, since
+the entire SCU address range is also requested by "aspeed,ast2600-sbc".
+Granted, I don't see actual code in the upstream kernel listing itself
+as compatible with "aspeed,ast2600-sbc" (it looks like attempts to upstream
+that code were unsuccessful), but it seems wrong to use that memory space
+for the watchdog driver.
+
+Also, ast2500 has the "external reset" flag in SCU register 1e6e2000:0x3c.
+That should be addressed at the same time, if at all.
+
+Thanks,
+Guenter
 
 
