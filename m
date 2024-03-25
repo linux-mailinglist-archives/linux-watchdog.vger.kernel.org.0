@@ -1,48 +1,48 @@
-Return-Path: <linux-watchdog+bounces-803-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-802-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3170D889649
-	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Mar 2024 09:48:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED7B98899E8
+	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Mar 2024 11:18:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 639491C30021
-	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Mar 2024 08:48:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E23F1F34E69
+	for <lists+linux-watchdog@lfdr.de>; Mon, 25 Mar 2024 10:18:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 804D44F88C;
-	Mon, 25 Mar 2024 05:31:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F29CD12FF7D;
+	Mon, 25 Mar 2024 05:31:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gl+UKIWl"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kjQoFYO8"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD798149C78;
-	Mon, 25 Mar 2024 01:54:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0E114A610;
+	Mon, 25 Mar 2024 01:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711331662; cv=none; b=OEK+lF0V7LwpSHg1udTJ2OUZXsmEhSo76p6DE4mQ31F8oFXl01NQFNIIf1UXprJGYuci4Z6jPWQhO8CVOlryki23WuGRlKkHsHc3gmbtprC1ER3xWIzWypnGHY90CaPFSdD0OWi6gj90fLucBo5/5u+p1ICjbQ+Gcp1oW4EZrao=
+	t=1711331664; cv=none; b=gYr37ZC1XsxDdAcxzNHmCY6nk/tl40yhdYP3Z8DdXF2nDt+TW4WLO+0R9uJu8+ipE5wgl7894jV2plWO/l3aDRLjB6DdjHdPI+UhUHtxeKBiyajFJNBjXiEA5+RefNDdKMusu22Pi4L7AQdHMm2bq6nS8F3M23LLEFLXCV195RE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711331662; c=relaxed/simple;
-	bh=iNGGIR2WzWnGk0XaABC+/QwzPkT5Pzv4yA9dV707Yy4=;
+	s=arc-20240116; t=1711331664; c=relaxed/simple;
+	bh=dGLtw9o76VTvjUB+GuC8G2B7iCbg1wM87eRGdun2uOI=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=gAUnjahhT5S8ZiCbJPcGKPZIjrW38uuYUYKmt1fSSzR/ARbWYMv2JlW3vhValCR3FzP/E6Wzp1+2D4mRy87yFm8S1SuV259bNIvDQtrBAvj/6FDgCGcu2F02JiOtufAJdvZhZoGPpicWQY/RHJzBkMIEgTXx4wv2oEdzUtWrS3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gl+UKIWl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5F8B1C43390;
+	 In-Reply-To:To:Cc; b=MBam6I4higyBM2Kr/epz7V3B1zAux0YqWiBsVrUxPqJQM21baPuV7DbJ+dprpNZIzjt/77y3/cnJd4wv3cp3s/DogVvKri+JSgulkaX8dG/uUGbuV+XDNJqqiEZh8RpdyQ4LzfiPffo/Lvwgm7sTdpLAyFfuaNlpV3OlVBYU+5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kjQoFYO8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AF215C41612;
 	Mon, 25 Mar 2024 01:54:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1711331662;
-	bh=iNGGIR2WzWnGk0XaABC+/QwzPkT5Pzv4yA9dV707Yy4=;
+	bh=dGLtw9o76VTvjUB+GuC8G2B7iCbg1wM87eRGdun2uOI=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Gl+UKIWl9/5Fdlf/GHr+f4fNNDMAREDvZoXNg3USffZUL+kTg69phl0Eg1vOvzTH9
-	 8kHNGfEtbogTo/rCFcFtycGToECdnyrDZI2aLGorqfVioHrhbZlZ7fbABpWhpnuhc/
-	 BdRZ5iC8RIYLxG5N6M0Dira7tpFrHpe1M+DYtpJ1HeBLLP7EWkMbFiB4X1RS+Hl2JA
-	 ZRCDng9xeTSVgqGTYdyKOqiOWn/YKce9ERJAwZUqlAEhhmqqfZ9x6nz01ifil7+r1z
-	 IQeuHOMfmORVbaeIMVSm6CAas7rrAqmrfxl1Ty1K+pR4dKzxZQ449yKxzsb51MU1zF
-	 fZ3SNgyf7z7mg==
+	b=kjQoFYO8fKJjz7H8xbUKF/K53JEivEvIdq37UDC2aubs3ODACU3XSRfqdop2h0w9e
+	 HwI5RuI/feZ6YWtgKXQ89L6b9KdTYsfXwZJPmz+mp4Ulcv37nZQqs3Ing2JhalmGj1
+	 sSCg1nZmphjRrNHc3zmNMXQVY7cPiKZOFFRK7jkzWtHnMiyrTnuKl6SLU1aGjTisPc
+	 TZwctn0kfMqDF62Mkh/uQYmvPEEUVmwQVx0EwsvswwrS+ENEyoq+KnbsQN3nmfApLl
+	 kLlIRLvkTJg4viHnObpx0LTjqYg77X/RxwkPYCkcWW4gED/S4C07flrvcVE7/jdZia
+	 Y9RTPpjXbrXnQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4D233D2D0E3;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9F29DD2D0E2;
 	Mon, 25 Mar 2024 01:54:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -52,13 +52,13 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 0/3] Introduce EC-based watchdog
+Subject: Re: [PATCH v4 0/3] Introduce EC-based watchdog
 From: patchwork-bot+chrome-platform@kernel.org
 Message-Id: 
- <171133166231.9916.7231250620075780929.git-patchwork-notify@kernel.org>
+ <171133166264.9916.12747204402586368718.git-patchwork-notify@kernel.org>
 Date: Mon, 25 Mar 2024 01:54:22 +0000
-References: <20240119084328.3135503-1-lma@chromium.org>
-In-Reply-To: <20240119084328.3135503-1-lma@chromium.org>
+References: <20240126095721.782782-1-lma@chromium.org>
+In-Reply-To: <20240126095721.782782-1-lma@chromium.org>
 To: =?utf-8?q?=C5=81ukasz_Majczak_=3Clma=40chromium=2Eorg=3E?=@codeaurora.org
 Cc: gwendal@chromium.org, tzungbi@kernel.org, biernacki@google.com,
  wim@linux-watchdog.org, lee@kernel.org, bleung@chromium.org,
@@ -70,25 +70,24 @@ Hello:
 This series was applied to chrome-platform/linux.git (for-kernelci)
 by Lee Jones <lee@kernel.org>:
 
-On Fri, 19 Jan 2024 08:43:24 +0000 you wrote:
+On Fri, 26 Jan 2024 09:57:18 +0000 you wrote:
 > Chromeos devices are equipped with the embedded controller (EC)
 > that can be used as a watchdog. The following patches
 > updates the structures and definitions required to
 > communicate with EC-based watchdog and implements the
 > driver itself.
 > 
-> The previous version of this patch was sent here:
-> https://patchwork.kernel.org/project/linux-watchdog/list/?series=817925
+> V1:https://patchwork.kernel.org/project/linux-watchdog/patch/20240117102450.4080839-1-lma@chromium.org/
+> V2:https://patchwork.kernel.org/project/linux-watchdog/list/?series=817925
+> V3:https://patchwork.kernel.org/project/linux-watchdog/list/?series=818036
 > 
 > [...]
 
 Here is the summary with links:
-  - [v3,1/3] platform/chrome: Update binary interface for EC-based watchdog
+  - [v4,1/3] platform/chrome: Update binary interface for EC-based watchdog
     https://git.kernel.org/chrome-platform/c/4d2ff655fb85
-  - [v3,2/3] watchdog: Add ChromeOS EC-based watchdog driver
-    (no matching commit)
-  - [v3,3/3] mfd: cros_ec: Register EC-based watchdog subdevice
-    https://git.kernel.org/chrome-platform/c/6cea614ba78d
+  - [v4,2/3] watchdog: Add ChromeOS EC-based watchdog driver
+    https://git.kernel.org/chrome-platform/c/843dac4d3687
 
 You are awesome, thank you!
 -- 
