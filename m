@@ -1,142 +1,131 @@
-Return-Path: <linux-watchdog+bounces-815-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-816-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 957A188C5B4
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Mar 2024 15:49:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D91A888C61A
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Mar 2024 16:00:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D6FF2E526F
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Mar 2024 14:49:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F6FE30637D
+	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Mar 2024 15:00:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD6D13C67E;
-	Tue, 26 Mar 2024 14:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B02A213C688;
+	Tue, 26 Mar 2024 15:00:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YdG5VOmz"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A32BED9;
-	Tue, 26 Mar 2024 14:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1B213C67C;
+	Tue, 26 Mar 2024 15:00:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711464567; cv=none; b=W5aRuY4FA+MFSwww+a9KSGBm6rjqxF/qS+LJFKNBU4hSPwhPIFxU2Jq1/l2LG5AczpGnyOXcEwvCrz/Q3NaPNqAwMPJKDzDYJJ1da4uSW1XH+h3VH+mdRZ4O2ERbQ09krA9hqDHEy8zJZYxtmOTIYcpbBICCxe2Qt3z18yuixBI=
+	t=1711465238; cv=none; b=agQ5A0l2zmXA7W7dypww2dBURaNISii+tYvJqqedQG74BUL8ZWOx7h72zf37+g3NnaLlnZARikO6bB43/8Gp8JHxhMgQtuocUrLb7ZjHyVe4KRZByw3wqBNSl1b8iKaoaz++2hzr0Dx5TBaRVzCiLfsziKl5pJIL0wGudelpNQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711464567; c=relaxed/simple;
-	bh=NjGYoZS9MYNf6KYedY89CIBd6GNJTkqJoAov7a2XKRo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PKa2GUP2mvNfmdnlyNeLbfnsCask9NEB4lp/RWBjl2d0U9X7MSBPz3S8LBcMRCJLBPg2ZLxsqT1391GskXnP9fC6P3xxTX/6E6DPlfevlCTKnIJjxYKl4YICDrwonkiLmXmCzDJBct5JO5U+vELkj+9bAOiu2XeEv2qMEhP4aN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=fail smtp.mailfrom=kernel.org; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
-X-CSE-ConnectionGUID: u4/HncuNQveTDgvADY/MsQ==
-X-CSE-MsgGUID: xKfSFc0eQ3Cp9nnBEl04Pw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="28999055"
-X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="28999055"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 07:49:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="914882408"
-X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="914882408"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 07:49:12 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andy@kernel.org>)
-	id 1rp86t-0000000GKYj-43J8;
-	Tue, 26 Mar 2024 16:49:07 +0200
-Date: Tue, 26 Mar 2024 16:49:07 +0200
-From: Andy Shevchenko <andy@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: nikita.shubin@maquefel.me,
-	Hartley Sweeten <hsweeten@visionengravers.com>,
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Lukasz Majewski <lukma@denx.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	s=arc-20240116; t=1711465238; c=relaxed/simple;
+	bh=rdSFTvDml3hhugFdPIWsD2smi74wsbvpjShQkzlFdEw=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=kQg/BIcm5bQyIruJ0zZ5myN4pynDHGt/AduwA0dl8NR9Tyw4IWX0dJNTB5+1gd/PyKCTI9+kusVRcIPCpKdUtgJKiqFhScJGYGOYY2VnnBofJRUXI1cWKuY0OP81YvA3DnSrlblaeTLThJ3IL5COo/6dxN1U3khRwo6kYavF0Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YdG5VOmz; arc=none smtp.client-ip=209.85.160.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-22222357d76so2034179fac.2;
+        Tue, 26 Mar 2024 08:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711465236; x=1712070036; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ep9QVOB8/YOpGWyRSjZf2H1PYHwu34pwGLtmpze6dGw=;
+        b=YdG5VOmzfCmx/HS+svIAyzVDG86ij5ulRVfI65dT1QKdI7rlTmKLElfF/+hegIy3IN
+         yGnpU8DArz8aqdP3XI4Pk2WqUm+67wP8Llv0kMelkYQWfBbtTfezGQVXXVWkOjUaG9Vl
+         AcbiT6yOWwMXycA5GnSbBDIxiKzohUoqaqtjfQufg3VzfNOwBhh+3wUk67boPa1XHQNA
+         M5QsKwGPkejec2gsH4h9b73HaFTxR87uLBYIb4RdQZfLg2ybIf+xwyU8/9ShAvN0RVyv
+         jzrBr3cftH8KLDkYoXBVsyVg7z5DcjGC/BZOcx4p10Y5dVTlzP/d9pRyGJe16BZk6yKa
+         FQaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711465236; x=1712070036;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ep9QVOB8/YOpGWyRSjZf2H1PYHwu34pwGLtmpze6dGw=;
+        b=VnmcnEYJibSVL+FZ+vpCdy8RwM8CQ8T/xQd4+NBhaHI4o7dbmpDx4f8cJHORbOPhvG
+         h4/L6/iNmbKRLVTwHk6srEqdQBVIoqdMMsuKYbN8yMJtuVOTUWM1VQK/mPaEz8kBPI9W
+         Dgadw5QZ4eyxi+ty5Mok+dWPGowWlExNsd+2BT1XighCxADHjKiyCBwhXrdPkFGNi5/2
+         8Txr0AcRwxCbaSIaos4wkaW7xzPV+QWTI8c+dCC3VMTE0MYhHVFpbYli3otA6PWUsnb5
+         UCQtkt5zFyZqRXdPjF9OcAZgz0AI7icLx70uBV43vRYxArqzfLPIiVp1+5b7Bp7SC4Ga
+         qKJg==
+X-Forwarded-Encrypted: i=1; AJvYcCXQxGzIEHdPVLpEN+GJSjmPCa1YgROnWZncimFxmRXboupwWLJWjDUAA5R4YhKQsRkfAOQrwig1OZCSyE+wSIbuQei/H7w/3HrwMpzV4IRv0VSkFdYAvhSU9Ooxh3qVdUpNpaQIx4HYD17tobLAEa6MN9qNANUBC0k/+GUMYCfdMDVDaDx5gi6l
+X-Gm-Message-State: AOJu0YyDsl7heUkU949oLg2wFD/V9Yszga5y1uBlTMUV1ZhR56kDsW7U
+	xhKp+WfsvQFl2A8LJogv2uyM0/KatI/KFpXfAXTjn2851CBD1/3M
+X-Google-Smtp-Source: AGHT+IE9lJtqRc0RFeoGBEWVBCzB5/BipthG8IbTBUUZW2xqn5DBa3mtgCMrQYxtY/j1pt86sk3CAg==
+X-Received: by 2002:a05:6870:50:b0:229:f1be:c73e with SMTP id 16-20020a056870005000b00229f1bec73emr10049326oaz.25.1711465236132;
+        Tue, 26 Mar 2024 08:00:36 -0700 (PDT)
+Received: from peter-bmc.dhcpserver.bu9bmc.local (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
+        by smtp.gmail.com with ESMTPSA id l27-20020a635b5b000000b005dcbb855530sm7658404pgm.76.2024.03.26.08.00.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Mar 2024 08:00:35 -0700 (PDT)
+From: Peter Yin <peteryin.openbmc@gmail.com>
+To: patrick@stwcx.xyz,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Guenter Roeck <linux@roeck-us.net>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Mark Brown <broonie@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Sergey Shtylyov <s.shtylyov@omp.ru>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Ralf Baechle <ralf@linux-mips.org>,
-	"Wu, Aaron" <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>,
-	Olof Johansson <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-	netdev@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-sound@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH v9 00/38] ep93xx device tree conversion
-Message-ID: <ZgLgY11N8dkpTZJB@smile.fi.intel.com>
-References: <20240326-ep93xx-v9-0-156e2ae5dfc8@maquefel.me>
- <dc3e2cb4-f631-4611-8814-0dc04c5502f0@linaro.org>
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/4] drivers: watchdog: ast2500 and ast2600 support bootstatus
+Date: Tue, 26 Mar 2024 23:00:23 +0800
+Message-Id: <20240326150027.3015958-1-peteryin.openbmc@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dc3e2cb4-f631-4611-8814-0dc04c5502f0@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 26, 2024 at 11:19:54AM +0100, Krzysztof Kozlowski wrote:
-> On 26/03/2024 10:18, Nikita Shubin via B4 Relay wrote:
-> > The goal is to recieve ACKs for all patches in series to merge it via Arnd branch.
-> > 
-> > Some changes since last version (v8):
-> > 
-> > - Most important, fixed bug in Device Tree resulting in CS4271 not working by Alexander Sverdlin.
-> > - added #interrupt-cells to gpio nodes with interrupts-controller
-> > - fixed some EOF in dtsi files
-> > - fixed identation and type in ep93xx-keypad thanks to Andy Shevchenko
-> > 
-> > Stephen Boyd, Vinod Koul PLEASE! give some comments on following, couse i hadn't one for a couple of iterations already:
-> > 
-> > Following patches require attention from Stephen Boyd, as they were converted to aux_dev as suggested:
-> > 
-> > - ARM: ep93xx: add regmap aux_dev
-> > - clk: ep93xx: add DT support for Cirrus EP93xx
-> > 
-> > Following patches require attention from Vinod Koul:
-> > 
-> > - dma: cirrus: Convert to DT for Cirrus EP93xx
-> > - dma: cirrus: remove platform code
-> 
-> A lot of this could have been already merged if you split it... Just
-> saying...
+Add WDIOF_EXTERN1 and WDIOF_CARDRESET bootstatus in ast2500/ast2600
 
-But you able to apply DT schema patches if you wish.
-Just doing? :-)
+Regarding the AST2600 specification, the WDTn Timeout Status Register
+(WDT10) has bit 1 reserved. Bit 1 of the status register indicates
+on ast2500 if the boot was from the second boot source.
+It does not indicate that the most recent reset was triggered by
+the watchdog. The code should just be changed to set WDIOF_CARDRESET
+if bit 0 of the status register is set.
+
+Include SCU register to veriy WDIOF_EXTERN1 in ast2600 SCU74 or
+ast2500 SCU3C when bit1 is set.
+
+v2 -> v3
+  - Fixed WDIOF_CARDRESET status bit check and added support
+  for WDIOF_EXTERN1 on ast2500 and ast2600.
+
+v1 -> v2
+  - Add comment and support WDIOF_CARDRESET in ast2600
+
+v1
+  - Patch 0001 - Add WDIOF_EXTERN1 bootstatus
+---
+
+Peter Yin (4):
+  ARM: dts: aspeed: Add the AST2500 WDT with SCU register
+  ARM: dts: aspeed: Add the AST2600 WDT with SCU register
+  dt-bindings: watchdog: aspeed-wdt: Add aspeed,scu
+  drivers: watchdog: ast2500 and ast2600 support bootstatus
+
+ .../bindings/watchdog/aspeed-wdt.txt          |  4 ++
+ arch/arm/boot/dts/aspeed/aspeed-g5.dtsi       |  3 ++
+ arch/arm/boot/dts/aspeed/aspeed-g6.dtsi       |  4 ++
+ drivers/watchdog/aspeed_wdt.c                 | 53 +++++++++++++------
+ 4 files changed, 48 insertions(+), 16 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
 
