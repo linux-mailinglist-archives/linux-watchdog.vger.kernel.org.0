@@ -1,116 +1,138 @@
-Return-Path: <linux-watchdog+bounces-832-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-833-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AE0B88EE5C
-	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Mar 2024 19:36:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 44A9C88F4A5
+	for <lists+linux-watchdog@lfdr.de>; Thu, 28 Mar 2024 02:33:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF04B1F3C480
-	for <lists+linux-watchdog@lfdr.de>; Wed, 27 Mar 2024 18:36:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D89D11F223B4
+	for <lists+linux-watchdog@lfdr.de>; Thu, 28 Mar 2024 01:33:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F3E13B2B9;
-	Wed, 27 Mar 2024 18:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BCC417C8B;
+	Thu, 28 Mar 2024 01:32:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jje+WtQW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hq6v7xIV"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38AD214F123;
-	Wed, 27 Mar 2024 18:36:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD00208A1;
+	Thu, 28 Mar 2024 01:32:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711564609; cv=none; b=S35nx4YY85iJbZf5RZrmOaU0gfvwQVLfrmzzXb2YEcceFWrf5CA6XB3DlOb4tZmWu00jm3yU7h/N84+yMXwxzrZfM4gj9D8I+BM4W3zJdKH845HM5q6Ecze0PtqjKXG2zBlYVmj1yWIvKAfmZr3YauTfVAOTgF/kxFrQU71xBXg=
+	t=1711589577; cv=none; b=iudM+FRxHak7QrDg18gUo1FPqQFXYh2f13sbYsAFcxdj1OZlhFcFoTc9lZGiI5B7NXZmcK2xV+lNz42ri1N6IZLDgdCPhzlurnuKuWomkHf4y2O8g3B2GubA8D6aJCytPYxcGVSbksmhOL04/5i4jEyNuVMJttb20E9wrqt/C4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711564609; c=relaxed/simple;
-	bh=05Vtrdwjo9vnA0afYAWqnqaRReuzR9JZQNH6yJD6kvE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=goclVsToSlVXf4m8uz+IZS15F0jOpLD9+cwLwABvJoaoSS04uUTqqw/+tzKHCZC1EVjAdsdqwym90OReYNgTmEXnnoq3nyOoEu51mq3EGpOqll7mKLuO21tOpClC3l6us/aq5Y1HVY7r3Sa9QI+oVaQgx2TQ/kHnyG13s3aENg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jje+WtQW; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1711589577; c=relaxed/simple;
+	bh=iuwHyz1syU2AnQIHPzBZMFgUuJdJtfSc68KscSNZrv4=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=iciiJ9EuLYhOWVLWrFw7zMMO6ipkt8AeK31uDPMTmL03YzeZM0t01r1uhZnfo9vxp0YDbuBb3MVsGebm+GbYhMwH+8F+iKo9n2XQ3xUwKIxg80gmY2vlnTTvemsEHt2/oJfXLzGtQk2ye9KMTuEa7oqSrYmOIoK4rwfy2Yi5SMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hq6v7xIV; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-5d42e7ab8a9so43550a12.3;
-        Wed, 27 Mar 2024 11:36:48 -0700 (PDT)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1e0d6356ce9so3803775ad.3;
+        Wed, 27 Mar 2024 18:32:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711564607; x=1712169407; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pUnyZDHxAplu3zLriBC+152zgXY6ostH4U6MjgQjkKE=;
-        b=Jje+WtQWpdDSAxKXV54YVoiGtfgjGbYi9pbV9mK0kAw0logkiMUH1csWVUqHGEfdUu
-         NmlS0yti8qqmfaCe5Jvbva/R3sZ5yZOHF6R0CA2jsstO2SN6fhdlB85jt+7p8XfAyPyc
-         zGCoAq8H5bRPe6CytsP1L6EAHYHmPKC/wZTM8ppuNPLw9DwVp1MM16D3EVRwK9h0cw31
-         xsOHzYB4HyaE8PKKmrWbWN30Yp+Gu68PofnJyhOH/xEik4t4dc2GuVSQTElR9K10TNT4
-         oNZnxsNjNFl8CgRkpy7M8CaooKypxlhbbtru+jKAIw/4ujivC3mOCzPWSl8Ku3qvq20Y
-         zNYQ==
+        d=gmail.com; s=20230601; t=1711589575; x=1712194375; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RwzVZ+IWpczySSp2ln+6XuuWUjbpq64nflGUKemUacE=;
+        b=hq6v7xIVjmUbvReaOZ+8TAcAf2tOiVDsGPumxmX6Q5u0XjurKGkqztoyyQZ69+3OvB
+         xYoOcjHcyJrMCvyj49G9p7tsVbBw6kFg1TdkDkjGTE13iswMmLrIwjL2aQGkr9tAwk52
+         jRJtpZjOiilyeeO6hnEY6CEBnNunYKlVWloTmvcToNpqmXzSBWi3AJ+d2K+LobWy/Qyq
+         2YL68ONS7qr/nQm7JcwrjibkbtjCqQKd4e1sSzN8skAB50dkDgxSPjWQ4OxdQBzO1gDd
+         757qAHKj/S3wg12WUACsVmD0YXCFLTzHKfnSUexWbh/d1tDDWlTMf6voSYA5H9IZP2h5
+         VqOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711564607; x=1712169407;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pUnyZDHxAplu3zLriBC+152zgXY6ostH4U6MjgQjkKE=;
-        b=UuIiwbeS85Mi+FozhgsKA25NCkxESCjRg57mUIzsn2idM2jYT3soGQP33Gemkz702f
-         b+1AhWz/+GfCnVLlf+hKqT2UqtmouPkr4baCf5UEWwVZLNktzq7NW1XtCgg0iHCd1JHr
-         Z6/AsGctDEqFTncGdtTyEYsD2RfjwgYRKflcgXVkuUzLFIEja98UCaLVrL8jLRU8f/Jq
-         86VgU3FVFLP4W0OB7+dYWS4bNtoQdEDOiaUC9qO3H6G40/hvVtFEJYuU3SeAgMVDlX4m
-         ZvXS+pf7zBjbhh+PAmxvJwMV8kqzPEF7AwmGsviIlMlFWisWwMZJdZT7cLw8+aqOvl9Z
-         VgOA==
-X-Forwarded-Encrypted: i=1; AJvYcCVAwSCyNvg9dWQwi050ui6uipA8cYj8HRA4wDgV2+2FkkbJ3jm7lxlzHiKATxBuUm3wTdPhkt7nr9H2hs3mGdBcUT66F8WPhK/7qrPNJ164+2FZFfwsb1lJtWh9I/qWCKh/4NuvcMCG26ziAqI=
-X-Gm-Message-State: AOJu0YxJphfM6q2wxudvoei4QW7WsvBDmnzYyTdlYzVMm85dH5TpWH5k
-	RGsXSPKpkZE8ShOnHXg7hoW5XBya0f1lPrRCQG4923ZWShqexY2R
-X-Google-Smtp-Source: AGHT+IGjeJyqlh/96GXHF3+Mi9fguELi362cjO5V2legq+rKdrso1IEiyMUXWtqDu7FvJNth5x4iaQ==
-X-Received: by 2002:a05:6a20:1202:b0:1a3:ca1f:8baa with SMTP id v2-20020a056a20120200b001a3ca1f8baamr786270pzf.32.1711564607431;
-        Wed, 27 Mar 2024 11:36:47 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id gu24-20020a056a004e5800b006e6f8e9ab6asm8531011pfb.15.2024.03.27.11.36.46
+        d=1e100.net; s=20230601; t=1711589575; x=1712194375;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RwzVZ+IWpczySSp2ln+6XuuWUjbpq64nflGUKemUacE=;
+        b=YtLPkro6V+fK23NwE8IFNZ8BQKfprkueUuyETtMWXGFsWyJIp93YBkVbGw1WEFn4aZ
+         xpJCFweuF+bwxxfkd6JaGWpBcodMw3IDzbyamrsfKzwbMleDOWvKxNUQaZWe3yG5GPKx
+         1pxzETtw/rjWkKSA37UOZszMoXQA87gDRl+q8c3vwd7Yy+UU9+3NNSeDOZDtoL4liKkW
+         Zea99YDwEHfnd9f2JUQM0DnZG67GqI0Tg2LsTkBmGlI6/XQAIfaQd0qO2xpt5wI4Vte6
+         eb3+leeYbTkn3rMHv9JEX1FpMCQzkJ1f+uV2nRZdlV4A+ZjRtCRowtnV41RyPTAp533e
+         7QWA==
+X-Forwarded-Encrypted: i=1; AJvYcCWDsTb3KA5dbiq3i0AuYXAn4jVvMFr/2d77mrRCd7DItZTV5O0obqqsogjFXDIBg8QibcnwtT/PCxVXBIZb88qcbFldxCDAVk5qOeUO7VxojTzdBq027jgYFE9iYkqNs5QhiNzwd/ItMcKaHC4igPz3dbouOICgRwkZuAnFTpFDAfQzWDSkt8eL
+X-Gm-Message-State: AOJu0YxtEjG0CBcTnjxftVMgQDprdyXSg157W3YckjE6u04RR5S7QZjF
+	PBrtNpbdj3QT3Ulkqr4Km7sM6X1bLKZ8fV0PyKo31VgTK9UC28We
+X-Google-Smtp-Source: AGHT+IGJiNm3BXlzN6cmEh56HkRazQmE2ErJ3ixpcojiNRSHT7tBktTULxMZ3pGOAZ0k6cV3jsh6qQ==
+X-Received: by 2002:a17:903:24d:b0:1e0:f5df:277c with SMTP id j13-20020a170903024d00b001e0f5df277cmr1426217plh.69.1711589574850;
+        Wed, 27 Mar 2024 18:32:54 -0700 (PDT)
+Received: from peter-bmc.dhcpserver.bu9bmc.local (2001-b400-e355-7eb0-b4d0-66d2-2269-ef6c.emome-ip6.hinet.net. [2001:b400:e355:7eb0:b4d0:66d2:2269:ef6c])
+        by smtp.gmail.com with ESMTPSA id q6-20020a170902dac600b001e0a2cf62bfsm191904plx.201.2024.03.27.18.32.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Mar 2024 11:36:47 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 27 Mar 2024 11:36:46 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: mtx-1: drop driver owner assignment
-Message-ID: <97006bea-f233-43c9-a038-f2a71ff7c443@roeck-us.net>
-References: <20240327174638.519445-1-krzysztof.kozlowski@linaro.org>
+        Wed, 27 Mar 2024 18:32:54 -0700 (PDT)
+From: Peter Yin <peteryin.openbmc@gmail.com>
+To: patrick@stwcx.xyz,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/4] drivers: watchdog: ast2500 and ast2600 support bootstatus
+Date: Thu, 28 Mar 2024 09:32:45 +0800
+Message-Id: <20240328013249.3609225-1-peteryin.openbmc@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240327174638.519445-1-krzysztof.kozlowski@linaro.org>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 27, 2024 at 06:46:38PM +0100, Krzysztof Kozlowski wrote:
-> Core in platform_driver_register() already sets the .owner, so driver
-> does not need to.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Add WDIOF_EXTERN1 and WDIOF_CARDRESET bootstatus in ast2500/ast2600
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Regarding the AST2600 specification, the WDTn Timeout Status Register
+(WDT10) has bit 1 reserved. Bit 1 of the status register indicates
+on ast2500 if the boot was from the second boot source.
+It does not indicate that the most recent reset was triggered by
+the watchdog. The code should just be changed to set WDIOF_CARDRESET
+if bit 0 of the status register is set.
 
-> ---
->  drivers/watchdog/mtx-1_wdt.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/mtx-1_wdt.c b/drivers/watchdog/mtx-1_wdt.c
-> index 152e41ecbb14..06756135033d 100644
-> --- a/drivers/watchdog/mtx-1_wdt.c
-> +++ b/drivers/watchdog/mtx-1_wdt.c
-> @@ -236,7 +236,6 @@ static struct platform_driver mtx1_wdt_driver = {
->  	.probe = mtx1_wdt_probe,
->  	.remove_new = mtx1_wdt_remove,
->  	.driver.name = "mtx1-wdt",
-> -	.driver.owner = THIS_MODULE,
->  };
->  
->  module_platform_driver(mtx1_wdt_driver);
-> -- 
-> 2.34.1
-> 
+Include SCU register to veriy WDIOF_EXTERN1 in ast2600 SCU74 or
+ast2500 SCU3C when bit1 is set.
+
+v4 -> v5
+  - Revert indentation. 
+
+v3 -> v4
+  - Add error handling for syscon_regmap_lookup_by_phandle and
+  regmap_read.
+
+v2 -> v3
+  - Fixed WDIOF_CARDRESET status bit check and added support
+  for WDIOF_EXTERN1 on ast2500 and ast2600.
+
+v1 -> v2
+  - Add comment and support WDIOF_CARDRESET in ast2600
+
+v1
+  - Patch 0001 - Add WDIOF_EXTERN1 bootstatus
+---
+
+Peter Yin (4):
+  ARM: dts: aspeed: Add the AST2500 WDT with SCU register
+  ARM: dts: aspeed: Add the AST2600 WDT with SCU register
+  dt-bindings: watchdog: aspeed-wdt: Add aspeed,scu
+  drivers: watchdog: ast2500 and ast2600 support bootstatus
+
+ .../bindings/watchdog/aspeed-wdt.txt          |  4 +++
+ arch/arm/boot/dts/aspeed/aspeed-g5.dtsi       |  3 ++
+ arch/arm/boot/dts/aspeed/aspeed-g6.dtsi       |  4 +++
+ drivers/watchdog/aspeed_wdt.c                 | 34 ++++++++++++++++---
+ 4 files changed, 41 insertions(+), 4 deletions(-)
+
+-- 
+2.25.1
+
 
