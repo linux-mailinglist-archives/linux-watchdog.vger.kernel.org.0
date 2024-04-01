@@ -1,61 +1,59 @@
-Return-Path: <linux-watchdog+bounces-846-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-847-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DD5F893BA6
-	for <lists+linux-watchdog@lfdr.de>; Mon,  1 Apr 2024 15:56:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89579893CB9
+	for <lists+linux-watchdog@lfdr.de>; Mon,  1 Apr 2024 17:18:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F05C281A77
-	for <lists+linux-watchdog@lfdr.de>; Mon,  1 Apr 2024 13:56:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA65B1C20EBB
+	for <lists+linux-watchdog@lfdr.de>; Mon,  1 Apr 2024 15:17:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3C903FBAA;
-	Mon,  1 Apr 2024 13:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7017C45C15;
+	Mon,  1 Apr 2024 15:17:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxp575dQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ksV+VYSS"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B023FB1E;
-	Mon,  1 Apr 2024 13:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A5245974;
+	Mon,  1 Apr 2024 15:17:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711979799; cv=none; b=KGaW/50g74zK4BT4HegxG+nnUDCNlIRp5G7lL5+gUtzMNFTYPtuCmyx7NOgHj1jLlhp15X9GU0y66LRe5LBfIfMEAacUYtPN8flwRXXIc73Xttd3W+7NfeSNrX/zKN/jgA+qhH9cIHtMYJ1H40ODrSQuB97wQ+UjDP9jxN8eu/8=
+	t=1711984669; cv=none; b=Dr8TmlO86Nm32w0gbk5Y3O8DxJHog/qkkA/gNTBsbkSlu7h/XPahPvXsPwLyxNk0wnMONl4urQGEzKExtp9s2niTUXMqrjoLSP0KyAlS69DCeQN44L8HNwM0dCqWrVJUzy/gJ2VMfeeqH772JzOtNk1tpXFBczWEGqCV10WDN2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711979799; c=relaxed/simple;
-	bh=SB286+nY7DQGLoaBo1jo/XJvyvYzcBgrwXpwBgupmWM=;
+	s=arc-20240116; t=1711984669; c=relaxed/simple;
+	bh=D83Xak9nDvDD3y92G9E1UTwi43wAfnHrgeFCBth+9FY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=okeW6jGjK8uV6A+J2tDcZjTVPHh9nR8T/1OXpPtAx4RPw1gc9mZbkSKt0UHZaULTy05WPU3x0v6+Uef3KO2PmDzOuOUWGwPQld4BYbSTogxZ8ZVO2CPd7eY3ENB76uPVf6mlIpdUKP50vo0okfHJdFrcDa/h6ayMVFAfUYxXlS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dxp575dQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06E18C43390;
-	Mon,  1 Apr 2024 13:56:38 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=qPBgzzihj9WQKHgobj4u3m8nvkz+DO2SY81Sz5xv0FJO243AkV0cDh+L1mFFk2l+22hd490P65Fm/cf+Vetv+VUupW3szWfaWvunDc3uL381ZXgdKbK4k06Pkz3/mksRah73BVX/k1Z1QuIcLGMWZnfz8iPbwlHggtwSyYmqXoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ksV+VYSS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DFC5C43390;
+	Mon,  1 Apr 2024 15:17:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711979799;
-	bh=SB286+nY7DQGLoaBo1jo/XJvyvYzcBgrwXpwBgupmWM=;
+	s=k20201202; t=1711984668;
+	bh=D83Xak9nDvDD3y92G9E1UTwi43wAfnHrgeFCBth+9FY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dxp575dQiKZXAdercVf8cUDwWfKwEI6IqLjDU0pN3iKC0OrWxwjzbb0sw0uNSB2su
-	 DPVp94ewBebNT2v7SyvuYfXsqUtZpuUvIwWT6EtFTNIZpVf/zF7D0puWN82DDXTa6Q
-	 Kpubtuqo9ATNQorO7++V53Rx8U58e13DUolQFy9a7g0XztCd9yAtBGZ70qTnVn534V
-	 mzlsyll3/cmjN5WycpuflvPpxhB+kKCL1N70VmsHaxLPjc6UjtiLJo3Cr1rEybUnEb
-	 i3tJWsVtJV6N59bCi3vYfRUQQWBcdPctEdOXf4zm4Aqec43LuDYbhXz0mgM8gHMD3z
-	 3jWM2YyadVUzQ==
-Date: Mon, 1 Apr 2024 08:56:37 -0500
+	b=ksV+VYSSXoXl39VJxMGapaLZJkt6ZsDvghxomF3OSk27xh9MkLI185twPxL1qUAkU
+	 RPVmlnXqaosJ6gXGBgfYSltYg9bweNT8ClWyeGJWTP++3zsKwwtAQO3tqS+Ae/LJeI
+	 AgojRiW+gidp/gADBEoAFf75qmctwtMscZ1dJBoNXLfv9x8dyurEFbHTdQfRw84S3b
+	 oXvf8YoCq8bNPkkcZrHYxRw+hPHdASdT2SVut9AFLKRPPj6T6OIQ4/zRn2+qmz7dqd
+	 FqwMkeNz5JXlp1R88xIMrJvnJhYFUfN2h/MCZZBqQexInU8MHuOn1PYMOyK8Ev5M6X
+	 TeVy2S8aYXKAw==
+Date: Mon, 1 Apr 2024 10:17:46 -0500
 From: Rob Herring <robh@kernel.org>
-To: Peter Yin <peteryin.openbmc@gmail.com>
-Cc: patrick@stwcx.xyz, Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 3/4] dt-bindings: watchdog: aspeed-wdt: Add aspeed,scu
-Message-ID: <20240401135637.GA342928-robh@kernel.org>
-References: <20240328022231.3649741-1-peteryin.openbmc@gmail.com>
- <20240328022231.3649741-4-peteryin.openbmc@gmail.com>
+To: Andreas Kemnade <andreas@kemnade.info>
+Cc: krzysztof.kozlowski+dt@linaro.org, linux@roeck-us.net,
+	devicetree@vger.kernel.org, wim@linux-watchdog.org,
+	linux-input@vger.kernel.org, dmitry.torokhov@gmail.com,
+	linux-rtc@vger.kernel.org, lee@kernel.org, conor+dt@kernel.org,
+	linux-watchdog@vger.kernel.org, sre@kernel.org,
+	linux-kernel@vger.kernel.org, alexandre.belloni@bootlin.com
+Subject: Re: [PATCH v3] dt-bindings: mfd: twl: Convert trivial subdevices to
+ json-schema
+Message-ID: <171198466420.742996.8175303890554994940.robh@kernel.org>
+References: <20240401081831.456828-1-andreas@kemnade.info>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -64,35 +62,40 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240328022231.3649741-4-peteryin.openbmc@gmail.com>
+In-Reply-To: <20240401081831.456828-1-andreas@kemnade.info>
 
-On Thu, Mar 28, 2024 at 10:22:30AM +0800, Peter Yin wrote:
-> To use the SCU register to obtain reset flags for supporting
-> bootstatus.
+
+On Mon, 01 Apr 2024 10:18:31 +0200, Andreas Kemnade wrote:
+> Convert subdevices with just an interrupt and compatbile to
+> json-schema and wire up already converted subdevices.
+> RTC is available in all variants, so allow it unconditionally.
+> GPADC binding for TWL603X uses two different compatibles, so
+> specify just the compatible and do not include it.
 > 
-> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
 > ---
->  Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt | 4 ++++
->  1 file changed, 4 insertions(+)
+> Changes in v3:
+> - added Ack
+>   (apparantly many recipients did not receive the V2 patch,
+>    so there is a need for a resend)
 > 
-> diff --git a/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt b/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
-> index 3208adb3e52e..80a1f58b5a2e 100644
-> --- a/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
-> +++ b/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
-> @@ -8,6 +8,8 @@ Required properties:
->  
->   - reg: physical base address of the controller and length of memory mapped
->     region
-> + - aspeed,scu: a reference to the System Control Unit node of the Aspeed
-> +   SOC.
+> Changes in v2:
+> - style cleanup
+> - absolute paths
+> - unevalutedProperties instead of additionalProperties
+>   due to not accepting things in if: clauses without it
+> 
+>  .../bindings/input/twl4030-pwrbutton.txt      | 21 ------
+>  .../devicetree/bindings/mfd/ti,twl.yaml       | 72 ++++++++++++++++++-
+>  .../devicetree/bindings/rtc/twl-rtc.txt       | 11 ---
+>  .../bindings/watchdog/twl4030-wdt.txt         | 10 ---
+>  4 files changed, 71 insertions(+), 43 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/input/twl4030-pwrbutton.txt
+>  delete mode 100644 Documentation/devicetree/bindings/rtc/twl-rtc.txt
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/twl4030-wdt.txt
+> 
 
-You cannot add new required properties as that is an ABI break.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-If there's only 1 SCU instance, you can just fetch its node by 
-compatible with no DT change.
-
-What's the plan for converting this binding to schema? This is the 2nd 
-new property in 6 months.
-
-Rob
 
