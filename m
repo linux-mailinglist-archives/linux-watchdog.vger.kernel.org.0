@@ -1,167 +1,140 @@
-Return-Path: <linux-watchdog+bounces-855-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-856-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18D058954EE
-	for <lists+linux-watchdog@lfdr.de>; Tue,  2 Apr 2024 15:14:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E550689596A
+	for <lists+linux-watchdog@lfdr.de>; Tue,  2 Apr 2024 18:15:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C14891F22671
-	for <lists+linux-watchdog@lfdr.de>; Tue,  2 Apr 2024 13:14:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 225A71C21520
+	for <lists+linux-watchdog@lfdr.de>; Tue,  2 Apr 2024 16:15:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67FAE83CD4;
-	Tue,  2 Apr 2024 13:12:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD1181474BD;
+	Tue,  2 Apr 2024 16:15:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ls5/sca8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AHillTm0"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9620B7F7E2;
-	Tue,  2 Apr 2024 13:12:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D8235FBA6;
+	Tue,  2 Apr 2024 16:15:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712063551; cv=none; b=PG5tIuclzlB7oB/qxus9W8F8PiWb1oIlt4p6hfifDBaNnrhK2VCxo4Wq3c5YQPfy6AbDGEnLDYomcBVf2Uqq4GAW6S7qy3W8k7UH4xiXqMUcQ+Umo9VpOmjmlPr0Zw2Ciow2tloo40ATAvj2MtpoQGzrAUWRS9+IfCFCAxIpWaQ=
+	t=1712074519; cv=none; b=DsRWNONIJjub16ADTM17qQqsp01cs2rkHoBEcBXVqS7Ay2EziF9kfbRfAls9RppZwX/sUpwP/5prl6qlWRiupG/jxONkoxv3M8qNbeAaPVfjUP/uqoNOKJKki4EQZwIxtRqvbP1wPvtLD1CJF+eOdDGQvq0DyJxrtZDkiAtzQ6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712063551; c=relaxed/simple;
-	bh=rdYQ1tLiYUnvXITLv6FeHGjCDGDhPtd8nFVP31fy3W0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f5iA4JB8+xnNbpTJazf6PaxnmyN71jLEKCMNO8Uiv4JurvhWQe5afRNhMPk1IB3U9CP1VNkXs39PYQ30cBteDaf2dj6M+CL8cnkDrgyybGUf3kLaU7CMiVlEDo3uq9vsRPwTuHZYEUFVCzmGzOObd9Lcd6lA4IAPOQCCwL31kjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ls5/sca8; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2d6eedf3e99so55477261fa.1;
-        Tue, 02 Apr 2024 06:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712063548; x=1712668348; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GfODrnl3+hV/+cwg0ntzklh446wLZuqf2PwhVeXC5as=;
-        b=ls5/sca8YbkdBPRiVAorfSxMUVlq8QiG41LlNzkzPtp9c071LnTGKYd1nyKWhrL/nz
-         uoYpcjSMJE5cvKhaj4Go38aft5NPpPlZ51gJyTdhp0+Val0deuQg2A8MPCaG8qVkFr6u
-         wbesDAjwGGK1wO+X68cSmvhdnhMJ3L5wFWSK7LNbbM7eBYi5ThsmZpV5NaRK1tJEZZsg
-         c0J+Ez/kUbUTTUq9diSJatrjFX8/TDGQUEsVRktKqaOsOyITj3CXfeALKzWvEsI34LH5
-         JPK1cU4OQbIkgYuto+DBCpZmW0fcMjQF9sdSc8MnCg8fdcPA1Z4GxRQECMJ16wEpRUY1
-         yQdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712063548; x=1712668348;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GfODrnl3+hV/+cwg0ntzklh446wLZuqf2PwhVeXC5as=;
-        b=Qz6s5Eqh0yToC8ciz5gcYI4oo21pfInvvXWfq7sY79CP+B7lkP81Id3/+XlpbpWrFj
-         S8jU5ycmRs+A9VcDSLQIFPtJv/UdKu0PcI8BFegVRY2QAiH0YQrJfV8N+JcGbMIDH7c7
-         yDkMaL8pQ/NZuTapKAT5sclH8ocObziWV7g1wWJnLHlxYY4I+6Pdp/eGt1m+e8gCHWKR
-         m9OwQnwKw2ETwjtc5iApPCnIUwaD75HsQvEq7vAoRQpbvmKovkuLoHjZk1dDnimleTb5
-         7cBJnfzmqSCOK73ti7+rzo61PsSS20jDV+AAdFGsBRQ87ZaMsnRTnM9PzdubaInnEkHz
-         6rSA==
-X-Forwarded-Encrypted: i=1; AJvYcCWN0l0lgNDQleNRF6QPzuLQDr+xUWFbDStV3bxWNbEyw6bz8xS8i5YKoDE92/YCraMOb2wpAzcv/KCbcKv24mjWq92hmH7mRBb3fRnPbLy8xw77+Yy6xnfRJ4wSuVl6eiH/0WZd5vViiiaGQNN+KvIW0RpkGDswyWIu+GYK+vFg3x9H+eKQNdVk
-X-Gm-Message-State: AOJu0YwMQjK3B5tn1l9gFkDRInNlSGAk9LJ4Tje957h9GUCXkOKQuvP5
-	dOvQO8fS3pGhYiGjVf13nGqSyPNQxAcGnvVjTutljbtl91/Wmp0L
-X-Google-Smtp-Source: AGHT+IHil5zfXpzDtXZRyO/D7ctaJIo//4eP7a5anXPeHhBTKHdx3X03nNzdahB3/3IZYx8c646WCA==
-X-Received: by 2002:a2e:b710:0:b0:2d5:9f6f:1df2 with SMTP id j16-20020a2eb710000000b002d59f6f1df2mr5545712ljo.0.1712063547308;
-        Tue, 02 Apr 2024 06:12:27 -0700 (PDT)
-Received: from fedora ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id a36-20020a05651c212400b002d8275474f8sm220244ljq.69.2024.04.02.06.12.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Apr 2024 06:12:26 -0700 (PDT)
-Date: Tue, 2 Apr 2024 16:12:22 +0300
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-To: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: [RFC PATCH 6/6] MAINTAINERS: Add ROHM BD96801 'scalable PMIC' entries
-Message-ID: <3169f1d8b1833b8b94650a19aecd3e1f92fb240b.1712058690.git.mazziesaccount@gmail.com>
-References: <cover.1712058690.git.mazziesaccount@gmail.com>
+	s=arc-20240116; t=1712074519; c=relaxed/simple;
+	bh=ME+pzcHTObWnKD4EPs/fLPEATEkqUZdr9joUj92h8P0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LkGaRl1FWNyMuhxl/syXVUG9prajk7W9WUrFD8SwEK3HoWdWcj+DUQX1dIqPmLFAMrUybVHKqSZ3PX96Am4ktm/pTDJ/wnM9bbDT6gOND2DBIOLGz4ipg/gARoHuAUNZEuih0TZIHLCNAFLadg5VQkjmK8D6cftfyM1sDb0ezDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AHillTm0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09E6DC433F1;
+	Tue,  2 Apr 2024 16:15:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712074519;
+	bh=ME+pzcHTObWnKD4EPs/fLPEATEkqUZdr9joUj92h8P0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=AHillTm0AhbD0qaPNipUnWsYUEXbXPKZS2aipskpC5FN3AEDMruLI/z87PkF/5GUB
+	 4+eB9g8a0YgObhuP8+EIhbZ2VSVaxkKPnLR8VqLjTmCcqeXm9afYbN13tIzgBzPRTX
+	 VkgzzCHXsbz2LILXsvMzlO9ajxNGx7T0MHGmMYC71F49gHVfCk+eqelY5PaNIQq+vz
+	 pcA7FfXSD3nGYgyMFZXqecaSaKbYmuyNmu93ixO0PtywajkSWyFpnnktYm8tz0LvUl
+	 TRSSv0dHR+uW4FrSSScmcN6vZB1HxvhLPzVbFb21y52Q73XRihOaEoHriW6+PtivRy
+	 3OSjQiTx+ak8A==
+Message-ID: <c867156e-4333-44b1-be1d-11ad3c0f55fc@kernel.org>
+Date: Tue, 2 Apr 2024 18:15:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="fzUcmCWvBEGWDcu7"
-Content-Disposition: inline
-In-Reply-To: <cover.1712058690.git.mazziesaccount@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 5/6] watchdog: ROHM BD96801 PMIC WDG driver
+To: Matti Vaittinen <mazziesaccount@gmail.com>,
+ Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc: Lee Jones <lee@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <cover.1712058690.git.mazziesaccount@gmail.com>
+ <f8e743a6c49607de0dd7a27778383477e051b130.1712058690.git.mazziesaccount@gmail.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
+ QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
+ gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
+ /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
+ iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
+ VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
+ 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
+ xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
+ eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
+ AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
+ MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
+ Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
+ ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
+ vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
+ oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
+ lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
+ t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
+ uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
+ 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
+ 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
+In-Reply-To: <f8e743a6c49607de0dd7a27778383477e051b130.1712058690.git.mazziesaccount@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 02/04/2024 15:11, Matti Vaittinen wrote:
+> Introduce driver for WDG block on ROHM BD96801 scalable PMIC.
+> 
+> This driver only supports watchdog with I2C feeding and delayed
+> response detection. Whether the watchdog toggles PRSTB pin or
+> just causes an interrupt can be configured via device-tree.
+> 
+> The BD96801 PMIC HW supports also window watchdog (too early
 
---fzUcmCWvBEGWDcu7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-Add maintainer entries for ROHM BD96801 a.k.a 'scalable PMIC'
+> +
+> +static struct platform_driver bd96801_wdt = {
+> +	.driver = {
+> +		.name = "bd96801-wdt"
+> +	},
+> +	.probe = bd96801_wdt_probe,
+> +};
+> +module_platform_driver(bd96801_wdt);
+> +
+> +MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
+> +MODULE_DESCRIPTION("BD96801 watchdog driver");
+> +MODULE_LICENSE("GPL");
+> +MODULE_ALIAS("platform:bd96801-wdt");
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
----
- MAINTAINERS | 4 ++++
- 1 file changed, 4 insertions(+)
+Same comment on alias. Please use ID table.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index aa3b947fb080..da68144d51ae 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19111,17 +19111,21 @@ F:	drivers/gpio/gpio-bd71828.c
- F:	drivers/mfd/rohm-bd71828.c
- F:	drivers/mfd/rohm-bd718x7.c
- F:	drivers/mfd/rohm-bd9576.c
-+F:	drivers/mfd/rohm-bd96801.c
- F:	drivers/regulator/bd71815-regulator.c
- F:	drivers/regulator/bd71828-regulator.c
- F:	drivers/regulator/bd718x7-regulator.c
- F:	drivers/regulator/bd9576-regulator.c
-+F:	drivers/regulator/bd96801-regulator.c
- F:	drivers/regulator/rohm-regulator.c
- F:	drivers/rtc/rtc-bd70528.c
- F:	drivers/watchdog/bd9576_wdt.c
-+F:	drivers/watchdog/bd96801_wdt.c
- F:	include/linux/mfd/rohm-bd71815.h
- F:	include/linux/mfd/rohm-bd71828.h
- F:	include/linux/mfd/rohm-bd718x7.h
- F:	include/linux/mfd/rohm-bd957x.h
-+F:	include/linux/mfd/rohm-bd96801.h
- F:	include/linux/mfd/rohm-generic.h
- F:	include/linux/mfd/rohm-shared.h
-=20
---=20
-2.43.2
+Best regards,
+Krzysztof
 
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---fzUcmCWvBEGWDcu7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmYMBDYACgkQeFA3/03a
-ocV6GQgAibZabRDElOaw8UmgO6U17HLGB4QmOyLjsNe4f/n7VykGLs/++Otz9kfE
-q3RjmBj6cC8S7ZsF2tVmC2oWOsKPV4rlHYMk9O+QpZI4WfRBt+StrPz8LeqbXLyB
-Bz0YD1bXq4Y3q4zPoCuEE6NM16avm65+CQvV9HQ6cVPfqB9KWJKBscUBUbB1wFxS
-Ki41/OguvXsdbljrN8b6SyOkw2mLk1dDpwGLWwP/tGj8/TduDUN1on/CyrfjCqB3
-O+m9CFaaHaBSZUIjTnuvi0CM+yyQ1TTiV1LjgO/InMUMgbylQ7OfcdHLMVJyxWgd
-UBUEZu9eC229IRiQhYaQ5I3Oe3/B1w==
-=y4I4
------END PGP SIGNATURE-----
-
---fzUcmCWvBEGWDcu7--
 
