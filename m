@@ -1,113 +1,197 @@
-Return-Path: <linux-watchdog+bounces-849-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-850-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEC90895298
-	for <lists+linux-watchdog@lfdr.de>; Tue,  2 Apr 2024 14:10:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEEFA895486
+	for <lists+linux-watchdog@lfdr.de>; Tue,  2 Apr 2024 15:09:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 52332B2654A
-	for <lists+linux-watchdog@lfdr.de>; Tue,  2 Apr 2024 12:10:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6866D287B0D
+	for <lists+linux-watchdog@lfdr.de>; Tue,  2 Apr 2024 13:09:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E10474262;
-	Tue,  2 Apr 2024 12:09:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7270C83CCF;
+	Tue,  2 Apr 2024 13:07:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="kKT+zZZF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D/4IMe0g"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D92757FB;
-	Tue,  2 Apr 2024 12:09:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818357FBBF;
+	Tue,  2 Apr 2024 13:07:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712059785; cv=none; b=pH1fpBrQkh/56Giqiq//B1brugB/jol6JYtK6fHCKDOFiiage7C5ZXrUtDujTFGEEctLanMhDZpiVeRSid3h0SQ1BGAZ5L5izJEQvF0Y20mAFT1Ik1upnRpnJ6DTL8NoOvrnP1DVssncmnXgDKD50zZbqnz91UVfLA6AevL/uBY=
+	t=1712063251; cv=none; b=kTL+xH9cvd5Ijv8fR2L1TxVoxZN6FZp785weeh6N87e7vSmxRhBVXxwnIfWIkUFGoWC9fn+/qqxqcdz8y8/R/n4d2xTfwmHAevcqX4Ev/q6RNvgPp7e2N3wdw9W+XW1yOY6Tf8AeXnPKa+5YGUT2D9ehVOgvNf1vTORDA3Hyhkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712059785; c=relaxed/simple;
-	bh=YwIUUX0x/WQwrkVO7VhtyyQYHpaR1vN10gFVa337qkM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KSpBXNFVMJllD1v87EIuOFzr5Kr20NBLShERIOeOhZSnLHeSjZTaxLwcqY6IS1G74TsgjAJHRDSXnuTttYkkg/m09q3rJY6/ODZgdSZQ1PmKe/A4CRCF+gtgEpdbgsWJ2d59tYfn0ywOHliA9PzWHNi/gsq96n0iJaoD50j2d+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=kKT+zZZF; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
-Received: from [192.168.68.112] (ppp118-210-182-70.adl-adc-lon-bras34.tpg.internode.on.net [118.210.182.70])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 5ED4C200E0;
-	Tue,  2 Apr 2024 20:09:40 +0800 (AWST)
+	s=arc-20240116; t=1712063251; c=relaxed/simple;
+	bh=+D1Ro3T40iXb4snfq1uLijK7/Bj8tezfUol7C0P/buc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bQcEKJT8ha0f+GSQmyxJt8rLpV7DmiQx429EI1u1WsdYtbSfZf4fCAZPPuBlS4CbOgqOJQrcrmwVn+8YpKBC+f8o50tIR8BPgZgaoZ/d9nlgWuuCCS6pd+iMJlbpXGFTow6o77+ILYQ3UmcU7svPMGW5OBnVUbRwTCDEiT88AwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D/4IMe0g; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-515a81928faso6313107e87.1;
+        Tue, 02 Apr 2024 06:07:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1712059781;
-	bh=emjzUDDqOpO14ZhysyWQJh3ovWJjdiQOg95LkukSphw=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=kKT+zZZFOaNhupP6tEx0DyFImtF+6Wo0ztnhUlc5gxPF4+Pfk/3j0oCL/A10KJUPK
-	 RV+VoLqisLrabWfWiYigDtSLNIkECYXhHgcsvJvlfhIBEo7EgWC0Bg/eZXwIVck4Ai
-	 bgLdLs0Ip2od48f6AtTZM/k8u0HBqv6kbdVm4z1ufRukbJfIhnRJlNiakJOORYsso7
-	 9DAS1bv8lNQOezoNo5BtqnX3T9fdt90SXU75gYayzkH/IzPmysCTmc7lTODLwfwNCH
-	 M0dCwPoJm1MkLDKbYFxoQuqq7KYqvfXGVYsNStcrzFU1Hz2Twn3HfF5EXeOpO5Aqrv
-	 lJZf7Wvm6yrjw==
-Message-ID: <ab76b0549172cf3e33d6242fa9ea3e6a87b4a58e.camel@codeconstruct.com.au>
-Subject: Re: [PATCH v6 3/4] dt-bindings: watchdog: aspeed-wdt: Add aspeed,scu
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Rob Herring <robh@kernel.org>, Peter Yin <peteryin.openbmc@gmail.com>
-Cc: patrick@stwcx.xyz, Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter
- Roeck <linux@roeck-us.net>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>,  Conor Dooley <conor+dt@kernel.org>,
- Joel Stanley <joel@jms.id.au>, linux-watchdog@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Date: Tue, 02 Apr 2024 22:39:32 +1030
-In-Reply-To: <20240401135637.GA342928-robh@kernel.org>
-References: <20240328022231.3649741-1-peteryin.openbmc@gmail.com>
-	 <20240328022231.3649741-4-peteryin.openbmc@gmail.com>
-	 <20240401135637.GA342928-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+        d=gmail.com; s=20230601; t=1712063247; x=1712668047; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NKU9jx20LVZGBMlMQd/cCeXupmo6LvEXs+isiI8gkiY=;
+        b=D/4IMe0g/5wY9yNbpHeEuYpWQFu1C3fpo69K4LYfv4iK2U1HXp2xI62j4D9PmwrneA
+         AE4DcOLjkFJsowP8buo45Fq7CBHQc6jkhhIjYu1SBC1vaBBnyd3jvQyMaBEcBUtPN+AU
+         nDiZYPuyVA9utfCW8kPxP4Cs6poVvAZTsPWyl9Vu+H5QBozw894DGr4BGxt3uEdpBaMf
+         FiKmf16O9Uy3miIKobLMz/yblMdKgq6Y7y3XdYGsCRVYPW7NaRMuDl8OfjVyI8DA1vpH
+         H4f0DFsdrjToCBlCTAIC3qFhl/5h5qME6AKiTbGQPC0ZMxrAWYueRU0jRf+w6xmYjU2Y
+         2x3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712063247; x=1712668047;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NKU9jx20LVZGBMlMQd/cCeXupmo6LvEXs+isiI8gkiY=;
+        b=kmVu7CYsoWvO3SuwlM6Y2kH6tCupTS2ZlSX8YODMMXHv3Qf3ZBxOBjLNJbdPDL5B3n
+         Cu2jrx2Mv8YOnktirx7fGftxLKhY1bVlcCXCkIZgLtOc5EB2KyX1ei/dPixZnqZ9vUfv
+         jz1xYLOYcbBGYdkBTGVgC7wVNV/RIK6j8NIeqJ8YBPAFAAgojjXgIgml60HvqaES8X9W
+         NWc1Stu0ZnxVgl2DQhdi88CrkoW2CX3SNEIrBj9Vzc5McofcUc1/iGSa516M7uoG3fpM
+         izwFZKE2FReQYiYwgTIOQ99HZCdmoamyAZASiZ4i3HgskPWdAd4b/5eP7QAsU6EhBUfj
+         cMDA==
+X-Forwarded-Encrypted: i=1; AJvYcCXlXCY92saJY9WQozmG0itzlZWcgc43J6hDLR04mWm622wvH0DfMIwwqKEqoBa45SkoPsPE2ZuRnyrW/rWhc7n46vG4MdPDYqlpIw1gdWrGPQL2/HYXokon0XJOIxQ1DFW1GamjBmTMQOuqzi17/dxDJ/NArl2uAMizjznDZqkvxE1m6TK0zMH5
+X-Gm-Message-State: AOJu0YzMZO27IFGrgelV9W8O0kkU62fVcgETte/M1sE9VmLQLcaIadMg
+	PIeF/5fQwqvpvHa3MDKn9RG43Gp+YOx5R6PMfnFdSwD86MwOHmdQ
+X-Google-Smtp-Source: AGHT+IFXRtAcfIYkcYjCj1CcDNrWBA3RpHGKgypg6iet93/LvdqOTpHmcVe4ODKD1p4AmLbDRANqJg==
+X-Received: by 2002:ac2:58fb:0:b0:515:8159:788d with SMTP id v27-20020ac258fb000000b005158159788dmr7676502lfo.64.1712063247164;
+        Tue, 02 Apr 2024 06:07:27 -0700 (PDT)
+Received: from fedora ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id bi15-20020a0565120e8f00b00515aa366202sm1706770lfb.274.2024.04.02.06.07.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Apr 2024 06:07:26 -0700 (PDT)
+Date: Tue, 2 Apr 2024 16:07:18 +0300
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+To: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [RFC PATCH 0/6] Support ROHM BD96801 scalable PMIC
+Message-ID: <cover.1712058690.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="WaiMjVoaQWIfNz5i"
+Content-Disposition: inline
 
-On Mon, 2024-04-01 at 08:56 -0500, Rob Herring wrote:
-> On Thu, Mar 28, 2024 at 10:22:30AM +0800, Peter Yin wrote:
-> > To use the SCU register to obtain reset flags for supporting
-> > bootstatus.
-> >=20
-> > Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
-> > ---
-> >  Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt =
-b/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
-> > index 3208adb3e52e..80a1f58b5a2e 100644
-> > --- a/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
-> > +++ b/Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
-> > @@ -8,6 +8,8 @@ Required properties:
-> > =20
-> >   - reg: physical base address of the controller and length of memory m=
-apped
-> >     region
-> > + - aspeed,scu: a reference to the System Control Unit node of the Aspe=
-ed
-> > +   SOC.
->=20
-> You cannot add new required properties as that is an ABI break.
->=20
-> If there's only 1 SCU instance, you can just fetch its node by=20
-> compatible with no DT change.
->=20
-> What's the plan for converting this binding to schema? This is the 2nd=
-=20
-> new property in 6 months.
 
-I had a patch converting it in a local branch which I've now sent:
+--WaiMjVoaQWIfNz5i
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-https://lore.kernel.org/all/20240402120118.282035-1-andrew@codeconstruct.co=
-m.au/
+Support ROHM BD96801 "scalable" PMIC.
 
-Perhaps we can pull it into this series?
+The ROHM BD96801 is automotive grade PMIC, intended to be usable in
+multiple solutions. The BD96801 can be used as a stand-alone, or together
+with separate 'companion PMICs'. This modular approach aims to make this
+PMIC suitable for various use-cases.
 
-Andrew
+This RFC series is a product of a _long_ process. The product has been
+re-designed a few times and this series has been sitting in my git
+forgotten for long periods of time, then been re-worked when new design
+has been available, after which it has again been forgotten. Last week I
+finally received the word that this product should've been stabilized,
+digged up my last set of patches (from Nov 2021 - cover letter
+reminding me the driver development had been done during 3 years...)
+
+I think this is valid information for reviewers as it's good to keep an
+eye on obsoleted practices - even though I tried updating this series.
+
+This is sent as an RFC because of the regulator features which can be
+configured only when the PMIC is in STBY state. This is described more
+detailed in the regulator patch.
+
+Another "oddity" is that the PMIC has two physical IRQ lines. When I
+last wrote this patch in 2021 I had some naming collison in debugfs for
+the IRQ domains. Back then I used:
+irq_domain_update_bus_token(intb_domain, DOMAIN_BUS_WIRED);
+to work-around the issue. Now, when rebasing to v6.9-rc1 the naming
+collision was gone and things seemed to work. However, it'd be great if
+the IRQ code in MFD driver was reviewed by greater minds :)
+
+Rest of the series ought to be business as usual.
+
+Matti Vaittinen (6):
+  dt-bindings: ROHM BD96801 PMIC regulators
+  dt-bindings: mfd: bd96801 PMIC core
+  mfd: support ROHM BD96801 PMIC core
+  regulator: bd96801: ROHM BD96801 PMIC regulators
+  watchdog: ROHM BD96801 PMIC WDG driver
+  MAINTAINERS: Add ROHM BD96801 'scalable PMIC' entries
+
+ .../bindings/mfd/rohm,bd96801-pmic.yaml       |  155 ++
+ .../regulator/rohm,bd96801-regulator.yaml     |   69 +
+ MAINTAINERS                                   |    4 +
+ drivers/mfd/Kconfig                           |   13 +
+ drivers/mfd/Makefile                          |    1 +
+ drivers/mfd/rohm-bd96801.c                    |  454 ++++
+ drivers/regulator/Kconfig                     |   12 +
+ drivers/regulator/Makefile                    |    2 +
+ drivers/regulator/bd96801-regulator.c         | 2109 +++++++++++++++++
+ drivers/watchdog/Kconfig                      |   13 +
+ drivers/watchdog/Makefile                     |    1 +
+ drivers/watchdog/bd96801_wdt.c                |  375 +++
+ include/linux/mfd/rohm-bd96801.h              |  212 ++
+ include/linux/mfd/rohm-generic.h              |    1 +
+ 14 files changed, 3421 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic=
+=2Eyaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd9680=
+1-regulator.yaml
+ create mode 100644 drivers/mfd/rohm-bd96801.c
+ create mode 100644 drivers/regulator/bd96801-regulator.c
+ create mode 100644 drivers/watchdog/bd96801_wdt.c
+ create mode 100644 include/linux/mfd/rohm-bd96801.h
+
+
+base-commit: 4cece764965020c22cff7665b18a012006359095
+--=20
+2.43.2
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--WaiMjVoaQWIfNz5i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmYMAwIACgkQeFA3/03a
+ocUrcQf8DQhFPJC1Qb61QJNRcbPGRFMvtn7Yv/pHPTaI1DKVZ9dp5plAx9ekzRD9
+AYFQkt1K+PyjAMFsdwKPUGMqkD40zsE5S77bXpBL5db1w2++jgDdz432BLggTsDS
+EaK779RB0mCuRPwbcnWi0b6WFD89u+8GiSEbOtpT3LfoYsoGhA2ljIsEKDMNK/m4
++SIXf/d3NOhcQcqyqUkQRWMEloVz9X7rpBviVdBhcKdPZsy2x82yhbUq0igkgCOw
+N71roCet4uS6MD7QYSb7iHGOqG2E/abymy1mNkTwednH/HmREgxiTWuBpf/Rstgg
+EUewKKY1Yd3ieFHg3U/YSYryW2G1fA==
+=nQLo
+-----END PGP SIGNATURE-----
+
+--WaiMjVoaQWIfNz5i--
 
