@@ -1,205 +1,131 @@
-Return-Path: <linux-watchdog+bounces-867-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-868-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54788896F2F
-	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Apr 2024 14:47:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4A1D8970F1
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Apr 2024 15:28:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7875A1C219E9
-	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Apr 2024 12:47:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6F97B288C1
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Apr 2024 13:28:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0416B70CA7;
-	Wed,  3 Apr 2024 12:47:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 912951487D5;
+	Wed,  3 Apr 2024 13:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aWosff4F"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XuT87jJO"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27BEF147C95;
-	Wed,  3 Apr 2024 12:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233CA1482FA;
+	Wed,  3 Apr 2024 13:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712148436; cv=none; b=uAR1a3ffUCL3PwM/1YywjB6EwFDTd8wRFWQJWWLpLpwd2kA5ON/iicUD4d0O4gIQ6bOigk+OKs3iEqScuCjQoWAGNKK/XRZp3RafL47zQ5TFI7ht94gjTzgN0278WVUmg2FcHzab012LFdWALvfrTPCfjoXRjiuGmiUJNrHfBwI=
+	t=1712150791; cv=none; b=aO6hNjtggY3PWUfVNreqQLfwFzpP/n279sHU523kvmCezvvxv38CxhDN4WvYnMogzDmE4KTtK1d+YhaE7PY0WCq7asxCZ7LgVgdurqqcviIeiVrzTkgaY/36GftL47KvoHqGYK7nYNTHY8kh79gyz2qQEk1kYkW7E6FQYyDB/GA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712148436; c=relaxed/simple;
-	bh=mmBOX5CWfuQTkTPKm+iURBQ8uUZaZB/7MTJNd2TQzbA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TCafBTCrCxJhFdtMxfSVzoperQXmFfsQtMgnpOuH60vKQlGX6Z3oqbQesCSnymNfOOBEUG67Qqj8coVFBYTbB7MucD/oxmwxaFXJh7RxmWs5XiSus9K46AqyChAfFaeFMLjOV+DrtU2jLLwvtofMamIrSl73b910bpsKHuzoo14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aWosff4F; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1712150791; c=relaxed/simple;
+	bh=pNqIMk3dXJAK1dmFXhtlvHJm8YAeYjgoXwxpjzjBV7c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QuJygQCCKClXQoKoC+tu3+0ltQoacWZ2ZwMYt17YBomfl4/y63CrT2IYNfQUc6W3Bc+eOkFreGz8nmbR8jdBtepICqQ3Dh8elrFSAasvCFAhsfKLuI5ecKDFLw0zz+LUffVHnmEZz5LhJ5DYcGUDYUOQQonHrowHfimJI0mIsT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XuT87jJO; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-513e6777af4so10443277e87.2;
-        Wed, 03 Apr 2024 05:47:14 -0700 (PDT)
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6ea838bf357so5167258b3a.0;
+        Wed, 03 Apr 2024 06:26:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712148433; x=1712753233; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nuDN6L38TIM9wf05jp6jhML5GX0735G9pkKElMgFJl0=;
-        b=aWosff4FAf8fgSF3bxjE9H9ylFYEs8x+tao3GEWMjuLUJ8lZCzuiH1qDv11pnHUD+7
-         MZqZjo4OWJn1eYQcQY48QzWm+9w3TOf94O3KP1Kt/DMQYjnMUnbNQDRBKwWOHOtYMAgk
-         BLOjp9DkwXRX92zNKiMnQuwkLJGtYkuGj4gyOsvKJc9a2RQXa+WeDaW4g+fJ4ZfLgyXI
-         QbI5GtwWIE8bqatGnAKUrGJAVmC1lsPwmX5WTl4UuXq4BSQyK7fHQ1K4N7fZybwzjzT6
-         nHLjjvBB79ILm02QqCcalUUr5Z0u+/fhB0AbjLHNXCDHsr4T/zXESUJdnVf2lSF/7HY0
-         VlBg==
+        d=gmail.com; s=20230601; t=1712150789; x=1712755589; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tv8iMSkszzMWqrID5CXG8dHdxUEdUozJG+zGUFmwB4A=;
+        b=XuT87jJOzluj5tMRmm1aaER7kM7bvaF3RGuBsVZPrnUSMovBeIaVfszsRsHvdJj6Ds
+         9J3j86OZ3J2XCi5NWtxEtQDIa23CSORM6rzBrSrVmuNBrBht1shdDy8VgcQdZWjmwlJh
+         +O5sQE7mjYdp6vqiPPvPXJYSch5D/+JnAf+2Q4QqrjF8n1VIbOp6c8J5xhhWZgJv1Y51
+         iv1xz0t6+QXk5GFboJ2O5a0eU3yScuja/2NbF3Ij6uO1pNaCPpvjqhTk5VxG4Jh+yeF/
+         /cy1Zzn3BSTjD5eKnNZr1tE9rn8itp7KfZGw0nou9kk9OsMbqrEYf8DTnH6yyd/2Fz2V
+         qXFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712148433; x=1712753233;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nuDN6L38TIM9wf05jp6jhML5GX0735G9pkKElMgFJl0=;
-        b=K62mwuv7fuFjOYtvuj9kvmBjCsGbohtpFvvmpE+6b5h+liHi4M0zvPRk5vrXpUsbTA
-         LcifsLtB9oE2JMsp0Uc+RKzc8120t+m6Aeos7zfQeqAC6a+SJjUo7EL0C2RDNpeOAinj
-         fEFHaEKnB0K+KaZ2xHrPVXuQLdfWj7qb+b+vhglJUsltaJ+jWe98XEqDyKh8ipvgjTxK
-         Y0cd/6oV9YmxUpB0muxSTievtbb3q5Pbj223TsEbfgDVtq92aW2uuqhh9wjHp6sPsPbY
-         +std7jx2DGuSmd9IkGoMEM0iuNTvEIXZ1mFsK6ZRApsj15qN1oxWSrCV5UCN3rvEXCjX
-         zbnA==
-X-Forwarded-Encrypted: i=1; AJvYcCWmW1w+5m0cTVayF8k6qZUKmMto2Q03P+FCbL/RmDNG6A3gyJHls5fwY3aKKphPeEqH0Jz5c7Dy6JVfBYFHSMzL5pWH6xgFeOOxT3nop+2UrlN0Rm4MnFVkI5Jw6ikXIoFlXJInJgrEc/utM/DI2RrHaub0ZDd6MilmA1in9kuHIDnuj7UTfK8P
-X-Gm-Message-State: AOJu0Yzatx5inrnecZTuGp0jGBHWa1GzKOEJgn5uWOQF5i2fvKGwpZju
-	8qSmPy7u2xiSIrg3vSE3aBZ4741WQrZWp269H5/gwYe+/5RWLE9XhBH01YO2
-X-Google-Smtp-Source: AGHT+IFBTNYJCfhqRdcb8brcRkZuW7VL/46WTvto5wbFfg82T3NK4Rar6AxuZXNY+0UHiF7/TQvvDQ==
-X-Received: by 2002:a05:6512:114f:b0:513:cfaa:e618 with SMTP id m15-20020a056512114f00b00513cfaae618mr4523164lfg.0.1712148432988;
-        Wed, 03 Apr 2024 05:47:12 -0700 (PDT)
-Received: from [172.16.183.82] ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id h18-20020a056512221200b00516b061e091sm648150lfu.4.2024.04.03.05.47.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Apr 2024 05:47:12 -0700 (PDT)
-Message-ID: <1d956aab-2892-4a2b-a4b3-0a93504668eb@gmail.com>
-Date: Wed, 3 Apr 2024 15:47:12 +0300
+        d=1e100.net; s=20230601; t=1712150789; x=1712755589;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tv8iMSkszzMWqrID5CXG8dHdxUEdUozJG+zGUFmwB4A=;
+        b=wI1u6B1EBrJLHn5/c5Awqbtugmt22WITdaj1ddiEXVIKu1HbnXYSA6xyFl80U+LXyx
+         smuhXfxlZtTic/GllQxsCeWlE9YWKK/QaKEdxFuOODnbl6MGRBspn/id6xQflrc2HbKA
+         rwLa8fMqdpP18R95QzVDC1/Vn4/sI7UbfWWjvf+MdxCR3613dtnj6wvZfDXf5RE4BhLF
+         Ra+LKmZTW28RsEeC/enA0RVVE4XrqdEuHCRIqB0KbgebOQELvWLHX9kUGKMCliuiJ1dX
+         yB3Mf5vwvDM2lJhFky3SX8SNPMB5SQGoOZB8/HHOrr/U/ei5yHj7PT/BWqhDNMmhyZoq
+         QPVw==
+X-Forwarded-Encrypted: i=1; AJvYcCWrn3OUNqzoL3WmWebbol1z1ANMPLg1CfUlTSgGrTY5cNuQe5LEPz/xZhn+08xq/Q2CxTPELAVJcMVZ3h7gVsXMf0oz9Mil0mEKHBnUmXYMieYoEJOwqn0FHM6Olum2lSwH52g07MBw7hUTvJNMDXakH5TmGzY9i+7WL3PW6w7+W9xTBXtOCAZk
+X-Gm-Message-State: AOJu0YyCfo982xCFNJJHR58VdvHvqjtv8z99m206+3vJg4/t8JIQjk9D
+	qXL10PUkpjm1MQmSjEuuvyI/XTsUgmmW18kM6Tp3TZ+c9LCYL5Rx
+X-Google-Smtp-Source: AGHT+IHPQcf1KauRRFFf95OsXrrxpcYKnvhoiA5NT6n4jVd/PqAHKw35hLjTyYgdc6RpO6DQuMy3vQ==
+X-Received: by 2002:a05:6a00:1413:b0:6e6:89ad:1233 with SMTP id l19-20020a056a00141300b006e689ad1233mr17299843pfu.2.1712150788005;
+        Wed, 03 Apr 2024 06:26:28 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id fd30-20020a056a002e9e00b006eaf43b5982sm8479994pfb.108.2024.04.03.06.26.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Apr 2024 06:26:26 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 3 Apr 2024 06:26:25 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Lee Jones <lee@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-watchdog@vger.kernel.org
+Subject: Re: [RFC PATCH 5/6] watchdog: ROHM BD96801 PMIC WDG driver
+Message-ID: <d7522458-35b1-40ca-84a3-eaf1127a1e4e@roeck-us.net>
+References: <cover.1712058690.git.mazziesaccount@gmail.com>
+ <f8e743a6c49607de0dd7a27778383477e051b130.1712058690.git.mazziesaccount@gmail.com>
+ <4fa3a64b-60fb-4e5e-8785-0f14da37eea2@roeck-us.net>
+ <279336b3-f28d-48ee-a10f-47abba7b0b89@gmail.com>
+ <d2ab33e6-4d3e-472a-b4d7-b703955989ba@roeck-us.net>
+ <1d956aab-2892-4a2b-a4b3-0a93504668eb@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 5/6] watchdog: ROHM BD96801 PMIC WDG driver
-Content-Language: en-US, en-GB
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Lee Jones <lee@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-watchdog@vger.kernel.org
-References: <cover.1712058690.git.mazziesaccount@gmail.com>
- <f8e743a6c49607de0dd7a27778383477e051b130.1712058690.git.mazziesaccount@gmail.com>
- <4fa3a64b-60fb-4e5e-8785-0f14da37eea2@roeck-us.net>
- <279336b3-f28d-48ee-a10f-47abba7b0b89@gmail.com>
- <d2ab33e6-4d3e-472a-b4d7-b703955989ba@roeck-us.net>
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <d2ab33e6-4d3e-472a-b4d7-b703955989ba@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d956aab-2892-4a2b-a4b3-0a93504668eb@gmail.com>
 
-On 4/3/24 15:41, Guenter Roeck wrote:
-> On Wed, Apr 03, 2024 at 09:34:35AM +0300, Matti Vaittinen wrote:
->> Hi Guenter,
->>
->> First of all, thanks for the review. It was quick! Especially when we speak
->> of a RFC series. Very much appreciated.
->>
->> On 4/2/24 20:11, Guenter Roeck wrote:
->>> On Tue, Apr 02, 2024 at 04:11:41PM +0300, Matti Vaittinen wrote >> +static int init_wdg_hw(struct wdtbd96801 *w)
->>>> +{
->>>> +	u32 hw_margin[2];
->>>> +	int count, ret;
->>>> +	u32 hw_margin_max = BD96801_WDT_DEFAULT_MARGIN, hw_margin_min = 0;
->>>> +
->>>> +	count = device_property_count_u32(w->dev->parent, "rohm,hw-timeout-ms");
->>>> +	if (count < 0 && count != -EINVAL)
->>>> +		return count;
->>>> +
->>>> +	if (count > 0) {
->>>> +		if (count > ARRAY_SIZE(hw_margin))
->>>> +			return -EINVAL;
->>>> +
->>>> +		ret = device_property_read_u32_array(w->dev->parent,
->>>> +						     "rohm,hw-timeout-ms",
->>>> +						     &hw_margin[0], count);
->>>> +		if (ret < 0)
->>>> +			return ret;
->>>> +
->>>> +		if (count == 1)
->>>> +			hw_margin_max = hw_margin[0];
->>>> +
->>>> +		if (count == 2) {
->>>> +			hw_margin_max = hw_margin[1];
->>>> +			hw_margin_min = hw_margin[0];
->>>> +		}
->>>> +	}
->>>> +
->>>> +	ret = bd96801_set_wdt_mode(w, hw_margin_max, hw_margin_min);
->>>> +	if (ret)
->>>> +		return ret;
->>>> +
->>>> +	ret = device_property_match_string(w->dev->parent, "rohm,wdg-action",
->>>> +					   "prstb");
->>>> +	if (ret >= 0) {
->>>> +		ret = regmap_update_bits(w->regmap, BD96801_REG_WD_CONF,
->>>> +				 BD96801_WD_ASSERT_MASK,
->>>> +				 BD96801_WD_ASSERT_RST);
->>>> +		return ret;
->>>> +	}
->>>> +
->>>> +	ret = device_property_match_string(w->dev->parent, "rohm,wdg-action",
->>>> +					   "intb-only");
->>>> +	if (ret >= 0) {
->>>> +		ret = regmap_update_bits(w->regmap, BD96801_REG_WD_CONF,
->>>> +				 BD96801_WD_ASSERT_MASK,
->>>> +				 BD96801_WD_ASSERT_IRQ);
->>>> +		return ret;
->>>> +	}
->>>
->>> I don't see the devicetree bindings documented in the series.
->>
->> Seems like I have missed this WDG binding. But after reading your comment
->> below, I am wondering if I should just drop the binding and default to
->> "prstb" (shutdown should the feeding be skipped) - and leave the "intb-only"
->> case for one who actually needs such.
->>
->>> I am also a bit surprised that the interrupt isn't handled in the driver.
->>> Please explain.
->>
->> Basically, I just had no idea what the IRQ should do in the generic case. If
->> we get an interrupt, it means the WDG feeding has failed. My thinking is
->> that, what should happen is forced reset. I don't see how that can be done
->> in reliably manner from an IRQ handler.
->>
->> When the "prstb WDG action" is set (please, see the above DT binding
->> handling), the PMIC shall shut down power outputs. This should get the
->> watchdog's job done.
->>
->> With the "intb-only"-option, PMIC will not turn off the power. I'd expect
->> there to be some external HW connection which handles the reset by HW.
->>
->> After all this being said, I wonder if I should just unconditionally
->> configure the PMIC to always turn off the power (prstb option) should the
->> feeding fail? Or do someone have some suggestion what the IRQ handler should
->> do (except maybe print an error msg)?
->>
+On Wed, Apr 03, 2024 at 03:47:12PM +0300, Matti Vaittinen wrote:
+> > 
+> > Other watchdog drivers call emergency_restart() if the watchdog times out
+> > and triggers an interrupt. Are you saying this won't work for this system ?
+> > If so, please explain.
+> > 
 > 
-> Other watchdog drivers call emergency_restart() if the watchdog times out
-> and triggers an interrupt. Are you saying this won't work for this system ?
-> If so, please explain.
+> Thanks Guenter. If it works with systems using other devices, then it should
+> work (to the same extent) with systems using this PMIC. Thanks.
 > 
 
-Thanks Guenter. If it works with systems using other devices, then it 
-should work (to the same extent) with systems using this PMIC. Thanks.
+You might also consider to just call panic(). What is what we do if the
+pretimeout panic governor is enabled.
 
-I'll add the IRQ handling to next version - but it may take a while as 
-I'm currently having some problems with the IRQs in general, and because 
-I'll wait for feedback from Mark to the regulator part.
+That makes me wonder if it would make sense to introduce watchdog timeout
+governors, similar to the existing pretimeout governors. Maybe if I ever
+find the time to do it ...
 
-Yours,
-	-- Matti
+Guenter
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+> I'll add the IRQ handling to next version - but it may take a while as I'm
+> currently having some problems with the IRQs in general, and because I'll
+> wait for feedback from Mark to the regulator part.
+> 
+> Yours,
+> 	-- Matti
+> 
+> -- 
+> Matti Vaittinen
+> Linux kernel developer at ROHM Semiconductors
+> Oulu Finland
+> 
+> ~~ When things go utterly wrong vim users can always type :help! ~~
+> 
 
