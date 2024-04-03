@@ -1,89 +1,59 @@
-Return-Path: <linux-watchdog+bounces-868-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-869-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4A1D8970F1
-	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Apr 2024 15:28:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4ECFA897603
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Apr 2024 19:13:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6F97B288C1
-	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Apr 2024 13:28:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E2501C26757
+	for <lists+linux-watchdog@lfdr.de>; Wed,  3 Apr 2024 17:13:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 912951487D5;
-	Wed,  3 Apr 2024 13:26:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 542EE152521;
+	Wed,  3 Apr 2024 17:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XuT87jJO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tb5w0YDG"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233CA1482FA;
-	Wed,  3 Apr 2024 13:26:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267C36E60F;
+	Wed,  3 Apr 2024 17:13:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712150791; cv=none; b=aO6hNjtggY3PWUfVNreqQLfwFzpP/n279sHU523kvmCezvvxv38CxhDN4WvYnMogzDmE4KTtK1d+YhaE7PY0WCq7asxCZ7LgVgdurqqcviIeiVrzTkgaY/36GftL47KvoHqGYK7nYNTHY8kh79gyz2qQEk1kYkW7E6FQYyDB/GA=
+	t=1712164404; cv=none; b=QsDk5qJmF5Zpj8hoe91qLy0ScRiXJCQQDTjbO1LOE9JyA34QVgo7zu3hJQpEnhY8EI22bxZ8dP3ter/27U2JhwfXMHntlsQuhXqNd7wMlfA2t0Srk3ABw9MQ4yr8rz1zhB8KyW8RCVjdjaLhiIdHAh211iWwRCwEnw/2BchMWsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712150791; c=relaxed/simple;
-	bh=pNqIMk3dXJAK1dmFXhtlvHJm8YAeYjgoXwxpjzjBV7c=;
+	s=arc-20240116; t=1712164404; c=relaxed/simple;
+	bh=iDTAlDyhhR24NhTX+LufgKRCpVJp7F5FVJPBKNDeZXg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QuJygQCCKClXQoKoC+tu3+0ltQoacWZ2ZwMYt17YBomfl4/y63CrT2IYNfQUc6W3Bc+eOkFreGz8nmbR8jdBtepICqQ3Dh8elrFSAasvCFAhsfKLuI5ecKDFLw0zz+LUffVHnmEZz5LhJ5DYcGUDYUOQQonHrowHfimJI0mIsT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XuT87jJO; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6ea838bf357so5167258b3a.0;
-        Wed, 03 Apr 2024 06:26:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712150789; x=1712755589; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tv8iMSkszzMWqrID5CXG8dHdxUEdUozJG+zGUFmwB4A=;
-        b=XuT87jJOzluj5tMRmm1aaER7kM7bvaF3RGuBsVZPrnUSMovBeIaVfszsRsHvdJj6Ds
-         9J3j86OZ3J2XCi5NWtxEtQDIa23CSORM6rzBrSrVmuNBrBht1shdDy8VgcQdZWjmwlJh
-         +O5sQE7mjYdp6vqiPPvPXJYSch5D/+JnAf+2Q4QqrjF8n1VIbOp6c8J5xhhWZgJv1Y51
-         iv1xz0t6+QXk5GFboJ2O5a0eU3yScuja/2NbF3Ij6uO1pNaCPpvjqhTk5VxG4Jh+yeF/
-         /cy1Zzn3BSTjD5eKnNZr1tE9rn8itp7KfZGw0nou9kk9OsMbqrEYf8DTnH6yyd/2Fz2V
-         qXFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712150789; x=1712755589;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tv8iMSkszzMWqrID5CXG8dHdxUEdUozJG+zGUFmwB4A=;
-        b=wI1u6B1EBrJLHn5/c5Awqbtugmt22WITdaj1ddiEXVIKu1HbnXYSA6xyFl80U+LXyx
-         smuhXfxlZtTic/GllQxsCeWlE9YWKK/QaKEdxFuOODnbl6MGRBspn/id6xQflrc2HbKA
-         rwLa8fMqdpP18R95QzVDC1/Vn4/sI7UbfWWjvf+MdxCR3613dtnj6wvZfDXf5RE4BhLF
-         Ra+LKmZTW28RsEeC/enA0RVVE4XrqdEuHCRIqB0KbgebOQELvWLHX9kUGKMCliuiJ1dX
-         yB3Mf5vwvDM2lJhFky3SX8SNPMB5SQGoOZB8/HHOrr/U/ei5yHj7PT/BWqhDNMmhyZoq
-         QPVw==
-X-Forwarded-Encrypted: i=1; AJvYcCWrn3OUNqzoL3WmWebbol1z1ANMPLg1CfUlTSgGrTY5cNuQe5LEPz/xZhn+08xq/Q2CxTPELAVJcMVZ3h7gVsXMf0oz9Mil0mEKHBnUmXYMieYoEJOwqn0FHM6Olum2lSwH52g07MBw7hUTvJNMDXakH5TmGzY9i+7WL3PW6w7+W9xTBXtOCAZk
-X-Gm-Message-State: AOJu0YyCfo982xCFNJJHR58VdvHvqjtv8z99m206+3vJg4/t8JIQjk9D
-	qXL10PUkpjm1MQmSjEuuvyI/XTsUgmmW18kM6Tp3TZ+c9LCYL5Rx
-X-Google-Smtp-Source: AGHT+IHPQcf1KauRRFFf95OsXrrxpcYKnvhoiA5NT6n4jVd/PqAHKw35hLjTyYgdc6RpO6DQuMy3vQ==
-X-Received: by 2002:a05:6a00:1413:b0:6e6:89ad:1233 with SMTP id l19-20020a056a00141300b006e689ad1233mr17299843pfu.2.1712150788005;
-        Wed, 03 Apr 2024 06:26:28 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id fd30-20020a056a002e9e00b006eaf43b5982sm8479994pfb.108.2024.04.03.06.26.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Apr 2024 06:26:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 3 Apr 2024 06:26:25 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Lee Jones <lee@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-watchdog@vger.kernel.org
-Subject: Re: [RFC PATCH 5/6] watchdog: ROHM BD96801 PMIC WDG driver
-Message-ID: <d7522458-35b1-40ca-84a3-eaf1127a1e4e@roeck-us.net>
-References: <cover.1712058690.git.mazziesaccount@gmail.com>
- <f8e743a6c49607de0dd7a27778383477e051b130.1712058690.git.mazziesaccount@gmail.com>
- <4fa3a64b-60fb-4e5e-8785-0f14da37eea2@roeck-us.net>
- <279336b3-f28d-48ee-a10f-47abba7b0b89@gmail.com>
- <d2ab33e6-4d3e-472a-b4d7-b703955989ba@roeck-us.net>
- <1d956aab-2892-4a2b-a4b3-0a93504668eb@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lk8jxUPjgrlH7bSa019FKZ2MfqD/X66j2GutwFHo+pNNbYmLOACei0cWO8dxGpnkp+OYSxE+EVFDnmD3yL1l6c0YK7z53q6radMTqroaW+eXtFbS+CbX5jLTzpk4M/Sftr+wZmtBasd1SqaZWn04NmtJbjNMLbLULIzBSqRThEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tb5w0YDG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 639AFC433F1;
+	Wed,  3 Apr 2024 17:13:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712164403;
+	bh=iDTAlDyhhR24NhTX+LufgKRCpVJp7F5FVJPBKNDeZXg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tb5w0YDGe4x+imn77oCq7en/5vXnu1PuX2SN6Yqg+ZNVugpAHzKHObawruVxu5sVX
+	 IBzzZhKicpNFzkAWWF0aed24aA3Ed99diLIAIjUDDY/ToweyWoiCNH/EJ3ImFBnOYo
+	 oYjQq8oSJb4st8TstbqOakzA2cntQfiMmDogL9bEtNnnIsCOoVdfRif8RtEvjghM1Q
+	 lzO4XQP/rlgL7DE+klootx5667C7jOoof9fcdk881uoRfpCIAB3vZX1JspBLBu3Sf5
+	 kUoYcuXIlLpN+CA72QAVnK6v/RfUwOzSjuE+H3PxOwtc9NFiyZsePxcZlTx7ronxCS
+	 4W05MzHEeYVdg==
+Date: Wed, 3 Apr 2024 12:13:21 -0500
+From: Rob Herring <robh@kernel.org>
+To: Andrew Jeffery <andrew@codeconstruct.com.au>
+Cc: wim@linux-watchdog.org, linux@roeck-us.net,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	joel@jms.id.au, zev@bewilderbeest.net,
+	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: watchdog: aspeed,ast2400-wdt: Convert to
+ DT schema
+Message-ID: <20240403171321.GA3996007-robh@kernel.org>
+References: <20240403020439.418788-1-andrew@codeconstruct.com.au>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -92,40 +62,66 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1d956aab-2892-4a2b-a4b3-0a93504668eb@gmail.com>
+In-Reply-To: <20240403020439.418788-1-andrew@codeconstruct.com.au>
 
-On Wed, Apr 03, 2024 at 03:47:12PM +0300, Matti Vaittinen wrote:
-> > 
-> > Other watchdog drivers call emergency_restart() if the watchdog times out
-> > and triggers an interrupt. Are you saying this won't work for this system ?
-> > If so, please explain.
-> > 
+On Wed, Apr 03, 2024 at 12:34:39PM +1030, Andrew Jeffery wrote:
+> Squash warnings such as:
 > 
-> Thanks Guenter. If it works with systems using other devices, then it should
-> work (to the same extent) with systems using this PMIC. Thanks.
+> ```
+> arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-galaxy100.dtb: /ahb/apb@1e600000/watchdog@1e785000: failed to match any schema with compatible: ['aspeed,ast2400-wdt']
+> ```
 > 
+> The schema binding additionally defines the clocks property over the
+> prose binding to align with use of the node in the DTS files.
+> 
+> Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
+> ---
+> v2: Address feedback from Rob and Zev
+> 
+>     - Rob: https://lore.kernel.org/linux-watchdog/20240402180718.GA358505-robh@kernel.org/
+>     - Zev: https://lore.kernel.org/linux-watchdog/65722a59-2e94-4616-81e1-835615b0e600@hatter.bewilderbeest.net/
+> 
+> v1: https://lore.kernel.org/linux-watchdog/20240402120118.282035-1-andrew@codeconstruct.com.au/
+> 
+>  .../bindings/watchdog/aspeed,ast2400-wdt.yaml | 142 ++++++++++++++++++
+>  .../bindings/watchdog/aspeed-wdt.txt          |  73 ---------
+>  2 files changed, 142 insertions(+), 73 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/watchdog/aspeed,ast2400-wdt.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/watchdog/aspeed-wdt.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/aspeed,ast2400-wdt.yaml b/Documentation/devicetree/bindings/watchdog/aspeed,ast2400-wdt.yaml
+> new file mode 100644
+> index 000000000000..be78a9865584
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/aspeed,ast2400-wdt.yaml
+> @@ -0,0 +1,142 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/aspeed,ast2400-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Aspeed watchdog timer controllers
+> +
+> +maintainers:
+> +  - Andrew Jeffery <andrew@codeconstruct.com.au>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - aspeed,ast2400-wdt
+> +      - aspeed,ast2500-wdt
+> +      - aspeed,ast2600-wdt
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +    description: >
 
-You might also consider to just call panic(). What is what we do if the
-pretimeout panic governor is enabled.
+You don't need '>' either. I guess it is equivalent here as there are no 
+double newlines. Drop these if you respin, otherwise:
 
-That makes me wonder if it would make sense to introduce watchdog timeout
-governors, similar to the existing pretimeout governors. Maybe if I ever
-find the time to do it ...
-
-Guenter
-
-> I'll add the IRQ handling to next version - but it may take a while as I'm
-> currently having some problems with the IRQs in general, and because I'll
-> wait for feedback from Mark to the regulator part.
-> 
-> Yours,
-> 	-- Matti
-> 
-> -- 
-> Matti Vaittinen
-> Linux kernel developer at ROHM Semiconductors
-> Oulu Finland
-> 
-> ~~ When things go utterly wrong vim users can always type :help! ~~
-> 
+Reviewed-by: Rob Herring <robh@kernel.org>
 
