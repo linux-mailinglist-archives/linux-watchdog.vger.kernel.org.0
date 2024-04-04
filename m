@@ -1,74 +1,67 @@
-Return-Path: <linux-watchdog+bounces-876-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-877-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BA1C8988A0
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Apr 2024 15:16:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAACF898B2B
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Apr 2024 17:33:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A5051C21C31
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Apr 2024 13:16:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 063DC1C21FCA
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Apr 2024 15:33:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D1D1272A3;
-	Thu,  4 Apr 2024 13:16:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8410823D0;
+	Thu,  4 Apr 2024 15:33:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oq4vWqDz"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="PxqEuPUS"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15EBF86245;
-	Thu,  4 Apr 2024 13:15:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB65D12AAD6;
+	Thu,  4 Apr 2024 15:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712236561; cv=none; b=TC74HvwL7C1zTjUHigmnDLGFNORXD6+hVuLb9C7IkxFa4WJcLLOsVoaJSNwy2WRZOVQL9m5x31YLNk9vyfPKzWGZowIAPZT7KdkfEavdwzFKYcx7Tv5Z+O4XZztujVNDq5806+0Xd4shfy9yv91PNf6jyTkEJdZ93kFjwAOo2QI=
+	t=1712244787; cv=none; b=TzVkducTnZiWFz1lhc3WNiiEszLSe/1DZP5LcvxQfhP3W33BK9oXL8o+oCx7PPryBN5JGem6YlBk3SE6LhU2Hb320lZhFWo07JT39o4w2DByJe6tjlSCgZkuKhuIU5JRsuhM6GgnUExSCCM84rzmj3ajaBvgoyaF8H3UhHcRysg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712236561; c=relaxed/simple;
-	bh=/gCKA/oReueBMsYxeYFIKM9dWH0tB6N2OUmuLZEgT1A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pVEcywnIlsTRXYjtNYWgoEGMNye1E1x6sIUbs4BExZ4s14qOUR45Lr5FDPDEZ7xQwXkTR+kDK0bNj+PDmmW1t8nAaVQGNJCmMbAvlXwZ2LnJh6xZnfgO9JR0zasUQaAHd/Aj3ypCQj7Wdo5rtdVwI9e/PEJXdhV7ftHSxEz1FJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oq4vWqDz; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-516c11b6af9so1367757e87.2;
-        Thu, 04 Apr 2024 06:15:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712236558; x=1712841358; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9FbFTfD/TvLUw6fU15r42KRVHlg7cUmb8nJYcUP4iv4=;
-        b=Oq4vWqDzq+CIjmJddOh1qNEWdNUCysErHnKZRo44dje+w5uY/g56BN/KShvxrYfGY7
-         vadOcy9ZyVm9tSCxpPBn64SL4fhsz3mW5DaOxzae+HeQ3FsF4dcO/A0peWrAHAU39Iu3
-         cGszU+BhsSoI3hPXPhx1pMThe5A1rMaRP6OQZeq8PTYJ8SPl3PWBekTwgZp4itDgBQ3S
-         yBC//TqUe5QoNaQ+uef6HMuLEBM6thT4fq8i7Dzd5hc/o+xJuDeQ8aBuGH/MkHhfktCB
-         S5IJVEqSQZRKug4BPmvfrY1jskvlldToK6Hz2rpFHWfGQI6ueIWvgZDjHe+SMwAWHXmu
-         ub8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712236558; x=1712841358;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9FbFTfD/TvLUw6fU15r42KRVHlg7cUmb8nJYcUP4iv4=;
-        b=oT4VK/dlOQgDIvkTHFUMsHwFzXGbGcF++N8WLqvsjqJdx+2OfbnjFmO9VfdLRrUvTs
-         6BSV3hmRUicamY92ww0QhwByserpx4dWKFAdswy5MAWClopxQp+MZykdITbMsPq+1bXS
-         ONrvuN4tUNBTilvZMo0WU2ZGwMDe+Qqwg4j9NR2dgeLEMBJ1aBroX2PDbyvMuuWIs/CD
-         atS2gSaL6j9xK2YhFGJI68APtSIAm2ZNIIl+8ebM9asCReuMqljzVRwIQ4swa8EMo97f
-         gewAL5V/Y41UcuXdGHRYOC3dc/Wfu0xkYuSh7lQHayx5tzqwLBBGqgPNg7+21Xr/i9za
-         1I6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVOJBHckdrPaTZ8sMpF4k6qm5mjl8vQnASLeqb89gSX74DAzZWTfa4Pt7TlltUeH3IyqhlbpSZLRje+FWfstgCcPN+cSzqx9lbCVGtCxsqowch1gDOC08f2+mpclxdMRwUVBG3jQAnhKeIi1yUdwW09e8H40Lu/iq4x27YlzofcL/Z07xnqWXeX
-X-Gm-Message-State: AOJu0YwY1fhf2opnYDz+WZMyZMSVoRx3VpZFQr/PJanJuL2xAF0dCbLd
-	2XnVwsDD3DTN/FveGWLA5ruvWBAYxPNfg7WllziPq7HNZwDhRXNj
-X-Google-Smtp-Source: AGHT+IFpvBBKlDlenBy4zyj+4duAMba2fIxXc6gDdHoGF1BQpu9586dGzFH3NKdaIHnKmAo1FqvnfA==
-X-Received: by 2002:ac2:51aa:0:b0:515:8bb2:72a2 with SMTP id f10-20020ac251aa000000b005158bb272a2mr1505812lfk.55.1712236557860;
-        Thu, 04 Apr 2024 06:15:57 -0700 (PDT)
-Received: from [172.16.183.82] ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id q27-20020ac2515b000000b00516c8e144adsm191259lfd.172.2024.04.04.06.15.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Apr 2024 06:15:57 -0700 (PDT)
-Message-ID: <b6279be8-cf7d-4608-b556-3c01587f0d43@gmail.com>
-Date: Thu, 4 Apr 2024 16:15:56 +0300
+	s=arc-20240116; t=1712244787; c=relaxed/simple;
+	bh=yrjkmQiC3FMkSbl5HUztMPrVreWKuakw77l4M84qpsg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=FIdlBguX1gqod4hep7kh/cO8BV5Q++jBJbKf4FgIID9QAGXSANUBux8tL/21gk1j9VJW4XvVxZ2sF/0mu/PxRp8ZgHY0hXJD5kK27J9LBgiDJITMWw4+ex1Nc2RpykysCzx6IVgHcos1MjqdbBDSdNj9IywD4qZfLq5tudhUmx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=PxqEuPUS; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 434FWl2h074117;
+	Thu, 4 Apr 2024 10:32:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1712244767;
+	bh=TlztorEvC5Xvtyqcs6DGjxvXkt168hykTsxA7fh/Buo=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=PxqEuPUSJQuG9lFLV1WTyrPmsWAAi3w5tx+2wOtsMRFxclD7DYus/GQ6kv9lL7jUo
+	 q45ZkTPQTpGZs1QK5Uenxn3AdIOa4XWYgOyOjX5Wy/vLvvnAF1bHLY3CjDletSHyHv
+	 QR3thw60yptffPoqY2uWK80MyRVofFXi5zfJuSdo=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 434FWlC5036328
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 4 Apr 2024 10:32:47 -0500
+Received: from lewvowa01.ent.ti.com (10.180.75.79) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 4
+ Apr 2024 10:32:47 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by lewvowa01.ent.ti.com
+ (10.180.75.79) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2507.34; Thu, 4 Apr
+ 2024 10:32:47 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 4 Apr 2024 10:32:47 -0500
+Received: from [128.247.81.105] (judy-hp.dhcp.ti.com [128.247.81.105])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 434FWlql112611;
+	Thu, 4 Apr 2024 10:32:47 -0500
+Message-ID: <7586bb3c-1d6a-4560-9188-14bc1762d27b@ti.com>
+Date: Thu, 4 Apr 2024 10:32:47 -0500
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -76,77 +69,39 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/6] Support ROHM BD96801 scalable PMIC
-Content-Language: en-US, en-GB
-To: Mark Brown <broonie@kernel.org>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <cover.1712058690.git.mazziesaccount@gmail.com>
- <f7d454ac-6ecb-4431-a1de-c9b5d1240969@gmail.com>
- <eb03ec33-0627-4986-be04-8e35da390d6b@sirena.org.uk>
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <eb03ec33-0627-4986-be04-8e35da390d6b@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH] watchdog: rti_wdt: Set min_hw_heartbeat_ms to accommodate
+ 5% safety margin
+To: Francesco Dolcini <francesco@dolcini.it>
+CC: Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck
+	<linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20240403212426.582727-1-jm@ti.com>
+ <20240404082814.GA8722@francesco-nb>
+Content-Language: en-US
+From: Judith Mendez <jm@ti.com>
+In-Reply-To: <20240404082814.GA8722@francesco-nb>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Hi Mark,
+Hi Francesco,
 
-On 4/4/24 15:09, Mark Brown wrote:
-> On Thu, Apr 04, 2024 at 10:26:34AM +0300, Matti Vaittinen wrote:
+On 4/4/24 3:28 AM, Francesco Dolcini wrote:
+> Hello Judith,
 > 
->> 1. Should we be able to have more than 1 IRQ domain / device?
->> 2. Should regmap_irq support having more than 1 HWIRQ
+> On Wed, Apr 03, 2024 at 04:24:26PM -0500, Judith Mendez wrote:
+>> On AM62x, the watchdog is pet before the valid window
+>> is open. Fix min_hw_heartbeat and accommodate a 5% safety
 > 
-> I would expect each parent interrupt to show up as a separate remap_irq.
+> Fix => Add Fixes tag + Cc:stable ?
+
+Thanks will add for v2
+~ Judith
+
 > 
->> then it seems that reading the IRQ information from the /proc/interrupts
->> works as expected. Here I am making a wild guess that the name of the domain
->> is used as a key for some data-lookups, and having two domains with a same
->> name will either overwrite something or cause wrong domain data to be
->> fetched. (This is just guessing for now).
+> Thanks,
+> Francesco
 > 
-> So if we arrange to supply a name when we register multiple domains
-> things should work fine?
-
-Thanks for taking the time to look at my questions :)
-I have been debugging this thing whole day today, without getting too 
-far :) It seems there is something beyond the name collision though.
-
-After I tried adding '-1' to the end of the other domain name to avoid 
-the debugfs name collision I managed to do couple of successful runs - 
-after which I reported here that problem seems to be just the naming. 
-Soon after sending that mail I hit the oops again even though the naming 
-was fixed.
-
-Further debugging shows that the desc->action->name for the last 28 
-'errb' IRQs get corrupted. This might point more to the IRQ requester 
-side - so I need to further study the BD96801 driver side as well as the 
-regulator_irq_helper. I'm having the creeping feeling that at the end of 
-the day I need to find the guilty one from the mirror :)
-
-But yes, creating 2 regmap-IRQ controllers for one device seems to 
-generate naming conflict in the debugfs - so unless I'm mistaken, with 
-the current regmap-IRQ we can't have more than 1 regmap-IRQ entity for a 
-single device.
-
-Just please give me some more time to see if I find the cause of the 
-corruption and I hope I can write more concrete description. For now it 
-was enough for me to hear having more than 1 IRQ domain / device is not 
-something on the "DON'T DO THIS" -list.
-
-Yours,
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
 
 
