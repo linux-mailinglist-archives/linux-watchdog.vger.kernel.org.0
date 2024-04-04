@@ -1,63 +1,66 @@
-Return-Path: <linux-watchdog+bounces-871-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-872-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FCFC897D08
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Apr 2024 02:27:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46552897D83
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Apr 2024 03:50:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 546D528C6B1
-	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Apr 2024 00:27:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 245AD1C23DEC
+	for <lists+linux-watchdog@lfdr.de>; Thu,  4 Apr 2024 01:50:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66DAA1C36;
-	Thu,  4 Apr 2024 00:27:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 472D918B04;
+	Thu,  4 Apr 2024 01:50:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="KMKihofe"
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="btSvpyF/"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2844A184D;
-	Thu,  4 Apr 2024 00:27:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE72318641;
+	Thu,  4 Apr 2024 01:50:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712190436; cv=none; b=h5klxbAfaSpz0zndZiGa5BdKfaw8A92wbc0SP2nbjcI6JOXZyHIrEdtnY36XPlQveI+PszcSJXNLqblW/HtVOMDmlz/uAQesGmexkYtc06aDcrCwMcwwZGpRDGGqYs2xoz+Dzy8DyjAQTmGSlPrCRNnKaBaqB0f5NZLo3yQvGjY=
+	t=1712195438; cv=none; b=Ykez/mFnrt4nz5q9SN2sCzDgu76LU+GyoKAsGpqEVPTgvRd22WplTRwPXN1kZ3iUCQYImAUZ5dpjbUTHketZt+5+xiH62vgzfLpQJOQOe/i/ATwTirS9oeQUESeDsNUVG/631xajn7L9sUKmfEbwvz+1wezezPShG+eZaDOyh0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712190436; c=relaxed/simple;
-	bh=v/vIa/rR8iRyMy4mIpAf1wWxqzwbq+JhVF4Y2ktEIAQ=;
+	s=arc-20240116; t=1712195438; c=relaxed/simple;
+	bh=sMJgocwG0ejwyAHece1APU7sO/OMGd+TkWb7n4BBNGU=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YW5JHVlJ7866pl79e5/cnAcEQrcQPOskDkCnx989SOJNsPVUBpmc+bvnnbSvHZTtN8QBjSjK1Ldj8kFeKVhDpKFrz2gO9zfQ/rd/l5EoxxB1k0c8xB4b0/xZCNeLslxdPiRLaVDJ5KemHLxCS4tBOa+FX1XD4q7p1gPW9voDFKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=KMKihofe; arc=none smtp.client-ip=203.29.241.158
+	 Content-Type:MIME-Version; b=EAxyqNv9PUmYpTxgJkzYJDNsDUfC+xI13YAhrIM/y04Hw1SWoRQBR3VOgqJ5m6+/sVtwLa/5SKba7leWA+u6Wtppyivut3+Z6gpNKHo2Nu+60pUj1URPAn6gOFEAg5J7dGs2ccOqcqcB57oEsI4yR9+miEzqKB32zBLfJcc3/cw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=btSvpyF/; arc=none smtp.client-ip=203.29.241.158
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 Received: from [192.168.68.112] (ppp118-210-182-70.adl-adc-lon-bras34.tpg.internode.on.net [118.210.182.70])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id CD58320172;
-	Thu,  4 Apr 2024 08:27:01 +0800 (AWST)
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id D9EC420172;
+	Thu,  4 Apr 2024 09:50:32 +0800 (AWST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1712190426;
-	bh=7XBJv5sXFllW6o2Z1qUfGGSmKeySAzOgxYx/fU65DDo=;
+	d=codeconstruct.com.au; s=2022a; t=1712195434;
+	bh=sMJgocwG0ejwyAHece1APU7sO/OMGd+TkWb7n4BBNGU=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=KMKihofeIwJ5nFzr9rQ6jaTGM8JkIsM88UxAya7N3V3td2wYInXkbxhN4x2bfPXnc
-	 6bc4M7rVw0UfgL1YD1QunC9k4bPWoTwTPRMghNm9ELeJyAy5a9QMUgXIQ2NNuoTTpR
-	 RNBzwmlKIwzeVisUPu/Sin/4XaD+G9S5+9UbnpBwldoxXicbThPk3FX/37bSTiHuMv
-	 hTD+rMM5ubqiu0BIG/tRIQ08n34xFzDKtPOICO9DhZFFDQF6si5kqe9Fhbm15OJXYx
-	 Jp1qcUoBGCJpXndHnXvBOnr3T5xX0ARuczw0DPLlZkYyEIKNlYNNqMZrrOiY9WGA7+
-	 wtT+HTc+9+kEw==
-Message-ID: <cfc735c787707298ef3e2e1f5aa6f3096326a26b.camel@codeconstruct.com.au>
-Subject: Re: [PATCH v2] dt-bindings: watchdog: aspeed,ast2400-wdt: Convert
- to DT schema
+	b=btSvpyF/upHJlsVY8A2BssX/zqlj3zpfHSY1CIG5LVwOc0UpxoxWMkucfh2t3i+p8
+	 E7CJivKe9hMaSPzA9E4bjWTAWDOYq+OGPU8LyUoHijDpFzfxA8P7Y7+CMRpMjF/GSx
+	 N0LkeNhlDrCSC5QDz6xApCRiFWIxK7PVzLjGfqIASC56VWuxOc38lRvUfGe9wfqEeu
+	 DSgVlNui06ZG43jhwOqBk39HlSEgT1rP77E6NCxV3EXvmFqgQgr3y2+oigk4Iph8vW
+	 LDRZnm5zCU1GRNDVRL5hxFO9fQb1E34YVPVIHg2dhtCfhrJv0fO3dSVH2CJwlSjDoz
+	 Ddefked6QnxEA==
+Message-ID: <496c6b2bf10bd8a1313740cd4047a2a153c13da8.camel@codeconstruct.com.au>
+Subject: Re: [PATCH v6 3/4] dt-bindings: watchdog: aspeed-wdt: Add aspeed,scu
 From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Rob Herring <robh@kernel.org>
-Cc: wim@linux-watchdog.org, linux@roeck-us.net, 
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, joel@jms.id.au, 
-	zev@bewilderbeest.net, linux-watchdog@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Date: Thu, 04 Apr 2024 10:56:59 +1030
-In-Reply-To: <20240403171321.GA3996007-robh@kernel.org>
-References: <20240403020439.418788-1-andrew@codeconstruct.com.au>
-	 <20240403171321.GA3996007-robh@kernel.org>
+To: PeterYin <peteryin.openbmc@gmail.com>, Rob Herring <robh@kernel.org>
+Cc: patrick@stwcx.xyz, Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter
+ Roeck <linux@roeck-us.net>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>,  Conor Dooley <conor+dt@kernel.org>,
+ Joel Stanley <joel@jms.id.au>, linux-watchdog@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Date: Thu, 04 Apr 2024 12:20:32 +1030
+In-Reply-To: <79b7e2ef-6f53-4642-ad3f-99b8ce780a7f@gmail.com>
+References: <20240328022231.3649741-1-peteryin.openbmc@gmail.com>
+	 <20240328022231.3649741-4-peteryin.openbmc@gmail.com>
+	 <20240401135637.GA342928-robh@kernel.org>
+	 <ab76b0549172cf3e33d6242fa9ea3e6a87b4a58e.camel@codeconstruct.com.au>
+	 <79b7e2ef-6f53-4642-ad3f-99b8ce780a7f@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.46.4-2 
@@ -68,81 +71,24 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Wed, 2024-04-03 at 12:13 -0500, Rob Herring wrote:
-> On Wed, Apr 03, 2024 at 12:34:39PM +1030, Andrew Jeffery wrote:
-> > Squash warnings such as:
-> >=20
-> > ```
-> > arch/arm/boot/dts/aspeed/aspeed-bmc-facebook-galaxy100.dtb: /ahb/apb@1e=
-600000/watchdog@1e785000: failed to match any schema with compatible: ['asp=
-eed,ast2400-wdt']
-> > ```
-> >=20
-> > The schema binding additionally defines the clocks property over the
-> > prose binding to align with use of the node in the DTS files.
-> >=20
-> > Signed-off-by: Andrew Jeffery <andrew@codeconstruct.com.au>
-> > ---
-> > v2: Address feedback from Rob and Zev
-> >=20
-> >     - Rob: https://lore.kernel.org/linux-watchdog/20240402180718.GA3585=
-05-robh@kernel.org/
-> >     - Zev: https://lore.kernel.org/linux-watchdog/65722a59-2e94-4616-81=
-e1-835615b0e600@hatter.bewilderbeest.net/
-> >=20
-> > v1: https://lore.kernel.org/linux-watchdog/20240402120118.282035-1-andr=
-ew@codeconstruct.com.au/
-> >=20
-> >  .../bindings/watchdog/aspeed,ast2400-wdt.yaml | 142 ++++++++++++++++++
-> >  .../bindings/watchdog/aspeed-wdt.txt          |  73 ---------
-> >  2 files changed, 142 insertions(+), 73 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/watchdog/aspeed,a=
-st2400-wdt.yaml
-> >  delete mode 100644 Documentation/devicetree/bindings/watchdog/aspeed-w=
-dt.txt
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/watchdog/aspeed,ast2400-=
-wdt.yaml b/Documentation/devicetree/bindings/watchdog/aspeed,ast2400-wdt.ya=
-ml
-> > new file mode 100644
-> > index 000000000000..be78a9865584
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/watchdog/aspeed,ast2400-wdt.yam=
-l
-> > @@ -0,0 +1,142 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/watchdog/aspeed,ast2400-wdt.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Aspeed watchdog timer controllers
-> > +
-> > +maintainers:
-> > +  - Andrew Jeffery <andrew@codeconstruct.com.au>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - aspeed,ast2400-wdt
-> > +      - aspeed,ast2500-wdt
-> > +      - aspeed,ast2600-wdt
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +    description: >
->=20
-> You don't need '>' either. I guess it is equivalent here as there are no=
-=20
-> double newlines. Drop these if you respin, otherwise:
->=20
-> Reviewed-by: Rob Herring <robh@kernel.org>
+On Wed, 2024-04-03 at 17:18 +0800, PeterYin wrote:
+> Thanks, I can wait you update it and send a new version for wdt driver.
 
-Thanks. I've made a note for the future to avoid `>` if it's not
-necessary, but at the time I figured it wasn't incorrect to include it.
+I've sent v2:
+
+
+https://lore.kernel.org/linux-watchdog/20240403020439.418788-1-andrew@codec=
+onstruct.com.au/
+
+Rob's okay with it:
+
+https://lore.kernel.org/linux-watchdog/20240403171321.GA3996007-robh@kernel=
+.org/
+
+Feel free to address his comment there if you integrate it into your
+series, though make sure to add his tag, keep my authorship, and append
+your own S-o-b if you do.
 
 Andrew
+
 
