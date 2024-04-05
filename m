@@ -1,125 +1,117 @@
-Return-Path: <linux-watchdog+bounces-884-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-885-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BDB789A58A
-	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Apr 2024 22:17:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7100E89A611
+	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Apr 2024 23:28:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4EFDC1C21D18
-	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Apr 2024 20:17:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A237E1C2114D
+	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Apr 2024 21:28:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65952174EC5;
-	Fri,  5 Apr 2024 20:16:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF776175542;
+	Fri,  5 Apr 2024 21:27:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="LUA/vy4e";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="m2h3piVF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R9M1TERB"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from wfhigh3-smtp.messagingengine.com (wfhigh3-smtp.messagingengine.com [64.147.123.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EECB7171E42;
-	Fri,  5 Apr 2024 20:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A861C36;
+	Fri,  5 Apr 2024 21:27:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712348217; cv=none; b=aZh+vpaBfiwZjK6I0pnQkveVsGFoewHU9oWeFOeS9Zp+HXkNhVqaS6KqGKg4PMybwSpxuj64hCYKVJprsYa7oUn+0Z9dkW2oBKtp3L7m49uBS61pco/wZHWdWlnitMKVxowYLKO9mkMNIIgTGIsDcQa78OuMSmO/r067dXdLKjc=
+	t=1712352477; cv=none; b=VbHNtgtIYirQqArYTIm8/rdssBSHi5o0+RuCBIywxb6Fs2E2dF4qhzcsEr6hBRVLk87WEW/HNEHvQ0G0QVJR6Pya49O6R0mwgB+dKdOBp030SaHGY9yquarT7QWTf9wIJViYIH2BmgLKzGMQATX5p76zNb6p9XSsC7TQUKFDnC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712348217; c=relaxed/simple;
-	bh=up5LFCC+UqimQbjnXWeVT9wsxfzpVWUu0porL7yDngo=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=SMmot3MwGvcAba7e3uGt5JH1g/r6oEMutewqdyoriBujTCk21gW5iWmSdfsyAguea53Bz1XuNtD4EZveogJjFlrE2kIbK8X8hquVNO0+QvDa+lNCkxGKaevroRPLz9sjaT6k4/OWL8hOghcF9G1ZKrdLJHV7WuNentqCvxYRFX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=LUA/vy4e; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=m2h3piVF; arc=none smtp.client-ip=64.147.123.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.west.internal (Postfix) with ESMTP id A6DFB18000BD;
-	Fri,  5 Apr 2024 16:16:52 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Fri, 05 Apr 2024 16:16:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1712348212; x=1712434612; bh=+dA8jRJDod
-	Xbd6NzxqN5UuThJ0zD1dMyCnvyLGXTIFI=; b=LUA/vy4e6vsExiAfAk907EnPX3
-	rmSTVLmiSmWVDa9sFWbkjZhzIuqOM0bEunLKrh9CvcZow8PPRm1RjZpyh/Z791s/
-	QusY8fc1QGpMM8Zj1fISMdBtwxWaf8GNaqV3mkdOVq8GmrggHBYc7NxirtvjWIMi
-	Z4R3d0H8sQbUka38K7NTzsvuuVuAb0E4CR7dyy7K30H3QnfzlrXziNJYn1mWRlcr
-	BYjhx0H+OeuXqoppO1uAelyqTq11IyxknamnKo4pzMJ2aVCZbX0oT27GfF59uLuf
-	MX04YT+BEH8N7S60iMYRZDTNtnIaN6IGy0Uf4lQ2DZdFRdOtfcOtUMt8ZCwQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1712348212; x=1712434612; bh=+dA8jRJDodXbd6NzxqN5UuThJ0zD
-	1dMyCnvyLGXTIFI=; b=m2h3piVFaODYG6e+Gyk6QE3aK42dls5GaZ2Bpapy7uhy
-	c8hAmbpK+oOnhiRO5a0WrRh5gjaptVtpwJVI6cb89RaLhSlNUDa46fQkudgJ7ppX
-	7L+Vvg+iKD+zyl5ygUy6a8yT7EUw5mxvbJEg5PLuyq9UN08pMpEAoeHDz+9MgxYs
-	wrMBEEw9xdfZBz08osJUVV27t23rusye/IKZdluxvmTSccZhvK3GaRu4+7cOQwbo
-	7BwZV6TGr74HTrjM9G8kbMOcp0xxfU7askL5SaT8arfL6s1R04ZJz8vedG3Nmyw7
-	jEZuIv6BnrlMzCrvF0J+P8sZ5hTUDW1b9956UQvyFA==
-X-ME-Sender: <xms:M1wQZgluBKPDX-NTgyEoD0GCNhqWtlsXUN-o1MnY3tipS3Ohb9Gwug>
-    <xme:M1wQZv0LAerK85hecsjAmteX4cLtSgc-drZkpHV2Jjpbz6EOYFA0_oAVd8cbvzv76
-    C6TPYufFx61evpZVoo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudegtddgudeglecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
-    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:M1wQZurA0_1FSlLdRqN3nejTSW0NmsT-cs60eBbw_MeubSFGsbG8EA>
-    <xmx:M1wQZsnLFlv_4mNQ_IUjXfDBgzkAprMNOcPH8kJ0z0AZuCVTLE7xQA>
-    <xmx:M1wQZu0eW6usyQn8Y-SAz-yA9cZyb0QGwizMLNQL4x5EW5NpJxF9-Q>
-    <xmx:M1wQZju191xYZhxPVpeEI68TLb2C0fBanOWDy_sc6s7kumUomKoOQQ>
-    <xmx:NFwQZkNxZzMCIgMI3M8IC-Pk3jJb37OE4Sw9xybnaWBxuRG1QsUDQ1dN>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 2642EB6008D; Fri,  5 Apr 2024 16:16:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-333-gbfea15422e-fm-20240327.001-gbfea1542
+	s=arc-20240116; t=1712352477; c=relaxed/simple;
+	bh=r2AHaawq9cdbJnZDM+X6rRc0imhgSLAPwqlxMUSDGOE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jB6Ppjkiq20med6RFN7SMPlBU33jS5wiBliBnmMpcmqbdgGwrYYuTqPmd3YI02Gp6vICVokprIoN/7GGk/lxsQ/lzb9HeCL29LlVuecLSc8UMB2MyKMeVk8W1NAj2ChH1SDp6i/AGJKYoNGhtS7wQf0nfux3qKTOvw2bh8KpV5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R9M1TERB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A9E6C433F1;
+	Fri,  5 Apr 2024 21:27:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712352477;
+	bh=r2AHaawq9cdbJnZDM+X6rRc0imhgSLAPwqlxMUSDGOE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R9M1TERBNdUBUxjGWLDBBHVDTiGhHCxiwRRpDaU4V7f1bEXwX07toqqFlHTNJlzpJ
+	 2OZmOFPmUxvw1L/3ceMv7Q2zsw/PZhC+6Vjpo2h2wRCA5b8DX1VWU3rp3Ms/Ocvmqm
+	 2VXhZklSsIN6cDfBgd83zcnGGHGNoz2K8Ke15tUvQ072nDN+0S/N37BqZauKcODUdg
+	 BC3nxxV99mv2moMKsUfOJErisDj4BoKQZlfJpFT/zkaB1XrlKpS9xMO5aU1hZwCDEX
+	 aQpFJDvkXL0P8d+6LoQMUmWYSHPm3MjxP4NPdZydfMQ2SrNXkwTiy8JYrt5ZjIJG1o
+	 tpHqWoHrG/OTg==
+Date: Fri, 5 Apr 2024 22:27:51 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [RFC PATCH 0/6] Support ROHM BD96801 scalable PMIC
+Message-ID: <8740ff6f-5dcc-40b0-b2d5-9a6d137efc4f@sirena.org.uk>
+References: <cover.1712058690.git.mazziesaccount@gmail.com>
+ <f7d454ac-6ecb-4431-a1de-c9b5d1240969@gmail.com>
+ <eb03ec33-0627-4986-be04-8e35da390d6b@sirena.org.uk>
+ <b6279be8-cf7d-4608-b556-3c01587f0d43@gmail.com>
+ <f1e3d31d-8c24-4cdc-ae26-747f383a937b@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <4b38f876-2178-458e-9e47-c436b5cd7eab@app.fastmail.com>
-In-Reply-To: <35e0b5cf-f7d8-4329-8dba-1098ed9451dd@gmail.com>
-References: <20240405142823.615609-1-arnd@kernel.org>
- <35e0b5cf-f7d8-4329-8dba-1098ed9451dd@gmail.com>
-Date: Fri, 05 Apr 2024 22:16:30 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Heiner Kallweit" <hkallweit1@gmail.com>,
- "Arnd Bergmann" <arnd@kernel.org>, "Andi Shyti" <andi.shyti@kernel.org>,
- "Wim Van Sebroeck" <wim@linux-watchdog.org>,
- "Guenter Roeck" <linux@roeck-us.net>,
- "Wolfram Sang" <wsa+renesas@sang-engineering.com>
-Cc: "Jarkko Nikula" <jarkko.nikula@linux.intel.com>,
- "Geert Uytterhoeven" <geert+renesas@glider.be>,
- "Jean Delvare" <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] i2c: i801: add I2C_MUX dependency
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="XOy5ZYZQYVihvc4r"
+Content-Disposition: inline
+In-Reply-To: <f1e3d31d-8c24-4cdc-ae26-747f383a937b@gmail.com>
+X-Cookie: Honk if you love peace and quiet.
 
-On Fri, Apr 5, 2024, at 21:18, Heiner Kallweit wrote:
-> On 05.04.2024 16:27, Arnd Bergmann wrote:
->
-> Question is whether we really want that I2C_MUX restricts the choice for
-> I2C_I801. Alternatively we can skip building the mux part in the 
-> problem case.
-> The mux part can be used on very few old Asus systems with > 8 memory 
-> slots only.
-> Proposal I sent:
-> https://lore.kernel.org/all/4dhfyaefnw2rtx5q7aaum6pfwha5o3vs65iqcrj2ghps34ubtw@b3bw3gggudjs/T/
->
-> Note also the CI bot tags, as the problem was reported by a CI bot before.
 
-That seems fine to me as well, and it avoids having to mess with
-the watchdog driver. We may want to change that bit anyway, but
-then it can be done independently.
+--XOy5ZYZQYVihvc4r
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-     Arnd
+On Fri, Apr 05, 2024 at 12:19:40PM +0300, Matti Vaittinen wrote:
+
+> Well, good thing is that now I can fix the regulator_irq_helper() to do:
+
+> --- a/drivers/regulator/irq_helpers.c
+> +++ b/drivers/regulator/irq_helpers.c
+> @@ -352,6 +352,9 @@ void *regulator_irq_helper(struct device *dev,
+>=20
+>         h->irq =3D irq;
+>         h->desc =3D *d;
+> +       h->desc.name =3D devm_kstrdup(dev, d->name, GFP_KERNEL);
+> +       if (!h->desc.name)
+> +               return ERR_PTR(-ENOMEM);
+>=20
+>         ret =3D init_rdev_state(dev, h, rdev, common_errs, per_rdev_errs,
+>                               rdev_amount);
+>=20
+> I'll send a patch if this sounds like a correct thing to do.
+
+Sure.
+
+--XOy5ZYZQYVihvc4r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmYQbNcACgkQJNaLcl1U
+h9C61wf+JKtHnrbZ1UFskt7o8mY9LHft9p7xpD4Qp/PPBVdJuv9nX1J+VGtXilBY
+HSuudVOlwueiKL5JGO/ykEunaoPBWaQ/D8Lslk16WwTc3x2meESJxvSw7s0vpp++
+mMRvNvUfLFRhJv3DPNwksFqvB8ALjcIRkU9AAz9M1A4U5JmjlO1mCTyctNxzC8Bz
+kM0EdjEyqnmGebL8LHbwKL1vbD5bS1LwM9cfEu6DdvjGAjgMGX4grWLQKwi/cNzX
+tS0G1B/YD5Uad2sRQ1nBos+SdGmT2Ey6PrN5clGGqdDilW6i8Asrs+Nxlo+Eml0v
+El3iLVDL96gjdtmpuf/VdYGEplkeLQ==
+=t/Do
+-----END PGP SIGNATURE-----
+
+--XOy5ZYZQYVihvc4r--
 
