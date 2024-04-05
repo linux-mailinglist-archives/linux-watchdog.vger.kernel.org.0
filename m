@@ -1,88 +1,88 @@
-Return-Path: <linux-watchdog+bounces-880-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-881-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D666899D27
-	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Apr 2024 14:38:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2014899E13
+	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Apr 2024 15:11:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E55BFB20F9F
-	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Apr 2024 12:38:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70D4B1F21362
+	for <lists+linux-watchdog@lfdr.de>; Fri,  5 Apr 2024 13:11:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8904137916;
-	Fri,  5 Apr 2024 12:38:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88B8A16D4C8;
+	Fri,  5 Apr 2024 13:11:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=beims.me header.i=@beims.me header.b="yo6V/mDP";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="XR7uKliT"
+	dkim=pass (2048-bit key) header.d=beims.me header.i=@beims.me header.b="oYdAFV+/";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Vb9IlwIC"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A081DFE4;
-	Fri,  5 Apr 2024 12:38:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2331E16D33A;
+	Fri,  5 Apr 2024 13:11:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712320687; cv=none; b=ZZjxsmG8uqkuRudwL07SYZJEOGePN378ybsLkMmza2R0L8L55wb/4nhxJSL21Oqxm9xiyq8hCT9HhjpsV2WIcL6VkGtjVofc9nudmSqP1MzfDUNMvkTfnPnDcFnB5NbCr7cJXgEQoj49OwncBhHPIo3pTA/baSvRgUlxPEPSkwo=
+	t=1712322712; cv=none; b=MaQwH8eqV/fFlPafKPRxmpdSHtjSXic9Ypp16IoHznmsdq0CaOH/xdxINqI6wwG8SztY82LRAf4SLl0tlPQ7QLJoSd0Z/E18pFjWRZL7iSaDxhedzenkOH2CzDhuhqBVojlTQ4t6pCf56YtR/7BHrEPixc9P2Y8IbgE9NpQa11Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712320687; c=relaxed/simple;
-	bh=mXnXA9x4NmE809L3U4eMhTHrd1MAnRHvb+EIUqVwVp4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=LB+ThZMTcBXLR3P3FX0BIulH7VOb9sA7zV5ju4sYODz9LxNkDGj4EZWv0SE5ppaswIL7KdRx53GirH6W867+xfgs2hCkueBsIlNNLzUvCiNIjLCUqnBWimKBfvrK4/X9aMyl/vfx5Em7y48TrGUAaSRjkZ0socBmJudh1AeE9lY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=beims.me; spf=pass smtp.mailfrom=beims.me; dkim=pass (2048-bit key) header.d=beims.me header.i=@beims.me header.b=yo6V/mDP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=XR7uKliT; arc=none smtp.client-ip=64.147.123.25
+	s=arc-20240116; t=1712322712; c=relaxed/simple;
+	bh=Pnb0JVfDd2AT2wehrIl4AxYkTliXvgkqqIMPGXnCdc8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QeATi9FlrQxDEOpjh/2I0XHdYlHPSqR9KXryXBmOe392t6IUJz3nya+Wb3jlGVr2MSTJEE9WDQcBfaaldLtlOafkfPXFiUVheV34NMSI3OrVVuXrjKla+mRPzIIF9zi9L9gdCzDJBh4snOgSJYg3QEy27yko8enuUXtgJsXBR9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=beims.me; spf=pass smtp.mailfrom=beims.me; dkim=pass (2048-bit key) header.d=beims.me header.i=@beims.me header.b=oYdAFV+/; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Vb9IlwIC; arc=none smtp.client-ip=64.147.123.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=beims.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=beims.me
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailout.west.internal (Postfix) with ESMTP id D092932003D3;
-	Fri,  5 Apr 2024 08:38:02 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute7.internal (MEProxy); Fri, 05 Apr 2024 08:38:03 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	by mailout.west.internal (Postfix) with ESMTP id A4E7C32000D9;
+	Fri,  5 Apr 2024 09:11:48 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Fri, 05 Apr 2024 09:11:49 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=beims.me; h=cc
-	:content-transfer-encoding:content-type:content-type:date:date
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1712320682;
-	 x=1712407082; bh=9yZNkFVecyVcwhuRWOOXDSmgJ0AyNeDXvYjOa+3vzUY=; b=
-	yo6V/mDPxcaesGpYwKN7NilaBjW8TDQzbJHV6dR6PXUyQE+KVO4EqskWHPse/HJJ
-	3jdDJPdOCWdV/zObaaHuq9EsTV1cP/xgfUBny7QSHrpVC+09/oomxs4113zQP34s
-	YRsRuoLxcvtIlYifbLcVPKo8toznDYchSqvC4c2MAkunx7BAXJMuJFyvFHPQwyrR
-	JvJfD32vWQCJp2zSjDK6s4EwNL+KQE8Bgk5oNJ013OmSKksi4lGtXypBKOSmvM3w
-	Q3g9Z6peViCVbkr1mvBxBDltadzjya8+qb+r2DXVp67VzZ7qDGd/XEsskdJdDmYH
-	FWFpOBqrenepwcVjyQw6Tw==
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1712322708;
+	 x=1712409108; bh=qI3pcWziRd9w6ZdQsFy3xHZSry+rZYZcRpH3Dy+mFlU=; b=
+	oYdAFV+/Pt5/XWbGQj+1X3aH+nbnfSAuH64MGl/FkZJrSCx5EKLtNHKSbmWa8jCt
+	RKECv0XEr48oSmz8BFquPUA/I4b8kDuiJfj8n3oG8cwQ/BBVgCPDhHigQMotPOlX
+	jJAEw2TR617nTk5dK5YjnsBEOkbsKsuxQ9+yJTpECdokqteC0zXvKWhZhtwCyRTY
+	dpp8STD52NdZw7W9tJdbZ2zGSOlIPxf4/2zbHk+RIPNRYnWTgMTdesAMkmNfr1xy
+	w7yjYERRwQusqtYd9hpHTNuMzz7X97WjRnGIjlj3lH/PNOk373Y9A9bYVEo1QifZ
+	0igm6eDHP3KCEcEvw0FswQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-transfer-encoding:content-type
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1712320682; x=
-	1712407082; bh=9yZNkFVecyVcwhuRWOOXDSmgJ0AyNeDXvYjOa+3vzUY=; b=X
-	R7uKliTKPNFdeXBUaphD0b13JnZc8hwIMv5yv9YTKIoGyOgrMrOryWOqR+DurFlp
-	+vs+/pM6GPryMg3YGKhIKGJy9RbiAiYmAJ9QRZ57/M2dhtsUxY8UAZqA2f/+2VPa
-	IM3qTEEnx7/BuTvhhdGqBpT17FULVVHdyCwrQXblRcHH4jMcPOj5eqtTnQ0XWB8j
-	ZMCuhYsROOFK0mSbKqt/tiKo6QHB1TnCE1jJWIkg9XTzEEIMcrtqjvbWlsIpyjka
-	nAL2CCZbc5GBptJoqOk83hmLJJEZUhIK7/8+u1syC//GuEq9UcCfahDoznvwc1/F
-	WukmQ5Ot7Lr4/187woAhQ==
-X-ME-Sender: <xms:qfAPZrE0eQ9MdXg-7i5QtOYS3YCLNdCh_7Z5d085taKBQQCuZWnegg>
-    <xme:qfAPZoWRFNVtclqRumXaLWU8LtCFZlwUgPX4Jci8AS8fB1bC27E19OXotBhJbKPyh
-    MkGuy2HF_-BnjRBeZU>
-X-ME-Received: <xmr:qfAPZtLLe6iKFqnAT3mpklcuw-GUYwAGRBNQWb2J2mIr0FRY5VvBPFwD3kLADk2l>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudegtddgheehucetufdoteggodetrfdotf
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1712322708; x=
+	1712409108; bh=qI3pcWziRd9w6ZdQsFy3xHZSry+rZYZcRpH3Dy+mFlU=; b=V
+	b9IlwICEXNv+Gfwxuws6pZFB8vSVmoR5BiPKNYYQkWoQe3OI7YZA60KZKDKQiUCQ
+	DP+jmzj5UMzpiG7SJMmnBiwASryDJ8z6H9JJ9mk8N6q22JzOjCZiGQhwRtYkfGv/
+	cbV6kNZlJUv6iTTJ3oY1KRrgizi/eN8+RITYN/gNzyvGaG+TAx2+FqIF7CoGwIES
+	PlrCBcWSh3vBpV0ICg+yD4t15lEIVjkUTaPcUMxKgoq2aBV+4llrLimEDeAe9EJf
+	ZiQn4zGzD9i7w7Uv9HPaqDyBo6Ya5LhJpJoDaYMAliM1lXtvhj+9HyvidoodJwxf
+	cggyS2nDovpn2YxBikM1A==
+X-ME-Sender: <xms:k_gPZvbZIF4YCi6u_ocVkOJjmYX-BXmS18-2dnMtG0Y-L2Zz1O0vug>
+    <xme:k_gPZubtjSJVGrGDSv90qtOVQo-nFfFeTW0B9IZu5FzbolDoOAK80eHUNh9aPhfXw
+    rx8XfmII3sDyb73wtU>
+X-ME-Received: <xmr:k_gPZh9Hk_XHH42X3pTkKYydKwrz9aclRc0ajXgnaui2ynW_4eoX1DDgBj75kEGR>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudegtddgiedvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvfhfhjggtgfesthejredttddvjeenucfhrhhomheptfgrfhgr
-    vghluceuvghimhhsuceorhgrfhgrvghlsegsvghimhhsrdhmvgeqnecuggftrfgrthhtvg
-    hrnhepleehtdfhiefgieethfetgeegudehgeejuedujedvfeduveetheevtdfgudfhueel
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprhgrfh
-    grvghlsegsvghimhhsrdhmvg
-X-ME-Proxy: <xmx:qfAPZpHgTzxeVmH5ad6yuVcTLG7bkIkWBaIHU-V5_mZ2w_cQXsvE9g>
-    <xmx:qfAPZhWotHFvuxPVG9Jyq3aiqipB9T92-xLzwGTDMgivTHNMWgGUzA>
-    <xmx:qfAPZkMLMWNwve4pd8ISmEN6dlyiObD_0kKz-UBLZ6CYJAIadQvrlA>
-    <xmx:qfAPZg2PYTou7T5ZFRoHMdqEuL0HSzk7Wlb5q7dyF2XcUoQUNWGcxA>
-    <xmx:qvAPZvc8D0P9Ma8wllYu6pYbcBq_aijTfXsn5-P8QTN3nxDV3o1v8bHvpfW6>
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtvdejnecuhfhrohhmpeftrghf
+    rggvlhcuuegvihhmshcuoehrrghfrggvlhessggvihhmshdrmhgvqeenucggtffrrghtth
+    gvrhhnpeejieejvdelgeduveejgeeltdevieefteejleeiieejgeeihfelleehtdegudei
+    ieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehrrg
+    hfrggvlhessggvihhmshdrmhgv
+X-ME-Proxy: <xmx:k_gPZlqOEpmwx1db4otyyrXdy7BxIN1yoO3HnuwNlth4f-1tRuihaA>
+    <xmx:k_gPZqo8B1zxGrkqLEagHCJIE2ATj7KUHeqA7taON4bcm-4vkdoYZw>
+    <xmx:k_gPZrQsNInDmFFMnxfythvCZwhCnztNsaAkT_XC-dPlNQk_GDVzug>
+    <xmx:k_gPZipS7gv70ZRgSwErG3dISj8BqoB3790p8OrDiM1DlMKS4KsHQA>
+    <xmx:lPgPZreo8NaQ6USuODbNdUu_pzNGWj7Wrdfb1mK635YeVjnWlNyH40qQJcar>
 Feedback-ID: idc214666:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 5 Apr 2024 08:38:00 -0400 (EDT)
-Message-ID: <9fe44ea8-3e60-4bac-9362-63a3138f1493@beims.me>
-Date: Fri, 5 Apr 2024 09:37:57 -0300
+ 5 Apr 2024 09:11:46 -0400 (EDT)
+Message-ID: <96b7715e-8cbe-4f85-bdf3-3aca64536d4e@beims.me>
+Date: Fri, 5 Apr 2024 10:11:45 -0300
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -90,24 +90,27 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: rti_wdt: Set min_hw_heartbeat_ms to accommodate
- 5% safety margin
-Content-Language: en-US
+Subject: Re: [PATCH v2] watchdog: rti_wdt: Set min_hw_heartbeat_ms to
+ accommodate 5% safety margin
+Content-Language: pt-BR
 To: Judith Mendez <jm@ti.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
- Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240403212426.582727-1-jm@ti.com>
+ Guenter Roeck <linux@roeck-us.net>
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Francesco Dolcini <francesco@dolcini.it>
+References: <20240404153319.1088644-1-jm@ti.com>
 From: Rafael Beims <rafael@beims.me>
-In-Reply-To: <20240403212426.582727-1-jm@ti.com>
+In-Reply-To: <20240404153319.1088644-1-jm@ti.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 03/04/2024 18:24, Judith Mendez wrote:
+On 04/04/2024 12:33, Judith Mendez wrote:
 > On AM62x, the watchdog is pet before the valid window
 > is open. Fix min_hw_heartbeat and accommodate a 5% safety
 > margin with the exception of open window size < 10%,
 > which shall use <5% due to the smaller open window size.
 >
+> cc: stable@vger.kernel.org
+> Fixes: 5527483f8f7c (" watchdog: rti-wdt: attach to running watchdog during probe")
 > Signed-off-by: Judith Mendez <jm@ti.com>
 > ---
 >   drivers/watchdog/rti_wdt.c | 24 +++++++++++++-----------
@@ -170,19 +173,13 @@ On 03/04/2024 18:24, Judith Mendez wrote:
 >   		break;
 >   
 >   	default:
-
-
-I tested this patch by enabling the systemd watchdog adding 
-RuntimeWatchdogSec=30 to system.conf on a Verdin AM62.
-
-This setup causes watchdog resets without the patch, and with the patch 
-applied I didn't see any watchdog related reboots.
+>
+> base-commit: 860bbe8e618fd62446309e286ab4a83d38201c0a
 
 
 Tested-by: Rafael Beims <rafael.beims@toradex.com>
 
 
 Rafael
-
 
 
