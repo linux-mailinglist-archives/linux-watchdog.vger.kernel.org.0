@@ -1,83 +1,88 @@
-Return-Path: <linux-watchdog+bounces-888-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-889-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3A4389AAF9
-	for <lists+linux-watchdog@lfdr.de>; Sat,  6 Apr 2024 15:01:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFA1989AB02
+	for <lists+linux-watchdog@lfdr.de>; Sat,  6 Apr 2024 15:08:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1F5A282334
-	for <lists+linux-watchdog@lfdr.de>; Sat,  6 Apr 2024 13:01:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8DDE2812DD
+	for <lists+linux-watchdog@lfdr.de>; Sat,  6 Apr 2024 13:08:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A0C22EB14;
-	Sat,  6 Apr 2024 13:01:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9412E364A4;
+	Sat,  6 Apr 2024 13:08:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RgbML6cD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ApfK4vaI"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B52E4C84;
-	Sat,  6 Apr 2024 13:01:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E89633611E;
+	Sat,  6 Apr 2024 13:08:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712408472; cv=none; b=Jh02Lef1jxPcIj+oGMjB8afAXhJ0lJlQAMCqN20X5uPSvk2N2i5c/e9XRM4/bg4sAfsXRtUeRqXZ+ak979GdGbuDfY+eZUJe0jiVCfhGWrtvucIxblK6w9ljuCn9/4N17OkCCpbNwqaWA5HS/vubnj/RlqkTg59Zq7VmnI1GciU=
+	t=1712408930; cv=none; b=dQZl9kqdf3mImuNZxbwungue5OrvhuMFO3Se2bZDM1dyppsRwEiGqFBSnVK5LW3yLblIyM3rAJmnzR0WdFMmDoZmQQPVRUq5y3QMrEq3OrXTC+MFYx7kVih2e/I6ViHCnmFIJMCC9Iysqj8jCz4B0WpdfKe2j6SD5pGKi84DNFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712408472; c=relaxed/simple;
-	bh=SBp6+4C+SfJy0u4Yx/qxNlUzGaQvzqy2E3uqnRjM+R8=;
+	s=arc-20240116; t=1712408930; c=relaxed/simple;
+	bh=yYjDFI9ZKghoXrKcIYL6WKRRHeCz9Z9GdEQaHVKWBWQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OsH/42e3+GOryTUmbCrRo88F2WVsu2/ZiAIMjejntWtnpilGRhoo7UpKRxCdKflpw7gAO3vwds3H6yTDK1O2swlqWkLOsn2R6J2HlCgOPtGiJ6QKQhLt1Vo9Z15Qso3wyFwnA9icA9anNBkGwOkMLx7Mtm80/8I5pljKEypqvtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RgbML6cD; arc=none smtp.client-ip=209.85.216.50
+	 Content-Type:Content-Disposition:In-Reply-To; b=O/mWxfwaxMueEYxr0txt3aGSNiPMhHUTmk+aZ0pE33DwNAO74jcHISagWYSuqjooBAgnqPlza6YkaqYLp1R+VOFl1Et5zeeTStveAEZfZVpR7MG0QNOc+n4VBvnVCPmvitkN31l8qU/au8/yLbA+n6eDSnR9RDNJulXkbGj1U0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ApfK4vaI; arc=none smtp.client-ip=209.85.166.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2a2dd2221d3so1936327a91.0;
-        Sat, 06 Apr 2024 06:01:09 -0700 (PDT)
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-368a663344eso11840505ab.2;
+        Sat, 06 Apr 2024 06:08:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712408468; x=1713013268; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712408928; x=1713013728; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0hzW4szNi17LncifpeJF0JAR4gKXduE2nrvj/0wk1eU=;
-        b=RgbML6cDNpAIz+v3B/DBtwptadiyKQdEAVCt2PpFYJ5MToWod/AXz8MSf9RcdxwZTA
-         BIMzzwh3XIkPShsLcjm+bQ/wIFN+vvEgKS5aOSh0udr1oDByAhxhOQ6GHyGdr/Z2LiZR
-         MJiI8hZfCPB4JD1MGG+idEMAUi64Qs/GugJdpBKrRvaIt8ewAGVp/qt/Gg99VXltwhHm
-         gO+aB2x1DrGD6ZBZBkWKLBYJfEKM7O2tV/GwSwPb40vWXtIND+0IvTU0a75U7Bisp9KK
-         Kt3chSndUWt5QXpuS7AbrBaIDjIbXivv5HUV+Dd1s0n1X1pAi2z01OLMECqZM0IJSQnv
-         lDcg==
+        bh=1nJCinrfZBqtHbptgKCevnPkG/FTidl3k5MY9MOWqZA=;
+        b=ApfK4vaIGqRE6r9lc8TqqVUJ4c3H46/lNQJaD1hOrsX7ZqqDvN50pGdoq/kfJI7E80
+         3upOIrsQ2lncj9LG363ZuP+6RL8SZWh9JTrnDL6/B7lzBChreA1MdankF7yDfssqgo9O
+         USsSuBx//4gUf9BgUZ0+ldozYyTxNv1gxrD/+A3bfm1LM4jgrTHWAidfJKq48MLb41r2
+         Q6YcOrLLXpt+/hOl6EfCIFZG6Cjd/5Ww4Db0bvYQxNkQDg3h8+k/lnyi6YVhCDcwEfWN
+         UqyCbV7IDfEhJtKaAdeFBlepHggH3ykjMhEzSUOk9+aHIg6x1So1/5FSUDbxwUNnfMVm
+         pthQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712408468; x=1713013268;
+        d=1e100.net; s=20230601; t=1712408928; x=1713013728;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0hzW4szNi17LncifpeJF0JAR4gKXduE2nrvj/0wk1eU=;
-        b=aZoBoDgL2O/8mspBp70K5R67BIhXZH0LAEgHIfEFxebvL9uSpaMAGRYvywBO0TCKB0
-         mwvCRtehQxiTxur1txsc0+Nn4C9vSrPPZBC8wtLXTI2CYfW4rNFKXol8kwJMu8YeLYd7
-         jQjw0c7KlVMFGKzKAEQbdsgxeiQQ05lYjHpnXhthphlVRAuFfWmvOFIxrM4r8bAXSQII
-         ddkbhCTi+E1fXz5sfqTN91fm85eXbmIz1hOIg16c7deelimKkLlB4UnP1ZPlKINXPl8e
-         gVGYsU18NDSzEPihy7x/m7j0ZxGdCCcC7Vy8+Pcq2j3jbrnw1cVR2ADHgb/PDF0pvOlU
-         /Ugw==
-X-Forwarded-Encrypted: i=1; AJvYcCUJ7YxqBsZ6eb2xKmho2NSgFRrANQnanTLz64PsT5xmXn7gTSmd2td3Pq/1SerNvm5Ex9SmiWOA/RqoqMEo86yMDZYBksI8sDqjwfuVnjAozQJOgjwcKdwT+Opa5VUlZ01crySVbFwoS/NlAaw=
-X-Gm-Message-State: AOJu0YzECtKaOHzCKhDH8UoVieGhEBNqsaZo87Uws66OX7wuLAol5HNH
-	m2w8X/4oxLr5PO2dWk1OWlpLCblLw+5qnGgMDJdYEI37S9uDrgYzys/vje/T
-X-Google-Smtp-Source: AGHT+IHTBq7s7Ctd7ICE1g+Zh8tMCf4Rbdr9eHdmEu8eeBZCcQAZIGQ+AfkCYjeMGU9r0CGx86yZtA==
-X-Received: by 2002:a17:90a:6884:b0:29d:dd93:5865 with SMTP id a4-20020a17090a688400b0029ddd935865mr2985885pjd.46.1712408468540;
-        Sat, 06 Apr 2024 06:01:08 -0700 (PDT)
+        bh=1nJCinrfZBqtHbptgKCevnPkG/FTidl3k5MY9MOWqZA=;
+        b=EBjEcv+4WNVeq84R6qQGqaqI+jQh4uf9bRZOHEy0Q2YR3HH8Qha30lm+ZbyTAikx0a
+         eWkkHQlt01H9HMKMC8u3YeRzBW8OHHZ6f23WBjDLmGeOhd1OKJPRtZL4HzMpi5Z0UCXk
+         UJ8eBc/DQe+pp3JY3YN3QvB+Tl+m0L1MA+hp4g/CCM+0ngydqm4ghKb2/uZw/LxQZoPQ
+         CxWD1mc0E6vijFhfpiS1qIrf2yM8IgHpbbKAC9Ea4w+5A5gEduAJRIxUMXWC1Bf8u2rp
+         h9pFl0zto8nyfAjmceyPjqkTavvTcDt0yK3hYpvXwAAr6tMLMQTOZE0C3C4izsb803S7
+         vFow==
+X-Forwarded-Encrypted: i=1; AJvYcCUiI+jkJD7E6G0/s1/iEFgNaPLgcg0cVF8QgbOV3Gb9YyPENoh2E10QiuxMsrhi7JWFg43tzKgcD1fv6baDhYUTrBVz2wjPLJOP9UrI0glJiVzTrSvwtAae1jysydMRwQJZH5tzgaJA+cLy+EbB0TtQ+VgPBDZagMFvyF1azwGwjzcKlTHwgVo=
+X-Gm-Message-State: AOJu0Yz8toUHVZfdARbTo4GF0rmSr6BeIYYWlfKJVk0E6eZNNYmrTs/d
+	//vWUHJejHfpnG5e6xdOsfOzQuys30fcFSR2BVobpJV5QF4a3qSH
+X-Google-Smtp-Source: AGHT+IEq96egabFjIWoJAlpe2kpHjL6Fgq+o/Btb4tyziAwF7UBDedWTRTIsV140sRRlpGQv2Q4ezw==
+X-Received: by 2002:a05:6e02:184d:b0:369:98a3:6f82 with SMTP id b13-20020a056e02184d00b0036998a36f82mr4888675ilv.13.1712408927936;
+        Sat, 06 Apr 2024 06:08:47 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t15-20020a17090a0d0f00b002a24886fa5asm5359850pja.36.2024.04.06.06.01.07
+        by smtp.gmail.com with ESMTPSA id q29-20020a63751d000000b005f3a8643176sm3146090pgc.44.2024.04.06.06.08.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Apr 2024 06:01:07 -0700 (PDT)
+        Sat, 06 Apr 2024 06:08:47 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sat, 6 Apr 2024 06:01:07 -0700
+Date: Sat, 6 Apr 2024 06:08:46 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Judith Mendez <jm@ti.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Francesco Dolcini <francesco@dolcini.it>
-Subject: Re: [PATCH v2] watchdog: rti_wdt: Set min_hw_heartbeat_ms to
- accommodate 5% safety margin
-Message-ID: <a148e8ab-f502-45ec-b915-22fce751ad64@roeck-us.net>
-References: <20240404153319.1088644-1-jm@ti.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Andi Shyti <andi.shyti@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH] i2c: i801: add I2C_MUX dependency
+Message-ID: <e2d0fdde-ff8b-4851-b18a-89e69dd18d5f@roeck-us.net>
+References: <20240405142823.615609-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -86,85 +91,71 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240404153319.1088644-1-jm@ti.com>
+In-Reply-To: <20240405142823.615609-1-arnd@kernel.org>
 
-On Thu, Apr 04, 2024 at 10:33:19AM -0500, Judith Mendez wrote:
-> On AM62x, the watchdog is pet before the valid window
-> is open. Fix min_hw_heartbeat and accommodate a 5% safety
-> margin with the exception of open window size < 10%,
-> which shall use <5% due to the smaller open window size.
+On Fri, Apr 05, 2024 at 04:27:43PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> cc: stable@vger.kernel.org
-> Fixes: 5527483f8f7c (" watchdog: rti-wdt: attach to running watchdog during probe")
-> Signed-off-by: Judith Mendez <jm@ti.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
+> When I2C_MUX is a loadable module but I2C_I801 is built-in, the newly
+> added notifier function causes a link error:
+> 
+> x86_64-linux-ld: drivers/i2c/busses/i2c-i801.o: in function `i801_notifier_call':
+> i2c-i801.c:(.text+0x1f5): undefined reference to `i2c_root_adapter'
+> 
+> This code is only built if I2C_MUX_GPIO is also enabled, so add a
+> conditional dependency that allows building the driver as before if the
+> GPIO part is disabled, but otherwise require the linker dependency at
+> Kconfig level.
+> 
+> With the added dependency, the driver cannot be selected by a builtin
+> ITCO_WDT driver when I2C_MUX_GPIO is a loadable module, so remove
+> the 'select' statement in that driver as well. This was apparently
+> never needed at compile-time, and the watchdog driver just needs either
+> the LPC or the I2C drivers, but never both.
+> 
+> Configurations that rely on the implied 'select' from the watchdog
+> driver now need to enable all three.
+> 
+> Fixes: 71b494e043d2 ("i2c: i801: Call i2c_register_spd for muxed child segments")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  drivers/watchdog/rti_wdt.c | 24 +++++++++++++-----------
->  1 file changed, 13 insertions(+), 11 deletions(-)
+>  drivers/i2c/busses/Kconfig | 1 +
+>  drivers/watchdog/Kconfig   | 2 --
+>  2 files changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
-> index 8e1be7ba0103..0b16ada659cc 100644
-> --- a/drivers/watchdog/rti_wdt.c
-> +++ b/drivers/watchdog/rti_wdt.c
-> @@ -92,7 +92,7 @@ static int rti_wdt_start(struct watchdog_device *wdd)
->  	 * to be 50% or less than that; we obviouly want to configure the open
->  	 * window as large as possible so we select the 50% option.
->  	 */
-> -	wdd->min_hw_heartbeat_ms = 500 * wdd->timeout;
-> +	wdd->min_hw_heartbeat_ms = 550 * wdd->timeout;
->  
->  	/* Generate NMI when wdt expires */
->  	writel_relaxed(RTIWWDRX_NMI, wdt->base + RTIWWDRXCTRL);
-> @@ -126,31 +126,33 @@ static int rti_wdt_setup_hw_hb(struct watchdog_device *wdd, u32 wsize)
->  	 * be petted during the open window; not too early or not too late.
->  	 * The HW configuration options only allow for the open window size
->  	 * to be 50% or less than that.
-> +	 * To avoid any glitches, we accommodate 5% safety margin, with the
-> +	 * exception of open window size < 10%.
->  	 */
->  	switch (wsize) {
->  	case RTIWWDSIZE_50P:
-> -		/* 50% open window => 50% min heartbeat */
-> -		wdd->min_hw_heartbeat_ms = 500 * heartbeat;
-> +		/* 50% open window => 55% min heartbeat */
-> +		wdd->min_hw_heartbeat_ms = 550 * heartbeat;
->  		break;
->  
->  	case RTIWWDSIZE_25P:
-> -		/* 25% open window => 75% min heartbeat */
-> -		wdd->min_hw_heartbeat_ms = 750 * heartbeat;
-> +		/* 25% open window => 80% min heartbeat */
-> +		wdd->min_hw_heartbeat_ms = 800 * heartbeat;
->  		break;
->  
->  	case RTIWWDSIZE_12P5:
-> -		/* 12.5% open window => 87.5% min heartbeat */
-> -		wdd->min_hw_heartbeat_ms = 875 * heartbeat;
-> +		/* 12.5% open window => 92.5% min heartbeat */
-> +		wdd->min_hw_heartbeat_ms = 925 * heartbeat;
->  		break;
->  
->  	case RTIWWDSIZE_6P25:
-> -		/* 6.5% open window => 93.5% min heartbeat */
-> -		wdd->min_hw_heartbeat_ms = 935 * heartbeat;
-> +		/* 6.5% open window => 96.5% min heartbeat */
-> +		wdd->min_hw_heartbeat_ms = 965 * heartbeat;
->  		break;
->  
->  	case RTIWWDSIZE_3P125:
-> -		/* 3.125% open window => 96.9% min heartbeat */
-> -		wdd->min_hw_heartbeat_ms = 969 * heartbeat;
-> +		/* 3.125% open window => 97.9% min heartbeat */
-> +		wdd->min_hw_heartbeat_ms = 979 * heartbeat;
->  		break;
->  
->  	default:
-> 
-> base-commit: 860bbe8e618fd62446309e286ab4a83d38201c0a
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index 1872f1995c77..2619018dd756 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -108,6 +108,7 @@ config I2C_HIX5HD2
+>  config I2C_I801
+>  	tristate "Intel 82801 (ICH/PCH)"
+>  	depends on PCI
+> +	depends on I2C_MUX || I2C_MUX_GPIO=n
+>  	select P2SB if X86
+>  	select CHECK_SIGNATURE if X86 && DMI
+>  	select I2C_SMBUS
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 0b0df3fe1efd..4dfb3773e6e2 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -1301,8 +1301,6 @@ config ITCO_WDT
+>  	select WATCHDOG_CORE
+>  	depends on I2C || I2C=n
+>  	depends on MFD_INTEL_PMC_BXT || !MFD_INTEL_PMC_BXT
+> -	select LPC_ICH if !EXPERT
+> -	select I2C_I801 if !EXPERT && I2C
+
+Sorry, I don't understand why LPC_ICH and I2C_I801 are neither a dependency
+nor need to be selected. What if both LPC_ICH=n and I2C_I801=n, or if one is
+selected but the other is needed to connect to the watchdog ?
+
+Guenter
+
+>  	help
+>  	  Hardware driver for the intel TCO timer based watchdog devices.
+>  	  These drivers are included in the Intel 82801 I/O Controller
 > -- 
-> 2.43.2
-> 
+> 2.39.2
 > 
 
