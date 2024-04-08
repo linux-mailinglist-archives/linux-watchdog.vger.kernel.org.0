@@ -1,89 +1,83 @@
-Return-Path: <linux-watchdog+bounces-892-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-893-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32F4489BE3D
-	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Apr 2024 13:42:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04ADF89BEEB
+	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Apr 2024 14:27:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFCD628361C
-	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Apr 2024 11:42:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63D91B21FFD
+	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Apr 2024 12:27:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C98569DEA;
-	Mon,  8 Apr 2024 11:42:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B592C69DF4;
+	Mon,  8 Apr 2024 12:27:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RiTehVt7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F9hfZWKF"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4B253AC;
-	Mon,  8 Apr 2024 11:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1624C2D057;
+	Mon,  8 Apr 2024 12:27:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712576534; cv=none; b=koDjwQ8TCkuIbyhzEOr1dPVDT35cBnrYzPXaBstCxA8jLFc2pLdomL0KwjVAKZ7BeX3iU3xm3GFr1AKQp3olg0MTSs7FaYcMi9SFnWfF+e9IDe1EgHas0uuW0b6KLE6+/m0V9acbL900orgwGdSnu8mraBhgVqP0vVO3yk+dct8=
+	t=1712579230; cv=none; b=G1lVd4saRbrGJQ6tVIwxdLchYTcuJO+EhSf2KqwsVWKep7gE48WPmSpwvLGSrLTz/B6c9ZnBehV40Y3/Ee/iE8a10RCTp8y/bJk501vsulV8cgAECVdTU7x/liSuUczmi+VO8IKo72cgkOWJSWnDUWT7TKviWkoo1xgE948E1tQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712576534; c=relaxed/simple;
-	bh=nNPSYahXleYlLrrINWryV7HMiMqL8rx38AhnCGE7+ZI=;
+	s=arc-20240116; t=1712579230; c=relaxed/simple;
+	bh=dOt7LZM25+j0aeS8Mr9l3sLd7L3WPiVLe9kA5eRFQ/4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=snk9cw6LoaIZk5endHl77nKf78/epS2Hqqzhbq7wsWhR82MHOKmfGCzfOPR2NokMO5Db8hImPGg8IHsdp4NpAObI2p5p/Pwj9TE3N7KjqN27FYmFtAlrGZxihkTi6b+d6BVS2RAVaktcYu1Y61W0rDyucd5SpT7OWMtlW99WGas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RiTehVt7; arc=none smtp.client-ip=209.85.214.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=mxoD4OlABauktiNjAJZt57SKfmGyD0Q2jDK7tPkd7MKuqD4vcHRokYoZikt7+mA4fKlnwMZSLxjC3KpCZ/Grca65LWBiZQwNorhKM0ifgAO/7k8/PLSzvqip7waovkiPzCH4MU95YMSbRpJdbx4VCEUF6z30krBQ40+CSVSPEwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F9hfZWKF; arc=none smtp.client-ip=209.85.161.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1e3dda73192so8804475ad.3;
-        Mon, 08 Apr 2024 04:42:12 -0700 (PDT)
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5a4f7a648dbso2455600eaf.3;
+        Mon, 08 Apr 2024 05:27:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712576532; x=1713181332; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712579228; x=1713184028; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=F7Q7LqhUOzgafb6Gz7z4EGohoVaiTS4bveRSGqzloyU=;
-        b=RiTehVt73XAlkrDS1UpR8q/WAG+3HFc+iYV3C49tukBzQd/xDu/2BQesUeocjXJgFk
-         vdq+3c/3FGZpmoXxbAWqsHDCIRAsqxvXr6la3l34NcRmRz3RH032ullyhR+eF98X1KGL
-         3WQgW6l/JQbX9Y213P2FV5DR7neZSfzZUgiU6uDOywqMMJ5VK2lxt9OpOr1oFYXTIdRj
-         j2yTvkkpsEvmMeo0ttAl0UVMCaheHdhLaHX2KbeGhH7eWmZ53kMg5IyFDgvFsD060IHu
-         NEE4oqEAAeDq6gCMxJ3bZaYfhBdPwvGpZ3BUU2GEZqBaedrMKvYiaanIpAnBCtJ1qqgW
-         JwIg==
+        bh=Y7LamdtnDDI5vKg7sEnvdU4PcvK43YQi33cvsRSsuUo=;
+        b=F9hfZWKF0Nr6OuWti/bwSMaRgCznxqs7CWfO+Bhuvk9Ni9Vv/QxMyEOqviUx0QxXla
+         5KuDbDTxhtdRCET6v6zrEd5Q68o7bfwnwEe1lHfrpyQuf/tRm9qY28hDfrCSxQzAOC4W
+         cKImjxSo+p48MT+aqJC4yuj764K8FtAfIJnQW/mVkFpR7jcR78+ZLaF4RWbMOr9HXlg+
+         ZewL6mqfeCNK91nhxPjviMyCbbRa6MBYpjs3LIpZxDJz4CCzMacq6kM6Uw1X8VX0yh2S
+         19OgsAHjRyXzlDYMFNYXBmocR5hwlpJ0DarLpx61CTpqG9aXZ68It5peXNuJD1rkQdQC
+         FuIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712576532; x=1713181332;
+        d=1e100.net; s=20230601; t=1712579228; x=1713184028;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=F7Q7LqhUOzgafb6Gz7z4EGohoVaiTS4bveRSGqzloyU=;
-        b=ih8CAtyDYsnjaRiFEzaWqxqLkKHdjtPX/TuWWuyESmofKlv2Qe11Wuf5iZ1LyTqc/U
-         KrM5dnhVFX0mBqvydpb6BbWjJHC5/SjnSLfx/WjOKMsc4OxO4Z2zHXJw+ge5A1tcsvsm
-         RNIAJYvFDSlCldG5MBONB310zakFaKDPIFlgWF/LlLwjb3o5i3qT5Mw/XGEermxR8ivn
-         ZE4lD4nK02rqA6y/3mWf83hCpq5gDW2KrX5uhlqb4Sen2ovm+wpd8ZAbeFV3+f6rXI8q
-         hxCf1LXQgN4qrZYRbufObpxm0r/CFNBjh5OgGBiRmiFQaPuSR2N2G2HQ9o9Fx66Uh0kD
-         x/HQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV84gAv1En/LnlOVK6j0LZesmo/Je4ISVIeobDWnWw9OaRU9AbMZLy26UooW0KRg3Nw2V2TNjmG4d1pv6Phif/U3ModI2BhUDLFbWVFNCkhaCZtZqKx7JVeLHoXk+T7HTB6jaT+B8NWcApTvii1IAUZfvCiojB+k+5nsWls7XjkbX2D8n2WsNE=
-X-Gm-Message-State: AOJu0Yyu4F7NHJjRn8sOPcHrAkQhTvMcFuP8ywY4eMIC6gPb7+m84ojj
-	1LnFZcBEMyZHcUIICLksG+NQujYkVZXWcBxaVwRKUnzqO9LEMQyi
-X-Google-Smtp-Source: AGHT+IFm0C8FzIBPiJbTKspBKacDErtAzdNbk4xEcb3w9ZiOmRS4YZF595FbnRiyRLlWia+eCn4ulw==
-X-Received: by 2002:a17:902:b7c9:b0:1e3:e0ca:d8a3 with SMTP id v9-20020a170902b7c900b001e3e0cad8a3mr4183246plz.6.1712576532097;
-        Mon, 08 Apr 2024 04:42:12 -0700 (PDT)
+        bh=Y7LamdtnDDI5vKg7sEnvdU4PcvK43YQi33cvsRSsuUo=;
+        b=sBmYyZYSPToTiOQlqlfphGMnePGy1KCEs0cSUehBXyv69vNpf/jlgYgDQc4uReOFMr
+         /dU07RSJAoKKS991N+/R7l0YfEkjBc5VHke25xJ0B+O/N1iwm5c4DBdik7dzHaKtZnXE
+         sUjQFhediWhpB0UUA9XBMvQg4AdrKNvhexpyuc7IONkfBNMDsG99Ttq4oOWz0asUgmUr
+         rr5XEDzvQ3IgDCaDYrRm84gMX8jZDxq81/YfmLGxpKNbo1YZPpkcuEFjDSC7suj6CEhR
+         XpUIPgupYTCqdUug80GGtWKTqkcOofNqXFPY82chWN9OsY0aciMLiaXKvy9SJXUrQKtv
+         bsvw==
+X-Forwarded-Encrypted: i=1; AJvYcCXwkco9YUIKuAGVQFbbr5ZVbHfsovOGzrAcT3Mt6HTF3nBH217fk+8akUthGRK56dNnvgQqrPhVJzpFGszfyZasT6iv6fb1Zv4CqzRqF0uddYYc+3B1syx91jC3KIZS+tGnYDAdleBfd0ynPag=
+X-Gm-Message-State: AOJu0YwnhcYyqappOkiouUOHvv4LalFJE4IFfn7zyT5WXpyc84PYDebA
+	XGJfctCcU7a93CwEYRKhexWQkZCi5GfBo8RVP72ZXZkmtsxyH3fqTGXe2D//
+X-Google-Smtp-Source: AGHT+IGTZSZBEX5V4h4KXAJrhF/sT+qU4iSY/08K8POlotC/2WCiSPR/4zuqfCJ5lVwcXJfFnUkrhw==
+X-Received: by 2002:a05:6871:1c5:b0:22e:8ec9:4463 with SMTP id q5-20020a05687101c500b0022e8ec94463mr10357765oad.51.1712579228163;
+        Mon, 08 Apr 2024 05:27:08 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y5-20020a170902ed4500b001dd6f1516a0sm6782072plb.87.2024.04.08.04.42.11
+        by smtp.gmail.com with ESMTPSA id f15-20020a056a00228f00b006ed37f1a912sm1656934pfe.89.2024.04.08.05.27.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Apr 2024 04:42:11 -0700 (PDT)
+        Mon, 08 Apr 2024 05:27:07 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 8 Apr 2024 04:42:10 -0700
+Date: Mon, 8 Apr 2024 05:27:06 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Arnd Bergmann <arnd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH] i2c: i801: add I2C_MUX dependency
-Message-ID: <a24a2a8a-2be9-414d-8378-668ba4408c71@roeck-us.net>
-References: <20240405142823.615609-1-arnd@kernel.org>
- <e2d0fdde-ff8b-4851-b18a-89e69dd18d5f@roeck-us.net>
- <cea58361-16bd-4daf-85eb-4d63d47cb46f@app.fastmail.com>
+	Lee Jones <lee@kernel.org>, linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog: bd9576: Drop "always-running" property
+Message-ID: <9e5f6d58-b72f-43ba-8280-3cd8b9b974ef@roeck-us.net>
+References: <ZhPAt76yaJMersXf@fedora>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -92,53 +86,30 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cea58361-16bd-4daf-85eb-4d63d47cb46f@app.fastmail.com>
+In-Reply-To: <ZhPAt76yaJMersXf@fedora>
 
-On Sat, Apr 06, 2024 at 05:45:57PM +0200, Arnd Bergmann wrote:
-> On Sat, Apr 6, 2024, at 15:08, Guenter Roeck wrote:
-> > On Fri, Apr 05, 2024 at 04:27:43PM +0200, Arnd Bergmann wrote:
-> >> 
-> >> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
-> >> index 1872f1995c77..2619018dd756 100644
-> >> --- a/drivers/i2c/busses/Kconfig
-> >> +++ b/drivers/i2c/busses/Kconfig
-> >> @@ -108,6 +108,7 @@ config I2C_HIX5HD2
-> >>  config I2C_I801
-> >>  	tristate "Intel 82801 (ICH/PCH)"
-> >>  	depends on PCI
-> >> +	depends on I2C_MUX || I2C_MUX_GPIO=n
-> >>  	select P2SB if X86
-> >>  	select CHECK_SIGNATURE if X86 && DMI
-> >>  	select I2C_SMBUS
-> >> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> >> index 0b0df3fe1efd..4dfb3773e6e2 100644
-> >> --- a/drivers/watchdog/Kconfig
-> >> +++ b/drivers/watchdog/Kconfig
-> >> @@ -1301,8 +1301,6 @@ config ITCO_WDT
-> >>  	select WATCHDOG_CORE
-> >>  	depends on I2C || I2C=n
-> >>  	depends on MFD_INTEL_PMC_BXT || !MFD_INTEL_PMC_BXT
-> >> -	select LPC_ICH if !EXPERT
-> >> -	select I2C_I801 if !EXPERT && I2C
-> >
-> > Sorry, I don't understand why LPC_ICH and I2C_I801 are neither a dependency
-> > nor need to be selected. What if both LPC_ICH=n and I2C_I801=n, or if one is
-> > selected but the other is needed to connect to the watchdog ?
+On Mon, Apr 08, 2024 at 01:02:31PM +0300, Matti Vaittinen wrote:
+> The always-running (from linux,wdt-gpio.yaml) is abused by the BD9576
+> watchdog driver. It's defined meaning is "the watchdog is always running
+> and can not be stopped". The BD9576 watchdog driver has implemented it
+> as "start watchdog when loading the module and prevent it from being
+> stopped".
 > 
-> The Kconfig dependencies are only required if there is a compile-time
-> dependencies. In this case, both LPC_ICH and I2C_I801 create a
-> platform device that is consumed by ITCO_WDT, but it could in
-> theory work with any other such driver providing the device.
+> Furthermore, the implementation does not set the WDOG_HW_RUNNING when
+> enabling the watchdog due to the "always-running" at module loading.
+> This will end up resulting a watchdog timeout if the device is not
+> opened.
 > 
-> It would be fine to make this explicit by adding
-> 'depends on LPC_ICH || I2C_I801' to enforce that the watchdog
-> driver can only be selected on if at least one of these
-> is present, but we have a lot of examples where we don't
-> spell out this type of dependency.
+> The culprit was pointed out by Guenter, discussion can be found from
+> https://lore.kernel.org/lkml/4fa3a64b-60fb-4e5e-8785-0f14da37eea2@roeck-us.net/
 > 
+> Drop the invalid "always-running" handling.
+> 
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Fixes: b237bcac557a ("wdt: Support wdt on ROHM BD9576MUF and BD9573MUF")
 
-Yes, I know, there are lots of inconsistencies in the kernel and its
-configuration. That should not be an excuse to making it worse.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 Guenter
 
