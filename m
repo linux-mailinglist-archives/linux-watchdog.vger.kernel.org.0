@@ -1,115 +1,119 @@
-Return-Path: <linux-watchdog+bounces-893-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-894-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04ADF89BEEB
-	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Apr 2024 14:27:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B2BF89D158
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Apr 2024 05:54:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63D91B21FFD
-	for <lists+linux-watchdog@lfdr.de>; Mon,  8 Apr 2024 12:27:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 458AE283CEF
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Apr 2024 03:54:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B592C69DF4;
-	Mon,  8 Apr 2024 12:27:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 809C554FAF;
+	Tue,  9 Apr 2024 03:54:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F9hfZWKF"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="SYhSaaT/"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1624C2D057;
-	Mon,  8 Apr 2024 12:27:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F17055E45;
+	Tue,  9 Apr 2024 03:54:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712579230; cv=none; b=G1lVd4saRbrGJQ6tVIwxdLchYTcuJO+EhSf2KqwsVWKep7gE48WPmSpwvLGSrLTz/B6c9ZnBehV40Y3/Ee/iE8a10RCTp8y/bJk501vsulV8cgAECVdTU7x/liSuUczmi+VO8IKo72cgkOWJSWnDUWT7TKviWkoo1xgE948E1tQ=
+	t=1712634846; cv=none; b=rnZDnhYU7c8MzD5ADjg7Xnyf3fWplqFvnMYC3tfPpV2DacxGE6sa/A/fEm2AAduMr/kmlYOcXOOB4vEJncGfEvJZZYQKzvsrrwnpxe6hwFIA204R0u2wa9+lT0cSPZ5STWyzJZWUq0BoYXwP4a1QUpk0+wxLJTkVZ+KRsYot+m4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712579230; c=relaxed/simple;
-	bh=dOt7LZM25+j0aeS8Mr9l3sLd7L3WPiVLe9kA5eRFQ/4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mxoD4OlABauktiNjAJZt57SKfmGyD0Q2jDK7tPkd7MKuqD4vcHRokYoZikt7+mA4fKlnwMZSLxjC3KpCZ/Grca65LWBiZQwNorhKM0ifgAO/7k8/PLSzvqip7waovkiPzCH4MU95YMSbRpJdbx4VCEUF6z30krBQ40+CSVSPEwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F9hfZWKF; arc=none smtp.client-ip=209.85.161.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5a4f7a648dbso2455600eaf.3;
-        Mon, 08 Apr 2024 05:27:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712579228; x=1713184028; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y7LamdtnDDI5vKg7sEnvdU4PcvK43YQi33cvsRSsuUo=;
-        b=F9hfZWKF0Nr6OuWti/bwSMaRgCznxqs7CWfO+Bhuvk9Ni9Vv/QxMyEOqviUx0QxXla
-         5KuDbDTxhtdRCET6v6zrEd5Q68o7bfwnwEe1lHfrpyQuf/tRm9qY28hDfrCSxQzAOC4W
-         cKImjxSo+p48MT+aqJC4yuj764K8FtAfIJnQW/mVkFpR7jcR78+ZLaF4RWbMOr9HXlg+
-         ZewL6mqfeCNK91nhxPjviMyCbbRa6MBYpjs3LIpZxDJz4CCzMacq6kM6Uw1X8VX0yh2S
-         19OgsAHjRyXzlDYMFNYXBmocR5hwlpJ0DarLpx61CTpqG9aXZ68It5peXNuJD1rkQdQC
-         FuIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712579228; x=1713184028;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y7LamdtnDDI5vKg7sEnvdU4PcvK43YQi33cvsRSsuUo=;
-        b=sBmYyZYSPToTiOQlqlfphGMnePGy1KCEs0cSUehBXyv69vNpf/jlgYgDQc4uReOFMr
-         /dU07RSJAoKKS991N+/R7l0YfEkjBc5VHke25xJ0B+O/N1iwm5c4DBdik7dzHaKtZnXE
-         sUjQFhediWhpB0UUA9XBMvQg4AdrKNvhexpyuc7IONkfBNMDsG99Ttq4oOWz0asUgmUr
-         rr5XEDzvQ3IgDCaDYrRm84gMX8jZDxq81/YfmLGxpKNbo1YZPpkcuEFjDSC7suj6CEhR
-         XpUIPgupYTCqdUug80GGtWKTqkcOofNqXFPY82chWN9OsY0aciMLiaXKvy9SJXUrQKtv
-         bsvw==
-X-Forwarded-Encrypted: i=1; AJvYcCXwkco9YUIKuAGVQFbbr5ZVbHfsovOGzrAcT3Mt6HTF3nBH217fk+8akUthGRK56dNnvgQqrPhVJzpFGszfyZasT6iv6fb1Zv4CqzRqF0uddYYc+3B1syx91jC3KIZS+tGnYDAdleBfd0ynPag=
-X-Gm-Message-State: AOJu0YwnhcYyqappOkiouUOHvv4LalFJE4IFfn7zyT5WXpyc84PYDebA
-	XGJfctCcU7a93CwEYRKhexWQkZCi5GfBo8RVP72ZXZkmtsxyH3fqTGXe2D//
-X-Google-Smtp-Source: AGHT+IGTZSZBEX5V4h4KXAJrhF/sT+qU4iSY/08K8POlotC/2WCiSPR/4zuqfCJ5lVwcXJfFnUkrhw==
-X-Received: by 2002:a05:6871:1c5:b0:22e:8ec9:4463 with SMTP id q5-20020a05687101c500b0022e8ec94463mr10357765oad.51.1712579228163;
-        Mon, 08 Apr 2024 05:27:08 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f15-20020a056a00228f00b006ed37f1a912sm1656934pfe.89.2024.04.08.05.27.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Apr 2024 05:27:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Mon, 8 Apr 2024 05:27:06 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Lee Jones <lee@kernel.org>, linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: bd9576: Drop "always-running" property
-Message-ID: <9e5f6d58-b72f-43ba-8280-3cd8b9b974ef@roeck-us.net>
-References: <ZhPAt76yaJMersXf@fedora>
+	s=arc-20240116; t=1712634846; c=relaxed/simple;
+	bh=VaB13mZvsSAtXvIGJhKOkspISedcMVO1Bd+yR+ifBdQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OhfsYfmDsbeIOgFpBaNu+RpjTzIixBzhqkO0650nzgjXOetfE54GYDgB+LNiSAmmTWOxXPh/IYlhCJh5zWMJr4l+JMWGLyuRoUxCxcSgP3A2sapV6/eH5em6fpqFYX/tzzMbnuEIJWQVmo8olIP2E1E9g/uJbWZ78ZebYSVE/H8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=SYhSaaT/; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: cc42a432f62411eeb8927bc1f75efef4-20240409
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=gn4SVKjDp2+oRxnoHIuawfi3x9MS9w2xBc7UDFhjgkg=;
+	b=SYhSaaT/QBMZd2TFXFBZh6V3wIWlWzq1vLkAtaLZVpq/N6B8Vc7fxOED0sdiFuhvPPp63+bIXnLNqr0KsJxtfpX0G/Kun/pIOmQBMgkqI7kEWZy/E02VJi6YQ6Ea49qFGBY7mnDEIRXat5pemTxlN9BMd5BdjVMwzEvc/J76VJ8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.37,REQID:46e1551d-ad9f-433c-8e8b-ba65d09fd744,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6f543d0,CLOUDID:9339f385-8d4f-477b-89d2-1e3bdbef96d1,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
+	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: cc42a432f62411eeb8927bc1f75efef4-20240409
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
+	(envelope-from <jason-ch.chen@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 2046319621; Tue, 09 Apr 2024 11:54:00 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 9 Apr 2024 11:53:57 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 9 Apr 2024 11:53:57 +0800
+From: Jason-ch Chen <jason-ch.chen@mediatek.com>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<linux-watchdog@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+	Jason-ch Chen <Jason-ch.Chen@mediatek.com>
+Subject: [PATCH] soc: mediatek: mtk-socinfo: Correct the marketing name for MT8188GV
+Date: Tue, 9 Apr 2024 11:53:55 +0800
+Message-ID: <20240409035355.27659-1-jason-ch.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZhPAt76yaJMersXf@fedora>
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--4.265700-8.000000
+X-TMASE-MatchedRID: VZuxIYcieyzh8RW9qY6+GwPZZctd3P4B7f6JAS2hKPhrTDNJQXOxDaPF
+	jJEFr+olwXCBO/GKkVr3FLeZXNZS4IzHo47z5Aa+JSsrnm9gBe1vuqvSSWUSX8OmhAllm9BvzsP
+	W6bH7ICFbnGka1c72QtIUoq3qtzf10Huf0+4h7vtorSEFudR6+b4uS7g0k2sdeZUpm6wun3ba/0
+	6NhYDa4wyzCDjlUx89p2y3mIB+it9WXGvUUmKP2w==
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--4.265700-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP: CCEE519ECF554D8D2C4644AD0C835A1320B2366487E12B37B88ADE3CC7D605D32000:8
+X-MTK: N
 
-On Mon, Apr 08, 2024 at 01:02:31PM +0300, Matti Vaittinen wrote:
-> The always-running (from linux,wdt-gpio.yaml) is abused by the BD9576
-> watchdog driver. It's defined meaning is "the watchdog is always running
-> and can not be stopped". The BD9576 watchdog driver has implemented it
-> as "start watchdog when loading the module and prevent it from being
-> stopped".
-> 
-> Furthermore, the implementation does not set the WDOG_HW_RUNNING when
-> enabling the watchdog due to the "always-running" at module loading.
-> This will end up resulting a watchdog timeout if the device is not
-> opened.
-> 
-> The culprit was pointed out by Guenter, discussion can be found from
-> https://lore.kernel.org/lkml/4fa3a64b-60fb-4e5e-8785-0f14da37eea2@roeck-us.net/
-> 
-> Drop the invalid "always-running" handling.
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Fixes: b237bcac557a ("wdt: Support wdt on ROHM BD9576MUF and BD9573MUF")
+From: Jason-ch Chen <Jason-ch.Chen@mediatek.com>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Change 'Kompanio 830' to 'Kompanio 838'.
 
-Guenter
+Signed-off-by: Jason-ch Chen <Jason-ch.Chen@mediatek.com>
+---
+ drivers/soc/mediatek/mtk-socinfo.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/soc/mediatek/mtk-socinfo.c b/drivers/soc/mediatek/mtk-socinfo.c
+index 6943ab29f095..74672a9d6d13 100644
+--- a/drivers/soc/mediatek/mtk-socinfo.c
++++ b/drivers/soc/mediatek/mtk-socinfo.c
+@@ -48,8 +48,8 @@ static struct socinfo_data socinfo_data_table[] = {
+ 	MTK_SOCINFO_ENTRY("MT8183", "MT8183V/AZA", "Kompanio 500", 0x00010043, 0x00000940),
+ 	MTK_SOCINFO_ENTRY("MT8186", "MT8186GV/AZA", "Kompanio 520", 0x81861001, CELL_NOT_USED),
+ 	MTK_SOCINFO_ENTRY("MT8186T", "MT8186TV/AZA", "Kompanio 528", 0x81862001, CELL_NOT_USED),
+-	MTK_SOCINFO_ENTRY("MT8188", "MT8188GV/AZA", "Kompanio 830", 0x81880000, 0x00000010),
+-	MTK_SOCINFO_ENTRY("MT8188", "MT8188GV/HZA", "Kompanio 830", 0x81880000, 0x00000011),
++	MTK_SOCINFO_ENTRY("MT8188", "MT8188GV/AZA", "Kompanio 838", 0x81880000, 0x00000010),
++	MTK_SOCINFO_ENTRY("MT8188", "MT8188GV/HZA", "Kompanio 838", 0x81880000, 0x00000011),
+ 	MTK_SOCINFO_ENTRY("MT8192", "MT8192V/AZA", "Kompanio 820", 0x00001100, 0x00040080),
+ 	MTK_SOCINFO_ENTRY("MT8192T", "MT8192V/ATZA", "Kompanio 828", 0x00000100, 0x000400C0),
+ 	MTK_SOCINFO_ENTRY("MT8195", "MT8195GV/EZA", "Kompanio 1200", 0x81950300, CELL_NOT_USED),
+-- 
+2.18.0
+
 
