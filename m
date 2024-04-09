@@ -1,205 +1,126 @@
-Return-Path: <linux-watchdog+bounces-895-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-896-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF88C89E066
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Apr 2024 18:31:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A32789E22A
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Apr 2024 20:08:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47AA51F2281A
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Apr 2024 16:31:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8FF6B25738
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Apr 2024 18:08:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA04314534C;
-	Tue,  9 Apr 2024 16:31:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C1AD156654;
+	Tue,  9 Apr 2024 18:08:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ebw30zeo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XwRz3dv0"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37EB1145357;
-	Tue,  9 Apr 2024 16:31:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0FEA156870;
+	Tue,  9 Apr 2024 18:08:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712680262; cv=none; b=s7qpKEzg6/+kww7+4wL+PwRk/CPS/QS3qc9CTUIgWUuGLhXEegu6n7eoi0j6NpP8hPxlB2OR++gHIk+8E67XPUiiwV1qPBdAfw2qhfrS7ovqb1+4JPCio0taI6aipf+upF6axH2CyR/D6yUuv+y5Pymz9hAp3KPyyJE+m0V3TB4=
+	t=1712686095; cv=none; b=s7scTmkSgexgnaz3DGRoHgPtola9OfW4gD/po5DhRMCmAA9WMSyEXTZR6ebpeWiNq3Rv8zePEvis/7/erqFj+r2IvpA2KXEn2x+8vyVRICVSXlEvN1wE+iZrRto+TFyvZkbI0mR2u1GDXP9bG8W+rPqHAdMx8gyx2V0k4zKrlPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712680262; c=relaxed/simple;
-	bh=9IGqlV3LbL0DRJUQIwWW6vNmvOiqvD650CTLJEMb5JM=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:References:
-	 In-Reply-To:Content-Type; b=mwsS8UcXcBVN61TMJW36YKbgA0GLMkB/Wi3sWrBh/PQ2FbSdgtxRPIqoEPnPoH5BFHMInHX607zgtqsiYTsO9PqtHoEZnNj7pwLxrlRIAkSjCkdDvOeBKHIGaI3ZvfHKPsodzEheQbpUQejhJfWnbCttTEK4TYZWhSQ1F+izeqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ebw30zeo; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1712686095; c=relaxed/simple;
+	bh=2I9xZFzWhxswz0ShSCkZGYHy3IU7FgiErcUKJcNqPpQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KiA1vr8zJKegMstbDy5VgmHTgl+qcdL16N90BsWG6+I7KJrPDkKm7LXx/y5JZEsm6/tOp9ZBIMm1c5ll3LhzT1LmihD5sGdfUWgFngwrtBoiKIoxhPuWqeqrxdMYO/BXklsoxgk8Z4Pl4jDJvfqWm/VQn+9kGS5f4vnuuLtsv1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XwRz3dv0; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6ed054f282aso3380238b3a.0;
-        Tue, 09 Apr 2024 09:31:00 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1e3e56c9d2cso26891445ad.1;
+        Tue, 09 Apr 2024 11:08:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712680260; x=1713285060; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :to:from:subject:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D5jDn3MTaqDeILwbAuiKYkg/Duk3E3U9ahMYMgz3dp4=;
-        b=ebw30zeopz6kuBTum2D5EZURNESQfqgQZqoDFy4bN02KNTA62lpDKm5z9jgiVlj5Um
-         eFqI3xce+eQRND6xbzq/mJBc69gxdnFlzGjucfBuYU41j7AFz1vj4uHUTk19tNjnNhZX
-         j0BD7RaBlcSUNq5ZFvNm1EkvA6rAvyQTE7xEF+AvLEnBBZMQNjmX9JxcAMoyslA7iIXZ
-         VrnCkRf12Mqp1IisONOjBGROIyxm3jfrXgs8b6BIXsz/Fy5NLC4mMM2cFg3+g/HAQ6V7
-         hG39+u/Vx22CjQeDMZNvzVu51ErckhWnPiUxbYibr/uwoXm0u6CGeNknoLbNi6gExcI1
-         /mSQ==
+        d=gmail.com; s=20230601; t=1712686093; x=1713290893; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=POlFcO8rRiMn4XpW5ioQKkg2ZlLEK2LdmVjbB41yM08=;
+        b=XwRz3dv0t/QVi131duexDuB3svITlJZT5nLvY8Ftx6NvYyjXHJQhaIsM2X8N2NEwI8
+         m4xNJG4pqmpkaJKdlUEyGd/oUbqdBdo2FKrQ8aC3bYba9mBBhZLaFbW+0EUCNkgOOCAM
+         P0DFhkRJMjLBkh9KKd9YmKMlNG2It8yLbhhtpcde+uvRhDeLxOX6YBtucvMA63Rc2YWd
+         2Bh5OQDZnNDZDmC/WvknYeuJ3isepmfwgEKvjebQ31bT+T4H2iuuy4+qWcWOuqkmpVKX
+         l/EaKEPfl2pxdkc1VZsoxRCkxk4GalLITiZXBGxcYcuI4ChuPSlIGWE+OIhSnBSCQKbr
+         H8rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712680260; x=1713285060;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D5jDn3MTaqDeILwbAuiKYkg/Duk3E3U9ahMYMgz3dp4=;
-        b=Et165VF7wgAchmQU3v/TazE/kwRIBDn87HdFLo5xSwxdDZfkHBy/CknPIpp4iluKP+
-         tdttY0WUWHvTzNZ3BTgMKV8wddUeJBXOm+A0OcEnwZZ297xmfQb4iXYDIFrpShhdjlBy
-         TvoY8jAcsxHlAey9fqAOhWpyScF9Nm25vq6IGgECofrYYdH2pcxpuMojGrp/U7SmnuWC
-         OmI9GI2dryspGh5HoRkYEwGyLGEw1YsxBVgD7jT/6yC8U+oPgrUIPI7aWACDyfNWflmt
-         BU2z0NWA41Hni5SYAJRpeN+krvAYb51qIjsYNY49OQPuR58srUGrulMCtVxaQUalGuBh
-         s8VA==
-X-Forwarded-Encrypted: i=1; AJvYcCWgdfeJC8SnL+qBHHtdRm5QDBQBp+M4raoszy90lOEp475rwqqgfZ28l7YfqY8Jm+K2dwgLWFlCFmFj6YKqsVdpoIg3W5DPajuVr+rsSEaXnRKrL9DiNdaHP7wKTf1cXjz0jgGWCJts5GsUGTqCoJGP427g6CypK/13fMF+SNLBGJh4iVp61L5/
-X-Gm-Message-State: AOJu0YzvegeChGQLYMNdRhJaTMcJUObItXzh+X2Cx0SopKMh198Cd/eC
-	NcKmIFDlrY5W4/pAmXvfuYaqdo3W4SV402t76ABvV04G3atgh2Og
-X-Google-Smtp-Source: AGHT+IHLfR8agCuvFel6ntEWfiy+fZrIfE1ihB/JnlmAX263CXs8KVa/MgkQI7sLDI8UzplSZX1hvg==
-X-Received: by 2002:a05:6a00:985:b0:6ec:f5cf:2bb1 with SMTP id u5-20020a056a00098500b006ecf5cf2bb1mr73165pfg.6.1712680260278;
-        Tue, 09 Apr 2024 09:31:00 -0700 (PDT)
-Received: from [10.10.14.80] (1-34-21-66.hinet-ip.hinet.net. [1.34.21.66])
-        by smtp.gmail.com with ESMTPSA id r14-20020aa79ece000000b006ecf72cf8easm8486979pfq.22.2024.04.09.09.30.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Apr 2024 09:30:59 -0700 (PDT)
-Message-ID: <47835475-36de-4682-84ae-0163d45d0bac@gmail.com>
-Date: Wed, 10 Apr 2024 00:28:44 +0800
+        d=1e100.net; s=20230601; t=1712686093; x=1713290893;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=POlFcO8rRiMn4XpW5ioQKkg2ZlLEK2LdmVjbB41yM08=;
+        b=kIf21v0XUdCXeOOvfAYrFMYLl7TwmWnPvUrBTL8QT3Aq6o0f4vxpMYKlopgWEgsoCk
+         ugfxO59HnEbT4i1yYo1AECaTfQ1EQVuz15Z3wEeg6e/YXClI6PZQakMJkidr8KbF3dog
+         orTjjEl3E1pJ7/ePexPfJxMCxII2l8UF7MvEYAyOkAUR2VNVa89X27qd3f0OFCoeuPH4
+         lY11S8+bq+QFgZap6Qfuo0+hgVIs7U4qhgAngwJIT1qUJ7rBzjZk4grlFPVxwOrrbJuw
+         ARrOpMsTdWmOOkL9eBJOpQ8lFU9B4TvpJ2Omb/BSpRHXnCIaDfOou/EsEy/MJYQ8iq7w
+         +IYA==
+X-Forwarded-Encrypted: i=1; AJvYcCXHFWGVIMn7W5SsxY3rNuddgNaanzf4U5wsrVa1Ycu2bltzPRAdIrYIaFRXg/PK1/zMfrLWPi37iD8boE2HPcAjMyJrulmIBfjmBnv8WWs5MBH7YNa7+O8Qi1SaAI9+A9vVh74N5scK3iA2XELGhYyozEsl8F6D6Dw2Gg+LB/G5EeVUQGaP7blx
+X-Gm-Message-State: AOJu0YzX92NsSENsKzZFTKW/ziPBwg0119qmSEPZigpx8tte0UERDbqY
+	jrxeV+77LTKq2VrkiEVAZxJwrEy1ZC72oj69/wPZ40MbzmZpwyLR
+X-Google-Smtp-Source: AGHT+IFzjFhyBMx6hv8MZ4xwZSSjTQZI1dh3fOoNpvvtY6yc9ogy1c4zmy1+R4Fpx4j8O6s7YrZffg==
+X-Received: by 2002:a17:902:ea01:b0:1e3:e243:1995 with SMTP id s1-20020a170902ea0100b001e3e2431995mr677747plg.1.1712686093000;
+        Tue, 09 Apr 2024 11:08:13 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i17-20020a170902c95100b001dda32430b3sm657972pla.89.2024.04.09.11.08.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Apr 2024 11:08:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 9 Apr 2024 11:08:10 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: PeterYin <peteryin.openbmc@gmail.com>
+Cc: patrick@stwcx.xyz, Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 4/4] drivers: watchdog: ast2500 and ast2600 support
+ bootstatus
+Message-ID: <01a07242-22ca-4abe-80f9-72ac4de93fb7@roeck-us.net>
+References: <20240328022231.3649741-1-peteryin.openbmc@gmail.com>
+ <20240328022231.3649741-5-peteryin.openbmc@gmail.com>
+ <47835475-36de-4682-84ae-0163d45d0bac@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 4/4] drivers: watchdog: ast2500 and ast2600 support
- bootstatus
-From: PeterYin <peteryin.openbmc@gmail.com>
-To: patrick@stwcx.xyz, Wim Van Sebroeck <wim@linux-watchdog.org>,
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
- linux-kernel@vger.kernel.org
-References: <20240328022231.3649741-1-peteryin.openbmc@gmail.com>
- <20240328022231.3649741-5-peteryin.openbmc@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20240328022231.3649741-5-peteryin.openbmc@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <47835475-36de-4682-84ae-0163d45d0bac@gmail.com>
 
-
-
-Peter Yin 於 3/28/24 10:22 寫道:
-> Add WDIOF_EXTERN1 and WDIOF_CARDRESET bootstatus in ast2600
+On Wed, Apr 10, 2024 at 12:28:44AM +0800, PeterYin wrote:
+[ ... ]
 > 
-> Regarding the AST2600 specification, the WDTn Timeout Status Register
-> (WDT10) has bit 1 reserved. Bit 1 of the status register indicates
-> on ast2500 if the boot was from the second boot source.
-> It does not indicate that the most recent reset was triggered by
-> the watchdog. The code should just be changed to set WDIOF_CARDRESET
-> if bit 0 of the status register is set.
-> 
-> Include SCU register to veriy WDIOF_EXTERN1 in ast2600 SCU74 or
-> ast2500 SCU3C when bit1 is set.
-> 
-> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
-> ---
->   drivers/watchdog/aspeed_wdt.c | 35 +++++++++++++++++++++++++++++++----
->   1 file changed, 31 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
-> index b4773a6aaf8c..0e7ef860cbdc 100644
-> --- a/drivers/watchdog/aspeed_wdt.c
-> +++ b/drivers/watchdog/aspeed_wdt.c
-> @@ -11,10 +11,12 @@
->   #include <linux/io.h>
->   #include <linux/kernel.h>
->   #include <linux/kstrtox.h>
-> +#include <linux/mfd/syscon.h>
->   #include <linux/module.h>
->   #include <linux/of.h>
->   #include <linux/of_irq.h>
->   #include <linux/platform_device.h>
-> +#include <linux/regmap.h>
->   #include <linux/watchdog.h>
->   
->   static bool nowayout = WATCHDOG_NOWAYOUT;
-> @@ -77,11 +79,19 @@ MODULE_DEVICE_TABLE(of, aspeed_wdt_of_table);
->   #define WDT_TIMEOUT_STATUS	0x10
->   #define   WDT_TIMEOUT_STATUS_IRQ		BIT(2)
->   #define   WDT_TIMEOUT_STATUS_BOOT_SECONDARY	BIT(1)
-> +#define   WDT_TIMEOUT_STATUS_EVENT		BIT(0)
->   #define WDT_CLEAR_TIMEOUT_STATUS	0x14
->   #define   WDT_CLEAR_TIMEOUT_AND_BOOT_CODE_SELECTION	BIT(0)
->   #define WDT_RESET_MASK1		0x1c
->   #define WDT_RESET_MASK2		0x20
->   
-> +/*
-> + * Ast2600 SCU74 bit1 is External reset flag
-> + * Ast2500 SCU3C bit1 is External reset flag
-> + */
-> +#define AST2500_SYSTEM_RESET_EVENT	0x3C
-> +#define AST2600_SYSTEM_RESET_EVENT	0x74
-> +#define   EXTERN_RESET_FLAG		BIT(1)
->   /*
->    * WDT_RESET_WIDTH controls the characteristics of the external pulse (if
->    * enabled), specifically:
-> @@ -330,6 +340,11 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
->   	if (IS_ERR(wdt->base))
->   		return PTR_ERR(wdt->base);
->   
-> +	struct regmap *scu_base = syscon_regmap_lookup_by_phandle(dev->of_node,
-> +							     "aspeed,scu");
-> +	if (IS_ERR(scu_base))
-> +		return PTR_ERR(scu_base);
-> +
->   	wdt->wdd.info = &aspeed_wdt_info;
->   
->   	if (wdt->cfg->irq_mask) {
-> @@ -459,14 +474,26 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
->   	}
->   
->   	status = readl(wdt->base + WDT_TIMEOUT_STATUS);
-> -	if (status & WDT_TIMEOUT_STATUS_BOOT_SECONDARY) {
-> +	if (status & WDT_TIMEOUT_STATUS_EVENT)
->   		wdt->wdd.bootstatus = WDIOF_CARDRESET;
->   
-> -		if (of_device_is_compatible(np, "aspeed,ast2400-wdt") ||
-> -		    of_device_is_compatible(np, "aspeed,ast2500-wdt"))
-> -			wdt->wdd.groups = bswitch_groups;
-> +	if (of_device_is_compatible(np, "aspeed,ast2600-wdt")) {
-> +		ret = regmap_read(scu_base,
-> +				  AST2600_SYSTEM_RESET_EVENT,
-> +				  &status);
-> +	} else {
-> +		ret = regmap_read(scu_base,
-> +				  AST2500_SYSTEM_RESET_EVENT,
-> +				  &status);
-> +		wdt->wdd.groups = bswitch_groups;
->   	}
->   
-> +	/*
-> +	 * Reset cause by Extern Reset
-> +	 */
-> +	if (status & EXTERN_RESET_FLAG && !ret)
-> +		wdt->wdd.bootstatus |= WDIOF_EXTERN1;
-> +
->   	dev_set_drvdata(dev, wdt);
->   
->   	return devm_watchdog_register_device(dev, &wdt->wdd);
+> Hi Guenter,
+>    Could you help me understand the definition of WDIOF_CARDRESET in the
+> kernel? If it resets the CPU, should all values be reset to default? Should
 
-Hi Guenter,
-    Could you help me understand the definition of WDIOF_CARDRESET in 
-the kernel? If it resets the CPU, should all values be reset to default? 
-Should we check the POR (RstPwr Power on reset SRST# flag) flag in SCU 
-0x74 register bit 0 in ast2600?
+Documentation/watchdog/watchdog-api.rst says:
 
+	"Card previously reset the CPU"
 
+This is a bit historic and was probably defined when watchdogs were
+not typically integrated. The appropriate description, applied to
+current watchdog devices, would be something like "The most recent
+reset was triggered by this watchdog".
+
+Not sure I understand "If it resets the CPU...". It doesn't _do_
+anything, it just reports if the most recent reset was triggered
+by the watchdog.
+
+> we check the POR (RstPwr Power on reset SRST# flag) flag in SCU 0x74
+> register bit 0 in ast2600?
+> 
+
+Only if it indicates that the most recent reset was triggered by the
+watchdog.
+
+Guenter
 
