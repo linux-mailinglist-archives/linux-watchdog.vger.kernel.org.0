@@ -1,126 +1,97 @@
-Return-Path: <linux-watchdog+bounces-896-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-897-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A32789E22A
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Apr 2024 20:08:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93E9589E3B7
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Apr 2024 21:37:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8FF6B25738
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Apr 2024 18:08:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5A3A1C212B2
+	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Apr 2024 19:37:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C1AD156654;
-	Tue,  9 Apr 2024 18:08:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EA46157A44;
+	Tue,  9 Apr 2024 19:37:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XwRz3dv0"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="uMCszpP6"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0FEA156870;
-	Tue,  9 Apr 2024 18:08:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7945A1386C0;
+	Tue,  9 Apr 2024 19:37:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712686095; cv=none; b=s7scTmkSgexgnaz3DGRoHgPtola9OfW4gD/po5DhRMCmAA9WMSyEXTZR6ebpeWiNq3Rv8zePEvis/7/erqFj+r2IvpA2KXEn2x+8vyVRICVSXlEvN1wE+iZrRto+TFyvZkbI0mR2u1GDXP9bG8W+rPqHAdMx8gyx2V0k4zKrlPE=
+	t=1712691461; cv=none; b=KpKZhlleMVivsbWNq1AaccR6qXkQ6PWH0TXMrKxv+R4RDkEr+L1DPcAPBcawrdYtoTGju9YpTaOUjnd7p43tqfC6upoadZMgnDvMDtEt1fBQyBxTBZbJhh4cNSmxnJuLCgzaC8iVVWOOjBdJB1qOL1p1cj9UXfXggnMosUyHSA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712686095; c=relaxed/simple;
-	bh=2I9xZFzWhxswz0ShSCkZGYHy3IU7FgiErcUKJcNqPpQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KiA1vr8zJKegMstbDy5VgmHTgl+qcdL16N90BsWG6+I7KJrPDkKm7LXx/y5JZEsm6/tOp9ZBIMm1c5ll3LhzT1LmihD5sGdfUWgFngwrtBoiKIoxhPuWqeqrxdMYO/BXklsoxgk8Z4Pl4jDJvfqWm/VQn+9kGS5f4vnuuLtsv1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XwRz3dv0; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1e3e56c9d2cso26891445ad.1;
-        Tue, 09 Apr 2024 11:08:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712686093; x=1713290893; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=POlFcO8rRiMn4XpW5ioQKkg2ZlLEK2LdmVjbB41yM08=;
-        b=XwRz3dv0t/QVi131duexDuB3svITlJZT5nLvY8Ftx6NvYyjXHJQhaIsM2X8N2NEwI8
-         m4xNJG4pqmpkaJKdlUEyGd/oUbqdBdo2FKrQ8aC3bYba9mBBhZLaFbW+0EUCNkgOOCAM
-         P0DFhkRJMjLBkh9KKd9YmKMlNG2It8yLbhhtpcde+uvRhDeLxOX6YBtucvMA63Rc2YWd
-         2Bh5OQDZnNDZDmC/WvknYeuJ3isepmfwgEKvjebQ31bT+T4H2iuuy4+qWcWOuqkmpVKX
-         l/EaKEPfl2pxdkc1VZsoxRCkxk4GalLITiZXBGxcYcuI4ChuPSlIGWE+OIhSnBSCQKbr
-         H8rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712686093; x=1713290893;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=POlFcO8rRiMn4XpW5ioQKkg2ZlLEK2LdmVjbB41yM08=;
-        b=kIf21v0XUdCXeOOvfAYrFMYLl7TwmWnPvUrBTL8QT3Aq6o0f4vxpMYKlopgWEgsoCk
-         ugfxO59HnEbT4i1yYo1AECaTfQ1EQVuz15Z3wEeg6e/YXClI6PZQakMJkidr8KbF3dog
-         orTjjEl3E1pJ7/ePexPfJxMCxII2l8UF7MvEYAyOkAUR2VNVa89X27qd3f0OFCoeuPH4
-         lY11S8+bq+QFgZap6Qfuo0+hgVIs7U4qhgAngwJIT1qUJ7rBzjZk4grlFPVxwOrrbJuw
-         ARrOpMsTdWmOOkL9eBJOpQ8lFU9B4TvpJ2Omb/BSpRHXnCIaDfOou/EsEy/MJYQ8iq7w
-         +IYA==
-X-Forwarded-Encrypted: i=1; AJvYcCXHFWGVIMn7W5SsxY3rNuddgNaanzf4U5wsrVa1Ycu2bltzPRAdIrYIaFRXg/PK1/zMfrLWPi37iD8boE2HPcAjMyJrulmIBfjmBnv8WWs5MBH7YNa7+O8Qi1SaAI9+A9vVh74N5scK3iA2XELGhYyozEsl8F6D6Dw2Gg+LB/G5EeVUQGaP7blx
-X-Gm-Message-State: AOJu0YzX92NsSENsKzZFTKW/ziPBwg0119qmSEPZigpx8tte0UERDbqY
-	jrxeV+77LTKq2VrkiEVAZxJwrEy1ZC72oj69/wPZ40MbzmZpwyLR
-X-Google-Smtp-Source: AGHT+IFzjFhyBMx6hv8MZ4xwZSSjTQZI1dh3fOoNpvvtY6yc9ogy1c4zmy1+R4Fpx4j8O6s7YrZffg==
-X-Received: by 2002:a17:902:ea01:b0:1e3:e243:1995 with SMTP id s1-20020a170902ea0100b001e3e2431995mr677747plg.1.1712686093000;
-        Tue, 09 Apr 2024 11:08:13 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i17-20020a170902c95100b001dda32430b3sm657972pla.89.2024.04.09.11.08.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Apr 2024 11:08:11 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Tue, 9 Apr 2024 11:08:10 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: PeterYin <peteryin.openbmc@gmail.com>
-Cc: patrick@stwcx.xyz, Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 4/4] drivers: watchdog: ast2500 and ast2600 support
- bootstatus
-Message-ID: <01a07242-22ca-4abe-80f9-72ac4de93fb7@roeck-us.net>
-References: <20240328022231.3649741-1-peteryin.openbmc@gmail.com>
- <20240328022231.3649741-5-peteryin.openbmc@gmail.com>
- <47835475-36de-4682-84ae-0163d45d0bac@gmail.com>
+	s=arc-20240116; t=1712691461; c=relaxed/simple;
+	bh=NWVotNPMcQTtLRf5uoxfd7Jy0qy0OAOatNqmTgO0CsE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Daq65ABIE0rpGwVh7Bb/Cezj4eGGEPPAKjxlRJP6tsapdeyJDYSqv4SBmLNGeKkh91g8jTE3pU6auXqO4psovgHsVP4UBPuApPRmypDnSuwQmWBVnrmXFpcpCYP0dGIb/5moT+K6nBz7t/vZI4W6bt48upTN4OPWh8EXan6Tgd0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=uMCszpP6; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 439JbFs1105947;
+	Tue, 9 Apr 2024 14:37:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1712691435;
+	bh=NWVotNPMcQTtLRf5uoxfd7Jy0qy0OAOatNqmTgO0CsE=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=uMCszpP6yRuOm0KtBdRYkAElSygNdMmzKAi4xd/nQ8p4GxOkuvdO4fmxSqkf9OHKD
+	 Lh/OEc7QtoZstXYWwkBgd8aU37g1s793SDJ2qLwoWFqci78Ai/TZfNSmpSUXvW72KL
+	 aZ1e4MWx7E3une6gT6dwv5iHzArME2d5be9pQ/yA=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 439JbFZS054227
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 9 Apr 2024 14:37:15 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 9
+ Apr 2024 14:37:15 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 9 Apr 2024 14:37:15 -0500
+Received: from [128.247.81.105] (judy-hp.dhcp.ti.com [128.247.81.105])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 439JbF4u090510;
+	Tue, 9 Apr 2024 14:37:15 -0500
+Message-ID: <a7b0baba-56bc-47ca-9494-0178f441ff8b@ti.com>
+Date: Tue, 9 Apr 2024 14:37:15 -0500
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <47835475-36de-4682-84ae-0163d45d0bac@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] watchdog: rti_wdt: Set min_hw_heartbeat_ms to
+ accommodate 5% safety margin
+To: Guenter Roeck <linux@roeck-us.net>
+CC: Wim Van Sebroeck <wim@linux-watchdog.org>,
+        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Francesco
+ Dolcini <francesco@dolcini.it>
+References: <20240404153319.1088644-1-jm@ti.com>
+ <a148e8ab-f502-45ec-b915-22fce751ad64@roeck-us.net>
+Content-Language: en-US
+From: Judith Mendez <jm@ti.com>
+In-Reply-To: <a148e8ab-f502-45ec-b915-22fce751ad64@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Wed, Apr 10, 2024 at 12:28:44AM +0800, PeterYin wrote:
-[ ... ]
-> 
-> Hi Guenter,
->    Could you help me understand the definition of WDIOF_CARDRESET in the
-> kernel? If it resets the CPU, should all values be reset to default? Should
+Hi all,
 
-Documentation/watchdog/watchdog-api.rst says:
+On 4/6/24 8:01 AM, Guenter Roeck wrote:
+> On Thu, Apr 04, 2024 at 10:33:19AM -0500, Judith Mendez wrote:
+>> On AM62x, the watchdog is pet before the valid window
+>> is open. Fix min_hw_heartbeat and accommodate a 5% safety
+>> margin with the exception of open window size < 10%,
+>> which shall use <5% due to the smaller open window size.
 
-	"Card previously reset the CPU"
+Please do not merge this patch, I will add an additional
+patch removing the hack in this driver.
 
-This is a bit historic and was probably defined when watchdogs were
-not typically integrated. The appropriate description, applied to
-current watchdog devices, would be something like "The most recent
-reset was triggered by this watchdog".
-
-Not sure I understand "If it resets the CPU...". It doesn't _do_
-anything, it just reports if the most recent reset was triggered
-by the watchdog.
-
-> we check the POR (RstPwr Power on reset SRST# flag) flag in SCU 0x74
-> register bit 0 in ast2600?
-> 
-
-Only if it indicates that the most recent reset was triggered by the
-watchdog.
-
-Guenter
+~ Judith
 
