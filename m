@@ -1,83 +1,88 @@
-Return-Path: <linux-watchdog+bounces-922-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-923-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C294889FAC1
-	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Apr 2024 16:57:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 045A389FD29
+	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Apr 2024 18:38:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FB891F30FDB
-	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Apr 2024 14:57:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82B181F25169
+	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Apr 2024 16:38:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FF92171E4E;
-	Wed, 10 Apr 2024 14:55:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF81217B4F4;
+	Wed, 10 Apr 2024 16:38:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R6DrME/l"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IZAZF/g/"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F77016D9D0;
-	Wed, 10 Apr 2024 14:55:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5F753361;
+	Wed, 10 Apr 2024 16:38:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712760912; cv=none; b=Fo4dCiHYSyMs5meEJyRtZBYgdbUUOkdParPG6Xyd1MHV7hoEgpg/wLB2yw/K6CXKBf1YnLyPdyaqXrgg00HDfSbXf+dUj31Rfx0b6I1ci/3ov7opOLXl+mT1FGQBo887yFeB10JHR0EC3dVZ6W3ssJARijV4ErzL+dVij8HR78I=
+	t=1712767127; cv=none; b=fZHtmSiBpS+KhYB9nMeJlsj92OTrZ8BvMOujJhd2FCAwwm1f3kugElTAFUVD5V+V3QuO2GPHOYWD3Uf+0aIW9K5etsDhakWizrFfYVImvAdoUdA9F+Yra1ByW03BscsFzcObxiy3BMeBh3NKES/EoncItoVgL4tNPeQ4NlygsQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712760912; c=relaxed/simple;
-	bh=7fAQgpTMDVPYKudJ06RE2pyN1k0PYQWs65V2L6UE7Sc=;
+	s=arc-20240116; t=1712767127; c=relaxed/simple;
+	bh=ah2mwperXtzYMn0SL/CpwmlBkomRZateERpW6kqvubE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tI6yR5eHfFNMfX35SKNl3f+kEWUcl5alrWyEPdKh6DSNEjOvpo0h/wO9ZEhhX10iTTYSW2bThqnq5q6FGD9eUz7VIZfHYHPwR1KZjmUoRx6G72KMZr+F6zp+KhRjiGg5IE5DiRbgJ5WAsIdAK4kJRTk7JjRdpKzitz+PDKehfI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R6DrME/l; arc=none smtp.client-ip=209.85.214.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=JiZN7ckQPa+FWpeDEi9naXJ1+r2rKTMPNj9JKRJSeJyyJdvPVhqNMTTAmtSrmiYTDqzkYAw46ocONwb48BNqu8JVkFiQQp/vNsIJDKJgKw7KtD/QTBi1JpS6XOxFisX3/j9zDxQ9d6N+ymDPzsvOs+SGZazBK8/8E9wOAZGGSoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IZAZF/g/; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1e40042c13eso24443145ad.2;
-        Wed, 10 Apr 2024 07:55:10 -0700 (PDT)
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6ed11782727so3559523b3a.1;
+        Wed, 10 Apr 2024 09:38:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712760910; x=1713365710; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712767125; x=1713371925; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rnPf8H9ChUNgME1R8Li6tCFhCJLrI7NwVEWBeOwG24w=;
-        b=R6DrME/lmH/fU9bli/fg2+PfCDCPr52bjjJuSC4cLLZ+1KO112Eg6YtL/crVShZA4U
-         xLdOiYChoCm7fLSeVk+CjGnYrzzxnOydk6FGnQ4eA+wlAqVK8d5Apu5Hpzy6rWG64DO7
-         /uaP46iq4qdR/PNvGCGC02LYL7Sh3/wD7C9y4i3Gy6OZfI6T1ovAajsgEYcXFs3mBG1i
-         YJC0H/CFQmQ+GGarSrSO5lrJjz6mLiIdOlGesMccSejUryG3XmiN5iFDh8oBzIuI+qb8
-         eHQCwyaKVGcax4hW+9tyqoQ4Ujym2oC5VaNR7IkZvQ98tfcKNv4Zl8sc1F2l9+zb/q6i
-         Wj3A==
+        bh=bH3SH9PZpVdfJLkcWJKtZ9DwpOlnEKGvk93uGkOR/UE=;
+        b=IZAZF/g/5EL+z+c3gxX115XgRkEjbNxRuYTEUPnYdGbaqZntBAa/3BgLUeQ/Rns7pH
+         2R7k/6WG+ezfvkfuAFA875hM3hjm4GG05SyvygxsBcAHe/NsPWLAC7Y2MAQlxR1cm5qr
+         z5w5Caeu09abFjg2An2JUD9iT6BGRNUf3DnnAgKi1MyXIYxwbOoH5dJFp1lf5Gbjl7OX
+         7p9csRZ9JpchrQ+/Lii19UcJL+VxFWfSiXtx5DlKk+bF29YjwNQz4qdJ1IHzgtqZlPrN
+         BFDUA8LcV/VYRMdRgXG6Fq09ZbO5M8XRAWieM54y2/m6P4VmCbiFwRwU9YPck+mP9240
+         nTUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712760910; x=1713365710;
+        d=1e100.net; s=20230601; t=1712767125; x=1713371925;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rnPf8H9ChUNgME1R8Li6tCFhCJLrI7NwVEWBeOwG24w=;
-        b=pqCHRWHJu/12iekTMCSEu0p2agc/qM1eEDCvyWcizU6XNYL8WLktNUigLP0fGcRKm9
-         zBrAaYd8piki4Xx+CMCF+/sDxAqrOBqvNTkfbZOxMNqbziEcn6KVEnDn6drW9tPhLbKc
-         pnwPf3GJpwfw2If3a3mwXBtsoJRoB9LTz3o4eFzhz3+UjW/SeoUdHaRAk7BWrcErE8z2
-         AAqz4ZDPj6pG/TS2QSnwdKkOkemlOyaSgAPvpG0gabw3997xI6wKLGj3A/pGptVlFKGC
-         Ykof1PNJFKifH9mHwc2m9vHYrM5/qv6KWTTlIrPiYMU3dxtD23+tLxeFUb9RHtD2mbGq
-         E5Pg==
-X-Forwarded-Encrypted: i=1; AJvYcCU9MZ3x13A6EpIhJfGcvP9LUimRRmjhSPaUjHHDwjlKFvTIc+hLFEJcx2EScr0ooOE0ENwHHJI0rpmvLncx9SHX23LqL9VuV3XCRIAj0/n3twunbSdPN6bqwzvkQLoxGvNjaVGeF34o7z2rrtI=
-X-Gm-Message-State: AOJu0YzkFzu2RkqHWTcJvKUHv8D15hIVb+aob30/pAVEGrPwNporp9EC
-	whax8Z8rAXNG9Oy0IZxfykXYcCBQPsHG52AIAv2n5V/+d3hKjoBh7MvOiBR3
-X-Google-Smtp-Source: AGHT+IFN/kZoObXcJJMFpnGS3H/KmNdrXTgYpzW2WtpE5Ti3/TE/96kfaAUMrC+QAZGPBEobCDBWng==
-X-Received: by 2002:a17:902:ed15:b0:1e4:8c64:33c6 with SMTP id b21-20020a170902ed1500b001e48c6433c6mr2711740pld.59.1712760909711;
-        Wed, 10 Apr 2024 07:55:09 -0700 (PDT)
+        bh=bH3SH9PZpVdfJLkcWJKtZ9DwpOlnEKGvk93uGkOR/UE=;
+        b=vqUAbAq40/on/lLCSOJN9X+IoIGs09xLF/n6vbhKeq0j1of+Ol1ZKAoZAnHKX4onYz
+         dXA3Qu7r/bbukWdUbcS9DcyMDCSslN3bHAr8MwgUQS+4KnyT7uJEP9kNWfyYWqH7wd/4
+         A6pFelJWZLG295A8PDy/iUo+tLJztSSRATfWSLdJG8NdYLz2tmPfsjbd++jxJmpbKqrB
+         rb+fF94vGYJjgVtKjUFHeUFsrLhwhKvj6bVE9pPxOoj+sZB5Bb6fmsfI3f2J0/Ca5UhH
+         uAmRkPjMzmsASc4wLEhtVT7uuey5nw+PP/QyNFneRTGPyqzCW4fbTHbrd++3s/Rrewj9
+         wMMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWMVvc2zxXMQnj/FX/6qXBN504NT+nyKu/mzVxaiDmz2eQ33RC0KZ+8ND61SHEO4aGJVFpS2U5PFxPCJof+SMtDkXgWACCsaqt3Sfv96ipq7WWt6lqSTe+k7MXZu4TGIzGNRLjNDLSN0Bvp7nEE+4JLYmimjx3sux7hEwLSZw46DDeICHrKsf83BxSr+eZ+XZZr7ax/ntuA5PPiFJpMDS9gEpvhSPz6RTPmNUM=
+X-Gm-Message-State: AOJu0YwepAsBBKWptmVhwaTsLImpCH6PPJsFds36z+R+l+tWIbwSdO5I
+	P06qMzs1n7Vus5/Cf6YjxJHqkChy7DFKuAqtB9jlGug3lPy5zKHk
+X-Google-Smtp-Source: AGHT+IHpTRrB1z6wLXvvCfgdEb4HXKeC2BDjzUdZ8l5lBS6gy4LBDOs3+XlqsJQahkr2ASwm5F3Dkg==
+X-Received: by 2002:a05:6a21:3b4a:b0:1a7:4b32:1195 with SMTP id zy10-20020a056a213b4a00b001a74b321195mr4093187pzb.61.1712767125263;
+        Wed, 10 Apr 2024 09:38:45 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m12-20020a170902f20c00b001e2a4ac7bf9sm10863971plc.111.2024.04.10.07.55.08
+        by smtp.gmail.com with ESMTPSA id lb14-20020a056a004f0e00b006ead47a65d1sm10344716pfb.109.2024.04.10.09.38.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Apr 2024 07:55:09 -0700 (PDT)
+        Wed, 10 Apr 2024 09:38:44 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 10 Apr 2024 07:55:08 -0700
+Date: Wed, 10 Apr 2024 09:38:42 -0700
 From: Guenter Roeck <linux@roeck-us.net>
-To: Niklas Schnelle <schnelle@linux.ibm.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	linux-watchdog@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] watchdog: add HAS_IOPORT dependencies
-Message-ID: <13ef0edf-e923-4139-8c6e-91bcb8193a9e@roeck-us.net>
-References: <20240410084201.1481930-1-schnelle@linux.ibm.com>
- <20240410084201.1481930-2-schnelle@linux.ibm.com>
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: wim@linux-watchdog.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, p.zabel@pengutronix.de,
+	geert+renesas@glider.be, magnus.damm@gmail.com,
+	biju.das.jz@bp.renesas.com, linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH RESEND v8 01/10] watchdog: rzg2l_wdt: Restrict the driver
+ to ARCH_RZG2L and ARCH_R9A09G011
+Message-ID: <d91ff06a-2d7f-4592-a08b-eab54ec272fa@roeck-us.net>
+References: <20240410134044.2138310-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240410134044.2138310-2-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -86,25 +91,53 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240410084201.1481930-2-schnelle@linux.ibm.com>
+In-Reply-To: <20240410134044.2138310-2-claudiu.beznea.uj@bp.renesas.com>
 
-On Wed, Apr 10, 2024 at 10:42:01AM +0200, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=n will disable inb()/outb() and friends at
-> compile time. We thus need to add HAS_IOPORT as dependency for those
-> drivers using them.
+On Wed, Apr 10, 2024 at 04:40:35PM +0300, Claudiu wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
-> Note: This patch does not depend any not-yet-mainline HAS_IOPORT changes
-> and may be merged via subsystem specific trees at your earliest
-> convenience.
-
-Seems like the COMPILE_TEST / HAS_IOPORT problem is watchdog and
-hwmon specific, so I'll just let it go.
+> The rzg2l_wdt driver is used only by ARCH_RZG2L and ARCH_R9A09G011
+> micro-architectures of Renesas. Thus, limit it's usage only to these.
+> 
+> Suggested-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Guenter
+> ---
+> 
+> Changes in v8:
+> - none
+> 
+> Changes in v7:
+> - none
+> 
+> Changes in v6:
+> - none
+> 
+> Changes in v5:
+> - none
+> 
+> Changes in v4:
+> - none; this patch is introduced in v4
+> 
+>  drivers/watchdog/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 6bee137cfbe0..e2439967417a 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -920,7 +920,7 @@ config RENESAS_RZN1WDT
+>  
+>  config RENESAS_RZG2LWDT
+>  	tristate "Renesas RZ/G2L WDT Watchdog"
+> -	depends on ARCH_RENESAS || COMPILE_TEST
+> +	depends on ARCH_RZG2L || ARCH_R9A09G011 || COMPILE_TEST
+>  	select WATCHDOG_CORE
+>  	help
+>  	  This driver adds watchdog support for the integrated watchdogs in the
+> -- 
+> 2.39.2
+> 
 
