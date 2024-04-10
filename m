@@ -1,121 +1,130 @@
-Return-Path: <linux-watchdog+bounces-899-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-900-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B9B189E521
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Apr 2024 23:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5436389EDCE
+	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Apr 2024 10:42:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3049A1C22730
-	for <lists+linux-watchdog@lfdr.de>; Tue,  9 Apr 2024 21:44:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D6541C20D3F
+	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Apr 2024 08:42:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FA3B158A07;
-	Tue,  9 Apr 2024 21:44:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2EF4154BFE;
+	Wed, 10 Apr 2024 08:42:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="VYsHSsqE"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SbSVGYrB"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014D4158851;
-	Tue,  9 Apr 2024 21:44:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A795EAD0;
+	Wed, 10 Apr 2024 08:42:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712699086; cv=none; b=I8V6ZkuKErYE4g+HnNYFfmDHaWiIFfxb9JNtg3k6SZzU38JAiLiIMxIEPjgcrX76up7VJNiGoijVN1mAvlOIgljobDKIErwgaQOybcJ7ip7Tg2OAQcO9HFKok5DWhijKDMJw1rC3WhO9e/Gj2bU45LW5qA8wmkx1P5/uoH2qAWc=
+	t=1712738545; cv=none; b=nN0B2Wt3Fn7wKEQbeLw+LNvHkFhFntM+cjPD/fKL7YwCENUNoiD3ng0JmBbKa2f3FouQSqmUFqcPuuTpg6s23cocCrHWCpCvET9dSvs5VkHnfYy6ocvWrfb8Ma7/aWxWi3L50pgmCf/yDrNClDWYy9wp4wFJcEBbHfE7/lnzIJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712699086; c=relaxed/simple;
-	bh=9AniVrmVEwjQQ91ny9Uuu92Ev9GZHv7gYh3BV+EJVvU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=JZLuXUklFut1R3EJW4cZspCts5mJTZYLRmVbebbJlWiRaeRhCdCPkGxUnG2+2rUBV/JhpRx/GzWrU2soMzPjbHOa+7paQfYGamC2CAOb6kit8Yh0tby6HUrZgl/85CX1png7rXNogU/bY7gjOsRSwBDnmLAA4iteXlgvSBZIxdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=VYsHSsqE; arc=none smtp.client-ip=198.47.23.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 439LiQRk004818;
-	Tue, 9 Apr 2024 16:44:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1712699066;
-	bh=6jGZr9jb/pRBatR/Kljqu36LgjlgOFEHyb73BCXCNbM=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=VYsHSsqEPUobLUljx6cz4GA5FVFaZv87np0wQT9/atjtfegoPU3JIjK2n7H9nPSz3
-	 tTydrdAOPmcyT67gtzLFgf43Mp6xZhjXm/YxHEnYNhNhXq0rZthdRuoFjdkEbZ1dOK
-	 lnVd8CZYk0L1sJSYct9/Yr8zKio2x+BEON1M3p/M=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 439LiQaJ003856
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 9 Apr 2024 16:44:26 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 9
- Apr 2024 16:44:25 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 9 Apr 2024 16:44:25 -0500
-Received: from [128.247.81.105] (judy-hp.dhcp.ti.com [128.247.81.105])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 439LiPKr059974;
-	Tue, 9 Apr 2024 16:44:25 -0500
-Message-ID: <e1d1aad3-0635-45e1-9470-6398a04820d0@ti.com>
-Date: Tue, 9 Apr 2024 16:44:25 -0500
+	s=arc-20240116; t=1712738545; c=relaxed/simple;
+	bh=zgD4h2tdgOKxahcEGju+xnEIk5FkSqhzKcu7AKKSMlg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=opf5Y1ZwczNLoarySntLIyEObG87W0PsCrTMZ1NnwMVAuYEfEMNQruiqY6lEvmuCt4bMZwHvCG4T10nRaSZqgICu98LBcNj6f0PegYLiztvpHMHeuEI84XJ/iFbW2wdkroXzu6tQ2+6UVT5xYoA+W5jKdriiv6DGVC+ufBkKAOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SbSVGYrB; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43A7T5rK001569;
+	Wed, 10 Apr 2024 08:42:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=FYNPn/ZEtEV4kUA+deN8z40Grjyrjzsl/i2iEbw8aQI=;
+ b=SbSVGYrBwz7hvJ6ciPm9qebhE0RrAkfQ++I5FRJ6pnw0Ie0w6GqIdfNfYnQCb3+8cqCK
+ Mxb+MNwp0xEWa4WGDHzLMBcLJAq/Kq16AhJrIUL72SIYRGyA5EpSYdm3nkM06/MdXbYB
+ ObwSSGRMwt5S3oWoKVBrjHo2CTN/MoCmRIM5U4pfy1YvJUv+sqVbZDCd5ulWBh4bjk/k
+ Wu1Ayx/s32GmKrqpsZ7b/X5scakqAAuEdCUBBcYyvBhJ5nu1mXSEGecngpswxM4cbgcn
+ xgS4nTuY+m9M18VQZpj8gQ3ldeGAsPSOi9kV+qAvxfJRCTnMheUlwkJ6cyqcCEx2Ly6X xA== 
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3xdnjs0bbc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Apr 2024 08:42:07 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 43A6aUhS013554;
+	Wed, 10 Apr 2024 08:42:07 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3xbgqtkwww-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Apr 2024 08:42:07 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 43A8g1jI46662018
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 10 Apr 2024 08:42:03 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BBA152004B;
+	Wed, 10 Apr 2024 08:42:01 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9C78B20040;
+	Wed, 10 Apr 2024 08:42:01 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 10 Apr 2024 08:42:01 +0000 (GMT)
+From: Niklas Schnelle <schnelle@linux.ibm.com>
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc: linux-watchdog@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>, linux-kernel@vger.kernel.org,
+        Niklas Schnelle <schnelle@linux.ibm.com>
+Subject: [PATCH 0/1] watchdog: Handle HAS_IOPORT dependencies
+Date: Wed, 10 Apr 2024 10:42:00 +0200
+Message-Id: <20240410084201.1481930-1-schnelle@linux.ibm.com>
+X-Mailer: git-send-email 2.40.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: SotcYkK1g1t-hT_77sKaS333X9wa4BSX
+X-Proofpoint-ORIG-GUID: SotcYkK1g1t-hT_77sKaS333X9wa4BSX
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] watchdog: rti_wdt: Set min_hw_heartbeat_ms to
- accommodate 5% safety margin
-To: Francesco Dolcini <francesco@dolcini.it>
-CC: Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck
-	<wim@linux-watchdog.org>,
-        <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20240404153319.1088644-1-jm@ti.com>
- <a148e8ab-f502-45ec-b915-22fce751ad64@roeck-us.net>
- <a7b0baba-56bc-47ca-9494-0178f441ff8b@ti.com>
- <ZhWchn3qr_7Ocggm@gaggiata.pivistrello.it>
-Content-Language: en-US
-From: Judith Mendez <jm@ti.com>
-In-Reply-To: <ZhWchn3qr_7Ocggm@gaggiata.pivistrello.it>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-04-10_03,2024-04-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 malwarescore=0
+ bulkscore=0 spamscore=0 adultscore=0 mlxlogscore=999 mlxscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2404010000 definitions=main-2404100062
 
-Hi Francesco,
+Hi Wim, Guenter,
 
-On 4/9/24 2:52 PM, Francesco Dolcini wrote:
-> On Tue, Apr 09, 2024 at 02:37:15PM -0500, Judith Mendez wrote:
->> Hi all,
->>
->> On 4/6/24 8:01 AM, Guenter Roeck wrote:
->>> On Thu, Apr 04, 2024 at 10:33:19AM -0500, Judith Mendez wrote:
->>>> On AM62x, the watchdog is pet before the valid window
->>>> is open. Fix min_hw_heartbeat and accommodate a 5% safety
->>>> margin with the exception of open window size < 10%,
->>>> which shall use <5% due to the smaller open window size.
->>
->> Please do not merge this patch, I will add an additional
->> patch removing the hack in this driver.
-> 
-> Is the patch buggy, or you are just talking about an additional clean-up?
-> If it is an additional patch and this code is fine, why holding it back?
+This is a follow up in my ongoing effort of making inb()/outb() and
+similar I/O port accessors compile-time optional. Previously I sent this
+as a treewide series titled "treewide: Remove I/O port accessors for
+HAS_IOPORT=n" with the latest being its 5th version[0]. With a significant
+subset of patches merged I've changed over to per-subsystem series. These
+series are stand alone and should be merged via the relevant tree such
+that with all subsystems complete we can follow this up with the final
+patch that will make the I/O port accessors compile-time optional.
 
+The current state of the full series with changes to the remaining subsystems
+and the aforementioned final patch can be found for your convenience on my
+git.kernel.org tree in the has_ioport branch[1]. As for compile-time vs runtime
+see Linus' reply to my first attempt[2].
 
-1. If we leave the hack, the hack shifts the valid window. This
-is not desirable behavior. It is better to add a safety margin
-that works in all possible scenarios.
+Thanks,
+Niklas
 
-2. 5% safety margin works in almost all cases except when the
-timeout is < 5s. This due to a requirement of a min of 0.25s for the
-safety margin due max possible error. At < 5s timeout, 5% is not
-enough.
+[0] https://lore.kernel.org/all/20230522105049.1467313-1-schnelle@linux.ibm.com/
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git/log/?h=has_ioport
+[2] https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
 
-I am not 100% sure if using < 5s timeout is a real use-case
-but I would rather use a safety margin that works for all cases.
+Niklas Schnelle (1):
+  watchdog: add HAS_IOPORT dependencies
 
-~ Judith
+ drivers/watchdog/Kconfig | 58 +++++++++++++++++++++-------------------
+ 1 file changed, 30 insertions(+), 28 deletions(-)
 
+-- 
+2.40.1
 
 
