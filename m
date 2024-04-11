@@ -1,153 +1,86 @@
-Return-Path: <linux-watchdog+bounces-932-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-933-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA43989FD65
-	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Apr 2024 18:46:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 533088A132A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 11 Apr 2024 13:39:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 260A7B2B41D
-	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Apr 2024 16:43:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6E5D1F23664
+	for <lists+linux-watchdog@lfdr.de>; Thu, 11 Apr 2024 11:39:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18E6517B502;
-	Wed, 10 Apr 2024 16:43:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6245A149DF3;
+	Thu, 11 Apr 2024 11:39:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BG29tawy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e8YlLmF/"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 910B917B4FF;
-	Wed, 10 Apr 2024 16:43:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DDD6149C75;
+	Thu, 11 Apr 2024 11:39:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712767413; cv=none; b=At1sucPnPuHX7jWMGTBAPH31ZcXLlFoxVYHkIHkF3Xxe6xTnoVXr0XrX3gA5bcYZdvW4uNtKUk/QTX6Rcgwb6OqDbsdl8WtsbK39wbs3QjwBxbdSxSGqkVpgPjXaZTlSsDOcXmxCV0SnVdoXBJhRI5/NgV7EQ13iAtbeblsP37g=
+	t=1712835550; cv=none; b=C4ftis54p3WK5HFFdIidtBjBwLg7QT5z3hY1c3Ymcx/mz4DGmHzdBYAL8B6Kc0H6gOs4hdp5sp/A/pXyJovz/tsOZgQMmeGU4bzx9P2Pue2MbwzwFKz76981GKMdhvLeYl7wexJen4kPO6QFFJ7hEiQ/0C0c8COrvMkRYDhn4EE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712767413; c=relaxed/simple;
-	bh=qP4rwcDDBXWsYnnCO06i7GA685vxVAn/SFCuKVL5ymk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uhV/tfQl2zv25Bc7lAE3nhGFPJCJD9iIX0C66CVhKmiKRoBy+mX9YJL0q1hVQSV4nJ3h57fHiYpuqJS2LOceUl95wzmQ/UpSyrEjl8nqZfPAZnep3PI+3UT7+i1Amgss+gH+cNs7JGUM7oT5QD68cr3ULPf7K/rAHRyHwbP/P2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BG29tawy; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6eddff25e4eso296087b3a.3;
-        Wed, 10 Apr 2024 09:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712767410; x=1713372210; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Awh8ecAEWQZ1WcJzJZ+Zpya1KnuzGUc8tEokrA81tso=;
-        b=BG29tawyLg6MJBxfO9YMPP3PN0FOh7+ntNPrIFASsTQkc7Pufpr8pfR6A0viww10Vh
-         +NI5hMGZXCtcpv5a1Blo4EECiq18kTuZ9ohQULSBcup6D8oBP2Yjf4OopqH7DUXuWy75
-         T4ARM7WoC3uKC07YoIhH+Xqc+GUAlNgh31OrdPUsvytjApu6J+aRN6MH9QEYEiMwuNwr
-         7oVPGFytvhViojS3NvtTXrYC70jxSqvhC8DchDaaanvRANIEKCG5sm+mmu9M8ikf0K/t
-         OmOYnzbcllA+WeIFTbVO+w47xaTQCjTpgLjubAKxA8aEnVP5zi1tp19R6cDJMk226SDC
-         UEvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712767410; x=1713372210;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Awh8ecAEWQZ1WcJzJZ+Zpya1KnuzGUc8tEokrA81tso=;
-        b=GrDngHgy9xwmZEDd1HK6wFHhVeCSW7rhpAaNLfdmvX5B8ftxXBKaMtSGXEfaDVxXbw
-         0fMfxQ4XBBTi2GBNPCj9ulNBOqITrog/a/GyzcZ+JcSWCHZqJECaknrcYx0mxu6z0uxD
-         0tfHgp9/SmGQGlHy5uMPDdu5r3ntsc/fGwlK4RlzXUJAqtotiar8zFUjMgreUkJVqpUQ
-         sPk7TE8Hx4fWItfQ+BA7CuBpFZ7F+GnHYfvB7V2MHfNLJqa0ThvfIrwwHtQMw5OVzsse
-         /ZK8DashCBNO+TaH/gmwRxpkG0fP4Q2tc1//JrpBRm1F8YSQSHBePyVV3vpSsP4nd35/
-         BNTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX+wPD53SalWl8n1xK72FJi4643ilVrL1yZz40PxNU3qAjUbjQnT0aoivRmS1mgQJSbLFw1jwi46APEOZneVF39WqPb0Eg1VwjP7jn4mwo1qOo9lkmOfDf4cecrYucWX+NxwdfFi8xEuZ+joVXWMnE7V2Tvat/QLd0dIYiPQ+jymxpaROcwV9EfosGTGqly/vvwgrupxMyKHiAqPmz1Mt8fenMa6OjfL6I+G+w=
-X-Gm-Message-State: AOJu0YzPOMMjGopgMMR64oAOx8Ac4sJlm6QZOuqM+dDHAm3TwSfMbY7f
-	Q2GC77fj9jNYDyfslUsupGCs8MoP/R4yJTTIKt7Go1juG7arTX8R
-X-Google-Smtp-Source: AGHT+IGowoxPbo5rXFumvdr4rBUE6oPeTkSAeAkpKiGPVElZ0Zqp0XkSo3uaxirSokB6jzLHky18fg==
-X-Received: by 2002:a05:6a21:3d95:b0:1a7:507a:c9f4 with SMTP id bj21-20020a056a213d9500b001a7507ac9f4mr3348678pzc.30.1712767410142;
-        Wed, 10 Apr 2024 09:43:30 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l9-20020a17090a408900b002a26430fc7bsm1578654pjg.2.2024.04.10.09.43.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Apr 2024 09:43:29 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 10 Apr 2024 09:43:28 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: wim@linux-watchdog.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, p.zabel@pengutronix.de,
-	geert+renesas@glider.be, magnus.damm@gmail.com,
-	biju.das.jz@bp.renesas.com, linux-watchdog@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH RESEND v8 10/10] dt-bindings: watchdog: renesas,wdt:
- Document RZ/G3S support
-Message-ID: <c6467ae4-c3f7-4a2c-abf9-8428bc068d42@roeck-us.net>
-References: <20240410134044.2138310-1-claudiu.beznea.uj@bp.renesas.com>
- <20240410134044.2138310-11-claudiu.beznea.uj@bp.renesas.com>
+	s=arc-20240116; t=1712835550; c=relaxed/simple;
+	bh=I5nbEGakjINwOJ+jcSeqOF0hmIiKmK5YtjwNvKXbnt0=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Tj9T9T74+YZmm/Scc0ytnTfWVJ7AKZWs96w97UfeHrjJ08MefWxuqgUUzMwERr8MRiVQBosbvMzZDXHz5TqpCep9j2Bs89+iFbzPsV3ObuN2mIqFVbCQj2SNOqy5wd1jrgohStNmm3Lx+GsYPTyELugsKAKbxM7sw7c/+qhRqe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e8YlLmF/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E588BC433F1;
+	Thu, 11 Apr 2024 11:39:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712835549;
+	bh=I5nbEGakjINwOJ+jcSeqOF0hmIiKmK5YtjwNvKXbnt0=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=e8YlLmF/k2ZQR/CLaHTpTEv8Z6qDsQ3oYwBFXf30TmSZ1bFezj9bziqeIjRL0CcdJ
+	 543VoblwOOU/NhuZTzgqU8WiAq3zdZeKVbHy6M3DASSkSlN0nTet0lQoOI7ZZuA8J5
+	 T/vMGZfXKfD9JbUwczG8q3ib7boGaaily3FbdgfbHdcMprGvyJqbCKJI3BplSC8BcY
+	 QsS5CFHlEic0s8eXecI5MPr+Ois+V9d3HKLoS0t/a6da2Z/3pYrwYI8+a0W/U4GNdO
+	 MGEBlNyJcUsQFTMGzaaemdh2vL5w9Kc/tYcqs5q+VDYL2gND550peIOCdWTq6mvj/a
+	 clRQdY2ZXWdKw==
+From: Lee Jones <lee@kernel.org>
+To: dmitry.torokhov@gmail.com, robh@kernel.org, 
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, lee@kernel.org, 
+ alexandre.belloni@bootlin.com, wim@linux-watchdog.org, linux@roeck-us.net, 
+ linux-input@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org, 
+ linux-watchdog@vger.kernel.org, sre@kernel.org, 
+ Andreas Kemnade <andreas@kemnade.info>
+In-Reply-To: <20240401081831.456828-1-andreas@kemnade.info>
+References: <20240401081831.456828-1-andreas@kemnade.info>
+Subject: Re: (subset) [PATCH v3] dt-bindings: mfd: twl: Convert trivial
+ subdevices to json-schema
+Message-Id: <171283554667.2315734.12959228748358608379.b4-ty@kernel.org>
+Date: Thu, 11 Apr 2024 12:39:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240410134044.2138310-11-claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.12.4
 
-On Wed, Apr 10, 2024 at 04:40:44PM +0300, Claudiu wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On Mon, 01 Apr 2024 10:18:31 +0200, Andreas Kemnade wrote:
+> Convert subdevices with just an interrupt and compatbile to
+> json-schema and wire up already converted subdevices.
+> RTC is available in all variants, so allow it unconditionally.
+> GPADC binding for TWL603X uses two different compatibles, so
+> specify just the compatible and do not include it.
 > 
-> Document the support for the watchdog IP available on RZ/G3S SoC. The
-> watchdog IP available on RZ/G3S SoC is identical to the one found on
-> RZ/G2L SoC.
 > 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> [...]
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Applied, thanks!
 
-> ---
-> 
-> Changes in v8:
-> - none
-> 
-> Changes in v7:
-> - none
-> 
-> Changes in v6:
-> - none
-> 
-> Changes in v5:
-> - none
-> 
-> Changes in v4:
-> - none
-> 
-> Changes in v3:
-> - re-arranged the tags as my b4 am/shazam placed previously the
->   Ab, Rb tags before the author's Sob
-> 
-> Changes in v2:
-> - collected tags
-> - s/G2UL/G2L in patch description
-> 
->  Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> index ffb17add491a..eba454d1680f 100644
-> --- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> @@ -29,6 +29,7 @@ properties:
->                - renesas,r9a07g043-wdt    # RZ/G2UL and RZ/Five
->                - renesas,r9a07g044-wdt    # RZ/G2{L,LC}
->                - renesas,r9a07g054-wdt    # RZ/V2L
-> +              - renesas,r9a08g045-wdt    # RZ/G3S
->            - const: renesas,rzg2l-wdt
->  
->        - items:
-> -- 
-> 2.39.2
-> 
+[1/1] dt-bindings: mfd: twl: Convert trivial subdevices to json-schema
+      commit: f9463e7b73bbd3b6dee77c0387e2ebc9e61fe0e4
+
+--
+Lee Jones [李琼斯]
+
 
