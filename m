@@ -1,72 +1,72 @@
-Return-Path: <linux-watchdog+bounces-946-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-947-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94E048A2D33
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Apr 2024 13:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE7E48A2D38
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Apr 2024 13:22:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 218871F22FF8
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Apr 2024 11:21:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59ACA1F230B7
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Apr 2024 11:22:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CA6753E2B;
-	Fri, 12 Apr 2024 11:21:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39C975474D;
+	Fri, 12 Apr 2024 11:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="la2JI6cn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="clN27y6b"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC3550A6C;
-	Fri, 12 Apr 2024 11:21:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BB923FBA4;
+	Fri, 12 Apr 2024 11:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712920888; cv=none; b=DJsoGgUqDEPGHAw1RjiNYP1C63fiSyju+YXg3AtlKhjc35S6SX7avn/oABTgJTi2XBc8chz4ylTXniC7P3X2HxDc1nxtI7vfjVoRLPeGhgUxy4lQkjK1yBCXkei0HiV6LBp0IaNtMwoyvYcmNuBHSEotcqxa4sL2w3CzSLWh5sg=
+	t=1712920913; cv=none; b=bqXDGyeAwlIDeU47m6QgaJV5x9pai0hRegY/pDBjlDq68sPXYCqpPv7uXFo98sbFYnuYdd864vnQFg2PA5boPg8U5L68rMFU5e+BTJBAzY1uqPvhh9lMeww7s4fLtbhEUPK2uyaBnY43U2dZRzVeKYDlp32kapHs97Nk0tDflfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712920888; c=relaxed/simple;
-	bh=TrYz9UDqxWjwVJaiIKMAsZXTVaUZhuYJVQblCZVXou0=;
+	s=arc-20240116; t=1712920913; c=relaxed/simple;
+	bh=ICjbDnzBp7YpJW5wHpjhB1igpp/jyJ4DlGLkYn0k7D4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Winr32qjNPHeT5/gfRSFGytGLSLMjm3faX0NiCCFkgxoMBQSbIWQinpVVS9o7vh9/Zhi/2ETVD+sbbSKmXJP8ZL8BkPP07Kl3MZNMzNj8pk46dEW85BvVuZC404TgvUQMIWrjZmjNBfxujINY/bPsgM+5xoP6dML1OoG8mcY9gU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=la2JI6cn; arc=none smtp.client-ip=209.85.167.47
+	 Content-Type:Content-Disposition:In-Reply-To; b=jFCsGcTIqd9xEJKCkOdqr/J7yyg+x7/lXZ10Ar1a3Xf1wbu51jQ51JOy0U5sbYd5Wf/+c08uXl5JRb7CwKJVAg4w8KtKtw7UIBl6iqEsJu/JNTpxDFt35e1MRDBoJvGlHkrB//p+m+EO1h8VSqaqCT0iYXpQgsSUkPyhZqPN7wI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=clN27y6b; arc=none smtp.client-ip=209.85.208.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-518931f8d23so220461e87.3;
-        Fri, 12 Apr 2024 04:21:26 -0700 (PDT)
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2da0f8f7b24so3488411fa.1;
+        Fri, 12 Apr 2024 04:21:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712920885; x=1713525685; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712920910; x=1713525710; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rC42Iv2fV40TZlZTcwRZ45fA0AdSbCtIhnE2lMAxxcM=;
-        b=la2JI6cnsjwLm3uw9pKcg879+AjuPmFkQxS3hlgPdjwP2P1dtksqzcRWA/kIJH2PIP
-         vHwZj7w3MT+ol/wDNLvkrp96JdUmen10Qhh7IyQr7LoDZeX2n9wREKdKUL4nSMqiAziB
-         A/V5eHr/XhB6v6lh7bV38qRSeSxukv/Zcmk0eTEPQjcSv9mpl31L0N01Mrftdw/kdWe4
-         KMjOrJhyk9YIuYHOaXE8D6/CHD4Lu5uSUsKOruTJngR+vbHfZK3HTXGbK9T7KEHTPO1z
-         bEJRVF1JznXz5NIbhjwgIvUUKdAvDNTOu1hWqHO4KgUJgSpYuBjwxCquhGgnmUt2jkNU
-         xlIg==
+        bh=f0FnZZT+KcP9KEAgIqjqP1/fvPTSQMK3ieIGYRwUR+Q=;
+        b=clN27y6bBUUyS8xI3DMhm87GqmAmBb/MjHXpKi0a79DGx0eH2MEk1So80iLxbZVzet
+         ORMlNwtCfHiCmpLVwym1uuS8Alkjge2msuy82m3mCQikzAiFNK6zdHKPNmhtL8XEaONw
+         KBn49PGuKWaEbVV1gcT0DeXRcOPkWzbCewOm7eGg/7o2qF0wROaNGtetpKtYoV/GVjfh
+         1qFQEyOp29fNLcCSdS5uzzjY8PlG2aHr7w11Dw9Uiw6mYk47mpWq0ZOXVWuUjL+rHB61
+         XrErxQtf54KYXa1gZ2RSWxjaQDJAXepie5EBPidRh6PWALm0i1krxlbVzWoCeJYGJlNg
+         Ld7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712920885; x=1713525685;
+        d=1e100.net; s=20230601; t=1712920910; x=1713525710;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rC42Iv2fV40TZlZTcwRZ45fA0AdSbCtIhnE2lMAxxcM=;
-        b=aRv8Lc/kUt/hdkbxmNOvbjTifcWkwz5u+FLySYkDyIRm+tzu6oZezFYepkMKHZTlT5
-         MzDmXNW5o0JggIlM5umDVcLcXtrd5mrYirqXmGsJUJhtLdlXmPGULfHj4g/s7rDHOF9o
-         cF/MIPZqXlVXsjVFjp5HW3WPdnDGdM510W2RqQZzRIbLJlOceU9T4ZN7NPfMeLXBfbLe
-         NdKdF8kMnvtWlVx66U/IBQw0DQkyx2XfAdrmIkqXnGLQzKTOeuQxpZOgu+PM8olCN5SW
-         q8/VbPvr8tAT8ymCIykZymN3sEtW+tgHFgm+mkTlzotYDwzODwdKI756BjG+hsTCh61V
-         cpQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWTwwv0Nnk6S8bL0C6ctgGmKlzvDnV51ZSk8O7R7dnnxPqG/2wHOJGTP5D5x7U4aAvN+B3u6AxSTaY7hhJcHa6Mwo3X7Ld0glle2vIh9NENFKTblJWSXBzuwuHQMgpE2rLgbDdIOowM9OZZn9h3UTIcSSRuEMz8BN/YNhzCpomyCZbwBrs7YqAZ
-X-Gm-Message-State: AOJu0Yx+KRZb/A1iplUm/jhuZO1z3aZ97nfOGs6TvmvYH01mGVSnn/eV
-	sZgZoSrOx1ucp+JIRtWi5ndl+rRlFlKH2Wuh92ZIgsV+DiQcxfAV
-X-Google-Smtp-Source: AGHT+IEZycmTojkKN9PWrCiQ9xYtYdUa28iY1OYShhXvIFi0fw+RbuwzJnpgvVLWgR4Hsrqe9aLHvg==
-X-Received: by 2002:ac2:4182:0:b0:516:d0c2:755 with SMTP id z2-20020ac24182000000b00516d0c20755mr1391618lfh.63.1712920884392;
-        Fri, 12 Apr 2024 04:21:24 -0700 (PDT)
+        bh=f0FnZZT+KcP9KEAgIqjqP1/fvPTSQMK3ieIGYRwUR+Q=;
+        b=dS3ELkrbH+10gug7lVJOEOXejjb6MMEqlK+LATJ//t0o/BWnHbL1uzysaDtiokdPKs
+         rVCAvoifQZyQ2h/EAg7XyHU621wWcSWFPkmzqqSay+jUr/DdROH1gJOCKoQKB6o3fVlQ
+         PowpklZ6ralu+YUVBgIX/FuTotYIT6GtUOQU5dEWpTBAOriVvBqQB7zCeioqFyokZL+O
+         6OXijKOTya2RZMZVdhFhcvn03NO0KoXBd792VT1xm3TAT+lO6tvve+CanIYuL+jt91rF
+         cHiq4ZJo2wUVFZE96Rf1dfd5RnHdNPd3pTUR6uanh1Pb3FeIws1jxTX2r8/gHu8WN0pN
+         d/bg==
+X-Forwarded-Encrypted: i=1; AJvYcCXcxhqYCbxJBuY9UZcR2jmy0O8GYfuGtrVCw64D0anAoTgumvqS8oNWnRtX5sZtCHjKg2tK6xz06F1UHnSiPJXORGWrxmp0W0fdEvUWoaAWPa/gSTLjX65yc8jh4/bzUDGYepPmagDpoU9FmSxOCZLEf7j3fgyf6mBZ3KUnKoyWNIcpi70Y2khO
+X-Gm-Message-State: AOJu0YxcTBhyaJWQst8hUpujsLQZq3+bf0kEYZF5Pb2cz6AGD+We2FwV
+	68gzv0C2f8j/nO5OZndgVPt8c+M35bhiHGzFo1y92SwpZicdwJTZ
+X-Google-Smtp-Source: AGHT+IGAU1wM3iGx1bcc2Bp3RGehHS3EmMJfEuFkOpeIZTEtADx9nAWEEmpZDaqqY15QctMYNO3X7w==
+X-Received: by 2002:a2e:be1a:0:b0:2d8:4892:bee2 with SMTP id z26-20020a2ebe1a000000b002d84892bee2mr919183ljq.20.1712920909508;
+        Fri, 12 Apr 2024 04:21:49 -0700 (PDT)
 Received: from fedora ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id f1-20020a056512360100b00516c5eef5c7sm496404lfs.243.2024.04.12.04.21.23
+        by smtp.gmail.com with ESMTPSA id u12-20020a2e2e0c000000b002d9f87402e3sm291732lju.51.2024.04.12.04.21.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Apr 2024 04:21:23 -0700 (PDT)
-Date: Fri, 12 Apr 2024 14:21:18 +0300
+        Fri, 12 Apr 2024 04:21:48 -0700 (PDT)
+Date: Fri, 12 Apr 2024 14:21:44 +0300
 From: Matti Vaittinen <mazziesaccount@gmail.com>
 To: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
 	Matti Vaittinen <mazziesaccount@gmail.com>
@@ -79,8 +79,8 @@ Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: [RFC PATCH v2 1/6] dt-bindings: ROHM BD96801 PMIC regulators
-Message-ID: <27a1c489f62e46a80643fe86cca101fb5aadb7f4.1712920132.git.mazziesaccount@gmail.com>
+Subject: [RFC PATCH v2 2/6] dt-bindings: mfd: bd96801 PMIC core
+Message-ID: <ea49494429528cf8e60fa984ae1f523ddacd850c.1712920132.git.mazziesaccount@gmail.com>
 References: <cover.1712920132.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
@@ -89,111 +89,213 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="CBMlU3iBsibC+fvd"
+	protocol="application/pgp-signature"; boundary="FddxCH5IwRm71hnx"
 Content-Disposition: inline
 In-Reply-To: <cover.1712920132.git.mazziesaccount@gmail.com>
 
 
---CBMlU3iBsibC+fvd
+--FddxCH5IwRm71hnx
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 ROHM BD96801 is a highly configurable automotive grade PMIC. Introduce
-DT bindings for the BD96801 regulators.
+DT bindings for the BD96801 core.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
 ---
 Revision history:
-- No changes since RFCv1
+RFCv1 =3D> RFCv2:
+  - Document rohm,hw-timeout-ms
+  - Document rohm,wdg-action
+---
+ .../bindings/mfd/rohm,bd96801-pmic.yaml       | 171 ++++++++++++++++++
+ 1 file changed, 171 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic=
+=2Eyaml
 
- .../regulator/rohm,bd96801-regulator.yaml     | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd9680=
-1-regulator.yaml
-
-diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd96801-regul=
-ator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd96801-regula=
-tor.yaml
+diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic.yaml b=
+/Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic.yaml
 new file mode 100644
-index 000000000000..4015802a3d84
+index 000000000000..31ef787d6a8a
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/rohm,bd96801-regulator.ya=
-ml
-@@ -0,0 +1,69 @@
++++ b/Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic.yaml
+@@ -0,0 +1,171 @@
 +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/regulator/rohm,bd96801-regulator.yaml#
++$id: http://devicetree.org/schemas/mfd/rohm,bd96801-pmic.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: ROHM BD96801 Power Management Integrated Circuit regulators
++title: ROHM BD96801 Scalable Power Management Integrated Circuit
 +
 +maintainers:
 +  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 +
 +description: |
-+  This module is part of the ROHM BD96801 MFD device. For more details
-+  see Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic.yaml.
++  BD96801 is an automotive grade single-chip power management IC.
++  It integrates 4 buck converters and 3 LDOs with safety features like
++  over-/under voltage and over current detection and a watchdog.
 +
-+  The regulator controller is represented as a sub-node of the PMIC node
-+  on the device tree.
++properties:
++  compatible:
++    const: rohm,bd96801
 +
-+  Regulator nodes should be named to BUCK_<number> and LDO_<number>.
-+  The valid names for BD96801 regulator nodes are
-+  BUCK1, BUCK2, BUCK3, BUCK4, LDO5, LDO6, LDO7
-+
-+patternProperties:
-+  "^LDO[5-7]$":
-+    type: object
++  reg:
 +    description:
-+      Properties for single LDO regulator.
-+    $ref: regulator.yaml#
++      I2C slave address.
++    maxItems: 1
 +
-+    properties:
-+      regulator-name:
-+        pattern: "^ldo[5-7]$"
-+        description:
-+          Name of the regulator. Should be "ldo5", ..., "ldo7"
-+      rohm,initial-voltage-microvolt:
-+        description:
-+          Initial voltage for regulator. Voltage can be tuned +/-150 mV fr=
-om
-+          this value. NOTE, This can be modified via I2C only when PMIC is=
- in
-+          STBY state.
-+        minimum: 300000
-+        maximum: 3300000
-+
-+  "^BUCK[1-4]$":
-+    type: object
++  interrupts:
 +    description:
-+      Properties for single BUCK regulator.
-+    $ref: regulator.yaml#
++      The PMIC provides intb and errb IRQ lines. The errb IRQ line is used
++      for fatal IRQs which will cause the PMIC to shut down power outputs.
++      In many systems this will shut down the SoC contolling the PMIC and
++      connecting/handling the errb can be omitted. However, there are cases
++      where the SoC is not powered by the PMIC. In that case it may be
++      useful to connect the errb and handle errb events.
++    minItems: 1
++    maxItems: 2
 +
-+    properties:
-+      regulator-name:
-+        pattern: "^buck[1-4]$"
-+        description:
-+          should be "buck1", ..., "buck4"
-+      rohm,initial-voltage-microvolt:
-+        description:
-+          Initial voltage for regulator. Voltage can be tuned +/-150 mV fr=
-om
-+          this value. NOTE, This can be modified via I2C only when PMIC is=
- in
-+          STBY state.
-+        minimum: 500000
-+        maximum: 3300000
-+      rohm,keep-on-stby:
-+        description:
-+          Keep the regulator powered when PMIC transitions to STBY state.
-+        type: boolean
++  interrupt-names:
++    minItems: 1
++    items:
++      - enum: [intb, errb]
++      - const: errb
 +
-+    required:
-+      - regulator-name
-+  additionalProperties: false
++  rohm,hw-timeout-ms:
++    description:
++      Watchdog timeout value(s). First walue is timeout limit. Second valu=
+e is
++      optional value for 'too early' watchdog ping if window timeout mode =
+is
++      to be used.
++    minItems: 1
++    maxItems: 2
++
++  rohm,wdg-action:
++    description:
++      Whether the watchdog failure must turn off the regulator power outpu=
+ts or
++      just toggle the INTB line.
++    enum:
++      - prstb
++      - intb-only
++
++  regulators:
++    $ref: ../regulator/rohm,bd96801-regulator.yaml
++    description:
++      List of child nodes that specify the regulators.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-names
++  - regulators
++
 +additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/leds/common.h>
++    i2c {
++        #address-cells =3D <1>;
++        #size-cells =3D <0>;
++        pmic: pmic@60 {
++            reg =3D <0x60>;
++            compatible =3D "rohm,bd96801";
++            interrupt-parent =3D <&gpio1>;
++            interrupts =3D <29 IRQ_TYPE_LEVEL_LOW>, <6 IRQ_TYPE_LEVEL_LOW>;
++            interrupt-names =3D "intb", "errb";
++
++            regulators {
++                buck1: BUCK1 {
++                    regulator-name =3D "buck1";
++                    regulator-ramp-delay =3D <1250>;
++                    /* 0.5V min INITIAL - 150 mV tune */
++                    regulator-min-microvolt =3D <350000>;
++                    /* 3.3V + 150mV tune */
++                    regulator-max-microvolt =3D <3450000>;
++
++                    /* These can be set only when PMIC is in STBY */
++                    rohm,initial-voltage-microvolt =3D <500000>;
++                    regulator-ov-error-microvolt =3D <230000>;
++                    regulator-uv-error-microvolt =3D <230000>;
++                    regulator-temp-protection-kelvin =3D <1>;
++                    regulator-temp-warn-kelvin =3D <0>;
++                };
++                buck2: BUCK2 {
++                    regulator-name =3D "buck2";
++                    regulator-min-microvolt =3D <350000>;
++                    regulator-max-microvolt =3D <3450000>;
++
++                    rohm,initial-voltage-microvolt =3D <3000000>;
++                    regulator-ov-error-microvolt =3D <18000>;
++                    regulator-uv-error-microvolt =3D <18000>;
++                    regulator-temp-protection-kelvin =3D <1>;
++                    regulator-temp-warn-kelvin =3D <1>;
++                };
++                buck3: BUCK3 {
++                    regulator-name =3D "buck3";
++                    regulator-min-microvolt =3D <350000>;
++                    regulator-max-microvolt =3D <3450000>;
++
++                    rohm,initial-voltage-microvolt =3D <600000>;
++                    regulator-ov-warn-microvolt =3D <18000>;
++                    regulator-uv-warn-microvolt =3D <18000>;
++                    regulator-temp-protection-kelvin =3D <1>;
++                    regulator-temp-error-kelvin =3D <0>;
++                };
++                buck4: BUCK4 {
++                    regulator-name =3D "buck4";
++                    regulator-min-microvolt =3D <350000>;
++                    regulator-max-microvolt =3D <3450000>;
++
++                    rohm,initial-voltage-microvolt =3D <600000>;
++                    regulator-ov-warn-microvolt =3D <18000>;
++                    regulator-uv-warn-microvolt =3D <18000>;
++                    regulator-temp-protection-kelvin =3D <1>;
++                    regulator-temp-error-kelvin =3D <0>;
++                };
++                ldo5: LDO5 {
++                    regulator-name =3D "ldo5";
++                    regulator-min-microvolt =3D <300000>;
++                    regulator-max-microvolt =3D <3300000>;
++
++                    rohm,initial-voltage-microvolt =3D <500000>;
++                    regulator-ov-error-microvolt =3D <36000>;
++                    regulator-uv-error-microvolt =3D <34000>;
++                    regulator-temp-protection-kelvin =3D <1>;
++                    regulator-temp-warn-kelvin =3D <0>;
++                };
++                ldo6: LDO6 {
++                    regulator-name =3D "ldo6";
++                    regulator-min-microvolt =3D <300000>;
++                    regulator-max-microvolt =3D <3300000>;
++
++                    rohm,initial-voltage-microvolt =3D <300000>;
++                    regulator-ov-error-microvolt =3D <36000>;
++                    regulator-uv-error-microvolt =3D <34000>;
++                    regulator-temp-protection-kelvin =3D <1>;
++                    regulator-temp-warn-kelvin =3D <0>;
++                };
++                ldo7: LDO7 {
++                    regulator-name =3D "ldo7";
++                    regulator-min-microvolt =3D <300000>;
++                    regulator-max-microvolt =3D <3300000>;
++
++                    rohm,initial-voltage-microvolt =3D <500000>;
++                    regulator-ov-error-microvolt =3D <36000>;
++                    regulator-uv-error-microvolt =3D <34000>;
++                    regulator-temp-protection-kelvin =3D <1>;
++                    regulator-temp-warn-kelvin =3D <0>;
++                };
++            };
++        };
++    };
 --=20
 2.43.2
 
@@ -210,20 +312,20 @@ Simon says - in Latin please.
 ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
 Thanks to Simon Glass for the translation =3D]=20
 
---CBMlU3iBsibC+fvd
+--FddxCH5IwRm71hnx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmYZGS4ACgkQeFA3/03a
-ocUMhwgAv3OfDjN8vqibNLKzONmxpCc0pyu5mxH7Z6o1iRcyp+PDn51va68nxvPx
-hYaDizDr2B/U7xAFD9+h+1D1OqnLmDqKgsZZzuovdnse4yxUxQV7nBrsWYtmSAcH
-q9gE9rfAm/c653N7XgCbHEWIGaI5u5dIpubMUAFwwQOgd1YNnMBbVxsSN25QEKiu
-ZJDMFlXSpOSuqtpyLnf7KI/99oWarw7t0DDgyGWrVJPCukiughgjkVT7bRyLbTHz
-/+tr1P8DsQILJF5AnhedZHtWcg9yNPHpn1XDNqZLC6IOZAq4U96C/zN5mVu7g0ux
-UpV0VrJJWkmHd/HZgmhxz66SC62NJw==
-=p5Kz
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmYZGUgACgkQeFA3/03a
+ocWwEQgAx1At5FCLa0qYwXh4bb2NdqJphOImuCWpRjpt8lk1prqtYLtkPXVi+ZgI
+ihQi5vrbdCddYWsJMa1OUfDLF9mEXjVvLa1T2vDTAK4XvcI5zmrtuEMt/lgeCfXy
+wi7HWj1juzg/8G6Iulng+aDqGMhAHJygP6XGvGGVuCOGNWvJIpmIbMkulmCn+Ayw
+2GQaZLk9qOWXk35gXKkfG9TrIw+QxbkLMaqR4IHyL0S6N7t92qrviF8iWGHbCPrM
+bKFDaWM9hHyfPJ1VwB0F05a7MIn9VuVP1cEek3Jc7UHl/pkSuOXDzWDjIcRj7GlD
+XC5MDVwmjDmagMIuA+QMg8GOZyce6A==
+=brO6
 -----END PGP SIGNATURE-----
 
---CBMlU3iBsibC+fvd--
+--FddxCH5IwRm71hnx--
 
