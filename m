@@ -1,74 +1,74 @@
-Return-Path: <linux-watchdog+bounces-941-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-942-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E9D38A2A45
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Apr 2024 11:05:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F61C8A2BE4
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Apr 2024 12:05:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9CAA28975F
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Apr 2024 09:05:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 80F8B1C2245F
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Apr 2024 10:05:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20EB954FAC;
-	Fri, 12 Apr 2024 08:58:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7980453E0D;
+	Fri, 12 Apr 2024 10:05:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YsBuXPKM"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Z7HYXTPb"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F88F5491B;
-	Fri, 12 Apr 2024 08:58:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794A253819
+	for <linux-watchdog@vger.kernel.org>; Fri, 12 Apr 2024 10:05:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712912324; cv=none; b=XiT21X1tW+XXqBS3by+3atNerw4DukD3kJukVDJq0AVGAyx6UitJFsEsj3qFPjb9Nu11Qh979YjCBshvMYEFFv3ZkVSCwd0qUaO7xL+AeFK73dVZz8xLGRybCv1aMp6EOvNWRwjHRE6m6SVCu+8dMKsSCXUarKUuBB/JJzfoVUQ=
+	t=1712916306; cv=none; b=K3ThsgBqt5uwEc8gGXxzVP3qt09PJS4l5RCkAGCOHgTgIaumUcr6fGpCamWOrMiRVcG1CA6ljmqCKgCLeORBJReZNgZ0YNTTB0mhxmcTD9MKOhJt1hKBQGyY8keeL6IRflkOMdPLtdmb60cCnGxbviIpJ38YsYTkhhEid1HWBhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712912324; c=relaxed/simple;
-	bh=huChjCQNWVRZ2z0cjXm27vIfd7qkeml70iNGjBlY0Y4=;
+	s=arc-20240116; t=1712916306; c=relaxed/simple;
+	bh=m7SZnyJBVQZSm3/ZMgPP8KmAohN82QOdxqDUo61ETQY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ss1dRjQGDani3lq40k2Cn3hytEXaa5+ttMJsUJhQg/IJWHSF6rOAUa+T3lWw9ZE7uMBOLszr21iaor+gRq9lUs24sSLMcgZjqMeapIpuLpJ6LWU+bI/AHvpz65/OT9JFCbw+1cavcMgAPFdPlNgpwoAFU4rihzpSBnXxElR1RrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YsBuXPKM; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-516d09bd434so867969e87.1;
-        Fri, 12 Apr 2024 01:58:41 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=F6+inFhryAlOPT9G9Jji212CxRslMblEc7ESeppgOb2eZWIB/78DOQdopc8Is5kS5L7slpVwp95oEzYrmsc/iQnxia8JQJK8+GL1asA7DMvoS23p6BuO5NsGRcTTnBWesZjoPyqExYY6HkKJ0y3r6OKbclmTZWQ8LYBZY6ccRSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Z7HYXTPb; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-56e2c1650d8so684656a12.0
+        for <linux-watchdog@vger.kernel.org>; Fri, 12 Apr 2024 03:05:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712912320; x=1713517120; darn=vger.kernel.org;
+        d=tuxon.dev; s=google; t=1712916302; x=1713521102; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=fFYPg17+SisPh/dO8GWqmztHALXDDWObuz1gO+wVXeE=;
-        b=YsBuXPKMGShVXQLGyQ554tX7yJkjdo42l1iFhFlWfpcHX9iUVLyzLPsJJ7XaJvj5nk
-         oZD12daNi0eiXUf3gOzoQpQeVRqy5Mf8jVxYyG4FtdwThPEFu0SBnEPgLyLL9z0Vov4V
-         tB8pJcppMnyM4CYsBWrPE9mmivxApVtlU+Aq8JCZfZKwv2hce9bH+dz23es/IwxscSDv
-         vMwN6VFAxtvCpSaGPlzGybipWHH8XCcCZpBNZrlVKYitDQZenzVllFOwDvSMgVOqgbhU
-         aPGJXtUzqOtFrjPW7D2LKDu1SEK3E0QzA34Bzo9jPsq82ZzL+Id9iQwVSqGO3hCSC1NA
-         FDDg==
+        bh=NmvVpGqH/YnUJn3EKn9NCfL9fG7zsGqsH7iqYTHHqXM=;
+        b=Z7HYXTPbEgHcFEGia5f3Cjw4XQFfFdF11UzWrXfj5n/Cr013pUpChNuVE3Gfi2LXBZ
+         z4MTf+vkcVMv/ixTP04YBHG9LKgTqvq6OqAHs+IuL0l5uDdN4EDadc0x36a8d9OcB/g6
+         K43uquGDN8TlGSmwvb2pk8Ltv4YCTTHny3ZbtWRIPJu5GUX3Fk65V8abkN/385fonp3N
+         FSH17u0IAOZ7rRTg4R6O+hivA7sErjQHtQht5ccslYOAaSCe6RFyxjPrjdgthWUTaF+Y
+         qdw10Cy83XX+CPOc9JdLjLH5FLYZl0F8bI+KSxnAKLRbBban0ytnVIXTOWCwV2wLZY+i
+         tzuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712912320; x=1713517120;
+        d=1e100.net; s=20230601; t=1712916302; x=1713521102;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fFYPg17+SisPh/dO8GWqmztHALXDDWObuz1gO+wVXeE=;
-        b=HLUMs88af9vdX3hrfVuqDtSnYBxFfhUTRVrgx5K+wRZbd+BUPVqeaW/z1150ASioS6
-         lOQ2wK+W/tg+3Fa7KEqBUbD2C5uj58mPaBRyk9Sl33nBYZ4iXPl7gBMnWXAI2Gs7yhHX
-         lxIJSE8eY6JgLnIRLZIE0Ej6JOoaOuGxWgOPUg6HMUjVEPBuCe5Pl9JvHrYHHEK2M0vO
-         hb4ofP4NoNo7uCMopnMoeoaHhYLt7YCvqO29a+1lZP7TipbIuDIy9AsT+NfM0AXyLlrP
-         Y+9xJ9C+0MjLOUvPwRC1TzUNbYzSbo0sMW+NsIRYM2s1UNMCuivTVCNjJ8GKQi+ZvSWn
-         rvNg==
-X-Forwarded-Encrypted: i=1; AJvYcCVihtyZD343/pgq7sGClpeWSwefWAI1ICEyTX3goe9vB/XTsYGlUZ4xuyBOSw6v8vtSmt8bbdODzDUeR6OxTbkpfZSpTVnmqIlI/hKmQ4BHs9ir80HOpaCEXZ7p5H0Q6A1iAHDploGbDRjtosCWWuGXEbtKF/UyH5lBEbh/B5rrRntakYj+MOBp
-X-Gm-Message-State: AOJu0Yy5+MrklEaxxngK9HprKLnsYXjiF9/vurp66hpsNGc6L/obUMyt
-	3dc4XeugTEO30HFmIITZT32Y0QbOuQK9zJk8ypIWQDn6BzRRpiBW
-X-Google-Smtp-Source: AGHT+IGAUv6OT2596DIE+RgEZ5zFhzXzYqcKOgGctjOv73rSkpxzaDu1qnLEdnfnz//LgENdfu6Hvg==
-X-Received: by 2002:a05:6512:21ce:b0:518:8aa3:c4ee with SMTP id d14-20020a05651221ce00b005188aa3c4eemr480147lft.42.1712912320168;
-        Fri, 12 Apr 2024 01:58:40 -0700 (PDT)
-Received: from [172.16.183.82] ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id b25-20020ac247f9000000b00516a01d2f44sm465460lfp.240.2024.04.12.01.58.39
+        bh=NmvVpGqH/YnUJn3EKn9NCfL9fG7zsGqsH7iqYTHHqXM=;
+        b=mYDkAKPhTW092w5Thepz7RMLfn/DiydjnHMZqi71GBy/CSPLMR9r2rQrAg5grOQjST
+         GqqTrFM5A1Q2XztpU4oiGflXEglSIlRUSnYSFdxoAdVGJZJlDl6f+hwko0rXl7F1yzTw
+         K8ueyXxfHk2kW3xRgU47D9FGfrbalivj98ZjVqhEUd52p55D220lvv7e94YV2D8gvS9O
+         ok9F4vHb3YHb01uJl/nCecZgZTNxJGSWSDCfv5shdlpYo01J/lOT8flSswWZmSS4+DGp
+         FptP2GFq1woVDdBEpyoF94spYHcLg7Jug/vKxUF7RuUm8IGUzSbBxibx1qzdqK0pmIN1
+         Q+VA==
+X-Forwarded-Encrypted: i=1; AJvYcCWxMnvWfhpiYCW/S3Un0efQfcEr82/JGuSJdHIzT4J2XRjv+2Jbyom5MzCr8EHpn82ha01BxvaZi5ph58VPZgKKby9QB4SEg4mYkvHo5GA=
+X-Gm-Message-State: AOJu0Yz7W4rp3+2TahDgo2SEUsgwn63udN40hZyW4nU+e/p80dClvAvj
+	JzlS82kuPtrQCSCmmCbWpjmmGnLVT9EjLYTtXg4YbG9pLhrJVqfFNaeDryuvRRc=
+X-Google-Smtp-Source: AGHT+IHQMQDAmt/KUMiRX2jfsv9Ugd19LQKa3XJw1aZ7aEKYJ1UBxTCpp3X0iWhacATHBs5n4+le0A==
+X-Received: by 2002:a17:906:36d6:b0:a51:d7f3:324b with SMTP id b22-20020a17090636d600b00a51d7f3324bmr1290933ejc.66.1712916301420;
+        Fri, 12 Apr 2024 03:05:01 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.8])
+        by smtp.gmail.com with ESMTPSA id g22-20020a1709063b1600b00a4e533085aesm1637200ejf.129.2024.04.12.03.04.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Apr 2024 01:58:39 -0700 (PDT)
-Message-ID: <700b63a1-ce91-4d91-9db7-43c195ba7a6f@gmail.com>
-Date: Fri, 12 Apr 2024 11:58:38 +0300
+        Fri, 12 Apr 2024 03:05:00 -0700 (PDT)
+Message-ID: <2a07d159-fdd4-48d4-b351-01f5e2579c3a@tuxon.dev>
+Date: Fri, 12 Apr 2024 13:04:58 +0300
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -76,191 +76,168 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 3/6] mfd: support ROHM BD96801 PMIC core
-Content-Language: en-US, en-GB
-To: Lee Jones <lee@kernel.org>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
- Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <cover.1712058690.git.mazziesaccount@gmail.com>
- <b86b7a73968810339b6cea7701bc3b6f626b4086.1712058690.git.mazziesaccount@gmail.com>
- <20240411143856.GD2399047@google.com>
- <25c959bc-fb02-42d9-b973-4a74cebd7208@gmail.com>
- <20240412072347.GM2399047@google.com>
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20240412072347.GM2399047@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v3 0/9] clk: renesas: rzg2l: Add support for power domains
+Content-Language: en-US
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ magnus.damm@gmail.com, linux-renesas-soc@vger.kernel.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Linux PM list <linux-pm@vger.kernel.org>, Guenter Roeck
+ <linux@roeck-us.net>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
+References: <20240410122657.2051132-1-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdUesJe0396MsH9PSUMEq=sWx3BYc=QrAFzR2EVcLhm03Q@mail.gmail.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <CAMuHMdUesJe0396MsH9PSUMEq=sWx3BYc=QrAFzR2EVcLhm03Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 4/12/24 10:23, Lee Jones wrote:
-> On Fri, 12 Apr 2024, Matti Vaittinen wrote:
+Hi, Geert,
+
+On 11.04.2024 18:30, Geert Uytterhoeven wrote:
+> Hi Claudiu,
 > 
->> Hi deee Ho Lee!
+> CC pmdomain, watchdog
+> 
+> On Wed, Apr 10, 2024 at 2:27 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>> Series adds support for power domains on rzg2l driver.
 >>
->> Thanks a ton for taking a look at this :) I already sent the V2 yesterday,
->> briefly before receiving your comments. I think all of the comments are
->> relevant for the V2 as well, I will fix them for the V3 when I get to that.
->> If you find the time to take a look at V2, then the major things are
->> addition of a watchdog IRQ + a work-around for the debugFS name collision
->> for IRQ domains.
+>> RZ/G2L kind of devices support a functionality called MSTOP (module
+>> stop/standby). According to hardware manual the module could be switch
+>> to standby after its clocks are disabled. The reverse order of operation
+>> should be done when enabling a module (get the module out of standby,
+>> enable its clocks etc).
 >>
->> On 4/11/24 17:38, Lee Jones wrote:
->>> On Tue, 02 Apr 2024, Matti Vaittinen wrote:
->>>
->>>> The ROHM BD96801 PMIC is highly customizable automotive grade PMIC
->>>> which integrates regulator and watchdog funtionalities.
->>>>
->>>> Provide IRQ and register accesses for regulator/watchdog drivers.
->>>>
->>>> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->>>> ---
->>>>    drivers/mfd/Kconfig              |  13 +
->>>>    drivers/mfd/Makefile             |   1 +
->>>>    drivers/mfd/rohm-bd96801.c       | 454 +++++++++++++++++++++++++++++++
->>>>    include/linux/mfd/rohm-bd96801.h | 212 +++++++++++++++
->>>>    include/linux/mfd/rohm-generic.h |   1 +
->>>>    5 files changed, 681 insertions(+)
->>>>    create mode 100644 drivers/mfd/rohm-bd96801.c
->>>>    create mode 100644 include/linux/mfd/rohm-bd96801.h
->>>>
->>>> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
->>>> index 4b023ee229cf..947045eb3a8e 100644
->>>> --- a/drivers/mfd/Kconfig
->>>> +++ b/drivers/mfd/Kconfig
->>>> @@ -2089,6 +2089,19 @@ config MFD_ROHM_BD957XMUF
->>>>    	  BD9573MUF Power Management ICs. BD9576 and BD9573 are primarily
->>>>    	  designed to be used to power R-Car series processors.
->>>> +config MFD_ROHM_BD96801
->>>> +	tristate "ROHM BD96801 Power Management IC"
->>>> +	depends on I2C=y
->>>> +	depends on OF
->>>> +	select REGMAP_I2C
->>>> +	select REGMAP_IRQ
->>>> +	select MFD_CORE
->>>> +	help
->>>> +	  Select this option to get support for the ROHM BD96801 Power
->>>> +	  Management IC. The ROHM BD96801 is a highly scalable power management
->>>
->>> Power Management
+>> In [1] the MSTOP settings were implemented by adding code in driver
+>> to attach the MSTOP state to the IP clocks. But it has been proposed
+>> to implement it as power domain. The result is this series.
 >>
->> Out of the curiosity, why is the "Power Management IC" written with
->> capitals, when speaking of a class of devices instead of a model? (I am 100%
->> fine with the change, just curious).
-> 
-> It's no different to how its expressed in the tristate section above.
-> 
-> Power Management IC or PMIC.
-> 
->    "provides power management capabilities" describes its function?
-> 
->    "is a scalable Power Management IC", describes the device?
-> 
-> But actually, it just looks odd when both are used in the same section.
-> 
-> /me likes uniformity and consistency.
-
-It's okay, thanks for the explanation :)
-
->>>> +	  IC for industrial and automotive use. The BD96801 can be used as a
->>>> +	  master PMIC in a chained PMIC solutions with suitable companion PMICs
->> ...
+>> Along with MSTOP functionality there is also module power down
+>> functionality (which is currently available only on RZ/G3S). This has
+>> been also implemented through power domains.
 >>
->>>> +static int bd96801_i2c_probe(struct i2c_client *i2c)
->>>> +{
->>>> +	int i, ret, intb_irq, errb_irq, num_regu_irqs, num_intb, num_errb = 0;
->>>> +	struct regmap_irq_chip_data *intb_irq_data, *errb_irq_data;
->>>> +	struct irq_domain *intb_domain, *errb_domain;
->>>> +	const struct fwnode_handle *fwnode;
->>>> +	struct resource *regulator_res;
->>>> +	struct regmap *regmap;
->>>> +
->>>> +	fwnode = dev_fwnode(&i2c->dev);
->>>> +	if (!fwnode) {
->>>> +		dev_err(&i2c->dev, "no fwnode\n");
->>>> +		return -EINVAL;
->>>
->>> Why not dev_err_probe() here for uniformity?
+>> The DT bindings were updated with power domain IDs (plain integers
+>> that matches the DT with driver data structures). The current DT
+>> bindings were updated with module IDs for the modules listed in tables
+>> with name "Registers for Module Standby Mode" (see HW manual) exception
+>> being RZ/G3S where, due to the power down functionality, the DDR,
+>> TZCDDR, OTFDE_DDR were also added, to avoid system being blocked due
+>> to the following lines of code from patch 6/9.
 >>
->> I can change it to dev_err_probe() if it's strongly preferred. It just feels
->> silly to use dev_err_probe() when the return value is hardcoded.
-> 
-> Not at all:
-> 
-> git grep dev_err_probe | grep "\-[A-Z]" 
-
-Yes, I know people do use the dev_err_probe() with hardcoded errors but 
-it does not make me feel any better about it :)
-
->> Intentionally writing code like
+>> +       /* Prepare for power down the BUSes in power down mode. */
+>> +       if (info->pm_domain_pwrdn_mstop)
+>> +               writel(CPG_PWRDN_MSTOP_ENABLE, priv->base + CPG_PWRDN_MSTOP);
 >>
->> err = -EINVAL;
->> if (err == ...)
+>> Domain IDs were added to all SoC specific bindings.
 >>
->> just makes me feel a bit sick.
-> 
-> Why would you want to do that?
-
-This is what the dev_err_probe() with a hardcoded err does, right?
-
-int dev_err_probe(const struct device *dev, int err, const char *fmt, ...)
-{
-	...
-	if (err != -EPROBE_DEFER) {
-		dev_err(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
-	} else {
-		device_set_deferred_probe_reason(dev, &vaf);
-		dev_dbg(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
-	}
-	...
-}
-
-> 
->>>> +	}
->>>> +
->>>> +	intb_irq = fwnode_irq_get_byname(fwnode, "intb");
->>>> +	if (intb_irq < 0)
->>>> +		return dev_err_probe(&i2c->dev, intb_irq,
->>>> +				     "No INTB IRQ configured\n");
->>>
->>> This function would look nicer if you expanded to 100-chars.
+>> Thank you,
+>> Claudiu Beznea
 >>
->> The reason why I still prefer the good old 80-chars for files I work with,
->> is that I am often having 3 terminal windows parallel on my laptop screen.
->> (Or, when I have my wide mofnitor connected it is 3 editor windows +
->> minicom). I need to keep the terminals small enough. Besides... I hate to
->> admit this, but the time is finally taking it's toll. My eyes aren't quite
->> the same they were 2 years ago...
+>> Changes in v3:
+>> - collected tags
+>> - dinamically detect if a SCIF is serial console and populate
+>>   pd->suspend_check
+>> - dropped patch 09/10 from v2
 > 
-> Upgrade your 14" CRT monitor to something more modern. :)
+> Thanks for the update!
+> 
+> I have provided my R-b for all patches, and the usual path for these
+> patches would be for me to queue patches 1-8 in renesas-clk for v6.10,
+> and to queue 9 in renesas-devel.
+> 
+> However:
+>   1. I had missed before the pmdomain people weren't CCed before,
+>      they still might have some comments,
 
-But those things were built to last! And throwing away perfectly working 
-stuff... :)
+My bad here, I missed it too.
+
+>   2. Patch 9 has a hard dependency on the rest of the series, so
+>      it has to wait one more cycle,
+
+I think 5/9 should also wait to avoid binding validation failures.
+
+>   3. Adding the watchdog domain has a dependency on [1].
+
+Adding the code for it in patch 7/9 w/o passing it as reference to watchdog
+node (as in patch 9/9) is harmless. The previous behavior will be in place.
+
+At the moment the watchdog domain initialization code is not in patch 7/9
+and the patch 9/9 has reference to watchdog domain to pass the DT binding
+validation. The probe will fail though, as I wasn't sure what should be
+better to drop: device probe or reset functionality. I mentioned it in
+patch for suggestions.
 
 > 
-> I have a 32" 4k monitor with a good sized font and each of my 3
-> terminals (per i3 workspace) are ~150 chars wide.
+> 2 and 2 may be resolved using an immutable branch.
+
+2 and 3?
+
+Immutable branch should be good, AFAICT. If that would be the strategy I
+can send an update to also add the initialization data for watchdog domain
+in 7/9. Or I can send an update afterwards. Please let me know how would
+you prefer.
+
+Thank you,
+Claudiu Beznea
+
+> Are my assumptions correct?
 > 
->> So, same old story, I can change this if it is important enough for others,
->> but personally I rather work with the short lines.
+> Thanks!
 > 
-> It's not a showstopper.
-
-I'll revise the line lengths for next version. I think this one still 
-won't go much over 80 chars, which may still fit on my terminals. I'll 
-change it if it fits, keep it if it wont. Thanks for pointing it out :)
-
-Yours,
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+> [1] "[PATCH RESEND v8 09/10] watchdog: rzg2l_wdt: Power on the PM
+>     domain in rzg2l_wdt_restart()"
+>     https://lore.kernel.org/all/20240410134044.2138310-10-claudiu.beznea.uj@bp.renesas.com
+> 
+>> Changes in v2:
+>> - addressed review comments
+>> - dropped:
+>>     - dt-bindings: clock: r9a09g011-cpg: Add always-on power domain IDs
+>>     - clk: renesas: r9a07g043: Add initial support for power domains
+>>     - clk: renesas: r9a07g044: Add initial support for power domains
+>>     - clk: renesas: r9a09g011: Add initial support for power domains
+>>     - clk: renesas: r9a09g011: Add initial support for power domains
+>>     - arm64: dts: renesas: r9a07g043: Update #power-domain-cells = <1>
+>>     - arm64: dts: renesas: r9a07g044: Update #power-domain-cells = <1>
+>>     - arm64: dts: renesas: r9a07g054: Update #power-domain-cells = <1>
+>>     - arm64: dts: renesas: r9a09g011: Update #power-domain-cells = <1>
+>>   as suggested in the review process
+>> - dropped "arm64: dts: renesas: rzg3s-smarc-som: Guard the ethernet IRQ
+>>   GPIOs with proper flags" patch as it was integrated
+>> - added suspend to RAM support
+>> - collected tag
+>>
+>> [1] https://lore.kernel.org/all/20231120070024.4079344-4-claudiu.beznea.uj@bp.renesas.com/
+>>
+>>
+>> Claudiu Beznea (9):
+>>   dt-bindings: clock: r9a07g043-cpg: Add power domain IDs
+>>   dt-bindings: clock: r9a07g044-cpg: Add power domain IDs
+>>   dt-bindings: clock: r9a07g054-cpg: Add power domain IDs
+>>   dt-bindings: clock: r9a08g045-cpg: Add power domain IDs
+>>   dt-bindings: clock: renesas,rzg2l-cpg: Update #power-domain-cells =
+>>     <1> for RZ/G3S
+>>   clk: renesas: rzg2l: Extend power domain support
+>>   clk: renesas: r9a08g045: Add support for power domains
+>>   clk: renesas: rzg2l-cpg: Add suspend/resume support for power domains
+>>   arm64: dts: renesas: r9a08g045: Update #power-domain-cells = <1>
+>>
+>>  .../bindings/clock/renesas,rzg2l-cpg.yaml     |  18 +-
+>>  arch/arm64/boot/dts/renesas/r9a08g045.dtsi    |  20 +-
+>>  drivers/clk/renesas/r9a08g045-cpg.c           |  61 ++++
+>>  drivers/clk/renesas/rzg2l-cpg.c               | 269 +++++++++++++++++-
+>>  drivers/clk/renesas/rzg2l-cpg.h               |  77 +++++
+>>  include/dt-bindings/clock/r9a07g043-cpg.h     |  52 ++++
+>>  include/dt-bindings/clock/r9a07g044-cpg.h     |  58 ++++
+>>  include/dt-bindings/clock/r9a07g054-cpg.h     |  58 ++++
+>>  include/dt-bindings/clock/r9a08g045-cpg.h     |  70 +++++
+>>  9 files changed, 659 insertions(+), 24 deletions(-)
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
