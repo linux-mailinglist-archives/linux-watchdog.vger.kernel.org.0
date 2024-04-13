@@ -1,227 +1,180 @@
-Return-Path: <linux-watchdog+bounces-952-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-953-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 120878A301C
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Apr 2024 16:02:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EB298A3BBD
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Apr 2024 10:49:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 351481C24901
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Apr 2024 14:02:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 513D3282480
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Apr 2024 08:49:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F7786260;
-	Fri, 12 Apr 2024 14:02:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="qjnxA4sF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81E54208B8;
+	Sat, 13 Apr 2024 08:49:29 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BB350241
-	for <linux-watchdog@vger.kernel.org>; Fri, 12 Apr 2024 14:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE9E2032B
+	for <linux-watchdog@vger.kernel.org>; Sat, 13 Apr 2024 08:49:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712930532; cv=none; b=B/wgQxIcLrubNuHwSz+5mACpwvFHUyUPucBlnO86tWGvZ4UCXCvyP2kzbeDleH9w6D2djDmdFlRNI5aHr5SGX5UPKZNxFX/TsYpr55zDueokb4PXI4En2Qb9dtN+iedZkew0YUaj3Kv8Beq41CMVRp3oGGTnKDMELWK7qLfJH1c=
+	t=1712998169; cv=none; b=atkJQDzmZoL288XZEQ9Lyo6KAgxHiiaiRsPtXceBQkMk9HmhOapeWcYJ22LkTrEFaRnfAHcOahEj94Ts+R30hCfAj6nlC4IGRt5hpKyLvssQpUzJdsoQt6GUpfE3/4mYtpRg44k4KAlvutF1E/iPCzWi0LHNXeAGpYSDpKN86zo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712930532; c=relaxed/simple;
-	bh=lYPTWLdvMEVQj9r+jQ2anUCEq2r/crYLuyN/2SuWdLw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aoRdripM2STx3g5IN11v2vXtMhEVfG7GJzlks9zEnvQnSYgfaon4jax6IE7bh435Tj3qHIP2jD+Crl+58nYKmLXpb1s4LKrliNp9HNt0eqpNbjsUIbdk+MgQujIq5KCC8wvqnBimXEzt5regdD88OJcMYIjWA8H8e5dFPoA0Hbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=qjnxA4sF; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a46de423039so55337666b.0
-        for <linux-watchdog@vger.kernel.org>; Fri, 12 Apr 2024 07:02:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1712930528; x=1713535328; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m2IAoqinwRu+uP7N6pyXnwN0TMgTPOq++rvccYitA5w=;
-        b=qjnxA4sFOGNPYBYtf67O2IN0hHym6GSPIJMYhd+F/MDyLDZ2tMLLwM83E0aS3AeTps
-         dbi8YEo8yx4xbnfeTiQ/0KJfyEAUEMCeyGwfEwzjPOW3Tdk9A9FIcU9hzFS+3adI5jIj
-         S6B5yddi7P7V/C03XuGaIrI77JIxy2Kfbhll/5tC2v3dP2/7joeoY1HQpnn7dE889VEo
-         G68FhYoX8D/Dwtjkfal9wjxqQt0rx+zjhkrpxgnzOibSSE8eAEGB/dRM/HZFfEgRzScm
-         w9GjLOLGCdKhMgRnu8DrHK9CWvZaa3V8/9A1FOO8PyQRuJ524a2i9DeT3KHJs9ieoGwv
-         OvqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712930528; x=1713535328;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m2IAoqinwRu+uP7N6pyXnwN0TMgTPOq++rvccYitA5w=;
-        b=Om38/VdyTOPJxqd3mKEpAd5ia8woCb7iMPv+Hyrx/RUCyRnu/prBD2In8M3y6mevZM
-         fNglI2q942CC2gtMH5ZBr1PPZFsEqnO9flNo2WMP0XWJULICnHE5SKLC+3olataBIsHV
-         kHJuZcdQh2Puq36fkjx/yTSRXsJ7s4EZIk8Avj1s2yB+UObMqKgqtCB0ZvvjHdRLpdi2
-         TT70ZL9cih51xh5swe1ou285esXf/aKdY/nY7Z8rSJKRMOA0UAHHpKYA2zFAZ5k2ZLvP
-         dhZswLHDwRDjPF5Ye+B93S9EWJH3mHwKul4N0F+/alZu5/lX/yVj2NTYsUSz9O/tUCrJ
-         tArQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU5LRJ1NWzfK8Mb42i/m20ao44cAkap/bm/bSC8KYRBnH0qnO+44tpjwm0VJiaXaamlS81FmSlSvJgOk3/t7U83aQWWHjeVR3i5YMRNVgs=
-X-Gm-Message-State: AOJu0YxFizS0CN46njLVTPUmnKEEgyX2p8ItsCV3SUMWj+BqotbWfLgU
-	rFe7nkk4Y1gqiLDMM6sRBNPTcQvF2GnFheZETgpPhEzHQJC8GbKk51TyLYDplZE=
-X-Google-Smtp-Source: AGHT+IHR7BiWNm2RQ9m4pL92rZ77hroajU61fyg1U3Ft1ZfMOweIPQK3mpvc11s7193AFpytfpeasQ==
-X-Received: by 2002:a50:8e12:0:b0:56e:2433:a0ab with SMTP id 18-20020a508e12000000b0056e2433a0abmr2606300edw.34.1712930527425;
-        Fri, 12 Apr 2024 07:02:07 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.8])
-        by smtp.gmail.com with ESMTPSA id p32-20020a056402502000b0056bfca6f1c0sm1705644eda.15.2024.04.12.07.02.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Apr 2024 07:02:06 -0700 (PDT)
-Message-ID: <af9c6747-120e-48c1-8c04-9594c9b49666@tuxon.dev>
-Date: Fri, 12 Apr 2024 17:02:04 +0300
+	s=arc-20240116; t=1712998169; c=relaxed/simple;
+	bh=6FIPiQ594KFngeqpTnGrN4qG2Klq6DDn5xZjR0G3Pr4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R30FiWg/fZWLdBFQtdr9i9HKmL1gbfcjtlPLWK0wi+0sh99sFlx6W6v98vBYmwRGP5MrzlBAVwwv4u6Z+/U57DTBcaoGSAgdmZXaKBCf85xPfM2xCeUkDzfOUrAfKd/AWJrETjlfRbT9ugxgVwAASkX57tG3IJ2Jm/2jwiqVD/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rvZ3g-00055f-W5; Sat, 13 Apr 2024 10:48:25 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rvZ3a-00C201-5I; Sat, 13 Apr 2024 10:48:18 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rvZ3a-000gB5-03;
+	Sat, 13 Apr 2024 10:48:18 +0200
+Date: Sat, 13 Apr 2024 10:48:17 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Nikita Shubin <nikita.shubin@maquefel.me>, 
+	Hartley Sweeten <hsweeten@visionengravers.com>, Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
+	Russell King <linux@armlinux.org.uk>, Lukasz Majewski <lukma@denx.de>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Andy Shevchenko <andy@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Thierry Reding <thierry.reding@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
+	Vignesh Raghavendra <vigneshr@ti.com>, Damien Le Moal <dlemoal@kernel.org>, 
+	Sergey Shtylyov <s.shtylyov@omp.ru>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Ralf Baechle <ralf@linux-mips.org>, Aaron Wu <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, 
+	Olof Johansson <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>, linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, Netdev <netdev@vger.kernel.org>, 
+	linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-sound@vger.kernel.org, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Andrew Lunn <andrew@lunn.ch>, Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v9 00/38] ep93xx device tree conversion
+Message-ID: <izbjcqcvjjhwwbrrhk7jer536ydi5gr7gqdg5icsbmialrrepn@dp7q6jvjujrj>
+References: <20240326-ep93xx-v9-0-156e2ae5dfc8@maquefel.me>
+ <66e1da99-5cf4-4506-b0bf-4bdf04959f41@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v8 09/10] watchdog: rzg2l_wdt: Power on the PM
- domain in rzg2l_wdt_restart()
-Content-Language: en-US
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: wim@linux-watchdog.org, linux@roeck-us.net, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, p.zabel@pengutronix.de,
- geert+renesas@glider.be, magnus.damm@gmail.com, biju.das.jz@bp.renesas.com,
- linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20240410134044.2138310-1-claudiu.beznea.uj@bp.renesas.com>
- <20240410134044.2138310-10-claudiu.beznea.uj@bp.renesas.com>
- <CAPDyKFqq+gMDHx_-g-j9rO3nBDcXRSoXRjJK9D51=VaQ5XaGvw@mail.gmail.com>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <CAPDyKFqq+gMDHx_-g-j9rO3nBDcXRSoXRjJK9D51=VaQ5XaGvw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="pjwf7nurmhwqoh67"
+Content-Disposition: inline
+In-Reply-To: <66e1da99-5cf4-4506-b0bf-4bdf04959f41@app.fastmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 
-Hi, Ulf,
 
-On 12.04.2024 14:14, Ulf Hansson wrote:
-> On Wed, 10 Apr 2024 at 16:19, Claudiu <claudiu.beznea@tuxon.dev> wrote:
->>
->> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>
->> The rzg2l_wdt_restart() is called from atomic context. Calling
->> pm_runtime_{get_sync, resume_and_get}() or any other runtime PM resume
->> APIs is not an option as it may lead to issues as described in commit
->> e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait context'")
->> that removed the pm_runtime_get_sync() and used directly the
->> clk_prepare_enable() APIs.
->>
->> Starting with RZ/G3S the watchdog could be part of its own software
->> controlled power domain (see the initial implementation in Link section).
->> In case the watchdog is not used the power domain is off and accessing
->> watchdog registers leads to aborts.
->>
->> To solve this the patch powers on the power domain using
->> dev_pm_genpd_resume() API before enabling its clock. This is not
->> sleeping or taking any other locks as the power domain will not be
->> registered with GENPD_FLAG_IRQ_SAFE flags.
->>
->> Link: https://lore.kernel.org/all/20240208124300.2740313-1-claudiu.beznea.uj@bp.renesas.com
->> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->> ---
->>
->> Changes in v8:
->> - none, this patch is new
->>
->>  drivers/watchdog/rzg2l_wdt.c | 12 ++++++++++++
->>  1 file changed, 12 insertions(+)
->>
->> diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
->> index c8c20cfb97a3..98e5e9914a5d 100644
->> --- a/drivers/watchdog/rzg2l_wdt.c
->> +++ b/drivers/watchdog/rzg2l_wdt.c
->> @@ -12,6 +12,7 @@
->>  #include <linux/module.h>
->>  #include <linux/of.h>
->>  #include <linux/platform_device.h>
->> +#include <linux/pm_domain.h>
->>  #include <linux/pm_runtime.h>
->>  #include <linux/reset.h>
->>  #include <linux/units.h>
->> @@ -164,6 +165,17 @@ static int rzg2l_wdt_restart(struct watchdog_device *wdev,
->>         struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
->>         int ret;
->>
->> +       /*
->> +        * The device may be part of a power domain that is currently
->> +        * powered off. We need to power it up before accessing registers.
->> +        * We don't undo the dev_pm_genpd_resume() as the device need to
->> +        * be up for the reboot to happen. Also, as we are in atomic context
->> +        * here there is no need to increment PM runtime usage counter
->> +        * (to make sure pm_runtime_active() doesn't return wrong code).
->> +        */
->> +       if (!pm_runtime_active(wdev->parent))
->> +               dev_pm_genpd_resume(wdev->parent);
->> +
-> 
-> I doubt this is the correct solution, but I may be wrong. Unless this
-> is invoked at the syscore stage?
+--pjwf7nurmhwqoh67
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On my case I see it invoked from kernel_restart(). As of my code reading,
-at that point only one CPU is active with IRQs disabled (done in
-machine_restart()). Below is the stack trace decoded on next-20240410 with
-this series
-(https://lore.kernel.org/all/20240410134044.2138310-1-claudiu.beznea.uj@bp.renesas.com/)
-on top and the one from here (adding power domain support):
-https://lore.kernel.org/all/20240410122657.2051132-1-claudiu.beznea.uj@bp.renesas.com/
+Hello Arnd,
 
-Hardware name: Renesas SMARC EVK version 2 based on r9a08g045s33 (DT)
-Call trace:
-dump_backtrace (arch/arm64/kernel/stacktrace.c:319)
-show_stack (arch/arm64/kernel/stacktrace.c:326)
-dump_stack_lvl (lib/dump_stack.c:117)
-dump_stack (lib/dump_stack.c:124)
-rzg2l_wdt_restart (drivers/watchdog/rzg2l_wdt.c:180)
-watchdog_restart_notifier (drivers/watchdog/watchdog_core.c:188)
-atomic_notifier_call_chain (kernel/notifier.c:98 kernel/notifier.c:231)
-do_kernel_restart (kernel/reboot.c:236)
-machine_restart (arch/arm64/kernel/process.c:145)
-kernel_restart (kernel/reboot.c:287)
-__do_sys_reboot (kernel/reboot.c:755)
-__arm64_sys_reboot (kernel/reboot.c:715)
-invoke_syscall (arch/arm64/include/asm/current.h:19
-arch/arm64/kernel/syscall.c:53)
-el0_svc_common.constprop.0 (include/linux/thread_info.h:127
-arch/arm64/kernel/syscall.c:141)
-do_el0_svc (arch/arm64/kernel/syscall.c:153)
-el0_svc (arch/arm64/include/asm/irqflags.h:56
-arch/arm64/include/asm/irqflags.h:77 arch/arm64/kernel/entry-common.c:165
-arch/arm64/kernel/entry-common.c:178 arch/arm64/kernel/entry-common.c:713)
-el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:731)
-el0t_64_sync (arch/arm64/kernel/entry.S:598)
+On Tue, Mar 26, 2024 at 11:07:06AM +0100, Arnd Bergmann wrote:
+> On Tue, Mar 26, 2024, at 10:18, Nikita Shubin via B4 Relay wrote:
+> > The goal is to recieve ACKs for all patches in series to merge it via=
+=20
+> > Arnd branch.
+>=20
+> Thank you for the continued updates, I really hope we can merge
+> it all for 6.10. I've looked through it again and I'm pretty much
+> ready to just merge it, though I admit that the process is not
+> working out that great, and it would probably have been quicker
+> to add DT support to drivers individually through the subsystem
+> trees.
+>=20
+> > Stephen Boyd, Vinod Koul PLEASE! give some comments on following, couse=
+=20
+> > i hadn't one for a couple of iterations already:
+> >
+> > Following patches require attention from Stephen Boyd, as they were=20
+> > converted to aux_dev as suggested:
+> >
+> > - ARM: ep93xx: add regmap aux_dev
+> > - clk: ep93xx: add DT support for Cirrus EP93xx
+> >
+> > Following patches require attention from Vinod Koul:
+> >
+> > - dma: cirrus: Convert to DT for Cirrus EP93xx
+> > - dma: cirrus: remove platform code
+>=20
+> I suspect that Stephen and Vinod may be missing this, as reviewing
+> a 38 patch series tends to be a lot of work, and they may have
+> missed that they are on the critical path here. I certainly
+> tend to just ignore an entire thread when it looks like I'm not
+> immediately going to be reviewing it all and other people are
+> likely to have more comments first, so I'm not blaming them.
+>=20
+> To better catch their attention, I would suggest you repost the
+> two smaller sets of patches as a separate series, with only the
+> relevant people on Cc. Please also include the respective
+> bindings when you send send these patches to Stephen and
+> Vinod.
 
-The watchdog restart handler is added in restart_handler_list and this list
-is invoked though do_kernel_restart(). As of my code investigation the
-restart_handler_list is invoked only though do_kernel_restart() and only
-though the stack trace above.
+It seems this happend for the clock series; it's at
+https://lore.kernel.org/all/20240408-ep93xx-clk-v1-0-1d0f4c324647@maquefel.=
+me/
+and received an ack by Stephen.
 
-Thank you,
-Claudiu Beznea
+Vinod gave some feedback in this thread with some remarks that need
+addressing.
 
-> 
->>         clk_prepare_enable(priv->pclk);
->>         clk_prepare_enable(priv->osc_clk);
->>
->> --
->> 2.39.2
->>
->>
-> 
-> Can you redirectly me to the complete series, so I can have a better
-> overview of the problem?
+With the latter I wonder if the plan to get this as a whole into v6.10
+is screwed and if I should pick up the PWM bits (patches #12, #13 and
+maybe #38) via my tree. Patch #38 touches arch/arm and
+include/linux/soc, so I wouldn't pick that one up without an explicit
+ack by (I guess) Arnd.
 
-This is the series that adds power domain support for RZ/G3S SoC:
-https://lore.kernel.org/all/20240410122657.2051132-1-claudiu.beznea.uj@bp.renesas.com/
+Best regards
+Uwe
 
-This is the series that adds watchdog support for RZ/G3S SoC:
-https://lore.kernel.org/all/20240410134044.2138310-1-claudiu.beznea.uj@bp.renesas.com/
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-Thank you for your review,
-Claudiu Beznea
+--pjwf7nurmhwqoh67
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> Kind regards
-> Uffe
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmYaRtAACgkQj4D7WH0S
+/k4o+wgAuEjfWmNoFVoIX9NkVmNLAztPiy6Nh9yJ/HEcfVvrFbjsMvDotb4qsGsE
+zfAz7mfofpUhLaFIGx1Sr9p8Zx4eXf0lmRH68rTiXE/hV39TXWKgmf03FG3yPOzN
+1KouxDXOtKIiBxdhSBON/zWyYksJzI9WfjLtzPhcbS0N3CEWi7aTvVS7HmKStyAU
+8/YI17F/4ym1Rf8Zm6JqyzQy5lOmmjy+Sq+BHfkB0ZpNIHQSoaOWISL3Y9bsFSJX
+ALkkO6L4WJVqkAL718q6pYMtb9SiNVyQjyYgYddxFfM6c6cnhg1AV+QEk+VLTPHy
+OgUVpigrpDXH/2JTVvZ7VetbpnSGAg==
+=sCOf
+-----END PGP SIGNATURE-----
+
+--pjwf7nurmhwqoh67--
 
