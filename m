@@ -1,75 +1,75 @@
-Return-Path: <linux-watchdog+bounces-955-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-956-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 146688A3EBF
-	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Apr 2024 23:34:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80FE78A3EC5
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Apr 2024 23:36:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F5971C20890
-	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Apr 2024 21:34:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9EE65B215AB
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Apr 2024 21:36:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D594C55E72;
-	Sat, 13 Apr 2024 21:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93E8C446BD;
+	Sat, 13 Apr 2024 21:36:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GkkwqY/M"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vdjIIV+m"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DEA0537F6
-	for <linux-watchdog@vger.kernel.org>; Sat, 13 Apr 2024 21:33:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A5B6E542
+	for <linux-watchdog@vger.kernel.org>; Sat, 13 Apr 2024 21:36:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713044036; cv=none; b=fePm8kWApG1X2qzIJAAM76zyRIBSHiSHnLH7llBDvna4pAY/V94LGv+IL+uHt/W+LRmo5Lpd88kd/tmLCSNTc/42U2e0EShnWYbxq/lrlZ+QDVa2nYJz/ZnT9tvfKq5d6PKoiY6GcRmPie5PJ7aHnTl4GGOnAMtyzx4g8jFfRvw=
+	t=1713044204; cv=none; b=LGYGm00/EVggziBi1AnOIk/h+RO38hNkpBeleYcNpz9M3cuyqbiHk61t5otPCTIhDbVr+q6suWLrQKQjklK0UARO+Nnxf5Hmo0wcaif6pc3J0HbZLqKYSWNyW6FVtUFkLalIybLDZy+eh7BUnWOqE7/c5vRRngL9A/mAAngg6CE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713044036; c=relaxed/simple;
-	bh=a6PQIdOQ4wImVAohuFXLKfpdVt8mIedoNm81ADHCqqw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WDQpU0AV3b8VXZmatSPNeblt1Q0MEDAwprCSgadPnOZQ4If//3abOSCZXRjksYQiIOGgBidrmopa+Pr8xWgo0Lo8y+83GRvAN3s/xUHTEOZDndZ+ZNDnDdHZcnSr+iriL4UhQ14INnlYGWUCrxQycVZOe38Gvni7LLmDT6uwmfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GkkwqY/M; arc=none smtp.client-ip=209.85.208.180
+	s=arc-20240116; t=1713044204; c=relaxed/simple;
+	bh=kCrX46jqUR87O9+F5n3p5RcXuJ/F86+2CAQ/hO797Ac=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=DJgTjq0HPETX2nezcgdzt3T+12Swg+Nrf/Tyo7VO7MqyTc0EisdOuZXU2xOXcXW1WRQc8KU0Wov/Xtqc4f8QpifeH4vqCpSuKkX2Bz/N3Z8QJvUt6QUeL5Oi9jXZkDkO6VDjSmvbBnhLsdj166PPVcQ/Hgvfbcpgqs0f6ie2t1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vdjIIV+m; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2d476d7972aso24851461fa.1
-        for <linux-watchdog@vger.kernel.org>; Sat, 13 Apr 2024 14:33:54 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a46ea03c2a5so323413966b.1
+        for <linux-watchdog@vger.kernel.org>; Sat, 13 Apr 2024 14:36:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1713044033; x=1713648833; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=lkBk/CzqEQa83bXA5cRGumM1/3HMjOQpgpakaBWuPRQ=;
-        b=GkkwqY/MNCZd/0yJbPH7HDDl9t2SP7OyuKma2ahOqbekmRkkQCNyWWS7b/cVdcum0z
-         wiQ6EDfJnCvn2GlaAm/zi4al5WcppBAIv7cHCI3M1tgU0vfkZAzxez6STIehpAjD2BLT
-         V5hfIvL10HPaTjU7BSCDSKGC8HRKukcbbRiGOHv16L4XeiQEZNolEYSHsOzKrmJJbt8g
-         /KpeJcj11oSo0AXCWYHfR5L4aTW0OVa+QcV56ejHwSHmwlOMUFG6e/eU6DWmjnNSxwVC
-         KGqSGD/ee7RdQBw9+cHz1dxbsLqruYwEmcDYzrMGMV7qDo0q7w9xuR+8NrXGsArYRNXt
-         /tLw==
+        d=linaro.org; s=google; t=1713044201; x=1713649001; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=KTgvblusc/CkX3bNxMsEarmlG/4AKtNsgb3vENuuK7Y=;
+        b=vdjIIV+ml/xoD7Yw7oSEE/JteUDXKiGC43BjRnhOxNhmfT2jirXgBDpvOb4FwZg2z3
+         fQOJqhy0Fb/EH4c0YWhGA4H52wCjHDqWdWj8MCo4VzmGs+L5empAqTpR1cvqal3DvyVi
+         JwV5loENCH0BGOA78jkAF+Cg/KBcZO9YXxal8ACQ69VVjyKkFbbXpvlE/07YAdwujdmN
+         cv0FB4pjrF3lau+OfIBweEPIRQ1MKM2q9R5rAtv7OccjoGTtjp9CddY6BLi9+mnUZjj9
+         IfDvAktcDO+ZEPtbFgH91AFVn4RhNFqsveEup7cYHcMF7dLIkWazq+Y7tHab0XUutk09
+         IUgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713044033; x=1713648833;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lkBk/CzqEQa83bXA5cRGumM1/3HMjOQpgpakaBWuPRQ=;
-        b=iDSXzAUc3TnnRiFqnPR9IYSu/sM2uDRa+FMTPTldix3pwl2biWudHM+DtGOmmA/KET
-         ZIQFN1d2la4h7HlZYK/WxLL+o1pwufkZnslEN6eNdmPhxmTsgMvFoa5Z09JzLGVsrF0S
-         qhPiNO7LtQXGvPTg6bY3B2jtVrigIg9ILoi6QsKfxTlXlFfTWjfW2104+/1+nT1nLjKX
-         EktOoN+69S2FKGeN6ug6aeCR6AeWDmZB0PCtWVP2E4qtpxYVC5/u9N6HOv0M6xVD8fr/
-         zbhpcbi7UXKf/PJpMOBTR3q5UqN4Uu6ANNyt90K51CTcThV4V/5wQwbP4rmjfN3NgdAo
-         xQzg==
-X-Forwarded-Encrypted: i=1; AJvYcCWMAO24JpLWlyn/4Tsi6uFc594c+Ep5WMkuXCG7j2bQMwlr2AABl4JWLFWYTw8qbF7rK2y+FLqduE6jbrhovNCDnBHOvtarWi6ggXdiVoc=
-X-Gm-Message-State: AOJu0YzpAXhjUapvmwAFMz65LIynLzYdyjHfyn47IV8Ytrc/5ePlzXYz
-	ksTrI861FWjJFxE+iCTRMcwiOD8Qh3mFHm9UTPEAuwU+lvynJyVIiylS/AnaE7M=
-X-Google-Smtp-Source: AGHT+IEJT4ECJzo9jekn94WFKIqo1KkgSgB9re0+9FTjVFDUPDJQfjA5xNSwGxTTnNfgqcr0Ev7KzQ==
-X-Received: by 2002:a2e:9e93:0:b0:2d8:b8c8:1311 with SMTP id f19-20020a2e9e93000000b002d8b8c81311mr4890367ljk.4.1713044033137;
-        Sat, 13 Apr 2024 14:33:53 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1713044201; x=1713649001;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KTgvblusc/CkX3bNxMsEarmlG/4AKtNsgb3vENuuK7Y=;
+        b=PEcDk69QmyQQSWoJyFRI6cGh6HSUqWe1jU7gqWxcVMnviUKh8W6qxuEAtjZYTFN/np
+         uBrs3w+ZgwF0taSn+8OYIgJFakvGM2CH4mQHcfs/3hWz0Vm/ro/jUmFqKOlSAfkK9tHY
+         3Lp+LwMZioZ219BU/687V7dJzP3Ih2X5C9+ko3K7TBlvYevcTQz899zKfUsvU9CEmdSS
+         6dtkJ7VLqNNvWd4UebPmgoGR1wyEvYarPvZ9sWU/jjnJXV4obSR522EjrrmnejG8qC+q
+         wkXhhJbrY511+b4VHbehNiziW1QAePrRSIPg2pZOPWQOgcjzDetR8Nt0lxehwaT4zFsg
+         GKfw==
+X-Forwarded-Encrypted: i=1; AJvYcCWwUUi4djt981VpMgKbusbtqUT+tUhxuvm9OC3K7fw+ogQ83JM9UbalLnJf0AzkavHeu0Sd4QNazWIhNzY0V0Q6indf3I5kaMCmGpinQ/w=
+X-Gm-Message-State: AOJu0YzRXLHd3MfX4jr2QVJX/7LdRn9tm6eFgypyu0VQFii/yTsFKBDM
+	SNRkMPhgI7SL8bpL6ZVzUv+8vrpmJQDP15ABH+E6WKtMf3yJgTaIXaAs6VPZrXY=
+X-Google-Smtp-Source: AGHT+IE8NMUesQjl83KHZUTmaXr3W3ZPp1jdP/Am97LhSgKDlISDBBo59iOMV8/M7Tt7+SQWzWnuvg==
+X-Received: by 2002:a17:906:c450:b0:a52:4edf:cc3 with SMTP id ck16-20020a170906c45000b00a524edf0cc3mr1379144ejb.11.1713044201273;
+        Sat, 13 Apr 2024 14:36:41 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.16])
-        by smtp.gmail.com with ESMTPSA id j25-20020aa7c359000000b0056ff4faa0b9sm2329817edr.6.2024.04.13.14.33.51
+        by smtp.gmail.com with ESMTPSA id jz9-20020a17090775e900b00a5208537b63sm3490261ejc.141.2024.04.13.14.36.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Apr 2024 14:33:52 -0700 (PDT)
-Message-ID: <b5eeaf10-e011-452b-840a-176c4f62cac4@linaro.org>
-Date: Sat, 13 Apr 2024 23:33:50 +0200
+        Sat, 13 Apr 2024 14:36:40 -0700 (PDT)
+Message-ID: <f1a6d589-5a3a-4d95-be91-1daf57891d95@linaro.org>
+Date: Sat, 13 Apr 2024 23:36:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -78,6 +78,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [RFC PATCH v2 2/6] dt-bindings: mfd: bd96801 PMIC core
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Matti Vaittinen <mazziesaccount@gmail.com>,
  Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -89,8 +90,8 @@ Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
  Fabio Aiuto <fabio.aiuto@engicam.com>
 References: <cover.1712920132.git.mazziesaccount@gmail.com>
  <ea49494429528cf8e60fa984ae1f523ddacd850c.1712920132.git.mazziesaccount@gmail.com>
+ <b5eeaf10-e011-452b-840a-176c4f62cac4@linaro.org>
 Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -135,128 +136,25 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <ea49494429528cf8e60fa984ae1f523ddacd850c.1712920132.git.mazziesaccount@gmail.com>
+In-Reply-To: <b5eeaf10-e011-452b-840a-176c4f62cac4@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 12/04/2024 13:21, Matti Vaittinen wrote:
-> ROHM BD96801 is a highly configurable automotive grade PMIC. Introduce
-> DT bindings for the BD96801 core.
+On 13/04/2024 23:33, Krzysztof Kozlowski wrote:
+>> +  rohm,wdg-action:
+>> +    description:
+>> +      Whether the watchdog failure must turn off the regulator power outputs or
+>> +      just toggle the INTB line.
+>> +    enum:
+>> +      - prstb
+>> +      - intb-only
 > 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> This is second property controlling bite behavior. The other being:
+> https://lore.kernel.org/all/e86812b3-a3aa-4bdb-9b32-a0339f0f76b5@kernel.org/
 > 
-> ---
-> Revision history:
-> RFCv1 => RFCv2:
->   - Document rohm,hw-timeout-ms
->   - Document rohm,wdg-action
-> ---
->  .../bindings/mfd/rohm,bd96801-pmic.yaml       | 171 ++++++++++++++++++
->  1 file changed, 171 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic.yaml b/Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic.yaml
-> new file mode 100644
-> index 000000000000..31ef787d6a8a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic.yaml
-> @@ -0,0 +1,171 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/rohm,bd96801-pmic.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ROHM BD96801 Scalable Power Management Integrated Circuit
-> +
-> +maintainers:
-> +  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> +
-> +description: |
+> Probably we need common property in watchdog.yaml.
 
-Do not need '|' unless you need to preserve formatting.
-
-> +  BD96801 is an automotive grade single-chip power management IC.
-> +  It integrates 4 buck converters and 3 LDOs with safety features like
-> +  over-/under voltage and over current detection and a watchdog.
-> +
-> +properties:
-> +  compatible:
-> +    const: rohm,bd96801
-> +
-> +  reg:
-> +    description:
-> +      I2C slave address.
-
-Drop description, obvious.
-
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    description:
-> +      The PMIC provides intb and errb IRQ lines. The errb IRQ line is used
-> +      for fatal IRQs which will cause the PMIC to shut down power outputs.
-> +      In many systems this will shut down the SoC contolling the PMIC and
-> +      connecting/handling the errb can be omitted. However, there are cases
-> +      where the SoC is not powered by the PMIC. In that case it may be
-> +      useful to connect the errb and handle errb events.
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  interrupt-names:
-> +    minItems: 1
-> +    items:
-> +      - enum: [intb, errb]
-> +      - const: errb
-> +
-> +  rohm,hw-timeout-ms:
-> +    description:
-> +      Watchdog timeout value(s). First walue is timeout limit. Second value is
-> +      optional value for 'too early' watchdog ping if window timeout mode is
-> +      to be used.
-
-Standard property timeout-sec does not work for you? It should allow two
-items as well.
-
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  rohm,wdg-action:
-> +    description:
-> +      Whether the watchdog failure must turn off the regulator power outputs or
-> +      just toggle the INTB line.
-> +    enum:
-> +      - prstb
-> +      - intb-only
-
-This is second property controlling bite behavior. The other being:
-https://lore.kernel.org/all/e86812b3-a3aa-4bdb-9b32-a0339f0f76b5@kernel.org/
-
-Probably we need common property in watchdog.yaml.
-
-> +
-> +  regulators:
-> +    $ref: ../regulator/rohm,bd96801-regulator.yaml
-
-Full path, so /schemas/regulator/....
-
-> +    description:
-> +      List of child nodes that specify the regulators.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-names
-> +  - regulators
-> +
-
-Missing allOf and $ref to watchdog.yaml
-
-> +additionalProperties: false
-> +
-> +examples:
-
+No, that's not the same case. I mixed up topics.
 
 Best regards,
 Krzysztof
