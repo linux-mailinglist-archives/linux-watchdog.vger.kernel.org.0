@@ -1,74 +1,74 @@
-Return-Path: <linux-watchdog+bounces-957-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-958-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 810048A47B0
-	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Apr 2024 07:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F0358A47FF
+	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Apr 2024 08:24:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15F272830C7
-	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Apr 2024 05:50:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44F6C283244
+	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Apr 2024 06:24:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64AA85258;
-	Mon, 15 Apr 2024 05:50:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02682FC0C;
+	Mon, 15 Apr 2024 06:24:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XSdrAQ/d"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FbYZU4oF"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77C463A5;
-	Mon, 15 Apr 2024 05:50:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7EC29CA;
+	Mon, 15 Apr 2024 06:24:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713160210; cv=none; b=ABl7221tmlRFfUHqdDrJGOKCucW0nyIpr/DvR7Gsjqsa9E7GpftAduEAPDU8SJNEsd79/F2eAJmPXblXN4o0N/LEZZ+7z5mu+ThCwQF/ZCguxTGUcn75s+oYwD0WfmjiMFPwFcTrt73IeXspoKNdLxXvWU/j1dbixAwo/XHK+KM=
+	t=1713162289; cv=none; b=c4OCiZEWH1XxkQ9vtjQDAVCLG+wQ251cKtUPJmm+3XSg3BP9J/lcz+Tz/MokdIIUhHwM6+ZuPNbwe0T8mk+NUas8C67Yb9eLbMGir4YoKKMMZhzTkyYI6dJyjTiqzbLN9Fq5FoiWmteOVUzw2r3vyHOPOOflAastCwFTg4Y+09U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713160210; c=relaxed/simple;
-	bh=pKvbKUaHAMes2QG7XgOsRZ1u0RDB6CQVQg/r1585r5I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G4aMUjNs2c2z+iygEf4IeTmc4xQwnDkaXaSFkvRtnWJKmE1Mm3G9ykAcuvHOynVO8F6q+2itKULKqjyIT6pYc3zZtd4a3RGLWosE/LCkLBShCS/EVhZoi8AaD4F1kZ9zjQdSqFxPwUEhZnWA41fuzo7ggz3SxzA+ODvT68SMU0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XSdrAQ/d; arc=none smtp.client-ip=209.85.167.45
+	s=arc-20240116; t=1713162289; c=relaxed/simple;
+	bh=9ybt3H1KuQiMeFLxerqDcife3C1kJWRVy37yfC7vcTY=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=EAfVbcQyYQtZ0N7SWf9oPRlVTRGkxuIbGPtxXT2LPKJyDoCLQG0JzmVYVPWpo5nyKH8whUp5Z2Hxjf4l8N1GU1gJ+a5VIrcxGZO1keIuKl8fIZPE0sno8T/MOPv1gJry7omgvXYq4U0PA7sOKueAVmEfbntOrko5B+mAbtmtinw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FbYZU4oF; arc=none smtp.client-ip=209.85.167.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-518a56cdbceso1744318e87.0;
-        Sun, 14 Apr 2024 22:50:08 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-516d2b9cd69so3257673e87.2;
+        Sun, 14 Apr 2024 23:24:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713160207; x=1713765007; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=gmail.com; s=20230601; t=1713162286; x=1713767086; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Hhge6ldXd4uNBh2q7E8muCHyp1IdQgnzbXqJxMF1SWA=;
-        b=XSdrAQ/dS5mq2N76cOp0DJwtkAzp4q9tmAY+V22Q+tjAFFUdVBbFg3EbFV93RFYHaf
-         agUWApFnd7gtPFy7nMIXChn7AAFZqHIgmIpNNtd2YUn2RmWzwevXMu1NVYzWMX+w9YUn
-         OjbCZ1EjvXh95qkGKIzWzhFN0c8xjjS3kN1NzExYLsdqoJCH51K4I3jxyPB46Z9lliVx
-         Ky68j8qQeyRe7FckqjxEJBPzETDZxg/7MamfcEcr9i61hYIOHO08hQLlWm+Q0Hh18iqZ
-         L2EUn+bCN7pM9ux24W1hI0nnN6+hwE8OCIPuPS9wLTO2rimXmw6kOedU3kaNpPHxw8YB
-         HZpw==
+        bh=lWxWn+6WJ0lxmuDHoUFyZCRFehv/jNxy+CdpoGRzTMI=;
+        b=FbYZU4oFvi8We0k+mYkRl+HP+U2VgFNMy9CQKTVGyn+kRSsC+gGCEf1pwR+1uWTGks
+         ibnHpZnVzmUSczsT/ukcBHPZQST8Rcb3UWyTx6XrQqulcGRVWZqoXFOiGWtMZewTTSqn
+         KtPjTsvlKddweFrwjips5BUgJs911wtCcRv4yKX1cZqbcgeDZF6qn1Y/NQPdPAeWsiY+
+         EzhXnvNhPus72p6CoO1bLd9LXpIxdXUkEmRrrMmO/hW66sOyWAadq4rzYDSfTzJIvKry
+         C6YU03oM6GlnZp6vFCFHs2ganI7OUpQOwHA4l1oF/0/fV+XPtcAJ2gI9y/+J0VJY7IMp
+         p+Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713160207; x=1713765007;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20230601; t=1713162286; x=1713767086;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hhge6ldXd4uNBh2q7E8muCHyp1IdQgnzbXqJxMF1SWA=;
-        b=AyUVI5bpSfmxiEeTBU0BopeSpyZSOLt/AO+/1o8h9Zj/ersE44fmo2EaMRvUzvVPzI
-         WKeunva6wHVYiM/LGHhbe/TDHyAXOgZxb/GALXHb1FFW1KunkA0bXhF6a+TkImv1EEim
-         h3IntII/YGK843YYV5bWq7xEW5dS8qrQCFUxBbtx/3gXvUQafF6wLoEeCG2pZYStKltm
-         skfc5erAyOQzKrfiRtO0wX+y5I56t+/ITKi3Vx5zgx1cvqWEsvMzBrY+CjiujgLIYLuW
-         Gt8/YCx7WHyLXkzxuVNxfoh/BvocebXziBv9JNM5k8pTX/QyAIqPFN4V/8lP/Er3CWNJ
-         FWhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXZ8q9lkLhrisqZhmmB8zOTftx6Yer8RJC42i78O8u4Nl/ugs//S+/txal25LvuNooixbNivQZKJcYDEKw1I4kRIAsX7kP+9OWV5VOdKim2hz7iuxQenDydRIcCocHxqT6wZAJu4W9xR2QXeZaXxhH0nNq+pvQVh49L2HbJ8a8JPDu20Sihzng3
-X-Gm-Message-State: AOJu0Yyi1mO8uJwb3G8psR0ZGLZ15GRKH52uVpNFmp9RhWvSF+F0L5ky
-	BrOQRLtTRLzikv1A3VUwkDaEo+vE/qp8J0RxFLa/3AWUy9r334oc
-X-Google-Smtp-Source: AGHT+IFrjmHsLQTNbMprEYNHTpIYPuiDb4tXllTV5X7b8Y1tKYnQve4QfqiDMUgJEBAHnJ7NNCIDcQ==
-X-Received: by 2002:a05:6512:2158:b0:518:c9bb:ee96 with SMTP id s24-20020a056512215800b00518c9bbee96mr1855898lfr.53.1713160206607;
-        Sun, 14 Apr 2024 22:50:06 -0700 (PDT)
+        bh=lWxWn+6WJ0lxmuDHoUFyZCRFehv/jNxy+CdpoGRzTMI=;
+        b=ZNFwnszscJv4iA0lQ/C1x6An2NYrud1FiYjXBe328eCSIAVq2BKuZnRJDBThaeIhkQ
+         J+3ImvCV1VmdX1lxW0jteFf0HqPHGUiyT9emfEduPIE3F2dD6W85xOEeWHX/s080BrAI
+         WMZkzU2TLqChvNem66kGKz/2XSnNJVpHXcGEDS12VOMA0ollv6855nddhJEucOp4G1iE
+         ZwwKKyeONAtYH8srwxrUUi5ApwZk8wxix+ASb3Cq2M8KZh2NRmiOD9dnVQB1kJUsb0Mw
+         XZj+hmqNWdKqCYh22+jM1G/Sqfy24UNdiltLdnyg5oFlmrxC2etrY2G/M9JftxO4iV3e
+         1oHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWezLJxRnt/zC8FR2pBZ9XRlNy+bWppZNGRjV/vREjo4nZNJ9/cxD6IM6JBgNtBajr4eVKqY2fUsdBCbu1K1ofNt8g+kHzGbE85Jnt/lbcgQ9JsPTPat24KhcQcYPN+m2WHFCDkzha5Wfs214sG4V/6HCuUxak1RsmBkXWiPi3+PHV1jsDAlmKm
+X-Gm-Message-State: AOJu0YzPrV7C0qGWUzlULp6DHnLoN10dJgBJg+iwbPDM6RK7Qk6c55pj
+	X2DTK76TDmpxhrPgu4XyzEgbDjunPzWDDFyQiWKTa3PMd28lmd+0
+X-Google-Smtp-Source: AGHT+IEQowzpT2zTQZdVl8OQE+0poRCGri5nhe5MP12UjrqnFWWC2eT16YHYf1ZcEU+WJ+/MD6GGGw==
+X-Received: by 2002:a19:6447:0:b0:518:b47e:c360 with SMTP id b7-20020a196447000000b00518b47ec360mr2643459lfj.43.1713162286239;
+        Sun, 14 Apr 2024 23:24:46 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:7426:df00::2? (drtxq0yyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:7426:df00::2])
-        by smtp.gmail.com with ESMTPSA id h16-20020a056512055000b00516d0933256sm1169909lfl.131.2024.04.14.22.50.05
+        by smtp.gmail.com with ESMTPSA id q12-20020ac2514c000000b00516d0c24008sm1186151lfd.306.2024.04.14.23.24.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Apr 2024 22:50:06 -0700 (PDT)
-Message-ID: <d3e555c2-e740-4aff-aac7-661877166399@gmail.com>
-Date: Mon, 15 Apr 2024 08:50:05 +0300
+        Sun, 14 Apr 2024 23:24:45 -0700 (PDT)
+Message-ID: <63d3891f-98d3-450f-967b-c72b0516b66b@gmail.com>
+Date: Mon, 15 Apr 2024 09:24:41 +0300
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -78,6 +78,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [RFC PATCH v2 2/6] dt-bindings: mfd: bd96801 PMIC core
 Content-Language: en-US, en-GB
+From: Matti Vaittinen <mazziesaccount@gmail.com>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
  Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
 Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -90,39 +91,45 @@ Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
 References: <cover.1712920132.git.mazziesaccount@gmail.com>
  <ea49494429528cf8e60fa984ae1f523ddacd850c.1712920132.git.mazziesaccount@gmail.com>
  <b5eeaf10-e011-452b-840a-176c4f62cac4@linaro.org>
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <b5eeaf10-e011-452b-840a-176c4f62cac4@linaro.org>
+ <d3e555c2-e740-4aff-aac7-661877166399@gmail.com>
+In-Reply-To: <d3e555c2-e740-4aff-aac7-661877166399@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Morning Krzysztof,
-
-Thanks again for the review/help!
-
-On 4/14/24 00:33, Krzysztof Kozlowski wrote:
-> On 12/04/2024 13:21, Matti Vaittinen wrote
->> +
->> +  rohm,hw-timeout-ms:
->> +    description:
->> +      Watchdog timeout value(s). First walue is timeout limit. Second value is
->> +      optional value for 'too early' watchdog ping if window timeout mode is
->> +      to be used.
+On 4/15/24 08:50, Matti Vaittinen wrote:
+> Morning Krzysztof,
 > 
-> Standard property timeout-sec does not work for you? It should allow two
-> items as well.
+> Thanks again for the review/help!
+> 
+> On 4/14/24 00:33, Krzysztof Kozlowski wrote:
+>> On 12/04/2024 13:21, Matti Vaittinen wrote
+>>> +
+>>> +  rohm,hw-timeout-ms:
+>>> +    description:
+>>> +      Watchdog timeout value(s). First walue is timeout limit. 
+>>> Second value is
+>>> +      optional value for 'too early' watchdog ping if window timeout 
+>>> mode is
+>>> +      to be used.
+>>
+>> Standard property timeout-sec does not work for you? It should allow two
+>> items as well.
+> 
+> I don't think so. We need sub-second units. Furthermore, the timeout-sec 
+> (if I understand it correctly) updates the "timeout policy", which tells 
+> the expected ping-interval. This can be different from the "HW 
+> heart-beat" which tells the HW's ping expectation. Hence the "hw-" prefix.
 
-I don't think so. We need sub-second units. Furthermore, the timeout-sec 
-(if I understand it correctly) updates the "timeout policy", which tells 
-the expected ping-interval. This can be different from the "HW 
-heart-beat" which tells the HW's ping expectation. Hence the "hw-" prefix.
+Oh, I just found out that this is an existing property. The ROHM 
+BD9576/BD9573 do aleady use this. It seems I've had some discussion 
+about it with Rob/Guenter when adding it. Frightening thing is that I 
+didin't remember the discussion or that the property existed at all... 
+Well, luckily we have lore :)
 
-> Missing allOf 
+https://lore.kernel.org/all/c390476e4279d8b75de53271e9fb8948d8854528.camel@fi.rohmeurope.com/#r
 
-This just about summarizes my feelings when I try write the bindings. XD 
-I do feel completely lost. Hence I do really appreciate someone like you 
-taking the time to help me through ^^;
-
-Enjoy the Seattle!
+(I don't see the final conclusion in this discussion, it has probably 
+been done on some later version of the series).
 
 Yours,
 	-- Matti
