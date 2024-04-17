@@ -1,234 +1,228 @@
-Return-Path: <linux-watchdog+bounces-967-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-968-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12DA48A7D2C
-	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Apr 2024 09:36:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03AFD8A831B
+	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Apr 2024 14:25:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 904A91F21BF7
-	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Apr 2024 07:36:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 230401C20E91
+	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Apr 2024 12:25:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 320466E61D;
-	Wed, 17 Apr 2024 07:35:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01F7E13D2BD;
+	Wed, 17 Apr 2024 12:25:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IOk3u++w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h0QedpGj"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E68C54F96;
-	Wed, 17 Apr 2024 07:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5DD13D295;
+	Wed, 17 Apr 2024 12:25:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713339348; cv=none; b=JHByDD1+6wMF7PLs2aREU+vaB2DwNZKZJJYQhU6iY7oHK5u1Hr2PLBx/LuJ8pK9aM53U4ruZumoWkwVISbKoACxTbJ5k3+B01tgikhevaRxCxEFt2QWd6qO4bmOtrQgOjn5JQHENf4xbrTSdDd9aEFcym7OqTD2X6hlmhJn2VnI=
+	t=1713356700; cv=none; b=SCfJCzFzuiM66Mrmu13bmw/y3pFXf9ES9p+wTmDPYiEm4ZrtsB0mpX04T3jyLKB/ehOoJub36/fT6zJbNdbDqIMdoD1lqaM2XA4q77/EqfY7VCtbJK06TM28820rharnSRAkqRt/qFNlhkQe3jB/aqUEPuLX7yY9siWDxGp4LC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713339348; c=relaxed/simple;
-	bh=loCEYmCNq0bWoL3QRJvjkDo2M/+Dk1ZSmKRR+9qBE2E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kM0C55IRVR/VFdnUl/PDDlgS/N1a4A6DnfCJgQtMpssvwe0uvn962Jo5SY9XU0IOPs1RRV3Tgs0CshdbOd2SO6qzxBqI/A4WpAhhKbSRv9IYn9cirVdWB6c1Nfp0StPQLnRe7idItruXx+qHR9yoEKGr078tLD69igODdcG3Evg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IOk3u++w; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-516d3776334so6697618e87.1;
-        Wed, 17 Apr 2024 00:35:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713339345; x=1713944145; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f6EVRLrBsLhKslUhuzemyZUHO7VOX5hRp+ari7MTAR4=;
-        b=IOk3u++we5xhBEmX+m466ascDNABrIllU6jBNz9D1nVTWehXDKycE7l38wgleK3zRR
-         JPOfi3iS9V0JY+5yfSsyUDGSkg3tDhHN2eiwCaO5l/rxfBch7nqm1zWf0mr8l5V8KY3F
-         q7MNzHsfPhq1GsIFHSYht0sNN9Y5ucXGaDfTu/IgNKtNiVbKjy8IZmtDbSB+F5gQM9K5
-         EjrWeJY51LIg9QCL0n8+DZI/JK6cyYYm5tLBYJKHgMrJd3Af0wN5Eq6Hj/pKjBbKv6Ms
-         KNlL+o77DdE57/78LpaPzdrdShVdZfv3gHyjVsokR08DS9eIfM02ybRbr9x91UinzDQq
-         3UQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713339345; x=1713944145;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f6EVRLrBsLhKslUhuzemyZUHO7VOX5hRp+ari7MTAR4=;
-        b=R98vUYOJhMeycg1zevWzgP39eIeq41y0orUZODpkPxXMNlUvK4r+NslTpgNdmi/jV9
-         3y3CjWzVTElYaM0yTxA2PfZZroy24Jn84JgLW7cbJNY1k3O5F9x8wp8uJCkPT1ICyMTG
-         kaVtENqNaINuAPZ3r0HM3VvyI8eBhJNhYhiu1h1xeTWWuVbliu5MtR/wR25pPcFG03Fx
-         Fc5ghMqpJF7bH0Qb5omtwZKz4dP0yeYeJuPVZj/mKwEXMOZuScvWGTWCbCZ3VYuz2ZWH
-         Rd5H125ZN7WbOn8iHWmUV9uRpLry/3+et1OdBb+3SVJih+Ra0qVYWnixtrhiqMFJUpVz
-         6k3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVMUHLdUV6tanCMZcTcQuaSEWcaVKMa/UNcxUYeZWfqN4VxB1hqLo9LItheOLRYuNBiTAJZTQQjIny6wLUDnrR/tVBKooKIMIeSeed0/jKuy8rl5kDWPGqn2imD4WtVUJYG5YFEi7ODH4E89fBqC6mcQ0ZhO0P00Jwn3/hwEMV46H5dWCn4B2BQ
-X-Gm-Message-State: AOJu0Yw27gzxaXRloowLh2Dwfe8+0AFTVL6NwR5XFJrkMNEV/g3d8t2j
-	UXdacuCU/ZgkmYLze1nyqHe6MTOfniAxCdJkGI97NtCZ5mLKVNxr
-X-Google-Smtp-Source: AGHT+IEA1hY6wIdC7jGk1wjFx3vL0HTS8jscv+ahPQi5VCoVUSyHqQ3JTEIslI3xC7B5GXshPR4sug==
-X-Received: by 2002:a05:6512:e9d:b0:519:730:b399 with SMTP id bi29-20020a0565120e9d00b005190730b399mr6189120lfb.9.1713339344439;
-        Wed, 17 Apr 2024 00:35:44 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:7426:df00::2? (drtxq0yyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:7426:df00::2])
-        by smtp.gmail.com with ESMTPSA id s6-20020a197706000000b00518ac6f0b37sm1267379lfc.244.2024.04.17.00.35.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Apr 2024 00:35:44 -0700 (PDT)
-Message-ID: <a605e79e-7b3d-477b-b6af-56ffb0cca6d3@gmail.com>
-Date: Wed, 17 Apr 2024 10:35:43 +0300
+	s=arc-20240116; t=1713356700; c=relaxed/simple;
+	bh=Q8zT258WQRDiwJmPtFZzZIyJIR1jdZVS+ZzaCdOE9JI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R02+U87ua6PRL8QJiha44WF+C3nC8tl+Y1sxmRyt4c4kwMIxLDZCTWjkMsZ9sxClvSSGCPYes+Q+na5UulaDwGN4J7qJs2DV99TN3Ok0gK7MPPfYrtaJzPnpiahJvg70PliDEajgHACsZOpNSdZp5GumQqm9nBEN7kyEw2leEyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h0QedpGj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C983C072AA;
+	Wed, 17 Apr 2024 12:24:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713356700;
+	bh=Q8zT258WQRDiwJmPtFZzZIyJIR1jdZVS+ZzaCdOE9JI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=h0QedpGjj8RNmOqZMuHdkWOw1mh0PWamjez5Zq/LUjHsHnN8lLUFYpt9r7HF6zDyU
+	 U6kdycDZ+zKka5PgDsOIoPodGOy0JIpRNqDQ/nBqtBxcQn0Nd+6LfLMCx9mXpVlSKN
+	 OenkBaLJNzBsHVK+JDiqWNAvKYBLua0mJE2fz8n1LcHErcEkV6hOsQWvw3SivP+nUz
+	 pTt9FJs96J7FswU9Ru6XkyCmJeiBmUURrzlpxGhiPyGHmlPzFCDjHZx+MxMBOXA5eI
+	 q0VzeO8Kg2hh+x4/linpnOCPbOsR9BFrxJ8bfiMjt5NilkOo/TdyHeIuEYoU4hJMzC
+	 76GNDNcExvjpA==
+Date: Wed, 17 Apr 2024 13:24:54 +0100
+From: Lee Jones <lee@kernel.org>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [RFC PATCH 3/6] mfd: support ROHM BD96801 PMIC core
+Message-ID: <20240417122454.GY2399047@google.com>
+References: <cover.1712058690.git.mazziesaccount@gmail.com>
+ <b86b7a73968810339b6cea7701bc3b6f626b4086.1712058690.git.mazziesaccount@gmail.com>
+ <20240411143856.GD2399047@google.com>
+ <25c959bc-fb02-42d9-b973-4a74cebd7208@gmail.com>
+ <20240412072347.GM2399047@google.com>
+ <700b63a1-ce91-4d91-9db7-43c195ba7a6f@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 5/6] watchdog: ROHM BD96801 PMIC WDG driver
-Content-Language: en-US, en-GB
-To: George Cherian <george.cherian@marvell.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
- Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <cover.1712920132.git.mazziesaccount@gmail.com>
- <d52fd63e98635293022e5a607fd763b580e24189.1712920132.git.mazziesaccount@gmail.com>
- <20240417042949.GA3513394@IPBU-BLR-SERVER1>
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20240417042949.GA3513394@IPBU-BLR-SERVER1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <700b63a1-ce91-4d91-9db7-43c195ba7a6f@gmail.com>
 
-Hi George,
+On Fri, 12 Apr 2024, Matti Vaittinen wrote:
 
-Thanks for the input! Reviewing is very much appreciated :)
-
-On 4/17/24 07:29, George Cherian wrote:
-> On 2024-04-12 at 16:52:46, Matti Vaittinen (mazziesaccount@gmail.com) wrote:
->> Introduce driver for WDG block on ROHM BD96801 scalable PMIC.
->>
->> This driver only supports watchdog with I2C feeding and delayed
->> response detection. Whether the watchdog toggles PRSTB pin or
->> just causes an interrupt can be configured via device-tree.
->>
->> The BD96801 PMIC HW supports also window watchdog (too early
->> feeding detection) and Q&A mode. These are not supported by
->> this driver.
->>
->> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->>
->> ---
->> Revision history:
->> RFCv1 => RFCv2:
->> - remove always running
->> - add IRQ handling
->> - call emergency_restart()
->> - drop MODULE_ALIAS and add MODULE_DEVICE_TABLE
->> ---
->>   drivers/watchdog/Kconfig       |  13 ++
->>   drivers/watchdog/Makefile      |   1 +
->>   drivers/watchdog/bd96801_wdt.c | 389 +++++++++++++++++++++++++++++++++
->>   3 files changed, 403 insertions(+)
->>   create mode 100644 drivers/watchdog/bd96801_wdt.c
->>4
->> +
->> +static const struct watchdog_ops bd96801_wdt_ops = {
->> +	.start		= bd96801_wdt_start,
->> +	.stop		= bd96801_wdt_stop,
->> +	.ping		= bd96801_wdt_ping,
->> +};
-> Is there no way to setup a timeout to the WDOG device from userspace?
+> On 4/12/24 10:23, Lee Jones wrote:
+> > On Fri, 12 Apr 2024, Matti Vaittinen wrote:
+> > 
+> > > Hi deee Ho Lee!
+> > > 
+> > > Thanks a ton for taking a look at this :) I already sent the V2 yesterday,
+> > > briefly before receiving your comments. I think all of the comments are
+> > > relevant for the V2 as well, I will fix them for the V3 when I get to that.
+> > > If you find the time to take a look at V2, then the major things are
+> > > addition of a watchdog IRQ + a work-around for the debugFS name collision
+> > > for IRQ domains.
+> > > 
+> > > On 4/11/24 17:38, Lee Jones wrote:
+> > > > On Tue, 02 Apr 2024, Matti Vaittinen wrote:
+> > > > 
+> > > > > The ROHM BD96801 PMIC is highly customizable automotive grade PMIC
+> > > > > which integrates regulator and watchdog funtionalities.
+> > > > > 
+> > > > > Provide IRQ and register accesses for regulator/watchdog drivers.
+> > > > > 
+> > > > > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> > > > > ---
+> > > > >    drivers/mfd/Kconfig              |  13 +
+> > > > >    drivers/mfd/Makefile             |   1 +
+> > > > >    drivers/mfd/rohm-bd96801.c       | 454 +++++++++++++++++++++++++++++++
+> > > > >    include/linux/mfd/rohm-bd96801.h | 212 +++++++++++++++
+> > > > >    include/linux/mfd/rohm-generic.h |   1 +
+> > > > >    5 files changed, 681 insertions(+)
+> > > > >    create mode 100644 drivers/mfd/rohm-bd96801.c
+> > > > >    create mode 100644 include/linux/mfd/rohm-bd96801.h
+> > > > > 
+> > > > > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > > > > index 4b023ee229cf..947045eb3a8e 100644
+> > > > > --- a/drivers/mfd/Kconfig
+> > > > > +++ b/drivers/mfd/Kconfig
+> > > > > @@ -2089,6 +2089,19 @@ config MFD_ROHM_BD957XMUF
+> > > > >    	  BD9573MUF Power Management ICs. BD9576 and BD9573 are primarily
+> > > > >    	  designed to be used to power R-Car series processors.
+> > > > > +config MFD_ROHM_BD96801
+> > > > > +	tristate "ROHM BD96801 Power Management IC"
+> > > > > +	depends on I2C=y
+> > > > > +	depends on OF
+> > > > > +	select REGMAP_I2C
+> > > > > +	select REGMAP_IRQ
+> > > > > +	select MFD_CORE
+> > > > > +	help
+> > > > > +	  Select this option to get support for the ROHM BD96801 Power
+> > > > > +	  Management IC. The ROHM BD96801 is a highly scalable power management
+> > > > 
+> > > > Power Management
+> > > 
+> > > Out of the curiosity, why is the "Power Management IC" written with
+> > > capitals, when speaking of a class of devices instead of a model? (I am 100%
+> > > fine with the change, just curious).
+> > 
+> > It's no different to how its expressed in the tristate section above.
+> > 
+> > Power Management IC or PMIC.
+> > 
+> >    "provides power management capabilities" describes its function?
+> > 
+> >    "is a scalable Power Management IC", describes the device?
+> > 
+> > But actually, it just looks odd when both are used in the same section.
+> > 
+> > /me likes uniformity and consistency.
 > 
+> It's okay, thanks for the explanation :)
+> 
+> > > > > +	  IC for industrial and automotive use. The BD96801 can be used as a
+> > > > > +	  master PMIC in a chained PMIC solutions with suitable companion PMICs
+> > > ...
+> > > 
+> > > > > +static int bd96801_i2c_probe(struct i2c_client *i2c)
+> > > > > +{
+> > > > > +	int i, ret, intb_irq, errb_irq, num_regu_irqs, num_intb, num_errb = 0;
+> > > > > +	struct regmap_irq_chip_data *intb_irq_data, *errb_irq_data;
+> > > > > +	struct irq_domain *intb_domain, *errb_domain;
+> > > > > +	const struct fwnode_handle *fwnode;
+> > > > > +	struct resource *regulator_res;
+> > > > > +	struct regmap *regmap;
+> > > > > +
+> > > > > +	fwnode = dev_fwnode(&i2c->dev);
+> > > > > +	if (!fwnode) {
+> > > > > +		dev_err(&i2c->dev, "no fwnode\n");
+> > > > > +		return -EINVAL;
+> > > > 
+> > > > Why not dev_err_probe() here for uniformity?
+> > > 
+> > > I can change it to dev_err_probe() if it's strongly preferred. It just feels
+> > > silly to use dev_err_probe() when the return value is hardcoded.
+> > 
+> > Not at all:
+> > 
+> > git grep dev_err_probe | grep "\-[A-Z]"
+> 
+> Yes, I know people do use the dev_err_probe() with hardcoded errors but it
+> does not make me feel any better about it :)
 
-For the BD96801 hardware? Currently no. (See below)
+<look into my swirling eyes> Uniformity within the function!
 
->> +
->> +static int init_wdg_hw(struct wdtbd96801 *w)
->> +{
->> +	u32 hw_margin[2];
->> +	int count, ret;
->> +	u32 hw_margin_max = BD96801_WDT_DEFAULT_MARGIN, hw_margin_min = 0;
->> +
->> +	count = device_property_count_u32(w->dev->parent, "rohm,hw-timeout-ms");
-> Why is that timeout need to be configured from a devicce-tree property?
-> set_timeout/get_timeout can't be done for this device?
+> > > Intentionally writing code like
+> > > 
+> > > err = -EINVAL;
+> > > if (err == ...)
+> > > 
+> > > just makes me feel a bit sick.
+> > 
+> > Why would you want to do that?
+> 
+> This is what the dev_err_probe() with a hardcoded err does, right?
+> 
+> int dev_err_probe(const struct device *dev, int err, const char *fmt, ...)
+> {
+> 	...
+> 	if (err != -EPROBE_DEFER) {
+> 		dev_err(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
+> 	} else {
+> 		device_set_deferred_probe_reason(dev, &vaf);
+> 		dev_dbg(dev, "error %pe: %pV", ERR_PTR(err), &vaf);
+> 	}
+> 	...
+> }
 
-The BD96801 supports 32 different "slow detection" timeouts - only 1 of 
-which is guaranteed to be greater than 1s (1.8432 Sec). The timeout 
-setting interface uses seconds.
+Attempt to purge this info from you brain!
 
-Furthermore, I think that the HW heartbeat is not all that meaningful to 
-the user-space. What is meaningful to user-space is how often the 
-userland daemon needs to write the watchdog file to keep system alive. 
-This is different thing. With the sub-second HW timeouts it is better 
-the kernel keeps feeding the watchdog based on a timer (adjusted to meet 
-the HW requirements) and can thus require the userspace to ping less 
-frequently than the HW heartbeat.
+> > > > > +	}
+> > > > > +
+> > > > > +	intb_irq = fwnode_irq_get_byname(fwnode, "intb");
+> > > > > +	if (intb_irq < 0)
+> > > > > +		return dev_err_probe(&i2c->dev, intb_irq,
+> > > > > +				     "No INTB IRQ configured\n");
+> > > > 
+> > > > This function would look nicer if you expanded to 100-chars.
+> > > 
+> > > The reason why I still prefer the good old 80-chars for files I work with,
+> > > is that I am often having 3 terminal windows parallel on my laptop screen.
+> > > (Or, when I have my wide mofnitor connected it is 3 editor windows +
+> > > minicom). I need to keep the terminals small enough. Besides... I hate to
+> > > admit this, but the time is finally taking it's toll. My eyes aren't quite
+> > > the same they were 2 years ago...
+> > 
+> > Upgrade your 14" CRT monitor to something more modern. :)
+> 
+> But those things were built to last! And throwing away perfectly working
+> stuff... :)
 
->> +	if (count < 0 && count != -EINVAL)
->> +		return count;
->> +
->> +	if (count > 0) {
->> +		if (count > ARRAY_SIZE(hw_margin))
->> +			return -EINVAL;
->> +
->> +		ret = device_property_read_u32_array(w->dev->parent,
->> +						     "rohm,hw-timeout-ms",
->> +						     &hw_margin[0], count);
->> +		if (ret < 0)
->> +			return ret;
->> +
->> +		if (count == 1)
->> +			hw_margin_max = hw_margin[0];
->> +
->> +		if (count == 2) {
->> +			hw_margin_max = hw_margin[1];
->> +			hw_margin_min = hw_margin[0];
->> +		}
->> +	}
->> +
->> +	ret = bd96801_set_wdt_mode(w, hw_margin_max, hw_margin_min);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret = device_property_match_string(w->dev->parent, "rohm,wdg-action",
->> +					   "prstb");
->> +	if (ret >= 0) {
->> +		ret = regmap_update_bits(w->regmap, BD96801_REG_WD_CONF,
->> +				 BD96801_WD_ASSERT_MASK,
->> +				 BD96801_WD_ASSERT_RST);
->> +		return ret;
->> +	}
->> +
->> +	ret = device_property_match_string(w->dev->parent, "rohm,wdg-action",
->> +					   "intb-only");
->> +	if (ret >= 0) {
->> +		ret = regmap_update_bits(w->regmap, BD96801_REG_WD_CONF,
->> +				 BD96801_WD_ASSERT_MASK,
->> +				 BD96801_WD_ASSERT_IRQ);
->> +		return ret;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +extern void emergency_restart(void);
->> +static irqreturn_t bd96801_irq_hnd(int irq, void *data)
->> +{
->> +	emergency_restart();
-> In case of a full system hang will this function get executed?
-
-Maybe, maybe not. It is probably still the best we can do if the 
-watchdog has not been configured to kill the power by HW. Or, do you 
-have some other suggestion? (The emergency_restart() was actually 
-suggested by Guenter during the v1 review).
-
->> +	return IRQ_NONE;
->> +}
-
-Yours,
-	-- Matti
+Can't argue with that!  Maybe put 2 side-by-side or 4 in a matrix!
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Lee Jones [李琼斯]
 
