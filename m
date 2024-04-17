@@ -1,186 +1,106 @@
-Return-Path: <linux-watchdog+bounces-970-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-971-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAE728A8D5E
-	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Apr 2024 22:57:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDAB98A8D85
+	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Apr 2024 23:10:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7927BB2308B
-	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Apr 2024 20:57:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A3DC283053
+	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Apr 2024 21:10:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE43B47F7E;
-	Wed, 17 Apr 2024 20:57:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 725DB47F62;
+	Wed, 17 Apr 2024 21:10:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="FDJTSrq2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jxqgJI9+"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F15F52F6B;
-	Wed, 17 Apr 2024 20:57:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFAF8F4A;
+	Wed, 17 Apr 2024 21:10:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713387440; cv=none; b=Cgxq0ZJQMC21qAT5sHki0CtyYltuh9xDsx67Vp+M6pucgHaYl0i5FcOlmGoNG1yBIizKMuXxFxyGZBKodnMPyV7EArnrr3ytbgEgrWFGIr5oyq4HpDUsScVbot7p/x0MB2WTAFSe7hwAsp1wLoC+xrYtROetbxvySlPYhlV8BBs=
+	t=1713388234; cv=none; b=Nsy9AzjfJSttIwwX0+oXG9NFOUG9cNvhj7sxhEEQZM5RJMt54GFnC8fXctM8Rf1wXvnaI5lKKZpvNjZggWtGKLOdvi3kJr1rC3jeTZOllvncOVU4NDHbjaEcqE/0+LJFWTcbA8J3Wsaj669P1inf3S3DTrrteNhuYuszm4Vi+rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713387440; c=relaxed/simple;
-	bh=BPdpGyW1F/Eojz4Os/i9vRYjSRgNet0NXz4BiUZ19RY=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nqSl+iGxbH6jAEM9jaSpk8YP+LswIK5W0apGQ4ChJoj72IpW9bS11TnfPbgCq4Bh7U7PyRCgOHMESbVK/ZIyo+aw/dqDMBs3gs46jky0C0SX1nQze/FbsaOAAUVDMKUxzMbayNmlgrR6tBF7BcNvmQMqpepOks17wYjNQpU6VDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=FDJTSrq2; arc=none smtp.client-ip=198.47.23.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 43HKv0uN005769;
-	Wed, 17 Apr 2024 15:57:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1713387420;
-	bh=S95d30u0MX9I2P7CepbqjsFGIsPWOe4MadM11Qo/Kn4=;
-	h=From:To:CC:Subject:Date;
-	b=FDJTSrq2FlVPCa0YMrynwY/rYGqFP9yVdlkOL6S5VCm+In+tjTXnWucWWcEGuNGLK
-	 302z+bQcX6W9ilJ+WdJFVxGYRmggFPlkI8HhLzuwTLxxbLGvykS0CPnBWbL8E0siUT
-	 m1ozGP16IiLBdE9fzYiPZsyB08UqHOSB6dokPHlM=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 43HKv0gJ005616
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 17 Apr 2024 15:57:00 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 17
- Apr 2024 15:57:00 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 17 Apr 2024 15:57:00 -0500
-Received: from judy-hp.dhcp.ti.com (judy-hp.dhcp.ti.com [128.247.81.105])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 43HKv0ad071011;
-	Wed, 17 Apr 2024 15:57:00 -0500
-From: Judith Mendez <jm@ti.com>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck
-	<linux@roeck-us.net>
-CC: <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Rafael
- Beims <rafael.beims@toradex.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nick
- Saulnier <nsaulnier@ti.com>
-Subject: [PATCH v3] watchdog: rti_wdt: Set min_hw_heartbeat_ms to accommodate a safety margin
-Date: Wed, 17 Apr 2024 15:57:00 -0500
-Message-ID: <20240417205700.3947408-1-jm@ti.com>
-X-Mailer: git-send-email 2.43.2
+	s=arc-20240116; t=1713388234; c=relaxed/simple;
+	bh=5m9dXzqFF14/T0VNrdqPf1m2OX3PG06UzIjj7KeORXk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WoRR58qqM760WRZOrHOON78g2uivR0wYwgzck/9gP03miPVkPaiT3bKhkbbXIrQMjrsQeVQ3nTjGfHnxbNNsHb0l9kLbercuRyVbQnsLD6rzaRp0EfgsRhM6ewbDOVX0yFzuFNBlkWQRbNKI7X3IaXWMRSVN4ekhqusEK0k/PdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jxqgJI9+; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5d42e7ab8a9so75527a12.3;
+        Wed, 17 Apr 2024 14:10:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713388232; x=1713993032; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k08bk0vsukuircHIqELwgJc5pJdNP2UpODKXFvn+jbU=;
+        b=jxqgJI9+w0+tZArMsxH5BP6yxXn35kMvjzJ0wFhpSH8gsmGCvttsU8/BiR10x9SiGA
+         yxZe87qVFe+1nzSbPq+/c998Znvbj7pDYa/AQjrL5S9n7oJHlO89C8TdslfKFYwCK+Jw
+         3Wu8Kyd5eKykPIwiiaL3r4bMjE17S7kp8z+kBNRoW+oSt6nIEHG7zv2X06TJ9oc20e4M
+         aI0+WWRp2qtbUddLERHvWcdBaoGKjqWCCTj4ppr8Q3sRRnTC7eMYqKjReAdDicXAaDDi
+         JMa2IBvOAyVookcYzcRms5i3F17yZbTQIk4CwV56XdIBitIYRCaJdLGYX/GBAldrxMaV
+         L5uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713388232; x=1713993032;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k08bk0vsukuircHIqELwgJc5pJdNP2UpODKXFvn+jbU=;
+        b=q7OBOXX3onG8G7TYM6vamnNKgcHTKqf7Mc6sV2ml+o1MmXLkv23NhGFqQzA9INq4Aq
+         1fOcil+9/56GonYz+if/2fu+n66vxFhga8BS7y+dtnHmv72NUpKF28ehFu91a8hWbW2U
+         6Eqain/hIr+NphWWJcC5XpkhOlSTZLVxrk9TIWy+147bFyX02wh3Qn6V4qQmMkQMNrch
+         5ZT/hFyRqIor1vigRnABB0hXfQzO5JBTUlpkIpnX17B6bwWPBM0XSXxSLEJbJelMCl7a
+         m+hNTJzrXlfdM+bQflZGSw1wpUIvRvGwf6GR9fTp2eSv9/Q3r3FS58s42zw6f/+WlHoL
+         NcTg==
+X-Forwarded-Encrypted: i=1; AJvYcCVKrhuSNONDMvB3kJuCsbZF8VVggV2ePeH3c5smQ0NGaJe8yFBHHmXXkTa9rnJouWtEEuGuO4UWifoyMlvJoTVozsiT5npZZnm4Ar/ENWFpxSccZu6JMwTNeNNHSEmesERKAd+Hxa4ARnLLMeg=
+X-Gm-Message-State: AOJu0YwEjpFsJ1F0zHkZrXJFTbL6YlCF2YsSCs2yokB+YR6Z31VLV0lM
+	Elyncgc5MXBcFTDO6EtjnRSz7FSOKgsV5HjdcLcYARZu6wPvJnm58lkaNw==
+X-Google-Smtp-Source: AGHT+IGn3emlFMD9pKAHR0kluTYorObtLK09R/qd/tX0W/tbZ+Ql/ttnq4O69mvAT1dF5vUjc2Dzhg==
+X-Received: by 2002:a17:90a:5504:b0:2a4:c109:4463 with SMTP id b4-20020a17090a550400b002a4c1094463mr697762pji.6.1713388231978;
+        Wed, 17 Apr 2024 14:10:31 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n2-20020a170902d2c200b001e826e4d087sm78204plc.142.2024.04.17.14.10.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Apr 2024 14:10:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Wed, 17 Apr 2024 14:10:29 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Judith Mendez <jm@ti.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Rafael Beims <rafael.beims@toradex.com>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Nick Saulnier <nsaulnier@ti.com>
+Subject: Re: [PATCH v3] watchdog: rti_wdt: Set min_hw_heartbeat_ms to
+ accommodate a safety margin
+Message-ID: <4fc37065-a43b-4295-951d-4fbcc72bfc63@roeck-us.net>
+References: <20240417205700.3947408-1-jm@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240417205700.3947408-1-jm@ti.com>
 
-On AM62x, the watchdog is pet before the valid window is open. Fix
-min_hw_heartbeat and accommodate a 2% + static offset safety margin.
-The static offset accounts for max hardware error.
+On Wed, Apr 17, 2024 at 03:57:00PM -0500, Judith Mendez wrote:
+> On AM62x, the watchdog is pet before the valid window is open. Fix
+> min_hw_heartbeat and accommodate a 2% + static offset safety margin.
+> The static offset accounts for max hardware error.
+> 
+> Remove the hack in the driver which shifts the open window boundary,
+> since it is no longer necessary due to the fix mentioned above.
+> 
+> cc: stable@vger.kernel.org
+> Fixes: 5527483f8f7c ("watchdog: rti-wdt: attach to running watchdog during probe")
+> Signed-off-by: Judith Mendez <jm@ti.com>
 
-Remove the hack in the driver which shifts the open window boundary,
-since it is no longer necessary due to the fix mentioned above.
-
-cc: stable@vger.kernel.org
-Fixes: 5527483f8f7c ("watchdog: rti-wdt: attach to running watchdog during probe")
-Signed-off-by: Judith Mendez <jm@ti.com>
----
-Changes since v2:
-- Change safety margin to 2% + max hardware error
-- remove hack that shifts open window boundary
----
- drivers/watchdog/rti_wdt.c | 34 +++++++++++++++-------------------
- 1 file changed, 15 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
-index 8e1be7ba01039..c7d4de28e1891 100644
---- a/drivers/watchdog/rti_wdt.c
-+++ b/drivers/watchdog/rti_wdt.c
-@@ -59,6 +59,8 @@
- #define PON_REASON_EOF_NUM	0xCCCCBBBB
- #define RESERVED_MEM_MIN_SIZE	12
- 
-+#define MAX_HW_ERROR		250
-+
- static int heartbeat = DEFAULT_HEARTBEAT;
- 
- /*
-@@ -92,7 +94,7 @@ static int rti_wdt_start(struct watchdog_device *wdd)
- 	 * to be 50% or less than that; we obviouly want to configure the open
- 	 * window as large as possible so we select the 50% option.
- 	 */
--	wdd->min_hw_heartbeat_ms = 500 * wdd->timeout;
-+	wdd->min_hw_heartbeat_ms = 520 * wdd->timeout + MAX_HW_ERROR;
- 
- 	/* Generate NMI when wdt expires */
- 	writel_relaxed(RTIWWDRX_NMI, wdt->base + RTIWWDRXCTRL);
-@@ -126,31 +128,33 @@ static int rti_wdt_setup_hw_hb(struct watchdog_device *wdd, u32 wsize)
- 	 * be petted during the open window; not too early or not too late.
- 	 * The HW configuration options only allow for the open window size
- 	 * to be 50% or less than that.
-+	 * To avoid any glitches, we accommodate 2% + max hardware error
-+	 * safety margin.
- 	 */
- 	switch (wsize) {
- 	case RTIWWDSIZE_50P:
--		/* 50% open window => 50% min heartbeat */
--		wdd->min_hw_heartbeat_ms = 500 * heartbeat;
-+		/* 50% open window => 52% min heartbeat */
-+		wdd->min_hw_heartbeat_ms = 520 * heartbeat + MAX_HW_ERROR;
- 		break;
- 
- 	case RTIWWDSIZE_25P:
--		/* 25% open window => 75% min heartbeat */
--		wdd->min_hw_heartbeat_ms = 750 * heartbeat;
-+		/* 25% open window => 77% min heartbeat */
-+		wdd->min_hw_heartbeat_ms = 770 * heartbeat + MAX_HW_ERROR;
- 		break;
- 
- 	case RTIWWDSIZE_12P5:
--		/* 12.5% open window => 87.5% min heartbeat */
--		wdd->min_hw_heartbeat_ms = 875 * heartbeat;
-+		/* 12.5% open window => 89.5% min heartbeat */
-+		wdd->min_hw_heartbeat_ms = 895 * heartbeat + MAX_HW_ERROR;
- 		break;
- 
- 	case RTIWWDSIZE_6P25:
--		/* 6.5% open window => 93.5% min heartbeat */
--		wdd->min_hw_heartbeat_ms = 935 * heartbeat;
-+		/* 6.5% open window => 95.5% min heartbeat */
-+		wdd->min_hw_heartbeat_ms = 955 * heartbeat + MAX_HW_ERROR;
- 		break;
- 
- 	case RTIWWDSIZE_3P125:
--		/* 3.125% open window => 96.9% min heartbeat */
--		wdd->min_hw_heartbeat_ms = 969 * heartbeat;
-+		/* 3.125% open window => 98.9% min heartbeat */
-+		wdd->min_hw_heartbeat_ms = 989 * heartbeat + MAX_HW_ERROR;
- 		break;
- 
- 	default:
-@@ -228,14 +232,6 @@ static int rti_wdt_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
--	/*
--	 * If watchdog is running at 32k clock, it is not accurate.
--	 * Adjust frequency down in this case so that we don't pet
--	 * the watchdog too often.
--	 */
--	if (wdt->freq < 32768)
--		wdt->freq = wdt->freq * 9 / 10;
--
- 	pm_runtime_enable(dev);
- 	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0) {
-
-base-commit: 860bbe8e618fd62446309e286ab4a83d38201c0a
--- 
-2.43.2
-
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
