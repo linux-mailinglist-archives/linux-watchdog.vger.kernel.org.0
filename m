@@ -1,106 +1,168 @@
-Return-Path: <linux-watchdog+bounces-971-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-972-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDAB98A8D85
-	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Apr 2024 23:10:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C52F8A9986
+	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Apr 2024 14:11:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A3DC283053
-	for <lists+linux-watchdog@lfdr.de>; Wed, 17 Apr 2024 21:10:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 084FE1F21CD7
+	for <lists+linux-watchdog@lfdr.de>; Thu, 18 Apr 2024 12:11:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 725DB47F62;
-	Wed, 17 Apr 2024 21:10:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA45D15F3FD;
+	Thu, 18 Apr 2024 12:11:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jxqgJI9+"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XrDUH59m"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFAF8F4A;
-	Wed, 17 Apr 2024 21:10:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D7B15DBD6;
+	Thu, 18 Apr 2024 12:11:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713388234; cv=none; b=Nsy9AzjfJSttIwwX0+oXG9NFOUG9cNvhj7sxhEEQZM5RJMt54GFnC8fXctM8Rf1wXvnaI5lKKZpvNjZggWtGKLOdvi3kJr1rC3jeTZOllvncOVU4NDHbjaEcqE/0+LJFWTcbA8J3Wsaj669P1inf3S3DTrrteNhuYuszm4Vi+rs=
+	t=1713442286; cv=none; b=Vh92bWZnv1LzSP7idl/j6/GZSZA+XWg/1JZvCcdZH0zIU7BaIomcWVFt1B4thBCypvP/xWzGVyZh0bW6jsIHgxbJGd9DVyMjQYvIG64zJDpTy+PsVH/QK9qc0LCbWPetjmEKalJwkuf+6WNd2jgYNBwUOX03eh2PyM+EHoiNMO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713388234; c=relaxed/simple;
-	bh=5m9dXzqFF14/T0VNrdqPf1m2OX3PG06UzIjj7KeORXk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WoRR58qqM760WRZOrHOON78g2uivR0wYwgzck/9gP03miPVkPaiT3bKhkbbXIrQMjrsQeVQ3nTjGfHnxbNNsHb0l9kLbercuRyVbQnsLD6rzaRp0EfgsRhM6ewbDOVX0yFzuFNBlkWQRbNKI7X3IaXWMRSVN4ekhqusEK0k/PdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jxqgJI9+; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5d42e7ab8a9so75527a12.3;
-        Wed, 17 Apr 2024 14:10:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713388232; x=1713993032; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k08bk0vsukuircHIqELwgJc5pJdNP2UpODKXFvn+jbU=;
-        b=jxqgJI9+w0+tZArMsxH5BP6yxXn35kMvjzJ0wFhpSH8gsmGCvttsU8/BiR10x9SiGA
-         yxZe87qVFe+1nzSbPq+/c998Znvbj7pDYa/AQjrL5S9n7oJHlO89C8TdslfKFYwCK+Jw
-         3Wu8Kyd5eKykPIwiiaL3r4bMjE17S7kp8z+kBNRoW+oSt6nIEHG7zv2X06TJ9oc20e4M
-         aI0+WWRp2qtbUddLERHvWcdBaoGKjqWCCTj4ppr8Q3sRRnTC7eMYqKjReAdDicXAaDDi
-         JMa2IBvOAyVookcYzcRms5i3F17yZbTQIk4CwV56XdIBitIYRCaJdLGYX/GBAldrxMaV
-         L5uQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713388232; x=1713993032;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k08bk0vsukuircHIqELwgJc5pJdNP2UpODKXFvn+jbU=;
-        b=q7OBOXX3onG8G7TYM6vamnNKgcHTKqf7Mc6sV2ml+o1MmXLkv23NhGFqQzA9INq4Aq
-         1fOcil+9/56GonYz+if/2fu+n66vxFhga8BS7y+dtnHmv72NUpKF28ehFu91a8hWbW2U
-         6Eqain/hIr+NphWWJcC5XpkhOlSTZLVxrk9TIWy+147bFyX02wh3Qn6V4qQmMkQMNrch
-         5ZT/hFyRqIor1vigRnABB0hXfQzO5JBTUlpkIpnX17B6bwWPBM0XSXxSLEJbJelMCl7a
-         m+hNTJzrXlfdM+bQflZGSw1wpUIvRvGwf6GR9fTp2eSv9/Q3r3FS58s42zw6f/+WlHoL
-         NcTg==
-X-Forwarded-Encrypted: i=1; AJvYcCVKrhuSNONDMvB3kJuCsbZF8VVggV2ePeH3c5smQ0NGaJe8yFBHHmXXkTa9rnJouWtEEuGuO4UWifoyMlvJoTVozsiT5npZZnm4Ar/ENWFpxSccZu6JMwTNeNNHSEmesERKAd+Hxa4ARnLLMeg=
-X-Gm-Message-State: AOJu0YwEjpFsJ1F0zHkZrXJFTbL6YlCF2YsSCs2yokB+YR6Z31VLV0lM
-	Elyncgc5MXBcFTDO6EtjnRSz7FSOKgsV5HjdcLcYARZu6wPvJnm58lkaNw==
-X-Google-Smtp-Source: AGHT+IGn3emlFMD9pKAHR0kluTYorObtLK09R/qd/tX0W/tbZ+Ql/ttnq4O69mvAT1dF5vUjc2Dzhg==
-X-Received: by 2002:a17:90a:5504:b0:2a4:c109:4463 with SMTP id b4-20020a17090a550400b002a4c1094463mr697762pji.6.1713388231978;
-        Wed, 17 Apr 2024 14:10:31 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n2-20020a170902d2c200b001e826e4d087sm78204plc.142.2024.04.17.14.10.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Apr 2024 14:10:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 17 Apr 2024 14:10:29 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Judith Mendez <jm@ti.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Rafael Beims <rafael.beims@toradex.com>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Nick Saulnier <nsaulnier@ti.com>
-Subject: Re: [PATCH v3] watchdog: rti_wdt: Set min_hw_heartbeat_ms to
- accommodate a safety margin
-Message-ID: <4fc37065-a43b-4295-951d-4fbcc72bfc63@roeck-us.net>
-References: <20240417205700.3947408-1-jm@ti.com>
+	s=arc-20240116; t=1713442286; c=relaxed/simple;
+	bh=b5J5aNlAuhkKaRFLEKNaYcnFOnkIAx+ioPr3QdH9v5A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oj2ufepvpYw5wRExON6itG3EtE2ezi2hvTzgOroaOMJopE2SOUoAubhvJOsY74zhVoIeD6QNiOsLbIgKJigvNQ9f2Z503cdeDsYkZPH3fkj1i7JooXaB+pvTQ+zVq7hsjLycdLh3HqRwcK0Ym1rY97iVPowbRm8CHFYhxEG82fI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XrDUH59m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF167C113CC;
+	Thu, 18 Apr 2024 12:11:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713442286;
+	bh=b5J5aNlAuhkKaRFLEKNaYcnFOnkIAx+ioPr3QdH9v5A=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=XrDUH59m5budXj01S9zfuQA4aaVYhENvFECekzgwmrq77aKyEuIu6q47o3D4nAAcN
+	 p5l07WUO0fo9Ry4QkaShPbPpzAdJn2ZVMKU/RtsWepp6onq8RaMKkwRNApK1Rkg9LZ
+	 xYw23Vd/NOfHmU8wHdl5Pvf+rR6wPpkGVAfRf0TO8NUPOeYboNd+hfQ68mCoR069GA
+	 rIbqLn7lgfrb9x5qHcZbUjFztpom0uwEKA/bmntKowHzHMaZDzN6OiiYclP1Unm+um
+	 1ak2bM14r+JDc2OzclHiOrz9RsPavHcWfIXBof23vS46Jw026vBaL3h6A/V7AyWUe5
+	 BdNSpSyuCIynQ==
+From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	devicetree@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-crypto@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Olivia Mackall <olivia@selenic.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: arm@kernel.org,
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Subject: [PATCH v6 00/11] Turris Omnia MCU driver
+Date: Thu, 18 Apr 2024 14:11:05 +0200
+Message-ID: <20240418121116.22184-1-kabel@kernel.org>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240417205700.3947408-1-jm@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 17, 2024 at 03:57:00PM -0500, Judith Mendez wrote:
-> On AM62x, the watchdog is pet before the valid window is open. Fix
-> min_hw_heartbeat and accommodate a 2% + static offset safety margin.
-> The static offset accounts for max hardware error.
-> 
-> Remove the hack in the driver which shifts the open window boundary,
-> since it is no longer necessary due to the fix mentioned above.
-> 
-> cc: stable@vger.kernel.org
-> Fixes: 5527483f8f7c ("watchdog: rti-wdt: attach to running watchdog during probe")
-> Signed-off-by: Judith Mendez <jm@ti.com>
+Hello Andy, Dan, Linus, Arnd, Gregory, and others,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+I am sending v6 of the series adding Turris Omnia MCU driver.
+
+This series depends on the immutable branch between LEDs and locking,
+introducing devm_mutex_init(), see the PR
+  https://lore.kernel.org/linux-leds/20240412084616.GR2399047@google.com/
+
+See the cover letters for v1, v2, v3, v4 and v5:
+  https://patchwork.kernel.org/project/linux-soc/cover/20230823161012.6986-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20230919103815.16818-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231023143130.11602-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231026161803.16750-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240323164359.21642-1-kabel@kernel.org/
+
+Changes since v5:
+- use dev_get_drvdata(dev) instead of
+  i2c_get_clientdata(to_i2c_client(dev))
+- uses devm_mutex_init() from the above mentioned branch
+- addressed Andy's suggestions for patch 2 (excluding the one suggesting
+  100 column lines, I still prefer 80 columns)
+- addressed Dan's suggestion for devm_irq_create_mapping() (return
+  -ENXIO if mapping could not be created, not 0 as irq_create_mapping()
+  does)
+- I threw away the changes for other drivers that came with the new
+  devm_ helpers, notably conversion to devm_debugfs_create_dir(), as
+  there were some problems
+
+Marek Behún (11):
+  dt-bindings: arm: add cznic,turris-omnia-mcu binding
+  platform: cznic: Add preliminary support for Turris Omnia MCU
+  platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs
+  platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
+  platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
+  devm-helpers: Add resource managed version of irq_create_mapping()
+  platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
+  devm-helpers: Add resource managed version of debugfs directory create
+    function
+  platform: cznic: turris-omnia-mcu: Add support for digital message
+    signing via debugfs
+  ARM: dts: turris-omnia: Add MCU system-controller node
+  ARM: dts: turris-omnia: Add GPIO key node for front button
+
+ .../ABI/testing/debugfs-turris-omnia-mcu      |   13 +
+ .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  126 ++
+ .../bindings/arm/cznic,turris-omnia-mcu.yaml  |   86 ++
+ MAINTAINERS                                   |    5 +
+ .../dts/marvell/armada-385-turris-omnia.dts   |   35 +-
+ drivers/platform/Kconfig                      |    2 +
+ drivers/platform/Makefile                     |    1 +
+ drivers/platform/cznic/Kconfig                |   51 +
+ drivers/platform/cznic/Makefile               |    9 +
+ .../platform/cznic/turris-omnia-mcu-base.c    |  439 +++++++
+ .../platform/cznic/turris-omnia-mcu-debugfs.c |  209 ++++
+ .../platform/cznic/turris-omnia-mcu-gpio.c    | 1047 +++++++++++++++++
+ .../cznic/turris-omnia-mcu-sys-off-wakeup.c   |  258 ++++
+ .../platform/cznic/turris-omnia-mcu-trng.c    |   89 ++
+ .../cznic/turris-omnia-mcu-watchdog.c         |  123 ++
+ drivers/platform/cznic/turris-omnia-mcu.h     |  188 +++
+ include/linux/devm-helpers.h                  |   94 ++
+ include/linux/turris-omnia-mcu-interface.h    |  249 ++++
+ 18 files changed, 3023 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/debugfs-turris-omnia-mcu
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
+ create mode 100644 Documentation/devicetree/bindings/arm/cznic,turris-omnia-mcu.yaml
+ create mode 100644 drivers/platform/cznic/Kconfig
+ create mode 100644 drivers/platform/cznic/Makefile
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-base.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-debugfs.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-gpio.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-trng.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-watchdog.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu.h
+ create mode 100644 include/linux/turris-omnia-mcu-interface.h
+
+-- 
+2.43.2
+
 
