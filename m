@@ -1,59 +1,84 @@
-Return-Path: <linux-watchdog+bounces-979-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-980-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5D7B8ABECF
-	for <lists+linux-watchdog@lfdr.de>; Sun, 21 Apr 2024 10:49:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C42B58AC229
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Apr 2024 01:51:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A5D7B20B44
-	for <lists+linux-watchdog@lfdr.de>; Sun, 21 Apr 2024 08:49:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FE6B1F2158B
+	for <lists+linux-watchdog@lfdr.de>; Sun, 21 Apr 2024 23:51:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A46CBBE5D;
-	Sun, 21 Apr 2024 08:49:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC0EC45C0C;
+	Sun, 21 Apr 2024 23:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="ELKYdL7k"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lzrAbT9L"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4277D33D5;
-	Sun, 21 Apr 2024 08:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361AC1BC58;
+	Sun, 21 Apr 2024 23:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713689373; cv=none; b=GNJSM7XXIgMajyaBvZzFMfDTOpfbIyKovNifRClj0kkuG9Ur97FyE1dV/PsBZdQvsLON6l61R+UfRI5RFCqQIi/6MLVdXRDBjscXiQe0arpswC8u6Sa8aHW+G64VukFTlKWv7/famBRDY9uuQLzXjjRg6+ohZUQlFNWCIGhh1ig=
+	t=1713743461; cv=none; b=eH+Zy3HCZeiAHPpRx3tVGM8JH00o355glAUpN9AC8yA00F3pSJRXvfRg8xylpXf9o6sjL2z24iwz1a/jKSaDeEf8ua56KZwX/WBUNv9Lvp/GDgGw9IbG1jvNDA7fpbIB7U0x5U0Z3xl/+B5GsHcnVtFwhSHjLiitubRbnLJJiS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713689373; c=relaxed/simple;
-	bh=IzOFxcvABLw7okAaODhaFqzHvAqBYKY/wpPe2vbfCpw=;
+	s=arc-20240116; t=1713743461; c=relaxed/simple;
+	bh=YdGlilwPoZmG9gKaaTLFfeBClo8PnMJTT3MPY8WJ+kQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=drvzZMcbs8rjiVO7jPhHtywHCCsn3kIHji29Q4d4IuGE7mQght45DN4DgN+BxfyAmx6VotBKVGpjlh6QZ/cek48KyUn/6dGenU4fQVbj7Xkgvxs98x/mc7G7DTI6XbLOsLe9wb9Gxl3jT03FmbDeGErkGNP2hufe6BWYqgfahGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=ELKYdL7k; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id 093881F92F;
-	Sun, 21 Apr 2024 10:49:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1713689360;
-	bh=BpFulAQbCdhJzSEsRhzIqEy0hJxoSMYEZcUkUy44sng=; h=From:To:Subject;
-	b=ELKYdL7kDycfV2btm/G2tfgdGzxdq3yTKBM8fryRcLmWRvSfpJwGJi7cqLzWWpRxg
-	 zekP2xABKZOouiZfCYNFXkQmednQ3hsIS8gpEfbAh86/gdoqvc5J7DoVW5e+zHnXVJ
-	 fFYE4eDcUt9TKn5e5ZYoSdSekf3tkYS57mv8dtMHFG7kCegH98IEfDMbl9x86b/eHy
-	 +YqXh+5cdPCudL9ZSXRSVla7J0qK58ZbXNW34APtWPF9WJVAD8YApOXNGNLKiZBpoe
-	 Cv/08ugo+vxITYpi+Dj5KIwCRBuyDRNKIQcL1FxKzmxRe4zUfjPj7okaNWdOAp3rY2
-	 4zfmL9CLbA1+Q==
-Date: Sun, 21 Apr 2024 10:49:16 +0200
-From: Francesco Dolcini <francesco@dolcini.it>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mkjS8Rg8fkV4dbZ93hQ71aaBzsbdtROgPRXSR42kBbXaZ3eH1/G7aQIMzxRJa9N77X3gpEoUslhrxLq8Yf1NU/4AneR3Nht4Gof4+Zuqu96dj7RhhCzAjMAJ6RpK1a57uTJZ4CyON0k4d+v+3dnRNmjeX5OO8vw4Ab2rVejyA/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lzrAbT9L; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-5ce2aada130so2600287a12.1;
+        Sun, 21 Apr 2024 16:50:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713743459; x=1714348259; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FV20n2eOOFz2ddqTNTvIrBb81EwLpU6B113A9MmWLvE=;
+        b=lzrAbT9LZBu2zNAw6hYb3VmVbWD5AtXCVpEwyYM/gkv2TM1dJXRsvDWxAb0lYbpv76
+         nskWAOH5EZlqtWv3puTW9c/oEB8PtVVzvKM56oP2lGb2o+9xTa5XczcNvGkRvLAX0Vra
+         wNd7w+lA6SBbZ7+ze5oVSYo32xUXL5GjEeRj3yoNs/ZRmPsl8GRTusGMFZyNsBxUcuyW
+         D7spR/lK+qoQuWpTU1bucF3BTiRvmvyQFB9rI00z5x1yj8GHTHcflTjeOIiHJT7Efmf/
+         x+ojdN4iXojE7jENd/GvnVo6S1SkWHcgbK+8rtD1n7z72LYmh3ogcjz7ANeLwmrGJQhM
+         8Y4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713743459; x=1714348259;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FV20n2eOOFz2ddqTNTvIrBb81EwLpU6B113A9MmWLvE=;
+        b=bTe6hdiCA5Ly5ZPNWGOwgW6i18hJXZ941mmHmeMQ4uoV/8uQ65BDVGKHt/cM+T5t8C
+         pHTpb8YUonKX2lUgV1Ye56ugFs1Gl/z7w7IEvU/HbO8bERgJiA84DFAvF/wgTFAic8Tu
+         wt+dS194A7xjwipE700QdXwdTbtKMYmgkFs6OPEiJ6vVCny7psZVPPXi2fsG0l6A7Utd
+         TTQ36TgwccdjpNel92kAaR5plHH5iRps2gG3vhmF8b6w6oActqcBwkoCX98TAWtX4Z+y
+         DswrAi6yy8LKhjbXesEOM/uUFlxy2PsifenMAeWBIOWq793LawNTFG4+cooGP80N3qfF
+         LE7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUtwT7wTN+cPOWWfwxWGSDasCjcIbvov+gKkEw4rIyqeZPDCg5xMvcNniUjbOZRKmRN9bJET9Ydr2F6CYXcbN+/ZASYCdDM9j5Y7O1FKayZFyimZOfipriwAD3+RTN3brqT4V+lbNnyord1V+U=
+X-Gm-Message-State: AOJu0YzkN2EG3SY+IfrrrcyoPUQZHwagpUnN6s4BVZOuTk0Bk2j07/qw
+	1YYV6oY3CWdlHWjojcMoiq8UQLTQIDnEOQ0KDr7A8LsSsFH0KZjj
+X-Google-Smtp-Source: AGHT+IHSUJDEAjxkLa5CYyX1ttCtJehdT/C3gsFsDVCWLxJ79iAuS+cM2jmWlJ0WoYMAOTnESGHXEg==
+X-Received: by 2002:a05:6a20:7f8c:b0:1a7:8a02:3058 with SMTP id d12-20020a056a207f8c00b001a78a023058mr9127929pzj.12.1713743459271;
+        Sun, 21 Apr 2024 16:50:59 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 3-20020a631943000000b005df41b00ee9sm6359267pgz.68.2024.04.21.16.50.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Apr 2024 16:50:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sun, 21 Apr 2024 16:50:56 -0700
+From: Guenter Roeck <linux@roeck-us.net>
 To: Jan Kiszka <jan.kiszka@siemens.com>
 Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Tero Kristo <t-kristo@ti.com>,
 	"Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
 Subject: Re: [RFC][PATCH] watchdog: rti-wdt: Provide set_timeout handler to
  make existing userspace happy
-Message-ID: <20240421084916.GA4208@francesco-nb>
+Message-ID: <e6e3f905-3de5-469c-a47e-179fe23c66df@roeck-us.net>
 References: <4d82b8ce-bc34-e4b2-c5fe-9e883b0db59d@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
@@ -64,8 +89,6 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <4d82b8ce-bc34-e4b2-c5fe-9e883b0db59d@siemens.com>
-
-Hello Jan,
 
 On Mon, Sep 13, 2021 at 01:41:43PM +0200, Jan Kiszka wrote:
 > From: Jan Kiszka <jan.kiszka@siemens.com>
@@ -78,8 +101,61 @@ On Mon, Sep 13, 2021 at 01:41:43PM +0200, Jan Kiszka wrote:
 > 
 > Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
 
-Are you aware of this patch https://lore.kernel.org/all/20240417205700.3947408-1-jm@ti.com/ ?
+NACK.
 
-Francesco
+This will need to be fixed in systemd. set_timeout is and will remain
+optional.
 
+Guenter
+
+> ---
+> 
+> See also https://github.com/systemd/systemd/issues/20683
+> 
+>  drivers/watchdog/rti_wdt.c | 17 ++++++++++++++++-
+>  1 file changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+> index 359302f71f7e..365255b15a0d 100644
+> --- a/drivers/watchdog/rti_wdt.c
+> +++ b/drivers/watchdog/rti_wdt.c
+> @@ -173,13 +173,27 @@ static unsigned int rti_wdt_get_timeleft_ms(struct watchdog_device *wdd)
+>  	return timer_counter;
+>  }
+>  
+> +static int rti_wdt_set_timeout(struct watchdog_device *wdd,
+> +			       unsigned int timeout)
+> +{
+> +	/*
+> +	 * Updating the timeout after start is actually not supported, but
+> +	 * let's ignore requests for the already configured value. Helps
+> +	 * existing userspace such as systemd.
+> +	 */
+> +	if (timeout != heartbeat)
+> +		return -EOPNOTSUPP;
+> +
+> +	return 0;
+> +}
+> +
+>  static unsigned int rti_wdt_get_timeleft(struct watchdog_device *wdd)
+>  {
+>  	return rti_wdt_get_timeleft_ms(wdd) / 1000;
+>  }
+>  
+>  static const struct watchdog_info rti_wdt_info = {
+> -	.options = WDIOF_KEEPALIVEPING,
+> +	.options = WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT,
+>  	.identity = "K3 RTI Watchdog",
+>  };
+>  
+> @@ -187,6 +201,7 @@ static const struct watchdog_ops rti_wdt_ops = {
+>  	.owner		= THIS_MODULE,
+>  	.start		= rti_wdt_start,
+>  	.ping		= rti_wdt_ping,
+> +	.set_timeout	= rti_wdt_set_timeout,
+>  	.get_timeleft	= rti_wdt_get_timeleft,
+>  };
+>  
+> -- 
+> 2.31.1
 
