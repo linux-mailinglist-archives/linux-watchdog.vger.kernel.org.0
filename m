@@ -1,139 +1,85 @@
-Return-Path: <linux-watchdog+bounces-978-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-979-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BB7A8AA812
-	for <lists+linux-watchdog@lfdr.de>; Fri, 19 Apr 2024 07:48:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5D7B8ABECF
+	for <lists+linux-watchdog@lfdr.de>; Sun, 21 Apr 2024 10:49:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 88B24B219C8
-	for <lists+linux-watchdog@lfdr.de>; Fri, 19 Apr 2024 05:48:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A5D7B20B44
+	for <lists+linux-watchdog@lfdr.de>; Sun, 21 Apr 2024 08:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BFE5D51A;
-	Fri, 19 Apr 2024 05:48:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A46CBBE5D;
+	Sun, 21 Apr 2024 08:49:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EiLc8h1z"
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="ELKYdL7k"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2B49C127;
-	Fri, 19 Apr 2024 05:48:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4277D33D5;
+	Sun, 21 Apr 2024 08:49:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713505721; cv=none; b=BfeKzIWq4149twAwQ8ifqo1N+IFDdsk7C77E2HE1K3UbIHeDUmq1UispjQNZWaIFu9Tkx77QXc6VLvlKQ79shvXdzEz3i0hDJ9e2PLYqTgJVD4KPaHw4WC5fnFjRq/Dzlk2LWZj1/Qnuk6re0q0Qx9M0Ycwt1HcE41jhcQ8fO+U=
+	t=1713689373; cv=none; b=GNJSM7XXIgMajyaBvZzFMfDTOpfbIyKovNifRClj0kkuG9Ur97FyE1dV/PsBZdQvsLON6l61R+UfRI5RFCqQIi/6MLVdXRDBjscXiQe0arpswC8u6Sa8aHW+G64VukFTlKWv7/famBRDY9uuQLzXjjRg6+ohZUQlFNWCIGhh1ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713505721; c=relaxed/simple;
-	bh=HlnIXS8pM3ffZ/RvmET8aAuoWI2SeR20JxIsTBt/+Go=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vs1CmzAVDQZDrB2DV6U8SechEkYsYvZjL/5sdNPOLNmzCPvjne4uV6Q9Uh8AGaOqgMfcs5IbgG4Jei1flPDQk0AB690iEyCTZyYI7wRkYMmMQldJGXgsuuFly1UQQIQVRAwF6JbDUOqqEdeVFU9vsqZiPhEGG7ZCk/VWRAFaZq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EiLc8h1z; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-51ac9c6599bso59064e87.1;
-        Thu, 18 Apr 2024 22:48:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713505718; x=1714110518; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5c2Rhg4mgS4eH1ovISMs98g6pb/JQ+nRM/lpp4nqnQI=;
-        b=EiLc8h1zL8F/SYJBpYGcWFQh7meRFXhhj13YmgxyLW4/zUPxNqaq9zw9adDgE3fhtJ
-         4dm3lZUTswYoHP4rwJ1Fx/v2QZxezCXG0yv/C93s7F3OFPw/xBAsBFAWPzVEKrbRAjGZ
-         pynHgxpZ1jpbu5atD27jszbvpJCKZdMP7tk5h5nVTtoN2xwX5vueDwXdopAXNHbQev84
-         5f009dSxIvkXxkdZVHZKYioDPwvy0+9XPBG7aHlsn53zGHTSPBwuZlAJL/IR1Awq/0vn
-         R1gCszbZsgnnabdvrSKj9gOhMVbq9B3jbRs2DIb1xYpEdQKnFuI2ZF0QevveeUBA2pGB
-         Jx1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713505718; x=1714110518;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5c2Rhg4mgS4eH1ovISMs98g6pb/JQ+nRM/lpp4nqnQI=;
-        b=W99RZtr54ZMC19n4amb2Ry5DYf11BY81Bg1b5l/UslQNSb3Rlhn4zXRTJnXjEilR5M
-         Y7Q+hYjkuGXByXRmpXvE1uk0Nw5wlKtHTlE6eOCZvm7Md3sx81fg/R4iQk5HHKpmNfl7
-         SYYVcum24KDumRiZO93OH0ks0r7Exix8HlowmT7sMs7nIbOY7oicca+0jY/a3xE5ULJg
-         9RmlQSJElj+nDlwxXe6s/XKmO1rXsLR3SxNpGOAtUpKLP09V8WzveHchraZAgRZrVViR
-         wI1rh+ogTkbGP42qQjNdgSQIiRgp09d4e52Pw9ogvE+TyF5ED7o1lxmHOM2Z9WaTYTW0
-         ceFA==
-X-Forwarded-Encrypted: i=1; AJvYcCXootP+TkbGmY4b3TGJQio20/E7ox6HHQ71k7Jz7/3FuPixUHs13rOEKpi1WVOSEwfMvOwN7FIyshCbAHhMUSbuu3GZrNuYJDmbq/VVwEMt9duuQw1pEaOaew78q+fuz6mcMyoOqnFHF+QabSPpQUuA4WBZp85a6AxfT/6/8JYfzlNU0HEQSv9O
-X-Gm-Message-State: AOJu0YzmbGTjgsYZKPgkTSq+HqhBO7Lhb2ihLYOJr/AysAqrgXfpZJnl
-	cbYHmKl6w45hqinbcDr+Bh2x56K4SMusjT6aeZbI35U5eVAJBOAY
-X-Google-Smtp-Source: AGHT+IEdcyybcHYAP3yMpgWtqA9Atv2L/pwyITTXmjPJPeVnp2PCxQKjGhR1B1FVx+YcDIC48dP3Tg==
-X-Received: by 2002:a05:6512:3082:b0:513:30fb:d64 with SMTP id z2-20020a056512308200b0051330fb0d64mr950308lfd.44.1713505717640;
-        Thu, 18 Apr 2024 22:48:37 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:7426:df00::2? (drtxq0yyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:7426:df00::2])
-        by smtp.gmail.com with ESMTPSA id s19-20020a056512215300b00518c1387e6esm550580lfr.64.2024.04.18.22.48.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Apr 2024 22:48:37 -0700 (PDT)
-Message-ID: <8622b4aa-1693-4762-b415-61e1b927efe3@gmail.com>
-Date: Fri, 19 Apr 2024 08:48:35 +0300
+	s=arc-20240116; t=1713689373; c=relaxed/simple;
+	bh=IzOFxcvABLw7okAaODhaFqzHvAqBYKY/wpPe2vbfCpw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=drvzZMcbs8rjiVO7jPhHtywHCCsn3kIHji29Q4d4IuGE7mQght45DN4DgN+BxfyAmx6VotBKVGpjlh6QZ/cek48KyUn/6dGenU4fQVbj7Xkgvxs98x/mc7G7DTI6XbLOsLe9wb9Gxl3jT03FmbDeGErkGNP2hufe6BWYqgfahGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=ELKYdL7k; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id 093881F92F;
+	Sun, 21 Apr 2024 10:49:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1713689360;
+	bh=BpFulAQbCdhJzSEsRhzIqEy0hJxoSMYEZcUkUy44sng=; h=From:To:Subject;
+	b=ELKYdL7kDycfV2btm/G2tfgdGzxdq3yTKBM8fryRcLmWRvSfpJwGJi7cqLzWWpRxg
+	 zekP2xABKZOouiZfCYNFXkQmednQ3hsIS8gpEfbAh86/gdoqvc5J7DoVW5e+zHnXVJ
+	 fFYE4eDcUt9TKn5e5ZYoSdSekf3tkYS57mv8dtMHFG7kCegH98IEfDMbl9x86b/eHy
+	 +YqXh+5cdPCudL9ZSXRSVla7J0qK58ZbXNW34APtWPF9WJVAD8YApOXNGNLKiZBpoe
+	 Cv/08ugo+vxITYpi+Dj5KIwCRBuyDRNKIQcL1FxKzmxRe4zUfjPj7okaNWdOAp3rY2
+	 4zfmL9CLbA1+Q==
+Date: Sun, 21 Apr 2024 10:49:16 +0200
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Jan Kiszka <jan.kiszka@siemens.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Tero Kristo <t-kristo@ti.com>,
+	"Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
+Subject: Re: [RFC][PATCH] watchdog: rti-wdt: Provide set_timeout handler to
+ make existing userspace happy
+Message-ID: <20240421084916.GA4208@francesco-nb>
+References: <4d82b8ce-bc34-e4b2-c5fe-9e883b0db59d@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 2/6] dt-bindings: mfd: bd96801 PMIC core
-Content-Language: en-US, en-GB
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
- Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
- Fabio Aiuto <fabio.aiuto@engicam.com>
-References: <cover.1712920132.git.mazziesaccount@gmail.com>
- <ea49494429528cf8e60fa984ae1f523ddacd850c.1712920132.git.mazziesaccount@gmail.com>
- <b5eeaf10-e011-452b-840a-176c4f62cac4@linaro.org>
- <7541fb24-894a-439e-8f9a-b18f04e06afe@gmail.com>
- <675cd641-7322-43d5-a33a-7f0be48c380c@linaro.org>
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <675cd641-7322-43d5-a33a-7f0be48c380c@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4d82b8ce-bc34-e4b2-c5fe-9e883b0db59d@siemens.com>
 
-On 4/18/24 20:28, Krzysztof Kozlowski wrote:
-> On 15/04/2024 10:28, Matti Vaittinen wrote:
->>>
->>> Missing allOf and $ref to watchdog.yaml
->>
->> Huh. The watchdog.yaml contains:
->>
->> select:
->>     properties:
->>       $nodename:
->>         pattern: "^watchdog(@.*|-([0-9]|[1-9][0-9]+))?$"
->>
->> properties:
->>     $nodename:
->>       pattern: "^(timer|watchdog)(@.*|-([0-9]|[1-9][0-9]+))?$"
->>
->>
->> This means the watchdog _must_ have own sub-node inside the PMIC node,
+Hello Jan,
+
+On Mon, Sep 13, 2021 at 01:41:43PM +0200, Jan Kiszka wrote:
+> From: Jan Kiszka <jan.kiszka@siemens.com>
 > 
-> Yes, that's a bit of a trouble.
+> Prominent userspace - systemd - cannot handle watchdogs without
+> WDIOF_SETTIMEOUT, even if it was configured to the same time as the
+> driver selected or was used by firmware to start the watchdog. To avoid
+> failing in this case, implement a handler that only fails if a deviating
+> set_timeout is requested.
+> 
+> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
 
-Agree. I'm not 100% sure why this requirement? I guess it is a bit of a 
-problem for many MFD devices with a watchdog.
+Are you aware of this patch https://lore.kernel.org/all/20240417205700.3947408-1-jm@ti.com/ ?
 
-> Then instead maybe just add timeout-sec
-> with maxItems: 2.
-
-Nice idea. Thanks for the suggestion, I'll do just that!
-
-Yours,
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+Francesco
 
 
