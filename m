@@ -1,161 +1,202 @@
-Return-Path: <linux-watchdog+bounces-980-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-981-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C42B58AC229
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Apr 2024 01:51:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CB218AC3C3
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Apr 2024 07:36:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FE6B1F2158B
-	for <lists+linux-watchdog@lfdr.de>; Sun, 21 Apr 2024 23:51:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FA071C21B37
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Apr 2024 05:36:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC0EC45C0C;
-	Sun, 21 Apr 2024 23:51:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF8C613FF6;
+	Mon, 22 Apr 2024 05:36:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lzrAbT9L"
+	dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b="OhWQ6OLX"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2088.outbound.protection.outlook.com [40.107.105.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361AC1BC58;
-	Sun, 21 Apr 2024 23:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713743461; cv=none; b=eH+Zy3HCZeiAHPpRx3tVGM8JH00o355glAUpN9AC8yA00F3pSJRXvfRg8xylpXf9o6sjL2z24iwz1a/jKSaDeEf8ua56KZwX/WBUNv9Lvp/GDgGw9IbG1jvNDA7fpbIB7U0x5U0Z3xl/+B5GsHcnVtFwhSHjLiitubRbnLJJiS8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713743461; c=relaxed/simple;
-	bh=YdGlilwPoZmG9gKaaTLFfeBClo8PnMJTT3MPY8WJ+kQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mkjS8Rg8fkV4dbZ93hQ71aaBzsbdtROgPRXSR42kBbXaZ3eH1/G7aQIMzxRJa9N77X3gpEoUslhrxLq8Yf1NU/4AneR3Nht4Gof4+Zuqu96dj7RhhCzAjMAJ6RpK1a57uTJZ4CyON0k4d+v+3dnRNmjeX5OO8vw4Ab2rVejyA/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lzrAbT9L; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-5ce2aada130so2600287a12.1;
-        Sun, 21 Apr 2024 16:50:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713743459; x=1714348259; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FV20n2eOOFz2ddqTNTvIrBb81EwLpU6B113A9MmWLvE=;
-        b=lzrAbT9LZBu2zNAw6hYb3VmVbWD5AtXCVpEwyYM/gkv2TM1dJXRsvDWxAb0lYbpv76
-         nskWAOH5EZlqtWv3puTW9c/oEB8PtVVzvKM56oP2lGb2o+9xTa5XczcNvGkRvLAX0Vra
-         wNd7w+lA6SBbZ7+ze5oVSYo32xUXL5GjEeRj3yoNs/ZRmPsl8GRTusGMFZyNsBxUcuyW
-         D7spR/lK+qoQuWpTU1bucF3BTiRvmvyQFB9rI00z5x1yj8GHTHcflTjeOIiHJT7Efmf/
-         x+ojdN4iXojE7jENd/GvnVo6S1SkWHcgbK+8rtD1n7z72LYmh3ogcjz7ANeLwmrGJQhM
-         8Y4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713743459; x=1714348259;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FV20n2eOOFz2ddqTNTvIrBb81EwLpU6B113A9MmWLvE=;
-        b=bTe6hdiCA5Ly5ZPNWGOwgW6i18hJXZ941mmHmeMQ4uoV/8uQ65BDVGKHt/cM+T5t8C
-         pHTpb8YUonKX2lUgV1Ye56ugFs1Gl/z7w7IEvU/HbO8bERgJiA84DFAvF/wgTFAic8Tu
-         wt+dS194A7xjwipE700QdXwdTbtKMYmgkFs6OPEiJ6vVCny7psZVPPXi2fsG0l6A7Utd
-         TTQ36TgwccdjpNel92kAaR5plHH5iRps2gG3vhmF8b6w6oActqcBwkoCX98TAWtX4Z+y
-         DswrAi6yy8LKhjbXesEOM/uUFlxy2PsifenMAeWBIOWq793LawNTFG4+cooGP80N3qfF
-         LE7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUtwT7wTN+cPOWWfwxWGSDasCjcIbvov+gKkEw4rIyqeZPDCg5xMvcNniUjbOZRKmRN9bJET9Ydr2F6CYXcbN+/ZASYCdDM9j5Y7O1FKayZFyimZOfipriwAD3+RTN3brqT4V+lbNnyord1V+U=
-X-Gm-Message-State: AOJu0YzkN2EG3SY+IfrrrcyoPUQZHwagpUnN6s4BVZOuTk0Bk2j07/qw
-	1YYV6oY3CWdlHWjojcMoiq8UQLTQIDnEOQ0KDr7A8LsSsFH0KZjj
-X-Google-Smtp-Source: AGHT+IHSUJDEAjxkLa5CYyX1ttCtJehdT/C3gsFsDVCWLxJ79iAuS+cM2jmWlJ0WoYMAOTnESGHXEg==
-X-Received: by 2002:a05:6a20:7f8c:b0:1a7:8a02:3058 with SMTP id d12-20020a056a207f8c00b001a78a023058mr9127929pzj.12.1713743459271;
-        Sun, 21 Apr 2024 16:50:59 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 3-20020a631943000000b005df41b00ee9sm6359267pgz.68.2024.04.21.16.50.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Apr 2024 16:50:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Sun, 21 Apr 2024 16:50:56 -0700
-From: Guenter Roeck <linux@roeck-us.net>
-To: Jan Kiszka <jan.kiszka@siemens.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	linux-watchdog@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Tero Kristo <t-kristo@ti.com>,
-	"Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0ED10A19;
+	Mon, 22 Apr 2024 05:35:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.105.88
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713764161; cv=fail; b=NDh9kElv0dXM5JKGulvrIODQ29aPhq+qkcWYwfZOnOCPq5Cd8kvHzFNi9uLdm6pMnsG6ZvqmZtidAzJhYXrMEEKld53rgIhfEE+OgTV3l7v66fH+U1yYMEQ0B2Gg0RamD4Ddw0V7MW82FQzU8fXpn6//RXaOu0L2K++w+lS7GFw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713764161; c=relaxed/simple;
+	bh=GCAc/R+66sEjARnWNPY0A0AyVoYirdpF392oOmMLgH4=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=l3o0DPdAmX+WjTZ4jcbzX3nKUSSDWvckYH0REcNx81jy75vUHrlWjutEyyriVc5CtWOuBh0PIdK6Nvlc8OUqunR1m+M0rSojQucfpCGpY+jcfxVc3OxaJhnJIZOUHmc3YZV7UT56OiZ8T0WnG9LeifA+U7XXai2IONErztzkTPw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b=OhWQ6OLX; arc=fail smtp.client-ip=40.107.105.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siemens.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gj1NSrKqMj9tgHd6M78v3/J739oe+tn+Os3Ox/j+SYvFiUZYJ+3VmxoVWhZ7XMYAwKwIML5+M2EAL9lZVkpTCDHpV0jjS8m4TmXWzLZUnNEnCVOCvnm9Pigdtjj6o+HZFsNhN3IamZrS/zb+k+y39P4YUblzVFbvihBpOqxvltaSNmphVTs1oA13OJy//QJWnGWJFJqv1OJPi2iU3mcMvuSg1eYax1kolzFBngLNtdenNhlqoXYJG1u4SCU6/3jGzJ/RQ6Tce+3++eHqKykiJWKeQ00hcl2z9cJd19mWgcnzFhvWkqtXbphCQwyYGKBqjsOQIkxSgeJCsNgrMXoP6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d0omA0/jZTjoPDi140ZuizkPtA3M4c1ipJuoYpXuzBg=;
+ b=Vb94k2XJvACzXuftK+QPHNFX83G4dJyhyGyp9GNvfwpG79Ryx6q6pWlH67waru6omDS2vkO6wnj+CvD/W/p1StqCuGir8KHluw+EiNckwGeM7SMj7PnR7PWYwCAij9V70CK66UrFs/IQDTtWX7WS5/xKHg0Hi2gBKTa52GNHuTsHAnNEb1+5AnMfxOpODK/QpL7hE5CXZXsxumz8sgQzN6adE22lJBuRMk6IKe3uSC3aRy9aKaFUjVFRPl27gg2EBLSCXupNt0Zelvsn9kxjo5rOAz8Iihe/dyg2jRlvDbhh0drHwxxoFxxAUMYS+lA+bZWtuo7dTuOK6DonhucT5w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d0omA0/jZTjoPDi140ZuizkPtA3M4c1ipJuoYpXuzBg=;
+ b=OhWQ6OLXDR3OvroAdhNn9po16UOuo/wpQV+frAOHImqWKntqAwE1pnKdqxWf0d5CqhqRWSYCCma1vsswZSi9lM2Cq6z8unn6vWqyjPHHCyWczHjNt5R3+J94KepevtmsLO7/khbv4FxHG4e3YpXKJ4Z4kEAeg1mtpRABiNzknRwWXupWgliEcU+SekdHWH/1vR2VkOlnLQkzuuOQo2G5xIJcW/tCCdBlptblX8tC8wwHxqe9cV8lTrt6mH1I5STcJ8kFwOKMJVo3hG2hG7D5lv5/FsB7mLeJckvjdh5rbfqoocarkxKId+xDQGe2UA/tNFR2Fw+bTCnv3xc07QALvQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:588::19)
+ by AS4PR10MB5622.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:4f0::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Mon, 22 Apr
+ 2024 05:35:55 +0000
+Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::4e33:3630:e08:77b9]) by AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::4e33:3630:e08:77b9%4]) with mapi id 15.20.7472.044; Mon, 22 Apr 2024
+ 05:35:55 +0000
+Message-ID: <9ed68e05-5761-4dc9-b81c-fc847ec6d043@siemens.com>
+Date: Mon, 22 Apr 2024 07:35:52 +0200
+User-Agent: Mozilla Thunderbird
 Subject: Re: [RFC][PATCH] watchdog: rti-wdt: Provide set_timeout handler to
  make existing userspace happy
-Message-ID: <e6e3f905-3de5-469c-a47e-179fe23c66df@roeck-us.net>
+To: Francesco Dolcini <francesco@dolcini.it>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Tero Kristo <t-kristo@ti.com>,
+ "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
 References: <4d82b8ce-bc34-e4b2-c5fe-9e883b0db59d@siemens.com>
+ <20240421084916.GA4208@francesco-nb>
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Content-Language: en-US
+In-Reply-To: <20240421084916.GA4208@francesco-nb>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR4P281CA0190.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:ca::15) To AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:588::19)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4d82b8ce-bc34-e4b2-c5fe-9e883b0db59d@siemens.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS4PR10MB6181:EE_|AS4PR10MB5622:EE_
+X-MS-Office365-Filtering-Correlation-Id: 097874f0-266b-41d8-b06e-08dc628e14f0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?NytGeWxkVVhLVW5lbTUxWDU2NnYvV1AwN3NkSldDVUFHRzJQUlJ3N2xyRGJS?=
+ =?utf-8?B?V2JoMm1FN280aWZNdEFJdzlqbmR2OFo1VG1jaEZuNUUrTmYvVlF5SDhmSkxK?=
+ =?utf-8?B?cUlITkplYjRBTW50VUZJM0NVRGNRY0ZIMHRKWEovTVJFOUxLanYrK0ZyZCtJ?=
+ =?utf-8?B?dyt6OGJsQTZwd3gxQWFMYlpkRXhZajVzeU5CM0t0M3F0b1piRkJ0UFZMbEc5?=
+ =?utf-8?B?M0tuTGZJem85VmE0K3JWVVg0U1oxUEVBcWNwNEZJWlZlUmJPd2hocjI4NEdR?=
+ =?utf-8?B?SGUydGROSzFGOWRRSVRXdFFrNjh0K2h4NklzTkdxWnkyNmxKbklXREZxdnRt?=
+ =?utf-8?B?MWZ3Q1B3VDhnT1BNS1IxSU5HV1JRRnNxaEJNT0hwY3BleHFpOC82MDRHN2t4?=
+ =?utf-8?B?cFdMRmhYMytUcXg5MEVvbnpKMlFhbDFuM0dRcUhIU3FOUkZMTFBOYVlGbWlD?=
+ =?utf-8?B?V3FDTzhOMVl2OGd2MitxVjA4a0ZJT2ZYOXhXTkhSQXJLY3hxNlJCbU1mT1NS?=
+ =?utf-8?B?bEp0bnFvbHJEVGdPdXp4RmU3b29BbnlQUW5IdjBGM0srUXBaS043ODVHVGJ5?=
+ =?utf-8?B?VzNkSUZkeFVLcXhQcnEvVWhRcWw1b2IvLy9JMUxJTG9PWUNXWHp5YlgzL0VS?=
+ =?utf-8?B?MUFMczJIUG52TDVCK3Bwd0lRR1BPYmNVNWMzbzU0TmwrZmxyd0tWRituOWtl?=
+ =?utf-8?B?VU55ZzRQaTV1SWMrMHIzd1g3SmVRVnl2SzJYaVQrRFhZbENMMk8rRFM3R0Rq?=
+ =?utf-8?B?YkxNbkovV3MycmsyT2JaeXk2Y09iQy9PaitZOXRRY0R3NmJTM2xmcENqemx5?=
+ =?utf-8?B?TGJpUmtQb1poKzJYa3E0UnhhV2Y4RGtiM21USXhhTFpqcjVsallQOFh5c1E5?=
+ =?utf-8?B?RjBkMlRFOVJ6TnRLeUt1RlhXRVdXZVJOOWVTajg4QUlFWGoyZzhkZHZXMmdk?=
+ =?utf-8?B?WHliNHBkRzU3LzBsK2M0WnpCNUpTbTJjVlF4aGFhelo0U05hQ1JjMEJPdlV6?=
+ =?utf-8?B?RDRuYzdFQUgzTXQrUXZhMC9FdkdmTkJmWkNkVWVLbmdSVVZKN0ZlUHk2aXpE?=
+ =?utf-8?B?cElBdkNlTVpLKy9VaVhVQzhUa1dnMWdHbEhzMVBsOGxtdTdsNUNCc25Mb2dR?=
+ =?utf-8?B?bGVoNTU1YjlicnhTSjNkOHJBa2NodzdhVFFrS0Vxck9rSkhSRXFDVDVIc2dC?=
+ =?utf-8?B?SHFDWkZSMjhsdzFyMThnT05NMFRTUmU3TjFGTysybjU0RmZSK01UVEVpZjNO?=
+ =?utf-8?B?aENhNGdpOEpsbmdaeGc5RktnQ2kwcW5kZDJ5OGV6eXZLdkJzcm9JcHN1MzhE?=
+ =?utf-8?B?SnlPcSt5YjlPUC90ZTY4N21pbGttSXZ4dGltTVNJVHdZL0FtOWl1alhsTmYv?=
+ =?utf-8?B?cU9aamhuQWlOVWdYL1JKZWlBeVhyNHMwL2RQNXFxQ2I3NzEvR3U5YkJlTGpE?=
+ =?utf-8?B?VGdnWCtzOE9KcW1ydFJ5dTE3RklUK0dOc3R1RUN5ekR0TUZJcSt4Y3J4Rlpa?=
+ =?utf-8?B?UVl3R0x5T3ZWQ3kxZ0RxYklyZXR0T1YzNkNoaTJBY2dYaTMrYWhhN1pWTC9Y?=
+ =?utf-8?B?TlV4VXlVV2pVbk56WGlNTkY3RXpUY05ZSnhhYnRIQStYTkFCa1pOcmdwbS9h?=
+ =?utf-8?B?M0JjME9LUms5T2FLcCthQlRhYXBFVTFkdTliZkdGVDBzRkxweWMwR25IZzhk?=
+ =?utf-8?B?OHR5WVVCbVhLQzBnN0VHa2ljZE12eVJhSS92MFJqTm1DVGpCZ3d6RzFnPT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(1800799015);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dXdOYVhSbHZCM1NCelZWdmM4WHBaZHRDU3hCcDltTXJFVFRTVExIKzhEV2xv?=
+ =?utf-8?B?RWJtM3hoWkVxeEoyL2o0aitRcmsxYVZUZ0hJTUloOVQ4TXk0ODdEQk1mclZz?=
+ =?utf-8?B?UG5yc2tyZDJvYVhVSnJ3R04zeHRFdTVzbUlwV1NvbytGNHB5dU5hcUhaZ01o?=
+ =?utf-8?B?WWtONytmejBDMUcyNTRtYkhKd2lvOGNaY0xad3NWUG5OUFhNUWJnNEQvY1V5?=
+ =?utf-8?B?eWlUOHRreFQzUEZrSzdza1FQYkJLaUJqM05JeS92YjNHbFc1bDQwSU52RDA0?=
+ =?utf-8?B?c0h1NVBOaGJzU1UvdmhsNUlKbEZJdzJ3bysrQlRSNEp6L012SUM2MWg3M0lT?=
+ =?utf-8?B?ZUljUUQ4Q2VZSFFWK0h6eThVY21UR3dRTi9SbXgxK0lETXp2dzFhN2VRYXFR?=
+ =?utf-8?B?T0xkU1BhZG9ydGsvUmxkRTJTK21sb2MxWHJ6WVorL3RUOTVHaGtoVGx4RDFS?=
+ =?utf-8?B?K2xxSjZ3ZGFNSklEUXlhYVVwNjR1bFNwUUFWV010NG42ckdUbllCc0JZRWEr?=
+ =?utf-8?B?dDZvZjltQ3I3akg0NmkwN0dEeWhjdk5pQVUvZGNHRm5idDFyWjNiY2xGSHFL?=
+ =?utf-8?B?emVtQnNEWDh2a2ZEV05nMnhQQnhqd1lBZ0NLbWxXNlUzS1BoL3JxaGJXMUFT?=
+ =?utf-8?B?c2RyL1hEZ3Yrb29LSjVkZnpKUXM5d3Q2a3RFNEU3UHVRTnFybUNGWmxFRmxN?=
+ =?utf-8?B?aDB1MXNaQmNReHN0S0NyaVpDazZjaG1vcExDcE40cU1ONEZwU1ZGNEt3R2Y4?=
+ =?utf-8?B?bkhLaDhZc3RjdlZsdlNCci92WTRDaTIyL0FHSXNTWHByVEFWalJYdGloZXJn?=
+ =?utf-8?B?RXdmV3p4amgzZmZSQVJnbWh1bHBHcUhrWDFURXljcHBHTkk5NEI0Q0RrRE9l?=
+ =?utf-8?B?WGVSbHUyRi9ncXNJSEJrSFdQN1QwMlgzcHc1dit3VUgzUFR3cTIzbG9KZTRT?=
+ =?utf-8?B?RzhDZlp4MFJRVWdPdUJ6bjR1blRFR0ZyRHlNVzEyQytacC9zcHlJUWllejFR?=
+ =?utf-8?B?VUxsa1N1VWlHQnJaeEpRN2ZwL0VreWdaWmlRTkkxQ0w0TUNLVExRdkd5UnZT?=
+ =?utf-8?B?aTJQM1BTYkxmT0ZMOFI2ckNWSE5Bb2lYcGtEUWxrdUhNNC9NMG03aTE4MXpM?=
+ =?utf-8?B?SnN2cmdsM0ZLZitjck9vVHVabE5OaGtCaE5kWGhmQnVER2FTRDYrQVRYVjcr?=
+ =?utf-8?B?TVRmOW5FeEpNdVAzOHFvbmE0WExHNGUvNUxFSGRrbXhjazV4RzZMSHRUcjZx?=
+ =?utf-8?B?eEdFczZKVFhlaS80YU9ibHJ0RGorU3I3dXJrR2o4Z240YmVBY1JnaFMvMXoy?=
+ =?utf-8?B?cWIyejVLT0ZFdmJyWnRTak81YWdOMDcyeHdmNytKY1dvVFhrNlRTRTJNSHdJ?=
+ =?utf-8?B?cUZZdXVEc1R2S0hVU2JCNGJUMXFPdGxWU2NWUHBtZ2g3WjNkQ1YvUWhIb0Jm?=
+ =?utf-8?B?RkRSMEdFRXFjY1VyTkpjUlRIRHVMTjJNd0hBb0c2QTE4VW9UdTk0MjBwdmow?=
+ =?utf-8?B?SDJNNEZrNHFYNTRhU3BRWHVraHpIbFFYRnArNHVYbVlleUtTQlVMYmdHK1Mx?=
+ =?utf-8?B?aGtaczNIRzBGaGZwSlRMcnJ6ekhSUHFRdHplZjNENTZ3cEdQdlNOUVZvYVE2?=
+ =?utf-8?B?M3QzMXdFT2tiUEhLOTFQUDBIVk1BS0FsTElCWW1WRVZZcisyZWVBVkhrNHEy?=
+ =?utf-8?B?Mm9pOGhuc1hWTFh4NjcrbFBMTVM0OGZ5TUhCbFRDdGMzR3ZMVmFwMUxLZE1w?=
+ =?utf-8?B?TktSZDh1UXdBWWNCcGMwOWd0dWRuY1I0N2hlZTgyZXM1WEhaKzZRdWwyWWNv?=
+ =?utf-8?B?L0svcFhnUmNBQVhWdWdTM25JbGxqYjlabmFscGM5OHFYOStTcmthQit6M3Bj?=
+ =?utf-8?B?aUFBckJxSGNJOXhKNlp2WTltQnBvK01KWXhhNWRwbU9sdUNTQ09UeGltSko1?=
+ =?utf-8?B?SWdtbVM2dk0zNnNPVDhIMEFaNHBzR1krQzlXbUt0Mis3M3NNbGUyN3hYcWhz?=
+ =?utf-8?B?b0FaMWRIS0N3ME1xeHR0WnZXM0ZYUXR5UmFRU1dXanpaK2o2R2JFN1dxRkhD?=
+ =?utf-8?B?NjJwVHBpbzRmV1loeEJIWEdDYmhHSFJYQjZqZDRHM1VmZXpzQWczMG9NRmhw?=
+ =?utf-8?Q?viB/SjsZPDO3/VVfFVM5FupLo?=
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 097874f0-266b-41d8-b06e-08dc628e14f0
+X-MS-Exchange-CrossTenant-AuthSource: AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2024 05:35:55.7130
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 83KyX2aKbwXigVHUJUFOdWaoIx1FV2g+CvC7Ihc+gA7tSnzYsqdNzkqpd7Aj6iqgfSX788FyipIQ+fXLzUy9sw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR10MB5622
 
-On Mon, Sep 13, 2021 at 01:41:43PM +0200, Jan Kiszka wrote:
-> From: Jan Kiszka <jan.kiszka@siemens.com>
+On 21.04.24 10:49, Francesco Dolcini wrote:
+> Hello Jan,
 > 
-> Prominent userspace - systemd - cannot handle watchdogs without
-> WDIOF_SETTIMEOUT, even if it was configured to the same time as the
-> driver selected or was used by firmware to start the watchdog. To avoid
-> failing in this case, implement a handler that only fails if a deviating
-> set_timeout is requested.
+> On Mon, Sep 13, 2021 at 01:41:43PM +0200, Jan Kiszka wrote:
+>> From: Jan Kiszka <jan.kiszka@siemens.com>
+>>
+>> Prominent userspace - systemd - cannot handle watchdogs without
+>> WDIOF_SETTIMEOUT, even if it was configured to the same time as the
+>> driver selected or was used by firmware to start the watchdog. To avoid
+>> failing in this case, implement a handler that only fails if a deviating
+>> set_timeout is requested.
+>>
+>> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
 > 
-> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+> Are you aware of this patch https://lore.kernel.org/all/20240417205700.3947408-1-jm@ti.com/ ?
+> 
 
-NACK.
+Thanks for the heads-up, we will surely try to test things on our setups
+as well. But commenting on this dead and not directly related thread may
+have caused some confusion...
 
-This will need to be fixed in systemd. set_timeout is and will remain
-optional.
+Jan
 
-Guenter
+-- 
+Siemens AG, Technology
+Linux Expert Center
 
-> ---
-> 
-> See also https://github.com/systemd/systemd/issues/20683
-> 
->  drivers/watchdog/rti_wdt.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
-> index 359302f71f7e..365255b15a0d 100644
-> --- a/drivers/watchdog/rti_wdt.c
-> +++ b/drivers/watchdog/rti_wdt.c
-> @@ -173,13 +173,27 @@ static unsigned int rti_wdt_get_timeleft_ms(struct watchdog_device *wdd)
->  	return timer_counter;
->  }
->  
-> +static int rti_wdt_set_timeout(struct watchdog_device *wdd,
-> +			       unsigned int timeout)
-> +{
-> +	/*
-> +	 * Updating the timeout after start is actually not supported, but
-> +	 * let's ignore requests for the already configured value. Helps
-> +	 * existing userspace such as systemd.
-> +	 */
-> +	if (timeout != heartbeat)
-> +		return -EOPNOTSUPP;
-> +
-> +	return 0;
-> +}
-> +
->  static unsigned int rti_wdt_get_timeleft(struct watchdog_device *wdd)
->  {
->  	return rti_wdt_get_timeleft_ms(wdd) / 1000;
->  }
->  
->  static const struct watchdog_info rti_wdt_info = {
-> -	.options = WDIOF_KEEPALIVEPING,
-> +	.options = WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT,
->  	.identity = "K3 RTI Watchdog",
->  };
->  
-> @@ -187,6 +201,7 @@ static const struct watchdog_ops rti_wdt_ops = {
->  	.owner		= THIS_MODULE,
->  	.start		= rti_wdt_start,
->  	.ping		= rti_wdt_ping,
-> +	.set_timeout	= rti_wdt_set_timeout,
->  	.get_timeleft	= rti_wdt_get_timeleft,
->  };
->  
-> -- 
-> 2.31.1
 
