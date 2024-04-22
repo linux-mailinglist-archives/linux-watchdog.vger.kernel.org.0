@@ -1,109 +1,182 @@
-Return-Path: <linux-watchdog+bounces-985-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-986-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 140B18AC6D7
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Apr 2024 10:24:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 456258ACB3F
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Apr 2024 12:52:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AE561C20E22
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Apr 2024 08:24:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9EC8CB20CB5
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Apr 2024 10:52:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B19254F213;
-	Mon, 22 Apr 2024 08:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3763D13E04E;
+	Mon, 22 Apr 2024 10:52:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="lYJOwzDq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QcqiBEIr"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAE31482CA;
-	Mon, 22 Apr 2024 08:23:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76EA2482C1;
+	Mon, 22 Apr 2024 10:52:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713774240; cv=none; b=IzYy6dSRrtCwJqbi4AvQjyUAWM6j2DFr9bfXD38d/CKBRrvpO5HVpC/yEqb7fccEboNIdrKHILTZKc6qipCrjblmic6dUtUCkChdyMzosNNAaE9G0Ye29e/B5D0MuTgJHMVgDGtjWlfCE6lALURZDdn830f2PFYPVNyLuhb+oig=
+	t=1713783154; cv=none; b=DFwOcZAeExRWMw6YIA1f3IvQvHoUrTHgZHYgw7EFVHy1vnEoG4fkWtcM0rqH5o/WjiUOTS5I7GEhMUmTdMwobq3cgWzCeZRbwJZEnko4l4wXVv1AhnCaHp5MJf44ugjlxvGAh9aOZ9XGPvTCCVdVdW9vuEC4bAOAqvwRW6OW9Mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713774240; c=relaxed/simple;
-	bh=qcmpMXK24ToMCaNq6MaE9YPrg0kGschS1HfQkrEgdi8=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=MTrLBl3IZGJrzZEyr9ViA3ODfXQwo54S7gbmeJJk6SSZANEfK2+imKUXruqmwNAJion1FxK7Iq0Vkq870xbV41vEiYTsPq54uzMhS/oLHvN2h9CYX9Vvo2xikh/YLR82kyL14ZNO/hKVRPFn43xcfKKzJr/hjW9hCiQbLrTCkf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=lYJOwzDq; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from [127.0.0.1] (unknown [62.19.35.7])
-	by mail11.truemail.it (Postfix) with ESMTPA id 2C01D1FE18;
-	Mon, 22 Apr 2024 10:23:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1713774235;
-	bh=qcmpMXK24ToMCaNq6MaE9YPrg0kGschS1HfQkrEgdi8=; h=From:To:Subject;
-	b=lYJOwzDqzaxEPaanJFTj8sna7+BpYkC0D7BjQlXwjl3F6yBl0lm3Pgwsm5VxYudag
-	 RTTD33B256Ukwk04d9S2iJ/4tkVHL2ddazR9Iq8M9a9b1tFkQU9Ii6X0Whca4lu8+s
-	 ktVJ6Jh3U8BReiGXXTgDqbfnW0bMABQy+SU+b3GMbgIDnKm1ml56W964AnCAtUPrFb
-	 gG3ZQQ08Una8GIky9B5ZqbCzZi94zPyIcX79AvqE6Sp/Cic52iMOBdK7hTMaqXMCq+
-	 NKlTboC3TC1t+mv7YP2bJFzkzcTlXcV0RRDbCfXvDaog6HBz/mwn2zp1Qg4DkKVYmJ
-	 /RdVYlBkVxVMg==
-Date: Mon, 22 Apr 2024 10:23:50 +0200
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Jan Kiszka <jan.kiszka@siemens.com>
-CC: Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>,
- linux-watchdog@vger.kernel.org,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Tero Kristo <t-kristo@ti.com>,
- "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BRFC=5D=5BPATCH=5D_watchdo?=
- =?US-ASCII?Q?g=3A_rti-wdt=3A_Provide_set=5F?=
- =?US-ASCII?Q?timeout_handler_to_make_existing_userspace_happy?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <3571B71C-5748-4F1C-9186-E7F687ABF198@dolcini.it>
-References: <4d82b8ce-bc34-e4b2-c5fe-9e883b0db59d@siemens.com> <20240421084916.GA4208@francesco-nb> <9ed68e05-5761-4dc9-b81c-fc847ec6d043@siemens.com> <3571B71C-5748-4F1C-9186-E7F687ABF198@dolcini.it>
-Message-ID: <92887F20-B0E7-41FD-A5BC-ED9A28804F2B@dolcini.it>
+	s=arc-20240116; t=1713783154; c=relaxed/simple;
+	bh=0KlyZbYLtPzoaO0C9rWrtsHQkri9Vg0zakhGtHwYeko=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=AL+2fy6M+dLIVy3KwhHj9N9acwDcGaJAqX9xLmjLx5+cFLlXY8lKmpm8CJgrdoPumOM1A2snqBK8mfUZp9atQpM3EBYDDC5eSsmbnkNM2Us6UoqRz8QCWinVNCb2I7Vi1vmKq+7RbNRI1N1Vmj/+KE9zDaNhJXReK02hFKa4Nv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QcqiBEIr; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-518a56cdbcfso6575908e87.2;
+        Mon, 22 Apr 2024 03:52:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713783150; x=1714387950; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XB9rFLfMWN1g7ihRLHwOUgZ6Nm1LwOP8sZGJRcsldyE=;
+        b=QcqiBEIrDdfB2wRJu8SJ4XUlcj7/V+wF/e64LNSS/BwV7wqLh+3FgprSGbhFmYs/RX
+         Q2DD7GRioJ1VjI4zN2YFp5oRfKpNFs4VeEqvlQGi6wGeK69m9W/O6OY+MxVe9mKEOAjx
+         YQDZSDSpqJKuEBnGslw7uceOBDE/eVz5Jotm/r192Pt3WZEs8vKomEuF1jDcKr08CLIu
+         nxwsWrV6uc55lvUnZno6s09QQyQ0prTpcuMMUwZO/Y9uPukI90909IkLcoMGXg576jIS
+         If7+USLHSv2R0f7mnkNEw5Fm8RSLNtgF6/RjILYhBWr/jSn2zrye0jqdF+dKaLBCLG3B
+         LXdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713783150; x=1714387950;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XB9rFLfMWN1g7ihRLHwOUgZ6Nm1LwOP8sZGJRcsldyE=;
+        b=VMHpXjuaTtxcKNfmjzsWlxl967h/HeJ3Udn5H5wD2k+0IWAi1/nCqVV0E8AlJs0QfU
+         PmTyX/KDcq1zk0Ear5nVL+E58G2RdOX/PkuTwaOJFusFTNoTZh9gCJCTS0tNwHLbjolU
+         1OXhwu8Iap+O/4tTiNrXH4U5YaolIjdjyJUzx+ZgZXULYgl8DEl01Be4YWRzoVW1agf4
+         95KlQ2ISwuRNs1R6MZgZA0jcBlNEFrRcY3PSZtMJFH40ofL4XKZ0s9e/MUpjag0EQ71C
+         3HnBBUtES7/8dJRM+R38fzEEcMnaEaSthaB+fC53htctNqC7uCIYv3ogeBNgQnwYIEwf
+         iXsg==
+X-Forwarded-Encrypted: i=1; AJvYcCU3WGgIHLHCGjcadOBKyfElzqB+tiaEutYRoy3eGMXXXwMwki0I++V8iIDuZXc/Uq3ZSkYlVKB07rXppU8Aehg3rSuGC1rrTewvpOQt3sPXGwf+ym9EcPWN4tlggLhxwfiqDy4R+pUrygztrhrB1Yptp1MUgZoxOGSFKizoLIKbI6j11ZrF2N2A
+X-Gm-Message-State: AOJu0Yy0h1hAcsQq/kla0/N2mX+G23LsAqUeaKC3fAatET063+Hm83NF
+	QB0RMwXJAhSi4NLbzebkrPfxY/FUnf0Hwjru8jW0mSDSShUnJTpSWIQOVg==
+X-Google-Smtp-Source: AGHT+IE2Fra+D9O2RmKL2tYXLgjMiLcbqzqK/4+uP5rJNuLIq6LRSJ0NyrdFpn1hET47c94bt7nfdQ==
+X-Received: by 2002:a05:6512:398b:b0:51b:214c:5231 with SMTP id j11-20020a056512398b00b0051b214c5231mr3320962lfu.15.1713783150279;
+        Mon, 22 Apr 2024 03:52:30 -0700 (PDT)
+Received: from [172.16.183.82] ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id w8-20020ac24428000000b0051b627770ecsm111901lfl.237.2024.04.22.03.52.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Apr 2024 03:52:29 -0700 (PDT)
+Message-ID: <b6ded975-1d16-46ea-84a2-8799b36e1270@gmail.com>
+Date: Mon, 22 Apr 2024 13:52:27 +0300
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 0/6] Support ROHM BD96801 scalable PMIC
+Content-Language: en-US, en-GB
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+ Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ Thomas Gleixner <tglx@linutronix.de>
+References: <cover.1712058690.git.mazziesaccount@gmail.com>
+ <f7d454ac-6ecb-4431-a1de-c9b5d1240969@gmail.com>
+ <eb03ec33-0627-4986-be04-8e35da390d6b@sirena.org.uk>
+ <b6279be8-cf7d-4608-b556-3c01587f0d43@gmail.com>
+ <f1e3d31d-8c24-4cdc-ae26-747f383a937b@gmail.com>
+In-Reply-To: <f1e3d31d-8c24-4cdc-ae26-747f383a937b@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+Hi dee Ho peeps,
 
-
-Il 22 aprile 2024 10:20:07 CEST, Francesco Dolcini <francesco@dolcini=2Eit=
-> ha scritto:
->
->
->Il 22 aprile 2024 07:35:52 CEST, Jan Kiszka <jan=2Ekiszka@siemens=2Ecom> =
-ha scritto:
->>On 21=2E04=2E24 10:49, Francesco Dolcini wrote:
->>> On Mon, Sep 13, 2021 at 01:41:43PM +0200, Jan Kiszka wrote:
->>>> From: Jan Kiszka <jan=2Ekiszka@siemens=2Ecom>
->>>>
->>>> Prominent userspace - systemd - cannot handle watchdogs without
->>>> WDIOF_SETTIMEOUT, even if it was configured to the same time as the
->>>> driver selected or was used by firmware to start the watchdog=2E To a=
-void
->>>> failing in this case, implement a handler that only fails if a deviat=
-ing
->>>> set_timeout is requested=2E
->>>>
->>>> Signed-off-by: Jan Kiszka <jan=2Ekiszka@siemens=2Ecom>
->>>=20
->>> Are you aware of this patch https://lore=2Ekernel=2Eorg/all/2024041720=
-5700=2E3947408-1-jm@ti=2Ecom/ ?
->>>=20
+On 4/5/24 12:19, Matti Vaittinen wrote:
+> On 4/4/24 16:15, Matti Vaittinen wrote:
+>> Hi Mark,
 >>
->>Thanks for the heads-up, we will surely try to test things on our setups
->>as well=2E But commenting on this dead and not directly related thread m=
-ay
->>have caused some confusion=2E=2E=2E
->
->I was too terse=2E
+>> On 4/4/24 15:09, Mark Brown wrote:
+>>> On Thu, Apr 04, 2024 at 10:26:34AM +0300, Matti Vaittinen wrote:
+>>>
+>>>> 1. Should we be able to have more than 1 IRQ domain / device?
+>>>> 2. Should regmap_irq support having more than 1 HWIRQ
+>>>
+>>> I would expect each parent interrupt to show up as a separate remap_irq.
 
-And I did not realize your patch was from 2021=2E Sorry for the confusion=
-=2E
+...
+>>> So if we arrange to supply a name when we register multiple domains
+>>> things should work fine?
+> 
+> After my latest findings, yes, I think so. How to do this correctly is 
+> beyond me though. The __irq_domain_create() seems to me that the name is 
+> meant to be the dt-node name when the controller is backed by a real 
+> dt-node. Naming of the irq_domain_alloc_named_fwnode() sounds to me like 
+> it is only intended to be used when there is no real fwnode. All 
+> suggestions appreciated. Using the:
+> irq_domain_update_bus_token(intb_domain, DOMAIN_BUS_WIRED);
+> feels like a dirty hack, and won't scale if there is more HWIRQs.
 
+I tried taking a look at this again.
 
-Francesco=20
+If we wanted to support multiple HWIRQs / regmap-IRQ controller, it 
+would require us to duplicate almost everything in the struct 
+regmap_irq_chip for every new parent IRQ. The status/mask register 
+information, IRQ type, etc. Naturally, it would require also duplicating 
+lot of the data contained in the struct regmap_irq_chip_data. I am not 
+sure if this could be done so the change is not reflected in the 
+existing IRQ data initialization macros etc. Furthermore, some API 
+changes would be required like changes to regmap_irq_get_domain().
+
+I am a bit afraid this change, if implemented in regmap-IRQ, would be 
+very intrusive and potentially impact large amount of callers. But more 
+importantly, looking the amount of data that should be duplicated per 
+new HWIRQ makes me think that an IRQ controller is really a product of a 
+parent IRQ, not product of the device. Hence, assuming there is only one 
+IRQ controller instance / device does not feel any more correct than 
+assuming there is an IRQ controller instance / parent IRQ. Same thinking 
+applies to IRQ domains.
+
+Thus, forcing the regmap-IRQ to support multiple parents instead of 
+having own regmap-IRQ instance / parent IRQ feels like fitting square 
+item to a round hole. I am sure fixing all the bugs I caused would give 
+donate a lot of EXP-points though :rolleyes:
+
+Question is, should I still try?
+
+Another option I see, is trying to think if irq-domain name could be 
+changed. (This is what the RFC v3 does, [ab]using the 
+irq_domain_update_bus_token()). I was a bit put off by the idea of 
+'instantiating' multiple domains (or regmap-IRQ controllers) from a 
+single node, but more I think of this, more I lean towards it. Besides, 
+this is not something completely odd, I think MFD devices do this 
+anyways. (Instantiate multiple [sub]devices from single DT-node). I 
+would love to get an opinion from someone who knows the 'fundamentals' 
+of the IRQ domains, and possibly some pointer for the right approach.
+
+Finally we might also consider adding own sub-node in DT for each parent 
+IRQ - but this feels very wrong to me.
+
+All in all, I am having very hard time trying to think how to proceed. 
+The last option for me is to skip support for the ERRB IRQ from the 
+BD96801 driver, which would leave this problem to the next person 
+working with a device providing multiple physical IRQs.
+
+Yours,
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
 
