@@ -1,250 +1,333 @@
-Return-Path: <linux-watchdog+bounces-1004-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1005-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F6578B5B1C
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Apr 2024 16:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 890C88B5C00
+	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Apr 2024 16:54:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C5E81F21895
-	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Apr 2024 14:20:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15EB61F21683
+	for <lists+linux-watchdog@lfdr.de>; Mon, 29 Apr 2024 14:54:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F19E178676;
-	Mon, 29 Apr 2024 14:20:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8289C7F484;
+	Mon, 29 Apr 2024 14:54:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rf+5EAPZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="URpeoLxP"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EDB1757E7
-	for <linux-watchdog@vger.kernel.org>; Mon, 29 Apr 2024 14:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9217B745C5;
+	Mon, 29 Apr 2024 14:54:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714400437; cv=none; b=pm26Ol2smudSamU7+SzGaBBnu3Xs+AfGAO7Fz5k0xGp1qwJjA+qHZSMSmGPAmS3Nz8b7JrChhWEVA9se9HWjRKSYUb50Dr3N1A8geIs1OuQ83gwUUal2nQDK2BK7zvghDLRRy/G7BrWvu0S/N+J6gGjJ3bJOR5aqO4J7FRYdy4M=
+	t=1714402469; cv=none; b=qR+xV8vz+0GmEQPRMAj/7osH6FtC6zmZ0+3F/fok2FrXcPKs1LG6N+lBciCT11sqwCsaGwgSDaBlRbab9E8INXDF4B2fBhJYnRnPYnNQ4ObpcmWA7YIUQfUIqjUF+HN/aKhg+K8Ax7by5UezZpA7MbPWrebtA93XhxRznmX2+1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714400437; c=relaxed/simple;
-	bh=uSTONnEE6bCuSEveO0Ljfw2aXr4s4UGIYP8uCnP1O9w=;
+	s=arc-20240116; t=1714402469; c=relaxed/simple;
+	bh=0OP1iT2oLI/HVVFj+Pz0v/3yh8vFWtEFHZCgWRQGeOA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oyj1+RWQ04cCb6KUdyGFevST8QfoPOKALk27nS+ENo2mn0bOUiVO81cIyBi9hPEC4zQsQprDCi7vqsyhwgsvh1D2i8iTepCfloAFr+DyKYj0G+ODv80Z/YpuQgxLfvweNT83MmstuSuLWuMDYlo7SjDVIpIzMzWHNiBE+CvRVjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rf+5EAPZ; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-de604ca3cfcso330332276.3
-        for <linux-watchdog@vger.kernel.org>; Mon, 29 Apr 2024 07:20:36 -0700 (PDT)
+	 To:Cc:Content-Type; b=k4m2vWicRiTU+iFbIoEO6pvoorM1kfyWysSPnRz/+5WECGEzO10AMw+xp+FrHXNx6YOEe7DT3BSGHhm7HmiiXMnfDNmSkWoR2fs4JTmogED+BE5ORLcrBK7OCXt28CyWiAB5awACzrRT2xZLZIyw5Pi645e6qmMsM9ttYa7xqr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=URpeoLxP; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-34c8f392172so1726029f8f.3;
+        Mon, 29 Apr 2024 07:54:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1714400435; x=1715005235; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bh5GjqgFJnCNeFlUQdx4KaiNVw6ilwHux7LWxSHvRJc=;
-        b=rf+5EAPZm/Y//W9tqbPkoGS0sC9MxtB+z81h+oLZPRE/cO7F+g8gwSPfeF7aN+Kw/s
-         mwVesoGzU8wu3jbUYdTCRQO/qCmiUUH+Mp9/DEVIyCzbpt3IESJGV0Pbxhw7bXWgYwzo
-         8NKU6qXqmuV4BMK2uBFTMk+5kIsG4EsxBQwf6rT8GVUOz8TJqf1bJsJ30jwgQn8x1mHq
-         CI3DDFn1rP5813Hxt2z0TYPhM3eIiyqmdGQP6TmeMAMPvWE3F1NVPjTs7h7EGir9VDCV
-         ym08R+ISbruAmiDZsJgPB3LSped8YixuslGEd1OpKCXfc5/IO8ipSe70HOSWXl+E94//
-         AFTw==
+        d=gmail.com; s=20230601; t=1714402466; x=1715007266; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0tfJMXHQAgMuRFbS4QzP6+/eEdtXTDFDEyyoUoeB4Ss=;
+        b=URpeoLxPs8dKpqBQZpurBvjWUlBPIr0aMzxVltu8BQJoJIkSwRwgyPNoDWacrdr902
+         4Dz6apEeJ2dABIxJj3DhuCyprWVritRqpY0Cu5ql9tEG/N85vK58hAZ84s6G6qZCxgSd
+         yCkkhXuYNw5tq92K1UWcCyw5Z6KlN7lxbyd5Ehdqcg4YB0ip2G9dtUrhS78hVxkfpRys
+         vLvaW9R8aunDrJs9CTiYYAvaEJ1AbCtap9AcDhPVrCnCeJayq5gGpNuKtC1uX4P9jmRi
+         RviqIJss6j+TEQet+c3hA+YQlHH3IcjTkIwN3tktipGXFu1RnEEmUSxKM2G4gGCfDKID
+         YVWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714400435; x=1715005235;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bh5GjqgFJnCNeFlUQdx4KaiNVw6ilwHux7LWxSHvRJc=;
-        b=Yq1eKd13RSH0xfiSWjc9AbK7kAKetC6Pds5FbppMWZCEB8XtoAcsObfWYreL6+v26r
-         cvXB2PGkpVLdI/+jJg4SjTjKz0+akYMQNYOxoxdxLlJwMoVDCOjFEosIF4LYpmcEPq1u
-         73lUgnqLfucpokXi+Fz8FzZuO2Og3GhtThHfOg/KEjFT7VTP+KMYRxPvZUwhFT87T+J0
-         vQ3GyxO0dQQ2kmp1Q0WQ0kJllMgxfWUq1dyHN2dauozobjaAIAMOxtKigqhn/eMR5zBb
-         6B2NA6+HGA246odl7tQtBwABdN5lAH8OUSG6lhQk/yypOs9aGR8vIb98AOhYuDLU+iwT
-         eODQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVp7coMlTdRcRkKAsixrWFjQXmmdGPL9VVOBkauFxd63D2z800uDTMleHpkzlKZX3aI/o6Cj2RCNO868b7cbpIEgaAmfvyJqNV2ogaQLzI=
-X-Gm-Message-State: AOJu0Yyya9MtUBY/X0qHcT4oS9bWF1XrnVBQqgS1Rfh+F2GBn/ATLSvB
-	ObZ0qRr+tlHip847td9RD7wpc9M/WF8AW79pS1Z2xT+xdu8jPBTPkuquothvtvPa2KKYwAULT1A
-	k9u0CIJqjtn10Rq+79CD4aynfysZmBGPhBYBw/Q==
-X-Google-Smtp-Source: AGHT+IHmlJ2jyI8mjBe+pxOG4dsuHYfxVfiW8tyhuQv/f2dImX1G7antM0eOYDE0OprKHgsuTrDWIBw4oGYVVa6LOXo=
-X-Received: by 2002:a25:b19d:0:b0:de0:fb7b:864f with SMTP id
- h29-20020a25b19d000000b00de0fb7b864fmr7331009ybj.37.1714400435318; Mon, 29
- Apr 2024 07:20:35 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1714402466; x=1715007266;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0tfJMXHQAgMuRFbS4QzP6+/eEdtXTDFDEyyoUoeB4Ss=;
+        b=vwVcybDuR7RJyYbKAEFEWNEOKWy2YT/ase5eOS817PKGBa0C8G0CQEhgDKB2btQPTO
+         WU+wXiJ/wHuKkxD/q1zZqWCwRdj3QiD28hx/BhvxL+rp0x/wmSSYamCGd/LJvhXIOJZ7
+         ryefdui4DiqQGFOB63v642nrEgMh4Jt9aIlKTQlmvjDXSJWg7drF7rQKFS55V2QnTIpL
+         Z3OhOUKHU7dmCSYCP7sVhST4m0BjwVnxbnRiBoTefnE9IbRi3tjA6QXDqlcpdMKJbkJC
+         3XmKmzabs6kqKPEv37Emp7wzwO62C3hLrlZtPTsR1qo5qdZEvS5HIaMEJTeEpoLg5FjV
+         g3iQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUDXabMcZyp0LIBp2YPE1cpZxYYx+ktYgD6qz5GYklgHKoDDD+77nhlqpXtqGYMHNa/lGU6NqERS2xSvaXCP22z1c+kXeADFOm3z5Iz9EbiqT/9V0VMdc38m+6RXSycprtpHG1CH+gwx/l1QpE=
+X-Gm-Message-State: AOJu0Yy4Dz7AGVI2DU4R7uMNG+x+MDIBwPy6ZPfRgcY8ZPB+GMlqy7t4
+	gwJETWmbqKzrYwH0OSpYDLCKzUutR6B4itnKiqps64jGBUpsyEBscwKG+l8O1dpT8NuBDMhi583
+	iQYo17bSibAZBj2o9Jl0XhPzrANL0tITY
+X-Google-Smtp-Source: AGHT+IHfEadp9VYsmGq1UEVeu6FrmpSgdOGjTzB+5DoH19hSgrF1zJiGbFcyAZRttnD4y1+IdZHv+1YYYkLFT5DtmOE=
+X-Received: by 2002:adf:a442:0:b0:34a:5c6d:4605 with SMTP id
+ e2-20020adfa442000000b0034a5c6d4605mr9573244wra.0.1714402465524; Mon, 29 Apr
+ 2024 07:54:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240410134044.2138310-1-claudiu.beznea.uj@bp.renesas.com>
- <20240410134044.2138310-10-claudiu.beznea.uj@bp.renesas.com>
- <CAPDyKFqq+gMDHx_-g-j9rO3nBDcXRSoXRjJK9D51=VaQ5XaGvw@mail.gmail.com>
- <af9c6747-120e-48c1-8c04-9594c9b49666@tuxon.dev> <2d674a18-006f-4182-bc85-bcfa50615495@tuxon.dev>
-In-Reply-To: <2d674a18-006f-4182-bc85-bcfa50615495@tuxon.dev>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 29 Apr 2024 16:19:59 +0200
-Message-ID: <CAPDyKFp+8VnxDfhDzvP1KWCN_oRHrVMCru9BXO_55GkF=gHUBA@mail.gmail.com>
-Subject: Re: [PATCH RESEND v8 09/10] watchdog: rzg2l_wdt: Power on the PM
- domain in rzg2l_wdt_restart()
-To: claudiu beznea <claudiu.beznea@tuxon.dev>
-Cc: wim@linux-watchdog.org, linux@roeck-us.net, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, p.zabel@pengutronix.de, 
-	geert+renesas@glider.be, magnus.damm@gmail.com, biju.das.jz@bp.renesas.com, 
-	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240428142937.785925-1-peteryin.openbmc@gmail.com>
+ <20240428142937.785925-2-peteryin.openbmc@gmail.com> <d231737bfa9f3dd3c0a4370ab2e86557a407980d.camel@codeconstruct.com.au>
+In-Reply-To: <d231737bfa9f3dd3c0a4370ab2e86557a407980d.camel@codeconstruct.com.au>
+From: Peter Yin <peteryin.openbmc@gmail.com>
+Date: Mon, 29 Apr 2024 22:54:14 +0800
+Message-ID: <CAPSyxFRG8mooBg1QWZk8sw=cWzoUQqk=WnyAtgPfRBmQRKtvaQ@mail.gmail.com>
+Subject: Re: [PATCH v8 1/1] drivers: watchdog: revise watchdog bootstatus
+To: Andrew Jeffery <andrew@codeconstruct.com.au>
+Cc: patrick@stwcx.xyz, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Joel Stanley <joel@jms.id.au>, linux-watchdog@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 24 Apr 2024 at 13:14, claudiu beznea <claudiu.beznea@tuxon.dev> wrote:
+Hi Andrew,
+    I am not sure how to add the Fixes tag, Is it like this?
+
+Fixes: 6a6c7b006e5c (watchdog: aspeed: Add support for
+aspeed,reset-mask DT property).
+Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
+
+Is it the correct commit ID or should I base on which commit ID?
+
+Thanks,
+Peter.
+
+On Mon, Apr 29, 2024 at 9:50=E2=80=AFAM Andrew Jeffery
+<andrew@codeconstruct.com.au> wrote:
 >
-> Hi, Ulf,
+> Hi Peter,
 >
-> On 12.04.2024 17:02, claudiu beznea wrote:
-> > Hi, Ulf,
-> >
-> > On 12.04.2024 14:14, Ulf Hansson wrote:
-> >> On Wed, 10 Apr 2024 at 16:19, Claudiu <claudiu.beznea@tuxon.dev> wrote:
-> >>>
-> >>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> >>>
-> >>> The rzg2l_wdt_restart() is called from atomic context. Calling
-> >>> pm_runtime_{get_sync, resume_and_get}() or any other runtime PM resume
-> >>> APIs is not an option as it may lead to issues as described in commit
-> >>> e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait context'")
-> >>> that removed the pm_runtime_get_sync() and used directly the
-> >>> clk_prepare_enable() APIs.
-> >>>
-> >>> Starting with RZ/G3S the watchdog could be part of its own software
-> >>> controlled power domain (see the initial implementation in Link section).
-> >>> In case the watchdog is not used the power domain is off and accessing
-> >>> watchdog registers leads to aborts.
-> >>>
-> >>> To solve this the patch powers on the power domain using
-> >>> dev_pm_genpd_resume() API before enabling its clock. This is not
-> >>> sleeping or taking any other locks as the power domain will not be
-> >>> registered with GENPD_FLAG_IRQ_SAFE flags.
-> >>>
-> >>> Link: https://lore.kernel.org/all/20240208124300.2740313-1-claudiu.beznea.uj@bp.renesas.com
-> >>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> >>> ---
-> >>>
-> >>> Changes in v8:
-> >>> - none, this patch is new
-> >>>
-> >>>  drivers/watchdog/rzg2l_wdt.c | 12 ++++++++++++
-> >>>  1 file changed, 12 insertions(+)
-> >>>
-> >>> diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-> >>> index c8c20cfb97a3..98e5e9914a5d 100644
-> >>> --- a/drivers/watchdog/rzg2l_wdt.c
-> >>> +++ b/drivers/watchdog/rzg2l_wdt.c
-> >>> @@ -12,6 +12,7 @@
-> >>>  #include <linux/module.h>
-> >>>  #include <linux/of.h>
-> >>>  #include <linux/platform_device.h>
-> >>> +#include <linux/pm_domain.h>
-> >>>  #include <linux/pm_runtime.h>
-> >>>  #include <linux/reset.h>
-> >>>  #include <linux/units.h>
-> >>> @@ -164,6 +165,17 @@ static int rzg2l_wdt_restart(struct watchdog_device *wdev,
-> >>>         struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
-> >>>         int ret;
-> >>>
-> >>> +       /*
-> >>> +        * The device may be part of a power domain that is currently
-> >>> +        * powered off. We need to power it up before accessing registers.
-> >>> +        * We don't undo the dev_pm_genpd_resume() as the device need to
-> >>> +        * be up for the reboot to happen. Also, as we are in atomic context
-> >>> +        * here there is no need to increment PM runtime usage counter
-> >>> +        * (to make sure pm_runtime_active() doesn't return wrong code).
-> >>> +        */
-> >>> +       if (!pm_runtime_active(wdev->parent))
-> >>> +               dev_pm_genpd_resume(wdev->parent);
-> >>> +
-> >>
-> >> I doubt this is the correct solution, but I may be wrong. Unless this
-> >> is invoked at the syscore stage?
-> >
-> > On my case I see it invoked from kernel_restart(). As of my code reading,
+> Thanks for reworking the patch to reduce the branching in probe(), it
+> looks a lot tidier.
 >
-> With the above explanations, do you consider calling dev_pm_genpd_resume()
-> here is still wrong?
-
-Yes. At least, those genpd functions were not added to cope for cases like this.
-
-Moreover, you still need to find another solution as
-clk_prepare_enable() can't be called in this path.
-
+> First, regarding the patch subject, looking at recent changes to the
+> watchdog subsystem the desired pattern appears to be `watchdog:
+> <controller>: <description>`. I expect you should change it to
+> `watchdog: aspeed: Revise handling of bootstatus`. Currently the
+> subject contains `drivers: ` which feels a bit redundant, and fails to
+> mention `aspeed`, which will bound the scope of the patch for people
+> skimming the mailing list.
 >
-> Do you have any suggestions I could try?
-
-Not at the moment, but I will try to circle back to this topic more
-thinking next week, when I have some more time.
-
+> I have a bit of feedback below. It looks like a lot but mostly it's
+> nitpicking at how we're naming things. Maybe the comments are a bit
+> subjective but I think addressing them will help provide consistency
+> for readers of the code.
 >
-> Thank you,
-> Claudiu Beznea
-
-Kind regards
-Uffe
-
+> On Sun, 2024-04-28 at 22:29 +0800, Peter Yin wrote:
+> > Regarding the AST2600 specification, the WDTn Timeout Status Register
+> > (WDT10) has bit 1 reserved. Bit 1 of the status register indicates
+> > on ast2500 if the boot was from the second boot source.
+> > It does not indicate that the most recent reset was triggered by
+> > the watchdog. The code should just be changed to set WDIOF_CARDRESET
+> > if bit 0 of the status register is set. However, this bit can be clear =
+when
+> > watchdog register 0x0c bit1(Reset System after timeout) is enabled.
+> > Thereforce include SCU register to veriy WDIOF_EXTERN1 and WDIOF_CARDRE=
+SET
+> > in ast2600 SCU74 or ast2400/ast2500 SCU3C.
+> >
+> > Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
+> > ---
+> >  drivers/watchdog/aspeed_wdt.c | 78 +++++++++++++++++++++++++++++++----
+> >  1 file changed, 70 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wd=
+t.c
+> > index b4773a6aaf8c..4393625c2e96 100644
+> > --- a/drivers/watchdog/aspeed_wdt.c
+> > +++ b/drivers/watchdog/aspeed_wdt.c
+> > @@ -11,10 +11,12 @@
+> >  #include <linux/io.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/kstrtox.h>
+> > +#include <linux/mfd/syscon.h>
+> >  #include <linux/module.h>
+> >  #include <linux/of.h>
+> >  #include <linux/of_irq.h>
+> >  #include <linux/platform_device.h>
+> > +#include <linux/regmap.h>
+> >  #include <linux/watchdog.h>
+> >
+> >  static bool nowayout =3D WATCHDOG_NOWAYOUT;
+> > @@ -22,10 +24,32 @@ module_param(nowayout, bool, 0);
+> >  MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (d=
+efault=3D"
+> >                               __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> >
+> > +//AST SCU Register
 >
-> > at that point only one CPU is active with IRQs disabled (done in
-> > machine_restart()). Below is the stack trace decoded on next-20240410 with
-> > this series
-> > (https://lore.kernel.org/all/20240410134044.2138310-1-claudiu.beznea.uj@bp.renesas.com/)
-> > on top and the one from here (adding power domain support):
-> > https://lore.kernel.org/all/20240410122657.2051132-1-claudiu.beznea.uj@bp.renesas.com/
+> Can you unpack in the comment which register this refers to? Also I
+> have a mild preference for `/* */-style comments and against the `//`-
+> style comments, but I won't hold the patch up on it.
+>
+> > +#define POWERON_RESET_FLAG           BIT(0)
+> > +#define EXTERN_RESET_FLAG            BIT(1)
+>
+> IMO an `AST_` prefix would be helpful. At least, it would help me
+> orient myself when reading use of the macro in the code.
+>
+> Further, can we include `SCU` in the symbol name to indicate we're not
+> actually referring to a register in the WDT controller (and update the
+> register and flag macros below as well)?
+>
+> Finally, including an indication of the register name (System Reset
+> Control/Status Register for the AST2500, System Reset Status Register
+> for the AST2600) is helpful too:
+>
+> Perhaps:
+>
+> ```
+> #define AST_SCU_SYS_RESET_POWERON_FLAG ...
+> #define AST_SCU_SYS_RESET_EXTERN_FLAG ...
+> ```
+>
+> I'd like to see these approaches applied to the other macros you've
+> introduced as well.
+>
+> > +
+> > +#define AST2400_AST2500_SYSTEM_RESET_EVENT   0x3C
+>
+> If the AST2500 register offset is compatible with the AST2400 then IMO
+> you can drop `_AST2500` from the macro name. The location of relevance
+> for a potential bug is the assignment into the `reset_event` struct
+> member below, which is straight-forward to inspect for correctness.
+>
+> With the prior requests in mind I'd propose:
+>
+> ```
+> #define AST2400_SCU_SYS_RESET_STATUS ...
+> ```
+>
+> > +#define   AST2400_WATCHDOG_RESET_FLAG        BIT(1)
+> > +#define   AST2400_RESET_FLAG_CLEAR   GENMASK(2, 0)
+> > +
+> > +#define   AST2500_WATCHDOG_RESET_FLAG        GENMASK(4, 2)
+>
+> While the individual bits in the register are flags, we're extracting a
+> collection of the bits from the register. My feeling is that we should
+> s/_FLAG/_MASK/ in the macro names, including
+> `AST2400_WATCHDOG_RESET_FLAG` for consistency (even though it is only a
+> single-bit mask).
+>
+> > +#define   AST2500_RESET_FLAG_CLEAR   (AST2500_WATCHDOG_RESET_FLAG | \
+> > +                                      POWERON_RESET_FLAG | EXTERN_RESE=
+T_FLAG)
+> > +
+> > +#define AST2600_SYSTEM_RESET_EVENT   0x74
+> > +#define   AST2600_WATCHDOG_RESET_FLAG   GENMASK(31, 16)
+> > +#define   AST2600_RESET_FLAG_CLEAR   (AST2600_WATCHDOG_RESET_FLAG | \
+> > +                                      POWERON_RESET_FLAG | EXTERN_RESE=
+T_FLAG)
+> > +
+> >  struct aspeed_wdt_config {
+> >       u32 ext_pulse_width_mask;
+> >       u32 irq_shift;
+> >       u32 irq_mask;
+> > +     const char *compatible;
+>
+> Hmm, a compatible string for what though? From the looks of the code,
+> this is for the SCU. I think it would be be helpful to prefix this with
+> `scu_` to make it clear, though see the struct-style consideration
+> below.
+>
+> > +     u32 reset_event;
+>
+> The datasheets refer to the register as 'status' and not 'event', so I
+> suggest we use `reset_status` here. I also prefer we suffix this with
+> `_reg` to actively differentiate it from the other field types (_flag)
+> we're defining (so `reset_status_reg`.
+>
+> > +     u32 watchdog_reset_flag;
+> > +     u32 extern_reset_flag;
+>
+> s/_flag/_mask/ if we have consensus on that macro name discussion
+> above.
+>
+> > +     u32 reset_flag_clear;
+>
+> I'd prefix these with `scu_` as well. Or perhaps a nested struct?
+>
+> struct aspeed_wdt_config {
+>     ...
+>     struct {
+>         const char *compatible;
+>         u32 reset_event_reg;
+>         u32 watchdog_reset_mask;
+>         u32 extern_reset_mask;
+>         u32 reset_flag_clear;
+>    } scu;
+>
+> That way the accesses look like wdt->cfg->scu.reset_event_reg` and
+> provide some context via the type system instead of deferring to object
+> naming convention.
+>
+> >  };
 > >
-> > Hardware name: Renesas SMARC EVK version 2 based on r9a08g045s33 (DT)
-> > Call trace:
-> > dump_backtrace (arch/arm64/kernel/stacktrace.c:319)
-> > show_stack (arch/arm64/kernel/stacktrace.c:326)
-> > dump_stack_lvl (lib/dump_stack.c:117)
-> > dump_stack (lib/dump_stack.c:124)
-> > rzg2l_wdt_restart (drivers/watchdog/rzg2l_wdt.c:180)
-> > watchdog_restart_notifier (drivers/watchdog/watchdog_core.c:188)
-> > atomic_notifier_call_chain (kernel/notifier.c:98 kernel/notifier.c:231)
-> > do_kernel_restart (kernel/reboot.c:236)
-> > machine_restart (arch/arm64/kernel/process.c:145)
-> > kernel_restart (kernel/reboot.c:287)
-> > __do_sys_reboot (kernel/reboot.c:755)
-> > __arm64_sys_reboot (kernel/reboot.c:715)
-> > invoke_syscall (arch/arm64/include/asm/current.h:19
-> > arch/arm64/kernel/syscall.c:53)
-> > el0_svc_common.constprop.0 (include/linux/thread_info.h:127
-> > arch/arm64/kernel/syscall.c:141)
-> > do_el0_svc (arch/arm64/kernel/syscall.c:153)
-> > el0_svc (arch/arm64/include/asm/irqflags.h:56
-> > arch/arm64/include/asm/irqflags.h:77 arch/arm64/kernel/entry-common.c:165
-> > arch/arm64/kernel/entry-common.c:178 arch/arm64/kernel/entry-common.c:713)
-> > el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:731)
-> > el0t_64_sync (arch/arm64/kernel/entry.S:598)
+> >  struct aspeed_wdt {
+> > @@ -39,18 +63,33 @@ static const struct aspeed_wdt_config ast2400_confi=
+g =3D {
+> >       .ext_pulse_width_mask =3D 0xff,
+> >       .irq_shift =3D 0,
+> >       .irq_mask =3D 0,
+> > +     .compatible =3D "aspeed,ast2400-scu",
+> > +     .reset_event =3D AST2400_AST2500_SYSTEM_RESET_EVENT,
+> > +     .watchdog_reset_flag =3D AST2400_WATCHDOG_RESET_FLAG,
+> > +     .extern_reset_flag =3D 0,
+> > +     .reset_flag_clear =3D AST2400_RESET_FLAG_CLEAR,
+> >  };
 > >
-> > The watchdog restart handler is added in restart_handler_list and this list
-> > is invoked though do_kernel_restart(). As of my code investigation the
-> > restart_handler_list is invoked only though do_kernel_restart() and only
-> > though the stack trace above.
+> >  static const struct aspeed_wdt_config ast2500_config =3D {
+> >       .ext_pulse_width_mask =3D 0xfffff,
+> >       .irq_shift =3D 12,
+> >       .irq_mask =3D GENMASK(31, 12),
+> > +     .compatible =3D "aspeed,ast2500-scu",
+> > +     .reset_event =3D AST2400_AST2500_SYSTEM_RESET_EVENT,
+> > +     .watchdog_reset_flag =3D AST2500_WATCHDOG_RESET_FLAG,
+> > +     .extern_reset_flag =3D EXTERN_RESET_FLAG,
+> > +     .reset_flag_clear =3D AST2500_RESET_FLAG_CLEAR,
+> >  };
 > >
-> > Thank you,
-> > Claudiu Beznea
+> >  static const struct aspeed_wdt_config ast2600_config =3D {
+> >       .ext_pulse_width_mask =3D 0xfffff,
+> >       .irq_shift =3D 0,
+> >       .irq_mask =3D GENMASK(31, 10),
+> > +     .compatible =3D "aspeed,ast2600-scu",
+> > +     .reset_event =3D AST2600_SYSTEM_RESET_EVENT,
+> > +     .watchdog_reset_flag =3D AST2600_WATCHDOG_RESET_FLAG,
+> > +     .extern_reset_flag =3D EXTERN_RESET_FLAG,
+> > +     .reset_flag_clear =3D AST2600_RESET_FLAG_CLEAR,
+> >  };
 > >
-> >>
-> >>>         clk_prepare_enable(priv->pclk);
-> >>>         clk_prepare_enable(priv->osc_clk);
-> >>>
-> >>> --
-> >>> 2.39.2
-> >>>
-> >>>
-> >>
-> >> Can you redirectly me to the complete series, so I can have a better
-> >> overview of the problem?
+> >  static const struct of_device_id aspeed_wdt_of_table[] =3D {
+> > @@ -310,6 +349,7 @@ static int aspeed_wdt_probe(struct platform_device =
+*pdev)
+> >       const struct of_device_id *ofdid;
+> >       struct aspeed_wdt *wdt;
+> >       struct device_node *np;
+> > +     struct regmap *scu_base;
+>
+> I don't think it's necessary to have the `_base` suffix as we're not
+> dealing directly with a mapped address.
+>
+> >       const char *reset_type;
+> >       u32 duration;
+> >       u32 status;
+> > @@ -458,14 +498,36 @@ static int aspeed_wdt_probe(struct platform_devic=
+e *pdev)
+> >               writel(duration - 1, wdt->base + WDT_RESET_WIDTH);
+> >       }
 > >
-> > This is the series that adds power domain support for RZ/G3S SoC:
-> > https://lore.kernel.org/all/20240410122657.2051132-1-claudiu.beznea.uj@bp.renesas.com/
-> >
-> > This is the series that adds watchdog support for RZ/G3S SoC:
-> > https://lore.kernel.org/all/20240410134044.2138310-1-claudiu.beznea.uj@bp.renesas.com/
-> >
-> > Thank you for your review,
-> > Claudiu Beznea
-> >
-> >>
-> >> Kind regards
-> >> Uffe
+> > -     status =3D readl(wdt->base + WDT_TIMEOUT_STATUS);
+> > -     if (status & WDT_TIMEOUT_STATUS_BOOT_SECONDARY) {
+>
+> Dropping this condition suggests the patch is a fix. Has there been any
+> discussion of adding a Fixes: tag?
+>
+> Andrew
 
