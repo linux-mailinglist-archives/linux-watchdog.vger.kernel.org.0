@@ -1,99 +1,163 @@
-Return-Path: <linux-watchdog+bounces-1006-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1007-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 790958B6784
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 03:38:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 933A68B74D9
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 13:51:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7F97283DE5
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 01:38:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4BD11C22183
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 11:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB7F517F5;
-	Tue, 30 Apr 2024 01:38:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 070D413CFB5;
+	Tue, 30 Apr 2024 11:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="YWNZ6eSu"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gMotWVD+"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51CA91113;
-	Tue, 30 Apr 2024 01:38:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46691311B0;
+	Tue, 30 Apr 2024 11:51:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714441103; cv=none; b=kzGdC5H/j6kHRFZeun7jpY5b0BRqwqe1yYIX7oCPQAooGIie6/zTAh/FtKFNlE7+sMFnuErFLa0tcXodKTh2AbwK9KP4ZNy0ZC6rA0GWBQrvOr98T3GDrqhFV5SB0aKEU4IxoLTRH5RlwaQLca4Cmck583CfE1dZcgdeLurwAXM=
+	t=1714477881; cv=none; b=na3uTiXUcqArIW5vGtnH0oovOIx2+sTCzZqxDRrP71aofxQqSbCwCicroJRmcVqDiSzV29Rm51ROawB9hOnzSs6sQstQKScrThcwttX55M9lV5FWEGLs3RZWROU5JjfPuxUbVois38lZl0jeFhuDkQizrmcmrvOF+t+06i5ukRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714441103; c=relaxed/simple;
-	bh=dMUJOGQZFnBYsgneEfy9fLkTZSvb/W/i64TqOEoqARk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fECEU7Uk4UMkwKPUTlEIjvXmAwQ3aNqDDgBczUCIz2+OE3o10CttMh0+pJfggEnfrnnYOlduwa3qbGzpxxPbX7cma0gBxV+qyWJvsfmouKsA0mWTEyxTRCV8HZQ+giqy//RgkjGhT7telqOUX2YBWSLicmoceIk0wmCmrmI1LjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=YWNZ6eSu; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
-Received: from [192.168.68.112] (ppp14-2-127-66.adl-apt-pir-bras32.tpg.internode.on.net [14.2.127.66])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id F402E200EF;
-	Tue, 30 Apr 2024 09:38:17 +0800 (AWST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1714441100;
-	bh=iO2Qb5vOGlEJy2p0kRpFmo54k139J+5qqBLF4SdTE8M=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=YWNZ6eSuJjdbazCq5Tr+/UMFUigvmiomlY34UiNQ8iZ6ukGL8t2ygckWbW1FQPw9r
-	 RUeeQGYiZKxASLXC4rgHy1PIE6o8XoALUjlioZrOuwUW5ZjmgYcKmbsc50mIeCVXni
-	 oJaGFoo+2fA6LPSY+LMM4E6fTl9NonCyWAwD0qFIwOLUvdmKadqtZK601bTUmdyXrY
-	 2EUw64UOzIzHckNCD8Rn/cfiZ0KYODOl5DmnQS3GfkoC5O1+dma7eD9mhKmJ5HRMe5
-	 ZAswFxFNqvUPPyphfQ23WKJRJ4REOwCXp1NerfE53XMINCfVWGcC1iO1OhYCemDU2M
-	 661FS1yGDsWFA==
-Message-ID: <e694ba58197687dce68d568dfcb078ff3a6c6fed.camel@codeconstruct.com.au>
-Subject: Re: [PATCH v8 1/1] drivers: watchdog: revise watchdog bootstatus
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Peter Yin <peteryin.openbmc@gmail.com>
-Cc: patrick@stwcx.xyz, Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter
- Roeck <linux@roeck-us.net>, Joel Stanley <joel@jms.id.au>, 
- linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Date: Tue, 30 Apr 2024 11:08:17 +0930
-In-Reply-To: <CAPSyxFRG8mooBg1QWZk8sw=cWzoUQqk=WnyAtgPfRBmQRKtvaQ@mail.gmail.com>
-References: <20240428142937.785925-1-peteryin.openbmc@gmail.com>
-	 <20240428142937.785925-2-peteryin.openbmc@gmail.com>
-	 <d231737bfa9f3dd3c0a4370ab2e86557a407980d.camel@codeconstruct.com.au>
-	 <CAPSyxFRG8mooBg1QWZk8sw=cWzoUQqk=WnyAtgPfRBmQRKtvaQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1714477881; c=relaxed/simple;
+	bh=vBMSAoS4FslXBKMp6Bl0M5x8r+e0FbC1+oCjbaWlU+U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Veq64Z2g6VZ8yaZtUdsSWhHyFmhXGaYocvbq1droZ/zZNL0NxWUsQ6XOYKh0+h4Hm9Hm10r005QoeuzTDk5PgNY1/hpTTbIOoIjZA9vNmo/hH1BiJgOpdjljuf43/RlKfnX5tjZLj4RjHCl/nRRAIEHZhmbD7sHfY0mOrh9rsLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gMotWVD+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58150C2BBFC;
+	Tue, 30 Apr 2024 11:51:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714477881;
+	bh=vBMSAoS4FslXBKMp6Bl0M5x8r+e0FbC1+oCjbaWlU+U=;
+	h=From:List-Id:To:Cc:Subject:Date:From;
+	b=gMotWVD+CJA+GM/SxYj9XE7Mk8Hco1CyjfuSrPqdU4hoQhynWYHtQIf0WOOfdbiSU
+	 lU++GicjvEdHyvtJ/8558SA6RYJnUoN63kWFqctUrcB7K3zk6sGEgwtD97p87r32UU
+	 bkzxDigyd5GNgegCk/2QZdxTAtFYahWogTFfgVxh86MKfx6FkmyV1PQPc4VyyNtenw
+	 CLmUjK9nDlCymDKeaptNcIMJi3bKb05F/yTrnkzPo0rGMK1ooGAhbovsZIsSUdgL5J
+	 n76Xq8hcCI/tuQIThcly+VDWJj5hmkXapZ88+F+emQBPlrTjdemHej3Mk/lC3n0TS1
+	 /Ll+rmIzu0bHQ==
+From: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+To: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	soc@kernel.org,
+	arm@kernel.org,
+	Andy Shevchenko <andy@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	devicetree@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-crypto@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	Olivia Mackall <olivia@selenic.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+Subject: [PATCH v8 0/9] Turris Omnia MCU driver
+Date: Tue, 30 Apr 2024 13:51:02 +0200
+Message-ID: <20240430115111.3453-1-kabel@kernel.org>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2024-04-29 at 22:54 +0800, Peter Yin wrote:
-> Hi Andrew,
->     I am not sure how to add the Fixes tag, Is it like this?
->=20
-> Fixes: 6a6c7b006e5c (watchdog: aspeed: Add support for
-> aspeed,reset-mask DT property).
+Hello Andy, Hans, Ilpo, Arnd, Gregory, and others,
 
-Approximately, yes, but it must not be wrapped.
+this is v8 of the series adding Turris Omnia MCU driver.
 
-Some more info is provided in the submitting-patches documentation:
+This series depends on the immutable branch between LEDs and locking,
+introducing devm_mutex_init(), see the PR
+  https://lore.kernel.org/linux-leds/20240412084616.GR2399047@google.com/
 
-https://docs.kernel.org/process/submitting-patches.html#describe-your-chang=
-es
+See also cover letters for v1, v2, v3, v4, v5, v6 and v7:
+  https://patchwork.kernel.org/project/linux-soc/cover/20230823161012.6986-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20230919103815.16818-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231023143130.11602-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20231026161803.16750-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240323164359.21642-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240418121116.22184-1-kabel@kernel.org/
+  https://patchwork.kernel.org/project/linux-soc/cover/20240424173809.7214-1-kabel@kernel.org/
 
-> Signed-off-by: Peter Yin <peteryin.openbmc@gmail.com>
->=20
-> Is it the correct commit ID or should I base on which commit ID?
->=20
+Changes since v7:
+- fixed wrong $id path in DT binding (patch 1)
+- removed resource managed IRQ mapping disposal, which is not needed, as
+  pointed out by Andy (patches 6, 7)
+- added some more #includes (for linux/device.h, linux/interrupt.h,
+  linux/hw_random.h) (patches 3, 6, 7)
+- dropped the Fixes tags from the DT changes (patches 8, 9), with an
+  explanation of this added into the commit message of patch 8, as
+  suggested by Andrew
 
-The correct commit ID to use is the one that introduces the problem.
-Using `git blame drivers/watchdog/aspeed_wdt.c` it appears you're
-changing the behaviour that was introduced in 49d4d277ca54 ("aspeed:
-watchdog: Set bootstatus during probe"):
+Marek Behún (9):
+  dt-bindings: firmware: add cznic,turris-omnia-mcu binding
+  platform: cznic: Add preliminary support for Turris Omnia MCU
+  platform: cznic: turris-omnia-mcu: Add support for MCU connected GPIOs
+  platform: cznic: turris-omnia-mcu: Add support for poweroff and wakeup
+  platform: cznic: turris-omnia-mcu: Add support for MCU watchdog
+  platform: cznic: turris-omnia-mcu: Add support for MCU provided TRNG
+  platform: cznic: turris-omnia-mcu: Add support for digital message
+    signing via debugfs
+  ARM: dts: turris-omnia: Add MCU system-controller node
+  ARM: dts: turris-omnia: Add GPIO key node for front button
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
-id=3D49d4d277ca54e04170d39484c8758a0ea9bca37d
+ .../ABI/testing/debugfs-turris-omnia-mcu      |   13 +
+ .../sysfs-bus-i2c-devices-turris-omnia-mcu    |  126 ++
+ .../firmware/cznic,turris-omnia-mcu.yaml      |   86 ++
+ MAINTAINERS                                   |    5 +
+ .../dts/marvell/armada-385-turris-omnia.dts   |   35 +-
+ drivers/platform/Kconfig                      |    2 +
+ drivers/platform/Makefile                     |    1 +
+ drivers/platform/cznic/Kconfig                |   51 +
+ drivers/platform/cznic/Makefile               |    9 +
+ .../platform/cznic/turris-omnia-mcu-base.c    |  439 +++++++
+ .../platform/cznic/turris-omnia-mcu-debugfs.c |  207 ++++
+ .../platform/cznic/turris-omnia-mcu-gpio.c    | 1048 +++++++++++++++++
+ .../cznic/turris-omnia-mcu-sys-off-wakeup.c   |  258 ++++
+ .../platform/cznic/turris-omnia-mcu-trng.c    |  101 ++
+ .../cznic/turris-omnia-mcu-watchdog.c         |  123 ++
+ drivers/platform/cznic/turris-omnia-mcu.h     |  188 +++
+ include/linux/turris-omnia-mcu-interface.h    |  249 ++++
+ 17 files changed, 2940 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/ABI/testing/debugfs-turris-omnia-mcu
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-i2c-devices-turris-omnia-mcu
+ create mode 100644 Documentation/devicetree/bindings/firmware/cznic,turris-omnia-mcu.yaml
+ create mode 100644 drivers/platform/cznic/Kconfig
+ create mode 100644 drivers/platform/cznic/Makefile
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-base.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-debugfs.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-gpio.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-sys-off-wakeup.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-trng.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu-watchdog.c
+ create mode 100644 drivers/platform/cznic/turris-omnia-mcu.h
+ create mode 100644 include/linux/turris-omnia-mcu-interface.h
 
-Andrew
+-- 
+2.43.2
+
 
