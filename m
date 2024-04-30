@@ -1,168 +1,339 @@
-Return-Path: <linux-watchdog+bounces-1017-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1018-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16BBE8B753C
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 14:02:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFE938B7659
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 14:54:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 45517B22348
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 12:02:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67BCF1F236A5
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 12:54:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07CBB13D633;
-	Tue, 30 Apr 2024 12:02:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C81171099;
+	Tue, 30 Apr 2024 12:54:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PP/eEPCw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fOunWnSF"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C82D13D267;
-	Tue, 30 Apr 2024 12:02:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31FD17106E;
+	Tue, 30 Apr 2024 12:54:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714478538; cv=none; b=SyQjB4TcRX/WAMfW080fdcOgJ6zhO5S+ETSzzOZeEeq4ptWPyPH076ytBC+jv1VQ2LK9FL3dBJz0WGG0qA3SXaT0keTlDrczwe3sqVqAgJNIuJiRLyA9woBc23cRqFgJV/2kma7thjzb3sSpBrcAZUZ+EGf80dxhDRzXN0nl3vE=
+	t=1714481671; cv=none; b=ZJIyguwBBCR6jCHJwiH2a+QUvUeqSbIiK6tyIYwF4yKHumCaHPVyIveDgDNv+isP+3YbpmFKD7nJlFL3kFem8SsxSLzOoyqgWZR7RNzXEZ5Wcp5aOe9EOjq3pU6NxUme79m+CffKSqm2anKgtCkdttxcTCopw8+3zqU7rqbkBCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714478538; c=relaxed/simple;
-	bh=79UNfhj2pKS3elAdRYb+cWvVDbeO+ck0Bf+XlOj7T44=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c3JnXU5ynd86evalACIAKB0QPLb3rK5XhP5eyq28Prav1jFyQDNEUcsli18RnzN7ARuv6aDwiPiBUZnmzyglYPBFWmiV9OhqX45QeNsP4GedQOwpx+RLWBPSZQO2bKhPs0hCDOVk9MhbpZGkTqfNkAPDDpEHpEZXo01YccwN9g0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PP/eEPCw; arc=none smtp.client-ip=209.85.167.47
+	s=arc-20240116; t=1714481671; c=relaxed/simple;
+	bh=IXqSSEEa53cqMmLQ2JMXnOsLZM0nx+pixJzCSlr6zSw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=skjFwxyXWW1UvVa5lJOYeoTzqey3rXk0irz5N7NSjttT7zgbNWxVxsZytaUw+bVZrBmRDh5I6i0NI5ZaySBZu/Gu/b0/kZK9O6YkW4gNuW3aBGGq4H5dwlN0VTRL/H2npa0L7NvSeOkVkGWWDu0vwJs/qQXhtsrlsr/aUacZNco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fOunWnSF; arc=none smtp.client-ip=209.85.208.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-51ca95db667so5240485e87.0;
-        Tue, 30 Apr 2024 05:02:17 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-571bddddbc2so6683005a12.1;
+        Tue, 30 Apr 2024 05:54:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714478536; x=1715083336; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zox/qmaglXo0HD/YN8voWJNp1dns8XrdzThPKzYbfYs=;
-        b=PP/eEPCwefkzMAxI3m34BUPZBGkPJX6Esd6qK0EyholXhUf0DGH0zdSNDrRi6hajB6
-         NcO8O9wPlhO9O27BtgHItwFrOAn1ybAIgXRza9KypD4gC7nwj/7o40lT08XcBOxJmp0j
-         vvxSnhhRzroJ3dvO9qTvXEQnTB6syElH1AB5obgj31cAoCBuT5mFShgw+SNVEnp21Niu
-         M/vf5iFluGKmRikvvt/mYwyCzb47CYoLPkqfNOYBsayfKYHW2LkOAxHUBJgT6rwpOdZ6
-         V7Z0R5mVGzhttM6fnoRcIiJz341bP5XeG3tAbPgPMvHQt7wdqlHKm+9I1DpcqXevxaRu
-         uk/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714478536; x=1715083336;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1714481668; x=1715086468; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Zox/qmaglXo0HD/YN8voWJNp1dns8XrdzThPKzYbfYs=;
-        b=S4t3W07aXMNDyscadSR7Tulf5yaY7LoQp6YEif4f/zmpGQEx1uG7e092WIsJ/X6A0s
-         V2Thgovbq8LkrlPZswXrNOVSaddIypANcgYzzifWwT4rW9+YtM7V+UcY4sgPrEdiWR3/
-         z848qdrbLC1oQig8UArC9RtoOMPnWwgU6QgjaqpZK746QxaNofwaqY9NXGK/CKo3/gh7
-         0KRvRgkNe62C0DigljNq9ziFNHM+e6CSdD3LzQkEZGUsOUK+mG/o6Xl571Rxk5cGJrqX
-         MLvSVJfyWVpyd+4okUjyrns0KGJtwtZjxjkzRmQzFT43aisKFNRL8BU2EtRX5U5GpJxn
-         subg==
-X-Forwarded-Encrypted: i=1; AJvYcCVkrZmOQZBz520hfFDItjCSqrIrpb61Angg3ELZHIp97NtoiI5ZC1p1irT9kr9o4fwBJEnlctkvkv5wmjTDwwqBn+PM/93twcGH9CpxuOLiBh7qJXRAk7G8Q5EmJmCRHZvo5ZGo47rpl7+xRpv4Ncvt/4UM96sgxvCWITuvjwq93p04RdRlihsz
-X-Gm-Message-State: AOJu0YyXHY3+nEracrL27qTFk3SNOiykWV0ax3s9+KK/gYun29glGlmH
-	Al83RJxXJTN8qFl9APuKuZrlKAyxy8p8zSc2WbmzvACUCy/aWzfw
-X-Google-Smtp-Source: AGHT+IEm3BEi0uEfxCxsS46zHZU+iHIkKBDuGFJu0IExFYzQtNGkHdUxuvrOiz7C2B6tfd+FYUZPSA==
-X-Received: by 2002:a05:6512:12cb:b0:51d:53fa:6530 with SMTP id p11-20020a05651212cb00b0051d53fa6530mr8597982lfg.28.1714478535490;
-        Tue, 30 Apr 2024 05:02:15 -0700 (PDT)
-Received: from fedora ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id v4-20020ac258e4000000b00516cba5b4cesm4479734lfo.46.2024.04.30.05.02.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Apr 2024 05:02:14 -0700 (PDT)
-Date: Tue, 30 Apr 2024 15:02:10 +0300
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-To: Matti Vaittinen <mazziesaccount@gmail.com>,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: [PATCH v1 6/6] MAINTAINERS: Add ROHM BD96801 'scalable PMIC' entries
-Message-ID: <e8d27104a7c673c87583557d2e40139f2908eb01.1714478142.git.mazziesaccount@gmail.com>
-References: <cover.1714478142.git.mazziesaccount@gmail.com>
+        bh=XUKw3zCotkBrEJ53HxbMFGbGGHTqC2IglxBradvfgLg=;
+        b=fOunWnSFN5VLh+tNJAcko89Bln+YUwulWsJKuYUanVL3xiqlvAQ7Edlhv0xE2K6NeO
+         H5hidzefCbDP2QZbqZ6O1EOMSH4mUVEhbtW8xEk4tJ8RKxwXICGPfEyfp7mJbnJdtMSz
+         rzDGvckf+5rWsVUAg+0hTNvENMS6vubIsPaRvrOf9sU/9DrJCWURn8uHu4m/AibJs1nm
+         u+u6dxt8I3mlj6Qi/F9g3N+VC1QWvrADgtLs5IJWGZhaK+K6mvrs8HEJviZKFPYs8j01
+         +qKkrZsxeFSpYRgdSuVLr9C6BmQIxjOk5jL6dR9XWPVlbNSc1a0fX+PVk1jeFz1Xuy42
+         QJVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714481668; x=1715086468;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XUKw3zCotkBrEJ53HxbMFGbGGHTqC2IglxBradvfgLg=;
+        b=jcWeRQdvffkvxdJpEu3LZ5qf4TxPF7sY/jlnhHaLx/kZR0++TDtoigd6LtQzaFSyiD
+         6rGXv7S113c8HBmQi/xJb5TDU/IvrVjupv74gYFzA5KckdVoA+IpyFQA7KYZqu/tIOUp
+         2UkxFxOeDil6l/kVnUBwFVkZn4ot53cwyZL/Rh3DROyVhk+wR1fnIrgOl7ZkACjzxwB9
+         0p4onNHesKLEOkkEcrTr4LIKb8HcBTGAtBul4NNmFx/PZqPEZJSH9cEoyeyrJUskjTYq
+         sAAR236CpA69JOVrxsLqSl+nAj4Sg57QClCR14xCQ4DfZXCwPzIrcYEVI7Ff0aGNMmQl
+         ACKw==
+X-Forwarded-Encrypted: i=1; AJvYcCXv4VsPXW9HNtD29oPCOfJ7NIdQWldb+89GPeR0h1Ajmq2rtELiGB/x/41SawyuK3JJaRurZv6I8yGQmKTwQ4dFEEO0kznP3k6NjRjPaKeQd5ThpbEFa8bYK07T+cwZJeqkb2LVAAktAU/HlKSCnPzuG54K5+LVmtKP6XXT339rk+Eb3OM1
+X-Gm-Message-State: AOJu0Yw9nN9FDr9/TA4CRaWRZEo7bwe1iK4fyDRZAscekQnv5M+ktxQ4
+	MHj47c1ciwLErtNIG6aTwurInEjcHxijjGxGDVFaMhzl4Wbl/QNAS22Buk4GgqO9oqj73Q5AU3/
+	ggkGDbt2UqslutRoWblbeuKniLPQ=
+X-Google-Smtp-Source: AGHT+IHVJkSsDjsW6r6/7AKH8NcIEvtzbu9axtrLp0aBUfYr7aAPPHDLcl+8227ox+KdfBMIsCmZgVIT3XXnVZK0qLY=
+X-Received: by 2002:a17:906:f288:b0:a58:872b:20e5 with SMTP id
+ gu8-20020a170906f28800b00a58872b20e5mr9031758ejb.28.1714481667961; Tue, 30
+ Apr 2024 05:54:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="DwNfJbWB549XTXxk"
-Content-Disposition: inline
-In-Reply-To: <cover.1714478142.git.mazziesaccount@gmail.com>
-
-
---DwNfJbWB549XTXxk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240430115111.3453-1-kabel@kernel.org> <20240430115111.3453-3-kabel@kernel.org>
+In-Reply-To: <20240430115111.3453-3-kabel@kernel.org>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Tue, 30 Apr 2024 15:53:51 +0300
+Message-ID: <CAHp75VcgfvyZ9rcNev9CpQEN3CkUVozEkv+ycaQggPbE4tx+1Q@mail.gmail.com>
+Subject: Re: [PATCH v8 2/9] platform: cznic: Add preliminary support for
+ Turris Omnia MCU
+To: =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, 
+	arm@kernel.org, Andy Shevchenko <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org, 
+	Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	linux-rtc@vger.kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Add maintainer entries for ROHM BD96801 a.k.a 'scalable PMIC'
-drivers to be reviewed by ROHM people.
+On Tue, Apr 30, 2024 at 2:51=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.org>=
+ wrote:
+>
+> Add the basic skeleton for a new platform driver for the microcontroller
+> found on the Turris Omnia board.
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
----
- MAINTAINERS | 4 ++++
- 1 file changed, 4 insertions(+)
+...
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index aa3b947fb080..da68144d51ae 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19111,17 +19111,21 @@ F:	drivers/gpio/gpio-bd71828.c
- F:	drivers/mfd/rohm-bd71828.c
- F:	drivers/mfd/rohm-bd718x7.c
- F:	drivers/mfd/rohm-bd9576.c
-+F:	drivers/mfd/rohm-bd96801.c
- F:	drivers/regulator/bd71815-regulator.c
- F:	drivers/regulator/bd71828-regulator.c
- F:	drivers/regulator/bd718x7-regulator.c
- F:	drivers/regulator/bd9576-regulator.c
-+F:	drivers/regulator/bd96801-regulator.c
- F:	drivers/regulator/rohm-regulator.c
- F:	drivers/rtc/rtc-bd70528.c
- F:	drivers/watchdog/bd9576_wdt.c
-+F:	drivers/watchdog/bd96801_wdt.c
- F:	include/linux/mfd/rohm-bd71815.h
- F:	include/linux/mfd/rohm-bd71828.h
- F:	include/linux/mfd/rohm-bd718x7.h
- F:	include/linux/mfd/rohm-bd957x.h
-+F:	include/linux/mfd/rohm-bd96801.h
- F:	include/linux/mfd/rohm-generic.h
- F:	include/linux/mfd/rohm-shared.h
-=20
---=20
-2.44.0
+> +What:          /sys/bus/i2c/devices/<mcu_device>/serial_number
+> +Date:          July 2024
+> +KernelVersion: 6.10
+> +Contact:       Marek Beh=C3=BAn <kabel@kernel.org>
+> +Description:   (RO) Contains the 64 bit long board serial number in hexa=
+decimal
 
+64 bit long --> 64-bit
 
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
+> +               format.
+> +
+> +               Only available if board information is burned in the MCU =
+(older
+> +               revisions have board information burned in the ATSHA204-A=
+ chip).
+> +
+> +               Format: %016X.
 
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
+It's strange to use capitalized hexadecimal here and not in other
+files, but maybe it's something special about "serial number"? Dunno.
 
---DwNfJbWB549XTXxk
-Content-Type: application/pgp-signature; name="signature.asc"
+...
 
------BEGIN PGP SIGNATURE-----
+> +menuconfig CZNIC_PLATFORMS
+> +       bool "Platform support for CZ.NIC's Turris hardware"
 
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmYw3cEACgkQeFA3/03a
-ocWPbggA1DOQEhF5jDsmIciK9UdDzwrr+OWE/aRtufuahdexUKICIldB1q4P2GcV
-O9S5ws0EikcsPbkE0j0qmSTF3FIj3KhAFSkq5YeyYxHYMxxLhGidoapGcN5mcGOw
-99FEDVsWsE28UE/0MrY/y0TSA6clVLw3bQaIqZVpmS5N1eMqZ4z0I/m5UC6vRfkH
-faobCFXzEvcxbqv6RJ7pRhCuVll8zmkAKIL5w0GRDuBEuPW9qq7mfsUD0px3YECy
-Bdv5r/uyx6sdS+UozfGvk0Mh5uaHlDFucSDV9diICB6P9v2LaHiR6cTyH73JpDBY
-TtD9vdoak3cZm6FCEzieay8Lg5Db2Q==
-=s5kO
------END PGP SIGNATURE-----
+> +       depends on MACH_ARMADA_38X || COMPILE_TEST
 
---DwNfJbWB549XTXxk--
+This...
+
+> +       help
+> +         Say Y here to be able to choose driver support for CZ.NIC's Tur=
+ris
+> +         devices. This option alone does not add any kernel code.
+> +
+> +if CZNIC_PLATFORMS
+> +
+> +config TURRIS_OMNIA_MCU
+> +       tristate "Turris Omnia MCU driver"
+
+> +       depends on MACH_ARMADA_38X || COMPILE_TEST
+
+...or this dependency is redundant. I think one would expect that
+these platforms will not be always based on the same platform, hence I
+would drop the former and leave the latter. But you should know better
+than me.
+
+> +       depends on I2C
+> +       help
+> +         Say Y here to add support for the features implemented by the
+> +         microcontroller on the CZ.NIC's Turris Omnia SOHO router.
+> +         To compile this driver as a module, choose M here; the module w=
+ill be
+> +         called turris-omnia-mcu.
+
+...
+
+> +static int omnia_get_version_hash(struct omnia_mcu *mcu, bool bootloader=
+,
+> +                                 u8 version[static OMNIA_FW_VERSION_HEX_=
+LEN])
+
+Interesting format of the last parameter. Does it make any difference
+to the compiler if you use u8 *version?
+
+> +{
+> +       u8 reply[OMNIA_FW_VERSION_LEN];
+> +       int err;
+> +
+> +       err =3D omnia_cmd_read(mcu->client,
+> +                            bootloader ? CMD_GET_FW_VERSION_BOOT
+> +                                       : CMD_GET_FW_VERSION_APP,
+> +                            reply, sizeof(reply));
+> +       if (err)
+> +               return err;
+
+> +       version[OMNIA_FW_VERSION_HEX_LEN - 1] =3D '\0';
+> +       bin2hex(version, reply, OMNIA_FW_VERSION_LEN);
+
+Hmm... I would rather use returned value
+
+char *p;
+
+p =3D bin2hex(...);
+*p =3D '\0';
+
+return 0;
+
+> +       return 0;
+> +}
+
+...
+
+> +static umode_t omnia_mcu_base_attrs_visible(struct kobject *kobj,
+> +                                           struct attribute *a, int n)
+> +{
+> +       struct device *dev =3D kobj_to_dev(kobj);
+> +       struct omnia_mcu *mcu =3D dev_get_drvdata(dev);
+
+> +       umode_t mode =3D a->mode;
+
+Do you need this?
+
+> +       if ((a =3D=3D &dev_attr_serial_number.attr ||
+> +            a =3D=3D &dev_attr_first_mac_address.attr ||
+> +            a =3D=3D &dev_attr_board_revision.attr) &&
+> +           !(mcu->features & FEAT_BOARD_INFO))
+
+> +               mode =3D 0;
+
+return 0; ?
+
+> +       return mode;
+
+return a->mode; ?
+
+> +}
+
+...
+
+> +static void omnia_mcu_print_version_hash(struct omnia_mcu *mcu, bool boo=
+tloader)
+> +{
+> +       const char *type =3D bootloader ? "bootloader" : "application";
+> +       struct device *dev =3D &mcu->client->dev;
+> +       u8 version[OMNIA_FW_VERSION_HEX_LEN];
+> +       int err;
+> +
+> +       err =3D omnia_get_version_hash(mcu, bootloader, version);
+> +       if (err) {
+> +               dev_err(dev, "Cannot read MCU %s firmware version: %d\n",=
+ type,
+> +                       err);
+
+One  line?
+
+> +               return;
+> +       }
+> +
+> +       dev_info(dev, "MCU %s firmware version hash: %s\n", type, version=
+);
+> +}
+
+...
+
+> +static const char *omnia_status_to_mcu_type(uint16_t status)
+
+Why out of a sudden uint16_t instead of u16?
+
+> +{
+> +       switch (status & STS_MCU_TYPE_MASK) {
+> +       case STS_MCU_TYPE_STM32:
+> +               return "STM32";
+> +       case STS_MCU_TYPE_GD32:
+> +               return "GD32";
+> +       case STS_MCU_TYPE_MKL:
+> +               return "MKL";
+> +       default:
+> +               return "unknown";
+> +       }
+> +}
+
+...
+
+> +       static const struct {
+> +               uint16_t mask;
+
+Ditto.
+
+> +               const char *name;
+> +       } features[] =3D {
+> +               { FEAT_EXT_CMDS,           "extended control and status" =
+},
+> +               { FEAT_WDT_PING,           "watchdog pinging" },
+> +               { FEAT_LED_STATE_EXT_MASK, "peripheral LED pins reading" =
+},
+> +               { FEAT_NEW_INT_API,        "new interrupt API" },
+> +               { FEAT_POWEROFF_WAKEUP,    "poweroff and wakeup" },
+> +               { FEAT_TRNG,               "true random number generator"=
+ },
+> +       };
+
+...
+
+> +               omnia_info_missing_feature(dev, "feature reading");
+
+Tautology. Read the final message. I believe you wanted to pass just
+"reading" here.
+
+...
+
+> +       memcpy(mcu->board_first_mac, &reply[9], ETH_ALEN);
+
+There is an API ether_copy_addr() or so, don't remember by heart.
+You also need an include for ETH_ALEN definition.
+
+...
+
+> +#include <linux/i2c.h>
+
+No users of this, you may replace with
+
+struct i2c_client;
+
+Am I right?
+
+...
+
+> +       CMD_GET_FW_VERSION_BOOT         =3D 0x0E, /* 20B git hash number =
+*/
+
+Git
+
+...
+
+> +       /* available only at address 0x2b (led-controller) */
+
+LED-controller
+
+...
+
+> +enum omnia_ctl_byte_e {
+> +       CTL_LIGHT_RST           =3D BIT(0),
+> +       CTL_HARD_RST            =3D BIT(1),
+> +       /* BIT(2) is currently reserved */
+> +       CTL_USB30_PWRON         =3D BIT(3),
+> +       CTL_USB31_PWRON         =3D BIT(4),
+> +       CTL_ENABLE_4V5          =3D BIT(5),
+> +       CTL_BUTTON_MODE         =3D BIT(6),
+> +       CTL_BOOTLOADER          =3D BIT(7)
+
+Keep trailing comma as it might be extended (theoretically). And you
+do the similar in other enums anyway.
+
+> +};
+
+--
+With Best Regards,
+Andy Shevchenko
 
