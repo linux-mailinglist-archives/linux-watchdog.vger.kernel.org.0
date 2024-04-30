@@ -1,98 +1,204 @@
-Return-Path: <linux-watchdog+bounces-1010-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1011-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35B1B8B74F0
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 13:54:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C3C88B750D
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 13:59:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9909284498
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 11:54:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EE561C222BA
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 11:59:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F0F913D267;
-	Tue, 30 Apr 2024 11:54:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4114313D247;
+	Tue, 30 Apr 2024 11:59:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kAYfwnR9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PTCW/av1"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D83E13C9C3;
-	Tue, 30 Apr 2024 11:54:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813CC383A5;
+	Tue, 30 Apr 2024 11:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714478073; cv=none; b=U/iYkBn2CUiUEQ6h15q/R/M7ITbV6YUdaDI44zjK2CWVwY7vJh+PHrV3t08dyHusLEvnn6XVMbybe9ApeDjpMIeUuRwp2aRYXDKMbM4Cb32jRD2C57nirbFZzNMAV+zBrW5Iaci5y0+essX80WLDUliIYpmKb3jiTpRO3qyiUOM=
+	t=1714478373; cv=none; b=g6hAC7U1hWuRNo+qG7E0Us+2DEAmo57VQOwYMAH4TFv1nCQ4UaRv+XQu4cV9ag53txNIckO4WF9BACP2GOqI6IVkO64gy5J4t9E8/QUFJrS9Xq8eSyVh9E+Jd1FliNQySkGJGXth48IW6LlcanWkGuJi/9nuGnU+IhKm6GUrbYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714478073; c=relaxed/simple;
-	bh=IapLrD/jogJqlTH0kGzdqSYfKtIIUt9wn2mvkUe0d0k=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WxOfErQ/Yd9DfpdlqF1D47akLywMr0qGX+sS/0EcaaQQMkpjkWIW+Xz4izKoakoR+Ysl0MzIbPKE5eBAlQZaE/f1yK6cLib9Wp9rHv1o/Yi/4iKd+YVxTNI+rZIaquKB2TIuo5gCO//z4JwS1pyhBA9FqWY/g+7WqM7Z6UQAOOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kAYfwnR9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11D00C4AF19;
-	Tue, 30 Apr 2024 11:54:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714478072;
-	bh=IapLrD/jogJqlTH0kGzdqSYfKtIIUt9wn2mvkUe0d0k=;
-	h=Date:From:To:List-Id:Cc:Subject:In-Reply-To:References:From;
-	b=kAYfwnR98InXLzwlWJqhJA+JJwOhNTOxNuHCOr4RLbp9x8NKXnlALo/tp99txLx5D
-	 A6L77Zd/oAV1I+ZP3rWVoFgPC7SrlJNbLS9BwUzJb9J8Pow4CpbGZ2tEbComEoLqak
-	 cis1JMW3l5PHjwsqJbWZnJju62BIOR48k+31tZhtFG7TKgdAx4OMKRHVDXPuCUlS8J
-	 lcRNkrbkXpZaPhiOuTIPh1CA6lqP383MVfvUdxwGj4wISR6qmPChKtUPMlE+qUNU0U
-	 ClQsCpxIooroqgx27cmxLAR8VjL8181Zxg8IuTivqPkJHmWwJWhsHkr6QI3Zekz59q
-	 MCzjOH19AN24Q==
-Date: Tue, 30 Apr 2024 13:54:23 +0200
-From: Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org, Andy
- Shevchenko <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, Ilpo
- =?UTF-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Alessandro Zummo
- <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Christophe JAILLET
- <christophe.jaillet@wanadoo.fr>, Dan Carpenter <dan.carpenter@linaro.org>,
- devicetree@vger.kernel.org, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Guenter Roeck <linux@roeck-us.net>, Herbert
- Xu <herbert@gondor.apana.org.au>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Linus Walleij
- <linus.walleij@linaro.org>, linux-crypto@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-watchdog@vger.kernel.org, Olivia Mackall <olivia@selenic.com>, Rob
- Herring <robh+dt@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
- Andrew Lunn <andrew@lunn.ch>, Conor Dooley <conor+dt@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>, Sebastian
- Hesselbarth <sebastian.hesselbarth@gmail.com>, Uwe =?UTF-8?B?S2xlaW5lLUs=?=
- =?UTF-8?B?w7ZuaWc=?= <uwe@kleine-koenig.org>
-Subject: Re: [PATCH v7 0/9] Turris Omnia MCU driver
-Message-ID: <20240430135423.2034fb51@dellmb>
-In-Reply-To: <875xw45cgj.fsf@BLaptop.bootlin.com>
-References: <20240424173809.7214-1-kabel@kernel.org>
-	<875xw45cgj.fsf@BLaptop.bootlin.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1714478373; c=relaxed/simple;
+	bh=O5E+OFHwPyDQM79u7siSM80Go0hq0dHphcFXG6dxOKo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VuzvTawOXoqP8eUwYcWmuVFYsUPGMLadCKoCt0EIeBd82B604nY6MmX/9KtdoG4ftaTklHPOQRSK/FwAbsPs6ykRoeU1GdEzlc6KKQhk+z773kiTuukTVw7BdodLTINzrhVPdUpl0cK4jb730S51fHm4kdD10sgxN83TYaNy6W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PTCW/av1; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-51ae315bb20so6886617e87.1;
+        Tue, 30 Apr 2024 04:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714478369; x=1715083169; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s8tGOSAl/1tF5oYYz2CQ/Rtt4a4nGClsd0EYlRKY4BY=;
+        b=PTCW/av1vvrjzewn9ne6Xu/SC3AjelWtuTAN7PijC0g+VYHqTvuWTyYBGFRmHEMKa9
+         kFeBdSCWOO4xwe/GKqbYmADSYhPJUZjYp+uZ4r67SWys/4NLwTapinyjnD31aARKTfo7
+         YR9RcdZ1Vf+mu0pL6LM78+L1W7YmVbXXEofUzuPJmKMBykb5J1bidoUpxHnK2vXebDuv
+         iX7Y7a27EtJzjdnFNdZFUE3AyHYMBdGgWd0rqTJI8YVtj2ujsQ9u4akhmLoS9JKR67LE
+         ow3bTcfdNLHsUs/7EKfyH7K0UQ4AOnGGoVOr9xTfdr9MCfHSyZDgPPsH3pU4nPnoV79e
+         5EuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714478369; x=1715083169;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s8tGOSAl/1tF5oYYz2CQ/Rtt4a4nGClsd0EYlRKY4BY=;
+        b=ojhRfgG1xjtXiHcTCsxBa1MJuH/IA8ZGwjOD/UMlfHNNZN1G6wUX/XEirAhVT97aa/
+         iGfBitKJIPBHqN+xUI78SXhQgbqC0NKtr5RyUfALG30QYR6Ubk7f0MEkByfehZKhKnJC
+         RPpjFBy3nush+VzOyudny5kVFtcsznidCgtcez/8FMclUB0IGYmSr3ESB1nGC3MaIXHm
+         YZNkU03jKOzkWncAo9rmE0lybhwmobBpBehTnIElIyM4rG/oT8t7zvqQKio9vUDbFlji
+         rvxXHcIZoOv2w7y0Ad4zhNfyKCt1eRbyZYWzsZj5HKY3K/0SCPdPArmManNXlsCFo7xz
+         3m6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWqDOB4ATynpzpfoznG/ID9ztDflLynM1/pGveXXzaiBepUManSHH7tEuVXYf3qYHdl7apyItdAmR2k5Rf+py2l9KSqfOCDf8i4FLH3nO3FaeJKryWcJK6NwcNxN2+kTEx606XT5BgJsLj/p/FUfh297veENNzsFsfLQnp6f59thwWdPq5kEF9A
+X-Gm-Message-State: AOJu0Yy16D9IQ8JAe3WPEuvDLNvKmMsUYqq1tTTZAlrbYXHG/TniiJ/1
+	3NqvhuLQ4pvlyr9TE2aK7bGk7LgMdAYBtH5UfoLQ+QmvzqqHkvDf
+X-Google-Smtp-Source: AGHT+IEbxazFlKpHGNMqErv25svZ1rKH2eopi03XEXJfphoB4IRwKuKJNNTa6GyzO6+pk7CRIzyBCw==
+X-Received: by 2002:a05:6512:607:b0:51a:bebb:690c with SMTP id b7-20020a056512060700b0051abebb690cmr1640215lfe.12.1714478368496;
+        Tue, 30 Apr 2024 04:59:28 -0700 (PDT)
+Received: from fedora ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id t12-20020ac2548c000000b0051da2c1d214sm794104lfk.305.2024.04.30.04.59.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Apr 2024 04:59:27 -0700 (PDT)
+Date: Tue, 30 Apr 2024 14:59:18 +0300
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+To: Matti Vaittinen <mazziesaccount@gmail.com>,
+	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [PATCH v1 0/6] Support ROHM BD96801 scalable PMIC
+Message-ID: <cover.1714478142.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="dEAgTGpokvAR9IlE"
+Content-Disposition: inline
 
-On Fri, 26 Apr 2024 18:13:32 +0200
-Gregory CLEMENT <gregory.clement@bootlin.com> wrote:
 
-> Hello all,
->
-...
-> 
-> It is still early as there are some comment pending but I wonder who
-> will responsible of merging all theses patches ?
-> 
-> Arnd ? Hans ? Ilpo ? me ?
+--dEAgTGpokvAR9IlE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I am assigning these patches to Arnd on patchwork all this time, so I
-guess it could be him, unless he has a problem with this?
+Support ROHM BD96801 "scalable" PMIC.
 
-I've just sent v8.
+The ROHM BD96801 is automotive grade PMIC, intended to be usable in
+multiple solutions. The BD96801 can be used as a stand-alone, or together
+with separate 'companion PMICs'. This modular approach aims to make this
+PMIC suitable for various use-cases.
 
-Marek
+This series brings only limited support. The more complete set of
+features was sent in the RFC:
+https://lore.kernel.org/lkml/cover.1712058690.git.mazziesaccount@gmail.com/
+
+As writing of this there is no known system using the ERRB interrupts,
+or doing configurations which require the PMIC to be in STBY state using
+Linux driver. Hence it felt natural to upstream only partial support for
+now, while leaving a note about the RFC series with more complete
+support for those who may need it later.
+
+Revision history still tries to summarize changes from the RFC for the
+reviewers.
+
+Revision history:
+RFCv2 =3D> v1:
+	- Drop ERRB IRQ from drivers (but not DT bindings).
+	- Drop configuration which requires STBY - state.
+	- Fix the register lock race by moving it from the regulator
+	  driver to the MFD driver.
+	- Fix watchdog timeout handling
+
+RFCv1 =3D> RFCv2:
+	- Tidying code based on feedback form Krzysztof Kozlowski and
+	  Lee Jones.
+	- Documented undocumented watchdog related DT properties.
+	- Added usage of the watchdog IRQ.
+	- Use irq_domain_update_bus_token() to work-around debugFS name
+	  collision for IRQ domains.
+
+---
+
+
+Matti Vaittinen (6):
+  dt-bindings: ROHM BD96801 PMIC regulators
+  dt-bindings: mfd: bd96801 PMIC core
+  mfd: support ROHM BD96801 PMIC core
+  regulator: bd96801: ROHM BD96801 PMIC regulators
+  watchdog: ROHM BD96801 PMIC WDG driver
+  MAINTAINERS: Add ROHM BD96801 'scalable PMIC' entries
+
+ .../bindings/mfd/rohm,bd96801-pmic.yaml       | 172 ++++
+ .../regulator/rohm,bd96801-regulator.yaml     |  62 ++
+ MAINTAINERS                                   |   4 +
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/rohm-bd96801.c                    | 278 ++++++
+ drivers/regulator/Kconfig                     |  12 +
+ drivers/regulator/Makefile                    |   2 +
+ drivers/regulator/bd96801-regulator.c         | 896 ++++++++++++++++++
+ drivers/watchdog/Kconfig                      |  13 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/bd96801_wdt.c                | 400 ++++++++
+ include/linux/mfd/rohm-bd96801.h              | 215 +++++
+ include/linux/mfd/rohm-generic.h              |   1 +
+ 14 files changed, 2070 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic=
+=2Eyaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd9680=
+1-regulator.yaml
+ create mode 100644 drivers/mfd/rohm-bd96801.c
+ create mode 100644 drivers/regulator/bd96801-regulator.c
+ create mode 100644 drivers/watchdog/bd96801_wdt.c
+ create mode 100644 include/linux/mfd/rohm-bd96801.h
+
+
+base-commit: 4cece764965020c22cff7665b18a012006359095
+--=20
+2.44.0
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--dEAgTGpokvAR9IlE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmYw3RIACgkQeFA3/03a
+ocWFTQgAyfX1YTiUQNJ/RsdGuBJRi/8qashGQKb6vNjMhQK5YmEzgpYBesZV7/xW
+zaILOkezGcalsJ+fDJ20bcgcxZSFmZVqINZWneJi/RahWMBFw93W6N2LigLZCiRh
+JsRTPCyrlrxrtMwu8Rg7Yfs6UfHWlg6ibDD7E9ABdN/X9pJALYYHh7s/eB7QM39Z
+c+H6Crs7BzAfOZvODx6IxiSRO70iOPELSSKL5sOuCFu97JDPFObTNR8p1ouH4vha
+zXvLtJWefAWIUWUm9dy+LXJQ01/m0IxIbogtZxsisw8QGCmyZZox4D6CnT2B1kW1
+a23PCPbZl+sXcB2ADoeRiVFSp8jPTQ==
+=sWEv
+-----END PGP SIGNATURE-----
+
+--dEAgTGpokvAR9IlE--
 
