@@ -1,391 +1,645 @@
-Return-Path: <linux-watchdog+bounces-1025-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1026-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 519978B7BB0
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 17:34:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 021C18B7CC6
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 18:24:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D436E1F25EDE
-	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 15:34:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC98B281B8E
+	for <lists+linux-watchdog@lfdr.de>; Tue, 30 Apr 2024 16:24:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2222714374B;
-	Tue, 30 Apr 2024 15:31:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82F61173350;
+	Tue, 30 Apr 2024 16:24:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n00f2QLq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K2kpHrDt"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A5913AA51;
-	Tue, 30 Apr 2024 15:31:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7218C175551;
+	Tue, 30 Apr 2024 16:24:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714491119; cv=none; b=lALxnjPxJbP5DuE8hosXiqtZmXxf6FcHn150Fe8rCooJHNxqCs4BR4ulEY0gs042KQ7tx/lN6aPYzvYQ8HOnhRs4vZlIJbe5EF9qJS2fBXb6n8b55T/0OwnhlqOZJRWaULt8q73DViVUbhN2O6B5Ymuzpt3phQm5X/ShgvXyr4w=
+	t=1714494289; cv=none; b=HdEj1vXVnxSkXIv1A4mWZxhJvBRUK1gqv4YT1PwyhpRxkvPb86HjalHXUrQHEpbzBB3Ec7b22Wc3w7gMgu7WbJ336RjIPR/jLXQehwY6Yb5DceJjiuQc0ChCbT1Sks3blnEjExmhkVdhmHqTNm24iM411DWD8phvXF+knGpEBI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714491119; c=relaxed/simple;
-	bh=4f8vPTEXoa/RV1WM80QmDjyRVjLy1yOS8lAeuWD3UDg=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=FubAGF6UOkdSeP8U8gDZ/x3PbH9f7LS+eTRMYmsfAyabUpZnOkvHz0M6ilKRJIhNTCKzXKorx1veIk808aBM1Y2Qp5nXO6DyU4q4FBl9xRX5ufDSISMWyy9xcbF5vT1eISDQoUKH10SVXVSlCTh4vtok9xGQUbCr0YYO2EM6HoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n00f2QLq; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714491117; x=1746027117;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=4f8vPTEXoa/RV1WM80QmDjyRVjLy1yOS8lAeuWD3UDg=;
-  b=n00f2QLqJikHbsvuCDgyXLxviUvrt1/24gh1OtCRNX+A8xv+Qw5B0Luv
-   pvmW+SKuk+fT7cMbzubueraY20ke+yJBqcUNCXPrNIbGp9wKPDCM9gtgj
-   14Be6M1UCaBEJwD8H/sfvD5CZE35xY1ZzbIlD0fZ130QEZhe708Yl/w/2
-   e5oaXInnYBJiYY/bjnyVXzjbRXIEGeDRSsBnclYD7pjcJ/gfatb01lEb/
-   vOAjSrvWT2ioew2vHLuBGf1VkcjeBo6SLUXrkZCmAF45S5/PgJffXbJZk
-   mhpn6WdL1wIkCruf7+dE+Ery61BghnDn2S4cAOlBBCtn8+86WArcH8A6K
-   g==;
-X-CSE-ConnectionGUID: nbNL/JcqRk+uAacO49XTUw==
-X-CSE-MsgGUID: KaQ3U0WqSTOcpxRvTOrHbw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11060"; a="10065022"
-X-IronPort-AV: E=Sophos;i="6.07,242,1708416000"; 
-   d="scan'208";a="10065022"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2024 08:31:55 -0700
-X-CSE-ConnectionGUID: yrXH3eKyShmIIQa33+NmwA==
-X-CSE-MsgGUID: Q0p7S90gQtu+ou59TZSY7A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,242,1708416000"; 
-   d="scan'208";a="31290948"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.49])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2024 08:31:51 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 30 Apr 2024 18:31:46 +0300 (EEST)
-To: =?ISO-8859-15?Q?Marek_Beh=FAn?= <kabel@kernel.org>
-cc: Gregory CLEMENT <gregory.clement@bootlin.com>, 
-    Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org, 
-    Andy Shevchenko <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
-    Linus Walleij <linus.walleij@linaro.org>, 
-    Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org, 
-    Alessandro Zummo <a.zummo@towertech.it>, 
-    Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-    linux-rtc@vger.kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-    Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v8 2/9] platform: cznic: Add preliminary support for
- Turris Omnia MCU
-In-Reply-To: <20240430115111.3453-3-kabel@kernel.org>
-Message-ID: <b90daba1-3333-0ca5-fb09-c2157f12d594@linux.intel.com>
-References: <20240430115111.3453-1-kabel@kernel.org> <20240430115111.3453-3-kabel@kernel.org>
+	s=arc-20240116; t=1714494289; c=relaxed/simple;
+	bh=KYqUEMR15dbVUBMBmYpe4FGD6JeH9VEM4po943dtKY0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rO40XYqELQixI4Ix3+iUfotQt3C9Sdahj+F13h1joFS1N3QFwrjUlo6zQJXg2khkdyrfSTOevywxs/gxW0suLeMGEsYOWK0avqXJTDy4O0bIslQ6aQsns6UFG2OOiQw+MsP4+wbifdD0YIuRoY7dzyUbZVEDo2EXSxk33McO6xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K2kpHrDt; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6edc61d0ff6so5928956b3a.2;
+        Tue, 30 Apr 2024 09:24:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714494287; x=1715099087; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=CmU6vdJlFujJwI/d3JQdfrcSGSioWDIcd97I629VQgA=;
+        b=K2kpHrDt4hsxK8EVEVbjbHwL39pllcnw9uKxBB42po5/GQw9zpSir5WvDYV1EqUu0x
+         /nksj5VVLTncRjE5DRR2RVDS5dbuc+3fFPDtsmiod7bGl9GTzCbYqgoBZB05C/AbgauY
+         ju5THEFsZCs1uG0JmkNNoITJoTG3Mza64vWgSgG8sER1QS7821iqNO6F27AWvkBidcPf
+         zvl+qZItfGtMt0wavIetIcUrUEf7SDdVZiA7iko+b5LodfzNVOZscxw9WBtyRToTt2LF
+         OU0Xp/VxGU48CKb3pOPKbaMXlrMhWX6xz9NTbO7re8ades+O7SlZ1N0lX02koVpONt+e
+         d3KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714494287; x=1715099087;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CmU6vdJlFujJwI/d3JQdfrcSGSioWDIcd97I629VQgA=;
+        b=G+f6punj4OdmebHjDrnEPLxFa0GKdLeXq2Zg/ZS7iQdKt5jiScxDl8Vgyk2O/P2vgp
+         CQ4E9oogr8YOSw/fE3U7fz3bBKY/ZreNghvQjKt5jflIjqviSzuaNnVQEJNuYMah+lvn
+         o3QDrNv76+vBGIVd79TdUHVAQsa1C8HAUU1ptBDxw45fCeDMXAye2BYzF9CS4vtAVceq
+         3kMbYWspBf7KuIxGDaRjrneNAYsblhbpWRWZRpurCrhKvB8wTjKndy+22FP05bplIHZn
+         3mMMlwEWzw0EVr53jLACjOvmFBZ0/B+0vwV+Hjp4C0fGg/m8fRFEpGml49D2k7bIY74b
+         M6Tg==
+X-Forwarded-Encrypted: i=1; AJvYcCXAqy5KANV/r/d9TVgovNDg7DWtS64mbg0kZRBWL0Gvc53eQD4ornuGauEiJUScP7InORGiBFZT65vjeRr5qfB+uyledOF6sNFWKS6QGypmWKV+gYj7MqWMIjSAJD/lZUBaYnQipBoSpeYfol0sUnw3nYEt3ZUr3gSnumZFQUfADONmvvdcoZU7
+X-Gm-Message-State: AOJu0Yx/Z5jaPaw/GwA8GblLWFA5joJoh83X4v6DTIQJNSk9T+uUumkr
+	k1lk1UYbhyly7Yde3FmdmPyRMWtI4FWY9PknBQLK++evGdhfYLmg
+X-Google-Smtp-Source: AGHT+IEML/4Wwr3ReF1BiZsCHw7WLQSCiXUu8zG9jkMCjWhqJsUxcuCeQEYVXBaQoNj4w7+g2vyRcg==
+X-Received: by 2002:a05:6a20:ddaf:b0:1af:5451:d00c with SMTP id kw47-20020a056a20ddaf00b001af5451d00cmr362789pzb.32.1714494286399;
+        Tue, 30 Apr 2024 09:24:46 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id nb16-20020a17090b35d000b002af8056917csm10551808pjb.29.2024.04.30.09.24.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Apr 2024 09:24:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b4c67e76-fad8-47bc-a9f8-29cc5630bc7b@roeck-us.net>
+Date: Tue, 30 Apr 2024 09:24:43 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-121940876-1714490287=:1349"
-Content-ID: <30ac92b2-d54b-bf80-edf2-b3f998ae025a@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 5/6] watchdog: ROHM BD96801 PMIC WDG driver
+To: Matti Vaittinen <mazziesaccount@gmail.com>,
+ Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-watchdog@vger.kernel.org
+References: <cover.1714478142.git.mazziesaccount@gmail.com>
+ <d1d5429e4a34a06af0ceb853d72344cf9b8ae67c.1714478142.git.mazziesaccount@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <d1d5429e4a34a06af0ceb853d72344cf9b8ae67c.1714478142.git.mazziesaccount@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323328-121940876-1714490287=:1349
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <c3816c99-1507-eaa1-97b9-2aac21194b52@linux.intel.com>
-
-On Tue, 30 Apr 2024, Marek Beh=FAn wrote:
-
-> Add the basic skeleton for a new platform driver for the microcontroller
-> found on the Turris Omnia board.
->=20
-> Signed-off-by: Marek Beh=FAn <kabel@kernel.org>
-
-> +=09struct device *dev =3D &mcu->client->dev;
-> +=09bool suggest_fw_upgrade =3D false;
-> +=09int status;
+On 4/30/24 05:01, Matti Vaittinen wrote:
+> Introduce driver for WDG block on ROHM BD96801 scalable PMIC.
+> 
+> This driver only supports watchdog with I2C feeding and delayed
+> response detection. Whether the watchdog toggles PRSTB pin or
+> just causes an interrupt can be configured via device-tree.
+> 
+> The BD96801 PMIC HW supports also window watchdog (too early
+> feeding detection) and Q&A mode. These are not supported by
+> this driver.
+> 
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
+> ---
+> Revision history:
+> RFCv2 => v1:
+> - Fix watchdog time-outs to match DS4
+> - Fix target timeout overflow
+> - Improve dbg prints
+> 
+> RFCv1 => RFCv2:
+> - remove always running
+> - add IRQ handling
+> - call emergency_restart()
+> - drop MODULE_ALIAS and add MODULE_DEVICE_TABLE
+> ---
+>   drivers/watchdog/Kconfig       |  13 ++
+>   drivers/watchdog/Makefile      |   1 +
+>   drivers/watchdog/bd96801_wdt.c | 400 +++++++++++++++++++++++++++++++++
+>   3 files changed, 414 insertions(+)
+>   create mode 100644 drivers/watchdog/bd96801_wdt.c
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 6bee137cfbe0..d97e735e1faa 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -181,6 +181,19 @@ config BD957XMUF_WATCHDOG
+>   	  watchdog. Alternatively say M to compile the driver as a module,
+>   	  which will be called bd9576_wdt.
+>   
+> +config BD96801_WATCHDOG
+> +	tristate "ROHM BD96801 PMIC Watchdog"
+> +	depends on MFD_ROHM_BD96801
+> +	select WATCHDOG_CORE
+> +	help
+> +	  Support for the watchdog in the ROHM BD96801 PMIC. Watchdog can be
+> +	  configured to only generate IRQ or to trigger system reset via reset
+> +	  pin.
 > +
-> +=09/* status word holds MCU type, which we need below */
-> +=09status =3D omnia_cmd_read_u16(mcu->client, CMD_GET_STATUS_WORD);
-> +=09if (status < 0)
-> +=09=09return status;
+> +	  Say Y here to include support for the ROHM BD96801 watchdog.
+> +	  Alternatively say M to compile the driver as a module,
+> +	  which will be called bd96801_wdt.
 > +
-> +=09/* check whether MCU firmware supports the CMD_GET_FEAUTRES command *=
-/
-
-FEATURES
-
-> +=09if (status & STS_FEATURES_SUPPORTED) {
-> +=09=09__le32 reply;
-> +=09=09int ret;
-> +
-> +=09=09/* try read 32-bit features */
-> +=09=09ret =3D omnia_cmd_read(mcu->client, CMD_GET_FEATURES, &reply,
-> +=09=09=09=09     sizeof(reply));
-> +=09=09if (ret) {
-> +=09=09=09/* try read 16-bit features */
-> +=09=09=09ret =3D omnia_cmd_read_u16(mcu->client, CMD_GET_FEATURES);
-> +=09=09=09if (ret < 0)
-> +=09=09=09=09return ret;
-> +
-> +=09=09=09mcu->features =3D ret;
-> +=09=09} else {
-> +=09=09=09mcu->features =3D le32_to_cpu(reply);
-> +
-> +=09=09=09if (mcu->features & FEAT_FROM_BIT_16_INVALID)
-> +=09=09=09=09mcu->features &=3D GENMASK(15, 0);
-> +=09=09}
-
-I'm not a big fan of the inconsistency here when it comes to who handles=20
-the endianness, perhaps there is a good reason for that but it looks a bit=
-=20
-odd to have it done in a different way for 32-bit and 16-bit.
-
-> +=09} else {
-> +=09=09omnia_info_missing_feature(dev, "feature reading");
-> +=09=09suggest_fw_upgrade =3D true;
-> +=09}
-> +
-> +=09mcu->type =3D omnia_status_to_mcu_type(status);
-> +=09dev_info(dev, "MCU type %s%s\n", mcu->type,
-> +=09=09 (mcu->features & FEAT_PERIPH_MCU) ?
-> +=09=09=09", with peripheral resets wired" : "");
-> +
-> +=09omnia_mcu_print_version_hash(mcu, true);
-> +
-> +=09if (mcu->features & FEAT_BOOTLOADER)
-> +=09=09dev_warn(dev,
-> +=09=09=09 "MCU is running bootloader firmware. Was firmware upgrade inte=
-rrupted?\n");
-> +=09else
-> +=09=09omnia_mcu_print_version_hash(mcu, false);
-> +
-> +=09for (unsigned int i =3D 0; i < ARRAY_SIZE(features); i++) {
-> +=09=09if (mcu->features & features[i].mask)
-> +=09=09=09continue;
-> +
-> +=09=09omnia_info_missing_feature(dev, features[i].name);
-> +=09=09suggest_fw_upgrade =3D true;
-> +=09}
-> +
-> +=09if (suggest_fw_upgrade)
-> +=09=09dev_info(dev,
-> +=09=09=09 "Consider upgrading MCU firmware with the omnia-mcutool utilit=
-y.\n");
-> +
-> +=09return 0;
-> +}
-
-> +int omnia_cmd_read(const struct i2c_client *client, u8 cmd, void *reply,
-> +=09=09   unsigned int len);
-> +
-> +static inline int omnia_cmd_read_u16(const struct i2c_client *client, u8=
- cmd)
-> +{
-> +=09__le16 reply;
-> +=09int err;
-> +
-> +=09err =3D omnia_cmd_read(client, cmd, &reply, sizeof(reply));
-> +
-> +=09return err ?: le16_to_cpu(reply);
-> +}
-> +
-> +static inline int omnia_cmd_read_u8(const struct i2c_client *client, u8 =
-cmd)
-> +{
-> +=09u8 reply;
-> +=09int err;
-> +
-> +=09err =3D omnia_cmd_read(client, cmd, &reply, sizeof(reply));
-> +
-> +=09return err ?: reply;
-> +}
-> +
-> +#endif /* __TURRIS_OMNIA_MCU_H */
-
-
-> diff --git a/include/linux/turris-omnia-mcu-interface.h b/include/linux/t=
-urris-omnia-mcu-interface.h
+>   config CROS_EC_WATCHDOG
+>   	tristate "ChromeOS EC-based watchdog"
+>   	select WATCHDOG_CORE
+> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> index 3710c218f05e..31bc94436c81 100644
+> --- a/drivers/watchdog/Makefile
+> +++ b/drivers/watchdog/Makefile
+> @@ -217,6 +217,7 @@ obj-$(CONFIG_XEN_WDT) += xen_wdt.o
+>   
+>   # Architecture Independent
+>   obj-$(CONFIG_BD957XMUF_WATCHDOG) += bd9576_wdt.o
+> +obj-$(CONFIG_BD96801_WATCHDOG) += bd96801_wdt.o
+>   obj-$(CONFIG_CROS_EC_WATCHDOG) += cros_ec_wdt.o
+>   obj-$(CONFIG_DA9052_WATCHDOG) += da9052_wdt.o
+>   obj-$(CONFIG_DA9055_WATCHDOG) += da9055_wdt.o
+> diff --git a/drivers/watchdog/bd96801_wdt.c b/drivers/watchdog/bd96801_wdt.c
 > new file mode 100644
-> index 000000000000..88f8490b5897
+> index 000000000000..6069f1d75356
 > --- /dev/null
-> +++ b/include/linux/turris-omnia-mcu-interface.h
-> @@ -0,0 +1,249 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+> +++ b/drivers/watchdog/bd96801_wdt.c
+> @@ -0,0 +1,400 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
 > +/*
-> + * CZ.NIC's Turris Omnia MCU I2C interface commands definitions
+> + * Copyright (C) 2024 ROHM Semiconductors
 > + *
-> + * 2024 by Marek Beh=FAn <kabel@kernel.org>
+> + * ROHM BD96801 watchdog driver
 > + */
 > +
-> +#ifndef __TURRIS_OMNIA_MCU_INTERFACE_H
-> +#define __TURRIS_OMNIA_MCU_INTERFACE_H
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/rohm-bd96801.h>
+> +#include <linux/mfd/rohm-generic.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/watchdog.h>
 > +
-> +#include <linux/bitfield.h>
-> +#include <linux/bits.h>
+> +static bool nowayout;
+> +module_param(nowayout, bool, 0);
+> +MODULE_PARM_DESC(nowayout,
+> +		"Watchdog cannot be stopped once started (default=\"false\")");
 > +
-> +enum omnia_commands_e {
-> +=09CMD_GET_STATUS_WORD=09=09=3D 0x01, /* slave sends status word back */
-> +=09CMD_GENERAL_CONTROL=09=09=3D 0x02,
-> +=09CMD_LED_MODE=09=09=09=3D 0x03, /* default/user */
-> +=09CMD_LED_STATE=09=09=09=3D 0x04, /* LED on/off */
-> +=09CMD_LED_COLOR=09=09=09=3D 0x05, /* LED number + RED + GREEN + BLUE */
-> +=09CMD_USER_VOLTAGE=09=09=3D 0x06,
-> +=09CMD_SET_BRIGHTNESS=09=09=3D 0x07,
-> +=09CMD_GET_BRIGHTNESS=09=09=3D 0x08,
-> +=09CMD_GET_RESET=09=09=09=3D 0x09,
-> +=09CMD_GET_FW_VERSION_APP=09=09=3D 0x0A, /* 20B git hash number */
-> +=09CMD_SET_WATCHDOG_STATE=09=09=3D 0x0B, /* 0 - disable
-> +=09=09=09=09=09=09 * 1 - enable / ping
-> +=09=09=09=09=09=09 * after boot watchdog is started
-> +=09=09=09=09=09=09 * with 2 minutes timeout
-> +=09=09=09=09=09=09 */
+> +#define BD96801_WD_TMO_SHORT_MASK	0x70
+> +#define BD96801_WD_RATIO_MASK		0x3
+> +#define BD96801_WD_TYPE_MASK		0x4
+> +#define BD96801_WD_TYPE_SLOW		0x4
+> +#define BD96801_WD_TYPE_WIN		0x0
 > +
-> +=09/* CMD_WATCHDOG_STATUS=09=09=3D 0x0C, not implemented anymore */
+> +#define BD96801_WD_EN_MASK		0x3
+> +#define BD96801_WD_IF_EN		0x1
+> +#define BD96801_WD_QA_EN		0x2
+> +#define BD96801_WD_DISABLE		0x0
 > +
-> +=09CMD_GET_WATCHDOG_STATE=09=09=3D 0x0D,
-> +=09CMD_GET_FW_VERSION_BOOT=09=09=3D 0x0E, /* 20B git hash number */
-> +=09CMD_GET_FW_CHECKSUM=09=09=3D 0x0F, /* 4B length, 4B checksum */
+> +#define BD96801_WD_ASSERT_MASK		0x8
+> +#define BD96801_WD_ASSERT_RST		0x8
+> +#define BD96801_WD_ASSERT_IRQ		0x0
 > +
-> +=09/* available if FEATURES_SUPPORTED bit set in status word */
-> +=09CMD_GET_FEATURES=09=09=3D 0x10,
+> +#define BD96801_WD_FEED_MASK		0x1
+> +#define BD96801_WD_FEED			0x1
 > +
-> +=09/* available if EXT_CMD bit set in features */
-> +=09CMD_GET_EXT_STATUS_DWORD=09=3D 0x11,
-> +=09CMD_EXT_CONTROL=09=09=09=3D 0x12,
-> +=09CMD_GET_EXT_CONTROL_STATUS=09=3D 0x13,
+> +/* units in uS */
+> +#define FASTNG_MIN			11
 > +
-> +=09/* available if NEW_INT_API bit set in features */
-> +=09CMD_GET_INT_AND_CLEAR=09=09=3D 0x14,
-> +=09CMD_GET_INT_MASK=09=09=3D 0x15,
-> +=09CMD_SET_INT_MASK=09=09=3D 0x16,
+> +#define BD96801_WDT_DEFAULT_MARGIN_MS	1843
+> +/* Unit is seconds */
+> +#define DEFAULT_TIMEOUT 30
 > +
-> +=09/* available if FLASHING bit set in features */
-> +=09CMD_FLASH=09=09=09=3D 0x19,
+> +/*
+> + * BD96801 WDG supports window mode so the TMO consists of SHORT and LONG
+> + * timeout values. SHORT time is meaningfull only in window mode where feeding
+
+meaningful
+
+> + * period shorter than SHORT would be an error. LONG time is used to detect if
+> + * feeding is not occurring within given time limit (SoC SW hangs). The LONG
+> + * timeout time is a multiple of (2, 4, 8 0r 16 times) the SHORT timeout.
+
+0r -> or
+
+> + */
 > +
-> +=09/* available if WDT_PING bit set in features */
-> +=09CMD_SET_WDT_TIMEOUT=09=09=3D 0x20,
-> +=09CMD_GET_WDT_TIMELEFT=09=09=3D 0x21,
-> +
-> +=09/* available if POWEROFF_WAKEUP bit set in features */
-> +=09CMD_SET_WAKEUP=09=09=09=3D 0x22,
-> +=09CMD_GET_UPTIME_AND_WAKEUP=09=3D 0x23,
-> +=09CMD_POWER_OFF=09=09=09=3D 0x24,
-> +
-> +=09/* available if USB_OVC_PROT_SETTING bit set in features */
-> +=09CMD_SET_USB_OVC_PROT=09=09=3D 0x25,
-> +=09CMD_GET_USB_OVC_PROT=09=09=3D 0x26,
-> +
-> +=09/* available if TRNG bit set in features */
-> +=09CMD_TRNG_COLLECT_ENTROPY=09=3D 0x28,
-> +
-> +=09/* available if CRYPTO bit set in features */
-> +=09CMD_CRYPTO_GET_PUBLIC_KEY=09=3D 0x29,
-> +=09CMD_CRYPTO_SIGN_MESSAGE=09=09=3D 0x2A,
-> +=09CMD_CRYPTO_COLLECT_SIGNATURE=09=3D 0x2B,
-> +
-> +=09/* available if BOARD_INFO it set in features */
-> +=09CMD_BOARD_INFO_GET=09=09=3D 0x2C,
-> +=09CMD_BOARD_INFO_BURN=09=09=3D 0x2D,
-> +
-> +=09/* available only at address 0x2b (led-controller) */
-> +=09/* available only if LED_GAMMA_CORRECTION bit set in features */
-> +=09CMD_SET_GAMMA_CORRECTION=09=3D 0x30,
-> +=09CMD_GET_GAMMA_CORRECTION=09=3D 0x31,
-> +
-> +=09/* available only at address 0x2b (led-controller) */
-> +=09/* available only if PER_LED_CORRECTION bit set in features */
-> +=09/* available only if FROM_BIT_16_INVALID bit NOT set in features */
-> +=09CMD_SET_LED_CORRECTIONS=09=09=3D 0x32,
-> +=09CMD_GET_LED_CORRECTIONS=09=09=3D 0x33,
+> +struct wdtbd96801 {
+> +	struct device		*dev;
+> +	struct regmap		*regmap;
+> +	struct watchdog_device	wdt;
 > +};
 > +
-> +enum omnia_flashing_commands_e {
-> +=09FLASH_CMD_UNLOCK=09=09=3D 0x01,
-> +=09FLASH_CMD_SIZE_AND_CSUM=09=09=3D 0x02,
-> +=09FLASH_CMD_PROGRAM=09=09=3D 0x03,
-> +=09FLASH_CMD_RESET=09=09=09=3D 0x04,
-> +};
-
-I'm bit worried about many items above, they seem generic enough they=20
-could trigger name conflict at some point. Could these all defines be=20
-prefixed so there's no risk of collisions.
-
-> +enum omnia_sts_word_e {
-> +=09STS_MCU_TYPE_MASK=09=09=09=3D GENMASK(1, 0),
-> +=09STS_MCU_TYPE_STM32=09=09=09=3D 0 << 0,
-> +=09STS_MCU_TYPE_GD32=09=09=09=3D 1 << 0,
-> +=09STS_MCU_TYPE_MKL=09=09=09=3D 2 << 0,
-
-These are FIELD_PREP(STS_MCU_TYPE_MASK, x), although I suspect you need to=
-=20
-use FIELD_PREP_CONST() in this context. If neither ends up working in this=
-=20
-context, then leave it as is.
-
-> +=09STS_FEATURES_SUPPORTED=09=09=09=3D BIT(2),
-> +=09STS_USER_REGULATOR_NOT_SUPPORTED=09=3D BIT(3),
-> +=09STS_CARD_DET=09=09=09=09=3D BIT(4),
-> +=09STS_MSATA_IND=09=09=09=09=3D BIT(5),
-> +=09STS_USB30_OVC=09=09=09=09=3D BIT(6),
-> +=09STS_USB31_OVC=09=09=09=09=3D BIT(7),
-> +=09STS_USB30_PWRON=09=09=09=09=3D BIT(8),
-> +=09STS_USB31_PWRON=09=09=09=09=3D BIT(9),
-> +=09STS_ENABLE_4V5=09=09=09=09=3D BIT(10),
-> +=09STS_BUTTON_MODE=09=09=09=09=3D BIT(11),
-> +=09STS_BUTTON_PRESSED=09=09=09=3D BIT(12),
-> +=09STS_BUTTON_COUNTER_MASK=09=09=09=3D GENMASK(15, 13)
+> +static int bd96801_wdt_ping(struct watchdog_device *wdt)
+> +{
+> +	struct wdtbd96801 *w = watchdog_get_drvdata(wdt);
+> +
+> +	return regmap_update_bits(w->regmap, BD96801_REG_WD_FEED,
+> +				  BD96801_WD_FEED_MASK, BD96801_WD_FEED);
+> +}
+> +
+> +static int bd96801_wdt_start(struct watchdog_device *wdt)
+> +{
+> +	struct wdtbd96801 *w = watchdog_get_drvdata(wdt);
+> +
+> +	return regmap_update_bits(w->regmap, BD96801_REG_WD_CONF,
+> +				  BD96801_WD_EN_MASK, BD96801_WD_IF_EN);
+> +}
+> +
+> +static int bd96801_wdt_stop(struct watchdog_device *wdt)
+> +{
+> +	struct wdtbd96801 *w = watchdog_get_drvdata(wdt);
+> +
+> +	return regmap_update_bits(w->regmap, BD96801_REG_WD_CONF,
+> +				  BD96801_WD_EN_MASK, BD96801_WD_DISABLE);
+> +}
+> +
+> +static const struct watchdog_info bd96801_wdt_info = {
+> +	.options	= WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING |
+> +			  WDIOF_SETTIMEOUT,
+> +	.identity	= "BD96801 Watchdog",
 > +};
 > +
-> +enum omnia_ctl_byte_e {
-> +=09CTL_LIGHT_RST=09=09=3D BIT(0),
-> +=09CTL_HARD_RST=09=09=3D BIT(1),
-> +=09/* BIT(2) is currently reserved */
-> +=09CTL_USB30_PWRON=09=09=3D BIT(3),
-> +=09CTL_USB31_PWRON=09=09=3D BIT(4),
-> +=09CTL_ENABLE_4V5=09=09=3D BIT(5),
-> +=09CTL_BUTTON_MODE=09=09=3D BIT(6),
-> +=09CTL_BOOTLOADER=09=09=3D BIT(7)
+> +static const struct watchdog_ops bd96801_wdt_ops = {
+> +	.start		= bd96801_wdt_start,
+> +	.stop		= bd96801_wdt_stop,
+> +	.ping		= bd96801_wdt_ping,
 > +};
 > +
-> +enum omnia_features_e {
-> +=09FEAT_PERIPH_MCU=09=09=09=3D BIT(0),
-> +=09FEAT_EXT_CMDS=09=09=09=3D BIT(1),
-> +=09FEAT_WDT_PING=09=09=09=3D BIT(2),
-> +=09FEAT_LED_STATE_EXT_MASK=09=09=3D GENMASK(4, 3),
-> +=09FEAT_LED_STATE_EXT=09=09=3D 1 << 3,
-> +=09FEAT_LED_STATE_EXT_V32=09=09=3D 2 << 3,
-
-Ditto.
-
-> +=09FEAT_LED_GAMMA_CORRECTION=09=3D BIT(5),
-> +=09FEAT_NEW_INT_API=09=09=3D BIT(6),
-> +=09FEAT_BOOTLOADER=09=09=09=3D BIT(7),
-> +=09FEAT_FLASHING=09=09=09=3D BIT(8),
-> +=09FEAT_NEW_MESSAGE_API=09=09=3D BIT(9),
-> +=09FEAT_BRIGHTNESS_INT=09=09=3D BIT(10),
-> +=09FEAT_POWEROFF_WAKEUP=09=09=3D BIT(11),
-> +=09FEAT_CAN_OLD_MESSAGE_API=09=3D BIT(12),
-> +=09FEAT_TRNG=09=09=09=3D BIT(13),
-> +=09FEAT_CRYPTO=09=09=09=3D BIT(14),
-> +=09FEAT_BOARD_INFO=09=09=09=3D BIT(15),
+> +static int find_closest_fast(unsigned int target, int *sel, unsigned int *val)
+> +{
+> +	unsigned int window = FASTNG_MIN;
+> +	int i;
 > +
-> +=09/*
-> +=09 * Orginally the features command replied only 16 bits. If more were
-> +=09 * read, either the I2C transaction failed or 0xff bytes were sent.
-> +=09 * Therefore to consider bits 16 - 31 valid, one bit (20) was reserve=
-d
-> +=09 * to be zero.
-> +=09 */
+> +	for (i = 0; i < 8 && window < target; i++)
+> +		window <<= 1;
 > +
-> +=09/* Bits 16 - 19 correspond to bits 0 - 3 of status word */
-> +=09FEAT_MCU_TYPE_MASK=09=09=3D GENMASK(17, 16),
-> +=09FEAT_MCU_TYPE_STM32=09=09=3D 0 << 16,
-> +=09FEAT_MCU_TYPE_GD32=09=09=3D 1 << 16,
-> +=09FEAT_MCU_TYPE_MKL=09=09=3D 2 << 16,
+> +	*val = window;
+> +	*sel = i;
+> +
+> +	if (i == 8)
+> +		return -EINVAL;
+> +
 
-Ditto.
+It might make sense to have the error check before assigning return values,
+similar to the other find functions.
 
+> +	return 0;
+> +}
+> +
+> +static int find_closest_slow_by_fast(unsigned int fast_val, unsigned int *target, int *slowsel)
+> +{
+> +	static const int multipliers[] = {2, 4, 8, 16};
+> +	int sel;
+> +
+> +	for (sel = 0; sel < ARRAY_SIZE(multipliers) &&
+> +	     multipliers[sel] * fast_val < *target; sel++)
+> +		;
+> +
+> +	if (sel == ARRAY_SIZE(multipliers))
+> +		return -EINVAL;
+> +
+> +	*slowsel = sel;
+> +	*target = multipliers[sel] * fast_val;
+> +
+> +	return 0;
+> +}
+> +
+> +static int find_closest_slow(unsigned int *target, int *slow_sel, int *fast_sel)
+> +{
+> +	static const int multipliers[] = {2, 4, 8, 16};
+> +	unsigned int window = FASTNG_MIN;
+> +	unsigned int val = 0;
+> +	int i, j;
+> +
+> +	for (i = 0; i < 8; i++) {
+> +		for (j = 0; j < ARRAY_SIZE(multipliers); j++) {
+> +			unsigned int slow;
+> +
+> +			slow = window * multipliers[j];
+> +			if (slow >= *target && (!val || slow < val)) {
+> +				val = slow;
+> +				*fast_sel = i;
+> +				*slow_sel = j;
+> +			}
+> +		}
+> +		window <<= 1;
+> +	}
+> +	if (!val)
+> +		return -EINVAL;
+> +
+> +	*target = val;
+> +
+> +	return 0;
+> +}
+> +
+> +static int bd96801_set_wdt_mode(struct wdtbd96801 *w, unsigned int hw_margin,
+> +			       unsigned int hw_margin_min)
+> +{
+> +	int fastng, slowng, type, ret, reg, mask;
+> +	struct device *dev = w->dev;
+> +
+> +	/*
+> +	 * Convert to 100uS to guarantee reasonable timeouts fit in
+> +	 * 32bit maintaining also a decent accuracy.
+> +	 */
+> +	hw_margin *= 10;
+> +	hw_margin_min *= 10;
+> +
+> +	if (hw_margin_min) {
+> +		unsigned int min;
+> +
+> +		type = BD96801_WD_TYPE_WIN;
+> +		dev_dbg(dev, "Setting type WINDOW 0x%x\n", type);
+> +		ret = find_closest_fast(hw_margin_min, &fastng, &min);
+> +		if (ret) {
+> +			dev_err(dev, "bad WDT window for fast timeout\n");
+> +			return ret;
+> +		}
+> +
+> +		ret = find_closest_slow_by_fast(min, &hw_margin, &slowng);
+> +		if (ret) {
+> +			dev_err(dev, "bad WDT window\n");
+> +			return ret;
+> +		}
+> +		w->wdt.min_hw_heartbeat_ms = min / 10;
+> +	} else {
+> +		type = BD96801_WD_TYPE_SLOW;
+> +		dev_dbg(dev, "Setting type SLOW 0x%x\n", type);
+> +		ret = find_closest_slow(&hw_margin, &slowng, &fastng);
+> +		if (ret) {
+> +			dev_err(dev, "bad WDT window\n");
 
---=20
- i.
---8323328-121940876-1714490287=:1349--
+What is the value of those error messages ? To me they only leave big
+question marks. One would see "bad WDT window" or "bad WDT window for
+fast timeout" and then what ? If the cause is bad values for hw_margin
+and/or hw_margin_min, the message should include the offending values
+and not leave the user in the dark.
+
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	w->wdt.max_hw_heartbeat_ms = hw_margin / 10;
+> +
+> +	fastng <<= ffs(BD96801_WD_TMO_SHORT_MASK) - 1;
+
+Any reason fore not using standard functionality such as FIELD_PREP here ?
+
+> +
+> +	reg = slowng | fastng;
+> +	mask = BD96801_WD_RATIO_MASK | BD96801_WD_TMO_SHORT_MASK;
+> +	ret = regmap_update_bits(w->regmap, BD96801_REG_WD_TMO,
+> +				 mask, reg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_update_bits(w->regmap, BD96801_REG_WD_CONF,
+> +				 BD96801_WD_TYPE_MASK, type);
+> +
+> +	return ret;
+> +}
+> +
+> +static int bd96801_set_heartbeat_from_hw(struct wdtbd96801 *w,
+> +					 unsigned int conf_reg)
+> +{
+> +	int ret;
+> +	unsigned int val, sel, fast;
+> +
+> +	/*
+> +	 * The BD96801 supports a somewhat peculiar QA-mode, which we do not
+> +	 * support in this driver. If the QA-mode is enabled then we just
+> +	 * warn and bail-out.
+> +	 */
+> +	if ((conf_reg & BD96801_WD_EN_MASK) != BD96801_WD_IF_EN) {
+> +		dev_warn(w->dev, "watchdog set to Q&A mode - exiting\n");
+
+This should be dev_err(). It is not just a warning.
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = regmap_read(w->regmap, BD96801_REG_WD_TMO, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	sel = val & BD96801_WD_TMO_SHORT_MASK;
+> +	sel >>= ffs(BD96801_WD_TMO_SHORT_MASK) - 1;
+
+Same question as above: Why not use FIELD_GET() ?
+
+> +	fast = FASTNG_MIN << sel;
+> +
+> +	sel = (val & BD96801_WD_RATIO_MASK) + 1;
+> +	w->wdt.max_hw_heartbeat_ms = (fast << sel) / USEC_PER_MSEC;
+> +
+> +	if ((conf_reg & BD96801_WD_TYPE_MASK) == BD96801_WD_TYPE_WIN)
+> +		w->wdt.min_hw_heartbeat_ms = fast / USEC_PER_MSEC;
+> +
+> +	return 0;
+> +}
+> +
+> +static int init_wdg_hw(struct wdtbd96801 *w)
+> +{
+> +	u32 hw_margin[2];
+> +	int count, ret;
+> +	u32 hw_margin_max = BD96801_WDT_DEFAULT_MARGIN_MS, hw_margin_min = 0;
+> +
+> +	count = device_property_count_u32(w->dev->parent, "rohm,hw-timeout-ms");
+> +	if (count < 0 && count != -EINVAL)
+> +		return count;
+> +
+> +	if (count > 0) {
+> +		if (count > ARRAY_SIZE(hw_margin))
+> +			return -EINVAL;
+> +
+> +		ret = device_property_read_u32_array(w->dev->parent,
+> +						     "rohm,hw-timeout-ms",
+> +						     &hw_margin[0], count);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (count == 1)
+> +			hw_margin_max = hw_margin[0];
+> +
+> +		if (count == 2) {
+> +			if (hw_margin[1] > hw_margin[0]) {
+> +				hw_margin_max = hw_margin[1];
+> +				hw_margin_min = hw_margin[0];
+> +			} else {
+> +				hw_margin_max = hw_margin[0];
+> +				hw_margin_min = hw_margin[1];
+> +			}
+> +		}
+> +	}
+> +
+> +	ret = bd96801_set_wdt_mode(w, hw_margin_max, hw_margin_min);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = device_property_match_string(w->dev->parent, "rohm,wdg-action",
+> +					   "prstb");
+> +	if (ret >= 0) {
+> +		ret = regmap_update_bits(w->regmap, BD96801_REG_WD_CONF,
+> +				 BD96801_WD_ASSERT_MASK,
+> +				 BD96801_WD_ASSERT_RST);
+> +		return ret;
+> +	}
+> +
+> +	ret = device_property_match_string(w->dev->parent, "rohm,wdg-action",
+> +					   "intb-only");
+> +	if (ret >= 0) {
+> +		ret = regmap_update_bits(w->regmap, BD96801_REG_WD_CONF,
+> +				 BD96801_WD_ASSERT_MASK,
+> +				 BD96801_WD_ASSERT_IRQ);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +extern void emergency_restart(void);
+
+No. include linux/reboot.h instead.
+
+> +static irqreturn_t bd96801_irq_hnd(int irq, void *data)
+> +{
+> +	emergency_restart();
+> +
+> +	return IRQ_NONE;
+> +}
+> +
+> +static int bd96801_wdt_probe(struct platform_device *pdev)
+> +{
+> +	struct wdtbd96801 *w;
+> +	int ret, irq;
+> +	unsigned int val;
+> +
+> +	w = devm_kzalloc(&pdev->dev, sizeof(*w), GFP_KERNEL);
+> +	if (!w)
+> +		return -ENOMEM;
+> +
+> +	w->regmap = dev_get_regmap(pdev->dev.parent, NULL);
+> +	w->dev = &pdev->dev;
+> +
+> +	w->wdt.info = &bd96801_wdt_info;
+> +	w->wdt.ops =  &bd96801_wdt_ops;
+> +	w->wdt.parent = pdev->dev.parent;
+> +	w->wdt.timeout = DEFAULT_TIMEOUT;
+> +	watchdog_set_drvdata(&w->wdt, w);
+> +
+> +	ret = regmap_read(w->regmap, BD96801_REG_WD_CONF, &val);
+> +	if (ret)
+> +		return dev_err_probe(&pdev->dev, ret,
+> +				     "Failed to get the watchdog state\n");
+> +
+> +	/*
+> +	 * If the WDG is already enabled we assume it is configured by boot.
+> +	 * In this case we just update the hw-timeout based on values set to
+> +	 * the timeout / mode registers and leave the hardware configs
+> +	 * untouched.
+> +	 */
+> +	if ((val & BD96801_WD_EN_MASK) != BD96801_WD_DISABLE) {
+> +		dev_dbg(&pdev->dev, "watchdog was running during probe\n");
+> +		ret = bd96801_set_heartbeat_from_hw(w, val);
+> +		if (ret)
+> +			return ret;
+> +
+> +		set_bit(WDOG_HW_RUNNING, &w->wdt.status);
+> +	} else {
+> +		/* If WDG is not running so we will initializate it */
+> +		ret = init_wdg_hw(w);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	dev_dbg(w->dev, "heartbeat set to %u - %u\n",
+> +		w->wdt.min_hw_heartbeat_ms, w->wdt.max_hw_heartbeat_ms);
+> +
+> +	watchdog_init_timeout(&w->wdt, 0, pdev->dev.parent);
+> +	watchdog_set_nowayout(&w->wdt, nowayout);
+> +	watchdog_stop_on_reboot(&w->wdt);
+> +
+> +	irq = platform_get_irq_byname(pdev, "bd96801-wdg");
+> +	if (irq > 0) {
+> +		ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+> +						bd96801_irq_hnd,
+> +						IRQF_ONESHOT,  "bd96801-wdg",
+> +						NULL);
+> +		if (ret)
+> +			return dev_err_probe(&pdev->dev, ret,
+> +					     "Failed to register IRQ\n");
+> +	}
+> +
+> +	return devm_watchdog_register_device(&pdev->dev, &w->wdt);
+> +}
+> +
+> +static const struct platform_device_id bd96801_wdt_id[] = {
+> +	{ "bd96801-wdt", },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(platform, bd96801_wdt_id);
+> +
+> +static struct platform_driver bd96801_wdt = {
+> +	.driver = {
+> +		.name = "bd96801-wdt"
+> +	},
+> +	.probe = bd96801_wdt_probe,
+> +	.id_table = bd96801_wdt_id,
+> +};
+> +module_platform_driver(bd96801_wdt);
+> +
+> +MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
+> +MODULE_DESCRIPTION("BD96801 watchdog driver");
+> +MODULE_LICENSE("GPL");
+
 
