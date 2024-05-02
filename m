@@ -1,113 +1,217 @@
-Return-Path: <linux-watchdog+bounces-1029-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1030-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 525668B9E64
-	for <lists+linux-watchdog@lfdr.de>; Thu,  2 May 2024 18:21:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77D1B8BA0A8
+	for <lists+linux-watchdog@lfdr.de>; Thu,  2 May 2024 20:40:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E635D1F24270
-	for <lists+linux-watchdog@lfdr.de>; Thu,  2 May 2024 16:21:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79BF7B217BA
+	for <lists+linux-watchdog@lfdr.de>; Thu,  2 May 2024 18:40:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC5C015D5D1;
-	Thu,  2 May 2024 16:21:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67ADB174EC8;
+	Thu,  2 May 2024 18:40:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GO84u2It"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cAHFP/NA"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF73414A634;
-	Thu,  2 May 2024 16:21:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35223155350;
+	Thu,  2 May 2024 18:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714666864; cv=none; b=EGnxediQ5I2QVCXyR31EweeiiZruy1hO84OApuPqI9qNrRyMRPv3vIKr7mHdomqc9qAr1ShTNFa4IcJ6T8uRcuxuk8m6TORYGHN8rK1BOraYn5msmPPjUSaH+hWTSHaWgzN4P3wKwOLtDXF4bWBhWA5872pZROhjGFLmQGXduVw=
+	t=1714675217; cv=none; b=sLu3e4YTKVTKkF7uwg84bJclVlmEKmH0Oqkzd9dgS/+ABR6DTMSCmpcyivv1lE5CZUEk7gz6XrdJXGKA3O0RCGzi/U2cLtTwP44+tRHgnqnkD2sYuz46NW2P+e6aPvt98Y21AMAxyI2rI+gQ+zJKBxnKaz2goHGM/niGp7wq1jY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714666864; c=relaxed/simple;
-	bh=WleDPBDuGpkWYaKIN5o6wY74OKM8aEWx5ZRGLFVujOA=;
+	s=arc-20240116; t=1714675217; c=relaxed/simple;
+	bh=W5wFylu4znY7p5AjANG4/Vgp7FEQmDmVli7qKcbQo0w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F1iRyi0evMyJWL0bemee9AbI8CsQjKOGju2TrxvvBrN/9CsPFsuN0qx4+jHauvWNAwN/SmmaFJU2/t8s7ApYQck/uJUGQGzTKW9MqoQOIWiqnx+jf4b/V8IOwN+hTbpegcgnA/u0v0IyYXGBlnta/vWLzsUoRFVZlpqDuRLfzOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GO84u2It; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9D72C113CC;
-	Thu,  2 May 2024 16:21:01 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=n9tq39OE0upbwtoGw74p1zc7+Cl6+PEhFENCIzwpubbjv4dBYzVTtyeWGYhh2jTbrC7QILVodI1u8QLyGK2Ah7GyNrykUuOvtLucrp7Tt+WyTu3O/0xcNlj1VnCtx7O7tSczMe0lzRN3goJjhAv1Hb/7y/Wk67g5HYhHODfhGL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cAHFP/NA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C06C113CC;
+	Thu,  2 May 2024 18:40:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714666864;
-	bh=WleDPBDuGpkWYaKIN5o6wY74OKM8aEWx5ZRGLFVujOA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GO84u2ItR5Rr4hpqiC0d9PsHJCwKEEg+nLUQ9CRVhpHu2VD0bwPC7JMGH4KBtLkp2
-	 WM4XouZZzLXEgFSCGESPV3BRfFT9t6mMS7GcnZtC8r4xb4eQimd0GqAooYbrwsXTLf
-	 I9+SBPe32rta1CSCKrc/emOsNatWjznN+xbxXxrhTrKnAkcJWCW6cFBnD8AEETI9iZ
-	 AFmF9nKvhOn6P4/DtXxSO1dxgzRGzldQBXLxYGurhifbNsm+CvPFLlm6DaQY5L2j7Y
-	 +s+nncxdHPn1GaXBlucr7UrOWpMNja0dFDyBcRyrnlBmWUh9IT5yyAiXbbTWSqHiH0
-	 RSE3KK+YVKk5g==
-Date: Thu, 2 May 2024 17:20:59 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
+	s=k20201202; t=1714675216;
+	bh=W5wFylu4znY7p5AjANG4/Vgp7FEQmDmVli7qKcbQo0w=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=cAHFP/NAPrl6DEg1/PnJaQHHzpc25KBPSl0vd1n4bja55GlysooyOy8Xwj3g5aF1K
+	 jEIkwC/c6x6Gw0Pqtu2cEhTfpa7TC4H4Zw1XZQFaR1ZtZpiRgG5nOxx3PP2DW0KUPZ
+	 Dx5UugTDy5Ntkm2RcI53D0/5A7vHNK4MdZRDogb43iTohT2jll08PRIus1IbhAysxN
+	 7aaXaZFQnNl08iTAaeD2GE41y9Ofy7TN7DRqAkeS/bvKj22wFCoSUld7QJj0cxgCMZ
+	 8huqKspTP8GZHrY23BLRCIUsaHzDLJm9IFHMsSXPfjhtMk6Q2AuA48nz123A/CEHh1
+	 hz5X4CdzvrUBw==
+Date: Thu, 2 May 2024 20:40:05 +0200
+From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v1 1/6] dt-bindings: ROHM BD96801 PMIC regulators
-Message-ID: <20240502-vitalize-oat-ecbc14647df8@spud>
-References: <cover.1714478142.git.mazziesaccount@gmail.com>
- <c747a3395a52bdb9b9697f814cd781fb0903b894.1714478142.git.mazziesaccount@gmail.com>
+	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v8 2/9] platform: cznic: Add preliminary support for
+ Turris Omnia MCU
+Message-ID: <20240502184005.fsdbwrbzmv5gshxh@kandell>
+References: <20240430115111.3453-1-kabel@kernel.org>
+ <20240430115111.3453-3-kabel@kernel.org>
+ <CAHp75VcgfvyZ9rcNev9CpQEN3CkUVozEkv+ycaQggPbE4tx+1Q@mail.gmail.com>
+ <20240430160507.45f1f098@dellmb>
+ <ZjELmaD3aQEuEa5K@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="pkgSKLeZe7hVqg4G"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c747a3395a52bdb9b9697f814cd781fb0903b894.1714478142.git.mazziesaccount@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZjELmaD3aQEuEa5K@smile.fi.intel.com>
+
+On Tue, Apr 30, 2024 at 06:17:45PM +0300, Andy Shevchenko wrote:
+> On Tue, Apr 30, 2024 at 04:05:07PM +0200, Marek Behún wrote:
+> > On Tue, 30 Apr 2024 15:53:51 +0300
+> > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > > On Tue, Apr 30, 2024 at 2:51 PM Marek Behún <kabel@kernel.org> wrote:
+> 
+> ...
+> 
+> > > > +static int omnia_get_version_hash(struct omnia_mcu *mcu, bool bootloader,
+> > > > +                                 u8 version[static OMNIA_FW_VERSION_HEX_LEN])
+> > > 
+> > > Interesting format of the last parameter. Does it make any difference
+> > > to the compiler if you use u8 *version?
+> > 
+> > The compiler will warn if an array with not enough space is passed as
+> > argument.
+> 
+> Really?
+
+Indeed:
+
+  extern void a(char *x);
+
+  static void b(char x[static 10]) {
+      a(x);
+  }
+
+  void c(void) {
+      char x[5] = "abcd";
+      b(x);
+  }
+
+says:
+  test.c: In function ‘c’:
+  test.c:9:9: warning: ‘b’ accessing 10 bytes in a region of size 5 [-Wstringop-overflow=]
+      9 |         b(x);
+        |         ^~~~
+  test.c:9:9: note: referencing argument 1 of type ‘char[10]’
+  test.c:3:13: note: in a call to function ‘b’
+      3 | static void b(char x[static 10]) {
+        |
+
+...
+
+> > > > +               dev_err(dev, "Cannot read MCU %s firmware version: %d\n", type,
+> > > > +                       err);  
+> > > 
+> > > One  line?
+> > 
+> > I'd like to keep this driver to 80 columns.
+> 
+> Then better to have a logical split then?
+> 
+> 			dev_err(dev, "Cannot read MCU %s firmware version: %d\n",
+> 				type, err);
+
+OK
+
+> > > > +               omnia_info_missing_feature(dev, "feature reading");  
+> > > 
+> > > Tautology. Read the final message. I believe you wanted to pass just
+> > > "reading" here.
+> > 
+> > No, I actually wanted it to print
+> >   Your board's MCU firmware does not support the feature reading
+> >   feature.
+> > as in the feature "feature reading" is not supported.
+> > I guess I could change it to
+> >   Your board's MCU firmware does not support the feature reading.
+> > but that would complicate the code: either I would need to add
+> > " feature" suffix to all the features[].name, or duplicate the
+> > info string from the omnia_info_missing_feature() function.
+> 
+> From point of a mere user (as I am towards this driver) I consider
+> the tautology confusing.
+> 
+> 	...the 'reading' feature
+> 
+> may be a good compromise.
+
+I have rewritten it to use another dev_info:
+  dev_info(dev,
+           "Your board's MCU firmware does not support feature reading.\n");
+
+> 
+> ...
+> 
+> > > > +       memcpy(mcu->board_first_mac, &reply[9], ETH_ALEN);  
+> > > 
+> > > There is an API ether_copy_addr() or so, don't remember by heart.
+> > > You also need an include for ETH_ALEN definition.
+> > 
+> > Doc for ether_addr_copy says:
+> >   Please note: dst & src must both be aligned to u16.
+> > since the code does:
+> >   u16 *a = (u16 *)dst;
+> >   const u16 *b = (const u16 *)src;
+> > 
+> >   a[0] = b[0];
+> >   a[1] = b[1];
+> >   a[2] = b[2]
+> > 
+> > Since I am copying from &reply[9], which is not u16-aligned, this won't
+> > work.
+> 
+> It would work on architectures that support misaligned accesses, but in general
+> you are right. Perhaps a comment on top to avoid "cleanup" patches like this?
 
 
---pkgSKLeZe7hVqg4G
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+OK
+ 
+> > > > +enum omnia_ctl_byte_e {
+> > > > +       CTL_LIGHT_RST           = BIT(0),
+> > > > +       CTL_HARD_RST            = BIT(1),
+> > > > +       /* BIT(2) is currently reserved */
+> > > > +       CTL_USB30_PWRON         = BIT(3),
+> > > > +       CTL_USB31_PWRON         = BIT(4),
+> > > > +       CTL_ENABLE_4V5          = BIT(5),
+> > > > +       CTL_BUTTON_MODE         = BIT(6),
+> > > > +       CTL_BOOTLOADER          = BIT(7)  
+> > > 
+> > > Keep trailing comma as it might be extended (theoretically). And you
+> > > do the similar in other enums anyway.
+> > 
+> > ctl_byt is 8-bit, so this enum really can't be extended.
+> 
+> I understand that (even before writing the previous reply).
+> 
+> > In fact I need
+> > to drop the last comma from omnia_ext_sts_dword_e and omnia_int_e.
+> 
+> Who prevents from having in a new firmware let's say
+> 
+>  BIT(31) | BIT(1)
+> 
+> as a new value?
+> 
+> From Linux perspective these are not terminating lines.
 
-On Tue, Apr 30, 2024 at 02:59:50PM +0300, Matti Vaittinen wrote:
-> ROHM BD96801 is a highly configurable automotive grade PMIC. Introduce
-> DT bindings for the BD96801 regulators.
->=20
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->=20
-> ---
-> RFCv2 =3D> v1
-
-RFC is a status, not a version - ideally this would have been v3 and the
-next version v4.
-
->     - Drop regulator-name pattern requirement
->     - do not require regulator-name
-
-
-Krzysztof had some comments on the buck/ldo node names and on the
-initial value properties that I'm not sure if have been addressed, so
-gonna leave this series to him.
-
-Cheers,
-Conor.
-
-
---pkgSKLeZe7hVqg4G
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjO9awAKCRB4tDGHoIJi
-0jr+AQCQt6Z+SetdU9x2J/oqB3jM4GsDUaIIBK2HqhEaBSlUHQEAq3UG5y0PLiXN
-TH7mteDIKPhBUiBOtcmWzO+dHOcXYA4=
-=OtgH
------END PGP SIGNATURE-----
-
---pkgSKLeZe7hVqg4G--
+OK
 
