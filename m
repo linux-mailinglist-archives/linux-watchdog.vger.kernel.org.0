@@ -1,149 +1,135 @@
-Return-Path: <linux-watchdog+bounces-1036-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1037-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2BF08BA73A
-	for <lists+linux-watchdog@lfdr.de>; Fri,  3 May 2024 08:51:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2A808BA7BD
+	for <lists+linux-watchdog@lfdr.de>; Fri,  3 May 2024 09:25:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73BF01F216BE
-	for <lists+linux-watchdog@lfdr.de>; Fri,  3 May 2024 06:51:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A670728196C
+	for <lists+linux-watchdog@lfdr.de>; Fri,  3 May 2024 07:25:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64D5D139D00;
-	Fri,  3 May 2024 06:51:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0066B146D48;
+	Fri,  3 May 2024 07:25:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D2JqoKOi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BGmrOF/d"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3576857CA8;
-	Fri,  3 May 2024 06:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51D31139593;
+	Fri,  3 May 2024 07:25:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714719113; cv=none; b=LexDiu0kNeBOI5PmEtrsV9xloBYsHfK7Z8Z+tAO5C8yTAm7KrX1AQtlFEB7iPD3wsNMupDKc4RmWtA7Vlpl51cpSmPWykgRz8JXW4ssNKY2FVYRLH1Oos/NNOG9OxJUa13BWKFZ/c/ggh0abIt5mQO836ay/qYrs1PoJmsu6RNk=
+	t=1714721130; cv=none; b=Lhfz+b5nuD0qiznByLZgr3x8tpQ9wbymc4oDkGBuiv8E/7Br3Jb6+hTVD5+zDVMRSzlB7oC1D/E6vk918gNWshfDmAMNLFHfoTSWIcEH2s4xIn2BOINmvJwId+5ArL/5XVqANK0s1RxSN/E6WXtOAAhd0zSnrrbnAPOzNop0kLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714719113; c=relaxed/simple;
-	bh=wT02tiM4wXh96p/92paNbLUWSCzZQvWt8NNAabXOQNQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NMOYuHN4A/tkuuu9XaqTXA4Vcu437VWOEA+n+yYxhq38GyKwFCgohiI5nShqL5ffsX6Oh7bApU3dSk7NoHOggf9pL/xLJrsX51Dk0EsiOh8HNAGA22HqTOsVI8ZkX+I0KYvcgDe236WnzoEN4WBPh6omCMnKZ5wwJKJJ58ChFys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D2JqoKOi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0AB5C116B1;
-	Fri,  3 May 2024 06:51:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714719112;
-	bh=wT02tiM4wXh96p/92paNbLUWSCzZQvWt8NNAabXOQNQ=;
-	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
-	b=D2JqoKOid/E7ElVPPALhAw5Rt+fgl6zYg73kWZfbf5bELCPTjSyrahQaNKBX31fJ0
-	 EJIxD878l9/a9F3JtE2e7gyt1k0AmRAL+9V999XLGEPfPRiWZSAc1ytp5FdIXl+eGJ
-	 0QEmHGJw/u+2G+XpwUaqWIx2qkfW5U0dDt0nIIzBwyMw3Hr67nqTE6kAFizMrGSkii
-	 4sLiWNyoH75e/vD180aXkKq0pcPNmzmD3ZiQvgindgDHn8DbyUVxpRksfYj7PzGyV1
-	 pYcTQIU+m0pW/ag3hQCCkoJK4l01lBrwR36/y/VxMF8Z/6fgZM9NXjy4wFVhf+n3ws
-	 hxExaDEtLUoag==
-Date: Fri, 3 May 2024 08:51:32 +0200
-From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
-	Alessandro Zummo <a.zummo@towertech.it>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v8 2/9] platform: cznic: Add preliminary support for
- Turris Omnia MCU
-Message-ID: <20240503065132.f3tellvhidjly4pf@kandell>
-References: <20240430115111.3453-1-kabel@kernel.org>
- <20240430115111.3453-3-kabel@kernel.org>
- <CAHp75VcgfvyZ9rcNev9CpQEN3CkUVozEkv+ycaQggPbE4tx+1Q@mail.gmail.com>
- <20240430160507.45f1f098@dellmb>
- <ZjELmaD3aQEuEa5K@smile.fi.intel.com>
- <20240502184005.fsdbwrbzmv5gshxh@kandell>
- <CAHp75VfktKyGUNBz18TUQknF-5YZDOTgh2WLJhTs-_Ay-wgQoA@mail.gmail.com>
- <20240502191756.ynwmp74yybat57my@kandell>
- <CAHp75VcNDv=it_H8xt2p2J63UEqBpX_9qO3LxvQ3V_ZP0eStug@mail.gmail.com>
+	s=arc-20240116; t=1714721130; c=relaxed/simple;
+	bh=cqv9SBuOKk4+0s89FmYuGzf91MVZ71PBD18TBj1B16Q=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=WKtEnZUzQeN0gI/RxRB+0CmM08bS2uiLs/OZo+BvtEb2QjIKJjbE1GvV8q2sotdrf0PTwxS1TnwG86N5xXYk0NbZuvOQdnUARGHo3YxRoHJ5zmqRyh7sXG3ukjMAx7YCDHs8VCJPHFi6W1JAmZ2LWTXI610fx4BbSHn+FzNQtv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BGmrOF/d; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-51f12ccff5eso2182206e87.1;
+        Fri, 03 May 2024 00:25:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714721127; x=1715325927; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2bfIVKPy8kEkNHpot7ISpKC3G8aLSDEdKgGxPBam63Q=;
+        b=BGmrOF/dqFu7W9+KburpANTmQFvxX9+IsUJHg1idfHvwPNkq4cRNYjS2utKMa5Vyow
+         GeXIegks0crNKGhhIl90V9fQteDWfykAA0sIB8wHKkLaKwRxKwf5+0aCvMWMJvmJ5JHt
+         xP/Rk+tchs7yl3qUX+iruNg9WFUVuWTaPv4iFLPgKMX0sDUYI8Sy9RKqmTjvmQtVNK62
+         sioRKLfbePdLzAzUZW2dXM/+xBwFvnHJn/90v2spn4GtdAgQ2NjzGD2O4gSPu3gTZH0m
+         upnIGFhyqqfzgbNi1oAaKk8Eh8KzTr2D39UGP4xNMusaXdC3R1EVyTuu/MFDLSisUS9X
+         vb6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714721127; x=1715325927;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2bfIVKPy8kEkNHpot7ISpKC3G8aLSDEdKgGxPBam63Q=;
+        b=OtjHM0KU+LjROJyDXkvT0JALEIAnFbUyvMOlQkLZCUxUBnvRQKF+6uK2fQg5LEmDw8
+         Pf8Euxh7oQE8jEgYIbEZp10O0iqMeYz7ReUTkbsUJe9dgx6ob/PVsLLEZwWbNGifN6Vp
+         pno1VMOQwzP7/NGprYiSV8fMc++pQg7Y7H88knTrQQ40dBcoFQhJ5ZDvJ0lecgypb2bl
+         MQD8gRXkEuA4A4vpaKk67y/Dnm5ZJWMUCQAboaQP32RfdFWEoTZ7aIQdHprSfePSJxVZ
+         sigtpeCn2bHMRlyTkZzuhStiZlfV9kqqh76U53eP7xDBzrYybncG9w8Dcb2Q2iT+QwIq
+         ybrw==
+X-Forwarded-Encrypted: i=1; AJvYcCXmVPOxqZeRqrGowawVXiW5jFUGiphCWXIB887Az/6e1nUdTzTgQ2iqxe4eIZshPhbqDTmzYEABn0n3+wPeX0F3fFLhTAOWUA2hEM1By7rtHdMjac//WIXz7j/KhpcO2oAQGUL/U/5kdxWx4LEf6qmbIEXFsJ+oEm6drT/x4lOXWPnISPlTTJGY
+X-Gm-Message-State: AOJu0YwvHDjizJi8sxDR1ndpKxzUthiIi85qY7T3LqY12mUvf+xidpkm
+	54yI/vLoeqT6A51CE3870QE+TOA9U14hqlHBQLr/Mkecn4wpftOM
+X-Google-Smtp-Source: AGHT+IHfp8TeX/0dHU9tN2siim24RPoCWkmxx7z811SZUiY7WINB0kURBDR6geiOQ/+SyFPGgu6HDA==
+X-Received: by 2002:a19:5201:0:b0:51c:cf2e:db1f with SMTP id m1-20020a195201000000b0051ccf2edb1fmr1198161lfb.6.1714721127176;
+        Fri, 03 May 2024 00:25:27 -0700 (PDT)
+Received: from [172.16.183.82] ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id y13-20020a19750d000000b0051f2230523fsm448785lfe.147.2024.05.03.00.25.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 May 2024 00:25:26 -0700 (PDT)
+Message-ID: <2286c7cd-6510-407a-817a-8d964b158c4c@gmail.com>
+Date: Fri, 3 May 2024 10:25:26 +0300
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VcNDv=it_H8xt2p2J63UEqBpX_9qO3LxvQ3V_ZP0eStug@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/6] dt-bindings: ROHM BD96801 PMIC regulators
+Content-Language: en-US, en-GB
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+ Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <cover.1714478142.git.mazziesaccount@gmail.com>
+ <c747a3395a52bdb9b9697f814cd781fb0903b894.1714478142.git.mazziesaccount@gmail.com>
+ <20240502-vitalize-oat-ecbc14647df8@spud>
+ <74655775-a8e2-45f4-8a1b-8046dffa5520@gmail.com>
+In-Reply-To: <74655775-a8e2-45f4-8a1b-8046dffa5520@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 03, 2024 at 06:59:20AM +0300, Andy Shevchenko wrote:
-> On Thu, May 2, 2024 at 10:18 PM Marek Behún <kabel@kernel.org> wrote:
-> > On Thu, May 02, 2024 at 09:47:25PM +0300, Andy Shevchenko wrote:
-> > > On Thu, May 2, 2024 at 9:40 PM Marek Behún <kabel@kernel.org> wrote:
-> > > > On Tue, Apr 30, 2024 at 06:17:45PM +0300, Andy Shevchenko wrote:
-> > > > > On Tue, Apr 30, 2024 at 04:05:07PM +0200, Marek Behún wrote:
-> > > > > > On Tue, 30 Apr 2024 15:53:51 +0300
-> > > > > > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > > > > > > On Tue, Apr 30, 2024 at 2:51 PM Marek Behún <kabel@kernel.org> wrote:
+On 5/3/24 07:54, Matti Vaittinen wrote:
+> Hi Conor,
 > 
-> ...
+> On 5/2/24 19:20, Conor Dooley wrote:
+>> On Tue, Apr 30, 2024 at 02:59:50PM +0300, Matti Vaittinen wrote:
+>>
+>> Krzysztof had some comments on the buck/ldo node names
 > 
-> > > > > > > > +static int omnia_get_version_hash(struct omnia_mcu *mcu, bool bootloader,
-> > > > > > > > +                                 u8 version[static OMNIA_FW_VERSION_HEX_LEN])
-> > > > > > >
-> > > > > > > Interesting format of the last parameter. Does it make any difference
-> > > > > > > to the compiler if you use u8 *version?
-> > > > > >
-> > > > > > The compiler will warn if an array with not enough space is passed as
-> > > > > > argument.
-> > > > >
-> > > > > Really?
-> > > >
-> > > > Indeed:
-> > > >
-> > > >   extern void a(char *x);
-> > > >
-> > > >   static void b(char x[static 10]) {
-> > > >       a(x);
-> > > >   }
-> > > >
-> > > >   void c(void) {
-> > > >       char x[5] = "abcd";
-> > >
-> > > >       b(x);
-> > >
-> > > It's not the example I was talking about. Here should be a(x).
-> >
-> > Somehow I got lost. Let's return to my function, where I have
-> >   int omnia_get_version_hash(..., u8 version[static 40]);
-> >
-> > and then I use this function:
-> >
-> >   u8 version[40];
-> >   omnia_get_version_hash(..., version);
-> >
-> > If somehow I made a mistake and declared the version array shorter:
-> >   u8 version[20];
-> >   omnia_get_version_hash(..., version);
-> > I would get a warning.
+> I think Krzysztof pointed out that the regulator-name property should 
+> not match the data-sheet but the board. If he had something to say about 
+> the node names, then I've missed his comment!
 > 
-> Yes. Would you get the same warning if you replace the parameter to a pointer?
+>> and on the
+>> initial value properties that I'm not sure if have been addressed, so
+>> gonna leave this series to him.
+> 
+> Thanks for pointing out I may have missed addressing some of his 
+> concerns. I though I fixed all issues he pointed to me but it may be I 
+> missed some - or accidentally dropped some change(s) when merging fixes 
+> from the 'experimental' branch to the 'simple'. I'll revise Krzysztof's 
+> feedback to the RFC before sending the next version!
 
-If you mean instead of declaring
-  u8 version[20];
-if I did
-  u8 *version;
-  omnia_get_version_hash(..., version);
-then I will get a different warning:
-  version is used uninitialized
+You were right Conor. I checked it and yes, I omitted a few of the fixes 
+to regulator bindings. Please skip reviewing this version of these 
+bindings, I'll handle the rest of the comments in next one!
 
-And if you mean that instead of the
-  char version[static 40]
-in the argument list of the function I used
-  char *version,
-then no, GCC spits no warning.
+Yours,
+	-- Matti
 
-Marek
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
 
