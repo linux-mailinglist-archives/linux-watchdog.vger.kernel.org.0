@@ -1,156 +1,149 @@
-Return-Path: <linux-watchdog+bounces-1035-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1036-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADAB68BA671
-	for <lists+linux-watchdog@lfdr.de>; Fri,  3 May 2024 06:54:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2BF08BA73A
+	for <lists+linux-watchdog@lfdr.de>; Fri,  3 May 2024 08:51:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB05BB21761
-	for <lists+linux-watchdog@lfdr.de>; Fri,  3 May 2024 04:54:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73BF01F216BE
+	for <lists+linux-watchdog@lfdr.de>; Fri,  3 May 2024 06:51:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE95A139563;
-	Fri,  3 May 2024 04:54:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64D5D139D00;
+	Fri,  3 May 2024 06:51:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FQtweVUQ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D2JqoKOi"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A11137C36;
-	Fri,  3 May 2024 04:54:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3576857CA8;
+	Fri,  3 May 2024 06:51:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714712066; cv=none; b=S1D7CFqTusC+ZOKAYYW1CFAdyUeLAvTbQVdCS85k2a4PBknDWTLM/j4iht9cm/qUG0Uc7iDjFr/1dmY/ERPNCtC6rY9BT4XdB3g5yKr+iwhK1vLzHwXgvtu+Xr7d+hGk9JbQ4UHRGxLTGGvHUDU4Tqc0mTcm8ZA46+H7Ged6hVk=
+	t=1714719113; cv=none; b=LexDiu0kNeBOI5PmEtrsV9xloBYsHfK7Z8Z+tAO5C8yTAm7KrX1AQtlFEB7iPD3wsNMupDKc4RmWtA7Vlpl51cpSmPWykgRz8JXW4ssNKY2FVYRLH1Oos/NNOG9OxJUa13BWKFZ/c/ggh0abIt5mQO836ay/qYrs1PoJmsu6RNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714712066; c=relaxed/simple;
-	bh=5Vk/o77IrN6HMyMH3vHDq6aK7PmYvi2tirm6073Fm2U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TGEYkgDKb05qwFSdZS1DNGSPZAn7jhPX6xhwVNxuLhux5ncEStkOj3GNubXUvqLazcnrewqrgO0btipTvihxSIn5H4ZZyUIgC+D9ree1UGGEiY9gS7V3PodzN9KA/wC5r4LZQSQiIM4ycz+mKlrCmGmvHxwuhNZ8TEmi+SMeE9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FQtweVUQ; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-51f1b378ca5so2576927e87.1;
-        Thu, 02 May 2024 21:54:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714712063; x=1715316863; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=loZHn25HlcmFKvqsuM9XCvTx/kGvrnibzVi5KvehX28=;
-        b=FQtweVUQVNbyUpzwMhhxwfIP9Id1fHXXvN9O34ovL4Dc+1AeVjVJROnJPX7/hjNXeb
-         jwJJoX7ru5aAjkdIn10PgvJuBLRs+d45ofCKf9NTGREx9qkQ5viqYJMA6NFkIZT9hkfQ
-         1AAZgRBmPI7Jydl5eys13fgrCRJ+W0mfxI6fGoMGaN6VPlTrZXIGlMLyGOTo/HM6BDLg
-         jJXjI1L/JYwWPWqMWltuBglNmK2KMbRIyCWyDH3YSVbLnMZ+hm6xV9A3TC4kvfMlSahY
-         nzUJqS2aKJQyi2knsZdFnjBRmjCKBma2R8rDQOZ+xwBD9NOKu/R6W3QdTtlJit/MZHcG
-         cVIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714712063; x=1715316863;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=loZHn25HlcmFKvqsuM9XCvTx/kGvrnibzVi5KvehX28=;
-        b=gcvKjxaO/Lq/tr2QZcqv1TpSScPQja7EpUhQnJPj9/6rynXhX0UHUb3CnyMxVRhvZK
-         BPjaxcS4j6tFM37GvCl0q6C9IL5Q5isaYgIX5CersdPuYhEo37ITgsnSiyyXwrZOEPl6
-         LIXjpGiYZ/1VPw3a59jrx10pJ/ZMKi530Ai+eIKNHDLwuCW/NCcfwwfWDeGTFqSEcvj5
-         pJMe2erMFWPBm6aZOhGozJRuvjlHMjdLyuF6aBSqUASgHe4TuonGu56ZsSMvRgkJ9wQm
-         tvTpt/qxkfL3ss7wsValISFRosSb80BWHR78GK1ZWNHU0J6aNqJ0oKunQmWzfcnHfD87
-         Iy+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW+fz/azFrsmjEDByMQBv8SZahizSHfATy79iyFCz1EpW5gK9XSKngXTri1kd6Sa1WCRINnX8ifwL4nB2SkTNpQhFRRp1mej8/ca4H1kJ0KJJkGAljl7LM9ZQe8Y754vMpVjjqLtm2HnXxdRMOjdbsIQ/ydcoWyvTLznoPJcKJxg+9/iZM/YW3f
-X-Gm-Message-State: AOJu0YwYhVPW1mc96mGvxqIY16y1Lre/urtTZVFF0poJDAhREoL+2CCd
-	u9kSLdyiDeddphJamKPD6incr64HUYZcZ/Vcc9BG0LcQGc2FJD1K
-X-Google-Smtp-Source: AGHT+IFQOjsN5z4X0Y11iSOg7oq/hzAzCCnkqGbNdxRqrYzdUZn7dn7SXecPkjPH+UsG3Nxix6eRpw==
-X-Received: by 2002:ac2:546c:0:b0:51b:9254:91e7 with SMTP id e12-20020ac2546c000000b0051b925491e7mr1213779lfn.61.1714712062993;
-        Thu, 02 May 2024 21:54:22 -0700 (PDT)
-Received: from ?IPV6:2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd? ([2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd])
-        by smtp.gmail.com with ESMTPSA id y17-20020ac24471000000b0051e12057075sm413999lfl.179.2024.05.02.21.54.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 May 2024 21:54:22 -0700 (PDT)
-Message-ID: <74655775-a8e2-45f4-8a1b-8046dffa5520@gmail.com>
-Date: Fri, 3 May 2024 07:54:21 +0300
+	s=arc-20240116; t=1714719113; c=relaxed/simple;
+	bh=wT02tiM4wXh96p/92paNbLUWSCzZQvWt8NNAabXOQNQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NMOYuHN4A/tkuuu9XaqTXA4Vcu437VWOEA+n+yYxhq38GyKwFCgohiI5nShqL5ffsX6Oh7bApU3dSk7NoHOggf9pL/xLJrsX51Dk0EsiOh8HNAGA22HqTOsVI8ZkX+I0KYvcgDe236WnzoEN4WBPh6omCMnKZ5wwJKJJ58ChFys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D2JqoKOi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0AB5C116B1;
+	Fri,  3 May 2024 06:51:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1714719112;
+	bh=wT02tiM4wXh96p/92paNbLUWSCzZQvWt8NNAabXOQNQ=;
+	h=Date:From:To:List-Id:Cc:Subject:References:In-Reply-To:From;
+	b=D2JqoKOid/E7ElVPPALhAw5Rt+fgl6zYg73kWZfbf5bELCPTjSyrahQaNKBX31fJ0
+	 EJIxD878l9/a9F3JtE2e7gyt1k0AmRAL+9V999XLGEPfPRiWZSAc1ytp5FdIXl+eGJ
+	 0QEmHGJw/u+2G+XpwUaqWIx2qkfW5U0dDt0nIIzBwyMw3Hr67nqTE6kAFizMrGSkii
+	 4sLiWNyoH75e/vD180aXkKq0pcPNmzmD3ZiQvgindgDHn8DbyUVxpRksfYj7PzGyV1
+	 pYcTQIU+m0pW/ag3hQCCkoJK4l01lBrwR36/y/VxMF8Z/6fgZM9NXjy4wFVhf+n3ws
+	 hxExaDEtLUoag==
+Date: Fri, 3 May 2024 08:51:32 +0200
+From: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, arm@kernel.org,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v8 2/9] platform: cznic: Add preliminary support for
+ Turris Omnia MCU
+Message-ID: <20240503065132.f3tellvhidjly4pf@kandell>
+References: <20240430115111.3453-1-kabel@kernel.org>
+ <20240430115111.3453-3-kabel@kernel.org>
+ <CAHp75VcgfvyZ9rcNev9CpQEN3CkUVozEkv+ycaQggPbE4tx+1Q@mail.gmail.com>
+ <20240430160507.45f1f098@dellmb>
+ <ZjELmaD3aQEuEa5K@smile.fi.intel.com>
+ <20240502184005.fsdbwrbzmv5gshxh@kandell>
+ <CAHp75VfktKyGUNBz18TUQknF-5YZDOTgh2WLJhTs-_Ay-wgQoA@mail.gmail.com>
+ <20240502191756.ynwmp74yybat57my@kandell>
+ <CAHp75VcNDv=it_H8xt2p2J63UEqBpX_9qO3LxvQ3V_ZP0eStug@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/6] dt-bindings: ROHM BD96801 PMIC regulators
-To: Conor Dooley <conor@kernel.org>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
- Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <cover.1714478142.git.mazziesaccount@gmail.com>
- <c747a3395a52bdb9b9697f814cd781fb0903b894.1714478142.git.mazziesaccount@gmail.com>
- <20240502-vitalize-oat-ecbc14647df8@spud>
-Content-Language: en-US, en-GB
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20240502-vitalize-oat-ecbc14647df8@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75VcNDv=it_H8xt2p2J63UEqBpX_9qO3LxvQ3V_ZP0eStug@mail.gmail.com>
 
-Hi Conor,
-
-On 5/2/24 19:20, Conor Dooley wrote:
-> On Tue, Apr 30, 2024 at 02:59:50PM +0300, Matti Vaittinen wrote:
->> ROHM BD96801 is a highly configurable automotive grade PMIC. Introduce
->> DT bindings for the BD96801 regulators.
->>
->> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->>
->> ---
->> RFCv2 => v1
+On Fri, May 03, 2024 at 06:59:20AM +0300, Andy Shevchenko wrote:
+> On Thu, May 2, 2024 at 10:18 PM Marek Behún <kabel@kernel.org> wrote:
+> > On Thu, May 02, 2024 at 09:47:25PM +0300, Andy Shevchenko wrote:
+> > > On Thu, May 2, 2024 at 9:40 PM Marek Behún <kabel@kernel.org> wrote:
+> > > > On Tue, Apr 30, 2024 at 06:17:45PM +0300, Andy Shevchenko wrote:
+> > > > > On Tue, Apr 30, 2024 at 04:05:07PM +0200, Marek Behún wrote:
+> > > > > > On Tue, 30 Apr 2024 15:53:51 +0300
+> > > > > > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> > > > > > > On Tue, Apr 30, 2024 at 2:51 PM Marek Behún <kabel@kernel.org> wrote:
 > 
-> RFC is a status, not a version - ideally this would have been v3 and the
-> next version v4.
-
-Thanks for the clarification. I've always wondered if an RFC should be 
-seen as a separate series. Previously I've ended up just dropping the 
-RFC and pumping up the version. This time the switch from RFC => non RFC 
-was somewhat radical as a lot of the features were dropped. Furthermore, 
-I've developed the 'simple' version (this non RFC one) and 
-'experimental' version (the RFC one) in separate branches - which made 
-the separation even stronger in my mind - I probably started thinking 
-these as two different patch series.
-
-But, as I said, thanks for the clarification! I guess it's still better 
-to make next version v2 (and not v4) to not add even more confusion...
-
->>      - Drop regulator-name pattern requirement
->>      - do not require regulator-name
+> ...
 > 
+> > > > > > > > +static int omnia_get_version_hash(struct omnia_mcu *mcu, bool bootloader,
+> > > > > > > > +                                 u8 version[static OMNIA_FW_VERSION_HEX_LEN])
+> > > > > > >
+> > > > > > > Interesting format of the last parameter. Does it make any difference
+> > > > > > > to the compiler if you use u8 *version?
+> > > > > >
+> > > > > > The compiler will warn if an array with not enough space is passed as
+> > > > > > argument.
+> > > > >
+> > > > > Really?
+> > > >
+> > > > Indeed:
+> > > >
+> > > >   extern void a(char *x);
+> > > >
+> > > >   static void b(char x[static 10]) {
+> > > >       a(x);
+> > > >   }
+> > > >
+> > > >   void c(void) {
+> > > >       char x[5] = "abcd";
+> > >
+> > > >       b(x);
+> > >
+> > > It's not the example I was talking about. Here should be a(x).
+> >
+> > Somehow I got lost. Let's return to my function, where I have
+> >   int omnia_get_version_hash(..., u8 version[static 40]);
+> >
+> > and then I use this function:
+> >
+> >   u8 version[40];
+> >   omnia_get_version_hash(..., version);
+> >
+> > If somehow I made a mistake and declared the version array shorter:
+> >   u8 version[20];
+> >   omnia_get_version_hash(..., version);
+> > I would get a warning.
 > 
-> Krzysztof had some comments on the buck/ldo node names
+> Yes. Would you get the same warning if you replace the parameter to a pointer?
 
-I think Krzysztof pointed out that the regulator-name property should 
-not match the data-sheet but the board. If he had something to say about 
-the node names, then I've missed his comment!
+If you mean instead of declaring
+  u8 version[20];
+if I did
+  u8 *version;
+  omnia_get_version_hash(..., version);
+then I will get a different warning:
+  version is used uninitialized
 
-> and on the
-> initial value properties that I'm not sure if have been addressed, so
-> gonna leave this series to him.
+And if you mean that instead of the
+  char version[static 40]
+in the argument list of the function I used
+  char *version,
+then no, GCC spits no warning.
 
-Thanks for pointing out I may have missed addressing some of his 
-concerns. I though I fixed all issues he pointed to me but it may be I 
-missed some - or accidentally dropped some change(s) when merging fixes 
-from the 'experimental' branch to the 'simple'. I'll revise Krzysztof's 
-feedback to the RFC before sending the next version!
-
-Thanks!
-
-Yours,
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Marek
 
