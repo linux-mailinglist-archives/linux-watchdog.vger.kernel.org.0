@@ -1,76 +1,76 @@
-Return-Path: <linux-watchdog+bounces-1076-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1077-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AC628D1D3A
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 May 2024 15:38:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23D748D1D3F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 May 2024 15:39:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78770B2280C
-	for <lists+linux-watchdog@lfdr.de>; Tue, 28 May 2024 13:38:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD31028152B
+	for <lists+linux-watchdog@lfdr.de>; Tue, 28 May 2024 13:39:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDD19131E3C;
-	Tue, 28 May 2024 13:38:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDFC216D4E3;
+	Tue, 28 May 2024 13:39:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mcxiyh3R"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c59oImeF"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FDFA17C7F;
-	Tue, 28 May 2024 13:38:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E9C817C7F;
+	Tue, 28 May 2024 13:39:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716903483; cv=none; b=Y7NO2sWVawbJWSZiBTclVyts51qxfhQXjQ4NofeiZhDSCzFmI/apjaV2jx09892BXx3Fsn7mwTEd5DOgmIrXkcIxjGijVlEV+CkfY8J+gO4zTduQivE5dbNjm+jiCBramTK022VKJGU+gi/BLKOW5Thhs/mEf70YKNQdVzqP9A8=
+	t=1716903560; cv=none; b=amMSD0SDAW5zOPBv7uoCJLqYNg8uiRVVb0mfyZXHJVME+2YsEC/3I15pCrCaunSZ2EWkFbWU6A9herUzj30sKApX4CaEhFf/IjYcOVQs9zt6YwtcG9Sp06G+If6U53PaLrBnQajBFwg2wf5CHeir/lBxplwwfuQlkeen/u/om1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716903483; c=relaxed/simple;
-	bh=d/PzWi9qwp3gQF7kZ8Ej4uHSWw8xW9QHZYuQwYRPTDc=;
+	s=arc-20240116; t=1716903560; c=relaxed/simple;
+	bh=2jNHHISgzmmu0HWBMmKiL9K/6wMcr5DAtI7972qMwHI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uA4jIwQhU/bN7MCIgo3Xs4tyKcTVV1zdkW6LElPYxaV6lw7VmgDuz3l4jzallUz1J9hWUZ1H/LxpH6c1aKe0qYFGPsgr0N8HAw5xzY/f+Cp/9lDL0vtvERyqaX+umx0wPkI9yax4Dn7V0S8+fTxfaTykhGzq+k8qxfe54N8mO7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mcxiyh3R; arc=none smtp.client-ip=209.85.214.170
+	 In-Reply-To:Content-Type; b=KID8YL1uBp3KRHk+rrR9BnkVSuDmpkFA32ZRUx23P0nRm+nj4mNiZaPv6QDEnCLwf8PKxU4SJdUd+bAYW2NIC8R1iszIAn3zczL5whUpkEoDSEuR2ZwqV+rkLTHbckvJy3hAycPlZI4Sbk/hBGDcsikZ/+XOnc2aOaNhugK3ZaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c59oImeF; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1f47f07aceaso7450415ad.0;
-        Tue, 28 May 2024 06:38:01 -0700 (PDT)
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2bfdae0b0e0so668098a91.0;
+        Tue, 28 May 2024 06:39:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716903481; x=1717508281; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1716903559; x=1717508359; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=6qJWbw1fdAeS4ogDSsgAOA+33bH6Pnzp7UwpXEY9FH4=;
-        b=Mcxiyh3RIC8Xa0FF855QTAadacpMryJ8oRl6BvuV3wpqrUSAhi3kPW4YOFwhupp6/p
-         RCkhQPEzGM6M29iwWxaRXqZ7u+7hKdj7rb5ZRCPxaP4E8tIcu0qUGuWZ2D8h4cfiApUG
-         xaYP4IiOzXmgBXCdManVcng33upwn3Rxd969yHP6wqn2gBoj4ZFEsYymW4Ogm3mFsy+J
-         H7rF/tivON1WRrcBnlQbP2+IQPzfi7J2gkan+RUCKJ+QLdcH12aJN4ZL3jNqZCEJLo2E
-         +q6+ru+aSmyQQ9d43jwTrfkuW9x5i3HEBP64jKLyvWnXTdij5/qctZjDGf26lIDEpT0D
-         q5cA==
+        bh=bj3R4EjF1QBZQsUr1Xs3RRu1us8jqj+uTGgy2dREVMs=;
+        b=c59oImeFm2OlURsNR5ffl5RUcsr0cP1HIGX763RVsD69lZElnVbio13JMCqAJMWeRv
+         UeIF6eWOyu8TIAUBVY+6VmIsc2Bpq+khsI+vtPYc5gjLvvVMAANVVO6zrk3R0gqjhbNF
+         7nmWnnuWiHb2rBtwH8zag7kq9iitLeErmt7yl4LvLsraEbTPIpWI0hxIKRysA8B3oWtg
+         F0wz3gERux5QftYmmfxqmsCN6bdFul5scWG57DQfizRU9QqhJNfGpSO31coUbPPSjI1s
+         m+DWhvMVK88FI0kqja5yumQGivA/0xQOsxmBqumnQHyF5ufYG1m3tgQEMzeL6VF3Q/db
+         CsMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716903481; x=1717508281;
+        d=1e100.net; s=20230601; t=1716903559; x=1717508359;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6qJWbw1fdAeS4ogDSsgAOA+33bH6Pnzp7UwpXEY9FH4=;
-        b=AhAN5hiXeNp5NDMx/1/EYBvsEamK4cN1BLAF+xCmYiYmXT36wCUWcWw7n2XJsV7kl0
-         C8LnqObUOJyGRgN9JFCtLbcxWhfbXkf5D3hX4cYZiVZYIqrdbdmVgBfp5TkOkOL0ZVZh
-         oQYpn5sgC3CTnrYyKAc7bILzbtbrxOP/ajZRYpOyCLgIaURlGopGu8rFcSfOfH03YtQg
-         2p9jKdM3HiSBxfJIRmVcEY9BaUbBJm5uA/pfjBFI8GogWJ63IjeWink29P4aBHPcomzt
-         PtaSntrrUQ6BX+q7uSyPekIyDRuYvkpWfAe2/yfj4NtQq7hp4vi011sOfAlkRzjtXW79
-         IuuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXUN2sEGPvsBkyBYE+QWNTG9nf+EvqPRWHC53S61A6DoiHhT9FvWP3mqtXauAyVpqYAVZBDkQGDPvSUhHmJvRFkmZeg7x33Rq65oH9Adc2i/z6kvWrhuRYsOQ/1UQD5PAaTv+GGDn/0GzHE374=
-X-Gm-Message-State: AOJu0YyvCiqTrf19afHymQJcPmZMh6tvXGiQRusmWlnFAIfyuUe7/LgQ
-	FJD8m8hD/Eo3/++dYhHEI/0KoGYX+bXPF22/RE6jAR0ZLMRkJzFLJBmZYQ==
-X-Google-Smtp-Source: AGHT+IHAT/6DooQvh7OuDiCQ75Ef2Bo+NQPsHnxYwpQgTD/ELFosvTUwryX37WeHBX01HGENUtKwHw==
-X-Received: by 2002:a17:902:e543:b0:1f4:6f3a:a13c with SMTP id d9443c01a7336-1f46f3aa69dmr82936765ad.47.1716903481174;
-        Tue, 28 May 2024 06:38:01 -0700 (PDT)
+        bh=bj3R4EjF1QBZQsUr1Xs3RRu1us8jqj+uTGgy2dREVMs=;
+        b=KZ0LcfXVpAywTcrL2Zel704IXpZZ0AqshNKB+ihzO2EpZFcj4jpSXFrwE55Ij2Fc4A
+         OeR61cw3F4IKFANMUghY9y+4EV+hKkmZ5jD8GwdixATTB/ku2otPw2OlRZdFEi9+Rfs1
+         uTZu4RRqQVzXx5crWPPR4GaSWDB5fmeiRnlvCFFmvAZ+IcjFb1QrCdKFYUhwtmnDQs5Z
+         CSTmpvy8QFBZt48VwZVz67eoKSjYprzmjEcFcoyZB87+iX7QiqXErzdoYPkGbCqCPFik
+         ZR6UYfcRIW7IIINthKiSu8YcZNV2KmEFQLHy8EASBHdezSI3HPLuuTS42huOJEvCQPml
+         V4xQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWvcu+CabCU8pEvqKaDTuVZoEihbNaDjSsGYWgWHRJi25QgUT93q7PLnEclJuN5v/IBDZmAH5DreNAh59qTOQA7RB2o3Fe8cRhdJMJ0YH+1kWa23JidtEx6PAF++Sy0kMnd0336Rgnmyg==
+X-Gm-Message-State: AOJu0YxS032zTEzcTnee7Di8hZP7hfAY4h3gagpw5rabAQRI2+zcpCf7
+	h82ln5DrwxBzeO8bsLZLsSCJTX8w+sZQXIgYOzyzKNNzSC7OQrsL
+X-Google-Smtp-Source: AGHT+IE8o+1r68USlRRObYRtI5TudUiQHWTg1gXqG5SSOD67c8BUFUq+LpehdJeJzxBj605tSHyDUg==
+X-Received: by 2002:a17:90a:e00e:b0:2bd:d42a:fef7 with SMTP id 98e67ed59e1d1-2bf5f74e008mr10542755a91.35.1716903558546;
+        Tue, 28 May 2024 06:39:18 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c760a21sm80123075ad.4.2024.05.28.06.37.59
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2bfb0d2e35fsm4635348a91.15.2024.05.28.06.39.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 May 2024 06:38:00 -0700 (PDT)
+        Tue, 28 May 2024 06:39:18 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fed00be4-2974-40cb-9d87-6c7c69cc1b98@roeck-us.net>
-Date: Tue, 28 May 2024 06:37:58 -0700
+Message-ID: <729e0b91-b7f3-4adc-8621-29a4b14bea1e@roeck-us.net>
+Date: Tue, 28 May 2024 06:39:16 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -78,13 +78,14 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: lenovo_se10_wdt: add HAS_IOPORT dependency
-To: Arnd Bergmann <arnd@kernel.org>, Wim Van Sebroeck
- <wim@linux-watchdog.org>, Mark Pearson <mpearson-lenovo@squebb.ca>,
- David Ober <dober@lenovo.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Hans de Goede <hdegoede@redhat.com>,
- linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240528120759.3491774-1-arnd@kernel.org>
+Subject: Re: [PATCH v2] dt-bindings: watchdog: img,pdc-wdt: Convert to
+ dtschema
+To: Shresth Prasad <shresthprasad7@gmail.com>, wim@linux-watchdog.org,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+ javier.carrasco.cruz@gmail.com, Shresth Prasad <shrestprasad7@gmail.com>
+References: <20240527195811.7897-2-shresthprasad7@gmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -130,51 +131,16 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240528120759.3491774-1-arnd@kernel.org>
+In-Reply-To: <20240527195811.7897-2-shresthprasad7@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/28/24 05:07, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 5/27/24 12:58, Shresth Prasad wrote:
+> Convert txt bindings of ImgTec's PDC watchdog timer to dtschema to allow
+> for validation.
 > 
-> Once the inb()/outb() helpers become conditional, the newly added driver
-> fails to link on targets without CONFIG_HAS_IOPORT:
-> 
-> In file included from arch/arm64/include/asm/io.h:299,
->                   from include/linux/io.h:14,
->                   from drivers/watchdog/lenovo_se10_wdt.c:8:
-> drivers/watchdog/lenovo_se10_wdt.c: In function 'set_bram':
-> include/asm-generic/io.h:596:15: error: call to '_outb' declared with attribute error: outb() requires CONFIG_HAS_IOPORT
->    596 | #define _outb _outb
-> include/asm-generic/io.h:655:14: note: in expansion of macro '_outb'
->    655 | #define outb _outb
->        |              ^~~~~
-> drivers/watchdog/lenovo_se10_wdt.c:67:9: note: in expansion of macro 'outb'
->     67 |         outb(offset, bram_base);
->        |         ^~~~
-> 
-> Add the same dependency we added to the other such drivers.
-> 
-> Fixes: 1f6602c8ed1e ("watchdog: lenovo_se10_wdt: Watchdog driver for Lenovo SE10 platform")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Shresth Prasad <shrestprasad7@gmail.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->   drivers/watchdog/Kconfig | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 5f91921afc79..24ea3b6f95fe 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -257,6 +257,7 @@ config GPIO_WATCHDOG_ARCH_INITCALL
->   config LENOVO_SE10_WDT
->   	tristate "Lenovo SE10 Watchdog"
->   	depends on (X86 && DMI) || COMPILE_TEST
-> +	depends on HAS_IOPORT
->   	select WATCHDOG_CORE
->   	help
->   	  If you say yes here you get support for the watchdog
 
 
