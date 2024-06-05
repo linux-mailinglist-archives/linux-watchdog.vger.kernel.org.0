@@ -1,125 +1,113 @@
-Return-Path: <linux-watchdog+bounces-1103-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1104-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D92508FD5F6
-	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Jun 2024 20:45:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 765EA8FD636
+	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Jun 2024 21:06:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 767DE282B82
-	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Jun 2024 18:45:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23829281F30
+	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Jun 2024 19:06:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21B23DF78;
-	Wed,  5 Jun 2024 18:45:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 014AA13B2A0;
+	Wed,  5 Jun 2024 19:06:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QJ/7EgQq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hUTu3Zy5"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 824DED512
-	for <linux-watchdog@vger.kernel.org>; Wed,  5 Jun 2024 18:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6379945030;
+	Wed,  5 Jun 2024 19:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717613151; cv=none; b=g+NGSt+laneUklXTC6HN3lfztEmqU6HI88WCICzHywkcKnurzDysGmBxQjQaVn7927/U5piS3yg6IqDiAQWN/wGliLVxydA+LKe4RKgafDOTctNz3Nf6+a2cqQfrh1+8+U4cnYw3B4KrdsPsstXKXk+5eMWMjQZAKiXG0la9ZEU=
+	t=1717614377; cv=none; b=QbQu18V8qiua+aOhcHhX/ilCAKrhrMuxXr33h8lf6/pCYIu4tmBjZB1JpSwkio3hJGaEbj4IOy8d6ADNV6AmMkyvH8yICjLNVE7sjnNHccVXl4MzGCvdzVIwzFqoX3Md1XeinRghHzZDAaTSaASlR1OvE0u9zi5cjrN15ZQe734=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717613151; c=relaxed/simple;
-	bh=KO3YJpszn4i2dYWjd6GDXV+JNvlKtW6b8xd+9T4kcl0=;
+	s=arc-20240116; t=1717614377; c=relaxed/simple;
+	bh=qq+M2c9YegqKnpKKBqVK3MQB5Dp/Y/BO95wVLDILlOU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MnFNPXepah/lfmZ+Jrh5YbmeV+3dcl3cPq+BdvzkrZhifLpLNi0/hiYupmtKchoCHCmN7791SPvGlx+oHuqUanXZKHhn0CRWx+VFdA5gXMCbmsHXNjSMjkazPdvaKDRdVQ1nXLUJPfHzrJmV24q9sKXdn45IgQFZBcZuhj2FzKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QJ/7EgQq; arc=none smtp.client-ip=209.85.218.45
+	 To:Cc:Content-Type; b=LkyHTolEQPRoqoCmVTBuKym4wSH+iXomCtiyJwCW2uUuyY8vwgskFDWyeMhNIaC0iG39X9HY82/72cpf4vZqN6QTUCEWOpUbrfBkuTcqzzjvC43d1E3WDKsQNjpawfzdKhuGq2UI8klU10k5jE3Rm5+lo+4weFLo0tyR2eHZm0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hUTu3Zy5; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a68c8b90c85so19612166b.2
-        for <linux-watchdog@vger.kernel.org>; Wed, 05 Jun 2024 11:45:49 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-57a526c6a2cso165894a12.2;
+        Wed, 05 Jun 2024 12:06:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717613148; x=1718217948; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717614375; x=1718219175; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KO3YJpszn4i2dYWjd6GDXV+JNvlKtW6b8xd+9T4kcl0=;
-        b=QJ/7EgQqt4FkNUlv0wUan8yd01nQIUA0P13BZZS0YU3f+H230BkbxnqN6pFCFGMgiO
-         tzdO2tyn5rvGUHvf0NXCxxzgV1faT3sZ0tBzv7zahJCrKzmMA1c1MF+V8w8fDthRF8Tt
-         Mode5+lf2ZpXtBJk76K7NaYwXluwaqeh2bHjx0aMDk5JEGo/Y9CEeFZtnNZsDtloU+IA
-         abJOMcUOhJ0J6LWGXVkgNM6pCn8OivayZVLYVJIHCnTNHVt03ZSVeMk5VqT03Vs/0Ul3
-         U8rnn6q61LHMOG2LSDRiueKQhBdIDRQzDpDcy2jfN/zt79fGeDEBiAOd/3fx+lzKy2GS
-         Q9KQ==
+        bh=qq+M2c9YegqKnpKKBqVK3MQB5Dp/Y/BO95wVLDILlOU=;
+        b=hUTu3Zy5LfZ9RnyTpy3s5nvS6uuvCF+tIx+bYsfJpV31BzgcOL3/kQXOuFAebIl2om
+         voBfGC8M5FVFOjacoKZhBCwzLkpiAmJsEyTGEHRCYqMOYypsJhYzKvs/F4L6EFOjadyW
+         c6LcrYruqRtlKzry0BdZTxeW8oC2iyfreVvCXUw+XONFhTLnE3cJ2EmzZ8GEBk6z+4Bq
+         5uYSnnNMdXDaDXl0N0zmI1IG6MTRpMtXgALd8KJcT4fsjRGGZQdgafBxQm6rBcQND6kN
+         mhqbo20NBMdUUSj2s5DFK45XQw4pCXF3xRk3QU1WJQ6UmtSHa1a7tV6PQIi6dnoat0zK
+         Y9QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717613148; x=1718217948;
+        d=1e100.net; s=20230601; t=1717614375; x=1718219175;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KO3YJpszn4i2dYWjd6GDXV+JNvlKtW6b8xd+9T4kcl0=;
-        b=m7NkmbcS/VUMZtxDAq3LE0cJc2NKy8UeAC4bjgDtaG4+yWobJ7xl91a0AVDR5gz8zW
-         iAcWJV42wXF34zuwIZrwbJX6tGnf0PETgwZd9bi+u171oLBbQFrrV13sDg0nLhRJfL3n
-         xlEJ11ttKxcIrRKk/SmhVgGCa/BAK2TICwIwjr4c3CFHAF2sQ9YxgisNNFRXJJmq2lHq
-         t5zuSjUx8JqHD20+wyuHvKV6lGS/+SCFSLZOELmDLsaIeIHyNwwr3Lk2ElBOTVfXR9oz
-         H8AbsduZGvrCMqKcMSvDkgQ6IF6KAuiQSoqvrtT2bH8GodfuzuGueyTSCkQExqX/ennD
-         PFMA==
-X-Forwarded-Encrypted: i=1; AJvYcCXkvngyFeEV0JLcX6A+64zet02FfyjVmdrhXVN+2Y/vt5w+Pi6H1Zb6QAqyk2pfLZ4mhkTBZFkeu4ixOlLNPRNZrTqXUlIKU6VdehresB8=
-X-Gm-Message-State: AOJu0YxWHcatzFehGBPvDCWZw3VHjJfTCTq/0xgbelocTmstADzDFsgf
-	ta8g0H0waua5BqveZysvt+ZN9YbdFFZ/4rJEl5QuptZsj/9LQwAjzE7aTdZIGztNptYrKBVNYgN
-	Cg42VGlFJo3lPYJ23ydywJDhM710=
-X-Google-Smtp-Source: AGHT+IHMAqLqsfwgU4jp0MKB/YVD1Gmi/UuOwjhc3pR/zh3OZZjcWDqxUdG7mpFATGq7swY87VEpnHuv+bckNYFhb/Q=
-X-Received: by 2002:a17:906:ad9:b0:a68:b73d:30d0 with SMTP id
- a640c23a62f3a-a699f363821mr271306166b.6.1717613147772; Wed, 05 Jun 2024
- 11:45:47 -0700 (PDT)
+        bh=qq+M2c9YegqKnpKKBqVK3MQB5Dp/Y/BO95wVLDILlOU=;
+        b=ByrRE66cNCSegrBi7cX9JJapxhQV/nTWDvucGxfnyZ3oR7xQ3L1WHVMHS/J1oGwLJa
+         tKvdMmQqHI3WJSya4w2G0udtwnjknT+UzpJE8+o2GPL3TGuknzye6V33DkZ/TndwvstM
+         kuHP3PjuG3ke6W2tXSN+/9vWYcDXTIsOlWLweNTEmt8rJPU6Uzg/dfqYvBlu8rR+1e7T
+         HoXeCPKpze3qQonpwtGslFMXmgegYiRM45qB+Oek4HeBn6flGCy67yvpqxrkCWwoIFEn
+         GRGhfR4SY3vLPL+XT2Z+nP0KHLCyEUulLwfpeJl4GE4YSivrdPOhXa+bLNND23EMtlcD
+         nSbw==
+X-Forwarded-Encrypted: i=1; AJvYcCXD5Trbok52z8HoGZMavmpNff8BslFm5kBoYw8hVSyliQOkKYq2cllt2Ncle2HOAZ+bYwIlJDMKW/DeZmo7JwUpimV8mcC9uaOFIPrwuEgvIfypexIBUbsSjbkmF4jyG+nhtX29S5yOcyBS2qd5BYabJc9k2HA/4R74suk5ADBfyIFtlV/4RerYCg9RFWBZOft57sTB2u23jGXJpW2x3lddaNJz3U1f02wsUX7qGTJNHObocjEvCDpeIiJqKVJvPg==
+X-Gm-Message-State: AOJu0YwvZni4S/X+J8xsZkHEVBX51WnY6CZzgf9IET3fzS4ETCXY9ifw
+	VK/ITy/2RwsJCu/1VQE73v/XjbQ+EkpG40wxiR+5IqVij1aZ4DlHpqo2aYBTIkVGl5kMfgWwjqT
+	XQnlgQNdKFPdDfxQOlyDeOAeP06M=
+X-Google-Smtp-Source: AGHT+IF23/xRdP7P8N5y6TuoTb7yn/vvqWaiOXqdpB/ZldVT0IhlV6YfTjVPOUivLO9r24Qx7V84qrwKXUOA6fxB//M=
+X-Received: by 2002:a17:906:4816:b0:a58:e3d9:e2d6 with SMTP id
+ a640c23a62f3a-a69a024cf61mr221021566b.56.1717614374459; Wed, 05 Jun 2024
+ 12:06:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240605161851.13911-1-kabel@kernel.org> <20240605161851.13911-6-kabel@kernel.org>
-In-Reply-To: <20240605161851.13911-6-kabel@kernel.org>
+References: <20240605161851.13911-1-kabel@kernel.org>
+In-Reply-To: <20240605161851.13911-1-kabel@kernel.org>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 5 Jun 2024 21:45:11 +0300
-Message-ID: <CAHp75Vf6U1dSKoGkgQsk_u55H=zjhce=VBnnn07pqu+VnVBR+g@mail.gmail.com>
-Subject: Re: [PATCH v11 5/8] platform: cznic: turris-omnia-mcu: Add support
- for MCU watchdog
+Date: Wed, 5 Jun 2024 22:05:37 +0300
+Message-ID: <CAHp75VdGQUBnbZ2G4tLYBBCD+PeiY4G6HZ6U9ammSMg72TNX7Q@mail.gmail.com>
+Subject: Re: [PATCH v11 0/8] Turris Omnia MCU driver
 To: =?UTF-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
 Cc: Gregory CLEMENT <gregory.clement@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, soc@kernel.org, 
 	arm@kernel.org, Andy Shevchenko <andy@kernel.org>, Hans de Goede <hdegoede@redhat.com>, 
 	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Guenter Roeck <linux@roeck-us.net>, 
-	Linus Walleij <linus.walleij@linaro.org>, linux-watchdog@vger.kernel.org, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>
+	Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, devicetree@vger.kernel.org, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, linux-crypto@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, Olivia Mackall <olivia@selenic.com>, 
+	Rob Herring <robh+dt@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Andrew Lunn <andrew@lunn.ch>, Conor Dooley <conor+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <uwe@kleine-koenig.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Wed, Jun 5, 2024 at 7:19=E2=80=AFPM Marek Beh=C3=BAn <kabel@kernel.org> =
 wrote:
 >
-> Add support for the watchdog mechanism provided by the MCU.
+> Hello Andy, Hans, Ilpo, Arnd, Gregory, and others,
+>
+> this is v11 of the series adding Turris Omnia MCU driver.
 
-...
-
-+ bitops.h
-+ dev_printk.h
-
-> +#include <linux/i2c.h>
-> +#include <linux/moduleparam.h>
-
-> +#include <linux/turris-omnia-mcu-interface.h>
-
-As per other patches.
-
-> +#include <linux/types.h>
-> +#include <linux/units.h>
-> +#include <linux/watchdog.h>
-> +
-> +#include "turris-omnia-mcu.h"
-
-struct device;
-
-Alternatively instead of dev_printk.h + struct device forward
-declaration --> device.h.
-
-...
-
-With the above being addressed, LGTM, FWIW,
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
+Thank you!
+There are a few small issues here and there, but overall LGTM. The
+only one main question is what to do with gpiochip_get_desc(). I Cc'ed
+Bart for this.
 
 --=20
 With Best Regards,
