@@ -1,152 +1,180 @@
-Return-Path: <linux-watchdog+bounces-1111-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1112-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09E2D8FFF60
-	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Jun 2024 11:26:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A21F900BB4
+	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Jun 2024 20:05:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 861ED1F22C08
-	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Jun 2024 09:26:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C718283D24
+	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Jun 2024 18:05:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DBB115B552;
-	Fri,  7 Jun 2024 09:25:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9066197A97;
+	Fri,  7 Jun 2024 18:05:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="deU+NLr/"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="kbkb/yRk"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6BD215B971;
-	Fri,  7 Jun 2024 09:25:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A6417582;
+	Fri,  7 Jun 2024 18:05:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717752347; cv=none; b=a0+1ECTj1U9K+iQ3fpid0mXRSZxbOoszzGPT4aSpTz1Gwu1lyzkw5nr0bYMQSB/Ms+wfcyXQNxs4KKMJukcAq1N99kOcTdGe/evgL8Wl3rfSRXCdW0ODv3XyAVq/pcy5zF5bte2d7ZZiAe28DTmbAJzCpnvXpxni0XU9VUZz1wo=
+	t=1717783505; cv=none; b=U5WtIT9IMs62c+0h4MQpblzxQBWZQofiED+Q8CCuuEmqFpmXH7K/Jw5/w9LEyPcOceTepJoE13j44CsCM/XMMv8v/y96TVUbrsmDUjQSw7HVvixKZOfoLS6RjzCFRAe3yFd2gAgyNy0lxAxHtD1NVtbyz4ejvCfzwp3Wyw4PEEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717752347; c=relaxed/simple;
-	bh=jBF5v5BVUZ5p9KI5K2L/2p0DPNYB2/IgznDp8NAAQso=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=USNyWfmSVboWQspH/tmkjQchMEAjaQpBJ0kZZjElD7+A5sfzWUXbZnI+4RQ77MFXIL1prnCpfr7q8YcPAButbbiBCDbgC6y4sf+GXLh88vLgv70GvLXH564ZIOr29e7+4LzxIgZuU9a0eIa5GW5Haa8A5HBWlVCadyjxlQqr658=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=deU+NLr/; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52bc1acb9f0so168410e87.2;
-        Fri, 07 Jun 2024 02:25:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717752344; x=1718357144; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u9ASv3z6aW5Usf95w5T/QMJgunpGdnmwRFnN/fLCNTU=;
-        b=deU+NLr/yjiInjyDb6oaUP80Fk0ls8Y6UVR3hX2PL+fMqSXye86Fl+7QVfUNcGuSgD
-         2Wm7vMMe8MJKiQW5HljJWotfQzK0VyQ62jmlkr3mEkI5EOH8IHXLXJ30YArtGGhBfS8D
-         lOhk5L9TqISv3Uz3S4kY8ON5zO9wq63eB4rEcdpIZ3f2imj32Kr2hR76khWCIGeO7L6K
-         F17OvbNCcgsPgwujiGQk/qLbzTpYovwg4t3/S0MCNYeWhB5V39Jc6o93tsTYPvbFqCR3
-         QBYViquj+KuPqOErQxwMmOJJIVd4estQatSDid9z5WJcSrVQV6C5MVHqG27BrcWktmYS
-         UqCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717752344; x=1718357144;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u9ASv3z6aW5Usf95w5T/QMJgunpGdnmwRFnN/fLCNTU=;
-        b=j0La0XztGCrAEOc0w6Z3Oyx3ROpII85gPavKUhJFs9eWN5D8keacu7dn3k2Z9JZVHn
-         nj2HoO52nUJUMhSpR9Wne/yVNLReLsjRjPQ/my/62zqF0wNGoMnuFAN31pmYSSfz3Tbo
-         d+ugi9jsRqp3iZ95lqqNbA6DflptCJ6meXSVXImhcZLzJI2glVJH1XncScT0WR1SljLv
-         O4s1nx6bY8eW/PI/+deIPtM8loewMYOAmusVE8R4KAPxmaWCm1D8yEvIHU9/yUzbLCxb
-         qs6EpJ2lHKhbz8lG4ERPnhM1a96RwMa6TEUdBXtZI5kd+trNjVwl/HgYMmIL8om5AfFJ
-         VtVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVWBUQi/xgmfOiWhZvCX2MZyXRI0nW1si9h9nJ794NcikCm5drosoH43H+Mcu1Ufdx0b4nMorLXZUfDiTRERjquA6YEGNpEOfTVg0tr/eXdIJj4TtaSs6WwsWKEi1QYpe8lbmRQs70GQDJBsdkwJHJugmnOOQf+Xq2N97rcBfqcC3MUHu0Bb/Nn
-X-Gm-Message-State: AOJu0YzwG+QSOt0j0b+uoYO26+8573EvSTIRx4D1NBvpRc3CWz9+HbeU
-	IBUFfs7iBtDQsYi81bfAMKcREBakS5FtdJPkUEPvHMpH3w9I5euw
-X-Google-Smtp-Source: AGHT+IHKQ6Tg3i4tZtYYKEcILbfowk8mCAyKD5fX55Ig/BQHMi2kBGlPe3r2yp8QXxeaMn+lmkOD2Q==
-X-Received: by 2002:a05:6512:3f03:b0:526:f4bc:beeb with SMTP id 2adb3069b0e04-52bb9f84612mr1662158e87.32.1717752343388;
-        Fri, 07 Jun 2024 02:25:43 -0700 (PDT)
-Received: from [172.16.183.82] ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52bb433d081sm464074e87.278.2024.06.07.02.25.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jun 2024 02:25:42 -0700 (PDT)
-Message-ID: <b4fe1689-4d29-475c-89b9-4bb5c4c1b2aa@gmail.com>
-Date: Fri, 7 Jun 2024 12:25:41 +0300
+	s=arc-20240116; t=1717783505; c=relaxed/simple;
+	bh=QERQ/4hLMbGS0Y3kWZiJAbgV8efCp/OW+am7ixwBny8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=E3QkRW5m5vLB2zImjjkJSBaBbbIl2LZcWvhLrw782Fo3rR0NgWDQXB5rgatn2d46/NqsgbG/Y/V4UcfzKFC2O2unQVAFzWovFlPSSXYEemX7gSi8Phok6SNfWGO6DSq6o3AgQYD2bXhGB4B87FesVoQVX6sIF88MjKXjtZvUqrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=kbkb/yRk; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 457HZXWp001309;
+	Fri, 7 Jun 2024 18:04:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=898bf9MlOZb7l0W+LIWVdf
+	B4dr99OYG2aJIrRxbb+BY=; b=kbkb/yRkX5yQE+ztpdxvw/LWwVrEuNkUea3szU
+	jwWXLC1At3vgEsOvPt0ZxnpjXJilqXVQ2DgPl0a910MBBb/2p+3HHUa4IfFNc+Vv
+	3zHZZTkRtHHYCYfFearlQEHzxqdN59onxn0DkFSWJfBfeixDlhAPIyqS9K8q5xJk
+	4FfWZd/mGT2QYjMIiVgiWZcd3L/QdWCRPq8DU07ENzxjUMcsBwv9PbdzwgGtusDw
+	ce9kQl9x6tQxgxDqXcE6jAz8WGvA4Xn4P66KmkVZiQauUU/lAVzKa4YwxF72qUGG
+	HU920TJBEL+3zw895I7zbpdVXqfnimWh8+JMWoR2TAaRpCSA==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3yjq2tpp5t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Jun 2024 18:04:43 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 457I4g4j003257
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 7 Jun 2024 18:04:42 GMT
+Received: from [169.254.0.1] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 7 Jun 2024
+ 11:04:41 -0700
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+Date: Fri, 7 Jun 2024 11:04:40 -0700
+Subject: [PATCH] watchdog: add missing MODULE_DESCRIPTION() macros
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 07/10] irqdomain: Allow giving name suffix for domain
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
- Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <cover.1717486682.git.mazziesaccount@gmail.com>
- <bbd219c95f4fe88752aee5f21232480fe9b949fb.1717486682.git.mazziesaccount@gmail.com>
- <87plst28yk.ffs@tglx> <045828bd-4aeb-4d8d-b152-44a816a07221@gmail.com>
- <20240607101356.3ede2a17@bootlin.com>
- <b2b31803-44ff-462b-bc1a-6b1ffa93bdf0@gmail.com>
- <20240607112325.27e23671@bootlin.com>
-Content-Language: en-US, en-GB
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20240607112325.27e23671@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-ID: <20240607-md-drivers-watchdog-v1-1-485c1c58301f@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIALdLY2YC/x3MwQrCMAyA4VcZORvoqlj0VcRD2sY14DpJ5hyMv
+ bvV43f4/w2MVdjg2m2gvIjJVBv6QwepUB0YJTeDd/7kzi7gmDGrLKyGH5pTydOA4dIfPYWUXHT
+ QypfyQ9b/9XZvjmSMUamm8ns9pb5XHMlmVtj3LweXa4+EAAAA
+To: Johannes Thumshirn <jth@kernel.org>,
+        Wim Van Sebroeck
+	<wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Gerd Haeussler
+	<gerd.haeussler.ext@siemens.com>,
+        Xing Tong Wu <xingtong.wu@siemens.com>,
+        Tobias Schaffner <tobias.schaffner@siemens.com>
+CC: <linux-watchdog@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>
+X-Mailer: b4 0.13.0
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: sgguRbeA-_y-jEwe_Y83JBgt0iAj1LY-
+X-Proofpoint-ORIG-GUID: sgguRbeA-_y-jEwe_Y83JBgt0iAj1LY-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-07_10,2024-06-06_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 impostorscore=0 clxscore=1011 spamscore=0 malwarescore=0
+ mlxlogscore=892 mlxscore=0 adultscore=0 lowpriorityscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405170001 definitions=main-2406070133
 
-On 6/7/24 12:23, Herve Codina wrote:
-> On Fri, 7 Jun 2024 11:49:07 +0300
-> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> 
->> On 6/7/24 11:13, Herve Codina wrote:
->>> Hi Matti,
->>>
->>> On Fri, 7 Jun 2024 09:38:31 +0300
->>> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
->>>
->>> ...
->>>    
->>>> Herve, do you have any idea when you plan to do further sketching on
->>>> this? Do you want me to try seeing if I can add the struct
->>>> irq_domain_info and maybe use that in the __irq_domain_add() to get the
->>>> name-suffix added? I might be able to send one version out during next
->>>> week - but then I plan to be offline for couple of weeks ... so it may
->>>> be I am not much of a help here.
->>>>   
->>>
->>> On my side, I plan to work on it next week too.
->>> If you are off a couple of weeks after, I think I can start and move forward
->>> on this topic.
->>
->> Thanks for the prompt reply and thanks for working with this :) I'll
->> leave it to you for now then, as I don't think it makes much sense to
->> intentionally do conflicting changes. I'll see what you've been up to
->> when I return to the keyboard :) I'd appreciated if you added me to CC
->> when sending the irqdomain refactoring patches (but I can dig them up if
->> you don't).
-> 
-> Sure, you will CC you.
+make allmodconfig && make W=1 C=1 reports:
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/watchdog/omap_wdt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/watchdog/twl4030_wdt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/watchdog/ts4800_wdt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/watchdog/simatic-ipc-wdt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/watchdog/menz69_wdt.o
 
-Thanks!
+Add the missing invocations of the MODULE_DESCRIPTION() macro.
 
-> Also, I am not sure that I will perfectly take into account your use-case
-> but it should not be a big deal to add it on top of my commits afterwards.
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+---
+ drivers/watchdog/menz69_wdt.c      | 1 +
+ drivers/watchdog/omap_wdt.c        | 1 +
+ drivers/watchdog/simatic-ipc-wdt.c | 1 +
+ drivers/watchdog/ts4800_wdt.c      | 1 +
+ drivers/watchdog/twl4030_wdt.c     | 1 +
+ 5 files changed, 5 insertions(+)
 
-No problem! That's just fine :)
+diff --git a/drivers/watchdog/menz69_wdt.c b/drivers/watchdog/menz69_wdt.c
+index c7de30270043..0508a65acfa6 100644
+--- a/drivers/watchdog/menz69_wdt.c
++++ b/drivers/watchdog/menz69_wdt.c
+@@ -161,6 +161,7 @@ static struct mcb_driver men_z069_driver = {
+ module_mcb_driver(men_z069_driver);
+ 
+ MODULE_AUTHOR("Johannes Thumshirn <jth@kernel.org>");
++MODULE_DESCRIPTION("Watchdog driver for the MEN z069 IP-Core");
+ MODULE_LICENSE("GPL v2");
+ MODULE_ALIAS("mcb:16z069");
+ MODULE_IMPORT_NS(MCB);
+diff --git a/drivers/watchdog/omap_wdt.c b/drivers/watchdog/omap_wdt.c
+index a7a12f2fe9de..b6e0236509bb 100644
+--- a/drivers/watchdog/omap_wdt.c
++++ b/drivers/watchdog/omap_wdt.c
+@@ -370,5 +370,6 @@ static struct platform_driver omap_wdt_driver = {
+ module_platform_driver(omap_wdt_driver);
+ 
+ MODULE_AUTHOR("George G. Davis");
++MODULE_DESCRIPTION("Driver for the TI OMAP 16xx/24xx/34xx 32KHz (non-secure) watchdog");
+ MODULE_LICENSE("GPL");
+ MODULE_ALIAS("platform:omap_wdt");
+diff --git a/drivers/watchdog/simatic-ipc-wdt.c b/drivers/watchdog/simatic-ipc-wdt.c
+index cdc1a2e15180..1e91f0a560ff 100644
+--- a/drivers/watchdog/simatic-ipc-wdt.c
++++ b/drivers/watchdog/simatic-ipc-wdt.c
+@@ -227,6 +227,7 @@ static struct platform_driver simatic_ipc_wdt_driver = {
+ 
+ module_platform_driver(simatic_ipc_wdt_driver);
+ 
++MODULE_DESCRIPTION("Siemens SIMATIC IPC driver for Watchdogs");
+ MODULE_LICENSE("GPL v2");
+ MODULE_ALIAS("platform:" KBUILD_MODNAME);
+ MODULE_AUTHOR("Gerd Haeussler <gerd.haeussler.ext@siemens.com>");
+diff --git a/drivers/watchdog/ts4800_wdt.c b/drivers/watchdog/ts4800_wdt.c
+index 0099403f4992..24b1ad52102e 100644
+--- a/drivers/watchdog/ts4800_wdt.c
++++ b/drivers/watchdog/ts4800_wdt.c
+@@ -200,5 +200,6 @@ static struct platform_driver ts4800_wdt_driver = {
+ module_platform_driver(ts4800_wdt_driver);
+ 
+ MODULE_AUTHOR("Damien Riegel <damien.riegel@savoirfairelinux.com>");
++MODULE_DESCRIPTION("Watchdog driver for TS-4800 based boards");
+ MODULE_LICENSE("GPL v2");
+ MODULE_ALIAS("platform:ts4800_wdt");
+diff --git a/drivers/watchdog/twl4030_wdt.c b/drivers/watchdog/twl4030_wdt.c
+index 09d17e20f4a7..8c80d04811e4 100644
+--- a/drivers/watchdog/twl4030_wdt.c
++++ b/drivers/watchdog/twl4030_wdt.c
+@@ -118,6 +118,7 @@ static struct platform_driver twl4030_wdt_driver = {
+ module_platform_driver(twl4030_wdt_driver);
+ 
+ MODULE_AUTHOR("Nokia Corporation");
++MODULE_DESCRIPTION("TWL4030 Watchdog");
+ MODULE_LICENSE("GPL");
+ MODULE_ALIAS("platform:twl4030_wdt");
+ 
 
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+---
+base-commit: 19ca0d8a433ff37018f9429f7e7739e9f3d3d2b4
+change-id: 20240607-md-drivers-watchdog-79132a7cc0b0
 
 
