@@ -1,76 +1,74 @@
-Return-Path: <linux-watchdog+bounces-1120-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1121-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7A6B907FDF
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Jun 2024 01:46:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 963349083BC
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Jun 2024 08:39:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E0611F22201
-	for <lists+linux-watchdog@lfdr.de>; Thu, 13 Jun 2024 23:46:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9A9EB232C3
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Jun 2024 06:39:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6F65152DE0;
-	Thu, 13 Jun 2024 23:46:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE1E2148305;
+	Fri, 14 Jun 2024 06:39:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FHiE1+GI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QSc7iHZA"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549A013B596;
-	Thu, 13 Jun 2024 23:46:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1230A145A05;
+	Fri, 14 Jun 2024 06:39:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718322368; cv=none; b=eYTXZ/xRr0DO5yYEZlRUhld4xknimIstxKskkrfkHJdrsipYiA9WDP8BsW2m29PwrW0JJ9q0MEpk/H4EYhzQBCix1lEUhoCtDy5und3FJL4eqHEMnmFJC/FY4SkewOy1R0uI+PzTbrJpQI11or1xi6C2i28evK2eiPZvCk+8O1s=
+	t=1718347146; cv=none; b=rB/vEO+UTVaSqq+aGcq8FZhfWh8GhWapTZHVkgTpb8OMSOmTx4KnNdlXEB9zu844sSa8rw++0yAkV0QxPwBUZ2QxUuUQNd+kcTbmCfruMp9/og9XInVFHDjiHr91A02+JjXv3u3ra1HyHeE2mKCYdtnY02/qp1Fgk2tdNnBuLMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718322368; c=relaxed/simple;
-	bh=PStYmvdM/XSUUo2Msyg1N0cpTanC5gs1isVxkFD9t3k=;
+	s=arc-20240116; t=1718347146; c=relaxed/simple;
+	bh=KHpIL1DkdfxYt1BGetjKnKSYlKwSHTX3tLAPYhqZMss=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NzmDE7qsMWHu+DDvaF/g3rFPU5rva/8wxh0OoT8WP2TwQA+R4QE3PTamMjqMIl3qJ2giE7jDPlkbjpGN7LtSlRe6a794ypvTaDYdAplvYNd0oM0oC0Q8fC4V14SF+jLoMBCCkctPmnTllvw9AoAhmQEk5WWq5todOJxZuQ0x/1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FHiE1+GI; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	 In-Reply-To:Content-Type; b=SkxGKUwoLdDRw90mZ8Gv73lRdfVastPYQY+9du151pzrbwUb3Utq/81+pFhVngQvfHV3D2LBA5yzrLU4WFijYlKFjbBHtCS1sL8f0uCAv/cw8wD8+SeJAz4qR1Tpu76yidZvDJP9QXRhlRiJYkvrqfMW11o+GIO2IyrsB9yWato=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QSc7iHZA; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7041e39a5beso1275420b3a.3;
-        Thu, 13 Jun 2024 16:46:07 -0700 (PDT)
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-52bbdb15dd5so2175827e87.3;
+        Thu, 13 Jun 2024 23:39:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718322366; x=1718927166; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=qkDkDIDkN3xTeib040OIbK3jTwp5fGnKqHN2gH6EvT0=;
-        b=FHiE1+GITWjVvNGX61yxXw62IUGj2uha0tGvO/lUM2VoUkl3B2p/YwrvkhiSwYZtPP
-         kp6Iu2YiI+268+EVw9kBUuSA9lCDNqS3gsgg+MuQUIMplo5HlrYSNPs+m+zSg7Vfy/3B
-         b9HJxS6lKQU6qCUmntEN4ezNudbMG64Iu8c7jd+a1+YI7H+mCUvQk6G5uhrKq5n3htuV
-         bs0GOcWKhGAEXauHmdVblcbkNvC4NUVJk2YNM5S2KL7xV2/RN76NlGwTEnlSdLtEstE0
-         RkY/xsbHQiLpdQDNpXPZpGFccf1vzdSosgtRh29lE9Z0lQll+gVDFxY9tBpCPlBVkyuR
-         mN2w==
+        d=gmail.com; s=20230601; t=1718347143; x=1718951943; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dZLQcxW42WTQ04EM2482xmMFoQSlTuqYFS39Z6tbXwU=;
+        b=QSc7iHZAgnd9FmvJunlnK5HxuwKgBnbgd4A2rLeAg507uZA457mdcOdqDZTVSzMpt8
+         qrBhzBZ8ve9BkmxSmattocAb9HCVNJtspWBINLQl7CV1JckRW6/DcAFbHwveW97QVN7Q
+         IamruM1LqTpbj6Z7NvLwdYUD3hUQZoCeVHsI4nHxVozmemt+Il/9rk7NHpLCzE0hZSyg
+         2OVvXwt29T4tb14DrhrY7nOJEN+ZVoLRsdhuwZOvJ6yQvUuim2bAXyd8MgD6Cfpi+/R+
+         ZOswCwesp1rgDwCVibfe2xnTTd4DnMNrUCoF3NllmbIvCKF3d23FlNy17OWB3I519RzH
+         1aaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718322366; x=1718927166;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qkDkDIDkN3xTeib040OIbK3jTwp5fGnKqHN2gH6EvT0=;
-        b=M/tCUJBzLMSrIEThPQd8/lmYZGsfvODNbDbuRRy/tXokiFiQMudK3Pr0S7HUahxRzA
-         rxPKFTkhJVCpnpY2XZGlrP2rachbRXMHle7ZI1DVJfr+KxUNaMpLzigqn3JIqhTWKIMR
-         T3uIOBp6kfO5SOjXqRM7MTMGP17Y1MacgXa2dlqKm3+9WHH2T0rYtXyBI7zzrhHGkZes
-         lp5h6Q4rtN9EImVFBIkxrp6Ok4fxLioU3lNddQ/oaHJz2HB5VHGQO80lyRe/Ycj8KEtR
-         q2o/Wx+miVTHE3YjBfY5IuFImgVwXVXNAg/S+FERb4cL2rHmcbcLPAtjao+zJwG2v1U7
-         cjlw==
-X-Forwarded-Encrypted: i=1; AJvYcCVHW/bQqnWe7OhMADYTfaY7yU3SJAeVEGSBgEfEOTakk+h9QlMeJ9jm4EVCxv+Ebrn39RRIFE/35XWoL5T09mPoHRJbfbqAyaUcmkOk
-X-Gm-Message-State: AOJu0YxHiiXltVvqBaeTlx8aFxRySCpm+FBpos2v9CZCLEOK/x5EXp4c
-	68d1YBOjuJxiKeSp4YbByu2G0dc12GGbLEY1kOh3DXcrsdyua5T4VyDjiw==
-X-Google-Smtp-Source: AGHT+IGDaoG2VmQJuDxq3LFEb+QfNWY43aeG0AzkV7al3cSatJsw7ZC94T07bATWjP1eq29+wEVb8g==
-X-Received: by 2002:a05:6a20:3caa:b0:1b2:b2b:5698 with SMTP id adf61e73a8af0-1bae8243b5fmr1419140637.33.1718322366421;
-        Thu, 13 Jun 2024 16:46:06 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c4a76ab127sm4691525a91.50.2024.06.13.16.46.05
+        d=1e100.net; s=20230601; t=1718347143; x=1718951943;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dZLQcxW42WTQ04EM2482xmMFoQSlTuqYFS39Z6tbXwU=;
+        b=HmgXm2nffZUeL2SlDuVSMbsmOM0nbRx4sEFbd+i8DwIwMcLtC00maulH18hmUl/0v+
+         RGdJVbNR+0EG3rSfOqHrEkA/22PQT7iIOULij0X8qHJKUNFmWzQuwxXIR9hU9j1O/G5I
+         uB/ewzxLwU0/BfdkgbCpviwmtRpstbuOGncVaS5/++nZZAhqsSeegHJULiMrZYcXocyB
+         RsXxrW6b9Yr2pC2NUo/dV3yEuv2+IU/nXyD8htyKyVKYBnM9RIF2XY8iyOtVLNicbf77
+         ZqHrVbE0nQuHpf90ns2yNHJDB/2EisGyCwuFWIZBpQ+DFaNSzkBLpe+JPIdCiRSFCuVg
+         0Y0A==
+X-Forwarded-Encrypted: i=1; AJvYcCXmXuv92srpUKRva7SDxZI3TWJ5N8x8xqeE8OQvM8wenIk53BgLbFx5gU0JkG7OSY47lHOZBxsxJKBk0fXDzPr2vysgk5J8iN9pPgKS+oDJlIpDEKXNZxfUsSV3n42E4kob8fWLRgNYBLBMsSh/4kp/p2JFsXSuJUY5WERJxJH+ZjkrLuB/KD7A
+X-Gm-Message-State: AOJu0YwqRSS7E1qhKq0hOhbv9q4AXJMplwbPPsU0A93bvMLu3RkrQqOM
+	4/6A0M9vTAX7Y0AOhwuUq9cBwEwnV0fvEmva1AftP5HmD8vyxBCx
+X-Google-Smtp-Source: AGHT+IGmrzSTMDejilr8oPKbsiJFCmB+sJBnlGtfxwJcqCEmHpKyyZvtwPf9bi/j7AuLPW02Tcjubg==
+X-Received: by 2002:a05:6512:794:b0:52c:8271:5252 with SMTP id 2adb3069b0e04-52ca6e65155mr1067973e87.16.1718347142810;
+        Thu, 13 Jun 2024 23:39:02 -0700 (PDT)
+Received: from ?IPV6:2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd? ([2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ca287a883sm426351e87.191.2024.06.13.23.39.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jun 2024 16:46:05 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8ec87c4a-40c4-4edd-966d-1dc2a0a3574d@roeck-us.net>
-Date: Thu, 13 Jun 2024 16:46:04 -0700
+        Thu, 13 Jun 2024 23:39:02 -0700 (PDT)
+Message-ID: <acc2edb5-ed9b-4ab8-b2a9-e51808a12478@gmail.com>
+Date: Fri, 14 Jun 2024 09:39:00 +0300
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -78,90 +76,114 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: Make watchdog_class const
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240614-class-const-wdt-v1-1-f9a4e2b1ba76@weissschuh.net>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240614-class-const-wdt-v1-1-f9a4e2b1ba76@weissschuh.net>
+Subject: Re: [PATCH v3 03/10] mfd: support ROHM BD96801 PMIC core
+To: Lee Jones <lee@kernel.org>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Thomas Gleixner <tglx@linutronix.de>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-watchdog@vger.kernel.org
+References: <cover.1717486682.git.mazziesaccount@gmail.com>
+ <97cd372d4502597bf051f0ff52f718eab9b186aa.1717486682.git.mazziesaccount@gmail.com>
+ <20240613161508.GM2561462@google.com>
+Content-Language: en-US, en-GB
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20240613161508.GM2561462@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 6/13/24 15:57, Thomas Weißschuh wrote:
-> Now that the driver core allows for struct class to be in read-only
-> memory, mark watchdog_class as const.
+On 6/13/24 19:15, Lee Jones wrote:
+> On Tue, 04 Jun 2024, Matti Vaittinen wrote:
 > 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+>> The ROHM BD96801 PMIC is highly customizable automotive grade PMIC
+>> which integrates regulator and watchdog funtionalities.
+>>
+>> Provide INTB IRQ and register accesses for regulator/watchdog drivers.
+>>
+>> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+>>
+>> ---
+>> Changelog:
+>> v2 =>:
+>> - No changes
+>>
+>> v1 => v2:
+>> - Drop unused enum
+>> - Improve error prints
+>> - improve comments
+>>
+>>   RFCv2 => v1:
+>> - drop ERRB interrupts (for now)
+>> - bd96801: Unlock registers in core driver
+>>
+>> Changelog: RFCv1 => RFCv2
+>> - Work-around the IRQ domain name conflict
+>> - Add watchdog IRQ
+>> - Various styling fixes based on review by Lee
+>> ---
+>>   drivers/mfd/Kconfig              |  13 ++
+>>   drivers/mfd/Makefile             |   1 +
+>>   drivers/mfd/rohm-bd96801.c       | 273 +++++++++++++++++++++++++++++++
+>>   include/linux/mfd/rohm-bd96801.h | 215 ++++++++++++++++++++++++
+>>   include/linux/mfd/rohm-generic.h |   1 +
+>>   5 files changed, 503 insertions(+)
+>>   create mode 100644 drivers/mfd/rohm-bd96801.c
+>>   create mode 100644 include/linux/mfd/rohm-bd96801.h
+> 
+> Pretty nice.  Uses generic interfaces.  Just a couple of nits.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Thanks :)
 
-> ---
->   drivers/watchdog/watchdog_dev.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+I'll try to send the next version of this series Today. I will only 
+include the patches 1-6, which I believe are pretty much good to be 
+merged (but the watchdog has not yet been acked by Guenter so no 
+guarantees), and which should result a working driver for many of the 
+predicted use-cases. Then I plan to be mostly off of my computer for a 
+few weeks. (I may do some very minor fixes.)
+
+The 7-10 will have to wait until the irqdomain name conflict can be 
+reasonably resolved. I plan to return to this when I'm back from my "off 
+time", and when we see what direction the irqdomain work by Herve has 
+evolved :)
+
+...
+
 > 
-> diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_dev.c
-> index e2bd266b1b5b..4190cb800cc4 100644
-> --- a/drivers/watchdog/watchdog_dev.c
-> +++ b/drivers/watchdog/watchdog_dev.c
-> @@ -1004,7 +1004,7 @@ static struct miscdevice watchdog_miscdev = {
->   	.fops		= &watchdog_fops,
->   };
->   
-> -static struct class watchdog_class = {
-> +static const struct class watchdog_class = {
->   	.name =		"watchdog",
->   	.dev_groups =	wdt_groups,
->   };
+>> +	{
+>> +		.name = "bd96801-wdt",
+>> +		.resources = wdg_intb_irqs,
+>> +		.num_resources = ARRAY_SIZE(wdg_intb_irqs),
+>> +	}, {
+>> +		.name = "bd96801-pmic",
 > 
-> ---
-> base-commit: d20f6b3d747c36889b7ce75ee369182af3decb6b
-> change-id: 20240614-class-const-wdt-3649d0adc431
+> I thought this was the PMIC?
 > 
-> Best regards,
+> What is this device?  Regulators?
+> 
+> "bd96801-regulator"?
+
+Yep. Thanks!
+
+> 
+>> +		.resources = regulator_intb_irqs,
+>> +		.num_resources = ARRAY_SIZE(regulator_intb_irqs),
+>> +	},
+>> +};
+
+Yours,
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
 
