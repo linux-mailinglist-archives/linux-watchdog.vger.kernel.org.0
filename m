@@ -1,74 +1,74 @@
-Return-Path: <linux-watchdog+bounces-1121-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1122-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 963349083BC
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Jun 2024 08:39:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 818F490840A
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Jun 2024 08:56:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9A9EB232C3
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Jun 2024 06:39:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3968B216A9
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Jun 2024 06:56:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE1E2148305;
-	Fri, 14 Jun 2024 06:39:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D987F1482FC;
+	Fri, 14 Jun 2024 06:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QSc7iHZA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R7gBNUjA"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1230A145A05;
-	Fri, 14 Jun 2024 06:39:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D80A41474B3;
+	Fri, 14 Jun 2024 06:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718347146; cv=none; b=rB/vEO+UTVaSqq+aGcq8FZhfWh8GhWapTZHVkgTpb8OMSOmTx4KnNdlXEB9zu844sSa8rw++0yAkV0QxPwBUZ2QxUuUQNd+kcTbmCfruMp9/og9XInVFHDjiHr91A02+JjXv3u3ra1HyHeE2mKCYdtnY02/qp1Fgk2tdNnBuLMk=
+	t=1718348173; cv=none; b=cRa4ptOtfAwGpaPmaGV7jA9qCrJ2AKXV/7NZb7/7fMhroJfQssOGLWsnClrr6ZpxMcc2aVXmy1cBxNp+oMMJoyXGpmKw0/fqsV0/dwTSKwDGx5BXm7v+6rFkC4LTeR/gCXV4IUgm6jEUkPTxk63mzMHr9+aD5MkUONnNN+iypig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718347146; c=relaxed/simple;
-	bh=KHpIL1DkdfxYt1BGetjKnKSYlKwSHTX3tLAPYhqZMss=;
+	s=arc-20240116; t=1718348173; c=relaxed/simple;
+	bh=cHzQVR+QoJunZTIXVhTgufjTwPxEpctcpiZI9XSE5Rk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SkxGKUwoLdDRw90mZ8Gv73lRdfVastPYQY+9du151pzrbwUb3Utq/81+pFhVngQvfHV3D2LBA5yzrLU4WFijYlKFjbBHtCS1sL8f0uCAv/cw8wD8+SeJAz4qR1Tpu76yidZvDJP9QXRhlRiJYkvrqfMW11o+GIO2IyrsB9yWato=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QSc7iHZA; arc=none smtp.client-ip=209.85.167.53
+	 In-Reply-To:Content-Type; b=IknSu5scZDdT+xCMc0WUc+aNmejcPVtOCdmS+0cs86ChCQK9n3Oc9h4O464jjFLMaHVDZWvsp6ualyXBCOT/KQr5HiVpRHDtmZgTQ3FjdPBNPB+lQoT7pwUYovXPKiGMy8xEastXV06OBnNOU4+DfYo1UQNN/FczmEoHmmBJveI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R7gBNUjA; arc=none smtp.client-ip=209.85.167.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-52bbdb15dd5so2175827e87.3;
-        Thu, 13 Jun 2024 23:39:04 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-52c89d6b4adso1719218e87.3;
+        Thu, 13 Jun 2024 23:56:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718347143; x=1718951943; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718348170; x=1718952970; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=dZLQcxW42WTQ04EM2482xmMFoQSlTuqYFS39Z6tbXwU=;
-        b=QSc7iHZAgnd9FmvJunlnK5HxuwKgBnbgd4A2rLeAg507uZA457mdcOdqDZTVSzMpt8
-         qrBhzBZ8ve9BkmxSmattocAb9HCVNJtspWBINLQl7CV1JckRW6/DcAFbHwveW97QVN7Q
-         IamruM1LqTpbj6Z7NvLwdYUD3hUQZoCeVHsI4nHxVozmemt+Il/9rk7NHpLCzE0hZSyg
-         2OVvXwt29T4tb14DrhrY7nOJEN+ZVoLRsdhuwZOvJ6yQvUuim2bAXyd8MgD6Cfpi+/R+
-         ZOswCwesp1rgDwCVibfe2xnTTd4DnMNrUCoF3NllmbIvCKF3d23FlNy17OWB3I519RzH
-         1aaw==
+        bh=n24EXAlVZKGSBdu/7kYSS2jHZx5u9QVUK7yX+sUB4h0=;
+        b=R7gBNUjAvL7UqQGGG4U7h0sWBcBbjl9fxyqP13ZBqmtt+Pu2kuuOFHC6y6Pl49wdDE
+         IXJ2gBj/SAYDnVJGbANsxRKSEy4KvcfwWxpFuLrtARBBN1p5B3yzoRvP/ljKjwnM/Hc4
+         OQQfNLNqSckHV0+zdnHOav5HKIx88CpjzleRejqatE2jvqjSdOEF+n9hy4PR5HimUC0b
+         sSWcjN8ArS4NQbFTyqGFkx3uG9G69dQKm951mBeWqLrN5/+W0PGfbadAPo+bj0zbeMny
+         0RXwRYiBzsikFhrj+y/Y1a7fHtIMp9uACXjyTWdmMDV6iBCQ4+YoBSsKl9voR41cMvIm
+         vbUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718347143; x=1718951943;
+        d=1e100.net; s=20230601; t=1718348170; x=1718952970;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dZLQcxW42WTQ04EM2482xmMFoQSlTuqYFS39Z6tbXwU=;
-        b=HmgXm2nffZUeL2SlDuVSMbsmOM0nbRx4sEFbd+i8DwIwMcLtC00maulH18hmUl/0v+
-         RGdJVbNR+0EG3rSfOqHrEkA/22PQT7iIOULij0X8qHJKUNFmWzQuwxXIR9hU9j1O/G5I
-         uB/ewzxLwU0/BfdkgbCpviwmtRpstbuOGncVaS5/++nZZAhqsSeegHJULiMrZYcXocyB
-         RsXxrW6b9Yr2pC2NUo/dV3yEuv2+IU/nXyD8htyKyVKYBnM9RIF2XY8iyOtVLNicbf77
-         ZqHrVbE0nQuHpf90ns2yNHJDB/2EisGyCwuFWIZBpQ+DFaNSzkBLpe+JPIdCiRSFCuVg
-         0Y0A==
-X-Forwarded-Encrypted: i=1; AJvYcCXmXuv92srpUKRva7SDxZI3TWJ5N8x8xqeE8OQvM8wenIk53BgLbFx5gU0JkG7OSY47lHOZBxsxJKBk0fXDzPr2vysgk5J8iN9pPgKS+oDJlIpDEKXNZxfUsSV3n42E4kob8fWLRgNYBLBMsSh/4kp/p2JFsXSuJUY5WERJxJH+ZjkrLuB/KD7A
-X-Gm-Message-State: AOJu0YwqRSS7E1qhKq0hOhbv9q4AXJMplwbPPsU0A93bvMLu3RkrQqOM
-	4/6A0M9vTAX7Y0AOhwuUq9cBwEwnV0fvEmva1AftP5HmD8vyxBCx
-X-Google-Smtp-Source: AGHT+IGmrzSTMDejilr8oPKbsiJFCmB+sJBnlGtfxwJcqCEmHpKyyZvtwPf9bi/j7AuLPW02Tcjubg==
-X-Received: by 2002:a05:6512:794:b0:52c:8271:5252 with SMTP id 2adb3069b0e04-52ca6e65155mr1067973e87.16.1718347142810;
-        Thu, 13 Jun 2024 23:39:02 -0700 (PDT)
+        bh=n24EXAlVZKGSBdu/7kYSS2jHZx5u9QVUK7yX+sUB4h0=;
+        b=cnn0Cavr4sVE5gLNGjpkUlM0KCp8Bta7ULsGVS3mEBq/JD34Tfv73d/7TbJ10QFkrc
+         WqRtGBRjOGiI25Lt97GmXKEeHCS3UaQaX+OQeH/MkzZFZBcUOMeXW22/MaOuYSsHYg7J
+         yfUI+FpWbKcAEyUqciI+Shj2C0JTYH9FGW35ukKXSFsYXWdta+5NvZ5F9U7ggkd4+/PG
+         Ea3mPj/nGzHCZwpyqAgHaEmCp382yCnGa2AQ68/TdQWNO4Okr2br2EMfQPpUZC/inT/e
+         G9lzW9bvX/0KbG9vI2JafI6qs3ZaI0RR/A0cHw/c6t4z+jb3HKD+iFK4MNimVxRwfsgz
+         KJig==
+X-Forwarded-Encrypted: i=1; AJvYcCX5XZYoYaLunxwNmgQbRApc9WxjWaJGyRmddjAOB1WUq/6Ghe40yXzxfuaTAPRCFfo1EQippqYniZqrj12PnC5wZMwjk6YBQSq0xmfKDDTJaMjelrmus1hET/8Q59K8mfQaorMbWa5/q2HPMH56Wwt0uKE9an5jMvib/79gLMiWeGlgo1ipaH6J
+X-Gm-Message-State: AOJu0Yz8F+sMYNq378ipdPHKYC0W50u0zkv8l0cEOVl14qeZNYeyn4FP
+	tilyXCvvvfcd0m+gzcctn5CaturNXk3L8Balq02q7mneSGp4maqQVxQZJQ==
+X-Google-Smtp-Source: AGHT+IF1aWze5zMVrk59hfZLBXrV94azpWD18wJQFV5oFH7sEx/0NKhdqV8nWXEWDPH+xzHzfni9rw==
+X-Received: by 2002:a05:6512:542:b0:516:a091:db5e with SMTP id 2adb3069b0e04-52ca6e90abemr967787e87.48.1718348169562;
+        Thu, 13 Jun 2024 23:56:09 -0700 (PDT)
 Received: from ?IPV6:2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd? ([2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ca287a883sm426351e87.191.2024.06.13.23.39.01
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ca2887effsm426127e87.257.2024.06.13.23.56.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jun 2024 23:39:02 -0700 (PDT)
-Message-ID: <acc2edb5-ed9b-4ab8-b2a9-e51808a12478@gmail.com>
-Date: Fri, 14 Jun 2024 09:39:00 +0300
+        Thu, 13 Jun 2024 23:56:09 -0700 (PDT)
+Message-ID: <21a468c2-7d8f-459a-a5a9-53d8694c3f38@gmail.com>
+Date: Fri, 14 Jun 2024 09:56:07 +0300
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -76,7 +76,7 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 03/10] mfd: support ROHM BD96801 PMIC core
+Subject: Re: [PATCH v3 09/10] mfd: bd96801: Add ERRB IRQ
 To: Lee Jones <lee@kernel.org>
 Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
  Rob Herring <robh@kernel.org>,
@@ -90,91 +90,227 @@ Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-watchdog@vger.kernel.org
 References: <cover.1717486682.git.mazziesaccount@gmail.com>
- <97cd372d4502597bf051f0ff52f718eab9b186aa.1717486682.git.mazziesaccount@gmail.com>
- <20240613161508.GM2561462@google.com>
+ <332a2d2429e2ba3c96afd28c1ccc18efc38e1fd3.1717486682.git.mazziesaccount@gmail.com>
+ <20240613163249.GN2561462@google.com>
 Content-Language: en-US, en-GB
 From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20240613161508.GM2561462@google.com>
+In-Reply-To: <20240613163249.GN2561462@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/13/24 19:15, Lee Jones wrote:
+On 6/13/24 19:32, Lee Jones wrote:
 > On Tue, 04 Jun 2024, Matti Vaittinen wrote:
 > 
->> The ROHM BD96801 PMIC is highly customizable automotive grade PMIC
->> which integrates regulator and watchdog funtionalities.
+>> The ROHM BD96801 "scalable PMIC" provides two physical IRQs. The ERRB
+>> handling can in many cases be omitted because it is used to inform fatal
+>> IRQs, which usually kill the power from the SOC.
 >>
->> Provide INTB IRQ and register accesses for regulator/watchdog drivers.
+>> There may however be use-cases where the SOC has a 'back-up' emergency
+>> power source which allows some very short time of operation to try to
+>> gracefully shut down sensitive hardware. Furthermore, it is possible the
+>> processor controlling the PMIC is not powered by the PMIC. In such cases
+>> handling the ERRB IRQs may be beneficial.
+>>
+>> Add support for ERRB IRQs.
 >>
 >> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->>
 >> ---
->> Changelog:
+>> Revision history:
 >> v2 =>:
->> - No changes
->>
+>> 	- No changes
 >> v1 => v2:
->> - Drop unused enum
->> - Improve error prints
->> - improve comments
->>
->>   RFCv2 => v1:
->> - drop ERRB interrupts (for now)
->> - bd96801: Unlock registers in core driver
->>
->> Changelog: RFCv1 => RFCv2
->> - Work-around the IRQ domain name conflict
->> - Add watchdog IRQ
->> - Various styling fixes based on review by Lee
+>> 	- New patch
 >> ---
->>   drivers/mfd/Kconfig              |  13 ++
->>   drivers/mfd/Makefile             |   1 +
->>   drivers/mfd/rohm-bd96801.c       | 273 +++++++++++++++++++++++++++++++
->>   include/linux/mfd/rohm-bd96801.h | 215 ++++++++++++++++++++++++
->>   include/linux/mfd/rohm-generic.h |   1 +
->>   5 files changed, 503 insertions(+)
->>   create mode 100644 drivers/mfd/rohm-bd96801.c
->>   create mode 100644 include/linux/mfd/rohm-bd96801.h
+>>   drivers/mfd/rohm-bd96801.c | 291 ++++++++++++++++++++++++++++++++-----
+>>   1 file changed, 253 insertions(+), 38 deletions(-)
+>>
+>> diff --git a/drivers/mfd/rohm-bd96801.c b/drivers/mfd/rohm-bd96801.c
+>> index 1c2a9591be7b..b7f073318873 100644
+>> --- a/drivers/mfd/rohm-bd96801.c
+>> +++ b/drivers/mfd/rohm-bd96801.c
+>> @@ -5,13 +5,9 @@
+>>    * ROHM BD96801 PMIC driver
+>>    *
+>>    * This version of the "BD86801 scalable PMIC"'s driver supports only very
+>> - * basic set of the PMIC features. Most notably, there is no support for
+>> - * the ERRB interrupt and the configurations which should be done when the
+>> - * PMIC is in STBY mode.
+>> - *
+>> - * Supporting the ERRB interrupt would require dropping the regmap-IRQ
+>> - * usage or working around (or accepting a presense of) a naming conflict
+>> - * in debugFS IRQs.
 > 
-> Pretty nice.  Uses generic interfaces.  Just a couple of nits.
+> Why bother adding all that blurb in the first place?
 
-Thanks :)
+Because, I assume there are users who would like to have the ERRB in 
+use. The main purpose of this comment is that any such users could
+	a) see this version does not support ERRB.
+	b) can find the original RFC with ERRB supportn and a workaround.
+	c) know why this version does not work with ERRB and thus fix this
 
-I'll try to send the next version of this series Today. I will only 
-include the patches 1-6, which I believe are pretty much good to be 
-merged (but the watchdog has not yet been acked by Guenter so no 
-guarantees), and which should result a working driver for many of the 
-predicted use-cases. Then I plan to be mostly off of my computer for a 
-few weeks. (I may do some very minor fixes.)
+It seems this ERRB support may be missing from upstream for a while, 
+hence I think having this note is worthy until (if) this ERRB patch 
+lands in upstream.
 
-The 7-10 will have to wait until the irqdomain name conflict can be 
-reasonably resolved. I plan to return to this when I'm back from my "off 
-time", and when we see what direction the irqdomain work by Herve has 
-evolved :)
+> 
+>> + * basic set of the PMIC features.
+>> + * Most notably, there is no support for the configurations which should
+>> + * be done when the PMIC is in STBY mode.
+>>    *
+>>    * Being able to reliably do the configurations like changing the
+>>    * regulator safety limits (like limits for the over/under -voltages, over
+>> @@ -23,16 +19,14 @@
+>>    * be the need to configure these safety limits. Hence it's not simple to
+>>    * come up with a generic solution.
+>>    *
+>> - * Users who require the ERRB handling and STBY state configurations can
+>> - * have a look at the original RFC:
+>> + * Users who require the STBY state configurations can  have a look at the
+>> + * original RFC:
+>>    * https://lore.kernel.org/all/cover.1712920132.git.mazziesaccount@gmail.com/
+>> - * which implements a workaround to debugFS naming conflict and some of
+>> - * the safety limit configurations - but leaves the state change handling
+>> - * and synchronization to be implemented.
+>> + * which implements some of the safety limit configurations - but leaves the
+>> + * state change handling and synchronization to be implemented.
+>>    *
+>>    * It would be great to hear (and receive a patch!) if you implement the
+>> - * STBY configuration support or a proper fix to the debugFS naming
+>> - * conflict in your downstream driver ;)
+>> + * STBY configuration support or a proper fix in your downstream driver ;)
+>>    */
 
 ...
 
+>>   static int bd96801_i2c_probe(struct i2c_client *i2c)
+>>   {
+>> -	struct regmap_irq_chip_data *intb_irq_data;
+>> +	int i, ret, intb_irq, errb_irq, num_regu_irqs, num_intb, num_errb = 0;
+>> +	int wdg_irq_no;
+>> +	struct regmap_irq_chip_data *intb_irq_data, *errb_irq_data;
+>> +	struct irq_domain *intb_domain, *errb_domain;
+>> +	struct resource wdg_irq;
+>>   	const struct fwnode_handle *fwnode;
+>> -	struct irq_domain *intb_domain;
+>> +	struct resource *regulator_res;
+>>   	struct regmap *regmap;
+>> -	int ret, intb_irq;
+>>   
+>>   	fwnode = dev_fwnode(&i2c->dev);
+>>   	if (!fwnode)
+>> @@ -212,10 +364,28 @@ static int bd96801_i2c_probe(struct i2c_client *i2c)
+>>   	if (intb_irq < 0)
+>>   		return dev_err_probe(&i2c->dev, intb_irq, "INTB IRQ not configured\n");
+>>   
+>> +	num_intb =  ARRAY_SIZE(regulator_intb_irqs);
+>> +
+>> +	/* ERRB may be omitted if processor is powered by the PMIC */
+>> +	errb_irq = fwnode_irq_get_byname(fwnode, "errb");
+>> +	if (errb_irq < 0)
+>> +		errb_irq = 0;
+>> +
+>> +	if (errb_irq)
+>> +		num_errb = ARRAY_SIZE(regulator_errb_irqs);
+>> +
+>> +	num_regu_irqs = num_intb + num_errb;
+>> +
+>> +	regulator_res = kcalloc(num_regu_irqs, sizeof(*regulator_res), GFP_KERNEL);
 > 
->> +	{
->> +		.name = "bd96801-wdt",
->> +		.resources = wdg_intb_irqs,
->> +		.num_resources = ARRAY_SIZE(wdg_intb_irqs),
->> +	}, {
->> +		.name = "bd96801-pmic",
-> 
-> I thought this was the PMIC?
-> 
-> What is this device?  Regulators?
-> 
-> "bd96801-regulator"?
+> Why not devm_* and omit the kfree()?
 
-Yep. Thanks!
+I used kcalloc() because this memory is only temporarily needed. It is 
+not needed after devm_mfd_add_devices() returns.
+
+Sure the devm_* would simplify the error paths... Thanks!
 
 > 
->> +		.resources = regulator_intb_irqs,
->> +		.num_resources = ARRAY_SIZE(regulator_intb_irqs),
->> +	},
->> +};
+>> +	if (!regulator_res)
+>> +		return -ENOMEM;
+>> +
+>>   	regmap = devm_regmap_init_i2c(i2c, &bd96801_regmap_config);
+>> -	if (IS_ERR(regmap))
+>> -		return dev_err_probe(&i2c->dev, PTR_ERR(regmap),
+>> +	if (IS_ERR(regmap)) {
+>> +		ret = dev_err_probe(&i2c->dev, PTR_ERR(regmap),
+>>   				    "Regmap initialization failed\n");
+>> +		goto free_out;
+>> +	}
+>>   
+>>   	ret = regmap_write(regmap, BD96801_LOCK_REG, BD96801_UNLOCK);
+>>   	if (ret)
+>> @@ -224,18 +394,63 @@ static int bd96801_i2c_probe(struct i2c_client *i2c)
+>>   	ret = devm_regmap_add_irq_chip(&i2c->dev, regmap, intb_irq,
+>>   				       IRQF_ONESHOT, 0, &bd96801_irq_chip_intb,
+>>   				       &intb_irq_data);
+>> -	if (ret)
+>> -		return dev_err_probe(&i2c->dev, ret, "Failed to add INTB IRQ chip\n");
+>> +	if (ret) {
+>> +		dev_err_probe(&i2c->dev, ret, "Failed to add INTB irq_chip\n");
+>> +		goto free_out;
+>> +	}
+>>   
+>>   	intb_domain = regmap_irq_get_domain(intb_irq_data);
+>>   
+>> -	ret = devm_mfd_add_devices(&i2c->dev, PLATFORM_DEVID_AUTO,
+>> -				   bd96801_mfd_cells,
+>> -				   ARRAY_SIZE(bd96801_mfd_cells), NULL, 0,
+>> -				   intb_domain);
+>> -
+>> +	/*
+>> +	 * MFD core code is built to handle only one IRQ domain. BD96801
+>> +	 * has two domains so we do IRQ mapping here and provide the
+>> +	 * already mapped IRQ numbers to sub-devices.
+>> +	 */
+>> +	for (i = 0; i < num_intb; i++) {
+>> +		struct resource *res = &regulator_res[i];
+>> +
+>> +		*res = regulator_intb_irqs[i];
+>> +		res->start = res->end = irq_create_mapping(intb_domain,
+>> +							    res->start);
+>> +	}
+>> +
+>> +	wdg_irq_no = irq_create_mapping(intb_domain, BD96801_WDT_ERR_STAT);
+>> +	wdg_irq = DEFINE_RES_IRQ_NAMED(wdg_irq_no, "bd96801-wdg");
+>> +	bd96801_mfd_cells[WDG_CELL].resources = &wdg_irq;
+>> +	bd96801_mfd_cells[WDG_CELL].num_resources = 1;
+>> +
+>> +	if (num_errb) {
+> 
+> 	if (!num_errb)
+> 		goto skip_errb;
+
+Ok, can do.
+
+> 
+>> +		ret = devm_regmap_add_irq_chip(&i2c->dev, regmap, errb_irq,
+>> +					       IRQF_ONESHOT, 0,
+>> +					       &bd96801_irq_chip_errb,
+>> +					       &errb_irq_data);
+>> +		if (ret) {
+>> +			dev_err_probe(&i2c->dev, ret,
+>> +				      "Failed to add ERRB (%d) irq_chip\n",
+>> +				      errb_irq);
+>> +			goto free_out;
+>> +		}
+>> +		errb_domain = regmap_irq_get_domain(errb_irq_data);
+>> +
+>> +		for (i = 0; i < num_errb; i++) {
+>> +			struct resource *res = &regulator_res[num_intb + i];
+>> +
+>> +			*res = regulator_errb_irqs[i];
+>> +			res->start = res->end = irq_create_mapping(errb_domain,
+>> +								   res->start);
+>> +		}
+>> +	}
+> 
+> skip_errb:
+
+...
+
+Thanks for comments Lee. Reworking this will have to wait for the 
+irqdomain name suffix, which I will continue after Hervé has done his 
+part of the irqdomain changes. I will omit this patch from the next 
+re-spin of the series.
 
 Yours,
 	-- Matti
