@@ -1,76 +1,76 @@
-Return-Path: <linux-watchdog+bounces-1145-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1146-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D15A1909906
-	for <lists+linux-watchdog@lfdr.de>; Sat, 15 Jun 2024 18:22:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7627890990D
+	for <lists+linux-watchdog@lfdr.de>; Sat, 15 Jun 2024 18:34:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C78E1C20B43
-	for <lists+linux-watchdog@lfdr.de>; Sat, 15 Jun 2024 16:22:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE903B2147D
+	for <lists+linux-watchdog@lfdr.de>; Sat, 15 Jun 2024 16:34:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA35F2233B;
-	Sat, 15 Jun 2024 16:21:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7289E4655D;
+	Sat, 15 Jun 2024 16:34:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lydYskUS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NWSptkeM"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621901DFFD
-	for <linux-watchdog@vger.kernel.org>; Sat, 15 Jun 2024 16:21:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE451DFC7
+	for <linux-watchdog@vger.kernel.org>; Sat, 15 Jun 2024 16:34:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718468516; cv=none; b=Tsr2dxhNiRYqc+/H7FYQRCDVeRUYSkATHQLVkzsUwQgIAikGf02Zl95jDuutQPMv04OVOgMf38EcKCVbVScqjqqm8lwvvs4hFV6h5v7R/kI9cftsm2i015+hKIuYWXca5B3eskqaYxWsJPam0l2tqy2En0Hpi8+rJGZ6yUyScXQ=
+	t=1718469261; cv=none; b=cr0tE+zLmZiF58y15xFs2w1pyTQ6GmiKXgHLky4KUhMw4Tg2dViDVIHjJMnYMjyu1ewMSxkrHz6+u9c89z5A8n0YYYGilYDtP0OFUgjOScJDIiDlKbf7r5HvnP/noJ2ScU5iFfvE9LzOJ+o/iUUTUGrRSAHM3gBGHLbVro8FwmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718468516; c=relaxed/simple;
-	bh=nseT3jnH7TDugs1GFvb4Xv8OW9smm+XMOFQ1ERn0xxU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pryuaiv8JSb7hBRI/cmdg8l9TxDVU8ny6RXgi2W/tWJ07FpQNOUnep8G43Xua4g61JHwBOWV/SjBiLkOYQceFCUZrODR+sGR6xa5lCuqZzwFY/yTESZrTGzMZgRhjb98ydlyOwNZUiiWDdc0KfKV11fLAN6w1bbaDHfgcKpTUtQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lydYskUS; arc=none smtp.client-ip=209.85.214.180
+	s=arc-20240116; t=1718469261; c=relaxed/simple;
+	bh=8pua4o1cyTqDRdRluAi9HB2xMIdT2IkUHJceHO8yweY=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=TGHbxyAZB/eZm6HShW1otQsFjxMlRMCRV+Q3LElLYN5yem2lyFiRMEpD0sKRG92btbqDpnb2yqUTvFA1adG9xavLcnv313mnu7id3CiNxLP6lgXiQ+xa/l36xXsha/5qVwJ7rmLnfDVNA+i38eP7WtbVZxcdK7hM4ZrrAKXxqAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NWSptkeM; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1f70fdc9644so31525375ad.0
-        for <linux-watchdog@vger.kernel.org>; Sat, 15 Jun 2024 09:21:55 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1f47f07acd3so27881865ad.0
+        for <linux-watchdog@vger.kernel.org>; Sat, 15 Jun 2024 09:34:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718468515; x=1719073315; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=6jpbVnER420awWvOnStDFZ6kJFXd2BJcugFSMBCOgB0=;
-        b=lydYskUSV7Uith5tyUQrDrlMqm4Cs9nLMwdKKNsg//E4enGU9HX+VESv4FxaWhet72
-         Rp13VWluePT2a1Hv6FlMmhw4nC16bUqORVtXI8bWkrwKzDARIOVJbi4t4iCzDuJaEoMN
-         vGj2lKE0ihXMPmL3TnSDn0WjPphGqWoSa66lrCj7cFGAw0qrmTBF7fe0Ztp65hKJ5LqQ
-         TqPLtDTVO1qduLSjxUG9BqxR4TPZouq2zZZ9qEW+9JfO3GUMoKg5nIWImYcdXxlL48Xv
-         HLozcFkyKzdkDkZGtDBYotRdhm4T6oqZ92PgVZKMoZQhz5gYbj+i4JQTG62WUJGZBAz9
-         ElIA==
+        d=gmail.com; s=20230601; t=1718469259; x=1719074059; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=PDM1oM1XC8WReZKf+c1OWc4+c5xQRkyV7QKWGB7jZvs=;
+        b=NWSptkeMz0DdhhsSpD9/t56X+68XnBwUyyi9qvYBWQZS65OpXgE/ABe0SEJo1xmexI
+         7B5g+/sUevZ2FM8WkjpDn/UjfwT6K7D/aRum+Z83gZ5HScY/tYigPokjgCmKQGAJEh7l
+         Nv4u9wDvNeW+MS+F1dGFlZn85LVi8JP9q/M5C8V4h4w1gAa9/x0u6eZvEM9C7FRdTFyK
+         rX/ooegqQ3Nrxi7hQCwtEOXiDddtwR4un1840ezflonWEp2VW+RLwRd2gT/edY/zhqzp
+         6ipWI2g8H77ZASt5AdDGgG6GgaRNW88s/lfKrR2yFRkn4CYZiOT6Oy9bjpjI7xqDrhgb
+         CYoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718468515; x=1719073315;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1718469259; x=1719074059;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6jpbVnER420awWvOnStDFZ6kJFXd2BJcugFSMBCOgB0=;
-        b=J1TwevPYdoUfqgA9Ca85f74j5c8AL5f4+PPIy8fPa+40FSuKT1XOLYe9HRH6FQRT0n
-         v8QhwJ4PzjV+CFh65GlAoiL86468FmvmE+P/Hvi6mU/ovGSEZPips8fc0MAAFOsdFb3J
-         qsI8/IS0XwLifg9C8NvOWaUtArYALbCJIgf/C20HsN0bk6i9Mpeh02zAgZRjavYu73Pm
-         5YKOWT2PwyaCl0g1Wq6PuUkcZRG85qJXP4Izi758oBd5FpHnncG3uel5AHLlBk7sguMw
-         im8mNWzF4JiL+5a61542AODoBs2pEwQ5y9QUbMDnwf1rh8U+lZPKG5q7dls5CnZZ9HTZ
-         j0Mg==
-X-Forwarded-Encrypted: i=1; AJvYcCXuAykzYy6+YjX+f6b1ih99aF0xmOUOmETudTRcnrsjqJlMf8/PMr5EnMRAWIftBkURAYQEcP+/jYmhHiKXuldKWcp2VQyuG5OIj2BkX1U=
-X-Gm-Message-State: AOJu0Yw10wu3Gu2ylTR3MVsu1kTd3jXtC8PU9k3i7WSiBjM3il3oqcks
-	3m1GF5MmZxt8SJ1YZy8+l6R+utof2pzu3KExQvMUSvQHSYyuj31rb7AhAw==
-X-Google-Smtp-Source: AGHT+IFUzkPmX6Sl86BSalpWN81RJrRwYjLK3O8LsMUn6S0eR2wf4E7W8cdyAqwO8QindJ3xuhMH3g==
-X-Received: by 2002:a17:902:f68e:b0:1f7:22b4:8240 with SMTP id d9443c01a7336-1f862322e45mr78056045ad.29.1718468514553;
-        Sat, 15 Jun 2024 09:21:54 -0700 (PDT)
+        bh=PDM1oM1XC8WReZKf+c1OWc4+c5xQRkyV7QKWGB7jZvs=;
+        b=EhUbrPqVmYwHiJpuwjsKRSknDFjCU0h9sm+t1ANpW9m+TJIO1ySbz0u9cl7LpVAcCK
+         rqEEEj5AEegZ+e2Vn6bzhslOvYCrN4Zos/dUlMW86gG9RnDBIOz50y75kxFjh8XP3VnC
+         f9yXr/s8yPFHAh/Hz4mk0+bXMHHG5ylLWtq8JEpG2FCKC/AHp3RVNLZ5clnjf3PQoK04
+         E7MVT+V0br6NWaTFZwEbfNfOFolSb+urlCWg8lnpjUBPq5ksieDyfJ7qDVnJWhLsdJuC
+         VBUhcd0GNlCOSHL+v7Zuzgdh1PMUWrXT3uWc2cPy2o/WP7+de6v9MlyAi2pqZCBZI5Hj
+         jNAg==
+X-Forwarded-Encrypted: i=1; AJvYcCUO213640poEppKAGvwiC9lG7T2XR05/SrKA2vJ5iPpCwoOhcoABHjdIE0J+v9edF8wtYokF4v9IyD3F05vnwvZcFGvbFcrwL2f9kUMUcc=
+X-Gm-Message-State: AOJu0Yz7aeb7lCxfYWgDgwRyI7ZbZJmrDPX8z3nAS35XkmO0eRcE15Af
+	q0PmeWK3MX88q3Uzk+WQ5pkwfNPidH+nT9yN/kQ3QYSnMhi0fznY
+X-Google-Smtp-Source: AGHT+IG7+bBwyXaUzMhXfv5dJ+0SUwpmFnCcsegrTytmMnVom6Js/AR3zA6hamwyd6CmsLiHP6GC1A==
+X-Received: by 2002:a17:902:f68b:b0:1f7:1706:25ba with SMTP id d9443c01a7336-1f8625cf2b0mr63491305ad.15.1718469259111;
+        Sat, 15 Jun 2024 09:34:19 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855f32334sm51703245ad.259.2024.06.15.09.21.52
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855ee8004sm51882675ad.121.2024.06.15.09.34.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Jun 2024 09:21:53 -0700 (PDT)
+        Sat, 15 Jun 2024 09:34:18 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <69dcaeba-a077-4f41-92ef-669392b66c24@roeck-us.net>
-Date: Sat, 15 Jun 2024 09:21:52 -0700
+Message-ID: <1ee5eeec-cda8-4977-a596-ec3a0e3fc8a9@roeck-us.net>
+Date: Sat, 15 Jun 2024 09:34:16 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -79,6 +79,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] watchdog: imx2_wdg: Save the actual timeout value
+From: Guenter Roeck <linux@roeck-us.net>
 To: "L.Q" <lqking7735@163.com>
 Cc: "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
  "shawnguo@kernel.org" <shawnguo@kernel.org>,
@@ -95,8 +96,8 @@ References: <20240615141059.345076-1-lqking7735@163.com>
  <57e6bc77.319eb.1901c76a5fa.Coremail.lqking7735@163.com>
  <480b0513-01c4-42a3-bc8b-5ee6e711a1a1@roeck-us.net>
  <7814550c.31a49.1901c98ad6f.Coremail.lqking7735@163.com>
+ <69dcaeba-a077-4f41-92ef-669392b66c24@roeck-us.net>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
  RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
@@ -140,45 +141,43 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <7814550c.31a49.1901c98ad6f.Coremail.lqking7735@163.com>
+In-Reply-To: <69dcaeba-a077-4f41-92ef-669392b66c24@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 6/15/24 08:51, L.Q wrote:
-> Step 1:
-> Call imx2_wdt_set_timeout with a timeout value greater than 128
-> This illegal value will be stored in wdog->timeout
+On 6/15/24 09:21, Guenter Roeck wrote:
+> On 6/15/24 08:51, L.Q wrote:
+>> Step 1:
+>> Call imx2_wdt_set_timeout with a timeout value greater than 128
+>> This illegal value will be stored in wdog->timeout
+> 
+> This is not an illegal value because the driver sets max_hw_heartbeat_ms
+> which lets the watchdog core handle timeout values exceeding the maximum
+> timeout supported by the chip.
+> 
 
-This is not an illegal value because the driver sets max_hw_heartbeat_ms
-which lets the watchdog core handle timeout values exceeding the maximum
-timeout supported by the chip.
+ From Documentation/watchdog/watchdog-kernel-api.rst:
 
-[ ... ]
+* set_timeout: this routine checks and changes the timeout of the watchdog
+   timer device. It returns 0 on success, -EINVAL for "parameter out of range"
+   and -EIO for "could not write value to the watchdog". On success this
+   routine should set the timeout value of the watchdog_device to the
+   achieved timeout value (which may be different from the requested one
+   because the watchdog does not necessarily have a 1 second resolution).
 
-> static inline void imx2_wdt_setup(struct watchdog_device *wdog)
-> {
->   struct imx2_wdt_device *wdev = watchdog_get_drvdata(wdog);
->   u32 val;
->   regmap_read(wdev->regmap, IMX2_WDT_WCR, &val);
->   /* Suspend timer in low power mode, write once-only */
->   val |= IMX2_WDT_WCR_WDZST;
->   /* Strip the old watchdog Time-Out value */
->   val &= ~IMX2_WDT_WCR_WT;
->   /* Generate internal chip-level reset if WDOG times out */
->   if (!wdev->ext_reset)
->    val &= ~IMX2_WDT_WCR_WRE;
->   /* Or if external-reset assert WDOG_B reset only on time-out */
->   else
->    val |= IMX2_WDT_WCR_WRE;
->   /* Keep Watchdog Disabled */
->   val &= ~IMX2_WDT_WCR_WDE;
->   /* Set the watchdog's Time-Out value */
->   val |= WDOG_SEC_TO_COUNT(wdog->timeout);
->      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   Drivers implementing max_hw_heartbeat_ms set the hardware watchdog heartbeat
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   to the minimum of timeout and max_hw_heartbeat_ms. Those drivers set the
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   timeout value of the watchdog_device either to the requested timeout value
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   (if it is larger than max_hw_heartbeat_ms), or to the achieved timeout value.
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-That is the bug. It needs to be
-	val |= WDOG_SEC_TO_COUNT(min(wdog->timeout, IMX2_WDT_MAX_TIME));
+If any of this is difficult to understand, please feel free to suggest
+a better wording.
 
+Thanks,
 Guenter
 
 
