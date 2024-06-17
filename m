@@ -1,147 +1,102 @@
-Return-Path: <linux-watchdog+bounces-1151-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1154-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFFA690AAE0
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Jun 2024 12:16:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA39D90AC0A
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Jun 2024 12:49:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D08BB3251A
-	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Jun 2024 09:38:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D97F1F26413
+	for <lists+linux-watchdog@lfdr.de>; Mon, 17 Jun 2024 10:49:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 890171946D1;
-	Mon, 17 Jun 2024 09:38:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TkGLxNbE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 046BD196457;
+	Mon, 17 Jun 2024 10:45:45 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54202194148;
-	Mon, 17 Jun 2024 09:38:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AABBC19598E;
+	Mon, 17 Jun 2024 10:45:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718617104; cv=none; b=l//0QPAyqwrnVdVM9wqMPDU5/w41k1rcnIbeFzbOtz7jaufC/Jbci9CqCV6cP4B97Mniz0XpMIuBDs8euSLA+1lPUdG8yRlBY9i7pzvxZoPoo3sCAq789XzhZJGaE2bGWRNRfKGJoUCFW8sE5ulHcLmzFbJqHfAMlR05IdyXANo=
+	t=1718621144; cv=none; b=qQXKdhZBNs1u08a/EspmuqlzmnyteyDQv0QQHj82JclMMX/sk3NNnlyOT9Q4RCJ6evR6ETFbEpIxcajdG06A7/YN9cwGzEYyFI07uBb2/F+NltJ5WZRyTP+jl87+EwAc3KwxJ9e3YsaSMrOWz9Cc2uHW4M9UUW5wFdxXVzZ5Jnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718617104; c=relaxed/simple;
-	bh=890W8DPr35N6/m48gE2Wn2MHyqWMitXLF0Yh04CJFj8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MZ87u5NNFX2F0RTLHvTSlLr7k11HuoIC1Cx2//wd7pGsWAJCMe0EM+N54tr+dvyqabC/j/uc9tw5X9DGU4+g/PxvuJWn6+gk/WfKU6avRpHvjecra6boXOn7elCEGKQxs+fDIBTnJIoJkcL4TCkYPI/svpex9rs2ut6tkWT5R64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TkGLxNbE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 09379C4AF49;
-	Mon, 17 Jun 2024 09:38:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718617104;
-	bh=890W8DPr35N6/m48gE2Wn2MHyqWMitXLF0Yh04CJFj8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=TkGLxNbERN6FJ8EUmM59vBcqSyh00uHwpRkm0ofn7ICO6cfFHUM7bynsrzyPxjaGU
-	 ZcL2cOlBFFXqPowutVZba/tO15TTtOO27cXcdsF8oINCMJDxEOGL5EW3WtYcl89DXH
-	 XWUE9ny0EvJG/P1ypXbDUMVceVrAAjhI0Ya9rXmkcc0tKH5E1GmBcvFoLpf135lgT3
-	 6WehxdjTNMsbmQQ5bQFKyN2sFKPoBJBMo2ddHf+18xEvw1ns0hXp/0PgsBJCARkcBo
-	 d7RNZwmAMxZPX7S4IAqmYZ0/vKYArEUWuBmWGcEg9p1PPRRVKbuvkgmSzUIxFuyak0
-	 QrCsK78EYQuWQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00BE1C27C77;
-	Mon, 17 Jun 2024 09:38:24 +0000 (UTC)
-From: Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
-Date: Mon, 17 Jun 2024 12:36:44 +0300
-Subject: [PATCH v10 10/38] dt-bindings: watchdog: Add Cirrus EP93x
+	s=arc-20240116; t=1718621144; c=relaxed/simple;
+	bh=OTuJ3HqmabYe5/7Op+lhMLRJmk9rH/AS810A5fih7Lc=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DCCM23dTn6iml5d0rJSx0vFkpidmedfJo2N8z1eHCLnJFiNjFarRRmGEG+ARDZ9qJJ9TQoOmUvpG3d3VXGwrqVSGDgrnGpph5XZbQDBqXWVTZ82ivy1Am2/LoD+0OWn6tGhx65Ca5Y3wd1TJGt+Ug7MGfxglPc7GsKuwqPZpDlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4W2mcp0jbRz6JBCM;
+	Mon, 17 Jun 2024 18:40:42 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 866B7140A1B;
+	Mon, 17 Jun 2024 18:45:34 +0800 (CST)
+Received: from localhost (10.203.174.77) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 17 Jun
+ 2024 11:45:33 +0100
+Date: Mon, 17 Jun 2024 11:45:32 +0100
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, "Sascha
+ Hauer" <s.hauer@pengutronix.de>, Pengutronix Kernel Team
+	<kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Abel Vesa
+	<abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, Michael Turquette
+	<mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Linus Walleij
+	<linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, "Dong
+ Aisheng" <aisheng.dong@nxp.com>, Andi Shyti <andi.shyti@kernel.org>, Jonathan
+ Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Srinivas
+ Kandagatla <srinivas.kandagatla@linaro.org>, Uwe
+ =?ISO-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>, Mark Brown
+	<broonie@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, "Daniel
+ Lezcano" <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz
+ Luba <lukasz.luba@arm.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Frank Li <Frank.Li@nxp.com>,
+	<devicetree@vger.kernel.org>, <imx@lists.linux.dev>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-clk@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+	<linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+	<linux-pwm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <linux-watchdog@vger.kernel.org>, Wolfram Sang
+	<wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH v2] dt-bindings: drop stale Anson Huang from maintainers
+Message-ID: <20240617114532.00001b5f@Huawei.com>
+In-Reply-To: <20240617065828.9531-1-krzysztof.kozlowski@linaro.org>
+References: <20240617065828.9531-1-krzysztof.kozlowski@linaro.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240617-ep93xx-v10-10-662e640ed811@maquefel.me>
-References: <20240617-ep93xx-v10-0-662e640ed811@maquefel.me>
-In-Reply-To: <20240617-ep93xx-v10-0-662e640ed811@maquefel.me>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Nikita Shubin <nikita.shubin@maquefel.me>, 
- Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: b4 0.13-dev-e3e53
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718617100; l=1622;
- i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
- bh=ms3IjWYaELf8kHC/xQEvZjvjU7YonAObO6Tdf+8gNec=;
- b=PFwh6oZEQCgt48/QKZefr6m6Tbbl7PKyIp8ekVWxvIWVsYTumWKfUymmEYBrGUK2OYzbft80tPYc
- nvv404muCj0vF42ZOwnD3rF3Yu6AFJqmTMU6EwebDJt8+3FRZcBj
-X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
- pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
-X-Endpoint-Received: by B4 Relay for nikita.shubin@maquefel.me/20230718
- with auth_id=65
-X-Original-From: Nikita Shubin <nikita.shubin@maquefel.me>
-Reply-To: nikita.shubin@maquefel.me
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-From: Nikita Shubin <nikita.shubin@maquefel.me>
+On Mon, 17 Jun 2024 08:58:28 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-Add device tree bindings for the Cirrus Logic EP93xx watchdog block
-used in these SoCs.
-
-Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/watchdog/cirrus,ep9301-wdt.yaml       | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/watchdog/cirrus,ep9301-wdt.yaml b/Documentation/devicetree/bindings/watchdog/cirrus,ep9301-wdt.yaml
-new file mode 100644
-index 000000000000..5dbe891c70c6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/watchdog/cirrus,ep9301-wdt.yaml
-@@ -0,0 +1,42 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/watchdog/cirrus,ep9301-wdt.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cirrus Logic EP93xx Watchdog Timer
-+
-+maintainers:
-+  - Nikita Shubin <nikita.shubin@maquefel.me>
-+  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
-+
-+allOf:
-+  - $ref: watchdog.yaml#
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: cirrus,ep9301-wdt
-+      - items:
-+          - enum:
-+              - cirrus,ep9302-wdt
-+              - cirrus,ep9307-wdt
-+              - cirrus,ep9312-wdt
-+              - cirrus,ep9315-wdt
-+          - const: cirrus,ep9301-wdt
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    watchdog@80940000 {
-+        compatible = "cirrus,ep9301-wdt";
-+        reg = <0x80940000 0x08>;
-+    };
-
--- 
-2.43.2
-
+> Emails to Anson Huang bounce:
+>=20
+>   Diagnostic-Code: smtp; 550 5.4.1 Recipient address rejected: Access den=
+ied.
+>=20
+> Add IMX platform maintainers for bindings which would become orphaned.
+>=20
+> Acked-by: Uwe Kleine-K=F6nig <ukleinek@kernel.org>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+> Acked-by: Peng Fan <peng.fan@nxp.com>
+> Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com> # for I2C
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>=20
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com> # for IIO
 
 
