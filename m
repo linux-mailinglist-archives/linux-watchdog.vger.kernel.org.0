@@ -1,169 +1,327 @@
-Return-Path: <linux-watchdog+bounces-1177-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1178-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2079C910898
-	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Jun 2024 16:39:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59A789109D2
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Jun 2024 17:27:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5250D1C20A6C
-	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Jun 2024 14:39:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1128228228B
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Jun 2024 15:27:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA3E21AD9EC;
-	Thu, 20 Jun 2024 14:39:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B830F1AF697;
+	Thu, 20 Jun 2024 15:27:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S0QTwX57"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jmol2VVN"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E9A81ACE9C;
-	Thu, 20 Jun 2024 14:39:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2893158DCE;
+	Thu, 20 Jun 2024 15:27:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718894345; cv=none; b=mbAdkWFXcSbruoc/Uz02Ub2fM0Mhli2f3rro08W2dVErjshBB/+T0Zy+Z1omcjosC79LmuWsE9zQg0huCS7tGyv6twPkNddASYdm27xT6w1NjNkinmp3k8vFVk87JsicWsbEV1nOdgImjXQMsmYlOfZI5iKpjsddgkfIMaFtQoo=
+	t=1718897226; cv=none; b=et3WjhMF45UM4Cs2KbGnSJcj6Jc8eNuUTAUEcTb8tzOFYdf1Zm0pThTOa0d7rIreWn5MtNeNrp+4zIgi7pOlK2x/1F2rlySAA1WsV/amOBZtHAjZ7BkCYjx49PlhbLS8fq4liGIt8hEF/29/ZAkdoqy7LZthjsdY482+T0f/7lY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718894345; c=relaxed/simple;
-	bh=05/RUrOTznOicbhTxGt3jINlULbNja3R+ibYExoycxY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ek649OHPsYNeNIMk+bwqiial/C/zzWzNdxhRcFlNXaxScEP1GaA+qTZSuY3td9rEewQNiIOQRY/vuNDLzxZFqwDwqA6kSVNsD+0gJmj1yLXRp+2mpcuGUsvRNgzGo7SnOBcSivVbC9X07oPlzX3NJw+w3b7y+yDAcpP+WVvaDS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S0QTwX57; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65107C2BD10;
-	Thu, 20 Jun 2024 14:39:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718894345;
-	bh=05/RUrOTznOicbhTxGt3jINlULbNja3R+ibYExoycxY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=S0QTwX57+Ly3xbKN+gWS+0Jj1L7+hwOMgdXsLjDB2woFCb2QQ5O5MAjOA7zRSlxZ3
-	 hXRto68N50fvgVEXeLVXBkTVuHt7ypO/DKbAL5N7FTHwr8UlBZ+YF4m+4awIYnky8M
-	 837LPIwneH+N4N9wEi1HJTLBIvOM0JVdoOhuDz05VCyA++iaCm3uB8OeuV1FuVYbBg
-	 DBOfTQccappFpK0ov1jgaw8VCCdViW7ZvNXOHHklSW8V3hGvCYbz+zQOK7NvmLAsoX
-	 8G1x9ctTOcDKyngaUumZuJv0cVr4ib2hYl+qHVBHCkYOXRhY3o+BTZtLqCHvezrTCF
-	 AT0ucvskAZTpQ==
-Date: Thu, 20 Jun 2024 15:38:59 +0100
-From: Lee Jones <lee@kernel.org>
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v4 0/6] Support ROHM BD96801 Scalable PMIC
-Message-ID: <20240620143859.GM3029315@google.com>
-References: <cover.1718356964.git.mazziesaccount@gmail.com>
+	s=arc-20240116; t=1718897226; c=relaxed/simple;
+	bh=2XrRRjYF1uqiDwFMGp264d7TNOKR4vo+7hL+13XX10o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Hl7XT0XCVu9IpeA3miolUX9odzlR7WzIhFOQhrH3TM9PBaX6RfjWHblFLidAFSG0eYodUq4RgRuJFHh4g4pVv2OBFo9Orc1aQQLbyi6lUhpG9EV0FaQneQe5Dd7DK4n9RCqdd3wbv1Hs3gd5OcTAg0qSJo2utHWwSIg+hz84R5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jmol2VVN; arc=none smtp.client-ip=209.85.217.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-48c4268adfeso336204137.1;
+        Thu, 20 Jun 2024 08:27:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718897224; x=1719502024; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vnZARGKyWFgO8+qiE4D0Qv1mwYwIeF0Y3Q9hF2+I9x0=;
+        b=jmol2VVNRfWDNNI6Cdd7lXG5NKYZ3iD412aZXw7N0RLfoNc9263UMZTeR+c3sSn8Hg
+         tLb2xPgCfjCNNPFWzHQhV529c+cjfmcC6bicbl59E1GSNdahuT3jaDjsufliTjNlNl3M
+         GDi22HIsUzYYNKeq8Iv5ZfyA6vdx8yzIbg/dFaMySLuIG0QmYP6eSS5COBYHVlmr+YEd
+         WbR0BRSeVGM3hhhM9WZ7GWN+UDI6l6fgcTMFKB7Y09H0WM9ZGkHTjLUoV6KflNFU9ABU
+         oxaPgnHJFlCF74p966xG2EjHXw9g83j3F1zS8G033cifM+ZQIcl7T/XWyDGUc5NnNJbW
+         1SaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718897224; x=1719502024;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vnZARGKyWFgO8+qiE4D0Qv1mwYwIeF0Y3Q9hF2+I9x0=;
+        b=KdejI8lj4EFF2a45QBTNh/BFnAFBLEyrdn50qEKXX1ZJT0KsmN5mxmjyg1miHT3OPj
+         BBDhVrpqq/CBX8BdBOt9zj0hcE9lnfTFGRpFBIgi2yaNl997rOUGkz1aVe2haq0MP1nP
+         Atw+1mFWUfJa/kRlqZE2kYEHNSX7gO2jgoo0W3GrzJB+sTH/oxPKdKWq9Fwj6qj2jZVM
+         UkC38DpElywvsQ7BP4mep3BbxAzVKeZ/famBzVUwWlUOUvCq819Q3pi8GjL83jqerEVt
+         R3EcAqrra1E0EirdhFbJhkqRcCkSq/ZrBC3U8CiesRsnw/kWOwLUrA24wd/365baJXi/
+         UBpg==
+X-Forwarded-Encrypted: i=1; AJvYcCXaAlZCckTcXE8QNmWIJPFlE4FHAcVkjT2Ica9KWw02UetujPdOJQAD7McqtC297il2BjZ0Th9IFHbr6zo6WTAedfErKSQrInxE3WFZ2ifDDeIxw3+8VcjP9rYYH1hZeKnYWfRY/gy+oL5l1A8t2W74FEkCVD01PYdzjML8HjQWFA3uDSczZjgId9Fps1ok6iEj76zPwTKZOYJsfl8UyBPHg9AlHXkESHiVgbs=
+X-Gm-Message-State: AOJu0YyFIeZkmcg70hI1qtuZTCV0dUQVlplGP18gmx2YDsPxFXi5w9o/
+	bBG23n8+kt0QUX86XBYosDWRZwobnEI6QLgBhysaZRABre4j14FZ4bUr6wF6EsbTwT8xtQ1qxwr
+	muBkup8opF6g1iW7sIn+KEvC6J1Y=
+X-Google-Smtp-Source: AGHT+IF9wWjFT/oXYKfheDYuwzcjUvYS61Gxy7ssfcblP4Zs9P+hcLZaQLihuPc5JHmVNVvfTOriddQZXw5Y2/pPDHM=
+X-Received: by 2002:a05:6122:2515:b0:4e4:eda9:ec32 with SMTP id
+ 71dfb90a1353d-4ef2779ffb5mr6997993e0c.10.1718897222232; Thu, 20 Jun 2024
+ 08:27:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1718356964.git.mazziesaccount@gmail.com>
+References: <20240618222403.464872-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20240618222403.464872-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <a86797d6-e262-483c-92de-cfab5dfaff69@tuxon.dev>
+In-Reply-To: <a86797d6-e262-483c-92de-cfab5dfaff69@tuxon.dev>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Thu, 20 Jun 2024 16:26:36 +0100
+Message-ID: <CA+V-a8sZJhqf9TKVo7znS9HKhfRR7pBw4eWjXkQa9FC6+F41xg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] watchdog: Add Watchdog Timer driver for RZ/V2H(P)
+To: claudiu beznea <claudiu.beznea@tuxon.dev>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Magnus Damm <magnus.damm@gmail.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 14 Jun 2024, Matti Vaittinen wrote:
+Hi Claudiu,
 
-> Support ROHM BD96801 Scalable PMIC
-> 
-> The ROHM BD96801 is automotive grade PMIC, intended to be usable in
-> multiple solutions. The BD96801 can be used as a stand-alone, or together
-> with separate 'companion PMICs'. This modular approach aims to make this
-> PMIC suitable for various use-cases.
-> 
-> This series brings only limited support. The more complete set of
-> features was sent in the RFC:
-> https://lore.kernel.org/lkml/cover.1712058690.git.mazziesaccount@gmail.com/
-> 
-> The v3: implemented also support for ERRB interrupt and setting a name
-> suffix to IRQ domains. That work was postponed and will be continued
-> after some unrelated changes to irqdomain code are completed as
-> discussed here:
-> https://lore.kernel.org/all/87plst28yk.ffs@tglx/
-> 
-> Revision history still tries to summarize changes from the RFC for the
-> reviewers.
-> 
-> Revision history:
-> v3 => v4:
->  - Drop patches 7 to 10 (inclusive) until preparatory irqdomain changes
->    are done.
->  - Cleanups as suggested by Lee.
-> 	- Change the regulator subdevice name. (MFD and regulators).
-> 	- Minor styling in MFD driver
-> 
-> v2 => v3: Mostly based on feedback from Thomas Gleixner
-> 	- Added acks from Krzysztof and Mark
-> 	- Rebased on v6.10-rc2
-> 	- Drop name suffix support for legacy IRQ domains (both
-> 	  irqdomain and regmap)
-> 	- Improve the commit message for patch 7/10
-> 
-> v1 => v2:
-> 	- Add support for setting a name suffix for fwnode backed IRQ domains.
-> 	- Add support for setting a domain name suffix for regmap-IRQ.
-> 	- Add handling of ERRB IRQs.
-> 	- Small fixes based on feedback.
-> 
-> RFCv2 => v1:
-> 	- Drop ERRB IRQ from drivers (but not DT bindings).
-> 	- Drop configuration which requires STBY - state.
-> 	- Fix the register lock race by moving it from the regulator
-> 	  driver to the MFD driver.
-> 
-> RFCv1 => RFCv2:
-> 	- Tidying code based on feedback form Krzysztof Kozlowski and
-> 	  Lee Jones.
-> 	- Documented undocumented watchdog related DT properties.
-> 	- Added usage of the watchdog IRQ.
-> 	- Use irq_domain_update_bus_token() to work-around debugFS name
-> 	  collision for IRQ domains.
-> 
-> ---
-> 
-> 
-> Matti Vaittinen (6):
->   dt-bindings: ROHM BD96801 PMIC regulators
->   dt-bindings: mfd: bd96801 PMIC core
->   mfd: support ROHM BD96801 PMIC core
->   regulator: bd96801: ROHM BD96801 PMIC regulators
->   watchdog: ROHM BD96801 PMIC WDG driver
->   MAINTAINERS: Add ROHM BD96801 'scalable PMIC' entries
-> 
->  .../bindings/mfd/rohm,bd96801-pmic.yaml       | 173 ++++
->  .../regulator/rohm,bd96801-regulator.yaml     |  63 ++
->  MAINTAINERS                                   |   4 +
->  drivers/mfd/Kconfig                           |  13 +
->  drivers/mfd/Makefile                          |   1 +
->  drivers/mfd/rohm-bd96801.c                    | 273 ++++++
->  drivers/regulator/Kconfig                     |  12 +
->  drivers/regulator/Makefile                    |   2 +
->  drivers/regulator/bd96801-regulator.c         | 908 ++++++++++++++++++
->  drivers/watchdog/Kconfig                      |  13 +
->  drivers/watchdog/Makefile                     |   1 +
->  drivers/watchdog/bd96801_wdt.c                | 416 ++++++++
->  include/linux/mfd/rohm-bd96801.h              | 215 +++++
->  include/linux/mfd/rohm-generic.h              |   1 +
->  14 files changed, 2095 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic.yaml
->  create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd96801-regulator.yaml
->  create mode 100644 drivers/mfd/rohm-bd96801.c
->  create mode 100644 drivers/regulator/bd96801-regulator.c
->  create mode 100644 drivers/watchdog/bd96801_wdt.c
->  create mode 100644 include/linux/mfd/rohm-bd96801.h
+Thank you for the review.
 
-allmodconfig and allyesconfig builds fail with:
+On Thu, Jun 20, 2024 at 8:40=E2=80=AFAM claudiu beznea <claudiu.beznea@tuxo=
+n.dev> wrote:
+>
+> Hi, Prabhakar,
+>
+> On 19.06.2024 01:24, Prabhakar wrote:
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> >
+> > Add Watchdog Timer driver for RZ/V2H(P) SoC.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> >  drivers/watchdog/Kconfig     |   8 ++
+> >  drivers/watchdog/Makefile    |   1 +
+> >  drivers/watchdog/rzv2h_wdt.c | 248 +++++++++++++++++++++++++++++++++++
+> >  3 files changed, 257 insertions(+)
+> >  create mode 100644 drivers/watchdog/rzv2h_wdt.c
+> >
+> > diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> > index 85eea38dbdf4..3f7bcc10ccc2 100644
+> > --- a/drivers/watchdog/Kconfig
+> > +++ b/drivers/watchdog/Kconfig
+> > @@ -938,6 +938,14 @@ config RENESAS_RZG2LWDT
+> >         This driver adds watchdog support for the integrated watchdogs =
+in the
+> >         Renesas RZ/G2L SoCs. These watchdogs can be used to reset a sys=
+tem.
+> >
+> > +config RENESAS_RZV2HWDT
+> > +     tristate "Renesas RZ/V2H(P) WDT Watchdog"
+> > +     depends on ARCH_RENESAS || COMPILE_TEST
+> > +     select WATCHDOG_CORE
+> > +     help
+> > +       This driver adds watchdog support for the integrated watchdogs =
+in the
+> > +       Renesas RZ/V2H(P) SoCs. These watchdogs can be used to reset a =
+system.
+> > +
+> >  config ASPEED_WATCHDOG
+> >       tristate "Aspeed BMC watchdog support"
+> >       depends on ARCH_ASPEED || COMPILE_TEST
+> > diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+> > index 2d1117564f5b..295909a1b3b9 100644
+> > --- a/drivers/watchdog/Makefile
+> > +++ b/drivers/watchdog/Makefile
+> > @@ -86,6 +86,7 @@ obj-$(CONFIG_RENESAS_WDT) +=3D renesas_wdt.o
+> >  obj-$(CONFIG_RENESAS_RZAWDT) +=3D rza_wdt.o
+> >  obj-$(CONFIG_RENESAS_RZN1WDT) +=3D rzn1_wdt.o
+> >  obj-$(CONFIG_RENESAS_RZG2LWDT) +=3D rzg2l_wdt.o
+> > +obj-$(CONFIG_RENESAS_RZV2HWDT) +=3D rzv2h_wdt.o
+> >  obj-$(CONFIG_ASPEED_WATCHDOG) +=3D aspeed_wdt.o
+> >  obj-$(CONFIG_STM32_WATCHDOG) +=3D stm32_iwdg.o
+> >  obj-$(CONFIG_UNIPHIER_WATCHDOG) +=3D uniphier_wdt.o
+> > diff --git a/drivers/watchdog/rzv2h_wdt.c b/drivers/watchdog/rzv2h_wdt.=
+c
+> > new file mode 100644
+> > index 000000000000..08f97b4bab7f
+> > --- /dev/null
+> > +++ b/drivers/watchdog/rzv2h_wdt.c
+> > @@ -0,0 +1,248 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Renesas RZ/V2H(P) WDT Watchdog Driver
+> > + *
+> > + * Copyright (C) 2024 Renesas Electronics Corporation.
+> > + */
+> > +#include <linux/bitops.h>
+> > +#include <linux/clk.h>
+> > +#include <linux/delay.h>
+> > +#include <linux/io.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +#include <linux/of.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/pm_runtime.h>
+> > +#include <linux/reset.h>
+> > +#include <linux/units.h>
+> > +#include <linux/watchdog.h>
+> > +
+> > +#define WDTRR                        0x00    /* RW, 8  */
+> > +#define WDTCR                        0x02    /* RW, 16 */
+> > +#define WDTRCR                       0x06    /* RW, 8  */
+> > +
+> > +#define WDTCR_TOPS_1024              0x00
+> > +#define WDTCR_TOPS_16384     0x03
+> > +
+> > +#define WDTCR_CKS_CLK_1              0x00
+> > +#define WDTCR_CKS_CLK_256    0x50
+> > +
+> > +#define WDTCR_RPES_0         0x300
+> > +#define WDTCR_RPES_75                0x000
+> > +
+> > +#define WDTCR_RPSS_25                0x00
+> > +#define WDTCR_RPSS_100               0x3000
+> > +
+> > +#define WDTRCR_RSTIRQS         BIT(7)
+> > +
+> > +#define CLOCK_DIV_BY_256     256
+> > +
+> > +#define WDT_DEFAULT_TIMEOUT  60U
+> > +
+> > +static bool nowayout =3D WATCHDOG_NOWAYOUT;
+> > +module_param(nowayout, bool, 0);
+> > +MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (d=
+efault=3D"
+> > +              __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+> > +
+> > +struct rzv2h_wdt_priv {
+> > +     void __iomem *base;
+> > +     struct watchdog_device wdev;
+> > +     struct reset_control *rstc;
+>
+> You can keep the pointers first to save some padding, if any.
+>
+OK.
 
-  make[5]: *** No rule to make target 'drivers/regulator/da903x.o', needed by 'drivers/regulator/built-in.a'.
-  make[5]: Target 'drivers/regulator/' not remade because of errors.
+> > +     unsigned long oscclk_rate;
+> > +};
+> > +
+> > +static u32 rzv2h_wdt_get_cycle_usec(struct rzv2h_wdt_priv *priv,
+> > +                                 unsigned long cycle,
+> > +                                 u16 wdttime)
+> > +{
+> > +     int clock_division_ratio;
+> > +     u64 timer_cycle_us;
+> > +
+> > +     clock_division_ratio =3D CLOCK_DIV_BY_256;
+> > +
+> > +     timer_cycle_us =3D clock_division_ratio * (wdttime + 1) * MICRO;
+> > +
+> > +     return div64_ul(timer_cycle_us, cycle);
+> > +}
+> > +
+> > +static int rzv2h_wdt_ping(struct watchdog_device *wdev)
+> > +{
+> > +     struct rzv2h_wdt_priv *priv =3D watchdog_get_drvdata(wdev);
+> > +     unsigned long delay;
+> > +
+> > +     writeb(0x0, priv->base + WDTRR);
+> > +     writeb(0xFF, priv->base + WDTRR);
+> > +
+> > +     /*
+> > +      * Refreshing the down-counter requires up to 4 cycles
+> > +      * of the signal for counting
+> > +      */
+> > +     delay =3D 4 * rzv2h_wdt_get_cycle_usec(priv, priv->oscclk_rate, 0=
+);
+> > +     udelay(delay);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static void rzv2h_wdt_setup(struct watchdog_device *wdev, u16 wdtcr)
+> > +{
+> > +     struct rzv2h_wdt_priv *priv =3D watchdog_get_drvdata(wdev);
+> > +
+> > +     writew(wdtcr, priv->base + WDTCR);
+> > +
+> > +     /* LSI needs RSTIRQS to be cleared */
+> > +     writeb(readb(priv->base + WDTRCR) & ~WDTRCR_RSTIRQS, priv->base +=
+ WDTRCR);
+> > +}
+> > +
+> > +static int rzv2h_wdt_start(struct watchdog_device *wdev)
+> > +{
+> > +     pm_runtime_get_sync(wdev->parent);
+>
+> You may consider using pm_runtime_resume_and_get() which takes care of
+> failures from __pm_runtime_resume(), if any.
+>
+OK.
 
--- 
-Lee Jones [李琼斯]
+> > +
+> > +     /*
+> > +      * WDTCR
+> > +      * - CKS[7:4] - Clock Division Ratio Select - 0101b: oscclk/256
+> > +      * - RPSS[13:12] - Window Start Position Select - 11b: 100%
+> > +      * - RPES[9:8] - Window End Position Select - 11b: 0%
+> > +      * - TOPS[1:0] - Timeout Period Select - 11b: 16384 cycles (3FFFh=
+)
+> > +      */
+> > +     rzv2h_wdt_setup(wdev, WDTCR_CKS_CLK_256 | WDTCR_RPSS_100 |
+> > +                     WDTCR_RPES_0 | WDTCR_TOPS_16384);
+> > +
+> > +     rzv2h_wdt_ping(wdev);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int rzv2h_wdt_stop(struct watchdog_device *wdev)
+> > +{
+> > +     struct rzv2h_wdt_priv *priv =3D watchdog_get_drvdata(wdev);
+> > +
+> > +     pm_runtime_put(wdev->parent);
+> > +     reset_control_reset(priv->rstc);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static const struct watchdog_info rzv2h_wdt_ident =3D {
+> > +     .options =3D WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING | WDIOF_SETTI=
+MEOUT,
+> > +     .identity =3D "Renesas RZ/V2H WDT Watchdog",
+> > +};
+> > +
+> > +static int rzv2h_wdt_restart(struct watchdog_device *wdev,
+> > +                          unsigned long action, void *data)
+> > +{
+> > +     rzv2h_wdt_stop(wdev);
+>
+> Calling pm_runtime_put() though this function may lead to unbalanced
+> runtime PM counter if the device is not used at this moment. I may be wro=
+ng
+> though, I'm just reading the code, anyway (see below).
+>
+Agreed, I have added a check now to call stop only if WDT is active.
+
+> > +
+> > +     pm_runtime_get_sync(wdev->parent);
+>
+> If compiled with LOCKDEP this should trigger an invalid wait context
+> (see commit e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait
+> context'") and maybe [2] for a possible fix (if it's considered ok).
+>
+I finally managed to replicate the issue and now replaced it with the
+clk_enable() api to turn ON the clocks.
+
+Cheers,
+Prabhakar
 
