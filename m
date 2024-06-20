@@ -1,106 +1,99 @@
-Return-Path: <linux-watchdog+bounces-1174-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1175-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9369090F5B7
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Jun 2024 20:07:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1A74910079
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Jun 2024 11:36:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 938EF1C20F35
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Jun 2024 18:07:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 667D61F2195B
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Jun 2024 09:36:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08152156F28;
-	Wed, 19 Jun 2024 18:07:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309ED1A4F02;
+	Thu, 20 Jun 2024 09:36:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W8tqlxfr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aFVws6FY"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB89E82495;
-	Wed, 19 Jun 2024 18:07:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 024EA19E836;
+	Thu, 20 Jun 2024 09:35:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718820458; cv=none; b=Lpov3sOBrAxxa45VzJYKr5FrGOxHOeFqr9TgRRDlYkovAFr1q5zrgP6Nx0f3Xz2eBrNQyP3RF0xVMYKxexiAmnD+QX7Rd7eX8ucvu/pUmo0vUFOR7DJj37YkMGg3VMgwzi7Cs1FiI5/AZlYTM7xyvGi8OAu6kvN5s3bA2n0/8Vw=
+	t=1718876160; cv=none; b=ZyoUCMl8cYQtEsmVd2s0F+0VlFg50uHFb+tvbWZ0FVhWVDusx+q5F6xj7Y974D4ARu9h5G3wqZyFWv5oo99GVmxzQBaCmGHbGWwCYwlYQvvcjE3CnFGx0V3ayCJ4YPz1OhJhK1koXB+pV/EiIup71K+LzLDrZ0lk4/RB9WNol9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718820458; c=relaxed/simple;
-	bh=WpG/N4n7weTtDgFu1xNBgVcm3zzjW8++gALi+2OvWb8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uXn7RM1WN7L6Ig+mxD8k6c30Rbaj4oTCx48v5qgAl+ewi7Si6Wb8eNFBnipfdpr65OKAbHPNOaxk3Ow8ZtwteAP7it3NIih3/SBAyvFkmpjJPdlh4Ivne5EPFfgImuMXzjaMn+ipEi5FwoWJktXK8n9aFcVvpDVFZ3Gyw7Y1AaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W8tqlxfr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D688C2BBFC;
-	Wed, 19 Jun 2024 18:07:34 +0000 (UTC)
+	s=arc-20240116; t=1718876160; c=relaxed/simple;
+	bh=8we+OhQL+wj+5hQuaEZHowMrYqroa17RySsbu8nMXok=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=VNi41AwtdagV8Y+UHFaAQwEsMmNUFZ/4woChvLojsfS4WgHh+p+AX0bkWpPHCiWscsKGah1ZSH4D5mrFGdLKRqe9RqS1BzwbafURZhAlck2gh/nHk7nTO0OXWAjywL3rm+ecK3XOMDwFYjvca/tk+0EOPIy0Wk1hkXzhDwu+Jjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aFVws6FY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BA1EC2BD10;
+	Thu, 20 Jun 2024 09:35:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718820458;
-	bh=WpG/N4n7weTtDgFu1xNBgVcm3zzjW8++gALi+2OvWb8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=W8tqlxfrsI41R/48hIcaPq5WIQQmsEBbXcIiEBOIacHqvIGX1wNhnOXTWLt5Zjm1z
-	 nAHo/sgyV3Vvw7jljDE9VCiJ7etcVHx5Svxpk8BxNsDHgCuswSW1brYtdQtWrbM/2Y
-	 av7u01E57DDQBql11Ut5QyDNsWUaJQiYlHOKTaU97mFqoqsN+TL++3FzbBbufqSVWs
-	 kM2Ho6uxBeeqRnSUl0SDaA/yVEdCKGNXpuA8n3wk9sXgFlBdFzcFuZ2tX3c+Mk6jC7
-	 Yh0Uo02aqpKYqgN56D/KUJUuqoFSk+sij6gj46ont2Ykh2YKxHLIBMGVn7w3JnYt9L
-	 g6aJ77zY1dzKw==
-Date: Wed, 19 Jun 2024 19:07:33 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: renesas,wdt: Document
- RZ/V2H(P) SoC
-Message-ID: <20240619-operator-species-3e1461c8fca5@spud>
-References: <20240618222403.464872-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20240618222403.464872-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	s=k20201202; t=1718876159;
+	bh=8we+OhQL+wj+5hQuaEZHowMrYqroa17RySsbu8nMXok=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=aFVws6FYFIAelZzuhoeUNzQ+Jpbg1+lvP4fiSYLEGVxfJsV4NhHdP0OqkaTOyAqHF
+	 ADtkaVf2frCrdD44KJqzk5KLkh3KUEykrl9M+R/w5/Vy3HT2YAWMfwTWVflgW35YTb
+	 UeDhtDOJHY/4HuaFk76JIIA18X+55j5guHAO7t9aKKfrPKCJaJemdH8UhXnH5tq8Zs
+	 O1oF+w4gj8dmMIIz1YbHfqJwppkMbx4KxMiB+UjQILF/TjiGM15zTJ0q5J6XeWMcuR
+	 hYDBUrSXRLSDwnbBATiilC4PdOrCSQ0jKESKe4m/Wl6cBN0zl+oFphtnKVI5yurq+e
+	 XKlI2hBlWtM/g==
+From: Lee Jones <lee@kernel.org>
+To: Matti Vaittinen <mazziesaccount@gmail.com>, 
+ Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+ Mark Brown <broonie@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+In-Reply-To: <cover.1718356964.git.mazziesaccount@gmail.com>
+References: <cover.1718356964.git.mazziesaccount@gmail.com>
+Subject: Re: [PATCH v4 0/6] Support ROHM BD96801 Scalable PMIC
+Message-Id: <171887615676.1119049.7678370393770067068.b4-ty@kernel.org>
+Date: Thu, 20 Jun 2024 10:35:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="XyJELvnlnScZvZ1t"
-Content-Disposition: inline
-In-Reply-To: <20240618222403.464872-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.13.0
 
+On Fri, 14 Jun 2024 12:42:35 +0300, Matti Vaittinen wrote:
+> Support ROHM BD96801 Scalable PMIC
+> 
+> The ROHM BD96801 is automotive grade PMIC, intended to be usable in
+> multiple solutions. The BD96801 can be used as a stand-alone, or together
+> with separate 'companion PMICs'. This modular approach aims to make this
+> PMIC suitable for various use-cases.
+> 
+> [...]
 
---XyJELvnlnScZvZ1t
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks!
 
-On Tue, Jun 18, 2024 at 11:24:02PM +0100, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->=20
-> Add support for the Watchdog Timer (WDT) hardware found in the Renesas
-> RZ/V2H(P) SoC to the `renesas,wdt` device tree bindings. The RZ/V2H(P)
-> SoC features a WDT that is compatible with existing Renesas watchdog
-> drivers.
->=20
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+[1/6] dt-bindings: ROHM BD96801 PMIC regulators
+      commit: 7edf20a5380779dd47e72b68e7cfa037dfd0807d
+[2/6] dt-bindings: mfd: bd96801 PMIC core
+      commit: ef0c63e3e22d4c9039831236e3b189caf538b4c0
+[3/6] mfd: support ROHM BD96801 PMIC core
+      commit: d701779ed5effdb55b8f08051ed1c5291fb9201c
+[4/6] regulator: bd96801: ROHM BD96801 PMIC regulators
+      commit: 79ab65717405d535b96a7bbf04eb8c71f9372985
+[5/6] watchdog: ROHM BD96801 PMIC WDG driver
+      commit: 10278981a2fb81fb07635b9649f6387f6a6a5abf
+[6/6] MAINTAINERS: Add ROHM BD96801 'scalable PMIC' entries
+      commit: de9fa7d755fd0c5f90c5faa524db0cc13efd809e
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+--
+Lee Jones [李琼斯]
 
---XyJELvnlnScZvZ1t
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZnMeZAAKCRB4tDGHoIJi
-0h8LAQCEHzUHsRWgDCslHOLKb9AD8wepaccM/cWws1tCOY0y1wEAg/fqrRdK4BW0
-M/m/yisdgfqFGfcCCiihOWBcIoNTDQ4=
-=bYDp
------END PGP SIGNATURE-----
-
---XyJELvnlnScZvZ1t--
 
