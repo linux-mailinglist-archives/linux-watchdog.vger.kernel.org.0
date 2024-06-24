@@ -1,72 +1,94 @@
-Return-Path: <linux-watchdog+bounces-1183-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1184-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAF6D913DC7
-	for <lists+linux-watchdog@lfdr.de>; Sun, 23 Jun 2024 21:51:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55358915548
+	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Jun 2024 19:25:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ABE2D1C20CE6
-	for <lists+linux-watchdog@lfdr.de>; Sun, 23 Jun 2024 19:51:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F9F9280CEB
+	for <lists+linux-watchdog@lfdr.de>; Mon, 24 Jun 2024 17:25:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A472B183087;
-	Sun, 23 Jun 2024 19:51:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F81219D8A9;
+	Mon, 24 Jun 2024 17:25:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="QvkfVibu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SVcOEXFP"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED29A3BBE2;
-	Sun, 23 Jun 2024 19:51:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96204179AA;
+	Mon, 24 Jun 2024 17:25:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719172311; cv=none; b=hDhOjyuJsgxuwrnTA1LDLqjxH/ibXRCv1NeEkgYQGCiESAHNxSFMttYsFqn4VjEzf2soOJaNhD5P4awS8H+GzJgCSLNDmbTHAyKQK36eMx/3KM2WkGpPfY6jrsHk4fmkPVo9acVOVzrBew9LQvhEilJ+9aplWtx4BFkZUiAldpA=
+	t=1719249948; cv=none; b=EX/excZCE7znd/N3SzbUOghaETRK7VBwDHT1TLSSpYfyM6GLfkZ/REYHAR4Hrb5wuqIWB9wBnym37ROtvuIt8Ohayuzh393jFImX10VrX69+ZZAW5Ss9FMqkCLto+P63HncZZbavrbecDnnCu9oJSD5RNYt2xO5fsWTTtO4S48g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719172311; c=relaxed/simple;
-	bh=8Njo9M75DV0GjH4h/w6TNvvqjYcKmboBOGAzX7BQcQk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gOoMtFnZUW+ZNg+pazAG+hwmA/kzKafbj9dFlQTKqYmlzNzvUTeoEVXKA2szavPnAXe+WbSYbsDpujaWYToI9O9FQNUAaXROSioyZiFhLXR+H6Vib3kjz7Ku6QPFxjzFH1tDvhov6k1kDfMHtoX0TFc6RXlVrLZJiQa+2ufTL6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=QvkfVibu; arc=none smtp.client-ip=85.214.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	(Authenticated sender: marex@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id 40D2A866F6;
-	Sun, 23 Jun 2024 21:51:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1719172308;
-	bh=dpfBkKDlAcEhwV93vk51cBuaVNWU/9Hhy3ka4ffDuAQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=QvkfVibup0Tqm/zvQ5PRjTg/CmAD3knrS0+nS/HR1IeC6uiXZulu5ZBBLiBm2lIQJ
-	 bnofODM/5fzvQhFOIsOo++40FMuO3pryr2SVlgmBZWiXsKa4bvE5E0YjCV0yHBJM9q
-	 1GCUOlqwc81X3N3E09S7lFa8bT9kE5WdTVLN5T+BwjvI43Da6AiXPwAvEp2ctr9ZGo
-	 LsWmYn3xce3fHR3RuBKN+D+VhKFS7MSftQ20HA33+VgeEtH0XbiPU0Jbe25Z5t2OFl
-	 7N5hrrX2F2Dz23Xxb3HnF8wjuvzxLZtIdo0Vnz4MXvZ4GVtStARnPuKPEdKs3IQItd
-	 dNCrN9G2bSShA==
-From: Marek Vasut <marex@denx.de>
-To: linux-arm-kernel@lists.infradead.org
-Cc: Marek Vasut <marex@denx.de>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Antonio Borneo <antonio.borneo@foss.st.com>,
+	s=arc-20240116; t=1719249948; c=relaxed/simple;
+	bh=9Fx3y+RGQy5iRyY0sJLMaqHk/ggeCACEEGValnaOj0Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YsTfMLufsTPG2fXQp26Q9pcO19loIRQs399Aq5lMesjPvGtU90C3WmkYXATD9QyS/+reIIgVMzHHfrybHo7GvBd/IWDTgrQyuqkGj4lVjviAyuzdLUEBwanpYwRb+NkX07oo5PxyoPCUj45PtM9s8S1GIhjWguVRyheJQYOljKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SVcOEXFP; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-35f2c9e23d3so3502577f8f.0;
+        Mon, 24 Jun 2024 10:25:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719249944; x=1719854744; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZwYx+K0nxCDlnHLtM/XdT9LfiVrp+4LlfN2T0Y5wLUc=;
+        b=SVcOEXFPon7oIs9ZtxSNPVxpbNx/l40igf+0pIZOeLZFnIS7qfX9zM04IXlfpa+1cV
+         id4vPn5Ak56XDBCznBiBcOORFqx2SH7/251EB6oscB4dFFgZmUZ0Ts84hMN9QJ1lbAXG
+         fi/mLnPaTk66yURcoGUNlbYV03CmERLeM7iEmxNslMZpQRh7OSw3I9S3kj8LyqsWLWvx
+         OYGjEiyN2HWvML56Sja5O0fyU9ozrIYesKaFZu5s4QSn3SBwschHPFiuagHxBBRfii/v
+         kQJ3Ouqx+Eb7xH8kG7V5vsSo/39K618c1xoB1TrmB4dAz+R3KSjhTNFD68EZCzZqF2Wp
+         3Ygg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719249944; x=1719854744;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZwYx+K0nxCDlnHLtM/XdT9LfiVrp+4LlfN2T0Y5wLUc=;
+        b=pVA0WJ9M+U7AJY1iYl0+6cayNOeAE7uZc698nVlGd+JPHWRMC0AVfb+7ZKfvucGXsu
+         FVRwgmLamaLAgoc+vuPpltaEDW7w+gpVxnMUw7fzPiLJUIaAN7zhsnP6Awpkz9D4BFdI
+         dNo8Pk+IlRz/vkU79iaJNgudSelb3brxHaS4wnoP2BGj+XcU7KO6wGQ2BSv5YC2H8sFY
+         KTpdFUfS1lkVr4SofXA2EZXbDmFzUmPYIciNd1pl0UAeOI88WOoLNzmn2qDmkZdugZHp
+         +OvoGSqC+91A5Gsl6sb+nmhWDRXK6WZV+cjLSnX01Ur+aTLr8sOMrcRx86Nra2aK8J1t
+         wAdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXk7qlw/vsFShXltg0HdD8cyX55Dn6tewq8VcfJ5HrPpD8cP2lAR+e6WnbKMVfaAvIlzd8NuQ1uyoqheAIdffrhsYqIvERv5dWgSzKl1AZcfgwx4eIFwfujN4vXvuJ9AMYFkUFUh0++99jxNHTrRXi+sN+ULwsFOQqeYpg1DVXMkYPXPl5kYPVyYIT1
+X-Gm-Message-State: AOJu0YyyOBcf7Do5aBlhfsbxAI3khUtjlWWYHOBfzBYptVz4JTq3FX+I
+	Q4P35S0D++2x+Hb2JytsKl2GphvJ31k1siHlmClMeEfZkPSipfuz
+X-Google-Smtp-Source: AGHT+IFkzKy+9AeZbOpeQzkp2YulpP7jLkEFBqErOwd8SMABngm6nh1c8sOJjfkkJVerJr/Rxcf98Q==
+X-Received: by 2002:adf:eac8:0:b0:363:337a:3e0 with SMTP id ffacd0b85a97d-366e325ba0cmr5812582f8f.1.1719249943875;
+        Mon, 24 Jun 2024 10:25:43 -0700 (PDT)
+Received: from prasmi.home ([2a00:23c8:2500:a01:c315:5cc8:bc92:639])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42481921f16sm140555005e9.41.2024.06.24.10.25.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jun 2024 10:25:43 -0700 (PDT)
+From: Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Guenter Roeck <linux@roeck-us.net>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-watchdog@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-watchdog@vger.kernel.org
-Subject: [PATCH v3] ARM: dts: stm32: Add IWDG2 EXTI interrupt mapping and mark as wakeup source
-Date: Sun, 23 Jun 2024 21:51:08 +0200
-Message-ID: <20240623195136.81522-1-marex@denx.de>
-X-Mailer: git-send-email 2.43.0
+	linux-renesas-soc@vger.kernel.org,
+	Prabhakar <prabhakar.csengg@gmail.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v2 0/2] Add Watchdog Timer driver for Renesas RZ/V2H(P) SoC
+Date: Mon, 24 Jun 2024 18:25:07 +0100
+Message-Id: <20240624172509.106912-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -74,51 +96,35 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
 
-The IWDG2 is capable of generating pre-timeout interrupt, which can be used
-to wake the system up from suspend to mem. Add the EXTI interrupt mapping
-and mark the IWDG2 as wake up source.
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Antonio Borneo <antonio.borneo@foss.st.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Richard Cochran <richardcochran@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-stm32@st-md-mailman.stormreply.com
-Cc: linux-watchdog@vger.kernel.org
----
-V2: No change
-V3: No change
----
- arch/arm/boot/dts/st/stm32mp151.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+Hi All,
 
-diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
-index 1804e202eb425..68846699b26fd 100644
---- a/arch/arm/boot/dts/st/stm32mp151.dtsi
-+++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
-@@ -355,6 +355,8 @@ iwdg2: watchdog@5a002000 {
- 			reg = <0x5a002000 0x400>;
- 			clocks = <&rcc IWDG2>, <&rcc CK_LSI>;
- 			clock-names = "pclk", "lsi";
-+			interrupts-extended = <&exti 46 IRQ_TYPE_LEVEL_HIGH>;
-+			wakeup-source;
- 			status = "disabled";
- 		};
- 
+This patch series aims to add WDT support to Renesas RZ/V2H(P)
+SoC.
+
+v1->v2
+- Included RB tag for binding patch
+- Fixed review comments from Claudiu
+- Stopped using PM runtime calls in restart handler
+- Dropped rstc deassert from probe
+
+Cheers,
+Prabhakar
+
+Lad Prabhakar (2):
+  dt-bindings: watchdog: renesas,wdt: Document RZ/V2H(P) SoC
+  watchdog: Add Watchdog Timer driver for RZ/V2H(P)
+
+ .../bindings/watchdog/renesas,wdt.yaml        |  17 +-
+ drivers/watchdog/Kconfig                      |   8 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/rzv2h_wdt.c                  | 251 ++++++++++++++++++
+ 4 files changed, 276 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/watchdog/rzv2h_wdt.c
+
 -- 
-2.43.0
+2.34.1
 
 
