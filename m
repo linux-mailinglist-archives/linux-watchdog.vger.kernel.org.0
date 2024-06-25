@@ -1,106 +1,140 @@
-Return-Path: <linux-watchdog+bounces-1187-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1188-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9CBC9169BC
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Jun 2024 16:01:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C17491743A
+	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Jun 2024 00:29:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5318E1F27425
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Jun 2024 14:01:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D2B51C22BD1
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Jun 2024 22:29:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FC1F1509A5;
-	Tue, 25 Jun 2024 14:00:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B836117F37B;
+	Tue, 25 Jun 2024 22:29:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="vxvjoZwt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aHIBw3DB"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B67ABE71;
-	Tue, 25 Jun 2024 14:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E27617E905;
+	Tue, 25 Jun 2024 22:29:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719324037; cv=none; b=n7WnN4Y83xC/MQ4RUbtzQbQ3qXV9WRXfaNfJQlCKCs2rNIpWEhwOMLw60kScppYs8oo9bpU3T6SJgoyOXoAOxykJsvUEBInpl8mxJdzagqjTuqj4vlA/NxtGgbBYpUugWc5oBzLeEaL5U7QJidMwlqgsTV8SrfErpy6q/3PGkgQ=
+	t=1719354544; cv=none; b=lRLgrbZ/+i8ofiZ9DUYt0OSJt4GMsLPzhoHJ/X5TtTmLph2ype4Tm9MQ2aJwT6EaFRXz+vtjCfii9YLrpj6lwJeSP7FrpgCsj87ptZTjpeek2M913vcHz4Iwj7sLGFmh6ePznLIG7KFKfXLfM5bqBD4A/Wc/jqG/nny8T5fO23I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719324037; c=relaxed/simple;
-	bh=Rb3KOLeLTiXVITDd5CHEUeEmlO2BzhhQejT8VB/17/I=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=nhrDiXlAQ8ZS5Kf39gUz9aezbW0eEsUJamGSbIaT3MujZW3NIJM2e3gb4c4CS4LzP9+n0c/TuxZGusAGnM7DtDaSUSEKyTVUgpCf82FbLvDs/J3E3ADaV46E+3WIRnzIHxUOSab0+D5M9dUTTiaxrICyqjDHwBIgM0GeWbteknw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=vxvjoZwt; arc=none smtp.client-ip=185.87.125.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-	id 5640B401AE; Tue, 25 Jun 2024 15:31:51 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 5640B401AE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-	s=odk20180602; t=1719322311;
-	bh=Rb3KOLeLTiXVITDd5CHEUeEmlO2BzhhQejT8VB/17/I=;
-	h=Date:From:To:Cc:Subject:From;
-	b=vxvjoZwtJmvfDoK0x1VBzI4in6ZIWSRRb8uw/ELktZKw8k8JFt78HLx+Hb9g0JmpH
-	 QscUMwiio6j4BtmBktY+G5LpCuAV4PruZ2q6mO/FPs7f95WfG6imok9ETggKd0Mj4P
-	 Rs/R6Vlo5lYkkJPSYaCkxxllWnb5//lK/9zobOzI=
-Date: Tue, 25 Jun 2024 15:31:51 +0200
-From: Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>, Arnd Bergmann <arnd@arndb.de>,
-	Jeff Johnson <quic_jjohnson@quicinc.com>
-Subject: [GIT PULL REQUEST] watchdog - v6.10 release cycle (fixes).
-Message-ID: <20240625133151.GA1554@www.linux-watchdog.org>
+	s=arc-20240116; t=1719354544; c=relaxed/simple;
+	bh=+L/emvVgtDd3ULOJoo20PaysUqptsWugNLJKhSGnCkg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N9xY9Hpih9mjZ7Ip6VPGC7OL0QIgFTRkTY0NzRH7cbZi4NG0U46xFjs897PTGMpgaYRXl7TndyaaWMqKR+lj3t1vyAUAnQI52Cw8/a6cqnZ4ni62Gs0BzfpDM8EmAxfcYlfB0DWLUrtJEkz6PR/rlDns0h3XaS4Fy9Bbs+F4oJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aHIBw3DB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F0AC32781;
+	Tue, 25 Jun 2024 22:29:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719354544;
+	bh=+L/emvVgtDd3ULOJoo20PaysUqptsWugNLJKhSGnCkg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aHIBw3DBgsgjmcpsG44SasdTK/47SLheszc2AagGPy/V7LIt+KIuH7AKrKN0mdQ4m
+	 v/86HnwE7/KWPAzxgOoR5hd/JrDeNRp9OvGbCb53WyGFL4HooYtZJcZIp7AkX2QJaT
+	 +vHjK7JhSOiOAkpK9K/Uyzwtlo1NR5gjQek9RAJpOZqYT6fUx1Eow01E9Q9ijR15CZ
+	 38Zdrwgb2Jm2MNu4wtYm/QCdZo2set9VEJc9HQaVddLzXwUicN4X+XaslvpbMn/EO5
+	 WLDZHpj95vw9bZc+CTbvXsK9O1YX/XaWex8fqU8mdI6PeHJvGwff4q5XmL1qsCihxt
+	 HbV5Mb4qb0ZXA==
+Date: Tue, 25 Jun 2024 16:29:02 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: imx@lists.linux.dev, Frank Li <Frank.Li@nxp.com>,
+	linux-gpio@vger.kernel.org,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-pwm@vger.kernel.org,
+	Lars-Peter Clausen <lars@metafoo.de>, linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Jonathan Cameron <jic23@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	linux-watchdog@vger.kernel.org, linux-iio@vger.kernel.org,
+	Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	linux-clk@vger.kernel.org, Dong Aisheng <aisheng.dong@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Abel Vesa <abelvesa@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+	Zhang Rui <rui.zhang@intel.com>, Andi Shyti <andi.shyti@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2] dt-bindings: drop stale Anson Huang from maintainers
+Message-ID: <171935453992.325655.11101198917545671907.robh@kernel.org>
+References: <20240617065828.9531-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-User-Agent: Mutt/1.5.20 (2009-12-10)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240617065828.9531-1-krzysztof.kozlowski@linaro.org>
 
-Hi Linus,
 
-Please pull following watchdog changes for the v6.10 release cycle.
+On Mon, 17 Jun 2024 08:58:28 +0200, Krzysztof Kozlowski wrote:
+> Emails to Anson Huang bounce:
+> 
+>   Diagnostic-Code: smtp; 550 5.4.1 Recipient address rejected: Access denied.
+> 
+> Add IMX platform maintainers for bindings which would become orphaned.
+> 
+> Acked-by: Uwe Kleine-König <ukleinek@kernel.org>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+> Acked-by: Peng Fan <peng.fan@nxp.com>
+> Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com> # for I2C
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Changes in v2:
+> 1. Add acks/Rbs.
+> 2. Change clock maintainers to Abel Vesa and Peng Fan.
+> 3. Change iio/magnetometer maintainer to Jonathan.
+> ---
+>  .../devicetree/bindings/arm/freescale/fsl,imx7ulp-sim.yaml    | 4 +++-
+>  Documentation/devicetree/bindings/clock/imx6q-clock.yaml      | 3 ++-
+>  Documentation/devicetree/bindings/clock/imx6sl-clock.yaml     | 3 ++-
+>  Documentation/devicetree/bindings/clock/imx6sll-clock.yaml    | 3 ++-
+>  Documentation/devicetree/bindings/clock/imx6sx-clock.yaml     | 3 ++-
+>  Documentation/devicetree/bindings/clock/imx6ul-clock.yaml     | 3 ++-
+>  Documentation/devicetree/bindings/clock/imx7d-clock.yaml      | 1 -
+>  Documentation/devicetree/bindings/clock/imx8m-clock.yaml      | 3 ++-
+>  Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml      | 4 +++-
+>  Documentation/devicetree/bindings/gpio/gpio-mxs.yaml          | 1 -
+>  Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml      | 4 +++-
+>  .../devicetree/bindings/iio/magnetometer/fsl,mag3110.yaml     | 2 +-
+>  .../devicetree/bindings/memory-controllers/fsl/mmdc.yaml      | 4 +++-
+>  Documentation/devicetree/bindings/nvmem/imx-iim.yaml          | 4 +++-
+>  Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml        | 4 +++-
+>  Documentation/devicetree/bindings/nvmem/mxs-ocotp.yaml        | 4 +++-
+>  Documentation/devicetree/bindings/pwm/imx-tpm-pwm.yaml        | 4 +++-
+>  Documentation/devicetree/bindings/pwm/mxs-pwm.yaml            | 1 -
+>  Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml      | 4 +++-
+>  Documentation/devicetree/bindings/thermal/imx-thermal.yaml    | 1 -
+>  Documentation/devicetree/bindings/thermal/imx8mm-thermal.yaml | 4 +++-
+>  Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml  | 4 +++-
+>  Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml   | 4 +++-
+>  .../devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml         | 4 +++-
+>  24 files changed, 52 insertions(+), 24 deletions(-)
+> 
 
-This series contains:
-* lenovo_se10_wdt: add HAS_IOPORT dependency
-* add missing MODULE_DESCRIPTION() macros
-
-The output from git request-pull:
-----------------------------------------------------------------
-The following changes since commit c3f38fa61af77b49866b006939479069cd451173:
-
-  Linux 6.10-rc2 (2024-06-02 15:44:56 -0700)
-
-are available in the git repository at:
-
-  git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.10-rc-fixes
-
-for you to fetch changes up to acf9e67a7625367b89440855572b29c5ec19dd20:
-
-  watchdog: add missing MODULE_DESCRIPTION() macros (2024-06-15 12:49:57 +0200)
-
-----------------------------------------------------------------
-linux-watchdog 6.10-rc-fixes tag
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      watchdog: lenovo_se10_wdt: add HAS_IOPORT dependency
-
-Jeff Johnson (1):
-      watchdog: add missing MODULE_DESCRIPTION() macros
-
- drivers/watchdog/Kconfig           | 1 +
- drivers/watchdog/menz69_wdt.c      | 1 +
- drivers/watchdog/omap_wdt.c        | 1 +
- drivers/watchdog/simatic-ipc-wdt.c | 1 +
- drivers/watchdog/ts4800_wdt.c      | 1 +
- drivers/watchdog/twl4030_wdt.c     | 1 +
- 6 files changed, 6 insertions(+)
-----------------------------------------------------------------
-
-Kind regards,
-Wim.
+Applied, thanks!
 
 
