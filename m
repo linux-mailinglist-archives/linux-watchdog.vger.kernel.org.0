@@ -1,214 +1,106 @@
-Return-Path: <linux-watchdog+bounces-1190-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1191-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1B5A917BBA
-	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Jun 2024 11:07:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 423BB91863C
+	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Jun 2024 17:50:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5EC91C21469
-	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Jun 2024 09:07:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB5491F21CB9
+	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Jun 2024 15:50:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 836691684A1;
-	Wed, 26 Jun 2024 09:07:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72C8718A92C;
+	Wed, 26 Jun 2024 15:50:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E6XZ/z1Z"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ONu2HtKR"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C86415F33A;
-	Wed, 26 Jun 2024 09:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59ACD18A923
+	for <linux-watchdog@vger.kernel.org>; Wed, 26 Jun 2024 15:50:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719392849; cv=none; b=mTn98hhB0FK9AwDZzUKrug/LcNUlRJhkpC5xOiluJZHpP/62nN/s4QS1Qsz66uM7Nup7SKnyIPvX4pPGnZ3Fw0sJwoN811tft5HhHSutEaBqPGIYoQLcHThxVVtqVmItIJyylscoaz28Q9+IIq9IuFNnYVOZBpTyBaS9anjFr1k=
+	t=1719417032; cv=none; b=ekD/ixdLim5gWEiY8qcUmtcN5Yf6ADj3DfG4QheEZQ3V1/8ZD7z9U8yxIlm0PwZXl8mzrLoxkivDo/zHB1hmhQQXb+XMMBQTgdxG82kVf03qH0Dj6OE4aMjdhCU+7g7viGNKZdTuDSnQGgzRnWBmZZyWf+reHjJ0gz7bwBAzuoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719392849; c=relaxed/simple;
-	bh=Vef46PKEnj+c20gxbE0Uu58kS6RdxRRCUeDVUuJMjso=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=km82hDP/r0N3FrQqCJy9wdHVKI6j/5HmQp0rRhyUDqaQ1BEdgVBIYK+cqK/eAC8KcM14iMMSJwTdCZu4ayvQQ5v/xBwit2jc8OIw1zqIS0m8Xvzkdg1h6qwCg2qi0shAKph5q9bft7svQSQjNeIX5J9FKfGq/1Wm8SMGGhM5JGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E6XZ/z1Z; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52cd87277d8so4868519e87.2;
-        Wed, 26 Jun 2024 02:07:27 -0700 (PDT)
+	s=arc-20240116; t=1719417032; c=relaxed/simple;
+	bh=37ZNP33e8+7HO0gnq2NbaftX9ElKyKSPmZLHZYCftzA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CJpgKGnei2WOrRM5c4kcIh0P9Of1C10tpwQBlMt9NhWcRfGSHs5++qG0jKYhC6PQZ76Fqxx1GWS2IfPTtoUUbeNzSz+Pzr8A6tHHKta7HK7HWsrBlA+WDWOAi2xn2dgEtdruaQRDjLJEuZpIaDE4hLPZi4YxCXPGF9HDxyaGtc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ONu2HtKR; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a70c0349b64so456722566b.1
+        for <linux-watchdog@vger.kernel.org>; Wed, 26 Jun 2024 08:50:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719392846; x=1719997646; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=76/161HoTumb+iDrdbol7NJLj3KBEjm/AeLJQvuGQYM=;
-        b=E6XZ/z1ZNeF2Ss0WOEfCd4s1EJF9pjBH5N3hUKRSHhQrUfJQ0ELSBT7oHYdmC81oW0
-         kBsHCNf8gkT0+qW7IrNKYXM7R3eYGXkXBlDdxqzKgdg99HACDFyrQvufhnT67prkfjoX
-         OnKt1V5nrpXfUN1+q5xx/7ELGNeqocGTrWqtwrz+lbOIiKyGsKgkX551KJRqZKalGitr
-         dLjddjOQcDe4D4XomgDRyKgNMU6O82QMul+jo3JVaLYxkFTHRhyk1H8K3ED5nNArBGwW
-         SvWjG/6CTxhbXKezErJXE/ASak8YG0BRLy3vCdcTvnha5YY51CBgv1y9DllnzTClFAQC
-         O3Bg==
+        d=linux-foundation.org; s=google; t=1719417028; x=1720021828; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uzAm2VJPpaiV1Xbr7cm5GnjinWJJrnRXltU4y23jQs4=;
+        b=ONu2HtKRBvxqmOD2z6rypEJiVJrI6H0sonuOSzZB5pXn7J1h1f8vSMHhvR30NOKbsl
+         wdLDLhvWamIUk9BEX4MSp6rU+uPkQlvJf6miHAEeR8IRzA1R4P/qVd5INgaQLQSklg82
+         yTzjbyhdjyn3jz7uAghvLAK/dq/udBrqilLFQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719392846; x=1719997646;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=76/161HoTumb+iDrdbol7NJLj3KBEjm/AeLJQvuGQYM=;
-        b=srAiVKSKsaJWJ2YgttVkbvLFq32g9GmjAqM6Qz+JXvm6yZ1NRfC3JFXwiUoKkClKk2
-         b48Vw2lmlsaUOp8OUHqe8cojxnYtSdMV856ysYxIalE8kbqBY0Vngre9BSGpQY+nIq2i
-         8oa0ORHXgADoEfMtoqID8RlOaLRT+dzSWD9l6YGeZax8nCREUxOEnLkNAj+O7VpbJCyg
-         o9jDeaOSDdXHB8pTyTxVY9Trip2tmdi/8smjTXxxagvNLCnNGpcJw5XAC45QZUVFVJlN
-         IbvYR84mndUl158wZm/S90JB4J9AzX6Qy9pzDl/Tt0n4sbIP6XJTVA5ad7Km7q7v/fgP
-         d9oQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVFglCX73AxZGiJ8d1uAVW595GLrCmRzfOapfgnTCgX9De7TYggq7hLTCBFU1wrbfAalPjMHk1yUFPHosYNSmQnTnrE5I0acCPmrkA6dLSc4NbdH1ZvFePwUdIRdo3YsajpTW+jgchTMqJ1hklPwdT/Ms3pjYUFxxEgddo3k5lzue+3ULQT4PiY
-X-Gm-Message-State: AOJu0YzxKjHxLT+q/7tmAa4DngzTWp54eR5gHayqeKuU4S82JiStEApC
-	Xc33jC6R6fpa/P5d1E9XxwExW/FbA8Sl2EThf6nJ3LjmjizuKT2bY2c8Yw==
-X-Google-Smtp-Source: AGHT+IFZmB6mGtubKzB8dHrJhQUZN+wpPbJjxQUSSxefcinOlw8QmfoZ2F+jKhN6CWJaO6QMqWqLEg==
-X-Received: by 2002:a05:6512:3450:b0:52c:dea8:7ca0 with SMTP id 2adb3069b0e04-52ce185cf71mr5655473e87.55.1719392844938;
-        Wed, 26 Jun 2024 02:07:24 -0700 (PDT)
-Received: from ?IPV6:2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd? ([2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52cd84b23d9sm1455429e87.202.2024.06.26.02.07.23
+        d=1e100.net; s=20230601; t=1719417028; x=1720021828;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uzAm2VJPpaiV1Xbr7cm5GnjinWJJrnRXltU4y23jQs4=;
+        b=FgECTo/UliLpwg0zyPwZ3iP92cyrw08wfZxrU2symUNTGidrmM5YeMDmVkG5+mBcEV
+         RfnXwvm6D1I4COmNb+BFJfrchhhoCqewTkDZ8Py3/UNAgbYQxRTVySRgQJxg/4OmT+Uc
+         s7AWioqGkfmjUNxyGnHf5ivovIhQT1rP2QHZ/yS7r9IVGGvmkAUeyCN3H20QJGWd386z
+         RJkWnO35YAR0yDgsS1H5jY3qXcTHnCqgvMoPRdBIALX24qMbWNSDgDZETqNIqldRgOIJ
+         7FAjovIfJs6Z1t84Q0H/oO8SGb5/0hjg3CZj8bGptPvfVoyY2hQzBSXU23xeuPaWicty
+         z0sQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXMWb5ujVg/MntFYeV9t6zoC8z/EeLrW9aTAPTQAw/fRTL/qXM0+eEl9G+2C6c8y36Lpvle8vNsaaO6aOSg0AD+Abu/DLxuLUMYYvpD5fM=
+X-Gm-Message-State: AOJu0YyHzttfpyV6i6iGdXJkSQciP/dqPqao8TmoRv/IwcE9CN+zktFr
+	QJQkoEXlRxDXs2iYsaYVvi3EFh8JmnLswg9Mfa7XAFF2AcvwD6K4Gkav4OEtIJ8t72n9cvcog2z
+	uwm5jSg==
+X-Google-Smtp-Source: AGHT+IH82voA89rekKLNd8PUoQn2yqo3WSzrmTFpqGNBZABJcRpzaZOV8US4n9SQjn0vTE1dqSnIfA==
+X-Received: by 2002:a17:906:2503:b0:a6e:a97c:fc9a with SMTP id a640c23a62f3a-a714d72effamr767565266b.8.1719417028495;
+        Wed, 26 Jun 2024 08:50:28 -0700 (PDT)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a728dabd1aesm62323966b.110.2024.06.26.08.50.27
+        for <linux-watchdog@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jun 2024 02:07:24 -0700 (PDT)
-Message-ID: <8d964b3f-e2d0-44b2-bece-92380b8c9a5d@gmail.com>
-Date: Wed, 26 Jun 2024 12:07:22 +0300
+        Wed, 26 Jun 2024 08:50:27 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a72517e6225so501341066b.0
+        for <linux-watchdog@vger.kernel.org>; Wed, 26 Jun 2024 08:50:27 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVxMvSc4GrgfA00waX8DcfWLANUS7d+v4u+r34Qt5tixgk5gaeWSO9IpkqaSXRKwfpHamwklkYPUEbs6TCUCURutwEwrGxsMOuFGMu7Ewc=
+X-Received: by 2002:a17:906:c009:b0:a6f:af31:6e7 with SMTP id
+ a640c23a62f3a-a715f94b0f4mr797666866b.32.1719417026789; Wed, 26 Jun 2024
+ 08:50:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/6] Support ROHM BD96801 Scalable PMIC
-To: Lee Jones <lee@kernel.org>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <cover.1718356964.git.mazziesaccount@gmail.com>
- <20240620143859.GM3029315@google.com>
-Content-Language: en-US, en-GB
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20240620143859.GM3029315@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240625133151.GA1554@www.linux-watchdog.org>
+In-Reply-To: <20240625133151.GA1554@www.linux-watchdog.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Wed, 26 Jun 2024 08:50:10 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whgnEuO1+8Gk3AiWeuSeAuCoUWnkuxUvczHwfJL+juAsA@mail.gmail.com>
+Message-ID: <CAHk-=whgnEuO1+8Gk3AiWeuSeAuCoUWnkuxUvczHwfJL+juAsA@mail.gmail.com>
+Subject: Re: [GIT PULL REQUEST] watchdog - v6.10 release cycle (fixes).
+To: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Arnd Bergmann <arnd@arndb.de>, Jeff Johnson <quic_jjohnson@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 6/20/24 17:38, Lee Jones wrote:
-> On Fri, 14 Jun 2024, Matti Vaittinen wrote:
-> 
->> Support ROHM BD96801 Scalable PMIC
->>
->> The ROHM BD96801 is automotive grade PMIC, intended to be usable in
->> multiple solutions. The BD96801 can be used as a stand-alone, or together
->> with separate 'companion PMICs'. This modular approach aims to make this
->> PMIC suitable for various use-cases.
->>
->> This series brings only limited support. The more complete set of
->> features was sent in the RFC:
->> https://lore.kernel.org/lkml/cover.1712058690.git.mazziesaccount@gmail.com/
->>
->> The v3: implemented also support for ERRB interrupt and setting a name
->> suffix to IRQ domains. That work was postponed and will be continued
->> after some unrelated changes to irqdomain code are completed as
->> discussed here:
->> https://lore.kernel.org/all/87plst28yk.ffs@tglx/
->>
->> Revision history still tries to summarize changes from the RFC for the
->> reviewers.
->>
->> Revision history:
->> v3 => v4:
->>   - Drop patches 7 to 10 (inclusive) until preparatory irqdomain changes
->>     are done.
->>   - Cleanups as suggested by Lee.
->> 	- Change the regulator subdevice name. (MFD and regulators).
->> 	- Minor styling in MFD driver
->>
->> v2 => v3: Mostly based on feedback from Thomas Gleixner
->> 	- Added acks from Krzysztof and Mark
->> 	- Rebased on v6.10-rc2
->> 	- Drop name suffix support for legacy IRQ domains (both
->> 	  irqdomain and regmap)
->> 	- Improve the commit message for patch 7/10
->>
->> v1 => v2:
->> 	- Add support for setting a name suffix for fwnode backed IRQ domains.
->> 	- Add support for setting a domain name suffix for regmap-IRQ.
->> 	- Add handling of ERRB IRQs.
->> 	- Small fixes based on feedback.
->>
->> RFCv2 => v1:
->> 	- Drop ERRB IRQ from drivers (but not DT bindings).
->> 	- Drop configuration which requires STBY - state.
->> 	- Fix the register lock race by moving it from the regulator
->> 	  driver to the MFD driver.
->>
->> RFCv1 => RFCv2:
->> 	- Tidying code based on feedback form Krzysztof Kozlowski and
->> 	  Lee Jones.
->> 	- Documented undocumented watchdog related DT properties.
->> 	- Added usage of the watchdog IRQ.
->> 	- Use irq_domain_update_bus_token() to work-around debugFS name
->> 	  collision for IRQ domains.
->>
->> ---
->>
->>
->> Matti Vaittinen (6):
->>    dt-bindings: ROHM BD96801 PMIC regulators
->>    dt-bindings: mfd: bd96801 PMIC core
->>    mfd: support ROHM BD96801 PMIC core
->>    regulator: bd96801: ROHM BD96801 PMIC regulators
->>    watchdog: ROHM BD96801 PMIC WDG driver
->>    MAINTAINERS: Add ROHM BD96801 'scalable PMIC' entries
->>
->>   .../bindings/mfd/rohm,bd96801-pmic.yaml       | 173 ++++
->>   .../regulator/rohm,bd96801-regulator.yaml     |  63 ++
->>   MAINTAINERS                                   |   4 +
->>   drivers/mfd/Kconfig                           |  13 +
->>   drivers/mfd/Makefile                          |   1 +
->>   drivers/mfd/rohm-bd96801.c                    | 273 ++++++
->>   drivers/regulator/Kconfig                     |  12 +
->>   drivers/regulator/Makefile                    |   2 +
->>   drivers/regulator/bd96801-regulator.c         | 908 ++++++++++++++++++
->>   drivers/watchdog/Kconfig                      |  13 +
->>   drivers/watchdog/Makefile                     |   1 +
->>   drivers/watchdog/bd96801_wdt.c                | 416 ++++++++
->>   include/linux/mfd/rohm-bd96801.h              | 215 +++++
->>   include/linux/mfd/rohm-generic.h              |   1 +
->>   14 files changed, 2095 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic.yaml
->>   create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd96801-regulator.yaml
->>   create mode 100644 drivers/mfd/rohm-bd96801.c
->>   create mode 100644 drivers/regulator/bd96801-regulator.c
->>   create mode 100644 drivers/watchdog/bd96801_wdt.c
->>   create mode 100644 include/linux/mfd/rohm-bd96801.h
-> 
-> allmodconfig and allyesconfig builds fail with:
-> 
->    make[5]: *** No rule to make target 'drivers/regulator/da903x.o', needed by 'drivers/regulator/built-in.a'.
->    make[5]: Target 'drivers/regulator/' not remade because of errors.
+On Tue, 25 Jun 2024 at 06:51, Wim Van Sebroeck <wim@linux-watchdog.org> wrote:
+>
+>   git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.10-rc-fixes
 
-Bummer!
+ENOSUCHTAG.
 
-There is unrelated change in the Makefile. I must've messed up a rebase! 
-Sorry! I'll send new version with corrected Makefile - latest early next 
-week. (I suppose new version is appropriate instead of a follow-up as 
-this breaks the build).
+I do see the commit you mention in HEAD, but there's no actual signed
+tag referencing it.
 
-Thanks for the heads-up Lee!
+Forgot to push out (and then didn't react to the error messages that
+git request-pull gave you)?
 
-Yours,
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+             Linus
 
