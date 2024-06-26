@@ -1,74 +1,74 @@
-Return-Path: <linux-watchdog+bounces-1189-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1190-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E659917937
-	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Jun 2024 08:52:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1B5A917BBA
+	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Jun 2024 11:07:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FBA3281EB3
-	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Jun 2024 06:52:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5EC91C21469
+	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Jun 2024 09:07:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC1D114F9E0;
-	Wed, 26 Jun 2024 06:51:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 836691684A1;
+	Wed, 26 Jun 2024 09:07:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dJ0bXan3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E6XZ/z1Z"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7954A154456
-	for <linux-watchdog@vger.kernel.org>; Wed, 26 Jun 2024 06:51:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C86415F33A;
+	Wed, 26 Jun 2024 09:07:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719384719; cv=none; b=nvFJyWw1LFYMqvOwOnGx58F/77Uu3TzAQTOiCEBQ2YI+rpDGAoj/XYSsil23J+pyToHEGEZRTqkS75gCxAeZQG8tNBEY37qKARM3eVztbW4p9Jo4HMiEljQ1meyTWW1gDxd+Y3Bk+XGxTvnssZs7qQkRyO5KvCduTORYHjPifHs=
+	t=1719392849; cv=none; b=mTn98hhB0FK9AwDZzUKrug/LcNUlRJhkpC5xOiluJZHpP/62nN/s4QS1Qsz66uM7Nup7SKnyIPvX4pPGnZ3Fw0sJwoN811tft5HhHSutEaBqPGIYoQLcHThxVVtqVmItIJyylscoaz28Q9+IIq9IuFNnYVOZBpTyBaS9anjFr1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719384719; c=relaxed/simple;
-	bh=ynqlRCWRsj3iwf/QWz3tSm58xMrYIOb+tFBeeWdwR1U=;
+	s=arc-20240116; t=1719392849; c=relaxed/simple;
+	bh=Vef46PKEnj+c20gxbE0Uu58kS6RdxRRCUeDVUuJMjso=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GjuYkz7nv7Y/wDmxqsoDcDbDbvO6mdDu+mlb1+JyvJH/IzbnxpUKY+6KCbRpH55BiF3fPWTHCjD38MbVN6oeHRZm8yqbqrTSwzj3TH8DD/v5uwzvRrJEdQshcInpSO2IHlyzJciurR7NC8U7vwRd7pZ1lM5eSQP5ga6rQk7VI+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dJ0bXan3; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2eaea28868dso83547551fa.3
-        for <linux-watchdog@vger.kernel.org>; Tue, 25 Jun 2024 23:51:57 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=km82hDP/r0N3FrQqCJy9wdHVKI6j/5HmQp0rRhyUDqaQ1BEdgVBIYK+cqK/eAC8KcM14iMMSJwTdCZu4ayvQQ5v/xBwit2jc8OIw1zqIS0m8Xvzkdg1h6qwCg2qi0shAKph5q9bft7svQSQjNeIX5J9FKfGq/1Wm8SMGGhM5JGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E6XZ/z1Z; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52cd87277d8so4868519e87.2;
+        Wed, 26 Jun 2024 02:07:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1719384716; x=1719989516; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719392846; x=1719997646; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=V3uopRJtNOMBMWqQ1sVAqEAV1XHAWRxYPml/zB8ZcPs=;
-        b=dJ0bXan3jyFLIfx5ue/LPWCGtLy11FRb1uH66z3d0uWClut3SnrKGsdmTkJ527NZ4E
-         whasMI7q2cPOzMVWhwUkIE7m8w6Uc95LESAoJ01bMBMW/kg70VkL1S1E4kJMSjcZJpU6
-         D/CFadMLjZx6QJ3BpcBA4CJckKXwJTqpxf00Xi4MZranybUWMfTDoblFKDOBnWNECQ+z
-         AxF4JghnttgvYXGU2RusC77liKpGmu8cVg7q04nRj/PlpquNRzmO5Tw7qus8oXn39K2x
-         5fTfYJFCMnr9siN/DqOG8X6tlklvIwZ6ybUq4BMYRV48Ppi3qFzpo7rK/RaanUzpCKSW
-         El1w==
+        bh=76/161HoTumb+iDrdbol7NJLj3KBEjm/AeLJQvuGQYM=;
+        b=E6XZ/z1ZNeF2Ss0WOEfCd4s1EJF9pjBH5N3hUKRSHhQrUfJQ0ELSBT7oHYdmC81oW0
+         kBsHCNf8gkT0+qW7IrNKYXM7R3eYGXkXBlDdxqzKgdg99HACDFyrQvufhnT67prkfjoX
+         OnKt1V5nrpXfUN1+q5xx/7ELGNeqocGTrWqtwrz+lbOIiKyGsKgkX551KJRqZKalGitr
+         dLjddjOQcDe4D4XomgDRyKgNMU6O82QMul+jo3JVaLYxkFTHRhyk1H8K3ED5nNArBGwW
+         SvWjG/6CTxhbXKezErJXE/ASak8YG0BRLy3vCdcTvnha5YY51CBgv1y9DllnzTClFAQC
+         O3Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719384716; x=1719989516;
+        d=1e100.net; s=20230601; t=1719392846; x=1719997646;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V3uopRJtNOMBMWqQ1sVAqEAV1XHAWRxYPml/zB8ZcPs=;
-        b=DFNewyhqGZuyLAtqYxK0uy+AVaBjvr6p+u7WtiSWrRcNZXjF5IyATR9AF4a7VQzKC3
-         429RYkQ+oj40HP0LMGmtUDivHJWsrAEDcfsqbF2YIvdfUna5NzcnJJmWV6ZhsgcmFMqu
-         coy/I+9wGgYX3Cd9zSbA1aqIJBvxXZzZ/yAhPNByMCIk8MHHLSn97odlIXucwqV52ufl
-         5j5MgJGGZpozsdcwvFxxy4c1T/Fk1mrXAXXB8EfnFeoL/ol7kO+6raiNn3cRdK6SpEfP
-         079lJzhUDYTu1/vYkkcmhEUyX8nCVuww5vxdCfrx+0NtI536uZiAxX2z51eBhPzMZ8o3
-         fazA==
-X-Forwarded-Encrypted: i=1; AJvYcCVtGJwCMeySSRpq/BgKgYnKipK7gHei68nx/7YqVQKINnJapTont4yJ0jj9vuKheIK9rZ47a5hecbJJ5K1eyEpNU6dfIxFM9VcG3DX5Jws=
-X-Gm-Message-State: AOJu0YwDVePu3nGZPmDY9OD9R2MKg9Tb9NE7zA2tYFtbv4tkaEOaF2VZ
-	pNFkvWpiuP04BToeYVje2ZikVjoW38AztLrW38O53vlZnlpamhvB3GSH9PsKHT4=
-X-Google-Smtp-Source: AGHT+IFGGT3YphhculXUz1kiKx+zIWJ6mdQrn4bujuYnEj3vPo1Q8an8KCt9LuHs1xrWKLz4/0ZaSg==
-X-Received: by 2002:a2e:a595:0:b0:2eb:eb96:c07d with SMTP id 38308e7fff4ca-2ec5f8fd33bmr76680151fa.14.1719384715402;
-        Tue, 25 Jun 2024 23:51:55 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-424c838099esm13342605e9.40.2024.06.25.23.51.54
+        bh=76/161HoTumb+iDrdbol7NJLj3KBEjm/AeLJQvuGQYM=;
+        b=srAiVKSKsaJWJ2YgttVkbvLFq32g9GmjAqM6Qz+JXvm6yZ1NRfC3JFXwiUoKkClKk2
+         b48Vw2lmlsaUOp8OUHqe8cojxnYtSdMV856ysYxIalE8kbqBY0Vngre9BSGpQY+nIq2i
+         8oa0ORHXgADoEfMtoqID8RlOaLRT+dzSWD9l6YGeZax8nCREUxOEnLkNAj+O7VpbJCyg
+         o9jDeaOSDdXHB8pTyTxVY9Trip2tmdi/8smjTXxxagvNLCnNGpcJw5XAC45QZUVFVJlN
+         IbvYR84mndUl158wZm/S90JB4J9AzX6Qy9pzDl/Tt0n4sbIP6XJTVA5ad7Km7q7v/fgP
+         d9oQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVFglCX73AxZGiJ8d1uAVW595GLrCmRzfOapfgnTCgX9De7TYggq7hLTCBFU1wrbfAalPjMHk1yUFPHosYNSmQnTnrE5I0acCPmrkA6dLSc4NbdH1ZvFePwUdIRdo3YsajpTW+jgchTMqJ1hklPwdT/Ms3pjYUFxxEgddo3k5lzue+3ULQT4PiY
+X-Gm-Message-State: AOJu0YzxKjHxLT+q/7tmAa4DngzTWp54eR5gHayqeKuU4S82JiStEApC
+	Xc33jC6R6fpa/P5d1E9XxwExW/FbA8Sl2EThf6nJ3LjmjizuKT2bY2c8Yw==
+X-Google-Smtp-Source: AGHT+IFZmB6mGtubKzB8dHrJhQUZN+wpPbJjxQUSSxefcinOlw8QmfoZ2F+jKhN6CWJaO6QMqWqLEg==
+X-Received: by 2002:a05:6512:3450:b0:52c:dea8:7ca0 with SMTP id 2adb3069b0e04-52ce185cf71mr5655473e87.55.1719392844938;
+        Wed, 26 Jun 2024 02:07:24 -0700 (PDT)
+Received: from ?IPV6:2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd? ([2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52cd84b23d9sm1455429e87.202.2024.06.26.02.07.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jun 2024 23:51:54 -0700 (PDT)
-Message-ID: <ebfc206c-748a-4741-9b5f-4facec985a5f@linaro.org>
-Date: Wed, 26 Jun 2024 08:51:53 +0200
+        Wed, 26 Jun 2024 02:07:24 -0700 (PDT)
+Message-ID: <8d964b3f-e2d0-44b2-bece-92380b8c9a5d@gmail.com>
+Date: Wed, 26 Jun 2024 12:07:22 +0300
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -76,58 +76,139 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: drop stale Anson Huang from maintainers
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Abel Vesa <abelvesa@kernel.org>,
- Peng Fan <peng.fan@nxp.com>, Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Dong Aisheng <aisheng.dong@nxp.com>,
- Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- Lars-Peter Clausen <lars@metafoo.de>,
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Mark Brown <broonie@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+Subject: Re: [PATCH v4 0/6] Support ROHM BD96801 Scalable PMIC
+To: Lee Jones <lee@kernel.org>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
  Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, Frank Li <Frank.Li@nxp.com>,
- devicetree@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
-References: <20240617065828.9531-1-krzysztof.kozlowski@linaro.org>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20240617065828.9531-1-krzysztof.kozlowski@linaro.org>
+ <linux@roeck-us.net>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <cover.1718356964.git.mazziesaccount@gmail.com>
+ <20240620143859.GM3029315@google.com>
+Content-Language: en-US, en-GB
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20240620143859.GM3029315@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 17/06/2024 08:58, Krzysztof Kozlowski wrote:
-> Emails to Anson Huang bounce:
+On 6/20/24 17:38, Lee Jones wrote:
+> On Fri, 14 Jun 2024, Matti Vaittinen wrote:
 > 
->    Diagnostic-Code: smtp; 550 5.4.1 Recipient address rejected: Access denied.
+>> Support ROHM BD96801 Scalable PMIC
+>>
+>> The ROHM BD96801 is automotive grade PMIC, intended to be usable in
+>> multiple solutions. The BD96801 can be used as a stand-alone, or together
+>> with separate 'companion PMICs'. This modular approach aims to make this
+>> PMIC suitable for various use-cases.
+>>
+>> This series brings only limited support. The more complete set of
+>> features was sent in the RFC:
+>> https://lore.kernel.org/lkml/cover.1712058690.git.mazziesaccount@gmail.com/
+>>
+>> The v3: implemented also support for ERRB interrupt and setting a name
+>> suffix to IRQ domains. That work was postponed and will be continued
+>> after some unrelated changes to irqdomain code are completed as
+>> discussed here:
+>> https://lore.kernel.org/all/87plst28yk.ffs@tglx/
+>>
+>> Revision history still tries to summarize changes from the RFC for the
+>> reviewers.
+>>
+>> Revision history:
+>> v3 => v4:
+>>   - Drop patches 7 to 10 (inclusive) until preparatory irqdomain changes
+>>     are done.
+>>   - Cleanups as suggested by Lee.
+>> 	- Change the regulator subdevice name. (MFD and regulators).
+>> 	- Minor styling in MFD driver
+>>
+>> v2 => v3: Mostly based on feedback from Thomas Gleixner
+>> 	- Added acks from Krzysztof and Mark
+>> 	- Rebased on v6.10-rc2
+>> 	- Drop name suffix support for legacy IRQ domains (both
+>> 	  irqdomain and regmap)
+>> 	- Improve the commit message for patch 7/10
+>>
+>> v1 => v2:
+>> 	- Add support for setting a name suffix for fwnode backed IRQ domains.
+>> 	- Add support for setting a domain name suffix for regmap-IRQ.
+>> 	- Add handling of ERRB IRQs.
+>> 	- Small fixes based on feedback.
+>>
+>> RFCv2 => v1:
+>> 	- Drop ERRB IRQ from drivers (but not DT bindings).
+>> 	- Drop configuration which requires STBY - state.
+>> 	- Fix the register lock race by moving it from the regulator
+>> 	  driver to the MFD driver.
+>>
+>> RFCv1 => RFCv2:
+>> 	- Tidying code based on feedback form Krzysztof Kozlowski and
+>> 	  Lee Jones.
+>> 	- Documented undocumented watchdog related DT properties.
+>> 	- Added usage of the watchdog IRQ.
+>> 	- Use irq_domain_update_bus_token() to work-around debugFS name
+>> 	  collision for IRQ domains.
+>>
+>> ---
+>>
+>>
+>> Matti Vaittinen (6):
+>>    dt-bindings: ROHM BD96801 PMIC regulators
+>>    dt-bindings: mfd: bd96801 PMIC core
+>>    mfd: support ROHM BD96801 PMIC core
+>>    regulator: bd96801: ROHM BD96801 PMIC regulators
+>>    watchdog: ROHM BD96801 PMIC WDG driver
+>>    MAINTAINERS: Add ROHM BD96801 'scalable PMIC' entries
+>>
+>>   .../bindings/mfd/rohm,bd96801-pmic.yaml       | 173 ++++
+>>   .../regulator/rohm,bd96801-regulator.yaml     |  63 ++
+>>   MAINTAINERS                                   |   4 +
+>>   drivers/mfd/Kconfig                           |  13 +
+>>   drivers/mfd/Makefile                          |   1 +
+>>   drivers/mfd/rohm-bd96801.c                    | 273 ++++++
+>>   drivers/regulator/Kconfig                     |  12 +
+>>   drivers/regulator/Makefile                    |   2 +
+>>   drivers/regulator/bd96801-regulator.c         | 908 ++++++++++++++++++
+>>   drivers/watchdog/Kconfig                      |  13 +
+>>   drivers/watchdog/Makefile                     |   1 +
+>>   drivers/watchdog/bd96801_wdt.c                | 416 ++++++++
+>>   include/linux/mfd/rohm-bd96801.h              | 215 +++++
+>>   include/linux/mfd/rohm-generic.h              |   1 +
+>>   14 files changed, 2095 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic.yaml
+>>   create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd96801-regulator.yaml
+>>   create mode 100644 drivers/mfd/rohm-bd96801.c
+>>   create mode 100644 drivers/regulator/bd96801-regulator.c
+>>   create mode 100644 drivers/watchdog/bd96801_wdt.c
+>>   create mode 100644 include/linux/mfd/rohm-bd96801.h
 > 
-> Add IMX platform maintainers for bindings which would become orphaned.
+> allmodconfig and allyesconfig builds fail with:
 > 
-> Acked-by: Uwe Kleine-König <ukleinek@kernel.org>
-> Reviewed-by: Fabio Estevam <festevam@gmail.com>
-> Acked-by: Peng Fan <peng.fan@nxp.com>
-> Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com> # for I2C
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>    make[5]: *** No rule to make target 'drivers/regulator/da903x.o', needed by 'drivers/regulator/built-in.a'.
+>    make[5]: Target 'drivers/regulator/' not remade because of errors.
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Bummer!
+
+There is unrelated change in the Makefile. I must've messed up a rebase! 
+Sorry! I'll send new version with corrected Makefile - latest early next 
+week. (I suppose new version is appropriate instead of a follow-up as 
+this breaks the build).
+
+Thanks for the heads-up Lee!
+
+Yours,
+	-- Matti
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+~~ When things go utterly wrong vim users can always type :help! ~~
 
 
