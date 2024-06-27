@@ -1,106 +1,228 @@
-Return-Path: <linux-watchdog+bounces-1191-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1192-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 423BB91863C
-	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Jun 2024 17:50:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C38C691A0A3
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Jun 2024 09:43:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB5491F21CB9
-	for <lists+linux-watchdog@lfdr.de>; Wed, 26 Jun 2024 15:50:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E66151C211BC
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Jun 2024 07:43:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72C8718A92C;
-	Wed, 26 Jun 2024 15:50:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F76161FCE;
+	Thu, 27 Jun 2024 07:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ONu2HtKR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M0SQdhPn"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59ACD18A923
-	for <linux-watchdog@vger.kernel.org>; Wed, 26 Jun 2024 15:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1359374D4;
+	Thu, 27 Jun 2024 07:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719417032; cv=none; b=ekD/ixdLim5gWEiY8qcUmtcN5Yf6ADj3DfG4QheEZQ3V1/8ZD7z9U8yxIlm0PwZXl8mzrLoxkivDo/zHB1hmhQQXb+XMMBQTgdxG82kVf03qH0Dj6OE4aMjdhCU+7g7viGNKZdTuDSnQGgzRnWBmZZyWf+reHjJ0gz7bwBAzuoo=
+	t=1719474170; cv=none; b=PmgcwEQVScbFCSJsq4GUS0/qgsqFj7CgNcT0ySph7AOODQKpR7cKFCn9W1F3iVKYzZzulhJ4tv8zor+7/SrTR8gbCnweolK7NxvN42lIpE8mr4PI48MzOutWShbQd6S7xltIb9WAluoEdm0+N0poJ0gcUjJs+H7hPy2Ok8CRFBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719417032; c=relaxed/simple;
-	bh=37ZNP33e8+7HO0gnq2NbaftX9ElKyKSPmZLHZYCftzA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CJpgKGnei2WOrRM5c4kcIh0P9Of1C10tpwQBlMt9NhWcRfGSHs5++qG0jKYhC6PQZ76Fqxx1GWS2IfPTtoUUbeNzSz+Pzr8A6tHHKta7HK7HWsrBlA+WDWOAi2xn2dgEtdruaQRDjLJEuZpIaDE4hLPZi4YxCXPGF9HDxyaGtc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ONu2HtKR; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a70c0349b64so456722566b.1
-        for <linux-watchdog@vger.kernel.org>; Wed, 26 Jun 2024 08:50:30 -0700 (PDT)
+	s=arc-20240116; t=1719474170; c=relaxed/simple;
+	bh=+aYaJeKfwWUFK7GSlzK2t5JQnsS8gzmmHK4bu1Y4nWo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ly0xsJDP7HbSMdOdYTNgFdrhiyDEQQZpqnB3UFyvlRqIO0JvC/beCZSD8rsPD7hE21IRIM4V5OAlT8w6eRC10Y/c6iPQ/rUYFbD3M3Eo4goBpOAQOyu0ABUYwRyn8kzu9JKZeGj045CtjTASSdvCmHKRKkOSLsYubTkMwJxj4t0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M0SQdhPn; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ec17eb4493so103493541fa.2;
+        Thu, 27 Jun 2024 00:42:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1719417028; x=1720021828; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uzAm2VJPpaiV1Xbr7cm5GnjinWJJrnRXltU4y23jQs4=;
-        b=ONu2HtKRBvxqmOD2z6rypEJiVJrI6H0sonuOSzZB5pXn7J1h1f8vSMHhvR30NOKbsl
-         wdLDLhvWamIUk9BEX4MSp6rU+uPkQlvJf6miHAEeR8IRzA1R4P/qVd5INgaQLQSklg82
-         yTzjbyhdjyn3jz7uAghvLAK/dq/udBrqilLFQ=
+        d=gmail.com; s=20230601; t=1719474166; x=1720078966; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pzyiJnZ7aQCZJPaij9547bOK4rGLg+j8o5jTxY/Qu5I=;
+        b=M0SQdhPnjDhu25wx6pIfEJcOLaON2NQsILIR51tzgXR/QY0S7SIS0BRK1LSJ9MkvB5
+         FF/NWRzI9VHmDnQ4CwCjerncJE7j1nYea1n3oM1cEjjuSWeNvqT9WQFD1nJRLSNnVKqJ
+         PlG8VBOh1Ge9gg3g19G2omB7edfxNKTTSlNi6F+DYBsfLDXh8Akd2TY+EYRho83bWy1H
+         rYEuRnjDk0WGWXdcU9nCK6pqW6xU4YboRVteplQQN72Ypgw/nL1rYHOBprHDKAlYboe5
+         tedgRdgrD22bHu24ibR4BkQ5F8X92Ty0p0XEXkyJv0TNXmbpd2k4X3QACZh+KjHEyIil
+         LrvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719417028; x=1720021828;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uzAm2VJPpaiV1Xbr7cm5GnjinWJJrnRXltU4y23jQs4=;
-        b=FgECTo/UliLpwg0zyPwZ3iP92cyrw08wfZxrU2symUNTGidrmM5YeMDmVkG5+mBcEV
-         RfnXwvm6D1I4COmNb+BFJfrchhhoCqewTkDZ8Py3/UNAgbYQxRTVySRgQJxg/4OmT+Uc
-         s7AWioqGkfmjUNxyGnHf5ivovIhQT1rP2QHZ/yS7r9IVGGvmkAUeyCN3H20QJGWd386z
-         RJkWnO35YAR0yDgsS1H5jY3qXcTHnCqgvMoPRdBIALX24qMbWNSDgDZETqNIqldRgOIJ
-         7FAjovIfJs6Z1t84Q0H/oO8SGb5/0hjg3CZj8bGptPvfVoyY2hQzBSXU23xeuPaWicty
-         z0sQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXMWb5ujVg/MntFYeV9t6zoC8z/EeLrW9aTAPTQAw/fRTL/qXM0+eEl9G+2C6c8y36Lpvle8vNsaaO6aOSg0AD+Abu/DLxuLUMYYvpD5fM=
-X-Gm-Message-State: AOJu0YyHzttfpyV6i6iGdXJkSQciP/dqPqao8TmoRv/IwcE9CN+zktFr
-	QJQkoEXlRxDXs2iYsaYVvi3EFh8JmnLswg9Mfa7XAFF2AcvwD6K4Gkav4OEtIJ8t72n9cvcog2z
-	uwm5jSg==
-X-Google-Smtp-Source: AGHT+IH82voA89rekKLNd8PUoQn2yqo3WSzrmTFpqGNBZABJcRpzaZOV8US4n9SQjn0vTE1dqSnIfA==
-X-Received: by 2002:a17:906:2503:b0:a6e:a97c:fc9a with SMTP id a640c23a62f3a-a714d72effamr767565266b.8.1719417028495;
-        Wed, 26 Jun 2024 08:50:28 -0700 (PDT)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a728dabd1aesm62323966b.110.2024.06.26.08.50.27
-        for <linux-watchdog@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jun 2024 08:50:27 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a72517e6225so501341066b.0
-        for <linux-watchdog@vger.kernel.org>; Wed, 26 Jun 2024 08:50:27 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVxMvSc4GrgfA00waX8DcfWLANUS7d+v4u+r34Qt5tixgk5gaeWSO9IpkqaSXRKwfpHamwklkYPUEbs6TCUCURutwEwrGxsMOuFGMu7Ewc=
-X-Received: by 2002:a17:906:c009:b0:a6f:af31:6e7 with SMTP id
- a640c23a62f3a-a715f94b0f4mr797666866b.32.1719417026789; Wed, 26 Jun 2024
- 08:50:26 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1719474166; x=1720078966;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pzyiJnZ7aQCZJPaij9547bOK4rGLg+j8o5jTxY/Qu5I=;
+        b=LJ18Gg3bfC4QgZ/7oz6ltACw5OoY2I4ICAKDoIg8tvO9Jh8JCoDz4xFX8Vmn4Xw/Kp
+         IYowf8ImpXTnglt0KY32S1LIAiW0xWtuUBiXH3ijWqigQBmNJhyut1hNhYreWzUEVznd
+         Tgxb5uE2Ma2Lz0OvwXzEdTSZl8fOpH8NumOhi4GdCirGwNbSsOigq2x/A3kYrhZ4SaDH
+         eIhpQ1ZxrUcYulSgnM+YqhWNHEzZ4FSPrH82Plynt3ktvaY1PMPGTZfeiKXUrZTENt+3
+         9/G/vIcEuK8AUQ0pPxQ2fWhy5zMzYXmPZasK7OsQL/CyauH7ILzYBlW8VNjwarkNM0sJ
+         ZWYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWhpLnD01IS2SL/fO1Mm8Rvqu1VEPHL1sPYkupSFS3nHbX1MNnXkzWiR3mtCJ+bvXGgp6nbCCqevdl+GfxTgASg/Vwzjq9SfsHwGy8hrmdkWwL2Z7sGuNcDxkiXKgJ2Z1q1eaXwfUVQW5LodTIOVNqc6svJ3wRqyrxak3MGLEeL3yKLrRRWd9Gg
+X-Gm-Message-State: AOJu0YwH0FdzJjBuf+c1W92RX5QcluDagbc8tThyDBaElDz5HHBbNSO4
+	s8mp2sFGkQLjHDZf1tJF6Yj9x23EmBqyLO3NzaCaaX/Xs1NyaVpS
+X-Google-Smtp-Source: AGHT+IH+GjvCIgWLgMsQlIT9dAtA7mMWQzMchoZbAEPfpQFeI7G7BJ34JtY2D9J95FAtY1dvyrCQbw==
+X-Received: by 2002:a2e:9ecd:0:b0:2ec:51b5:27be with SMTP id 38308e7fff4ca-2ec5b2d4619mr100811781fa.12.1719474165777;
+        Thu, 27 Jun 2024 00:42:45 -0700 (PDT)
+Received: from fedora ([2a10:a5c0:800d:dd00:8cfe:d6e7:6701:9dfd])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ee4a4bed76sm1457831fa.106.2024.06.27.00.42.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jun 2024 00:42:44 -0700 (PDT)
+Date: Thu, 27 Jun 2024 10:42:37 +0300
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+To: Matti Vaittinen <mazziesaccount@gmail.com>,
+	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [PATCH v5 0/6] Support ROHM BD96801 Scalable PMIC
+Message-ID: <cover.1719473802.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240625133151.GA1554@www.linux-watchdog.org>
-In-Reply-To: <20240625133151.GA1554@www.linux-watchdog.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 26 Jun 2024 08:50:10 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whgnEuO1+8Gk3AiWeuSeAuCoUWnkuxUvczHwfJL+juAsA@mail.gmail.com>
-Message-ID: <CAHk-=whgnEuO1+8Gk3AiWeuSeAuCoUWnkuxUvczHwfJL+juAsA@mail.gmail.com>
-Subject: Re: [GIT PULL REQUEST] watchdog - v6.10 release cycle (fixes).
-To: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Arnd Bergmann <arnd@arndb.de>, Jeff Johnson <quic_jjohnson@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="naMxCvaYHuQUKU2V"
+Content-Disposition: inline
 
-On Tue, 25 Jun 2024 at 06:51, Wim Van Sebroeck <wim@linux-watchdog.org> wrote:
->
->   git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.10-rc-fixes
 
-ENOSUCHTAG.
+--naMxCvaYHuQUKU2V
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I do see the commit you mention in HEAD, but there's no actual signed
-tag referencing it.
+Support ROHM BD96801 Scalable PMIC
 
-Forgot to push out (and then didn't react to the error messages that
-git request-pull gave you)?
+The ROHM BD96801 is automotive grade PMIC, intended to be usable in
+multiple solutions. The BD96801 can be used as a stand-alone, or together
+with separate 'companion PMICs'. This modular approach aims to make this
+PMIC suitable for various use-cases.
 
-             Linus
+This series brings only limited support. The more complete set of
+features was sent in the RFC:
+https://lore.kernel.org/lkml/cover.1712058690.git.mazziesaccount@gmail.com/
+
+The v3: implemented also support for ERRB interrupt and setting a name
+suffix to IRQ domains. That work was postponed and will be continued
+after some unrelated changes to irqdomain code are completed as
+discussed here:
+https://lore.kernel.org/all/87plst28yk.ffs@tglx/
+
+Revision history still tries to summarize changes from the RFC for the
+reviewers.
+
+Revision history:
+v4 =3D> v5:
+	- Drop unintended Makefile change from regulator Makefile
+
+v3 =3D> v4:
+	- Drop patches 7 to 10 (inclusive) until preparatory irqdomain changes
+	   are done.
+	- Cleanups as suggested by Lee.
+	- Change the regulator subdevice name. (MFD and regulators).
+	- Minor styling in MFD driver
+
+v2 =3D> v3: Mostly based on feedback from Thomas Gleixner
+	- Added acks from Krzysztof and Mark
+	- Rebased on v6.10-rc2
+	- Drop name suffix support for legacy IRQ domains (both
+	  irqdomain and regmap)
+	- Improve the commit message for patch 7/10
+
+v1 =3D> v2:
+	- Add support for setting a name suffix for fwnode backed IRQ domains.
+	- Add support for setting a domain name suffix for regmap-IRQ.
+	- Add handling of ERRB IRQs.
+	- Small fixes based on feedback.
+
+RFCv2 =3D> v1:
+	- Drop ERRB IRQ from drivers (but not DT bindings).
+	- Drop configuration which requires STBY - state.
+	- Fix the register lock race by moving it from the regulator
+	  driver to the MFD driver.
+
+RFCv1 =3D> RFCv2:
+	- Tidying code based on feedback form Krzysztof Kozlowski and
+	  Lee Jones.
+	- Documented undocumented watchdog related DT properties.
+	- Added usage of the watchdog IRQ.
+	- Use irq_domain_update_bus_token() to work-around debugFS name
+	  collision for IRQ domains.
+
+---
+
+
+Matti Vaittinen (6):
+  dt-bindings: ROHM BD96801 PMIC regulators
+  dt-bindings: mfd: bd96801 PMIC core
+  mfd: support ROHM BD96801 PMIC core
+  regulator: bd96801: ROHM BD96801 PMIC regulators
+  watchdog: ROHM BD96801 PMIC WDG driver
+  MAINTAINERS: Add ROHM BD96801 'scalable PMIC' entries
+
+ .../bindings/mfd/rohm,bd96801-pmic.yaml       | 173 ++++
+ .../regulator/rohm,bd96801-regulator.yaml     |  63 ++
+ MAINTAINERS                                   |   4 +
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/rohm-bd96801.c                    | 273 ++++++
+ drivers/regulator/Kconfig                     |  12 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/bd96801-regulator.c         | 908 ++++++++++++++++++
+ drivers/watchdog/Kconfig                      |  13 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/bd96801_wdt.c                | 416 ++++++++
+ include/linux/mfd/rohm-bd96801.h              | 215 +++++
+ include/linux/mfd/rohm-generic.h              |   1 +
+ 14 files changed, 2094 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic=
+=2Eyaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd9680=
+1-regulator.yaml
+ create mode 100644 drivers/mfd/rohm-bd96801.c
+ create mode 100644 drivers/regulator/bd96801-regulator.c
+ create mode 100644 drivers/watchdog/bd96801_wdt.c
+ create mode 100644 include/linux/mfd/rohm-bd96801.h
+
+
+base-commit: 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
+--=20
+2.45.1
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--naMxCvaYHuQUKU2V
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmZ9F+kACgkQeFA3/03a
+ocWBsAf/QdlhMUwYBpyafmBY6fG6eGmmEc7uX7uQbX85eva1/Ur06PzQakUS0ZHA
+bpFnT7uYImxTXf6374aR8tjg0TxVp5dQbliG9DpU+QYTItxzpuIh0VI6pwPn7Cj5
+obL85HPfHpm2b7kpXWJG0QsAaUoiwub9ZQa9c/V9Z+nfTcXl9ColK8MxdhS5iW0A
+QCaQ9Z6OMDFC2FDzYBwHOWvPSTgdWGwiJl14ShkkKacFbRww5hEGUH3CKAZ59CO/
+jovqN0X8SehQM91kg8s/flGcbivT5ZEvf1xDpIfCF6ncyeY6Vq2JFnPZ4tHqhp4D
+Sothg/mPj42Dv7LJ62+r2llLDni8Bg==
+=JFFx
+-----END PGP SIGNATURE-----
+
+--naMxCvaYHuQUKU2V--
 
