@@ -1,180 +1,151 @@
-Return-Path: <linux-watchdog+bounces-1200-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1201-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFAFA91A1BA
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Jun 2024 10:39:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2D4991A40A
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Jun 2024 12:38:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73BBD281244
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Jun 2024 08:39:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 450FBB20CC7
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Jun 2024 10:38:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19AAA13AD26;
-	Thu, 27 Jun 2024 08:38:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A7FD13E41A;
+	Thu, 27 Jun 2024 10:38:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b="fYt77sep"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="WtUu1cdh"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from forward501a.mail.yandex.net (forward501a.mail.yandex.net [178.154.239.81])
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 098567C097;
-	Thu, 27 Jun 2024 08:38:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B5C13C831;
+	Thu, 27 Jun 2024 10:38:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719477511; cv=none; b=XLNDhkbXr/dR4DMCd2JJCE0Qos3YV1HJSo9TwBxPLpIe8LHWu2abh5dEEi45PfsYzuS7kNyTBW2QHB7iDxizNypSUmTiDIfxGPCdifQT0w0TZjVEorG+8pAxXQLPg9s6cVDlMby6Jo5bz5Wra7zERwQ9HcvGLFo+JiF9kkLrjdI=
+	t=1719484699; cv=none; b=dRvhC0UWQSkSzkOmxwCZVV6ttu9KlVMTR+HuWxP9c1eMFPq/mAxxmkXkbMOuwTYqTGAUx/QgSvQRTsVLptlsAKY6ydpBA2WIBbr7lL4bPoHCPlXo7tRgT2DD+8NsGAKZnkX2D0Ynb7yd38T3sMZLT/XoU3KBT1jwBi4OXzs3SpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719477511; c=relaxed/simple;
-	bh=sncecviZ4oVzyaqVg6LU/TKkhzMCJcCvnENYdLedhDQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lCDDAcTYqAJfIwhLmscFk8xCyAW78PCjg/OoxkpdL++WvW/lVLcesjayHlKCKoa4pkxbpud7JcrwQZakAcKhWt4DSKa7DPLev6bpqsSraYWpficcmpSoHluYlKKsPP9D1+0knk07Mb5V2mNqZmeWPZNPVxLS704pF+/1M844NYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me; spf=pass smtp.mailfrom=maquefel.me; dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b=fYt77sep; arc=none smtp.client-ip=178.154.239.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=maquefel.me
-Received: from mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net [IPv6:2a02:6b8:c1f:6289:0:640:5fc6:0])
-	by forward501a.mail.yandex.net (Yandex) with ESMTPS id 62E6D62860;
-	Thu, 27 Jun 2024 11:29:53 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id hTMqF50OgeA0-419Dn7dc;
-	Thu, 27 Jun 2024 11:29:51 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail;
-	t=1719476991; bh=sncecviZ4oVzyaqVg6LU/TKkhzMCJcCvnENYdLedhDQ=;
-	h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
-	b=fYt77sepJb6Dz5nNn3wvLM2BcROhwWdG7wRisBkqtF3/hXtLy8lIDdb5a9wki+xgj
-	 m+gfMLnWml2khZDKWnsANuhxBC4XcH3KBbc8wli7qPcKfOBKMiiokOznOQZASnsShb
-	 uhxbpxZgH1kBKx/Vy2qTDCDcjYAISNAwQklonyaU=
-Authentication-Results: mail-nwsmtp-smtp-production-main-54.vla.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
-Message-ID: <241a4cf9830b0118f01e8fcf2853c62527636049.camel@maquefel.me>
-Subject: Re: [PATCH v10 00/38] ep93xx device tree conversion
-From: Nikita Shubin <nikita.shubin@maquefel.me>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>, Arnd Bergmann
- <arnd@arndb.de>,  Stephen Boyd <sboyd@kernel.org>
-Cc: Hartley Sweeten <hsweeten@visionengravers.com>, Alexander Sverdlin
- <alexander.sverdlin@gmail.com>, Russell King <linux@armlinux.org.uk>,
- Lukasz Majewski <lukma@denx.de>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Sebastian Reichel
- <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>,  Conor Dooley <conor+dt@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, Thierry Reding <thierry.reding@gmail.com>, Uwe
- =?ISO-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>, Mark
- Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,  Paolo
- Abeni <pabeni@redhat.com>, Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Damien Le Moal <dlemoal@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Liam Girdwood
- <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai
- <tiwai@suse.com>, Ralf Baechle <ralf@linux-mips.org>,  "Wu, Aaron"
- <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, Olof Johansson
- <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-pm@vger.kernel.org,  devicetree@vger.kernel.org,
- dmaengine@vger.kernel.org,  linux-watchdog@vger.kernel.org,
- linux-pwm@vger.kernel.org,  linux-spi@vger.kernel.org,
- netdev@vger.kernel.org, linux-mtd@lists.infradead.org, 
- linux-ide@vger.kernel.org, linux-input@vger.kernel.org, 
- linux-sound@vger.kernel.org, Bartosz Golaszewski
- <bartosz.golaszewski@linaro.org>,  Krzysztof Kozlowski
- <krzysztof.kozlowski@linaro.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Andrew Lunn <andrew@lunn.ch>, Vinod
- Koul <vkoul@kernel.org>
-Date: Thu, 27 Jun 2024 11:29:44 +0300
-In-Reply-To: <48c242838c77034485a9e667dc0e867207c5beed.camel@maquefel.me>
-References: <20240617-ep93xx-v10-0-662e640ed811@maquefel.me>
-	 <CAHp75VfSC9gAD9ipeWRPdQOxUp4FXqYYei-cJTs38nbz0cHpkg@mail.gmail.com>
-	 <48c242838c77034485a9e667dc0e867207c5beed.camel@maquefel.me>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 
+	s=arc-20240116; t=1719484699; c=relaxed/simple;
+	bh=blg5AQRINgzDYB2M+iU5BJ2iQ6WA8Das//y1GF975sg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=IXF0UXR4YyUFcME7nY1+BTDNwRNX5RfvDhCi8Q4zLQUm1mlM29IuCEtAJp1BITE4Edi2HYxqgmN/6/qQn5KFtFVOYdarlmt/HrfDw8ygDJwMIcU97gB5FO0nuE7HZEJseMtszQ/htE+PsNss0AfvXAMy62XLQ7dr/65Ky16v1eA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=WtUu1cdh; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45R7m8Ph031056;
+	Thu, 27 Jun 2024 12:37:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=selector1; bh=
+	pN++2ujzdbFJwZfUqOV3yOY6BX5oEhjCHKWQP0tE4Zs=; b=WtUu1cdhoWfx5rCv
+	fwouGVfCGu1j/kwIPGWRoNGxyqsLcwIkih/FjN69IAtjw1uZzh3VGWmhoeFxdELo
+	lXIlfKKKnvcHNG8KH0yXfOhU/egSxEkPxs4yHZlSdCZok4t6vvuu6MR5AXpG3Nn7
+	d7rwsNct5LaIgqmYAZriFCPxtD5vFBSiZ6So4W3EyAWcX6Jxg4AmgVNbsiEYXyX7
+	Y+VMZ1ABt51cizO8cQhmCxW8kKqP2nigS1TleAOyOuiPTvVr3mvPMFgk0tkPQUxQ
+	6WxRjTawDKt+lsWlyCwxOw9Z7MyfmueX8I1W9uwGhrvOcAL9+m5xE/M3Q1bPV3jH
+	sf3KAw==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ywkr5mqgv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 27 Jun 2024 12:37:36 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id C46B04002D;
+	Thu, 27 Jun 2024 12:37:22 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 34FF821685E;
+	Thu, 27 Jun 2024 12:36:24 +0200 (CEST)
+Received: from [10.48.86.79] (10.48.86.79) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 27 Jun
+ 2024 12:36:23 +0200
+Message-ID: <0edad233-3884-4de3-9bfe-a2c0a10b6353@foss.st.com>
+Date: Thu, 27 Jun 2024 12:36:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] ARM: dts: stm32: Add IWDG2 EXTI interrupt mapping and
+ mark as wakeup source
+To: Marek Vasut <marex@denx.de>, <linux-arm-kernel@lists.infradead.org>
+CC: Antonio Borneo <antonio.borneo@foss.st.com>,
+        Guenter Roeck
+	<linux@roeck-us.net>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Maxime
+ Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran
+	<richardcochran@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Gleixner
+	<tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-watchdog@vger.kernel.org>
+References: <20240623195136.81522-1-marex@denx.de>
+Content-Language: en-US
+From: Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20240623195136.81522-1-marex@denx.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-27_06,2024-06-27_02,2024-05-17_01
 
-On Tue, 2024-06-18 at 19:20 +0300, Nikita Shubin wrote:
-> Hello Andy!
-> On Mon, 2024-06-17 at 12:58 +0200, Andy Shevchenko wrote:
-> > On Mon, Jun 17, 2024 at 11:38=E2=80=AFAM Nikita Shubin via B4 Relay
-> > <devnull+nikita.shubin.maquefel.me@kernel.org> wrote:
-> > >=20
-> > > The goal is to recieve ACKs for all patches in series to merge it
-> > > via Arnd branch.
-> >=20
-> > 'receive'
-> >=20
-> > > Unfortunately, CLK subsystem suddenly went silent on clk portion
-> > > of
-> > > series V2 reroll,
-> > > tried to ping them for about a month but no luck.
-> > >=20
-> > > Link:
-> > > https://lore.kernel.org/r/20240408-ep93xx-clk-v2-1-adcd68c13753@maque=
-fel.me
-> > >=20
-> > > Some changes since last version (v9) - see "Changes in v10",
-> > > mostly
-> > > cosmetic.
-> >=20
-> > ...
-> >=20
-> > > Patches should be formated with '--histogram'
-> >=20
-> > 'formatted'
-> >=20
-> > ...
-> >=20
-> > > Changes in v10:
-> > >=20
-> > > Reordered SoB tags to make sure they appear before Rb and Acked
-> > > tags.
-> >=20
-> > This is not required. The importance is only the order of SoBs
-> > themselves. If they are interleaved with other tags, it's fine.
->=20
-> Ah - ok. Just saw someone was complaining about b4 reordering them.=20
->=20
-> >=20
-> > ...
-> >=20
-> >=20
-> > Hopefully to see this series being eventually applied soon.
-> > Arnd? (Do we have all necessary subsystem maintainers' tags, btw?)
-> >=20
-> >=20
->=20
-> As i see from my perspective only three left:
->=20
-> Clk subsystem:
->=20
-> - clk: ep93xx: add DT support for Cirrus EP93xx
->=20
-> DMA subsystem (but the only request from Vinod, as far as i remember,
-> was fixing commits titles):
->=20
-> - dmaengine: cirrus: Convert to DT for Cirrus EP93xx
-> - dmaengine: cirrus: remove platform code
->=20
-> Beside that tags missing on platform code removal (which can be Acked
-> by Arnd himself i believe) and dtsi/dts files (same ?).
+Hi Marek
 
-Vinod acked the above two patches:
+On 6/23/24 21:51, Marek Vasut wrote:
+> The IWDG2 is capable of generating pre-timeout interrupt, which can be used
+> to wake the system up from suspend to mem. Add the EXTI interrupt mapping
+> and mark the IWDG2 as wake up source.
+> 
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> ---
+> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Cc: Antonio Borneo <antonio.borneo@foss.st.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+> Cc: Richard Cochran <richardcochran@gmail.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-stm32@st-md-mailman.stormreply.com
+> Cc: linux-watchdog@vger.kernel.org
+> ---
+> V2: No change
+> V3: No change
+> ---
+>   arch/arm/boot/dts/st/stm32mp151.dtsi | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/st/stm32mp151.dtsi b/arch/arm/boot/dts/st/stm32mp151.dtsi
+> index 1804e202eb425..68846699b26fd 100644
+> --- a/arch/arm/boot/dts/st/stm32mp151.dtsi
+> +++ b/arch/arm/boot/dts/st/stm32mp151.dtsi
+> @@ -355,6 +355,8 @@ iwdg2: watchdog@5a002000 {
+>   			reg = <0x5a002000 0x400>;
+>   			clocks = <&rcc IWDG2>, <&rcc CK_LSI>;
+>   			clock-names = "pclk", "lsi";
+> +			interrupts-extended = <&exti 46 IRQ_TYPE_LEVEL_HIGH>;
+> +			wakeup-source;
+>   			status = "disabled";
+>   		};
+>   
 
-https://lore.kernel.org/all/ZnkIp8bOcZK3yVKP@matsya/
-https://lore.kernel.org/all/ZnkImp8BtTdxl7O3@matsya/
+Nice feature. Applied on stm32-next.
 
-so only:
-
-- clk: ep93xx: add DT support for Cirrus EP93xx
-
-https://lore.kernel.org/all/20240617-ep93xx-v10-3-662e640ed811@maquefel.me/
-
-left.
-
-Hope Stephen will find some time for this one.
-
+Cheers
+Alex
 
