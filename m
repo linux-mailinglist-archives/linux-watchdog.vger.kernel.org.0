@@ -1,169 +1,123 @@
-Return-Path: <linux-watchdog+bounces-1203-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1204-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49DE691BA65
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Jun 2024 10:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 451A691C10F
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Jun 2024 16:34:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DCD4B2305E
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Jun 2024 08:50:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A61ACB218EE
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Jun 2024 14:34:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A24F4147C85;
-	Fri, 28 Jun 2024 08:50:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F9C71C004E;
+	Fri, 28 Jun 2024 14:34:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZzIWXVmc"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2102.outbound.protection.partner.outlook.cn [139.219.17.102])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A26B62139D4;
-	Fri, 28 Jun 2024 08:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.102
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719564654; cv=fail; b=RUs2PyE7YwbJW0oSKWIJJ9Xf8upAIWypWhoR3AW0NzG1b7h6kUflEgVOsFtw4Dui3LqaJ2rO1A8+98EMRuaTHOnEOAWgl57RRkra0uA37nc7qwxNZvtYUNoGFA5OpXNKb/odrngTCsFKJSiwOL6L/TQxD2LlYLMKYJhg8XmvF9U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719564654; c=relaxed/simple;
-	bh=hGE99M1Lgq3iE+crM3hmPWGIAWMSpl3UYsrBIz2gdok=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=heXNzFwXkX2zv6lpxDYWfMDh8+bk7+WDZMJYr08ovOYJcKtxv8FQJYTdTNS68YcEhrRG+871vA2EJNRUDJw8GXK/13O5xcgqyTApGwqlmxmlJzWK4ayHx1ZhhVS0dYf6WgBgCO/C8H1niONGA3dMyIDUbv+brz9mB4lJ7rMa6po=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WAGgDpWD/TC9psDgTu2xCuCjXHt9F2EjJWQUbJU8s47Zouj310iy2U4cQjhkb1kBVBCjOzllOGg2lygfPBZ1/m0k43fYO4H++T1RtQ2dwyasm6iQuPJbG2Yh8NHUE4UUBXONM8G9vSyxt83FBdCW8MM2k6UICeVu5J2gkqWiR9DIQ9k0jLvDqE05+GXlDpY85Yr3ocETFYNW8RZqby5ctANw+ZJieq5BUf7zSwC43QGXjqWllUHagNES+OtrzMccR9GFWYXNB7rVDJO0VJ+XH/78PO4y1Yr0ju4P+iPKGW9phFw5aCtlgBlW+Ya5LNTDe00+3tdT+pXdxu7+oT7TwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1hYxebCzXmQlRFwI4kWleyCm76/ntNaGzEqXTDxscfs=;
- b=gsWTqABBI71HbDqYXJiVnmgp9QEOQKbcWPMWwgKs1PVG47sPcI6l5Ht2JElb6qackNC/opK/Is07fXegRaWKZk7ydt2QXNxDud4E1it4YR5mQXV87ub2ZOZaPRRZvULu1CQlHMel6Jc33P9XrbSqwVAlAoVU/pJOEDpcXK2TbclY298vFXvyTLH3g+CRjRaoehrhdvgps4FrS97LPfHzdG+5qv6MPRTHcTsJQ0KXmvylw0t6lIySEnTsWu5NZakmz1ZpDdIAGp1Zvu7WhqECFGzfblCvjtTSzfq7vn+2QgtedypRU4os82e+GpGp8pONj9sfg6Vh2hQj1J8SYiazRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Received: from NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c510:8::10) by NTZPR01MB1116.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c510:8::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.32; Fri, 28 Jun
- 2024 08:50:42 +0000
-Received: from NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
- ([fe80::a25e:ab43:d741:7538]) by
- NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn ([fe80::a25e:ab43:d741:7538%4])
- with mapi id 15.20.7698.032; Fri, 28 Jun 2024 08:50:41 +0000
-From: Xingyu Wu <xingyu.wu@starfivetech.com>
-To: Chen Ni <nichen@iscas.ac.cn>, "wim@linux-watchdog.org"
-	<wim@linux-watchdog.org>, "linux@roeck-us.net" <linux@roeck-us.net>
-CC: "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] watchdog: starfive: Add missing clk_disable_unprepare()
-Thread-Topic: [PATCH] watchdog: starfive: Add missing clk_disable_unprepare()
-Thread-Index: AQHayQxEFY6084V3l0KF4kTfFC9B7bHc3QvA
-Date: Fri, 28 Jun 2024 08:50:41 +0000
-Message-ID:
- <NTZPR01MB09566E4706676F5F0DE547159FD02@NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn>
-References: <20240628033508.281058-1-nichen@iscas.ac.cn>
-In-Reply-To: <20240628033508.281058-1-nichen@iscas.ac.cn>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: NTZPR01MB0956:EE_|NTZPR01MB1116:EE_
-x-ms-office365-filtering-correlation-id: 82321968-27c0-4cf6-1bc5-08dc974f642f
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|1800799024|41320700013|38070700018;
-x-microsoft-antispam-message-info:
- AftzK3Xlpe4RoqEL4utyn/cAP04n+4USLFR/H/RlxzhvR9EhFcaa/BJqbRbw3RGob3mS0P3acemdfgaCFa2Mq5Nz0Vw/+wmrkcQB7kByPTum1O7yhsfTe7/Jobmzr+2b7GnP8vsL7bFIkgZSK/iJAHk/2oZlpaJxM9suisOt2/66zgEy7LsCvdd5q9Hu+MlDBQpr6VAY6FDc+Ds/pihPYP0ACoYUChYa7tnGciEMe8zs9Rt1MRo5FTsZVZtJmXLnfxPsFt7DM1izr7y3peQ3hcre/Je9YcDYGU9Wyzpm/jJJPQFMWzp4zO8Zkqrgx7ihw3kTYZvoPlizHdqcVuu5RwWry4yzyZ9J5ANubQJxnQl/VxbXkYXq7YQckKRpxYjxERVijsFvq20hDY7n9i47q+ly0a5MAuBXJKXuHYmpPfzA8W274EaDGTGTKPF99Ag9+TbQToo79vIfImUtgY80QCTysUvEtj5uAzk8RwDDWcRX1cHLfCQSSZOWRqd0RMs6WcRSOtHDPBOeJFPzrtHuFOiDe6N5De6n7GPM4x3KUDsRkjAHRy5a9Uit4VuCRNlUGIlWD/pSHWqgkubDzddJ9BSkiIziiYTM0MegshCs9jIBUjKiOgPpgNRX+qCqOtbt
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(41320700013)(38070700018);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?BMH8O0YIZAYEmS43cyGludjAo6AX3XSx0fKYKOyWakOWXLdpFknL2O+SkE/r?=
- =?us-ascii?Q?9l1GbNGpD5O0TKAFAofp6MNe1o7fIBdmm8itsu5eMLrRuAChDhFmg8AmR62b?=
- =?us-ascii?Q?510wF8QrC5GPlYboZcY3owdJnfVNNR/gJAwnRExyJnD7ZtQytpqe7hU75LWX?=
- =?us-ascii?Q?R9qUH/9Qap6qlfw5g05aP9HZZ2OQY0J2bnUMQ4mimuJwx6EisDfZBGo/Yp7n?=
- =?us-ascii?Q?ybRZxKXFsNyiX054xkaKD3DEjqb7SEXk7pjJ/tzmkbUJ7fBxE44oc6q2B02W?=
- =?us-ascii?Q?70TqwWTEfKtVuazAOjNowzCePbIXEMhBUnVlY892xol2AtTZuz4eEfYQzZkg?=
- =?us-ascii?Q?8CpsPrHZyuKHQHFoEPgURu+sd+OgU5yv5H98ioGpY6oCaElY1X2qkv+kpDDd?=
- =?us-ascii?Q?sebywWMEkG6w+PYfrGakJ5GSE13aYog6TMOhADULJZvx6whr0USB5R+j9k7x?=
- =?us-ascii?Q?onDh7ayWWScZYMBGC8SbGJHMbBJYvl5IRFjCwwfUkVk0Q0DFt6KanxHdtvGi?=
- =?us-ascii?Q?pgeuWEl6tjOTz+cMIioDLO0avPW3juxTcozVbdR+Y/Ltg0QhJziElZLv+xb7?=
- =?us-ascii?Q?Km/67g8L6ZNpqTKDuTlijA+LknbE0D1cTmMGuZdKiPD6usVSc9FIbvyhQIT1?=
- =?us-ascii?Q?HT6sc0/271rkVrql/iNnjnWgcooB12vaAW5SuVp5AghkbXN2vv1ZW58n7rfd?=
- =?us-ascii?Q?AGdlVD26tQUkdAx0Xv4uUqm+R270m8DzE+c4lG4otALdXntheQ9daZhqxdBv?=
- =?us-ascii?Q?93ix533q2o81xv5Ng9jZOC7RQq2e+qF7DKgtrgBcqCMFosURDhIYv6ggbIM+?=
- =?us-ascii?Q?sUUTCN8EkRRBAO5shBhqKTDQZCSSb3a4zlwVFOP7FPKWVTw1B93gyvnOTQhk?=
- =?us-ascii?Q?bYwI4Lq6b6Y/wleMvDXFK29sZ61hTJaHsdtOsueq83ttTl4IJyedb9BGtBSN?=
- =?us-ascii?Q?aR2GaAQ47JcJwmww13B3U6vIq7GGUgmYTGC5gp/QD0MvMIO+CxyK9ovl29b5?=
- =?us-ascii?Q?Mxwoesk5iUbYGzr4B3J4/o3dF7pM2NdkXVizHvAZfcqinLxgcUF5X1KrlgK4?=
- =?us-ascii?Q?BtXaDXCyaRh4uGlzjSOr8P7EGY6f+F76Dmhgmvm4nctjxWacAxCbA0qsmtN8?=
- =?us-ascii?Q?ZHGA4Tpmb2qUZ9KvfpQ4pCPjHae8rRYDAbr1ptBTSh/sztUnQavDCI3dn2HG?=
- =?us-ascii?Q?SJgZjUx87IkmsXQlNcSOzDkAddBHlD7emkJAq0u5BjE7SQI7xLhuoWdeeLUP?=
- =?us-ascii?Q?vCldX59Vnzh5lrX1SV+lQAisQgsTg1MOvxxFBnTZwGa6FKO2iK/T+Pu0qmnj?=
- =?us-ascii?Q?RTbs0mQp2FPXBpkQtqxB4md6IQTWq4C+MZdNmDMgk3sCzKwTeAo7wT/pr0I7?=
- =?us-ascii?Q?X6T7acrVFs3ejAd5MsyAaxpeYDQWecpQn9s8oRRzEV+kSNT2sdqJktwN+tqT?=
- =?us-ascii?Q?TcP8rxymSESwYMQ4gBQTvVnkR8rN2j3Zy5SYUNG5GckQv77HJAGE+I4wyqRA?=
- =?us-ascii?Q?WPcS0S8SYJSLbtPouxCKvn02QwqP4DoZKeRMBok1JknM8ZATQ7CJFwiy5vUg?=
- =?us-ascii?Q?XduuD5DFb0sc26X5XBvoy5jUop+Q9DKJ0LDRMg/J2XsHNHtMm/7QFnkseJ0E?=
- =?us-ascii?Q?/Q=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B581E522;
+	Fri, 28 Jun 2024 14:34:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719585265; cv=none; b=p6vItlEfm3RskuyZMOnXyIFpBZ+GqXFZsMZy85jgmBt8xa7CiQyooij3wgAz16A3TgAHjnyCXlilk9g5uzxPnvgIna9GTkGLdp0NvLrRYlV5BxGCREoP8ykPaggP3GAGm/18N7iWZBoWP8SpsglIF/FIMIAFVO3StyHLAiDmRu8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719585265; c=relaxed/simple;
+	bh=M93Nvl53wprdqB1rCgjlA3JH/jyBzpgsj3DjF0i+/Uc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oZenfuvy6Jptjzi3gqTSuDOqqqxrz+ylIl80HiEH0erLaJ1GGKUJ/zPN0zsPQSpBFlCPdLWpP1+ziaIfy/I9g+M4oxtLYy3BtYAfL3N0Y2BCNAZMu3ZrPQPPEi6k44o77G2ngfxyVl0IQ7UOOtb3m48pef6TXL+Z836n5C/ihUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZzIWXVmc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A0E8C116B1;
+	Fri, 28 Jun 2024 14:34:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719585265;
+	bh=M93Nvl53wprdqB1rCgjlA3JH/jyBzpgsj3DjF0i+/Uc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZzIWXVmc2KqAbYAU7z50dq5r2g665ts4K1cpp2jdj1J6YPrDCEB6HMK/GOJNdjRb6
+	 9C0DYeiuqZdZMZbuE3RYCXBMjHOLstLaQ3PLpZ8iIFp3iw9EaZDMH2NmH5LaHf+OMQ
+	 bTBeSzPmEPVO3z5ecU+9iVdlNzqsVaY1fomUGHeI+VLb3V1HjASRJ2rE+gBacxxmzz
+	 goG2+AaLa6/JT8bHF6r8FP0Nw422XgA2LnvkkXua6cACceBw8GLLzGBQCTLrOzUApF
+	 rlCy9LaLzIPpX0iIWjk1Ex0uuB4cmttnD/NrS0rxDeOsm4mt6u1du9g+E0v8lCn51o
+	 o+slq1Moa5gUQ==
+Date: Fri, 28 Jun 2024 15:34:19 +0100
+From: Lee Jones <lee@kernel.org>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [GIT PULL] Immutable branch between MFD, Regulator and Watchdog due
+ for the v6.11 merge window
+Message-ID: <20240628143419.GO2532839@google.com>
+References: <cover.1719473802.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-Network-Message-Id: 82321968-27c0-4cf6-1bc5-08dc974f642f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2024 08:50:41.8297
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Wcam3vh09IjjonVfFUgUHeEEI4iHhQyBYWV5ByylJTdDFeX6NUBErI36QMNeXe3/DNo2JluQ3YyRp0pq3NF8RhVyksYpswcSxTEV1UohC0c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: NTZPR01MB1116
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1719473802.git.mazziesaccount@gmail.com>
 
-On 28/06/2024 11:35, Chen Ni wrote:
+Enjoy!
 
->=20
-> Add the missing clk_disable_unprepare() before return in
-> starfive_wdt_enable_clock().
->=20
-> Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
-> ---
->  drivers/watchdog/starfive-wdt.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/watchdog/starfive-wdt.c b/drivers/watchdog/starfive-=
-wdt.c
-> index b4b059883618..19a2620d3d38 100644
-> --- a/drivers/watchdog/starfive-wdt.c
-> +++ b/drivers/watchdog/starfive-wdt.c
-> @@ -152,8 +152,10 @@ static int starfive_wdt_enable_clock(struct starfive=
-_wdt
-> *wdt)
->  		return dev_err_probe(wdt->wdd.parent, ret, "failed to enable
-> apb clock\n");
->=20
->  	ret =3D clk_prepare_enable(wdt->core_clk);
-> -	if (ret)
-> +	if (ret) {
-> +		clk_disable_unprepare(wdt->apb_clk);
->  		return dev_err_probe(wdt->wdd.parent, ret, "failed to enable
-> core clock\n");
-> +	}
->=20
->  	return 0;
->  }
+The following changes since commit 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0:
 
-It looks good. Thanks for your patch.
+  Linux 6.10-rc1 (2024-05-26 15:20:12 -0700)
 
-Reviewed-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+are available in the Git repository at:
 
-Best regards,
-Xingyu Wu
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git tags/ib-mfd-regulator-watchdog-v6.11
+
+for you to fetch changes up to fcf1f960a6aa45a22efd4d49114c672ed305b85f:
+
+  MAINTAINERS: Add ROHM BD96801 'scalable PMIC' entries (2024-06-27 09:24:45 +0100)
+
+----------------------------------------------------------------
+Immutable branch between MFD, Regulator and Watchdog due for the v6.11 merge window
+
+----------------------------------------------------------------
+Matti Vaittinen (6):
+      dt-bindings: ROHM BD96801 PMIC regulators
+      dt-bindings: mfd: bd96801 PMIC core
+      mfd: support ROHM BD96801 PMIC core
+      regulator: bd96801: ROHM BD96801 PMIC regulators
+      watchdog: ROHM BD96801 PMIC WDG driver
+      MAINTAINERS: Add ROHM BD96801 'scalable PMIC' entries
+
+ .../devicetree/bindings/mfd/rohm,bd96801-pmic.yaml | 173 ++++
+ .../bindings/regulator/rohm,bd96801-regulator.yaml |  63 ++
+ MAINTAINERS                                        |   4 +
+ drivers/mfd/Kconfig                                |  13 +
+ drivers/mfd/Makefile                               |   1 +
+ drivers/mfd/rohm-bd96801.c                         | 273 +++++++
+ drivers/regulator/Kconfig                          |  12 +
+ drivers/regulator/Makefile                         |   1 +
+ drivers/regulator/bd96801-regulator.c              | 908 +++++++++++++++++++++
+ drivers/watchdog/Kconfig                           |  13 +
+ drivers/watchdog/Makefile                          |   1 +
+ drivers/watchdog/bd96801_wdt.c                     | 416 ++++++++++
+ include/linux/mfd/rohm-bd96801.h                   | 215 +++++
+ include/linux/mfd/rohm-generic.h                   |   1 +
+ 14 files changed, 2094 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd96801-pmic.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd96801-regulator.yaml
+ create mode 100644 drivers/mfd/rohm-bd96801.c
+ create mode 100644 drivers/regulator/bd96801-regulator.c
+ create mode 100644 drivers/watchdog/bd96801_wdt.c
+ create mode 100644 include/linux/mfd/rohm-bd96801.h
+
+-- 
+Lee Jones [李琼斯]
 
