@@ -1,92 +1,79 @@
-Return-Path: <linux-watchdog+bounces-1207-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1208-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B94D91D107
-	for <lists+linux-watchdog@lfdr.de>; Sun, 30 Jun 2024 12:04:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2A5291D280
+	for <lists+linux-watchdog@lfdr.de>; Sun, 30 Jun 2024 17:46:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF92F28198C
-	for <lists+linux-watchdog@lfdr.de>; Sun, 30 Jun 2024 10:04:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB78F1C20845
+	for <lists+linux-watchdog@lfdr.de>; Sun, 30 Jun 2024 15:46:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C65C812E1C4;
-	Sun, 30 Jun 2024 10:04:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C47615383C;
+	Sun, 30 Jun 2024 15:46:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="vtxK/kQ/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g0v7Y0Iw"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AE6E2C6BD;
-	Sun, 30 Jun 2024 10:04:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151D215383F;
+	Sun, 30 Jun 2024 15:46:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719741875; cv=none; b=c7DYA/aRw9gQjEdsnNcm1E5ULdz9umocB5LpRq742Cunn2WoxI6eMjI5o0nS4wNjAaj/Qgn3O4yQjKLq4oCKyITtms8x1reOHfIYzIJBX3rAd42S9+4qdE6wSYas25UUQDOygqrRK3c0T+8VXMGL1YfcodYDx9Ke41NjFx5cRc0=
+	t=1719762363; cv=none; b=dOWHZ57t0ogcVeiOIho8iagWgj0bhr3w0T3xkDM8eZBlrZHsYp+Nr7D1RBgPOP0Qt0DM8yTBazjFD2B7W/YPIY8DfLm4isrEOV7fmRUuNl+SReZiUBd6hgOuphgj0BBJsx//0aNRDaDLHaOvXHe45LrMcX+VZv/dua9UfyhLjxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719741875; c=relaxed/simple;
-	bh=ksI5U99p5TXI+fWs7G8VsLJMf0qVoJiuCSx528ExG58=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N24Xn2ZkvurhhgFf66mlO+jCgE7iKpiCmt4AI5teHtera1L9RXgbr/hkg4aY2OmUHY+BsTap+TMdr3BScb8YDtFz4Vq1TEOMz6Cy+b92CkYYuHFrl/orcZd8IjEp3nb7OhyUEhytLEZA/J/6JtPKLhrzNYjk17BCG2bdXktC45Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=vtxK/kQ/; arc=none smtp.client-ip=185.87.125.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-	id 97CB840A00; Sun, 30 Jun 2024 11:44:26 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 97CB840A00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-	s=odk20180602; t=1719740666;
-	bh=ksI5U99p5TXI+fWs7G8VsLJMf0qVoJiuCSx528ExG58=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vtxK/kQ/4Au4lVVotFHMhEpiieOkXWxecYUtIpVWpnwvy/zbmlJ5v7qTVj/cm+bt6
-	 u/i/srnPRNKzXm3zOVyGTHPJjJsqpGxxpajBG2dacFQr9rydP0n5nVI2khJ1PnyKPj
-	 +w1GF5DNOcwwvKTAGEKozsPDwiKeG1DP5TyoUPfQ=
-Date: Sun, 30 Jun 2024 11:44:26 +0200
-From: Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>, Arnd Bergmann <arnd@arndb.de>,
-	Jeff Johnson <quic_jjohnson@quicinc.com>
+	s=arc-20240116; t=1719762363; c=relaxed/simple;
+	bh=DGaL9GzS4XlQKNaq+W/gqgj0+12C0l+HhzPNdEgYNtw=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=icmajhsxceeHY4Ygti4hBa9U8A4BvbEl4yQ6V3Nn0+IofzYrz8lnMbGue81WwOF9iwlesK8HUstGlOOnknD1B6eHCGrKiHLwO9psa6DhdGJsIFLr2NKGxdON7dctn7NFcnvhg1LHdwbAQJZmYV+iKqSMInvk1Kl2STE/BYKdeSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g0v7Y0Iw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E7FE8C2BD10;
+	Sun, 30 Jun 2024 15:46:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719762362;
+	bh=DGaL9GzS4XlQKNaq+W/gqgj0+12C0l+HhzPNdEgYNtw=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=g0v7Y0IwuFfcRqHXw2C5w+/b3pq92WVMAJq0c4kLz6vUPF+4q1hGp2KgFRNCL4gwW
+	 buftoFmICdEVUgMwqT8iRUoxCfnBo6dRsWs/Rt5WXjh1fQ/MCmtbed40JW/3sbuIAj
+	 KFyxrdakGJ5CJA38VOq1RDuFGCCyWegZ1wMXq7kQ/6WNQUxfpcNce2S+S8wfCRW5+a
+	 Rt8NCUyGXi//321pz5K20SvXVrwCVZR/X6ghl4+FFNRyDJQMJwBEzlcA4IYUIJxfd8
+	 eLEqkgN92th/x6jtkzaySHuWh4KGOxv735kUjGGIZiumtjlmQmXuw83gJEYkGL1HT0
+	 wZvnfcMAuP6FQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DE057C433A2;
+	Sun, 30 Jun 2024 15:46:02 +0000 (UTC)
 Subject: Re: [GIT PULL REQUEST] watchdog - v6.10 release cycle (fixes).
-Message-ID: <20240630094426.GA13073@www.linux-watchdog.org>
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20240625133151.GA1554@www.linux-watchdog.org>
 References: <20240625133151.GA1554@www.linux-watchdog.org>
- <CAHk-=whgnEuO1+8Gk3AiWeuSeAuCoUWnkuxUvczHwfJL+juAsA@mail.gmail.com>
- <20240630091403.GA12993@www.linux-watchdog.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20240625133151.GA1554@www.linux-watchdog.org>
+X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.10-rc-fixes
+X-PR-Tracked-Commit-Id: acf9e67a7625367b89440855572b29c5ec19dd20
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 327fceff3b634e6f21bbe60bd1d28e41d5b1d924
+Message-Id: <171976236290.1786.9447781866447775015.pr-tracker-bot@kernel.org>
+Date: Sun, 30 Jun 2024 15:46:02 +0000
+To: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, LKML <linux-kernel@vger.kernel.org>, Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>, Guenter Roeck <linux@roeck-us.net>, Arnd Bergmann <arnd@arndb.de>, Jeff Johnson <quic_jjohnson@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240630091403.GA12993@www.linux-watchdog.org>
-User-Agent: Mutt/1.5.20 (2009-12-10)
 
+The pull request you sent on Tue, 25 Jun 2024 15:31:51 +0200:
 
-Hi Linus,
+> git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.10-rc-fixes
 
-> > On Tue, 25 Jun 2024 at 06:51, Wim Van Sebroeck <wim@linux-watchdog.org> wrote:
-> > >
-> > >   git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.10-rc-fixes
-> > 
-> > ENOSUCHTAG.
-> > 
-> > I do see the commit you mention in HEAD, but there's no actual signed
-> > tag referencing it.
-> > 
-> > Forgot to push out (and then didn't react to the error messages that
-> > git request-pull gave you)?
-> 
-> It didn't gave me any warnings, so I took time to investigate it this morning.
-> Turns out I did not do it on the linux-watchdog tree but on the linux-watchog-next tree :-( .
-> Such a stupid mistake from my side...
-> 
-> I'll fix it and will come back.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/327fceff3b634e6f21bbe60bd1d28e41d5b1d924
 
-It's fixed now. Tag is on the correct tree. (Actually on both trees :-) ).
+Thank you!
 
-Kind regards,
-Wim.
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
