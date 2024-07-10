@@ -1,152 +1,168 @@
-Return-Path: <linux-watchdog+bounces-1348-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1349-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 429A192D0C2
-	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Jul 2024 13:35:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0E7F92D1A3
+	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Jul 2024 14:32:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F21CE288BA9
-	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Jul 2024 11:35:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F406A1C20E16
+	for <lists+linux-watchdog@lfdr.de>; Wed, 10 Jul 2024 12:32:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C559D190478;
-	Wed, 10 Jul 2024 11:35:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12BC419149D;
+	Wed, 10 Jul 2024 12:32:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b="fPA3cmXm"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="li1YxcHH";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IB3v6d3P"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F727D412;
-	Wed, 10 Jul 2024 11:35:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79BFE1E488;
+	Wed, 10 Jul 2024 12:32:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720611313; cv=none; b=PCaEQR+tAakkxP861jSUdj2kNEu8OE8QRG08WWsv+7eVjnKs/A/0VCWJWlHA9gbQLeOseRdpN5uw3rVRvefQ5athwyNOUgb6TdF9hGl7uMFbl8YEUMiskmozf/KoDIoZsArDIK4eYtXAkrVA027DIX3FUu5WXWSJrcGXDwRZ7nc=
+	t=1720614727; cv=none; b=LTgfrWf6l56HiesS7A97WmBuDASmnDvF9r1RECH1wKBYqFu2RuXXgJve276Zx5XejZ9ryInKy7+jfKLLEkPd07GIxRwfEMY9Pw1PYArmtBf0BByBRqVNrEiGwSPHaObESPIapc3QRKhy71hGhqyBrCK/kRvmYgzfBAwbz3/rQBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720611313; c=relaxed/simple;
-	bh=Ca7YWsHqHzNel/xzp85QT864ezTfPIJoPDCqCbc2WfQ=;
-	h=MIME-Version:Message-ID:From:To:Cc:Subject:Content-Type:Date:
-	 In-Reply-To:References; b=i77PSRLvzNPwXzcBptyosWx8ohYg2v8wUC3Q6v+BHjEm5Hdryz26WlKfpx9QE8wI6WABW7SMV4sorOzPTlyiMJi88uBMMQE6QQRZfI/9AdhN2BG5V51nwu6wnqqhxEi4FS1OPTDZA6FilC0m/uet5FH5r/QVZoBrrB/svGYI944=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de; spf=pass smtp.mailfrom=public-files.de; dkim=pass (2048-bit key) header.d=public-files.de header.i=frank-w@public-files.de header.b=fPA3cmXm; arc=none smtp.client-ip=212.227.15.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=public-files.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=public-files.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=public-files.de;
-	s=s31663417; t=1720611282; x=1721216082; i=frank-w@public-files.de;
-	bh=Ca7YWsHqHzNel/xzp85QT864ezTfPIJoPDCqCbc2WfQ=;
-	h=X-UI-Sender-Class:MIME-Version:Message-ID:From:To:Cc:Subject:
-	 Content-Type:Date:In-Reply-To:References:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=fPA3cmXmgU6pQYBA574Np/QsgP2UKY3YRdeTeQxzaDJIvMsDm86RE3r8QPgbfdG1
-	 PpbXq61an4mXRS7iaxfEuJNg810frhWggLxeVdqp2/lo4oJ92M/bQiC+RwkRdN5al
-	 RDi6UhbPZpBRR2f7XU0ixb//8J12/u7IxrUVMSVjNA4T8HPaaxgCqeptDsdctENvs
-	 KMHDxteEMaoFAQy7mXjVYZ02LlzC1JjoPBXZHrF0xnd5+knO+YROpLcj8A4Va49vF
-	 I7uV1hbbkABQjlFsxDOIBct+JTlqRVJsnv9YIr9dgP+O5aKvwaGFM3TAWFDbmSczt
-	 xpeYVmzdcRZUysYYQw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.158.245] ([217.61.158.245]) by web-mail.gmx.net
- (3c-app-gmx-bs04.server.lan [172.19.170.53]) (via HTTP); Wed, 10 Jul 2024
- 13:34:42 +0200
+	s=arc-20240116; t=1720614727; c=relaxed/simple;
+	bh=XU81jlqPSEHhklnXvmeUHF4K+FfBTeR9jSQAbMBRniM=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=I+qMFHWMO+rC+GJQRnBjALkPNoQdmi83uvXNlxqdXFE+rXyhDdSQDRGZpaOQdlLl162jhqm6YO8cNx6jmFaSWcCpC+syjdcbiz3/Lrefoo3vwCJ+bItS+lyliJSmVCM2JFNI1J8oSrCvwVSOF+67vkN0tqQWtYOXfHoDkQ3huUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=li1YxcHH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IB3v6d3P; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 689051385136;
+	Wed, 10 Jul 2024 08:32:04 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Wed, 10 Jul 2024 08:32:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1720614724; x=1720701124; bh=C2Se+H9RzY
+	HkM+IvsyadLBKj3T9ynrUDq9Xcr2QdKUs=; b=li1YxcHH3YLCQ4Le7dl2muHN8j
+	eMQ3UOnJF2Kn5c3G8TqV3FTvl3x6SSRi08Gli+0KxjlQo5baF/Uw2goGLZ0zV962
+	O+0dbBjc96aY0X3OfzwO4T9Vq3oycXC9UY+jfbqIQZnCZkVYvcVt4rGn0CjXFfsI
+	x01m2Qn7qm9aC1DjvEbzZv0Je+YJYwvl3wYilpL1OR+VQWic/lrfI/t/M23qmytk
+	obEhpc4FUTd6l1ENJI4CdSmTJImc1fVa4dJ717DPMPYK0c3wYKrThMImwyvtD373
+	9P0IhfOWjjqMlrqwtrY6DAjvnOcPjh+VSYYQXPLwHQjjvMtdYbw6d7BRU0KQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1720614724; x=1720701124; bh=C2Se+H9RzYHkM+IvsyadLBKj3T9y
+	nrUDq9Xcr2QdKUs=; b=IB3v6d3Phr9VWTcxt8gBc2qcRz2azkcEcmvH0Yd+yEa3
+	g9xn5bnLx1fKqjDN1R2Zwrnky673MsrPd0Hn7Zfe+mpOkhIbhvxlKL6EWJi8KkbX
+	IrFCk/rCfEBcoMQESHdkxOZF2rJde3RKeJzGC1TYQYAwUr5rUc6AxDCMpu9CJo68
+	u8ahhEa7s2NSp6hh+gt2paRMhj3TgijNx5vM4Xa4D6Wy4WXrTbE2i42ZrK2nFA+x
+	fXw47caFr8RHQOKF6GXXnf4EYiRsZTNNuhj6Vvw1EVBliFbdLQJmwuIoZHpw0gkx
+	+q4zkGZBCkISrLrcpnAZzZAhsHNa782s+ub2R7Xvqw==
+X-ME-Sender: <xms:Q3-OZubytZE4eowk4SBwd6hMi1H9GUi8VnkX6U3DBiJe6th8n_5a_w>
+    <xme:Q3-OZhYssSpvCnxNlzCJ9UZkhGWR04WPe8Nh1Ww-TQk3zUwsHMOxwG-QZoOEM6zOf
+    eQ8ecMhmQcG3EOFMyM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrfedugdehfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:Q3-OZo_hswq48saoXU7mzKLp59S-ElC0pUMtf-ZdqPyc4tuSZaCSvw>
+    <xmx:Q3-OZgrw9GGfjnJwhwXkfnRA_RU8P6fsBJiCeL3U7HL26R6CQOl-Wg>
+    <xmx:Q3-OZpr0bvZIiYqiyQFln6EySrIEHwSZhi9tOoqN4tp0x1B8sPE-4Q>
+    <xmx:Q3-OZuQd3ydDSldUIX01Q5l0z9-EQ4hy3zb3OhkIisG9b-K3WDSgLg>
+    <xmx:RH-OZtLntWVOrwVwg-KdB-d6vurB4_VxNR9iIYGfWiVJaUprkM1Da6tC>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 09148B6008D; Wed, 10 Jul 2024 08:32:03 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <trinity-93a5ed81-b890-4d49-bfec-1bbb1219cb65-1720611282583@3c-app-gmx-bs04>
-From: Frank Wunderlich <frank-w@public-files.de>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Frank Wunderlich <linux@fw-web.de>, Michael Turquette
- <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, Wim Van
- Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>,
- Daniel Golle <daniel@makrotopia.org>, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-watchdog@vger.kernel.org
-Subject: Aw: Re: [PATCH v1 0/4] add syscon requirement for mt7988
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 10 Jul 2024 13:34:42 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <126053ef-3bfb-47c2-aa17-eb1d26d99102@collabora.com>
-References: <20240709101328.102969-1-linux@fw-web.de>
- <126053ef-3bfb-47c2-aa17-eb1d26d99102@collabora.com>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:VqJ3hcPVu1xb9GRAUly8AumwiYagwz5PSVlmCKg5mTSwZJoEnbbu0LT1soXbfegD3Ernj
- +cpVjnfKv7Mc6sSvh/GSJm+gwOdONocDiO3sl5tVAppbv/E//rvACaUzXBknfW5uKmgyUALE3sa4
- GOYdzjiE3ROIWei/P9aszJtcldqIa/3ubboc8IvRuSt0HMYdFOevd3QOAoVvjB82AwO1UEGHu/AB
- wp8+YHPqQPxiQievpPiEqYrCo7HbcOUyEUst3MJZjWZqPn0LXU84ODIG+QnRuQZprx7PgaLTCKkP
- HM=
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:J5us5hzBH7g=;I3oO7BrCPjmdtXrzt/KONxqrjiQ
- eE4SQym1ZEjsCG0I06cjTEAdEqMadHr7wnl5eJsNsexH8IzQCfzI/T8qZioVzNruvB7MpoBWM
- fJKQ6G2nctMhz0sN2/NYfTNpxkF9jCyu1qnhnsjDZvOjkOKhDysuvsN5+Ln18KqLRdW0v1XdU
- 9RLZbHdJ1gMcUQm3aJdyvCfKM7qoi27GK1SXfEGS7pRnauXFSnaEdYUyVG5Y5d3QGKltIzqK/
- GntpjfKGLgXu+HhKVypbT2HwxSvWM97s7p5Er3Q26/zonqeE1FvfedpsXlCCkR2NjZwpeg+l5
- gt8N9XKe9Zv9t6Po8Fvaqk+nyBEoswduX3ijEKPDQdVk2OZJsq2DQXsDDTV5ANOCjGL9STWQZ
- +SpTzTJRp5hgMmfG4Uv/nsID2q2kF46nGmqJp8NqEYt/bgkeZDyWDr+h6qxgLDtYRonVrfj43
- Lpe4JviSNXUL/J3+02anpfYGxFWPUUu2MTmE3p/sv9BgFQEp6VSymI33b504yXVjsZVKdSDII
- zqgj3j9qp+BzZIMuSZQ9vov7JZhWlSSStBOWMYKZU+emtTxk9MUVW7Kwc7uDh/pxBV5/deehi
- Hdj/1R47FpWYG2BQdEJAvalty4ziHGt1ZI7L0JSk3WnBl7Nq4+UEN0UtC7PYqI25FDPTtBMYx
- 2wO2UWPQWDh11PAiD/UfLPyQM+/r7mnwNnejW+5ewA==
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <8f45a3d9-429c-441e-a17c-33a163eb86c2@app.fastmail.com>
+In-Reply-To: <663b1749afeb5cec281149fdb445ed36fdcbc68e.camel@maquefel.me>
+References: <20240617-ep93xx-v10-0-662e640ed811@maquefel.me>
+ <CAHp75VfSC9gAD9ipeWRPdQOxUp4FXqYYei-cJTs38nbz0cHpkg@mail.gmail.com>
+ <48c242838c77034485a9e667dc0e867207c5beed.camel@maquefel.me>
+ <241a4cf9830b0118f01e8fcf2853c62527636049.camel@maquefel.me>
+ <jyvlqfvqn5bp3jmvxvwyrcqmihjohuq3o757mfph7x37kbwvtq@gtgyh4fca4fq>
+ <663b1749afeb5cec281149fdb445ed36fdcbc68e.camel@maquefel.me>
+Date: Wed, 10 Jul 2024 14:31:42 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Nikita Shubin" <nikita.shubin@maquefel.me>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: "Andy Shevchenko" <andy.shevchenko@gmail.com>,
+ "Stephen Boyd" <sboyd@kernel.org>,
+ "Hartley Sweeten" <hsweeten@visionengravers.com>,
+ "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
+ "Russell King" <linux@armlinux.org.uk>,
+ "Lukasz Majewski" <lukma@denx.de>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Bartosz Golaszewski" <brgl@bgdev.pl>,
+ "Andy Shevchenko" <andy@kernel.org>,
+ "Michael Turquette" <mturquette@baylibre.com>,
+ "Sebastian Reichel" <sre@kernel.org>, "Rob Herring" <robh+dt@kernel.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+ "Guenter Roeck" <linux@roeck-us.net>,
+ "Thierry Reding" <thierry.reding@gmail.com>,
+ "Mark Brown" <broonie@kernel.org>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>,
+ "Miquel Raynal" <miquel.raynal@bootlin.com>,
+ "Richard Weinberger" <richard@nod.at>,
+ "Vignesh Raghavendra" <vigneshr@ti.com>,
+ "Damien Le Moal" <dlemoal@kernel.org>,
+ "Sergey Shtylyov" <s.shtylyov@omp.ru>,
+ "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+ "Liam Girdwood" <lgirdwood@gmail.com>,
+ "Jaroslav Kysela" <perex@perex.cz>, "Takashi Iwai" <tiwai@suse.com>,
+ "Ralf Baechle" <ralf@linux-mips.org>, "Aaron Wu" <Aaron.Wu@analog.com>,
+ "Lee Jones" <lee@kernel.org>, "Olof Johansson" <olof@lixom.net>,
+ "Niklas Cassel" <cassel@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-pwm@vger.kernel.org,
+ linux-spi@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+ linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-sound@vger.kernel.org,
+ "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
+ "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+ "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+ "Andrew Lunn" <andrew@lunn.ch>, "Vinod Koul" <vkoul@kernel.org>
+Subject: Re: [PATCH v10 00/38] ep93xx device tree conversion
+Content-Type: text/plain
 
-Hi
-
-> Gesendet: Mittwoch, 10. Juli 2024 um 12:45 Uhr
-> Von: "AngeloGioacchino Del Regno" <angelogioacchino.delregno@collabora.c=
-om>
-> Betreff: Re: [PATCH v1 0/4] add syscon requirement for mt7988
+On Mon, Jul 8, 2024, at 09:34, Nikita Shubin wrote:
+> Arnd, 
 >
-> Il 09/07/24 12:13, Frank Wunderlich ha scritto:
-> > From: Frank Wunderlich <frank-w@public-files.de>
-> >
-> > Some nodes require the syscon fallback at least in u-boot when using
-> > OF_UPSTREAM.
-> >
-> > This is because uboot driver uses syscon_node_to_regmap in mtk_eth.c f=
-or
-> > "mediatek,toprgu", "mediatek,xfi_pll" and reset pointing to watchdog-n=
-ode.
-> >
+> Are we continuing this patch series ?
 >
-> I wonder what's the major blocker here to modify the u-boot driver to ta=
-ke
-> the upstream devicetree as-is, instead of using syscon_node_to_regmap?
+> You are silent since last version submit, which makes me a bit worried.
+>
+> If you suddenly changed your mind please let us know, cause anyway we
+> have no possibility to merge these series without you.
 
-in uboot there is no driver for all syscon and to handle parallel access t=
-his is done with the syscon fallback.
+Hi Nikita,
 
-The syscon uclass is a small driver which is generic and only handle the r=
-egmap in global context.
+I definitely still want to merge your work, I was just not paying
+attention while there were others commenting on it, and I don't
+know what the current state is. If you are ready to have some
+or all of the patches included in the next merge window, can
+you send either the set of patches that were reviewed to
+soc@kernel.org for me to pick up, or prepare a pull request
+to that address?
 
-In theory it could be possible that regmap is aquired twice when used from=
- 2+ other drivers...to prevent this without
-adding the syscon fallback each syscon needs a dedicated driver like in li=
-nux which does only syscon stuff (code
-duplication at its best :) ).
-
-of course i can use regmap_init_mem in the uboot ethernet driver
-
-https://elixir.bootlin.com/u-boot/latest/source/drivers/core/regmap.c#L242
-
-like it's done once for syscon-uclass.
-
-but i will cause issues when a second device tries to access this regmap. =
-So it was be much easier (for me) to add this
-fallback and not writing 3 device-drivers in uboot doing the exactly same =
-as syscon.
-
-if you have a better idea how to handle it, let me know :)
-
-regards Frank
-
-> Regards,
-> Angelo
-
+       Arnd
 
