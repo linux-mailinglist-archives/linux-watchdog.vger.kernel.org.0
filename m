@@ -1,76 +1,76 @@
-Return-Path: <linux-watchdog+bounces-1361-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1362-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 747EF92F23C
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Jul 2024 00:48:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D114492F257
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Jul 2024 00:56:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E82611F21A79
-	for <lists+linux-watchdog@lfdr.de>; Thu, 11 Jul 2024 22:48:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88270282239
+	for <lists+linux-watchdog@lfdr.de>; Thu, 11 Jul 2024 22:56:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70F5B19F46D;
-	Thu, 11 Jul 2024 22:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCC2216D4E8;
+	Thu, 11 Jul 2024 22:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VmcfDbQ7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YwQ7NHDj"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B139D12C477
-	for <linux-watchdog@vger.kernel.org>; Thu, 11 Jul 2024 22:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 386A01A01B3;
+	Thu, 11 Jul 2024 22:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720738115; cv=none; b=Q+A9n9R5Ts+5GRzIDJW1wYiOE6DzaJLNFKu1tmcWhVh+18fYLGPLxQx5sQRCSZseS4Y4LYoaTHoNzXUooVGRsIyCb6iiSGKBK1VENu9l6NqplJLXIJKCdK+nZz9xN36YIo77R7+uTmnNUNlYjaH5ZfsrgjotSX6ME0DKCASUPkM=
+	t=1720738557; cv=none; b=mDDrJHC41GY2iiUoIo1v2lp3R9bKeeU0TtqAo/j/AzZp6DMawNLZ+gbUpSHmCxZfdhr0W0ChMywnf7fwOOloUSV/tRTgWXdfejAC1ypa1axYEHef/9yRL8sfDHRSlK6LYnmJ29l18UpkucM18vxwrSFgNBLcmO+/JQLgluIKBk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720738115; c=relaxed/simple;
-	bh=lMJXKrJ+sZgTobqLzPiOr5mCbWjl0P/6Oi3O9qnCpF8=;
+	s=arc-20240116; t=1720738557; c=relaxed/simple;
+	bh=Mo+9VEhaKXrJvyIIl0Tyru4MXCNFIaHePIM31J/9U0Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HBlS8FUVlcHltwZq7wmuyPihfGiQCtHTiiANLNz+k4vLdX6UpL6gJIQ70RcbcAY72+jgMaGmsA9h5G9pjkK9rjzaMiq51XbMWs8KEbindhcNoo3o2yMXapXQ49R1wxOQJ1xjiiIW86XcwFB+Fhw8RqMfm9oxAKEs7sr1M1THw7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VmcfDbQ7; arc=none smtp.client-ip=209.85.216.43
+	 In-Reply-To:Content-Type; b=a4e+zRfp/TVXiUgcMT/bCXHqMqhRCTfDwH12Z9StKlQj8nZPeXy9jEq28t/hq7XPHYiv8/wc9o62DVYmpBoOkjoBLELqb/vyPW2AJqQ7MENVSmssRpJ7GV6LOaXWteVkxj2rgd+iV8tZpZo8eL0jbg2/ZpGohBOndsyVuhUxp2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YwQ7NHDj; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2c5362c7c0bso1114030a91.1
-        for <linux-watchdog@vger.kernel.org>; Thu, 11 Jul 2024 15:48:33 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-75ee39f1ffbso920283a12.2;
+        Thu, 11 Jul 2024 15:55:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720738113; x=1721342913; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1720738555; x=1721343355; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=NjDTHFeGoDbF/L+Ohm7sJ9OD83vLlsvpbtUDo7ckSgs=;
-        b=VmcfDbQ7HH02FAhUDwNsPuT8kjrliW0kMFLP2sNWcmB9Oqw0VcW6Hxggu2yATIkQ5o
-         6z6yXSrtrFR8llgqxUBzDLVsZ0qBp+n5VvQq2WgoGcBRwyP+yoP3B75R8fnNJ5mP1JfT
-         c+LsE4uy7hUZOXTw6FKJBQyZ4s7UU7eVbl1l9dWiuidhSF9at+xJoKDRqD1QzNdC2hLx
-         ywHmp/ckzpDwreJyOgPip+Z2nt5mPDWRdhhUMxu93xkmmebAchN9qAxP5Vzd5SmE8PGq
-         dF15I9DpWXUJtfh+JVt15ZFMw8yNaG9CkSK2Je7YMikJjpvEggplmidnG9QuDMBQ8P/0
-         ti3w==
+        bh=x1loahMMaLspFbuMb9Cc5mUjzYYmly045uRUWyjnZF4=;
+        b=YwQ7NHDj8XqsCHVKiMUgVK9nVF97EMVeFmdJs4onevpbaIob7aKD3MQleUdhdZU96Y
+         eeLqTb06mKr3etUlgA798XR4Pnxg13ofLARRt+w53pipPYtTgH8CnZXSfjhmxBVTeruD
+         46mA6TMuj1OuEcICjoB1ZhDD1AvdLySZMTb8zCFI7EUpuP7z+qHzw0EdfUhPClRRYnJ/
+         s8HAyUCU1BH1NtC4FLzzIHDJQ4zrdsqFYIti71JmzHyA1q7oQa0CH/UavhgaWEbXQqvg
+         4p6BbOJ8ohmajKnP5+ixET1rkRUa2mBU9ib4KeKI5xdY7rjJF6k/hXsyBbDBj5iQ+oEr
+         xZ4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720738113; x=1721342913;
+        d=1e100.net; s=20230601; t=1720738555; x=1721343355;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NjDTHFeGoDbF/L+Ohm7sJ9OD83vLlsvpbtUDo7ckSgs=;
-        b=dG5D87TjIwaOwLBFsFsWaG8vUVoYT5ya0t6ED4DFJX42QKmIs0k5vWginceZ5Rl3eS
-         1NcgfuSlbMx+9653rLiVSQJeLvXBYGWGzAyG1ZAxdVEOR6RVsU5hVGq1e9o+VWF8ifRD
-         C9yOV0QsorZ/jUVSmGTV9GDLH+hp0bYEzrcMQdq3UUQLggAnprirUgBk0thf5qrH+k58
-         aSo1mlHt/0j+lZncRUM9YLQ+n8Skg61r3fm9DFs2yrAhifAryp9B51kjhF2J/F+47Bjp
-         AXKw2u7qmkCiN/uCdah06jm2p0BgPQAhbcBehRrr92wfpLig7AfOsm7yv02zpkHntG2V
-         Xs3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVuozV3KsXABx+0EC7m1JxaNTF1u8QiSLgendL8r5FVGbYhJQWsBlWeza98fxvvZKz9vP7Lv03eLLOvN/0b7daeqwRTzH5MXgZkN5QALDw=
-X-Gm-Message-State: AOJu0YzoI4YWWBATy7ylu6d91XonnXZHScfcM5V45ics/xDsH3+FTIs3
-	He08gLSCkdqB0w8plQFvZQsWzh9fh86hDiitltYqOpUf+UG61lDB
-X-Google-Smtp-Source: AGHT+IEqJp8rvG6PXJcmGsNnT/9RHLECEwUnl6fOfjSYFawYozBLEn1sjlGLmI/JL91RahUSjumKHA==
-X-Received: by 2002:a17:90b:4a4c:b0:2c5:1a3:6170 with SMTP id 98e67ed59e1d1-2ca35d4878amr7769786a91.38.1720738112834;
-        Thu, 11 Jul 2024 15:48:32 -0700 (PDT)
+        bh=x1loahMMaLspFbuMb9Cc5mUjzYYmly045uRUWyjnZF4=;
+        b=Pg6vMfmQtftPV8Ok1vxr/8YUJlLDEl6F5Z4IqadI5WvkUXnxL7UGgz3eThJ6WNrNwb
+         lvLIdf8lxd3lWjTTJap/w/BGPdMFM+SeL47VpzaIjlRvxTQgCJpLUelCL2JYl7S6LwlP
+         9A7QwOrcleSgyi7T1J7DbYKNh+IDPEsGLgdO1pMoCHLBybgIaRSEff+vqvqh5Zzwk3Ze
+         gIvAAtWFtywNiMYJvTLYcaYnZzJTEkFzmasiScqph4P9dY0OWfq5aBOL37JFXR91vwj5
+         Fdkhe7qYKsuX1sIOx/na99LzwGRKt304hH4bs6DMJtF0HCyfostnXXVHMyIXwHW6b7Wj
+         KL1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV9hTPX3EgoZV8hXaMoYmxuFr2OBq5HUDcFgp1vM/rrMXSqB3mOvEQn7FpO7TM0IzAdNGwWAs76LXLjlKkCYSLpL7I2L0Bh5DcvcTwW
+X-Gm-Message-State: AOJu0YwLYvIp0VEteCLWCpRo7QgdW4Ix1Y7mQ2ZRZRMvzMZeZ21pYi60
+	t2oW02Oh2JxeNe/sjkRavkfHjJgGRrPILW/qijIN/Z+t1r3qxe/yC9JzYA==
+X-Google-Smtp-Source: AGHT+IF57L9AfWCFlz5+WKrBNpRQgZ7R67SvXjq5FRE1JaWog8Xvos9BThKvid6JhRrNn1G2WUy0LA==
+X-Received: by 2002:a05:6a21:999d:b0:1c2:a0b2:e69 with SMTP id adf61e73a8af0-1c2a0b2110bmr9714462637.33.1720738555305;
+        Thu, 11 Jul 2024 15:55:55 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cacd3fe09asm117777a91.13.2024.07.11.15.48.31
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b4396788csm6218064b3a.134.2024.07.11.15.55.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jul 2024 15:48:31 -0700 (PDT)
+        Thu, 11 Jul 2024 15:55:54 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <213f1f7c-aa0a-49b4-a6af-d76a2cbc2299@roeck-us.net>
-Date: Thu, 11 Jul 2024 15:48:30 -0700
+Message-ID: <696425a1-8e71-464f-9fe7-b965452b9d84@roeck-us.net>
+Date: Thu, 11 Jul 2024 15:55:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -78,20 +78,17 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] watchdog: it87_wdt: Keep WDTCTRL bit 3 unmodified for
- IT8784/IT8786
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: Werner Fischer <devlists@wefi.net>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, linux-watchdog@vger.kernel.org
-References: <20231213094525.11849-1-devlists@wefi.net>
- <20231213094525.11849-4-devlists@wefi.net>
- <CADvTj4r58ETz-Yym+MMEcu0DDeW-xbXBRGHxfZAfyGqOj3prGQ@mail.gmail.com>
- <9770a65c-e08a-4f7c-9ffd-8899d8390e2e@roeck-us.net>
- <CADvTj4qk0QMafMOD81D=95oL3Qyc7Jd0C5_gGjtw+Kbn=_v9WA@mail.gmail.com>
- <49f46f96-dfc3-4c50-a33d-a6cf1b67066d@roeck-us.net>
- <CADvTj4ohSu7ngB=M8eEpA45shos8M9YM7bbDHhOy=HQVk9YG3w@mail.gmail.com>
- <b09058ca-9547-4d70-96a7-b7fe6b8beb3e@roeck-us.net>
- <CADvTj4r3y4W=PwP4aw1TsKpe1pY=SKBTWjfKZJqFe5J-GxNOJA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] watchdog: imx7ulp_wdt: needn't wait 2.5 clocks after
+ RCS is done for iMX93
+To: Frank Li <Frank.Li@nxp.com>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>
+Cc: linux-watchdog@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ Ye Li <ye.li@nxp.com>, Alice Guo <alice.guo@nxp.com>
+References: <20240711-wdt-v1-0-8955a9e05ba0@nxp.com>
+ <20240711-wdt-v1-2-8955a9e05ba0@nxp.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -137,80 +134,44 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <CADvTj4r3y4W=PwP4aw1TsKpe1pY=SKBTWjfKZJqFe5J-GxNOJA@mail.gmail.com>
+In-Reply-To: <20240711-wdt-v1-2-8955a9e05ba0@nxp.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 7/11/24 15:14, James Hilliard wrote:
-> On Thu, Jul 11, 2024 at 3:42 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On 7/11/24 14:09, James Hilliard wrote:
->>
->>>> The best we could possibly do might be to add a check for the bit in register
->>>> 0xf1 and warn the user that they might have to use the ACPI driver if the bit
->>>> is set. I am not sure if that would be helpful or just add noise, though.
->>>
->>> Do your systems which work with the it87_wdt driver have that 0xF1 bit not set?
->>>
->>
->> I only have one such system left, and the bit is not set on that system.
->> I avoid buying hardware with ITE Super-IO chips nowadays since their support
->> for Linux is non-existent.
+On 7/11/24 15:41, Frank Li wrote:
+> From: Alice Guo <alice.guo@nxp.com>
 > 
-> Yeah, I got stuck with a fleet of these boards, trying to make the best of it.
+> i.MX93 watchdog needn't wait 2.5 clocks after RCS is done. So set
+> post_rcs_wait to false for "fsl,imx93-wdt".
 > 
->>
->>> I'm thinking we should check for that bit and prevent loading the
->>> it87_wdt driver if
->>
->> No. That would create the risk of no longer loading the driver on systems where
->> it currently works.
+> Signed-off-by: Alice Guo <alice.guo@nxp.com>
+> Reviewed-by: Ye Li <ye.li@nxp.com>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>   drivers/watchdog/imx7ulp_wdt.c | 1 -
+>   1 file changed, 1 deletion(-)
 > 
-> Hmm, any idea how likely it would be that the bit could be set on a board
-> which the driver works on?
+> diff --git a/drivers/watchdog/imx7ulp_wdt.c b/drivers/watchdog/imx7ulp_wdt.c
+> index 904b9f1873856..3a75a6f98f8f0 100644
+> --- a/drivers/watchdog/imx7ulp_wdt.c
+> +++ b/drivers/watchdog/imx7ulp_wdt.c
+> @@ -405,7 +405,6 @@ static const struct imx_wdt_hw_feature imx8ulp_wdt_hw = {
+>   static const struct imx_wdt_hw_feature imx93_wdt_hw = {
+>   	.prescaler_enable = true,
+>   	.wdog_clock_rate = 125,
+> -	.post_rcs_wait = true,
+>   };
+>   
+>   static const struct of_device_id imx7ulp_wdt_dt_ids[] = {
 > 
+Introducing that flag in the previous patch just to remove it here doesn't
+make sense to me, sorry.
 
-No idea, but I would not want to disable it just to find out with a flurry
-of angry e-mails.
+What the two changes do together is to disable post_rcs_wait for iMX93.
+That is a single logical change, and it can and should be done in a
+single patch. If you do that by moving the flag into imx_wdt_hw_feature
+or by adding another of_device_is_compatible() is your call.
 
-> Or maybe best to have a quirks table with dmi matching to disable the
-> driver on known broken systems?
-> 
->>
->>> it's set(maybe along with an override param). That way the wdat_wdt driver I
->>
->> I prefer the less invasive version of logging a message. The user can then
->> block the it87_wdt driver if it doesn't work.
-> 
-> Hmm, I build multiple watchdog drivers into the same kernel and somewhat
-> rely on the autodetection working correctly as I support multiple boards
-> with the same kernel build. It's not exactly trivial to conditionally prevent
-> drivers from loading when built into the kernel AFAIU.
-> 
-
-Those drivers should never be built into the kernel; they should be built
-as modules, and module load instructions in /etc/modprobe.d (or whatever the
-distribution uses) should be used to determine which drivers to load. I really
-would not want to rely on a bit such as the smi interrupt bit to determine
-if the watchdog is used by ACPI.
-
-This is actually a multi-level problem: Even if there is an ACPI watchdog,
-that does not mean that ACPI uses the Super-IO chip for its watchdog implementation.
-It might as well using the ICH watchdog on Intel systems or the TCO watchdog on
-AMD systems. Similar, even if the SMI interrupt bit is not set, it is essentially
-unknown if the it87_wdt driver actually works, because its reset pins might not
-be connected. Or, of course, both watchdogs might work.
-
-Assuming the wdat_wdt driver auto-loads on your system (I think it should),
-can you write a little script which loads the it87_wdt driver only if the
-wdat_wdt driver is not loaded ?
-
-Actually, just building the wdat_wdt driver into the kernel and it87_wdt as
-module (and loading it via modules.d) should work since the wdat_wdt driver
-would then be instantiated first, and the first watchdog is all that systemd
-cares about.
-
-Thanks,
 Guenter
 
 
