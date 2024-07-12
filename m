@@ -1,76 +1,74 @@
-Return-Path: <linux-watchdog+bounces-1369-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1370-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A81ED92FD1D
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Jul 2024 17:03:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28F2592FDB3
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Jul 2024 17:39:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F13A1F21732
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Jul 2024 15:03:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D43E0282ED9
+	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Jul 2024 15:39:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53C9417166D;
-	Fri, 12 Jul 2024 15:03:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C2F717333C;
+	Fri, 12 Jul 2024 15:39:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gtJersK4"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="cvHB570J"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF658821;
-	Fri, 12 Jul 2024 15:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84CB0172BBA
+	for <linux-watchdog@vger.kernel.org>; Fri, 12 Jul 2024 15:39:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720796595; cv=none; b=GyQ11ho8oNGSFf6SybsxF9+CZRrGTvg9Csf6IziBggTQIZlYOZqF0kdj44QFBP/laCDwi2zyCTkx8BE5D16PmRObAFOiuLQEN8UZ++weg5dDBQ4a2leM6OEBTaxgYT+IXDoohGwcu/wHyRwrIKAzB30YW/P6WN92R9vinRm2FEw=
+	t=1720798768; cv=none; b=NHWcZllWbsW/+ZfC+vQFdapQ1hq40OooXY191pWtNqOXLKT4VqZ+kUUQtEQYi5OsJjPtAEVa4D6ZdgB1Dmlxm7Rdoc3ansJ8NZ6rypEL0+m/Jizvb9DR452Jqd3Gndq16tYCkEm0V3l1aI/YtRzaos/qVeSxW7miHEAvrgRtZOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720796595; c=relaxed/simple;
-	bh=Dl9FP+M/lbN4nwU5NPuc4lScl8rfAmTSX9BsDt6brxM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HW4oqJtW3N1jC2zDk0EqSFe1BLB6O9UlC1/cFdAXtzEr7b76Dc+srRp1RHzWdg0Jhq7+A12ov5PPM7Ey2BdtkCmUBSAc0gg8Sa9Sz5s8+9WPMrxRc9fmpxienZcTlcDsa5vjQO5ncbjTA6AVKUSqbWTcbEIVei0C8bQWaluJwnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gtJersK4; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1f4c7b022f8so16791525ad.1;
-        Fri, 12 Jul 2024 08:03:13 -0700 (PDT)
+	s=arc-20240116; t=1720798768; c=relaxed/simple;
+	bh=68/kltcLtm3c5q8IqHBsqqo8yQ9MYg9r+nGvbZAb6v8=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=IaxTCRzhLGJF6ua70mFIM8CidYbP9QbRPK3jaE59PSrchwHrIwkpcZuAb/D+Mmm+OP02XnqfPVSkFiyV1ce3WuuOwx8Igoe31YYXPcOoiL4ERKYt43I8jGtVIYnEh2v7s1rUDV6d4uvJyJK6OWhCdgKkwMooCZz72SRubobYZ/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=cvHB570J; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52e9b9fb3dcso2621611e87.1
+        for <linux-watchdog@vger.kernel.org>; Fri, 12 Jul 2024 08:39:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720796593; x=1721401393; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=yrHTmXoY1JLklwwCecSAq5dVc5htyPNVeI+zdJ/A3U0=;
-        b=gtJersK4EKiFyuj+B2Jk9J7G52e4RfyNYPEhYyC3WF4t2NFsZNJY9xAF+hgXPp8p6t
-         2WVsoikhyQWHNt+uCo5COHne07BWZZBjTc2KlXRHlBYogmaY298MuR0uJfFPb+DmOfwt
-         4bjAK5D9hB2Reg4QLPLwVY/DqNmMPMtG+tD69V7odrIvtYGaBKjRuT1JPDZVonpQolDJ
-         qBT+GxYDaHSydLv4u3H9wvdAP3O1cj5eYYpTLwmvixqLnr5oayCEPHFl7RvtcDvzPt3C
-         gDcCw7lLVyDhf83OXI206IhbG0h+JxclFwSRpvBBqO1psZq6FEbH1AvdiKX0wEM/UwFA
-         LdhA==
+        d=tuxon.dev; s=google; t=1720798765; x=1721403565; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vXS6CNYAdyuDwfj4669MHWReU6UN/YmeD5dTtm16ne4=;
+        b=cvHB570JIU/T0Kc4UbAjc+leZuO7yBrsLKr9kziLLcpdaAb+yOvSTdi9rQjd267Nwc
+         zvn+ip+ghdBKIVk3WuQZstwnRpZ+GRciPeWD5bVIPNNuV2Nvy8M6mzkMZxhgrY5Bn9VH
+         ZDLBBmt2l1VGUfoFvaHNjwA6N75Ec8url3uZL6O8CcN2NFQ9i57o0c6hXG2rSf2FmFvV
+         QCeaur1zEnXYLL55W8dE96a6l6hTRvfGpZVMAmPaOFkG7rt/4zGvTm+JWc26LaRJCRrs
+         WNfejp1msyGDdUF+UGL9rczvsb0NaX9GY7G3IjGPnIePK9ZUB+HzHfzw2vK6LLXQAZZ4
+         2wSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720796593; x=1721401393;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yrHTmXoY1JLklwwCecSAq5dVc5htyPNVeI+zdJ/A3U0=;
-        b=oE3xACY36bbuFCEQVdk4ZyZadd+UKT7G15F2uIG4ywC7YEngJVLEYOxmLjTFeXhuL2
-         hVmK8Un9D9qT6B11sVeL4ZvYf6Mu2tQM+apKQnbXyEwif4nQHfx0wX8cthlvT7Mh6EU8
-         tqAHNAek5k2icFPDJSX6mlwo9GXnySlgkitm86Ic744kw4Cb16q9Qc7mzKGvoLICETsh
-         GiWmoHfOXX1WlD/dOQdg3M4IDUfVJ3yofkrdXrS9RVUXrXsthDJ4bffaAUI/DrV/F1NO
-         hjFgvYc8+cKoernunhZPHcWX0LO9dqA+JfKVWV8BFRf9zeRD8Oi7MrVUZ+onQkkmrFhb
-         4f9w==
-X-Forwarded-Encrypted: i=1; AJvYcCWmmnvKDfy3Ytzq6XLhO40FpzVEWoDf99X/LfZdnosBppqdLNBGFOS6T3d0zx8Nvl0fy7Go/Hgxd1dOQqXRGBL4L0m9h+21wEFPTqFkQ7gfoq2kYyxOr5mJUqQAujOU5OMDII6N+g4V5gGglug=
-X-Gm-Message-State: AOJu0YxaBN4rXqvHdvRdRBsHBKzGWic7sIqdettil5U+z3PJJvT1aOaO
-	hwWPLNT/wyT8dpwB4j0wm1NbALMFTE444XH0y6V+g0L7sBWvXn+X
-X-Google-Smtp-Source: AGHT+IFhIiuSBTMz8Q6UdaDo7gOKDnVFdswPpmFpIRZYLWu+kL287Q1N9EREpdY68oEmGKmqv9N3Jw==
-X-Received: by 2002:a17:90b:1645:b0:2c9:cbdd:ac8 with SMTP id 98e67ed59e1d1-2ca35d3b196mr9567487a91.37.1720796593100;
-        Fri, 12 Jul 2024 08:03:13 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cacd6da488sm1643792a91.40.2024.07.12.08.03.11
+        d=1e100.net; s=20230601; t=1720798765; x=1721403565;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vXS6CNYAdyuDwfj4669MHWReU6UN/YmeD5dTtm16ne4=;
+        b=iA5VdpqHXXqxNuXQ64BYR4FDveF3snocOFNg+0RoaRHrMtDGRYdSct74dPeLz0Np/d
+         oN6jhbhplFPp1yzZqdo45uGiWuJr6wYM4FWr+YVCuoBpXHVnOdVzberhA9UoCjrVQHXv
+         gD7n9/YErzti5vqXgKwwHKXAe0bWDqbsrmvxqiYczW+MLcogzazidRhy/Oz9fpgk7jKG
+         L79n/vqsfQbz+cbwRDa8jQrJLD4byjiMpGRtx8q3WW0M8PQecOEIcNZ9oCJAztgOxAZr
+         2uTxXDYk9udFjxwCvTIrWQIqGHXsOU+3i+F61pn2HoZovGePe1Jfhnh5x/G5uZpz3M/Z
+         Ztgg==
+X-Forwarded-Encrypted: i=1; AJvYcCVjiKPJTTlW49PJ1MllvCW9XQEd5xUL37lsmw0KYoY+Ycf8KAAgnwzDy/hbWMReePNiKL0a2t+a+pbImbXs4tsbPaJLR4d6fxuDJQnX4mQ=
+X-Gm-Message-State: AOJu0YykHMeVFmYfef/oXLZrZx2o/KwdkNrdH5/4/hatLBiNaoijECNH
+	OL7p403ngRfhoEZWFpC187Jn6F9I3wR5ANvBtiCkoXqpfeTBwpg8NOTlBHNECPo=
+X-Google-Smtp-Source: AGHT+IFt+v0z4s2SEnUzvpF3XhmKLoMZVPIgAXxpi9rthXghlv3Aylzcme0OH0Wr5YydJX6qYwmksw==
+X-Received: by 2002:a05:6512:750:b0:52c:d78b:d0b8 with SMTP id 2adb3069b0e04-52eb99a32c7mr6495989e87.39.1720798764436;
+        Fri, 12 Jul 2024 08:39:24 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.171])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4279f2ba545sm26557105e9.34.2024.07.12.08.39.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jul 2024 08:03:12 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <284f8569-1bea-4d41-ab44-3aa0935d7b11@roeck-us.net>
-Date: Fri, 12 Jul 2024 08:03:10 -0700
+        Fri, 12 Jul 2024 08:39:23 -0700 (PDT)
+Message-ID: <7f99cb63-0c6b-460e-934b-4e7e8d84bb3a@tuxon.dev>
+Date: Fri, 12 Jul 2024 18:39:22 +0300
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -78,75 +76,106 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/1] watchdog: imx7ulp_wdt: move post_rcs_wait into
- struct imx_wdt_hw_feature
-To: Frank Li <Frank.Li@nxp.com>
-Cc: alice.guo@nxp.com, festevam@gmail.com, imx@lists.linux.dev,
- kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
- s.hauer@pengutronix.de, shawnguo@kernel.org, wim@linux-watchdog.org,
- ye.li@nxp.com
-References: <20240712141844.3274214-1-Frank.Li@nxp.com>
+Subject: Re: [PATCH v9 0/9] watchdog: rzg2l_wdt: Add support for RZ/G3S
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240712141844.3274214-1-Frank.Li@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+To: wim@linux-watchdog.org, linux@roeck-us.net, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, p.zabel@pengutronix.de,
+ geert+renesas@glider.be, magnus.damm@gmail.com
+Cc: biju.das.jz@bp.renesas.com, linux-watchdog@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, claudiu.beznea.uj@bp.renesas.com
+References: <20240531065723.1085423-1-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240531065723.1085423-1-claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 7/12/24 07:18, Frank Li wrote:
-> Move post_rcs_wait into struct imx_wdt_hw_feature to simple code logic for
-> difference compatible string.
-> 
-> i.MX93 watchdog needn't wait 2.5 clocks after RCS is done. So needn't set
-> post_rcs_wait.
-> 
-> Signed-off-by: Alice Guo <alice.guo@nxp.com>
-> Reviewed-by: Ye Li <ye.li@nxp.com>
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+Hi, watchdog maintainers,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Can you please let me know if there is anything you would like me to
+address for this series?
 
+Thank you,
+Claudiu Beznea
+
+On 31.05.2024 09:57, Claudiu wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> 
+> Hi,
+> 
+> Series adds watchdog support for Renesas RZ/G3S (R9A08G045) SoC.
+> 
+> Patches do the following:
+> - patch 1/9 makes the driver depend on ARCH_RZG2L || ARCH_R9A09G011
+> - patch 2/9 makes the driver depend on PM
+> - patches 3-7/9 adds fixes and cleanups for the watchdog driver
+> - patch 8/9 adds suspend to RAM to the watchdog driver (to be used by
+>   RZ/G3S)
+> - patch 9/9 documents the RZ/G3S support
+> 
+> Thank you,
+> Claudiu Beznea
+> 
+> Changes in v9:
+> - dropped patch "watchdog: rzg2l_wdt: Power on the PM domain in
+>   rzg2l_wdt_restart()" until further clarifications; this will not
+>   impact any behavior as the RZ/G3S power domain support is not
+>   instantiated
+> - on patch "watchdog: rzg2l_wdt: Remove reset de-assert from probe"
+>   call pm_runtime_put() in case the reset deassert fails
+> 
+> Changes in v8:
+> - added patch 9
+> - collected tags
+> 
+> Changes in v7:
+> - updated the dependency on patch 2/9
+> 
+> Changes in v6:
+> - update patch 2/9 description
+> - fixed the dependency on COMPILE_TEST previously introduced in patch
+>   2/9
+> 
+> Changes in v5:
+> - updated description of patch 2/9
+> - simplify the code in patch 2/9 by using on a new line:
+>   depends on PM || COMPILE_TEST
+> 
+> Changes in v4:
+> - added patch "watchdog: rzg2l_wdt: Restrict the driver to ARCH_RZG2L and
+>   ARCH_R9A09G011"
+> - collected tags
+> 
+> Changes in v3:
+> - make driver depend on PM not select it
+> - drop patches already accepted (patches 1, 10, 11 from v2)
+> - re-arranged the tags in patch 8/8 as they were messed by b4 am/shazam
+> 
+> Changes in v2:
+> - added patch "watchdog: rzg2l_wdt: Select PM"
+> - propagate the return status of rzg2l_wdt_start() to it's callers
+>   in patch "watchdog: rzg2l_wdt: Use pm_runtime_resume_and_get()" 
+> - propagate the return status of rzg2l_wdt_stop() to it's callers
+>   in patch "watchdog: rzg2l_wdt: Check return status of pm_runtime_put()" 
+> - removed pm_ptr() from patch "watchdog: rzg2l_wdt: Add suspend/resume support"
+> - s/G2UL/G2L in patch "dt-bindings: watchdog: renesas,wdt: Document RZ/G3S support"
+> - collected tags
+> 
+> Claudiu Beznea (9):
+>   watchdog: rzg2l_wdt: Restrict the driver to ARCH_RZG2L and
+>     ARCH_R9A09G011
+>   watchdog: rzg2l_wdt: Make the driver depend on PM
+>   watchdog: rzg2l_wdt: Use pm_runtime_resume_and_get()
+>   watchdog: rzg2l_wdt: Check return status of pm_runtime_put()
+>   watchdog: rzg2l_wdt: Remove reset de-assert from probe
+>   watchdog: rzg2l_wdt: Remove comparison with zero
+>   watchdog: rzg2l_wdt: Rely on the reset driver for doing proper reset
+>   watchdog: rzg2l_wdt: Add suspend/resume support
+>   dt-bindings: watchdog: renesas,wdt: Document RZ/G3S support
+> 
+>  .../bindings/watchdog/renesas,wdt.yaml        |   1 +
+>  drivers/watchdog/Kconfig                      |   3 +-
+>  drivers/watchdog/rzg2l_wdt.c                  | 113 ++++++++++--------
+>  3 files changed, 66 insertions(+), 51 deletions(-)
+> 
 
