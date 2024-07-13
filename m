@@ -1,48 +1,48 @@
-Return-Path: <linux-watchdog+bounces-1373-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1374-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EC0593050B
-	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Jul 2024 12:22:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6F88930511
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Jul 2024 12:22:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADE1AB213B9
-	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Jul 2024 10:22:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13AD91C21345
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Jul 2024 10:22:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD15162171;
-	Sat, 13 Jul 2024 10:21:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E0CB69D2B;
+	Sat, 13 Jul 2024 10:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lDqSH9wf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZUDrUqID"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75CC47F64;
-	Sat, 13 Jul 2024 10:21:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0FC56EB59;
+	Sat, 13 Jul 2024 10:22:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720866115; cv=none; b=CXK1XBW1Ysh4M80SqQ+13xylaefygT+Oq2fGBfBLSzC255s9mx5ypbwIuuy78oLnnSP0mSC9vlFlEhZ0uM6+ROY6kCwocMeU0Qf/QJ22nqnk8MB2tyE54Yv3h9S/1yGs6yiS+cYhe7P/XyTYX3igblC98cYV/VASPE6nXVZzNjw=
+	t=1720866137; cv=none; b=XyE64jilg84i9Q2cXBr6yZ3DhCSgFiP0xhLgXvy0PsDkPziQ4A90fwoclDWSfnHsq0sHpk5BvR+Dcxr/cunFOeE4aZ6RIemKkhuwr7+N0AZROqSg4z+vZI+oisiTVWvHylOW4HSreR+SI2QlK0uOx1trOTM6cNCtAJYMYh7X+ZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720866115; c=relaxed/simple;
-	bh=QExiL7wySDZOW3fc4Ocea97JXipxWSo22yFkl96PF5Q=;
+	s=arc-20240116; t=1720866137; c=relaxed/simple;
+	bh=8PaFxkIYfqRo/IX/3tegfBiE2Ol52YNznfEZPU0+b1Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cF8a7gE6CrWOgEZNhGpJcYTzmfDIWTrYwF6UzSeyV66J+IC/NomKMW2XqM9Xw86QGM9Qb2JOh/yVRJf3sxEHwbAM6fiKLkOHd79tHJz9ymFEr+SMbfM1HfvIxpfxTXjPHRdDWzJYItMCDiEwnTcnNFNyzWdz8S4T+Gi+PmnlpaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lDqSH9wf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 773EEC32781;
-	Sat, 13 Jul 2024 10:21:49 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=rCZGXoUHEI3CyWi8G67rnaE08FpQ9qXbQnJVLckaQQeSwekqKRRSP+K0Z7k0WSmMD2zNyOpC0POySVFDTQB06F3UoPtO+Lhb5J4wNv2sghMtRpnpiURD/qS/MG7GDxDDxgBp83aFO2GDOZ4x9FvOT7Iq0kUuI66lEfwmtU592n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZUDrUqID; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3485C32781;
+	Sat, 13 Jul 2024 10:22:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720866115;
-	bh=QExiL7wySDZOW3fc4Ocea97JXipxWSo22yFkl96PF5Q=;
+	s=k20201202; t=1720866137;
+	bh=8PaFxkIYfqRo/IX/3tegfBiE2Ol52YNznfEZPU0+b1Y=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lDqSH9wfXswOqftScP1XoonOIFcd+RO0KFuOzYRAi9bBuVFHUnuTfNf/o2FexNEGV
-	 czBGCf/xUurz6FkcA61hqEkhKjCJu7kFHGDqV2IjcVVDXjR+VFFrHHnsbgJaYftIek
-	 Ag2MiqRBTuQ9bpu25rpS/7gvt/ez0k0yV8wdvt3GIoc9XB6/UIYNjWDSZAtg5VzqCl
-	 ryqvsrF9bW5EbpM1vTC/OPxnehSlCxSKmM4qhfmPSFxXuT+RJ5rESLYwv5PIWWhvyz
-	 zCeIS/KiJm+EDksYGM+WmL0mjSqcEX/axrmeuK+2DbpPkJHLmb51+ZxwT2Uu0glPeH
-	 PxM0kUVLEGtrQ==
-Message-ID: <58cba30d-af53-47a6-9258-8b36eab6cbfb@kernel.org>
-Date: Sat, 13 Jul 2024 12:21:46 +0200
+	b=ZUDrUqIDxiu+6o6uylzPMV0wIWj//FiytUM+YwI38Eg0irJYgT7Rx6egtURedxijv
+	 tFMjwktZWWWhe91n9CC6hLC9vRs1xr/snx88+bZUqCLMsdk4GsEXEmNfWhShwSqWi9
+	 Kufzpjy1BwMtXkeRhFCO3HMf0xgT96zdtKG3mR+rJBg/EEDb8CC+RzLoP76u4BrTLx
+	 aT/tauZoB5E21lOS7j8/JR2+UgMtmCOH7fVSwz4kdLUA2C+czG66g+b27CO+2hhMoz
+	 Hq0o5lS5OGpPBMKIJgqyQggKu/oqgYUmj0u/J3ZeyenX+y/f4P3L6oXEV9AfbHha2p
+	 QU5lwwOHUMaMA==
+Message-ID: <1f387b7c-689a-4a55-b23f-45bee301f747@kernel.org>
+Date: Sat, 13 Jul 2024 12:22:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/4] dt-bindings: watchdog: mediatek,mtk-wdt: add
- MT7988 syscon requirement
+Subject: Re: [PATCH v1 2/4] dt-bindings: clock: mediatek: add syscon
+ requirement for mt7988 xfi-pll
 To: Frank Wunderlich <linux@fw-web.de>,
  Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
  <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -65,7 +65,7 @@ Cc: Frank Wunderlich <frank-w@public-files.de>,
  linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
  linux-watchdog@vger.kernel.org
 References: <20240709101328.102969-1-linux@fw-web.de>
- <20240709101328.102969-2-linux@fw-web.de>
+ <20240709101328.102969-3-linux@fw-web.de>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,7 +111,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240709101328.102969-2-linux@fw-web.de>
+In-Reply-To: <20240709101328.102969-3-linux@fw-web.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
@@ -119,16 +119,29 @@ On 09/07/2024 12:13, Frank Wunderlich wrote:
 > From: Frank Wunderlich <frank-w@public-files.de>
 > 
 > This is needed by u-boot-driver when using OF_UPSTREAM.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+>  .../devicetree/bindings/clock/mediatek,mt7988-xfi-pll.yaml | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt7988-xfi-pll.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt7988-xfi-pll.yaml
+> index 192f1451f0af..c3686712505a 100644
+> --- a/Documentation/devicetree/bindings/clock/mediatek,mt7988-xfi-pll.yaml
+> +++ b/Documentation/devicetree/bindings/clock/mediatek,mt7988-xfi-pll.yaml
+> @@ -15,7 +15,10 @@ description:
+>  
+>  properties:
+>    compatible:
+> -    const: mediatek,mt7988-xfi-pll
+> +    items:
+> +      - enum:
+> +          - mediatek,mt7988-xfi-pll
+> +      - const: syscon
 
-Thanks for providing context. What we miss here still, is the
-description of the hardware and for what this syscon is used. Why this
-become system controller and before was not? Or this is just for regmap
-- then it does not work that way... You cannot have whatever driver
-poking all around then claim - I have crappy driver poking to every
-driver without implementing proper driver model, so I add syscon to
-bindings.
+No.
 
-
+Crappy drivers which do not implement clock bindings do not get workaround.
 
 Best regards,
 Krzysztof
