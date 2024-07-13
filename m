@@ -1,75 +1,48 @@
-Return-Path: <linux-watchdog+bounces-1372-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1373-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 350AF92FFB6
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Jul 2024 19:25:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EC0593050B
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Jul 2024 12:22:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1CF91F2369F
-	for <lists+linux-watchdog@lfdr.de>; Fri, 12 Jul 2024 17:25:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADE1AB213B9
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Jul 2024 10:22:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90A611EB56;
-	Fri, 12 Jul 2024 17:25:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD15162171;
+	Sat, 13 Jul 2024 10:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="LzQ4is3I"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lDqSH9wf"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CC317BCD
-	for <linux-watchdog@vger.kernel.org>; Fri, 12 Jul 2024 17:24:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75CC47F64;
+	Sat, 13 Jul 2024 10:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720805100; cv=none; b=Vy/C8/sG1YzR3O8umHsQP3c40WHRAn5Btda9aCKH5k0/XzbL2ZuSfKhnbBZWX7z/9NUlKQDn9QNNa5TVlHr9GUGUVQ4xNzL06ZjhI0xpp6VLVXiPou39hp2AiLj5yQ8C8EMnerDNtJ4Ihw+mJpvEoBzoskNPPvXvQPTLfELx0NU=
+	t=1720866115; cv=none; b=CXK1XBW1Ysh4M80SqQ+13xylaefygT+Oq2fGBfBLSzC255s9mx5ypbwIuuy78oLnnSP0mSC9vlFlEhZ0uM6+ROY6kCwocMeU0Qf/QJ22nqnk8MB2tyE54Yv3h9S/1yGs6yiS+cYhe7P/XyTYX3igblC98cYV/VASPE6nXVZzNjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720805100; c=relaxed/simple;
-	bh=oItytILQOCwm+LxnV+klJYRd5+wEjT3G4pzPFdDn7vM=;
+	s=arc-20240116; t=1720866115; c=relaxed/simple;
+	bh=QExiL7wySDZOW3fc4Ocea97JXipxWSo22yFkl96PF5Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a4SAhRL9jWENrl5TXz+YKzlyfO/SGE6El9c+JiRrXExa5iYa5NKmtilWIFodNnnMzzg2kqRg92wcSgbRdldaYw/SbqWxc4NhjdQBZ3mwAzJ6pjy9aa59w//Q45m5MFgf0jW+7n548Nye7CZ/9GBIo0Bbr3COMBmnH9Q6C0zmaa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=LzQ4is3I; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-42793d4abbbso15548985e9.2
-        for <linux-watchdog@vger.kernel.org>; Fri, 12 Jul 2024 10:24:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1720805097; x=1721409897; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/kcUOj+B7ix4wFrjmiIqRB4s9K/GptfFcWjVq2YUd68=;
-        b=LzQ4is3IurDoCi3XW0F4F9lk/YERMzt6QzeJ3GPRsPjE2cXMgaFewe2/YPfHkYG7DG
-         GZt2zEhcIIVDxsxZEjWctCQ1VWGjOGh3O0XpdAKLeSoYyR/Amfp8fO9qvFPrxIcoOCJv
-         imjVXsEz26M2lfPQGK540oY+yg0e8Yg18lJx5uNOb8ZJfMqAkjBfO8nHQJ9292vxqASp
-         qIALyw/2DuYB31gv03kx16mq7Alq8iioCJ4Ac3pHChftZdI1w1N9K18HBpYzblwWCT+i
-         i5gjrRf+0vHhmx4KBV9ygTA4L0pgA4eJyNSyl0YM4im0G9g5Ufdobp5djhBVSgUjvwYe
-         xdGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720805097; x=1721409897;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/kcUOj+B7ix4wFrjmiIqRB4s9K/GptfFcWjVq2YUd68=;
-        b=dmJoM2gs4fBcEInAy8aKOlDgcS3eSpOwov5ZlVs6ULguJsqXosJlP/9n3Y+yjXXtdn
-         LqtJcxP8M8mvRyuzD2TwZPmJQ2UO4r4BSYOc/PRfHw9lVTms2K52Z0d4f8kION/wDoIp
-         Z80tY73IpDOPsXb4isWWO+trU+VkUCO/TVZ+vVVi87LGbxlf1o1/YAgE1r5TIy6niKXH
-         rAi9p86lHNNHae8/fGFjo645NXZujIWkyfbHa7C/seO1h0lpG4Q/HvOTlDAu1FLijRAD
-         NDrcqsio/oPTGvj5v1+a2dzDfkglhy6x2bZkoJgA6WgNb2hRCtIji+zi7SLawX3FGJA/
-         kdIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXtd6nAJHQUflqFF2X3FsqTLjGcoYY277pr6TzYOVP+U7SPejYa1ppA7qBNB1/nb9MU9CHHuuHHUyVvhBTUZaZuTCN+fegOIe5y539wLnI=
-X-Gm-Message-State: AOJu0YzZdYnpW1zEi4ZRFoDSRGnlGDiztUgRmk0gwMjt6MBlUaMEMcxR
-	hg8foQFlO2qQxO7XaV78SUE0f+QL06KMbu4Os1RoAm531nAfGz0Pnpbg7hqlRZNV8G+gT6MJidf
-	a
-X-Google-Smtp-Source: AGHT+IEbwv2aqYJrQ4eYr+eTCvp2ZVYaXErHbWTEnoJWSTMpnS3FoLzus6WA+pYLiP74DOnPbffshw==
-X-Received: by 2002:a05:600c:1505:b0:427:98b4:624b with SMTP id 5b1f17b1804b1-42798b4628bmr39930825e9.24.1720805097322;
-        Fri, 12 Jul 2024 10:24:57 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.171])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-367fba1b15esm4218403f8f.22.2024.07.12.10.24.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jul 2024 10:24:56 -0700 (PDT)
-Message-ID: <3ad435b0-c110-4254-9071-b2397cdc7f9e@tuxon.dev>
-Date: Fri, 12 Jul 2024 20:24:55 +0300
+	 In-Reply-To:Content-Type; b=cF8a7gE6CrWOgEZNhGpJcYTzmfDIWTrYwF6UzSeyV66J+IC/NomKMW2XqM9Xw86QGM9Qb2JOh/yVRJf3sxEHwbAM6fiKLkOHd79tHJz9ymFEr+SMbfM1HfvIxpfxTXjPHRdDWzJYItMCDiEwnTcnNFNyzWdz8S4T+Gi+PmnlpaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lDqSH9wf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 773EEC32781;
+	Sat, 13 Jul 2024 10:21:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720866115;
+	bh=QExiL7wySDZOW3fc4Ocea97JXipxWSo22yFkl96PF5Q=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=lDqSH9wfXswOqftScP1XoonOIFcd+RO0KFuOzYRAi9bBuVFHUnuTfNf/o2FexNEGV
+	 czBGCf/xUurz6FkcA61hqEkhKjCJu7kFHGDqV2IjcVVDXjR+VFFrHHnsbgJaYftIek
+	 Ag2MiqRBTuQ9bpu25rpS/7gvt/ez0k0yV8wdvt3GIoc9XB6/UIYNjWDSZAtg5VzqCl
+	 ryqvsrF9bW5EbpM1vTC/OPxnehSlCxSKmM4qhfmPSFxXuT+RJ5rESLYwv5PIWWhvyz
+	 zCeIS/KiJm+EDksYGM+WmL0mjSqcEX/axrmeuK+2DbpPkJHLmb51+ZxwT2Uu0glPeH
+	 PxM0kUVLEGtrQ==
+Message-ID: <58cba30d-af53-47a6-9258-8b36eab6cbfb@kernel.org>
+Date: Sat, 13 Jul 2024 12:21:46 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -77,44 +50,87 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 0/9] watchdog: rzg2l_wdt: Add support for RZ/G3S
+Subject: Re: [PATCH v1 1/4] dt-bindings: watchdog: mediatek,mtk-wdt: add
+ MT7988 syscon requirement
+To: Frank Wunderlich <linux@fw-web.de>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>
+Cc: Frank Wunderlich <frank-w@public-files.de>,
+ Daniel Golle <daniel@makrotopia.org>, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-watchdog@vger.kernel.org
+References: <20240709101328.102969-1-linux@fw-web.de>
+ <20240709101328.102969-2-linux@fw-web.de>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: wim@linux-watchdog.org, linux@roeck-us.net, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, p.zabel@pengutronix.de,
- geert+renesas@glider.be, magnus.damm@gmail.com, biju.das.jz@bp.renesas.com,
- linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- claudiu.beznea.uj@bp.renesas.com
-References: <20240531065723.1085423-1-claudiu.beznea.uj@bp.renesas.com>
- <7f99cb63-0c6b-460e-934b-4e7e8d84bb3a@tuxon.dev>
- <CAMuHMdXN7xCtjRraTu=3JS6x8GCo7iuS40PVTN_DPvhA-AMqfw@mail.gmail.com>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <CAMuHMdXN7xCtjRraTu=3JS6x8GCo7iuS40PVTN_DPvhA-AMqfw@mail.gmail.com>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240709101328.102969-2-linux@fw-web.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Hi, Geert,
-
-On 12.07.2024 20:10, Geert Uytterhoeven wrote:
-> Hi Claudiu,
+On 09/07/2024 12:13, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> On Fri, Jul 12, 2024 at 5:39 PM claudiu beznea <claudiu.beznea@tuxon.dev> wrote:
->> Can you please let me know if there is anything you would like me to
->> address for this series?
-> 
-> Your series was merged in watchdog/master two days ago, and is part
-> of next-20240711 and later.
+> This is needed by u-boot-driver when using OF_UPSTREAM.
 
-Didn't noticed, thanks!
+Thanks for providing context. What we miss here still, is the
+description of the hardware and for what this syscon is used. Why this
+become system controller and before was not? Or this is just for regmap
+- then it does not work that way... You cannot have whatever driver
+poking all around then claim - I have crappy driver poking to every
+driver without implementing proper driver model, so I add syscon to
+bindings.
 
-And sorry for the noise.
 
-Claudiu
 
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
+Best regards,
+Krzysztof
+
 
