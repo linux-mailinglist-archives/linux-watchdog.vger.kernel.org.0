@@ -1,48 +1,48 @@
-Return-Path: <linux-watchdog+bounces-1374-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1375-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6F88930511
-	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Jul 2024 12:22:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7351D930516
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Jul 2024 12:22:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13AD91C21345
-	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Jul 2024 10:22:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 143381F22378
+	for <lists+linux-watchdog@lfdr.de>; Sat, 13 Jul 2024 10:22:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E0CB69D2B;
-	Sat, 13 Jul 2024 10:22:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02E4B6EB55;
+	Sat, 13 Jul 2024 10:22:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZUDrUqID"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E0RGdJrr"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0FC56EB59;
-	Sat, 13 Jul 2024 10:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDDB770F8;
+	Sat, 13 Jul 2024 10:22:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720866137; cv=none; b=XyE64jilg84i9Q2cXBr6yZ3DhCSgFiP0xhLgXvy0PsDkPziQ4A90fwoclDWSfnHsq0sHpk5BvR+Dcxr/cunFOeE4aZ6RIemKkhuwr7+N0AZROqSg4z+vZI+oisiTVWvHylOW4HSreR+SI2QlK0uOx1trOTM6cNCtAJYMYh7X+ZI=
+	t=1720866146; cv=none; b=s++9wLwlxjR75+qRw8GiX/g5Ps5K6T38y+9PP0sKLspF5rw/Vyh6LlW4MMgkVoKDw/spSTSSBmvag+2fxfbH2qsNacS50io6vpxR6IP8Py7R3/9v55MIV181yjOwa+HuxnUP/+fKo4haiEqh/3Qj7E4UiYnBGBJzTxq93rhiPz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720866137; c=relaxed/simple;
-	bh=8PaFxkIYfqRo/IX/3tegfBiE2Ol52YNznfEZPU0+b1Y=;
+	s=arc-20240116; t=1720866146; c=relaxed/simple;
+	bh=MGzk1zmSwW0wtyid9P/0BxZcNDOw7gWM9+WK36sUzGg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rCZGXoUHEI3CyWi8G67rnaE08FpQ9qXbQnJVLckaQQeSwekqKRRSP+K0Z7k0WSmMD2zNyOpC0POySVFDTQB06F3UoPtO+Lhb5J4wNv2sghMtRpnpiURD/qS/MG7GDxDDxgBp83aFO2GDOZ4x9FvOT7Iq0kUuI66lEfwmtU592n0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZUDrUqID; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3485C32781;
-	Sat, 13 Jul 2024 10:22:11 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=gUAkc426UJ7AqOY5N1u2ua9Z15kiZbbUUTldietWHRE5eAXiz73SmI8LrObfs3zT/ZclY2VPFwI6c7alk1yGjzOtvcebwTJP5QtjewGdDloSmsJ2eJVmgcqA83mKyW2PcT4T0YcbaY+/t99jjFHRKjjCsYWyifff8VGS11NZqDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E0RGdJrr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52008C4AF0B;
+	Sat, 13 Jul 2024 10:22:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720866137;
-	bh=8PaFxkIYfqRo/IX/3tegfBiE2Ol52YNznfEZPU0+b1Y=;
+	s=k20201202; t=1720866146;
+	bh=MGzk1zmSwW0wtyid9P/0BxZcNDOw7gWM9+WK36sUzGg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZUDrUqIDxiu+6o6uylzPMV0wIWj//FiytUM+YwI38Eg0irJYgT7Rx6egtURedxijv
-	 tFMjwktZWWWhe91n9CC6hLC9vRs1xr/snx88+bZUqCLMsdk4GsEXEmNfWhShwSqWi9
-	 Kufzpjy1BwMtXkeRhFCO3HMf0xgT96zdtKG3mR+rJBg/EEDb8CC+RzLoP76u4BrTLx
-	 aT/tauZoB5E21lOS7j8/JR2+UgMtmCOH7fVSwz4kdLUA2C+czG66g+b27CO+2hhMoz
-	 Hq0o5lS5OGpPBMKIJgqyQggKu/oqgYUmj0u/J3ZeyenX+y/f4P3L6oXEV9AfbHha2p
-	 QU5lwwOHUMaMA==
-Message-ID: <1f387b7c-689a-4a55-b23f-45bee301f747@kernel.org>
-Date: Sat, 13 Jul 2024 12:22:09 +0200
+	b=E0RGdJrrLNVrqOqUy1jnZb1p6dNVPlXdHIbf3ZNK/ushi6YzMlw27drpZZ5ZLMBnG
+	 onikYWLOZhUYJDtRA4bjD6hLcLL4s+zMkeRGewbg+0N9gWBBNdM/MGNg9JzY3rRe5e
+	 QafALYnykiCRcgZV8w7ahWut0K+4wzcJPpRMy29OXxDV6h5eNOrFW+og465nCsWydo
+	 l6F9yZEBumLyTswIK7dDsqV7usBjeTuAMnxilyhlOC/DSjHO6XBmKM9iXxPKP/Qanz
+	 NAW9iQYvyWvp24unUQ6pj0aFYCsZbKVQ/cwHYKZedtfCcAG8J2Dcqkat4tG3b/O/lq
+	 SRB30DZNbeq2w==
+Message-ID: <998b2cd8-1f23-475e-8251-e9afbcff6b25@kernel.org>
+Date: Sat, 13 Jul 2024 12:22:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/4] dt-bindings: clock: mediatek: add syscon
- requirement for mt7988 xfi-pll
+Subject: Re: [PATCH v1 3/4] dt-bindings: clock: mediatek: add syscon
+ requirement for mt7988 ethwarp
 To: Frank Wunderlich <linux@fw-web.de>,
  Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
  <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -65,7 +65,7 @@ Cc: Frank Wunderlich <frank-w@public-files.de>,
  linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
  linux-watchdog@vger.kernel.org
 References: <20240709101328.102969-1-linux@fw-web.de>
- <20240709101328.102969-3-linux@fw-web.de>
+ <20240709101328.102969-4-linux@fw-web.de>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,7 +111,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240709101328.102969-3-linux@fw-web.de>
+In-Reply-To: <20240709101328.102969-4-linux@fw-web.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
@@ -122,26 +122,23 @@ On 09/07/2024 12:13, Frank Wunderlich wrote:
 > 
 > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 > ---
->  .../devicetree/bindings/clock/mediatek,mt7988-xfi-pll.yaml | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+>  .../devicetree/bindings/clock/mediatek,mt7988-ethwarp.yaml  | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt7988-xfi-pll.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt7988-xfi-pll.yaml
-> index 192f1451f0af..c3686712505a 100644
-> --- a/Documentation/devicetree/bindings/clock/mediatek,mt7988-xfi-pll.yaml
-> +++ b/Documentation/devicetree/bindings/clock/mediatek,mt7988-xfi-pll.yaml
-> @@ -15,7 +15,10 @@ description:
->  
+> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mt7988-ethwarp.yaml b/Documentation/devicetree/bindings/clock/mediatek,mt7988-ethwarp.yaml
+> index e32a0251ff6a..b460a0de8503 100644
+> --- a/Documentation/devicetree/bindings/clock/mediatek,mt7988-ethwarp.yaml
+> +++ b/Documentation/devicetree/bindings/clock/mediatek,mt7988-ethwarp.yaml
+> @@ -17,7 +17,9 @@ description:
 >  properties:
 >    compatible:
-> -    const: mediatek,mt7988-xfi-pll
-> +    items:
+>      items:
+> -      - const: mediatek,mt7988-ethwarp
 > +      - enum:
-> +          - mediatek,mt7988-xfi-pll
+> +          - mediatek,mt7988-ethwarp
 > +      - const: syscon
 
-No.
-
-Crappy drivers which do not implement clock bindings do not get workaround.
+No, for the same reason.
 
 Best regards,
 Krzysztof
