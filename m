@@ -1,618 +1,256 @@
-Return-Path: <linux-watchdog+bounces-1384-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1385-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B0069313C9
-	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Jul 2024 14:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C71639318F5
+	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Jul 2024 19:07:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09B3A281E6F
-	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Jul 2024 12:13:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 824E82826CE
+	for <lists+linux-watchdog@lfdr.de>; Mon, 15 Jul 2024 17:07:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF10618C324;
-	Mon, 15 Jul 2024 12:12:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2A594436C;
+	Mon, 15 Jul 2024 17:07:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gXEEW3ex"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="UXu8Q+FN"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011047.outbound.protection.outlook.com [52.101.70.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C86E18C18E;
-	Mon, 15 Jul 2024 12:12:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721045569; cv=none; b=AR4tkEBYhCQ0iaN33TuDO8eDB4G2aY6oRknTsMt7HheCm17+WxQg72lRTm5tp5SWLaFJaEjmSQ/3mi9Mn1YeaRx6H43LRhWv/NjXw6Z7NxhY+xrI6Q95ODD4j5ETwCa7wEsQCgMjXXuQVYG3J8wIHG+oK6l+PNQNWPbHAc9q0AA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721045569; c=relaxed/simple;
-	bh=WYjF6U6nibfk7u3cHUo6gwUQDC1Ss/Tcj2bYgTGZ2l4=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=q+/zZycaoWkiyHZx92i+/AeI1PSfVmL3p3A5LISF6Duc2gmmRQSOmuiDyM97gZcvxVbLMufEvAU3uxGMGf4S+fIYB8E47Qisfc4ruqUhTSOGdc+rsLj2OqTVx+0EdcUqjvAZdf357MrC3ZrPrE+Q393WFdl89sgLA4C9NJPjPAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gXEEW3ex; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B084BC32782;
-	Mon, 15 Jul 2024 12:12:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721045568;
-	bh=WYjF6U6nibfk7u3cHUo6gwUQDC1Ss/Tcj2bYgTGZ2l4=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=gXEEW3exOJjCXclpGKoQYGG9opyBMzVA24PMJsQnTeml1rcJ1fVsWZ8UkBXdRlIJi
-	 0oFnQ4q3FICDYfiT/nBv8KshYO7W/1A7oU5/h4m9VNp4v60U3oEtBs9eOnYF00PkNx
-	 4x1ENkvnC0mwVZ2f856zAC92FDY3hMLyzuUsnTgylGgIuKfKpi6p2D2T2Xa62QeH6g
-	 8y2YFBrdFGcvw+Wv6Q/Ta+uadx7cg+sVyZrWpHao8EkC8qCtt7g1O1QvlkLOMq0xoa
-	 D3ACsA6zkhrPBcRV0jE/6uwu6t8F4t5gq08lkReU0UzMdkCttZ9MMMkU4L+IItHtdO
-	 XzO/VsLMCTRlQ==
-Date: Mon, 15 Jul 2024 06:12:47 -0600
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBD8481D5;
+	Mon, 15 Jul 2024 17:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721063259; cv=fail; b=Rves91uicl9dotOB2gYJ/g6STRxqoJm4kjp29+RcMkFo+Lv2YC4Nc4VtlaYFX142o9bE/9gLclG7nJKVkEgonLpj2D8M8lhIuOWJBK8j4tsUBCLPseZgijfJCaMacBgcbxmgd25QUL35Lyinn/vAlPGha9ZyEVBqrpBYWIVkacY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721063259; c=relaxed/simple;
+	bh=q93P879H3QqIZQaVGpdoSJXX7TzJukxIO3aSV/NfQv4=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=Ybxhdmes3lmDzAqL9SEWgqDqnLyF7vD66NlVHzt80RgEqQkf51QObXEqbEvD5sOmNDkFKVntsnu1Ewyl+F95rkGoIiQswx1FevzNzIv0+UaOzOGyOjyVGKDFLL52IFT/2CcNUgohqeZXo32DXrKFP8chww3UKwiRucxBjNDtMpQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=UXu8Q+FN; arc=fail smtp.client-ip=52.101.70.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ksd0XNNjujoen9IMzAzfxtRAOAEKnn30K/BwAU36+XUeaW74sfcPhizK0Mou3Tk8ADz//c8xm3aNsTeB0k3c0bjqPwk8RcJQXeOdmDEDcmfG4L+fM5F8zajYVR0dctsinkaONp559Yh3q+gbxuAe/i7TqTL6UU5BUm12hsnL4xnFrlAUZsP9sNxX8vqoLDCKTjW6zlWvHy09Kdqg0fmdXaq9S/qCjZ/QryKAX3eUsk/fmo9XiIec931Wsf3fSqX3WqQe+E/TXnRCVvkzFlhdXJuZN4rSPnZg3Aq1Fjn8abBGeDNt/GLLgpsrraACpo+HUyrCpQ8AVdFODM/Av+s7WQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IrEoMJJve6wI+fUv21eSJCWBRFRgYgWHvklS1wN4yUA=;
+ b=jCzrSMeYGUXXSJ/S5olzr0ifqD2dDPccs7YH/JO3968NKsLDaPn9xjukFwX4b/7uPqK2MvMkie+b67qIc4oTRAk/A/OcisQKoUoTF0dvF7FsnWzuQNuSsHdCnxzSzeCD2agT5udlO7v6po9iT3Q/3aH2xihZFfjsGHUw64rgTjkE16XMKnsYWpzd7iBfgrqtqY7zrmScI4p/qQXklNjggDLEVBbluvA8t0CxfXaDzjE21snJaVilk1ffQTY6Trj92zUpMVKH8DnFYN0yf5medoyEDQ1e96Fu65KVVOptDMKc3TYQQ+4fnrRe2QdO2IUfY3tA8gav82BpiHsznq/F0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IrEoMJJve6wI+fUv21eSJCWBRFRgYgWHvklS1wN4yUA=;
+ b=UXu8Q+FNoahSgV1BXZn4okg6LjEjGb20ce/JeKlYef5jKesnF9CUtgjck6tlgS59UiUnzuKgHA9QtMCKdaWHMvRmF/KBT6hKFcydw1oUzrux8mcPusWcEC4GgBh1ROS6JjjHXs4GqTjnNPLA3bbRrqih4bnqQ1ZYNNALkxy0bIA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by AM8PR04MB7956.eurprd04.prod.outlook.com (2603:10a6:20b:241::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.28; Mon, 15 Jul
+ 2024 17:07:34 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%4]) with mapi id 15.20.7762.027; Mon, 15 Jul 2024
+ 17:07:34 +0000
+From: Frank Li <Frank.Li@nxp.com>
+To: linux@roeck-us.net
+Cc: Frank.Li@nxp.com,
+	alice.guo@nxp.com,
+	festevam@gmail.com,
+	imx@lists.linux.dev,
+	kernel@pengutronix.de,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	s.hauer@pengutronix.de,
+	shawnguo@kernel.org,
+	wim@linux-watchdog.org,
+	ye.li@nxp.com
+Subject: [PATCH v3 1/1] watchdog: imx7ulp_wdt: move post_rcs_wait into struct imx_wdt_hw_feature
+Date: Mon, 15 Jul 2024 13:07:17 -0400
+Message-Id: <20240715170717.2490688-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR05CA0002.namprd05.prod.outlook.com
+ (2603:10b6:a03:33b::7) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Nikita Shubin <nikita.shubin@maquefel.me>
-Cc: linux-gpio@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
- Paolo Abeni <pabeni@redhat.com>, Andy Shevchenko <andy@kernel.org>, 
- linux-mtd@lists.infradead.org, Liam Girdwood <lgirdwood@gmail.com>, 
- linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, netdev@vger.kernel.org, 
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
- Vinod Koul <vkoul@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Olof Johansson <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>, 
- linux-arm-kernel@lists.infradead.org, Jakub Kicinski <kuba@kernel.org>, 
- Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
- Andy Shevchenko <andy.shevchenko@gmail.com>, dmaengine@vger.kernel.org, 
- Bartosz Golaszewski <brgl@bgdev.pl>, Russell King <linux@armlinux.org.uk>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Rob Herring <robh+dt@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
- devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
- "Wu, Aaron" <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>, 
- linux-watchdog@vger.kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Miquel Raynal <miquel.raynal@bootlin.com>, 
- Damien Le Moal <dlemoal@kernel.org>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Vignesh Raghavendra <vigneshr@ti.com>, linux-pwm@vger.kernel.org, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
- Ralf Baechle <ralf@linux-mips.org>, Sebastian Reichel <sre@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- linux-ide@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- linux-spi@vger.kernel.org, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- Mark Brown <broonie@kernel.org>, 
- Hartley Sweeten <hsweeten@visionengravers.com>, 
- linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.com>, 
- Andrew Lunn <andrew@lunn.ch>, Richard Weinberger <richard@nod.at>, 
- Eric Dumazet <edumazet@google.com>, linux-sound@vger.kernel.org, 
- Arnd Bergmann <arnd@arndb.de>, linux-input@vger.kernel.org, 
- Jaroslav Kysela <perex@perex.cz>, Sergey Shtylyov <s.shtylyov@omp.ru>, 
- Lukasz Majewski <lukma@denx.de>
-In-Reply-To: <20240715-ep93xx-v11-0-4e924efda795@maquefel.me>
-References: <20240715-ep93xx-v11-0-4e924efda795@maquefel.me>
-Message-Id: <172104541245.3725513.13547524352291855487.robh@kernel.org>
-Subject: Re: [PATCH v11 00/38] ep93xx device tree conversion
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|AM8PR04MB7956:EE_
+X-MS-Office365-Filtering-Correlation-Id: 206ca358-0958-4e59-ef7e-08dca4f09f01
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|7416014|376014|366016|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?IUq7e/4wwa/Fy/vYI8aGCpnkxrLCakmTTIZ7oNbUjf4JeZ9TrfH1/98Q+fAJ?=
+ =?us-ascii?Q?x0ARnbBnmOTD555ecY1PQ+xpwI/N1wk/1cjRyfvqyf9fIH6CqDx/76tFHelq?=
+ =?us-ascii?Q?BBwTAbILLidLuL9hgGZZjS7eHzeqy5ys3nVw9p160UF2hnBUE12K3KoIMEE1?=
+ =?us-ascii?Q?vSTMeNDXiWl5pAXvG2xI5ET/EnNvro6gWk1lG6j5GsUSLnlS+XuXagB8KLmD?=
+ =?us-ascii?Q?JCc3n2h6OI3oz0FGPuEs2OnxHgGiHdoFPMQvZh3A89Ejx9B1wgQxHC6hLCAA?=
+ =?us-ascii?Q?jEJ47Cnx9mVeOPzCSb69t0YC/Mm9EZwD0NwknLPMRyVCtva5o5OUyDhf8gIf?=
+ =?us-ascii?Q?Q+N0ryOjucEdfIb3rPO/h5DlIsu8UZ71Kfqo4a4M8ET+w17lvDU/cQeJgVjn?=
+ =?us-ascii?Q?JVd16oEyQRm5KROVQx4ydlIR0c+CtayVfIiVChwJ9SS28HZM7xcuvtL1nvRH?=
+ =?us-ascii?Q?nKISfiFJ0lbtbxFK/WbkqF3YBAt8oYRpaDb50hUBRwT1rLccUqc2N+gQzStQ?=
+ =?us-ascii?Q?3Za1a7Tug7HveRJEP1m1GAFfY+OY+I/Cc/f1USQJFpx1PNV2YPC+vXx33yWF?=
+ =?us-ascii?Q?ppkn0rMhOrWRURaQpcJb4gdAQ3q0QZbtnXXspxb28NcRZKQKSdktE786jPUf?=
+ =?us-ascii?Q?mnHOyhe6iCIwsBW9S0iLQG251K5wUzWVtw3yZ72IE3qw8Ntqx7yzWRYP+mUV?=
+ =?us-ascii?Q?9Qeu9nF+HZL3OtNpixrot/Zh+pHrI0SxLOXxCLsab3cqBgXJ0wBPxoKXZfPT?=
+ =?us-ascii?Q?ABwkWWokkQS0CJXbs36ZWVOZN6WR/4YtwSV/4EG4rgLGBs1DoE9+ay4hNfzf?=
+ =?us-ascii?Q?5l17feeerBo7M7rKn0CjjEwcbeauxrevN3EhKbCIN+amceR4WileJsxrFW2V?=
+ =?us-ascii?Q?7+1b67ciqm2rbuITTBvTw2JBmog4X5U1xSYkOcN2hmWDx20sUZZzEvtojWKI?=
+ =?us-ascii?Q?jwGEBI+GNxEP58PZ1X31E6cpw+Xiv6xePc8ah1bIdcv/R+LhdnAVTtRoNxqV?=
+ =?us-ascii?Q?S9qa/DfubPuiG7Dyd2fVEQlotkr3cy+A6LTvHW2jarYEihsSDjeL52Y1mhpH?=
+ =?us-ascii?Q?S1ksMjh0qY23OnIx4lQhUsahaQQU55Tymx+BOHCsmH7taCIOYeD4lwTNIq7d?=
+ =?us-ascii?Q?erncXF5yBXMusA6nyHF8raQi8OXrWeIfWNYwQbmPpeMEeQ78m5iIfhjYNht1?=
+ =?us-ascii?Q?1LTqoLGvC5eSkC5jA7QtTjbfLT2VtHIgHgxICMn8yStG6SR1Kle/DY6X1z40?=
+ =?us-ascii?Q?tRENCQ0HaXw5zWTndIe0aB55WWkW2bxQPDWn48HrezP0F9Yjjpy2NxnQaIAU?=
+ =?us-ascii?Q?28+Ez8t76oc+jaqVeyGYoxZY+ogVy58xZRr4PirbgBKzzyVR70kia+DohBHf?=
+ =?us-ascii?Q?iCmhgW5J5ThlA2XZrGRkBYK8ZxqlIMuM6I9qvsnHzRMSmOJgtw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(7416014)(376014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?9tEAacI3nc13l017T22D+pAJc+FMp2iY5EbgQUka5NVYsFKmMwLlqbkhTgOm?=
+ =?us-ascii?Q?y3dnxud0rb+mGGFxXTWndHAHcDBZg5wP9fKKo5svhM/5VmGpkrs0aMIVHIrS?=
+ =?us-ascii?Q?A8mKKr8K35qQxcM7+asH7oUippOk2uvEz567J6nxm6G9QoyAnxAAf+PuRSFe?=
+ =?us-ascii?Q?cNgQotZLEfclF6LY/PPOnyH/RX71s9EEBCxMsGuI5JWmm3/M+H4dtI39xiQX?=
+ =?us-ascii?Q?sXvQ32KWKDmd44HFEDRW1qb4OZ/6ZFUn4AoM8Zwyy5yGNyTx2TZUxoCSOqnO?=
+ =?us-ascii?Q?lgVuLnk0C/16WP1WqRp3o0rmYk7uU7AeTbkEhQ294Qzs2egD8+cS0s6aCb1V?=
+ =?us-ascii?Q?jAVF7wwwD8zVyrFzoytPvMD+7nnc+RwcETQmhpqRIXfw4wr/YQyVtdjRCfeH?=
+ =?us-ascii?Q?sTtiCWUlZljT239JOcdhbPz7v3NkSC1aXHw/bSOJ9LrpD7tZPyDMWAjfBL+U?=
+ =?us-ascii?Q?5DsazrPZV5spQ6sEBJudMTPDp5DlWdS5qwDmqlHYme3CwCw2IjoD2/DwkXVL?=
+ =?us-ascii?Q?vNy7pkcSvS+gBSoxnzF5nzFKL1k4HpT710ykqD4GB7W7JPHU9ysaKaBb7zUH?=
+ =?us-ascii?Q?0+kRkWvrJCw3k2DRSqCBoSR1SsPcfavsAdQPWjUEvV4OM3QRo8G7UashoyEb?=
+ =?us-ascii?Q?iKgYEGEtoniCHxqAAj+85HCEuIh6T1FeMgP+6YaJ5G+k5fpdjVFU135D9XI1?=
+ =?us-ascii?Q?KLDJ9e8nRoZ7jBpE8AHKgabT9I/H/j6CQdF/7IDMfdBdtwbzVQOOwhXdwjX+?=
+ =?us-ascii?Q?97p+zby082b2cJQbGQLtUbQqvBLZApRIZ7K0bJdfz5oV58Pci5qddVILzcob?=
+ =?us-ascii?Q?3OH164XdG07k3uRDj4pmeMaQrGcEZMQ8TONK5AapFujB5doJ4QXsWtOf5wRp?=
+ =?us-ascii?Q?8LOho8lwHFKPbHlRUoEodGpSpp8t7hw4wXAp/gZe1fxIGZYdkfsd44H1Z8rr?=
+ =?us-ascii?Q?Y92Qks+Yhg1J2kjMiCQhkLN1h1RpMaG0vtCEMgSY/pTovmsya6Ijawpe4Yez?=
+ =?us-ascii?Q?/zw/nSiGSsxVANjYuXTrXzzsEVBXzUHqPTwyCs18bHEk35yAnqxiJ3vvq+cM?=
+ =?us-ascii?Q?x5dASA/L4jAWRVynlIrMAkc5ZAdgsYyvL0kDbOrjW9DD6/lv9g9er59T4HUJ?=
+ =?us-ascii?Q?GUNVaYTxPwh1pqPNYWKQH5Wu8strg1vxDwdEIsoFIPc75t0eLBPXjId4r+AZ?=
+ =?us-ascii?Q?tdfmQAZfkhCwOTdAoMn3YopjrihWTZvY6KblrZzy2W3eRRiXJfpbyIXME9tZ?=
+ =?us-ascii?Q?7JehGw8kwgAwWdKN4x/P/SZhWT0gm82uho2mIkg3nIPgjIIGzL3y/ekik1ot?=
+ =?us-ascii?Q?y5oo0UPjdiGLdd9hYKCpslLWPNOhw9wnquR2uHYX4IcEeAM2KU4/Z3m5EohB?=
+ =?us-ascii?Q?4ao+Dphp8Kk7OJOXjrx/uQvzspNiMT4+++IGtyw2tpDJhaUwZ+Bw0IaoIvm8?=
+ =?us-ascii?Q?lsgD8d6fP+TDdWrJcwBbfOkM337lhTIEjdr1ziTT6ywm+EaOblqUYZ4NU/bm?=
+ =?us-ascii?Q?DCneb27sdR5E7Aj9+dPXpMW4Yq0giIogb5B0xcLOqDhES+6upLm/b18Y4mpA?=
+ =?us-ascii?Q?s2Qy/KpGq3UWotyg+cdIJF720L/7G9ehpKKud3zp?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 206ca358-0958-4e59-ef7e-08dca4f09f01
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2024 17:07:34.7796
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8Zehx4j5XcceZDIrvcF14I298umdqQWSnjx+HwJvziMlCmpP1AafNHMkTM0MDpWpk2vIS2O+rjcY6nzMKksnEw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7956
 
+Move post_rcs_wait into struct imx_wdt_hw_feature to simplify code logic
+for different compatible strings
 
-On Mon, 15 Jul 2024 11:38:04 +0300, Nikita Shubin wrote:
-> The goal is to recieve ACKs for all patches in series to merge it via Arnd branch.
-> 
-> It was decided from the very beginning of these series, mostly because
-> it's a full conversion of platform code to DT and it seemed not
-> convenient to maintain compatibility with both platform and DT.
-> 
-> Following patches require attention from Stephen Boyd or clk subsystem:
-> 
-> - clk: ep93xx: add DT support for Cirrus EP93xx
-> 
-> It is purely possible to add something like devm_clk_hw_register_fixed_rate_parent_data()
-> for devm managed version clk_hw_register_fixed_rate_parent_data(), still i would like to
-> leave for the time after this series if it's all possible.
-> 
-> Couse may be it's better to add something like
-> devm_clk_hw_register_fixed_rate_index() like it's done for
-> devm_clk_hw_register_fixed_factor_index().
-> 
-> Changelog for this patch:
-> - added devm_ep93xx_clk_hw_register_fixed_rate_parent_data() for
->   devm_ version of clk_hw_register_fixed_rate_parent_data()
-> - s/devm_clk_hw_register_fixed_rate()/devm_ep93xx_clk_hw_register_fixed_rate_parent_data()/
-> - replaced all devm_clk_hw_register_fixed_factor() to
->   devm_clk_hw_register_fixed_factor_parent_hw() or
->   devm_clk_hw_register_fixed_factor_index()
-> - s/devm_clk_hw_register_gate()/devm_clk_hw_register_gate_parent_data()
-> 
-> Stephen - it think that's you was aiming for - to get rid of all
-> functions that are using const char* parent_name directly instead of
-> clk_hw or clk_parent_data.
-> 
-> Patches should be formated with '--histogram'
-> 
-> ---
-> Changes in v11:
-> - clk: ep93xx: add DT support for Cirrus EP93xx
->   - added devm_ep93xx_clk_hw_register_fixed_rate_parent_data() for
->     devm_ version of clk_hw_register_fixed_rate_parent_data()
->   - s/devm_clk_hw_register_fixed_rate()/devm_ep93xx_clk_hw_register_fixed_rate_parent_data()/
->   - replaced all devm_clk_hw_register_fixed_factor() to
->     devm_clk_hw_register_fixed_factor_parent_hw() or
->     devm_clk_hw_register_fixed_factor_index()
->   - s/devm_clk_hw_register_gate()/devm_clk_hw_register_gate_parent_data()
-> 
-> - Link to v10: https://lore.kernel.org/r/20240617-ep93xx-v10-0-662e640ed811@maquefel.me
-> 
-> Changes in v10:
-> 
-> Reordered SoB tags to make sure they appear before Rb and Acked tags.
-> 
-> dmaengine: cirrus: Convert to DT for Cirrus EP93xx
->     - s/dma/dmaengine/ title
-> 
-> dmaengine: cirrus: remove platform code
->     - s/dma/dmaengine/ title
-> 
-> soc: Add SoC driver for Cirrus ep93xx:
->     - added __init for ep93xx_adev_alloc(), ep93xx_controller_register()
->     - added static, __initconst for pinctrl_names[]
->     - clk revision for SPI is now resolved here through differently named
->       clk device
->     - more verbose Kconfig description
-> 
-> clk: ep93xx: add DT support for Cirrus EP93xx:
->     - dropped includes
->     - dropped ep93xx_soc_table[]
->     - add different named clk and dropped involved includes
->     - moved pll's and fclk, hclk, pclk init to separate function
->     - fixed ep93xx_clk_ids[] explicit lines
-> 
-> - Link to v9: https://lore.kernel.org/r/20240326-ep93xx-v9-0-156e2ae5dfc8@maquefel.me
-> - Link to v2 clk: https://lore.kernel.org/r/20240408-ep93xx-clk-v2-1-adcd68c13753@maquefel.me
-> 
-> Changes in v9:
-> 
-> ARM: dts: add Cirrus EP93XX SoC .dtsi
->     - added #interrupt-cells to gpio nodes with interrupts-controller
->     - fixed EOF
-> 
-> ARM: dts: ep93xx: Add EDB9302 DT
->     - Alexander Sverdlin: fixed bug in Device Tree resulting in CS4271 not working
-> 
-> input: keypad: ep93xx: add DT support for Cirrus EP93xx
->     - fixed identation and type
-> 
-> - Link to v8: https://lore.kernel.org/r/20240226-ep93xx-v8-0-3136dca7238f@maquefel.me/
-> 
-> Changes in v8:
-> 
-> soc: Add SoC driver for Cirrus ep93xx
->     - fixed freeing adev instead of rdev
->     - use __free() and no_free_ptr() for rdev allocation
->     - s/of_device_get_match_data()/device_get_match_data()/
-> 
-> ata: pata_ep93xx: add device tree support
->     - more appropriate usage of dev_err_probe()
-> 
-> pinctrl: add a Cirrus ep93xx SoC pin controller
->     - 8 per row in ide_9312_pins
-> 
-> mtd: rawnand: add support for ts72xx
->     - fwnode_handle_put() for fwnode in ts72xx_nand_remove()
-> 
-> - Link to v7: https://lore.kernel.org/r/20240118-ep93xx-v7-0-d953846ae771@maquefel.me
-> 
-> Changes in v7:
-> 
-> mtd: rawnand: add support for ts72xx
->     - fixed KConfig description
-> 
-> ARM: ep93xx: Add terminator to gpiod_lookup_table
->     - + Reported-by, Fixes
-> 
-> ARM: ep93xx: add regmap aux_dev
->     - + trailing comma
->     - - #include <linux/spinlock.h>
-> 
-> clk: ep93xx: add DT support for Cirrus EP93xx
->     - dropped unused defines
->     - return from default in ep93xx_mux_get_parent()
->     - use guard() in ep93xx_mux_set_parent_lock()
->     - <math.h> header for abs_diff()
->     - fixed comments
-> 
-> pinctrl: add a Cirrus ep93xx SoC pin controller
->     - dropped comments for DEVCFG defines
->     - <linux/array_size.h> for ARRAY_SIZE()
->     - + default in ep93xx_get_group_name()
->     - correct cast for id->driver_data
->     - s/device_set_of_node_from_dev()/device_set_node()/
-> 
-> power: reset: Add a driver for the ep93xx reset
->     - Add <linux/container_of.h>, <linux/errno.h>, <linux/slab.h>
->     - Add <linux/module.h>, <linux/mod_devicetable.h>
->     - Remove <platform_device.h>
-> 
-> spi: ep93xx: add DT support for Cirrus EP93xx
->     - Replace with ret = dev_err_probe(...);
-> 
-> ata: pata_ep93xx: add device tree support
->     - fixed wrong rebase with some partes leaked in "ata: pata_ep93xx: remove legacy pinctrl use"
->     - fix dma_request_chan() error processing
-> 
-> dma: cirrus: Convert to DT for Cirrus EP93xx
->     - fixed commit message (dropped explicit "only")
->     - fixed clk_get() processing to defer probe and log spamming
->     - refactor ep93xx_m2p_dma_filter()
->     - dropped blank line in ep93xx_m2p_dma_of_xlate()
->     - refactor ep93xx_m2m_dma_of_xlate()
-> 
-> dma: cirrus: remove platform code
->     - s/dma/DMA/ in commit message
-> 
-> soc: Add SoC driver for Cirrus ep93xx
->     - add period
->     - use cleanup and guard() for spinlocking
->     - correct cast for device_get_match_data()
->     - dropped dev_info() with SoC revision - i can't find it anywhere since 2.6 :/,
->       don't know why i was so sured that ep93xx always printed that
-> 
-> ata: pata_ep93xx: remove legacy pinctrl use
->     - made error handling in DMA as Uwe suggested
-> 
-> - Link to v6: https://lore.kernel.org/r/20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me
-> 
-> Changes in v6:
-> 
-> - clk: ep93xx: add DT support for Cirrus EP93xx
->   - s/spin_lock_irqsave()/guard()/
->   - refactor index check in ep93xx_mux_set_parent_lock() to something more readable
->   - use in_range in ep93xx_mux_set_parent_lock()/ep93xx_ddiv_set_rate()
->   - use GENMASK() in ep93xx_ddiv_recalc_rate()
->   - comment reserved bit in ep93xx_ddiv_set_rate()
->   - move out from loop ClkDiv value assigment
->   - some style fixes
-> 
-> Andy, i was i asked to set index of XTALI explicitly, i am not setting ddiv_pdata
-> there becouse only XTALI is jnown in advance, and i think setting them in one place is more convenient.
-> 
-> - pinctrl: add a Cirrus ep93xx SoC pin controller
->   - drop OF from Kconfig
->   - droped linux/of.h include
->   - add space to */ where it is applicable
->   - add coma in multiline assigment
->   - "return NULL" as default case in ep93xx_get_group_name()
->   - fixed casting id->driver_data
->   - use device_set_of_node_from_dev()
->   - use dev_err_probe()
-> 
-> - power: reset: Add a driver for the ep93xx reset
->   - drop linux/of.h include
-> 
-> - soc: Add SoC driver for Cirrus ep93xx
->   - s/GPL-2.0/GPL-2.0-only/
->   - drop linux/kernel.h include
->   - + blank line before linux/soc/cirrus/ep93xx.h
->   - + blank line after ep93xx_get_soc_rev()
->   - + coma for pinctrl_names
->   - valid casting to int for of_device_get_match_data() return value
-> 
-> - mtd: rawnand: add support for ts72xx
->   - return as part of switch case
->   - s/iowrite8/iowrite8_rep/
-> 
-> - net: cirrus: add DT support for Cirrus EP93xx
->   - fix header sorting
-> 
-> - dma: cirrus: Convert to DT for Cirrus EP93xx
->   - use devm_clk_get
->   - use is_slave_direction
-> 
-> Changes in v5:
-> 
-> - gpio: ep93xx: split device in multiple
->   - ordered headers
->   - use irqd_to_hwirq()
->   - s/platform_get_irq()/platform_get_irq_optional()/
-> 
-> - [PATCH v4 02/42] ARM: ep93xx: add swlocked prototypes
->   - replaced with ARM: ep93xx: add regmap aux_dev
-> 
-> - [PATCH v4 03/42] dt-bindings: clock: Add Cirrus EP93xx
->   - fixed identation
->   - removed EP93XX_CLK_END
->   - and dropped it
->   - clock bindings moved to syscon with renaming to cirrus,ep9301-syscon.h
-> 
-> - clk: ep93xx: add DT support for Cirrus EP93xx
->   - convert to auxiliary and use parent device tree node
->   - moved all clocks except XTALI here
->   - used devm version everywhere and *_parent_hw() instead of passing name where it's possible
->   - unfortunately devm_clk_hw_register_fixed_rate doesn't have a parent index version
-> 
-> - [PATCH v4 05/42] dt-bindings: pinctrl: Add Cirrus EP93xx
->   - "unevaluatedProperties: false" for pins
->   - returned "additionalProperties: false" where it was
->   - and dropped it
-> 
-> - pinctrl: add a Cirrus ep93xx SoC pin controller
->   - sorted includes
->   - convert to auxiliary and use parent device tree node
-> 
-> - power: reset: Add a driver for the ep93xx reset
->   - convert to auxiliary device
-> 
-> - dt-bindings: soc: Add Cirrus EP93xx
->   - dropped all ref to reboot, clk, pinctrl subnodes
->   - added pins, as it's now used for pinctrl
->   - added #clock-cells, as it's now used for clk
-> 
-> - dt-bindings: pwm: Add Cirrus EP93xx
->   - $ref to pwm.yaml
->   - fixed 'pwm-cells'
->   - s/additionalProperties/unevaluatedProperties/
-> 
-> - soc: Add SoC driver for Cirrus ep93xx
->   - removed clocks, they are moved to clk auxiliary driver, as we dropped the clk dt node
->   - removed all swlocked exported functions
->   - dropped static spinlock
->   - added instantiating auxiliary reboot, clk, pinctrl
-> 
-> - dt-bindings: spi: Add Cirrus EP93xx
->   - Document DMA support
-> 
-> - spi: ep93xx: add DT support for Cirrus EP93xx
->   - dropped CONFIG_OF and SPI/DMA platform data entirely
->   - s/master/host/
->   - reworked DMA setup so we can use probe defer
-> 
-> - dt-bindings: dma: Add Cirrus EP93xx
->   - dropped bindings header (moved ports description to YAML)
->   - changed '#dma-cells' to 2, we use port, direction in cells so we can drop platform code completely
-> 
-> - dma: cirrus: add DT support for Cirrus EP93xx
->   - dropped platform probing completely
->   - dropped struct ep93xx_dma_data replaced with internal struct ep93xx_dma_chan_cfg with port/direction
->   - added xlate functions for m2m/m2p
->   - we require filters to set dma_cfg before hw_setup
-> 
-> - dt-bindings: ata: Add Cirrus EP93xx
->   - Document DMA support
-> 
-> - ata: pata_ep93xx: add device tree support
->   - drop DMA platform header with data
->   - use DMA OF so we can defer probing until DMA is up
-> 
-> - ARM: dts: add Cirrus EP93XX SoC .dtsi
-> - ARM: dts: ep93xx: add ts7250 board
-> - ARM: dts: ep93xx: Add EDB9302 DT
->   - replaced "eclk: clock-controller" to syscon reference
->   - replaced "pinctrl: pinctrl" to syscon reference
->   - gpios are now "enabled" by default
->   - reworked i2s node
->   - change all dma nodes and refs
-> 
-> - new additions to I2S
->   - Document DMA
->   - Document Audio Port usage
->   - drop legacy DMA support
-> 
-> - Link to v4: https://lore.kernel.org/r/20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me
-> 
-> Changes in v4:
-> 
-> - gpio: ep93xx: split device in multiple
->   - s/generic_handle_irq/generic_handle_domain_irq/
->   - s/int offset/irq_hw_number_t offset/ though now it looks a bit odd to me
->   - drop i = 0
->   - drop 'error'
->   - use dev_err_probe withour printing devname once again
-> 
-> dt-bindings: clock: Add Cirrus EP93xx
->   - renamed cirrus,ep93xx-clock.h -> cirrus,ep9301-clk.h
-> 
-> clk: ep93xx: add DT support for Cirrus EP93xx
->   - drop unused includes
->   - use .name only for xtali, pll1, pll2 parents
->   - convert // to /*
->   - pass clk_parent_data instead of char* clock name
-> 
-> dt-bindings: pinctrl: Add Cirrus EP93xx
->   - s/additionalProperties/unevaluatedProperties/
-> 
-> dt-bindings: soc: Add Cirrus EP93xx
->   - move syscon to soc directory
->   - add vendor prefix
->   - make reboot same style as pinctrl, clk
->   - use absolute path for ref
->   - expand example
-> 
-> soc: Add SoC driver for Cirrus ep93xx
->   - s/0xf0000000/GENMASK(31, 28)/
->   - s/ret/ep93xx_chip_revision(map)/
->   - drop symbol exports
->   - convert to platform driver
-> 
-> dt-bindings: rtc: Add Cirrus EP93xx
->   - allOf: with $ref to rtc.yaml
->   - s/additionalProperties/unevaluatedProperties/
-> 
-> dt-bindings: watchdog: Add Cirrus EP93x
->   - drop description
->   - reword
-> 
-> power: reset: Add a driver for the ep93xx reset
->   - lets use 'GPL-2.0+' instead of '(GPL-2.0)'
->   - s/of_device/of/
->   - drop mdelay with warning
->   - return 0 at the end
-> 
-> net: cirrus: add DT support for Cirrus EP93xx
->   - fix leaking np
-> 
-> mtd: nand: add support for ts72xx
->   - +bits.h
->   - drop comment
->   - ok to fwnode_get_next_child_node
->   - use goto to put handle and nand and report error
-> 
-> ARM: dts: add Cirrus EP93XX SoC .dtsi
->   - add simple-bus for ebi, as we don't require to setup anything
->   - add arm,pl011 compatible to uart nodes
->   - drop i2c-gpio, as it's isn't used anywhere
-> 
-> ARM: dts: ep93xx: add ts7250 board
->   - generic node name for temperature-sensor
->   - drop i2c
->   - move nand, rtc, watchdog to ebi node
-> 
-> - Link to v3: https://lore.kernel.org/r/20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me
-> 
-> ---
-> Alexander Sverdlin (3):
->       ASoC: ep93xx: Drop legacy DMA support
->       ARM: dts: ep93xx: Add EDB9302 DT
->       ASoC: cirrus: edb93xx: Delete driver
-> 
-> Nikita Shubin (35):
->       gpio: ep93xx: split device in multiple
->       ARM: ep93xx: add regmap aux_dev
->       clk: ep93xx: add DT support for Cirrus EP93xx
->       pinctrl: add a Cirrus ep93xx SoC pin controller
->       power: reset: Add a driver for the ep93xx reset
->       dt-bindings: soc: Add Cirrus EP93xx
->       soc: Add SoC driver for Cirrus ep93xx
->       dt-bindings: dma: Add Cirrus EP93xx
->       dmaengine: cirrus: Convert to DT for Cirrus EP93xx
->       dt-bindings: watchdog: Add Cirrus EP93x
->       watchdog: ep93xx: add DT support for Cirrus EP93xx
->       dt-bindings: pwm: Add Cirrus EP93xx
->       pwm: ep93xx: add DT support for Cirrus EP93xx
->       dt-bindings: spi: Add Cirrus EP93xx
->       spi: ep93xx: add DT support for Cirrus EP93xx
->       dt-bindings: net: Add Cirrus EP93xx
->       net: cirrus: add DT support for Cirrus EP93xx
->       dt-bindings: mtd: Add ts7200 nand-controller
->       mtd: rawnand: add support for ts72xx
->       dt-bindings: ata: Add Cirrus EP93xx
->       ata: pata_ep93xx: add device tree support
->       dt-bindings: input: Add Cirrus EP93xx keypad
->       input: keypad: ep93xx: add DT support for Cirrus EP93xx
->       wdt: ts72xx: add DT support for ts72xx
->       gpio: ep93xx: add DT support for gpio-ep93xx
->       ASoC: dt-bindings: ep93xx: Document DMA support
->       ASoC: dt-bindings: ep93xx: Document Audio Port support
->       ARM: dts: add Cirrus EP93XX SoC .dtsi
->       ARM: dts: ep93xx: add ts7250 board
->       ARM: ep93xx: DT for the Cirrus ep93xx SoC platforms
->       pwm: ep93xx: drop legacy pinctrl
->       ata: pata_ep93xx: remove legacy pinctrl use
->       ARM: ep93xx: delete all boardfiles
->       ARM: ep93xx: soc: drop defines
->       dmaengine: cirrus: remove platform code
-> 
->  .../bindings/arm/cirrus/cirrus,ep9301.yaml         |   38 +
->  .../bindings/ata/cirrus,ep9312-pata.yaml           |   42 +
->  .../bindings/dma/cirrus,ep9301-dma-m2m.yaml        |   84 ++
->  .../bindings/dma/cirrus,ep9301-dma-m2p.yaml        |  144 ++
->  .../bindings/input/cirrus,ep9307-keypad.yaml       |   87 ++
->  .../devicetree/bindings/mtd/technologic,nand.yaml  |   45 +
->  .../devicetree/bindings/net/cirrus,ep9301-eth.yaml |   59 +
->  .../devicetree/bindings/pwm/cirrus,ep9301-pwm.yaml |   53 +
->  .../bindings/soc/cirrus/cirrus,ep9301-syscon.yaml  |   94 ++
->  .../bindings/sound/cirrus,ep9301-i2s.yaml          |   16 +
->  .../devicetree/bindings/spi/cirrus,ep9301-spi.yaml |   70 +
->  .../bindings/watchdog/cirrus,ep9301-wdt.yaml       |   42 +
->  arch/arm/Makefile                                  |    1 -
->  arch/arm/boot/dts/cirrus/Makefile                  |    4 +
->  arch/arm/boot/dts/cirrus/ep93xx-bk3.dts            |  125 ++
->  arch/arm/boot/dts/cirrus/ep93xx-edb9302.dts        |  181 +++
->  arch/arm/boot/dts/cirrus/ep93xx-ts7250.dts         |  145 ++
->  arch/arm/boot/dts/cirrus/ep93xx.dtsi               |  444 ++++++
->  arch/arm/mach-ep93xx/Kconfig                       |   20 +-
->  arch/arm/mach-ep93xx/Makefile                      |   11 -
->  arch/arm/mach-ep93xx/clock.c                       |  733 ----------
->  arch/arm/mach-ep93xx/core.c                        | 1018 --------------
->  arch/arm/mach-ep93xx/dma.c                         |  114 --
->  arch/arm/mach-ep93xx/edb93xx.c                     |  368 -----
->  arch/arm/mach-ep93xx/ep93xx-regs.h                 |   38 -
->  arch/arm/mach-ep93xx/gpio-ep93xx.h                 |  111 --
->  arch/arm/mach-ep93xx/hardware.h                    |   25 -
->  arch/arm/mach-ep93xx/irqs.h                        |   76 --
->  arch/arm/mach-ep93xx/platform.h                    |   42 -
->  arch/arm/mach-ep93xx/soc.h                         |  212 ---
->  arch/arm/mach-ep93xx/timer-ep93xx.c                |  143 --
->  arch/arm/mach-ep93xx/ts72xx.c                      |  422 ------
->  arch/arm/mach-ep93xx/ts72xx.h                      |   94 --
->  arch/arm/mach-ep93xx/vision_ep9307.c               |  321 -----
->  drivers/ata/pata_ep93xx.c                          |  107 +-
->  drivers/clk/Kconfig                                |    8 +
->  drivers/clk/Makefile                               |    1 +
->  drivers/clk/clk-ep93xx.c                           |  846 ++++++++++++
->  drivers/dma/ep93xx_dma.c                           |  287 +++-
->  drivers/gpio/gpio-ep93xx.c                         |  345 ++---
->  drivers/input/keyboard/ep93xx_keypad.c             |   74 +-
->  drivers/mtd/nand/raw/Kconfig                       |    6 +
->  drivers/mtd/nand/raw/Makefile                      |    1 +
->  drivers/mtd/nand/raw/technologic-nand-controller.c |  222 +++
->  drivers/net/ethernet/cirrus/ep93xx_eth.c           |   63 +-
->  drivers/pinctrl/Kconfig                            |    7 +
->  drivers/pinctrl/Makefile                           |    1 +
->  drivers/pinctrl/pinctrl-ep93xx.c                   | 1434 ++++++++++++++++++++
->  drivers/power/reset/Kconfig                        |   10 +
->  drivers/power/reset/Makefile                       |    1 +
->  drivers/power/reset/ep93xx-restart.c               |   84 ++
->  drivers/pwm/pwm-ep93xx.c                           |   26 +-
->  drivers/soc/Kconfig                                |    1 +
->  drivers/soc/Makefile                               |    1 +
->  drivers/soc/cirrus/Kconfig                         |   17 +
->  drivers/soc/cirrus/Makefile                        |    2 +
->  drivers/soc/cirrus/soc-ep93xx.c                    |  252 ++++
->  drivers/spi/spi-ep93xx.c                           |   66 +-
->  drivers/watchdog/ep93xx_wdt.c                      |    8 +
->  drivers/watchdog/ts72xx_wdt.c                      |    8 +
->  include/dt-bindings/clock/cirrus,ep9301-syscon.h   |   46 +
->  include/linux/platform_data/dma-ep93xx.h           |   94 --
->  include/linux/platform_data/eth-ep93xx.h           |   10 -
->  include/linux/platform_data/keypad-ep93xx.h        |   32 -
->  include/linux/platform_data/spi-ep93xx.h           |   15 -
->  include/linux/soc/cirrus/ep93xx.h                  |   47 +-
->  sound/soc/cirrus/Kconfig                           |    9 -
->  sound/soc/cirrus/Makefile                          |    4 -
->  sound/soc/cirrus/edb93xx.c                         |  116 --
->  sound/soc/cirrus/ep93xx-i2s.c                      |   19 -
->  sound/soc/cirrus/ep93xx-pcm.c                      |   19 +-
->  71 files changed, 5161 insertions(+), 4550 deletions(-)
-> ---
-> base-commit: 0c3836482481200ead7b416ca80c68a29cfdaabd
-> change-id: 20230605-ep93xx-01c76317e2d2
-> 
-> Best regards,
-> --
-> Nikita Shubin <nikita.shubin@maquefel.me>
-> 
-> 
-> 
+i.MX93 and i.MX8ULP watchdog do not need to wait 2.5 clocks after RCS is
+done. Set post_rcs_wait to false explicitly to maintain code consistency.
 
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Alice Guo <alice.guo@nxp.com>
+Reviewed-by: Ye Li <ye.li@nxp.com>
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+Change from v2 to v3
+- Set post_rcs_wait to false explicitly to maintain code consistency
+- Add Guenter review tag.
+Change from v1 to v2
+- Combine to one patch
+---
+ drivers/watchdog/imx7ulp_wdt.c | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y cirrus/ep93xx-bk3.dtb cirrus/ep93xx-edb9302.dtb cirrus/ep93xx-ts7250.dtb' for 20240715-ep93xx-v11-0-4e924efda795@maquefel.me:
-
-arch/arm/boot/dts/cirrus/ep93xx-edb9302.dtb: /soc/spi@808a0000/codec@0: failed to match any schema with compatible: ['cirrus,cs4271']
-
-
-
-
+diff --git a/drivers/watchdog/imx7ulp_wdt.c b/drivers/watchdog/imx7ulp_wdt.c
+index 94914a22daff7..a4aa02f388b15 100644
+--- a/drivers/watchdog/imx7ulp_wdt.c
++++ b/drivers/watchdog/imx7ulp_wdt.c
+@@ -55,6 +55,7 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
+ 
+ struct imx_wdt_hw_feature {
+ 	bool prescaler_enable;
++	bool post_rcs_wait;
+ 	u32 wdog_clock_rate;
+ };
+ 
+@@ -62,7 +63,6 @@ struct imx7ulp_wdt_device {
+ 	struct watchdog_device wdd;
+ 	void __iomem *base;
+ 	struct clk *clk;
+-	bool post_rcs_wait;
+ 	bool ext_reset;
+ 	const struct imx_wdt_hw_feature *hw;
+ };
+@@ -95,7 +95,7 @@ static int imx7ulp_wdt_wait_rcs(struct imx7ulp_wdt_device *wdt)
+ 		ret = -ETIMEDOUT;
+ 
+ 	/* Wait 2.5 clocks after RCS done */
+-	if (wdt->post_rcs_wait)
++	if (wdt->hw->post_rcs_wait)
+ 		usleep_range(wait_min, wait_min + 2000);
+ 
+ 	return ret;
+@@ -334,15 +334,6 @@ static int imx7ulp_wdt_probe(struct platform_device *pdev)
+ 	/* The WDOG may need to do external reset through dedicated pin */
+ 	imx7ulp_wdt->ext_reset = of_property_read_bool(dev->of_node, "fsl,ext-reset-output");
+ 
+-	imx7ulp_wdt->post_rcs_wait = true;
+-	if (of_device_is_compatible(dev->of_node,
+-				    "fsl,imx8ulp-wdt")) {
+-		dev_info(dev, "imx8ulp wdt probe\n");
+-		imx7ulp_wdt->post_rcs_wait = false;
+-	} else {
+-		dev_info(dev, "imx7ulp wdt probe\n");
+-	}
+-
+ 	wdog = &imx7ulp_wdt->wdd;
+ 	wdog->info = &imx7ulp_wdt_info;
+ 	wdog->ops = &imx7ulp_wdt_ops;
+@@ -402,16 +393,24 @@ static const struct dev_pm_ops imx7ulp_wdt_pm_ops = {
+ 
+ static const struct imx_wdt_hw_feature imx7ulp_wdt_hw = {
+ 	.prescaler_enable = false,
++	.post_rcs_wait = true,
++	.wdog_clock_rate = 1000,
++};
++
++static const struct imx_wdt_hw_feature imx8ulp_wdt_hw = {
++	.prescaler_enable = false,
++	.post_rcs_wait = false,
+ 	.wdog_clock_rate = 1000,
+ };
+ 
+ static const struct imx_wdt_hw_feature imx93_wdt_hw = {
+ 	.prescaler_enable = true,
++	.post_rcs_wait = false,
+ 	.wdog_clock_rate = 125,
+ };
+ 
+ static const struct of_device_id imx7ulp_wdt_dt_ids[] = {
+-	{ .compatible = "fsl,imx8ulp-wdt", .data = &imx7ulp_wdt_hw, },
++	{ .compatible = "fsl,imx8ulp-wdt", .data = &imx8ulp_wdt_hw, },
+ 	{ .compatible = "fsl,imx7ulp-wdt", .data = &imx7ulp_wdt_hw, },
+ 	{ .compatible = "fsl,imx93-wdt", .data = &imx93_wdt_hw, },
+ 	{ /* sentinel */ }
+-- 
+2.34.1
 
 
