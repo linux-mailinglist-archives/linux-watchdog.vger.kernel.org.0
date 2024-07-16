@@ -1,76 +1,76 @@
-Return-Path: <linux-watchdog+bounces-1397-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1398-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E14493200D
-	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Jul 2024 07:29:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B86AD93200F
+	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Jul 2024 07:30:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 791431F21DA2
-	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Jul 2024 05:29:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B27A21C2196A
+	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Jul 2024 05:30:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AF9A10A11;
-	Tue, 16 Jul 2024 05:29:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7367F15E9B;
+	Tue, 16 Jul 2024 05:30:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mTEZ8Bdo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X4WCSV17"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62CCF14265;
-	Tue, 16 Jul 2024 05:29:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1E4915EA6;
+	Tue, 16 Jul 2024 05:30:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721107789; cv=none; b=EklI/rsaoAE8lSSW7CAB/e7VYgFHvcTcYjwxU97CfcyA04bof+JQu1hYDmG9QXRj51bejFTAbjsRXebnZ4paYZLwHp6IuepnTk8vNEfzgVVjOEQF/paRENofjGK98OMUp+URzYI9C+IBw5Im12Sla+m6taWRtMWf3b4eBaGza60=
+	t=1721107819; cv=none; b=X/bwMElfTidyQdf2kreviIYe46rl5WDSgzbRbSor7RL82bIa48r4s8cVu2WLZ+a7WAnGk6Oqz5WwdX9Cp0AbK4jp1CiyeM8+jF3tLw+eOF6JTTJtEkOgDr78k/oGAtZbq+Wjf0yGCH87Am1MUbftRQifzVNYEPSZZPr4utSlzlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721107789; c=relaxed/simple;
-	bh=e46U/DiNcyi7HDcA3Cujr0BhJ99xGXxALF0PWvE10d4=;
+	s=arc-20240116; t=1721107819; c=relaxed/simple;
+	bh=+doUghyhtuWkTqmCEPxqUDaHMOU4eE3B8vBE9cMoIVw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Gl65yaPoAfEjwdiiGNBvLdqdYBJz9KWAXjPVndP5gjAyjAP0EHV7qNOy+pBdA7IgTJj30PtuhbK7A6lBPl3ZO4LV5+m/aMjmWemkylr02h0U5/1TzMmWYbuMUrZWa+bQIyjpFMqBFfUh7iwemWcVDA4r8Zp+nbbcQ4VPg97bW2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mTEZ8Bdo; arc=none smtp.client-ip=209.85.215.182
+	 In-Reply-To:Content-Type; b=Ni4XXJ+tJAKqYEv1nDnS9Fuz7KpQIDtWv0JxrRoJAw6ll+aYF5wfa5lVa4ddCiCRZ5cUAJzaQVTszbjcior/yFrTjrUDHsVNIKNcpToyq8ECNkcr04ShJDvyys8s9nxVGpt4l80s0XXp/ICeAlP3y9agZhJWMwiDzcEp/zfXKvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X4WCSV17; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-793a3a79a83so975242a12.3;
-        Mon, 15 Jul 2024 22:29:47 -0700 (PDT)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1fb3cf78fcaso34617575ad.1;
+        Mon, 15 Jul 2024 22:30:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721107787; x=1721712587; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721107817; x=1721712617; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=T05ApqdVkEZV4zjLsrh5xHJajwEHetva8Vcp3aNTwkM=;
-        b=mTEZ8BdoDJWS5UiuFXRDJ/RP458KQhEp3jei6XRUf2dSCZsuFfSorVev9A8Qw9B+gV
-         3U8Cr0kI+b5GC4jP442D3iblnOAHl0goJEARWDPCtNweN+T0drOsxZ9xwJ1R4zWbx40l
-         ntSFgLQ21u/d0UafUeYua+UR/fnLU/INzz1XJjDtX+psb+MK7PdilK18kqI9lrm5cu9S
-         J5qeLowtwZF108ZPQm2zKm2GE4sZUABnkJASbjf/3BRzjC872iROW5NQxeBC+U0Nk14s
-         01P8gjXyGyBWEnOlHJp6zGS69jLX9f9pb9fHR0S35X2iFfyUqH0J5fJx0HHC1VhNdTe6
-         O8JQ==
+        bh=9GvAbw2+QEdQ/vGjwyQTSMa6PXDq48QTGM5pRuyk3as=;
+        b=X4WCSV172HEb7UQgG319cfvZE5/jQ34ivph2cKs15uFzrODwuAW2ruJOkRK19l+ot2
+         mFzckH+CHAuSc3HWUqw8EVrn0ClGIiVyyVVhGlXCcD0BBBlIgGNiPEQ8HdN5zWmBsQwt
+         SRj8gdxRtjbbREfJXeoBbA3S0XvF1CVXCt0yjppPeOQKpDxy9eRQO7XHlF4/hFSTbZ8H
+         /5mfGv8mQN0w87+S1eEFxnfwZWcoZPfiEPXPnN2JxKZh9/DzM/6Pqz/AlST20eScNZ9j
+         c4IvSi2dh9QEtUAggMu+RoQtaOiURT8MfjpaNgdr/yBEZqsyXZCGt0e4cCkOVqzg1d13
+         E88Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721107787; x=1721712587;
+        d=1e100.net; s=20230601; t=1721107817; x=1721712617;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=T05ApqdVkEZV4zjLsrh5xHJajwEHetva8Vcp3aNTwkM=;
-        b=l+kw3DIvk2QW2T5rSp8Yyh+D5z13Wr08wt/dpQBXhgv9spdahpnL+E0YyYy5TkpwRE
-         SPQOpXvdJoPP/wyhAZkOvLRKSuoyMZowaPilwUQEo48cVFDgaSmGXU1lN0VJRdlvyM4S
-         Zr+fPXFSG17yy4MCZF/4Hu+8PuRSj+If6oH7pY5wOLTofTkU+P9nN+XQXZ3YZbG3wSJY
-         u4XVaoJeRBfx+ngaZNI/oQRfwgZrpQo+UWKh+LlrBdza1bPyomVUw9EgJQcTDHfxjHeA
-         EUq72FC0DP3+BN3P0ylw+dr96BXZx/P+iMV2bagGvtpm15sVEK9k7IVuLE2MxSHIYM0K
-         tfQA==
-X-Forwarded-Encrypted: i=1; AJvYcCWqdvksVxrIaLJJTysl20mLBC6s/O+cxf8R1UsF3Tk3nFIwiyjTn05Fe6XkeYTIeBwgwO57goc1DywTBENNitI//SVA06+2drYt8YY2
-X-Gm-Message-State: AOJu0YxkGVYfXEFG/cTmTapHNJRE8QTh6IrlTqMWrI/d3QkzFlQb8UW3
-	vJum+bSJ8L9WpIBgbKrq57tnm5RFk4xODUoxX67WPjwZq3fzct0P
-X-Google-Smtp-Source: AGHT+IHHXbdTJjx/VzGhEYT4vlHxhEz8vfmGVnL6yFcBjAZ1WaSlHUsRoucaaKJBZQOmCfv7YeifEg==
-X-Received: by 2002:a05:6a20:d50d:b0:1be:2e2e:5ae8 with SMTP id adf61e73a8af0-1c3f1274c64mr1208592637.40.1721107786563;
-        Mon, 15 Jul 2024 22:29:46 -0700 (PDT)
+        bh=9GvAbw2+QEdQ/vGjwyQTSMa6PXDq48QTGM5pRuyk3as=;
+        b=gQFAOG6KWLFwMNN0u8UFyOtkn5okJeKVUKzJkn92jSnKkwkISPXNA4xTGE9vi+u9Rb
+         XEy4N1LNQZz1nypldno9O41XiHwnomuZVhfvGP00gTap+6EjTDieCL9Jd6KEPjuk2Rop
+         bVvKScnJKv2sGPWRyKSQIZUhmPb0Yehu3XROilOo6hbdoTHQr0tkdFvwJ//GE+RY1hIg
+         qvr6FMXFRHdKbJ3KQ6mOSk9r9PlvnSbaoU3uWwnRWe7Mf6OdHdFe31XIiX8apnYFQQxw
+         H2gGab415CLUWS21z2NlhMITTF4AWE0CFnIEaIselzJyIMgKiGKgrx9ybBpdaRlb9lA9
+         mfcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX892wiDh0Uw4JFCgFFAdjPjgnZgaCzrqsd3ePmXNiTdYLXuIjdS7le08S8V0EK6GKv0RCuR4CT3jvuHH4Po8xR16ojjCd6n1WzVBxx
+X-Gm-Message-State: AOJu0YxfdljuI81sdHzlID/PI1n2Nv5fvzLbhT8wiAU1IBaA5Ht3Ts80
+	Vpw3bIObmW9Lo9vN81e++R1IR18pFrm+XJn3b74RYYt+i+pZH0VP
+X-Google-Smtp-Source: AGHT+IEPYMo8gYQskcf2kw99pQwQH1OCllXS7FMoIMYGSNM6L6DAQy+pgFEZUM+2aaKZ+iGvgV4H5g==
+X-Received: by 2002:a17:902:dacf:b0:1fb:48c3:9328 with SMTP id d9443c01a7336-1fc3da01822mr8143215ad.52.1721107816932;
+        Mon, 15 Jul 2024 22:30:16 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fc0bc5f7c0sm49712555ad.307.2024.07.15.22.29.45
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fc0bc39078sm49710055ad.228.2024.07.15.22.30.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jul 2024 22:29:45 -0700 (PDT)
+        Mon, 15 Jul 2024 22:30:16 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <464a6eca-e981-402b-a14c-61439d6fa4f2@roeck-us.net>
-Date: Mon, 15 Jul 2024 22:29:44 -0700
+Message-ID: <58be303d-d56c-4c56-9756-6b1b0441ccc2@roeck-us.net>
+Date: Mon, 15 Jul 2024 22:30:15 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -78,11 +78,11 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: lenovo_se10_wdt: Convert comma to semicolon
+Subject: Re: [PATCH] watchdog: rzn1: Convert comma to semicolon
 To: Chen Ni <nichen@iscas.ac.cn>, wim@linux-watchdog.org,
- mpearson-lenovo@squebb.ca, dober@lenovo.com
+ jjhiblot@traphandler.com, tzungbi@kernel.org, phil.edworthy@renesas.com
 Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240716030725.400400-1-nichen@iscas.ac.cn>
+References: <20240716031137.400502-1-nichen@iscas.ac.cn>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -128,14 +128,14 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240716030725.400400-1-nichen@iscas.ac.cn>
+In-Reply-To: <20240716031137.400502-1-nichen@iscas.ac.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/15/24 20:07, Chen Ni wrote:
+On 7/15/24 20:11, Chen Ni wrote:
 > Replace a comma between expression statements by a semicolon.
 > 
-> Fixes: 1f6602c8ed1e ("watchdog: lenovo_se10_wdt: Watchdog driver for Lenovo SE10 platform")
+> Fixes: d65112f58464 ("watchdog: Add Renesas RZ/N1 Watchdog driver")
 > Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
