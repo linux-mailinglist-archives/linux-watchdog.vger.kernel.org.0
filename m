@@ -1,194 +1,116 @@
-Return-Path: <linux-watchdog+bounces-1399-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1400-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74738932793
-	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Jul 2024 15:35:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0C69932842
+	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Jul 2024 16:23:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 009311F21730
-	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Jul 2024 13:35:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D24101C21A14
+	for <lists+linux-watchdog@lfdr.de>; Tue, 16 Jul 2024 14:23:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A6F14386C;
-	Tue, 16 Jul 2024 13:35:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ACF419CCE4;
+	Tue, 16 Jul 2024 14:23:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="EELSkW9F";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="WYnN1iCA";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="EELSkW9F";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="WYnN1iCA"
+	dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b="Kr38KrpQ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UKpFOr4/"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh6-smtp.messagingengine.com (fhigh6-smtp.messagingengine.com [103.168.172.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D37217C9FC
-	for <linux-watchdog@vger.kernel.org>; Tue, 16 Jul 2024 13:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D86619B593;
+	Tue, 16 Jul 2024 14:23:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721136920; cv=none; b=CHJKcDvPuHOYVSMXjgQlqfcgg/gvbq+2MXsWFMpmm2Po6Q6esHEF9mMvJtlE62RHFsvEZrGbpHVCqlwQ74jXfwpsRKiR+eX+9Q1zERL7D80/wzyNq8p9Ahdn815W7Ms9J19khF6Hnpdj9WoRPOXjALjGMbhUdRhwUsnb6Dazuw4=
+	t=1721139815; cv=none; b=Ajqpcv6O0KbhUmS952x2DSh84ptPg8EFXcK/LOS43P4GTkKcR76KqwMhzgDlBaVBsGmre7cxyPNP4xNKkZ3yOPLzb4mFJUFOsFuWIxv5aNGO3McTQbRDxN1JkY611eLM2Zt2nxumpyDLAmArR5PLwnWcpvm3UKxmVAQM2ZkzGTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721136920; c=relaxed/simple;
-	bh=Lj6UpcsfDxhNUkRl2ejtapRNpNO3Eem+zEWM6OfVY4w=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YIr9ZUOQqoSPUu1Ey9NI9PV3gdfmbz84CIhKMTqM8VBovVsx4N4SeZWxdN+AMTu6KAIjQIeGb+VL4NRwkbN5ifFoe3OXdp2cnLibImai6wCoxANlq36WkcUjHWedsPvTneqq3CeeEwzbVfxeoavz3RX3u8MzT6DfpReBSlBGRZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=EELSkW9F; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=WYnN1iCA; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=EELSkW9F; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=WYnN1iCA; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 9617421BE4;
-	Tue, 16 Jul 2024 13:35:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1721136917; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gNGpAHgHWZAsHIZiRBSse05NAY4jVykcuIaJQdFEVVE=;
-	b=EELSkW9FD5Z0+SmNu8sEl3Sa99KevOhUaoN8OMQ3SfQqBGU6QSZhhgqVgESnsNQYYptQ46
-	rYhtDL10/rWT8J5w5CH0nj9afa/dj5kipWviPrmmdySm8szYX3p4PkcOxeWiyI6BefTmEb
-	YidNIQakzusvnqAnFu08QoTD6F0VwYQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1721136917;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gNGpAHgHWZAsHIZiRBSse05NAY4jVykcuIaJQdFEVVE=;
-	b=WYnN1iCAaIcRhpHcQAGp6UVzkqb2PZaGO47srzBh4imkOok2zveMILvnvty6HmnPowS2uy
-	i8y65M7b5g5uz7CQ==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=EELSkW9F;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=WYnN1iCA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1721136917; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gNGpAHgHWZAsHIZiRBSse05NAY4jVykcuIaJQdFEVVE=;
-	b=EELSkW9FD5Z0+SmNu8sEl3Sa99KevOhUaoN8OMQ3SfQqBGU6QSZhhgqVgESnsNQYYptQ46
-	rYhtDL10/rWT8J5w5CH0nj9afa/dj5kipWviPrmmdySm8szYX3p4PkcOxeWiyI6BefTmEb
-	YidNIQakzusvnqAnFu08QoTD6F0VwYQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1721136917;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gNGpAHgHWZAsHIZiRBSse05NAY4jVykcuIaJQdFEVVE=;
-	b=WYnN1iCAaIcRhpHcQAGp6UVzkqb2PZaGO47srzBh4imkOok2zveMILvnvty6HmnPowS2uy
-	i8y65M7b5g5uz7CQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id DE4D713795;
-	Tue, 16 Jul 2024 13:35:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id zmeMLxR3lmbZbAAAD6G6ig
-	(envelope-from <jdelvare@suse.de>); Tue, 16 Jul 2024 13:35:16 +0000
-Date: Tue, 16 Jul 2024 15:35:12 +0200
-From: Jean Delvare <jdelvare@suse.de>
-To: Duoming Zhou <duoming@zju.edu.cn>
-Cc: Guenter Roeck <linux@roeck-us.net>, Wim Van Sebroeck
- <wim@linux-watchdog.org>, linux-watchdog@vger.kernel.org
-Subject: Re: Question about cpu5wdt del_timer fix
-Message-ID: <20240716153512.0e63ccbf@endymion.delvare>
-In-Reply-To: <20240703163958.20c6f00e@endymion.delvare>
-References: <20240703163958.20c6f00e@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-suse-linux-gnu)
+	s=arc-20240116; t=1721139815; c=relaxed/simple;
+	bh=E7ypFtpvfgmkGHvNpsJg2xVn9bjEX/pSLpLPWHddrdQ=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=GDZ/u8OhXv7LuGcDhYGYdV0xyBgMXhaxs1auzTU08rARNnqka8eXkWjQ/0hQZU5000tJXjApfeqp5NLEwI7W6YM6g4zTHuLOdoEBf1UpjXEuiX41UB33nfvEBTHqj24vBgXCTgJCJEI1wYNAsGBoGmd+MghH/yegiW8xpCGXvqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca; spf=pass smtp.mailfrom=squebb.ca; dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b=Kr38KrpQ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UKpFOr4/; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 3DEB711403B8;
+	Tue, 16 Jul 2024 10:23:30 -0400 (EDT)
+Received: from imap52 ([10.202.2.102])
+  by compute3.internal (MEProxy); Tue, 16 Jul 2024 10:23:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm3; t=1721139810; x=1721226210; bh=6Y3UdmOeL8
+	LalOZK3VA218nR0Bb5Owbmu16C8UWhXP0=; b=Kr38KrpQtX9mhQZGqghSEOkMJV
+	9y62WdPWidLufS6hY0ZObabevCXDSv6TID5QU5dZzIEKZd+wUScf87f3vYGbHjnc
+	js4pE/FZxlX1It5PGBWU2OmbsnztSNXZ0vaIjawCz/uLh4T/6Y4mgLijuI5JLk4S
+	erBEyb4z0AKl6ROOZMOGwqIwu2kDFqEBGRsGiiK2LQHnz7vdubsRo0zNOBXTBeG4
+	sKol50ruv3yWsjbKcRX2mcvtTdywoLiujNU3DQZmNFfRVmxd3bHKEhE5SYrHKHiz
+	Vv89eGhVWQRglaxoCkFxs4UAZftLuyyOPc+e2i2xUthdudMRacaOCeTySP7w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1721139810; x=1721226210; bh=6Y3UdmOeL8LalOZK3VA218nR0Bb5
+	Owbmu16C8UWhXP0=; b=UKpFOr4/Gx4LfQA3w1qHgtOJM+7U5a8fqf80yInab0I4
+	/bsbuUnOoMKN/WskJG0rg/YelKpo9dIToRy6RYLDJjbpWybVAJORAEBnIw4ztjm6
+	EIvR/lMvn9MTwkqjfC7YPVjn4BRssYlzgcPS+xTnkKO35BsRF6OcCM49EHrATVrI
+	YSJQBB9zFJVmp7B6itUmRT53lZNnA6J5UlL/0dphhBaHZ9v5vg3M59/hdzPoHPfX
+	z+z+QUjA9fz9ql9S5oHLveT3KsLUckYYzorn8KxnTTlgtZYMO7zix8ubl+/krEJ+
+	alYtQ9kEtGPxy9r3inaK1MX5Y9+CvOuAfPWizNcLFg==
+X-ME-Sender: <xms:YIKWZjGLgoAOzX1xYlqInQmCbmTHMktqyOqm3l536FcnLaSF7e-7qA>
+    <xme:YIKWZgVmxReI1Rn4iteN3M6N87WF9t6m4ADFxpfirUWAombmtukacpgIlfEXxrhr0
+    h3TCI8wXqzCr4YaQqA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrgeeggdejhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdforghr
+    khcurfgvrghrshhonhdfuceomhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrd
+    gtrgeqnecuggftrfgrthhtvghrnhepieeufeejieevteduvdekteefledtveffveduheff
+    feejudefvdeijeegudegkefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepmhhpvggrrhhsohhnqdhlvghnohhvohesshhquhgvsggsrdgtrg
+X-ME-Proxy: <xmx:YIKWZlJGsdKNLwQSmC1hqptH6E5_V0s2eXT2Nbg_hZLOcdNzZMCvnQ>
+    <xmx:YIKWZhEJJC8CPqgheKDudFFMftsYN1A1wJ64FQ-wu82VetUbeNeHfA>
+    <xmx:YIKWZpXmbMg43HM3rCb7k5DA_sIQVrvxsJMeH9DkJjEu9VlFaVSQYQ>
+    <xmx:YIKWZsOnynUx_9Cjj8WBJ5u50e6dS2FGMd7GI-SdtYUWuZ43jD97yg>
+    <xmx:YoKWZnf9kvqwkNC2qoeeseHU6suRrqaG5Hwr8G2lehfg4Zkp3bbzoCdy>
+Feedback-ID: ibe194615:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 5A234C60097; Tue, 16 Jul 2024 10:23:28 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-568-g843fbadbe-fm-20240701.003-g843fbadb
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 9617421BE4
-X-Spam-Flag: NO
-X-Spam-Score: -0.51
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-0.51 / 50.00];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	ARC_NA(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Level: 
-X-Spamd-Bar: /
+Message-Id: <dee10300-9441-445f-9d32-3a23e922cbc6@app.fastmail.com>
+In-Reply-To: <464a6eca-e981-402b-a14c-61439d6fa4f2@roeck-us.net>
+References: <20240716030725.400400-1-nichen@iscas.ac.cn>
+ <464a6eca-e981-402b-a14c-61439d6fa4f2@roeck-us.net>
+Date: Tue, 16 Jul 2024 10:23:06 -0400
+From: "Mark Pearson" <mpearson-lenovo@squebb.ca>
+To: "Guenter Roeck" <linux@roeck-us.net>, "Chen Ni" <nichen@iscas.ac.cn>,
+ "Wim Van Sebroeck" <wim@linux-watchdog.org>, "David Ober" <dober@lenovo.com>
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog: lenovo_se10_wdt: Convert comma to semicolon
+Content-Type: text/plain
 
-On Wed, 3 Jul 2024 16:39:58 +0200, Jean Delvare wrote:
-> I have been asked to backport kernel commit 573601521277 ("watchdog:
-> cpu5wdt.c: Fix use-after-free bug caused by cpu5wdt_trigger") because
-> it was assigned a CVE number (CVE-2024-38630).
-> 
-> I was about to just backport the commit as it is pretty simple, however
-> out of curiosity I looked at the code and I must say I just can't see
-> which bug is being fixed.
-> 
-> The commit description says that there was a race condition if
-> cpu5wdt_trigger() was still running after del_timer() when
-> release_region() is being called as part of cpu5wdt_exit().
-> 
-> The way I read the original code (before your commit):
-> 
-> * In cpu5wdt_exit(), del_timer() is called after
->   wait_for_completion(&cpu5wdt_device.stop).
-> 
-> * The completion happens at only one point in the driver, that's in
->   cpu5wdt_trigger(), and that's an alternative to rearming the timer.
->   Therefore we are guaranteed that no timer is armed when we reach
->   del_timer() in cpu5wdt_exit().
-> 
-> * Also this happens *after* the outb() to the I/O region, and I don't
->   think the compiler is allowed to reorder that. So even if
->   cpu5wdt_trigger() still has to finish after the completion, it can't
->   race with release_region().
-> 
-> So I do not think that replacing del_timer() with timer_shutdown_sync()
-> was needed. The only point of switching to timer_shutdown_sync(), as I
-> understand it, would be to get rid of the completion to simplify the
-> code a bit.
-> 
-> Am I missing anything?
+Hi Chen,
 
-Actually I did. One week of vacation gave me time to think about this
-some more and I do believe there was actually a race condition, but not
-the one described in commit 573601521277.
+Thank you for fixing this - I should have caught this originally :( 
+I'm slightly bemused that it worked at all.
 
-The race condition I am seeing (before this commit) is that
-cpu5wdt_exit() could complete, and thus the module be unloaded and
-cpu5wdt_trigger() be removed from memory, while the end of
-cpu5wdt_trigger() is still being executed (just one instruction
-actually, spin_unlock(&cpu5wdt_lock)).
+On Tue, Jul 16, 2024, at 1:29 AM, Guenter Roeck wrote:
+> On 7/15/24 20:07, Chen Ni wrote:
+>> Replace a comma between expression statements by a semicolon.
+>> 
+>> Fixes: 1f6602c8ed1e ("watchdog: lenovo_se10_wdt: Watchdog driver for Lenovo SE10 platform")
+>> Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-So the fix was needed after all and CVE-2024-38630 is real, even though
-I believe its description is incorrect.
-
-I also believe that timer_shutdown_sync() was not needed as driver
-cpu5wdt doesn't involve any workqueue, so timer_delete_sync() would
-have been sufficient.
-
--- 
-Jean Delvare
-SUSE L3 Support
+Reviewed-by: Mark Pearson <mpearson-lenovo@squebb.ca>
 
