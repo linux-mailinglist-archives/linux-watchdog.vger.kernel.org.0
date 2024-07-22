@@ -1,48 +1,48 @@
-Return-Path: <linux-watchdog+bounces-1410-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1411-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29906938AE3
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jul 2024 10:14:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF50E938AE8
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jul 2024 10:15:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4294281A93
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jul 2024 08:14:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48B4D1F21912
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jul 2024 08:15:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B23CB160877;
-	Mon, 22 Jul 2024 08:14:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE1CC16191B;
+	Mon, 22 Jul 2024 08:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tv+hTDoj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fzn8ZJ8c"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8164717C6C;
-	Mon, 22 Jul 2024 08:14:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F6035464A;
+	Mon, 22 Jul 2024 08:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721636046; cv=none; b=MbNTYyJiCl4c7IKOvLGP9+2kQTSNA/6+OrR0vNnCJvza8tD0+InfZv1dPbQjxlLBeaAMwd8vdzQLDulfGrk4ITH2tnNlD7yCjPQOOxe19SSKNtUHKxELzNxu/VExIVRdm9RK/Mv3rKsD/GwBjjVIXpvTzzTPl5Sh3l/doAUaZbg=
+	t=1721636111; cv=none; b=LHaWZ3vMvJcYXalP09u7P1zIzamlo3dNR85ZaG4R+2hX1BAsFr4RzEJAGEDHHRbVfeQ1DFmZGK43X19OL+IqKIpcS2JSMB+rKuKWqsRH3OmbHSD6v+yPxL5z2qy0ZTWPz3LBNl+FtnRez3+p6wG0xmB6nLWSQe2r5EUIPWkcneY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721636046; c=relaxed/simple;
-	bh=C2NaW+Zq4jOBuUR9+MZbp49gT4iqZ6mtDTCTDpEOTM0=;
+	s=arc-20240116; t=1721636111; c=relaxed/simple;
+	bh=0oGpUqOBsSf4I4Pw/8lsymXSnXjQMTGGP33mr2C9pas=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RyBLnmvIzOgn97LYnexkxIWVwrGjvbRmI4AJOi/t5aBiDTfqtiw6TiWpqdkmq0x+3feUhZls3a7x9iGIjOublQZLvVg1lbKiRApNMMyNnPYlwmS1C8Hc+tyb4LMbCKgcd/dOxb9NXTWgPZ9QfGYPMUZ3TSHzB/VSljsHcZiOrf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tv+hTDoj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DB88C116B1;
-	Mon, 22 Jul 2024 08:14:00 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=p7vdEqAYor2zJvC7YTkYfX43LwZqowLYdt5zhlsUAJfGWXhZpEYr9FuZhAKwNEa01X/UhLd2Mtwgw3zrCoyVCU6+gPjSacF2FIecnNW8g6CCKpQAZXrqyPJQaieOLc345FLWG2Dqk5m1N11PczFwMRk50EzfwdtDgvsIfN6aojA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fzn8ZJ8c; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B07BC116B1;
+	Mon, 22 Jul 2024 08:15:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721636046;
-	bh=C2NaW+Zq4jOBuUR9+MZbp49gT4iqZ6mtDTCTDpEOTM0=;
+	s=k20201202; t=1721636111;
+	bh=0oGpUqOBsSf4I4Pw/8lsymXSnXjQMTGGP33mr2C9pas=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Tv+hTDojuCaprW2AR+2ufnncWfv1wEAzrfqAfWQ5N8tFj3CdVsHCEj0nsiTPHnFn7
-	 Bzcjs71Db2pXYwZFo+0tiygnNdW9NFLLN7W/yi9uJHd0Jo06Mxo4zTw1wa1WeZs304
-	 XbsZ8cl/WxMaHM9ZUwWF1YqTDqC9Bvg88NNHgd6O2ZsoSntYRoXvJabI5nY8k2XH+w
-	 51ygR7qFVbtAirRSjpSTfz22kqiGi6nH6IADKHJl2opfjotErGuTwLyjd84OgmMaYi
-	 PbkQ6lbp1zPgavu/HjC5YOM3iKiSEj22vKSX7KGlRqnhaiG8X/udZNKDsIvTfSkJfg
-	 h1Iq5n/gOQ8qg==
-Message-ID: <e0e36e05-f565-48ad-9309-854b6fb7985c@kernel.org>
-Date: Mon, 22 Jul 2024 10:13:59 +0200
+	b=fzn8ZJ8cp3Zk82f3I2BNhhX9nARwMlxLqulmGtN1oKxM40LXbPT+K4c0loQzD9z71
+	 5pqKv4VTnmiSFGbziwuLAfC82WPLQNGA8QBbp0SQbn9GGI7HXTkcbtASAsYf/pwwDB
+	 5VYhAE0jTCkxyETKAjeN+hy/3Oe/Gtq4jYpcH1h5udXCr6xbAiWG30cKl7DskTeXij
+	 O1ZLislpim2QOatQFticCmor+y1gZCDKYP6bg+ycxiwwnJaWH0YddhQ2zyWEHi3/G3
+	 2B/mXmic2HWCiojOe8/EpGBEZBXeK0TETE9n617J/Tt7PmUW5+n7R2WRgPM5XbO3Jd
+	 EyIzyX1wUBtrw==
+Message-ID: <629a925c-24ef-4a44-832f-a06a60c266a7@kernel.org>
+Date: Mon, 22 Jul 2024 10:15:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 3/3] ARM: dts: davinci, keystone: correct watchdog
- nodenames
+Subject: Re: [RFC PATCH 2/3] dt-bindings: watchdog: ti,davinci-wdt: convert to
+ dtschema
 To: Kousik Sanagavarapu <five231003@gmail.com>,
  Daniel Lezcano <daniel.lezcano@linaro.org>,
  Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>,
@@ -62,7 +62,7 @@ To: Kousik Sanagavarapu <five231003@gmail.com>,
 Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20240721170840.15569-1-five231003@gmail.com>
- <20240721170840.15569-4-five231003@gmail.com>
+ <20240721170840.15569-3-five231003@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -108,35 +108,52 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240721170840.15569-4-five231003@gmail.com>
+In-Reply-To: <20240721170840.15569-3-five231003@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 21/07/2024 18:28, Kousik Sanagavarapu wrote:
-> Using "wdt" instead of "watchdog" for watchdog timer nodes doesn't allow
-> for validation with the corresponding dtschema and gives errors
-> 
-> 	$ make CHECK_DTBS=y DT_SCHEMA_FILES=ti,davinci-wdt.yaml \
-> 		ti/keystone/keystone-k2g-ice.dtb
-> 
-> 	DTC_CHK arch/arm/boot/dts/ti/keystone/keystone-k2g-ice.dtb
-> 	arch/arm/boot/dts/ti/keystone/keystone-k2g-ice.dtb:
-> 	wdt@02250000: $nodename:0: 'wdt@02250000' does not match
-> 	'^(timer|watchdog)(@.*|-([0-9]|[1-9][0-9]+))?$'
-> 	from schema $id:
-> 	http://devicetree.org/schemas/watchdog/ti,davinci-wdt.yaml#
-> 
-> Therefore change "wdt@" to "watchdog@".
-> 
-> While at it, remove "ti,davinci-wdt" compatible from the keystone dts
-> code.
+> diff --git a/Documentation/devicetree/bindings/watchdog/ti,davinci-wdt.yaml b/Documentation/devicetree/bindings/watchdog/ti,davinci-wdt.yaml
+> new file mode 100644
+> index 000000000000..1829c407147d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/watchdog/ti,davinci-wdt.yaml
 
-That's entirely unrelated patch. Don't mix simple cleanups with patches
-affecting ABI and users. Also, explain why.
+Use fallback as filename, so ti,keystone-wdt.yaml
 
-> 
-> Signed-off-by: Kousik Sanagavarapu <five231003@gmail.com>
-> ---
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/watchdog/ti,davinci-wdt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TI DaVinci/Keystone Watchdog Timer Controller
+> +
+> +maintainers:
+> +  - Kousik Sanagavarapu <five231003@gmail.com>
+> +
+> +description: |
+> +  TI's Watchdog Timer Controller for DaVinci and Keystone Processors.
+> +
+> +  Datasheets
+> +
+> +    Davinci DM646x - https://www.ti.com/lit/ug/spruer5b/spruer5b.pdf
+> +    Keystone - https://www.ti.com/lit/ug/sprugv5a/sprugv5a.pdf
+> +
+> +allOf:
+> +  - $ref: watchdog.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,davinci-wdt
+> +      - ti,keystone-wdt
+
+This does not match the original binding and commit msg did not explain
+why such change is necessary.
+
+This also does not match DTS.
 
 
 Best regards,
