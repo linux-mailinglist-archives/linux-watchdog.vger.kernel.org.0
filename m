@@ -1,48 +1,48 @@
-Return-Path: <linux-watchdog+bounces-1417-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1418-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5098939050
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jul 2024 16:07:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E31CE939057
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jul 2024 16:08:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FD171F21F6F
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jul 2024 14:07:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA896B216E2
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jul 2024 14:08:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1931B16D9C8;
-	Mon, 22 Jul 2024 14:07:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C913316D9C9;
+	Mon, 22 Jul 2024 14:08:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lxTc7X+D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dqfOb+qm"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6FDE8F5E;
-	Mon, 22 Jul 2024 14:07:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC661DFE3;
+	Mon, 22 Jul 2024 14:08:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721657256; cv=none; b=NnHysHWi/BJdjTaAg/w6jfK+w80cz9aw9KbF4fGp9xhiXQDP7KmTl/zZd1RlYrG3QdnOPlVmBYHG3ghbrIBdhLkP0NQZEf7B0M+JOPolNI6lGyeYrac8z7jpJdcN2NdfBmTqZUUxyvHpZAZbEKbSQGv5mgTUOsA99KBoSxk7VjU=
+	t=1721657298; cv=none; b=gFw+vRSs0zJx4XFTnlRPH8Zudvf62v5X/LbrRZC5GgxSWV7NpouZXxG7CR2iWLcxEwrTEB1TtB1SsZJbyi58jmVf0fAGLZ3e8jFeYljcISfaUSdZi9pt5Twf5Rne4iJPfJfAZceOcTcGfwg//xy8VqLePuSq7E8lTo1+Dhs4mh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721657256; c=relaxed/simple;
-	bh=X2Dq9EEgIsw217TATz57R704BTL8O+bNFphSbNYfFVU=;
+	s=arc-20240116; t=1721657298; c=relaxed/simple;
+	bh=N6IiowuXKaiT8NYw3UN1F4KTF+aBzmB19xg+QeJxfA4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q9oqK6t5ZKKEIrwrVaHIjAUGbUAqWA+/9IooOcbQ4mZeQJ48Pr+PyLwCMy3VP9e6K99IiM18CMtUdIFAN6zYbdn+vsjCj7EiHc0WV/Lba/9thG75IGsKFEJSAY8pTFD5O5aodTxAkrpcDfdcpmQqBgdYFCnKgIdXRKOZ0cVeSZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lxTc7X+D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 112B6C116B1;
-	Mon, 22 Jul 2024 14:07:29 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=SaZWNQUqtrBCB6gY58hFdOkqPzK7Bj8nYT1vb64Gmdr9k5xkSDafXUrU9HyTx/0vSddTlCv5eWiTDRklJPi9KkKidNbj5fcQLHYkFkb3pZ4bHc1LVu2T0FigqvukAaAZBcBERXyQwhBa+R6nUDRnSiqXt/35fTUq8XMOQNn71kE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dqfOb+qm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0DD8C116B1;
+	Mon, 22 Jul 2024 14:08:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721657255;
-	bh=X2Dq9EEgIsw217TATz57R704BTL8O+bNFphSbNYfFVU=;
+	s=k20201202; t=1721657298;
+	bh=N6IiowuXKaiT8NYw3UN1F4KTF+aBzmB19xg+QeJxfA4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lxTc7X+DqbXcwu0lTAP6ofwGu7Ww9JRnyg3cZBFaaeDujewWiTwNFSGgCj57Exy3s
-	 MmxuxSCfkCtdv7o3NYZXw4S5boca2vyFol9Prn21guqlpYyGEf7nX+KiDS5GNngpsM
-	 7zlL0iQ7u9ZsCG9gK4GiHvpmr2q9ZO5GNeQjCyABSHO08oJCPBsuaIaYd9+UYHOboD
-	 CSqBBlOzZ26tlXV0rqwfy3bx5nW9z9AXMj+S6ow6TkO4bH6VJ7XQ0MHq4CsOzIb8sl
-	 UB51yaC/K02dRtlz9qBtFqCVXAVw83poq0CloWaCo22cWk7+c5aKQm8ZcNCPC81rR1
-	 7/DMc1QPaoyLA==
-Message-ID: <f2dffc5d-9598-4722-8a24-8ad113c9321a@kernel.org>
-Date: Mon, 22 Jul 2024 16:07:27 +0200
+	b=dqfOb+qm3Gr6Tc7r8QA6xQiAIdbGcNUDKMfw+LGZrdiPCD0Up4ptskT7f12pMMHSS
+	 rtYmNc5Q8RGAvYqccBiX65mUSF9N+JxwAbcVP4Y2qC/OWDj6K2hbeT6YghJB1SfALf
+	 POCTluzGcPx0xzfzMwYc+crZ6suafKeephJdUouF4+myIdIhS+DrWi1FZmJmiqMCBP
+	 hP80dTaczo79KB9r3BCheVE8aPlD7Z84Qkp9ijlN5m8e6A7gRWUd0DpYY3kpwUSqpi
+	 HkTzsY1gk+fiJNVt9i4/dm477pOzGpmVtXYL/Jbpg/7N7UNM62o8sjPuzcwW6WHuaA
+	 8XdMFA4zzPoEg==
+Message-ID: <0f1becb9-56e9-4b71-b9ca-263dd6592c43@kernel.org>
+Date: Mon, 22 Jul 2024 16:08:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 3/3] ARM: dts: davinci, keystone: correct watchdog
- nodenames
+Subject: Re: [RFC PATCH 2/3] dt-bindings: watchdog: ti,davinci-wdt: convert to
+ dtschema
 To: Kousik Sanagavarapu <five231003@gmail.com>
 Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
  Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>,
@@ -62,11 +62,13 @@ Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
  linux-arm-kernel@lists.infradead.org, linux-watchdog@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20240721170840.15569-1-five231003@gmail.com>
- <20240721170840.15569-4-five231003@gmail.com>
- <e0e36e05-f565-48ad-9309-854b6fb7985c@kernel.org>
- <Zp5c9rNyNJwQZ4+k@five231003>
-Content-Language: en-US
+ <20240721170840.15569-3-five231003@gmail.com>
+ <629a925c-24ef-4a44-832f-a06a60c266a7@kernel.org>
+ <Zp5asqhipQHEoviM@five231003>
+ <2d8ceef8-9d5e-42a9-af2e-f9292728a3bf@kernel.org>
+ <Zp5mkcDca6jRvOnf@five231003>
 From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -110,27 +112,75 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <Zp5c9rNyNJwQZ4+k@five231003>
+In-Reply-To: <Zp5mkcDca6jRvOnf@five231003>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 22/07/2024 15:21, Kousik Sanagavarapu wrote:
-> On Mon, Jul 22, 2024 at 10:13:59AM +0200, Krzysztof Kozlowski wrote:
->> On 21/07/2024 18:28, Kousik Sanagavarapu wrote:
->>> Using "wdt" instead of "watchdog" for watchdog timer nodes doesn't allow
->>> for validation with the corresponding dtschema and gives errors
+On 22/07/2024 16:02, Kousik Sanagavarapu wrote:
+> On Mon, Jul 22, 2024 at 03:50:15PM +0200, Krzysztof Kozlowski wrote:
+>> On 22/07/2024 15:12, Kousik Sanagavarapu wrote:
+>>> On Mon, Jul 22, 2024 at 10:15:03AM +0200, Krzysztof Kozlowski wrote:
+>>>> On 21/07/2024 18:28, Kousik Sanagavarapu wrote:
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    enum:
+>>>>> +      - ti,davinci-wdt
+>>>>> +      - ti,keystone-wdt
+>>>>
+>>>> This does not match the original binding and commit msg did not explain
+>>>> why such change is necessary.
 >>>
->>> [...]
+>>> I don't understand.  Do you mean both the compatibles are always
+>>> compulsory?  Meaning
 >>>
->> That's entirely unrelated patch. Don't mix simple cleanups with patches
->> affecting ABI and users. Also, explain why.
+>>> 	compatible:
+>>> 	  items:
+>>> 	    - const: ti,davinci-wdt
+>>> 	    - const: ti,keystone-wdt
+>>
+>> Yes, this is what old binding said.
 > 
-> Got it.  Will submit v2 as a seperate patch, outside of this series.
+> That was what I thought initially too, but the example in the old
+> binding says otherwise and also the DTS from ti/davinci/da850.dtsi
+> says
+> 
+> 	wdt: watchdog@21000 {
+> 		compatible = "ti,davinci-wdt";
+> 		reg = <0x21000 0x1000>;
+> 		clocks = <&pll0_auxclk>;
+> 		status = "disabled";
+> 	};
+> 
+> Or am I seeing it the wrong way?
+> 
+>>>
+>>> It is enum because I intended it to align with the subsequent patch
+>>> which changes DTS.
+>>>
+>>>> This also does not match DTS.
+>>>
+>>> Yes.  I've asked about changing the DTS in the subsequent patch.
+>>>
+>>
+>> Changing the DTS cannot be the reason to affect users and DTS... It's
+>> tautology. You change DTS because you intent to change DTS?
+> 
+> Not exactly.  I thought that the DTS was wrong when it said
+> 
+> 	compatible = "ti,keystone-wdt", "ti,davinci-wdt";
+> 
+> while it should have been
+> 
+> 	compatible = "ti,keystone-wdt";
+> 
+> I was not sure about this though and hence marked both the patches as
+> RFC, in case I was interpretting them the wrong way.
 
-... and carefully re-think why. I am 99% sure your patch breaks the
-users. Better if you test your changes.
-
-Conversion of the bindings is a task which requires to know how DTS works.
+Ah, right, the DTS says keystone+davinci while old binding suggested
+davinci+keystone. Considering there is no driver binding to keystone, I
+think the answer is obvious - intention was keystone+davinci. Anyway,
+commit msg should mention why you are doing something else than pure
+conversion.
 
 Best regards,
 Krzysztof
