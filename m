@@ -1,159 +1,138 @@
-Return-Path: <linux-watchdog+bounces-1416-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1417-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D5A1939046
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jul 2024 16:03:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5098939050
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jul 2024 16:07:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46E491C208AF
-	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jul 2024 14:03:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FD171F21F6F
+	for <lists+linux-watchdog@lfdr.de>; Mon, 22 Jul 2024 14:07:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68AA3161311;
-	Mon, 22 Jul 2024 14:03:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1931B16D9C8;
+	Mon, 22 Jul 2024 14:07:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EKhelIAJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lxTc7X+D"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA858F5E;
-	Mon, 22 Jul 2024 14:03:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6FDE8F5E;
+	Mon, 22 Jul 2024 14:07:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721656987; cv=none; b=TObr26riQUF4nnAQ55XOZwPj/mW+kiqf6F4SylHu1yRzdqeN3W4sPBHlrA/6A2sUO1Tk8WveQe94Pm7gjgnezzK7J2KjEDurZILxu9NfsypTb8lmxVR0NUz2n6OPuMUyrvfg1p2C0RMIzvIs9dXXJrYmZvME+9RnBalz+NejG3g=
+	t=1721657256; cv=none; b=NnHysHWi/BJdjTaAg/w6jfK+w80cz9aw9KbF4fGp9xhiXQDP7KmTl/zZd1RlYrG3QdnOPlVmBYHG3ghbrIBdhLkP0NQZEf7B0M+JOPolNI6lGyeYrac8z7jpJdcN2NdfBmTqZUUxyvHpZAZbEKbSQGv5mgTUOsA99KBoSxk7VjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721656987; c=relaxed/simple;
-	bh=ynwZ4t58tKSgmVQqyFTQtFETjRIxYDGf7mo1oxOOCAk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s66N7bBKDJUKEo140Hp3EDHJyaWE48Sjn3PWx0SCNIYXLRdhb6JrgvXdQFGhw/MeUUsYVTzvIoMfcynMlNnMIzPOqOkHRO6Ai0KiK1HjJu4PgaUJM9UtdlZPJHb+uGy+6f7f4uZbZkmbaevpcUXa0JhPau8DQQTKfgDG67arrJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EKhelIAJ; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1fd66cddd4dso25214895ad.2;
-        Mon, 22 Jul 2024 07:03:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721656985; x=1722261785; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mtHNdbyEsPDzz18RGuCJiRbWlFGvSqg44axaeswU7vE=;
-        b=EKhelIAJaxwSYkqNXwfDAWanfkunjSvZZrrfBiHxPb2il5m/+PO3d/3qSnrUTR9nKN
-         wmwrAuX8rF6jWNtvNPIkwe60aTzmC1fV8bfCNYupO6QSsUxYKRxi5EOlpA131gfzEjh3
-         R4LeyG7VW3YsKSZKTGf7l/freRl/6nU2F6K0NEPexjLVy/BhiHXiqEdFilMg80v6xETe
-         f0uVlgA+JYqmR07AkioKxViLL3rgFWjXzhLpbTS21Sre87qBhtpetjwoKzJ6dkdUw/3h
-         x/erFXnUVNuco6bx6sM1LftJsbw9jI1M3c4W+2IPHOQhK9q47cF98JoUdrptCDIbzDfm
-         MVgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721656985; x=1722261785;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mtHNdbyEsPDzz18RGuCJiRbWlFGvSqg44axaeswU7vE=;
-        b=YxX+o7uAJIvxFp5QBuG7DCNW1chOW/jaozc7K1z+egnqcI8QXZasNdCh2tcfYMWCmM
-         BkA/6m5PguANrsQS9UncyQzPUtqhNDgVxb6gjnTHHGGvJDH7ASr0OV5Zw2zTsjZ0dzls
-         g60kwef0scNE+Ob5xLLixSpRBMBQ7fFgrUia7MnXqsx8hwnA56yFXoHaUkbeYzrPEOs4
-         JTMkohgZlzIyRgDa8ONcN/OkshWuJ4YsDdqSbbeVkCq7G0S6asTcV4cXF5YMns//f2cg
-         8KJTKoHiX9KC25lD7CrTj4UJJmdUhbLzQuJP5wp6piWtxr93T+MtGkJanm0mMRhjQPdQ
-         uTmg==
-X-Forwarded-Encrypted: i=1; AJvYcCVW4PuTg9TnGrQg5iAPhkRift0aGDEfcjpQoc06x3ulmkdVeFmQFmj6N2KNwzGvYtbvXpasNwHYvSxxB2ini2EnHhjbvE3NX9CnS2g82Mf9n8Gnp9T5K5hVw9Zy9HWCFq+sDF5fo/sej7c+7swgNM/l+ikKdgscdqlsIORyKuWT7VefQryGJ4e1
-X-Gm-Message-State: AOJu0YzRN3MQ00aE+uR0fILBnkxHqGqYc/FWAxBRGOz2P6aqbdkFMwXH
-	BanKQbCuUfis5MO/bRtd+3fs6r7DWhDbhJHatKRhjpf+FZ7c/Dqc
-X-Google-Smtp-Source: AGHT+IGFt3jkG6S7Vi8FeT6dkF7VryXqlry4aVmBf5zMYAhOQLHSE0E5fAr5qap1gGLWd1gskjd4EQ==
-X-Received: by 2002:a17:90b:789:b0:2c9:69d2:67a8 with SMTP id 98e67ed59e1d1-2cd16037674mr6660232a91.9.1721656985062;
-        Mon, 22 Jul 2024 07:03:05 -0700 (PDT)
-Received: from five231003 ([2405:201:c006:312d:8653:831a:b06f:a502])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cb772c23a8sm8322709a91.1.2024.07.22.07.02.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jul 2024 07:03:04 -0700 (PDT)
-Date: Mon, 22 Jul 2024 19:32:57 +0530
-From: Kousik Sanagavarapu <five231003@gmail.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Nishanth Menon <nm@ti.com>,
-	Santosh Shilimkar <ssantosh@kernel.org>, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 2/3] dt-bindings: watchdog: ti,davinci-wdt: convert
- to dtschema
-Message-ID: <Zp5mkcDca6jRvOnf@five231003>
-References: <20240721170840.15569-1-five231003@gmail.com>
- <20240721170840.15569-3-five231003@gmail.com>
- <629a925c-24ef-4a44-832f-a06a60c266a7@kernel.org>
- <Zp5asqhipQHEoviM@five231003>
- <2d8ceef8-9d5e-42a9-af2e-f9292728a3bf@kernel.org>
+	s=arc-20240116; t=1721657256; c=relaxed/simple;
+	bh=X2Dq9EEgIsw217TATz57R704BTL8O+bNFphSbNYfFVU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=q9oqK6t5ZKKEIrwrVaHIjAUGbUAqWA+/9IooOcbQ4mZeQJ48Pr+PyLwCMy3VP9e6K99IiM18CMtUdIFAN6zYbdn+vsjCj7EiHc0WV/Lba/9thG75IGsKFEJSAY8pTFD5O5aodTxAkrpcDfdcpmQqBgdYFCnKgIdXRKOZ0cVeSZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lxTc7X+D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 112B6C116B1;
+	Mon, 22 Jul 2024 14:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721657255;
+	bh=X2Dq9EEgIsw217TATz57R704BTL8O+bNFphSbNYfFVU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=lxTc7X+DqbXcwu0lTAP6ofwGu7Ww9JRnyg3cZBFaaeDujewWiTwNFSGgCj57Exy3s
+	 MmxuxSCfkCtdv7o3NYZXw4S5boca2vyFol9Prn21guqlpYyGEf7nX+KiDS5GNngpsM
+	 7zlL0iQ7u9ZsCG9gK4GiHvpmr2q9ZO5GNeQjCyABSHO08oJCPBsuaIaYd9+UYHOboD
+	 CSqBBlOzZ26tlXV0rqwfy3bx5nW9z9AXMj+S6ow6TkO4bH6VJ7XQ0MHq4CsOzIb8sl
+	 UB51yaC/K02dRtlz9qBtFqCVXAVw83poq0CloWaCo22cWk7+c5aKQm8ZcNCPC81rR1
+	 7/DMc1QPaoyLA==
+Message-ID: <f2dffc5d-9598-4722-8a24-8ad113c9321a@kernel.org>
+Date: Mon, 22 Jul 2024 16:07:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2d8ceef8-9d5e-42a9-af2e-f9292728a3bf@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 3/3] ARM: dts: davinci, keystone: correct watchdog
+ nodenames
+To: Kousik Sanagavarapu <five231003@gmail.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Guenter Roeck <linux@roeck-us.net>, Nishanth Menon <nm@ti.com>,
+ Santosh Shilimkar <ssantosh@kernel.org>, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-watchdog@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240721170840.15569-1-five231003@gmail.com>
+ <20240721170840.15569-4-five231003@gmail.com>
+ <e0e36e05-f565-48ad-9309-854b6fb7985c@kernel.org>
+ <Zp5c9rNyNJwQZ4+k@five231003>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <Zp5c9rNyNJwQZ4+k@five231003>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jul 22, 2024 at 03:50:15PM +0200, Krzysztof Kozlowski wrote:
-> On 22/07/2024 15:12, Kousik Sanagavarapu wrote:
-> > On Mon, Jul 22, 2024 at 10:15:03AM +0200, Krzysztof Kozlowski wrote:
-> >> On 21/07/2024 18:28, Kousik Sanagavarapu wrote:
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    enum:
-> >>> +      - ti,davinci-wdt
-> >>> +      - ti,keystone-wdt
-> >>
-> >> This does not match the original binding and commit msg did not explain
-> >> why such change is necessary.
-> > 
-> > I don't understand.  Do you mean both the compatibles are always
-> > compulsory?  Meaning
-> > 
-> > 	compatible:
-> > 	  items:
-> > 	    - const: ti,davinci-wdt
-> > 	    - const: ti,keystone-wdt
+On 22/07/2024 15:21, Kousik Sanagavarapu wrote:
+> On Mon, Jul 22, 2024 at 10:13:59AM +0200, Krzysztof Kozlowski wrote:
+>> On 21/07/2024 18:28, Kousik Sanagavarapu wrote:
+>>> Using "wdt" instead of "watchdog" for watchdog timer nodes doesn't allow
+>>> for validation with the corresponding dtschema and gives errors
+>>>
+>>> [...]
+>>>
+>> That's entirely unrelated patch. Don't mix simple cleanups with patches
+>> affecting ABI and users. Also, explain why.
 > 
-> Yes, this is what old binding said.
+> Got it.  Will submit v2 as a seperate patch, outside of this series.
 
-That was what I thought initially too, but the example in the old
-binding says otherwise and also the DTS from ti/davinci/da850.dtsi
-says
+... and carefully re-think why. I am 99% sure your patch breaks the
+users. Better if you test your changes.
 
-	wdt: watchdog@21000 {
-		compatible = "ti,davinci-wdt";
-		reg = <0x21000 0x1000>;
-		clocks = <&pll0_auxclk>;
-		status = "disabled";
-	};
+Conversion of the bindings is a task which requires to know how DTS works.
 
-Or am I seeing it the wrong way?
+Best regards,
+Krzysztof
 
-> > 
-> > It is enum because I intended it to align with the subsequent patch
-> > which changes DTS.
-> > 
-> >> This also does not match DTS.
-> > 
-> > Yes.  I've asked about changing the DTS in the subsequent patch.
-> > 
-> 
-> Changing the DTS cannot be the reason to affect users and DTS... It's
-> tautology. You change DTS because you intent to change DTS?
-
-Not exactly.  I thought that the DTS was wrong when it said
-
-	compatible = "ti,keystone-wdt", "ti,davinci-wdt";
-
-while it should have been
-
-	compatible = "ti,keystone-wdt";
-
-I was not sure about this though and hence marked both the patches as
-RFC, in case I was interpretting them the wrong way.
-
-Thanks
 
