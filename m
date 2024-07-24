@@ -1,113 +1,134 @@
-Return-Path: <linux-watchdog+bounces-1421-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1422-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3E0C93A392
-	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Jul 2024 17:14:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25BC093B0DF
+	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Jul 2024 14:14:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F1B328457C
-	for <lists+linux-watchdog@lfdr.de>; Tue, 23 Jul 2024 15:14:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84FAFB21702
+	for <lists+linux-watchdog@lfdr.de>; Wed, 24 Jul 2024 12:14:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BD8C155753;
-	Tue, 23 Jul 2024 15:14:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E428157489;
+	Wed, 24 Jul 2024 12:14:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="eLapEhgL"
+	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="u4jp/u9j"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA31D15445E;
-	Tue, 23 Jul 2024 15:14:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 655D5155740;
+	Wed, 24 Jul 2024 12:14:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721747690; cv=none; b=e5dg3csDuU22VEs3leJd7VVgaB0SYp97OKTB0ypLww6SW3LM9PbKDLn/X8jDjPf59z+sESD7y3dqsLRmu8YtvCMafOiLI1B3sqVqbT5srouWsacXSrRi1CmEPH7njEHyxybjFWOZE62xRW/FoOBJ5ua643LvOnQfY5+v/qo6n5Q=
+	t=1721823272; cv=none; b=M1HhSStc4iqAlBWhphfB92C94t42EAk8GCq7I6iq4g5kxwlG8WTM0TQEEJWP0MuwrcYznJ+Im1rb1v6xVCLOn2tAwz6msrqRTol5FSSEYh+L1SY4/PLIrkFV0yPZ0IS9VFbDmXAdmixfSYb1uty4G/AIsn1aOXbNlTo7RBWGbDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721747690; c=relaxed/simple;
-	bh=Cq67rOMLvvxvMkMeTU2TSWpFfXHa040dLmsPdMkfreo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SitaSSN/uQyFZ7p3AxHZ/e/3RlVjFRTg8H9kPPJVSBZ89MFax+UpYNeJCnvi36ZuFB2ZxZ7+FjljpCbNAF9pn5yFwbg952acO6SBkf5wBqwUjb5tICtmLc7VvtIYFn2ESpdjrD8i/gRrjW37G0N6j+hJefr6SRgs3XkYu9DYbuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=eLapEhgL; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=VTgL5ge11jBWnXDpOUwdP8RTW1RcdJWmSf5FeYaWObU=; b=eLapEhgLQwOvy/aRkTlLU3y5KO
-	G6h5VIcP+h/85L2oglrmVT45vXtTIhS6PId3E52cLWcfyGRcQNNo1l44YhFn1P44TKHfZumSdp2BH
-	zPpaLsqNA7E6Fv3kubjqiSgcjlLL3OXmlt575Uy7QL6Ut5cVyBQdjCJON+wXixV2cTcHX4j2p2ncm
-	BYi5+NGrY1kaPKitajqxzebVrIbJzahyXjCvbqUXhIiGXBvMyUySyewz03YMgnjopUlc5KH5DiEp3
-	hVtgZH0dvaQkU8onQ51IE3hcrqMj7tHE6hKXCvu9ElQsAOE24FbKbBFq8UBfFFYChklZPqmn6IcXk
-	iHZK5JOw==;
-Received: from [50.53.4.147] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sWHDx-0000000CqyF-2IxX;
-	Tue, 23 Jul 2024 15:14:45 +0000
-Message-ID: <63e6c29d-3335-46f4-b296-4c7856abcb35@infradead.org>
-Date: Tue, 23 Jul 2024 08:14:43 -0700
+	s=arc-20240116; t=1721823272; c=relaxed/simple;
+	bh=xmgN7D/hlJ4G3cTmV/7yO3RBYg43xuFNUEG6p+7+jOI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=rQpl5623lk1EXd5v/2fZt/B8+SIiNeQ8slf4C8yrLvdoX+lG/BMysqKYpPEGXsdSmA/0oTKH886VDj/DsFa93CkHSDX1mrKOkhfgleo37+CRf1NzjEnw6ksM/iBwfhaOPcXTfG90Ao10ZQju9vj6W4pQ5LNTfM+RT6p8iULy2nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=u4jp/u9j; arc=none smtp.client-ip=185.87.125.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+	id 8A116409F1; Wed, 24 Jul 2024 13:52:54 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 8A116409F1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+	s=odk20180602; t=1721821974;
+	bh=xmgN7D/hlJ4G3cTmV/7yO3RBYg43xuFNUEG6p+7+jOI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=u4jp/u9jTfh1K7yoUgNtCCTWiusKZ8kO7QyLnmrn8QtT+hV4M0aFuAOy2Akdiw696
+	 5EW9lH+t4Xw/egjdcqBek8bz4b9ZwbdMrjrzPsNkxWc8i1Y0//Qk5aq6+eCVFDAvu4
+	 U3qKKjOcZ0yxNA28UGhYLKVZvjcB8AIZXxiXRhZs=
+Date: Wed, 24 Jul 2024 13:52:54 +0200
+From: Wim Van Sebroeck <wim@linux-watchdog.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Biju Das <biju.das.jz@bp.renesas.com>, Chen Ni <nichen@iscas.ac.cn>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject: [GIT PULL REQUEST] watchdog - v6.11 release cycle.
+Message-ID: <20240724115254.GA19031@www.linux-watchdog.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Capitalize Farenheit
-To: Guenter Roeck <linux@roeck-us.net>,
- David Hunter <david.hunter.linux@gmail.com>, wim@linux-watchdog.org,
- corbet@lwn.net, linux-watchdog@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: skhan@linuxfoundation.org, javier.carrasco.cruz@gmail.com
-References: <20240723131849.264939-1-david.hunter.linux@gmail.com>
- <2de779a1-be76-4aab-8440-9b01a2cc22ce@roeck-us.net>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <2de779a1-be76-4aab-8440-9b01a2cc22ce@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.5.20 (2009-12-10)
 
+Hi Linus,
 
+On this sad day where the belgian linux community said goodbye to P2:
+Please pull following watchdog changes for the v6.11 release cycle.
 
-On 7/23/24 6:57 AM, Guenter Roeck wrote:
-> On 7/23/24 06:18, David Hunter wrote:
->> Not capitalizing "fahrenheit" is an extremely minor spelling mistake.
->> This commit fixes that.
->>
-> 
-> Please at least follow guidelines for submitting patches, specifically
-> 
-> "Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
->  instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
->  to do frotz", as if you are giving orders to the codebase to change
->  its behaviour.
-> "
-> 
-> Guenter
-> 
+This series contains:
+* Make watchdog_class const
+* reworking of the rzg2l_wdt driver
+* Other small fixes and improvements
 
-Also, please spell it correctly in the $Subject.
+The output from git request-pull:
+----------------------------------------------------------------
+The following changes since commit 22a40d14b572deb80c0648557f4bd502d7e83826:
 
->> Signed-off-by: David Hunter <david.hunter.linux@gmail.com>
->> ---
->>   Documentation/watchdog/watchdog-api.rst | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/Documentation/watchdog/watchdog-api.rst b/Documentation/watchdog/watchdog-api.rst
->> index 800dcd7586f2..78e228c272cf 100644
->> --- a/Documentation/watchdog/watchdog-api.rst
->> +++ b/Documentation/watchdog/watchdog-api.rst
->> @@ -249,7 +249,7 @@ Note that not all devices support these two calls, and some only
->>   support the GETBOOTSTATUS call.
->>     Some drivers can measure the temperature using the GETTEMP ioctl.  The
->> -returned value is the temperature in degrees fahrenheit::
->> +returned value is the temperature in degrees Fahrenheit::
->>         int temperature;
->>       ioctl(fd, WDIOC_GETTEMP, &temperature);
-> 
-> 
+  Linux 6.10-rc6 (2024-06-30 14:40:44 -0700)
 
--- 
-~Randy
+are available in the git repository at:
+
+  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.11-rc1
+
+for you to fetch changes up to 63d097d46799dc6ab4d1430482cd5ab6a409c4ec:
+
+  dt-bindings: watchdog: dlg,da9062-watchdog: Drop blank space (2024-07-18 20:35:41 +0200)
+
+----------------------------------------------------------------
+linux-watchdog 6.11-rc1 tag
+
+----------------------------------------------------------------
+Biju Das (1):
+      dt-bindings: watchdog: dlg,da9062-watchdog: Drop blank space
+
+Chen Ni (3):
+      watchdog: starfive: Add missing clk_disable_unprepare()
+      watchdog: lenovo_se10_wdt: Convert comma to semicolon
+      watchdog: rzn1: Convert comma to semicolon
+
+Claudiu Beznea (9):
+      watchdog: rzg2l_wdt: Restrict the driver to ARCH_RZG2L and ARCH_R9A09G011
+      watchdog: rzg2l_wdt: Make the driver depend on PM
+      watchdog: rzg2l_wdt: Use pm_runtime_resume_and_get()
+      watchdog: rzg2l_wdt: Check return status of pm_runtime_put()
+      watchdog: rzg2l_wdt: Remove reset de-assert from probe
+      watchdog: rzg2l_wdt: Remove comparison with zero
+      watchdog: rzg2l_wdt: Rely on the reset driver for doing proper reset
+      watchdog: rzg2l_wdt: Add suspend/resume support
+      dt-bindings: watchdog: renesas,wdt: Document RZ/G3S support
+
+Sascha Hauer (1):
+      watchdog: imx7ulp_wdt: keep already running watchdog enabled
+
+Thomas Wei�schuh (1):
+      watchdog: Make watchdog_class const
+
+ .../bindings/watchdog/dlg,da9062-watchdog.yaml     |   2 +-
+ .../devicetree/bindings/watchdog/renesas,wdt.yaml  |   1 +
+ drivers/watchdog/Kconfig                           |   3 +-
+ drivers/watchdog/imx7ulp_wdt.c                     |   5 +
+ drivers/watchdog/lenovo_se10_wdt.c                 |   4 +-
+ drivers/watchdog/rzg2l_wdt.c                       | 113 ++++++++++++---------
+ drivers/watchdog/rzn1_wdt.c                        |   6 +-
+ drivers/watchdog/starfive-wdt.c                    |   4 +-
+ drivers/watchdog/watchdog_dev.c                    |   2 +-
+ 9 files changed, 81 insertions(+), 59 deletions(-)
+----------------------------------------------------------------
+
+Kind regards,
+Wim.
+
 
