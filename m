@@ -1,141 +1,140 @@
-Return-Path: <linux-watchdog+bounces-1432-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1433-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4549193D618
-	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Jul 2024 17:30:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33C5A93DD58
+	for <lists+linux-watchdog@lfdr.de>; Sat, 27 Jul 2024 07:08:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3879287C43
-	for <lists+linux-watchdog@lfdr.de>; Fri, 26 Jul 2024 15:30:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8DC3284F87
+	for <lists+linux-watchdog@lfdr.de>; Sat, 27 Jul 2024 05:08:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E27517BB3A;
-	Fri, 26 Jul 2024 15:30:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12325171D8;
+	Sat, 27 Jul 2024 05:08:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X7/mMiHl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fIWAVPUM"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D873B17BB03;
-	Fri, 26 Jul 2024 15:30:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CAAE17577;
+	Sat, 27 Jul 2024 05:08:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722007804; cv=none; b=LrWA6Ze/NJwTQHizeKHVLIL3tid6MQVvzNyFDXBRY+LEO9DlFyaW9wLYTyF3IcPHK8mDNoIoYXx+svpY4rgG2V9Cdjx7h2yjw9ARmvydyzaN/7vjgV5sZ9NoybiMCUZ3FeNomarLfPMXFu91aU5S2ByjUNDRkA5Qtrcht5OgLEQ=
+	t=1722056923; cv=none; b=atDoAScee5RVpsrJQHJV2YcOr8wSkmpE306fwmHV1RIQR2QJjBnrs1P0lmU/FQdCxhddx+skKmm81MNqJq2a7/rMIAZyYrOkpeGjhdLQfqOZZgINLp8tdSEFSTEhC/VD8faQV+XXE/Hj7PZpxlIGIGghicShEFRejbYYZ3TVc84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722007804; c=relaxed/simple;
-	bh=ZyVoeCwN0Y/eArawBL0I4SXa/a8py/8Zm8XyorMlagA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dr2YoCKVrDLKh/4IS6dwE6gBlDw0d7GO4IiZ3TzUpInxwX6+ebaudNdLY5b26V6zmfvLbsNktFTHInD5TwMhzVm+8OwRn3EvVtGLSmU6DxEdsgfmC9tiOcP1ze7EVEIWgVWY5xcVvb5xLNr6atgddINkKHXuRuemprhHtgM2OfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X7/mMiHl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB9D1C32782;
-	Fri, 26 Jul 2024 15:29:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722007803;
-	bh=ZyVoeCwN0Y/eArawBL0I4SXa/a8py/8Zm8XyorMlagA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=X7/mMiHl2PG9PdIYuAY415Qe1vBg5fKZJ8QNXTJKapgf4RgXO3nkXvLA/Co0JOBxG
-	 IsMtWddfwUbf7xL/8W8kse06CEIRSkKsVwSZTfOWkgoo+SuNG08oTC7uijNuhPh+1V
-	 VCKffib1ZCYwrS4l/ch65TkPEbOMMQ+/KMT8zycttKvZsY+hrAjik//So5wR7p3Ke5
-	 1FqwJ2mpKQB9IiS73eEX6NuDt4XnTb8qUfS/P/Hy1W9pOCF7eZAdrv+tBCemeIiEEE
-	 j6aPtAcZ/qahkxjD59ana/CyHO6RkvSrCXXW8e3zNJkVNk925Rc6iLtgodKRvCbqZL
-	 ru5vPcMGQmBBA==
-Message-ID: <5e87c31a-fd83-4ee4-8a03-71e405432e76@kernel.org>
-Date: Fri, 26 Jul 2024 17:29:57 +0200
+	s=arc-20240116; t=1722056923; c=relaxed/simple;
+	bh=qgUUTF1sFMauq/xgeXZI1G2LtT0PlNVWuIPwYO5B/2Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ttooovaeZrlCe2bZ6CVLXu3rSeUt5YygEmkpsB9UQmEq14j+DUeamxN4O+6OuyIitBcJCPNVYpA8uAfl2jpMqDVdyw4Ozuomf0UDr3qo0QVB5zo28zPyRXcIq8rg2X0P/7qHtbYv5CB7z7zdHn4C9ogKkK55MtKczSvf55CGUCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fIWAVPUM; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-70d2b921cdfso1456483b3a.0;
+        Fri, 26 Jul 2024 22:08:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722056921; x=1722661721; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=n5MUIjwfPVofvJ7l24V1rvRc5cHOQSx9beaC0wMyp8k=;
+        b=fIWAVPUMhIkKdW/IY6GxbyWq3ku2698lc2/acTVbYj8+GjUzrPnS6LYzRXzm1TOOAb
+         dPvXJnj5/1v0AON4z2JZcON8M+mrh+6bfeKH6IWWblWGfCqMlCUCYfV5HoB2IR+jC3N3
+         TOX1zfPIyZVdBv37XORm4kJ8nmekZWpSkxeGqRcjbQZq4/fuulUZQyU1aOPqni2PBMGy
+         EC7h0TBSqf9IayxKsB8wIj2ZNnyCcefA0LqzWHmU2qtoGVcfvGoKXjJH4LcuYS3uF/50
+         gFxWIgwjeL3mK3JieiIdkayCsBPMG+6k/1MAqp9KzpBMpjatcnp/khZIe6HV0Ua3WrLy
+         kBUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722056921; x=1722661721;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n5MUIjwfPVofvJ7l24V1rvRc5cHOQSx9beaC0wMyp8k=;
+        b=Ylrdi1FnTSYRya2iGc+7+W1V9/oIBXLYEkfyjl+4bJDouQc7oi45+SK8b4iLnoB/Gn
+         G2N0fF4ugLd1yBzhnCDt/gACpx3mogP5PDgrFGJsom/nsCXU/lo20GrHFz0uGA3LgM6F
+         B/y09rYby6436J1mpUwfGYnJ4gRpuoz13NyKnR4B8UqBE6jLPfFCyS60AitBOrAvOY7s
+         EBppJBcL5rRWqlwHChXKFr+Ic0NohWSmrikzfeYsOPSkMxUy8XrSLfOD/TewElOKoazT
+         fLVXCsxVdLt+UYskv6g4OghG5WohVDkK1slgmAtwZh9cLTdqeOHpGBDVdpMqTOfxdltd
+         AvGw==
+X-Forwarded-Encrypted: i=1; AJvYcCUKvLWV5dNqeoXNdFimtJQdjHcdj8dI8ebPmc3sMt2StA5+GPBuV1fwiHHfH4wZCjXVypFPM3AGpsurkuSCUzowFj1oxAGerrN0fk72kCMc6ZFTUC3vSryrRwvw9APzNc6SWAMVIQ5maA8rBPI=
+X-Gm-Message-State: AOJu0YxWepQmK7RJkBXqckwJdgT8bEbRwE8SV+0WQ2AMvmSY09jlg1pe
+	B65Y48yiCVOxs7Qt5CxcMjrVNhe/Sld67ctTzBzZHGLplcxc479i
+X-Google-Smtp-Source: AGHT+IEK5h2KvdmvEPmltYeeQRjFuL243ef5mk/88GBjwaGoik1AtOgbbXsBOWheKSG1u7ivmibbrg==
+X-Received: by 2002:a05:6a00:14c4:b0:706:a931:20da with SMTP id d2e1a72fcca58-70ece9ebbd6mr2286330b3a.3.1722056920670;
+        Fri, 26 Jul 2024 22:08:40 -0700 (PDT)
+Received: from kousik.local ([2405:201:c006:380f:4245:58a3:6108:fcf0])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70ead87a372sm3495756b3a.166.2024.07.26.22.08.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jul 2024 22:08:40 -0700 (PDT)
+From: Kousik Sanagavarapu <five231003@gmail.com>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: devicetree@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kousik Sanagavarapu <five231003@gmail.com>
+Subject: [PATCH v4 0/2] ti: davinci, keystone: txt to yaml
+Date: Sat, 27 Jul 2024 10:34:42 +0530
+Message-ID: <20240727050736.4756-1-five231003@gmail.com>
+X-Mailer: git-send-email 2.45.2.827.g557ae147e6.dirty
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] dt-bindings: watchdog: ti,davinci-wdt: convert to
- dtschema
-To: Kousik Sanagavarapu <five231003@gmail.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>,
- Guenter Roeck <linux@roeck-us.net>
-Cc: devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240726150537.6873-1-five231003@gmail.com>
- <20240726150537.6873-3-five231003@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240726150537.6873-3-five231003@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 26/07/2024 16:57, Kousik Sanagavarapu wrote:
-> Convert txt bindings of TI's DaVinci/Keystone Watchdog Timer Controller
-> to dtschema to allow for validation.
-> 
-> While at it,
-> 
+Convert txt bindings of DaVinci Timer and DaVinci/Keystone WDT
+Controller to dtschema.
 
-Drop blank line
+v3: https://lore.kernel.org/linux-devicetree/20240726150537.6873-1-five231003@gmail.com/
 
-> - Change the order of the compatibles.
-> - Add "power-domains", which is a phandle to the associated power
->   domain.
+Changes since v3:
+- No changes in 1/2.
+- Explain why "power-domians" is needed in the commit msg and also add
+  the Reviewed-by tag.
 
-Please do not explain what "power-domains" is. We all know it. Say why
-you are doing it. Entire commit msg could be more concise with the same
-amount of information.
+v2: https://lore.kernel.org/linux-devicetree/20240725153711.16101-1-five231003@gmail.com/
 
-> 
-> w.r.t. to the txt binding to stay in sync with existing DTS.
-> 
-> Signed-off-by: Kousik Sanagavarapu <five231003@gmail.com>
+Changes since v2:
+- Add Reviewed-by tag on 1/2.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+- Change the compatible to match the DTS on 2/2 and also mention in the
+  commit msg that we are adding "power-domins" as an extra optional
+  property, which was missing in txt binding.
 
-Best regards,
-Krzysztof
+v1: https://lore.kernel.org/linux-devicetree/20240721170840.15569-1-five231003@gmail.com/
+
+Changes vs v1:
+- Change davinci timer binding's file name to match with the compatible.
+  Also add "maxItems" for interrupts.
+
+- Change the order of compatibles in wdt controller bindings touched in
+  order to match DTS.
+
+- Drop 3/3 from v1 which might effect users and should not have been
+  included in this series in the first place.
+
+Kousik Sanagavarapu (2):
+  dt-bindings: timer: ti,davinci-timer: convert to dtschema
+  dt-bindings: watchdog: ti,davinci-wdt: convert to dtschema
+
+ .../bindings/timer/ti,da830-timer.yaml        | 68 +++++++++++++++++++
+ .../bindings/timer/ti,davinci-timer.txt       | 37 ----------
+ .../bindings/watchdog/davinci-wdt.txt         | 24 -------
+ .../bindings/watchdog/ti,davinci-wdt.yaml     | 55 +++++++++++++++
+ 4 files changed, 123 insertions(+), 61 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/timer/ti,da830-timer.yaml
+ delete mode 100644 Documentation/devicetree/bindings/timer/ti,davinci-timer.txt
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/davinci-wdt.txt
+ create mode 100644 Documentation/devicetree/bindings/watchdog/ti,davinci-wdt.yaml
+
+-- 
+2.45.2.827.g557ae147e6.dirty
 
 
