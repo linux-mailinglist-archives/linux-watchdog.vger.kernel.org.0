@@ -1,137 +1,104 @@
-Return-Path: <linux-watchdog+bounces-1446-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1447-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC36B9458F5
-	for <lists+linux-watchdog@lfdr.de>; Fri,  2 Aug 2024 09:36:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBDF89475B9
+	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Aug 2024 09:07:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E6862823B7
-	for <lists+linux-watchdog@lfdr.de>; Fri,  2 Aug 2024 07:36:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86D441F2138E
+	for <lists+linux-watchdog@lfdr.de>; Mon,  5 Aug 2024 07:07:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9D4615B13D;
-	Fri,  2 Aug 2024 07:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA1A8145B05;
+	Mon,  5 Aug 2024 07:06:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b="B+gbkflc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PujBspFE"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from forward500d.mail.yandex.net (forward500d.mail.yandex.net [178.154.239.208])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E15FC482EF;
-	Fri,  2 Aug 2024 07:36:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.208
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8D86A01E;
+	Mon,  5 Aug 2024 07:06:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722584187; cv=none; b=sr+K7eGaIPS75Gkr4OlmaudDkNAMetEupwf2eFd//k4eBKtAHMY0g8Ki5wYLp0p7zlmZC43s/Z9F+9cBrkCwQ1eXNdISsmT474YhAwR7k+ZKhXTBr8wxXg2mBNLfMWz1TPC023zb2gujoHMXKr0r6Cu1rsdylwE6O7vUReu2cbY=
+	t=1722841618; cv=none; b=hdhfV/hVJ2b5SuhuiHbiWHous+qBmAZDq4z15VVSomzEvM9zvkN9FgNjZ0amro/U5IfdFzRn0jZTGFWFdbQWzA3uR4RObqJycSAUQ+alLs3WZ+C/mQlxBYY4SDH8CheKElRH6yt3Uy8rxoJBHc7hpXb65ZvLyxda/4i7hNcycLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722584187; c=relaxed/simple;
-	bh=xFfFI1VUxM96WEW9h09vMDS1bRrM3Fk2qt43Z+ICuZ8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uKMlx82TRvia6UWp4OhrxgBHFAjpXbHsmXLTKdxQt2nkyAneXWR0UJfnM2ufRgniRuORF05wQI7wF+PM0mc+EQCJxDoGGqeYTi5neBtTEbepFAXc6YTkOhNueFnNdGMYaL0lEzqQJtktPvBikksAi7Jl25CUH1a4OwWgnBuPcQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me; spf=pass smtp.mailfrom=maquefel.me; dkim=pass (1024-bit key) header.d=maquefel.me header.i=@maquefel.me header.b=B+gbkflc; arc=none smtp.client-ip=178.154.239.208
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maquefel.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=maquefel.me
-Received: from mail-nwsmtp-smtp-production-main-84.klg.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-84.klg.yp-c.yandex.net [IPv6:2a02:6b8:c42:3ca5:0:640:b181:0])
-	by forward500d.mail.yandex.net (Yandex) with ESMTPS id D54DA614BA;
-	Fri,  2 Aug 2024 10:36:14 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-84.klg.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id 6aS9oj3g9Gk0-oGKazRiT;
-	Fri, 02 Aug 2024 10:36:13 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail;
-	t=1722584173; bh=xFfFI1VUxM96WEW9h09vMDS1bRrM3Fk2qt43Z+ICuZ8=;
-	h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
-	b=B+gbkflcsamzsGcKQTG4gVtLeiw5V77vFyRCXGV32y02UNz0jqZWx/MHlr09NS+AF
-	 H/nuqOh4suJapcpzsjCr0oA+GzqaB3O/j3B06JXBVCF/TWiGCMWTOk55v0lhknim05
-	 7duSEm+DNJsbKzrqYeFrO89AuJ66z0aYIFrJU63c=
-Authentication-Results: mail-nwsmtp-smtp-production-main-84.klg.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
-Message-ID: <a1a27117725305dcd6135df193fe2b74646a9e26.camel@maquefel.me>
-Subject: Re: [PATCH v11 00/38] ep93xx device tree conversion
-From: Nikita Shubin <nikita.shubin@maquefel.me>
-To: "Rob Herring (Arm)" <robh@kernel.org>, Alexander Sverdlin
-	 <alexander.sverdlin@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org, 
- linux-watchdog@vger.kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Miquel Raynal <miquel.raynal@bootlin.com>, Damien Le Moal
- <dlemoal@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, Thierry
- Reding <thierry.reding@gmail.com>,  Vignesh Raghavendra <vigneshr@ti.com>,
- linux-pwm@vger.kernel.org, Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?=
- <u.kleine-koenig@pengutronix.de>, Ralf Baechle <ralf@linux-mips.org>, 
- Sebastian Reichel <sre@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>,  linux-ide@vger.kernel.org, Stephen
- Boyd <sboyd@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski@linaro.org>, linux-spi@vger.kernel.org, Andy
- Shevchenko <andriy.shevchenko@linux.intel.com>, Mark Brown
- <broonie@kernel.org>,  Hartley Sweeten <hsweeten@visionengravers.com>,
- linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,  Andrew Lunn
- <andrew@lunn.ch>, Richard Weinberger <richard@nod.at>, Eric Dumazet
- <edumazet@google.com>,  linux-sound@vger.kernel.org, Arnd Bergmann
- <arnd@arndb.de>,  linux-input@vger.kernel.org, Jaroslav Kysela
- <perex@perex.cz>, Sergey Shtylyov <s.shtylyov@omp.ru>, Lukasz Majewski
- <lukma@denx.de>
-Date: Fri, 02 Aug 2024 10:36:06 +0300
-In-Reply-To: <f68b628c3978a4fb0e5989e3b6918c756da1fefb.camel@gmail.com>
-References: <20240715-ep93xx-v11-0-4e924efda795@maquefel.me>
-	 <172104541245.3725513.13547524352291855487.robh@kernel.org>
-	 <f68b628c3978a4fb0e5989e3b6918c756da1fefb.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 
+	s=arc-20240116; t=1722841618; c=relaxed/simple;
+	bh=4XqyUiKaQFFwLeX5Fyg1wWnbwOi3BPFIuuUL9L060MY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AKrcOc3VWIaOrQq+XvdhbAkSQ/8RN8U2x+ozuFb8AllGw9rfWtJEpea8aSN1ros/J9qkAW51NPEzm17x5b1v5+PxvXlMJLTSgp1PDiQVATN5HisCJpXQSfkxb6QYRP+wmemsP29ZaXM0xmEI1I9bpRjDs8SaJ82hTgGpnc+Yl6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PujBspFE; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7106e2d0ec1so2227323b3a.2;
+        Mon, 05 Aug 2024 00:06:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722841616; x=1723446416; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ipj8h43pPOKTNzU/Znuuk+lVg9B/KjDAWhRCKAX4HAc=;
+        b=PujBspFEGQUtIQNLQzYBHowgKTnA+lbHvyNrjqQRxR9cCSjwO5gCTCS/80pj0EIB8A
+         NGa4NjGhl6Nb157V4ftvxbXgsUBNcW4mldeG7CP+xWebelMtlXA3Q/snZ7j0KhNBuQ7z
+         FqPIglYo/38/B8BZOVWBmdmbVuMvfl5Pot6ZXN6Puh/u0UWbR6JlPkrVvIOjomdFOKMR
+         Psb/qZEKYoMKw5K0DBohreN/aKlsX2+aGP7Gi9jNxKmv2CYdWZSfr3SLgf463rbhmVw1
+         vqiMQcB/5M7zBaLDXYOxL/KKmvIWVTDwRwyEAfiPgJEkSQhuymfRFoYgpZMQpSB2z0bZ
+         yoKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722841616; x=1723446416;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ipj8h43pPOKTNzU/Znuuk+lVg9B/KjDAWhRCKAX4HAc=;
+        b=Z6J2l4hMSQQ0AYQDrp1SdbmtinXU1BJXu+EE6nLb3/yuTOX9yshV7VyBp4U0BdeHed
+         W0wTV4hj7Q82+8R+XniVaHoguawlz66V0qDuh/Q5vcETzhwCZaUXIxNf4b4etouH12WF
+         5Z735dLN0qixf7h2EKCEiZBZOs8Uj+rv5WRawettCYDhHomJeiG+TwO4NwASOEqgjcrY
+         FEyOmgQHYDFIx/fShJqVZoo0j/abOrVKruEIXTnvHTjV5MEoQHHLQYOHI8tqPwHAMVYS
+         jrydBGzEWczeRznoXh5PmhS0sQLXlj57AvAur7CGTEfbN7cu/IwPdBwy4a+AOX0ejb9x
+         19NA==
+X-Forwarded-Encrypted: i=1; AJvYcCU76h82oxsB+3Nm0QjJwZE6eGTPkm8bI03yRV4WPNyG12A3GrTD6d9s4si9TCNGbs8YtguYjiu1GgN8tZzf0qrj3E9zIfC3Wml1K9kw22pgSPdnrE0GabwONf6u+anO6tNir/edMpnmpeyR3U4=
+X-Gm-Message-State: AOJu0YwqX2w6hz8Oi8LHFY01y6FIuhXfFDmK8R+XjV8dE2nK9LCIWT6l
+	xaYkCphD8dlBIdIJ/bHmBT6RB1a97DJ+kpij119FU3wCowkRwb9U
+X-Google-Smtp-Source: AGHT+IFxAYYNsZNMQw/gsUmLCjSi4vHnVNtAUxZy7n8oJT1OGLmzuiWv/1dPuXXixJuOopBlnTc23A==
+X-Received: by 2002:a05:6a20:db0a:b0:1c2:8949:5ba1 with SMTP id adf61e73a8af0-1c69966b82bmr8176033637.53.1722841616404;
+        Mon, 05 Aug 2024 00:06:56 -0700 (PDT)
+Received: from five231003 ([2405:201:c006:3108:6fc5:f50c:613c:4ceb])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff58f2734dsm60525145ad.41.2024.08.05.00.06.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Aug 2024 00:06:55 -0700 (PDT)
+Date: Mon, 5 Aug 2024 12:36:49 +0530
+From: Kousik Sanagavarapu <five231003@gmail.com>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/2] ti: davinci, keystone: txt to yaml
+Message-ID: <ZrB6Cbe6JBxFPRWn@five231003>
+References: <20240727050736.4756-1-five231003@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240727050736.4756-1-five231003@gmail.com>
 
-Hi Rob,
+On Sat, Jul 27, 2024 at 10:34:42AM +0530, Kousik Sanagavarapu wrote:
+> Convert txt bindings of DaVinci Timer and DaVinci/Keystone WDT
+> Controller to dtschema.
+> 
+> v3: https://lore.kernel.org/linux-devicetree/20240726150537.6873-1-five231003@gmail.com/
+> 
+> Changes since v3:
+> - No changes in 1/2.
+> - Explain why "power-domians" is needed in the commit msg and also add
+>   the Reviewed-by tag.
 
-On Mon, 2024-07-15 at 22:46 +0200, Alexander Sverdlin wrote:
-> Hi Rob,
->=20
-> On Mon, 2024-07-15 at 06:12 -0600, Rob Herring (Arm) wrote:
-> > My bot found new DTB warnings on the .dts files added or changed in
-> > this
-> > series.
-> >=20
-> > Some warnings may be from an existing SoC .dtsi. Or perhaps the
-> > warnings
-> > are fixed by another series. Ultimately, it is up to the platform
-> > maintainer whether these warnings are acceptable or not. No need to
-> > reply
-> > unless the platform maintainer has comments.
-> >=20
-> > If you already ran DT checks and didn't see these error(s), then
-> > make sure dt-schema is up to date:
-> >=20
-> > =C2=A0 pip3 install dtschema --upgrade
-> >=20
-> >=20
-> > New warnings running 'make CHECK_DTBS=3Dy cirrus/ep93xx-bk3.dtb
-> > cirrus/ep93xx-edb9302.dtb cirrus/ep93xx-ts7250.dtb' for
-> > 20240715-ep93xx-v11-0-4e924efda795@maquefel.me:
-> >=20
-> > arch/arm/boot/dts/cirrus/ep93xx-edb9302.dtb:
-> > /soc/spi@808a0000/codec@0: failed to match any schema with
-> > compatible: ['cirrus,cs4271']
->=20
-> well, this seems to come from the fact is still documented in a .txt
-> file
-> (Documentation/devicetree/bindings/sound/cs4271.txt), which is not
-> really
-> the scope of this series. Hope it's OK to ignore it for the series.
->=20
-
-Indeed it resides in
-Documentation/devicetree/bindings/sound/cs4271.txt.
-
-Can we slip for the series ?
-
-Actually i found this one on mail lists:
-
-https://lore.kernel.org/lkml/20240709184231.125207-1-animeshagarwal28@gmail=
-.com/
-
-Conversion of cs4270.txt, Alexander isn't it almost the same thing as
-cs4271 ?
-
+Ping incase this got lost in traffic
 
