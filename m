@@ -1,161 +1,130 @@
-Return-Path: <linux-watchdog+bounces-1466-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1467-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 399D694A6D4
-	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Aug 2024 13:21:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB16A94B00E
+	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Aug 2024 20:53:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BFA11C20ACD
-	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Aug 2024 11:21:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30ACC1C22396
+	for <lists+linux-watchdog@lfdr.de>; Wed,  7 Aug 2024 18:53:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4CF61E3CA2;
-	Wed,  7 Aug 2024 11:21:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A59C01419A1;
+	Wed,  7 Aug 2024 18:53:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="FD6+mn5Z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aho2UIMq"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3B81C8FB7
-	for <linux-watchdog@vger.kernel.org>; Wed,  7 Aug 2024 11:21:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E84813F43A;
+	Wed,  7 Aug 2024 18:53:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723029693; cv=none; b=oH2E5BBKSTsjFWILYJAjJjvYk3jug/WXC61THYyf44ZP71Ic4gosi7wgsJiTo8Zu1k4KvnFTDmcWuKeGQqU4XcOSJ4XlCExRS1xZ74IuqLmRydlYn46bHLSpAVVoT/z5uG3lZszPRkdpgQAbxNV9eZzniHL31ISvcuMdrvDsJdo=
+	t=1723056822; cv=none; b=HIsmoS+QkAC3hnUZkl1Lk744ItjFHUrfU8fU1v0n123hF86BnKs5fmlx12FleOkRYvPnoKdaw+KUyCQMWUm/RO/CnO0ayBfVUE45Rpt1jcsbW2RPfASD5f0ypGm00Os1VEJToJX7qvyaDiCXd3BfFs0KzIGuJVmwG9u9P1hTT/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723029693; c=relaxed/simple;
-	bh=LDuVR8Q8SBltlZ0Y7R0bvpdndZWmNaepum4NflH3uEs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NR1MfmYHNOzSjn2HFQVyzXKpnluuo9K1RhhG229x1HLhxw8jIcDfjqMHNdia/Q+C981Ca15VH2SfKkjfGdd0ShUl6HOqtm2Mf47EHp4zlf9BymY69sfJkUgRd2H1O3uSUyQcVsIFfb0OLqViFeBREh7jp/wo+cvLsFAjknMZMAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=FD6+mn5Z; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5a1337cfbb5so2239752a12.3
-        for <linux-watchdog@vger.kernel.org>; Wed, 07 Aug 2024 04:21:31 -0700 (PDT)
+	s=arc-20240116; t=1723056822; c=relaxed/simple;
+	bh=e9IyYXy2oprSPFD8Ke8Dj7pvrFwX8/hQdl3qzz158Oo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=kL4U0sG4QAkIRWHYFFYmnxF/KPg/VtTK7pyREWTMCwPwY90rBKCHd6o2QmHTtzalfWD1Ja5OMENR8NpchZNhuIsn17DehDA9znaitn/GerP6EWfW8Q/3JvMCe/Qmk+u5y23Kp62DmV07Eyo0W1K8kenT+orb8R8SwXuYVfY1l6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aho2UIMq; arc=none smtp.client-ip=209.85.217.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-48ffdfae096so35429137.0;
+        Wed, 07 Aug 2024 11:53:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1723029690; x=1723634490; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O63kDKJnx9fmZjMbiNZsuL2wJTTHJuwzpsSd5JTI0e0=;
-        b=FD6+mn5ZHCrD3MxYmmtC0VaBk3LNHgpKvrKG5BG3p7OaFGG7h9rG8czOmjZX4nQImD
-         y5ee6jjh5mbznkAxusuMXeZBaBZwGdBSbi90RAx756W3xWr2Tps20+RC416Ig9BMDolB
-         AZLU7VeCBkhpciT+ZgCXq7YK7axvCZ0IObzUNM5T2fBIsh3pP6O8GIcfNUdRCmUQvV1s
-         KXPMcISCImcynppr/bYpfaysZDx08IXPZnXVMIDkSanxVmvRKgYuoXIrfQlbDYSSIOpV
-         uowFo+3ggvY+8kzhhpGbNZnhfxNB7K8Wq/ciJnod3aoPoeXZ6LnEki3cSHhMLFO563zq
-         /kxA==
+        d=gmail.com; s=20230601; t=1723056820; x=1723661620; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mrxfRKvkVDz5Xf+hzvJmQ6Nw1sDrNkZo7rKJhKh6E44=;
+        b=aho2UIMqPXo44dduWn8il/BWR9O8ch8IZ8cy1mp0c2y7aL4sd2avs+h/fz5WQmK7le
+         f04C2fDKqs8dHeSLNBXVoVzkZK8i3gmb/fBqzE94kLfGOSse3SazpWzxBYFl5YOEJu/6
+         8dsBmRBt1gW1feJh0uyC9T8TBUW5zHY5aAMXqKB2/OLgclduoz9iSjwvGmuvc/2MFFUp
+         RoipTPIOn34TNtGftTKnQ7QtJvBLP/50EodbGue6izVyDfPwIwIgpik89SXlWy356DXM
+         2ntnQ3qwyBvMO3iHWI8C7V1eNlr+LQ8/XKyzDYbBDBppt/M5Mgc50ycJ1NrxvDxxVRfL
+         TRxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723029690; x=1723634490;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O63kDKJnx9fmZjMbiNZsuL2wJTTHJuwzpsSd5JTI0e0=;
-        b=I4nj578fRkBUeHj6pF+6Iip4lkQX5kcXB/o5sxR98dpRaJYRW0G8wWi5r7MdDy+pPe
-         8l6aPHk8E47JDaRSuMU8vsHrH4Xtm5qUyCdPqd1MVwYTEkeOXnHBB2oZxoUBlZrds+lF
-         xBw5GUc+wodXbqlX7hIfE8DfMbo1otJ2/O7BYuw0o45fnfJWWwflFEFlQ4O6Rf3SiPzu
-         DfnJNi59b9k1j9FDiokiNJmAhrgj9A+znGCsFZUq7ZYMoPZhNSt3mLLyTpijbYyfH39z
-         ZZokD1S56SV5KRND3r9ElhACBPO+3QBcYhm0mRMOVI3/c0hOzbX/S9J2ZaUYd543Okp1
-         0ecw==
-X-Forwarded-Encrypted: i=1; AJvYcCXxueVB2EPTkLGjTylsVXEtZ0OWQ9/aFhAxyPYpWETe4Y3YhUZrEXQn1SRBskW+60SeSdfdRf92wLtcVXOOXTMRQNLd4mpJyg/gESHL8oU=
-X-Gm-Message-State: AOJu0YxcFnb5GVEQl2EzN6MVddeP5uUA3+teJkw1Uxt4/wirOmfGDodZ
-	rcrpaK2jw11cISeqmZiySwWvHBZBSEcw1ThKH/soXikXmsm6K4HRQAXF2ySYxBM=
-X-Google-Smtp-Source: AGHT+IHM3r2bAdSLrg/pmt0OrZB5Bhj5Th6878fNVzaGx5MeOuvAuO1T3w9OQvFHUVXk+68bCP5iCA==
-X-Received: by 2002:a17:906:fe41:b0:a7a:a46e:dc3f with SMTP id a640c23a62f3a-a7dc50a345bmr1206383166b.45.1723029689288;
-        Wed, 07 Aug 2024 04:21:29 -0700 (PDT)
-Received: from [192.168.50.4] ([82.78.167.5])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9c0cc95sm624246766b.85.2024.08.07.04.21.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Aug 2024 04:21:28 -0700 (PDT)
-Message-ID: <201cbbe6-99eb-4622-bc5f-3d298f9e30b4@tuxon.dev>
-Date: Wed, 7 Aug 2024 14:21:25 +0300
+        d=1e100.net; s=20230601; t=1723056820; x=1723661620;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mrxfRKvkVDz5Xf+hzvJmQ6Nw1sDrNkZo7rKJhKh6E44=;
+        b=m5w9Hfm4RF1DJHvEJciZPrNtS8BthAOJvPIdIp0Hs/14AAKk2hzLkWYBIHJgmpHOcM
+         QPZ3+xQyLQNOuKlD54oCbNG1yyhD2TmFg0/zW61RAwXJq0YV/JB+rqV9rUOjpmh/q9hR
+         58wjJDMzqjffYcZjg6BxqNA1thvkznzpmer3ypsCaZ/i4qcR/ho+OjIDswKGqzKjbgAi
+         Bzn0EIbrSgEl9MVMc8yi8okHWQvdewF5UGVImOhGSGbB6/rXfoAZl6uSclqlDVPUxjVO
+         D/CmW1a6KEHkAWrfiUeDjR3Wrz7Y00BFGzqk3xuetL89JvgHQywXJOXro4/giDnIZCoc
+         KxWg==
+X-Forwarded-Encrypted: i=1; AJvYcCVkP3FbrndDGcNAiV+Gq1OOjIhrGThc781bo4WZphW7m2hKubiqVDoCS5+mUo04Jw7y3DDk4Qg70dOqps/H@vger.kernel.org, AJvYcCW9Yi+VOGbBMQjLdXG3jZxxKPPh2uV09KkrPllSHZC6WfvyqvRKvIVWPkCLR/GGDuGXa08ZeXO+pZY=@vger.kernel.org, AJvYcCWaoOT2oRA7kn7UV0Of5eC2S8hkfJpLsUaYfXEYj+3/pmN1pj+BBkY9spD3ggQoCcCucTUmVXdn7CWQaTaejuY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQWUGk1vPVrj4Thl1hUfP4dgiT1ZMUvcA8TPSViOvPIZvMiCid
+	TkY8W/bjKM7OxYavQBDOvRDkUPhld3wVgx4YPKmr3hbnRxar5vro
+X-Google-Smtp-Source: AGHT+IHLEQSvEuEV5aYuygNTojlWpO3dDQyyeV0soFivtuciDnfsodcfJQqmA8+V5DyV9/XZlcF5BQ==
+X-Received: by 2002:a05:6102:f10:b0:48f:23b4:1d96 with SMTP id ada2fe7eead31-4945be09d61mr17260089137.16.1723056819863;
+        Wed, 07 Aug 2024 11:53:39 -0700 (PDT)
+Received: from localhost (57-135-107-183.static4.bluestreamfiber.net. [57.135.107.183])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-83c07d00b53sm1647518241.10.2024.08.07.11.53.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Aug 2024 11:53:39 -0700 (PDT)
+From: David Hunter <david.hunter.linux@gmail.com>
+To: david.hunter.linux@gmail.com
+Cc: corbet@lwn.net,
+	javier.carrasco.cruz@gmail.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux@roeck-us.net,
+	skhan@linuxfoundation.org,
+	wim@linux-watchdog.org
+Subject: [PATCH v3] Documentation: Capitalize Fahrenheit in watchdog-api.rst
+Date: Wed,  7 Aug 2024 14:53:32 -0400
+Message-Id: <20240807185332.61624-1-david.hunter.linux@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240723131849.264939-1-david.hunter.linux@gmail.com>
+References: <20240723131849.264939-1-david.hunter.linux@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 0/3] watchdog: rzg2l_wdt: Enable properly the watchdog
- clocks and power domain
-Content-Language: en-US
-To: ulf.hansson@linaro.org, wim@linux-watchdog.org, linux@roeck-us.net,
- rafael@kernel.org
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-watchdog@vger.kernel.org, geert+renesas@glider.be,
- linux-renesas-soc@vger.kernel.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20240619120920.2703605-1-claudiu.beznea.uj@bp.renesas.com>
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <20240619120920.2703605-1-claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi, Ulf,
+Capitalize "fahrenheit," a spelling mistake.
 
-Please, do you have any input/suggestions on this?
+Signed-off-by: David Hunter <david.hunter.linux@gmail.com>
+---
+V2 -> V3:
+ - Fixed misspelling of "Capitalize" in commit message. 
+ - Put Tags and Kernel Subsystem in subject
+ - Put changelog after commit message
 
-Thank you,
-Claudiu Beznea
+V1 -> V2: 
+ - Fixed imperative mood 
+ - Fixed misspelling of "Fahrenheit" in Subject
 
-On 19.06.2024 15:09, Claudiu wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> 
-> Hi,
-> 
-> Watchdog device available on RZ/G3S SoC is part of a software-controlled
-> power domain. The watchdog driver implements struct
-> watchdog_ops::restart() handler which is called in atomic context via
-> this call chain:
-> 
-> kernel_restart() ->
->   machine_restart() ->
->     do_kernel_restart() ->
->       atomic_notifier_call_chain() ->
->         watchdog_restart_notifier()
-> 	  rzg2l_wdt_restart()
-> 
-> When the rzg2l_wdt_restart() is called it may happen that the watchdog
-> clocks to be disabled and the associated power domain to be off.
-> Accessing watchdog registers in this state leads to aborts and system
-> blocks.
-> 
-> To solve this issue the series proposes a new API called
-> dev_pm_genpd_resume_restart_dev() that is intended to be called in
-> scenarios like this. In this RFC series the
-> dev_pm_genpd_resume_restart_dev() checks if the system is in
-> SYSTEM_RESTART context and call dev_pm_genpd_resume(). I also wanted to
-> mark the device as a restart device with a new member in struct dev_pm_info
-> (similar to struct dev_pm_info::syscore) and check it in the newly
-> introduced API but then I told myself maybe it would be better to keep it
-> simpler for the moment.
-> 
-> Please let me know how do you consider this.
-> 
-> Along with it, series addresses the usage of clk_prepare_enable() in
-> rzg2l_wdt_restart() reported by Ulf Hansson at [1] and use the
-> dev_pm_genpd_resume_restart_dev() in rzg2l_wdt driver.
-> 
-> Please note that series is built on top of [1].
-> 
-> A similar approach (using directly the dev_pm_genpd_resume() function in
-> rzg2l_wdt was proposed at [2]). This series was posted separatelly to
-> avoid blocking the initial support for the RZ/G3S SoC.
-> 
-> Thank you,
-> Claudiu Beznea
-> 
-> [1] https://lore.kernel.org/all/20240531065723.1085423-1-claudiu.beznea.uj@bp.renesas.com/
-> [2] https://lore.kernel.org/all/20240410134044.2138310-10-claudiu.beznea.uj@bp.renesas.com/
-> 
-> Claudiu Beznea (3):
->   pmdomain: core: Add a helper to power on the restart devices
->   watchdog: rzg2l_wdt: Keep the clocks prepared
->   watchdog: rzg2l_wdt: Power on the PM domain in rzg2l_wdt_restart()
-> 
->  drivers/pmdomain/core.c      | 18 +++++++++++++++
->  drivers/watchdog/rzg2l_wdt.c | 43 +++++++++++++++++++++++++++++++-----
->  include/linux/pm_domain.h    |  2 ++
->  3 files changed, 58 insertions(+), 5 deletions(-)
-> 
+V2: https://lore.kernel.org/lkml/7b7ca7e0-6bd2-45ab-bd9b-40331a8e6fdd@roeck-us.net/
+
+V1: https://lore.kernel.org/lkml/20240723131849.264939-1-david.hunter.linux@gmail.com/
+
+ Documentation/watchdog/watchdog-api.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+---
+diff --git a/Documentation/watchdog/watchdog-api.rst b/Documentation/watchdog/watchdog-api.rst
+index 800dcd7586f2..78e228c272cf 100644
+--- a/Documentation/watchdog/watchdog-api.rst
++++ b/Documentation/watchdog/watchdog-api.rst
+@@ -249,7 +249,7 @@ Note that not all devices support these two calls, and some only
+ support the GETBOOTSTATUS call.
+ 
+ Some drivers can measure the temperature using the GETTEMP ioctl.  The
+-returned value is the temperature in degrees fahrenheit::
++returned value is the temperature in degrees Fahrenheit::
+ 
+     int temperature;
+     ioctl(fd, WDIOC_GETTEMP, &temperature);
+-- 
+2.34.1
+
 
