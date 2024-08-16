@@ -1,96 +1,106 @@
-Return-Path: <linux-watchdog+bounces-1498-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1499-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52150953721
-	for <lists+linux-watchdog@lfdr.de>; Thu, 15 Aug 2024 17:26:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA55295535D
+	for <lists+linux-watchdog@lfdr.de>; Sat, 17 Aug 2024 00:35:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEE201F213C5
-	for <lists+linux-watchdog@lfdr.de>; Thu, 15 Aug 2024 15:26:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 684B3B2221F
+	for <lists+linux-watchdog@lfdr.de>; Fri, 16 Aug 2024 22:35:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C621AD3F7;
-	Thu, 15 Aug 2024 15:26:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0879813FD8C;
+	Fri, 16 Aug 2024 22:35:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LSMo27Ik"
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="cagOpNgc"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB4A1ABEBA;
-	Thu, 15 Aug 2024 15:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99FA7BA33;
+	Fri, 16 Aug 2024 22:35:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723735586; cv=none; b=Z/yvqEsZlBzoEq3glmop7WyPzf+qIz1Tjy5v/AucdabPyiy8dfs/jIuhsjf2qwQ2Y4XPS7uK/ChjPFHefvw/zYRPFFzuLJ4wnA9TVBA2YJCz+3CDRls1BMocVCGabOdubIR7R4VSdh3HCbAIj6W8JhrealSrzluJZiq6cW6DnK0=
+	t=1723847709; cv=none; b=j9lmkJnniafSCQn3Napa/uh5EhEgzB71S/Mxh95WdxMVGPZSkiyBT4Qi+yi+obWNm2JfuR4Q2bGk35Z8xQFOatGJirY6Pc0NsXUueypJuYB7CR01RqeP/Ot924/YWdor/SHZba6t3tuY2C/hG/8TjUbCHXY6dlApr1D2RCHIKI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723735586; c=relaxed/simple;
-	bh=chUBqqmXI7iyoUjg33iK+8MmTB56lRavf1zo+HiDWhY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=quLqKgjC+XXPvphuDT8zlfbiOOj5zCWH+XYr0QWbm0YfgiKqETuzUTcq9zL4IibTx7QAUldp2SFo4o8DXntFEsmKD6c2waBwrsnDdecZnMFqRXvrkhlD8ZsBYoyYSiG34InJwq+JIYfGWG88g7Zka7sJntpBGP/YmFnLD3lh0K0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LSMo27Ik; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71F36C4AF09;
-	Thu, 15 Aug 2024 15:26:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723735585;
-	bh=chUBqqmXI7iyoUjg33iK+8MmTB56lRavf1zo+HiDWhY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LSMo27IkMXuq/VIdsHrCQ8QBQ+K0z+jElfn1WoPOQMJ4B04qm/SooLqbqtsPDykWM
-	 Ayj+ivdH8vN5Iws5aMXxjZuHDiwhCcbrLCJZiF0lModEFNB4DvF9Ng2FwpfCVW2xqF
-	 NHMatld/1bmDlW9+Gv2rfY2Xs0hwuthBnyBlZWXqvbe1VY49eUSBASVArScF14CoqC
-	 okK/yPJGk9z40xQ2QBek/JOcmTR/HZlryJfvfdxZvowTIuMY8r1sleqa4ItTi9IQFp
-	 Cnpd5xmKZlmDVdlBpYFu4DirY7Df1oYqigaex6PtKaIdeli5Lzp1xZ9+1fWm07gzeh
-	 zjrFxtAxI+KhA==
-Date: Thu, 15 Aug 2024 16:26:21 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Animesh Agarwal <animeshagarwal28@gmail.com>
-Cc: Daniel Baluta <daniel.baluta@nxp.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vladimir Zapolskiy <vz@mleia.com>, linux-watchdog@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: watchdog: nxp,lpc1850-wdt: Convert bindings
- to dtschema
-Message-ID: <20240815-undocked-shun-20797c63532c@spud>
-References: <20240814061210.56213-1-animeshagarwal28@gmail.com>
+	s=arc-20240116; t=1723847709; c=relaxed/simple;
+	bh=ehLTjwjDdh9blb3CqGfEr+2DDQvrpcXGzOlnOBLI5ec=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=P96GR+JpBqERjtsnDWD1A4iArJdHrjuQHf76TtMUrewLMNwrIkV/XVLrArBYL1OHVjTqBjj8jeWq0ze9tLtmmkm4V22tHlInYm3/x7f+rVi1gTWcOhI5gtXF1KpxskU6Oj1/LHAfdJHJN8BeJ1P8reGv1Cso4MJSFRyou0MsxqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=cagOpNgc; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0C938418AB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1723847708; bh=kSkA2qMealWsON4N+tqutzsgMm8VvYqfVjBrQ4vneoo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=cagOpNgcuEcNSIOt8oidoDU33zfM15DxR6dv4HdK+JVSpaLIC8gxAT/537Lrx6oBP
+	 EaUWEU5qNvh+scDUb+xW00OyqOEbvas/xznEyFB243PPEWX+pjDEyYfPDt8ZsTVZja
+	 R9raz7WpC0PWW4mws6l5azkysDJv4QLNSYlZiMN/I5g8HVQ4zzlksr70U2BFStOAlz
+	 m0c4ZyljxGFbGUZmaA05vZ3VZnfK2dkiRNzXqtR4TiY6Gfu8ucid/H3SOTuckOWYLd
+	 JV9gWlNpTW+abb5CiCBWxH/14ME0OohbDH4dPY9ajRj+s/kONHKUiQmsjIkiEE8U+H
+	 6pKrpXEN3ZFIg==
+Received: from localhost (unknown [IPv6:2601:280:5e00:625::1fe])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id 0C938418AB;
+	Fri, 16 Aug 2024 22:35:07 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: David Hunter <david.hunter.linux@gmail.com>, david.hunter.linux@gmail.com
+Cc: javier.carrasco.cruz@gmail.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux@roeck-us.net, skhan@linuxfoundation.org, wim@linux-watchdog.org
+Subject: Re: [PATCH v3] Documentation: Capitalize Fahrenheit in
+ watchdog-api.rst
+In-Reply-To: <20240807185332.61624-1-david.hunter.linux@gmail.com>
+References: <20240723131849.264939-1-david.hunter.linux@gmail.com>
+ <20240807185332.61624-1-david.hunter.linux@gmail.com>
+Date: Fri, 16 Aug 2024 16:35:07 -0600
+Message-ID: <87ikw0hzac.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="L/843tFBv2lEsulm"
-Content-Disposition: inline
-In-Reply-To: <20240814061210.56213-1-animeshagarwal28@gmail.com>
+Content-Type: text/plain
 
+David Hunter <david.hunter.linux@gmail.com> writes:
 
---L/843tFBv2lEsulm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Capitalize "fahrenheit," a spelling mistake.
+>
+> Signed-off-by: David Hunter <david.hunter.linux@gmail.com>
+> ---
+> V2 -> V3:
+>  - Fixed misspelling of "Capitalize" in commit message. 
+>  - Put Tags and Kernel Subsystem in subject
+>  - Put changelog after commit message
+>
+> V1 -> V2: 
+>  - Fixed imperative mood 
+>  - Fixed misspelling of "Fahrenheit" in Subject
+>
+> V2: https://lore.kernel.org/lkml/7b7ca7e0-6bd2-45ab-bd9b-40331a8e6fdd@roeck-us.net/
+>
+> V1: https://lore.kernel.org/lkml/20240723131849.264939-1-david.hunter.linux@gmail.com/
+>
+>  Documentation/watchdog/watchdog-api.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> ---
+> diff --git a/Documentation/watchdog/watchdog-api.rst b/Documentation/watchdog/watchdog-api.rst
+> index 800dcd7586f2..78e228c272cf 100644
+> --- a/Documentation/watchdog/watchdog-api.rst
+> +++ b/Documentation/watchdog/watchdog-api.rst
+> @@ -249,7 +249,7 @@ Note that not all devices support these two calls, and some only
+>  support the GETBOOTSTATUS call.
+>  
+>  Some drivers can measure the temperature using the GETTEMP ioctl.  The
+> -returned value is the temperature in degrees fahrenheit::
+> +returned value is the temperature in degrees Fahrenheit::
 
-On Wed, Aug 14, 2024 at 11:42:03AM +0530, Animesh Agarwal wrote:
-> Convert the NXP LPC18xx Watchdog Timer bindings to yaml format.
->=20
-> Cc: Daniel Baluta <daniel.baluta@nxp.com>
-> Signed-off-by: Animesh Agarwal <animeshagarwal28@gmail.com>
+Applied, thanks.
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
---L/843tFBv2lEsulm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZr4eHQAKCRB4tDGHoIJi
-0lFhAP4jwpI7e9hAqXex3sii+gGBYhQ+/JCOORpV8aybJoWzmgEAx9Nj2TQqqLY3
-hGn8Qar0qfxoKTwNj/NxF/WlhgRU7wM=
-=TUhA
------END PGP SIGNATURE-----
-
---L/843tFBv2lEsulm--
+jon
 
