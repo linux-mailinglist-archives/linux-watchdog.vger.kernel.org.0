@@ -1,92 +1,65 @@
-Return-Path: <linux-watchdog+bounces-1526-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1527-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CC7295E3E5
-	for <lists+linux-watchdog@lfdr.de>; Sun, 25 Aug 2024 16:26:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A1FB95EB39
+	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Aug 2024 10:02:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1C39B2119B
-	for <lists+linux-watchdog@lfdr.de>; Sun, 25 Aug 2024 14:26:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BACCE2867E6
+	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Aug 2024 08:02:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E0EE155326;
-	Sun, 25 Aug 2024 14:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0256014534A;
+	Mon, 26 Aug 2024 07:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b="c1AX3GIC"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-m12815.netease.com (mail-m12815.netease.com [103.209.128.15])
+Received: from rcdn-iport-9.cisco.com (rcdn-iport-9.cisco.com [173.37.86.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750212A1BF;
-	Sun, 25 Aug 2024 14:26:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.209.128.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAEED13EFF3;
+	Mon, 26 Aug 2024 07:54:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.37.86.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724596007; cv=none; b=ubbegKwiLQceOTCLXGEkjp4SmJpm9Uh3YUu7RBYUx906entqT42Fhb6bGsQgxPtE5QtonAud4O7Kix7jkYh0k5J1/gdQVQAHDVXTq4kuUOhFGOPuShYDuR6G8RStCdOszkXdntC4uvCqS3hnskZB8CZwdt4HP7qvOW2JrndvMSI=
+	t=1724658852; cv=none; b=Rv/qvYEZWZGkdUiWJiBHfFdntr3+GCbPcQHCuE3pyWgLrxeF3VxKdd2IVL/P77GM3gNziBL3+nqpdqucujHjQxCSOXEUcmxRMhaX8bchJobo93OTn5Ay/AS47lMueqg8L7m79wqXWCqMZcjlDa15HVaFuNzrqmlDHpWEOdyifUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724596007; c=relaxed/simple;
-	bh=pZqwQJtt5ZpLN0gMl8xyL9mFpFuL6cREpcoZhJF6fCw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FsUMB+9rmOwN+9NQqsBGXhzvXhvUBoterb1pwZwwtCRq/sMmTUh7/yI3qZr6S8TozJ12VVSe4W3ANiO7KwsKM4fT3n+PTDKQwM9ovU/GMexPXrFKSmPODqnoqVLWHYwBowht7rq+htKRJgnz/dwNM4Y7f0evJ4rWkg6aAMOlx3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn; spf=pass smtp.mailfrom=jmu.edu.cn; arc=none smtp.client-ip=103.209.128.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jmu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jmu.edu.cn
-Received: from amadeus-Vostro-3710.lan (unknown [58.61.141.165])
-	by smtp.qiye.163.com (Hmail) with ESMTPA id 9084A7E0183;
-	Sun, 25 Aug 2024 22:25:12 +0800 (CST)
-From: Chukun Pan <amadeus@jmu.edu.cn>
-To: detlev.casanova@collabora.com
-Cc: airlied@gmail.com,
-	alchark@gmail.com,
-	amadeus@jmu.edu.cn,
-	andi.shyti@kernel.org,
-	andyshrk@163.com,
-	broonie@kernel.org,
-	cl@rock-chips.com,
-	conor+dt@kernel.org,
-	daniel@ffwll.ch,
-	devicetree@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	dsimic@manjaro.org,
-	efectn@protonmail.com,
-	finley.xiao@rock-chips.com,
-	gregkh@linuxfoundation.org,
-	heiko@sntech.de,
-	honyuenkwun@gmail.com,
-	jagan@edgeble.ai,
-	jamie@jamieiles.com,
-	jic23@kernel.org,
-	jirislaby@kernel.org,
-	jonas@kwiboo.se,
-	jszhang@kernel.org,
-	kernel@collabora.com,
-	krzk+dt@kernel.org,
-	lars@metafoo.de,
-	lee@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mmc@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	linux-serial@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux@roeck-us.net,
-	maarten.lankhorst@linux.intel.com,
-	macromorgan@hotmail.com,
-	megi@xff.cz,
-	michael.riesch@wolfvision.net,
-	mripard@kernel.org,
-	robh@kernel.org,
-	tim@feathertop.org,
-	tzimmermann@suse.de,
-	ulf.hansson@linaro.org,
-	wim@linux-watchdog.org
-Subject: Re: [PATCH v2 12/12] arm64: dts: rockchip: Add rk3576-armsom-sige5 board
-Date: Sun, 25 Aug 2024 22:25:09 +0800
-Message-Id: <20240825142509.201943-1-amadeus@jmu.edu.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <4367745.ejJDZkT8p0@trenzalore>
-References: <4367745.ejJDZkT8p0@trenzalore>
+	s=arc-20240116; t=1724658852; c=relaxed/simple;
+	bh=Oi+B0kPRMelYRxWClEb8ARvaX6r/tYTuNt39GlLZJvA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=m/UyayPZdGEeoARSv7DakcDZqzVOWK+DP4q9cVIWXsbM/REB5Ul7Zwh+XxihzsuhZQl9ijPW2EWtmml9FcIV9sBaFS/4bquLyoZSS3LAoru59XhOsZAV0tzE8yLkGyAJEGJiVX+X0TJTapwSzcG3261/wuuk5BHxVTSZts0HoAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b=c1AX3GIC; arc=none smtp.client-ip=173.37.86.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=cisco.com; i=@cisco.com; l=1212; q=dns/txt; s=iport;
+  t=1724658847; x=1725868447;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=B1FEm6L4bWbz+pJgqwOw+8ENx6wInpwg7Mz4G4vh4fE=;
+  b=c1AX3GICX3iosCrU5LotmWRaudBv2CmzeKj2TKHu7bEt78MGdoKHGxcc
+   ctdn8KZsU3w+OYP4dFJ4+cfSIRvO+i4DFI3ddH7mxqytgrwVuJiz64Trb
+   /84Yp0gkoEPlP0n7IH75dSG3bzFX6DM9uivnD5Ml8TI9RNf2DMyiWZuKg
+   M=;
+X-CSE-ConnectionGUID: nVnaVUObTkybk5fYfNlUuA==
+X-CSE-MsgGUID: rIixp7J8SvG8yk8jA/9PoQ==
+X-IronPort-AV: E=Sophos;i="6.10,177,1719878400"; 
+   d="scan'208";a="250273246"
+Received: from rcdn-core-12.cisco.com ([173.37.93.148])
+  by rcdn-iport-9.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 07:53:59 +0000
+Received: from sjc-ads-3421.cisco.com (sjc-ads-3421.cisco.com [171.68.249.119])
+	by rcdn-core-12.cisco.com (8.15.2/8.15.2) with ESMTP id 47Q7rwm3022358;
+	Mon, 26 Aug 2024 07:53:59 GMT
+From: Oleksandr Ocheretnyi <oocheret@cisco.com>
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: xe-linux-external@cisco.com, Oleksandr Ocheretnyi <oocheret@cisco.com>
+Subject: [PATCH v1] iTCO_wdt: ignore NMI_NOW bit on register comparison
+Date: Mon, 26 Aug 2024 00:53:01 -0700
+Message-Id: <20240826075303.3964392-1-oocheret@cisco.com>
+X-Mailer: git-send-email 2.35.6
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -94,86 +67,42 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZGE5NVk1LGUwaSkMYSEweGVYeHw5VEwETFhoSFy
-	QUDg9ZV1kYEgtZQVlOQ1VNSlVKT0pVSk1OWVdZFhoPEhUdFFlBWU9LSFVKS0lCQ0NNVUpLS1VLWQ
-	Y+
-X-HM-Tid: 0a9189ed442703a2kunm9084a7e0183
-X-HM-MType: 10
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6M006Nio5SzI0GhkuCj5PLjo1
-	QhVPCzNVSlVKTElPTkJOQkpPSUhOVTMWGhIXVRoWGh8eDgg7ERYOVR4fDlUYFUVZV1kSC1lBWU5D
-	VU1KVUpPSlVKTU5ZV1kIAVlBT09MSjcG
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 171.68.249.119, sjc-ads-3421.cisco.com
+X-Outbound-Node: rcdn-core-12.cisco.com
 
-Hi,
+Commit da23b6faa8bf ("watchdog: iTCO: Add support for Cannon Lake
+PCH iTCO") does not ignore NMI_NOW bit on write operation to TCO1_CNT
+register what causes unexpected NMIs due to NMI_NOW bit inversion
+during regular crashkernel's workflow with following logs:
 
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dts
-> ...
-> +	leds: leds {
-> +		compatible = "gpio-leds";
+iTCO_vendor_support: vendor-support=0
+iTCO_wdt iTCO_wdt: unable to reset NO_REBOOT flag, device
+                                            disabled by hardware/BIOS
 
-Maybe there should be a blank line.
+This change clears NMI_NOW bit in the TCO1_CNT register to have no
+effect on NMI_NOW bit inversion what can cause NMI immediately.
 
-> +		work_led: work-led {
-> +			gpios = <&gpio0 RK_PB4 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "heartbeat";
-> +		};
-> +	};
+Fixes: da23b6faa8bf ("watchdog: iTCO: Add support for Cannon Lake PCH iTCO")
+Signed-off-by: Oleksandr Ocheretnyi <oocheret@cisco.com>
+---
+ drivers/watchdog/iTCO_wdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Is the color missing?
-
-> ...
-> +	vcc_3v3_rtc_s5: regulator-vcc-3v3-rtc-s5 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc_3v3_rtc_s5";
-> +		regulator-boot-on;
-> +		regulator-always-on;
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		vin-supply = <&vcc_5v0_sys>;
-> +	};
-
-Missing blank line.
-
-> +	vcc_1v8_s0: regulator-vcc-1v8-s0 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc_1v8_s0";
-> +		regulator-boot-on;
-> +		regulator-always-on;
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +		vin-supply = <&vcc_1v8_s3>;
-> +	};
-> ...
-> +&gmac0 {
-> +	phy-mode = "rgmii-rxid";
-
-Can we use "rgmii-id" and remove tx_delay here?
-
-> ...
-> +&sdmmc {
-> +	bus-width = <4>;
-> +	cap-mmc-highspeed;
-> +	cap-sd-highspeed;
-> +	disable-wp;
-> +	max-frequency = <200000000>;
-> +	no-sdio;
-> +	no-mmc;
-> +	non-removable;
-> +	sd-uhs-sdr104;
-> +        vmmc-supply = <&vcc_3v3_s3>;
-
-Indentation error.
-
-> +	vqmmc-supply = <&vccio_sd_s0>;
-> +	status = "okay";
-> +};
-> ...
-
-Thanks,
-Chukun
-
+diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+index 264857d314da..679c115ef7d3 100644
+--- a/drivers/watchdog/iTCO_wdt.c
++++ b/drivers/watchdog/iTCO_wdt.c
+@@ -224,7 +224,7 @@ static int update_no_reboot_bit_cnt(void *priv, bool set)
+ 		val |= BIT(0);
+ 	else
+ 		val &= ~BIT(0);
+-	outw(val, TCO1_CNT(p));
++	outw(val & ~BIT(8), TCO1_CNT(p));
+ 	newval = inw(TCO1_CNT(p));
+ 
+ 	/* make sure the update is successful */
 -- 
-2.25.1
+2.39.3
 
 
