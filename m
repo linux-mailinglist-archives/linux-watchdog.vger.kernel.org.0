@@ -1,136 +1,179 @@
-Return-Path: <linux-watchdog+bounces-1539-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1540-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F0DA95FA23
-	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Aug 2024 21:56:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C88EF9600C4
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Aug 2024 07:04:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC1341F241C3
-	for <lists+linux-watchdog@lfdr.de>; Mon, 26 Aug 2024 19:56:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F57E283418
+	for <lists+linux-watchdog@lfdr.de>; Tue, 27 Aug 2024 05:04:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8746E199250;
-	Mon, 26 Aug 2024 19:56:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5ED112E1C2;
+	Tue, 27 Aug 2024 05:04:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b="yMt3jDjC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FPg11gFe"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EAE9198E9B
-	for <linux-watchdog@vger.kernel.org>; Mon, 26 Aug 2024 19:56:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F5DF4C92;
+	Tue, 27 Aug 2024 05:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724702212; cv=none; b=focGDsft6tOvXWTteKVelH024wnteq85X+12va3f4yRttSxsq7HCiTEjdE2p3XM/7WHg+DT3SvpMxH/3CBiPtSLqGG/KfTiwO3mEmMSWprVKngcbYfAXmpHiYzwcIkyj6Fuy13gZpMbkELETKdBmJcPSFPO2I97qEwTpMx2Fr9M=
+	t=1724735051; cv=none; b=s6h4CJrbuExsIRWaIy430yO0giaka1do3IHTl2G89lpV1eOvYmoZ62icXBFQHEM+rpzC8bF6CVfo44ig4XkaK7I7aZ0Dp+5O2Ju88sOeave7h5UkOie4OuzR1I+iWGXqbMNmtJWLp/5vIhOs0EEDNPlSwXsSG0mmXHWIxTDIfuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724702212; c=relaxed/simple;
-	bh=f44u1tmOhjyUpYSb/IUGjf0UFDthWX1iuarJYnkxt8E=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=omrd3C55HAeDmAgJEDMwGUvz6MdJdq8R7hchoafLyg6l4nqfrOba/yKPiy4mu/gUf5FZ/1nkiN0Tdsm62IMgo2qjm2+IEc7adkBQd7STuvFnBw9RMhAZftgB9nBzBpV2KGRjja3CuEmu3DGp+maWtCBFDNttmZt/2gzNKsL32nE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org; spf=pass smtp.mailfrom=cknow.org; dkim=pass (2048-bit key) header.d=cknow.org header.i=@cknow.org header.b=yMt3jDjC; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cknow.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cknow.org
+	s=arc-20240116; t=1724735051; c=relaxed/simple;
+	bh=GO0zNOW/uhkO9YPbWUQ7p2nEfAJZKu25c78aYjvnEXc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=f5g93hrUFViIJ9Y6RZFXQp1Cmq1CR9AZ7VUbsMu3JEFVjHOBEL87kgn40m7l3kW2cJQ0PubYpivBtz39iioUTyCh3Jj+Fb8lrCDCOb91p7VTYvyGZDeuB06vjPLSvH6ziLnBhOovLGHeDHBNZ4SZjY/CAMuT09bmdmK8JPxyeTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FPg11gFe; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2020ac89cabso45033085ad.1;
+        Mon, 26 Aug 2024 22:04:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724735049; x=1725339849; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=pS15vPEb/TE1/EitqKs+W/XYfjN7muJ2TfqmqJCODDk=;
+        b=FPg11gFej/wmvaQYP+Mnnxn7wXxtw8yGC1ue6iVTDVg3AFpKkwi5RzFpuQxeuN+GEw
+         VXp0/uiGWZDueVH0F+Ed9lHlMp5ZaznnGZreoeK5puuq99PM/Egg/P7IenqPHCe8Hk6s
+         Fx8NTswrBu5j9XE/W51rNaYej2xjtPtVzNoE65GxEkbjNxhBxou52PKViVDQwb1Pi5fx
+         x5GjpFfUD7eR3mLqDn3PRknKwjr3YMwIjbscoqx4ycobSSvfv4y0Z/LtcgtxrYX2vFhM
+         P7+l6JC84O2VkV6cXOHT4ljKOc9wQ6seo0/X8/gRoJwoijsIa/XrWh8OD57kgfGzq8cP
+         5J9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724735049; x=1725339849;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pS15vPEb/TE1/EitqKs+W/XYfjN7muJ2TfqmqJCODDk=;
+        b=uaAP3k8eiTwOsUwa65lj66XM8Jh2SkZ6QRuglpzxTafA7Uz5Y/vjEQSv6VD360lOwB
+         Ftv7fzJ1eeJFqRvkDyJHALcw4/bSjGCh1Mph5eYg/SihzEMhmnyrQnZ2fAXBaj48/e7d
+         ZbGrB272ChEfwlVFgi8x8903dQFrbiTdPcF2ycgVnYzXKiFhm6DTRK3kK3PqCmZP5krA
+         X3xLLUQw0ARl+CBPwHxD78EXcod9v9I5SsV6lcd2VNIckZWLxVcbs+MBp5yqFKt3CtaA
+         n1ahAhrzaO/RBmyq6wty4QGCHJbcIoS0Nrp6ZtlOEaYlFAaVi46jUv+1Ms3rbR5ZnQHh
+         hYvw==
+X-Forwarded-Encrypted: i=1; AJvYcCU6LD0KOS2/Xs8pgUzQ2+JKiHMPvnD3TcF1+H/TIsM8ADmMnE/6O+C+ngE4dpbhT5oKqsHYLxEvsuM=@vger.kernel.org, AJvYcCVdVO/K5fzTTr0yF6DJ3bi7A1zERlGGblYQa72cJU77UbnTz+Tifzc1+Z1EgD7Iccpr16monMIj8VGdhWlB@vger.kernel.org, AJvYcCW42uNGLJ6Xq2vnKWvEQ0bOO3SHQq5gP5lHIEFC3sQs30Ky83+OuhkPKn+m2+pHvDFw1x7SuN+W8iE=@vger.kernel.org, AJvYcCXyPdeTqHSedKEqqgU8wzBVda85P907D4zofBXJesqeIh81O+w5nQxx1EQkgEBWoT1Y9rDPrzBPwxdl5avKz18=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMuRag1hlhqF+80gU1gH2CMzZCvNxaM2SGzUQ+PpnQlBBKUw1w
+	ZE92C7bBtVZB1n4Ek28QtCiXp25MG60ejiTP9xQ5+0esZ87nEdLT
+X-Google-Smtp-Source: AGHT+IHYMlAJ7cseyBWWV3t9xPn+jhmKSnw0GVJdJSMZSjCeZH9bI3KDUJ3ytLkyMDvyWzQWl2op4Q==
+X-Received: by 2002:a17:902:ec83:b0:202:883:bef with SMTP id d9443c01a7336-2039e4ab20bmr100966045ad.30.1724735049361;
+        Mon, 26 Aug 2024 22:04:09 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-203855dbf57sm75480025ad.147.2024.08.26.22.04.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Aug 2024 22:04:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ee11fea3-3e77-4870-837a-ef6147ac2bf0@roeck-us.net>
+Date: Mon, 26 Aug 2024 22:04:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cknow.org; s=key1;
-	t=1724702208;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lSNB16YmTmGtSszFku9OEpzxCSlM3sSnGKMEEle5Jqc=;
-	b=yMt3jDjCx/B0z6xC082cVw0HQY4Me/FagDvE50oGlZZXCMF5Jq6LNhf+2Qxm6GxDSPpGhy
-	osQCkmyACysyLu+u650VEqjzcGGEzFWl7uD9cGiG2uKMLG+neaKZVbHPdqs4NgFfV9kN36
-	F6RecMyRzzHf5tUuKzWLlXy6Zq2aaUrO4Nqz767HIHttvZPw1xfRvEvz1/LRgm5SKRKgW5
-	e98Q7S61cpPqJ69fgCnm4wfemUXqHoZmqLDjo7EW4Gn5fu5LKSLz7FsFpc5L1IqLMoKSNw
-	zVNkFcO6HzXLN8irNUWL94mMo90EcrTYmktZgOLYwgwJL0BRUy5LS22/0nNbVQ==
-Content-Type: multipart/signed;
- boundary=128cfb0fa1f91e2aae272ffecd950e1f386b558b6f3d91eca48fb6bdbb70;
- micalg=pgp-sha256; protocol="application/pgp-signature"
-Date: Mon, 26 Aug 2024 21:56:34 +0200
-Message-Id: <D3Q3WI8AHRJ1.3B8E985JAVVC2@cknow.org>
-Cc: <airlied@gmail.com>, <alchark@gmail.com>, <andi.shyti@kernel.org>,
- <andyshrk@163.com>, <broonie@kernel.org>, <cl@rock-chips.com>,
- <conor+dt@kernel.org>, <daniel@ffwll.ch>, <devicetree@vger.kernel.org>,
- <dri-devel@lists.freedesktop.org>, <dsimic@manjaro.org>,
- <efectn@protonmail.com>, <finley.xiao@rock-chips.com>,
- <gregkh@linuxfoundation.org>, <heiko@sntech.de>, <honyuenkwun@gmail.com>,
- <jagan@edgeble.ai>, <jamie@jamieiles.com>, <jic23@kernel.org>,
- <jirislaby@kernel.org>, <jonas@kwiboo.se>, <jszhang@kernel.org>,
- <kernel@collabora.com>, <krzk+dt@kernel.org>, <lars@metafoo.de>,
- <lee@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
- <linux-rockchip@lists.infradead.org>, <linux-serial@vger.kernel.org>,
- <linux-spi@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
- <linux@roeck-us.net>, <maarten.lankhorst@linux.intel.com>,
- <macromorgan@hotmail.com>, <megi@xff.cz>, <michael.riesch@wolfvision.net>,
- <mripard@kernel.org>, <robh@kernel.org>, <tim@feathertop.org>,
- <tzimmermann@suse.de>, <ulf.hansson@linaro.org>, <wim@linux-watchdog.org>
-Subject: Re: [PATCH v2 11/12] arm64: dts: rockchip: Add rk3576 SoC base DT
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Diederik de Haas" <didi.debian@cknow.org>
-To: "Detlev Casanova" <detlev.casanova@collabora.com>, "Chukun Pan"
- <amadeus@jmu.edu.cn>
-References: <23624422.6Emhk5qWAg@trenzalore>
- <20240825140824.200453-1-amadeus@jmu.edu.cn>
- <22403959.EfDdHjke4D@bootstrap>
-In-Reply-To: <22403959.EfDdHjke4D@bootstrap>
-X-Migadu-Flow: FLOW_OUT
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] watchdog: rzg2l_wdt: Power on the watchdog domain in
+ the restart handler
+To: Claudiu <claudiu.beznea@tuxon.dev>, geert+renesas@glider.be,
+ mturquette@baylibre.com, sboyd@kernel.org, wim@linux-watchdog.org,
+ ulf.hansson@linaro.org
+Cc: linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240826152529.2080248-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240826152529.2080248-4-claudiu.beznea.uj@bp.renesas.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240826152529.2080248-4-claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---128cfb0fa1f91e2aae272ffecd950e1f386b558b6f3d91eca48fb6bdbb70
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
+On 8/26/24 08:25, Claudiu wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> 
+> On RZ/G3S the watchdog can be part of a software-controlled PM domain. In
+> this case, the watchdog device need to be powered on in
+> struct watchdog_ops::restart API. This can be done though
+> pm_runtime_resume_and_get() API if the watchdog PM domain and watchdog
+> device are marked as IRQ safe. We mark the watchdog PM domain as IRQ safe
+> with GENPD_FLAG_IRQ_SAFE when the watchdog PM domain is registered and the
+> watchdog device though pm_runtime_irq_safe().
+> 
+> Before commit e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait
+> context'") pm_runtime_get_sync() was used in watchdog restart handler
+> (which is similar to pm_runtime_resume_and_get() except the later one
+> handles the runtime resume errors).
+> 
+> Commit e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait
+> context'") dropped the pm_runtime_get_sync() and replaced it with
+> clk_prepare_enable() to avoid invalid wait context due to genpd_lock()
+> in genpd_runtime_resume() being called from atomic context. But
+> clk_prepare_enable() doesn't fit for this either (as reported by
+> Ulf Hansson) as clk_prepare() can also sleep (it just not throw invalid
+> wait context warning as it is not written for this).
+> 
+> Because the watchdog device is marked now as IRQ safe (though this patch)
+> the irq_safe_dev_in_sleep_domain() call from genpd_runtime_resume() returns
+> 1 for devices not registering an IRQ safe PM domain for watchdog (as the
+> watchdog device is IRQ safe, PM domain is not and watchdog PM domain is
+> always-on), this being the case of RZ/G2 devices that uses this driver,
+> we can now drop also the clk_prepare_enable() calls in restart handler and
+> rely on pm_runtime_resume_and_get().
+> 
+> Thus, drop clk_prepare_enable() and use pm_runtime_resume_and_get() in
+> watchdog restart handler.
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-On Mon Aug 26, 2024 at 8:28 PM CEST, Detlev Casanova wrote:
-> On Sunday, 25 August 2024 10:08:24 EDT Chukun Pan wrote:
-> > > --- /dev/null
-> > > +++ b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
-> > > ...
-> > > +		opp-1416000000 {
-> > > +			opp-hz =3D /bits/ 64 <1416000000>;
-> > > +			opp-microvolt =3D <725000 725000 950000>;
-> > > +			opp-microvolt-L1 =3D <712500 712500 950000>;
-> > > +			opp-microvolt-L2 =3D <700000 700000 950000>;
-> > > +			opp-microvolt-L3 =3D <700000 700000 950000>;
-> > > +			opp-microvolt-L4 =3D <700000 700000 950000>;
-> > > +			opp-microvolt-L5 =3D <700000 700000 950000>;
-> > > +			clock-latency-ns =3D <40000>;
-> > > +		};
-> > > ...
-> >=20
-> > I'm curious if these frequencies work properly. On the bsp kernel,
-> > 'opp-microvolt-L<name>' is used by the PVTM driver, I don't know
-> > if it works on the upstream kernel.
->
-> Which seems to correspond to the set opp-hz value. As mentionned by Alexe=
-y,=20
-> the opp-microvolt-L.* values are not used by the driver.
->
-> I also have not tested any cpufreq settings/driver on this board yet. I c=
-an=20
-> remove the opp-microvolt-L.* for now.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-If you run this command on the upstream kernel:
-``grep -r "opp-microvolt" arch/arm64/boot/dts/rockchip/``
-
-you'll see it doesn't use the opp-microvolt-LN variants anywhere,
-so this is indeed a downstream/BSP only thing.
-
---128cfb0fa1f91e2aae272ffecd950e1f386b558b6f3d91eca48fb6bdbb70
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCZszd+QAKCRDXblvOeH7b
-bsPMAP9CORw/HV6VNrTduOL78GjAIEpWxM/M9+0BOgYkBHnzpQEAjK8fuZpW3HrN
-ri8LuinsuvlO+D0OMT9SEJJAE8prZQE=
-=pQv4
------END PGP SIGNATURE-----
-
---128cfb0fa1f91e2aae272ffecd950e1f386b558b6f3d91eca48fb6bdbb70--
 
