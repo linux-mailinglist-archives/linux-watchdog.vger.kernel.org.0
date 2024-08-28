@@ -1,93 +1,90 @@
-Return-Path: <linux-watchdog+bounces-1553-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1554-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 530539629C6
-	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Aug 2024 16:07:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 207C5962B5E
+	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Aug 2024 17:10:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BDFF91F25010
-	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Aug 2024 14:07:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45A251C2371E
+	for <lists+linux-watchdog@lfdr.de>; Wed, 28 Aug 2024 15:10:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E05DF1891AA;
-	Wed, 28 Aug 2024 14:06:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FAFD1A255E;
+	Wed, 28 Aug 2024 15:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="kSnq8xHZ"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="So6GTcbv";
+	dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b="NGAgRuxD"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from a7-28.smtp-out.eu-west-1.amazonses.com (a7-28.smtp-out.eu-west-1.amazonses.com [54.240.7.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87CD91898F1
-	for <linux-watchdog@vger.kernel.org>; Wed, 28 Aug 2024 14:06:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44939381C2;
+	Wed, 28 Aug 2024 15:10:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.240.7.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724853982; cv=none; b=RSQzSjLBgYkFM1OxJAWCw6EwZW1oQfaA3W9J8y8/zCEo5NM1lac8yyvpk0jE4eu8FTHrp6HK4DZojaQbYt1vvy6fwI68S4NFEiFtPuW0d6RpIxYAddCt1nvR2GdqkJzIwtvhP6aXUFLtokDUzGk/eTkkmqdqwhICHqUTnOoa8GY=
+	t=1724857841; cv=none; b=aW/0aPmJMSu7X0JBY4eEsGK4IlKRX7G4OMv7Ddn2tv3L5uM2Rzc/djQQc9jvvF4dWzG/g4nli0hiTgwXisQCM8HfXofRNIchSoDb2IioITEqv8gZCfIMHATlxOaTMiyVxPhVRUesilqOC9Qzfp42kqIE55I96XxiuH0kcgad3mE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724853982; c=relaxed/simple;
-	bh=RZ7f8KSDfavIg2LMNLDwKSDIUWMWuB94Qd8u4dHZeAw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cy6lRP4JgFNNVljK6hdnrzE1nnQMYIR0KccJdUD1/rSNsrOPACylbHIb/fDUlc94FmkEodk1cly7eyixDy6DcBx92XCnj8FNqY54PllJtSgBpfDU1E87aYuFOiVEfg+FpZk06rtXzC9vij0nnjWW+TLenEs7045Yz21mIog+k1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=kSnq8xHZ; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a7a81bd549eso539845566b.3
-        for <linux-watchdog@vger.kernel.org>; Wed, 28 Aug 2024 07:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1724853978; x=1725458778; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S9iF1jJIvtOjyxkFa1dGcE5P1zK7/0vC9veIHL8v450=;
-        b=kSnq8xHZmThYKL9vBgbC2urulWGAc5YWtqbKicaWc9kVI0opDrqxru4IsLhWzZiRW9
-         KTpfS/A0KoIa2tR+QG2uJxLyR4PCjK+H7zQvyukTmv7XsaPNqzKj85yYByapooyCXpGd
-         O8dUJJtEpig4t+qZF+pK4GqaCJXezTSw1so2r9MnItWKTuYJ8gvDPnNOypNKs69my8Zg
-         VXsPGIwpk3gNNsw1F2poKM5GLK2kyLU2om44Io95/olJdvmKr7iBAYtmPIrdU19YlAn9
-         TyWPzQGAKsT/yR5Tvgo51M91dzLw6KU8iLtUI7DsLvPXBTCjTbip6e20Lu2ys8cpc+X8
-         f9eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724853978; x=1725458778;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S9iF1jJIvtOjyxkFa1dGcE5P1zK7/0vC9veIHL8v450=;
-        b=IiltUis522+vyHUfGiYgy2McCgE3jBvq4cdRXbTdWShOnGI7eYo6rE/5Hsy6SvGifD
-         aGSIfPUVWNgkDKjgWGyErISP/K82T4q3xw6HArftJHzdCjjenHmBdF479ceJawzDSZ/l
-         oGPqN8aQoqs+KVSx5pB6OkDvl8nSWUwpgxHhxfIQO+bdIQZ8OBzt7RUSskD7KJKO3NJC
-         DncPcZzkYDiwMUfUhhnO60ilTvo5ORRM7nJPn25UgIMCsR10/lc2KiIDKwLrkdPbMd2m
-         RIC1gSwPXCqrX+wQu1Bg4MfWOrfrLHI3gdnITLd5MHjIfxBYdlHecvEsNXgUiztJHXXg
-         a0wA==
-X-Forwarded-Encrypted: i=1; AJvYcCVh/cnOjVscd2st2AVNZoZs55qmNUAKgvps/oHmTJtHuPQnCwD95syFxoHC/N2hhU0QsCFMavvWeXY18Pp9jA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxksiFS98ErScIVELP55hj+XBrnMkCsWdd0s6i2Ns0C5n/Wc0wV
-	jZm2pqpAbzyMj++puLfv5DYGsXP088jSwEwVVDx1UWTxJbpO3190QtUA/U1lL+M=
-X-Google-Smtp-Source: AGHT+IEsHCbcGPRfjvRa3ReFX+yeEg97TxBu8qrzEnpYz3gK7FeIv1FbQkePSMHvE/KzGYp7D32IZw==
-X-Received: by 2002:a17:907:ea1:b0:a86:789c:2d07 with SMTP id a640c23a62f3a-a86a516305emr1476874566b.4.1724853977604;
-        Wed, 28 Aug 2024 07:06:17 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.144])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a86e54b50dbsm251875666b.93.2024.08.28.07.06.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2024 07:06:17 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: geert+renesas@glider.be,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	wim@linux-watchdog.org,
-	linux@roeck-us.net,
-	ulf.hansson@linaro.org
-Cc: linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	claudiu.beznea@tuxon.dev,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v2 3/3] watchdog: rzg2l_wdt: Power on the watchdog domain in the restart handler
-Date: Wed, 28 Aug 2024 17:06:02 +0300
-Message-Id: <20240828140602.1006438-4-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240828140602.1006438-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20240828140602.1006438-1-claudiu.beznea.uj@bp.renesas.com>
+	s=arc-20240116; t=1724857841; c=relaxed/simple;
+	bh=/6xBr387lHpMiwXE06HG6XGKl2MHb0i9Xw/IsslGxeY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h/VpjMjNsvPYxOSZOy6Elr98917KpkQbF8ubC5DNobI4GVy8poGh8cOMVhO2S7OCzhVG62xcoTKqXHvPTFH2CmdhXs488wCSM1Vi5kJJfh7vLspV7i0aJVZFT/uYwrpg8fOCgPlwO8RjVuCz125eR9MaH7QAzVOMiGRdFDnk2qI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=amazonses.collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=So6GTcbv; dkim=pass (1024-bit key) header.d=amazonses.com header.i=@amazonses.com header.b=NGAgRuxD; arc=none smtp.client-ip=54.240.7.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazonses.collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=4232tfv5ebdrjdwkr5zzm7kytdkokgug; d=collabora.com; t=1724857836;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding;
+	bh=/6xBr387lHpMiwXE06HG6XGKl2MHb0i9Xw/IsslGxeY=;
+	b=So6GTcbvolSMtNsUCWfb8CsMbmN8o1hLN+EU3OGSCp6G6ggakxwJR+tjfj4tuvmO
+	2iFphPt4sq3whGtEOFUlDZC0XFG7Ocmp3fzDtoj7lhbs4r7BBNudpIFNMLDJqIq7lFu
+	OtHXlEE0J6Tsk6+nt4i25p3SEtO2U7DX6P6MnfnUV/Q38nBG6RNnpIrEVLcj9dSlOEk
+	vZAgwDDjqiMUCl6Ziav3Nn/LyL7rdTuhGrwU2twVByj33MCEbtvHfh3piVEMQqcBnl5
+	5WhtHmiHN9c+mQ1Yhw5bNkyd5W2pncevISM+uTneW/tx1rFB60tC0uNnFAgzibv2z6V
+	C68N1PqD1w==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=uku4taia5b5tsbglxyj6zym32efj7xqv; d=amazonses.com; t=1724857836;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Feedback-ID;
+	bh=/6xBr387lHpMiwXE06HG6XGKl2MHb0i9Xw/IsslGxeY=;
+	b=NGAgRuxDN5KLV7xQPZrLjHKHSu36qmbsagTi0A/Jw//EHQPMd3rky8uzhqSPZjzn
+	yW3h6SHcZ11Mi7D0oRMsawVkbWSuPcppzFU7IoxCqmkmivRRZFsS1gsservqYsNPHjE
+	cFeO8N7rwF4vkSpAlc2aIvusOfhoxD3Echpx1ZVU=
+From: Detlev Casanova <detlev.casanova@collabora.com>
+To: linux-kernel@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, 
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, 
+	Andi Shyti <andi.shyti@kernel.org>, Lee Jones <lee@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Guenter Roeck <linux@roeck-us.net>, 
+	Chris Morgan <macromorgan@hotmail.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Tim Lunn <tim@feathertop.org>, 
+	Chukun Pan <amadeus@jmu.edu.cn>, 
+	Muhammed Efe Cetin <efectn@protonmail.com>, 
+	Andy Yan <andyshrk@163.com>, Jagan Teki <jagan@edgeble.ai>, 
+	Dragan Simic <dsimic@manjaro.org>, 
+	Detlev Casanova <detlev.casanova@collabora.com>, 
+	Ondrej Jirman <megi@xff.cz>, Jimmy Hon <honyuenkwun@gmail.com>, 
+	Elon Zhang <zhangzj@rock-chips.com>, 
+	Finley Xiao <finley.xiao@rock-chips.com>, 
+	Elaine Zhang <zhangqing@rock-chips.com>, 
+	Liang Chen <cl@rock-chips.com>, 
+	Yifeng Zhao <yifeng.zhao@rock-chips.com>, 
+	Jisheng Zhang <jszhang@kernel.org>, Jamie Iles <jamie@jamieiles.com>, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org, 
+	linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel@collabora.com
+Subject: [PATCH v3 00/11] Add device tree for ArmSoM Sige 5 board
+Date: Wed, 28 Aug 2024 15:10:36 +0000
+Message-ID: <010201919989e3de-60b56341-85e0-4869-89d1-362407c4f2ec-000000@eu-west-1.amazonses.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -95,103 +92,98 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Feedback-ID: ::1.eu-west-1.YpP9ZbxnARFfy3Cb5pfsLd/pdsXBCNK0KEM7HforL4k=:AmazonSES
+X-SES-Outgoing: 2024.08.28-54.240.7.28
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Add the rk3576-armsom-sige5 device tree as well as its rk3576.dtsi base
+and pinctrl information in rk3576-pinctrl.dtsi.
 
-On RZ/G3S the watchdog can be part of a software-controlled PM domain. In
-this case, the watchdog device need to be powered on in
-struct watchdog_ops::restart API. This can be done though
-pm_runtime_resume_and_get() API if the watchdog PM domain and watchdog
-device are marked as IRQ safe. We mark the watchdog PM domain as IRQ safe
-with GENPD_FLAG_IRQ_SAFE when the watchdog PM domain is registered and the
-watchdog device though pm_runtime_irq_safe().
+The other commits add DT bindings documentation for the devices that
+already work with the current corresponding drivers.
 
-Before commit e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait
-context'") pm_runtime_get_sync() was used in watchdog restart handler
-(which is similar to pm_runtime_resume_and_get() except the later one
-handles the runtime resume errors).
+Note that as is, the rockchip gpio driver needs the gpio nodes
+to be children of the pinctrl node, even though this is deprecated.
 
-Commit e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait
-context'") dropped the pm_runtime_get_sync() and replaced it with
-clk_prepare_enable() to avoid invalid wait context due to genpd_lock()
-in genpd_runtime_resume() being called from atomic context. But
-clk_prepare_enable() doesn't fit for this either (as reported by
-Ulf Hansson) as clk_prepare() can also sleep (it just not throw invalid
-wait context warning as it is not written for this).
+When the driver supports it, they can be moved out of the pinctrl node.
 
-Because the watchdog device is marked now as IRQ safe (though this patch)
-the irq_safe_dev_in_sleep_domain() call from genpd_runtime_resume() returns
-1 for devices not registering an IRQ safe PM domain for watchdog (as the
-watchdog device is IRQ safe, PM domain is not and watchdog PM domain is
-always-on), this being the case for RZ/G3S with old device trees and
-the rest of the SoCs that use this driver, we can now drop also the
-clk_prepare_enable() calls in restart handler and rely on
-pm_runtime_resume_and_get().
+The power-domain@RK3576_PD_USB is a child of power-domain@RK3576_PD_VOP.
+That looks strange but it is how the hardware is, and confirmed by
+Rockchip: The NOC bus of USB passes through the PD of VOP, so it relies on
+VOP PD.
 
-Thus, drop clk_prepare_enable() and use pm_runtime_resume_and_get() in
-watchdog restart handler.
+The other bindings and driver implementations are in other patch sets:
+- PMIC: https://lore.kernel.org/all/20240802134736.283851-1-detlev.casanova@collabora.com/ (applied on next)
+- CRU: https://lore.kernel.org/all/20240822194956.918527-1-detlev.casanova@collabora.com/
+- PINCTRL: https://lore.kernel.org/all/20240822195706.920567-1-detlev.casanova@collabora.com/
+- PM DOMAIN: https://lore.kernel.org/all/20240814222824.3170-1-detlev.casanova@collabora.com/ (applied on next)
+- DW-MMC: https://lore.kernel.org/all/20240822212418.982927-1-detlev.casanova@collabora.com/
+- GMAC: https://lore.kernel.org/all/20240823141318.51201-1-detlev.casanova@collabora.com/
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
+Changes since v2:
+- Fix LEDs in armsom dts
+- mmc: Move allOf after the required block
+- Remove saradc dt-binding commit (already applied)
+- Remove opp-microvolt-L* fields
+- Reword mali commit message
+- Use rgmii-id and remove delays on gmac nodes
 
-Changes in v2:
-- adjusted patch description and comment from code
-- collected tags
+Changes since v1:
+- Add eMMC support
+- Add gpu node
+- Add rtc node
+- Add spi compatible dt-bindings
+- Add watchdog support
+- Dropped timer compatible commit (applied in [0])
+- Move ethernet aliases to board dt
+- Move mmio nodes to soc node
+- Removed cru grf phandle
+- Removed gpio aliases
+- Removed grf compatibles (applied in [1])
+- Removed pinctrl php-grf phandle
+- Removed v2-tuning for sdcard
+- Renamed clock nodes
+- Renamed regulators do match regulator-vcc-<voltage>-<name>
+- Renamed the rkvdec_sram node to vdec_sram to match prior generations
+- Reorder fields consistently in nodes
+- Use correct #power-domain-cells values
 
-Changes since RFC:
-- use pm_runtime_resume_and_get() and pm_runtime_irq_safe()
-- drop clock prepare in probe
+[0]: https://lore.kernel.org/all/918bb9e4-02d9-4dca-bed2-28bb123bdc10@linaro.org/
+[1]: https://lore.kernel.org/all/172441646605.877570.8075942261050000.b4-ty@sntech.de/
 
- drivers/watchdog/rzg2l_wdt.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+Detlev.
 
-diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-index 2a35f890a288..11bbe48160ec 100644
---- a/drivers/watchdog/rzg2l_wdt.c
-+++ b/drivers/watchdog/rzg2l_wdt.c
-@@ -12,6 +12,7 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
- #include <linux/reset.h>
- #include <linux/units.h>
-@@ -166,8 +167,22 @@ static int rzg2l_wdt_restart(struct watchdog_device *wdev,
- 	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
- 	int ret;
- 
--	clk_prepare_enable(priv->pclk);
--	clk_prepare_enable(priv->osc_clk);
-+	/*
-+	 * In case of RZ/G3S the watchdog device may be part of an IRQ safe power
-+	 * domain that is currently powered off. In this case we need to power
-+	 * it on before accessing registers. Along with this the clocks will be
-+	 * enabled. We don't undo the pm_runtime_resume_and_get() as the device
-+	 * need to be on for the reboot to happen.
-+	 *
-+	 * For the rest of SoCs not registering a watchdog IRQ safe power
-+	 * domain it is safe to call pm_runtime_resume_and_get() as the
-+	 * irq_safe_dev_in_sleep_domain() call in genpd_runtime_resume()
-+	 * returns non zero value and the genpd_lock() is avoided, thus, there
-+	 * will be no invalid wait context reported by lockdep.
-+	 */
-+	ret = pm_runtime_resume_and_get(wdev->parent);
-+	if (ret)
-+		return ret;
- 
- 	if (priv->devtype == WDT_RZG2L) {
- 		ret = reset_control_deassert(priv->rstc);
-@@ -275,6 +290,7 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
- 
- 	priv->devtype = (uintptr_t)of_device_get_match_data(dev);
- 
-+	pm_runtime_irq_safe(&pdev->dev);
- 	pm_runtime_enable(&pdev->dev);
- 
- 	priv->wdev.info = &rzg2l_wdt_ident;
+Detlev Casanova (11):
+  dt-bindings: arm: rockchip: Add ArmSoM Sige 5
+  dt-bindings: arm: rockchip: Add rk3576 compatible string to pmu.yaml
+  dt-bindings: i2c: i2c-rk3x: Add rk3576 compatible
+  dt-bindings: mfd: syscon: Add rk3576 QoS register compatible
+  dt-bindings: serial: snps-dw-apb-uart: Add Rockchip RK3576
+  dt-bindings: mmc: Add support for rk3576 eMMC
+  dt-bindings: gpu: Add rockchip,rk3576-mali compatible
+  dt-bindings: watchdog: Add rockchip,rk3576-wdt compatible
+  spi: dt-bindings: Add rockchip,rk3576-spi compatible
+  arm64: dts: rockchip: Add rk3576 SoC base DT
+  arm64: dts: rockchip: Add rk3576-armsom-sige5 board
+
+ .../devicetree/bindings/arm/rockchip.yaml     |    5 +
+ .../devicetree/bindings/arm/rockchip/pmu.yaml |    2 +
+ .../bindings/gpu/arm,mali-bifrost.yaml        |    1 +
+ .../devicetree/bindings/i2c/i2c-rk3x.yaml     |    1 +
+ .../devicetree/bindings/mfd/syscon.yaml       |    2 +
+ .../bindings/mmc/snps,dwcmshc-sdhci.yaml      |   38 +-
+ .../bindings/serial/snps-dw-apb-uart.yaml     |    1 +
+ .../devicetree/bindings/spi/spi-rockchip.yaml |    1 +
+ .../bindings/watchdog/snps,dw-wdt.yaml        |    1 +
+ arch/arm64/boot/dts/rockchip/Makefile         |    1 +
+ .../boot/dts/rockchip/rk3576-armsom-sige5.dts |  659 ++
+ .../boot/dts/rockchip/rk3576-pinctrl.dtsi     | 5775 +++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3576.dtsi      | 1644 +++++
+ 13 files changed, 8119 insertions(+), 12 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-armsom-sige5.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3576-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3576.dtsi
+
 -- 
-2.39.2
+2.46.0
 
 
