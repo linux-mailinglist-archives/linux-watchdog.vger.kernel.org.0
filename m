@@ -1,450 +1,259 @@
-Return-Path: <linux-watchdog+bounces-1634-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1635-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 465C2964F2A
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2024 21:39:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6375965293
+	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Aug 2024 00:01:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C53BF1F211BE
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2024 19:39:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA5991C249CE
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2024 22:01:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A43CE1BB680;
-	Thu, 29 Aug 2024 19:38:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A9551BB688;
+	Thu, 29 Aug 2024 22:01:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BTOguPDR"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="YYOsw+Dn"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2068.outbound.protection.outlook.com [40.107.241.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2601BAEC8;
-	Thu, 29 Aug 2024 19:38:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724960329; cv=none; b=tnSRvsM01fuaGH4rDrX/Mr7ExxExvInFqzTslyYu137fBA+yg/KwgtiCC1KzSHF+4ZrnSBAiqXecSYvHVV+uyUdNRpjXHzW09QYaroKmTDIWfO3Z/mvFmK+ASxLB19va2dA+mlCn32Vnkiu1ivrfu5c6p5hJx2QJkI61X0EJs50=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724960329; c=relaxed/simple;
-	bh=W4epz5aDmv6U1NLOP5QkEYtlC6Yx6N3VhoJcWSy+RBQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZP608wcKJTp8eun6g3kXyJA0U3P5aTTA/SXAQqUWZTafvuetV+FjR/dgQAUi/Qhxru9KbQxgXQfZHkG2HI+58kJENFGDKcOdOq9pCvv/5IFJ0IptrxEAa+ieEPD4bgevU1ltiRG+xuw544e6wl28LmJ7vAIVM9bfs4fd+Spigtw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BTOguPDR; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-371c5187198so647221f8f.3;
-        Thu, 29 Aug 2024 12:38:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724960326; x=1725565126; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fmJ3uoNesBVlL8LJG2PwbBt6QgGjpRJlMiaccw0L+8A=;
-        b=BTOguPDRj4kw/nJlx4GZ1YO0oG0gSMD/R6DEaxfTs+UvpO0TTO2/vX3Qz2spAf+5cg
-         3GMRQLvjlSRlCRC7An7MQDfc1b3tDDnsJfM5S29F/GkCrYRPLA2rVQDG50cK0C/mw0Fy
-         Hs12jjPTF5xjJs7bA7m4GzkwYuSMxphKeKt/vQFSwi60IIAN1KPjvH7m7rJUr54BSWJC
-         HPB0FSjyDnB8mv0fwNYF4ESXN/Dk6HjOjcuixpnAIBsj91+/P7y9fOk9mqRb3ryaKKp1
-         PQzW28PspnKdOLbTwdQVYVCWz+eJ4cLV/f1mralvFKyuWE5bbDCrB1sHgI2XZbiNT79O
-         nxEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724960326; x=1725565126;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fmJ3uoNesBVlL8LJG2PwbBt6QgGjpRJlMiaccw0L+8A=;
-        b=hpFCe9KBaHn03/FO5RNFGMjiLA+AlId9DzQ90ZPBMsDpx+oLZggqO1PN8+d1xRXTbI
-         sKPtOBpMRURnzGmOIPSnzELiELLqBe89VSvnXW63psZmq3PYfFE26oYpS4GxqK8NegWl
-         XCfmdefo0YZv3tNFxIs9H8ek/utYd+RTd6j8IvykY0wSNMCY5MVCoHlHOUTCbLJSNNiz
-         QzAeuWeXpWM3sg3l5awgHiuZE/dr0lJGgIj5/jP13Sbq1659XSCGriP02L8RW61Bjs8/
-         9PqXWMFGMJyn9lFcyNtvIh+falPfh8p0r9Ugoq0hplquP/Wjev0iPJ0u0gntgkOcla/l
-         eORQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUD5eJOUEtFMQy9++Uqosh6Ghz/nmWZFp0P3Y98b1o4VoKNN23jCpYFTcAqfv9UAO9Dxd3pNRlKuCmIQL1e@vger.kernel.org, AJvYcCXC0mQ5nyHw+oBRQE65xsc8+YIAMPzoS9G7OxgEffltTVIj6Nr9hgy7TrlVJtCEIbctSTIVh73AZkU5VqwLTVSokaI=@vger.kernel.org, AJvYcCXwKOjKm71bMJ3cmtPYui7PH3uNITTFZJYD0DpYRWCWnLiyyiMUsy1AvACD2HzowIiSReSRPULgHdB/@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiB6WUiUn8YLL2Qp1sJtvCK0nAm344bO0HpseFl17ZMEhMqS9r
-	eLIvHgqs2RJ8jis5jD4rC+q6xwc5PiqLJ+d2rWLLF3WYMAXQJhFg
-X-Google-Smtp-Source: AGHT+IEVGSIn7FwxgnqajHXyzrP9CTluLgrL/DGCEkaq6RT0Orjud+iTOEW9QuZh7FJI/QOfFG/Z6g==
-X-Received: by 2002:adf:a3d9:0:b0:371:937a:326c with SMTP id ffacd0b85a97d-3749b5867c1mr2286829f8f.57.1724960325319;
-        Thu, 29 Aug 2024 12:38:45 -0700 (PDT)
-Received: from prasmi.home ([2a00:23c8:2500:a01:a26f:c074:4086:5001])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3749efb2c91sm2140049f8f.102.2024.08.29.12.38.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2024 12:38:44 -0700 (PDT)
-From: Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-watchdog@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Prabhakar <prabhakar.csengg@gmail.com>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v5 2/2] watchdog: Add Watchdog Timer driver for RZ/V2H(P)
-Date: Thu, 29 Aug 2024 20:38:31 +0100
-Message-Id: <20240829193831.80768-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240829193831.80768-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20240829193831.80768-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166A71BAEC8;
+	Thu, 29 Aug 2024 22:01:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724968867; cv=fail; b=EEYOPEAvLKA4SIOc0fh0yK0lko5gDzRVtBZqb3ZKS05Rlyfgt5NV3ZtlCZiHcVatWrfVKfH7L7UKdZ7kBHgUKhVAWvvv5w9VvILYAciik0/xeOHrxyOH9kXTAt7ekeb51EI3ELhZQjGB3Cg+MUj8mjT+QPmTDHhQydsPB+gANBQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724968867; c=relaxed/simple;
+	bh=Wk64ta0iJfSK1W/mqKyM+dF84J9+EQwinuXF1qhfBq8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=HGB5+8aQw7+NlooJHvtnJ+p7u4sOTiXpYWf0nX8LwZnhBAgkMKT4rKGe7DDoQ6IZCr6BRa6Wk8uehMwHo+RqtKwEwO2ykrv8ezkpNUbKVhOVhMNEjPFOBaeKfQIoRxixwyL24ASx0VDvnJ0LkOjjhSgvQp1I4+X8mTUcq6HxO9o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=YYOsw+Dn; arc=fail smtp.client-ip=40.107.241.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hfRhHHRBTBtZTcV3PS13h2Slg2M1prLPzGUGwW31qad8Srbhbr1qGPthr75NF9bEbRmbFawiVgpeShIMfwp0H38V3rfuavZdN4E0gpWeff2oWv1anZwrh9wSYZVBgsJxzZfRanMCFEReO1mLWUgzjAfd7wKmVc1oPrKOQlKpiW6TqtKpRF8d6qOkE0mL2bD3wr88VzGgwFy/3VpTUusg7uoSd/7Ao62xba4BPVWbtqWzOFueKEvVykJRMSvOM16AHFZwAr5948ORqruvl6oITViYyFxxdRynDfJqeDEcq8OR3OLUbHKVP4W+ghdzbbKEgIZfTSi03cBOkoH8HNqqow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3s/rTSHPBF/g0T1U3Tw+A6CXNyzCswGc3yTk0lB1dGo=;
+ b=RcbVT/s5vfDrcIz2pYQYeCNJTtmE1wYbLkF1uopfsHugCdvdMyp76kkS7aNim9KGmJ+PgDv789vIYWHsWiYjpRJFWXR80TUExf9a3Z85Egzd99WdNiCN3ZEarM+IZJT/hZcCHRydw+fSGLEA1qMsVEST7V+KSt8QA7DTb7FEmsof2NCxL+QsEM/f6WeCsdPe4OcHCz5K2f3G1lYDNy7UbBRgd9BDW3uY0dTVo2SF9DL+L4Ky4wuZ6AEh/rR1j3ncDCev521YX3v0TsXjFxbDURw76QUuXOUgxFCGeTRN7gWlZEuMlJg83YAjyjm0qUXNzcxUNflaHW6Tj+cIJaPhjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3s/rTSHPBF/g0T1U3Tw+A6CXNyzCswGc3yTk0lB1dGo=;
+ b=YYOsw+DnsDk49ctZylgoRu90I0zSn1HX4OClOZ/ZB7nvTU3kcU9ignJJP55EZIzAsAD2WghQU6PB94MRtjndwAo+/W+8xTud4PBDU4bcZMiJcI0Z4HB2bJAEx3wU6S/IsvDzBuZT/lFZvtZvTk1tijwyaZpYT60csz9LYGBi1gLqv8hbi4g9Pip9c7U8zGpAw5EjCVJpFAg2KKMH9UjyY1EvVeBB1p2SmMt5XCfV0Tam5B7o5FH4dZqp+bxjBKGyOi4nL8uOWaoHI5RYrrsEbxwOzDpved/kSvmnULfJSrBysjgURrSJ8c9YOdcXQS/+M0iKAJnmfDknVlNt4aNS4A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by AM8PR04MB7972.eurprd04.prod.outlook.com (2603:10a6:20b:236::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.24; Thu, 29 Aug
+ 2024 22:00:58 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%4]) with mapi id 15.20.7897.027; Thu, 29 Aug 2024
+ 22:00:58 +0000
+Date: Thu, 29 Aug 2024 18:00:51 -0400
+From: Frank Li <Frank.li@nxp.com>
+To: christophe.jaillet@wanadoo.fr
+Cc: alice.guo@nxp.com, festevam@gmail.com, imx@lists.linux.dev,
+	kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux@roeck-us.net, s.hauer@pengutronix.de, shawnguo@kernel.org,
+	wim@linux-watchdog.org, ye.li@nxp.com
+Subject: Re: [PATCH v5 1/1] watchdog: imx7ulp_wdt: move post_rcs_wait into
+ struct imx_wdt_hw_feature
+Message-ID: <ZtDvk02cvKCemYbN@lizhi-Precision-Tower-5810>
+References: <20240730145610.2177627-1-Frank.Li@nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240730145610.2177627-1-Frank.Li@nxp.com>
+X-ClientProxiedBy: SJ0PR03CA0159.namprd03.prod.outlook.com
+ (2603:10b6:a03:338::14) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|AM8PR04MB7972:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8a820525-5b93-4022-ac92-08dcc876102e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|366016|7416014|52116014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?KdWO0+W30E3+ovn7NTTsbamNLvSVQM8qStN2yRDycctEwBAPUoiBzcw9AZIO?=
+ =?us-ascii?Q?e3cXrDwS5sfdK+KCWicL6+1qlQp0cAIlXi5zX08WsGy/+SmNpa4O/0NPQO33?=
+ =?us-ascii?Q?JG3ibzOCC8FcYt6rD/cHqAS9+VHgicReR8GQO7iyF/k9Pi3MNCGpIJTTMqsf?=
+ =?us-ascii?Q?zFC2VPqHhW93RadyuxogQ6vWTbD63e+BqUUqeXXmb7GUdUdDrrmCFJf6FxIW?=
+ =?us-ascii?Q?YqOl/C5hsc0jdQuMvOW8WQ9EWOtW4oAZOY5/8+ke5wfp2JzZMUG9tKkNTikh?=
+ =?us-ascii?Q?uagJUDapkW2Tib9scCOo+plBrx6jp6WqOMUsS0mPnS4lV6XvUTSHpzWfH1Sg?=
+ =?us-ascii?Q?5F+kT4V6KPegB1mbD9b/Vu2CcVjMplMnejmb3BJndJdDN8+ZIn9yq/20MHHa?=
+ =?us-ascii?Q?fxOM9uiXW6Yh8vXdOlXkxcWiN2j/PDBRloqNJkPuVknpGH5SgeRYDZDaHJG/?=
+ =?us-ascii?Q?XUQMcTrMNx4fW0uILpUTvSS1yFjy7p2fjIBcWXAVaVUnF1Xbq2KuuifIzQe1?=
+ =?us-ascii?Q?NLinYMSlSfrZdtEKUHOMU8nXkTMSzQ03ciI52/2yikBLcVmAoFaHxmdN+mHk?=
+ =?us-ascii?Q?1XJIDz68VjEdNn2I2sOn+uQ7n2Nqio/UPZJBtgpprjDf/4TO0r/8i6GtHxHs?=
+ =?us-ascii?Q?LXvkaPy1cMNiEz7cErtgeDD2zUqj/cP7L/UTiOEFxCqltK6fUkGUryiLbeEq?=
+ =?us-ascii?Q?ChsHFvlXamSJKLmV/MjDukjojGLvEgvwKb4K4sW+6GnMi5DXyl4xC5q2iGw1?=
+ =?us-ascii?Q?bVgi+VdVaEvXXmhjgvZ/x/tganZCcaN5gGLoIt8DngKLWZ9LTniBpiI1FjOU?=
+ =?us-ascii?Q?wIT/fA8ruG2ilLVdOMsQ2P1or+G+fAnVGc6VHel9irL+6LPMYMlA3tWAlMlh?=
+ =?us-ascii?Q?KIvVi4ktQXZY7F52pbOSiRoWTSz7+IKAH4/PPF1QplWOslkrpJsLZHBWqK2G?=
+ =?us-ascii?Q?AzsaZo/Nt6HKZRV5iCeBfM88rmAL35Jm+qtfa9v2aVg0WzIjXrXWoNWFgbxg?=
+ =?us-ascii?Q?G0eCQOxajzx0nRn55EDOIN7KZdhAkMoP9LCLgDnW/vPrrdCb4d4nH6LEbOoj?=
+ =?us-ascii?Q?nNsnKqJl+oKOd6NQL3EQyrOabyU3JJTO7TieUrXGzkzBPptx6kir6a4YVFlU?=
+ =?us-ascii?Q?OXiPVT8RrjtDCEp6PQhn9NmNDAZ93WaqgvidgeP/vbQhtP3SYlWC0AWR9rjQ?=
+ =?us-ascii?Q?T3xYnP8vcONNzpwsPJOvaXsOKWK7hQuSwUfA9STztmRTU5qGUVsj5J9PKxdq?=
+ =?us-ascii?Q?r23W2RjP2MHpRmqRj942K4BSf8HGxVQ1UEB6VzhTtu1vpqsmIRIjguSovNdT?=
+ =?us-ascii?Q?fCVThrfXXdTnE1Mk/Z+I2iQrZz/epup8Yd3M5hREXMeX9LDFE4x7btLFwn1Y?=
+ =?us-ascii?Q?FP6TpSh8IoX37ChQSgM4Oh0ppStgelUndbyjpVpFI5t45fPiVA=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014)(52116014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?nRTY7WsAdTbXwNHEvVutWpf3QSp+WZaGoe9nPqIR1/EcRxK5CcoB7S4YWNtF?=
+ =?us-ascii?Q?zuESMAn1HUe84oplDAa6vZ0zOAHVAhkkqIzRe7rGNehG6IboNyTd2z5rRLb9?=
+ =?us-ascii?Q?8FnwrmpSd1qgiafOJFfisTVZo3hz+CEB/I3LJ7qf5LNLuq2WNUh7dg3JD2Vk?=
+ =?us-ascii?Q?JXYFXqOqruUmDCfb7+yuLW+1DzerhAbea7jGVyAB6OTp9uOAEKsfUmYDHbOU?=
+ =?us-ascii?Q?xUCSzU9vMjKclYYt6WmDbI6zO5sehAdb/4HKvwpN7lXWszzNEV0LZoKwgWgL?=
+ =?us-ascii?Q?3O97d0eQhE71auWrKdQ3wGZaAytPKFzMk4Kg2Dl/9WX5LMBeFS1BAg0N4Ar2?=
+ =?us-ascii?Q?bPdXSzFrkgsqvGA3XMAq3FtRC/nBhLGwn3gc4YMbKF8N3Clt/UXe9ElX42+U?=
+ =?us-ascii?Q?llA7VYQBmF/U2rdgYseLrch+dGKrnr8eUypqu3SqSkIIcLGAbNiLv3qzh1D8?=
+ =?us-ascii?Q?jBslCAKtdWcXy9VNZNAsDFK/bbe/cJKXXt0mTnXUN1wmMhIwPlSew9ZwDQhK?=
+ =?us-ascii?Q?ViqbSXeDTVxVxAikDJQ2flORZgxtQXWdsn8SJkE7T/hsgXxh8SRGGfpn4DZ2?=
+ =?us-ascii?Q?OzlwPPKq19gKhjspXb4jfSGcSEXCS/qRWpAOKcjcviIIfjyhsQCu8eyHd6XW?=
+ =?us-ascii?Q?2EQBJVSKfZsBWIBFuKJYyujuD/VuX6nFFjzH0hHC9wwoI+bhNK+TXUUNJacy?=
+ =?us-ascii?Q?txcYuBj4FnSZggjBvQUb38dZOpuZnZUuEaEQtRk3AymTQjUyWDAIQ1foINDT?=
+ =?us-ascii?Q?688SeDEwcIhOsYf/s3AuodOGYgJJeigUecCLv8XcCA+wqHmVd2X1ch3ytAXl?=
+ =?us-ascii?Q?AMn5ydtegvw1SZD7+Ld/i75Qb5NuXDGPnuNx279oyOWJjnRRdtCAo3hjJ5AL?=
+ =?us-ascii?Q?LJr3Tk/6CD7O5ea0nbczIgIRclDCnkB0+aIst8WdXG0GzAgdsRdnStUSDzS+?=
+ =?us-ascii?Q?C/jaZGxpvP6jZkecgsQKTKYoknc0dLmnSkO3li6130wXiFBU57nLmL7XwV0K?=
+ =?us-ascii?Q?AmG9VC0ZWkXpoK+n79CHk7kRJ+RE5LcU0XCkYK8eymLIoG4p+OXgLqokc873?=
+ =?us-ascii?Q?jMNx+zFuOobJFZVX8TUXqTv2Mxm6PCOTqcHkGQkA3Ig0EilSwu2Fo7oZB7yH?=
+ =?us-ascii?Q?G9N5dYjuSXb+25ACT0LfkrtPlgEu9bFlImFSkCSxPpw9kYatOuitf8GlIhuR?=
+ =?us-ascii?Q?Babnp3HsA85DP4wO6X3I17b807xbIqqChavai5GdAx/pimG91FF9GEo/AuIa?=
+ =?us-ascii?Q?peGmd1RZ/wgZIo+bj5XMbLDUnQHN7al8dZqyv+1YcnqsONLR4HAsK3FXOD4x?=
+ =?us-ascii?Q?NeEL5TaezpOScE28XVLi9Tu7drlTLzmzaX9sYajXZIApMR6ycZGIJj+sbTt6?=
+ =?us-ascii?Q?fqJqUsa4t/+BtSEHgnmT10xlB8IcOyqvt2UOeXvSDynSG4hzH4hx8WYYlt19?=
+ =?us-ascii?Q?nSeRKnPbGkiVUH6UpepFUYRtm+hxoKKvkaHStSa0SC4D2x3MQ2IDg9DRVrdN?=
+ =?us-ascii?Q?utc+IL1toBD1IovA+CsywOy3gsg43cQgh2c4N2QF1OBgV3Tgj7HhCKSPgxIH?=
+ =?us-ascii?Q?zmETDx6wwkt1LcHoiCc=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a820525-5b93-4022-ac92-08dcc876102e
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2024 22:00:58.4215
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tuF9PzN8jGB8u8Z8aDqIyUPglGUkJAcXQMjq67irlUTahmXzKOcMzoszj7p1KUh3i8JKTeXtr2eAy/SSrslEYQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7972
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Tue, Jul 30, 2024 at 10:56:10AM -0400, Frank Li wrote:
+> Move post_rcs_wait into struct imx_wdt_hw_feature to simple code logic for
+> difference compatible string.
+>
+> i.MX93 watchdog needn't wait 2.5 clocks after RCS is done. So needn't set
+> post_rcs_wait.
+>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Alice Guo <alice.guo@nxp.com>
+> Reviewed-by: Ye Li <ye.li@nxp.com>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
 
-Add Watchdog Timer driver for RZ/V2H(P) SoC.
+Ping?
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
----
-v4->v5
-- Collated RB tag from Guenter 
+Frank
 
-v3->v4
-- Turn on the clocks first before reset operation in start & restart callbacks
-- Added checks in restart callback before turning ON clocks/resets
-- Dropped udelay after every ping operation
-- Added comments
-- Simplified calculation of max_hw_heartbeat_ms
-
-v2->v3
-- Fixed dependency, ARCH_R9A09G011->ARCH_R9A09G057
-- Added dependency for PM
-- Added delay after de-assert operation as clks are halted temporarily
-  after de-assert operation
-- clearing WDTSR register
-
-v1->v2
-- Stopped using PM runtime calls in restart handler
-- Dropped rstc deassert from probe
----
- drivers/watchdog/Kconfig     |   9 ++
- drivers/watchdog/Makefile    |   1 +
- drivers/watchdog/rzv2h_wdt.c | 272 +++++++++++++++++++++++++++++++++++
- 3 files changed, 282 insertions(+)
- create mode 100644 drivers/watchdog/rzv2h_wdt.c
-
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index bae1d97cce89..684b9fe84fff 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -953,6 +953,15 @@ config RENESAS_RZG2LWDT
- 	  This driver adds watchdog support for the integrated watchdogs in the
- 	  Renesas RZ/G2L SoCs. These watchdogs can be used to reset a system.
- 
-+config RENESAS_RZV2HWDT
-+	tristate "Renesas RZ/V2H(P) WDT Watchdog"
-+	depends on ARCH_R9A09G057 || COMPILE_TEST
-+	depends on PM || COMPILE_TEST
-+	select WATCHDOG_CORE
-+	help
-+	  This driver adds watchdog support for the integrated watchdogs in the
-+	  Renesas RZ/V2H(P) SoCs. These watchdogs can be used to reset a system.
-+
- config ASPEED_WATCHDOG
- 	tristate "Aspeed BMC watchdog support"
- 	depends on ARCH_ASPEED || COMPILE_TEST
-diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
-index b51030f035a6..ab6f2b41e38e 100644
---- a/drivers/watchdog/Makefile
-+++ b/drivers/watchdog/Makefile
-@@ -86,6 +86,7 @@ obj-$(CONFIG_RENESAS_WDT) += renesas_wdt.o
- obj-$(CONFIG_RENESAS_RZAWDT) += rza_wdt.o
- obj-$(CONFIG_RENESAS_RZN1WDT) += rzn1_wdt.o
- obj-$(CONFIG_RENESAS_RZG2LWDT) += rzg2l_wdt.o
-+obj-$(CONFIG_RENESAS_RZV2HWDT) += rzv2h_wdt.o
- obj-$(CONFIG_ASPEED_WATCHDOG) += aspeed_wdt.o
- obj-$(CONFIG_STM32_WATCHDOG) += stm32_iwdg.o
- obj-$(CONFIG_UNIPHIER_WATCHDOG) += uniphier_wdt.o
-diff --git a/drivers/watchdog/rzv2h_wdt.c b/drivers/watchdog/rzv2h_wdt.c
-new file mode 100644
-index 000000000000..2da7a631fb2a
---- /dev/null
-+++ b/drivers/watchdog/rzv2h_wdt.c
-@@ -0,0 +1,272 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Renesas RZ/V2H(P) WDT Watchdog Driver
-+ *
-+ * Copyright (C) 2024 Renesas Electronics Corporation.
-+ */
-+#include <linux/clk.h>
-+#include <linux/delay.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/reset.h>
-+#include <linux/units.h>
-+#include <linux/watchdog.h>
-+
-+#define WDTRR			0x00	/* WDT Refresh Register RW, 8  */
-+#define WDTCR			0x02	/* WDT Control Register RW, 16 */
-+#define WDTSR			0x04	/* WDT Status Register RW, 16 */
-+#define WDTRCR			0x06	/* WDT Reset Control Register RW, 8  */
-+
-+#define WDTCR_TOPS_1024		0x00
-+#define WDTCR_TOPS_16384	0x03
-+
-+#define WDTCR_CKS_CLK_1		0x00
-+#define WDTCR_CKS_CLK_256	0x50
-+
-+#define WDTCR_RPES_0		0x300
-+#define WDTCR_RPES_75		0x000
-+
-+#define WDTCR_RPSS_25		0x00
-+#define WDTCR_RPSS_100		0x3000
-+
-+#define WDTRCR_RSTIRQS		BIT(7)
-+
-+#define MAX_TIMEOUT_CYCLES	16384
-+#define CLOCK_DIV_BY_256	256
-+
-+#define WDT_DEFAULT_TIMEOUT	60U
-+
-+static bool nowayout = WATCHDOG_NOWAYOUT;
-+module_param(nowayout, bool, 0);
-+MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
-+		 __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
-+struct rzv2h_wdt_priv {
-+	void __iomem *base;
-+	struct clk *pclk;
-+	struct clk *oscclk;
-+	struct reset_control *rstc;
-+	struct watchdog_device wdev;
-+};
-+
-+static int rzv2h_wdt_ping(struct watchdog_device *wdev)
-+{
-+	struct rzv2h_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+
-+	/*
-+	 * The down-counter is refreshed and starts counting operation on
-+	 * a write of the values 00h and FFh to the WDTRR register.
-+	 */
-+	writeb(0x0, priv->base + WDTRR);
-+	writeb(0xFF, priv->base + WDTRR);
-+
-+	return 0;
-+}
-+
-+static void rzv2h_wdt_setup(struct watchdog_device *wdev, u16 wdtcr)
-+{
-+	struct rzv2h_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+
-+	/* Configure the timeout, clock division ratio, and window start and end positions. */
-+	writew(wdtcr, priv->base + WDTCR);
-+
-+	/* Enable interrupt output to the ICU. */
-+	writeb(0, priv->base + WDTRCR);
-+
-+	/* Clear underflow flag and refresh error flag. */
-+	writew(0, priv->base + WDTSR);
-+}
-+
-+static int rzv2h_wdt_start(struct watchdog_device *wdev)
-+{
-+	struct rzv2h_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	int ret;
-+
-+	ret = pm_runtime_resume_and_get(wdev->parent);
-+	if (ret)
-+		return ret;
-+
-+	ret = reset_control_deassert(priv->rstc);
-+	if (ret) {
-+		pm_runtime_put(wdev->parent);
-+		return ret;
-+	}
-+
-+	/* delay to handle clock halt after de-assert operation */
-+	udelay(3);
-+
-+	/*
-+	 * WDTCR
-+	 * - CKS[7:4] - Clock Division Ratio Select - 0101b: oscclk/256
-+	 * - RPSS[13:12] - Window Start Position Select - 11b: 100%
-+	 * - RPES[9:8] - Window End Position Select - 11b: 0%
-+	 * - TOPS[1:0] - Timeout Period Select - 11b: 16384 cycles (3FFFh)
-+	 */
-+	rzv2h_wdt_setup(wdev, WDTCR_CKS_CLK_256 | WDTCR_RPSS_100 |
-+			WDTCR_RPES_0 | WDTCR_TOPS_16384);
-+
-+	/*
-+	 * Down counting starts after writing the sequence 00h -> FFh to the
-+	 * WDTRR register. Hence, call the ping operation after loading the counter.
-+	 */
-+	rzv2h_wdt_ping(wdev);
-+
-+	return 0;
-+}
-+
-+static int rzv2h_wdt_stop(struct watchdog_device *wdev)
-+{
-+	struct rzv2h_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	int ret;
-+
-+	ret = reset_control_assert(priv->rstc);
-+	if (ret)
-+		return ret;
-+
-+	ret = pm_runtime_put(wdev->parent);
-+	if (ret < 0)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static const struct watchdog_info rzv2h_wdt_ident = {
-+	.options = WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING | WDIOF_SETTIMEOUT,
-+	.identity = "Renesas RZ/V2H WDT Watchdog",
-+};
-+
-+static int rzv2h_wdt_restart(struct watchdog_device *wdev,
-+			     unsigned long action, void *data)
-+{
-+	struct rzv2h_wdt_priv *priv = watchdog_get_drvdata(wdev);
-+	int ret;
-+
-+	if (!watchdog_active(wdev)) {
-+		ret = clk_enable(priv->pclk);
-+		if (ret)
-+			return ret;
-+
-+		ret = clk_enable(priv->oscclk);
-+		if (ret) {
-+			clk_disable(priv->pclk);
-+			return ret;
-+		}
-+
-+		ret = reset_control_deassert(priv->rstc);
-+		if (ret) {
-+			clk_disable(priv->oscclk);
-+			clk_disable(priv->pclk);
-+			return ret;
-+		}
-+	} else {
-+		/*
-+		 * Writing to the WDT Control Register (WDTCR) or WDT Reset
-+		 * Control Register (WDTRCR) is possible once between the
-+		 * release from the reset state and the first refresh operation.
-+		 * Therefore, issue a reset if the watchdog is active.
-+		 */
-+		ret = reset_control_reset(priv->rstc);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/* delay to handle clock halt after de-assert operation */
-+	udelay(3);
-+
-+	/*
-+	 * WDTCR
-+	 * - CKS[7:4] - Clock Division Ratio Select - 0000b: oscclk/1
-+	 * - RPSS[13:12] - Window Start Position Select - 00b: 25%
-+	 * - RPES[9:8] - Window End Position Select - 00b: 75%
-+	 * - TOPS[1:0] - Timeout Period Select - 00b: 1024 cycles (03FFh)
-+	 */
-+	rzv2h_wdt_setup(wdev, WDTCR_CKS_CLK_1 | WDTCR_RPSS_25 |
-+			WDTCR_RPES_75 | WDTCR_TOPS_1024);
-+
-+	rzv2h_wdt_ping(wdev);
-+
-+	/* wait for underflow to trigger... */
-+	udelay(5);
-+
-+	return 0;
-+}
-+
-+static const struct watchdog_ops rzv2h_wdt_ops = {
-+	.owner = THIS_MODULE,
-+	.start = rzv2h_wdt_start,
-+	.stop = rzv2h_wdt_stop,
-+	.ping = rzv2h_wdt_ping,
-+	.restart = rzv2h_wdt_restart,
-+};
-+
-+static int rzv2h_wdt_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct rzv2h_wdt_priv *priv;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base))
-+		return PTR_ERR(priv->base);
-+
-+	priv->pclk = devm_clk_get_prepared(&pdev->dev, "pclk");
-+	if (IS_ERR(priv->pclk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(priv->pclk), "no pclk");
-+
-+	priv->oscclk = devm_clk_get_prepared(&pdev->dev, "oscclk");
-+	if (IS_ERR(priv->oscclk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(priv->oscclk), "no oscclk");
-+
-+	priv->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
-+	if (IS_ERR(priv->rstc))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(priv->rstc),
-+				     "failed to get cpg reset");
-+
-+	priv->wdev.max_hw_heartbeat_ms = (MILLI * MAX_TIMEOUT_CYCLES * CLOCK_DIV_BY_256) /
-+					 clk_get_rate(priv->oscclk);
-+	dev_dbg(dev, "max hw timeout of %dms\n", priv->wdev.max_hw_heartbeat_ms);
-+
-+	ret = devm_pm_runtime_enable(&pdev->dev);
-+	if (ret)
-+		return ret;
-+
-+	priv->wdev.min_timeout = 1;
-+	priv->wdev.timeout = WDT_DEFAULT_TIMEOUT;
-+	priv->wdev.info = &rzv2h_wdt_ident;
-+	priv->wdev.ops = &rzv2h_wdt_ops;
-+	priv->wdev.parent = dev;
-+	watchdog_set_drvdata(&priv->wdev, priv);
-+	watchdog_set_nowayout(&priv->wdev, nowayout);
-+	watchdog_stop_on_unregister(&priv->wdev);
-+
-+	ret = watchdog_init_timeout(&priv->wdev, 0, dev);
-+	if (ret)
-+		dev_warn(dev, "Specified timeout invalid, using default");
-+
-+	return devm_watchdog_register_device(&pdev->dev, &priv->wdev);
-+}
-+
-+static const struct of_device_id rzv2h_wdt_ids[] = {
-+	{ .compatible = "renesas,r9a09g057-wdt", },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, rzv2h_wdt_ids);
-+
-+static struct platform_driver rzv2h_wdt_driver = {
-+	.driver = {
-+		.name = "rzv2h_wdt",
-+		.of_match_table = rzv2h_wdt_ids,
-+	},
-+	.probe = rzv2h_wdt_probe,
-+};
-+module_platform_driver(rzv2h_wdt_driver);
-+MODULE_AUTHOR("Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>");
-+MODULE_DESCRIPTION("Renesas RZ/V2H(P) WDT Watchdog Driver");
--- 
-2.34.1
-
+> Change from v4 to v5
+> - move compatible string 8ulp under 7ulp
+> Chagne from v3 to v4:
+> - Go back to v2 according to Guenter's feedback
+> Change from v2 to v3:
+> - Set post_rcs_wait to false explicitly to maintain code consistency
+> - Add Guenter review tag.
+> Change from v1 to v2:
+> - Combine to one patch
+> ---
+>  drivers/watchdog/imx7ulp_wdt.c | 21 +++++++++------------
+>  1 file changed, 9 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/watchdog/imx7ulp_wdt.c b/drivers/watchdog/imx7ulp_wdt.c
+> index 94914a22daff7..0f13a30533574 100644
+> --- a/drivers/watchdog/imx7ulp_wdt.c
+> +++ b/drivers/watchdog/imx7ulp_wdt.c
+> @@ -55,6 +55,7 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
+>
+>  struct imx_wdt_hw_feature {
+>  	bool prescaler_enable;
+> +	bool post_rcs_wait;
+>  	u32 wdog_clock_rate;
+>  };
+>
+> @@ -62,7 +63,6 @@ struct imx7ulp_wdt_device {
+>  	struct watchdog_device wdd;
+>  	void __iomem *base;
+>  	struct clk *clk;
+> -	bool post_rcs_wait;
+>  	bool ext_reset;
+>  	const struct imx_wdt_hw_feature *hw;
+>  };
+> @@ -95,7 +95,7 @@ static int imx7ulp_wdt_wait_rcs(struct imx7ulp_wdt_device *wdt)
+>  		ret = -ETIMEDOUT;
+>
+>  	/* Wait 2.5 clocks after RCS done */
+> -	if (wdt->post_rcs_wait)
+> +	if (wdt->hw->post_rcs_wait)
+>  		usleep_range(wait_min, wait_min + 2000);
+>
+>  	return ret;
+> @@ -334,15 +334,6 @@ static int imx7ulp_wdt_probe(struct platform_device *pdev)
+>  	/* The WDOG may need to do external reset through dedicated pin */
+>  	imx7ulp_wdt->ext_reset = of_property_read_bool(dev->of_node, "fsl,ext-reset-output");
+>
+> -	imx7ulp_wdt->post_rcs_wait = true;
+> -	if (of_device_is_compatible(dev->of_node,
+> -				    "fsl,imx8ulp-wdt")) {
+> -		dev_info(dev, "imx8ulp wdt probe\n");
+> -		imx7ulp_wdt->post_rcs_wait = false;
+> -	} else {
+> -		dev_info(dev, "imx7ulp wdt probe\n");
+> -	}
+> -
+>  	wdog = &imx7ulp_wdt->wdd;
+>  	wdog->info = &imx7ulp_wdt_info;
+>  	wdog->ops = &imx7ulp_wdt_ops;
+> @@ -403,6 +394,12 @@ static const struct dev_pm_ops imx7ulp_wdt_pm_ops = {
+>  static const struct imx_wdt_hw_feature imx7ulp_wdt_hw = {
+>  	.prescaler_enable = false,
+>  	.wdog_clock_rate = 1000,
+> +	.post_rcs_wait = true,
+> +};
+> +
+> +static const struct imx_wdt_hw_feature imx8ulp_wdt_hw = {
+> +	.prescaler_enable = false,
+> +	.wdog_clock_rate = 1000,
+>  };
+>
+>  static const struct imx_wdt_hw_feature imx93_wdt_hw = {
+> @@ -411,8 +408,8 @@ static const struct imx_wdt_hw_feature imx93_wdt_hw = {
+>  };
+>
+>  static const struct of_device_id imx7ulp_wdt_dt_ids[] = {
+> -	{ .compatible = "fsl,imx8ulp-wdt", .data = &imx7ulp_wdt_hw, },
+>  	{ .compatible = "fsl,imx7ulp-wdt", .data = &imx7ulp_wdt_hw, },
+> +	{ .compatible = "fsl,imx8ulp-wdt", .data = &imx8ulp_wdt_hw, },
+>  	{ .compatible = "fsl,imx93-wdt", .data = &imx93_wdt_hw, },
+>  	{ /* sentinel */ }
+>  };
+> --
+> 2.34.1
+>
 
