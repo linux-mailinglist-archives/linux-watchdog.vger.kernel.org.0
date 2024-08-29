@@ -1,142 +1,206 @@
-Return-Path: <linux-watchdog+bounces-1617-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1618-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5947964384
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2024 13:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 98809964488
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2024 14:33:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 467331F22BBD
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2024 11:52:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 171231F2644F
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2024 12:33:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 704BD192B62;
-	Thu, 29 Aug 2024 11:52:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="BSFNf44C"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0B471A3BCF;
+	Thu, 29 Aug 2024 12:33:05 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A539918C03D;
-	Thu, 29 Aug 2024 11:52:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA05E1A38F0;
+	Thu, 29 Aug 2024 12:33:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724932331; cv=none; b=YsYh4YHTX1TQjXld/yZ0qebXiZ9Vrya395uzoOmw5TMbyUJPTZW5IB1xthbeso0+4pSViKpVirM6w95nHnIIc/Df9yZjrZUgUyZ+tku0rB51Dyx7is5HOm+tx+2qVlCCL5HkES/rBCSmGlE5W3VTwjQThIYP2+1aSk8y4Pue0N4=
+	t=1724934785; cv=none; b=Wq6fql1DZcKZ2/7/i/0/z/MuHmw0/H4yAW2o1tN0ShzQuP7v8S5tq0gKiGz21iKUhcM/RardOcAAAmSLVbSpv36AnKgZYVrQDNdcVfhXZOCvfKrTDifkE7nUAuORemB+n5w4JIJD3vtuXhmC8tnPPaFzaPdXHMAo6D8sN0FdynI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724932331; c=relaxed/simple;
-	bh=tLZ8vmFpkVpu4IvhBOz9UunW+WpkV/nZjcZ3qim3VmY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CfUBYGWmUw/7is5Bw4/+edeiZ5/LllmyRZpjT4zLEBv5AloaXJlzwfkjI5URPKCzIrmSVLmuCljM78icTxzpU3Ny+adI7nTH2l6tsKgczfSKkZIgF/oHdB3qfQSmLC9CLlFUvkNSnXy9fpRCE+GLndi5OTRyw9KBgfi1njQHwBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=BSFNf44C; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=tLZ8vmFpkVpu4IvhBOz9UunW+WpkV/nZjcZ3qim3VmY=; b=BSFNf44C7QcZSYJ3IeF8hDavGL
-	JZ2YxBEDZGmxXUbx3qel7FKJU1TY9i8zVYc76pwv0N7eQ9qa7NP52WVNYJwgUkQStsCdWI4HLn7ba
-	DIwnks4ACBQA7N093a3FzyGXHK+XAaGvKjROcPDnV9uNEYCHdJT/iuBidO48dBWxChgcGFJMG2C9b
-	eyObsZF5sdPuLdHcnbCrDbCQ/rZP1nsmxyOt87KlJWycQAEjBfaklEReRjJTglG3/bfjAoKzUE0CT
-	MVE7W3kPCOLwqYLTMu45+pbGExipmw9U93rcXS7Djc/lWaBtmTwJhU6P3BkMAdK5qMhoWG0fhGfhe
-	y7YmOsDQ==;
-Received: from i5e861916.versanet.de ([94.134.25.22] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1sjdgT-0003bn-Pb; Thu, 29 Aug 2024 13:51:25 +0200
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: Detlev Casanova <detlev.casanova@collabora.com>,
- Guenter Roeck <linux@roeck-us.net>
-Cc: linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, Mark Brown <broonie@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>,
- Chris Morgan <macromorgan@hotmail.com>, Jonas Karlman <jonas@kwiboo.se>,
- Tim Lunn <tim@feathertop.org>, Chukun Pan <amadeus@jmu.edu.cn>,
- Andy Yan <andyshrk@163.com>, Muhammed Efe Cetin <efectn@protonmail.com>,
- Jagan Teki <jagan@edgeble.ai>, Dragan Simic <dsimic@manjaro.org>,
- Ondrej Jirman <megi@xff.cz>, Michael Riesch <michael.riesch@wolfvision.net>,
- Jimmy Hon <honyuenkwun@gmail.com>, Alexey Charkov <alchark@gmail.com>,
- Elon Zhang <zhangzj@rock-chips.com>, Elaine Zhang <zhangqing@rock-chips.com>,
- Yifeng Zhao <yifeng.zhao@rock-chips.com>,
- Finley Xiao <finley.xiao@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
- Jisheng Zhang <jszhang@kernel.org>, Jamie Iles <jamie@jamieiles.com>,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org,
- linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
- kernel@collabora.com
-Subject:
- Re: [PATCH v2 09/12] dt-bindings: watchdog: Add rockchip,rk3576-wdt
- compatible
-Date: Thu, 29 Aug 2024 13:52:37 +0200
-Message-ID: <61607306.matp6XCIr4@diego>
-In-Reply-To: <5254cf14-65d1-4ffa-a1fb-265a51dda37d@roeck-us.net>
-References:
- <20240823150057.56141-1-detlev.casanova@collabora.com>
- <3262963.l52yBJDM9G@diego>
- <5254cf14-65d1-4ffa-a1fb-265a51dda37d@roeck-us.net>
+	s=arc-20240116; t=1724934785; c=relaxed/simple;
+	bh=xut1B75Copn1UQMc3oOTgZsdXNP6Xy8ddJQStmm+73U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=m+t54aTMpxUYU0NEdczaf5rpYdjev8z8lgNcBQoZZ/rnZfZL2i3GPRBsWHMAxvk00elNpfauKeLaW+d6+J4k2nTJyxlSxg8x+rYzcCwv00JMCa+S/lbejaA4a7FoqniC1v5+ykEpqjcgEam23KwtSk8YVaocAzb1SEY03I9nzFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6c130ffa0adso6323567b3.3;
+        Thu, 29 Aug 2024 05:33:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724934782; x=1725539582;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fBoF3+XOHG34nWFsOj1vD6Tq0LtW/x7+eoI1HvREX4A=;
+        b=VBsmrcgycDa1uxzAsQZqwNRbI5fCKZEJvb6wFNabzi768gBGKdV+8ubYtWpb4NdZdJ
+         2qAXkVHsSNEvtGOx93Y2TBxHrslrNkXXRWaTog37Wn3ZFT75EUaX3bvIGBCy5Lmq6q4w
+         lYcQ1JHNS0kaNZouK3k2Rh3OcEsPA6eFWhffxMJjbnyfnmYUWjg9Ff2Xw6k16REW07bz
+         qWtp3c84BbcLRU1d8zuPp0PnCmkibJ6HQfgdy9AW9qJJAsGWOekiW+OKEv4g7UUF0b7x
+         lGj8MCice/cND/U0Sl2smJqrvywhIliuwDcXtgj3aNsgqnnaj/rB7slV4TN+jWlEYyeS
+         2X9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCURgnorinCplGHSN+FHQRIBgnQXLDYKUibmdgGJzSbUVOO5mCDewp5RqDDSFRJw+KdWzs0ivfNXqZrknljdykc=@vger.kernel.org, AJvYcCUZxa07shkFQ/aOZeeU8J6IgXA0nBDM4IMi9E+G6cqOPgnOMWZBb6uUV7ZjiAwUuDGMRX/J+Q30xBU=@vger.kernel.org, AJvYcCWHmcBClnhmoqMQyiMc+QsOW0A7Y3Jwm0BPSXYOBDO2da+PlC5Hl026rJpMxR4718evcfS4jBOy6kRl/MGkgAD3ors=@vger.kernel.org, AJvYcCWoqqVcKKv0Xv8SIlE9tnQHy/Kvl+KhNW18PAONBilHxsY41w4L795HeGUpCGJOCqHdNjWDfJBLthmvPsN0@vger.kernel.org, AJvYcCXiXPBoXPgOPH+tTgqD1PdVQIjpRzJ0s69eQTYPD00aOHJHxBNmXvLyIEOZVOoI+WeObU8qT/If7Nw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzStHEQXMwxTyPnOBrNgfCI4WNwU8wu/SXyYns8Iwo0BQOd/XuI
+	Z5nlNOiDty37SJWqo2/FNXeTXZ6oc0HunG7TPCehfz8SgdAbUdTHH23FZ/t2
+X-Google-Smtp-Source: AGHT+IGTG6xYFya3Nt+/gww/itAi9HETKsLFYYu4TFE47IKn3Vh9Y9BZ1reE+e8HjyLFDamv3UxAug==
+X-Received: by 2002:a05:690c:6903:b0:6b2:7c54:51d with SMTP id 00721157ae682-6d2769e1f05mr31492557b3.23.1724934782487;
+        Thu, 29 Aug 2024 05:33:02 -0700 (PDT)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6d2d40a7427sm2246717b3.56.2024.08.29.05.33.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Aug 2024 05:33:02 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6c3f1939d12so5664657b3.2;
+        Thu, 29 Aug 2024 05:33:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUV92UKyoPn+oOjdSX9nv72Yrx1eTxQZ06wX5ykVFJV0VwQTNjrM2Uux4VFEURwpCAiJZyoL2nOhnKE86xtz9RbQa4=@vger.kernel.org, AJvYcCVKIiK2YztirlsLFYGYkc5vPfaHeXOERDsTu04p+o7MkzO2qUw8nBjRRLLtVLVSCklq3sY8N4UqXtQ=@vger.kernel.org, AJvYcCVPsyJ9Od0ebkXbzS4gtSQRL/LMfc3G5bSMmLZWMsX4fRjuriVYsQriw6LoZMxw33uejn1PRPNBzCthEOTCtSs=@vger.kernel.org, AJvYcCVgDCVlOgrROZ1me8BTj0aRmzXNV9WOVLoS1yjtu2yVesbUwaEHmvCHT9QX9nyh/NlXExEdBp8qrwc=@vger.kernel.org, AJvYcCXL3KOa38KvSqREbcEyd4eGG+SkUw0/1shInMbo1gX/MXQ4dTZI3ZCkswN4BKtn+eF1hsBerpBt3NWzurQ3@vger.kernel.org
+X-Received: by 2002:a05:690c:338f:b0:6b1:3bf8:c161 with SMTP id
+ 00721157ae682-6d276404cd2mr31558997b3.13.1724934782077; Thu, 29 Aug 2024
+ 05:33:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240828140602.1006438-1-claudiu.beznea.uj@bp.renesas.com> <20240828140602.1006438-2-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20240828140602.1006438-2-claudiu.beznea.uj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 29 Aug 2024 14:32:49 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX+Q99MvQRZcwGbk8F8SiAUzRU_t2QmRuO_6etAqqXskg@mail.gmail.com>
+Message-ID: <CAMuHMdX+Q99MvQRZcwGbk8F8SiAUzRU_t2QmRuO_6etAqqXskg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] clk: renesas: rzg2l-cpg: Use GENPD_FLAG_* flags
+ instead of local ones
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, wim@linux-watchdog.org, 
+	linux@roeck-us.net, ulf.hansson@linaro.org, linux-renesas-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
 
-Hi Guenter,
+Hi Claudiu,
 
-Am Dienstag, 27. August 2024, 21:38:35 CEST schrieb Guenter Roeck:
-> On 8/27/24 00:20, Heiko St=FCbner wrote:
-> > Am Samstag, 24. August 2024, 18:44:29 CEST schrieb Guenter Roeck:
-> >> On Fri, Aug 23, 2024 at 10:52:36AM -0400, Detlev Casanova wrote:
-> >>> It is compatible with the other rockchip SoCs.
-> >>>
-> >>> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> >>
-> >> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> >=20
-> > For my understanding, does this Ack mean you expect the patch to go in
-> > with the other patches?
-> >=20
-> Yes
->=20
-> > Because in theory this patch could also be picked and go through the
-> > watchdog tree, similar to how the saradc binding went into the
-> > iio tree already.
-> >=20
->=20
-> I thought it was all supposed to be pushed together.
+On Wed, Aug 28, 2024 at 4:06=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
+wrote:
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> For watchdog PM domain it is necessary to provide GENPD_FLAG_IRQ_SAFE fla=
+g
+> to be able to power on the watchdog PM domain from atomic context. For
+> this, adjust the current infrastructure to be able to provide GENPD_FLAG_=
+*
+> for individual PM domains.
+>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-I think at this point the rk3576 has still quite a number of separate
-pieces. A series for clocks, one for mmc and I think there are more.
+Thanks for your patch!
 
-So for stuff that is obvious, like the saradc compatible Jonathan already,
-picked or this watchdog compatible, a strategy of "someone picks the
-individual" patch also is helpful, because it reduces the number of pieces
-on the "chess board" ;-) .
+> --- a/drivers/clk/renesas/rzg2l-cpg.c
+> +++ b/drivers/clk/renesas/rzg2l-cpg.c
+> @@ -1680,11 +1680,13 @@ static int rzg2l_cpg_power_off(struct generic_pm_=
+domain *domain)
+>         return 0;
+>  }
+>
+> -static int __init rzg2l_cpg_pd_setup(struct rzg2l_cpg_pd *pd, bool alway=
+s_on)
+> +static int __init rzg2l_cpg_pd_setup(struct rzg2l_cpg_pd *pd, u32 genpd_=
+flags,
+> +                                    bool always_on)
 
+You don't need always_on, as that should already be reflected in
+genpd_flags.
 
-So I guess both ways (wdt binding getting applied, or me just applying it
-with the rest) are doable and we'll just follow what you feel comfortable
-with doing.
+Also, you could do without passing genpd_flags, if the caller would have
+initialized pd->genpd.flags (it already initializes pd->genpd.name).
 
-Heiko
+>  {
+>         struct dev_power_governor *governor;
+>
+> -       pd->genpd.flags |=3D GENPD_FLAG_PM_CLK | GENPD_FLAG_ACTIVE_WAKEUP=
+;
+> +       pd->genpd.flags |=3D GENPD_FLAG_PM_CLK | GENPD_FLAG_ACTIVE_WAKEUP=
+ |
+> +                          genpd_flags;
 
+Change not needed if the caller would have initialized flags.
 
+>         pd->genpd.attach_dev =3D rzg2l_cpg_attach_dev;
+>         pd->genpd.detach_dev =3D rzg2l_cpg_detach_dev;
+>         if (always_on) {
 
+The next line is
 
+    pd->genpd.flags |=3D GENPD_FLAG_ALWAYS_ON;
+
+which should already be the case if always_on is true, so it can
+be removed.
+
+> @@ -1712,7 +1714,7 @@ static int __init rzg2l_cpg_add_clk_domain(struct r=
+zg2l_cpg_priv *priv)
+>
+>         pd->genpd.name =3D np->name;
+
+pd->genpd.flags =3D GENPD_FLAG_ALWAYS_ON;
+
+>         pd->priv =3D priv;
+> -       ret =3D rzg2l_cpg_pd_setup(pd, true);
+> +       ret =3D rzg2l_cpg_pd_setup(pd, 0, true);
+
+s/0/GENPD_FLAG_ALWAYS_ON/, FWIW ;-)
+
+>         if (ret)
+>                 return ret;
+>
+> @@ -1777,7 +1779,8 @@ static int __init rzg2l_cpg_add_pm_domains(struct r=
+zg2l_cpg_priv *priv)
+>                 return ret;
+>
+>         for (unsigned int i =3D 0; i < info->num_pm_domains; i++) {
+> -               bool always_on =3D !!(info->pm_domains[i].flags & RZG2L_P=
+D_F_ALWAYS_ON);
+> +               u32 genpd_flags =3D info->pm_domains[i].genpd_flags;
+> +               bool always_on =3D !!(genpd_flags & GENPD_FLAG_ALWAYS_ON)=
+;
+>                 struct rzg2l_cpg_pd *pd;
+>
+>                 pd =3D devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
+> @@ -1789,7 +1792,7 @@ static int __init rzg2l_cpg_add_pm_domains(struct r=
+zg2l_cpg_priv *priv)
+
+You can add
+
+    pd->genpd.flags =3D info->pm_domains[i].genpd_flags;
+
+above.
+
+>                 pd->id =3D info->pm_domains[i].id;
+>                 pd->priv =3D priv;
+>
+> -               ret =3D rzg2l_cpg_pd_setup(pd, always_on);
+> +               ret =3D rzg2l_cpg_pd_setup(pd, genpd_flags, always_on);
+>                 if (ret)
+>                         return ret;
+
+What about moving the conditional call to rzg2l_cpg_power_on()
+below to rzg2l_cpg_pd_setup()? Then this function no longer needs
+the always_on flag.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
