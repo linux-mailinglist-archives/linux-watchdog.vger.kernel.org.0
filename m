@@ -1,156 +1,141 @@
-Return-Path: <linux-watchdog+bounces-1619-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1620-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B396964556
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2024 14:53:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBACC9647D6
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2024 16:18:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08E721F28676
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2024 12:53:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71C5D282DD9
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2024 14:18:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FA941B8E81;
-	Thu, 29 Aug 2024 12:45:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF7D71AED54;
+	Thu, 29 Aug 2024 14:18:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DKZih9YA"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432241B86E2;
-	Thu, 29 Aug 2024 12:45:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2881C1AD9E7;
+	Thu, 29 Aug 2024 14:18:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724935516; cv=none; b=XjTwGwR9MqKDDrGu+QqTxiGwDuPRdcRQpXwwcwaSf8XQQIO97taKgisCfL1oz3R8ZH+MCK02EVaWKLwKR1JMG1uBO60ZCvi5iKYu5fez0lHJqC1RjPYdFI83DnkHDnox64FqjeUkBIrXcwRHVQTV8aDPw08wez0LupAZj/1EH5o=
+	t=1724941090; cv=none; b=XyVaDL6xw8Woi7ghH4f7XZJHY2hIsYXNEIEOASSiSiPt8MzY0hQ6GxBCbq9Ny3oEBpKA4LXTbjqOkUPhHhtXdeIkp5nluT9ZWN4Hmu+iQvee46lgjIyG1BTaBwCzoQQcuIG2hI/JRh8VzZvPap6AzjMgMApOCmwvfObCbUvy7k8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724935516; c=relaxed/simple;
-	bh=+LwzQuOMskdYCQNrSv2N8XSkkE9ud0IF6wQLEtd6zEI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S1z0z01CxJ68bbILITEWcZ3jnIdyjYzR7jxLdNunK+jEtXvr4eY2HzVWQfNRNjfkmsrHDBbP17tYech0vM6NWnJquWnhvBFpMRhGaCM4eiHwhTf24lzgbRZMfnEm08s7gtxWHsxnFQXar33wLT9oLyaD535Fjz2W5OZPZhLFMrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6b44dd520ceso6144917b3.0;
-        Thu, 29 Aug 2024 05:45:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724935513; x=1725540313;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FUjTeXLSWnZkbY07LBWpQrBCxuH3GeKukadOEJ6jzwk=;
-        b=vyjUe4OkIk2GTJnx906gfWHqvrtkq+Y+JGthwrsEfCYwE+VQRrqKCJ/0uLXG6/XCBf
-         xzkagx34jL9I04tPaqUMx9U78IartBee7MkSXAxBNX5C+3sGOln0wm96wscYvO0/9wi5
-         1cxLgDi3kFuxK8XRrlCbHHsvQb6am5ikCx6vIslcOCwGrjsUHZcA1CCjvUzHhyl+XNJ6
-         VMrCCig6qahkt5JBVhhhBM7IBwXqJKLPJN03v4GR8fp08+X8tAWLGspla0bzLJmioCl3
-         VkFqr9tSs0OlfboePn4LGNa9gCKrIxacfbFzrWlzUUFlBKypUWFJkjBfrfvsWRQ1P10k
-         bRsw==
-X-Forwarded-Encrypted: i=1; AJvYcCUQTWyLnmkwG1xfQr2txqJCpQuwA2icvp9M2xKbhUxtorBQPRthMvDAH/hw1znKNV5HTBcVpM1pGDPJUs6J@vger.kernel.org, AJvYcCUZ2gtzm26QBLvSDcsDXf2gIqwys/V6cSQXhmQ86ElyAXcVWs9nDo+SbOTDrnyfwROIrumrLkFdcZY=@vger.kernel.org, AJvYcCV3apZ6EPvMwliVH7CejwY0WPmLxLSNRUV/LWf7VXxNKX96p7BV2gGwo4+Cc6gBDhfsGzVpoKdC+eLhMy8bNh4=@vger.kernel.org, AJvYcCVyM8qbxkxyELp7bcDZ+p7ALF0r0DqQpAwg4vBHP3NcKz+crf6M2BAg/esOYKk2yZcslUPPicD0UYo=@vger.kernel.org, AJvYcCW2781C6aljG4CKgz2TGgNuKMmBcUcWGB1284y2qW3dvWTYEUKn5ZvCCyB1ML2wAHXV94Qygcgi85FwzXbWlTzlN2g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxiWGeXmNIV0OzPdugm9ONtpF58PARNvjZdBjE1PMmpzK0nsseU
-	+QzZP0RbT86E0aj2wrsuyJfBG6SrPlBtfSXMIGmzZPBc4rCCjW2C2fOkmTgj
-X-Google-Smtp-Source: AGHT+IFAUogVjLo5+Zp77g4oRb2MIRnJj1pAtGZjSCI45VAEcUBNrrEcqVTZ6GHyebCbxY4AzWC+8g==
-X-Received: by 2002:a05:690c:d0f:b0:65f:cdc6:e25d with SMTP id 00721157ae682-6d277f514c7mr26523757b3.45.1724935512917;
-        Thu, 29 Aug 2024 05:45:12 -0700 (PDT)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6d2d39c8c93sm2245847b3.28.2024.08.29.05.45.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Aug 2024 05:45:12 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e115c8aa51fso673409276.1;
-        Thu, 29 Aug 2024 05:45:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU0/1Vfys8UijhdRthkzC3PLqnXF88YcngRpeVFyERj4+37oDbwS1HWiHbixh5laCVgQv0RcrduUfKEDdM1vkNRFVw=@vger.kernel.org, AJvYcCUEK2+MkUCenraSKZKsPxT6DSQMPHboY4pmjn66LOIOM0ziOfUJZFUuh9C/J9V7IihIur4He2JyArx5sPOK@vger.kernel.org, AJvYcCUHHbq1tfolJidAoW06SpTFQk2Bxp/UG+npzQsVN6xI4ckXlUEvHcMpzBWFpBrc/UgVipHHD0J7wOn0yQLpRZw=@vger.kernel.org, AJvYcCWTVqIVjj4x1jQunyb9Xomf5+cOupHfJ9J53ZhSTGWY+G6SwUrXdqEiBf2VfdhydcD1/2gV5TDyFZM=@vger.kernel.org, AJvYcCXniaAFKPeMtJBfoJtUuUBfRqgQOy8N+ahngXKyatGOgXKPOgsnWgtHa/L1LCPD0L5jr7TjmR9M4A0=@vger.kernel.org
-X-Received: by 2002:a05:6902:2b0f:b0:e11:6f62:2290 with SMTP id
- 3f1490d57ef6-e1a5ab89aafmr3001251276.24.1724935512448; Thu, 29 Aug 2024
- 05:45:12 -0700 (PDT)
+	s=arc-20240116; t=1724941090; c=relaxed/simple;
+	bh=t+RKO9TNWxY4HrBdBWb9BA8+VLsmoITn4UlYlIT7srY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=MfLaDi/bGUE9OU7itVdbrTB9FKBXWRxcufyA4egl4FAxlIPelyvs94Kt4jMlULYWcwUOMAt1MI4svsXSusU0JOkXlVGGTo7KKnypE+ytVGOyHq0GYlTGM8p5tZq4RD8H/jvGupoU35IW2qa/ioce9r14HcGWVvRNhXvF57sw9VU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DKZih9YA; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47T8qot9013831;
+	Thu, 29 Aug 2024 14:17:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	t+RKO9TNWxY4HrBdBWb9BA8+VLsmoITn4UlYlIT7srY=; b=DKZih9YAEWADMmXQ
+	sdVY89ixeiTr1iAWqukECdtYmZU3kK9mfKqDrNlx/2MVx07VTIMwYLUdAekmAwsY
+	idKsx1qQdliqNzMmL9RdIXevrNeCfsoOIu/ELTc56mEmrWjf8bp7ZM12e/GI96Ej
+	DaSElKuQYHRAdPzjCAJIT0bHx6RK176n9KnCyta/tsltRB8wTbcScppbSRTcVubo
+	j99yRUOew5+8MtfigQ8/CLlhRpcCeCY/3hx7u7J9A04mimYzRX4/Qhb9YlYA2RQK
+	n/OXRIp5JXMJRqhqv0LSHxthi6XoKGt/pFOZp7J5QLRmghU7c6sH5h4ksvCOZnOx
+	pIT7gw==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 419pv15ejs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 Aug 2024 14:17:26 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47TEHPsx001357
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 Aug 2024 14:17:25 GMT
+Received: from [10.110.28.107] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 29 Aug
+ 2024 07:17:21 -0700
+Message-ID: <d15927f9-bd00-4e32-9c25-535c69fe56f6@quicinc.com>
+Date: Thu, 29 Aug 2024 07:17:20 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240828140602.1006438-1-claudiu.beznea.uj@bp.renesas.com> <20240828140602.1006438-3-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20240828140602.1006438-3-claudiu.beznea.uj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 29 Aug 2024 14:45:00 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUcstyRDfaQ0Y=1NHgBYuRWjC0vuJj2j8USCTsEE1qKVA@mail.gmail.com>
-Message-ID: <CAMuHMdUcstyRDfaQ0Y=1NHgBYuRWjC0vuJj2j8USCTsEE1qKVA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] clk: renesas: r9a08g045: Mark the watchdog and
- always-on PM domains as IRQ safe
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, wim@linux-watchdog.org, 
-	linux@roeck-us.net, ulf.hansson@linaro.org, linux-renesas-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 11/22] pinctrl: qcom: sa8775p: Add support for SA8255p SoC
+To: Krzysztof Kozlowski <krzk@kernel.org>
+CC: <andersson@kernel.org>, <konradybcio@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <sudeep.holla@arm.com>, <andi.shyti@kernel.org>,
+        <tglx@linutronix.de>, <will@kernel.org>, <joro@8bytes.org>,
+        <jassisinghbrar@gmail.com>, <lee@kernel.org>,
+        <linus.walleij@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <broonie@kernel.org>,
+        <wim@linux-watchdog.org>, <linux@roeck-us.net>, <robin.murphy@arm.com>,
+        <cristian.marussi@arm.com>, <rui.zhang@intel.com>,
+        <lukasz.luba@arm.com>, <vkoul@kernel.org>, <quic_gurus@quicinc.com>,
+        <agross@kernel.org>, <bartosz.golaszewski@linaro.org>,
+        <quic_rjendra@quicinc.com>, <robimarko@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <arm-scmi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <linux-gpio@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <kernel@quicinc.com>,
+        <quic_psodagud@quicinc.com>, <quic_tsoni@quicinc.com>,
+        <quic_shazhuss@quicinc.com>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240828203721.2751904-12-quic_nkela@quicinc.com>
+ <erlzqkxrogk24ugfahfsxrramay6tfhljnxrcfcuhe24pla7k3@lytnz3kmszyj>
+Content-Language: en-US
+From: Nikunj Kela <quic_nkela@quicinc.com>
+In-Reply-To: <erlzqkxrogk24ugfahfsxrramay6tfhljnxrcfcuhe24pla7k3@lytnz3kmszyj>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 5ZcCT-ksT85jhXv9aplZcsONon_gYS75
+X-Proofpoint-ORIG-GUID: 5ZcCT-ksT85jhXv9aplZcsONon_gYS75
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-29_03,2024-08-29_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 clxscore=1011 lowpriorityscore=0 mlxscore=0 bulkscore=0
+ mlxlogscore=999 impostorscore=0 malwarescore=0 spamscore=0 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408290098
 
-Hi Claudiu,
 
-On Wed, Aug 28, 2024 at 4:06=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
-wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On 8/29/2024 12:29 AM, Krzysztof Kozlowski wrote:
+> On Wed, Aug 28, 2024 at 01:37:10PM -0700, Nikunj Kela wrote:
+>> SA8255p platform uses the same TLMM block as used in SA8775p,
+>> though the pins are split between Firmware VM and Linux VM.
+>> let's add SA8255p specific compatible.
+> The change suggests devices are fully compatible, but above description
+> does not.
 >
-> If the watchdog is part of a dedicated power domain (as it may be on
-> RZ/G3S) the watchdog PM domain need to be powered on in the watchdog
-> restart handler. Currently, only the clocks are enabled in the watchdog
-> restart handler. To be able to also power on the PM domain we need to
-> call pm_runtime_resume_and_get() on the watchdog restart handler, mark
-> the watchdog device as IRQ safe and register the watchdog PM domain
-> with GENPD_FLAG_IRQ_SAFE.
+> This looks conflicting.
 >
-> Register watchdog PM domain as IRQ safe. Along with it the always-on
-> PM domain (parent of the watchdog domain) was marked as IRQ safe.
->
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> ---
->
-> Changes in v2:
-> - changed patch title; it was "clk: renesas: rzg2l-cpg: Mark
->   watchdog and always-on PM domains as IRQ safe"
+> Best regards,
+> Krzysztof
 
-Thanks for the update!
+Hi Krzysztof,
 
-> --- a/drivers/clk/renesas/r9a08g045-cpg.c
-> +++ b/drivers/clk/renesas/r9a08g045-cpg.c
-> @@ -259,7 +259,7 @@ static const struct rzg2l_cpg_pm_domain_init_data r9a=
-08g045_pm_domains[] =3D {
->         /* Keep always-on domain on the first position for proper domains=
- registration. */
->         DEF_PD("always-on",     R9A08G045_PD_ALWAYS_ON,
->                                 DEF_REG_CONF(0, 0),
-> -                               GENPD_FLAG_ALWAYS_ON),
-> +                               GENPD_FLAG_ALWAYS_ON | GENPD_FLAG_IRQ_SAF=
-E),
->         DEF_PD("gic",           R9A08G045_PD_GIC,
->                                 DEF_REG_CONF(CPG_BUS_ACPU_MSTOP, BIT(3)),
->                                 GENPD_FLAG_ALWAYS_ON),
-> @@ -270,7 +270,8 @@ static const struct rzg2l_cpg_pm_domain_init_data r9a=
-08g045_pm_domains[] =3D {
->                                 DEF_REG_CONF(CPG_BUS_REG1_MSTOP, GENMASK(=
-3, 0)),
->                                 GENPD_FLAG_ALWAYS_ON),
->         DEF_PD("wdt0",          R9A08G045_PD_WDT0,
-> -                               DEF_REG_CONF(CPG_BUS_REG0_MSTOP, BIT(0)),=
- 0),
-> +                               DEF_REG_CONF(CPG_BUS_REG0_MSTOP, BIT(0)),
-> +                               GENPD_FLAG_IRQ_SAFE),
->         DEF_PD("sdhi0",         R9A08G045_PD_SDHI0,
->                                 DEF_REG_CONF(CPG_BUS_PERI_COM_MSTOP, BIT(=
-0)), 0),
->         DEF_PD("sdhi1",         R9A08G045_PD_SDHI1,
+Thanks for reviewing patches. TLMM HW block is exactly same as used in
+SA8775p however ownership of pins can be split between firmware VM and
+Linux VM. It is upto devices to decide what pins they want to use in
+what VM. I will extend the subject with same description as used in DT
+binding.
 
-Can't you just do this for all domains (e.g. in rzg2l_cpg_pd_setup()),
-instead of limiting this to the wdt0 and always-on domains?
+Regards,
 
-Gr{oetje,eeting}s,
+-Nikunj
 
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
