@@ -1,127 +1,142 @@
-Return-Path: <linux-watchdog+bounces-1616-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1617-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF7C99640EC
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2024 12:08:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5947964384
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2024 13:52:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C83EB2168D
-	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2024 10:07:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 467331F22BBD
+	for <lists+linux-watchdog@lfdr.de>; Thu, 29 Aug 2024 11:52:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1856118CBE5;
-	Thu, 29 Aug 2024 10:07:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 704BD192B62;
+	Thu, 29 Aug 2024 11:52:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="BSFNf44C"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33DD4A00;
-	Thu, 29 Aug 2024 10:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A539918C03D;
+	Thu, 29 Aug 2024 11:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724926078; cv=none; b=RaMplrminwsqtRyH0m2n34yQBPZ0fp4J0a+v/tawxOtXlQz2SrzwlQHam0phV2F7Bg4pNXNOavZPNTMHGCQ47vUDoyllV8/tregoBAH9ttKHF//jlRHW7Q8hXqxDnuzKghGuAI+18vOs8YD6QVS+lH73RkWhz26MuQaoRKHeZZk=
+	t=1724932331; cv=none; b=YsYh4YHTX1TQjXld/yZ0qebXiZ9Vrya395uzoOmw5TMbyUJPTZW5IB1xthbeso0+4pSViKpVirM6w95nHnIIc/Df9yZjrZUgUyZ+tku0rB51Dyx7is5HOm+tx+2qVlCCL5HkES/rBCSmGlE5W3VTwjQThIYP2+1aSk8y4Pue0N4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724926078; c=relaxed/simple;
-	bh=34SMnDpz2sOkKhVTCiD5hAHJS3njg+Xu9HXU10mjVNQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=npj89V/+VGGqR2n+/z4swg8Y4ARzfvRHHLmEj8BWL/icL+h/fZSoqqkcAyW7TdRVqxKcxUcjTMujnF8aJrDtY0yfXox496blaYcv7L4XjOPMn6tCRKPS6d8a/fIpzb/ZNgSPbmZtZTmCEu5xOq2DaSdG53ZB9kW6NJq/KVIVQUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6b4432b541aso4871547b3.1;
-        Thu, 29 Aug 2024 03:07:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724926074; x=1725530874;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=agM2uieBOGDHR7oA4CvBCTPuHqTNsiUN2AfPhgc69q4=;
-        b=jmB8nnmKooN9CaFD67ul6wZPap/iNPRd270zqJIpcaqFw36LtftVHbIilm4oLO0Wdp
-         cXckJP7pM5d3tN5Mai/927hvQXeAHlP24/Qj8oIuaUXo9EvgU40c+L93ReAhW9dNM0vF
-         38zWan2/k/5EgP3YbrN6AeD4vL1nsTHbtb+4E3XyI34YK0dLWIQ4EtasQBUb5u4vPO1z
-         urkLOzDlJ7nhK5y8Pt/N1EHMVoM5J1I/OIi1vg2BrxzVcU+DZUbRA04DNxPB4FpVr545
-         5uFWvEUa7TLX539dQpNCDPXjqdlB+CG2eeHYr9Kc/VDLtDtQahUI2u8ydBaip29Cy/Fd
-         iZ4g==
-X-Forwarded-Encrypted: i=1; AJvYcCUSuIYQ0LUfKVDnf+3VEgC+6NhkwTTS1s25wNpeCnW/FeXnncOxv7tmMvv99EW2+gBvAPkodKHJeUU6cXyE@vger.kernel.org, AJvYcCUnGRLwtF1e2iyseCbGcuNnohZtYOSM0UUvTHKIAOI/xlPVxdgGhqHgtpaE3DQLrnZ4RWb7TRsEdDYt@vger.kernel.org, AJvYcCV2Xn+wdECbPTB8RZhUlpop8wpRxyT52DRgxoMQxvualSqD36+bp9LoW/4sj80cchYxYqaE1LXXsIUE/n9yLyo=@vger.kernel.org, AJvYcCW4r0uT1/szO8XgzKf+FyUQG0jdIBV25Sku7yy9OkO4JGg/URNlgnKBM+dJKEqnIrRMjzKvFqBO3HfwmUfWxzs5EEc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9/RPticklKb67yqT9TJRAdqU6pRmOyEGkyjzF0ozJIeDmHo1Q
-	KwylGFdMPFzrJCj6mE/Fi9zK2AhclCLXG2II+M9w3FwqxX55jOhBWIZZOduk
-X-Google-Smtp-Source: AGHT+IGpGMFWeVqqx+ZaqEkEnBkoAa8xh12uYIUlSBhuIZoCsK6tepIXrfrEQHnONZNLDe2HO5Qc0Q==
-X-Received: by 2002:a05:690c:6509:b0:6b2:1b65:4c0d with SMTP id 00721157ae682-6d276404956mr24390297b3.10.1724926074375;
-        Thu, 29 Aug 2024 03:07:54 -0700 (PDT)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6d2d39c72c1sm1783607b3.24.2024.08.29.03.07.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Aug 2024 03:07:53 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6b4432b541aso4871407b3.1;
-        Thu, 29 Aug 2024 03:07:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCULIosyf1XranRO/NecnPwrnDNAFIb+04W0nwTu8BwqNJ5TfbE+8phQ08Iprn5rAcycZa8cY14X42VTl0EJlofXEvY=@vger.kernel.org, AJvYcCV7j+ma8k4eaAEJZ/Tsp0Gz1xyX0eJdQ2qDP2r0MqsI8NE/6rxpZ83RrEcA7bGHxNxE6iQ0PEFsaY5HL21Xyvg=@vger.kernel.org, AJvYcCVf+99xgukgvRBuPdWO5ZwW/sDe6BGLonWF6uNt/42/6/c4v7ZdAzi3qgXF7NvVxY5QvQ4qVWSJE+zC@vger.kernel.org, AJvYcCW8U1XxxS3vPkPaqiseGmk+m3t31Mk9L/8J0l+ludtmOWpIkTJAyXy2XbSnWYBPdBqtJK73yf1AcKMF6ttQ@vger.kernel.org
-X-Received: by 2002:a05:690c:10c:b0:6c1:4068:cd45 with SMTP id
- 00721157ae682-6d27804aeb9mr20404287b3.38.1724926073635; Thu, 29 Aug 2024
- 03:07:53 -0700 (PDT)
+	s=arc-20240116; t=1724932331; c=relaxed/simple;
+	bh=tLZ8vmFpkVpu4IvhBOz9UunW+WpkV/nZjcZ3qim3VmY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=CfUBYGWmUw/7is5Bw4/+edeiZ5/LllmyRZpjT4zLEBv5AloaXJlzwfkjI5URPKCzIrmSVLmuCljM78icTxzpU3Ny+adI7nTH2l6tsKgczfSKkZIgF/oHdB3qfQSmLC9CLlFUvkNSnXy9fpRCE+GLndi5OTRyw9KBgfi1njQHwBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=BSFNf44C; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=tLZ8vmFpkVpu4IvhBOz9UunW+WpkV/nZjcZ3qim3VmY=; b=BSFNf44C7QcZSYJ3IeF8hDavGL
+	JZ2YxBEDZGmxXUbx3qel7FKJU1TY9i8zVYc76pwv0N7eQ9qa7NP52WVNYJwgUkQStsCdWI4HLn7ba
+	DIwnks4ACBQA7N093a3FzyGXHK+XAaGvKjROcPDnV9uNEYCHdJT/iuBidO48dBWxChgcGFJMG2C9b
+	eyObsZF5sdPuLdHcnbCrDbCQ/rZP1nsmxyOt87KlJWycQAEjBfaklEReRjJTglG3/bfjAoKzUE0CT
+	MVE7W3kPCOLwqYLTMu45+pbGExipmw9U93rcXS7Djc/lWaBtmTwJhU6P3BkMAdK5qMhoWG0fhGfhe
+	y7YmOsDQ==;
+Received: from i5e861916.versanet.de ([94.134.25.22] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1sjdgT-0003bn-Pb; Thu, 29 Aug 2024 13:51:25 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: Detlev Casanova <detlev.casanova@collabora.com>,
+ Guenter Roeck <linux@roeck-us.net>
+Cc: linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Andi Shyti <andi.shyti@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+ Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Chris Morgan <macromorgan@hotmail.com>, Jonas Karlman <jonas@kwiboo.se>,
+ Tim Lunn <tim@feathertop.org>, Chukun Pan <amadeus@jmu.edu.cn>,
+ Andy Yan <andyshrk@163.com>, Muhammed Efe Cetin <efectn@protonmail.com>,
+ Jagan Teki <jagan@edgeble.ai>, Dragan Simic <dsimic@manjaro.org>,
+ Ondrej Jirman <megi@xff.cz>, Michael Riesch <michael.riesch@wolfvision.net>,
+ Jimmy Hon <honyuenkwun@gmail.com>, Alexey Charkov <alchark@gmail.com>,
+ Elon Zhang <zhangzj@rock-chips.com>, Elaine Zhang <zhangqing@rock-chips.com>,
+ Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+ Finley Xiao <finley.xiao@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+ Jisheng Zhang <jszhang@kernel.org>, Jamie Iles <jamie@jamieiles.com>,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, dri-devel@lists.freedesktop.org,
+ linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ kernel@collabora.com
+Subject:
+ Re: [PATCH v2 09/12] dt-bindings: watchdog: Add rockchip,rk3576-wdt
+ compatible
+Date: Thu, 29 Aug 2024 13:52:37 +0200
+Message-ID: <61607306.matp6XCIr4@diego>
+In-Reply-To: <5254cf14-65d1-4ffa-a1fb-265a51dda37d@roeck-us.net>
+References:
+ <20240823150057.56141-1-detlev.casanova@collabora.com>
+ <3262963.l52yBJDM9G@diego>
+ <5254cf14-65d1-4ffa-a1fb-265a51dda37d@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240806210623.183842-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20240806210623.183842-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20240806210623.183842-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 29 Aug 2024 12:07:41 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUW8FjgNb9J4hsfZOk3EbXMmihemm2BkO4pLAaZ-QGNiw@mail.gmail.com>
-Message-ID: <CAMuHMdUW8FjgNb9J4hsfZOk3EbXMmihemm2BkO4pLAaZ-QGNiw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: watchdog: renesas,wdt: Document
- RZ/V2H(P) SoC
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Magnus Damm <magnus.damm@gmail.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-watchdog@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
-	Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 
-Hi Prabhakar,
+Hi Guenter,
 
-Thanks for your patch!
+Am Dienstag, 27. August 2024, 21:38:35 CEST schrieb Guenter Roeck:
+> On 8/27/24 00:20, Heiko St=FCbner wrote:
+> > Am Samstag, 24. August 2024, 18:44:29 CEST schrieb Guenter Roeck:
+> >> On Fri, Aug 23, 2024 at 10:52:36AM -0400, Detlev Casanova wrote:
+> >>> It is compatible with the other rockchip SoCs.
+> >>>
+> >>> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> >>
+> >> Acked-by: Guenter Roeck <linux@roeck-us.net>
+> >=20
+> > For my understanding, does this Ack mean you expect the patch to go in
+> > with the other patches?
+> >=20
+> Yes
+>=20
+> > Because in theory this patch could also be picked and go through the
+> > watchdog tree, similar to how the saradc binding went into the
+> > iio tree already.
+> >=20
+>=20
+> I thought it was all supposed to be pushed together.
 
-On Tue, Aug 6, 2024 at 11:06=E2=80=AFPM Prabhakar <prabhakar.csengg@gmail.c=
-om> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Add support for the Watchdog Timer (WDT) hardware found in the Renesas
-> RZ/V2H(P) SoC to the `renesas,wdt` device tree bindings. The RZ/V2H(P)
-> SoC features a WDT that is compatible with existing Renesas watchdog
-> drivers.
+I think at this point the rk3576 has still quite a number of separate
+pieces. A series for clocks, one for mmc and I think there are more.
 
-Your patch "watchdog: Add Watchdog Timer driver for RZ/V2H(P)"
-contradicts the last sentence, so please drop the latter.
+So for stuff that is obvious, like the saradc compatible Jonathan already,
+picked or this watchdog compatible, a strategy of "someone picks the
+individual" patch also is helpful, because it reduces the number of pieces
+on the "chess board" ;-) .
 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-> --- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+So I guess both ways (wdt binding getting applied, or me just applying it
+with the rest) are doable and we'll just follow what you feel comfortable
+with doing.
 
-With the above fixed:
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Heiko
 
-Gr{oetje,eeting}s,
 
-                        Geert
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
