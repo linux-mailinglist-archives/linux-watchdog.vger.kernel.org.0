@@ -1,96 +1,142 @@
-Return-Path: <linux-watchdog+bounces-1638-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1639-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D775965920
-	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Aug 2024 09:54:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4FEA965978
+	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Aug 2024 10:07:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BC411C20309
-	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Aug 2024 07:54:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E77F51C21453
+	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Aug 2024 08:07:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1CE11509A8;
-	Fri, 30 Aug 2024 07:54:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A63C16BE0C;
+	Fri, 30 Aug 2024 08:06:48 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA5A1380
-	for <linux-watchdog@vger.kernel.org>; Fri, 30 Aug 2024 07:54:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22B93165EEB;
+	Fri, 30 Aug 2024 08:06:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725004453; cv=none; b=ekxxd1tc06lK2neGqoFI4dfLCt9/8gF9DEyfP9cKQqiJXE5Hu2KsufukTt8eL4pkb7B8qiT+mV8QHXU3eM/zfMc7dovnPiBITcFSQxPE8GyihNzX1f1ZoF9tyrDnmhJSol8YoVJz0J5TXLK/2fqRs7qBW0AjQqhhiXZdxvJqTJc=
+	t=1725005208; cv=none; b=JFFF0YxCILWqDxpVfjA+9uxH9OupefjI1HkdjB+VR9w9nUwWHFCiE0eBRi0KjgK2XhvGZUoHNw5ZBxGCMZbt3x66lyMq5JgWMNCdw5OMnDKRcJtU6qnJtFzPv9ZytuUkCReWtUhnBSEoFSgsNOZoqHP3ilMRRbf660Tq3Xv9InY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725004453; c=relaxed/simple;
-	bh=RQsbkrzcvjS2aGIyv75Nx+FzgXqvDagSJ9tpnaXGDSg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eZCdmqkVtZAM4qda4rQiZnX6SkpaAAs17WqfwUcQ48kNT95VbPQsmq2SWRhDBe/88VxAptj72G/Z6RzmqdnPTh7yBO9KCjLf2/4D+Np1N86WEJSTCr0GSrljbJXAPc1yiadGf8pfhQNQ6BiOcLgcTBuHCdXx/L6++6cdxQmn37Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Ww9QC2Qslz1j7Nb;
-	Fri, 30 Aug 2024 15:53:55 +0800 (CST)
-Received: from dggpeml500022.china.huawei.com (unknown [7.185.36.66])
-	by mail.maildlp.com (Postfix) with ESMTPS id E1D9614011D;
-	Fri, 30 Aug 2024 15:54:08 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpeml500022.china.huawei.com
- (7.185.36.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 30 Aug
- 2024 15:54:08 +0800
-From: Hongbo Li <lihongbo22@huawei.com>
-To: <wim@linux-watchdog.org>, <linux@roeck-us.net>
-CC: <linux-watchdog@vger.kernel.org>, <lihongbo22@huawei.com>
-Subject: [PATCH -next] watchdog: cpwd: replace simple_strtoul to kstrtoul
-Date: Fri, 30 Aug 2024 16:02:20 +0800
-Message-ID: <20240830080220.3545142-1-lihongbo22@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1725005208; c=relaxed/simple;
+	bh=VteBl1ktda+owSutLUfZmZK8Yr6JwgOtGs4JdVObDYE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e9Mbbfx8AWmljLmeTny7aRokDsF/LsTdl53O3LJ+3DEA50tXqM3DQA/qruR87w9TkHKX+jnLy7RfjWl6N1Fib37qd64M1tJNCHjME9ECC/bMXBV8rvGv5Qsbg/7AFLOza/23kiYY7wVs5Jhd8qGwhOL41rq8xCxshuR3F68BQt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6d3f017f80eso4517077b3.1;
+        Fri, 30 Aug 2024 01:06:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725005204; x=1725610004;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9iPS+SBt3nBt176C4U0ae1o6YJDXC/Hy1m/tM/oZV58=;
+        b=C5MoMGr8p8Un/uoqUsCfFSaPFLg8fOdK4C4XWomVnI6iHF6Qdgw02rZzndm4g4sRlL
+         HWLjhFTje1Vt5uea4/r7ixriYAtcle7hmWJtyeAHJDlu9d0L4gtVmYHWjx+LNCIs89K0
+         aS6aH7lzqhFqV9EJuBUFKEz0gsGLtxBoVfuN+F7eBVy7QPaPwU6VGre1c/BYjuddiD6Y
+         tYp0SRYe/KNKTajj7DFtQ7gO6D9io9VZSnDqkvjTCC/c65HxcFjeGZNEGSTEIpDmurAR
+         Zpdb/qJG3+TIfkDJ5RbJA0falr/MHxLaW0+oAduFhw6YmGMfYqfAowpJSbFYxrLyf0/f
+         jXrg==
+X-Forwarded-Encrypted: i=1; AJvYcCVB04eAD2+ANjMRF7QtzzPRs0OdypjGbRmCCisoOLaVpxcCBzwtmGSr7Cprytrk8YJ4/Xnfd0JdVsMTdZ7o@vger.kernel.org, AJvYcCVqfppLrAzbl109tqSLIDDU1bnlb/z111dKp213JkgsPJQYg67kzS5+KAvA7huDSqQqzjO4OOhAb60=@vger.kernel.org, AJvYcCWVu+qwTst5CxlchESZZEfmbGo4M5XBUBB3R80fTVM6vG9Mdxzlw6fMm6FZVHsZ1QZ2oqRlkkr/vlYxBrU0GMA=@vger.kernel.org, AJvYcCWe7Mc02cxFeG0rdjZHmAHzh0+2Hz/8xDTkWN4ojz+57JPx1f5XvnP40neMPFL5qOXT2nLzO2jurYjBhfBrGWT4Y94=@vger.kernel.org, AJvYcCXtaWindIMWOlOvdexdpNBytuTe+HNWSenn/4bWrxrNOHwhOICAZoID4Ej/44UbA9zxjtsT6HhW/Pc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzy4VAb0POH1nNrRU4rxhEUGeqkbkeiAfGilSafqMoL5CbCtkj2
+	TUQOq2qhFW7t+2xX6hPF2bF8we/ZCqvYoxYBRFWBU36QV1hrXKXVAaqYHOPB
+X-Google-Smtp-Source: AGHT+IGxpgLU4nf0irLKtvdfMa8v9GP6OPyz8uV1M8xYZJEwr9W/gFaJ9MkyuKRsVvoObMR3JTpq6w==
+X-Received: by 2002:a05:690c:81:b0:6af:eaa:3dd4 with SMTP id 00721157ae682-6d40f3421a9mr15071557b3.13.1725005203789;
+        Fri, 30 Aug 2024 01:06:43 -0700 (PDT)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6d47b06daabsm308897b3.142.2024.08.30.01.06.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Aug 2024 01:06:42 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6d3f017f80eso4516557b3.1;
+        Fri, 30 Aug 2024 01:06:42 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU1zMuDwuGnWkv+ANov4LYAzQPHFTH2T4vaRC/GUUL32j6JGxAAZzYXRv6hMb8R3rprKROvNacgPp0kbHBhqRqUmJU=@vger.kernel.org, AJvYcCWm0BUudjIoia4FYMzgYTxErIPJ351lVo53z3q+Z1HTCMo2I+H4IPc64587yxpDBqA1tV49jbA3uaQ=@vger.kernel.org, AJvYcCX3+j4worpGlRLkNbXDiXb0TB0N62ex5Hdp60WhlD6V8w/Qc42VfYOSXUYY+js+82lu95nTaRhh2Tny/BLB@vger.kernel.org, AJvYcCXrp8AZvuKo8CMEcY09u+/nCiXXCHRr+vDLhGZGoBQCZioM6kbG6DjcuA9jOBa5rehnXw4fks2Ue1I=@vger.kernel.org, AJvYcCXyx17iePm1irvdsP1t8VHHpCEiZZ/2/Mcq65ScPwiNAUgy7QHiJcJSlfpm4o+T1/ZPL7JYzCgwgfVGGyLusRw=@vger.kernel.org
+X-Received: by 2002:a05:690c:81:b0:6af:eaa:3dd4 with SMTP id
+ 00721157ae682-6d40f3421a9mr15070947b3.13.1725005202277; Fri, 30 Aug 2024
+ 01:06:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500022.china.huawei.com (7.185.36.66)
+References: <20240828140602.1006438-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240828140602.1006438-2-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdX+Q99MvQRZcwGbk8F8SiAUzRU_t2QmRuO_6etAqqXskg@mail.gmail.com> <8b6fc67d-5e07-4403-ac07-6ad0b9d61882@tuxon.dev>
+In-Reply-To: <8b6fc67d-5e07-4403-ac07-6ad0b9d61882@tuxon.dev>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 30 Aug 2024 10:06:30 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUqVcojRoPAEuZ8a9Y-iHm4b185StD73FpQoRFsEiZ8oQ@mail.gmail.com>
+Message-ID: <CAMuHMdUqVcojRoPAEuZ8a9Y-iHm4b185StD73FpQoRFsEiZ8oQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] clk: renesas: rzg2l-cpg: Use GENPD_FLAG_* flags
+ instead of local ones
+To: claudiu beznea <claudiu.beznea@tuxon.dev>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, wim@linux-watchdog.org, 
+	linux@roeck-us.net, ulf.hansson@linaro.org, linux-renesas-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The function simple_strtoul performs no error checking
-in scenarios where the input value overflows the intended
-output variable.
+Hi Claudiu,
 
-We can replace the use of the simple_strtoul with the safer
-alternatives kstrtoul. For fail case, we also print the extra
-message.
+On Fri, Aug 30, 2024 at 9:46=E2=80=AFAM claudiu beznea <claudiu.beznea@tuxo=
+n.dev> wrote:
+> On 29.08.2024 15:32, Geert Uytterhoeven wrote:
+> > On Wed, Aug 28, 2024 at 4:06=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.d=
+ev> wrote:
+> >> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> >>
+> >> For watchdog PM domain it is necessary to provide GENPD_FLAG_IRQ_SAFE =
+flag
+> >> to be able to power on the watchdog PM domain from atomic context. For
+> >> this, adjust the current infrastructure to be able to provide GENPD_FL=
+AG_*
+> >> for individual PM domains.
+> >>
+> >> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Signed-off-by: Hongbo Li <lihongbo22@huawei.com>
----
- drivers/watchdog/cpwd.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+> >> --- a/drivers/clk/renesas/rzg2l-cpg.c
+> >> +++ b/drivers/clk/renesas/rzg2l-cpg.c
 
-diff --git a/drivers/watchdog/cpwd.c b/drivers/watchdog/cpwd.c
-index 901b94d456db..978bc6c87a35 100644
---- a/drivers/watchdog/cpwd.c
-+++ b/drivers/watchdog/cpwd.c
-@@ -550,8 +550,14 @@ static int cpwd_probe(struct platform_device *op)
- 	p->reboot = (prop_val ? true : false);
- 
- 	str_prop = of_get_property(options, "watchdog-timeout", NULL);
--	if (str_prop)
--		p->timeout = simple_strtoul(str_prop, NULL, 10);
-+	if (str_prop) {
-+		err = kstrtoul(str_prop, 10, &p->timeout);
-+		if (err != 0) {
-+			pr_err("Unable to parse watchdog-timeout\n");
-+			of_node_put(options);
-+			goto out_iounmap;
-+		}
-+	}
- 
- 	of_node_put(options);
- 
--- 
-2.34.1
+> >
+> >>                 pd->id =3D info->pm_domains[i].id;
+> >>                 pd->priv =3D priv;
+> >>
+> >> -               ret =3D rzg2l_cpg_pd_setup(pd, always_on);
+> >> +               ret =3D rzg2l_cpg_pd_setup(pd, genpd_flags, always_on)=
+;
+> >>                 if (ret)
+> >>                         return ret;
+> >
+> > What about moving the conditional call to rzg2l_cpg_power_on()
+> > below to rzg2l_cpg_pd_setup()? Then this function no longer needs
+> > the always_on flag.
+>
+> That could be done but I think it will involve an extra power on/power of=
+f
+> cycle for the unused domains.
 
+Still only to be done for the always-on domain, of course.
+Anyway, up to you.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
