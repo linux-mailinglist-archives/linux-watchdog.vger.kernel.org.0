@@ -1,48 +1,74 @@
-Return-Path: <linux-watchdog+bounces-1644-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1645-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA10A965DBD
-	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Aug 2024 12:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 46F399663BB
+	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Aug 2024 16:08:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81C1E282551
-	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Aug 2024 10:01:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 705222804D9
+	for <lists+linux-watchdog@lfdr.de>; Fri, 30 Aug 2024 14:08:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E727F17B439;
-	Fri, 30 Aug 2024 10:00:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E7FA1B1D56;
+	Fri, 30 Aug 2024 14:08:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XcnojyBo"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="QHAQMDDh"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D3316D302;
-	Fri, 30 Aug 2024 10:00:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3363F170A31
+	for <linux-watchdog@vger.kernel.org>; Fri, 30 Aug 2024 14:07:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725012055; cv=none; b=Go4lCfVVlOxSkYjwUHEhylAajvtlDShAZVcCtN69Y7UDyI7tJwTjjbzSbEUS0q15yqL/DCPPdWHaMNKyld95jtrK5tCn4jW/XWQXSk0QO4P4REnJVqwMgcmzQBVprFWAjFLOHMpfiA6GZ822XVSIBilh23nRJRR30mqmoayG57Q=
+	t=1725026881; cv=none; b=kiC/kE0le2SruowzlmbJSw4em8RSU5x9OIUfN/9EqCCUNNi0+9y/XcVN+qEXNDZCOqeGsBLEDDXJ3mQi9TfiqBhMwk+oUQMD3Pj+70OQZxJb2wxCmmel51Naz5wgt7UUcWolmQpao2fW/qF4zQPIE0KVXZpbFIEFRdJJ31QCgfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725012055; c=relaxed/simple;
-	bh=C3ag8Y3EtU5RLIBr1X7bSD/nVTfEcPkUuGp8nq5gfug=;
+	s=arc-20240116; t=1725026881; c=relaxed/simple;
+	bh=I5aIqy/UEUXMFE8Rh7I4MruLQD76lvWIbdNAtEzLSTY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C5MpCjbBlAacZZLNpUC8mqa9siQoNhWunmnSSykZYzR9dRTTPinbwjFgMhnNidKEiTmPwj81j2x+YBB8zt8WlRCEt2BS9RNZXvRAFWhkbDbdULxRLwMm+Jc87GUM8NeYea+LMG2LjVWp/Njb3+CSCaheN5pr8rLrCKn3tXiv1rY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XcnojyBo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08AA0C4CEC2;
-	Fri, 30 Aug 2024 10:00:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725012055;
-	bh=C3ag8Y3EtU5RLIBr1X7bSD/nVTfEcPkUuGp8nq5gfug=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XcnojyBoEw03okmEUhYyiuVGiudJln6+lDRs8RxPWqbnTVTN6kE3HlvahTSw+mzJf
-	 pvSuQIZGDFm5q7+PodHvHA+dKD54Xnc+KvOhMDDquwXX6MwvUMNevlgnga7+gF0liv
-	 etjGaB3lkh0Je4N09EdQu9CEAlXQ/vs40UgVTUTBSqM5vnBJ8s+libUlWcfcv5pJ3J
-	 8R2RznLX2M2oPYtLBta2qNizJWyc9vaRMvvZQytr+/SVRq4HibkkWVkyl6ltP6VhlB
-	 TcLdC+eKkVuq5aN9IBkdbZYrkKv8jadgoTwXPMmC0qulvRKpVx2+VqAc+OaUedNLyj
-	 KtqvrSS0g2iXQ==
-Message-ID: <b6c1a81e-1533-4a17-8d6a-49a209a38557@kernel.org>
-Date: Fri, 30 Aug 2024 12:00:36 +0200
+	 In-Reply-To:Content-Type; b=HO8JeZ3PpePQz8p2+nT0NR+2k87Ptxrm35tdZ3lNoctMeTUOYvuc5jd5EOg251/4PSjpJ2p9jhEQ9iM/BjSxxinhAml0a4RXSjtQrYRXhpwiqX9Qc2RAy+zC/UaCKLrdA+rHIdPIFjdOVEQ2UmT9gO28QWkz2mtOKsaS25trrwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=QHAQMDDh; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-42bbe809b06so4044225e9.1
+        for <linux-watchdog@vger.kernel.org>; Fri, 30 Aug 2024 07:07:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1725026876; x=1725631676; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gUsIK727D/kMhMjVhqwKF/thJUrDUXU728kGFQYDRt0=;
+        b=QHAQMDDh9sP7oU/yicPk+N7M9Q/ILeBwyqXHcz5uD30yyveV1zoLC3xDTwet+IgXLh
+         rfSxkfrLuGLM7O3Dte4gfXq7eiUh7+by8rtCxXTaaVCYi4HYAEksQwkNXSfZYxokz4XI
+         ak0cCHS+8xiBv8zNUWRzGujsw8THsUlNZZFn3GqdZL44C0YBbIXPn3rG6k14Cob0f4iy
+         xFpSzE2c/r+Ny2ZV4twSVK+KqPal0fJzXoiaPWRGe7Qa8GOdZHi/2g28ForJVUGmM/I1
+         NwqGjqTkWcykGt1+fgMp3IsgGfp3KmgmHWhUu/UTYYadq2kjViOaZ2iq7Ro174RfawUL
+         7Tpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725026876; x=1725631676;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gUsIK727D/kMhMjVhqwKF/thJUrDUXU728kGFQYDRt0=;
+        b=bF/dGdrchIkqpdNuIR2mRIPQGTEKq0grv0aIMRq6jGmLgsPe+6aJn22VhBYDLqJLrx
+         8CCyZw4IcXg+JH7vlemYxdxPOZXPRA6RGP8Nqn6zEXFqze4wd6H2f9XGC4iZZoJX5xPb
+         hfNX6T434BRvOfduQX72qlcc/jDbIvEWb4wTq0nQ4o6LHSzWrT8vcVpgTE0Pqtko7wQ0
+         quJUrBFgLCcr2zDV/zUj5Hj6w6Om2HZq2/mP3VL5o47aUiIJRlLR2lxc4KjNPVUaCuYp
+         JsxAkIU1zp+dcAbGlR3+7Y6Jmy8WG8eSz4w1uqV+DQJMxIbLEMnfZJc6Zm3+aRh8EGAy
+         Tl1g==
+X-Forwarded-Encrypted: i=1; AJvYcCVQi+ZUQoQ9ofKrty9f+LC6WAAgc+cLjpCtZ7yE0ErXAhFC4za8QlqSx5Lg0YH1bt2veL4pl/MgG3WmstoBBw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1Pfvq3a8xu+QW2tIRcmgloysEepIwiFD9Nr4qjjKpHVHDLW0Q
+	OVfilVOCt8ChFQp+MQ5jW3dXF8wzIMVJ8qohkIWEtIW4njHRyEWmkqU9Q+29naY=
+X-Google-Smtp-Source: AGHT+IHsi38bxWb3DH0GTQLefA8NeqM/+Q0cudI7v+QLxZSUlm4s1VrNogfvm84TLbAlA8m3jS0TQA==
+X-Received: by 2002:a05:600c:699b:b0:426:5269:9824 with SMTP id 5b1f17b1804b1-42bb0229f05mr55125795e9.0.1725026876131;
+        Fri, 30 Aug 2024 07:07:56 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.144])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42ba63965dbsm82864085e9.6.2024.08.30.07.07.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Aug 2024 07:07:55 -0700 (PDT)
+Message-ID: <194e87f4-7eab-4bfb-833a-27fabd2d5205@tuxon.dev>
+Date: Fri, 30 Aug 2024 17:07:54 +0300
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -50,112 +76,85 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 14/22] dt-bindings: arm-smmu: document the support on
- SA8255p
-To: Nikunj Kela <quic_nkela@quicinc.com>
-Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
- viresh.kumar@linaro.org, herbert@gondor.apana.org.au, davem@davemloft.net,
- sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de,
- will@kernel.org, joro@8bytes.org, jassisinghbrar@gmail.com, lee@kernel.org,
- linus.walleij@linaro.org, amitk@kernel.org, thara.gopinath@gmail.com,
- broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
- robin.murphy@arm.com, cristian.marussi@arm.com, rui.zhang@intel.com,
- lukasz.luba@arm.com, vkoul@kernel.org, quic_gurus@quicinc.com,
- agross@kernel.org, bartosz.golaszewski@linaro.org, quic_rjendra@quicinc.com,
- robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
- arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-i2c@vger.kernel.org, iommu@lists.linux.dev,
- linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
- kernel@quicinc.com, quic_psodagud@quicinc.com, quic_tsoni@quicinc.com,
- quic_shazhuss@quicinc.com
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240828203721.2751904-15-quic_nkela@quicinc.com>
- <ompfueg7civ5spjdumkhd7qgx4cnvjcftznf3z3q5duuxppt5d@fao7zx4oxfm3>
- <e8e9cdcf-63c8-4bfa-aacc-d99338c7f8fa@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v2 1/3] clk: renesas: rzg2l-cpg: Use GENPD_FLAG_* flags
+ instead of local ones
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <e8e9cdcf-63c8-4bfa-aacc-d99338c7f8fa@quicinc.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, wim@linux-watchdog.org,
+ linux@roeck-us.net, ulf.hansson@linaro.org,
+ linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-pm@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20240828140602.1006438-1-claudiu.beznea.uj@bp.renesas.com>
+ <20240828140602.1006438-2-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdX+Q99MvQRZcwGbk8F8SiAUzRU_t2QmRuO_6etAqqXskg@mail.gmail.com>
+ <8b6fc67d-5e07-4403-ac07-6ad0b9d61882@tuxon.dev>
+ <CAMuHMdUqVcojRoPAEuZ8a9Y-iHm4b185StD73FpQoRFsEiZ8oQ@mail.gmail.com>
+From: claudiu beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <CAMuHMdUqVcojRoPAEuZ8a9Y-iHm4b185StD73FpQoRFsEiZ8oQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 29/08/2024 17:39, Nikunj Kela wrote:
+Hi, Geert,
+
+On 30.08.2024 11:06, Geert Uytterhoeven wrote:
+> Hi Claudiu,
 > 
-> On 8/29/2024 12:36 AM, Krzysztof Kozlowski wrote:
->> On Wed, Aug 28, 2024 at 01:37:13PM -0700, Nikunj Kela wrote:
->>> Add compatible for smmu representing support on SA8255p.
->>>
->>> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
->>> ---
->>>  Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 3 +++
->>>  1 file changed, 3 insertions(+)
->>>
->> Your subjects contain quite redundant/excessive information. In the same
->> time they lack information about device. 
->>
->> 1. s/document the support on/add/
->> 2. s/SA8255p/SA8255p SMMU-or-whatever-device-it-is/
->>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> Best regards,
->> Krzysztof
+> On Fri, Aug 30, 2024 at 9:46 AM claudiu beznea <claudiu.beznea@tuxon.dev> wrote:
+>> On 29.08.2024 15:32, Geert Uytterhoeven wrote:
+>>> On Wed, Aug 28, 2024 at 4:06 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>>
+>>>> For watchdog PM domain it is necessary to provide GENPD_FLAG_IRQ_SAFE flag
+>>>> to be able to power on the watchdog PM domain from atomic context. For
+>>>> this, adjust the current infrastructure to be able to provide GENPD_FLAG_*
+>>>> for individual PM domains.
+>>>>
+>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 > 
-> Okay. I thought arm-smmu tag already indicate which device this patch is
-> for but would put SMMU explicitly in the subject.
+>>>> --- a/drivers/clk/renesas/rzg2l-cpg.c
+>>>> +++ b/drivers/clk/renesas/rzg2l-cpg.c
+> 
+>>>
+>>>>                 pd->id = info->pm_domains[i].id;
+>>>>                 pd->priv = priv;
+>>>>
+>>>> -               ret = rzg2l_cpg_pd_setup(pd, always_on);
+>>>> +               ret = rzg2l_cpg_pd_setup(pd, genpd_flags, always_on);
+>>>>                 if (ret)
+>>>>                         return ret;
+>>>
+>>> What about moving the conditional call to rzg2l_cpg_power_on()
+>>> below to rzg2l_cpg_pd_setup()? Then this function no longer needs
+>>> the always_on flag.
+>>
+>> That could be done but I think it will involve an extra power on/power off
+>> cycle for the unused domains.
+> 
+> Still only to be done for the always-on domain, of course.
+> Anyway, up to you.
 
-arm,smmu indicates the binding file which might be or might not exactly
-be the same as actual device. Sometimes they have difference names. I am
-not saying that it would be beneficial here, but some other patches
-could benefit probably.
+I checked your proposal. If unconditional power on is going to be done for
+all the registered domains it may happen to register domains for which
+there are no enabled nodes in device tree and thus the domains to remain on
+(because the driver enables it under the hood and the genpd core doesn't
+know about it).
 
-Best regards,
-Krzysztof
+With unconditional power on and the current DTSes the following domains
+remain on after booting with r9a08g045s33-smarc.dtb:
+- sdhi2
+- i2c2
+- i2c3
 
+as the domains are registered and powered (while registered) but the nodes
+are not enabled in DT.
+
+Thank you,
+Claudiu Beznea
+
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
