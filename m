@@ -1,201 +1,297 @@
-Return-Path: <linux-watchdog+bounces-1662-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1663-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAB3F9688C2
-	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Sep 2024 15:25:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E54DE968908
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Sep 2024 15:38:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFDAD1C22705
-	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Sep 2024 13:25:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D046282F02
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Sep 2024 13:38:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEEF5205E16;
-	Mon,  2 Sep 2024 13:24:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 879C320124A;
+	Mon,  2 Sep 2024 13:38:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="XrS6UD7c"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="k0CCwUTb"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0705210191
-	for <linux-watchdog@vger.kernel.org>; Mon,  2 Sep 2024 13:24:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3DC184D;
+	Mon,  2 Sep 2024 13:38:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725283464; cv=none; b=ZDIAosJ/XqQ9WzgQgPPjfKb0NAmZWtJk/AQKLhKGVpYhtjKh0TF3vLpPYw12Oo5xygdx1kD85SPQSNAmf6arZm2mMvWR9FhwdPeN1Usu4ezLXeHcl4Z6Ulig2o2Ro5gO78GLxZb6JvWVPJF9juNkkx4kNGf81/0VYWSfov7qmUU=
+	t=1725284317; cv=none; b=PCrMQ03kV1kGsSMqN8ZNmlWDQ5UYAmN5ojw0/dZE/adUe6jS2FaaBrn3CAz6rHKSm7OJm+bvyapFEBTicLq83U3iE7Q3CkPgyiD1kAWKPdQ49PV9SiPSnsCC4c9+eILEmQW48CZrmwMnRNRohj7tgLXU9dvMmFJ8TTjwodGtfII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725283464; c=relaxed/simple;
-	bh=gdX4LY/4yU+mlWy8gCvvEjSlGF+vBwCodsPP82Gby4k=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dMh82Fnv2aqOJNIxl9WkCxsijgYYNFXe4+moBEV+4fWd+yT5m2B9Y1kIwnMTUFyKoJcNrhksQ+jqTx7SY4ciaoZiZmJF85GcORXY/9hXGSwo/7LAD5vwJtHzLZRmGr3tLUH9Qd2rYcyz0Ep4M78owvjax8Rx1MpVpP+Vez+hO/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=XrS6UD7c; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a869332c2c2so833342766b.0
-        for <linux-watchdog@vger.kernel.org>; Mon, 02 Sep 2024 06:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1725283461; x=1725888261; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=im5aw856OWg4/fogGw4xCv7sKGPQlBRJhw+64YokHEM=;
-        b=XrS6UD7cTGntujm37rG/rpAio1+nqOmhyPRnEJvndjOg07ItKP7qPzuBNB7G1KSIXH
-         tCHPydILi5NfB4AiAe4ma0OYO4o8CrRUW9875h74aDk41Vlo+h8G6sZBPijIGr7a9hjl
-         cno3JHLXagxg7cSZQmj1Mi2UtUNqObSq5FKB6HX+nsATrzZ9B+j4fs9nlud52reQTu/n
-         1CUztKQ7S7E1ISuEXdk3m1L7gFmcvkgH+haEQwaZspchBdq4qwRsysgmBtdpaawoIHl5
-         x0SgT7hANpmrYZgB50cqWkapGj4vRpQZdOcpmNieA0+3C+13z2KW5a/XyJC66gGoTAx2
-         xXlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725283461; x=1725888261;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=im5aw856OWg4/fogGw4xCv7sKGPQlBRJhw+64YokHEM=;
-        b=vS8hIlFxakrNBdXAhcDbLnsKG4kceOoT2FU4e+d0eIraIZVJJMUxBZePt0NX1gTOqk
-         8WDylvI7ZpFgVAMa46OpPvs6zrZh+h6o8OxubuLoXdlFyMfhibaib7B+x1M+iGK3GNxx
-         y5Cla8qXOAYrmIu7QupR6xSiKzFDGTGCFsHYU9Ct7D4DwEcec9rq6KqStmKcDhO2GVZ/
-         FwPx+OLwbCxJBKJDiCGLMB+ONbGCWkzOy5Mo2Z/YdiRkIc7X5oFGkpuf5xXRQeqIgjwC
-         sWo+B5gZr3KD5xIWOW5gh5i3HRkJjg9pZQr7FNYKZ+Fkzw7SQwYt1YoXuQf9V1rHrQ0o
-         OqTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVJaUX3f4uMI8DLzQPg4OeoJzoAixIyg9MksEgmzXCAvSUo2tfQ68k3OPhQ+W8Vb0kjuHW/fhYhFiQ88Rhe/A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDqUzIhyzxpeyR12cWspjh0rByXZ/kBTaULKUEz1W+8wfo12TM
-	ECQs7EgWEBFVNsMAfdv12MDeaE94PF1sUKJmeGTajpWHhwKT8JkkU3MoTkdS/C0=
-X-Google-Smtp-Source: AGHT+IHWgodDTCMpY6sAaF4OeL9wHVBwlEZaCHhwCHZIzlirti4fLX+yVhPcOLQSsTLCiVff+6iwfw==
-X-Received: by 2002:a17:907:6d25:b0:a86:94cd:97f0 with SMTP id a640c23a62f3a-a89a26bfcb7mr1167450566b.19.1725283460815;
-        Mon, 02 Sep 2024 06:24:20 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.144])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a898900f6e0sm556060266b.77.2024.09.02.06.24.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Sep 2024 06:24:20 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: geert+renesas@glider.be,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	wim@linux-watchdog.org,
-	linux@roeck-us.net,
-	ulf.hansson@linaro.org
-Cc: linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	claudiu.beznea@tuxon.dev,
-	linux-pm@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v3 4/4] watchdog: rzg2l_wdt: Power on the watchdog domain in the restart handler
-Date: Mon,  2 Sep 2024 16:24:02 +0300
-Message-Id: <20240902132402.2628900-5-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240902132402.2628900-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20240902132402.2628900-1-claudiu.beznea.uj@bp.renesas.com>
+	s=arc-20240116; t=1725284317; c=relaxed/simple;
+	bh=VmbSlwz30CrgBjxHN1m/rtFJOQFx3FRyCzp3Ry2x69s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=twk/6kxs0FTb+Dt10NLPnXHcDzuVNbLGb51TWPRBGD0mlsJSI5RhVe1vAXGzhxXPVdVtluTMQ0KvtGPSML5dUQtIeMzlZAwuQ/48HU5c2GeiKXVszN1j6KX8USS9Hd1kZ1CdIqHI4crTw5b/+3E1vnalQnKopblepXxyfDHA3ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=k0CCwUTb; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D7C8A40006;
+	Mon,  2 Sep 2024 13:38:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1725284305;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xQY4ArvB7ONJr6lW7dYcvuSILbt3nf3xqfBfKcm34kM=;
+	b=k0CCwUTbIe+E+p6iI7jRvjha8V3FntUrfWrWbfTojJwp6sv+/k6g2jXTYCsc5viQVGz2ik
+	/BNqnhbIGPuZGgmkfgiW6qNcLlgBYKe907EsCVFnYCyCa8uXELTBB6SGIkFaLRSQpOHkJv
+	BBG+W2oz9x2gIb1OS7tBgzMlpxwnQyP7P8ezng/AtibztVPy2T68tNo9SBTHMQQowBYrWg
+	Mmv8fX26CMPzknYLLm/QLpFT8YqrYKXukJob9pGBdqi8HtU2yuk8nzjiVzP4cBa1Iaa1gw
+	9I+En5JjFKpvi5a7rip8Ew9zP+8naSzdLbWb8iFgwjGGtBtWrShBoWXgTcyBkw==
+Message-ID: <13c328c9-eb44-4a40-9f0e-734a84594bef@bootlin.com>
+Date: Mon, 2 Sep 2024 15:38:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/5] watchdog: Congatec Board Controller watchdog timer
+ driver
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, thomas.petazzoni@bootlin.com,
+ blake.vermeer@keysight.com
+References: <20240503-congatec-board-controller-v1-0-fec5236270e7@bootlin.com>
+ <20240503-congatec-board-controller-v1-4-fec5236270e7@bootlin.com>
+ <d37e3fea-d35e-4688-a845-02be6ea5eaa3@roeck-us.net>
+Content-Language: en-US
+From: Thomas Richard <thomas.richard@bootlin.com>
+In-Reply-To: <d37e3fea-d35e-4688-a845-02be6ea5eaa3@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: thomas.richard@bootlin.com
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Hi Guenter,
 
-On RZ/G3S the watchdog can be part of a software-controlled PM domain. In
-this case, the watchdog device need to be powered on in
-struct watchdog_ops::restart API. This can be done though
-pm_runtime_resume_and_get() API if the watchdog PM domain and watchdog
-device are marked as IRQ safe. We mark the watchdog PM domain as IRQ safe
-with GENPD_FLAG_IRQ_SAFE when the watchdog PM domain is registered and the
-watchdog device though pm_runtime_irq_safe().
+>> +
+>> +struct cgbc_wdt_cmd_cfg {
+>> +	u8 cmd;
+>> +	u8 mode;
+>> +	u8 action;
+>> +	u8 timeout1[3];
+>> +	u8 timeout2[3];
+>> +	u8 reserved[3];
+>> +	u8 delay[3];
+>> +} __packed;
+>> +
+>> +static_assert(sizeof(struct cgbc_wdt_cmd_cfg) == 15);
+> 
+> static_assert() is declared in linux/build_bug.h. Please include all
+> necessary include files explicitly and do not depend on indirect includes.
 
-Before commit e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait
-context'") pm_runtime_get_sync() was used in watchdog restart handler
-(which is similar to pm_runtime_resume_and_get() except the later one
-handles the runtime resume errors).
+Fixed in next iteration.
 
-Commit e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait
-context'") dropped the pm_runtime_get_sync() and replaced it with
-clk_prepare_enable() to avoid invalid wait context due to genpd_lock()
-in genpd_runtime_resume() being called from atomic context. But
-clk_prepare_enable() doesn't fit for this either (as reported by
-Ulf Hansson) as clk_prepare() can also sleep (it just not throw invalid
-wait context warning as it is not written for this).
+> 
+>> +
+>> +static int cgbc_wdt_start(struct watchdog_device *wdd)
+>> +{
+>> +	struct cgbc_wdt_data *wdt_data = watchdog_get_drvdata(wdd);
+> 
+> Unusual way to get wdt_data instead of using container_of().
+> Any special reason ?
 
-Because the watchdog device is marked now as IRQ safe (though this patch)
-the irq_safe_dev_in_sleep_domain() call from genpd_runtime_resume() returns
-1 for devices not registering an IRQ safe PM domain for watchdog (as the
-watchdog device is IRQ safe, PM domain is not and watchdog PM domain is
-always-on), this being the case for RZ/G3S with old device trees and
-the rest of the SoCs that use this driver, we can now drop also the
-clk_prepare_enable() calls in restart handler and rely on
-pm_runtime_resume_and_get().
+No special reason, I saw that watchdog_get_drvdata() was often used in
+watchdog drivers (more than container_of()) to get wdt_data.
+But I can use container_of() if you think I should.
 
-Thus, drop clk_prepare_enable() and use pm_runtime_resume_and_get() in
-watchdog restart handler.
+> 
+>> +	struct cgbc_device_data *cgbc = wdt_data->cgbc;
+>> +	unsigned int timeout1 = (wdd->timeout - wdd->pretimeout) * 1000;
+>> +	unsigned int timeout2 = wdd->pretimeout * 1000;
+>> +	u8 action;
+>> +
+>> +	struct cgbc_wdt_cmd_cfg cmd_start = {
+>> +		.cmd = CGBC_WDT_CMD_INIT,
+>> +		.mode = CGBC_WDT_MODE_SINGLE_EVENT,
+>> +		.timeout1[0] = (u8)timeout1,
+>> +		.timeout1[1] = (u8)(timeout1 >> 8),
+>> +		.timeout1[2] = (u8)(timeout1 >> 16),
+>> +		.timeout2[0] = (u8)timeout2,
+>> +		.timeout2[1] = (u8)(timeout2 >> 8),
+>> +		.timeout2[2] = (u8)(timeout2 >> 16),
+>> +	};
+>> +
+>> +	if (wdd->pretimeout) {
+>> +		action = 2;
+>> +		action |= wdt_data->pretimeout_action << 2;
+>> +		action |= wdt_data->timeout_action << 4;
+>> +	} else {
+>> +		action = 1;
+>> +		action |= wdt_data->timeout_action << 2;
+>> +	}
+>> +
+>> +	cmd_start.action = action;
+>> +
+>> +	return cgbc_command(cgbc, &cmd_start, sizeof(cmd_start), NULL, 0, NULL);
+>> +}
+>> +
+>> +static int cgbc_wdt_stop(struct watchdog_device *wdd)
+>> +{
+>> +	struct cgbc_wdt_data *wdt_data = watchdog_get_drvdata(wdd);
+>> +	struct cgbc_device_data *cgbc = wdt_data->cgbc;
+>> +	struct cgbc_wdt_cmd_cfg cmd_stop = {
+>> +		.cmd = CGBC_WDT_CMD_INIT,
+>> +		.mode = CGBC_WDT_DISABLE,
+>> +	};
+>> +
+>> +	return cgbc_command(cgbc, &cmd_stop, sizeof(cmd_stop), NULL, 0, NULL);
+>> +}
+>> +
+>> +static int cgbc_wdt_keepalive(struct watchdog_device *wdd)
+>> +{
+>> +	struct cgbc_wdt_data *wdt_data = watchdog_get_drvdata(wdd);
+>> +	struct cgbc_device_data *cgbc = wdt_data->cgbc;
+>> +	u8 cmd_ping = CGBC_WDT_CMD_TRIGGER;
+>> +
+>> +	return cgbc_command(cgbc, &cmd_ping, sizeof(cmd_ping), NULL, 0, NULL);
+>> +}
+>> +
+>> +static int cgbc_wdt_set_pretimeout(struct watchdog_device *wdd,
+>> +				   unsigned int pretimeout)
+>> +{
+>> +	struct cgbc_wdt_data *wdt_data = watchdog_get_drvdata(wdd);
+>> +
+>> +	wdd->pretimeout = pretimeout;
+>> +	wdt_data->pretimeout_action = ACTION_SMI;
+>> +
+>> +	if (watchdog_active(wdd))
+>> +		return cgbc_wdt_start(wdd);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int cgbc_wdt_set_timeout(struct watchdog_device *wdd,
+>> +				unsigned int timeout)
+>> +{
+>> +	struct cgbc_wdt_data *wdt_data = watchdog_get_drvdata(wdd);
+>> +
+>> +	if (timeout < wdd->pretimeout) {
+>> +		dev_warn(wdd->parent, "timeout <= pretimeout. Setting pretimeout to zero\n");
+> 
+> That is a normal condition which does not warrant a log message.
+> Also see drivers/watchdog/watchdog_dev.c around line 385.
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
+Fixed in next iteration.
 
-Changes in v4:
-- collected Ulf's tag
+> 
+>> +		wdd->pretimeout = 0;
+>> +	}
+>> +
+>> +	wdd->timeout = timeout;
+>> +	wdt_data->timeout_action = ACTION_RESET;
+> 
+> Both timeout_action and pretimeout_action are set statically.
+> What is the point of doing that instead of just using
+> ACTION_RESET and ACTION_SMI as needed irectly ?
 
-Changes in v2:
-- adjusted patch description and comment from code
-- collected tags
+Yes indeed, using ACTION_RESET and ACTION_SMI directly in
+cgbc_wdt_start() makes the code smaller.
 
-Changes since RFC:
-- use pm_runtime_resume_and_get() and pm_runtime_irq_safe()
-- drop clock prepare in probe
+> 
+>> +
+>> +	if (watchdog_active(wdd))
+>> +		return cgbc_wdt_start(wdd);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct watchdog_info cgbc_wdt_info = {
+>> +	.identity	= "CGBC Watchdog",
+>> +	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
+>> +		WDIOF_MAGICCLOSE | WDIOF_PRETIMEOUT
+>> +};
+>> +
+>> +static const struct watchdog_ops cgbc_wdt_ops = {
+>> +	.owner		= THIS_MODULE,
+>> +	.start		= cgbc_wdt_start,
+>> +	.stop		= cgbc_wdt_stop,
+>> +	.ping		= cgbc_wdt_keepalive,
+>> +	.set_timeout	= cgbc_wdt_set_timeout,
+>> +	.set_pretimeout = cgbc_wdt_set_pretimeout,
+>> +};
+>> +
+>> +static int cgbc_wdt_probe(struct platform_device *pdev)
+>> +{
+>> +	struct cgbc_device_data *cgbc = dev_get_drvdata(pdev->dev.parent);
+>> +	struct device *dev = &pdev->dev;
+>> +	struct cgbc_wdt_data *wdt_data;
+>> +	struct watchdog_device *wdd;
+>> +	int ret;
+>> +
+>> +	wdt_data = devm_kzalloc(dev, sizeof(*wdt_data), GFP_KERNEL);
+> 
+> devm_kzalloc() is declared in linux/device.h. Again, please include all
+> necessary include files explicitly.
 
- drivers/watchdog/rzg2l_wdt.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+Fixed in next iteration.
 
-diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-index 2a35f890a288..11bbe48160ec 100644
---- a/drivers/watchdog/rzg2l_wdt.c
-+++ b/drivers/watchdog/rzg2l_wdt.c
-@@ -12,6 +12,7 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
- #include <linux/reset.h>
- #include <linux/units.h>
-@@ -166,8 +167,22 @@ static int rzg2l_wdt_restart(struct watchdog_device *wdev,
- 	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
- 	int ret;
- 
--	clk_prepare_enable(priv->pclk);
--	clk_prepare_enable(priv->osc_clk);
-+	/*
-+	 * In case of RZ/G3S the watchdog device may be part of an IRQ safe power
-+	 * domain that is currently powered off. In this case we need to power
-+	 * it on before accessing registers. Along with this the clocks will be
-+	 * enabled. We don't undo the pm_runtime_resume_and_get() as the device
-+	 * need to be on for the reboot to happen.
-+	 *
-+	 * For the rest of SoCs not registering a watchdog IRQ safe power
-+	 * domain it is safe to call pm_runtime_resume_and_get() as the
-+	 * irq_safe_dev_in_sleep_domain() call in genpd_runtime_resume()
-+	 * returns non zero value and the genpd_lock() is avoided, thus, there
-+	 * will be no invalid wait context reported by lockdep.
-+	 */
-+	ret = pm_runtime_resume_and_get(wdev->parent);
-+	if (ret)
-+		return ret;
- 
- 	if (priv->devtype == WDT_RZG2L) {
- 		ret = reset_control_deassert(priv->rstc);
-@@ -275,6 +290,7 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
- 
- 	priv->devtype = (uintptr_t)of_device_get_match_data(dev);
- 
-+	pm_runtime_irq_safe(&pdev->dev);
- 	pm_runtime_enable(&pdev->dev);
- 
- 	priv->wdev.info = &rzg2l_wdt_ident;
--- 
-2.39.2
+> 
+>> +	if (!wdt_data)
+>> +		return -ENOMEM;
+>> +
+>> +	wdt_data->cgbc = cgbc;
+>> +	wdd = &wdt_data->wdd;
+>> +	wdd->parent = dev;
+>> +
+> 
+> No limits ? That is unusual. Are you sure the driver accepts all
+> timeouts from 0 to UINT_MAX ?
 
+Yes limits are needed.
+For next iteration I added 1s as min_timeout (which seems to be the
+usual value, and it is accepted by the hardware), and a max_timeout.
+
+> 
+>> +	wdd->info = &cgbc_wdt_info;
+>> +	wdd->ops = &cgbc_wdt_ops;
+>> +
+>> +	watchdog_set_drvdata(wdd, wdt_data);
+>> +	watchdog_set_nowayout(wdd, nowayout);
+>> +
+>> +	cgbc_wdt_set_timeout(wdd, timeout);
+>> +	cgbc_wdt_set_pretimeout(wdd, pretimeout);
+> 
+> The more common approach would be to set default limits in wdd->{timout,pretimeout}
+> and only override the values if needed, ie if provided using module parameters.
+> That implies initializing the module parameters with 0. YOur call, though.
+
+Ok.
+For next iteration I added limits (min_timeout, max_timeout), the
+timeout module parameter is set to 0 by default, and
+watchdog_init_timeout() is called in the probe.
+
+> 
+>> +
+>> +	platform_set_drvdata(pdev, wdt_data);
+>> +	watchdog_stop_on_reboot(wdd);
+>> +	watchdog_stop_on_unregister(wdd);
+>> +
+>> +	ret = devm_watchdog_register_device(dev, wdd);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	return 0;
+> 
+> Why not just
+> 	return devm_watchdog_register_device(dev, wdd);
+> ?
+
+I don't know :)
+Fixed in the next iteration.
+
+Thanks for the review !!
+
+Thomas.
 
