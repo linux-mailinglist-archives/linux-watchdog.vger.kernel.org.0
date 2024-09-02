@@ -1,52 +1,76 @@
-Return-Path: <linux-watchdog+bounces-1663-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1664-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E54DE968908
-	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Sep 2024 15:38:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B138968CBA
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Sep 2024 19:15:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D046282F02
-	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Sep 2024 13:38:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CB971C21E9F
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Sep 2024 17:15:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 879C320124A;
-	Mon,  2 Sep 2024 13:38:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42D161AB6D3;
+	Mon,  2 Sep 2024 17:15:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="k0CCwUTb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hJ6UEj4b"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3DC184D;
-	Mon,  2 Sep 2024 13:38:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B55A1CB53C;
+	Mon,  2 Sep 2024 17:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725284317; cv=none; b=PCrMQ03kV1kGsSMqN8ZNmlWDQ5UYAmN5ojw0/dZE/adUe6jS2FaaBrn3CAz6rHKSm7OJm+bvyapFEBTicLq83U3iE7Q3CkPgyiD1kAWKPdQ49PV9SiPSnsCC4c9+eILEmQW48CZrmwMnRNRohj7tgLXU9dvMmFJ8TTjwodGtfII=
+	t=1725297356; cv=none; b=HAZqpsPYFcxMU11ywhC8KKfKL5jx2gqmGuZD/USMvV+tMhe6DmKmk8fG1NOitRRTxYx4yRMluYkgBeYvHagUFN6Gnpz4gM+ZtVBz+CtE4UraZ+lb5vFhIMTlq0LsOOgUcbteHjfPdi8uom9+GI48LlGaYQOUBilZMvY3Ckcvr58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725284317; c=relaxed/simple;
-	bh=VmbSlwz30CrgBjxHN1m/rtFJOQFx3FRyCzp3Ry2x69s=;
+	s=arc-20240116; t=1725297356; c=relaxed/simple;
+	bh=Y3F+jiEbHV2sGQ4WdGXMqHKNU7egSLTAGwP8v4w0xXs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=twk/6kxs0FTb+Dt10NLPnXHcDzuVNbLGb51TWPRBGD0mlsJSI5RhVe1vAXGzhxXPVdVtluTMQ0KvtGPSML5dUQtIeMzlZAwuQ/48HU5c2GeiKXVszN1j6KX8USS9Hd1kZ1CdIqHI4crTw5b/+3E1vnalQnKopblepXxyfDHA3ug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=k0CCwUTb; arc=none smtp.client-ip=217.70.183.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D7C8A40006;
-	Mon,  2 Sep 2024 13:38:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1725284305;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xQY4ArvB7ONJr6lW7dYcvuSILbt3nf3xqfBfKcm34kM=;
-	b=k0CCwUTbIe+E+p6iI7jRvjha8V3FntUrfWrWbfTojJwp6sv+/k6g2jXTYCsc5viQVGz2ik
-	/BNqnhbIGPuZGgmkfgiW6qNcLlgBYKe907EsCVFnYCyCa8uXELTBB6SGIkFaLRSQpOHkJv
-	BBG+W2oz9x2gIb1OS7tBgzMlpxwnQyP7P8ezng/AtibztVPy2T68tNo9SBTHMQQowBYrWg
-	Mmv8fX26CMPzknYLLm/QLpFT8YqrYKXukJob9pGBdqi8HtU2yuk8nzjiVzP4cBa1Iaa1gw
-	9I+En5JjFKpvi5a7rip8Ew9zP+8naSzdLbWb8iFgwjGGtBtWrShBoWXgTcyBkw==
-Message-ID: <13c328c9-eb44-4a40-9f0e-734a84594bef@bootlin.com>
-Date: Mon, 2 Sep 2024 15:38:23 +0200
+	 In-Reply-To:Content-Type; b=a42wApDrNRw1zRrzys7Ryj3k7qMlsiPRAtu5RKyZ1yuyZOY3O4geG8n3OIHyIKxmTXFmk5SZlH6AFWB60wG9PvEpIiXPs7HjJhvzu0pMLD3I/MOZU0iPnLDdpl25Tk0WfNSdrzNoV9Z+I0gov8vpMEEvuVXKTNNlBph8E9Kg4Vw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hJ6UEj4b; arc=none smtp.client-ip=209.85.166.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-39f540795afso6456865ab.0;
+        Mon, 02 Sep 2024 10:15:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725297354; x=1725902154; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=G6p3ko4LFyBY+04TDWxCHzAk1B2NviZe/YEXobAMJ/Q=;
+        b=hJ6UEj4bswGYq88W4W8E95+ilx8SxO0csU33MPXGJHVz3QnNYKEczTI0z2WnoRwGX2
+         YmbHW6cRHVtpN1Ewh10C9iKzP3U8kJQpG7LR7wnOV7ADxJO5xxzoYgLkbxBpsTO8E/NS
+         nQIRWrU70F8vGZtqw+1O+TXTkAZ4SaKyA0QF5WAyuZ/YQxh7O4rWNciNCYoE7LV8trBk
+         uEcQbLXksFXJndkyfA93DUM1h1VtBv8uRoX6GDxYHJicL54SsHk59zLOsoAM2uO1jK68
+         7Db9tIEbdn/BLH3/3/u1zreDYXlruvsZOK+GLxXoEBudbm9lf1BWhT6JzsTz3QOV1zyc
+         6tCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725297354; x=1725902154;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G6p3ko4LFyBY+04TDWxCHzAk1B2NviZe/YEXobAMJ/Q=;
+        b=TWfsWv6Wx0fZLNGfAujYaqYDF0iD5DT/mBG2oui+5zhfRyOtvgfyneLTQVN9l1FQaw
+         S82w6lY8++tUlG2+MsdFeZsiOpZqkVQqVzyM4A62G/dCAIVX9CKpAg6uAsuyk76CKW3v
+         1f/canmrzko5196tmjjC+zFbAmOkZl8EiCQhLWN5OJ4QbVg9c6NwVAnkc3fDtm6NjEpn
+         juUb5pxo5ZUzfaeX5GAdowroDB9davebP6X0FIzOt1Tl31fbWNKkX1YUlv0tYXKI42Q6
+         HjICee5OxB5uLX14L4GEeGd8iGKVm8Ahm96kdQbUjXMnEIqF5VLEG0b3ZRewo7Q06Uba
+         l2AQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWafpd4/tsdf61q8vqwprWWRoRLReoaTi/RtKweTeiLPXXQaStFwZ0gYdsMcVtaBGMqZqCQOjln8j7uf50=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMIrjnbzOe17GegtOb9ufBucPCrGpkj1ouXrTvws7hqpEM3rbd
+	5JAirn0J2U07VEnHQg3IP+ycRtRyvxJcLiuaJKMj8Y4vG1CG4OEg
+X-Google-Smtp-Source: AGHT+IEx6OXmg99LFEPVaW8McXtbZQqOVa9NAPxuzNHTv+u7Il4NcUIsJ1SyuJTNrFTJUjiVXjLSLg==
+X-Received: by 2002:a92:cd83:0:b0:39a:eb4d:4335 with SMTP id e9e14a558f8ab-39f4f5169c3mr96647745ab.4.1725297353598;
+        Mon, 02 Sep 2024 10:15:53 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7d22e77f33asm7871052a12.39.2024.09.02.10.15.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Sep 2024 10:15:53 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <2896d0a9-5e92-41d9-8dcb-c804ac2a606b@roeck-us.net>
+Date: Mon, 2 Sep 2024 10:15:51 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -54,244 +78,92 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/5] watchdog: Congatec Board Controller watchdog timer
- driver
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-watchdog@vger.kernel.org, thomas.petazzoni@bootlin.com,
- blake.vermeer@keysight.com
-References: <20240503-congatec-board-controller-v1-0-fec5236270e7@bootlin.com>
- <20240503-congatec-board-controller-v1-4-fec5236270e7@bootlin.com>
- <d37e3fea-d35e-4688-a845-02be6ea5eaa3@roeck-us.net>
+Subject: Re: [PATCH] watchdog: iTCO_wdt: Convert comma to semicolon
+To: Chen Ni <nichen@iscas.ac.cn>, wim@linux-watchdog.org,
+ andy.shevchenko@gmail.com
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240902081051.3824822-1-nichen@iscas.ac.cn>
 Content-Language: en-US
-From: Thomas Richard <thomas.richard@bootlin.com>
-In-Reply-To: <d37e3fea-d35e-4688-a845-02be6ea5eaa3@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240902081051.3824822-1-nichen@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-GND-Sasl: thomas.richard@bootlin.com
 
-Hi Guenter,
-
->> +
->> +struct cgbc_wdt_cmd_cfg {
->> +	u8 cmd;
->> +	u8 mode;
->> +	u8 action;
->> +	u8 timeout1[3];
->> +	u8 timeout2[3];
->> +	u8 reserved[3];
->> +	u8 delay[3];
->> +} __packed;
->> +
->> +static_assert(sizeof(struct cgbc_wdt_cmd_cfg) == 15);
+On 9/2/24 01:10, Chen Ni wrote:
+> Replace a comma between expression statements by a semicolon.
 > 
-> static_assert() is declared in linux/build_bug.h. Please include all
-> necessary include files explicitly and do not depend on indirect includes.
+> Fixes: ce1b95ca23c1 ("watchdog: iTCO_wdt: Use allocated data structures")
+> Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+> ---
 
-Fixed in next iteration.
+The patch is ok, but it doesn't _fix_ anything. The fixes tag should be dropped
+when applying.
 
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
+
+
+>   drivers/watchdog/iTCO_wdt.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->> +
->> +static int cgbc_wdt_start(struct watchdog_device *wdd)
->> +{
->> +	struct cgbc_wdt_data *wdt_data = watchdog_get_drvdata(wdd);
-> 
-> Unusual way to get wdt_data instead of using container_of().
-> Any special reason ?
+> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+> index 264857d314da..35b358bcf94c 100644
+> --- a/drivers/watchdog/iTCO_wdt.c
+> +++ b/drivers/watchdog/iTCO_wdt.c
+> @@ -563,8 +563,8 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>   	}
+>   
+>   	ident.firmware_version = p->iTCO_version;
+> -	p->wddev.info = &ident,
+> -	p->wddev.ops = &iTCO_wdt_ops,
+> +	p->wddev.info = &ident;
+> +	p->wddev.ops = &iTCO_wdt_ops;
+>   	p->wddev.bootstatus = 0;
+>   	p->wddev.timeout = WATCHDOG_TIMEOUT;
+>   	watchdog_set_nowayout(&p->wddev, nowayout);
 
-No special reason, I saw that watchdog_get_drvdata() was often used in
-watchdog drivers (more than container_of()) to get wdt_data.
-But I can use container_of() if you think I should.
-
-> 
->> +	struct cgbc_device_data *cgbc = wdt_data->cgbc;
->> +	unsigned int timeout1 = (wdd->timeout - wdd->pretimeout) * 1000;
->> +	unsigned int timeout2 = wdd->pretimeout * 1000;
->> +	u8 action;
->> +
->> +	struct cgbc_wdt_cmd_cfg cmd_start = {
->> +		.cmd = CGBC_WDT_CMD_INIT,
->> +		.mode = CGBC_WDT_MODE_SINGLE_EVENT,
->> +		.timeout1[0] = (u8)timeout1,
->> +		.timeout1[1] = (u8)(timeout1 >> 8),
->> +		.timeout1[2] = (u8)(timeout1 >> 16),
->> +		.timeout2[0] = (u8)timeout2,
->> +		.timeout2[1] = (u8)(timeout2 >> 8),
->> +		.timeout2[2] = (u8)(timeout2 >> 16),
->> +	};
->> +
->> +	if (wdd->pretimeout) {
->> +		action = 2;
->> +		action |= wdt_data->pretimeout_action << 2;
->> +		action |= wdt_data->timeout_action << 4;
->> +	} else {
->> +		action = 1;
->> +		action |= wdt_data->timeout_action << 2;
->> +	}
->> +
->> +	cmd_start.action = action;
->> +
->> +	return cgbc_command(cgbc, &cmd_start, sizeof(cmd_start), NULL, 0, NULL);
->> +}
->> +
->> +static int cgbc_wdt_stop(struct watchdog_device *wdd)
->> +{
->> +	struct cgbc_wdt_data *wdt_data = watchdog_get_drvdata(wdd);
->> +	struct cgbc_device_data *cgbc = wdt_data->cgbc;
->> +	struct cgbc_wdt_cmd_cfg cmd_stop = {
->> +		.cmd = CGBC_WDT_CMD_INIT,
->> +		.mode = CGBC_WDT_DISABLE,
->> +	};
->> +
->> +	return cgbc_command(cgbc, &cmd_stop, sizeof(cmd_stop), NULL, 0, NULL);
->> +}
->> +
->> +static int cgbc_wdt_keepalive(struct watchdog_device *wdd)
->> +{
->> +	struct cgbc_wdt_data *wdt_data = watchdog_get_drvdata(wdd);
->> +	struct cgbc_device_data *cgbc = wdt_data->cgbc;
->> +	u8 cmd_ping = CGBC_WDT_CMD_TRIGGER;
->> +
->> +	return cgbc_command(cgbc, &cmd_ping, sizeof(cmd_ping), NULL, 0, NULL);
->> +}
->> +
->> +static int cgbc_wdt_set_pretimeout(struct watchdog_device *wdd,
->> +				   unsigned int pretimeout)
->> +{
->> +	struct cgbc_wdt_data *wdt_data = watchdog_get_drvdata(wdd);
->> +
->> +	wdd->pretimeout = pretimeout;
->> +	wdt_data->pretimeout_action = ACTION_SMI;
->> +
->> +	if (watchdog_active(wdd))
->> +		return cgbc_wdt_start(wdd);
->> +
->> +	return 0;
->> +}
->> +
->> +static int cgbc_wdt_set_timeout(struct watchdog_device *wdd,
->> +				unsigned int timeout)
->> +{
->> +	struct cgbc_wdt_data *wdt_data = watchdog_get_drvdata(wdd);
->> +
->> +	if (timeout < wdd->pretimeout) {
->> +		dev_warn(wdd->parent, "timeout <= pretimeout. Setting pretimeout to zero\n");
-> 
-> That is a normal condition which does not warrant a log message.
-> Also see drivers/watchdog/watchdog_dev.c around line 385.
-
-Fixed in next iteration.
-
-> 
->> +		wdd->pretimeout = 0;
->> +	}
->> +
->> +	wdd->timeout = timeout;
->> +	wdt_data->timeout_action = ACTION_RESET;
-> 
-> Both timeout_action and pretimeout_action are set statically.
-> What is the point of doing that instead of just using
-> ACTION_RESET and ACTION_SMI as needed irectly ?
-
-Yes indeed, using ACTION_RESET and ACTION_SMI directly in
-cgbc_wdt_start() makes the code smaller.
-
-> 
->> +
->> +	if (watchdog_active(wdd))
->> +		return cgbc_wdt_start(wdd);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct watchdog_info cgbc_wdt_info = {
->> +	.identity	= "CGBC Watchdog",
->> +	.options	= WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
->> +		WDIOF_MAGICCLOSE | WDIOF_PRETIMEOUT
->> +};
->> +
->> +static const struct watchdog_ops cgbc_wdt_ops = {
->> +	.owner		= THIS_MODULE,
->> +	.start		= cgbc_wdt_start,
->> +	.stop		= cgbc_wdt_stop,
->> +	.ping		= cgbc_wdt_keepalive,
->> +	.set_timeout	= cgbc_wdt_set_timeout,
->> +	.set_pretimeout = cgbc_wdt_set_pretimeout,
->> +};
->> +
->> +static int cgbc_wdt_probe(struct platform_device *pdev)
->> +{
->> +	struct cgbc_device_data *cgbc = dev_get_drvdata(pdev->dev.parent);
->> +	struct device *dev = &pdev->dev;
->> +	struct cgbc_wdt_data *wdt_data;
->> +	struct watchdog_device *wdd;
->> +	int ret;
->> +
->> +	wdt_data = devm_kzalloc(dev, sizeof(*wdt_data), GFP_KERNEL);
-> 
-> devm_kzalloc() is declared in linux/device.h. Again, please include all
-> necessary include files explicitly.
-
-Fixed in next iteration.
-
-> 
->> +	if (!wdt_data)
->> +		return -ENOMEM;
->> +
->> +	wdt_data->cgbc = cgbc;
->> +	wdd = &wdt_data->wdd;
->> +	wdd->parent = dev;
->> +
-> 
-> No limits ? That is unusual. Are you sure the driver accepts all
-> timeouts from 0 to UINT_MAX ?
-
-Yes limits are needed.
-For next iteration I added 1s as min_timeout (which seems to be the
-usual value, and it is accepted by the hardware), and a max_timeout.
-
-> 
->> +	wdd->info = &cgbc_wdt_info;
->> +	wdd->ops = &cgbc_wdt_ops;
->> +
->> +	watchdog_set_drvdata(wdd, wdt_data);
->> +	watchdog_set_nowayout(wdd, nowayout);
->> +
->> +	cgbc_wdt_set_timeout(wdd, timeout);
->> +	cgbc_wdt_set_pretimeout(wdd, pretimeout);
-> 
-> The more common approach would be to set default limits in wdd->{timout,pretimeout}
-> and only override the values if needed, ie if provided using module parameters.
-> That implies initializing the module parameters with 0. YOur call, though.
-
-Ok.
-For next iteration I added limits (min_timeout, max_timeout), the
-timeout module parameter is set to 0 by default, and
-watchdog_init_timeout() is called in the probe.
-
-> 
->> +
->> +	platform_set_drvdata(pdev, wdt_data);
->> +	watchdog_stop_on_reboot(wdd);
->> +	watchdog_stop_on_unregister(wdd);
->> +
->> +	ret = devm_watchdog_register_device(dev, wdd);
->> +	if (ret)
->> +		return ret;
->> +
->> +	return 0;
-> 
-> Why not just
-> 	return devm_watchdog_register_device(dev, wdd);
-> ?
-
-I don't know :)
-Fixed in the next iteration.
-
-Thanks for the review !!
-
-Thomas.
 
