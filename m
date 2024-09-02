@@ -1,123 +1,174 @@
-Return-Path: <linux-watchdog+bounces-1657-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1658-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81393968609
-	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Sep 2024 13:20:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF4A99688AB
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Sep 2024 15:24:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79DC7B2726C
-	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Sep 2024 11:13:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 495561F22F38
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Sep 2024 13:24:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99FD9187FE6;
-	Mon,  2 Sep 2024 11:13:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 480E6205E34;
+	Mon,  2 Sep 2024 13:24:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iJ8ZqelK"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="LmjjR7U3"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8523F181CE1
-	for <linux-watchdog@vger.kernel.org>; Mon,  2 Sep 2024 11:13:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A4A18455B
+	for <linux-watchdog@vger.kernel.org>; Mon,  2 Sep 2024 13:24:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725275599; cv=none; b=lUoS5G3XeHOjKTipD7Rf9tS1+a6lNPGRhY9u8Ou6okyxYkKdad2reOqY/MhD+DJ462Uoke6DqLaZN+K1bNgc0yW4cKBu37MevRFULkgCxCnyho1Z5YYGCZMS85OeiFKWjBDwEwUNL0TgLsNNDrnnGIA/G3zm4BmMf1aTZxFdUk4=
+	t=1725283459; cv=none; b=MDN3smz2W9Udd1eYQurdYD8NaggqsiG3NaduKUn7cLP964KD9tNASa9Kb9cwS2XPGJPwODLiL7jJr4JsJuwJa/eBhm6vvmW88Po163yDFzhL0fYp0Q3Lcz0Qk9l3vcFxXOro/sDxWUizrL5Vg08zW55TLyOCJxwhcKZ0/9qIbDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725275599; c=relaxed/simple;
-	bh=DWzn1hYA+MqPVdMdjEmyelcVAh57NyETVCIWQcpDC9k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I3HE2KpklOqTT2mU3a8k4MSul6TTwFymttKPH17ccTiSHfRrK5RgLYz2n5lhMCTGtFSFzLvXmOHRGfk0V5fXwSsOsEDCDg4xM6EGbPyj3FbFzToUSQCBailbhtB6wEV9qBx6KDSUqP9LCz1jxm3TO6+JSP4Yt2SBIZjHCc8odj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iJ8ZqelK; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-42bbc70caa4so24404645e9.0
-        for <linux-watchdog@vger.kernel.org>; Mon, 02 Sep 2024 04:13:16 -0700 (PDT)
+	s=arc-20240116; t=1725283459; c=relaxed/simple;
+	bh=Abxa8BkfsJuLjrDSm+JLHl1KZHPfBQ7Y/v/znoZjjdM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JyftQULoxL1Bpku9mVALsdWcvz7ERZUKBugexTGVUbpq+PFfFqcGpYhZjyFtl5PZny3NSZZJiOPBaWMNxI8rCavPRQ3jbSEmgv0XaoMumqSCdJ6Ry6DElo2IUxbFiOLPrGT8434wpnouw1zGuz/yH/gdd9J30tEV3pV4nEPr6cI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=LmjjR7U3; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a8679f534c3so438245466b.0
+        for <linux-watchdog@vger.kernel.org>; Mon, 02 Sep 2024 06:24:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725275595; x=1725880395; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t0y66KZsilWy5/q39E1+glqNVuSns5JZhAjLByhViBs=;
-        b=iJ8ZqelKXJymdJWrC2q1XKRPSuI2+MxDVEE6CjA+fjLWqla5YFbXnVmIWbQCAbylI2
-         FIumhjKQ+gJlmKiiezMg/SyqPoDKb6aoIKpOHyIwYyqLt2eyZ7vrn18EvwFt7qaY7eYi
-         33xZkr7vhpE/QY+7gvnj4rOhyIdneZf75T7nv8WfLbhlkxe1FVc+wu/NbrsL1KslhacT
-         yNjyIHwSerKUnMI6wdyntu48ZInsMmdSUm4bk0IgTGC7rfHT008SkKlVANK6Tjz7+2eK
-         EWJXGe7JlGEuFOq2aXPuQkuvykzst+jnKHUS6B5ukPlTQuXpH9Zt8pe47tKjg4TCcTXM
-         r0GA==
+        d=tuxon.dev; s=google; t=1725283455; x=1725888255; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B2OrY7LmS5ARPSvD7Xeqfyw/hCUAImQblS8V1N5kgNU=;
+        b=LmjjR7U3F9OKRrrq8tatiKAwO2QEiPY76JqPdLHfcOGML35uuFYi+cfYLHkKMafEyC
+         Lwr7hKyD8mvcYeXibt5oL3Q+eQKGrhtNLUDJp9dhhwvgzlQwlLhJ57UFVIaM5UnQ/qg4
+         xWneUuEcfl6NpC6EuOYCaSA6kHYbbCYCbEk3xp8es5ToHaLFWyJWnLgIknsQdnu1soSr
+         tsiGMA6WantKS/atgqaq8XtbLp+Ss1s1I9SwCKu6R7vLdJP9iMibPU6wY7lUq2WIFz23
+         7Zv6FMpC8UzenyAANOL2IO0HX2KtR4HeFNLJkriE/0Lx4W1LzNTTjtP9Um3rRI3miTru
+         ZiQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725275595; x=1725880395;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t0y66KZsilWy5/q39E1+glqNVuSns5JZhAjLByhViBs=;
-        b=HW3IOFgn9YSED+DpZjPI4hdGfurKrku7+q7Fp8Xeotlayak61r9s/2d4GxCE6yAXLT
-         UJH5TM/OgRsz53y7LRQg8+sqFtZnI4JoGcb+4EajpQgAZCVRDu3DHW0Tzt/VLiIx/zpg
-         6D0Lk6I70xIblMEllX2yfaWfyOLJ4JTdGi+KoDd50KvtEDg0rrftqLQrvKakiSh+E/Fx
-         DVVzxahFYAupCoiwNMk3T9OZ7H7+HsVTBXszIiAdVwcbShRXfGYnINaaoWOUZfYmckvR
-         jkU6PCLfkWSX1e/6woRoMdNosWv2Cv8tQkcgUx+QHQYJXzOb2HGBmqMJEHLhLw01q2NJ
-         j+PQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX7ECrDvtSXnh87S2lHmjVOrf39eB37DW/LAXxP0iU9w/gv73GyvU0t+OfOGKT7fazJJhXuayRtsbI/OJRtNA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnltPg++7LY0F/O2Lxr3Idyzli+KM5v7UsLUBOOy4X13UQYsbe
-	mGEmV9UbHhNSFZbmgI8ekLM1mnqUAcMyq3BxRebm/So1FRt2EazwHSTucP9BW6o=
-X-Google-Smtp-Source: AGHT+IFxCzBbJEBnXgmaDcBmR8nMNXjOhCACiDRaC3OZHxGXv/tYXf8mnP+AgdXOfY0pl7t3Hw1Y7g==
-X-Received: by 2002:a05:600c:3b25:b0:426:6320:7ddf with SMTP id 5b1f17b1804b1-42bb01fb0fbmr100596305e9.35.1725275594477;
-        Mon, 02 Sep 2024 04:13:14 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-42bb6e274ccsm136021455e9.37.2024.09.02.04.13.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Sep 2024 04:13:14 -0700 (PDT)
-Message-ID: <ad18f559-b067-4f2b-9bbc-6830bbe2f252@linaro.org>
-Date: Mon, 2 Sep 2024 13:13:12 +0200
+        d=1e100.net; s=20230601; t=1725283455; x=1725888255;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B2OrY7LmS5ARPSvD7Xeqfyw/hCUAImQblS8V1N5kgNU=;
+        b=oNEhisu61seIeWjlKHRaaOFxoVbWMJWWRtVyGZNfG8onbU1EQ3u+5lnddV03Vn/MuU
+         AuM5YkSmzrpusxDipK7VAhrIgeM62jXDtlBNOXj9IorHuZqBGvwn36hEY3P91qHhKtiT
+         URILAt4tpIhlkUZkbgft6MZgmoVnlM2TvwhlbK8p1IA7hAi8szuVkfiLixTnaVw6pbyJ
+         AxeTMIBVdqGyN5qKIYU4QhHiKM5yF8JDnaT3c0Ko6xF9JMqAA4Re2IBjKrua6e15LnMn
+         di/hICvDrpowyafMFpJhhx+0bDF4FItN9R4TFzzqpnLrC/Af6Bm/WEDfwFVNVDIBS4P2
+         ANnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7pisYbhlQ6aliXWk/tVLzntya7xI7AQLVaU1icABQ537+nW97ptf/sW1XYELF2MhSrBIP56dhAHieNNSR5Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKfjoDvcWaMfA+5jO07/Zi89KoFfrrbow24nhpFmpqPVRwsSeL
+	Yu8LlMi8/Yb2dxBbFciqGo1CcABGPsrM7QaVH+v3Xnk2Tq5aTaydfzp2KFEnvx4=
+X-Google-Smtp-Source: AGHT+IHq2+YTpWos8UI4QD8URbF/o1Hr+oJBrO2/y4dbGstIixrmAx2AK2gC4/Vkm+N+BUjHdjr3Lw==
+X-Received: by 2002:a17:907:7e85:b0:a7a:aa35:408a with SMTP id a640c23a62f3a-a89d87821c7mr526219066b.25.1725283455134;
+        Mon, 02 Sep 2024 06:24:15 -0700 (PDT)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.144])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a898900f6e0sm556060266b.77.2024.09.02.06.24.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Sep 2024 06:24:14 -0700 (PDT)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: geert+renesas@glider.be,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	ulf.hansson@linaro.org
+Cc: linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	claudiu.beznea@tuxon.dev,
+	linux-pm@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH v3 0/4] watchdog: rzg2l_wdt: Enable properly the watchdog clocks and power domain
+Date: Mon,  2 Sep 2024 16:23:58 +0300
+Message-Id: <20240902132402.2628900-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 13/22] dt-bindings: thermal: tsens: document support on
- SA8255p
-To: Nikunj Kela <quic_nkela@quicinc.com>, andersson@kernel.org,
- konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
- herbert@gondor.apana.org.au, davem@davemloft.net, sudeep.holla@arm.com,
- andi.shyti@kernel.org, tglx@linutronix.de, will@kernel.org, joro@8bytes.org,
- jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
- amitk@kernel.org, thara.gopinath@gmail.com, broonie@kernel.org,
- wim@linux-watchdog.org, linux@roeck-us.net
-Cc: robin.murphy@arm.com, cristian.marussi@arm.com, rui.zhang@intel.com,
- lukasz.luba@arm.com, vkoul@kernel.org, quic_gurus@quicinc.com,
- agross@kernel.org, bartosz.golaszewski@linaro.org, quic_rjendra@quicinc.com,
- robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
- arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-i2c@vger.kernel.org, iommu@lists.linux.dev,
- linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
- kernel@quicinc.com, quic_psodagud@quicinc.com, quic_tsoni@quicinc.com,
- quic_shazhuss@quicinc.com
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240828203721.2751904-14-quic_nkela@quicinc.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20240828203721.2751904-14-quic_nkela@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 28/08/2024 22:37, Nikunj Kela wrote:
-> Add compatible for sensors representing support on SA8255p.
-> 
-> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
-> ---
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Applied, thanks
+Hi,
+
+Watchdog device available on RZ/G3S SoC is part of a software-controlled
+power domain. The watchdog driver implements struct
+watchdog_ops::restart() handler which is called in atomic context via
+this call chain:
+
+kernel_restart() ->
+  machine_restart() ->
+    do_kernel_restart() ->
+      atomic_notifier_call_chain() ->
+        watchdog_restart_notifier()
+          rzg2l_wdt_restart()
+
+When the rzg2l_wdt_restart() is called it may happen that the watchdog
+clocks to be disabled and the associated power domain to be off.
+Accessing watchdog registers in this state leads to aborts and system
+blocks.
+
+To solve this issue the watchdog power domain was marked as IRQ safe
+as well as watchdog device (as proposed by Ulf Hansson). Along with
+it the clk_prepare_enable() calls from the watchdog restart() handler
+were removed and all is based now on pm_runtime_resume_and_get()
+as explained in patch 03/03.
+
+Series contains also power domain driver changes to be able to
+register the watchdog PM domain as an IRQ safe one.
+
+Initial RFC series for solving this issue was posted at [1].
+
+It is safe to merge watchdog and PM domain driver changes though
+different trees.
+
+Thank you,
+Claudiu Beznea
+
+[1] https://lore.kernel.org/all/20240619120920.2703605-1-claudiu.beznea.uj@bp.renesas.com/
+
+Changes in v3:
+- added patch "clk: renesas: rzg2l-cpg: Move PM domain power on in
+  rzg2l_cpg_pd_setup()"
+- addressed review comments
+- collected tags
+- per-patch changes are listed in individual patches
+
+Changes in v2:
+- adjusted patch title for patch 02/03
+- adjusted description for patch 03/03 along with comment
+  from code
+
+Changes since RFC:
+- dropped patches 01/03, 02/03 from RFC
+- adjusted power domain driver to be able to register the
+  watchdog PM domain as an IRQ safe one
+- drop clock prepare approach from watchdog driver presented in RFC
+  and rely only on pm_runtime_resume_and_get()
+- mark the watchdog device as IRQ safe
+
+
+Claudiu Beznea (4):
+  clk: renesas: rzg2l-cpg: Move PM domain power on in
+    rzg2l_cpg_pd_setup()
+  clk: renesas: rzg2l-cpg: Use GENPD_FLAG_* flags instead of local ones
+  clk: renesas: r9a08g045: Mark the watchdog and always-on PM domains as
+    IRQ safe
+  watchdog: rzg2l_wdt: Power on the watchdog domain in the restart
+    handler
+
+ drivers/clk/renesas/r9a08g045-cpg.c | 43 ++++++++++++-----------------
+ drivers/clk/renesas/rzg2l-cpg.c     | 38 ++++++++++++-------------
+ drivers/clk/renesas/rzg2l-cpg.h     | 10 ++-----
+ drivers/watchdog/rzg2l_wdt.c        | 20 ++++++++++++--
+ 4 files changed, 56 insertions(+), 55 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.39.2
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
