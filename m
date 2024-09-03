@@ -1,61 +1,72 @@
-Return-Path: <linux-watchdog+bounces-1687-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1688-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7E7F96A51E
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Sep 2024 19:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 83C6A96A63B
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Sep 2024 20:12:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 951F628137C
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Sep 2024 17:14:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A1B3287B71
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Sep 2024 18:12:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EB7A6F315;
-	Tue,  3 Sep 2024 17:14:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D9B1190073;
+	Tue,  3 Sep 2024 18:11:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EJREvbue"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a1dC6l8a"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30A2D1C14;
-	Tue,  3 Sep 2024 17:14:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F92F9DF;
+	Tue,  3 Sep 2024 18:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725383654; cv=none; b=B3paqwNek9ZtSNpP7zWhBSV0V25L4Ru7EWBEyolvMXPQv7qGEX6K362zLbxtL/7oWYZg5gQsNtCChMqdsUiSjURe1o2dW6WHlP6uYHYgNQWNuHT/8ci8afMMCAG8Wz9jYesUB/BWx5c7XgjrCHis+o353YIedBgQ5OvbL9MXDws=
+	t=1725387119; cv=none; b=Znf2BpRcDLMd2j5Rp+oax28ll0R1YuzJGDe11hZnrSzTT0AhGMRDqTSisdOJ7uRLfQ3dgXrVZrEM5uD9fEBbWhWivkYWeDwtWhsc4JR6VAq2XH4LwPaRvw3mTw8SqM6UyFlTpCnRiybmzR+7wqubZ9L8r2hetUuyrjz8VmP6210=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725383654; c=relaxed/simple;
-	bh=eGwm4taelSh/WXzqN+PU1w4rQntRFxVVS/ENxfgCBQg=;
+	s=arc-20240116; t=1725387119; c=relaxed/simple;
+	bh=if11Vy5KkDrmjGEflqzJtRJ7Egv1VFzayV75E2P4Iv8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lP6Tg4gMGmNum2bIuL0f88ztwD6l6YPXnH9mamzKg/0zFp9+lucMMLVJdFcSmdyrUzqVrwFaMF6DXFMuEvFmR++Mmo0WhNlLHzTYF8IQ3nwIazUKDxpAxE5xUBDUnqbVXBN1eL6OF1r8VEBfl/RXP3W67zaqgtLcOv2F4fDynwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EJREvbue; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1A60C4CEC4;
-	Tue,  3 Sep 2024 17:14:13 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=lmaVPWJYc6iIy6wX4y5NEf3g+nIpu0UTuRC3qUY/86G4356oSdHZIPeW0trRo/8Hej/mRP1w3jtKwjBHza8KVDOQmwvdHuxyEy4FBgDHYq7bsab9oYI2IHY6QEV0jahDk52y26Dj4LL4tpKq9x17gm1EzSJP3v5Ev3Tu4wS+goE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a1dC6l8a; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C0EC4CEC4;
+	Tue,  3 Sep 2024 18:11:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725383653;
-	bh=eGwm4taelSh/WXzqN+PU1w4rQntRFxVVS/ENxfgCBQg=;
+	s=k20201202; t=1725387118;
+	bh=if11Vy5KkDrmjGEflqzJtRJ7Egv1VFzayV75E2P4Iv8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EJREvbue78QlGh2r2sHgxA8lg6oHcpVyMzlsSbxjcBOfaNLLoHej+xYDrrsZ5hXhT
-	 vvxOn3olgwxKrFaCzxYywN+2of8nYp/XN7wdPXEknsko2NBZgzsBMHEik3wp7eW/jJ
-	 yH9uEAkqiayT7WjHW02fQte9o2QJBLerWHryA/ZicPHTWH89/ID1B06h4tvtrBDadn
-	 HgKjRlAfVVGoA34SNpGv90RlPtRxfO3j5JNwVcIeioBUD+Xx3fx7TEO49aG9+QPDxv
-	 C+IFJIXsV9nVNyuy/kbs26Pn3iCByMfAl6KFMcYaOscggqF8JvWk3QU9yl8P4+YPe8
-	 rhfR805npq6Lw==
-Date: Tue, 3 Sep 2024 12:14:12 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Animesh Agarwal <animeshagarwal28@gmail.com>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-watchdog@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Daniel Baluta <daniel.baluta@nxp.com>
-Subject: Re: [PATCH] dt-bindings: watchdog: nxp,lpc1850-wdt: Convert bindings
- to dtschema
-Message-ID: <172538365106.1746854.14927974412674667837.robh@kernel.org>
-References: <20240814061210.56213-1-animeshagarwal28@gmail.com>
+	b=a1dC6l8aPQD5OCJJwQjbcZ8mqfhJ+Nq/wS+UFqq1cNHh9/hwCCT9ttOLwe9zO9V4B
+	 obKom5l+3kjqfPr2YfeW4QdYRTLlayD94yQL8rrE2JxNeg58T7XHE0sJqvD6FRdX5s
+	 +IImDuKXxXvt7kSZWxqGjaqoJAYTy+u1N/8vOWRK3zPh8Xz9rNaW7LYtiZ6MmJuOzU
+	 HbLfsYGMrIg7QXE9BHc8jf0AJnnasvuFPg8Wdj1N2mJh6UTBsrIMx57auQwiTTSTIn
+	 ZjNu9BK41/4HnLjGm5tRimIht2HF5vA01g+C0NyGDRzZf7xbaRX3h+HOMoL7/LqQLn
+	 5aOpFuXQJ4Xkw==
+Date: Tue, 3 Sep 2024 20:11:55 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Detlev Casanova <detlev.casanova@collabora.com>
+Cc: linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Heiko Stuebner <heiko@sntech.de>, David Airlie <airlied@gmail.com>, 
+	Daniel Vetter <daniel@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Mark Brown <broonie@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Chris Morgan <macromorgan@hotmail.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Tim Lunn <tim@feathertop.org>, Andy Yan <andyshrk@163.com>, 
+	Muhammed Efe Cetin <efectn@protonmail.com>, Jagan Teki <jagan@edgeble.ai>, Dragan Simic <dsimic@manjaro.org>, 
+	Ondrej Jirman <megi@xff.cz>, Michael Riesch <michael.riesch@wolfvision.net>, 
+	Jimmy Hon <honyuenkwun@gmail.com>, Elon Zhang <zhangzj@rock-chips.com>, 
+	Alexey Charkov <alchark@gmail.com>, Elaine Zhang <zhangqing@rock-chips.com>, 
+	Yifeng Zhao <yifeng.zhao@rock-chips.com>, Finley Xiao <finley.xiao@rock-chips.com>, 
+	Liang Chen <cl@rock-chips.com>, Jamie Iles <jamie@jamieiles.com>, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+	dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org, kernel@collabora.com, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v4 3/9] dt-bindings: i2c: i2c-rk3x: Add rk3576 compatible
+Message-ID: <4hfdvgvkzt6cvyqbhfy3ttlwip4p4yfnhzbbciq5l3tso25zw2@qty5bsbbtbp4>
+References: <20240903152308.13565-1-detlev.casanova@collabora.com>
+ <20240903152308.13565-4-detlev.casanova@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -64,22 +75,39 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240814061210.56213-1-animeshagarwal28@gmail.com>
+In-Reply-To: <20240903152308.13565-4-detlev.casanova@collabora.com>
 
+BTW, just as a self reminder,
 
-On Wed, 14 Aug 2024 11:42:03 +0530, Animesh Agarwal wrote:
-> Convert the NXP LPC18xx Watchdog Timer bindings to yaml format.
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+
+Thanks,
+Andi
+
+On Tue, Sep 03, 2024 at 11:22:33AM GMT, Detlev Casanova wrote:
+> Just like RK356x and RK3588, RK3576 is compatible to the existing
+> rk3399 binding.
 > 
-> Cc: Daniel Baluta <daniel.baluta@nxp.com>
-> Signed-off-by: Animesh Agarwal <animeshagarwal28@gmail.com>
+> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Heiko Stuebner <heiko@sntech.de>
 > ---
->  .../bindings/watchdog/lpc18xx-wdt.txt         | 19 -------
->  .../bindings/watchdog/nxp,lpc1850-wwdt.yaml   | 52 +++++++++++++++++++
->  2 files changed, 52 insertions(+), 19 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/watchdog/lpc18xx-wdt.txt
->  create mode 100644 Documentation/devicetree/bindings/watchdog/nxp,lpc1850-wwdt.yaml
+>  Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-
-Applied, thanks!
-
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml b/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
+> index 82b9d6682297..a9dae5b52f28 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-rk3x.yaml
+> @@ -38,6 +38,7 @@ properties:
+>                - rockchip,rk3308-i2c
+>                - rockchip,rk3328-i2c
+>                - rockchip,rk3568-i2c
+> +              - rockchip,rk3576-i2c
+>                - rockchip,rk3588-i2c
+>                - rockchip,rv1126-i2c
+>            - const: rockchip,rk3399-i2c
+> -- 
+> 2.46.0
+> 
 
