@@ -1,147 +1,123 @@
-Return-Path: <linux-watchdog+bounces-1756-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1757-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3C8396D806
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Sep 2024 14:12:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A59796D991
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Sep 2024 15:00:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E69741C21CD6
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Sep 2024 12:12:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86C25B26B28
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Sep 2024 13:00:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1FA519AD87;
-	Thu,  5 Sep 2024 12:12:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EFB819CD11;
+	Thu,  5 Sep 2024 13:00:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CLuInnLe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N1WULtDB"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA7219AA5D;
-	Thu,  5 Sep 2024 12:12:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C98C19AD7B;
+	Thu,  5 Sep 2024 13:00:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725538347; cv=none; b=DDXlcKxr83lGAKZkYPKY7JaCI3sTCc+bYRNX+xQQ6zfKa9NOnEYRwLS59aDHSLm7kaYlRfue+mlztuUBeqVmcI7Ytm2Frry0nI/ZFDgsUMcVTf7OX/AeZ9Z1OhVIIrQnz1cOk8jeLG9wevTa/358i1/vlzRjzU3ZZdiTA6bR7Vk=
+	t=1725541203; cv=none; b=ebyRJn0ZitWxYbtfDWpg53Bq+u6HzwGJ5iefJbbluMedOBBBqLJeO1KKk5ZoxePGrgy4EsnrPXtIoPu7c1F4SMJK7vyxvWROVGQgaMwpQ7jRSutBC0R8mjn8a/yOYDr5SO2RnhmAncWXuAz+yUd7zzMhxH1kamnfkqNaFaYJIMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725538347; c=relaxed/simple;
-	bh=FONOtkrHn9wffb60g9bCFmD5Ce6Mpzm24koAoepUZFQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fUECrZRafxLwprvJ1GUdXM/RxVyGiIsGFuapYPbd2PuxN6NEr+I3MwXUuF3za0VxZBQpWH+2RWaQEcnD2LsfENC/4JjYV02VPMer+tx0X+kvasdXEpJ4BWwOV3zbiKoyA5eKnrx56KIdc0TP9+jHpG9vqCT/LcVE8rPTYhnx44k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CLuInnLe; arc=none smtp.client-ip=209.85.221.180
+	s=arc-20240116; t=1725541203; c=relaxed/simple;
+	bh=4uY2WQgSivZ2VQhFIdlGE0xY62rtVvkAX6QFj3t2Dqg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qVvrJ4xM9TqAuHL8ZIO3/Qj8Msk0ryvx0HB7uemD3fCcTFbLue9zRPv1YeYq+N3y7YYxmxVckUmltjJrNYuJYoYDV459Ve9J0vLUe2RrN0R0Yjt8WcLa5nAea5BttRWJYM6BhuzLIGGvKFGwWa/JeRIBCrv1j6LCH5DHBovPCAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N1WULtDB; arc=none smtp.client-ip=209.85.167.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-501274e2c29so10878e0c.3;
-        Thu, 05 Sep 2024 05:12:25 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-53568ffc525so973970e87.0;
+        Thu, 05 Sep 2024 06:00:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725538345; x=1726143145; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9gZAyTtY3aoGNNDzIbl+ioueHhEM4J2F6ba4GcLwUm8=;
-        b=CLuInnLegHd+XHPSVPghafie3UQqCrew+zqk0jBidVXsiJWTlSRxxdHf3u/3wOT5dP
-         DU/IV5j4AP8rQKqeJOEyO1bUiX70hPNpDsd//gajwRYph0pQCMovSgxX4NzLTCnWJHXG
-         SgsfLC/7ODYsYrVIEav8G48iHKbmsS4r4I45w27Pa1hYuZDVqxsW86gVLP7gd4ni2aox
-         pvy8Q0RCOMJnM9mc7KGUmOemJURBq4XgMCIHWoU50TcwhKmQGTZgyfBabfMygmnSR52e
-         cV/01Sx9MseL0bIhAVo3vGtuWgBfRUgaGFQSQve22OZ/US/AeGgakV0vn+wT5d3kLrld
-         xZOQ==
+        d=gmail.com; s=20230601; t=1725541200; x=1726146000; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M8aymMdGqVKINPmql7jmoZbSERwTF4J4EhSuMd5HKKg=;
+        b=N1WULtDBQSfmjlOvqE4MV/55XWIVIuvKAL6gN7icausgHiGwTI21OmUcSImpr55a0J
+         jzqwnVGPG+zFx9ovsu5TntBD812UQwdyvrrDLwIGVbfN6bJvOYNqUFjpRTrRSJtSygT3
+         GtRSZBYjcmo9yJwNCzYHOndXDnOb/dziYktJt6D1vm6hEPhuRrNAFxUylJe3jxglyhi2
+         tj6gJHlAWIFchzg4lLj3Lde38wQzMHVxu3drXzwNDRAnWsrQMkpdujAlY/u+3qPsare7
+         OXdVC6Ag/cmZovfbfv5k+88NmfqUBrj2dNMkjzPx2pFN/NvlU1ucOOM0hL01AzwPcLZE
+         VfEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725538345; x=1726143145;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9gZAyTtY3aoGNNDzIbl+ioueHhEM4J2F6ba4GcLwUm8=;
-        b=vN5p5r7jhdMk5fYx1cc+DG1kuMzNeBaEpKhKlaL1YjPWgE0wL7uhfIqrhvRzblSrpu
-         LJj6wlJ2KHkP6Mj9sOp1NIHWmsrW5yMJtiDmWVb2u9xnewb3vJScqrnjZ07ooAklT9BA
-         3rjPV9w57lurVPdYLGSbU+zVawEyZhBGRq/sPl9qsTmwBzStW4VMcUfE1WWsq6uPrjxR
-         DiFL8vYGFSZID9C/HniE8UC9E1U/z9neyXO1Tmrr2DG/Fy9TbIrr5yV21NydeDdM2VjN
-         dGaIY2Uqd6RiOKhSYbQ2HihxcDIhhnsXl64KdxAbrwZgQja4w8B/mHqhOK/2BVf3V966
-         w9eQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU0SOatdL9lwsYOtMrDx8f2VqVGKFCwyBhdBRhaAJfulErAhyRPXD7ZW9x2ghMtcbQKxBz5/1hoNlPAVVxIxB4=@vger.kernel.org, AJvYcCUIyS2LrF4ZRM87PVA50vgfzUVq6RGhGP36mkaD7nyszIidtXVyr89nG2dsgpHbNzHIaTJTiTb8lh4BB0UUzLSsmzU=@vger.kernel.org, AJvYcCVngW5Pc/z4y++SYszOywSS2BpCvQK7Rc4pBm9AHIY1ltRA1KXhfvgMdCR2iUlcX+FXmze5koUTRVjQRnqf@vger.kernel.org, AJvYcCXnJgbLGA9cNl9rD5mbpovVj7NVH5V8WOUHankVSOL261M4mb5rvyCkl7wU8ee1t+81Nb1D075jquMh@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfuY4KgeTMBzNKH+3n7bPeYqoKsHnnv89d7Pclg8OGt83l3mTK
-	qPUr+6VakIRDlg/qf6MPMAFrYu2zBCnfqOVtBrdHG7puKQdkHo+8FvihAIE9Zm5qR8YG1BQJWZr
-	zdRibrzcpOsrZ0ANZrOePAauu4M+Vf7zH/P8=
-X-Google-Smtp-Source: AGHT+IHXyw2RxkWhPsZxpmqiSi/213b8QWfi+5HjtH7I9tuPHtt3kLBnh3OYZTkw1Y8/ZGUBwriigeoD0h16GDmtUJg=
-X-Received: by 2002:a05:6122:2a05:b0:4f6:a7f7:164d with SMTP id
- 71dfb90a1353d-5009ac7a8a8mr21097634e0c.8.1725538344968; Thu, 05 Sep 2024
- 05:12:24 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725541200; x=1726146000;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M8aymMdGqVKINPmql7jmoZbSERwTF4J4EhSuMd5HKKg=;
+        b=HRGXQZSqd0nzBLQVHlnHUBxag6+smE5qgoFtfFAKGNK517BywET/iFInro9Yt0gORt
+         TmyPTCOYxrX9lhJbvDudmJbPryfJpwTFFGpc8BYgCj1hmaPGa8WMWgT9ChkSrtRucNQT
+         RwgkOhLJR3IdksppCCv5NBvgYH1FiP6X/m919sg59sOVGArGpDIjoFcRTnEDI80vL5Bc
+         25WnP4kIIMZWT6HoO6Q4vqIp7sBOPYuzmpXit+hlFy3TOTPVqRgQJnGLQlqGWgrjA0JF
+         /4xqbLoEFGb1QDKhPa3KGDG/dH3eUXsKewxuSqgmomDA7Vqwwv5pOEd7zEOk+EEHIen2
+         Y4vw==
+X-Forwarded-Encrypted: i=1; AJvYcCU1BesVHSF8o17YoFfIJyODvNKemVmoVMllct3NKuLOeI3844BlxaqafIyv2fhP1elKVmOixLYAVi2u@vger.kernel.org, AJvYcCUUYNHR7XP6/zSxk2TC1K4izRZayFMaiVPznsqmJnimi2USRxDlSK2UO6gnGFVkb0qL8HbOk8ZueiG8Ki9EHeg=@vger.kernel.org, AJvYcCV1biotWukQUt58KZ6Zbhl5xID0laHbwcQtE3NRk2/Ed/FmjnMueFcBxT/X9xfi3AaLLOyLz2L2L38=@vger.kernel.org, AJvYcCV4yTc8CLN5/VLr9GG9tjEChQXc1c07MvbHbCVB/jwTZzpB0d1onkZjjy3wk4Wb1F3DlG7ZTNqrQ/+lwMMc@vger.kernel.org, AJvYcCVUtWuc8R4XKjFJQyt5BwIV7kFwkcpfM3tVbx6z1Gz7YvEatFZYegmlebl4XI73aN8/RB+cN/M29A==@vger.kernel.org, AJvYcCVwuFXCdhzb40YdSiPxuaMmLnOxuSwvombtUKU5Sr7CMsbb+Ui1f61kv0RSQJZU500KOo86vVGMJYqG@vger.kernel.org, AJvYcCW6nkqaPXIN4LnVpf7mN3DXpI/MA1xoevRlGrsvpMkz1FUd/20RlUl7FJdMVLQBfXgphFCigGa3pyWtrde0@vger.kernel.org, AJvYcCWEecFgdqKzTvhSxrrWGWQ/OrsJyOEooA7lBacr9ioiGwBhxpVf/3P1gastEbywTjJhBQnAQUiSRn6nlT0Z@vger.kernel.org, AJvYcCWmszh4Yu7QYE7Egay+QeV7/WontReBCGcz/8KLuOE89kAcZU58n5uZzbY7j5Ozc4DUTR7NWiFV+fZeXdNw/Q==@vger.kernel.org, AJvYcCWyg27QU2Nl7cTXh2AI
+ 9wmt30uhahZ8FxtIVNwqmb/3C4ca+Ad0ESkRid9o1HN2SeQ8lkWLRPuFj0tgcw==@vger.kernel.org, AJvYcCXH3KoZtiPO9PCVq7yB7q559oPnkp5qnuWqzSCxut54Ne3+jtdkfP7cGUgImfHTNfgff9euNGBAYUvnJg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyjn9Nn2jss0jyaki2jhQiKY7KwSX1l52bTbd5wXZ94oZfqWvcZ
+	GAXR3QsysrhS5VJp6Xomj039Efd7JeZPzBWvBTygIyCCvNV4oOPk
+X-Google-Smtp-Source: AGHT+IF9QchVfib2TGNl44/PzgjS0URPqGUjbcmYR3mRhZSVqTrRZTQB8Yjb9zSWYe+zZesnRPDrWw==
+X-Received: by 2002:ac2:4c4e:0:b0:52c:9f9e:d8e3 with SMTP id 2adb3069b0e04-53546b40c79mr12956646e87.31.1725541199344;
+        Thu, 05 Sep 2024 05:59:59 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5356cbbbe15sm242758e87.211.2024.09.05.05.59.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Sep 2024 05:59:59 -0700 (PDT)
+Date: Thu, 5 Sep 2024 15:59:57 +0300
+From: Dmitry Baryshkov <dbaryshkov@gmail.com>
+To: Nikunj Kela <quic_nkela@quicinc.com>
+Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, sudeep.holla@arm.com, andi.shyti@kernel.org, 
+	tglx@linutronix.de, will@kernel.org, robin.murphy@arm.com, joro@8bytes.org, 
+	jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org, amitk@kernel.org, 
+	thara.gopinath@gmail.com, broonie@kernel.org, cristian.marussi@arm.com, 
+	rui.zhang@intel.com, lukasz.luba@arm.com, wim@linux-watchdog.org, linux@roeck-us.net, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org, arm-scmi@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, iommu@lists.linux.dev, 
+	linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, kernel@quicinc.com, quic_psodagud@quicinc.com
+Subject: Re: [PATCH v2 00/21] arm64: qcom: Introduce SA8255p Ride platform
+Message-ID: <rcr6bphq6qojq2cchv2vurymcio5utgaa63a5p7pry5pslab6d@q4fi2pkdxg3r>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240829193831.80768-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20240829193831.80768-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Thu, 5 Sep 2024 13:11:58 +0100
-Message-ID: <CA+V-a8tzZPkdxiivuRvOQoo8ayFttzXBWGoMufDXtdGg9477Yw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/2] Add Watchdog Timer driver for Renesas RZ/V2H(P) SoC
-To: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Magnus Damm <magnus.damm@gmail.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240903220240.2594102-1-quic_nkela@quicinc.com>
 
-Hi Wim,
+On Tue, Sep 03, 2024 at 03:02:19PM GMT, Nikunj Kela wrote:
+> This series enables the support for SA8255p Qualcomm SoC and Ride
+> platform. This platform uses SCMI power, reset, performance, sensor
+> protocols for resources(e.g. clocks, regulator, interconnect, phy etc.)
+> management. SA8255p is a virtual platforms that uses Qualcomm smc/hvc
+> transport driver.
+> 
+> Multiple virtual SCMI instances are being used to achieve the parallelism.
+> SCMI platform stack runs in SMP enabled VM hence allows platform to service
+> multiple resource requests in parallel. Each device is assigned its own
+> dedicated SCMI channel and Tx/Rx doorbells.
+> 
+> Resource operations are grouped together to achieve better abstraction
+> and to reduce the number of requests being sent to SCMI platform(server)
+> thus improving boot time KPIs. This design approach was presented during
+> LinaroConnect 2024 conference[1].
 
-On Thu, Aug 29, 2024 at 8:38=E2=80=AFPM Prabhakar <prabhakar.csengg@gmail.c=
-om> wrote:
->
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Hi All,
->
-> This patch series aims to add WDT support to Renesas RZ/V2H(P) SoC.
->
-> v4->v5
-> - Updated commit description for patch 1/2
-> - Collated RB tags from Geert and Guenter
->
-> v3->v4
-> - Simplified calculation of max_hw_heartbeat_ms
-> - Turn on the clocks first before reset operation in start & restart
->   callbacks
-> - Added checks in restart callback before turning ON clocks/resets
-> - Dropped udelay after every ping operation
-> - Added comments
->
-> v2->v3
-> - Fixed dependency, ARCH_R9A09G011->ARCH_R9A09G057
-> - Added dependency for PM
-> - Added delay after de-assert operation as clks are halted temporarily
->   after de-assert operation
-> - Clearing WDTSR register
->
-> v1->v2
-> - Included RB tag for binding patch
-> - Fixed review comments from Claudiu
-> - Stopped using PM runtime calls in restart handler
-> - Dropped rstc deassert from probe
->
-> Cheers,
-> Prabhakar
->
-> Lad Prabhakar (2):
->   dt-bindings: watchdog: renesas,wdt: Document RZ/V2H(P) SoC
->   watchdog: Add Watchdog Timer driver for RZ/V2H(P)
->
->  .../bindings/watchdog/renesas,wdt.yaml        |  17 +-
->  drivers/watchdog/Kconfig                      |   9 +
->  drivers/watchdog/Makefile                     |   1 +
->  drivers/watchdog/rzv2h_wdt.c                  | 272 ++++++++++++++++++
->  4 files changed, 298 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/watchdog/rzv2h_wdt.c
->
-Gentle ping.
+Please don't send new revisions as a reply to the previous patchset.
+Always start new thread for new submission. This is documented in your
+internal 'upstreaming' documents. If it is not, please update them.
 
-Cheers,
-Prabhakar
+-- 
+With best wishes
+Dmitry
 
