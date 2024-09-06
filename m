@@ -1,52 +1,48 @@
-Return-Path: <linux-watchdog+bounces-1799-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1800-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FD8196F554
-	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Sep 2024 15:29:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DE2996F596
+	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Sep 2024 15:40:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAD4C1C2276E
-	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Sep 2024 13:29:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 898721C22D2D
+	for <lists+linux-watchdog@lfdr.de>; Fri,  6 Sep 2024 13:40:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ED0C1CE6F7;
-	Fri,  6 Sep 2024 13:29:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C05E1CF2A1;
+	Fri,  6 Sep 2024 13:40:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XPLwuuvL"
+	dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b="U+1eM/4q"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02BF51CB147;
-	Fri,  6 Sep 2024 13:29:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+Received: from classfun.cn (unknown [129.204.178.38])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E86221CEAD6;
+	Fri,  6 Sep 2024 13:40:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.204.178.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725629370; cv=none; b=P1KGB0WHWlHI8TjPmN9aE0cBXN9/VPhmoqsmCO1VfohFJEnxCyy/jzvNS3NylbvRt4Ul6KuA1sJQLptSFU4UW70KP417lQvnsRmTEMpoAcYBw7bxW1QDuOzybd/Czmg09GJXTpweUILWGNoPcAs3ILKs1MCWIG8SvkvnEQFnKyk=
+	t=1725630018; cv=none; b=b8AJN9vVS8LrP7VYjobk7/glQ5DexrjV94DR+HJZ9OxsOgwZQFKphSh08FjZh9ueWy4GzEjP6wnBmiqK+hunWbOiBF/NwbrkB7SM3NDaN6B6FGFZgyEST9kdEYJc4tlZueeF0vg0F28m+iP/5dcqnPcwV/dsgHHuxV+PGniNY94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725629370; c=relaxed/simple;
-	bh=2MCZFYMk0R0k+j/Cl4qia65Y795F6XZcd60+O/23gHQ=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=pHfNs/DqK3iJWvXEmWpI6ROx+MaTrJebVPxMEIQZMp+u5RmC2XVDnFVNiT2RtjQ0wvfu7hMqoWbZDUxmRhOJ+b2xAKDDXCl7XsYcHd4hteXp4xH+5c3mUFKVfblLzwx+t9ZOQB4yBb7ab8eynONyBruSfdo1AeZK25Q8/UMcZq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XPLwuuvL; arc=none smtp.client-ip=217.70.183.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D2ACD4000D;
-	Fri,  6 Sep 2024 13:29:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1725629359;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sYet+e+pd+7Iu5G+bLcsXPTiPdSnZjD0jCpEBGIfkCs=;
-	b=XPLwuuvLyi7grRkAhRnDY2tPGHCiwhtc2XTWdhc0LOHq8Qi+7RbQuPypl1rlSGt2Q9pVRc
-	bn5fIqEtivOx86amFuhL59HgYgkSnSVVu/JaxHuqruIFTopZGRdCGsEOYYUz2zGP8ObpTJ
-	R0HQaNaohSOCuLWqNLqBw97w4lAlv91KyGGAfep5OaPugTRh2ZOtEaYTrotwMGzHSJEsaX
-	3VftJZl3Y3TOfz+qFcM1O1nzGsDqJb7IxCck/mOKGZqYhveh86ZnfRTfdXL5TFOrFK6/rd
-	2roorvn2/csaN4uhhR9zyMq3FpwdFQ1q37s6TC/Z1oJKMmHdg+dJzYVl83xb4Q==
-Message-ID: <cbbd52bf-8758-42e9-8b35-48750137f2fd@bootlin.com>
-Date: Fri, 6 Sep 2024 15:29:17 +0200
+	s=arc-20240116; t=1725630018; c=relaxed/simple;
+	bh=1RLdC7O4/AuL7/4SO2U2uqqpXyawhm+W3oQSmgLTBws=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
+	 In-Reply-To:Content-Type; b=HewotgwyrozD1tVRjGThffX+jBEdKDKoVO7BA0IKWG6TeflQl+Coih1EZaZ3fhT83a+9kOGgmYoOdvQO68hwvZ6Hsu/Y2E3y9XZHYo65NB490LIIRhxRYCZlBK2qV3jJiHpid78A7G5eDsGGtAS27rFQyQOy+ILNj5NgIEsV6MY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn; spf=pass smtp.mailfrom=classfun.cn; dkim=pass (1024-bit key) header.d=classfun.cn header.i=@classfun.cn header.b=U+1eM/4q; arc=none smtp.client-ip=129.204.178.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=classfun.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=classfun.cn
+Received: from [192.168.0.160] (unknown [14.155.100.110])
+	(Authenticated sender: bigfoot)
+	by classfun.cn (Postfix) with ESMTPSA id 8E88C789F3;
+	Fri,  6 Sep 2024 21:40:03 +0800 (CST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 classfun.cn 8E88C789F3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=classfun.cn;
+	s=default; t=1725630005;
+	bh=THWh+jTU82Bk2jmaEr2jKdyj00Le9PDV8sXnbY3W8pw=;
+	h=Date:Subject:To:References:From:Cc:In-Reply-To:From;
+	b=U+1eM/4q7hMnhB/H/vmuwrkYpiweMg1aAhliFX9aUjFYAPCWIdmQuYDFeLLtYir6Y
+	 B/nfatTkjew4Gbl4eXGwKfR6TGQre/dQbAzqzZV2/Sy/BHl8FjNNO9ov05Q1okXk+j
+	 /UsUdrhs/RISXZ3poemVDMTGg3BLm+eN/rBMsYoE=
+Message-ID: <a1e96682-4eb5-486e-97bf-472634642553@classfun.cn>
+Date: Fri, 6 Sep 2024 21:41:30 +0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -54,151 +50,119 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Thomas Richard <thomas.richard@bootlin.com>
-Subject: Re: [PATCH 3/5] i2c: Congatec Board Controller i2c bus driver
-To: Andi Shyti <andi.shyti@kernel.org>
-Cc: Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-watchdog@vger.kernel.org, thomas.petazzoni@bootlin.com,
- blake.vermeer@keysight.com
-References: <20240503-congatec-board-controller-v1-0-fec5236270e7@bootlin.com>
- <20240503-congatec-board-controller-v1-3-fec5236270e7@bootlin.com>
- <tv6v7g3nkoedbu4olu2xi76qtfueebnfz7c2zx7t2wmpthqdt6@wmbo2lwv5qnf>
+Subject: Re: [PATCH 3/9] watchdog: Add Photonicat PMU watchdog driver
+To: Guenter Roeck <linux@roeck-us.net>
+References: <20240906093630.2428329-1-bigfoot@classfun.cn>
+ <20240906093630.2428329-4-bigfoot@classfun.cn>
+ <8e2cecbe-aa48-4e84-93cc-8c028c5e649e@roeck-us.net>
 Content-Language: en-US
-In-Reply-To: <tv6v7g3nkoedbu4olu2xi76qtfueebnfz7c2zx7t2wmpthqdt6@wmbo2lwv5qnf>
+From: Junhao Xie <bigfoot@classfun.cn>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, "Conor Dooley,"
+ <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+ Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Heiko Stuebner <heiko@sntech.de>,
+ Chukun Pan <amadeus@jmu.edu.cn>, Junhao Xie <bigfoot@classfun.cn>
+In-Reply-To: <8e2cecbe-aa48-4e84-93cc-8c028c5e649e@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: thomas.richard@bootlin.com
+Content-Transfer-Encoding: 8bit
 
-On 8/14/24 01:24, Andi Shyti wrote:
-> Hi Thomas,
-
-Hi Andi,
-
-Thanks for the review !!
-
-> 
-> On Fri, Aug 09, 2024 at 04:52:07PM GMT, Thomas Richard wrote:
->> Add i2c support for the Congatec Board Controller.
->> do you mind adding some more description?
-
-I'll mention that there are 2 busses.
-
-> 
->> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
-> 
-> ...
-> 
->> +config I2C_CGBC
->> +	tristate "Congatec I2C Controller"
->> +	depends on MFD_CGBC
->> +	help
->> +	  This enables the I2C bus interfaces for the Congatec Board
-> 
-> This what? :-)
-
-Rephrased it for next iteration.
-
-> 
->> +	  Controller.
+On 2024/9/6 19:52, Guenter Roeck wrote:
+> On 9/6/24 02:36, Junhao Xie wrote:
+>> This driver provides access to Photonicat PMU watchdog functionality.
+>>
+[...]
 >> +
->> +	  This driver can also be built as a module. If so, the module will
->> +	  be called i2c-cgbc.ko.
+>> +struct pcat_watchdog {
+>> +    struct device *dev;
+> 
+> I don't see what this is used for.
+
+I used to use this for logging, but now they are gone, I will delete it.
+
+> 
+[...]
 >> +
+>> +static int pcat_wdt_setup(struct pcat_watchdog *data, int timeout)
+>> +{
+>> +    int ret;
+>> +    u8 time = 0;
 > 
-> ...
+> Unnecessary initialization.
 > 
->> +#include <linux/module.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/i2c.h>
->> +#include <linux/iopoll.h>
-> 
-> please sort includes in alphabetical order?
-
-Fixed in the next iteration.
-
-> 
->> +#include <linux/mfd/cgbc.h>
-> 
-> ...
-> 
->> +enum i2c_state {
->> +	STATE_DONE = 0,
->> +	STATE_INIT,
->> +	STATE_START,
->> +	STATE_READ,
->> +	STATE_WRITE,
->> +	STATE_ERROR,
->> +};
-> 
-> can you please use the cgbc prefix for this enum and all the
-> members?
-
-Ok, fixed in the next iteration.
-
-> 
-> ...
-> 
->> +	if (bus_frequency > CGBC_I2C_FREQ_MAX_HZ ||
->> +	    bus_frequency < CGBC_I2C_FREQ_MIN_HZ) {
->> +		dev_warn(i2c->dev, "invalid frequency %u, using default\n", bus_frequency);
-> 
-> should this rather be a dev_info()? (supernit: please start with
-> capital leter).
-
-The driver i2c-xlp9xx has a similar message [1] and it uses a dev_warn().
-So I don't know.
-If you think dev_info() is more relevant in this case, I'll change it.
-Supernit will be fixed in next iteration.
-
-[1]
-https://elixir.bootlin.com/linux/v6.11-rc6/source/drivers/i2c/busses/i2c-xlp9xx.c#L480
-
-> 
->> +		bus_frequency = I2C_MAX_STANDARD_MODE_FREQ;
->> +	}
+>> +    u8 times[3] = { 60, 60, 0 };
 >> +
->> +	cmd[0] = CGBC_I2C_CMD_SPEED | algo_data->bus_id;
->> +	cmd[1] = cgbc_i2c_freq_to_reg(bus_frequency);
+>> +    time = MIN(255, MAX(0, timeout));
 >> +
->> +	ret = cgbc_command(cgbc, &cmd, sizeof(cmd), &data, 1, NULL);
->> +	if (ret)
->> +		return dev_err_probe(i2c->dev, ret,
->> +				     "Failed to initialize I2C bus %s",
->> +				     adap->name);
->> +
->> +	cmd[1] = 0x00;
->> +
->> +	ret = cgbc_command(cgbc, &cmd, sizeof(cmd), &data, 1, NULL);
->> +	if (ret)
->> +		return dev_err_probe(i2c->dev, ret,
->> +				     "Failed to get I2C bus frequency");
->> +
->> +	bus_frequency = cgbc_i2c_reg_to_freq(data);
->> +
->> +	dev_dbg(i2c->dev, "%s is running at %d Hz\n", adap->name, bus_frequency);
->> +
->> +	/*
->> +	 * The read_maxtime_us is the maximum time to wait during a read to get
->> +	 * data. At maximum CGBC_I2C_READ_MAX_LEN can be read by command.
->> +	 * So calculate the max time to size correctly the timeout.
->> +	 */
+>> +    ret = pcat_pmu_write_data(data->pmu, PCAT_CMD_WATCHDOG_TIMEOUT_SET,
+>> +                  times, sizeof(times));
 > 
-> this comment is a bit wild, can we rephrase to something like:
+> Where does this actually send the timeout to the chip ?
 > 
-> /*
->  * The read_maxtime_us variable represents the maximum time to wait
->  * for data during a read operation. The maximum amount of data that
->  * can be read by a command is CGBC_I2C_READ_MAX_LEN.
->  * Therefore, calculate the max time to properly size the timeout.
->  */
-> 
-> (it's a suggestion, please choose the words you prefer).
 
-thanks for the rephrasing.
+I forgot to fill in timeout into times[2] during refactoring process, I will fix it.
 
-Thomas
+>> +    if (!ret)
+[...]>> +
+>> +static int pcat_wdt_set_timeout(struct watchdog_device *wdev, unsigned int val)
+>> +{
+>> +    int ret = 0;
+>> +    struct pcat_watchdog *data = watchdog_get_drvdata(wdev);
+>> +
+>> +    data->timeout = val;
+> 
+> This needs to store 'timeout' in wdev. Storing it locally is unnecessary.
+> 
+>> +    if (data->started)
+>> +        ret = pcat_wdt_setup(data, data->timeout);
+> 
+> This is misleading because it would permit setting the timeout to
+> 0 when the watchdog isn't running, and then when the watchdog is started
+> it would not really start it. The code should not use a local "started"
+> variable but call watchdog_active(). It should also not accept "0"
+> as a valid timeout.
+> 
+
+I will fix the pcat_wdt_set_timeout.
+
+>> +
+[...]
+>> +
+>> +    watchdog->dev = dev;
+>> +    watchdog->pmu = dev_get_drvdata(dev->parent);
+>> +    watchdog->wdd.info = &pcat_wdt_info;
+>> +    watchdog->wdd.ops = &pcat_wdt_ops;
+>> +    watchdog->wdd.timeout = 60;
+>> +    watchdog->wdd.max_timeout = U8_MAX;
+>> +    watchdog->wdd.min_timeout = 0;
+> 
+> This effectively lets the user ... kind of ... stop the watchdog
+> by setting the timeout to 0. This is not acceptable.
+> 
+>> +    watchdog->wdd.parent = dev;
+>> +
+>> +    watchdog_stop_on_reboot(&watchdog->wdd);
+>> +    watchdog_set_drvdata(&watchdog->wdd, watchdog);
+>> +    platform_set_drvdata(pdev, watchdog);
+>> +
+> No watchdog_init_timeout() ?
+
+Thanks for your correction, I will fix it.
+
+> 
+>> +    return devm_watchdog_register_device(dev, &watchdog->wdd);
+[...]
+>> +MODULE_LICENSE("GPL");
+> 
+
+Thanks for your review, I will fix all problems in next version!
+
+Best regards,
+Junhao
 
