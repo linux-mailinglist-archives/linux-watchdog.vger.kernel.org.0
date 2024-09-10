@@ -1,194 +1,794 @@
-Return-Path: <linux-watchdog+bounces-1825-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1826-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D72A89729F7
-	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Sep 2024 09:01:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CBC0973C74
+	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Sep 2024 17:41:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 073AE1C240C9
-	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Sep 2024 07:01:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C00731F21844
+	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Sep 2024 15:41:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A89517B50E;
-	Tue, 10 Sep 2024 07:01:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2894191F97;
+	Tue, 10 Sep 2024 15:41:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="PsVSzPdB"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mrJRNHXK"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2041.outbound.protection.outlook.com [40.107.255.41])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A332617B4FF;
-	Tue, 10 Sep 2024 07:01:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725951675; cv=fail; b=sAEGHIT3tiJ1g1rqFooyTA3lLlmnYToN/1q2gMn/WRuJEMkYNicmHcd5lkkCskF6jAV/7n84IeSoReUqtP4D8MNjqiQ6dgZdDt98sJVYh0EO/9rcNGaESCPFwS/oeZYq+Jm5CZB1LPMfNFrUN+qC0hNs04mO8V1DArlErnqXkVs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725951675; c=relaxed/simple;
-	bh=D0bJWI4kx4QAbnDYfQkYtoqOhQ9YVJExlOvmzsZW6Xk=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=WtSCPu4h1Nvg1NLrrqzrJefxgLZyEgShtOWYwag11tUTQUFPQOU30o9CcscJC63NmWC9qKZmhQUChHIHxPQ5GE/ehMVmUqnOkRuLZ0NDofMs7oe6XcMtAuRSfWFbHL6NgcImRSRLbwPqzYunehiJ+GzOVwFHokLtZhjglMsxbgQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=PsVSzPdB; arc=fail smtp.client-ip=40.107.255.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cnh9R1ABOx3Y2CnHetZEGB8AvITYqBIcB0G7KbBpIhMiN2dNtUZ5b/Mh7GRC11CnXLbvGdcX4OHcltsgeyW/vO1PUOc4AJCZmIzk3Qh/qad9JpLHIHxlSq2IaCLa8HIIfILBAOQvaODpzFsmuXu0F8QlLUwPbAFer68d6oN3dUE4rrC6hX5/HbphMz47XK5A8W+dje130W5THUTaLARHJYa3028c1i8j+InQ5ZXF58dU5V71nPQqpziwpQMdS8bRGwmzoVYLr58oLwoMfFMi9jg5paHROZaq6H/16irpZ3QKIbspUXXbumodFUAvp4tMt4z58oYgDo7RNFbS9dDkPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sfdIx0/xYyIKnRdpSahiM1TBvRr6C4U4r8OEPxSxwVs=;
- b=tC2t7JxvExZoCUjU9aLWDgeTj+sSx69vSqaa7y3usAq1E8fpBFTQQ4GO/ZivO6xyQrF5vK4+I5Xs25PFURMvTijWEEZTUXponK5Jzg8LrSE+HQMfZoAOfG7pR1KXnOPYt5tggEh9mPzS+HA37IVYYIj9lwwtQ3T1u4qpt3yL0csWlCxzODQFdBB1uHGHeye4Zzkb84pabnLDLrvF5H3tFW+9VNSdsnfQVEYPKRm+j5wQQjEzc17/9p0Re7XjhH8HLZAUwJ1esOLOGRYLMBwkIuNebGj9if5vQdpFV3439J+hdZaF25Hs9a0j7AcY0cLpMj7zXjc49y5UMpAT2esgdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sfdIx0/xYyIKnRdpSahiM1TBvRr6C4U4r8OEPxSxwVs=;
- b=PsVSzPdBPUyCZUDJDiZ1eYebmrRoXDI63BsgLYlz4HRyQpeRIXq6MxX5KrAU1cFOBaYSa0IU3VRWZ2RjgNKL+1lHB/xKqUAgmhSteLBl9kePM/0iLsp+qxXgoPRKUYSyIj7RApq4i+RZFsJMQ74IqyEkRD1lvBHk6Kc7LWCp1lVL8DtTy6aBWenn7yJxQY3t5jYcR3MynMKIWoKPgAlCKL0thzRoXzh7VBt6x2OMEw71FkYWZwaxNVxGPmVTVHQzFTzKukkScCP5vzHwoUcurNRYQGVvNQhslgqWcSqvjQaexHZO2nqwxrCt4Ibba45QrHx5FhSrkbagAeH2G7VPWw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from KL1PR06MB5896.apcprd06.prod.outlook.com (2603:1096:820:db::5)
- by TYSPR06MB6409.apcprd06.prod.outlook.com (2603:1096:400:411::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.24; Tue, 10 Sep
- 2024 07:01:09 +0000
-Received: from KL1PR06MB5896.apcprd06.prod.outlook.com
- ([fe80::f820:452c:5a5a:fea6]) by KL1PR06MB5896.apcprd06.prod.outlook.com
- ([fe80::f820:452c:5a5a:fea6%6]) with mapi id 15.20.7939.022; Tue, 10 Sep 2024
- 07:01:07 +0000
-From: Shen Lichuan <shenlichuan@vivo.com>
-To: wim@linux-watchdog.org,
-	linux@roeck-us.net
-Cc: linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	opensource.kernel@vivo.com,
-	Shen Lichuan <shenlichuan@vivo.com>
-Subject: [PATCH v1] watchdog: Convert comma to semicolon
-Date: Tue, 10 Sep 2024 15:00:58 +0800
-Message-Id: <20240910070058.40867-1-shenlichuan@vivo.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR06CA0196.apcprd06.prod.outlook.com (2603:1096:4:1::28)
- To KL1PR06MB5896.apcprd06.prod.outlook.com (2603:1096:820:db::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 632862837D;
+	Tue, 10 Sep 2024 15:41:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725982898; cv=none; b=qsC8/e1X5H7DqAjg0L085zhk6i1Lf2wedjtn+yQk6BpV7amgoqmL9M9edHtdHRkTj6AGf3yNtWANkqlk8rOsh0ZqQpHIj/+t2BGlN72Xv+LguTgW2ViGEMyH+b907LWKsv4WpJ2a+SzLEdibu6tl3PfzJD5AWGasTdjIbHCTAfw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725982898; c=relaxed/simple;
+	bh=ClxiWEFJs35N55lHY9HafX5FQEO6iIzel9EG2ZneBFM=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=NKF9dDNMzTuBxI0xveQ8PLjKRvrrFmfh1bGac5g6g9JVyjbD15lGZkVjE+GTKiXJg3+eDrYlhLRmfWa206/dHRuHMyAkXt5YaxcMrppk/sBXlekAHjxx1+sWEqCCBqbh6/pK9Z/h3QueL9AmoT4TWo6XzcVCJO5LPgOzgpeyTwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mrJRNHXK; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A52EB60006;
+	Tue, 10 Sep 2024 15:41:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1725982893;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Bo6XTqlF6m1kHW3y1j/dd1BkiedKYODCOwa9AiEGbvs=;
+	b=mrJRNHXKpcnEOhJlD6RHNfJT9KU4TqqQNcUsgdzn/ILkAwl3J2aq/N4uRMmyC26QGHHOlO
+	uXPUti+pXqfH/W5Uf9PO4D9yEe92t5lI22xDnuuGvx0HQJncyLNrw5T1IvkwnkKGDlIAZe
+	jlRJDVVgeu7v2yjMRqtZVkBShZBLL0HiM3c77hboz7ayVAYGCzgHUQulyPdKqFuLjXU/+S
+	ywlNY+Qhhxrd9aaHHGko1cMyYctNTDRAtM9fJIIoL7ruaCUsDXTT8P7VACGu0YN0wIXcmf
+	aH0qCUmAa4Zg3MIvbtLWC8pR/fUrKCMHB1xAoz3PXbLakgxxwB7nemBXprzgaw==
+Message-ID: <9f29d904-e7ba-40fb-b5d8-1efeddf6f148@bootlin.com>
+Date: Tue, 10 Sep 2024 17:41:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: KL1PR06MB5896:EE_|TYSPR06MB6409:EE_
-X-MS-Office365-Filtering-Correlation-Id: ffc55f05-3cbf-4a2e-1667-08dcd1665806
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|52116014|376014|366016|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?fnnSz5KSAdK9v/RIoVzM+LO+md6qTSmRjiYOmO+jWQ8UL2Ws6p6V8EEg6hiu?=
- =?us-ascii?Q?EkLYJFBR0v0Jd5TDtj34PVZxybxapQUOphnNv8ZMNtyNty9fWmHj/sQYQDkt?=
- =?us-ascii?Q?HLvxv1mZNSwaa/cCFk3OqXz6Mc0pTU75dqD8fFzS21+xVxuREkJH4SXMn7n4?=
- =?us-ascii?Q?FIl7BqnwqfM60FjSXWfi7wFj5LKBqDeMmzhKb5DHXAEP6fBaeYJawTX6hMUD?=
- =?us-ascii?Q?+sUQF6cKmg8JK5/UZtxS6fTbtnFyUwVnrRbTL2vmX/3clgzGjTpRqW4y4a8c?=
- =?us-ascii?Q?TaUbgCPzfi/oZYyIKv0Bb622nrWLpS8TazOPT0jh0DVmZoteBzzeIOgx879x?=
- =?us-ascii?Q?sTgtGfpQ6wEDpYSsJ1hGbmN2YJVNzTQOci4zyg1rDJE22TAvgaOAUxkCxtYB?=
- =?us-ascii?Q?nnwr43Pfu8kxNcecXQZ4QhnWTNAi1/Wl1Jk88utIBARW+cL9AG9/NMo6qVHy?=
- =?us-ascii?Q?8X0+uHxDd23x1MhBgE/UJAIor2eu7rl+uiLHjy92XfXiAREeqwK9n4QZkDSt?=
- =?us-ascii?Q?mGeHxPzs/PHcmA4zVq3QC1kaFBTnu3Ft3f0hMLi9NH2r50fe0ED9B/+f5Cpc?=
- =?us-ascii?Q?6FUiHzfgbslgSEE6Snfk2o4Pih3YaFqEMqO3zn79WpJ1Kch7bbVdOPjpgkhE?=
- =?us-ascii?Q?EutUNdDzt5L1p0J6pZIPklnHKEk4sbo+hlr/q2ZFuYTHMtAbF+M/gHUEKIl9?=
- =?us-ascii?Q?w6KeeTs1MWY22ktwjtTgXWbfdskynxKGO6eSswh+u3cUK3gYf75ocui1MZ29?=
- =?us-ascii?Q?7p80BOlPDO13wQZCEgYS8QOZiLnfoiWE99ml2+/C1UHYj/6epe6MYkUcBcxz?=
- =?us-ascii?Q?akv/DsO42GhJ9b2+IjsuSxLz9avJQaCPzVVvvHRU/0of7Oevmsg45t+IJ5MZ?=
- =?us-ascii?Q?XuCUmOyitoXIvGU8Vfsoq57nQsfKUZblDTy0dbs8BpSycCiBAExbATHyZywo?=
- =?us-ascii?Q?yEIfCLKJu5Zh3vzrX7NCMiwAk+F/EI047moW4f7zb+cgzckgzUz41SFDjdGH?=
- =?us-ascii?Q?IskS7R/2iqX8aJt4oe0TNZKMsrSN25TsRuWVu4nHEu0m8iHnqIMs8Gak2ypI?=
- =?us-ascii?Q?5i3P/5T/ot5enX3vL5epXvQcxFSQMbNMJ1ovGXdgN0TxZy75wYMp1a5AB0jU?=
- =?us-ascii?Q?17DadV5Uh3Ilxbgx12EeZxx6ZZc546oBbbGoAlE6tMeOwr0CFdY8Y8vrshUC?=
- =?us-ascii?Q?4AYCqr3bZMDMiZb4lJyklxsKaqHpKDpPcNVcD/BBFXXniyfxzsuUs9MxjBhH?=
- =?us-ascii?Q?UvlEC98piIlM2QtHFHjjAhP5ix+UvJ59ce2vf4UsFhZx9eaVzDQAhy7tpMAD?=
- =?us-ascii?Q?kFP9oltMw9s+U8LcftylJI/y09D+H4Ajptz2mhU6J7L1VEQF89wa6x9Jz1Hw?=
- =?us-ascii?Q?rmXnd8EvhiS4UqnMXWWMsTgo1KjmwxTbmKtl0OO+falrUSc85g=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR06MB5896.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?/JCJqjkZjgn5EWpJQjcfTC7kxTpjqHepLk7FFdN7401WnVXzeX8QFQbWNiGp?=
- =?us-ascii?Q?2hg3FMJrDDv4uG8zoahUj4EZCdEj6NF9nZt0jWu8viyEnhUCv8pXY79/q3kR?=
- =?us-ascii?Q?qQQ/Gj/ye3oYsiFMrQMgzI6VM8Ko2o+28+HKqAJhHQXaZSQjaUUYdpZAeOEI?=
- =?us-ascii?Q?NWHwpQ80TAIIM+ZtB5ycVO2vW4Pp+JkCc131ilhmqvBEmR1OaJfthyJh+737?=
- =?us-ascii?Q?BXTd6RKqFG9FGLpu/AamjAHbAX33l+zQfjJ1eeonpxpWEgZRnb1RIao1E7QU?=
- =?us-ascii?Q?5coxo0QqOS4Gbif2oQtcveK/KhMmmtTaC6Ig+UqDdZgbuvI1MVkmHjrfl3UN?=
- =?us-ascii?Q?lXGSlu/EAYgi4hgqR11DQo7jC2t5fFa0WxNRYC9OIPmURXcURzgT1Cf/r2mK?=
- =?us-ascii?Q?nD5BFxbu2Nmo85ZLlzLxMxHgOr4aP6YnXXx0PFtJfkeBhRANJjihNu8w6gke?=
- =?us-ascii?Q?/alPhSHzlkTRTJ33OcdhKxklYEumaY1sxBWDbyhw9Jq6hAbgpduozl1P1RGp?=
- =?us-ascii?Q?W4RqLNPnO2HOq/PwGYr/G3iU/FZ4eqVQ1NqBnZPU8eiDyVtDKFAdmynhCxUB?=
- =?us-ascii?Q?c37xxFWObYL9x2eZUKI++HWa/EBS3X1DRNhspDLWhETLyKR29fGcr8P5yHzN?=
- =?us-ascii?Q?m29Jx2xeIDd7BiyoXmrmXaw+dDWts+fBaBMQqBaXs7Uhrt6CZ+NOfNkwmlEU?=
- =?us-ascii?Q?bx70j2K6Ip1CZKLW0X4mrSo3ZxSZXWoDzXIigB0ujLxbKwvCCPpzDcMPGxOb?=
- =?us-ascii?Q?2xhZqYeuP+NYgJknVpHQKN5dTFgNf8kwATXQpazA9yX1PB4sfaOnYfOfOSFE?=
- =?us-ascii?Q?7/LeU9Wxk6nrPUJIyoje44qDOxAPPNSPaE4aK9uGGAWzAxwWvYf9KEzFTB+r?=
- =?us-ascii?Q?GJdSh+x0BODaSwOLMtKmrXmS3OcCpaceFrBJv3k+MjkGKnkgJaRvzLTYxeLC?=
- =?us-ascii?Q?i2vOljRx2YJNiV43mV8/V8hWKp+CxoUDsvBypYjWDfPIgUtIX1v5Dd5vfmkQ?=
- =?us-ascii?Q?mlm9UkQX4J9kF0KUICtoH9bC3UNiWogXmypYlQa3yDzJPOkSghgMxNMG1+ZY?=
- =?us-ascii?Q?am18tgjAo0PKrAdNbs9YrJKdIG9v8VHcQ4c/Na4APwXmD9o++mpU5KfNcGvy?=
- =?us-ascii?Q?1Up8Ow7exIEQir3G8WDp2Du4VHSuXyVePLl1O7Uf6hMgTJ/VQK33/PQTuQ7V?=
- =?us-ascii?Q?QUh2Uvv+1fmMReinEfudNcxfeg+lpmZWrB5l5te+TwO2Y6yMEcrdfc+f1PuH?=
- =?us-ascii?Q?3qH8gEMCEGOMgP+3mpSJyWJbBmz3ISEEEYi6uSSgbTjoQXcKfV9peyT7ealY?=
- =?us-ascii?Q?FZehwnhuhAe4NnfAcZD5j7A/As5Ezww+lnB9Rzb1nNwGE5JQIXihIT30ddTk?=
- =?us-ascii?Q?I7E9F/YC/rCzhpCvCPRR/UYeHLGvnd4m3OSifrMAmLmzhYiXB+ri2ccv3C4D?=
- =?us-ascii?Q?OOS0SXFrh0ZdovWSFtm3DTmQKF2BcdOso6vzJNES3IYuwvA5QXWCjQleOi05?=
- =?us-ascii?Q?oh2csJwro1UCcGAjVKfEfktHWpNO1kqaaDE0s1YHWluroein5DaO6VnFyuGR?=
- =?us-ascii?Q?K0vY67xqRrcN7Hfdz+QS8R1202j82vxj7wGrd9rW?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ffc55f05-3cbf-4a2e-1667-08dcd1665806
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR06MB5896.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2024 07:01:07.4581
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BAr0gEWPU0HEvHncA3rXjn6JcXwhdW5lnQqiIqSRrGzU8C9wsnM2rRYMggR00jaz7hGG0uZ3zIe8AExZvLWvvA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR06MB6409
+User-Agent: Mozilla Thunderbird
+From: Thomas Richard <thomas.richard@bootlin.com>
+Subject: Re: [PATCH 1/5] mfd: add Congatec Board Controller mfd driver
+To: Lee Jones <lee@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, thomas.petazzoni@bootlin.com,
+ blake.vermeer@keysight.com
+References: <20240503-congatec-board-controller-v1-0-fec5236270e7@bootlin.com>
+ <20240503-congatec-board-controller-v1-1-fec5236270e7@bootlin.com>
+ <20240822103858.GH6858@google.com>
+Content-Language: en-US
+In-Reply-To: <20240822103858.GH6858@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: thomas.richard@bootlin.com
 
-To ensure code clarity and prevent potential errors, it's advisable
-to employ the ';' as a statement separator, except when ',' are
-intentionally used for specific purposes.
+On 8/22/24 12:38, Lee Jones wrote:
+> On Fri, 09 Aug 2024, Thomas Richard wrote:
+> 
+>> Add core MFD driver for the Board Controller found on some Congatec SMARC
+>> module. This Board Controller provides functions like watchdog, GPIO, and
+>> I2C busses.
+>>
+>> This commit add support only for the conga-SA7 module.
+>>
+>> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+>> ---
+>>  drivers/mfd/Kconfig      |  12 ++
+>>  drivers/mfd/Makefile     |   1 +
+>>  drivers/mfd/cgbc-core.c  | 453 +++++++++++++++++++++++++++++++++++++++++++++++
+>>  include/linux/mfd/cgbc.h |  44 +++++
+>>  4 files changed, 510 insertions(+)
+>>
+>> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+>> index bc8be2e593b6..3e0530f30267 100644
+>> --- a/drivers/mfd/Kconfig
+>> +++ b/drivers/mfd/Kconfig
+>> @@ -224,6 +224,18 @@ config MFD_AXP20X_RSB
+>>  	  components like regulators or the PEK (Power Enable Key) under the
+>>  	  corresponding menus.
+>>  
+>> +config MFD_CGBC
+>> +	tristate "Congatec Board Controller"
+>> +	select MFD_CORE
+>> +	depends on X86
+>> +	help
+>> +	  This is the core driver of the Board Controller found on some Congatec
+>> +	  SMARC modules. The Board Controller provides functions like watchdog,
+>> +	  I2C busses, and GPIO controller.
+>> +
+>> +	  To compile this driver as a module, choose M here: the module will be
+>> +	  called cgbc-core.
+>> +
+>>  config MFD_CROS_EC_DEV
+>>  	tristate "ChromeOS Embedded Controller multifunction device"
+>>  	select MFD_CORE
+>> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+>> index 02b651cd7535..d5da3fcd691c 100644
+>> --- a/drivers/mfd/Makefile
+>> +++ b/drivers/mfd/Makefile
+>> @@ -13,6 +13,7 @@ obj-$(CONFIG_MFD_SM501)		+= sm501.o
+>>  obj-$(CONFIG_ARCH_BCM2835)	+= bcm2835-pm.o
+>>  obj-$(CONFIG_MFD_BCM590XX)	+= bcm590xx.o
+>>  obj-$(CONFIG_MFD_BD9571MWV)	+= bd9571mwv.o
+>> +obj-$(CONFIG_MFD_CGBC)		+= cgbc-core.o
+>>  obj-$(CONFIG_MFD_CROS_EC_DEV)	+= cros_ec_dev.o
+>>  obj-$(CONFIG_MFD_CS42L43)	+= cs42l43.o
+>>  obj-$(CONFIG_MFD_CS42L43_I2C)	+= cs42l43-i2c.o
+>> diff --git a/drivers/mfd/cgbc-core.c b/drivers/mfd/cgbc-core.c
+>> new file mode 100644
+>> index 000000000000..cca9b1170cc9
+>> --- /dev/null
+>> +++ b/drivers/mfd/cgbc-core.c
+>> @@ -0,0 +1,453 @@
+>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>> +/*
+>> + * Congatec Board Controller MFD core driver.
+> 
+> No such thing as an MFD.
 
-Signed-off-by: Shen Lichuan <shenlichuan@vivo.com>
----
- drivers/watchdog/iTCO_wdt.c   | 4 ++--
- drivers/watchdog/pm8916_wdt.c | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+What should it be if it's not an MFD ?
 
-diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
-index 264857d314da..35b358bcf94c 100644
---- a/drivers/watchdog/iTCO_wdt.c
-+++ b/drivers/watchdog/iTCO_wdt.c
-@@ -563,8 +563,8 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
- 	}
- 
- 	ident.firmware_version = p->iTCO_version;
--	p->wddev.info = &ident,
--	p->wddev.ops = &iTCO_wdt_ops,
-+	p->wddev.info = &ident;
-+	p->wddev.ops = &iTCO_wdt_ops;
- 	p->wddev.bootstatus = 0;
- 	p->wddev.timeout = WATCHDOG_TIMEOUT;
- 	watchdog_set_nowayout(&p->wddev, nowayout);
-diff --git a/drivers/watchdog/pm8916_wdt.c b/drivers/watchdog/pm8916_wdt.c
-index f3fcbeb0852c..007ed139ab96 100644
---- a/drivers/watchdog/pm8916_wdt.c
-+++ b/drivers/watchdog/pm8916_wdt.c
-@@ -218,7 +218,7 @@ static int pm8916_wdt_probe(struct platform_device *pdev)
- 		return err;
- 	}
- 
--	wdt->wdev.ops = &pm8916_wdt_ops,
-+	wdt->wdev.ops = &pm8916_wdt_ops;
- 	wdt->wdev.parent = dev;
- 	wdt->wdev.min_timeout = PM8916_WDT_MIN_TIMEOUT;
- 	wdt->wdev.max_timeout = PM8916_WDT_MAX_TIMEOUT;
+> 
+>> + * The x86 Congatec modules have an embedded micro controller named Board
+>> + * Controller.
+> 
+> I think the '\n' can be dropped without issue.
+
+Will be fixed in v2
+
+> 
+>> + * This Board Controller have a watchdog timer, some GPIOs, and two i2c busses.
+> 
+> "has a"
+> 
+> Consider "Watchdog"
+> 
+> "I2C"
+
+Will be fixed in v2
+
+> 
+>> + *
+>> + * Copyright (C) 2024 Bootlin
+> 
+> Nit: '\n' here.
+
+Will be fixed in v2
+
+> 
+>> + * Author: Thomas Richard <thomas.richard@bootlin.com>
+>> + */
+>> +
+>> +#include <linux/dmi.h>
+>> +#include <linux/mfd/core.h>
+>> +#include <linux/mfd/cgbc.h>
+>> +#include <linux/module.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/iopoll.h>
+>> +#include <linux/sysfs.h>
+> 
+> Alphabetical.
+
+Will be fixed in v2
+
+> 
+>> +#define CGBC_MASK_STATUS        (BIT(6) | BIT(7))
+>> +#define CGBC_MASK_DATA_COUNT	0x1F
+>> +#define CGBC_MASK_ERROR_CODE	0x1F
+> 
+> Not sure if it's just my mailer, but if all of these are not already
+> aligned, please can you tab them out so that they are.
+
+It was not your mailer :)
+Will be fixed in v2
+
+> 
+>> +#define CGBC_STATUS_DATA_READY	0x00
+>> +#define CGBC_STATUS_CMD_READY	BIT(6)
+>> +#define CGBC_STATUS_ERROR	(BIT(6) | BIT(7))
+>> +
+>> +#define CGBC_CMD_GET_FW_REV	0x21
+>> +
+>> +#define CGBC_IO_SESSION_BASE	0x0E20
+>> +#define CGBC_IO_SESSION_END	0x0E30
+>> +#define CGBC_IO_CMD_BASE	0x0E00
+>> +#define CGBC_IO_CMD_END		0x0E10
+>> +
+>> +#define CGBC_SESSION_CMD	0x00
+>> +#define		CGBC_SESSION_CMD_IDLE		0x00
+>> +#define		CGBC_SESSION_CMD_REQUEST	0x01
+>> +#define	CGBC_SESSION_DATA	0x01
+>> +#define CGBC_SESSION_STATUS	0x02
+>> +#define		CGBC_SESSION_STATUS_FREE	0x03
+>> +#define CGBC_SESSION_ACCESS	0x04
+>> +#define		CGBC_SESSION_ACCESS_GAINED	0x00
+>> +
+>> +#define CGBC_SESSION_VALID_MIN  0x02
+>> +#define CGBC_SESSION_VALID_MAX  0xFE
+>> +
+>> +#define CGBC_CMD_STROBE	0x00
+>> +#define CGBC_CMD_INDEX	0x02
+>> +#define		CGBC_CMD_INDEX_CBM_MAN8		0x00
+>> +#define		CGBC_CMD_INDEX_CBM_AUTO32	0x03
+>> +#define CGBC_CMD_DATA	0x04
+>> +#define CGBC_CMD_ACCESS	0x0C
+>> +
+>> +struct cgbc_platform_data {
+>> +	const struct resource	*ioresource;
+>> +	unsigned int		num_ioresource;
+>> +};
+> 
+> This looks way over engineered.
+> 
+> Why not provide platform_device_info statically in the first place?
+
+Yes indeed, if I use platform_device_register_simple(), I can remove the
+struct cgbc_platform_data, and cgbc_create_platform_device().
+It makes the code smaller.
+
+> 
+>> +static struct platform_device *cgbc_pdev;
+> 
+> No avoidable globals.
+
+I don't see how can I have cgbc_pdev not global.
+
+> 
+> This stuff should get stored in driver data (ddata)
+> 
+>> +static int cgbc_detect_device(struct cgbc_device_data *cgbc)
+>> +{
+>> +	u16 status;
+>> +	int ret;
+>> +
+>> +	ret = readx_poll_timeout(ioread16, cgbc->io_session + CGBC_SESSION_STATUS, status,
+>> +				 status == CGBC_SESSION_STATUS_FREE, 0, 500000);
+>> +
+>> +	if (ret || ioread32(cgbc->io_session + CGBC_SESSION_ACCESS))
+>> +		ret = -ENODEV;
+>> +
+>> +	return ret;
+>> +}
+> 
+> This function could do with some commentary.
+
+Comment added in v2
+
+> 
+>> +static int cgbc_session_command(struct cgbc_device_data *cgbc, u8 cmd)
+>> +{
+>> +	int ret;
+>> +	u8 val;
+>> +
+>> +	ret = readx_poll_timeout(ioread8, cgbc->io_session + CGBC_SESSION_CMD, val,
+>> +				 val == CGBC_SESSION_CMD_IDLE, 0, 100000);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	iowrite8(cmd, cgbc->io_session + CGBC_SESSION_CMD);
+>> +
+>> +	ret = readx_poll_timeout(ioread8, cgbc->io_session + CGBC_SESSION_CMD, val,
+>> +				 val == CGBC_SESSION_CMD_IDLE, 0, 100000);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = (int)ioread8(cgbc->io_session + CGBC_SESSION_DATA);
+>> +
+>> +	iowrite8(CGBC_SESSION_STATUS_FREE,
+>> +		 cgbc->io_session + CGBC_SESSION_STATUS);
+> 
+> Which char are you using to line-feed?  This looks inconsistent.
+> 
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int cgbc_session_request(struct cgbc_device_data *cgbc)
+>> +{
+>> +	unsigned int ret = cgbc_detect_device(cgbc);
+> 
+> What does cgbc_detect_device() do?
+> 
+> You're not getting the device?  Just seeing if it's present?
+
+cgbc_detect_device() waits the device ready to create (or close) a session.
+I will rename it to cgbc_wait_device().
+Indirectly it checks if the device is present as it waits some specific
+values.
+
+> 
+> Please separate the declaration from the assignment when calling
+> functions.
+> 
+
+Will be fixed in v2
+
+>> +	if (ret)
+>> +		return dev_err_probe(cgbc->dev, ret, "device not found\n");
+>> +
+>> +	cgbc->session = cgbc_session_command(cgbc, CGBC_SESSION_CMD_REQUEST);
+>> +
+>> +	/* the Board Controller sent us a wrong session handle, we cannot
+> 
+> This is a non-standard multi-line comment.
+
+Will be fixed in v2
+
+> 
+>> +	 * communicate with it.
+>> +	 */
+>> +	if (cgbc->session < CGBC_SESSION_VALID_MIN ||
+>> +	    cgbc->session > CGBC_SESSION_VALID_MAX) {
+> 
+> How are you justifying this line-break and then not line-breaking 2
+> lines down?
+
+Will be fixed in v2
+
+> 
+>> +		cgbc->session = 0;
+> 
+> Why are we setting variables before bombing out?
+> 
+>> +		return dev_err_probe(cgbc->dev, (cgbc->session < 0) ? cgbc->session : -ECONNREFUSED,
+> 
+> How can (cgbc->session < 0) ever be true?
+
+It cannot.
+It's a total nonsense, I'll fix it in v2.
+
+> 
+>> +				     "failed to get a valid session handle\n");
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void cgbc_session_release(struct cgbc_device_data *cgbc)
+>> +{
+>> +	if (cgbc_session_command(cgbc, cgbc->session) != cgbc->session)
+> 
+> What does this do?
+> 
+> Are we checking or doing something?  If the latter, then we shouldn't be
+> doing that in an if() statement.  If the former, then what's the point
+> of the function?
+
+We try to close the session we opened with the device.
+We check that the session is closed correctly.
+
+> 
+>> +		dev_err(cgbc->dev, "failed to release session\n");
+> 
+> Why print if there isn't anything you can do about it?
+
+There is a limited number of session ids.
+Not releasing correctly the session could be a problem in case of lots
+of module load/unload.
+But as 252 sessions can be opened, the maximum number of session will
+probably never be reached.
+But it could be interesting to have the information that something is
+wrong and we failed to close the session.
+A dev_info() or dev_warn() is maybe more relevant.
+
+> 
+>> +}
+>> +
+>> +static bool cgbc_command_lock(struct cgbc_device_data *cgbc)
+>> +{
+>> +	iowrite8(cgbc->session, cgbc->io_cmd + CGBC_CMD_ACCESS);
+>> +
+>> +	return ioread8(cgbc->io_cmd + CGBC_CMD_ACCESS) == cgbc->session;
+>> +}
+>> +
+>> +static void cgbc_command_unlock(struct cgbc_device_data *cgbc)
+>> +{
+>> +	iowrite8(cgbc->session, cgbc->io_cmd + CGBC_CMD_ACCESS);
+>> +}
+>> +
+>> +static int __cgbc_command(struct cgbc_device_data *cgbc, u8 *cmd, u8 cmd_size,
+>> +			  u8 *data, u8 data_size, u8 *status)
+>> +{
+>> +	u8 checksum = 0, data_checksum = 0, istatus = 0, val;
+>> +	int mode_change = -1;
+>> +	bool lock;
+>> +	int ret, i;
+>> +
+>> +	mutex_lock(&cgbc->lock);
+>> +
+>> +	/* request access */
+> 
+> Start comments with uppercase chars please.
+
+Will be fixed in v2
+
+> 
+>> +	ret = readx_poll_timeout(cgbc_command_lock, cgbc, lock, lock, 0, 100000);
+>> +	if (ret)
+>> +		goto out;
+>> +
+>> +	/* wait board controller is ready */
+>> +	ret = readx_poll_timeout(ioread8, cgbc->io_cmd + CGBC_CMD_STROBE, val,
+>> +				 val == CGBC_CMD_STROBE, 0, 100000);
+>> +	if (ret)
+>> +		goto release;
+>> +
+>> +	/* write command packet */
+>> +	if (cmd_size <= 2) {
+>> +		iowrite8(CGBC_CMD_INDEX_CBM_MAN8,
+>> +			 cgbc->io_cmd + CGBC_CMD_INDEX);
+>> +	} else {
+>> +		iowrite8(CGBC_CMD_INDEX_CBM_AUTO32,
+>> +			 cgbc->io_cmd + CGBC_CMD_INDEX);
+>> +		if ((cmd_size % 4) != 0x03)
+>> +			mode_change = (cmd_size & 0xFFFC) - 1;
+>> +	}
+>> +
+>> +	for (i = 0; i < cmd_size; i++) {
+>> +		iowrite8(cmd[i], cgbc->io_cmd + CGBC_CMD_DATA + (i % 4));
+>> +		checksum ^= cmd[i];
+>> +		if (mode_change == i)
+>> +			iowrite8((i + 1) | CGBC_CMD_INDEX_CBM_MAN8,
+>> +				 cgbc->io_cmd + CGBC_CMD_INDEX);
+>> +	}
+>> +
+>> +	/* append checksum byte */
+>> +	iowrite8(checksum, cgbc->io_cmd + CGBC_CMD_DATA + (i % 4));
+>> +
+>> +	/* perform command strobe */
+>> +	iowrite8(cgbc->session, cgbc->io_cmd + CGBC_CMD_STROBE);
+>> +
+>> +	/* rewind cmd buffer index */
+>> +	iowrite8(CGBC_CMD_INDEX_CBM_AUTO32,
+>> +		 cgbc->io_cmd + CGBC_CMD_INDEX);
+>> +
+>> +	/* wait command completion */
+>> +	ret = read_poll_timeout(ioread8, val, val == CGBC_CMD_STROBE, 0,
+>> +				100000, false,
+>> +				cgbc->io_cmd + CGBC_CMD_STROBE);
+>> +	if (ret)
+>> +		goto release;
+>> +
+>> +	istatus = ioread8(cgbc->io_cmd + CGBC_CMD_DATA);
+>> +	checksum = istatus;
+>> +
+>> +	/* check command status */
+>> +	switch (istatus & CGBC_MASK_STATUS) {
+>> +	case CGBC_STATUS_DATA_READY:
+>> +		if (istatus > data_size)
+>> +			istatus = data_size;
+>> +		for (i = 0; i < istatus; i++) {
+>> +			data[i] = ioread8(cgbc->io_cmd +
+>> +					  CGBC_CMD_DATA + ((i + 1) % 4));
+>> +			checksum ^= data[i];
+>> +		}
+>> +		data_checksum = ioread8(cgbc->io_cmd +
+>> +					CGBC_CMD_DATA + ((i + 1) % 4));
+>> +		istatus &= CGBC_MASK_DATA_COUNT;
+>> +		break;
+>> +	case CGBC_STATUS_ERROR:
+>> +	case CGBC_STATUS_CMD_READY:
+>> +		data_checksum = ioread8(cgbc->io_cmd +
+>> +					CGBC_CMD_DATA + 1);
+>> +		if ((istatus & CGBC_MASK_STATUS) == CGBC_STATUS_ERROR)
+>> +			ret = -EIO;
+>> +		istatus = istatus & CGBC_MASK_ERROR_CODE;
+>> +		break;
+>> +	default:
+>> +		data_checksum = ioread8(cgbc->io_cmd + CGBC_CMD_DATA + 1);
+>> +		istatus &= CGBC_MASK_ERROR_CODE;
+>> +		ret = -EIO;
+>> +		break;
+>> +	}
+>> +
+>> +	/* checksum verification */
+>> +	if (ret == 0 && data_checksum != checksum)
+>> +		ret = -EIO;
+>> +
+>> +release:
+>> +	cgbc_command_unlock(cgbc);
+>> +
+>> +out:
+>> +	mutex_unlock(&cgbc->lock);
+>> +
+>> +	if (status)
+>> +		*status = istatus;
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +int cgbc_command(struct cgbc_device_data *cgbc, void *cmd, unsigned int cmd_size,
+>> +		 void *data, unsigned int data_size, u8 *status)
+> 
+> What's the point of this abstracted function?
+
+The goal was to cast cmd and data.
+But it can be done directly in the function. So this wrapper is useless.
+
+> 
+>> +{
+>> +	return __cgbc_command(cgbc, (u8 *)cmd, cmd_size, (u8 *)data, data_size, status);
+>> +}
+>> +EXPORT_SYMBOL_GPL(cgbc_command);
+>> +
+>> +static struct mfd_cell cgbc_devs[] = {
+>> +	{ .name = "cgbc-wdt"	},
+>> +	{ .name = "cgbc-gpio"	},
+>> +	{ .name = "cgbc-i2c", .id = 1 },
+>> +	{ .name = "cgbc-i2c", .id = 2 },
+>> +};
+>> +
+>> +static int cgbc_map(struct cgbc_device_data *cgbc)
+>> +{
+>> +	struct device *dev = cgbc->dev;
+>> +	struct platform_device *pdev = to_platform_device(dev);
+>> +	struct resource *ioport;
+>> +
+>> +	ioport = platform_get_resource(pdev, IORESOURCE_IO, 0);
+>> +	if (!ioport)
+>> +		return -EINVAL;
+>> +
+>> +	cgbc->io_session = devm_ioport_map(dev, ioport->start,
+>> +					   resource_size(ioport));
+>> +	if (!cgbc->io_session)
+>> +		return -ENOMEM;
+>> +
+>> +	ioport = platform_get_resource(pdev, IORESOURCE_IO, 1);
+>> +	if (!ioport)
+>> +		return -EINVAL;
+>> +
+>> +	cgbc->io_cmd = devm_ioport_map(dev, ioport->start,
+>> +				       resource_size(ioport));
+>> +	if (!cgbc->io_cmd)
+>> +		return -ENOMEM;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static struct resource cgbc_ioresource[] = {
+>> +	{
+>> +		.start  = CGBC_IO_SESSION_BASE,
+>> +		.end    = CGBC_IO_SESSION_END,
+>> +		.flags  = IORESOURCE_IO,
+>> +	},
+>> +	{
+>> +		.start  = CGBC_IO_CMD_BASE,
+>> +		.end    = CGBC_IO_CMD_END,
+>> +		.flags  = IORESOURCE_IO,
+>> +	},
+>> +};
+>> +
+>> +static const struct cgbc_platform_data cgbc_platform_data = {
+>> +	.ioresource = &cgbc_ioresource[0],
+>> +	.num_ioresource = ARRAY_SIZE(cgbc_ioresource),
+>> +};
+>> +
+>> +static int cgbc_create_platform_device(const struct cgbc_platform_data *pdata)
+>> +{
+>> +	const struct platform_device_info pdevinfo = {
+>> +		.name = "cgbc",
+>> +		.id = PLATFORM_DEVID_NONE,
+>> +		.res = pdata->ioresource,
+>> +		.num_res = pdata->num_ioresource,
+>> +	};
+>> +
+>> +	cgbc_pdev = platform_device_register_full(&pdevinfo);
+>> +	if (IS_ERR(cgbc_pdev))
+>> +		return PTR_ERR(cgbc_pdev);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static ssize_t cgbc_version_show(struct device *dev,
+>> +				 struct device_attribute *attr, char *buf)
+>> +{
+>> +	struct cgbc_device_data *cgbc = dev_get_drvdata(dev);
+>> +
+>> +	return sysfs_emit(buf, "CGBCP%c%c%c\n", cgbc->version.feature,
+>> +			  cgbc->version.major, cgbc->version.minor);
+>> +}
+>> +
+>> +static DEVICE_ATTR_RO(cgbc_version);
+>> +
+>> +static struct attribute *cgbc_attrs[] = {
+>> +	&dev_attr_cgbc_version.attr,
+>> +	NULL
+>> +};
+>> +
+>> +ATTRIBUTE_GROUPS(cgbc);
+>> +
+>> +static int cgbc_get_version(struct cgbc_device_data *cgbc)
+>> +{
+>> +	u8 cmd = CGBC_CMD_GET_FW_REV;
+>> +	u8 data[4];
+>> +	int ret;
+>> +
+>> +	ret = cgbc_command(cgbc, &cmd, 1, &data, sizeof(data), NULL);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	cgbc->version.feature = data[0];
+>> +	cgbc->version.major = data[1];
+>> +	cgbc->version.minor = data[2];
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int cgbc_init_device(struct cgbc_device_data *cgbc)
+>> +{
+>> +	int ret;
+>> +
+>> +	ret = cgbc_session_request(cgbc);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = cgbc_get_version(cgbc);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	return mfd_add_devices(cgbc->dev, -1, cgbc_devs,
+>> +			       ARRAY_SIZE(cgbc_devs), NULL, 0, NULL);
+>> +}
+>> +
+>> +static int cgbc_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct cgbc_device_data *cgbc;
+>> +	int ret;
+>> +
+>> +	cgbc = devm_kzalloc(dev, sizeof(*cgbc), GFP_KERNEL);
+>> +	if (!cgbc)
+>> +		return -ENOMEM;
+>> +
+>> +	cgbc->dev = dev;
+>> +
+>> +	ret = cgbc_map(cgbc);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	mutex_init(&cgbc->lock);
+>> +
+>> +	platform_set_drvdata(pdev, cgbc);
+>> +
+>> +	return cgbc_init_device(cgbc);
+>> +}
+>> +
+>> +static void cgbc_remove(struct platform_device *pdev)
+>> +{
+>> +	struct cgbc_device_data *cgbc = platform_get_drvdata(pdev);
+>> +
+>> +	cgbc_session_release(cgbc);
+>> +
+>> +	mfd_remove_devices(&pdev->dev);
+>> +}
+>> +
+>> +static struct platform_driver cgbc_driver = {
+>> +	.driver		= {
+>> +		.name		= "cgbc",
+>> +		.dev_groups	= cgbc_groups,
+>> +	},
+>> +	.probe		= cgbc_probe,
+>> +	.remove_new	= cgbc_remove,
+>> +};
+>> +
+>> +static const struct dmi_system_id cgbc_dmi_table[] __initconst = {
+>> +	{
+>> +		.ident = "SA7",
+>> +		.matches = {
+>> +			DMI_MATCH(DMI_BOARD_VENDOR, "congatec"),
+>> +			DMI_MATCH(DMI_BOARD_NAME, "conga-SA7"),
+>> +		},
+>> +	},
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(dmi, cgbc_dmi_table);
+>> +
+>> +static int __init cgbc_init(void)
+>> +{
+>> +	const struct dmi_system_id *id;
+>> +	int ret = -ENODEV;
+>> +
+>> +	id = dmi_first_match(cgbc_dmi_table);
+>> +	if (IS_ERR_OR_NULL(id))
+>> +		return ret;
+>> +
+>> +	ret = cgbc_create_platform_device(&cgbc_platform_data);
+> 
+> You have no other way to register this device?  ACPI/PCI/I2C?
+
+No, the Board Controller is on a eSPI bus.
+I found nothing in ACPI tables related to this Board Controller.
+The only way is to use DMI tables and match board name.
+
+> 
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	return platform_driver_register(&cgbc_driver);
+>> +}
+>> +
+>> +static void __exit cgbc_exit(void)
+>> +{
+>> +	platform_device_unregister(cgbc_pdev);
+>> +	platform_driver_unregister(&cgbc_driver);
+>> +}
+>> +
+>> +module_init(cgbc_init);
+>> +module_exit(cgbc_exit);
+>> +
+>> +MODULE_DESCRIPTION("Congatec Board Controller Core Driver");
+>> +MODULE_AUTHOR("Thomas Richard <thomas.richard@bootlin.com>");
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_ALIAS("platform:cgbc-core");
+>> diff --git a/include/linux/mfd/cgbc.h b/include/linux/mfd/cgbc.h
+>> new file mode 100644
+>> index 000000000000..badbec4c7033
+>> --- /dev/null
+>> +++ b/include/linux/mfd/cgbc.h
+>> @@ -0,0 +1,44 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+>> +/*
+>> + * Congatec Board Controller driver definitions
+>> + *
+>> + * Copyright (C) 2024 Bootlin
+>> + * Author: Thomas Richard <thomas.richard@bootlin.com>
+>> + */
+>> +
+>> +#ifndef _LINUX_MFD_CGBC_H_
+>> +
+>> +/**
+>> + * struct cgbc_version - Board Controller device version structure
+>> + * @feature:	Board Controller feature number
+>> + * @major:	Board Controller major revision
+>> + * @minor:	Board Controller minor revision
+>> + */
+>> +struct cgbc_version {
+>> +	unsigned char feature;
+>> +	unsigned char major;
+>> +	unsigned char minor;
+>> +};
+>> +
+>> +/**
+>> + * struct cgbc_device_data - Internal representation of the Board Controller device
+>> + * @io_session:		Pointer to the session IO memory
+>> + * @io_cmd:		Pointer to the command IO memory
+>> + * @session:		Session id returned by the Board Controller
+>> + * @dev:		Pointer to kernel device structure
+>> + * @cgbc_version:	Board Controller version structure
+>> + * @mutex:		Board Controller mutex
+>> + */
+>> +struct cgbc_device_data {
+>> +	void __iomem		*io_session;
+>> +	void __iomem		*io_cmd;
+>> +	u8			session;
+>> +	struct device		*dev;
+>> +	struct cgbc_version	version;
+>> +	struct mutex		lock;
+>> +};
+>> +
+>> +int cgbc_command(struct cgbc_device_data *cgbc, void *cmd, unsigned int cmd_size,
+>> +		 void *data, unsigned int data_size, u8 *status);
+>> +
+>> +#endif /*_LINUX_MFD_CGBC_H_*/
+> 
+> There's more to review, but I think there is enough to turn around for now.
+
+Thanks for the review !!
+
 -- 
-2.17.1
+Thomas Richard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
