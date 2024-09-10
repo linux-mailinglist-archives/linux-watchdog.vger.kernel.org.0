@@ -1,115 +1,194 @@
-Return-Path: <linux-watchdog+bounces-1824-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1825-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8547D9724D9
-	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Sep 2024 00:00:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D72A89729F7
+	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Sep 2024 09:01:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 097BCB22D4F
-	for <lists+linux-watchdog@lfdr.de>; Mon,  9 Sep 2024 22:00:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 073AE1C240C9
+	for <lists+linux-watchdog@lfdr.de>; Tue, 10 Sep 2024 07:01:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEFBD18C92E;
-	Mon,  9 Sep 2024 22:00:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A89517B50E;
+	Tue, 10 Sep 2024 07:01:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NQxyacZq"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="PsVSzPdB"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2041.outbound.protection.outlook.com [40.107.255.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1CC17085C;
-	Mon,  9 Sep 2024 22:00:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725919241; cv=none; b=KPI93kEssoG1zSpMEpEmXPquuB49ToTcgYOnFbjV6CBt7qYLKb5MEsIRnep6IRz9AJv+FFIM2dtCvGbfgEdJPhZZc0oO+44ucFxC7OdQPrXXdTEGPGlGjWmvoegdnlRy13Nn7XSM6+l+//4YRHkqKYjGu+xGaBDK1nmY/IlEOuA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725919241; c=relaxed/simple;
-	bh=JGqxWA1KpqkAc55m1tTC6BCwYiBtn9t2WlYbKLNP9PA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t7LTXBUPaCpQdJxHG8SxPM471MOStfjEMmgVhfFTSHGkq3ACgq+APyboa9FzIZJAnDgICCdN7sBdIXBRuqtHIIF6zuSXMC7Co2tinYkIw12v9oaz/whXBOcG0cs26YHEwJYV7Hf4pZIBUOTM39HeTvDnDITYrucP8n4HGZAeJFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NQxyacZq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22797C4CEC5;
-	Mon,  9 Sep 2024 22:00:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725919241;
-	bh=JGqxWA1KpqkAc55m1tTC6BCwYiBtn9t2WlYbKLNP9PA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NQxyacZqx2mx4EIfylMDD80N8nKpi6Z4sD/6j/wb42m457LVQ7pSUYuqK9GwJ591u
-	 PbP+1nkeIN/X9dNDZ+QlCx7QuEuRErypeBcRu04QZcCVboJCDgqIAoCZlUQIoaZ3ry
-	 7yEiOmZB03zKzR2vJjhBoA1r0BTUqVtYhw9gX5VdjH7qmXrvgfaT7Ux6Om8uea3lgk
-	 k3uIZrrYN8N0cpQA3ftiduW3sSUipu5n8RYtU192usneRZ8bZN3ZxBrr1R26ApGpSO
-	 22OhK7XfNoCuee+oiepdl8ebEpfvTsT05+vRXrdkfbAMAYGjE2ObeU03mP7wkJrL0L
-	 3oNMpguap45Qw==
-Date: Mon, 9 Sep 2024 23:00:30 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Nikunj Kela <quic_nkela@quicinc.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, andersson@kernel.org,
-	konradybcio@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
-	herbert@gondor.apana.org.au, davem@davemloft.net,
-	sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de,
-	will@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
-	jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
-	amitk@kernel.org, thara.gopinath@gmail.com,
-	cristian.marussi@arm.com, rui.zhang@intel.com, lukasz.luba@arm.com,
-	wim@linux-watchdog.org, linux@roeck-us.net,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-crypto@vger.kernel.org, arm-scmi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-	iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, kernel@quicinc.com,
-	quic_psodagud@quicinc.com,
-	Praveen Talari <quic_ptalari@quicinc.com>
-Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
-Message-ID: <70673636-5b44-4b61-865c-83f9c5d3501d@sirena.org.uk>
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-17-quic_nkela@quicinc.com>
- <sdxhnqvdbcpmbp3l7hcnsrducpa5zrgbmkykwfluhrthqhznxi@6i4xiqrre3qg>
- <b369bd73-ce2f-4373-8172-82c0cca53793@quicinc.com>
- <9a655c1c-97f6-4606-8400-b3ce1ed3c8bf@kernel.org>
- <d206e315-3324-4814-b98d-027c3af6ebb6@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A332617B4FF;
+	Tue, 10 Sep 2024 07:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725951675; cv=fail; b=sAEGHIT3tiJ1g1rqFooyTA3lLlmnYToN/1q2gMn/WRuJEMkYNicmHcd5lkkCskF6jAV/7n84IeSoReUqtP4D8MNjqiQ6dgZdDt98sJVYh0EO/9rcNGaESCPFwS/oeZYq+Jm5CZB1LPMfNFrUN+qC0hNs04mO8V1DArlErnqXkVs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725951675; c=relaxed/simple;
+	bh=D0bJWI4kx4QAbnDYfQkYtoqOhQ9YVJExlOvmzsZW6Xk=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=WtSCPu4h1Nvg1NLrrqzrJefxgLZyEgShtOWYwag11tUTQUFPQOU30o9CcscJC63NmWC9qKZmhQUChHIHxPQ5GE/ehMVmUqnOkRuLZ0NDofMs7oe6XcMtAuRSfWFbHL6NgcImRSRLbwPqzYunehiJ+GzOVwFHokLtZhjglMsxbgQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=PsVSzPdB; arc=fail smtp.client-ip=40.107.255.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=cnh9R1ABOx3Y2CnHetZEGB8AvITYqBIcB0G7KbBpIhMiN2dNtUZ5b/Mh7GRC11CnXLbvGdcX4OHcltsgeyW/vO1PUOc4AJCZmIzk3Qh/qad9JpLHIHxlSq2IaCLa8HIIfILBAOQvaODpzFsmuXu0F8QlLUwPbAFer68d6oN3dUE4rrC6hX5/HbphMz47XK5A8W+dje130W5THUTaLARHJYa3028c1i8j+InQ5ZXF58dU5V71nPQqpziwpQMdS8bRGwmzoVYLr58oLwoMfFMi9jg5paHROZaq6H/16irpZ3QKIbspUXXbumodFUAvp4tMt4z58oYgDo7RNFbS9dDkPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sfdIx0/xYyIKnRdpSahiM1TBvRr6C4U4r8OEPxSxwVs=;
+ b=tC2t7JxvExZoCUjU9aLWDgeTj+sSx69vSqaa7y3usAq1E8fpBFTQQ4GO/ZivO6xyQrF5vK4+I5Xs25PFURMvTijWEEZTUXponK5Jzg8LrSE+HQMfZoAOfG7pR1KXnOPYt5tggEh9mPzS+HA37IVYYIj9lwwtQ3T1u4qpt3yL0csWlCxzODQFdBB1uHGHeye4Zzkb84pabnLDLrvF5H3tFW+9VNSdsnfQVEYPKRm+j5wQQjEzc17/9p0Re7XjhH8HLZAUwJ1esOLOGRYLMBwkIuNebGj9if5vQdpFV3439J+hdZaF25Hs9a0j7AcY0cLpMj7zXjc49y5UMpAT2esgdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sfdIx0/xYyIKnRdpSahiM1TBvRr6C4U4r8OEPxSxwVs=;
+ b=PsVSzPdBPUyCZUDJDiZ1eYebmrRoXDI63BsgLYlz4HRyQpeRIXq6MxX5KrAU1cFOBaYSa0IU3VRWZ2RjgNKL+1lHB/xKqUAgmhSteLBl9kePM/0iLsp+qxXgoPRKUYSyIj7RApq4i+RZFsJMQ74IqyEkRD1lvBHk6Kc7LWCp1lVL8DtTy6aBWenn7yJxQY3t5jYcR3MynMKIWoKPgAlCKL0thzRoXzh7VBt6x2OMEw71FkYWZwaxNVxGPmVTVHQzFTzKukkScCP5vzHwoUcurNRYQGVvNQhslgqWcSqvjQaexHZO2nqwxrCt4Ibba45QrHx5FhSrkbagAeH2G7VPWw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from KL1PR06MB5896.apcprd06.prod.outlook.com (2603:1096:820:db::5)
+ by TYSPR06MB6409.apcprd06.prod.outlook.com (2603:1096:400:411::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.24; Tue, 10 Sep
+ 2024 07:01:09 +0000
+Received: from KL1PR06MB5896.apcprd06.prod.outlook.com
+ ([fe80::f820:452c:5a5a:fea6]) by KL1PR06MB5896.apcprd06.prod.outlook.com
+ ([fe80::f820:452c:5a5a:fea6%6]) with mapi id 15.20.7939.022; Tue, 10 Sep 2024
+ 07:01:07 +0000
+From: Shen Lichuan <shenlichuan@vivo.com>
+To: wim@linux-watchdog.org,
+	linux@roeck-us.net
+Cc: linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	opensource.kernel@vivo.com,
+	Shen Lichuan <shenlichuan@vivo.com>
+Subject: [PATCH v1] watchdog: Convert comma to semicolon
+Date: Tue, 10 Sep 2024 15:00:58 +0800
+Message-Id: <20240910070058.40867-1-shenlichuan@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0196.apcprd06.prod.outlook.com (2603:1096:4:1::28)
+ To KL1PR06MB5896.apcprd06.prod.outlook.com (2603:1096:820:db::5)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="+4FsY8uVcR5U7FtS"
-Content-Disposition: inline
-In-Reply-To: <d206e315-3324-4814-b98d-027c3af6ebb6@quicinc.com>
-X-Cookie: Anything is possible, unless it's not.
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: KL1PR06MB5896:EE_|TYSPR06MB6409:EE_
+X-MS-Office365-Filtering-Correlation-Id: ffc55f05-3cbf-4a2e-1667-08dcd1665806
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|376014|366016|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?fnnSz5KSAdK9v/RIoVzM+LO+md6qTSmRjiYOmO+jWQ8UL2Ws6p6V8EEg6hiu?=
+ =?us-ascii?Q?EkLYJFBR0v0Jd5TDtj34PVZxybxapQUOphnNv8ZMNtyNty9fWmHj/sQYQDkt?=
+ =?us-ascii?Q?HLvxv1mZNSwaa/cCFk3OqXz6Mc0pTU75dqD8fFzS21+xVxuREkJH4SXMn7n4?=
+ =?us-ascii?Q?FIl7BqnwqfM60FjSXWfi7wFj5LKBqDeMmzhKb5DHXAEP6fBaeYJawTX6hMUD?=
+ =?us-ascii?Q?+sUQF6cKmg8JK5/UZtxS6fTbtnFyUwVnrRbTL2vmX/3clgzGjTpRqW4y4a8c?=
+ =?us-ascii?Q?TaUbgCPzfi/oZYyIKv0Bb622nrWLpS8TazOPT0jh0DVmZoteBzzeIOgx879x?=
+ =?us-ascii?Q?sTgtGfpQ6wEDpYSsJ1hGbmN2YJVNzTQOci4zyg1rDJE22TAvgaOAUxkCxtYB?=
+ =?us-ascii?Q?nnwr43Pfu8kxNcecXQZ4QhnWTNAi1/Wl1Jk88utIBARW+cL9AG9/NMo6qVHy?=
+ =?us-ascii?Q?8X0+uHxDd23x1MhBgE/UJAIor2eu7rl+uiLHjy92XfXiAREeqwK9n4QZkDSt?=
+ =?us-ascii?Q?mGeHxPzs/PHcmA4zVq3QC1kaFBTnu3Ft3f0hMLi9NH2r50fe0ED9B/+f5Cpc?=
+ =?us-ascii?Q?6FUiHzfgbslgSEE6Snfk2o4Pih3YaFqEMqO3zn79WpJ1Kch7bbVdOPjpgkhE?=
+ =?us-ascii?Q?EutUNdDzt5L1p0J6pZIPklnHKEk4sbo+hlr/q2ZFuYTHMtAbF+M/gHUEKIl9?=
+ =?us-ascii?Q?w6KeeTs1MWY22ktwjtTgXWbfdskynxKGO6eSswh+u3cUK3gYf75ocui1MZ29?=
+ =?us-ascii?Q?7p80BOlPDO13wQZCEgYS8QOZiLnfoiWE99ml2+/C1UHYj/6epe6MYkUcBcxz?=
+ =?us-ascii?Q?akv/DsO42GhJ9b2+IjsuSxLz9avJQaCPzVVvvHRU/0of7Oevmsg45t+IJ5MZ?=
+ =?us-ascii?Q?XuCUmOyitoXIvGU8Vfsoq57nQsfKUZblDTy0dbs8BpSycCiBAExbATHyZywo?=
+ =?us-ascii?Q?yEIfCLKJu5Zh3vzrX7NCMiwAk+F/EI047moW4f7zb+cgzckgzUz41SFDjdGH?=
+ =?us-ascii?Q?IskS7R/2iqX8aJt4oe0TNZKMsrSN25TsRuWVu4nHEu0m8iHnqIMs8Gak2ypI?=
+ =?us-ascii?Q?5i3P/5T/ot5enX3vL5epXvQcxFSQMbNMJ1ovGXdgN0TxZy75wYMp1a5AB0jU?=
+ =?us-ascii?Q?17DadV5Uh3Ilxbgx12EeZxx6ZZc546oBbbGoAlE6tMeOwr0CFdY8Y8vrshUC?=
+ =?us-ascii?Q?4AYCqr3bZMDMiZb4lJyklxsKaqHpKDpPcNVcD/BBFXXniyfxzsuUs9MxjBhH?=
+ =?us-ascii?Q?UvlEC98piIlM2QtHFHjjAhP5ix+UvJ59ce2vf4UsFhZx9eaVzDQAhy7tpMAD?=
+ =?us-ascii?Q?kFP9oltMw9s+U8LcftylJI/y09D+H4Ajptz2mhU6J7L1VEQF89wa6x9Jz1Hw?=
+ =?us-ascii?Q?rmXnd8EvhiS4UqnMXWWMsTgo1KjmwxTbmKtl0OO+falrUSc85g=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR06MB5896.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?/JCJqjkZjgn5EWpJQjcfTC7kxTpjqHepLk7FFdN7401WnVXzeX8QFQbWNiGp?=
+ =?us-ascii?Q?2hg3FMJrDDv4uG8zoahUj4EZCdEj6NF9nZt0jWu8viyEnhUCv8pXY79/q3kR?=
+ =?us-ascii?Q?qQQ/Gj/ye3oYsiFMrQMgzI6VM8Ko2o+28+HKqAJhHQXaZSQjaUUYdpZAeOEI?=
+ =?us-ascii?Q?NWHwpQ80TAIIM+ZtB5ycVO2vW4Pp+JkCc131ilhmqvBEmR1OaJfthyJh+737?=
+ =?us-ascii?Q?BXTd6RKqFG9FGLpu/AamjAHbAX33l+zQfjJ1eeonpxpWEgZRnb1RIao1E7QU?=
+ =?us-ascii?Q?5coxo0QqOS4Gbif2oQtcveK/KhMmmtTaC6Ig+UqDdZgbuvI1MVkmHjrfl3UN?=
+ =?us-ascii?Q?lXGSlu/EAYgi4hgqR11DQo7jC2t5fFa0WxNRYC9OIPmURXcURzgT1Cf/r2mK?=
+ =?us-ascii?Q?nD5BFxbu2Nmo85ZLlzLxMxHgOr4aP6YnXXx0PFtJfkeBhRANJjihNu8w6gke?=
+ =?us-ascii?Q?/alPhSHzlkTRTJ33OcdhKxklYEumaY1sxBWDbyhw9Jq6hAbgpduozl1P1RGp?=
+ =?us-ascii?Q?W4RqLNPnO2HOq/PwGYr/G3iU/FZ4eqVQ1NqBnZPU8eiDyVtDKFAdmynhCxUB?=
+ =?us-ascii?Q?c37xxFWObYL9x2eZUKI++HWa/EBS3X1DRNhspDLWhETLyKR29fGcr8P5yHzN?=
+ =?us-ascii?Q?m29Jx2xeIDd7BiyoXmrmXaw+dDWts+fBaBMQqBaXs7Uhrt6CZ+NOfNkwmlEU?=
+ =?us-ascii?Q?bx70j2K6Ip1CZKLW0X4mrSo3ZxSZXWoDzXIigB0ujLxbKwvCCPpzDcMPGxOb?=
+ =?us-ascii?Q?2xhZqYeuP+NYgJknVpHQKN5dTFgNf8kwATXQpazA9yX1PB4sfaOnYfOfOSFE?=
+ =?us-ascii?Q?7/LeU9Wxk6nrPUJIyoje44qDOxAPPNSPaE4aK9uGGAWzAxwWvYf9KEzFTB+r?=
+ =?us-ascii?Q?GJdSh+x0BODaSwOLMtKmrXmS3OcCpaceFrBJv3k+MjkGKnkgJaRvzLTYxeLC?=
+ =?us-ascii?Q?i2vOljRx2YJNiV43mV8/V8hWKp+CxoUDsvBypYjWDfPIgUtIX1v5Dd5vfmkQ?=
+ =?us-ascii?Q?mlm9UkQX4J9kF0KUICtoH9bC3UNiWogXmypYlQa3yDzJPOkSghgMxNMG1+ZY?=
+ =?us-ascii?Q?am18tgjAo0PKrAdNbs9YrJKdIG9v8VHcQ4c/Na4APwXmD9o++mpU5KfNcGvy?=
+ =?us-ascii?Q?1Up8Ow7exIEQir3G8WDp2Du4VHSuXyVePLl1O7Uf6hMgTJ/VQK33/PQTuQ7V?=
+ =?us-ascii?Q?QUh2Uvv+1fmMReinEfudNcxfeg+lpmZWrB5l5te+TwO2Y6yMEcrdfc+f1PuH?=
+ =?us-ascii?Q?3qH8gEMCEGOMgP+3mpSJyWJbBmz3ISEEEYi6uSSgbTjoQXcKfV9peyT7ealY?=
+ =?us-ascii?Q?FZehwnhuhAe4NnfAcZD5j7A/As5Ezww+lnB9Rzb1nNwGE5JQIXihIT30ddTk?=
+ =?us-ascii?Q?I7E9F/YC/rCzhpCvCPRR/UYeHLGvnd4m3OSifrMAmLmzhYiXB+ri2ccv3C4D?=
+ =?us-ascii?Q?OOS0SXFrh0ZdovWSFtm3DTmQKF2BcdOso6vzJNES3IYuwvA5QXWCjQleOi05?=
+ =?us-ascii?Q?oh2csJwro1UCcGAjVKfEfktHWpNO1kqaaDE0s1YHWluroein5DaO6VnFyuGR?=
+ =?us-ascii?Q?K0vY67xqRrcN7Hfdz+QS8R1202j82vxj7wGrd9rW?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ffc55f05-3cbf-4a2e-1667-08dcd1665806
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR06MB5896.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2024 07:01:07.4581
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BAr0gEWPU0HEvHncA3rXjn6JcXwhdW5lnQqiIqSRrGzU8C9wsnM2rRYMggR00jaz7hGG0uZ3zIe8AExZvLWvvA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR06MB6409
 
+To ensure code clarity and prevent potential errors, it's advisable
+to employ the ';' as a statement separator, except when ',' are
+intentionally used for specific purposes.
 
---+4FsY8uVcR5U7FtS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Shen Lichuan <shenlichuan@vivo.com>
+---
+ drivers/watchdog/iTCO_wdt.c   | 4 ++--
+ drivers/watchdog/pm8916_wdt.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Mon, Sep 09, 2024 at 01:29:37PM -0700, Nikunj Kela wrote:
+diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+index 264857d314da..35b358bcf94c 100644
+--- a/drivers/watchdog/iTCO_wdt.c
++++ b/drivers/watchdog/iTCO_wdt.c
+@@ -563,8 +563,8 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	ident.firmware_version = p->iTCO_version;
+-	p->wddev.info = &ident,
+-	p->wddev.ops = &iTCO_wdt_ops,
++	p->wddev.info = &ident;
++	p->wddev.ops = &iTCO_wdt_ops;
+ 	p->wddev.bootstatus = 0;
+ 	p->wddev.timeout = WATCHDOG_TIMEOUT;
+ 	watchdog_set_nowayout(&p->wddev, nowayout);
+diff --git a/drivers/watchdog/pm8916_wdt.c b/drivers/watchdog/pm8916_wdt.c
+index f3fcbeb0852c..007ed139ab96 100644
+--- a/drivers/watchdog/pm8916_wdt.c
++++ b/drivers/watchdog/pm8916_wdt.c
+@@ -218,7 +218,7 @@ static int pm8916_wdt_probe(struct platform_device *pdev)
+ 		return err;
+ 	}
+ 
+-	wdt->wdev.ops = &pm8916_wdt_ops,
++	wdt->wdev.ops = &pm8916_wdt_ops;
+ 	wdt->wdev.parent = dev;
+ 	wdt->wdev.min_timeout = PM8916_WDT_MIN_TIMEOUT;
+ 	wdt->wdev.max_timeout = PM8916_WDT_MAX_TIMEOUT;
+-- 
+2.17.1
 
-> Now I am confused which prefix format shall I use? first spi or first
-> dt-bindings?
-
-spi: first.
-
---+4FsY8uVcR5U7FtS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbfb/0ACgkQJNaLcl1U
-h9DmmAf9G79iJqbIo+rLvhxVQG/V00Xz3Y1hZjGbPTyKNQIuiSThwS/ZexjpAnky
-dxPN6CKinfv2CcaHSqAfTaiOX7e41E6yQe0MhZRHgvnp9GWDwzFR+vo/Jkf7vOvk
-FdHkgDxP+8DqOEk/JvSsuUbeWBm8+6SYmz3aY49ZDdTM/AWXoLpfIuRG9HHI4oC0
-pcewKeElbb4mm8XtAESmg+SfofXpaXXqWnzrqGfKnG2Jhz2SYaDIbLUzRrIcMyQC
-UkUJzcsdp019ZGJl0xUhb05YlxUPnZ2vQ1OJaDh/15NkTWCoSTdDX1WTWjHtmjfB
-soCaA83E+/cUHrHnZjH7ZOZFfA0F2A==
-=OtuN
------END PGP SIGNATURE-----
-
---+4FsY8uVcR5U7FtS--
 
