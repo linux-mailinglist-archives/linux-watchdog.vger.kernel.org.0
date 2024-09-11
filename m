@@ -1,136 +1,136 @@
-Return-Path: <linux-watchdog+bounces-1852-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1853-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E3CA974D76
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Sep 2024 10:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EB112974FFC
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Sep 2024 12:44:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B8E2288EC4
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Sep 2024 08:53:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8D6A2896F5
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Sep 2024 10:44:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C00819E99A;
-	Wed, 11 Sep 2024 08:48:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91472185B7B;
+	Wed, 11 Sep 2024 10:43:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SELzJjzQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zY0EqP5S"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218F519E996;
-	Wed, 11 Sep 2024 08:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB30717C7C4
+	for <linux-watchdog@vger.kernel.org>; Wed, 11 Sep 2024 10:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726044518; cv=none; b=oClQ0scTJI8PtfMbPaoZacaxUw3Ia5iqmDZidFfIJ4deI57RAX8WfipK6B8gkMFggjRHUJCWVH2Gx/yu5O5qqxe4RP2c81jJsjw/LdvL7d6KT15izX6P/iFheJw/urD8grVkOVL6zxyjeSYBVK2/V+TrJpE1JuJtL9OR44M5LWM=
+	t=1726051438; cv=none; b=CrtCsCIMiLIkfb9B/rFYXO8s9zvDHq41/ELsu6h2AVpt9FhmwbWM3+VPgQmBzxwbYg7Vt2l6DqpDzQllxQQIQSUNl9MiDIo9RqwTz/At9Xe6kk02H8z5i3X/jqk/D4+v9s47MJI8Zfr396fN9uyEhv2oAArw2G8wIIn9FbjbAQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726044518; c=relaxed/simple;
-	bh=IlwfpKeYG1A6lmRpl2J8Js+0dUrkM33rNMIVVPeLcso=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Iukc8IvS0Q/VEz+PMWfmY18yGk3wBhC92wlKjB3D7monpaqL1VK8Vh+/Hd8FmyB2IQ4epb4TAhMfsQJY2DCyDMiNBd3uFO0u4TKbY3TonOhMUJnr4E2fMzsaGWxCgcXEk3n/HK3Ua7GRRsZ0YzjUIguhX84nhpiGEbozt99i8Lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SELzJjzQ; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-71781f42f75so5188059b3a.1;
-        Wed, 11 Sep 2024 01:48:36 -0700 (PDT)
+	s=arc-20240116; t=1726051438; c=relaxed/simple;
+	bh=h/LBrWSpUs8DPI9U1+af2i3m6dozVC63fYk7NBtw7Tc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tgfXpzpYq6C7QsxEbVzHSR8jcoYy+IQWh8z8ksDZ+E0wogVjYQGE8m2Zg9CmbmlF70YszflGiLsUXEjNzejiRkfJ9hnafvA3lN5sqzmJXwA0UKmQ/tpjeOq2p7WlS9LnbxN58nmmRXTXQe+RaVLTkPKum2ZHe6KDSUDyLxGuBYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zY0EqP5S; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2f7528f4658so55020031fa.3
+        for <linux-watchdog@vger.kernel.org>; Wed, 11 Sep 2024 03:43:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726044516; x=1726649316; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zy0C2tn+S+ad9UGMaUozuLH5nIPIOY9VH2lYfYG3DPM=;
-        b=SELzJjzQRJIJxRVXaRARykQkhwroJK283xwl4eIwbQUTffdcYb0/l0GAl4hnYzMjFt
-         y5KwXDeq7WnpnSHdSTGqqMkvFXMI5C/oWk/lcKwdX6hPf6XREZWRc8y9Abd4mU+7i71D
-         ild4sZbaikqvOKg4Kz+VN9+CTKZFyiDTAQYhbiyWtn0ANi5pjuHeR3sumcbg8AlyE22y
-         WeIX4STn3DYZ0QpGmxEFK7qa7RHhyJZljSVpfCd3h2S672IPxefpFWm/r7fKA+jc1Gz5
-         /xz/wBkr+6sBCIPbNByEoCM/hYb9Rlb/cSUpKiC6PS6x3IQ8tdI957odc36CBomlTnbT
-         HoYw==
+        d=linaro.org; s=google; t=1726051435; x=1726656235; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yEmg0mv3aZiw4epk0S/D8wOQJkCJdi8IprxOeJvP7ug=;
+        b=zY0EqP5S6SX3+wBo+e/hQFGJWZlDvJAuXMh6/WVH4CvjO6w3nXiP8ElqFXsZ71XiKE
+         d0NUCFbRCJZ6+JLRwwwuS3tszGBJWOfvA23YrtD/cFLOAgrImnbVzXR8fTE8GzuOHA7Q
+         WsKBilNJpLU9KpdYez8v9JKWFhpFmoUXsoWafI8sh1MH59cK1PPglRD3btbafmK+Lyhv
+         1inidNZ3Z2e71pz/H35eSewK3NBdbWpdvA8Hwknp3CO+LadYDv0A3XHck702SsWl90RF
+         dvUEjnS2YjtmtpgKbUIF24arxeK6SL6SDk6d5emKJ64dJvehGi1Mq87PE9BjikljXN2g
+         5+vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726044516; x=1726649316;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zy0C2tn+S+ad9UGMaUozuLH5nIPIOY9VH2lYfYG3DPM=;
-        b=V3DyqsjOzUUCruUM0hgWKPp+tV0nIM+FnF0gbF3PdJcIUYacHg7zn4zL2+KW1W8pcg
-         4Nevid9rpqUITt47c2yu086KBGiNkf1n2NIi6SmSlpq37S3l/1KHZf/69/S8Zlt9BNzJ
-         1ZUdKmBrNIiTHVr0DmSTb401KFiZMLhHdBSiKeugKok/yFMJvePGHpkY1cPh/shqFlXP
-         2YdMFQOwEa8MpqJFCYyRxL+fFfe5/RYS50FRQF7dsrAJWVbXuVNh4x+OwwEEQPekBpyJ
-         awl+mInZ2q3MBqrABe/WNHqwLkV3aXKjeB3Gj6nLIFONhFZ60JqGD+fihqt2Fb+6SbGx
-         jl4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU49cM36hX0Bpg7SFnHlDCnTmSXbs0/vv/wYnvvm6YX1AuVWC7AO2QgcS++EPrp5n/AMud8cN/tuJtULOvvZiM=@vger.kernel.org, AJvYcCUSEmsgRY+hvnFoLQ08GdYTYTaYjXDF9y31lvaKb00cqgyqa++EbM9KRrBSGfaClSbcL87Sc9mBmRWL1A==@vger.kernel.org, AJvYcCUe5m4b3qmfzfxT/M/D9F9ei5nxzIOITtrw8L7dXSeX9Dzmd6724QAhwrWbUOX72FxiSxm17yYX3jE1EiK0@vger.kernel.org, AJvYcCWCYGZ6hzE2OMawugdksF1jG1od/1oZtHS4LNzqn+k4BW7XkTV95X/4p0O6UNV00mkz07KsdbxnkhY2@vger.kernel.org, AJvYcCWS1bkMbSPWEkcM0KVksC6Z0Fk1fcITs2LNNlsHVtLPzxF32zAJxi1neUV+7oMe9cXDuckL77QWbIw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrEnrUOHif1ImnThTjsX9BDYbdbO9DsGlhKxcCD/VR5+L6CKa2
-	sXLEgzVhEkSL9GasCL+Bef0DPx1fSRbLSgJ4rJCxPOWQUCMOXeAq
-X-Google-Smtp-Source: AGHT+IEIz5d//17WPnMDgMVDUYvH7+sxfpmlvAoBsrI8xaC6pMBmCRrAzLDUicf2j5d88qL+NqMcTg==
-X-Received: by 2002:a05:6a00:886:b0:70d:22b5:5420 with SMTP id d2e1a72fcca58-718d5e5476fmr26897235b3a.15.1726044516437;
-        Wed, 11 Sep 2024 01:48:36 -0700 (PDT)
-Received: from nick-mbp.ust.hk (wf121-022.ust.hk. [175.159.121.22])
-        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-71909095177sm2530125b3a.112.2024.09.11.01.48.32
+        d=1e100.net; s=20230601; t=1726051435; x=1726656235;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yEmg0mv3aZiw4epk0S/D8wOQJkCJdi8IprxOeJvP7ug=;
+        b=HI3lrm1m2ndGittIjAdPNTMOohNatEt9I8PQjy0KL51c55WVQmcRj24qwmWkvcqFBT
+         HerBetTEvOPmkM1mlm7rFjadiaAJCWllX3dRh4bQZFOTDcfWWDsy0aIWUmFGR+JoCsA1
+         HZDd9DtDkb4pqqSS1dNuaa9Cof/b/rxTZNPytdUI95wa4xMUoEClDZaOHOOJc8kUL506
+         3l5SPKeNSkDFIiU/ETiGOwu/MqqR/DYCyN2/PvvoXSohv90FkLtTzmQ0IQkQI8TQFYFu
+         F8J9aYvL+FBaJZP9PfDwfN3lRRwidW/nwHoekXm/wf3sGOfp4uzndcHRWjwV7DFH1E0r
+         i1nw==
+X-Forwarded-Encrypted: i=1; AJvYcCUxSw6D5CVmyo5xbpfLn05CQJzfvB1nODZQ/O0Dkf80QKONoPioHFOSz6yYxtbzAjwXL+nh2K1RM9V/xQi0Tw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yww0cKtQsGiiJ0T0rKfCGqs5r18w1FHgASAG/m0XCdMljcxdZVH
+	liVaI1/xgFKqTmrbXhSTfbn/g++jPqvX1RJajhypyV6wfyRRmEtXlLnoTEIpUUY=
+X-Google-Smtp-Source: AGHT+IHlGG8lUNXquAJHd6tZISj+TQ2YsszM2ZdBtl/KjJ9veSTZvzSOCuVd6OHtGTOCf+LGCgfwiw==
+X-Received: by 2002:a05:651c:50b:b0:2f7:6129:5804 with SMTP id 38308e7fff4ca-2f761295a15mr75354701fa.15.1726051434260;
+        Wed, 11 Sep 2024 03:43:54 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f75c07c5bcsm15188951fa.96.2024.09.11.03.43.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Sep 2024 01:48:35 -0700 (PDT)
-From: Nick Chan <towinchenmi@gmail.com>
-To: Hector Martin <marcan@marcan.st>,
-	Sven Peter <sven@svenpeter.dev>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Mark Kettenis <kettenis@openbsd.org>,
-	asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-watchdog@vger.kernel.org
-Cc: Konrad Dybcio <konradybcio@kernel.org>,
-	Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
-	Nick Chan <towinchenmi@gmail.com>
-Subject: [PATCH 22/22] arm64: Kconfig: Update help text for CONFIG_ARCH_APPLE
-Date: Wed, 11 Sep 2024 16:41:12 +0800
-Message-ID: <20240911084353.28888-24-towinchenmi@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240911084353.28888-2-towinchenmi@gmail.com>
-References: <20240911084353.28888-2-towinchenmi@gmail.com>
+        Wed, 11 Sep 2024 03:43:53 -0700 (PDT)
+Date: Wed, 11 Sep 2024 13:43:52 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Nikunj Kela <quic_nkela@quicinc.com>
+Cc: wim@linux-watchdog.org, linux@roeck-us.net, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel@quicinc.com, quic_psodagud@quicinc.com, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v4] dt-bindings: watchdog: qcom-wdt: document support on
+ SA8255p
+Message-ID: <j4yhwags7refg2qxc2ykkykxjv5sue3yghucsiykoyuvzmk4zj@zvh3fd6avmgi>
+References: <20240910165926.2408630-1-quic_nkela@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240910165926.2408630-1-quic_nkela@quicinc.com>
 
-Apple's A7-A11 SoC is now supported, so the original help text is no longer
-accurate.
+On Tue, Sep 10, 2024 at 09:59:26AM GMT, Nikunj Kela wrote:
+> Add a compatible for the SA8255p platform's KPSS watchdog.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+> ---
+> 
+> Changes in v4:
+>         - Added Reviewed-by tag
 
-Signed-off-by: Nick Chan <towinchenmi@gmail.com>
----
- arch/arm64/Kconfig.platforms | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+If this is the only change, there is no need to post it as a new
+iteration.
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 6c6d11536b42..370a9d2b6919 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -37,8 +37,8 @@ config ARCH_APPLE
- 	bool "Apple Silicon SoC family"
- 	select APPLE_AIC
- 	help
--	  This enables support for Apple's in-house ARM SoC family, starting
--	  with the Apple M1.
-+	  This enables support for Apple's in-house ARM SoC family, such
-+	  as the Apple M1.
- 
- menuconfig ARCH_BCM
- 	bool "Broadcom SoC Support"
+> 
+> Changes in v3:
+>         - Removed the patch from original series[1]
+> 
+> Changes in v2:
+>         - Added Reviewed-by tag
+> 
+> [1]: https://lore.kernel.org/all/20240903220240.2594102-1-quic_nkela@quicinc.com/
+> ---
+>  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> index 47587971fb0b..932393f8c649 100644
+> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+> @@ -26,6 +26,7 @@ properties:
+>                - qcom,apss-wdt-msm8994
+>                - qcom,apss-wdt-qcm2290
+>                - qcom,apss-wdt-qcs404
+> +              - qcom,apss-wdt-sa8255p
+>                - qcom,apss-wdt-sa8775p
+>                - qcom,apss-wdt-sc7180
+>                - qcom,apss-wdt-sc7280
+> -- 
+> 2.34.1
+> 
+
 -- 
-2.46.0
-
+With best wishes
+Dmitry
 
