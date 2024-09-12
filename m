@@ -1,76 +1,76 @@
-Return-Path: <linux-watchdog+bounces-1879-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1880-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C6D997736E
-	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Sep 2024 23:15:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDF35977370
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Sep 2024 23:16:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68995285255
-	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Sep 2024 21:15:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D12B21C214D6
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Sep 2024 21:16:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D884413D89D;
-	Thu, 12 Sep 2024 21:15:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C459318BB80;
+	Thu, 12 Sep 2024 21:15:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l3DtisiN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C/jcHDgz"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03F1F47F6B;
-	Thu, 12 Sep 2024 21:15:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B84B548E0;
+	Thu, 12 Sep 2024 21:15:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726175732; cv=none; b=TmQXRK+fC5tmereQncJARWWVkiuFKo+Zbj4jo7JfNr3FW9rwgKmuAAGACDMTK5WVwKlyPyc02gMFzIwMLenkrgrsbOA5psUJkSU4U9RAj1qylCRNO/K5Tyj/EIKiP+pLfujWC6XrfaHCiAsaMk+cRs5SAXR5uLduq14q8/OyMJw=
+	t=1726175758; cv=none; b=C1gnTn0PcvHoHOQl+L5HYJuAb/5tY8LuxeWWd8iCsGKWQbIp5vp8XWq1Un8eNF1nUkxPVndDitQf4H372NtS+gRbJIZqatDMMDt20uT0Ad9XRGeWhEF9TuVS3eHV9f3N3Vrl3qzcVsNkMTDZLzBgkfCl8idCbPCdNfa1QyKEAUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726175732; c=relaxed/simple;
-	bh=wMPYDYysoFZiJ766A+fh1ZdAOcmlOQDl31Z1qyrEItA=;
+	s=arc-20240116; t=1726175758; c=relaxed/simple;
+	bh=w45kFhbtOblz6hrNrwals70xyTiWgU0u4oHrmw7gONo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lhh6aYr7WWZFBen1LwpNAwU1AEfL++aUULtTt6h9/q/kApfflCYeVsDb5KsD2yqBYE6pZAwiWVIkJIjUAaNnTbzhC28qCMaP6r0LhfSoVQpjOdSO40ZN4eZSTVn4NWNYRSTNTdwf/9IikMelBBr6DOA4ZZppDewPologBAzMXoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l3DtisiN; arc=none smtp.client-ip=209.85.215.177
+	 In-Reply-To:Content-Type; b=IFIvkSTeAcVQ/Axcps7L6oPz7f3HSodubiHD6lA0axd+kekU4gTch+gK5/WAzZIVTsPzv4VwXGpgrFzA0Z5jKk2uyQxXHGORvI91IBXL+VisnIV1x1otHVr1DP9QidFhufBSGmtOqllNwyoe6XtRVXy0dps2xW6jjtt29hF8DjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C/jcHDgz; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-7d82b0ebd51so60753a12.2;
-        Thu, 12 Sep 2024 14:15:30 -0700 (PDT)
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-71911585911so1245292b3a.3;
+        Thu, 12 Sep 2024 14:15:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726175730; x=1726780530; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1726175756; x=1726780556; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rlDPMDhjaiteUhjBR6Ca8ZvyPrmOqcDT4erUYA/SjyQ=;
-        b=l3DtisiNm8nlsFVMz/71q0j4m3nDQSUwLQUFqg6E7agu4Q2fZfwKPiF2SuXMVRP42Y
-         sqpu5GR7QZwLEYHvB1LYv8fOxaGBFEkQbgqnjgBoUzi64tUbaXu5Mpm5jgJL7iRxAao2
-         KghwhjBOhQjF3WVZmm4kybCt8OT/wTWukZgdNpRrpwEoxWJhXMQ5aaO5z013CUhT9NC5
-         BxH21p/9r//CE5xtZ1yvXE6y+Mv5FO9YDtKfWhXXyyOjTVfsaDcnNgcA/csY47vo5NZe
-         uu0sH/QizdtKO86eJS1Xu3Sk8bVNqnNpxxsvkK63Rr0WHdQkkjBFBB3CwzG0FrLEMoNw
-         gLpw==
+        bh=J+V/SKmtoNTOu9JBLVfLgw76iJMJHqaec3jY8eBRImc=;
+        b=C/jcHDgzWFKbR82ygV0j8tGoES1G9MWLZQPNDDZQ+H4DViX6F2Uyfv0ujupXQkwzaJ
+         1rXtoTM5vqIQvPuSIGGGNVBA15fcE9+E+hPk05UVHyrHm1UJJlHHS6vhWOCrv3pTigYm
+         bbas/XGGuGFIesRW59ZTf6Jo/oBjc0tA0ICGdJUQiOL8X8jmK8yafqnAdlDkjtpxSCm9
+         TVC8+oI8qjv8EMEBBwP/ft5d+THosDX3ObSGeccPlHMVzcdhZJoBlZeLKT7D5+3wl6au
+         mRV88qbkXexacuH43xRWFIwgTwgBA7vZWNiT6V/8m6EF/36wNmkl2qvrw/D1VIdfwgt2
+         Zjbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726175730; x=1726780530;
+        d=1e100.net; s=20230601; t=1726175756; x=1726780556;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rlDPMDhjaiteUhjBR6Ca8ZvyPrmOqcDT4erUYA/SjyQ=;
-        b=KMKXzjlfiyxFHBh4q61vCJDRR1dKBpX2Z8Rv6pUBPNulN/99ECn59//3E99V3V25Iw
-         CkCbigFidT96gbn991ba5RHWtS4ovh4y5ypk4xYt61rkf85WfhV+HBFZB65en86ZniYj
-         HbK7IJgz4ledolI4tXPfvGT6c1XaKcJNJ3hTlm40dLvLpUwH87S5bx33Wnc+1t3Wck/r
-         VNCYOSqyPuxj0+cv90X7Ke5NC9FJvMR39XQbNuZJXwWYmHiSMMaMtZnxUXlKaT62zYp5
-         JSn/ok5YoRFBeBMGXyY2yT3UPI6jGO87HnncpJGoZ7+SANipuL7WU2Z0xM0Q80Dvh+NV
-         LbLA==
-X-Forwarded-Encrypted: i=1; AJvYcCW7nBU0zJROhKVzrjOF3uXSL8+/VbWd2yvMcWLm4BfQqWjt0qGgPwJlgRaP0vWF0vQVlKgG0Q2+11igDlM=@vger.kernel.org, AJvYcCWzQ419eWaAEhXL0WMa/2E8NkDfPZkapLbAFafE6Ek/7LVIYYVAAnPPeXMDLzfolqfD2E07uTgc2oc0WDTnydw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFlDGhefx2TlsSFQ1NCN3xJPWaCuW5QXl+xy700AxMvH/6o1Ly
-	ifissEME/YiXEOzRSW3xVu6JbLpLFuORaGOUA/p+lsIINw73igKZ
-X-Google-Smtp-Source: AGHT+IHAS9/+STmVvGWl2H7IBrE9yd2yXTA7hs1PhBGtHNPwJkovgL4Hrus2zyfGAD/g13t6FVbN8A==
-X-Received: by 2002:a05:6a21:e90:b0:1cf:6d67:fe5a with SMTP id adf61e73a8af0-1d112edc9b4mr598350637.50.1726175729994;
-        Thu, 12 Sep 2024 14:15:29 -0700 (PDT)
+        bh=J+V/SKmtoNTOu9JBLVfLgw76iJMJHqaec3jY8eBRImc=;
+        b=O4RW+xdrbFqwAAyLDZyD2dv9ycW2TvSa2H/TG8qSmizPuLZND3mrYK+qYa9OYx/u2y
+         9NE31to7HHYzdbStvEIhQgNV64S7ooRkdimw3KXwUZN1nnOEPjJdbKlWLooxmUGrwfDF
+         SgG+r060rgdr5+QNQeqCHIgXTbONB4qpTSNnl7ksP4gTiKzI6+xh+jkgeUlFmRW57msv
+         rURj0ALHrdcbTfrzb/SE4Cr5qun/8R06FHTQrtzdg2suVTOWCXF5kHq6FUoDawZlgfwZ
+         KBc5JRLmlJNQKwSJLiW98DbB7dhaS+AlvI88bmwCDSJcDmXWzHlVJI57rcbOBTDH314j
+         +FIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW60WHSr7vbakRbh81c4E+Z4afZP1Y1iO83PEa69YjF0+KfWf58h/wqblhO+TKmf0FBKBhRcWG3p5It4do=@vger.kernel.org, AJvYcCWhbR4bJ9AmQeAjZLoBYvZXCBtFveIjGR11gG0LQljbFA3LtLWijD8t9fvUyNq9lH0bLzX6BOv/k7HuExUfDZQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxuxj3XRpQixw+gfepD8z5xV29s/NvQQb6f7XJLZKOfyWGjthWW
+	UEfhvNaGf+qDh3opZZ+vKKWgDEc3I6IUrF1CyAHpgSTDjIoIZGLU
+X-Google-Smtp-Source: AGHT+IFtZQwVAiKGWLSsA9/OucCp1ev6NRyH09SeqMNSET9MsvhbUbD0/7MT6fulB3jFFwL/3WLYAw==
+X-Received: by 2002:a05:6a00:815:b0:714:2881:44cc with SMTP id d2e1a72fcca58-7192606d9d1mr6507994b3a.10.1726175756407;
+        Thu, 12 Sep 2024 14:15:56 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7db1fba402esm2169020a12.16.2024.09.12.14.15.28
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-719090c37efsm4987079b3a.187.2024.09.12.14.15.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Sep 2024 14:15:29 -0700 (PDT)
+        Thu, 12 Sep 2024 14:15:55 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1ac5e79b-f313-44aa-a19c-dca05574ba91@roeck-us.net>
-Date: Thu, 12 Sep 2024 14:15:27 -0700
+Message-ID: <cc652ed1-32c7-4ea2-b494-698b344f24a0@roeck-us.net>
+Date: Thu, 12 Sep 2024 14:15:54 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -156,63 +156,9 @@ On 9/12/24 07:19, Oleksandr Ocheretnyi wrote:
 > Fixes: da23b6faa8bf ("watchdog: iTCO: Add support for Cannon Lake PCH iTCO")
 > Signed-off-by: Oleksandr Ocheretnyi <oocheret@cisco.com>
 > ---
->   drivers/watchdog/iTCO_wdt.c | 23 +++++++++++++++++++----
->   1 file changed, 19 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
-> index 264857d314da..46c09359588f 100644
-> --- a/drivers/watchdog/iTCO_wdt.c
-> +++ b/drivers/watchdog/iTCO_wdt.c
-> @@ -82,6 +82,12 @@
->   #define TCO2_CNT(p)	(TCOBASE(p) + 0x0a) /* TCO2 Control Register	*/
->   #define TCOv2_TMR(p)	(TCOBASE(p) + 0x12) /* TCOv2 Timer Initial Value*/
->   
-> +/* NMI_NOW is bit 8 of TCO1_CNT register
-> + * Read/Write
-> + * This bit is implemented as RW but has no effect on HW.
-> + */
-> +#define NMI_NOW		BIT(8)
-> +
->   /* internal variables */
->   struct iTCO_wdt_private {
->   	struct watchdog_device wddev;
-> @@ -217,15 +223,24 @@ static int update_no_reboot_bit_mem(void *priv, bool set)
->   static int update_no_reboot_bit_cnt(void *priv, bool set)
->   {
->   	struct iTCO_wdt_private *p = priv;
-> -	u16 val, newval;
-> -
-> -	val = inw(TCO1_CNT(p));
-> +	u16 val, newval, mask = (~NMI_NOW);
-> +
-Unnecessary (). Either case, please just mask against ~NMI_NOW directly.
-The mask variable is not necessary.
 
-> +	/* writing back 1b1 to NMI_NOW of TCO1_CNT register
+Oh, and change log goes here.
 
-Standard multi-line comments, please.
-
-Thanks,
 Guenter
-
-> +	 * causes NMI_NOW bit inversion what consequently does
-> +	 * not allow to perform the register's value comparison
-> +	 * properly.
-> +	 *
-> +	 * NMI_NOW bit masking for TCO1_CNT register values
-> +	 * helps to avoid possible NMI_NOW bit inversions on
-> +	 * following write operation.
-> +	 */
-> +	val = inw(TCO1_CNT(p)) & mask;
->   	if (set)
->   		val |= BIT(0);
->   	else
->   		val &= ~BIT(0);
->   	outw(val, TCO1_CNT(p));
-> -	newval = inw(TCO1_CNT(p));
-> +	newval = inw(TCO1_CNT(p)) & mask;
->   
->   	/* make sure the update is successful */
->   	return val != newval ? -EIO : 0;
 
 
