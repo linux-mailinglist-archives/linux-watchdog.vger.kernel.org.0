@@ -1,173 +1,138 @@
-Return-Path: <linux-watchdog+bounces-1873-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1874-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E05D8975A75
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Sep 2024 20:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 81D66975F79
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Sep 2024 05:00:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4020288FE2
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Sep 2024 18:40:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 487FB28A889
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Sep 2024 03:00:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EE1F1B653E;
-	Wed, 11 Sep 2024 18:40:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CF28188904;
+	Thu, 12 Sep 2024 02:57:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i+1qFSI4"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Pkt7u27W"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1574F1B4C4A;
-	Wed, 11 Sep 2024 18:40:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF3717E46E;
+	Thu, 12 Sep 2024 02:57:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726080017; cv=none; b=azb1fPFHMhCXn6i+Hhoa/8TtOROJf96a81M3o3naD7qphNAeWo+2FiyuXlEXhgrVQJBcp7bB1mfU8zzmV/xKw7Of1QvKz72ENMEqVB2SwMl+F13KdUHi8aXjtLJfALI+5XeR2ByAgvKxvT+6F8oif5lZRrrSsazPn1xXl67eYrQ=
+	t=1726109858; cv=none; b=tpFjHD0oUjvSU4fsPXwHUDJOUM97htG9mgVaapvAN5NFXJW/XNQF3KkxYE0jBcoq3EJGpg7nRkf4BmCyfTmVct8sHka+vT6fCUCr76qAVQH1uWqXqvBj9hpgSM3xTPVUIZUm54u/0dj3UGLP/KNCTbrAXnwbFEt3ZjA24cV4u0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726080017; c=relaxed/simple;
-	bh=7LZvl8bR4J5JCUKcVqkF7fXZODe/gIENMVevu9s2WTE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oGNGNr23lMluykWlotnEvrIH0y20lBhloBYT4OuNgStHQON2moV6rAq84oPw0B5NBbh6xd3br7qmXY+lT8oXokKCn4sToSjizhIA77XWaQFVt2X6zx8h4bcYcAnhZpB1nMZwtA4mYkMeQJpZOZ5qLrSiudD/H3n3eLKL30LYHoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i+1qFSI4; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7c1324be8easo917217a12.1;
-        Wed, 11 Sep 2024 11:40:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726080015; x=1726684815; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1+7p3Z5qCC26Ye8mLVaKGA4gMsf3x0zTnnTmPLOwPnE=;
-        b=i+1qFSI4gY676GNwveSu4V7ORnz6yXZTmQvdx4cK/sXoBOyrCHdXukbiV3+iGF2vCx
-         JtvB6a7ixrfy51KZAqH8HUBw/B5dfnYl7r/F6/zOsrudO7JyO8YvXZiWGZbZlcQbM8RZ
-         S1qNC8blUoQsJei5UK9ykRQCjjSJfhbgdKlPR8G6YbtGWZvdNwltGDuNG+zBBreiYlDe
-         G5x8L51uS+vM+qX6XyGoFZTg291f4InaoYaQVeyPGmUii+vUCmt1rKDUXBHbMO8uje+9
-         d0Q7gGDZ8Hby/J4J1Dcw6xG8LyaA9V5F2Dulb1ckJ9H4BQyp7UnUVsp5NO/Cp5KtDf/D
-         KPnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726080015; x=1726684815;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1+7p3Z5qCC26Ye8mLVaKGA4gMsf3x0zTnnTmPLOwPnE=;
-        b=Zfyvxo0sGUxiKe6cxz0deVm9SixlrdwFhIZuKqFO4uNyTAF/ZBl+27cl5w8Bsga7m/
-         EXBK3BbOnxcs05Wj91NBLb6QqY9Y5u3HOpgG5mvMNxxaoFG/1L42kDthFplRcF2yjKbd
-         hzCss07Pi2mbcRoWXJFmmw1flcu3L7YqvfBMCN1rMkeAtkS/kcYOnMaqJmEDRTIUl8cs
-         kLKcnkOx4vVrosq269ifxAKIKK9o01grbyOG5QSJ9RT1NsUNTd1Pq8piao4maoRCKrCn
-         bqNMI99IOGg5zJl49RFV1V/Uqm7I0U7w9Pp9GEBFusd0FkVGDKOgbK5rTNor6aQbe69m
-         QJMg==
-X-Forwarded-Encrypted: i=1; AJvYcCUae9TUCIjPUVHo0W+pcGMOvZYWPVQyTL3vZE/SdCO3JxBFW4Tm/WHndgIoqHnI3FnkNzaiqbGSD3UQ5UBK@vger.kernel.org, AJvYcCVIBKvGTTtxziesPcP9FJ2pXlKSq/rw9UQ1655mtrf5npn/f+t/iFOGVqj1InupdLfBsg18YigqfW8=@vger.kernel.org, AJvYcCVdQhGNLQ2uv5rcGD5winkTVSPovPuKHL/NRAzt4x2P76HVFEa7mc/CGNzeuHGTNddGGeubfCBC2Cks6AfWWaQ=@vger.kernel.org, AJvYcCVuaxwKtkPVJsQVI0oMDs2sHNWZvGHfNTHhHtD85KI+FqQDAxsQpjDVIa/ZfrQkk/dQ0ZoozYuoEIQJ@vger.kernel.org, AJvYcCXIcYvrXZD+wseqhNiZ3kmfV49P14JOqYyVsApwyTCznGW4HH+rz5U1JUkTePqnYJ4Duac4RnEE0569xg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/zFRjcrTw9/c8GA1H0F3AmgiseC6zEhNOVcUsPHjGW/v3IHqO
-	Zb7diNYCfInhlOHcfnf9PT3P4udcM1SMvTxcYs6vRBOyauHRZ83z
-X-Google-Smtp-Source: AGHT+IGWNpBp0JEJJKNe7VJxVt4ola9QUy4T9WHvT1vG5vjPcbQJy+069xnc1aIkGvbTJudOOVEgTw==
-X-Received: by 2002:a17:902:e80f:b0:205:5f95:c283 with SMTP id d9443c01a7336-2074c5d28d9mr77798925ad.4.1726080014877;
-        Wed, 11 Sep 2024 11:40:14 -0700 (PDT)
-Received: from [192.168.0.122] ([59.188.211.160])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2076b039539sm2541905ad.309.2024.09.11.11.40.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Sep 2024 11:40:14 -0700 (PDT)
-Message-ID: <a3849bc0-000a-4290-b2c3-71a50a750495@gmail.com>
-Date: Thu, 12 Sep 2024 02:40:09 +0800
+	s=arc-20240116; t=1726109858; c=relaxed/simple;
+	bh=2Xgry6/RQgxtq1aLvL2gFkPM+sSA+g0YJU2qjMIyyLM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=GrjIkit8nPWkVCmRLO5YtVqQFR5ddPLsNtA0O/tjExs02iOPT949TWpKTxQKhj7UwigGTRkziDXJiCfoALDCd6i3s5nkMfbUhz65s4hNCSrdkSowfykKXEgdxuYyeqBacCeTC0H7RjWqjzlcWBApWGm/K1hOzK4d6e3rd63UW3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Pkt7u27W; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48C2Lst8007628;
+	Thu, 12 Sep 2024 02:57:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=84GJH/u0Zu7gKYdPL4WBOg
+	PQVpIdwoPRTQde69kc82k=; b=Pkt7u27WRaFcc9WNuUtVc4E4tJPV4bMm6Q7sik
+	eXum7W84N0zYsstz6I/F+RrzY/spA8ITBA3n1Hx0FtqK8FpcV1k+nf7J2hrBkSCg
+	AIzJaG5LNNnzm7Yx2fGwXE+ggMWLrZkhKTePvNCPsEg1khkGz51lJRSeVHh2DX8M
+	FB5sE9sPXi/V7StxWHhVx4lBvlONMsxAqstMtDtvlHPWV4FA9IiHWjH+zu5D8g32
+	/ihUK2iA+6dCZKMgK2jrZ2kWQj65JhS6P18hRvQ0j54QV6oGUanlbOv+XcFehOQP
+	Pgm5wcLM1aYYKpIoDqz1NFOX1TOYTgy68jzgjY1TEgn6s8RQ==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41gy5rkm9h-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Sep 2024 02:57:19 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48C2vIYU004423
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Sep 2024 02:57:18 GMT
+Received: from lijuang2-gv.ap.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 11 Sep 2024 19:57:12 -0700
+From: Lijuan Gao <quic_lijuang@quicinc.com>
+Date: Thu, 12 Sep 2024 10:56:59 +0800
+Subject: [PATCH] dt-bindings: watchdog: Document Qualcomm QCS615 watchdog
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/22] dt-bindings: arm: cpus: Add Apple A7-A11 CPU cores
-Content-Language: en-MW
-To: Conor Dooley <conor@kernel.org>
-Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Linus Walleij <linus.walleij@linaro.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
- Konrad Dybcio <konradybcio@kernel.org>,
- Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-References: <20240911084353.28888-2-towinchenmi@gmail.com>
- <20240911084353.28888-3-towinchenmi@gmail.com>
- <20240911-unsuited-pranker-60a7d0b6caf9@spud>
-From: Nick Chan <towinchenmi@gmail.com>
-In-Reply-To: <20240911-unsuited-pranker-60a7d0b6caf9@spud>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-ID: <20240912-add_watchdog_compatible_for_qcs615-v1-1-ec22b5ad9891@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAHpY4mYC/5WNWw6CMBBFt0L6bQ3Do6hf7sOQpkwHmEQptIgaw
+ t6t7MDPc3NzzioCeaYgLskqPC0c2A0R4JAI7M3QkWQbWWRpVqRnAGms1S8zY29dp9E9RjNzcyf
+ dOq8nDApKCYClsiZP85MSUTR6avm9R2515J7D7Pxnby7wW//SLyBBVmSqVjVFGRvX6cnIAx7jX
+ 9Tbtn0BKNQBRdYAAAA=
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck
+	<linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Rajendra Nayak
+	<quic_rjendra@quicinc.com>
+CC: <kernel@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Lijuan Gao <quic_lijuang@quicinc.com>
+X-Mailer: b4 0.15-dev-99b12
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1726109832; l=1103;
+ i=quic_lijuang@quicinc.com; s=20240827; h=from:subject:message-id;
+ bh=2Xgry6/RQgxtq1aLvL2gFkPM+sSA+g0YJU2qjMIyyLM=;
+ b=YIOQowhFR1X84PqjsUhWPqWpnOkj0nvgqmB/tWDv3rroYsZjZ95w3SnBdfLNIRnUxLUUR9jPa
+ BZLQwnbME1eB+nDW50oIiBCpPbBtX+bwDyl9mMuDM76y4jTDy9lO4Im
+X-Developer-Key: i=quic_lijuang@quicinc.com; a=ed25519;
+ pk=1zeM8FpQK/J1jSFHn8iXHeb3xt7F/3GvHv7ET2RNJxE=
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 5aNYaRHKIzkdqUpYg7UHVWElN1PEddnT
+X-Proofpoint-ORIG-GUID: 5aNYaRHKIzkdqUpYg7UHVWElN1PEddnT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ clxscore=1011 malwarescore=0 bulkscore=0 lowpriorityscore=0 adultscore=0
+ mlxscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=792 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2408220000
+ definitions=main-2409120020
 
+Add devicetree binding for watchdog present on Qualcomm QCS615 SoC.
 
+Signed-off-by: Lijuan Gao <quic_lijuang@quicinc.com>
+---
+Add devicetree binding for watchdog present on Qualcomm
+QCS615 SoC.
+---
+ Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 12/9/2024 02:16, Conor Dooley wrote:
-> On Wed, Sep 11, 2024 at 04:40:51PM +0800, Nick Chan wrote:
->> Add the following CPU cores:
->>
->> - apple,cyclone: A7 cores
->> - apple,typhoon: A8 cores
->> - apple,twister: A9 cores
->> - apple,hurricane-zephyr: A10 logical cores
->> - apple,monsoon: A11 performance cores
->> - apple,mistral: A11 efficiency cores
->>
->> In the Apple A10, there are physical performance-efficiency cores that
->> forms logical cores to software depending on the current p-state, and
->> only one type of core may be active at one time.
->>
->> Signed-off-by: Nick Chan <towinchenmi@gmail.com>
->> ---
->>  Documentation/devicetree/bindings/arm/cpus.yaml | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
->> index f308ff6c3532..3959e022079f 100644
->> --- a/Documentation/devicetree/bindings/arm/cpus.yaml
->> +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
->> @@ -89,6 +89,12 @@ properties:
->>        - apple,blizzard
->>        - apple,icestorm
->>        - apple,firestorm
->> +      - apple,mistral
->> +      - apple,monsoon
->> +      - apple,hurricane-zephyr
->> +      - apple,twister
->> +      - apple,typhoon
->> +      - apple,cyclone
-> 
-> Same on this one, can you add these in alphanumerical order, even if the
-> existing 3 devices are not in it? You could take the opportunity to
-> reshuffle icestorm and firestorm while you're at it.
-(Same goes for the watchdog, pinctrl and cluster-cpufreq bindings)
-I am not actually sure what is the right thing to do here. It seems that
-these bindings are
-originally sorted using SoC types (desktop or mobile) and generations.
-But then again I have
-looked at some other in-tree bindings from asahi, and it seems to be a
-mix of alphabetical
-and logical sorting in the way mentioned above.
+diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+index 47587971fb0b..e8f2488ddff8 100644
+--- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+@@ -26,6 +26,7 @@ properties:
+               - qcom,apss-wdt-msm8994
+               - qcom,apss-wdt-qcm2290
+               - qcom,apss-wdt-qcs404
++              - qcom,apss-wdt-qcs615
+               - qcom,apss-wdt-sa8775p
+               - qcom,apss-wdt-sc7180
+               - qcom,apss-wdt-sc7280
 
-Maybe we can get some clarification from an Asahi Maintainer?
+---
+base-commit: 100cc857359b5d731407d1038f7e76cd0e871d94
+change-id: 20240911-add_watchdog_compatible_for_qcs615-11c56da30386
 
-For the soc-level machine compatibles though, I believe that should be
-retaining the logical
-order instead of trying to use alphabetical order.
-
-> 
-> Cheers,
-> Conor.
-> 
->>        - arm,arm710t
->>        - arm,arm720t
->>        - arm,arm740t
->> -- 
->> 2.46.0
->>
-
-Nick Chan
+Best regards,
+-- 
+Lijuan Gao <quic_lijuang@quicinc.com>
 
 
