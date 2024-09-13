@@ -1,58 +1,53 @@
-Return-Path: <linux-watchdog+bounces-1888-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1889-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1572977BAB
-	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Sep 2024 10:57:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9537977BC4
+	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Sep 2024 11:01:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 176CD1C21416
-	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Sep 2024 08:57:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD49428951D
+	for <lists+linux-watchdog@lfdr.de>; Fri, 13 Sep 2024 09:01:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 743F41D67B4;
-	Fri, 13 Sep 2024 08:57:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2751E1BCA01;
+	Fri, 13 Sep 2024 09:00:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="CZkLeRj5"
+	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="EPV16MLu"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 917031714CD;
-	Fri, 13 Sep 2024 08:57:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B101E80B;
+	Fri, 13 Sep 2024 09:00:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726217829; cv=none; b=htnyItOMAPZ7nNTkf8f4aDdmmXEqacTICW3ePRsjc27cBc43fqxD8d6XnZcxRD2nTYA33kj0Y1uIIV9MpXo8/3tcBd7OYwo0wPZiBwiSDhxad/VdUFhe9ehRWJXn2Z+LORBGf6FZczyyTy573cwDxEE3xJpNdyKPU+mMiQHBJU4=
+	t=1726218056; cv=none; b=iW4aqjCtJ17kIP9ORI6bRV+Il+BRiMeH0Ysni7boRWXXVS6x9ejPtVvACTmQagkqyPYf6qlTaZPfpK+h872pKOTo5uKmzTLgL4BUBZHJF/Sy1fx6dA5msLEflATmOrqW1GoGOE0TFX5h6dByjjPt3/PYJKCKbNfdQksONeffL+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726217829; c=relaxed/simple;
-	bh=L2M5SuCNmipfKphPitsBa/R/HP6VsGtSLkdrj9Qb54g=;
+	s=arc-20240116; t=1726218056; c=relaxed/simple;
+	bh=yWD/92u+XFhtQdYKm2gtn2rSyWlAtkwRqZS6BFKn22E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f2pbmfgF9mTiDhlWzCERE10oofsRfigl85DrPPB9FK6mKrIp7HYuOVhQgewdYp1IQUXBmvNKAQIQk6IVM/cpwO6uVXYQ/EdUZ1/ZnfkOMw7Ze6tkwTTIFiHDjjFWe0GGnciysIytNoPZWtoDIySKBABeK4ZeHkltZQ1fkqQEytM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=CZkLeRj5; arc=none smtp.client-ip=185.87.125.42
+	 Content-Type:Content-Disposition:In-Reply-To; b=pF68CsSr8fBGQqnR1Px324hXzlCpj+PRMdZJa5ReI4QzlSG69b3hcnA90s3GnqnGP+ubW6449FgsLT1J2fsZyMYIizvvzAKu0neH9AYryuxllGL9MjX4cgQRvpl4lXZZyk6Ulg4id5Hoef47q6QSSoYmaUIYKOljBUJU22cCr+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=EPV16MLu; arc=none smtp.client-ip=185.87.125.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
 Received: by www.linux-watchdog.org (Postfix, from userid 500)
-	id AC2DA40A91; Fri, 13 Sep 2024 10:32:48 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org AC2DA40A91
+	id 87E2640A91; Fri, 13 Sep 2024 10:36:37 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 87E2640A91
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-	s=odk20180602; t=1726216368;
-	bh=L2M5SuCNmipfKphPitsBa/R/HP6VsGtSLkdrj9Qb54g=;
+	s=odk20180602; t=1726216597;
+	bh=yWD/92u+XFhtQdYKm2gtn2rSyWlAtkwRqZS6BFKn22E=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CZkLeRj5I+JHFdgwKfx2xPu0TUcICC6Av4mvTd0hJS56DR4LQWZMDzck27P7/+7TE
-	 oL/n53T+wnOTPEfQ0Gt9rSxVBT9bHZzKLkFdQIRLBycCNkEnStRz39DHIQcOm47x/W
-	 GhFrM0id0Rz/bzNH1cstMK0zvOjjZJnjsGa+kqTk=
-Date: Fri, 13 Sep 2024 10:32:48 +0200
+	b=EPV16MLu21t81sea0feTtu/2h/f0iY2B0ocNE1v1OA6iakls8HysQv0mSGLH7iGvU
+	 xnTM9USnjz6sW1b0ZGKlTjbqI15+LOl5IcmOLogGEtv2gHdRPndcrHPo3osTfc7lJh
+	 tW02TL7MWW3adNO7rm1NDwfTWlAmwjKGnZ0OFTwk=
+Date: Fri, 13 Sep 2024 10:36:37 +0200
 From: Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Frank Li <Frank.li@nxp.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, alice.guo@nxp.com,
-	festevam@gmail.com, imx@lists.linux.dev, kernel@pengutronix.de,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux@roeck-us.net,
-	s.hauer@pengutronix.de, shawnguo@kernel.org, ye.li@nxp.com
-Subject: Re: [PATCH v5 1/1] watchdog: imx7ulp_wdt: move post_rcs_wait into
- struct imx_wdt_hw_feature
-Message-ID: <20240913083248.GB31440@www.linux-watchdog.org>
-References: <20240730145610.2177627-1-Frank.Li@nxp.com>
- <ZtDvk02cvKCemYbN@lizhi-Precision-Tower-5810>
- <ZuCd0xTZ29meorYy@lizhi-Precision-Tower-5810>
+To: Shen Lichuan <shenlichuan@vivo.com>
+Cc: wim@linux-watchdog.org, linux@roeck-us.net,
+	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+	opensource.kernel@vivo.com
+Subject: Re: [PATCH v1] watchdog: Convert comma to semicolon
+Message-ID: <20240913083637.GA31468@www.linux-watchdog.org>
+References: <20240910070058.40867-1-shenlichuan@vivo.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -61,31 +56,59 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZuCd0xTZ29meorYy@lizhi-Precision-Tower-5810>
+In-Reply-To: <20240910070058.40867-1-shenlichuan@vivo.com>
 User-Agent: Mutt/1.5.20 (2009-12-10)
 
-Hi Frank,
+Hi Shen,
 
-> On Thu, Aug 29, 2024 at 06:00:51PM -0400, Frank Li wrote:
-> > On Tue, Jul 30, 2024 at 10:56:10AM -0400, Frank Li wrote:
-> > > Move post_rcs_wait into struct imx_wdt_hw_feature to simple code logic for
-> > > difference compatible string.
-> > >
-> > > i.MX93 watchdog needn't wait 2.5 clocks after RCS is done. So needn't set
-> > > post_rcs_wait.
-> > >
-> > > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> > > Signed-off-by: Alice Guo <alice.guo@nxp.com>
-> > > Reviewed-by: Ye Li <ye.li@nxp.com>
-> > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > > ---
+> To ensure code clarity and prevent potential errors, it's advisable
+> to employ the ';' as a statement separator, except when ',' are
+> intentionally used for specific purposes.
 > 
-> Wim Van Sebroeck:
+> Signed-off-by: Shen Lichuan <shenlichuan@vivo.com>
+> ---
+>  drivers/watchdog/iTCO_wdt.c   | 4 ++--
+>  drivers/watchdog/pm8916_wdt.c | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> 	Could you please take care this patch?
+> diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
+> index 264857d314da..35b358bcf94c 100644
+> --- a/drivers/watchdog/iTCO_wdt.c
+> +++ b/drivers/watchdog/iTCO_wdt.c
+> @@ -563,8 +563,8 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	ident.firmware_version = p->iTCO_version;
+> -	p->wddev.info = &ident,
+> -	p->wddev.ops = &iTCO_wdt_ops,
+> +	p->wddev.info = &ident;
+> +	p->wddev.ops = &iTCO_wdt_ops;
+>  	p->wddev.bootstatus = 0;
+>  	p->wddev.timeout = WATCHDOG_TIMEOUT;
+>  	watchdog_set_nowayout(&p->wddev, nowayout);
+
+Removed this part since there was allready a patch for this that is in linux-watchdog-next.
+
+> diff --git a/drivers/watchdog/pm8916_wdt.c b/drivers/watchdog/pm8916_wdt.c
+> index f3fcbeb0852c..007ed139ab96 100644
+> --- a/drivers/watchdog/pm8916_wdt.c
+> +++ b/drivers/watchdog/pm8916_wdt.c
+> @@ -218,7 +218,7 @@ static int pm8916_wdt_probe(struct platform_device *pdev)
+>  		return err;
+>  	}
+>  
+> -	wdt->wdev.ops = &pm8916_wdt_ops,
+> +	wdt->wdev.ops = &pm8916_wdt_ops;
+>  	wdt->wdev.parent = dev;
+>  	wdt->wdev.min_timeout = PM8916_WDT_MIN_TIMEOUT;
+>  	wdt->wdev.max_timeout = PM8916_WDT_MAX_TIMEOUT;
+> -- 
+> 2.17.1
 > 
 
-It's in Linux-watchdog-next since tuesday.
+Reviewed-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+
+And added it to linux-watchdog-next also.
 
 Kind regards,
 Wim.
