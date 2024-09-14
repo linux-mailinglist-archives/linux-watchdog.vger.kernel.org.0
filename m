@@ -1,136 +1,143 @@
-Return-Path: <linux-watchdog+bounces-1918-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1919-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0757D978E07
-	for <lists+linux-watchdog@lfdr.de>; Sat, 14 Sep 2024 07:32:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8349B9792A1
+	for <lists+linux-watchdog@lfdr.de>; Sat, 14 Sep 2024 19:18:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 856EBB20E57
-	for <lists+linux-watchdog@lfdr.de>; Sat, 14 Sep 2024 05:32:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 287961F229BC
+	for <lists+linux-watchdog@lfdr.de>; Sat, 14 Sep 2024 17:18:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 622A9192B72;
-	Sat, 14 Sep 2024 05:26:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E9261D1302;
+	Sat, 14 Sep 2024 17:18:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cqxSHtIM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aoqGHgcm"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0747192B63;
-	Sat, 14 Sep 2024 05:26:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F399B1CFEC1;
+	Sat, 14 Sep 2024 17:18:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726291615; cv=none; b=OGHxk8unUQJsQmSTZfreskCCMAeqIz5pVPpoMOwITeu35QDdpDBceF1Z+D6vn9tToH/Q8CFOqFKk4860fMIxpvpfUt8uIRLpZKwcE5BWr8bCvdAkwe1foa9I6Obw5ERt420rmTrJ1OrtZ5HFx0zasfAGc2UI31k/TFEdY61Fkjw=
+	t=1726334285; cv=none; b=C7UX2vRNMGMqbp9F29Vyr1O5ilQZoIBHQabeygm5ohqjqYof9ixFiGAwdxp7D4YsH8jlK0/jmU+Gu1R/8vU7rU3mWy9iRO6/p2HS5fykotQ5w79oky0lcLWnle+gYu+09QjOG98m3HXEAu1CdeSpj+0qrUcRHv/c5lQGxlRkbAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726291615; c=relaxed/simple;
-	bh=IlwfpKeYG1A6lmRpl2J8Js+0dUrkM33rNMIVVPeLcso=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EBcUY/5w7sO44ZjcpBsHXI+Prl7lJGWLmTsOQBQ8qicKuZ5VlAmDSBB2BNo7kdZJDU2YfsIpE3pgy4E/BY1GRjfuHhn41OIHccHbO+pU7KFz/4AgEJl/AZnG0rj2tVtk/aYw/jKsw2uwXzxmkrVfKQfYwV5hoTYpJWxxgIdBE58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cqxSHtIM; arc=none smtp.client-ip=209.85.215.182
+	s=arc-20240116; t=1726334285; c=relaxed/simple;
+	bh=aRytwP9pLBei3TTlU1BMBB5/oF2kGbMPm/3Y+2Ugk9E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pVd6oIxVJ2f+34yNzTPZ/Cv9mf/H+gVDutWrO8tIoTM8l7STwfQQweES0DJiyGbZiiLCNboS2XPHjkfiEBhrTmSjypEl28AtFuVsBd/Y7A6ZkFOWpCvf9dQ5w1aDMdmaXsL2AMew49hR3JH9aI6Rabra2g4b4abj1hA/LBW3XNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aoqGHgcm; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7163489149eso1246518a12.1;
-        Fri, 13 Sep 2024 22:26:53 -0700 (PDT)
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-718f4fd89e5so2925803b3a.0;
+        Sat, 14 Sep 2024 10:18:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726291613; x=1726896413; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zy0C2tn+S+ad9UGMaUozuLH5nIPIOY9VH2lYfYG3DPM=;
-        b=cqxSHtIMhW3IZ0I25qq7R1PMrSYWmTnVo0QCXF8KJ5FKBLHoSReJQldWHt9OertdIE
-         D2IBeh/8ILTYMVbO8+GtaKrzbJhXn9xt3GJNjMziJNM8OIoHiHWwefxdFBV+ExXoUJNn
-         SFelCNyQERnotstjdU6pYA6bXHPno3qgwsrbEMWWNhJ5qG9YfqFdjNBw65JfMxNrGuJJ
-         UPnRWxBJJzTI7ZJbgsqteFyFwBtrR8R3bQqtGkCTk46xh9Tv/TqGxXkk7qUBwwdq3Bti
-         4S64DZ39NHlK3EXxHYa987H2n3oV69kyVil1u8DOrFxwaOrH7UjZJWoHhitAhGKwlkho
-         EgMQ==
+        d=gmail.com; s=20230601; t=1726334283; x=1726939083; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5+GhMoA3xa1971oY2HzI8hp5Uk+PbFfIHHqZtQjkbuw=;
+        b=aoqGHgcmwSE8wbps4MAOXLJh50AaJmj5IVUjAJ5wazDJROV/MrdWS8KgL5nazrpB8Y
+         CgJj48ZVu+b9rSxghfmgie02ycaau4zdJb2cvLNJr8rcnGI5YoR0k82XACkYT3rf0fUh
+         z68GbGKQhjgGrR3GfoSIZij4vmx1pA4uY4f2AQiA6mipu+38+oXcUNpjsSWNS3yTBEQc
+         HJAjXIWliDj7NvBcficUOpNWA8GncHGMRjJ39IVenFGahyZDxJXtY7EGaiY3/FIWqzVg
+         exth4x6xPoKCc0857MESbPrMjYNap7szo637826JlGlvRyK+FHH1aZAyS22ZuEFnCNpY
+         GtEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726291613; x=1726896413;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zy0C2tn+S+ad9UGMaUozuLH5nIPIOY9VH2lYfYG3DPM=;
-        b=kCBNFu/w/uEziYq4IknJwP62nbwAsWakN0aL+B9T1PWa1WXHoX0HInrQKj/fsL900e
-         RLHYXn5NueiS4sMVEiL0sknjzqkPyfcAOJmtwygXGalGGa7wJSpehcDpNO/U02PwUpud
-         kzOuCr/b0iPIRlW6yIg7VULV3Vie9OBwTjwq7C+sROSxdwA36Vr37YsjoK6sXkyeJAdR
-         dDVdt7V+x0brhhiSKSgWT1ucIK9IeDujjUFikdbxJ7enE9JwqjPusNvAgsNOKpOj6+D9
-         Ewiz2iS2GNy9FnfUDQ3m2/FlLgPpzxrCESVtzQbE1+kvkXd8M0lwBx8doqdhaT8B2Z7t
-         LbKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVJafuLksu6Ctf6f9z724q+faK5PB1D8jiQ8XKA4ICp36wml5+I2VVdKvWY+vYyCjIwI+iYNyHKZwhMiw==@vger.kernel.org, AJvYcCVjGUcXhT2V3up8xfZWTNyy8EXwN50VcXc0cRxqXdNt7t8CGRQb2eY8rr1urr/RyxmCcWHFeRAfeesElzSVJXY=@vger.kernel.org, AJvYcCW5RmPd75dbWWqNq6bNRgWQ+KnJQIQvNlI1tRe+l6avrqGcA6h3Nn5jkUyx3/h8NOKBcoLfcj2E5/D/nBWJ@vger.kernel.org, AJvYcCWP2AC4HeaWvNY0S+jLy89QxVPIgp36gUVxex675safx3GdW8mM6I4ELfjZTLK7ekTfGzPsLA3HM5I=@vger.kernel.org, AJvYcCXcwNndotA88rzbmoBg+skaEz4I8FgAU0bPGY0ngp52eklShzbEUbInjLTPB8zwS/pbJ/jKp5ygYMqf@vger.kernel.org
-X-Gm-Message-State: AOJu0YzESYxVdTK9kcgvpPKJNFxCbUlr5IvJW8NDjKf9e/VkiL1Txw2T
-	KI3B/KkOsLEuj2atX9ANoUiM05oKaWusIi7/klK62f4cUI9dEkye
-X-Google-Smtp-Source: AGHT+IFAx3i0hnBuicVE8YdLzp74NzUBOGZMK0WvmVsGZX4ALFKO/gW3JhnXQICFiSDi3OGKhSwvZQ==
-X-Received: by 2002:a05:6a20:7b26:b0:1d1:17c6:7a38 with SMTP id adf61e73a8af0-1d117c67a9emr4578281637.9.1726291613169;
-        Fri, 13 Sep 2024 22:26:53 -0700 (PDT)
-Received: from localhost.localdomain ([59.188.211.160])
-        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-71944b7b749sm391223b3a.113.2024.09.13.22.26.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Sep 2024 22:26:52 -0700 (PDT)
-From: Nick Chan <towinchenmi@gmail.com>
-To: Hector Martin <marcan@marcan.st>,
-	Sven Peter <sven@svenpeter.dev>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Mark Kettenis <kettenis@openbsd.org>,
-	asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-watchdog@vger.kernel.org
-Cc: Nick Chan <towinchenmi@gmail.com>,
-	Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
-	Konrad Dybcio <konradybcio@kernel.org>
-Subject: [PATCH v2 22/22] arm64: Kconfig: Update help text for CONFIG_ARCH_APPLE
-Date: Sat, 14 Sep 2024 13:17:31 +0800
-Message-ID: <20240914052413.68177-26-towinchenmi@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240914052413.68177-1-towinchenmi@gmail.com>
-References: <20240914052413.68177-1-towinchenmi@gmail.com>
+        d=1e100.net; s=20230601; t=1726334283; x=1726939083;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5+GhMoA3xa1971oY2HzI8hp5Uk+PbFfIHHqZtQjkbuw=;
+        b=A5auRwNcAAHxvUOV9IlYk4lqFI4bFlXtPkPqx5hUpWZAwSKUrv+pl5umbZnDwOObdZ
+         UtQNXRL/RPecc/waKZD5YGaaYiCzurv/iVbnWs4M1dsaKf+SsVTGJ3MiNb4Q6hMet8AW
+         zYuY4V1O19BVIEjhL1TVrEtlMkv7uDhsLefQ/lLfYlEgC1hIjw73SJ7Ux36OuXF+2Bhs
+         De2AuvM6+7mQeZQaWdsTqXsWA1y48hFHR+oyjYZyAvdR4CPa4jMo8TVG68m/9rz6XtkE
+         NJ6IY4TRG+kfmkFCdXA/TupSRT1gKXeJAdUb/q8ny8R9AU8FqQoBaMPg03cY3Gy/+SKI
+         LnkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUS9IR76KT1NN986O4Lp8UfGQ7EAgzo8dgbFA++2RRliQEQ7C+gY/528vAbo3pnNiyGiJMf5ZavpMk=@vger.kernel.org, AJvYcCVR5DR9TxAnxQfsSiAuVCF+UQmEABuNeOZXdm9qqPDhg2/n8uZLtARv246wEx6gzdNNWrAcFArdUODcMzG+@vger.kernel.org, AJvYcCVtGXsS7U/nAveX9bG5c6vOmzYjUXqadikcthwqvMyJWU2nXUglNoOIymmnLZJOPO95ripyBM1gV/BMMHhEbo8=@vger.kernel.org, AJvYcCXLW1k6vseSJtk+2UVIOMeiPRgBUnwrAZDn1PIHwL3u7NySl9MaA0J+9rztt9aIWBM8nvpmD7gd7The@vger.kernel.org, AJvYcCXONPUUPsBNOucWQd6yj7wjH3/h1VvXKJhZdEtlo88PnvfulgS215XemBRMsnf11ioT0KKPbYDjBwHHDg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqerectmuYGGykdaZxsRDmeKFDAZbI+lPIdhJXW+HznZwPeaGL
+	mUDNpREOkzi3rEmlXj4dTgH7tP4zzP7gm/rVpwT8Y/87kp72B4Kw
+X-Google-Smtp-Source: AGHT+IEVlENJgk8dXWBf4D2XILJQRHJRlYjJlO5FZwJPUxVX2SZ1X5qAa0SOTNhIkEM4keufiASuDw==
+X-Received: by 2002:a05:6a00:b92:b0:717:8d81:e548 with SMTP id d2e1a72fcca58-7192606523bmr15785200b3a.1.1726334283027;
+        Sat, 14 Sep 2024 10:18:03 -0700 (PDT)
+Received: from [192.168.0.122] ([59.188.211.160])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7db4999cfb7sm1397145a12.79.2024.09.14.10.17.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 14 Sep 2024 10:18:02 -0700 (PDT)
+Message-ID: <2ebf5258-b55d-4010-aa94-d5bab1f93bb5@gmail.com>
+Date: Sun, 15 Sep 2024 01:17:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 03/22] dt-bindings: cpufreq: apple,cluster-cpufreq: Add
+ A10 compatible
+To: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org
+Cc: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
+ Konrad Dybcio <konradybcio@kernel.org>
+References: <20240914052413.68177-1-towinchenmi@gmail.com>
+ <20240914052413.68177-6-towinchenmi@gmail.com>
+Content-Language: en-MW
+From: Nick Chan <towinchenmi@gmail.com>
+In-Reply-To: <20240914052413.68177-6-towinchenmi@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Apple's A7-A11 SoC is now supported, so the original help text is no longer
-accurate.
 
-Signed-off-by: Nick Chan <towinchenmi@gmail.com>
----
- arch/arm64/Kconfig.platforms | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 6c6d11536b42..370a9d2b6919 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -37,8 +37,8 @@ config ARCH_APPLE
- 	bool "Apple Silicon SoC family"
- 	select APPLE_AIC
- 	help
--	  This enables support for Apple's in-house ARM SoC family, starting
--	  with the Apple M1.
-+	  This enables support for Apple's in-house ARM SoC family, such
-+	  as the Apple M1.
- 
- menuconfig ARCH_BCM
- 	bool "Broadcom SoC Support"
--- 
-2.46.0
+On 14/9/2024 13:17, Nick Chan wrote:
+> The block found on the Apple A10 SoC is compatible with the
+> existing driver so just add its per-SoC compatible.
+> 
+> Signed-off-by: Nick Chan <towinchenmi@gmail.com>
+> ---
+>  .../devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml    | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+> index 76cb9726660e..e0d1a9813696 100644
+> --- a/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+> +++ b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+> @@ -24,7 +24,9 @@ properties:
+>                - apple,t8112-cluster-cpufreq
+>            - const: apple,cluster-cpufreq
+>        - items:
+> -          - const: apple,t6000-cluster-cpufreq
+> +          - enum:
+> +              - apple,t8010-cluster-cpufreq
+> +              - apple,t6000-cluster-cpufreq
+>            - const: apple,t8103-cluster-cpufreq
+>            - const: apple,cluster-cpufreq
+>  
 
+Have to retract the cpufreq patches, a v3 without them will be available
+tomorrow. cpufreq works on iPad 7 (A10). However it is already pretty
+weird when the cpufreq did not work on Apple TV 4K (A10X), with adjusted
+p-states. However, it seems that iPhone 7 (A10) is also not working. So
+this is definitely broken. As far as the hardware interfaces go they should
+be compatible, so the only explanation that makes sense is that the behavior
+is not correct on t8010 and t8011 and it only *happened* to work on iPad 7,
+with some incorrect behaviors.
+
+Marked as deferred on patchwork.
+
+Nick Chan
 
