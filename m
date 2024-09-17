@@ -1,167 +1,148 @@
-Return-Path: <linux-watchdog+bounces-1951-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1952-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 864C497AC99
-	for <lists+linux-watchdog@lfdr.de>; Tue, 17 Sep 2024 10:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B6D397B33E
+	for <lists+linux-watchdog@lfdr.de>; Tue, 17 Sep 2024 19:01:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CB7328C2DC
-	for <lists+linux-watchdog@lfdr.de>; Tue, 17 Sep 2024 08:09:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55ACA28332D
+	for <lists+linux-watchdog@lfdr.de>; Tue, 17 Sep 2024 17:01:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF43415746B;
-	Tue, 17 Sep 2024 08:09:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 327CF17BEB4;
+	Tue, 17 Sep 2024 17:01:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QJyC6IcX"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="T6kLt+Wa"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D531156C70;
-	Tue, 17 Sep 2024 08:09:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 441BE15AD90;
+	Tue, 17 Sep 2024 17:01:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726560581; cv=none; b=M+2R+ROxGo41d9o6fTlPpJ0l7kRaQ3lswDE+m5r34AIWNPKIyUZnO3yHjTR9aXuqSx/tMDpMnvcH+H62rLCJC+i4gVQrv+LQhEGppqsWuQI+Q7BZ3EIrqnkDgWdRaoqmS3cK9JgM+owoJ5RzCalIQQXq/lHbUwolqGS4gPbXqXo=
+	t=1726592466; cv=none; b=Ju96726331onmyz7JQRF4G0SYoS26cQipLSwXIFARISEWbHABKdRXtcidfzHTkVUB/dBNff7JhqQ+3wuON10wHEmLkzxRs/z/L3A4+VR4GIjcBoMmE9AlhJCzw2FW+th6vs9PAAlzK1b3aXsKDHijhoZGvKzaF24OWDPpKaN2cU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726560581; c=relaxed/simple;
-	bh=6s7C8hobD3fIYgLx8J4qWFbmevZAmpnrWRmu1pRVBTA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZQLQHRt1JY0BYvAGoy6RfgPrx3VeNWSv6iwCtFyPeJZoDvXuxuMPUOvqVXpCZjQI2ng1uVF0UTxw9ubKpH/lrYOPymTtv4VcCc5/ugSdGnMWrj2M6rl4b/xB+31gwIrpWOe0spg9IgRjUf/9oFFAYmr/fvSn5t6b6dIPDkz6d5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QJyC6IcX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC3FC4CEC6;
-	Tue, 17 Sep 2024 08:09:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726560581;
-	bh=6s7C8hobD3fIYgLx8J4qWFbmevZAmpnrWRmu1pRVBTA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QJyC6IcX1sm/0OS30slFVeEI3bzrgd4GDjjVWXPqBLYfX0uzsSejy2qcQHJayBaS8
-	 YX1DqT+qmcpf35HK/oWtY5TlOJ52UMEKF2VQ6NXObGBkgQMlSwwfhuNiZBAzmvPjLG
-	 j1gq4V7p6FM1e8LOE1zkWcIlkX+3y2A4WQ+XZzJKekx6PYVH9RcUk2fctzNz4p71p7
-	 gQ8cQqg+69mcZsFUUiPqAbFeMEZ/c5c0ElNjPVJ9sjehSapBH7+IHTy52uB5xfhXVD
-	 m5YkGvA2F2nG8Rsss5+plnfOKd5KcymxJKqILz66iDLhIxnknfWGaL/vK3KFnQAZCV
-	 KLaJCTJ65l/2Q==
-Date: Tue, 17 Sep 2024 09:09:35 +0100
-From: Lee Jones <lee@kernel.org>
-To: Thomas Richard <thomas.richard@bootlin.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, thomas.petazzoni@bootlin.com,
-	blake.vermeer@keysight.com
-Subject: Re: [PATCH 1/5] mfd: add Congatec Board Controller mfd driver
-Message-ID: <20240917080935.GC9955@google.com>
-References: <20240503-congatec-board-controller-v1-0-fec5236270e7@bootlin.com>
- <20240503-congatec-board-controller-v1-1-fec5236270e7@bootlin.com>
- <20240822103858.GH6858@google.com>
- <9f29d904-e7ba-40fb-b5d8-1efeddf6f148@bootlin.com>
- <20240912141309.GC24460@google.com>
- <618cb281-9fec-471f-9e3d-c7a471f75a7a@bootlin.com>
+	s=arc-20240116; t=1726592466; c=relaxed/simple;
+	bh=PCwEG5cM4IEq07AFnUZTSlDXP7VkqJ13jqXIS6+Le1k=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FZQelHhULPKH7z0zxta7gwQsMOYGGjwZMY08iZs26moiNYSCrklf6cmRI747jENlQSjdl6Ll/+gr8ULuC6o6loXPnN+PJrpTwe48CptlYy6LlSSXpYaHezVnz3O1xD7Np38u3hv9hgEHIR9zP8hHEMldZn20S3eqm0HEHmbpb6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=T6kLt+Wa; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2B971FF804;
+	Tue, 17 Sep 2024 17:00:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1726592456;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VOJA4oKRl1c97qcSG2JsyY/IxozKo3PoM0EutgiNiJk=;
+	b=T6kLt+Wa/cNA9JSypXaiBatuSPPDxb0BnZSHtwn6UOtGmAqcxfW3wICOhChbxk45SkhNVG
+	+gFN2DVb36n5VH1P2tVzcaHXk9hfiFsi6zBzQZJS9V/BC9zSnht9lBCIj1IKRrkVb7xSJu
+	ASzkaweTjkfrEl/2PVAi+Kj8co1e6hQ0xvFfa4zgH3bLhKAFbx9hKZFhDqvRzAGFAyCM2w
+	bxEody8eXV0CEmGBE00uZDOiLedNwtwCkOW8kO4HbopMCGTLqftZ1QGl52pnKmE1IH77Ea
+	ykT+NwFE2tmS6TALFbgyHTcP3gufq9jzXdvsVul3mEvT0hy8yX8keHQIRdMyVg==
+From: Thomas Richard <thomas.richard@bootlin.com>
+Subject: [PATCH v2 0/5] Congatec Board Controller drivers
+Date: Tue, 17 Sep 2024 19:00:46 +0200
+Message-Id: <20240503-congatec-board-controller-v2-0-681511a01c8f@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <618cb281-9fec-471f-9e3d-c7a471f75a7a@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAL616WYC/42OTQqDMBCFryJZNyXGX7rqPYqLZBw1oJkyCdIi3
+ r2JJ+jye4/3c4iA7DCIR3EIxt0FRz6BvhUCFuNnlG5MLLTStWpUJYH8bCKCtGR4zBiZ1hVZ9hp
+ a29cw1mhEylsTUFo2HpbcsJkQkbPxZpzc5xp9DYkXFyLx9/qwl1n9Z24vpZITQqOrVncKu6cli
+ qvzd6BNDOd5/gBTgtEr3QAAAA==
+To: Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ thomas.petazzoni@bootlin.com, blake.vermeer@keysight.com, 
+ Thomas Richard <thomas.richard@bootlin.com>
+X-Mailer: b4 0.12.0
+X-GND-Sasl: thomas.richard@bootlin.com
 
-On Fri, 13 Sep 2024, Thomas Richard wrote:
+This is a new iteration of the Congatec Board Controller series.
 
-> On 9/12/24 16:13, Lee Jones wrote:
-> > On Tue, 10 Sep 2024, Thomas Richard wrote:
-> > 
-> >> On 8/22/24 12:38, Lee Jones wrote:
-> >>> On Fri, 09 Aug 2024, Thomas Richard wrote:
-> >>>
-> >>>> Add core MFD driver for the Board Controller found on some Congatec SMARC
-> >>>> module. This Board Controller provides functions like watchdog, GPIO, and
-> >>>> I2C busses.
-> >>>>
-> >>>> This commit add support only for the conga-SA7 module.
-> >>>>
-> >>>> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
-> >>>> ---
-> >>>>  drivers/mfd/Kconfig      |  12 ++
-> >>>>  drivers/mfd/Makefile     |   1 +
-> >>>>  drivers/mfd/cgbc-core.c  | 453 +++++++++++++++++++++++++++++++++++++++++++++++
-> >>>>  include/linux/mfd/cgbc.h |  44 +++++
-> >>>>  4 files changed, 510 insertions(+)
-> >>>>
-> >>>> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> >>>> index bc8be2e593b6..3e0530f30267 100644
-> >>>> --- a/drivers/mfd/Kconfig
-> >>>> +++ b/drivers/mfd/Kconfig
-> >>>> @@ -224,6 +224,18 @@ config MFD_AXP20X_RSB
-> >>>>  	  components like regulators or the PEK (Power Enable Key) under the
-> >>>>  	  corresponding menus.
-> >>>>  
-> >>>> +config MFD_CGBC
-> >>>> +	tristate "Congatec Board Controller"
-> >>>> +	select MFD_CORE
-> >>>> +	depends on X86
-> >>>> +	help
-> >>>> +	  This is the core driver of the Board Controller found on some Congatec
-> >>>> +	  SMARC modules. The Board Controller provides functions like watchdog,
-> >>>> +	  I2C busses, and GPIO controller.
-> >>>> +
-> >>>> +	  To compile this driver as a module, choose M here: the module will be
-> >>>> +	  called cgbc-core.
-> >>>> +
-> >>>>  config MFD_CROS_EC_DEV
-> >>>>  	tristate "ChromeOS Embedded Controller multifunction device"
-> >>>>  	select MFD_CORE
-> >>>> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> >>>> index 02b651cd7535..d5da3fcd691c 100644
-> >>>> --- a/drivers/mfd/Makefile
-> >>>> +++ b/drivers/mfd/Makefile
-> >>>> @@ -13,6 +13,7 @@ obj-$(CONFIG_MFD_SM501)		+= sm501.o
-> >>>>  obj-$(CONFIG_ARCH_BCM2835)	+= bcm2835-pm.o
-> >>>>  obj-$(CONFIG_MFD_BCM590XX)	+= bcm590xx.o
-> >>>>  obj-$(CONFIG_MFD_BD9571MWV)	+= bd9571mwv.o
-> >>>> +obj-$(CONFIG_MFD_CGBC)		+= cgbc-core.o
-> >>>>  obj-$(CONFIG_MFD_CROS_EC_DEV)	+= cros_ec_dev.o
-> >>>>  obj-$(CONFIG_MFD_CS42L43)	+= cs42l43.o
-> >>>>  obj-$(CONFIG_MFD_CS42L43_I2C)	+= cs42l43-i2c.o
-> >>>> diff --git a/drivers/mfd/cgbc-core.c b/drivers/mfd/cgbc-core.c
-> >>>> new file mode 100644
-> >>>> index 000000000000..cca9b1170cc9
-> >>>> --- /dev/null
-> >>>> +++ b/drivers/mfd/cgbc-core.c
-> >>>> @@ -0,0 +1,453 @@
-> >>>> +// SPDX-License-Identifier: GPL-2.0-or-later
-> >>>> +/*
-> >>>> + * Congatec Board Controller MFD core driver.
-> >>>
-> >>> No such thing as an MFD.
-> >>
-> >> What should it be if it's not an MFD ?
-> > 
-> > You should be telling me this. :)
-> > 
-> > "Board Controller" according to the Kconfig entry.
-> > 
-> 
-> This Congatec Board Controller is an external micro-controller that is
-> interfaced with the CPU through a eSPI bus.
-> This Board Controller provides multiple functions: an I2C controller, a
-> GPIO controller, a watchdog and other not yet implemented functions
-> (temp/voltage sensors, backlight).
-> 
-> Therefore, the MFD subsystem is a very good fit, as it allows to have a
-> core driver that implements the communication with the external
-> micro-controller, and then individual drivers for each of the functions
-> offered by this Board Controller.
+For the MFD driver, the main change is the use of
+platform_device_register_simple() which makes the code smaller.
 
-Sorry for the ambiguity, that was not the point of the review comment.
+For the GPIO driver the main change is the use of guard() and scope_gard().
 
-Please remove all mentions to MFD in the help/header text.
+For the I2C bus driver, the I2C_FUNC_SMBUS_QUICK flag was unset as the
+controller doesn't support smbus quick accesses.
 
+For the Watchdog driver, min_timeout and max_timeout are configured now,
+and watchdog_init_timeout() is used to initialize the timeout. 
+
+More details in the changelog.
+
+Best Regards,
+
+Thomas
+
+Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+---
+Changes in v2:
+- mfd: use platform_device_register_simple(), so struct cgbc_platform_data
+  and cgbc_create_platform_device() were removed.
+- mfd: rename cgbc_detect_device() to cgbc_wait_device().
+- mfd: remove the useless abstracted function cgbc_command().
+- mfd: set the release session message as warning instead of error.
+- mfd: minor fixes (sort includes, add comments, fix some alignments and
+  nit ...).
+- gpio: use scoped_guard() and guard().
+- gpio: use devm_mutex_init().
+- i2c: unset the I2C_FUNC_SMBUS_QUICK flag as smbus quick accesses are not
+  supported by the controller.
+- i2c: rephrase comment for read_maxtime_us.
+- i2c: set the invalid frequency message as an info (previously a warning).
+- i2c: other minor fixes (sort includes, fix name of i2c_state enum).
+- watchdog: add missing includes.
+- watchdog: remove warning for the pretimeout.
+- watchdog: remove timeout_action and pretimeout_action (ACTION_RESET and
+  ACTION_SMI are directly used in cgbc_wdt_start()).
+- watchdog: set max_timeout and min_timeout.
+- watchdog: use watchdog_init_timeout() to set the timeout.
+- Link to v1: https://lore.kernel.org/r/20240503-congatec-board-controller-v1-0-fec5236270e7@bootlin.com
+
+---
+Thomas Richard (5):
+      mfd: add Congatec Board Controller mfd driver
+      gpio: Congatec Board Controller gpio driver
+      i2c: Congatec Board Controller i2c bus driver
+      watchdog: Congatec Board Controller watchdog timer driver
+      MAINTAINERS: Add entry for Congatec Board Controller
+
+ MAINTAINERS                   |   9 +
+ drivers/gpio/Kconfig          |  10 +
+ drivers/gpio/Makefile         |   1 +
+ drivers/gpio/gpio-cgbc.c      | 196 ++++++++++++++++++++
+ drivers/i2c/busses/Kconfig    |  10 +
+ drivers/i2c/busses/Makefile   |   1 +
+ drivers/i2c/busses/i2c-cgbc.c | 406 +++++++++++++++++++++++++++++++++++++++++
+ drivers/mfd/Kconfig           |  12 ++
+ drivers/mfd/Makefile          |   1 +
+ drivers/mfd/cgbc-core.c       | 411 ++++++++++++++++++++++++++++++++++++++++++
+ drivers/watchdog/Kconfig      |  10 +
+ drivers/watchdog/Makefile     |   1 +
+ drivers/watchdog/cgbc_wdt.c   | 211 ++++++++++++++++++++++
+ include/linux/mfd/cgbc.h      |  44 +++++
+ 14 files changed, 1323 insertions(+)
+---
+base-commit: 83d650136610d87d8ed0626c178ed18879b69564
+change-id: 20240503-congatec-board-controller-82c6b84cd4ea
+
+Best regards,
 -- 
-Lee Jones [李琼斯]
+Thomas Richard <thomas.richard@bootlin.com>
+
 
