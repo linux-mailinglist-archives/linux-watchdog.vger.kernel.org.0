@@ -1,107 +1,110 @@
-Return-Path: <linux-watchdog+bounces-1960-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1961-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B9A697C0A7
-	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Sep 2024 22:10:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABFEA97C167
+	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Sep 2024 23:29:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 404F7282F3E
-	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Sep 2024 20:10:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53E981F22118
+	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Sep 2024 21:29:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C715A187FE6;
-	Wed, 18 Sep 2024 20:10:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1C3419DF51;
+	Wed, 18 Sep 2024 21:29:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ab4D6i2t"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="2RTVmVRr"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C01A273DC;
-	Wed, 18 Sep 2024 20:10:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178CC18A95C;
+	Wed, 18 Sep 2024 21:29:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726690210; cv=none; b=fmLG2RIIYkBmBo70UmHh+LLv5aQ7RN6zYsYjjbfG5x3dZ0ioqYGcYE3cRV9S/HGXyVi4RRwVW9+d2NYq4C4O+FPXbbJSlDxt+KfLL83p196oskb8/9r2219Gpn3wMV6XQ3KwYrIn9VM3OkleneU5dZQtXJz6JIvTBNZFVOVF1IY=
+	t=1726694977; cv=none; b=jRWXrGH8Z+MiG2gQUq2mfJNc1epHPoTNZl+1ylCMvIeiGtFwK1Ve7ec3n46p4fcgX4q/1e786tB3n+P514rxFivvFF15OEfpqUAxMuiEDJ/1RcUSW7z9Wpl0wdPH3b9nrEHPs6kft7lYlQJhM0N7FUMiqUeexdIRdVUIJ8Xt8iQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726690210; c=relaxed/simple;
-	bh=HP/zRaWLm37a0O/YnwD/z87FqywELzKP69C1iP96//k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OPkJA57Lc3Q58QtC9v+ahIzeIfc9n4xR5cX6LQdrgFbETHYWxof2bxYjBpfh8zqlYU+TJ3rJGBG4Z5rY9JCDPM1IhIfZkVpzi23axPON2tD5QEvMTIjWOJ8zoYZI02CmlYD0+UcTNtPhbnVqFTU+1K5M/WJteOa82DvnK4qx9HU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ab4D6i2t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C73A7C4CEC2;
-	Wed, 18 Sep 2024 20:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726690210;
-	bh=HP/zRaWLm37a0O/YnwD/z87FqywELzKP69C1iP96//k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ab4D6i2t1X8aYzasuMglH+8lIcj884En9JvHGqiJKCssXAyYDvgusG7KW/oQdp3bo
-	 2rvibPnGOg/5tO6Yh+uoiJQSy+vWkregpERB2YcXHJux/E4hwcjhvZbUxVbI7O3rJ0
-	 jojYEpuNO4DC7gb2zSdlCBH5Ffmx3RPGX0FnOIJBSi2dm9Cs8QVcZSySqewnPZ5S5l
-	 m5pVhJRlYTf0VeSdqjP0za6numHxK/9wyjS9y3vYp9a3T3FbW9KcwG97f+gOT9Pc6Z
-	 1+KprkgDs0slZmTyvMm9eC/AA1brksiHPZ5vzUWj6d4CnlTYyFPYLttA42Ht+u2RRw
-	 MCgNSIH5L3mLQ==
-Date: Wed, 18 Sep 2024 15:10:07 -0500
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Detlev Casanova <detlev.casanova@collabora.com>
-Cc: devicetree@vger.kernel.org, Elaine Zhang <zhangqing@rock-chips.com>,
-	Yifeng Zhao <yifeng.zhao@rock-chips.com>, kernel@collabora.com,
-	Jamie Iles <jamie@jamieiles.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-i2c@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-watchdog@vger.kernel.org,
-	linux-serial@vger.kernel.org, Dragan Simic <dsimic@manjaro.org>,
-	linux-kernel@vger.kernel.org,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jagan Teki <jagan@edgeble.ai>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Elon Zhang <zhangzj@rock-chips.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Chris Morgan <macromorgan@hotmail.com>,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	Alexey Charkov <alchark@gmail.com>, dri-devel@lists.freedesktop.org,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Mark Brown <broonie@kernel.org>, Andy Yan <andyshrk@163.com>,
-	Muhammed Efe Cetin <efectn@protonmail.com>,
-	Finley Xiao <finley.xiao@rock-chips.com>,
-	Tim Lunn <tim@feathertop.org>, David Airlie <airlied@gmail.com>,
-	Ondrej Jirman <megi@xff.cz>, Liang Chen <cl@rock-chips.com>,
-	linux-spi@vger.kernel.org, Jimmy Hon <honyuenkwun@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>, Jonas Karlman <jonas@kwiboo.se>
-Subject: Re: [PATCH v4 6/9] dt-bindings: watchdog: Add rockchip,rk3576-wdt
- compatible
-Message-ID: <172669020548.2047533.8189624285795132059.robh@kernel.org>
-References: <20240903152308.13565-1-detlev.casanova@collabora.com>
- <20240903152308.13565-7-detlev.casanova@collabora.com>
+	s=arc-20240116; t=1726694977; c=relaxed/simple;
+	bh=djuj7d+S75J6vb/tqwefg5muiJ+vFt4qii9br5bwWFk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DrVN3nj1uh5f/sS4T9rATbpmrjOAcNHxSLbpSYmAxU8SxvqRW8vL0RLzPuSbewmasBZOTEc6LSQytMAaPYlJDn9tfYtlJQsBHfp65GU/KgerKI4M+bPKcQkSRHXAEStZZiareH43aHZj3DZm2Zf1ZfVr6hs2uk2CQ1CIkSxG+7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=2RTVmVRr; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=Cc:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=m0zb4s0l/KDjx7wazc9LAz7ShpBy107GIK0Y3rKSEfs=; b=2RTVmVRrWdA9NqvZc/uOTpuj7i
+	JtFY38SdbUpGSX4v2NxTEvRBIj8HNCvYM7o0rOcUehlUiDvL81FE3t1odbfTN9qP9p4kQxy9v15Fd
+	g4JuEgH1Tx52f3ACee9SDFlAqOESM6ZwyRWs9c+UTaLyu7Rzp/GQl6H+PEwLtGITmWZAlKgDH0rVj
+	0nAVIwGxVmPcYwmqsBNeV2Nu01qxf312K0KsDV1yFlTGfAXAUPaJPMG1QWkx/V7snqhUjcreleebt
+	sKHnpvkgDhOdeC5QUxluq/Ny4OUSR7Hxu7AYpVZJI6jD5zhWkTvFH6rf3NtZsq8+aQ3ihqytVgl3H
+	hD1HD/SA==;
+From: Andreas Kemnade <andreas@kemnade.info>
+To: wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH] watchdog: rn5t618: use proper module tables
+Date: Wed, 18 Sep 2024 23:29:25 +0200
+Message-Id: <20240918212925.1191953-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240903152308.13565-7-detlev.casanova@collabora.com>
+Content-Transfer-Encoding: 8bit
 
+Avoid requiring MODULE_ALIASES by declaring proper device id tables.
 
-On Tue, 03 Sep 2024 11:22:36 -0400, Detlev Casanova wrote:
-> It is compatible with the other rockchip SoCs.
-> 
-> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+---
+ drivers/watchdog/rn5t618_wdt.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-Applied, thanks!
+diff --git a/drivers/watchdog/rn5t618_wdt.c b/drivers/watchdog/rn5t618_wdt.c
+index 87d06d210ac9..97ef54f01ed9 100644
+--- a/drivers/watchdog/rn5t618_wdt.c
++++ b/drivers/watchdog/rn5t618_wdt.c
+@@ -8,6 +8,7 @@
+ #include <linux/device.h>
+ #include <linux/mfd/rn5t618.h>
+ #include <linux/module.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/platform_device.h>
+ #include <linux/watchdog.h>
+ 
+@@ -181,16 +182,25 @@ static int rn5t618_wdt_probe(struct platform_device *pdev)
+ 	return devm_watchdog_register_device(dev, &wdt->wdt_dev);
+ }
+ 
++static const struct platform_device_id rn5t618_wdt_id[] = {
++	{
++		.name = "rn5t618-wdt",
++	}, {
++		/* sentinel */
++	}
++};
++MODULE_DEVICE_TABLE(platform, rn5t618_wdt_id);
++
+ static struct platform_driver rn5t618_wdt_driver = {
+ 	.probe = rn5t618_wdt_probe,
+ 	.driver = {
+ 		.name	= DRIVER_NAME,
+ 	},
++	.id_table = rn5t618_wdt_id,
+ };
+ 
+ module_platform_driver(rn5t618_wdt_driver);
+ 
+-MODULE_ALIAS("platform:rn5t618-wdt");
+ MODULE_AUTHOR("Beniamino Galvani <b.galvani@gmail.com>");
+ MODULE_DESCRIPTION("RN5T618 watchdog driver");
+ MODULE_LICENSE("GPL v2");
+-- 
+2.39.2
 
 
