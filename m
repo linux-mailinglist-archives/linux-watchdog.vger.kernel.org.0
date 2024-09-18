@@ -1,163 +1,159 @@
-Return-Path: <linux-watchdog+bounces-1958-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1959-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09BC697B459
-	for <lists+linux-watchdog@lfdr.de>; Tue, 17 Sep 2024 21:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A54C797B88A
+	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Sep 2024 09:29:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86441B28029
-	for <lists+linux-watchdog@lfdr.de>; Tue, 17 Sep 2024 19:26:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1846AB24647
+	for <lists+linux-watchdog@lfdr.de>; Wed, 18 Sep 2024 07:29:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAB29189BB5;
-	Tue, 17 Sep 2024 19:26:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AFEF16C84B;
+	Wed, 18 Sep 2024 07:29:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="g9s4tI9I"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b="M1RuQaED"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from omta040.useast.a.cloudfilter.net (omta040.useast.a.cloudfilter.net [44.202.169.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A184F188A13
-	for <linux-watchdog@vger.kernel.org>; Tue, 17 Sep 2024 19:26:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA11141C79
+	for <linux-watchdog@vger.kernel.org>; Wed, 18 Sep 2024 07:29:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.202.169.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726601172; cv=none; b=QkkLjL6BgscQTn7nXugyiZ9Vua3nH+H2mG4cuioGu8EV/t6KryUeMcM1N2GqhHhfQV4VfO/6fFpwwY/sFI7TIPiERC8IIA+CUzV/2qteGT5iZzdAr73S+pGpN+4nNddCzLqanlyOc5EqeUjfr4xnvs+7Mzz1PqTUeILCfa39xHg=
+	t=1726644584; cv=none; b=udXphSDGzvp3mtXMlgEEKovobdHdqlnNjSskCNArwC8Uv9bmXPiHUCXGsYQ/YPF05JHGVsYjBIX9lerzyUhIZ8ut5Fn1Yr3VBOgqPYr/nOcf1vFVjEfPQiFI+0gEx1jjJoQk6k0Dzw5sYv0QDt0kaj+YqbK21HXngY8UbuJO15M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726601172; c=relaxed/simple;
-	bh=liMe9iwi93+dpSBeURQnc46wVTHZXxB/uxVXVNf+IDs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N3QaFrWN53+MHvayRnvCYu2wq5ofOIOg2Q0d6Q31qWijppOSMalVKdNg4OWRsxhqvOhXxnxO3s4ZwDf1tPM9LUBH9Q4TIbst2C2qPn9dZjzW0nNBLDggPSZE5Fr4LtImGXbU0QR4zcEepKqZAIhvUeR0xJsxe24L2gBxg85nUbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=g9s4tI9I; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2f75aa08a96so63461831fa.1
-        for <linux-watchdog@vger.kernel.org>; Tue, 17 Sep 2024 12:26:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1726601169; x=1727205969; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LShiWHIg+F4swBTJEPuCgmaykDqizVljoM2XVKJ6JmU=;
-        b=g9s4tI9IJP0+UuIqaaUvM5QJURq+k78HH70rq6TdZgXm0zbU0QA8dbpeZOK+Uqw6e6
-         TzbeEGOLBc9UXSLANDDeRhZE9e1pkCP3K94NWmRDjYqwXYMQ63enZRmLF8jgg8ZrI4Nu
-         8b/8v5zsJY598IhYx3A7MquOz432MeVqM8N1l8jP0+kN7yMPeInWLz/dmQc3xAoB4RON
-         AqsYm5EW2s8HrxcO8b3KaeggZf4Ktw1WNwA/xXUWbALDAewFSjddXGGY0R0hjliAtlR4
-         LBdSZ1pES9jgFUtFYIpZtsab06NSa1J31ZguA2F7diohagbFWUI++SxqHOXA0hhbMNIi
-         sXMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726601169; x=1727205969;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LShiWHIg+F4swBTJEPuCgmaykDqizVljoM2XVKJ6JmU=;
-        b=P5K425k8OdLblMjdV11MfAqIgw/F+cb+kJtmHsAbedrPqtPqrdhEr9ztOS4mNaOTU7
-         9Xej4vrAPpv8hnzN8HoPURJAAbFbZ/PBqjosCHjU9uh+HkvH8/YUNDdpgzLGa4Nbjq7c
-         /fVSlvq1WIRO/I6eCJNcfIVIYcRRg2SybCzfUgIpiBxhzBkWK7Z9fU37BZnNHlNv5O8q
-         /a4Nad6Hwyhsblz/bVXSlf5HR2RE0w2FxPw1dek2mkMcCv3kvNh0rBOQwh7/VCXlluce
-         BZwWnLXnexk8Yj0ZipUCAzuhhNgD5kApe2keIr2/J2rWYmTjMe7Nk+lWyPy2y4r+1CMp
-         EeQg==
-X-Forwarded-Encrypted: i=1; AJvYcCVgF7WfeYIn3kzsGttDQUoK9v/OIFlHUnkYBTzKaLAepbxf0obBPLvRsQp2ecqh2LvQZr0iDMBg/y+hZv3rAA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpAFpp7LVeb/y+BhapHf5y9me9q/x2ImLsfjzOcU+YiAOUmQUB
-	VZ05ZoBsEqtnh1d5jj4sEFtqfJyCrQyVfVcmSEZ2hW8XB2Yte3bg3yc9aZOVzqDvbwekA6zB+LE
-	iZAwCoMhuNes+ikMXibuuYwi/ynGb71sAJrEijASQJ4ljSTtE
-X-Google-Smtp-Source: AGHT+IHp7mvP4Yiy062HmDCtGTcMl9uLDuiOfffwb5UzggCbfmiXWDAlopJqHwK8zUo4d3iwjlUhXSsgQoKP/vCx7ec=
-X-Received: by 2002:a05:651c:1992:b0:2ef:251f:785 with SMTP id
- 38308e7fff4ca-2f787da4fc2mr116438661fa.1.1726601168627; Tue, 17 Sep 2024
- 12:26:08 -0700 (PDT)
+	s=arc-20240116; t=1726644584; c=relaxed/simple;
+	bh=yP0aZDcQLjQJHAwqB/Fw8rs6y8tndFngO8tTKM8vLdU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NhSkALvIHRHPmBudd60NI1VLn7S7jp6mtuFmupYd+zQUnN/sHxqbzTuAFTXbpnpYskSDDjkYWiqG4s0KwUev5UxVy7FpjVOjB1qvmiBCcL5izpbpAYh14UGlKsXQlqE0QCqF651HRKZZTivmvbMY2bymGPOQY0Xlz3faUleqxSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com; spf=pass smtp.mailfrom=linumiz.com; dkim=pass (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b=M1RuQaED; arc=none smtp.client-ip=44.202.169.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linumiz.com
+Received: from eig-obgw-5006a.ext.cloudfilter.net ([10.0.29.179])
+	by cmsmtp with ESMTPS
+	id qgLis0x9SnNFGqp88sLLTb; Wed, 18 Sep 2024 07:29:40 +0000
+Received: from md-in-79.webhostbox.net ([43.225.55.182])
+	by cmsmtp with ESMTPS
+	id qp86sLGmhuVcZqp87skWQ6; Wed, 18 Sep 2024 07:29:40 +0000
+X-Authority-Analysis: v=2.4 cv=EpfUrzcA c=1 sm=1 tr=0 ts=66ea8164
+ a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=kofhyyBXuK/oEhdxNjf66Q==:17
+ a=IkcTkHD0fZMA:10 a=EaEq8P2WXUwA:10 a=-pn6D5nKLtMA:10 a=vU9dKmh3AAAA:8
+ a=EfumUPoKJa0OZNXMQWIA:9 a=QEXdDO2ut3YA:10 a=rsP06fVo5MYu2ilr0aT5:22
+ a=ZCPYImcxYIQFgLOT52_G:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
+	; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=Bsh0+YTIBF2g9B4a29qrB1FFLWx62R+OsNpok7/VG0c=; b=M1RuQaED7/rSKCPTvoomTTe3wM
+	0SbdHGTITSV/ErpEZsSl0iLV0Bxw1WXMQyEAqxMQbzDJ6j8dryEQOirTTkBgI/iDXn0YxHpRSUo2V
+	41Jii4EIjhpW+xZOkEGb23l8aUnlGP3iCCnnaIZ0eeVI9VA1rxs8WpT1VeFtx0v4gA3TKybazWz0S
+	TI/4PkOcsTfY5TjQ8s/8hDcYCwLKdACetM7I0iM/64KH+QQiEresGITqiEd7NPhkNMPppXNuV78Qs
+	Q/Ug9bMheh0ZexztgAIed/Jv84tsqKgY68PURgvsFlyvS0CmjJlUePqb7NTGA3mzgTR+6+TLlWRPT
+	s/BA7krg==;
+Received: from [122.165.245.213] (port=51864 helo=[192.168.1.106])
+	by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <karthikeyan@linumiz.com>)
+	id 1sqp80-0028P1-1L;
+	Wed, 18 Sep 2024 12:59:32 +0530
+Message-ID: <ddca4051-0e83-4d39-8654-12210ffa5685@linumiz.com>
+Date: Wed, 18 Sep 2024 12:59:28 +0530
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240503-congatec-board-controller-v2-0-681511a01c8f@bootlin.com> <20240503-congatec-board-controller-v2-2-681511a01c8f@bootlin.com>
-In-Reply-To: <20240503-congatec-board-controller-v2-2-681511a01c8f@bootlin.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 17 Sep 2024 21:25:56 +0200
-Message-ID: <CACRpkdbtwF-k3fHFvpXD+m8KN2XCt56X=iOXbideds0v+LWqWw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] gpio: Congatec Board Controller gpio driver
-To: Thomas Richard <thomas.richard@bootlin.com>
-Cc: Lee Jones <lee@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>, 
-	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org, 
-	thomas.petazzoni@bootlin.com, blake.vermeer@keysight.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/6] dt-bindings: watchdog: rockchip: Add
+ rockchip,rv1126-wdt string
+To: Heiko Stuebner <heiko@sntech.de>, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, alexandre.belloni@bootlin.com, wim@linux-watchdog.org,
+ linux@roeck-us.net
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
+References: <20240912142451.2952633-1-karthikeyan@linumiz.com>
+ <20240912142451.2952633-2-karthikeyan@linumiz.com> <2206048.Mh6RI2rZIc@phil>
+Content-Language: en-US
+From: karthikeyan <karthikeyan@linumiz.com>
+In-Reply-To: <2206048.Mh6RI2rZIc@phil>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - linumiz.com
+X-BWhitelist: no
+X-Source-IP: 122.165.245.213
+X-Source-L: No
+X-Exim-ID: 1sqp80-0028P1-1L
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.1.106]) [122.165.245.213]:51864
+X-Source-Auth: karthikeyan@linumiz.com
+X-Email-Count: 1
+X-Org: HG=dishared_whb_net_legacy;ORG=directi;
+X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfGF3m9qu9UW2lZ2o43y0vw8GkqiEQfZH+DSb7ruxWEcKnXwr8eMD8WRLaBjQAox8cqhr2RSFQTSjuBTsE6oBcYIzAVxupGJ6uKV9mW4W2AVI/Yab+Go2
+ IGt0kpyeALJd0J949XqOTWuG1pCHZIbaVzPiz9mizHrdAfH0UcYr+2nYYOVLWgJePoT2QnEFbbzRcSH7a0bxMK0JL+VwbfvPIjdk0y4riHhoEVMQ1Cq4lw97
 
-Hi Thomas,
 
-thanks for your patch!
 
-Some comments:
+On 9/18/24 04:46, Heiko Stuebner wrote:
+> Hey,
+> 
+> Am Donnerstag, 12. September 2024, 16:24:46 CEST schrieb Karthikeyan Krishnasamy:
+>> Add rockchip,rv1126-wdt compatible string.
+>>
+>> Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
+> 
+> I think this patch misses some recipients because neither
+> the watchdog maintainers nor the watchdog list is included.
+> 
+> We'll need for them to at least Ack this patch, so they'll
+> need to be included. Please check your scripts/get_maintainer.pl
+> call
+> 
+> 
+> Thanks
+> Heiko
+> 
+Apologies for missing them. Adding them in this reply mail.
+>> ---
+>>
+>> Notes:
+>>      v3:
+>>      - add watchdog compatible string
+>>
+>>   Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+>> index c7aab0418a32..bccd27a1e470 100644
+>> --- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+>> +++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+>> @@ -31,6 +31,7 @@ properties:
+>>                 - rockchip,rk3568-wdt
+>>                 - rockchip,rk3588-wdt
+>>                 - rockchip,rv1108-wdt
+>> +              - rockchip,rv1126-wdt
+>>             - const: snps,dw-wdt
+>>   
+>>     reg:
+>>
+> 
+> 
+> 
+> 
 
-On Tue, Sep 17, 2024 at 7:00=E2=80=AFPM Thomas Richard
-<thomas.richard@bootlin.com> wrote:
-
-> Add gpio support for the Congatec Board Controller.
->
-> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
-
-That's a bit terse commit message. At least mention that it sits under
-the MFD.
-
-> @@ -233,6 +233,16 @@ config GPIO_CADENCE
->         help
->           Say yes here to enable support for Cadence GPIO controller.
->
-> +config GPIO_CGBC
-> +       tristate "Congatec Board Controller GPIO support"
-> +       depends on MFD_CGBC
-> +       help
-> +         Select this option to enable GPIO support for the Congatec Boar=
-d
-> +         Controller.
-> +
-> +         This driver can also be built as a module. If so, the module wi=
-ll be
-> +         called gpio-cgbc.
-> +
->  config GPIO_CLPS711X
-
-This is in the middle of the memory-mapped GPIO drivers.
-
-This is not a memory-mapped driver.
-
-Move it down in the menu to the submenu for MFD GPIO
-drivers please.
-
-> +static void __cgbc_gpio_set(struct gpio_chip *chip,
-> +                           unsigned int offset, int value)
-> +{
-> +       struct cgbc_gpio_data *gpio =3D gpiochip_get_data(chip);
-> +       struct cgbc_device_data *cgbc =3D gpio->cgbc;
-> +       u8 val;
-> +       int ret;
-> +
-> +       ret =3D cgbc_gpio_cmd(cgbc, CGBC_GPIO_CMD_GET, (offset > 7) ? 1 :=
- 0, 0, &val);
-> +       if (ret)
-> +               return;
-> +
-> +       if (value)
-> +               val |=3D BIT(offset % 8);
-> +       else
-> +               val &=3D ~((u8)BIT(offset % 8));
-
-Is that cast really needed? (If you tried without and it
-cause compilation problems, I believe you, if someone
-smarter than me said it should be there, ignore me.)
-
-> +       if (direction =3D=3D GPIO_LINE_DIRECTION_IN)
-> +               val &=3D ~((u8)BIT(offset % 8));
-
-Dito.
-
-Apart from this it looks very nice, so with the above
-addressed:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+Best Regards,
+Karthikeyan
 
