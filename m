@@ -1,133 +1,121 @@
-Return-Path: <linux-watchdog+bounces-1991-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1992-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7288397CC70
-	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Sep 2024 18:21:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4C0197CF08
+	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Sep 2024 00:03:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 243981F23FE1
-	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Sep 2024 16:21:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86156281763
+	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Sep 2024 22:03:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D6631AB6D6;
-	Thu, 19 Sep 2024 16:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5F5F1B29CD;
+	Thu, 19 Sep 2024 22:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="debNizYv"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="8dP53nBv"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F5071AAE1A;
-	Thu, 19 Sep 2024 16:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85401B29C6;
+	Thu, 19 Sep 2024 22:03:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726762627; cv=none; b=IL9RO8iUHqVo+p+cpylzLZnhnDrsa11eaW1KcVK4PtKKeu2z//MmiXryg3P9DxO8b2psU6TWKvgrAWjooksykA1Dpp9RxXNQM24+30Vylw2Z0yC8QLSpZqXvXjkh6fVgTcXuA6pMibFAWygMcnwbe1ykTywGo+dhLKAsIPpIZNM=
+	t=1726783417; cv=none; b=bsqNye164/02FQMx8de16fy71+fBI6jT4i3tfZz1+SnpB1MPtMdaekAKy1MJnhUGynkF2m6hRnJi6xaFmg4PgTwBQtO+d/5Jufl5NJCktrvpQpbmPVMzHL/xi8OhYI2ux0EJwf1PtgIavyxYasikclWaQuLw0A+gmxpVUCDY3o0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726762627; c=relaxed/simple;
-	bh=IlwfpKeYG1A6lmRpl2J8Js+0dUrkM33rNMIVVPeLcso=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=f3eEQ2cTnYrppNxOrx6xvG6WEdmuz5s6X3btBDalO9mH7p9S3X/l1s5QoI4wqLqXCgPBbWEB1Kd2WmNbmCBFZ1ZrcoOhCGLBo4NPTRoIEYpqR8pa9e/L2R5olRtusdyJidf1lv1uU9clfEU3U54YKUEjK8Qa2dU/SHaSOg5/OQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=debNizYv; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2da55ea8163so752281a91.1;
-        Thu, 19 Sep 2024 09:17:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726762625; x=1727367425; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zy0C2tn+S+ad9UGMaUozuLH5nIPIOY9VH2lYfYG3DPM=;
-        b=debNizYvgO7i/uJMevdLLyqmDBnsYmkeyv5bz9uw45LtMOZIzQJzfZFNoWqR5o7N1g
-         PeMMUx8+S/2oyqcObDkWsoauyZEdR/GKvF/pPuryzreQ3B4iBRZ19Xd3fGLsj8QlhRwQ
-         h639yXY6bEIG5pP+AXA9BME2M4xv6v9V1iGFywEvxiJvFPfWsQnMA7ohLL+NpOdilf0v
-         w1XeCzcX0uJ4WBbF3capIDiWks2ir0JI4YYJN86ZK1jPFKJhqKVj9fjv5wuEZ2fTTlPh
-         QR7VD/JFoOg7iEsmbqmaeLzzwNBUjr4dnA3c/eAO7gRaqMBc/O23vMnCDKOW9QlXvXRE
-         wPrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726762625; x=1727367425;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zy0C2tn+S+ad9UGMaUozuLH5nIPIOY9VH2lYfYG3DPM=;
-        b=kE3fLUM1+TZC9P0X/BZK7sGdctPR/ga5Jk8N4a1LeL4DnrC20h+oxHLZmsVknwsTJF
-         zHw8MLy5b09/uq8fbJxzuOGRnVklX3aKBjpMEmjIvJV+uDiEngrb4ijYam+i2j5BWjTI
-         BaJcE14ki9mi1HGcZjDaZSnXMCsDRGiE4j+MHoUZz+zgZgFOA7SJnh7wXFaVYUkeBQ4i
-         YeJWRbUVFaxUQz7e1Be9bq4zMLxAwLyqnTRCS61wdkBTLYxOhg6wpH+MDjuXXmvCdyBy
-         FPwrsU75CD502SPC5so0SeNtS75AbQck3597Obug0R6y0P8Mvb2R4++fsYbMjlVi/X7x
-         HL7g==
-X-Forwarded-Encrypted: i=1; AJvYcCUcztaeAW7BtdsS0mswMtZMb5dJOIaL6slnN1UPUK4slWIv8Il4Y+vxCjBrAuczN/aALJz9VF08absR6Bad@vger.kernel.org, AJvYcCVGOOLiwiJT8apetcyM0E7DQ3uM267VvIxT2cjP7Dpp5kkq4xiO6kgPRCwrBfuDKlybTE/H2wjjD9JO@vger.kernel.org, AJvYcCXBF6w5LB+dZlhZTu9Esp6UajezLi4gH2tq6Z0VbbypBINHZtpiwueGGKN/tkTUcQr+g8AoaMX952W91x/RLaE=@vger.kernel.org, AJvYcCXcySVEB7KGTmSVNDPEOdJwHmREDc+/8y1Yc67pCVZ36gFB6g4mCbhjdr/sBbyWXccwJYQOSal+pUS9MQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpfMVxvO6bsVYC2LvOX+kyuV7dUQEABVDxWXdbJOlxU4ICkVIM
-	ahREtU6tl1wk0i/GmqrMelnwFazcSmEwYYZg/xvz899y9558oSboDxXQ10ZF
-X-Google-Smtp-Source: AGHT+IGRF92p4WUX3sebubNh4Ll+ZX5ut0xjvjFQrZyc8PPhy8mSH/poADCmKduZBnqxmWGKnJBn+A==
-X-Received: by 2002:a17:90a:68c5:b0:2c9:6cd2:1732 with SMTP id 98e67ed59e1d1-2db9fec89a1mr30095674a91.0.1726762625354;
-        Thu, 19 Sep 2024 09:17:05 -0700 (PDT)
-Received: from localhost.localdomain ([59.188.211.160])
-        by smtp.googlemail.com with ESMTPSA id 98e67ed59e1d1-2dd6eed1865sm2084674a91.34.2024.09.19.09.17.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Sep 2024 09:17:05 -0700 (PDT)
-From: Nick Chan <towinchenmi@gmail.com>
-To: Hector Martin <marcan@marcan.st>,
-	Sven Peter <sven@svenpeter.dev>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Mark Kettenis <kettenis@openbsd.org>,
-	asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-watchdog@vger.kernel.org
-Cc: konradybcio@kernel.org,
-	ivo.ivanov.ivanov1@gmail.com,
-	towinchenmi@gmail.com
-Subject: [PATCH v4 20/20] arm64: Kconfig: Update help text for CONFIG_ARCH_APPLE
-Date: Fri, 20 Sep 2024 00:06:09 +0800
-Message-ID: <20240919161443.10340-21-towinchenmi@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240919161443.10340-1-towinchenmi@gmail.com>
-References: <20240919161443.10340-1-towinchenmi@gmail.com>
+	s=arc-20240116; t=1726783417; c=relaxed/simple;
+	bh=QW4+1KKGJY+s1DJGWLQcjCthftxRyxioRpUTjBW+9XY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IDT8zaDlyYtJ9GhsqsJQa/LerAtrYL56XTTse5INMgJD296HtdRsQTW6DfJlK9rbNLTLo+azYJSqWd0wcLT+KAgzjGV5dkdGcMGJHAkRKyLMU94zC6xUwLm4H8xF+CJkLMKeot60eZj5KQ+5rUKGEp7+sIk0Cxk0gCfW8ebcjEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=8dP53nBv; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=Wwr5tc/2MQBgqyVSbXdpoSg01DffOELLVlpjQ44Q0FA=; b=8dP53nBv9j/XLYSo//wG3O7Hmd
+	Fh5LVAVc25DcfLEgD1NB6BT0igQeRqQ2eNTe6Py8YCmvilUIIFFE9hEfoLqUIYCu4JAQVFyzj46i4
+	Ym6VsKPew1KkfwaRUfhORLb+EkuJ3BjXP2mtUUcbqXgKzOdZjpleIWJ2SyxYpa99AApqpzxHXec+l
+	MOuAcWBoHy43z8mucHIfPRqMpYxuxq3G54TkgN3ounxpWgBPuyolxfx53OTz8PPjL5pOpZmw5GAiq
+	HP++SX7KE3WavCifX5Qp9ATYGDM1Xm+sSajqfojCbCJSPNpoIbC1A6v7BFRON368TpoMrfTsvK5/a
+	ruaoTeBQ==;
+Date: Fri, 20 Sep 2024 00:03:32 +0200
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, wim@linux-watchdog.org,
+ linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog: rn5t618: use proper module tables
+Message-ID: <20240920000332.377f370a@akair>
+In-Reply-To: <2543aa99-0069-4eb1-a37b-204f3e6bbf6c@kernel.org>
+References: <20240918212925.1191953-1-andreas@kemnade.info>
+	<f52deaf1-492e-4cbe-8e46-8999ae2e481f@roeck-us.net>
+	<20240919125005.0bcd17e4@akair>
+	<2543aa99-0069-4eb1-a37b-204f3e6bbf6c@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Apple's A7-A11 SoC is now supported, so the original help text is no longer
-accurate.
+Am Thu, 19 Sep 2024 13:02:55 +0200
+schrieb Krzysztof Kozlowski <krzk@kernel.org>:
 
-Signed-off-by: Nick Chan <towinchenmi@gmail.com>
----
- arch/arm64/Kconfig.platforms | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> On 19/09/2024 12:50, Andreas Kemnade wrote:
+> > Am Wed, 18 Sep 2024 15:43:40 -0700
+> > schrieb Guenter Roeck <linux@roeck-us.net>:
+> >   
+> >> On 9/18/24 14:29, Andreas Kemnade wrote:  
+> >>> Avoid requiring MODULE_ALIASES by declaring proper device id
+> >>> tables.
+> >>>
+> >>> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>    
+> >>
+> >> This needs a better rationale. There are more than 40 watchdog
+> >> drivers using MODULE_ALIAS. I would hate having to deal with 40+
+> >> patches just for cosmetic reasons, not counting the thousands of
+> >> instances of MODULE_ALIAS in the kernel, including the more than
+> >> 1,000 instances of "MODULE_ALIAS.*platform:".
+> >>  
+> > basically reviewers were arguing against patches from me bringing in
+> > MODULE_ALIASES. So I decided to clean up a bit in my backyard. Not
+> > sure whether such things could by done by coccinelle but at least
+> > it could be tested via output of modinfo.
+> > 
+> > This is one example for such a patch:
+> > https://lore.kernel.org/linux-clk/119f56c8-5f38-eb48-7157-6033932f0430@linaro.org/
+> >   
+> 
+> There are multiple aspects here:
+> 1. People (including me) copy code which they do no understand. Or
+> without really digging into it, because they do not have time. They
+> just copy it, regardless whether the code is necessary or not.
+> MODULE_ALIAS is one of such examples. It got copied to new drivers
+> just because some other driver had it.
+> 
+and copy nowadays unaccepted design patterns. Probably best to look at
+the newest example.
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 6c6d11536b42..370a9d2b6919 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -37,8 +37,8 @@ config ARCH_APPLE
- 	bool "Apple Silicon SoC family"
- 	select APPLE_AIC
- 	help
--	  This enables support for Apple's in-house ARM SoC family, starting
--	  with the Apple M1.
-+	  This enables support for Apple's in-house ARM SoC family, such
-+	  as the Apple M1.
- 
- menuconfig ARCH_BCM
- 	bool "Broadcom SoC Support"
--- 
-2.46.0
+> 2. MODULE_ALIAS creates basically ABI - some user-space might depend
+> on it, so removal might affect user. I think I was not dropping it
+> from the drivers in cases it would actually drop an alias. I was only
+> dropping duplicated aliases. That's not the case here, I believe.
+> 
+> 3. MODULE_ALIAS scales poor. I believe proper xxx_device_id table is
+> better.
+> 
+> 4. But it does not mean that one single line - MODULE_ALIAS - should
+> be replaced in existing drivers into full-blown ID table. I think I
+> never proposed such patches for existing drivers. Why? Because if
+> there was no such need so far, means there were no scalability issues.
+> 
+Thanks for the long explanation.
 
+Regards,
+Andreas
 
