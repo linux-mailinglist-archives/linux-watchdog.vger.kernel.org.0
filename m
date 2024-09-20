@@ -1,76 +1,76 @@
-Return-Path: <linux-watchdog+bounces-1995-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1996-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4F6B97D721
-	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Sep 2024 16:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C2A297D730
+	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Sep 2024 16:58:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7266C2867B7
-	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Sep 2024 14:55:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7FF2284730
+	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Sep 2024 14:58:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA38217C220;
-	Fri, 20 Sep 2024 14:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70E9379C0;
+	Fri, 20 Sep 2024 14:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iOrnXgTm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G1I4h3JQ"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F33A217B427;
-	Fri, 20 Sep 2024 14:55:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA83D17C21B;
+	Fri, 20 Sep 2024 14:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726844121; cv=none; b=gfj/2v3DN2M4sgmyVF5ulpBaq9kTF+OCa4+iF7WAKHEp2Oxfjvpp+KhgPEDmU6r360ue7VMMLLa2fGbw/l8UbLZhN9sesG9efvyHkNIrmi67diqKZVh19KXsNTBDGE3JdxQf+ew7eZy9ypzmy7vrcpAtL9wHc6aBjCEqTVxJGTs=
+	t=1726844304; cv=none; b=iyZ80O5Xsf8EeBi+6PaVjV/Np9sJZ60jOZDi+OyMLdtHPPCjOHdSUb/CyokYufGMu5G5Za1AFdpYeiIzj8/TDtohHw9kHWUSsc/IWYVwFqzVlzHBCOB7IAWEl2GjnKLPRuoQ/Ttdo4YfPhRL0Mtt/lJ5tR6ciiFXqsYnH0YZis8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726844121; c=relaxed/simple;
-	bh=yNQF5SZSaV0xZ9gcCY2fWRoUR09TbUOlCkRV9w3aG9k=;
+	s=arc-20240116; t=1726844304; c=relaxed/simple;
+	bh=F7VW+38YkfYrOdIps0qbmxsKsewCErp6/rAUqx/w9/0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SoUqHCoqrNgwivQM3sxsXoutFLDkTBpL02z4oB5tKDjLZs6ERM9F3X3gKIQ1Ok3nFWazeHmWOpfI9YW0Dx1Djdt+aUWC5D5+gf7W3cX8j95pe48n3EPMlSyFw1vYcEz+/7z/VuxAkO68iw3ZEwUIV1jPT9EiGrTzsuvhtgL4Wp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iOrnXgTm; arc=none smtp.client-ip=209.85.214.173
+	 In-Reply-To:Content-Type; b=N328yhPRevDowCu5RI3zPqXoM3t1QzlpHvXdTKAFXAu/9ttFNWG+gqJF/vG9+QPWTdXTa+ZMNjJ/eJY6P8cRp+Ad6FmEe+doE6ZhdZnYtL2OX4znOTYA3KDTunocl1ZZOFkbcO0UPOTKWqHN8K0/2M/01FTIuM/+B1y1OnE7JgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G1I4h3JQ; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2068a7c9286so22622085ad.1;
-        Fri, 20 Sep 2024 07:55:19 -0700 (PDT)
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7db1f0e1641so724895a12.1;
+        Fri, 20 Sep 2024 07:58:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726844119; x=1727448919; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1726844302; x=1727449102; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=0aLWCOvmRfQ9tx0++umKXL26ekop1c8YzfPe/jk0KqM=;
-        b=iOrnXgTmRrIW7nVlJRALc2xpX8GIuL/5flOZCuid0zv5yqnpHzQX/PxJdCLUZVQdgH
-         g0iEI5gIvEHQa2Oy0bWN3a7JbYmupHubXYqSW8yR4nuEplvppxbRvDmnHY+yDbJaPwwo
-         dGQhqzJa8GzNnB990eaz2WovnsDzK0Gx6h+POTyRvaWi4/NzsXfcq/axGGoNObG/e9OV
-         7nq675oeqqpU/XkeKwh/77MAzET6UcKhEYRpDiUQaBv2cuyzL0dZxxRI5Uxv04zOi+Z5
-         oyOMyQ7/R8H+XdiHEAKqaOa2HgvONAZ7EGCnhLYEzveep3fh+sWc/UJ2nUlLGLm0s3HD
-         rP7A==
+        bh=69Ai5LvhNUYR4IJgcq7IQfzna+mHgTfiWiM32wBl+Nw=;
+        b=G1I4h3JQ6Ya97y4maifapbw7D47giHOu3SewW1UeHLBjZ4BryU+Yi0h7nWZecijcb6
+         hjxGkYjF7R6cZQTL/KZDqkN94l8DxM7Y5WGeUaWsaTB0oNlLdF3WwDQ70o+GCNGsplWI
+         6Un4fyM9ECFtDLGwkXROoAymx4HRIOGOKDGfqEAakYYHdYa265/03q4KmTFQywpaJVm8
+         bGiqfXCb2bTCcssPUr2WYC9CAgIGfXru+Ltixp0AeCfRTNdkn+TMJSRwDJBeZ3S5WDt8
+         5lnqSwL+E7dEbBawTGufYMUCrKDuw26huY3rKVFS3YlvswbB2uniD20k/Rxa4hIcTdLv
+         XMOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726844119; x=1727448919;
+        d=1e100.net; s=20230601; t=1726844302; x=1727449102;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0aLWCOvmRfQ9tx0++umKXL26ekop1c8YzfPe/jk0KqM=;
-        b=dsTnXan6Km7ehtj3vySjBeA+8FR1O2d+ugUPt2hW7ZlbU1feH9Qg9P4a+bea0MAVHs
-         +6NqIBb4/enHBGvPfXJU1xn/F9R+P2bsSBqAG1gafOKsS31s8phLVF/BOvL2dy5G1CNb
-         35BOBiapctUqDcQmWp65BsU9vws8UM8+IvuF9+19zRRCWIeKHB750v3Yn30AGeSPEW9p
-         HF4Dv696QAH1YnktQbqRlti2ioTb4bS2ZUBTW7CvUAD2KQq0cQmqwGv8kg4TREB72M0S
-         1zj+Ytl0QFCyv7hrvCuHcZZA7hWWIe+CjU+wJFIvWYqedH3OVJliqt/w9WlPGg6fOYAs
-         wrsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWLzljOFQDAqZx0qHIOpRahPDJTr7JnKl8Q1XHdaU1dCPeZdxqCwcs88QoSHwK7XNsuJ3MMS8gRl4v5@vger.kernel.org, AJvYcCWTVkfh7tiUQJmc1ATSvzZV33e5uBRS2TgbPOd95PnxpZqGIrL58jSFrL5oBMWG0tas506Br9PFXb3D@vger.kernel.org, AJvYcCWtz0Y4LJuz+H8Gzxqm1nY4gWLfL9eqMTjD50FAk4dqXOwPbt4LZdHnAeWOdDB0g/2X8uh8BGoq/XE6HUI5XXI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXpI1tpvXPAgIJSpfe5TKwxt0mL84HtcE5wDSmB/IMZqNGq/E1
-	evhDT0KkWmGXeWOyquaQvZW32Ql2eFdroZUsRC/qmAntJumpoNId
-X-Google-Smtp-Source: AGHT+IFkl3OLlOqVjNuBUjWZomTccHc6drWK6KEhGMPDFIwkIwEKc8KxVKpjStEMwneY8fYtYu0szA==
-X-Received: by 2002:a17:902:c40d:b0:205:82d5:2368 with SMTP id d9443c01a7336-208d8414165mr41277205ad.49.1726844119137;
-        Fri, 20 Sep 2024 07:55:19 -0700 (PDT)
+        bh=69Ai5LvhNUYR4IJgcq7IQfzna+mHgTfiWiM32wBl+Nw=;
+        b=n4zw5wer8N5TxyAy0tMReLlFQ//5X1xyxLHlQcFZudXCg0lX/CzRHfHs9Oq1RODZFK
+         g1Pi/9RD8lLzoUSyvN0IOxJZhZR2hn8jOMaObxaxdjAi1GLK0YjhvC3fGPiOTYEVRXBR
+         mez/JTzkuTnOQTmpBr8DG1KHF39UXE3oFzXj/IICtXvxfYxo0Y670iAqonn9GnskRjb8
+         TRCZRtkc5bSmemqqzkf8ukxOH6W5vCsfF35Y9LT/q+O0sRGaYJFocz9L/BykXdcBeNiC
+         6Vg5E1gIBftuDc6NsESEigqX9IXhG1VIzgakKXBKZSvED5XQmNYiRFq/Qk51x7wFqNXY
+         uDmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXhZ1AyTc5NXHn0mMZHgLoC5DoDD44OLJGA7f8PN5ehDIzt6eI96gJfVs7prTSS812qkEubxAYdA0XJr0AKgkQ=@vger.kernel.org, AJvYcCXrRxVD+g/HaRN+5S2UWXCiQsiwWOShUA3rfRy85anO0+0e4DIdKanDqJEC8tZr19oB63r0jpYS4WoobIM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxU4LleR8FGQgsDEr0Z63lSVusdd2+yHMnfXTD0ARIs8mxZxDRB
+	arfzQTpYD6VtfPec02eCb0oqCuw1gyIvXCYAW1CfGnV4fH17TDk0XLbHFA==
+X-Google-Smtp-Source: AGHT+IFS14r+vvooHawbdxg3AAjDYfpTobgQO43FAsXAs68QAa14OqW1P3sy4RxFtqwrQZi0KfRW2w==
+X-Received: by 2002:a05:6a20:b603:b0:1cf:2875:c4af with SMTP id adf61e73a8af0-1d30a947cd1mr4070594637.8.1726844301998;
+        Fri, 20 Sep 2024 07:58:21 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20794601126sm96179725ad.72.2024.09.20.07.55.17
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71944a9cab5sm9927233b3a.5.2024.09.20.07.58.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Sep 2024 07:55:18 -0700 (PDT)
+        Fri, 20 Sep 2024 07:58:21 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <05c44952-3421-438c-b8d6-7a6370f52ced@roeck-us.net>
-Date: Fri, 20 Sep 2024 07:55:16 -0700
+Message-ID: <2509005b-2dbd-4dde-bd78-c832a2a343a0@roeck-us.net>
+Date: Fri, 20 Sep 2024 07:58:19 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -78,17 +78,14 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/5] watchdog: Congatec Board Controller watchdog timer
- driver
-To: Thomas Richard <thomas.richard@bootlin.com>, Lee Jones <lee@kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
- <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>,
- Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org,
- thomas.petazzoni@bootlin.com, blake.vermeer@keysight.com
-References: <20240503-congatec-board-controller-v2-0-681511a01c8f@bootlin.com>
- <20240503-congatec-board-controller-v2-4-681511a01c8f@bootlin.com>
+Subject: Re: [PATCH V3] watchdog: xilinx_wwdt: Calculate max_hw_heartbeat_ms
+ using clock frequency
+To: Harini T <harini.t@amd.com>, michal.simek@amd.com,
+ srinivas.neeli@amd.com, shubhrajyoti.datta@amd.com
+Cc: srinivas.goud@amd.com, wim@linux-watchdog.org,
+ linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, git@amd.com
+References: <20240913113230.1939373-1-harini.t@amd.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -134,15 +131,27 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240503-congatec-board-controller-v2-4-681511a01c8f@bootlin.com>
+In-Reply-To: <20240913113230.1939373-1-harini.t@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/17/24 10:00, Thomas Richard wrote:
-> Add watchdog timer support for the Congatec Board Controller.
+On 9/13/24 04:32, Harini T wrote:
+> In the current implementation, the value of max_hw_heartbeat_ms is set
+> to the timeout period expressed in milliseconds and fails to verify if
+> the close window percentage exceeds the maximum value that the hardware
+> supports.
 > 
-> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+> 1. Calculate max_hw_heartbeat_ms based on input clock frequency.
+> 2. Update frequency check to require a minimum frequency of 1Mhz.
+> 3. Limit the close and open window percent to hardware supported value
+> to avoid truncation.
+> 4. If the user input timeout exceeds the maximum timeout supported, use
+> only open window and the framework supports the higher timeouts.
+> 
+> Fixes: 12984cea1b8c ("watchdog: xilinx_wwdt: Add Versal window watchdog support")
+> 
+> Signed-off-by: Harini T <harini.t@amd.com>
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 
