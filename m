@@ -1,76 +1,76 @@
-Return-Path: <linux-watchdog+bounces-1994-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1995-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68F8197D713
-	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Sep 2024 16:52:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4F6B97D721
+	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Sep 2024 16:55:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D7451C22FAE
-	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Sep 2024 14:52:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7266C2867B7
+	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Sep 2024 14:55:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A619717BED6;
-	Fri, 20 Sep 2024 14:52:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA38217C220;
+	Fri, 20 Sep 2024 14:55:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i+raH+en"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iOrnXgTm"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1314BC147;
-	Fri, 20 Sep 2024 14:52:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F33A217B427;
+	Fri, 20 Sep 2024 14:55:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726843961; cv=none; b=ZzGYm89IVpWPdScxKYo6FDspgkJt+XegFZbt7QnBFDoCIQHVW9Yl2OcWbMzG/qgIppl+P/DMHyhAuAw5gb3jcGBWYmzEq183VcHfQlGgwD+pbmvRIXagqEKCmeyRwRxch3y1sb3rI0+5kaCVJiedgKtF4i93zbelTONrj45w3LQ=
+	t=1726844121; cv=none; b=gfj/2v3DN2M4sgmyVF5ulpBaq9kTF+OCa4+iF7WAKHEp2Oxfjvpp+KhgPEDmU6r360ue7VMMLLa2fGbw/l8UbLZhN9sesG9efvyHkNIrmi67diqKZVh19KXsNTBDGE3JdxQf+ew7eZy9ypzmy7vrcpAtL9wHc6aBjCEqTVxJGTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726843961; c=relaxed/simple;
-	bh=zj2/kCH9YlrgdIqZoB33422bwus3qpZj7Tm0cCISCII=;
+	s=arc-20240116; t=1726844121; c=relaxed/simple;
+	bh=yNQF5SZSaV0xZ9gcCY2fWRoUR09TbUOlCkRV9w3aG9k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N2Sj53p2/KfpRGedL+YkWWTqxTki2CojSAJ8zH4C44i8daesaBJ8P1GOx61yCtw5vUB0TOTLqh24T+RScFvA3uMzaKxD3FcUtlCKDSe3q0ngOBTACc4SQbQxbznpwu3eB5MdjElgFOFgfCEloPjoEDSlVqyQjMAAzXeSomEnFdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i+raH+en; arc=none smtp.client-ip=209.85.210.176
+	 In-Reply-To:Content-Type; b=SoUqHCoqrNgwivQM3sxsXoutFLDkTBpL02z4oB5tKDjLZs6ERM9F3X3gKIQ1Ok3nFWazeHmWOpfI9YW0Dx1Djdt+aUWC5D5+gf7W3cX8j95pe48n3EPMlSyFw1vYcEz+/7z/VuxAkO68iw3ZEwUIV1jPT9EiGrTzsuvhtgL4Wp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iOrnXgTm; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-718d704704aso1780234b3a.3;
-        Fri, 20 Sep 2024 07:52:39 -0700 (PDT)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2068a7c9286so22622085ad.1;
+        Fri, 20 Sep 2024 07:55:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726843959; x=1727448759; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1726844119; x=1727448919; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=gB9ffN048M04ImE/bxyA1QZZn/yZ6B5bkK640TSTD+0=;
-        b=i+raH+enQM7+jLlEBvCQju6IlHy9P+QhICEyxi3o5GuPn1VBNcrTjweHhUuV1vNfFr
-         WsGimD9xNSfR4YANgPrnUHOKFSGnPvRNkC0Gjk+LeXIoppJfCXZpfau9zwPcMH95n0kr
-         zdnlxOD8vdGL59x1x4V0DnHnClmrXhLg40cL0WTxDffUJ//e8QR5vb7yuSf838sZOzeg
-         VVu7qjuiz3eAgUCQWNPqzhc9kaeWimUXcsTFhXZnn9IxQXc6UvO98DFg0M847aAMxpVW
-         1MerVCqqapF4VSozSZWo7ZuKF0hEBZJYymBkC9P5XMOniAg0H0dDsXIRvH7y9pRu24lH
-         1P0w==
+        bh=0aLWCOvmRfQ9tx0++umKXL26ekop1c8YzfPe/jk0KqM=;
+        b=iOrnXgTmRrIW7nVlJRALc2xpX8GIuL/5flOZCuid0zv5yqnpHzQX/PxJdCLUZVQdgH
+         g0iEI5gIvEHQa2Oy0bWN3a7JbYmupHubXYqSW8yR4nuEplvppxbRvDmnHY+yDbJaPwwo
+         dGQhqzJa8GzNnB990eaz2WovnsDzK0Gx6h+POTyRvaWi4/NzsXfcq/axGGoNObG/e9OV
+         7nq675oeqqpU/XkeKwh/77MAzET6UcKhEYRpDiUQaBv2cuyzL0dZxxRI5Uxv04zOi+Z5
+         oyOMyQ7/R8H+XdiHEAKqaOa2HgvONAZ7EGCnhLYEzveep3fh+sWc/UJ2nUlLGLm0s3HD
+         rP7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726843959; x=1727448759;
+        d=1e100.net; s=20230601; t=1726844119; x=1727448919;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gB9ffN048M04ImE/bxyA1QZZn/yZ6B5bkK640TSTD+0=;
-        b=IY8yfmwlGWcVzE15fKqIkBmPOqd9PrhDZCNJb+uLG0B0i07GT+YPtIABpSZXFpg8s+
-         7H8JbrIeHK38TrL29UBu9FkWoeRBFVvrDoUXI9UK0v9q0fOY+DlntFcrXKoaBnqFkQ1D
-         QzHp6+QIIDB45sJ8f/fMVlec3F1+Qqc6ZoHj/Wcowo3kwizC8Xm0x/DEhUibdTvpNDL6
-         A91t2RkghzNzKwURRj0XZDDrtbk4TgW7QpVwnOhaxNX0t9NX4QHfidmi0xxb/17Xb3x+
-         2lzuEwQJ9VCiWcXDCMZP5K8+7DfYdM9lXYl/GQj1I/GtVDrlgEMvon/rsp2b1vm6hijT
-         lsIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUrIO4pVjvyvtimiFQWZFwErwrgnD9whFKlkbj6C0DZ0P1qU5nNnd+zw3KFA1Ppn1iS84xRji/Pj3q4@vger.kernel.org, AJvYcCWnbNWUq0yxUGVNu0m+VfRrO1sALE5ILHaOcuqr2C0RI88NCDYHxzAvUfYw2se/DCJ+Pj9G5lgO/4t27db1@vger.kernel.org, AJvYcCXG2NQhL7gXhdCASy8eZnUL0LcurgpiufQnXeJLqHMAwWTTPp+UAGZtJ4vGChYvReK7sGe+aP66pheY7/SgOA==@vger.kernel.org, AJvYcCXNwHtUItN2+M1xwUvMop0mR2eTIUJ3lRBpg29nq28u18gTMKRhyaWEvRiYuEiR6gbXEzB0nmn8AoqcZTLGbLI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6qA8VWNj3f5FIW6vZ6HOenMxdYRE8d0jOYzbpWXhpuwJdRse3
-	WTsiFXKGrtYPbdrDax0GOUIkd9LxYp7Q9FTJ1H+0Oc24IDOcaFzD71njgQ==
-X-Google-Smtp-Source: AGHT+IGLD1vNuuK+Q3H41O6xw5iwjidmSuL7frNtZj4Ldq8hKjRbWG77JSrDTBZ96z8PyJlY6dwgfw==
-X-Received: by 2002:a05:6a00:8d0:b0:70a:f576:beeb with SMTP id d2e1a72fcca58-7199c96d36dmr4681912b3a.15.1726843959001;
-        Fri, 20 Sep 2024 07:52:39 -0700 (PDT)
+        bh=0aLWCOvmRfQ9tx0++umKXL26ekop1c8YzfPe/jk0KqM=;
+        b=dsTnXan6Km7ehtj3vySjBeA+8FR1O2d+ugUPt2hW7ZlbU1feH9Qg9P4a+bea0MAVHs
+         +6NqIBb4/enHBGvPfXJU1xn/F9R+P2bsSBqAG1gafOKsS31s8phLVF/BOvL2dy5G1CNb
+         35BOBiapctUqDcQmWp65BsU9vws8UM8+IvuF9+19zRRCWIeKHB750v3Yn30AGeSPEW9p
+         HF4Dv696QAH1YnktQbqRlti2ioTb4bS2ZUBTW7CvUAD2KQq0cQmqwGv8kg4TREB72M0S
+         1zj+Ytl0QFCyv7hrvCuHcZZA7hWWIe+CjU+wJFIvWYqedH3OVJliqt/w9WlPGg6fOYAs
+         wrsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWLzljOFQDAqZx0qHIOpRahPDJTr7JnKl8Q1XHdaU1dCPeZdxqCwcs88QoSHwK7XNsuJ3MMS8gRl4v5@vger.kernel.org, AJvYcCWTVkfh7tiUQJmc1ATSvzZV33e5uBRS2TgbPOd95PnxpZqGIrL58jSFrL5oBMWG0tas506Br9PFXb3D@vger.kernel.org, AJvYcCWtz0Y4LJuz+H8Gzxqm1nY4gWLfL9eqMTjD50FAk4dqXOwPbt4LZdHnAeWOdDB0g/2X8uh8BGoq/XE6HUI5XXI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXpI1tpvXPAgIJSpfe5TKwxt0mL84HtcE5wDSmB/IMZqNGq/E1
+	evhDT0KkWmGXeWOyquaQvZW32Ql2eFdroZUsRC/qmAntJumpoNId
+X-Google-Smtp-Source: AGHT+IFkl3OLlOqVjNuBUjWZomTccHc6drWK6KEhGMPDFIwkIwEKc8KxVKpjStEMwneY8fYtYu0szA==
+X-Received: by 2002:a17:902:c40d:b0:205:82d5:2368 with SMTP id d9443c01a7336-208d8414165mr41277205ad.49.1726844119137;
+        Fri, 20 Sep 2024 07:55:19 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71944ab502csm9923983b3a.51.2024.09.20.07.52.36
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20794601126sm96179725ad.72.2024.09.20.07.55.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Sep 2024 07:52:37 -0700 (PDT)
+        Fri, 20 Sep 2024 07:55:18 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <d18d958c-d3b4-4e3c-a3f6-6c50d360c046@roeck-us.net>
-Date: Fri, 20 Sep 2024 07:52:35 -0700
+Message-ID: <05c44952-3421-438c-b8d6-7a6370f52ced@roeck-us.net>
+Date: Fri, 20 Sep 2024 07:55:16 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -78,16 +78,17 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: watchdog: Document Qualcomm QCS615
- watchdog
-To: lijuang <quic_lijuang@quicinc.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Rajendra Nayak <quic_rjendra@quicinc.com>
-Cc: kernel@quicinc.com, linux-arm-msm@vger.kernel.org,
- linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240920-add_watchdog_compatible_for_qcs615-v2-1-427944f1151e@quicinc.com>
+Subject: Re: [PATCH v2 4/5] watchdog: Congatec Board Controller watchdog timer
+ driver
+To: Thomas Richard <thomas.richard@bootlin.com>, Lee Jones <lee@kernel.org>,
+ Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+ <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ thomas.petazzoni@bootlin.com, blake.vermeer@keysight.com
+References: <20240503-congatec-board-controller-v2-0-681511a01c8f@bootlin.com>
+ <20240503-congatec-board-controller-v2-4-681511a01c8f@bootlin.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -133,47 +134,15 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240920-add_watchdog_compatible_for_qcs615-v2-1-427944f1151e@quicinc.com>
+In-Reply-To: <20240503-congatec-board-controller-v2-4-681511a01c8f@bootlin.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/20/24 00:11, lijuang wrote:
-> Add devicetree binding for watchdog present on Qualcomm QCS615 SoC.
+On 9/17/24 10:00, Thomas Richard wrote:
+> Add watchdog timer support for the Congatec Board Controller.
 > 
-> Acked-by: Rob Herring (Arm) <robh@kernel.org>
-> Signed-off-by: Lijuan Gao <quic_lijuang@quicinc.com>
+> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
 
-Reviewed-by: Guenter Roeck <linux@roeck-usn.net>
-
-> ---
-> Add devicetree binding for watchdog present on Qualcomm
-> QCS615 SoC.
-> ---
-> Changes in v2:
-> - Collected Acked-by
-> - Rebased patchset on top next-20240919
-> - Link to v1: https://lore.kernel.org/r/20240912-add_watchdog_compatible_for_qcs615-v1-1-ec22b5ad9891@quicinc.com
-> ---
->   Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> index 932393f8c649..32eaf43aadb3 100644
-> --- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
-> @@ -26,6 +26,7 @@ properties:
->                 - qcom,apss-wdt-msm8994
->                 - qcom,apss-wdt-qcm2290
->                 - qcom,apss-wdt-qcs404
-> +              - qcom,apss-wdt-qcs615
->                 - qcom,apss-wdt-sa8255p
->                 - qcom,apss-wdt-sa8775p
->                 - qcom,apss-wdt-sc7180
-> 
-> ---
-> base-commit: 3621a2c9142bd490af0666c0c02d52d60ce0d2a5
-> change-id: 20240920-add_watchdog_compatible_for_qcs615-eec8a8c2c924
-> 
-> Best regards,
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
 
