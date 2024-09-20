@@ -1,121 +1,145 @@
-Return-Path: <linux-watchdog+bounces-1992-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-1993-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4C0197CF08
-	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Sep 2024 00:03:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 327FA97D187
+	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Sep 2024 09:12:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86156281763
-	for <lists+linux-watchdog@lfdr.de>; Thu, 19 Sep 2024 22:03:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E085C284A8F
+	for <lists+linux-watchdog@lfdr.de>; Fri, 20 Sep 2024 07:12:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5F5F1B29CD;
-	Thu, 19 Sep 2024 22:03:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EE0142ABD;
+	Fri, 20 Sep 2024 07:12:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="8dP53nBv"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DSVBRiAx"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85401B29C6;
-	Thu, 19 Sep 2024 22:03:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D0F3BB50;
+	Fri, 20 Sep 2024 07:12:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726783417; cv=none; b=bsqNye164/02FQMx8de16fy71+fBI6jT4i3tfZz1+SnpB1MPtMdaekAKy1MJnhUGynkF2m6hRnJi6xaFmg4PgTwBQtO+d/5Jufl5NJCktrvpQpbmPVMzHL/xi8OhYI2ux0EJwf1PtgIavyxYasikclWaQuLw0A+gmxpVUCDY3o0=
+	t=1726816343; cv=none; b=ETHz+lNWowZW3iV9kgCnT/o3dfgofiwvlbgwIxci06+z6BWu8ueDyxi4c4xskHsOErd+JbCVnbkze5/J0one8HcyFpXkFnvClx4IulOBlsPPMt4Lp+Zb9dgO3vVGCF+cSosp8y97K84PVKQ7K3l8QTUiZBP/owKJqPj/tKXBkVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726783417; c=relaxed/simple;
-	bh=QW4+1KKGJY+s1DJGWLQcjCthftxRyxioRpUTjBW+9XY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IDT8zaDlyYtJ9GhsqsJQa/LerAtrYL56XTTse5INMgJD296HtdRsQTW6DfJlK9rbNLTLo+azYJSqWd0wcLT+KAgzjGV5dkdGcMGJHAkRKyLMU94zC6xUwLm4H8xF+CJkLMKeot60eZj5KQ+5rUKGEp7+sIk0Cxk0gCfW8ebcjEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=8dP53nBv; arc=none smtp.client-ip=178.238.236.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=Wwr5tc/2MQBgqyVSbXdpoSg01DffOELLVlpjQ44Q0FA=; b=8dP53nBv9j/XLYSo//wG3O7Hmd
-	Fh5LVAVc25DcfLEgD1NB6BT0igQeRqQ2eNTe6Py8YCmvilUIIFFE9hEfoLqUIYCu4JAQVFyzj46i4
-	Ym6VsKPew1KkfwaRUfhORLb+EkuJ3BjXP2mtUUcbqXgKzOdZjpleIWJ2SyxYpa99AApqpzxHXec+l
-	MOuAcWBoHy43z8mucHIfPRqMpYxuxq3G54TkgN3ounxpWgBPuyolxfx53OTz8PPjL5pOpZmw5GAiq
-	HP++SX7KE3WavCifX5Qp9ATYGDM1Xm+sSajqfojCbCJSPNpoIbC1A6v7BFRON368TpoMrfTsvK5/a
-	ruaoTeBQ==;
-Date: Fri, 20 Sep 2024 00:03:32 +0200
-From: Andreas Kemnade <andreas@kemnade.info>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, wim@linux-watchdog.org,
- linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: rn5t618: use proper module tables
-Message-ID: <20240920000332.377f370a@akair>
-In-Reply-To: <2543aa99-0069-4eb1-a37b-204f3e6bbf6c@kernel.org>
-References: <20240918212925.1191953-1-andreas@kemnade.info>
-	<f52deaf1-492e-4cbe-8e46-8999ae2e481f@roeck-us.net>
-	<20240919125005.0bcd17e4@akair>
-	<2543aa99-0069-4eb1-a37b-204f3e6bbf6c@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1726816343; c=relaxed/simple;
+	bh=/8F4vC+WrRK8JmcD0TA3VmXt6A8IcZpsr5kN9dbyx7o=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=R9PQQSyiMvtZRf4byHzhhB3R6Fpv3Cw/K5eSm2/XRmvMtXEnDG148+DRPbJbeupyV0ZNkeLDWR+2JiJJMBuMly3IblLdeXMvNhSNPuQ0SbHlIpx+/leXHO9i4cshpvjq7HRNEYhwTshO9wBMhSBRrvCMhMNa1TAHEMwbJJLF+V8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DSVBRiAx; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48JLx2kl018133;
+	Fri, 20 Sep 2024 07:12:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=0EKgVH//p3yEU4Of22Zpii
+	69hvSp1EgzKmBMS7nyUfU=; b=DSVBRiAxcTbzJSnxmAek/GIIjgTySK5YYE75XW
+	T7wMWjHt0X4vmDPZ286A1JSNhswbjVDXjzgHzRqNJ22TVDZNHfpasyD+TfueDqZp
+	UnGrEbh4FQlOfpWy1a5As4YB6RJrjZIWKmp7aWrorK6YjdjXp0YoYWs8i1GtciOn
+	Rql7CxLRllKKDYCDmL2SFoYvhe8U6lHIKP/ioJzWmM5bcZNlRf6tcimtYLfkZo48
+	u9PRdbkoSHhJOgQjNWyHfmcj3+YegqnfZ00PzM0kahPp6dd9bcRs8uN8Ivr7faNh
+	GKwEFgoAraZkncksGZUkErPqGzGBqPQdfc5ayjMXRpHfbETA==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41n4hfr2rg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 20 Sep 2024 07:12:05 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 48K7C4cR006797
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 20 Sep 2024 07:12:04 GMT
+Received: from lijuang2-gv.ap.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Fri, 20 Sep 2024 00:11:57 -0700
+From: lijuang <quic_lijuang@quicinc.com>
+Date: Fri, 20 Sep 2024 15:11:41 +0800
+Subject: [PATCH v2] dt-bindings: watchdog: Document Qualcomm QCS615
+ watchdog
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-ID: <20240920-add_watchdog_compatible_for_qcs615-v2-1-427944f1151e@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIACwg7WYC/42NQQ6CMBBFr0K6toZOwFBX3sOQpkwHmEQptIgaw
+ t2txAO4fD8/760iUmCK4pytItDCkf2QAA6ZwN4OHUl2iQXkUOQacmmdM087Y+98Z9DfRztzcyP
+ T+mAmjCdVSiKsbIWAGgqRRGOgll975Fon7jnOPrz35qK+60+v4B/9oqSShABNaZ2utLpMD0Ye8
+ Jj+ot627QN1orgt1gAAAA==
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck
+	<linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Rajendra Nayak
+	<quic_rjendra@quicinc.com>
+CC: <kernel@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Lijuan Gao <quic_lijuang@quicinc.com>
+X-Mailer: b4 0.15-dev-99b12
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1726816316; l=1347;
+ i=quic_lijuang@quicinc.com; s=20240827; h=from:subject:message-id;
+ bh=/8F4vC+WrRK8JmcD0TA3VmXt6A8IcZpsr5kN9dbyx7o=;
+ b=AyiaB6kq6mN7zrKjfS3c7QTrfacqklSKgmDxslJeYz3hj6UVjrLSwKt755IHXcqoZFueHRPIZ
+ x3rutL4hQX6CCGTrsgd7B2zWcYegmzaZ1KJt0erfV8yrLlfupwlQPWx
+X-Developer-Key: i=quic_lijuang@quicinc.com; a=ed25519;
+ pk=1zeM8FpQK/J1jSFHn8iXHeb3xt7F/3GvHv7ET2RNJxE=
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 2LvPdIpFtkIOlW-stJqeU7CLoU7Wqp4c
+X-Proofpoint-ORIG-GUID: 2LvPdIpFtkIOlW-stJqeU7CLoU7Wqp4c
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 phishscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0
+ impostorscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409200049
 
-Am Thu, 19 Sep 2024 13:02:55 +0200
-schrieb Krzysztof Kozlowski <krzk@kernel.org>:
+Add devicetree binding for watchdog present on Qualcomm QCS615 SoC.
 
-> On 19/09/2024 12:50, Andreas Kemnade wrote:
-> > Am Wed, 18 Sep 2024 15:43:40 -0700
-> > schrieb Guenter Roeck <linux@roeck-us.net>:
-> >   
-> >> On 9/18/24 14:29, Andreas Kemnade wrote:  
-> >>> Avoid requiring MODULE_ALIASES by declaring proper device id
-> >>> tables.
-> >>>
-> >>> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>    
-> >>
-> >> This needs a better rationale. There are more than 40 watchdog
-> >> drivers using MODULE_ALIAS. I would hate having to deal with 40+
-> >> patches just for cosmetic reasons, not counting the thousands of
-> >> instances of MODULE_ALIAS in the kernel, including the more than
-> >> 1,000 instances of "MODULE_ALIAS.*platform:".
-> >>  
-> > basically reviewers were arguing against patches from me bringing in
-> > MODULE_ALIASES. So I decided to clean up a bit in my backyard. Not
-> > sure whether such things could by done by coccinelle but at least
-> > it could be tested via output of modinfo.
-> > 
-> > This is one example for such a patch:
-> > https://lore.kernel.org/linux-clk/119f56c8-5f38-eb48-7157-6033932f0430@linaro.org/
-> >   
-> 
-> There are multiple aspects here:
-> 1. People (including me) copy code which they do no understand. Or
-> without really digging into it, because they do not have time. They
-> just copy it, regardless whether the code is necessary or not.
-> MODULE_ALIAS is one of such examples. It got copied to new drivers
-> just because some other driver had it.
-> 
-and copy nowadays unaccepted design patterns. Probably best to look at
-the newest example.
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Lijuan Gao <quic_lijuang@quicinc.com>
+---
+Add devicetree binding for watchdog present on Qualcomm
+QCS615 SoC.
+---
+Changes in v2:
+- Collected Acked-by
+- Rebased patchset on top next-20240919
+- Link to v1: https://lore.kernel.org/r/20240912-add_watchdog_compatible_for_qcs615-v1-1-ec22b5ad9891@quicinc.com
+---
+ Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 2. MODULE_ALIAS creates basically ABI - some user-space might depend
-> on it, so removal might affect user. I think I was not dropping it
-> from the drivers in cases it would actually drop an alias. I was only
-> dropping duplicated aliases. That's not the case here, I believe.
-> 
-> 3. MODULE_ALIAS scales poor. I believe proper xxx_device_id table is
-> better.
-> 
-> 4. But it does not mean that one single line - MODULE_ALIAS - should
-> be replaced in existing drivers into full-blown ID table. I think I
-> never proposed such patches for existing drivers. Why? Because if
-> there was no such need so far, means there were no scalability issues.
-> 
-Thanks for the long explanation.
+diff --git a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+index 932393f8c649..32eaf43aadb3 100644
+--- a/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml
+@@ -26,6 +26,7 @@ properties:
+               - qcom,apss-wdt-msm8994
+               - qcom,apss-wdt-qcm2290
+               - qcom,apss-wdt-qcs404
++              - qcom,apss-wdt-qcs615
+               - qcom,apss-wdt-sa8255p
+               - qcom,apss-wdt-sa8775p
+               - qcom,apss-wdt-sc7180
 
-Regards,
-Andreas
+---
+base-commit: 3621a2c9142bd490af0666c0c02d52d60ce0d2a5
+change-id: 20240920-add_watchdog_compatible_for_qcs615-eec8a8c2c924
+
+Best regards,
+-- 
+lijuang <quic_lijuang@quicinc.com>
+
 
