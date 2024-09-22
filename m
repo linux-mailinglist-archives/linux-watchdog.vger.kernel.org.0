@@ -1,145 +1,97 @@
-Return-Path: <linux-watchdog+bounces-2002-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2003-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8A3C97E0E2
-	for <lists+linux-watchdog@lfdr.de>; Sun, 22 Sep 2024 12:25:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CD9197E34A
+	for <lists+linux-watchdog@lfdr.de>; Sun, 22 Sep 2024 22:43:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FE0E1C2093C
-	for <lists+linux-watchdog@lfdr.de>; Sun, 22 Sep 2024 10:25:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29EA2B20BD0
+	for <lists+linux-watchdog@lfdr.de>; Sun, 22 Sep 2024 20:43:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8779D524D7;
-	Sun, 22 Sep 2024 10:25:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D658757CBC;
+	Sun, 22 Sep 2024 20:43:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="RhHAdd2b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qHQbSKsi"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08D66B663;
-	Sun, 22 Sep 2024 10:24:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFF555898;
+	Sun, 22 Sep 2024 20:43:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727000704; cv=none; b=FTOfZuuBKKjmecUELFHU/+CBaFRS0H/DyPqnJ7IHzPab9LwoottAU9mgQfWG+BVaGWJMK5ukMnOulSYbm8Us3kBRm7P8VII1tqlfkbfY6cXjO+LOi7or+h4eU42RVUBbwy+aQmjOGKyWw0Y61Cu+zNZQ/5ceQZEgZBzYaFNIumg=
+	t=1727037828; cv=none; b=WapioEpX5MiXExfj91KyRHJkX9/LI46VbwD2bGNiB7eXou++z4CGK8wxDDBtOrul1lDaTQ+D6/IvelJWMk62kjMaE3SeNxBwb+z6Xnn3qbdQ5pObdEd44sGXmfSjClM8cFa/HO//tjMvBZgwKzOfun9rT94pBItddQikqjvslYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727000704; c=relaxed/simple;
-	bh=w/ZWHCQc40nkBw6bes7cbk5X0VzoOhqf3DRFWJ2Sqmg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tyhKluPQj4Qb1P0Rl4UOT7Ra5MNJT8KUgYiQUJaKBhPlBiZ5Ki8uSY+OpnoNLFA6MDWc/HThXFHsXJ+P2N59xAZsJ6jd6IT5h/Bj85224VrHuDZv0ax3X2axtqWzt4Cc1C3BiApyWgs75MXF0uziSboBUAwwAhjPlfJM3DWhi90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=RhHAdd2b; arc=none smtp.client-ip=185.87.125.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-	id 81F22401AE; Sun, 22 Sep 2024 11:53:41 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 81F22401AE
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-	s=odk20180602; t=1726998821;
-	bh=w/ZWHCQc40nkBw6bes7cbk5X0VzoOhqf3DRFWJ2Sqmg=;
-	h=Date:From:To:Cc:Subject:From;
-	b=RhHAdd2bbk/EQe/SPNvKhztvoz4PpirZzhFpKLPGzO6Sx7L1ORicgiVLapF2eg58C
-	 4TYJG/b+htKnvt4nbIEv3C0JSdzqHdYq5fuXp8wKnuj/KoMk6ttUwjxKwfi7+Rqg8X
-	 Kz1XOxxsY8C+rHBvoHQ3JsjhZv1N3VYT7rkxN+RU=
-Date: Sun, 22 Sep 2024 11:53:41 +0200
-From: Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-	Chen Ni <nichen@iscas.ac.cn>, Fabio Estevam <festevam@denx.de>,
-	Frank Li <Frank.Li@nxp.com>, Jonas Blixt <jonas.blixt@actia.se>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Marek Vasut <marex@denx.de>,
-	Nikita Shubin <nikita.shubin@maquefel.me>,
-	Shen Lichuan <shenlichuan@vivo.com>
-Subject: [GIT PULL REQUEST] watchdog - v6.12 release cycle.
-Message-ID: <20240922095341.GA1554@www.linux-watchdog.org>
+	s=arc-20240116; t=1727037828; c=relaxed/simple;
+	bh=M4TF5ayIuFRvWwOsi5XVMxki7jlOEntStSvxNGBxNL4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fMjiiE+rzTOMXWrN6DFza5W08pmBLE06nmUqZsCQuo3qObIV/aQIIBzDygcRmmbpeg/4x70X1vLGXaCG2N5G6+dwDtYBTbvpkpPdaLy3+jte11llYa0Xh1XzbjX24bvyN77dEGNlPRzwmheHgjiuUkE0Ibg/oTI8J99S5T8d/mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qHQbSKsi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52048C4CEC3;
+	Sun, 22 Sep 2024 20:43:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727037828;
+	bh=M4TF5ayIuFRvWwOsi5XVMxki7jlOEntStSvxNGBxNL4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qHQbSKsi8PW6RN/qJntYotqc/YBS+PsVmGjJufBBnnUUuwR+qwRACId4ct8dhIjK1
+	 hx1XTohgh+2ZWm9isbcDRzuJR1AMGF2+nKEBvpBPQ568OgQs+qdbMCaBAgRpDfklYr
+	 FYYXyJuCQhSsNCu5MT09WpIw/tMxrkaSo3YzwX87ifEZ+eJpEA7rxrh2/TnMqk8FMI
+	 Fc6mvSUq0wd11kP3oSzUkJOh8RCQptWAhTQmLDldIS5b3lykgtP+F7qI2aSGab8bm7
+	 +va9Jth56cU39irEJORCLzp+d86PVR8ah/uV5KpHD8oeouPS5i1BcPoNFTObv4DHTf
+	 QArRDI9Rix9dg==
+Date: Sun, 22 Sep 2024 22:43:44 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Nick Chan <towinchenmi@gmail.com>
+Cc: Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>, 
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, konradybcio@kernel.org, ivo.ivanov.ivanov1@gmail.com
+Subject: Re: [PATCH v4 01/20] dt-bindings: arm: cpus: Add Apple A7-A11 CPU
+ cores
+Message-ID: <34fubbbf6jlqjs6q2f73oohkijhudvzni63dtillg4d4fxjm6i@e7oogteye2oe>
+References: <20240919161443.10340-1-towinchenmi@gmail.com>
+ <20240919161443.10340-2-towinchenmi@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.5.20 (2009-12-10)
+In-Reply-To: <20240919161443.10340-2-towinchenmi@gmail.com>
 
-Hi Linus,
+On Fri, Sep 20, 2024 at 12:05:50AM +0800, Nick Chan wrote:
+> Add the following CPU cores:
+> 
+> - apple,cyclone: A7 cores
+> - apple,typhoon: A8 cores
+> - apple,twister: A9 cores
+> - apple,hurricane-zephyr: A10 logical cores
+> - apple,monsoon: A11 performance cores
+> - apple,mistral: A11 efficiency cores
+> 
+> In the Apple A10, there are physical performance-efficiency cores that
+> forms logical cores to software depending on the current p-state, and
+> only one type of core may be active at one time.
+> 
+> This follows the existing newest-first order.
+> 
+> Signed-off-by: Nick Chan <towinchenmi@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/arm/cpus.yaml | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 
-Please pull following watchdog changes for the v6.12 release cycle.
+Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-This series contains:
-* Add Watchdog Timer driver for RZ/V2H(P)
-* Add Cirrus EP93x
-* Some small fixes and improvements
-
-The output from git request-pull:
-----------------------------------------------------------------
-The following changes since commit bc83b4d1f08695e85e85d36f7b803da58010161d:
-
-  Merge tag 'bcachefs-2024-09-09' of git://evilpiepirate.org/bcachefs (2024-09-09 09:49:23 -0700)
-
-are available in the git repository at:
-
-  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.12-rc1
-
-for you to fetch changes up to 134d2531ef82043e8bf219497a4f1eb8fe21a6b7:
-
-  watchdog: Convert comma to semicolon (2024-09-17 13:41:31 +0200)
-
-----------------------------------------------------------------
-linux-watchdog 6.12-rc1 tag
-
-----------------------------------------------------------------
-Alexander Sverdlin (1):
-      watchdog: imx_sc_wdt: detect if already running
-
-Chen Ni (2):
-      watchdog: iTCO_wdt: Convert comma to semicolon
-      drivers: watchdog: marvell_gti: Convert comma to semicolon
-
-Fabio Estevam (1):
-      watchdog: imx2_wdt: Remove __maybe_unused notations
-
-Frank Li (1):
-      watchdog: imx7ulp_wdt: move post_rcs_wait into struct imx_wdt_hw_feature
-
-Jonas Blixt (1):
-      watchdog: imx_sc_wdt: Don't disable WDT in suspend
-
-Lad Prabhakar (3):
-      dt-bindings: watchdog: renesas,wdt: Document RZ/V2H(P) SoC
-      watchdog: Add Watchdog Timer driver for RZ/V2H(P)
-      watchdog: rzv2h_wdt: Add missing MODULE_LICENSE tag to fix modpost error
-
-Marek Vasut (1):
-      dt-bindings: watchdog: stm32-iwdg: Document interrupt and wakeup properties
-
-Nikita Shubin (1):
-      dt-bindings: watchdog: Add Cirrus EP93x
-
-Shen Lichuan (1):
-      watchdog: Convert comma to semicolon
-
- .../bindings/watchdog/cirrus,ep9301-wdt.yaml       |  42 ++++
- .../devicetree/bindings/watchdog/renesas,wdt.yaml  |  17 +-
- .../bindings/watchdog/st,stm32-iwdg.yaml           |   6 +
- drivers/watchdog/Kconfig                           |   9 +
- drivers/watchdog/Makefile                          |   1 +
- drivers/watchdog/iTCO_wdt.c                        |   4 +-
- drivers/watchdog/imx2_wdt.c                        |  10 +-
- drivers/watchdog/imx7ulp_wdt.c                     |  21 +-
- drivers/watchdog/imx_sc_wdt.c                      |  46 ++--
- drivers/watchdog/marvell_gti_wdt.c                 |   4 +-
- drivers/watchdog/pm8916_wdt.c                      |   2 +-
- drivers/watchdog/rzv2h_wdt.c                       | 273 +++++++++++++++++++++
- 12 files changed, 388 insertions(+), 47 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/watchdog/cirrus,ep9301-wdt.yaml
- create mode 100644 drivers/watchdog/rzv2h_wdt.c
-----------------------------------------------------------------
-
-Kind regards,
-Wim.
+Best regards,
+Krzysztof
 
 
