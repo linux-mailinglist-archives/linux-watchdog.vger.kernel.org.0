@@ -1,79 +1,119 @@
-Return-Path: <linux-watchdog+bounces-2018-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2019-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69387983A3A
-	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Sep 2024 01:15:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B331F98468D
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Sep 2024 15:12:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA950282A14
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Sep 2024 22:36:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C7761F20C98
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Sep 2024 13:12:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A70014AD38;
-	Mon, 23 Sep 2024 22:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD0A01A7067;
+	Tue, 24 Sep 2024 13:12:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vCPHfH4c"
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="QSRdj1N1"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0284914A62F;
-	Mon, 23 Sep 2024 22:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC8B1B85DD
+	for <linux-watchdog@vger.kernel.org>; Tue, 24 Sep 2024 13:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727130880; cv=none; b=K6PfQli6tiAMs236lYMIGKOf2+LTKGf3n1eKK+UuaC1hc7uKD+1EGvDdu7Kb28FJKYJaJWeKK68VTRV+j0qcgMyzyqnsX1Gbls28T3FhE8YasAldBRdQb7jB3RGlNp3XgFGL+S7i6uHcbyI30nRRtWJDO8qcj3xkUkQI9Y5KIcU=
+	t=1727183541; cv=none; b=J3MoF14rMpD6hhISmkD7CwFLCHiH0dbWJLPl0sI2kPhuDSnmhUPS8jQdU+mWBDhcpzTdXGJBI8YbGlK9qpayOp1OS5EkJ9ZS5AMbxNNxCzmWH3Bq9jyaU/7xhBCkMqF8oSiKdNuykrsCYvX2+gYv93TfmuxOZ1VZneo+bLEX7O0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727130880; c=relaxed/simple;
-	bh=4t76kJGzDtHS8fuEWAELTq1eRSbhzpPx8GSUyTdweY4=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=SOwndVm+eGfxMICLsvbBb80N0usWxkPAxCvlR92vLCs1H68o/WGlUm717vdMu1+6h+8EIjrWoNv2hIoDYJWvcdPjd5y/u43BjtJ2pTMKW0/fEC8yoD9xhunRu8GsKEHN0RIziPe/KqWZHAWNuO8bizGlHDB7odXNuzgNf0LO7+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vCPHfH4c; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5DC2C4CEC4;
-	Mon, 23 Sep 2024 22:34:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727130879;
-	bh=4t76kJGzDtHS8fuEWAELTq1eRSbhzpPx8GSUyTdweY4=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=vCPHfH4cqsvT3+U5YkxToCP2+hlqCa8lhFVImohrDcyaPy9DC8ZylorYMUGmh0y1s
-	 1N7ijtiwcIOh0UA8eF2ahQErDcuD9TPO94fglOq6SBameBxCcOAeJf7gjB22orO5Kg
-	 5FLBzWqx0OQyIyn76462bSkMzSBBfDpZiedMs/Px4dJdDnMZtiDLPk7AWB1dYoXvbB
-	 xtMYRmDGjoy8j6qhrChTcOkcHAFD88rLvah0lO44cE3nU6hBbLlu2MdJpIgJ6OLrRE
-	 79tGwua8CZeyUv3Tm3sk88H5SwpCKTKslK6m2T7MLdEPrAebMNbFwsg2cuvbRfOzXW
-	 OMuwNAQs2xM6g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70E9D3809A8F;
-	Mon, 23 Sep 2024 22:34:43 +0000 (UTC)
-Subject: Re: [GIT PULL REQUEST] watchdog - v6.12 release cycle.
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20240922095341.GA1554@www.linux-watchdog.org>
-References: <20240922095341.GA1554@www.linux-watchdog.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20240922095341.GA1554@www.linux-watchdog.org>
-X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.12-rc1
-X-PR-Tracked-Commit-Id: 134d2531ef82043e8bf219497a4f1eb8fe21a6b7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f34c51252189e6f18f3983f7cb7cc46f2e54ffe9
-Message-Id: <172713088205.3509221.6951445322869167780.pr-tracker-bot@kernel.org>
-Date: Mon, 23 Sep 2024 22:34:42 +0000
-To: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, LKML <linux-kernel@vger.kernel.org>, Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>, Guenter Roeck <linux@roeck-us.net>, Alexander Sverdlin <alexander.sverdlin@siemens.com>, Chen Ni <nichen@iscas.ac.cn>, Fabio Estevam <festevam@denx.de>, Frank Li <Frank.Li@nxp.com>, Jonas Blixt <jonas.blixt@actia.se>, Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, Marek Vasut <marex@denx.de>, Nikita Shubin <nikita.shubin@maquefel.me>, Shen Lichuan <shenlichuan@vivo.com>
+	s=arc-20240116; t=1727183541; c=relaxed/simple;
+	bh=OI1lHGN/8rq7Cy4rK+rxZTZJzs4W6CxKJf57L0o5NGU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=kz9QvOUPXnQ9Wy/OczdBZdLEF8wnZdgYo4yGa/q9ZF9zJ6bubJQJI/+U75ppqXWJKyBdad0POcqmnxaP2XlIkOVTee4AImUoIojZPjuC+b7IniGQwKXX0kM3lxpYF9HAOZ/86b8lcvdRn+l6W+2rUo/yCtY5wJA0RyPFFaZjsb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=QSRdj1N1; arc=none smtp.client-ip=85.214.62.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+	(No client certificate requested)
+	(Authenticated sender: marex@denx.de)
+	by phobos.denx.de (Postfix) with ESMTPSA id 787498814D;
+	Tue, 24 Sep 2024 15:12:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+	s=phobos-20191101; t=1727183532;
+	bh=n7OBSndBBjC1EH1IxTFK9YvGedMJTiLcAZ4olyfRRL4=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=QSRdj1N1dqWU09ThEOU0wk+gZf3USpIPkoTD+TdjRYTaF7Dlivvdko/69HoLChu1g
+	 TXIIJPEDLifzIinOxw7xmg0RVZWyScGHzR0H5hYeTrLIwn5klvrsQQ85AylRFX5BHP
+	 ex80ArMi0kh1qaOkgMXLbmXcVhZICIRHteNyPwGeU8Hacre1+8Xe4eFqmh2Nz9jxh/
+	 +WnoqchZSlPL8ZK5enPaEOlJhHM4kuhjyn2MXhP318HVUB04mSOZjlRqtvSnT/hDCg
+	 7e217uoxQciUje8evEHavzYy1s0hfn9G20JqokEGUf6R8amNhCthO3sa3ybgjmgjte
+	 cCP5PuDVMCDhw==
+Message-ID: <20d9dfe7-44a1-4f92-92bb-9b760a735e60@denx.de>
+Date: Tue, 24 Sep 2024 12:04:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] watchdog: stm32_iwdg: Add pretimeout support
+From: Marek Vasut <marex@denx.de>
+To: linux-watchdog@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: =?UTF-8?Q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ linux-arm-kernel@lists.infradead.org,
+ linux-stm32@st-md-mailman.stormreply.com
+References: <20240415134903.8084-1-marex@denx.de>
+ <f93b5a80-33fb-4708-ab86-6b28f626a186@denx.de>
+ <4386a9c2-bf9e-4612-a928-dddb1adb9571@denx.de>
+Content-Language: en-US
+In-Reply-To: <4386a9c2-bf9e-4612-a928-dddb1adb9571@denx.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
 
-The pull request you sent on Sun, 22 Sep 2024 11:53:41 +0200:
+On 9/5/24 3:12 PM, Marek Vasut wrote:
+> On 6/23/24 8:18 PM, Marek Vasut wrote:
+>> On 4/15/24 3:48 PM, Marek Vasut wrote:
+>>> The STM32MP15xx IWDG adds registers which permit this IP to generate
+>>> pretimeout interrupt. This interrupt can also be used to wake the CPU
+>>> from suspend. Implement support for generating this interrupt and let
+>>> userspace configure the pretimeout. In case the pretimeout is not
+>>> configured by user, set pretimeout to 3/4 of the WDT timeout cycle.
+>>>
+>>> Reviewed-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+>>> Tested-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+>>> Signed-off-by: Marek Vasut <marex@denx.de>
+>>> ---
+>>> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+>>> Cc: Guenter Roeck <linux@roeck-us.net>
+>>> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+>>> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+>>> Cc: linux-arm-kernel@lists.infradead.org
+>>> Cc: linux-stm32@st-md-mailman.stormreply.com
+>>> Cc: linux-watchdog@vger.kernel.org
+>>> ---
+>>> V2: - Subtract the pretimeout value from timeout value before writing it
+>>>        into the IWDG pretimeout register, because the watchdog counter
+>>>        register is counting down, and the pretimeout interrupt triggers
+>>>        when watchdog counter register matches the pretimeout register
+>>>        content.
+>>>      - Set default pretimeout to 3/4 of timeout .
+>>> V3: - Use dev instead of pdev->dev
+>>>      - Swap order of ret/return 0
+>>>      - Split this from the DT changes, which are orthogonal
+>>>      - Uh, this patch got stuck in upstreaming queue, sorry
+>>> V4: - Update commit message to match V2 default pretimeout to 3/4
+>>>      - Add RB/TB from Clément
+>>
+>> Hi,
+>>
+>> Are there still any open topics with this patch ?
+> 
+> Anything ?
 
-> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.12-rc1
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f34c51252189e6f18f3983f7cb7cc46f2e54ffe9
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Can this be pulled via the stm32 SoC tree ?
 
