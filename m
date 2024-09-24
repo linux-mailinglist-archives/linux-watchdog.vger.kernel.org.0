@@ -1,79 +1,101 @@
-Return-Path: <linux-watchdog+bounces-2021-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2022-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2DED98483B
-	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Sep 2024 17:07:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76371984BDF
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Sep 2024 22:00:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 908DD282D99
-	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Sep 2024 15:07:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91FA31C22979
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Sep 2024 20:00:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 247141AB50A;
-	Tue, 24 Sep 2024 15:07:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YXIY7GIk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47FB012D773;
+	Tue, 24 Sep 2024 20:00:08 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA35B1A4F30;
-	Tue, 24 Sep 2024 15:07:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8DF13B2BB;
+	Tue, 24 Sep 2024 20:00:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727190468; cv=none; b=lCN7kFBI4t8HSXItpaWrkLXvalZPunTbg1TH2tLD7hD56UMnXWw/b44h69e5vm2LOO9zbOsCvcdf5cB9CAx5N3+Gea+9qZGqrYJF+t0TRrS7il+70U2ndIobbFmblwPD4RviLc9pZD/Z6ZhFtaCBVzwnFNt0QwYUmAP13IimriY=
+	t=1727208008; cv=none; b=iktehUWFJdyesHOfkobpRUBki1s7oXeb9IbaTZn+aPoDVGr516Z/Bm+0qP3FjrUX331wPyfgNKJ0obMPVVqwXo1ZNhipGrPmscFLl3aJqk2DPfMv/sP8eIsrHOznnxmoHNpG2ZI9EtP3rFoQ7l1Asz6pyPJYfH+NtIdXM10HpcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727190468; c=relaxed/simple;
-	bh=TBVZS5I/tsaXX9mMohoWRCq6ZqMV4ADDrABkBybvC6E=;
-	h=MIME-Version:Content-Type:From:To:Message-ID:In-Reply-To:
-	 References:Subject:Date; b=qjnISCaoPI9fC/L1qQc2ecFntfWE3pfOROpDcg+c5D8RwonSg/oksgIl2jSsmYeEJU/aE6rOQbH2dsar5T5QJ+kFW4g2ErnmDfvjveD4U2tRBC1LoCS/eemNbau01kcKytf4smmcgAkqyaKH1ZksZV4yqYKarMIn0xeIiM1UcwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YXIY7GIk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EEC8C4CEC4;
-	Tue, 24 Sep 2024 15:07:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727190467;
-	bh=TBVZS5I/tsaXX9mMohoWRCq6ZqMV4ADDrABkBybvC6E=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=YXIY7GIkg/gD+Dwfj9oauRjuaKrwQBZ7KgnOj7S6ARR8kbBIrM3qi0CH9sURkUloJ
-	 AhCFRCqmGSBZLAgbS9S30SNDlY4fo/GRrnuL0GfncdbP1fsr3rUhqc4bNpFycqKxxR
-	 OgsmSA+KDkxp+FedyJQ9xFVMEc8SYecCrpf/nVhOU0pvcB2DpbB2P5N+8yM3Ou9Onw
-	 pxMrZrdYEIYR/GHtoVQcZ1B7Lq4soC0e0RtZ7EBlAubfbPpbf+0f3Fg7fb6shEHimJ
-	 mF56uagroigMZdxVjhnJJYZVJ/4N2C8M9vl8B/ywxf1oSCoP9QJjNdGE+wVpM/eCMm
-	 Sx7x2S1DfEMtA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 0284A3806656;
-	Tue, 24 Sep 2024 15:07:50 +0000 (UTC)
+	s=arc-20240116; t=1727208008; c=relaxed/simple;
+	bh=9hKhFyVM4E8u4KeWbEylTGZvzQ0rrdD7T4ymUGZPV64=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UxCcx7eJlXNfk7088+Vy138pVJDq3nFGeBStZ3rvhnrnnkcJKGvrGr826vhGTecHGYJyo/pkU5vQVnUhlWGaM6oW12qy13jOAHuGmVQBPD/96jgirM8kATe2sWzIpM/ZY/LtnWIQi1/2G8rGq53E0eCdNNPAJTpyCy3FbzYy4VA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=176.9.242.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id 86B6E100DA1C6;
+	Tue, 24 Sep 2024 22:00:01 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 3A5E35931A1; Tue, 24 Sep 2024 22:00:01 +0200 (CEST)
+Date: Tue, 24 Sep 2024 22:00:01 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	Baocheng Su <baocheng.su@siemens.com>,
+	Felix Moessbauer <felix.moessbauer@siemens.com>,
+	Christian Storm <christian.storm@siemens.com>,
+	Quirin Gylstorff <quirin.gylstorff@siemens.com>,
+	Chao Zeng <chao.zeng@siemens.com>
+Cc: Xing Tong Wu <xingtong_wu@163.com>,
+	Tobias Schaffner <tobias.schaffner@siemens.com>,
+	linux-leds@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, helpdesk@kernel.org
+Subject: Re: Bouncing maintainers: Xing Tong Wu, Gerd Haeussler
+Message-ID: <ZvMaQcTHXaUDBO3U@wunner.de>
+References: <20240924-straight-rigorous-earthworm-f8f242@lemur>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-From: Bugspray Bot <bugbot@kernel.org>
-To: helpdesk@kernel.org, xingtong_wu@163.com, 
- konstantin@linuxfoundation.org, linux-watchdog@vger.kernel.org, 
- platform-driver-x86@vger.kernel.org, tobias.schaffner@siemens.com, 
- linux-leds@vger.kernel.org
-Message-ID: <20240924-b219308-dff6b18aadda@bugzilla.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20240924-straight-rigorous-earthworm-f8f242@lemur>
-References: <20240924-straight-rigorous-earthworm-f8f242@lemur>
-Subject: Re: Bouncing maintainers: Xing Tong Wu, Gerd Haeussler
-X-Bugzilla-Product: kernel.org
-X-Bugzilla-Component: Helpdesk
-X-Mailer: bugspray 0.1-dev
-Date: Tue, 24 Sep 2024 15:07:50 +0000 (UTC)
 
-Hello:
+[to += Jan Kiszka and other Siemens folks]
 
-This conversation is now tracked by Kernel.org Bugzilla:
-https://bugzilla.kernel.org/show_bug.cgi?id=219308
-
-There is no need to do anything else, just keep talking.
--- 
-Deet-doot-dot, I am a bot.
-Kernel.org Bugzilla (bugspray 0.1-dev)
-
+On Tue, Sep 24, 2024 at 10:56:12AM -0400, Konstantin Ryabitsev wrote:
+> Hello:
+> 
+> I'm reaching out to co-maintainers of the following subsystems:
+> 
+>   - SIEMENS IPC LED DRIVERS
+>   - SIEMENS IPC PLATFORM DRIVERS
+>   - SIEMENS IPC WATCHDOG DRIVERS
+> 
+> The email address for several of your maintainers are bouncing:
+> 
+>   M: Xing Tong Wu <xingtong.wu@siemens.com>
+>   M: Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+> 
+> There are several possible courses of action:
+> 
+> 1. If you know the new email address for the maintainers, please ask them to
+>    submit a patch for MAINTAINERS and .mailmap files.
+> 
+> 2. If these maintainer stepped away from their duties, or if co-maintainers are
+>    equally unable to reach them via any other means, please submit a patch to
+>    MAINTAINERS to remove their M: entries.
+> 
+> The goal is to have no bouncing M: entries in the maintainers file, so please
+> follow up as soon as you have decided on the correct course of action.
+> 
+> Best regards,
+> -- 
+> Konstantin Ryabitsev
+> Linux Foundation
+> 
+> bugspray track
 
