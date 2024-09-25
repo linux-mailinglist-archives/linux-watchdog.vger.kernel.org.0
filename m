@@ -1,272 +1,411 @@
-Return-Path: <linux-watchdog+bounces-2025-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2026-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFF14985262
-	for <lists+linux-watchdog@lfdr.de>; Wed, 25 Sep 2024 07:26:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B057E9853B4
+	for <lists+linux-watchdog@lfdr.de>; Wed, 25 Sep 2024 09:20:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D09B1F24E22
-	for <lists+linux-watchdog@lfdr.de>; Wed, 25 Sep 2024 05:26:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 06922B20F71
+	for <lists+linux-watchdog@lfdr.de>; Wed, 25 Sep 2024 07:20:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D36314B967;
-	Wed, 25 Sep 2024 05:26:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A53D2156C73;
+	Wed, 25 Sep 2024 07:20:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b="n+SHadMk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X147m70G"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2040.outbound.protection.outlook.com [40.107.103.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 796CD14A62F;
-	Wed, 25 Sep 2024 05:26:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.103.40
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727241976; cv=fail; b=GiXlbEUKOHAicATylZzLcyys0MLZBRiQAgXK89hGfOYnq/2a5zI+4PKlguJA36BS4jZVGugL3L733tVeMqu7yuvR3oeCKzUiFeLU+oRv9iidB/MgqBZrL7tuILUWLlByqYm4BVlT7cU0EbIFy8e406iBcm6+6mcziJLTicKXciA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727241976; c=relaxed/simple;
-	bh=/Db3pWOnIat6fvW0r5Z8RfQ3U/gq6CkCb+1+2qj0m1k=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=AnyB3T1+cqOLzMKYWx3GkKKEQEdvnU8BnnHsAZ/7f4WCSnilC8kDUGULfdAoYPl0baEuAIOLpYCIgf75sFE0E9Hx4yAn9n2txaXhiP5Sclys8TFpp3vjGQcpGewdModhkBi4P+AEV7RNArO1Z9FHUnQ5AJ0v27GpQj/e/bn2dBE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b=n+SHadMk; arc=fail smtp.client-ip=40.107.103.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siemens.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vsQVi5ogHH4zQGisu/5wP0+JDciQSKhfD8LZufsvL4NAfaREuT+E4VJZl4nYcH6q/otAH0s1JggFtxj/UgNvkB+J2KeDGw6DlrPnEuQEvIa//WyPTZ5pp0flvEKyvO6A0NtJ8u9wnRsW+wiYJzYmitphlwVwZfw0SLTWe02Xhr7/y1MuMMmLJRcnnBpTMYP3ZQTebw45IR4IX/HvZVqjVut0hmWm3DGotea030TxC9anzDyTda+Im+7vnM/YVZcz+NxMy1d67C0QZI3RjIk8bFGwChkmUz3sz+cZdu36qoVQfNTnO1ynpnRMtCdN35LJ5v8iYSKq3ZICFMCsIMW/pA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=slS3TiJuEl4BK2t4DfUCCGJuiD/nOh27lF0d/wDD644=;
- b=EVprLbEDreVxS77DGRITbfJcFbXuyA4kwhuSVl4cPSUTwRDuaIXcJNN7ghTEDK51UGBgYK5s6FE04qGtSs0TwMakj0atTWKlujgBr5VI7ZfLMYgdUwfN5vIYSc4lApxmEFyNRF714qExQGrTc0hZFMxly7x+EYsSDCPEMuNkgGY07fPiOmKu1OyULIw2HtRMrg5f9bHMwhmc/lTJ/YO2a1tY0UsBPZDsCi/N+fa7RYQIiETJEu3Vx3zC83vyIawKEztnU+VOf3cd+wBuVbrQGzdS0OvcOFyxjHPrIcbUci04CIdcoLRjYvyfpy4uP/4gccuT7DymJf2EjegQoUcOkw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=slS3TiJuEl4BK2t4DfUCCGJuiD/nOh27lF0d/wDD644=;
- b=n+SHadMkPROQtznYt6ydVf0MpZ+6nKQo9yZ9dPdptTEZuJbv5exOcB71U5crYnFQRlliGrozhl36TbMYRyIJQPDCWONRojTRiZupDh9F81NKK6rYfS7hz9fOjzWvWc4e3+UntQPHZY5LtPA9TMpNNbFnFkSsAEF9pFnQweLzkEk3nAWo9P73HCp2EvHXaPoOOesniWBM2T7Dmi8Az8IPkN70FCdddzaMmh+kknurSZceEy3dIzGyZBxXUEBb9SJKm/aGVxvihkZV0gvpUnUl/VnZpHmHd76fCW4YkuDvbjwXMQNwQ4QHvGhQWXujjYkZukhVcyK+2T4D4YpEuxc9TA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:588::19)
- by AS1PR10MB5416.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:48d::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.25; Wed, 25 Sep
- 2024 05:26:06 +0000
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::8fe1:7e71:cf4a:7408]) by AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::8fe1:7e71:cf4a:7408%3]) with mapi id 15.20.7982.022; Wed, 25 Sep 2024
- 05:26:06 +0000
-Message-ID: <a70714c8-cfc6-417d-bdd4-c42370cd8075@siemens.com>
-Date: Wed, 25 Sep 2024 07:26:03 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: Bouncing maintainers: Xing Tong Wu, Gerd Haeussler
-To: Lukas Wunner <lukas@wunner.de>,
- Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
- Baocheng Su <baocheng.su@siemens.com>,
- Felix Moessbauer <felix.moessbauer@siemens.com>,
- Christian Storm <christian.storm@siemens.com>,
- Quirin Gylstorff <quirin.gylstorff@siemens.com>,
- Chao Zeng <chao.zeng@siemens.com>
-Cc: Xing Tong Wu <xingtong_wu@163.com>,
- Tobias Schaffner <tobias.schaffner@siemens.com>, linux-leds@vger.kernel.org,
- platform-driver-x86@vger.kernel.org, linux-watchdog@vger.kernel.org,
- helpdesk@kernel.org
-References: <20240924-straight-rigorous-earthworm-f8f242@lemur>
- <ZvMaQcTHXaUDBO3U@wunner.de>
-From: Jan Kiszka <jan.kiszka@siemens.com>
-Content-Language: en-US
-Autocrypt: addr=jan.kiszka@siemens.com; keydata=
- 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
-In-Reply-To: <ZvMaQcTHXaUDBO3U@wunner.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0140.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9e::8) To AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:588::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C234715666A;
+	Wed, 25 Sep 2024 07:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727248827; cv=none; b=W/Xce/DWaG004zfxplEUSATuws3A+gsPmjsO889UI+TUILflLcjF8TwZg9MQtBWaNGe1yovPZ1oXaQJ1Bkl4NbYBDYL4tUQNx/nG8tI//xH8D3HheBK4zGsyJgbbz7QK0sdHJxqoa57BtDydiRsFccMrmke7HrcXCfmu9DVTFVk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727248827; c=relaxed/simple;
+	bh=iuOoT/U8V/IjPnHJe1f8Kd0MVA0ZQh/W2g1jrrUbMFY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iuFS1a9Jm9cnwy6AoS098VhUEVFY4AoBYC3WSfrx5An1EMpcfNYINGhlIg3H0vddM26ZKunzX8BmusuqH11fKYnaaKW9r+cG7shO0/8jvZLY4OXaiGQ867RazshxqCS2/tVmZBgokFl9VTcaWlSeET9DNNbeKC78njvE6thzSiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X147m70G; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-71b0d1c74bbso275296b3a.0;
+        Wed, 25 Sep 2024 00:20:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727248825; x=1727853625; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IfnMzceNKrPajkb5ZuYEoLQYnMZTf7LW1SZIK5C34ZI=;
+        b=X147m70G+eVTVOHi9TsxMqpQd8e8gj/Pb2dRTbuCQh7JEunXrHZCdYzACO+8aKR+Hb
+         UNQw0SkcXcGDWF+a9kgpWeQc5BeytCI1FJYJhbDY0SSeaMuPKF1Aez2JBU13pFzDKYW6
+         TkB5MnLt/WZ8GQy/Eni7V7jiqPNSR1+amqFHXCM8wmRGHd+tnJvviOx78u2ciHoqZIn2
+         lPSG556QCsLO2gF3TbgDRHe/unRessWVBsnQZg5Xv/ty/6toiOdMZL/fgIFAnmkOay5q
+         4PVLLGFv6OU/8HoTt5Wx8AUko7x7vJ43Ol6RE3WIKsbZ812ItFlGqYtgS0JrsUP/Tw8o
+         gI8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727248825; x=1727853625;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IfnMzceNKrPajkb5ZuYEoLQYnMZTf7LW1SZIK5C34ZI=;
+        b=KZXeXUo3vvHS14lYzc11uziLW23O3fTciq1cMNB7b49Msu2Kf1w68G73/lHnYD5vbc
+         90i/smLasC0XAACohs9jgxSUQZVCa1vyKZm5/tMR3xG5Zk15RLRphtvqhsCylPVtYdZT
+         gSByjo5cpPx7LWSPt1xGyN/nwtibXFj6dNUd0shRuSBfTtHaMDWzvpTJV/mtvS66xQbJ
+         xtNQ+bYM6+K2TVJPZSZIAb7kD/jn8E/B28OPGpqaYXZx0mImiloQNEHYdi1b30Rz9kCL
+         NII4FTh9S8NRKXKafSSH7N9XsX0zC9wH+ytluzIamcj67bwSe8q6BAuzsRXP6rR32afZ
+         itgg==
+X-Forwarded-Encrypted: i=1; AJvYcCU+yDOwBv7ZCr4UNdq/hBNQW0Zvw/S6il8SdRA69AeCeRX32GdcDlqR5AJJQ882DfswiCJLrJ2jLWqC@vger.kernel.org, AJvYcCVF84BjbtKgHF3esKMpH7hnDTTAg7B61J1SWarh0zV/cMxf32Qbmy9FvB5NI7rTl7RP9gs96W7ZW7ZGaA==@vger.kernel.org, AJvYcCVJc6GxZj9oJ9Ehg8QNm7ola7ffMDlxPoO3jZ1BEy2u9GiZipL5PLz2VJw5r5wJfk300hsYEkjRmPbt+KPy@vger.kernel.org, AJvYcCXLn50EPAqmGd7lJh5eJcS2o/7/1+D+LH9ueqij5k82ZOKV8PpA2Vqff1tQAKQ0YIuFcYD+MyWcYrXDe1rxi0w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWjTxSx6fWmSNkMdpz2K880d1e9G66eqqOeFbZ1xXFMlXmef/w
+	eyf0uEFsE7zolG5ftcNhe66nXWTukdTTcrYrLamJunGHzhEvQbqL
+X-Google-Smtp-Source: AGHT+IGHCNeu5ZpJhxILkxU96qzlnPtqCBVZ8dNtc0pfCMbxna6aMi25RDYXrACdTYgy++N4Cfha1g==
+X-Received: by 2002:a05:6a20:769e:b0:1d4:e640:2697 with SMTP id adf61e73a8af0-1d4e6402705mr501417637.1.1727248824728;
+        Wed, 25 Sep 2024 00:20:24 -0700 (PDT)
+Received: from localhost.localdomain ([49.130.52.78])
+        by smtp.googlemail.com with ESMTPSA id 41be03b00d2f7-7e6b7c732bdsm2155662a12.63.2024.09.25.00.20.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Sep 2024 00:20:24 -0700 (PDT)
+From: Nick Chan <towinchenmi@gmail.com>
+To: Hector Martin <marcan@marcan.st>,
+	Sven Peter <sven@svenpeter.dev>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Mark Kettenis <kettenis@openbsd.org>,
+	asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-watchdog@vger.kernel.org
+Cc: Nick Chan <towinchenmi@gmail.com>
+Subject: [PATCH v5 00/20] Initial device trees for A7-A11 based Apple devices
+Date: Wed, 25 Sep 2024 15:17:58 +0800
+Message-ID: <20240925071939.6107-1-towinchenmi@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS4PR10MB6181:EE_|AS1PR10MB5416:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5c817f1a-cc9d-4f3a-1a95-08dcdd228dff
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?NUt4OXJoOGV0bU0rNGxZZjVsT1pwZE4zNVE0VUFsaE02aEFYVko0ejg1MU1u?=
- =?utf-8?B?SEt4ekdweGUzbTBKdXVKdHU0UFNLdEc5OGFFa3ZPelVwSXF4dUxTNzYxdFlG?=
- =?utf-8?B?VTU5aGhrOU1lVmlHaU5jdDkwcXpndkhlK01sS2hDTm1LWUZmYm9hSEZ1ajN4?=
- =?utf-8?B?d29IUTBLRXZjMGtRTFhYb3ZocTRWT0p3V29pdlBuSDlTWktQUEw4cFlsRkhz?=
- =?utf-8?B?dEQrSTBWSXhObnJ2eGhta0c0QzF0bm5KL05GeDFkNzJhVmEwelZyclVvci9N?=
- =?utf-8?B?OTYxOEkxd3NNOHlCNHRCUHU0QjdIYnF4d0xDekplK1NXM2dJZDNiUzRnUkQ0?=
- =?utf-8?B?TW9mYURxMHFBMm51aitKaUtUOXM0Ty9CUEVUa1l0aFZjWEkweFRacXoyUWJl?=
- =?utf-8?B?QlI0REdKT1QyT3lqR3o0M05oWXVqN0VHSHU2Q0tlN0t2SHRyR3cxM0pwZ3pq?=
- =?utf-8?B?WU1JQkhSdlRRY2VpQlUrYkt0blJqdFBRZHIzNkNnTjhKWWpXUllER0p4c0FX?=
- =?utf-8?B?YkVsbjJsQkRGSFkrL01Ga3ZWSmluekQ2UlJuS1NFWVZ4V1dEOTVBaVp0MDFw?=
- =?utf-8?B?U01ndHdkQUZ4Ky94amxpTXZmVW0vajNDWVlkNm1JeXRCb2RyUHk0WEwydkZ3?=
- =?utf-8?B?WEZyZUwzYWNMOVJPWnlJSmJMQmhwcnZIRk1UcWxHaysrbndHd3Z3N21mS2ht?=
- =?utf-8?B?NWsybmRvYm9JOStySTZUSWxnSjBmcExLZTBHd1NnME5PK09SWFRpMlR3UW1W?=
- =?utf-8?B?U0JhOUpsTzRXWS95MXBKZHl6SUxObnoxKzBwdFhmLzd3YXF0Mzh5bExVaHI5?=
- =?utf-8?B?L09LcWxxclg4UWJhRStXcjhmS0ZYUHROU3pwZjUrVGpaVHB2cFNzWVdtc256?=
- =?utf-8?B?dFBETmpoekc3em1GcDR5MlpYTS91MFJqL0tpdG9YT2NSYVhpbkxnT1FMVkRO?=
- =?utf-8?B?ZTVqV2NVT0o1a3d5dFlhL2l0bHRKZGE5U2xVRC82OFZJWWRpWGdpc0pvemNC?=
- =?utf-8?B?TFVDdU5qNk5zZE8vU00vKzU2WjFBeXB6VFdzQTNnTWVnb3NmSW9XY09xMlQ3?=
- =?utf-8?B?OXE5SVV2MGNUakhjV29LNDQrU2FkTWx6UUNWc2h3NnRjYXAzb3k4Uks0RDlY?=
- =?utf-8?B?bnFTTFFGdTdQRm1udVVJSFFRQ0dmeU1CNVFrbU1hc2pZOXF1cVphQlBaSXR0?=
- =?utf-8?B?cytBeUpKSjUvZzlXakROYmVrNy82RjkrUHdLL3FMMmFIYWlkMUFRdXJmN1Rl?=
- =?utf-8?B?ckN5ZXE3b0JxUEhqd3NLRTBZRmV1aFQzNEJ1czFyUjVNdG9STUdDeEcyQW0x?=
- =?utf-8?B?SFRYclc4eExhc0xVeEdKcUE1NWU5Z1dXU2dpL0NsTGhZYzMrQUhrcDVubERN?=
- =?utf-8?B?NDMyaFM3VXkwWkJKU056RFYyYlZQaHdDRUpWN0xJcjBIL3FKUmdXaGlzVitW?=
- =?utf-8?B?Q0l2ald2MUVpR3p1WEh0M3JaUHdUZHJtUUlXM0x5ZkJWUDROb0N6cm93ZXUr?=
- =?utf-8?B?Z0NUNmhONzJ4UU1rcURqdm5vUURvVTU2MkNQaUliSFJJQWxUNkFIRGRKMUZm?=
- =?utf-8?B?ZmM5eis3QW10cEtPaEFFOTdEYUVRQWEvU2VQZ2kzajc2VEM2emc4NVFuWFZY?=
- =?utf-8?B?MDVsS2U5SjFSZlpTb1MrdFkxOUNTUGRENytZaVFNK0VpaS80ZGl0NmlZQk0w?=
- =?utf-8?B?cDVKY0dUM1RSalJDUU5adE5vSEowRy9QZWFOK3hsalRwelZ0TE1OazR1TGdv?=
- =?utf-8?B?VmRCcHdNNTl6SHZxdlRSZWVYL1J5UDNWWXUydkRkZVRVbFBOT1lCZW9oL0ZW?=
- =?utf-8?B?aFpiRnRTcU04SDFqR0lpQT09?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?c1UwdnhiTWRtZDB1anRScnorQkxHL3RtNmQwM2JtckNFM3Ivaml1QWF3bDFU?=
- =?utf-8?B?WkwraXdsWXJpOVJHWGdCcklvQWtrZDl6cHF0alFPa1BVOFFVbmZJREZueW1N?=
- =?utf-8?B?WEp0WnU1VFJOZzlDeTNVM2I0ZWkvYjZGNnRpY3VUazNUai9icDNRbWNKT2tL?=
- =?utf-8?B?UVViam8zcDNEdlNZQ1dRdkdyY1J4VCs0ZXVvTU1tNzgwSkV6alVIZFN3U3ZU?=
- =?utf-8?B?emZsYjZXRlQycVBlM3lDQTJ4M3ZXdlNuYnRpQzhrNG43UkZkc3MwV01TSEx5?=
- =?utf-8?B?Y3p0OEZZSDVIeml6NkE5c2JDVC9aSkI5eGIwTjFEUGVMZ3NHNTJUTVFqRWlH?=
- =?utf-8?B?cGxlb05lZ1E1L2NCd3pZVFZGMWQ1azdqS1ZJbEh3WlNHT3p5Wk1kejJmRzVp?=
- =?utf-8?B?U1BFVmh1RE9HWDBWdUwzTllHNlY0NVo5aEwyRVlVUk5iTGsrQXlvSFlqQ2ox?=
- =?utf-8?B?ait2UnlHK3FNdGtjb2U4VHNJWVBZWTVZMVRkYktGeG56NUVxVjhuR1E3c3ZB?=
- =?utf-8?B?R1p1UHk1OGF0NHU4NlR4ZkUrWm1CYW5TTDFBSjVQTnRhWXo0SnFjRVJPYmoz?=
- =?utf-8?B?SEFqZ0hHRy85MW1BVkhWdFpYVDNTT0JRRDFiMkxwMjBhdGRMYlcvblIxVkcz?=
- =?utf-8?B?c2FCcnpjb0lDaWgvcXlWNk5ZYzBOR0E1NjZtdFF3Vit3T0ZsenNYSjRBd0Zj?=
- =?utf-8?B?cnpjZmtpNzQvYVdIYjdqRnNzcUJYSlc0ZSs2ZThZZCtzMXpabTV6Z1Zta0l2?=
- =?utf-8?B?RExMTkRqWlUvZE1xSVVKU0NoTEgvWjdVdnA4bGJKdlhCVWRwTkpFalVURFM0?=
- =?utf-8?B?d3VSc01WMGpwMi8vQjJ2R3V5NnpOSkd1SUZhcUdUbzlEMmNocGlJbUx0TmxB?=
- =?utf-8?B?L3c3OFM4TFpDMzFSOEFFWjMyeUZJQlVNNzlLWGR6eW5JOHNWRkR0dEZTTTJ0?=
- =?utf-8?B?dm1udnM5STdRSzlPYlErUjd5UlZqdmlNRHRWTFEyK3hEd1ZLOElZQzZFZFRq?=
- =?utf-8?B?SENHQk1rUmtKYWFlSGNsZWl1eTVaTGVFbkh6c3F6U0orckVxSDRpZVFjM0I4?=
- =?utf-8?B?TFFxMHM3N1BhV0ZUSXVxVXF5NnFSTDBoWHZYM1E2dlg2WUhsaG1ITWxOVjl0?=
- =?utf-8?B?dnRIeUFpMC9KcmduQktKSkhyZ2Zmc016S0hHUk15a3V3TEpTajUxRExrUlJq?=
- =?utf-8?B?KzIydVdnRS9ZQTRITGZQZ3dWcldEdnl5R0RlN21Ub095elU1SFZiNnRadGlU?=
- =?utf-8?B?dkVXWXNTQzZOdHorOVZhS3NvRW51dk5ZenFOcWRUUkJkWlY0MWJsZVlIWnFL?=
- =?utf-8?B?WGh0VTZNQ0Y1cTVLYi9VamMyTG9OR0poUnJQM3VvRDhURUloanhpN2V3dFFj?=
- =?utf-8?B?cHpBNGtvdllMQ254MkxZRVQxMTc3R3NBRnJEeDNQeHU3UFZsMWViN3d6Tjd5?=
- =?utf-8?B?dmdTZTNSOUZWdmYvL0w2N1U1d3JLQUliY203bWtnM1ZXTWd0MXNJdEgwL2NW?=
- =?utf-8?B?N0c3ZkJ3eW1OeVpMZE15NDZteHU2OVlaejdKS2F4OVJMS294T1ZDL0xVSWoz?=
- =?utf-8?B?VGdVOUZWWUtXZ3RRS2RObzdDYUZZaDNOOU8wa1hVZ2djSjM0Vm5aUTB1MkxZ?=
- =?utf-8?B?QlFLazFLNmpNZjU0Yk1RcldRdXJ5aVk0S09PNHB4WWh2L2Z4UUJGazh2V09O?=
- =?utf-8?B?WGdCVEFUbE1lWTNMb3ovZEhGSXk1SkVJQmVsTTdBN2VOdWdna0svUTd2d2ox?=
- =?utf-8?B?VDEzWFhRMFRUakk0cjFya3hLMDVzSkZySnA0M3l4SStHakVYQ3R6alFKYkZh?=
- =?utf-8?B?eUxOL3J1QVR3UUFTTHdyaVBhNFM1N1AyMlVNYmZuMnpyT0pONGNhU3pkdzhS?=
- =?utf-8?B?UjhUcDlQb3E5VG1yampPdDVnYVZ5OTgwQmxrK3NWazZCRnJjVzd5YVl2aGxO?=
- =?utf-8?B?YkhnYU9KV3NnZVRrbDlhZjNtbDgzSkkzaHhpd1ZKL3lva2RENE1PR1hWNWhN?=
- =?utf-8?B?eVkzZkdPYldvQXBEcUdFenB0L1lYWlhLZmp1b1IyM0RFdzRGVWJjb3JRMFQ2?=
- =?utf-8?B?SXZBSjJIVDZPZWxUclE3aU16TUpGNFNxNEtab1RUL3NuZlN6ZjNJSnJRT2Mz?=
- =?utf-8?Q?AnCl+GeR/ynw0P9FfK6xhDfLo?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c817f1a-cc9d-4f3a-1a95-08dcdd228dff
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2024 05:26:06.2183
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lnbiQnyL8Qv4bQxr3UxgVt4AXyRz8DErxCFHvcGUpIb63saB/OSbfIuzpnfFhsVgET4beP9HifLFF0OvrVakyw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR10MB5416
+Content-Transfer-Encoding: 8bit
 
-Hi all,
+Hi,
 
-On 24.09.24 22:00, Lukas Wunner wrote:
-> [to += Jan Kiszka and other Siemens folks]
-> 
-> On Tue, Sep 24, 2024 at 10:56:12AM -0400, Konstantin Ryabitsev wrote:
->> Hello:
->>
->> I'm reaching out to co-maintainers of the following subsystems:
->>
->>   - SIEMENS IPC LED DRIVERS
->>   - SIEMENS IPC PLATFORM DRIVERS
->>   - SIEMENS IPC WATCHDOG DRIVERS
->>
->> The email address for several of your maintainers are bouncing:
->>
->>   M: Xing Tong Wu <xingtong.wu@siemens.com>
->>   M: Gerd Haeussler <gerd.haeussler.ext@siemens.com>
->>
->> There are several possible courses of action:
->>
->> 1. If you know the new email address for the maintainers, please ask them to
->>    submit a patch for MAINTAINERS and .mailmap files.
->>
->> 2. If these maintainer stepped away from their duties, or if co-maintainers are
->>    equally unable to reach them via any other means, please submit a patch to
->>    MAINTAINERS to remove their M: entries.
->>
->> The goal is to have no bouncing M: entries in the maintainers file, so please
->> follow up as soon as you have decided on the correct course of action.
->>
->> Best regards,
->> -- 
->> Konstantin Ryabitsev
->> Linux Foundation
->>
->> bugspray track
+This series adds device trees for all A7-A11 SoC based iPhones, iPads,
+iPod touches and Apple TVs.
 
-Sorry for the mess, we are sorting this out right now. Update patch will
-follow then.
+The following devices has been excluded from this series:
+  - All T2 devices (A10-based): bootloader does not work (yet)
+  - HomePod: Not tested, and it's also a different form factor
 
-Jan
+To pass `make dtbs_check`, please install the latest dtschema from the main
+branch, for the `television` chassis type.
 
+This series supports the following on all devices:
+- SMP (spin-table)
+- UART
+- simple-framebuffer
+- watchdog
+- timer
+- pinctrl
+- AIC interrupts
+
+The following is supported on A7-A10:
+- Buttons and switches (with pinctrl)
+The buttons on A11 based devices like the iPhone X is a subdevice of the
+not yet supported SMC.
+
+Patch dependencies:
+- The required AIC patches[1] has been sitting in linux-next since
+next-20240906, through the tip tree.
+- The important serial fixes[2] has been sitting in linux-next since
+next-20240913, through the tty tree.
+- A trivial patch to increase the reset delay in the watchdog driver[3]
+are needed on some SoCs to avoid the "Reboot Failed" message. It has
+been reviewed. (The system will reset regardless of the patch)
+
+Authorship information:
+- The commits to actually add the dts files are mostly made by Konrad,
+and Konrad's sign-off is added by me with permission. I also updated the
+Konrad's email in the actual dts files. Konrad can confirm this.
+
+- Everything else is entirely made by me.
+
+Changes since v4:
+  - Removed incorrect commit message about the order of CPU cores
+    in the commit adding Apple A7-A11 CPU cores.
+  - Update tags on commit added A8X device tree files, requested by
+    Markuss.
+
+Changes since v3:
+  - Properly seperate A10X dt-binding additions and dts additions.
+  - Apple CPU cores, including the existing ones are now ordered
+    alphabetically.
+
+Changes since v2:
+  - Removed A10 cpufreq. The loader may be missing some initialization
+    code that just happened to be performed by some versions of the
+    firmware as well, given the inconsistent behavior on different
+    devices. It is also possible that the driver needs to be modified,
+    I do not know and this needs more research first.
+
+  - Removed Ivaylo's tags on commit to add A8X device trees, seems he
+    does not want those anymore[4].
+  - Added Ivaylo's tags on commit to add A8 device tree, I have missed
+    the tag. See [5] for source of those tags.
+  - Added Conor's missing A-b on the commit to add A7 machine bindings.
+
+Changes since v1:
+  - Added /chassis-type property
+  - Added opp-microvolt in A10 cpufreq for documentation purposes
+  - Home button is now assigned KEY_HOMEPAGE
+  - Fixed t8010-n112.dts and do not remove it from Makefile in later
+    commits... (iPod touch 7)
+
+In order to be consistent with the Apple ARM Machines bindings,
+the order of dt-bindings did not change from v1.
+
+The sort order logic here is having SoC type families in release
+order, and SoCs within each family in release order:
+    
+- t8xxx/t700x/s5l8960x (Apple HxxP/G series, "phone"/"tablet" chips)
+   - s5l8960x (Apple H6/A7)
+   - t7000 (Apple H7P/A8)
+   - t7001 (Apple H7G/A8X)
+   - s8000/3 (Apple H8P/A9)
+   - s8001 (Apple H8G/A9X)
+   - t8010 (Apple H9P/A10)
+   - t8011 (Apple H9G/A10X)
+   - t8015 (Apple H10/A11)
+   - t8103 (Apple H13G/M1)
+   - t8112 (Apple H14G/M2)
+- t6xxx (Apple HxxJ series, "desktop" chips)
+   - t6000 (Apple H13J(S)/M1 Pro)
+   - t6001 (Apple H13J(C)/M1 Max)
+   - t6002 (Apple H13J(D)/M1 Ultra)
+
+At this moment, it is expected that most hardware blocks will be 100%
+compatible between A-series and AX-series SoCs, though to a less extent
+than compatibility between desktop chips of the same generation.
+
+v1: https://lore.kernel.org/asahi/20240911084353.28888-2-towinchenmi@gmail.com
+v2: https://lore.kernel.org/asahi/20240914052413.68177-1-towinchenmi@gmail.com
+v3: https://lore.kernel.org/asahi/20240915080733.3565-1-towinchenmi@gmail.com
+v4: https://lore.kernel.org/asahi/20240919161443.10340-1-towinchenmi@gmail.com
+
+[1]: https://lore.kernel.org/asahi/20240901034143.12731-1-towinchenmi@gmail.com
+[2]: https://lore.kernel.org/asahi/20240911050741.14477-1-towinchenmi@gmail.com
+[3]: https://lore.kernel.org/asahi/20240913174540.45551-1-towinchenmi@gmail.com
+[4]: https://lore.kernel.org/asahi/34c748fe-89d2-d3a5-599d-52972c10f688@gmail.com
+[5]: https://github.com/konradybcio/linux-apple/commits/apple/v5.19-rc1
+
+Nick Chan
+---
+
+Konrad Dybcio (8):
+  arm64: dts: apple: Add A7 devices
+  arm64: dts: apple: Add A8 devices
+  arm64: dts: apple: Add A8X devices
+  arm64: dts: apple: Add A9 devices
+  arm64: dts: apple: Add A9X devices
+  arm64: dts: apple: Add A10 devices
+  arm64: dts: apple: Add A10X devices
+  arm64: dts: apple: Add A11 devices
+
+Nick Chan (12):
+  dt-bindings: arm: cpus: Add Apple A7-A11 CPU cores
+  dt-bindings: watchdog: apple,wdt: Add A7-A11 compatibles
+  dt-bindings: pinctrl: apple,pinctrl: Add A7-A11 compatibles
+  dt-bindings: arm: apple: Add A7 devices
+  dt-bindings: arm: apple: Add A8 devices
+  dt-bindings: arm: apple: Add A8X devices
+  dt-bindings: arm: apple: Add A9 devices
+  dt-bindings: arm: apple: Add A9X devices
+  dt-bindings: arm: apple: Add A10 devices
+  dt-bindings: arm: apple: Add A10X devices
+  dt-bindings: arm: apple: Add A11 devices
+  arm64: Kconfig: Update help text for CONFIG_ARCH_APPLE
+
+ .../devicetree/bindings/arm/apple.yaml        | 160 ++++++++++-
+ .../devicetree/bindings/arm/cpus.yaml         |   8 +-
+ .../bindings/pinctrl/apple,pinctrl.yaml       |   5 +
+ .../bindings/watchdog/apple,wdt.yaml          |   5 +
+ arch/arm64/Kconfig.platforms                  |   4 +-
+ arch/arm64/boot/dts/apple/Makefile            |  53 ++++
+ arch/arm64/boot/dts/apple/s5l8960x-5s.dtsi    |  54 ++++
+ arch/arm64/boot/dts/apple/s5l8960x-air1.dtsi  |  54 ++++
+ arch/arm64/boot/dts/apple/s5l8960x-j71.dts    |  14 +
+ arch/arm64/boot/dts/apple/s5l8960x-j72.dts    |  14 +
+ arch/arm64/boot/dts/apple/s5l8960x-j73.dts    |  14 +
+ arch/arm64/boot/dts/apple/s5l8960x-j85.dts    |  14 +
+ arch/arm64/boot/dts/apple/s5l8960x-j85m.dts   |  14 +
+ arch/arm64/boot/dts/apple/s5l8960x-j86.dts    |  14 +
+ arch/arm64/boot/dts/apple/s5l8960x-j86m.dts   |  14 +
+ arch/arm64/boot/dts/apple/s5l8960x-j87.dts    |  14 +
+ arch/arm64/boot/dts/apple/s5l8960x-j87m.dts   |  14 +
+ arch/arm64/boot/dts/apple/s5l8960x-mini2.dtsi |  54 ++++
+ arch/arm64/boot/dts/apple/s5l8960x-mini3.dtsi |  14 +
+ arch/arm64/boot/dts/apple/s5l8960x-n51.dts    |  14 +
+ arch/arm64/boot/dts/apple/s5l8960x-n53.dts    |  14 +
+ arch/arm64/boot/dts/apple/s5l8960x.dtsi       | 146 ++++++++++
+ arch/arm64/boot/dts/apple/s8000-j71s.dts      |  15 +
+ arch/arm64/boot/dts/apple/s8000-j72s.dts      |  15 +
+ arch/arm64/boot/dts/apple/s8000-n66.dts       |  15 +
+ arch/arm64/boot/dts/apple/s8000-n69u.dts      |  15 +
+ arch/arm64/boot/dts/apple/s8000-n71.dts       |  15 +
+ arch/arm64/boot/dts/apple/s8000.dtsi          | 178 ++++++++++++
+ arch/arm64/boot/dts/apple/s8001-j127.dts      |  14 +
+ arch/arm64/boot/dts/apple/s8001-j128.dts      |  14 +
+ arch/arm64/boot/dts/apple/s8001-j98a.dts      |  14 +
+ arch/arm64/boot/dts/apple/s8001-j99a.dts      |  14 +
+ arch/arm64/boot/dts/apple/s8001-pro.dtsi      |  47 +++
+ arch/arm64/boot/dts/apple/s8001.dtsi          | 167 +++++++++++
+ arch/arm64/boot/dts/apple/s8003-j71t.dts      |  15 +
+ arch/arm64/boot/dts/apple/s8003-j72t.dts      |  15 +
+ arch/arm64/boot/dts/apple/s8003-n66m.dts      |  15 +
+ arch/arm64/boot/dts/apple/s8003-n69.dts       |  15 +
+ arch/arm64/boot/dts/apple/s8003-n71m.dts      |  15 +
+ arch/arm64/boot/dts/apple/s8003.dtsi          |  19 ++
+ arch/arm64/boot/dts/apple/s800x-6s.dtsi       |  52 ++++
+ arch/arm64/boot/dts/apple/s800x-ipad5.dtsi    |  46 +++
+ arch/arm64/boot/dts/apple/s800x-se.dtsi       |  52 ++++
+ arch/arm64/boot/dts/apple/t7000-6.dtsi        |  52 ++++
+ arch/arm64/boot/dts/apple/t7000-j42d.dts      |  19 ++
+ arch/arm64/boot/dts/apple/t7000-j96.dts       |  14 +
+ arch/arm64/boot/dts/apple/t7000-j97.dts       |  14 +
+ arch/arm64/boot/dts/apple/t7000-mini4.dtsi    |  53 ++++
+ arch/arm64/boot/dts/apple/t7000-n102.dts      |  50 ++++
+ arch/arm64/boot/dts/apple/t7000-n56.dts       |  14 +
+ arch/arm64/boot/dts/apple/t7000-n61.dts       |  14 +
+ arch/arm64/boot/dts/apple/t7000.dtsi          | 146 ++++++++++
+ arch/arm64/boot/dts/apple/t7001-air2.dtsi     |  46 +++
+ arch/arm64/boot/dts/apple/t7001-j81.dts       |  14 +
+ arch/arm64/boot/dts/apple/t7001-j82.dts       |  14 +
+ arch/arm64/boot/dts/apple/t7001.dtsi          | 154 ++++++++++
+ arch/arm64/boot/dts/apple/t8010-7.dtsi        |  47 +++
+ arch/arm64/boot/dts/apple/t8010-d10.dts       |  14 +
+ arch/arm64/boot/dts/apple/t8010-d101.dts      |  14 +
+ arch/arm64/boot/dts/apple/t8010-d11.dts       |  14 +
+ arch/arm64/boot/dts/apple/t8010-d111.dts      |  14 +
+ arch/arm64/boot/dts/apple/t8010-ipad6.dtsi    |  47 +++
+ arch/arm64/boot/dts/apple/t8010-ipad7.dtsi    |  15 +
+ arch/arm64/boot/dts/apple/t8010-j171.dts      |  14 +
+ arch/arm64/boot/dts/apple/t8010-j172.dts      |  14 +
+ arch/arm64/boot/dts/apple/t8010-j71b.dts      |  14 +
+ arch/arm64/boot/dts/apple/t8010-j72b.dts      |  14 +
+ arch/arm64/boot/dts/apple/t8010-n112.dts      |  50 ++++
+ arch/arm64/boot/dts/apple/t8010.dtsi          | 167 +++++++++++
+ arch/arm64/boot/dts/apple/t8011-j105a.dts     |  15 +
+ arch/arm64/boot/dts/apple/t8011-j120.dts      |  14 +
+ arch/arm64/boot/dts/apple/t8011-j121.dts      |  14 +
+ arch/arm64/boot/dts/apple/t8011-j207.dts      |  14 +
+ arch/arm64/boot/dts/apple/t8011-j208.dts      |  14 +
+ arch/arm64/boot/dts/apple/t8011-pro2.dtsi     |  47 +++
+ arch/arm64/boot/dts/apple/t8011.dtsi          | 175 ++++++++++++
+ arch/arm64/boot/dts/apple/t8015-8.dtsi        |  16 ++
+ arch/arm64/boot/dts/apple/t8015-8plus.dtsi    |   9 +
+ arch/arm64/boot/dts/apple/t8015-d20.dts       |  14 +
+ arch/arm64/boot/dts/apple/t8015-d201.dts      |  14 +
+ arch/arm64/boot/dts/apple/t8015-d21.dts       |  14 +
+ arch/arm64/boot/dts/apple/t8015-d211.dts      |  14 +
+ arch/arm64/boot/dts/apple/t8015-d22.dts       |  14 +
+ arch/arm64/boot/dts/apple/t8015-d221.dts      |  14 +
+ arch/arm64/boot/dts/apple/t8015-x.dtsi        |  16 ++
+ arch/arm64/boot/dts/apple/t8015.dtsi          | 268 ++++++++++++++++++
+ 86 files changed, 3202 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-5s.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-air1.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j71.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j72.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j73.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j85.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j85m.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j86.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j86m.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j87.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-j87m.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-mini2.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-mini3.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-n51.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x-n53.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s5l8960x.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/s8000-j71s.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s8000-j72s.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s8000-n66.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s8000-n69u.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s8000-n71.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s8000.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/s8001-j127.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s8001-j128.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s8001-j98a.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s8001-j99a.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s8001-pro.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/s8001.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/s8003-j71t.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s8003-j72t.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s8003-n66m.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s8003-n69.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s8003-n71m.dts
+ create mode 100644 arch/arm64/boot/dts/apple/s8003.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/s800x-6s.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/s800x-ipad5.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/s800x-se.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t7000-6.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t7000-j42d.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t7000-j96.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t7000-j97.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t7000-mini4.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t7000-n102.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t7000-n56.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t7000-n61.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t7000.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t7001-air2.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t7001-j81.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t7001-j82.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t7001.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t8010-7.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t8010-d10.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8010-d101.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8010-d11.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8010-d111.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8010-ipad6.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t8010-ipad7.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t8010-j171.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8010-j172.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8010-j71b.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8010-j72b.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8010-n112.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8010.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t8011-j105a.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8011-j120.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8011-j121.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8011-j207.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8011-j208.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8011-pro2.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t8011.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t8015-8.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t8015-8plus.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t8015-d20.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8015-d201.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8015-d21.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8015-d211.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8015-d22.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8015-d221.dts
+ create mode 100644 arch/arm64/boot/dts/apple/t8015-x.dtsi
+ create mode 100644 arch/arm64/boot/dts/apple/t8015.dtsi
+
+
+base-commit: 4d0326b60bb753627437fff0f76bf1525bcda422
 -- 
-Siemens AG, Technology
-Linux Expert Center
+2.46.0
 
 
