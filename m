@@ -1,151 +1,145 @@
-Return-Path: <linux-watchdog+bounces-2051-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2052-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 358A3987EB5
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Sep 2024 08:51:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10C669882D1
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Sep 2024 12:53:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B30B32854DA
-	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Sep 2024 06:51:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 748F4B20C23
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Sep 2024 10:53:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4741317ADFC;
-	Fri, 27 Sep 2024 06:50:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C38F8183092;
+	Fri, 27 Sep 2024 10:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lvVycrQ1"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2116.outbound.protection.partner.outlook.cn [139.219.146.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BA815D5C1;
-	Fri, 27 Sep 2024 06:50:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.116
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727419855; cv=fail; b=VZRN87pOTYUPvcsQtg4MdwwTjj2P04ot7WdOnkehtINoCEUWpSXeMcI0ogIRSBq+jpU09LMrvpGoLpsxTqqRwpXr8DrrV02ti+9FMTT2Qg6GGmMpkswwCXtPRwaiMANRqMV2temJ+hj+iO5RboDxozoduq2meZtHlxwEcAoDZ6Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727419855; c=relaxed/simple;
-	bh=JZjloVqb6RoT3pnlZByOIyzo68aLVJA6mI0uyPnbYis=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=oNBBzrqCUjarWeWUE93bI6Og8owIaniDaCyzOjupmDd2n55ZJTXxtnZs1yR5qnqpEfRx+EI25g6uYdsnCPT/eyiDfsbFAoulAtaC9RyT7WcQ6vHIU6hNw7/SPOIb6/rw98ix44ZQhGczRSEGr0zxT1vPzEU9kmd+caDtBkUAVEI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U1sYStp58NDDMyt/9H21sT8nOXlfa+M4cd3WV7scTbcaPJZYMdFCHcf4K+HxjcoZrCoeXtOm69scONY4k/Xx6oUHCkoqfAIzHuYqNedpQqjlfnn0ZlfIlOEFRKUV9g7Hcvo+b9aiTGOGdmDROppaKsL4ygu2T/ZggHFR1qUuK4w5VwrP3/Z3b1l4dD5e+bIFaKqjL2z7rhVN97Ocei6YKNPV65IFhrcmfxRsrUa0wV/NphtPErW6TVXVnvMYO6zUAsfwZOmWaqoJ/nYbNTbC7q95AK/RoafNm6tLR20CHyObZ6ZVJvplZ+qlS1TjAoBQCYeUpXZKkzLCLYCD1vTtPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a8fshkL8QwkCD4nF3sKqLPVv1ejn1/tKdqPGo2yYkOQ=;
- b=F9sE2L85MRH7kfoxMUX6i4bk+vV8AiwFBAmW8rG+OPnP5PQ68vdRkn4GT8wRgOADKPFNR2P42IuZazA/p1jBIYeUX2LCqr2EuHR5utewlNyBeCG493q4Io43SE+xBU20/XSadzJG3v4xewSZbUyvdf8EeEntXMsPoEibAOKprgXvppYLO6ROLs9rB7HVn2nWtRmpZ4vSen+Rtu+yjsqJdGa3kliIwEWq9tcL7dhYDmJMUQwbkKUSgxQS6jhhKUmGv9cw0ZP5b4qVE2X4aYsy6dTV6TUUO8ol17Ahm4wWDpCoKL8LWYMFs6k9aKDB9o5b6sCfGflS07KLktDDegrvFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-Received: from NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c510:8::10) by NTZPR01MB1033.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c510:a::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.19; Fri, 27 Sep
- 2024 06:50:41 +0000
-Received: from NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
- ([fe80::40dc:d70a:7a0b:3f92]) by
- NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn ([fe80::40dc:d70a:7a0b:3f92%4])
- with mapi id 15.20.7962.021; Fri, 27 Sep 2024 06:50:41 +0000
-From: Xingyu Wu <xingyu.wu@starfivetech.com>
-To: Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-	Ziv Xu <ziv.xu@starfivetech.com>,
-	linux-kernel@vger.kernel.org
-Cc: Xingyu Wu <xingyu.wu@starfivetech.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-watchdog@vger.kernel.org
-Subject: [PATCH v1] MAINTAINERS: Update the maintainer of StarFive watchdog driver
-Date: Fri, 27 Sep 2024 14:50:32 +0800
-Message-Id: <20240927065032.2773997-1-xingyu.wu@starfivetech.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SHXPR01CA0012.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c311:1b::21) To NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c510:8::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1227176231;
+	Fri, 27 Sep 2024 10:53:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727434382; cv=none; b=azGP5ZBi+pCTCPkNdH7D9yvP1pYQqOT1ksn1/CgDp9t/G0tIDvY5Wk4aUhcBSj4pUtoMNRJZuWhD3aGt4xMtdnMX9aRP4Lmyy0FeZfOUOJjkkt698oTrCZ3I6YXBl9ENMXyyuefhv7mZF0QOhkIS0cpremrnYN+0NVYuZTJFJL8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727434382; c=relaxed/simple;
+	bh=qpzjcK7P9aCIhyL9j6ErFx1L8MX/ouoRYzE4NRYamEA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=onvch/lRJCi4sOACc1OOZWsGHsLm827KG6uNSqdDd48CMnXBW36AJdQ/Ynl6Z1ntsCS7JDCp34yeukdby+4YiMn0GC8ZEzoZGsMnvHGnnGQ9xzQwaaHgt6ocK29Uk4MkY9JEfcYGjlKap0zjvrGR+wlqn1DME/sPEm/8YPgEStw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lvVycrQ1; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2054e22ce3fso23177935ad.2;
+        Fri, 27 Sep 2024 03:53:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727434380; x=1728039180; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=E+c2UctfRu4dEGPzoXRKlz44mkq/CrL/aM0G1S5KNv0=;
+        b=lvVycrQ1sfe+2GVle3nLaF2UD8qeixxUmgcm6O4+45mkZPHw8AHMQUZmSQjY+uoAce
+         eIfRx18DEYFPhnUvNanOByFTbZFVyDvilW6C272sS3NppmNNJ27rKNPKH6ZeMD00ZyN+
+         07Caupbx+Y7RqlxGhXy1jYgfDbyHc6kDL/cBT5Bh5zs2AqqrULO6vxGJcVXJopR95QlL
+         NgFjhIC7ujDkmqeTZkow1ObMH1tXQn5NdYjdWwe4IzSLcrVwPKmZn6YmeldWh4k1/At9
+         +kwzgrqdL3al7lauUfw2qTTwjiPHmqAtGAMHZ4085nzOsjnbFE7RrqMwdvPyF6hwJMbz
+         bmTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727434380; x=1728039180;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E+c2UctfRu4dEGPzoXRKlz44mkq/CrL/aM0G1S5KNv0=;
+        b=xVK1Q/3HD17hoxqX9Xgo25O0sCvz+ss0cfp/OW2FDlBaa45RAUrAhXeR9vTGPZTJ/e
+         2Z/0/pSAZvU1baU+1U6aEZiJHwqmcWIzzvnNwVGbdnMCsq1ipkhoHa7FVcZ2LsFpzEVo
+         2RB+Wav3td+ZCgKraZXnHWljAAghvtajBEujhIkj+GpleKcGTI4puhfseocCQCxMGvwe
+         10A2tsvUzl6eDbLWqIa6vJRf/kwlM7awdLnz/aAKUVcdGan2PmWj1nMdyD/VrLj6Lkm+
+         VUcTgxdcqOnix7OM5YKRn4kA4p5fxGdNJjKY79Xmv210l284rxCyrjkS0RGlbblCNK4R
+         uG1A==
+X-Forwarded-Encrypted: i=1; AJvYcCUrw8NW2UG84wuf1NBQcKT/z4uxGqfOiNkzIro3ld7wYzD+D+hL66PnnKShIbRfdcWuoZWK3awHZk4nUtA=@vger.kernel.org, AJvYcCXHzG8165jA0NyNCkEsTtS9nfJFgnPgPX0RU82181+Iso6AB+DbTgIcJUWDIqCarPpKCBABFxhZ84a6LTQyPlw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLrhHGyQUzVPQfKnS5B5IlRBrL8Y5hfeV54C8DVI0rJhGbrfjh
+	TyB0pO/AXcQIwCcnQWCIdrp5QycZDsJtN7LqLSwnIZwKbvGv+0s9
+X-Google-Smtp-Source: AGHT+IFGNiiYrlQT5OIBiZ/pzB/VJiF7lU6NaACC3XfoT0i7X25FX8NVpQCZYuqjMSI+wOeV2Hj1Ag==
+X-Received: by 2002:a17:902:ce88:b0:205:4531:54d with SMTP id d9443c01a7336-20b37b6f245mr41351605ad.30.1727434379981;
+        Fri, 27 Sep 2024 03:52:59 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b37db029csm11624785ad.106.2024.09.27.03.52.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Sep 2024 03:52:59 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <8fb6bcdf-be19-4769-a1cb-dada2e9c3362@roeck-us.net>
+Date: Fri, 27 Sep 2024 03:52:57 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: NTZPR01MB0956:EE_|NTZPR01MB1033:EE_
-X-MS-Office365-Filtering-Correlation-Id: 80bc429a-54d5-4731-e2b0-08dcdec0b39e
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|41320700013|1800799024|366016|52116014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	OHjSDcUECDVreN1J13fvTiQ6vtpzg9icE70176wlzTKXfjKxbZVSbEe5F5NXUPxWvLhvdPI86+FdefA/q/JKsIhKdzOvfInLryrREdK0wnQGdMg8DJOhrj09p5Z49kAAjRNQn9QewU3WG/kMHqDUfBrMomkgxo51IpV1OmUBQZ8a8uiHSJ5xaYmQSifdIIRMM//iY5gPKgGc7AbO1OpbyLkUXj+/FRPXbEEzckVAb3mkuxvL6cU9PLlTa13FuT4Jp+bysvPMkojxHSpV5eqa2kPiwvpZs7LZMPUa6W99sUdxsqLUEJda0wqVaVX0bYoNn5vbFpKyeRCRxbPWfem6xYI4LDNCGHqF/8q1omgUE9tBPJsYw5v/y+ve4ximNtdy8q7ut+HXmF79DtrGqpyjZ1L54x5+GzNLybdahbdM8hndYXKrHu3tzj8PBL3P7JIqqMamTNF3knXhwxcv0eO9V2yTnXP3WHeZlTuQmqRAxjkiArN0ql/5j+1gAmMDk7QCzP9jyWFBQeyh1HCjMSldEEeydDym9uv+qi3wXNgVzosHXzRD430uyHivu9/2UaDsVdRqA36SlhIjZ/RXn7wtRR/sHM0PL0hSBHf4TgTFqo2OhvO0hIBy1eoe6xoPj3iv
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(41320700013)(1800799024)(366016)(52116014)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?repkQhlf5o0k6LPkjyMwwi1FJCoQx+ySdBTYVzpUyrwNyhXO+AeWsO03K7/s?=
- =?us-ascii?Q?+MPBzo4ySHjLxkTyprCxAR7JCrwOCgZUpul9ieHKoXKntrNLpeKFX66msArc?=
- =?us-ascii?Q?Pe9A96nqzMvSr2vog0oKnOkUFfbeOPG2GNzZlLug5K4UAIZsC4MZAN9tEfGp?=
- =?us-ascii?Q?zkLOoy+/14nznqIXXEPbss/BVirhtb0kPVcYP2vYNIkm0jcSrbeaTikq3W0n?=
- =?us-ascii?Q?EhOYcEKzkcAi9AXal/9ot0JzHnhJZV/URzA//08Tghz6C2CyX2JifLFBHhk2?=
- =?us-ascii?Q?DNZGPsIvZNfm1Sp8W2XEuqk2bCEFpM7O2bKtAlo3kGc8D/CmYFJOsxpGfWoW?=
- =?us-ascii?Q?cNAjlwdJIHWLqE1HvVuaWZzbcJ5i5mPpEXCckQC1WZFBoWAiAl+5d1L1Ivk8?=
- =?us-ascii?Q?oE6f7yQVH/XmbRIwdavuAHIpdQFHYcYzGQ6h0zjddlrokuqBUdtsYdHK/CBE?=
- =?us-ascii?Q?gjJv3Rsl5NQMv20rJOXRNuAqzB6y9fbnOaf/Ii0Q7FlvbJc5Xv95BiCvKgYU?=
- =?us-ascii?Q?+ImxJ3slxwZl3j3CvbJ00qdTwbtf3ayl87PPPzAd+pkW06mT6AwrXqN/2sQf?=
- =?us-ascii?Q?QYGUMzw3rjNN1N1y+6GwPo+9uE1NF4kZASjogHmFiLzzx4EUf8jgffCwyr+4?=
- =?us-ascii?Q?1Wwnqp9AJ1PewXu6cuExysOm0O2TYs18XZdFNxxeWFSWSR+CirI3EtjUkQnl?=
- =?us-ascii?Q?ZELPlr7xceYMclZxrtXPRyCbeVodlwSDOKOQYCOoeoQo+GFrWAyQEVUFPF1i?=
- =?us-ascii?Q?I8NMYtVm791Jx9w3JOjOo4Sv5ws21FVXnUD6C9icPDo/Xlas3kBQGkhLW3fb?=
- =?us-ascii?Q?OSPUZQltiyU/Dm+XS8yc8rPCztOGekrGcd6dlKi6u3/dRT7EYns8mQ9NwCvG?=
- =?us-ascii?Q?KuoNmMwZGpDt5I03uTV0FxnD9Sqsy4zcMp/3HdEtaBChGMbjhZUIGnhU/TkA?=
- =?us-ascii?Q?p6ouIc3oXy2RiF3YItB9N+HuYB30QtSSY2nimxp7HsfPc3vla9nyGJay9Irs?=
- =?us-ascii?Q?RBmyd93Gued5rgLnSc1Vcpcu5zN3+A04s2j6zgnpGhWwQK4CCzjsD/iJXh4x?=
- =?us-ascii?Q?t/mcQAughtCHbYkfGzi6rZ/0oE8I6OVgnBYQLHGiChY8raxafxuMEvBg/VQJ?=
- =?us-ascii?Q?2SOPv5VV7WuLv7T2igKgky6BDAjx6w3+Sx1ViGqo3mO3wP+SLpZ7w/a7wHWn?=
- =?us-ascii?Q?ET/JAUVxYaOAbbgyqNbrirYXh58PJggP6u7GMwQauYmAyb8ggE0e+t5Q3sfg?=
- =?us-ascii?Q?6IdfTI+poHDgmDACqRIvtyeINDlWdMnT3RyzGR47fySvDU5FWLGWgkGba0Pt?=
- =?us-ascii?Q?uCLpRBjCrcXkUt4VAdlfbB7iWZwYz9+CZWRmoiLpum8Ye8ckvlX5NHCtomH+?=
- =?us-ascii?Q?u0SKbSJE3joYtO4nyHItttSo3umdI03LIpCtyQ1AQ/nZpfLdZjUMiWS2jriY?=
- =?us-ascii?Q?LX6dyHotEbR65qWw2ndLocvNyhlKjZsM9vVKBXAqsLMGLVVMejDDHanBVzSh?=
- =?us-ascii?Q?8TazMpxCTJMoyP11pN7/X7on6sdo/TAR66iMLkjG706l/UKfy0nolI+WfvA7?=
- =?us-ascii?Q?Vz3Zr0dxD24VQSi//XJM6PXQxRviPvZcPkrP9UH/z7/lgw5rtn6g/jb436NY?=
- =?us-ascii?Q?FQ=3D=3D?=
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 80bc429a-54d5-4731-e2b0-08dcdec0b39e
-X-MS-Exchange-CrossTenant-AuthSource: NTZPR01MB0956.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2024 06:50:41.0699
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qd0bireWFAmvL3s9/hESmO1XBubsWbYMhaemtfBxymC13Js28ubL1fNWxZpxKVUHY/an6dLfjaNSmqAYNnjKzGxrQ0nv4LlxMeV/LbX8FQo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: NTZPR01MB1033
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] MAINTAINERS: Update the maintainer of StarFive
+ watchdog driver
+To: Xingyu Wu <xingyu.wu@starfivetech.com>,
+ Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+ Ziv Xu <ziv.xu@starfivetech.com>, linux-kernel@vger.kernel.org
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, linux-watchdog@vger.kernel.org
+References: <20240927065032.2773997-1-xingyu.wu@starfivetech.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240927065032.2773997-1-xingyu.wu@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Samin quits maintaining the StarFive watchdog driver and Ziv joins instead.
-Update the maintainer of this driver from Samin to Ziv.
+On 9/26/24 23:50, Xingyu Wu wrote:
+> Samin quits maintaining the StarFive watchdog driver and Ziv joins instead.
+> Update the maintainer of this driver from Samin to Ziv.
+> 
+> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
 
-Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cc40a9d9b8cd..3c4276b2e72e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21846,7 +21846,7 @@ F:	drivers/char/hw_random/jh7110-trng.c
- 
- STARFIVE WATCHDOG DRIVER
- M:	Xingyu Wu <xingyu.wu@starfivetech.com>
--M:	Samin Guo <samin.guo@starfivetech.com>
-+M:	Ziv Xu <ziv.xu@starfivetech.com>
- S:	Supported
- F:	Documentation/devicetree/bindings/watchdog/starfive*
- F:	drivers/watchdog/starfive-wdt.c
--- 
-2.34.1
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 
