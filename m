@@ -1,91 +1,200 @@
-Return-Path: <linux-watchdog+bounces-2060-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2061-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB92598AC15
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Sep 2024 20:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 72C8798AE03
+	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Sep 2024 22:18:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BE0D2849D2
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Sep 2024 18:28:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 294A0282420
+	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Sep 2024 20:18:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D80A197A7A;
-	Mon, 30 Sep 2024 18:28:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C6491AD9DD;
+	Mon, 30 Sep 2024 20:14:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="IciaZ6Xe"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IgQ1+e/a"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8A62B9A5
-	for <linux-watchdog@vger.kernel.org>; Mon, 30 Sep 2024 18:28:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855DF1AC898
+	for <linux-watchdog@vger.kernel.org>; Mon, 30 Sep 2024 20:14:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727720915; cv=none; b=nKVMR8HILJtgJ8SSyH91AYgalHK3OuBpsPdPXyltUfuA1JBnvtNluftRPCZKVFZwMEu5BE/dGfHh/0SHrrgorp/t1Ez9asE/x0nZ1gKEx6QFC/XB0R56ojl9YiWzCh5KopzkOF5kxpI4/fV0r4EFHt4Pxk7HoWpkFbb+Mdd/nGU=
+	t=1727727288; cv=none; b=PNq7xj2LsK9uIjZxMZFiPkBsFOJjo2nlPMdliAh8xQcD6hpARPb+elp73B1SiP/9s97w4KqvOY2j8stG8V4o5nPR9RH47ceZEFfqGEk7lrKNCPTV09BBVBClTweu0Q6rr1JsImOyKkd0j4taexpSywxNf1S0iRbP1XtApD2jgSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727720915; c=relaxed/simple;
-	bh=qNJjJcqU51Rj44D6y28ZD/nHqFULx33BN80S2JvD3VQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XR4BlkVHFTTCps0CczQvFp9UxbrRmbTbXoQEd3WKnRBN8itr+1H6oX9TdwX/wHtIed2frdkcghuERscrFh5KyBnv8jObR5TFlQMw/NcPfBNYLGhaCrnQoqqiPQI8WUPd6GMht4RCehfVoWEQtAliiNDvTI60a37AxG7lF+vl05U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=IciaZ6Xe; arc=none smtp.client-ip=85.214.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-	(No client certificate requested)
-	(Authenticated sender: marex@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id 6526488670;
-	Mon, 30 Sep 2024 20:28:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1727720910;
-	bh=v8W0AftGD5WCKt0vquLj4HDVyAid7m6TozrgpAGchU0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=IciaZ6XevgcyexP0Jru4yixkH+pXJ2Dz9p2ZpYi8xncRZWg0limeMGCwB2S2EDn8E
-	 LqGzW5LfCDUN4pHOzg0R7Mt8w6n4X6ON45+9uEgt47Dh8aoJ7p8uQs+zRsDqrfl1q9
-	 70x0UMNbDaeuvwP5CKTnn64pD2KASjS4KjaMnMiRA5y9UESwPxt09q7fruRrd98gdU
-	 DB5VUpZT7oWY1ZIjPf429ebR0Ks/SpnQ2H3syCrXXHSTaEl5VUYNj1Q3c2JdMGx8OO
-	 g0MhV6vRxLn3jhw3dCN28CeSjB3sdtNwTSArifpCUC6YoRSOZhvoHtipZuezkKiB7Y
-	 cynR/fDnZxWBg==
-Message-ID: <a556f3f9-467f-4c8e-aed5-e1e318376b31@denx.de>
-Date: Mon, 30 Sep 2024 20:28:29 +0200
+	s=arc-20240116; t=1727727288; c=relaxed/simple;
+	bh=X/4e7mZxuw2J+n9vnToA8fMOd1pL/QZg+X4D355Gd6g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mrGL+bbSxvgJjpzCGtoDgjy6NILUIGgS+0RF52Wn2jTNfQT5doEhF+jtTAtzIRdkfP0aLat/3YyzmxWLp3DvmOTNz1R1/D5yZPqtYsogwMB74rzHrPRNCYPqBAZZ5OQPv6UbLakmlLYqjtEp1kj0W7dkPNAVfMZF/knKaHHiPsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IgQ1+e/a; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6e21b4d7236so40600727b3.2
+        for <linux-watchdog@vger.kernel.org>; Mon, 30 Sep 2024 13:14:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1727727284; x=1728332084; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pprKSaNRuk4RU9vGlhC9xypgMoYbs/DlEn6atpZhZX0=;
+        b=IgQ1+e/aYhrvpPcZVPrCJ9h+UaepHAeuRAE5y4GV+e9YKVZ1n2SLbXTWXGULYm/YFn
+         QiGlpagbdKg9pX5TjQgQkHhzOs8nOLhNsCsYPg5JKPWuKus40DVR16dp9OiGVCUZv8MW
+         Pu4olqTwWnUDDjrvD2GRPUHBQ4mWoOM/thaPREmADIMqwqwNM4ujytpy2+Ra/kTTtiMB
+         zElSnqrhOrq28+3hSFR0qXjBEvkYaC1nBvFgbDRVIjJXUFUn/7R6MXmbTlf7nVvHdYZi
+         nsg+1gUe/y1zgjA5zTNJSx6LRd2Zd5qW3/cmj5IWsl1TyarjnoqI6nWU3bqIjsamhl9G
+         IyYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727727284; x=1728332084;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pprKSaNRuk4RU9vGlhC9xypgMoYbs/DlEn6atpZhZX0=;
+        b=GK8WGiZRtsQCltEVyEwP3xWri91Yzx8J3H2p5KYp1580fHGJ9QIBOZ62boIp41mPFR
+         1d4v8WTPDizckiBSStwBiNxeWfmgD/AJZHpGFuget/tp+VRjk86H9+nMnN5tOBAHDYEc
+         vIazlkhShQzMtw3O31i9pxx2Q2Lv+sN0nDjdpnQ1onNca/SQY/b2hBXDHxJl7/LAnkjF
+         eA/KUSva7JJlss1E3XtEA4/HEnPJjy6BvOspJskXTxAa4lEfNWVifH3xkbGVxfWA2p3j
+         WOBmoGriSH4N3MVOeVwpZdpmgYQnSWLJljxEdg8A28fCv/v0/7+9jwTwiozzsNfYC6jm
+         dJpg==
+X-Forwarded-Encrypted: i=1; AJvYcCV/9X48Nui3MurRQk6urdLc42OUkjNICsG3KHml55KuR72gxSYYtlxsIocbOCwZlLo6YQNjDhNTUnXkVjy9tg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNYlQb1PfG1VwJHy7x7puwCGCNcGtGqKYwW3s9Ve4Ib4CZdUTe
+	VhCbuD6EMkMd7l0FSxiAwd422aRk06lwBj2Z9N3sWPWjEiOKY2qf7sLPcbgBEJRgIi6cwuvqEtY
+	9qy6V06KjvKfZC3psCxMl87EWhrTVumovXc+aRA==
+X-Google-Smtp-Source: AGHT+IGw89Yi103G7oHwBihXrrG7C1HKFwoxrFWy4eJ4ItSgybQDiDfYN6d7HhLwkVImZdJ046BeMXWV/7ACSsaScYs=
+X-Received: by 2002:a05:690c:6403:b0:646:7b75:5c2c with SMTP id
+ 00721157ae682-6e247546f2bmr112204887b3.16.1727727284450; Mon, 30 Sep 2024
+ 13:14:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] watchdog: stm32_iwdg: Add pretimeout support
-To: Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
-Cc: =?UTF-8?Q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>,
- linux-arm-kernel@lists.infradead.org,
- linux-stm32@st-md-mailman.stormreply.com
-References: <20240415134903.8084-1-marex@denx.de>
- <eb0ab015-57bc-4aae-b518-dc12392f3ea0@roeck-us.net>
-Content-Language: en-US
-From: Marek Vasut <marex@denx.de>
-In-Reply-To: <eb0ab015-57bc-4aae-b518-dc12392f3ea0@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
+References: <CGME20240913080347epcas2p4b5694797cff88a22fd815a9de989d20b@epcas2p4.samsung.com>
+ <20240913080325.3676181-1-trunixs.kim@samsung.com> <20240913080325.3676181-3-trunixs.kim@samsung.com>
+In-Reply-To: <20240913080325.3676181-3-trunixs.kim@samsung.com>
+From: Sam Protsenko <semen.protsenko@linaro.org>
+Date: Mon, 30 Sep 2024 15:14:33 -0500
+Message-ID: <CAPLW+4k0rpS0F14sqMGPbq_m=aMqK+g=PZewtZYYroQ+OQBeOQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] watchdog: s3c2410_wdt: add support for exynosautov920 SoC
+To: Taewan Kim <trunixs.kim@samsung.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Alim Akhtar <alim.akhtar@samsung.com>, linux-watchdog@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	Byoungtae Cho <bt.cho@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/30/24 8:23 PM, Guenter Roeck wrote:
-> On 4/15/24 06:48, Marek Vasut wrote:
->> The STM32MP15xx IWDG adds registers which permit this IP to generate
->> pretimeout interrupt. This interrupt can also be used to wake the CPU
->> from suspend. Implement support for generating this interrupt and let
->> userspace configure the pretimeout. In case the pretimeout is not
->> configured by user, set pretimeout to 3/4 of the WDT timeout cycle.
->>
->> Reviewed-by: Clément Le Goffic <clement.legoffic@foss.st.com>
->> Tested-by: Clément Le Goffic <clement.legoffic@foss.st.com>
->> Signed-off-by: Marek Vasut <marex@denx.de>
-> 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Thank you
+On Fri, Sep 13, 2024 at 3:04=E2=80=AFAM Taewan Kim <trunixs.kim@samsung.com=
+> wrote:
+>
+> From: Byoungtae Cho <bt.cho@samsung.com>
+>
+> Adds the compatibles and drvdata for the ExynosAuto V920 SoC. This SoC
+> is almost similar to ExynosAutoV9, but some CPU configurations are quite
+> different, so it should be added. Plus it also support DBGACK like as
+> GS101 SoC.
+>
+> Signed-off-by: Byoungtae Cho <bt.cho@samsung.com>
+> Signed-off-by: Taewan Kim <trunixs.kim@samsung.com>
+> ---
+>  drivers/watchdog/s3c2410_wdt.c | 37 +++++++++++++++++++++++++++++++++-
+>  1 file changed, 36 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wd=
+t.c
+> index 686cf544d0ae..c25133348f0e 100644
+> --- a/drivers/watchdog/s3c2410_wdt.c
+> +++ b/drivers/watchdog/s3c2410_wdt.c
+> @@ -63,6 +63,10 @@
+>  #define EXYNOS850_CLUSTER1_NONCPU_INT_EN       0x1644
+>  #define EXYNOSAUTOV9_CLUSTER1_NONCPU_OUT       0x1520
+>  #define EXYNOSAUTOV9_CLUSTER1_NONCPU_INT_EN    0x1544
+> +#define EXYNOSAUTOV920_CLUSTER0_NONCPU_OUT     0x1420
+> +#define EXYNOSAUTOV920_CLUSTER0_NONCPU_INT_EN  0x1444
+> +#define EXYNOSAUTOV920_CLUSTER1_NONCPU_OUT     0x1720
+> +#define EXYNOSAUTOV920_CLUSTER1_NONCPU_INT_EN  0x1744
+>
+>  #define EXYNOS850_CLUSTER0_WDTRESET_BIT                24
+>  #define EXYNOS850_CLUSTER1_WDTRESET_BIT                23
+> @@ -303,6 +307,32 @@ static const struct s3c2410_wdt_variant drv_data_gs1=
+01_cl1 =3D {
+>                   QUIRK_HAS_DBGACK_BIT,
+>  };
+>
+> +static const struct s3c2410_wdt_variant drv_data_exynosautov920_cl0 =3D =
+{
+> +       .mask_reset_reg =3D EXYNOSAUTOV920_CLUSTER0_NONCPU_INT_EN,
+> +       .mask_bit =3D 2,
+> +       .mask_reset_inv =3D true,
+> +       .rst_stat_reg =3D EXYNOS5_RST_STAT_REG_OFFSET,
+> +       .rst_stat_bit =3D EXYNOSAUTOV9_CLUSTER0_WDTRESET_BIT,
+> +       .cnt_en_reg =3D EXYNOSAUTOV920_CLUSTER0_NONCPU_OUT,
+> +       .cnt_en_bit =3D 7,
+> +       .quirks =3D QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET |
+> +                 QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN |
+> +                 QUIRK_HAS_DBGACK_BIT,
+> +};
+> +
+> +static const struct s3c2410_wdt_variant drv_data_exynosautov920_cl1 =3D =
+{
+> +       .mask_reset_reg =3D EXYNOSAUTOV920_CLUSTER1_NONCPU_INT_EN,
+> +       .mask_bit =3D 2,
+> +       .mask_reset_inv =3D true,
+> +       .rst_stat_reg =3D EXYNOS5_RST_STAT_REG_OFFSET,
+> +       .rst_stat_bit =3D EXYNOSAUTOV9_CLUSTER1_WDTRESET_BIT,
+> +       .cnt_en_reg =3D EXYNOSAUTOV920_CLUSTER1_NONCPU_OUT,
+> +       .cnt_en_bit =3D 7,
+> +       .quirks =3D QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET |
+> +                 QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN |
+> +                 QUIRK_HAS_DBGACK_BIT,
+> +};
+> +
+>  static const struct of_device_id s3c2410_wdt_match[] =3D {
+>         { .compatible =3D "google,gs101-wdt",
+>           .data =3D &drv_data_gs101_cl0 },
+> @@ -320,6 +350,8 @@ static const struct of_device_id s3c2410_wdt_match[] =
+=3D {
+>           .data =3D &drv_data_exynos850_cl0 },
+>         { .compatible =3D "samsung,exynosautov9-wdt",
+>           .data =3D &drv_data_exynosautov9_cl0 },
+> +       { .compatible =3D "samsung,exynosautov920-wdt",
+> +         .data =3D &drv_data_exynosautov920_cl0},
+>         {},
+>  };
+>  MODULE_DEVICE_TABLE(of, s3c2410_wdt_match);
+> @@ -643,7 +675,8 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev=
+, struct s3c2410_wdt *wdt)
+>         /* Choose Exynos850/ExynosAutov9 driver data w.r.t. cluster index=
+ */
+>         if (variant =3D=3D &drv_data_exynos850_cl0 ||
+>             variant =3D=3D &drv_data_exynosautov9_cl0 ||
+> -           variant =3D=3D &drv_data_gs101_cl0) {
+> +           variant =3D=3D &drv_data_gs101_cl0 ||
+> +           variant =3D=3D &drv_data_exynosautov920_cl0) {
+>                 u32 index;
+>                 int err;
+>
+> @@ -662,6 +695,8 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev=
+, struct s3c2410_wdt *wdt)
+>                                 variant =3D &drv_data_exynosautov9_cl1;
+>                         else if (variant =3D=3D &drv_data_gs101_cl0)
+>                                 variant =3D &drv_data_gs101_cl1;
+> +                       else if (variant =3D=3D &drv_data_exynosautov920_=
+cl1)
+
+Shouldn't it be cl0 here?
+
+> +                               variant =3D &drv_data_exynosautov920_cl1;
+>                         break;
+>                 default:
+>                         return dev_err_probe(dev, -EINVAL, "wrong cluster=
+ index: %u\n", index);
+> --
+> 2.46.0
+>
+>
 
