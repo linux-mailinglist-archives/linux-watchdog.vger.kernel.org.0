@@ -1,76 +1,76 @@
-Return-Path: <linux-watchdog+bounces-2058-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2059-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B59098A7CB
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Sep 2024 16:53:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9968B98AC09
+	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Sep 2024 20:23:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEE5428612F
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Sep 2024 14:53:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C3C1B23DBB
+	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Sep 2024 18:23:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDA401953AB;
-	Mon, 30 Sep 2024 14:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99034199939;
+	Mon, 30 Sep 2024 18:23:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XD1FXrU3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sf9/eghT"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F331F194C9D;
-	Mon, 30 Sep 2024 14:51:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D33541991A1
+	for <linux-watchdog@vger.kernel.org>; Mon, 30 Sep 2024 18:23:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727707873; cv=none; b=PNGeN0fJ1hhzWY8qLlNI5VESNspS3Rp7MDtQ4faarH3XbQsl0y1nzEzvpw8M+BC4x3AhJ+iGj7sGmXGb71GB6EtQiZ7j2qnpE6bUaoXRcEiklKBEoI3aWN6oVuN4YFTAopyLY+nBiaIw0XncZ20ptKl2XNtsKq4EQ+ZLpI3kiM4=
+	t=1727720618; cv=none; b=ARqtEc0zSe2oBQeg+czI0UVVUOQYq8B1c6rg+eZiuoP6Bge6CpOfOnAD2jNb2sXPCFKfOxOg0uWTAhoNtYVLdR3PGH8mwCaqAq/hKlHt2BcykjOpcGP+qp5XU20FI0W8LxAlhKappSIvUrUbuxQwyGALg6Ds1P/OLnU/GjxH0SE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727707873; c=relaxed/simple;
-	bh=W/15mwfsMOdUMZCEAQnTUhSMq33MkRfFX+u8/LzbOpM=;
+	s=arc-20240116; t=1727720618; c=relaxed/simple;
+	bh=wShvWvXrOjWD/UnJ+djwrU2kdZAzDyW1YdBvUeVTQUE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GfdrUFqqYYigrOMV1Gww1AcdeEHBM6bBOchReUqmfSu1JyLQdPcGPmz/NNtUwkc8jMYrz5hj6T3r/6pATJDtO/mJL0r6oQCyNYVojqNOUBB0xegC5DWB1jJGLX2wcfjTmSDhfWnd6iOQqfkEquAkgEFlvu4K78LiuwfiKbMB9Ew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XD1FXrU3; arc=none smtp.client-ip=209.85.216.48
+	 In-Reply-To:Content-Type; b=uciV+3fficNXIeLSL/qEbHCSC+m9VHbDDmlwT9xYGn115SRWyevSC1KDWvVjSQtqOCJMbVsJZ7DJN1pyVtLhG10SJMdbzdOtvEvl4RQOiNCKogL7+SbYd5pmmu+dZKxVTkK7hmHnmeNFBUxccCHIY1c4v+fMqdKmZC+lzcT/a9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sf9/eghT; arc=none smtp.client-ip=209.85.167.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2db85775c43so3280834a91.0;
-        Mon, 30 Sep 2024 07:51:11 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3e0438e81aaso3197438b6e.3
+        for <linux-watchdog@vger.kernel.org>; Mon, 30 Sep 2024 11:23:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727707871; x=1728312671; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1727720616; x=1728325416; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ei8R9qgMGBNjxfWPS/m3HODUQUOhNth41iRV0XmScp8=;
-        b=XD1FXrU3joG37mIzpbYMjMTLk79BJSVVGy6MZVqggS1q9svPfe1KPZBHDwm0wm/Saz
-         h2u/86nnMEd0/YuI8hkTGrqgBUZnR1RKYU8vp6INuqNzeqJSouqQtahItvkEyBWXJIFy
-         DoUULZqUowwVI7NTyhp05xwAl9Kx3BJpIC1EfkYhFb1Pr5cxfzI2npO9D3XAItlemyxk
-         mcvBJt88oJMrx1KuSXEctSzahparNbzqDHKq6z8+GrhIve9mBSxpzV/dh9j6K1wOQdV8
-         xeGdBqAkulW7DouvDQ1zJd1qsVU/3bqQNJXkORaxuVsSgvgYZZAcd1sodavvIXx/IH/u
-         QFOQ==
+        bh=RPsGXL6/hvf7AWlkG/kZ+5m2K9iUefJz2lkfqi3JwGU=;
+        b=Sf9/eghTnV8NaJ2mMlYOJJdAuw27SG5wCm6IOhq1N++OGeHJQfRUJHb/AoQN8LJIt1
+         1mwhC12r1b52mBtKhe+T+A48vjxBz+m2Gk/qH0JB7QsPv+tEkyX80DpjVmc55unVPUs1
+         IbwMuerOuJ5XjMVtwy1bracyic9H5DRh7r6ZGq8Xskd3fAA1EvWYbM9gxULfOponNn6N
+         8jP/T2IxMcWScSKfkKAuBwTIG8PlqMAv9yOw/RWjD2RAT90LWmKF3c1Xbv/Tg2gr2+H1
+         MJFtaclQHq5OZpLinKU6h+sMVrapAaghtqr42rhVT2jM1kBR/rUlQspHN37xSzK41Hdf
+         9Rpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727707871; x=1728312671;
+        d=1e100.net; s=20230601; t=1727720616; x=1728325416;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ei8R9qgMGBNjxfWPS/m3HODUQUOhNth41iRV0XmScp8=;
-        b=AgmmPoQx8F/J+tIj9tPHJvs002CWYFPuGqyqiXb8oJCi3hR7uL1jhlTy1txsUMf3B/
-         N3wrCiU8nqmzfAH/MgC89niQBU53opAj9fnJ6kvyDgmpTwRfJIkyVt9FcnwX5d4HT7Zx
-         jvjFmpc6BOKOVJsBFxwnpA5DfdxsUCcUBSufq0oFQCKv3AYSv2BRBwSzxz/ywu1tISVH
-         m/xGX+FxlMw7Htv1jOqqtqrHCa2T0MaaNoN+6RkbsImcXiyHARPauTYNadEPC9yL4M7+
-         ljxn9sVIQx3FrgQj/RMOQ/cLLgGqyqRBp2rP7lqzCP8Kxd7FKgDNFledekqBneGwm2yO
-         bqYg==
-X-Forwarded-Encrypted: i=1; AJvYcCUcbbkH9oKRjq+aPWvoZyzv7KVIQxdOf8JWokUfBA1vp5+AP26WUOphHylGrzOsqEr2bDhfpVuDckGjCMixF5IemXM=@vger.kernel.org, AJvYcCVnlFeAHSOQO6ek5RaH5DwH++RPwboJ9a10mIZ74PmwoDUbbwe21U1ZSdGPP8nZyB00eaLT1Q3LD1pe@vger.kernel.org, AJvYcCXsVeJZecHyxdq6NcjsDsLaZ3opbUzVW4IVqr84fT72EU1ALKxkEH8pYXr8IFIG4ZqBd5AExeRCFhFFPGrA@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7J7/+1nQ37dOHCwVgZtI/Q7b+9jBjE0qHS1xB2P/UmQSSzvbs
-	bKy+0PjwR1ri+wM+P4V72DOAChHArOti6b7++WpPzHKwZh3gFh4J
-X-Google-Smtp-Source: AGHT+IESj6q0YIuvcr+nnx/mRmuhZjN9eqqic59z9EEnxqUyoXh6hE3HWGSs0IU8MORXMDQo+0yGiw==
-X-Received: by 2002:a17:90a:8a8f:b0:2e0:8780:ecb with SMTP id 98e67ed59e1d1-2e0b71d09ebmr19199298a91.12.1727707871194;
-        Mon, 30 Sep 2024 07:51:11 -0700 (PDT)
+        bh=RPsGXL6/hvf7AWlkG/kZ+5m2K9iUefJz2lkfqi3JwGU=;
+        b=KG+/akHnZBEaTm3LHliZsjhKkqmyodntEY996SldNiNTGOQs1V28rTsfMXCqFb7AVs
+         EOraTueNx+nXA4nC8VL9pqbbLW9DFF9WuIQWAf0yp4tiWxrlTBKEekFCxYUfGJ15UDYD
+         vIY+YJYwdmCvsnJZm6l0n4sXZUpSAhqynytg4TCL1GtZkWNeFX5Q2nmlsj/mB7++raw0
+         0zG19wZwpfO7FD61yxGsM2SFeRiUZnFmJCwokeWXgL2gsHkcQqTEX/+PkkFyHHlguZm+
+         thOfQFC90Yv5awPbEWgqNugHkV2GAlCludI6Ut/2OAvTG0Ddw3h+hwGyieGEOmQ/rjdV
+         7UjA==
+X-Forwarded-Encrypted: i=1; AJvYcCV4LKrr7GYxbBedazYHb3yI7jq85C9xdN6c2f12YnDh+wkeRo8JmnTeWPVUdM51aKRzBHTg6+DM9zRSbRMM8w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGmitynu20yY9y3wtQXqiuSChOG/sK0bnqZJHMFPaKTv4VaJ8P
+	Zqq49gBVbPW8vTo6unueFc2eZA/rPYMwpnghLgsBxvY9Ekpevkxs
+X-Google-Smtp-Source: AGHT+IGHrQBUTYbmpsIAzVAzJpdhj1iGNbdCLwNonc01yRxdQ1siBh1dv10sXABVNb5GDKGFt3ze6g==
+X-Received: by 2002:a05:6870:2013:b0:286:f2cc:7a4a with SMTP id 586e51a60fabf-28710bb320emr8339799fac.34.1727720615897;
+        Mon, 30 Sep 2024 11:23:35 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e0b6ca6563sm7986887a91.34.2024.09.30.07.51.05
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7e6db2c6875sm6809235a12.46.2024.09.30.11.23.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Sep 2024 07:51:06 -0700 (PDT)
+        Mon, 30 Sep 2024 11:23:34 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3eaec6e3-c99b-4efb-9456-c157eb484ff3@roeck-us.net>
-Date: Mon, 30 Sep 2024 07:51:04 -0700
+Message-ID: <eb0ab015-57bc-4aae-b518-dc12392f3ea0@roeck-us.net>
+Date: Mon, 30 Sep 2024 11:23:33 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -78,18 +78,15 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] watchdog: s3c2410_wdt: add support for exynosautov920
- SoC
-To: Taewan Kim <trunixs.kim@samsung.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, Byoungtae Cho <bt.cho@samsung.com>
-References: <20240913080325.3676181-1-trunixs.kim@samsung.com>
- <CGME20240913080347epcas2p4b5694797cff88a22fd815a9de989d20b@epcas2p4.samsung.com>
- <20240913080325.3676181-3-trunixs.kim@samsung.com>
+Subject: Re: [PATCH v4] watchdog: stm32_iwdg: Add pretimeout support
+To: Marek Vasut <marex@denx.de>, linux-watchdog@vger.kernel.org
+Cc: =?UTF-8?Q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>,
+ linux-arm-kernel@lists.infradead.org,
+ linux-stm32@st-md-mailman.stormreply.com
+References: <20240415134903.8084-1-marex@denx.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -135,102 +132,21 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20240913080325.3676181-3-trunixs.kim@samsung.com>
+In-Reply-To: <20240415134903.8084-1-marex@denx.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/13/24 01:03, Taewan Kim wrote:
-> From: Byoungtae Cho <bt.cho@samsung.com>
+On 4/15/24 06:48, Marek Vasut wrote:
+> The STM32MP15xx IWDG adds registers which permit this IP to generate
+> pretimeout interrupt. This interrupt can also be used to wake the CPU
+> from suspend. Implement support for generating this interrupt and let
+> userspace configure the pretimeout. In case the pretimeout is not
+> configured by user, set pretimeout to 3/4 of the WDT timeout cycle.
 > 
-> Adds the compatibles and drvdata for the ExynosAuto V920 SoC. This SoC
-> is almost similar to ExynosAutoV9, but some CPU configurations are quite
-> different, so it should be added. Plus it also support DBGACK like as
-> GS101 SoC.
-> 
-> Signed-off-by: Byoungtae Cho <bt.cho@samsung.com>
-> Signed-off-by: Taewan Kim <trunixs.kim@samsung.com>
+> Reviewed-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+> Tested-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+> Signed-off-by: Marek Vasut <marex@denx.de>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->   drivers/watchdog/s3c2410_wdt.c | 37 +++++++++++++++++++++++++++++++++-
->   1 file changed, 36 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-> index 686cf544d0ae..c25133348f0e 100644
-> --- a/drivers/watchdog/s3c2410_wdt.c
-> +++ b/drivers/watchdog/s3c2410_wdt.c
-> @@ -63,6 +63,10 @@
->   #define EXYNOS850_CLUSTER1_NONCPU_INT_EN	0x1644
->   #define EXYNOSAUTOV9_CLUSTER1_NONCPU_OUT	0x1520
->   #define EXYNOSAUTOV9_CLUSTER1_NONCPU_INT_EN	0x1544
-> +#define EXYNOSAUTOV920_CLUSTER0_NONCPU_OUT	0x1420
-> +#define EXYNOSAUTOV920_CLUSTER0_NONCPU_INT_EN	0x1444
-> +#define EXYNOSAUTOV920_CLUSTER1_NONCPU_OUT	0x1720
-> +#define EXYNOSAUTOV920_CLUSTER1_NONCPU_INT_EN	0x1744
->   
->   #define EXYNOS850_CLUSTER0_WDTRESET_BIT		24
->   #define EXYNOS850_CLUSTER1_WDTRESET_BIT		23
-> @@ -303,6 +307,32 @@ static const struct s3c2410_wdt_variant drv_data_gs101_cl1 = {
->   		  QUIRK_HAS_DBGACK_BIT,
->   };
->   
-> +static const struct s3c2410_wdt_variant drv_data_exynosautov920_cl0 = {
-> +	.mask_reset_reg = EXYNOSAUTOV920_CLUSTER0_NONCPU_INT_EN,
-> +	.mask_bit = 2,
-> +	.mask_reset_inv = true,
-> +	.rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
-> +	.rst_stat_bit = EXYNOSAUTOV9_CLUSTER0_WDTRESET_BIT,
-> +	.cnt_en_reg = EXYNOSAUTOV920_CLUSTER0_NONCPU_OUT,
-> +	.cnt_en_bit = 7,
-> +	.quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET |
-> +		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN |
-> +		  QUIRK_HAS_DBGACK_BIT,
-> +};
-> +
-> +static const struct s3c2410_wdt_variant drv_data_exynosautov920_cl1 = {
-> +	.mask_reset_reg = EXYNOSAUTOV920_CLUSTER1_NONCPU_INT_EN,
-> +	.mask_bit = 2,
-> +	.mask_reset_inv = true,
-> +	.rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
-> +	.rst_stat_bit = EXYNOSAUTOV9_CLUSTER1_WDTRESET_BIT,
-> +	.cnt_en_reg = EXYNOSAUTOV920_CLUSTER1_NONCPU_OUT,
-> +	.cnt_en_bit = 7,
-> +	.quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET |
-> +		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN |
-> +		  QUIRK_HAS_DBGACK_BIT,
-> +};
-> +
->   static const struct of_device_id s3c2410_wdt_match[] = {
->   	{ .compatible = "google,gs101-wdt",
->   	  .data = &drv_data_gs101_cl0 },
-> @@ -320,6 +350,8 @@ static const struct of_device_id s3c2410_wdt_match[] = {
->   	  .data = &drv_data_exynos850_cl0 },
->   	{ .compatible = "samsung,exynosautov9-wdt",
->   	  .data = &drv_data_exynosautov9_cl0 },
-> +	{ .compatible = "samsung,exynosautov920-wdt",
-> +	  .data = &drv_data_exynosautov920_cl0},
->   	{},
->   };
->   MODULE_DEVICE_TABLE(of, s3c2410_wdt_match);
-> @@ -643,7 +675,8 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev, struct s3c2410_wdt *wdt)
->   	/* Choose Exynos850/ExynosAutov9 driver data w.r.t. cluster index */
->   	if (variant == &drv_data_exynos850_cl0 ||
->   	    variant == &drv_data_exynosautov9_cl0 ||
-> -	    variant == &drv_data_gs101_cl0) {
-> +	    variant == &drv_data_gs101_cl0 ||
-> +	    variant == &drv_data_exynosautov920_cl0) {
->   		u32 index;
->   		int err;
->   
-> @@ -662,6 +695,8 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev, struct s3c2410_wdt *wdt)
->   				variant = &drv_data_exynosautov9_cl1;
->   			else if (variant == &drv_data_gs101_cl0)
->   				variant = &drv_data_gs101_cl1;
-> +			else if (variant == &drv_data_exynosautov920_cl1)
-> +				variant = &drv_data_exynosautov920_cl1;
->   			break;
->   		default:
->   			return dev_err_probe(dev, -EINVAL, "wrong cluster index: %u\n", index);
 
 
