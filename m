@@ -1,155 +1,142 @@
-Return-Path: <linux-watchdog+bounces-2054-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2055-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43A98989E98
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Sep 2024 11:38:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6998998A0FC
+	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Sep 2024 13:42:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C62E51F20FD1
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Sep 2024 09:38:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 318B9B29998
+	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Sep 2024 11:37:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D90A718873F;
-	Mon, 30 Sep 2024 09:38:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F16317C22F;
+	Mon, 30 Sep 2024 11:37:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="fUe0vnYA";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OE6WleaI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BsOuWPbb"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B7C188734;
-	Mon, 30 Sep 2024 09:38:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A197BAEC;
+	Mon, 30 Sep 2024 11:37:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727689116; cv=none; b=ZkgGfnm8RfBuZf/Ad1VIf3Os0MOsa6Fq3XBcBmRBZp3y9O2u8BYwJECCQ2lB4pvErfxRPZ2vBv4YOConCjw/7cARiG2WaeJp/SVxYN5oCTm8IdLsUS7TieEVCZoMu7pMlSanFuxBz98emsPqnwuOb9kfFbSgrGCAR+lqWGFSmM0=
+	t=1727696260; cv=none; b=lQc/heZxtCuc2b8bV8tXlc/iRUaffp+vaffs9TMIEROhAE8LvTcS+6hD5gFwa70QsNiVXIAiZHFZlGrvNOkonzmMHNZg015s/es6UzhhmUs1skCEU1xFs9KuP0vnl1Qsw0L7ESPRcwLPGFBXCR5Dgp9/Y1LDzhFFt4hN23eKBmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727689116; c=relaxed/simple;
-	bh=AjjCBDd0nsipeu208WcIdXj8TEg91EpXaEoTrHSRxPg=;
-	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=W4l3u0b27fn6pmdY5Cn12ONdf3qjKh0yfk4lDrYSNC54NeEwBFcbHJ8PF5D2puChk6UPUQ1R5L/meGeR0JDMc94XdLs4lQhA58Ara49Drp6ISWsXmMGpCC00wXgbq/vgqpVF7R0X9rv0senFLrqfxF62cLUnmbECwx2r/n4F7eQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=fUe0vnYA; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OE6WleaI; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 6DA971140234;
-	Mon, 30 Sep 2024 05:38:33 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Mon, 30 Sep 2024 05:38:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:content-transfer-encoding:content-type:content-type:date:date
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1727689113;
-	 x=1727775513; bh=0pZwVNr1lAKNsIqugDiiFsNfmcaJup7h9klMs9lcUZ8=; b=
-	fUe0vnYAhQAVX7ZNTsyJ0LiJqUjgrnkHcVkAgQJY61z1h8fCgOdXHwrzeRec5xr0
-	b+1wxwhcjUeyjUY5Xjc4JspDyd0NjaxzlcZoTVawAbmhGc+9iSsUTHZA6XzHNlWe
-	YrM527UYYuyE9tXb5eOkZj64HycUvh1Xdpla9CVFc/HOE43Oc9WIlxs8s6bRL9id
-	bke5jD9PZuxkW3j58m7uG95lMb/WxfKqAA54QkB3fm7YcnE7cLp8KxU79IfK3gNg
-	RBS8gMV0JwsgegazIsJFWuC6XNYpxiUGL/vYpnBU49Ys4kFhV9/8+6m6GmV7gEci
-	sLLJ9s2ZrPd7SS3PPhR94Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-transfer-encoding:content-type
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1727689113; x=
-	1727775513; bh=0pZwVNr1lAKNsIqugDiiFsNfmcaJup7h9klMs9lcUZ8=; b=O
-	E6WleaIJgBqwfkjwV+6/vVUBwh7werM+AQ1gW2m40RYwJyCSEuXz05nUR3i9Q3MZ
-	EEczDZN3dmVoRKhgyYHFLtFhk4QWR8migVDXIBkFZJQmAHI8K5efV6pNQN84tjE5
-	Rs3cN7bw2KkKxj7PYFp2vvbx8F+xMe+Wr89MiiDnHazsgCiwQoMGA6nIL4yivIQ/
-	iSp/8bQt4d+Nevk1OXfsUGnG0Jug9NS+8rKx0j2e6jD5vTbLib/Jtj9n5mbqe/aL
-	gV0CR73Y6DZ48J0kkD8kdY1c2FV+iYhNSNXFVs+8neZTIS1raS1rzDXNOuLtzLsb
-	xVpWX7dvUF/JQc8UHI2Mw==
-X-ME-Sender: <xms:l3H6Zlpna80A-aKemYDNwdcd2e4ZLSMjLsRNi64f_TbfN1x0bYgzzQ>
-    <xme:l3H6Znr5g5BNjNUhj8kZ-2fuq6AZyuuIUH9Oh6qs64BSOtB0ETbODok8tIk1ljv31
-    PquAlfYgzvhuW-amZ8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdduhedgudejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvffkjghfufgtgfesthejredtredttden
-    ucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdrug
-    gvqeenucggtffrrghtthgvrhhnpefhkeeltdfffefhgffhteetheeuhffgteeghfdtueef
-    udeuleetgfehtdejieffhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedutddp
-    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhofihinhgthhgvnhhmihesghhmrg
-    hilhdrtghomhdprhgtphhtthhopeifihhmsehlihhnuhigqdifrghttghhughoghdrohhr
-    ghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfh
-    hrrgguvggrugdrohhrghdprhgtphhtthhopegrshgrhhhisehlihhsthhsrdhlihhnuhig
-    rdguvghvpdhrtghpthhtohepmhgrrhgtrghnsehmrghrtggrnhdrshhtpdhrtghpthhtoh
-    eplhhinhhugiesrhhovggtkhdquhhsrdhnvghtpdhrtghpthhtoheprghlhihsshgrsehr
-    ohhsvghniiifvghighdrihhopdhrtghpthhtohepshhvvghnsehsvhgvnhhpvghtvghrrd
-    guvghvpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghl
-    rdhorhhg
-X-ME-Proxy: <xmx:mHH6ZiMtLdqnPrQxJ7N8hs5M2UJv2rqES9sZHNrpAUJY51VSRpGhQg>
-    <xmx:mHH6Zg4W8bZpFUssjQgmUA3sCCR3lb5Ox7kWFnLi2Wi21A_3p5jNMQ>
-    <xmx:mHH6Zk68ojMiiGCi1YTrvJmjiOFrVBXnw3AjDnBwfKpKHNgh2MLp5A>
-    <xmx:mHH6ZojdRu7BOFJ1iw9wsNTktLKoj4X-iaMx6y9Yl5A6Mh-8RwwyWw>
-    <xmx:mXH6ZlHWz7A46fVRwwW6BU2rXaXuOtfZfNaoZRdEV51xPwSR5u61xSvv>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id D9D9C2220072; Mon, 30 Sep 2024 05:38:31 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1727696260; c=relaxed/simple;
+	bh=I7dVY/AP4rcuasxluLu8ehh6h4DVVK1QYBMDXtHh2xo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=h0zxSMJfgZ51GMWyewueUFM+NpdfQIgZFCBRMSqNFypGWYKBX4vfNUs+Sv1M1TuKZsVRIHguQ4Yhn+sxzsPJyojGJW70XHea8vWeYF27FEA8Vw5NE+rnQC03eHnSigS/H52yNgl24VyBnb0D9wQdYS66OwLUOhDuYmTMc07r134=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BsOuWPbb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9182C4CEC7;
+	Mon, 30 Sep 2024 11:37:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727696259;
+	bh=I7dVY/AP4rcuasxluLu8ehh6h4DVVK1QYBMDXtHh2xo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BsOuWPbbdI66ra9G56Xyl/KIHzpEurfCYxBeC8mC0aM3LYQNhwGXb/gd4Q+tHANpw
+	 ZhT6Y6qR7RUQewdB8WhcKfGLXGcohq2JxUOE4AxpLoD4Ay1T1rD+HbyzxJbwZJ9bPd
+	 i3PR1AzG5MoPLg9IyP6/xDZc0oM1NehXmXqVbKe/Fdt/uI2J7cVVyydmGhiiigQCYX
+	 CuXQOeSc2szAjxsEj1w21KoWH0nCKJ6JTJP3pj88ibTkiwAvpKNqd3cL+trQgzYJmb
+	 bv6p46MwE9BpI6/nUKERfwcmsOwIElugnS4652EhFdlAgWG2LuICl6TPnJ1NzWFi68
+	 NhGCzcAJbxC6g==
+Message-ID: <c3d4c5b5-6c94-4f19-9de1-8f124a91475e@kernel.org>
+Date: Mon, 30 Sep 2024 13:37:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 30 Sep 2024 09:37:53 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nick Chan" <towinchenmi@gmail.com>, "Hector Martin" <marcan@marcan.st>,
- "Sven Peter" <sven@svenpeter.dev>,
- "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
- "Wim Van Sebroeck" <wim@linux-watchdog.org>,
- "Guenter Roeck" <linux@roeck-us.net>, asahi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-watchdog@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Message-Id: <6775f288-9278-412e-957b-b341b1a75ae8@app.fastmail.com>
-In-Reply-To: <20240930060653.4024-1-towinchenmi@gmail.com>
-References: <20240930060653.4024-1-towinchenmi@gmail.com>
-Subject: Re: [PATCH RESEND] watchdog: apple: Increase reset delay to 150ms
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] arm64: dts: exynosautov920: add watchdog DT node
+To: Taewan Kim <trunixs.kim@samsung.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org, Byoungtae Cho <bt.cho@samsung.com>
+References: <20240913080325.3676181-1-trunixs.kim@samsung.com>
+ <CGME20240913080347epcas2p46fd90107fe54b8eab3a031cf2fbd592c@epcas2p4.samsung.com>
+ <20240913080325.3676181-4-trunixs.kim@samsung.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240913080325.3676181-4-trunixs.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 30, 2024, at 06:06, Nick Chan wrote:
-> The Apple A8X SoC seems to be slowest at resetting, taking up to around
-> 125ms to reset. Wait 150ms to be safe here.
->
-> Reviewed-by: Sven Peter <sven@svenpeter.dev>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Nick Chan <towinchenmi@gmail.com>
+On 13/09/2024 10:03, Taewan Kim wrote:
+> From: Byoungtae Cho <bt.cho@samsung.com>
+> 
+> Adds two watchdog devices for ExynosAutoV920 SoC.
+> 
+> Signed-off-by: Byoungtae Cho <bt.cho@samsung.com>
+> Signed-off-by: Taewan Kim <trunixs.kim@samsung.com>
 > ---
->  drivers/watchdog/apple_wdt.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/watchdog/apple_wdt.c b/drivers/watchdog/apple_wdt.c
-> index d4f739932f0b..353ecf0b04dc 100644
-> --- a/drivers/watchdog/apple_wdt.c
-> +++ b/drivers/watchdog/apple_wdt.c
-> @@ -127,11 +127,11 @@ static int apple_wdt_restart(struct 
-> watchdog_device *wdd, unsigned long mode,
->  	/*
->  	 * Flush writes and then wait for the SoC to reset. Even though the
->  	 * reset is queued almost immediately experiments have shown that it
-> -	 * can take up to ~20-25ms until the SoC is actually reset. Just wait
-> -	 * 50ms here to be safe.
-> +	 * can take up to ~120-125ms until the SoC is actually reset. Just
-> +	 * wait 150ms here to be safe.
->  	 */
->  	(void)readl_relaxed(wdt->regs + APPLE_WDT_WD1_CUR_TIME);
-> -	mdelay(50);
-> +	mdelay(150);
+>  .../arm64/boot/dts/exynos/exynosautov920.dtsi | 20 +++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
+> index c1c8566d74f5..de210f8e5599 100644
+> --- a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
+> @@ -297,6 +297,26 @@ pinctrl_aud: pinctrl@1a460000 {
+>  			compatible = "samsung,exynosautov920-pinctrl";
+>  			reg = <0x1a460000 0x10000>;
+>  		};
+> +
+> +		watchdog_cl0: watchdog@10060000 {
 
-I think you also need to insert a barrier before the mdelay(),
-or turn the readl_relaxed() into a readl(), it will otherwise
-be bypassed by the delay.
+Does not look like placed in correct location. 1a46 > 1006. Please
+follow DTS coding style in all your works.
 
-The comment is a bit confusing here as it suggests that the
-MMIO read is meant to serialize between the restart and the
-mdelay(), but the _relaxed() annotation on the readl()
-explicitly skips that serialization, so one of the two is
-wrong here.
+Best regards,
+Krzysztof
 
-       Arnd
 
