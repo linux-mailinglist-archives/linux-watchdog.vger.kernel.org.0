@@ -1,103 +1,237 @@
-Return-Path: <linux-watchdog+bounces-2072-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2073-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52FD798C5B3
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Oct 2024 20:52:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17DF898DF4F
+	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Oct 2024 17:35:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E129AB21F47
-	for <lists+linux-watchdog@lfdr.de>; Tue,  1 Oct 2024 18:52:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F6441F2409F
+	for <lists+linux-watchdog@lfdr.de>; Wed,  2 Oct 2024 15:35:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 296C91CC176;
-	Tue,  1 Oct 2024 18:52:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C581D0DF7;
+	Wed,  2 Oct 2024 15:35:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="fbyh1WRY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gvZ48ukx"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 485961C8FB3
-	for <linux-watchdog@vger.kernel.org>; Tue,  1 Oct 2024 18:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3FC51D0DD9;
+	Wed,  2 Oct 2024 15:35:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727808759; cv=none; b=TDC2UsrOa/DMo54TnSNhjYLlFORje7euGBUZfup+AodLjNYgsgL84eAnC1cGAwxewo7gnpD1I6whB8LDWdBXdXd5UGUlgMemG/ak3BUVD9u+YcWfobjxEi7h3/XU33YIsH6j1Z6OfNmd3a9UD/VBxUBon7ro1SXucRPLCBQrBd4=
+	t=1727883344; cv=none; b=RYnwtZjO0O+ZFZUIMbf1jmfQUc0dfaONa8+bKtCihN5Wxxcjc8fqJ6dQjcnNOZa4tcwOpRLHZCVdX00/eDwEopBxoR/kQv4RqUi0qSf9j0JQz8TAUhOvK/L4vJJa8qkxaVnrEfplMPFCqIQrlneHsYjsQBDmnYJ5YnNFh71cByo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727808759; c=relaxed/simple;
-	bh=sD8E4e+PPFfoPemdrxEApnMQulCxcLHme5ymLS77OkM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oSWG3Ee1RPWEMbj3HkUwDmkIAm28VFDqT8/2zM9k1mgbNHZQVwZG95WiyVol5qGwW6SINewr4UTPr72wZK0WwGjEhnuzzKNpJu3L8+OoR87MNzBE15B2Hw1RXF3xfXodBlA/ujvtxLTSh9QEWX88oZcWdoEeS5UIl4qgLs/vgl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=fbyh1WRY; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-53988c54ec8so5081131e87.0
-        for <linux-watchdog@vger.kernel.org>; Tue, 01 Oct 2024 11:52:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1727808755; x=1728413555; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sD8E4e+PPFfoPemdrxEApnMQulCxcLHme5ymLS77OkM=;
-        b=fbyh1WRYT5iKrurPqvG/zXCY4YTt4zA5d2I4oQrAgnycvOSuoNcALMcWNCyDkgRr9C
-         OJSrgyvUwHy7gH/3UzwHZ4dAEI1DbgdnTdR/gg1xmSIrCnsoAORTNRBh/JfJgctnQOQ0
-         5WFTSiTYJD3dgsAE9Z9xRRDNtWw7XL/iTR5fOZBNdEVIZNkf01duKbc77I+yclER8Wm8
-         s1k+MIYn39e45qrZImZzpnWd2nkYc1dcbACAW/PVCkPCv3vjuQCFsBtYtcGvW1Y5WfxA
-         XtVCBhXunuyBZh1I70LvzmwEFbszDFtjM2CJj5YRovdLtR5JQAx0DZ8rPCmnTn2iidMU
-         l0Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727808755; x=1728413555;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sD8E4e+PPFfoPemdrxEApnMQulCxcLHme5ymLS77OkM=;
-        b=KyYY3/hQTrUZADKsd5hUgu1d6uRQs9CM1V/gN/mFkgDZVpdXcduFhYjGJues8EXW0a
-         NMorp/V7HjHIyRXXxDkcLPP3QAE3cQedPxZs8Zc3XEYzk2PqXl9TuQAUcPcbdrWqm3nR
-         tcR9HeV9aAPGrTBX9V5m1TPSjxLBJOLoZWvuDHaRaaLvP9gi+cwxDkSZxa2Xbs6KDISh
-         M2yKijR0DuzEX87EiSciqoB3wU8Cw/byXPeCfwcES19F08tT5bq5a1tgYgSPKGKwgWFC
-         lcU91XHv2CIOA0kF+Ad1/OMhuYXkJa4Qx4hRGAZxT1zS5aKGnoaD+StkMWxLiHgNEgvV
-         5A4A==
-X-Forwarded-Encrypted: i=1; AJvYcCWHKOETd2UDUg4TMUBKye7cw6+RCzpEDJSPU4x4bigLEjHfb1soFn6ApOs3uxBwUsNiopqxHUxD0menhw1KYQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyv/vZISc0i/Z9b5cBk3OR/sOSM/Hzxab4TZbyLWL337dSRsCFG
-	tbq/s3VTao7l2yRshiwXfSsUwhOJopRfSoD2blbBddyOzayWDJ5BnLLhGQYDA7BVkdaKiClDha8
-	aCA8UBtfmDqy13rUZzEKIKe9Xk+iLxQd1C8BSpw==
-X-Google-Smtp-Source: AGHT+IG41sCRZbM6//whDIpTonuwAIsnbWZRJaaYzsvm+L+r9ge26qwBfuwOHKSHxHakYmEWv1+JQdqE3PMHOMQu+pA=
-X-Received: by 2002:a05:6512:3a96:b0:52c:9468:c991 with SMTP id
- 2adb3069b0e04-539a066336fmr236090e87.14.1727808755057; Tue, 01 Oct 2024
- 11:52:35 -0700 (PDT)
+	s=arc-20240116; t=1727883344; c=relaxed/simple;
+	bh=k1zW8KXz7EwiJvjqcAxwtSjygKZUVJO8HBFqTJuGMF0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rQ5iwQ/2ABMp30aiiUKMjLqvalzp4G8Jdu+R3KMqHwN0w+qPsrEDsoL/9TLj34Ri7yvKlnUvxezwlsRR6lhdyVula/HAoJgQ25kff4XkrLPXk1KZ5voP4/O8BQSQ2KIo0/h7AhuDRwJAFibA7JOrJLjebK3/il36ize+xN/IiBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gvZ48ukx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF281C4CECD;
+	Wed,  2 Oct 2024 15:35:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727883343;
+	bh=k1zW8KXz7EwiJvjqcAxwtSjygKZUVJO8HBFqTJuGMF0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gvZ48ukxkvlA/tROM+XWQCC+GQjn1xdlFnYHeifEYVq3bNZE7U+/awWbv/IXObCLK
+	 Ysc1gbU85mEH1o377fQn2byyXFnnUwqVzaCVMUJDVsA8bKlOmU5vmNabqZmvyRGbGc
+	 X/7kX4t1SPLDknV2pBJAyf8aXxdc31pTUtOn2E1xJQ91H6DmdnOUL0nKg75YA48ga8
+	 /xwVQ+krKvfrEpXXbqzBZXcjjpO8Rpksw4EdnWB1XquWOMs6zS79szHrzEoSX0ZE31
+	 jvaKCO00kXJudpcVy4IoBnDzj6q4gdEc1EpMNZp4UTrHDbHjavRHXl1tGXmhrSbzdl
+	 mkgFXnebCgzIw==
+Date: Wed, 2 Oct 2024 16:35:36 +0100
+From: Lee Jones <lee@kernel.org>
+To: Junhao Xie <bigfoot@classfun.cn>
+Cc: devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+	Sebastian Reichel <sre@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Heiko Stuebner <heiko@sntech.de>, Chukun Pan <amadeus@jmu.edu.cn>
+Subject: Re: [PATCH 7/9] leds: add Photonicat PMU LED driver
+Message-ID: <20241002153536.GG7504@google.com>
+References: <20240906093630.2428329-1-bigfoot@classfun.cn>
+ <20240906093630.2428329-8-bigfoot@classfun.cn>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241001-congatec-board-controller-v3-0-39ceceed5c47@bootlin.com> <20241001-congatec-board-controller-v3-2-39ceceed5c47@bootlin.com>
-In-Reply-To: <20241001-congatec-board-controller-v3-2-39ceceed5c47@bootlin.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Tue, 1 Oct 2024 20:52:23 +0200
-Message-ID: <CAMRc=MdGYUt25kE+rVHvKhgLw97aS7KDLHRXv9M+G5sz_qqYZw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] gpio: Congatec Board Controller gpio driver
-To: Thomas Richard <thomas.richard@bootlin.com>
-Cc: Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Andi Shyti <andi.shyti@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, thomas.petazzoni@bootlin.com, 
-	blake.vermeer@keysight.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240906093630.2428329-8-bigfoot@classfun.cn>
 
-On Tue, Oct 1, 2024 at 1:54=E2=80=AFPM Thomas Richard
-<thomas.richard@bootlin.com> wrote:
->
-> Add gpio support for the Congatec Board Controller.
-> This Board Controller has 14 GPIO pins.
->
-> The driver is probed by the Congatec Board Controller MFD driver.
->
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
+On Fri, 06 Sep 2024, Junhao Xie wrote:
+
+> Photonicat has a network status LED that can be controlled by system.
+> The LED status can be set through command 0x19.
+> 
+> Signed-off-by: Junhao Xie <bigfoot@classfun.cn>
 > ---
+>  drivers/leds/Kconfig           | 11 +++++
+>  drivers/leds/Makefile          |  1 +
+>  drivers/leds/leds-photonicat.c | 75 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 87 insertions(+)
+>  create mode 100644 drivers/leds/leds-photonicat.c
+> 
+> diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+> index 8d9d8da376e4..539adb5944e6 100644
+> --- a/drivers/leds/Kconfig
+> +++ b/drivers/leds/Kconfig
+> @@ -381,6 +381,17 @@ config LEDS_PCA9532_GPIO
+>  	  To use a pin as gpio pca9532_type in pca9532_platform data needs to
+>  	  set to PCA9532_TYPE_GPIO.
+>  
+> +config LEDS_PHOTONICAT_PMU
+> +	tristate "LED Support for Photonicat PMU"
+> +	depends on LEDS_CLASS
+> +	depends on MFD_PHOTONICAT_PMU
+> +	help
+> +	  Photonicat has a network status LED that can be controlled by system,
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+"the system"
+
+> +	  this option enables support for LEDs connected to the Photonicat PMU.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called leds-photonicat.
+> +
+>  config LEDS_GPIO
+>  	tristate "LED Support for GPIO connected LEDs"
+>  	depends on LEDS_CLASS
+> diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
+> index 18afbb5a23ee..dcd5312aee12 100644
+> --- a/drivers/leds/Makefile
+> +++ b/drivers/leds/Makefile
+> @@ -76,6 +76,7 @@ obj-$(CONFIG_LEDS_PCA9532)		+= leds-pca9532.o
+>  obj-$(CONFIG_LEDS_PCA955X)		+= leds-pca955x.o
+>  obj-$(CONFIG_LEDS_PCA963X)		+= leds-pca963x.o
+>  obj-$(CONFIG_LEDS_PCA995X)		+= leds-pca995x.o
+> +obj-$(CONFIG_LEDS_PHOTONICAT_PMU)	+= leds-photonicat.o
+>  obj-$(CONFIG_LEDS_PM8058)		+= leds-pm8058.o
+>  obj-$(CONFIG_LEDS_POWERNV)		+= leds-powernv.o
+>  obj-$(CONFIG_LEDS_PWM)			+= leds-pwm.o
+> diff --git a/drivers/leds/leds-photonicat.c b/drivers/leds/leds-photonicat.c
+> new file mode 100644
+> index 000000000000..3aa5ce525b83
+> --- /dev/null
+> +++ b/drivers/leds/leds-photonicat.c
+> @@ -0,0 +1,75 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2024 Junhao Xie <bigfoot@classfun.cn>
+> + */
+> +
+> +#include <linux/mfd/photonicat-pmu.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/leds.h>
+
+Alphabetical.
+
+> +struct pcat_leds {
+> +	struct device *dev;
+
+Where is this used?
+
+> +	struct pcat_pmu *pmu;
+
+Why do you need to store this?
+
+Can't you get this at the call-site by:
+
+  dev_get_drvdata(cdev->dev->parent)
+
+> +	struct led_classdev cdev;
+> +};
+> +
+> +static int pcat_led_status_set(struct led_classdev *cdev,
+> +			       enum led_brightness brightness)
+> +{
+> +	struct pcat_leds *leds = container_of(cdev, struct pcat_leds, cdev);
+> +	struct pcat_data_cmd_led_setup setup = { 0, 0, 0 };
+> +
+> +	if (brightness)
+> +		setup.on_time = 100;
+> +	else
+> +		setup.down_time = 100;
+> +	return pcat_pmu_write_data(leds->pmu, PCAT_CMD_NET_STATUS_LED_SETUP,
+> +				   &setup, sizeof(setup));
+> +}
+> +
+> +static int pcat_leds_probe(struct platform_device *pdev)
+> +{
+> +	int ret;
+
+Small sized variables at the bottom please.
+
+> +	struct device *dev = &pdev->dev;
+> +	struct pcat_leds *leds;
+> +	const char *label;
+> +
+> +	leds = devm_kzalloc(dev, sizeof(*leds), GFP_KERNEL);
+> +	if (!leds)
+> +		return -ENOMEM;
+> +
+> +	leds->dev = dev;
+
+Where is this used?
+
+> +	leds->pmu = dev_get_drvdata(dev->parent);
+> +	platform_set_drvdata(pdev, leds);
+
+Where do you platform_get_drvdata()
+
+> +	ret = of_property_read_string(dev->of_node, "label", &label);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "No label property\n");
+> +
+> +	leds->cdev.name = label;
+> +	leds->cdev.max_brightness = 1;
+> +	leds->cdev.brightness_set_blocking = pcat_led_status_set;
+> +
+> +	return devm_led_classdev_register(dev, &leds->cdev);
+> +}
+> +
+> +static const struct of_device_id pcat_leds_dt_ids[] = {
+> +	{ .compatible = "ariaboard,photonicat-pmu-leds", },
+
+How many LEDs are there?
+
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, pcat_leds_dt_ids);
+> +
+> +static struct platform_driver pcat_leds_driver = {
+> +	.driver = {
+> +		.name = "photonicat-leds",
+> +		.of_match_table = pcat_leds_dt_ids,
+> +	},
+> +	.probe = pcat_leds_probe,
+> +};
+> +module_platform_driver(pcat_leds_driver);
+> +
+> +MODULE_AUTHOR("Junhao Xie <bigfoot@classfun.cn>");
+> +MODULE_DESCRIPTION("Photonicat PMU Status LEDs");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.46.0
+> 
+
+-- 
+0)
+Lee Jones [李琼斯]
 
