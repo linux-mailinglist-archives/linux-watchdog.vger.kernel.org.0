@@ -1,58 +1,58 @@
-Return-Path: <linux-watchdog+bounces-2080-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2081-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5954C991031
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF207991033
 	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Oct 2024 22:20:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 022AC1F23DED
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1272A1C239B7
 	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Oct 2024 20:20:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D7C41ADFFA;
-	Fri,  4 Oct 2024 20:03:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 613141DDC05;
+	Fri,  4 Oct 2024 20:03:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="lQw4bbhc"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="QGpIqVNr"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CFF71DDA3F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8146D1ADFEA
 	for <linux-watchdog@vger.kernel.org>; Fri,  4 Oct 2024 20:03:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728072227; cv=none; b=EGs+HgBrpa4SdJIkoDggOhsD9jpCGZ+8G3Tj1FvnJWPlS3LiOjKqHcqHYYL+nLwVTyDBO8/B4cwUiZNUGFqMlRUpdYATRsTAOucTLFNKlv+UhcH5XfSYmUbkU3ih+aWxuyBTiuLeeZrbP/SUttyZyg++Wq1N8kuSSc+/6+E9hSw=
+	t=1728072228; cv=none; b=Z7+wFGLM48bryl4kSYid95flKjQr8oqjw8bxMCzsYN1aO94AoNEek6rUKOnsui1PeMjrdsfRPamDJZWANlhc6hwE4odgHFTIH64V2efsLjGIWbkWdHLS3/8Zn0TY2JyLoAzrRn+Ej1l/dIivEnaEqxZ+NqHovOBtNIq9+Jr4ZyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728072227; c=relaxed/simple;
-	bh=pUWXX1eEh0bHkVgo5GPCA8FvemlxuFmoYSsmgQaoquk=;
+	s=arc-20240116; t=1728072228; c=relaxed/simple;
+	bh=m3VCMQ/U1FEvwdKAaBIXtcP4IcR4tq5vJkX2/sMfcD4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tV6xhhtGIMfpCoyc3mKHOTV82iQQYGNI61xlnMRMIJeDSnssfDwUckjl7NWECu5TJGeiCggkzJiMp3aMtnPau3InXlQgyWblMiAjoViIp2kEg0xoKj2gUWHXv3RKTmfTOgq7kOiLYR8RFuWIImb5zt8KxmedCRjx4IvsdfMtPE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=lQw4bbhc; arc=none smtp.client-ip=194.117.254.33
+	 MIME-Version; b=nOuy9eH30ALEN8qG78D1+oS4fAbbGDvHjqr0VCCmmM048R5M+7xrfn5JilhRrqZsO+3hBWZmVii2DeAouGag4y7FU0/KQjDQJBrRq5GBdDSZBrt8s2v+o1ZC0tiXDz/1i+KdtBrML0OshkhPMqOuI6a2GUxkspM1ObJ80N4ntos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=QGpIqVNr; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
 	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=8Cg6dqgREWhM8nhZTwIK4zog/oTVaoavkF88FB1RjZw=; b=lQw4bb
-	hcRLZWFApxlVL7SZMBQ9eeIPN2MjGNd+YwwU6oyket8szWDTHeWP27qfc1tcjjKc
-	gTo+3mpb7bwdjqcS+F/rYJHhh94Ck7p9UEMmZI/lLGMKDOOREEn6bkMWrTRKBO1b
-	OcIR6O90p8/C80dC8w9OHYOBz2PgZYz/YpDh7FPBRPC8aJ4LCzQ3QMgil5WApaeZ
-	4COrNJWqO8vf0nOV0hk2qXAwvRDIeZa9McMJnRb2zt4YVX23KZ2dwPGRTt+RjOfb
-	/TZrNHFGIzfas4+ma7GT/sBrlJgdj4w2hqzKye17gD+jYiQ/biraveMUnrzTTuSo
-	4tHeLcHdnxi9WtHA==
-Received: (qmail 3546673 invoked from network); 4 Oct 2024 22:03:43 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Oct 2024 22:03:43 +0200
-X-UD-Smtp-Session: l3s3148p1@yS0FK6wjMupQvCeD
+	 s=k1; bh=pTdZzF/9LfC8RZByD3JQpP/YAG+/UGBGUduKxb+sEnQ=; b=QGpIqV
+	NrnJUE7foMNfFuoxZJl1xMG1aJVRVLm0tcQmhFU4JqBNxVUDo6aKWgftv4TftcLS
+	o0MvmRLbr6wV3pJeu78DsNvv1DBXWDuH1YDuDtKYTH5Zu/VLy8KDhzdCWNQ2h3xw
+	YOos6f2+4py/41rZtEEmgNtYzBn109KHrfiYKKYvUrqkPdPSIR+U2gBcaLUrZWt4
+	HgblNACc782Hsqkb/u5rCaEReGzgGpqa+7FgGxfMR34JC0HBd3mzpcCHNe0iFEFW
+	S8ZXi/pkcJx0MZ5o18T1+c5AKkHMvlW2XoApwd/1rNq3+lLQ7cslav/vk5qOlUIG
+	mZXN4oNEbEPadmXw==
+Received: (qmail 3546701 invoked from network); 4 Oct 2024 22:03:44 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Oct 2024 22:03:44 +0200
+X-UD-Smtp-Session: l3s3148p1@GuUPK6wjNOpQvCeD
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-renesas-soc@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Guenter Roeck <linux@roeck-us.net>,
 	linux-watchdog@vger.kernel.org
-Subject: [RFC PATCH 4/9] watchdog: iTCO_wdt: don't print out if registering watchdog fails
-Date: Fri,  4 Oct 2024 22:03:07 +0200
-Message-ID: <20241004200314.5459-5-wsa+renesas@sang-engineering.com>
+Subject: [RFC PATCH 5/9] watchdog: it87_wdt: don't print out if registering watchdog fails
+Date: Fri,  4 Oct 2024 22:03:08 +0200
+Message-ID: <20241004200314.5459-6-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241004200314.5459-1-wsa+renesas@sang-engineering.com>
 References: <20241004200314.5459-1-wsa+renesas@sang-engineering.com>
@@ -68,25 +68,25 @@ The core will do this already.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/watchdog/iTCO_wdt.c | 4 +---
+ drivers/watchdog/it87_wdt.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/watchdog/iTCO_wdt.c b/drivers/watchdog/iTCO_wdt.c
-index 35b358bcf94c..0d3c09a82f4f 100644
---- a/drivers/watchdog/iTCO_wdt.c
-+++ b/drivers/watchdog/iTCO_wdt.c
-@@ -592,10 +592,8 @@ static int iTCO_wdt_probe(struct platform_device *pdev)
- 	watchdog_stop_on_reboot(&p->wddev);
- 	watchdog_stop_on_unregister(&p->wddev);
- 	ret = devm_watchdog_register_device(dev, &p->wddev);
--	if (ret != 0) {
--		dev_err(dev, "cannot register watchdog device (err=%d)\n", ret);
-+	if (ret != 0)
- 		return ret;
+diff --git a/drivers/watchdog/it87_wdt.c b/drivers/watchdog/it87_wdt.c
+index 3e8c15138edd..676cd134e677 100644
+--- a/drivers/watchdog/it87_wdt.c
++++ b/drivers/watchdog/it87_wdt.c
+@@ -349,10 +349,8 @@ static int __init it87_wdt_init(void)
+ 
+ 	watchdog_stop_on_reboot(&wdt_dev);
+ 	rc = watchdog_register_device(&wdt_dev);
+-	if (rc) {
+-		pr_err("Cannot register watchdog device (err=%d)\n", rc);
++	if (rc)
+ 		return rc;
 -	}
  
- 	dev_info(dev, "initialized. heartbeat=%d sec (nowayout=%d)\n",
- 		heartbeat, nowayout);
+ 	pr_info("Chip IT%04x revision %d initialized. timeout=%d sec (nowayout=%d testmode=%d)\n",
+ 		chip_type, chip_rev, timeout, nowayout, testmode);
 -- 
 2.45.2
 
