@@ -1,84 +1,77 @@
-Return-Path: <linux-watchdog+bounces-2093-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2094-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CA769910F7
-	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Oct 2024 22:54:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2ECD4991223
+	for <lists+linux-watchdog@lfdr.de>; Sat,  5 Oct 2024 00:08:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7EA721C22DC2
-	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Oct 2024 20:54:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D23041F23DA6
+	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Oct 2024 22:08:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACBBE7406D;
-	Fri,  4 Oct 2024 20:54:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2742147C86;
+	Fri,  4 Oct 2024 22:08:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iFTMSt79"
+	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="aMgHdBkY"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38BF7231CAE;
-	Fri,  4 Oct 2024 20:54:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B711A0708;
+	Fri,  4 Oct 2024 22:08:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.147.86
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728075281; cv=none; b=WrQBRUmdIVxpqWzfIbtoHWrCo9LML+XamLhxoagnkado+M0YUW9EiEVym2qtcMKF2+FvIEYwfoZQs53llTMaFRZc0YLVjl8nAvD5khSQL8oUqPrjlX6QuDl62QZZBVY6Tth1TwwF2LkMaLhaf7GtNMrQVik8iAewbNeByQpcegE=
+	t=1728079711; cv=none; b=RS1MxZrW6B5OCWlfbH1xZCZdfOfMTRvlMnO8HnHYPbit+BSn+dkPPbTb7NXJQh8r3nooEi/wSxZ4KL4TV/Z1hZ2QdRN5sCG639gTSX1xql1aZgHTDQQ2mIibG1Do5en3co/llEpygLWYUxZv4tj3HrfUOURV89OXneqcV/eOFgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728075281; c=relaxed/simple;
-	bh=0nebFgyXysSWDWnQZVoWEALxoJeAoHkstpZ4Oe2HoRA=;
+	s=arc-20240116; t=1728079711; c=relaxed/simple;
+	bh=o9qU/A35l1Kot3wFtaUfmVaaenJHHKKZCK/gHpnoi7U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=InGybHNeKPYcHhs0T59wooj4ynuO4xuHGYqYGtA0acUbYadLx7DIrU81eP2cyWIgFETEvzGsYYdkUl5UWJiqtg2Sa6EpMVwsEt+uyM5AYzksidGUW2xUAUWd3eyrBBdq8/LiYmAPdOoA+822cEuGjcB5NZ4/iCdWiCibOx4tSoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iFTMSt79; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7179069d029so2000126b3a.2;
-        Fri, 04 Oct 2024 13:54:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728075279; x=1728680079; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ir91wjsLu7qjjjD9nb3lbz+LANF3mGuM0dYeVvk3fRQ=;
-        b=iFTMSt794PAuKMj+5r17iEpRsqZVAIrjcrsLdnCQGFwHly/xQg3xa/nrdYgIFEzM3c
-         2pbF7lG0hXrK0R5upHYuKHx2EV6TrrrSrpqDXb1JEPoI/pQ1qFIPPNGbNguGse17QiBM
-         WiOlqKrgoanvBNBrh87N0wKXwZxXvmbNJTHdDirLNDnJ4jPbPa5KC35lHXx/MhPhyda3
-         c6OH1dUZsLt04L4V5k2SLWQJLMmkLMUmumGMCsRz3gz1Awo5aLVBLZNV4HaIQ1IPjDMk
-         IVVLkKDfUtxfeqguhrL/29Wi4i8zrUEVYpPDsDfquG2S8P5ZBsrwvq6BcC76wA3xzgY/
-         nXkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728075279; x=1728680079;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ir91wjsLu7qjjjD9nb3lbz+LANF3mGuM0dYeVvk3fRQ=;
-        b=cMGzNBBSkYdiHHWvFyoRfLHiBhf8QxG+RujnqwNa0m/SYq4LcEgynkMom9rsWOURyr
-         GSIOx1AAgxyWK3pjG06y+PvSkz8M0sFVjep5QUoERDdXVxTluZ5GPtZJitVFlHhe5sh6
-         PMRT2tanGfeSe5mw/8PhQcBDtMSyD1WWcnkEFZgqrtEDzoMj3N2tESQoU5IT1ptNhjgd
-         BuL2B+dUTTkIgj0hExSjwdhnSRA3HWLyMEYrSJb9yenGmAhPqAgTruxWH1bYRJkBCihO
-         ay6IHKKIU9ZQBxCmgpizH18Ve6Nx78OqBuhhPevSXZ250HWVAd8SOCulZtcFpLqaYBrX
-         hF/A==
-X-Forwarded-Encrypted: i=1; AJvYcCU1Hx+Tr6qoudHU7+hlLE7GD1sD7f6cGnXSeV689DZl4TQl93pZrL+SiI/4Toro0WQaXpT7gTxFT2jC3cUqpQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTwMAwkOgQIrsZRg19wcz1iGoD6b0ckiSa9o9WmTtBCA3mZDsT
-	0AiM7qJbk1+EGRaVSJ0fODIZ/nXIBOKC0DsoV7l2NRh5cEkX83Qf
-X-Google-Smtp-Source: AGHT+IHbZWrl7mpdijr4HGdvUMdhPH2M2ryd4sOGONkOGCXNivoONyvbUbmJrfiPNfIA9wJmyJlR7A==
-X-Received: by 2002:a05:6a21:3992:b0:1d3:2928:f167 with SMTP id adf61e73a8af0-1d6dfaeee76mr6352120637.42.1728075279394;
-        Fri, 04 Oct 2024 13:54:39 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7e9f682d374sm356987a12.44.2024.10.04.13.54.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Oct 2024 13:54:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Fri, 4 Oct 2024 13:54:37 -0700
-From: Guenter Roeck <linux@roeck-us.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=B3962SWqk9bSyMMlRoB3xjyyxRsc3aNTod/7WpV1A/x9malH1jfipzdZSH8i9a/CaNmrV8lzHrG2iNB09kryW7+Z6f1jJsuzlJSxr9HKUOuMBJ0vHKc3NqCHmfPJycC06iWG09U+Eyf/QvA4dPpVhygxqk7HxDhCU6ZptYRYFWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=aMgHdBkY; arc=none smtp.client-ip=148.163.147.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
+Received: from pps.filterd (m0150241.ppops.net [127.0.0.1])
+	by mx0a-002e3701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 494HrI9C003959;
+	Fri, 4 Oct 2024 21:29:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date
+	:from:to:cc:subject:message-id:reply-to:references:mime-version
+	:content-type:in-reply-to; s=pps0720; bh=E9EPOTTowAxulKOGhHpOs4g
+	ZL3GrZMfR31KCIwjIz7k=; b=aMgHdBkYHYdmrr4YKPN1CLfzRfVFSeilJ4b0UQ+
+	iHI4cSmJl2U+hDvQbRR4MNzVc2Va7rSnmzzb28Ao1PV6k0QhtDLZImQ2Vm9fACsX
+	JvfzAFC0TpV/XUxNmYW6UoBpcwdzwi84HY3cQqQ1TroBqNAOmLYHcc+gdx/ErFEo
+	xXpKT/OFYw3cZGj+tLudU7NCRVSlHyzH9sHiQ3eC8qExe1GBs08GePlY5xUV7hY3
+	uMape+XK+LeuqbjaC8ic0ZcRbkAg3J9Jou9OfULjR604kBRC2rT5IxJu5+mBME5V
+	DhCYYcAGeT9pg2DWdhEAKpUIo7bEWiWxVrrsNvVte90r1SQ==
+Received: from p1lg14878.it.hpe.com ([16.230.97.204])
+	by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 422n53h420-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 04 Oct 2024 21:29:15 +0000 (GMT)
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by p1lg14878.it.hpe.com (Postfix) with ESMTPS id AC31914799;
+	Fri,  4 Oct 2024 21:29:14 +0000 (UTC)
+Received: from anatevka.ftc.rdlabs.hpecorp.net (unknown [16.231.227.39])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 6F6DA801620;
+	Fri,  4 Oct 2024 21:29:10 +0000 (UTC)
+Date: Fri, 4 Oct 2024 15:29:09 -0600
+From: Jerry Hoemann <jerry.hoemann@hpe.com>
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-renesas-soc@vger.kernel.org, Michael Walle <mwalle@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	linux-watchdog@vger.kernel.org
-Subject: Re: [RFC PATCH 9/9] watchdog: sl28cpld_wdt: don't print out if
+Cc: linux-renesas-soc@vger.kernel.org, Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+Subject: Re: [RFC PATCH 3/9] watchdog: hpe-wdt: don't print out if
  registering watchdog fails
-Message-ID: <1ad2caf1-fffa-4feb-9f67-0ebbea0ace0e@roeck-us.net>
+Message-ID: <ZwBeJUXqm3Tf0th_@anatevka.ftc.rdlabs.hpecorp.net>
+Reply-To: Jerry.Hoemann@hpe.com
 References: <20241004200314.5459-1-wsa+renesas@sang-engineering.com>
- <20241004200314.5459-10-wsa+renesas@sang-engineering.com>
+ <20241004200314.5459-4-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -87,13 +80,64 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241004200314.5459-10-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20241004200314.5459-4-wsa+renesas@sang-engineering.com>
+X-Proofpoint-ORIG-GUID: jXaEx0KcMm_16CEQDy6C9lrCo3klNyMK
+X-Proofpoint-GUID: jXaEx0KcMm_16CEQDy6C9lrCo3klNyMK
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-04_18,2024-10-04_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 lowpriorityscore=0 mlxscore=0 adultscore=0 phishscore=0
+ clxscore=1011 suspectscore=0 impostorscore=0 malwarescore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410040148
 
-On Fri, Oct 04, 2024 at 10:03:12PM +0200, Wolfram Sang wrote:
+On Fri, Oct 04, 2024 at 10:03:06PM +0200, Wolfram Sang wrote:
 > The core will do this already.
 > 
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/watchdog/gxp-wdt.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Question:  should email have been titled
+	"watchdog: gxp-wdt: ..."
+instead of
+	"watchdog: hpe-wdt: ..."
 
+to match the module name as the email title gets put into
+the git log for the file?
+
+Thanks
+
+Jerry
+
+
+> 
+> diff --git a/drivers/watchdog/gxp-wdt.c b/drivers/watchdog/gxp-wdt.c
+> index 2fd85be88278..f2c236160266 100644
+> --- a/drivers/watchdog/gxp-wdt.c
+> +++ b/drivers/watchdog/gxp-wdt.c
+> @@ -151,10 +151,8 @@ static int gxp_wdt_probe(struct platform_device *pdev)
+>  
+>  	watchdog_stop_on_reboot(&drvdata->wdd);
+>  	err = devm_watchdog_register_device(dev, &drvdata->wdd);
+> -	if (err) {
+> -		dev_err(dev, "Failed to register watchdog device");
+> +	if (err)
+>  		return err;
+> -	}
+>  
+>  	dev_info(dev, "HPE GXP watchdog timer");
+>  
+> -- 
+> 2.45.2
+> 
+
+-- 
+
+-----------------------------------------------------------------------------
+Jerry Hoemann                  Software Engineer   Hewlett Packard Enterprise
+-----------------------------------------------------------------------------
 
