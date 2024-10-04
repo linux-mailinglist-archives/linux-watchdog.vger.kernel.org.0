@@ -1,61 +1,61 @@
-Return-Path: <linux-watchdog+bounces-2076-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2077-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1937991029
-	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Oct 2024 22:19:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1A3899102B
+	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Oct 2024 22:19:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D37521C239A7
-	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Oct 2024 20:19:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53F271F22105
+	for <lists+linux-watchdog@lfdr.de>; Fri,  4 Oct 2024 20:19:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEB581ADFE2;
-	Fri,  4 Oct 2024 20:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A70F13212A;
+	Fri,  4 Oct 2024 20:03:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="hpNw6klj"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="QteVaGyT"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1103B1ADFE5
-	for <linux-watchdog@vger.kernel.org>; Fri,  4 Oct 2024 20:03:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50CA61AA787
+	for <linux-watchdog@vger.kernel.org>; Fri,  4 Oct 2024 20:03:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728072211; cv=none; b=Ck1g+t/QxkcI35SnWXA95n4EakgH4c6WFYS7nEWkOcRl8eO8EHofOu9BVVMRchWhMKe9P9wpear+Mu8I8ZqQ/IJyMQrmb7qRlcCpnsnEHVruCFTK8ryEFyiiLGrR2wYni1wwYKgynM4Bbzjlz4gT2GNSYlRlAfeL+QHPvahN/Rs=
+	t=1728072213; cv=none; b=Li2P+RutARxUr2AvWBghXUesvbFfKWeH48uDiDsvh+T2lUTZFfxda/CUUahfNCm5h6mkFzW0iCcmkphb4HhFXJvNr2x5puyLEXvDnaPUUfhJol5a4HpOiOPJsom6dJM9AQc/ZcPAy0ThhRD0eRKLFCCQGFNw8KeK5yKN5EjSjyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728072211; c=relaxed/simple;
-	bh=al6r3J1XvWz+qtQauqxukHeMJBUFZaCsGtAxq/emG+Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e2oQWq30ApsgBKEnNmSwzVlfrHtKllnLYwEkj1Y5iAjlYuD+HqvqMxrgslHf5IAOEIiWlOIbxns/T+bw4Zlw1uhF7U9bUKB/O9scYleol3GtyvZy2AEkP0y2v7aH18oP0Q8v1nDEGyJ6dM7WMHaQyMVdCOL4n+ZegEtz9wRNrEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=hpNw6klj; arc=none smtp.client-ip=194.117.254.33
+	s=arc-20240116; t=1728072213; c=relaxed/simple;
+	bh=IX+b0LghnDfcnrdNO78F3Jdizxh79eWxQpGF0Her+rE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fqKNnEkwahu29feAIVnkU3CqGHcaroFsXYcQvU2w44fSWFyBx/e/SoaRJBNPE73HSzc7qRVB305D4XHIbLjnL2ldbz2lAh96g+CdxKG91PwMHwwox0LfPnjs29weGf//jjEBz29a0EG3pxvAKzEHR+NBu3PB3uo+reReVd2C8Qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=QteVaGyT; arc=none smtp.client-ip=194.117.254.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:mime-version:content-transfer-encoding; s=k1; bh=oxFvBwHLQIyYtq
-	XIRO1kguuDD0F+GEZfx9tyLIEoAb8=; b=hpNw6kljb1v1clVoTIr4WT8kJxQT04
-	r14NDklqofNuVRFfCG2bF5D87lDflWpt4J3czlNOfbcUmsPS7LPfM6ZbDLytgVAZ
-	0o1Xdt2obQbCi49GQatRsvJs7iAng/sOtOmmecC0If/oTQRVV9ondrfpxCBTRDZ/
-	CCfUhRuvFOjRz0LJWL+Le6g3Phc+JFhZhaxjdT02Sja6Art07SfCoDV1a93PUmgN
-	VMM8eJQcCTalPA7rGvFZ3dkrU6xPNzUZi3sCwNkWznq6LVYH08BMix11/eAFIcPs
-	Nhc7AHYrr4kH3ALgmfpK+Sl+2SmRXz5ORqS3Gc/0l4bYc88qOK/QAI9A==
-Received: (qmail 3546497 invoked from network); 4 Oct 2024 22:03:27 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Oct 2024 22:03:27 +0200
-X-UD-Smtp-Session: l3s3148p1@68cTKqwjTtdQvCeD
+	:in-reply-to:references:mime-version:content-transfer-encoding;
+	 s=k1; bh=37DtN53WqYeQDmLHrgDa9J8oqi3XKqR9P5WZSkrQflo=; b=QteVaG
+	yT13HXwrKOI9EAU7FY5oprSrhuLFp+rQUCrX1V2wwqPwBKPvJpD0uiuIpRfYZcAu
+	0veU6/4dIHcR/fyUq/wk1mrgPQi+mFBXBhTyNSQX03evc+f5Y93HzAPQttImXKbO
+	1l/R/KIoE1QM8vxbx6zwdDJwv4v6+PMhLRLZkAYrFQJ8a7vpWZHehjlSGmwC6Zzl
+	HTv5k8ZcE4T32cyX7nlG7vLi7mmhDED7pkEbEyiEKhHdSl3sCpOu4CljxzCRGGGJ
+	w7Mgik3jdaQBPp6TmIWsOx7x9Svy6vw8PVtIrY49E2CYGJFlfh2IUaFMX3d6+EMy
+	M3PPNr13zvjOCKiw==
+Received: (qmail 3546544 invoked from network); 4 Oct 2024 22:03:29 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Oct 2024 22:03:29 +0200
+X-UD-Smtp-Session: l3s3148p1@E0wqKqwjXtdQvCeD
 From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: linux-renesas-soc@vger.kernel.org
 Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Guenter Roeck <linux@roeck-us.net>,
-	Jean-Marie Verdun <verdun@hpe.com>,
-	linux-watchdog@vger.kernel.org,
-	Michael Walle <mwalle@kernel.org>,
-	Nick Hawkins <nick.hawkins@hpe.com>,
-	Support Opensource <support.opensource@diasemi.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>
-Subject: [RFC PATCH 0/9] watchdog: don't print out if registering watchdog fails
-Date: Fri,  4 Oct 2024 22:03:03 +0200
-Message-ID: <20241004200314.5459-1-wsa+renesas@sang-engineering.com>
+	linux-watchdog@vger.kernel.org
+Subject: [RFC PATCH 1/9] watchdog: always print when registering watchdog fails
+Date: Fri,  4 Oct 2024 22:03:04 +0200
+Message-ID: <20241004200314.5459-2-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241004200314.5459-1-wsa+renesas@sang-engineering.com>
+References: <20241004200314.5459-1-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -64,39 +64,74 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-While working with the rza-driver, I noticed that the watchdog core does
-not always print out errors when registering a watchdog fails. Only most
-of the time. With a simple refactoring, it will always print out. We can
-remove similar printouts then from drivers. This series does exactly
-that. Not sure about the core change, thus still RFC. There are two more
-drivers outside the 'watchdog' dir which could benefit from this change,
-but I left them out for now until I know this path is acceptable.
+So far, only 'watchdog_register_device' prints an error if registering
+the watchdog driver fails. '__watchdog_register_device' doesn't.
+Refactor the code so that both print out. Drivers can then rely on that
+and skip their own error messages.
 
-Looking forward to comments...
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
+ drivers/watchdog/watchdog_core.c | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
 
-
-Wolfram Sang (9):
-  watchdog: always print when registering watchdog fails
-  watchdog: da9055_wdt: don't print out if registering watchdog fails
-  watchdog: hpe-wdt: don't print out if registering watchdog fails
-  watchdog: iTCO_wdt: don't print out if registering watchdog fails
-  watchdog: it87_wdt: don't print out if registering watchdog fails
-  watchdog: octeon-wdt: don't print out if registering watchdog fails
-  watchdog: rti_wdt: don't print out if registering watchdog fails
-  watchdog: rza_wdt: don't print out if registering watchdog fails
-  watchdog: sl28cpld_wdt: don't print out if registering watchdog fails
-
- drivers/watchdog/da9055_wdt.c      |  7 +------
- drivers/watchdog/gxp-wdt.c         |  4 +---
- drivers/watchdog/iTCO_wdt.c        |  4 +---
- drivers/watchdog/it87_wdt.c        |  4 +---
- drivers/watchdog/octeon-wdt-main.c |  4 +---
- drivers/watchdog/rti_wdt.c         |  4 +---
- drivers/watchdog/rza_wdt.c         |  7 +------
- drivers/watchdog/sl28cpld_wdt.c    |  4 +---
- drivers/watchdog/watchdog_core.c   | 26 +++++++++++++++++---------
- 9 files changed, 25 insertions(+), 39 deletions(-)
-
+diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
+index aff2c3912ead..d46d8c8c01f2 100644
+--- a/drivers/watchdog/watchdog_core.c
++++ b/drivers/watchdog/watchdog_core.c
+@@ -237,7 +237,7 @@ void watchdog_set_restart_priority(struct watchdog_device *wdd, int priority)
+ }
+ EXPORT_SYMBOL_GPL(watchdog_set_restart_priority);
+ 
+-static int __watchdog_register_device(struct watchdog_device *wdd)
++static int ___watchdog_register_device(struct watchdog_device *wdd)
+ {
+ 	int ret, id = -1;
+ 
+@@ -337,6 +337,22 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
+ 	return 0;
+ }
+ 
++static int __watchdog_register_device(struct watchdog_device *wdd)
++{
++	const char *dev_str;
++	int ret;
++
++	ret = ___watchdog_register_device(wdd);
++	if (ret) {
++		dev_str = wdd->parent ? dev_name(wdd->parent) :
++			  (const char *)wdd->info->identity;
++		pr_err("%s: failed to register watchdog device (err = %d)\n",
++			dev_str, ret);
++	}
++
++	return ret;
++}
++
+ /**
+  * watchdog_register_device() - register a watchdog device
+  * @wdd: watchdog device
+@@ -350,7 +366,6 @@ static int __watchdog_register_device(struct watchdog_device *wdd)
+ 
+ int watchdog_register_device(struct watchdog_device *wdd)
+ {
+-	const char *dev_str;
+ 	int ret = 0;
+ 
+ 	mutex_lock(&wtd_deferred_reg_mutex);
+@@ -360,13 +375,6 @@ int watchdog_register_device(struct watchdog_device *wdd)
+ 		watchdog_deferred_registration_add(wdd);
+ 	mutex_unlock(&wtd_deferred_reg_mutex);
+ 
+-	if (ret) {
+-		dev_str = wdd->parent ? dev_name(wdd->parent) :
+-			  (const char *)wdd->info->identity;
+-		pr_err("%s: failed to register watchdog device (err = %d)\n",
+-			dev_str, ret);
+-	}
+-
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(watchdog_register_device);
 -- 
 2.45.2
 
