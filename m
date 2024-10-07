@@ -1,31 +1,31 @@
-Return-Path: <linux-watchdog+bounces-2100-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2099-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A09B9924E4
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Oct 2024 08:34:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD30F9924E1
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Oct 2024 08:34:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4CED1F228D8
-	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Oct 2024 06:34:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B0F51C221A7
+	for <lists+linux-watchdog@lfdr.de>; Mon,  7 Oct 2024 06:34:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01FD416630A;
-	Mon,  7 Oct 2024 06:34:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBA7F42077;
+	Mon,  7 Oct 2024 06:34:15 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF2B15B13C;
-	Mon,  7 Oct 2024 06:34:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE575149C6A;
+	Mon,  7 Oct 2024 06:34:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728282857; cv=none; b=Wn5Kmo7npKAVOa6YLF/1UBXWjcpXy2KriTAbFOb5zex3z6q2zDqCBxFJ47MLXKElDD4vvHP0b5PJHPdLk/p5aCcyGkS28X3z0BQ3LpxCs4AsL0YmxQyOUhOaIpUNAWkNqlOsCo8cTmTfQaJSKQoSOsP1n/F+vbcNNc8yquoqm9M=
+	t=1728282855; cv=none; b=p4vxD3NeI9Jl36oS6BjmDF6/HqIHGfZZGCOCs/1VMHCVNqk6qd04vvbS1fw/VnVEX8xAf6IiVil9JgJsYi27lfiR7gWICTnbnRWMiM2q9oqVh35O+DNeoOz2SzD2J1t4wpoyks2+RUurqLYoBhcUAGJN8pD+06VlmP/JxdF3r2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728282857; c=relaxed/simple;
-	bh=QKnsrnHH4rF8FOuJI0h9zOVDsyQQPZgRzSvWRKKjZhw=;
+	s=arc-20240116; t=1728282855; c=relaxed/simple;
+	bh=SfVok2QnDPH32Kmkcj3p1nt9RMkzDbWzinsZZpIrOOA=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GSu57UaMDTfaoQDbxF6ZRWekoiAs1wbIzcN9SmU+imYjR+FpYeEuTe9tj/qSrk1C44imzLQJG3GEtpHnEjkH2B35WTopToU0giJevhpZDTyEOI6bYN6ZQ5P9/wzTb0BuquVSdOQxEJNrKjC3kv5DuJWcmUPrw2NBMPu3mO69HG8=
+	 MIME-Version:Content-Type; b=k3Vu8tlKmX46KdTqSSJNyXcIr49wlRGpc2aL6CSLhtcCrvMSLS12UR6X49HJYUJViy45040InJuPSP3Z9nN5pNa7KMQUXGHZerPy/PTa0CNWAx3odxblxbChVYBE7PjBQH1Tz2OJhUtVD5pDDAJGEDDI2oASh/4yzXeBvX3pCZQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
@@ -45,9 +45,9 @@ To: <patrick@stwcx.xyz>, <wim@linux-watchdog.org>, <linux@roeck-us.net>,
 	<linux-kernel@vger.kernel.org>
 CC: <Peter.Yin@quantatw.com>, <Patrick_NC_Lin@wiwynn.com>,
 	<Bonnie_Lo@wiwynn.com>, <DELPHINE_CHIU@wiwynn.com>, <BMC-SW@aspeedtech.com>
-Subject: [PATCH 1/4] dt-bindings: watchdog: aspeed: Add property for WDT SW reset
-Date: Mon, 7 Oct 2024 14:34:05 +0800
-Message-ID: <20241007063408.2360874-2-chin-ting_kuo@aspeedtech.com>
+Subject: [PATCH 2/4] ARM: dts: aspeed: Add WDT controller into alias field
+Date: Mon, 7 Oct 2024 14:34:06 +0800
+Message-ID: <20241007063408.2360874-3-chin-ting_kuo@aspeedtech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241007063408.2360874-1-chin-ting_kuo@aspeedtech.com>
 References: <20241007063408.2360874-1-chin-ting_kuo@aspeedtech.com>
@@ -60,36 +60,59 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-Add "aspeed,restart-sw" property to distinguish normal WDT
-reset from system restart triggered by SW consciously.
+Add WDT controller into alias field. After that, WDT index,
+used to distinguish different WDT controllers in the driver,
+can be gotten by using of_alias_get_id dts API.
 
 Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
 ---
- .../bindings/watchdog/aspeed,ast2400-wdt.yaml         | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ arch/arm/boot/dts/aspeed/aspeed-g4.dtsi | 2 ++
+ arch/arm/boot/dts/aspeed/aspeed-g5.dtsi | 3 +++
+ arch/arm/boot/dts/aspeed/aspeed-g6.dtsi | 4 ++++
+ 3 files changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/aspeed,ast2400-wdt.yaml b/Documentation/devicetree/bindings/watchdog/aspeed,ast2400-wdt.yaml
-index be78a9865584..6cc3604c295a 100644
---- a/Documentation/devicetree/bindings/watchdog/aspeed,ast2400-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/aspeed,ast2400-wdt.yaml
-@@ -95,6 +95,17 @@ properties:
-       array with the first word defined using the AST2600_WDT_RESET1_* macros,
-       and the second word defined using the AST2600_WDT_RESET2_* macros.
+diff --git a/arch/arm/boot/dts/aspeed/aspeed-g4.dtsi b/arch/arm/boot/dts/aspeed/aspeed-g4.dtsi
+index 78c967812492..d8b4136d0ca0 100644
+--- a/arch/arm/boot/dts/aspeed/aspeed-g4.dtsi
++++ b/arch/arm/boot/dts/aspeed/aspeed-g4.dtsi
+@@ -29,6 +29,8 @@ aliases {
+ 		serial3 = &uart4;
+ 		serial4 = &uart5;
+ 		serial5 = &vuart;
++		watchdog0 = &wdt1;
++		watchdog1 = &wdt2;
+ 	};
  
-+  aspeed,restart-sw:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description: >
-+      Normally, ASPEED WDT reset may occur when system hangs or reboot
-+      triggered by SW consciously. However, system doesn't know whether the
-+      restart is triggered by SW consciously since the reset event flag is
-+      the same as normal WDT timeout reset. With this property, SW can
-+      restart the system immediately and directly without wait for WDT
-+      timeout occurs. The reset event flag is also different from the normal
-+      WDT reset. This property is only supported since AST2600 platform.
-+
- required:
-   - compatible
-   - reg
+ 	cpus {
+diff --git a/arch/arm/boot/dts/aspeed/aspeed-g5.dtsi b/arch/arm/boot/dts/aspeed/aspeed-g5.dtsi
+index 57a699a7c149..4dd220bca617 100644
+--- a/arch/arm/boot/dts/aspeed/aspeed-g5.dtsi
++++ b/arch/arm/boot/dts/aspeed/aspeed-g5.dtsi
+@@ -30,6 +30,9 @@ aliases {
+ 		serial3 = &uart4;
+ 		serial4 = &uart5;
+ 		serial5 = &vuart;
++		watchdog0 = &wdt1;
++		watchdog1 = &wdt2;
++		watchdog2 = &wdt3;
+ 	};
+ 
+ 	cpus {
+diff --git a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
+index 8ed715bd53aa..c0a47c795fff 100644
+--- a/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
++++ b/arch/arm/boot/dts/aspeed/aspeed-g6.dtsi
+@@ -40,6 +40,10 @@ aliases {
+ 		mdio1 = &mdio1;
+ 		mdio2 = &mdio2;
+ 		mdio3 = &mdio3;
++		watchdog0 = &wdt1;
++		watchdog1 = &wdt2;
++		watchdog2 = &wdt3;
++		watchdog3 = &wdt4;
+ 	};
+ 
+ 
 -- 
 2.34.1
 
