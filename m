@@ -1,95 +1,117 @@
-Return-Path: <linux-watchdog+bounces-2136-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2137-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0340995479
-	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Oct 2024 18:33:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4978B995795
+	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Oct 2024 21:26:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 88136B2661F
-	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Oct 2024 16:33:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CFE73B25237
+	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Oct 2024 19:26:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62F711E0B99;
-	Tue,  8 Oct 2024 16:33:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 601C9212EFD;
+	Tue,  8 Oct 2024 19:26:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UHPf5+FI"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="Y7poJ758"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1DA1EA73;
-	Tue,  8 Oct 2024 16:33:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7851E0DCC;
+	Tue,  8 Oct 2024 19:26:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728405197; cv=none; b=ERB7GJkQE3Bi/xiZXnW3j73HyP6+II0at3DBDAo01OEgr+UTIDeSB7KH3hOgM397TFkGDAaFczyMLvLnr9Sn8DluJCi9NoqvaJUYdgVkO0FJ7/grpSXWPgPCndw7surb0j0WDlTvSkNx/Hr4dk0MPciwP412Sg9RLOytMy/VLl8=
+	t=1728415595; cv=none; b=g+siMHSmM/P65BZtDmLzq9TFDydnvcA6DwJkJOykH8v9y47Pa+OcGrWaZBlwJB9gEOlpC1B+joNLtoPAciNMSAmVFaBAJ5MKbiwg+xou2Eo4tui+9XDtRmUgF9VzpPy92CNAO/LIhoY0FxEj4PSYRmSCPWqsg/FygtDY+UCE+KU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728405197; c=relaxed/simple;
-	bh=ABYLgna9ik3Qw3mklNtm//dxT/ojFvjCVfeIpWSQXx4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MkhqYc52cUULqg9M3fx8w8SuHaAyVjdYJDMhY8WVzqaKh5U3CBZBnT8C4tlekdAmmRZyrXVRiAfFzMzqaKyEFWVXzUTOa0ZCVDHp6qla9HedS0m0zDcVXYews6bI4myGeLcGD+eE5kV+7pD/PU7mqP/cTnHt+VvAUS8V47SSJEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UHPf5+FI; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728405196; x=1759941196;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ABYLgna9ik3Qw3mklNtm//dxT/ojFvjCVfeIpWSQXx4=;
-  b=UHPf5+FIMm3hs4oEeJAcEAk+oQz8BJP2oYAScCyh/hMe8vrwmOkwMx17
-   qTONI01VZwwy9ZT2cPHkpO0ArNygIlBw/YbHzf5oSxOoKk3+0lycU0Aqg
-   /Qe67Jbzmrna7krg0RzqLnVZB7EJ2PPM84VwfCy4JZr5j8NZOG0YMCl2P
-   rR0XbmXNN15kmtCRVKACWhRGRRd7gb1GletpSa3kTsUSVv3tiGAxZyHVz
-   1N5wRAgA/7IkWXhUSesgXnZaL8YWdSJDZZ7evACkyIAmQpuo1cLthZ5H/
-   mYBQsbh1/CcqTNO6gqroIYe0dpH59pDaiMBYlh9SwdTb0UgxillQOpSW4
-   A==;
-X-CSE-ConnectionGUID: Z7/Sn2zES+OJ/8Zs/E6TaA==
-X-CSE-MsgGUID: yK35D0XETeuSHuXYF8biqQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="27710411"
-X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
-   d="scan'208";a="27710411"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 09:33:15 -0700
-X-CSE-ConnectionGUID: AQyTA9GQQ96nhOK24BJtMw==
-X-CSE-MsgGUID: XANtgy2WQj+5FMfNuLqwyA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
-   d="scan'208";a="75572678"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa007.fm.intel.com with ESMTP; 08 Oct 2024 09:33:13 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 3123720F; Tue, 08 Oct 2024 19:33:12 +0300 (EEST)
-Date: Tue, 8 Oct 2024 19:33:12 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Oleksandr Ocheretnyi <oocheret@cisco.com>
-Cc: linux@roeck-us.net, jdelvare@suse.de, linux-kernel@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-	wsa@kernel.org, xe-linux-external@cisco.com
-Subject: Re: [PATCH v3] iTCO_wdt: mask NMI_NOW bit for update_no_reboot_bit()
- call
-Message-ID: <20241008163312.GS275077@black.fi.intel.com>
-References: <05dba51b-7c3c-4455-9c97-09777e885fac@roeck-us.net>
- <20241007155702.3676667-1-oocheret@cisco.com>
+	s=arc-20240116; t=1728415595; c=relaxed/simple;
+	bh=UN60g7ok2txVfjib6VFzxF/hYlvmRSU7ESVjdEIV/FI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rIqIS/kFiXNJZBMlwMg88lZMSsdDm+gvIrIygIqEnVozj9pZB2R4B+EpT35CeW63Xc9QRBkj/WlJtJhskwChg0bbMqyG+4s5ZPLtQgHKqw+hF3swgQbeo4KwF56UT8YED0tpwaqZy6KhaYT71bDkDWiD9zTcMigKf27Mufzqf10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=Y7poJ758; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=FhQkehwGj9tY7Cfu+3fe0KEsL4p9cA3gfskuGZndKuQ=; b=Y7poJ7581kZPvGWRfvLw6odq0I
+	oanEKm52hlcmfBdwCH7A7AGCcZQyVN+YeDXa4nMGgWOxWGs3+d9b8XHFgEgdZ4laRXfVpgKTizsIi
+	DCk8WCL3QtSoNiA2daFRIuG9N5K0GxOGRBz3bAHU+MrNc/HBVDAeIdB5H1u+kixyLO7xbntHzo6n7
+	KT7o1xj07cOfaQBTe3/On3T16SDifk4jA0ZYCjzzJ3Z8fePjVkeyZR/ikKYV3omW2pEbKfIyyxNnB
+	TwyCn7CuZ4SLgsBMC59d0W21NuY19UDRZaVZ35lx12fO/LVZtJwRI2VOQK4hfm9XhWITt+SXdV37p
+	yYIqLWpg==;
+Received: from i53875ad9.versanet.de ([83.135.90.217] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1syFqV-0006zK-1L; Tue, 08 Oct 2024 21:26:11 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ alexandre.belloni@bootlin.com, wim@linux-watchdog.org, linux@roeck-us.net,
+ karthikeyan <karthikeyan@linumiz.com>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject:
+ Re: [PATCH v3 1/6] dt-bindings: watchdog: rockchip: Add rockchip,rv1126-wdt
+ string
+Date: Tue, 08 Oct 2024 21:26:10 +0200
+Message-ID: <1988046.PYKUYFuaPT@diego>
+In-Reply-To: <37e26b46-2f6a-4db4-b003-59088ef1dcc1@linumiz.com>
+References:
+ <20240912142451.2952633-1-karthikeyan@linumiz.com>
+ <ddca4051-0e83-4d39-8654-12210ffa5685@linumiz.com>
+ <37e26b46-2f6a-4db4-b003-59088ef1dcc1@linumiz.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241007155702.3676667-1-oocheret@cisco.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-On Mon, Oct 07, 2024 at 08:57:02AM -0700, Oleksandr Ocheretnyi wrote:
-> Hello Mika,
+Hi,
+
+Am Montag, 7. Oktober 2024, 15:56:58 CEST schrieb karthikeyan:
 > 
-> > I suggest adding some #define for the magical number 8 so that it is
-> > easier for anyone looking at this driver to figure out what it is doing.
-> 
-> Are the changes with #define NMI_NOW bit fine for you?
+> On 9/18/24 12:59, karthikeyan wrote:
+> > 
+> > 
+> > On 9/18/24 04:46, Heiko Stuebner wrote:
+> >> Hey,
+> >>
+> >> Am Donnerstag, 12. September 2024, 16:24:46 CEST schrieb Karthikeyan 
+> >> Krishnasamy:
+> >>> Add rockchip,rv1126-wdt compatible string.
+> >>>
+> >>> Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
+> >>
+> >> I think this patch misses some recipients because neither
+> >> the watchdog maintainers nor the watchdog list is included.
+> >>
+> >> We'll need for them to at least Ack this patch, so they'll
+> >> need to be included. Please check your scripts/get_maintainer.pl
+> >> call
+> >>
+> >>
+> >> Thanks
+> >> Heiko
+> >>
+> > Apologies for missing them. Adding them in this reply mail.
 
-Sure,
+I don't think that will have worked.
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Ideally can you include Conor's Ack and resend only the watchdog binding
+patch to the watchdog maintainers (and lists and me too please) .
+
+Because just adding more people to a reply probably won't tell them
+that some action is expected.
+
+Heiko
+
+
 
