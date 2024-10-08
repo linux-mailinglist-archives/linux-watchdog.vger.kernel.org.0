@@ -1,83 +1,90 @@
-Return-Path: <linux-watchdog+bounces-2134-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2135-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 969B7994303
-	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Oct 2024 10:57:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5BB6995034
+	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Oct 2024 15:35:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B51701C2420F
-	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Oct 2024 08:57:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 901121F226FE
+	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Oct 2024 13:35:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A3F31925A5;
-	Tue,  8 Oct 2024 08:48:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03C2A1DEFE0;
+	Tue,  8 Oct 2024 13:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TgwsCPhD"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from cmccmta2.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2E701C231E;
-	Tue,  8 Oct 2024 08:48:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.137
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B7D1D9A43;
+	Tue,  8 Oct 2024 13:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728377337; cv=none; b=M2gsC6QKp8EIqQc1pQ+GahZIoh8OyvqNMxoDafuwHINsZUw68psmP7ll4jiO0Mb4H8paAvkbLtElvDgh8NKOEPZSGEsdx5MzbLQdZhOsNXyzEOWEvJvQm1orOtnfwvTw2+iS/mQmhWUWKE0G+yuELm4bWsh+Kbn7RPhCX8C+1hM=
+	t=1728394496; cv=none; b=p8J91YmoBxPVAsXrGnFSqUT/ekJ1bDJqMuIT/WVwbqzWY/GpCqPlMwW8IETn1m5S48PB+3Gl2/btbwwwknmtyR/fwZDf2oHN90pils7OU71bI4aBYqSc8FwrOsY107477/LoE8EAfZM7kHSw0w4zPJ5aJObESKJZgNMEIwSW9oI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728377337; c=relaxed/simple;
-	bh=NCPYzTGYfBLkgRBCCxhfCOO94oU9WxQTrSRTThzoqoU=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=EzKjx2KzPXdE/eVoxNcUeJ5T0zq3iiCMRBvkP7KkW/ChiWZjh8WruFI9q/v9sU1G9IHIu+OuevQOMlUp6S3sVdT4pR3a5vYlZEh43My3HzPsv5lSaTu5T3C/oPcLjhxBOpojcciChA6+xeGScbPuQEHKi25hdZOwUNpOy1wQ8Uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee86704f1eee9c-1ded5;
-	Tue, 08 Oct 2024 16:48:46 +0800 (CST)
-X-RM-TRANSID:2ee86704f1eee9c-1ded5
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from ubuntu.localdomain (unknown[10.55.1.71])
-	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee86704f1ed85a-94cf6;
-	Tue, 08 Oct 2024 16:48:46 +0800 (CST)
-X-RM-TRANSID:2ee86704f1ed85a-94cf6
-From: Zhu Jun <zhujun2@cmss.chinamobile.com>
-To: wim@linux-watchdog.org
-Cc: linux@roeck-us.net,
-	linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	zhujun2@cmss.chinamobile.com
-Subject: [PATCH] drivers/pcwd_pci:Fix the wrong format specifier
-Date: Tue,  8 Oct 2024 01:48:44 -0700
-Message-Id: <20241008084844.13751-1-zhujun2@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1728394496; c=relaxed/simple;
+	bh=AsYoCsU044vrxM77ATJ+bBtvZ6wwx4g48fpwc54K/Eg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RmsGPJmUrK8wvum26SluhNnMvHQ6EU35rwoC1osj0FW1u13wgK0CKobvpbTuFqaqJs4rA95TuoCgqXcxGohOIcGvw/aZdgZEpFBYzOyPB422hg8ibH7/gwqE0ruJhDTYen5rYgVF51Qq1k3K3JOxM3zHjITAaLHZv/Vbg/9DHkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TgwsCPhD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDD4AC4CEC7;
+	Tue,  8 Oct 2024 13:34:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728394496;
+	bh=AsYoCsU044vrxM77ATJ+bBtvZ6wwx4g48fpwc54K/Eg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TgwsCPhDlQ59rdZyDIYS5VIg3On0g4zCf9UEEx8G3scMnBBRssmSpCPt5lj/Auo8D
+	 N3jaGSR0Alps4nZlsy2uMCOwdu0LI9mzk0eYgpBYArncC5LW5wUHiKP2m0EFcjoR30
+	 WIzErCGlJpBSS9id34mH/WvPag05INkV0w9QEx6BLV12YoaIiSPM1L5hMbOPpfpVm7
+	 vXcs70W7lWOgKvDYPcAP3rCH5QPP3SbftG9sZXI0X3fqhS4NjGeINMSiCpej6TktaJ
+	 KS7Y9jiR/DAVnxoPj63xm4Q4mh2CICdPitxuKuhSP/cevugGKLTeT4ffUaGmjZGyXV
+	 3CThlwfvW4n3g==
+Date: Tue, 8 Oct 2024 15:34:54 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	"open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, 
+	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>, 
+	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/1] dt-bindings: watchdog: fsl-imx-wdt: Add missing
+ 'big-endian' property
+Message-ID: <h2ynhrnuhiwixxkoeiyu5kpkpssvlscwbyxgsfdg2j22kwyfz4@urzf32egddcg>
+References: <20241007212434.895521-1-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241007212434.895521-1-Frank.Li@nxp.com>
 
-The format specifier of "int" in printf() should be "%d", not
-"%u".
+On Mon, Oct 07, 2024 at 05:24:33PM -0400, Frank Li wrote:
+> From: Animesh Agarwal <animeshagarwal28@gmail.com>
+> 
+> Add missing big-endian property in watchdog/fsl-imx-wdt.yaml schema. Only
+> allow big-endian property for ls1012a and ls1043a.
+> 
+> Fix dtbs_check errors.
+> arch/arm64/boot/dts/freescale/fsl-ls1012a-frwy.dtb: watchdog@2ad0000:
+>     Unevaluated properties are not allowed ('big-endian' was unexpected)
+> 
+> Cc: Daniel Baluta <daniel.baluta@nxp.com>
+> Signed-off-by: Animesh Agarwal <animeshagarwal28@gmail.com>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
 
-Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
----
- drivers/watchdog/pcwd_pci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/watchdog/pcwd_pci.c b/drivers/watchdog/pcwd_pci.c
-index a489b426f2ba..3672e7f23b39 100644
---- a/drivers/watchdog/pcwd_pci.c
-+++ b/drivers/watchdog/pcwd_pci.c
-@@ -230,7 +230,7 @@ static void pcipcwd_show_card_info(void)
- 	got_fw_rev = send_command(CMD_GET_FIRMWARE_VERSION, &fw_rev_major,
- 								&fw_rev_minor);
- 	if (got_fw_rev)
--		sprintf(fw_ver_str, "%u.%02u", fw_rev_major, fw_rev_minor);
-+		sprintf(fw_ver_str, "%d.%02d", fw_rev_major, fw_rev_minor);
- 	else
- 		sprintf(fw_ver_str, "<card no answer>");
- 
--- 
-2.17.1
-
-
+Best regards,
+Krzysztof
 
 
