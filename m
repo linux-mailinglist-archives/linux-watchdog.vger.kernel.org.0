@@ -1,62 +1,76 @@
-Return-Path: <linux-watchdog+bounces-2135-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2136-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5BB6995034
-	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Oct 2024 15:35:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0340995479
+	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Oct 2024 18:33:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 901121F226FE
-	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Oct 2024 13:35:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 88136B2661F
+	for <lists+linux-watchdog@lfdr.de>; Tue,  8 Oct 2024 16:33:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03C2A1DEFE0;
-	Tue,  8 Oct 2024 13:34:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62F711E0B99;
+	Tue,  8 Oct 2024 16:33:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TgwsCPhD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UHPf5+FI"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B7D1D9A43;
-	Tue,  8 Oct 2024 13:34:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1DA1EA73;
+	Tue,  8 Oct 2024 16:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728394496; cv=none; b=p8J91YmoBxPVAsXrGnFSqUT/ekJ1bDJqMuIT/WVwbqzWY/GpCqPlMwW8IETn1m5S48PB+3Gl2/btbwwwknmtyR/fwZDf2oHN90pils7OU71bI4aBYqSc8FwrOsY107477/LoE8EAfZM7kHSw0w4zPJ5aJObESKJZgNMEIwSW9oI=
+	t=1728405197; cv=none; b=ERB7GJkQE3Bi/xiZXnW3j73HyP6+II0at3DBDAo01OEgr+UTIDeSB7KH3hOgM397TFkGDAaFczyMLvLnr9Sn8DluJCi9NoqvaJUYdgVkO0FJ7/grpSXWPgPCndw7surb0j0WDlTvSkNx/Hr4dk0MPciwP412Sg9RLOytMy/VLl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728394496; c=relaxed/simple;
-	bh=AsYoCsU044vrxM77ATJ+bBtvZ6wwx4g48fpwc54K/Eg=;
+	s=arc-20240116; t=1728405197; c=relaxed/simple;
+	bh=ABYLgna9ik3Qw3mklNtm//dxT/ojFvjCVfeIpWSQXx4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RmsGPJmUrK8wvum26SluhNnMvHQ6EU35rwoC1osj0FW1u13wgK0CKobvpbTuFqaqJs4rA95TuoCgqXcxGohOIcGvw/aZdgZEpFBYzOyPB422hg8ibH7/gwqE0ruJhDTYen5rYgVF51Qq1k3K3JOxM3zHjITAaLHZv/Vbg/9DHkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TgwsCPhD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDD4AC4CEC7;
-	Tue,  8 Oct 2024 13:34:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728394496;
-	bh=AsYoCsU044vrxM77ATJ+bBtvZ6wwx4g48fpwc54K/Eg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TgwsCPhDlQ59rdZyDIYS5VIg3On0g4zCf9UEEx8G3scMnBBRssmSpCPt5lj/Auo8D
-	 N3jaGSR0Alps4nZlsy2uMCOwdu0LI9mzk0eYgpBYArncC5LW5wUHiKP2m0EFcjoR30
-	 WIzErCGlJpBSS9id34mH/WvPag05INkV0w9QEx6BLV12YoaIiSPM1L5hMbOPpfpVm7
-	 vXcs70W7lWOgKvDYPcAP3rCH5QPP3SbftG9sZXI0X3fqhS4NjGeINMSiCpej6TktaJ
-	 KS7Y9jiR/DAVnxoPj63xm4Q4mh2CICdPitxuKuhSP/cevugGKLTeT4ffUaGmjZGyXV
-	 3CThlwfvW4n3g==
-Date: Tue, 8 Oct 2024 15:34:54 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	"open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, 
-	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>, 
-	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/1] dt-bindings: watchdog: fsl-imx-wdt: Add missing
- 'big-endian' property
-Message-ID: <h2ynhrnuhiwixxkoeiyu5kpkpssvlscwbyxgsfdg2j22kwyfz4@urzf32egddcg>
-References: <20241007212434.895521-1-Frank.Li@nxp.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=MkhqYc52cUULqg9M3fx8w8SuHaAyVjdYJDMhY8WVzqaKh5U3CBZBnT8C4tlekdAmmRZyrXVRiAfFzMzqaKyEFWVXzUTOa0ZCVDHp6qla9HedS0m0zDcVXYews6bI4myGeLcGD+eE5kV+7pD/PU7mqP/cTnHt+VvAUS8V47SSJEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UHPf5+FI; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728405196; x=1759941196;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ABYLgna9ik3Qw3mklNtm//dxT/ojFvjCVfeIpWSQXx4=;
+  b=UHPf5+FIMm3hs4oEeJAcEAk+oQz8BJP2oYAScCyh/hMe8vrwmOkwMx17
+   qTONI01VZwwy9ZT2cPHkpO0ArNygIlBw/YbHzf5oSxOoKk3+0lycU0Aqg
+   /Qe67Jbzmrna7krg0RzqLnVZB7EJ2PPM84VwfCy4JZr5j8NZOG0YMCl2P
+   rR0XbmXNN15kmtCRVKACWhRGRRd7gb1GletpSa3kTsUSVv3tiGAxZyHVz
+   1N5wRAgA/7IkWXhUSesgXnZaL8YWdSJDZZ7evACkyIAmQpuo1cLthZ5H/
+   mYBQsbh1/CcqTNO6gqroIYe0dpH59pDaiMBYlh9SwdTb0UgxillQOpSW4
+   A==;
+X-CSE-ConnectionGUID: Z7/Sn2zES+OJ/8Zs/E6TaA==
+X-CSE-MsgGUID: yK35D0XETeuSHuXYF8biqQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="27710411"
+X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
+   d="scan'208";a="27710411"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 09:33:15 -0700
+X-CSE-ConnectionGUID: AQyTA9GQQ96nhOK24BJtMw==
+X-CSE-MsgGUID: XANtgy2WQj+5FMfNuLqwyA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,187,1725346800"; 
+   d="scan'208";a="75572678"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa007.fm.intel.com with ESMTP; 08 Oct 2024 09:33:13 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 3123720F; Tue, 08 Oct 2024 19:33:12 +0300 (EEST)
+Date: Tue, 8 Oct 2024 19:33:12 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Oleksandr Ocheretnyi <oocheret@cisco.com>
+Cc: linux@roeck-us.net, jdelvare@suse.de, linux-kernel@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
+	wsa@kernel.org, xe-linux-external@cisco.com
+Subject: Re: [PATCH v3] iTCO_wdt: mask NMI_NOW bit for update_no_reboot_bit()
+ call
+Message-ID: <20241008163312.GS275077@black.fi.intel.com>
+References: <05dba51b-7c3c-4455-9c97-09777e885fac@roeck-us.net>
+ <20241007155702.3676667-1-oocheret@cisco.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -65,26 +79,17 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241007212434.895521-1-Frank.Li@nxp.com>
+In-Reply-To: <20241007155702.3676667-1-oocheret@cisco.com>
 
-On Mon, Oct 07, 2024 at 05:24:33PM -0400, Frank Li wrote:
-> From: Animesh Agarwal <animeshagarwal28@gmail.com>
+On Mon, Oct 07, 2024 at 08:57:02AM -0700, Oleksandr Ocheretnyi wrote:
+> Hello Mika,
 > 
-> Add missing big-endian property in watchdog/fsl-imx-wdt.yaml schema. Only
-> allow big-endian property for ls1012a and ls1043a.
+> > I suggest adding some #define for the magical number 8 so that it is
+> > easier for anyone looking at this driver to figure out what it is doing.
 > 
-> Fix dtbs_check errors.
-> arch/arm64/boot/dts/freescale/fsl-ls1012a-frwy.dtb: watchdog@2ad0000:
->     Unevaluated properties are not allowed ('big-endian' was unexpected)
-> 
-> Cc: Daniel Baluta <daniel.baluta@nxp.com>
-> Signed-off-by: Animesh Agarwal <animeshagarwal28@gmail.com>
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
+> Are the changes with #define NMI_NOW bit fine for you?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Sure,
 
-Best regards,
-Krzysztof
-
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
