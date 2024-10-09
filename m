@@ -1,158 +1,163 @@
-Return-Path: <linux-watchdog+bounces-2149-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2150-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5547F9963A5
-	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Oct 2024 10:49:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90D76996DB7
+	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Oct 2024 16:28:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0183A1F260AF
-	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Oct 2024 08:49:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C30381C22855
+	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Oct 2024 14:28:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D32861917CE;
-	Wed,  9 Oct 2024 08:44:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1CAB19D8AD;
+	Wed,  9 Oct 2024 14:28:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b="D753RUIG"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fO3K7ls4"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF8818E357
-	for <linux-watchdog@vger.kernel.org>; Wed,  9 Oct 2024 08:44:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCC5190671
+	for <linux-watchdog@vger.kernel.org>; Wed,  9 Oct 2024 14:28:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728463484; cv=none; b=rV8Tl8Z6B0d981l2TgfcjLU0GYVcU6ZUGo9ucjIuq6ADPZKpMZk2Vm8A2Ykmtk/WEneN23mHDrGXfdySl54n1bVmhEieiYS0En4cQ7nvpiiU3CRaFq8YX3PZYBFVcLqdZ4Iwp/1v8nbgjDF/frUpj4oV4z0AZesjijqMrCQp2JQ=
+	t=1728484084; cv=none; b=MBkM26+6nR9wwmhOMPq4axwNgYSdH/PF8Yxjpgxbr4nWRPKcVDmIQSyOp1fCEgKp3AoR4H3nifes1SM6YbXpW2xnl0+OaD7aYsu4PuCY2TEcbiVToDEh4npZcsqUpxNOwui8yuPWZFueluZorpb/HqDfPz5jB/pee+r90M5SMDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728463484; c=relaxed/simple;
-	bh=dvnsPxMliHeqbRIQiioXG8o912SFDQg2gZbzOnOIUoM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u8DnwmtXbQCshRQfXsoG5vvmNEvP4KTt0McI+SC39CyJi25gW204HvVUan4EmpMaQYr/XqOLiGI0zZHm3oBHih3sr5xtAQSMu5dlKV0r2UTSxR5u4l7wnAXEIcgiP0xE0ryQJevuUA4PziU17PZZZG/oX6TzrDINDgq/wbbeQaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com; spf=pass smtp.mailfrom=linumiz.com; dkim=pass (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b=D753RUIG; arc=none smtp.client-ip=35.89.44.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linumiz.com
-Received: from eig-obgw-6009a.ext.cloudfilter.net ([10.0.30.184])
-	by cmsmtp with ESMTPS
-	id yAJBs5cNlumtXySJBshsnR; Wed, 09 Oct 2024 08:44:37 +0000
-Received: from md-in-79.webhostbox.net ([43.225.55.182])
-	by cmsmtp with ESMTPS
-	id ySJ8sOueiV7ozySJAsRLnc; Wed, 09 Oct 2024 08:44:37 +0000
-X-Authority-Analysis: v=2.4 cv=Ur9lNfwB c=1 sm=1 tr=0 ts=67064275
- a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=kofhyyBXuK/oEhdxNjf66Q==:17
- a=IkcTkHD0fZMA:10 a=DAUX931o1VcA:10 a=-pn6D5nKLtMA:10 a=vU9dKmh3AAAA:8
- a=L2ZAzL5Tc2YXbkthkrQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=rsP06fVo5MYu2ilr0aT5:22 a=ZCPYImcxYIQFgLOT52_G:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
-	; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=kjer777veAS4MsonIO7ZNfH7bB3CmtYfsy4XksivrrU=; b=D753RUIG2S8fD8Ru8o2mx55yae
-	3fJdjxM1T8dU6bdAMMYpi2K3noLZ20hXFebknCjNlyB4/zpfbTYGS24Qh0LbmFzzyiFEdVwpDENwD
-	CyJtohV6Les7xWAtw2AswcfooQd0N5WFK4hJejeAld9LhnDQWhODzdcAx4pg7c0iDxYE0Krx3ly4E
-	hdvLDTTQluEKjqEpNt9a4MYI33gR5P0IW4M+nUIH0u/Xy//nTRM0R4Sq1lFEQW8QJ+TqtdL1nBCs5
-	8mbjyGOuUztafcR/HO+9wDzpKHqO08+089fWXt+buLaVwF5KmBULkswmIYbyBERGor4EZYqIdk+hu
-	9VDxWzxQ==;
-Received: from [122.165.245.213] (port=35160 helo=[192.168.1.106])
-	by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <karthikeyan@linumiz.com>)
-	id 1sySJ2-00125N-1R;
-	Wed, 09 Oct 2024 14:14:28 +0530
-Message-ID: <1562366d-34eb-4698-a722-d9e2d400397f@linumiz.com>
-Date: Wed, 9 Oct 2024 14:14:25 +0530
+	s=arc-20240116; t=1728484084; c=relaxed/simple;
+	bh=23cA1onqzwt1q7lhY9JMGOcwOd3fOLWS2ciwmGet5bg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kd5rXN9tWhyhaYBP+wSsIaVecWzqtnebrzfrjbQql48ByH/XBovBR0FRWabfkmLx+KrAlGs5ykte5haW6x/3oOg79buZNJijbRCCu+4+TJreTMsvUbKu37Op08if8SuJcQzLeOi7pnQCNIxHNDjMfhpCBLbf5nys2/esdOBdy9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fO3K7ls4; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5c8a2579d94so8068826a12.0
+        for <linux-watchdog@vger.kernel.org>; Wed, 09 Oct 2024 07:28:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1728484081; x=1729088881; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CylJOmagGAkGpdVrMr6+1cW2iaVLREpDJiGPFs09KAk=;
+        b=fO3K7ls4i7JsT/TnbFPklx+ss4sTEg5Vamz+C/xNw9i2AWD+LILRtzZSsU8G6q8ICM
+         DIAaS70BV0ySeOQjK5gEPIRQOU3b/PeemR5PyEaINKVErU44QDKjKiFR/VontsQIJtxS
+         Q49RvF3C16Zc59Lu98D5vx1rSL/R5LZxJLA8c1KSelg8f3oMe2CocktgG4yxAyTPTE5m
+         x9BOrrFpfVJgiDtVP4EM5xD6Es8FwvW8Uv2DELaPxlczIUyzYgXwsa3KttttekI1f06m
+         8usIaa1UIZcNo9m9ns2K2cTREJkOyXHpk25nnIb4Nlac+VyFShKX6sFOjCYP/wNQPMSN
+         +EwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728484081; x=1729088881;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CylJOmagGAkGpdVrMr6+1cW2iaVLREpDJiGPFs09KAk=;
+        b=UuL8xEEqpWvs7/yR3xEK7Nzvr+vDSS/Y6UVscvqppYI05/3hkbJ48SplLQzgfvCHK7
+         F1KEKgH5wQXtNbnohyGRT+n2V6rgQZSyAyMaxnCgC5nJKqYk4oVfanwUdAImTPL3riXc
+         3jbb7UZchzKFOA2JUdhs5ssVkJoEIz6sDtacmhcQbY76bPiTwbUcoTnejNAVdfziM0TA
+         HqfY49W2ZgCBaNQHKcVDXhYs25PV1kwg+GUE63rSQYr9/mPu2o41KDwzpi+rdADjztBo
+         am6r3vALjv2HyC3t9pXXXpqYM5va1Y5/58bITzQ41ftzFHX7DPe4TBLBHuBv0/lOc/zm
+         ul1w==
+X-Forwarded-Encrypted: i=1; AJvYcCVjH/Jwf5wK85G+fuBevq+k/O+B+jtDkOcqtAmo7wNIMe1r/+HteU7l0YlTXU0Hux6nSvBccan6+1bAnZSJRQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVKIogxYFlkM49yviFEtQJg6RHNOTq6IGO4W8MXCj6lgwwy8p9
+	jQyHO9AiUho0u5lw0bRa6zqsAxEFBl8QODurDidgfvt76UJFX8pvLtpvv73K1DE=
+X-Google-Smtp-Source: AGHT+IFC2+aNftX1wtcYA5gceGi5A5G0BYMh6bKRimAvEmAv1nnzz79VY6eqA3p/ELTcZ0JDKdD5Pw==
+X-Received: by 2002:a05:6402:528a:b0:5c8:84d9:ce26 with SMTP id 4fb4d7f45d1cf-5c91d5c3636mr2060269a12.19.1728484080612;
+        Wed, 09 Oct 2024 07:28:00 -0700 (PDT)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c91cd8eadesm1016377a12.12.2024.10.09.07.27.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Oct 2024 07:28:00 -0700 (PDT)
+Date: Wed, 9 Oct 2024 15:27:58 +0100
+From: Daniel Thompson <daniel.thompson@linaro.org>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+	Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-input@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+	linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 2/5] dt-bindings: backlight: convert
+ zii,rave-sp-backlight.txt to yaml
+Message-ID: <20241009142758.GB16179@aspen.lan>
+References: <20241008-zii_yaml-v1-0-d06ba7e26225@nxp.com>
+ <20241008-zii_yaml-v1-2-d06ba7e26225@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/6] dt-bindings: watchdog: rockchip: Add
- rockchip,rv1126-wdt string
-To: =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, alexandre.belloni@bootlin.com,
- wim@linux-watchdog.org, linux@roeck-us.net
-Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <20240912142451.2952633-1-karthikeyan@linumiz.com>
- <ddca4051-0e83-4d39-8654-12210ffa5685@linumiz.com>
- <37e26b46-2f6a-4db4-b003-59088ef1dcc1@linumiz.com> <1988046.PYKUYFuaPT@diego>
-Content-Language: en-US
-From: karthikeyan <karthikeyan@linumiz.com>
-In-Reply-To: <1988046.PYKUYFuaPT@diego>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - linumiz.com
-X-BWhitelist: no
-X-Source-IP: 122.165.245.213
-X-Source-L: No
-X-Exim-ID: 1sySJ2-00125N-1R
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.1.106]) [122.165.245.213]:35160
-X-Source-Auth: karthikeyan@linumiz.com
-X-Email-Count: 1
-X-Org: HG=dishared_whb_net_legacy;ORG=directi;
-X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfGUjkC3YKL1YnO2KHy8qrBIJo55eMllS5NRWG+4emOXSMNqJtPW+gPglN3xCECc1b9z1fURDIrzsm8cQuwubzn2XLTzAmidlfQ4EhOODwmGW4LaTko0n
- xhrZJqY5ucRXe6XlgQa7+vkBfWxKGkSF1uu/A4XwuPL3G/5krAi3UB9FyYdmoXEv41MycOBPcpZukZjpNApELLrJnwGynmMs7zqKc2CtOH7ZUzlUNW159o3p
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241008-zii_yaml-v1-2-d06ba7e26225@nxp.com>
+
+On Tue, Oct 08, 2024 at 06:00:58PM -0400, Frank Li wrote:
+> Convert device tree binding doc zii,rave-sp-backlight.txt to yaml format.
+> Additional Changes:
+> - Remove mfd parent node at example.
+> - Ref to backlight's common.yaml
+>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  .../leds/backlight/zii,rave-sp-backlight.txt       | 23 --------------
+>  .../leds/backlight/zii,rave-sp-backlight.yaml      | 36 ++++++++++++++++++++++
+>  2 files changed, 36 insertions(+), 23 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/leds/backlight/zii,rave-sp-backlight.txt b/Documentation/devicetree/bindings/leds/backlight/zii,rave-sp-backlight.txt
+> deleted file mode 100644
+> index ff5c921386502..0000000000000
+> --- a/Documentation/devicetree/bindings/leds/backlight/zii,rave-sp-backlight.txt
+> +++ /dev/null
+> @@ -1,23 +0,0 @@
+> -Zodiac Inflight Innovations RAVE Supervisory Processor Backlight Bindings
+> -
+> -RAVE SP backlight device is a "MFD cell" device corresponding to
+> -backlight functionality of RAVE Supervisory Processor. It is expected
+> -that its Device Tree node is specified as a child of the node
+> -corresponding to the parent RAVE SP device (as documented in
+> -Documentation/devicetree/bindings/mfd/zii,rave-sp.txt)
+> -
+> -Required properties:
+> -
+> -- compatible: Should be "zii,rave-sp-backlight"
+> -
+> -Example:
+> -
+> -	rave-sp {
+> -		compatible = "zii,rave-sp-rdu1";
+> -		current-speed = <38400>;
+> -
+> -		backlight {
+> -			compatible = "zii,rave-sp-backlight";
+> -		};
+> -	}
+> -
+> diff --git a/Documentation/devicetree/bindings/leds/backlight/zii,rave-sp-backlight.yaml b/Documentation/devicetree/bindings/leds/backlight/zii,rave-sp-backlight.yaml
+> new file mode 100644
+> index 0000000000000..fe9dba8231bf1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/leds/backlight/zii,rave-sp-backlight.yaml
+> @@ -0,0 +1,36 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/leds/backlight/zii,rave-sp-backlight.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Zodiac Inflight Innovations RAVE Supervisory Processor Backlight
+> +
+> +maintainers:
+> +  - Lee Jones <lee@kernel.org>
+
+How did you arrive at this maintainer list?
+
+It's not the usual backlight group and it also doesn't match the
+maintainer for the mfd bindings.
 
 
-
-On 10/9/24 00:56, Heiko Stübner wrote:
-> Hi,
-> 
-> Am Montag, 7. Oktober 2024, 15:56:58 CEST schrieb karthikeyan:
->>
->> On 9/18/24 12:59, karthikeyan wrote:
->>>
->>>
->>> On 9/18/24 04:46, Heiko Stuebner wrote:
->>>> Hey,
->>>>
->>>> Am Donnerstag, 12. September 2024, 16:24:46 CEST schrieb Karthikeyan
->>>> Krishnasamy:
->>>>> Add rockchip,rv1126-wdt compatible string.
->>>>>
->>>>> Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
->>>>
->>>> I think this patch misses some recipients because neither
->>>> the watchdog maintainers nor the watchdog list is included.
->>>>
->>>> We'll need for them to at least Ack this patch, so they'll
->>>> need to be included. Please check your scripts/get_maintainer.pl
->>>> call
->>>>
->>>>
->>>> Thanks
->>>> Heiko
->>>>
->>> Apologies for missing them. Adding them in this reply mail.
-> 
-> I don't think that will have worked.
-> 
-> Ideally can you include Conor's Ack and resend only the watchdog binding
-> patch to the watchdog maintainers (and lists and me too please) .
-> 
-> Because just adding more people to a reply probably won't tell them
-> that some action is expected.
-> 
-> Heiko
-> 
-> 
-
-Thanks for your info. It's my mistake. I will resend the watchdog patch 
-alone.
-
-Best regards,
-Karthikeyan
+Daniel.
 
