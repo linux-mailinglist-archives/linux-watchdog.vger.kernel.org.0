@@ -1,100 +1,95 @@
-Return-Path: <linux-watchdog+bounces-2152-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2153-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0FC2996F23
-	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Oct 2024 17:02:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44D38997039
+	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Oct 2024 18:01:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DC5DB27EA4
-	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Oct 2024 15:02:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75C661C22667
+	for <lists+linux-watchdog@lfdr.de>; Wed,  9 Oct 2024 16:01:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24EB8161313;
-	Wed,  9 Oct 2024 15:02:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 261BF1A76D5;
+	Wed,  9 Oct 2024 15:35:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oOM32IBO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ubTSdqyG"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE1D64084D;
-	Wed,  9 Oct 2024 15:02:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF1E1925A0;
+	Wed,  9 Oct 2024 15:35:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728486151; cv=none; b=MRf7KkvFVdMnIsKQ7Q21Y8Yff9OZOpPqQh2tFWYwa7nXpyo6z3iTqPym6aMn5ENki6zq3fQn5z+9IqgI9j20Q7qyZaY4XLisFhG/v3luSxXOwOb8aQASmly5+ooNhvyOXyrXl1aBwrlnRXazFpIYt2KnDaKJsgkdA+8lAXgsoiM=
+	t=1728488131; cv=none; b=PnXAxWMc0BvykK9tz0d5OLbt6ozKyAEyZU+Jq3kKhqdfT1ayNgSVobSl0H5eUSz9hulfA2Z3H+DfGkhlJr5fQo6tOZ93mD1EUnkhU52xPX4THyTb9P8IrNIB7yA0Jv5yw4NvjU7xxoOP2KWJCvUda4hTdu98Nut+ucvWcEnK3SE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728486151; c=relaxed/simple;
-	bh=YijPQnFRilQWRtLvvdo5y8s95IoL47EEoI6aPDUbRg8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N7RcxjsotHMQxPMeMUCGBaVz7xBG8A56TTG4+3Zm48rHL7lq7ClAiYi7vOUkUubO1lTaZlQa/7cO19Tc5S7tIWt2d5hSxl4JxChQimd/9ErtKRzf7jN1Ldb6H7fVVGxM/qXRK5vrWs1nwA3fNIU83WiM/B9dBVudQ9rrfv1WmYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oOM32IBO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F2AC4CEC3;
-	Wed,  9 Oct 2024 15:02:30 +0000 (UTC)
+	s=arc-20240116; t=1728488131; c=relaxed/simple;
+	bh=3YKf4wKe97IZuGPzRWJvZsU/s9xM8HMmlYnkvbFJI0Q=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=EwT32akgyE6666Cbf1n8HnyJu2rZKiActY0Crd0pX0Mdhwu8FkH6WQRkSE4ZiO2pJCdboxhhcLEdT4Bmbhe6063l05AQQ1m+/N44W2Ml6K2Nf1R6bSDw1ZPCVERvmI0TOsl7cfiDPshhdMjyXa7g6V03pz32yrItXPxXRVxRhDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ubTSdqyG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D880BC4CEC3;
+	Wed,  9 Oct 2024 15:35:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728486150;
-	bh=YijPQnFRilQWRtLvvdo5y8s95IoL47EEoI6aPDUbRg8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oOM32IBOekQCh583Xv7JBTXXjGSGt2wiWSi5G5Vm0PCPDbsJolFYePCS0OVH04/Ni
-	 ftaxp2RWcWQ/fUzPu5bG2JHkteD4AmFOv07W9KmW5z2aUcWgZKqKvlYJcDXMlrCOsH
-	 hgc7i291Q3Eev3H2ywjGqVu2JrFRHOsyggEqwp3rOu7LQ69CRg5AZvGHam08EGbbHM
-	 UTtOVbLFRE0ZQF0XRYj6XsgW1q+5a+7+duAyfl6UjcCUqa87iUc8xGXEVZ8oaDUHT9
-	 1AdY46RGoiD4S08D4n6SA6O8LCxnjkSc/Af91uZuqzwPJmeFl+i3c9LT6Pj7LCn/sj
-	 jdwilatPoP4WQ==
-Date: Wed, 9 Oct 2024 10:02:28 -0500
-From: Rob Herring <robh@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-	Daniel Thompson <daniel.thompson@linaro.org>,
-	Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-input@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-	linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 0/5] dt-bindings: mfd: convert zii,rave-sp.txt and child
- txt to yaml format
-Message-ID: <20241009150228.GB465237-robh@kernel.org>
-References: <20241008-zii_yaml-v1-0-d06ba7e26225@nxp.com>
+	s=k20201202; t=1728488130;
+	bh=3YKf4wKe97IZuGPzRWJvZsU/s9xM8HMmlYnkvbFJI0Q=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=ubTSdqyGo6z5z/ZicbAqro0XaI2uqoDHton7yrxCOJ5efww9Qgvg3PPesV7zgkmPv
+	 BazLs0C6im+4Lygt+FLdjJEcFrqDJFFd5UKlLdh3qoaqGRBhL5E1QpC2COaKprk6Wu
+	 S9kyamdWcuY0PHosV+KOpuDDxDvoa6lhCo43RvULn5bn+cSc7Mq8xjDo701cXJ+gLq
+	 EoEHYn4YCDPWLvTH1fcsQz33nZuEjTPhPl+GscVEYNhHhr58apExEIeA9L2VYaaRRl
+	 QLkVYBrMnTOia9LBc26h0cj3oNqZRYBPs8Jemy7Bvf3PNshornxsm8zaT9W6IBkSG3
+	 TdSmAq+4cw8uw==
+From: Lee Jones <lee@kernel.org>
+To: Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andi Shyti <andi.shyti@kernel.org>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, 
+ Thomas Richard <thomas.richard@bootlin.com>
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ thomas.petazzoni@bootlin.com, blake.vermeer@keysight.com
+In-Reply-To: <20241001-congatec-board-controller-v3-0-39ceceed5c47@bootlin.com>
+References: <20241001-congatec-board-controller-v3-0-39ceceed5c47@bootlin.com>
+Subject: Re: [PATCH v3 0/5] Congatec Board Controller drivers
+Message-Id: <172848812261.638400.481811844035668418.b4-ty@kernel.org>
+Date: Wed, 09 Oct 2024 16:35:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241008-zii_yaml-v1-0-d06ba7e26225@nxp.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.13.0
 
-On Tue, Oct 08, 2024 at 06:00:56PM -0400, Frank Li wrote:
-> Fixed below warnings:
+On Tue, 01 Oct 2024 13:53:26 +0200, Thomas Richard wrote:
+> This is the third iteration of the Congatec Board Controller series.
 > 
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu: failed to match any schema with compatible: ['zii,rave-sp-rdu2']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu/watchdog: failed to match any schema with compatible: ['zii,rave-sp-watchdog']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu/backlight: failed to match any schema with compatible: ['zii,rave-sp-backlight']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu/pwrbutton: failed to match any schema with compatible: ['zii,rave-sp-pwrbutton']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu/eeprom@a3: failed to match any schema with compatible: ['zii,rave-sp-eeprom']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu/eeprom@a4: failed to match any schema with compatible: ['zii,rave-sp-eeprom']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu: failed to match any schema with compatible: ['zii,rave-sp-rdu2']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu/watchdog: failed to match any schema with compatible: ['zii,rave-sp-watchdog']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu/backlight: failed to match any schema with compatible: ['zii,rave-sp-backlight']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu/pwrbutton: failed to match any schema with compatible: ['zii,rave-sp-pwrbutton']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu/eeprom@a3: failed to match any schema with compatible: ['zii,rave-sp-eeprom']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu/eeprom@a4: failed to match any schema with compatible: ['zii,rave-sp-eeprom']
+> There are only few changes for the GPIO driver (commit message, Kconfig,
+> remove useless cast).
+> I also rebased the series on Linux v6.12-rc1.
 > 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
-> Frank Li (5):
->       dt-bindings: input: convert zii,rave-sp-pwrbutton.txt to yaml
->       dt-bindings: backlight: convert zii,rave-sp-backlight.txt to yaml
->       dt-bindings: nvmem: convert zii,rave-sp-eeprom.txt to yaml format
->       dt-bindings: watchdog: convert zii,rave-sp-wdt.txt to yaml format
->       dt-bindings: mfd: convert zii,rave-sp.txt to yaml format
+> Best Regards,
+> 
+> [...]
 
-All looks fine except for the maintainers.
+Applied, thanks!
 
-Rob
+[1/5] mfd: add Congatec Board Controller mfd driver
+      commit: 6f1067cfbee72b04fc42234f7f1588f838cec0b6
+[2/5] gpio: Congatec Board Controller gpio driver
+      commit: 4342bf63b64b09561f4ad1537de2e1a971cfb197
+[3/5] i2c: Congatec Board Controller i2c bus driver
+      commit: 6894f640b8f3f48700ccc828419ba60704f5a405
+[4/5] watchdog: Congatec Board Controller watchdog timer driver
+      commit: 6f264047869e9683520ff8f7c235c07c1ca989d6
+[5/5] MAINTAINERS: Add entry for Congatec Board Controller
+      commit: 590bcce85e014a2e16afe910bc6a20b4c1b2b374
+
+--
+Lee Jones [李琼斯]
+
 
