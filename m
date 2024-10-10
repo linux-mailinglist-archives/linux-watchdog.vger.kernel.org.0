@@ -1,76 +1,76 @@
-Return-Path: <linux-watchdog+bounces-2170-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2171-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2831D998941
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Oct 2024 16:22:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6219998944
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Oct 2024 16:22:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA9F328A9D9
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Oct 2024 14:22:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52FE31F28B63
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Oct 2024 14:22:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A6321CCB28;
-	Thu, 10 Oct 2024 14:14:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F4B1CC172;
+	Thu, 10 Oct 2024 14:14:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DQ8n8Gnt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dAHclbv6"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B071CB505;
-	Thu, 10 Oct 2024 14:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CD561CCB5C;
+	Thu, 10 Oct 2024 14:14:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728569659; cv=none; b=IkMlfuF8K2zAIli5qyCxdbjcR+0StDp8h7XMrHmgoDUSNQNSkIR727vVKmgvoM86qAKwYgeyGiyXQL6XXaOVu0tUDyVCQWY2J4sj3+SOSmQXJqbcF+VOqN7ZrPPEF4KAbbi5rScQPbyCKMRdqX21i35E85RyTWOUbdO6sERNrl0=
+	t=1728569692; cv=none; b=p2lFYpQ1NEMDI0IDHb+Xjk6LYMS9Bd68twQLSSYgZcxyBkhT52+7AGPPvclrTP0Q8tGV1GwsgN726gWN+hAjC85ilgzJBZy1lsnjwx+RVj2PXX6O6ACZYIuPQBRPCn5wBCs0oS640NFC2m/8u0Qt2rbA3a8kWohiIc2FGnU9hD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728569659; c=relaxed/simple;
-	bh=cNTLaPlqmk1DVmX1ffKjBHb3+5ytOIx+BBbcEHfJHwQ=;
+	s=arc-20240116; t=1728569692; c=relaxed/simple;
+	bh=5if37T2Len4PHlz96BAcZRBUNl6DKqeX+sAZVkKENPs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aX8BVm3HYl1naVDSrifK+MebK1un5TfGXzFQcJ7oKhvtn4N5VYzViRPyoPDE127St8U8oj19hZpMdiWL/6XJX4RSSPScxLgJOen57GX4sSgvd3y/SCOD1pbJ2z1/ozfe45xup/HV8amHlvdHofcbiqc+8rQJ7Am+Jny7jSZUrdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DQ8n8Gnt; arc=none smtp.client-ip=209.85.210.176
+	 In-Reply-To:Content-Type; b=YpNM+kCPkuti1kdesoIMboWS6aXeXyihfZMwrwL5Hb8j+COy4RKB9EzxH1J2Ll4ykDsTE/zwXeySU75pdVdBgLfFUMy1eMJHFoYOeFN58a1J0VjtTMtUaMWPHaCbvLzNRRQEOc/kWxSC+OI5yTJEcw2h6WmUOjOX513BY9ypUVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dAHclbv6; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-71e0cd1f3b6so761049b3a.0;
-        Thu, 10 Oct 2024 07:14:17 -0700 (PDT)
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-71e02249621so796345b3a.1;
+        Thu, 10 Oct 2024 07:14:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728569657; x=1729174457; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728569690; x=1729174490; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=yvHeCDhdcRIH496syVGmBzmdcJIijCDtmjRSWF/mNyU=;
-        b=DQ8n8GntcaSNRarcaNdJyan+JoRAVBZN9foWnQSnaqwu5BmzK1kZeh7QsAsUXIOGK7
-         6WNq0UZmqtVujGKM1o1o4YjEC9TuBixkTA1Ao1DDZroqNNpODU0WJglf32zDJLCcklCL
-         j0d0mTzem+Wm/BKVfahZA5ehglOKjNgcsE80pQMQEA700yl/ay9sEHdzLSMdZlw28f0m
-         SkPk0PM+Tal/ZtUuFvpXAPWFj/k20N52Hraz/d39gO/8fteo9KLX1TD3El6FI7VeZGI6
-         g00L+7so85KhaZ9V5v2xSJnpDfMeqDEsvkGiyFVnWOW+EL9LMHA8uUDG49LdJQctLWZO
-         9IYA==
+        bh=qoflmzKG0xjefCinuhjdDm1wHD1fpDIHjHWWay70BDU=;
+        b=dAHclbv6bt4P8A4yxl8gFULrdLNxHvuDPKIx2SWulN7l518VJMayk5xhn8vLtAhezC
+         RueO7FIIXtjvbGxIfqGy4tvjs+68GN4ZDFlivBiq3ftItcD1HPGkmoxD/yqYU41+N2K5
+         AxzhccDroJO5SpjnVeN0+f4tqmCilTJVsfhwZPeuPiVjDIu1/fQfq9gXQfCAoO9Xp+2C
+         TlYiW9S3RiWNlEjxL9tQ/48ffPCOQkZexDXQfnQNTltwYTq+7M7fMXE19l/D7m2LFdXq
+         gtcZ6gPTjUuVpzCb3UdgLNCmuW4ug2y9bOPmox0SdhmAfKDwZOWLG5DhgFefvvlN82qV
+         Lq8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728569657; x=1729174457;
+        d=1e100.net; s=20230601; t=1728569690; x=1729174490;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yvHeCDhdcRIH496syVGmBzmdcJIijCDtmjRSWF/mNyU=;
-        b=WuvqD5wRN47RpYajgHIxb7lIeo4KX8jn3xDO7JdDlcVB87KrR1JAK5Ou7z4kh5y2V7
-         btCDeXUIiyu3ya0ZJ4LISghCjTw0C0Wb734/LPQLzygAm1hb+TBRJg+kgkX/IL+hnS34
-         cerGYzEYBdWOT/JUM0H0uMV6tECVCHGUBTEF2++fsnJMsYyQicO/q9l41jlUSTFc6K+H
-         Xm7SxS1QHboSVt1ApaEbSDy3t8446aJlWP/Ei46BpYc45/CW59dvHOgMOGDArNjCkNC1
-         QCxKVO+ghtQ9QGBs/NVHdBvwVImG3fs5Gbpchjo4CVoUCRT43Ras4FEoFzY141Uj6Atk
-         0KUA==
-X-Forwarded-Encrypted: i=1; AJvYcCV7CSWHCdbymjxajX5H5NN1gxkE/KnZ9fosDgTFe3JSoK6cqXj8zp9vMUaoeMYaXRq7BfK3LxM2FRezkbi/@vger.kernel.org, AJvYcCXwMjeGb7IQGKzS74vWDBWYuMj3HNSFardg/Mp8wb6B+f6rvXco+VKx+jmwJjqPXJZR3wsryOEYD8jk@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtJh1GjMCsqfqNiv308y2rasyhldypofNuLIZHV66OuyOo0V7r
-	YsktApFXK8DcEw/9K+pJZX3ZQpdA+RZzw3YSwolLOTYS4ybH5saI
-X-Google-Smtp-Source: AGHT+IHFMjuAvQQl5rnYEDKUKdIeODkNv9AqdtBfjJ4hc/fOCAcar8Vzv9smwKR0HWGd2kgzD5zfdA==
-X-Received: by 2002:a05:6a21:3983:b0:1cf:3885:b9d8 with SMTP id adf61e73a8af0-1d8a3c208fcmr10332464637.27.1728569656621;
-        Thu, 10 Oct 2024 07:14:16 -0700 (PDT)
+        bh=qoflmzKG0xjefCinuhjdDm1wHD1fpDIHjHWWay70BDU=;
+        b=Xk6rC81UHSpLLI2cI5enK1K0bC8oQ2UDJkWgPeM7FaVYbUv8SG/KW/eF65Iq40ssn0
+         4UQK1VPWWOU+epYdex+0hersG3q+C/VbV7AR3CxkL8NtNTvYGnGKxA+0NTII8V61CpZw
+         xStvYQb6KS46pFo5rzHG6kD39e1wWAYte+LmIz9GTpiKnlb8p9ldfb16FaKk5nJlQGQD
+         u3Gl22u/gi39XmjyBYYnxJAtUddaJOKx0DJsho/wMscL23h4E62N2RAw0H6NWb2Ilign
+         nVrLICs0mjFvemzwp+iksgLXk31UHd6+PENEgI02I3Oj9P8HwpC4miJWcb5lLw3ALNpt
+         zWrw==
+X-Forwarded-Encrypted: i=1; AJvYcCVJ5nUFuzGDrTacbgNu2b6CnCUTtgLaNqe3Wb+1sH+oYXOI5WJFaxEgk2pyCjSpQ+CnpA77DCtyfWaW0o7g@vger.kernel.org, AJvYcCWrLgXnGI4HrYhke1d4qOktE7pVdPrGr8FCxC1KXn6GKxy8aIcZah5Ofks4+11HIWgyu0tUc7co3IE1@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpCv6FDByqQuAGCubfNAnaLVmPIXhrRYGFRbWjQu0vXgWfbdTh
+	VDyprbGZODRtS43SwmCR+x9SNjeZaGxQCQj09f4UBUadpJAnrYN3
+X-Google-Smtp-Source: AGHT+IEugzCbQzBl4ZRBH73suQXIncKPw8OXBX/sUT2w8P0P7I/SyLhmVdaOWU+7NnLDd98IP+nYTg==
+X-Received: by 2002:a05:6a00:1749:b0:71e:148c:4611 with SMTP id d2e1a72fcca58-71e1db6488amr10122047b3a.6.1728569690374;
+        Thu, 10 Oct 2024 07:14:50 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ea44908236sm908852a12.43.2024.10.10.07.14.14
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71e2a9f7813sm1065971b3a.45.2024.10.10.07.14.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Oct 2024 07:14:15 -0700 (PDT)
+        Thu, 10 Oct 2024 07:14:49 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <20141056-15a3-4e4b-9100-d1a570f39e83@roeck-us.net>
-Date: Thu, 10 Oct 2024 07:14:13 -0700
+Message-ID: <40083f48-5e8a-4483-9858-8907c6a4643b@roeck-us.net>
+Date: Thu, 10 Oct 2024 07:14:48 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -78,13 +78,15 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/1] Add RV1126 compatible watchdog string
+Subject: Re: [PATCH 1/1] dt-bindings: watchdog: rockchip: Add
+ rockchip,rv1126-wdt string
 To: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>,
  wim@linux-watchdog.org, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, heiko@sntech.de
 Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
+ linux-kernel@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>
 References: <20241010061408.1351865-1-karthikeyan@linumiz.com>
+ <20241010061408.1351865-2-karthikeyan@linumiz.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -130,40 +132,33 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241010061408.1351865-1-karthikeyan@linumiz.com>
+In-Reply-To: <20241010061408.1351865-2-karthikeyan@linumiz.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 10/9/24 23:14, Karthikeyan Krishnasamy wrote:
-> This patch is introduces a watchdog compatible string for rockchip's
-> RV1126. I have already send this patch[1] in the series[2] but somehow
-> missed watchdog maintainers and list. So resending this patch alone
-> again from the series[2].
+> Add rockchip,rv1126-wdt compatible string.
 > 
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 > Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
-> 
-> - Link to patch: [1]. https://lore.kernel.org/all/20240912142451.2952633-2-karthikeyan@linumiz.com
-> - Link to series: [2]. https://lore.kernel.org/all/20240912142451.2952633-1-karthikeyan@linumiz.com
-> 
-> Karthikeyan Krishnasamy (1):
->    dt-bindings: watchdog: rockchip: Add rockchip,rv1126-wdt string
-> 
 >   Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 1 +
 >   1 file changed, 1 insertion(+)
 > 
-
-I am curious: More and more people send introduction patches for individual
-patches. I don't see any value in it, the intro patch is not available
-in patchwork, and thus the context is missing when trying to review the
-patch from there. This makes reviews much more difficult if one doesn't
-reply directly to the patch. It doesn't make any sense to me, yet people
-do it more and more.
-
-Where is it suggested to send introduction patches for single-patch series,
-and what is the rationale ?
-
-Thanks,
-Guenter
+> diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> index b5a3dc377070..1efefd741c06 100644
+> --- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+> @@ -32,6 +32,7 @@ properties:
+>                 - rockchip,rk3576-wdt
+>                 - rockchip,rk3588-wdt
+>                 - rockchip,rv1108-wdt
+> +              - rockchip,rv1126-wdt
+>             - const: snps,dw-wdt
+>   
+>     reg:
 
 
