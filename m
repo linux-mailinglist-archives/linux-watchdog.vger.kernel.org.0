@@ -1,113 +1,89 @@
-Return-Path: <linux-watchdog+bounces-2181-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2182-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EDEF998ED0
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Oct 2024 19:51:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CEF6998FD5
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Oct 2024 20:24:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2856286425
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Oct 2024 17:51:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 072BC1C22FE7
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Oct 2024 18:24:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C547B1CEE9B;
-	Thu, 10 Oct 2024 17:50:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE63A1CCB2A;
+	Thu, 10 Oct 2024 18:24:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="onqp1m+C"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W09yPTrs"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F6241CEAD8;
-	Thu, 10 Oct 2024 17:50:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892B21C9B93;
+	Thu, 10 Oct 2024 18:24:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728582632; cv=none; b=X9hyhNItcfTeyakLQSUYVnQ432JxkOOCe1pQm8CX5ttA8+nsoMw1OPYWDnytXjFAkNWjCoItP5bK5lyK9qa8aBK6lfD2qpkCRzXY1YRL+hgfVnNdNolGRlVcbAzg2pxDsfWlZCs+X7dJRwvM9cneYu/Yo0vukoOnerMQbEheNbI=
+	t=1728584664; cv=none; b=CQeWpu6qeSfhkIgmi0XyYLOGeRAisbwBAa4P/Svtv1J7tesyQsQ5Tk45+RQhU9zetUAMERJrzAAE5FoJUQiQax2+BaiWgBi0DMgqSV34VjwA+aS/IbDB4Ia4JCWrhwi/CXyZ/g4+34lW8yPEIyEe6XMH8PWnMi0Wws6eUzVLBQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728582632; c=relaxed/simple;
-	bh=e2ct8EgYpnqZZr08HUKWQNGYtu2nQSXbY5wl+rtsE68=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=pjfkFkAI439wVZtV/Yj3SIoekhMRTsHbvpULhZVbgjMZ+gKOx8HAjjFG94+2vjttRWiKfwgl+UeCaHwWj0D9Bv/j/FgWNBk4UMghCHBLKVYrpxhQbsLsNSWrpT//mqbkeMhLwe4EjOno7gwQzC3FBd2AlXrHgYhBK0fvet+Zzws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=onqp1m+C; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9055C4CECC;
-	Thu, 10 Oct 2024 17:50:31 +0000 (UTC)
+	s=arc-20240116; t=1728584664; c=relaxed/simple;
+	bh=LXWRpUCFEW0Rx04S04rSJW8bkwD7Sr+8cSNN1CAscBM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qcV1fSgegJeLCN00Dv8fFGIYF70nbynNXqE6rGAAR1qjofii5RHQxdZZC8oc9rhKVIVJCXDJj5RafoQPZNZw/veNgRcL7Di3N87fvyqHw9EeG59QrdgiI8V55K5HA8nfG6P64YymTBTFFbhK+QswjOZxAO38vL8OTzbN+/jbyIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W09yPTrs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C9EFC4CEC5;
+	Thu, 10 Oct 2024 18:24:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728582632;
-	bh=e2ct8EgYpnqZZr08HUKWQNGYtu2nQSXbY5wl+rtsE68=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=onqp1m+Chu2s1rdECvnyt9l7leioNL/SHAyciVnS7UgPGlOzCzm4LRSr/KGp2CA80
-	 UbMdYz/LBwjiptaVhPMSO6PiRtMqVxlRPIy321HsN4bjyNCIRMGfvi6G911FTVjSgq
-	 NIonrIRb31X4hFA3XAQjUSqTQtyy1qnYhRRBqISpqx8VA3RMETZHtjO0oQJzVlE6AJ
-	 BJhckatk2ze9cOZw9ZBOMf+DGPiJyi2Ir7h/UoW8GTYRcCmUsIdPVqKl6B0wFJgFP4
-	 a8YoHthkLecJLEm8ZPchjoD/gHEjGeZpcMXZp+LO62MblsHBOyhjqAd/DWw7q6lqX1
-	 hf3LrRI3OkIIA==
-Date: Thu, 10 Oct 2024 12:50:30 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1728584664;
+	bh=LXWRpUCFEW0Rx04S04rSJW8bkwD7Sr+8cSNN1CAscBM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=W09yPTrsAR0lHYNUF/tBo+WwwUzmSF3X/IPDGqlWqiO7J5dM9dmuHlI8bv8C30/NJ
+	 W3wRi4K5Y4dEfXG7JJQgL5s91rSZtBQM/xooGHy6CLEVXDJudAeToRi0/2LSU9A/Ym
+	 zyTJYO55nf/irDzKi+8GceKbR5rmjS1+ziMG+Ymr9dgRSKWpdwN3uuiLlAYjnr9TGb
+	 WNzqgARb+3h8JGXwcQt7nceDb7BMKPSrXXch7fIZi/SPu3tZcR0YIS2aKY/8nN3tcb
+	 RhRuFtxc+PshCMxIAif3BUwwY6nlO3CtGk0G2K7PDOURkcNJQ8JMaeycZG3PZT68HN
+	 P9CtfTVDaWkrQ==
+Date: Thu, 10 Oct 2024 13:24:23 -0500
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-watchdog@vger.kernel.org, Lee Jones <lee@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	linux-leds@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+	Jingoo Han <jingoohan1@gmail.com>, linux-input@vger.kernel.org,
+	Daniel Thompson <daniel.thompson@linaro.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH v2 1/5] dt-bindings: input: convert
+ zii,rave-sp-pwrbutton.txt to yaml
+Message-ID: <172858466263.2206934.3878201862515578388.robh@kernel.org>
+References: <20241010-zii_yaml-v2-0-0ab730607422@nxp.com>
+ <20241010-zii_yaml-v2-1-0ab730607422@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org, 
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
- devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Guenter Roeck <linux@roeck-us.net>, Conor Dooley <conor+dt@kernel.org>, 
- Daniel Thompson <daniel.thompson@linaro.org>, 
- dri-devel@lists.freedesktop.org, Wim Van Sebroeck <wim@linux-watchdog.org>, 
- linux-watchdog@vger.kernel.org, Jingoo Han <jingoohan1@gmail.com>, 
- Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org
-In-Reply-To: <20241010-zii_yaml-v2-4-0ab730607422@nxp.com>
-References: <20241010-zii_yaml-v2-0-0ab730607422@nxp.com>
- <20241010-zii_yaml-v2-4-0ab730607422@nxp.com>
-Message-Id: <172858262752.2080943.12465101127692480556.robh@kernel.org>
-Subject: Re: [PATCH v2 4/5] dt-bindings: watchdog: convert
- zii,rave-sp-wdt.txt to yaml format
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241010-zii_yaml-v2-1-0ab730607422@nxp.com>
 
 
-On Thu, 10 Oct 2024 11:42:41 -0400, Frank Li wrote:
-> Convert device binding doc zii,rave-sp-wdt.txt to yaml format.
+On Thu, 10 Oct 2024 11:42:38 -0400, Frank Li wrote:
+> Convert device tree binding doc zii,rave-sp-pwrbutton.txt to yaml format.
 > Additional changes:
-> - Ref to watchdog.yaml.
-> - Remove mfd node in example.
-> - Remove eeprom part in example.
+> - add ref to input.yaml.
+> - remove mfd node in example.
 > 
 > Signed-off-by: Frank Li <Frank.Li@nxp.com>
 > ---
->  .../bindings/watchdog/zii,rave-sp-wdt.txt          | 39 ------------------
->  .../bindings/watchdog/zii,rave-sp-wdt.yaml         | 47 ++++++++++++++++++++++
->  2 files changed, 47 insertions(+), 39 deletions(-)
+>  .../bindings/input/zii,rave-sp-pwrbutton.txt       | 22 -------------
+>  .../bindings/input/zii,rave-sp-pwrbutton.yaml      | 36 ++++++++++++++++++++++
+>  2 files changed, 36 insertions(+), 22 deletions(-)
 > 
 
-My bot found errors running 'make dt_binding_check' on your patch:
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-
-
-doc reference errors (make refcheckdocs):
-Warning: Documentation/devicetree/bindings/watchdog/zii,rave-sp-wdt.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/zii,rave-sp.yaml
-Documentation/devicetree/bindings/watchdog/zii,rave-sp-wdt.yaml: Documentation/devicetree/bindings/mfd/zii,rave-sp.yaml
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241010-zii_yaml-v2-4-0ab730607422@nxp.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 
