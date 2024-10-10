@@ -1,152 +1,236 @@
-Return-Path: <linux-watchdog+bounces-2172-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2173-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB94B998BD2
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Oct 2024 17:35:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8034A998CC4
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Oct 2024 18:06:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD6B31C23779
-	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Oct 2024 15:35:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 729D3B261DB
+	for <lists+linux-watchdog@lfdr.de>; Thu, 10 Oct 2024 15:43:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1435E1CCB2E;
-	Thu, 10 Oct 2024 15:34:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61EA81CC89F;
+	Thu, 10 Oct 2024 15:43:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b="WG3dY42F"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="IxI7xerN"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from omta038.useast.a.cloudfilter.net (omta038.useast.a.cloudfilter.net [44.202.169.37])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11012030.outbound.protection.outlook.com [52.101.66.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D61192D8B
-	for <linux-watchdog@vger.kernel.org>; Thu, 10 Oct 2024 15:34:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.202.169.37
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728574492; cv=none; b=WBSt7OdMqt5Zig0+ZqTxnIyfYsc2PjxSg7A9pBmJsDRhb7GhZN4bkxBzMMMcMw4H766XhD5zR9rhl/VdRQFzvXCztoc+zgL0FvwHNdpHuN1wWgbt+lfp98pqNCov+VZ6cojEqmsmX4wfFFuVD0ZoHD9OYrUVJNIq+zKfYMM0qY4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728574492; c=relaxed/simple;
-	bh=IHfGFVFpzeyoiNdlI+PDUKGy8fv4i/qhh73fARwIQwk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IjLhtel9zoIAYjJy8FC6T0ab0Z8wdWqN30mguRmuDb5jIH9zdPs+jPDm3tvs23BStTfKJKMXhgtSAHGRvwKaw7UdW6+Fnbe2Vneea3OQD2SobFJxm+t3q4J32e1dHm41Q9Ly7bURs6ncP+bd0tsyIGx+3jxWQTex1dEnUnqT0+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com; spf=pass smtp.mailfrom=linumiz.com; dkim=pass (2048-bit key) header.d=linumiz.com header.i=@linumiz.com header.b=WG3dY42F; arc=none smtp.client-ip=44.202.169.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linumiz.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linumiz.com
-Received: from eig-obgw-5006a.ext.cloudfilter.net ([10.0.29.179])
-	by cmsmtp with ESMTPS
-	id ylCjsIDy6g2lzyvBgsANoD; Thu, 10 Oct 2024 15:34:48 +0000
-Received: from md-in-79.webhostbox.net ([43.225.55.182])
-	by cmsmtp with ESMTPS
-	id yvBbssYOY3nDKyvBesHyrN; Thu, 10 Oct 2024 15:34:46 +0000
-X-Authority-Analysis: v=2.4 cv=T6iKTeKQ c=1 sm=1 tr=0 ts=6707f416
- a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=kofhyyBXuK/oEhdxNjf66Q==:17
- a=IkcTkHD0fZMA:10 a=DAUX931o1VcA:10 a=-pn6D5nKLtMA:10 a=vU9dKmh3AAAA:8
- a=VwQbUJbxAAAA:8 a=DPoJn4Cox0Z2GlYLnjEA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=rsP06fVo5MYu2ilr0aT5:22 a=ZCPYImcxYIQFgLOT52_G:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
-	; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=7ZILJKIEXwoz7iU/aC8w4Ldjs73VMDFGeUrEw/ggIFw=; b=WG3dY42FXgb4GhOYql7yfdHP+W
-	tPu1de5GiommDcEFZCPNZu2aG4O+raWfJc5Bq+SuCzlDW0QCFbupMvGWBRrkO4nbDdVvpJXoJB3s9
-	ismHonGBfGZpubIDz5BPUKNacB8GFD1ZB9BvMpQ3oUeAavMykAGqXjmNrdyg62Zkv41G0J6H0ss8C
-	LlgLp/T6M0AgBjw+xCpoeuNO6kI6L8Zd5nJFKJ5gC+zuSbiR7759LdM7JjA4oCBxsvEqVQYMUpljg
-	d98CKSHj+r9ZpmHzwQUn7gkzLMJsSHFGEeE+RZdBxqwdEyqL2iFmbHyZv2uiy+8gQ0pLtZ3sO4BjW
-	OvkqgiHA==;
-Received: from [122.165.245.213] (port=36630 helo=[192.168.1.106])
-	by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <karthikeyan@linumiz.com>)
-	id 1syvBa-000Y39-0Z;
-	Thu, 10 Oct 2024 21:04:42 +0530
-Message-ID: <6dd5f092-1711-4fd5-baac-f66edf74842d@linumiz.com>
-Date: Thu, 10 Oct 2024 21:04:39 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCF9664C6;
+	Thu, 10 Oct 2024 15:43:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.30
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728575004; cv=fail; b=Q9J+Njh9k0w/uCEFvLBeg555WrHU4WCPxulmVtoKGpkElJQX43gJMlbjD1vOJVd70naFB5VEXp/5u4v/H4pbd11DhEOrt2+SqtemtBBNuVSVNs6NKCSV9CZRH8fJdtcD8g/nRSfjcK/+Z0ngzjFg+zgoxYPOyrKraHTWDnj6Z80=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728575004; c=relaxed/simple;
+	bh=FFW9vTTfu+1LclL+1qqt/RPtoMWa7YWs4PSsGztXa/s=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=MOZY0TW+93cG2lQ6xSKG9NYRFAXBu8mEtWD4ADZAgSbYY62SuU0kVP/45YS61XsRU4xZasl/DNlS4OgPRT/YCEFwp0r17ysEIaA9bbqIPt9jqo+fRFsyiov5CBu3LXfssfyDdziZk2mEi/M6M7HVtJzY+nPuyjx9TEmJrDtpBdE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=IxI7xerN; arc=fail smtp.client-ip=52.101.66.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Z7+y+iEJYZKzdmzJ6A2IZ7rwb27sXbmxYth8HfbMrutpj1jmwI4jwfGGo5Ty+pw63BqRP23w9aQn7Zj5VaOEwwZyLAXzzKWiAggdSAS25cq0YM/TaLHoOkxDjiGeVWzG4dWzdHySXFQ2HSuPUEynEe48w1WJGVzJiveykqku3sPLy+hBE7HyBgG0SNRWzm6+cwtMhxCBwXAzlDcTVteEfRPmPNEy1WSdkqFg5oVUvCeEKt9qzoWwidmL/w4BzzkMNKTNaAEkMmvj5TPLchlBoQUefaRUnAlTf+9DLiS1Xk4Hby8OV3JYFZ1tVscWNmxevM8r8QFlbAzsde0RfoDg0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jOvTxzuTGn680qRYZEX29BxqJgSy50gXYhp8nBEANtQ=;
+ b=F8LxNksYVOXJmTSIKZibXGF5QgnOEsV9Vibs7m+VCNR9S5Ya0Pzuk1C15FK8YgQDS7DruwMugPSlDkq6xmVg8vB9RMNLpPNl3ghJkUm06ohbR1wJX9OSuFEpttBHcJGccaUHOOX96UYiEjgZpZRMgPLHMO8ya5tieU5T0Tn8ePjnh4LpAOnedt5Hh9uP4qEhPA81N4Q5VGlFpAoLv7xE4M4yE4TBBwSawoCQ5s8lI9quxEY/tZmBpjspb9tNfxtB5bS4JNg2AR5gkhX5Bj5ZN1aE/0OMWQM5uHBz5hXwJgG9bZZk0u14zjL/62gl02B4154svvLvI9Rla26q5QRphg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jOvTxzuTGn680qRYZEX29BxqJgSy50gXYhp8nBEANtQ=;
+ b=IxI7xerNKHa9hZS130oDgKMt01Kvm8TnkvJuflemmiKYra8e0wbU4Z6tFJm019LzN0qt6U4Il/1lFYaqYuB2qqQAOQV7xDFbPotlmgMCLFspEyqvd17hwI7qWDUHkPTY6hHvJdZFgoHSyHVlTj7cb1KpqTA4tlEaStWTsEFbg/S3dCDavmpPQm9qAhW4Huf3opEAJqmwQ0KiyO4lJvrf4+JIPXHK1GFn5jtLJXdSrUaVqmd8jq+MrXOU6vTJ1ZQt3kU7oAhuuaBW5gU8hJ3gwpbHzG0YClMY9BBn22Z/ftj9FgVwypxK653ENz+ORCPpLw8HIa729UFZoMs9+jCqlA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by DU2PR04MB8984.eurprd04.prod.outlook.com (2603:10a6:10:2e3::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.18; Thu, 10 Oct
+ 2024 15:43:19 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%4]) with mapi id 15.20.8048.013; Thu, 10 Oct 2024
+ 15:43:18 +0000
+From: Frank Li <Frank.Li@nxp.com>
+Subject: [PATCH v2 0/5] dt-bindings: mfd: convert zii,rave-sp.txt and child
+ txt to yaml format
+Date: Thu, 10 Oct 2024 11:42:37 -0400
+Message-Id: <20241010-zii_yaml-v2-0-0ab730607422@nxp.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAO31B2cC/22MQQ6CMBAAv0L2bM12RVo5+Q9DTIEqmwglrWlA0
+ r9bOXucyWQ2CNazDVAXG3gbObCbMtChgG4w09MK7jMDIZUSUYsP830140uottSY9UWrE+R89vb
+ By766NZkHDm/n1/0c5c/+mUQpUPRYtUZZqojO12mZj50boUkpfQF/AlKRngAAAA==
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
+ Daniel Thompson <daniel.thompson@linaro.org>, 
+ Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>
+Cc: linux-input@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ linux-leds@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ Frank Li <Frank.Li@nxp.com>
+X-Mailer: b4 0.13-dev-e586c
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1728574994; l=3634;
+ i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
+ bh=FFW9vTTfu+1LclL+1qqt/RPtoMWa7YWs4PSsGztXa/s=;
+ b=8Nvc42lR5QBNJ7txTr4fwA9aJRDpDJW2m1gbpeWChi2U+uVeQ96hFOBzEtMqDvQBCzeyaICv0
+ LaRaxSVOf0SBFgg7MtlG8Rf0+ozJNXH5UXUuvZ9q8bY8vl2SyaIubLp
+X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
+ pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
+X-ClientProxiedBy: SJ2PR07CA0022.namprd07.prod.outlook.com
+ (2603:10b6:a03:505::24) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/1] Add RV1126 compatible watchdog string
-To: Guenter Roeck <linux@roeck-us.net>, wim@linux-watchdog.org,
- robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, heiko@sntech.de
-Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20241010061408.1351865-1-karthikeyan@linumiz.com>
- <20141056-15a3-4e4b-9100-d1a570f39e83@roeck-us.net>
-Content-Language: en-US
-From: karthikeyan <karthikeyan@linumiz.com>
-In-Reply-To: <20141056-15a3-4e4b-9100-d1a570f39e83@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - linumiz.com
-X-BWhitelist: no
-X-Source-IP: 122.165.245.213
-X-Source-L: No
-X-Exim-ID: 1syvBa-000Y39-0Z
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.1.106]) [122.165.245.213]:36630
-X-Source-Auth: karthikeyan@linumiz.com
-X-Email-Count: 3
-X-Org: HG=dishared_whb_net_legacy;ORG=directi;
-X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfHe8jX9oQvHzvUPEuUj0crQY5SGcFVx2EAUul9Zy8BJICa2qLJu79DAaddMAoXdraKaNYGOdK/vla60mV9eUpdYtyWQXc6YCvNej08T28jl+tcxWFgx3
- VqwJVK5Y7y6BNIT1p12QsSoJsJYsXMP77yrrTmPdT3tXjuflle1O/iiVRwtUC4nv3SMHxMe1/uc4ka0/5rQBXkNK+T9PryeuuDIaWmXVgu9v4/TOU46k9XcR
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DU2PR04MB8984:EE_
+X-MS-Office365-Filtering-Correlation-Id: a5630e25-b258-4bc8-fc27-08dce9424360
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|7416014|376014|52116014|1800799024|921020|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OStRbEwyNks3bTMrRHhlTE5NK0dTVllDZlAzNUQwSjFaMCthMENtY1NteDND?=
+ =?utf-8?B?RmVEWFBNUjU0Y3ptYUFreTdYTCtJRVVjU3h3V1FYOFdBZ1k5aUp2VW5HcjN0?=
+ =?utf-8?B?MElmYnF5N1Rrb21YMEhvVndkZ2dKVUdXalo5Z0VZeWNWcGVLWXc3cVV4YkY0?=
+ =?utf-8?B?ZElPekV6MXRuaHl2Qko0MnhHRFloRFJnQm1BOUlSTjhROWNhWXI3a2JKeFVN?=
+ =?utf-8?B?WGRIY21JQWNGUVBaT2NDeWk1bmFyVU5Dak0xWDQxV0ZWQ0pZUFFZenNXck9C?=
+ =?utf-8?B?RUE1QktEVHoreS9yaXg5a1pkV0hDVXpSUnl6U0ZVSXlWNTJ6UFNZQ3BROHhi?=
+ =?utf-8?B?Z1h2amJTNkI4TU5KbEZqYVBuU1dSQmFjMG1wY3JmS09wTmJ4THNlSk8xRmI2?=
+ =?utf-8?B?dllWUHliL0xZZjBkV1J1SUxyQ3dpazRDUEpZQ0thVlQrcVJ2dFdlQnlWcUFT?=
+ =?utf-8?B?SUJNUWZ4UEFuT01EdURlS2dQL2hqMDFEUjFkOFFQbUxUdUxFMmVaSThveDY2?=
+ =?utf-8?B?TWg4azZrdndXZnZHNnJTSHNnTmlkNHE2dEM3dGs1b0hDWThaTG5hS05ud1Jo?=
+ =?utf-8?B?UlBJcUk2TkVST09HMnNFY05sR21BOUlES0doK3FWTFo4bGVXeWRZVGw0U3BD?=
+ =?utf-8?B?MVpreWJWbWRVMzlRWDkwajRsTk9MOG8vWU9VQm1IKzRwcWRpVkc5Mk5ndzh1?=
+ =?utf-8?B?cXFCbUt2Y0YrRlZYU3VTTjg1NkRGdTJjYzV1K1B4MTFuRkpDdVRNQ1ZKdm1J?=
+ =?utf-8?B?M2h4dVF3MzM4N21vcUgxYVZIcllWTWs4TTJkS0xlWDliTjRCdDRzaFJSeG1v?=
+ =?utf-8?B?N3hTQjhGWHBXZXlpTmwwOENLRXhLRVFIRG1mSUgwbGR1Sm9Qd21jTzU0dmNl?=
+ =?utf-8?B?YUNYaDBIazFWZCthdTdkMHMzaVF6dTR2by9xNE9vakswcnVlVG9la2FOWHJQ?=
+ =?utf-8?B?WDY5L0RnY0tBNitPdE14WEQrSmMzSVB4RjhMSS9pU1dFaHEzU2orQm1hMFpX?=
+ =?utf-8?B?RDdROFZIWi9wa3ZxL2VDL01YeTJkbytRYTBPaUR5dm1yWldaK2N0SlJDd0xy?=
+ =?utf-8?B?RFdYZ2UvWUpvS3oraXdYaVpHRFY0dVNkMk14L1YxZU5WN3F5TXJTOUphVnd2?=
+ =?utf-8?B?bEZER3VnQ0lwWkhsYms2MVlZb2NZeUNiTnhQR1dhM3RBdXBMaUkrcWxUSTRq?=
+ =?utf-8?B?V3dqbkYvQmhtcUtKT2tvRmJlUlluMzlZZmdnMlQ0dGQxTmpucm1TNnN6OUU5?=
+ =?utf-8?B?VkowbzM2cllhT1FmLzhsNnpiUjYxM2ZEb0pxZDZ0d2pxZENBaVloT2lEbnI1?=
+ =?utf-8?B?TmlIQzN4cXViM1MvNDdVb1dZR25qR0hsMTloNFNtblZXWFcrTFFheW1uZXI3?=
+ =?utf-8?B?Y2I3VWtlQmNMTU5VMWY2N0l1U0lPRjFnMmZ3cjgxRFozQTJGV3dCN0lqdU9F?=
+ =?utf-8?B?TCsvcVg2ZWQ1YVhrUXNRTmVvSWFDQ3ZqWTZWYjIxOEZEQy82WHhvbGtCMm5W?=
+ =?utf-8?B?ODVQeXVEQVdQRDMvTjZyNVNjaUd3dzRzYzExd2RDTjZiUFRJWm9XaysreVNw?=
+ =?utf-8?B?Qnl5LzR1aFNBYzF3ZGJIRE9SZm1yMDVPb2R4ZzdhY1QrRW9IalFFb0h0WnVu?=
+ =?utf-8?B?djhWWTZIRFdVYlFZZTluV2JuU1RmUThlZjdYU042Z3hOZnJOU2VXdUhvQ09J?=
+ =?utf-8?B?bGtPa2t2UnZKU0FLdDdKYnlodmRYcy8vTzR5SGRoT05EYncrdHdSWTNyeHVJ?=
+ =?utf-8?B?NjJuOVJVWVB4T3V2NmhRQldUUTBKWWZpY1Bzd1lxOUs5ejVHcXJyMEJxRHRY?=
+ =?utf-8?Q?8g/X6LmqpzxA2G+YDE4ucZPztQl3TlausPTlg=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(52116014)(1800799024)(921020)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZVhrRXdsNnpFV1hLc3Vsa09BM2JmTjF1a2FSaS8vbzVkcG9HL2NuL0tBVFE4?=
+ =?utf-8?B?cmw0RS9NTlUzNDNGdStWZnVzZlVXWlNxZVUySjl1WitjMFZlQ1ZnUWdOS0RB?=
+ =?utf-8?B?YWpQS2FQNzE2ajJIQ3Jxc05YNzBQdmN1dnpzMy9ENEo5Rld2UC92eHc4L3BP?=
+ =?utf-8?B?WHJrb081bldwZEdvZGZ2NjloTk00QWpLMnhwUU9FKytXVHhYU0FsSmNiRkx3?=
+ =?utf-8?B?eDRqVWM5bG8rdjN5UTBHTXZYOE81YzZJcldta2YrV2o0QlFEbitNZmZXZ1ll?=
+ =?utf-8?B?SmwwVk9rbE1XaE5wNitIRm1Dd1dNanBraHNwdnpFVG9STUFBZGx4dUFwdXB3?=
+ =?utf-8?B?Tk9OT3ozWTlVVFEzUm1aNHZVdUJOMTlkZ3Z2SVo5dlVOaE9HeFRWNiswcVph?=
+ =?utf-8?B?YUI5S3EzQjRiSFZ2R0hBeVFJMi9MWGExRzVyT2N5Zmd0Q2luN3hHK3NtSGFk?=
+ =?utf-8?B?UEhXdVd6dmlicDh6MzljeUhxQVFtSDhIeTQ1bVlDSkFPMEpTb0cxS2tXSWpT?=
+ =?utf-8?B?RE1scFc1TEFJYWtWNTMxaWdad1A0SnpNb3duWkFDUTl1K1didExkcnFqS2po?=
+ =?utf-8?B?cVcrZmJFbUZ4UEEySk5mSnZYOUZSZTY0clNQSzVIdEE5U205QkdHZFVrVWdw?=
+ =?utf-8?B?MG01OHBaTUhjZlFVdHZNYmdxMUF1bUd6TWJtMGdJZ0tyQ21TWFRNb3h0Zldt?=
+ =?utf-8?B?WFZTaytucDhGWSswcnZVRlJtbXMvRTFMRUMwejB5Z1JJMmt2d0xUNkdjVkZr?=
+ =?utf-8?B?bWRQKzlwYnU3OHlraUM0bGNuVXFzWHd5QjVqNVpuZlkvRnNTVCtXaXlaak1y?=
+ =?utf-8?B?dzI0RmdUUkRaN2w4MDhIbjMzL1NiSXdjTDNCYzBHeXFNZnorRnYyb1ZiMG14?=
+ =?utf-8?B?a2hvczZTNUgwWHJGSkFKSWR3QnVMTGRrVzVHMjdXdUh3c3FQSW5KaFJURGJn?=
+ =?utf-8?B?UDgvdW9oeGYrMGtGMmRJNEp3eE1mVExRdmo5ZHF1aHBaOW9UZ1RRSXhPQ3NH?=
+ =?utf-8?B?SEU1cGNOajhxUFN1Y1Z1Z200ekR1Ym85K1RJZ0hrYTJYblhMOU43VHcvRUsr?=
+ =?utf-8?B?ZThSNkwyQi93SWlhYjBEKzVUMGtGU1BQelFaWXdycWIrQzhYbHVDNGZOY2hX?=
+ =?utf-8?B?TzU0b3JxTDd1M2RTQmdjODd4c041R1QwcVBEaTJ6SXNpRWJzeW1nSnFPU1ND?=
+ =?utf-8?B?MU10ei9GUklEN3I5UWtZT25xNFBjTURQU3lUVDQxcUJHOWhEeC9TZ090WVdC?=
+ =?utf-8?B?bWYwbVVjd0FtdlhhaWs2M2pCZmI1MHk5TzYxUTlmTW1UNkcxYUdmS2U5OTVu?=
+ =?utf-8?B?eVliRnNGUkZSTXMzdTJEUmdRVjlzU3VVUng1eG8rdktHWVFTWVQyZUZrMDhX?=
+ =?utf-8?B?d0ZqUmJ4SUhMTFNSa2hPZ040QjI0ajUxeGFOQmFYTW9kY0xicVBpRWhKM1VH?=
+ =?utf-8?B?ZVFFdnUzM0lqVW5oZy9ZRmQyN0t4RlV2K2VTa0VHR3BuczVENGhHdFBKcEt0?=
+ =?utf-8?B?MEYyUFQrNlJ0Wnd6S0p4bFFNTnU2RWg2N3FZc0MxNzR1YVRDVkNWM2FpNVZn?=
+ =?utf-8?B?VG9wUldES0xUbXBkZHNPb0FRaXFLdXZxVHE4SDdBNEVRK1NiREpRM01ZMWlL?=
+ =?utf-8?B?SjAzWXg3MXdPcndlM2MyNHRJSHlmeGlydW5JL0pXZGFGbDRvNS81akZJamZi?=
+ =?utf-8?B?cnlBYnRaTGt2c1htVjBZb0w5UHpocHdPMklpVzlSb3pVWHhER0NqWktZREpT?=
+ =?utf-8?B?YlZvUWxldS9TN0ltUjhnSGRHS20vMHNBQUhmVktkKzFDNG15Ym5ZbzBkVnRt?=
+ =?utf-8?B?ZnNrQytJYVRuaTBGYkF0aEtwcFFiQW00Ynp2NkJqMmptSDhEcng4WVlLL2dH?=
+ =?utf-8?B?cmdqYmE5c2ZySlBya2NPays1cUM1UHhTUUgzM3lPRWhZOFE5bE9jMVh3UW9t?=
+ =?utf-8?B?dk5jek1RRnFhczYvSzNJUlhoRjZqVVkyd3ozZHFhaU5mS0htcUZ1R25Cc25z?=
+ =?utf-8?B?YVlmcDdVc3ZNMjAySFRxSmhKNW1nSkVlWTZnQ2ZoRGNvTm1mcHd3QXJISUJ4?=
+ =?utf-8?B?aWxVYmtRS2dWbUJoYks1N21nYnA3TXoweURSSkQ2bnpvb3NlbG4yRUdSSTNz?=
+ =?utf-8?Q?J8gc=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5630e25-b258-4bc8-fc27-08dce9424360
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2024 15:43:18.8433
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CnEq11VNAPKtbXXqPBKu3oIQd9M0hB1t5IHExss74nqFhyFpruOfGmOabt66ED9VpzMPAGInp3j+kWb6lpzcLA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8984
 
+Fixed below warnings:
 
+arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu: failed to match any schema with compatible: ['zii,rave-sp-rdu2']
+arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu/watchdog: failed to match any schema with compatible: ['zii,rave-sp-watchdog']
+arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu/backlight: failed to match any schema with compatible: ['zii,rave-sp-backlight']
+arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu/pwrbutton: failed to match any schema with compatible: ['zii,rave-sp-pwrbutton']
+arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu/eeprom@a3: failed to match any schema with compatible: ['zii,rave-sp-eeprom']
+arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu/eeprom@a4: failed to match any schema with compatible: ['zii,rave-sp-eeprom']
+arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu: failed to match any schema with compatible: ['zii,rave-sp-rdu2']
+arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu/watchdog: failed to match any schema with compatible: ['zii,rave-sp-watchdog']
+arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu/backlight: failed to match any schema with compatible: ['zii,rave-sp-backlight']
+arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu/pwrbutton: failed to match any schema with compatible: ['zii,rave-sp-pwrbutton']
+arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu/eeprom@a3: failed to match any schema with compatible: ['zii,rave-sp-eeprom']
+arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu/eeprom@a4: failed to match any schema with compatible: ['zii,rave-sp-eeprom']
 
-On 10/10/24 19:44, Guenter Roeck wrote:
-> On 10/9/24 23:14, Karthikeyan Krishnasamy wrote:
->> This patch is introduces a watchdog compatible string for rockchip's
->> RV1126. I have already send this patch[1] in the series[2] but somehow
->> missed watchdog maintainers and list. So resending this patch alone
->> again from the series[2].
->>
->> Signed-off-by: Karthikeyan Krishnasamy <karthikeyan@linumiz.com>
->> ---
->>
->> - Link to patch: [1]. 
->> https://lore.kernel.org/all/20240912142451.2952633-2-karthikeyan@linumiz.com
->> - Link to series: [2]. 
->> https://lore.kernel.org/all/20240912142451.2952633-1-karthikeyan@linumiz.com
->>
->> Karthikeyan Krishnasamy (1):
->>    dt-bindings: watchdog: rockchip: Add rockchip,rv1126-wdt string
->>
->>   Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 1 +
->>   1 file changed, 1 insertion(+)
->>
-> 
-> I am curious: More and more people send introduction patches for individual
-> patches. I don't see any value in it, the intro patch is not available
-> in patchwork, and thus the context is missing when trying to review the
-> patch from there. This makes reviews much more difficult if one doesn't
-> reply directly to the patch. It doesn't make any sense to me, yet people
-> do it more and more.
-> 
-> Where is it suggested to send introduction patches for single-patch series,
-> and what is the rationale ?
-> 
-> Thanks,
-> Guenter
-> 
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+Changes in v2:
+- change all maintainer to frank li.
+- Link to v1: https://lore.kernel.org/r/20241008-zii_yaml-v1-0-d06ba7e26225@nxp.com
 
-Hi,
+---
+Frank Li (5):
+      dt-bindings: input: convert zii,rave-sp-pwrbutton.txt to yaml
+      dt-bindings: backlight: convert zii,rave-sp-backlight.txt to yaml
+      dt-bindings: nvmem: convert zii,rave-sp-eeprom.txt to yaml format
+      dt-bindings: watchdog: convert zii,rave-sp-wdt.txt to yaml format
+      dt-bindings: mfd: convert zii,rave-sp.txt to yaml format
 
-I had missed watchdog maintainers in previous patch series, and received 
-a tag for this patch from the one of the maintainer. So i thought, 
-mention this make sense and added this info in introduction patch. That 
-is the reason. Looks like i made a mistake.
+ .../bindings/input/zii,rave-sp-pwrbutton.txt       | 22 --------
+ .../bindings/input/zii,rave-sp-pwrbutton.yaml      | 36 +++++++++++++
+ .../leds/backlight/zii,rave-sp-backlight.txt       | 23 --------
+ .../leds/backlight/zii,rave-sp-backlight.yaml      | 36 +++++++++++++
+ .../devicetree/bindings/mfd/zii,rave-sp.txt        | 39 --------------
+ .../devicetree/bindings/mfd/zii,rave-sp.yaml       | 63 ++++++++++++++++++++++
+ .../bindings/nvmem/zii,rave-sp-eeprom.txt          | 40 --------------
+ .../bindings/nvmem/zii,rave-sp-eeprom.yaml         | 54 +++++++++++++++++++
+ .../bindings/watchdog/zii,rave-sp-wdt.txt          | 39 --------------
+ .../bindings/watchdog/zii,rave-sp-wdt.yaml         | 47 ++++++++++++++++
+ 10 files changed, 236 insertions(+), 163 deletions(-)
+---
+base-commit: 2c1dd8a45abe738d15a9ebe015a17eeac9a3b13f
+change-id: 20241008-zii_yaml-7b4802029873
 
-Best Regards,
-Karthikeyan
+Best regards,
+---
+Frank Li <Frank.Li@nxp.com>
+
 
