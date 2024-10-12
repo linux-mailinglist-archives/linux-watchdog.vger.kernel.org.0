@@ -1,293 +1,152 @@
-Return-Path: <linux-watchdog+bounces-2195-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2196-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81F9F99B103
-	for <lists+linux-watchdog@lfdr.de>; Sat, 12 Oct 2024 07:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE47299B5F1
+	for <lists+linux-watchdog@lfdr.de>; Sat, 12 Oct 2024 17:47:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 190C328455C
-	for <lists+linux-watchdog@lfdr.de>; Sat, 12 Oct 2024 05:02:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D1CE2835A4
+	for <lists+linux-watchdog@lfdr.de>; Sat, 12 Oct 2024 15:47:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA7FE2746A;
-	Sat, 12 Oct 2024 05:02:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D00832745B;
+	Sat, 12 Oct 2024 15:47:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I1Jctcwj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mY0BGE9D"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 319E91F5FA
-	for <linux-watchdog@vger.kernel.org>; Sat, 12 Oct 2024 05:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3909917BA3;
+	Sat, 12 Oct 2024 15:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728709336; cv=none; b=Oz5IkYK9FKi3tJIguog0ZS973TH5dbRxcl2QKczkCLWUgVAQH2845Hrl3zP/mCMwid1DZPPk0CgfPFq5yVzg1pJt/XGpl1uOJMzuh6SiBNMk4UN7jUF00WZBCvzRFjYEXG26Er3qIJXzCixTL2ZybrVSzCQFvi+t7Za6fOK5bLs=
+	t=1728748031; cv=none; b=Hv8BCc6mtqM6GCmBMWOhiTabJ7bHQwf1oQcYL+iznH05CVfIa59kSHMrTrsBQ5hxbGr0JYIXt/sIjJMpDvFdGjar200LlPwyun7qwB45Nj3fRwD8/MzitRDqjZXhhF2ua2EYBiQZYBay/maJl1DNapAsc9d4OGPAsv2RgLF6/Ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728709336; c=relaxed/simple;
-	bh=sVeCdv7RiAyU+fIsBG9nv4NkdXUIMq4xcwkQAhhHHAM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dyDz52YlAiuzAxXobqzv10I7qPESqyg0BLf6LTEnLOhvue8tR14YzvsOiv6VP66VTxuk4g5XHPvJPpSjBEdd4b5N776HZR88TJs1IMMRAvJoSZ8zAPWDlgyEnP9eNpqexgNzwTE9t4YezPm4YKNUPzT51rhIIMMK5VtSP1OnQS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I1Jctcwj; arc=none smtp.client-ip=209.85.217.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1728748031; c=relaxed/simple;
+	bh=BwFf6upCJNAdJ40mkYVPW+Ta9bTNXw5vnfXHGSPr1gM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rnqDaS4CmdHKU8QhSqoBIGGqEHI7ka0z17KYzLOIXcyGuY4aZ5NPVUyKQWyRxO/YHgLtO0nL6sosiqoFbEByx6YU0v6yApm0lNw9kRKJ4brCOjpJvKtSzHXPytUXq6OcD71Bb2xaJrdy9oRpeHBZUT3IwQfIAo1psizFPJBSWiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mY0BGE9D; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-4a3c8b8cf78so932655137.0
-        for <linux-watchdog@vger.kernel.org>; Fri, 11 Oct 2024 22:02:14 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-20c803787abso19968905ad.0;
+        Sat, 12 Oct 2024 08:47:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728709334; x=1729314134; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=srtXtOe4NzvAKG4iLyd34O55zcI/IITHcQJU3/jN0p8=;
-        b=I1Jctcwjf+K0qI05xCX+AihaN/2iiUu3WYcjtRQQf5IA7IstKO66fxMmxZywRQQ6L6
-         T8ECbbS68KQy7sOrriHVMqLxa9M3q92k5MLH+5/Nij0QdOqt4OPfxUHgR9p0aTrHyeoB
-         oh1Jnh0yDf9aHMLtTcI2++xWYdm5O8dJVu3/PyzjxgwGJah/bUweckvqfJJa2tJH2ovN
-         uS1QchJQvv5FnSIyyWrihVeHadUziOfcIB+teT3UI7CgdjDa9f0AEsgpFoFy8L9GcvLP
-         Ckr/lDA/ewJUW8IqFmVO8MuGaUlop3YtLvMF9wawG1WfcN89bmCRiGzLdJ9OoTh+4P9f
-         a41w==
+        d=gmail.com; s=20230601; t=1728748029; x=1729352829; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=XLMUXamEtLIqeIpfxCxeP30iEHUYuhfBpCnBWVAFBd4=;
+        b=mY0BGE9DGyTiUkTt6f+ka3SqxqdS3ylXHXE19dB5hm5Z7EhBNzWyA5BHQ9IEF99PHc
+         2v4+WePFaV64Uj5Im9Gv5sw9zTYCoV0TkQhrbOzy3k4+9PUYIi6qlVmldnXI8qx9n1RK
+         bOQYsoDSyoGkmB7Zf2kKB7O4/xLJ3RLCTFRbMU8NFjha8bqJKmENwoWqm0hBqP6HO0nh
+         QchYPpjzdReYoQYPWVdkKI/EFCqPTviPgAKi7932OmsKTuwzv2gCOj2ZhVEb+sUTP+Ma
+         6L5EPPkEHKoRR0NPYIKALbPCdCuB6GIkTLyiNXI+3wwiz6UwgA53gS4j/MXCSgr2KY/0
+         I/Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728709334; x=1729314134;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=srtXtOe4NzvAKG4iLyd34O55zcI/IITHcQJU3/jN0p8=;
-        b=tztC3wA6bBMHdJGzVp7yfu7LXdugpTAzBwN1+cEN4Vc2im02tObSyZqctOxDcZ3J4J
-         bzxsZM9Cj74l/GUrzEMwCsWKhY9OS/ZIynci+gt2pH+Nsnh8OT/GbhqPpr/zcD8fD/3M
-         JifLRa0XcJqHjq+owo/dg3ba8bpGgmgUIHaAx9n2kD8TRJ/UZVG7K5RAj7KphKYBmpJM
-         Iim43JzFEz+Hy4fJVeA1/xE1zaZMNpzz1WUcNNkwdzhWB1Ypl7MjRI143uph/I0wQzEa
-         sH8mSVi+/okvb7kuifQIK8pCBzBrwissfFsisQ020aSxBIjJ0hC2fDAVedptqHZxA/ZP
-         a4Nw==
-X-Forwarded-Encrypted: i=1; AJvYcCVbKXsHY5OjUPmSu12Cyt4RKzqLDhn+Oj5soRgtQ1+mF3ISZejP6EOfuGiVtJKv3o5Vn/rR4ypyXaWSct02gw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCgVC0+VwO7ZzvH1CG/+JY7OGdP/1N4IHfQE0Mzr2G7u2c/qGg
-	khlZOUY4R5V1UKlFxeVTl3IlddIOVNt75zRUQb4mPqP/E0NYP3NhCjdOo8BQjf/ne1+kgk+61Gt
-	dSS1O+/rUkY+MtgvpOWSpVU3JXeqs0Zzd
-X-Google-Smtp-Source: AGHT+IFNZD5CNR54hUzO9/7Wp/RteQ5supmMX0prgWhh4THU3ViZFGpYSLOX5ZItdkYawFMMSYNnB1dqwnoI/eW1Wgg=
-X-Received: by 2002:a05:6102:18d9:b0:4a4:6858:334a with SMTP id
- ada2fe7eead31-4a4685833c9mr2456004137.27.1728709334017; Fri, 11 Oct 2024
- 22:02:14 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1728748029; x=1729352829;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XLMUXamEtLIqeIpfxCxeP30iEHUYuhfBpCnBWVAFBd4=;
+        b=wNO2pqEIddKCcIos+H/UsUaeOFirasP95c5MfO6MCSLDOp65VSWqXs4nD86CcGEi0i
+         ozUfP5o3XcEPququrwCGXZwwCuC3vnTCzLZZrfptj8O6LKQJTBDKxQJwPPpU3SBlar9u
+         Y1B4Gdt3RySPMLnRPi/TSLam2vnb+O76NOckkOW46/QfDmn7OqnRHGkDdBwg68A4X8Dm
+         D3dT6oZzMka+TlOUmRkcmUJ9Kx4x4pAAbhjLPHH9OiQ+ipCfOhYlon54c3L5usLnPYJZ
+         /FjPGUftVjRi14v5kq7aWOkHr8ynFZDNQKoSx7UeRf+gscCtpid0kS9RnZ7D4qC8jpGj
+         hzHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVmkaiuRjnpCwGtlsKkUMSmg3zliDRKbF5aA70k40y4flQzkuH/V9XlMox5YLwLmTRWxsfXoHkuuy3S@vger.kernel.org, AJvYcCXBBDeBj/JxSQgXNooE0Kq6NNwFF9zipDEI5NxPjaO8Zd9n/V/e7A2uylLrhiN3BSBbfpOw6wCVfdPsM0pfjdE=@vger.kernel.org, AJvYcCXl6sdHtpWcSUw5zpTSUmtmlW38Ka3iZcwm4FMU2GQh77Y3hjy5Aetd+FuiyYdqDxvsIN5SAWkQ2xfASYZl@vger.kernel.org
+X-Gm-Message-State: AOJu0Yydn551OH83UxPH5dbg1jresKNTGkXkVYIemELdDII//DhLWf0i
+	H/SPp4K8Qgh2h5YOQfgMu0aJoGAEFuGiIlKCmfvUxP+CvybuJIwLQ+mnMw==
+X-Google-Smtp-Source: AGHT+IH2X/2CraMLah4T1W4dj08Ekq5evuLcjvHRohEUNuM9leWAPTb3294GE2CUl5CU0PL0kxrQsw==
+X-Received: by 2002:a17:902:748c:b0:20b:9df1:54d5 with SMTP id d9443c01a7336-20ca041887dmr82939425ad.29.1728748029359;
+        Sat, 12 Oct 2024 08:47:09 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8c0e75fesm38294595ad.158.2024.10.12.08.47.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Oct 2024 08:47:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b953d076-3901-47fe-a73e-f990ed1ddf69@roeck-us.net>
+Date: Sat, 12 Oct 2024 08:47:07 -0700
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231213094525.11849-1-devlists@wefi.net> <20231213094525.11849-4-devlists@wefi.net>
- <CADvTj4r58ETz-Yym+MMEcu0DDeW-xbXBRGHxfZAfyGqOj3prGQ@mail.gmail.com>
- <9770a65c-e08a-4f7c-9ffd-8899d8390e2e@roeck-us.net> <CADvTj4qk0QMafMOD81D=95oL3Qyc7Jd0C5_gGjtw+Kbn=_v9WA@mail.gmail.com>
- <49f46f96-dfc3-4c50-a33d-a6cf1b67066d@roeck-us.net> <CADvTj4ohSu7ngB=M8eEpA45shos8M9YM7bbDHhOy=HQVk9YG3w@mail.gmail.com>
- <b09058ca-9547-4d70-96a7-b7fe6b8beb3e@roeck-us.net> <CADvTj4r3y4W=PwP4aw1TsKpe1pY=SKBTWjfKZJqFe5J-GxNOJA@mail.gmail.com>
- <213f1f7c-aa0a-49b4-a6af-d76a2cbc2299@roeck-us.net>
-In-Reply-To: <213f1f7c-aa0a-49b4-a6af-d76a2cbc2299@roeck-us.net>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Sat, 12 Oct 2024 00:02:02 -0500
-Message-ID: <CADvTj4rmNOrowVyJnyBmWQAu=e=WdV3KVfMJGq1vQ9v=a6ssqQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] watchdog: it87_wdt: Keep WDTCTRL bit 3 unmodified for IT8784/IT8786
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Werner Fischer <devlists@wefi.net>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] dt-bindings: watchdog: airoha: document watchdog
+ for Airoha EN7581
+To: Christian Marangi <ansuelsmth@gmail.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, linux-watchdog@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Lorenzo Bianconi <lorenzo@kernel.org>, upstream@airoha.com
+Cc: Krzysztof Kozlowski <krzk@kernel.org>
+References: <20241011104411.28659-1-ansuelsmth@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20241011104411.28659-1-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 11, 2024 at 5:48=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> On 7/11/24 15:14, James Hilliard wrote:
-> > On Thu, Jul 11, 2024 at 3:42=E2=80=AFPM Guenter Roeck <linux@roeck-us.n=
-et> wrote:
-> >>
-> >> On 7/11/24 14:09, James Hilliard wrote:
-> >>
-> >>>> The best we could possibly do might be to add a check for the bit in=
- register
-> >>>> 0xf1 and warn the user that they might have to use the ACPI driver i=
-f the bit
-> >>>> is set. I am not sure if that would be helpful or just add noise, th=
-ough.
-> >>>
-> >>> Do your systems which work with the it87_wdt driver have that 0xF1 bi=
-t not set?
-> >>>
-> >>
-> >> I only have one such system left, and the bit is not set on that syste=
-m.
-> >> I avoid buying hardware with ITE Super-IO chips nowadays since their s=
-upport
-> >> for Linux is non-existent.
-> >
-> > Yeah, I got stuck with a fleet of these boards, trying to make the best=
- of it.
-> >
-> >>
-> >>> I'm thinking we should check for that bit and prevent loading the
-> >>> it87_wdt driver if
-> >>
-> >> No. That would create the risk of no longer loading the driver on syst=
-ems where
-> >> it currently works.
-> >
-> > Hmm, any idea how likely it would be that the bit could be set on a boa=
-rd
-> > which the driver works on?
-> >
->
-> No idea, but I would not want to disable it just to find out with a flurr=
-y
-> of angry e-mails.
->
-> > Or maybe best to have a quirks table with dmi matching to disable the
-> > driver on known broken systems?
-> >
-> >>
-> >>> it's set(maybe along with an override param). That way the wdat_wdt d=
-river I
-> >>
-> >> I prefer the less invasive version of logging a message. The user can =
-then
-> >> block the it87_wdt driver if it doesn't work.
-> >
-> > Hmm, I build multiple watchdog drivers into the same kernel and somewha=
-t
-> > rely on the autodetection working correctly as I support multiple board=
-s
-> > with the same kernel build. It's not exactly trivial to conditionally p=
-revent
-> > drivers from loading when built into the kernel AFAIU.
-> >
->
-> Those drivers should never be built into the kernel; they should be built
-> as modules, and module load instructions in /etc/modprobe.d (or whatever =
-the
-> distribution uses) should be used to determine which drivers to load. I r=
-eally
-> would not want to rely on a bit such as the smi interrupt bit to determin=
-e
-> if the watchdog is used by ACPI.
->
-> This is actually a multi-level problem: Even if there is an ACPI watchdog=
-,
-> that does not mean that ACPI uses the Super-IO chip for its watchdog impl=
-ementation.
-> It might as well using the ICH watchdog on Intel systems or the TCO watch=
-dog on
-> AMD systems. Similar, even if the SMI interrupt bit is not set, it is ess=
-entially
-> unknown if the it87_wdt driver actually works, because its reset pins mig=
-ht not
-> be connected. Or, of course, both watchdogs might work.
->
-> Assuming the wdat_wdt driver auto-loads on your system (I think it should=
-),
-> can you write a little script which loads the it87_wdt driver only if the
-> wdat_wdt driver is not loaded ?
+On 10/11/24 03:43, Christian Marangi wrote:
+> Document watchdog for Airoha EN7581. This SoC implement a simple
+> watchdog that supports a max timeout of 28 seconds.
+> 
+> The watchdog ticks on half the BUS clock and requires the BUS clock to be
+> referenced.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-I'm a bit wary of using scripts to manually choose drivers like this, I
-suppose it could work but I'm thinking it may be somewhat brittle.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-So I ended up just disabling the it87_wdt driver, but a different batch of
-boards also with the it8786 wdt chip we found doesn't appear to have a
-functional wdat_wdt and does have working it87_wdt support so I'm now
-looking at this again.
-
-I messaged the vendor and they sent me some wdt sample code(that
-I still need to test) which is supposed to be for the board that I'm having=
- to
-use wdat_wdt on.
-
-It's setting some additional bits(like bit 5) which is interesting.
-
-#include <sys/io.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/io.h>
-#include <string.h>
-
-#define BIT0 0x01
-#define BIT1 0x02
-#define BIT2 0x04
-#define BIT3 0x08
-#define BIT4 0x10
-#define BIT5 0x20
-#define BIT6 0x40
-#define BIT7 0x80
-
-#define BYTE unsigned char
-
-main(int argc, char* argv[])
-{
-
-int TValue;
-BYTE data =3D0;
-
-ioperm(0x2e,1,1);
-ioperm(0x2f,1,1);
-
-//Enter SIO  Configuration Mode
-outb(0x87,0x2e);
-outb(0x01,0x2e);
-outb(0x55,0x2e);
-outb(0x55,0x2e);
-
-//Select Logic Device 7
-outb(0x07,0x2e);
-outb(0x07,0x2f);
-
-//Setting Default Watch Dog is Disabled
-outb(0x71,0x2e);
-outb(0x00,0x2f);
-
-//Watchdog Reset Code
-outb(0x72,0x2e);
-outb(0x80,0x2f);
-
-
-if(argc =3D=3D 3)
-{
-    if(strcmp(argv[1], "-M") =3D=3D 0)
-    {
-        outb(0x72,0x2e);
-        data =3D inb(0x2f);
-        data &=3D ~BIT7;
-        outb(data,0x2f);
-
-        TValue =3D atoi(argv[2]);
-        outb(0x73,0x2e);
-        outb((BYTE)TValue,0x2f);
-    }
-
-    if(strcmp(argv[1], "-S") =3D=3D 0)
-    {
-       outb(0x72,0x2e);
-        data =3D inb(0x2f);
-        data |=3D BIT7;
-        outb(data,0x2f);
-
-        TValue =3D atoi(argv[2]);
-        outb(0x73,0x2e);
-        outb((BYTE)TValue,0x2f);
-    }
-
-    outb(0x07,0x2e);
-    outb(0x04,0x2f);
-
-    outb(0xFA,0x2e);
-    data =3D inb(0x2f);
-    data |=3D BIT5;
-    outb(data,0x2f);
-
-}
-}
-
-
->
-> Actually, just building the wdat_wdt driver into the kernel and it87_wdt =
-as
-> module (and loading it via modules.d) should work since the wdat_wdt driv=
-er
-> would then be instantiated first, and the first watchdog is all that syst=
-emd
-> cares about.
->
-> Thanks,
-> Guenter
->
 
