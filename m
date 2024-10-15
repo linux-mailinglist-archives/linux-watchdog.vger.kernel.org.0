@@ -1,46 +1,46 @@
-Return-Path: <linux-watchdog+bounces-2213-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2214-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48B0899EFD0
-	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Oct 2024 16:40:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDBE099EFDC
+	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Oct 2024 16:41:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E115281DD4
-	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Oct 2024 14:40:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B1411C228AA
+	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Oct 2024 14:41:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75CD31C07F8;
-	Tue, 15 Oct 2024 14:40:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F2E71D5140;
+	Tue, 15 Oct 2024 14:40:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bmvoxCXy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lEOwdjsw"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AD7F1C07C3;
-	Tue, 15 Oct 2024 14:40:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01E91C4A2C;
+	Tue, 15 Oct 2024 14:40:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729003230; cv=none; b=bvUz8GGvjxuAm6hW23gzfGJU4r8Dc+DMydCO1dF+THtWRYJRrAKYoQ7fhMo43q6S+dEPHQuCjGDhzq74mGO6jQxbjDRAySKgxFT5bnul5A8MLeacYA2+jzqjgK3S4fexbMxNrwjc5UYz5UCln0Z3AuaGEpz51Qos2fmACJ5u3u8=
+	t=1729003257; cv=none; b=NY5i+ls9l+KkhLxiNXaWEuF5LBlrhdLi0ibBcyRFm12PYO+E5VQ3YEoNluHAs+hb3i7+1myWYFi5WBOXj0roM0B/v3v5iE3OVwWK3ATG1Lka+gl2ubZxlQi/YakkNWbBTQXJcVhIyjMqo3ZI6No//rJIHEH4pJzNjvexgoJsY6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729003230; c=relaxed/simple;
-	bh=k9GQx+65Wq20zwo6mDcDTXDu7hgnpwGe16oAYfUcGic=;
+	s=arc-20240116; t=1729003257; c=relaxed/simple;
+	bh=h45voZ3l33ty37RQF0W2WNSzAywOCLZGEWusIeq6Kuc=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=hL0+/U4dIAy8i4XmC0cFdPTGJtxENAjC8wuvT/nw0zpa56XdEa6F1gH31VXWo7AUYwvyr9PQ5Q2rvDB88tBNBfOC3wKuqtKZ4tGs2xd5lMCWfcw6UdmigUtRzlALCMtTE4vPRvF1gjQ/P6dOCkWNVMA0JmKmwIBRHrZgJJrlhz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bmvoxCXy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C0CC4CEC6;
-	Tue, 15 Oct 2024 14:40:26 +0000 (UTC)
+	 MIME-Version:Content-Type; b=qtU/LOODE6i7hvho8zQKZ1M94n+sWAfeCQclQI93KU7qAB1A4MqAUqapyp1id0Rnkas1sAJuMS8eQjAJ48R6bRTiguY72ZE1krkrSWblBEg+3JgIi/H7wKfw8bAqsLhYv1wmOM1wsadq0jr8Lk542HUnxpCrTZVmW7m8pv2h7Kw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lEOwdjsw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B2FAC4CEC6;
+	Tue, 15 Oct 2024 14:40:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729003229;
-	bh=k9GQx+65Wq20zwo6mDcDTXDu7hgnpwGe16oAYfUcGic=;
+	s=k20201202; t=1729003256;
+	bh=h45voZ3l33ty37RQF0W2WNSzAywOCLZGEWusIeq6Kuc=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=bmvoxCXyzcuHs8IaLgwXNaQEAqgjuR/4aetJoBgdpYzKbLTzcUPgGVYOrsRPXrBKr
-	 pxcF7tQMT47Cb4gixPqGeGYtnRn8aYBQy4Q1eaB8g3diTGYLGK1C6XLmMBKjzOJEN3
-	 nKndgNEAjLPO8Hkl4oMGKW9pjBzNNqL7wsuq5ziwCJD8FP75q73oySRmkjk2s59D/P
-	 HwCVsA56BjDlG9g+LgrpgR9FS+lZ0G0K93Y6MpA8eM5qVKu6P9dov0QUQz6a1Cfqvb
-	 puc2AirCy8snCK4bExieqHJBO6O+6aUANCrSktdpKhLlHWMH30yD4dwfwsTUSozHpX
-	 vC2csQrdiQ7aA==
+	b=lEOwdjswxHb/fngcBMbmH7c/lymo/+exHYs4FoQWCtL8YM2yFNgoHs9PMaEikcpVP
+	 wnw/Kc2BRu9HA2JAfAuLUEu0jQHC42neuZ4a0RnNYHbj9dGwY3kMzhjjDRI0+5TgnE
+	 bw/uO3oPYyMCSIc1tyu5Uxw+1nVpFVRS7X8nZs0iZkDH9kgyDW31L1BD8XntFm3aSB
+	 b6DMdndcSmtkStcUkcl0UTtieiBa6G/GyVCBJFYKuABmWs5DFO2/O/6fump97C8NMf
+	 7GsbArSpUUdjpkYCuHQ3X3rh8RDCPpTd+V/G74IYBHrPdO+gCMBpjDZ3t0YjbLVYNo
+	 aH/916hbn5ZDg==
 From: Lee Jones <lee@kernel.org>
 To: Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -53,13 +53,13 @@ To: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
 Cc: linux-input@vger.kernel.org, devicetree@vger.kernel.org, 
  linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
  linux-leds@vger.kernel.org, linux-watchdog@vger.kernel.org
-In-Reply-To: <20241010-zii_yaml-v2-5-0ab730607422@nxp.com>
+In-Reply-To: <20241010-zii_yaml-v2-2-0ab730607422@nxp.com>
 References: <20241010-zii_yaml-v2-0-0ab730607422@nxp.com>
- <20241010-zii_yaml-v2-5-0ab730607422@nxp.com>
-Subject: Re: (subset) [PATCH v2 5/5] dt-bindings: mfd: convert
- zii,rave-sp.txt to yaml format
-Message-Id: <172900322623.629898.5064045014135877171.b4-ty@kernel.org>
-Date: Tue, 15 Oct 2024 15:40:26 +0100
+ <20241010-zii_yaml-v2-2-0ab730607422@nxp.com>
+Subject: Re: (subset) [PATCH v2 2/5] dt-bindings: backlight: convert
+ zii,rave-sp-backlight.txt to yaml
+Message-Id: <172900325306.630549.2100737513482910527.b4-ty@kernel.org>
+Date: Tue, 15 Oct 2024 15:40:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -70,18 +70,18 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Mailer: b4 0.13.0
 
-On Thu, 10 Oct 2024 11:42:42 -0400, Frank Li wrote:
-> Convert device binding doc zii,rave-sp.txt to yaml format.
-> Additional change:
-> - ref to other zii yaml files.
-> - remove rave-sp-hwmon and rave-sp-leds.
+On Thu, 10 Oct 2024 11:42:39 -0400, Frank Li wrote:
+> Convert device tree binding doc zii,rave-sp-backlight.txt to yaml format.
+> Additional Changes:
+> - Remove mfd parent node at example.
+> - Ref to backlight's common.yaml
 > 
 > 
 
 Applied, thanks!
 
-[5/5] dt-bindings: mfd: convert zii,rave-sp.txt to yaml format
-      commit: f4b00ab2c29960961f9641be8f3e8ba4960fd849
+[2/5] dt-bindings: backlight: convert zii,rave-sp-backlight.txt to yaml
+      commit: 0eda30af58809224d80dc3bf3f368fc677fe8c08
 
 --
 Lee Jones [李琼斯]
