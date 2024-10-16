@@ -1,205 +1,165 @@
-Return-Path: <linux-watchdog+bounces-2219-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2220-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54D9999F332
-	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Oct 2024 18:48:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 548309A0572
+	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Oct 2024 11:26:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9EF0AB22F8B
-	for <lists+linux-watchdog@lfdr.de>; Tue, 15 Oct 2024 16:48:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 041F6282E3D
+	for <lists+linux-watchdog@lfdr.de>; Wed, 16 Oct 2024 09:26:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C76D81F76C8;
-	Tue, 15 Oct 2024 16:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16484205E02;
+	Wed, 16 Oct 2024 09:26:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="ND11Q3V5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I1BXvJrO"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A316D1F76AC
-	for <linux-watchdog@vger.kernel.org>; Tue, 15 Oct 2024 16:48:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B54E204F88;
+	Wed, 16 Oct 2024 09:26:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729010889; cv=none; b=hKlGDrexgz+cXwzOj4V9cgsdLZbm5RYPOHWHSpTFvb4Zv7IZNBYN+o6/6+/xkBSfQUZMlRR1d5j1HC15zKUyCMBW7eB4bviSSPqxzOi2IMBxnIKASKGYRmDRs50tUqdBWFcN6Y4YSUYPZQGqNWhL9B5mErv4720g+A/6m9TdXxU=
+	t=1729070796; cv=none; b=hZ19MjWyRe4WBddI+f4yPQoJ90plbreZiQc1CZyd/xitkhDjVuGmZCJDPZkDoNRPtmAyX67g5hY862QEDUffddv4ZgpRSf7FX0ZHrgiwRMfLbzTUQ4LyslAeSvc2f7KHVizjckUjJLmr9ivBSafFgPQIg35EckdbNuMgFTN4Ve8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729010889; c=relaxed/simple;
-	bh=Do6R67fDrh9jcYKlaytygcK60uwldKHxRsm47aMNHGw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dO9oq++TOCikoDwSclJjptXw309909sn7TjjS4tbyCQiBawRvn2Ruv9XOp96ZynaA1vHdLEwNKia1DvEPrlYzOBud0unbNoFzK01Mm0o1/nDY0nX4AooPQdBdrz2eZvYbPAxw9KeDH2Ux4Fc5+qLU+lFPJG3Mi57LI5XsZsY8OU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=ND11Q3V5; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-37d55f0cf85so2742650f8f.3
-        for <linux-watchdog@vger.kernel.org>; Tue, 15 Oct 2024 09:48:07 -0700 (PDT)
+	s=arc-20240116; t=1729070796; c=relaxed/simple;
+	bh=xbv8g/d+YBrSH2U04+r+NIqzL9Cm0yWo2vxM2Km/75A=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Fqg2fUW48Ps6XmVxulPxaqNPMle+Npdv6LaI2hE2wcCLbpI38wbIpvtec8LkrCK6PrUOyCFtPR7eJ0BG8men3LnSOBbZ3JVmDK8D8C6d+QehRzn3yuaVRym2Wdgx3FSr/0LqB75jTJUVOJx/QMcpZHwjWD9qN1GNBxAyXIUrYUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I1BXvJrO; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a9a16b310f5so379478766b.0;
+        Wed, 16 Oct 2024 02:26:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1729010886; x=1729615686; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8+WjlxGYvCEnZMLQQq/g2hxfKe8FSL9YNlHSnfanC+Q=;
-        b=ND11Q3V5CbQbjKBaTyhLSaUK3vA8iLwFSE9vjjPMMMXv65XpQjNJm8otm6sDdcLG6L
-         /xuwfrH0PfdZVc3aaEmjn+qtaY6qJbAmJQ0MEt1YOOvfzKHagF7tlsc6JMMZJRH0gwyt
-         cc0hOSKpeRSV5R0KixwmncUOnHbTjbQMtjBDGIZlllDauIX5VxUExT0CpLuVFMzN9Lp0
-         5bj4GAbZ6zRlx4FSbHea7TnQYW78Bg25D3UBw/6/fiEGrmAWw40bP8KBrnYb2e8Nxigo
-         4VT8NNXHfRlIVMO7n1fZG+zSPo4NBePYywQ8Dvth6CHoIHHbpROit8i5o4fm1nF43Nfc
-         X0sQ==
+        d=gmail.com; s=20230601; t=1729070793; x=1729675593; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rMaOQqtMK7dh5z6AqS9oePkZV37kLn6/iI4c+MM8NYw=;
+        b=I1BXvJrOyn5iKAaj9SV9QTzEf6yRC4p00uSN1RFBpCMgxH52l0LIdtyUETs3Vv9WHk
+         W5pCYy1Jt8RGSeYJS2mc3iUrmPBcHCRfwiS4O28fBsggz2hRRb7/t9LToHysDLspeWKC
+         sBHcAA418ebdr1h8tLK6iOO0trr0qKHPJF/nnowW6hW6FuDjMtkIZ/8T4Ly7E700iL61
+         bPzWGQm2I2IxtxjLq6mXDdUYhjhHGf3xK6kgOgdNMlt8z49Cjx36O9LcMTnN83lhfgnI
+         gAAmiZE7/g6IrfFR8Ekwdlaizo+BzZRvxteUTuSva/wPPfpIBaI5zY0CLuqK0u2D2rxA
+         mFpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729010886; x=1729615686;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8+WjlxGYvCEnZMLQQq/g2hxfKe8FSL9YNlHSnfanC+Q=;
-        b=OunfuuEE+2NlsGqh+r038y4h4xg3NwaONEUViKMhPDxK3hCC11Dxb8krnXNsUoegXV
-         YiynaeSDxn9cdrKoWo8kLDgW09mrocLw25DuHzMln8ncHOk12MTii9mfkvbEFLVRjPOT
-         9/6binP8lMYuNSZFjWJvSJgbMNTmJcpRAmPfLS6p7dGUvUa0e+6m/GFq4XZ3aX7OqcZT
-         1fXkyb+aFTddFWjjILq+2ebX1wYIh/9lgyI/5rEBQ0W9ZKqz2syaYYKYr0a44pnS2AXt
-         W7uRAFwlqEwEWEYMiF2laOVhMzIX/hJu/642nFmHiLgzZaJd6bgoqE+8psNvh96w9iE+
-         8avQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXT2arwxg8wPFnWQbKVer/Oq+exeFB1Vsqt24feBsMhA5t8MQG3+Ul0OZWHMrOw/I9W2MoF2wR9Pujf4lrY+g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6deO0YmcTofwvNIzivWb0Sp7URt6BAWTk5bMdp8qOCQLQAHkJ
-	HHE7wlHDd89ukK3lO7/NN5dgbAxEAEriV2vP9Q4qdxzxuJrrYUeQR6Ta+uuZEoA=
-X-Google-Smtp-Source: AGHT+IFbPxKiOb7gV0asDYaMtDQ6cVmg+NsPy6xW6VOvqCFQFXVTlGbw+GFY1xG0Jhjvm9YrsIjHwQ==
-X-Received: by 2002:a05:6000:4f:b0:37c:cfeb:e612 with SMTP id ffacd0b85a97d-37d55198893mr9563540f8f.1.1729010885896;
-        Tue, 15 Oct 2024 09:48:05 -0700 (PDT)
-Received: from claudiu-X670E-Pro-RS.. ([82.78.167.23])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4313f56eab2sm22882045e9.26.2024.10.15.09.48.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2024 09:48:05 -0700 (PDT)
-From: Claudiu <claudiu.beznea@tuxon.dev>
-X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
-To: geert+renesas@glider.be,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	wim@linux-watchdog.org,
-	linux@roeck-us.net,
-	ulf.hansson@linaro.org
-Cc: linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	claudiu.beznea@tuxon.dev,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: [PATCH v4 4/4] watchdog: rzg2l_wdt: Power on the watchdog domain in the restart handler
-Date: Tue, 15 Oct 2024 19:47:32 +0300
-Message-Id: <20241015164732.4085249-5-claudiu.beznea.uj@bp.renesas.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20241015164732.4085249-1-claudiu.beznea.uj@bp.renesas.com>
-References: <20241015164732.4085249-1-claudiu.beznea.uj@bp.renesas.com>
+        d=1e100.net; s=20230601; t=1729070793; x=1729675593;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rMaOQqtMK7dh5z6AqS9oePkZV37kLn6/iI4c+MM8NYw=;
+        b=QEbMkJR9215u2g8ZWhnPeEoOsSoUnnFt1B5GJUF0vzATSvNjDhevmQmxWAs192pjLc
+         FoMW9FWkXyifHx0EfG0sHcJkiWhXKY1lywYjpvegXMdYuHqwh+QSbU6TrI3jnN1o6xM5
+         FZU4t25FWB+Wquaov3ba3OkrQ2+ZyGB4FVIIG6AJmzaR4DZmp/gC4ZzDdpoLMkWGH44A
+         0ULxWNerFS9zWl9nBGhwj7bO4hzBKj/VZitytbdTugSOa0qpvHhQWIpHZ0on742LVOao
+         PEW8/IUNjwgKYgy9xwczng883WqJPJ/jtYqDFm8ow1cbTl6OS74+UmSXmXM/0tBEiJwl
+         /5Ig==
+X-Forwarded-Encrypted: i=1; AJvYcCUBvij4Jw3PK6eqhpoaamyHfnRaonEUxrGa0ZPdbyf88NhUwyzRyREWjrjjaXpnLJBx8YGvxAG3XIyC@vger.kernel.org, AJvYcCWIsmApHFdjVdBvn5NU95EYNpCZ8sqRCkRPMDvvQCFRcI1o2Ph3jnKHsmWMsCHPgo/RkN2grwUgnjGoySk2@vger.kernel.org, AJvYcCXl+WtUJDwT4UMIKsw3sZreF0eYJyJRMavVdSqdHomU7cO0PkkiS3rStgzabaxSG5SfOnvT9qNczBmFYC9B41w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/X2y2ZT3ax1wcWjgmohLmvB3GSVagrjLcHAGn8RbGHSqtKjtI
+	vtXIZvMSLUNbWrpfKDxzLnp1xCB8+GDloVvm1X0JZiIASPt++ZGO
+X-Google-Smtp-Source: AGHT+IHMzxBtdEjtVgLCn4hmoAnv2sE5tdGFWFFOdsQvOO0VupDmPCb8kIWiZ+cHK0TgZ/yPcT5P7A==
+X-Received: by 2002:a17:907:3fa0:b0:a99:f9e6:1d0 with SMTP id a640c23a62f3a-a99f9e61f50mr1161706966b.27.1729070792226;
+        Wed, 16 Oct 2024 02:26:32 -0700 (PDT)
+Received: from [10.34.14.228] ([95.183.227.34])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a298170fesm165347266b.142.2024.10.16.02.26.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Oct 2024 02:26:31 -0700 (PDT)
+Message-ID: <f9b09f59-a222-4b75-a6ef-c7fb7c2cff9e@gmail.com>
+Date: Wed, 16 Oct 2024 12:26:26 +0300
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Yassine Oudjana <yassine.oudjana@gmail.com>
+Subject: Re: [PATCH 2/2] watchdog: mtk_wdt: Add support for MT6735 WDT
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Yassine Oudjana <y.oudjana@protonmail.com>,
+ linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org
+References: <20230302124015.75546-1-y.oudjana@protonmail.com>
+ <20230302124015.75546-3-y.oudjana@protonmail.com>
+ <0398e95e-dbb8-2e41-7b36-12e36b8729f0@collabora.com>
+Content-Language: en-US
+In-Reply-To: <0398e95e-dbb8-2e41-7b36-12e36b8729f0@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On 02/03/2023 6:15 pm, AngeloGioacchino Del Regno wrote:
+> Il 02/03/23 13:40, Yassine Oudjana ha scritto:
+>> From: Yassine Oudjana <y.oudjana@protonmail.com>
+>>
+>> Add support for the watchdog timer/top reset generation unit found on 
+>> MT6735.
+>> Disable WDT_MODE_IRQ_EN in mtk_wdt_restart in order to make TOPRGU assert
+>> the SYSRST pin instead of issuing an IRQ. This change may be needed in 
+>> other
+>> SoCs as well.
+>>
+>> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>> ---
+>>   drivers/watchdog/mtk_wdt.c | 12 ++++++++++++
+>>   1 file changed, 12 insertions(+)
+>>
+>> diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+>> index a9c437598e7e..5a7a7b2b3727 100644
+>> --- a/drivers/watchdog/mtk_wdt.c
+>> +++ b/drivers/watchdog/mtk_wdt.c
+>> @@ -10,6 +10,7 @@
+>>    */
+>>   #include <dt-bindings/reset/mt2712-resets.h>
+>> +#include <dt-bindings/reset/mediatek,mt6735-wdt.h>
+>>   #include <dt-bindings/reset/mediatek,mt6795-resets.h>
+>>   #include <dt-bindings/reset/mt7986-resets.h>
+>>   #include <dt-bindings/reset/mt8183-resets.h>
+>> @@ -82,6 +83,10 @@ static const struct mtk_wdt_data mt2712_data = {
+>>       .toprgu_sw_rst_num = MT2712_TOPRGU_SW_RST_NUM,
+>>   };
+>> +static const struct mtk_wdt_data mt6735_data = {
+>> +    .toprgu_sw_rst_num = MT6735_TOPRGU_RST_NUM,
+>> +};
+>> +
+>>   static const struct mtk_wdt_data mt6795_data = {
+>>       .toprgu_sw_rst_num = MT6795_TOPRGU_SW_RST_NUM,
+>>   };
+>> @@ -187,9 +192,15 @@ static int mtk_wdt_restart(struct watchdog_device 
+>> *wdt_dev,
+>>   {
+>>       struct mtk_wdt_dev *mtk_wdt = watchdog_get_drvdata(wdt_dev);
+>>       void __iomem *wdt_base;
+>> +    u32 reg;
+>>       wdt_base = mtk_wdt->wdt_base;
+>> +    /* Enable reset in order to issue a system reset instead of an 
+>> IRQ */
+>> +    reg = readl(wdt_base + WDT_MODE);
+>> +    reg &= ~WDT_MODE_IRQ_EN;
+>> +    writel(reg | WDT_MODE_KEY, wdt_base + WDT_MODE);
+> 
+> This is unnecessary and already done in mtk_wdt_start().
+> If you think you *require* this snippet, you most likely misconfigured the
+> devicetree node for your device :-)
 
-On RZ/G3S the watchdog can be part of a software-controlled PM domain. In
-this case, the watchdog device need to be powered on in
-struct watchdog_ops::restart API. This can be done though
-pm_runtime_resume_and_get() API if the watchdog PM domain and watchdog
-device are marked as IRQ safe. We mark the watchdog PM domain as IRQ safe
-with GENPD_FLAG_IRQ_SAFE when the watchdog PM domain is registered and the
-watchdog device though pm_runtime_irq_safe().
+Ok so mtk_wdt_start is never called. I'm still not quite sure how the 
+watchdog works but it seems to me like it's supposed to be started from 
+userspace. I also see some drivers calling it in probe.
 
-Before commit e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait
-context'") pm_runtime_get_sync() was used in watchdog restart handler
-(which is similar to pm_runtime_resume_and_get() except the later one
-handles the runtime resume errors).
-
-Commit e4cf89596c1f ("watchdog: rzg2l_wdt: Fix 'BUG: Invalid wait
-context'") dropped the pm_runtime_get_sync() and replaced it with
-clk_prepare_enable() to avoid invalid wait context due to genpd_lock()
-in genpd_runtime_resume() being called from atomic context. But
-clk_prepare_enable() doesn't fit for this either (as reported by
-Ulf Hansson) as clk_prepare() can also sleep (it just not throw invalid
-wait context warning as it is not written for this).
-
-Because the watchdog device is marked now as IRQ safe (though this patch)
-the irq_safe_dev_in_sleep_domain() call from genpd_runtime_resume() returns
-1 for devices not registering an IRQ safe PM domain for watchdog (as the
-watchdog device is IRQ safe, PM domain is not and watchdog PM domain is
-always-on), this being the case for RZ/G3S with old device trees and
-the rest of the SoCs that use this driver, we can now drop also the
-clk_prepare_enable() calls in restart handler and rely on
-pm_runtime_resume_and_get().
-
-Thus, drop clk_prepare_enable() and use pm_runtime_resume_and_get() in
-watchdog restart handler.
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
----
-
-Changes in v4:
-- collected Geert's tag
-
-Changes in v3:
-- collected Ulf's tag
-
-Changes in v2:
-- adjusted patch description and comment from code
-- collected tags
-
-Changes since RFC:
-- use pm_runtime_resume_and_get() and pm_runtime_irq_safe()
-- drop clock prepare in probe
-
- drivers/watchdog/rzg2l_wdt.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-index 2a35f890a288..11bbe48160ec 100644
---- a/drivers/watchdog/rzg2l_wdt.c
-+++ b/drivers/watchdog/rzg2l_wdt.c
-@@ -12,6 +12,7 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
- #include <linux/reset.h>
- #include <linux/units.h>
-@@ -166,8 +167,22 @@ static int rzg2l_wdt_restart(struct watchdog_device *wdev,
- 	struct rzg2l_wdt_priv *priv = watchdog_get_drvdata(wdev);
- 	int ret;
- 
--	clk_prepare_enable(priv->pclk);
--	clk_prepare_enable(priv->osc_clk);
-+	/*
-+	 * In case of RZ/G3S the watchdog device may be part of an IRQ safe power
-+	 * domain that is currently powered off. In this case we need to power
-+	 * it on before accessing registers. Along with this the clocks will be
-+	 * enabled. We don't undo the pm_runtime_resume_and_get() as the device
-+	 * need to be on for the reboot to happen.
-+	 *
-+	 * For the rest of SoCs not registering a watchdog IRQ safe power
-+	 * domain it is safe to call pm_runtime_resume_and_get() as the
-+	 * irq_safe_dev_in_sleep_domain() call in genpd_runtime_resume()
-+	 * returns non zero value and the genpd_lock() is avoided, thus, there
-+	 * will be no invalid wait context reported by lockdep.
-+	 */
-+	ret = pm_runtime_resume_and_get(wdev->parent);
-+	if (ret)
-+		return ret;
- 
- 	if (priv->devtype == WDT_RZG2L) {
- 		ret = reset_control_deassert(priv->rstc);
-@@ -275,6 +290,7 @@ static int rzg2l_wdt_probe(struct platform_device *pdev)
- 
- 	priv->devtype = (uintptr_t)of_device_get_match_data(dev);
- 
-+	pm_runtime_irq_safe(&pdev->dev);
- 	pm_runtime_enable(&pdev->dev);
- 
- 	priv->wdev.info = &rzg2l_wdt_ident;
--- 
-2.39.2
-
+Say I don't want to use the watchdog (which I don't, all I need from 
+TOPRGU is the resets, I don't care about the watchdog). Not starting the 
+watchdog means I can't reset the system because all mtk_wdt_restart will 
+do is make TOPRGU send me an IRQ that I have no use for. According to 
+the datasheet, setting WDT_MODE_IRQ_EN configures TOPRGU to send an IRQ 
+on system reset event (either watchdog timeout or software watchdog 
+reset) while clearing it makes it actually issue a system reset. What 
+can I do in this case?
 
