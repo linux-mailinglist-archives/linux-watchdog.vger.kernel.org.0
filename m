@@ -1,250 +1,183 @@
-Return-Path: <linux-watchdog+bounces-2229-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2230-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2984F9A33D0
-	for <lists+linux-watchdog@lfdr.de>; Fri, 18 Oct 2024 06:30:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DADDA9A3916
+	for <lists+linux-watchdog@lfdr.de>; Fri, 18 Oct 2024 10:50:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BE341C20E25
-	for <lists+linux-watchdog@lfdr.de>; Fri, 18 Oct 2024 04:29:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08C811C252E8
+	for <lists+linux-watchdog@lfdr.de>; Fri, 18 Oct 2024 08:50:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 747A61714A5;
-	Fri, 18 Oct 2024 04:29:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 464A518FC67;
+	Fri, 18 Oct 2024 08:50:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TG7GeQXi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cGvX/ymO"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B468520E32F;
-	Fri, 18 Oct 2024 04:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 727BE18EFDC
+	for <linux-watchdog@vger.kernel.org>; Fri, 18 Oct 2024 08:50:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729225795; cv=none; b=cC9U5jQJz+gVASLeZqT748KoJ0j+iQd31EGM/IthcUSSGSVFehB7l0Lmb3S595EtkvZIg6bo0VM5T10QI+JahplnUztLAF8tBt7AcZsz1MjN9+shms+jGK+SCzzoC6pc07C3UFeLBnL2q0jHlUxOFXjQajsdRc1x5toTc35/63Q=
+	t=1729241437; cv=none; b=ZiUBOOOmx6yOkkDfgv7J/7/38UubmIklH1VggsMJu+/jsDF5TrTtV+kmRWd7BsxlmsazFnQ4veQqcIWzc760yIyQYsZO3XwQN7AS+tGb0wH58KqheWdcHf26cUgq7jjAL/R7+ki/9roGdZlieiAvOq3QuBUwEllPm03JMMFzbG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729225795; c=relaxed/simple;
-	bh=Vv3Y5ZH+3zJm4Gn7OSRkForj6TI3DVIQ473KN96JQ2g=;
+	s=arc-20240116; t=1729241437; c=relaxed/simple;
+	bh=q6UaaBG1S1+qACQ6YRhwicu8VBEuLQLOH0LNHXVY9yc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aLvuFlXuXyarxAa3jiIX4h0Rj/aw+r7AF8NlbvnQ0bx2LzQ0QjU7SW7b4x+THNlt7CKjyJHkx9W7cg6K6vAYxcKX5uRemFFkRcYzzl55fYdifnYlyO+RyRbQNiVKEOrDKKo5IbOw8Xbxpk168+CfKWUydaFdkI3VRKxG7wqNNSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TG7GeQXi; arc=none smtp.client-ip=209.85.217.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4a487a7519fso494562137.0;
-        Thu, 17 Oct 2024 21:29:53 -0700 (PDT)
+	 To:Cc:Content-Type; b=uLwfUfDowaIHk6uC8p+XkMsiOv+BtoLCF1bwdLPbi8uBYCUX2O80INXvFaZQPxLOZ1BasPiTgYwZcCvUhmarEraAGUM7iajKD5fHtJ5SOR+9yzFGQghp2xmE+VGLZPJBdaATybf46D924FBTn2VNArljbeiEPyHBoWlGYycKEhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cGvX/ymO; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6e5a5abc915so16435267b3.3
+        for <linux-watchdog@vger.kernel.org>; Fri, 18 Oct 2024 01:50:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729225792; x=1729830592; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VIficAJv2QmRgfNKu6z0Gj8S6rkpuYN83vvojTzaMZM=;
-        b=TG7GeQXiberyBhrK8VfdRj29ZVl9kYCW5xb2X8ww+p/X0w8MXHL8+JknBDshfuq9Fb
-         t4ZodaAn5ClWXKjqg58rhi6yb0/EN4IlC+v+Jl9QbxGNjv5Rs7i+91CyY0QiSBwq5kTO
-         v1bwCxSnTf6R7YaGin7tqLLmyt9Ksuf4fUJ8Idfif+07L9sy9IPan00ishSwBO+98UtF
-         +ZZ0mbOzdnE5xdd+AO6NmFucdh0dr8Ax7J3UFNEemoBKx1a6Px69ekY+OxkPoYOsW92J
-         z+AsRVuGb+Sn4k6pKGkKnyKISF4OieKBsIJ9AgbXONsUeB1LSjiqZ4sUbYMzsqvehOiN
-         Mj9Q==
+        d=linaro.org; s=google; t=1729241434; x=1729846234; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4/RSforFp+VQNtLc4ofIvEcTd/s/JTnlqhsY7WVRH24=;
+        b=cGvX/ymOsRiCUhCtm6gKWeuZv7bEICcUSiqlkEPEsnKr/DjCPCeM5szJA6HiqIMEJJ
+         7GBU7tluoAZ/Lc/wJZF4Dp0fflq8F72YmkdRI7OQTp6n8DQfwyLtOGwFr79mM4LDVKpW
+         z2e1o2Qq7rnQ+MM6bWbLXn4LLxzwTssXZhGeZ/QCQRRYqGVNzAHfePrMMmlKjRI0x9NN
+         H59W4nbjDXpBXrFw101KgpBc3IIaORYMIlHKzenIVrAXJK77QRvbdS85C30cZiZM40Ql
+         Yr2J4dEKBnCjbQk4qON2gBvMLCi0Eto8dhwgnNmguO9ApD8m3r33VPrR4mmz7UGDTqvB
+         m3BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729225792; x=1729830592;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VIficAJv2QmRgfNKu6z0Gj8S6rkpuYN83vvojTzaMZM=;
-        b=V1UpqDAjU5Zy1YP5n54ldsxFXc8YaNavhBCvOMegFtJHsUUGwqhkg8Cre99OVF06ts
-         r87+B/1ZQ62fmMLtwNxzNi3bpJGsK161HKIcL2TEbJyiR1RRHm2o4ZOo+DC90jvIiLc3
-         eP71IlQIIlD1/2G7IZN1FlrLuY5EpEr/t+PaB+P225c7th522HOXiz/UJ5ySIQpfm1+K
-         Aik4QsptVHuY+KojN6hYAowrI6tARcUJvCe7dYhWugdyUArpTTisexmrLWxzbxICkA0J
-         cc+WVw5oglCr9I/PPZ/XemdtUXusGJltmpqCrONx6XSKQOtNvpItpd52Ai3jQTCYKGz3
-         wIlg==
-X-Forwarded-Encrypted: i=1; AJvYcCWB9/lMBBkZbxOtNG4taLlSc70SNvyAj4oUZb0YAjzY6/F/8mT1zgy0XYinhEFVWnACynBZ6gCGAnLYyig=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/FytXE3cLPcL38Os+ic7Yvzh5U/l/7fkse6yX79NOO9yupQXe
-	pBPr6OC3Ww2q6XC7TMuuuJusC2rQ5SZhIowknx3hEwu8a5MM5kjIZN0k09e0MtAvxWoOhKIvggB
-	K8XC1wRm0w/xKiKmzdXdGIO4GImpkWw/F
-X-Google-Smtp-Source: AGHT+IFY+skUvXKTmPtXePBZRhZjdxHs8SBVKUpgXoawLa1v+kAY84pgsdMUhY6RlgRWxS2eqWCVmMV/XvVRESIjRpo=
-X-Received: by 2002:a05:6102:c90:b0:4a5:ad80:a9e1 with SMTP id
- ada2fe7eead31-4a5d6bd77efmr485137137.28.1729225792571; Thu, 17 Oct 2024
- 21:29:52 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729241434; x=1729846234;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4/RSforFp+VQNtLc4ofIvEcTd/s/JTnlqhsY7WVRH24=;
+        b=SyECbKxhgdaBecEVE0zX5RXUYcq5CT39Xsz9cRgO1M7H5MxZiscCz9WSrUxplu3OKQ
+         qIoqnCWqO/87NnL7f+tlbeTDNPco1s7nrkJM2W/Vd6o+dRk80dK059XZZarkRr8U6GUI
+         i40pgT/JvDk8+W29K2rKiLzZWuDU/WxEm6wU3QRAlYKGfjhITIKhz76Q8/LGbsc/A22X
+         0g2S8aLfp1cL8eRNTogfk84i6pU7AVeC8xuZ7zivcUyW7C7+yua6YoD7ETalqVBmKOcx
+         7HugLy2jQSvjLSN/oKLi39HHz6cvAtxurDnHTl7fWN2HR9OxXwZKOFpaMKn30q0uue04
+         VlVA==
+X-Forwarded-Encrypted: i=1; AJvYcCXL0b4etbO+vGirzyyRcwuQcPxorHDdvmQ/9IBclyW2i0l5k1/gnBmwkF2JOYJEk0GDn7+ml5aKXAYpa/K0Wg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFREzCnms2gDF3xRRXTgpzjhpJdjnIuGJnB2pX9oHDXotn8eIG
+	5pAN5cnM8tKnDBp2gEMdZYxaKFl2xM+jMPspVlZhmKTbbHoVX3ugYyyV2GCkzpyGPpXQvH5FkPd
+	Tub9VEDsoCR1mgl5X/GQzqUeTOoYz3YA/+Xr1mg==
+X-Google-Smtp-Source: AGHT+IEfhw8dTGOqtMUmLixgGGVRqyf2gSqNzfjdP2OonSOoTDcrjLgzvPuP0+fWji/QpUGei3fuavAC7iK/8ckB4NI=
+X-Received: by 2002:a05:690c:fc2:b0:6e2:1090:af31 with SMTP id
+ 00721157ae682-6e5bfbe7c76mr17174717b3.3.1729241434462; Fri, 18 Oct 2024
+ 01:50:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241018030917.2540841-1-james.hilliard1@gmail.com> <66922a0b-6e30-4501-9262-8bdd224155f9@roeck-us.net>
-In-Reply-To: <66922a0b-6e30-4501-9262-8bdd224155f9@roeck-us.net>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 17 Oct 2024 22:29:41 -0600
-Message-ID: <CADvTj4pnYn478mzM6LQFJ7x1SBANY_Q4JBygTUqx2PnJgJkQxg@mail.gmail.com>
-Subject: Re: [PATCH] watchdog: it87_wdt: add quirks for some Qotom IT8786 boards
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-watchdog@vger.kernel.org, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	linux-kernel@vger.kernel.org
+References: <20241015164732.4085249-1-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <20241015164732.4085249-1-claudiu.beznea.uj@bp.renesas.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 18 Oct 2024 10:49:58 +0200
+Message-ID: <CAPDyKFq1-fW=d5QiEcYNkErpMuBo0aZzB1pos1CHcPZmAWGTRw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] watchdog: rzg2l_wdt: Enable properly the watchdog
+ clocks and power domain
+To: Claudiu <claudiu.beznea@tuxon.dev>
+Cc: geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org, 
+	wim@linux-watchdog.org, linux@roeck-us.net, linux-renesas-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 17, 2024 at 9:59=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
+On Tue, 15 Oct 2024 at 18:47, Claudiu <claudiu.beznea@tuxon.dev> wrote:
 >
-> On 10/17/24 20:09, James Hilliard wrote:
-> > For the watchdog timer to work properly on the QCML04 board we need to
-> > set PWRGD enable in the Environment Controller Configuration Registers
-> > Special Configuration Register 1 when it is not already set, this may
-> > be the case when the watchdog is not enabled from within the BIOS.
-> >
-> > For the Qotom QGLK02 board the vendor indicates that the IT8786
-> > watchdog hardware is not functional due to a conflict with the BIOS
-> > power-on function, with PWRGD set the watchdog will trigger but the
-> > board will poweroff rather than restart as expected. Disable the
-> > it87 driver on this broken hardware.
-> >
+> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 >
-> This shouldn't be done in drivers, and it doesn't scale. The driver needs
-> to be disabled with the mechanism supported by the distribution, for exam=
-ple
-> in /etc/modprobe.d/blacklist-watchdog.conf, or by whatever other mechanis=
-m
-> the distribution supports for that purpose.
+> Hi,
+>
+> Watchdog device available on RZ/G3S SoC is part of a software-controlled
+> power domain. The watchdog driver implements struct
+> watchdog_ops::restart() handler which is called in atomic context via
+> this call chain:
+>
+> kernel_restart() ->
+>   machine_restart() ->
+>     do_kernel_restart() ->
+>       atomic_notifier_call_chain() ->
+>         watchdog_restart_notifier()
+>           rzg2l_wdt_restart()
+>
+> When the rzg2l_wdt_restart() is called it may happen that the watchdog
+> clocks to be disabled and the associated power domain to be off.
+> Accessing watchdog registers in this state leads to aborts and system
+> blocks.
+>
+> To solve this issue the watchdog power domain was marked as IRQ safe
+> as well as watchdog device (as proposed by Ulf Hansson). Along with
+> it the clk_prepare_enable() calls from the watchdog restart() handler
+> were removed and all is based now on pm_runtime_resume_and_get()
+> as explained in patch 03/03.
+>
+> Series contains also power domain driver changes to be able to
+> register the watchdog PM domain as an IRQ safe one.
+>
+> Initial RFC series for solving this issue was posted at [1].
+>
+> It is safe to merge watchdog and PM domain driver changes though
+> different trees.
+>
+> Thank you,
+> Claudiu Beznea
+>
+> [1] https://lore.kernel.org/all/20240619120920.2703605-1-claudiu.beznea.uj@bp.renesas.com/
+>
+> Changes in v4:
+> - in patch 1/1, function rzg2l_cpg_pd_setup():
+> -- call rzg2l_cpg_power_on() unconditionally of governor
+> -- drop governor's parameter and decide what governor to use based on
+>    always_on
+> - collected tags
+>
+> Changes in v3:
+> - added patch "clk: renesas: rzg2l-cpg: Move PM domain power on in
+>   rzg2l_cpg_pd_setup()"
+> - addressed review comments
+> - collected tags
+> - per-patch changes are listed in individual patches
+>
+> Changes in v2:
+> - adjusted patch title for patch 02/03
+> - adjusted description for patch 03/03 along with comment
+>   from code
+>
+> Changes since RFC:
+> - dropped patches 01/03, 02/03 from RFC
+> - adjusted power domain driver to be able to register the
+>   watchdog PM domain as an IRQ safe one
+> - drop clock prepare approach from watchdog driver presented in RFC
+>   and rely only on pm_runtime_resume_and_get()
+> - mark the watchdog device as IRQ safe
+>
+>
+> Claudiu Beznea (4):
+>   clk: renesas: rzg2l-cpg: Move PM domain power on in
+>     rzg2l_cpg_pd_setup()
+>   clk: renesas: rzg2l-cpg: Use GENPD_FLAG_* flags instead of local ones
+>   clk: renesas: r9a08g045: Mark the watchdog and always-on PM domains as
+>     IRQ safe
+>   watchdog: rzg2l_wdt: Power on the watchdog domain in the restart
+>     handler
+>
+>  drivers/clk/renesas/r9a08g045-cpg.c | 52 +++++++++++------------------
+>  drivers/clk/renesas/rzg2l-cpg.c     | 41 ++++++++++++-----------
+>  drivers/clk/renesas/rzg2l-cpg.h     | 10 ++----
+>  drivers/watchdog/rzg2l_wdt.c        | 20 +++++++++--
+>  4 files changed, 63 insertions(+), 60 deletions(-)
+>
+> --
+> 2.39.2
+>
 
-There isn't really a good way that I've found with my setup since I use com=
-mon
-images for both of these boards. I'm also worried that it's much easier to =
-mess
-something critical like this up if user space is involved in hardware detec=
-tion.
+For the series, feel free to add:
 
-Many other watchdog drivers do this sort of thing so I'm a bit confused why=
- we
-would want to not do that here as well, for example:
-https://github.com/torvalds/linux/blob/v6.11/drivers/watchdog/renesas_wdt.c=
-#L176-L207
-https://github.com/torvalds/linux/blob/v6.11/drivers/watchdog/ebc-c384_wdt.=
-c#L125
-https://github.com/torvalds/linux/blob/v6.11/drivers/watchdog/lenovo_se10_w=
-dt.c#L242-L285
-https://github.com/torvalds/linux/blob/v6.11/drivers/watchdog/sbc_fitpc2_wd=
-t.c#L203-L206
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
->
-> Guenter
->
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> >   drivers/watchdog/it87_wdt.c | 55 ++++++++++++++++++++++++++++++++++++=
-+
-> >   1 file changed, 55 insertions(+)
-> >
-> > diff --git a/drivers/watchdog/it87_wdt.c b/drivers/watchdog/it87_wdt.c
-> > index 3e8c15138edd..dec501c21fd3 100644
-> > --- a/drivers/watchdog/it87_wdt.c
-> > +++ b/drivers/watchdog/it87_wdt.c
-> > @@ -20,6 +20,7 @@
-> >
-> >   #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> >
-> > +#include <linux/dmi.h>
-> >   #include <linux/init.h>
-> >   #include <linux/io.h>
-> >   #include <linux/kernel.h>
-> > @@ -40,6 +41,7 @@
-> >   #define VAL         0x2f
-> >
-> >   /* Logical device Numbers LDN */
-> > +#define EC           0x04
-> >   #define GPIO                0x07
-> >
-> >   /* Configuration Registers and Functions */
-> > @@ -73,6 +75,12 @@
-> >   #define IT8784_ID   0x8784
-> >   #define IT8786_ID   0x8786
-> >
-> > +/* Environment Controller Configuration Registers LDN=3D0x04 */
-> > +#define SCR1         0xfa
-> > +
-> > +/* Environment Controller Bits SCR1 */
-> > +#define WDT_PWRGD    0x20
-> > +
-> >   /* GPIO Configuration Registers LDN=3D0x07 */
-> >   #define WDTCTRL             0x71
-> >   #define WDTCFG              0x72
-> > @@ -240,6 +248,28 @@ static int wdt_set_timeout(struct watchdog_device =
-*wdd, unsigned int t)
-> >       return ret;
-> >   }
-> >
-> > +enum {
-> > +     IT87_WDT_BROKEN                 =3D BIT(0),
-> > +     IT87_WDT_OUTPUT_THROUGH_PWRGD   =3D BIT(1),
-> > +};
-> > +
-> > +static const struct dmi_system_id it8786_quirks[] =3D {
-> > +     {
-> > +             /* Qotom Q730P/Q8XXG2-P */
-> > +             .matches =3D {
-> > +                     DMI_EXACT_MATCH(DMI_BOARD_NAME, "QGLK02"),
-> > +             },
-> > +             .driver_data =3D (void *)IT87_WDT_BROKEN,
-> > +     },
-> > +     {
-> > +             /* Qotom Q30900P */
-> > +             .matches =3D {
-> > +                     DMI_EXACT_MATCH(DMI_BOARD_NAME, "QCML04"),
-> > +             },
-> > +             .driver_data =3D (void *)IT87_WDT_OUTPUT_THROUGH_PWRGD,
-> > +     }
-> > +};
-> > +
-> >   static const struct watchdog_info ident =3D {
-> >       .options =3D WDIOF_SETTIMEOUT | WDIOF_MAGICCLOSE | WDIOF_KEEPALIV=
-EPING,
-> >       .firmware_version =3D 1,
-> > @@ -261,8 +291,10 @@ static struct watchdog_device wdt_dev =3D {
-> >
-> >   static int __init it87_wdt_init(void)
-> >   {
-> > +     const struct dmi_system_id *dmi_id;
-> >       u8  chip_rev;
-> >       u8 ctrl;
-> > +     int quirks =3D 0;
-> >       int rc;
-> >
-> >       rc =3D superio_enter();
-> > @@ -273,6 +305,20 @@ static int __init it87_wdt_init(void)
-> >       chip_rev  =3D superio_inb(CHIPREV) & 0x0f;
-> >       superio_exit();
-> >
-> > +     switch (chip_type) {
-> > +     case IT8786_ID:
-> > +             dmi_id =3D dmi_first_match(it8786_quirks);
-> > +             break;
-> > +     default:
-> > +             dmi_id =3D NULL;
-> > +     }
-> > +
-> > +     if (dmi_id)
-> > +             quirks =3D (long)dmi_id->driver_data;
-> > +
-> > +     if (quirks & IT87_WDT_BROKEN)
-> > +             return -ENODEV;
-> > +
-> >       switch (chip_type) {
-> >       case IT8702_ID:
-> >               max_units =3D 255;
-> > @@ -333,6 +379,15 @@ static int __init it87_wdt_init(void)
-> >               superio_outb(0x00, WDTCTRL);
-> >       }
-> >
-> > +     if (quirks & IT87_WDT_OUTPUT_THROUGH_PWRGD) {
-> > +             superio_select(EC);
-> > +             ctrl =3D superio_inb(SCR1);
-> > +             if (!(ctrl & WDT_PWRGD)) {
-> > +                     ctrl |=3D WDT_PWRGD;
-> > +                     superio_outb(ctrl, SCR1);
-> > +             }
-> > +     }
-> > +
-> >       superio_exit();
-> >
-> >       if (timeout < 1 || timeout > max_units * 60) {
->
+Kind regards
+Uffe
 
