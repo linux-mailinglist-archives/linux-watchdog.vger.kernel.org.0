@@ -1,180 +1,213 @@
-Return-Path: <linux-watchdog+bounces-2245-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2248-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3C7F9A5A85
-	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Oct 2024 08:39:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A365E9A689B
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Oct 2024 14:35:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2834BB217D3
-	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Oct 2024 06:39:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57ECE288927
+	for <lists+linux-watchdog@lfdr.de>; Mon, 21 Oct 2024 12:35:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BB211CF5C8;
-	Mon, 21 Oct 2024 06:39:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F62A1EF935;
+	Mon, 21 Oct 2024 12:35:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="svCjVUlX"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="n3Da1lY5"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECDFB1CFEB0
-	for <linux-watchdog@vger.kernel.org>; Mon, 21 Oct 2024 06:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDB51E884E;
+	Mon, 21 Oct 2024 12:35:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729492784; cv=none; b=WB/PM0+krLQCTH3zd0KX8BrszSJpRwiHZjuDB1iyAfzGcIrcfW6zh4BbksjdJhniGIp4o1rc/Ig3bhU9CIhWiSK0aDS/H61AWGoATTkrDrY6P6peLwoWkPVQnmp3r4tDtTNWHSNrMQ74NhsxoYafC5MAzUzXqpN1JdABFPwScco=
+	t=1729514136; cv=none; b=qsesQyyFBXR6DlIFYkjWIn2Zo/ttIjDgl/U8ns6Qb/Xlal9fOokngXiV4hYPkWlJA7gCVIG2VSq9YK+6aXaBQ5deurkYl/+52COfU6j90/DdXdUi/1n3PuKUQhRDbSo/W6fz7ZDhe0vb4ydSezoivWZqHHprPWaTwxqvlkhEOtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729492784; c=relaxed/simple;
-	bh=toSZEPuA8KtW4NGZWit+YtMDDVelJFCqeH6SIX+0vSQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=kmpaYg+8fzrlidnFvQjD7I1P4b/5Ugd0udXiSvVVdkCg6XcZ6WL8UgVrorIBYhWSjuaregqgNfz1vRP1JEygbnyWonyuB0P7sC7OeawA3u4yfWwx77UtZddSl+qbKvkefv4Q7/lOTTIT/6jATuaVcVjmoeUPjsHMjy5Wr0j11eU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=svCjVUlX; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20241021063940epoutp040d39349b0880930e1a0d13bed92c4f02~AZIUzJctf1010110101epoutp04Z
-	for <linux-watchdog@vger.kernel.org>; Mon, 21 Oct 2024 06:39:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20241021063940epoutp040d39349b0880930e1a0d13bed92c4f02~AZIUzJctf1010110101epoutp04Z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1729492780;
-	bh=QSyRVDO0W3RLAiNZJSPSIuTvox4rmOFWkLwxUqIuoeg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=svCjVUlXHVBLUOq1j8m8yM1vlISe9t+eXUbD/QvYXAPIMhl29b07C6uy5dReImasm
-	 /48iczIkGZCmqRPpBHovgrjb2NwFFM7iZ6y69EV6NvTRYIDJA2bWND0JcRwzr0u2v9
-	 TRct53kfI9MTQZxJElCtxPAhg1PLD9qUrkCSfUZQ=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-	20241021063939epcas2p454e9cc22e689e4f877c2dc872993f24e~AZIUP4-u_2426824268epcas2p4P;
-	Mon, 21 Oct 2024 06:39:39 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.88]) by
-	epsnrtp1.localdomain (Postfix) with ESMTP id 4XX5JV6mMWz4x9Q1; Mon, 21 Oct
-	2024 06:39:38 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-	epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-	CF.57.09770.A27F5176; Mon, 21 Oct 2024 15:39:38 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
-	20241021063938epcas2p1c01c89badb532f08a46087a4907df7dc~AZIS9GdeQ2425624256epcas2p1x;
-	Mon, 21 Oct 2024 06:39:38 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20241021063938epsmtrp249ea0445f9583877a9ddffb0e23e3470~AZIS8Jh482414924149epsmtrp2e;
-	Mon, 21 Oct 2024 06:39:38 +0000 (GMT)
-X-AuditID: b6c32a46-638d9a800000262a-13-6715f72a8da5
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	45.F8.08227.A27F5176; Mon, 21 Oct 2024 15:39:38 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.229.9.55]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20241021063937epsmtip20d8581a5f2d02f8c61d13bd58fcc11e7~AZISuxjK31927319273epsmtip2W;
-	Mon, 21 Oct 2024 06:39:37 +0000 (GMT)
-From: Taewan Kim <trunixs.kim@samsung.com>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
-	<linux@roeck-us.net>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
-	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Alim Akhtar
-	<alim.akhtar@samsung.com>
-Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, Byoungtae Cho <bt.cho@samsung.com>,
-	Taewan Kim <trunixs.kim@samsung.com>
-Subject: [PATCH v3 3/3] arm64: dts: exynosautov920: add watchdog DT node
-Date: Mon, 21 Oct 2024 15:39:03 +0900
-Message-ID: <20241021063903.793166-4-trunixs.kim@samsung.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241021063903.793166-1-trunixs.kim@samsung.com>
+	s=arc-20240116; t=1729514136; c=relaxed/simple;
+	bh=6yTBTh60Y/KjEm4ulMUsaCtpVhZo6wmYVFZWdN+BQcI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=I7slEiPv44UTotLz4cKIQhF1WyaRmbVbdreCk8eXhWx/odUNytjtONHr8kk5FGGUWLJsHA/gUUQyvaTPabdobL6vF0lylNh9CsisMhd9LGeQIlruR0N1yz/YEkgIPvMAbcMy5e1ddcfCNXEGo3K6B9Qj/yFxgfayJzA1ez76Emc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=n3Da1lY5; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1729514132;
+	bh=6yTBTh60Y/KjEm4ulMUsaCtpVhZo6wmYVFZWdN+BQcI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=n3Da1lY5ifIG0HIbIKLOXX7fWP+pRg1BWcZRZRBA0JD6YqK5hFdoSwyFpOWOVAckG
+	 Ym+ihkaThzCMfde6Uf795gS2HTNIUdg13wapr1dEi4km/60cbEMuTg58xuEavUX8mv
+	 nBzv0/CzXTBgqb81DWbLatv69qj6pp/DtRnpTRTfLX+OpClGiuze1aW2sKwpWLnSv1
+	 hTNRtiehLk9VhnTjawpFDL4wop9H2wo71NLDVYuxosiep/0d/WTbFeZsCA1WGoP1lo
+	 TwCikOihlGQzZvg6rRgTk+hvi9SjNeFnHRrES8Bm/dzK/0UUVBggssjmgFovEFin3B
+	 KaMZkyLWFnCxQ==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 7E17D17E3601;
+	Mon, 21 Oct 2024 14:35:31 +0200 (CEST)
+Message-ID: <daacbe14-b6f8-4de2-8bb1-b3db62245a66@collabora.com>
+Date: Mon, 21 Oct 2024 14:35:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] watchdog: mtk_wdt: Add support for MT6735 WDT
+To: Guenter Roeck <linux@roeck-us.net>, yassine.oudjana@gmail.com
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ Yassine Oudjana <y.oudjana@protonmail.com>, linux-watchdog@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+References: <20230302124015.75546-1-y.oudjana@protonmail.com>
+ <20230302124015.75546-3-y.oudjana@protonmail.com>
+ <0398e95e-dbb8-2e41-7b36-12e36b8729f0@collabora.com>
+ <f9b09f59-a222-4b75-a6ef-c7fb7c2cff9e@gmail.com>
+ <9bd327fb-5f67-453d-947d-4742134b32b1@collabora.com>
+ <WOMHLS.HLNVQWWVER5T1@gmail.com>
+ <4e3545ce-5740-48b6-8c10-666548d31908@roeck-us.net>
+ <ccacc376-8494-4941-a4b8-dbb4d09914ee@collabora.com>
+ <14eb9404-a71c-4f8f-a808-8d3c1cf50c49@roeck-us.net>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <14eb9404-a71c-4f8f-a808-8d3c1cf50c49@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPJsWRmVeSWpSXmKPExsWy7bCmha7Wd9F0g1V/FCwezNvGZnH/Ux+T
-	xZq955gs5h85x2rxctY9NotNj6+xWlzeNYfNYsb5fUwWN9btY7d4svAMk8X/PTvYLSYtPs9k
-	8fjlP2YHXo9NqzrZPFauWcPqsXlJvcfO7w3sHn1bVjF6fN4kF8AWlW2TkZqYklqkkJqXnJ+S
-	mZduq+QdHO8cb2pmYKhraGlhrqSQl5ibaqvk4hOg65aZA3SokkJZYk4pUCggsbhYSd/Opii/
-	tCRVISO/uMRWKbUgJafAvECvODG3uDQvXS8vtcTK0MDAyBSoMCE7Y+XlX4wFh7grJm7/wdTA
-	eJazi5GTQ0LAROLc48nsXYxcHEICOxglpq2+xwbhfGKU2L74MFTmG6PE5lktLDAt7zd0M0Mk
-	9jJKLFjzigXC+cgocfDgeUaQKjYBLYlth18xgSREBF4zSjT1vgNrYRb4CjS4tZUVpEpYwEPi
-	yp1mJhCbRUBV4u+dJWwgNq+ArcTWI9Og9slLnH/zHyzOKWAn8fjYUxaIGkGJkzOfgNnMQDXN
-	W2eDLZAQmMohsebUZ2aIZheJqyums0PYwhKvjm+BsqUkPr/bywZh50usXHmCCcKukbjXtgtq
-	sb3EojM/geo5gBZoSqzfpQ9iSggoSxy5BbWWT6Lj8F92iDCvREebEISpKjF9WQDEDGmJiTPW
-	Qu3xkNh+4Qg04CYySkw8tJ1tAqPCLCTPzELyzCyEvQsYmVcxiqUWFOempxYbFRjBozg5P3cT
-	IzjlarntYJzy9oPeIUYmDsZDjBIczEoivEoloulCvCmJlVWpRfnxRaU5qcWHGE2BQT2RWUo0
-	OR+Y9PNK4g1NLA1MzMwMzY1MDcyVxHnvtc5NERJITyxJzU5NLUgtgulj4uCUamAKuWrXNqOi
-	xO5Qztl3H7jfh8XN19IuaLxuu7w6TWZm1YMoo9KpOScSjy6YyPMjaAqH3PKf/f6KlZ++la58
-	7+BUeuHFXT/NDo38Eg2HyQ4586WZeJic+SpC105aV3VuWo5LkJmU1epzk49x2MooZH/KN9ml
-	Msf7nuccrdc2TS0H9k04Z6VUcvHZ1v2255jlH7OeV4uu0Nh8fL64zpp5xX+yN0VFNhkHyTKZ
-	Oq5bfLVpbeaDe/XxrmFzO6yXM0dfFDjvk+fS+ymMx9/hjuq85F6TKZcudn612fe2NFH32bKc
-	tLYIj42z7s52LH27dnrV1d/ik4y7L3knMHRnbqia/bJf1aOsJnnKugduHRe5LyqxFGckGmox
-	FxUnAgBR4/9XQgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrFLMWRmVeSWpSXmKPExsWy7bCSvK7Wd9F0g0tnmC0ezNvGZnH/Ux+T
-	xZq955gs5h85x2rxctY9NotNj6+xWlzeNYfNYsb5fUwWN9btY7d4svAMk8X/PTvYLSYtPs9k
-	8fjlP2YHXo9NqzrZPFauWcPqsXlJvcfO7w3sHn1bVjF6fN4kF8AWxWWTkpqTWZZapG+XwJWx
-	8vIvxoJD3BUTt/9gamA8y9nFyMkhIWAi8X5DN3MXIxeHkMBuRomjx16wQSSkJY78hrGFJe63
-	HGGFKHrPKHHj/kZmkASbgJbEtsOvmEASIiCJs19+MYIkmAV+M0psWGAMYgsLeEhcudPMBGKz
-	CKhK/L2zBGwqr4CtxNYj01ggNshLnH/zHyzOKWAn8fjYU7C4EFDNlasvoOoFJU7OfMICMV9e
-	onnrbOYJjAKzkKRmIUktYGRaxSiZWlCcm55bbFhglJdarlecmFtcmpeul5yfu4kRHB1aWjsY
-	96z6oHeIkYmD8RCjBAezkgivUolouhBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHeb697U4QE0hNL
-	UrNTUwtSi2CyTBycUg1Mq0892dXDaruNjXn5NpNpk9ZU7dLXaX/3xCu07F4G4zxO9QPNm3Z4
-	G2sf6fjANT26+L31k2C7Gv+l1jnnvkrksH9/LmK4K7BDZ0sq65v03ktO+y4cnn7rbmkgt6zm
-	hqOZ8ptuhVt+bF+QtmjFlFX7jezLzazPbVCX9K99uM0lL0ZwyyNdecG2uuIZjrxv3q/60ylz
-	l01SS4fphGLjy/58bjsNw1qZ5OzD+ZvPFjnVMzoHXRXlZJnM7fZv07J3cj8e5b3wZqrL8RcN
-	1tEzvVZ32o6tdKnY1VsHqw1uNHp57zU52bLR9JjadL6WsMkea29oxVzdI7SgXX7qhbVdYRz3
-	431MTGP3+056JORW+UGJpTgj0VCLuag4EQDIcTVd/QIAAA==
-X-CMS-MailID: 20241021063938epcas2p1c01c89badb532f08a46087a4907df7dc
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20241021063938epcas2p1c01c89badb532f08a46087a4907df7dc
-References: <20241021063903.793166-1-trunixs.kim@samsung.com>
-	<CGME20241021063938epcas2p1c01c89badb532f08a46087a4907df7dc@epcas2p1.samsung.com>
 
-From: Byoungtae Cho <bt.cho@samsung.com>
+Il 17/10/24 17:39, Guenter Roeck ha scritto:
+> On 10/17/24 08:16, AngeloGioacchino Del Regno wrote:
+>> Il 17/10/24 16:09, Guenter Roeck ha scritto:
+>>> On 10/16/24 23:43, yassine.oudjana@gmail.com wrote:
+>>> ...
+>>>>>>
+>>>>>> Say I don't want to use the watchdog (which I don't, all I need from TOPRGU 
+>>>>>> is the resets, I don't care about the watchdog). Not starting the watchdog 
+>>>>>> means I can't reset the system because all mtk_wdt_restart will do is make 
+>>>>>> TOPRGU send me an IRQ that I have no use for.
+>>>>>
+>>>>> If you don't want to use the watchdog, then you don't need to care about bark
+>>>>> interrupts and you don't need any mtk_wdt_restart() functionality at all :-)
+>>>>
+>>>> I need mtk_wdt_restart to restart my system. I shouldn't need to take off my 
+>>>> phone's back cover and remove the battery every time :)
+>>>>
+>>>>>
+>>>> I think what Guenter said makes sense. We should make sure the watchdog is 
+>>>> started when calling mtk_wdt_restart or at least configured in such a way that 
+>>>> we are sure it will issue a system reset.
+>>>>
+>>>
+>>> It is more than that. There is no limitation in the watchdog API that says
+>>> "you must only use the watchdog kernel driver to reset the system if the
+>>> watchdog has been activated from userspace". Such a limitation would be
+>>> completely arbitrary and not make any sense. It is perfectly fine to enable
+>>> the watchdog from the restart callback if needed. Actually, all restart
+>>> handlers in watchdog drivers have to do that if they indeed use a watchdog
+>>> to reset the system.
+>>>
+>>> Actually, I am not entirely sure I understand what we are arguing about.
+>>>
+>>
+>> Guenter:
+>> We're arguing about bad configuration and lots of misunderstanding.
+>>
+>> Regarding WDT_MODE_EXRST_EN: when enabled, it enables an external output
+>> reset signal - meaning that it's going to flip the state of a GPIO to active
+>> (high in Yassine's case - as that's configured through WDT_MODE BIT(1) and
+>> his 0x5c means that it's flipped on), signaling to another chip (usually,
+>> the PMIC...!) that we want to reset the system.
+>>
+>> Explaining what Yassine is doing with this commit: he is flipping the IRQ_EN
+>> bit [BIT(5)] in WDT_MODE.
+>>
+>> When bit 5 *is set*, the watchdog bark event will only raise an interrupt and
+>> will not reset the system (that's left to be done to an interrupt handler in
+>> the driver).
+>>
+>> When bit 5 *is NOT set*, the watchdog bark event will trigger a CPU reset.
+>>
+>> Now, my confusion came from the fact that he's trying to fix a watchdog bark
+>> event so that it triggers system reset, but I didn't understand the actual
+>> reason why he wants to do that - which is powering off the system!
+>>
+>>
+>> Yassine:
+>>
+>> You don't *have to* rely on the watchdog to reset the system, and if you use
+>> only that - especially on a smartphone - I'm mostly sure that you'll get
+>> power leakage.
+>>
+>> Before you read the following - please note that this is platform dependent
+>> so, take this with a grain of salt: it is the PMIC that should get configured
+>> to take your system down! I have a hunch that this works for you only because
+>> the platform will reboot, and then the bootloader will decide to turn off the
+>> system for you by default (that, unless you send a warm reboot indication).
+>>
+>> That flow looks more like a hack than a solution for an actual problem.
+>>
+>>
+>> Now - whether you want to fix your platform or not, this is out of the scope
+>> of this commit, which is - in the end - still fixing something that is wrong.
+>>
+>> Effectively, as Guenter said, if the watchdog is never started, the restart
+>> function is not going to reboot the system, so yes this problem needs to be
+>> fixed.
+>>
+>> There are two problems in this driver that can be solved with:
+>>   1. Disable IRQ generation when *no irq* is found in DT; and
+>>   2. Implement support for reboot in mtk_wdt_isr() by reading the WDT_STA
+>>      register and by then taking appropriate actions.
+>>
+> 
+> That won't work because interrupts are likely disabled when the reset callback
+> executes. The reset handler must not depend on an interrupt. It has to be
+> self-contained: It has to configure the hardware to issue a reset.
+> On some systems, that is done by setting the watchdog timeout to a really low value
+> and enabling it. Others have a special configuration in the watchdog register set
+> which triggers a reset immediately. If the hardware supports pretimeout, that would
+> have to be disabled because the idea is to trigger a reset signal, not an interrupt.
+> 
+> To repeat, setting up the system and then waiting for an interrupt to do something
+> defeats the purpose of the reset handler, which is to issue a reset signal.
+> Somehow. If that can be done from an interrupt handler, it can and should be done
+> immediately instead.
+> 
+>> Of course my preference would be N.2 because:
+>>   - The pretimeout way is already supported in the driver, and if you specify
+>>     a pretimeout, then the watchdog will never trigger SYSRST->XRST: this
+>>     is actually a bug (IMO!!), as declaring an IRQ in DT means losing reset (!);
+>>   - The WDT_STA register tells you more than just "SW/HW watchdog reset asserted"
+>>     and that can be extended in the future to support more than that.
+>>
+>> However, I recognize that this may be too much work for you, so, if there's no
+>> way for you to properly add support for N.2 - I can chime in.
+>>
+>> As for N.1, the solution is simple: check if platform_get_irq_optional fails
+>> and - if it does - force unsetting (WDT_MODE_IRQ_EN | WDT_MODE_DUAL_EN) in
+>> WDT_MODE, if and only if WDT_EN is not set.. but that, in the probe function!
+>>
+> 
+> All that should be configured in the reset handler. It has to disable interrupts
+> even if there is interrupt support because that is not what is wanted at this point.
+> 
 
-Adds two watchdog devices for ExynosAutoV920 SoC.
+Ack.
+After re-reading this and thinking about it for a bit - you're definitely right.
 
-Signed-off-by: Byoungtae Cho <bt.cho@samsung.com>
-Signed-off-by: Taewan Kim <trunixs.kim@samsung.com>
----
- .../arm64/boot/dts/exynos/exynosautov920.dtsi | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Let's go for the setup in the reset handler then.
 
-diff --git a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-index 91882b37fdb3..2b3e8debda3d 100644
---- a/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynosautov920.dtsi
-@@ -172,6 +172,26 @@ chipid@10000000 {
- 			reg = <0x10000000 0x24>;
- 		};
- 
-+		watchdog_cl0: watchdog@10060000 {
-+			compatible = "samsung,exynosautov920-wdt";
-+			reg = <0x10060000 0x100>;
-+			interrupts = <GIC_SPI 953 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&xtcxo>, <&xtcxo>;
-+			clock-names = "watchdog", "watchdog_src";
-+			samsung,syscon-phandle = <&pmu_system_controller>;
-+			samsung,cluster-index = <0>;
-+		};
-+
-+		watchdog_cl1: watchdog@10070000 {
-+			compatible = "samsung,exynosautov920-wdt";
-+			reg = <0x10070000 0x100>;
-+			interrupts = <GIC_SPI 952 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&xtcxo>, <&xtcxo>;
-+			clock-names = "watchdog", "watchdog_src";
-+			samsung,syscon-phandle = <&pmu_system_controller>;
-+			samsung,cluster-index = <1>;
-+		};
-+
- 		gic: interrupt-controller@10400000 {
- 			compatible = "arm,gic-v3";
- 			#interrupt-cells = <3>;
--- 
-2.47.0
+Though, I think that a v2 is still needed here - one patch to fix the reset handler
+(at this point, with a Fixes tag for backporting..!), and one to add support for
+the MT6735 resets.
 
+Cheers,
+Angelo
 
