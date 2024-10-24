@@ -1,122 +1,99 @@
-Return-Path: <linux-watchdog+bounces-2292-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2293-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DAC59AE205
-	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Oct 2024 12:04:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D020B9AE2D2
+	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Oct 2024 12:42:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCA871C21C3F
-	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Oct 2024 10:04:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 880A0283E0F
+	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Oct 2024 10:42:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB3E51C07F5;
-	Thu, 24 Oct 2024 10:03:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B78951C4A31;
+	Thu, 24 Oct 2024 10:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/jxCsBg"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28001C07E8;
-	Thu, 24 Oct 2024 10:03:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F7F1B6D1F;
+	Thu, 24 Oct 2024 10:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729764234; cv=none; b=tLH3XPUU+9WWi1QxHtDIo6sjBGjQOHmaDYgDmNNdyz422h7xPUkG7SU5+q3Mfum6tyHd754Jf8r//LbrxPyIhOx2kveujn/olUCFZPr9f1HrrJPzyFJ0D1G3JUa2yhQqyCwIaqatQ4VOQSHeStZftYTyQKm6Z3QRLEEB8hQg3gE=
+	t=1729766519; cv=none; b=VJ41T5/dPUEu8AztwgzqrbLdXgxrbTPmRIZ4/iiEom/OhFiFf4HIQ9AicanAakNAPXqF/Knk//j7r7oit3sTLyUPRqGkeIXfdEWETMWm7kiQmNHgENmcinmaE38NAb9BXnjuc6YStBo/4XiItFsYD1fXMNLInXC6EO2Lf4VxhbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729764234; c=relaxed/simple;
-	bh=Bm0t+UbS6/N6Y1136yIFyLmb5F/KydJo4Y9Kvz6oqyw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MC5fTDTp238X7URgETKFKL1qa84WhGIgL7JE2fCVuFnKEdENSM3s/1nS3sdZvrTi5fdkf40ek/5D0sZVpp0Yze+8mrzFPmXumj+XJD2Zsu352eoOi64BaF6D2VblFAzYstBE7YZqdsBxZbiCGYFNqUpCr699w5AaxbWIDy8SlLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6e34339d41bso7535117b3.0;
-        Thu, 24 Oct 2024 03:03:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729764231; x=1730369031;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kBNib9fI7OsKe0S0XoMgI5p0KxqmwSJ7TbyOIgCT61I=;
-        b=n+5Q8L8MP1cruHBT8h99oTScSQyNsfw7GVKV5bgN+TI/k6wcsHCkgqG26mEiiJz0xS
-         DtwaTmi3gpjyyv5WRMsxczCkCU90Y3JQrD/0lwfxZ7lFeAq6DaG40iCzqp535xDGS5oK
-         E9+bGIaYid3IKJovZwRAnorzZ+gdfa++SFVbLe9CPa9uCMCH9x9X6JqWHIW9Sc2lXmeR
-         V0rTvOFra9POO87JAQzWL/HnQVBWKTXz86eNNCDyuTR1BnG3e3Pu+UL3mQZxYcM8N5+A
-         f/2z5+p5OANmmfgH2ad8QT3fjUJY7WufMG9rFCUAKpP4u0Huwi2KP4OV8CLxpvUmkl7D
-         wJdA==
-X-Forwarded-Encrypted: i=1; AJvYcCU0BZqbGR1jpZg319I48eJF1iDSQet2KiWdQy9xqG/Kp45ucWO/qQHu6M5OTo10XEXiqv/z5Tk8AeI=@vger.kernel.org, AJvYcCV7whR5rlzAL+0eKIm9PvETEIVd6OSWB6HR8M/rEMw+aqfp0e/71B+8h0hC/bP47XeOSch7Jk+HN0AIRC6z6h8=@vger.kernel.org, AJvYcCW4WnjD5NDPH8XH66B9C0QoSYncVtloAeyFlcxJcpxSr/+M/oIxYljy3IHSah8KJ40x2axyQloWAR4=@vger.kernel.org, AJvYcCWB5B7MDhT8cFpods6F2g5hO/c/1u8DEo3dKE8Oh/E/YeIxQVCKZv+MEdgQ5ghbVCROEKNML61W0M30SY2J/CJmiuc=@vger.kernel.org, AJvYcCWKM64QBXT0FeyNdpiHLeRO9Kajccn65ZfFNMNC8QMMXqqCABj7foXZGIrhYhvovkQCv9rcOzOfwQssYWt1@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeF5emDR7q968TqeBdEQSv2h74DkoMc9pyurs31jmLAESqS4fE
-	O+R1lAnrOL4109kfcrUhxIf6n3/kluLuBnGEpZ03jzLrpXmXzRQ1INamWnhA
-X-Google-Smtp-Source: AGHT+IGhu7YOMVfWbv6QUP3X9d6DUjcNCObmVuumXVoXb/CekxesvT/qehzsFkgjGqdP957Bs8QhbQ==
-X-Received: by 2002:a05:690c:6b09:b0:6e3:31ee:23ab with SMTP id 00721157ae682-6e8581aed96mr15670177b3.25.1729764230767;
-        Thu, 24 Oct 2024 03:03:50 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e5f5ccb641sm19144537b3.83.2024.10.24.03.03.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Oct 2024 03:03:50 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6e33c65d104so6507987b3.3;
-        Thu, 24 Oct 2024 03:03:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUplpB7SxUzgyiMwgBxEzyZ85tlH4v0YX3lf+8oU4U3zPz+L4r0ykzLhhreppv1LDEf2n0BreJWeudBxXOmvlq2kLY=@vger.kernel.org, AJvYcCVrQLaG4oAAws5a2dYoSRboBn16pObJkWBH1EFd/GJtgZ5Lco/aSwj6y9f6bzm+QmI4vWBn9rPj/BZ/oVHg@vger.kernel.org, AJvYcCW2PNI67yA85CSeKF33/CpTTfrtaziQTzUJMa+cOH1bjj2Qavt/7ZF3A+mp85cqPSsddYZBjb5cl3I=@vger.kernel.org, AJvYcCWy1ttWdU/y3+kbQE9NNKUXRStjeXqPb6pJlsUp4IuTzkhZcafCAgzWHqdxFTlo6aLjKRjLNWQMFfo=@vger.kernel.org, AJvYcCX7dixJdPZrZLkWGTPr3750lhj+1clDP6igiY3qls2QzcauF/n67C7bQW5PU1vdm2ZQKzq6uj9fLwON7JNXBDQ=@vger.kernel.org
-X-Received: by 2002:a05:690c:6610:b0:6b1:2825:a3cd with SMTP id
- 00721157ae682-6e866319e02mr13432837b3.35.1729764230288; Thu, 24 Oct 2024
- 03:03:50 -0700 (PDT)
+	s=arc-20240116; t=1729766519; c=relaxed/simple;
+	bh=CkOAGRd26mLI67dmD/BaQdzbXEOWA3GpFBs26vS3Fj8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HoNG4ogaSZmj5L8JVBYIeHGrhKiUek4JT0GA2p3hNjLKph2MdiL7pcFYdqmGLeJDlbUEMQRMQ4jiaXMiv+rgtrqYWyxEN4dh31TXTvItLXzEMcx1A4i3EoTqoxhQR8rq36+Pp8Afac5oib6dYGA6c//JVUTVX+FLbjCjMrvQ/3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/jxCsBg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6862DC4CEC7;
+	Thu, 24 Oct 2024 10:41:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729766519;
+	bh=CkOAGRd26mLI67dmD/BaQdzbXEOWA3GpFBs26vS3Fj8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J/jxCsBgDfMeAKjiuCwahGbBWnueVH7zNvbB1HbZAAC5BM6BjdVGigaXkQlXMTLDy
+	 hHL9/CJGBsyYHj+D42jZ3sxiJzakW+naQGpCb5fv5UjquXyr9oBQ+b/reIjswHlPAk
+	 lLPd7StIfrhrZlb78DiJwrvpSirqhtvPmr2J2olct9eTjv6POXFEuqDLTiP8lSVIun
+	 HKAIdfa2mpnNUv0IdaCmrr+1c3ngJjYxP0LhW2J5vO5cnukFqXXePteFYtawXvLe3L
+	 xlNLeRHzX/D4DR2txiWlsxL2rdp2Kg4kVUIpc++ymcWK0GYJq+8rqvNGLMp7SEXNom
+	 hHdapvf8rIQRg==
+Date: Thu, 24 Oct 2024 12:41:55 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v1 3/9] i2c: Add Nuvoton NCT6694 I2C support
+Message-ID: <linka6lz5zpnaf64vmunrn2ezqts5gp5rsbwiaffm4v2mtnqyg@npxgcksgizrn>
+References: <20241024085922.133071-1-tmyu0@nuvoton.com>
+ <20241024085922.133071-4-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241015164732.4085249-1-claudiu.beznea.uj@bp.renesas.com> <20241015164732.4085249-4-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20241015164732.4085249-4-claudiu.beznea.uj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 24 Oct 2024 12:03:37 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWCDBrivxN0pzbrH=fiwMWM3sj3BTsgHOjeOAT4dr3DEA@mail.gmail.com>
-Message-ID: <CAMuHMdWCDBrivxN0pzbrH=fiwMWM3sj3BTsgHOjeOAT4dr3DEA@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] clk: renesas: r9a08g045: Mark the watchdog and
- always-on PM domains as IRQ safe
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, wim@linux-watchdog.org, 
-	linux@roeck-us.net, ulf.hansson@linaro.org, linux-renesas-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241024085922.133071-4-tmyu0@nuvoton.com>
 
-On Tue, Oct 15, 2024 at 6:48=E2=80=AFPM Claudiu <claudiu.beznea@tuxon.dev> =
-wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->
-> If the watchdog is part of a dedicated power domain (as it may be on
-> RZ/G3S) the watchdog PM domain need to be powered on in the watchdog
-> restart handler. Currently, only the clocks are enabled in the watchdog
-> restart handler. To be able to also power on the PM domain we need to
-> call pm_runtime_resume_and_get() on the watchdog restart handler, mark
-> the watchdog device as IRQ safe and register the watchdog PM domain
-> with GENPD_FLAG_IRQ_SAFE.
->
-> Register watchdog PM domain as IRQ safe. Along with it the always-on
-> PM domain (parent of the watchdog domain) was marked as IRQ safe.
->
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> ---
->
-> Changes in v4:
-> - collected tags
+Hi Ming,
 
-Thanks, will queue in renesas-clk for v6.13.
+...
 
-Gr{oetje,eeting}s,
+> +static int __init nct6694_init(void)
+> +{
+> +	int err;
+> +
+> +	err = platform_driver_register(&nct6694_i2c_driver);
+> +	if (!err) {
+> +		if (err)
+> +			platform_driver_unregister(&nct6694_i2c_driver);
+> +	}
+> +
+> +	return err;
+> +}
+> +subsys_initcall(nct6694_init);
+> +
+> +static void __exit nct6694_exit(void)
+> +{
+> +	platform_driver_unregister(&nct6694_i2c_driver);
+> +}
+> +module_exit(nct6694_exit);
 
-                        Geert
+Have you thought about using auxiliary driver here?
+(auxiliary_bus.h)
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Thanks,
+Andi
 
