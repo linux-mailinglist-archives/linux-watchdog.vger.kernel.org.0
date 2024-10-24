@@ -1,31 +1,31 @@
-Return-Path: <linux-watchdog+bounces-2296-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2297-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 093419AE878
-	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Oct 2024 16:25:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 101129AE891
+	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Oct 2024 16:26:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B462F1F226D2
-	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Oct 2024 14:25:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9AEA290AA7
+	for <lists+linux-watchdog@lfdr.de>; Thu, 24 Oct 2024 14:26:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E9631FC7CC;
-	Thu, 24 Oct 2024 14:18:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69F822003BE;
+	Thu, 24 Oct 2024 14:20:59 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5586F1FC7CB
-	for <linux-watchdog@vger.kernel.org>; Thu, 24 Oct 2024 14:18:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA9F200135
+	for <linux-watchdog@vger.kernel.org>; Thu, 24 Oct 2024 14:20:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729779521; cv=none; b=tIvbKex9h28A7Ka58Vr+22XqpdmdlVZ0z5L0lyTQef0HXmAvHAoLD1f0Wt9pej4K6npUVy9ferXjzDUo+5DGXKZT9No+y4SrBPneEAGSmLNwF3yHKL9IMQQXvMWfiNkUhjHoAEcx1gba6cTjczNj5Ldo3G2pX81VqyowKOoACFo=
+	t=1729779659; cv=none; b=i647JGslQ5YluOPQt/GsbgMAGVuVS2PRY4+A0bv6Da3/gqzXscJalbGdNPiVOgzrsWdgS6dHGieJUchgoH3Gf3i9MCESSJuAxeiRjOTpgDfHXo6JSwZ6kFLgLXv19qTiZn8BKjFYBoNzty8qHmCNi0lkpAvoMNK+qPAowntsgTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729779521; c=relaxed/simple;
-	bh=nr1BFMUqpOOZTknszusigTrqeLkm84oMDbFg8eVnqyE=;
+	s=arc-20240116; t=1729779659; c=relaxed/simple;
+	bh=CeH6d9jYHaUoXOEafD41IQtDoDuY9WGiGrn3lPFqJ9E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I475dAjZ+NzdBeFCn8D5gftQXSjQRTe/uJu35YWpuT57oR2q/Q7YZXJ5bV85AkcHKM5MSB+F4U86OwAt6q4Pkgh87k5gZSEE+RIA24Utfq/YE52l71L4NhmKzCEs6asybYQJymQ3+PsAC6KVxDvm4j11wWLm5PprzhoR7JtCtWw=
+	 Content-Type:Content-Disposition:In-Reply-To; b=i8idFoMm4I9Va4779fn7izzOT/9m7G7SQfdEW8TqSZZQ/bzh8NVcHsKlFPsRaXLecxNYnuYZvJ/reLJHyso5HW4aTw5eE/NynfL1IISOr89anhcM5qVsBzdIy/rS6KOnrKqgXq4PmT1v/Tp2cUGzKFLc0IbDoounfCTqgO7KYwg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,21 +33,21 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1t3yex-0003ep-6Q; Thu, 24 Oct 2024 16:17:55 +0200
+	id 1t3yhJ-000452-8g; Thu, 24 Oct 2024 16:20:21 +0200
 Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <mkl@pengutronix.de>)
-	id 1t3yeu-000DEg-2T;
-	Thu, 24 Oct 2024 16:17:52 +0200
+	id 1t3yhI-000DEt-35;
+	Thu, 24 Oct 2024 16:20:20 +0200
 Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
 	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 4E0EB35DCD7;
-	Thu, 24 Oct 2024 14:17:52 +0000 (UTC)
-Date: Thu, 24 Oct 2024 16:17:51 +0200
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 8119C35DCED;
+	Thu, 24 Oct 2024 14:20:20 +0000 (UTC)
+Date: Thu, 24 Oct 2024 16:20:20 +0200
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Ming Yu <a0282524688@gmail.com>
 Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
@@ -60,9 +60,10 @@ Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
 	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
 	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
 Subject: Re: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
-Message-ID: <20241024-poetic-offbeat-alligator-d6b9fe-mkl@pengutronix.de>
+Message-ID: <20241024-cryptic-giga-mole-54e2b5-mkl@pengutronix.de>
 References: <20241024085922.133071-1-tmyu0@nuvoton.com>
  <20241024085922.133071-5-tmyu0@nuvoton.com>
+ <20241024-poetic-offbeat-alligator-d6b9fe-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -70,64 +71,55 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gd3ti3yld7agool5"
+	protocol="application/pgp-signature"; boundary="umhghwnwqoavy3lt"
 Content-Disposition: inline
-In-Reply-To: <20241024085922.133071-5-tmyu0@nuvoton.com>
+In-Reply-To: <20241024-poetic-offbeat-alligator-d6b9fe-mkl@pengutronix.de>
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 
 
---gd3ti3yld7agool5
+--umhghwnwqoavy3lt
 Content-Type: text/plain; protected-headers=v1; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 Subject: Re: [PATCH v1 4/9] can: Add Nuvoton NCT6694 CAN support
 MIME-Version: 1.0
 
-On 24.10.2024 16:59:17, Ming Yu wrote:
-> This driver supports Socket CANfd functionality for NCT6694 MFD
-> device based on USB interface.
->=20
-> Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
-> ---
->  MAINTAINERS                     |   1 +
->  drivers/net/can/Kconfig         |  10 +
->  drivers/net/can/Makefile        |   1 +
->  drivers/net/can/nct6694_canfd.c | 843 ++++++++++++++++++++++++++++++++
+On 24.10.2024 16:17:52, Marc Kleine-Budde wrote:
+> On 24.10.2024 16:59:17, Ming Yu wrote:
+> > This driver supports Socket CANfd functionality for NCT6694 MFD
+> > device based on USB interface.
+> >=20
+> > Signed-off-by: Ming Yu <tmyu0@nuvoton.com>
+> > ---
+> >  MAINTAINERS                     |   1 +
+> >  drivers/net/can/Kconfig         |  10 +
+> >  drivers/net/can/Makefile        |   1 +
+> >  drivers/net/can/nct6694_canfd.c | 843 ++++++++++++++++++++++++++++++++
 
-FTBFS:
+|   CC [M]  drivers/net/can/nct6694_canfd.o
+| drivers/net/can/nct6694_canfd.c: In function =E2=80=98nct6694_canfd_start=
+_xmit=E2=80=99:
+| drivers/net/can/nct6694_canfd.c:282:22: error: variable =E2=80=98echo_byt=
+e=E2=80=99 set but not used [-Werror=3Dunused-but-set-variable]
+|   282 |         unsigned int echo_byte;
+|       |                      ^~~~~~~~~
+| drivers/net/can/nct6694_canfd.c: In function =E2=80=98nct6694_canfd_rx_wo=
+rk=E2=80=99:
+| drivers/net/can/nct6694_canfd.c:677:34: error: variable =E2=80=98stats=E2=
+=80=99 set but not used [-Werror=3Dunused-but-set-variable]
+|   677 |         struct net_device_stats *stats;
+|       |                                  ^~~~~
+| cc1: all warnings being treated as errors
 
-| make[5]: *** No rule to make target 'drivers/net/can/nct6604_canfd.o', ne=
-eded by 'drivers/net/can/'.  Stop.
+If compiling with C=3D1, sparse throws the following errors:
 
-[...]
+| drivers/net/can/nct6694_canfd.c:417:14: warning: cast to restricted __le32
+| drivers/net/can/nct6694_canfd.c:750:9: warning: cast to restricted __le32
+| drivers/net/can/nct6694_canfd.c:777:32: warning: cast to restricted __le32
 
-> diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
-> index a71db2cfe990..825c011aead5 100644
-> --- a/drivers/net/can/Makefile
-> +++ b/drivers/net/can/Makefile
-> @@ -28,6 +28,7 @@ obj-$(CONFIG_CAN_JANZ_ICAN3)	+=3D janz-ican3.o
->  obj-$(CONFIG_CAN_KVASER_PCIEFD)	+=3D kvaser_pciefd.o
->  obj-$(CONFIG_CAN_MSCAN)		+=3D mscan/
->  obj-$(CONFIG_CAN_M_CAN)		+=3D m_can/
-> +obj-$(CONFIG_CAN_NCT6694)	+=3D nct6604_canfd.o
-                                   ^^^^^^^^^^^^^^^
->  obj-$(CONFIG_CAN_PEAK_PCIEFD)	+=3D peak_canfd/
->  obj-$(CONFIG_CAN_SJA1000)	+=3D sja1000/
->  obj-$(CONFIG_CAN_SUN4I)		+=3D sun4i_can.o
-> diff --git a/drivers/net/can/nct6694_canfd.c b/drivers/net/can/nct6694_ca=
-nfd.c
-> new file mode 100644
-> index 000000000000..d873a9fd656d
-> --- /dev/null
-> +++ b/drivers/net/can/nct6694_canfd.c
-                        ^^^^^^^^^^^^^^^
-
-This doesn't compile :(
-
-regards,
 Marc
 
 --=20
@@ -136,20 +128,20 @@ Embedded Linux                   | https://www.pengutronix.de |
 Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---gd3ti3yld7agool5
+--umhghwnwqoavy3lt
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcaVwwACgkQKDiiPnot
-vG+eWQf/b18jVZRlBPO4peY++zek7fG2mvAETij44FJ1yoEkgaRkIs8jB3bsyp3g
-22pVm7/JdA27DOoyj2m9ptUut353vjv3XKSNsDvnfqaswliao/aivl+A7CENuu47
-JwoeiRDKZhYo+9XE5ljEch75VSvYBnYJJoBLWNuR9bA/ZqiYDjOpr24sErJFwH9T
-IhdgB1wBCe+VCzRIrJxTrzeIQ4bItA1D5ZHMugRhPQcS/qkk5zZeemv5OUiRkCCP
-kO3qZDX0zU+cuHyV+e3OlXS4Ebhad/Z0e7jr1N11Ses+gi/6kWCDTuv4p/wFTZXG
-8tbRDZS0/A/FLwF3XyY+rRJ5N/UwHA==
-=Zy3R
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcaV6EACgkQKDiiPnot
+vG+E+Qf8CIIlMRqAUgax6FgoXWP0LDl3JVfJSfoClGvwvTGIR6r0hAAYhY6YXdy9
+gUPusFE69CRe780ZIu4/gR45YWIRpof1exG4JAIoKbU/4Bdq/42x1BKSXifWPayo
+Rm/mm+HyVCjb7WTpopxM7ZCnZMks9xOUwl6A+/ShIRZA3pWBz8ll4yRCtTq1V6xy
+GMKhYsYP4mDY3YyD1+hUfLBmiBu2XvhnGksdoLRZHNMNKlNhZnpRSLeQew5EHSy1
+03BltphJ6YsdAgTfyR7AT4nTisdNyYl+IhnJq1+FSKsWxdHcelNMaM3JwlLrXMBO
+FbotT17CV8J3M14xFrwqL7cRROi57A==
+=lV4A
 -----END PGP SIGNATURE-----
 
---gd3ti3yld7agool5--
+--umhghwnwqoavy3lt--
 
