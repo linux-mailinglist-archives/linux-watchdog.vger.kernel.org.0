@@ -1,56 +1,56 @@
-Return-Path: <linux-watchdog+bounces-2341-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2342-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C21089B1F23
-	for <lists+linux-watchdog@lfdr.de>; Sun, 27 Oct 2024 16:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FB149B1F26
+	for <lists+linux-watchdog@lfdr.de>; Sun, 27 Oct 2024 16:56:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 682E71F215EE
-	for <lists+linux-watchdog@lfdr.de>; Sun, 27 Oct 2024 15:54:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 017301F21537
+	for <lists+linux-watchdog@lfdr.de>; Sun, 27 Oct 2024 15:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 171D913A265;
-	Sun, 27 Oct 2024 15:54:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C48917279E;
+	Sun, 27 Oct 2024 15:56:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="NDogIxbn"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="bzVK4fTD"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D5378C9D;
-	Sun, 27 Oct 2024 15:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6661678C9D;
+	Sun, 27 Oct 2024 15:56:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730044475; cv=none; b=qBQa5POqZOGStGtPRTcJoTkmy25mDD5S8HFpwiTkQIPTBoY8XzRKONl2bQmBzGvZLCO29iADuhl8KBY81JPFIi4zDQhVofCUYSKr+set2DeoQUb5akKf4dFtdWDrS6SwXB/6sLgVUDLdBWTlogjZUxuh0RAqhGiPC7t/+LbfJSE=
+	t=1730044612; cv=none; b=PPRHXgL9J6iL8NHRy7Q0bLNgGJZudfqF9hb/HTe1o0d60r2VWx3yXdc2xdro+dp21vlaCo2CgW2sHyXlBzLt2Olc+9CHyZDzVMWEHe+WSpTS9pfFatkHEALcmv1jxvwrW6Id6sKcWt/hMsASFiKOkRrkT/AH3yoUznFKJ+dFr6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730044475; c=relaxed/simple;
-	bh=S52TV53JYVw4ssB8apb8QpRsCbB5Ll6Prp5SvUoLNv4=;
+	s=arc-20240116; t=1730044612; c=relaxed/simple;
+	bh=L0qDBAArgMaITShLaQbn3eqNAsZRpwfqjIR/eK3UYyM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p5YXoOtRVGHjw223tx8X/yQUCCcVLuJti0jh4QGOCcw89R0DxRXyL0xrxPqKWlWJDkeDKIn5Z/4g3FetHZ3kvEiJMSNP/cqvIvGHuJuX9mggIfO0E1MMDOLPs3meoNVKjVrj7E5UrlMhp0zdqi1sbqGdnTobsoFndNzVlbLDj6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=NDogIxbn; arc=none smtp.client-ip=212.227.15.18
+	 In-Reply-To:Content-Type; b=a9nThc9lA1+wjkyNvAo3vZzg7MEMyCGxci+x1NggJf3c6VYBfpzJnOg+IsxHcpYMWW/092ge8qMTN6w/kKbOhDgz6dPTNAdSjdmY9cZ8JGl84It08rpJgkwiSrVChkr936FLOPYzgaZaoTPxw9PbAyhwaz7k6zVOGp9IJDTDRl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=bzVK4fTD; arc=none smtp.client-ip=212.227.15.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1730044445; x=1730649245; i=wahrenst@gmx.net;
-	bh=S52TV53JYVw4ssB8apb8QpRsCbB5Ll6Prp5SvUoLNv4=;
+	s=s31663417; t=1730044584; x=1730649384; i=wahrenst@gmx.net;
+	bh=L0qDBAArgMaITShLaQbn3eqNAsZRpwfqjIR/eK3UYyM=;
 	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
 	 References:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding:cc:content-transfer-encoding:
 	 content-type:date:from:message-id:mime-version:reply-to:subject:
 	 to;
-	b=NDogIxbncmRPVdih/3caGPpkAwbhLpDLgVyxD9T4llzJviJRagVvfh+v4wyaJB09
-	 oqCfsF+zAnxHLbw0ax3iZKEKT5vvk9CzEpMXKkq6VAlBgfTIMMVpqaRNnyFr+EWSi
-	 9D+3o6WK9r1CWze2mKBwyfB+dAK+hkJhI7f/kkE2XKOjjfndk1JMKTLzXkTe3FB1r
-	 rk4P8a44Ynbpv3sJN0OVoKGFu6jWYa8ZCamy9FDxfbWl/pfyD2aVmJXcMgly8bsgo
-	 9+DObDY0LPCRZxHj0F0Eq3H/wauaxcaJdf54zrLb5/wAXWYH3uqhjSCXtgVBQMO7b
-	 86FDM4e+6z5b0AhgdA==
+	b=bzVK4fTD6NyNxrrIn+R4OHJakvYwE2xHyFRgYlLqFObW2PibCXidP5B8DsCDbF14
+	 O/xho/EjI4QQROQPSokhJA0t2OM4hyrXCl8foj8nBlxOlFslRSB/HxNsRrvZbsNUZ
+	 nDK7xgIoVNMzpYJjAIfhMCgQzioZMojZUo3NEtyFdjuHHPm/ghWoSFCk88LbzLEjT
+	 tYN5hKHJ+5ekrYvXCXOi4kL5GeLYBKwFlhgHzcC1dVGzifTHrd1FESVzZXgDAID2r
+	 qFxZlDXjlUQepvtsGQS1sAjewX0BqwR4cM0KvoOBPWEX+0++VqsL7B0UJNcNgqMEs
+	 P8/9QUDPf3zGuvajdw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [192.168.1.105] ([37.4.248.43]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M7sHo-1t09de3Zly-0047OO; Sun, 27
- Oct 2024 16:54:04 +0100
-Message-ID: <686d128c-ce02-421e-9af5-6c418e82071d@gmx.net>
-Date: Sun, 27 Oct 2024 16:54:03 +0100
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mlf4S-1tmdZV3YLS-00qKPr; Sun, 27
+ Oct 2024 16:56:23 +0100
+Message-ID: <711294ea-9bed-44a1-9b1a-38e63c76be01@gmx.net>
+Date: Sun, 27 Oct 2024 16:56:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -58,7 +58,7 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] watchdog: imx7ulp_wdt: Add TOVAL range check
+Subject: Re: [PATCH 1/2] watchdog: imx7ulp_wdt: Clarify timing units
 To: Guenter Roeck <linux@roeck-us.net>, Alice Guo <alice.guo@nxp.com>,
  Wim Van Sebroeck <wim@linux-watchdog.org>, Shawn Guo <shawnguo@kernel.org>,
  Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>
@@ -66,92 +66,166 @@ Cc: Pengutronix Kernel Team <kernel@pengutronix.de>,
  linux-watchdog@vger.kernel.org, imx@lists.linux.dev,
  linux-arm-kernel@lists.infradead.org
 References: <20241027105323.93699-1-wahrenst@gmx.net>
- <20241027105323.93699-3-wahrenst@gmx.net>
- <33721072-6ff4-45bd-b20f-cc0a213e3aae@roeck-us.net>
+ <20241027105323.93699-2-wahrenst@gmx.net>
+ <fb93ba0f-d414-4f7f-aff9-cd958c715e23@roeck-us.net>
 Content-Language: en-US
 From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <33721072-6ff4-45bd-b20f-cc0a213e3aae@roeck-us.net>
+In-Reply-To: <fb93ba0f-d414-4f7f-aff9-cd958c715e23@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ddXs+8wjTNEs+IMlPWyG2xgLyVyw5OMmDdi9zc/aCnPov5BFN4I
- edgV7Yzx8e4r+6Fp5077g4/uvmrv+Q15YWXI/O5wKKFP0dIl4hh9v05mu3VRwRKIHMcsQMF
- 4T3AZO6p9ZnDgXhBua7CcHsekJYcwE1E5yAD+VzQn7Ug0Go1uC6f6tw5c75DcNtCFYCzZbj
- XXiE9LbP3sFxgECF+QG9Q==
+X-Provags-ID: V03:K1:Q3BIhw96rpvrmXPmv/Ty+pdzXp8z9vyV6KRFkdRhyMqiDG+HEYN
+ 9ff2yOsP8AGxJR4GNXQbtFLwD7j3u5big1RRyzuHiHdzzMxcnHt1xztJEs6kZaEETrV/Xbf
+ N5D/MIh4bfJqG20hw89GfgsbI17p7SumThynNeurmoTbKWtUUFXT6oxRlA9AAihOeKWzfzf
+ xLnwR6rpJI//M9EVnpxxQ==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:6w/mAcG88Kw=;TlJu9eOKkpqPo7CziDcShLo73b0
- yvWgFYOzFlV0eSuv5xprGGznT9tk4voDXZ9SAqZVjeUstwxNC3fuzO2BGo1nJEAmaMKItzii5
- GK/yKIaQ2YY64FUS6rRKqSFnbfHiSws75kTh0oujuqkXTjMCEmLyIuHQ0aJbV7gI1xZUv9T+8
- YTHDTJzy+4Iuam2ITFmgXUWpIUVr/7PJi5w6umFMysbS784wuwv4KxPO2MqqKqoDjmJ3QYfAm
- o3vlNNoX1j1nIOGN6fK0H4VjRtQylyBQB2utB/+gAh6GXijgj4bLtjj9p8282Cl9prOihLecf
- Ael8vyZ4uNJJK9RwOdjtqLAdZW/sOc5yvphgzz3SA0qTAB48KlqVRQ+2axxyYUcpHGF1b9S+y
- sCe6J2iXufTNbO0XXgAHT806OHXlIQIKop09DItsPvXBDb/3nWp5Q1Pnoss+qUm1f3sjtF8yG
- JvMOrYpxhp3VkFHfAVdsklOYduRZjzjbtdrU26Yi7TKCRCH4gI2DMnhsQFrJAzSAM5zjGD79w
- g84ctygoGZuzvMNxY7LzL4MsL2wOjoRUP1sOSteoqhCdgNNaC5eyUMkhqteR5QUjy7cH1NTiT
- YPFcQzRREDl9aCsRi6DVHgEf2xR6DjOqkMBNwXby0CzxcPp6vQF/Oi65zm2xR0ERQUchqbaK8
- /Cm8zxcmhXBTaHvIGGgJoVK6VpAtwTPgMOqP/HmwFD1MU01e/U7+gZATEheDctoDczEgy4FhN
- K5WM36oVRkugSQ6XEaYU0v2kkm10nys1mfe42lhFSvTsEgi2yGWxBHhzZdl8X1pO20br49ocL
- XTCADH3+vCYRQ/07XrjRZCbQ==
+UI-OutboundReport: notjunk:1;M01:P0:iZCAP0iGeQM=;O1Mpjpr657CpvZER8GJiey98Wgp
+ C6gqKDJxJitZZ6zDjIBO+HTcJifeS0usODjuH20CRlZL0EcjfS8O61pVSB79QgjWDo5Xkuv9k
+ YN/co8T6LvzQuIAol4TItISt0X5VZ/ydZCYNiowdR45VuOMrp0eybqRidRfTUhlZ5lUj5KvyV
+ 2vSB+ix3AtQK8N9nskkJ5fAEga6KsXnCCoGe0ro1GbUDPGD/EGwIRRwjfw812BUehGGtoMskk
+ dYAMK0VKXUQmcB5z3XZ8dlbKOpuUmFSNhySLlnOpb6bcFAhvoGkk5RFBf4nyVVSWLKk0he3lK
+ 5eW4/pB5fryvsnirVwbvOMDfK/TLQXF01L8dA3SD1AMt+ErgdhynwATqVKmQEN+qTxgvUBkVY
+ jyyfYHVc6EgmCv9+bKQzRY9Jyj6Lb351tnMVPFvw6WKQkEmIlqfiD2kBHjLt4VOxARWudW8l+
+ SkF4K9TEL8VhyLID7/bhh1vx+ddMLM6rivHFdni3cvVXCfJsYeK12i2xoTV9V9hZQfz9IEjaJ
+ o6hceWzOFoRDWR1FEBkFos7vD33MuxbKGEkmnaiaqj3qDQnQGj3L2QJlqbqlE7oxiXcBCxm4L
+ GnNnWXlIULLMpP4vPN6f4NB/RyVFx2KFFS1CChmEj5svtfBBctm0t4V0U1MQavLd5jyZ9OToB
+ oDUrHjVgphDYUk3VoTR6JVmTD5UVv9zpPiB0CsoWCaVCyKUAqdiiiRVk6ThX+5X/BkljvHTFt
+ Hq0ZMJSgbR7Jx1UOL0YggKP7xKqTDqIsm3kRINbvK0t0xuVnCQf1KjEm22qWFzhMd1P6Mzeyh
+ ksYIob/0MsAgok1KXlhrjBFw==
 
-Am 27.10.24 um 14:36 schrieb Guenter Roeck:
+Am 27.10.24 um 15:28 schrieb Guenter Roeck:
 > On 10/27/24 03:53, Stefan Wahren wrote:
->> The WDOG Timeout Value (TOVAL) is a 16 bit value, which is stored
->> at the beginning of a 32 bit register. So add a range check to
->> prevent writing in the reserved register area.
+>> imx7ulp_wdt mixes a lot of timing units (frequency, clocks, seconds)
+>> in a not obvious way. So improve readability of imx7ulp_wdt by
+>> clarifying the relevant units.
 >>
 >> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 >> ---
->> =C2=A0 drivers/watchdog/imx7ulp_wdt.c | 8 ++++++++
->> =C2=A0 1 file changed, 8 insertions(+)
+>> =C2=A0 drivers/watchdog/imx7ulp_wdt.c | 18 ++++++++++--------
+>> =C2=A0 1 file changed, 10 insertions(+), 8 deletions(-)
 >>
 >> diff --git a/drivers/watchdog/imx7ulp_wdt.c
 >> b/drivers/watchdog/imx7ulp_wdt.c
->> index 0f92d2217088..a7574f9c9150 100644
+>> index 0f13a3053357..0f92d2217088 100644
 >> --- a/drivers/watchdog/imx7ulp_wdt.c
 >> +++ b/drivers/watchdog/imx7ulp_wdt.c
->> @@ -48,6 +48,8 @@
->>
->> =C2=A0 #define RETRY_MAX 5
->>
->> +#define TOVAL_MAX=C2=A0=C2=A0=C2=A0 0xFFFF
->> +
->> =C2=A0 static bool nowayout =3D WATCHDOG_NOWAYOUT;
->> =C2=A0 module_param(nowayout, bool, 0000);
->> =C2=A0 MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once star=
-ted
->> (default=3D"
->> @@ -192,6 +194,9 @@ static int imx7ulp_wdt_set_timeout(struct
->> watchdog_device *wdog,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 loop =3D RETRY_MAX;
->>
->> +=C2=A0=C2=A0=C2=A0 if (toval > TOVAL_MAX)
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
->> +
+>> @@ -19,7 +19,7 @@
+>> =C2=A0 #define WDOG_CS_PRES=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 B=
+IT(12)
+>> =C2=A0 #define WDOG_CS_ULK=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BI=
+T(11)
+>> =C2=A0 #define WDOG_CS_RCS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BI=
+T(10)
+>> -#define LPO_CLK=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 0x1
+>> +#define LPO_CLK=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 0x1=C2=A0=C2=A0=C2=A0 /* 32 kHz */
 >
-> The whole idea of having max_timeout in struct watchdog_device is to
-> avoid the need
-> for this check. max_timeout should be set to 0xffff /
-> wdt->hw->wdog_clock_rate.
-> It is currently set to 128. With wdt->hw->wdog_clock_rate set to
-> either 125 or 1000,
-> it can indeed overflow. However, checking the value above is wrong.
-> max_timeout should
-> be initialized correctly instead.
+> This configures the clock source to be the LPO clock, which according
+> to the
+> chip datasheets is a 1kHz clock for all chips except IMX93. It is only
+> 32kHz
+> for IMX93, and the prescaler is enabled for that chip.
 >
-> Even better would be to set max_hw_heartbeat_ms and let the watchdog
-> core handle
-> larger timeouts.
-It's funny because I tried this on a i.MX93 board but it didn't work for
-me. But I must confess that I didn't spend much time in the investigation.
+> The comment is not only misleading because it selects the clock source,
+> not the rate, but wrong, because it only selects a 32kHz clock for IMX93=
+,
+> and that value is then prescaled.
+Okay, I will drop it
 >
-> Another question is why the driver enables a clock but doesn't use its
-> actual
-> frequency.
-Yes, this would be better
+>> =C2=A0 #define LPO_CLK_SHIFT=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+8
+>> =C2=A0 #define WDOG_CS_CLK=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (L=
+PO_CLK << LPO_CLK_SHIFT)
+>> =C2=A0 #define WDOG_CS_EN=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BIT=
+(7)
+>> @@ -39,8 +39,8 @@
+>> =C2=A0 #define UNLOCK_SEQ1=C2=A0=C2=A0=C2=A0 0xD928
+>> =C2=A0 #define UNLOCK=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ((UNLOC=
+K_SEQ1 << 16) | UNLOCK_SEQ0)
+>>
+>> -#define DEFAULT_TIMEOUT=C2=A0=C2=A0=C2=A0 60
+>> -#define MAX_TIMEOUT=C2=A0=C2=A0=C2=A0 128
+>> +#define DEFAULT_TIMEOUT=C2=A0=C2=A0=C2=A0 60=C2=A0=C2=A0=C2=A0 /* seco=
+nds */
+>> +#define MAX_TIMEOUT=C2=A0=C2=A0=C2=A0 128=C2=A0=C2=A0=C2=A0 /* seconds=
+ */
+>> =C2=A0 #define WDOG_CLOCK_RATE=C2=A0=C2=A0=C2=A0 1000
+>> =C2=A0 #define WDOG_ULK_WAIT_TIMEOUT=C2=A0=C2=A0=C2=A0 1000
+>> =C2=A0 #define WDOG_RCS_WAIT_TIMEOUT=C2=A0=C2=A0=C2=A0 10000
+>> @@ -240,7 +240,8 @@ static const struct watchdog_info
+>> imx7ulp_wdt_info =3D {
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 WDIOF_MAGICCLOSE,
+>> =C2=A0 };
+>>
+>> -static int _imx7ulp_wdt_init(struct imx7ulp_wdt_device *wdt,
+>> unsigned int timeout, unsigned int cs)
+>> +static int _imx7ulp_wdt_init(struct imx7ulp_wdt_device *wdt,
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int timeout_clks, unsigned int cs)
+>
+> I don't think "_clks" adds any clarity because the value doesn't set a
+> "clock".
+> "_ticks", maybe.
+I'm fine with _ticks
 
-Regards
+Thanks
 >
-> Guenter
+>> =C2=A0 {
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 val;
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
+>> @@ -263,7 +264,7 @@ static int _imx7ulp_wdt_init(struct
+>> imx7ulp_wdt_device *wdt, unsigned int timeou
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto init_out;
+>>
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* set an initial timeout value in TOVAL=
+ */
+>> -=C2=A0=C2=A0=C2=A0 writel(timeout, wdt->base + WDOG_TOVAL);
+>> +=C2=A0=C2=A0=C2=A0 writel(timeout_clks, wdt->base + WDOG_TOVAL);
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 writel(cs, wdt->base + WDOG_CS);
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 local_irq_enable();
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D imx7ulp_wdt_wait_rcs(wdt);
+>> @@ -275,7 +276,8 @@ static int _imx7ulp_wdt_init(struct
+>> imx7ulp_wdt_device *wdt, unsigned int timeou
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return ret;
+>> =C2=A0 }
+>>
+>> -static int imx7ulp_wdt_init(struct imx7ulp_wdt_device *wdt, unsigned
+>> int timeout)
+>> +static int imx7ulp_wdt_init(struct imx7ulp_wdt_device *wdt,
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 unsigned int timeout_clks)
+>> =C2=A0 {
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* enable 32bit command sequence and rec=
+onfigure */
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 val =3D WDOG_CS_CMD32EN | WDOG_CS_CL=
+K | WDOG_CS_UPDATE |
+>> @@ -296,11 +298,11 @@ static int imx7ulp_wdt_init(struct
+>> imx7ulp_wdt_device *wdt, unsigned int timeout
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 do {
+>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D _imx7ulp_wdt_init(w=
+dt, timeout, val);
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D _imx7ulp_wdt_init(w=
+dt, timeout_clks, val);
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 toval =3D readl(=
+wdt->base + WDOG_TOVAL);
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cs =3D readl(wdt=
+->base + WDOG_CS);
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cs &=3D ~(WDOG_C=
+S_FLG | WDOG_CS_ULK | WDOG_CS_RCS);
+>> -=C2=A0=C2=A0=C2=A0 } while (--loop > 0 && (cs !=3D val || toval !=3D t=
+imeout || ret));
+>> +=C2=A0=C2=A0=C2=A0 } while (--loop > 0 && (cs !=3D val || toval !=3D t=
+imeout_clks ||
+>> ret));
+>>
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (loop =3D=3D 0)
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EBUSY;
+>> --
+>> 2.34.1
+>>
 >
 >
 
