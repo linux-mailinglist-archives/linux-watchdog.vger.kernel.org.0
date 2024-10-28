@@ -1,113 +1,125 @@
-Return-Path: <linux-watchdog+bounces-2357-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2358-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9CF89B2CB4
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2024 11:22:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD3B39B2EC3
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2024 12:24:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E3C528114E
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2024 10:22:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BA171C21CA0
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2024 11:24:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FC151D47BC;
-	Mon, 28 Oct 2024 10:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C33BD42A82;
+	Mon, 28 Oct 2024 11:20:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tOgZklpm"
+	dkim=pass (2048-bit key) header.d=siemens.com header.i=benedikt.niedermayr@siemens.com header.b="YK1ouhSF"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mta-65-228.siemens.flowmailer.net (mta-65-228.siemens.flowmailer.net [185.136.65.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ACD91D47AC
-	for <linux-watchdog@vger.kernel.org>; Mon, 28 Oct 2024 10:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A0D1D3648
+	for <linux-watchdog@vger.kernel.org>; Mon, 28 Oct 2024 11:20:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.65.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730110936; cv=none; b=MxF7qsbREipVLDw2zY9l6eBxqp8PUOTMg5mKAzh+xTROe5rZTMsDaejnr5E9HWp8Xkc4BH/TBI6ZGS7Jnr4l6zlgBa2ieQ/STU7T6aZWsBwN8BdhRsnsF0pGv+sCfIVFfZYmtoKj8CinBuS0nxFvjRhzIhrVQB5gCRzUW9GwGBk=
+	t=1730114413; cv=none; b=pYu7mR24jFCgUNTTOwVcq27dvbnIF6Uo9HdphYD1aF+FDHQOF1Ck0qtIyRcPjHCa3tZcsG36VIkzomWhwbVqvOnSywQm97tcbAHWq9d5kFejlWB7QftUQxch5tOWN/DU16tVVcXfAzf6UUfllnqL/moHEN+tvrVpvHeFCT3CTts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730110936; c=relaxed/simple;
-	bh=j+BzI74zx8wGhWna04Y/zOpDOTV07gvAuCwfKzcB5Zk=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=qr9nrcSOEKrQB9h1qMmD7+ENh0MX30Rd5p1wEplwlJ1djZmtmnKFGn1GibS6ttJMgbhXOdVBR6GLXFl+PDIaTa+60Fg8jQ2/3DE4aXmwbHv0i3enqTXJX/NetM5V0e10Dsc2sSUd3GvLFGyT576mnyFR5P+RABV9lX/XlrG4/K0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tOgZklpm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA644C4CEE4;
-	Mon, 28 Oct 2024 10:22:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730110935;
-	bh=j+BzI74zx8wGhWna04Y/zOpDOTV07gvAuCwfKzcB5Zk=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=tOgZklpm4yBEFypetxsi/9WsC1GvbpvGpTutm8XVtGiT7IrEYHdhZWFdX4KvpuwJG
-	 0C2EOIcXGE8pDW6np3zCYq7LwEfCsKTYv6X+WvSEMoeglpCKMWL3P9cmL9fk63pK3n
-	 xFYNjQaw9ZHs9R/v+jBAnnOxPiwLjxd5gJM2mekcEWquW9oVOOxAeAk+JFEgTapAhu
-	 cydshbOzEk5mqiZv8xjenME6Me9bwGrC2a1kNIgg+RpzblSlqJYtQLmWrPnFQESb7a
-	 Akkxx5LP5U+Z7j1LGdteY/G4abIaqS70avctcqKXoBWXVPRiR/8cV7bIfr1WqOjsZr
-	 SioRSGSSIkuGQ==
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id A2A831200043;
-	Mon, 28 Oct 2024 06:22:14 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Mon, 28 Oct 2024 06:22:14 -0400
-X-ME-Sender: <xms:1mUfZ7VC_Z2q7gUIjT0iD4Tme7xLSeA5h2JwFvBJd6yiUYNARZKwcQ>
-    <xme:1mUfZzkhlos7N77TrD7v8n6OjKW7mHiY1UBisOIgWCPK34KZG_H6IuBigdrIP7VGp
-    -yPAUXvkKZwJxzO5Cs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdejkedgudegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnhgvlh
-    drohhrgheqnecuggftrfgrthhtvghrnhepjeejffetteefteekieejudeguedvgfeffeei
-    tdduieekgeegfeekhfduhfelhfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghrnhguodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhi
-    thihqdduvdekhedujedtvdegqddvkeejtddtvdeigedqrghrnhgupeepkhgvrhhnvghlrd
-    horhhgsegrrhhnuggsrdguvgdpnhgspghrtghpthhtohephedpmhhouggvpehsmhhtphho
-    uhhtpdhrtghpthhtohepfihimheslhhinhhugidqfigrthgthhguohhgrdhorhhgpdhrtg
-    hpthhtohepshgthhhnvghllhgvsehlihhnuhigrdhisghmrdgtohhmpdhrtghpthhtohep
-    lhhinhhugiesrhhovggtkhdquhhsrdhnvghtpdhrtghpthhtoheplhhinhhugidqkhgvrh
-    hnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqfigr
-    thgthhguohhgsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:1mUfZ3azsVaR0rd6cg1YgmWUEY1S1CuTPs75uT79Ho-1o76R81hyKA>
-    <xmx:1mUfZ2XZkJqco_3KuwtD5_JSRIcHtT-_p27mD7SC7IWqaug2nYCPcw>
-    <xmx:1mUfZ1kSXS4g6_0m3YW9Jflt9IubwmdMMb37yVF-s9QUqVs5RCufTA>
-    <xmx:1mUfZzdiD_V8CCivPV6KlQhXgSa4eXL85Ju5nekhzPS1hIG_HgLtRA>
-    <xmx:1mUfZ_HMG9l2BfzQslx_7CeWPEHFGlDJLNjZ6MPMMNrcTjCEeSrOJWtY>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 6F5B42220071; Mon, 28 Oct 2024 06:22:14 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1730114413; c=relaxed/simple;
+	bh=ItHaAeA3t5zCok+910i2whs/c6mfv3/gAIB7CAL5qPA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NY87xvm9cBVga1R3uUk1zviZoYWrwf+EM5VJk4zX2uGlPOow1buO6gT3mN3k3dBKAs2iJ++izPlKx5Rzz2nIBMxgR9l2uv8rK3hYa+ELolx21s+TQPKo+HjLccqP538WNrvfq6PBxETf9Bv83/DXuU6DIWjO1O4FpPNfYjGhizM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=benedikt.niedermayr@siemens.com header.b=YK1ouhSF; arc=none smtp.client-ip=185.136.65.228
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+Received: by mta-65-228.siemens.flowmailer.net with ESMTPSA id 20241028112000e9745799d9bed13ee9
+        for <linux-watchdog@vger.kernel.org>;
+        Mon, 28 Oct 2024 12:20:01 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=benedikt.niedermayr@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=60P486yFCSDAYHWuQ7gt3t6auAm6BcPA3MNAns79R/0=;
+ b=YK1ouhSFLNLqqTW2fxklzWXfUPXW6WWP7sCIfzUlA3d+qiFLSm3fJ0JDgA+R4MmYg/rJr7
+ PHBINPLLzfLHSbYmQQUlRECx3g/M8f7mg7i+zN1MiGRnebNujoviOwQyyQCprRTcRcC5Xley
+ lC9lF0Ri+LApX4lzHx61LSf8pJFEyilMMW36/fWqClavSWbxUZy+OcyP/xTL1Sz2O0Yx2jKB
+ kUo311ngSIz9PGkYyD2iUhhtZWcyAaYqhjvQim8tBAvpNoCUOhiP65Q7NPYFYoGexcl1xhQ1
+ fpgZEnXOwImq51tqbrASeZ0MFLcMWEoLUFJ6sMEGO0G1G7zcN/w1mTqA==;
+From: Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
+To: konstantin@linuxfoundation.org,
+	baocheng.su@siemens.com,
+	tobias.schaffner@siemens.com,
+	pavel@ucw.cz,
+	lee@kernel.org,
+	hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com,
+	wim@linux-watchdog.org,
+	linux@roeck-us.net
+Cc: linux-leds@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	felix.moessbauer@siemens.com,
+	christian.storm@siemens.com,
+	quirin.gylstorff@siemens.com,
+	chao.zeng@siemens.com
+Subject: [PATCH 1/1] MAINTAINERS: replace bouncing maintainers
+Date: Mon, 28 Oct 2024 12:19:53 +0100
+Message-Id: <20241028111953.3329169-2-benedikt.niedermayr@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 28 Oct 2024 10:21:42 +0000
-From: "Arnd Bergmann" <arnd@kernel.org>
-To: "Niklas Schnelle" <schnelle@linux.ibm.com>,
- "Wim Van Sebroeck" <wim@linux-watchdog.org>,
- "Guenter Roeck" <linux@roeck-us.net>
-Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <3b12e20d-a299-4e82-a92c-cb3a68e60eb1@app.fastmail.com>
-In-Reply-To: <20241014-watchdog_sbc_ioport-v1-1-896ccf311839@linux.ibm.com>
-References: <20241014-watchdog_sbc_ioport-v1-1-896ccf311839@linux.ibm.com>
-Subject: Re: [PATCH] watchdog: Add HAS_IOPORT dependency for SBC8360 and SBC7240
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-1323861:519-21489:flowmailer
 
-On Mon, Oct 14, 2024, at 11:25, Niklas Schnelle wrote:
-> Both drivers use I/O port accesses without declaring a dependency on
-> CONFIG_HAS_IOPORT. For sbc8360_wdt this causes a compile error on UML
-> once inb()/outb() helpers become conditional.
->
-> For sbc7240_wdt this causes no such errors with UML because this driver
-> depends on both x86_32 and !UML. Nevertheless add HAS_IOPORT as
-> a dependency for both drivers to be explicit and drop the !UML
-> dependency for sbc7240_wdt as it is now redundant since UML implies no
-> HAS_IOPORT.
->
-> Fixes: 52df67b6b313 ("watchdog: add HAS_IOPORT dependencies")
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Since complaints about bouncing maintainers raised [1] we have now a
+replacement for maintainers that stepped away from their duties.
 
-I applied this to the asm-generic tree as well now, seeing that
-it was not part of the HAS_IOPORT series but is required for UML.
+[1] https://www.spinics.net/lists/platform-driver-x86/msg47105.html
 
-      Arnd
+Signed-off-by: Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
+---
+ MAINTAINERS | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a7ff3c758535..c1b39fe9e356 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20274,16 +20274,16 @@ F:	drivers/media/usb/siano/
+ F:	drivers/media/usb/siano/
+ 
+ SIEMENS IPC LED DRIVERS
+-M:	Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+-M:	Xing Tong Wu <xingtong.wu@siemens.com>
++M:	Bao Cheng Su <baocheng.su@siemens.com>
++M:	Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
+ M:	Tobias Schaffner <tobias.schaffner@siemens.com>
+ L:	linux-leds@vger.kernel.org
+ S:	Maintained
+ F:	drivers/leds/simple/
+ 
+ SIEMENS IPC PLATFORM DRIVERS
+-M:	Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+-M:	Xing Tong Wu <xingtong.wu@siemens.com>
++M:	Bao Cheng Su <baocheng.su@siemens.com>
++M:	Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
+ M:	Tobias Schaffner <tobias.schaffner@siemens.com>
+ L:	platform-driver-x86@vger.kernel.org
+ S:	Maintained
+@@ -20292,8 +20292,8 @@ F:	include/linux/platform_data/x86/simatic-ipc-base.h
+ F:	include/linux/platform_data/x86/simatic-ipc.h
+ 
+ SIEMENS IPC WATCHDOG DRIVERS
+-M:	Gerd Haeussler <gerd.haeussler.ext@siemens.com>
+-M:	Xing Tong Wu <xingtong.wu@siemens.com>
++M:	Bao Cheng Su <baocheng.su@siemens.com>
++M:	Benedikt Niedermayr <benedikt.niedermayr@siemens.com>
+ M:	Tobias Schaffner <tobias.schaffner@siemens.com>
+ L:	linux-watchdog@vger.kernel.org
+ S:	Maintained
+-- 
+2.34.1
+
 
