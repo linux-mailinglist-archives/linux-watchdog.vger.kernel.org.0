@@ -1,237 +1,228 @@
-Return-Path: <linux-watchdog+bounces-2361-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2362-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E7BE9B32B8
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2024 15:08:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 433D69B371D
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2024 17:52:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F30AFB2299E
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2024 14:08:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D21561F22254
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2024 16:52:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78EE31DE4EC;
-	Mon, 28 Oct 2024 14:07:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 738661DED59;
+	Mon, 28 Oct 2024 16:52:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="UQQyaMxi"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECD81DE2D7
-	for <linux-watchdog@vger.kernel.org>; Mon, 28 Oct 2024 14:07:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657051DED42;
+	Mon, 28 Oct 2024 16:52:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730124450; cv=none; b=mhWam7GSNV8InOd1F22tn+1TEDtDjntBRR0JUIOdpfvV0Nb0Fb695jKyJBsQ4R1eTEC5e+HKmET+3zx6rAHybgsWLvDBOt5Ub/gTSmy7Klx0dJJyel5oQgActFxNEDrS2AjjGIrspbxWLBWOejSvYaTpT6HFcs7ONvVeAA2CqXA=
+	t=1730134356; cv=none; b=EQFMcdRYqoWLJsQS8D8yW780Ufkj0fKI8AUPM9YdzYVsqHPBeAQhonT9xrFTxZWkxXwXReME6ITnQs0f7DSF2cxRNQUeOOT97ovoPJcvIv8jtD80ahGUiLZk/Q+vHQQ7064tHNicDW2JsRuUjk27DmJhwhaWjVlSR7BaCMZo3Tg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730124450; c=relaxed/simple;
-	bh=cphWtKkhhPCR0SL0T9ODiGPD3s6cDdHQ8iEsC3GcO3g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OzH0KZQwE6Vfe+SmYfzkCWMyZFrZpBiFfA4BKMbof4L8S0THxpPmTT0g+ECgGRDlkgpSsysZrK+TvbvqLjrkIpYyLN7sVtkW/CjH7OOLUmMm43yDFa5tNfSIeaX6ICo2mCMzyqfbzQluyDzkMlmKQkJrQoWTMyQTIHc3uTo6CCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t5QOJ-0001De-10; Mon, 28 Oct 2024 15:06:43 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1t5QOG-000rfn-1t;
-	Mon, 28 Oct 2024 15:06:40 +0100
-Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 174A6360944;
-	Mon, 28 Oct 2024 14:06:40 +0000 (UTC)
-Date: Mon, 28 Oct 2024 15:06:39 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
-Message-ID: <20241028-observant-gentle-doberman-0a2baa-mkl@pengutronix.de>
-References: <20241024085922.133071-1-tmyu0@nuvoton.com>
- <20241024085922.133071-2-tmyu0@nuvoton.com>
- <20241024-adventurous-imaginary-hornet-4d5c46-mkl@pengutronix.de>
- <CAOoeyxUhnyYG3p+DQJG-tvU5vc5WYQZLLqCXW=uPcXTjq2gVfw@mail.gmail.com>
- <20241025-truthful-honest-newt-c371c8-mkl@pengutronix.de>
- <CAOoeyxUEf5vjqL67WjR-DbrhE0==2hqHLEyZ5XEBhEfMfQ5pag@mail.gmail.com>
- <20241025-spirited-nocturnal-antelope-ce93dd-mkl@pengutronix.de>
- <CAOoeyxW5QwPMGAYCWhQDtZwJJLG5xj9HXpL3-cduRSgF+4VHhg@mail.gmail.com>
- <20241028-uptight-modest-puffin-0556e7-mkl@pengutronix.de>
- <CAOoeyxU1r3ayhNWrbE_muDhA0imfZYX3-UHxSen9TqsTrSsxyA@mail.gmail.com>
+	s=arc-20240116; t=1730134356; c=relaxed/simple;
+	bh=GhKQEalQq5DhqXZjp2nVcnuYVrHx6DAoEyqeJ8d+4hw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pyt7aRSxnvmfFwp9G+U6hHoTQl+fzbA6mPgy8uKwEq1HmcflpZBNqm6kWxjWNtAyp/iQ62U24QZn2ObhTla/dzxg1WJa60RwnplEQi1OKjxv0QHUfgTSdFXqtDDI/8QwPI2FCiRTX1tEVPtUdL/pb4vVdajpsvPPRJqtScQ1bY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=UQQyaMxi; arc=none smtp.client-ip=212.227.15.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1730134325; x=1730739125; i=wahrenst@gmx.net;
+	bh=GhKQEalQq5DhqXZjp2nVcnuYVrHx6DAoEyqeJ8d+4hw=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=UQQyaMxiQO7Q4b41H0HfESW7Mu1BFb81cidVwRD+yI2pIAddr9k1WhCPQ4PrRgZk
+	 TFPnbwm/pwrkbjo9/0bDrWDfayHxkb4M8zMsvW1h1hITteSUScOlPjTyA1j8pZNJF
+	 EQCgVyaCcaXCoijIY8Rog9sTLuiDTlQSlxxS+ouU/9RY1e5ybbP9Y5mbT/qPlN6Xr
+	 dVEK9Q+bQUmW+HJ5J8AXU0PFFXpzw2IWDizJjnh1NYF1uTtYBNmtbrE4FzcRFynJo
+	 oK2rNWjQaT5lmsWktg1Dyybi5ggUfadiLRyO4gpYu9hefoqXgMh8fBaiTKzo1/p7Q
+	 P02vDoz/XEgZdCfLSA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.105] ([37.4.248.43]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mulm5-1tvEXv3UtH-00zMj7; Mon, 28
+ Oct 2024 17:52:04 +0100
+Message-ID: <7f175303-b7e8-4d49-ad17-9cb434721bd1@gmx.net>
+Date: Mon, 28 Oct 2024 17:52:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2vg3oknj3uphvbvf"
-Content-Disposition: inline
-In-Reply-To: <CAOoeyxU1r3ayhNWrbE_muDhA0imfZYX3-UHxSen9TqsTrSsxyA@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
-
-
---2vg3oknj3uphvbvf
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] watchdog: imx7ulp_wdt: Add TOVAL range check
+To: Guenter Roeck <linux@roeck-us.net>, Alice Guo <alice.guo@nxp.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>,
+ linux-watchdog@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org
+References: <20241027105323.93699-1-wahrenst@gmx.net>
+ <20241027105323.93699-3-wahrenst@gmx.net>
+ <33721072-6ff4-45bd-b20f-cc0a213e3aae@roeck-us.net>
+ <686d128c-ce02-421e-9af5-6c418e82071d@gmx.net>
+ <016f25b9-58ec-4b51-81d7-4a573a4cc18a@roeck-us.net>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <016f25b9-58ec-4b51-81d7-4a573a4cc18a@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 1/9] mfd: Add core driver for Nuvoton NCT6694
-MIME-Version: 1.0
+X-Provags-ID: V03:K1:7XdQT3hLhRr9ALXESZ/YWfwjV+ddX83sIaU4FF5eHKFEb/hlLC6
+ JiGDIRp1mTanuohRfhCtrOWRgE1ds1ZX86VKINdnZrVJqoB9jFr/P6QkO3LnjUTmYKTeGmo
+ eA8nAThKn5rjoKLWrB0j53wGeqLpXocXPL4+EMXlQP01M3Ns1aUqbBaqTWPRae40sWk4Avx
+ 7rrLdswy5aI4amw5xFMhQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:SFlAgT4Oyxc=;Np0jtOdDNzlQoExMBs5gBffx/iw
+ F1j7m0F467Gdelbf6LkLnr8jxsKH+lApkOAyuy82iooGeqP5VhsvkGoSHp0x+DtLRoONj/alp
+ 17lmZVH6qhMJP4wElRH3kFwqbyIEAAoVqYafGXQAkOp/MOKkB+B8KHY6269kgNH8704HX+TsE
+ Eejm/ElutIQgUjvq/kHF3DzFtWH7w5GQAKVzc/YPzxiaPw5zhu95EKvOMAAMdD+hD0G1rvmgT
+ nbdfkaHiHyXaFlDKQLlqC/4bxy0Xel58LOz5EcbnPg5HtN/+bGS4hkF9rPiALasj31qNqI5i3
+ DQlzf/Pb0jTfewhhzLNHNdrYuZ0gxr7GgWJAUWgIafvBSmevt7B74ERcSvyFEvElAlpB3D7Wr
+ AeG2acZ8AkBxhBwMvNMzAr0IMFV8BJjZqFmlUiOGHmYDJOoHwT+sqPpkw/chx+nkIRGtBdxGh
+ xbsp3SgJyMKYinsN2ttQqtQdSwYVXDXTFHiAdOrIVubmFOkt74XvypRpP/rpGdUtZhXS8puux
+ SYw79W7SwX5mvqaKyJGbZBrBBLKGMoDO+5X+ILOlr+SR3OsXrTnNmdQZIyiJerylRZMwiTfwP
+ Q/40osCuocieAuQaDQZjCre+mSzwyZS9pAfK8CXlBqkGD7KGAYNHshDd67pIel7QUV4xqnsOu
+ RBcw7Pt1i1AYQaNrRcPBYfnM6DnWaCWlCIMYwwZBI4nvsdrGXndo4bdKUeCZM42NO+9YQ0bGr
+ kmRj9Y2qV+rD5RK8BKWWGJbofglEU1boGNrSjFy24NHBxljeby6SVfAVPsQIEqaaUV9Vvu24D
+ g9yjPVJjXGpG0y7OEynflEdQ==
 
-On 28.10.2024 16:31:25, Ming Yu wrote:
-> > > > > > > > The Linux USB stack can receive bulk messages longer than t=
-he max packet size.
-> > > > > > >
-> > > > > > > [Ming] Since NCT6694's bulk pipe endpoint size is 128 bytes f=
-or this MFD device.
-> > > > > > > The core will divide packet 256 bytes for high speed USB devi=
-ce, but
-> > > > > > > it is exceeds
-> > > > > > > the hardware limitation, so I am dividing it manually.
-> > > > > >
-> > > > > > You say the endpoint descriptor is correctly reporting it's max=
- packet
-> > > > > > size of 128, but the Linux USB will send packets of 256 bytes?
-> > > > >
-> > > > > [Ming] The endpoint descriptor is correctly reporting it's max pa=
-cket
-> > > > > size of 256, but the Linux USB may send more than 256 (max is 512)
-> > > > > https://elixir.bootlin.com/linux/v6.11.5/source/drivers/usb/host/=
-xhci-mem.c#L1446
-> > > >
-> > > > AFAIK according to the USB-2.0 spec the maximum packet size for
-> > > > high-speed bulk transfers is fixed set to 512 bytes. Does this mean=
- that
-> > > > your device is a non-compliant USB device?
-> > >
-> > > We will reduce the endpoint size of other interfaces to ensure that M=
-FD device
-> > > meets the USB2.0 spec. In other words, I will remove the code for man=
-ual
-> > > unpacking in the next patch.
-> >
-> > I was not talking about the driver, but your USB device. According to
-> > the USB2.0 spec, the packet size is fixed to 512 for high-speed bulk
-> > transfers. So your device must be able to handle 512 byte transfers or
-> > it's a non-compliant USB device.
->=20
-> I understand. Therefore, the USB device's firmware will be modified to su=
-pport
-> bulk pipe size of 512 bytes to comply with the USB 2.0 spec.
+Hi Guenter,
 
-Then you don't need manual segmentation of bulk transfers anymore!
+Am 27.10.24 um 18:35 schrieb Guenter Roeck:
+> On 10/27/24 08:54, Stefan Wahren wrote:
+>> Am 27.10.24 um 14:36 schrieb Guenter Roeck:
+>>> On 10/27/24 03:53, Stefan Wahren wrote:
+>>>> The WDOG Timeout Value (TOVAL) is a 16 bit value, which is stored
+>>>> at the beginning of a 32 bit register. So add a range check to
+>>>> prevent writing in the reserved register area.
+>>>>
+>>>> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+>>>> ---
+>>>> =C2=A0 drivers/watchdog/imx7ulp_wdt.c | 8 ++++++++
+>>>> =C2=A0 1 file changed, 8 insertions(+)
+>>>>
+>>>> diff --git a/drivers/watchdog/imx7ulp_wdt.c
+>>>> b/drivers/watchdog/imx7ulp_wdt.c
+>>>> index 0f92d2217088..a7574f9c9150 100644
+>>>> --- a/drivers/watchdog/imx7ulp_wdt.c
+>>>> +++ b/drivers/watchdog/imx7ulp_wdt.c
+>>>> @@ -48,6 +48,8 @@
+>>>>
+>>>> =C2=A0 #define RETRY_MAX 5
+>>>>
+>>>> +#define TOVAL_MAX=C2=A0=C2=A0=C2=A0 0xFFFF
+>>>> +
+>>>> =C2=A0 static bool nowayout =3D WATCHDOG_NOWAYOUT;
+>>>> =C2=A0 module_param(nowayout, bool, 0000);
+>>>> =C2=A0 MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once st=
+arted
+>>>> (default=3D"
+>>>> @@ -192,6 +194,9 @@ static int imx7ulp_wdt_set_timeout(struct
+>>>> watchdog_device *wdog,
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
+>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 loop =3D RETRY_MAX;
+>>>>
+>>>> +=C2=A0=C2=A0=C2=A0 if (toval > TOVAL_MAX)
+>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
+>>>> +
+>>>
+>>> The whole idea of having max_timeout in struct watchdog_device is to
+>>> avoid the need
+>>> for this check. max_timeout should be set to 0xffff /
+>>> wdt->hw->wdog_clock_rate.
+>>> It is currently set to 128. With wdt->hw->wdog_clock_rate set to
+>>> either 125 or 1000,
+>>> it can indeed overflow. However, checking the value above is wrong.
+>>> max_timeout should
+>>> be initialized correctly instead.
+>>>
+>>> Even better would be to set max_hw_heartbeat_ms and let the watchdog
+>>> core handle
+>>> larger timeouts.
+>> It's funny because I tried this on a i.MX93 board but it didn't work fo=
+r
+>> me. But I must confess that I didn't spend much time in the
+>> investigation.
+>
+> I can't test it, but something like the diff below should do.
+Thanks, I will give it a try but it will take some time.
 
-> > > > > > > > > +     for (i =3D 0, len =3D length; len > 0; i++, len -=
-=3D packet_len) {
-> > > > > > > > > +             if (len > nct6694->maxp)
-> > > > > > > > > +                     packet_len =3D nct6694->maxp;
-> > > > > > > > > +             else
-> > > > > > > > > +                     packet_len =3D len;
-> > > > > > > > > +
-> > > > > > > > > +             ret =3D usb_bulk_msg(udev, usb_rcvbulkpipe(=
-udev, BULK_IN_ENDPOINT),
-> > > > > > > > > +                                nct6694->rx_buffer + nct=
-6694->maxp * i,
-> > > > > > > > > +                                packet_len, &rx_len, nct=
-6694->timeout);
-> > > > > > > > > +             if (ret)
-> > > > > > > > > +                     goto err;
-> > > > > > > > > +     }
-> > > > > > > > > +
-> > > > > > > > > +     for (i =3D 0; i < rd_len; i++)
-> > > > > > > > > +             buf[i] =3D nct6694->rx_buffer[i + rd_idx];
-> > > > > > > >
-> > > > > > > > memcpy()?
-> > > > > > > >
-> > > > > > > > Or why don't you directly receive data into the provided bu=
-ffer? Copying
-> > > > > > > > of the data doesn't make it faster.
-> > > > > > > >
-> > > > > > > > On the other hand, receiving directly into the target buffe=
-r means the
-> > > > > > > > target buffer must not live on the stack.
-> > > > > > >
-> > > > > > > [Ming] Okay! I'll change it to memcpy().
-> > > > > >
-> > > > > > fine!
-> > > > > >
-> > > > > > > This is my perspective: the data is uniformly received by the=
- rx_bffer held
-> > > > > > > by the MFD device. does it need to be changed?
-> > > > > >
-> > > > > > My question is: Why do you first receive into the nct6694->rx_b=
-uffer and
-> > > > > > then memcpy() to the buffer provided by the caller, why don't y=
-ou
-> > > > > > directly receive into the memory provided by the caller?
-> > > > >
-> > > > > [Ming] Due to the bulk pipe maximum packet size limitation, I thi=
-nk consistently
-> > > > > using the MFD'd dynamically allocated buffer to submit URBs will =
-better
-> > > > > manage USB-related operations
-> > > >
-> > > > The non-compliant max packet size limitation is unrelated to the
-> > > > question which RX or TX buffer to use.
-> > >
-> > > I think these two USB functions can be easily called using the buffer
-> > > dynamically
-> > > allocated by the MFD. However, if they transfer data directly to the
-> > > target buffer,
-> > > they must ensure that it is not located on the stack.
-> >
-> > You have a high coupling between the MFD driver and the individual
-> > drivers anyways, so why not directly use the dynamically allocated
-> > buffer provided by the caller and get rid of the memcpy()?
->=20
-> Okay! I will provide a function to request and free buffer for child devi=
-ces,
-> and update the caller's variables to use these two functions in the next =
-patch.
+Regards
+>
+> Guenter
+>
+> ---
+> diff --git a/drivers/watchdog/imx7ulp_wdt.c
+> b/drivers/watchdog/imx7ulp_wdt.c
+> index 0f13a3053357..e672d27af63e 100644
+> --- a/drivers/watchdog/imx7ulp_wdt.c
+> +++ b/drivers/watchdog/imx7ulp_wdt.c
+> @@ -187,11 +187,16 @@ static int imx7ulp_wdt_set_timeout(struct
+> watchdog_device *wdog,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int =
+timeout)
+> =C2=A0{
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct imx7ulp_wdt_device *wd=
+t =3D watchdog_get_drvdata(wdog);
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 toval =3D wdt->hw->wdog_clock_=
+rate * timeout;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 toval;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 val;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 loop =3D RETRY_MAX;
+>
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (timeout > 0xffff / wdt->hw->wd=
+og_clock_rate)
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 toval =3D 0xffff;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 else
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 toval =3D wdt->hw->wdog_clock_rate * timeout;
+> +
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 do {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 ret =3D _imx7ulp_wdt_set_timeout(wdt, toval);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 val =3D readl(wdt->base + WDOG_TOVAL);
+> @@ -338,7 +343,6 @@ static int imx7ulp_wdt_probe(struct
+> platform_device *pdev)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wdog->info =3D &imx7ulp_wdt_i=
+nfo;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wdog->ops =3D &imx7ulp_wdt_op=
+s;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wdog->min_timeout =3D 1;
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wdog->max_timeout =3D MAX_TIMEOUT;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wdog->parent =3D dev;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wdog->timeout =3D DEFAULT_TIM=
+EOUT;
+>
+> @@ -348,6 +352,7 @@ static int imx7ulp_wdt_probe(struct
+> platform_device *pdev)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 watchdog_set_drvdata(wdog, im=
+x7ulp_wdt);
+>
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 imx7ulp_wdt->hw =3D of_device=
+_get_match_data(dev);
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wdog->max_hw_heartbeat_ms =3D 0xff=
+ff * 1000 /
+> imx7ulp_wdt->hw->wdog_clock_rate;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D imx7ulp_wdt_init(imx7=
+ulp_wdt, wdog->timeout *
+> imx7ulp_wdt->hw->wdog_clock_rate);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 return ret;
+>
+>
 
-I don't see a need to provide dedicated function to allocate and free
-the buffers. The caller can allocate them as part of their private data,
-or allocate them during probe().
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---2vg3oknj3uphvbvf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmcfmm0ACgkQKDiiPnot
-vG/OvQf+OF2IzP8yZ65Ke0Cq9hXkJZCpDCF4vKc3f2pLJQ/RjGNeubOY0v36mFwD
-5tZBs5Y7Md645uvjFh9VNg8YzW45+0dnzgzjGC28wj7hZpAW+yxnjNJ0zdpfBOPF
-pdwcIa8OLdqZ6exM1yGAyzV/en/klaL3oHu6RB8TmEMig/NQljdIF9nyslaqIAa4
-T1f+B7NmyH4nauAdBBhAOheqdJiO+eciscoFtxmOh4U5PQqGqR7VoBhkWrkx3JD1
-CqF6D9sNT+SP91/wuNPin6n85l/YDxSFkiKBG59p2do0l/vcwcWQ0denp4PT0dhk
-ZBpf0j8jPbNWS+ad8NpEyLE42beDRw==
-=o2YF
------END PGP SIGNATURE-----
-
---2vg3oknj3uphvbvf--
 
