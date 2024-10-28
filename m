@@ -1,107 +1,144 @@
-Return-Path: <linux-watchdog+bounces-2363-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2364-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97D709B3777
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2024 18:15:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 605AA9B39B9
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2024 19:54:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F1271C21671
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2024 17:15:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF9001F22FD7
+	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2024 18:54:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04B5D1DED5E;
-	Mon, 28 Oct 2024 17:15:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07E381DFE17;
+	Mon, 28 Oct 2024 18:54:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CWAOt+iN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hVzHeTEN"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2EAF188CD8;
-	Mon, 28 Oct 2024 17:15:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4873A268;
+	Mon, 28 Oct 2024 18:54:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730135726; cv=none; b=IuN4BG6nNfxWeBr195LM5lak0irytMXp7acxJTxCJBYJFzuIMEykPUrEa1EDyccUQ4FERXcSKls5fAqzi1h81DGD/pIzjSSr/F4cPP8tHrPyADlDQZuOqMcLPe+M1lVyfP/WmKz1Dq2esmCeRzKnM8RfX02HuMAM3oQ7wvXxPT8=
+	t=1730141668; cv=none; b=aoArrMviq3n86DrfCQCc8u6D0HU7vb200fbMll+miLf1njisWVrUCst3REJIDijDfr2PRVaKBswnUkiDVucoIgUQLFU8OhLtpA2T3B8pCDpevh8m/bhZznnTcgO66I1rnElLY3FZrlT/nLh8KibZHMljSdQs5tWUJRypr+KAWto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730135726; c=relaxed/simple;
-	bh=SHA60aUVkHc5dOlticmp590SgsHwyopdCX3RsUQYjWU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z8qSIKKt4ZLwEEAaZbIDgA3+VRSYewjkkvNq28sRrgGUKMzRFkMB1NugQOQJMOnRyS0VWpjdcOyZ6pa6QNwRp+mWQSkACDHiI3wWMv4sB2/1IG7wcSFXgeEah1bVf+Wbo5wOB+ZNywObj+m9KFJHoPuATKB0cSD1BKEZ2y5t8rQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CWAOt+iN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18F54C4CEC3;
-	Mon, 28 Oct 2024 17:15:25 +0000 (UTC)
+	s=arc-20240116; t=1730141668; c=relaxed/simple;
+	bh=ANCSbHqyxuvgp0nFgUZB2RvRiM1hWXf/XbsXVH8Nu0w=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hdFLplWPAyc69aNByuijthAxKBbbriIRvMajr6iPquUlyH+e3JN4sZJYKG1aD5fJDYXdAC/UsJkL4cAkTp0RshUSr53MQ6w1kHKoP9KvzRQpYNSoXnOuuVaseliKh96BbDETHt3z06e8Wvr8maJhSnKW/E0gMpc3MgDzedUVxjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hVzHeTEN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEACEC4CEC3;
+	Mon, 28 Oct 2024 18:54:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730135726;
-	bh=SHA60aUVkHc5dOlticmp590SgsHwyopdCX3RsUQYjWU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CWAOt+iNqV10UbkGMm36iAkjcva/IcPN2CiH5/NaihQtNCvt2RzbFu8Z3qJejfR/Q
-	 98AB7CAtGwicrznM29UzZtx5rnNHNFMdA+3xsHywrzFCo1yMoZfBcypBFW3cGCGzX3
-	 jp9BqiggK9yw/A9paQ0uxWnhV5vZwe+v/SIAYcfIrWWQ1Omrtgx7Fy/KjGRXcYky9S
-	 BaRi3qsuI14JxJiHm6H57dmVXxLmHwbfMfYlKBxnIbs+7CToaZIPAbEOJGmMRXegVS
-	 AVuGchll3ZzAwXShS1RXO8r0Ur5pK71nmjuv57v+czwzRxMO6s+DsZVO46wUB0mf/0
-	 atZrkOYxqzCsw==
-Date: Mon, 28 Oct 2024 12:15:24 -0500
-From: Rob Herring <robh@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-	Daniel Thompson <daniel.thompson@linaro.org>,
-	Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-input@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-	linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] dt-bindings: mfd: convert zii,rave-sp.txt and
- child txt to yaml format
-Message-ID: <20241028171524.GA888974-robh@kernel.org>
-References: <20241010-zii_yaml-v2-0-0ab730607422@nxp.com>
+	s=k20201202; t=1730141667;
+	bh=ANCSbHqyxuvgp0nFgUZB2RvRiM1hWXf/XbsXVH8Nu0w=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=hVzHeTENHMRNzDW3+KoT1ZR10ZxgtOU2dYGXd9+qjI7sGIXekTjlWGJ3QlHZpX333
+	 m5sd7l4u3A6e4KsRDqXzjwzflDfK0/to5CzePmJNw4VOulXUgz9OISBalHm75SzJYO
+	 9VQ2dh+2YTTwiEwGP3zjFwzsZr84qNKDKS8dEx2zk2hdGydSIFNV0bsk76zSFWm8HV
+	 pflgGv5/4GIwx2OwzHndpsshfKrVQ+i6eN1rnbb1+LSY8T8i55MEV5NyHWYd1vuDCv
+	 bPwfRWdxS5sWjeLr/TZXMjbDddRjGTSgXtmFrmInNeUP2sitIPfdswQQvnyl2lPWU3
+	 QzxqydZz+LTOQ==
+Date: Mon, 28 Oct 2024 18:54:14 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Kalesh Anakkur Purayil
+ <kalesh-anakkur.purayil@broadcom.com>, tmyu0@nuvoton.com, lee@kernel.org,
+ linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
+ mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, wim@linux-watchdog.org, jdelvare@suse.com,
+ lars@metafoo.de, ukleinek@kernel.org, alexandre.belloni@bootlin.com,
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v1 6/9] hwmon: Add Nuvoton NCT6694 HWMON support
+Message-ID: <20241028185414.65456203@jic23-huawei>
+In-Reply-To: <CAOoeyxX2Jk+76Cedu5_ZGgeRCPmT8Yhczmx7h+K-za7r2WS=Sw@mail.gmail.com>
+References: <20241024085922.133071-1-tmyu0@nuvoton.com>
+	<20241024085922.133071-7-tmyu0@nuvoton.com>
+	<CAH-L+nPGGhgDFge0Ov4rX_7vUyLN8uu51cks80=kt38h22N7zQ@mail.gmail.com>
+	<62ea5a91-816f-4600-bfec-8f70798051db@roeck-us.net>
+	<CAOoeyxX=A5o5PhxpniPwPgMCBv1VwMstt=wXCxHiGPF59gm5wQ@mail.gmail.com>
+	<817d24e1-6fdd-4ce2-9408-eccc94134559@roeck-us.net>
+	<02f05807-77ae-4a3b-8170-93dd7520c719@roeck-us.net>
+	<CAOoeyxX2Jk+76Cedu5_ZGgeRCPmT8Yhczmx7h+K-za7r2WS=Sw@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241010-zii_yaml-v2-0-0ab730607422@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 10, 2024 at 11:42:37AM -0400, Frank Li wrote:
-> Fixed below warnings:
-> 
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu: failed to match any schema with compatible: ['zii,rave-sp-rdu2']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu/watchdog: failed to match any schema with compatible: ['zii,rave-sp-watchdog']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu/backlight: failed to match any schema with compatible: ['zii,rave-sp-backlight']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu/pwrbutton: failed to match any schema with compatible: ['zii,rave-sp-pwrbutton']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu/eeprom@a3: failed to match any schema with compatible: ['zii,rave-sp-eeprom']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-rmb3.dtb: /soc@0/bus@30800000/serial@30890000/mcu/eeprom@a4: failed to match any schema with compatible: ['zii,rave-sp-eeprom']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu: failed to match any schema with compatible: ['zii,rave-sp-rdu2']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu/watchdog: failed to match any schema with compatible: ['zii,rave-sp-watchdog']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu/backlight: failed to match any schema with compatible: ['zii,rave-sp-backlight']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu/pwrbutton: failed to match any schema with compatible: ['zii,rave-sp-pwrbutton']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu/eeprom@a3: failed to match any schema with compatible: ['zii,rave-sp-eeprom']
-> arch/arm64/boot/dts/freescale/imx8mq-zii-ultra-zest.dtb: /soc@0/bus@30800000/serial@30890000/mcu/eeprom@a4: failed to match any schema with compatible: ['zii,rave-sp-eeprom']
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
-> Changes in v2:
-> - change all maintainer to frank li.
-> - Link to v1: https://lore.kernel.org/r/20241008-zii_yaml-v1-0-d06ba7e26225@nxp.com
-> 
-> ---
-> Frank Li (5):
->       dt-bindings: input: convert zii,rave-sp-pwrbutton.txt to yaml
->       dt-bindings: backlight: convert zii,rave-sp-backlight.txt to yaml
->       dt-bindings: nvmem: convert zii,rave-sp-eeprom.txt to yaml format
->       dt-bindings: watchdog: convert zii,rave-sp-wdt.txt to yaml format
->       dt-bindings: mfd: convert zii,rave-sp.txt to yaml format
+On Mon, 28 Oct 2024 15:58:00 +0800
+Ming Yu <a0282524688@gmail.com> wrote:
 
-Applied 1 and 4 since they still haven't been picked up and linux-next 
-is warning due to the whole series not being applied. Once again, these 
-MFD bindings need to go in via 1 tree.
+> Dear Guenter,
+>=20
+> The original plan was to use the IIO driver to access the temperature
+> and voltage sensors, and the HWMON driver to access the tachometers.
+> However, since the device is a hot-plug USB device, as far as I know,
+> IIO-HWMON is not applicable. I will merge the IIO driver part into the
+> HWMON driver in the next patch.
+> In  other words, the driver will be used to access TIN, VIN and FIN.
+See drivers/mfd/sun4i-gpadc.c
+for an example of an mfd using the iio-hwmon bridge.
 
-Rob
+Jonathan
+
+>=20
+> Best regards
+> Ming
+>=20
+> Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2024=E5=B9=B410=E6=9C=8826=
+=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=8810:50=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> >
+> > On 10/25/24 08:44, Guenter Roeck wrote: =20
+> > > On 10/25/24 08:22, Ming Yu wrote:
+> > > [ ... ]
+> > > =20
+> > >>>>> +static int nct6694_fan_write(struct device *dev, u32 attr, int c=
+hannel,
+> > >>>>> +                            long val)
+> > >>>>> +{
+> > >>>>> +       struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev);
+> > >>>>> +       unsigned char enable_buf[REQUEST_HWMON_CMD0_LEN] =3D {0};=
+ =20
+> > >>>> [Kalesh] Please try to maintain RCT order for variable declaration=
+ =20
+> > >>>
+> > >>> Ok, but that is already the case here ? =20
+> > >>
+> > >> [Ming] Is there anything that needs to be changed?
+> > >> =20
+> > >
+> > > I don't think so, If two lines have the same length, the order is up
+> > > to the developer to decide.
+> > >
+> > > Question though is if the buffer needs to be initialized. You should =
+drop
+> > > the initialization if it is not necessary. In that case the second li=
+ne
+> > > would be shorter anyway, and the order question would not arise.
+> > > =20
+> >
+> > Actually, I just noticed that you also submitted an IIO driver which
+> > reports the same data again. If a chip has an IIO driver, there should
+> > be no HWMON driver since the IIO -> HWMON bridge can then be used if
+> > necessary. So please drop this driver.
+> >
+> > Thanks,
+> > Guenter
+> >
+> > =20
+>=20
+
 
