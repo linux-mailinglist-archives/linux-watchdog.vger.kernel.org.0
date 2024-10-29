@@ -1,84 +1,119 @@
-Return-Path: <linux-watchdog+bounces-2365-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2366-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4C229B3EB6
-	for <lists+linux-watchdog@lfdr.de>; Tue, 29 Oct 2024 00:55:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D563A9B3FC4
+	for <lists+linux-watchdog@lfdr.de>; Tue, 29 Oct 2024 02:31:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA531282E86
-	for <lists+linux-watchdog@lfdr.de>; Mon, 28 Oct 2024 23:55:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A31A283205
+	for <lists+linux-watchdog@lfdr.de>; Tue, 29 Oct 2024 01:31:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDDE51EF92F;
-	Mon, 28 Oct 2024 23:55:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46C717DA82;
+	Tue, 29 Oct 2024 01:31:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="CNA8hmve"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="elYMcl+u"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC541DFDB9;
-	Mon, 28 Oct 2024 23:55:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7618C7DA95;
+	Tue, 29 Oct 2024 01:31:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730159738; cv=none; b=HyV6lWFa9pMudeAsQhqba3WQlMaiRgGBVi9wsk0bJj3u0qIiokhEG2tx/ecTdpBkaDRtnM/jDB2/3p6NZ2QcvoVyd3SGy5vT+uDk5dn67nSAiLrMFyBHhK5Ti6Fc6k0PDs7vlbrSywZyaPdt+atNWs2d+Bm66uWAOKDOZKQRPw4=
+	t=1730165481; cv=none; b=OBHKjwF4Y0TUzOOOMmJ66TG8fG8vpLu440UP8VYhxmdjBK+Yl/ivpJSvlY/9nEMxpnm8SmDYo5LSh+P2oB70zvvdm3ahujDZsHAsHsXz1BsdLbHbTh7QafgNLkc8cFztDulM2hlIdwfo1bTIAQBzDK9ToTSfz6E0m0YZJDviGno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730159738; c=relaxed/simple;
-	bh=bjqlL3P9HBN4voyP2L5yXiRhMBCYac+G+6cqIX9zAoQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dHd5aposqC4SiWh6jijHxAwCuyg0ybwxkAaaaV2lOcciFlaZmceu7YyPNov+fIxvi0q1KfLsTtQozc7u5PTygm8EqCUTE73vYcBf+ZMHaHOeMCvQepHrPPsb+BD5ItrApJF+Fmf0e1rkqEsb0CmGDWWNkt3dDiBZ4b9JVtdmuTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=CNA8hmve; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+	s=arc-20240116; t=1730165481; c=relaxed/simple;
+	bh=6fAcAqpXTciIBerQvj9NeAzXhK41rLKSjlVQqYmzxWA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UBYF8xTDixHq20mnmxdUQZK9ckvVj2QMQ4+tnufsLDOIve2tAoiw0X4Dv4B620Moz91xxMv+SuehrBqlI4mTIrV3BdTcW0zhRNv2XaSQkhRCYA20fDRSel+aQp/lp0kp9iGhrdT/NDXygiWv3hSrr10frTG96DCCagpxFunxRBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=elYMcl+u; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-20e6981ca77so52748085ad.2;
+        Mon, 28 Oct 2024 18:31:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1730159732;
-	bh=bjqlL3P9HBN4voyP2L5yXiRhMBCYac+G+6cqIX9zAoQ=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=CNA8hmvef1s42GR010rD7RxBEzuLHnOSLEfuTT4ohExeXOUCtAQ3i+ii9BKdYKgKV
-	 oo+ShgOBibYW+XnZbEV/vB+1TfNLRQXjyFJrz0LhuGlcgReHpnuvlFkW7MOxNEvdvd
-	 ww1dmGu+0KI665WZPEqhRujOC1/thS7nO3Rjd+GF5ltVm7gahHiv7Iu4N/GsSAxdx2
-	 l7lujEO43zAdpezhv6vA4WZmuVsYw2em11xjIbHBYTxBvLb6JIajA3ovfIYuJwq89Q
-	 8yOFQNx3fu39RpTxjMjnWcvV1eDs6PkTYpfahkMeC4b4BbiELz9EC3tL/4My1i9pUT
-	 ow3BSW4nRJKLw==
-Received: from [192.168.68.112] (ppp118-210-190-243.adl-adc-lon-bras34.tpg.internode.on.net [118.210.190.243])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 91D4F67728;
-	Tue, 29 Oct 2024 07:55:26 +0800 (AWST)
-Message-ID: <0b51600b1308d64e362b771f1bf8adde2fa0fc19.camel@codeconstruct.com.au>
-Subject: Re: [PATCH v2 1/3] ARM: dts: aspeed: Add WDT controller into alias
- field
-From: Andrew Jeffery <andrew@codeconstruct.com.au>
-To: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>, patrick@stwcx.xyz, 
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, joel@jms.id.au, 
-	wim@linux-watchdog.org, linux@roeck-us.net, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Cc: Peter.Yin@quantatw.com, Patrick_NC_Lin@wiwynn.com, Bonnie_Lo@wiwynn.com,
-  DELPHINE_CHIU@wiwynn.com, bmc-sw@aspeedtech.com,
- chnguyen@amperecomputing.com
-Date: Tue, 29 Oct 2024 10:25:20 +1030
-In-Reply-To: <20241028024813.2416962-2-chin-ting_kuo@aspeedtech.com>
-References: <20241028024813.2416962-1-chin-ting_kuo@aspeedtech.com>
-	 <20241028024813.2416962-2-chin-ting_kuo@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+        d=gmail.com; s=20230601; t=1730165479; x=1730770279; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mTMUiHHYVMRUoicKPTQrikup5KdhwmqMJsFGyJ97y1M=;
+        b=elYMcl+ukd4UA+QnzrsHbMonX6ByCpwKO00MMjs857RGmiGiuw3BTg9jMUaJ8DYc0L
+         ulH6bdOgVGRG7Jc2mulNgPbev0YBNKYM3f4Vi851gaXbfj8eXSy+GBXgyOd8Taelas4o
+         +caofcci2eszb6VL60vi7W3A0DR/2eM/yJ4BcysExsCotyvbJrYgVFSNIohWGjg6jopY
+         4pEQxxm39v6JqprHuC2kCj4M7vN1jC9sarnCEZcxtdKES44M5DSj6jUd80RwJjBTYsNw
+         BsQXrTw4h5aZX1Y2KxO4FNGioL8DmYux/rJGYpiZhNi49M1YWpPRh5LGt00AURrv0DMs
+         15rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730165479; x=1730770279;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mTMUiHHYVMRUoicKPTQrikup5KdhwmqMJsFGyJ97y1M=;
+        b=GRhsjURW2TVkrPBfqTjWOaoR9wUT5MQMN4wCCn0ECDx0CVNAexUtQeEVlMKl8EH/wi
+         WtZBvc1JzspoAfR7nMBoWFdPX+Xd5SrfWWQk0/vZRJECyu3SnrotabZmWtQWj6NnUete
+         IgEndc4hyYkXtLuQDdctg6S0kJ4IiNLqcGMrn7CC+Tf3snGIBsB2iWiYuVR0DHgKMezW
+         tVbXoTsm2mKnzTvWoM2dPyllCuIwvmSNEEI0YK7rRtfU+nS/uRf5qdNoBfLb+7zLQ73f
+         1REhrTqxm/EcsvgkmOmYz94up2FkGbpIl0fyO3PKCndmJGXIIan5CYn2dPuQyQqZDGg5
+         n/Jw==
+X-Forwarded-Encrypted: i=1; AJvYcCUqRrk1sA1K39+iW0Zdk4eqIyy6I0FG/rnOZvuwOcdaBoaNfaCWd7QmI8gVZNBmAIzaPgD5Xpj+u7hqNLf7wHw=@vger.kernel.org, AJvYcCXv9tZHOsD+ulvS18S8bQEgEsdixsCJRGwGnN04q3/B7y7dCPv/deb/JzB0sqWV2BV9hlE/4TVWfPCGvbI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDM7WwUI05Z5njyTs3K+O2DMAO3Au5Tpzm2UdLtqwRcrQaFSfX
+	3pp1wbqQafqRMaMywLr7YWjY+WnQ6StURzehxYBBLMQJ/Tv3/TNX
+X-Google-Smtp-Source: AGHT+IHpTVvjwrQ3EcoGKK0bmJ6jA8y24xXtEro+uTiZy8kx8QQbwEUeJniOAu9P1ssNSK/aTxA2WA==
+X-Received: by 2002:a05:6a20:e30b:b0:1d9:d5e:82a6 with SMTP id adf61e73a8af0-1d9a85169f1mr14366765637.45.1730165478664;
+        Mon, 28 Oct 2024 18:31:18 -0700 (PDT)
+Received: from localhost.localdomain ([59.188.211.160])
+        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-7205791e564sm6686529b3a.17.2024.10.28.18.31.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Oct 2024 18:31:18 -0700 (PDT)
+From: Nick Chan <towinchenmi@gmail.com>
+To: Hector Martin <marcan@marcan.st>,
+	Sven Peter <sven@svenpeter.dev>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Nick Chan <towinchenmi@gmail.com>
+Subject: [PATCH v2 RESEND 0/2] watchdog: apple: Increase reset delay to 150ms
+Date: Tue, 29 Oct 2024 09:29:16 +0800
+Message-ID: <20241029013055.45538-1-towinchenmi@gmail.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2024-10-28 at 10:48 +0800, Chin-Ting Kuo wrote:
-> Add WDT controller into alias field. After that, WDT index,
-> used to distinguish different WDT controllers in the driver,
-> can be gotten by using of_alias_get_id dts API.
+Increase the reset delay to 150ms as the Apple A8X SoC can take up to
+125ms to actually reset.
 
-I feel it would be less brittle if we encode the mapping in the driver?
-Based on reg the driver can derive the watchdog index. That way there's
-no constraint on how the platform architect arranges the aliases for
-the watchdogs (if they define them at all).
+Since the code is being modified anyways, also fix a bug where watchdog
+writes were not actually getting flushed after requesting reset, depsite
+what the code comments said.
 
-Andrew
+Changes since v1:
+- Fix an existing bug where watchdog writes are not flushed
+
+v1: https://lore.kernel.org/asahi/20240930060653.4024-1-towinchenmi@gmail.com
+
+Nick Chan
+---
+
+Nick Chan (2):
+  watchdog: apple: Actually flush writes after requesting watchdog
+    restart
+  watchdog: apple: Increase reset delay to 150ms
+
+ drivers/watchdog/apple_wdt.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+
+base-commit: dec9255a128e19c5fcc3bdb18175d78094cc624d
+-- 
+2.47.0
+
 
