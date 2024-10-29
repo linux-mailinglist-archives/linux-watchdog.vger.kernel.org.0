@@ -1,70 +1,72 @@
-Return-Path: <linux-watchdog+bounces-2366-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2367-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D563A9B3FC4
-	for <lists+linux-watchdog@lfdr.de>; Tue, 29 Oct 2024 02:31:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39FF69B3FC6
+	for <lists+linux-watchdog@lfdr.de>; Tue, 29 Oct 2024 02:31:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A31A283205
-	for <lists+linux-watchdog@lfdr.de>; Tue, 29 Oct 2024 01:31:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BA0A1C21F16
+	for <lists+linux-watchdog@lfdr.de>; Tue, 29 Oct 2024 01:31:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46C717DA82;
-	Tue, 29 Oct 2024 01:31:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00210188733;
+	Tue, 29 Oct 2024 01:31:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="elYMcl+u"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wp9NUbcl"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7618C7DA95;
-	Tue, 29 Oct 2024 01:31:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 200A780054;
+	Tue, 29 Oct 2024 01:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730165481; cv=none; b=OBHKjwF4Y0TUzOOOMmJ66TG8fG8vpLu440UP8VYhxmdjBK+Yl/ivpJSvlY/9nEMxpnm8SmDYo5LSh+P2oB70zvvdm3ahujDZsHAsHsXz1BsdLbHbTh7QafgNLkc8cFztDulM2hlIdwfo1bTIAQBzDK9ToTSfz6E0m0YZJDviGno=
+	t=1730165483; cv=none; b=J1YQXK3gLLVHWkMJERqaQfQfFNUsNwOpP45txZmv1q6g8fF1yeVkmtZP+fHJ4BFdJs6fmMB9m3Ix3MMtQ0cd8m/a6gPlqGJ2OSFYThdYBuaZPt1hBntrwks5qOlQpIO0DjdBvE8IfrAPyfUekpUvkdkKNRZWJwv1aIJ6SH+dj80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730165481; c=relaxed/simple;
-	bh=6fAcAqpXTciIBerQvj9NeAzXhK41rLKSjlVQqYmzxWA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UBYF8xTDixHq20mnmxdUQZK9ckvVj2QMQ4+tnufsLDOIve2tAoiw0X4Dv4B620Moz91xxMv+SuehrBqlI4mTIrV3BdTcW0zhRNv2XaSQkhRCYA20fDRSel+aQp/lp0kp9iGhrdT/NDXygiWv3hSrr10frTG96DCCagpxFunxRBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=elYMcl+u; arc=none smtp.client-ip=209.85.214.182
+	s=arc-20240116; t=1730165483; c=relaxed/simple;
+	bh=VqoKn0i085NYBXXwHkUOwL2fkvCdHCGrJiPFJ/U3NUI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LxXqMfh2SzD2MkFdbAIz5vTF/OP7fi6ztxmDXbWb/X/e/lEg0uG5ejJZ4mE2foijm7d/VVezYGWNXHOwld+kT5L3A5snvNMr3SU6vIoci+4V+C1BchoRYXOoPK1icsi05zQyEcK1vGxrg5k2hy6r7c2+A+llj9akM3SgPB++3pI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wp9NUbcl; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-20e6981ca77so52748085ad.2;
-        Mon, 28 Oct 2024 18:31:19 -0700 (PDT)
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7edb6879196so3142527a12.3;
+        Mon, 28 Oct 2024 18:31:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730165479; x=1730770279; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mTMUiHHYVMRUoicKPTQrikup5KdhwmqMJsFGyJ97y1M=;
-        b=elYMcl+ukd4UA+QnzrsHbMonX6ByCpwKO00MMjs857RGmiGiuw3BTg9jMUaJ8DYc0L
-         ulH6bdOgVGRG7Jc2mulNgPbev0YBNKYM3f4Vi851gaXbfj8eXSy+GBXgyOd8Taelas4o
-         +caofcci2eszb6VL60vi7W3A0DR/2eM/yJ4BcysExsCotyvbJrYgVFSNIohWGjg6jopY
-         4pEQxxm39v6JqprHuC2kCj4M7vN1jC9sarnCEZcxtdKES44M5DSj6jUd80RwJjBTYsNw
-         BsQXrTw4h5aZX1Y2KxO4FNGioL8DmYux/rJGYpiZhNi49M1YWpPRh5LGt00AURrv0DMs
-         15rg==
+        d=gmail.com; s=20230601; t=1730165481; x=1730770281; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZLlIgnNlMn/MjFz2hg97vAWrW6LF9UehdPASjV2ScCU=;
+        b=Wp9NUbclnPzUZmYrx5Y2TPFA0/jyqn8XFJ+oGEVtralTmn3ohhszIHeSfflewYH9NK
+         HxG9/lqidsSYXB9gn7rzDxmRJzTaBPXzWSZ/EFomPI+fJdS0HOVCYfNcRKQRhhL9FDCT
+         j49VZr2D3o4OenRwmbQb9TBhuunk8dU4MZ7Wfa5zReCeplGemsdtAOckgQJSezonFL3C
+         oP5RV6fvmXT0l3ss95RIFFo/ekhQngvILqzo+Ap/Hwbnt06M0qlU3rTcxr81ieza/QMs
+         3rfYqrYftEUvaxlFgn63iYoBNLguD09uha2Uo70GHhWKWX1QDKxQxRqgBQZyOdZSYGlY
+         7ABg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730165479; x=1730770279;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mTMUiHHYVMRUoicKPTQrikup5KdhwmqMJsFGyJ97y1M=;
-        b=GRhsjURW2TVkrPBfqTjWOaoR9wUT5MQMN4wCCn0ECDx0CVNAexUtQeEVlMKl8EH/wi
-         WtZBvc1JzspoAfR7nMBoWFdPX+Xd5SrfWWQk0/vZRJECyu3SnrotabZmWtQWj6NnUete
-         IgEndc4hyYkXtLuQDdctg6S0kJ4IiNLqcGMrn7CC+Tf3snGIBsB2iWiYuVR0DHgKMezW
-         tVbXoTsm2mKnzTvWoM2dPyllCuIwvmSNEEI0YK7rRtfU+nS/uRf5qdNoBfLb+7zLQ73f
-         1REhrTqxm/EcsvgkmOmYz94up2FkGbpIl0fyO3PKCndmJGXIIan5CYn2dPuQyQqZDGg5
-         n/Jw==
-X-Forwarded-Encrypted: i=1; AJvYcCUqRrk1sA1K39+iW0Zdk4eqIyy6I0FG/rnOZvuwOcdaBoaNfaCWd7QmI8gVZNBmAIzaPgD5Xpj+u7hqNLf7wHw=@vger.kernel.org, AJvYcCXv9tZHOsD+ulvS18S8bQEgEsdixsCJRGwGnN04q3/B7y7dCPv/deb/JzB0sqWV2BV9hlE/4TVWfPCGvbI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDM7WwUI05Z5njyTs3K+O2DMAO3Au5Tpzm2UdLtqwRcrQaFSfX
-	3pp1wbqQafqRMaMywLr7YWjY+WnQ6StURzehxYBBLMQJ/Tv3/TNX
-X-Google-Smtp-Source: AGHT+IHpTVvjwrQ3EcoGKK0bmJ6jA8y24xXtEro+uTiZy8kx8QQbwEUeJniOAu9P1ssNSK/aTxA2WA==
-X-Received: by 2002:a05:6a20:e30b:b0:1d9:d5e:82a6 with SMTP id adf61e73a8af0-1d9a85169f1mr14366765637.45.1730165478664;
-        Mon, 28 Oct 2024 18:31:18 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1730165481; x=1730770281;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZLlIgnNlMn/MjFz2hg97vAWrW6LF9UehdPASjV2ScCU=;
+        b=YdiVce+ggQhmwvBb/pFVD+KC9BotaOQF4V6Eu2y7FcBYIvaox4/N9vKEQYKrPJPY0e
+         zAwjegk7P5EotDnOmnJCV060NvpliL9aN7WR4Bcf47tIu/yeEOfcWtof9/e7bO+er+j1
+         KPtcZRTp2OUJ8Hid3lHds8JzLgOwI9oMyQV29jXJTGpMj8JWkLChL61qHnZ6MAGUJrPt
+         cT1UQenlPSDX7s35Ke15s9CTqdifHGoOzIyxjpvtGi3z+9e89NQoUCLkIycovBuO/9VR
+         6EQ244c9uLqtc83qkQVqECdrgL8mzQ+3q6WpxeQJIiLKIYnvTtThJzxXgOYhZHixQ1mQ
+         b5JA==
+X-Forwarded-Encrypted: i=1; AJvYcCV+lrqk0MHDVKtGcUnNrHfGO/H3GhWeUDaOvopKJl0k+wt8MKMJN0Dg6TETDNQZImjxTgV488/e5unfajtIRCI=@vger.kernel.org, AJvYcCX7j9FeLM/B1HuOCKC6xz1nLf5fKEyN1WPYZki2263BN9ElfXhJVa2/5La7+1cXkfjkLM6ChsMYUhlOIo8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLXvYRdT6Wj0yuJ407f7sO8Y3/ncxadnZWx3wP7gtc6t8MFRXL
+	tpYMvmx/dAme93Ea+bOPO2WrBY6y7dEJfA74uRMbfv+uV31I2CeS
+X-Google-Smtp-Source: AGHT+IFsJ8/5pQAcma2IcNhwC+EoCEWeaDrvUbuERmpkGhRfDc2AJixjHb6s+XFCiJXWVYDvFRJCIg==
+X-Received: by 2002:a05:6a20:c6ce:b0:1d8:d302:16a7 with SMTP id adf61e73a8af0-1d9a83ab53emr11772805637.3.1730165481451;
+        Mon, 28 Oct 2024 18:31:21 -0700 (PDT)
 Received: from localhost.localdomain ([59.188.211.160])
-        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-7205791e564sm6686529b3a.17.2024.10.28.18.31.16
+        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-7205791e564sm6686529b3a.17.2024.10.28.18.31.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2024 18:31:18 -0700 (PDT)
+        Mon, 28 Oct 2024 18:31:21 -0700 (PDT)
 From: Nick Chan <towinchenmi@gmail.com>
 To: Hector Martin <marcan@marcan.st>,
 	Sven Peter <sven@svenpeter.dev>,
@@ -75,11 +77,14 @@ To: Hector Martin <marcan@marcan.st>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-watchdog@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Cc: Nick Chan <towinchenmi@gmail.com>
-Subject: [PATCH v2 RESEND 0/2] watchdog: apple: Increase reset delay to 150ms
-Date: Tue, 29 Oct 2024 09:29:16 +0800
-Message-ID: <20241029013055.45538-1-towinchenmi@gmail.com>
+Cc: Nick Chan <towinchenmi@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v2 RESEND 1/2] watchdog: apple: Actually flush writes after requesting watchdog restart
+Date: Tue, 29 Oct 2024 09:29:17 +0800
+Message-ID: <20241029013055.45538-2-towinchenmi@gmail.com>
 X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20241029013055.45538-1-towinchenmi@gmail.com>
+References: <20241029013055.45538-1-towinchenmi@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -88,31 +93,32 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Increase the reset delay to 150ms as the Apple A8X SoC can take up to
-125ms to actually reset.
+Although there is an existing code comment about flushing the writes,
+writes were not actually being flushed.
 
-Since the code is being modified anyways, also fix a bug where watchdog
-writes were not actually getting flushed after requesting reset, depsite
-what the code comments said.
+Actually flush the writes by changing readl_relaxed() to readl().
 
-Changes since v1:
-- Fix an existing bug where watchdog writes are not flushed
-
-v1: https://lore.kernel.org/asahi/20240930060653.4024-1-towinchenmi@gmail.com
-
-Nick Chan
+Fixes: 4ed224aeaf661 ("watchdog: Add Apple SoC watchdog driver")
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Guenter Roeck  <linux@roeck-us.net>
+Signed-off-by: Nick Chan <towinchenmi@gmail.com>
 ---
+ drivers/watchdog/apple_wdt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Nick Chan (2):
-  watchdog: apple: Actually flush writes after requesting watchdog
-    restart
-  watchdog: apple: Increase reset delay to 150ms
-
- drivers/watchdog/apple_wdt.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-
-base-commit: dec9255a128e19c5fcc3bdb18175d78094cc624d
+diff --git a/drivers/watchdog/apple_wdt.c b/drivers/watchdog/apple_wdt.c
+index d4f739932f0b..62dabf223d90 100644
+--- a/drivers/watchdog/apple_wdt.c
++++ b/drivers/watchdog/apple_wdt.c
+@@ -130,7 +130,7 @@ static int apple_wdt_restart(struct watchdog_device *wdd, unsigned long mode,
+ 	 * can take up to ~20-25ms until the SoC is actually reset. Just wait
+ 	 * 50ms here to be safe.
+ 	 */
+-	(void)readl_relaxed(wdt->regs + APPLE_WDT_WD1_CUR_TIME);
++	(void)readl(wdt->regs + APPLE_WDT_WD1_CUR_TIME);
+ 	mdelay(50);
+ 
+ 	return 0;
 -- 
 2.47.0
 
