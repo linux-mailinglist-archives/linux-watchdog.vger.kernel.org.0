@@ -1,154 +1,183 @@
-Return-Path: <linux-watchdog+bounces-2379-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2380-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29A149B55B2
-	for <lists+linux-watchdog@lfdr.de>; Tue, 29 Oct 2024 23:23:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1088A9B5A5A
+	for <lists+linux-watchdog@lfdr.de>; Wed, 30 Oct 2024 04:30:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 522FA1C20CA1
-	for <lists+linux-watchdog@lfdr.de>; Tue, 29 Oct 2024 22:23:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC75C283EAE
+	for <lists+linux-watchdog@lfdr.de>; Wed, 30 Oct 2024 03:30:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D95AA20ADD3;
-	Tue, 29 Oct 2024 22:23:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACD8A1991DA;
+	Wed, 30 Oct 2024 03:29:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c3SNIhGZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mvtq13+I"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F3D20A5FE;
-	Tue, 29 Oct 2024 22:23:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBE914F90;
+	Wed, 30 Oct 2024 03:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730240623; cv=none; b=d4toTzoClIKZBwEDFjqfTGc3VMlb1V6vLtBjW/ZEKDZ4u3/Lk0jsLi84pSXpqyvuYQZQDZCoykqGLEEwN5GFB2V/Lzc1RHFiQP3rSr5QxQsvswOws2S6mQUKpRjCOKHOmiCF627+G0qmPGIes36nBKYTKdjvbBx/lgnhP5HpGj8=
+	t=1730258997; cv=none; b=ed6ocFOK6lRO3Szymoi7ZRORrcK5FIl4GAT6cHJRmdQ+RAWgIcJZVp7kaiJ8gy+Sa5GnP2WarV+f3Vil1AhMVr6avDZdW6aVENpsjCV3jmY+tbbMqmrixyZV4CUBw3WuT/DstVFyCxFuihsnDdBzT7Zi/qVsec5Wa/+72aYdHrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730240623; c=relaxed/simple;
-	bh=YOHlfonGcOkRZSPk9E2iJXfWyslkYwgrxSzkG+aqEkk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jo4+25nlBj83uj/OUnmR55APhRAP7zMRpbr+neqyxmh4SRENf3JDwnRGsFKH2DTixFoKt/IyYv1w2SH6agWxPP4pGzX6NkoAEVCB55R2q9WHYXMUSmEYzF17urP2UjDFR/whsLoBqKmH1IOky2gviuNauw1ZOfdYqRr8g9TL+PY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c3SNIhGZ; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1730258997; c=relaxed/simple;
+	bh=gB6sMqfjocTtVpdzRyKnKZUQ89s5//aBIvoYbkO8htc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FJWnkXpw9RkdypNuofLD7LIjrWdJ5QNl/TqB3MJxd9SdmlBfAJAgrYgRPV1PzLfx1ftkWNZMVDqyYYOgNyVDs61peYGge0u2kfHuOvD2wUvC/fY4GK8d1HCaB3T4vuYXNZffhWckXZ6o/xXU3OOiRdTa2RhjQsqwPuUafJrO9RI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mvtq13+I; arc=none smtp.client-ip=209.85.219.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-20cbcd71012so64434695ad.3;
-        Tue, 29 Oct 2024 15:23:41 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e29687f4cc6so6416226276.2;
+        Tue, 29 Oct 2024 20:29:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730240621; x=1730845421; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=S3amIaBqxn/MRk2a7GLzyv4HMPzhNOSMDMorth6/EHs=;
-        b=c3SNIhGZNTehoQdWucxglG+h7S90E0jMO7kOccc1und7DRW8PgK4qkRzVOffV6Qsz8
-         9J8NWaPFufp5OE1AK+GDDEO56ai3Eerl7NsvQtDPWVHW3EoFTpIDOA8nEQbRbF/S+Ion
-         S3h8GjovzPdilziqModyHwQfbK1L9TOz3k49iERdN4UYzWzqBih602qv8vcmerKASrf0
-         +s7Z5om8vzCdxlmF9TiPGufFMia3CO9s2fIDTM77MyU8d1/NG9wXHvX74yW99QWXDtys
-         WmtkFRxEQIh8wDhx/pfFGJ43NjLgJn0La44AFtlk3eyO9LytkmSjQB6cOKRaD3PT8ETD
-         nMYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730240621; x=1730845421;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1730258994; x=1730863794; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=S3amIaBqxn/MRk2a7GLzyv4HMPzhNOSMDMorth6/EHs=;
-        b=PSfYTW2XkcPwl21//d6fmi0iup8LV5sdxTS4tDneI9ItcGtiBNxfrK5mryGVrNLp/K
-         EtjoQVyly/Xa2RiWObUfWZ8Sw1H7I1JZynmuf2us1C89ufmEMomnQ/LzHhnOaZ3XMNdq
-         yXRSclyU5B2rdzUPdL8OYCmuAbK4JWUtu8oAlYDffVs+IdT9HdYpBXixfulG9OBOBbP2
-         N+YYSm7o3fLB+NmHo1Fpnu7dWLFw3yjM86Ba7bDyyEF3/s3MynMZjtjAWFVelD11wSPx
-         V231U54v9bKz72jQlBMtD6GvFWg/wYl0h5DE83/0w2dZQte0pFToe6jHgRe2+G6yMpBx
-         hFTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWyw6qellbf64ZHXMZXPhBQCW115uT5mD2VZBPm3VJoAQBuS0WYlMResqtn8M+qpMSqb1hdp2OgPAGhEoM=@vger.kernel.org, AJvYcCXfNhvZTS6N9UC4XZNp9uLdwsKIIbo6nFU1VmxoTkpnQWhBPJSVwuiLUVykdYIx3NqHs71gz4cS3oT259n467FB78o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcvJ8j1H7U0hcsnSlRVQiVY3gjeO5s2LEoRoMQceoQoQMacUw7
-	ymEetkdzreorklBV89nriZg2la6tpVZZ31u1T4VGw3iQNQkKIPF/A9oDdQ==
-X-Google-Smtp-Source: AGHT+IG2OJ1VL8fU2/dXLJtV/JilmSF/qgLlzh7YDYRMAY3fyaGBjvcMUfU2RkOk3ukVkrg9Pj8vqA==
-X-Received: by 2002:a17:902:db0f:b0:20c:92ce:359d with SMTP id d9443c01a7336-210c6c6d8bamr214657625ad.45.1730240620917;
-        Tue, 29 Oct 2024 15:23:40 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-210bc082bb5sm71477175ad.295.2024.10.29.15.23.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Oct 2024 15:23:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <58e98acc-d7b7-4160-9504-e5a7201f25e7@roeck-us.net>
-Date: Tue, 29 Oct 2024 15:23:38 -0700
+        bh=JP29SaC0+NjDpQ+Q8kSclFW9qhNXYgN/YI2Vt9caTfw=;
+        b=Mvtq13+Ir2K8UrbaAH2NeinUPkSi9Pefnkri8iKtcgB5GvMbrhSHDb8aOphpnwcsX0
+         PNsLjVAh+lpbH4FFGDZ1EVmpeW24n+QlgCd8EsrR2x+xiSLozXUEYQonmPi36aiHqdJ4
+         bENhdsKn9KSPibuehm9myVWFIxZT6xcVv41McDZ8wxJwjw+lPBwCt/hZZMEXBd5PrJay
+         AX6D6hUs3+a3kFHhPiG9FfpvXPl8K9Z/VE5nPuj5Eoc5ERszHlIS9dUufys06ysqIAar
+         CVm3WvE3IYqz3uwNoEtwvnwCjfPpEMFsZeTwIdR9aoy5MNoc/UEGtFF9wRZ2JewA85cu
+         HU7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730258994; x=1730863794;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JP29SaC0+NjDpQ+Q8kSclFW9qhNXYgN/YI2Vt9caTfw=;
+        b=hO89FkEcCQBmYKM5WXVJtzQBJuZob7iKi2pXFhlFY7qsa1W9b9fUuN060Py5OLNUtc
+         ViUKyNV+7zzBnq+pd8Y347WSTPPh/rvjvG5g/Sr24o8h0vIVJgFQ9NdWN3/BRTdc67vV
+         ysRZKwiCW8OUJ30O6VNI+2NkiEmPAfStOEfEh2R6uQvYebAfAIWK+3pk4vzbgbfeMTj6
+         VFSuvd34bjfFpPUIWMvmjdjrn+s9BUxsSew7vvcDW02AnJFJ4EBJi1FveCo5hX5hk5u6
+         gdX5RjITIpXSrLu2lVDzlbw1zhp5bo+LYrJXlHj7vbgSnIsnWZ4M1jp0LhhNNChwjBNY
+         19LA==
+X-Forwarded-Encrypted: i=1; AJvYcCUQNIcwz0ZKLloMTPO4bVeJDbg7yJ73TNR9qfndcn6PbfpOnIiCooFE1GMTi5eeuQhwa6OwTmzDvhse@vger.kernel.org, AJvYcCUay08yr5SFvtOT8GNCeim9ShS6Ic4BL4PvegXrp4TH1PRBIuRqdzsAFktYLhf1yesC8iLDjDteUWeQsQ8=@vger.kernel.org, AJvYcCVN/RKj/C/PSwSdafMvcI80W3aaZe0xXnQyeoOuROW4mw3gANIN5vAuTDkB7vllWwzmVlwRzo7xEdiEZA==@vger.kernel.org, AJvYcCW76l/H+vb7n/2qzi6emWlDis2ADdCDu4PCysuzKIKidgTxGPAshm1DIqbafBpLJYG0SiQtC8it@vger.kernel.org, AJvYcCWKnzObPVU7MCE/ltf8OOmIkNQ2xk3WAZ8vrZhh4daiRwVAnPu5KlAjE9K9cW42QI5IT9XvcaKPlKlwGLZY@vger.kernel.org, AJvYcCWaieWED+EcEew7BvG8wzdWyasreMdzR/AOhi5Cr7eITkGalp9kzOPkeHKqu40bvK3b8tEC+1aNu2wN@vger.kernel.org, AJvYcCWgaTDx0CwAdMNk7TxAncd2ObB23c/n/W+rkQUUVGCB1GeAurY13Od3XJMEqOT1taJsAEt8jZ9IkuCywbseg+s=@vger.kernel.org, AJvYcCWoSO39idEDue/hSZ0xPPoUR8AbUOwKQPvZxxReVU/ia+QigqfmEE30jIJuPROmlErHIwFPNvuYeGM=@vger.kernel.org, AJvYcCXSbIYF6dC1P6qYC0h4JGj+mAOyOzZrdm1KQ+WVcZVXWxmmQbCKvvJnJRhEgLx7D9w0Lr3Z5yRKf12s@vger.kernel.org, AJvYcCXVWD3cvMTo0jBA2awVwJxo2UpF/upb
+ Ya3AEK3C40sYJJmrbDsN9BiXs8whDlhezuYB+QgXTn1FoZ6w@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhNoPPrOQ6nHW1Tr5q6jYM3ZZYT0CZEm7lm0Tm1XaEtU6v9FlZ
+	zu7hLL1jqhbnpWVhzNZgoaqpVfODzFwRbpf13KoziEfbIudN8Oj4dL0E05k632dr4QM6q//vpDu
+	rD2rFOmNj/kkBhT1jZljb0GZ4r8g=
+X-Google-Smtp-Source: AGHT+IHPHivp//5/1F1E+KCfk4ICpoDujCclNjDxmM3AkIl+YaqACUChlZiv6jcz1YluWguSbfgvDGU/q+nvuJeLm/Y=
+X-Received: by 2002:a05:6902:2b8b:b0:e2b:ba9d:64c5 with SMTP id
+ 3f1490d57ef6-e3087c13018mr11188254276.48.1730258994399; Tue, 29 Oct 2024
+ 20:29:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Revert "watchdog: s3c2410_wdt: use
- exynos_get_pmu_regmap_by_phandle() for PMU regs"
-To: Peter Griffin <peter.griffin@linaro.org>, wim@linux-watchdog.org,
- krzk@kernel.org, alim.akhtar@samsung.com
-Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- tudor.ambarus@linaro.org, andre.draszik@linaro.org, kernel-team@android.com,
- willmcvicker@google.com
-References: <20241029191131.2329414-1-peter.griffin@linaro.org>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241029191131.2329414-1-peter.griffin@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-7-tmyu0@nuvoton.com>
+ <CAH-L+nPGGhgDFge0Ov4rX_7vUyLN8uu51cks80=kt38h22N7zQ@mail.gmail.com>
+ <62ea5a91-816f-4600-bfec-8f70798051db@roeck-us.net> <CAOoeyxX=A5o5PhxpniPwPgMCBv1VwMstt=wXCxHiGPF59gm5wQ@mail.gmail.com>
+ <817d24e1-6fdd-4ce2-9408-eccc94134559@roeck-us.net> <02f05807-77ae-4a3b-8170-93dd7520c719@roeck-us.net>
+ <CAOoeyxX2Jk+76Cedu5_ZGgeRCPmT8Yhczmx7h+K-za7r2WS=Sw@mail.gmail.com> <20241028185414.65456203@jic23-huawei>
+In-Reply-To: <20241028185414.65456203@jic23-huawei>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Wed, 30 Oct 2024 11:29:43 +0800
+Message-ID: <CAOoeyxXJa05XxTg0JpZ6GRV7XMMa3Rct4+c5Q3cqCtW9KZzQLw@mail.gmail.com>
+Subject: Re: [PATCH v1 6/9] hwmon: Add Nuvoton NCT6694 HWMON support
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Guenter Roeck <linux@roeck-us.net>, 
+	Kalesh Anakkur Purayil <kalesh-anakkur.purayil@broadcom.com>, tmyu0@nuvoton.com, lee@kernel.org, 
+	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, 
+	mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, jdelvare@suse.com, lars@metafoo.de, 
+	ukleinek@kernel.org, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/29/24 12:11, Peter Griffin wrote:
-> This reverts commit 746f0770f916e6c48e422d6a34e67eae16707f0e.
-> 
-> Now that we can register a SoC specific regmap with syscon using
-> of_syscon_register_regmap() api we can switch back to using
-> syscon_regmap_lookup_by_phandle() in the client drivers.
-> 
-> Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+Dear Jonathan,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Thanks you for your comments,
+I tested your suggestion in both the MFD driver and the IIO driver, and
+the iio-hwmon bridge worked well.
+On the other hand, my requirements involve accessing thermal sensors,
+voltage sensors and tachometers, so I should implement it in this HWMON
+drive, right?
 
-I hope this won't get auto-backported.
+Best regards
+Ming
 
-Guenter
-
+Jonathan Cameron <jic23@kernel.org> =E6=96=BC 2024=E5=B9=B410=E6=9C=8829=E6=
+=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8A=E5=8D=882:54=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Mon, 28 Oct 2024 15:58:00 +0800
+> Ming Yu <a0282524688@gmail.com> wrote:
+>
+> > Dear Guenter,
+> >
+> > The original plan was to use the IIO driver to access the temperature
+> > and voltage sensors, and the HWMON driver to access the tachometers.
+> > However, since the device is a hot-plug USB device, as far as I know,
+> > IIO-HWMON is not applicable. I will merge the IIO driver part into the
+> > HWMON driver in the next patch.
+> > In  other words, the driver will be used to access TIN, VIN and FIN.
+> See drivers/mfd/sun4i-gpadc.c
+> for an example of an mfd using the iio-hwmon bridge.
+>
+> Jonathan
+>
+> >
+> > Best regards
+> > Ming
+> >
+> > Guenter Roeck <linux@roeck-us.net> =E6=96=BC 2024=E5=B9=B410=E6=9C=8826=
+=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=8810:50=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> > >
+> > > On 10/25/24 08:44, Guenter Roeck wrote:
+> > > > On 10/25/24 08:22, Ming Yu wrote:
+> > > > [ ... ]
+> > > >
+> > > >>>>> +static int nct6694_fan_write(struct device *dev, u32 attr, int=
+ channel,
+> > > >>>>> +                            long val)
+> > > >>>>> +{
+> > > >>>>> +       struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev=
+);
+> > > >>>>> +       unsigned char enable_buf[REQUEST_HWMON_CMD0_LEN] =3D {0=
+};
+> > > >>>> [Kalesh] Please try to maintain RCT order for variable declarati=
+on
+> > > >>>
+> > > >>> Ok, but that is already the case here ?
+> > > >>
+> > > >> [Ming] Is there anything that needs to be changed?
+> > > >>
+> > > >
+> > > > I don't think so, If two lines have the same length, the order is u=
+p
+> > > > to the developer to decide.
+> > > >
+> > > > Question though is if the buffer needs to be initialized. You shoul=
+d drop
+> > > > the initialization if it is not necessary. In that case the second =
+line
+> > > > would be shorter anyway, and the order question would not arise.
+> > > >
+> > >
+> > > Actually, I just noticed that you also submitted an IIO driver which
+> > > reports the same data again. If a chip has an IIO driver, there shoul=
+d
+> > > be no HWMON driver since the IIO -> HWMON bridge can then be used if
+> > > necessary. So please drop this driver.
+> > >
+> > > Thanks,
+> > > Guenter
+> > >
+> > >
+> >
+>
 
