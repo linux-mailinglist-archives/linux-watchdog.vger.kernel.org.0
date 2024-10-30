@@ -1,188 +1,138 @@
-Return-Path: <linux-watchdog+bounces-2386-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2387-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB7759B6077
-	for <lists+linux-watchdog@lfdr.de>; Wed, 30 Oct 2024 11:49:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E8B09B659A
+	for <lists+linux-watchdog@lfdr.de>; Wed, 30 Oct 2024 15:21:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6AA2F28407C
-	for <lists+linux-watchdog@lfdr.de>; Wed, 30 Oct 2024 10:49:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FED51C2478F
+	for <lists+linux-watchdog@lfdr.de>; Wed, 30 Oct 2024 14:21:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 944761E4908;
-	Wed, 30 Oct 2024 10:47:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A96501EF942;
+	Wed, 30 Oct 2024 14:21:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OZRfhihB"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E84A1E765C;
-	Wed, 30 Oct 2024 10:47:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2A6C13C;
+	Wed, 30 Oct 2024 14:21:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730285256; cv=none; b=f6x2WAb2ugEbKCaFOfqmMjh81YtQvWo/KVfv1YyS7Rp4kp1HcSjkUfDvNmkmI8EcEeAK5Y2HOWPDCdLm9uyAR9d2DNz5M0sVqjcLJaO06dluGDEFuN2mJgiwZEfz5HpFV9iSALAVXBJ9c60GDnD2vlNYlloGkqRjiqiXkq+59Mg=
+	t=1730298084; cv=none; b=kKWRR/HOtxtFigYpTVFpyYti8tLbZOJzzwld3YH16mJXQMWEvDLskKg/Tip5OAeTk5Xu9RCGUZ2EW9F1NlORAKyEmVc/lcHJOkMG9Lh8LT2dffGHlmHyEbDmpxgDuNAock7jgDHwvRhpGCedj6PkG8nbIcTyIpjHIfe1QVXSz20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730285256; c=relaxed/simple;
-	bh=NfdECQjhLdCrDtfug5grGVQRxCB3pq6AgqaEH3NDC6g=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Gh0GXwHeXX0E9t48Qq+FT0F+QJlYkLj6Z+4zIVoC98Al+fm1YtlF+mTlchKmOHjfirdNi2pw4JWrFP9wtHiRcAIcHOPthyAtm4X2IOagz4+APTgR/FnPi7N8p0ieF4KDyfkh1N1uaF6PmEQ2OZRVcG4PAOaKb1j2R6MT7wMIMNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Wed, 30 Oct
- 2024 18:47:18 +0800
-Received: from aspeedtech.com (192.168.10.152) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server id 15.2.1258.12 via Frontend
- Transport; Wed, 30 Oct 2024 18:47:18 +0800
-From: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-To: <patrick@stwcx.xyz>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-	<conor+dt@kernel.org>, <joel@jms.id.au>, <andrew@codeconstruct.com.au>,
-	<wim@linux-watchdog.org>, <linux@roeck-us.net>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
-	<linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
-CC: <Peter.Yin@quantatw.com>, <Patrick_NC_Lin@wiwynn.com>,
-	<Bonnie_Lo@wiwynn.com>, <DELPHINE_CHIU@wiwynn.com>, <bmc-sw@aspeedtech.com>,
-	<chnguyen@amperecomputing.com>
-Subject: [PATCH v3 2/2] watchdog: aspeed: Add support for SW restart
-Date: Wed, 30 Oct 2024 18:47:17 +0800
-Message-ID: <20241030104717.168324-3-chin-ting_kuo@aspeedtech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241030104717.168324-1-chin-ting_kuo@aspeedtech.com>
-References: <20241030104717.168324-1-chin-ting_kuo@aspeedtech.com>
+	s=arc-20240116; t=1730298084; c=relaxed/simple;
+	bh=bgOvNyxM1biWcyfhRvIlKkBu8+hSrIZJM9KA7N8pO9k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VpnRGxs1Bd97AwOUAi6nm3ZLdzf9ueXSxfg+ZWHkBKNe9305hQjxP7htb1/Tka3QGPJSVnDc3k4Tewz7qv8KCnS42PADGQ2g81g3Gkc5cN0HNC0xDuSLj3mAZxyoE0a8/9spWg6uKspRl8u3cu/YFNpZBUeXh5V09PMHUrbcT3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OZRfhihB; arc=none smtp.client-ip=209.85.219.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e290e857d56so6273141276.1;
+        Wed, 30 Oct 2024 07:21:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730298081; x=1730902881; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DHmWJLAn/9laEJxekdnxjm8UsDMhYqG1tJ/wt9SJ9OU=;
+        b=OZRfhihB1RSFRiQZIYCRpM+xQwtPAw8+ag3cxQPvjFlIsuEST4eQM5ctBi4SiY92fV
+         +TP5C3Ll7MM21/TOkewjYvrNtJmL9fvpDqBZwTuHDfhR3xifjcnzIjeA05uL3oRrJucR
+         hPi1LIsz2c4kkrYxMqFsAM39OQBsnLiZE+KmkT979UXT0MGTxJWFYUdrkGsaJQy6PhfS
+         gx+waNAI1UkQQ+axm6GWr23yhNTE7VfyV3wsbFyeYCHL7iq2Uhjds7VnPViiS0a1PTZh
+         QZiZp1YKdB7utIFkehqOLzGJQK1dBGFT867ThBTd7vw8cPHpwkLUjV3xFED1/CyB+9et
+         QqFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730298081; x=1730902881;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DHmWJLAn/9laEJxekdnxjm8UsDMhYqG1tJ/wt9SJ9OU=;
+        b=mdbXyxq7IuG9D5H+iOEVZpH1wVM9wwV2+udq0Y8SyTZo5ngTgl/DlR1t9C5RPpc9bG
+         UVrnRIxhqfVMVRzoh0tcFtf3SlMXZGY+Y1uomu1tR7nE2vxEN/mkZ5THOSzS2Zl4wOry
+         N9Hja4wzJ8CwfGpNGg5m/lv53Wg1OSooizK9Y+S6x0gtjywlT0Q6EorsO3/uZqhiXhnE
+         dXAhssopgQARqpHQQPuwSKLjKxk7IG10tH4LlhEg+gFLEvbY063VXC1FMEinrySUoSyx
+         Cv/HQOz/hUmy9gMKnK6uj3DUZt2P9KEYwPTKnbhGXqqcy0+QETJQkcyjPiSTydAXSRyE
+         gxiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUdmjxWA5HaRz9eOBWnJwBvbikO3ijEkjrT9S5vcJw3f7uWgT/VjfbKnBlZDaFMGKRFHh/EZVUHnI38ew==@vger.kernel.org, AJvYcCUyme4PEsCO+7fM+2oQ8C4KnVj9Djtbfi2L+c+26AIc8G3xqubTJlNdnS6W71cAalEpKJ7D5yw8PqEa@vger.kernel.org, AJvYcCV0BeRSyuKjNekrJ+pvjF4EHv6PE0rXNw682geKf0TgOyTxyvLy04v/PfdTZEC6sN9WUST6/awI+CR+@vger.kernel.org, AJvYcCVCE8FIzPk6Gp5GH7n3+W4KehWfmJVkd5w8nuQ9zkX6H5QSV5ZcAcXgcGcRb2rl6BP3od5dR5k8lGjc@vger.kernel.org, AJvYcCWHdGZnO1uoEI+8PcfYVqo8jP6kleNRvU0O6eh+M+k61/4EzZXMje8klVkWMXLfG00Wwyqiunf97L4=@vger.kernel.org, AJvYcCWxomMWOISYgN/oljYLCdEQNjBgk8MVClwWl8s+i+lsCpzKGyNeDziAN6BPWq0czFxNdsgJJUcPQrFCHOQkzbM=@vger.kernel.org, AJvYcCXD6NYzciX1DThfUJlygTHZ+YJwt4AHZnABpUiO4uPhk/lcm23t/mL46p4HdkUCPcSidfnEyWCZbIOewWiH@vger.kernel.org, AJvYcCXQMleB2sakRCeoVoau1nbftjjXuOaA4mlPflJQaTvUob9G0dDfJBPc/YgmJ1eZryo/GfJV+gbUBtnJ@vger.kernel.org, AJvYcCXc3wFUTw7chbWZvoRpspylZbazFRP7grt9Sn8q+M3YZXoCDIYrs3l6DBUIdTXgL9ppVTONKT/pO8Yo+2s=@vger.kernel.org, AJvYcCXg7lBdSrWD00Rqk5I7GpHJ1nnK
+ eWcJX5BoCezDuLQVUmGxYgAwG0WU+H9z74PG1lSaA5XBLSDf@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9taKdlZ7n38xhsxTiz4wWdpWcXnrUpOqZiApuF6kHv1GHps5C
+	2ePChBf+5KjTbxZjkHohBF5yNWmfxcc/54+Ys5845QClfU4T03Bu+b9uwGRYMpsZ7eDAo/19xNE
+	IxIBAKX2vkyXEmMykO1USuOtgygk=
+X-Google-Smtp-Source: AGHT+IGKheT7lugnX8JlgJMn7QT/nmS4FJcCiGvJE3Pk7raMagj1Ij4TOsIejWemk17tl9iiaN1879b2lAZo9ua6oSM=
+X-Received: by 2002:a05:6902:c10:b0:e24:a0da:f89c with SMTP id
+ 3f1490d57ef6-e3087b7c21bmr15483239276.30.1730298081498; Wed, 30 Oct 2024
+ 07:21:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024-eminent-dancing-narwhal-8f25dd-mkl@pengutronix.de>
+ <CAOoeyxV4K=jR+tofeQtsMB7+smuu+Ghas5Tqfx4JvhuVK8dXrA@mail.gmail.com>
+ <20241025-modest-hasty-angelfish-1e9193-mkl@pengutronix.de>
+ <CAOoeyxU9VwsM=mRZy5AtjH=V3iSGQxkKw18qL+yeUxkh1OVHgQ@mail.gmail.com> <20241030-industrious-sidewinder-of-strength-efbe4a-mkl@pengutronix.de>
+In-Reply-To: <20241030-industrious-sidewinder-of-strength-efbe4a-mkl@pengutronix.de>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Wed, 30 Oct 2024 22:21:07 +0800
+Message-ID: <CAOoeyxUiFoU6hdj96ih4x_rUCBSzSCQ+vvab45=woZ3wLhNE7g@mail.gmail.com>
+Subject: Re: [PATCH v1 0/9] Add Nuvoton NCT6694 MFD devices
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	jic23@kernel.org, lars@metafoo.de, ukleinek@kernel.org, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Since AST2600, except for HW WDT counter timeout, HW WDT
-reset can also be triggered by just cinfiguring some
-HW registers by SW directly. We named it "SW restart".
-Although it is "SW" restart, its mechanism is implemented
-by HW.
+Hi Marc,
 
-Originally, system can only know it is reset by WDT
-through a reset flag. However, since AST2600, SW can
-trigger the reset event consciously and directly without
-wait for WDT timeout. WDT counter is not enabled when
-SW restart is adopted. After that, an independent reset
-event flag will be set after systemis reset by SW.
+okay, I will implement it in the next patch,
+thank you very much!
 
-Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
----
- drivers/watchdog/aspeed_wdt.c | 40 +++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+Best regards
+Ming
 
-diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
-index add76be3ee42..1e9808d42023 100644
---- a/drivers/watchdog/aspeed_wdt.c
-+++ b/drivers/watchdog/aspeed_wdt.c
-@@ -42,6 +42,9 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
- 
- #define WDT_REG_OFFSET_MASK		0x00000fff
- 
-+/* WDT behavior control flag */
-+#define WDT_RESTART_SYSTEM_SW_SUPPORT	0x00000001
-+
- struct aspeed_wdt_scu {
- 	const char *compatible;
- 	u32 reset_status_reg;
-@@ -55,6 +58,7 @@ struct aspeed_wdt_config {
- 	u32 irq_shift;
- 	u32 irq_mask;
- 	u32 reg_size;
-+	u32 flags;
- 	struct aspeed_wdt_scu scu;
- };
- 
-@@ -71,6 +75,7 @@ static const struct aspeed_wdt_config ast2400_config = {
- 	.irq_shift = 0,
- 	.irq_mask = 0,
- 	.reg_size = 0x20,
-+	.flags = 0,
- 	.scu = {
- 		.compatible = "aspeed,ast2400-scu",
- 		.reset_status_reg = AST2400_SCU_SYS_RESET_STATUS,
-@@ -85,6 +90,7 @@ static const struct aspeed_wdt_config ast2500_config = {
- 	.irq_shift = 12,
- 	.irq_mask = GENMASK(31, 12),
- 	.reg_size = 0x20,
-+	.flags = 0,
- 	.scu = {
- 		.compatible = "aspeed,ast2500-scu",
- 		.reset_status_reg = AST2400_SCU_SYS_RESET_STATUS,
-@@ -99,6 +105,7 @@ static const struct aspeed_wdt_config ast2600_config = {
- 	.irq_shift = 0,
- 	.irq_mask = GENMASK(31, 10),
- 	.reg_size = 0x40,
-+	.flags = WDT_RESTART_SYSTEM_SW_SUPPORT,
- 	.scu = {
- 		.compatible = "aspeed,ast2600-scu",
- 		.reset_status_reg = AST2600_SCU_SYS_RESET_STATUS,
-@@ -136,6 +143,11 @@ MODULE_DEVICE_TABLE(of, aspeed_wdt_of_table);
- #define   WDT_CLEAR_TIMEOUT_AND_BOOT_CODE_SELECTION	BIT(0)
- #define WDT_RESET_MASK1		0x1c
- #define WDT_RESET_MASK2		0x20
-+#define WDT_SW_RESET_CTRL	0x24
-+#define   WDT_SW_RESET_COUNT_CLEAR	0xDEADDEAD
-+#define   WDT_SW_RESET_ENABLE	0xAEEDF123
-+#define WDT_SW_RESET_MASK1	0x28
-+#define WDT_SW_RESET_MASK2	0x2c
- 
- /*
-  * WDT_RESET_WIDTH controls the characteristics of the external pulse (if
-@@ -255,10 +267,31 @@ static int aspeed_wdt_set_pretimeout(struct watchdog_device *wdd,
- 	return 0;
- }
- 
-+static void aspeed_wdt_sw_reset(struct watchdog_device *wdd)
-+{
-+	struct aspeed_wdt *wdt = to_aspeed_wdt(wdd);
-+	u32 ctrl = WDT_CTRL_RESET_MODE_SOC |
-+		   WDT_CTRL_RESET_SYSTEM;
-+
-+	writel(ctrl, wdt->base + WDT_CTRL);
-+	writel(WDT_SW_RESET_COUNT_CLEAR,
-+	       wdt->base + WDT_SW_RESET_CTRL);
-+	writel(WDT_SW_RESET_ENABLE, wdt->base + WDT_SW_RESET_CTRL);
-+
-+	/* system must be reset immediately */
-+	mdelay(1000);
-+}
-+
- static int aspeed_wdt_restart(struct watchdog_device *wdd,
- 			      unsigned long action, void *data)
- {
- 	struct aspeed_wdt *wdt = to_aspeed_wdt(wdd);
-+	const struct aspeed_wdt_config *cfg = wdt->cfg;
-+
-+	if (cfg->flags & WDT_RESTART_SYSTEM_SW_SUPPORT) {
-+		aspeed_wdt_sw_reset(wdd);
-+		return 0;
-+	}
- 
- 	wdt->ctrl &= ~WDT_CTRL_BOOT_SECONDARY;
- 	aspeed_wdt_enable(wdt, 128 * WDT_RATE_1MHZ / 1000);
-@@ -529,6 +562,13 @@ static int aspeed_wdt_probe(struct platform_device *pdev)
- 			if (nrstmask > 1)
- 				writel(reset_mask[1], wdt->base + WDT_RESET_MASK2);
- 		}
-+
-+		if (wdt->cfg->flags & WDT_RESTART_SYSTEM_SW_SUPPORT) {
-+			reg = readl(wdt->base + WDT_RESET_MASK1);
-+			writel(reg, wdt->base + WDT_SW_RESET_MASK1);
-+			reg = readl(wdt->base + WDT_RESET_MASK2);
-+			writel(reg, wdt->base + WDT_SW_RESET_MASK2);
-+		}
- 	}
- 
- 	if (!of_property_read_u32(np, "aspeed,ext-pulse-duration", &duration)) {
--- 
-2.34.1
-
+Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2024=E5=B9=B410=E6=9C=8830=
+=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=886:12=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> On 30.10.2024 16:30:37, Ming Yu wrote:
+> > I am trying to register interrupt controller for the MFD deivce.
+> > I need to queue work to call handle_nested_irq() in the callback
+> > of the interrupt pipe, right?
+>
+> I think you can directly demux the IRQ from the interrupt endpoint
+> callback. But handle_nested_irq() only works from threaded IRQ context,
+> so you have to use something like generic_handle_domain_irq_safe().
+>
+> Have a look for how to setup the IRQ domain:
+>
+> | drivers/net/usb/lan78xx.c
+> | drivers/net/usb/smsc95xx.c
+>
+> But the IRQ demux in the lan78xx only handles the PHY IRQ. The ksz
+> driver does proper IRQ demux:
+>
+> | net/dsa/microchip/ksz_common.c
+>
+> regards,
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde          |
+> Embedded Linux                   | https://www.pengutronix.de |
+> Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
