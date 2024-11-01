@@ -1,202 +1,107 @@
-Return-Path: <linux-watchdog+bounces-2403-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2404-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFECD9B9106
-	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Nov 2024 13:12:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB03B9B9175
+	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Nov 2024 14:02:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0394283279
-	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Nov 2024 12:12:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 000C61C2137E
+	for <lists+linux-watchdog@lfdr.de>; Fri,  1 Nov 2024 13:02:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A121819CC32;
-	Fri,  1 Nov 2024 12:12:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56D9219CCF5;
+	Fri,  1 Nov 2024 13:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=marcan.st header.i=@marcan.st header.b="EkXtSx78"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE27019D8B7;
-	Fri,  1 Nov 2024 12:12:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0417015F40B;
+	Fri,  1 Nov 2024 13:02:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.63.210.85
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730463155; cv=none; b=kpKNCAiDzBz+Sx4Ts5gcFqedAg9Iep7mE/xAP2yb4DvmfxoAc0Y25MrP7YPfqJCbneXOQ5aU9+beoAWmwV+bGeVNt/8VPu0Cc7fc9QFLXkBfV4qyx8QQTKropKGr/p71FQqEv50gdL88SMr3tAm2yJ6WjGdncad1usDlvzx2IVg=
+	t=1730466161; cv=none; b=fj+yakx1/Jftzs57dew3CODvzGiPEimE08qBWDn0/ZdKd6fVJvfxH5SGB2NpVYqUFhO9fUBbHmeh21YvC9w0xESDwq1ZoVagPd6xOd1H8t9Aolkhx8pEya88iV4vJhpC64fxQi09je3C6lUL/A7tf8sWTd9D7NDwlLJ95NncUvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730463155; c=relaxed/simple;
-	bh=zi8NB7cF1zN02ZyOGMwY6cDJEjjoHK+KkCYbzXVAWeo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CIkJotgbw8tZnyeKsQM9RmNINHOqtGfD8IxVVdScteOyC6X5oWe4FVW+7Iyed6JnrX/u/f1RQD5BLIKin+VqLpQtaecO19zC/zMaIqErY6r1wTM8a1LNbxTDAmoi1/QuoQpIKjU47exqKxY/oRqrc5zUJKv20J5kmSYEAHbAjWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Fri, 1 Nov
- 2024 20:12:02 +0800
-Received: from aspeedtech.com (192.168.10.152) by TWMBX01.aspeed.com
- (192.168.0.62) with Microsoft SMTP Server id 15.2.1258.12 via Frontend
- Transport; Fri, 1 Nov 2024 20:12:02 +0800
-From: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-To: <patrick@stwcx.xyz>, <joel@jms.id.au>, <andrew@codeconstruct.com.au>,
-	<wim@linux-watchdog.org>, <linux@roeck-us.net>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
-	<linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
-CC: <Peter.Yin@quantatw.com>, <Patrick_NC_Lin@wiwynn.com>,
-	<Bonnie_Lo@wiwynn.com>, <DELPHINE_CHIU@wiwynn.com>, <bmc-sw@aspeedtech.com>,
-	<chnguyen@amperecomputing.com>
-Subject: [PATCH v4 3/3] watchdog: aspeed: Update restart implementations
-Date: Fri, 1 Nov 2024 20:12:01 +0800
-Message-ID: <20241101121201.2464091-4-chin-ting_kuo@aspeedtech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241101121201.2464091-1-chin-ting_kuo@aspeedtech.com>
-References: <20241101121201.2464091-1-chin-ting_kuo@aspeedtech.com>
+	s=arc-20240116; t=1730466161; c=relaxed/simple;
+	bh=nhbHZKbxhPcBXuHUqFG2yiYnaslxZtegal/zrhaoRY4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=EeYQB4EZs4eqphXxGjv9M8hJOyCHx9JqjF18UV6Gg97W1MzZKwEoQCYfuJonVCbCiMvrLvggtB5A6+hBy5vaEesfL1y4Aur0K2OoitpT62dcobBgVZVkNC6IM3KX6rERmtIa9oJ3Uu9LfiqCM9HY+fz5qQ8n1ewvobXWTuLZf6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marcan.st; spf=pass smtp.mailfrom=marcan.st; dkim=pass (2048-bit key) header.d=marcan.st header.i=@marcan.st header.b=EkXtSx78; arc=none smtp.client-ip=212.63.210.85
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marcan.st
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marcan.st
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	(Authenticated sender: marcan@marcan.st)
+	by mail.marcansoft.com (Postfix) with ESMTPSA id 4C2554346B;
+	Fri,  1 Nov 2024 13:02:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+	t=1730466156; bh=nhbHZKbxhPcBXuHUqFG2yiYnaslxZtegal/zrhaoRY4=;
+	h=Date:Subject:To:References:From:In-Reply-To;
+	b=EkXtSx78tsnEiLjKYpIO8q8ZP5aZBk3HctrUH0NJltK2p8lzJIfy6zAjKtIR8P7eH
+	 RfcMbu0PdhuCadcd3pe3T4v8fHM+bQegql5sDqNhEkgv8ze6orUF1BPaPasiTvBYpP
+	 finfnvZ5tr0DMuw8H23A5xS7xroVhGKJ/Cs1G/uDM5EyWaXCmX9YzfY2v/LlPz5YDE
+	 q7JAQ4Q3oXcnkVlxwaffNgTBgFwsMTKaM0kbz35Sw3NWzmkOJJ2CPiDiP+87mmz285
+	 5sdchaQEkiVbJzoJZEj20mvIVx9pgkLejflylzD9RyO1RUUZlsuc20zweQkmNT8zjs
+	 Fx/TZXD2w9cYg==
+Message-ID: <2f03a7aa-cd74-45d1-b56c-ab19c19d9632@marcan.st>
+Date: Fri, 1 Nov 2024 22:02:34 +0900
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 RESEND 0/2] watchdog: apple: Increase reset delay to
+ 150ms
+To: Nick Chan <towinchenmi@gmail.com>, Sven Peter <sven@svenpeter.dev>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
+ <linux@roeck-us.net>, asahi@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-watchdog@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20241029013055.45538-1-towinchenmi@gmail.com>
+From: Hector Martin <marcan@marcan.st>
+Content-Language: en-US
+In-Reply-To: <20241029013055.45538-1-towinchenmi@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Restart callback function is created to distinguish the restart mechanisms
-between AST2400/AST2500 and AST2600.
 
-On AST2400 and AST2500 platforms, system can only be reset by enabling
-WDT and waiting for WDT timeout. Since AST2600, SW can trigger the reset
-event consciously and directly by just cinfiguring some HW registers
-without waiting for WDT timeout. This mechanism is named "SW restart" and
-is implemented by HW. The WDT counter is not enabled when SW restart
-is adopted.
 
-Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
----
- drivers/watchdog/aspeed_wdt.c | 59 +++++++++++++++++++++++++++++------
- 1 file changed, 49 insertions(+), 10 deletions(-)
+On 2024/10/29 10:29, Nick Chan wrote:
+> Increase the reset delay to 150ms as the Apple A8X SoC can take up to
+> 125ms to actually reset.
+> 
+> Since the code is being modified anyways, also fix a bug where watchdog
+> writes were not actually getting flushed after requesting reset, depsite
+> what the code comments said.
+> 
+> Changes since v1:
+> - Fix an existing bug where watchdog writes are not flushed
+> 
+> v1: https://lore.kernel.org/asahi/20240930060653.4024-1-towinchenmi@gmail.com
+> 
+> Nick Chan
+> ---
+> 
+> Nick Chan (2):
+>   watchdog: apple: Actually flush writes after requesting watchdog
+>     restart
+>   watchdog: apple: Increase reset delay to 150ms
+> 
+>  drivers/watchdog/apple_wdt.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> 
+> base-commit: dec9255a128e19c5fcc3bdb18175d78094cc624d
 
-diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
-index 63b5ff9e2751..28a16a0c442d 100644
---- a/drivers/watchdog/aspeed_wdt.c
-+++ b/drivers/watchdog/aspeed_wdt.c
-@@ -23,6 +23,14 @@ static bool nowayout = WATCHDOG_NOWAYOUT;
- module_param(nowayout, bool, 0);
- MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started (default="
- 				__MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
-+
-+struct aspeed_wdt {
-+	struct watchdog_device	wdd;
-+	void __iomem		*base;
-+	u32			ctrl;
-+	const struct aspeed_wdt_data *data;
-+};
-+
- struct aspeed_wdt_scu {
- 	const char *compatible;
- 	u32 reset_status_reg;
-@@ -36,14 +44,11 @@ struct aspeed_wdt_data {
- 	u32 irq_shift;
- 	u32 irq_mask;
- 	struct aspeed_wdt_scu scu;
-+	int (*restart)(struct aspeed_wdt *wdt);
- };
- 
--struct aspeed_wdt {
--	struct watchdog_device	wdd;
--	void __iomem		*base;
--	u32			ctrl;
--	const struct aspeed_wdt_data *data;
--};
-+static int aspeed_ast2400_wdt_restart(struct aspeed_wdt *wdt);
-+static int aspeed_ast2600_wdt_restart(struct aspeed_wdt *wdt);
- 
- static const struct aspeed_wdt_data ast2400_data = {
- 	.ext_pulse_width_mask = 0xff,
-@@ -56,6 +61,7 @@ static const struct aspeed_wdt_data ast2400_data = {
- 		.wdt_sw_reset_mask = 0,
- 		.wdt_reset_mask_shift = 1,
- 	},
-+	.restart = aspeed_ast2400_wdt_restart,
- };
- 
- static const struct aspeed_wdt_data ast2500_data = {
-@@ -69,6 +75,7 @@ static const struct aspeed_wdt_data ast2500_data = {
- 		.wdt_sw_reset_mask = 0,
- 		.wdt_reset_mask_shift = 2,
- 	},
-+	.restart = aspeed_ast2400_wdt_restart,
- };
- 
- static const struct aspeed_wdt_data ast2600_data = {
-@@ -82,6 +89,7 @@ static const struct aspeed_wdt_data ast2600_data = {
- 		.wdt_sw_reset_mask = 0x8,
- 		.wdt_reset_mask_shift = 16,
- 	},
-+	.restart = aspeed_ast2600_wdt_restart,
- };
- 
- static const struct of_device_id aspeed_wdt_of_table[] = {
-@@ -112,6 +120,11 @@ MODULE_DEVICE_TABLE(of, aspeed_wdt_of_table);
- #define   WDT_CLEAR_TIMEOUT_AND_BOOT_CODE_SELECTION	BIT(0)
- #define WDT_RESET_MASK1		0x1c
- #define WDT_RESET_MASK2		0x20
-+#define WDT_SW_RESET_CTRL	0x24
-+#define   WDT_SW_RESET_COUNT_CLEAR	0xDEADDEAD
-+#define   WDT_SW_RESET_ENABLE	0xAEEDF123
-+#define WDT_SW_RESET_MASK1	0x28
-+#define WDT_SW_RESET_MASK2	0x2c
- 
- /*
-  * WDT_RESET_WIDTH controls the characteristics of the external pulse (if
-@@ -231,11 +244,8 @@ static int aspeed_wdt_set_pretimeout(struct watchdog_device *wdd,
- 	return 0;
- }
- 
--static int aspeed_wdt_restart(struct watchdog_device *wdd,
--			      unsigned long action, void *data)
-+static int aspeed_ast2400_wdt_restart(struct aspeed_wdt *wdt)
- {
--	struct aspeed_wdt *wdt = to_aspeed_wdt(wdd);
--
- 	wdt->ctrl &= ~WDT_CTRL_BOOT_SECONDARY;
- 	aspeed_wdt_enable(wdt, 128 * WDT_RATE_1MHZ / 1000);
- 
-@@ -244,6 +254,35 @@ static int aspeed_wdt_restart(struct watchdog_device *wdd,
- 	return 0;
- }
- 
-+static int aspeed_ast2600_wdt_restart(struct aspeed_wdt *wdt)
-+{
-+	u32 reg;
-+	u32 ctrl = WDT_CTRL_RESET_MODE_SOC |
-+		   WDT_CTRL_RESET_SYSTEM;
-+
-+	reg = readl(wdt->base + WDT_RESET_MASK1);
-+	writel(reg, wdt->base + WDT_SW_RESET_MASK1);
-+	reg = readl(wdt->base + WDT_RESET_MASK2);
-+	writel(reg, wdt->base + WDT_SW_RESET_MASK2);
-+
-+	writel(ctrl, wdt->base + WDT_CTRL);
-+	writel(WDT_SW_RESET_COUNT_CLEAR, wdt->base + WDT_SW_RESET_CTRL);
-+	writel(WDT_SW_RESET_ENABLE, wdt->base + WDT_SW_RESET_CTRL);
-+
-+	/* system must be reset immediately */
-+	mdelay(1000);
-+
-+	return 0;
-+}
-+
-+static int aspeed_wdt_restart(struct watchdog_device *wdd,
-+			      unsigned long action, void *data)
-+{
-+	struct aspeed_wdt *wdt = to_aspeed_wdt(wdd);
-+
-+	return wdt->data->restart(wdt);
-+}
-+
- static int aspeed_wdt_update_bootstatus(struct platform_device *pdev,
- 					struct aspeed_wdt *wdt)
- {
--- 
-2.34.1
+Acked-by: Hector Martin <marcan@marcan.st>
+
+- Hector
 
 
