@@ -1,119 +1,106 @@
-Return-Path: <linux-watchdog+bounces-2414-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2415-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 712619BCD44
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Nov 2024 14:02:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 634AA9BD12C
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Nov 2024 16:55:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A26AF1C22271
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Nov 2024 13:02:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED485B22764
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Nov 2024 15:55:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0A121D5CD7;
-	Tue,  5 Nov 2024 13:02:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FF8714BF86;
+	Tue,  5 Nov 2024 15:55:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TpG0MeX1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H1y7x+Ny"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25FA1D5AA5;
-	Tue,  5 Nov 2024 13:02:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C1314A4DC;
+	Tue,  5 Nov 2024 15:55:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730811736; cv=none; b=gysKpyjub4WUoJXCNLZxsUApW8FEO34+zcoHYi6DQrCtkKQXnPkeQo2x4NNZgMrWACOwLF2Acj8MTErS6qgRL7XMXYaz9XVDOpAxhZD/0JlPOjjQC1OG+p7YwSoe9nLySZNYdJiYDKepZHB+o0Ew26YNkMdcuOXC8tjxh0IqphU=
+	t=1730822127; cv=none; b=kNnj3G9IwVyl6e1Ahl/kE5XyVgH8ZP1sh3k/HaRgTmOQbUWraDNcrB+YtFNqqLYV7kEzoUncRbSyTZKIwtRbFSxNJVulnNDDhykRkM5S1QD2bECcKZgImgoCUBXWV2AGvC2kWZDq1rtqiSuqoLlIFdpqlW+9lh3+6jvWf10xan4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730811736; c=relaxed/simple;
-	bh=LJBE4I0IMy7jf525lG/+ykCGvei5KrQcg6hhR4qOr3E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sGDlmD7hHdLdLz22/7KCBWA26X4rDLfcUBM4hy0Obht7ar/hWtsrquWk2pZow3B9lx2GmN7oKn0AFKCmFYkEuKMrYRnTu+aOw5mJQ/fKf0xJpVv4wR/qkoKepvheqt1GRHrygnkG44t9ma7LK3OmdN8Uq5bFtgGKxTYFcLvR9VI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TpG0MeX1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B3C6C4CED0;
-	Tue,  5 Nov 2024 13:02:16 +0000 (UTC)
+	s=arc-20240116; t=1730822127; c=relaxed/simple;
+	bh=cMvTh8PxTSmZ112HIDfP6ZSowBcMCKVJTesKcB3gvwk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U5GiDGKT8rHId67/i4sGE1pOzg9S1q1IVe/Wv2s0XP1MPBdDS558fT+B5IdnvrIWBdnXvzS/cWfz2dfXuQJL4QYPuMkYlx+wALE3TJQfAz1TITjwYV4n9xknT0OakI2KsqcK51xYpFBFjxOpd19VcHhULnvDimDTbtuty/3gywk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H1y7x+Ny; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8686AC4CECF;
+	Tue,  5 Nov 2024 15:55:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730811736;
-	bh=LJBE4I0IMy7jf525lG/+ykCGvei5KrQcg6hhR4qOr3E=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TpG0MeX11BO462clx65JUfLsvq7mhYbF/8TSUt0yOb/+sflQ3T/k8A9Tp9FG63RuD
-	 0636srl1MjyFyrhJc81qno/7J1qL+Mw5zrOHiBi72fuBiRN1KQ2iM+bo0HolczBHba
-	 c7Uk7UP6R729XBO1at5dQ7HRh6W40mffJRYDbnJLBHQpGPQoVPKVKqf3qQ0AJguVXF
-	 c+1bCIH1yj8fuZIYA/kHZ4fJ37aL3wZbWpVUbqicrQzs+vKZA8Z40vnynqYcP89Gbr
-	 E6FhESgpjnUQE1vUIyasS2+0nzjEvzjuarJGYp2ekKOTE1Qe1hBKH20jbM4y/8iJHi
-	 jAXlB6S3LBiqQ==
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e2918664a3fso4387126276.0;
-        Tue, 05 Nov 2024 05:02:16 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVRxEOQnvWR/2HXvLWnvoOj/RQdg9LQRAptjv1pjEaYL7SqynnnA6AZ8/lPgXietVdQRKY5ZRAfGsgH@vger.kernel.org, AJvYcCVeGy+9VEW1z/OzDmV6MjmV2PlK8maFD2XnHcLj8CyzYs3+KBMQbCEhSEVQAa4R0sNg00y5w+VLxfIGM8hy3Cg=@vger.kernel.org, AJvYcCWrlMY8JFmMchTB3hZbHVi4ZhVRtUav6RXGGLu+YPeVp4/3vDlgNcttNqqZIg/7210w0mQ7PkmNa23bk+YG@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7UmIdNi73ayEMF3cPspBO3ucaFWUQJ7vV+xqJD19NU9KL2t6B
-	gJPMTdgoIz/RXlcP/bf+GUHNrObHhMDsl1/VMmSz8blAcAs9GP0uMdXZExAIsGyFwrvfj14knmL
-	KEUQDjZX6e5beudReRyeiHC0D3w==
-X-Google-Smtp-Source: AGHT+IFFLLbvPgCz9E48Dc4uvqtjg8zV3O4+z1GmI3+QqVk1B5G6UocOVyAeLNkYeXQF7e9enyX5at0Z8dFOlsu37pM=
-X-Received: by 2002:a05:690c:9b04:b0:664:74cd:5548 with SMTP id
- 00721157ae682-6ea642e5c1bmr128709737b3.1.1730811735520; Tue, 05 Nov 2024
- 05:02:15 -0800 (PST)
+	s=k20201202; t=1730822126;
+	bh=cMvTh8PxTSmZ112HIDfP6ZSowBcMCKVJTesKcB3gvwk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=H1y7x+NyhnuuyB5F85fhewQ2GPZQXp7zTj5nyJz/ECA8hH1QUxx5PW6fwWEKnW7fH
+	 1G8sTZek5eZ+kwBpCOBfg24Am0Frdtdxg/+PLjpyhjy8XYOaqC5CrlaaSU68crFl1c
+	 EjYclJ5GBgx0kUmRjDwgtZu8yz1xJevhzsHGsW5kyJQNlf0TrG+g/JUdZpV7alVkQh
+	 I2vFAcPfmwejx+xjYiS14ScmQc1SUt3jC5wRo0+1yTnWsgu+JMJhErOuej/IE1KsKl
+	 5q+h9OR7BtYrmxdJfYEY8/sonX2GPLy0v97KyEJnkL3xGF8hYR9mTVlAif/XqJqaRV
+	 teMxarrdIZ6UA==
+Date: Tue, 5 Nov 2024 15:55:20 +0000
+From: Lee Jones <lee@kernel.org>
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: konstantin@linuxfoundation.org, baocheng.su@siemens.com,
+	tobias.schaffner@siemens.com, pavel@ucw.cz,
+	ilpo.jarvinen@linux.intel.com, wim@linux-watchdog.org,
+	linux@roeck-us.net,
+	Benedikt Niedermayr <benedikt.niedermayr@siemens.com>,
+	linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	felix.moessbauer@siemens.com, christian.storm@siemens.com,
+	quirin.gylstorff@siemens.com, chao.zeng@siemens.com
+Subject: Re: (subset) [PATCH 1/1] MAINTAINERS: replace bouncing maintainers
+Message-ID: <20241105155520.GC1807686@google.com>
+References: <20241028112359.3333152-1-benedikt.niedermayr@siemens.com>
+ <20241028112359.3333152-2-benedikt.niedermayr@siemens.com>
+ <173048213838.1966999.11456105703949125929.b4-ty@kernel.org>
+ <0f27f32e-bf00-4f9d-a0b6-0625a6dae203@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241007212434.895521-1-Frank.Li@nxp.com> <ZyPUWaINgupm7dZ3@lizhi-Precision-Tower-5810>
- <20241105083255.GA24194@www.linux-watchdog.org>
-In-Reply-To: <20241105083255.GA24194@www.linux-watchdog.org>
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 5 Nov 2024 07:02:04 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+taEhxJVhzRpZwZnrDDrjpCPXk1vgkAvqWscjH7QPXCA@mail.gmail.com>
-Message-ID: <CAL_Jsq+taEhxJVhzRpZwZnrDDrjpCPXk1vgkAvqWscjH7QPXCA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] dt-bindings: watchdog: fsl-imx-wdt: Add missing
- 'big-endian' property
-To: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Frank Li <Frank.li@nxp.com>, Guenter Roeck <linux@roeck-us.net>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	"open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, 
-	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>, 
-	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, 
-	open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0f27f32e-bf00-4f9d-a0b6-0625a6dae203@redhat.com>
 
-On Tue, Nov 5, 2024 at 3:00=E2=80=AFAM Wim Van Sebroeck <wim@linux-watchdog=
-.org> wrote:
->
-> Hi Frank,
->
-> > On Mon, Oct 07, 2024 at 05:24:33PM -0400, Frank Li wrote:
-> > > From: Animesh Agarwal <animeshagarwal28@gmail.com>
-> > >
-> > > Add missing big-endian property in watchdog/fsl-imx-wdt.yaml schema. =
-Only
-> > > allow big-endian property for ls1012a and ls1043a.
-> > >
-> > > Fix dtbs_check errors.
-> > > arch/arm64/boot/dts/freescale/fsl-ls1012a-frwy.dtb: watchdog@2ad0000:
-> > >     Unevaluated properties are not allowed ('big-endian' was unexpect=
-ed)
-> > >
-> > > Cc: Daniel Baluta <daniel.baluta@nxp.com>
-> > > Signed-off-by: Animesh Agarwal <animeshagarwal28@gmail.com>
-> > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > > ---
-> >
-> > Wim Van Sebroeck:
-> >
-> >       Any update this patch? Kyzy already acked.
-> >
->
-> Acked-by: Wim Van Sebroeck <wim@linux-watchdog.org>
->
-> Via which tree will this go upsteam?
+On Mon, 04 Nov 2024, Hans de Goede wrote:
 
-Your tree.
+> Hi Lee,
+> 
+> On 1-Nov-24 6:28 PM, Lee Jones wrote:
+> > On Mon, 28 Oct 2024 12:23:59 +0100, Benedikt Niedermayr wrote:
+> >> Since complaints about bouncing maintainers raised [1] we have now a
+> >> replacement for maintainers that stepped away from their duties.
+> >>
+> >> [1] https://www.spinics.net/lists/platform-driver-x86/msg47105.html
+> >>
+> >>
+> > 
+> > Applied, thanks!
+> > 
+> > [1/1] MAINTAINERS: replace bouncing maintainers
+> >       commit: 64dd44a658065ab5595bbfe2cb4d8fd30c9e34a2
+> 
+> I'm not seeing this on either of:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git/log/?h=for-leds-next
+> https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/log/?h=for-mfd-next
+> 
+> ?
+> 
+> Note I'm fine with you picking this up, I just want to make sure that
+> it does not fall through the cracks and drop it from my own patch queue
+> since it also touches pdx86 MAINTAINERS entries.
 
-DT bindings go in via $subsystem tree. I only take DT bindings if they
-don't get picked up by the subsystem maintainer.
+I'm pushing it through the LEDs tree.  It'll be in -next tomorrow.
 
-Rob
+-- 
+Lee Jones [李琼斯]
 
