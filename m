@@ -1,103 +1,163 @@
-Return-Path: <linux-watchdog+bounces-2412-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2413-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 516509BC554
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Nov 2024 07:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CA6499BC881
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Nov 2024 10:00:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AFBF2830F3
-	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Nov 2024 06:21:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E4ED282E3C
+	for <lists+linux-watchdog@lfdr.de>; Tue,  5 Nov 2024 09:00:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88FFD1D151D;
-	Tue,  5 Nov 2024 06:21:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D38C4317C;
+	Tue,  5 Nov 2024 09:00:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UDFgIUEv"
+	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="HsbnN/Tx"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37D61DFE8;
-	Tue,  5 Nov 2024 06:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 253FA1C2450;
+	Tue,  5 Nov 2024 09:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730787681; cv=none; b=ih3smCWuWoEbV6VlCEHO1c82ZcsLepxipfN7S03Jfuj4sO7bQNClp3cmS9pVz+zDvIpqvYNP7ZArMMp46rdwVqRnUFBI3mcwyiQTpIqTXrjAT/e6/q6iF0KyoAORF2Qsq3wcBaVohSv5/6ucUj/p+mg01i/oyuv2rrhlOqe8RDU=
+	t=1730797216; cv=none; b=jetOdhnxVFTMHv04iCJ315eOomdKCz4pDotcnr6jlu/jI6RslY5ho5dqkG640afrrkW40LWnZa8K0k3q8TEWrVhzMBuEtP0yttl9XUKj71Nu0R6iREuQRSycLiVjOpC8OY9PYQ8y1RKIKHK7ng2m6/qf0Zkj07Ey3CP8VJuySiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730787681; c=relaxed/simple;
-	bh=kk8dszoqp8PqiEkZB9fm5YAoTt8ToqdKlYqHvKHmOa0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IlJS7697aGpqVaEpgQd8jHgV0+YIKxO5wflOiHia7UFc2Hl1LUJkb5pB+ldLjNI4O6bbvH6X6jzxgOA7Vcd6hkQ3dI3Jh87RzPlUPvyzJSIbvx/wk0rnGKfKQnce0EW8LOlhYdbgGoWhyJmbgz67Wx+0NgyU6reS25ArGlqzh3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UDFgIUEv; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e2e340218daso5050854276.0;
-        Mon, 04 Nov 2024 22:21:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730787678; x=1731392478; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t3wFW12/6RoBqXny0VQWOTmH5aSf+LWh0KZ4bCkVkr0=;
-        b=UDFgIUEvoXQ0tOWsfZzd1cNcMKWGiquULIjrzIFwCHnkVplP2eDnjXVmcLVPlfFDMe
-         KQ6qiRkSrjpLMaEM6Byr4D4Q2bh5ZZbxkXwis3FWGZWaJ8jG/tIDSX3TVXVswvjx26rw
-         6IB/Ur+rmXACuoIxpa8QuGq6C6/ttJ04ATeGt9gdGLMKL8eML3RnLH3shH47tzEEwqcq
-         sFct5hre/HVGudfOOMnvwuXZK1Cic4ONXk+3hWAL29PQJge7sBYozlLuDpWFsMuTFD2e
-         i0D9I/9rlxwZOqEQjMM+kOhdhCbv9w9CFHJsohW36p/zQxnT0bHUjSUEgG9pMXv0moqZ
-         iA1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730787678; x=1731392478;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t3wFW12/6RoBqXny0VQWOTmH5aSf+LWh0KZ4bCkVkr0=;
-        b=FtCWOynGII977DVSQlLV7a4hsKaGZpfuH/i01hoEb8OLqcsBqlQtwY/lu6W4Bzr3x/
-         N/f2vO6LVxKTSsl4rDbHcGYbMbijOeIAlPvjRB7CYzUM5QD3ORt7067Byus4mDDNEyQt
-         S6Fs7soDKuWK/HLQbriF0yDF3fdol3YqGj5l7lx3CammjhHRiDcQigBr6Y6Z587oLmg+
-         wGZvcKXa9mMnTQm5cbJ6Oee2TbZgx0DK4gVR+ue6x7aTHtQSVXLvfQegTuFxrggFv/7l
-         A8yZT19UAYmwHvlEMpWTH4DSaECgCP41sX3Jzci6m5eddsVJaIKKPcTAIqvAcuhJRIrt
-         dpsg==
-X-Forwarded-Encrypted: i=1; AJvYcCUi/RTmww2fBBEhsWqJ9/KHrrITWMZpj5STIQw5d9k+Ra/jL6dbQdMsEa9LQdmhUwZbHhNPuVGq598=@vger.kernel.org, AJvYcCVEMTymjrGQlbPG6Js2UUFRG1IKGf6bB1OcUm7yKQ62B8rGvZmIvkRCQxVgwYcE/dqKYCIC1L9Keg4112E=@vger.kernel.org, AJvYcCVI/7mIgZg+iIDJO74Jp/dytKeSqMLQvWNkkHClT7dcXc5ucMJpdschNYUSGFdF0c7PBIj1AbYr/L+gGJ04aHA=@vger.kernel.org, AJvYcCVQ9jkFV2yot1V4G0v7SmjTDxV1ezvqpoPZBjprZuGJJGy9Eg7uBIB+zb7Nc7dKRo0qokRR+GX71sRi@vger.kernel.org, AJvYcCVV2bUUeRfQaEnzYcTJbqP3pkZe95JvP4Dxs4qbst2psN0Iv4a0+nxczqm0sX+TL3wKmq23LZ7BqX9Ym8gY@vger.kernel.org, AJvYcCVrcpzf0qWH+i9h0n4UyAoYiN2ZMJL8QAkL8dKCirEXu9xXQHFDCCwlMDkGEbpuaeBEC/0Z7XwExPLsYQ==@vger.kernel.org, AJvYcCW5uOgORflXjroIlWko1DsoP3ZEf0u7Sjrzj0MnCMc6hRTHVxIlv2v28IPGMYukfQDsZW0tBzs9Epxk@vger.kernel.org, AJvYcCWDeBrSTQObBrgZSLyQwPtZgM2+iQYA3di0r2Zl6blPG7D5E1s6hn8KiU2an3+P/2330sjEg8Zf@vger.kernel.org, AJvYcCWcFjTndcE21ow7Scl64CaeiJgtoDLmZzmd38/JFDoTzBlMeksMZktDy0fvzmJzet7ht1HngbJ5x/wJ@vger.kernel.org, AJvYcCWrEZCgWtO8USER3+roGYiOPHQ9BYlc
- wEYOntV+6fYSQYOvzN/14gEZ75o8HLe14OjKuIcq1S330o2B@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWHGP4ZAPPfIcq23xAHxbqPgWVbn9m11d/au4Dyj9nnlXVY1id
-	CKBvSYr6Rwq65vvv6t6JDqgncMsxdoDPj29Nk5gPCRbyc2IXgdfOtiqgQ3BD9AzuuEV74L++Lsr
-	B+XnmiQu99yBFqErlyAoOeLrRHiA=
-X-Google-Smtp-Source: AGHT+IHa9Wl6kaZMC2Iqh+PZ97OJD2htTC9UI9oFXhLn0ebZGsBU/q2UeprWViXbP5D6nHQs3LLDaTs6iEW2fsyU8bY=
-X-Received: by 2002:a05:6902:15c4:b0:e29:24c:1d82 with SMTP id
- 3f1490d57ef6-e30e5b576e7mr16882810276.38.1730787677760; Mon, 04 Nov 2024
- 22:21:17 -0800 (PST)
+	s=arc-20240116; t=1730797216; c=relaxed/simple;
+	bh=b+cUcGREjwIVOb8iVPWQ1xX9l5pWIaGxnqXDOFCzuIE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zaaza3EFjqrVLIb7Iw6K/9XAavIwhNQLBfHyjN4T5bGdYXvprVw6c3Ba8WE28i8vPrAHLIVmEn5xOMHVKa1aTz9gE9VCjigk9nbY1SembOQmGeN4dZ6S1vfJKGnjoyzz5Fi5CpYoZSeRRYUI69Yi53l1RIZnYRxx+21q2yFoP00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=HsbnN/Tx; arc=none smtp.client-ip=185.87.125.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+	id 80D2540A06; Tue,  5 Nov 2024 09:32:55 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 80D2540A06
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+	s=odk20180602; t=1730795575;
+	bh=b+cUcGREjwIVOb8iVPWQ1xX9l5pWIaGxnqXDOFCzuIE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HsbnN/Tx+/Bvj8KL+ri+wWbTFp5C/N3vOAEZg0J4qoqhzSNsjJG1yl0RT1yU7xkvV
+	 3QOwZ2PWKt8zKELSK5Q699hFHBLRUkxAQrUh37XyMjN8cLi7UEYNNfOUixdIpCAAKr
+	 Ct0C2dZFrEG7Ytszd9Io//ao6Y3TMSBIQfV6PUzo=
+Date: Tue, 5 Nov 2024 09:32:55 +0100
+From: Wim Van Sebroeck <wim@linux-watchdog.org>
+To: Frank Li <Frank.li@nxp.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	"open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>,
+	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/1] dt-bindings: watchdog: fsl-imx-wdt: Add missing
+ 'big-endian' property
+Message-ID: <20241105083255.GA24194@www.linux-watchdog.org>
+References: <20241007212434.895521-1-Frank.Li@nxp.com>
+ <ZyPUWaINgupm7dZ3@lizhi-Precision-Tower-5810>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241024085922.133071-1-tmyu0@nuvoton.com> <20241024085922.133071-8-tmyu0@nuvoton.com>
- <20241026154113.66fe0324@jic23-huawei>
-In-Reply-To: <20241026154113.66fe0324@jic23-huawei>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Tue, 5 Nov 2024 14:21:06 +0800
-Message-ID: <CAOoeyxXmOE5R03Gof9zXS_E+32AFaY-miPN7jNZU+2GGX+nsKQ@mail.gmail.com>
-Subject: Re: [PATCH v1 7/9] iio: adc: Add Nuvoton NCT6694 IIO support
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, lars@metafoo.de, ukleinek@kernel.org, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZyPUWaINgupm7dZ3@lizhi-Precision-Tower-5810>
+User-Agent: Mutt/1.5.20 (2009-12-10)
 
-Dear Jonathan,
+Hi Frank,
 
-Thank you for your comments,
-I will make changes based on the part you mentioned in the  future.
+> On Mon, Oct 07, 2024 at 05:24:33PM -0400, Frank Li wrote:
+> > From: Animesh Agarwal <animeshagarwal28@gmail.com>
+> >
+> > Add missing big-endian property in watchdog/fsl-imx-wdt.yaml schema. Only
+> > allow big-endian property for ls1012a and ls1043a.
+> >
+> > Fix dtbs_check errors.
+> > arch/arm64/boot/dts/freescale/fsl-ls1012a-frwy.dtb: watchdog@2ad0000:
+> >     Unevaluated properties are not allowed ('big-endian' was unexpected)
+> >
+> > Cc: Daniel Baluta <daniel.baluta@nxp.com>
+> > Signed-off-by: Animesh Agarwal <animeshagarwal28@gmail.com>
+> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> > ---
+> 
+> Wim Van Sebroeck:
+> 
+> 	Any update this patch? Kyzy already acked.
+> 
 
+Acked-by: Wim Van Sebroeck <wim@linux-watchdog.org>
 
-Best regards
-Ming
+Via which tree will this go upsteam?
+
+Kind regards,
+Wim.
+
+> 
+> Frank
+> 
+> 
+> >
+> > Change from v1 to v2:
+> >   only allow big endian for layerscape platform.
+> >
+> > previous post at:
+> > https://lore.kernel.org/imx/20240806103819.10890-1-animeshagarwal28@gmail.com/
+> >
+> > check spec, and dump watch dog reset value
+> > at ls1043a platform.
+> >
+> > 0x02A80000:  00 30 00 00 00 10 00 04 00 01 00 00 00 00 00 0
+> >
+> > It is big-endian. imx2_wdt.c use regmap which call regmap_get_val_endian()
+> > to handle endian.
+> >
+> > So this change is corret.
+> >
+> > big-endian for wdt is necessary
+> > ---
+> >  .../devicetree/bindings/watchdog/fsl-imx-wdt.yaml  | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> > index 36b836d0620c9..0da953cb71272 100644
+> > --- a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> > +++ b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+> > @@ -48,6 +48,8 @@ properties:
+> >    clocks:
+> >      maxItems: 1
+> >
+> > +  big-endian: true
+> > +
+> >    fsl,ext-reset-output:
+> >      $ref: /schemas/types.yaml#/definitions/flag
+> >      description: |
+> > @@ -93,6 +95,18 @@ allOf:
+> >        properties:
+> >          fsl,suspend-in-wait: false
+> >
+> > +  - if:
+> > +      not:
+> > +        properties:
+> > +          compatible:
+> > +            contains:
+> > +              enum:
+> > +                - fsl,ls1012a-wdt
+> > +                - fsl,ls1043a-wdt
+> > +    then:
+> > +      properties:
+> > +        big-endian: false
+> > +
+> >  unevaluatedProperties: false
+> >
+> >  examples:
+> > --
+> > 2.34.1
+> >
 
