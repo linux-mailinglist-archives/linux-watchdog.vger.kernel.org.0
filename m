@@ -1,76 +1,76 @@
-Return-Path: <linux-watchdog+bounces-2423-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2424-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B6FA9BF0E7
-	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Nov 2024 15:57:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D2919BF0EA
+	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Nov 2024 15:57:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CEC71F2300D
-	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Nov 2024 14:57:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6060280DF6
+	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Nov 2024 14:57:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD7D18BBBB;
-	Wed,  6 Nov 2024 14:57:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EB962746C;
+	Wed,  6 Nov 2024 14:57:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gYb9o7aW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MKBd+vOI"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B031E767B;
-	Wed,  6 Nov 2024 14:57:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1EB18BBBB;
+	Wed,  6 Nov 2024 14:57:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730905038; cv=none; b=tmtQo1JddfnbSqsL82TjP0RyC0S7C8Iixp3SshqZvagCg7/Gw+YGYIS8UjuBc5lyVV+K4dpGvLrJ3CDj4P/IJT+W78gTzGX7NZFPQgVsAZQ27jOHZmvUBG1bwBjKh/elLybldg7jnGn/uliZvZ619W+6wxzZYbppdhxpWOHkz4I=
+	t=1730905067; cv=none; b=giVCcr1V+7P8vEtZyfbRMf2gHx4Qw4mjPFB7xeGmbvUSFI+4hsENrZvsCEEZiyhyiIQz5UKCoXwsL6iilJA7a+bZA5PnEmZfkQ7RBYkF9B4lb8mUJ7Ug1hwFAOl78lPCm2dIJJ8RekQ3LoAnDrE84HmHKYfIOL/+/cgGRTNv0aw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730905038; c=relaxed/simple;
-	bh=sAqOR0dGPBtFwTJ71ZUgMpuHpwkDzlzgdXbrj9+4m3U=;
+	s=arc-20240116; t=1730905067; c=relaxed/simple;
+	bh=r3kUs6fJuPVVGQQ4YTCdOd3YW5RVZevKVVfntjZ2m8Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YuiCwpr/LvMtJamtdUZgiKkY9MBm0HPnXysz1E1uWGrWm53phdlZBDbQF4Clt5KXaLQAnzg8ngMe6+0R0frNrsVO9HfEF6etsVFSmLlf9pL85fYy3x2KdXRhKNos2GaFZyneWQb0tBswppsVUb6PhxcvyrlADzNgySPNM3svpWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gYb9o7aW; arc=none smtp.client-ip=209.85.214.174
+	 In-Reply-To:Content-Type; b=DYHGMjiAyyP1hcqhlAu3ppkEWUCzhXtEAh+rVuWqtG3PmufM90hB7KtvGkS7/7ElXeQAjDvh8RdIi69gkG3Ax3ODbqHaeX8y/VaAZIUf9M7cpGqAU2oLPRDnii2GlUIhoE/iQPWqP8kDnFuKQfD9EqH/0zlu4gRqIYoUw8fNEDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MKBd+vOI; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-20c9978a221so70148995ad.1;
-        Wed, 06 Nov 2024 06:57:16 -0800 (PST)
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-71e3fce4a60so5530958b3a.0;
+        Wed, 06 Nov 2024 06:57:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730905035; x=1731509835; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1730905065; x=1731509865; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=9un1oqqphPvuz/LlacJPYk650tZim9kSbvAUxteUe0c=;
-        b=gYb9o7aWjUdboowzUb1QqKRaO9ewsOus5sp+5VtOadq/K9Rl1XRTIx0dvv7Q+iGoEp
-         +80QVhk0kiMmARL9npViLzOd4+UHzG2Ms4zlbETd13DXue+t1wLCRgjQALb/VP4Z+Fn7
-         J1UTB8FiB18W7G7pFg6fgRSYQ8C642o9tpyleGrLVcKb2baAtPSdf69oebY7Ag7tft0A
-         rVpiDUoByBTOf8o8+LRNlgEXU6Aj1hfp3w+Xdp3KT+dd6vKVb+YUhXd+ZutUHZ4ZVDn5
-         N+O5rGepJy+BtPHxPmSsHfKaZe+dLMTov/R7sPiKD8pdqpt4O89NmSfLQonBn9E+SDoV
-         YJwQ==
+        bh=L8Da5bhq0dGUQkyEY7F7AHhF5ebr+WQTOwB16Hy9GjQ=;
+        b=MKBd+vOI2ypR5Cxew9Uayrsnb/uSVMzyZk9mhuLSweSFPOK2IeEAxpmTi4Sl6EABcq
+         hp8kzyktshXUolVCzPN8Sv4BxZpg5hYJG2Y6vt2qpyulblBdQPhmdbGXeQhOOFtGL3Va
+         ME4FQpNeZPj6ZDC//2yJ+ZI0YzU+hh/UP35ZNg2MV1Mop+b5vBeIFi+1o5QxjC4xZ99M
+         8cr2F3ZGobeKfxe9kgSciLOjZsyYrghD0ZJIvIb9GECn2huJiZ2exy7fCweXtEYX9MUI
+         KoF0J8cDCpNjm1t+IYtvlgMpvJiZq0JtFSa5W2mOBVbJC5I9EUzqmV17PH0y42p5YRoS
+         0AnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730905035; x=1731509835;
+        d=1e100.net; s=20230601; t=1730905065; x=1731509865;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9un1oqqphPvuz/LlacJPYk650tZim9kSbvAUxteUe0c=;
-        b=ITOS+Cefr7ZmpWRDwZdjuO6E168NRzDn+0RhukkTevY3dsztpn9Y7SiR6A9KeJ7/UW
-         rEIRNloBILJTdru/qhM9S3ynJ1/FjBHCUMcWIPFogWV4UWNpZPJA62NmBMe1oxR8D1Jh
-         foh8ySgl8BurKycZerzoCsM4SDLMkZqyDmhRg6Ph+E/brLE1oSRhm+XX2qo1RBbRQqhJ
-         rIQSBHd/FhfMJc0NxzIAij2opeXCa7TsBDFuG+6sNEDYvHhjAU8CrsTyPQt84ysHftIL
-         8p/V9uAl7DJdnTBQI6yb/MxoAEuEWdveGjwJEXvl7ohFBaeCaqP9zh2ERwm4dfJsPXsG
-         r/qA==
-X-Forwarded-Encrypted: i=1; AJvYcCVqCM+kpCyBfN5nsEPMCbl+Jwf8v2bQbLuSJzsJS6BpfpRgBIDA/6/pcmVEEIWFQxtGweaE0NMhtYc5qUU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBJ/q6Xtgo77c4JVni5z9vihWGlRZtz+7WPCPKSY51YNdHDeP+
-	Syjjgj2bf4RHFoB4rFkZ7IrLm3FN+HWXSrr6yWU2r1a9asRoyl8Y
-X-Google-Smtp-Source: AGHT+IFtgAKfA6kWLbPTvJs2W8mYXVSRcHx8IIOvlPoTUmyZTR/20DKsCiKGX3HsMpj+FqOcI8F1gA==
-X-Received: by 2002:a17:902:f607:b0:20b:ab4b:544a with SMTP id d9443c01a7336-210c6c6d591mr586992085ad.43.1730905034032;
-        Wed, 06 Nov 2024 06:57:14 -0800 (PST)
+        bh=L8Da5bhq0dGUQkyEY7F7AHhF5ebr+WQTOwB16Hy9GjQ=;
+        b=haInsF0vUBlloxwuhbGX6EsaunNqhsbRI9xoRaT1tEjCrldBBj5fRY2QzT1mWb3qh7
+         dkzuDL59PIiHXSNXiAY+z9bllnYT0dOL3YJBAWkhi2/EBWiqbFcqentxYYklbvHzHXCM
+         KvcI2sQ6O23qW/RAvlKidnEHiMdTwHNQ6wp0kKd0Y2JRnNaQnN8aP3gz/zHnMFvJ+EOQ
+         Fvp59mV6md8iQJ0BfA52Iu2hvjtRdFMEnIjYZ1eMOV2O8M8Gp+LkIj+mm4amiKpnlXAQ
+         Fcmq0/TXoO9ZFTP2VVUb8rvg1kVdzMpPhHry8IOo9frwJuXMAieuSpnzQIJ/A3pNETMi
+         lq7A==
+X-Forwarded-Encrypted: i=1; AJvYcCVapa+GPm1deIkmQ1TrAQHYcGgdlw66hwQPpcAtyEGFZqbFqXI9ZfjNszR8K1Uhx/tUCPDEQt4MKf4tOkc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrfSYrG4oZJKtMV94ZCswo6O29uHaTR0UmIXBRpYk/91mzrDS4
+	kqmMwD56kF+SQMxXsY93blDVmCs3uoPHID/ceYnvh8S59ipxcjWN
+X-Google-Smtp-Source: AGHT+IEyoOs7FisnjB9XNs4o24/QZHs0WWRb3jQM0eyiTvMhy49UaXpIc0R1oBNIXhJwo8c31NpDRQ==
+X-Received: by 2002:a05:6a00:982:b0:71e:7b8a:5953 with SMTP id d2e1a72fcca58-72063059dc2mr55790941b3a.24.1730905064850;
+        Wed, 06 Nov 2024 06:57:44 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057c0ec7sm96453795ad.202.2024.11.06.06.57.12
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc2c39acsm11708107b3a.137.2024.11.06.06.57.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Nov 2024 06:57:13 -0800 (PST)
+        Wed, 06 Nov 2024 06:57:44 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1d801e59-341d-4f2f-88ca-98277731bd83@roeck-us.net>
-Date: Wed, 6 Nov 2024 06:57:11 -0800
+Message-ID: <0b521e7f-dab5-4605-949d-5ebbe817239a@roeck-us.net>
+Date: Wed, 6 Nov 2024 06:57:42 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -78,7 +78,8 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] watchdog: mediatek: Fix mtk_wdt_restart
+Subject: Re: [PATCH v2 2/2] watchdog: mediatek: Add support for MT6735
+ TOPRGU/WDT
 To: Yassine Oudjana <y.oudjana@protonmail.com>,
  Wim Van Sebroeck <wim@linux-watchdog.org>,
  Matthias Brugger <matthias.bgg@gmail.com>,
@@ -86,7 +87,7 @@ To: Yassine Oudjana <y.oudjana@protonmail.com>,
 Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
 References: <20241106104738.195968-1-y.oudjana@protonmail.com>
- <20241106104738.195968-2-y.oudjana@protonmail.com>
+ <20241106104738.195968-3-y.oudjana@protonmail.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -132,15 +133,14 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241106104738.195968-2-y.oudjana@protonmail.com>
+In-Reply-To: <20241106104738.195968-3-y.oudjana@protonmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 11/6/24 02:47, Yassine Oudjana wrote:
-> Clear the IRQ enable bit of WDT_MODE before asserting software reset
-> in order to make TOPRGU issue a system reset signal instead of an IRQ.
+> Add support for the Top Reset Generation Unit/Watchdog Timer found on
+> MT6735.
 > 
-> Fixes: a44a45536f7b ("watchdog: Add driver for Mediatek watchdog")
 > Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
@@ -150,24 +150,35 @@ Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 >   1 file changed, 6 insertions(+)
 > 
 > diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
-> index c35f85ce8d69c..e2d7a57d6ea2e 100644
+> index e2d7a57d6ea2e..91d110646e16f 100644
 > --- a/drivers/watchdog/mtk_wdt.c
 > +++ b/drivers/watchdog/mtk_wdt.c
-> @@ -225,9 +225,15 @@ static int mtk_wdt_restart(struct watchdog_device *wdt_dev,
->   {
->   	struct mtk_wdt_dev *mtk_wdt = watchdog_get_drvdata(wdt_dev);
->   	void __iomem *wdt_base;
-> +	u32 reg;
+> @@ -10,6 +10,7 @@
+>    */
 >   
->   	wdt_base = mtk_wdt->wdt_base;
+>   #include <dt-bindings/reset/mt2712-resets.h>
+> +#include <dt-bindings/reset/mediatek,mt6735-wdt.h>
+>   #include <dt-bindings/reset/mediatek,mt6795-resets.h>
+>   #include <dt-bindings/reset/mt7986-resets.h>
+>   #include <dt-bindings/reset/mt8183-resets.h>
+> @@ -87,6 +88,10 @@ static const struct mtk_wdt_data mt2712_data = {
+>   	.toprgu_sw_rst_num = MT2712_TOPRGU_SW_RST_NUM,
+>   };
 >   
-> +	/* Enable reset in order to issue a system reset instead of an IRQ */
-> +	reg = readl(wdt_base + WDT_MODE);
-> +	reg &= ~WDT_MODE_IRQ_EN;
-> +	writel(reg | WDT_MODE_KEY, wdt_base + WDT_MODE);
+> +static const struct mtk_wdt_data mt6735_data = {
+> +	.toprgu_sw_rst_num = MT6735_TOPRGU_RST_NUM,
+> +};
 > +
->   	while (1) {
->   		writel(WDT_SWRST_KEY, wdt_base + WDT_SWRST);
->   		mdelay(5);
+>   static const struct mtk_wdt_data mt6795_data = {
+>   	.toprgu_sw_rst_num = MT6795_TOPRGU_SW_RST_NUM,
+>   };
+> @@ -489,6 +494,7 @@ static int mtk_wdt_resume(struct device *dev)
+>   static const struct of_device_id mtk_wdt_dt_ids[] = {
+>   	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
+>   	{ .compatible = "mediatek,mt6589-wdt" },
+> +	{ .compatible = "mediatek,mt6735-wdt", .data = &mt6735_data },
+>   	{ .compatible = "mediatek,mt6795-wdt", .data = &mt6795_data },
+>   	{ .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
+>   	{ .compatible = "mediatek,mt7988-wdt", .data = &mt7988_data },
 
 
