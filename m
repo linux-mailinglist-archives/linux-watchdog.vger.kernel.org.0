@@ -1,116 +1,109 @@
-Return-Path: <linux-watchdog+bounces-2416-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2417-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C39C9BE0F2
-	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Nov 2024 09:29:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AF019BE127
+	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Nov 2024 09:38:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB694B242B1
-	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Nov 2024 08:29:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C7A71F24568
+	for <lists+linux-watchdog@lfdr.de>; Wed,  6 Nov 2024 08:38:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF0EA1D5171;
-	Wed,  6 Nov 2024 08:28:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B94B01D79A5;
+	Wed,  6 Nov 2024 08:36:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="WGVIyQNV"
+	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="QDMY5Ias"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE8991D432C;
-	Wed,  6 Nov 2024 08:28:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8892B1D5171
+	for <linux-watchdog@vger.kernel.org>; Wed,  6 Nov 2024 08:36:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730881723; cv=none; b=i4At6ulHotBSTeIRSTGX2qE6G0HCcOqc0RAt6LpWPqI3i/uUordl6Wir5Nq8czQn5WdWP1sjhdDmpEfSmX1DkLlAMUFFGwmdN5F40+OGkNncZBgBoZBlwIgdi9JvVaBoZZEofhBfRtbFJjFjClzVmYH42tc3lRNBkm9BZEDy550=
+	t=1730882193; cv=none; b=UEYl1qLfp0Yqq/AJBZ9AyZ16GuOLA5zFGxssjq7fMCrpxM3wVKkGlihMN/rdbzjALMaqCk8iMx6VtMkUcIPra08uozXaoY6r7dM/MwvPUryVumKssjHt6UDp7VF4zRoLENS38xAe/jVnU7Cxg18jewrgprWZI1BTFAI4ifPnP0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730881723; c=relaxed/simple;
-	bh=1ciSStcfRdIZHSbpIwhHEGxTT0wF9Oowtv8x1fEmb94=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GDXjVDqj7JLfEgnkC7kIe3NbtqwmQAteo70UKSx+Qg8J/aFtgtrULy7yymcfE1i/NR3NXBapYC/2Ck5IloialOo7rHcegM2XaZFg/FJI/oyCQwwndFjysdXcOMh9PkvmToQHH49hwAvMjZNuO29sUB5Sqt8AQreih8iICYhId9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=WGVIyQNV; arc=none smtp.client-ip=185.87.125.42
+	s=arc-20240116; t=1730882193; c=relaxed/simple;
+	bh=EAIRbyCqw2/wS3P03tLp0qleY32RBgs9qcUtao2s1Ys=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=YeMN/h5/WDqxDPevgj8/O4s7eYwRoRkLwxlUrjhhvcEp+OUnoPpOLi+vs/J6+aR26gFvN9w7VHZAN/FaZaO2hGUO826hnDGEyjmq+38mbwOsldO1k9q1oB8TfUhbvMmHa5VUTxXQkdVapo7v1XRcmA2ttLwChNvOZY9FMGXS8Ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=QDMY5Ias; arc=none smtp.client-ip=185.87.125.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
 Received: by www.linux-watchdog.org (Postfix, from userid 500)
-	id 0AEB0409F8; Wed,  6 Nov 2024 09:01:16 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 0AEB0409F8
+	id EEE54409F8; Wed,  6 Nov 2024 09:09:07 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org EEE54409F8
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-	s=odk20180602; t=1730880077;
-	bh=1ciSStcfRdIZHSbpIwhHEGxTT0wF9Oowtv8x1fEmb94=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WGVIyQNVE53GZ5mr6L5/ZU6VZbFLmazGh1e0WUij7oyHfxHe9agTPk45KuhcSSIpz
-	 CMrr7Zro60keW3uAMqVBr55ikkycyg33vy4Tb3V/yACs4SC3zM4AXyZtkVgmmN3cLE
-	 yLXsmajfkar3cMZSgq3hPzkUGOFLVYKnsysYzWew=
-Date: Wed, 6 Nov 2024 09:01:16 +0100
+	s=odk20180602; t=1730880548;
+	bh=EAIRbyCqw2/wS3P03tLp0qleY32RBgs9qcUtao2s1Ys=;
+	h=Date:From:To:Cc:Subject:From;
+	b=QDMY5Ias/NBlASI5Hip1Yv1JjTUS2hMl8odPNKtFNvCRGFGtqDRBh8Y/EiNSYCEAE
+	 t0KTbyo6ioStuVf4r1UAngEfq9e4RNQPI9KKCz82k7EEVJzUCZAVebGU7q3uivR9y0
+	 rnmPdIXozW0k6oxAYaNbvfinRNf/P8kiRyk/ayWU=
+Date: Wed, 6 Nov 2024 09:09:07 +0100
 From: Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, Frank Li <Frank.li@nxp.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	"open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	"open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <imx@lists.linux.dev>,
-	"moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/1] dt-bindings: watchdog: fsl-imx-wdt: Add missing
- 'big-endian' property
-Message-ID: <20241106080116.GA14302@www.linux-watchdog.org>
-References: <20241007212434.895521-1-Frank.Li@nxp.com>
- <ZyPUWaINgupm7dZ3@lizhi-Precision-Tower-5810>
- <20241105083255.GA24194@www.linux-watchdog.org>
- <CAL_Jsq+taEhxJVhzRpZwZnrDDrjpCPXk1vgkAvqWscjH7QPXCA@mail.gmail.com>
+To: Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+Cc: Animesh Agarwal <animeshagarwal28@gmail.com>,
+	Byoungtae Cho <bt.cho@samsung.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	Fabio Estevam <festevam@denx.de>, Harini T <harini.t@amd.com>,
+	James Hilliard <james.hilliard1@gmail.com>,
+	Jean Delvare <jdelvare@suse.de>, lijuang <quic_lijuang@quicinc.com>,
+	Marek Vasut <marex@denx.de>, Nick Chan <towinchenmi@gmail.com>,
+	Oleksandr Ocheretnyi <oocheret@cisco.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Rosen Penev <rosenp@gmail.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Xingyu Wu <xingyu.wu@starfivetech.com>,
+	Xin Liu <quic_liuxin@quicinc.com>, Yan Zhen <yanzhen@vivo.com>
+Subject: Patches add for v6.13-rc1 in Linux-watchdog-next
+Message-ID: <20241106080907.GA14713@www.linux-watchdog.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_Jsq+taEhxJVhzRpZwZnrDDrjpCPXk1vgkAvqWscjH7QPXCA@mail.gmail.com>
 User-Agent: Mutt/1.5.20 (2009-12-10)
 
-Hi Frank, Rob,
+Hi All,
 
-> On Tue, Nov 5, 2024 at 3:00 AM Wim Van Sebroeck <wim@linux-watchdog.org> wrote:
-> >
-> > Hi Frank,
-> >
-> > > On Mon, Oct 07, 2024 at 05:24:33PM -0400, Frank Li wrote:
-> > > > From: Animesh Agarwal <animeshagarwal28@gmail.com>
-> > > >
-> > > > Add missing big-endian property in watchdog/fsl-imx-wdt.yaml schema. Only
-> > > > allow big-endian property for ls1012a and ls1043a.
-> > > >
-> > > > Fix dtbs_check errors.
-> > > > arch/arm64/boot/dts/freescale/fsl-ls1012a-frwy.dtb: watchdog@2ad0000:
-> > > >     Unevaluated properties are not allowed ('big-endian' was unexpected)
-> > > >
-> > > > Cc: Daniel Baluta <daniel.baluta@nxp.com>
-> > > > Signed-off-by: Animesh Agarwal <animeshagarwal28@gmail.com>
-> > > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> > > > ---
-> > >
-> > > Wim Van Sebroeck:
-> > >
-> > >       Any update this patch? Kyzy already acked.
-> > >
-> >
-> > Acked-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-> >
-> > Via which tree will this go upsteam?
-> 
-> Your tree.
-> 
-> DT bindings go in via $subsystem tree. I only take DT bindings if they
-> don't get picked up by the subsystem maintainer.
-> 
-> Rob
-
-Added.
+Following patches have been added in Linux-Watchdog-Next the last days:
+[PATCH v3] iTCO_wdt: mask NMI_NOW bit for update_no_reboot_bit() call
+[PATCH V3] watchdog: xilinx_wwdt: Calculate max_hw_heartbeat_ms using clock frequency
+[PATCH v2] dt-bindings: watchdog: Document Qualcomm QCS615 watchdog
+[PATCH] watchdog: ziirave_wdt: Drop explicit initialization of struct i2c_device_id::driver_data to 0
+[PATCH v1] MAINTAINERS: Update the maintainer of StarFive watchdog driver
+[PATCH v4] watchdog: stm32_iwdg: Add pretimeout support
+[PATCH v2 1/2] watchdog: apple: Actually flush writes after requesting watchdog restart
+[PATCH v2 2/2] watchdog: apple: Increase reset delay to 150ms
+[PATCH] watchdog: armada_37xx_wdt: remove struct resource
+[RFC PATCH 1/9] watchdog: always print when registering watchdog fails
+[RFC PATCH 2/9] watchdog: da9055_wdt: don't print out if registering watchdog fails
+[RFC PATCH 3/9] watchdog: gxp-wdt: don't print out if registering watchdog fails
+[RFC PATCH 4/9] watchdog: iTCO_wdt: don't print out if registering watchdog fails
+[RFC PATCH 5/9] watchdog: it87_wdt: don't print out if registering watchdog fails
+[RFC PATCH 6/9] watchdog: octeon-wdt: don't print out if registering watchdog fails
+[RFC PATCH 7/9] watchdog: rti_wdt: don't print out if registering watchdog fails
+[RFC PATCH 8/9] watchdog: rza_wdt: don't print out if registering watchdog fails
+[RFC PATCH 9/9] watchdog: sl28cpld_wdt: don't print out if registering watchdog fails
+[PATCH v3 1/2] dt-bindings: watchdog: airoha: document watchdog for Airoha EN7581
+[PATCH v3 2/2] watchdog: Add support for Airoha EN7851 watchdog
+[PATCH] watchdog: Delete the cpu5wdt driver
+[PATCH v2 1/2] watchdog: da9063: Do not use a global variable
+[PATCH v2 2/2] watchdog: da9063: Remove __maybe_unused notations
+[PATCH v3] watchdog: it87_wdt: add PWRGD enable quirk for Qotom QCML04
+[PATCH] watchdog: Switch back to struct platform_driver::remove()
+[PATCH v4 4/4] watchdog: rzg2l_wdt: Power on the watchdog domain in the restart handler
+[PATCH v3 2/3] watchdog: s3c2410_wdt: add support for exynosautov920 SoC
+[PATCH] Revert "watchdog: s3c2410_wdt: use exynos_get_pmu_regmap_by_phandle() for PMU regs"
+[PATCH][next] docs: ABI: Fix spelling mistake in pretimeout_avaialable_governors
+[PATCH v1 1/3] dt-bindings: watchdog: Document Qualcomm QCS8300
+[PATCH v2 1/1] dt-bindings: watchdog: fsl-imx-wdt: Add missing 'big-endian' property
 
 Kind regards,
 Wim.
