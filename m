@@ -1,141 +1,108 @@
-Return-Path: <linux-watchdog+bounces-2433-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2434-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D1459C0552
-	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 13:08:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95A559C0FDF
+	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 21:40:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8ED94B223CA
-	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 12:08:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D3B11F22FD3
+	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 20:40:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1342220F5A0;
-	Thu,  7 Nov 2024 12:08:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C15D216A15;
+	Thu,  7 Nov 2024 20:40:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u9kZKM3J"
+	dkim=pass (2048-bit key) header.d=siemens.com header.i=alexander.sverdlin@siemens.com header.b="Ju5j/IjL"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mta-64-226.siemens.flowmailer.net (mta-64-226.siemens.flowmailer.net [185.136.64.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52D220EA26;
-	Thu,  7 Nov 2024 12:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78903215F58
+	for <linux-watchdog@vger.kernel.org>; Thu,  7 Nov 2024 20:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730981293; cv=none; b=h19mkRlrdqW6fiEGoZtITuJ2Z3CnV44KWvKBcczgL3+9vg6xBnGGyhrDUKFADDPYPyiE/6T+hkb1rrQ+3o0cdCx3Up4iEIGclLjVO3UQ7zQ8Hhs50LK9zGNu8N9Fk2D0slySKNjnEFVH6SRRVCQ5MNl3vXpnkfKehyy0iqyHpjU=
+	t=1731012012; cv=none; b=umr1749gkNZLGtPmhFy7BhMcq6orSiBrtgGDZFJbhjCIGWXlf2SPgqt7Bs3BksjjAiRvAyK4WY4ZPDkU7jXVtcDEdrbsxY1quuAer3l6ET7pAdAhUYvHeBAIx67tff882uyWd19jrCmAx+/vPj8fno7l5Su8nmu4a8yLkp5RcFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730981293; c=relaxed/simple;
-	bh=3pDMqBYbIse61cbzLdo+JGwA785g7t/Qa6s3J/DvTVU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SChyJ6CikzEVSqTDafn1w21eewflDN4HLFi4noNtBCnE6O6tRUa3VfPbG4XB5DqKQFiCSXBPtyc8Q3CddCuJxoljfAh+QnflUsalbMNl8RgJKJP8XamK4SaZ3bMdtcdvTD/8Dxoq7/K3ShXkraWPhY9zij3w18sQ0/a7e+m9rB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u9kZKM3J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EADFCC4CECC;
-	Thu,  7 Nov 2024 12:08:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730981292;
-	bh=3pDMqBYbIse61cbzLdo+JGwA785g7t/Qa6s3J/DvTVU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=u9kZKM3JxNbEiOdmXbXMH0dMviyQJk46SJGm3dIUkAjq3Zce3MruvYQdVXCflnZYM
-	 c31PuFmXo3z4QgcUfpvE5yZomemrx5sJ40LTBBhH5LxcFfS1MoD0prGMJayFeDFOhy
-	 xL9KM3cYp88N4TrwtImOObLYMBdT+O3zXLBeUShQpUVBfRY2MSnBkVqcj3l3t3Pnfs
-	 yiGAuGkIknhE8Oq/yB+4TW39aobUfedAfaHIx7VmjOjgU9IKDF4lvSKPSwFXLkV1un
-	 UtCjbopwBxMzAyZRqdJR64DOlDcD3QafffNB4YRaYoZog5IYINuR6pVRdqHesTwKf7
-	 SiqDk/JiMRVjg==
-Message-ID: <c487babb-84a5-4e47-a58f-75fec55cbabb@kernel.org>
-Date: Thu, 7 Nov 2024 13:08:07 +0100
+	s=arc-20240116; t=1731012012; c=relaxed/simple;
+	bh=XA8ytG5Btrx5ToFaFPbZhHY197rAlWz2s8TtR+S1TQg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y3lBU96HwEhTU0jgFE+HPVLaTzYnTygGUbKy4/xFuv246TQ9LA+P6+/6MudTteEETmcJJX7dHPqGutL5H5842joz1jZ1KHQBfGMeDJSKsusHr4RrzI9ar68e8dowX7WojwjjJmnElRKZK+JFDMCK/1Vb3g7xkqzRaxAYCM3nXno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=alexander.sverdlin@siemens.com header.b=Ju5j/IjL; arc=none smtp.client-ip=185.136.64.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+Received: by mta-64-226.siemens.flowmailer.net with ESMTPSA id 20241107203958a498406dd204576d72
+        for <linux-watchdog@vger.kernel.org>;
+        Thu, 07 Nov 2024 21:39:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=alexander.sverdlin@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=fytcx9+5LjgzP3RSEwhtTB02382uHm/r8QYjk2LvJ1I=;
+ b=Ju5j/IjLEaqnq5YEtBL02a26yzFANIXbtqkFdbDhKC34BoJm0r0UIW9aukD3hEx6o6pa3a
+ g+Fx01hWhiAFKDgD+MZaylvOJDAZkYpvhkXbdEsC2vGx8unfips8GfaQkb2ZbFu7BM9hU1dO
+ BJwrIcM430cz1BWYhDoPeVsOs/3sOV1ZkpSy0GAda38PC/xJRSBYKkODGqoOMTl820WjBS+B
+ O3zd5zfcFttUuudfOQ/uBKt9nmoC9NQpH91vLnVVkR8vbZLNmVBgbgbYE6HZjuJsdc30pUIW
+ Hwg/YxBKALGVS5MknW7GHYBexMed71J0GBgPd/nCIRzn+jMCuL2Zd3xw==;
+From: "A. Sverdlin" <alexander.sverdlin@siemens.com>
+To: linux-watchdog@vger.kernel.org
+Cc: Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Judith Mendez <jm@ti.com>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <t-kristo@ti.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] watchdog: rti: of: honor timeout-sec property
+Date: Thu,  7 Nov 2024 21:38:28 +0100
+Message-ID: <20241107203830.1068456-1-alexander.sverdlin@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] arm64: dts: exynosautov920: add watchdog DT node
-To: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: Taewan Kim <trunixs.kim@samsung.com>, Guenter Roeck <linux@roeck-us.net>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
- linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, Byoungtae Cho <bt.cho@samsung.com>
-References: <20241021063903.793166-1-trunixs.kim@samsung.com>
- <CGME20241021063938epcas2p1c01c89badb532f08a46087a4907df7dc@epcas2p1.samsung.com>
- <20241021063903.793166-4-trunixs.kim@samsung.com>
- <961e1aca-cd90-4db1-87d7-afd2e542421e@kernel.org>
- <20241107103331.GA4818@www.linux-watchdog.org>
- <589c40e1-6a1c-4ef7-b0d8-b761b132578a@kernel.org>
- <20241107113325.GA5284@www.linux-watchdog.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20241107113325.GA5284@www.linux-watchdog.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-456497:519-21489:flowmailer
 
-On 07/11/2024 12:33, Wim Van Sebroeck wrote:
->>> Seems like you are having a hard day. 
->>> The 3 patches are dropped. I presume that you will take them all through your tree then?
->>
->> I meant only this one patch, not entire patchset. The bindings and
->> watchdog driver are for you. I commented only about this patch here - DTS.
->>
->>
->> Best regards,
->> Krzysztof
->>
-> 
-> I added the first two patches again. Even when it sounds more logical to me to keep the 3 together.
+From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 
-Thank you.
+Currently "timeout-sec" Device Tree property is being silently ignored:
+even though watchdog_init_timeout() is being used, the driver always passes
+"heartbeat" == DEFAULT_HEARTBEAT == 60 as argument.
 
-> But that's a never ending discussion, so we won't go into that :-).
+Fix this by setting struct watchdog_device::timeout to DEFAULT_HEARTBEAT
+and passing real module parameter value to watchdog_init_timeout() (which
+may now be 0 if not specified).
 
-DTS is hardware description independent from Linux, therefore always
-goes separate way than Linux drivers.
+Cc: stable@vger.kernel.org
+Fixes: 2d63908bdbfb ("watchdog: Add K3 RTI watchdog support")
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+---
+ drivers/watchdog/rti_wdt.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+index f410b6e39fb6f..58c9445c0f885 100644
+--- a/drivers/watchdog/rti_wdt.c
++++ b/drivers/watchdog/rti_wdt.c
+@@ -61,7 +61,7 @@
+ 
+ #define MAX_HW_ERROR		250
+ 
+-static int heartbeat = DEFAULT_HEARTBEAT;
++static int heartbeat;
+ 
+ /*
+  * struct to hold data for each WDT device
+@@ -252,6 +252,7 @@ static int rti_wdt_probe(struct platform_device *pdev)
+ 	wdd->min_timeout = 1;
+ 	wdd->max_hw_heartbeat_ms = (WDT_PRELOAD_MAX << WDT_PRELOAD_SHIFT) /
+ 		wdt->freq * 1000;
++	wdd->timeout = DEFAULT_HEARTBEAT;
+ 	wdd->parent = dev;
+ 
+ 	watchdog_set_drvdata(wdd, wdt);
+-- 
+2.47.0
 
 
