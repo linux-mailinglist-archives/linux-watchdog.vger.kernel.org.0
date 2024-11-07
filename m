@@ -1,48 +1,48 @@
-Return-Path: <linux-watchdog+bounces-2431-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2433-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49E389C0444
-	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 12:38:06 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D1459C0552
+	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 13:08:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09D81284226
-	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 11:38:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8ED94B223CA
+	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 12:08:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5413120ADF9;
-	Thu,  7 Nov 2024 11:38:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1342220F5A0;
+	Thu,  7 Nov 2024 12:08:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UBe77Scq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u9kZKM3J"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E41F194C8B;
-	Thu,  7 Nov 2024 11:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52D220EA26;
+	Thu,  7 Nov 2024 12:08:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730979480; cv=none; b=ArgL87xgXNof5+VvwpYSW65QtVR+NV5xLv99OMtpfqvRE9eWFXL9iM/l6OjEbQVotuvjhp4chgmgO1H1qCThZGLXenxGVn8i259JCefWGV8PAEQINZEq0mYES/VKe3JLGFI9cy/zMjeZ6TplrvKoYn1j+sVYi3VLoWnpxKdQyjI=
+	t=1730981293; cv=none; b=h19mkRlrdqW6fiEGoZtITuJ2Z3CnV44KWvKBcczgL3+9vg6xBnGGyhrDUKFADDPYPyiE/6T+hkb1rrQ+3o0cdCx3Up4iEIGclLjVO3UQ7zQ8Hhs50LK9zGNu8N9Fk2D0slySKNjnEFVH6SRRVCQ5MNl3vXpnkfKehyy0iqyHpjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730979480; c=relaxed/simple;
-	bh=JejBT1GHFv0FHpnWY8g5R0OVMjGv2rERzyFJZT73N7U=;
+	s=arc-20240116; t=1730981293; c=relaxed/simple;
+	bh=3pDMqBYbIse61cbzLdo+JGwA785g7t/Qa6s3J/DvTVU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RaqDUodqrzzg28HW3H8gobfSXW3zOCzsYtT3Yvlzite7+CpUminBolOIwAZw6yVBvQXc2KRRQmnrzwKwvf+69bH8P0lz6P/GYCTxizcijTOntuBnGm79EwCYDxVMircaEfjECmU8itVGEXAw7oUZufd9Z+dHfGqcd/xWvD+mAxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UBe77Scq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56C2FC4CECC;
-	Thu,  7 Nov 2024 11:37:56 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=SChyJ6CikzEVSqTDafn1w21eewflDN4HLFi4noNtBCnE6O6tRUa3VfPbG4XB5DqKQFiCSXBPtyc8Q3CddCuJxoljfAh+QnflUsalbMNl8RgJKJP8XamK4SaZ3bMdtcdvTD/8Dxoq7/K3ShXkraWPhY9zij3w18sQ0/a7e+m9rB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u9kZKM3J; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EADFCC4CECC;
+	Thu,  7 Nov 2024 12:08:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730979479;
-	bh=JejBT1GHFv0FHpnWY8g5R0OVMjGv2rERzyFJZT73N7U=;
+	s=k20201202; t=1730981292;
+	bh=3pDMqBYbIse61cbzLdo+JGwA785g7t/Qa6s3J/DvTVU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UBe77ScqKTCo9V/XlbWiAZAM/UgZmxn1DmSD6yHEwHce7K2AohMsUB57rrnVO4Ehc
-	 cWM8BQl4QtGzQdYUA1tdLRYmH6mt3AYBdQ1QCx6ghOe39qW63MY+GaxD9x+vpNv2pD
-	 HuEfwASvEbhs+IDwnGWLkv1n+yagPW5mnpmcShms6zNwATI+wcaJN8Z910Owg6ajn0
-	 qHBogawFbvvbd0lZTMknfKPLK+pIZ3QJS3y9PTmrKXTiOI12jEbzMKckcu2kcd+jkZ
-	 CFmQZbiHM/wCGxZ7qqJAZtRC7lepppM9R7Rk/updc4ZmeftkeoaUn6XrltOxbi34yf
-	 qRCuS/xxuo1VQ==
-Message-ID: <589c40e1-6a1c-4ef7-b0d8-b761b132578a@kernel.org>
-Date: Thu, 7 Nov 2024 12:37:52 +0100
+	b=u9kZKM3JxNbEiOdmXbXMH0dMviyQJk46SJGm3dIUkAjq3Zce3MruvYQdVXCflnZYM
+	 c31PuFmXo3z4QgcUfpvE5yZomemrx5sJ40LTBBhH5LxcFfS1MoD0prGMJayFeDFOhy
+	 xL9KM3cYp88N4TrwtImOObLYMBdT+O3zXLBeUShQpUVBfRY2MSnBkVqcj3l3t3Pnfs
+	 yiGAuGkIknhE8Oq/yB+4TW39aobUfedAfaHIx7VmjOjgU9IKDF4lvSKPSwFXLkV1un
+	 UtCjbopwBxMzAyZRqdJR64DOlDcD3QafffNB4YRaYoZog5IYINuR6pVRdqHesTwKf7
+	 SiqDk/JiMRVjg==
+Message-ID: <c487babb-84a5-4e47-a58f-75fec55cbabb@kernel.org>
+Date: Thu, 7 Nov 2024 13:08:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -63,6 +63,8 @@ References: <20241021063903.793166-1-trunixs.kim@samsung.com>
  <20241021063903.793166-4-trunixs.kim@samsung.com>
  <961e1aca-cd90-4db1-87d7-afd2e542421e@kernel.org>
  <20241107103331.GA4818@www.linux-watchdog.org>
+ <589c40e1-6a1c-4ef7-b0d8-b761b132578a@kernel.org>
+ <20241107113325.GA5284@www.linux-watchdog.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -108,39 +110,30 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241107103331.GA4818@www.linux-watchdog.org>
+In-Reply-To: <20241107113325.GA5284@www.linux-watchdog.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 07/11/2024 11:33, Wim Van Sebroeck wrote:
-> Hi Krzystof,
-> 
->> On 21/10/2024 08:39, Taewan Kim wrote:
->>> From: Byoungtae Cho <bt.cho@samsung.com>
->>>
->>> Adds two watchdog devices for ExynosAutoV920 SoC.
->>>
->>> Signed-off-by: Byoungtae Cho <bt.cho@samsung.com>
->>> Signed-off-by: Taewan Kim <trunixs.kim@samsung.com>
->>> ---
->>>  .../arm64/boot/dts/exynos/exynosautov920.dtsi | 20 +++++++++++++++++++
->>>  1 file changed, 20 insertions(+)
+On 07/11/2024 12:33, Wim Van Sebroeck wrote:
+>>> Seems like you are having a hard day. 
+>>> The 3 patches are dropped. I presume that you will take them all through your tree then?
 >>
->> How did this happen that this patch was taken to watchdog? There is no
->> Ack here from me.
+>> I meant only this one patch, not entire patchset. The bindings and
+>> watchdog driver are for you. I commented only about this patch here - DTS.
 >>
->> Drop this patch from watchdog, I do no agree to take it via that tree.
 >>
 >> Best regards,
 >> Krzysztof
 >>
 > 
-> Seems like you are having a hard day. 
-> The 3 patches are dropped. I presume that you will take them all through your tree then?
+> I added the first two patches again. Even when it sounds more logical to me to keep the 3 together.
 
-I meant only this one patch, not entire patchset. The bindings and
-watchdog driver are for you. I commented only about this patch here - DTS.
+Thank you.
 
+> But that's a never ending discussion, so we won't go into that :-).
+
+DTS is hardware description independent from Linux, therefore always
+goes separate way than Linux drivers.
 
 Best regards,
 Krzysztof
