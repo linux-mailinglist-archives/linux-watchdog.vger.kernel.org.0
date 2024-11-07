@@ -1,133 +1,105 @@
-Return-Path: <linux-watchdog+bounces-2428-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2429-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 810E19C012C
-	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 10:33:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15AAF9C0319
+	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 12:01:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FBBE1F2243B
-	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 09:33:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47CF31C214DC
+	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 11:01:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 719F91CC16C;
-	Thu,  7 Nov 2024 09:32:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC1631D363D;
+	Thu,  7 Nov 2024 11:01:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ah3yTj9K"
+	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="QmV8O2Os"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E950BA2D;
-	Thu,  7 Nov 2024 09:32:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F09A71373;
+	Thu,  7 Nov 2024 11:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730971976; cv=none; b=q4M2WPl/GG0hN51grBaKk9Ry/gee6VkpZw93v0Yw9oQGPRIgY1rkIhXDHXn7HDM48nZ2ykAVrgrmwCbU84dCoisRpp4lfXcjiEWkQbXge55hNXokdLxoACt14wM8zTw9oKUOtGmy29Yf5Yk7zZaKjSEQC1V/ZPh3jAZQz3sA/rQ=
+	t=1730977264; cv=none; b=ubuTf34+Ev0NkWiVADo7AbEYNhf8/zngkiExkwht1uQh3KtHC5XTeyD2zkOBKwCUJNuOPg9odNJ5JB0UKN574KsQh9jjqQYhXRPTti/fY2FbdGvWCATckcwcm+/3d8nuNZ6w0I4GsptCgFP2v2VfqrTxdISh2JsAlTbrUco4V70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730971976; c=relaxed/simple;
-	bh=hRGJJEiH2gPekF0iqZ0/h+ayhMMcIyNJ65HQsDcSF6A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZpSd4k2BFVsSvmGZUBlb+4DhCsWqQQXBVPaj7jncsvMb27DQG+Ys/RsIUtP8vNO56AYLgTVxzN+OaGcPjXhZeRqwNa39pvasRoXvmqdYnOXEJgp+4TfJtWVsENp0Md4UB4SeN1i3/D0QvgzVoloJg3mxqGA8W6JlqiTFz7Y8oM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ah3yTj9K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3C0C4CECC;
-	Thu,  7 Nov 2024 09:32:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730971975;
-	bh=hRGJJEiH2gPekF0iqZ0/h+ayhMMcIyNJ65HQsDcSF6A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Ah3yTj9Kd4H5/Da7x8iNF+Dr/PmQpA/a4U6xQHaOAo4gvUKVWrZv+7EtLPpVk1hk6
-	 JCfqjYfxAi7HDpARtDnXEvzEYluNfBoh0r+vjpUxDmwqS0UXGeO6uBg5cTSWazPegq
-	 RjG/PbI78i5YdmkPspjvNC2QG58UFoMdpMBvJ7uL3Z80GErwwCrN4AAenj8THdknsd
-	 pYw8b7V6+Jry+zssOtVYcLXmi986/cYmM1+YbnIGDFFm60TdVzQ4kQZCpkGDEvkfqW
-	 eO6y2B+jc0eCgD6o6k1wAqJAzCRwN0olDz0mcr/ETa29hZ44yp12BEYOc38XLfT4m1
-	 q2FUfzf1bIbAw==
-Message-ID: <961e1aca-cd90-4db1-87d7-afd2e542421e@kernel.org>
-Date: Thu, 7 Nov 2024 10:32:48 +0100
+	s=arc-20240116; t=1730977264; c=relaxed/simple;
+	bh=bkxxQT0ywZ+RAU3jBxc18hVZFtgf6aogb7G4KtK1nhk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lNQyL7Yf/41jj8Xn9vL487imNIqz/Ikj+NWlIU6HIwTsPzsYmvA3umq5+E5N7rkc4C9LWBb09eS1vAd2lY3MlgPqHKJb1S/5b6SxsUIfTde+qiaOh9hh4VJ0U/OdvWC7CyFbuW7dyaIFnyQjIElR9f7sCAwpVHx3FhGjb8owBWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=QmV8O2Os; arc=none smtp.client-ip=185.87.125.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+	id 0485940A06; Thu,  7 Nov 2024 11:33:31 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 0485940A06
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+	s=odk20180602; t=1730975612;
+	bh=bkxxQT0ywZ+RAU3jBxc18hVZFtgf6aogb7G4KtK1nhk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QmV8O2OsnEKHTeXWL2yUMNdkZmtV18s3l1A0wMrvm/yCqpCvsfwDX1WwKx+YsZgmv
+	 1D9NAG0ffFkeFhzcPoEbOuKInQOHo0AWuMmXPO7bIY0PcVyJ+gZ1WCi8FNqAqZ+eZu
+	 SyFHUaZxyptoPue5zAt/M/pKYi0mId8MFOI9oMFI=
+Date: Thu, 7 Nov 2024 11:33:31 +0100
+From: Wim Van Sebroeck <wim@linux-watchdog.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Taewan Kim <trunixs.kim@samsung.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	Byoungtae Cho <bt.cho@samsung.com>
+Subject: Re: [PATCH v3 3/3] arm64: dts: exynosautov920: add watchdog DT node
+Message-ID: <20241107103331.GA4818@www.linux-watchdog.org>
+References: <20241021063903.793166-1-trunixs.kim@samsung.com>
+ <CGME20241021063938epcas2p1c01c89badb532f08a46087a4907df7dc@epcas2p1.samsung.com>
+ <20241021063903.793166-4-trunixs.kim@samsung.com>
+ <961e1aca-cd90-4db1-87d7-afd2e542421e@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] arm64: dts: exynosautov920: add watchdog DT node
-To: Taewan Kim <trunixs.kim@samsung.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
- <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, Byoungtae Cho <bt.cho@samsung.com>
-References: <20241021063903.793166-1-trunixs.kim@samsung.com>
- <CGME20241021063938epcas2p1c01c89badb532f08a46087a4907df7dc@epcas2p1.samsung.com>
- <20241021063903.793166-4-trunixs.kim@samsung.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20241021063903.793166-4-trunixs.kim@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <961e1aca-cd90-4db1-87d7-afd2e542421e@kernel.org>
+User-Agent: Mutt/1.5.20 (2009-12-10)
 
-On 21/10/2024 08:39, Taewan Kim wrote:
-> From: Byoungtae Cho <bt.cho@samsung.com>
+Hi Krzystof,
+
+> On 21/10/2024 08:39, Taewan Kim wrote:
+> > From: Byoungtae Cho <bt.cho@samsung.com>
+> > 
+> > Adds two watchdog devices for ExynosAutoV920 SoC.
+> > 
+> > Signed-off-by: Byoungtae Cho <bt.cho@samsung.com>
+> > Signed-off-by: Taewan Kim <trunixs.kim@samsung.com>
+> > ---
+> >  .../arm64/boot/dts/exynos/exynosautov920.dtsi | 20 +++++++++++++++++++
+> >  1 file changed, 20 insertions(+)
 > 
-> Adds two watchdog devices for ExynosAutoV920 SoC.
+> How did this happen that this patch was taken to watchdog? There is no
+> Ack here from me.
 > 
-> Signed-off-by: Byoungtae Cho <bt.cho@samsung.com>
-> Signed-off-by: Taewan Kim <trunixs.kim@samsung.com>
-> ---
->  .../arm64/boot/dts/exynos/exynosautov920.dtsi | 20 +++++++++++++++++++
->  1 file changed, 20 insertions(+)
+> Drop this patch from watchdog, I do no agree to take it via that tree.
+> 
+> Best regards,
+> Krzysztof
+> 
 
-How did this happen that this patch was taken to watchdog? There is no
-Ack here from me.
+Seems like you are having a hard day. 
+The 3 patches are dropped. I presume that you will take them all through your tree then?
 
-Drop this patch from watchdog, I do no agree to take it via that tree.
+Kind regards,
+Wim.
 
-Best regards,
-Krzysztof
+PS: the patches are:
+[PATCH v3 1/3] dt-bindings: watchdog: Document ExynosAutoV920 watchdog bindings
+[PATCH v3 2/3] watchdog: s3c2410_wdt: add support for exynosautov920 SoC
+[PATCH v3 3/3] arm64: dts: exynosautov920: add watchdog DT node
 
 
