@@ -1,63 +1,59 @@
-Return-Path: <linux-watchdog+bounces-2429-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2430-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15AAF9C0319
-	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 12:01:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A322B9C036C
+	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 12:08:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47CF31C214DC
-	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 11:01:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 35A3AB2368D
+	for <lists+linux-watchdog@lfdr.de>; Thu,  7 Nov 2024 11:08:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC1631D363D;
-	Thu,  7 Nov 2024 11:01:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFC731F4279;
+	Thu,  7 Nov 2024 11:08:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="QmV8O2Os"
+	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="YPRG8d3H"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F09A71373;
-	Thu,  7 Nov 2024 11:01:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 718CD1EF923;
+	Thu,  7 Nov 2024 11:08:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730977264; cv=none; b=ubuTf34+Ev0NkWiVADo7AbEYNhf8/zngkiExkwht1uQh3KtHC5XTeyD2zkOBKwCUJNuOPg9odNJ5JB0UKN574KsQh9jjqQYhXRPTti/fY2FbdGvWCATckcwcm+/3d8nuNZ6w0I4GsptCgFP2v2VfqrTxdISh2JsAlTbrUco4V70=
+	t=1730977684; cv=none; b=nwsnk1IBMyR/aXU9cPgkuOxiHGBQNMVLv4tM9r7fLAIGnWjaZjT6jwIz5D8UX+ro+z9C+j7aNcNXHWtDc6oQqhe3VoNdZRp9L7uMHzXZVsSFDFsyUqRe9ug06PrX0Yf8NUmiyt5KSqkcB68/gpmReAd2UupOOZLgmX3V9D3h/+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730977264; c=relaxed/simple;
-	bh=bkxxQT0ywZ+RAU3jBxc18hVZFtgf6aogb7G4KtK1nhk=;
+	s=arc-20240116; t=1730977684; c=relaxed/simple;
+	bh=qm0sRgjyJYZCmmY/AhZSz8Z8fn4UGSfVYOCj0xQLmMc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lNQyL7Yf/41jj8Xn9vL487imNIqz/Ikj+NWlIU6HIwTsPzsYmvA3umq5+E5N7rkc4C9LWBb09eS1vAd2lY3MlgPqHKJb1S/5b6SxsUIfTde+qiaOh9hh4VJ0U/OdvWC7CyFbuW7dyaIFnyQjIElR9f7sCAwpVHx3FhGjb8owBWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=QmV8O2Os; arc=none smtp.client-ip=185.87.125.42
+	 Content-Type:Content-Disposition:In-Reply-To; b=n/9Kzh8tRYMmz/MPDAEkNyM9mMXvRGAj0JItN2WzG1Xn5kTx7inH/KbihfBiXbAAyT/chljxg1/ROsPWGSOAhSdQgqiLjuJdjXp07w2FWOjMPoN0u6TT/hv7m3A0Sxz8ijM2ul+9AuBOJ1nvprxtQYwnPKv/9cWUPOxARj66GjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=YPRG8d3H; arc=none smtp.client-ip=185.87.125.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
 Received: by www.linux-watchdog.org (Postfix, from userid 500)
-	id 0485940A06; Thu,  7 Nov 2024 11:33:31 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 0485940A06
+	id 7C90F40A9F; Thu,  7 Nov 2024 11:40:40 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 7C90F40A9F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-	s=odk20180602; t=1730975612;
-	bh=bkxxQT0ywZ+RAU3jBxc18hVZFtgf6aogb7G4KtK1nhk=;
+	s=odk20180602; t=1730976040;
+	bh=qm0sRgjyJYZCmmY/AhZSz8Z8fn4UGSfVYOCj0xQLmMc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QmV8O2OsnEKHTeXWL2yUMNdkZmtV18s3l1A0wMrvm/yCqpCvsfwDX1WwKx+YsZgmv
-	 1D9NAG0ffFkeFhzcPoEbOuKInQOHo0AWuMmXPO7bIY0PcVyJ+gZ1WCi8FNqAqZ+eZu
-	 SyFHUaZxyptoPue5zAt/M/pKYi0mId8MFOI9oMFI=
-Date: Thu, 7 Nov 2024 11:33:31 +0100
+	b=YPRG8d3HYFQ0Avd4hWzXFR0pswWAUumDi+RYJTWINOPrlJpEj9MjYiA9uIdRtS4D2
+	 5j2GbKZYMjLmQyWLx+Ryp5OMzp79ZJJeg/LNFXYrQ2s4Mmo19MfKx20mU/V5R6d8Ln
+	 4nGMYvUB8vxv5Sp3HsQMT0JD8869hTIzuvFX+a/g=
+Date: Thu, 7 Nov 2024 11:40:40 +0100
 From: Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Taewan Kim <trunixs.kim@samsung.com>,
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Yassine Oudjana <y.oudjana@protonmail.com>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	Byoungtae Cho <bt.cho@samsung.com>
-Subject: Re: [PATCH v3 3/3] arm64: dts: exynosautov920: add watchdog DT node
-Message-ID: <20241107103331.GA4818@www.linux-watchdog.org>
-References: <20241021063903.793166-1-trunixs.kim@samsung.com>
- <CGME20241021063938epcas2p1c01c89badb532f08a46087a4907df7dc@epcas2p1.samsung.com>
- <20241021063903.793166-4-trunixs.kim@samsung.com>
- <961e1aca-cd90-4db1-87d7-afd2e542421e@kernel.org>
+	Guenter Roeck <linux@roeck-us.net>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 1/2] watchdog: mediatek: Fix mtk_wdt_restart
+Message-ID: <20241107104040.GA5233@www.linux-watchdog.org>
+References: <20241106104738.195968-1-y.oudjana@protonmail.com>
+ <20241106104738.195968-2-y.oudjana@protonmail.com>
+ <2bd7a02d-c5bc-4926-8aee-0eed6eb490a2@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -66,40 +62,63 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <961e1aca-cd90-4db1-87d7-afd2e542421e@kernel.org>
+In-Reply-To: <2bd7a02d-c5bc-4926-8aee-0eed6eb490a2@collabora.com>
 User-Agent: Mutt/1.5.20 (2009-12-10)
 
-Hi Krzystof,
+Hi Angelo, Yassine,
 
-> On 21/10/2024 08:39, Taewan Kim wrote:
-> > From: Byoungtae Cho <bt.cho@samsung.com>
-> > 
-> > Adds two watchdog devices for ExynosAutoV920 SoC.
-> > 
-> > Signed-off-by: Byoungtae Cho <bt.cho@samsung.com>
-> > Signed-off-by: Taewan Kim <trunixs.kim@samsung.com>
-> > ---
-> >  .../arm64/boot/dts/exynos/exynosautov920.dtsi | 20 +++++++++++++++++++
-> >  1 file changed, 20 insertions(+)
+> Il 06/11/24 11:47, Yassine Oudjana ha scritto:
+> >Clear the IRQ enable bit of WDT_MODE before asserting software reset
+> >in order to make TOPRGU issue a system reset signal instead of an IRQ.
+> >
+> >Fixes: a44a45536f7b ("watchdog: Add driver for Mediatek watchdog")
+> >Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 > 
-> How did this happen that this patch was taken to watchdog? There is no
-> Ack here from me.
+> I'd be more comfortable with a title like:
 > 
-> Drop this patch from watchdog, I do no agree to take it via that tree.
+> watchdog: mediatek: Make sure system reset gets asserted in mtk_wdt_restart()
 > 
-> Best regards,
-> Krzysztof
+> or along those lines, saying what's this commit about, because a generic
+> "fix" doesn't really mean anything...
 > 
+> About the commit description - that's good.
+> Btw, I wonder if maintainers can fix the title without you sending a v3...
 
-Seems like you are having a hard day. 
-The 3 patches are dropped. I presume that you will take them all through your tree then?
+I added it into linux-watchdog-next and changed the commit description whiledoing that.
 
 Kind regards,
 Wim.
 
-PS: the patches are:
-[PATCH v3 1/3] dt-bindings: watchdog: Document ExynosAutoV920 watchdog bindings
-[PATCH v3 2/3] watchdog: s3c2410_wdt: add support for exynosautov920 SoC
-[PATCH v3 3/3] arm64: dts: exynosautov920: add watchdog DT node
-
+> 
+> Anyway - you can get my:
+> 
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> 
+> Cheers!
+> Angelo
+> 
+> >---
+> >  drivers/watchdog/mtk_wdt.c | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> >diff --git a/drivers/watchdog/mtk_wdt.c b/drivers/watchdog/mtk_wdt.c
+> >index c35f85ce8d69c..e2d7a57d6ea2e 100644
+> >--- a/drivers/watchdog/mtk_wdt.c
+> >+++ b/drivers/watchdog/mtk_wdt.c
+> >@@ -225,9 +225,15 @@ static int mtk_wdt_restart(struct watchdog_device *wdt_dev,
+> >  {
+> >  	struct mtk_wdt_dev *mtk_wdt = watchdog_get_drvdata(wdt_dev);
+> >  	void __iomem *wdt_base;
+> >+	u32 reg;
+> >  	wdt_base = mtk_wdt->wdt_base;
+> >+	/* Enable reset in order to issue a system reset instead of an IRQ */
+> >+	reg = readl(wdt_base + WDT_MODE);
+> >+	reg &= ~WDT_MODE_IRQ_EN;
+> >+	writel(reg | WDT_MODE_KEY, wdt_base + WDT_MODE);
+> >+
+> >  	while (1) {
+> >  		writel(WDT_SWRST_KEY, wdt_base + WDT_SWRST);
+> >  		mdelay(5);
+> 
+> 
 
