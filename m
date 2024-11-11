@@ -1,168 +1,171 @@
-Return-Path: <linux-watchdog+bounces-2440-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2441-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0AC39C1ED5
-	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Nov 2024 15:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CF02C9C35F4
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Nov 2024 02:31:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A91B1F233DA
-	for <lists+linux-watchdog@lfdr.de>; Fri,  8 Nov 2024 14:08:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6187A1F21EC7
+	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Nov 2024 01:31:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AED61F4713;
-	Fri,  8 Nov 2024 14:08:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jThi73Yd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6440D80034;
+	Mon, 11 Nov 2024 01:30:50 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A38E1F4292;
-	Fri,  8 Nov 2024 14:08:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA418482DD;
+	Mon, 11 Nov 2024 01:30:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731074885; cv=none; b=YRLp8iRupfVwroTQjc7FWL3trmFAOD9kJMJnqoB5S3ubEdExkP/Ntdwiy6XjtfTQwjCj10bQfoN3Z94KS8uAyQZQJNdIBHVeLOTWaB6NeL28CokakGcF5sApjhY8Wz7MuMi+pbqdiKNyPsl8lH243yvULPESRCoBudvymeAPWIw=
+	t=1731288650; cv=none; b=jWS/8H6vs4XFNAgJDbpbZgI/yTD3M492kkvCI56qtULqnk59a5AIFRQmLsv3sCmymvZqCwW1FhRIkEbjqaB2/7dWxKuOp2/R8Rm2G249Hxqm6Whg1OfTAq561wcht8utZfxg6T/3sS1JZnXbo4wxb8cDmprG3MVi/BGXuTY5GMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731074885; c=relaxed/simple;
-	bh=1JDeXfRhKokM549SCom7cHvn1gonLus1O4lY8TDZ3+Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZSoYS3IpvE58WxCdoYsUKUpN/BtqoFNoWuzCIhPY67sRKdzSGDYI+0KELl/8LKnh7daeSX9QYhmKbaYS7IFUc9d6iJjDnmL+kVC4pi8eNQF1SWx++66BIWmT1CAuE1Fefq23McDBo8MPus6JJb0VXcv4XWkHi6nBt6F4VUiZ8aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jThi73Yd; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-20cf3e36a76so23434375ad.0;
-        Fri, 08 Nov 2024 06:08:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731074883; x=1731679683; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=MDA/YnPw1q979OydzNA3RQek3PwG3C1LVM/KL/xZqYg=;
-        b=jThi73Yd3DKDW8gMZZ//DOOVlbrOlySjroGHTXiGRcwB4tk0mNVfIp6kKBTTVGRAYB
-         i6xuQXaWjI7JZNHMu6UEwveK4ZfQV+9Sg/nzU8W77DWX9dUZRWQwfOscb8yCdhv6PK1u
-         Qr6WxxmwrVrVuwkqOkSzwxMei8+sguiDVpEIv3yQ4CA0HzZNciAufP2EAB9IM3s6Rvr+
-         nUSwqzLTgvacojZo8/+vsGXcLIJxsivtt0q69iss2pFuRB/AwfdyXuCKoC3sqWAs9R5v
-         3dVwm4mTRtwsZT4WHkFtX9oiePhnnbTV38YDLDNUQsf0+UBxzCssgDv4kY9q0lWmnftd
-         acbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731074883; x=1731679683;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MDA/YnPw1q979OydzNA3RQek3PwG3C1LVM/KL/xZqYg=;
-        b=RooOvW9UUVGCLRenL2CY2bS119d9Ncp7gslAfxCU3K3EAWo5XM+i7G6blSYJ+ZFiIU
-         ed7wFVFj8fZY18a/12HrKoVIEoe/f+ai3mrf9JvmPGO/6rN8MJNsYdoUP5RVEgNDDSM7
-         SR/gJXupoNYk7ORBn3N0p5iTAh3CDJXpxoUxEwxQbStFgGj6ddNnTX/MCqcAEgcHR36Q
-         wZSTFD0Id+nhMVQI/qg7YCYrl3AN1KG8NZvgHDXZGKlXFqs1rPutnWbyF9Aj4FysMNoe
-         GIoJ+fnFftSkK9P6xPlOTYJaBCZoHwCIst0jb4jKDg3VXrnAjem/wRmoELUa6GgnXrev
-         sBGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVyntsiaSKYjYDtGkYgCtAd7CRf5S6FPtdTm4n0FgosStj76nesAUeLA9zF+bz0OLnxhp6kZwNZzJcZs9FnIeE=@vger.kernel.org, AJvYcCXFeH1GkSR48dlmEDQp3LfP62ESJz+xa7JPHlCTKC4YYPULMdmKoHcUS3WRrOpyMXgEZpsbt78E5yD0Rj8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMt03F76yDEETKh0Y/L2IGenDWC3mNJ9LDy+yJnSpaSUB9WcjG
-	xkkeuzod1gM4Ft5pEg95I5bu1HMYHjbjAwcH65FddR1fJCzIUvVs
-X-Google-Smtp-Source: AGHT+IFgkItELd0W01lweMUWk3BaIPKK/cfRmmwUw4c5FH32ummS1mrI9WYYmto2+9cJdiXsPPWbrw==
-X-Received: by 2002:a17:902:c942:b0:211:a6d:85dd with SMTP id d9443c01a7336-211835d9930mr35684205ad.47.1731074882693;
-        Fri, 08 Nov 2024 06:08:02 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7f41f5cab66sm3454618a12.33.2024.11.08.06.08.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Nov 2024 06:08:01 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9a1e64ef-81d9-48b0-b871-ce4ff792eae4@roeck-us.net>
-Date: Fri, 8 Nov 2024 06:07:59 -0800
+	s=arc-20240116; t=1731288650; c=relaxed/simple;
+	bh=Yitza08W5XYTvZe1J/EwMesDT4epJexlDkl8ospyV9I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kS9RzAMUqGRgz6BgKybNeszzktmp1hJ9Hekp4gC65gcX97jn+MFP2niIvRBQmFPBGIWwt2kSohVND3CvPKCqmptAAzJefsweU9K+J35kZFsJdEVp9jXDDu4R5Yh32Eq+PlqizFW8gaol0msQKIMrUkRL5AgHjvkucuDLpPoE59o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E61113D5;
+	Sun, 10 Nov 2024 17:31:16 -0800 (PST)
+Received: from localhost.localdomain (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DFB6E3F66E;
+	Sun, 10 Nov 2024 17:30:42 -0800 (PST)
+From: Andre Przywara <andre.przywara@arm.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>
+Cc: devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-mmc@vger.kernel.org,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-watchdog@vger.kernel.org,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	linux-i2c@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	linux-phy@lists.infradead.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org
+Subject: [PATCH 00/14] arm64: dts: allwinner: Add basic Allwinner A523 support
+Date: Mon, 11 Nov 2024 01:30:19 +0000
+Message-ID: <20241111013033.22793-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.46.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/3] watchdog: aspeed: Update bootstatus handling
-To: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Patrick Williams <patrick@stwcx.xyz>,
- "wim@linux-watchdog.org" <wim@linux-watchdog.org>
-Cc: "joel@jms.id.au" <joel@jms.id.au>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
- "Peter.Yin@quantatw.com" <Peter.Yin@quantatw.com>,
- "Patrick_NC_Lin@wiwynn.com" <Patrick_NC_Lin@wiwynn.com>,
- "Bonnie_Lo@wiwynn.com" <Bonnie_Lo@wiwynn.com>,
- "DELPHINE_CHIU@wiwynn.com" <DELPHINE_CHIU@wiwynn.com>,
- BMC-SW <BMC-SW@aspeedtech.com>,
- "chnguyen@amperecomputing.com" <chnguyen@amperecomputing.com>
-References: <20241101121201.2464091-1-chin-ting_kuo@aspeedtech.com>
- <20241101121201.2464091-2-chin-ting_kuo@aspeedtech.com>
- <ZyUcIIb1dtoNhX00@heinlein.vulture-banana.ts.net>
- <a0faca9a6ec7f4acdfa2f29b4ffb94b5392aea6b.camel@codeconstruct.com.au>
- <TYZPR06MB5203053A004676F51322DECFB25C2@TYZPR06MB5203.apcprd06.prod.outlook.com>
- <ed77d57facaaef0be796b4c6a742dc7bf3bff479.camel@codeconstruct.com.au>
- <TYZPR06MB52039B02B6D3053355F30489B25D2@TYZPR06MB5203.apcprd06.prod.outlook.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <TYZPR06MB52039B02B6D3053355F30489B25D2@TYZPR06MB5203.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/7/24 21:42, Chin-Ting Kuo wrote:
+Hi,
 
-> But now, I think it will be better to add a patch for creating a new
-> reset reason, e.g., WDIOF_REBOOT or WDIOF_RESTART, in watchdog.h
-> of uapi. Can I include this change, creating a new reset reason, in
-> this patch series? Or, should I create an extra new patch series for
-> this purpose?
-> 
+this series adds basic DT support for the Allwinner A523 SoC, plus the
+Avaota-A1 router board using the T527 package variant of that SoC.[1]
+Functionality-wise it relies on the pinctrl[2] and clock[3] support
+series, though there is no direct code dependency series to this series
+(apart from the respective binding patches in the two series').
 
-This is a UAPI change. That is a major change. It needs to be discussed
-separately, on its own, and can not be sneaked in like this.
+Most of the patches add DT binding documentation for the most basic
+peripherals, the vast majority of them actually being already supported,
+courtesy of identical IP being used. This includes MMC and USB 2.0, so
+with the above mentioned clock and pinctrl support this gives an already
+somewhat usable mainline support for this new SoC family.
+The watchdog is not completely compatible, but is an easy addition, so
+this bit is included in here as well.
 
-Guenter
+The A523 features 8 Arm Cortex-A55 cores, organised in two clusters,
+clocked separately, with different OPP limits, in some kind of
+little/LITTLE configuration. The GPU is a Arm Mali G57 MC01, and the chip
+also features a single PCIe 2.1 lane, sharing a PHY with some USB 3.1
+controller - which means only one of the two can be used.
+The rest of the SoC is the usual soup of multimedia SoC IP, with eDP
+support and two Gigabit Ethernet MACs among the highlights.
+
+The main feature is patch 11/14, which adds the SoC .dtsi. This for now
+is limited to the parts that are supported and could be tested. At the
+moment there is no PSCI firmware, even the TF-A port from the BSP does
+not seem to work for me. That's why the secondary cores have been omitted
+for now, among other instances of some IP that I couldn't test yet.
+I plan to add them in one of the next revisions.
+
+The last patch adds basic support for the Avaota-A1 router board,
+designed by YuzukiHD, with some boards now built by Pine64.
+
+The mainline firmware side in general is somewhat lacking still: I have
+basic U-Boot support working (including MMC and USB), although still
+without DRAM support. This is for now covered by some binary blob found
+in the (otherwise Open Source) Syterkit firmware, which also provides
+the BSP versions of TF-A and the required (RISC-V) management core
+firmware. Fortunately we have indications that DRAM support is not that
+tricky, as the IP blocks are very similar to already supported, and dev
+boards are on their way to the right people.
+
+Meanwhile I would like people to have a look at those DT bits here. Please
+compare them to the available user manual, and test them if you have access
+to hardware.
+
+Based on v6.12-rc1.
+I pushed a branch with all the three series combined here:
+https://github.com/apritzel/linux/commits/a523-v1/
+
+Cheers,
+Andre
+
+[1] https://linux-sunxi.org/A523#Family_of_sun55iw3
+[2] https://lore.kernel.org/linux-sunxi/20241111005750.13071-1-andre.przywara@arm.com/T/#t
+[3] https://lore.kernel.org/linux-sunxi/20241111004722.10130-1-andre.przywara@arm.com/T/#t
+
+Andre Przywara (14):
+  dt-bindings: mmc: sunxi: Simplify compatible string listing
+  dt-bindings: mmc: sunxi: add compatible strings for Allwinner A523
+  dt-bindings: watchdog: sunxi: add Allwinner A523 compatible string
+  watchdog: sunxi_wdt: Add support for Allwinner A523
+  dt-bindings: i2c: mv64xxx: Add Allwinner A523 compatible string
+  dt-bindings: irq: sun7i-nmi: document the Allwinner A523 NMI
+    controller
+  dt-bindings: phy: document Allwinner A523 USB-2.0 PHY
+  dt-bindings: usb: sunxi-musb: add Allwinner A523 compatible string
+  dt-bindings: usb: add A523 compatible string for EHCI and OCHI
+  dt-bindings: rtc: sun6i: Add Allwinner A523 support
+  arm64: dts: allwinner: Add Allwinner A523 .dtsi file
+  dt-bindings: vendor-prefixes: Add YuzukiHD name
+  dt-bindings: arm: sunxi: Add Avaota A1 board
+  arm64: dts: allwinner: a523: add Avaota-A1 router support
+
+ .../devicetree/bindings/arm/sunxi.yaml        |   5 +
+ .../bindings/i2c/marvell,mv64xxx-i2c.yaml     |   1 +
+ .../allwinner,sun7i-a20-sc-nmi.yaml           |   1 +
+ .../bindings/mmc/allwinner,sun4i-a10-mmc.yaml |  40 +-
+ .../phy/allwinner,sun50i-a64-usb-phy.yaml     |  10 +-
+ .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml |   4 +-
+ .../usb/allwinner,sun4i-a10-musb.yaml         |   1 +
+ .../devicetree/bindings/usb/generic-ehci.yaml |   1 +
+ .../devicetree/bindings/usb/generic-ohci.yaml |   1 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ .../watchdog/allwinner,sun4i-a10-wdt.yaml     |   2 +
+ arch/arm64/boot/dts/allwinner/Makefile        |   1 +
+ .../arm64/boot/dts/allwinner/sun55i-a523.dtsi | 386 ++++++++++++++++++
+ .../dts/allwinner/sun55i-t527-avaota-a1.dts   | 311 ++++++++++++++
+ drivers/watchdog/sunxi_wdt.c                  |  11 +
+ 15 files changed, 751 insertions(+), 26 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun55i-t527-avaota-a1.dts
+
+-- 
+2.46.2
 
 
