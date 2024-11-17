@@ -1,101 +1,116 @@
-Return-Path: <linux-watchdog+bounces-2447-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2448-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02B309C46F2
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Nov 2024 21:35:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD7AD9D02EE
+	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Nov 2024 11:42:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5C6A2873DD
-	for <lists+linux-watchdog@lfdr.de>; Mon, 11 Nov 2024 20:35:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5314B1F230DF
+	for <lists+linux-watchdog@lfdr.de>; Sun, 17 Nov 2024 10:42:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C7821ACDE3;
-	Mon, 11 Nov 2024 20:35:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321D57581A;
+	Sun, 17 Nov 2024 10:41:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S7RtvOxe"
+	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="q/oTSx/2"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC0C88468;
-	Mon, 11 Nov 2024 20:35:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1DB46AA7
+	for <linux-watchdog@vger.kernel.org>; Sun, 17 Nov 2024 10:41:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731357351; cv=none; b=PYt/YtUq7W4I5AWyiCdRLItSu8AtIU4QbwHhRLI7mQJzJL1AodGVARANm+hZS0d9f3VujFiTMJCJdFgDYlQVdtAo9Fsg5dIJUFkdS7InOP3qFhF4rB09jfSp2ItOmOdAqyyC/xlN36vJOO31KrHcLc+tBuus6UMRQVRnjIZuOn4=
+	t=1731840116; cv=none; b=awDwL2nAyoUIza/dZRQAEElB59D5sXlvNsKi5pg0KJoiUaPC56XOmNpVZlgkEa9JqSobMVrZz7afk54TdTpBOTOydANs8gWCOwisB8/QK0zsE4Qa5jDXukb6LpYhbvbGb/gvWCyH3CQ+EdAOBBOvWQv6PIuo5DpJ4L7Y5GvgsSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731357351; c=relaxed/simple;
-	bh=jD9IhMlTkTKhEl+qsJul7DlgC95YTdQp6DQwN3sXz+0=;
+	s=arc-20240116; t=1731840116; c=relaxed/simple;
+	bh=jiaCMg4PiaVnw+plOg4wkClSh7rAZg4biQivjNYq+RI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S0hvKfnMRIjapbGuTsbdNySCNKBhLmPCclPP6S/5PVUbb6QaVVPutwQqJ4tYYAzP3JP51a4W6HL2CERsyugqn/WiO9zbcVNZbHxjy+O9cOed65KcBXHI5hW5WSLtYr1kRJJjvdqkPYe6esHkzxDJfHaHZVIjtzrc4gATmSdR29A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S7RtvOxe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2013C4CECF;
-	Mon, 11 Nov 2024 20:35:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731357351;
-	bh=jD9IhMlTkTKhEl+qsJul7DlgC95YTdQp6DQwN3sXz+0=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rlon9nuD9hg98Cb64IE/ftgQs+VQrdPwALLDfM7qG5iHR59stTOgoCQ/GA3kScFw1h0zVInEltuosVoYtJM5V1nmX6DrabVP+MGM1UGw2Ink8SNHuo9iQq7vXOIgpdr/1sXIk6+qC3c0QaTNLWf61wyr4jjx625BD+R+fQOj3Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=q/oTSx/2; arc=none smtp.client-ip=185.87.125.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+	id 431D2409E9; Sun, 17 Nov 2024 11:06:13 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org 431D2409E9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+	s=odk20180602; t=1731837973;
+	bh=jiaCMg4PiaVnw+plOg4wkClSh7rAZg4biQivjNYq+RI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=S7RtvOxe1eV3paQTMZF0E0wgHOJpUSQW55RWoEzh0rl4StvYNcsuSnFGPKe/Hk5FS
-	 N6vmxXLr7gtRL3Dt7vzXRYhHjhMZdDb7EDHJG/RjsAQOX+ZIC0ECkrxDQYqUaj8K/O
-	 uOu7PKW/L1Xpkgc/Z1jkWSmD+gt02S8oT9+8PqRI5v4rNr7k07s9kTGaGwgvchfgpt
-	 jqMwefgYmDT0IudkGj+k+qBjaIEzKionTyiGltvqu1mCAwvnDQZuk3VxQvdyO9Kamg
-	 AmhJzK6eGRA4Ot7hxkK/dAexGGE6fDYag/G7m67LwAFQPsY1hR/c687JuzeE/xvSdP
-	 lRSK33AFYzpFw==
-Date: Mon, 11 Nov 2024 20:35:46 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 03/14] dt-bindings: watchdog: sunxi: add Allwinner A523
- compatible string
-Message-ID: <20241111-esteemed-tissue-337ce5f108a7@spud>
-References: <20241111013033.22793-1-andre.przywara@arm.com>
- <20241111013033.22793-4-andre.przywara@arm.com>
+	b=q/oTSx/2n/UeOIpIfTOoyC8MXtQRLyHkc8UovNWj9iq0u554+zeOqINoMyWpYTAyo
+	 wrbyMtSh3ihQruiHkh5awEb5QiBlxzdx16vYIWjMLxCUJ7bfCW1DXlW6QCyxqrbpuO
+	 pGYi9e3bdeaMrM192HZAzDZ/jXMCFZGZ+XH6b1Rw=
+Date: Sun, 17 Nov 2024 11:06:12 +0100
+From: Wim Van Sebroeck <wim@linux-watchdog.org>
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+Subject: Re: Patches add for v6.13-rc1 in Linux-watchdog-next
+Message-ID: <20241117100612.GA31413@www.linux-watchdog.org>
+References: <20241106080907.GA14713@www.linux-watchdog.org>
+ <CADvTj4qg0F5772jK=B3an9=_9f6z=2y8cfcWPZOjyJzJdJRyWA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="rlQpuSGKQTNIpwjz"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241111013033.22793-4-andre.przywara@arm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADvTj4qg0F5772jK=B3an9=_9f6z=2y8cfcWPZOjyJzJdJRyWA@mail.gmail.com>
+User-Agent: Mutt/1.5.20 (2009-12-10)
 
+Hi James,
 
---rlQpuSGKQTNIpwjz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Wed, Nov 6, 2024 at 1:38 AM Wim Van Sebroeck <wim@linux-watchdog.org> wrote:
+> >
+> > Hi All,
+> >
+> > Following patches have been added in Linux-Watchdog-Next the last days:
+> > [PATCH v3] iTCO_wdt: mask NMI_NOW bit for update_no_reboot_bit() call
+> > [PATCH V3] watchdog: xilinx_wwdt: Calculate max_hw_heartbeat_ms using clock frequency
+> > [PATCH v2] dt-bindings: watchdog: Document Qualcomm QCS615 watchdog
+> > [PATCH] watchdog: ziirave_wdt: Drop explicit initialization of struct i2c_device_id::driver_data to 0
+> > [PATCH v1] MAINTAINERS: Update the maintainer of StarFive watchdog driver
+> > [PATCH v4] watchdog: stm32_iwdg: Add pretimeout support
+> > [PATCH v2 1/2] watchdog: apple: Actually flush writes after requesting watchdog restart
+> > [PATCH v2 2/2] watchdog: apple: Increase reset delay to 150ms
+> > [PATCH] watchdog: armada_37xx_wdt: remove struct resource
+> > [RFC PATCH 1/9] watchdog: always print when registering watchdog fails
+> > [RFC PATCH 2/9] watchdog: da9055_wdt: don't print out if registering watchdog fails
+> > [RFC PATCH 3/9] watchdog: gxp-wdt: don't print out if registering watchdog fails
+> > [RFC PATCH 4/9] watchdog: iTCO_wdt: don't print out if registering watchdog fails
+> > [RFC PATCH 5/9] watchdog: it87_wdt: don't print out if registering watchdog fails
+> > [RFC PATCH 6/9] watchdog: octeon-wdt: don't print out if registering watchdog fails
+> > [RFC PATCH 7/9] watchdog: rti_wdt: don't print out if registering watchdog fails
+> > [RFC PATCH 8/9] watchdog: rza_wdt: don't print out if registering watchdog fails
+> > [RFC PATCH 9/9] watchdog: sl28cpld_wdt: don't print out if registering watchdog fails
+> > [PATCH v3 1/2] dt-bindings: watchdog: airoha: document watchdog for Airoha EN7581
+> > [PATCH v3 2/2] watchdog: Add support for Airoha EN7851 watchdog
+> > [PATCH] watchdog: Delete the cpu5wdt driver
+> > [PATCH v2 1/2] watchdog: da9063: Do not use a global variable
+> > [PATCH v2 2/2] watchdog: da9063: Remove __maybe_unused notations
+> > [PATCH v3] watchdog: it87_wdt: add PWRGD enable quirk for Qotom QCML04
+> 
+> This v3 patch had a bug, a v4 with a fix was posted here:
+> https://lore.kernel.org/all/20241025063441.3494837-1-james.hilliard1@gmail.com/
 
-On Mon, Nov 11, 2024 at 01:30:22AM +0000, Andre Przywara wrote:
-> The Allwinner A523 SoC features a watchdog similar to the one used in
-> previous SoCs, but moves some registers around (by just one word), making
-> it incompatible to existing IPs.
->=20
-> Add the new name to the list of compatible string, and also to the list
-> of IP requiring two clock inputs.
->=20
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+I checked it and I indeed used "[PATCH v4] watchdog: it87_wdt: add PWRGD enable quirk for Qotom QCML04".
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+> > [PATCH] watchdog: Switch back to struct platform_driver::remove()
+> > [PATCH v4 4/4] watchdog: rzg2l_wdt: Power on the watchdog domain in the restart handler
+> > [PATCH v3 2/3] watchdog: s3c2410_wdt: add support for exynosautov920 SoC
+> > [PATCH] Revert "watchdog: s3c2410_wdt: use exynos_get_pmu_regmap_by_phandle() for PMU regs"
+> > [PATCH][next] docs: ABI: Fix spelling mistake in pretimeout_avaialable_governors
+> > [PATCH v1 1/3] dt-bindings: watchdog: Document Qualcomm QCS8300
+> > [PATCH v2 1/1] dt-bindings: watchdog: fsl-imx-wdt: Add missing 'big-endian' property
+> >
+> > Kind regards,
+> > Wim.
+> >
+> >
 
---rlQpuSGKQTNIpwjz
-Content-Type: application/pgp-signature; name="signature.asc"
+Kind regards,
+Wim.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZzJqogAKCRB4tDGHoIJi
-0kZYAQCM0zsg+49iqBqKBacKijQrJerc8T6Xw/ZyGsmo0adCmQEAjkchuYxIObPb
-zZukFFH5sHTMlLvxdQ8GI/592mf5vwI=
-=tNH2
------END PGP SIGNATURE-----
-
---rlQpuSGKQTNIpwjz--
 
