@@ -1,48 +1,48 @@
-Return-Path: <linux-watchdog+bounces-2461-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2462-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0FBA9D3436
-	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Nov 2024 08:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A92819D343C
+	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Nov 2024 08:40:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6F05283846
-	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Nov 2024 07:39:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B8A42837FF
+	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Nov 2024 07:40:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 073A315AD9C;
-	Wed, 20 Nov 2024 07:39:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3C9715CD41;
+	Wed, 20 Nov 2024 07:40:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s+tLXOqT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="itz8+HYg"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C598215A86B;
-	Wed, 20 Nov 2024 07:39:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71DC915B551;
+	Wed, 20 Nov 2024 07:40:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732088377; cv=none; b=uyKk0qXNJH7TX8hxs0gtYQqLnweB22WdsJBbrKe4SjCeTZpy9x5Ti+6mKithVdeZE6JPhnJugXwv4/1aNg8X4DfcRLUcJsn3fPDYJNUxay3DDQ84CfY/MAbvKZsZhKZJucOy9ybdV4EX23NToo2Bglrre+Cq6CYdctkvT369VK0=
+	t=1732088420; cv=none; b=CBINpOqd2QHFTSfXtYXGJ6CqZ5cIeVQ/DLhoxS0kfbUXYAZAvxp0Vj7YHKCpXjnIl639OBdaStYUi4ePCyi/tcq+hSkXr2eJoeVgLMiRfxgP/qrtiwpqfoa2GjVRS8gk4jdzy3uyQS8KC4r7HMS725Cc0RmMkCYUX1vfBiVLPRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732088377; c=relaxed/simple;
-	bh=10jt7KVZi9s0xQcr2Z+HAHYZm3YfRLEcR2KHUrrSBnY=;
+	s=arc-20240116; t=1732088420; c=relaxed/simple;
+	bh=Vk+edMuRwdigXAhzGNViWsNrxB9OrTmqFx0qUitlICY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eMNbE+JZ7x8Zh9o0b/vVz0PhRp3hKdUGNLh3ccjOahk5B0OQ0mRBOAF6kr7WNSVr0BGQZbF/uuc6Bugc+vdyPQFuf6F1bBlXE/KZrriFeQsaq55DsC2a4Y0u8MWqWJ3OPl1tQPcKiqGf0RdYkjzVdct4poBEQOHZFzMt6mhu5Ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s+tLXOqT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AC77C4CECD;
-	Wed, 20 Nov 2024 07:39:32 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=t/BmNmXKnzixC45aZnx82kYtM/EvAYqubzRgpVCyS89fRr42rKTw2EFUfDOiP3TlLXUOCGJYzQtStSNl3DtM2vVniw4U1ne3Xo29NO2/LJobKYaOXfoyVtrTfrq5jHldURrSPEOV4RpQ2mNpzdVx1BaCvLnJVJdmgM9QWe0Xhu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=itz8+HYg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 154C9C4CECD;
+	Wed, 20 Nov 2024 07:40:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732088377;
-	bh=10jt7KVZi9s0xQcr2Z+HAHYZm3YfRLEcR2KHUrrSBnY=;
+	s=k20201202; t=1732088419;
+	bh=Vk+edMuRwdigXAhzGNViWsNrxB9OrTmqFx0qUitlICY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=s+tLXOqTlZEuEzLGuOZX2xrsZ6bTiMHaf3o4p+1rcRos1NepY+UjPKPpktBsR+tW6
-	 RVe7iHqndx3nO3aSA9SwZA5/cGkdgjFUOcOxUQa5cxawAw8tftFZaju4wHbmhM1vgG
-	 xBubE1C6spmCLj5gSXSnRT7bwWxucXeCdBwCGVFRzLMuiSsh0IlP0/UAy8K9QvxhyG
-	 76SPJw0iCoYJXdyB8FSJhxCEqDrrdbi/dzdWAOAs8k09FGPaQvjUyeb4bZkC7Hy/7f
-	 eCHvUucbnap8uss3KmIZc2Q5GWH3rWm0gjNUe9Bk48DioBD2fGTcVn0+sFP9UdrVgY
-	 2Y3shlQUcOXjg==
-Message-ID: <cb92e58c-f80c-4353-932f-c61a25ac8448@kernel.org>
-Date: Wed, 20 Nov 2024 08:39:31 +0100
+	b=itz8+HYgkH2iPD3/R1TZkmZpyZNRMFuy3VF+L2YyfuQ8yLrlfoqEz5/AFRjTiYsYY
+	 pn/3qgQ4lLxmgLAxyuPFhRprY4+P+DRrFAWnFXbEdiNy0iVcviV7j+GhXYQyZ0EW28
+	 xkil3hc11LHDfUugLSaHrURtJ3UNMZEB+93iM8InGfo16ciSeZItXg5D3b511sC0J2
+	 47MM5fKzHErB1mFoncBssn1qgvYC+vYTpimM2TEwa6SJYdPry58CUBx0BLbLLpmBke
+	 ejVczfEzlCN6HodIIlLJtAtapvck6dPV9C+CCjyQNhix/J6xVlT8UJTSzn/0PKVKAZ
+	 BJYlZ7bC9Djsg==
+Message-ID: <e134af10-4d58-4bee-9de2-80c120ca8a02@kernel.org>
+Date: Wed, 20 Nov 2024 08:40:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Document Qualcomm IPQ5424
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: ipq5424: Add watchdog node
 To: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>, wim@linux-watchdog.org,
  linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
  conor+dt@kernel.org, andersson@kernel.org, konradybcio@kernel.org,
@@ -59,7 +59,7 @@ To: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>, wim@linux-watchdog.org,
  linux-kernel@vger.kernel.org
 Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com
 References: <20241120055248.657813-1-quic_mmanikan@quicinc.com>
- <20241120055248.657813-2-quic_mmanikan@quicinc.com>
+ <20241120055248.657813-3-quic_mmanikan@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -105,17 +105,28 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241120055248.657813-2-quic_mmanikan@quicinc.com>
+In-Reply-To: <20241120055248.657813-3-quic_mmanikan@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 20/11/2024 06:52, Manikanta Mylavarapu wrote:
-> Add devicetree binding for watchdog present on Qualcomm IPQ5424 SoC.
+> Add the watchdog node for IPQ5424 SoC.
 > 
 > Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>  arch/arm64/boot/dts/qcom/ipq5424.dtsi | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq5424.dtsi b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
+> index 5e219f900412..4ca1ef1c4dc7 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq5424.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
+> @@ -233,6 +233,13 @@ intc: interrupt-controller@f200000 {
+>  			msi-controller;
+>  		};
+>  
+> +		watchdog: watchdog@f410000 {
+You do not use the label. Can be dropped.
 
 Best regards,
 Krzysztof
