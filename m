@@ -1,86 +1,122 @@
-Return-Path: <linux-watchdog+bounces-2460-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2461-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C8819D33F3
-	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Nov 2024 08:03:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0FBA9D3436
+	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Nov 2024 08:39:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09C241F241B8
-	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Nov 2024 07:03:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6F05283846
+	for <lists+linux-watchdog@lfdr.de>; Wed, 20 Nov 2024 07:39:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EC8516DEDF;
-	Wed, 20 Nov 2024 07:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 073A315AD9C;
+	Wed, 20 Nov 2024 07:39:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PO/GJ28P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s+tLXOqT"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DA9F1662F1;
-	Wed, 20 Nov 2024 07:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C598215A86B;
+	Wed, 20 Nov 2024 07:39:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732086154; cv=none; b=DfpsiFl/nLVCE7I1fG9+WtDZDhNQTffLxReel7LUOVBTubkk2XhP7Bfx5CHge/LlNWE5hnoMBHVbVrNFk3NOS1aWSs0e5nXtol1DZE6bWjrIpNeYtJh0m+4OBfoEMmdY1InqxNtDn9fQRuN2pGXI14L/iqeMMpx/j3nNKWKHiWs=
+	t=1732088377; cv=none; b=uyKk0qXNJH7TX8hxs0gtYQqLnweB22WdsJBbrKe4SjCeTZpy9x5Ti+6mKithVdeZE6JPhnJugXwv4/1aNg8X4DfcRLUcJsn3fPDYJNUxay3DDQ84CfY/MAbvKZsZhKZJucOy9ybdV4EX23NToo2Bglrre+Cq6CYdctkvT369VK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732086154; c=relaxed/simple;
-	bh=1V+lROt7o3roFGG9XlSfD0KUf/yppNvuAk1fHarFLjg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dp5HomwkRKjgR68voCMyOFChz5qlqFBqbuHFRx3tOr3sE92roIfFGxdiXcerqcCwDb13zVWxOmTPKYDhNr9rTS8K2tBT8/MSu1IhtLTyRd5+w/wVGgbPX67AJo45GOnaYUw9ociq69gvClu7xnlsCnVOlfi4UBBjIW9PXsXcDN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PO/GJ28P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A58BC4CED0;
-	Wed, 20 Nov 2024 07:02:33 +0000 (UTC)
+	s=arc-20240116; t=1732088377; c=relaxed/simple;
+	bh=10jt7KVZi9s0xQcr2Z+HAHYZm3YfRLEcR2KHUrrSBnY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eMNbE+JZ7x8Zh9o0b/vVz0PhRp3hKdUGNLh3ccjOahk5B0OQ0mRBOAF6kr7WNSVr0BGQZbF/uuc6Bugc+vdyPQFuf6F1bBlXE/KZrriFeQsaq55DsC2a4Y0u8MWqWJ3OPl1tQPcKiqGf0RdYkjzVdct4poBEQOHZFzMt6mhu5Ck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s+tLXOqT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AC77C4CECD;
+	Wed, 20 Nov 2024 07:39:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732086154;
-	bh=1V+lROt7o3roFGG9XlSfD0KUf/yppNvuAk1fHarFLjg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PO/GJ28PqyJ83SlHBFNymbZzjig4P5QqrK99dPHKrG29wUGBJH0fMcb3fyDNcQMTP
-	 z6NuJiUwwstfGTeSu/nbpSrB+cgrHF4GI83RgxJORFaPI6aEMRusYT7ZB29ymwsak6
-	 eKEU0oCp+61L5IGF6ncStrW6LhUuVqkcgrC/QkzjDn2XGOFhMiFaMPVpaf/s0ljhL5
-	 bxkLRk35Kyvc484129SV5x0T5cJ+zx/ZZflf6kzJqdnIxJF5jZ6FgaPqecbZ4JzenY
-	 ttX196tzCgPQl4L1mLhb1qY7G4wOt/wb1PU+Ap5aCOWO8i+wAhfbjAMuKF5IsCRYiN
-	 1odhIRO+8Xzxg==
-Date: Wed, 20 Nov 2024 08:02:30 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Thomas Richard <thomas.richard@bootlin.com>
-Cc: Lee Jones <lee@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org, thomas.petazzoni@bootlin.com, 
-	blake.vermeer@keysight.com, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-Subject: Re: [PATCH v2 3/5] i2c: Congatec Board Controller i2c bus driver
-Message-ID: <vrbdmnhekuw3p4zf7xlztd3pf2mgedhrgmfgmryzcyqsuwywhj@p5yhisrggti2>
-References: <20240503-congatec-board-controller-v2-0-681511a01c8f@bootlin.com>
- <20240503-congatec-board-controller-v2-3-681511a01c8f@bootlin.com>
- <lfh3asa2bmy73c4otgtbpr6l2wmjn7btsqzy6zv22sjots53a6@axonub5u454l>
+	s=k20201202; t=1732088377;
+	bh=10jt7KVZi9s0xQcr2Z+HAHYZm3YfRLEcR2KHUrrSBnY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=s+tLXOqTlZEuEzLGuOZX2xrsZ6bTiMHaf3o4p+1rcRos1NepY+UjPKPpktBsR+tW6
+	 RVe7iHqndx3nO3aSA9SwZA5/cGkdgjFUOcOxUQa5cxawAw8tftFZaju4wHbmhM1vgG
+	 xBubE1C6spmCLj5gSXSnRT7bwWxucXeCdBwCGVFRzLMuiSsh0IlP0/UAy8K9QvxhyG
+	 76SPJw0iCoYJXdyB8FSJhxCEqDrrdbi/dzdWAOAs8k09FGPaQvjUyeb4bZkC7Hy/7f
+	 eCHvUucbnap8uss3KmIZc2Q5GWH3rWm0gjNUe9Bk48DioBD2fGTcVn0+sFP9UdrVgY
+	 2Y3shlQUcOXjg==
+Message-ID: <cb92e58c-f80c-4353-932f-c61a25ac8448@kernel.org>
+Date: Wed, 20 Nov 2024 08:39:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <lfh3asa2bmy73c4otgtbpr6l2wmjn7btsqzy6zv22sjots53a6@axonub5u454l>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Document Qualcomm IPQ5424
+To: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>, wim@linux-watchdog.org,
+ linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, andersson@kernel.org, konradybcio@kernel.org,
+ quic_rjendra@quicinc.com, linux-arm-msm@vger.kernel.org,
+ linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com
+References: <20241120055248.657813-1-quic_mmanikan@quicinc.com>
+ <20241120055248.657813-2-quic_mmanikan@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20241120055248.657813-2-quic_mmanikan@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Thomas,
-
-On Tue, Nov 19, 2024 at 11:41:36PM +0100, Andi Shyti wrote:
-> Hi Thomas,
+On 20/11/2024 06:52, Manikanta Mylavarapu wrote:
+> Add devicetree binding for watchdog present on Qualcomm IPQ5424 SoC.
 > 
-> ...
-> 
-> > +static struct platform_driver cgbc_i2c_driver = {
-> > +	.driver = {
-> > +		.name = "cgbc-i2c",
-> > +	},
-> > +	.probe		= cgbc_i2c_probe,
-> > +	.remove_new	= cgbc_i2c_remove,
-> 
-> Please use "remove" now.
+> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 1 +
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-please ignore this comment.
-
-Andi
+Best regards,
+Krzysztof
 
