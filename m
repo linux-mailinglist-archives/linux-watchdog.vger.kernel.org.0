@@ -1,172 +1,265 @@
-Return-Path: <linux-watchdog+bounces-2491-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2492-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31BB59D9A73
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Nov 2024 16:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DF2E89E0C29
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Dec 2024 20:31:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D86BB215F8
-	for <lists+linux-watchdog@lfdr.de>; Tue, 26 Nov 2024 15:32:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9BFEEB2F5A0
+	for <lists+linux-watchdog@lfdr.de>; Mon,  2 Dec 2024 19:00:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FC011D5ADA;
-	Tue, 26 Nov 2024 15:32:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 599FF1DE3B5;
+	Mon,  2 Dec 2024 19:00:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b9ADWYFU"
+	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="T8g2mwhh"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A11E1D5CFE
-	for <linux-watchdog@vger.kernel.org>; Tue, 26 Nov 2024 15:32:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6750E1DE3A5;
+	Mon,  2 Dec 2024 19:00:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732635174; cv=none; b=aXIKvr5+ygcvoWHTsPqnmxif8vFhdsHWYmnvf8pWQsUssGEFCx8yOZMhidMZHW7fAzNORpmvtlJlbi29VB9Pdud9wu8XVc0ZaF7o9VbjjKQ6sxP8p5UTECauCBGY18j34aEm/eSE8WELOwP/9ct5B0IM4oPZg9zhU/pTZZjZ7r4=
+	t=1733166009; cv=none; b=OYmVHdirP72VLO7QxrFSaLMYdbHaKWnHaGDYQ/IcqUXNKadwOpvjw8nPNQ8hqaXRZc0cvPjTAINh9PDd1n11QCg5In4yXuJ5vcb++NXKu7PsLQ8OqQ4hdpqFc5ns6kX5Q1Nnxak7NQGFefknrs4/x3FE2ohylUSxiiB76JXmVWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732635174; c=relaxed/simple;
-	bh=sI1PdnMG+EwfqZQa0MvzB3N21EHRVuwzkFIinfRP7Os=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ppmedhAaasonKVJ68E/UKbhcz/Iuj1U8zw693UC1WVVzO8EdKsBrcrGOcPhpfrd9Pv1Avq8A0THfAV6SrzcxjCl2GkOEXq/A57Uu+fmJtsbrLm5cSgwUPvKuEIGGiLTftwdvE4S7+TLn6hskVG1MMvNEo3vb53IusTNnB8SoleY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b9ADWYFU; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7ea8c4ce232so5082402a12.0
-        for <linux-watchdog@vger.kernel.org>; Tue, 26 Nov 2024 07:32:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732635172; x=1733239972; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=+G0SRkTm4LW2cWO/9wDnxt8QGAOUsLs7tvoMLIMwSCY=;
-        b=b9ADWYFUKPtnBMb9Vcyz7HAmr4fDVh98GmTzuQ1tx38MjSLkgut92f633a7qw+AeaM
-         jyrxF0xwoKz0lT91gHIgVWq9ro6FVUWIIurHTv0QVINSEycqE9KwYAnjJ8jzOgvjJTg7
-         OZOSgLWeGA28XWr94RdoI8+Q8j3uBq7pmRvJgWGW0lQjX8JRlGt4yYFKYW1lA0kUerEI
-         ANkJi5+AK1ktRcnvTmgDIOi3Kx5OByfR7HZvIoJrt9QlmliJcvY5ONj78CGeAoh5FymR
-         QaNa55FSTo4HW5iiCVeZQqhxXswfWSyGow2gPXBS7G0Ezo/QanKnvl9H17kNXYzdJ8z/
-         vDQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732635172; x=1733239972;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+G0SRkTm4LW2cWO/9wDnxt8QGAOUsLs7tvoMLIMwSCY=;
-        b=YAjG+8b8mLo5TL3218CWxSveSmDGGhF89xPyrepEXA2JIlhyA6ElhmLZWcyAzCHOnj
-         R6/RUIdiqcAv4ui8xMmGdLAJBBH5nBwGH/KWV7TMzhTsJwUDmzfzScEXLTxm1+IXd4gQ
-         lI6FtuiE6r3aNYEkWlXNpWMA5D2YO0RZcGMfp3dfqMeUmXkbCWREvYiQ7t73Le/a0g39
-         xXmjSJvqqKPfRzdYUZU3iBSTBB6rqU7vuEuUdpuqld3tnxjHrgKLyI7zx6e0Sz9b7hEq
-         4D7TU5HE86RnZIcoUxBUVFXq24kP3cxoe3CPQ4XmQbcQ+4it327T05val6/dYClVG7Hm
-         rLqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXfxKFA23J1GPk3mF8z8rhGhb4Rey15HE4CZvsxox2++jj8kP1EpGo5E0L3NbEKXNyjhL26jG+II2LM4G+QWw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4GiGjYe4/rXzgnbjQrD7GMDnL9N2tK8cDV3ejPCwLm1JR8Tq5
-	fVrMjVe8brk6nLmKqxO+KF4aC6XtB37nc2/QB3Nu3WvHYAVXjhPq
-X-Gm-Gg: ASbGncsqTir7zWdvG20Sdq/EGI8ZuCG5qHjSCLQSwUrTZFlqpp+gq2L7MmqpS5MYjrv
-	iSs4WmVpRV0A2f5jTzmgfx5XW38rD1bJgfHv+q1MVLoE2fpUG3hjTzjMO1cMIdYJjZh9NyWYJpA
-	nbJSPJd/EIT3ZfAHOD4je6IXegzaMPtmHMjmexaOcuaDHb1I/bfSAc7IB9/0I8tLJgLFWPf8NGD
-	MV6OJmLovEVXsMyTReqQObTwB9poXX5l/ZWVkiwd8kxQsS9RIu4xfwjPinNO/UARaJRkrzwRzWH
-	/Fa0ch9WlTfzylk3whd2W3Q=
-X-Google-Smtp-Source: AGHT+IEnbgw6xnf5zyl51NyFAOj2i06X3LCEJ+TBAZYsRx2VDs7CDSxWVKZovfhpV5CdD1g/PlM5BA==
-X-Received: by 2002:a05:6a20:914e:b0:1dc:790e:3bd0 with SMTP id adf61e73a8af0-1e09e420895mr26262282637.15.1732635171664;
-        Tue, 26 Nov 2024 07:32:51 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724dea69e96sm8482541b3a.73.2024.11.26.07.32.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Nov 2024 07:32:50 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5500eecd-2dd9-46cc-a7d8-dfd004cd00a8@roeck-us.net>
-Date: Tue, 26 Nov 2024 07:32:48 -0800
+	s=arc-20240116; t=1733166009; c=relaxed/simple;
+	bh=ilTfIwv93oRhUkU8N6lXP9KIAcMA0X5OUfCS9rybPhE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Sj0BIPjf3tOLn4pPXdYAKkrpekzS5+8uI44sDUbhoFC2kmRLaUDpRQsTbgSoqj9Kmx0RCNaYLkg/zzAPrkaKzShzJleUBP56W/BTQt8bEcygytuWIfRNk4l/yDz7oaAkBHSmQagktmhGtPnlh7YRQbEZLXtTXHt3h5cNm+M0LNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=T8g2mwhh; arc=none smtp.client-ip=185.87.125.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
+Received: by www.linux-watchdog.org (Postfix, from userid 500)
+	id A62B1409FE; Mon,  2 Dec 2024 19:18:49 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org A62B1409FE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
+	s=odk20180602; t=1733163529;
+	bh=ilTfIwv93oRhUkU8N6lXP9KIAcMA0X5OUfCS9rybPhE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=T8g2mwhhkTAb9tyQqs2HmZAt+RSfB7q72lCgmTjXIOY2YUVp937N4wug2vYWmqwt9
+	 U8NT+7EpXcigPif/J3qwocl0fylV6nqQadf4UwnAcAkvQ03h9gcyPMyAs7E+Zh8/5P
+	 NY0LlIfXHnL/zOBRp5P1ajnAv7P7x6HXYXYzO5LU=
+Date: Mon, 2 Dec 2024 19:18:49 +0100
+From: Wim Van Sebroeck <wim@linux-watchdog.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+	Animesh Agarwal <animeshagarwal28@gmail.com>,
+	Byoungtae Cho <bt.cho@samsung.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Colin Ian King <colin.i.king@gmail.com>,
+	Fabio Estevam <festevam@denx.de>, Harini T <harini.t@amd.com>,
+	James Hilliard <james.hilliard1@gmail.com>,
+	Jean Delvare <jdelvare@suse.de>, lijuang <quic_lijuang@quicinc.com>,
+	Marek Vasut <marex@denx.de>, Nick Chan <towinchenmi@gmail.com>,
+	Oleksandr Ocheretnyi <oocheret@cisco.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Rosen Penev <rosenp@gmail.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Xingyu Wu <xingyu.wu@starfivetech.com>,
+	Xin Liu <quic_liuxin@quicinc.com>, Yan Zhen <yanzhen@vivo.com>,
+	Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: [GIT PULL REQUEST] watchdog - v6.13 release cycle.
+Message-ID: <20241202181849.GA5357@www.linux-watchdog.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: rti: Fix off-by-one in heartbeat recovery
-To: "A. Sverdlin" <alexander.sverdlin@siemens.com>,
- linux-watchdog@vger.kernel.org
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, Judith Mendez <jm@ti.com>,
- Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <t-kristo@ti.com>
-References: <20241126073646.126752-1-alexander.sverdlin@siemens.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241126073646.126752-1-alexander.sverdlin@siemens.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.5.20 (2009-12-10)
 
-On 11/25/24 23:36, A. Sverdlin wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
-> 
-> According to AM62x TRM WDT period is (RTIDWDPRLD + 1) * (2^13) / RTICLK1,
-> Fix the heartbeat recovery. In practice this doesn't affect rounded
-> heatbeat in seconds, but it does correct 4% of error in milliseconds,
-> for, say, default 60s heartbeat. This affects last_ping calculation.
-> 
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+Hi Linus,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Due to work issues, I was too late to sent in this pull request.
+Can you consider to still pull this in please?
 
-> ---
->   drivers/watchdog/rti_wdt.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
-> index 563d842014dfb..0416e54b17edb 100644
-> --- a/drivers/watchdog/rti_wdt.c
-> +++ b/drivers/watchdog/rti_wdt.c
-> @@ -273,7 +273,8 @@ static int rti_wdt_probe(struct platform_device *pdev)
->   
->   		set_bit(WDOG_HW_RUNNING, &wdd->status);
->   		time_left_ms = rti_wdt_get_timeleft_ms(wdd);
-> -		heartbeat_ms = readl(wdt->base + RTIDWDPRLD);
-> +		/* AM62x TRM: texp = (RTIDWDPRLD + 1) * (2^13) / RTICLK1 */
-> +		heartbeat_ms = readl(wdt->base + RTIDWDPRLD) + 1;
->   		heartbeat_ms <<= WDT_PRELOAD_SHIFT;
->   		heartbeat_ms *= 1000;
->   		do_div(heartbeat_ms, wdt->freq);
+Please pull following watchdog changes for the v6.13 release cycle.
+
+This series contains:
+* Add support for exynosautov920 SoC
+* Add support for Airoha EN7851 watchdog
+* Add support for MT6735 TOPRGU/WDT
+* Delete the cpu5wdt driver
+* Always print when registering watchdog fails
+* Several other small fixes and improvements
+
+The output from git request-pull:
+----------------------------------------------------------------
+The following changes since commit 59b723cd2adbac2a34fc8e12c74ae26ae45bf230:
+
+  Linux 6.12-rc6 (2024-11-03 14:05:52 -1000)
+
+are available in the git repository at:
+
+  git://www.linux-watchdog.org/linux-watchdog.git linux-watchdog-6.13-rc1
+
+for you to fetch changes up to 4962ee045d8f06638714d801ab0fb72f89c16690:
+
+  watchdog: rti: of: honor timeout-sec property (2024-11-17 11:24:22 +0100)
+
+----------------------------------------------------------------
+linux-watchdog 6.13-rc1 tag
+
+----------------------------------------------------------------
+Alexander Sverdlin (1):
+      watchdog: rti: of: honor timeout-sec property
+
+Animesh Agarwal (1):
+      dt-bindings: watchdog: fsl-imx-wdt: Add missing 'big-endian' property
+
+Byoungtae Cho (2):
+      dt-bindings: watchdog: Document ExynosAutoV920 watchdog bindings
+      watchdog: s3c2410_wdt: add support for exynosautov920 SoC
+
+Christian Marangi (2):
+      dt-bindings: watchdog: airoha: document watchdog for Airoha EN7581
+      watchdog: Add support for Airoha EN7851 watchdog
+
+Claudiu Beznea (1):
+      watchdog: rzg2l_wdt: Power on the watchdog domain in the restart handler
+
+Colin Ian King (1):
+      docs: ABI: Fix spelling mistake in pretimeout_avaialable_governors
+
+Fabio Estevam (2):
+      watchdog: da9063: Do not use a global variable
+      watchdog: da9063: Remove __maybe_unused notations
+
+Harini T (1):
+      watchdog: xilinx_wwdt: Calculate max_hw_heartbeat_ms using clock frequency
+
+James Hilliard (1):
+      watchdog: it87_wdt: add PWRGD enable quirk for Qotom QCML04
+
+Jean Delvare (1):
+      watchdog: Delete the cpu5wdt driver
+
+Marek Vasut (1):
+      watchdog: stm32_iwdg: Add pretimeout support
+
+Nick Chan (2):
+      watchdog: apple: Actually flush writes after requesting watchdog restart
+      watchdog: apple: Increase reset delay to 150ms
+
+Oleksandr Ocheretnyi (1):
+      iTCO_wdt: mask NMI_NOW bit for update_no_reboot_bit() call
+
+Peter Griffin (1):
+      Revert "watchdog: s3c2410_wdt: use exynos_get_pmu_regmap_by_phandle() for PMU regs"
+
+Rosen Penev (1):
+      watchdog: armada_37xx_wdt: remove struct resource
+
+Uwe Kleine-König (2):
+      watchdog: ziirave_wdt: Drop explicit initialization of struct i2c_device_id::driver_data to 0
+      watchdog: Switch back to struct platform_driver::remove()
+
+Wolfram Sang (9):
+      watchdog: always print when registering watchdog fails
+      watchdog: da9055_wdt: don't print out if registering watchdog fails
+      watchdog: gxp-wdt: don't print out if registering watchdog fails
+      watchdog: iTCO_wdt: don't print out if registering watchdog fails
+      watchdog: it87_wdt: don't print out if registering watchdog fails
+      watchdog: octeon-wdt: don't print out if registering watchdog fails
+      watchdog: rti_wdt: don't print out if registering watchdog fails
+      watchdog: rza_wdt: don't print out if registering watchdog fails
+      watchdog: sl28cpld_wdt: don't print out if registering watchdog fails
+
+Xin Liu (1):
+      dt-bindings: watchdog: Document Qualcomm QCS8300
+
+Xingyu Wu (1):
+      MAINTAINERS: Update the maintainer of StarFive watchdog driver
+
+Yan Zhen (1):
+      watchdog: fix typo in the comment
+
+Yassine Oudjana (2):
+      watchdog: mediatek: Make sure system reset gets asserted in mtk_wdt_restart()
+      watchdog: mediatek: Add support for MT6735 TOPRGU/WDT
+
+lijuang (1):
+      dt-bindings: watchdog: Document Qualcomm QCS615 watchdog
+
+ Documentation/ABI/testing/sysfs-class-watchdog     |   2 +-
+ .../bindings/watchdog/airoha,en7581-wdt.yaml       |  47 ++++
+ .../devicetree/bindings/watchdog/fsl-imx-wdt.yaml  |  14 +
+ .../devicetree/bindings/watchdog/qcom-wdt.yaml     |   2 +
+ .../devicetree/bindings/watchdog/samsung-wdt.yaml  |   3 +
+ Documentation/watchdog/watchdog-parameters.rst     |  10 -
+ MAINTAINERS                                        |   2 +-
+ drivers/watchdog/Kconfig                           |  17 +-
+ drivers/watchdog/Makefile                          |   2 +-
+ drivers/watchdog/acquirewdt.c                      |   2 +-
+ drivers/watchdog/advantechwdt.c                    |   2 +-
+ drivers/watchdog/airoha_wdt.c                      | 216 ++++++++++++++++
+ drivers/watchdog/apple_wdt.c                       |   8 +-
+ drivers/watchdog/armada_37xx_wdt.c                 |  10 +-
+ drivers/watchdog/at91rm9200_wdt.c                  |   2 +-
+ drivers/watchdog/at91sam9_wdt.c                    |   2 +-
+ drivers/watchdog/ath79_wdt.c                       |   2 +-
+ drivers/watchdog/bcm2835_wdt.c                     |   2 +-
+ drivers/watchdog/bcm_kona_wdt.c                    |   2 +-
+ drivers/watchdog/cpu5wdt.c                         | 284 ---------------------
+ drivers/watchdog/cpwd.c                            |   2 +-
+ drivers/watchdog/da9055_wdt.c                      |   7 +-
+ drivers/watchdog/da9063_wdt.c                      |  19 +-
+ drivers/watchdog/dw_wdt.c                          |   2 +-
+ drivers/watchdog/gef_wdt.c                         |   2 +-
+ drivers/watchdog/geodewdt.c                        |   2 +-
+ drivers/watchdog/gxp-wdt.c                         |   4 +-
+ drivers/watchdog/iTCO_wdt.c                        |  25 +-
+ drivers/watchdog/ib700wdt.c                        |   2 +-
+ drivers/watchdog/ie6xx_wdt.c                       |   2 +-
+ drivers/watchdog/it87_wdt.c                        |  43 +++-
+ drivers/watchdog/lpc18xx_wdt.c                     |   2 +-
+ drivers/watchdog/mtk_wdt.c                         |  12 +
+ drivers/watchdog/mtx-1_wdt.c                       |   2 +-
+ drivers/watchdog/nic7018_wdt.c                     |   2 +-
+ drivers/watchdog/nv_tco.c                          |   2 +-
+ drivers/watchdog/octeon-wdt-main.c                 |   4 +-
+ drivers/watchdog/omap_wdt.c                        |   2 +-
+ drivers/watchdog/orion_wdt.c                       |   2 +-
+ drivers/watchdog/pcwd.c                            |   2 +-
+ drivers/watchdog/rc32434_wdt.c                     |   2 +-
+ drivers/watchdog/rdc321x_wdt.c                     |   2 +-
+ drivers/watchdog/renesas_wdt.c                     |   2 +-
+ drivers/watchdog/riowd.c                           |   2 +-
+ drivers/watchdog/rti_wdt.c                         |   9 +-
+ drivers/watchdog/rza_wdt.c                         |   7 +-
+ drivers/watchdog/rzg2l_wdt.c                       |  20 +-
+ drivers/watchdog/rzn1_wdt.c                        |   2 +-
+ drivers/watchdog/s3c2410_wdt.c                     |  45 +++-
+ drivers/watchdog/sa1100_wdt.c                      |   4 +-
+ drivers/watchdog/sch311x_wdt.c                     |   2 +-
+ drivers/watchdog/shwdt.c                           |   2 +-
+ drivers/watchdog/sl28cpld_wdt.c                    |   4 +-
+ drivers/watchdog/smsc37b787_wdt.c                  |   2 +-
+ drivers/watchdog/st_lpc_wdt.c                      |   2 +-
+ drivers/watchdog/starfive-wdt.c                    |   4 +-
+ drivers/watchdog/stm32_iwdg.c                      |  95 ++++++-
+ drivers/watchdog/stmp3xxx_rtc_wdt.c                |   2 +-
+ drivers/watchdog/txx9wdt.c                         |   2 +-
+ drivers/watchdog/watchdog_core.c                   |  26 +-
+ drivers/watchdog/xilinx_wwdt.c                     |  75 +++++-
+ drivers/watchdog/ziirave_wdt.c                     |   2 +-
+ include/linux/mfd/da9063/core.h                    |   1 +
+ 63 files changed, 661 insertions(+), 424 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/airoha,en7581-wdt.yaml
+ create mode 100644 drivers/watchdog/airoha_wdt.c
+ delete mode 100644 drivers/watchdog/cpu5wdt.c
+----------------------------------------------------------------
+
+Kind regards,
+Wim.
 
 
