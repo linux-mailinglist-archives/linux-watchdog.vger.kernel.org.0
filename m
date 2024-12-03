@@ -1,103 +1,100 @@
-Return-Path: <linux-watchdog+bounces-2497-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2496-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B2969E189D
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Dec 2024 10:58:27 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E84D16665E
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Dec 2024 09:58:24 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2548A190068;
-	Tue,  3 Dec 2024 09:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mcrowe.com header.i=@mcrowe.com header.b="k/u/D7b1"
-X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smarthost01b.sbp.mail.zen.net.uk (smarthost01b.sbp.mail.zen.net.uk [212.23.1.3])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F1859E1911
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Dec 2024 11:20:58 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9989185B48
-	for <linux-watchdog@vger.kernel.org>; Tue,  3 Dec 2024 09:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.23.1.3
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86B9BB23BE7
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Dec 2024 09:58:07 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79D2B190068;
+	Tue,  3 Dec 2024 09:58:04 +0000 (UTC)
+X-Original-To: linux-watchdog@vger.kernel.org
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056BF165EEB
+	for <linux-watchdog@vger.kernel.org>; Tue,  3 Dec 2024 09:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733219904; cv=none; b=PMGtE1umMMkkaIhUjSg6UcjBIVjw0kV7Air7mVYHNNcUDyHQQ3aPVSWQ0TfOZW00qRkKtfrFeSb7095df5IVv/ep263Qoxb7Pr6zHB8dAG+IKORHEQguNleW4MVlzKLytsEaKFInhA9Z4lEC/hzQ/mLDAY/zE+2us2iDrkuNrrM=
+	t=1733219884; cv=none; b=E2PyNXg9DhXeGpGpcTZ6t7zH0LH1OwOcVAwN+rkQPRRHDF7G/u3Z1Kfed7NaEoAZK99wAkU2OabGJImpxw0V13jwwemFd6Bc7t8zlk9Sill0b63VpNHnYvXzobuQBm1fBG2A/DDlCWJqbbxSewfcGCVZBMLTXdl3Xe0juFhe3jU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733219904; c=relaxed/simple;
-	bh=dYQYJ0HQcV8mZWDgGPoIhwK/tPS1FNDfqYK6l3wbVEQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=TwIvjJUw/CHUtdOgsq/6D7B5c4MB+W+/fRa31EorAy2tauY0RhrLA7aFe7eas4Ke5aAm3/8HNuA1GoRoUCKsI8znkiCHGevF0nVYEIIzBmfTsGt1TvcT4sgInHUcfFLWfAgjYL9313rzMfJs3w2+aHY7HbVlNWzHwYLi7ZHgs1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mcrowe.com; spf=pass smtp.mailfrom=mcrowe.com; dkim=pass (2048-bit key) header.d=mcrowe.com header.i=@mcrowe.com header.b=k/u/D7b1; arc=none smtp.client-ip=212.23.1.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mcrowe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mcrowe.com
-Received: from [88.97.37.36] (helo=deneb.mcrowe.com)
-	by smarthost01b.sbp.mail.zen.net.uk with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <mac@mcrowe.com>)
-	id 1tIPfQ-007ZSa-B8;
-	Tue, 03 Dec 2024 09:58:14 +0000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mcrowe.com;
-	s=20191005; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description; bh=tabRML47ADo8k2LCejYOp7BvKRTeWBTUsmGddHb/Qts=; b=k/u/D
-	7b1OwjJ3q+T72iXOa05KTdI/xZl+F7Xv0ksNPliL3sgQjGOnYX47GbznhCnzo3sZTdkD0wapM4N/k
-	kl47sMqFhUGMTRPGb91hcqsrjEQZtG9nxEjy382+gVEcoL2LOidMwayM3ogXG4ZB+ABRkwFefnYxI
-	+9qlBfmFPxysaHQN/txfoELopVLoUD1fVnDbnMiH8xr9rRKYPtgdtseC3gQb04hpyDCcT+l+Bfq9a
-	1lBCgDROg60FIob1UrM5Ew6rPpWV7isGuT7bp3sdGLrI7RzK3NuomYNXeOy2ixxXSpUiej9IuKOWg
-	qMbEgqPT5tMkOT5C7YcVfs97fERhA==;
-Received: from mac by deneb.mcrowe.com with local (Exim 4.96)
-	(envelope-from <mac@mcrowe.com>)
-	id 1tIPfY-004x9N-2z;
-	Tue, 03 Dec 2024 09:58:12 +0000
-From: Mike Crowe <mac@mcrowe.com>
-To: linux-watchdog@vger.kernel.org
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Mike Crowe <mac@mcrowe.com>
-Subject: [PATCH v2] watchdog: sp805: Report correct timeleft at maximum
-Date: Tue,  3 Dec 2024 09:57:44 +0000
-Message-Id: <20241203095744.3001795-1-mac@mcrowe.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241202214343.2425341-1-mac@mcrowe.com>
-References: <20241202214343.2425341-1-mac@mcrowe.com>
+	s=arc-20240116; t=1733219884; c=relaxed/simple;
+	bh=5R9V6VM88Pv7fB0kKpA2gIRwslcp4CmlIjVmF2/i4hU=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=UbzilMPdR28pzr8+TPEON8xCIX0tuEdZ6gfzqKsLIrbFCIOFLRTEIjrtlmNT4/IU9kAI2Ydwcy9MGD9k1Pa9jd1ramNOorRYmik6nWHV+C6mn27U20rrOIvxI5sWDST7vCotIXt6GMECsamAl2PpcjN23HN0rCy9s/fWlp0UXrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:829d:a1e7:5b32:5d8e])
+	by xavier.telenet-ops.be with cmsmtp
+	id k9xz2D0093sLyzB019xzFx; Tue, 03 Dec 2024 10:57:59 +0100
+Received: from geert (helo=localhost)
+	by ramsan.of.borg with local-esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1tIPfL-000B88-A0;
+	Tue, 03 Dec 2024 10:57:59 +0100
+Date: Tue, 3 Dec 2024 10:57:59 +0100 (CET)
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+To: =?ISO-8859-15?Q?Uwe_Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
+cc: Wim Van Sebroeck <wim@linux-watchdog.org>, 
+    Guenter Roeck <linux@roeck-us.net>, 
+    Linus Torvalds <torvalds@linux-foundation.org>, 
+    "open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>, 
+    linux-next@vger.kernel.org
+Subject: Re: [PATCH] watchdog: Switch back to struct
+ platform_driver::remove()
+In-Reply-To: <20241010203622.839625-4-u.kleine-koenig@baylibre.com>
+Message-ID: <6236624-1239-9671-7fab-7b1b84d5e778@linux-m68k.org>
+References: <20241010203622.839625-4-u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Originating-smarthost01b-IP: [88.97.37.36]
-Feedback-ID: 88.97.37.36
+Content-Type: multipart/mixed; boundary="8323329-2132459464-1733219879=:42768"
 
-sp805_wdt::load_val is of type unsigned int. When the interrupt is
-inactive wdt_timeleft adds one to the value, and then adds that to the
-value used to calculate the time remaining. Unfortunately it's not
-unlikely that load_val contains LOAD_MAX, which is 0xFFFFFFFF and wraps
-to zero when one is added to it, resulting in the time left being
-understated by about 21.7s. Fix this by ensuring the addition happens as
-64-bit.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Signed-off-by: Mike Crowe <mac@mcrowe.com>
----
- drivers/watchdog/sp805_wdt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--8323329-2132459464-1733219879=:42768
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
 
-diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wdt.c
-index 109e2e37e8f0..4400c439c718 100644
---- a/drivers/watchdog/sp805_wdt.c
-+++ b/drivers/watchdog/sp805_wdt.c
-@@ -128,7 +128,7 @@ static unsigned int wdt_timeleft(struct watchdog_device *wdd)
- 
- 	/*If the interrupt is inactive then time left is WDTValue + WDTLoad. */
- 	if (!(readl_relaxed(wdt->base + WDTRIS) & INT_MASK))
--		load += wdt->load_val + 1;
-+		load += (u64)wdt->load_val + 1;
- 	spin_unlock(&wdt->lock);
- 
- 	return div_u64(load, wdt->rate);
--- 
-2.39.5
+On Thu, 10 Oct 2024, Uwe Kleine-König wrote:
+> After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
+> return void") .remove() is (again) the right callback to implement for
+> platform drivers.
+>
+> Convert all platform drivers below drivers/watchdog/ to use .remove(),
+> with the eventual goal to drop struct platform_driver::remove_new(). As
+> .remove() and .remove_new() have the same prototypes, conversion is done
+> by just changing the structure member name in the driver initializer.
+>
+> While touching these files, make indention of the struct initializer
+> consistent in several files.
+>
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
 
+Thanks for your patch, which is now commit 562b0b03193b567c ("watchdog:
+Switch back to struct platform_driver::remove()") in watchdog/master.
+Note that this now conflicts with commit e70140ba0d2b1a30 ("Get rid of
+'remove_new' relic from platform driver struct") upstream.
+Resolution: just take the version from upstream.
+
+Gr{oetje,eeting}s,
+
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds
+--8323329-2132459464-1733219879=:42768--
 
