@@ -1,165 +1,175 @@
-Return-Path: <linux-watchdog+bounces-2498-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2500-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C9A69E1B6B
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Dec 2024 12:54:52 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B33579E223B
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Dec 2024 16:22:14 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BDFB283CBC
-	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Dec 2024 11:54:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E883516843E
+	for <lists+linux-watchdog@lfdr.de>; Tue,  3 Dec 2024 15:17:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C21F11E4120;
-	Tue,  3 Dec 2024 11:54:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D99D41F7071;
+	Tue,  3 Dec 2024 15:16:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="uPNDxMqu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IsF3KTNz"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4751632E6
-	for <linux-watchdog@vger.kernel.org>; Tue,  3 Dec 2024 11:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF64B1F6698
+	for <linux-watchdog@vger.kernel.org>; Tue,  3 Dec 2024 15:16:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733226888; cv=none; b=WVtNO3SyeOMx3dHjXlyEsoFEbIfu+6w7ns6a44iCO/JIWh9pDhcpXamgLS/q3XQbpaf4RnbaXftlGUgSe8JGvOvIybaKjRavz5lUKkFDu74MkUpfV1qaqJbyBA/qPiKzANlhDte9HyRCtkCBj7o8DmIl54mC3FfOg2hRgEE7xJA=
+	t=1733239009; cv=none; b=jbsT9W4wFup1kF++gDkieYWunpHYSI8n99/asS/zRUq3aFwW48RxDvXUQRVGfJU0KyaVUSKHHhI2lG7mJwvTmCkbll+Cl8T75vHhyVZzNce4b6xJFEyFMS/a/VIou0TIzN4ukNWhL34PiGDT3RCdK0fTTyrqKzzWTJV4ksBkWbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733226888; c=relaxed/simple;
-	bh=lbnV9/OfKewYlnigAfj2lpnHbgQcZsOvD1YYnit2rqo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ROC2TJMqmvl4ZObfIPg8iIcvPpeD1n4iyp/4AGvOHrDwc48nGdnnJRW267xeRwTGi9qm3VJo1Qnf2kzOltixtsrMZBDo+vJExwhlI6J1MOKQ3iB/8JFsG28wAAPsCEpcJRt+touHKBYjqQ/Rb7kwso8MctuA/B6Eq0wvLZP84Mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=uPNDxMqu; arc=none smtp.client-ip=209.85.221.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-385eb7ee7e2so1357453f8f.3
-        for <linux-watchdog@vger.kernel.org>; Tue, 03 Dec 2024 03:54:46 -0800 (PST)
+	s=arc-20240116; t=1733239009; c=relaxed/simple;
+	bh=n1aMLT+bz9zlpMhHlqhw1pLzEFgqgWtaQBZe1kxtaPE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jvYqHN7TMFiMw2YsFkpYhxQE5HaOpbtAMDwtKK428cc0fIs3bmhluzrvXKAdjmcRPFW8stAjcFN0vJu5bMGQMUrOpGNBxCoKXu7o645NATDUtrqVKgdcImx0HuKjfuU+98NMf7fiGoukkrLCuLK6LQCUuCI989FvVvv9aW/GBHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IsF3KTNz; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7fbd9be84bdso4346200a12.1
+        for <linux-watchdog@vger.kernel.org>; Tue, 03 Dec 2024 07:16:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1733226885; x=1733831685; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UgGNXpohR/eYydtB7L2Ht3fUc5XtlMm7UEOZZWUiN1Q=;
-        b=uPNDxMquCv6/WoapqZp9bJN3IMjgDVJAF2cyCjvDb6Fr9s7Z/YUtJ7zaH1armcsI5/
-         /j/W36tosEQUx01QANkR/gbtUqCHVyJVlQzMMUspQ0+Rye/GGo4ALg1RxZjt+YimSZnM
-         s6GZ6SxCpeTCXGsPC+i6tgMPPHn8cmMJ5IdeRgGq0rl4vO5MDy+QmVX6Ig5tHGN4zanZ
-         6+i4Il3XPA+cB8bxn3kDPQYFD8bMv2VTdPpm24rrgDAMz98mpX+JqLvC+3W2vyLsbMtb
-         nh8LYxdgRnkm3zRtA2OoelUx8R5xrmr+cGiUtjNNDP+cOTKKeXn39E2HKXb8G3fXCcaI
-         quJw==
+        d=gmail.com; s=20230601; t=1733239007; x=1733843807; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=89YKLRzn9zOH0nQuUskkOUPH4e8JKryQbi+/JTlgn4A=;
+        b=IsF3KTNzQ05oRCDZLnmFC0KFLmt2+FgKWoczEhix251rY0HYWNChKdYXyXekE+4QJ2
+         XWZADy8ETDLe3+wLtc8WA8+tW9jepckgz8/MjxaQd4glzZl9AIHYQxbvxw74NFf0Wc67
+         hJmb+aMqD9IZVzkMsmMGAsW5/mVbu8+vrpBAz6AQm9vHIX27drEUaos8k3Awxcke+Dyv
+         zJzK/CEDesItg3glqXIdu72gk7ygrK5H6BYxitVKfY8pr1reMmtzKboSpU4lcM5A6gr2
+         04Dm9DyNHUSVrEr6fHlVkOKTAvPYUi0MVZptjE4hlWAWKsFx50qUxbRQ3swWwho+rke7
+         gWGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733226885; x=1733831685;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1733239007; x=1733843807;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UgGNXpohR/eYydtB7L2Ht3fUc5XtlMm7UEOZZWUiN1Q=;
-        b=j+I7JnkSaS1iNxluppag5Ef3fqmQmro3ikc3me0ChM9R5VN8uPGFKfIFJ9fMU+hxou
-         SvGv22H9PErNTSw3LTC8FtiBlTQO1Kd4pTvjA60XOsyLDdAGoQKHzGIejRm0aYwfrGAX
-         XULfOKZIVm6zEmgpt6RUT2zq4Vgt2/wamN3kAMhBjyIa7s6wYGkzsum9RT26smjbAgMo
-         nd0N5jnkExlfMXtF3aR/KapurcdZYrwoI0MUSNltldVzQgx5qTexPs4pCcUeEnfobxeF
-         RZ4E8hQL59CcyBkux5z8sNvKkBvGMaGFN8CVrvaRbiqX5pZSivQpKV3J6L4zzOMEZgEz
-         OdqA==
-X-Forwarded-Encrypted: i=1; AJvYcCVfpVKxifL0nlOpYFFdjcNUmGiVJbwo0LpZSxO5q6G73U8Sbe5L2bCA4sDxZtl+ruEXWhfNDJyOtWEVSWZ38g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxITsbPlvoqKohQakZlwKz0H4q/UanLysJTsX7EuNdDdmZaBHQE
-	L33qR45ErV5/ikDG6ek3Q21Zs6oSvET8CDb9jjH7IGuMDNneiXAG8i1R6MOWdzI=
-X-Gm-Gg: ASbGncskAC+1TObmuCYD3DxkGxvWd+A0H1OQz00fHX9MWp6zv+qcgCWcUgMjtrVeDMP
-	wNm0pZ43wdGz/Cr+kcPeQIb6gDv4uNvBeqTXUNrP4km1p+Ayjz7QTq6mFFl9cbZkTthCVs+zNco
-	dQbwiVA5WArPr/NqBgYh5QVc38IV5Dgefwugi6EkjtPcxa2GrOlRVLBjBNcSRIaFlMQt7YPKIGo
-	P5TKnFgiuj41ZxD42INChrTz3li72UjGkQ/TXtTDsWUnxmCyi2ncU3hrP/f46XJ50/qNDcd8tMk
-	DA0bc57gLXZ55hEtsTY/1N9b72vgt3AIz33xAM8=
-X-Google-Smtp-Source: AGHT+IFUw0oxE1rIHxN7paauKavjflFV52kyqjZANtW6RS1An0zFLwPqSvIguwvhLlxrYC7v/VwhcA==
-X-Received: by 2002:a05:6000:4028:b0:385:f271:a224 with SMTP id ffacd0b85a97d-385fd3e784amr1626024f8f.18.1733226884558;
-        Tue, 03 Dec 2024 03:54:44 -0800 (PST)
-Received: from localhost (p200300f65f242d005bbc9b581c6b9666.dip0.t-ipconnect.de. [2003:f6:5f24:2d00:5bbc:9b58:1c6b:9666])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434aa77d01esm224113545e9.22.2024.12.03.03.54.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2024 03:54:44 -0800 (PST)
-Date: Tue, 3 Dec 2024 12:54:42 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	"open list:WATCHDOG DEVICE DRIVERS" <linux-watchdog@vger.kernel.org>, linux-next@vger.kernel.org
-Subject: Re: [PATCH] watchdog: Switch back to struct platform_driver::remove()
-Message-ID: <g2e433wsfey3smpg6gc32nr3x72eb6kdt7orieaegbl7qya74m@trtgyqz3oenj>
-References: <20241010203622.839625-4-u.kleine-koenig@baylibre.com>
- <6236624-1239-9671-7fab-7b1b84d5e778@linux-m68k.org>
+        bh=89YKLRzn9zOH0nQuUskkOUPH4e8JKryQbi+/JTlgn4A=;
+        b=FNdk237TWmdIRoOL9o+2iJ1Cq6Ctfi2JFGvEPNAGXQBOj6pDarCDJwpklP+Yu2D4Rn
+         vcHgzcIKqt0Ef3/5ULk7HiGEELEwWS7u6oN9Mtpr5NXlLHwNWkDhQF261+nHyAq56uso
+         IlLijL/UynStp9wySeGrv9IA7l7DvkpRtj+ZEYVLgNJXXqEpPZAof8Mze3Vu5udxaxZM
+         Bgo71RXqS1ykSOY/+7/koMK3T6gvGmoU7AudQknk5oiLb1kx26iYmiMTbi+e0xqYCc4S
+         JPC0rlCzUfKTbI2tDDSfWegUQVodq+eWAtVlrB3wrBlgwRtN+CfFE+iLdotByH0/4dpu
+         5wvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUy/GNeMx6etZsOhcSlo9hHlJ7ngGEDltxlK4K9S1IXKqSNYWX0Bm9G9Udi7RlxCXQgXefNcPPd+chiT5EC3g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdtWUz/c4issOKKpi9OTwOfX7yosC5XVRtaQSCaQJG8iZNof1j
+	QQzf5oRdpy/ty8jQBN90OqlpRcEoVfMDyrn3MYTJZKOSgl5Lw49T3SnkUw==
+X-Gm-Gg: ASbGncvOUsVQErEFO4TY6Dbs8NWgiXTEfcFYN6N/gUsfqwZhDJVyUn2NgiNyBCXPjVk
+	O1lxWFJtipL4Ri/v2GTSzHsAzJtHBtpqcnS5rG32QsUbIsbUMErGhkmS0HsqmgB1gNGY9erNTVa
+	MvLFd6JtGSt1JS4yFL2w8pMqvDZTfxXxSdxiYEMxLA2p+3ko45JTCxBlF5QAMK7HpeZLnyrN2jY
+	9kF1k+CSGuccfEN8+/XKo4I8Q7moXO3TUrW0SCg3JraKZvj8fsNl4QBAI+UjLb4/jtBPkXFtGAA
+	4tTfYatKkmaWwzbu7TN1tbw=
+X-Google-Smtp-Source: AGHT+IF/VMsbQ8/i0UJ47bG6cN6ekeKU7AR3+CE6Q+2ipiSeiGTM/zBCzIcqbcg1D+Zezz3ERKyU0Q==
+X-Received: by 2002:a05:6a21:3289:b0:1e0:c30a:6f22 with SMTP id adf61e73a8af0-1e1654132dfmr4510948637.40.1733239006963;
+        Tue, 03 Dec 2024 07:16:46 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fc9c2e2babsm9731209a12.22.2024.12.03.07.16.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Dec 2024 07:16:46 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ef171d61-66a5-4d69-8dac-dfb73e4479f4@roeck-us.net>
+Date: Tue, 3 Dec 2024 07:16:44 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kx3eny2qjv4nijvj"
-Content-Disposition: inline
-In-Reply-To: <6236624-1239-9671-7fab-7b1b84d5e778@linux-m68k.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] watchdog: sp805: Report correct timeleft at maximum
+To: Mike Crowe <mac@mcrowe.com>, linux-watchdog@vger.kernel.org
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+References: <20241202214343.2425341-1-mac@mcrowe.com>
+ <20241203095744.3001795-1-mac@mcrowe.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20241203095744.3001795-1-mac@mcrowe.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 12/3/24 01:57, Mike Crowe wrote:
+> sp805_wdt::load_val is of type unsigned int. When the interrupt is
+> inactive wdt_timeleft adds one to the value, and then adds that to the
+> value used to calculate the time remaining. Unfortunately it's not
+> unlikely that load_val contains LOAD_MAX, which is 0xFFFFFFFF and wraps
+> to zero when one is added to it, resulting in the time left being
+> understated by about 21.7s. Fix this by ensuring the addition happens as
+> 64-bit.
+> 
+> Signed-off-by: Mike Crowe <mac@mcrowe.com>
 
---kx3eny2qjv4nijvj
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] watchdog: Switch back to struct platform_driver::remove()
-MIME-Version: 1.0
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-On Tue, Dec 03, 2024 at 10:57:59AM +0100, Geert Uytterhoeven wrote:
-> On Thu, 10 Oct 2024, Uwe Kleine-K=F6nig wrote:
-> > After commit 0edb555a65d1 ("platform: Make platform_driver::remove()
-> > return void") .remove() is (again) the right callback to implement for
-> > platform drivers.
-> >=20
-> > Convert all platform drivers below drivers/watchdog/ to use .remove(),
-> > with the eventual goal to drop struct platform_driver::remove_new(). As
-> > .remove() and .remove_new() have the same prototypes, conversion is done
-> > by just changing the structure member name in the driver initializer.
-> >=20
-> > While touching these files, make indention of the struct initializer
-> > consistent in several files.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@baylibre.com>
->=20
-> Thanks for your patch, which is now commit 562b0b03193b567c ("watchdog:
-> Switch back to struct platform_driver::remove()") in watchdog/master.
-> Note that this now conflicts with commit e70140ba0d2b1a30 ("Get rid of
-> 'remove_new' relic from platform driver struct") upstream.
-> Resolution: just take the version from upstream.
+Please provide change logs in future patches.
 
-The conflicting file is drivers/watchdog/sa1100_wdt.c. Linus's variant
-looks as follows:
+Guenter
 
-static struct platform_driver sa1100dog_driver =3D {
-        .driver.name =3D "sa1100_wdt",
-        .probe    =3D sa1100dog_probe,
-        .remove   =3D sa1100dog_remove,
-};
+> ---
+>   drivers/watchdog/sp805_wdt.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/watchdog/sp805_wdt.c b/drivers/watchdog/sp805_wdt.c
+> index 109e2e37e8f0..4400c439c718 100644
+> --- a/drivers/watchdog/sp805_wdt.c
+> +++ b/drivers/watchdog/sp805_wdt.c
+> @@ -128,7 +128,7 @@ static unsigned int wdt_timeleft(struct watchdog_device *wdd)
+>   
+>   	/*If the interrupt is inactive then time left is WDTValue + WDTLoad. */
+>   	if (!(readl_relaxed(wdt->base + WDTRIS) & INT_MASK))
+> -		load += wdt->load_val + 1;
+> +		load += (u64)wdt->load_val + 1;
+>   	spin_unlock(&wdt->lock);
+>   
+>   	return div_u64(load, wdt->rate);
 
-Mine is:
-
-static struct platform_driver sa1100dog_driver =3D {
-        .driver.name =3D "sa1100_wdt",
-        .probe =3D sa1100dog_probe,
-        .remove =3D sa1100dog_remove,
-};
-
-The difference is only whitespace and my variant is the (obviously?)
-better variant. So I agree to everything what Geert said apart from
-"Resolution: just take the version from upstream."
-
-Best regards
-Uwe
-
---kx3eny2qjv4nijvj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmdO8YAACgkQj4D7WH0S
-/k5WRggAtQrQGFRg1w5mkNOkimvVRGly8uThCE2drmNsCKsom1Xcpk3/wZ+b2th7
-50qjqWOGbU/MhYVlUEvwRwAkXVv9JQ+XXitqmZN3wwehOPrzZZqWBFGv67/56hjx
-OHG9anbqX+ifsUcEUwM0LU6oAeptqUXT7w+lbMFqaFxuRzAnUXi8SZXtNiLRcfVu
-kBTvCi2X0AX8bXhMXWd2152ljxQFpkJXmjaY0hssjOtBvxhXy7T/06qnQs1OwNB9
-8uFpxTql3anzWvY7qlAGKbA4ifL9Gm44d8xwjk9oqhSSMKLSmvpNIPewVcg2utQg
-V5wU8X5kJHV+nBYlxzDq+5OBKnGIQA==
-=z2tQ
------END PGP SIGNATURE-----
-
---kx3eny2qjv4nijvj--
 
