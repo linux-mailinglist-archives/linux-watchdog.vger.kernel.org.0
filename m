@@ -1,48 +1,48 @@
-Return-Path: <linux-watchdog+bounces-2502-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2503-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4FED9E4E17
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Dec 2024 08:19:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D05999E526B
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Dec 2024 11:35:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B10828466C
-	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Dec 2024 07:19:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 820E0283D2C
+	for <lists+linux-watchdog@lfdr.de>; Thu,  5 Dec 2024 10:35:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 620BC188587;
-	Thu,  5 Dec 2024 07:19:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A53A61D5AD4;
+	Thu,  5 Dec 2024 10:35:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vOodXTJR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nWI5jfSS"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32B6F2391AB;
-	Thu,  5 Dec 2024 07:19:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2D318FC83;
+	Thu,  5 Dec 2024 10:35:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733383159; cv=none; b=ILvyh+3c04xPi8Brwm2eC5PWVYWoppj2J1G41YyYUMqD8eXI6BDdglfJUBtqN2pgiIiUqWfQRMqm37GMoRpxzqKTNKza993gFhxzMe6wl8cfsX9UntI4U679+nIbJ0XLPY9fP+sQKMRiVF+2EJtOhDfliAVAWAj+MqVR7D1rUK0=
+	t=1733394949; cv=none; b=rZwXhme77PMb0xSJwTOyRC1mQRQHVAX32r6rG658YTfm/8BVHippOvpmgLM2/sU8q245rZyIgwYmdT0OH66+XEmc0lCYsdSYhdd6MAHkKgVr1YmBcNx2RjYOtiqTykAbBrGRxjXgFi2iZxDb0pvJcJxB9sx6yjVLkCFM0gYRIxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733383159; c=relaxed/simple;
-	bh=YhQa/Ahbqqo1MzvJ5iZ47+nHNgHY+pg+hLM7s+GXQfM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VpODz947JwlRjUfNHgUOFg1OxB1Od0+lPCIyMNDG4aAzs3vjGWcc594I/2Q3Ocnq7sV4GQS/P+to3NFgbqxzEgD8IO8UeLDyKaqB+U3eXiubOson7Ct8TgmTWVIDeduvKMoN4cB//VBkoQ2z3SXfvuf4rzcw9Q4iym91juasm8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vOodXTJR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBAEAC4CED1;
-	Thu,  5 Dec 2024 07:19:14 +0000 (UTC)
+	s=arc-20240116; t=1733394949; c=relaxed/simple;
+	bh=zvwx3dNMbF1OGEZ/wX/0dBuD40qhT1nOo1XKS+LNxVw=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=m6mrfIsXS+nzflkfPhXd6dhvWjZllr4dYvzsF4VwwC8o0tCQc+sGzb0a70GL4sOq9V9byOhdDRRRt1ZIHmWgpNtzOG+wF2orXnMoqNjDsx2xNTm5XEaUiIsnbd+GjpkyHbstqMG79cUfABPR8KB4/TOaVMjvcLkhMxgc0tXVpZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nWI5jfSS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80D87C4CED1;
+	Thu,  5 Dec 2024 10:35:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733383157;
-	bh=YhQa/Ahbqqo1MzvJ5iZ47+nHNgHY+pg+hLM7s+GXQfM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=vOodXTJRjENzGZmW4dN6QDMBe1SIhoLaGR6QHpAXpaOvkzXJhbB6WxcRCIli2XsTV
-	 sOC5zOnxmwOPtIrjovbUFHkRY5JYGC3JQIENyewC5ONw7xPpLGS6MP6u6+98CB24+t
-	 vzkmv57JNipMiZYj5jodWj8IEnWak3uur8zNtGULwAkNTIYwhCbdkDnZp7Ez94Vvnz
-	 jPUzGjfdZZSCNre0MKcRbaIlNRVx+2+BKWaY5DAPQEpJIe3dkaZGd5rIez0hALNyrz
-	 5nHUm0G2b2Vbr+jZdRKJYKCDHGITb4EfsvbxIf3lJKp/WZFhaYotgzDASe6JZ1MjH8
-	 yRM2UhceK97jg==
-Message-ID: <88950a3a-c3de-4ff5-9ff8-9b85e1b0ad14@kernel.org>
-Date: Thu, 5 Dec 2024 08:19:12 +0100
+	s=k20201202; t=1733394948;
+	bh=zvwx3dNMbF1OGEZ/wX/0dBuD40qhT1nOo1XKS+LNxVw=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=nWI5jfSS9Q0rD+jRCWevdh2IgcROcB8DWDo3U/YVYumrEG5UbO2tUpCQ+RYjov8UH
+	 IBPqiSmaNTMFBZLn1t8BLUEMSlQRXls8VlODx7FABjQLl9HZ9E3HJoixFVF2NCeCqd
+	 FlrXcaZ+KyONsk2FtXgZp4aRjCUummri/tH5JCCtSt/ZcDO/RAjoy7GyhJO6JeI3w1
+	 AenYLMxRnZGBlr8iGFkVLKq7epAO9yNBQBPLShGoXLYMPe+uZITwdMjd/yI0ocs/pC
+	 +4fVnCh5bgqPvC4ln+sVQSqfbVvd4IpFz/QIpxtPsvvuRN8Ak+T17tNQv7aecR14uc
+	 f7HH+V8oYeHnw==
+Message-ID: <171072ed-c35f-430e-a8c0-5cf718efed0c@kernel.org>
+Date: Thu, 5 Dec 2024 11:35:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -51,6 +51,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 3/3] arm64: dts: exynosautov920: add watchdog DT node
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: =?UTF-8?B?6rmA7YOc7JmE?= <trunixs.kim@samsung.com>
 Cc: 'Guenter Roeck' <linux@roeck-us.net>, 'Rob Herring' <robh@kernel.org>,
  'Krzysztof Kozlowski' <krzk+dt@kernel.org>,
@@ -67,7 +68,7 @@ References: <20241021063903.793166-1-trunixs.kim@samsung.com>
  <20241107113325.GA5284@www.linux-watchdog.org>
  <c487babb-84a5-4e47-a58f-75fec55cbabb@kernel.org>
  <000201db46ac$8d7cfee0$a876fca0$@samsung.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <88950a3a-c3de-4ff5-9ff8-9b85e1b0ad14@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -112,47 +113,33 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <000201db46ac$8d7cfee0$a876fca0$@samsung.com>
+In-Reply-To: <88950a3a-c3de-4ff5-9ff8-9b85e1b0ad14@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 05/12/2024 01:28, 김태완 wrote:
-> Hi Krzysztof,
-> 
->> On 07/11/2024 12:33, Wim Van Sebroeck wrote:
->>>>> Seems like you are having a hard day.
->>>>> The 3 patches are dropped. I presume that you will take them all
->> through your tree then?
->>>>
->>>> I meant only this one patch, not entire patchset. The bindings and
->>>> watchdog driver are for you. I commented only about this patch here -
->> DTS.
->>>>
->>>>
->>>> Best regards,
->>>> Krzysztof
->>>>
+On 05/12/2024 08:19, Krzysztof Kozlowski wrote:
+>>>> But that's a never ending discussion, so we won't go into that :-).
 >>>
->>> I added the first two patches again. Even when it sounds more logical to
->> me to keep the 3 together.
+>>> DTS is hardware description independent from Linux, therefore always goes
+>>> separate way than Linux drivers.
+>>>
+>>> Best regards,
+>>> Krzysztof
 >>
->> Thank you.
+>> I found that the first two patches have been added to the linux-next git, 
+>> but the last patch has not yet been reviewed.
 >>
->>> But that's a never ending discussion, so we won't go into that :-).
->>
->> DTS is hardware description independent from Linux, therefore always goes
->> separate way than Linux drivers.
->>
->> Best regards,
->> Krzysztof
+>> I would appreciate it if you could take a look at this patch.
 > 
-> I found that the first two patches have been added to the linux-next git, 
-> but the last patch has not yet been reviewed.
-> 
-> I would appreciate it if you could take a look at this patch.
+> Since this patch was applied, I dropped from my queue. I don't have it
+> in my inbox anymore. Please rebase, resolve any comments and resend.
 
-Since this patch was applied, I dropped from my queue. I don't have it
-in my inbox anymore. Please rebase, resolve any comments and resend.
+I found it in my inbox and tried to apply but it fails:
+error: patch failed: arch/arm64/boot/dts/exynos/exynosautov920.dtsi:172
+
+
+please rebase and resend.
+
 Best regards,
 Krzysztof
 
