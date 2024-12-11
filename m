@@ -1,187 +1,182 @@
-Return-Path: <linux-watchdog+bounces-2539-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2540-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01BC39ED31F
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2024 18:12:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6E5C9ED4E3
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2024 19:50:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A269167093
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2024 17:12:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FEE41888043
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2024 18:50:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BD9F24634B;
-	Wed, 11 Dec 2024 17:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 091162036FF;
+	Wed, 11 Dec 2024 18:50:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="llN44uBz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TucUnsGm"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F82A1DDC11;
-	Wed, 11 Dec 2024 17:12:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8AF1C3F27;
+	Wed, 11 Dec 2024 18:50:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733937131; cv=none; b=JLzNaVuZLtmvVaSuXeDr66KuaeDbCenSQkQtrQNA6NWNfBAgOLxcHVjAXN5zboGhEIViuByoKlOOBVTUz1Z+TFUNomkIEJVcIREECF3gh7dQ0mDByxZ6xVsLCgvSbGm8kUTYk/emNgnNKDWiFcRZ6Rmam5Tq1PY1v0HdmwB6xog=
+	t=1733943030; cv=none; b=u4jZD9wqRNsB/8UM6BhY2fP3o7mO5gLFQS6Z2Fsoa1o8Ro861TV+aMSLTsOxVK6cyWOmabatEfV9nHvg7r1XcSBTFBR54MEY30tS5DCovOsFMs/QgFTkGW23MObjnqdEgKOmBR+82Zk0193dYSaTz9p+EbEKGQlHlzY/PRA1HPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733937131; c=relaxed/simple;
-	bh=IGipVbStRxY+9NnW6skGplPEKqm1H/qhkNh4NFWdMGw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IW48nyI5y0UoRaDnuB3OElCoGsJqAjHoM+6SyAdsJhEmt526QnUCZlp6Qvihw6zMBICFflaV5z9I/WYgnwkUGGJH93+lInrpWxLU3HpE6xlEASU7G58maKMVSh9uZeG7xmdbUzkDekrIS+ovnCraeDNcHs/i0Na80MlMhbwYqTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=llN44uBz; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2163b0c09afso39362775ad.0;
-        Wed, 11 Dec 2024 09:12:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733937129; x=1734541929; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=sIXMJ1ZYrC0ZfzeXus7WJ4iSXyvaP59GTvAsdbdQD+Y=;
-        b=llN44uBzuPXAP0rSkgZtKv9oT53NFhuF7f3uLr/x/jTDMO+K/rDO8pvnxBniTxWIPi
-         llsyEEpAGsTtmfP9sRCS26/c4zxbDirPQ28X2ucwwY2ouoNFA122riearexPyIS+E2bx
-         p22mhy524v//O8uln0d1dGBkXTNqiSkNMAZX/cvK16AEqagswn2EW3/ZM+Cz5wR1lA1L
-         O5/YtCGj6gISaEpnN4DivrHawYdHFGAe69zoeegrj7/Erv8ESKAiFhywEOGH78MOFjGz
-         ld29rC/mN/uNuFr6cHqog+XmgV3tn6QW69RlAoTWmjunuvKCxdghAHf8q0Jb+zTESSGd
-         Pg9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733937129; x=1734541929;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sIXMJ1ZYrC0ZfzeXus7WJ4iSXyvaP59GTvAsdbdQD+Y=;
-        b=aIplLDl/r9C5fiGL+Otgh/gaZCEeN/t1wy3Y0lR4UDZ6DVJRS2xhid0ubSgeo6FSuh
-         ZMiFElJZaWUMLZzc6Y1+uvyHqh6L78Ci4JVSV7IsvRNZ9O7HC4Ojfb1r2S7P5RScYQXg
-         Xt00JX4UrIC/gnGRMpwzAeqWXW5BRGQuKAdaKvHB/RNY4BOfu/8aSyNl4UM4izPXNySL
-         Z9mxHaTfax1ZM0jc3Ph9BfQKNOPEBi5tYp7+CgMPSPsgMaBPGLgM4MBZTjk0UB4fBZgq
-         5FCP+ZAWLn24eidz9qS3tT2icMaVRlGJHG4JAKbNWrMUdTWVKmOhDdW3He4xMnRKvAxz
-         aK6A==
-X-Forwarded-Encrypted: i=1; AJvYcCWbRiycjPYLhMzBBjD3aH/jU2NVmaTZuR3XIKqdf0joggVp6Cgud0Q4aKYguMDLGQzRqrmq4S842/DWnZw=@vger.kernel.org, AJvYcCXvYzMRLI8W66hnTp66wlkIKfNrUxrNak2VibnA24Lcs8Unmg94+hcDDmk2+g/KlfVV+hxaCTYYyQ80afKwt/U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4UOpbc0MAaJVJErwIh/e/O70bs2qzb8XtrusXneBeEXwYVNLs
-	JMFpY6e6rj+R+FBSRg3j7Oiz+MXqeBmumpSx69FvuB9dCZtftflk
-X-Gm-Gg: ASbGncvqUULwQlopXt84q95qX745TlSVDQbkx74POP1X99MmvVjh2M6Ha60iEEr1wWn
-	Na3y7fK302NvcjLRBNb5K+1AYGgtMBoXMPKCWmH/Z3Ya1UNUNjaKQUtX0D9jUI1TQ19U70t7Oxu
-	6EpwmkumyHzt7+6ooByp/7/dNAgIi4KZxsfVnlcdaCKZFCDlqCh/frq2xlmS59DAGRwonpUm4Nf
-	BmV8zZaOKLrYXfzm5S/pZ1/R/5hPRvdcUx/Pp+HHtY22ysgA4Wu7RoyRYWTw37iN5bgjvcWUk5A
-	9h8tiumNR0WMwFMMsumq9Ibw8H8=
-X-Google-Smtp-Source: AGHT+IHYT7AOgxnWx/J7njq421pvdT5RVtm7+2GQ8l+rCNO36MOZPhHyAqro6NWj/eR2bXFBKcZViQ==
-X-Received: by 2002:a17:902:f78b:b0:216:7cef:99b3 with SMTP id d9443c01a7336-2178af03c54mr7681475ad.52.1733937128927;
-        Wed, 11 Dec 2024 09:12:08 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21779e0f7besm15574125ad.115.2024.12.11.09.12.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Dec 2024 09:12:08 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <213073e5-c929-4207-a9a5-13194012cf70@roeck-us.net>
-Date: Wed, 11 Dec 2024 09:12:06 -0800
+	s=arc-20240116; t=1733943030; c=relaxed/simple;
+	bh=si+HkGWTUu5iJBmrPqw+Eij7fvLdWJDbVQ5PJ6PzaAs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XJd03pwnQtkpF6W8ayh7CfcSMxtJDZb3Jt4fsS07zlYJXFNfJvqd3JPMXdwB9wCL+wdjIFfhbVBb2wjiD3ClrwigkUPWR2mV/2Z1gg/Z7kqj5hhqZnVXVTVR0dxGKedDjyby9WLlMN2Flj5SvrTGIEYQxESoCbGahGQqUx3FTN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TucUnsGm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE30CC4CED2;
+	Wed, 11 Dec 2024 18:50:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733943030;
+	bh=si+HkGWTUu5iJBmrPqw+Eij7fvLdWJDbVQ5PJ6PzaAs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=TucUnsGmc8ieuXiLGh5rNWVeDExDH8En559wEDDsP0+7zBie8xxhljzAOG5q72wdk
+	 2yXLPhHfcxlBpPMmCtV2jV3zDLaFPCMEQEc1K2mOCpn06VrZr1G/0TtCYWTOY35s0Y
+	 VYgZlkSlcRekO1aWosMwxMAEi2FstoM5ljjk50cYv+2pclDIZUNhtOorth5xy1WOSy
+	 4nhCnJw1dCCoTeojslbOYSVqW+QYWruIlboKKU4+EZ2x+W3p3f3Qihov5xcYbabuWu
+	 +WLS63rX9OiyrzA+WfDVP/BFfVgBphDNLUx8g76EI16NXP0ISsV3v9zkwSSYmPH0vi
+	 B94UVg9qExVWw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-watchdog@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.12 01/36] watchdog: it87_wdt: add PWRGD enable quirk for Qotom QCML04
+Date: Wed, 11 Dec 2024 13:49:17 -0500
+Message-ID: <20241211185028.3841047-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: stm32_iwdg: fix DT backward compatibility
-To: =?UTF-8?Q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Marek Vasut <marex@denx.de>, linux-watchdog@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20241211163457.301140-1-clement.legoffic@foss.st.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241211163457.301140-1-clement.legoffic@foss.st.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.12.4
 Content-Transfer-Encoding: 8bit
 
-On 12/11/24 08:34, Clément Le Goffic wrote:
-> The commit 3ab1663af6c1 ("watchdog: stm32_iwdg: Add pretimeout support")
-> introduces the support for the pre-timeout interrupt.
-> 
-> The support for this interrupt is optional but the driver mandates the
-> interrupts property in the device-tree, breaking the compatibility with
-> existing device-trees.
-> 
-> Use the platform_get_irq_optional() API to comply with existing
-> device-trees.
-> 
-> Fixes: 3ab1663af6c1 ("watchdog: stm32_iwdg: Add pretimeout support")
-> Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+From: James Hilliard <james.hilliard1@gmail.com>
 
+[ Upstream commit 43439076383a7611300334d1357c0f8883f40816 ]
+
+For the watchdog timer to work properly on the QCML04 board we need to
+set PWRGD enable in the Environment Controller Configuration Registers
+Special Configuration Register 1 when it is not already set, this may
+be the case when the watchdog is not enabled from within the BIOS.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20241025063441.3494837-1-james.hilliard1@gmail.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/watchdog/it87_wdt.c | 39 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-> ---
-> 
-> Please consider merging this patch in the v6.13 cycle to avoid breaking
-> the compatibility of the existing device-tree.
-> 
-> drivers/watchdog/stm32_iwdg.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
-> index d700e0d49bb95..8ad06b54c5adc 100644
-> --- a/drivers/watchdog/stm32_iwdg.c
-> +++ b/drivers/watchdog/stm32_iwdg.c
-> @@ -286,7 +286,7 @@ static int stm32_iwdg_irq_init(struct platform_device *pdev,
->   	if (!wdt->data->has_early_wakeup)
->   		return 0;
-> 
-> -	irq = platform_get_irq(pdev, 0);
-> +	irq = platform_get_irq_optional(pdev, 0);
->   	if (irq <= 0)
->   		return 0;
-> 
-> 
-> base-commit: fac04efc5c793dccbd07e2d59af9f90b7fc0dca4
-> --
-> 2.34.1
-> 
+diff --git a/drivers/watchdog/it87_wdt.c b/drivers/watchdog/it87_wdt.c
+index 3e8c15138edda..1a5a0a2c3f2e3 100644
+--- a/drivers/watchdog/it87_wdt.c
++++ b/drivers/watchdog/it87_wdt.c
+@@ -20,6 +20,8 @@
+ 
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
++#include <linux/bits.h>
++#include <linux/dmi.h>
+ #include <linux/init.h>
+ #include <linux/io.h>
+ #include <linux/kernel.h>
+@@ -40,6 +42,7 @@
+ #define VAL		0x2f
+ 
+ /* Logical device Numbers LDN */
++#define EC		0x04
+ #define GPIO		0x07
+ 
+ /* Configuration Registers and Functions */
+@@ -73,6 +76,12 @@
+ #define IT8784_ID	0x8784
+ #define IT8786_ID	0x8786
+ 
++/* Environment Controller Configuration Registers LDN=0x04 */
++#define SCR1		0xfa
++
++/* Environment Controller Bits SCR1 */
++#define WDT_PWRGD	0x20
++
+ /* GPIO Configuration Registers LDN=0x07 */
+ #define WDTCTRL		0x71
+ #define WDTCFG		0x72
+@@ -240,6 +249,21 @@ static int wdt_set_timeout(struct watchdog_device *wdd, unsigned int t)
+ 	return ret;
+ }
+ 
++enum {
++	IT87_WDT_OUTPUT_THROUGH_PWRGD	= BIT(0),
++};
++
++static const struct dmi_system_id it87_quirks[] = {
++	{
++		/* Qotom Q30900P (IT8786) */
++		.matches = {
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "QCML04"),
++		},
++		.driver_data = (void *)IT87_WDT_OUTPUT_THROUGH_PWRGD,
++	},
++	{}
++};
++
+ static const struct watchdog_info ident = {
+ 	.options = WDIOF_SETTIMEOUT | WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING,
+ 	.firmware_version = 1,
+@@ -261,8 +285,10 @@ static struct watchdog_device wdt_dev = {
+ 
+ static int __init it87_wdt_init(void)
+ {
++	const struct dmi_system_id *dmi_id;
+ 	u8  chip_rev;
+ 	u8 ctrl;
++	int quirks = 0;
+ 	int rc;
+ 
+ 	rc = superio_enter();
+@@ -273,6 +299,10 @@ static int __init it87_wdt_init(void)
+ 	chip_rev  = superio_inb(CHIPREV) & 0x0f;
+ 	superio_exit();
+ 
++	dmi_id = dmi_first_match(it87_quirks);
++	if (dmi_id)
++		quirks = (long)dmi_id->driver_data;
++
+ 	switch (chip_type) {
+ 	case IT8702_ID:
+ 		max_units = 255;
+@@ -333,6 +363,15 @@ static int __init it87_wdt_init(void)
+ 		superio_outb(0x00, WDTCTRL);
+ 	}
+ 
++	if (quirks & IT87_WDT_OUTPUT_THROUGH_PWRGD) {
++		superio_select(EC);
++		ctrl = superio_inb(SCR1);
++		if (!(ctrl & WDT_PWRGD)) {
++			ctrl |= WDT_PWRGD;
++			superio_outb(ctrl, SCR1);
++		}
++	}
++
+ 	superio_exit();
+ 
+ 	if (timeout < 1 || timeout > max_units * 60) {
+-- 
+2.43.0
 
 
