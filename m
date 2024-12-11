@@ -1,65 +1,57 @@
-Return-Path: <linux-watchdog+bounces-2544-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2545-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 453559ED4F0
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2024 19:51:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1820D9ED550
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2024 19:58:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB7072849AF
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2024 18:51:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCBC8280DA8
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2024 18:58:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D8CD2288EE;
-	Wed, 11 Dec 2024 18:50:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA0592479A5;
+	Wed, 11 Dec 2024 18:52:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hnYxS5ta"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EnLoHd6+"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E49B211A14;
-	Wed, 11 Dec 2024 18:50:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D68924799B;
+	Wed, 11 Dec 2024 18:52:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733943038; cv=none; b=JzuFPjd//fwnZI96evw0bXezuj7jy0C2+11DcOrAldEXBtuVsHXQ/t6DEzXBZWiG2OU+oM5DMmf8BKltJfM4DRHRO5iQuhZO0KmZ5b2WFq4fXQgcp5tfO3+vIRO8vByH4UbpmapFenWPL+5VMwHgm/Jqb35efe3yXNAnAxKw+vk=
+	t=1733943137; cv=none; b=VV2FNEOdReCD9y9ip6TrB8z5ay7oIAl66TxFe1lDPrST5cE+ugGhC+73R5pYX3TUmJXHohMG1EwfwoY+edvmM0SAnG6X/v+jOL2sApF9nHGaw+vqnlhYvnYgT8e5+eU797O951N66+PbP4QIA+DEtp/uUbMNmNaA4p223+c0+Gc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733943038; c=relaxed/simple;
-	bh=qrrMUOSZEfY/cTaNeMEEDWyFjmfOCB6G3PQly+6iqjA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OIXjOlvs74IjDfUYL2eJyu+RvVlYJNk+VFlasYzAI12AM9XXdFfg4L/M50SiRmpqOFp3IPeb+dDxTiX5UGeKtpL8YvPVuYrqRlJrSeot5JNwkaU2yzOUGuOIBzBPsmv22FVHGNZRI+66iWTeWYAescE0wiUw9AdakgCwjT/OnnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hnYxS5ta; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9787AC4CED2;
-	Wed, 11 Dec 2024 18:50:36 +0000 (UTC)
+	s=arc-20240116; t=1733943137; c=relaxed/simple;
+	bh=cMHujGTwR/Y+8zeiO+d9MOKlVyHMMOTiGn/MHw7K/Kg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GHlACVCJl6cpPd0q3AJ9pQZDc/uVxQZChW4UxFNS4uzLND6BxCvHaNu7y6xsPPSD1S4RM2m7R8L0cLG657EZp9ZWEXjYh8a2fOrRvrTWdN0WkA/SEHVAh1fXRoB3o/UBQ7iOLopYvWf/DwhDjKugPTRI02q2aayongRBmRbDs6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EnLoHd6+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E62C4CED2;
+	Wed, 11 Dec 2024 18:52:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733943038;
-	bh=qrrMUOSZEfY/cTaNeMEEDWyFjmfOCB6G3PQly+6iqjA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hnYxS5tahjnBIDKL6W1G4XMFjoiORdj5TFan4lrQOfPLoYA45Y7lt/JaC6y7PimxK
-	 0tSdwfjIU7RZ00amc17CkJ5qnhyLkVUXkBVX6gRjnoQH39yfUKCjo36Fpjai4aq7Tx
-	 FWDSSWdLPzbDIY+4ZYUD3jy1efqbA5HRICM3M8cxSJfxn+mcN8mave5JHEv4EPLXr8
-	 yBJdJUAeX4Lndx81C+BlMOlFvYxOiRcEWn1yVx5Fp9Yv615kwGrguFOCTWx3gPAYkG
-	 0JmwykS1aH5dE8On76PHWRF5nUynqkuxTxVoTCdTIw/zFGBta7nU1VzRCAZMah5hSh
-	 8hwM0cqlZcSSg==
+	s=k20201202; t=1733943137;
+	bh=cMHujGTwR/Y+8zeiO+d9MOKlVyHMMOTiGn/MHw7K/Kg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=EnLoHd6+vg6kNCXo7K4QwZpTHlX0NLpsUT4/dJ5plVQ1ig7TKr+XXXfmeZOY3R1wH
+	 NHjPmyvlD81XFtSJaAb8aTNJZl9ojD1MEe5jsjpAsJPcVc9/mXQ/BOseyrSvMt8Eri
+	 q4naOUDfo1Su4rPbbsNJEYnnRbdXXK00GNU27C1CS40T3SL5Pd7WsKgpfWD8PCPD21
+	 l/oDttxfYS6CyXLcl0w4C+OwxTvBBKE1VkEGLEoAKP4PfRB+FNksj98lbudVtLVyj0
+	 Wh59YGYJ977BmptbMF25ZcOfCPYnCtgtXmRRcNyvJqLeAQ/JPffgUzUV2/BLSn79Cg
+	 Le1it/891+ItA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Byoungtae Cho <bt.cho@samsung.com>,
-	Taewan Kim <trunixs.kim@samsung.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+Cc: James Hilliard <james.hilliard1@gmail.com>,
 	Guenter Roeck <linux@roeck-us.net>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Sasha Levin <sashal@kernel.org>,
-	krzk@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
 	linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 05/36] watchdog: s3c2410_wdt: add support for exynosautov920 SoC
-Date: Wed, 11 Dec 2024 13:49:21 -0500
-Message-ID: <20241211185028.3841047-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 01/23] watchdog: it87_wdt: add PWRGD enable quirk for Qotom QCML04
+Date: Wed, 11 Dec 2024 13:51:38 -0500
+Message-ID: <20241211185214.3841978-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241211185028.3841047-1-sashal@kernel.org>
-References: <20241211185028.3841047-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -68,106 +60,122 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.4
+X-stable-base: Linux 6.6.65
 Content-Transfer-Encoding: 8bit
 
-From: Byoungtae Cho <bt.cho@samsung.com>
+From: James Hilliard <james.hilliard1@gmail.com>
 
-[ Upstream commit a5cb13980e00e9c4fbc382d68eda250ab6a14d7c ]
+[ Upstream commit 43439076383a7611300334d1357c0f8883f40816 ]
 
-Adds the compatibles and drvdata for the ExynosAuto V920 SoC. This SoC
-is almost similar to ExynosAutoV9, but some CPU configurations are quite
-different, so it should be added. Plus it also support DBGACK like as
-GS101 SoC.
+For the watchdog timer to work properly on the QCML04 board we need to
+set PWRGD enable in the Environment Controller Configuration Registers
+Special Configuration Register 1 when it is not already set, this may
+be the case when the watchdog is not enabled from within the BIOS.
 
-Signed-off-by: Byoungtae Cho <bt.cho@samsung.com>
-Signed-off-by: Taewan Kim <trunixs.kim@samsung.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20241021063903.793166-3-trunixs.kim@samsung.com
+Link: https://lore.kernel.org/r/20241025063441.3494837-1-james.hilliard1@gmail.com
 Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/watchdog/s3c2410_wdt.c | 37 +++++++++++++++++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
+ drivers/watchdog/it87_wdt.c | 39 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
-index 349d30462c8c0..30450e99e5e9d 100644
---- a/drivers/watchdog/s3c2410_wdt.c
-+++ b/drivers/watchdog/s3c2410_wdt.c
-@@ -63,6 +63,10 @@
- #define EXYNOS850_CLUSTER1_NONCPU_INT_EN	0x1644
- #define EXYNOSAUTOV9_CLUSTER1_NONCPU_OUT	0x1520
- #define EXYNOSAUTOV9_CLUSTER1_NONCPU_INT_EN	0x1544
-+#define EXYNOSAUTOV920_CLUSTER0_NONCPU_OUT	0x1420
-+#define EXYNOSAUTOV920_CLUSTER0_NONCPU_INT_EN	0x1444
-+#define EXYNOSAUTOV920_CLUSTER1_NONCPU_OUT	0x1720
-+#define EXYNOSAUTOV920_CLUSTER1_NONCPU_INT_EN	0x1744
+diff --git a/drivers/watchdog/it87_wdt.c b/drivers/watchdog/it87_wdt.c
+index 843f9f8e39177..239947df613db 100644
+--- a/drivers/watchdog/it87_wdt.c
++++ b/drivers/watchdog/it87_wdt.c
+@@ -20,6 +20,8 @@
  
- #define EXYNOS850_CLUSTER0_WDTRESET_BIT		24
- #define EXYNOS850_CLUSTER1_WDTRESET_BIT		23
-@@ -303,6 +307,32 @@ static const struct s3c2410_wdt_variant drv_data_gs101_cl1 = {
- 		  QUIRK_HAS_DBGACK_BIT,
- };
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
-+static const struct s3c2410_wdt_variant drv_data_exynosautov920_cl0 = {
-+	.mask_reset_reg = EXYNOSAUTOV920_CLUSTER0_NONCPU_INT_EN,
-+	.mask_bit = 2,
-+	.mask_reset_inv = true,
-+	.rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
-+	.rst_stat_bit = EXYNOSAUTOV9_CLUSTER0_WDTRESET_BIT,
-+	.cnt_en_reg = EXYNOSAUTOV920_CLUSTER0_NONCPU_OUT,
-+	.cnt_en_bit = 7,
-+	.quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET |
-+		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN |
-+		  QUIRK_HAS_DBGACK_BIT,
++#include <linux/bits.h>
++#include <linux/dmi.h>
+ #include <linux/init.h>
+ #include <linux/io.h>
+ #include <linux/kernel.h>
+@@ -40,6 +42,7 @@
+ #define VAL		0x2f
+ 
+ /* Logical device Numbers LDN */
++#define EC		0x04
+ #define GPIO		0x07
+ 
+ /* Configuration Registers and Functions */
+@@ -71,6 +74,12 @@
+ #define IT8784_ID	0x8784
+ #define IT8786_ID	0x8786
+ 
++/* Environment Controller Configuration Registers LDN=0x04 */
++#define SCR1		0xfa
++
++/* Environment Controller Bits SCR1 */
++#define WDT_PWRGD	0x20
++
+ /* GPIO Configuration Registers LDN=0x07 */
+ #define WDTCTRL		0x71
+ #define WDTCFG		0x72
+@@ -233,6 +242,21 @@ static int wdt_set_timeout(struct watchdog_device *wdd, unsigned int t)
+ 	return ret;
+ }
+ 
++enum {
++	IT87_WDT_OUTPUT_THROUGH_PWRGD	= BIT(0),
 +};
 +
-+static const struct s3c2410_wdt_variant drv_data_exynosautov920_cl1 = {
-+	.mask_reset_reg = EXYNOSAUTOV920_CLUSTER1_NONCPU_INT_EN,
-+	.mask_bit = 2,
-+	.mask_reset_inv = true,
-+	.rst_stat_reg = EXYNOS5_RST_STAT_REG_OFFSET,
-+	.rst_stat_bit = EXYNOSAUTOV9_CLUSTER1_WDTRESET_BIT,
-+	.cnt_en_reg = EXYNOSAUTOV920_CLUSTER1_NONCPU_OUT,
-+	.cnt_en_bit = 7,
-+	.quirks = QUIRK_HAS_WTCLRINT_REG | QUIRK_HAS_PMU_MASK_RESET |
-+		  QUIRK_HAS_PMU_RST_STAT | QUIRK_HAS_PMU_CNT_EN |
-+		  QUIRK_HAS_DBGACK_BIT,
++static const struct dmi_system_id it87_quirks[] = {
++	{
++		/* Qotom Q30900P (IT8786) */
++		.matches = {
++			DMI_EXACT_MATCH(DMI_BOARD_NAME, "QCML04"),
++		},
++		.driver_data = (void *)IT87_WDT_OUTPUT_THROUGH_PWRGD,
++	},
++	{}
 +};
 +
- static const struct of_device_id s3c2410_wdt_match[] = {
- 	{ .compatible = "google,gs101-wdt",
- 	  .data = &drv_data_gs101_cl0 },
-@@ -320,6 +350,8 @@ static const struct of_device_id s3c2410_wdt_match[] = {
- 	  .data = &drv_data_exynos850_cl0 },
- 	{ .compatible = "samsung,exynosautov9-wdt",
- 	  .data = &drv_data_exynosautov9_cl0 },
-+	{ .compatible = "samsung,exynosautov920-wdt",
-+	  .data = &drv_data_exynosautov920_cl0 },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, s3c2410_wdt_match);
-@@ -643,7 +675,8 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev, struct s3c2410_wdt *wdt)
- 	/* Choose Exynos850/ExynosAutov9 driver data w.r.t. cluster index */
- 	if (variant == &drv_data_exynos850_cl0 ||
- 	    variant == &drv_data_exynosautov9_cl0 ||
--	    variant == &drv_data_gs101_cl0) {
-+	    variant == &drv_data_gs101_cl0 ||
-+	    variant == &drv_data_exynosautov920_cl0) {
- 		u32 index;
- 		int err;
+ static const struct watchdog_info ident = {
+ 	.options = WDIOF_SETTIMEOUT | WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING,
+ 	.firmware_version = 1,
+@@ -254,8 +278,10 @@ static struct watchdog_device wdt_dev = {
  
-@@ -662,6 +695,8 @@ s3c2410_get_wdt_drv_data(struct platform_device *pdev, struct s3c2410_wdt *wdt)
- 				variant = &drv_data_exynosautov9_cl1;
- 			else if (variant == &drv_data_gs101_cl0)
- 				variant = &drv_data_gs101_cl1;
-+			else if (variant == &drv_data_exynosautov920_cl0)
-+				variant = &drv_data_exynosautov920_cl1;
- 			break;
- 		default:
- 			return dev_err_probe(dev, -EINVAL, "wrong cluster index: %u\n", index);
+ static int __init it87_wdt_init(void)
+ {
++	const struct dmi_system_id *dmi_id;
+ 	u8  chip_rev;
+ 	u8 ctrl;
++	int quirks = 0;
+ 	int rc;
+ 
+ 	rc = superio_enter();
+@@ -266,6 +292,10 @@ static int __init it87_wdt_init(void)
+ 	chip_rev  = superio_inb(CHIPREV) & 0x0f;
+ 	superio_exit();
+ 
++	dmi_id = dmi_first_match(it87_quirks);
++	if (dmi_id)
++		quirks = (long)dmi_id->driver_data;
++
+ 	switch (chip_type) {
+ 	case IT8702_ID:
+ 		max_units = 255;
+@@ -326,6 +356,15 @@ static int __init it87_wdt_init(void)
+ 		superio_outb(0x00, WDTCTRL);
+ 	}
+ 
++	if (quirks & IT87_WDT_OUTPUT_THROUGH_PWRGD) {
++		superio_select(EC);
++		ctrl = superio_inb(SCR1);
++		if (!(ctrl & WDT_PWRGD)) {
++			ctrl |= WDT_PWRGD;
++			superio_outb(ctrl, SCR1);
++		}
++	}
++
+ 	superio_exit();
+ 
+ 	if (timeout < 1 || timeout > max_units * 60) {
 -- 
 2.43.0
 
