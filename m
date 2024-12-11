@@ -1,45 +1,45 @@
-Return-Path: <linux-watchdog+bounces-2548-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2549-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4927D9ED5C6
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2024 20:07:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2A699ED5E9
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2024 20:10:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D814D164F4E
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2024 19:06:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A978166A93
+	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2024 19:09:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD626253D0D;
-	Wed, 11 Dec 2024 18:53:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 827D125615F;
+	Wed, 11 Dec 2024 18:54:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZZufNAOI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JWDhM7e7"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FBEA253D02;
-	Wed, 11 Dec 2024 18:53:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593FB25615D;
+	Wed, 11 Dec 2024 18:54:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733943237; cv=none; b=QbzEycrZUfD4u3f1heJJ2YEMixuMRGeMJBlNMwcgescQbpHpS4C0YTUNIo2weU4n5tFe+cwnB0xL2tuZVuZEpQACqQ1ZBJ/ZL6KN+7ijNJunvykMpHFL3w4t2j2DDes3ercm6wuLIbSLEJ8QTI6Jvc1euJ99JtGkuHmgf1IVpas=
+	t=1733943262; cv=none; b=IA2h0JaTkFQZ118t0hujAFYBithJcBA8oh9luzJXyLWkEqRA4qqS7ocR3FvUCVWyAY9qfTgRBLirN5FzV1WkOa6XFOhd5MjFdAN88c7m7bfs+eaLD5NYYkF8u9lIOfhD3zQX6lyy4YrPA75FvF1a0LGk3fJre2rn9RybBJ58Jv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733943237; c=relaxed/simple;
-	bh=cMHujGTwR/Y+8zeiO+d9MOKlVyHMMOTiGn/MHw7K/Kg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KoAGqu2ztN6rknOTtc4DJZAl1cbQ6TGVboJNrGrqLQ869HTaHQ73uRkOwBniAAzGzkxJaWpcl1phjE0jtOtrbvj1DfJ+khW/bjpyA24Hq+FnrZ1GtkqXLgEk5jNnvrWIpr5QFWangelwWYpr3ieDVib8f1NW/YQqud23CRqW7Xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZZufNAOI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85452C4CED2;
-	Wed, 11 Dec 2024 18:53:56 +0000 (UTC)
+	s=arc-20240116; t=1733943262; c=relaxed/simple;
+	bh=9E/Isbo+FXM6DvwET1ygPqHe/OysEciXdK9fB1gfCps=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qSKodPvqhzxhoJULlRxJjKdBPaWvOHk55a8+9t5qjju5Fc7HKUUXo3eVQOsdVaet877IQxTLw1VlmYzjfPM5DLpNJQ0gA5CLMS7IRTKJrSgdeICt2w6K5EgGn61ZiV5ZpWxvyuNQwPCD5cBmS82Og0eWCzQ+NB9ffmXTefWPVYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JWDhM7e7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F07DFC4CED2;
+	Wed, 11 Dec 2024 18:54:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733943237;
-	bh=cMHujGTwR/Y+8zeiO+d9MOKlVyHMMOTiGn/MHw7K/Kg=;
+	s=k20201202; t=1733943261;
+	bh=9E/Isbo+FXM6DvwET1ygPqHe/OysEciXdK9fB1gfCps=;
 	h=From:To:Cc:Subject:Date:From;
-	b=ZZufNAOI0Zc+hbZ27Hr7VtnT8eejc1nzh6B/jR64d6QMi1ui/rot05ls1FKCMB3ve
-	 mMrsSx4iSlVYuMAT5IeHLR1OZZK/ela4o8/khj0ciVpBiZhVqyT3N1BPOsh/BpOrNl
-	 MFWWeT4sKmw6jBu8A9iifkGzDZuTT4YLjxibGaHmxrjjruAD4feTTwYhi3LEZkkKzT
-	 +L6EAEjRkeXwukGubwCLaV/MW/4pWpZbuOycNPB/9CKpftBv4BxMTyvVr5ulN6YGBA
-	 kN5eMx/4BB+2KZl8UFKLN87EFmNIOjy7u0WwkL7HmSUks5/9QGKmgiV3NaehgIrUui
-	 5+f6Np2bwG+yA==
+	b=JWDhM7e7oD0nMo3hFWPr8+aoc+17woX2ZUQxr9VjsYk1+3bWsyY5cYple5xfBaXnD
+	 BtuQv/sw8ZxAKjj/Np0tiB4Gc5hcQ44+hGHEK1YsYHb7IKsioc7BwOfP3+q0PhvoaY
+	 kbPOeJ0pGC1utxgPPpTNficC3iAiicGwy3xxpsh9voAfqjbcUJo8LyqJJ/tUbRGKdw
+	 C/8/q3wtU//xBJfl8Q7yM38kPwYAPGH9mXrNK6jeFX1qsA0fnyPxWG+XgCmocsDt72
+	 T7Bm8ySMhisUH9uucv0cBjlD7k2Z64lDTARQuRBNEDLeUyt44eSiEoRyHyLSRCYU5e
+	 rJcPV4+seF63g==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -48,9 +48,9 @@ Cc: James Hilliard <james.hilliard1@gmail.com>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 01/10] watchdog: it87_wdt: add PWRGD enable quirk for Qotom QCML04
-Date: Wed, 11 Dec 2024 13:53:42 -0500
-Message-ID: <20241211185355.3842902-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 01/10] watchdog: it87_wdt: add PWRGD enable quirk for Qotom QCML04
+Date: Wed, 11 Dec 2024 13:54:07 -0500
+Message-ID: <20241211185419.3843138-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.173
+X-stable-base: Linux 5.10.230
 Content-Transfer-Encoding: 8bit
 
 From: James Hilliard <james.hilliard1@gmail.com>
@@ -83,7 +83,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 39 insertions(+)
 
 diff --git a/drivers/watchdog/it87_wdt.c b/drivers/watchdog/it87_wdt.c
-index 843f9f8e39177..239947df613db 100644
+index 6340ca058f890..da9e24e4a8b60 100644
 --- a/drivers/watchdog/it87_wdt.c
 +++ b/drivers/watchdog/it87_wdt.c
 @@ -20,6 +20,8 @@
@@ -116,7 +116,7 @@ index 843f9f8e39177..239947df613db 100644
  /* GPIO Configuration Registers LDN=0x07 */
  #define WDTCTRL		0x71
  #define WDTCFG		0x72
-@@ -233,6 +242,21 @@ static int wdt_set_timeout(struct watchdog_device *wdd, unsigned int t)
+@@ -241,6 +250,21 @@ static int wdt_set_timeout(struct watchdog_device *wdd, unsigned int t)
  	return ret;
  }
  
@@ -138,7 +138,7 @@ index 843f9f8e39177..239947df613db 100644
  static const struct watchdog_info ident = {
  	.options = WDIOF_SETTIMEOUT | WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING,
  	.firmware_version = 1,
-@@ -254,8 +278,10 @@ static struct watchdog_device wdt_dev = {
+@@ -262,8 +286,10 @@ static struct watchdog_device wdt_dev = {
  
  static int __init it87_wdt_init(void)
  {
@@ -149,7 +149,7 @@ index 843f9f8e39177..239947df613db 100644
  	int rc;
  
  	rc = superio_enter();
-@@ -266,6 +292,10 @@ static int __init it87_wdt_init(void)
+@@ -274,6 +300,10 @@ static int __init it87_wdt_init(void)
  	chip_rev  = superio_inb(CHIPREV) & 0x0f;
  	superio_exit();
  
@@ -160,7 +160,7 @@ index 843f9f8e39177..239947df613db 100644
  	switch (chip_type) {
  	case IT8702_ID:
  		max_units = 255;
-@@ -326,6 +356,15 @@ static int __init it87_wdt_init(void)
+@@ -334,6 +364,15 @@ static int __init it87_wdt_init(void)
  		superio_outb(0x00, WDTCTRL);
  	}
  
