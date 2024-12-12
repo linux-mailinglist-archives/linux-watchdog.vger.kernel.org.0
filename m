@@ -1,81 +1,81 @@
-Return-Path: <linux-watchdog+bounces-2560-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2561-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D7CA9EE81A
-	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Dec 2024 14:56:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92F249EE820
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Dec 2024 14:57:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BED9F163E63
-	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Dec 2024 13:56:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AC961887FFB
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Dec 2024 13:57:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B547320ADCD;
-	Thu, 12 Dec 2024 13:56:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08A632135B8;
+	Thu, 12 Dec 2024 13:57:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZH+s+RcN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nNkTVbrV"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF521748D;
-	Thu, 12 Dec 2024 13:56:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41005748D;
+	Thu, 12 Dec 2024 13:57:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734011779; cv=none; b=OrGkjcrlFQ7zmZxres6/q6ohvVC9wuh7ObhVEMUP9uAzHxelu5+2XZqYuW2Dy0yhqWYx1IzLmaS14nQkakDoXNPIFr3obs13Om+H+F+XeSTRYim31HTFCje/eeNfvG4tZVxIPBinQE8DzoqPhcOIHhx+uvDOox5knrgtneVfq3s=
+	t=1734011833; cv=none; b=jCriXQa3thBQskSD6CwrIlic6Wgap8f1iZadGbyi6UAYxZgV+df7bDquu04ngxxvt5xO+409Y0sGeEU6DN/ZwD37uHEqFviievvZOX68PFqzTR5Z1e67Rtf1n1jGO3IdQVEGj1d6NReNYQ04leU5X1cT3T+pN5cyXE2l+QNM3DM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734011779; c=relaxed/simple;
-	bh=4sdDL+SdPk2aGNtCFb1wT7FzhMXuVBy3l4AT/jIgv+g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=gGN1orCUsp0D6EbKCwUNFz0DGL4QWiKYfmyyMDyl7JmcqQOOnPhIyrP87UrTRkD0YQEYmeivp44UN/mfV3rrFjXlu9784PqM8nIG3q4Eq3hHWYlLU2LxKkM4e2v6FpsJOi3Abz6eHG6FEW2J8uokUrwq6vpYnLGSKSG2DFLfFls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZH+s+RcN; arc=none smtp.client-ip=209.85.214.173
+	s=arc-20240116; t=1734011833; c=relaxed/simple;
+	bh=m8t1n2mpPCYXVNNwxexnBNkY2zrrY1ttJsg7+eoSYqE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LSoTeTSw82oFRsqg8VTnGcPvpYSjV10+lyVCyrSTkUweULSB6uzzxax0NYhS4yoxpHfn1lDV68yyr0Kzj4pUMuToCYUXkKLmM/oHkykfF50crsJ71vuhhC7ksJSNhHcQAyUU+td6DydJjgqIv+e3gOELPytcwta21QeIxeAYAMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nNkTVbrV; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21634338cfdso6631435ad.2;
-        Thu, 12 Dec 2024 05:56:17 -0800 (PST)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2156e078563so4817855ad.2;
+        Thu, 12 Dec 2024 05:57:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734011777; x=1734616577; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734011831; x=1734616631; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=e4O93T3nWN1CvVNDoucw7J8PWjYgMeFXCoydStFkkYU=;
-        b=ZH+s+RcNzGTl/DvC+QUJFGDcZu4nSgpIKJeD3dqQ4a8pu9kcvZfBGzrsJcE8sXrzAN
-         PE1a35Wxm8p3hUsyPvj+LubXQ84F2YbVl7Tyi27vVOyaffu5oeio8ndfNw7LCk8F9vrS
-         6MqqGbW0DjUelz132fXt7kEe6OK6M1h1Ig9+GNZrrQLwC7JotVi3AwM6P+43Kl8tZOa/
-         WtX9uXp7/fsXwsgenRE0f/ybB1/nGIPpwT+d5tnXLEFSGiDDBsnTPxxNlBKzLzZjbNUE
-         WC9v+JlBLUSHXm12BjhKLcJfUkQ4ins91ctZn1Lg8OWfjv7zfOXVNWtqfFnVhCNo5HNh
-         Q1xQ==
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=NmTLqzScZk4mohfJDKEOFiS/c5yRNNGYoc5k/qifRE8=;
+        b=nNkTVbrVqGgu1f83EXYMf7VKELzjN+1cXjBJhwW7T5clI1AmWTXoURwwQoPNUNEY8l
+         sZ5Rj6rEoBT7ZyQWWmcz2ANTFwB2K5vYQtaFcI+P4zgl2eCUWz+5ZQFAO7Sqw75w0M44
+         BYPOlpauajB4pVs6vm/jRMsdSi1n7WHQzolHWQVIMwLiMhcsdWU+FfwX8TjsP8LvdrRl
+         mbsR1cQClry3cvznvz8pnpwI+vagnRBze3G9zsYtXVTaJUOrckMmO5qAGq8dLAGZ7In+
+         gcAUi0xTBFUTESrv/+z2o7JhOLfB3mVkkG06FPog+cTM+yczePMkdBTD0V+bJ5sa7J/9
+         d6TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734011777; x=1734616577;
+        d=1e100.net; s=20230601; t=1734011831; x=1734616631;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e4O93T3nWN1CvVNDoucw7J8PWjYgMeFXCoydStFkkYU=;
-        b=TmKpSH3RusJR3XEjwXxo4h6/Vqm6TFSjTiaVKTBHrnaBKnRKpvEc1alHHNqCk2DJ0v
-         kRfXUfTi2qq9te0GWPO7gRgnAu1NZWm7DsPlrybijvOM9iyGyhQ/x6TH6BtVLi7Vo92G
-         LuHqIBqlOGOoapPkaHH/5w1Of/gNGUds52rC3JFQbuakvnmmKzfKhTpHbqkY6wdOvlOQ
-         Mb8c1hnj0lUxxqOFbmQvcOlthzw4avB7wBVz8kibj0xoNOEBrV1hotIQURvbmBl/D7eD
-         vF225usLOlPKvfXg0ABB0NM8RD+qrv10ByeCLjjB+vQEXn7QDQF2M5EQYE1d9qRWY8KO
-         Bdsw==
-X-Forwarded-Encrypted: i=1; AJvYcCUtcYSx8tRLaz4QA06fxXR+y0DQ2X9M6Tuc5INm0SV0ZIm4iTRpzUjxYqaMetnyhba//eou7xLP2j2Q6EE=@vger.kernel.org, AJvYcCVekfU4cS9cu5b7TSdW4YV5a2qpCtAZdFXnunEnkxLXvBvglf2ZWcfAXcsD9vRJY1mrX/C+qsAEZPKXO9VWus0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKyFJ4Vl0R+TBhqWMtd8i6Wb88+E7wWgts5mOxL8eg2yKD4ESj
-	LQouzvqWdn8dB/KKWstB/PWaMPxUfCOok8PUyIB0hVFXjiJfENeePfY3Bw==
-X-Gm-Gg: ASbGnctLBdE3IQC28Q7Lfx4Hr/Qke/rCCKsZBTwRC4WfWHrPtG5z3H50aCohn1bhOaA
-	oFtV81iEJoAuokBvEFaBqBbGXfMv2q70td5GyTY+yQDMMA56hc+sADKI+9JevUuJueV6Dz9UInw
-	RA3OkoHjNBDB633pcBYsbbyXJKc48cxh6SOrsAv+GFIoAfYV3gaYRbPK1F6QD2khc+xj4NVa+ET
-	mDLG7SmQGWpMKTG46gYzxrdCCbeQzRMzLyKia6yyK5gZjgSLi5xEZ34BUIdqV2iy9SjTr2FsI5u
-	K/k230pjZeg5xKaHti3yuIntTIH6tw==
-X-Google-Smtp-Source: AGHT+IG9t76dpjEFCQdDLx6ycmXDuEQ02DE+EnhOu+AEhkJ/qd7d7+aSme/4j39HQkmI44uCAwy+5w==
-X-Received: by 2002:a17:902:db10:b0:216:7ee9:21ff with SMTP id d9443c01a7336-2177899ae0fmr107634975ad.49.1734011777022;
-        Thu, 12 Dec 2024 05:56:17 -0800 (PST)
+        bh=NmTLqzScZk4mohfJDKEOFiS/c5yRNNGYoc5k/qifRE8=;
+        b=XXN06nGSp0OMHx7nRXQyN3D4rpWKA1j1MSfCqL0n8xAJ0VePnAJRubNEL751L49fiQ
+         Z0R0l/TRxWp04k0A/FKc8yj7PdSK1ltm9yRhpH8OwZZO/RN4RhEZ4GmDZVbu8dzAcH2D
+         F+M7BsEEDziX6dhYQeJ0+hciTE36EMXplTsMdvxlpw97kjdumKOeWSZmjfuTQdb85a+F
+         u66ZQNTKVPU6qWogGdFBDsp5UrzBScNK5dKvlYq3N8XfLok4jjTyJLl0MUpxOlguoczV
+         4rOEzVyU/1UoF1eHbXzpL7qYf8iX7CX57+uAW8pOefiHBw357iMIGApWKHK1lXwp21J6
+         x7vQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW4cI3al9E8GOf8fDyjVQ5InG0BzJ9DHivV3Rd9+1WYZf3yZ2yvhO7tcceuLReH6Y1gdrZAWveC4OF2gTIJgK8=@vger.kernel.org, AJvYcCXKpzZUaiKt3XQGwP/iBSKt8h6P+p6LddGTNRIlZQ9ovilDcqzm5bwocBLTVTqYuKSnNUbrhKi88lR2zrA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdpqeB1d7hsoLq+Dpe/JROBEDyvABQ6jHr1N/DO31ceW/yCGhW
+	STTiW+sAXspXr9+TWOklxb3kUKk4ZUewuF37uId/f5Z93wIn7xGe
+X-Gm-Gg: ASbGncvG0w1UlCatvFaruDKafdU/Nrr3O8t81SW2IeAXZKpAPurJ+yqnRdkAAGQkxnr
+	ajas0OidYbPYiHFcwcYk/p0XRAEvkP5Wf80T4bU7oQlfW0Y+a785+HxGZUiJu+LVVX4P1wFsMKS
+	yEVFF2mZqppMo1HRbEVHyAXu3bTwS/boMpJokhw35XoY2IFz7ofa5wkA7VDXbp1H54LJpEiwA7t
+	qO72cERvPdzKiCj2bsxmdqpdu/+ylN9NLJGKOKTUSUl5p2uc1D8xY3DbjhXhWRHcPpkLYOFBEJs
+	pE9PtecFMbIR7Rxlspcrm63lURR22Q==
+X-Google-Smtp-Source: AGHT+IEo4mBbMhtkdB3hzbmQugEtnQdEpzVLfEDXMQUSzX33prBh8SEVLIh/6dA+93tI1uPs3+SUpA==
+X-Received: by 2002:a17:90b:3b49:b0:2ee:5bc9:75b5 with SMTP id 98e67ed59e1d1-2f13925b22dmr5825418a91.4.1734011831408;
+        Thu, 12 Dec 2024 05:57:11 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21669ca7be3sm53985785ad.234.2024.12.12.05.56.15
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f142de33basm1274609a91.23.2024.12.12.05.57.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Dec 2024 05:56:16 -0800 (PST)
+        Thu, 12 Dec 2024 05:57:10 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3fe75eab-e700-4ae2-984b-42342ec7d784@roeck-us.net>
-Date: Thu, 12 Dec 2024 05:56:14 -0800
+Message-ID: <194f1c3a-2333-4a33-b459-d50f02e1b98c@roeck-us.net>
+Date: Thu, 12 Dec 2024 05:57:09 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -83,12 +83,17 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] watchdog: aspeed: replace mdelay with msleep
-To: Phil Eichinger <phil@zankapfel.net>, wim@linux-watchdog.org,
- joel@jms.id.au, andrew@codeconstruct.com.au, linux-watchdog@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
- linux-kernel@vger.kernel.org
-References: <20241212113014.1075414-1-phil@zankapfel.net>
+Subject: Re: [PATCH v2] watchdog: stm32_iwdg: fix error message during driver
+ probe
+To: =?UTF-8?Q?Cl=C3=A9ment_Le_Goffic?= <clement.legoffic@foss.st.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Marek Vasut <marex@denx.de>, linux-watchdog@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20241211163457.301140-1-clement.legoffic@foss.st.com>
+ <20241212102050.374501-1-clement.legoffic@foss.st.com>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -134,39 +139,51 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20241212113014.1075414-1-phil@zankapfel.net>
+In-Reply-To: <20241212102050.374501-1-clement.legoffic@foss.st.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 12/12/24 03:30, Phil Eichinger wrote:
-> Since it is not called in an atomic context the mdelay function
-> can be replaced with msleep to avoid busy wait.
+On 12/12/24 02:20, Clément Le Goffic wrote:
+> The commit 3ab1663af6c1 ("watchdog: stm32_iwdg: Add pretimeout support")
+> introduces the support for the pre-timeout interrupt.
 > 
-> Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+> The support for this interrupt is optional but the driver uses the
+> platform_get_irq() wich produces an error message during the driver
+> probe if we don't have any `interrupts` property in the DT.
+> 
+> Use the platform_get_irq_optional() API to get rid of the error message
+> as this property is optional.
+> 
+> Fixes: 3ab1663af6c1 ("watchdog: stm32_iwdg: Add pretimeout support")
+> Signed-off-by: Clément Le Goffic <clement.legoffic@foss.st.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->   drivers/watchdog/aspeed_wdt.c | 2 +-
+> v1 -> v2: Change the commit message because it only prints an error
+> message and dont break the DT backward compatibility.
+> 
+> drivers/watchdog/stm32_iwdg.c | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/watchdog/aspeed_wdt.c b/drivers/watchdog/aspeed_wdt.c
-> index b4773a6aaf8c..98ef341408f7 100644
-> --- a/drivers/watchdog/aspeed_wdt.c
-> +++ b/drivers/watchdog/aspeed_wdt.c
-> @@ -208,7 +208,7 @@ static int aspeed_wdt_restart(struct watchdog_device *wdd,
->   	wdt->ctrl &= ~WDT_CTRL_BOOT_SECONDARY;
->   	aspeed_wdt_enable(wdt, 128 * WDT_RATE_1MHZ / 1000);
->   
-> -	mdelay(1000);
-> +	msleep(1000);
->   
->   	return 0;
->   }
-This is a _restart_ handler. The only purpose of the delay is to wait
-for the reset to trigger. It is not supposed to sleep.
-
-NACK.
-
-Guenter
-
-
+> diff --git a/drivers/watchdog/stm32_iwdg.c b/drivers/watchdog/stm32_iwdg.c
+> index d700e0d49bb95..8ad06b54c5adc 100644
+> --- a/drivers/watchdog/stm32_iwdg.c
+> +++ b/drivers/watchdog/stm32_iwdg.c
+> @@ -286,7 +286,7 @@ static int stm32_iwdg_irq_init(struct platform_device *pdev,
+>   	if (!wdt->data->has_early_wakeup)
+>   		return 0;
+> 
+> -	irq = platform_get_irq(pdev, 0);
+> +	irq = platform_get_irq_optional(pdev, 0);
+>   	if (irq <= 0)
+>   		return 0;
+> 
+> 
+> base-commit: fac04efc5c793dccbd07e2d59af9f90b7fc0dca4
+> --
+> 2.34.1
+> 
+> 
 
 
