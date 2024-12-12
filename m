@@ -1,182 +1,147 @@
-Return-Path: <linux-watchdog+bounces-2549-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2551-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2A699ED5E9
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2024 20:10:15 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A978166A93
-	for <lists+linux-watchdog@lfdr.de>; Wed, 11 Dec 2024 19:09:13 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 827D125615F;
-	Wed, 11 Dec 2024 18:54:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JWDhM7e7"
-X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C97219EDEE5
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Dec 2024 06:28:06 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593FB25615D;
-	Wed, 11 Dec 2024 18:54:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F901283B90
+	for <lists+linux-watchdog@lfdr.de>; Thu, 12 Dec 2024 05:28:05 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A262717BB24;
+	Thu, 12 Dec 2024 05:28:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mHDfh5SJ"
+X-Original-To: linux-watchdog@vger.kernel.org
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038D816DC28;
+	Thu, 12 Dec 2024 05:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733943262; cv=none; b=IA2h0JaTkFQZ118t0hujAFYBithJcBA8oh9luzJXyLWkEqRA4qqS7ocR3FvUCVWyAY9qfTgRBLirN5FzV1WkOa6XFOhd5MjFdAN88c7m7bfs+eaLD5NYYkF8u9lIOfhD3zQX6lyy4YrPA75FvF1a0LGk3fJre2rn9RybBJ58Jv0=
+	t=1733981280; cv=none; b=d5BupylUznLUZ20PEwr6M/yRDeKZv1Lkxr1WcZcakM0PlRkVb4EPyrBHMfTxukQS4zo41CtrFEggXBkHfYFltrYN42Te280ImB+Mb/ZwRTzDEOCxEe2c6pLXP/l84QTEO4Z2d7HK4+ekdUbydHoY/gz8cU3orFpLer0KvaanyxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733943262; c=relaxed/simple;
-	bh=9E/Isbo+FXM6DvwET1ygPqHe/OysEciXdK9fB1gfCps=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qSKodPvqhzxhoJULlRxJjKdBPaWvOHk55a8+9t5qjju5Fc7HKUUXo3eVQOsdVaet877IQxTLw1VlmYzjfPM5DLpNJQ0gA5CLMS7IRTKJrSgdeICt2w6K5EgGn61ZiV5ZpWxvyuNQwPCD5cBmS82Og0eWCzQ+NB9ffmXTefWPVYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JWDhM7e7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F07DFC4CED2;
-	Wed, 11 Dec 2024 18:54:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733943261;
-	bh=9E/Isbo+FXM6DvwET1ygPqHe/OysEciXdK9fB1gfCps=;
-	h=From:To:Cc:Subject:Date:From;
-	b=JWDhM7e7oD0nMo3hFWPr8+aoc+17woX2ZUQxr9VjsYk1+3bWsyY5cYple5xfBaXnD
-	 BtuQv/sw8ZxAKjj/Np0tiB4Gc5hcQ44+hGHEK1YsYHb7IKsioc7BwOfP3+q0PhvoaY
-	 kbPOeJ0pGC1utxgPPpTNficC3iAiicGwy3xxpsh9voAfqjbcUJo8LyqJJ/tUbRGKdw
-	 C/8/q3wtU//xBJfl8Q7yM38kPwYAPGH9mXrNK6jeFX1qsA0fnyPxWG+XgCmocsDt72
-	 T7Bm8ySMhisUH9uucv0cBjlD7k2Z64lDTARQuRBNEDLeUyt44eSiEoRyHyLSRCYU5e
-	 rJcPV4+seF63g==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: James Hilliard <james.hilliard1@gmail.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 01/10] watchdog: it87_wdt: add PWRGD enable quirk for Qotom QCML04
-Date: Wed, 11 Dec 2024 13:54:07 -0500
-Message-ID: <20241211185419.3843138-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1733981280; c=relaxed/simple;
+	bh=qp0i5w/u39t3jbXhVMeRQCOlDTJ4v3kQ6Qs1em2ybJ4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZBmB1prfHkn6FB1SEt6NYyxFZ63Gg+U0TJuZNJCEf149wMG+69DAYyActd2BuL9YOSDKt/3XIEWkjq3CurfDl21P0YyGDAxxdhz5iWHYNkjNDTJFsAKrpN0L4LKIg4zUSyPgKMc2Wg1h3u78M5GbfeCoa1Fn/tQAN/WbJSz2ZRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mHDfh5SJ; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6ef8028fe9fso1834257b3.2;
+        Wed, 11 Dec 2024 21:27:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733981278; x=1734586078; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i2jQavP4ta6B4Cbqnu1IGli2ZwXsJRL5QsCRRyBteD4=;
+        b=mHDfh5SJQP+HIePXtVlkvBf2FRCtretS6vVkF4QOvrzmUM9gXKatBDWKpq8xJNTrrc
+         fxbsr28Ln0iInO1oQDlJ09JPNw5vkaYjsOdVl1rhXh1krqa3Ombz+G12VHPt/FeV4qBS
+         opas9J3A+gVVCMCT1+9NJ9hvm4m93B7Efb2ed20mTYaELI38zQIES7eepmUdbiPGyhIA
+         An23NXM972ctVGXGIafTW0rZu8tvESOfRGF2pK0Z4xbaPgspKCTtAY0Mg0eatiFZ2uHu
+         vPNQ8+d8LE+r2nNsCsPD7sAU7tZd7kLuMVcSseiSuzcGcTb4lsy/qnTZhpfqLCjb7Vsa
+         xojw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733981278; x=1734586078;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i2jQavP4ta6B4Cbqnu1IGli2ZwXsJRL5QsCRRyBteD4=;
+        b=MhchKkJ6AFALxTi8dEdQh5LqzuA1dNxIW66wImlZei2Y9appkDIE63BXd8VP99irhM
+         8D4GFkKHWFQVf9hANJSwOQ5R0oK0Z5/hvSVqB9Gd2PixZQ3p6gBEHh4dIQphNeRdjY08
+         Eox1bk4Wqx8kSd005uU0xTAw9H98Uh3lAqr+KMteece/Nwqqp/W1WiihylWKoaiYGjSc
+         5UU7F80gOUxReSPmtx9qakTW2wLG/Bw6OU1mzOMUNkFiWKzWseK2a4zdfeWVKQWfeWUZ
+         Lu8NN+z1X8GyA0f4Zrvf//yxGfFSvtRYkMaBqsTxOubE6I7SQ5FsWDKZ0EFa485D8Rdn
+         E7DQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3RnsTOJijdK+9GGDlO0fJQB8SmvaxIXanpwg+kZcj6959XZa8UkO2aezo+DnmjaQWEQKN4p8ZrCp25k5n@vger.kernel.org, AJvYcCUJkIv0zvdY38ma9IJm810eTixMY2RfUX7ULm6MBnWB0PwTKitDrx81Nqq9S8WZQ9jgDd9v94HRMwo=@vger.kernel.org, AJvYcCUbhLHoPHK19WtURQ34faZrPMRbcwjA0UHbqpiKTxEYY5mXvfASARFdms14AhwY8Ny+V/7iPy4UAzuktWs1iLU=@vger.kernel.org, AJvYcCUfMWOlpQCYeeKZRAUuB1TgIGikSo5LE1BfZp98W1qrx6anwsKCGsFYC5cAi2K2SUlFHDy8vFtnANdkpz4=@vger.kernel.org, AJvYcCUzWJl07K2EpOlF+vVJGCcQEEolKF0KZZmEs8DjV/MNDUzvOH6Ed2l6S3sy1kFOYQJQrUGr+9giD2Ta@vger.kernel.org, AJvYcCX3Z5D/p1iCpfIQx/2elza+/Wi0y4+TmU+eUgzSrY7G36R0jM2dKln4k0eQRSHraU4G4yXp0/JhtGNGXw==@vger.kernel.org, AJvYcCXm+zHuWwEo3eX3JIZRZyCZXTs0y1qjixscBuXC4eqLgZTFkiwHkf4p1RPHRrovUCjzezEm7C8H8dQb@vger.kernel.org, AJvYcCXr5YixUF63Jf3WjDg2TUu8ELQkaIRhrWUdXfW8fvRozSGSBApRG0nL+oo9jwagNQsX3qx9i0Qh@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOQraaoPhxpySDDNf4lLt0a+MKupDzmoSRkI/lTTsJRmIqJAIL
+	nRgCMmfI50tdgFSjUqzXxRci0xuZdPbsKRac0qgNMsgmMNhyqx2fnnXKPiGnKWk3hYuiyRC5sEP
+	eERfs/FQFWh9UJC28J94n/aEmyBs=
+X-Gm-Gg: ASbGncvsgnEwA5EGm8LflYi2gufq8ko55BRGJDcF/j78TgZlV3BXtfLbjKd22HgWqVL
+	paNh5ONWMtJIi9WDqu0ZqpPGaaPuPElu0ncHEffYlCLgQ+lKDJFkcnGBFN0eSCy6LvztB2Ro=
+X-Google-Smtp-Source: AGHT+IFdrPaTPZ9GejJx+R+k192Po7wThLXGiNtYgpHneGtofpZWdqMlRAawKJACPdSwzsCirltSWXVY1xz5qEDY38E=
+X-Received: by 2002:a05:690c:7249:b0:6ef:6a91:4965 with SMTP id
+ 00721157ae682-6f19e861030mr21004747b3.37.1733981277626; Wed, 11 Dec 2024
+ 21:27:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.230
-Content-Transfer-Encoding: 8bit
+References: <20241210104524.2466586-1-tmyu0@nuvoton.com> <20241210104524.2466586-2-tmyu0@nuvoton.com>
+ <68d1490a-ba67-480b-943f-afa56e5b8436@kernel.org>
+In-Reply-To: <68d1490a-ba67-480b-943f-afa56e5b8436@kernel.org>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Thu, 12 Dec 2024 13:27:46 +0800
+Message-ID: <CAOoeyxVAbf45g-PGiDiUkZoBrSq6mRvAwHdoC6OCjEUYAUS=Lw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: James Hilliard <james.hilliard1@gmail.com>
+Dear Krzysztof,
 
-[ Upstream commit 43439076383a7611300334d1357c0f8883f40816 ]
+Thank you for your comments,
 
-For the watchdog timer to work properly on the QCML04 board we need to
-set PWRGD enable in the Environment Controller Configuration Registers
-Special Configuration Register 1 when it is not already set, this may
-be the case when the watchdog is not enabled from within the BIOS.
+Krzysztof Kozlowski <krzk@kernel.org> =E6=96=BC 2024=E5=B9=B412=E6=9C=8810=
+=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=8810:38=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> > +
+> > +     dev_set_drvdata(dev, nct6694);
+> > +     usb_set_intfdata(iface, nct6694);
+> > +
+> > +     ret =3D mfd_add_hotplug_devices(dev, nct6694_dev, ARRAY_SIZE(nct6=
+694_dev));
+> > +     if (ret)
+> > +             goto err_mfd;
+> > +
+> > +     dev_info(dev, "Probed device: (%04X:%04X)\n", id->idVendor, id->i=
+dProduct);
+>
+> Drop. Duplicating existing messages and interfaces. Your driver is
+> supposed to be silent on success.
+>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20241025063441.3494837-1-james.hilliard1@gmail.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/watchdog/it87_wdt.c | 39 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+Okay, I will drop it in v4.
 
-diff --git a/drivers/watchdog/it87_wdt.c b/drivers/watchdog/it87_wdt.c
-index 6340ca058f890..da9e24e4a8b60 100644
---- a/drivers/watchdog/it87_wdt.c
-+++ b/drivers/watchdog/it87_wdt.c
-@@ -20,6 +20,8 @@
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-+#include <linux/bits.h>
-+#include <linux/dmi.h>
- #include <linux/init.h>
- #include <linux/io.h>
- #include <linux/kernel.h>
-@@ -40,6 +42,7 @@
- #define VAL		0x2f
- 
- /* Logical device Numbers LDN */
-+#define EC		0x04
- #define GPIO		0x07
- 
- /* Configuration Registers and Functions */
-@@ -71,6 +74,12 @@
- #define IT8784_ID	0x8784
- #define IT8786_ID	0x8786
- 
-+/* Environment Controller Configuration Registers LDN=0x04 */
-+#define SCR1		0xfa
-+
-+/* Environment Controller Bits SCR1 */
-+#define WDT_PWRGD	0x20
-+
- /* GPIO Configuration Registers LDN=0x07 */
- #define WDTCTRL		0x71
- #define WDTCFG		0x72
-@@ -241,6 +250,21 @@ static int wdt_set_timeout(struct watchdog_device *wdd, unsigned int t)
- 	return ret;
- }
- 
-+enum {
-+	IT87_WDT_OUTPUT_THROUGH_PWRGD	= BIT(0),
-+};
-+
-+static const struct dmi_system_id it87_quirks[] = {
-+	{
-+		/* Qotom Q30900P (IT8786) */
-+		.matches = {
-+			DMI_EXACT_MATCH(DMI_BOARD_NAME, "QCML04"),
-+		},
-+		.driver_data = (void *)IT87_WDT_OUTPUT_THROUGH_PWRGD,
-+	},
-+	{}
-+};
-+
- static const struct watchdog_info ident = {
- 	.options = WDIOF_SETTIMEOUT | WDIOF_MAGICCLOSE | WDIOF_KEEPALIVEPING,
- 	.firmware_version = 1,
-@@ -262,8 +286,10 @@ static struct watchdog_device wdt_dev = {
- 
- static int __init it87_wdt_init(void)
- {
-+	const struct dmi_system_id *dmi_id;
- 	u8  chip_rev;
- 	u8 ctrl;
-+	int quirks = 0;
- 	int rc;
- 
- 	rc = superio_enter();
-@@ -274,6 +300,10 @@ static int __init it87_wdt_init(void)
- 	chip_rev  = superio_inb(CHIPREV) & 0x0f;
- 	superio_exit();
- 
-+	dmi_id = dmi_first_match(it87_quirks);
-+	if (dmi_id)
-+		quirks = (long)dmi_id->driver_data;
-+
- 	switch (chip_type) {
- 	case IT8702_ID:
- 		max_units = 255;
-@@ -334,6 +364,15 @@ static int __init it87_wdt_init(void)
- 		superio_outb(0x00, WDTCTRL);
- 	}
- 
-+	if (quirks & IT87_WDT_OUTPUT_THROUGH_PWRGD) {
-+		superio_select(EC);
-+		ctrl = superio_inb(SCR1);
-+		if (!(ctrl & WDT_PWRGD)) {
-+			ctrl |= WDT_PWRGD;
-+			superio_outb(ctrl, SCR1);
-+		}
-+	}
-+
- 	superio_exit();
- 
- 	if (timeout < 1 || timeout > max_units * 60) {
--- 
-2.43.0
+> > +     return 0;
+> > +
+> > +err_mfd:
+> > +     usb_kill_urb(nct6694->int_in_urb);
+> > +err_urb:
+> > +     usb_free_urb(nct6694->int_in_urb);
+> > +     return dev_err_probe(dev, ret, "Probe failed\n");
+>
+> No, this should go to individual call causing errors so this will be
+> informative. Above is not informative at all and kernel already reports
+> this, so drop.
+>
 
+Okay, I will drop it in v4.
+
+> > +}
+> > +
+> > +static void nct6694_usb_disconnect(struct usb_interface *iface)
+> > +{
+> > +     struct usb_device *udev =3D interface_to_usbdev(iface);
+> > +     struct nct6694 *nct6694 =3D usb_get_intfdata(iface);
+>
+
+Best regards,
+Ming
 
