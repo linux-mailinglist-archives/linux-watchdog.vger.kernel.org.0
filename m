@@ -1,107 +1,137 @@
-Return-Path: <linux-watchdog+bounces-2574-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2575-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8A5F9F20EC
-	for <lists+linux-watchdog@lfdr.de>; Sat, 14 Dec 2024 22:22:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A31D9F20FA
+	for <lists+linux-watchdog@lfdr.de>; Sat, 14 Dec 2024 22:36:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED48816509E
-	for <lists+linux-watchdog@lfdr.de>; Sat, 14 Dec 2024 21:22:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6614216686E
+	for <lists+linux-watchdog@lfdr.de>; Sat, 14 Dec 2024 21:36:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A9401A8F79;
-	Sat, 14 Dec 2024 21:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 462231AF0C6;
+	Sat, 14 Dec 2024 21:36:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HnXAm/cc"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA00313AA2A
-	for <linux-watchdog@vger.kernel.org>; Sat, 14 Dec 2024 21:22:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95FB51990A2;
+	Sat, 14 Dec 2024 21:36:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734211335; cv=none; b=CR7K8SLI9H5BL/4g+2BX68IPwnm1rrK4Qs5cXWEiMcnI+5e/dGFUkuJPJ1kJpQ2kQip0B6so9z9dd1/BxMeYKig+esjvtMpP0qr2WnOb7JGRrcTtMCTTwe53rYPhjnJetjX/8Eq7qRNNBN0tRgY61P+iqMvf+YVZ937WImtHiQY=
+	t=1734212200; cv=none; b=O6BBPBSSygMDmOTsQwihihlV1M4lkBqjKar2OYuO3WjlOidDDzOguSZ7Dt1ufRi2kfMeMniGF8mjHCFf0/skugDZCwXlCpz05mJoKJPWfcrk9PaATwjE5gIdEqCQ+eCYn+4ch8Hxs8aNFooGTQpAY9wRtAmrgnnA99oV7aYwNTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734211335; c=relaxed/simple;
-	bh=8GG0RjcNGNE2OK3lCVeZBPxKNfW8B/oXmAkc+WuOPYA=;
-	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=AQ4JTdgvDIAxZEfTjBKFktHTPT0Wh7p8OVHIjTZR/xUJWM8INjXr4PrSSXU8lUTrY+FeWEIVRiaY9cwS+/eFI2ui2vY5n/sRlbgIjmOX+7kbQKMQaDA/Uwt2G3MMvrQ4hu7CJ3r/tqY8gZsjWUEXwWr3FT3yLylcsu3oAp8Byt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-58-sktCOR70PYGp0bebtytxiw-1; Sat, 14 Dec 2024 21:22:09 +0000
-X-MC-Unique: sktCOR70PYGp0bebtytxiw-1
-X-Mimecast-MFC-AGG-ID: sktCOR70PYGp0bebtytxiw
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 14 Dec
- 2024 21:21:12 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Sat, 14 Dec 2024 21:21:12 +0000
-From: David Laight <David.Laight@ACULAB.COM>
-To: 'Guenter Roeck' <linux@roeck-us.net>, Phil Eichinger <phil@zankapfel.net>,
-	"wim@linux-watchdog.org" <wim@linux-watchdog.org>, "joel@jms.id.au"
-	<joel@jms.id.au>, "andrew@codeconstruct.com.au"
-	<andrew@codeconstruct.com.au>, "linux-watchdog@vger.kernel.org"
-	<linux-watchdog@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-aspeed@lists.ozlabs.org"
-	<linux-aspeed@lists.ozlabs.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] watchdog: aspeed: replace mdelay with msleep
-Thread-Topic: [PATCH] watchdog: aspeed: replace mdelay with msleep
-Thread-Index: AQHbTJ2DHVjYGoChYUCL8UX75YmbgrLmQtrQ
-Date: Sat, 14 Dec 2024 21:21:12 +0000
-Message-ID: <d7ab80332def4a328cb9492fddcb8bef@AcuMS.aculab.com>
-References: <20241212113014.1075414-1-phil@zankapfel.net>
- <3fe75eab-e700-4ae2-984b-42342ec7d784@roeck-us.net>
-In-Reply-To: <3fe75eab-e700-4ae2-984b-42342ec7d784@roeck-us.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
+	s=arc-20240116; t=1734212200; c=relaxed/simple;
+	bh=JSmXnQzAC3lbJhuxkEAtytCsvBO1s7INTmO8xFi6WTs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jb6nV2SqiV4JcmnDH8dD0h+WtYD5u76IUiqeUQHv2Y8wORIQXSIz/ptlgkCyu5agqFAxCsrcYWLlKeyQGxJGhBVMEbRzXYQ+sLb9TvUkuBqCqnvXCyh5u2oulYwGXY8BVwqYWU2iTe8vci2pBkFCLpfjJi7i904cBIng4Y8012k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HnXAm/cc; arc=none smtp.client-ip=209.85.221.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-518802a1e7eso1651136e0c.3;
+        Sat, 14 Dec 2024 13:36:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734212197; x=1734816997; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JSmXnQzAC3lbJhuxkEAtytCsvBO1s7INTmO8xFi6WTs=;
+        b=HnXAm/ccfF44rdEk3FFAdckpHzysEIUrS0tvxqJ13+WbNSw78vdXhw/nFuVWf61Rxd
+         54xKh0+Y611AEZVuqbmg5+gT18syj7QiEFx21niUmT/+30HkoCxPxe/SR3qdIucvyamn
+         6CAu5Q+VkpNuoPjHZsfpF+5Jjg9AXQjQ07Z6J08S0tWBkqS/slrZOtMiStDQJc02pFEL
+         sYk58FzCmX8T67Wq2Whse9D0JBNcEmCWoa4v2+m/jXI5EHEO7nZOCyjsUCN0T3FLRnZb
+         eVCUt4/gHBt3xyaDAsWZHsKJubG1GlnD3qAM5q31gM8eUZHkxIsZN20iktAsOX/3bhQK
+         ZOIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734212197; x=1734816997;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JSmXnQzAC3lbJhuxkEAtytCsvBO1s7INTmO8xFi6WTs=;
+        b=Lpt+m1zIyoDgP31VAf60tZiTLPEtQq1Uh2NZZmUYI1c3TX3fIv3Q5Gu6F1fQKMWJuJ
+         PIvul8lTDwnBqfhvgVYmvkoYK4Vr6cLwgv+dEEWjbY9WLrU5AkEm2ApwtAQzyvqNSVAx
+         OnuUJbgaECwpRZ88SvxsPfz38LaCB5faYfCdejT1pZIPYgwvRBz+9Gr4dfI7qLjFlBpq
+         4yE6M/upOO/DZzGlBXpwP5hX4JqVR4a8AuIBSCJlE2LwSt5nBMS3BvE/ZH+Fn0oEaaGq
+         Acz6RUJQAWLXEVDTE17iT+2WMyQrxYrwSto53FwYaUitzgsstda9a47I7G3PnpxCrAgn
+         4t/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVQVsKOqBLmPiekB/vTl/sQvIikNkvIaaNwGo5NXq0w4iAqNAx1kFXQjZyJAAOnP0vqQHOCkWQH48Yw@vger.kernel.org, AJvYcCVrx/7CyU/lf9Dt+XygbsKoY6deCxqVjgKnD4CyH9RJsxStI1SDJTRUVvVoBLaACZIWEcJ9INp7U3AK//c7@vger.kernel.org, AJvYcCWGwt0NmPbh7P6QQKi3SfpdB5R4GDsgbOTbMRA3yXPxs6YL0RZVIJ5UyjKv6T+UJpDeC5OlxYIOLKEEDn2UfsnV50g=@vger.kernel.org, AJvYcCXQKP7d0D5/7S05ljMre8SuRI9KYJmXwRsiNgq8BGh7X5dOMmQzG0kIbjGU0kKeX9h9LedtJuGWhHlCOs1aZm4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHPh2b0XSxX4m/DJ529Zx2JHVj6zADTz8aCeGxFuG/shp/cFfb
+	Dvt5avTDg1kAOOEuK+HrOSdlKR00b5yF9cbKwTt7YG/QljLEEql7HfsV6l0DVEvscIGKC5GJ78i
+	KhqMRUxQuFthn/IvHrtcspK1lrYo=
+X-Gm-Gg: ASbGncsDZB7kcb6mQnz2vfMkjT+EJm/Hm7ADnyc0Ps0PWFRirnf44oQTJSJSoDG8sZ2
+	2gD6Qio/ZOL5C5GZdnfU4EOn6amHnU5SuxntExIZ+G7Ye2hIWJCEHh0k/vI0oYIltEqil0e0=
+X-Google-Smtp-Source: AGHT+IHdDBc/DTuaPG5v2NK8NoaPY3B90zut1+0sQGHapEIdTbD0nlg2qhZ4HFMLfv++ls0XPJ6DuU57a5ogmlSPavw=
+X-Received: by 2002:a05:6122:2a0e:b0:515:daa7:ed0b with SMTP id
+ 71dfb90a1353d-518ca21d0cbmr7570939e0c.0.1734212197304; Sat, 14 Dec 2024
+ 13:36:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 8WpbwE8JfnWuH0_Ym4Nru-qQb1fwHtPiz_JYGwp5y3I_1734211329
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+References: <20241213174419.908525-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <4d3e6f12-7cea-45ce-b1e2-c1fda94b92cd@roeck-us.net> <CA+V-a8uasq+E+_7rk+o729hRp6PwYSgTcUQYbTe44CkXfSE71A@mail.gmail.com>
+ <TY3PR01MB11346774419BA8D51043C762986392@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+In-Reply-To: <TY3PR01MB11346774419BA8D51043C762986392@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Sat, 14 Dec 2024 21:36:11 +0000
+Message-ID: <CA+V-a8srdDkdAss2okuyfGYBwU5b9cF0aNw+KOSGR1wPquqNdQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] watchdog: rzv2h_wdt: Add support to retrieve the
+ bootstatus information
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Rob Herring <robh@kernel.org>, 
+	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-RnJvbTogR3VlbnRlciBSb2Vjaw0KPiBTZW50OiAxMiBEZWNlbWJlciAyMDI0IDEzOjU2DQo+IFRv
-OiBQaGlsIEVpY2hpbmdlciA8cGhpbEB6YW5rYXBmZWwubmV0Pjsgd2ltQGxpbnV4LXdhdGNoZG9n
-Lm9yZzsgam9lbEBqbXMuaWQuYXU7DQo+IGFuZHJld0Bjb2RlY29uc3RydWN0LmNvbS5hdTsgbGlu
-dXgtd2F0Y2hkb2dAdmdlci5rZXJuZWwub3JnOyBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJh
-ZGVhZC5vcmc7DQo+IGxpbnV4LWFzcGVlZEBsaXN0cy5vemxhYnMub3JnOyBsaW51eC1rZXJuZWxA
-dmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIHdhdGNoZG9nOiBhc3BlZWQ6
-IHJlcGxhY2UgbWRlbGF5IHdpdGggbXNsZWVwDQo+IA0KPiBPbiAxMi8xMi8yNCAwMzozMCwgUGhp
-bCBFaWNoaW5nZXIgd3JvdGU6DQo+ID4gU2luY2UgaXQgaXMgbm90IGNhbGxlZCBpbiBhbiBhdG9t
-aWMgY29udGV4dCB0aGUgbWRlbGF5IGZ1bmN0aW9uDQo+ID4gY2FuIGJlIHJlcGxhY2VkIHdpdGgg
-bXNsZWVwIHRvIGF2b2lkIGJ1c3kgd2FpdC4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFBoaWwg
-RWljaGluZ2VyIDxwaGlsQHphbmthcGZlbC5uZXQ+DQo+ID4gLS0tDQo+ID4gICBkcml2ZXJzL3dh
-dGNoZG9nL2FzcGVlZF93ZHQuYyB8IDIgKy0NCj4gPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2Vy
-dGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvd2F0
-Y2hkb2cvYXNwZWVkX3dkdC5jIGIvZHJpdmVycy93YXRjaGRvZy9hc3BlZWRfd2R0LmMNCj4gPiBp
-bmRleCBiNDc3M2E2YWFmOGMuLjk4ZWYzNDE0MDhmNyAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJz
-L3dhdGNoZG9nL2FzcGVlZF93ZHQuYw0KPiA+ICsrKyBiL2RyaXZlcnMvd2F0Y2hkb2cvYXNwZWVk
-X3dkdC5jDQo+ID4gQEAgLTIwOCw3ICsyMDgsNyBAQCBzdGF0aWMgaW50IGFzcGVlZF93ZHRfcmVz
-dGFydChzdHJ1Y3Qgd2F0Y2hkb2dfZGV2aWNlICp3ZGQsDQo+ID4gICAJd2R0LT5jdHJsICY9IH5X
-RFRfQ1RSTF9CT09UX1NFQ09OREFSWTsNCj4gPiAgIAlhc3BlZWRfd2R0X2VuYWJsZSh3ZHQsIDEy
-OCAqIFdEVF9SQVRFXzFNSFogLyAxMDAwKTsNCj4gPg0KPiA+IC0JbWRlbGF5KDEwMDApOw0KPiA+
-ICsJbXNsZWVwKDEwMDApOw0KPiA+DQo+ID4gICAJcmV0dXJuIDA7DQo+ID4gICB9DQo+IFRoaXMg
-aXMgYSBfcmVzdGFydF8gaGFuZGxlci4gVGhlIG9ubHkgcHVycG9zZSBvZiB0aGUgZGVsYXkgaXMg
-dG8gd2FpdA0KPiBmb3IgdGhlIHJlc2V0IHRvIHRyaWdnZXIuIEl0IGlzIG5vdCBzdXBwb3NlZCB0
-byBzbGVlcC4NCg0KV2l0aCB0aGUgcmVjZW50IHNjaGVkdWxlciBjaGFuZ2VzIGlzbid0IHRoZSBj
-b2RlIGxpa2VseSB0byBnZXQNCnByZS1lbXB0ZWQ/DQpXaGljaCAoZWZmZWN0aXZlbHkpIGNvbnZl
-cnRzIGlzIHRvIGEgc2xlZXA/DQoNCglEYXZpZA0KIA0KPiANCj4gTkFDSy4NCj4gDQo+IEd1ZW50
-ZXINCj4gDQo+IA0KPiANCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5
-IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRp
-b24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+Hi Biju,
 
+On Sat, Dec 14, 2024 at 11:32=E2=80=AFAM Biju Das <biju.das.jz@bp.renesas.c=
+om> wrote:
+>
+> Hi Lad, Prabhakar,
+>
+<snip>
+> > > That is a change in behavior. Up to now the syscon phandle did not
+> > > have to exist for the driver to work. Is it guaranteed to not result
+> > > in regressions on systems where it doesn't ? Also, is this documented=
+ ? I don't seem to be able to
+> > find it.
+> > >
+> > Agreed. I will add a fallback mechanism to handle cases where the sysco=
+n property is not present in
+> > the WDT node. This will ensure no regressions occur, and the bootstatus=
+ will simply be set to 0 in
+> > such scenarios. As mentioned in the patch comments, I have not yet subm=
+itted the DT binding changes
+> > because I wanted feedback on the syscon approach. The new RZ SoCs have =
+registers scattered across
+> > various locations, and I was exploring if there might be a better way t=
+o handle this.
+>
+> See, syscon compatible not needed with [1]
+>
+> [1]
+> https://lore.kernel.org/all/20241211-syscon-fixes-v1-3-b5ac8c219e96@kerne=
+l.org/
+>
+As per my understanding, `syscon` compatible is required in this case
+because the CPG driver does not register a regmap. With the patch [1]
+(linked above), this applies to drivers that register a syscon regmap,
+where the corresponding DT node does not necessarily need a `syscon`
+compatible.
+
+Cheers,
+Prabhakar
 
