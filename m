@@ -1,148 +1,151 @@
-Return-Path: <linux-watchdog+bounces-2581-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2582-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 984BA9F2B7F
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Dec 2024 09:07:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 632779F2E62
+	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Dec 2024 11:43:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D55A5163EC0
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Dec 2024 08:07:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D848D1885C47
+	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Dec 2024 10:43:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF6B61CEAD5;
-	Mon, 16 Dec 2024 08:07:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 914D8204571;
+	Mon, 16 Dec 2024 10:42:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="he03HcTC"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="oqcYIiEa"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C7601FF615;
-	Mon, 16 Dec 2024 08:07:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADF2203D53;
+	Mon, 16 Dec 2024 10:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734336465; cv=none; b=cQzjvwS5O4IoOngCHjD9kVidDFMIrIqQP65HC73voUn+0h4d71cyYAepXv87VUdoJH6yfrGe4zqRuIvxHvijFFr1VpaxGFcDokuB4PPg0whxzbxcnRpq6wZ+KFfgTg7s5Eh0lhVPSPFWiBFt5NMnRN7ujyCXjhVLhsvG3X+pCms=
+	t=1734345732; cv=none; b=QMbf2g+A3PD+T9DbKYtvLeMFeaeKOOdw7Xj+nLz1kSdnBzIwGD1DQIvDHg5o3E8rukl8wK8HpGa4rT5VaUMvMvh7EVef0SjshMnBb2SKDOsLah5WMOg8d2vWySEu3TtGQdVXo6z+jxuuCj2Acu0TMQnqOD3TIALOFE/enivvQqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734336465; c=relaxed/simple;
-	bh=Nrrpzv5D0ignzOdsBwdtNDJpwja7u1irJgZFRTZyeOo=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=u2x7Nll6NOnYJoFp/2xvlqEEAGY18a7LT8dAiz2TU9SpncXrbjqfSxnK7yHgKi+VvrzYlnUB2BgWt/9QktHBxfKHg19IiRm4yKRz3ru6iqrQLMQwoXulZVZstYlo7sXwPjvUz2vbKW5DvQgcnbRTgZmC8pwwByCURGu3YAIZ4XA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=he03HcTC; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BG6XTs6022877;
-	Mon, 16 Dec 2024 08:07:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=sL1yIlUQQ65cZAokLj4GXd
-	aY0BfotyRSs/hH7bf98SE=; b=he03HcTCHA4Zsq/6ZIAuGWBWqEeGj6CkGkUzqD
-	qmk4Gi7Pybs9Q9UZ4uSgqXJhUIG3TrP0YfpMH26duQv3cweF8Y2HgzyCA3yVh/AK
-	IJHASo6964krPkFXXEFir87YUl/VX2O442fKYmYIBa6MterrOHHVJXu7rasMOeqq
-	8TyILixb1pxihgjBJCaKIhQluxT47OBqF+G9jVGSz5LSBrjiTH9wU5GtKPvlY/cf
-	s8THgvREZlhEXmzs2H81D6z/bcF4kDTk1Mt741EV7HEzBT4PB7PDfp8JOnBfvZDn
-	2/OQJMekev6VQ4m2HTJYDBEp3D06Mw1R8/gEE1Frp5sTZ8Kg==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43jf1w8aq9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Dec 2024 08:07:28 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BG87RK9003350
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Dec 2024 08:07:27 GMT
-Received: from liuxin-gv.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Mon, 16 Dec 2024 00:07:20 -0800
-From: Xin Liu <quic_liuxin@quicinc.com>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck
-	<linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski
-	<krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-CC: Rajendra Nayak <quic_rjendra@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@quicinc.com>,
-        <quic_jiegan@quicinc.com>, <quic_aiquny@quicinc.com>,
-        <quic_tingweiz@quicinc.com>
-Subject: [PATCH v4] arm64: dts: qcom: qcs8300: Add watchdog node
-Date: Mon, 16 Dec 2024 16:06:40 +0800
-Message-ID: <20241216080640.509182-1-quic_liuxin@quicinc.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1734345732; c=relaxed/simple;
+	bh=wYHyds/oC/bIXn1FOZ3FfxUd/venFVAC8H+IayFbp3w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QtkXSChmdno7FZUD88RKGWX0co0ApuxJ4twtpeqGIYCZrzjVCIF21lmujyBYthM84J0cuEZdClDNcj7DQvKPj6BXAIqwwt7n4mAeCz7rQr33fHJTmPV/3qOCsYE+MA2rrdL91tCalyj5oMOJXEbWOM4e9zYPCB5IF1Kf2UOwdh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=oqcYIiEa; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8FC2620003;
+	Mon, 16 Dec 2024 10:41:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1734345721;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tcrvnYxItVVme/Ppg4krYaiv+M+aU8FG8UoKAi5Pjng=;
+	b=oqcYIiEad4rgc71cps3pZPHKUjfxnfC/h+9Jwv86EATSIos1zHyfSWk0LI7LT6ruTObGbA
+	rOv1o9iGgNyEIPgAc8S1O7SkW7RkpYvZXVM8V5s3aesCLvyN8WouNZu0RvxHl/sCSbokqv
+	xSoEHHqTbFg6JTl9ouXJRkPTZKjOy2J7iVx9s/beUky1KvE7Qtsq/4agmdKpBk6Oy8/t9o
+	G9YxkPW1ihIBDt/5pydjLpdqmKtPxdZBGXFWoLjaqHTO6l45paRdc1pPAyA6QEVXuwyiwY
+	NLG6lYdezTCu25nVlYFS+LuxzTCiwqWiwyvZA1Qu5jfhipEHVRkCSpwH9jwp7A==
+Date: Mon, 16 Dec 2024 11:41:58 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
+	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-can@vger.kernel.org, netdev@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v3 7/7] rtc: Add Nuvoton NCT6694 RTC support
+Message-ID: <202412161041586ed7c0ff@mail.local>
+References: <20241210104524.2466586-1-tmyu0@nuvoton.com>
+ <20241210104524.2466586-8-tmyu0@nuvoton.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: kcjt2lqlbi10m7qH_b3iFukB3ZYoiYf3
-X-Proofpoint-ORIG-GUID: kcjt2lqlbi10m7qH_b3iFukB3ZYoiYf3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- impostorscore=0 suspectscore=0 phishscore=0 adultscore=0 bulkscore=0
- lowpriorityscore=0 spamscore=0 mlxlogscore=841 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412160066
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241210104524.2466586-8-tmyu0@nuvoton.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-Add the watchdog node for QCS8300 SoC.
+On 10/12/2024 18:45:24+0800, Ming Yu wrote:
+> +static int nct6694_rtc_probe(struct platform_device *pdev)
+> +{
+> +	struct nct6694_rtc_data *data;
+> +	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
+> +	int ret, irq;
+> +
+> +	irq = irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
+> +	if (!irq)
+> +		return -EINVAL;
+> +
+> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->xmit_buf = devm_kcalloc(&pdev->dev, NCT6694_MAX_PACKET_SZ,
+> +				      sizeof(unsigned char), GFP_KERNEL);
+> +	if (!data->xmit_buf)
+> +		return -ENOMEM;
+> +
+> +	data->rtc = devm_rtc_allocate_device(&pdev->dev);
+> +	if (IS_ERR(data->rtc))
+> +		return PTR_ERR(data->rtc);
+> +
+> +	data->nct6694 = nct6694;
+> +	data->rtc->ops = &nct6694_rtc_ops;
+> +	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
+> +	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
+> +
+> +	mutex_init(&data->lock);
 
-This patch depends on below patch series:
-https://lore.kernel.org/linux-arm-msm/20241203-qcs8300_initial_dtsi-v4-0-d7c953484024@quicinc.com/
+You should use rtc_lock/rtc_unlock instead of having your own lock. The
+core will take and release the lock appropriately before calling the
+rtc_ops so you only have to do it in the irq handler.
 
-Signed-off-by: Xin Liu <quic_liuxin@quicinc.com>
---- 
-Changes in v4:
-- Patch dt-bindings is already applied.
-- Move sleep_clk to SoC DT.
-- Link to v3: https://lore.kernel.org/linux-arm-msm/20241125093503.1162412-1-quic_liuxin@quicinc.com/
-Changes in v3:
-- PATCH 3/3：Add \n at the last line of the file.
-- Link to v2: https://lore.kernel.org/linux-arm-msm/20241119102315.3167607-1-quic_liuxin@quicinc.com/
-Changes in v2:
-- PATCH 1/3：Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-- PATCH 2/3：Drop the Reviewed-by tag that received by v1. Assign a label to
-  the wachdog node.
-- Link to v1: https://lore.kernel.org/all/20241029031222.1653123-1-quic_liuxin@quicinc.com/
+> +
+> +	device_set_wakeup_capable(&pdev->dev, 1);
 
+This will cause a memory leak later on, see the discussion here:
 
-Signed-off-by: Xin Liu <quic_liuxin@quicinc.com>
----
- arch/arm64/boot/dts/qcom/qcs8300.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
----
-base-commit: f486c8aa16b8172f63bddc70116a0c897a7f3f02
+https://lore.kernel.org/linux-rtc/a88475b6-08bf-4c7c-ad63-efd1f29307e3@pf.is.s.u-tokyo.ac.jp/T/#mf51fdce6036efa3ea12fe75bd5126d4ac0c6813e
 
-diff --git a/arch/arm64/boot/dts/qcom/qcs8300.dtsi b/arch/arm64/boot/dts/qcom/qcs8300.dtsi
-index 73abf2ef9c9f..c0efcd98ec65 100644
---- a/arch/arm64/boot/dts/qcom/qcs8300.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs8300.dtsi
-@@ -1148,6 +1148,13 @@ intc: interrupt-controller@17a00000 {
- 			redistributor-stride = <0x0 0x20000>;
- 		};
- 
-+		watchdog@17c10000 {
-+			compatible = "qcom,apss-wdt-qcs8300", "qcom,kpss-wdt";
-+			reg = <0x0 0x17c10000 0x0 0x1000>;
-+			clocks = <&sleep_clk>;
-+			interrupts = <GIC_SPI 0 IRQ_TYPE_EDGE_RISING>;
-+		};
-+
- 		timer@17c20000 {
- 			compatible = "arm,armv7-timer-mem";
- 			reg = <0x0 0x17c20000 0x0 0x1000>;
+> +
+> +	platform_set_drvdata(pdev, data);
+> +
+> +	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+> +					nct6694_irq, IRQF_ONESHOT,
+> +					"nct6694-rtc", data);
+> +	if (ret < 0)
+> +		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
+> +
+> +	/* Register rtc device to RTC framework */
+> +	return devm_rtc_register_device(data->rtc);
+> +}
+> +
+> +static struct platform_driver nct6694_rtc_driver = {
+> +	.driver = {
+> +		.name	= "nct6694-rtc",
+> +	},
+> +	.probe		= nct6694_rtc_probe,
+> +};
+> +
+> +module_platform_driver(nct6694_rtc_driver);
+> +
+> +MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
+> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
+> +MODULE_LICENSE("GPL");
+> +MODULE_ALIAS("platform:nct6694-rtc");
+> -- 
+> 2.34.1
+> 
+
 -- 
-2.34.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
