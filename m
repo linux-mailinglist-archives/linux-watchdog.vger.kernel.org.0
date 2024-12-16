@@ -1,151 +1,167 @@
-Return-Path: <linux-watchdog+bounces-2582-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2583-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 632779F2E62
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Dec 2024 11:43:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D6B09F3153
+	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Dec 2024 14:14:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D848D1885C47
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Dec 2024 10:43:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37B737A28E9
+	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Dec 2024 13:14:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 914D8204571;
-	Mon, 16 Dec 2024 10:42:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BE2F204C2B;
+	Mon, 16 Dec 2024 13:14:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="oqcYIiEa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PHLtzsjc"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADF2203D53;
-	Mon, 16 Dec 2024 10:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895971119A;
+	Mon, 16 Dec 2024 13:14:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734345732; cv=none; b=QMbf2g+A3PD+T9DbKYtvLeMFeaeKOOdw7Xj+nLz1kSdnBzIwGD1DQIvDHg5o3E8rukl8wK8HpGa4rT5VaUMvMvh7EVef0SjshMnBb2SKDOsLah5WMOg8d2vWySEu3TtGQdVXo6z+jxuuCj2Acu0TMQnqOD3TIALOFE/enivvQqg=
+	t=1734354890; cv=none; b=ZKmFHUGruF6rZiGtjsLBJDu5x+lmnX3rHZkc08iL9J5h4bP9UBagftc4QOEohkA3qcMikchArucNt2jmT/Ze3fzNEsf2RAfEeJ4LfyzwqZ/No3X+iEVG7O1XtxcsLWAE1s5xgRTJfGkpp+cyJ/9+FvsNqOhrGVz/LQ2D/3nFyFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734345732; c=relaxed/simple;
-	bh=wYHyds/oC/bIXn1FOZ3FfxUd/venFVAC8H+IayFbp3w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QtkXSChmdno7FZUD88RKGWX0co0ApuxJ4twtpeqGIYCZrzjVCIF21lmujyBYthM84J0cuEZdClDNcj7DQvKPj6BXAIqwwt7n4mAeCz7rQr33fHJTmPV/3qOCsYE+MA2rrdL91tCalyj5oMOJXEbWOM4e9zYPCB5IF1Kf2UOwdh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=oqcYIiEa; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8FC2620003;
-	Mon, 16 Dec 2024 10:41:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1734345721;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tcrvnYxItVVme/Ppg4krYaiv+M+aU8FG8UoKAi5Pjng=;
-	b=oqcYIiEad4rgc71cps3pZPHKUjfxnfC/h+9Jwv86EATSIos1zHyfSWk0LI7LT6ruTObGbA
-	rOv1o9iGgNyEIPgAc8S1O7SkW7RkpYvZXVM8V5s3aesCLvyN8WouNZu0RvxHl/sCSbokqv
-	xSoEHHqTbFg6JTl9ouXJRkPTZKjOy2J7iVx9s/beUky1KvE7Qtsq/4agmdKpBk6Oy8/t9o
-	G9YxkPW1ihIBDt/5pydjLpdqmKtPxdZBGXFWoLjaqHTO6l45paRdc1pPAyA6QEVXuwyiwY
-	NLG6lYdezTCu25nVlYFS+LuxzTCiwqWiwyvZA1Qu5jfhipEHVRkCSpwH9jwp7A==
-Date: Mon, 16 Dec 2024 11:41:58 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
-	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v3 7/7] rtc: Add Nuvoton NCT6694 RTC support
-Message-ID: <202412161041586ed7c0ff@mail.local>
-References: <20241210104524.2466586-1-tmyu0@nuvoton.com>
- <20241210104524.2466586-8-tmyu0@nuvoton.com>
+	s=arc-20240116; t=1734354890; c=relaxed/simple;
+	bh=6rnP6sxljKeOL3PkJ6leFI7sX5hX/jcT6RIt0e4lQPo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jIKluxSmEloIRjGsYYbxpY4niFW5HFgXPqj6CnKJSrzPc0bicJWm7FcRN9KRfPtKNt1hnQedk2UXwajRMVn/08vqeRa15WBLTmzr5a7IKW6uW1BbcUC9+qn6q+8zZGTPA4h2ffwguRRJXdfm4LgtO/q9DV4qsXh/sc2Iuau1yvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PHLtzsjc; arc=none smtp.client-ip=209.85.217.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-4afe1009960so1004090137.0;
+        Mon, 16 Dec 2024 05:14:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734354887; x=1734959687; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6rnP6sxljKeOL3PkJ6leFI7sX5hX/jcT6RIt0e4lQPo=;
+        b=PHLtzsjcfA+xVzV6DLH/bVuLtRXXsusX/c0UKBMOUHPmzXicZf/+yMA61jT1oJdrTf
+         A6omabzoZjgCESXq0J+CCEIPydRLAD9pSf3sm6r1aoDU3pUrntjqyc1MwSykzU1JRvkl
+         W1ncMAG1pTHH8Pg5zFkAlneeHmgSplw4XCkPyDg3nLDJ6Zr+nbFImtOkZQx6NPbH6LeX
+         Jjy0pkgPSNtYwX3gRFWZ1mWKloRgawrbUR1kd/tftqmKdMvq7fCu4kLFyvuZOsSwzCym
+         kFeY+mEFtMEMjx6CePbRtRYMpEoQ58CS691WroUivfkHV8H1IPsVBj5UkbyaNO1eBFYO
+         z+2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734354887; x=1734959687;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6rnP6sxljKeOL3PkJ6leFI7sX5hX/jcT6RIt0e4lQPo=;
+        b=sjIR9oFA8cMHEVf8Aq17/rYl5LTkhbTkWUFbdygYs4mGr+2cdatT8ff+cSDivbrN/r
+         n7/1lLNO/t4+zKRZ35ul5rtQmdNlmNhSDl8G5SSwNdOkkA87J4wwfy9aqB3jb76MJxC3
+         MD+lRO3IZcIl9P/QdKD7xG3WihAUuMHz7hSMXoNlQvzhpt6fGkjwTXHBiEkQtoTeSUDM
+         JR56Cu4FntGj/ZBrN5hjHLYhgI+yKUbQxRgrJrKxEoFYyfIEDGoSgK83HHvAYgipUbJk
+         XccjktOc24sa9RVi/4+opLFy8fX9bps+ZxQh7e+jSnhbu+k3jZxdyl/wc2xdAu3GbLsV
+         V+Og==
+X-Forwarded-Encrypted: i=1; AJvYcCWtla9xVmgvL0sOYHFhfJ/CQDp/xzdF5DUJMSvx9aSDBxx6/wpLttM6t4QlRzoWtQl21bqxBpFSBWx0@vger.kernel.org, AJvYcCX478gqC2IGA9Vpc/6/rQv6pctn3cKqQG3MZEBZlOHOr2y93/LdSg4H4D1yY5tkVFnMjiqpGUIKCnqvl873JjA=@vger.kernel.org, AJvYcCX5yVPRuER1BhFyBUv9wej87eVH5srWmopRngx3ECGKzoh34JuucBnM/oZHcc8u18FGj8LM5sFjib7wR2TJ8nWHne0=@vger.kernel.org, AJvYcCXlW06au+mLHS1I01PihHY0kP/TZVsTSwFRf6QRGDyxk3iX7j/Z9hJQKU4Xv2DYd3NowN8hO6oFzufqrtiI@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2lEyqNW6UVqfndXCOSKuLur12jdF4VhHqFHIASHXuQ0Kh/VIx
+	oPgbSmUAeoP50uyri+TrjGPeEyg7qySEdNc3LVE/vygKIUEQh2p4lwh3QjgwCLwMRPEpTOR6YAf
+	2mOYOaA/9hzd+voa/pok2JgnfANI=
+X-Gm-Gg: ASbGnctXq64Ir3K14lvLAFkGZhMtnGuUBzHKMBRB4zvpHGbjJumVzW45EyJ5A5diYcE
+	2QKH3U0TSXfGfHrnADCXWkyfpAgQQe5w+n5a92g==
+X-Google-Smtp-Source: AGHT+IGHvoEWiHQEktpq8LAmICokSHUhsk33kpCMQhArgLW3vcvRbs3+IKesK9ztiuLOP0diDrNVoqwRp/EZdDgRI1k=
+X-Received: by 2002:a05:6122:178f:b0:50a:b604:2bb2 with SMTP id
+ 71dfb90a1353d-518ca2e301fmr10014053e0c.11.1734354887242; Mon, 16 Dec 2024
+ 05:14:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241210104524.2466586-8-tmyu0@nuvoton.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+References: <20241213174419.908525-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <4d3e6f12-7cea-45ce-b1e2-c1fda94b92cd@roeck-us.net> <CA+V-a8uasq+E+_7rk+o729hRp6PwYSgTcUQYbTe44CkXfSE71A@mail.gmail.com>
+ <TY3PR01MB11346774419BA8D51043C762986392@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <CA+V-a8srdDkdAss2okuyfGYBwU5b9cF0aNw+KOSGR1wPquqNdQ@mail.gmail.com> <TY3PR01MB1134664B737514AEAECA960D9863A2@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+In-Reply-To: <TY3PR01MB1134664B737514AEAECA960D9863A2@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date: Mon, 16 Dec 2024 13:14:21 +0000
+Message-ID: <CA+V-a8tWFSwajUSObZstvuBfL__j4EFdtOzSYs4U-aMBacwnLg@mail.gmail.com>
+Subject: Re: [RFC PATCH] watchdog: rzv2h_wdt: Add support to retrieve the
+ bootstatus information
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Guenter Roeck <linux@roeck-us.net>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Rob Herring <robh@kernel.org>, 
+	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/12/2024 18:45:24+0800, Ming Yu wrote:
-> +static int nct6694_rtc_probe(struct platform_device *pdev)
-> +{
-> +	struct nct6694_rtc_data *data;
-> +	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-> +	int ret, irq;
-> +
-> +	irq = irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
-> +	if (!irq)
-> +		return -EINVAL;
-> +
-> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->xmit_buf = devm_kcalloc(&pdev->dev, NCT6694_MAX_PACKET_SZ,
-> +				      sizeof(unsigned char), GFP_KERNEL);
-> +	if (!data->xmit_buf)
-> +		return -ENOMEM;
-> +
-> +	data->rtc = devm_rtc_allocate_device(&pdev->dev);
-> +	if (IS_ERR(data->rtc))
-> +		return PTR_ERR(data->rtc);
-> +
-> +	data->nct6694 = nct6694;
-> +	data->rtc->ops = &nct6694_rtc_ops;
-> +	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> +	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
-> +
-> +	mutex_init(&data->lock);
+Hi Biju,
 
-You should use rtc_lock/rtc_unlock instead of having your own lock. The
-core will take and release the lock appropriately before calling the
-rtc_ops so you only have to do it in the irq handler.
+On Sun, Dec 15, 2024 at 9:15=E2=80=AFAM Biju Das <biju.das.jz@bp.renesas.co=
+m> wrote:
+>
+> Hi Prabhakar,
+>
+> > -----Original Message-----
+> > From: Lad, Prabhakar <prabhakar.csengg@gmail.com>
+> > Sent: 14 December 2024 21:36
+> > Subject: Re: [RFC PATCH] watchdog: rzv2h_wdt: Add support to retrieve t=
+he bootstatus information
+> >
+> > Hi Biju,
+> >
+> > On Sat, Dec 14, 2024 at 11:32=E2=80=AFAM Biju Das <biju.das.jz@bp.renes=
+as.com> wrote:
+> > >
+> > > Hi Lad, Prabhakar,
+> > >
+> > <snip>
+> > > > > That is a change in behavior. Up to now the syscon phandle did no=
+t
+> > > > > have to exist for the driver to work. Is it guaranteed to not
+> > > > > result in regressions on systems where it doesn't ? Also, is this
+> > > > > documented ? I don't seem to be able to
+> > > > find it.
+> > > > >
+> > > > Agreed. I will add a fallback mechanism to handle cases where the
+> > > > syscon property is not present in the WDT node. This will ensure no
+> > > > regressions occur, and the bootstatus will simply be set to 0 in
+> > > > such scenarios. As mentioned in the patch comments, I have not yet
+> > > > submitted the DT binding changes because I wanted feedback on the s=
+yscon approach. The new RZ SoCs
+> > have registers scattered across various locations, and I was exploring =
+if there might be a better way
+> > to handle this.
+> > >
+> > > See, syscon compatible not needed with [1]
+> > >
+> > > [1]
+> > > https://lore.kernel.org/all/20241211-syscon-fixes-v1-3-b5ac8c219e96@k=
+e
+> > > rnel.org/
+> > >
+> > As per my understanding, `syscon` compatible is required in this case b=
+ecause the CPG driver does not
+> > register a regmap. With the patch [1] (linked above), this applies to d=
+rivers that register a syscon
+> > regmap, where the corresponding DT node does not necessarily need a `sy=
+scon` compatible.
+>
+> I guess you can use "syscon_node_to_regmap" for that as of_syscon_registe=
+r_regmap() is for externally
+> created regmaps??
+>
+No, it doesn't work either; the CPG node block needs to have `syscon`
+compatible when you are using
+syscon_node_to_regmap/syscon_regmap_lookup_by_phandle. See patch [0]
+in `device_node_get_regmap()` the `of_syscon_register()` is only
+called when it has a `syscon` compatible or else `-EINVAL` is
+returned.
 
-> +
-> +	device_set_wakeup_capable(&pdev->dev, 1);
+[0] https://lore.kernel.org/all/20241211-syscon-fixes-v1-3-b5ac8c219e96@ker=
+nel.org/
 
-This will cause a memory leak later on, see the discussion here:
-
-https://lore.kernel.org/linux-rtc/a88475b6-08bf-4c7c-ad63-efd1f29307e3@pf.is.s.u-tokyo.ac.jp/T/#mf51fdce6036efa3ea12fe75bd5126d4ac0c6813e
-
-> +
-> +	platform_set_drvdata(pdev, data);
-> +
-> +	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-> +					nct6694_irq, IRQF_ONESHOT,
-> +					"nct6694-rtc", data);
-> +	if (ret < 0)
-> +		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
-> +
-> +	/* Register rtc device to RTC framework */
-> +	return devm_rtc_register_device(data->rtc);
-> +}
-> +
-> +static struct platform_driver nct6694_rtc_driver = {
-> +	.driver = {
-> +		.name	= "nct6694-rtc",
-> +	},
-> +	.probe		= nct6694_rtc_probe,
-> +};
-> +
-> +module_platform_driver(nct6694_rtc_driver);
-> +
-> +MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
-> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:nct6694-rtc");
-> -- 
-> 2.34.1
-> 
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Cheers,
+Prabhakar
 
