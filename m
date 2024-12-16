@@ -1,133 +1,148 @@
-Return-Path: <linux-watchdog+bounces-2580-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2581-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA2029F2AA4
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Dec 2024 08:05:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 984BA9F2B7F
+	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Dec 2024 09:07:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7E3018822C7
-	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Dec 2024 07:05:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D55A5163EC0
+	for <lists+linux-watchdog@lfdr.de>; Mon, 16 Dec 2024 08:07:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED1761CEEB6;
-	Mon, 16 Dec 2024 07:04:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF6B61CEAD5;
+	Mon, 16 Dec 2024 08:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WevJQVgb"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="he03HcTC"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58D1129CA;
-	Mon, 16 Dec 2024 07:04:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C7601FF615;
+	Mon, 16 Dec 2024 08:07:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734332653; cv=none; b=GMZNyLX9bQyVoFNPaY5uF04v+4WJBTcoMrWUSgBEJlnX731vOfPTSIekcIzx112N/BV7KcdGyMKOnLeelYQOGO4kCxl7sqigd2kAh8SsD3LJ3qCdfEdyxQgoRLWYQFfskBS8JROND7CU8+QpySZwfrUtlvJyITGDBh8WKPegl7Y=
+	t=1734336465; cv=none; b=cQzjvwS5O4IoOngCHjD9kVidDFMIrIqQP65HC73voUn+0h4d71cyYAepXv87VUdoJH6yfrGe4zqRuIvxHvijFFr1VpaxGFcDokuB4PPg0whxzbxcnRpq6wZ+KFfgTg7s5Eh0lhVPSPFWiBFt5NMnRN7ujyCXjhVLhsvG3X+pCms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734332653; c=relaxed/simple;
-	bh=KeSpEDkKtZpQhSch1YgBwfAeYb9z/c43PHmS5zAo9i0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fFZrmEbiXsdri2EF6dNOXy/qBqdn0fhJmUNIWBDWgsDZvdxEr5lxS3nyhKUhqR3GJtUbQDRA5fa6BIfYqXSLCJ7CUtwn+wUC5QWTnmCMV73Y0GK1qHmWco7dAoFk+DX+cuwJQPk2RRLvSmshC8ZIxbGWWd9q4roKo39wt/BHxbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WevJQVgb; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e3a0d2d15adso2453106276.0;
-        Sun, 15 Dec 2024 23:04:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734332651; x=1734937451; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tsU5wmh2P4K8mF9Ggmz3hxOZU+54LH8riOqnst6ceWc=;
-        b=WevJQVgbmXC1pclM8jpkZfyO8o9H4dSFa6ABjrT/c+AxQKnewTsDhp/j2p281yhSrY
-         B8oMI2Law1CM7NYLVAm2I0NLqyM0PGNSZX41Unn7qVUb8kF+YACMvYHqAGOMYuewpK9l
-         6tnnfATxDLsG0mA1LifEWm6tZtkey/MiaayomMBcje/nsSdF6C8Y/bC7WWl+DGht76to
-         luEcr9I2qT/UzcUonSXKBClAFAmUMEoj+H+mDxr1IktlR2XQwiAQY6BMxvN1XfP1sW4h
-         /9ykvBcM9bdvXxtMeSuFKkPa4Bg/isOPYImcjWrR+MddJct8MlIoHeH6p39Uk+wXi1Ki
-         Hg/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734332651; x=1734937451;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tsU5wmh2P4K8mF9Ggmz3hxOZU+54LH8riOqnst6ceWc=;
-        b=C3rHQvOYzv54LmzyuMhBHrdZcVuYkEndznqxOO34/2frpXDPyUlzF782TOMZId+G5b
-         7sLUIF5JOvgWS3Xy6CaMY9ouNFx1MDI8LLElp0IFy5Rvbcel3tjectbpIS2zPA405Z/Q
-         dCbf5RRV130LoMQfMCYDfIq4DisgrOE+S36r7AVuTTWYzGJ6im0UJQjmSL6IplKtJOwW
-         KJj4O/vJNU3T9fFIwYdz/Qv2usY7pOCdNKVt6K9u3c7NvECYReCJs+G1JxxVX4H4nXMq
-         R6rFsuqWg9YuspTbCOCsBVJLfuq4UL/iJS8ykpYYuBNIuxSVJKHIFNisv6I8fcilnycQ
-         Vt1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUw/Uar9vBZrZMC4NwBlmFfYUC8b1pdpgagOO+6J1bKEeMhpXo21Y5P3C53inatx2i3bZp7ZYRn9LSRxA==@vger.kernel.org, AJvYcCVLP2Sj64uMbAh3nhkjpyJEFK5fbQ3OhXnbbxfI11mRS7WYGj/VPmAWAEQsMvAzn6kE4WzvPheOOYYVAmY=@vger.kernel.org, AJvYcCVUnD2BN+6ofahDPqhklkTYEwFLYWVqWoIesUKRlXxojCCH5LlVWvnJuUUWwq/5k2xThLpqRyeJky0=@vger.kernel.org, AJvYcCVY4SHocZ7gMqjJ3OlfGI9wg2EZddo2OfSFG/FOQoJb2xYvD14CSzbfSVOoRfiKf/4UFy/dmplQ2B7f3xWYees=@vger.kernel.org, AJvYcCWE+3MhRmV/3D7WwzPFN1iSAjDdhNl0CgzIteV1Mxp9Wj+BoCuldaTzAZIzsdfwxL0oz74T/ebLRICX@vger.kernel.org, AJvYcCWSU1P6s1hO1hkSw06UUGwITro85/4EsOTD95KN09fx83pxcZcDbRMZ8SjeZMhSesA9LW1mO1FTHhwYtG1J@vger.kernel.org, AJvYcCWf9PrTyIV9ZZ2DDCceFJ9dXFPO3UOej1iESsY+elW7Q7M1Ku0kO6FkaMsFY5VQnxj6EG3jUReC@vger.kernel.org, AJvYcCX5k9u8xsoJov1/CFrKNCqyyhIaSC/htrzcQdFoo/zdBA8uLHXnn9q/YYgG69/Cn2r/HKSh9yjk9a9T@vger.kernel.org
-X-Gm-Message-State: AOJu0YwW2oR3tCX0RXx8Qa+fioDHhtdxd72CR5RGIP4/B6znPwiJXXD6
-	Yob6rX6dCGXDQhcnkZLytJAiSgqnrcQ9yWAKQIY7JU3/H04JVwArCk5/nPlr57MAlUhVe9yKIas
-	CJBo2r07vtZfxZX0sUyRRJgI2UQM=
-X-Gm-Gg: ASbGnctqYft5gHoREbzjO/BcdUZf7GFMDymiBj7+0Mp7UGMz4WBAD9ch5mcyDLBTcgS
-	lf86GBvrtj6pz6iVyG1M+H/r5yaYgsnt3AjTgRtxdl7IAYaCi48tt3COmKUE68tqeVkv0XPs=
-X-Google-Smtp-Source: AGHT+IHLFDXpcf4og2XrYkLAxxhOSZA2+BQlHOzPM0PO9nHe4iVqax2MnRn2XR8QWV2Gsxx89csWs78ajaevICvrWAc=
-X-Received: by 2002:a05:6902:11ce:b0:e39:92ec:b5f6 with SMTP id
- 3f1490d57ef6-e434f084c2amr8834964276.41.1734332651424; Sun, 15 Dec 2024
- 23:04:11 -0800 (PST)
+	s=arc-20240116; t=1734336465; c=relaxed/simple;
+	bh=Nrrpzv5D0ignzOdsBwdtNDJpwja7u1irJgZFRTZyeOo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=u2x7Nll6NOnYJoFp/2xvlqEEAGY18a7LT8dAiz2TU9SpncXrbjqfSxnK7yHgKi+VvrzYlnUB2BgWt/9QktHBxfKHg19IiRm4yKRz3ru6iqrQLMQwoXulZVZstYlo7sXwPjvUz2vbKW5DvQgcnbRTgZmC8pwwByCURGu3YAIZ4XA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=he03HcTC; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BG6XTs6022877;
+	Mon, 16 Dec 2024 08:07:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=sL1yIlUQQ65cZAokLj4GXd
+	aY0BfotyRSs/hH7bf98SE=; b=he03HcTCHA4Zsq/6ZIAuGWBWqEeGj6CkGkUzqD
+	qmk4Gi7Pybs9Q9UZ4uSgqXJhUIG3TrP0YfpMH26duQv3cweF8Y2HgzyCA3yVh/AK
+	IJHASo6964krPkFXXEFir87YUl/VX2O442fKYmYIBa6MterrOHHVJXu7rasMOeqq
+	8TyILixb1pxihgjBJCaKIhQluxT47OBqF+G9jVGSz5LSBrjiTH9wU5GtKPvlY/cf
+	s8THgvREZlhEXmzs2H81D6z/bcF4kDTk1Mt741EV7HEzBT4PB7PDfp8JOnBfvZDn
+	2/OQJMekev6VQ4m2HTJYDBEp3D06Mw1R8/gEE1Frp5sTZ8Kg==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43jf1w8aq9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Dec 2024 08:07:28 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BG87RK9003350
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Dec 2024 08:07:27 GMT
+Received: from liuxin-gv.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 16 Dec 2024 00:07:20 -0800
+From: Xin Liu <quic_liuxin@quicinc.com>
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck
+	<linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+CC: Rajendra Nayak <quic_rjendra@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@quicinc.com>,
+        <quic_jiegan@quicinc.com>, <quic_aiquny@quicinc.com>,
+        <quic_tingweiz@quicinc.com>
+Subject: [PATCH v4] arm64: dts: qcom: qcs8300: Add watchdog node
+Date: Mon, 16 Dec 2024 16:06:40 +0800
+Message-ID: <20241216080640.509182-1-quic_liuxin@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241210104524.2466586-1-tmyu0@nuvoton.com> <20241210104524.2466586-7-tmyu0@nuvoton.com>
- <CAMZ6RqK+B3nc9bLWR49vwDJX3=pbjOKKoa=e=Pnc7wJNQx7JPQ@mail.gmail.com>
-In-Reply-To: <CAMZ6RqK+B3nc9bLWR49vwDJX3=pbjOKKoa=e=Pnc7wJNQx7JPQ@mail.gmail.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Mon, 16 Dec 2024 15:04:00 +0800
-Message-ID: <CAOoeyxXNvnsdbrhjaKq13x=27-nK0U73+6yvRfTjJLAY+v_OcA@mail.gmail.com>
-Subject: Re: [PATCH v3 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: kcjt2lqlbi10m7qH_b3iFukB3ZYoiYf3
+X-Proofpoint-ORIG-GUID: kcjt2lqlbi10m7qH_b3iFukB3ZYoiYf3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ impostorscore=0 suspectscore=0 phishscore=0 adultscore=0 bulkscore=0
+ lowpriorityscore=0 spamscore=0 mlxlogscore=841 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412160066
 
-Dear Vincent,
+Add the watchdog node for QCS8300 SoC.
 
-Thank you for your comments,
-I understand, I will make the modifications for these drivers,
+This patch depends on below patch series:
+https://lore.kernel.org/linux-arm-msm/20241203-qcs8300_initial_dtsi-v4-0-d7c953484024@quicinc.com/
 
-Thanks,
-Ming
+Signed-off-by: Xin Liu <quic_liuxin@quicinc.com>
+--- 
+Changes in v4:
+- Patch dt-bindings is already applied.
+- Move sleep_clk to SoC DT.
+- Link to v3: https://lore.kernel.org/linux-arm-msm/20241125093503.1162412-1-quic_liuxin@quicinc.com/
+Changes in v3:
+- PATCH 3/3：Add \n at the last line of the file.
+- Link to v2: https://lore.kernel.org/linux-arm-msm/20241119102315.3167607-1-quic_liuxin@quicinc.com/
+Changes in v2:
+- PATCH 1/3：Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+- PATCH 2/3：Drop the Reviewed-by tag that received by v1. Assign a label to
+  the wachdog node.
+- Link to v1: https://lore.kernel.org/all/20241029031222.1653123-1-quic_liuxin@quicinc.com/
 
-Vincent Mailhol <mailhol.vincent@wanadoo.fr> =E6=96=BC 2024=E5=B9=B412=E6=
-=9C=8813=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8A=E5=8D=8812:10=E5=AF=AB=E9=81=
-=93=EF=BC=9A
->
-...
-> > +struct nct6694_hwmon_data {
-> > +       struct nct6694 *nct6694;
-> > +       struct mutex lock;
-> > +       unsigned char *xmit_buf;
-> > +       unsigned char hwmon_en[NCT6694_HWMON_CMD0_LEN];
-> > +};
->
-> A global comment on this series: do not declare your buffers as some
-> opaque unsigned char arrays. Instead, make it a structure (or an array
-> of structures if needed) using the little endian types for the
-> different fields.
->
-> You already applied this change to the CAN driver after I made a
-> comment, please do the same throughout the series.
->
-> The same applies with any other comments made by anyone else: do not
-> only apply to the patch where the comment is made, but apply it
-> broadly to the series.
->
-> Thank you.
->
->
-> Yours sincerely,
-> Vincent Mailhol
+
+Signed-off-by: Xin Liu <quic_liuxin@quicinc.com>
+---
+ arch/arm64/boot/dts/qcom/qcs8300.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
+---
+base-commit: f486c8aa16b8172f63bddc70116a0c897a7f3f02
+
+diff --git a/arch/arm64/boot/dts/qcom/qcs8300.dtsi b/arch/arm64/boot/dts/qcom/qcs8300.dtsi
+index 73abf2ef9c9f..c0efcd98ec65 100644
+--- a/arch/arm64/boot/dts/qcom/qcs8300.dtsi
++++ b/arch/arm64/boot/dts/qcom/qcs8300.dtsi
+@@ -1148,6 +1148,13 @@ intc: interrupt-controller@17a00000 {
+ 			redistributor-stride = <0x0 0x20000>;
+ 		};
+ 
++		watchdog@17c10000 {
++			compatible = "qcom,apss-wdt-qcs8300", "qcom,kpss-wdt";
++			reg = <0x0 0x17c10000 0x0 0x1000>;
++			clocks = <&sleep_clk>;
++			interrupts = <GIC_SPI 0 IRQ_TYPE_EDGE_RISING>;
++		};
++
+ 		timer@17c20000 {
+ 			compatible = "arm,armv7-timer-mem";
+ 			reg = <0x0 0x17c20000 0x0 0x1000>;
+-- 
+2.34.1
+
 
