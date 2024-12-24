@@ -1,217 +1,180 @@
-Return-Path: <linux-watchdog+bounces-2609-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2610-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D6EC9FAE33
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Dec 2024 13:16:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2FF39FBBB2
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Dec 2024 10:57:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87E6E164FAC
-	for <lists+linux-watchdog@lfdr.de>; Mon, 23 Dec 2024 12:16:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57E2A188601A
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Dec 2024 09:53:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A353519992D;
-	Mon, 23 Dec 2024 12:16:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82B861C3BEB;
+	Tue, 24 Dec 2024 09:49:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="B4O+M/Zw"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp02.aussiebb.com.au (smtp02.aussiebb.com.au [121.200.0.93])
+Received: from mail-m32123.qiye.163.com (mail-m32123.qiye.163.com [220.197.32.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD812194C8B
-	for <linux-watchdog@vger.kernel.org>; Mon, 23 Dec 2024 12:16:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=121.200.0.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D241B3926;
+	Tue, 24 Dec 2024 09:49:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734956185; cv=none; b=gEXrb/Rc1fKGrpFgB337hDiGJUTr1xwJPVxrbUI6wNVjWQAecGbMQKIVjrj+7vCspGDxyQuUvUbNpvoOj6ZNTDalFsIAYz2FMwj6Vc4ZsZl4LKgC4A7H7DAcoGBnFdl2BlV6fYF3j22dIZw+Bl52xf95lkw+b0J2d8msc8whqGw=
+	t=1735033777; cv=none; b=CUhpAF/zrPS5rmhXRysRd4mDjC8LDRs99XvSb8CnQbqdbP/zVN6sVaU78ZdIX7yE7/AtAFSxAeI4W1FKVlyCLCrbeDIHtkMSTKrE+Eyjd1Sv5Rsh0buymwP5QqkjjbVMR6aTTaQ0Dc1Qv/4NmjjakIn7NuqYbEXaeng7kYBG2CA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734956185; c=relaxed/simple;
-	bh=eDxkL8/XIhSmBEgaT1zy7zIVeYT5UTja8kUAQFkCTho=;
-	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=HX8hKH5/fY4xNLnlscHJTU4gPdWgPbNhCbjzPdwQIW8/jy+JVsVik8YkwcsrHDh6nQ0UMB2biLXh2XVBftLpf3JQCYh8Vzu1HjIgUG9DWC8BVW1l2y6UkOqE/NjaZX/laVIJky44eeA2qWhSK+KVtwQv6Y9OE+sBY8aLTK/q42Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=foreveryoung.id.au; spf=pass smtp.mailfrom=foreveryoung.id.au; arc=none smtp.client-ip=121.200.0.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=foreveryoung.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foreveryoung.id.au
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by smtp02.aussiebb.com.au (Postfix) with ESMTP id 761D8100E1D
-	for <linux-watchdog@vger.kernel.org>; Mon, 23 Dec 2024 23:16:20 +1100 (AEDT)
-X-Virus-Scanned: Debian amavisd-new at smtp02.aussiebb.com.au
-Received: from smtp02.aussiebb.com.au ([127.0.0.1])
-	by localhost (smtp02.aussiebb.com.au [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8ScN7zvO7Yua for <linux-watchdog@vger.kernel.org>;
-	Mon, 23 Dec 2024 23:16:20 +1100 (AEDT)
-Received: by smtp02.aussiebb.com.au (Postfix, from userid 116)
-	id 614A3100EC7; Mon, 23 Dec 2024 23:16:20 +1100 (AEDT)
-X-Spam-Level: *
-Received: from mail.foreveryoung.id.au (119-18-14-36.77120e.mel.nbn.aussiebb.net [119.18.14.36])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp02.aussiebb.com.au (Postfix) with ESMTPS id 36A76100E1D
-	for <linux-watchdog@vger.kernel.org>; Mon, 23 Dec 2024 23:16:20 +1100 (AEDT)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.foreveryoung.id.au (Postfix) with ESMTP id 5C58115EB0B
-	for <linux-watchdog@vger.kernel.org>; Mon, 23 Dec 2024 23:15:10 +1100 (AEDT)
-Received: from mail.foreveryoung.id.au ([127.0.0.1])
-	by localhost (mail.foreveryoung.id.au [127.0.0.1]) (amavisd-new, port 10032)
-	with ESMTP id tVTTyfbj_tFc for <linux-watchdog@vger.kernel.org>;
-	Mon, 23 Dec 2024 23:15:10 +1100 (AEDT)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.foreveryoung.id.au (Postfix) with ESMTP id 31372170DB2
-	for <linux-watchdog@vger.kernel.org>; Mon, 23 Dec 2024 23:15:10 +1100 (AEDT)
-X-Virus-Scanned: amavisd-new at mail.foreveryoung.id.au
-Received: from mail.foreveryoung.id.au ([127.0.0.1])
-	by localhost (mail.foreveryoung.id.au [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id YYdsyBMA0dUR for <linux-watchdog@vger.kernel.org>;
-	Mon, 23 Dec 2024 23:15:10 +1100 (AEDT)
-Received: from SEYPR04MB6821.apcprd04.prod.outlook.com (unknown [40.99.49.221])
-	by mail.foreveryoung.id.au (Postfix) with ESMTPSA id C40D115EB0B
-	for <linux-watchdog@vger.kernel.org>; Mon, 23 Dec 2024 23:15:09 +1100 (AEDT)
-From: "james@foreveryoung.id.au" <james@foreveryoung.id.au>
-To: "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Subject: Re:  [PATCH v2] watchdog: it87_wdt: add support for IT8733
-Thread-Topic:  [PATCH v2] watchdog: it87_wdt: add support for IT8733
-Thread-Index: AQHbVTR3jiCFSQQHWEyLkryDniTIfw==
-X-MS-Exchange-MessageSentRepresentingType: 1
-Date: Mon, 23 Dec 2024 12:16:16 +0000
-Message-ID:
-	<SEYPR04MB6821BD74A23F3C6A561E78B8F3022@SEYPR04MB6821.apcprd04.prod.outlook.com>
-References:
-	<SEYPR04MB682104A5CC12856953A3A11CF3022@SEYPR04MB6821.apcprd04.prod.outlook.com>
-In-Reply-To:
-	<SEYPR04MB682104A5CC12856953A3A11CF3022@SEYPR04MB6821.apcprd04.prod.outlook.com>
-Accept-Language: en-AU, en-US
-Content-Language: en-AU
-X-MS-Has-Attach: yes
-X-MS-Exchange-Organization-SCL: -1
-X-MS-TNEF-Correlator:
-X-MS-Exchange-Organization-RecordReviewCfmType: 0
-msip_labels:
-Content-Type: multipart/mixed;
-	boundary="_004_SEYPR04MB6821BD74A23F3C6A561E78B8F3022SEYPR04MB6821apcp_"
+	s=arc-20240116; t=1735033777; c=relaxed/simple;
+	bh=FyoNrvG944raOlEcqGIAFdzTG2vSx7b14uZG3/FwDOs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=i+47Ithy00snwT4bOIIazkWcKuIPZWnCYXtAwkKuCar0gE0ar8bzyXgnD8z8e9ZUfKd3+j/DmHrRFZOU7oqdVy0mO8sMVBaPwMTuVB6l1L5S7udNzoXHUw4Lu6dNQEEYyBeZXtZ9kKrmNGHE2g23Puou4U4BfklnA1yAZN0Q4VA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=B4O+M/Zw; arc=none smtp.client-ip=220.197.32.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 6aad4ed7;
+	Tue, 24 Dec 2024 17:49:21 +0800 (GMT+08:00)
+From: Kever Yang <kever.yang@rock-chips.com>
+To: heiko@sntech.de
+Cc: linux-rockchip@lists.infradead.org,
+	Kever Yang <kever.yang@rock-chips.com>,
+	Simon Xue <xxm@rock-chips.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Mark Brown <broonie@kernel.org>,
+	Chris Morgan <macromorgan@hotmail.com>,
+	Frank Wang <frank.wang@rock-chips.com>,
+	Jamie Iles <jamie@jamieiles.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	linux-pci@vger.kernel.org,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Johan Jonker <jbx6244@gmail.com>,
+	David Airlie <airlied@gmail.com>,
+	dri-devel@lists.freedesktop.org,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	linux-i2c@vger.kernel.org,
+	Shawn Lin <shawn.lin@rock-chips.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Elaine Zhang <zhangqing@rock-chips.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Finley Xiao <finley.xiao@rock-chips.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+	FUKAUMI Naoki <naoki@radxa.com>,
+	linux-pwm@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Andy Yan <andyshrk@163.com>,
+	linux-serial@vger.kernel.org,
+	Michael Riesch <michael.riesch@wolfvision.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	devicetree@vger.kernel.org,
+	Diederik de Haas <didi.debian@cknow.org>,
+	linux-watchdog@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Shresth Prasad <shresthprasad7@gmail.com>,
+	Tim Lunn <tim@feathertop.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Dragan Simic <dsimic@manjaro.org>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	linux-mmc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Subject: [PATCH v2 00/17] rockchip: Add rk3562 support
+Date: Tue, 24 Dec 2024 17:49:03 +0800
+Message-Id: <20241224094920.3821861-1-kever.yang@rock-chips.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQx1OGFZCHUlLSB0dSx5OTE9WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpKQk
+	1VSktLVUpCWQY+
+X-HM-Tid: 0a93f8122e8303afkunm6aad4ed7
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PxA6ODo6AjIJHEoJS1EdLD8s
+	DxEKCU5VSlVKTEhOS0hITE1PQ0xDVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
+	EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFJTUJDNwY+
+DKIM-Signature:a=rsa-sha256;
+	b=B4O+M/Zw24LyURNcEw+WhDYJK29iAHTi0p4dShi0/NhEClO4QvsLlaGzwjfu6wmFcSn5fN5xHurXqhfa05Z/V+HFtpARvcipLUAtfEvn/JVqKw3D5bl5WacGOSbQ9WTLN3PzdpWIg/Xxm3+foqpbqwx3bhj89Wvq4UKSq85Zlys=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=oAXD/EvvyZpJMisxlK2FCVt8jBq9aehKbViTNvrjWK8=;
+	h=date:mime-version:subject:message-id:from;
 
---_004_SEYPR04MB6821BD74A23F3C6A561E78B8F3022SEYPR04MB6821apcp_
-Content-Type: multipart/alternative;
-	boundary="_000_SEYPR04MB6821BD74A23F3C6A561E78B8F3022SEYPR04MB6821apcp_"
 
---_000_SEYPR04MB6821BD74A23F3C6A561E78B8F3022SEYPR04MB6821apcp_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+This patch set adds rk3562 SoC and its evb support.
 
-I previously posted a patch titled "watchdog: it87_wdt: add support for IT8=
-733" on 2024-12-23, but I realized there was an issue with the original ver=
-sion. Specifically, I made a typo in the chip ID definition. I have fixed t=
-he problem and am resubmitting the updated patch as v2.
+Split out patches belong to different subsystem.
 
+Test with GMAC, USB, PCIe, EMMC, SD Card.
 
-Signed-off-by: James Young <james@foreveryoung.id.au>
+This patch set is base on the patche set for rk3576 evb1 support.
 
-________________________________
-From: james@foreveryoung.id.au <james@foreveryoung.id.au>
-Sent: Monday, 23 December 2024 11:06 PM
-To: linux-watchdog@vger.kernel.org <linux-watchdog@vger.kernel.org>
-Subject: [PATCH] watchdog: it87_wdt: add support for IT8733
+Changes in v2:
+- Update in sort order
+- remove grf in cru
+- Update some properties order
 
-Add support for the IT8733 Super I/O watchdog timer.
+Finley Xiao (2):
+  arm64: dts: rockchip: add core dtsi for RK3562 Soc
+  arm64: dts: rockchip: Add RK3562 evb2 devicetree
 
-Tested on a Lenovo ThinkCenter M93p SFF.
+Kever Yang (15):
+  dt-bindings: PCI: dwc: rockchip: Add rk3562 support
+  dt-bindings: mmc: Add support for rk3562 eMMC
+  dt-bindings: mmc: rockchip-dw-mshc: Add rk3562 compatible string
+  dt-bindings: power: rockchip: Add bindings for rk3562
+  dt-bindings: i2c: i2c-rk3x: Add rk3562 compatible
+  dt-bindings: gpu: Add rockchip,rk3562-mali compatible
+  dt-bindings: watchdog: Add rk3562 compatible
+  dt-bindings: spi: Add rockchip,rk3562-spi compatible
+  dt-bindings: serial: snps-dw-apb-uart: Add support for rk3562
+  dt-bindings: usb: dwc3: add compatible for rk3562
+  dt-bindings: pwm: rockchip: Add rockchip,rk3562-pwm
+  dt-bindings: rockchip: pmu: Add rk3562 compatible
+  dt-bindings: soc: rockchip: Add rk3562 syscon compatibles
+  dt-bindings: arm: rockchip: Add rk3562 evb2 board
+  dt-bindings: mfd: syscon: Add rk3562 QoS register compatible
 
-Signed-off-by: James Young <james@foreveryoung.id.au>
+ .../devicetree/bindings/arm/rockchip.yaml     |    5 +
+ .../devicetree/bindings/arm/rockchip/pmu.yaml |    2 +
+ .../bindings/gpu/arm,mali-bifrost.yaml        |    3 +-
+ .../devicetree/bindings/i2c/i2c-rk3x.yaml     |    1 +
+ .../devicetree/bindings/mfd/syscon.yaml       |    2 +
+ .../bindings/mmc/rockchip-dw-mshc.yaml        |    1 +
+ .../bindings/mmc/snps,dwcmshc-sdhci.yaml      |    9 +-
+ .../bindings/pci/rockchip-dw-pcie.yaml        |    1 +
+ .../power/rockchip,power-controller.yaml      |    1 +
+ .../devicetree/bindings/pwm/pwm-rockchip.yaml |    1 +
+ .../bindings/serial/snps-dw-apb-uart.yaml     |    1 +
+ .../devicetree/bindings/soc/rockchip/grf.yaml |    7 +
+ .../devicetree/bindings/spi/spi-rockchip.yaml |    1 +
+ .../bindings/usb/rockchip,dwc3.yaml           |    3 +
+ .../bindings/watchdog/snps,dw-wdt.yaml        |    1 +
+ arch/arm64/boot/dts/rockchip/Makefile         |    1 +
+ .../boot/dts/rockchip/rk3562-evb2-v10.dts     |  520 ++++
+ .../boot/dts/rockchip/rk3562-pinctrl.dtsi     | 2352 +++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3562.dtsi      | 1432 ++++++++++
+ 19 files changed, 4340 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-evb2-v10.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3562.dtsi
 
---_000_SEYPR04MB6821BD74A23F3C6A561E78B8F3022SEYPR04MB6821apcp_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+-- 
+2.25.1
 
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
-ttom:0;} </style>
-</head>
-<body dir=3D"ltr">
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-I previously posted a patch titled &quot;watchdog: it87_wdt: add support fo=
-r IT8733&quot; on 2024-12-23, but I realized there was an issue with the or=
-iginal version. Specifically, I made a typo in the chip ID definition. I ha=
-ve fixed the problem and am resubmitting the
- updated patch as v2.</div>
-<div class=3D"elementToProof" style=3D"font-family: Aptos, Aptos_EmbeddedFo=
-nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
-olor: rgb(0, 0, 0);">
-<br>
-</div>
-<pre><div style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontServ=
-ice, Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"=
->Signed-off-by: James Young &lt;james@foreveryoung.id.au&gt;</div></pre>
-<hr style=3D"display: inline-block; width: 98%;">
-<div id=3D"divRplyFwdMsg" dir=3D"ltr" style=3D"color: inherit;"><span style=
-=3D"font-family: Calibri, sans-serif; font-size: 11pt; color: rgb(0, 0, 0);=
-"><b>From:</b>&nbsp;james@foreveryoung.id.au &lt;james@foreveryoung.id.au&g=
-t;<br>
-<b>Sent:</b>&nbsp;Monday, 23 December 2024 11:06 PM<br>
-<b>To:</b>&nbsp;linux-watchdog@vger.kernel.org &lt;linux-watchdog@vger.kern=
-el.org&gt;<br>
-<b>Subject:</b>&nbsp;[PATCH] watchdog: it87_wdt: add support for IT8733</sp=
-an>
-<div>&nbsp;</div>
-</div>
-<div class=3D"elementToProof" style=3D"direction: ltr; font-family: Aptos, =
-Aptos_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, sans-serif; fo=
-nt-size: 12pt; color: rgb(0, 0, 0);">
-Add support for the IT8733 Super I/O watchdog timer.</div>
-<div style=3D"direction: ltr; font-family: Aptos, Aptos_EmbeddedFont, Aptos=
-_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb=
-(0, 0, 0);">
-<br>
-</div>
-<div style=3D"direction: ltr; font-family: Aptos, Aptos_EmbeddedFont, Aptos=
-_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb=
-(0, 0, 0);">
-Tested on a Lenovo ThinkCenter M93p SFF.</div>
-<div style=3D"direction: ltr; font-family: Aptos, Aptos_EmbeddedFont, Aptos=
-_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb=
-(0, 0, 0);">
-<br>
-</div>
-<div style=3D"direction: ltr; font-family: Aptos, Aptos_EmbeddedFont, Aptos=
-_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb=
-(0, 0, 0);">
-Signed-off-by: James Young &lt;james@foreveryoung.id.au&gt;</div>
-</body>
-</html>
-
---_000_SEYPR04MB6821BD74A23F3C6A561E78B8F3022SEYPR04MB6821apcp_--
-
---_004_SEYPR04MB6821BD74A23F3C6A561E78B8F3022SEYPR04MB6821apcp_
-Content-Type: application/octet-stream;
-	name="0002-watchdog-it87_wdt-add-support-for-IT8733.patch"
-Content-Description: 0002-watchdog-it87_wdt-add-support-for-IT8733.patch
-Content-Disposition: attachment;
-	filename="0002-watchdog-it87_wdt-add-support-for-IT8733.patch"; size=1086;
-	creation-date="Mon, 23 Dec 2024 12:12:39 GMT";
-	modification-date="Mon, 23 Dec 2024 12:14:24 GMT"
-Content-Transfer-Encoding: base64
-
-RnJvbSAyZjU3YjZkZmY1NzRjNDE3ZjkzZGVhYTk3ZDhlNWQzMWFiYTIwMmRiIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBKYW1lcyBZb3VuZyA8amFtZXNAZm9yZXZlcnlvdW5nLmlkLmF1
-PgpEYXRlOiBNb24sIDIzIERlYyAyMDI0IDIzOjEwOjIzICsxMTAwClN1YmplY3Q6IFtQQVRDSF0g
-d2F0Y2hkb2c6IGl0ODdfd2R0OiBhZGQgc3VwcG9ydCBmb3IgSVQ4NzMzCgotLS0KIGRyaXZlcnMv
-d2F0Y2hkb2cvaXQ4N193ZHQuYyB8IDIgKy0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigr
-KSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvd2F0Y2hkb2cvaXQ4N193ZHQu
-YyBiL2RyaXZlcnMvd2F0Y2hkb2cvaXQ4N193ZHQuYwppbmRleCAzNmM4YmRjYTQ3NDMuLjkzYWJh
-ZWIxZTg0YiAxMDA2NDQKLS0tIGEvZHJpdmVycy93YXRjaGRvZy9pdDg3X3dkdC5jCisrKyBiL2Ry
-aXZlcnMvd2F0Y2hkb2cvaXQ4N193ZHQuYwpAQCAtNzEsNyArNzEsNyBAQAogI2RlZmluZSBJVDg3
-MjFfSUQgMHg4NzIxCiAjZGVmaW5lIElUODcyNl9JRCAweDg3MjYgLyogdGhlIGRhdGEgc2hlZXQg
-c3VnZ2VzdCB3cm9uZ2x5IDB4ODcxNiAqLwogI2RlZmluZSBJVDg3MjhfSUQgMHg4NzI4Ci0jZGVm
-aW5lIElUODcyOF9JRCAweDg3MzMKKyNkZWZpbmUgSVQ4NzMzX0lEIDB4ODczMwogI2RlZmluZSBJ
-VDg3NzJfSUQgMHg4NzcyCiAjZGVmaW5lIElUODc4M19JRCAweDg3ODMKICNkZWZpbmUgSVQ4Nzg0
-X0lEIDB4ODc4NAotLSAKMi40My4wCgo=
-
---_004_SEYPR04MB6821BD74A23F3C6A561E78B8F3022SEYPR04MB6821apcp_--
 
