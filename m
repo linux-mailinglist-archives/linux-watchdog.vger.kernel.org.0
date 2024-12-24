@@ -1,99 +1,58 @@
-Return-Path: <linux-watchdog+bounces-2610-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2611-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2FF39FBBB2
-	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Dec 2024 10:57:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 099DC9FBBA9
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Dec 2024 10:56:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 57E2A188601A
-	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Dec 2024 09:53:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 914237A1275
+	for <lists+linux-watchdog@lfdr.de>; Tue, 24 Dec 2024 09:56:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82B861C3BEB;
-	Tue, 24 Dec 2024 09:49:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EB681A8F98;
+	Tue, 24 Dec 2024 09:54:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="B4O+M/Zw"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="kIsQGord"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-m32123.qiye.163.com (mail-m32123.qiye.163.com [220.197.32.123])
+Received: from mail-m1973170.qiye.163.com (mail-m1973170.qiye.163.com [220.197.31.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D241B3926;
-	Tue, 24 Dec 2024 09:49:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ED5517C220;
+	Tue, 24 Dec 2024 09:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735033777; cv=none; b=CUhpAF/zrPS5rmhXRysRd4mDjC8LDRs99XvSb8CnQbqdbP/zVN6sVaU78ZdIX7yE7/AtAFSxAeI4W1FKVlyCLCrbeDIHtkMSTKrE+Eyjd1Sv5Rsh0buymwP5QqkjjbVMR6aTTaQ0Dc1Qv/4NmjjakIn7NuqYbEXaeng7kYBG2CA=
+	t=1735034088; cv=none; b=n3fafa/OI67+B81mkWd31W34+IMZteeNTDpwZDL9CSGalF71VWEjLgjWKS9LxZE7c+es4m0vsvUOrb0kiwfhUo8xWmMW4a8GksRHum4vyaZWXlxuaeHUkmxX7ipN7GTKQr690tLSHUEM8H7t4dba3hFgNBsQxswGKOpP36AzhOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735033777; c=relaxed/simple;
-	bh=FyoNrvG944raOlEcqGIAFdzTG2vSx7b14uZG3/FwDOs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=i+47Ithy00snwT4bOIIazkWcKuIPZWnCYXtAwkKuCar0gE0ar8bzyXgnD8z8e9ZUfKd3+j/DmHrRFZOU7oqdVy0mO8sMVBaPwMTuVB6l1L5S7udNzoXHUw4Lu6dNQEEYyBeZXtZ9kKrmNGHE2g23Puou4U4BfklnA1yAZN0Q4VA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=B4O+M/Zw; arc=none smtp.client-ip=220.197.32.123
+	s=arc-20240116; t=1735034088; c=relaxed/simple;
+	bh=QC8QKO926aubblv/IQQskodaCWChRpxnYNf+iiZ2nS0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=A8kYc0RGgrImvd8XxEAV37iXExhbto7wNwhTNeEG6S/ESqRbGWkdyTMAnFtR5ThcYCBt/IG8NByKLHlbbmib2riYEqwNRbgzYNQOxJgdYkY96wYMmNMHsCa5oUA4ALmqAMKPPBCgVwUhcYhJYeOH16YziUAgdiJC0eTWnr0+Gjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=kIsQGord; arc=none smtp.client-ip=220.197.31.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
 Received: from localhost.localdomain (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 6aad4ed7;
-	Tue, 24 Dec 2024 17:49:21 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id 6aad4f15;
+	Tue, 24 Dec 2024 17:49:33 +0800 (GMT+08:00)
 From: Kever Yang <kever.yang@rock-chips.com>
 To: heiko@sntech.de
 Cc: linux-rockchip@lists.infradead.org,
 	Kever Yang <kever.yang@rock-chips.com>,
-	Simon Xue <xxm@rock-chips.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Mark Brown <broonie@kernel.org>,
-	Chris Morgan <macromorgan@hotmail.com>,
-	Frank Wang <frank.wang@rock-chips.com>,
 	Jamie Iles <jamie@jamieiles.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	linux-pci@vger.kernel.org,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Johan Jonker <jbx6244@gmail.com>,
-	David Airlie <airlied@gmail.com>,
-	dri-devel@lists.freedesktop.org,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	linux-i2c@vger.kernel.org,
-	Shawn Lin <shawn.lin@rock-chips.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Elaine Zhang <zhangqing@rock-chips.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Finley Xiao <finley.xiao@rock-chips.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-	FUKAUMI Naoki <naoki@radxa.com>,
-	linux-pwm@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Andy Yan <andyshrk@163.com>,
-	linux-serial@vger.kernel.org,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	devicetree@vger.kernel.org,
-	Diederik de Haas <didi.debian@cknow.org>,
+	Guenter Roeck <linux@roeck-us.net>,
 	linux-watchdog@vger.kernel.org,
 	Rob Herring <robh@kernel.org>,
-	Lee Jones <lee@kernel.org>,
-	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Shresth Prasad <shresthprasad7@gmail.com>,
-	Tim Lunn <tim@feathertop.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Dragan Simic <dsimic@manjaro.org>,
-	Detlev Casanova <detlev.casanova@collabora.com>,
-	linux-mmc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-Subject: [PATCH v2 00/17] rockchip: Add rk3562 support
-Date: Tue, 24 Dec 2024 17:49:03 +0800
-Message-Id: <20241224094920.3821861-1-kever.yang@rock-chips.com>
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>
+Subject: [PATCH v2 07/17] dt-bindings: watchdog: Add rk3562 compatible
+Date: Tue, 24 Dec 2024 17:49:10 +0800
+Message-Id: <20241224094920.3821861-8-kever.yang@rock-chips.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20241224094920.3821861-1-kever.yang@rock-chips.com>
+References: <20241224094920.3821861-1-kever.yang@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -102,78 +61,41 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQx1OGFZCHUlLSB0dSx5OTE9WFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpKQk
-	1VSktLVUpCWQY+
-X-HM-Tid: 0a93f8122e8303afkunm6aad4ed7
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGkNKHlZOSx1LHxpDQh4dSU1WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpOTE
+	5VSktLVUpCS0tZBg++
+X-HM-Tid: 0a93f8125ef503afkunm6aad4f15
 X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PxA6ODo6AjIJHEoJS1EdLD8s
-	DxEKCU5VSlVKTEhOS0hITE1PQ0xDVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-	EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFJTUJDNwY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MRQ6UQw4CDIXPko3PFELLBkM
+	TTdPCRJVSlVKTEhOS0hITExOS01DVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
+	EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFDTks3Bg++
 DKIM-Signature:a=rsa-sha256;
-	b=B4O+M/Zw24LyURNcEw+WhDYJK29iAHTi0p4dShi0/NhEClO4QvsLlaGzwjfu6wmFcSn5fN5xHurXqhfa05Z/V+HFtpARvcipLUAtfEvn/JVqKw3D5bl5WacGOSbQ9WTLN3PzdpWIg/Xxm3+foqpbqwx3bhj89Wvq4UKSq85Zlys=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=oAXD/EvvyZpJMisxlK2FCVt8jBq9aehKbViTNvrjWK8=;
+	b=kIsQGord8lsAPJmwszbIVhJI3b+HHzCIMLWAf6rQyq5DWGDccoC0RNicvEadQy8GW9w+qIhrB3ksI/idOd777KwoiVRBxb2wN2N7piZj48fEqpN1fnjTsXApCGlkc4Qbvlb1DA5JH0xzzW2OkxQmaO4Y5PNvM2s9NsSBlKPAIAg=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=w65nHanWmBSK+gAUJK97FwbkvqytD7kBrCEuPTUVJpI=;
 	h=date:mime-version:subject:message-id:from;
 
+Add rockchip,rk3562-wdt for rk3562.
 
-This patch set adds rk3562 SoC and its evb support.
+Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
+---
 
-Split out patches belong to different subsystem.
+Changes in v2: None
 
-Test with GMAC, USB, PCIe, EMMC, SD Card.
+ Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-This patch set is base on the patche set for rk3576 evb1 support.
-
-Changes in v2:
-- Update in sort order
-- remove grf in cru
-- Update some properties order
-
-Finley Xiao (2):
-  arm64: dts: rockchip: add core dtsi for RK3562 Soc
-  arm64: dts: rockchip: Add RK3562 evb2 devicetree
-
-Kever Yang (15):
-  dt-bindings: PCI: dwc: rockchip: Add rk3562 support
-  dt-bindings: mmc: Add support for rk3562 eMMC
-  dt-bindings: mmc: rockchip-dw-mshc: Add rk3562 compatible string
-  dt-bindings: power: rockchip: Add bindings for rk3562
-  dt-bindings: i2c: i2c-rk3x: Add rk3562 compatible
-  dt-bindings: gpu: Add rockchip,rk3562-mali compatible
-  dt-bindings: watchdog: Add rk3562 compatible
-  dt-bindings: spi: Add rockchip,rk3562-spi compatible
-  dt-bindings: serial: snps-dw-apb-uart: Add support for rk3562
-  dt-bindings: usb: dwc3: add compatible for rk3562
-  dt-bindings: pwm: rockchip: Add rockchip,rk3562-pwm
-  dt-bindings: rockchip: pmu: Add rk3562 compatible
-  dt-bindings: soc: rockchip: Add rk3562 syscon compatibles
-  dt-bindings: arm: rockchip: Add rk3562 evb2 board
-  dt-bindings: mfd: syscon: Add rk3562 QoS register compatible
-
- .../devicetree/bindings/arm/rockchip.yaml     |    5 +
- .../devicetree/bindings/arm/rockchip/pmu.yaml |    2 +
- .../bindings/gpu/arm,mali-bifrost.yaml        |    3 +-
- .../devicetree/bindings/i2c/i2c-rk3x.yaml     |    1 +
- .../devicetree/bindings/mfd/syscon.yaml       |    2 +
- .../bindings/mmc/rockchip-dw-mshc.yaml        |    1 +
- .../bindings/mmc/snps,dwcmshc-sdhci.yaml      |    9 +-
- .../bindings/pci/rockchip-dw-pcie.yaml        |    1 +
- .../power/rockchip,power-controller.yaml      |    1 +
- .../devicetree/bindings/pwm/pwm-rockchip.yaml |    1 +
- .../bindings/serial/snps-dw-apb-uart.yaml     |    1 +
- .../devicetree/bindings/soc/rockchip/grf.yaml |    7 +
- .../devicetree/bindings/spi/spi-rockchip.yaml |    1 +
- .../bindings/usb/rockchip,dwc3.yaml           |    3 +
- .../bindings/watchdog/snps,dw-wdt.yaml        |    1 +
- arch/arm64/boot/dts/rockchip/Makefile         |    1 +
- .../boot/dts/rockchip/rk3562-evb2-v10.dts     |  520 ++++
- .../boot/dts/rockchip/rk3562-pinctrl.dtsi     | 2352 +++++++++++++++++
- arch/arm64/boot/dts/rockchip/rk3562.dtsi      | 1432 ++++++++++
- 19 files changed, 4340 insertions(+), 4 deletions(-)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-evb2-v10.dts
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-pinctrl.dtsi
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3562.dtsi
-
+diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+index 1efefd741c06..ef088e0f6917 100644
+--- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
+@@ -28,6 +28,7 @@ properties:
+               - rockchip,rk3328-wdt
+               - rockchip,rk3368-wdt
+               - rockchip,rk3399-wdt
++              - rockchip,rk3562-wdt
+               - rockchip,rk3568-wdt
+               - rockchip,rk3576-wdt
+               - rockchip,rk3588-wdt
 -- 
 2.25.1
 
