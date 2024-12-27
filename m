@@ -1,93 +1,132 @@
-Return-Path: <linux-watchdog+bounces-2617-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2618-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52BF39FCCF2
-	for <lists+linux-watchdog@lfdr.de>; Thu, 26 Dec 2024 19:34:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C1209FD16D
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Dec 2024 08:39:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1450E18833D9
-	for <lists+linux-watchdog@lfdr.de>; Thu, 26 Dec 2024 18:34:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 021B53A05D6
+	for <lists+linux-watchdog@lfdr.de>; Fri, 27 Dec 2024 07:39:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D78E1DED54;
-	Thu, 26 Dec 2024 18:27:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2370314A0BC;
+	Fri, 27 Dec 2024 07:38:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FSYYD9iH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aTuE13RY"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D54B91DED4F;
-	Thu, 26 Dec 2024 18:27:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B37781474A7;
+	Fri, 27 Dec 2024 07:38:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735237664; cv=none; b=VRf1KaH+Z7Juca87wn3iMnljHXVnIpE6HiyKHwwEyN98SpJKJ/GhetOx84R6TnjGHeF+1s4s17M/e4/E5SZwYNz2gymX+/XsbUANqgkE76eJO4cKL6s7/fN5S7U/MaJJp4JH3qa0+hiU54tb9PU6XoWW79fxjy+wbQXKFYwBpa8=
+	t=1735285136; cv=none; b=DCKxCx0RTFPYUF7PQk1TXhRFgLfE63TmGGWWd/zu+vvYnl9moU06xP1TcEgsvtPytS3cqvt5FDkqviPvQlYkxM782t9kqK072cSfpYyQvlTvTkFWzXgZvBd8Z8vtc6B+SKpOgn147726k6f9ouCO3Ukd4066QqM5fRF33OjrH3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735237664; c=relaxed/simple;
-	bh=3rra3OEL4T2fPfqzANKvKHQ9vGwn5eoOrpfGXhXCcco=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W/gbT9Q8xy0r+U/UDY+wUE97CtbLELl4YjhLdi9qkSkJ29aqgg+VcGmzHIoXwILqq5j9xmexjJK7aMldPu5rpk4IJSn9mX6hY7OTcZIiwoLWIdi+WxLtR3km8KUZxU0m/njz0qn2ceCF9iRfr3AX0+HQqzyUnRwLIfPV6JJM2Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FSYYD9iH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50E7FC4CED7;
-	Thu, 26 Dec 2024 18:27:43 +0000 (UTC)
+	s=arc-20240116; t=1735285136; c=relaxed/simple;
+	bh=Wf+SvqNi6slsfwtp9CR+b3C0cjM1BKcBVm093pQ2syc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pRrxx5VDFIoJzyeI7JA/eqOOdRGnFP4Fx24UF9/GEWn6uMRrVkU1RtSCgO7Btb/E69kTlCVdD5thKswR53WAj810f1glIgzLvQeYUERE49JMpipzEGIcWSXGHqj2QX67wM7t6LbuQ3ITH4wbN/5jBjScwJU0n1RSSAb9Q+q61RA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aTuE13RY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E6D2C4CED3;
+	Fri, 27 Dec 2024 07:38:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735237664;
-	bh=3rra3OEL4T2fPfqzANKvKHQ9vGwn5eoOrpfGXhXCcco=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FSYYD9iH9trTAby6FEylCJJBFPAVynzD6cC+dw/nNtLhlV9g8bbDyOk4h+Pfmb2Sm
-	 t6N91CDOYpAx+S5spA+xxAtvGInpUuNEaJVJY2pHDsbzQ3f82ELSCO/CbxUDV2pI9k
-	 6KSd/iMWapwrUilVpDByzsClevzP2CzZsdgnDSko7kJF++TtVzKhA/QKVeM5xCFg+s
-	 m0DS0i/W+wolfxEMpAX2XjoXIUp9FrnrSxmql0K8QFrTBy+NVGr3rzfldB2HVFq8P0
-	 ztiWw02FUiXZzYzXhi6jn3GL7/W5N5za6f7PW1tNoHTIBSy1Y8OzJ7iKKYHQ31TXfY
-	 LeE2NF7arl8AQ==
-From: Bjorn Andersson <andersson@kernel.org>
-To: wim@linux-watchdog.org,
-	linux@roeck-us.net,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	konradybcio@kernel.org,
-	quic_rjendra@quicinc.com,
-	linux-arm-msm@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-Cc: quic_srichara@quicinc.com,
-	quic_varada@quicinc.com
-Subject: Re: (subset) [PATCH v2 0/2] Add watchdog support for IPQ5424
-Date: Thu, 26 Dec 2024 12:27:00 -0600
-Message-ID: <173523761392.1412574.3549863619757179987.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20241121051951.1776250-1-quic_mmanikan@quicinc.com>
-References: <20241121051951.1776250-1-quic_mmanikan@quicinc.com>
+	s=k20201202; t=1735285136;
+	bh=Wf+SvqNi6slsfwtp9CR+b3C0cjM1BKcBVm093pQ2syc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aTuE13RYXpFbp4ATHOcud1qoWz6gazgLh6G7+g6K+m+MYZPlTmlVRioMn0km9mkEE
+	 nnTTjnBXZJevN4SHX8nPschH5OjNfKocnRCSFM9T8KfGnWGkIXoZljNeczyVXhfrx1
+	 4BNhx+ANKF+gAznsdRteWmHrJJHiGVK6UDkVMsbK3RCzUiOLDiC6akwNed3GJjIbe/
+	 0ik79J2Z8Ye9WlYsQNJfZ0hF9PF84uZjnNMtpTuI4RgbKUM0h6TZ6SgiULSqNfU7tX
+	 IS5ZupcP/HvUDTuTG6HDZbZoFJSnMfh91qi+HIUmZhi6NOdjhwR245l5M6wLVCG3nM
+	 iZrIdyQYy8NzQ==
+Date: Fri, 27 Dec 2024 08:38:53 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Kever Yang <kever.yang@rock-chips.com>
+Cc: heiko@sntech.de, linux-rockchip@lists.infradead.org, 
+	Simon Xue <xxm@rock-chips.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Mark Brown <broonie@kernel.org>, Chris Morgan <macromorgan@hotmail.com>, 
+	Frank Wang <frank.wang@rock-chips.com>, Jamie Iles <jamie@jamieiles.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org, Jonas Karlman <jonas@kwiboo.se>, 
+	Johan Jonker <jbx6244@gmail.com>, David Airlie <airlied@gmail.com>, 
+	dri-devel@lists.freedesktop.org, Sebastian Reichel <sebastian.reichel@collabora.com>, 
+	linux-i2c@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>, 
+	Simona Vetter <simona@ffwll.ch>, Elaine Zhang <zhangqing@rock-chips.com>, 
+	Conor Dooley <conor+dt@kernel.org>, Finley Xiao <finley.xiao@rock-chips.com>, 
+	Maxime Ripard <mripard@kernel.org>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>, 
+	FUKAUMI Naoki <naoki@radxa.com>, linux-pwm@vger.kernel.org, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Andy Yan <andyshrk@163.com>, linux-serial@vger.kernel.org, 
+	Michael Riesch <michael.riesch@wolfvision.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, devicetree@vger.kernel.org, 
+	Diederik de Haas <didi.debian@cknow.org>, linux-watchdog@vger.kernel.org, Rob Herring <robh@kernel.org>, 
+	Lee Jones <lee@kernel.org>, Cristian Ciocaltea <cristian.ciocaltea@collabora.com>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Shresth Prasad <shresthprasad7@gmail.com>, 
+	Tim Lunn <tim@feathertop.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, linux-arm-kernel@lists.infradead.org, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Jisheng Zhang <jszhang@kernel.org>, 
+	Dragan Simic <dsimic@manjaro.org>, Detlev Casanova <detlev.casanova@collabora.com>, 
+	linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-usb@vger.kernel.org, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Subject: Re: [PATCH v2 00/17] rockchip: Add rk3562 support
+Message-ID: <sasnc2ocxnlfp4kprsobu5gkajjb5wdxhld73bg6xocgb3foah@yjmphtvpmyff>
+References: <20241224094920.3821861-1-kever.yang@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241224094920.3821861-1-kever.yang@rock-chips.com>
 
-
-On Thu, 21 Nov 2024 10:49:49 +0530, Manikanta Mylavarapu wrote:
-> Add a watchdog node to the IPQ5424 device tree and update the relevant
-> bindings accordingly.
+On Tue, Dec 24, 2024 at 05:49:03PM +0800, Kever Yang wrote:
 > 
-> Changes in V2:
-> 	- Fixed review comment from Krzysztof Kozlowski
-> 	- Detailed change logs are added to the respective patches
+> This patch set adds rk3562 SoC and its evb support.
 > 
-> [...]
+> Split out patches belong to different subsystem.
+> 
+> Test with GMAC, USB, PCIe, EMMC, SD Card.
+> 
+> This patch set is base on the patche set for rk3576 evb1 support.
+> 
+> Changes in v2:
+> - Update in sort order
+> - remove grf in cru
+> - Update some properties order
+> 
+> Finley Xiao (2):
+>   arm64: dts: rockchip: add core dtsi for RK3562 Soc
+>   arm64: dts: rockchip: Add RK3562 evb2 devicetree
+> 
+> Kever Yang (15):
+>   dt-bindings: PCI: dwc: rockchip: Add rk3562 support
+>   dt-bindings: mmc: Add support for rk3562 eMMC
+>   dt-bindings: mmc: rockchip-dw-mshc: Add rk3562 compatible string
+>   dt-bindings: power: rockchip: Add bindings for rk3562
+>   dt-bindings: i2c: i2c-rk3x: Add rk3562 compatible
+>   dt-bindings: gpu: Add rockchip,rk3562-mali compatible
+>   dt-bindings: watchdog: Add rk3562 compatible
+>   dt-bindings: spi: Add rockchip,rk3562-spi compatible
+>   dt-bindings: serial: snps-dw-apb-uart: Add support for rk3562
+>   dt-bindings: usb: dwc3: add compatible for rk3562
+>   dt-bindings: pwm: rockchip: Add rockchip,rk3562-pwm
+>   dt-bindings: rockchip: pmu: Add rk3562 compatible
+>   dt-bindings: soc: rockchip: Add rk3562 syscon compatibles
+>   dt-bindings: arm: rockchip: Add rk3562 evb2 board
+>   dt-bindings: mfd: syscon: Add rk3562 QoS register compatible
 
-Applied, thanks!
+You squezzed here like 12 different subsystems. Some of these changes
+suggest missing drivers.
 
-[2/2] arm64: dts: qcom: ipq5424: Add watchdog node
-      commit: 825b203296a845a1093722062ac6e5b655825704
+Please read basic upstreaming guide, some previous discussions and get
+internal rock-chips help so we want repeat basics over and over.
+
+Bindings are with drivers. Send them to respective subsystems.
 
 Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+Krzysztof
+
 
