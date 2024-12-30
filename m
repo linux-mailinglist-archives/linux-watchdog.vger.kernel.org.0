@@ -1,109 +1,101 @@
-Return-Path: <linux-watchdog+bounces-2643-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2644-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C5E99FE7AF
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Dec 2024 16:39:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69EC79FE96C
+	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Dec 2024 18:36:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0728F1614DE
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Dec 2024 15:39:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54450188107A
+	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Dec 2024 17:36:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5C521AAA32;
-	Mon, 30 Dec 2024 15:39:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CEBE1ACED5;
+	Mon, 30 Dec 2024 17:36:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XuvWJtEE"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="J1lqBNPC"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4FE154BE4;
-	Mon, 30 Dec 2024 15:39:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A45185920;
+	Mon, 30 Dec 2024 17:36:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735573183; cv=none; b=VbjHB7Dv4TRSJ1xvmA5Tt3yuUEta96ZVwi1ZpjGCxjcdA1GiM6b6j/CVyvgBIQjELceRVxzKm/ULQ9UO9y8+cqJonVniR7Bk8bzo65/LmyWo1WFEo6vcxLJAZcWlsX6G7Z1IE29nm24ofgVB8TkO0699JW7pikr3jcMzTYXD5ok=
+	t=1735580199; cv=none; b=o7qYaIGOMrSsXM5rioczdez0wsMWs+7PZqKKY/l7Z6N11ROZUjqqhmGROUjRTkMsT9aR6x5KKKfsh9hDxwDwbbBq8nRv6MZnhBHckpBYU/dzRxoR+75tWpcOw8c9UwUFIqhk/9SvSfsYvQ0prjV1RAX81YidXLQzZtjf52aX7A0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735573183; c=relaxed/simple;
-	bh=z95nvnR0IBfFZgmgFKAM139dJRdkSORpd/LIl6jgSDI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TjqIVPNLZJwkbM9ku79OKmpRmhZAOeAbx+tqIyaYUJ/2ABgd9UC3MvTnl56VigNtJgptVwcyVOCX7PNVJm60IH/BxImazUCMJsLg9YT+t897c/wrjhWQphuq8lg0/6cUjlxtVX71/4ROs+8uwSnMuk4EArywgrq2K6MTYNy4yes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XuvWJtEE; arc=none smtp.client-ip=217.70.183.197
+	s=arc-20240116; t=1735580199; c=relaxed/simple;
+	bh=RCFDpSIiPM+fgvDEVLMWb/PAwBv5GDH6BDYtTBeQd0s=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ny4iCnqvFIeHG2kGzl1vF6/EQdis68QkPuAIVmzyWulz4mhGWxAiE2vX39WCn5yl8PxiOZqiJWRLsw1dKCH3r4rrnpCcc3NFNrwlMj1RaUuUN6cjU9ZHTQYXzqIrlCP6ICIuD4LAXHrsUUru0fvnVLTCBlotq8oRbq1vhhimB8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=J1lqBNPC; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C90E1C0002;
-	Mon, 30 Dec 2024 15:39:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8534320002;
+	Mon, 30 Dec 2024 17:36:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1735573178;
+	t=1735580189;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hA6CvsCmERwL792aXpdy/ULlGDIdsXDMPmDFIsJtA6E=;
-	b=XuvWJtEE0++XLT3rjMf9QjyWRB1g9h7vnqPO7uWmXBjocxq+NoCycynxsGKJmKQlDfH9Yx
-	1ilV8yt4k+8YgHIF9ToR+BZ6BTDhk/q1w37IAJYbJAodKEVUuzdeulTaOIoA4s6Z0ihmw4
-	sRkOi7lOxe30lAVxPMk+2ArnorH0JvtorS92rVthXDsL9+DWX64KZpPNsoWqSinnlfxDDt
-	4HmfgAvft3IdMa9U+q2i5XrPI3/K2KZkpmRnHOGIkX76XWqBB6uHPxiSToobxC2KNkZh08
-	vAGwy1jwSp7IWTxgauhY3nNw40B+bqmn6IeJSMURelKCAGbwdErgEnq2vtXnMQ==
-Date: Mon, 30 Dec 2024 16:39:36 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
-	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org, netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v4 7/7] rtc: Add Nuvoton NCT6694 RTC support
-Message-ID: <2024123015393681ee26a3@mail.local>
-References: <20241227095727.2401257-1-a0282524688@gmail.com>
- <20241227095727.2401257-8-a0282524688@gmail.com>
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VTjyXowLtD8jETjdFmOuLNQ6/oxD8kvkCk4UOI4K1yY=;
+	b=J1lqBNPCVDjKTO9jr58E9HODPem18uFgdoNf8GTjAmk+0+C6Xlj1fpdjMp3EnNc8GwOpMW
+	uiFv9uL308o8WlN6aYgBlMuwKS1dPxsJcSlUCfuKNrLf2q3dvRAiXnhNQ3NYVYdFZpL306
+	O5aKQZIpuaWBhiVFmltkglhYDIK9E4YsHU8hlk4hYtlb6PyhAXH1dvF/eT/hWMICxfb8Sg
+	HNkMsY8K49ghHvz+KCjsvqZSY/O/vwMYZKaWHe5vuIjITn8OGnEtcDcjbP2aqtYhsg95SW
+	DfB+c5klUmSOuZW6TQaPP3qlM+J760Qb037BHY+TEsmGPCMFV+hV+OHLgZm62Q==
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Date: Mon, 30 Dec 2024 18:35:58 +0100
+Subject: [PATCH] watchdog: max77620: fix excess field in kerneldoc
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241227095727.2401257-8-a0282524688@gmail.com>
-X-GND-Sasl: alexandre.belloni@bootlin.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241230-max77620_wdt-kerneldoc-fix-v1-1-8a3211818993@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAP3ZcmcC/x3MQQqDMBBA0avIrB1IptJQryIiMRnbQY2SSA2Id
+ 2/o8v3FvyBxFE7QVhdE/kqSLRTougL3seHNKL4YSFGj6aFwtdmYJ6nh9AfOHAMvfnM4SUbnNL1
+ Gy2oaDZTBHrnk/7zr7/sHuElcuGwAAAA=
+X-Change-ID: 20241230-max77620_wdt-kerneldoc-fix-cc129bae0fb7
+To: Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel test robot <lkp@intel.com>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-On 27/12/2024 17:57:27+0800, Ming Yu wrote:
-> +	ret = devm_rtc_register_device(data->rtc);
-> +	if (ret)
-> +		return dev_err_probe(&pdev->dev, ret, "Failed to register rtc\n");
+The wdt_info does not exist in the struct being documented.
 
-There is no error path where the error is silent in
-devm_rtc_register_device, the message is unnecessary .
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202412281555.YMBF9azh-lkp@intel.com/
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+---
+ drivers/watchdog/max77620_wdt.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-> +
-> +	device_init_wakeup(&pdev->dev, true);
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver nct6694_rtc_driver = {
-> +	.driver = {
-> +		.name	= "nct6694-rtc",
-> +	},
-> +	.probe		= nct6694_rtc_probe,
-> +};
-> +
-> +module_platform_driver(nct6694_rtc_driver);
-> +
-> +MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
-> +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:nct6694-rtc");
-> -- 
-> 2.34.1
-> 
+diff --git a/drivers/watchdog/max77620_wdt.c b/drivers/watchdog/max77620_wdt.c
+index 33835c0b06de573c93737309bd69c7aaab43127e..d3ced783a5f4d554db787a47185c8b7eb7ac85e4 100644
+--- a/drivers/watchdog/max77620_wdt.c
++++ b/drivers/watchdog/max77620_wdt.c
+@@ -25,7 +25,6 @@ static bool nowayout = WATCHDOG_NOWAYOUT;
+ 
+ /**
+  * struct max77620_variant - Data specific to a chip variant
+- * @wdt_info:            watchdog descriptor
+  * @reg_onoff_cnfg2:     ONOFF_CNFG2 register offset
+  * @reg_cnfg_glbl2:      CNFG_GLBL2 register offset
+  * @reg_cnfg_glbl3:      CNFG_GLBL3 register offset
 
+---
+base-commit: fc033cf25e612e840e545f8d5ad2edd6ba613ed5
+change-id: 20241230-max77620_wdt-kerneldoc-fix-cc129bae0fb7
+
+Best regards,
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Luca Ceresoli <luca.ceresoli@bootlin.com>
+
 
