@@ -1,101 +1,93 @@
-Return-Path: <linux-watchdog+bounces-2644-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2645-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69EC79FE96C
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Dec 2024 18:36:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BF189FF332
+	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Jan 2025 08:06:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54450188107A
-	for <lists+linux-watchdog@lfdr.de>; Mon, 30 Dec 2024 17:36:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E44147A13B0
+	for <lists+linux-watchdog@lfdr.de>; Wed,  1 Jan 2025 07:06:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CEBE1ACED5;
-	Mon, 30 Dec 2024 17:36:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="J1lqBNPC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61A8E219E4;
+	Wed,  1 Jan 2025 07:06:31 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A45185920;
-	Mon, 30 Dec 2024 17:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F258217543;
+	Wed,  1 Jan 2025 07:06:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735580199; cv=none; b=o7qYaIGOMrSsXM5rioczdez0wsMWs+7PZqKKY/l7Z6N11ROZUjqqhmGROUjRTkMsT9aR6x5KKKfsh9hDxwDwbbBq8nRv6MZnhBHckpBYU/dzRxoR+75tWpcOw8c9UwUFIqhk/9SvSfsYvQ0prjV1RAX81YidXLQzZtjf52aX7A0=
+	t=1735715191; cv=none; b=j161GoCf4mQadkcrveQre3S3TSChAbK/85/IRzguZd90CHYBp2sy/H2OhYP4LCkHvOCHS7Ep0ZKeCxbqpylwZo2N/nTq8Pj44MXnNOieXHEHnQ2USuEvTV3Icv8BhbP9y+yn4yVI53fQFK7//BU2aUiYpV2CkDGO0a5ZhnGQBLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735580199; c=relaxed/simple;
-	bh=RCFDpSIiPM+fgvDEVLMWb/PAwBv5GDH6BDYtTBeQd0s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ny4iCnqvFIeHG2kGzl1vF6/EQdis68QkPuAIVmzyWulz4mhGWxAiE2vX39WCn5yl8PxiOZqiJWRLsw1dKCH3r4rrnpCcc3NFNrwlMj1RaUuUN6cjU9ZHTQYXzqIrlCP6ICIuD4LAXHrsUUru0fvnVLTCBlotq8oRbq1vhhimB8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=J1lqBNPC; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8534320002;
-	Mon, 30 Dec 2024 17:36:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1735580189;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=VTjyXowLtD8jETjdFmOuLNQ6/oxD8kvkCk4UOI4K1yY=;
-	b=J1lqBNPCVDjKTO9jr58E9HODPem18uFgdoNf8GTjAmk+0+C6Xlj1fpdjMp3EnNc8GwOpMW
-	uiFv9uL308o8WlN6aYgBlMuwKS1dPxsJcSlUCfuKNrLf2q3dvRAiXnhNQ3NYVYdFZpL306
-	O5aKQZIpuaWBhiVFmltkglhYDIK9E4YsHU8hlk4hYtlb6PyhAXH1dvF/eT/hWMICxfb8Sg
-	HNkMsY8K49ghHvz+KCjsvqZSY/O/vwMYZKaWHe5vuIjITn8OGnEtcDcjbP2aqtYhsg95SW
-	DfB+c5klUmSOuZW6TQaPP3qlM+J760Qb037BHY+TEsmGPCMFV+hV+OHLgZm62Q==
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Mon, 30 Dec 2024 18:35:58 +0100
-Subject: [PATCH] watchdog: max77620: fix excess field in kerneldoc
+	s=arc-20240116; t=1735715191; c=relaxed/simple;
+	bh=M6uGJmYw44zN+fQjiG8DJFAmdOQrPSd6+Qa6uITln9Y=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qK10KY8KZCtrGCbqRD2hI3sFb1K16qcwydLqr0pmtThmYSt5wUKW6khayJuplyI86JQ9+KGul9TF8zmGBd0IsLANLGnErKuoKKk+/NG+fLX5p4PfFOqZxZQPCH745hH5MsRt8SuGC6iZZIjn84M5Fwk6Esq5MqM0rWUoZm7vgYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.12; Wed, 1 Jan
+ 2025 15:01:16 +0800
+Received: from aspeedtech.com (192.168.10.13) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server id 15.2.1258.12 via Frontend
+ Transport; Wed, 1 Jan 2025 15:01:16 +0800
+From: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+To: <patrick@stwcx.xyz>, <andrew@codeconstruct.com.au>, <linux@roeck-us.net>,
+	<wim@linux-watchdog.org>, <joel@jms.id.au>, <linux-watchdog@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-aspeed@lists.ozlabs.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <Peter.Yin@quantatw.com>, <Patrick_NC_Lin@wiwynn.com>,
+	<BMC-SW@aspeedtech.com>, <chnguyen@amperecomputing.com>,
+	<aaron_lee@aspeedtech.com>
+Subject: [PATCH v5 0/1] Update ASPEED WDT bootstatus
+Date: Wed, 1 Jan 2025 15:01:15 +0800
+Message-ID: <20250101070116.2287171-1-chin-ting_kuo@aspeedtech.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241230-max77620_wdt-kerneldoc-fix-v1-1-8a3211818993@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAP3ZcmcC/x3MQQqDMBBA0avIrB1IptJQryIiMRnbQY2SSA2Id
- 2/o8v3FvyBxFE7QVhdE/kqSLRTougL3seHNKL4YSFGj6aFwtdmYJ6nh9AfOHAMvfnM4SUbnNL1
- Gy2oaDZTBHrnk/7zr7/sHuElcuGwAAAA=
-X-Change-ID: 20241230-max77620_wdt-kerneldoc-fix-cc129bae0fb7
-To: Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Guenter Roeck <linux@roeck-us.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
- kernel test robot <lkp@intel.com>, 
- Luca Ceresoli <luca.ceresoli@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-Sasl: luca.ceresoli@bootlin.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-The wdt_info does not exist in the struct being documented.
+This patch series inherits the patch submitted by Peter.
+https://patchwork.kernel.org/project/linux-watchdog/patch/20240430143114.1323686-2-peteryin.openbmc@gmail.com/
+Bootstatus mechanism is reconstructed to the latest
+architecture and for all existing ASPEED BMC platforms.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202412281555.YMBF9azh-lkp@intel.com/
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
----
- drivers/watchdog/max77620_wdt.c | 1 -
- 1 file changed, 1 deletion(-)
+Changes in v2:
+  - Support SW restart on AST2600 by default without
+    adding any dts property.
 
-diff --git a/drivers/watchdog/max77620_wdt.c b/drivers/watchdog/max77620_wdt.c
-index 33835c0b06de573c93737309bd69c7aaab43127e..d3ced783a5f4d554db787a47185c8b7eb7ac85e4 100644
---- a/drivers/watchdog/max77620_wdt.c
-+++ b/drivers/watchdog/max77620_wdt.c
-@@ -25,7 +25,6 @@ static bool nowayout = WATCHDOG_NOWAYOUT;
- 
- /**
-  * struct max77620_variant - Data specific to a chip variant
-- * @wdt_info:            watchdog descriptor
-  * @reg_onoff_cnfg2:     ONOFF_CNFG2 register offset
-  * @reg_cnfg_glbl2:      CNFG_GLBL2 register offset
-  * @reg_cnfg_glbl3:      CNFG_GLBL3 register offset
+Changes in v3:
+  - Get watchdog controller index by dividing register
+    base offset by register size.
 
----
-base-commit: fc033cf25e612e840e545f8d5ad2edd6ba613ed5
-change-id: 20241230-max77620_wdt-kerneldoc-fix-cc129bae0fb7
+Changes in v4:
+  - Update the commit message for updating bootstatus
+    handling patch.
+  - Rename aspeed_wdt_config struct to aspeed_wdt_data.
+  - Create restart callback function.
 
-Best regards,
+Changes in v5:
+  - Remove SW reset mechanism since there is no consensus
+    about bootstatus for SW reset currently.
+  - Correct the method for clearing reset event flag on
+    AST2400 and AST2500 legacy platforms.
+
+Chin-Ting Kuo (1):
+  watchdog: aspeed: Update bootstatus handling
+
+ drivers/watchdog/aspeed_wdt.c | 85 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 83 insertions(+), 2 deletions(-)
+
 -- 
-Luca Ceresoli <luca.ceresoli@bootlin.com>
+2.34.1
 
 
