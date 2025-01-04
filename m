@@ -1,98 +1,79 @@
-Return-Path: <linux-watchdog+bounces-2654-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2655-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0D62A0165F
-	for <lists+linux-watchdog@lfdr.de>; Sat,  4 Jan 2025 19:37:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75424A0167B
+	for <lists+linux-watchdog@lfdr.de>; Sat,  4 Jan 2025 20:05:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C7D0162D11
-	for <lists+linux-watchdog@lfdr.de>; Sat,  4 Jan 2025 18:37:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 271A67A011C
+	for <lists+linux-watchdog@lfdr.de>; Sat,  4 Jan 2025 19:05:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01D1E1C3F1C;
-	Sat,  4 Jan 2025 18:37:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2A081A8F61;
+	Sat,  4 Jan 2025 19:05:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b="UKCH+nYE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="afXA+zGV"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from www.linux-watchdog.org (www.linux-watchdog.org [185.87.125.42])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86D7723CB;
-	Sat,  4 Jan 2025 18:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.87.125.42
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77FAE1BC3F;
+	Sat,  4 Jan 2025 19:05:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736015849; cv=none; b=LuRDSpmTaGEnoTe41TzRgSwmyL6Z8W5fNCbWAY8Nmad/5Be9bl5lIMLAakAEmGp+Bcp0Xe65cP+xhYhH7Rr59J8Wrl+sbED0yRus4fxduQ05ZiyD4vwN03ERIVqmGkwS+qfbKQqWmrUo0YCSjo5A2arxOVzTdgLXREAoxfcNOz0=
+	t=1736017542; cv=none; b=IL/JfbDnaX8L+g4LR1IJ5ljM+nl3tEEvrlM+ihiA3Awfcb9eCaECH86PyDmtt8jszBez5bIK7h6u8uDIOnkrOfrub2dSMk44m2e7Z1dAUrmYVCSz2DHVZljSWYtKkXftV7JasK6dRPw/Xt5NWISkJM8h3PepYe+NLvylmou/ogA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736015849; c=relaxed/simple;
-	bh=978YavRrx9NtArdM/RvDSMUGwvbrTvXyTi+saLv1xcs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DMMmvt5XfB8z36P9X8CO6zac/zWOniBPjQcZ0cVuwI5IDx9fcSEm50Pm+Rj2GYHMI79dGDgWolwpqc46Oc4zAG6yC+UbhYRFa4G6HMlZfo3fKaGfQ1JMU6W36PRmTqBPFPfMm1kcewdtG7gybcueXm37hDw43hwzYcu3OSdSInY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org; spf=pass smtp.mailfrom=linux-watchdog.org; dkim=pass (1024-bit key) header.d=linux-watchdog.org header.i=@linux-watchdog.org header.b=UKCH+nYE; arc=none smtp.client-ip=185.87.125.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=linux-watchdog.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux-watchdog.org
-Received: by www.linux-watchdog.org (Postfix, from userid 500)
-	id C2A4640A06; Sat,  4 Jan 2025 18:58:42 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 www.linux-watchdog.org C2A4640A06
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-watchdog.org;
-	s=odk20180602; t=1736013522;
-	bh=978YavRrx9NtArdM/RvDSMUGwvbrTvXyTi+saLv1xcs=;
-	h=Date:From:To:Cc:Subject:From;
-	b=UKCH+nYEIxpm7NQoNGsbpY7ZWavrY5qKiXac8nEUvSMmDE3G64yNHfApvaVWZQFk/
-	 LZn1O9tu0/324TBYt8jxs23FpWc5ydvI1Kr5DA3ggu/MojnXozBn1t5y5LCWdXGpu7
-	 Glt+kmT2N3e4/cXL7EkwiAiuePNU6Idh/QJA5rU4=
-Date: Sat, 4 Jan 2025 18:58:42 +0100
-From: Wim Van Sebroeck <wim@linux-watchdog.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	=?iso-8859-1?Q?Cl=E9ment?= Le Goffic <clement.legoffic@foss.st.com>
-Subject: [GIT PULL REQUEST] watchdog - v6.10 release cycle.
-Message-ID: <20250104175842.GA15428@www.linux-watchdog.org>
+	s=arc-20240116; t=1736017542; c=relaxed/simple;
+	bh=KKyrHjawuVXvkdaDpwqwueEw5yb9fLXqwBKqhXo/TL0=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=HBgwyHCpmtPXWrwCDc0gDAd0rMJaqqd6SCRBfRiBSRIwyYDpooHTnniLG5YMc78DB8l5UEQzL3YtXYFMzvjkyVOlzs+eU8VWz2dLaQcX8juT0e+tY05zXU31YnJDsMWHxa5JROg6jKrSFzqO3gA3DorTJ4ZhkCHeeR2oxWAYpAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=afXA+zGV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 056A7C4CED1;
+	Sat,  4 Jan 2025 19:05:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736017540;
+	bh=KKyrHjawuVXvkdaDpwqwueEw5yb9fLXqwBKqhXo/TL0=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=afXA+zGVnm2S86PhgLES5nJBb5OPxJ+cHxNexFM5RUpk3yrbV8LgSBvvEnu4PKAtu
+	 sjbYE7Mi42pNNqK3dWulcGE8y3V1dkCTxA8vB/eEr+2LvqacahSj3O3mT+9zrkEAS6
+	 INgUl/DArq6LkEsiNlSKFqtDm7/VFCI9h9S3ucv6P3CX0pHB7t2BnPOJypEOqNQws8
+	 RSnTYYm6lyPP4zJhfk7fCZMc4OtkLTP88PCz4Wu+MiXdXY+qBkaR/gxoM4x3Q479Y9
+	 c5Tpgt87czZKQCJQig9yyVVcFp89t4CGI0N1BfJ4jGjfc1AZSaqCtaHtQSyTvZS8hk
+	 v66ZozVbIkW5g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB2A9380A96F;
+	Sat,  4 Jan 2025 19:06:01 +0000 (UTC)
+Subject: Re: [GIT PULL REQUEST] watchdog - v6.10 release cycle.
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20250104175842.GA15428@www.linux-watchdog.org>
+References: <20250104175842.GA15428@www.linux-watchdog.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20250104175842.GA15428@www.linux-watchdog.org>
+X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.13-rc6
+X-PR-Tracked-Commit-Id: cc0dc9e871a91aadf5b26a2d7760fb762e0d9203
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ab75170520d4964f3acf8bb1f91d34cbc650688e
+Message-Id: <173601756063.2486886.1061939975743399707.pr-tracker-bot@kernel.org>
+Date: Sat, 04 Jan 2025 19:06:00 +0000
+To: Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, LKML <linux-kernel@vger.kernel.org>, Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>, Guenter Roeck <linux@roeck-us.net>, =?iso-8859-1?Q?Cl=E9ment?= Le Goffic <clement.legoffic@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.5.20 (2009-12-10)
 
-Hi Linus,
+The pull request you sent on Sat, 4 Jan 2025 18:58:42 +0100:
 
-Please pull following watchdog changes for the v6.13 release cycle.
+> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.13-rc6
 
-This series contains:
-* stm32_iwdg: fix error message during driver probe
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ab75170520d4964f3acf8bb1f91d34cbc650688e
 
-The output from git request-pull:
-----------------------------------------------------------------
-The following changes since commit fc033cf25e612e840e545f8d5ad2edd6ba613ed5:
+Thank you!
 
-  Linux 6.13-rc5 (2024-12-29 13:15:45 -0800)
-
-are available in the git repository at:
-
-  git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.13-rc6
-
-for you to fetch changes up to cc0dc9e871a91aadf5b26a2d7760fb762e0d9203:
-
-  watchdog: stm32_iwdg: fix error message during driver probe (2024-12-30 15:28:02 +0100)
-
-----------------------------------------------------------------
-linux-watchdog 6.13-rc6 tag
-
-----------------------------------------------------------------
-Clément Le Goffic (1):
-      watchdog: stm32_iwdg: fix error message during driver probe
-
- drivers/watchdog/stm32_iwdg.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-----------------------------------------------------------------
-
-Kind regards,
-Wim.
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
