@@ -1,211 +1,184 @@
-Return-Path: <linux-watchdog+bounces-2669-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2670-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12ED0A0ADA4
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jan 2025 04:00:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24808A0ADEA
+	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jan 2025 04:28:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EAFF71884FC9
-	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jan 2025 03:00:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8DA217A037D
+	for <lists+linux-watchdog@lfdr.de>; Mon, 13 Jan 2025 03:28:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C6A12CD96;
-	Mon, 13 Jan 2025 03:00:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F33C413DBA0;
+	Mon, 13 Jan 2025 03:28:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="msrmVdeE"
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="aCnVO0As"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52C279E1;
-	Mon, 13 Jan 2025 03:00:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F831420DD;
+	Mon, 13 Jan 2025 03:28:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736737222; cv=none; b=rWGLD+Ik/ca036BVBdCx88tt91VWpGZS7Y+8s8b4RMTsFTiQ4jyxNzcL2lC0g3Ancgu4qVFuIwOHZiGkRUHcaZHBJgARK5q8RfU4nwcHM3do0AfX0zBWu9zJaWIgTxbAHuBIwcAF1IFn3MudHDb52M3yPGzWZMDDLS9hPBq3k8w=
+	t=1736738929; cv=none; b=Wdx4R0jx25n4/eyOelbmeBDrS45bOtvExaaYY3VdGAKie/vduCnqpTS6lIaNepfIYWQmQj4xNmSq0FU8FQQEqHwsgeLOgTS2oV6VyxNXPTaxD0T5zIF3chzjHQfmbRoCIIm9lH+7C3RC7xPiUjllQZSOCO2wVBTrdRBj6xLxu2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736737222; c=relaxed/simple;
-	bh=vWDv9c+Hb5NFBDqnLC3anS0jUC4B07QypVbhZL/BxTk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pmf+eAJtbIH/LRS8V24RLS3He/IwgfqZL506ztWHylZCrB4fqg/SgCTwMuMrCtb8UqXLm2a2njhg0oVVqYt+7B0Lp0S+QIq73hrZKFXldmyZSsqrhgUQA2V0rRRo9bY5GkvZNtpDiUlUJnWcBwy2FtlLvLbYMqhX8qTPJPBOCJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=msrmVdeE; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e3983426f80so5878731276.1;
-        Sun, 12 Jan 2025 19:00:19 -0800 (PST)
+	s=arc-20240116; t=1736738929; c=relaxed/simple;
+	bh=JMeokgEoqvclzQzNSXe8UO+DR4Tug5q56qg8MyJQ7h8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sdx8n0VucZbG9dVLTV4hiFpiJmmCSrEe9iygMdf7cvHgi13hHqEJGPfLP5O9vLncWNK4MuHO+UIDf/4wEC9fy87cr2Cu57nfh6xcb3agsYwOtfz9GsxPKBxn3FzoiU9CCm9uT7PK3aD7JaxFLYI+OKbKtlkd9sOPaeMvS4Dji0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=aCnVO0As; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736737219; x=1737342019; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7vHUyb9eNg2JqWHIeEtx4JxxlaEahhQgvricUcB0kaU=;
-        b=msrmVdeEXhgI6OED5WasaszCm5FJkvfwO3V8oini06lN/Mojp3sV8ykJybQRGFQWuS
-         Ew4rAU1R1AUK5pgbno5Nb9RR+bIkn0OW4uJHmQ7s4+rWo6lPX85smR7wyx5j77HZ9aMq
-         twY7tS0SH6tJqpETq5PeX0L7Kg+L3Gvn6n6nY3cNWnkgziJiZ/GHE427Oj8YzvkBuyz/
-         GVJY80AGg0t+ybgFyfDcoiM6yi5Tt089NLddd9HtHC2v4QDZ3BKyQjQZiPwTRSDOxO0H
-         pn6tFJ8vrNY7+q0LNx/aAirs4YN6unnNSLhHvcsZXTepPJAN2MAPfpXycAhj4NpfjnXN
-         Pvug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736737219; x=1737342019;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7vHUyb9eNg2JqWHIeEtx4JxxlaEahhQgvricUcB0kaU=;
-        b=qTHphbfIIT1Iq8UwDKRHQ574R1okZ5Z2hcmXyK/XKLbBxk293ek3NIvwHiYEZkdrkV
-         mDKlYRl7iwi15/lr4/bfr2t2f3OAh1SjXJMMIU7lfylitsgKmYZZcdTX0KiRrUojYn+m
-         ZsLR8sAgP8VXyitGejHPZrPve5gDE7o4aS4g7nbqR1ubSAoa3dNUa9Y9ZZ4B4oQuxRDV
-         KUbzrdwi8ugQyHhO/lOrR3cJ/r9KUr3kAM5h4o5HAJW1l2rE53rs0OfjaFl17Whtubse
-         jqrTWs+YEPqegIF3irgAaWl3c1h1xH368c9mc0SGfFBxO8MKyCQVuoxpE3Qj4PsGmoAx
-         UYhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUK0CiXomYykw0fdYj25dDmuoz/DZ4uJO3K2AxyvWTU8flJhvikoOuw9IBPC0ybs/6dyjgORcr/@vger.kernel.org, AJvYcCW0ApG1ciJhKM3IKFIVaRBORJuiwNEbF8++CiaFhPEizgTZcR3fwFxpmu/v0dYxgiQYQ08bJBfXlXlZ+H83@vger.kernel.org, AJvYcCW6EaLrO+tG32JQ0cue501tXWsg4XFhspq3VfT/Kba979fUmpClYRfKlTIk4gl7RifjG5EGhYqreHj+@vger.kernel.org, AJvYcCWMmIrFgET8eIEZlM1xmwg7b73IWmYEzR5ajuUQLOtuqeKNwdaFddDaEDpuhyJEFDRo1SpLo1rufE7Dk536ZAg=@vger.kernel.org, AJvYcCWO+oeLv2sCLPYF6YY2NyFoJfy9kMEMoJ3RejC7We6Ihj74u8nqlX9Slin68afjb0DV87ogDvkEZVwW@vger.kernel.org, AJvYcCWTdxm8p1omKnHHmheTqjL4KsjoQFY/8u3ZWOhgQh24MxzIABD6NgS2ZYgHIV9On3utXfGl9F5cK99sreA=@vger.kernel.org, AJvYcCX20F3YL8xNuL17QBGXdtMQBbKB0AYtjkbbvA+2M78HpK1rqJ5godFBk/fGSYflfzYWfL9oa7XPc3YftA==@vger.kernel.org, AJvYcCXcKAb20c0Lj9IQ0urOd6JsQ3dDTXJbz/FVxlUt5o4TuGW2GWcY3PkPA4U5GJ+ptk9WTukgx65oTCA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxobPcfGrskszvDhj9vf0VjY4IUM9aypLXs2avVgcBTYruQ9wj
-	LxtFSMwhhUXvo4qZIPdlv1kWHt3wMZ3vUbgBuyRqYYJDJxzSIUOrOFe2ZGEwUh3hZL4Zd1BEVPd
-	haJYYAgbSONTloICF8jkoCr0T/qo=
-X-Gm-Gg: ASbGncubp5jZFm15NToKBfk87nrjcXQn9k0H3umDmqmj2WsUvn7eB3GNyJggPD3RGxW
-	cPsN4i9M5JtDr0qFhlTPPD8k4sXoiJDcUX2XkNd85rJHDD4/0ni8b+HDHxdYf3w/5Dkr+M08=
-X-Google-Smtp-Source: AGHT+IGsfoH84Emy/3VAy+2ciT/LDM53GHF7kLpSuNtlkY+mcbIYtSqMBLpJAo2tp5wPRRi4KWOuDrwlzY99kXjwbZU=
-X-Received: by 2002:a25:2104:0:b0:e47:f4e3:87e3 with SMTP id
- 3f1490d57ef6-e54edf25ca4mr10429337276.11.1736737218579; Sun, 12 Jan 2025
- 19:00:18 -0800 (PST)
+	d=codeconstruct.com.au; s=2022a; t=1736738919;
+	bh=JMeokgEoqvclzQzNSXe8UO+DR4Tug5q56qg8MyJQ7h8=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=aCnVO0AsWXP3yQJfv8dtCs95hQsS/mgyQAnN0Uc82KOc5dhwaTibVpguz3UfD/B7S
+	 Ls6yPyn86vVgAQdJFykVU1YRETCxZd3PnEXKgU33CzpdowoidiP0/zcZTgBkRIU3Lh
+	 VWEV8Im4qzSU7quz6cwWrt1bKXzlJ3KrGmGpCIJ4fU7NARNZCsTqQ86qwFbINVJKKE
+	 FJHtmqn348D81zdPYQxHWvf2KENgfN3DZlKqdGelSduV31TXpK2Qyw3fJEpuzADUT1
+	 o3sqkOVqjPetA3pjm6n6IvYrh9jCgOO4id9Axv+CNVcOQseiOSUqPNlWa2pRGJiqRp
+	 RFwMB3wF2cfug==
+Received: from [192.168.68.112] (ppp118-210-178-153.adl-adc-lon-bras34.tpg.internode.on.net [118.210.178.153])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 9D4B371781;
+	Mon, 13 Jan 2025 11:28:35 +0800 (AWST)
+Message-ID: <b4fa429c6c7df899281d36f295b4431c90fe443c.camel@codeconstruct.com.au>
+Subject: Re: [PATCH v6 1/1] watchdog: aspeed: Update bootstatus handling
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+To: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>, patrick@stwcx.xyz, 
+	linux@roeck-us.net, wim@linux-watchdog.org, joel@jms.id.au, 
+	linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc: Peter.Yin@quantatw.com, Patrick_NC_Lin@wiwynn.com,
+ BMC-SW@aspeedtech.com,  chnguyen@amperecomputing.com,
+ aaron_lee@aspeedtech.com
+Date: Mon, 13 Jan 2025 13:58:35 +1030
+In-Reply-To: <20250112081204.263216-2-chin-ting_kuo@aspeedtech.com>
+References: <20250112081204.263216-1-chin-ting_kuo@aspeedtech.com>
+	 <20250112081204.263216-2-chin-ting_kuo@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241227095727.2401257-1-a0282524688@gmail.com>
- <20241227095727.2401257-7-a0282524688@gmail.com> <20250106135135.GN4068@kernel.org>
-In-Reply-To: <20250106135135.GN4068@kernel.org>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Mon, 13 Jan 2025 11:00:07 +0800
-X-Gm-Features: AbW1kvZmveBm_1ZsSzbrQ6SCqOa0J-Y9vxXUkcqQ9J4x_X6pa8sZdwCwcoEMWQw
-Message-ID: <CAOoeyxWvRzHRVLW-U=nemfUpoF5pcO_bDmvg4U-wVqkFp=V=Yg@mail.gmail.com>
-Subject: Re: [PATCH v4 6/7] hwmon: Add Nuvoton NCT6694 HWMON support
-To: Simon Horman <horms@kernel.org>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Dear Simon,
+T24gU3VuLCAyMDI1LTAxLTEyIGF0IDE2OjEyICswODAwLCBDaGluLVRpbmcgS3VvIHdyb3RlOgo+
+IFRoZSBib290IHN0YXR1cyBpbiB0aGUgd2F0Y2hkb2cgZGV2aWNlIHN0cnVjdCBpcyB1cGRhdGVk
+IGR1cmluZwo+IGNvbnRyb2xsZXIgcHJvYmUgc3RhZ2UuIEFwcGxpY2F0aW9uIGxheWVyIGNhbiBn
+ZXQgdGhlIGJvb3Qgc3RhdHVzCj4gdGhyb3VnaCB0aGUgY29tbWFuZCwgY2F0IC9zeXMvY2xhc3Mv
+d2F0Y2hkb2cvd2F0Y2hkb2dYL2Jvb3RzdGF0dXMuCj4gVGhlIGJvb3RzdGF0dXMgY2FuIGJlLAo+
+IFdESU9GX0NBUkRSRVNFVCA9PiB0aGUgc3lzdGVtIGlzIHJlc2V0IGJ5IFdEVCBTb0MgcmVzZXQu
+Cj4gT3RoZXJzwqDCoMKgwqDCoMKgwqDCoMKgID0+IG90aGVyIHJlc2V0IGV2ZW50cywgZS5nLiwg
+cG93ZXIgb24gcmVzZXQuCj4gCj4gT24gQVNQRUVEIHBsYXRmb3JtLCB0aGUgYm9vdCBzdGF0dXMg
+aXMgcmVjb3JkZWQgaW4gdGhlIFNDVSByZWdpc3RlcnMuCj4gLSBBU1QyNDAwOiBPbmx5IGEgYml0
+IHJlcHJlc2VudHMgZm9yIGFueSBXRFQgcmVzZXQuCj4gLSBBU1QyNTAwL0FTVDI2MDA6IFRoZSBy
+ZXNldCB0cmlnZ2VyZWQgYnkgZGlmZmVyZW50IFdEVCBjb250cm9sbGVycwo+IMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjYW4gYmUgZGlzdGluZ3Vpc2hlZCBieSBkaWZmZXJl
+bnQgU0NVIGJpdHMuCj4gCj4gQmVzaWRlcywgb24gQVNUMjQwMCBhbmQgQVNUMjUwMCwgc2luY2Ug
+YWx0ZXJuYXRpbmcgYm9vdCBldmVudCBpcwo+IHRyaWdnZXJlZCBieSBXRFQgU29DIHJlc2V0LCBp
+dCBpcyBjbGFzc2lmaWVkIGFzIFdESU9GX0NBUkRSRVNFVC4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBD
+aGluLVRpbmcgS3VvIDxjaGluLXRpbmdfa3VvQGFzcGVlZHRlY2guY29tPgo+IC0tLQo+IMKgZHJp
+dmVycy93YXRjaGRvZy9hc3BlZWRfd2R0LmMgfCA4MQo+ICsrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKystCj4gwqAxIGZpbGUgY2hhbmdlZCwgNzkgaW5zZXJ0aW9ucygrKSwgMiBkZWxl
+dGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy93YXRjaGRvZy9hc3BlZWRfd2R0LmMK
+PiBiL2RyaXZlcnMvd2F0Y2hkb2cvYXNwZWVkX3dkdC5jCj4gaW5kZXggYjQ3NzNhNmFhZjhjLi4z
+Njk2MzViMzhjYTAgMTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy93YXRjaGRvZy9hc3BlZWRfd2R0LmMK
+PiArKysgYi9kcml2ZXJzL3dhdGNoZG9nL2FzcGVlZF93ZHQuYwo+IEBAIC0xMSwyMSArMTEsMzAg
+QEAKPiDCoCNpbmNsdWRlIDxsaW51eC9pby5oPgo+IMKgI2luY2x1ZGUgPGxpbnV4L2tlcm5lbC5o
+Pgo+IMKgI2luY2x1ZGUgPGxpbnV4L2tzdHJ0b3guaD4KPiArI2luY2x1ZGUgPGxpbnV4L21mZC9z
+eXNjb24uaD4KPiDCoCNpbmNsdWRlIDxsaW51eC9tb2R1bGUuaD4KPiDCoCNpbmNsdWRlIDxsaW51
+eC9vZi5oPgo+IMKgI2luY2x1ZGUgPGxpbnV4L29mX2lycS5oPgo+IMKgI2luY2x1ZGUgPGxpbnV4
+L3BsYXRmb3JtX2RldmljZS5oPgo+ICsjaW5jbHVkZSA8bGludXgvcmVnbWFwLmg+Cj4gwqAjaW5j
+bHVkZSA8bGludXgvd2F0Y2hkb2cuaD4KPiDCoAo+IMKgc3RhdGljIGJvb2wgbm93YXlvdXQgPSBX
+QVRDSERPR19OT1dBWU9VVDsKPiDCoG1vZHVsZV9wYXJhbShub3dheW91dCwgYm9vbCwgMCk7Cj4g
+wqBNT0RVTEVfUEFSTV9ERVNDKG5vd2F5b3V0LCAiV2F0Y2hkb2cgY2Fubm90IGJlIHN0b3BwZWQg
+b25jZSBzdGFydGVkCj4gKGRlZmF1bHQ9Igo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBfX01PRFVMRV9TVFJJTkcoV0FUQ0hE
+T0dfTk9XQVlPVVQpCj4gIikiKTsKPiArc3RydWN0IGFzcGVlZF93ZHRfc2N1IHsKPiArwqDCoMKg
+wqDCoMKgwqBjb25zdCBjaGFyICpjb21wYXRpYmxlOwo+ICvCoMKgwqDCoMKgwqDCoHUzMiByZXNl
+dF9zdGF0dXNfcmVnOwo+ICvCoMKgwqDCoMKgwqDCoHUzMiB3ZHRfcmVzZXRfbWFzazsKPiArwqDC
+oMKgwqDCoMKgwqB1MzIgd2R0X3Jlc2V0X21hc2tfc2hpZnQ7Cj4gK307Cj4gwqAKPiDCoHN0cnVj
+dCBhc3BlZWRfd2R0X2NvbmZpZyB7Cj4gwqDCoMKgwqDCoMKgwqDCoHUzMiBleHRfcHVsc2Vfd2lk
+dGhfbWFzazsKPiDCoMKgwqDCoMKgwqDCoMKgdTMyIGlycV9zaGlmdDsKPiDCoMKgwqDCoMKgwqDC
+oMKgdTMyIGlycV9tYXNrOwo+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBhc3BlZWRfd2R0X3NjdSBz
+Y3U7Cj4gwqB9Owo+IMKgCj4gwqBzdHJ1Y3QgYXNwZWVkX3dkdCB7Cj4gQEAgLTM5LDE4ICs0OCwz
+NiBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGFzcGVlZF93ZHRfY29uZmlnCj4gYXN0MjQwMF9jb25m
+aWcgPSB7Cj4gwqDCoMKgwqDCoMKgwqDCoC5leHRfcHVsc2Vfd2lkdGhfbWFzayA9IDB4ZmYsCj4g
+wqDCoMKgwqDCoMKgwqDCoC5pcnFfc2hpZnQgPSAwLAo+IMKgwqDCoMKgwqDCoMKgwqAuaXJxX21h
+c2sgPSAwLAo+ICvCoMKgwqDCoMKgwqDCoC5zY3UgPSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoC5jb21wYXRpYmxlID0gImFzcGVlZCxhc3QyNDAwLXNjdSIsCj4gK8KgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoC5yZXNldF9zdGF0dXNfcmVnID0gMHgzYywKPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLndkdF9yZXNldF9tYXNrID0gMHgxLAo+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAud2R0X3Jlc2V0X21hc2tfc2hpZnQgPSAxLAo+ICvCoMKg
+wqDCoMKgwqDCoH0sCj4gwqB9Owo+IMKgCj4gwqBzdGF0aWMgY29uc3Qgc3RydWN0IGFzcGVlZF93
+ZHRfY29uZmlnIGFzdDI1MDBfY29uZmlnID0gewo+IMKgwqDCoMKgwqDCoMKgwqAuZXh0X3B1bHNl
+X3dpZHRoX21hc2sgPSAweGZmZmZmLAo+IMKgwqDCoMKgwqDCoMKgwqAuaXJxX3NoaWZ0ID0gMTIs
+Cj4gwqDCoMKgwqDCoMKgwqDCoC5pcnFfbWFzayA9IEdFTk1BU0soMzEsIDEyKSwKPiArwqDCoMKg
+wqDCoMKgwqAuc2N1ID0gewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAuY29tcGF0
+aWJsZSA9ICJhc3BlZWQsYXN0MjUwMC1zY3UiLAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAucmVzZXRfc3RhdHVzX3JlZyA9IDB4M2MsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoC53ZHRfcmVzZXRfbWFzayA9IDB4MSwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgLndkdF9yZXNldF9tYXNrX3NoaWZ0ID0gMiwKPiArwqDCoMKgwqDCoMKgwqB9LAo+IMKg
+fTsKPiDCoAo+IMKgc3RhdGljIGNvbnN0IHN0cnVjdCBhc3BlZWRfd2R0X2NvbmZpZyBhc3QyNjAw
+X2NvbmZpZyA9IHsKPiDCoMKgwqDCoMKgwqDCoMKgLmV4dF9wdWxzZV93aWR0aF9tYXNrID0gMHhm
+ZmZmZiwKPiDCoMKgwqDCoMKgwqDCoMKgLmlycV9zaGlmdCA9IDAsCj4gwqDCoMKgwqDCoMKgwqDC
+oC5pcnFfbWFzayA9IEdFTk1BU0soMzEsIDEwKSwKPiArwqDCoMKgwqDCoMKgwqAuc2N1ID0gewo+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAuY29tcGF0aWJsZSA9ICJhc3BlZWQsYXN0
+MjYwMC1zY3UiLAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAucmVzZXRfc3RhdHVz
+X3JlZyA9IDB4NzQsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC53ZHRfcmVzZXRf
+bWFzayA9IDB4ZiwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLndkdF9yZXNldF9t
+YXNrX3NoaWZ0ID0gMTYsCj4gK8KgwqDCoMKgwqDCoMKgfSwKPiDCoH07Cj4gwqAKPiDCoHN0YXRp
+YyBjb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIGFzcGVlZF93ZHRfb2ZfdGFibGVbXSA9IHsKPiBA
+QCAtMjEzLDYgKzI0MCw1NiBAQCBzdGF0aWMgaW50IGFzcGVlZF93ZHRfcmVzdGFydChzdHJ1Y3QK
+PiB3YXRjaGRvZ19kZXZpY2UgKndkZCwKPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIDA7Cj4gwqB9
+Cj4gwqAKPiArc3RhdGljIHZvaWQgYXNwZWVkX3dkdF91cGRhdGVfYm9vdHN0YXR1cyhzdHJ1Y3Qg
+cGxhdGZvcm1fZGV2aWNlCj4gKnBkZXYsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3Qg
+YXNwZWVkX3dkdCAqd2R0KQo+ICt7Cj4gK8KgwqDCoMKgwqDCoMKgY29uc3Qgc3RydWN0IHJlc291
+cmNlICpyZXM7Cj4gK8KgwqDCoMKgwqDCoMKgc3RydWN0IGFzcGVlZF93ZHRfc2N1IHNjdSA9IHdk
+dC0+Y2ZnLT5zY3U7Cj4gK8KgwqDCoMKgwqDCoMKgc3RydWN0IHJlZ21hcCAqc2N1X2Jhc2U7Cj4g
+K8KgwqDCoMKgwqDCoMKgdTMyIHJlc2V0X21hc2tfd2lkdGg7Cj4gK8KgwqDCoMKgwqDCoMKgdTMy
+IHJlc2V0X21hc2tfc2hpZnQ7Cj4gK8KgwqDCoMKgwqDCoMKgdTMyIGlkeCA9IDA7Cj4gK8KgwqDC
+oMKgwqDCoMKgdTMyIHN0YXR1czsKPiArwqDCoMKgwqDCoMKgwqBpbnQgcmV0Owo+ICsKPiArwqDC
+oMKgwqDCoMKgwqBpZiAoIW9mX2RldmljZV9pc19jb21wYXRpYmxlKHBkZXYtPmRldi5vZl9ub2Rl
+LAo+ICJhc3BlZWQsYXN0MjQwMC13ZHQiKSkgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqByZXMgPSBwbGF0Zm9ybV9nZXRfcmVzb3VyY2UocGRldiwgSU9SRVNPVVJDRV9NRU0sIDAp
+Owo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZHggPSAoKGludHB0cl90KXdkdC0+
+YmFzZSAmIDB4MDAwMDBmZmYpIC8KPiByZXNvdXJjZV9zaXplKHJlcyk7Cj4gK8KgwqDCoMKgwqDC
+oMKgfQo+ICsKPiArwqDCoMKgwqDCoMKgwqBzY3VfYmFzZSA9Cj4gc3lzY29uX3JlZ21hcF9sb29r
+dXBfYnlfY29tcGF0aWJsZShzY3UuY29tcGF0aWJsZSk7Cj4gK8KgwqDCoMKgwqDCoMKgaWYgKElT
+X0VSUihzY3VfYmFzZSkpIHsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgd2R0LT53
+ZGQuYm9vdHN0YXR1cyA9IFdESU9TX1VOS05PV047Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoHJldHVybjsKPiArwqDCoMKgwqDCoMKgwqB9Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoHJl
+dCA9IHJlZ21hcF9yZWFkKHNjdV9iYXNlLCBzY3UucmVzZXRfc3RhdHVzX3JlZywgJnN0YXR1cyk7
+Cj4gK8KgwqDCoMKgwqDCoMKgaWYgKHJldCkgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqB3ZHQtPndkZC5ib290c3RhdHVzID0gV0RJT1NfVU5LTk9XTjsKPiArwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuOwo+ICvCoMKgwqDCoMKgwqDCoH0KPiArCj4gK8KgwqDC
+oMKgwqDCoMKgcmVzZXRfbWFza193aWR0aCA9IGh3ZWlnaHQzMihzY3Uud2R0X3Jlc2V0X21hc2sp
+Owo+ICvCoMKgwqDCoMKgwqDCoHJlc2V0X21hc2tfc2hpZnQgPSBzY3Uud2R0X3Jlc2V0X21hc2tf
+c2hpZnQgKwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCByZXNldF9tYXNrX3dpZHRoICogaWR4Owo+ICsKPiArwqDCoMKgwqDCoMKgwqBpZiAoc3Rh
+dHVzICYgKHNjdS53ZHRfcmVzZXRfbWFzayA8PCByZXNldF9tYXNrX3NoaWZ0KSkKPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgd2R0LT53ZGQuYm9vdHN0YXR1cyA9IFdESU9GX0NBUkRS
+RVNFVDsKCkhvdyBwcmVjaXNlIGlzIHRoZSB3b3JkaW5nIGluIHlvdXIgY29tbWl0IG1lc3NhZ2U/
+IFRoZSBBU1QyNjAwLCBmb3IKaW5zdGFuY2UsIGhhcyA0IHJlc2V0IHR5cGVzOgoKMS4gIlNvQyIK
+Mi4gIkZ1bGwiCjMuICJBUk0iCjQuICJTb2Z0d2FyZSIKCkluIHRoZSBjb21taXQgbWVzc2FnZSwg
+eW91IHNhaWQ6Cgo+IFdESU9GX0NBUkRSRVNFVCA9PiB0aGUgc3lzdGVtIGlzIHJlc2V0IGJ5IFdE
+VCBTb0MgcmVzZXQuCgpIb3dldmVyIHRoZSBsb2dpYyBoZXJlICh3aXRoIHRoZSB3YXkgeW91J3Zl
+IGluaXRpYWxpc2VkIHRoZSBjb25maWcKc3RydWN0IGZvciB0aGUgQVNUMjYwMCkgd2lsbCBzaWdu
+YWwgV0RJT0ZfQ0FSRFJFU0VUIGV2ZW4gaWYgd2hhdApvY2N1cnJlZCB3YXMgZS5nLiBhIChncmFj
+ZWZ1bD8pIHNvZnR3YXJlIHJlc2V0LgoKVGhlIG9ubHkgdGhpbmcgV0RJT0ZfQ0FSRFJFU0VUIGRp
+ZmZlcmVudGlhdGVzIGlzIGEgcG93ZXItb24gcmVzZXQgZnJvbQphbnkgb3RoZXIga2luZCBvZiB3
+YXRjaGRvZy1kcml2ZW4gcmVzZXQuCgpJcyB0aGF0IHdoYXQncyBpbnRlbmRlZD8gSSdtIGp1c3Qg
+d2FyeSBvZiBjb25mdXNpb24gZm9yIHdoYXQgYXBwZWFycyB0bwpiZSBhIGdlbmVyaWMgdXNlIG9m
+ICJTb0MiIGluIHRoZSBjb21taXQgbWVzc2FnZSB2cyB0aGUgc3BlY2lmaWMgIlNvQyIKbW9kZSBv
+ZiB0aGUgd2F0Y2hkb2cgY29udHJvbGxlciAoc2hvdWxkIHNvbWUgZG9jdW1lbnRhdGlvbiBiZQp3
+cml0dGVuL3VwZGF0ZWQ/KQoKQW5kcmV3Cg==
 
-Thank you for your comments,
-
-Simon Horman <horms@kernel.org> =E6=96=BC 2025=E5=B9=B41=E6=9C=886=E6=97=A5=
- =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=889:51=E5=AF=AB=E9=81=93=EF=BC=9A
->
-...
-> > +static int nct6694_pwm_read(struct device *dev, u32 attr, int channel,
-> > +                         long *val)
-> > +{
-> > +     struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev);
-> > +     unsigned char pwm_en;
-> > +     int ret;
-> > +
-> > +     guard(mutex)(&data->lock);
-> > +
-> > +     switch (attr) {
-> > +     case hwmon_pwm_enable:
-> > +             pwm_en =3D data->hwmon_en.pwm_en[channel / 8];
-> > +             *val =3D !!(pwm_en & BIT(channel % 8));
-> > +
-> > +             return 0;
-> > +     case hwmon_pwm_input:
-> > +             ret =3D nct6694_read_msg(data->nct6694, NCT6694_RPT_MOD,
-> > +                                    NCT6694_PWM_IDX(channel),
-> > +                                    sizeof(data->rpt->fin),
-> > +                                    &data->rpt->fin);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             *val =3D data->rpt->fin;
->
-> Hi Ming Yu,
->
-> *val is host byte order, but fin is big endian.
-> Elsewhere in this patch this seems to be handled using,
-> which looks correct to me:
->
->                 *val =3D be16_to_cpu(data->rpt->fin);
->
-> Flagged by Sparse.
->
-
-Yes, it needs to be fixed to be16_to_cpu(). I'll make the modification
-in the next patch.
-
-> > +
-> > +             return 0;
-> > +     case hwmon_pwm_freq:
-> > +             *val =3D NCT6694_FREQ_FROM_REG(data->hwmon_en.pwm_freq[ch=
-annel]);
-> > +
-> > +             return 0;
-> > +     default:
-> > +             return -EOPNOTSUPP;
-> > +     }
-> > +}
->
-> ...
->
-> > +static int nct6694_fan_write(struct device *dev, u32 attr, int channel=
-,
-> > +                          long val)
-> > +{
-> > +     struct nct6694_hwmon_data *data =3D dev_get_drvdata(dev);
-> > +     int ret;
-> > +
-> > +     guard(mutex)(&data->lock);
-> > +
-> > +     switch (attr) {
-> > +     case hwmon_fan_enable:
-> > +             if (val =3D=3D 0)
-> > +                     data->hwmon_en.fin_en[channel / 8] &=3D ~BIT(chan=
-nel % 8);
-> > +             else if (val =3D=3D 1)
-> > +                     data->hwmon_en.fin_en[channel / 8] |=3D BIT(chann=
-el % 8);
-> > +             else
-> > +                     return -EINVAL;
-> > +
-> > +             return nct6694_write_msg(data->nct6694, NCT6694_HWMON_MOD=
-,
-> > +                                      NCT6694_HWMON_CONTROL,
-> > +                                      sizeof(data->msg->hwmon_ctrl),
-> > +                                      &data->hwmon_en);
-> > +     case hwmon_fan_min:
-> > +             ret =3D nct6694_read_msg(data->nct6694, NCT6694_HWMON_MOD=
-,
-> > +                                    NCT6694_HWMON_ALARM,
-> > +                                    sizeof(data->msg->hwmon_alarm),
-> > +                                    &data->msg->hwmon_alarm);
-> > +             if (ret)
-> > +                     return ret;
-> > +
-> > +             val =3D clamp_val(val, 1, 65535);
-> > +             data->msg->hwmon_alarm.fin_ll[channel] =3D (u16)cpu_to_be=
-16(val);
->
-> cpu_to_be16() returns a 16bit big endian value.
-> And, AFAIKT, the type of data->msg->hwmon_alarm.fin_ll[channel] is __be16=
-.
->
-> So the cast above seems both unnecessary and misleading.
->
-> Also flagged by Sparse,
->
-
-Understood. Fix it in v5.
-
-> ...
-
-Best regards,
-Ming
 
