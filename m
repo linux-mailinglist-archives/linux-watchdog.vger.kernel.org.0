@@ -1,160 +1,127 @@
-Return-Path: <linux-watchdog+bounces-2705-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2706-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E64AA10A6A
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Jan 2025 16:12:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F061FA111A2
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Jan 2025 21:03:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A90DF1882C78
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Jan 2025 15:12:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BE4C3A119D
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Jan 2025 20:03:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2824815A863;
-	Tue, 14 Jan 2025 15:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54FCD1FDE05;
+	Tue, 14 Jan 2025 20:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Dq3OjX15"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hHo2NxWe"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-16.smtpout.orange.fr [193.252.22.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF40523244D;
-	Tue, 14 Jan 2025 15:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D61119149F;
+	Tue, 14 Jan 2025 20:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736867531; cv=none; b=X8fHUOUbWPtLTbbSZdPohB1HuWHgEjtFQy3eeau3sXE9puXJTffrYfCNov+L8k6vSStnqWb0rvQtmmFih9L2KldTjGjpdoAt9eJ/2GSqLFUwqz2NbpjMfMzMdDdtL4bGeHLhdBqdi5OwBu9G6/uyLC2pYTle8NWdoa3KbbrUBfQ=
+	t=1736885017; cv=none; b=OrT6RswSaljyfX3FJ6hL8y203+XYpneG3I6UvmLe2D9xrRWhg662Py1c1s1zE7S1PqCRbZk6luMjvk7pkQQHqi/tN+Zb4ySOI65yX+g6IFXSge/lpv7q9s0gJkzkPZFIw+f5iOmk4m4mPA5GJJMLTaEYWGCnMXMeVsLZi7eRhCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736867531; c=relaxed/simple;
-	bh=DL8gwF1GJ20n33ml1FHEg/aAAglXZ3TF9OFCcZ0ipiA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F7tXeACVQIsxbLJWHS+B8MIRwMqcTXe/0OQIhHCt243V5kovoJAd6urQxLR8C2nu2sQZaA7qcTcRSd65Vb1m9uWj4cYUvMVC0bC/yfEUiJtfm8et5CtOgUZaqnUHsv2KrThI0XfSX9mnaTN9ez10xD/bb5+QdrvorSd8NKmvxNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Dq3OjX15; arc=none smtp.client-ip=193.252.22.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id XiZytlY9xyfdlXia3tQ2B1; Tue, 14 Jan 2025 16:11:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1736867519;
-	bh=XV4Id1xvYHlaSYqAm96ChNINwUN4AO6c7LrvEBY8Mp4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=Dq3OjX15koJsiFaPGJLMkr02s81/arOSIzSYmgnER7lakEeU8cyCDas42c5HdzPY/
-	 rtU5LMqs+bYPOYqAV7IFYKn9+JamBu8kD18TyYPEwZkmIszlDF5cQ5vQf4R/rv4kwD
-	 vb0jr8Hq7oB2aH0ZobATJjChAg69ptArkMXzbqk8F+A2qVdSQBnTlyylL+dEf9dBSG
-	 QVNFHAQ5klUnx/5p8OSiqTnxmkhXW+q9SooGiQEd30YcNb3/Oru9AeNc8xRvCv2NZb
-	 Gz4hFOD0eu2DbzgtBIWV4Xwk/Xt3nlEipG7y0KH/9b8+7eUZSemzie93loGr+DV/Cb
-	 JJXOMvikfVx1w==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 14 Jan 2025 16:11:59 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <6e349f0f-6509-4a3b-bb75-e2381e9205c6@wanadoo.fr>
-Date: Wed, 15 Jan 2025 00:11:41 +0900
+	s=arc-20240116; t=1736885017; c=relaxed/simple;
+	bh=VvF68fnl5Cqm9qY20iFeMcP+DYp/YWXE36Bm8gfWFG8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bOY5zI4TsoxSlWVymTkoH2tPW+iknWIaWZxguA5Ctuk6boaOnxHbYfFwity9hfxvXztPQoHlf+xHUV/O0whvaCHydx5cD16KVnxKQ0rPGSUJkKsnJkcA0K+wlTXpWbsvUQqkE6n1g0xVcVQO/tkvUCN/wXu4dppmDFu66V+FaHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hHo2NxWe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E0D3C4CEDD;
+	Tue, 14 Jan 2025 20:03:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736885016;
+	bh=VvF68fnl5Cqm9qY20iFeMcP+DYp/YWXE36Bm8gfWFG8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hHo2NxWepfL2y4LhkgD/8SyK4GYqlrRl4KckXA4sdg0oRnaIVg3RVIThHwzNTajdE
+	 xO1J7r4jKPIixh0G54iDX+BPEqsjHfFlLX/5qfAgjikh3iteUhYq2aRiZZfP2+aOqc
+	 f1Vys3aTCCiNBDAjIVyNEQoATwOVqsefIEWFljMDHfLg6qyAqiV5fk6nuiqRgeU5t6
+	 LiYa1eVpoRmnyVmKGTe5MloREqB9Ik/c/qj2Z9tNFJh75mw1sGvJxFQa4z+8OtHrA4
+	 lPh34yRimlmlA/KrFg9OjNwjhelav7szjNj1bRFk4/z1UFTV1GLPXUd19873voRKjG
+	 uQYPfrP4JDGTQ==
+Date: Tue, 14 Jan 2025 14:03:35 -0600
+From: Rob Herring <robh@kernel.org>
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Prabhakar <prabhakar.csengg@gmail.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v3 0/6] Add support to retrieve the bootstatus from
+ watchdog for RZ/V2H(P) SoC
+Message-ID: <20250114200335.GA1626474-robh@kernel.org>
+References: <20250113112349.801875-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <TY3PR01MB11346D7617436A7779B6697B3861F2@TY3PR01MB11346.jpnprd01.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/7] can: Add Nuvoton NCT6694 CAN support
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
- brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
- linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com,
- linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250114033010.2445925-1-a0282524688@gmail.com>
- <20250114033010.2445925-5-a0282524688@gmail.com>
- <CAMZ6RqLHEoukxDfV33iDWXjM1baK922QnWSkOP01VzZ0S_9H8g@mail.gmail.com>
- <CAOoeyxW=k35-bkeqNmhyZwUxjy=g3irTBS5mbXLxqp1Stx-Zfg@mail.gmail.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <CAOoeyxW=k35-bkeqNmhyZwUxjy=g3irTBS5mbXLxqp1Stx-Zfg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TY3PR01MB11346D7617436A7779B6697B3861F2@TY3PR01MB11346.jpnprd01.prod.outlook.com>
 
-On 14/01/2025 at 19:46, Ming Yu wrote:
-> Dear Vincent,
+On Mon, Jan 13, 2025 at 11:38:08AM +0000, Biju Das wrote:
+> Hi Prabhakar,
 > 
-> Thank you for your reply,
-> I'll add comments to describe these locks in the next patch,
+> > -----Original Message-----
+> > From: Prabhakar <prabhakar.csengg@gmail.com>
+> > Sent: 13 January 2025 11:24
+> > Subject: [PATCH v3 0/6] Add support to retrieve the bootstatus from watchdog for RZ/V2H(P) SoC
+> > 
+> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > 
+> > Hi All,
+> > 
+> > This patch series adds SYSCON support to retrieve boot status information for RZ/V2H(P) SoC.
+> > Summary of Changes,
+> > 
+> >     Clock:
+> >         Add syscon compatible support to the CPG block in bindings and
+> >         device trees.
+> > 
+> >     Watchdog:
+> >         Document the renesas,r9a09g057-syscon-wdt-errorrst property.
+> >         Update the watchdog driver to fetch and report boot status via
+> >         Error Reset Registers (CPG_ERROR_RSTm).
+> > 
+> >     Device Tree:
+> >         Add the syscon property to CPG and WDT nodes in R9A09G057 and
+> >         R9A09G047 SoC DTSI.
+> > 
+> > These changes enable the watchdog driver to identify boot sources like Power-on Reset and Watchdog
+> > Reset, improving system diagnostics.
 > 
-> Vincent Mailhol <mailhol.vincent@wanadoo.fr> 於 2025年1月14日 週二 下午4:06寫道：
-
-(...)
-
->>> +static int nct6694_can_get_berr_counter(const struct net_device *ndev,
->>> +                                       struct can_berr_counter *bec)
->>> +{
->>> +       struct nct6694_can_priv *priv = netdev_priv(ndev);
->>> +       struct nct6694_can_event *evt = priv->rx->event;
->>> +       struct nct6694_cmd_header cmd_hd;
->>> +       u8 mask = NCT6694_CAN_EVENT_REC | NCT6694_CAN_EVENT_TEC;
->>> +       int ret;
->>> +
->>> +       guard(mutex)(&priv->lock);
->>> +
->>> +       cmd_hd = (struct nct6694_cmd_header) {
->>> +               .mod = NCT6694_CAN_MOD,
->>> +               .cmd = NCT6694_CAN_EVENT,
->>> +               .sel = NCT6694_CAN_EVENT_SEL(priv->can_idx, mask),
->>> +               .len = cpu_to_le16(sizeof(priv->rx->event))
->>> +       };
->>> +
->>> +       ret = nct6694_read_msg(priv->nct6694, &cmd_hd, evt);
->>> +       if (ret < 0)
->>> +               return ret;
->>
->> You are holding the priv->lock mutex before calling
->> nct6694_read_msg(). But nct6694_read_msg() then holds the
->> nct6694->access_lock mutex. Why do you need a double mutex here? What
->> kind of race scenario are you trying to prevent here?
->>
+> This means that, we should assume U-boot/bootloader should not clear the WDT reset status bit.
 > 
-> I think priv->lock need to be placed here to prevent priv->rx from
-> being assigned by other functions, and nct6694->access_lock ensures
-> that the nct6694_read_msg() transaction is completed.
-> But in this case, cmd_hd does not need to be in priv->lock's scope.
+> If they clear it, there should be a way to propagate it from u-boot/bootloader to linux,
+> otherwise, we get wrong bootstatus in linux.
+> But the clearing of watchdog status by one of the cases: 
+> 
+> 1) u-boot identify the boot source and clear the status bit
+> 2) u-boot identify the boot source and does not clear the status bit, but linux clear it.
+> 3) u-boot does not touch WDT status bits, but linux clear it.
 
-So, the only reason for holding priv->lock is because priv->rx is shared
-between functions.
+Sounds like the same problem as this[1]. If that works for you, please 
+comment there. Always better if there is more than 1 user for something 
+"common".
 
-struct nct6694_can_event is only 8 bytes. And you only need it for the
-life time of the function so it can simply be declared on the stack:
+Rob
 
-  	struct nct6694_can_event evt;
-
-and with this, no more need to hold the lock. And the same thing also
-applies to the other functions.
-
-Here, by trying to optimize the memory for only a few bytes, you are
-getting a huge penalty on the performance by putting locks on all the
-functions. This is not a good tradeoff.
-
->>> +       bec->rxerr = evt[priv->can_idx].rec;
->>> +       bec->txerr = evt[priv->can_idx].tec;
->>> +
->>> +       return 0;
->>> +}
-
-
-Yours sincerely,
-Vincent Mailhol
-
+[1]https://lore.kernel.org/devicetree-spec/48defa98-9718-4997-86cb-b171187708a6@cherry.de/T/#u
 
