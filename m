@@ -1,109 +1,160 @@
-Return-Path: <linux-watchdog+bounces-2704-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2705-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 567D9A10641
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Jan 2025 13:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E64AA10A6A
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Jan 2025 16:12:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D3D81888A71
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Jan 2025 12:12:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A90DF1882C78
+	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Jan 2025 15:12:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EB6E236EB9;
-	Tue, 14 Jan 2025 12:12:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2824815A863;
+	Tue, 14 Jan 2025 15:12:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="f68S+rd2"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="Dq3OjX15"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+Received: from out.smtpout.orange.fr (out-16.smtpout.orange.fr [193.252.22.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5200236EB2
-	for <linux-watchdog@vger.kernel.org>; Tue, 14 Jan 2025 12:12:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF40523244D;
+	Tue, 14 Jan 2025 15:12:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736856742; cv=none; b=ZeQp4SlRbQT1T2h07HrAPMVmCaZPQYIJUMWiXdZxYHZrJ9z+OhWUS9hjtJCWtCx0SdXlzztiqd1oWQvNEBNlcbyziJfKsWhrZY45RZcrRmNPEGxwBZt3esJkGc4+cdJm+7ZNqjAsZi8xEFXV1Xx+6LbMQjJ/d8pQ6nakWc4NcOI=
+	t=1736867531; cv=none; b=X8fHUOUbWPtLTbbSZdPohB1HuWHgEjtFQy3eeau3sXE9puXJTffrYfCNov+L8k6vSStnqWb0rvQtmmFih9L2KldTjGjpdoAt9eJ/2GSqLFUwqz2NbpjMfMzMdDdtL4bGeHLhdBqdi5OwBu9G6/uyLC2pYTle8NWdoa3KbbrUBfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736856742; c=relaxed/simple;
-	bh=K6oz2DS94f8jy21SzXh52ZGsk7kmXvUL4fauuKsYHSA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h8m/AbsVH/PU9WkYVjC02NjZi6MqNuh1fx/NxUr+zRtgsXxspSRaAHM/Xa5vuYvcF8Qm1u0qRytiZAP+/cqh4iVO8ueUmNSnjpJgvt5RIWSfZXQ4fC9hoqEGmgsJWGJJfkbLArvpeYEBbkoL4W47CwqKKAKoYYeOlgOJGdxKpog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=f68S+rd2; arc=none smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-30613037309so27293871fa.3
-        for <linux-watchdog@vger.kernel.org>; Tue, 14 Jan 2025 04:12:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1736856739; x=1737461539; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K6oz2DS94f8jy21SzXh52ZGsk7kmXvUL4fauuKsYHSA=;
-        b=f68S+rd2H2M+mTqpHL+RyKBn+6j9nrOVdFgEMefWySkKUAzP9y9mjuA6H0Ro66sBjM
-         FCXYXkG4Lcg5tb8jEqGt4CbD58xensbZNXE5Pbmq2LtOZIbez4+69aj4vauoxAXkTgTy
-         z6B1BSnHVTcPJ0q4kbHbJBN2xST9NIbHGqmkpCC8t6cBjS2olv3XycARQFl/Uo5WlRvV
-         FOnoRwUGqxCx91jKhvi0O0oPFHQpTZZWyz5B0CLpORzWhxOfMr1B283BdubODqySHg2+
-         tyzPDiJH777Ux4/Ar26YyhGNMjmIVyK5aJX69sAKH+0KRzFgg9irk2ishhA11kwkgKIR
-         GidQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736856739; x=1737461539;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K6oz2DS94f8jy21SzXh52ZGsk7kmXvUL4fauuKsYHSA=;
-        b=t+tI3EgyJ+pLMWvCCq/q38Aptzf8zcUC8mg3HpoIpZMkF5muMy6Tykjm7vQXhQ6oWh
-         NcLsUCZ/sA7tWGN7QJkfn5HVddQeJalPEIpOjKrqgXY9FoIJg8COVSDnnADBrrpTlBwq
-         01q1UT3YC+C8truBS289g/0mAu3kbXPOprMf+i3152wmhU3Ey4+avTJ6b58tGCo3o6KP
-         BsbaVOZTeUTwRzCxLqJyZWwWTdPxvNVonEkkErA3UoDRuQs3kZERUeYJdlP8FaWHZa7p
-         1e8eXKq9hJh0Ytc9RXWs4gH2XzC+jkVjEStF+u0nR7Fim/4KPosr80tdXwT6kiq3W3oS
-         C1+g==
-X-Forwarded-Encrypted: i=1; AJvYcCXRrofgY4HbZV9qZLFLt01CdcVk03hZnyztrGU/93x0WlKUqxFRasDxJEov9J+s9/Y1x1Ko5cn695Tk87K8Hw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwegxKoQIuuFqcZ1jkGLJ8bho6JpXqL2P+lDcnQKc9ElqQeNiQb
-	gU6JR7kQ7+FLfp7o3VS8AEb144dE6LkGS+/liSIqILZu+wC3xi9IuYSh0q2eDQs/p1ZoNtHCuXY
-	x7kgqDf/2OXuxr8Qsm51XimloPdAxHDU3T5sC9A==
-X-Gm-Gg: ASbGncv7MAeTem5QewNibRyOkgmOEltUX5G2j2tYrkSZMgFzGKPRShdeVB6ytNFMMxE
-	ytXjEkhcikCmpfiRcbvuPN+jF2EGmzgSg8JZPj88Xo0ZVjXOJRoQBBs+rLp4O+rXpI2FNuA==
-X-Google-Smtp-Source: AGHT+IENAzQOWIqeBcjNLCeAWZHXeOZ644Mso77ytYMGJJwc3A78vETSt+TEx++AZVkXjYF397/HELxPeWd4tKYdKto=
-X-Received: by 2002:a2e:a587:0:b0:300:3a15:8f2a with SMTP id
- 38308e7fff4ca-305f459aaddmr69824011fa.2.1736856738634; Tue, 14 Jan 2025
- 04:12:18 -0800 (PST)
+	s=arc-20240116; t=1736867531; c=relaxed/simple;
+	bh=DL8gwF1GJ20n33ml1FHEg/aAAglXZ3TF9OFCcZ0ipiA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F7tXeACVQIsxbLJWHS+B8MIRwMqcTXe/0OQIhHCt243V5kovoJAd6urQxLR8C2nu2sQZaA7qcTcRSd65Vb1m9uWj4cYUvMVC0bC/yfEUiJtfm8et5CtOgUZaqnUHsv2KrThI0XfSX9mnaTN9ez10xD/bb5+QdrvorSd8NKmvxNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=Dq3OjX15; arc=none smtp.client-ip=193.252.22.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id XiZytlY9xyfdlXia3tQ2B1; Tue, 14 Jan 2025 16:11:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1736867519;
+	bh=XV4Id1xvYHlaSYqAm96ChNINwUN4AO6c7LrvEBY8Mp4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=Dq3OjX15koJsiFaPGJLMkr02s81/arOSIzSYmgnER7lakEeU8cyCDas42c5HdzPY/
+	 rtU5LMqs+bYPOYqAV7IFYKn9+JamBu8kD18TyYPEwZkmIszlDF5cQ5vQf4R/rv4kwD
+	 vb0jr8Hq7oB2aH0ZobATJjChAg69ptArkMXzbqk8F+A2qVdSQBnTlyylL+dEf9dBSG
+	 QVNFHAQ5klUnx/5p8OSiqTnxmkhXW+q9SooGiQEd30YcNb3/Oru9AeNc8xRvCv2NZb
+	 Gz4hFOD0eu2DbzgtBIWV4Xwk/Xt3nlEipG7y0KH/9b8+7eUZSemzie93loGr+DV/Cb
+	 JJXOMvikfVx1w==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 14 Jan 2025 16:11:59 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <6e349f0f-6509-4a3b-bb75-e2381e9205c6@wanadoo.fr>
+Date: Wed, 15 Jan 2025 00:11:41 +0900
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250114033010.2445925-1-a0282524688@gmail.com> <20250114033010.2445925-3-a0282524688@gmail.com>
-In-Reply-To: <20250114033010.2445925-3-a0282524688@gmail.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Tue, 14 Jan 2025 13:12:07 +0100
-X-Gm-Features: AbW1kvZqlT9ZQof5_cPsRoDpTSEUzbcfgE_gPvPzrdmIRQZ45w8iL14wP2FIYK8
-Message-ID: <CAMRc=MeEye9i2Z=Y8bHt2ruCS6JJRxmGiLvAUt6E7BJ2K4wosg@mail.gmail.com>
-Subject: Re: [PATCH v5 2/7] gpio: Add Nuvoton NCT6694 GPIO support
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/7] can: Add Nuvoton NCT6694 CAN support
 To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
+ brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
+ linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com,
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20250114033010.2445925-1-a0282524688@gmail.com>
+ <20250114033010.2445925-5-a0282524688@gmail.com>
+ <CAMZ6RqLHEoukxDfV33iDWXjM1baK922QnWSkOP01VzZ0S_9H8g@mail.gmail.com>
+ <CAOoeyxW=k35-bkeqNmhyZwUxjy=g3irTBS5mbXLxqp1Stx-Zfg@mail.gmail.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <CAOoeyxW=k35-bkeqNmhyZwUxjy=g3irTBS5mbXLxqp1Stx-Zfg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jan 14, 2025 at 4:30=E2=80=AFAM Ming Yu <a0282524688@gmail.com> wro=
-te:
->
-> This driver supports GPIO and IRQ functionality for NCT6694 MFD
-> device based on USB interface.
->
-> Signed-off-by: Ming Yu <a0282524688@gmail.com>
-> ---
+On 14/01/2025 at 19:46, Ming Yu wrote:
+> Dear Vincent,
+> 
+> Thank you for your reply,
+> I'll add comments to describe these locks in the next patch,
+> 
+> Vincent Mailhol <mailhol.vincent@wanadoo.fr> 於 2025年1月14日 週二 下午4:06寫道：
 
-Please pick up review tags when resending.
+(...)
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>> +static int nct6694_can_get_berr_counter(const struct net_device *ndev,
+>>> +                                       struct can_berr_counter *bec)
+>>> +{
+>>> +       struct nct6694_can_priv *priv = netdev_priv(ndev);
+>>> +       struct nct6694_can_event *evt = priv->rx->event;
+>>> +       struct nct6694_cmd_header cmd_hd;
+>>> +       u8 mask = NCT6694_CAN_EVENT_REC | NCT6694_CAN_EVENT_TEC;
+>>> +       int ret;
+>>> +
+>>> +       guard(mutex)(&priv->lock);
+>>> +
+>>> +       cmd_hd = (struct nct6694_cmd_header) {
+>>> +               .mod = NCT6694_CAN_MOD,
+>>> +               .cmd = NCT6694_CAN_EVENT,
+>>> +               .sel = NCT6694_CAN_EVENT_SEL(priv->can_idx, mask),
+>>> +               .len = cpu_to_le16(sizeof(priv->rx->event))
+>>> +       };
+>>> +
+>>> +       ret = nct6694_read_msg(priv->nct6694, &cmd_hd, evt);
+>>> +       if (ret < 0)
+>>> +               return ret;
+>>
+>> You are holding the priv->lock mutex before calling
+>> nct6694_read_msg(). But nct6694_read_msg() then holds the
+>> nct6694->access_lock mutex. Why do you need a double mutex here? What
+>> kind of race scenario are you trying to prevent here?
+>>
+> 
+> I think priv->lock need to be placed here to prevent priv->rx from
+> being assigned by other functions, and nct6694->access_lock ensures
+> that the nct6694_read_msg() transaction is completed.
+> But in this case, cmd_hd does not need to be in priv->lock's scope.
+
+So, the only reason for holding priv->lock is because priv->rx is shared
+between functions.
+
+struct nct6694_can_event is only 8 bytes. And you only need it for the
+life time of the function so it can simply be declared on the stack:
+
+  	struct nct6694_can_event evt;
+
+and with this, no more need to hold the lock. And the same thing also
+applies to the other functions.
+
+Here, by trying to optimize the memory for only a few bytes, you are
+getting a huge penalty on the performance by putting locks on all the
+functions. This is not a good tradeoff.
+
+>>> +       bec->rxerr = evt[priv->can_idx].rec;
+>>> +       bec->txerr = evt[priv->can_idx].tec;
+>>> +
+>>> +       return 0;
+>>> +}
+
+
+Yours sincerely,
+Vincent Mailhol
+
 
