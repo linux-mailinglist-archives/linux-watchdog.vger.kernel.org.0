@@ -1,142 +1,162 @@
-Return-Path: <linux-watchdog+bounces-2708-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2709-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 091AFA1123B
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Jan 2025 21:40:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3599A11713
+	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jan 2025 03:11:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 948637A0FA9
-	for <lists+linux-watchdog@lfdr.de>; Tue, 14 Jan 2025 20:40:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D27653A3BDC
+	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jan 2025 02:11:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B653C20AF65;
-	Tue, 14 Jan 2025 20:40:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58EE322DFAB;
+	Wed, 15 Jan 2025 02:11:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KRATKsoI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jCBmfkYT"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80668146590;
-	Tue, 14 Jan 2025 20:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9803C3597D;
+	Wed, 15 Jan 2025 02:11:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736887223; cv=none; b=KWGKZg2JM2Sg/WPrx0NQOOqeBa5SUF5xS9fXBS5zGB5om5iHEgZj+rfgwttAS7jNV/pCciPodV3kxjMEcnX9J6R77GsdRGag4VbaUvJbujR7w1t9qyG3WWbCmLfralEUUp9wtykZginvKiDQw2f9EqPFTokQFKxEBENwAKT6ATE=
+	t=1736907106; cv=none; b=dMcA2fohmgwPC3eAA61DTdlEONH17hyAc7Wv6mPSZdEet8h/TSFF3XlEFMTfVIj/ucalD0bIgaWkVTcsSJKjbqOP8pfyXh/S3MvNuXNOJUF6/s19+wk3cgpvEsPTYOUxX5YCmlU9UNMwtj0jHtNOhq3Y3S12QJf1KWBOG7Sf+HM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736887223; c=relaxed/simple;
-	bh=gfRSX2GYBFaW3+bJZ4OY5mVTnljCuw1ZvJQxSJCMgWs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QY+JDebHE2n78Ng7qyDRGvukYU2b/LIc2fZYo7LpfEt7YJMok0u3K1GxZrdud77S6d+4+M0prlRLr14dOjpi0tzuVCDW6teWMKdIY/kjPVY215E2zXGOPoPUhcX/ppY5h8i/WkcSceZ6b2FZ+QMo1ntFx+F4vpRtX6HjMj06WTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KRATKsoI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B64C4CEDD;
-	Tue, 14 Jan 2025 20:40:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736887223;
-	bh=gfRSX2GYBFaW3+bJZ4OY5mVTnljCuw1ZvJQxSJCMgWs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KRATKsoIY3LO2ovpqzgCudm88TPSEUQ8NKJV2//zqUhewA8om56zVReEyD7lmsTKX
-	 vrhhfJ4YBlhX1bmPy947jzhNSVLLNJeH+GOKqOAiWJo0Fw84mRSjCqFmjjl9SGwP3S
-	 Qf86rmgd8equripDjT+3cVAsCWcq1lEETE8xQ3lOa1np/MJErebfeKmwOpk1vCZhWw
-	 FCGiwSXENAXQDgVeqa10fmE861CM6xtBun4KfmjMyBxQbbx17Rn1wtoAXMfjv9GyJD
-	 K3jA91U/KePWtAMdd3hioeX7CxybbZB+lzEAeJCdw8E/Ink/nJfJK6PWlR0YKP8nJ8
-	 rySkbkgO0rNDQ==
-Date: Tue, 14 Jan 2025 14:40:21 -0600
-From: Rob Herring <robh@kernel.org>
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v3 4/6] dt-bindings: watchdog: renesas: Document
- `renesas,syscon-cpg-error-rst` property
-Message-ID: <20250114204021.GA1676959-robh@kernel.org>
-References: <20250113112349.801875-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20250113112349.801875-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	s=arc-20240116; t=1736907106; c=relaxed/simple;
+	bh=z6Rc+pSrBIHC9Iws72s1fI5gE0Df27Hul3Jn0LH1KVw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Awa2iH8Yd4NdmRQvYFBg9Z8mgrFR/qcWPCddT1caWtVqBSzcehJy7Oj/xwOP/KQg1d1YUlAlYlhqauyg4jj3FA87gXof0Y/+Ow3cMvsLgS/xYjlYq8ZHCJeAAjFKiOFZW/W+MpWLq6ItL72k8rT5e2gjSa52h3KMTY2+jUikCIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jCBmfkYT; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e3978c00a5aso9707809276.1;
+        Tue, 14 Jan 2025 18:11:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736907103; x=1737511903; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kzBbvyc9XeOPumeywlczQ3YKQ+UKjKz6ZgpLbbtCGjw=;
+        b=jCBmfkYT9Dhr85MsIrBElqHUjaLj917PZmxuTTt9dd0wWCyLdyN/NBxijbCdVzTPYT
+         Cjksn3WkYqXqWxB8KS4AFTXFC2E5wqj+PbhQa60UE6PYA1e3QyPuBmYEvmZY3iwquwBM
+         fNK+rTkuagI9NDSPrVXQa03sW2vUtjVUARRmBlJZzddJG8DFiCt6FBumCvCCaCAxOa/2
+         UpwnbZozkIpqwRwnWoUG04FymVEkxwhrl4oB0ThH3GoMNOl/SI3FA4o6Q0BGoxS2I6IZ
+         d6LAT7wbmQQU8kYuEwEwtvx+hvPqenaLqJRK0B6jBHzzdEt+pFOzK13e/roAkQKgUHnW
+         iZFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736907103; x=1737511903;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kzBbvyc9XeOPumeywlczQ3YKQ+UKjKz6ZgpLbbtCGjw=;
+        b=UD4KnAwlUDaG0UzTAOkYMQTExEF4HlDJexuk+fnEs4WAYeypMzL6/cgEeInOfLhhFB
+         dW21kpGu7za1nVRRTqaMm0e7Opl4QKLYLUmSjVnLqRLUrpHMxCWuygKc/XUGMqdjCP9q
+         D4qy3zvaeyItcbwYKCstyHh4TzUEh1fbAn83M3ole/idEUO+Wwm83fQkGfvwLuBD5B0R
+         83YbfXesWkJmec4YA1pz+y6XQ87HORf4a70KS+cF0F9Wh75gBAHqPRHYaFRbrsaaQXf8
+         MI8nYIpKZx77HtlG2yd88sxR9JjxNDeq20a2k8fjlxoSm97tHpYSrazYKM/HF3rtb2GK
+         eDWw==
+X-Forwarded-Encrypted: i=1; AJvYcCU23/8YlnoqihDpIrSRvt7+nwVNRoj02y4pKbEBaDih603qwDGKtybquWDdaf+hrM0kuLGkld9b@vger.kernel.org, AJvYcCUfWALug5ujERmRJVNm1O1jnMmyp5+SkDBeWo0rWxqwVidfOu91vj63YNF+K8/hFPbkTJpTvlSOIYExQaU=@vger.kernel.org, AJvYcCVWJSjccXYBy0jUUqaiM12QLlsgI4P/m1ZofMTL47JEoOGN0g6RbELH1PUPsHm4oCd4CrJXgBtc+k1VCJaP@vger.kernel.org, AJvYcCWECwS/HJlip/qLUfrWKXlr6EnNHvJA8z2AsDTa5ujSoHoGV+lTfvHolUUA/u1m4E8jNvWzUOL2xAB7WA==@vger.kernel.org, AJvYcCWtqQkqpzi59sw5JR7twvl31FHquPSSBk19f3l3vgIxACbE5Zwg1bF9RWDHLklvKcqGN8FF5rk367iw@vger.kernel.org, AJvYcCX7MxjaZ71VvvHY+syJO+mevH6U/2qgiTrHH8xTsd2RgpDFaJNISDtJ8A3HRYeltfaevYrBqSxtUnU=@vger.kernel.org, AJvYcCXTxzhn4Kn/lTBkbLxH5lD0n2IQPRMmEUFl7VWSYzQC1EFV8B7X/8lNZUDGUQJtyQpRyw3FgKyxJrx9@vger.kernel.org, AJvYcCXV3dWLNqyc432SNo2vNL3BvXOJ8C+AH8CpnznXtj5Seg+SWTvbBWuVlopKMZQVhVHWwbWT0VMFpRzXeTJnIu4=@vger.kernel.org, AJvYcCXxpNRuoEytq7f2ZKoiPT8CuyfGGheGn6a/dZQ0Yp1YiIUskmDSikDGizY+1Ksfz0+jJjtKnzjAxDdc@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXajf6GNUOAcQ4GowJPdnE01ntCpDnuYelW0esCGgk2VEM7DFp
+	5yIIu7hrqKv+1NLxAI5sq5Eu/ngs1HLlMV5/ZioSU4A3tx/5+v3AzF+uPLk8XsB9Ws26NrxP1DJ
+	XIjFkTAdtuIS7WZYsyo+V8IWMK2g=
+X-Gm-Gg: ASbGncs6qLLujIlp38RU8mLd2SEhc0MaNKc5O0AYY0r5MltIrAI/rDZnIwqAsXy9gBM
+	4ydzGV89F5H5T4vzocOisGt7udb1bsBZl7exkOqFavIl0ic/RXGNdT7/tjqWNwmr9q6YPK3o=
+X-Google-Smtp-Source: AGHT+IFIVxjvuwQxlm+It/LMur9kFyF8O1Z9FGStqAjIGuLMVyk8BbeY9MnMf1DEg2p5Hq1WcKpXYmr8gaoL7EQy+HY=
+X-Received: by 2002:a05:6902:a01:b0:e57:311d:3143 with SMTP id
+ 3f1490d57ef6-e57311d4dcamr12922097276.42.1736907103392; Tue, 14 Jan 2025
+ 18:11:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250113112349.801875-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20250114033010.2445925-1-a0282524688@gmail.com>
+ <20250114033010.2445925-5-a0282524688@gmail.com> <CAMZ6RqLHEoukxDfV33iDWXjM1baK922QnWSkOP01VzZ0S_9H8g@mail.gmail.com>
+ <CAOoeyxW=k35-bkeqNmhyZwUxjy=g3irTBS5mbXLxqp1Stx-Zfg@mail.gmail.com> <6e349f0f-6509-4a3b-bb75-e2381e9205c6@wanadoo.fr>
+In-Reply-To: <6e349f0f-6509-4a3b-bb75-e2381e9205c6@wanadoo.fr>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Wed, 15 Jan 2025 10:11:32 +0800
+X-Gm-Features: AbW1kvaQIEFE9WM-IPay3Y7pZt581CJwaqBO4xhiRtEJtYM812FJmCH8UFsvh0Y
+Message-ID: <CAOoeyxVST6rEqp65rU6ZgmM-rSkAdeUVM=0nTLZYrqiO4DbQOA@mail.gmail.com>
+Subject: Re: [PATCH v5 4/7] can: Add Nuvoton NCT6694 CAN support
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 13, 2025 at 11:23:47AM +0000, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> 
-> The RZ/V2H(P) CPG block includes Error Reset Registers (CPG_ERROR_RSTm).
-> A system reset is triggered in response to error interrupt factors, and
-> the corresponding bit is set in the CPG_ERROR_RSTm register. These
-> registers can be utilized by various IP blocks as needed.
-> 
-> In the event of a watchdog overflow or underflow, a system reset is issued,
-> and the CPG_ERROR_RST2[0/1/2/3] bits are set depending on the watchdog in
-> use: CM33 = 0, CA55 = 1, CR8_0 = 2, CR8_1 = 3. For the watchdog driver to
-> determine and report the current boot status, it needs to read the
-> CPG_ERROR_RST2[0/1/2/3]bits and provide this information to the user upon
-> request.
-> 
-> To facilitate this operation, add `renesas,syscon-cpg-error-rst`
-> property to the WDT node, which maps to the `syscon` CPG node, enabling
-> retrieval of the necessary information.
-> 
-> Additionally, the property is marked as required for the RZ/V2H(P) SoC to
-> ensure future compatibility (e.g., where the same IP block is present on
-> the RZ/G3E SoC) and explicitly disallowed for other SoCs.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> Note, this change doesnt break any ABI, as the subsequent driver patch handles
-> the case elegantly if the `syscon` node is missing to handle backward compatibility.
-> 
-> v2->v3
-> - No change
-> 
-> v1->v2
-> - Renamed `renesas,r9a09g057-syscon-wdt-errorrst` to `renesas,syscon-cpg-error-rst`
-> - Updated commit message
-> ---
->  .../bindings/watchdog/renesas,wdt.yaml          | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> index 29ada89fdcdc..ca62ae8b1b0c 100644
-> --- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> +++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
-> @@ -112,6 +112,19 @@ properties:
->  
->    timeout-sec: true
->  
-> +  renesas,syscon-cpg-error-rst:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description:
-> +      The first cell is a phandle to the SYSCON entry required to obtain
-> +      the current boot status. The second cell specifies the CPG_ERROR_RSTm
-> +      register offset within the SYSCON, and the third cell indicates the
-> +      bit within the CPG_ERROR_RSTm register.
-> +    items:
-> +      - items:
-> +          - description: Phandle to the CPG node
-> +          - description: The CPG_ERROR_RSTm register offset
-> +          - description: The bit within CPG_ERROR_RSTm register of interest
+Vincent Mailhol <mailhol.vincent@wanadoo.fr> =E6=96=BC 2025=E5=B9=B41=E6=9C=
+=8814=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=8811:12=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+...
+> >>> +static int nct6694_can_get_berr_counter(const struct net_device *nde=
+v,
+> >>> +                                       struct can_berr_counter *bec)
+> >>> +{
+> >>> +       struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> >>> +       struct nct6694_can_event *evt =3D priv->rx->event;
+> >>> +       struct nct6694_cmd_header cmd_hd;
+> >>> +       u8 mask =3D NCT6694_CAN_EVENT_REC | NCT6694_CAN_EVENT_TEC;
+> >>> +       int ret;
+> >>> +
+> >>> +       guard(mutex)(&priv->lock);
+> >>> +
+> >>> +       cmd_hd =3D (struct nct6694_cmd_header) {
+> >>> +               .mod =3D NCT6694_CAN_MOD,
+> >>> +               .cmd =3D NCT6694_CAN_EVENT,
+> >>> +               .sel =3D NCT6694_CAN_EVENT_SEL(priv->can_idx, mask),
+> >>> +               .len =3D cpu_to_le16(sizeof(priv->rx->event))
+> >>> +       };
+> >>> +
+> >>> +       ret =3D nct6694_read_msg(priv->nct6694, &cmd_hd, evt);
+> >>> +       if (ret < 0)
+> >>> +               return ret;
+> >>
+> >> You are holding the priv->lock mutex before calling
+> >> nct6694_read_msg(). But nct6694_read_msg() then holds the
+> >> nct6694->access_lock mutex. Why do you need a double mutex here? What
+> >> kind of race scenario are you trying to prevent here?
+> >>
+> >
+> > I think priv->lock need to be placed here to prevent priv->rx from
+> > being assigned by other functions, and nct6694->access_lock ensures
+> > that the nct6694_read_msg() transaction is completed.
+> > But in this case, cmd_hd does not need to be in priv->lock's scope.
+>
+> So, the only reason for holding priv->lock is because priv->rx is shared
+> between functions.
+>
+> struct nct6694_can_event is only 8 bytes. And you only need it for the
+> life time of the function so it can simply be declared on the stack:
+>
+>         struct nct6694_can_event evt;
+>
+> and with this, no more need to hold the lock. And the same thing also
+> applies to the other functions.
+>
+> Here, by trying to optimize the memory for only a few bytes, you are
+> getting a huge penalty on the performance by putting locks on all the
+> functions. This is not a good tradeoff.
+>
 
-Why does the watchdog node care about the reset reason? Why doesn't the 
-CPG handle that? Seems like this is the Linux watchdog subsystem handles 
-reset reasons, so let's stick a property in the watchdog node. Sounds 
-like OS design dictating bindings.
+Since nct6694_read_msg()/nct6694_write_msg() process URBs via
+usb_bulk_msg(), the transferred data must not be located on the stack.
+For more details about allocating buffers for transmitting data,
+please refer to the link:
+https://lore.kernel.org/linux-can/20241028-observant-gentle-doberman-0a2baa=
+-mkl@pengutronix.de/
 
-Rob
+Thanks,
+Ming
 
