@@ -1,121 +1,85 @@
-Return-Path: <linux-watchdog+bounces-2714-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2717-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 452E8A11A50
-	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jan 2025 08:05:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D3DDA1205A
+	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jan 2025 11:44:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E57F7A3C33
-	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jan 2025 07:05:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF5E83A306C
+	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jan 2025 10:44:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 470C322F3A6;
-	Wed, 15 Jan 2025 07:05:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VhBWUNQO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F7551E98E4;
+	Wed, 15 Jan 2025 10:44:17 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27BE23243D;
-	Wed, 15 Jan 2025 07:05:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C761E98F8;
+	Wed, 15 Jan 2025 10:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736924718; cv=none; b=icT+ePPv8txNGwPAG+W1Vz4jxh9Pi+Uve5Kyuvu5x1u5UpYjdxJMKtlDJ+HVCyNindwZlFUgDIzVkqEQ3ACWnR7flzXX+Iwcuj+NZ1nTBZwIBy6EQjm+4GLqVZZiPHXmo79YbMIHQC3BLC7wLJOg/sVwcXpWxtNraSw7AT1xwNI=
+	t=1736937857; cv=none; b=Y8ZPHcpUjqar3UJOs0lWxTke3CT57rvyXhiZOIaCX5yA25Ttzg3aTRpT1OZ9mrT+m1YSpHzJfu0LABpvLln0H3M5tV8Ku56iqLj6Ms8gdZ9awCaK6fTY8g8ZNau/aK3ZJX86HEwymt2h/tc3E9XmFptwptmSY0r7u4ALFeAt2tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736924718; c=relaxed/simple;
-	bh=ESrP+R+vbzb0KV3PE778NNDH+LI5asYGq+gEf/u9+bI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UhriFju11QHGwh1ui1XEp1vwKYBIOctojKfD35Ul27YTo6yKzGKIDYkHFBP+QFTg1iOQswcWtwusPffjv/237ghZpo+BiXUwpGm09rgOE9nFmiZNIxL57DivwUImEK/iqJxHGWO48J7fEhLtNieGdaUwNO1s8t960XetjqOH8PU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VhBWUNQO; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e54d268bc3dso11347362276.1;
-        Tue, 14 Jan 2025 23:05:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736924715; x=1737529515; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ESrP+R+vbzb0KV3PE778NNDH+LI5asYGq+gEf/u9+bI=;
-        b=VhBWUNQO8NHoScnUwS8Uxv3XIZee++JodIxuHyYMBJCZ/2vX/sFLCilMyVjdRk7P4V
-         IfQ1wgAeZFMWssR87P5gyADyRYcsAbMKs4De5PeiuXO7orK+c2gb1PToBj9QP4MOnUuT
-         Q6EOMH0q+AxQe6vKRblKFDTK622i0olyQBiQt1l+hG9JdcQyGhQI5z5FBrYr/XD7gPrd
-         52gbcntrn0m8xLOrZLTRjVNKP08lpCOT5kHrdrRnvSNGnkgFxbD+sEOKu9TUFkIgeyf4
-         maSjK1EIeA2+krQjtDKUT1XQxdHpoi/75NI0aTwnaLPJ1i3M+6OhNBS9ii8+H7pq2uJO
-         Ph+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736924715; x=1737529515;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ESrP+R+vbzb0KV3PE778NNDH+LI5asYGq+gEf/u9+bI=;
-        b=ef4uko9cRRnKqsx85wySy/3CMVTJj10p5yd7jpneH2X4RO5jnlKLXW0ELPUIzBnRM+
-         1jhbwag4ugUkPl/BdwKJZTYm9muLJxjvtzapUEKyYuGPbZ8obYFl21t+m1r3/thncavt
-         jqexqd+AcbvrSH6JcN9ddRrlf2Ral9MEd+JjezmFlhGlDhp5qv3kj6jtNLIWzzay/W6u
-         U3/v3G0I4GODxLrUa49h3SAMS+uahHwNC5vmSrM1xa/nC9Ewz5n5K0dqVNhFX8zX52aI
-         oddrrLXDvbAk5ioI9xhiHsnABV+v9jV8zvsyZ4EBE5ZvMF+yyes9yX9Y3Bk5Of1l0S47
-         7Ogw==
-X-Forwarded-Encrypted: i=1; AJvYcCUyBTqN/gvqabMXTWkQ1fMq4DP88Zex4o7DrYA2eXPmmzZ+U9ux6f8ZHk7AqE6Bui9zIu+rLDiz@vger.kernel.org, AJvYcCVFFAu6SL4S5sKyDwgMtR9mgQnXtAHJhv2uebTHSfFuAfFEAa9KgnqvNWKCHSHaBUvvQkguXWV9DUVZ@vger.kernel.org, AJvYcCVpBfuJDRG+OrKRH2mFc65MNMYdL24R/VuG6UMv+npD7bURF00CfiW1c9hxXm2exfAs57rAATTdrDVM@vger.kernel.org, AJvYcCVx8bwOeSfPVk0KRzmy2d5phchIK7kTkftG9eYj40AOQt2epnWt3U691o7pGk2MD60z4nKmSzPkkaOes1hA6/A=@vger.kernel.org, AJvYcCWEJ4SG0rZ66Kj7TnneXMBG8GuLH/WoQst0Frsc4GdYbv1YyEbvP/qJtde8mKVsHXY1BbkxfwVeoI+fKKc=@vger.kernel.org, AJvYcCWKAEqvDaU5UMWuYohjZ+/422mcNy79BL1x28R0Jr17AdsTZ6prbzEg6OSPOvgK8YHWxjWX4oQS1GJTwsyO@vger.kernel.org, AJvYcCWVY3bmESKINm6soiyX3yQfUdGxYpDwEK7eHRrr5R41HZq68uFS/CESvQtwzZmkwoYiO5KKo0oV1gMc@vger.kernel.org, AJvYcCWe9B7uCpI8uAWqHeqfpyXDCIVAdh+kPI4UvD7YkaJ288VOk2epsAOq4b+F1Vzu6a5zTgpIwfRUXuGILA==@vger.kernel.org, AJvYcCX9FecU/olgUbYyWsXdRnlszy7ltbetqxaDgfu1xZxIF/1EVkjTuHEJqz2JFxryDXjeRHnFBkoZv6M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQJztWEF56D9aA1or0RBOl804YVRrBE0qu3RUMsYKiqh17tfgc
-	i+12gbMfRLNIAqejWqDw5Z/1mtMvYwo1FSZDFqgMTqNgMBiQVOyachF+vq1WQnmCRXw5U2oCf1W
-	UeEs1lyONs6V6HXaXXxPUMDyCWKk=
-X-Gm-Gg: ASbGnctrT9sR8O1HGYuPgiYikdutzjBn8ji/r7xYvAD8pf7mwsiIpXJ6yBhM2l3bxKL
-	r1WDtkW+BYIFQzf2hLl7YFqMS1ANkPB4O8MnHH+nRL8hEDy4uNQMbNGFln8q7FdYZERFdhpE=
-X-Google-Smtp-Source: AGHT+IFIsyVRJmpHZBjotMVCSRPbd3gEaCIIHHy4FjD1w9/Fs7vwaZor8NBHQG4IdMBq2/3+m2DX7k9Rk0mcGAJ2tJA=
-X-Received: by 2002:a05:6902:1891:b0:e57:8df4:523e with SMTP id
- 3f1490d57ef6-e578df4612cmr601583276.41.1736924715583; Tue, 14 Jan 2025
- 23:05:15 -0800 (PST)
+	s=arc-20240116; t=1736937857; c=relaxed/simple;
+	bh=YreGTaxToDhQTEYAOnwnnG5rnM3YMzUqjJ3eF3dQMAI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=c9TWDHdAZyRzVYgDBGC7qtiVozmaN9vqzpHFrND49Rw1VLkAB+q3JnzNmcfrMggb0KhH7y830LLcGm7tBEQjiIcDE/HM9OSC671RQY/d2xZSnxfWOVwKj7+XuANeZbKFMdSOZZlKBDuiFnxLTg59eB7PaBzM+a7cgw/WjivCOSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-CSE-ConnectionGUID: 7b5Glj5nSg2tW4vtWLWFtQ==
+X-CSE-MsgGUID: XJL4LDtGSgSnFQRTDv51hQ==
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 15 Jan 2025 19:39:05 +0900
+Received: from localhost.localdomain (unknown [10.226.93.251])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 1E681422D9AD;
+	Wed, 15 Jan 2025 19:39:00 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-watchdog@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>
+Subject: [PATCH 0/5] Add support for RZ/G3E WDT
+Date: Wed, 15 Jan 2025 10:38:49 +0000
+Message-ID: <20250115103858.104709-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250114033010.2445925-1-a0282524688@gmail.com>
- <20250114033010.2445925-3-a0282524688@gmail.com> <CAMRc=MeEye9i2Z=Y8bHt2ruCS6JJRxmGiLvAUt6E7BJ2K4wosg@mail.gmail.com>
-In-Reply-To: <CAMRc=MeEye9i2Z=Y8bHt2ruCS6JJRxmGiLvAUt6E7BJ2K4wosg@mail.gmail.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Wed, 15 Jan 2025 15:05:04 +0800
-X-Gm-Features: AbW1kvbY0w-UuJw15CFDA2VEYiv0cNht8IhrNUen9V2_54YGXuldzphdX2Xup68
-Message-ID: <CAOoeyxXxmO7Hvd4==TY-NuUwY_tv7xfjG-Cd4H4stfL6Wmoorg@mail.gmail.com>
-Subject: Re: [PATCH v5 2/7] gpio: Add Nuvoton NCT6694 GPIO support
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Dear Bartosz,
+The RZ/G3E WDT IP is similar to RZ/V2H WDT. WDT0 can be used for CM33 cold
+reset, system reset and asserting WDTUDFCM pin where as WDT1 can be used
+for CA55 cold reset, system reset and asserting WDTUDFCA pin. Other 2
+watchdogs can be used for system reset. So define WDT{1..3} in SoC dtsi.
 
-Understood!
+Biju Das (5):
+  dt-bindings: watchdog: renesas,wdt: Document RZ/G3E support
+  clk: renesas: r9a09g047: Add WDT clocks/resets
+  watchdog: Make RZV2HWDT driver depend on ARCH_R9A09G47
+  arm64: dts: renesas: r9a09g047: Add WDT1-WDT3 nodes
+  arm64: dts: renesas: r9a09g047e57-smarc: Enable watchdog
 
+ .../bindings/watchdog/renesas,wdt.yaml        |  4 +++
+ arch/arm64/boot/dts/renesas/r9a09g047.dtsi    | 30 +++++++++++++++++++
+ .../boot/dts/renesas/r9a09g047e57-smarc.dts   |  4 +++
+ drivers/clk/renesas/r9a09g047-cpg.c           | 15 ++++++++++
+ drivers/watchdog/Kconfig                      |  7 +++--
+ 5 files changed, 57 insertions(+), 3 deletions(-)
 
-Thanks,
-Ming
+-- 
+2.43.0
 
-Bartosz Golaszewski <brgl@bgdev.pl> =E6=96=BC 2025=E5=B9=B41=E6=9C=8814=E6=
-=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=888:12=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Tue, Jan 14, 2025 at 4:30=E2=80=AFAM Ming Yu <a0282524688@gmail.com> w=
-rote:
-> >
-> > This driver supports GPIO and IRQ functionality for NCT6694 MFD
-> > device based on USB interface.
-> >
-> > Signed-off-by: Ming Yu <a0282524688@gmail.com>
-> > ---
->
-> Please pick up review tags when resending.
->
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
