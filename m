@@ -1,38 +1,39 @@
-Return-Path: <linux-watchdog+bounces-2717-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2715-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D3DDA1205A
-	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jan 2025 11:44:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84B42A11FE9
+	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jan 2025 11:39:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF5E83A306C
-	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jan 2025 10:44:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 264A67A2CAD
+	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jan 2025 10:39:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F7551E98E4;
-	Wed, 15 Jan 2025 10:44:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2990B24168A;
+	Wed, 15 Jan 2025 10:39:27 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C761E98F8;
-	Wed, 15 Jan 2025 10:44:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 846591EEA20;
+	Wed, 15 Jan 2025 10:39:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736937857; cv=none; b=Y8ZPHcpUjqar3UJOs0lWxTke3CT57rvyXhiZOIaCX5yA25Ttzg3aTRpT1OZ9mrT+m1YSpHzJfu0LABpvLln0H3M5tV8Ku56iqLj6Ms8gdZ9awCaK6fTY8g8ZNau/aK3ZJX86HEwymt2h/tc3E9XmFptwptmSY0r7u4ALFeAt2tc=
+	t=1736937565; cv=none; b=nf40dTgbc6flNmsPEcESfuLA69qRZ9al1ZQnrorXKZUO0P0b2rMBTSEdMu6I/Ojoy+L8FVSBIUMtfJzVwtTh9URjyisCKTCQXFnObBjEgXRlfm7uZ16sgqulWIVCwH2JLq4gVAl/evfhFx5Pq9HJnccpAfZhvtJLfPD8VmfS9lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736937857; c=relaxed/simple;
-	bh=YreGTaxToDhQTEYAOnwnnG5rnM3YMzUqjJ3eF3dQMAI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=c9TWDHdAZyRzVYgDBGC7qtiVozmaN9vqzpHFrND49Rw1VLkAB+q3JnzNmcfrMggb0KhH7y830LLcGm7tBEQjiIcDE/HM9OSC671RQY/d2xZSnxfWOVwKj7+XuANeZbKFMdSOZZlKBDuiFnxLTg59eB7PaBzM+a7cgw/WjivCOSo=
+	s=arc-20240116; t=1736937565; c=relaxed/simple;
+	bh=Fu2okt0y2+IeQHNBikLETeTY557OS6ji8DQZNYHPgZw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qgBMH4TtpkiC7MPgksqrtZaoMa9hO6Vu/2TZhgaXmoIYOQWfBnQrHFQDCfXdbH9Dbk4MW9Q+RtGGXrOAT6HsUTybQAAQmD2EHr/NBL9/xJq+DFl0NB39kCox+LG9jHEbvXXub1VOM79Bpv950fDGepNp+nvYWROFZPPtPv8Gxng=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-X-CSE-ConnectionGUID: 7b5Glj5nSg2tW4vtWLWFtQ==
-X-CSE-MsgGUID: XJL4LDtGSgSnFQRTDv51hQ==
+X-CSE-ConnectionGUID: 68PlJ+6lRSCsOmDc84y/fg==
+X-CSE-MsgGUID: r3SI7oOKS3SCDKs69HnIzg==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 15 Jan 2025 19:39:05 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 15 Jan 2025 19:39:18 +0900
 Received: from localhost.localdomain (unknown [10.226.93.251])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 1E681422D9AD;
-	Wed, 15 Jan 2025 19:39:00 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id C577E422D9AF;
+	Wed, 15 Jan 2025 19:39:05 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
 To: Wim Van Sebroeck <wim@linux-watchdog.org>,
 	Guenter Roeck <linux@roeck-us.net>,
@@ -48,10 +49,12 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	linux-renesas-soc@vger.kernel.org,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH 0/5] Add support for RZ/G3E WDT
-Date: Wed, 15 Jan 2025 10:38:49 +0000
-Message-ID: <20250115103858.104709-1-biju.das.jz@bp.renesas.com>
+Subject: [PATCH 1/5] dt-bindings: watchdog: renesas,wdt: Document RZ/G3E support
+Date: Wed, 15 Jan 2025 10:38:50 +0000
+Message-ID: <20250115103858.104709-2-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250115103858.104709-1-biju.das.jz@bp.renesas.com>
+References: <20250115103858.104709-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -60,25 +63,30 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The RZ/G3E WDT IP is similar to RZ/V2H WDT. WDT0 can be used for CM33 cold
-reset, system reset and asserting WDTUDFCM pin where as WDT1 can be used
-for CA55 cold reset, system reset and asserting WDTUDFCA pin. Other 2
-watchdogs can be used for system reset. So define WDT{1..3} in SoC dtsi.
+Document the support for the watchdog IP available on RZ/G3E SoC. The
+watchdog IP available on RZ/G3E SoC is identical to the one found on
+RZ/V2H SoC.
 
-Biju Das (5):
-  dt-bindings: watchdog: renesas,wdt: Document RZ/G3E support
-  clk: renesas: r9a09g047: Add WDT clocks/resets
-  watchdog: Make RZV2HWDT driver depend on ARCH_R9A09G47
-  arm64: dts: renesas: r9a09g047: Add WDT1-WDT3 nodes
-  arm64: dts: renesas: r9a09g047e57-smarc: Enable watchdog
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
+ Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- .../bindings/watchdog/renesas,wdt.yaml        |  4 +++
- arch/arm64/boot/dts/renesas/r9a09g047.dtsi    | 30 +++++++++++++++++++
- .../boot/dts/renesas/r9a09g047e57-smarc.dts   |  4 +++
- drivers/clk/renesas/r9a09g047-cpg.c           | 15 ++++++++++
- drivers/watchdog/Kconfig                      |  7 +++--
- 5 files changed, 57 insertions(+), 3 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+index 29ada89fdcdc..3e0a8747a357 100644
+--- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
++++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+@@ -75,6 +75,10 @@ properties:
+               - renesas,r8a779h0-wdt     # R-Car V4M
+           - const: renesas,rcar-gen4-wdt # R-Car Gen4
+ 
++      - items:
++          - const: renesas,r9a09g047-wdt # RZ/G3E
++          - const: renesas,r9a09g057-wdt # RZ/V2H(P)
++
+       - const: renesas,r9a09g057-wdt       # RZ/V2H(P)
+ 
+   reg:
 -- 
 2.43.0
 
