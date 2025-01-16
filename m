@@ -1,199 +1,810 @@
-Return-Path: <linux-watchdog+bounces-2723-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2724-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6190AA12996
-	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jan 2025 18:18:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A85D1A13160
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jan 2025 03:29:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECB0C3A713F
-	for <lists+linux-watchdog@lfdr.de>; Wed, 15 Jan 2025 17:18:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C40801885F18
+	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jan 2025 02:29:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0BF070812;
-	Wed, 15 Jan 2025 17:18:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4E888634D;
+	Thu, 16 Jan 2025 02:29:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="ey8laRwZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RijYDDtd"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011029.outbound.protection.outlook.com [40.107.74.29])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A868F3C47B;
-	Wed, 15 Jan 2025 17:18:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.29
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736961489; cv=fail; b=SYjQ7fQlwwtuQqh206B+083W/2DRA2gWAAewzIZUK0PcZE+kEPM43mx3o46NwbJv3KZnRCMmI3aIYu89f8laA1mlLzZW0lyUmnJVMCNhW+lSA9KF1cTO4rWBeHno7/v8Dt+XvoZwIxkCmKAdMxTGS8UHZy/UjMuqssHBAkNi8xs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736961489; c=relaxed/simple;
-	bh=u3slTDt3VNVA8m5MA3F8KsMWXuXTkTX0QNZRkavkPTQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=oKXU74TbCY+CvTyH2MxGxUbm5gt+rw0c9yq+18otdl+motIkNKmoMPBsVJ//iAwRSO/YRI7vfQIPTt8ObnmzuO2+rWg+lUjPVSehqGW4gRqdSyLjIq3nzMmS/tL9McQlnB4dI9fuf8iSxrKdSNvBtB3Av3AcjP3x7Tedai8SNIk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=ey8laRwZ; arc=fail smtp.client-ip=40.107.74.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dKZ6q51q6K5Wf2GpP5le7pbadYgwZqq71Fn9zqQbHBERvlW18/vqjz/HDKct8AfWpIPqNz4tQBV9ox0Qhs6Am6NGXrUdM9I2odjpUdv5iVatcT7ylMSEfZybxnalmefOjtdEYTrYgyXXFZJiaNOXvkVYaRTFzjaSEG5koB4+5eR+WAji01aKZrD7QCTGYfXFZL5VsdllcmUW8fZYf7345MruXsMca441MP0Pr75Zy+Ms/rE5gVJgzcxy1vNF9VvdkZ8I0CVmnktChW+Ndmzvf+/rDbhIVwE2lGaB1ZPmCZC6H39KiXY4Z8JVoi+eJPrMD3Gi6bRxvm9ssR+nvzXITg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u3slTDt3VNVA8m5MA3F8KsMWXuXTkTX0QNZRkavkPTQ=;
- b=GOZXTofRDzIk3d0wvULSaEQNtHGTP4ClZ5S9vDXfDzsJyfJl2CB22+fuslMXxn1K6KBx8HsVCdOLEL8jBM4BGWsI3NTXVDKV4zoWRVmakQxDU2pMgMg7EKx/Rk0oSJot4VTREND9zvUnZHXvSN6iM6RgGe8VO2YDbFW3UiH3khCNiRuAH0wRevq7px7t5z/BiMArqhXiXSaBBM/VITOxfI1516nwNKbigNdXh3ksc/cbQOCw95EdTrGUUjdzvrUszHI408yke6Qb0gbnq15E8KF9ZwLYi8bqAaPS+8kOxwxEIsiTR+c2P22w9kGoqdTW81XnpOjVe/plkEHz8km1mQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u3slTDt3VNVA8m5MA3F8KsMWXuXTkTX0QNZRkavkPTQ=;
- b=ey8laRwZCh/5nzJn2of2ryzTBehZ66Oms8Ld5xiblICA68mkVZHxh7QJO/NX0JGytWQaKPsm2QcdhRz7EMvwDOtmNpz4sRWDicqVk1WX4ySIRT+o2Kh6bqzAeHtv7HGLwk1puWJUyRZnnW6tXaowgUoemdt/SviOSXzaJcof86Q=
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
- by TYYPR01MB12451.jpnprd01.prod.outlook.com (2603:1096:405:f6::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.13; Wed, 15 Jan
- 2025 17:18:02 +0000
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1%4]) with mapi id 15.20.8356.010; Wed, 15 Jan 2025
- 17:17:56 +0000
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Guenter Roeck <linux@roeck-us.net>, Wim Van Sebroeck
-	<wim@linux-watchdog.org>
-CC: "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Prabhakar Mahadev Lad
-	<prabhakar.mahadev-lad.rj@bp.renesas.com>, biju.das.au
-	<biju.das.au@gmail.com>, "linux-renesas-soc@vger.kernel.org"
-	<linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH 3/5] watchdog: Make RZV2HWDT driver depend on
- ARCH_R9A09G47
-Thread-Topic: [PATCH 3/5] watchdog: Make RZV2HWDT driver depend on
- ARCH_R9A09G47
-Thread-Index: AQHbZznBkfvGK/9M9kaeTTHwnLvzBrMX7ImAgAAnWJA=
-Date: Wed, 15 Jan 2025 17:17:56 +0000
-Message-ID:
- <TY3PR01MB1134639C3CBAEA08936144D2F86192@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-References: <20250115103858.104709-1-biju.das.jz@bp.renesas.com>
- <20250115103858.104709-4-biju.das.jz@bp.renesas.com>
- <de74406e-8554-4179-9d1c-4467d8c92645@roeck-us.net>
-In-Reply-To: <de74406e-8554-4179-9d1c-4467d8c92645@roeck-us.net>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|TYYPR01MB12451:EE_
-x-ms-office365-filtering-correlation-id: fd2b63fe-9804-4686-1904-08dd35888d82
-x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?SUJqRVlqSnpwbnBJTS93blpyYWhZS3RPNkZMTjl6bGJpTUhyOWx6S1Y0RXU1?=
- =?utf-8?B?aW9Vdm5NN2VNRkRibDAxN2l0QlNvQ3RFQ2U0dFQxV3ZRQVJqcHJWN0J6SkpT?=
- =?utf-8?B?T3RzekdMblRoSmpDbER4dEpQUit2WFQvUWF2SDVJRC9sUU1vNGFnZEVyMWNp?=
- =?utf-8?B?eThTV3JDUGsrbGV6U2lZcVFEdDd4d29HTXREVUxvUzN1ZTRNLzBBbzFDMjVl?=
- =?utf-8?B?YzB1enl0N1FvbkZrTGhManF5enpzN1dJcEhMSnlTc1p6MDlMdk9lTExwWnhM?=
- =?utf-8?B?MTdreVV1MFdWTmpQNnpUUmpGS3dESVc5NUJoaUFwVmQyd3FJQjNpcUhNdCsy?=
- =?utf-8?B?ZDZnSytseUZDUVlLOWlxVjdISzB3dWZEWnA5TDUwamYwam9JYnc2MUZNVy9H?=
- =?utf-8?B?dEpSS0RPVHF6Uk1ldlVuVmI0dFFXK25KZ2k5TGFkSjM0SmhxeXRwN25ldU1J?=
- =?utf-8?B?eDBnV3RnS09BeUFZSEdocVV6RENjb2x1ZTllWWcxbTdSb3dGcTQydE5rWXlT?=
- =?utf-8?B?UVhYRTg1RDhhZ1ZXMXRkR0xFbktNZVE2bWQ1UWVmL2hPSmtXVGl0K1FRb21n?=
- =?utf-8?B?MFY0YyswUjg4SEhuclBHcDdrdWVzbTV1WkdBNGp1cS9VbDMzUnh1V1p2cGFx?=
- =?utf-8?B?Q09ZYnlCbGVwUUhoaVh5bkxxT1Vob1llY29oZWxXNnRpekZwWWlVQzczOXQ2?=
- =?utf-8?B?WFdObG1yZCt6T2MzSmpVOFFVeSt5cmVWNG9pa2ZuK0NMLzVUVys0REFyTklD?=
- =?utf-8?B?MFNRY29ySGZmSXI3ZmFjNkZkY3EweFZ3WmN2ekc3Q1JDeXNqZDltYXZIaUxm?=
- =?utf-8?B?KzFWQXBnbTZGemNuL3VJbnJSb05IVytRQzdHdjVQbURUdW1NNXRsMHZVd0NO?=
- =?utf-8?B?MVlRRlNXbXYvNVM3NVVQejgxQmFrSUJnVVk0TVVsZEdiNVoyYmNOVGpOQWdW?=
- =?utf-8?B?TXZ5QTJtV054T1R2UnpTdDZrZFBuVFZrdmVVeVV6NEdPKzNRSWllNlkwM0dD?=
- =?utf-8?B?MEpRWEZMRXpNNWkvT2dPdkZSeHIwSjJiMkxxK2NFSXgzQlROa1lsYzFzYnVi?=
- =?utf-8?B?Qms3M2ZnUVY1VkdFb2hieTdzVkJ6TlMrZW5JTnkwRFl5b29GWlloZEtaTndH?=
- =?utf-8?B?TVFydW14c3hBbW5ZbURQYjJZQ1UvcndGVGxHQTF0TnlkNm80TWVCSFBCenZo?=
- =?utf-8?B?cmE1TG1lWk5kbStEM0gvN005SkdncVlwMXIyR09JSmZnOWxPaWRqOFljVytV?=
- =?utf-8?B?TVNPWDhST2ExUm5jcU1GMldNaTJyclB5OGV1WGg1M2xpRlU5WjQ5UHhQbTYr?=
- =?utf-8?B?WHFZbG5QNi9oNFUwUFREaGN6d2h1VHNhNGhsa0xxb3RJSDFtbHVoWGdQSnN2?=
- =?utf-8?B?L3RiTTFOY2pmdUZRNzczMjhMQm1LbEs1Vlp6dHBqMGd6R3IxQWRlbmE0aWh5?=
- =?utf-8?B?RUZEbkdLUFNmZDRZQU1XRldoVFErQjMrTVFJbVBkVkNFallyQk1najk5YWxS?=
- =?utf-8?B?YmhpSitYam53QnF5ekdob1VjOGVUVTFWeGdkOGduVzQ5Z0VWWHA2K2piVThF?=
- =?utf-8?B?KzNBa3Nwd3pUSFowYVk5bU9BZ3FCNTZZcU9WOGwrRFdCeUc4MUM2MVBYc1lG?=
- =?utf-8?B?SEx2TXRQZ1ZYYmdKU3FiWlZrNFlFM0o3dWJCa1VmT2NJTElUZndkVW1CVG11?=
- =?utf-8?B?aHp3V3pnbmttTDFrdDlWaXZVWjhrK0tyV1RWZ3ptZ0N6YVEyS2llcE9XRnBh?=
- =?utf-8?B?djltMTVXZCtxSDZVaTdLRFYvVHR3Z2lZdk1NM1dBcWxYU1FvblR6aDBpdGRa?=
- =?utf-8?B?Y0RvWXZjRDNFazMycHQ4ZlllODZpcEdmNXFYSE94VkNaZmNnWHJ1RGg4clhk?=
- =?utf-8?B?bW1oY21UZXNCU2VnNnRuNThIQWYzaHkrWUQvaXJ1cFA1bDBiOUJGbGVBZFJO?=
- =?utf-8?Q?qVLHOWVmzRLdHj1x/vevBtHNgRNj5DMd?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?ODlMeXl5R3gyNVcvK0wxL214dWp6UjVuWUp1OWk4S1ZPeFF1d1V6NzRqbG96?=
- =?utf-8?B?YXRScithekVYODFzZ3ZEOW5yRHFwa2Y0THpVVzV4dG1FeHlLSTc0MnhOSlZP?=
- =?utf-8?B?L1B0dHhBYUhEQXBjejNseVBLcFl1dzJvdy92RXMrUkwxNXRValB0Qi9JZlVv?=
- =?utf-8?B?aHBPZmJPUi9NZ2R4ZEllcHkrZ29yc3JueGV1YUxUVWpOQTVxYmFTYVU4QXdw?=
- =?utf-8?B?ZEpPZXhmVzA4RUpPOGtiZGNMbnBuZnJaUzF4UTJyZkZGWXBXY3hNSGVvWlRW?=
- =?utf-8?B?VTRiZGROdXlmRGNGdm5CYmZCQUNiWUdER05EUVFwYlZLcjJodTV0NWxWdmF3?=
- =?utf-8?B?aGRCWGFyWDVzcUg0M0RLRmVubEpRaXBIQTVaMU1qWW1GRU1hYWxOTi83Z2wv?=
- =?utf-8?B?UVZobEF2UEJPWDBvMjlXcDFwbTBubFp2VGVDZWVIL1BERzVyQW9VZldBMDdL?=
- =?utf-8?B?VUR6RU1BdW9kTW10TmlHRjlNSXNVd2ZZcnQ5bXJvNExLMXg5cFRmNGR1MmF1?=
- =?utf-8?B?RFl4bXRiaERkSTMwTm5rRjd5cUR3WDdnVXduZmlqZjFSK0dTSzFwLzhFUlho?=
- =?utf-8?B?dzR6QkdpUTVIWFp4ZVlTeVpJbkxOOUdjRkt5dER0WlowSFlFK0laY1d5VjlB?=
- =?utf-8?B?Yjc4L2FXWmRZcmh1YW5lY3pOZWN2SFU1Ukl2TlppckxDNXoyMmJ5aHpQTEZx?=
- =?utf-8?B?U2lVbnA5RksvL3JLL2FKS2dCZ05rSVhuWm01WjB0Q21GREIzNFd4eTZxN2FF?=
- =?utf-8?B?dEVlaElJSHdyL1ZjSnJ0N1F2MGw4ZHZhdXFZaFdhOXpkVlhoVTArdGJqZlgz?=
- =?utf-8?B?L2VrV3BiOVVTb0VoSEUzRnVPUHNFV0NhSnhaZjJueGs4TkxORG44WFI4bHl2?=
- =?utf-8?B?N2xaMHBoVy8rSUdhVmpkY3hXSVdhbEk3Q3Uyem9IWFZCR215bkk3RUdFa0xR?=
- =?utf-8?B?WGFSVHovNXhNRXZrS1QrUVpwRWtaa2VwYUZmSUZabWdjS293ZmFlTkllY1pG?=
- =?utf-8?B?Mm15elhIZk01L0s0VlRCWUw4YXJJSGpXdDBranhsZzZkVUFMdkhUaXJWM3hN?=
- =?utf-8?B?TkxsQUxHM3dIZHlRSEhnY2pnZ1F1SHhiZncrOWJHYnBaUHJrcW01ZUV4Mndh?=
- =?utf-8?B?QmFPN2NkcXVNdGpYVFVYTDFqcFVidGh0b2dVSEF2UnZIQXE3cG9FS3NQRndW?=
- =?utf-8?B?Slg0MHptMVkvNk81TWtlUFFGSDBMUG1ZWDNiZ1paZm56NERSY2FOVmx3dkRv?=
- =?utf-8?B?dGs4VlNHSnQ5WDF2RnNWWGJKQkJ4aVh4dE9DMHR2NlErdXZjV2QvVHp2RDEr?=
- =?utf-8?B?V2FqVEVWV01MZGhyMmhzSGs4dmZseEVySXRUcGpuc2NpUHhmbzJtalQzVFcw?=
- =?utf-8?B?cmE5dGRxUmRPaTJxNktHeHJ2cFd3ZDlsNVpZUGlDaUdudzlxQkNkd3puYWFV?=
- =?utf-8?B?aFlXbUVQZEx2VCt5OE9DeU5xS3I2SEtpMHlHZHNhNWdtbk1mbldBWHJsaDZn?=
- =?utf-8?B?QUY5SUR5ZlJvNlcrcUtjYnkzaFdPbmhCNHJ0RkdQMlhHLzZIVWtYbEZhWTB1?=
- =?utf-8?B?VVpVektPQXNQNDdQWVgrS21pSisyVFVLaEtwa2ExRHAyUlIvdFN5TmtqR0Rp?=
- =?utf-8?B?ai83UlpTODJCOVRFejdNWDV2dXZpZ2w3c1N5dnlqcG1tWUpWbngyWFdwOGd6?=
- =?utf-8?B?MmIzcW1ndTN2cVg1QWtCL3ptMmhFS2o1cWNjZFRZbUI0bUN5UDlQMUlqU3Y0?=
- =?utf-8?B?MXJpdzhUSDh4T2N3RzRWTnZQWEx6UUhjVFR3S0dzUGI3VWxucXBISmthVlJW?=
- =?utf-8?B?SG9GY3FPU1lYY3BrMXZqNTF5WEhaejlzUWo3OWtONEhBRjM2bjNSOXNvWk9v?=
- =?utf-8?B?T3pwM1oxK0lkdm43U05raVZmaVZYMWhoNzJDWUJGL0ZYOU9GTFFyWEgyNmlX?=
- =?utf-8?B?SkJST1lRdkhLVExjc1J0Qmx1c21BdGhjb2RmTDZvWFU4dUx3ckIrZHI5SS9i?=
- =?utf-8?B?ZTA5bmR6QmFxL0ZHaTBKSDJWcW9GTm83RnlGVnNDbENuejFjbEY2N3hyaldD?=
- =?utf-8?B?VENrNnJNQzJkWElTREE2ekxoZHU1b1EyK0xYV0I4QzlCWVAzTTJpdVBPTUNk?=
- =?utf-8?B?eDFNVnFhZWpScThSQUxVYUZMZVYxeXZ5VWYrYXRDaEJsRFh0VjZuc0dYS3JW?=
- =?utf-8?B?S0E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AABC024A7EE;
+	Thu, 16 Jan 2025 02:29:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736994547; cv=none; b=bN47g9Vubl617TtCmBOOjFvKX/g5tvz+hNcisKICo+shRxdnGKblVL/A+uI73jyYBUy54/YZQRXuKo+5LMugM7kFAVkmATHNG2VE4CkeJ5Q8WNvFTwr0DlPeQpMjyShOoSaomhO8NBStjlznU5PCWQPwRmY6XPPOB5i7F+MTago=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736994547; c=relaxed/simple;
+	bh=WT0+dydykW/JxtikGPMFnEDS5xnaa0bePUsfbe5etr4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K88ksL04s14dV29OgfHfYnblHFN0zopTmKfqKiPodrB0UhBVOZ2KSPR6iUXJ/5GsGIV9VGQ15FV/ijpYkkt2423ZmxI9A0JjLq+r7W1LjGL+FJJtbKDrCNaaLwtBZaNo0BUCVq5P+zoPbZ9A7nxr99i5oTwig3ULqOkgotgMHCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RijYDDtd; arc=none smtp.client-ip=209.85.219.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e4a6b978283so2845998276.0;
+        Wed, 15 Jan 2025 18:29:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736994544; x=1737599344; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+GIKsnvbzkRGvM2ntRhtRXwKVW3iyvrkQS53nqfJvuY=;
+        b=RijYDDtdvDRukqmIVCl6JLELqYPF3DRNzhipZfe7SSlInJIHZd2UZLCwLkI3CZa58H
+         w/CgLG/aGQJKZothmihIQN0WH71cKVO25NdtTGFfmKCuhqy1mA5UzebkIv+1nPqw940g
+         xQ666Ut8cWWlSr1VutZZJgY5dKgUJOEEIX4jpi7B+NOIqLMwEyQPhzqHEETnlHa6MhSu
+         AvGGJFoG87lGIQlgNrBPdp8blWkSmWzAgkIxgzHQQil2NdhA6SLAwRX+L8jv2RGRJ99G
+         bvg/qHNY4CbdpkwB1ObIqyh2BsUt1vpy3RimzqSduXhIiWgjSUySmGegqWvckaKrsOld
+         RAqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736994544; x=1737599344;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+GIKsnvbzkRGvM2ntRhtRXwKVW3iyvrkQS53nqfJvuY=;
+        b=ojIs2AhGlxxNrCkdrTG3R0TkdtMP0UhU0lMnzxjWEXArTicmV5HhJVGtRkm72+RxuP
+         h/zVnvobnPlNI3e03Dk+hvJf65u4cVJgr08od5Dq2nHXse3RQ/wBQHNagdR4LDjAw4sl
+         eGUVMGMguAXkRhsbBQwhdytnCAcIjJtQBbuIcbFiua5gi5RxNvJhZpNL7ifMhfVByxKW
+         f6REyL1TQ/pBvQXe8fNrdkgV/8PK7LmGnv6eTjCJwvNdRTWeoESG1vNElEke1uNVVHrK
+         AJ/tkmSyr/oKq60rPjU19C4Ax4TwDWu+cFiTQqzzi7Diy2O3zxuhHLaidjPeC61oEyS0
+         LfcA==
+X-Forwarded-Encrypted: i=1; AJvYcCUm3zeEBuWWcS6+LhD1SjbARFgbTmLbq3Ea0gBfquPibRsBDIqC5FiecXKtvUvQ4XbKMS4cw2kpQN2mQv50@vger.kernel.org, AJvYcCUveRYMDMD67uRsq6HQwDOYDAbeCo8zqUvVBF9CmumahFt0eZNWCK97rxDWiSrkL2KtGjvbaGmm/C/E@vger.kernel.org, AJvYcCUwu2aEZlJiWGbdcziFqGmZ5YgFdSLXU8l+QnI5Jx6ZYIvkF/qFDFQm3Kex72e0lDinKR2Ao9gkUYAO@vger.kernel.org, AJvYcCVCEScyr8RK6NTXL+bExrzfzjUZyrU9MOWuKfbu+MZc4kQXtvPDQe85qC50qf1pJ+zeKzD+32iZgZCrpg==@vger.kernel.org, AJvYcCVeqcLodN0hhtoI9MwBtlsGF2d3U+hh6lNRUjUXY2VIIVXtctxhbGK0BZsIoDaRRBs35QOF+8D9niw=@vger.kernel.org, AJvYcCWJNURevdnipstKYHrITOi4SfdB7MnFoPyv/+24PyExgwykZjTd3/3K+Fq/PoN9oUs6OOgyRaP7@vger.kernel.org, AJvYcCWMiJazvvvszXHVyP1ZTh8chUAhaZx5TfYozgnWq1YjQpNhXnWO0xtNlUVfmocifYZrydsKip0K+Ubh@vger.kernel.org, AJvYcCWhKEX/7q/PXKg4WWT7Rn9u3APXV5fE+iIAdsrYYsfO31J5zX1rbaZARDod/lpfFsWwGjaMEZ0236fewiq5QiQ=@vger.kernel.org, AJvYcCWruuhHOAoy4THXEZFVhavC8+YftqybT45KapfkVmWKUvb1DPq/n/ap4qMCaeRwhTdNAPB7rVPgyb3YFpo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3TZTrQ9shSvCOzjYBdbSPZ/sURyk5bwYUNe/c1KKsfOBOwjvL
+	nWM5iEqVdWW7x/ZwvjgN5wPx2qPQyM6VUCj/qpWJYAy9GeXLWV8bWAPIkMxPPInBiHL14Q6gC0e
+	B4bYOInjgDwsBv45YikUEFn+GEU4=
+X-Gm-Gg: ASbGnctVYgkM6YxI7ELE3PMpKOYVqz2Y9VYHzEZXTNF6l0/POVwQMHvRRxD3kLft2zQ
+	45mwiI9gZrQR5niV3VOwifuXngkkeIKBzJLwNvw==
+X-Google-Smtp-Source: AGHT+IEXEI4dBQcymfAC4IaxFxxb5qCy4f8kvxuST9nbCahb3NMNK4TdbJW3B8YiXQ7p3u5hvM7jseKvSXKy/pVV0ZI=
+X-Received: by 2002:a05:6902:260c:b0:e38:b399:590b with SMTP id
+ 3f1490d57ef6-e578a1222dcmr4578245276.2.1736994543998; Wed, 15 Jan 2025
+ 18:29:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd2b63fe-9804-4686-1904-08dd35888d82
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jan 2025 17:17:56.2307
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lwT1qp926yo15c4CsVshjMMKt0JEa/Sx/Ivp1mHdk4X2zdsGEvSBwdMS0muL9WKDmiqGj3CueUuQoF4pLSJci73BYjmrCcwwyib3qjEoFjE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYPR01MB12451
+References: <20250114033010.2445925-1-a0282524688@gmail.com>
+ <20250114033010.2445925-2-a0282524688@gmail.com> <20250115160401.GL6763@google.com>
+In-Reply-To: <20250115160401.GL6763@google.com>
+From: Ming Yu <a0282524688@gmail.com>
+Date: Thu, 16 Jan 2025 10:28:52 +0800
+X-Gm-Features: AbW1kvbGm6LzPwIFioqWJ7E3m4sciO9tqukVeoKIPgzARRTQGynoAHmnM5M95sI
+Message-ID: <CAOoeyxWUCOcxqovKP0cnnNOtdSc-8JMe0g9aE5W0JMEcTsG2pQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: Lee Jones <lee@kernel.org>
+Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl, 
+	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
+	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SGkgR3VlbnRlciwNCg0KVGhhbmtzIGZvciB0aGUgZmVlZGJhY2suDQoNCj4gLS0tLS1PcmlnaW5h
-bCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogR3VlbnRlciBSb2VjayA8Z3JvZWNrN0BnbWFpbC5jb20+
-IE9uIEJlaGFsZiBPZiBHdWVudGVyIFJvZWNrDQo+IFNlbnQ6IDE1IEphbnVhcnkgMjAyNSAxNDo1
-NQ0KPiBTdWJqZWN0OiBSZTogW1BBVENIIDMvNV0gd2F0Y2hkb2c6IE1ha2UgUlpWMkhXRFQgZHJp
-dmVyIGRlcGVuZCBvbiBBUkNIX1I5QTA5RzQ3DQo+IA0KPiBPbiAxLzE1LzI1IDAyOjM4LCBCaWp1
-IERhcyB3cm90ZToNCj4gPiBSWi9HM0Ugd2F0Y2hkb2cgdGltZXIgSVAgaXMgc2ltaWxhciB0byB0
-aGUgb25lIGZvdW5kIG9uIFJaL1YySC4NCj4gPiBBZGQgS2NvbmZpZyBkZXBlbmRlbmN5IGZvciBS
-WlYySFdEVCBkcml2ZXIgd2l0aCBBUkNIX1I5QTA5RzQ3IGFuZA0KPiA+IHVwZGF0ZSB0aGUgaGVs
-cCBkZXNjcmlwdGlvbi4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEJpanUgRGFzIDxiaWp1LmRh
-cy5qekBicC5yZW5lc2FzLmNvbT4NCj4gDQo+IFRoZSBzdWJqZWN0IGlzIGEgYml0IG1pc2xlYWRp
-bmcuIEl0IHdvdWxkIGJlIGJldHRlciBuYW1lZCAiRW5hYmxlIHRoZSBSWlYySFdEVCBkcml2ZXIg
-Zm9yDQo+IEFSQ0hfUjlBMDlHNDciIG9yIHNpbWlsYXIuDQoNCk9LLCBXaWxsIHVwZGF0ZSBzdWJq
-ZWN0IGFuZCBkZXNjcmlwdGlvbi4NCg0KQ2hlZXJzLA0KQmlqdQ0KDQoNCg==
+Dear Lee,
+
+Thank you for your comments,
+
+Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B41=E6=9C=8816=E6=97=A5 =E9=
+=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=8812:04=E5=AF=AB=E9=81=93=EF=BC=9A
+...
+> > +config MFD_NCT6694
+> > +     tristate "Nuvoton NCT6694 support"
+> > +     select MFD_CORE
+> > +     depends on USB
+> > +     help
+> > +       This adds support for Nuvoton USB device NCT6694 sharing periph=
+erals
+>
+> Missing full stop.
+>
+> > +       This includes the USB device driver and core APIs.
+> > +       Additional drivers must be enabled in order to use the function=
+ality
+>
+> New sentences do not have to be on new lines.
+>
+> > +       of the device.
+>
+> Please explain what this functionality is.
+>
+
+Okay! I will fix these in the next patch.
+
+> > +
+> >  config MFD_OCELOT
+> >       tristate "Microsemi Ocelot External Control Support"
+> >       depends on SPI_MASTER
+> > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> > index e057d6d6faef..3c902d3704dc 100644
+> > --- a/drivers/mfd/Makefile
+> > +++ b/drivers/mfd/Makefile
+> > @@ -121,6 +121,8 @@ obj-$(CONFIG_MFD_MC13XXX) +=3D mc13xxx-core.o
+> >  obj-$(CONFIG_MFD_MC13XXX_SPI)        +=3D mc13xxx-spi.o
+> >  obj-$(CONFIG_MFD_MC13XXX_I2C)        +=3D mc13xxx-i2c.o
+> >
+> > +obj-$(CONFIG_MFD_NCT6694)    +=3D nct6694.o
+> > +
+> >  obj-$(CONFIG_MFD_CORE)               +=3D mfd-core.o
+> >
+> >  ocelot-soc-objs                      :=3D ocelot-core.o ocelot-spi.o
+> > diff --git a/drivers/mfd/nct6694.c b/drivers/mfd/nct6694.c
+> > new file mode 100644
+> > index 000000000000..294b6b7a902e
+> > --- /dev/null
+> > +++ b/drivers/mfd/nct6694.c
+> > @@ -0,0 +1,388 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Nuvoton NCT6694 MFD driver based on USB interface.
+>
+> No such thing as an MFD driver.  What is this device?
+>
+
+Fix it in the v6.
+
+> > + *
+> > + * Copyright (C) 2024 Nuvoton Technology Corp.
+> > + */
+> > +
+> > +#include <linux/bits.h>
+> > +#include <linux/interrupt.h>
+> > +#include <linux/irq.h>
+> > +#include <linux/irqdomain.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/mfd/core.h>
+> > +#include <linux/mfd/nct6694.h>
+> > +#include <linux/module.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/usb.h>
+> > +
+> > +#define MFD_DEV_SIMPLE(_name)                                \
+> > +{                                                    \
+> > +     .name =3D NCT6694_DEV_##_name,                    \
+>
+> Device names are usually lower case.
+>
+> > +}                                                    \
+>
+> MFD_CELL_NAME()
+>
+
+Fix it in the v6.
+
+> > +#define MFD_DEV_WITH_ID(_name, _id)                  \
+> > +{                                                    \
+> > +     .name =3D NCT6694_DEV_##_name,                    \
+> > +     .id =3D _id,                                      \
+> > +}
+>
+> MFD_CELL_BASIC()
+>
+> Or add a new one to include/linux/mfd/core.h.
+>
+
+Fix it in the v6.
+
+> > +/* MFD device resources */
+>
+> This comment is superfluous.
+>
+
+Drop it in the v6.
+
+> > +static const struct mfd_cell nct6694_dev[] =3D {
+> > +     MFD_DEV_WITH_ID(GPIO, 0x0),
+>
+> Why doesn't PLATFORM_DEVID_AUTO work for you?
+>
+
+I need to manage these IDs to ensure that child devices can be
+properly utilized within their respective modules.
+
+> > +     MFD_DEV_WITH_ID(GPIO, 0x1),
+> > +     MFD_DEV_WITH_ID(GPIO, 0x2),
+> > +     MFD_DEV_WITH_ID(GPIO, 0x3),
+> > +     MFD_DEV_WITH_ID(GPIO, 0x4),
+> > +     MFD_DEV_WITH_ID(GPIO, 0x5),
+> > +     MFD_DEV_WITH_ID(GPIO, 0x6),
+> > +     MFD_DEV_WITH_ID(GPIO, 0x7),
+> > +     MFD_DEV_WITH_ID(GPIO, 0x8),
+> > +     MFD_DEV_WITH_ID(GPIO, 0x9),
+> > +     MFD_DEV_WITH_ID(GPIO, 0xA),
+> > +     MFD_DEV_WITH_ID(GPIO, 0xB),
+> > +     MFD_DEV_WITH_ID(GPIO, 0xC),
+> > +     MFD_DEV_WITH_ID(GPIO, 0xD),
+> > +     MFD_DEV_WITH_ID(GPIO, 0xE),
+> > +     MFD_DEV_WITH_ID(GPIO, 0xF),
+> > +
+> > +     MFD_DEV_WITH_ID(I2C, 0x0),
+> > +     MFD_DEV_WITH_ID(I2C, 0x1),
+> > +     MFD_DEV_WITH_ID(I2C, 0x2),
+> > +     MFD_DEV_WITH_ID(I2C, 0x3),
+> > +     MFD_DEV_WITH_ID(I2C, 0x4),
+> > +     MFD_DEV_WITH_ID(I2C, 0x5),
+> > +
+> > +     MFD_DEV_WITH_ID(CAN, 0x0),
+> > +     MFD_DEV_WITH_ID(CAN, 0x1),
+> > +
+> > +     MFD_DEV_WITH_ID(WDT, 0x0),
+> > +     MFD_DEV_WITH_ID(WDT, 0x1),
+> > +
+> > +     MFD_DEV_SIMPLE(HWMON),
+> > +     MFD_DEV_SIMPLE(RTC),
+> > +};
+> > +
+> > +static int nct6694_response_err_handling(struct nct6694 *nct6694,
+> > +                                      unsigned char err_status)
+> > +{
+> > +     struct device *dev =3D &nct6694->udev->dev;
+> > +
+> > +     switch (err_status) {
+> > +     case NCT6694_NO_ERROR:
+> > +             return err_status;
+> > +     case NCT6694_NOT_SUPPORT_ERROR:
+> > +             dev_dbg(dev, "%s: Command is not supported!\n", __func__)=
+;
+>
+> These should be dev_warns().
+>
+> __func__ shouldn't be used in production code.
+>
+> Users don't care about functions.
+>
+
+Fix it in the v6.
+
+> > +             break;
+> > +     case NCT6694_NO_RESPONSE_ERROR:
+> > +             dev_dbg(dev, "%s: Command received no response!\n", __fun=
+c__);
+> > +             break;
+> > +     case NCT6694_TIMEOUT_ERROR:
+> > +             dev_dbg(dev, "%s: Command timed out!\n", __func__);
+> > +             break;
+> > +     case NCT6694_PENDING:
+> > +             dev_dbg(dev, "%s: Command is pending!\n", __func__);
+> > +             break;
+> > +     default:
+> > +             return -EINVAL;
+> > +     }
+> > +
+> > +     return -EIO;
+> > +}
+> > +
+> > +int nct6694_read_msg(struct nct6694 *nct6694,
+> > +                  struct nct6694_cmd_header *cmd_hd,
+> > +                  void *buf)
+> > +{
+> > +     union nct6694_usb_msg *msg =3D nct6694->usb_msg;
+> > +     int tx_len, rx_len, ret;
+> > +
+> > +     guard(mutex)(&nct6694->access_lock);
+> > +
+> > +     /* Send command packet to USB device */
+> > +     memcpy(&msg->cmd_header, cmd_hd, sizeof(*cmd_hd));
+> > +     msg->cmd_header.hctrl =3D NCT6694_HCTRL_GET;
+> > +
+> > +     ret =3D usb_bulk_msg(nct6694->udev,
+> > +                        usb_sndbulkpipe(nct6694->udev, NCT6694_BULK_OU=
+T_EP),
+> > +                        &msg->cmd_header, sizeof(*msg), &tx_len,
+> > +                        nct6694->timeout);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     /* Receive response packet from USB device */
+> > +     ret =3D usb_bulk_msg(nct6694->udev,
+> > +                        usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN=
+_EP),
+> > +                        &msg->response_header, sizeof(*msg), &rx_len,
+> > +                        nct6694->timeout);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     /* Receive data packet from USB device */
+> > +     ret =3D usb_bulk_msg(nct6694->udev,
+> > +                        usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN=
+_EP),
+> > +                        buf, le16_to_cpu(cmd_hd->len), &rx_len,
+> > +                        nct6694->timeout);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     if (rx_len !=3D le16_to_cpu(cmd_hd->len)) {
+> > +             dev_dbg(&nct6694->udev->dev, "%s: Received length is not =
+match!\n",
+>
+> "does not match <something>"
+>
+
+Fix it in the v6.
+
+> > +                     __func__);
+>
+> This should be dev_err().
+>
+
+Fix it in the v6.
+
+> > +             return -EIO;
+> > +     }
+> > +
+> > +     return nct6694_response_err_handling(nct6694, msg->response_heade=
+r.sts);
+> > +}
+> > +EXPORT_SYMBOL(nct6694_read_msg);
+> > +
+> > +int nct6694_write_msg(struct nct6694 *nct6694, struct nct6694_cmd_head=
+er *cmd_hd,
+> > +                   void *buf)
+> > +{
+> > +     union nct6694_usb_msg *msg =3D nct6694->usb_msg;
+> > +     int tx_len, rx_len, ret;
+> > +
+> > +     guard(mutex)(&nct6694->access_lock);
+> > +
+> > +     /* Send command packet to USB device */
+> > +     memcpy(&msg->cmd_header, cmd_hd, sizeof(*cmd_hd));
+> > +     msg->cmd_header.hctrl =3D NCT6694_HCTRL_SET;
+> > +
+> > +     ret =3D usb_bulk_msg(nct6694->udev,
+> > +                        usb_sndbulkpipe(nct6694->udev, NCT6694_BULK_OU=
+T_EP),
+> > +                        &msg->cmd_header, sizeof(*msg), &tx_len,
+> > +                        nct6694->timeout);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     /* Send data packet to USB device */
+> > +     ret =3D usb_bulk_msg(nct6694->udev,
+> > +                        usb_sndbulkpipe(nct6694->udev, NCT6694_BULK_OU=
+T_EP),
+> > +                        buf, le16_to_cpu(cmd_hd->len), &tx_len,
+> > +                        nct6694->timeout);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     /* Receive response packet from USB device */
+> > +     ret =3D usb_bulk_msg(nct6694->udev,
+> > +                        usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN=
+_EP),
+> > +                        &msg->response_header, sizeof(*msg), &rx_len,
+> > +                        nct6694->timeout);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     /* Receive data packet from USB device */
+> > +     ret =3D usb_bulk_msg(nct6694->udev,
+> > +                        usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN=
+_EP),
+> > +                        buf, le16_to_cpu(cmd_hd->len), &rx_len,
+> > +                        nct6694->timeout);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     if (rx_len !=3D le16_to_cpu(cmd_hd->len)) {
+> > +             dev_dbg(&nct6694->udev->dev, "%s: Sent length is not matc=
+h!\n",
+> > +                     __func__);
+>
+> This should be dev_err().
+>
+
+Fix it in the v6.
+
+> > +             return -EIO;
+> > +     }
+> > +
+> > +     return nct6694_response_err_handling(nct6694, msg->response_heade=
+r.sts);
+> > +}
+> > +EXPORT_SYMBOL(nct6694_write_msg);
+> > +
+> > +static void usb_int_callback(struct urb *urb)
+> > +{
+> > +     struct nct6694 *nct6694 =3D urb->context;
+> > +     struct device *dev =3D &nct6694->udev->dev;
+> > +     unsigned int *int_status =3D urb->transfer_buffer;
+> > +     int ret;
+> > +
+> > +     switch (urb->status) {
+> > +     case 0:
+> > +             break;
+> > +     case -ECONNRESET:
+> > +     case -ENOENT:
+> > +     case -ESHUTDOWN:
+> > +             return;
+> > +     default:
+> > +             goto resubmit;
+> > +     }
+> > +
+> > +     while (*int_status) {
+> > +             int irq =3D __ffs(*int_status);
+> > +
+> > +             generic_handle_irq_safe(irq_find_mapping(nct6694->domain,=
+ irq));
+> > +             *int_status &=3D ~BIT(irq);
+> > +     }
+> > +
+> > +resubmit:
+> > +     ret =3D usb_submit_urb(urb, GFP_ATOMIC);
+> > +     if (ret)
+> > +             dev_dbg(dev, "%s: Failed to resubmit urb, status %pe",
+> > +                     __func__, ERR_PTR(ret));
+> > +}
+> > +
+> > +static void nct6694_irq_lock(struct irq_data *data)
+> > +{
+> > +     struct nct6694 *nct6694 =3D irq_data_get_irq_chip_data(data);
+> > +
+> > +     mutex_lock(&nct6694->irq_lock);
+> > +}
+> > +
+> > +static void nct6694_irq_sync_unlock(struct irq_data *data)
+> > +{
+> > +     struct nct6694 *nct6694 =3D irq_data_get_irq_chip_data(data);
+> > +
+> > +     mutex_unlock(&nct6694->irq_lock);
+> > +}
+> > +
+> > +static void nct6694_irq_enable(struct irq_data *data)
+> > +{
+> > +     struct nct6694 *nct6694 =3D irq_data_get_irq_chip_data(data);
+> > +     irq_hw_number_t hwirq =3D irqd_to_hwirq(data);
+> > +
+> > +     nct6694->irq_enable |=3D BIT(hwirq);
+>
+> Changing a bit mask doesn't actually {en,dis}able an IRQ, right?
+>
+
+Yes, it's only used to record irq.
+
+> > +}
+> > +
+> > +static void nct6694_irq_disable(struct irq_data *data)
+> > +{
+> > +     struct nct6694 *nct6694 =3D irq_data_get_irq_chip_data(data);
+> > +     irq_hw_number_t hwirq =3D irqd_to_hwirq(data);
+> > +
+> > +     nct6694->irq_enable &=3D ~BIT(hwirq);
+> > +}
+> > +
+> > +static struct irq_chip nct6694_irq_chip =3D {
+> > +     .name =3D "nct6694-irq",
+> > +     .flags =3D IRQCHIP_SKIP_SET_WAKE,
+> > +     .irq_bus_lock =3D nct6694_irq_lock,
+> > +     .irq_bus_sync_unlock =3D nct6694_irq_sync_unlock,
+> > +     .irq_enable =3D nct6694_irq_enable,
+> > +     .irq_disable =3D nct6694_irq_disable,
+> > +};
+> > +
+> > +static int nct6694_irq_domain_map(struct irq_domain *d, unsigned int i=
+rq,
+> > +                               irq_hw_number_t hw)
+> > +{
+> > +     struct nct6694 *nct6694 =3D d->host_data;
+> > +
+> > +     irq_set_chip_data(irq, nct6694);
+> > +     irq_set_chip_and_handler(irq, &nct6694_irq_chip, handle_simple_ir=
+q);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static void nct6694_irq_domain_unmap(struct irq_domain *d, unsigned in=
+t irq)
+> > +{
+> > +     irq_set_chip_and_handler(irq, NULL, NULL);
+> > +     irq_set_chip_data(irq, NULL);
+> > +}
+> > +
+> > +static const struct irq_domain_ops nct6694_irq_domain_ops =3D {
+> > +     .map    =3D nct6694_irq_domain_map,
+> > +     .unmap  =3D nct6694_irq_domain_unmap,
+> > +};
+> > +
+> > +static int nct6694_usb_probe(struct usb_interface *iface,
+> > +                          const struct usb_device_id *id)
+> > +{
+> > +     struct usb_device *udev =3D interface_to_usbdev(iface);
+> > +     struct usb_endpoint_descriptor *int_endpoint;
+> > +     struct usb_host_interface *interface;
+> > +     struct device *dev =3D &udev->dev;
+> > +     struct nct6694 *nct6694;
+> > +     int pipe, maxp;
+> > +     int ret;
+> > +
+> > +     interface =3D iface->cur_altsetting;
+>
+> Initialise this during allocation.
+>
+
+Should these be moved before usb_fill_int_urb()?
+
+> > +     int_endpoint =3D &interface->endpoint[0].desc;
+> > +     if (!usb_endpoint_is_int_in(int_endpoint))
+> > +             return -ENODEV;
+> > +
+> > +     nct6694 =3D devm_kzalloc(dev, sizeof(*nct6694), GFP_KERNEL);
+> > +     if (!nct6694)
+> > +             return -ENOMEM;
+> > +
+> > +     pipe =3D usb_rcvintpipe(udev, NCT6694_INT_IN_EP);
+> > +     maxp =3D usb_maxpacket(udev, pipe);
+> > +
+> > +     nct6694->usb_msg =3D devm_kzalloc(dev, sizeof(union nct6694_usb_m=
+sg),
+> > +                                     GFP_KERNEL);
+>
+> Unwrap this - you can use up to 100-chars.
+>
+
+Fix it in the v6.
+
+> > +     if (!nct6694->usb_msg)
+> > +             return -ENOMEM;
+> > +
+> > +     nct6694->int_buffer =3D devm_kzalloc(dev, maxp, GFP_KERNEL);
+> > +     if (!nct6694->int_buffer)
+> > +             return -ENOMEM;
+> > +
+> > +     nct6694->int_in_urb =3D usb_alloc_urb(0, GFP_KERNEL);
+> > +     if (!nct6694->int_in_urb)
+> > +             return -ENOMEM;
+> > +
+> > +     nct6694->domain =3D irq_domain_add_simple(NULL, NCT6694_NR_IRQS, =
+0,
+> > +                                             &nct6694_irq_domain_ops,
+> > +                                             nct6694);
+> > +     if (!nct6694->domain) {
+> > +             ret =3D -ENODEV;
+> > +             goto err_urb;
+> > +     }
+> > +
+> > +     nct6694->udev =3D udev;
+> > +     nct6694->timeout =3D NCT6694_URB_TIMEOUT; /* Wait until urb compl=
+ete */
+>
+> "URB completes"?
+>
+
+Fix it in the v6.
+
+> > +
+> > +     devm_mutex_init(dev, &nct6694->access_lock);
+> > +     devm_mutex_init(dev, &nct6694->irq_lock);
+> > +
+> > +     usb_fill_int_urb(nct6694->int_in_urb, udev, pipe,
+> > +                      nct6694->int_buffer, maxp, usb_int_callback,
+> > +                      nct6694, int_endpoint->bInterval);
+> > +     ret =3D usb_submit_urb(nct6694->int_in_urb, GFP_KERNEL);
+> > +     if (ret)
+> > +             goto err_urb;
+> > +
+> > +     dev_set_drvdata(dev, nct6694);
+> > +     usb_set_intfdata(iface, nct6694);
+>
+> These two do the same thing.  You don't need both.
+>
+
+Fix it in the v6.
+
+> > +     ret =3D mfd_add_hotplug_devices(dev, nct6694_dev, ARRAY_SIZE(nct6=
+694_dev));
+> > +     if (ret)
+> > +             goto err_mfd;
+> > +
+> > +     return 0;
+> > +
+> > +err_mfd:
+> > +     usb_kill_urb(nct6694->int_in_urb);
+> > +err_urb:
+> > +     usb_free_urb(nct6694->int_in_urb);
+> > +     return ret;
+> > +}
+> > +
+> > +static void nct6694_usb_disconnect(struct usb_interface *iface)
+> > +{
+> > +     struct usb_device *udev =3D interface_to_usbdev(iface);
+> > +     struct nct6694 *nct6694 =3D usb_get_intfdata(iface);
+> > +
+> > +     mfd_remove_devices(&udev->dev);
+>
+> Does devm_* work here?
+>
+
+No, or do you think mfd_add_hotplug_devices() should be replaced with
+devm_mfd_add_devices()?
+
+> > +     usb_kill_urb(nct6694->int_in_urb);
+> > +     usb_free_urb(nct6694->int_in_urb);
+> > +}
+> > +
+> > +static const struct usb_device_id nct6694_ids[] =3D {
+> > +     { USB_DEVICE_AND_INTERFACE_INFO(NCT6694_VENDOR_ID,
+> > +                                     NCT6694_PRODUCT_ID,
+> > +                                     0xFF, 0x00, 0x00)},
+> > +     {}
+> > +};
+> > +MODULE_DEVICE_TABLE(usb, nct6694_ids);
+> > +
+> > +static struct usb_driver nct6694_usb_driver =3D {
+> > +     .name   =3D "nct6694",
+> > +     .id_table =3D nct6694_ids,
+> > +     .probe =3D nct6694_usb_probe,
+> > +     .disconnect =3D nct6694_usb_disconnect,
+> > +};
+> > +
+> > +module_usb_driver(nct6694_usb_driver);
+> > +
+> > +MODULE_DESCRIPTION("USB-MFD driver for NCT6694");
+>
+> Remove all references to MFD.
+>
+
+Fix it in the v6.
+
+> > +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
+> > +MODULE_LICENSE("GPL");
+> > diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
+> > new file mode 100644
+> > index 000000000000..67ca835589ad
+> > --- /dev/null
+> > +++ b/include/linux/mfd/nct6694.h
+> > @@ -0,0 +1,109 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Nuvoton NCT6694 USB transaction and data structure.
+> > + *
+> > + * Copyright (C) 2024 Nuvoton Technology Corp.
+> > + */
+> > +
+> > +#ifndef __MFD_NCT6694_H
+> > +#define __MFD_NCT6694_H
+> > +
+> > +#define NCT6694_DEV_GPIO     "nct6694-gpio"
+> > +#define NCT6694_DEV_I2C              "nct6694-i2c"
+> > +#define NCT6694_DEV_CAN              "nct6694-can"
+> > +#define NCT6694_DEV_WDT              "nct6694-wdt"
+> > +#define NCT6694_DEV_HWMON    "nct6694-hwmon"
+> > +#define NCT6694_DEV_RTC              "nct6694-rtc"
+>
+> Use raw strings in place please.
+>
+
+Fix it in the v6.
+
+> > +#define NCT6694_VENDOR_ID    0x0416
+> > +#define NCT6694_PRODUCT_ID   0x200B
+> > +#define NCT6694_INT_IN_EP    0x81
+> > +#define NCT6694_BULK_IN_EP   0x02
+> > +#define NCT6694_BULK_OUT_EP  0x03
+> > +
+> > +#define NCT6694_HCTRL_SET    0x40
+> > +#define NCT6694_HCTRL_GET    0x80
+> > +
+> > +#define NCT6694_URB_TIMEOUT  1000
+> > +
+> > +enum nct6694_irq_id {
+>
+> These are never used.
+>
+
+Some of these numbers ared used by child devices to map the irq_domain.
+(e.g. NCT6694_IRQ_CAN1, NCT6694_IRQ_RTC)
+
+> > +     NCT6694_IRQ_GPIO0 =3D 0,
+> > +     NCT6694_IRQ_GPIO1,
+> > +     NCT6694_IRQ_GPIO2,
+> > +     NCT6694_IRQ_GPIO3,
+> > +     NCT6694_IRQ_GPIO4,
+> > +     NCT6694_IRQ_GPIO5,
+> > +     NCT6694_IRQ_GPIO6,
+> > +     NCT6694_IRQ_GPIO7,
+> > +     NCT6694_IRQ_GPIO8,
+> > +     NCT6694_IRQ_GPIO9,
+> > +     NCT6694_IRQ_GPIOA,
+> > +     NCT6694_IRQ_GPIOB,
+> > +     NCT6694_IRQ_GPIOC,
+> > +     NCT6694_IRQ_GPIOD,
+> > +     NCT6694_IRQ_GPIOE,
+> > +     NCT6694_IRQ_GPIOF,
+> > +     NCT6694_IRQ_CAN1,
+> > +     NCT6694_IRQ_CAN2,
+> > +     NCT6694_IRQ_RTC,
+> > +     NCT6694_NR_IRQS,
+> > +};
+> > +
+> > +enum nct6694_response_err_status {
+> > +     NCT6694_NO_ERROR =3D 0,
+> > +     NCT6694_FORMAT_ERROR,
+> > +     NCT6694_RESERVED1,
+> > +     NCT6694_RESERVED2,
+> > +     NCT6694_NOT_SUPPORT_ERROR,
+> > +     NCT6694_NO_RESPONSE_ERROR,
+> > +     NCT6694_TIMEOUT_ERROR,
+> > +     NCT6694_PENDING,
+> > +};
+> > +
+> > +struct __packed nct6694_cmd_header {
+> > +     u8 rsv1;
+> > +     u8 mod;
+> > +     union __packed {
+> > +             __le16 offset;
+> > +             struct __packed {
+> > +                     u8 cmd;
+> > +                     u8 sel;
+> > +             };
+> > +     };
+> > +     u8 hctrl;
+> > +     u8 rsv2;
+> > +     __le16 len;
+> > +};
+> > +
+> > +struct __packed nct6694_response_header {
+> > +     u8 sequence_id;
+> > +     u8 sts;
+> > +     u8 reserved[4];
+> > +     __le16 len;
+> > +};
+> > +
+> > +union __packed nct6694_usb_msg {
+> > +     struct nct6694_cmd_header cmd_header;
+> > +     struct nct6694_response_header response_header;
+> > +};
+> > +
+> > +struct nct6694 {
+>
+> Do all of these values need to be stored?
+>
+
+I think that's right.
+
+> > +     struct usb_device *udev;
+> > +     struct urb *int_in_urb;
+> > +     struct irq_domain *domain;
+> > +     struct mutex access_lock;
+> > +     struct mutex irq_lock;
+> > +     union nct6694_usb_msg *usb_msg;
+> > +     unsigned char *int_buffer;
+> > +     unsigned int irq_enable;
+> > +     /* time in msec to wait for the urb to the complete */
+>
+> "Time"  "URB"
+
+Fix it in the v6.
+
+> > +     long timeout;
+> > +};
+> > +
+> > +int nct6694_read_msg(struct nct6694 *nct6694, struct nct6694_cmd_heade=
+r *cmd_hd,
+> > +                  void *buf);
+> > +
+> > +int nct6694_write_msg(struct nct6694 *nct6694, struct nct6694_cmd_head=
+er *cmd_hd,
+> > +                   void *buf);
+> > +
+> > +#endif
+> > --
+> > 2.34.1
+> >
+>
+
+Best regards,
+Ming
 
