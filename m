@@ -1,76 +1,76 @@
-Return-Path: <linux-watchdog+bounces-2732-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2733-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BB10A15AD8
-	for <lists+linux-watchdog@lfdr.de>; Sat, 18 Jan 2025 02:28:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEEF8A15B53
+	for <lists+linux-watchdog@lfdr.de>; Sat, 18 Jan 2025 04:51:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 543A4167F47
-	for <lists+linux-watchdog@lfdr.de>; Sat, 18 Jan 2025 01:28:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D72D2168F0F
+	for <lists+linux-watchdog@lfdr.de>; Sat, 18 Jan 2025 03:51:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB6F615E8B;
-	Sat, 18 Jan 2025 01:27:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8763913D52E;
+	Sat, 18 Jan 2025 03:51:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ELo7Gq0R"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h2UDjwnI"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624CD1C6BE;
-	Sat, 18 Jan 2025 01:27:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A197381732;
+	Sat, 18 Jan 2025 03:51:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737163678; cv=none; b=sFyDVNjYu98wAiUPZyxJAFmM43V6+OYJJtl8j7EBdYFKBx3ptFAyrCV/aesnssxEWWcTEXAJEWdF4ASbkbBuhvkJeQDPJ2I9O3hN3WuCU12clNX+jNXfehqPqcLPixNpDxjNcBat4nBNrza3VjmrNkHtEWrxL7lUVzyzwtKN+/E=
+	t=1737172280; cv=none; b=JoPDlhgg/aj392kgU0plfOU2ZgQEEgb6bQF8xl5OpZ70VpzFSEkaCCdpN4sawNV49rCucbzgia/R4+LGKZlqGRvhdq6Wdh2wx/EfPdqUbwDI95SX+LqAYOeZXcjnB9rN696t6J+gNRzL+1LZWAMJ939VudKCQEnpt8+v3APhl0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737163678; c=relaxed/simple;
-	bh=rZay4Jsccg/xTNYp5ZcWkjQ/9kALxAhYawwmQcEOZu0=;
+	s=arc-20240116; t=1737172280; c=relaxed/simple;
+	bh=NsLPs1LY+ZkZo6Cp2r5IAxQJ6eB/k/p/DA9Lgy3d1P8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HdBkUeahrlIDmSL6B32jLzmJ3gvdaqw35yWUJcWuDcJs5MOfy35XSZbFHlE5qpBcuvQMLUN566yixCXN1AY44yPjmQEDAALqCijah8HXW/YmHraYjo7i+sMyE5EXvhRAdAoziFTHXym0Y5LGKEZTPhO0VJxRFIQ8jdiBdzwVITc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ELo7Gq0R; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=hjoMMpTlMEqIXYG691NpW37RsNjabRhlyTeD/MDmf6iCA0G4popYga82dqBXqLQ3npzKFpg5YHrO05wkD2MK4jUOZgQXXyUjXJPxOLkGB7Wk7WRMGVY74Ng5ExRw8g28lyJIeiMGZd4Jdqau4dCVBZjT9H6hEu04CEP6X/4j+y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h2UDjwnI; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737163677; x=1768699677;
+  t=1737172279; x=1768708279;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rZay4Jsccg/xTNYp5ZcWkjQ/9kALxAhYawwmQcEOZu0=;
-  b=ELo7Gq0Rhd9eSOEKUgVlH3Gt2Sh2ISV3WIcjtaYItiqcsVwwLMZyUHgH
-   2GCgpYvTWx5RvpgESzDvFdwMgMSIefAT2EXJEkKY/DqDfoZmbrr+q5D6x
-   bNDJA8w5ee05WpsvHlxmXxv3KUnaJW5/UufyNBy7YstU7PgTVENloOB7I
-   ymOyAgr7V1iYBBfWcsSdj672hjDKkP5k8JYZzg1R6dGiou4d0XKNFEzKI
-   4y52tbyF7UiFCnY7VIrGE2n3AXP84C1e10FnNxw4atJTtzt6fbdOYNedc
-   kdgGS1XwDUEK2mlCljPAZWuyPWAnDtDFaNqHQvH7fZFdK/7N+fSqIMFRH
+  bh=NsLPs1LY+ZkZo6Cp2r5IAxQJ6eB/k/p/DA9Lgy3d1P8=;
+  b=h2UDjwnI89EpPdqjPI671AlX++ca+gRqJetl0nXHs8OxOZoekde23YEN
+   1+dCEoJBdLZAkyZOUvM750UVHQnyU1xyWjXkTfijpS+/Us0fhG27G8xZZ
+   rz0HbZS+VRy++8Y5X48BoxOJCv6Jk+gEEckcB0HWbLpGuGe1hRbt6z+st
+   5OeQ9VzPwRV7vMCduzxE6qeAqkMgRm/jus0RObz1g0zIygkfhJ3O8AMuW
+   PUO1ifhyMHYC1vJao3Abby40+nDVwVzgeJ20mUxhen1KVYz4Fh4iWlWl5
+   a/5iVAQO7y9n6v7fUOo2PiMpzi9cFtPOWoYgubjKyL7TeFIh0q7E3idYw
    A==;
-X-CSE-ConnectionGUID: 3muLyC60RD+TsKd599Cvew==
-X-CSE-MsgGUID: 1fLeBjE9TAOtiI8dcXtKvQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="48109035"
-X-IronPort-AV: E=Sophos;i="6.13,213,1732608000"; 
-   d="scan'208";a="48109035"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 17:26:04 -0800
-X-CSE-ConnectionGUID: YF6ihR7NRbiiP+WXuKS8Hg==
-X-CSE-MsgGUID: nOEoJEz+RFawfS70s10erA==
+X-CSE-ConnectionGUID: hVnC6RhGQqO4hC/3h4b2ew==
+X-CSE-MsgGUID: Za6BofmHSFqxqsU6MlXP5Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="37770585"
+X-IronPort-AV: E=Sophos;i="6.13,214,1732608000"; 
+   d="scan'208";a="37770585"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 19:51:18 -0800
+X-CSE-ConnectionGUID: ZKC+u8psRtegxT5L7eLHnA==
+X-CSE-MsgGUID: 0KIS7bmkSJSrBPM+vI794w==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="106426027"
+X-IronPort-AV: E=Sophos;i="6.13,214,1732608000"; 
+   d="scan'208";a="110972798"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 17 Jan 2025 17:26:02 -0800
+  by orviesa004.jf.intel.com with ESMTP; 17 Jan 2025 19:51:16 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tYxb4-000Tv5-2H;
-	Sat, 18 Jan 2025 01:25:58 +0000
-Date: Sat, 18 Jan 2025 09:25:05 +0800
+	id 1tYzre-000U3x-01;
+	Sat, 18 Jan 2025 03:51:14 +0000
+Date: Sat, 18 Jan 2025 11:50:48 +0800
 From: kernel test robot <lkp@intel.com>
 To: Mark Pearson <mpearson-lenovo@squebb.ca>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	wim@linux-watchdog.org, linux@roeck-us.net, dober@lenovo.com,
+Cc: oe-kbuild-all@lists.linux.dev, wim@linux-watchdog.org,
+	linux@roeck-us.net, dober@lenovo.com,
 	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] watchdog: lenovo_se30_wdt: Watchdog driver for Lenovo
  SE30 platform
-Message-ID: <202501180914.vD2HyOZ2-lkp@intel.com>
+Message-ID: <202501181145.cTfnETL4-lkp@intel.com>
 References: <20250115140510.2017-1-mpearson-lenovo@squebb.ca>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
@@ -96,56 +96,28 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Pearson/watchdog-len
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
 patch link:    https://lore.kernel.org/r/20250115140510.2017-1-mpearson-lenovo%40squebb.ca
 patch subject: [PATCH] watchdog: lenovo_se30_wdt: Watchdog driver for Lenovo SE30 platform
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20250118/202501180914.vD2HyOZ2-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f5cd181ffbb7cb61d582fe130d46580d5969d47a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501180914.vD2HyOZ2-lkp@intel.com/reproduce)
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20250118/202501181145.cTfnETL4-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501181145.cTfnETL4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501180914.vD2HyOZ2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501181145.cTfnETL4-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/watchdog/lenovo_se30_wdt.c:11:
-   In file included from include/linux/iommu.h:10:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/watchdog/lenovo_se30_wdt.c:314:24: error: call to undeclared function 'ioremap_cache'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   drivers/watchdog/lenovo_se30_wdt.c: In function 'lenovo_se30_wdt_probe':
+>> drivers/watchdog/lenovo_se30_wdt.c:314:31: error: implicit declaration of function 'ioremap_cache'; did you mean 'ioremap_uc'? [-Wimplicit-function-declaration]
      314 |         priv->shm.base_addr = ioremap_cache(priv->shm.base_phys, SHM_WIN_SIZE);
-         |                               ^
-   drivers/watchdog/lenovo_se30_wdt.c:314:24: note: did you mean 'ioremap_uc'?
-   include/asm-generic/io.h:1145:29: note: 'ioremap_uc' declared here
-    1145 | static inline void __iomem *ioremap_uc(phys_addr_t offset, size_t size)
+         |                               ^~~~~~~~~~~~~
+         |                               ioremap_uc
+>> drivers/watchdog/lenovo_se30_wdt.c:314:29: error: assignment to 'unsigned char *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     314 |         priv->shm.base_addr = ioremap_cache(priv->shm.base_phys, SHM_WIN_SIZE);
          |                             ^
-   include/asm-generic/io.h:1144:20: note: expanded from macro 'ioremap_uc'
-    1144 | #define ioremap_uc ioremap_uc
-         |                    ^
->> drivers/watchdog/lenovo_se30_wdt.c:314:22: error: incompatible integer to pointer conversion assigning to 'unsigned char *' from 'int' [-Wint-conversion]
-     314 |         priv->shm.base_addr = ioremap_cache(priv->shm.base_phys, SHM_WIN_SIZE);
-         |                             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings and 2 errors generated.
 
 
-vim +/ioremap_cache +314 drivers/watchdog/lenovo_se30_wdt.c
+vim +314 drivers/watchdog/lenovo_se30_wdt.c
 
    276	
    277	static int lenovo_se30_wdt_probe(struct platform_device *pdev)
