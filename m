@@ -1,188 +1,215 @@
-Return-Path: <linux-watchdog+bounces-2731-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2732-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7F3DA144F8
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jan 2025 23:59:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BB10A15AD8
+	for <lists+linux-watchdog@lfdr.de>; Sat, 18 Jan 2025 02:28:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B1E327A0537
-	for <lists+linux-watchdog@lfdr.de>; Thu, 16 Jan 2025 22:58:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 543A4167F47
+	for <lists+linux-watchdog@lfdr.de>; Sat, 18 Jan 2025 01:28:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 775AE22CBDC;
-	Thu, 16 Jan 2025 22:58:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB6F615E8B;
+	Sat, 18 Jan 2025 01:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QOUhFgNJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ELo7Gq0R"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD80D22FAFC
-	for <linux-watchdog@vger.kernel.org>; Thu, 16 Jan 2025 22:58:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624CD1C6BE;
+	Sat, 18 Jan 2025 01:27:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737068334; cv=none; b=M2bgNMDRMmJgmVwCHIYbhgYyyyunFGLO1DEjiCsqvl7BTD5HgI5spxMA7Y4en7q/ANouOoa/U+ot7qpyvpGimskSFdkm/PFR1APuI+ycvsLRffWIecVKpDBKCIDHj7GP99wtOALBbS9gx+mY4LxF1EtWjXEalumC3E0c97FXd5c=
+	t=1737163678; cv=none; b=sFyDVNjYu98wAiUPZyxJAFmM43V6+OYJJtl8j7EBdYFKBx3ptFAyrCV/aesnssxEWWcTEXAJEWdF4ASbkbBuhvkJeQDPJ2I9O3hN3WuCU12clNX+jNXfehqPqcLPixNpDxjNcBat4nBNrza3VjmrNkHtEWrxL7lUVzyzwtKN+/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737068334; c=relaxed/simple;
-	bh=g13QriG2HaYgqb0uLffYe8D5Ap9JtELmtfDRmSibjnI=;
+	s=arc-20240116; t=1737163678; c=relaxed/simple;
+	bh=rZay4Jsccg/xTNYp5ZcWkjQ/9kALxAhYawwmQcEOZu0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kt/0PULZDynNVf6BZoCBd3Q8HSIXSrhMjkv4aWFvNfe3Yb6syoLyhyLUBR6ElDrb4VUnip+myphGaTt6ajktw8YC5PUYbZ6G+ITpC+m66OUd2GDvRAvXjU9r93RDfIWUK1oXxcryopD7Vb5lIQV5PGfD33nv1XDaKV0esCBfims=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QOUhFgNJ; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2ee86a1a92dso2209547a91.1
-        for <linux-watchdog@vger.kernel.org>; Thu, 16 Jan 2025 14:58:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737068332; x=1737673132; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IvMp8UJ+AUZmpf/2T1YDxrAGfWL2IguTr0D7rYDEuSg=;
-        b=QOUhFgNJ2+0ON7EUYK9O6n6TpDSOx1WMrJ1BeQBLsBAbdUxBgtaLXHxYBezNng3qYg
-         FlC4TclTNR4ycZ4SI63i79aHhrqA0JLjrhy7T1YbwzaugaxnucdbeD9shig66lSsO3QO
-         qXGrTyISRdffPxRbjm0Gxhip/UvgYlQxGLvjmXaMK/per2Ei0gr0qtREg+nua4Ku0r6h
-         mT2ChIRCpM1uizDxIPCBmZWTusgQsFW0mOif8SDEPGWQ1N47PYHt4lO0SqX72Ch14sli
-         aNRnmMf1uLhhK1+CCneJEGqUNArsWrNwEi499HGEzK/ekaHwCIdISvlsFqDyv1LizxkH
-         eirA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737068332; x=1737673132;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IvMp8UJ+AUZmpf/2T1YDxrAGfWL2IguTr0D7rYDEuSg=;
-        b=fJRcE0Y6vQUtY/h4wMfbB/3GByKlHEblw5yh41xnY0pzG/cCF8J3VoMNFsE6eNTo1U
-         Maj/ex/wEoHKbzwI51UH7X8l3DxDLnSrQWSvRBLZiizZNYTl4n8eY+n1P71/QRJU2Jjc
-         n7ZkqVdfpTtjH6h/uQeZ5o4im3TYSGg3rl2xJ1cQ2Nv47o5hXgj8vQ62x2D79HceYW2t
-         wKp6FuY3wOfsiNZ9OTcFYgxCaIUWZMoWvU4UpxOgU7JNyEUgIxVOqBl/4Ye/pKfwszTw
-         8/rzEJxY6kz1Ri7ax79/XHVE5ms3tBmCsozIjGjY0F/QCNoXxQt+iem9lT5HW+oN1iv5
-         D0rQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWzal5qd8GYSoejFvk5Jh4ofXCaI5R+TkhmDwWRIVoQ7DSqlw69jMv54cH+ZHuAnvL+O7TSh+aMGLKD1Uq5fQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9VHeP2trfST0L4W3KbD8mLaB5jKeU1CA7suQRhGC9NC+z+DBF
-	b3ZyXUDUh8FD0gFS4ExCB/HIX05FB8DNtJ6+pjy+rnXIxB1Gs1hlWZO7yGAYUw==
-X-Gm-Gg: ASbGnct7Tu8kONE5uxuS4tSC84mWacrOtZKkifoPa3tSnCkB1F7bj6UAJ93lIcyFAih
-	wp2/I/cQm+ckocXo4yMjGvpoklHRzm0jsj3G/nIlkFpLRuRAO37IzG51+SNAGld0ur+Rab+X8Lt
-	AbL549Ra7kCs4awOpsrUenwVAT8ui7zwN+ueyU9bfrwv6FOHYdMv+zS0VmmGu3K/ODlOyUdfZ48
-	epvoHio1pRB5tfnXH3X37tR4fQFEyTY9gYlbbjIQ7T1OGMG0jxoWnWXUmQyQVq9lj8+1rYTdGH6
-	midFgxhmAMkusw==
-X-Google-Smtp-Source: AGHT+IHI0gnCSzyJPMRPrLaAscBds4qE3vC5wbmKSUGCK9b/EKZJbpAOYjrqiqEA0exBtUcdYrt1Uw==
-X-Received: by 2002:a17:90b:38ca:b0:2ef:316b:53fe with SMTP id 98e67ed59e1d1-2f782d306dbmr434742a91.22.1737068331992;
-        Thu, 16 Jan 2025 14:58:51 -0800 (PST)
-Received: from google.com (28.67.125.34.bc.googleusercontent.com. [34.125.67.28])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f77629bf96sm715296a91.36.2025.01.16.14.58.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2025 14:58:50 -0800 (PST)
-Date: Thu, 16 Jan 2025 22:58:46 +0000
-From: Benson Leung <bleung@google.com>
-To: Stephen Boyd <swboyd@chromium.org>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev, chrome-platform@lists.linux.dev,
-	linux-watchdog@vger.kernel.org, Lukasz Majczak <lma@chromium.org>,
-	Benson Leung <bleung@chromium.org>
-Subject: Re: [PATCH] watchdog: cros-ec: Add newlines to printks
-Message-ID: <Z4mPJmbBXqXkfoX8@google.com>
-References: <20250116224605.110870-1-swboyd@chromium.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=HdBkUeahrlIDmSL6B32jLzmJ3gvdaqw35yWUJcWuDcJs5MOfy35XSZbFHlE5qpBcuvQMLUN566yixCXN1AY44yPjmQEDAALqCijah8HXW/YmHraYjo7i+sMyE5EXvhRAdAoziFTHXym0Y5LGKEZTPhO0VJxRFIQ8jdiBdzwVITc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ELo7Gq0R; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737163677; x=1768699677;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rZay4Jsccg/xTNYp5ZcWkjQ/9kALxAhYawwmQcEOZu0=;
+  b=ELo7Gq0Rhd9eSOEKUgVlH3Gt2Sh2ISV3WIcjtaYItiqcsVwwLMZyUHgH
+   2GCgpYvTWx5RvpgESzDvFdwMgMSIefAT2EXJEkKY/DqDfoZmbrr+q5D6x
+   bNDJA8w5ee05WpsvHlxmXxv3KUnaJW5/UufyNBy7YstU7PgTVENloOB7I
+   ymOyAgr7V1iYBBfWcsSdj672hjDKkP5k8JYZzg1R6dGiou4d0XKNFEzKI
+   4y52tbyF7UiFCnY7VIrGE2n3AXP84C1e10FnNxw4atJTtzt6fbdOYNedc
+   kdgGS1XwDUEK2mlCljPAZWuyPWAnDtDFaNqHQvH7fZFdK/7N+fSqIMFRH
+   A==;
+X-CSE-ConnectionGUID: 3muLyC60RD+TsKd599Cvew==
+X-CSE-MsgGUID: 1fLeBjE9TAOtiI8dcXtKvQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11318"; a="48109035"
+X-IronPort-AV: E=Sophos;i="6.13,213,1732608000"; 
+   d="scan'208";a="48109035"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2025 17:26:04 -0800
+X-CSE-ConnectionGUID: YF6ihR7NRbiiP+WXuKS8Hg==
+X-CSE-MsgGUID: nOEoJEz+RFawfS70s10erA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="106426027"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 17 Jan 2025 17:26:02 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tYxb4-000Tv5-2H;
+	Sat, 18 Jan 2025 01:25:58 +0000
+Date: Sat, 18 Jan 2025 09:25:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mark Pearson <mpearson-lenovo@squebb.ca>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	wim@linux-watchdog.org, linux@roeck-us.net, dober@lenovo.com,
+	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog: lenovo_se30_wdt: Watchdog driver for Lenovo
+ SE30 platform
+Message-ID: <202501180914.vD2HyOZ2-lkp@intel.com>
+References: <20250115140510.2017-1-mpearson-lenovo@squebb.ca>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Pw379ZAJmMFLjC7o"
-Content-Disposition: inline
-In-Reply-To: <20250116224605.110870-1-swboyd@chromium.org>
-
-
---Pw379ZAJmMFLjC7o
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250115140510.2017-1-mpearson-lenovo@squebb.ca>
 
-On Thu, Jan 16, 2025 at 02:46:04PM -0800, Stephen Boyd wrote:
-> Add newlines to printk messages so that the next record is more easily
-> readable.
->=20
-> Cc: Lukasz Majczak <lma@chromium.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Hi Mark,
 
-Reviewed-by: Benson Leung <bleung@chromium.org>
+kernel test robot noticed the following build errors:
 
-> ---
->  drivers/watchdog/cros_ec_wdt.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/watchdog/cros_ec_wdt.c b/drivers/watchdog/cros_ec_wd=
-t.c
-> index ba045e29f9a5..716c23f4388c 100644
-> --- a/drivers/watchdog/cros_ec_wdt.c
-> +++ b/drivers/watchdog/cros_ec_wdt.c
-> @@ -58,7 +58,7 @@ static int cros_ec_wdt_ping(struct watchdog_device *wdd)
->  	arg.req.command =3D EC_HANG_DETECT_CMD_RELOAD;
->  	ret =3D cros_ec_wdt_send_cmd(cros_ec, &arg);
->  	if (ret < 0)
-> -		dev_dbg(wdd->parent, "Failed to ping watchdog (%d)", ret);
-> +		dev_dbg(wdd->parent, "Failed to ping watchdog (%d)\n", ret);
-> =20
->  	return ret;
->  }
-> @@ -74,7 +74,7 @@ static int cros_ec_wdt_start(struct watchdog_device *wd=
-d)
->  	arg.req.reboot_timeout_sec =3D wdd->timeout;
->  	ret =3D cros_ec_wdt_send_cmd(cros_ec, &arg);
->  	if (ret < 0)
-> -		dev_dbg(wdd->parent, "Failed to start watchdog (%d)", ret);
-> +		dev_dbg(wdd->parent, "Failed to start watchdog (%d)\n", ret);
-> =20
->  	return ret;
->  }
-> @@ -88,7 +88,7 @@ static int cros_ec_wdt_stop(struct watchdog_device *wdd)
->  	arg.req.command =3D EC_HANG_DETECT_CMD_CANCEL;
->  	ret =3D cros_ec_wdt_send_cmd(cros_ec, &arg);
->  	if (ret < 0)
-> -		dev_dbg(wdd->parent, "Failed to stop watchdog (%d)", ret);
-> +		dev_dbg(wdd->parent, "Failed to stop watchdog (%d)\n", ret);
-> =20
->  	return ret;
->  }
-> @@ -136,7 +136,7 @@ static int cros_ec_wdt_probe(struct platform_device *=
-pdev)
->  	arg.req.command =3D EC_HANG_DETECT_CMD_GET_STATUS;
->  	ret =3D cros_ec_wdt_send_cmd(cros_ec, &arg);
->  	if (ret < 0)
-> -		return dev_err_probe(dev, ret, "Failed to get watchdog bootstatus");
-> +		return dev_err_probe(dev, ret, "Failed to get watchdog bootstatus\n");
-> =20
->  	wdd->parent =3D &pdev->dev;
->  	wdd->info =3D &cros_ec_wdt_ident;
-> @@ -150,7 +150,7 @@ static int cros_ec_wdt_probe(struct platform_device *=
-pdev)
->  	arg.req.command =3D EC_HANG_DETECT_CMD_CLEAR_STATUS;
->  	ret =3D cros_ec_wdt_send_cmd(cros_ec, &arg);
->  	if (ret < 0)
-> -		return dev_err_probe(dev, ret, "Failed to clear watchdog bootstatus");
-> +		return dev_err_probe(dev, ret, "Failed to clear watchdog bootstatus\n"=
-);
-> =20
->  	watchdog_stop_on_reboot(wdd);
->  	watchdog_stop_on_unregister(wdd);
->=20
-> base-commit: 5bc55a333a2f7316b58edc7573e8e893f7acb532
-> --=20
-> https://chromeos.dev
->=20
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on linus/master v6.13-rc7 next-20250117]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
---Pw379ZAJmMFLjC7o
-Content-Type: application/pgp-signature; name="signature.asc"
+url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Pearson/watchdog-lenovo_se30_wdt-Watchdog-driver-for-Lenovo-SE30-platform/20250115-220703
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250115140510.2017-1-mpearson-lenovo%40squebb.ca
+patch subject: [PATCH] watchdog: lenovo_se30_wdt: Watchdog driver for Lenovo SE30 platform
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20250118/202501180914.vD2HyOZ2-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f5cd181ffbb7cb61d582fe130d46580d5969d47a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250118/202501180914.vD2HyOZ2-lkp@intel.com/reproduce)
 
------BEGIN PGP SIGNATURE-----
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501180914.vD2HyOZ2-lkp@intel.com/
 
-iHUEABYIAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCZ4mPJgAKCRBzbaomhzOw
-wm3iAP0Z7Dg/5jcSL4eji0cptrtvNWyhVdS51qVX3Tnlw+bADgEAjjcwFG7aUqYQ
-ahmXBLry1zvisbI5crLJC4Jadbo2rwY=
-=ppxp
------END PGP SIGNATURE-----
+All errors (new ones prefixed by >>):
 
---Pw379ZAJmMFLjC7o--
+   In file included from drivers/watchdog/lenovo_se30_wdt.c:11:
+   In file included from include/linux/iommu.h:10:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2223:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/watchdog/lenovo_se30_wdt.c:314:24: error: call to undeclared function 'ioremap_cache'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     314 |         priv->shm.base_addr = ioremap_cache(priv->shm.base_phys, SHM_WIN_SIZE);
+         |                               ^
+   drivers/watchdog/lenovo_se30_wdt.c:314:24: note: did you mean 'ioremap_uc'?
+   include/asm-generic/io.h:1145:29: note: 'ioremap_uc' declared here
+    1145 | static inline void __iomem *ioremap_uc(phys_addr_t offset, size_t size)
+         |                             ^
+   include/asm-generic/io.h:1144:20: note: expanded from macro 'ioremap_uc'
+    1144 | #define ioremap_uc ioremap_uc
+         |                    ^
+>> drivers/watchdog/lenovo_se30_wdt.c:314:22: error: incompatible integer to pointer conversion assigning to 'unsigned char *' from 'int' [-Wint-conversion]
+     314 |         priv->shm.base_addr = ioremap_cache(priv->shm.base_phys, SHM_WIN_SIZE);
+         |                             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   4 warnings and 2 errors generated.
+
+
+vim +/ioremap_cache +314 drivers/watchdog/lenovo_se30_wdt.c
+
+   276	
+   277	static int lenovo_se30_wdt_probe(struct platform_device *pdev)
+   278	{
+   279		struct device *dev = &pdev->dev;
+   280		struct lenovo_se30_wdt *priv;
+   281		unsigned long base_phys;
+   282		unsigned short val;
+   283		int err;
+   284	
+   285		err = superio_enter(UNLOCK_KEY, SIO_REG, LNV_SE30_NAME);
+   286		if (err)
+   287			return err;
+   288	
+   289		val = superio_inb(SIO_REG, CHIPID_REG) << 8;
+   290		val |= superio_inb(SIO_REG, CHIPID_REG + 1);
+   291	
+   292		if ((val & CHIPID_MASK) != LNV_SE30_ID) {
+   293			superio_exit(LOCK_KEY, SIO_REG);
+   294			return -ENODEV;
+   295		}
+   296	
+   297		superio_outb(SIO_REG, LDN_REG, LD_NUM_SHM);
+   298		base_phys = (superio_inb(SIO_REG, LD_BASE_ADDR) |
+   299				 (superio_inb(SIO_REG, LD_BASE_ADDR + 1) << 8) |
+   300				 (superio_inb(SIO_REG, LD_BASE_ADDR + 2) << 16) |
+   301				 (superio_inb(SIO_REG, LD_BASE_ADDR + 3) << 24)) &
+   302				0xFFFFFFFF;
+   303	
+   304		superio_exit(LOCK_KEY, SIO_REG);
+   305		if (base_phys == 0xFFFFFFFF || base_phys == 0)
+   306			return -ENODEV;
+   307	
+   308		priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+   309		if (!priv)
+   310			return -ENOMEM;
+   311	
+   312		priv->sio.base_phys = base_phys;
+   313		priv->shm.base_phys = base_phys;
+ > 314		priv->shm.base_addr = ioremap_cache(priv->shm.base_phys, SHM_WIN_SIZE);
+   315	
+   316		priv->wdt_cfg.mod = WDT_MODULE;
+   317		priv->wdt_cfg.idx = WDT_CFG_INDEX;
+   318		priv->wdt_cnt.mod = WDT_MODULE;
+   319		priv->wdt_cnt.idx = WDT_CNT_INDEX;
+   320	
+   321		priv->wdt.ops = &lenovo_se30_wdt_ops;
+   322		priv->wdt.info = &lenovo_se30_wdt_info;
+   323		priv->wdt.timeout = WATCHDOG_TIMEOUT; /* Set default timeout */
+   324		priv->wdt.min_timeout = MIN_TIMEOUT;
+   325		priv->wdt.max_timeout = MAX_TIMEOUT;
+   326		priv->wdt.parent = dev;
+   327	
+   328		watchdog_init_timeout(&priv->wdt, timeout, dev);
+   329		watchdog_set_drvdata(&priv->wdt, priv);
+   330		watchdog_set_nowayout(&priv->wdt, nowayout);
+   331		watchdog_stop_on_reboot(&priv->wdt);
+   332		watchdog_stop_on_unregister(&priv->wdt);
+   333	
+   334		return devm_watchdog_register_device(dev, &priv->wdt);
+   335	}
+   336	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
