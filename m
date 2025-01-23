@@ -1,115 +1,119 @@
-Return-Path: <linux-watchdog+bounces-2747-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2748-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEDF0A1A1A8
-	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Jan 2025 11:15:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47B27A1A294
+	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Jan 2025 12:09:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F08F4160FAE
-	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Jan 2025 10:15:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 759DD16BF1B
+	for <lists+linux-watchdog@lfdr.de>; Thu, 23 Jan 2025 11:09:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A8AB1BC9FB;
-	Thu, 23 Jan 2025 10:15:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 834A320E031;
+	Thu, 23 Jan 2025 11:09:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iDy5a1SQ"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6394E80034;
-	Thu, 23 Jan 2025 10:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B89820C46B;
+	Thu, 23 Jan 2025 11:09:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737627346; cv=none; b=mdCL7jq7J/dFZTHLg31jY6S9pKaJmhnAQN7QTrbA7TVLdqWQZg4gUEi7p2ul317TLgCwPZ/7vWSqdtPBkO5vZTsgJItbpb86PW0BYK3HdSD1KbXnpENysx7o3gezAppuZtyQ36dHax2wf72WZZECo/FEiBARrmFSJQQqh9m9i1s=
+	t=1737630577; cv=none; b=OqfYPwCFs+XMYrRJX38sBhCYBckBXWzqIGf3dd18VMOQtcCKqAhxJ+PdKNNgN2iDxiog5qgVdwWT+W7tY5O8yJ6QV4gf1ls//lUElHPkY1KKz3aDACb0CmIczKOR669NexwaK8DUNTGq59Tq7oHs5IKF/JcrYaRlge+SmP8tOZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737627346; c=relaxed/simple;
-	bh=LdEvxOG4M3xhyziRPDEdshXqYe9qDBdUuHYDXg0Gup4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s1+lSq4K9UXqcHMzAKMMmxWqcLkUTDg13jWKDifO8z063+AtVGpE3zkvxCqR0F5hvE6qrpuSPu6zPjDDOc4VVm923B2kwRRR9Ok6/69c7v8R9aOmTji9KVGMt53+3R8Em9e4JMrLk10iI3HNqSJbLIsq3JIXoa/ZscrUHYnnYwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-4afe1009960so199839137.0;
-        Thu, 23 Jan 2025 02:15:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737627343; x=1738232143;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p+KxmSb3ng/SgqlGHgo2Oo9yt38YcpGVh06tKkX2Y34=;
-        b=oTbsdF498lyLlmieqWMjtMSSk3/xqyTPGN7G9hvA9Ynq7yDd90zawNJV5O2n7oK5a+
-         jZSUplp6Gj9U+GpxczilH07T98bqBxliFD91krW1aL0yPA+V3YX5Fhp1QyB8hsip5lCR
-         9Xi+Rsp53haLvZLcP+rzJFqdTfGj03zeV3UBz9wx5bJ/awThQzc1Jjdf5NzhX07ceDDs
-         1Ut9Oo/miwCbk9NKZe7ti6whsTH/9nnG0GrRIChEF63sSeQLAwXh5JVkK40iKqKzOYuj
-         u6oZbpzsyjLbgyYr0qQZPC0/z0vTWDOBP8g2+KWXLS99wTeOMkQGBqXf8crRQ+iSBb4j
-         +wPw==
-X-Forwarded-Encrypted: i=1; AJvYcCUMkRaOC+mJthUZZrGW3jr0C2HSNs4IhPDXri/OhRvqZ/Lboinf83s5/TfxtvOEfnc/My4md2YVWkV2eREXDMHZ2+E=@vger.kernel.org, AJvYcCVK4fClyLopcA0vc0uz9teIrfas6EUgK6EOArSCB844gI2wRwtW2nCLD45vv3YAIIVXtXk/SsSUR+H8@vger.kernel.org, AJvYcCW+7pxOAGZP45rSUB0qJo/1SCMjvgmJvZ/B3wRiNbKzauyvYQxD6Gsh9D5OieYfd1gUN7Rb6B8JwGYbdtF72KQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQk2EDONog30pOYY+5w1srutzgayCbRLYDabBQTHaKfoYsxkTM
-	1YYX+sSB+Gf/XLUtZseit/u8gulNpDOb1yng9vm64FHm6iMtQufOcP5Cj1ND
-X-Gm-Gg: ASbGncugzQ+9iuzwNLDRCEglJD3vY50Kv4pBVvBK1hd2GXQYHvYNFF79XETiV3rr71T
-	zYyhbq3pW77Dm/y6iR7iPY7BXpkIJJBX3Q9YPwbc0unu1ovma+/OR4g24DFot3qcb2nGfwjZx/g
-	9HbQG3wjDqICVzSIeIMhxjt08dgtihPse1t3u2JCMzQn+NN7z2K7YY5VRgC4ZiSkfKGHvTaEewe
-	6KjfMOIv1WdGSEI6Be/Thq5AwObUhHHKBuQDcv0MRBdV5T743YaFiFcW/MVKiRpZV/Zu65iKwZM
-	lHB9Q4RjLn0gDfwF5u0L373rg/zP7pySOzCBcT9IDH8=
-X-Google-Smtp-Source: AGHT+IH596c/mFj1M3ZYeTg+9i9i2zt/oQHDNCSPK2dwom0D958IPoTbyYFe2KOp3I/1gCLADDQMKA==
-X-Received: by 2002:a05:6102:6ca:b0:4b2:bcea:dce2 with SMTP id ada2fe7eead31-4b690bd1fcfmr21005354137.10.1737627342948;
-        Thu, 23 Jan 2025 02:15:42 -0800 (PST)
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-8642ccaf42dsm3406218241.30.2025.01.23.02.15.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Jan 2025 02:15:42 -0800 (PST)
-Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-85c15e283bfso147106241.2;
-        Thu, 23 Jan 2025 02:15:42 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU9yRhAc/hFpZZNThYikuqSmEtxpBQlYe1ZN+ddMQB/cm33CoZC+nRbqRScgQ9nHm2R2ro5XtpdzxOe@vger.kernel.org, AJvYcCVM//JXKgRKOfAlMgK0hdONB13wmO8YeM5SMBAIY3H+xHdFymG43W/c20n1zp1ryEXDfyYaw4lPt0/iIJGBsiIYwt4=@vger.kernel.org, AJvYcCWrRU7UkJBBwKGVke0cFW7gVm5yXMa++n8SeqWTAsD4tfcqLo7wYa6ey3RX2x90dgQg02uZpg+Xfhy2auyGbQ8=@vger.kernel.org
-X-Received: by 2002:a05:6102:304a:b0:4b2:48af:bc84 with SMTP id
- ada2fe7eead31-4b690bbf595mr20469196137.7.1737627342101; Thu, 23 Jan 2025
- 02:15:42 -0800 (PST)
+	s=arc-20240116; t=1737630577; c=relaxed/simple;
+	bh=Qvy74JqKzVd1qj7fQJwVAQBLAKbjrWNDB+WUyydr2iM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=vBTq7hHZxRq5XfeRu6ydnQPoF9cQA7PevU3XsZyvtDLYdy1Od5lSyOybpTCw4prU7a9KOZ2+JZL/kLSBflStApT4jNHz89snW1HiU0PqpidBxPEhIPZQ30mt2Vxl/QPrKUwoLdHE5tykLaYLWmHnX8wy8cimmB0uRJjuG1c5o5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iDy5a1SQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F9FC4CED3;
+	Thu, 23 Jan 2025 11:09:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737630576;
+	bh=Qvy74JqKzVd1qj7fQJwVAQBLAKbjrWNDB+WUyydr2iM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iDy5a1SQ2A9Bh43KXqO27rb4uTuw0SwEiZDMaJa76EmUfX4jD6520n31rfpOInsGF
+	 S7q4jkd7DJzi8EeyjMVHWNW1sfwNdjXGjxCB5ZDoqN37peHq4LsHXcqZFmttVYR9Mc
+	 C6wL/X6dHoVprL5dGGNsblsyc0Seabo27Oj8Yt1y1OQF3BPRmuhcfK6eeN/1sJrvA7
+	 8CbxKoTEE9PaqSt4322HjmcQ0Co5G1iHaKTrzlwjvW5Cf81ik4BsZRTpX63P6I1YnC
+	 OjRSGHufLwHNWMO/+gvkLGEHNOT+xrX3FUUgdZqBYDJ8vsTRIr5lzBzrOIVXPvi9f1
+	 QYr3XFZlj9UKg==
+Date: Thu, 23 Jan 2025 11:09:29 +0000
+From: Simon Horman <horms@kernel.org>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
+	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
+	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+	jdelvare@suse.com, alexandre.belloni@bootlin.com,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v6 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250123110929.GP395043@kernel.org>
+References: <20250123091115.2079802-1-a0282524688@gmail.com>
+ <20250123091115.2079802-5-a0282524688@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250115103858.104709-1-biju.das.jz@bp.renesas.com> <20250115103858.104709-2-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20250115103858.104709-2-biju.das.jz@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 23 Jan 2025 11:15:29 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVwZ-YZjCpTgZBxepoVozy=0y-yERpv47+aNaP-opmtpA@mail.gmail.com>
-X-Gm-Features: AWEUYZlotLYOyfGG5HoLXPjOGN00_IF1ZN0qxno-ciiGepYbCVMMKEerAm8pvIo
-Message-ID: <CAMuHMdVwZ-YZjCpTgZBxepoVozy=0y-yERpv47+aNaP-opmtpA@mail.gmail.com>
-Subject: Re: [PATCH 1/5] dt-bindings: watchdog: renesas,wdt: Document RZ/G3E support
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-watchdog@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, Biju Das <biju.das.au@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250123091115.2079802-5-a0282524688@gmail.com>
 
-On Wed, Jan 15, 2025 at 11:39=E2=80=AFAM Biju Das <biju.das.jz@bp.renesas.c=
-om> wrote:
-> Document the support for the watchdog IP available on RZ/G3E SoC. The
-> watchdog IP available on RZ/G3E SoC is identical to the one found on
-> RZ/V2H SoC.
->
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+On Thu, Jan 23, 2025 at 05:11:12PM +0800, Ming Yu wrote:
+> This driver supports Socket CANFD functionality for NCT6694 MFD
+> device based on USB interface.
+> 
+> Signed-off-by: Ming Yu <a0282524688@gmail.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+...
 
-Gr{oetje,eeting}s,
+> diff --git a/drivers/net/can/usb/nct6694_canfd.c b/drivers/net/can/usb/nct6694_canfd.c
 
-                        Geert
+...
 
+> +static int nct6694_can_get_clock(struct nct6694_can_priv *priv)
+> +{
+> +	struct nct6694_can_information *info;
+> +	struct nct6694_cmd_header cmd_hd = {
+> +		.mod = NCT6694_CAN_MOD,
+> +		.cmd = NCT6694_CAN_INFORMATION,
+> +		.sel = NCT6694_CAN_INFORMATION_SEL,
+> +		.len = cpu_to_le16(sizeof(*info))
+> +	};
+> +	int ret, can_clk;
+> +
+> +	info = kzalloc(sizeof(*info), GFP_KERNEL);
+> +	if (!info)
+> +		return -ENOMEM;
+> +
+> +	ret = nct6694_read_msg(priv->nct6694, &cmd_hd, info);
+> +	if (ret)
+> +		goto exit;
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+Hi Ming Yu,
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+This goto will result in the function returning can_clk.
+But can_clk is not initialised until the following line.
+
+Flagged by W=1 builds with clang-19, and by Smatch.
+
+> +
+> +	can_clk = le32_to_cpu(info->can_clk);
+> +
+> +exit:
+> +	kfree(info);
+> +	return can_clk;
+> +}
+
+...
 
