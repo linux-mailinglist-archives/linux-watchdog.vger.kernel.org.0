@@ -1,224 +1,258 @@
-Return-Path: <linux-watchdog+bounces-2799-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2800-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7578FA219D5
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jan 2025 10:28:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53EC8A21F92
+	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jan 2025 15:48:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0DF61886B4F
-	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jan 2025 09:28:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EB003A2496
+	for <lists+linux-watchdog@lfdr.de>; Wed, 29 Jan 2025 14:48:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 389FC1A0714;
-	Wed, 29 Jan 2025 09:28:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF6DFAD51;
+	Wed, 29 Jan 2025 14:48:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gb6rXYKX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hhzNL2L4"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5268A8462;
-	Wed, 29 Jan 2025 09:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF942033A;
+	Wed, 29 Jan 2025 14:48:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738142891; cv=none; b=KqIbemmvKBHAqY8oR6S10kjbYdQB94PzkF4xsUd/pygAt+2T5kHaaEV+KHp9Sg5GHy6y33LaqJ7beengsQbdx4MGaD3GxD31AmrPMY+ea8oLNHgHGPX9ZNqXMIWC5ICkrjiCaZV1a/8b+BM29mafWJ3QgYVwkglZctTM4tgb3Fo=
+	t=1738162089; cv=none; b=mRENXwRUutqq/OXxeM6cTMmSz42o0shgTg+v3uQyTfW1ptnLP61XgIMc5f0BKqYKcvIhPgZ+//qcZUgb96VfmXqpy7UEyegYiR9dR/yqHxjm1ypIeWc0X4HqPSWdzJ6VUSUzcWxjVqFHkvQsVKzX5+t4wxTRrJV5uml6lTYLmH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738142891; c=relaxed/simple;
-	bh=bstLlNNMUSL9GLMeRITPC6FJBEtJ1HMb74bi9UtZ8M8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=BL6tidJxl+hH/q9UqyD8Q9vnNzxEeKc7+Mejkgdt1CpAtXMI7JLu9PZGO4w85SUY7wuTfmok8tWFZY0n49cHXOkEJSdrfa9FExfSc1DqPrpm6s4tzKgzjxBuu9wn+hSEzkXnbrmCTUO4INd35Fhv6nLQkDt2a+9M4+Yl4F3rvjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gb6rXYKX; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1738162089; c=relaxed/simple;
+	bh=zf1iNrFl7lo6jxE4yxXErxMxFRokwIekPR/v6sGOJzk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HkdgG3dSB15NDwA/wh7IMVLcYGuomtHXrm7r1ZhaxadyRuPK+3nGzy9Wj47McO/y8Q2xw2dKJuYisdLkcSc5yZaGRFplBYIVma6QsmUW71SfSrHabYaRWOlHQ0y3InPZGKHHOGMEbJ8Jg6XKe9P1rG+cclu4vtvv4eZkd6KmD7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hhzNL2L4; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-53e3a37ae07so7417031e87.3;
-        Wed, 29 Jan 2025 01:28:08 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2165448243fso10171415ad.1;
+        Wed, 29 Jan 2025 06:48:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738142887; x=1738747687; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=buVhDuRguPlyJZPyEvCsXVBFflGX5iw4xHFgTeamWsI=;
-        b=gb6rXYKX8IefV5k+Zd+fJo6kfzyJ65lFMWEwQTEkd/ho94hE4eMxXJgkdLJmtRtB2V
-         sdR84TgMoqrxRDAtipoI4igd11iFbfvBN5VQa5/wNGVWafs+FRZY94q9QlHvBJ0Tmy1M
-         unlBLqeCviVk4Y4UX2qquzXDNTQxJkx2iodWD/U7QNul0srL0lZ0Gy83XScuyX7ShUfE
-         pDIi/RaQwd4Hh6wR1M1o9+bBCgLX3OL3PZMglV/jHpk/F2e0azCR/bp8kkXk0EXe+XmL
-         eeaJl1j26UC8h2ADmv3g6qbsjZM6XbV+49McL7Rs0k1WPAid8ZX+O8zKKHxin/upBqOM
-         8phg==
+        d=gmail.com; s=20230601; t=1738162087; x=1738766887; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xn73dDm1IgOb+09czxsAhVAWIkGMPx2d9kCIkGzUY1k=;
+        b=hhzNL2L4yrgMKTN8ZsuoaE0EQYSsGFSNtiEzrx909TacJhcsw+mK3cb8bXebvrqmV2
+         YMPtDpSGkA0J26/oSJ+JHNnkgQDjcJcBAaQE67SdiX4HtOfw4FdJ6zlUJHqJ9zYMGR/L
+         hTtKlOuA6yKuE9iYI3uiM/czpZASsf6N7Tb+SHdEtnWHzCTpQ2gOHtYmxIhPFbStKOFS
+         NNPTtIT4EZR4Ud4Ia1LDxjLibQs5jBKm5R+Wb3Fc8T/wjKm0aZeFAi25QBKsR3xtMit2
+         Hlq6cxwX5M68QY78nDFFX3T3rS/8mkynBAhylxcA0UqojTgG7sFmZ2B25nceC0fNnHKi
+         uDSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738142887; x=1738747687;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=buVhDuRguPlyJZPyEvCsXVBFflGX5iw4xHFgTeamWsI=;
-        b=Rq2ybde/BjzcGi6Sr33PDSoaRMA3lhwAly2/sy+yPicuIASYvcJWzPFd6DrA6LoLJS
-         QnLylAkw1zvp2Sy5uCI9xeQiOx/EpmcsbaE2F6KqA8SvIeKa6stTbW7ItmyaZGlHiiS6
-         CrYrp/B+J4jpR+0cKJLJkDH4+XkzegyhvugpLP3Zz+xv0HmzIhpbK8FOXfHWPNJsHI6H
-         e0Q6qSGIPP5bsTZyfw65pVPNBwgtJ8VoIufo3w15GMM7VcdGKDLp8ntdP6HBxx4mx+zV
-         oNlMHjXmWUKIbri0ZiHqwds+oZ7WHwOC7DPlGo+VWCFA9tHYh93NHxsNaZeRzM9Fyze3
-         kKHA==
-X-Forwarded-Encrypted: i=1; AJvYcCVz9Cv7MoQEpC/1YickPcvvPF1wxRK81596322zcMvSrGFixBvfzfTYbnTyvD1dsxPpi1QKdbeIzdNsLJY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQtHztSEAZwOiYplELHtGptxKkPY6EdaeS1V7iTtrxmqBA2wZ5
-	dMdMEEvHJK21brzHJ6DmSi5li4IlEVm8jNZeq7nGTH1FEeqDNAv0
-X-Gm-Gg: ASbGncus9oeyNbqFj2SvKcZeqeTHw77RfCYaFoLLVIjicayByV5g9ENh8aW3bMd5rLs
-	SYeFbsEXJIFfGBauYKFX3fAxpk9t8DgrCdZLw3g/cRI3rBidzDP8Tp9RUkYVvf9HJwHmex6ShJd
-	EjreZteBSaL+DQMXgEUmj0CcxlOPPOvAA4c0TXkStI3urimppFbwr8rtzhDTorqi6iaE1NSvgJs
-	Q4ti/QQSEas6ZYbYVY9dbMi+B994+WUAIzvvMd52gp1f970Gp+RXooiv2RiykWGYQy3pyE3MGj1
-	cTF37DXeYMXiu05jh67VUrV2vFzKoAe4WoJCY+56zk8OOAczTneM6s/Hwcbb
-X-Google-Smtp-Source: AGHT+IEsxAcsjKyMe+Xrnabdze3nkd6Wp/8ROWGaGmpAXS67Lg9chpYFVF9n3KiCaw0vBBrZmQLu7A==
-X-Received: by 2002:ac2:4294:0:b0:542:2e04:edb3 with SMTP id 2adb3069b0e04-543e4c3a22bmr687438e87.49.1738142886930;
-        Wed, 29 Jan 2025 01:28:06 -0800 (PST)
-Received: from [192.168.1.199] (83-233-6-197.cust.bredband2.com. [83.233.6.197])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-543c82272c3sm1957918e87.39.2025.01.29.01.28.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jan 2025 01:28:05 -0800 (PST)
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Wed, 29 Jan 2025 10:27:52 +0100
-Subject: [PATCH v2] watchdog: da9052_wdt: respect TWDMIN
+        d=1e100.net; s=20230601; t=1738162087; x=1738766887;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xn73dDm1IgOb+09czxsAhVAWIkGMPx2d9kCIkGzUY1k=;
+        b=NEzusbglRbxdI7jGfdL/FX5TLSII50x4Zo5mXgIYmQFIZ8oh5pY2rvL2xfZUSqYgNT
+         KMyW67/eaTAEinRonIa50TFBRGTuyIyFnfzXmjrnHfqqCdJJIRR5Piv09+Am7yHuK1em
+         hrjq7g7J4vvqsvqttDDFL9bF8je3qS0e6kd76eAszrdIy9RC6Z/8EDFD4GjtXoIYMJxE
+         IOuKojuscZCEoXHAI32KmmMFzKh+OwS2aC0EpEafcLQfqM7Dlq1G7WQTC7Vh3NJo6Fwi
+         HkRKtdK0efIS1Gt9P8HtB8/NQTf33AfHeT4ldFbLzOC/UGsBDQYRv6JSgBEmqYKWwt+R
+         bIUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWx32bTcly1CDbZ4HBRavPECYrfnU/yL78AiqwzxW3S4QcviDEzuIq6+vRpfs22M5JTN06OPt5T0zE1bd8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxDqJBrfWb2n9mM8HPVkKeZ/bTd7zlu30qD3Qy6StaX5xfOLLG
+	I8JX+P72elbhjFSs7gGySOg2XkOXz7d4c1Rmv1HeRdh00938kvUY
+X-Gm-Gg: ASbGncvDifP+TTzm8mRVDcRo/0lAcB74adz4xG42bJgPNoEHeptdk2dBD8W6UA01ilZ
+	6KcFUbS8R1U2f7UxYmc+UDPvx4UIVT2Tffnxbxwe+LxGzPvxhU/JS3EpQsE34cXT/IpaKqOicIe
+	y6wOmfHeKHDo4GH4mZLavURjVy/98E8HJ5YakiJsqC94JIZIVodMjpjJ15Cp/X8pREmHUjKOyQg
+	b//GT2D5WwDzU4mUJpkgaeteT21WL3M2zRIw9ezae3eEwDjY8GcXNJNOTLnwSBW2k2r1T/nkTW/
+	FxQgv7G7goQ4lhzdEMorTHUYpAG50FuTsH0aFbsCnpnKUkDPZjZTGH8q+5ViPyCp
+X-Google-Smtp-Source: AGHT+IFjdiXdL16A3+waHiaZcYyN+iFMZhAzasogsB5ZkmD8MMmJbR+OsHGReCPwasmYt4JBG6LgkA==
+X-Received: by 2002:a17:903:188:b0:21d:dfae:300c with SMTP id d9443c01a7336-21ddfae34camr6066465ad.3.1738162087055;
+        Wed, 29 Jan 2025 06:48:07 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da414edb3sm100088235ad.202.2025.01.29.06.48.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jan 2025 06:48:06 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <56d8a231-3af7-4e12-a08b-f7faa549c96a@roeck-us.net>
+Date: Wed, 29 Jan 2025 06:48:04 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] watchdog: da9052_wdt: respect TWDMIN
+To: Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Support Opensource <support.opensource@diasemi.com>,
+ Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Marcus Folkesson <marcus.folkesson@combitech.com>
+References: <20250129-da9052-v1-1-aa0dfc2ad595@gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20250129-da9052-v1-1-aa0dfc2ad595@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250129-da9052-v2-1-1ae2b263d936@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAJf0mWcC/2XMQQ7CIBCF4as0sxYDGKq48h6miykM7SS2GDBE0
- 3B3sVuX/8vLt0GmxJTh2m2QqHDmuLbQhw7cjOtEgn1r0FIbqbQVHq00WvS98mEcz55OF2jnZ6L
- A7x26D61nzq+YPrtb1G/9I4oSSiBKH5xGb6y5TQvy4+jiAkOt9QsbXMcknAAAAA==
-X-Change-ID: 20250129-da9052-661dfbb7de38
-To: Support Opensource <support.opensource@diasemi.com>, 
- Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Guenter Roeck <linux@roeck-us.net>
-Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Marcus Folkesson <marcus.folkesson@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3690;
- i=marcus.folkesson@gmail.com; h=from:subject:message-id;
- bh=bstLlNNMUSL9GLMeRITPC6FJBEtJ1HMb74bi9UtZ8M8=;
- b=owEBbQKS/ZANAwAIAYiATm9ZXVIyAcsmYgBnmfSe9y05JqSH5/xh/TYWd2ztxdbWr4JfpB0df
- rfZe09PQV+JAjMEAAEIAB0WIQQFUaLotmy1TWTBLGWIgE5vWV1SMgUCZ5n0ngAKCRCIgE5vWV1S
- Mhd4D/42UBaf+XWIenKy7jSTAPF4DNaAeyC/zyVTmEVUon2tTC8eNi3qroB5J9HQPYU/t+t/X/p
- AO4llFpL/7iXkF4W/3gz0OvYHHMdemDoKd0dy/aivdJ64QR5GKO1k7NyfiV6l+YDz3T0jom/hku
- mYMcz4OVcYJrobC66obwyJSR2znTQoC3hGvLTtYZ9k0nkbrXtMYKZS4a+Zs6y75ajlwJr30eLMS
- EI7Z/zTrs651udLsm9Ssx8R5NtF3dYy4ASykgf5+xN1UDfuOzhUE3M3PrRHFdwoqBv1IEV/Pqrd
- GiFZ643GOoMRBDWLQcMSAK5zi9pW6FVWrE5brgVZ7FWUjBZrOQSAALr8VBjdC76kqtY0Gqvi6Z0
- QrxYmI2N0VaaklkfaZc2wPjEmSDWSAsLDL+wfcq856drcpirpra5Zp91as+zxNZK3Zp9aO8GvWD
- KPPfSQSeB7VkNkokgD+MnrlTSQLNcOEpqvwmNw9v8Phawv/7EYhrhPxSE6gaVghrqh7u6DqLyVb
- ASGsrugLdBYd986i6KB2Ey8vkr1+qNPgVEdSxoT6AnI5YI1KnB2Iy4fRt74gZjxzty2AT3o5L5A
- 7uIBFbLN4rgMKeVwsikh1hBnNXEdL05vwJtmywYXGLmV+Mfd0+6HBpKPLRxRMbDHkkaAvYLJuH0
- 9poETHufbUn4fxw==
-X-Developer-Key: i=marcus.folkesson@gmail.com; a=openpgp;
- fpr=AB91D46C7E0F6E6FB2AB640EC0FE25D598F6C127
 
-We have to wait at least the minimium time for the watchdog window
-(TWDMIN) before writings to the wdt register after the
-watchdog is activated.
-Otherwise the chip will assert TWD_ERROR and power down to reset mode.
+On 1/29/25 01:24, Marcus Folkesson wrote:
+> From: Marcus Folkesson <marcus.folkesson@combitech.com>
+> 
+> We have to wait at least the minimium time for the watchdog window
+> (TWDMIN) before writings to the wdt register after the
+> watchdog is activated.
+> Otherwise the chip will assert TWD_ERROR and power down to reset mode.
+> 
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
----
-The current implementation does not respect the time window for all
-cases not it handle when the jiffie wrap around.
-E.g. setting a new timeout and immediately perform a 'ping' causes the
-chip to assert TWD_ERROR.
----
-Changes in v2:
-- Use the right author email.
-- Link to v1: https://lore.kernel.org/r/20250129-da9052-v1-1-aa0dfc2ad595@gmail.com
----
- drivers/watchdog/da9052_wdt.c | 33 +++++++++++++++++++++++----------
- 1 file changed, 23 insertions(+), 10 deletions(-)
+This is missing a key explanation:
 
-diff --git a/drivers/watchdog/da9052_wdt.c b/drivers/watchdog/da9052_wdt.c
-index 77039f2f0be54273df1666fe40c413b6c89285a1..5ca957a6c2219d99cb3e653205e3f556f7cfb56f 100644
---- a/drivers/watchdog/da9052_wdt.c
-+++ b/drivers/watchdog/da9052_wdt.c
-@@ -45,6 +45,21 @@ static const struct {
- 	{ 7, 131 },
- };
- 
-+static void da9052_wdt_wait_for_twdmin(struct watchdog_device *wdt_dev)
-+{
-+	struct da9052_wdt_data *driver_data = watchdog_get_drvdata(wdt_dev);
-+	unsigned long msecs, twdmin, jnow = jiffies;
-+
-+	/*
-+	 * The host must wait at least TWDMIN ms between writings to the watchdog
-+	 * register or the DA9052 will assert TWD_ERROR and power down to RESET mode.
-+	 */
-+	twdmin  = driver_data->jpast + msecs_to_jiffies(DA9052_TWDMIN);
-+	if (time_before(jnow, twdmin)) {
-+		msecs = jiffies_to_msecs(twdmin - jnow);
-+		mdelay(msecs);
-+	}
-+}
- 
- static int da9052_wdt_set_timeout(struct watchdog_device *wdt_dev,
- 				  unsigned int timeout)
-@@ -53,6 +68,7 @@ static int da9052_wdt_set_timeout(struct watchdog_device *wdt_dev,
- 	struct da9052 *da9052 = driver_data->da9052;
- 	int ret, i;
- 
-+	da9052_wdt_wait_for_twdmin(wdt_dev);
- 	/*
- 	 * Disable the Watchdog timer before setting
- 	 * new time out.
-@@ -89,8 +105,8 @@ static int da9052_wdt_set_timeout(struct watchdog_device *wdt_dev,
- 		}
- 
- 		wdt_dev->timeout = timeout;
--		driver_data->jpast = jiffies;
- 	}
-+	driver_data->jpast = jiffies;
- 
- 	return 0;
- }
-@@ -109,16 +125,9 @@ static int da9052_wdt_ping(struct watchdog_device *wdt_dev)
- {
- 	struct da9052_wdt_data *driver_data = watchdog_get_drvdata(wdt_dev);
- 	struct da9052 *da9052 = driver_data->da9052;
--	unsigned long msec, jnow = jiffies;
- 	int ret;
- 
--	/*
--	 * We have a minimum time for watchdog window called TWDMIN. A write
--	 * to the watchdog before this elapsed time should cause an error.
--	 */
--	msec = (jnow - driver_data->jpast) * 1000/HZ;
--	if (msec < DA9052_TWDMIN)
--		mdelay(msec);
-+	da9052_wdt_wait_for_twdmin(wdt_dev);
- 
- 	/* Reset the watchdog timer */
- 	ret = da9052_reg_update(da9052, DA9052_CONTROL_D_REG,
-@@ -130,8 +139,11 @@ static int da9052_wdt_ping(struct watchdog_device *wdt_dev)
- 	 * FIXME: Reset the watchdog core, in general PMIC
- 	 * is supposed to do this
- 	 */
--	return da9052_reg_update(da9052, DA9052_CONTROL_D_REG,
-+	ret = da9052_reg_update(da9052, DA9052_CONTROL_D_REG,
- 				 DA9052_CONTROLD_WATCHDOG, 0 << 7);
-+
-+	driver_data->jpast = jiffies;
-+	return ret;
- }
- 
- static const struct watchdog_info da9052_wdt_info = {
-@@ -187,6 +199,7 @@ static int da9052_wdt_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	driver_data->jpast = jiffies;
- 	return devm_watchdog_register_device(dev, &driver_data->wdt);
- }
- 
+Why does setting @min_hw_heartbeat_ms in struct watchdog_device
+not work for this driver ?
 
----
-base-commit: 05dbaf8dd8bf537d4b4eb3115ab42a5fb40ff1f5
-change-id: 20250129-da9052-661dfbb7de38
+Guenter
 
-Best regards,
--- 
-Marcus Folkesson <marcus.folkesson@gmail.com>
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> ---
+> The current implementation does not respect the time window for all
+> cases not it handle when the jiffie wrap around.
+> E.g. setting a new timeout and immediately perform a 'ping' causes the
+> chip to assert TWD_ERROR.
+> ---
+>   drivers/watchdog/da9052_wdt.c | 33 +++++++++++++++++++++++----------
+>   1 file changed, 23 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/watchdog/da9052_wdt.c b/drivers/watchdog/da9052_wdt.c
+> index 77039f2f0be54273df1666fe40c413b6c89285a1..5ca957a6c2219d99cb3e653205e3f556f7cfb56f 100644
+> --- a/drivers/watchdog/da9052_wdt.c
+> +++ b/drivers/watchdog/da9052_wdt.c
+> @@ -45,6 +45,21 @@ static const struct {
+>   	{ 7, 131 },
+>   };
+>   
+> +static void da9052_wdt_wait_for_twdmin(struct watchdog_device *wdt_dev)
+> +{
+> +	struct da9052_wdt_data *driver_data = watchdog_get_drvdata(wdt_dev);
+> +	unsigned long msecs, twdmin, jnow = jiffies;
+> +
+> +	/*
+> +	 * The host must wait at least TWDMIN ms between writings to the watchdog
+> +	 * register or the DA9052 will assert TWD_ERROR and power down to RESET mode.
+> +	 */
+> +	twdmin  = driver_data->jpast + msecs_to_jiffies(DA9052_TWDMIN);
+> +	if (time_before(jnow, twdmin)) {
+> +		msecs = jiffies_to_msecs(twdmin - jnow);
+> +		mdelay(msecs);
+> +	}
+> +}
+>   
+>   static int da9052_wdt_set_timeout(struct watchdog_device *wdt_dev,
+>   				  unsigned int timeout)
+> @@ -53,6 +68,7 @@ static int da9052_wdt_set_timeout(struct watchdog_device *wdt_dev,
+>   	struct da9052 *da9052 = driver_data->da9052;
+>   	int ret, i;
+>   
+> +	da9052_wdt_wait_for_twdmin(wdt_dev);
+>   	/*
+>   	 * Disable the Watchdog timer before setting
+>   	 * new time out.
+> @@ -89,8 +105,8 @@ static int da9052_wdt_set_timeout(struct watchdog_device *wdt_dev,
+>   		}
+>   
+>   		wdt_dev->timeout = timeout;
+> -		driver_data->jpast = jiffies;
+>   	}
+> +	driver_data->jpast = jiffies;
+>   
+>   	return 0;
+>   }
+> @@ -109,16 +125,9 @@ static int da9052_wdt_ping(struct watchdog_device *wdt_dev)
+>   {
+>   	struct da9052_wdt_data *driver_data = watchdog_get_drvdata(wdt_dev);
+>   	struct da9052 *da9052 = driver_data->da9052;
+> -	unsigned long msec, jnow = jiffies;
+>   	int ret;
+>   
+> -	/*
+> -	 * We have a minimum time for watchdog window called TWDMIN. A write
+> -	 * to the watchdog before this elapsed time should cause an error.
+> -	 */
+> -	msec = (jnow - driver_data->jpast) * 1000/HZ;
+> -	if (msec < DA9052_TWDMIN)
+> -		mdelay(msec);
+> +	da9052_wdt_wait_for_twdmin(wdt_dev);
+>   
+>   	/* Reset the watchdog timer */
+>   	ret = da9052_reg_update(da9052, DA9052_CONTROL_D_REG,
+> @@ -130,8 +139,11 @@ static int da9052_wdt_ping(struct watchdog_device *wdt_dev)
+>   	 * FIXME: Reset the watchdog core, in general PMIC
+>   	 * is supposed to do this
+>   	 */
+> -	return da9052_reg_update(da9052, DA9052_CONTROL_D_REG,
+> +	ret = da9052_reg_update(da9052, DA9052_CONTROL_D_REG,
+>   				 DA9052_CONTROLD_WATCHDOG, 0 << 7);
+> +
+> +	driver_data->jpast = jiffies;
+> +	return ret;
+>   }
+>   
+>   static const struct watchdog_info da9052_wdt_info = {
+> @@ -187,6 +199,7 @@ static int da9052_wdt_probe(struct platform_device *pdev)
+>   		return ret;
+>   	}
+>   
+> +	driver_data->jpast = jiffies;
+>   	return devm_watchdog_register_device(dev, &driver_data->wdt);
+>   }
+>   
+> 
+> ---
+> base-commit: 05dbaf8dd8bf537d4b4eb3115ab42a5fb40ff1f5
+> change-id: 20250129-da9052-661dfbb7de38
+> 
+> Best regards,
 
 
