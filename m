@@ -1,164 +1,139 @@
-Return-Path: <linux-watchdog+bounces-2815-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2816-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A14FA23FD5
-	for <lists+linux-watchdog@lfdr.de>; Fri, 31 Jan 2025 16:44:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69F78A24029
+	for <lists+linux-watchdog@lfdr.de>; Fri, 31 Jan 2025 17:18:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B5721884CEF
-	for <lists+linux-watchdog@lfdr.de>; Fri, 31 Jan 2025 15:44:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D096C1683F7
+	for <lists+linux-watchdog@lfdr.de>; Fri, 31 Jan 2025 16:18:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C87B114B092;
-	Fri, 31 Jan 2025 15:44:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D1CA1C75F2;
+	Fri, 31 Jan 2025 16:18:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T6pFpZ1o"
+	dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b="imtzkOOz";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ibmkxLo1"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225881D0E2B;
-	Fri, 31 Jan 2025 15:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82F08467;
+	Fri, 31 Jan 2025 16:18:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738338281; cv=none; b=MbvDVjOPiuF4/z2k8M2W8UPfpklv/IXXTgzqm1EgmDMuViK0yXfaAqxShdxGs3tUbDVnlCCpZ4rst7f6Xk9ZLFBuwUclGV7Y1S/J4xE9dmBN/T4gkdwgzzbWo32VzdfRNFVuXIYPmnJQhvKuCfJtz8k+NF9R6hP02wwJ8IbNJwY=
+	t=1738340285; cv=none; b=eFVR2vu+5kO6YRGGcjAUIwbKprDPftmPod7ENmaBRy31K1DSo/qWTjAT/V5yJf1YHtXuW4LksEvEYRbsdqzE8cu9xg55Rki8STWRQYhiR3XjMKIhN71B9PTDPF3muRSgGvbHBavwmZy2eL3pwYXpuForZcElTf4DTsgrY9WUNEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738338281; c=relaxed/simple;
-	bh=lcLm9SSvUlLY0ZzM/AW8Xevl2bPj3NG0gFCsBflcDm4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZuFMFjnZ3eCNY21fK3Wwp90q4A5t4+WuianI0CcvqYGvwvaYF/DhVhfWGtVcmfVnthgGFziQidwtyNBoep/tC7QHndHNonBiWlY9qt1BEVte7MMkUuEZLAg5YgwhVfR0mjq8VHL5HSnGRDvKsSKnHHVHZVuCGzlBVQQqlgANQeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T6pFpZ1o; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2167141dfa1so38637675ad.1;
-        Fri, 31 Jan 2025 07:44:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738338279; x=1738943079; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=rnTU/By2h1Kdt2bvSDYTHUDEomCeXigEUkCqGnwitys=;
-        b=T6pFpZ1oQQMPlc/uGCzSqee4/MIiQp1JQQKCNktU0Dm/VX8EmLd6nGBb/+q7pre+AR
-         69Ur1m9Re3CAlBWoz/3oMEESaRWoT8ALNocb1Ty2ZbhcBiU8iLUaFtQoLHMVBwiZHgg+
-         D2yhdeZsTCQzW+uZaFk9+Xk+sHgANtCg9q6pRtaDU5LkZg2mVLH4raBWsrRWDiuCRQWu
-         CVk1/V432RI5GQoJetcMlCZym5fq3gUOK5xOah+O0DLggCXo5YDtlxGYeFMUA1Pyrwnl
-         wk5bsiI26NVQoX7VnphlGUDaPAWRAGOIgB8oEg+XJ9SbbDHq3i59vIqNkEYbPyTcIzyM
-         OxPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738338279; x=1738943079;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rnTU/By2h1Kdt2bvSDYTHUDEomCeXigEUkCqGnwitys=;
-        b=tNelBvfxbRqgW64SxB44AYb7BMLRJe8u1ZlEbMzE6Ffj0NOE2SymSfcFNkiqUmpxNt
-         cYT9I+nj5P7mADfKNR+OkAKsDP0TgLpHcPlk3MfHgT1m/PYX0Phn8b3rkygdD2FQEPIu
-         yl1WJNQd/wlbmknLPJAegels6AKCeL1dyi0Wi7o6RDI7uGMHULTSgJ7N+mXOtoG9tNDT
-         niEYigyPXJsmjcsM0zUxwqZZokOeC5xjvTG3vzuDVrUh00t9JLbhMVzy+FAO3Rza3Zml
-         C4E3XvyXa6Goxte/1Dh8phalXpm9VSlAEvilx+E3OfpxXFyRgZjiXxhQWQB2jGtOB98G
-         5Zcw==
-X-Forwarded-Encrypted: i=1; AJvYcCW2HYFu6jxsUFgjwKt1FZJ369YuW7GCInlXclRXz81gkjUVZNK41k4UzdTKQpw9LZ/IcOJwsVbkf0Ye7V4=@vger.kernel.org, AJvYcCXFAMBBQ4iFVybOQ6cJsne0x5fEIBB4tKU5OSDTtkeed0f9rYjLTcI1o4a1SnYkgxS+K7xAWiSa6nlEKrtD9k4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxARbo+orsoABkLHfMov5ABimM6rhWoJZH4EJd+twD5bRAPqpgd
-	7MZHAKYGaDuI8waM39KH37svxpBdJJ5qe8J3aZk11bX4b74z9vhL
-X-Gm-Gg: ASbGncvvgsAc8eQf64c3ZbC+4cSfxmTE0cGKYP1Gjccdkdo3nwj8fo1AvBl4oid2sNS
-	PIYYbZ/KwlxmrUjS2moV++gGwXlgYJxNhEQlkOsKEyggqmAjtcRiv/8UXPGC2e9oSDLzmUfLoL4
-	T22FdyXyxq6PM74AEWHBrXp5lb6AqmSkwCtd3TdpdivwCIVTgPYP7Dh61oZWxrhKSEsleDJHySA
-	z76MyC6CW7iOJtti0t9u6ogJxlh2bZhgiE1e5/AkiRKaKe5M8AH8f08sBOxVaDEk4sbcL7y3FiJ
-	5EXQR16nGdfuzIYSNKFl6NciPjEdpMRRNdyEI2iXFaJ4p6VcfTFJaCVN7fRNJ4uF
-X-Google-Smtp-Source: AGHT+IHxHBbsYsw5MiWtqkX2SyYqmSLL2h0ALS9r8P6xSZ+NlZYhmTfld+dzhl5gAJcWprAk+G9dew==
-X-Received: by 2002:a17:902:d58a:b0:215:ae61:27ca with SMTP id d9443c01a7336-21de19cb4cbmr115350625ad.26.1738338279164;
-        Fri, 31 Jan 2025 07:44:39 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21de33206besm31715045ad.241.2025.01.31.07.44.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Jan 2025 07:44:38 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c7571180-c643-42e9-b2b8-4da07c9394c1@roeck-us.net>
-Date: Fri, 31 Jan 2025 07:44:36 -0800
+	s=arc-20240116; t=1738340285; c=relaxed/simple;
+	bh=zrqi3hXuCg/pOAs3BM+Y8qLb9r9I1zt3QwyRMaxjl4c=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=iZqxHQV7Vp1RN/eTVo+sWWWwlZFyo4VQ+aA85W00S532AdMtlJ5tny9+WvsN98vOUCf9Wi1SqpIyXCa4sSg+azkhkftj6PRt7fDiV6mmhK7W9eBslLEsQvC3z+K7p+vjYPDw5ieWKMezX9z4pdIOHlft3gZMCsB/Qdq0ugbx9UM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca; spf=pass smtp.mailfrom=squebb.ca; dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b=imtzkOOz; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ibmkxLo1; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
+Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
+	by mailfout.phl.internal (Postfix) with ESMTP id C99E713801B9;
+	Fri, 31 Jan 2025 11:18:01 -0500 (EST)
+Received: from phl-imap-10 ([10.202.2.85])
+  by phl-compute-02.internal (MEProxy); Fri, 31 Jan 2025 11:18:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1738340281;
+	 x=1738426681; bh=tctp8a/ADsUOAVTFosNL9TM08hrtr5AOZz+znhkKVOU=; b=
+	imtzkOOzlMo9KTK/nb3nUb2KdgXwlaZYZYAndhGa55juPdi6Xv36jRVx/OTwr4Xy
+	FnAqzVsgzrGLiqqNNw/njAj13qS4IIbdJGDZZT4Da7g6+YRZhJITWO3nOcdM2qrz
+	jsD3gsXhefXVWAgMj2ppZuAm8Jkf1EbFJm8LTC8zhl9lX8ka0srq6JiUgs0UN6+1
+	xy8YWENByZhKxYzQNZIyUnOPq7533Q0T7914OOh4tn6kJXN5b9QFS1gDajhCpNde
+	TeZf1JOZ1qyJjKF4UKHLsn5odnNMWmMPCM3N/7wUiLLqIrnzPyYWL2FvJZnuCvuA
+	eeJKnrcw2Hbx3yz5kSsOsA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1738340281; x=
+	1738426681; bh=tctp8a/ADsUOAVTFosNL9TM08hrtr5AOZz+znhkKVOU=; b=i
+	bmkxLo152X2bvbVY9iU4JFWhM5MV01Qmjz0qexyUSeEoZKhywyv0lUhpT1WNgveH
+	20aiFxuqRtPATycraMZf00iPr8JAXzbwP6kQaMMyRDjXmJsd0GsuHr1Gc3/V8GNS
+	VZV2MX/l9yvEWAY0YV/keLVSZKSGI5D10PbNb9KE7rvmaZNU5Y6EVQBEYZ4nVTfb
+	NU4fr8tS/e1rHHPtHLJd+6Siboz1Tj2PTz+HYI+rXrLrPpssglZ4YY+jEwzZvnFB
+	oSfkA+WugddpMfDJKMvvBMtKwP2lyJDD0cg9hXco41aEN92U6+ifeS7b+JLTiavw
+	6GTx+TwkNqO/2Odct8yow==
+X-ME-Sender: <xms:ufecZxSgHkis6yjCT4DIzKS9u2PXhdICIaL6-h_h3LaWkQYiXuUSVA>
+    <xme:ufecZ6w8QmtiOUgM76E-etoGPnlHxaDDIgPZxh-ndckKe5JMIAr3ave92AX74gOcv
+    Z6shjst6eLobYQwlDE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdelvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedfofgrrhhkucfrvggrrhhsohhnfdcuoehmphgvrghrshhonhdqlhgvnh
+    hovhhosehsqhhuvggssgdrtggrqeenucggtffrrghtthgvrhhnpefhuedvheetgeehtdeh
+    tdevheduvdejjefggfeijedvgeekhfefleehkeehvdffheenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmphgvrghrshhonhdqlhgvnhhovhho
+    sehsqhhuvggssgdrtggrpdhnsggprhgtphhtthhopeehpdhmohguvgepshhmthhpohhuth
+    dprhgtphhtthhopeguohgsvghrsehlvghnohhvohdrtghomhdprhgtphhtthhopeifihhm
+    sehlihhnuhigqdifrghttghhughoghdrohhrghdprhgtphhtthhopehlihhnuhigsehroh
+    gvtghkqdhushdrnhgvthdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghr
+    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdifrghttghhughoghesvh
+    hgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:ufecZ221pjsUz9LC7-ruHq95Yuv5ugbRAONUmngi6Jrw7fww74FTpQ>
+    <xmx:ufecZ5CZWjhtjtrWY2oPnpMapOmrbVtyQzyiBW0V0Bjzi2EHkiLO2Q>
+    <xmx:ufecZ6iGjhE_2MBKcznQWww37Y03ypbAKHo3JuBbVaoM5IrdmLq42A>
+    <xmx:ufecZ9rhcNolYYHxmnO2rUAl4Hs_kTBbLsooeXcsYpWcXN99BpFlAA>
+    <xmx:ufecZye5Kz66PeK6thIEFU7IrXEC2HAHPHqIbte4XNqQlrbLL_p8XKM4>
+Feedback-ID: ibe194615:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 5800F3C0068; Fri, 31 Jan 2025 11:18:01 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] watchdog: lenovo_se30_wdt: Watchdog driver for Lenovo
- SE30 platform
-To: Mark Pearson <mpearson-lenovo@squebb.ca>
-Cc: dober@lenovo.com, wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+Date: Fri, 31 Jan 2025 11:17:41 -0500
+From: "Mark Pearson" <mpearson-lenovo@squebb.ca>
+To: "Guenter Roeck" <linux@roeck-us.net>
+Cc: "David Ober" <dober@lenovo.com>,
+ "Wim Van Sebroeck" <wim@linux-watchdog.org>, linux-watchdog@vger.kernel.org,
  linux-kernel@vger.kernel.org
+Message-Id: <c0981f17-1577-4f1e-ad38-919820f30c1b@app.fastmail.com>
+In-Reply-To: <c7571180-c643-42e9-b2b8-4da07c9394c1@roeck-us.net>
 References: <mpearson-lenovo@squebb.ca>
  <20250116182912.1844-1-mpearson-lenovo@squebb.ca>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250116182912.1844-1-mpearson-lenovo@squebb.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <c7571180-c643-42e9-b2b8-4da07c9394c1@roeck-us.net>
+Subject: Re: [PATCH v2] watchdog: lenovo_se30_wdt: Watchdog driver for Lenovo SE30
+ platform
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 1/16/25 10:29, Mark Pearson wrote:
-> Watchdog driver implementation for Lenovo SE30 platform.
-> 
-> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
-...
-> --- /dev/null
-> +++ b/drivers/watchdog/lenovo_se30_wdt.c
-...
-> +
-> +static int lenovo_se30_wdt_set_timeout(struct watchdog_device *wdog,
-> +				       unsigned int timeout)
-> +{
-> +	wdog->timeout = timeout;
-> +	return 0;
-> +}
-> +
+Hi Guenter
 
-This function, as implemented, is unnecessary. See watchdog_set_timeout()
-in drivers/watchdog/watchdog_dev.c.
+On Fri, Jan 31, 2025, at 10:44 AM, Guenter Roeck wrote:
+> On 1/16/25 10:29, Mark Pearson wrote:
+>> Watchdog driver implementation for Lenovo SE30 platform.
+>> 
+>> Signed-off-by: Mark Pearson <mpearson-lenovo@squebb.ca>
+> ...
+>> --- /dev/null
+>> +++ b/drivers/watchdog/lenovo_se30_wdt.c
+> ...
+>> +
+>> +static int lenovo_se30_wdt_set_timeout(struct watchdog_device *wdog,
+>> +				       unsigned int timeout)
+>> +{
+>> +	wdog->timeout = timeout;
+>> +	return 0;
+>> +}
+>> +
+>
+> This function, as implemented, is unnecessary. See watchdog_set_timeout()
+> in drivers/watchdog/watchdog_dev.c.
+>
+Ah - good point. I'll remove this.
 
-Guenter
-
+Thanks
+Mark
 
