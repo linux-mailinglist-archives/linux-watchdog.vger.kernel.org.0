@@ -1,179 +1,139 @@
-Return-Path: <linux-watchdog+bounces-2826-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2827-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 942FFA26F86
-	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Feb 2025 11:48:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FF31A2799E
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Feb 2025 19:19:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EB033A807B
-	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Feb 2025 10:48:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DD737A4A75
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Feb 2025 18:18:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D76C320B1EB;
-	Tue,  4 Feb 2025 10:48:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CA18217655;
+	Tue,  4 Feb 2025 18:19:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gsN6deVy"
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="QLuSB3Cp"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B5FD20B1E0;
-	Tue,  4 Feb 2025 10:48:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2340217664
+	for <linux-watchdog@vger.kernel.org>; Tue,  4 Feb 2025 18:19:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738666110; cv=none; b=Wy//Gq3eApwHR2NMaO0vcBYXaD4ROBWUemfNulls3biF+7CDSGDun9M3rNdNDyqWmtEaQSWxPW9aRKKQf33tQWI+GYHFtFmCnkhm1UYyMhC5dk1+uFOb3t0QtFYjXbUdJMRgwkH4B/BBadfIVOWdCCCxwRk0iDY0UKsOu9nRuOw=
+	t=1738693162; cv=none; b=U9zsZ2GaCcGFdNCynlRi5F9extAOq44cIAIL9ukOFrxgiMMwxBprU0uEyRVJIQqi5WdnewoQCcQEKCIf/7IhWQhMVoWjG6Ilas33jV/eBigMxtrVPnpJczXqKJlzNsVmj6EYwuPoW5HIvwtfhcqAoY7SLQavQXs2O2+TKVtBDcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738666110; c=relaxed/simple;
-	bh=iIOyQqK2JUjh2rscZEMfvq/pbw9sd7AmroWd/zVeCuk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GMS4dCUAuMUVnWKqYLK57l+lYba4AnBnbmzOWN5dIIBsUtTj9/yYdxdO6JQ5gTLcwy/WeUgQpNBQ14dxSfDjrG+7eQwD+2bnOxeleK4jXPO5EhVj/hDvG+NLMPDd6tTkJm0Z9SgZdF1kpZ3e+lb+nzhAAGRXBDfHaQwwSvYnqN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gsN6deVy; arc=none smtp.client-ip=209.85.222.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-866dc3cd96eso129414241.3;
-        Tue, 04 Feb 2025 02:48:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738666108; x=1739270908; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LC2vRRW/Kf2UPav9OdbBLlCMqBd9LT0RXpPkOPJfFNY=;
-        b=gsN6deVyM4PduuvSftJ9D1shD6bapEUP6SN7fAjYxVYcX15z4wvKcrXpkvNy40dZ8v
-         TYgpRYoUYFBnBH0M59Jqj+6OilxnLdiblP1R9eFdvUmXF8FVoDV3fpRz5Sez6Xps7wjI
-         7Az1aYgDpxy1cM0yXEh0UjtRCQ8lpIgmyGLA7zG9ZUOlozIZKQxSI3HxZ2f4ZDmUdN5s
-         k9jJygKIJTK0iild0POo+EB/4lg3g5Z5JI/5a7oJwTa2s4/vPTHYSzGyuLQrtEglbrGo
-         3FHtMQSipsDMzyADR2j79sYI8Bo6tvAL82uzVRa5kmRNY8udiuqxXYL8wqTLQo8k9Wot
-         xHbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738666108; x=1739270908;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LC2vRRW/Kf2UPav9OdbBLlCMqBd9LT0RXpPkOPJfFNY=;
-        b=cYnJU8EQ1PxQgizV6puAbiZEILUXhzbcy5lXOiiIZaBlCuBrixuPgOn0HoP0IqzXFM
-         ZM9fJ/sLZGADrysEJusWAlxzw/VRK9JgNo6UwnWFzO5xTXn3anBAsIfCu2Tey9OiZavy
-         1/TFglB+4eSuZXpUhb7ekQ9qb8ZNAyfiBA1ew3YM0HM+ebpE4Rq+lieNGmWJganN9WaS
-         iFIyrN97Pv/aQr5ZeCQi9knLKiCie7psyFj8itKtd/lUci2BJVowSZ/QALBH+ISCi9of
-         ikAwdjXX4MZCBa0+2SOdCseNSgmMwNLuQ0an5t8/yuKXHE3CfkROs5Xn9VdTEOP3huOx
-         QWog==
-X-Forwarded-Encrypted: i=1; AJvYcCUNBV46aWF0r2hUccaZd/dpIoe2DylFBSIM8B2gi+Ya0s/Ie+rQ6QuKBlikpbNCYlEhbZrsGcwmnoYOz9WMXiqRPsk=@vger.kernel.org, AJvYcCVT4YMs+LOcqlGWRoCSy83N8JpT6MsItZAaRfx0MqQJ95xv0hmeGuNHa9LOORf/6uZzP4j/FJaI+0s1TMsU@vger.kernel.org, AJvYcCWFSDDlu+DKheY36ErdMHtSuxQAg9+taMU98ifqs3WrWHx2yJ+/U5qS9/ONH2OY9aaj3YLP2ed+Us6k@vger.kernel.org, AJvYcCWc25LOgYVZHSQ5YoE2pY3lOPsYPCYjXu4l8Qdtuw2nxwXt2W59pw5Fslg1T3cxYWguJ/+yfMU+BAju@vger.kernel.org, AJvYcCXehd813UH7VwusDGC5KcHlvirPUN0TcE7sCcUZjNW/VvciDRWlMwNe8H11sghvNpWOHdNQuvPfwpRmW8jXXS8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOaTVoDTXITqgyuj3czoMdcDpzYq5mfgQZWf7PQL0lWGRDS5L8
-	nw3fhQ4Bo6riiRCbzVlTpXu1RJNBP7+NONFV63OBIJrKMgwV2QiO22e21k8UvUVfOI+Tkr4+pPZ
-	q9Cqk84w/1uPNXjmbOzGjfePBmFmCwtwuGsDxXg==
-X-Gm-Gg: ASbGncsrH8cza2vh/iX0hXNl/SliuLP6MMKqjStFkgTPlJe7uy52PR5iul08mVks9rB
-	0Z1iDfZke+2gFNpqfjBPTPk9PFB1dVg/5L2Bg93o1QKmc4DGdEQbCIeDkd80y2b7TEWa/psxM
-X-Google-Smtp-Source: AGHT+IHcocGGipmX2tlrKsnQTcJY6JRWYgrNpEAV/bSPbiniGDmvkDVtYdocUMr0YE++t2jaDjHLk1KBJqx3xSwtuiI=
-X-Received: by 2002:a05:6122:45a1:b0:50a:b728:5199 with SMTP id
- 71dfb90a1353d-51e9e4fdb03mr20990003e0c.7.1738666107927; Tue, 04 Feb 2025
- 02:48:27 -0800 (PST)
+	s=arc-20240116; t=1738693162; c=relaxed/simple;
+	bh=TCqqBaH/6DxhhY4LxUIZxLWTUzfo7FZ0g9lCT/VEHVQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jJUPHEYum/Pl6pbH3JpZ/+5rlUhBrCLSkHHQzsXg+/0TRK0d2fkhEHsw5KYxLbxS3lhaTbbWuDwEm4OLAZUnhFc3oMGklh8I93AVq+lcdJYl3GxdorGVZgwTxAiSb40ZuVVAYSovGPL2xeTOeiWHzV7hXRZH/tCzD/Bagr1iFYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=QLuSB3Cp; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id 45A6F24002B
+	for <linux-watchdog@vger.kernel.org>; Tue,  4 Feb 2025 19:19:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1738693152; bh=TCqqBaH/6DxhhY4LxUIZxLWTUzfo7FZ0g9lCT/VEHVQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:From;
+	b=QLuSB3Cp5wmxvy0AcnxYAbea4vAVqLHQ2qWlm36gLR16yyS9Z6v9YRiCvyp4j4gn5
+	 LgZDTviocjTkkrBZfKjqIX7HKrKmbEgZd5usiMBwfyowuAzH7n9ya5rw+1WcRG1Oim
+	 61l/YRbLQ/MuqjUeCkWoQ1kkGDN+vaSKCCpYDwnidKomCYAjqhFy+gkv+aXN4VknA6
+	 SHTFc7qSWaWjKRuglfENNnh6zyhAw0zuaTMO+sMLjEjkDm5sMj/UWLXt8eIducymRH
+	 jcDEMinpzWrqCDL2LTwSNhNU1eiDWLfNxb9bwY4wxFJwO7H3iV26supD7Xr4Uco5Zq
+	 7tomMw0Ep2Izg==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4YnWpc4lyZz6tw4;
+	Tue,  4 Feb 2025 19:19:03 +0100 (CET)
+Date: Tue,  4 Feb 2025 18:19:03 +0000
+From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+To: Rob Herring <robh@kernel.org>
+Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>,
+	devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	Scott Wood <oss@buserror.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-mtd@lists.infradead.org
+Subject: Re: [PATCH 5/9] dt-bindings: dma: Convert fsl,elo*-dma bindings to
+ YAML
+Message-ID: <Z6JaFxfwC0tAB4uQ@probook>
+References: <20250126-ppcyaml-v1-0-50649f51c3dd@posteo.net>
+ <20250126-ppcyaml-v1-5-50649f51c3dd@posteo.net>
+ <20250127044735.GD3106458-robh@kernel.org>
+ <Z5zYGdZU-IXwIuR6@probook>
+ <CAL_JsqJAX1QbXvG16NV2g6DGece6KiG_V-uyKQQLA618Oq9miw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250113112349.801875-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <TY3PR01MB11346D7617436A7779B6697B3861F2@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <20250114200335.GA1626474-robh@kernel.org> <e74391e7-c7ab-422b-9dab-dbde9ce55204@roeck-us.net>
-In-Reply-To: <e74391e7-c7ab-422b-9dab-dbde9ce55204@roeck-us.net>
-From: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date: Tue, 4 Feb 2025 10:48:02 +0000
-X-Gm-Features: AWEUYZkjdRPGf4IpLF2l35NAVBIXPh_8XYPcTIQ85vWtHQ6cImY8aU7Ha3TVdr0
-Message-ID: <CA+V-a8vBi9Dmrm00N=xNNRPPi4TBk2ZBBkPEyC2YBDAa8gN4hA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] Add support to retrieve the bootstatus from
- watchdog for RZ/V2H(P) SoC
-To: Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>
-Cc: Biju Das <biju.das.jz@bp.renesas.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
-	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>, 
-	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_JsqJAX1QbXvG16NV2g6DGece6KiG_V-uyKQQLA618Oq9miw@mail.gmail.com>
 
-Hi Guenter and Rob,
-
-On Tue, Jan 14, 2025 at 8:17=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> On 1/14/25 12:03, Rob Herring wrote:
-> > On Mon, Jan 13, 2025 at 11:38:08AM +0000, Biju Das wrote:
-> >> Hi Prabhakar,
-> >>
-> >>> -----Original Message-----
-> >>> From: Prabhakar <prabhakar.csengg@gmail.com>
-> >>> Sent: 13 January 2025 11:24
-> >>> Subject: [PATCH v3 0/6] Add support to retrieve the bootstatus from w=
-atchdog for RZ/V2H(P) SoC
-> >>>
-> >>> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >>>
-> >>> Hi All,
-> >>>
-> >>> This patch series adds SYSCON support to retrieve boot status informa=
-tion for RZ/V2H(P) SoC.
-> >>> Summary of Changes,
-> >>>
-> >>>      Clock:
-> >>>          Add syscon compatible support to the CPG block in bindings a=
-nd
-> >>>          device trees.
-> >>>
-> >>>      Watchdog:
-> >>>          Document the renesas,r9a09g057-syscon-wdt-errorrst property.
-> >>>          Update the watchdog driver to fetch and report boot status v=
-ia
-> >>>          Error Reset Registers (CPG_ERROR_RSTm).
-> >>>
-> >>>      Device Tree:
-> >>>          Add the syscon property to CPG and WDT nodes in R9A09G057 an=
-d
-> >>>          R9A09G047 SoC DTSI.
-> >>>
-> >>> These changes enable the watchdog driver to identify boot sources lik=
-e Power-on Reset and Watchdog
-> >>> Reset, improving system diagnostics.
-> >>
-> >> This means that, we should assume U-boot/bootloader should not clear t=
-he WDT reset status bit.
-> >>
-> >> If they clear it, there should be a way to propagate it from u-boot/bo=
-otloader to linux,
-> >> otherwise, we get wrong bootstatus in linux.
-> >> But the clearing of watchdog status by one of the cases:
-> >>
-> >> 1) u-boot identify the boot source and clear the status bit
-> >> 2) u-boot identify the boot source and does not clear the status bit, =
-but linux clear it.
-> >> 3) u-boot does not touch WDT status bits, but linux clear it.
+On Fri, Jan 31, 2025 at 04:16:07PM -0600, Rob Herring wrote:
+> On Fri, Jan 31, 2025 at 8:03 AM J. Neuschäfer <j.ne@posteo.net> wrote:
 > >
-> > Sounds like the same problem as this[1]. If that works for you, please
-> > comment there. Always better if there is more than 1 user for something
-> > "common".
+> > On Sun, Jan 26, 2025 at 10:47:35PM -0600, Rob Herring wrote:
+> > > On Sun, Jan 26, 2025 at 07:59:00PM +0100, J. Neuschäfer wrote:
+> > > > The devicetree bindings for Freescale DMA engines have so far existed as
+> > > > a text file. This patch converts them to YAML, and specifies all the
+> > > > compatible strings currently in use in arch/powerpc/boot/dts.
+> > > >
+> > > > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+> > > > ---
+> > > >  .../devicetree/bindings/dma/fsl,elo-dma.yaml       | 129 +++++++++++++
+> > > >  .../devicetree/bindings/dma/fsl,elo3-dma.yaml      | 105 +++++++++++
+> > > >  .../devicetree/bindings/dma/fsl,eloplus-dma.yaml   | 120 ++++++++++++
+> > > >  .../devicetree/bindings/powerpc/fsl/dma.txt        | 204 ---------------------
+> > > >  4 files changed, 354 insertions(+), 204 deletions(-)
+> > [...]
+> > > > +patternProperties:
+> > > > +  "^dma-channel@.*$":
+> > > > +    type: object
+> > >
+> > >        additionalProperties: false
 > >
-> > Rob
+> > I'll add it.
 > >
-> > [1]https://lore.kernel.org/devicetree-spec/48defa98-9718-4997-86cb-b171=
-187708a6@cherry.de/T/#u
->
-> If this ends up being provided through /chosen, it should probably be sup=
-ported
-> in the watchdog core.
->
-There wasn't any conclusion on the thread [0]. Can you please
-recommend how you want me to proceed on this series.
+> > > (The tools should have highlighted this)
+> >
+> > With dtschema 2024.11 installed, "make dt_binding_check
+> > DT_SCHEMA_FILES=fsl,elo-dma.yaml" does not highlight this.
+> 
+> Actually, it's the top-level 'addtionalProperties: true' that disables
+> the check here. That should be false as well.
 
-[0] https://lore.kernel.org/devicetree-spec/48defa98-9718-4997-86cb-b171187=
-708a6@cherry.de/T/#m2f1c7f5c8166522982cecf9351903ab06ca4f9ee
+Noted. This did indeed help me find more errors.
 
-Cheers,
-Prabhakar
+
+Best regards,
+J. Neuschäfer
 
