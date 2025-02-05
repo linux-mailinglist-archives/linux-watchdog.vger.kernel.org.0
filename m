@@ -1,172 +1,189 @@
-Return-Path: <linux-watchdog+bounces-2837-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2838-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4605BA28847
-	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Feb 2025 11:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2319AA28FE4
+	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Feb 2025 15:30:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A76003A287B
-	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Feb 2025 10:41:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C6A93A7F4A
+	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Feb 2025 14:29:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70D4422F165;
-	Wed,  5 Feb 2025 10:39:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F25214A088;
+	Wed,  5 Feb 2025 14:29:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OgIFI4DU";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2MkVDWvb"
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="PACWVV/B"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E9F022ACD6;
-	Wed,  5 Feb 2025 10:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8577155A30
+	for <linux-watchdog@vger.kernel.org>; Wed,  5 Feb 2025 14:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738751999; cv=none; b=EqHV9sbb/SkA1+DhP5W+X6JgTZz6n4gjk2SD61HCAObQa3ZBc7mK+X4JmtpS0jP5PRj/8s09WReOUUw3AfO2DgtAfQ6U8XxuqJBJ/r324m441TMTqP4PVKXCei1L8wJjDtqU/NxYl6XY+S8uGaDhUvUEbYdNTlnjJ6cowYg5LOE=
+	t=1738765765; cv=none; b=o160OOupCYpeltwMhcQtjdaN0gxxF//+UQD7qGLH2jZOQzzeFjkYCviZW8UMzyiUy+x3LM9zEnbbG7G2rHx9U8ajES0+dbLu0yVh8iAHCLy6tCX0khbAlGo0MkHmPCQ3Tmc46IEcrb0wfjDJvjrpv++VKjMXc7nF/QTuUf1LPeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738751999; c=relaxed/simple;
-	bh=AMjna7+7OWsw2aJekWWPLgo4H/lNOzaMTw/WhoTLB6Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UA7hvKsrCqPU8mRdZa6kaa8R0ADRW47toy8ijEhw4k6lvq9KnJMbCt0iA2WeADCGgtgWlokVgRrEyXhnRKqE1heZ0C7CHeuf9GcQgQ77OY7Xt2yL32BC/dvsqQF++jzxe/bi3HLJMHeOQ3FFyJHI69Jb58MgUyLLHOJuzHXFn9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OgIFI4DU; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=2MkVDWvb; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1738751994;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bWOsbeBXYe4P9Ey/QKmxFEQWVZvEI9fDikxtPGxLwCw=;
-	b=OgIFI4DUO8J5bYuE4Zm2bHxV1S+PMB4KVkZgSX66PQX7xXUC87r7jVWm7767dg9quDM5LL
-	AZEG9dcp0LAH8eV4kYNJLQ+MluhNk+ZBiOhClLq8RmvTE86rKabBS1HY94K86xD76fhPJL
-	gi3srorMIplUUC1qwlT0FsZuXKvgOVEzUGXE8oGGy/dKP4r7oiBXcEW21KuhtLrn4kykXo
-	kTwfaNL4vLwXnJwVLld3vAUEHURmzDI8cDSSVfuVMvECD1WQ1bu0tiltFi5frfHEL+P7wB
-	BrJDTLfIVXw8i+g4eX5G3NmXp+LePBhYP8eHCA4tU0Kfn4G7pfsJGb+ISE1jYA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1738751994;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bWOsbeBXYe4P9Ey/QKmxFEQWVZvEI9fDikxtPGxLwCw=;
-	b=2MkVDWvbnMnhUfU4YQg7QyUj/XQaIPs/rHUx3IpPjx5AJtVC/2y5QVDMgbhmepZZpRb/77
-	QEsfNF0Znm8a8yDg==
-To: Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	linux-kernel@vger.kernel.org
-Cc: Nam Cao <namcao@linutronix.de>,
+	s=arc-20240116; t=1738765765; c=relaxed/simple;
+	bh=e42SIVOUhhbdor72mrNuSIArnji9rVNQMG+KjSfReLQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nbKLb4HjIyxhxlWF3u8el9wD8USlCw9kvuxSJHtc7cFRUuvsw4915fzxlJMWnlq9O3kMLuViDd0UawSayGk+6altHjgs4TOaaVZi/as8SFAignVzC5udRRAg1F5OOuixzEGrw2+jHrcD0MqmFEiziMqmJrpWPS6e2GVnIbU0ymQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=PACWVV/B; arc=none smtp.client-ip=185.67.36.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout02.posteo.de (Postfix) with ESMTPS id 2D5DB240104
+	for <linux-watchdog@vger.kernel.org>; Wed,  5 Feb 2025 15:29:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1738765761; bh=e42SIVOUhhbdor72mrNuSIArnji9rVNQMG+KjSfReLQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:From;
+	b=PACWVV/B2zEXa/3zM3iFyWGMCvq1ep2tJrc4lnPcQd3vMa6GfKW9yWUGJflhWkzB6
+	 mdwFgQnP74Q/JsCwaMpTD/CjCuigxBwGIzzFxwKWVOeHk4MaYvlikd7rp62zTC36An
+	 Agq7QhuBJJS77HdFXurVKxgAqrp2UMVQuGlfqmMXwEUvTE2X+Q7vjO9yeuFfneWNi4
+	 UzFkZdRD0ItU6gs7hUevNamTNwgpLFYRa/IWNqQMQfGMroi2NGU2e/DlG3TmQlVncm
+	 PLI6VUrrsbH50E1C83K8fRG84DpnJGcwKJONJ/5Rq2M0DazTqmw5sg53lAryZJ//tS
+	 +5vr8gbAqJFJA==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4Yp2fz0fXhz9rxQ;
+	Wed,  5 Feb 2025 15:29:14 +0100 (CET)
+Date: Wed,  5 Feb 2025 14:29:14 +0000
+From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+To: Rob Herring <robh@kernel.org>
+Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>,
+	devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	Scott Wood <oss@buserror.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	linux-watchdog@vger.kernel.org
-Subject: [PATCH v2 23/31] watchdog: Switch to use hrtimer_setup()
-Date: Wed,  5 Feb 2025 11:39:07 +0100
-Message-Id: <a5c62f2b5e1ea1cf4d32f37bc2d21a8eeab2f875.1738746821.git.namcao@linutronix.de>
-In-Reply-To: <cover.1738746821.git.namcao@linutronix.de>
-References: <cover.1738746821.git.namcao@linutronix.de>
+	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-mtd@lists.infradead.org
+Subject: Re: [PATCH 8/9] dt-bindings: spi: Convert Freescale SPI bindings to
+ YAML
+Message-ID: <Z6N1uqg4Dji4Pt3X@probook>
+References: <20250126-ppcyaml-v1-0-50649f51c3dd@posteo.net>
+ <20250126-ppcyaml-v1-8-50649f51c3dd@posteo.net>
+ <20250127050901.GB3127337-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250127050901.GB3127337-robh@kernel.org>
 
-hrtimer_setup() takes the callback function pointer as argument and
-initializes the timer completely.
+On Sun, Jan 26, 2025 at 11:09:01PM -0600, Rob Herring wrote:
+> On Sun, Jan 26, 2025 at 07:59:03PM +0100, J. Neuschäfer wrote:
+> > fsl-spi.txt contains the bindings for the fsl,spi and fsl,espi
+> > contollers. Convert them to YAML.
+> > 
+> > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+> > ---
+> >  .../devicetree/bindings/spi/fsl,espi.yaml          | 56 +++++++++++++++++
+> >  Documentation/devicetree/bindings/spi/fsl,spi.yaml | 71 ++++++++++++++++++++++
+> >  Documentation/devicetree/bindings/spi/fsl-spi.txt  | 62 -------------------
+> >  3 files changed, 127 insertions(+), 62 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/spi/fsl,espi.yaml b/Documentation/devicetree/bindings/spi/fsl,espi.yaml
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..350275760210c5763af0c7b1e1522ccbfb97eec7
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/spi/fsl,espi.yaml
+> > @@ -0,0 +1,56 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/spi/fsl,espi.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Freescale eSPI (Enhanced Serial Peripheral Interface) controller
+> > +
+> > +maintainers:
+> > +  - J. Neuschäfer <j.ne@posteo.net>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: fsl,mpc8536-espi
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts: true
+> 
+> How many?
+> 
+> > +
+> > +  fsl,espi-num-chipselects:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: The number of the chipselect signals.
+> 
+> Constraints?
+> 
+> > +
+> > +  fsl,csbef:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: Chip select assertion time in bits before frame starts
+> 
+> Constraints?
+> 
+> > +
+> > +  fsl,csaft:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: Chip select negation time in bits after frame ends
+> 
+> Constraints?
 
-Replace hrtimer_init() and the open coded initialization of
-hrtimer::function with the new setup mechanism.
+I'll add appropriate constraints to all of these.
 
-Patch was created by using Coccinelle.
 
-Signed-off-by: Nam Cao <namcao@linutronix.de>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc: linux-watchdog@vger.kernel.org
----
- drivers/watchdog/softdog.c                     | 8 +++-----
- drivers/watchdog/watchdog_dev.c                | 4 ++--
- drivers/watchdog/watchdog_hrtimer_pretimeout.c | 4 ++--
- kernel/watchdog.c                              | 3 +--
- 4 files changed, 8 insertions(+), 11 deletions(-)
+> > diff --git a/Documentation/devicetree/bindings/spi/fsl,spi.yaml b/Documentation/devicetree/bindings/spi/fsl,spi.yaml
+[...]
+> > +  clock-frequency:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> 
+> Don't need a type.
 
-diff --git a/drivers/watchdog/softdog.c b/drivers/watchdog/softdog.c
-index 7a1096265f18..0820e35ad2e3 100644
---- a/drivers/watchdog/softdog.c
-+++ b/drivers/watchdog/softdog.c
-@@ -187,14 +187,12 @@ static int __init softdog_init(void)
- 	watchdog_set_nowayout(&softdog_dev, nowayout);
- 	watchdog_stop_on_reboot(&softdog_dev);
-=20
--	hrtimer_init(&softdog_ticktock, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
--	softdog_ticktock.function =3D softdog_fire;
-+	hrtimer_setup(&softdog_ticktock, softdog_fire, CLOCK_MONOTONIC, HRTIMER_M=
-ODE_REL);
-=20
- 	if (IS_ENABLED(CONFIG_SOFT_WATCHDOG_PRETIMEOUT)) {
- 		softdog_info.options |=3D WDIOF_PRETIMEOUT;
--		hrtimer_init(&softdog_preticktock, CLOCK_MONOTONIC,
--			     HRTIMER_MODE_REL);
--		softdog_preticktock.function =3D softdog_pretimeout;
-+		hrtimer_setup(&softdog_preticktock, softdog_pretimeout, CLOCK_MONOTONIC,
-+			      HRTIMER_MODE_REL);
- 	}
-=20
- 	if (soft_active_on_boot)
-diff --git a/drivers/watchdog/watchdog_dev.c b/drivers/watchdog/watchdog_de=
-v.c
-index 19698d87dc57..8369fd94fc1a 100644
---- a/drivers/watchdog/watchdog_dev.c
-+++ b/drivers/watchdog/watchdog_dev.c
-@@ -1051,8 +1051,8 @@ static int watchdog_cdev_register(struct watchdog_dev=
-ice *wdd)
- 	}
-=20
- 	kthread_init_work(&wd_data->work, watchdog_ping_work);
--	hrtimer_init(&wd_data->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_HARD);
--	wd_data->timer.function =3D watchdog_timer_expired;
-+	hrtimer_setup(&wd_data->timer, watchdog_timer_expired, CLOCK_MONOTONIC,
-+		      HRTIMER_MODE_REL_HARD);
- 	watchdog_hrtimer_pretimeout_init(wdd);
-=20
- 	if (wdd->id =3D=3D 0) {
-diff --git a/drivers/watchdog/watchdog_hrtimer_pretimeout.c b/drivers/watch=
-dog/watchdog_hrtimer_pretimeout.c
-index 940b53718a91..fbc7eecd8b20 100644
---- a/drivers/watchdog/watchdog_hrtimer_pretimeout.c
-+++ b/drivers/watchdog/watchdog_hrtimer_pretimeout.c
-@@ -23,8 +23,8 @@ void watchdog_hrtimer_pretimeout_init(struct watchdog_dev=
-ice *wdd)
- {
- 	struct watchdog_core_data *wd_data =3D wdd->wd_data;
-=20
--	hrtimer_init(&wd_data->pretimeout_timer, CLOCK_MONOTONIC, HRTIMER_MODE_RE=
-L);
--	wd_data->pretimeout_timer.function =3D watchdog_hrtimer_pretimeout;
-+	hrtimer_setup(&wd_data->pretimeout_timer, watchdog_hrtimer_pretimeout, CL=
-OCK_MONOTONIC,
-+		      HRTIMER_MODE_REL);
- }
-=20
- void watchdog_hrtimer_pretimeout_start(struct watchdog_device *wdd)
-diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-index b2da7de39d06..6a98dbc931ac 100644
---- a/kernel/watchdog.c
-+++ b/kernel/watchdog.c
-@@ -797,8 +797,7 @@ static void watchdog_enable(unsigned int cpu)
- 	 * Start the timer first to prevent the hardlockup watchdog triggering
- 	 * before the timer has a chance to fire.
- 	 */
--	hrtimer_init(hrtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_HARD);
--	hrtimer->function =3D watchdog_timer_fn;
-+	hrtimer_setup(hrtimer, watchdog_timer_fn, CLOCK_MONOTONIC, HRTIMER_MODE_R=
-EL_HARD);
- 	hrtimer_start(hrtimer, ns_to_ktime(sample_period),
- 		      HRTIMER_MODE_REL_PINNED_HARD);
-=20
---=20
-2.39.5
+Will remove
 
+> 
+> > +    description: input clock frequency to non FSL_SOC cores
+> > +
+> > +  cs-gpios: true
+> > +
+> > +  fsl,spisel_boot:
+> > +    $ref: /schemas/types.yaml#/definitions/flag
+
+I do wonder, what's the difference between
+$ref: /schemas/types.yaml#/definitions/flag and type: boolean?
+
+
+
+Thanks for your review.
+
+Best regards,
+J. Neuschäfer
 
