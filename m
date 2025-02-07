@@ -1,106 +1,123 @@
-Return-Path: <linux-watchdog+bounces-2855-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2856-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 309E1A2C3D7
-	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Feb 2025 14:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B3A5A2C662
+	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Feb 2025 16:01:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 357281684B4
-	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Feb 2025 13:38:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC56016B419
+	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Feb 2025 15:01:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CE001FF1AD;
-	Fri,  7 Feb 2025 13:37:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BACD113D244;
+	Fri,  7 Feb 2025 15:01:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="WGLsSyhy"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="ltR/Bra9"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-15.smtpout.orange.fr [193.252.22.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 516B21FCF72
-	for <linux-watchdog@vger.kernel.org>; Fri,  7 Feb 2025 13:37:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15356238D52;
+	Fri,  7 Feb 2025 15:01:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738935441; cv=none; b=KC2gN0/MXzmcQbziX+dq1uBGpjOWSQEjgrfqAPU1rnIbt5uIl9DGC+JwWAaTNQDJxSoBF3+llbiIGeEjbawr9ph5I5sJ3u3Fgclg4NUn56gm0r4QIfzl/unQCedZNZxbd5kaq7InU2PYz7+2wzqfKQzC06qA3PJPblHoWeSVzM4=
+	t=1738940471; cv=none; b=PohG2zyZKZrzCfNcR1k99ffARgQJ7VD2Ne6nn7TsxkQMLScdRSVZn2E6ITATZxO9rsL7p5ju1w/ixah7r/qz59ktPmP/DgYB7tr5Jk/O6rPSL7MqqNROLIf8P08uvwUE5gu3I2xZWItPDg9iQ7vGGLMnPCVjrrERMZw1fCPOafE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738935441; c=relaxed/simple;
-	bh=IdbOi6N0+bHgyQ08uTaIC9JomsdE+10WelxdSZmGp0A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uMIwnTwgDfbZXkEFzxdK60HNquetIEF6LmrWbG43bDu3G1bWe3K4FqKvDF+dBOlyXFy8aplKQUzWM72W8nTAKfq2mtxXwp85UX1O9JWvmR2v0ZSJNcvgFD7cd67AoiKI1STFmqz8KDLQktHf75p7dPtzKqca84lE9s8xL1LIi+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=WGLsSyhy; arc=none smtp.client-ip=185.67.36.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout01.posteo.de (Postfix) with ESMTPS id DDBB524002B
-	for <linux-watchdog@vger.kernel.org>; Fri,  7 Feb 2025 14:37:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-	t=1738935431; bh=IdbOi6N0+bHgyQ08uTaIC9JomsdE+10WelxdSZmGp0A=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:From;
-	b=WGLsSyhyR1M+holYpFY2DE/LqX/M15jThbkxjOYqB/FmQAFFwC+GWz5a9IBwAww3F
-	 mXlFcNxwX5ET/KIyhDzrzYAJY2KaepXF/mKP4+zXFWdqXcK2Rpm93qt97oV3bsN4U3
-	 6OYk4IO4oNfu/VfOtLRiUArkbEZMHnUtEJuShNd8ptsnidw4lztDocLchG9SWz9COQ
-	 GA8CeOLRgAiXRcPtFw1cPUr7OZALJdnNxBcwTv1PQp4jHg7fJVSTPfXh9ptk+RHx08
-	 mrnvnVzNvI/Gm1FUwiVaDkEn8atEz/5JPR20I63GGSttcZALk/3j01UOWYKbg5sLQG
-	 8/F+eljWn4kpQ==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4YqFPs4w9Pz9rxF;
-	Fri,  7 Feb 2025 14:37:05 +0100 (CET)
-Date: Fri,  7 Feb 2025 13:37:04 +0000
-From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
-To: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>,
-	Frank Li <Frank.li@nxp.com>, devicetree@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, Scott Wood <oss@buserror.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-mtd@lists.infradead.org
-Subject: Re: [PATCH 6/9] dt-bindings: pci: Add fsl,mpc83xx-pcie bindings
-Message-ID: <Z6YMgETdCZGMJI4i@probook>
-References: <20250126-ppcyaml-v1-0-50649f51c3dd@posteo.net>
- <20250126-ppcyaml-v1-6-50649f51c3dd@posteo.net>
- <Z5qx3jAFE81Ni2cJ@lizhi-Precision-Tower-5810>
- <Z6KkBEaGTkSyWiE_@probook>
- <689302c6-8fba-4fd1-a4b7-557cb2f8fa4d@quicinc.com>
+	s=arc-20240116; t=1738940471; c=relaxed/simple;
+	bh=Ismxwm1c+xEaqBjLFJVdqK9TSoif2Fk0K+yMxRkINVg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JYR9ybp/2M5pr5QzBHTMbiKESRtx582ocPyncHDLb1HU4p8DYS/hzclOcoTOkIXl22gDVKtV5f4iFuWAd/fjIp/j9K/sa2sIYdTeMpKQNZZSnk5xXZKIUHT/Ex5Ol+ORlgC57GoD4Z7DkOp/8TQAg47quKT8v2Uqd4h/ghW6dAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=ltR/Bra9; arc=none smtp.client-ip=193.252.22.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id gPqWtL8WXFt3IgPqatESry; Fri, 07 Feb 2025 16:01:01 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1738940461;
+	bh=Pyha5odVGsX/CKqH1ZkXIQ53HwwjGzZ3ipFrj9lnhz4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=ltR/Bra9iY/vwRcNq/YBqz4kt3s9oCNpzfGigntH9sfQiTTrkWuSMYZeRdTVHAm9q
+	 ELN6QjvKXUDDagncZdtHNzfc4Dph6J9ZbNAMnJ2T8uTjBMkcQOy0w1CmQsZPJ0LpWT
+	 dOCxl+huYkYk1+Wj2h6oeNsysoenQmB6u8IMRd2y9Xmr3zkUCeN66z+Hha7pFLRs/W
+	 89ZI+zgAKMoUKsVRYls4qKSqE9WdR4rHvgwufNzfv2EPxKESy+aJXcg95jlM25oO+E
+	 8PurBrxhE+/r4TKOfBZKrvfxeXyUB4hsDku2l6X/asT6VfDK7fDLpwcmkDwpo0QgCf
+	 a+3PA3c1yBBLw==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 07 Feb 2025 16:01:01 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <9a3f1242-794e-41f1-80a5-bc6d18ff6641@wanadoo.fr>
+Date: Sat, 8 Feb 2025 00:00:43 +0900
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <689302c6-8fba-4fd1-a4b7-557cb2f8fa4d@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+To: Marc Kleine-Budde <mkl@pengutronix.de>, Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
+ brgl@bgdev.pl, andi.shyti@kernel.org, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+ jdelvare@suse.com, alexandre.belloni@bootlin.com,
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20250207074502.1055111-1-a0282524688@gmail.com>
+ <20250207074502.1055111-5-a0282524688@gmail.com>
+ <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 06, 2025 at 06:12:47PM +0530, Mukesh Kumar Savaliya wrote:
-> neat: subject: since binding is already mentioned in the prefix of the
-> subject, no need to add bindings word again.
+On 07/02/2025 at 21:15, Marc Kleine-Budde wrote:
+> On 07.02.2025 15:44:59, Ming Yu wrote:
 
-Sounds reasonable, thanks
-J. Neuschäfer
+(...)
+
+>> +static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
+>> +					  struct net_device *ndev)
+>> +{
+>> +	struct nct6694_can_priv *priv = netdev_priv(ndev);
+>> +
+>> +	if (can_dev_dropped_skb(ndev, skb))
+>> +		return NETDEV_TX_OK;
+>> +
+>> +	netif_stop_queue(ndev);
+>> +	can_put_echo_skb(skb, ndev, 0, 0);
+>> +	queue_work(priv->wq, &priv->tx_work);
+
+What is the reason to use a work queue here? xmit() is not a hard IRQ.
+Also, the other USB CAN devices just directly send the USB message in
+their xmit() without the need to rely on such worker.
+
+Sorry if this was discussed in the past, I can not remember if this
+question has already been raised.
+
+>> +	return NETDEV_TX_OK;
+>> +}
+
+(...)
+
+Yours sincerely,
+Vincent Mailhol
+
 
