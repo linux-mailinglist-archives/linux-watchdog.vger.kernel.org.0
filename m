@@ -1,57 +1,56 @@
-Return-Path: <linux-watchdog+bounces-2880-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2881-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A60DA2D30A
-	for <lists+linux-watchdog@lfdr.de>; Sat,  8 Feb 2025 03:21:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0B0DA2D9ED
+	for <lists+linux-watchdog@lfdr.de>; Sun,  9 Feb 2025 01:07:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69F7A7A484D
-	for <lists+linux-watchdog@lfdr.de>; Sat,  8 Feb 2025 02:20:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 335E41887123
+	for <lists+linux-watchdog@lfdr.de>; Sun,  9 Feb 2025 00:07:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AADB1514E4;
-	Sat,  8 Feb 2025 02:20:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F7E1A48;
+	Sun,  9 Feb 2025 00:07:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="RETv0pi8"
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="SR2TmtIo"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 656D72AD32
-	for <linux-watchdog@vger.kernel.org>; Sat,  8 Feb 2025 02:20:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6726A4409
+	for <linux-watchdog@vger.kernel.org>; Sun,  9 Feb 2025 00:07:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738981257; cv=none; b=g2pwlHZNU4rM4VgHQ5v8DRIs8DGRlnMLBHo7PLTSw3qx0S9xFQ7g4Fdxx+4Hp4SAG3ImMG4ZrXuefRCV1JG7g3PHYYbm3mapecjTjOSKgSf3TH46conlZ88B0DzAGzvzpgjaE8nJdoJzCRlHXWTHnLDcvLnkHBb6qtzUN06jRTI=
+	t=1739059635; cv=none; b=OJtCejnqjRF+TDveLZfbHNAWvxxG0fYyLa4YauGsWt1q1WiXkTrYeh+oiTuQnILtXPC9XY1JRzWuP5gZEP8wxclLizz9lCpBH+VtsXBikDwZ86GUslwuvzE8UgZ0NHPHeSG3goAeyQNXbuItU/SlnbjVY2DprU1ZPJZUaIOTI3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738981257; c=relaxed/simple;
-	bh=X/9UQWBS5m7Ib3mDDNhFlWLQ3zPrVaQFBwT1jLZLH3k=;
+	s=arc-20240116; t=1739059635; c=relaxed/simple;
+	bh=Rnod+Cv9JGN27bc74JTeUwsZwKe+/eQ5wUgORPxiuzc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mhcHFxfTNqScIOEsHaA/STlKUt9tO3aDUQ/aW2yK7H9r6ngYj9mHZOKIoH+Z5XxPQBc9bHvysusH98OIWAAHYRMjzy/bGpKUyKdnLrNae83DItdQt5QoB7Xf9Be6TAV5ifRnyqhbhSz1YAGJcd6KRWrxE66NaTsB9QOK4Xa4DKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=RETv0pi8; arc=none smtp.client-ip=185.67.36.66
+	 Content-Type:Content-Disposition:In-Reply-To; b=BoJb98RchEkaPzcPAuguxvVGCY7ukUuTq2VyIVqhCnhLmuHOtOXqPs5Xf/4xN7jlRYifRfM1OCH58wypXAX6UKMV/ca/7jJcHZ+DZp8u6LHDdK5R2WvNfcIUP75zWfOnXTm9ynQrJWV1rikvJ//0JGy0qOx+4xlRM/svqlrzk+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=SR2TmtIo; arc=none smtp.client-ip=185.67.36.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
 Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id C1F88240105
-	for <linux-watchdog@vger.kernel.org>; Sat,  8 Feb 2025 03:20:53 +0100 (CET)
+	by mout02.posteo.de (Postfix) with ESMTPS id 275AB240103
+	for <linux-watchdog@vger.kernel.org>; Sun,  9 Feb 2025 01:07:08 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-	t=1738981253; bh=X/9UQWBS5m7Ib3mDDNhFlWLQ3zPrVaQFBwT1jLZLH3k=;
+	t=1739059628; bh=Rnod+Cv9JGN27bc74JTeUwsZwKe+/eQ5wUgORPxiuzc=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
 	 Content-Disposition:Content-Transfer-Encoding:From;
-	b=RETv0pi8P373DiegxSUvi4C2fJev+HyWTRyNykg7oIgWn47X65NNvVgCsCbdWDAQP
-	 DMPA93xS+LXRfM/pNswr8q1Lv7jueqqTAaY6kl3zaQ3VQ6BVmyzau/3NjwVPv4x0pa
-	 DyRmTi86qoq2bQLzc/9fvmo0N+Y1eqLuyep9+vlpbT8B2at6F1Vx/ZEQ8QKMzSjGww
-	 1jnOpdg43i8qcuBMG9zpmrhFU1fjx68aD33m56Tv1/WyL22Pca//Bc0TkaL7owECs9
-	 ymKH6bYxsVIiQqiGoOvl+CE/ynq28UQJdSo/80Iw0zp4Bue42SfjvS9yUGrJOzKE2z
-	 WiW/Swc0Ab07w==
+	b=SR2TmtIo67z05s4kxF0Ofa2/igGTbKkcbZPByXWXy8i6zm9KWjhNMQ/3Vaqi5EU6A
+	 JkqODKQmGafdbjTgaw6zvXIjbwCea1icwXx7XJkKGwDvjrw6cOwzih3KjdBWDEkmeQ
+	 TAV2d8GBB+HcI8v0XRjQ89eked08X5Fnl4rHWmiAxvOraVLYfkyXf4raGqN9z9w9Gy
+	 VmloYIu+RyuefxPplg8tyDFctF4eRcBdw1kFlC36JnybCRp/IEQgKYg+M3g7QvpWUG
+	 ohkM9bj5pnzu735rDicaTmq0dj+A2G8d9R/pUbzadWaJ8mfgVociMnpq9oukqQgHOv
+	 /dTErrwHPl7Ag==
 Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4YqZM431Sgz9rxL;
-	Sat,  8 Feb 2025 03:20:48 +0100 (CET)
-Date: Sat,  8 Feb 2025 02:20:47 +0000
+	by submission (posteo.de) with ESMTPSA id 4Yr7LD23pfz6v0D;
+	Sun,  9 Feb 2025 01:06:59 +0100 (CET)
+Date: Sun,  9 Feb 2025 00:06:59 +0000
 From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
-To: Mark Brown <broonie@kernel.org>
-Cc: j.ne@posteo.net, devicetree@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
+To: j.ne@posteo.net
+Cc: devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
 	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
 	Scott Wood <oss@buserror.net>,
 	Madhavan Srinivasan <maddy@linux.ibm.com>,
@@ -70,8 +69,9 @@ Cc: j.ne@posteo.net, devicetree@vger.kernel.org,
 	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
 	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
 	Bjorn Helgaas <bhelgaas@google.com>,
+	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
+	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
 	Miquel Raynal <miquel.raynal@bootlin.com>,
 	Richard Weinberger <richard@nod.at>,
 	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
@@ -79,11 +79,11 @@ Cc: j.ne@posteo.net, devicetree@vger.kernel.org,
 	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
 	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
 	linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2 00/12] YAML conversion of several Freescale/PowerPC DT
- bindings
-Message-ID: <Z6a_f03Ct9aB7Bbn@probook>
+Subject: Re: [PATCH v2 06/12] dt-bindings: pci: Convert fsl,mpc83xx-pcie to
+ YAML
+Message-ID: <Z6fxo4j5a6ro0f1w@probook>
 References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
- <611e47da-ba87-4c21-a6b7-cf051dc88158@sirena.org.uk>
+ <20250207-ppcyaml-v2-6-8137b0c42526@posteo.net>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -93,31 +93,66 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <611e47da-ba87-4c21-a6b7-cf051dc88158@sirena.org.uk>
+In-Reply-To: <20250207-ppcyaml-v2-6-8137b0c42526@posteo.net>
 
-On Fri, Feb 07, 2025 at 09:38:05PM +0000, Mark Brown wrote:
-> On Fri, Feb 07, 2025 at 10:30:17PM +0100, J. Neuschäfer via B4 Relay wrote:
+On Fri, Feb 07, 2025 at 10:30:23PM +0100, J. Neuschäfer via B4 Relay wrote:
+> From: "J. Neuschäfer" <j.ne@posteo.net>
 > 
-> > This is a spin-off of the series titled
-> > "powerpc: MPC83xx cleanup and LANCOM NWAPP2 board".
+> Formalise the binding for the PCI controllers in the Freescale MPC8xxx
+> chip family. Information about PCI-X-specific properties was taken from
+> fsl,pci.txt. The examples were taken from mpc8315erdb.dts and
+> xpedite5200_xmon.dts.
 > 
-> > During the development of that series, it became clear that many
-> > devicetree bindings for Freescale MPC8xxx platforms are still in the old
-> > plain-text format, or don't exist at all, and in any case don't mention
-> > all valid compatible strings.
+> Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+> ---
 > 
-> What's the story with dependencies here - why is all this stuff in one
-> series?
+> V2:
+> - merge fsl,pci.txt into fsl,mpc8xxx-pci.yaml
+> - regroup compatible strings, list single-item values in one enum
+> - trim subject line (remove "binding")
+> - fix property order to comply with dts coding style
+> ---
+>  .../devicetree/bindings/pci/fsl,mpc8xxx-pci.yaml   | 115 +++++++++++++++++++++
+>  Documentation/devicetree/bindings/pci/fsl,pci.txt  |  27 -----
+>  2 files changed, 115 insertions(+), 27 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/fsl,mpc8xxx-pci.yaml b/Documentation/devicetree/bindings/pci/fsl,mpc8xxx-pci.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..57c5503cec47e6e90ed2b09835bfad10309db927
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pci/fsl,mpc8xxx-pci.yaml
+> @@ -0,0 +1,115 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +
+> +$id: http://devicetree.org/schemas/pci/fsl,mpc8xxx-pci.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Freescale MPC83xx PCI/PCI-X/PCIe controllers
+> +
+> +description: |
+> +  Binding for the PCI/PCI-X/PCIe host bridges on MPC8xxx SoCs.
+> +  See also: Documentation/devicetree/bindings/pci/fsl,pci.txt
 
-The patches are independent of each other, except for the four elbc/nand
-patches. They are in the same series because they came up during the
-same project and achieve similar goals, but it isn't necessary.
+This is obviously a bit wrong; I ended up putting the information from
+fsl,pci.txt entirely under the fsl,pci-agent-force-enum property, but
+forgot to remove the reference to the old txt file.
 
-
-> Normally I'd expect bindings conversions to be standalone.
-
-Noted.
-
-
-J. Neuschäfer
+> +properties:
+[...]
+> +  fsl,pci-agent-force-enum:
+> +    type: boolean
+> +    description:
+> +      Typically any Freescale PCI-X bridge hardware strapped into Agent mode is
+> +      prevented from enumerating the bus. The PrPMC form-factor requires all
+> +      mezzanines to be PCI-X Agents, but one per system may still enumerate the
+> +      bus.
+> +
+> +      This property allows a PCI-X bridge to be used for bus enumeration
+> +      despite being strapped into Agent mode.
+> +
+> +required:
+> +  - reg
+> +  - compatible
 
