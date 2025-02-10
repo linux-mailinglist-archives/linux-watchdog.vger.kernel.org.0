@@ -1,77 +1,77 @@
-Return-Path: <linux-watchdog+bounces-2899-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2900-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8329DA2F7E3
-	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Feb 2025 19:50:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E696A2F7E5
+	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Feb 2025 19:51:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD66A7A1BF9
-	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Feb 2025 18:49:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D65DD3A4005
+	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Feb 2025 18:51:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED4B42586F0;
-	Mon, 10 Feb 2025 18:49:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7BEA25A2BA;
+	Mon, 10 Feb 2025 18:49:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N9FpjaF2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eUeqDZjf"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C7E257AF3;
-	Mon, 10 Feb 2025 18:49:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8C6A25A2A3;
+	Mon, 10 Feb 2025 18:49:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739213379; cv=none; b=p/NOYfIwy37MKnIeYtqr9cNs4Jepw2YdX4nJsclVBtKHHw1iippQga7YK9Va8Ojg6ajj0ZyhPwO+vX/z8Tdlm3R4dG/OUp+LlbrLJAUkVZwulQQAV0ahYhvnpPnVrelYhljieYM5coiCLR2ZpFL5kM5RHahJ+CPD6oG0WaKE1SE=
+	t=1739213382; cv=none; b=f3yFg4J/Ld0js6sOyRndQQU4pxmFw/9Hry/egrh2mn8bH3WBa6MjjoAVfjmLMLQes3G+HJaqvlI2QC6lV8dfogGxi4A3pOoZZOwM0qJrzdwekm4LkzMoEoEH4BWGgQYY9ewV03gWWaQRsxDCwmInKaifFDeGlMmYobAq18CyLoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739213379; c=relaxed/simple;
-	bh=JW8WXeGhwkTj/u+SIfC/LcplUpDFNlJ3w4JmvgB1U6k=;
+	s=arc-20240116; t=1739213382; c=relaxed/simple;
+	bh=d3yUIK9fiwVZoC8eDMG/+QqQegvEeowhWbT4UaUXcG8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RY9RJn5ih3zmzKSWLRoxGVnHyvs9socak/EeO0Ng8Nomn2CmU1/vRcCnD8RaKVSh9xuqppQLpH6oMhbIUr2bnFfz9bIdbQNAB/0HcdwRCnSkEq/fA9HeqC/FoXKd78JKT91U2k4KgZTNfiqueJt4HbIwDEVD8VKzB7uwzTSxIjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N9FpjaF2; arc=none smtp.client-ip=209.85.221.43
+	 MIME-Version; b=IBzXryDOlk04qy1fQtnfvoZAiuroJF8Gh2FyadYbGtRUY0529xFrz1IvgEfIQINPliSdkE1JIcEWMleKlEwAEniT+oqa+tbm+jqjbTQO22Z+eavT6jrK3wlDTWPkbBwMfKDNy0kRiD7ANbp99K2BX1oP8CffzTkuSsZVcMDTXdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eUeqDZjf; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-38dd93a4e8eso1552208f8f.1;
-        Mon, 10 Feb 2025 10:49:37 -0800 (PST)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43690d4605dso32358905e9.0;
+        Mon, 10 Feb 2025 10:49:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739213376; x=1739818176; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739213378; x=1739818178; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xgmTlEFFErCjgcASm7njArgbXrrj3ZoAMlivlaHohlU=;
-        b=N9FpjaF2M2THLIaN1NP+JGD0i1qtqmzV7xIGO0ujco66IlS2x6v9B/Jw4tgHP9DXC0
-         s0pGage6uaRpOPeZ+Am5Ci0HxQGcB95pzJNX4+/vRjYKJctYAurauEHYAbq2b9/NxhNw
-         VILOHaanxzf64vwAqmtRu+NwQLbmh91wXEm8zbCe8mo5xt2V5C50LqRXRnv8DZczakXR
-         9j2T0z52e1jTjhy4G6/mKITkz9mcwliENpXniqgwf6rN+WlvkjjMYWUMnEohWUX4dE4P
-         h5345jdUcdul6wmbnDIV5iNyDtVHD0KSybR6zz1lCXdVfOZo33Bcr+cDD+yZXX1kMJIN
-         K07w==
+        bh=+viOnN6vcnLl9dZhOIuDVGEqsWnlhS/CS2cEXKLaDJU=;
+        b=eUeqDZjfzqA8t9a337YDbq0/J1Di4MLl6OjLPFCEP7EofJZxlBWQTiN+pboZgQQAM8
+         aTAevNqUr4MUKuKGg6td1CWd97TyexQ2p+mIKr3LS65V1ikp6Y9v2GMOdp27PhYcJXXG
+         9qa9fGPTrQlyXyVDx2rX2PoEf/jvKn5GZJailjqb4UE3f/GBVjtYP/nfRyVWf2hrSQDU
+         EXKQL/lgPSVDlC/l77RGZiQZwHralzgaukqLE81ei4TCnC8q6hCYRBanCR9w701XXY/q
+         sFM6tVILD4fBGz32c+jVmYin22WGzrjxV7s9yxl9PnsxzW6RxuxwhcxKJ1TVZLOG88WF
+         nCpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739213376; x=1739818176;
+        d=1e100.net; s=20230601; t=1739213378; x=1739818178;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xgmTlEFFErCjgcASm7njArgbXrrj3ZoAMlivlaHohlU=;
-        b=lDzpcvizfmTsHzT5TDv6Qc/s8AoFZaSXXA6TJgqkfnTEUJhwZ9fJPBqagUg8jcE3Vd
-         QGjd1IDIt10uaJdoAJcErjLLcOWpkNxrQDisKinrApamziQ4pIm3Z9pql+UX/MXjOWps
-         hgMBqxoL24TS5CHjzIQXU38xSws7cZ6hfUYF1eyjUhY9PXJEE7idj9gzvfNwWGmOrMz2
-         a3j31dKR2TA4odDD4Y+bNwhD/Jg1v+TpCa8/bQZzGz4sJEIMYymk7r6yDLrTO6izGD6L
-         LVDe0P2jA1+s0VM9tIUpNVZBGqcJfALQtdcL9HZhE32+qfN3GZ3it3sfx+27h9NlnecN
-         StLw==
-X-Forwarded-Encrypted: i=1; AJvYcCU2bfob9BsnUiUeTvAgpyh0FIy8z6v3SGPB48yR1ZJBUU4SaLveSC5CSJ1U4Mk5tIvudIgcnOiEF6Wf@vger.kernel.org, AJvYcCUeynOq62ABFxTECnP0UCcBCgNyZGzhTh59qIwiVHSjUY68xIdHF6UJuR2YZSNK4PqdZ3nHi9hBtDNCDOW0@vger.kernel.org, AJvYcCW/CP4uHkWv8p0w9A/O8SyPBnnV1lSvrtcx+CAKBw8AGt+CS+wsL+Su7AHzWk61CV2jyuHcHgkzg97s@vger.kernel.org, AJvYcCWWQjjtHmaq2g0xHu32frgIBSIrVpiCUiONiFUVZh3xzhUdbgyUNkUtO6FhDLSG5mEtNcT6VDbkC2XKZIssPwU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyM/ODJFPbvE/QADSiBacCaqrKaIPRtrYd1Oet9r/9+rIs4M1KG
-	R3HJcrzufg1gprVlzA6megVtWkb8BPc8BsWo16N9jzcZyEB6OTQQ
-X-Gm-Gg: ASbGncsU5d4yod+y298vlxZmCYZPtKcYT5Rqx4AYHQOFNIrWajmwGLulqQwiAEfYuFM
-	FMux7qyIn+vlgNv3zICojfIixlOjzk9IsY8UcbFGk4P0ntpKpHp75x0yl+hCCILN939g11lu/W8
-	QV6T48ytjlsEcsFyRN3cspeuDUZYQ/5jg7pmcPqe+t4LLxh+JVCVBLKEBmasV8W6SIQQk7avqWe
-	UhfPdKo3VFKxyjOvBtnQ+qdJcx/nLKYxtai4szBKd2A0lwG1xKYbUebvQDduGmDizNC1ICAkg6s
-	Y7qfEI8WdY0+CYI/f2CJwLkbN+PDs/vTlKww62W7oIJp
-X-Google-Smtp-Source: AGHT+IEjfOsqbZlHKDI628m8fgisOOWzLpcuCibpPD3eDfptKdVhVVxFs9uJnIm7MZhNPcmK9fxnww==
-X-Received: by 2002:a05:6000:144d:b0:38d:df21:a51a with SMTP id ffacd0b85a97d-38ddf21a881mr5572000f8f.16.1739213376260;
-        Mon, 10 Feb 2025 10:49:36 -0800 (PST)
+        bh=+viOnN6vcnLl9dZhOIuDVGEqsWnlhS/CS2cEXKLaDJU=;
+        b=wEz376fL8jEJxaKcfQ95/g2fAAayr9t/5yCsn/rTNFg05NabrpQMUaBTFtmv89UsMW
+         o0TF+yGtNY173AuYU5HqcgAx5p7f12XVUeA0az+JuU0sJ4mVjWqz1VCJspbOLtuijZ4l
+         PtBp/uSpUebZGrP7jkpXwklvVPfkz2R0wBpxpuyIi823z/Ych1GvsDaCFXlp/Ofs1mXb
+         BWVSYPUXhUXvyb4ZF03snsSBVCJyzVM+JoyyexuAWE3KUXj1HsITzVZPQXpEjmrGRY+d
+         5ff2YRsyMSMZeMdXCsZz4odmpBYkDSgunmU4SahSCRB1Uj9w//rZ8VPiIauoW6Wsx1xv
+         QAYg==
+X-Forwarded-Encrypted: i=1; AJvYcCV+UffO5qei9qBCuiUsinMsjjPPJHuk3UHfny3WP0MEcroMlPjV2lJAvGS+5JTM3qEfZZnEJbzjJC5U0SX0@vger.kernel.org, AJvYcCW+t6QNPfoi7ddD2P4YZtx8jt7WP7xs6UQQLNs0z/Rof0484vcJYMDatkfXSWhenmQ17dtW6t/OtxcH@vger.kernel.org, AJvYcCWrNz6oi/uXAdbB7hI90p9ncUiLmigjF9GN2cCNOUbUFiiUf22QGIJsh+0D4u7HmnkFBRNgm1EIRPHnUdQq9io=@vger.kernel.org, AJvYcCXbooPQnUVCgx/AaVSIwXXh+Vx3LNjh4B/lORI7ffmC1XxAfP8omujIycJveAAU+PlEaLvHdRzqXJti@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRnyHD9+V1HPQk2s1hCIhamqoCy2Ufes73W5ZJ79+6ibqOxc+d
+	AZO+88Y/KQBLw1hxnHCwRCM0/hRJHH/Rans4uUJSRFDbWWJyqtEE
+X-Gm-Gg: ASbGncuauBULwx4uNplfGn8H7/Wd38Qa9Itaj6+DnYyjY278zPja1Fw+/cn8ym5M/kL
+	67XyiKIM1waLbXLUd8M0ON5s9gcIH/Lj2e+JHROa0XQm1EwwnvDTRNQLLBa/oVdubCzMzwUJFNh
+	K6T166YsKM5pxAyL60gRIfi7iNu3Thf/grsqMnefFSIEjbzoXhZo/S5t6NMRGzjXThzb+pgzlYC
+	qKp5zlSN2LakSJ9w7VFiMHwMXut5J/0zIdvDCnoNE6JapNA+fOBqhf3JgaRd7n6gzxXSHsbZsW2
+	tY4VzLdKXjnbiq9PE8GMKh2XX6Jch0Xyb8UHtwkqPtLp
+X-Google-Smtp-Source: AGHT+IHyYLNpHbbjs4AcOuo0o4L1XRFpiCCfjWH6uZzVxWpahPXoaLHSouWtxpK0uWHgFjddkcNrlw==
+X-Received: by 2002:a05:6000:1a86:b0:38d:dd8c:51a1 with SMTP id ffacd0b85a97d-38ddd8c542bmr5513640f8f.27.1739213378004;
+        Mon, 10 Feb 2025 10:49:38 -0800 (PST)
 Received: from prasmi.Home ([2a06:5906:61b:2d00:b833:1deb:a929:b461])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-439452533ecsm22911525e9.0.2025.02.10.10.49.34
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-439452533ecsm22911525e9.0.2025.02.10.10.49.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 10:49:35 -0800 (PST)
+        Mon, 10 Feb 2025 10:49:36 -0800 (PST)
 From: Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To: Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -93,9 +93,9 @@ Cc: linux-renesas-soc@vger.kernel.org,
 	Biju Das <biju.das.jz@bp.renesas.com>,
 	Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
 	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v4 7/9] watchdog: rzv2h_wdt: Configure CPG_ERRORRST_SEL2 register
-Date: Mon, 10 Feb 2025 18:49:08 +0000
-Message-ID: <20250210184910.161780-8-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v4 8/9] arm64: dts: renesas: r9a09g057: Add `renesas,syscon-cpg-error-rst` property to WDT node
+Date: Mon, 10 Feb 2025 18:49:09 +0000
+Message-ID: <20250210184910.161780-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250210184910.161780-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20250210184910.161780-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -109,55 +109,57 @@ Content-Transfer-Encoding: 8bit
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Currently, the watchdog driver relies on TF-A/U-Boot to configure the
-`CPG_ERRORRST_SEL2` register. This register must be set correctly to
-ensure a reset request is issued upon watchdog timer (WDT) underflow.
-
-Now that the driver has access to the `syscon` handle for CPG, configure
-`CPG_ERRORRST_SEL2` directly instead of depending on firmware. This
-improves robustness by ensuring the required configuration is applied
-within the driver itself.
+Add `renesas,syscon-cpg-error-rst` property to WDT node, to
+determine whether the current boot resulted from a `Power-on Reset`
+or a `Watchdog Reset`.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 ---
-v3->v4
-- New patch
----
- drivers/watchdog/rzv2h_wdt.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+v2->v3
+- No change
 
-diff --git a/drivers/watchdog/rzv2h_wdt.c b/drivers/watchdog/rzv2h_wdt.c
-index c9bdaa8f2e3a..04b8ee899353 100644
---- a/drivers/watchdog/rzv2h_wdt.c
-+++ b/drivers/watchdog/rzv2h_wdt.c
-@@ -43,6 +43,10 @@
+v1->v2
+- No change
+---
+ arch/arm64/boot/dts/renesas/r9a09g057.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/renesas/r9a09g057.dtsi b/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
+index acc9c512fbab..4d5baed02fda 100644
+--- a/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
++++ b/arch/arm64/boot/dts/renesas/r9a09g057.dtsi
+@@ -367,6 +367,7 @@ wdt0: watchdog@11c00400 {
+ 			clock-names = "pclk", "oscclk";
+ 			resets = <&cpg 0x75>;
+ 			power-domains = <&cpg>;
++			renesas,syscon-cpg-error-rst = <&cpg 0xb40 0>;
+ 			status = "disabled";
+ 		};
  
- #define WDT_DEFAULT_TIMEOUT	60U
+@@ -377,6 +378,7 @@ wdt1: watchdog@14400000 {
+ 			clock-names = "pclk", "oscclk";
+ 			resets = <&cpg 0x76>;
+ 			power-domains = <&cpg>;
++			renesas,syscon-cpg-error-rst = <&cpg 0xb40 1>;
+ 			status = "disabled";
+ 		};
  
-+#define CPG_ERRORRST_SEL2(x)	((x) - 0x3c)
-+#define CPG_ERRRSTSELx(x)	BIT(x)
-+#define CPG_ERRRSTSELx_WEN(x)	BIT((x) + 16)
-+
- #define CPG_ERROR_RST2(x)	BIT(x)
- #define CPG_ERROR_RST2_WEN(x)	BIT((x) + 16)
+@@ -387,6 +389,7 @@ wdt2: watchdog@13000000 {
+ 			clock-names = "pclk", "oscclk";
+ 			resets = <&cpg 0x77>;
+ 			power-domains = <&cpg>;
++			renesas,syscon-cpg-error-rst = <&cpg 0xb40 2>;
+ 			status = "disabled";
+ 		};
  
-@@ -246,6 +250,16 @@ static int rzv2h_wdt_probe(struct platform_device *pdev)
- 				return ret;
- 		}
- 		bootstatus = val & CPG_ERROR_RST2(bit) ? WDIOF_CARDRESET : 0;
-+
-+		/*
-+		 * configure CPG_ERRORRST_SEL2 register to issue a reset request
-+		 * upon WDT underflow
-+		 */
-+		ret = regmap_write(syscon, CPG_ERRORRST_SEL2(offset),
-+				   CPG_ERRRSTSELx(bit) |
-+				   CPG_ERRRSTSELx_WEN(bit));
-+		if (ret)
-+			return ret;
- 	}
+@@ -397,6 +400,7 @@ wdt3: watchdog@13000400 {
+ 			clock-names = "pclk", "oscclk";
+ 			resets = <&cpg 0x78>;
+ 			power-domains = <&cpg>;
++			renesas,syscon-cpg-error-rst = <&cpg 0xb40 3>;
+ 			status = "disabled";
+ 		};
  
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
 -- 
 2.43.0
 
