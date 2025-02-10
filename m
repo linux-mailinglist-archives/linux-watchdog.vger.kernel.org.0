@@ -1,89 +1,91 @@
-Return-Path: <linux-watchdog+bounces-2887-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2888-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05507A2E6BC
-	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Feb 2025 09:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 38183A2EB14
+	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Feb 2025 12:31:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B897188386D
-	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Feb 2025 08:45:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5935418880B5
+	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Feb 2025 11:31:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D4FF1BEF63;
-	Mon, 10 Feb 2025 08:45:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 254A31DF749;
+	Mon, 10 Feb 2025 11:31:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZY02NguF"
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="JpmWN1g6"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D688D1E4A9;
-	Mon, 10 Feb 2025 08:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F6D1DF98B
+	for <linux-watchdog@vger.kernel.org>; Mon, 10 Feb 2025 11:31:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739177133; cv=none; b=WOSzAmx+FdNbRKt8aJs0afrTV92+8PpLO0p8fdnsZX9fKbG1yDqRpwGTzxVop1+tkfd05oCXi97GhBZ2PlrAm6rB0RNFJv/eWAU0Dz1ZT0nue0wJVYSCID8+U20mr7skaFUcpNpuCAut5gqzamqJ+qBHtYOBmMNOqD7qa5WhUX4=
+	t=1739187095; cv=none; b=MtaCFHXmEcU074E5+CqA7NFba2P/cL9CjT00CU7PCMTIE/X30Y/8I1v69Jqhb4o6vTQ63lFqM9YvoE/vAz/4RUpS4Pfl3+1rFnm6DYy6VQs7xGUlPXCbMerCKlUW6lIilhSzp8sixDemhrh3znAUCJAx3FCEtjP4tX7zgjBskuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739177133; c=relaxed/simple;
-	bh=8e9TvzMvnN655dD9mW3ziQ4pedVgVTCtFygXZeQGWbI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=KyxgRLA/Ci3epCkfPiSGZZ3uXWW52YyNBuEfnc4EqMpXVobiGuEXG9r+99AVQV8RfEiCWqv9SkE3filo8TaDep31yyI9TBqHIWkb3ryNdvPDQlotWHJ0ordISoiYT1hX5hWztS3Mc41vKOmV+k1Hbj6AwKx5sBEshAjEgB2Ac5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZY02NguF; arc=none smtp.client-ip=217.70.178.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-	by mslow3.mail.gandi.net (Postfix) with ESMTP id 55A93582BA6;
-	Mon, 10 Feb 2025 08:27:35 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6E7EC441F0;
-	Mon, 10 Feb 2025 08:27:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1739176047;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8e9TvzMvnN655dD9mW3ziQ4pedVgVTCtFygXZeQGWbI=;
-	b=ZY02NguFvp2D4ou3No/QCzpfSTJ/vEq/6qT+XJ/nvm4ksYAK39lFMb0mQgDBqM0QIBRl1F
-	8lQkkIF/mc8rfl0l4flqx4G6JMtztvl8iq4f4mpGpYsw9F+0rmgop6/sp/OOfQsixdP9Hn
-	F5EBu6cuuY9MfhzpBOyfm3OiCFVmX2cf9gRlizM56NuNZNK60icbcTT+3/d+T/Unba6ad9
-	nIAJD/b54HfwpeWm89ATdYeoXB7ZO5w+IHsHy0eoz3L543OybW2v5YkqjOB1Y1pInLZonw
-	gvl82hS9MNgYZaE0ZItYKARh4AqYqBh+HH0IcpFf14eU4/gDM4YqjQJ7ekjhow==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: J. =?utf-8?Q?Neusch=C3=A4fer?= via B4 Relay
- <devnull+j.ne.posteo.net@kernel.org>
-Cc: devicetree@vger.kernel.org,  linuxppc-dev@lists.ozlabs.org,  Krzysztof
- Kozlowski <krzk@kernel.org>,  j.ne@posteo.net,  imx@lists.linux.dev,
-  Scott Wood <oss@buserror.net>,  Madhavan Srinivasan
- <maddy@linux.ibm.com>,  Michael Ellerman <mpe@ellerman.id.au>,  Nicholas
- Piggin <npiggin@gmail.com>,  Christophe Leroy
- <christophe.leroy@csgroup.eu>,  Naveen N Rao <naveen@kernel.org>,  Rob
- Herring <robh@kernel.org>,  Krzysztof Kozlowski <krzk+dt@kernel.org>,
-  Conor Dooley <conor+dt@kernel.org>,  Damien Le Moal <dlemoal@kernel.org>,
-  Niklas Cassel <cassel@kernel.org>,  Herbert Xu
- <herbert@gondor.apana.org.au>,  "David S. Miller" <davem@davemloft.net>,
-  Lee Jones <lee@kernel.org>,  Vinod Koul <vkoul@kernel.org>,  Lorenzo
- Pieralisi <lpieralisi@kernel.org>,  Krzysztof =?utf-8?Q?Wilczy=C5=84ski?=
- <kw@linux.com>,
-  Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,  Bjorn Helgaas
- <bhelgaas@google.com>,  J. =?utf-8?Q?Neusch=C3=A4fer?=
- <j.neuschaefer@gmx.net>,  Wim Van
- Sebroeck <wim@linux-watchdog.org>,  Guenter Roeck <linux@roeck-us.net>,
-  Mark Brown <broonie@kernel.org>,  Richard Weinberger <richard@nod.at>,
-  Vignesh Raghavendra <vigneshr@ti.com>,  linux-kernel@vger.kernel.org,
-  linux-ide@vger.kernel.org,  linux-crypto@vger.kernel.org,
-  dmaengine@vger.kernel.org,  linux-pci@vger.kernel.org,
-  linux-watchdog@vger.kernel.org,  linux-spi@vger.kernel.org,
-  linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2 12/12] dt-bindings: mtd: raw-nand-chip: Relax node
- name pattern
-In-Reply-To: <20250207-ppcyaml-v2-12-8137b0c42526@posteo.net> ("J.
- =?utf-8?Q?Neusch=C3=A4fer?=
-	via B4 Relay"'s message of "Fri, 07 Feb 2025 22:30:29 +0100")
+	s=arc-20240116; t=1739187095; c=relaxed/simple;
+	bh=JF/n15lnAm7NZMFbEUTi4J8f8m2TQ7lxj7+v1eHdIuY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rWvdNOJQTfb/qms6DRYkvy87j6+hn3ceCexrTmhpfJQIbRd/8Cl+6sk+4aqZeqGl9tU65VAC7xZOWqcoWMzjcH3yeFlMCHroTdaf+Gk9Amy3f7/2I9o9eKz+q8cgeZMv1tAD+v7tdRwAKvZxjudfo2cpgoh3ppormj4qIrWE2ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=JpmWN1g6; arc=none smtp.client-ip=185.67.36.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout02.posteo.de (Postfix) with ESMTPS id 1E83C240104
+	for <linux-watchdog@vger.kernel.org>; Mon, 10 Feb 2025 12:31:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1739187085; bh=JF/n15lnAm7NZMFbEUTi4J8f8m2TQ7lxj7+v1eHdIuY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:From;
+	b=JpmWN1g6e9WQyrXQ7YqKa6Kz7YaEDYolPFawuJollCAzXyAykqbJGoZ+zalrhTLl8
+	 0f20eLO/gb+kGMQG2fH5TKmJEFrqGaN6UwBOAyyTSCiSuA57Gfh1FfJR75F2BTuW7Y
+	 /y2wCp2bUoNfwe8q67lwJI2tleg3YW+PS4g+S57IUQyxrG6AeC8sx71dc9aXf0Q5rE
+	 ikLvW6yzzw4cRkk6JOrSz2ttcOw/XLuzsx6rsHe0z0p6E3OCWI5L8kDFa14iqPeDcP
+	 /xijkoq/1z1YJJwTE3M4e6n7DlQEG+y3BB99cR2HqY4pCUnD30XDSw+fWIzzAOuBpH
+	 CY8rACCyyxnAw==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4Ys2TK4ysMz6tw3;
+	Mon, 10 Feb 2025 12:31:17 +0100 (CET)
+Date: Mon, 10 Feb 2025 11:31:01 +0000
+From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+To: Crystal Wood <oss@buserror.net>
+Cc: j.ne@posteo.net, devicetree@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-mtd@lists.infradead.org, Li Yang <leoyang.li@nxp.com>,
+	John Ogness <john.ogness@linutronix.de>
+Subject: Re: [PATCH v2 09/12] dt-bindings: memory-controllers: Convert
+ fsl,elbc to YAML
+Message-ID: <Z6njdeo8kHw6RtYH@probook>
 References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
-	<20250207-ppcyaml-v2-12-8137b0c42526@posteo.net>
-User-Agent: mu4e 1.12.7; emacs 29.4
-Date: Mon, 10 Feb 2025 09:27:22 +0100
-Message-ID: <87o6zaurv9.fsf@bootlin.com>
+ <20250207-ppcyaml-v2-9-8137b0c42526@posteo.net>
+ <Z6kQpuQf5m-bXTyt@buserror.net>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -91,29 +93,189 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefjeehkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefujghffgffkfggtgfgsehtqhertddtreejnecuhfhrohhmpefoihhquhgvlhcutfgrhihnrghluceomhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepffeghfejtdefieeguddukedujeektdeihfelleeuieeuveehkedvleduheeivdefnecukfhppeelvddrudekgedrleekrdekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeelvddrudekgedrleekrdekgedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfeelpdhrtghpthhtohepuggvvhhnuhhllhdojhdrnhgvrdhpohhsthgvohdrnhgvtheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggvvhhitggvthhrvggvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugihpphgtqdguvghvsehlihhsthhsrdhoiihlrggsshdrohhrghdprhgtphhtthhopehkrhiikheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhdrnhgvsehpohhst
- hgvohdrnhgvthdprhgtphhtthhopehimhigsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepohhsshessghushgvrhhrohhrrdhnvghtpdhrtghpthhtohepmhgrugguhieslhhinhhugidrihgsmhdrtghomh
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z6kQpuQf5m-bXTyt@buserror.net>
 
-Hello,
+On Sun, Feb 09, 2025 at 02:31:34PM -0600, Crystal Wood wrote:
+> On Fri, Feb 07, 2025 at 10:30:26PM +0100, J. Neuschäfer via B4 Relay wrote:
+> > From: "J. Neuschäfer" <j.ne@posteo.net>
+> > 
+> > Convert the Freescale localbus controller bindings from text form to
+> > YAML. The updated list of compatible strings reflects current usage
+> > in arch/powerpc/boot/dts/, except that many existing device trees
+> > erroneously specify "simple-bus" in addition to fsl,*elbc.
+> > 
+> > Changes compared to the txt version:
+> >  - removed the board-control (fsl,mpc8272ads-bcsr) node because it only
+> >    appears in this example and nowhere else
+> >  - added a new example with NAND flash
+> >  - updated list of compatible strings
+> > 
+> > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+> > ---
+> > 
+> > V2:
+> > - fix order of properties in examples, according to dts coding style
+> > - move to Documentation/devicetree/bindings/memory-controllers
+> > - clarify the commit message a tiny bit
+> > - remove unnecessary multiline markers (|)
+> > - define address format in patternProperties
+> > - trim subject line (remove "binding")
+> > - remove use of "simple-bus", because it's technically incorrect
+> 
+> While I admit I haven't been following recent developments in this area,
+> as someone who was involved when "simple-bus" was created (and was on the
+> ePAPR committee that standardized it) I'm surprised to hear simple-bus
+> being called "erroneous" or "technically incorrect" here.
 
-On 07/02/2025 at 22:30:29 +01, J. Neusch=C3=A4fer via B4 Relay <devnull+j.n=
-e.posteo.net@kernel.org> wrote:
+It is quite possible that my understanding of it is incomplete or wrong.
 
-> From: "J. Neusch=C3=A4fer" <j.ne@posteo.net>
->
-> In some scenarios, such as under the Freescale eLBC bus, there are raw
-> NAND chips with a unit address that has a comma in it (cs,offset).
-> Relax the $nodename pattern in raw-nand-chip.yaml to allow such unit
-> addresses.
+> 
+> For non-NAND devices this bus generally meets the definition of "an
+> internal I/O bus that cannot be probed for devices" where "devices on the
+> bus can be accessed directly without additional configuration
+> required".  NAND flash is an exception, but those devices have
+> compatibles that are specific to the bus controller.
+> 
+> The fact that the address encoding is non-linear is irrelevant; the
+> addresses can still be translated using the standard "ranges" mechanism. 
+> This seems to be a disconnect between the schema verification and the way
+> the compatible has previously been defined and used.
 
-This is super specific to this controller, I'd rather avoid that in the
-main (shared) files. I believe you can force another node name in the
-controller's binding instead?
+This is what led me to my assumptions: The simple-bus validation logic
+in dtc complains about unit addresses such as nand@1,0 which are quite
+appropriate for the eLBC.
 
-Thanks,
-Miqu=C3=A8l
+> 
+> And as a practical matter, unless I'm missing something (which I might be
+> since I haven't been in devicetree-land for nearly a decade), Linux is
+> relying on simple-bus to probe these devices.  There is a driver that
+> binds to the bus itself but that is just for error interrupts and NAND.
+
+As of now, yes, that's correct. Without simple-bus, a current Linux
+kernel doesn't find the device nodes inside such a localbus.
+
+> 
+> You'd probably need something like commit 3e25f800afb82bd9e5f8 ("memory:
+> fsl_ifc: populate child devices without relying on simple-bus") and the 
+> subsequent fix in dd8adc713b1656 ("memory: fsl_ifc: populate child
+> nodes of buses and mfd devices")...
+
+I have prepared such a patch, based on the same assumptions:
+
+  [PATCH] powerpc/fsl_lbc: Explicitly populate bus
+  https://lore.kernel.org/lkml/20250209-localbus-v1-1-efcd780153a0@posteo.net/
+
+> 
+> I'm curious what the reasoning was for removing simple-bus from IFC.  It
+> seems that the schema verification also played a role in that:
+> https://www.spinics.net/lists/devicetree/msg220418.html
+
+Yes, that's the same as my reasoning.
+
+> 
+> ...but there's also the comment in 985ede63a045eabf3f9d ("dt-bindings:
+> memory: fsl: convert ifc binding to yaml schema") that "this will help to
+> enforce the correct probe order between parent device and child devices",
+> but was that really not already guaranteed by the parent/child
+> relationship (and again, it should only really matter for NAND except for
+> the possibility of missing error reports during early boot)?
+
+I'm inclined to agree with you, but it's somewhat beyond my skill level.
+
+I'll let Li Yang or Rob Herring comment on that.
+
+> 
+> > +  compatible:
+> > +    oneOf:
+> > +      - items:
+> > +          - enum:
+> > +              - fsl,mpc8313-elbc
+> > +              - fsl,mpc8315-elbc
+> > +              - fsl,mpc8377-elbc
+> > +              - fsl,mpc8378-elbc
+> > +              - fsl,mpc8379-elbc
+> > +              - fsl,mpc8536-elbc
+> > +              - fsl,mpc8569-elbc
+> > +              - fsl,mpc8572-elbc
+> > +              - fsl,p1020-elbc
+> > +              - fsl,p1021-elbc
+> > +              - fsl,p1023-elbc
+> > +              - fsl,p2020-elbc
+> > +              - fsl,p2041-elbc
+> > +              - fsl,p3041-elbc
+> > +              - fsl,p4080-elbc
+> > +              - fsl,p5020-elbc
+> > +              - fsl,p5040-elbc
+> > +          - const: fsl,elbc
+> 
+> Is it really necessary to list every single chip?
+> 
+> And then it would need to be updated when new ones came out?  I know this
+> particular line of chips is not going to see any new members at this
+> point, but as far as the general approach goes...
+
+As far as I'm aware, this reflects common practice today.
+
+> 
+> Does the schema validation complain if it sees an extra compatible it
+> doesn't recognize?  If so that's obnoxious.
+
+Yes.
+
+> 
+> > +examples:
+> > +  - |
+> > +    localbus@f0010100 {
+> > +        compatible = "fsl,mpc8272-localbus",
+> > +                     "fsl,pq2-localbus";
+> > +        reg = <0xf0010100 0x40>;
+> > +        ranges = <0x0 0x0 0xfe000000 0x02000000
+> > +                  0x1 0x0 0xf4500000 0x00008000
+> > +                  0x2 0x0 0xfd810000 0x00010000>;
+> > +        #address-cells = <2>;
+> > +        #size-cells = <1>;
+> > +
+> > +        flash@0,0 {
+> > +            compatible = "jedec-flash";
+> > +            reg = <0x0 0x0 0x2000000>;
+> > +            bank-width = <4>;
+> > +            device-width = <1>;
+> > +        };
+> > +
+> > +        simple-periph@2,0 {
+> > +            compatible = "fsl,elbc-gpcm-uio";
+> > +            reg = <0x2 0x0 0x10000>;
+> > +            elbc-gpcm-br = <0xfd810800>;
+> > +            elbc-gpcm-or = <0xffff09f7>;
+> > +        };
+> 
+> I know this isn't new, but... since we're using this as an example,
+> where is the documentation for this fsl,elbc-gpcm-uio and
+> elbc-gpcm-br/or?  What exactly is a simple-periph?
+
+fsl,elbc-gpcm-uio is handled in the following patch
+(dt-bindings: memory-controllers: Add fsl,elbc-gpcm-uio).
+
+simple-periph is something I haven't thought about, because this whole
+example comes from the old txt-format binding. The whole purpose of
+fsl,elbc-gpcm-uio is to allow userspace drivers to interact with
+localbus devices, so that doesn't make the intention any clearer, either.
+
+> 
+> There are no in-tree device trees that use this either.  The bcsr
+> node was actually a much more normal example, despite that particular
+> platform having been removed.  There are other bcsr nodes that still
+> exist that could be used instead.
+
+Ah, fsl,mpc8568mds-bcsr for example, good point. I'll add it back.
+
+> 
+> -Crystal
+
+Thank you for reaching out!
+
+Best regards,
+J. Neuschäfer
 
