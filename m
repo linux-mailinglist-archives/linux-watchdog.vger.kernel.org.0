@@ -1,191 +1,100 @@
-Return-Path: <linux-watchdog+bounces-2909-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2910-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56F05A2FEBD
-	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Feb 2025 01:02:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19E4DA30DE3
+	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Feb 2025 15:13:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 503D41888C31
-	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Feb 2025 00:02:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DB791887788
+	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Feb 2025 14:13:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 654617B3E1;
-	Tue, 11 Feb 2025 00:01:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A44524CEDC;
+	Tue, 11 Feb 2025 14:13:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q1j87QGs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UWXtA3oT"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA932CA8;
-	Tue, 11 Feb 2025 00:01:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF7D1F1908;
+	Tue, 11 Feb 2025 14:13:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739232119; cv=none; b=orpFdI33HLmsABVyv6jrgt3/YwVn5flWOq3fJWFpL5RRJGnLl+TQ8E6gPsiGGgZ/2G8+ypw4gQPe8rwVUKKTqrykFqCkLSykJKDHnFWu5BCvufLLgaIgcwRrsF7nFE1dsvPJDKJ1mC9vJvLTKJSqdhOIznBK0ZyGyWdvgH9TR4s=
+	t=1739283216; cv=none; b=L+SbSjk/DcRbrRnKXCD1/5cDHTL8olBWE4OHJDwIUZ2cxLYpRb6+HCy/S26aSzDFDf1i6QiI6ogmAuJ6tIY1nhfZLYbu58YvXkg3ls0KmvGx4W40hINd9B/TopyUg/P969YMg9+LS8draQtB8qoc7ULA9vNVIo3av0aNKd2ZdMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739232119; c=relaxed/simple;
-	bh=rAzkLZM09qQrVfb6++qtL1NVW6ye9kBKxmsecVL8AX0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=phFMG2lITeO1sBiL+tcqCk0YYkqm300xsFdDUTlBNXXmTtVx7kSlclcHARSB33E1tkr315T1J3OVjOWqTkv+tADy74Jl61o83S+/0SbuKzt4Xd07mom6QSY79N0nAhb/jWhrd3q/+sbcVeuEHT0xFVW+lGeczAdrU16k1YssuLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q1j87QGs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C868C4CEDF;
-	Tue, 11 Feb 2025 00:01:58 +0000 (UTC)
+	s=arc-20240116; t=1739283216; c=relaxed/simple;
+	bh=vDix81U6Ld3DReX03VSDWokaA9gTIex+ysGARHYBa4w=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=D31u2YMr3d/y1PDuWE/uNDCKa+RookZYgEH19eVLbla8/c4WZgE5EiVaahtZsyjBTv3ARGc2iWoGp4dWgV/yzjkWMk0zcsnb8vkMtv4e4vM9d4KmR2f8dQvaJypMKxO/8U0Y2qeANJXRp3YRVOVGP4BHc+QuG1kGy5DbYUCZe6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UWXtA3oT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71FA2C4CEDD;
+	Tue, 11 Feb 2025 14:13:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739232118;
-	bh=rAzkLZM09qQrVfb6++qtL1NVW6ye9kBKxmsecVL8AX0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q1j87QGsjnUkqkcVlg2v4gnZWuuz2UEGFoQfFx8S5hm6OD3/mp8QI0dCwQT4YmTEr
-	 IB2Hu3/xsA738TjmL9hvDacqP3Cn1fn1l38WTUXKf4SHgxcaaqcmtfDjrQUDk9eoqE
-	 gB6wCJ5myKFPgBwelHmsgcxfai/gZhPdUPy8zVu8z/cx9kuD9+RM3Bb/ajecRTWHax
-	 fVRq4VYORDNdvHY/BD15McfYj6CkfxzLNVClI1u8/Pfa9FJn4JqDpQ7Nyn/Fr2156J
-	 CGUj1Kbf4bjxLul7s2ASKdEhbPJl+pwIxxn70nR5a5VyWkDiXJ4SybO3o/a5i5XUEL
-	 d5paRyJt5qYuQ==
-Date: Mon, 10 Feb 2025 18:01:57 -0600
-From: Rob Herring <robh@kernel.org>
-To: =?iso-8859-1?Q?J=2E_Neusch=E4fer?= <j.ne@posteo.net>
-Cc: devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
-	Scott Wood <oss@buserror.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	=?iso-8859-1?Q?J=2E_Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2 11/12] dt-bindings: nand: Add fsl,elbc-fcm-nand
-Message-ID: <20250211000157.GA240011-robh@kernel.org>
-References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
- <20250207-ppcyaml-v2-11-8137b0c42526@posteo.net>
+	s=k20201202; t=1739283215;
+	bh=vDix81U6Ld3DReX03VSDWokaA9gTIex+ysGARHYBa4w=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=UWXtA3oTS+v0q5G+sC9wAGrQZjODEQAnaR0oVQTshDp+I9TwaC8dSIgVEox+pVhiv
+	 WWcvOT3MmyWJ75dZACpkY8Ja3QESry9PBuQV9mlp1VMqI/238hvWLqFYRuZ9Jqm0oN
+	 cwTz0p2oIVVzONSb4lDc9caK6gmpqGWLqfw/lwN56VuXEYaARH68C1tUya+W8JUVg9
+	 3U5dEFvvQsZXw3u7N+8B3j4rIFzCmvZVl7xl2QxnqTdoxo6WV51ZbZRiK96/YKQpV9
+	 1kOSZLQ8BBJBrMsbguCncwtdh8zf2Crfw5Wgh4QQqqYCFFWPSquZBXcWueQ4cHPvb6
+	 srLbfkvAlWIXA==
+From: Lee Jones <lee@kernel.org>
+To: devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+ =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+Cc: Scott Wood <oss@buserror.net>, 
+ Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Damien Le Moal <dlemoal@kernel.org>, 
+ Niklas Cassel <cassel@kernel.org>, Herbert Xu <herbert@gondor.apana.org.au>, 
+ "David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>, 
+ Vinod Koul <vkoul@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+ Bjorn Helgaas <bhelgaas@google.com>, 
+ =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>, 
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
+ linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org, 
+ linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+ linux-pci@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org
+In-Reply-To: <20250126-ppcyaml-v1-4-50649f51c3dd@posteo.net>
+References: <20250126-ppcyaml-v1-0-50649f51c3dd@posteo.net>
+ <20250126-ppcyaml-v1-4-50649f51c3dd@posteo.net>
+Subject: Re: (subset) [PATCH 4/9] dt-bindings: mfd: Convert
+ fsl,mcu-mpc8349emitx binding to YAML
+Message-Id: <173928320921.2188572.3955959141357602902.b4-ty@kernel.org>
+Date: Tue, 11 Feb 2025 14:13:29 +0000
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250207-ppcyaml-v2-11-8137b0c42526@posteo.net>
+X-Mailer: b4 0.13.0
 
-On Fri, Feb 07, 2025 at 10:30:28PM +0100, J. Neusch‰fer wrote:
-> Formalize the binding already supported by the fsl_elbc_nand.c driver
-> and used in several device trees in arch/powerpc/boot/dts/.
+On Sun, 26 Jan 2025 19:58:59 +0100, J. Neusch√§fer wrote:
+> Convert mcu-mpc8349emitx.txt to YAML and list the compatible strings
+> currently in use.
 > 
-> Signed-off-by: J. Neusch‰fer <j.ne@posteo.net>
-> ---
 > 
-> V2:
-> - split out from fsl,elbc binding patch
-> - constrain #address-cells and #size-cells
-> - add a general description
-> - use unevaluatedProperties=false instead of additionalProperties=false
-> - fix property order to comply with dts coding style
-> - include raw-nand-chip.yaml instead of nand-chip.yaml
 
-Why? Doesn't look like you use anything from it. I think the correct 
-thing to use here is just mtd.yaml to pick up partitions.
+Applied, thanks!
 
-> ---
->  .../devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml | 68 ++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml b/Documentation/devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..1de97bb24fa4a83e2ea5d94ab822dd0e37baa102
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml
-> @@ -0,0 +1,68 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mtd/fsl,elbc-fcm-nand.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NAND flash attached to Freescale eLBC
-> +
-> +description:
-> +  The Freescale Enhanced Local Bus controller (eLBC) contains logic to
-> +  interface with NAND flash, called the NAND Flash Control Machine (FCM).
-> +  This binding describes flash attached to an eLBC using the FCM.
-> +
-> +maintainers:
-> +  - J. Neusch‰fer <j.ne@posteo.net>
-> +
-> +allOf:
-> +  - $ref: raw-nand-chip.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - fsl,mpc8313-fcm-nand
-> +              - fsl,mpc8315-fcm-nand
-> +              - fsl,mpc8377-fcm-nand
-> +              - fsl,mpc8378-fcm-nand
-> +              - fsl,mpc8379-fcm-nand
-> +              - fsl,mpc8536-fcm-nand
-> +              - fsl,mpc8569-fcm-nand
-> +              - fsl,mpc8572-fcm-nand
-> +              - fsl,p1020-fcm-nand
-> +              - fsl,p1021-fcm-nand
-> +              - fsl,p1025-fcm-nand
-> +              - fsl,p2020-fcm-nand
-> +          - const: fsl,elbc-fcm-nand
-> +      - const: fsl,elbc-fcm-nand
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    localbus {
-> +        #address-cells = <2>;
-> +        #size-cells = <1>;
-> +
-> +        nand@1,0 {
-> +            compatible = "fsl,mpc8315-fcm-nand",
-> +                         "fsl,elbc-fcm-nand";
-> +            reg = <0x1 0x0 0x2000>;
-> +            #address-cells = <1>;
-> +            #size-cells = <1>;
-> +        };
-> +    };
-> 
-> -- 
-> 2.48.0.rc1.219.gb6b6757d772
-> 
+[4/9] dt-bindings: mfd: Convert fsl,mcu-mpc8349emitx binding to YAML
+      commit: 252c95ec3802a5f447df58253575b52aa741c1a1
+
+--
+Lee Jones [ÊùéÁêºÊñØ]
+
 
