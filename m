@@ -1,52 +1,52 @@
-Return-Path: <linux-watchdog+bounces-2908-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2909-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16E79A2FC84
-	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Feb 2025 22:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 56F05A2FEBD
+	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Feb 2025 01:02:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59CB61886BE3
-	for <lists+linux-watchdog@lfdr.de>; Mon, 10 Feb 2025 21:53:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 503D41888C31
+	for <lists+linux-watchdog@lfdr.de>; Tue, 11 Feb 2025 00:02:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91FE324CEC8;
-	Mon, 10 Feb 2025 21:53:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 654617B3E1;
+	Tue, 11 Feb 2025 00:01:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NGcZXPMM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q1j87QGs"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA7417BCE;
-	Mon, 10 Feb 2025 21:53:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA932CA8;
+	Tue, 11 Feb 2025 00:01:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739224406; cv=none; b=riEQqsIRPrKyrMb3qefPJjA08rSGM+4VIpE5VnKQZiGivTSzUSu3YUF68Mn77vchD+LZov0EEs1p51aOItP0DwFlKko4OJih3H9iNq3RHtFFFj5A6I0c7ccdTBiKuEzDoEtOs2a2MW2xZOkxOXrUUWoJMHh9YlESmTnWvo3OEJI=
+	t=1739232119; cv=none; b=orpFdI33HLmsABVyv6jrgt3/YwVn5flWOq3fJWFpL5RRJGnLl+TQ8E6gPsiGGgZ/2G8+ypw4gQPe8rwVUKKTqrykFqCkLSykJKDHnFWu5BCvufLLgaIgcwRrsF7nFE1dsvPJDKJ1mC9vJvLTKJSqdhOIznBK0ZyGyWdvgH9TR4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739224406; c=relaxed/simple;
-	bh=1xp9i23qLHopM7Es6GWfv9JVXjG6ubbsAUbJbN9kf34=;
+	s=arc-20240116; t=1739232119; c=relaxed/simple;
+	bh=rAzkLZM09qQrVfb6++qtL1NVW6ye9kBKxmsecVL8AX0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b+0hNS3gl1kXG6kzWSP+eQQaYPyW4Kxom43XKe47uNKv37HKGjCZT+XfoC16MSHYLgPTE+1Q9l/0G3CWSiRzW/Qwgngyn+CYfnNbpPrdOfoNU1D3uHe/VOeqfqEraNeAS7neE41xc35L3te70yYkkVkITSnGAGTzjnCTUDHfX8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NGcZXPMM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68FBCC4CED1;
-	Mon, 10 Feb 2025 21:53:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=phFMG2lITeO1sBiL+tcqCk0YYkqm300xsFdDUTlBNXXmTtVx7kSlclcHARSB33E1tkr315T1J3OVjOWqTkv+tADy74Jl61o83S+/0SbuKzt4Xd07mom6QSY79N0nAhb/jWhrd3q/+sbcVeuEHT0xFVW+lGeczAdrU16k1YssuLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q1j87QGs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C868C4CEDF;
+	Tue, 11 Feb 2025 00:01:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739224405;
-	bh=1xp9i23qLHopM7Es6GWfv9JVXjG6ubbsAUbJbN9kf34=;
+	s=k20201202; t=1739232118;
+	bh=rAzkLZM09qQrVfb6++qtL1NVW6ye9kBKxmsecVL8AX0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NGcZXPMM/lK6UWM10B0N7PXv1VH61bn282fDCJTlPl1oAnx1M4a7L4gil8TfoFjsQ
-	 iVfcXcyQtxu0uYmeY1b7SYwB+M4sNZA503rNTLJu8v4CS96dewxQfEwpGoxonNE1UD
-	 oHexGvB6qDhY4uMQdSN2oSqoSJDEjKyxe/81ZFw57xUGZzbjaP+f27Ra/fasNu6OBb
-	 WM28ie1HwprSTWcdnAgLoyl2lMvOYLFB2elGFwtEXUHNIZWCqXRj1ljrMziS8e1ANG
-	 GZfkZqxF80cbxhl1M24mvpPioI6iktw7xFRqhgaZ6WZxkC8UdK2gEFDtGIp+74767j
-	 ZTsZsRWmZENHA==
-Date: Mon, 10 Feb 2025 15:53:24 -0600
+	b=q1j87QGsjnUkqkcVlg2v4gnZWuuz2UEGFoQfFx8S5hm6OD3/mp8QI0dCwQT4YmTEr
+	 IB2Hu3/xsA738TjmL9hvDacqP3Cn1fn1l38WTUXKf4SHgxcaaqcmtfDjrQUDk9eoqE
+	 gB6wCJ5myKFPgBwelHmsgcxfai/gZhPdUPy8zVu8z/cx9kuD9+RM3Bb/ajecRTWHax
+	 fVRq4VYORDNdvHY/BD15McfYj6CkfxzLNVClI1u8/Pfa9FJn4JqDpQ7Nyn/Fr2156J
+	 CGUj1Kbf4bjxLul7s2ASKdEhbPJl+pwIxxn70nR5a5VyWkDiXJ4SybO3o/a5i5XUEL
+	 d5paRyJt5qYuQ==
+Date: Mon, 10 Feb 2025 18:01:57 -0600
 From: Rob Herring <robh@kernel.org>
-To: Crystal Wood <oss@buserror.net>
-Cc: j.ne@posteo.net, devicetree@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
+To: =?iso-8859-1?Q?J=2E_Neusch=E4fer?= <j.ne@posteo.net>
+Cc: devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
 	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
+	Scott Wood <oss@buserror.net>,
 	Madhavan Srinivasan <maddy@linux.ibm.com>,
 	Michael Ellerman <mpe@ellerman.id.au>,
 	Nicholas Piggin <npiggin@gmail.com>,
@@ -72,14 +72,11 @@ Cc: j.ne@posteo.net, devicetree@vger.kernel.org,
 	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
 	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
 	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-mtd@lists.infradead.org, Li Yang <leoyang.li@nxp.com>,
-	John Ogness <john.ogness@linutronix.de>
-Subject: Re: [PATCH v2 09/12] dt-bindings: memory-controllers: Convert
- fsl,elbc to YAML
-Message-ID: <20250210215324.GA1040564-robh@kernel.org>
+	linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v2 11/12] dt-bindings: nand: Add fsl,elbc-fcm-nand
+Message-ID: <20250211000157.GA240011-robh@kernel.org>
 References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
- <20250207-ppcyaml-v2-9-8137b0c42526@posteo.net>
- <Z6kQpuQf5m-bXTyt@buserror.net>
+ <20250207-ppcyaml-v2-11-8137b0c42526@posteo.net>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -89,134 +86,106 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z6kQpuQf5m-bXTyt@buserror.net>
+In-Reply-To: <20250207-ppcyaml-v2-11-8137b0c42526@posteo.net>
 
-On Sun, Feb 09, 2025 at 02:31:34PM -0600, Crystal Wood wrote:
-> On Fri, Feb 07, 2025 at 10:30:26PM +0100, J. Neuschäfer via B4 Relay wrote:
-> > From: "J. Neuschäfer" <j.ne@posteo.net>
-> > 
-> > Convert the Freescale localbus controller bindings from text form to
-> > YAML. The updated list of compatible strings reflects current usage
-> > in arch/powerpc/boot/dts/, except that many existing device trees
-> > erroneously specify "simple-bus" in addition to fsl,*elbc.
-> > 
-> > Changes compared to the txt version:
-> >  - removed the board-control (fsl,mpc8272ads-bcsr) node because it only
-> >    appears in this example and nowhere else
-> >  - added a new example with NAND flash
-> >  - updated list of compatible strings
-> > 
-> > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
-> > ---
-> > 
-> > V2:
-> > - fix order of properties in examples, according to dts coding style
-> > - move to Documentation/devicetree/bindings/memory-controllers
-> > - clarify the commit message a tiny bit
-> > - remove unnecessary multiline markers (|)
-> > - define address format in patternProperties
-> > - trim subject line (remove "binding")
-> > - remove use of "simple-bus", because it's technically incorrect
+On Fri, Feb 07, 2025 at 10:30:28PM +0100, J. Neuschäfer wrote:
+> Formalize the binding already supported by the fsl_elbc_nand.c driver
+> and used in several device trees in arch/powerpc/boot/dts/.
 > 
-> While I admit I haven't been following recent developments in this area,
-> as someone who was involved when "simple-bus" was created (and was on the
-> ePAPR committee that standardized it) I'm surprised to hear simple-bus
-> being called "erroneous" or "technically incorrect" here.
-
-Erroneous because the binding did not say "simple-bus" was used. Not 
-uncommon with the old .txt bindings.
-
-Generally, if a bus has control registers or resources like clocks, then 
-we tend not to call them 'simple-bus'. And '"specific-bus", 
-"simple-bus"' gives some problems around what driver if any do you 
-bind to. 
-
-If you have chip selects, then you have config registers for those. 
-Not really "simple" if you ask me. That being said, you could keep 
-'simple-bus' here. I would tend to err on making the schema match the 
-actual .dts rather than updating the .dts files on older platforms like 
-these.
-
-> For non-NAND devices this bus generally meets the definition of "an
-> internal I/O bus that cannot be probed for devices" where "devices on the
-> bus can be accessed directly without additional configuration
-> required".  NAND flash is an exception, but those devices have
-> compatibles that are specific to the bus controller.
-
-NAND bindings have evolved quite a bit if you haven't been paying 
-attention.
-
-> The fact that the address encoding is non-linear is irrelevant; the
-> addresses can still be translated using the standard "ranges" mechanism. 
-> This seems to be a disconnect between the schema verification and the way
-> the compatible has previously been defined and used.
+> Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+> ---
 > 
-> And as a practical matter, unless I'm missing something (which I might be
-> since I haven't been in devicetree-land for nearly a decade), Linux is
-> relying on simple-bus to probe these devices.  There is a driver that
-> binds to the bus itself but that is just for error interrupts and NAND.
+> V2:
+> - split out from fsl,elbc binding patch
+> - constrain #address-cells and #size-cells
+> - add a general description
+> - use unevaluatedProperties=false instead of additionalProperties=false
+> - fix property order to comply with dts coding style
+> - include raw-nand-chip.yaml instead of nand-chip.yaml
+
+Why? Doesn't look like you use anything from it. I think the correct 
+thing to use here is just mtd.yaml to pick up partitions.
+
+> ---
+>  .../devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml | 68 ++++++++++++++++++++++
+>  1 file changed, 68 insertions(+)
 > 
-> You'd probably need something like commit 3e25f800afb82bd9e5f8 ("memory:
-> fsl_ifc: populate child devices without relying on simple-bus") and the 
-> subsequent fix in dd8adc713b1656 ("memory: fsl_ifc: populate child
-> nodes of buses and mfd devices")...
+> diff --git a/Documentation/devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml b/Documentation/devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..1de97bb24fa4a83e2ea5d94ab822dd0e37baa102
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/fsl,elbc-fcm-nand.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/fsl,elbc-fcm-nand.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NAND flash attached to Freescale eLBC
+> +
+> +description:
+> +  The Freescale Enhanced Local Bus controller (eLBC) contains logic to
+> +  interface with NAND flash, called the NAND Flash Control Machine (FCM).
+> +  This binding describes flash attached to an eLBC using the FCM.
+> +
+> +maintainers:
+> +  - J. Neuschäfer <j.ne@posteo.net>
+> +
+> +allOf:
+> +  - $ref: raw-nand-chip.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - fsl,mpc8313-fcm-nand
+> +              - fsl,mpc8315-fcm-nand
+> +              - fsl,mpc8377-fcm-nand
+> +              - fsl,mpc8378-fcm-nand
+> +              - fsl,mpc8379-fcm-nand
+> +              - fsl,mpc8536-fcm-nand
+> +              - fsl,mpc8569-fcm-nand
+> +              - fsl,mpc8572-fcm-nand
+> +              - fsl,p1020-fcm-nand
+> +              - fsl,p1021-fcm-nand
+> +              - fsl,p1025-fcm-nand
+> +              - fsl,p2020-fcm-nand
+> +          - const: fsl,elbc-fcm-nand
+> +      - const: fsl,elbc-fcm-nand
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    localbus {
+> +        #address-cells = <2>;
+> +        #size-cells = <1>;
+> +
+> +        nand@1,0 {
+> +            compatible = "fsl,mpc8315-fcm-nand",
+> +                         "fsl,elbc-fcm-nand";
+> +            reg = <0x1 0x0 0x2000>;
+> +            #address-cells = <1>;
+> +            #size-cells = <1>;
+> +        };
+> +    };
 > 
-> I'm curious what the reasoning was for removing simple-bus from IFC.  It
-> seems that the schema verification also played a role in that:
-> https://www.spinics.net/lists/devicetree/msg220418.html
-
-If a kernel change is needed to support changed .dts files, then we 
-shouldn't be doing that here (being mature platforms). That would mean 
-new DTB will not work with existing kernels.
-
+> -- 
+> 2.48.0.rc1.219.gb6b6757d772
 > 
-> ...but there's also the comment in 985ede63a045eabf3f9d ("dt-bindings:
-> memory: fsl: convert ifc binding to yaml schema") that "this will help to
-> enforce the correct probe order between parent device and child devices",
-> but was that really not already guaranteed by the parent/child
-> relationship (and again, it should only really matter for NAND except for
-> the possibility of missing error reports during early boot)?
-> 
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
-> > +          - enum:
-> > +              - fsl,mpc8313-elbc
-> > +              - fsl,mpc8315-elbc
-> > +              - fsl,mpc8377-elbc
-> > +              - fsl,mpc8378-elbc
-> > +              - fsl,mpc8379-elbc
-> > +              - fsl,mpc8536-elbc
-> > +              - fsl,mpc8569-elbc
-> > +              - fsl,mpc8572-elbc
-> > +              - fsl,p1020-elbc
-> > +              - fsl,p1021-elbc
-> > +              - fsl,p1023-elbc
-> > +              - fsl,p2020-elbc
-> > +              - fsl,p2041-elbc
-> > +              - fsl,p3041-elbc
-> > +              - fsl,p4080-elbc
-> > +              - fsl,p5020-elbc
-> > +              - fsl,p5040-elbc
-> > +          - const: fsl,elbc
-> 
-> Is it really necessary to list every single chip?
-
-Yes. If they exist, they have to be documented.
-
-> 
-> And then it would need to be updated when new ones came out?  I know this
-> particular line of chips is not going to see any new members at this
-> point, but as far as the general approach goes...
-> 
-> Does the schema validation complain if it sees an extra compatible it
-> doesn't recognize?  If so that's obnoxious.
-
-Yes.
-
-More annoying is having to boot and debug typos:
-
-compatible = "foo,bar", "simplebus";
-
-Rob
 
