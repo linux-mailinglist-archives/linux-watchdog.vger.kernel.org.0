@@ -1,198 +1,258 @@
-Return-Path: <linux-watchdog+bounces-2931-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2932-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36872A35C71
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Feb 2025 12:24:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA683A35DBA
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Feb 2025 13:36:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A799A16CFB4
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Feb 2025 11:24:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6A4F188E7D8
+	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Feb 2025 12:36:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 185EF25B66C;
-	Fri, 14 Feb 2025 11:24:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FF252641CB;
+	Fri, 14 Feb 2025 12:35:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FtFhgTSG"
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="D5Xod9Nn"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53DF522D793;
-	Fri, 14 Feb 2025 11:24:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA491263F4A
+	for <linux-watchdog@vger.kernel.org>; Fri, 14 Feb 2025 12:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739532266; cv=none; b=rguc62IHVvwg03p1POh3v+prJRrq+mA7Ulu80jx6twZFEY1DqNNzxk7d2xY0+LpYAlZbd1v1i/O6gJUPNKDuYJY2JjRT6u+oIIOODf11f/ok6wEkjiwQ4nGO50bNybpc5EaxqBYESr8pjFN57Y8dNRVs+oX0Vabj4j1WMW7FfVs=
+	t=1739536557; cv=none; b=URhWYiaS8lqIRtaSF8h9VzWLvXXQyzLLRguefNg6LzfIXiULggV3Z1OGbF1LT9A18HdHGpP3HpD3gJbLidvXgOv1p8JS/kmn2rKZ8w+8AYh/ONMrkqo9+Wt8dfUYK7/odi5p3PLeQ1tzy5BDB01BGM0Cnaiif/fU3pjXedGvs4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739532266; c=relaxed/simple;
-	bh=xoPfeGaMeAnbYc4D9oVEv8b6qS8ajimo6pf9kVPokbY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=J9qVRGT23VkP9ww1Zvog4Gr9/HU7pS6ZNmpOjlOX8/BOwCKuTY23+RKGxId+OBpwP9qpMLZSYqmLy6NwYC1WGTrkfApc1oVs6U3naw6yK2YRimdi6FJfw6+LhW78KKMIPD28mMD3d0D68bioOqcvMdsdo35y4mJlF7+zNxCRTAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FtFhgTSG; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ab7e9254bb6so294638666b.1;
-        Fri, 14 Feb 2025 03:24:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739532262; x=1740137062; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6u3ojM9oHoVngZ+zSXriBOwUU5fx5CwXrZHQTSmA34Q=;
-        b=FtFhgTSGKVRSASbsFFTM65JbyA7UGxvgxhv8WDs8D1ZssG72ZoPAI4dhytPjJ06TDM
-         0oCsLqUIzlCqxNcqHo1viF8Ht/nxoiHmeb9skhkE+2Nso/1MI0G2LPAAD/EkmuCvpBh5
-         HuSkk/Xl0m3dSYZ0OBak74avp89eLblCrYSDBlh5IC10NuZm80lnmQXhmExAt51dTQMi
-         uzID/PtLmkDXBbi75Bs9sFbXC5YITVwuEhRYl34ZYhNP5nEdp4I4jahMXVMCBZ4IL96c
-         bzIqPG2hLNsug62vYrD8irmYxfVz3OV3cPQyPutk3K1HBVU47hf/iLZDcD4Bcm/0tmnT
-         e5+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739532262; x=1740137062;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6u3ojM9oHoVngZ+zSXriBOwUU5fx5CwXrZHQTSmA34Q=;
-        b=Lt2kx4yFt3/DBKQTQJ9jmNzcIbthxCCIFamYodQpV7wKaDnj9gLXi9vM7oQWWgaV6P
-         BaJiYzOD4qpCTzStCZn2OzP8boEXXr+g1nmzXyq/W53wUP+x2GWYRc2R5SDN/XLOtmoi
-         eDgEslCu2L4PGV4nnClA4GN8tJaAm2coJCsTUqQTW2/IW/bUJwHuflJkU19NHdSzhgUt
-         Tcg0QAcr3d+nKzsWLrq8X3yvbrO61Gmm6AQgeb+ez3m6HlH+P5P/YNSsj2GGX0H85+YI
-         JHHkXiVZcVI7qFJEoTx3YePCfM1hzZB8THobuxYag5LMqwJ8/M7qNUW7QxJSkTD8RSce
-         68iQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVuHHl0pj67/J9YJ4m8NaaJ9+Rlap6RG+sP2oiGGxkj73Q3feUceMeNNR1AYkzzYIkwjiJplKVJ5DsFM8s=@vger.kernel.org, AJvYcCWNhtUT5ss+NC7a3O/gJww9vi8eLvZblwWwdJwNPv8XzGsEA87gUHpHmNTpnVT7menRQUj2MGwZWaG373SBQfo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/jzCX2KLJQzDfyqYxkDCHDq2CkUTa18BL9axk+ebA5JDYL3Fg
-	X8vfmQbNuMAAxfeCNCDLNe9C3XZNEZIPjQbuIOgH3ljnto2oz8I4
-X-Gm-Gg: ASbGnctsYRZcWtHb3M3OP9PK0PScHMqNmTfl4BwXvIGCb0nCDqihmiwdIXbGioZv0wT
-	QyLZrlcHeT/i3QZ8h1GpJ2PdKg9/xl6CzsibzHzjt22JuxqyLdIFF9g449bYer23jJ7xZiQ60N2
-	BB7lq3ncpxXRyGClbipz7s+TZNj0E4fvb9uj0JUgCk5DuTF89Lmr8IxUWWn3CswDZHrGr4rh5G1
-	bxfEoQdOQS3wEURCufa7XbAbEtOH4d6WPomJ6yT+S9AaernH9KQfrihuvmblqE9tRoUjKd4EOBm
-	F9jpQrLFf5wvulW7rLqVrVKPDl4lLCwYQ3OReWnpIPMusjFHikg3
-X-Google-Smtp-Source: AGHT+IFpCUYSVYlZScFUUmsS8KG3/PYr/ve7XBNh3XUSHixfrU5ppZNMRkZVtyg8SPqunh8IFSJGsg==
-X-Received: by 2002:a17:906:3283:b0:aba:a81c:f972 with SMTP id a640c23a62f3a-abaa81cfcbamr61349666b.17.1739532261556;
-        Fri, 14 Feb 2025 03:24:21 -0800 (PST)
-Received: from Junction.dargent.eu (242.76.29.93.rev.sfr.net. [93.29.76.242])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aba532594a0sm329434266b.68.2025.02.14.03.24.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Feb 2025 03:24:21 -0800 (PST)
-From: Regis Dargent <regis.dargent@gmail.com>
-To: 
-Cc: Regis Dargent <regis.dargent@gmail.com>,
+	s=arc-20240116; t=1739536557; c=relaxed/simple;
+	bh=DhdTMX1B/VBmrfjg4gCD28dH1z0ZeJtuCVVqdYJtLzw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ni0HlsvbHutTdgVr+MlLi3WuzDC7aJ3+Ompt4VtfHeyBvXJjcB4KYZQZCAfYugoigTM+feo+pc7621FiUN1mysnxoS2VOrtQYwSvgMhhZNY63cpuOtp3X77tsIaQ7HDKn6LzeMjohKGN9BIR+XSJ3eWVrWmrg7WTv5Elmamn/+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=D5Xod9Nn; arc=none smtp.client-ip=185.67.36.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout02.posteo.de (Postfix) with ESMTPS id C8F87240103
+	for <linux-watchdog@vger.kernel.org>; Fri, 14 Feb 2025 13:35:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1739536549; bh=DhdTMX1B/VBmrfjg4gCD28dH1z0ZeJtuCVVqdYJtLzw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:From;
+	b=D5Xod9Nnl1WE6g1L7y5neIscsjHlzP9MY5Mw6Agu8uZD51CniEAu5nc1a/M7uOuay
+	 FnPzKuG+5DhX1AR2By4JLt2+6SePYX9dxTPP26BbYZz5yslylfLJ5HeYXeZKigJTD8
+	 wXckP4BTVk0rpmFwPrtSM3F5JmFkYBbJwcZ9ILZoY9XREALy+R8PMLWVfRJJIqegGR
+	 ip0tDQNNZvhC+Ac7P9yckRRncsRnZpwesWfImxAkK3WxgCwLbe+EOgHyElpxRWrYjw
+	 JI/8foXkGFM8JegiqDKfVrOw0juWrGF0P67jAcRLWyShcX0FBJqPObf2fUnzLcM0WW
+	 OMX71QAVAqbKw==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4YvWjq1cxCz9rxG;
+	Fri, 14 Feb 2025 13:35:41 +0100 (CET)
+Date: Fri, 14 Feb 2025 12:35:41 +0000
+From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+To: Frank Li <Frank.li@nxp.com>
+Cc: j.ne@posteo.net, devicetree@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
+	Scott Wood <oss@buserror.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
 	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	linux-watchdog@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] watchdog: sunxi_wdt: Allow watchdog to remain enabled after probe
-Date: Fri, 14 Feb 2025 12:22:54 +0100
-Message-Id: <20250214112255.97099-2-regis.dargent@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250214112255.97099-1-regis.dargent@gmail.com>
-References: <CAGb2v67tmzGfcFPchjzfSima-sT_u7viYd1UDGB9r6ZeJEgdyg@mail.gmail.com>
- <20250214112255.97099-1-regis.dargent@gmail.com>
+	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v2 05/12] dt-bindings: dma: Convert fsl,elo*-dma to YAML
+Message-ID: <Z684nUnDX4Sb98rQ@probook>
+References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
+ <20250207-ppcyaml-v2-5-8137b0c42526@posteo.net>
+ <Z6pV4eauZj75+911@lizhi-Precision-Tower-5810>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z6pV4eauZj75+911@lizhi-Precision-Tower-5810>
 
-If the watchdog is already running during probe, let it run on, read its
-configured timeout, and set its status so that it is correctly handled by the
-kernel.
+On Mon, Feb 10, 2025 at 02:39:13PM -0500, Frank Li wrote:
+> On Fri, Feb 07, 2025 at 10:30:22PM +0100, J. Neuschäfer via B4 Relay wrote:
+> > From: "J. Neuschäfer" <j.ne@posteo.net>
+> >
+> > The devicetree bindings for Freescale DMA engines have so far existed as
+> > a text file. This patch converts them to YAML, and specifies all the
+> > compatible strings currently in use in arch/powerpc/boot/dts.
+> >
+> > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+> > ---
+> >
+> > V2:
+> > - remove unnecessary multiline markers
+> > - fix additionalProperties to always be false
+> > - add description/maxItems to interrupts
+> > - add missing #address-cells/#size-cells properties
+> > - convert "Note on DMA channel compatible properties" to YAML by listing
+> >   fsl,ssi-dma-channel as a valid compatible value
+> > - fix property ordering in examples: compatible and reg come first
+> > - add missing newlines in examples
+> > - trim subject line (remove "bindings")
+> > ---
+> >  .../devicetree/bindings/dma/fsl,elo-dma.yaml       | 140 ++++++++++++++
+> >  .../devicetree/bindings/dma/fsl,elo3-dma.yaml      | 123 +++++++++++++
+> >  .../devicetree/bindings/dma/fsl,eloplus-dma.yaml   | 134 ++++++++++++++
+> >  .../devicetree/bindings/powerpc/fsl/dma.txt        | 204 ---------------------
+> >  4 files changed, 397 insertions(+), 204 deletions(-)
+[...]
+> > +  reg:
+> > +    maxItems: 1
+> > +    description:
+> > +      DMA General Status Register, i.e. DGSR which contains status for
+> > +      all the 4 DMA channels.
+> 
+> needn't maxItems
+> items:
+>   - description: DMA ...
 
-Signed-off-by: Regis Dargent <regis.dargent@gmail.com>
----
- drivers/watchdog/sunxi_wdt.c | 48 +++++++++++++++++++++++++++++++++---
- 1 file changed, 45 insertions(+), 3 deletions(-)
+Good point, I'll do that.
 
-diff --git a/drivers/watchdog/sunxi_wdt.c b/drivers/watchdog/sunxi_wdt.c
-index b85354a99582..0094bcd063c5 100644
---- a/drivers/watchdog/sunxi_wdt.c
-+++ b/drivers/watchdog/sunxi_wdt.c
-@@ -140,6 +140,7 @@ static int sunxi_wdt_set_timeout(struct watchdog_device *wdt_dev,
- 		timeout++;
- 
- 	sunxi_wdt->wdt_dev.timeout = timeout;
-+	sunxi_wdt->wdt_dev.max_hw_heartbeat_ms = 0;
- 
- 	reg = readl(wdt_base + regs->wdt_mode);
- 	reg &= ~(WDT_TIMEOUT_MASK << regs->wdt_timeout_shift);
-@@ -152,6 +153,32 @@ static int sunxi_wdt_set_timeout(struct watchdog_device *wdt_dev,
- 	return 0;
- }
- 
-+static int sunxi_wdt_read_timeout(struct watchdog_device *wdt_dev)
-+{
-+	struct sunxi_wdt_dev *sunxi_wdt = watchdog_get_drvdata(wdt_dev);
-+	void __iomem *wdt_base = sunxi_wdt->wdt_base;
-+	const struct sunxi_wdt_reg *regs = sunxi_wdt->wdt_regs;
-+	int i;
-+	u32 reg;
-+
-+	reg = readl(wdt_base + regs->wdt_mode);
-+	reg >>= regs->wdt_timeout_shift;
-+	reg &= WDT_TIMEOUT_MASK;
-+
-+	/* Start at 0 which actually means 0.5s */
-+	for (i = 0; ((i < WDT_MAX_TIMEOUT) && (wdt_timeout_map[i] != reg)); i++)
-+		;
-+	if (i == 0) {
-+		wdt_dev->timeout = 1;
-+		wdt_dev->max_hw_heartbeat_ms = 500;
-+	} else {
-+		wdt_dev->timeout = i;
-+		wdt_dev->max_hw_heartbeat_ms = 0;
-+	}
-+
-+	return 0;
-+}
-+
- static int sunxi_wdt_stop(struct watchdog_device *wdt_dev)
- {
- 	struct sunxi_wdt_dev *sunxi_wdt = watchdog_get_drvdata(wdt_dev);
-@@ -192,11 +219,22 @@ static int sunxi_wdt_start(struct watchdog_device *wdt_dev)
- 	return 0;
- }
- 
-+static bool sunxi_wdt_enabled(struct sunxi_wdt_dev *wdt)
-+{
-+	u32 reg;
-+	void __iomem *wdt_base = wdt->wdt_base;
-+	const struct sunxi_wdt_reg *regs = wdt->wdt_regs;
-+
-+	reg = readl(wdt_base + regs->wdt_mode);
-+	return !!(reg & WDT_MODE_EN);
-+}
-+
- static const struct watchdog_info sunxi_wdt_info = {
- 	.identity	= DRV_NAME,
- 	.options	= WDIOF_SETTIMEOUT |
- 			  WDIOF_KEEPALIVEPING |
--			  WDIOF_MAGICCLOSE,
-+			  WDIOF_MAGICCLOSE |
-+			  WDIOF_SETTIMEOUT,
- };
- 
- static const struct watchdog_ops sunxi_wdt_ops = {
-@@ -275,8 +313,12 @@ static int sunxi_wdt_probe(struct platform_device *pdev)
- 
- 	watchdog_set_drvdata(&sunxi_wdt->wdt_dev, sunxi_wdt);
- 
--	sunxi_wdt_stop(&sunxi_wdt->wdt_dev);
--
-+	if (sunxi_wdt_enabled(sunxi_wdt)) {
-+		sunxi_wdt_read_timeout(&sunxi_wdt->wdt_dev);
-+		set_bit(WDOG_HW_RUNNING, &sunxi_wdt->wdt_dev.status);
-+	} else {
-+		sunxi_wdt_stop(&sunxi_wdt->wdt_dev);
-+	}
- 	watchdog_stop_on_reboot(&sunxi_wdt->wdt_dev);
- 	err = devm_watchdog_register_device(dev, &sunxi_wdt->wdt_dev);
- 	if (unlikely(err))
--- 
-2.25.1
+> 
+> > +
+> > +  cell-index:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: Controller index. 0 for controller @ 0x8100.
+> > +
+> > +  ranges: true
+> > +
+> > +  "#address-cells":
+> > +    const: 1
+> > +
+> > +  "#size-cells":
+> > +    const: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +    description: Controller interrupt.
+> 
+> Needn't description because no any additional informaiton.
 
+True.
+
+> 
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+[...]
+> > +additionalProperties: false
+> 
+> Need ref to dma-common.yaml?
+
+Sounds good, but I'm not sure what to do about the #dma-cells property,
+which is required by dma-common.yaml.
+
+There aren't many examples of DMA channels being explicitly declared in
+device trees. One example that I could find is the the xilinx_dma.txt
+binding:
+
+
+	axi_vdma_0: axivdma@40030000 {
+		compatible = "xlnx,axi-vdma-1.00.a";
+		#dma_cells = <1>;
+		reg = < 0x40030000 0x10000 >;
+		dma-ranges = <0x00000000 0x00000000 0x40000000>;
+		xlnx,num-fstores = <0x8>;
+		xlnx,flush-fsync = <0x1>;
+		xlnx,addrwidth = <0x20>;
+		clocks = <&clk 0>, <&clk 1>, <&clk 2>, <&clk 3>, <&clk 4>;
+		clock-names = "s_axi_lite_aclk", "m_axi_mm2s_aclk", "m_axi_s2mm_aclk",
+			      "m_axis_mm2s_aclk", "s_axis_s2mm_aclk";
+		dma-channel@40030000 {
+			compatible = "xlnx,axi-vdma-mm2s-channel";
+			interrupts = < 0 54 4 >;
+			xlnx,datawidth = <0x40>;
+		};
+		dma-channel@40030030 {
+			compatible = "xlnx,axi-vdma-s2mm-channel";
+			interrupts = < 0 53 4 >;
+			xlnx,datawidth = <0x40>;
+		};
+	};
+
+	...
+
+	vdmatest_0: vdmatest@0 {
+		compatible ="xlnx,axi-vdma-test-1.00.a";
+		dmas = <&axi_vdma_0 0
+			&axi_vdma_0 1>;
+		dma-names = "vdma0", "vdma1";
+	};
+
+It has #dma_cells (I'm sure #dma-cells was intended) on the controller.
+
+
+Another example is in arch/powerpc/boot/dts/fsl/p1022si-post.dtsi:
+
+	dma@c300 {
+		dma00: dma-channel@0 {
+			compatible = "fsl,ssi-dma-channel";
+		};
+		dma01: dma-channel@80 {
+			compatible = "fsl,ssi-dma-channel";
+		};
+	};
+
+	...
+
+	ssi@15000 {
+		compatible = "fsl,mpc8610-ssi";
+		cell-index = <0>;
+		reg = <0x15000 0x100>;
+		interrupts = <75 2 0 0>;
+		fsl,playback-dma = <&dma00>;
+		fsl,capture-dma = <&dma01>;
+		fsl,fifo-depth = <15>;
+	};
+
+
+There, the DMA channels are used directly and without additional
+information (i.e. #dma-cells = <0>, althought it isn't specified).
+
+
+> > +        dma-channel@0 {
+> > +            compatible = "fsl,mpc8349-dma-channel", "fsl,elo-dma-channel";
+> > +            reg = <0 0x80>;
+> > +            cell-index = <0>;
+> > +            interrupt-parent = <&ipic>;
+> > +            interrupts = <71 8>;
+> 
+> '8',  use predefine MACRO for irq type.
+
+Good catch, will do
+
+> 
+> Frank
+
+Thanks for your review!
+J. Neuschäfer
 
