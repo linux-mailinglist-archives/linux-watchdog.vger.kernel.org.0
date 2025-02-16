@@ -1,119 +1,163 @@
-Return-Path: <linux-watchdog+bounces-2941-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2942-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07F93A36560
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Feb 2025 19:10:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD2A1A37557
+	for <lists+linux-watchdog@lfdr.de>; Sun, 16 Feb 2025 17:00:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 194963AEECB
-	for <lists+linux-watchdog@lfdr.de>; Fri, 14 Feb 2025 18:09:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EAC81891726
+	for <lists+linux-watchdog@lfdr.de>; Sun, 16 Feb 2025 16:00:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DE22269CFF;
-	Fri, 14 Feb 2025 18:08:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CCE679DC;
+	Sun, 16 Feb 2025 16:00:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Uu8n5TI2"
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="pTgJM2RV"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953F4269AEF;
-	Fri, 14 Feb 2025 18:08:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44085199235
+	for <linux-watchdog@vger.kernel.org>; Sun, 16 Feb 2025 16:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739556531; cv=none; b=VcftWcby9CYVCffDvZ7tHk0c85nkTpSewCCfXTnliMO4l3rItKwP486MrWNxrGMzLaoO1YuLK8wd7xsmgeOeQsW81gWGdxmWDTHqPysd0CfGcdnsjPvsA1LEchtEWvujjHELoMRh1ZMh9q15xzRDdvWshjrfyh0usktvo/yPDf4=
+	t=1739721612; cv=none; b=BmKH0gY4u8FdtfvQE7gtAoszPrURVdtknTBAOyX4L36kcVl6uB83dlPr0Nz0aqKmzZf4fnKo44MUHXODYJqPCb5+UejHwnoKL7Nem49gkLnLsqyiIqWICwlX5a1am8wvMhFtGvpSsDQXRcvVnhEAONqxZCrxxhoxPQ+IzxNhptU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739556531; c=relaxed/simple;
-	bh=RVSWb8fwoMmHWM5arqdcYZ9wwDPFb0IQdvCLd5ewN/0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L2LBE2aorptInSRWeaW+izr/u9SYGdGRvn+5wWbcyC9EG52YXxwxlyVJL3eNRJh+qFF9jFBiveiEg1CX5CBuyQiHKWSa1g+uV/N7zntuWIzmq9nTQIqncvWHkJFaW4tHyTvHZ4dqLk6SrRMRtTHSvHWB16hIHi/XugWQGb5G838=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Uu8n5TI2; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1739556530; x=1771092530;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RVSWb8fwoMmHWM5arqdcYZ9wwDPFb0IQdvCLd5ewN/0=;
-  b=Uu8n5TI2tZ8dUi+KA8zEMPA3fqMgW1ZQW6nSkkGXFnSytcKHiTqVnSZ7
-   iuY10NzFvI9n4mikAZ6ohcq4VXw+IdXGE4qFCwjx8LfuFNj8rlB6QPkt3
-   L1RLVwm/RbX7hGD+oqrdbG97cT77wxLULdeZQCxej1/ChbebpfFUkqFCV
-   XfkdU9978ghx+KjeQR30+cHoXtocqwcpfUQaScSwuAv0u9bx7QocnwvMc
-   UZwgpPMzG+BJoDWmIb5AXIRzu3L/KWDWwGkmZDIwZpGNwV4bRXovFs2wn
-   QrL8/BunWPgxGdhR/NLGDVLRUKXVbevwFIB5VH0X8KbEKmtsHl7/WlSaz
-   Q==;
-X-CSE-ConnectionGUID: afEECSQvQkGMMmDvtHvTFg==
-X-CSE-MsgGUID: gfHqDAcxTA+RqH/t2Tkv0g==
-X-IronPort-AV: E=Sophos;i="6.13,286,1732604400"; 
-   d="scan'208";a="37700933"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Feb 2025 11:08:41 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 14 Feb 2025 11:08:26 -0700
-Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Fri, 14 Feb 2025 11:08:26 -0700
-From: <Ryan.Wanner@microchip.com>
-To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<claudiu.beznea@tuxon.dev>, <vkoul@kernel.org>, <wim@linux-watchdog.org>,
-	<linux@roeck-us.net>
-CC: <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-	<linux-watchdog@vger.kernel.org>, Ryan Wanner <Ryan.Wanner@microchip.com>
-Subject: [PATCH 8/8] ARM: dts: microchip: sama7d65: Enable DMAs
-Date: Fri, 14 Feb 2025 11:08:21 -0700
-Message-ID: <e233ab028123bd91b1de7b0f02eb966d719cc0af.1739555984.git.Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1739555984.git.Ryan.Wanner@microchip.com>
-References: <cover.1739555984.git.Ryan.Wanner@microchip.com>
+	s=arc-20240116; t=1739721612; c=relaxed/simple;
+	bh=EF26j1suwLuBzziUeMgwWp0X8x4RpIgeD8Jxuuo4ULs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JJkvbJgF+L91pEsg4w21aFOlMCAJMaynP5GajLBmLFQgde5gYPbNPBmno6WPOrHRgogC8S6cX/8l3445PPY6DItdKXfY5me4Dwdyego8wI0Ely19Uf74Ltz7/E/S0ya4WSBOqIlwUKjM5QirtlNttMFYGXNGvGmLNRJ9WAHjMNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=pTgJM2RV; arc=none smtp.client-ip=185.67.36.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout01.posteo.de (Postfix) with ESMTPS id 6410B24002A
+	for <linux-watchdog@vger.kernel.org>; Sun, 16 Feb 2025 17:00:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1739721604; bh=EF26j1suwLuBzziUeMgwWp0X8x4RpIgeD8Jxuuo4ULs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:From;
+	b=pTgJM2RVrLprfYbMXybmlG4KLOjVo9E5qpqmA+ccmW85RElh5VpLIRz1jG+WN+S/n
+	 /1a+/Z7pYIDe5dnKfrSx017pXnXOnaK0Z4oSx9JPbq5XY211pMBp1oBmcel4YGxq52
+	 F3RFdjVJ+IRnPS7aXKXN0RW4qOCHxnRfvy1KzqoSH8ARmyd2EiaZD4HdzFGgnbeGt1
+	 EF0887xrzs+xoKfuvZWrJfWF4lUIF/f4kWYDcBTen21LugjWTYJ/6EFcuL+Jof8s8x
+	 Rz6Ymj2KIeS3xT0Ke1YT8gFrFa0zSQbesigmbblCfD+ohW23aPetTyHEH8BbIFFnzO
+	 aesaOV6qAm6Dw==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4Ywr8V6Vlfz9rxW;
+	Sun, 16 Feb 2025 16:59:54 +0100 (CET)
+Date: Sun, 16 Feb 2025 15:59:54 +0000
+From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+To: Rob Herring <robh@kernel.org>
+Cc: Crystal Wood <oss@buserror.net>, j.ne@posteo.net,
+	devicetree@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-mtd@lists.infradead.org, Li Yang <leoyang.li@nxp.com>,
+	John Ogness <john.ogness@linutronix.de>
+Subject: Re: [PATCH v2 09/12] dt-bindings: memory-controllers: Convert
+ fsl,elbc to YAML
+Message-ID: <Z7ILej_AJYot_wKP@probook>
+References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
+ <20250207-ppcyaml-v2-9-8137b0c42526@posteo.net>
+ <Z6kQpuQf5m-bXTyt@buserror.net>
+ <20250210215324.GA1040564-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+In-Reply-To: <20250210215324.GA1040564-robh@kernel.org>
 
-From: Ryan Wanner <Ryan.Wanner@microchip.com>
+On Mon, Feb 10, 2025 at 03:53:24PM -0600, Rob Herring wrote:
+> On Sun, Feb 09, 2025 at 02:31:34PM -0600, Crystal Wood wrote:
+> > On Fri, Feb 07, 2025 at 10:30:26PM +0100, J. Neuschäfer via B4 Relay wrote:
+> > > From: "J. Neuschäfer" <j.ne@posteo.net>
+> > > 
+> > > Convert the Freescale localbus controller bindings from text form to
+> > > YAML. The updated list of compatible strings reflects current usage
+> > > in arch/powerpc/boot/dts/, except that many existing device trees
+> > > erroneously specify "simple-bus" in addition to fsl,*elbc.
+> > > 
+> > > Changes compared to the txt version:
+> > >  - removed the board-control (fsl,mpc8272ads-bcsr) node because it only
+> > >    appears in this example and nowhere else
+> > >  - added a new example with NAND flash
+> > >  - updated list of compatible strings
+> > > 
+> > > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+> > > ---
+> > > 
+> > > V2:
+> > > - fix order of properties in examples, according to dts coding style
+> > > - move to Documentation/devicetree/bindings/memory-controllers
+> > > - clarify the commit message a tiny bit
+> > > - remove unnecessary multiline markers (|)
+> > > - define address format in patternProperties
+> > > - trim subject line (remove "binding")
+> > > - remove use of "simple-bus", because it's technically incorrect
+> > 
+> > While I admit I haven't been following recent developments in this area,
+> > as someone who was involved when "simple-bus" was created (and was on the
+> > ePAPR committee that standardized it) I'm surprised to hear simple-bus
+> > being called "erroneous" or "technically incorrect" here.
+> 
+> Erroneous because the binding did not say "simple-bus" was used. Not 
+> uncommon with the old .txt bindings.
+> 
+> Generally, if a bus has control registers or resources like clocks, then 
+> we tend not to call them 'simple-bus'. And '"specific-bus", 
+> "simple-bus"' gives some problems around what driver if any do you 
+> bind to. 
+[...]
+> > You'd probably need something like commit 3e25f800afb82bd9e5f8 ("memory:
+> > fsl_ifc: populate child devices without relying on simple-bus") and the 
+> > subsequent fix in dd8adc713b1656 ("memory: fsl_ifc: populate child
+> > nodes of buses and mfd devices")...
+> > 
+> > I'm curious what the reasoning was for removing simple-bus from IFC.  It
+> > seems that the schema verification also played a role in that:
+> > https://www.spinics.net/lists/devicetree/msg220418.html
+> 
+> If a kernel change is needed to support changed .dts files, then we 
+> shouldn't be doing that here (being mature platforms). That would mean 
+> new DTB will not work with existing kernels.
 
-Enable DMA interface for sama7d65_curiosity board.
+Alright, I'll keep simple-bus in the eLBC binding for historical
+compatibility.
 
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
----
- .../boot/dts/microchip/at91-sama7d65_curiosity.dts   | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-index 0f86360fb733a..0c21e3ed3a95a 100644
---- a/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-+++ b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-@@ -32,6 +32,18 @@ memory@60000000 {
- 	};
- };
- 
-+&dma0 {
-+	status = "okay";
-+};
-+
-+&dma1 {
-+	status = "okay";
-+};
-+
-+&dma2 {
-+	status = "okay";
-+};
-+
- &flx6 {
- 	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
- 	status = "okay";
--- 
-2.43.0
+Thank you both for your discussion.
 
+
+J. Neuschäfer
 
