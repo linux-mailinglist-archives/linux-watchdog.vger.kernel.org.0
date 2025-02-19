@@ -1,126 +1,93 @@
-Return-Path: <linux-watchdog+bounces-2963-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2964-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3276A3AD4F
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Feb 2025 01:44:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 930FDA3AEB2
+	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Feb 2025 02:13:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 380487A1F92
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Feb 2025 00:43:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32A57188406A
+	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Feb 2025 01:13:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B41D19DF98;
-	Wed, 19 Feb 2025 00:42:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AB6425757;
+	Wed, 19 Feb 2025 01:12:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g7DXt187"
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="GG4Nw1bv"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC3A19D882;
-	Wed, 19 Feb 2025 00:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D88E1A920;
+	Wed, 19 Feb 2025 01:12:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739925748; cv=none; b=dDaxdQxcn1jBJKn1CyDvFE5asQOWZOMbMOIZ8eidpjnfSYvbXsk2Hqpvi6KsmxkLlJiDDhCE9712d0GkGXrJMWVf4nPIPmjGy+Mc216Q09NhlYUGjBRQNlO/9MZhdO+QZI5iRLgwEjHz2/AlTXwHh8HhY6vT7pgwg/P6OP71I+0=
+	t=1739927577; cv=none; b=lDoTKZa3AqVpgHpG5O3tXX/m4OLeX9SWKtDc8YMoMxoL8JVTOK1+uLvAMNS7HXuzD8mNeBJBoLtpvbPEdYuG8eK1DL4obVNw6Wqb8HAa3NGqabQPs3Av4Xzk9jEcAw9pDhhwP5506A/QpzuLOB4g+ciFCRYz7uDlPX8yrmlI91c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739925748; c=relaxed/simple;
-	bh=MCUZvMnjI+St/xxB98n3RdGdbJTQ9UD808hd20KqjPs=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=RY+mGwwkPWVq8uXjZ7EysOEaCyGEGRgNQu8i7mQiL/LC216DN8bWikePvMl3qBxqshJfwKaFz/00BGniTFKYgSWLC4AzNwEwyOESJy6SaYC0eMleJoO/P6SOD0VI8eEKNywoMusJzFV7R8NvhuU57WR0Ws9T15XHdRC6/90Bvwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g7DXt187; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41AD0C4CEE2;
-	Wed, 19 Feb 2025 00:42:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739925747;
-	bh=MCUZvMnjI+St/xxB98n3RdGdbJTQ9UD808hd20KqjPs=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=g7DXt187wHzs6lpJOBkSrmxvJy6EAno2kUlthlhPsgMhUKij1NDLsEfj8cya5mDQY
-	 xfC1EOHc+knjSm5CH8o6khCn3rDz2NHfnSE1uk2Qhc0hgf/ydW3G8jOlCJqaoDh/DE
-	 bc0jKanWKe7hYDToKMjh65tWXzRmnzM8mDRiG4lFQSpbSLOYX3R3wmn9HaeIzD+mTg
-	 oyMiTZcjyshGu2hKWv44TdS1ze0xfKxFxZ9MmE1s4ru/Cbm6PDzEmVvzm0XHx3eEP2
-	 O+Ti7sW763NoQQ1FeaEFJD+QH9Cae6SX5W/BN13rUrJaVeSUbodBzH2kJ1IjtMwMj8
-	 Hni1nopfxMlfg==
-Date: Tue, 18 Feb 2025 18:42:26 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1739927577; c=relaxed/simple;
+	bh=Ni1r638kXhz6gOBSh0GzjFMf1Ey2XUVcA0yKk/KtpJY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TsO2WpY4BoCEwVBl7itgykdSK6aSZ9LWroPlJ4q47+g7d2Z6AmBf4fwLTCuXbpNnwVEW5GJ3V+zIGf+ibPk1ThSXLc+atBMcRWX2P1zCaRpThfUKFgNcrIwPr1kd8VFeRES0Bm5Kryjq/WkoPIv/XQaZH+NgO6i2p7FUCy2GHtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=GG4Nw1bv; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1739927572;
+	bh=Ni1r638kXhz6gOBSh0GzjFMf1Ey2XUVcA0yKk/KtpJY=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=GG4Nw1bvSKh8tDf3E+2t/uMIf7OolfOAl6mSmUWL6zpk45Zsy2/B31/S+KrMPCKx4
+	 ptMe2y+TaQ2da9TTRW4kF91rgL/iQlVLR8uTcQTUm/mkyAlBGk2h+6SjjiBPdty042
+	 h6X9e2gKDVlq9GIMEyIiGdMm2RHoRjy9z9B9qsjsIku2Ec1nKqcf7b75A5v1Nw7cR5
+	 3XUMMv21fA2X652KA2KlzJ3oMwWKUiie9gAbHsrtYmI3bTWaF8gzoZDIEvzvccX30x
+	 2uoYuiCFfVP9hCm3IzcbGoVzFO5AHfBXbNNAq3JxbEULwt1kbNRAwVTXLg2nANYCZJ
+	 SBKyx4CtVg8PA==
+Received: from [192.168.68.112] (203-173-1-6.dyn.iinet.net.au [203.173.1.6])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id ECA6176191;
+	Wed, 19 Feb 2025 09:12:51 +0800 (AWST)
+Message-ID: <a7df160add1563a69573e00af44caf8bb73f520b.camel@codeconstruct.com.au>
+Subject: Re: [PATCH 2/2] ARM: dts: aspeed: aspeed-g6.dtsi: enable IRQ for
+ watchdogs
+From: Andrew Jeffery <andrew@codeconstruct.com.au>
+To: Heyi Guo <guoheyi@linux.alibaba.com>, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+  Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>
+Date: Wed, 19 Feb 2025 11:42:51 +1030
+In-Reply-To: <20250218031709.103823-2-guoheyi@linux.alibaba.com>
+References: <20250218031709.103823-1-guoheyi@linux.alibaba.com>
+	 <20250218031709.103823-2-guoheyi@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: krzk+dt@kernel.org, dmaengine@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux@roeck-us.net, vkoul@kernel.org, 
- wim@linux-watchdog.org, linux-watchdog@vger.kernel.org, conor+dt@kernel.org, 
- linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com, 
- claudiu.beznea@tuxon.dev, alexandre.belloni@bootlin.com, 
- devicetree@vger.kernel.org
-To: Ryan.Wanner@microchip.com
-In-Reply-To: <cover.1739555984.git.Ryan.Wanner@microchip.com>
-References: <cover.1739555984.git.Ryan.Wanner@microchip.com>
-Message-Id: <173992516786.2065578.832520865805552342.robh@kernel.org>
-Subject: Re: [PATCH 0/8]  Add System Components for Microchip SAMA7D65 SoC
 
-
-On Fri, 14 Feb 2025 11:08:13 -0700, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
-> 
-> This patch set adds support for the following systems in the SAMA7D65
-> SoC:
-> - DMAs
-> - Chip ID
-> - Dual watchdog timer.
-> 
-> Ryan Wanner (8):
->   dt-bindings: atmel-sysreg: Add SAMA7D65 Chip ID
->   dt-bindings: watchdog: sama5d4-wdt: Add sama7d65-wdt
->   dt-bindings: dma: atmel: add microchip,sama7d65-dma
->   ARM: at91: Add Support in SoC driver for SAMA7D65
->   ARM: dts: microchip: sama7d65: Add chipID for sama7d65
->   ARM: dts: microchip: sama7d65: Add watchdog for sama7d65
->   ARM: dts: microchip: sama7d65: Add DMAs to sama7d65 SoC
->   ARM: dts: microchip: sama7d65: Enable DMAs
-> 
->  .../devicetree/bindings/arm/atmel-sysregs.txt |  1 +
->  .../bindings/dma/atmel,sama5d4-dma.yaml       |  3 ++
->  .../bindings/watchdog/atmel,sama5d4-wdt.yaml  |  3 ++
->  .../dts/microchip/at91-sama7d65_curiosity.dts | 12 +++++
->  arch/arm/boot/dts/microchip/sama7d65.dtsi     | 44 +++++++++++++++++++
->  drivers/soc/atmel/soc.c                       |  5 +++
->  drivers/soc/atmel/soc.h                       |  3 ++
->  7 files changed, 71 insertions(+)
-> 
-> --
-> 2.43.0
-> 
-> 
-> 
-
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y for arch/arm/boot/dts/microchip/' for cover.1739555984.git.Ryan.Wanner@microchip.com:
-
-arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: watchdog@e001d180: Unevaluated properties are not allowed ('clocks' was unexpected)
-	from schema $id: http://devicetree.org/schemas/watchdog/atmel,sama5d4-wdt.yaml#
-arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: /soc/chipid@e0020000: failed to match any schema with compatible: ['microchip,sama7d65-chipid']
-
-
-
-
+SGkgSGV5aSwKCk9uIFR1ZSwgMjAyNS0wMi0xOCBhdCAxMToxNiArMDgwMCwgSGV5aSBHdW8gd3Jv
+dGU6Cj4gVG8gZmluYWxseSBlbmFibGUgd2F0Y2hkb2cgcHJldGltZW91dCBmdW5jdGlvbi4KPiAK
+PiBTaWduZWQtb2ZmLWJ5OiBIZXlpIEd1byA8Z3VvaGV5aUBsaW51eC5hbGliYWJhLmNvbT4KPiAK
+PiBDYzogUm9iIEhlcnJpbmcgPHJvYmhAa2VybmVsLm9yZz4KPiBDYzogS3J6eXN6dG9mIEtvemxv
+d3NraSA8a3J6aytkdEBrZXJuZWwub3JnPgo+IENjOiBDb25vciBEb29sZXkgPGNvbm9yK2R0QGtl
+cm5lbC5vcmc+Cj4gQ2M6IEpvZWwgU3RhbmxleSA8am9lbEBqbXMuaWQuYXU+Cj4gQ2M6IEFuZHJl
+dyBKZWZmZXJ5IDxhbmRyZXdAY29kZWNvbnN0cnVjdC5jb20uYXU+Cj4gLS0tCj4gwqBhcmNoL2Fy
+bS9ib290L2R0cy9hc3BlZWQvYXNwZWVkLWc2LmR0c2kgfCA0ICsrKysKPiDCoDEgZmlsZSBjaGFu
+Z2VkLCA0IGluc2VydGlvbnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vYm9vdC9kdHMv
+YXNwZWVkL2FzcGVlZC1nNi5kdHNpCj4gYi9hcmNoL2FybS9ib290L2R0cy9hc3BlZWQvYXNwZWVk
+LWc2LmR0c2kKPiBpbmRleCA4ZWQ3MTViZDUzYWEuLmVmN2NlZDI4NWM0NCAxMDA2NDQKPiAtLS0g
+YS9hcmNoL2FybS9ib290L2R0cy9hc3BlZWQvYXNwZWVkLWc2LmR0c2kKPiArKysgYi9hcmNoL2Fy
+bS9ib290L2R0cy9hc3BlZWQvYXNwZWVkLWc2LmR0c2kKPiBAQCAtNTM4LDIzICs1MzgsMjcgQEAg
+dWFydDU6IHNlcmlhbEAxZTc4NDAwMCB7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgd2R0MTogd2F0Y2hkb2dAMWU3ODUwMDAgewo+IMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBjb21w
+YXRpYmxlID0gImFzcGVlZCxhc3QyNjAwLXdkdCI7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlZyA9IDwweDFlNzg1MDAw
+IDB4NDA+Owo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoGludGVycnVwdHMgPSA8R0lDX1NQSSAyNAo+IElSUV9UWVBFX0xFVkVM
+X0hJR0g+OwoKVGhlIGJpbmRpbmcgd2lsbCBuZWVkIGFuIHVwZGF0ZSB0byBhbGxvdyAnaW50ZXJy
+dXB0cycgYXMgYW4gb3B0aW9uYWwKcHJvcGVydHkuCgpBbmRyZXcK
 
 
