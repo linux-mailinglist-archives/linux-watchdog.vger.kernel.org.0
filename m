@@ -1,83 +1,123 @@
-Return-Path: <linux-watchdog+bounces-2975-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2976-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ACAAA3CCEF
-	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Feb 2025 00:01:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C8D1A3D636
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Feb 2025 11:12:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA4EB17947F
-	for <lists+linux-watchdog@lfdr.de>; Wed, 19 Feb 2025 23:00:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35EC63B45E2
+	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Feb 2025 10:12:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37EC325C710;
-	Wed, 19 Feb 2025 23:00:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="raIXypYF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A958E1F03DE;
+	Thu, 20 Feb 2025 10:12:25 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083002417C3;
-	Wed, 19 Feb 2025 23:00:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4B31E9B35;
+	Thu, 20 Feb 2025 10:12:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740006019; cv=none; b=RQIW/aYQisFnUd2epBqkuzMHlpJQFYU9w6i33dfI9fctOKzNSNEVq0JS/CPdjkN+7q+r7kwd/gdXw3Qeokz9Jj1ST0T1MT4VH81tI/sz4sWfNYKG4+Hpxxkl/10WKha03myXyqSZCxWUcQLKvqN91cSEuUGnWM+6YptBII9molQ=
+	t=1740046345; cv=none; b=l+HT65fCcr6OgzFE6PxWS5YVckgVOjAMqi4xGzjyrkkaT2O0564CLYMYGoLz7J38AvNBNLgCkAv0aJ7rNcVnCz33k4qgmIsjogmrtyWRKTVLlA92o/mDohXKw1lQJB0dMFmxD+XIPGMJfay3+HboM9pOzd9F40PEjHnF6z7VLaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740006019; c=relaxed/simple;
-	bh=Fm7ii2ab9wmKHnkgzHIKXYVrWpsA7NKpu2v+Av3Ghh8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L8Us4RsomsfITU9PDdEg90J130XF70bEBKzecjvLoIR0wVC9k+qx0WNm/Cx7XKSpogyxqlBHZ8lgy6XMhev+oKh1+geWsCpUB2oyD/ssEeBwpHa6ag/kVN8n43lZyruRHnrzcBsuMbK44i6ED+p9owdj563L8MfL7BlsF0K03q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=raIXypYF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ABB7C4CED1;
-	Wed, 19 Feb 2025 23:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740006018;
-	bh=Fm7ii2ab9wmKHnkgzHIKXYVrWpsA7NKpu2v+Av3Ghh8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=raIXypYFZI9kHKms0Iy1gpDJxZja85zUcLtt4/iedzY/wXqt55qFnkcZmjEPkB5ga
-	 NLtetxbVC3/TrBR7e5Qdb0CcXCInXG66fQXmjn6ZRsXqPymT+3JSVfMMontJeM7MYS
-	 EgvhE4CRss9oUxw9ev9t97jwvi2vLDDdlYkH/oWegidHL2NDChAydDpWN+R2regoBJ
-	 kIPy1h4Q97GI30/COJxkdvh6zfefBIp359ZWAwlR4kneu1pSLr873FkzAdZ80vCcU0
-	 6R9f1S/BeLtbMCZTmc/G74oQPy+s8AgpuTlWA1o8uW3ggF7VEdzzFdFdInEAqPUnmu
-	 aNV+hrhphurHw==
-Date: Wed, 19 Feb 2025 17:00:17 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Ryan.Wanner@microchip.com
-Cc: linux-kernel@vger.kernel.org, linux@roeck-us.net,
-	wim@linux-watchdog.org, claudiu.beznea@tuxon.dev, vkoul@kernel.org,
-	conor+dt@kernel.org, devicetree@vger.kernel.org,
-	dmaengine@vger.kernel.org, nicolas.ferre@microchip.com,
-	linux-watchdog@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, alexandre.belloni@bootlin.com,
-	krzk+dt@kernel.org
-Subject: Re: [PATCH 3/8] dt-bindings: dma: atmel: add microchip,sama7d65-dma
-Message-ID: <174000601710.3128913.15621337092238580817.robh@kernel.org>
-References: <cover.1739555984.git.Ryan.Wanner@microchip.com>
- <8b69f0c6d8955790edcdbe5d1e205b43dedb99ff.1739555984.git.Ryan.Wanner@microchip.com>
+	s=arc-20240116; t=1740046345; c=relaxed/simple;
+	bh=nIi99FHDxzLdX0vKOH+URmw24gaSbRYE2N63qsAdWec=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RHTMbiqaGykVsCurjrtviingIBn2blrSwxeewMRWpUnRfQKoVDY450jj9nLDYauIBYtXqG3KSfpI/pueGikfiZ8fPl6eSBTRGoZM52asgqcpo2GQihMlC07C1sDUq9PIlPv6TW6dXpf96+OxqUdDdRkPPMxPq6Ofx2Tey4PtuX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-4be66604050so258743137.3;
+        Thu, 20 Feb 2025 02:12:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740046340; x=1740651140;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v6g+DX3MC+/86jx2uJn9E9iTV8rLmFW1Dd5ipEZ0c9k=;
+        b=WiyAZF8SXWEZx9TxlGP7S3YHQOexWC47npPa4Jj6hUeDLy44zmL+f90d5rZth2dSNY
+         EC77SbZKR5EIlxq26Ex/sETzy1REWu4+IgWD3xvoMLgPgJv/v2G0BFK2ha8Mkq4sH5kb
+         hC0qhDmvksRwXWKscLFERInIpqg37RyssVcrfLqoGRYxEubwyNr0MJVV7iaa1H/u/M+t
+         lUomYmIc9aIX7ER12F0pcvPBbWzgn8broyMGmvy94nh72F7Zd+B+EQbLY3MxYMdM3A9w
+         XFIzNCmzzLHLVLXuFS1QHp7NmX9djCiOvVnFeU63+KNW7MYCmpnfWzBmYUDZHxyvx6vu
+         cveQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUP9td4dlpsk/GpXQOzbffq6zugjneSiaIsxtr/Wkm/giI4RPPhpQ652KatoQU+ms7boNQZ4XvMf71I95FOBzOJZGo=@vger.kernel.org, AJvYcCUR4w9WtYKc0WeGw5TQkK3Yq+rUSikp3urwIxRXhzzdoOlTvmRZ0l9O7JEEq11NDrymfcEiJvYRZ9+8@vger.kernel.org, AJvYcCV3pnYr3TmXul8k1L5/bJqxDz59el1zE6/hUFhCVi14d8NdjI1VsZmeGKz9N/1sb5R8QE1rWOSEhUq4LeFI+5M=@vger.kernel.org, AJvYcCVJEsMv7JyoCWu/RcdO5HaWMFlB7Id8WT6lGBNXkOfn1XP086nX7N9p3f0TVmoIdiFLb/okrQjfpEc55zdS@vger.kernel.org, AJvYcCWD3wp0U+3GeGgmLO45FmnJOPi1D87P95pmhXszMlCSgdIT5enXXFgBzioEj9jnCCZdj3Bw7WTo02gQ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9tRcZQNE10TXxLDlm4CRNqBWDe7npQ9/zXkuIOY7DvDBd84VG
+	RrsFf+v6sUa3qZTQPyde5rYOSsBzYHa1iHh8coQtORwXcp9NtjOVtaBeSBZ1
+X-Gm-Gg: ASbGncuBqr8HMHJSJ0TrTz8STpPTYfQg8ZgPgJKU2S8lGsVCSn7u0UU40gJXrp3ZPyT
+	OAn4eV5vQwd2AUv31HFTJOfrBCrRjSDuHSOPUrvfaWXW5o4UnINSWPSZfM9nwVJRrb3dOWuJH22
+	zTbp0ZMWt0FXYq11nhIkW29n/pVn1clySmp+F7rGncMLbXPp8gArQ5Bjhoa6kAEibCfC/Pi/S8s
+	notnFHKnckm1Ov0tW1l4ueQ6Z+/fIByiDiGd50+rR/0U5+XSOzCfZjQ3B9ZS433Aac4+FcjBdy9
+	j3J9o1ZpD3CUxAC4tRmKnt/Oa0WumjzPKvZMb2wPOLJkZerDQyuorg==
+X-Google-Smtp-Source: AGHT+IF2u6D62Vnl4M6IzxCv2Pe64IooAhgmygegDeTDAu6zr6P9EvaLevM8KSvRBx9Ih1qX2H0n4Q==
+X-Received: by 2002:a05:6102:150f:b0:4bb:d962:61f with SMTP id ada2fe7eead31-4bd3fe55f27mr14511726137.24.1740046340627;
+        Thu, 20 Feb 2025 02:12:20 -0800 (PST)
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com. [209.85.217.42])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4bc13d53651sm3166586137.17.2025.02.20.02.12.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Feb 2025 02:12:19 -0800 (PST)
+Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-4ba0eb3b0f9so259322137.0;
+        Thu, 20 Feb 2025 02:12:19 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVEgaPrUiRpLaAfJPcwu/vBYSpYLU07ARaxpr1lck7E/Tl0NsiAQcf44NywG+UhZ6Ut7UIZFb1oetF1@vger.kernel.org, AJvYcCX6nd+WMyUSpyylUazZWuEsae3BTsGIzjkvt0xdDXP3DH1SfPoY2W1ob9+feyuRF+nDm5udT+/B/OqJGmHt@vger.kernel.org, AJvYcCXO+rxtUuwyC466ArRn41WjagUuCyB+CXQWiiH38HWxYRUsHVn85CQJ4zhD48XvNxe2At3H0f9rxzP6@vger.kernel.org, AJvYcCXiVJ/9SwqMwT71mgRQcLzrjXUCTukNKN7JjiwPF0WN7hJCtNfVD7j5z463Yy3vYcyPEeH+ddqAX4rohXb4zu0W5bg=@vger.kernel.org, AJvYcCXnzDYPofC/BeoIsbJOLBp33qFt1qwv1y6hdg7ma85De8iZrqwVPQKBy+uBcnZPHbqp/xx0rfm443KlujXJDU8=@vger.kernel.org
+X-Received: by 2002:a05:6102:150f:b0:4ba:95f1:cc83 with SMTP id
+ ada2fe7eead31-4bd3fe0463fmr11960631137.16.1740046339391; Thu, 20 Feb 2025
+ 02:12:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8b69f0c6d8955790edcdbe5d1e205b43dedb99ff.1739555984.git.Ryan.Wanner@microchip.com>
+References: <20250210184910.161780-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20250210184910.161780-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 20 Feb 2025 11:12:07 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUZTpcuhOsK-VQ=cQHACU_OK13GpKrW9zontqtUzWpB1g@mail.gmail.com>
+X-Gm-Features: AWEUYZl6-xC_bxNyu24YgYdf9ZH6bVOARQ4QLwAphkFO_eW2hGjwktxozR2jY1k
+Message-ID: <CAMuHMdUZTpcuhOsK-VQ=cQHACU_OK13GpKrW9zontqtUzWpB1g@mail.gmail.com>
+Subject: Re: [PATCH v4 0/9] Add support to configure CPG block for watchdog on
+ RZ/V2H(P) and RZ/G3E SoCs
+To: Prabhakar <prabhakar.csengg@gmail.com>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck <linux@roeck-us.net>, 
+	Magnus Damm <magnus.damm@gmail.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>, 
+	Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 
+Hi Prabhakar,
 
-On Fri, 14 Feb 2025 11:08:16 -0700, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
-> 
-> Add microchip,sama7d65-dma compatible string to DT bindings
-> documentation.
-> 
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> ---
->  Documentation/devicetree/bindings/dma/atmel,sama5d4-dma.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+On Mon, 10 Feb 2025 at 19:49, Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> This patch series adds SYSCON support to configure and retrieve boot
+> status information from the CPG block for the RZ/V2H(P) and RZ/G3E SoCs.
+> Summary of Changes,
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Wasn't the plan to use a DT property under /chosen instead?
+(Yes, I go to great lengths to avoid reviewing and accepting patches
+ adding syscon compatible values anywhere ;-)
 
+> v3->v4
+> - Added support to configure CPG_ERRORRST_SEL2 register
+
+Oh, I  guess that's the reason why you changed your mind.
+I will reply to that patch...
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
