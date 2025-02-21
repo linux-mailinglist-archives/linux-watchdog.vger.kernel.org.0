@@ -1,231 +1,197 @@
-Return-Path: <linux-watchdog+bounces-2980-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2981-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5089AA3E444
-	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Feb 2025 19:55:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6981DA3EACF
+	for <lists+linux-watchdog@lfdr.de>; Fri, 21 Feb 2025 03:36:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE933189EE19
-	for <lists+linux-watchdog@lfdr.de>; Thu, 20 Feb 2025 18:54:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65AA63B6931
+	for <lists+linux-watchdog@lfdr.de>; Fri, 21 Feb 2025 02:36:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79D3E1C6FE9;
-	Thu, 20 Feb 2025 18:54:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 211421D7E2F;
+	Fri, 21 Feb 2025 02:36:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XdSjBnW2"
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="a71xTtDu"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0A62139CE;
-	Thu, 20 Feb 2025 18:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 071F93C2F;
+	Fri, 21 Feb 2025 02:36:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740077686; cv=none; b=BDG+wGcYSPTwhn91l7vP38KVx5wi5bIjRQtbYKGP0AfDEyM+dceSdBz4GivOp69ZPHbzVbhPhJeqEIuRamcchOpiXHB92oZ1dcf/60nk9ter+yKXewG2VNBr6mvJhIkQgJkMZJJqIZUIvT8ZJEMAyXwGsPmYiotWW5iz+/pPW/E=
+	t=1740105384; cv=none; b=YLNBKYRgzI0OqW7DI9FpGZAv/x8yhia0E2EQQKco2F0LqkzLeGzw8qSoZ/OBj0rKLuAajWwunNyTX793hsUFAhYUxUs8Ofa6xfDe1+hhk3UJsUw0zqtq71kPj5a9bTBq9oT09OvOuOlUR/Tv4AYeaBtWVufr+pRwNE6GiWDIYvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740077686; c=relaxed/simple;
-	bh=cMDqIV3x7lh6uv9EJP5Tt0+qvfNego5MD8pqPWxIX2E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uY75GYR/Qirm6Q1DVPXLdNG0WcYlTHoZeuUOwOyKxyMTnfo3KQF+xixy40FbGPEFhc6FsV3nfyEAMU4BQsA3HaWhxxV+blXEjFyT86IWAQv+b+1uAj49zL1EP3m41h1k5LhNhgQH4I2hRzRcIhsWtQ6jo6G3Concpkf2mQYv6NQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XdSjBnW2; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-38f3ee8a119so687591f8f.0;
-        Thu, 20 Feb 2025 10:54:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740077683; x=1740682483; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6Oal8utCZ08ILyHyFTz/wIyOgD/RRDeQUzHjyhfMLf8=;
-        b=XdSjBnW2jL+iE7J70FTw/dasVfEVj0cXPX3mieH8Q/S5nN//YqUFGmgTntmUTCWY9J
-         brCEm0mGKB0yFAl7OFBlHKBNFqCv6R0H6bAqr0u1jFmRro8t5wzDcrWLfrznxNtFe9aB
-         fux7mNXrY8WiCghnMNAY9QDTRuRmeONShd/v9A47bsq6CyycpQWR9W7UCWOJfTmvPeZJ
-         CgAPdm6TsXY+GK3Xy+M4LI8krovNpUSHEa7DEzhZYjMeGcFzGjz4fl3zyNQGObtuud0C
-         SMX1mwi91G9rGGvHlZsBYxYKLRGnKwysMd4ZHNj+sFla4QOq1ThMjSBzuLNV+o4qTuqf
-         Lz2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740077683; x=1740682483;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6Oal8utCZ08ILyHyFTz/wIyOgD/RRDeQUzHjyhfMLf8=;
-        b=rqnKl8j8KrAiTVtZ3TrcfMz5pTSizdmL1h5E8AJp1ZMhBdHIZRoaZeOjFLQ9eEnIe6
-         WH1gtgg1fWi9/XxVwM8wkBUF3FOkhcXzo+w7awTva33rrw4x8ilTxIkq2dT8s8YiZx/+
-         IpWIiTylEkna7jBU50MbFHR5L7dTrmZcCKpyjW2jbycTJmoq+DXxtnCFOTfkGDf63B/m
-         FdYnetg+tyUK1h//kvedi7KkNM3de/pWZmlEtOZdtzAYda+WNaHZEfsUxLLbiSRFzH8q
-         LAth9GTkighxMX8YjyTwEbOWmD0DLEpXhDkwyGBIdvmVMzwWnlqGeZvh3Xcva2fFB7AP
-         nmYA==
-X-Forwarded-Encrypted: i=1; AJvYcCUyC6ZT+76JVFIyqvSQPnV2ls9NMDWpGE7tl5nXdKbsx+4qNKAbrmKI/6f/uWwytMcZIe0sq9NLcuRJUGs=@vger.kernel.org, AJvYcCV9XuUXP12FRCH1DuP1KbDubgHVhWNBbmvp/iRSEkCTFsgaafzcU7FXwjtbgRar6OZqeY9pXxpqSTWnxrx5+tA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwhzcR3hsrBqEqrA5hxVKWXGqLMHRZZWrTEsHfiyvViIr+inGu
-	P4UuJTzCK63cUQAhZvdtmY+ncxvYLxxzyYtxCs+3ZG1Hy8UtxpTC
-X-Gm-Gg: ASbGncsE13BKjDMXaB6Vf+VwllKbsutiQXBgkJXbpAuvOYDAFHr8m/Fkv35cVCgTAwr
-	G2hN2clWpZnpLSjxtpX9BukN5H00urgb+OcMsFgU7bvk1RH06gAfNwIOnkDv5Nf3Tj5GI6uTDVO
-	AjeIhs+B59d4ECFUQouQOqj3ZxITHJXB5uMWxe7LcZyiBEsRjL4zLRGOhccJhQTjMx03xgBCFuC
-	pixgr9w6NOZq1vJyculP7y2eKH3yFKE0KoKu19B5pzNAZ58110jzu6I3zrmleJ1C9vqBBF0a1LY
-	SheUtEvY4mHmdhITVZ868E675Q8gl937mx++MteFHPK+jUEXJdl8m2UMQXC/tkj7uew=
-X-Google-Smtp-Source: AGHT+IEz1kRSBdQaUNaxSf9Ymu++DD9XiW/gWiIlW5Kf9eF4M/t3Ayol4FGnQYUa8AygEQgkEekRPA==
-X-Received: by 2002:a5d:6c68:0:b0:38f:3a89:fdae with SMTP id ffacd0b85a97d-38f6f0d7237mr322996f8f.46.1740077682854;
-        Thu, 20 Feb 2025 10:54:42 -0800 (PST)
-Received: from jernej-laptop.localnet (86-58-6-171.dynamic.telemach.net. [86.58.6.171])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f258dab74sm21637846f8f.32.2025.02.20.10.54.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Feb 2025 10:54:42 -0800 (PST)
-From: Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To: Regis Dargent <regis.dargent@gmail.com>
-Cc: Regis Dargent <regis.dargent@gmail.com>,
- Wim Van Sebroeck <wim@linux-watchdog.org>,
- Guenter Roeck <linux@roeck-us.net>, Chen-Yu Tsai <wens@csie.org>,
- Samuel Holland <samuel@sholland.org>, linux-watchdog@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-kernel@vger.kernel.org
-Subject:
- Re: [PATCH v2] watchdog: sunxi_wdt: Allow watchdog to remain enabled after
- probe
-Date: Thu, 20 Feb 2025 19:54:41 +0100
-Message-ID: <3278560.vfdyTQepKt@jernej-laptop>
-In-Reply-To: <20250214112255.97099-2-regis.dargent@gmail.com>
-References:
- <CAGb2v67tmzGfcFPchjzfSima-sT_u7viYd1UDGB9r6ZeJEgdyg@mail.gmail.com>
- <20250214112255.97099-1-regis.dargent@gmail.com>
- <20250214112255.97099-2-regis.dargent@gmail.com>
+	s=arc-20240116; t=1740105384; c=relaxed/simple;
+	bh=bZK0D6NskJV20GTUtw762wIucpi7jyCaWV4efMBFBJw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=G72ityn/Td9vgN15llGRztZjQOww5vlWJ5ldggcOZqV9vpvb4kQbvMZAL1nlQcgbbNa7zEl+ioZNDkVAbp/YSx3wZz1fGz5WGaLpz1+cXnYj5W2I4y+Sk4gCrZHOKvPX1dtlysn4m/ucns63bXIVxCgA94kRwiD3eh7AYVFSrRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=a71xTtDu; arc=none smtp.client-ip=67.231.156.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+Received: from pps.filterd (m0431383.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51KLpI4X019253;
+	Thu, 20 Feb 2025 18:36:06 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pfpt0220; bh=yrGSGxFZaPyMAX/abbQYP6Y
+	xMutI6bHyx5LFZnAqtuc=; b=a71xTtDu5NQM6q5GRDyuBKOtLvldojJzSZlQl8S
+	ux2GtvKRxWp/ggH4g0GIxj/7ZZ3y4qiBoXVsvqAdqjhOFIB1n/0dJreXaFYWeSia
+	eRXlHFrxxpxFBCG+VDKO5M/Jp0y1Vy942okcUXtUi2c467QjvlyIUXfN8s5KOxrp
+	LSDuXP6zEh2g4E2TU+XNx+V0Fs30zMDpFPhSqJ0dElzM0hC8fNbtZKD7YxH2tGO8
+	Uem8yvgG/nIxEnUmsdZQ/Q2Fj4BKT/bJAOLYybZ7ilOiwggaR/MOWjh9GWojFU5h
+	7oP1wyWZs+eSDq6StDpVwByU2prbfqFqLjqbf4QS0/6lf+Q==
+Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 44wu8pb3u9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 20 Feb 2025 18:36:06 -0800 (PST)
+Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
+ DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Thu, 20 Feb 2025 18:36:05 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
+ (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
+ Transport; Thu, 20 Feb 2025 18:36:05 -0800
+Received: from tx2-sever.caveonetworks.com (unknown [10.110.141.15])
+	by maili.marvell.com (Postfix) with ESMTP id 221A53F708C;
+	Thu, 20 Feb 2025 18:36:05 -0800 (PST)
+From: George Cherian <george.cherian@marvell.com>
+To: <wim@linux-watchdog.org>, <linux@roeck-us.net>, <corbet@lwn.net>
+CC: <linux-watchdog@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        George Cherian <george.cherian@marvell.com>
+Subject: [PATCH 1/2] drivers: watchdog: Add support for panic notifier callback
+Date: Fri, 21 Feb 2025 02:35:49 +0000
+Message-ID: <20250221023550.2092232-1-george.cherian@marvell.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: jaxOC1g25aDZTmy-Cop8rA6vdyl7fdW5
+X-Proofpoint-GUID: jaxOC1g25aDZTmy-Cop8rA6vdyl7fdW5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-20_09,2025-02-20_02,2024-11-22_01
 
-Hi,
+Watchdog is not turned off in kernel panic situation.
+In certain systems this might prevent the successful loading
+of kdump kernel. The kdump kernel might hit a watchdog reset
+while it is booting.
 
-please send new versions as separate e-mail thread.
+To avoid such scenarios add a panic notifier call back function
+which can stop the watchdog. This provision can be enabled on per
+driver basis if the user wishes to by setting the flag
+WDOG_STOP_ON_PANIC from respective drivers.
 
-Dne petek, 14. februar 2025 ob 12:22:54 Srednjeevropski standardni =C4=8Das=
- je Regis Dargent napisal(a):
-> If the watchdog is already running during probe, let it run on, read its
-> configured timeout, and set its status so that it is correctly handled by=
- the
-> kernel.
->=20
-> Signed-off-by: Regis Dargent <regis.dargent@gmail.com>
-> ---
->  drivers/watchdog/sunxi_wdt.c | 48 +++++++++++++++++++++++++++++++++---
->  1 file changed, 45 insertions(+), 3 deletions(-)
+Signed-off-by: George Cherian <george.cherian@marvell.com>
+---
+ drivers/watchdog/watchdog_core.c | 31 +++++++++++++++++++++++++++++++
+ include/linux/watchdog.h         |  8 ++++++++
+ 2 files changed, 39 insertions(+)
 
-You should add changelog here.
-
->=20
-> diff --git a/drivers/watchdog/sunxi_wdt.c b/drivers/watchdog/sunxi_wdt.c
-> index b85354a99582..0094bcd063c5 100644
-> --- a/drivers/watchdog/sunxi_wdt.c
-> +++ b/drivers/watchdog/sunxi_wdt.c
-> @@ -140,6 +140,7 @@ static int sunxi_wdt_set_timeout(struct watchdog_devi=
-ce *wdt_dev,
->  		timeout++;
-> =20
->  	sunxi_wdt->wdt_dev.timeout =3D timeout;
-> +	sunxi_wdt->wdt_dev.max_hw_heartbeat_ms =3D 0;
-> =20
->  	reg =3D readl(wdt_base + regs->wdt_mode);
->  	reg &=3D ~(WDT_TIMEOUT_MASK << regs->wdt_timeout_shift);
-> @@ -152,6 +153,32 @@ static int sunxi_wdt_set_timeout(struct watchdog_dev=
-ice *wdt_dev,
->  	return 0;
->  }
-> =20
-> +static int sunxi_wdt_read_timeout(struct watchdog_device *wdt_dev)
-> +{
-> +	struct sunxi_wdt_dev *sunxi_wdt =3D watchdog_get_drvdata(wdt_dev);
-> +	void __iomem *wdt_base =3D sunxi_wdt->wdt_base;
-> +	const struct sunxi_wdt_reg *regs =3D sunxi_wdt->wdt_regs;
-> +	int i;
-> +	u32 reg;
-> +
-> +	reg =3D readl(wdt_base + regs->wdt_mode);
-> +	reg >>=3D regs->wdt_timeout_shift;
-> +	reg &=3D WDT_TIMEOUT_MASK;
-> +
-> +	/* Start at 0 which actually means 0.5s */
-> +	for (i =3D 0; ((i < WDT_MAX_TIMEOUT) && (wdt_timeout_map[i] !=3D reg));=
- i++)
-
-Drop parenthesis in condition.
-
-> +		;
-> +	if (i =3D=3D 0) {
-> +		wdt_dev->timeout =3D 1;
-> +		wdt_dev->max_hw_heartbeat_ms =3D 500;
-> +	} else {
-> +		wdt_dev->timeout =3D i;
-> +		wdt_dev->max_hw_heartbeat_ms =3D 0;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int sunxi_wdt_stop(struct watchdog_device *wdt_dev)
->  {
->  	struct sunxi_wdt_dev *sunxi_wdt =3D watchdog_get_drvdata(wdt_dev);
-> @@ -192,11 +219,22 @@ static int sunxi_wdt_start(struct watchdog_device *=
-wdt_dev)
->  	return 0;
->  }
-> =20
-> +static bool sunxi_wdt_enabled(struct sunxi_wdt_dev *wdt)
-> +{
-> +	u32 reg;
-> +	void __iomem *wdt_base =3D wdt->wdt_base;
-> +	const struct sunxi_wdt_reg *regs =3D wdt->wdt_regs;
-
-Inverse christmas tree.
-
-> +
-> +	reg =3D readl(wdt_base + regs->wdt_mode);
-> +	return !!(reg & WDT_MODE_EN);
-> +}
-> +
->  static const struct watchdog_info sunxi_wdt_info =3D {
->  	.identity	=3D DRV_NAME,
->  	.options	=3D WDIOF_SETTIMEOUT |
->  			  WDIOF_KEEPALIVEPING |
-> -			  WDIOF_MAGICCLOSE,
-> +			  WDIOF_MAGICCLOSE |
-> +			  WDIOF_SETTIMEOUT,
-
-Drop this change. WDIOF_SETTIMEOUT is already defined.
-
->  };
-> =20
->  static const struct watchdog_ops sunxi_wdt_ops =3D {
-> @@ -275,8 +313,12 @@ static int sunxi_wdt_probe(struct platform_device *p=
-dev)
-> =20
->  	watchdog_set_drvdata(&sunxi_wdt->wdt_dev, sunxi_wdt);
-> =20
-> -	sunxi_wdt_stop(&sunxi_wdt->wdt_dev);
-> -
-> +	if (sunxi_wdt_enabled(sunxi_wdt)) {
-
-Also check for IS_ENABLED(CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED). This will
-allow user to select behaviour via Kconfig.
-
-Best regards,
-Jernej
-
-> +		sunxi_wdt_read_timeout(&sunxi_wdt->wdt_dev);
-> +		set_bit(WDOG_HW_RUNNING, &sunxi_wdt->wdt_dev.status);
-> +	} else {
-> +		sunxi_wdt_stop(&sunxi_wdt->wdt_dev);
-> +	}
->  	watchdog_stop_on_reboot(&sunxi_wdt->wdt_dev);
->  	err =3D devm_watchdog_register_device(dev, &sunxi_wdt->wdt_dev);
->  	if (unlikely(err))
->=20
-
-
-
+diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
+index d46d8c8c01f2..cce29d54535c 100644
+--- a/drivers/watchdog/watchdog_core.c
++++ b/drivers/watchdog/watchdog_core.c
+@@ -34,6 +34,7 @@
+ #include <linux/idr.h>		/* For ida_* macros */
+ #include <linux/err.h>		/* For IS_ERR macros */
+ #include <linux/of.h>		/* For of_get_timeout_sec */
++#include <linux/panic_notifier.h>
+ #include <linux/suspend.h>
+ 
+ #include "watchdog_core.h"	/* For watchdog_dev_register/... */
+@@ -155,6 +156,23 @@ int watchdog_init_timeout(struct watchdog_device *wdd,
+ }
+ EXPORT_SYMBOL_GPL(watchdog_init_timeout);
+ 
++static int watchdog_panic_notify(struct notifier_block *nb,
++				 unsigned long action, void *data)
++{
++	struct watchdog_device *wdd;
++
++	wdd = container_of(nb, struct watchdog_device, panic_nb);
++	if (watchdog_active(wdd)) {
++		int ret;
++
++		ret = wdd->ops->stop(wdd);
++		if (ret)
++			return NOTIFY_BAD;
++	}
++
++	return NOTIFY_DONE;
++}
++
+ static int watchdog_reboot_notifier(struct notifier_block *nb,
+ 				    unsigned long code, void *data)
+ {
+@@ -334,6 +352,16 @@ static int ___watchdog_register_device(struct watchdog_device *wdd)
+ 				wdd->id, ret);
+ 	}
+ 
++	if (test_bit(WDOG_STOP_ON_PANIC, &wdd->status)) {
++		if (!wdd->ops->stop) {
++			pr_warn("watchdog%d: stop_on_panic not supported\n", wdd->id);
++		} else {
++			wdd->panic_nb.notifier_call = watchdog_panic_notify;
++			atomic_notifier_chain_register(&panic_notifier_list,
++						       &wdd->panic_nb);
++		}
++	}
++
+ 	return 0;
+ }
+ 
+@@ -390,6 +418,9 @@ static void __watchdog_unregister_device(struct watchdog_device *wdd)
+ 	if (test_bit(WDOG_STOP_ON_REBOOT, &wdd->status))
+ 		unregister_reboot_notifier(&wdd->reboot_nb);
+ 
++	if (test_bit(WDOG_STOP_ON_PANIC, &wdd->status))
++		atomic_notifier_chain_unregister(&panic_notifier_list,
++						 &wdd->panic_nb);
+ 	watchdog_dev_unregister(wdd);
+ 	ida_free(&watchdog_ida, wdd->id);
+ }
+diff --git a/include/linux/watchdog.h b/include/linux/watchdog.h
+index 99660197a36c..3c21b527ede9 100644
+--- a/include/linux/watchdog.h
++++ b/include/linux/watchdog.h
+@@ -108,6 +108,7 @@ struct watchdog_device {
+ 	struct notifier_block reboot_nb;
+ 	struct notifier_block restart_nb;
+ 	struct notifier_block pm_nb;
++	struct notifier_block panic_nb;
+ 	void *driver_data;
+ 	struct watchdog_core_data *wd_data;
+ 	unsigned long status;
+@@ -118,6 +119,7 @@ struct watchdog_device {
+ #define WDOG_HW_RUNNING		3	/* True if HW watchdog running */
+ #define WDOG_STOP_ON_UNREGISTER	4	/* Should be stopped on unregister */
+ #define WDOG_NO_PING_ON_SUSPEND	5	/* Ping worker should be stopped on suspend */
++#define WDOG_STOP_ON_PANIC	6	/* Should be stopped on panic for loading kdump kernels */
+ 	struct list_head deferred;
+ };
+ 
+@@ -146,6 +148,12 @@ static inline void watchdog_set_nowayout(struct watchdog_device *wdd, bool noway
+ 		set_bit(WDOG_NO_WAY_OUT, &wdd->status);
+ }
+ 
++/* Use the following function to stop the watchdog on panic */
++static inline void watchdog_stop_on_panic(struct watchdog_device *wdd)
++{
++	set_bit(WDOG_STOP_ON_PANIC, &wdd->status);
++}
++
+ /* Use the following function to stop the watchdog on reboot */
+ static inline void watchdog_stop_on_reboot(struct watchdog_device *wdd)
+ {
+-- 
+2.34.1
 
 
