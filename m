@@ -1,48 +1,48 @@
-Return-Path: <linux-watchdog+bounces-2987-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-2988-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 223C8A40DCE
-	for <lists+linux-watchdog@lfdr.de>; Sun, 23 Feb 2025 10:54:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A9B2A40DD2
+	for <lists+linux-watchdog@lfdr.de>; Sun, 23 Feb 2025 10:54:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE48C7A8DB0
-	for <lists+linux-watchdog@lfdr.de>; Sun, 23 Feb 2025 09:53:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7E163B4D43
+	for <lists+linux-watchdog@lfdr.de>; Sun, 23 Feb 2025 09:54:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D094201269;
-	Sun, 23 Feb 2025 09:54:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 590F2204C26;
+	Sun, 23 Feb 2025 09:54:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CgYX801s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ApoVHDqI"
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351C71FCF5F;
-	Sun, 23 Feb 2025 09:54:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A9F204C17;
+	Sun, 23 Feb 2025 09:54:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740304466; cv=none; b=nKASOPid47d/rVkKRi7h3ovRBK+a+JqhYv5iPhFH79iGLfKv+apCDTD65bXeo+85+6uornXsjbrHZRcCD8qRJslx2LA1HBoT4yqhqWButC+8uD25uWj3HOmi3C43ojdMAowE5uTNA7DMEKXwC6d+IsyaRAv5WXv+CYnXHNpLpUk=
+	t=1740304474; cv=none; b=SwpLh+cKr+CveP0+4kn/092TDep9PkjgC9ZVx6lEeaXsjfjeC76RRdplx4wXyB8Tmjv/F+6r7Vhu2SPMMTuOTXPQrMPnOLXnKozg0TxsqPya+csS4cwg6FeCgKF6j4BfhbLGjisGYwBARBn5w/5NmPZoNThFirMehnETQXlzBTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740304466; c=relaxed/simple;
-	bh=IXC+QnwUgx7budvbxqlsKE7CWwRuNIefFivX39u2m48=;
+	s=arc-20240116; t=1740304474; c=relaxed/simple;
+	bh=RQF52wYo0aKPNoeoj6LKwhlRLm5ADHcZDc58q17xfPE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mOyPuf9BK70VYaIsd8yvP2KjAkNa8DsdlQCJlyFSqWZoUXtSP0qEu8GFSOBmhe2TfYQJkrTO1trjUMmyOQ0QdFC1z6obPT3RGVUh3FZV670ItQGqPrCbR0Op0YdMaZBH0NcCYlit/F40guwzF9ndFaXJ9uCGDt6JkRhwzkc2TQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CgYX801s; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26159C4CEDD;
-	Sun, 23 Feb 2025 09:54:21 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=GI5vtcH7OV9jSwYtcKnuXLhpu81gsh1JbZOSauhi91fENyly6utyGb72CiwMKbbZ0UQKgjwKnblyta/qsLoyBgs5S2xAAbofxczIvNsq+6/pCciSzoqzPrvGpJZKspPpZdvDgH651CEfwDUghz1Qy2f/R9zPlR/Z8c6ckxXc+RA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ApoVHDqI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BBF6C4CEDD;
+	Sun, 23 Feb 2025 09:54:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740304465;
-	bh=IXC+QnwUgx7budvbxqlsKE7CWwRuNIefFivX39u2m48=;
+	s=k20201202; t=1740304473;
+	bh=RQF52wYo0aKPNoeoj6LKwhlRLm5ADHcZDc58q17xfPE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CgYX801sO8add/I/MBw38bfCjbRPTrB+AZLZM6Zw0jqY1Hm+hFP8ZZ3NPOc+CJDfU
-	 K4eZKUhf1k1wajNNKo67MR0ks8d5hT06cvL6PzcMQ4LQ1E+IezeDLk3afieL8X/NMj
-	 UlMr9p+o9NpV4Z8WKWXSHnuvUbdcXXZzi0/AXGzbhj9W+w4mSgDdUoqsOBTVJkmT0o
-	 Q3+RFsj2SDoRni0hzFmjcKhyK7KXHLPYTNmsQLC4IhxO6MiUEOT2oYdx94SLQR1LLt
-	 r4yA8Os6KsTVChT4gpcSAgwNkHUXXHVSyhdppcOYgIjFUHzgvbT/LQ1L77ydmoiovC
-	 0F8Dn9Ct6RqqA==
-Message-ID: <c710e85c-dc72-41ea-b2c6-51d5d2132eab@kernel.org>
-Date: Sun, 23 Feb 2025 10:54:19 +0100
+	b=ApoVHDqI+1R4xUj2mRicBCe7fvBP28cWuEF7rZitDbD9vopK18XRIhwc0k6aJUvok
+	 XjLK/GP6lcvGLsUkLCZl4pnGmDpDpFHvaO4YQseYiu6ySZ3exWOuetye2swbRqZkn2
+	 s0GFSQVQnt+kWLM7Fpwltpl/P5Ux0kiO9v147PEXh0ISKKAdCE3TcVG3NCgp9JZAhs
+	 i7ucAVXNIrac//xnkNKpFi5OE7wwgnzZMOsiKg4OHNa3b1mVqYR0RoBZ+lAS7VeOGq
+	 JqgEZNfup4NIJOiKWuEffzxGY61NkhwRkc2Jmij4QS2D99/dDc8rZJN0wjAzExKyNA
+	 tCpuOqXrew37w==
+Message-ID: <99261067-5c13-483b-be3b-5370b36e3978@kernel.org>
+Date: Sun, 23 Feb 2025 10:54:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] watchdog: s3c2410_wdt: Add exynos990-wdt
- compatible data
+Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: samsung-wdt: Add
+ exynos990-wdt compatible
 To: Igor Belwon <igor.belwon@mentallysanemainliners.org>,
  Wim Van Sebroeck <wim@linux-watchdog.org>, Guenter Roeck
  <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
@@ -61,7 +61,7 @@ Cc: linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-samsung-soc@vger.kernel.org
 References: <20250217-exynos990-wdt-v2-0-3eb4fbc113f4@mentallysanemainliners.org>
- <20250217-exynos990-wdt-v2-2-3eb4fbc113f4@mentallysanemainliners.org>
+ <20250217-exynos990-wdt-v2-1-3eb4fbc113f4@mentallysanemainliners.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,14 +107,16 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250217-exynos990-wdt-v2-2-3eb4fbc113f4@mentallysanemainliners.org>
+In-Reply-To: <20250217-exynos990-wdt-v2-1-3eb4fbc113f4@mentallysanemainliners.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 17/02/2025 20:57, Igor Belwon wrote:
-> The Exynos990 has two watchdog clusters - cl0 and cl2. Add new
-> driver data for these two clusters, making it possible to use the
-> watchdog timer on this SoC.
+> Add a dt-binding compatible for the Exynos990 Watchdog timer.
+> This watchdog is compatible with the GS101/Exynos850 design, as
+> such it requires the cluster-index and syscon-phandle properties
+> to be present. It also contains a cl2 cluster, as such the
+> cluster-index property has been expanded.
 > 
 > Signed-off-by: Igor Belwon <igor.belwon@mentallysanemainliners.org>
 > ---
