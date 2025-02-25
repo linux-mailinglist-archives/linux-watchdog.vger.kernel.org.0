@@ -1,191 +1,177 @@
-Return-Path: <linux-watchdog+bounces-3002-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3003-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2385FA43FB5
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Feb 2025 13:54:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8077A44089
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Feb 2025 14:20:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1842189FA55
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Feb 2025 12:54:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA84444164B
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Feb 2025 13:14:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FA6A268C72;
-	Tue, 25 Feb 2025 12:54:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F858269803;
+	Tue, 25 Feb 2025 13:14:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="mjILcAIk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QWkh7cpj"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF07B70838
-	for <linux-watchdog@vger.kernel.org>; Tue, 25 Feb 2025 12:54:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A055268FDB;
+	Tue, 25 Feb 2025 13:14:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740488077; cv=none; b=IN31AlPRG4yVwJIkgD+qLLu8tv9F9OrgY+TA/eKnKsODzAy7ujvIqtnn1/zkueIMBOoogY7Fa3jHsIo6rF3Fg0n44V9s6BDGBEL5RE6LGJKzGOxA4E0DVW2MwVbG8wsZudcfKDnaiE+1beo3WiBIkzfrQPSWRj8odOBuZdftg9g=
+	t=1740489249; cv=none; b=Q1ryTaQ/Y5ct/hPA04oQysfIwlGS6DANebokKWWgeFsFAasTWcrhD67lzjZVaO9nFWz136eE/Ej9fVGNNS+pvJ+1hnmSZGJx/RroVnlcKgxxeL2eSnDmp6TOS1ht4KtifcE4KnksWsXKx5m9Mf5tHJVJ1shNkOgXzH2WI8u/KPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740488077; c=relaxed/simple;
-	bh=W8LIqF7kkH6cCLj3gN0Tz1ix7jTva4xQTCeEx72fA+w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=czr7i4QQgbLLMK1HYhtXXDjKt6Gs/++7dP/wr3Is4CZMajoOg6M2nd1v2nl/EtzO4FyeAS2mEWHmbKyWyW3S7LAcMsfmGoGijde6v7YWmaSI3aM94jkcRoNnTsGHr8KtPz44sYHJI2pl2Bet1yNM9m5zQPmAwtt/+9rRG4EKTvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=mjILcAIk; arc=none smtp.client-ip=185.67.36.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id 71840240107
-	for <linux-watchdog@vger.kernel.org>; Tue, 25 Feb 2025 13:54:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-	t=1740488073; bh=W8LIqF7kkH6cCLj3gN0Tz1ix7jTva4xQTCeEx72fA+w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:Content-Transfer-Encoding:From;
-	b=mjILcAIkXqzqNKdVJx8aNZciCsFDMgWk1hSEOtkfGbO6HFVdhu5Vy04vupoKrYvbv
-	 c6on3zliqSDojlPicjEIhjGdw22NRnh01nANE/3jRMwtf45rqgaGqjBEPbDvvOZQgg
-	 s4Jb6KbceFTD97AcdgGFKHeQkXDlrBbwG3iChrbmjhflZJIT8e5l8aV2shsyZ4sXKo
-	 6ofVmK+sYqzNywRiys2+yrDszLO59sxgwWTEXz+wqj0Y8Kj8BPrm6dHb8ttxz+aByz
-	 WtF5CLyU4itMYTueMHGswR3Km+h6T3R2kOXkZBOleO2kFLusG00NHpXaxrg6YwUFTp
-	 3ou6TTWtB7XpA==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4Z2HcG3WCTz9rxG;
-	Tue, 25 Feb 2025 13:54:21 +0100 (CET)
-Date: Tue, 25 Feb 2025 12:54:21 +0000
-From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
-To: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
-Cc: Frank Li <Frank.li@nxp.com>, devicetree@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
-	Scott Wood <oss@buserror.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
-	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2 05/12] dt-bindings: dma: Convert fsl,elo*-dma to YAML
-Message-ID: <Z729fRBNLAxdYD22@probook>
-References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
- <20250207-ppcyaml-v2-5-8137b0c42526@posteo.net>
- <Z6pV4eauZj75+911@lizhi-Precision-Tower-5810>
- <Z684nUnDX4Sb98rQ@probook>
+	s=arc-20240116; t=1740489249; c=relaxed/simple;
+	bh=v1iIaERknrbs8eqWlTOb/MgMkMtkVDqJt5teF3ovGX0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ni/nOR2w9cufLLaYiKdJInU3yDd263CR5GEZvABJDEqWk5XOmLNV2Edv96WYMGTAFpsgbIw1t9Q4iPkKPJ6V2koB9j1+VCOKZZs/5uIAHrH+xVYJYBBn1IQzMW2llsIRJjtkCU9ZCav4ncn7rC0WNUkdaZVwzkqQW53hLbr3jHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QWkh7cpj; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-222e8d07dc6so37664805ad.1;
+        Tue, 25 Feb 2025 05:14:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740489247; x=1741094047; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=sYLcWu+xpfN0lDdZpNbKgmtUozIU0xde+CMOHsFz2oM=;
+        b=QWkh7cpjXk9zH33ZTrEVDc7sskl4Epabbf7Lh0AA/204wbWWuIdntPI2Hm6nz4IVLx
+         WAQ3eP3+kzj67hCvHsmvoimZWTeFsmJwoseuqjudjyAUHl66yT+cKLY51W3lfZFWdSkK
+         cZosshd+vW09EEL7n6w/p60fqk5S1bkv1ongwoPbfxLBwbU2LpKXWaS16BQV8Olqw6Zc
+         +kS10e4tFrXuh1ng0iFgn+V+ernPWaCMSLmeL7/v4G1YyB8Y9gozul9d6Da59LmIa9Vb
+         PtcMgM+NfD8F7ek4/6ZN32ktLuSaDS2O+lCA+M7COjjmWudndORSahxRdn4EFq2Eg5bk
+         y+lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740489247; x=1741094047;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sYLcWu+xpfN0lDdZpNbKgmtUozIU0xde+CMOHsFz2oM=;
+        b=YfsParCCH/mg6wwfeXldOn8ZccNOFfZ2gzsMeCTTh5LJVtjsWnW1RhucRsFCFS78Ke
+         ho5iH++vJirf4CyLAkQAd0mfGStUG8vkm6yCIniCL3LtH+QGb7ZaRMh8IYbmwx3WewuR
+         hFPkhq8x4XQBKJR3tQPWSNDUQgaY9c+9QBgzeYk0SlgkfpAhRlQwI6/Oa/zCeSByiSAW
+         kqGKOslHIQD5/Qe9WDQSzuhSuuAbf5Oeq75VHHD1RH3jV4331WuQVLr15XdrfQlJhQZa
+         hLTweJFHDtD/r3GKsB7SEMVmqInoh4HEbEZXMpuiQ5Tl9jOjadK9DrfSR8jNyvwkVWtx
+         fWYw==
+X-Forwarded-Encrypted: i=1; AJvYcCVMC/jEiKPw/7Ev3z9zF/3ueOtXRq+poxzhtjPqAaQ/RBSnb/+PJoqSM8LPoIZ1SgtJicHJARKDFjfgRQED@vger.kernel.org, AJvYcCWsxQNq9gTrODK9zvofZSDZjx+Q+RrT5gbQmrn9ksiKng8GMY9DlA1cF9NwlkoJ8K2Q5lq4NztSieA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPHH/oQR2OuBYEGvZcjNfGS8Qfd3ZSWpCAy1eR9z/lUAKY6hOG
+	cJLmxdH6UX0Muidi5WVLBMdU0vFxgaDFanP6vNMsOyFH2TY64hXW
+X-Gm-Gg: ASbGncuJqJIYB7Nz824AK/cIGCazUOYKZic4oasLLLvn/4i0wKwMzTgmNLKpLrD9qXd
+	SSTUnRk117xycTtKT3pW8HYMBQjPVs21cDFj7pcRvVEdJ9B8nvahsQNTSbpFURJDRKxy/zJnp05
+	kM8U++aYFarNF5qrqGODxEwkY2FlBNoSlXBTrjSV8+/YIgyrU/RwgaEn1mSnk9ZEGfeZkK6yRUC
+	iOUx1RIxIJbOiZXUDFPeT4sLJfg/Es3UWMjKgBBqsypd0o5xZJzfEkd7lD8u8fNwKnJEkbfSJ5u
+	kbFSm4Dvrcj21ELuvrs8VnNrT3d6YzSWb6lWhaKrbQU+XCjDBki10EhFfQ3yGX2Sy3B6uzkkS3M
+	=
+X-Google-Smtp-Source: AGHT+IF9xSVNNuEnu6Nb7s+MD3IYoAuPzopICChiSlU5gJPgycSfrX2OtQiuNgsgcv93eNwA8suD2w==
+X-Received: by 2002:a17:903:32c7:b0:215:5600:18cc with SMTP id d9443c01a7336-221a0010c3amr294829325ad.22.1740489246673;
+        Tue, 25 Feb 2025 05:14:06 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2230a0aec2dsm13697015ad.221.2025.02.25.05.14.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Feb 2025 05:14:06 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3308b190-b639-4aff-a1f8-3ad9761dd991@roeck-us.net>
+Date: Tue, 25 Feb 2025 05:14:05 -0800
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z684nUnDX4Sb98rQ@probook>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] drivers: watchdog: Add support for panic notifier
+ callback
+To: George Cherian <george.cherian@marvell.com>, wim@linux-watchdog.org,
+ corbet@lwn.net
+Cc: linux-watchdog@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250225095203.2139482-1-george.cherian@marvell.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20250225095203.2139482-1-george.cherian@marvell.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Feb 14, 2025 at 12:35:41PM +0000, J. Neuschäfer wrote:
-> On Mon, Feb 10, 2025 at 02:39:13PM -0500, Frank Li wrote:
-> > On Fri, Feb 07, 2025 at 10:30:22PM +0100, J. Neuschäfer via B4 Relay wrote:
-> > > From: "J. Neuschäfer" <j.ne@posteo.net>
-> > >
-> > > The devicetree bindings for Freescale DMA engines have so far existed as
-> > > a text file. This patch converts them to YAML, and specifies all the
-> > > compatible strings currently in use in arch/powerpc/boot/dts.
-> > >
-> > > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
-> > > ---
-[...]
-> > Need ref to dma-common.yaml?
+On 2/25/25 01:52, George Cherian wrote:
+> Watchdog is not turned off in kernel panic situation.
+> In certain systems this might prevent the successful loading
+> of kdump kernel. The kdump kernel might hit a watchdog reset
+> while it is booting.
 > 
-> Sounds good, but I'm not sure what to do about the #dma-cells property,
-> which is required by dma-common.yaml.
+> To avoid such scenarios add a panic notifier call back function
+> which can stop the watchdog. This provision can be enabled by
+> passing watchdog.stop_on_panic=1 via kernel command-line parameter.
 > 
-> There aren't many examples of DMA channels being explicitly declared in
-> device trees. One example that I could find is the the xilinx_dma.txt
-> binding:
-> 
-> 
-> 	axi_vdma_0: axivdma@40030000 {
-> 		compatible = "xlnx,axi-vdma-1.00.a";
-> 		#dma_cells = <1>;
-> 		reg = < 0x40030000 0x10000 >;
-> 		dma-ranges = <0x00000000 0x00000000 0x40000000>;
-> 		xlnx,num-fstores = <0x8>;
-> 		xlnx,flush-fsync = <0x1>;
-> 		xlnx,addrwidth = <0x20>;
-> 		clocks = <&clk 0>, <&clk 1>, <&clk 2>, <&clk 3>, <&clk 4>;
-> 		clock-names = "s_axi_lite_aclk", "m_axi_mm2s_aclk", "m_axi_s2mm_aclk",
-> 			      "m_axis_mm2s_aclk", "s_axis_s2mm_aclk";
-> 		dma-channel@40030000 {
-> 			compatible = "xlnx,axi-vdma-mm2s-channel";
-> 			interrupts = < 0 54 4 >;
-> 			xlnx,datawidth = <0x40>;
-> 		};
-> 		dma-channel@40030030 {
-> 			compatible = "xlnx,axi-vdma-s2mm-channel";
-> 			interrupts = < 0 53 4 >;
-> 			xlnx,datawidth = <0x40>;
-> 		};
-> 	};
-> 
-> 	...
-> 
-> 	vdmatest_0: vdmatest@0 {
-> 		compatible ="xlnx,axi-vdma-test-1.00.a";
-> 		dmas = <&axi_vdma_0 0
-> 			&axi_vdma_0 1>;
-> 		dma-names = "vdma0", "vdma1";
-> 	};
-> 
-> It has #dma_cells (I'm sure #dma-cells was intended) on the controller.
-> 
-> 
-> Another example is in arch/powerpc/boot/dts/fsl/p1022si-post.dtsi:
-> 
-> 	dma@c300 {
-> 		dma00: dma-channel@0 {
-> 			compatible = "fsl,ssi-dma-channel";
-> 		};
-> 		dma01: dma-channel@80 {
-> 			compatible = "fsl,ssi-dma-channel";
-> 		};
-> 	};
-> 
-> 	...
-> 
-> 	ssi@15000 {
-> 		compatible = "fsl,mpc8610-ssi";
-> 		cell-index = <0>;
-> 		reg = <0x15000 0x100>;
-> 		interrupts = <75 2 0 0>;
-> 		fsl,playback-dma = <&dma00>;
-> 		fsl,capture-dma = <&dma01>;
-> 		fsl,fifo-depth = <15>;
-> 	};
-> 
-> 
-> There, the DMA channels are used directly and without additional
-> information (i.e. #dma-cells = <0>, althought it isn't specified).
+> Signed-off-by: George Cherian <george.cherian@marvell.com>
+> ---
+> Changelog:
+> v1 -> v2
+> - Remove the per driver flag setting option
 
-I had another look at dma-common.yaml and it explicitly requires
-#dma-cells to have a value of at least 1, so this second idea won't
-work.
+You didn't actually remove it.
 
+> diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
+> index d46d8c8c01f2..8cbebe38b7dd 100644
+> --- a/drivers/watchdog/watchdog_core.c
+> +++ b/drivers/watchdog/watchdog_core.c
+...>
+> +/* Use the following function to stop the watchdog on panic */
+> +static inline void watchdog_stop_on_panic(struct watchdog_device *wdd)
+> +{
+> +	set_bit(WDOG_STOP_ON_PANIC, &wdd->status);
+> +}
 
-Best regards,
-J. Neuschäfer
+Under what circumstance could or would a _driver_ request this ?
+I do not see the use case, sorry.
+
+Guenter
+
 
