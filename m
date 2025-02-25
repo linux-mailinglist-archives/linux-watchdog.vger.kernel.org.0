@@ -1,110 +1,191 @@
-Return-Path: <linux-watchdog+bounces-3001-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3002-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 959CCA43D0B
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Feb 2025 12:13:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2385FA43FB5
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Feb 2025 13:54:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6CCD179384
-	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Feb 2025 11:09:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1842189FA55
+	for <lists+linux-watchdog@lfdr.de>; Tue, 25 Feb 2025 12:54:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74C3A267F48;
-	Tue, 25 Feb 2025 11:00:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FA6A268C72;
+	Tue, 25 Feb 2025 12:54:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k5FEkeRd"
+	dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b="mjILcAIk"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD70267B71;
-	Tue, 25 Feb 2025 11:00:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF07B70838
+	for <linux-watchdog@vger.kernel.org>; Tue, 25 Feb 2025 12:54:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740481225; cv=none; b=YDERoDEHqVT/kNNSZnAiDZ1Py+PxBQHo2JqVAGl9MHXX/X8cXl515H415ju0E1cP3zXzBp0d8jvzxQmgfALp29e109/V511EmE7RWOiMDwuuBZ+SClm8dy736biG2Rd5XNXdipIXhtfcwVs8sRR7Dpw4AskKgTQMUv3dcgsJrak=
+	t=1740488077; cv=none; b=IN31AlPRG4yVwJIkgD+qLLu8tv9F9OrgY+TA/eKnKsODzAy7ujvIqtnn1/zkueIMBOoogY7Fa3jHsIo6rF3Fg0n44V9s6BDGBEL5RE6LGJKzGOxA4E0DVW2MwVbG8wsZudcfKDnaiE+1beo3WiBIkzfrQPSWRj8odOBuZdftg9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740481225; c=relaxed/simple;
-	bh=J1HWkZJkiWOegQfp5vHIqN+whL/4IGe+JzHch6uSDhM=;
+	s=arc-20240116; t=1740488077; c=relaxed/simple;
+	bh=W8LIqF7kkH6cCLj3gN0Tz1ix7jTva4xQTCeEx72fA+w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fxvbRZK2Bu0Ikh3Gm41lo7BGWqHPtT+7FKoswqPfmKhqO37kHS09z9vu3owic/2XaovovyX8jqQcmfGoTk+Nqh3xHmTRIoNoIvaixfiEt8aCpiS9/Pd7o4QZBOH3TrZkfjrq7pP2XVktgE0LoJA4PCcYnRE0YYZVIC+yzI049no=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k5FEkeRd; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740481224; x=1772017224;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J1HWkZJkiWOegQfp5vHIqN+whL/4IGe+JzHch6uSDhM=;
-  b=k5FEkeRd3zMogToEymcl2ViDiFGVnWactS7FbzVePQIPGxbnfbJ557mL
-   fIeLCEVynlOgMzjXjQZ/0kNCZTtMGxX5VU5zoqBPWeh6GFrX1/p6LVb7L
-   d8J6JrjAycXpGH8qBPZJ/SnEbVUt4GbNbBDiWYee2yOVN7z17HdkTpjx1
-   2a9w09ncP5+H5PglEf8lbMlNmHgS0duNYG4sGj/NxQEsem8gFvYIBibOM
-   Y/NCuuR/0WnIWVrINZvnsimXRSNt7HgCLlMtVXpqLqez96kXHY3Uec+MB
-   9Q9PFY2H4W+EITbDqyrb10sJEYhQ1gZlA6T1Gze2cG/hIvBfx2F9CT780
-   g==;
-X-CSE-ConnectionGUID: i2Fb9CGFSGOOcAvkb1zP/g==
-X-CSE-MsgGUID: V5BhLf/yTdSh80tmxi0HHw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11355"; a="58821997"
-X-IronPort-AV: E=Sophos;i="6.13,314,1732608000"; 
-   d="scan'208";a="58821997"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 03:00:23 -0800
-X-CSE-ConnectionGUID: VKcO8oSbTdGI6udia3EFxg==
-X-CSE-MsgGUID: jyifJL4kRbGD9sqL2GIF/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="153538303"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 03:00:22 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tmsfi-0000000Ext0-47Ej;
-	Tue, 25 Feb 2025 13:00:18 +0200
-Date: Tue, 25 Feb 2025 13:00:18 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-Subject: Re: [PATCH v1 1/1] watchdog: nic7018_wdt: tidy up ACPI ID table
-Message-ID: <Z72iwgbvlYFCz5q0@smile.fi.intel.com>
-References: <20250225095804.360899-1-andriy.shevchenko@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=czr7i4QQgbLLMK1HYhtXXDjKt6Gs/++7dP/wr3Is4CZMajoOg6M2nd1v2nl/EtzO4FyeAS2mEWHmbKyWyW3S7LAcMsfmGoGijde6v7YWmaSI3aM94jkcRoNnTsGHr8KtPz44sYHJI2pl2Bet1yNM9m5zQPmAwtt/+9rRG4EKTvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net; spf=pass smtp.mailfrom=posteo.net; dkim=pass (2048-bit key) header.d=posteo.net header.i=@posteo.net header.b=mjILcAIk; arc=none smtp.client-ip=185.67.36.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.net
+Received: from submission (posteo.de [185.67.36.169]) 
+	by mout02.posteo.de (Postfix) with ESMTPS id 71840240107
+	for <linux-watchdog@vger.kernel.org>; Tue, 25 Feb 2025 13:54:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+	t=1740488073; bh=W8LIqF7kkH6cCLj3gN0Tz1ix7jTva4xQTCeEx72fA+w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:Content-Transfer-Encoding:From;
+	b=mjILcAIkXqzqNKdVJx8aNZciCsFDMgWk1hSEOtkfGbO6HFVdhu5Vy04vupoKrYvbv
+	 c6on3zliqSDojlPicjEIhjGdw22NRnh01nANE/3jRMwtf45rqgaGqjBEPbDvvOZQgg
+	 s4Jb6KbceFTD97AcdgGFKHeQkXDlrBbwG3iChrbmjhflZJIT8e5l8aV2shsyZ4sXKo
+	 6ofVmK+sYqzNywRiys2+yrDszLO59sxgwWTEXz+wqj0Y8Kj8BPrm6dHb8ttxz+aByz
+	 WtF5CLyU4itMYTueMHGswR3Km+h6T3R2kOXkZBOleO2kFLusG00NHpXaxrg6YwUFTp
+	 3ou6TTWtB7XpA==
+Received: from customer (localhost [127.0.0.1])
+	by submission (posteo.de) with ESMTPSA id 4Z2HcG3WCTz9rxG;
+	Tue, 25 Feb 2025 13:54:21 +0100 (CET)
+Date: Tue, 25 Feb 2025 12:54:21 +0000
+From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+To: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
+Cc: Frank Li <Frank.li@nxp.com>, devicetree@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	Krzysztof Kozlowski <krzk@kernel.org>, imx@lists.linux.dev,
+	Scott Wood <oss@buserror.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, Lee Jones <lee@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	=?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>, Mark Brown <broonie@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org, linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-watchdog@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v2 05/12] dt-bindings: dma: Convert fsl,elo*-dma to YAML
+Message-ID: <Z729fRBNLAxdYD22@probook>
+References: <20250207-ppcyaml-v2-0-8137b0c42526@posteo.net>
+ <20250207-ppcyaml-v2-5-8137b0c42526@posteo.net>
+ <Z6pV4eauZj75+911@lizhi-Precision-Tower-5810>
+ <Z684nUnDX4Sb98rQ@probook>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250225095804.360899-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z684nUnDX4Sb98rQ@probook>
 
-On Tue, Feb 25, 2025 at 11:58:04AM +0200, Andy Shevchenko wrote:
-> Tidy up ACPI ID table:
-> - drop ACPI_PTR() and hence replace acpi.h with mod_devicetable.h
-> - remove explicit driver_data initializer
-> - drop comma in the terminator entry
+On Fri, Feb 14, 2025 at 12:35:41PM +0000, J. Neuschäfer wrote:
+> On Mon, Feb 10, 2025 at 02:39:13PM -0500, Frank Li wrote:
+> > On Fri, Feb 07, 2025 at 10:30:22PM +0100, J. Neuschäfer via B4 Relay wrote:
+> > > From: "J. Neuschäfer" <j.ne@posteo.net>
+> > >
+> > > The devicetree bindings for Freescale DMA engines have so far existed as
+> > > a text file. This patch converts them to YAML, and specifies all the
+> > > compatible strings currently in use in arch/powerpc/boot/dts.
+> > >
+> > > Signed-off-by: J. Neuschäfer <j.ne@posteo.net>
+> > > ---
+[...]
+> > Need ref to dma-common.yaml?
 > 
-> With that done, extend compile test coverage.
+> Sounds good, but I'm not sure what to do about the #dma-cells property,
+> which is required by dma-common.yaml.
+> 
+> There aren't many examples of DMA channels being explicitly declared in
+> device trees. One example that I could find is the the xilinx_dma.txt
+> binding:
+> 
+> 
+> 	axi_vdma_0: axivdma@40030000 {
+> 		compatible = "xlnx,axi-vdma-1.00.a";
+> 		#dma_cells = <1>;
+> 		reg = < 0x40030000 0x10000 >;
+> 		dma-ranges = <0x00000000 0x00000000 0x40000000>;
+> 		xlnx,num-fstores = <0x8>;
+> 		xlnx,flush-fsync = <0x1>;
+> 		xlnx,addrwidth = <0x20>;
+> 		clocks = <&clk 0>, <&clk 1>, <&clk 2>, <&clk 3>, <&clk 4>;
+> 		clock-names = "s_axi_lite_aclk", "m_axi_mm2s_aclk", "m_axi_s2mm_aclk",
+> 			      "m_axis_mm2s_aclk", "s_axis_s2mm_aclk";
+> 		dma-channel@40030000 {
+> 			compatible = "xlnx,axi-vdma-mm2s-channel";
+> 			interrupts = < 0 54 4 >;
+> 			xlnx,datawidth = <0x40>;
+> 		};
+> 		dma-channel@40030030 {
+> 			compatible = "xlnx,axi-vdma-s2mm-channel";
+> 			interrupts = < 0 53 4 >;
+> 			xlnx,datawidth = <0x40>;
+> 		};
+> 	};
+> 
+> 	...
+> 
+> 	vdmatest_0: vdmatest@0 {
+> 		compatible ="xlnx,axi-vdma-test-1.00.a";
+> 		dmas = <&axi_vdma_0 0
+> 			&axi_vdma_0 1>;
+> 		dma-names = "vdma0", "vdma1";
+> 	};
+> 
+> It has #dma_cells (I'm sure #dma-cells was intended) on the controller.
+> 
+> 
+> Another example is in arch/powerpc/boot/dts/fsl/p1022si-post.dtsi:
+> 
+> 	dma@c300 {
+> 		dma00: dma-channel@0 {
+> 			compatible = "fsl,ssi-dma-channel";
+> 		};
+> 		dma01: dma-channel@80 {
+> 			compatible = "fsl,ssi-dma-channel";
+> 		};
+> 	};
+> 
+> 	...
+> 
+> 	ssi@15000 {
+> 		compatible = "fsl,mpc8610-ssi";
+> 		cell-index = <0>;
+> 		reg = <0x15000 0x100>;
+> 		interrupts = <75 2 0 0>;
+> 		fsl,playback-dma = <&dma00>;
+> 		fsl,capture-dma = <&dma01>;
+> 		fsl,fifo-depth = <15>;
+> 	};
+> 
+> 
+> There, the DMA channels are used directly and without additional
+> information (i.e. #dma-cells = <0>, althought it isn't specified).
 
-...
-
->  config NIC7018_WDT
->  	tristate "NIC7018 Watchdog"
-> -	depends on X86 && ACPI
-> +	depends on HAS_IOMEM
-
-Oh, this should be HAS_IOPORT, compiling on X86 won't help to find this issue
-:-)
-
-> +	depends on ACPI || COMPILE_TEST
->  	select WATCHDOG_CORE
-
--- 
-With Best Regards,
-Andy Shevchenko
+I had another look at dma-common.yaml and it explicitly requires
+#dma-cells to have a value of at least 1, so this second idea won't
+work.
 
 
+Best regards,
+J. Neuschäfer
 
