@@ -1,308 +1,196 @@
-Return-Path: <linux-watchdog+bounces-3019-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3020-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2610FA475C7
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Feb 2025 07:03:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81BE5A47971
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Feb 2025 10:40:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B60A3A2E12
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Feb 2025 06:03:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 419E87A251C
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Feb 2025 09:39:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F7B3218E96;
-	Thu, 27 Feb 2025 06:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 203C822655B;
+	Thu, 27 Feb 2025 09:40:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BJEY7UlC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FTgtBK/J"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74BAA2E403;
-	Thu, 27 Feb 2025 06:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D98C270024;
+	Thu, 27 Feb 2025 09:40:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740636216; cv=none; b=GLVtlWAjgavgDtdMgn97ow/xsf3n7PIFPKv71m2xpd1gJHJ3wnplG5j7rcQwceoA4Cx1qN4fJm8O+daiEiWdxKGFjRAGguY14WMhnsi6IAH0zBe1+0EuvJ4MDrMirbq50td9Wg5aje3DrX2895vYRDD7UkI+UjZVl9RtSjH769k=
+	t=1740649211; cv=none; b=H4M7Qy5RboZ+oCHND+NnfVJsMER597uwG477YTLRXinI7W3HVYDRfSnEnAv1s2V68sV1SmZspDGcOndK3p2+v8D1SaDLMtsh5l2BqvuDve4xmEwn4WrDI4QthHB65/NILh37mFNKDngA399cHI6TcV5GvroqmN3khKXJ064ExIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740636216; c=relaxed/simple;
-	bh=5bQCSUlFL3cNMzqJxwc4JWiUDzaWUIigVUibvHYYM8I=;
+	s=arc-20240116; t=1740649211; c=relaxed/simple;
+	bh=G56e6T7N0AS1QUnn4c+GxR6le/4/uvsYzyrCw8JfIDY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U7SInUxPaGpd2jQFdRtBR+mvuLdJ8quUbMU4EccYQf87GYQZpNK/BE9Y59v5Cofzcy4nESetdhPSFi9rX2Hq1jdMOzSMqP27wFV0BAlX4syV1K/TrMCSCDOLM2jnfzimqL0g2sRtOPOZ7CoI09LfOktqsiw3S3BTKQUGrRNBqeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BJEY7UlC; arc=none smtp.client-ip=209.85.128.175
+	 To:Cc:Content-Type; b=nosf0n37JcA7IrRfpPVuYWczUN99bOIOpuI2igemPGPA13YbkeHXNE5WHblL8UiqY7K8c94ns3vGBj0pwQNqsxJ0RBtALcWu9obawK+/VCvJxzMep6mihqSPcSG7UY96IYRDI0ixS/N91MiuHJOuULOlN2GvnmJixOwlhFv6ads=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FTgtBK/J; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6f77b9e0a34so4445677b3.2;
-        Wed, 26 Feb 2025 22:03:34 -0800 (PST)
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-390e3b3d432so361488f8f.2;
+        Thu, 27 Feb 2025 01:40:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740636213; x=1741241013; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740649207; x=1741254007; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KtYpkd2jzucIGjS+RbAQ8XkHU/fTQAGMdmomglbM5kM=;
-        b=BJEY7UlCawcICN9hVZhAMc9HiM/0JQxlBPGTwH08R0Ww+FNqclbWPmcOTE4RRPhF0u
-         LED6rA0XaiNmrLspCLhzl1S84RR8jK6xsy0RQ/ZxbP9O1AeArYrPdA5Jlpzf3gICQSf8
-         Rd+4H+slRTWLe7gllg/9kgyOLJcZiRr52484ppJzArcXVq2MZaza5D4+RTz9NpLAEPNQ
-         wkL6NPkfSbr2H0wa1AiW/TeZnVTRawDEtwBbghIximLZIco3yZNrhcakoJ254xHgPE5K
-         PsmmE65dU37D32EuAx8jJKrvWIfTwG5hf+bsh0aEHW8S08DIZLvau89c2AHhPR0iK2e2
-         kXBQ==
+        bh=E5QDWkO2mZIUqFyZfWARuefSQbIGKebt4uDjmqBxFCM=;
+        b=FTgtBK/JgCbIsNj2j5kgq0q80z1xkkbJ9PW/6kg2Ah0V94BYKhaZpZPdt+SuXQzvPZ
+         i/iHtmEnUDxmguQDLchOWWV+nJgLGrZOrIA0xKf6hjguqxitWkgTpUlrIYh6+npUHikU
+         pcP44DHuI1yHtGdGJMsW0kUC/QUheIioR0qfLa9C8II0CYXVhy6GCvbyx8xSYry8yUIO
+         i/8EKcLeTZejZONwCsFVIxcscGGVnrxoMy+LJp3NqZQcuBsPs3IJaRHJhymKjBbxhwuR
+         sQ67CzJSQa43/Vi9KHM177hs3+6hvTviZ3gE9R1TnLM0M0v8KU/jaC96r4ZfBjMIu3qf
+         /UUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740636213; x=1741241013;
+        d=1e100.net; s=20230601; t=1740649207; x=1741254007;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KtYpkd2jzucIGjS+RbAQ8XkHU/fTQAGMdmomglbM5kM=;
-        b=D+XUxTE5cI9ICx5WE1Qt2w7+v+PuPlLdKVSNJxyw88qU25y2qcbulPwFaJHPv+1jHN
-         Zn9Y7AkGwlUTZ/nQkjDPLmah0+n8NhVeJlUrcjL/2S3mdjn5/vJTjMLANL9+LWg9eL6b
-         4GnU2Dt7SbCC15q0Pshoe+ulCa6ydSOnNIBI+KWy4mySxYcny+DtljtmIhW5kpcqNAxo
-         +hMrGNuqFgFJ07GhaUajGSwH1khseK5kZquDxKMepSlq7UE2sfEfjs1iupVv34KyWWJ/
-         fYN89odGWZ9k9FyE8OOockziLdYZz+P6YK4DtM6qt99kIu8KEqCHDv42L+F0+jul734r
-         PZgw==
-X-Forwarded-Encrypted: i=1; AJvYcCUCtpnbkPZqSSB90WJefVbF3UVGQg1vuOoULWpks/KSegecs4RbzDBqo4T73nJ7bE92vogJQLHLbgBU@vger.kernel.org, AJvYcCV+j6l6tZuN9AVBB7ZlkSkMNcE5O/CXnV5eKhgAO9Pq4lpf7sgm+f0aYWhuTD3hg5yyYggNuz6Tx8Y=@vger.kernel.org, AJvYcCVH0DJ55Mp9tfAwnGUegXwh0FcCxpffMTN24DubxzEukfS1QhEy2zPyGOE0yO7gLiARd4rcydKx@vger.kernel.org, AJvYcCVzFgwizoGpVPBuhgS78hyO9DE4onasxNiQHnO5ZlV8KQUj2f1dW4k0YwPdJT/kD2Qb9bfJ5FfcD8iSOA==@vger.kernel.org, AJvYcCW+hu2Rtr8Ks6A7o7TXB/zuHSlhpca7YR5yRR9jrRPsTqOvPXXxaHC+eSMSdrNHiP9eYw24zNmb89B5GobPy/8=@vger.kernel.org, AJvYcCW6bShUpiRSE8tdp+f3gVzDs6zQw6FvQxLjKRpdTx4u8HkZLVd3RvPJZce77guIDcc4A/8W05nbM7N8@vger.kernel.org, AJvYcCWIMyWYsWWOplUd4GM/tDE6eB40P19p9cj9vLKsf0eKyBPHZ9U3sdWEEjKFloTIU3TzPUdECCQQ9wdB@vger.kernel.org, AJvYcCWirC+hJdMP1c9kTaWzdyg9ETkQ6G6UbLWkF30DZH9ORqKlIUmBb45NhAsuiU/BKaA3LN9PBFVS31RPABY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7SxDqufp/AVuD3yLIvceMmgVIdlll+a1ycvLteY1quqaKQUvg
-	KIee2VS+LdVq3/+StNizNzxeWUWD+sGoGVe7JjerUKSzf4KGjP0rp3/T4+fE8yz22Hvd3LaMlJs
-	Kq3d0zlXXdZ732+sQgMAvTg2kKQgx42Pl
-X-Gm-Gg: ASbGnctx+olhuQtj5eanz+KcTeYbh7l5aFoFP/oH1x8eRwxTUPIV53UKdOi/lj74w3V
-	Okjr4+Hb3n9n4ZQjP2vDWyHgEwEOy1n3gb7XjxSHmJMTewv0OX3Da/41v8f5juKh+99VlsUyUmw
-	7Gfj1c11NLltB6RprIDauce9hbc/7eV+oqQqI1m8HqIA==
-X-Google-Smtp-Source: AGHT+IHhW5RmOkI7gkOjlnGO69YlG3Snu/7w3uKIK+tMNwqUqsl2+cEq6+/+Jh1ycoF05KXQ4giGB5nQbc+/Fln9Lv8=
-X-Received: by 2002:a05:690c:6402:b0:6fd:359a:8fd2 with SMTP id
- 00721157ae682-6fd359aa0f1mr37893927b3.26.1740636213413; Wed, 26 Feb 2025
- 22:03:33 -0800 (PST)
+        bh=E5QDWkO2mZIUqFyZfWARuefSQbIGKebt4uDjmqBxFCM=;
+        b=KLkgKaJY8NrgRnYtKFeibabJBwNGggGemhC0Onn/2kcNZbNipSznOaAla92BuynyTc
+         tZB+hZSv3SXWi8rSfr8wzBWxn0gu7Kceh80/qCb8rkLVPPVouIB298kRieWhxzlWnR0r
+         uUC6ropfYjC9hL0O/AxZ8/+w6Q1G6lS9b4KhuRQy++0g2y1rrKr33bEPsn9iXxpWrAxe
+         rRfhJkCUIjuDB43228QJBL7xGuL4905Q3Uh5xofwcigHlY8APDT4HeIIzzcEnTMTgHne
+         twK08sN2VRhg1vgU+yTjGnF9t5PKutPr5CLD2nqzX6pXkwOrMKY1R3E12MDzpFImfFV5
+         aIZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVQ0tT3thWKqOa+oG45UuV69AZUhO/1yFSibQFNr0ezQhOPvoulBkB5zsxNZgVCvx9GdDQj+Jk6S0rmtUjsa/g=@vger.kernel.org, AJvYcCWiX9UOzrukPPQ8J4RyjLQ/8cqd1snSWTWGtiBdnGZRpburHeZiMvIDoN4hGg4wmm4/RNtuqy8J63KaSMQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyNunfFCyW5YrzF7mkNpFkLRX9Urb5ZNr6jT5Mso+47ytk15yr
+	KHQRkqYFI1DlnRSmYtX3zEKeltoPjl1oiIFX/CvhloTckPsOuBbC5HH4RzlYRVzkB+a3NeQBILi
+	co0eiUHgAhuTSjjT4X3Z6JdFMISI=
+X-Gm-Gg: ASbGnctunoXalkakZmZ8bL3j6WQ9U4BLLpqnkdp/Q0KJEYGsJda6OV9fiDnQUb3Je8L
+	/Gj7DYC9uOEtDAkt4VnPJfi+3Q1kyi5URTNxMZ5NfV+rSbT4AMWLUcNKNedGLHEf2luKpM+jrdj
+	kyh2SWx5k2
+X-Google-Smtp-Source: AGHT+IHVxpKqJjF6Oy3UiSsoNMUk3O6YtCQmwyuh/+RElalPL6ZKmZpdr7GUuDOpP7wb1pIYfzRVat/b4jfY+6rXg4Q=
+X-Received: by 2002:adf:ed4c:0:b0:38f:476f:e176 with SMTP id
+ ffacd0b85a97d-38f6ec63868mr17667271f8f.31.1740649207536; Thu, 27 Feb 2025
+ 01:40:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-5-a0282524688@gmail.com> <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
-In-Reply-To: <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Thu, 27 Feb 2025 14:03:22 +0800
-X-Gm-Features: AQ5f1JqT0RaRfdM1W6C9qCDjKis5nvigOw3vz5qmtqucCho9jlDXbeZ2UgpSNeA
-Message-ID: <CAOoeyxXax83oNg1MpC7N4B6TrLMeg8z53SaHGqsej8ZDMP1SLA@mail.gmail.com>
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, tmyu0@nuvoton.com, 
-	lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com
+References: <20250225143638.1989755-1-regis.dargent@gmail.com>
+ <20250225143638.1989755-2-regis.dargent@gmail.com> <2547277e-d9c0-4138-abaa-7afbff1ba3ca@roeck-us.net>
+In-Reply-To: <2547277e-d9c0-4138-abaa-7afbff1ba3ca@roeck-us.net>
+From: =?UTF-8?Q?R=C3=A9gis_DARGENT?= <regis.dargent@gmail.com>
+Date: Thu, 27 Feb 2025 10:39:56 +0100
+X-Gm-Features: AQ5f1JrSA6DaEhL-Nslpn5PJiSZvOfwBqv4VOqRh3wNZ-79IdfFHdRc-00phYLw
+Message-ID: <CANarb_ci_vgBMU4XejMwOwxKjGVccfMuweUQA7JwbNzWZqotuw@mail.gmail.com>
+Subject: Re: [PATCH v3] watchdog: sunxi_wdt: Allow watchdog to remain enabled
+ after probe
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Dear Vincent,
-
-Thank you for reviewing,
-
-Vincent Mailhol <mailhol.vincent@wanadoo.fr> =E6=96=BC 2025=E5=B9=B42=E6=9C=
-=8827=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=8810:09=E5=AF=AB=E9=81=93=
-=EF=BC=9A
+Le mar. 25 f=C3=A9vr. 2025 =C3=A0 22:51, Guenter Roeck <linux@roeck-us.net>=
+ a =C3=A9crit :
 >
-...
-> > +static void nct6694_can_handle_state_change(struct net_device *ndev,
-> > +                                         enum can_state new_state)
+> On 2/25/25 06:36, Regis Dargent wrote:
+> > If the watchdog is already running during probe, let it run on, read it=
+s
+> > configured timeout, and set its status so that it is correctly handled =
+by the
+> > kernel.
+> >
+> > Signed-off-by: Regis Dargent <regis.dargent@gmail.com>
+> >
+> > --
+> >
+> > Changelog v1..v2:
+> > - add sunxi_wdt_read_timeout function
+> > - add signed-off-by tag
+> >
+> > Changelog v2..v3:
+> > - WDIOF_SETTIMEOUT was set twice, and other code cleanup
+> > ---
+> >   drivers/watchdog/sunxi_wdt.c | 45 ++++++++++++++++++++++++++++++++++-=
+-
+> >   1 file changed, 43 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/watchdog/sunxi_wdt.c b/drivers/watchdog/sunxi_wdt.=
+c
+> > index b85354a99582..d509dbcb77ce 100644
+> > --- a/drivers/watchdog/sunxi_wdt.c
+> > +++ b/drivers/watchdog/sunxi_wdt.c
+> > @@ -140,6 +140,7 @@ static int sunxi_wdt_set_timeout(struct watchdog_de=
+vice *wdt_dev,
+> >               timeout++;
+> >
+> >       sunxi_wdt->wdt_dev.timeout =3D timeout;
+> > +     sunxi_wdt->wdt_dev.max_hw_heartbeat_ms =3D 0;
+> >
+> >       reg =3D readl(wdt_base + regs->wdt_mode);
+> >       reg &=3D ~(WDT_TIMEOUT_MASK << regs->wdt_timeout_shift);
+> > @@ -152,6 +153,32 @@ static int sunxi_wdt_set_timeout(struct watchdog_d=
+evice *wdt_dev,
+> >       return 0;
+> >   }
+> >
+> > +static int sunxi_wdt_read_timeout(struct watchdog_device *wdt_dev)
 > > +{
-> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > +     struct can_berr_counter bec;
-> > +     struct can_frame *cf;
-> > +     struct sk_buff *skb;
-> > +
-> > +     skb =3D alloc_can_err_skb(ndev, &cf);
-> > +
-> > +     nct6694_can_get_berr_counter(ndev, &bec);
-> > +
-> > +     switch (new_state) {
-> > +     case CAN_STATE_ERROR_ACTIVE:
-> > +             priv->can.can_stats.error_warning++;
-> > +             priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
-> > +             if (cf)
->
-> Set the CAN_ER_CRTL flag:
->
->                 if (cf) {
->                         cf->can_id |=3D CAN_ERR_CRTL;
->                         cf->data[1] |=3D CAN_ERR_CRTL_ACTIVE;
->                 }
->
-
-Fix it in the v9.
-
-> > +                     cf->data[1] |=3D CAN_ERR_CRTL_ACTIVE;
-> > +             break;
-> > +     case CAN_STATE_ERROR_WARNING:
-> > +             priv->can.can_stats.error_warning++;
-> > +             priv->can.state =3D CAN_STATE_ERROR_WARNING;
-> > +             if (cf) {
-> > +                     cf->can_id |=3D CAN_ERR_CRTL;
->
-> Set the CAN_ERR_CNT flag when you populate cf->data[6] and cf->data[7]:
->
->                         cf->can_id |=3D CAN_ERR_CRTL | CAN_ERR_CNT;
->
-
-Fix it in the v9.
-
-> > +                     if (bec.txerr > bec.rxerr)
-> > +                             cf->data[1] =3D CAN_ERR_CRTL_TX_WARNING;
-> > +                     else
-> > +                             cf->data[1] =3D CAN_ERR_CRTL_RX_WARNING;
-> > +                     cf->data[6] =3D bec.txerr;
-> > +                     cf->data[7] =3D bec.rxerr;
-> > +             }
-> > +             break;
-> > +     case CAN_STATE_ERROR_PASSIVE:
-> > +             priv->can.can_stats.error_passive++;
-> > +             priv->can.state =3D CAN_STATE_ERROR_PASSIVE;
-> > +             if (cf) {
-> > +                     cf->can_id |=3D CAN_ERR_CRTL;
->
-> Set the CAN_ERR_CNT flag when you populate cf->data[6] and cf->data[7]:
->
->                         cf->can_id |=3D CAN_ERR_CRTL | CAN_ERR_CNT;
->
-
-Fix it in the v9.
-
-> > +                     cf->data[1] |=3D CAN_ERR_CRTL_RX_PASSIVE;
-> > +                     if (bec.txerr >=3D CAN_ERROR_PASSIVE_THRESHOLD)
-> > +                             cf->data[1] |=3D CAN_ERR_CRTL_TX_PASSIVE;
-> > +                     cf->data[6] =3D bec.txerr;
-> > +                     cf->data[7] =3D bec.rxerr;
-> > +             }
-> > +             break;
-> > +     case CAN_STATE_BUS_OFF:
-> > +             priv->can.state =3D CAN_STATE_BUS_OFF;
-> > +             priv->can.can_stats.bus_off++;
-> > +             if (cf)
-> > +                     cf->can_id |=3D CAN_ERR_BUSOFF;
-> > +             can_free_echo_skb(ndev, 0, NULL);
-> > +             netif_stop_queue(ndev);> +              can_bus_off(ndev)=
+> > +     struct sunxi_wdt_dev *sunxi_wdt =3D watchdog_get_drvdata(wdt_dev)=
 ;
-> > +             break;
-> > +     default:
-> > +             break;
-> > +     }
+> > +     void __iomem *wdt_base =3D sunxi_wdt->wdt_base;
+> > +     const struct sunxi_wdt_reg *regs =3D sunxi_wdt->wdt_regs;
+> > +     int i;
+> > +     u32 reg;
 > > +
-> > +     nct6694_can_rx_offload(&priv->offload, skb);
-> > +}
+> > +     reg =3D readl(wdt_base + regs->wdt_mode);
+> > +     reg >>=3D regs->wdt_timeout_shift;
+> > +     reg &=3D WDT_TIMEOUT_MASK;
 > > +
-...
-> > +static int nct6694_can_stop(struct net_device *ndev)
-> > +{
-> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > +
-> > +     priv->can.ctrlmode =3D CAN_CTRLMODE_LISTENONLY;
+> > +     /* Start at 0 which actually means 0.5s */
+> > +     for (i =3D 0; (i < WDT_MAX_TIMEOUT) && (wdt_timeout_map[i] !=3D r=
+eg); i++)
 >
-> Hmmm, when Marc asked you to put the device in listen only mode, I think
-> he meant that you set it on the device side (i.e. flag
-> NCT6694_CAN_SETTING_CTRL1_MON) and not on the driver side. If you set
-> CAN_CTRLMODE_LISTENONLY flag, that will be reported in the netlink
-> interface. So you should not change that flag.
+> Unnecessary (). On top of that, its complexity is unnecessary.
+> The timeout in seconds, except for reg =3D=3D 0, is wdt_timeout_map[reg],
+> with values of 0x0c..0x0f undefined. Worse, the above code can access
+> beyond the size of wdt_timeout_map[] if reg >=3D 0x0c.
+
+Ok, I prefer parenthesis for (my) readability, but I will remove them.
+
+wdt_timeout_map is not linear, so timeout in seconds is i when
+wdt_timeout_map[i] =3D=3D reg, some values of i not corresponding to any
+reg value.
+reg values of 0x0c and more will end with a timeout of 16s
+(i =3D=3D WDT_MAX_TIMEOUT) which will lead to unknown behaviour only
+because these values are marked "reserved" in the HW timer documentation.
+
+> > +             ;
+> > +     if (i =3D=3D 0) {
+> > +             wdt_dev->timeout =3D 1;
+> > +             wdt_dev->max_hw_heartbeat_ms =3D 500;
 >
-> But before that, did you check the datasheet? Don't you have a device
-> flag to actually turn the device off (e.g. sleep mode)?
+> This is an unacceptable API abuse. max_hw_heartbeat_ms, if set,
+> should be 16000, not 500. You could set the timeout to 1 second instead.
+
+sorry about that, my comprehension of the documentation on
+min/max_hw_heartbeat_ms suggested that they define the time window during
+which the HW timer must receive a heartbeat or it will reset.
+0-'timeout' defines the time window for the userspace point of view,
+meaning that if 'timeout' > max_hw_heartbeat_ms, extra heartbeats must be
+sent to HW timer so that the reset can occur only after 'timeout' seconds.
+
+Just to be clear, setting max_hw_heartbeat_ms to the maximum HW possible
+value (here 16000ms) means that one cannot use sub-second HW timer values,
+while all the watchdog API actually handles them well enough (my tests on
+the 500ms HW timer worked good).
+
+For this sunxi driver case, this implies that instead of just reading the
+current timeout value from the HW timer (if it was enabled before the
+kernel start), I also have to reconfigure the HW timer (to 1sec) if its
+timeout is less than a second (the 0 register value).
+
+> Guenter
 >
-
-Our firmware currently does not provide an interface to turn the
-device off, I will put the device in listen-only mode as an
-alternative.
-
-> > +     netif_stop_queue(ndev);
-> > +     free_irq(ndev->irq, ndev);
-> > +     destroy_workqueue(priv->wq);
-> > +     can_rx_offload_disable(&priv->offload);
-> > +     priv->can.state =3D CAN_STATE_STOPPED;
-> > +     close_candev(ndev);
-> > +
-> > +     return 0;
-> > +}
-> > +
-...
-> > +static int nct6694_can_probe(struct platform_device *pdev)
-> > +{
-> > +     const struct mfd_cell *cell =3D mfd_get_cell(pdev);
-> > +     struct nct6694 *nct6694 =3D dev_get_drvdata(pdev->dev.parent);
-> > +     struct nct6694_can_priv *priv;
-> > +     struct net_device *ndev;
-> > +     int ret, irq, can_clk;
-> > +
-> > +     irq =3D irq_create_mapping(nct6694->domain,
-> > +                              NCT6694_IRQ_CAN0 + cell->id);
-> > +     if (!irq)
-> > +             return irq;
-> > +
-> > +     ndev =3D alloc_candev(sizeof(struct nct6694_can_priv), 1);
-> > +     if (!ndev)
-> > +             return -ENOMEM;
-> > +
-> > +     ndev->irq =3D irq;
-> > +     ndev->flags |=3D IFF_ECHO;
-> > +     ndev->dev_port =3D cell->id;
-> > +     ndev->netdev_ops =3D &nct6694_can_netdev_ops;
-> > +     ndev->ethtool_ops =3D &nct6694_can_ethtool_ops;
-> > +
-> > +     priv =3D netdev_priv(ndev);
-> > +     priv->nct6694 =3D nct6694;
-> > +     priv->ndev =3D ndev;
-> > +
-> > +     can_clk =3D nct6694_can_get_clock(priv);
-> > +     if (can_clk < 0) {
-> > +             ret =3D dev_err_probe(&pdev->dev, can_clk,
-> > +                                 "Failed to get clock\n");
-> > +             goto free_candev;
-> > +     }
-> > +
-> > +     INIT_WORK(&priv->tx_work, nct6694_can_tx_work);
-> > +
-> > +     priv->can.state =3D CAN_STATE_STOPPED;
->
-> Marc asked you to remove this line during the v7 review.
->
-
-Sorry, drop it in the v9.
-
-> > +     priv->can.clock.freq =3D can_clk;
-> > +     priv->can.bittiming_const =3D &nct6694_can_bittiming_nominal_cons=
-t;
-> > +     priv->can.data_bittiming_const =3D &nct6694_can_bittiming_data_co=
-nst;
-> > +     priv->can.do_set_mode =3D nct6694_can_set_mode;
-> > +     priv->can.do_get_berr_counter =3D nct6694_can_get_berr_counter;
-> > +     priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK |
-> > +             CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTING |
-> > +             CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
-> > +
-> > +     ret =3D can_rx_offload_add_manual(ndev, &priv->offload,
-> > +                                     NCT6694_NAPI_WEIGHT);
-> > +     if (ret) {
-> > +             dev_err_probe(&pdev->dev, ret, "Failed to add rx_offload\=
-n");
-> > +             goto free_candev;
-> > +     }
-> > +
-> > +     platform_set_drvdata(pdev, priv);
-> > +     SET_NETDEV_DEV(priv->ndev, &pdev->dev);
-> > +
-> > +     ret =3D register_candev(priv->ndev);
-> > +     if (ret)
-> > +             goto rx_offload_del;
-> > +
-> > +     return 0;
-> > +
-> > +rx_offload_del:
-> > +     can_rx_offload_del(&priv->offload);
-> > +free_candev:
-> > +     free_candev(ndev);
-> > +     return ret;
-> > +}
-> > +
-
-
-Best regards,
-Ming
 
