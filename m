@@ -1,136 +1,136 @@
-Return-Path: <linux-watchdog+bounces-3024-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3025-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37929A48018
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Feb 2025 14:56:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7B41A480D0
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Feb 2025 15:20:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EFCD016E931
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Feb 2025 13:48:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DD4C7A1C1F
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Feb 2025 14:19:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 488E1231A3F;
-	Thu, 27 Feb 2025 13:48:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u7PEQG2j"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 801C323717E;
+	Thu, 27 Feb 2025 14:18:38 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8D723024D;
-	Thu, 27 Feb 2025 13:48:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9BED2356BC
+	for <linux-watchdog@vger.kernel.org>; Thu, 27 Feb 2025 14:18:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740664104; cv=none; b=GVzhsVCbEhYvgPMYTvvYKfqfNQbeJM9gXcG7l12ePwjm32M2ryDtyzMX4Y5zK8fo4nhzeL3RUrKPrisc4kNPdxQOYVB18bbg0PYCFcDaLzBi/8UPT3Q0Go1TLFfgL5J+fuaKMzU6J+M5yOevhwl50voAigF+SRpy9H8zXlTo2rg=
+	t=1740665918; cv=none; b=G1WHOiFCCVJjx0waz9r+Zmfy5QSTeKiDCnXUyWtXzxxWTkjVwrSLdelwq1h9f81SE8tlCPIpyljhnF1dyqqEqEYoub53V05pojuuVCtaVULq9HVfIjqTidWsTjYx+gSj1OcOoBsNkfs3HyndApA8eGAeNcFlQjmkqcWQsfuwkWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740664104; c=relaxed/simple;
-	bh=+0o56Rl9c9XlxO66ciG8cF7751qtwRokbDOXu3oKKI4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=FMFKyocHrZSA/TlKZnIb1X6A/TMi9N72lH4SDCKr0X1bCQ9bRXaqP+vqJFFSNOgakaqqzfJtpSNC4vXHeX+UMliVpgXdUTTIMcG9/x89fjLp8Yuz1BAaN5Q78qwrfrWim6cKeGuXMIAaAJ3N7uclDuMSaxvK+lNQ0x/WI3dUwzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u7PEQG2j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E80BC4CEDD;
-	Thu, 27 Feb 2025 13:48:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740664103;
-	bh=+0o56Rl9c9XlxO66ciG8cF7751qtwRokbDOXu3oKKI4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=u7PEQG2j83U1EUgccAsv7ZZeyzoXGP5E3eyEnhw4NoElI1P1PQduAFpk3Aw26XQga
-	 MU1FsSM2xWeVk3888IvozG2rU0czOy6ksHQKL+ms88vEKd69Oz3Wn/JfI5RXTFTwNk
-	 wfGNc/kEM3DNOFtXZ34ZRYeTDGKQ9rq2QA/8JJ070MZrbICKSyOueWiZTR8CewZk/4
-	 YNa2OgN5lkcQjeMyprtE571tUFUuQFiRLywSCD55mJu1bl6w3MNEN7o1f2vw9759LK
-	 TWM2LHQPLAcDuMVzwA6GP/6GMrZpDf8H3uZGfG3Gq2L3gj60l5E8fYaRb6MO8wqJWV
-	 z16TlfgV2NvRQ==
-From: Mark Brown <broonie@kernel.org>
-To: heiko@sntech.de, Kever Yang <kever.yang@rock-chips.com>
-Cc: linux-rockchip@lists.infradead.org, Simon Xue <xxm@rock-chips.com>, 
- Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org, 
- Chris Morgan <macromorgan@hotmail.com>, 
- Frank Wang <frank.wang@rock-chips.com>, Jamie Iles <jamie@jamieiles.com>, 
- Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org, 
- Jonas Karlman <jonas@kwiboo.se>, Johan Jonker <jbx6244@gmail.com>, 
- David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org, 
- linux-i2c@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>, 
- Simona Vetter <simona@ffwll.ch>, Elaine Zhang <zhangqing@rock-chips.com>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Finley Xiao <finley.xiao@rock-chips.com>, 
- Maxime Ripard <mripard@kernel.org>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
- FUKAUMI Naoki <naoki@radxa.com>, linux-pwm@vger.kernel.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-serial@vger.kernel.org, 
- Michael Riesch <michael.riesch@wolfvision.net>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, ulf.hansson@linaro.org, 
- Jiri Slaby <jirislaby@kernel.org>, 
- Detlev Casanova <detlev.casanova@collabora.com>, 
- Andi Shyti <andi.shyti@kernel.org>, devicetree@vger.kernel.org, 
- Diederik de Haas <didi.debian@cknow.org>, linux-watchdog@vger.kernel.org, 
- Rob Herring <robh@kernel.org>, 
- Cristian Ciocaltea <cristian.ciocaltea@collabora.com>, 
- Wim Van Sebroeck <wim@linux-watchdog.org>, 
- Shresth Prasad <shresthprasad7@gmail.com>, Tim Lunn <tim@feathertop.org>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- linux-arm-kernel@lists.infradead.org, Jisheng Zhang <jszhang@kernel.org>, 
- Dragan Simic <dsimic@manjaro.org>, linux-mmc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
- Andy Yan <andy.yan@rock-chips.com>, 
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
- Thomas Zimmermann <tzimmermann@suse.de>, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-In-Reply-To: <20250227111913.2344207-1-kever.yang@rock-chips.com>
-References: <20250227111913.2344207-1-kever.yang@rock-chips.com>
-Subject: Re: (subset) [PATCH v3 00/15] rockchip: Add rk3562 SoC and evb
- support
-Message-Id: <174066409262.43847.18143301735398340521.b4-ty@kernel.org>
-Date: Thu, 27 Feb 2025 13:48:12 +0000
+	s=arc-20240116; t=1740665918; c=relaxed/simple;
+	bh=LxGqDDciDNPai+yMXfQ6y3up7TsSxsnZOwf8EJYTN8g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cg25SY3+ZaraAds9sdvpDXL0XGKFp3oo7IiyBf7b3uAny+pHRqMdAY0BC/Anjf4ouRNwYQHd3TBYvWjp6tKtLlmNK2aXnUES2mYNiIk3s/Nu9Wea16zd6Gr836x/ixJeTn05CE9KqoqbpLowYFarDn/9Aj/jeGiie7qz7UtBPz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tnehz-0003GQ-MD; Thu, 27 Feb 2025 15:17:51 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tnehw-0038i4-0Z;
+	Thu, 27 Feb 2025 15:17:48 +0100
+Received: from pengutronix.de (p5b164285.dip0.t-ipconnect.de [91.22.66.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id C00033CD6A6;
+	Thu, 27 Feb 2025 14:17:47 +0000 (UTC)
+Date: Thu, 27 Feb 2025 15:17:47 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Ming Yu <a0282524688@gmail.com>, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, tmyu0@nuvoton.com, lee@kernel.org, 
+	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250227-gregarious-garrulous-echidna-ca7975-mkl@pengutronix.de>
+References: <20250225081644.3524915-1-a0282524688@gmail.com>
+ <20250225081644.3524915-5-a0282524688@gmail.com>
+ <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-1b0d6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="i5nv6d7na7xl5d3b"
+Content-Disposition: inline
+In-Reply-To: <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
 
-On Thu, 27 Feb 2025 19:18:58 +0800, Kever Yang wrote:
-> This patch set adds rk3562 SoC and its evb support.
-> 
-> I have split out patches need driver change for different subsystem.
-> And all the modules with dt-binding document update in this patch set
-> do not need any driver change. I put them together to make it clear we
-> have a new SoC and board to use the new compatible. Please pick up the
-> patch for your subsystem, or please let me know if the patch has to
-> send separate.
-> 
-> [...]
 
-Applied to
+--i5nv6d7na7xl5d3b
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On 27.02.2025 11:08:50, Vincent Mailhol wrote:
+> > +static int nct6694_can_stop(struct net_device *ndev)
+> > +{
+> > +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > +
+> > +	priv->can.ctrlmode =3D CAN_CTRLMODE_LISTENONLY;
+>=20
+> Hmmm, when Marc asked you to put the device in listen only mode, I think
+> he meant that you set it on the device side (i.e. flag
+> NCT6694_CAN_SETTING_CTRL1_MON) and not on the driver side. If you set
+> CAN_CTRLMODE_LISTENONLY flag, that will be reported in the netlink
+> interface. So you should not change that flag.
 
-Thanks!
+ACK
 
-[07/15] dt-bindings: spi: Add rk3562 support
-        commit: 825687c1662c53ecda991adf0ecfd8dd3d864043
+> But before that, did you check the datasheet? Don't you have a device
+> flag to actually turn the device off (e.g. sleep mode)?
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Please test that the ifup -> ifdown -> ifup sequence works properly,
+even on a busy bus and on a bus without with a 2nd CAN station that is
+sending and you are the only receiver.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+regards,
+Marc
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+--i5nv6d7na7xl5d3b
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Mark
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfAdAgACgkQDHRl3/mQ
+kZxjHQf/cl+NPaGA6wNUTa68Le8AS6tbcg6UkzWcAd8AS8/6CWkgPeebGEbmzKvl
+iENWrgc7mfiuy346ubOPufojybeeXMdOHLiwDPEkVgZegMycqUnS+2F/mTCm50fR
+vf9mETJuODrqvL4I265jS9Z+SUA/R/pzTcs0pQItMSzfUwGJ5nv9JQS8mv3MOQhM
+zOqyOMX1bv3+0Ov9ZTpjaV2JoOmTqpDFIYuN2DyqGl+NlJfZyHCp/Z8UJ7MyQykL
+Nzk53OPw0yb1MC6RT8m5ijRnpiVzfV5Et+2/FEXSW0aE/SXBRailPfDqdEmxXFnf
+f4DOoo4Z+H6xhf0L7EUZ1HcmpU+ckA==
+=2o2X
+-----END PGP SIGNATURE-----
+
+--i5nv6d7na7xl5d3b--
 
