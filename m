@@ -1,106 +1,98 @@
-Return-Path: <linux-watchdog+bounces-3022-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3023-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A637CA47BEB
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Feb 2025 12:22:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DAFDA47CED
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Feb 2025 13:09:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD5763A3DE3
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Feb 2025 11:21:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 80F97173AC0
+	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Feb 2025 12:08:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A1B022F164;
-	Thu, 27 Feb 2025 11:19:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9488022D797;
+	Thu, 27 Feb 2025 12:07:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="EgcoGntc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IHdCOLJC"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-m15574.qiye.163.com (mail-m15574.qiye.163.com [101.71.155.74])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C5122D4EC;
-	Thu, 27 Feb 2025 11:19:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA9A22D4FE;
+	Thu, 27 Feb 2025 12:07:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740655181; cv=none; b=lTCjsRm9Ey36+Jxee5bMDoJ0bF1JxFfY0oSJQzZWzFzu1Yh9AXPeJg0qFa9khJjs2TptTw0djKrt4o23ySoK3hhR4iE1FMn4mMzDa31KpSbTAmvsuDHs0HfUsaYOr9uRpAo6ldhHKAmTdD7hKd4dBcMZyqWJo0DUaH8JNbuTe3I=
+	t=1740658073; cv=none; b=Yat14AT1LqpZOSv2oJLct3EgcjiFdX+iX/4qnlzbJ6vPZgvgBfIe1J8DThC/CQGLLA/N+gqc4b/FiJO5ZaYhOyKVl9qt6z6ZMKb81jI3OmxekegqGflJp85bdxEKr87mbWMyYfrRwmTPAjt/ikzWYjIemA6N8DxGIchpJuM2X7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740655181; c=relaxed/simple;
-	bh=8nxVAn0y+muDhbzVRlwphXg3OiK0MuvkEFK9HHV+OP4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=I7RI8ew9fVnzMRsAdodJph/kaa01d8WkEudCvaAKDBgAZHc5aTseBJ6RFd6C3OGW/CwE0olGiv+36zfTO3q/3ivHkauH5aSFTM881R1MuUQZ6L8Lr9uniQ4lb2aOdnoZRobXw0jmJ2CSmm0wKyk8TaGwIhNDYzA1F7iroaHlykA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=EgcoGntc; arc=none smtp.client-ip=101.71.155.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from localhost.localdomain (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id c65f97df;
-	Thu, 27 Feb 2025 19:19:29 +0800 (GMT+08:00)
-From: Kever Yang <kever.yang@rock-chips.com>
-To: heiko@sntech.de
-Cc: linux-rockchip@lists.infradead.org,
-	Kever Yang <kever.yang@rock-chips.com>,
-	Jamie Iles <jamie@jamieiles.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-watchdog@vger.kernel.org,
-	Rob Herring <robh@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	devicetree@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: [PATCH v3 06/15] dt-bindings: watchdog: Add rk3562 compatible
-Date: Thu, 27 Feb 2025 19:19:04 +0800
-Message-Id: <20250227111913.2344207-7-kever.yang@rock-chips.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250227111913.2344207-1-kever.yang@rock-chips.com>
-References: <20250227111913.2344207-1-kever.yang@rock-chips.com>
+	s=arc-20240116; t=1740658073; c=relaxed/simple;
+	bh=XeRhQ6iq6uKT/D+pyDPZgb7AbcoHU0EabaJrmBJdI+I=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=MCOfPOMoWE62ed3C7Zwi5+mB3JUSTJ/+X+w6MT02biPmA5hEBT3F+l5j6YEAs+fKsg8v1wX/to6V7WmR7i/i2Z6ZIiKnZZ1BwvgspW4DT66j5QRYZ/2HrOxyN3fAISP+Fd+QObc+J/uo/m+xyBeaofj76jl8jKUTT9XYhyrin2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IHdCOLJC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7D6CC4CEE8;
+	Thu, 27 Feb 2025 12:07:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740658072;
+	bh=XeRhQ6iq6uKT/D+pyDPZgb7AbcoHU0EabaJrmBJdI+I=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=IHdCOLJCXFMQcKDXTBbd5QCoOizYpE5URnyiFNAasjlOnNLT5ECIj//PcH0kWMFVe
+	 lEpYbKBGqTOUHrgtxTqXoFokwe5MfuFI2bkNpTo/WVY+0Mr/XiGC+2onpLAuxng/eH
+	 QGlI0zsWnCOHseAXuMInqtQLzcbx0ztw5ImyEWtff3hsxgIDNxTd5GlbTM/l4MyTPM
+	 AXzL/UdBkODuMCt7Jm2PguiYx3H6wxgasJtqNoR+HJuoXE28OH6y27cqdpaqGBYlBG
+	 En56VXbzMy9zqkgcn3qGrd1piftlK/xyMcLo5MDYwNubmJBVtSHt3vPLyQf/yGf212
+	 IzqzKNIskEYSQ==
+From: Vinod Koul <vkoul@kernel.org>
+To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+ nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+ claudiu.beznea@tuxon.dev, wim@linux-watchdog.org, linux@roeck-us.net, 
+ Ryan.Wanner@microchip.com
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org, 
+ linux-watchdog@vger.kernel.org
+In-Reply-To: <cover.1739555984.git.Ryan.Wanner@microchip.com>
+References: <cover.1739555984.git.Ryan.Wanner@microchip.com>
+Subject: Re: (subset) [PATCH 0/8] Add System Components for Microchip
+ SAMA7D65 SoC
+Message-Id: <174065806827.367410.5368210992879330466.b4-ty@kernel.org>
+Date: Thu, 27 Feb 2025 17:37:48 +0530
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGUtIHlZCHhgZSBhIH0MfTBhWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEtLTE
-	5VSktLVUtZBg++
-X-HM-Tid: 0a9547220f0b03afkunmc65f97df
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6ORA6Kzo4FzIWDQ0TAkMvHkgh
-	Fg9PCR1VSlVKTE9LTU5OSkxLTExCVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-	EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFCSEw3Bg++
-DKIM-Signature:a=rsa-sha256;
-	b=EgcoGntciTxCQjGQDNSXhBebTn/a1XHkwoVLEKby7uIjYhLPIS0qshS/xaWEf1NaIlfHns0hGP4E0KlxakFCKIohef0rDdIihujpLnnoSGewgHlVmsNutRNp6TcG6EbTFbSlRl4Siql9xAbRC1Tkaug9NHo2yQph2kGJ16Sa8Ns=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
-	bh=MmoOb1kC/SCzMgR6n1gfFcymCz5QC60HQW0OqyXl4dg=;
-	h=date:mime-version:subject:message-id:from;
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.2
 
-Add rockchip,rk3562-wdt for rk3562.
 
-Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
----
+On Fri, 14 Feb 2025 11:08:13 -0700, Ryan.Wanner@microchip.com wrote:
+> This patch set adds support for the following systems in the SAMA7D65
+> SoC:
+> - DMAs
+> - Chip ID
+> - Dual watchdog timer.
+> 
+> Ryan Wanner (8):
+>   dt-bindings: atmel-sysreg: Add SAMA7D65 Chip ID
+>   dt-bindings: watchdog: sama5d4-wdt: Add sama7d65-wdt
+>   dt-bindings: dma: atmel: add microchip,sama7d65-dma
+>   ARM: at91: Add Support in SoC driver for SAMA7D65
+>   ARM: dts: microchip: sama7d65: Add chipID for sama7d65
+>   ARM: dts: microchip: sama7d65: Add watchdog for sama7d65
+>   ARM: dts: microchip: sama7d65: Add DMAs to sama7d65 SoC
+>   ARM: dts: microchip: sama7d65: Enable DMAs
+> 
+> [...]
 
-Changes in v3:
-- Collect reveiw tag
+Applied, thanks!
 
-Changes in v2: None
+[3/8] dt-bindings: dma: atmel: add microchip,sama7d65-dma
+      commit: e19ba02eeb8e98086708ee11ca1b123d17ec1977
 
- Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-index 1efefd741c06..ef088e0f6917 100644
---- a/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/snps,dw-wdt.yaml
-@@ -28,6 +28,7 @@ properties:
-               - rockchip,rk3328-wdt
-               - rockchip,rk3368-wdt
-               - rockchip,rk3399-wdt
-+              - rockchip,rk3562-wdt
-               - rockchip,rk3568-wdt
-               - rockchip,rk3576-wdt
-               - rockchip,rk3588-wdt
+Best regards,
 -- 
-2.25.1
+~Vinod
+
 
 
