@@ -1,136 +1,138 @@
-Return-Path: <linux-watchdog+bounces-3025-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3026-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7B41A480D0
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Feb 2025 15:20:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46B15A49114
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Feb 2025 06:45:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DD4C7A1C1F
-	for <lists+linux-watchdog@lfdr.de>; Thu, 27 Feb 2025 14:19:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72DDA1891949
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Feb 2025 05:45:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 801C323717E;
-	Thu, 27 Feb 2025 14:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5AEE136351;
+	Fri, 28 Feb 2025 05:45:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NxLk5rYw"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9BED2356BC
-	for <linux-watchdog@vger.kernel.org>; Thu, 27 Feb 2025 14:18:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B222E10E5;
+	Fri, 28 Feb 2025 05:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740665918; cv=none; b=G1WHOiFCCVJjx0waz9r+Zmfy5QSTeKiDCnXUyWtXzxxWTkjVwrSLdelwq1h9f81SE8tlCPIpyljhnF1dyqqEqEYoub53V05pojuuVCtaVULq9HVfIjqTidWsTjYx+gSj1OcOoBsNkfs3HyndApA8eGAeNcFlQjmkqcWQsfuwkWY=
+	t=1740721521; cv=none; b=OecFdK5rFKEy39YJJnRyui/2ExjmpzNEASO4S770d8gzFGOxlZU+J2FqqnukQ/mHpcg9uszkaEaBvrwkQ5oOMnkr/pE9mgsPys/MXv1OGLM1y9BIf2ifxQL0nTr62r9mXCHtlfuSC+k32heVH7je5ImUa0BGWCmzNEvQg92QCxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740665918; c=relaxed/simple;
-	bh=LxGqDDciDNPai+yMXfQ6y3up7TsSxsnZOwf8EJYTN8g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cg25SY3+ZaraAds9sdvpDXL0XGKFp3oo7IiyBf7b3uAny+pHRqMdAY0BC/Anjf4ouRNwYQHd3TBYvWjp6tKtLlmNK2aXnUES2mYNiIk3s/Nu9Wea16zd6Gr836x/ixJeTn05CE9KqoqbpLowYFarDn/9Aj/jeGiie7qz7UtBPz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tnehz-0003GQ-MD; Thu, 27 Feb 2025 15:17:51 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tnehw-0038i4-0Z;
-	Thu, 27 Feb 2025 15:17:48 +0100
-Received: from pengutronix.de (p5b164285.dip0.t-ipconnect.de [91.22.66.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id C00033CD6A6;
-	Thu, 27 Feb 2025 14:17:47 +0000 (UTC)
-Date: Thu, 27 Feb 2025 15:17:47 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: Ming Yu <a0282524688@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, tmyu0@nuvoton.com, lee@kernel.org, 
-	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250227-gregarious-garrulous-echidna-ca7975-mkl@pengutronix.de>
-References: <20250225081644.3524915-1-a0282524688@gmail.com>
- <20250225081644.3524915-5-a0282524688@gmail.com>
- <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
+	s=arc-20240116; t=1740721521; c=relaxed/simple;
+	bh=ZqCNpjf6g7/GpyUYXG7ZDp+0yD8RgPnvALy3XXC2m0c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=AV7Nrn7FDC7Vjv871ACznNAY9N/Tu8WeMjsC1cUDWiilnjj0nczgVVQAQT9vigt+ksasD3PgwxNyC6DBlpxAF5L9tgykt1uVnzsj/uSUXwepPgGZpZ0AaGu+m4A5ehPs8pfWBrghFMypnA+6cDuaoBiVcUb57TF/MUbstAsek8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NxLk5rYw; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-390eebcc331so172153f8f.1;
+        Thu, 27 Feb 2025 21:45:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740721518; x=1741326318; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=7awwPtRK1mf6e45cfAiajRWVyXe2s9XIPiPpwvclm/g=;
+        b=NxLk5rYwV4cj3llgfLuHpclZ1B/5EiiXGyrRYRjJc4tlPuy3SN3/3L10iHQEuBqXVy
+         ADKAPzO4y65uBYkbWMTRhFruIE4LDK+Kewq+8LJ4VsymyaemBhLqZBZrihXBjAIAxFe7
+         ssvG+V9IntA3lWUp/ap0AWQcrd2dk1YTmaAwLhAKlFu3pBcvkT7pwxCaf94H3pFpooKd
+         fy8vZtpDxGOqOh1jEYuN37vvR+ri2S2i/3N5XclNsTDp1QWlsNSsHEgBzbQunmY9tspk
+         aJK0qFv1XPQkiwYxAucccnm9uSOiXr73OH3k1H4ZyI9CDqoBzyl7y0bK6okCTa46TeDj
+         7ilg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740721518; x=1741326318;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7awwPtRK1mf6e45cfAiajRWVyXe2s9XIPiPpwvclm/g=;
+        b=ArSdYhIu8ZBtE7z01BR5etSq9xm2e/h2qQFdjTm7xvCzgtibGJVnlDYGhIhukDhEiE
+         V8EYv54NnN1NbjlCqktS948rcCq+I/fcyV7/W3sjCx3vPzIq60gTom4wgf3NTOTBdbfZ
+         PX4GdNwheYq0I1A8jukmMJzssyTXY0veITi77lYirYqa73SGdaEk7m+LTc8+PJ40CPrT
+         OhnLbZWrrG9+de7KoTF2gFG9B4XJV7fsVDhDv5fhkaRhjsua/skAyEEThAUxqcy0sy8I
+         DVWr0lhD6Z4XXxT/2+SH2vg22vmSOGjQVFe9wDQRipa8t0kGFUy0Zc+lEoaAkW5mDNfh
+         ys9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUnedD1PNj5RuBrPJMXKpa0MpvWFUU5JLK6S2YVjYlqzWAkcQgh1FsMZ5gHubE0/q70nKnsN2xGPSMFagc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAAwksQLrAVbfOMjBpHzDN4OaHJhYHGu9YvqWRtVMkWFGxhLon
+	arCht80NRO4tfD5u7JcnIjBbc+zBXa/dErrSqy4t73GeDcuE3iGB
+X-Gm-Gg: ASbGnctkb4CveoyAMtZn97c1CPGHL2j1bH+d27S5BPf7FX6hrBQ+OE1TZEtRUHm37Dl
+	IhTB+gIEsd74FnzFucbjwCkKWDxGYvVTS5chsCOQdMiVBzVz5tzdd4710Ia1u68DM6kp45E7zA8
+	tc7hTgUQYzllHUvfSpBKKB1KeN4JGKHowbA2k40Ox+GMGAWBQC+bI88ZDDJz9i70Um1lyxQG8Y4
+	Tlzr8ibxQxeg80USAXCMTOxd+yJHi4R8LrC4hUNvCY5RcLOmLX446fwpCddVK71BUN6Uu1Pf5dZ
+	XugR8CrOO0gxjPrNA5KQIRbxbTrDjLvHa09HJHnuGy2Z8ohTg5dUSxoUSFI=
+X-Google-Smtp-Source: AGHT+IGUt38tH21UY1y/PR7YrpTZfeWm8QQKpz/rk9iRNqSDNWUTGUcTh8PBEf2ystdDH/QswJULqg==
+X-Received: by 2002:a5d:6dad:0:b0:38d:ae4e:2267 with SMTP id ffacd0b85a97d-390ec12f046mr1377578f8f.11.1740721517649;
+        Thu, 27 Feb 2025 21:45:17 -0800 (PST)
+Received: from eldamar.lan (c-82-192-244-13.customer.ggaweb.ch. [82.192.244.13])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390e4847e62sm4089231f8f.67.2025.02.27.21.45.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Feb 2025 21:45:16 -0800 (PST)
+Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
+Received: by eldamar.lan (Postfix, from userid 1000)
+	id 9FBE9BE2DE0; Fri, 28 Feb 2025 06:45:15 +0100 (CET)
+Date: Fri, 28 Feb 2025 06:45:15 +0100
+From: Salvatore Bonaccorso <carnil@debian.org>
+To: Terry Bowman <terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>,
+	Jean Delvare <jdelvare@suse.de>, Guenter Roeck <linux@roeck-us.net>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	=?utf-8?B?0L/RgNC+0LPRgNCw0LzQvNC40YHRgiDQvdC10LrRgtC+?= <programmer11180@programist.ru>
+Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Report of a nonworking P5100/SB800 TCO WatchDog after 1f182aca2300
+ ("Watchdog: sp5100_tco: Refactor MMIO base address initialization") changes
+Message-ID: <Z8FNaycb6bpW9JA_@eldamar.lan>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="i5nv6d7na7xl5d3b"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a32b4ca1-0bcf-48e4-87ab-61fbd077a3c3@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-watchdog@vger.kernel.org
+
+Hi
+
+A user in Debian reported quite a long back an issue that after the
+update to the 5.18 version but present still up to recent kernel
+versions his SP5100/SB800 TCO WatchDog would not work anymore.
+
+The report is at: https://bugs.debian.org/1054231
+
+> Hello. WatchDog broken since version 5.17. Kernel write an error to syslog.
+> Tested versions: 5.10, 5.15, 5.16, 5.17, 5.19, 6.1, 6.5.
+> 
+> From syslog:
+> KERNEL 5.16 (and lower)
+> Oct 19 12:24:12 debian-gateway kernel: Linux version 5.16.0-6-amd64 (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.2.0-19) 11.2.0, GNU ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT Debian 5.16.18-1 (2022-03-29)
+> ...
+> Oct 19 12:24:13 debian-gateway kernel: sp5100_tco: SP5100/SB800 TCO WatchDog Timer Driver
+> 
+> KERNEL 5.17 (and higher)
+> Oct 18 20:36:00 debian-gateway kernel: Linux version 5.17.0-3-amd64 (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.3.0-3) 11.3.0, GNU ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT Debian 5.17.11-1 (2022-05-26)
+> ...
+> Oct 18 20:36:01 debian-gateway kernel: sp5100_tco: SP5100/SB800 TCO WatchDog Timer Driver
+> Oct 18 20:36:01 debian-gateway kernel: sp5100-tco sp5100-tco: Failed to reserve MMIO or alternate MMIO region
+> Oct 18 20:36:01 debian-gateway kernel: sp5100-tco: probe of sp5100-tco failed with error -16
+
+I had a look only recently at open bugs which were stalled in Debian
+and had a look at upstrema changes, and I'm not sure if this was a
+kernel problem at all an the change is introduced around
 
 
---i5nv6d7na7xl5d3b
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v8 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
+5559598742fb ("drm/amd/display: Pass non-null to dcn20_validate_apply_pipe_split_flags")
+(https://git.kernel.org/linus/1f182aca230086d4a4469c0f9136a6ea762d6385)
+which is 5.18-rc1 and got backported to 5.17.10 and 5.15.42.
 
-On 27.02.2025 11:08:50, Vincent Mailhol wrote:
-> > +static int nct6694_can_stop(struct net_device *ndev)
-> > +{
-> > +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > +
-> > +	priv->can.ctrlmode =3D CAN_CTRLMODE_LISTENONLY;
->=20
-> Hmmm, when Marc asked you to put the device in listen only mode, I think
-> he meant that you set it on the device side (i.e. flag
-> NCT6694_CAN_SETTING_CTRL1_MON) and not on the driver side. If you set
-> CAN_CTRLMODE_LISTENONLY flag, that will be reported in the netlink
-> interface. So you should not change that flag.
+The reporter confirmed that the problem does not show up with the old
+packaged image we can get from the snapshots archive 5.7.6-1 but
+happends reconfirmed with 6.7.11-1 and say there are no MMIO related
+settings to adjust in BIOS.
 
-ACK
+Does the above ring some bell?
 
-> But before that, did you check the datasheet? Don't you have a device
-> flag to actually turn the device off (e.g. sleep mode)?
-
-Please test that the ifup -> ifdown -> ifup sequence works properly,
-even on a busy bus and on a bus without with a 2nd CAN station that is
-sending and you are the only receiver.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---i5nv6d7na7xl5d3b
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmfAdAgACgkQDHRl3/mQ
-kZxjHQf/cl+NPaGA6wNUTa68Le8AS6tbcg6UkzWcAd8AS8/6CWkgPeebGEbmzKvl
-iENWrgc7mfiuy346ubOPufojybeeXMdOHLiwDPEkVgZegMycqUnS+2F/mTCm50fR
-vf9mETJuODrqvL4I265jS9Z+SUA/R/pzTcs0pQItMSzfUwGJ5nv9JQS8mv3MOQhM
-zOqyOMX1bv3+0Ov9ZTpjaV2JoOmTqpDFIYuN2DyqGl+NlJfZyHCp/Z8UJ7MyQykL
-Nzk53OPw0yb1MC6RT8m5ijRnpiVzfV5Et+2/FEXSW0aE/SXBRailPfDqdEmxXFnf
-f4DOoo4Z+H6xhf0L7EUZ1HcmpU+ckA==
-=2o2X
------END PGP SIGNATURE-----
-
---i5nv6d7na7xl5d3b--
+Regards,
+Salvatore
 
