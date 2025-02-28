@@ -1,114 +1,97 @@
-Return-Path: <linux-watchdog+bounces-3034-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3035-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DA1BA49D5E
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Feb 2025 16:25:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C843A4A142
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Feb 2025 19:17:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27212176005
-	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Feb 2025 15:25:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 609263BC7BB
+	for <lists+linux-watchdog@lfdr.de>; Fri, 28 Feb 2025 18:17:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D9F7270EC1;
-	Fri, 28 Feb 2025 15:25:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B59C81A2554;
+	Fri, 28 Feb 2025 18:17:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="fYbxd2H2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h4WzT/G2"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A0FE1F9AA6;
-	Fri, 28 Feb 2025 15:25:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 816F51F4C97;
+	Fri, 28 Feb 2025 18:17:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740756323; cv=none; b=syMRMWTy5/+kV2zkDa3ASIaOAe3X/V0EYjxVl0//uUCri5eHjFwMkVRk2E4yu9yVT+HtZ+L02QtYPcI9mw40N3Jh1xoFSpPQ9FwsZvcv+PNdYhL4aFodGk9mSeIxbhNe3ysayc33oJ3L9zmyz3q2nmXdQbecgNQYKCzbXHjqLq8=
+	t=1740766660; cv=none; b=Lc9ba+4J0uuwMfgfrA/sB9sPUK2HpEfDMpYvN1kjCDUfraXvcZkQqsH9LWNSzHaAfNE+MQr82t5uLDqkn+B5fdpA5Mtfz9V56FWhJEE7cz/F+DSFj0/NdnCSUATy49QAwfgEQJ76oPwRNH8ohXECsJs4jrz/pMazgAp2co7kvK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740756323; c=relaxed/simple;
-	bh=C+WJBpj9bMXThG9QJfuqTXTLi4bYFGvQeKIFgFhaMJQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=di7K8XWzcMq97B+wpY///gqi2hOqNdaMACWu/RQ36mW/H6rcJ6xgAj0TKPWv41nVy/aX3W6Q+iFB08lYw1SXYBHk1MbtSbBA+WdgCSyMvFTPc0ZoCA3RqQz7sAfEWnd6dC7c4DXOSgMrf+ZugiVySzj0Vpfi74WF9YGwWcWBFy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=fYbxd2H2; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1740756321; x=1772292321;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=C+WJBpj9bMXThG9QJfuqTXTLi4bYFGvQeKIFgFhaMJQ=;
-  b=fYbxd2H2H3bH4CQgHA1hq94rS992yzazfiTiORZNlp9dfA8BmufuIdTX
-   co6590+i/05Lg5lZWB1dk5C3HpPqBmcdfNfT5Dyy7Cufpk53xArMNcGdk
-   eH1oF+TJBkwW5tM40APUQlJ3nVal20I9ze0ksq6hUM5GueZN1O43gdLwb
-   gFoeDRlFCBQd6G0A6keuI6ignrY93r3DPXZUWpjzS6sAHU4L6CVDjtXFZ
-   QuFQFR0V253aTU7HCxQ2rCYM3iQtxoMEzsIOhYcj+Ll/6B3SGws/s1d21
-   pYcHHO27svU/XFClVvMhLM4ofQVm1GwsMxk/Yi6AFDeOmJyNrjaWngbzG
-   w==;
-X-CSE-ConnectionGUID: YRQSNli+QiSyLIXFC1GTlQ==
-X-CSE-MsgGUID: DEk0ug21RBa+XoE4zvTP+Q==
-X-IronPort-AV: E=Sophos;i="6.13,322,1732604400"; 
-   d="scan'208";a="42415303"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Feb 2025 08:24:16 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 28 Feb 2025 08:23:55 -0700
-Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Fri, 28 Feb 2025 08:23:55 -0700
-From: <Ryan.Wanner@microchip.com>
-To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<claudiu.beznea@tuxon.dev>, <wim@linux-watchdog.org>, <linux@roeck-us.net>
-CC: <vkoul@kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<dmaengine@vger.kernel.org>, <linux-watchdog@vger.kernel.org>, Ryan Wanner
-	<Ryan.Wanner@microchip.com>
-Subject: [PATCH v2 2/2] ARM: dts: microchip: sama7d65: Add watchdog for sama7d65
-Date: Fri, 28 Feb 2025 08:24:11 -0700
-Message-ID: <05785a34b9181b7debb57c1896cc733bd3088c56.1740675317.git.Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1740675317.git.Ryan.Wanner@microchip.com>
+	s=arc-20240116; t=1740766660; c=relaxed/simple;
+	bh=a/UMFY3PmG/1uLNOqdYStwAd4uZGvoG8DB49sRcvT7U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cbCviRo5ANKGBA7P863P08Jpbf88m/UreoCbhWWHArGSyguKaxI3FH8+nj5u1NcLmMvrs2IZIdmq+ahfod6dmO5Gz0j+i7OIvewetONdTY7QOjXfGcae+zkXo926stoo1qv1IVu/iBiaig5+UjKaG9SD+1PMEm8mhvrmG0hb63Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h4WzT/G2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2017CC4CED6;
+	Fri, 28 Feb 2025 18:17:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740766659;
+	bh=a/UMFY3PmG/1uLNOqdYStwAd4uZGvoG8DB49sRcvT7U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=h4WzT/G2oAFp+dNhWfYKlm79abS+NcpyQZ6eqyRwjYZ4EPAb0WBkJoTAYhTfQXByR
+	 y6rm7XHSuoIOh9RpAt4GyGZQ7SxOXAko6BPndWwD4CieeqLaSwomU4O9NsoQl8360l
+	 0mdhllvDDzddzU881slMEqFz7HdCuxBV9y+NyuoSkW6fGKQeZd9sEK4zvtbRwTsW/t
+	 d/wJK//J+vfSHdknARu+bnfB9jrrTh/0ZJejmCmWWXixeXO1pizGB+VDSEnnfz7I5x
+	 6HCMJuBpkd6gnm4BrtWF1NilRbb3MuEHHPkBya05AV0BdMIdrmUHtWD+eS1eha53t2
+	 1qtZwd/tajQUw==
+Date: Fri, 28 Feb 2025 18:17:34 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Ryan.Wanner@microchip.com
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+	claudiu.beznea@tuxon.dev, wim@linux-watchdog.org,
+	linux@roeck-us.net, vkoul@kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: watchdog: sama5d4-wdt: Add
+ sama7d65-wdt
+Message-ID: <20250228-quaking-yoga-3ca96e2bd3c6@spud>
 References: <cover.1740675317.git.Ryan.Wanner@microchip.com>
+ <15d6f901e64dd36d25a62e27601252c59708275a.1740675317.git.Ryan.Wanner@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="OwNJr0RVbE/sS7Fv"
+Content-Disposition: inline
+In-Reply-To: <15d6f901e64dd36d25a62e27601252c59708275a.1740675317.git.Ryan.Wanner@microchip.com>
 
-From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Add watchdog timer support for SAMA7D65 SoC.
+--OwNJr0RVbE/sS7Fv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
----
- arch/arm/boot/dts/microchip/sama7d65.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+On Fri, Feb 28, 2025 at 08:24:10AM -0700, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+>=20
+> Add microchip,sama7d65-wdt compatible string to the dt-binding documentat=
+ion.
+>=20
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-diff --git a/arch/arm/boot/dts/microchip/sama7d65.dtsi b/arch/arm/boot/dts/microchip/sama7d65.dtsi
-index 92a5347e35b5..179d7f54cc7f 100644
---- a/arch/arm/boot/dts/microchip/sama7d65.dtsi
-+++ b/arch/arm/boot/dts/microchip/sama7d65.dtsi
-@@ -77,6 +77,13 @@ pmc: clock-controller@e0018000 {
- 			clock-names = "td_slck", "md_slck", "main_xtal";
- 		};
- 
-+		ps_wdt: watchdog@e001d000 {
-+			compatible = "microchip,sama7d65-wdt", "microchip,sama7g5-wdt";
-+			reg = <0xe001d000 0x30>;
-+			interrupts = <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clk32k 0>;
-+		};
-+
- 		clk32k: clock-controller@e001d500 {
- 			compatible = "microchip,sama7d65-sckc", "microchip,sam9x60-sckc";
- 			reg = <0xe001d500 0x4>;
--- 
-2.43.0
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
+--OwNJr0RVbE/sS7Fv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ8H9vgAKCRB4tDGHoIJi
+0lJcAP9u9Uvx/4C75KIMdUEVO/h+wPDo8Rq2c+a08bA/fz8CEAEAl7uhrUKbEPRt
+rrGARi737735dX3i+yX85Af/e9nLrQI=
+=P3hd
+-----END PGP SIGNATURE-----
+
+--OwNJr0RVbE/sS7Fv--
 
