@@ -1,152 +1,186 @@
-Return-Path: <linux-watchdog+bounces-3040-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3041-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A335A4E00C
-	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Mar 2025 15:02:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7326DA4E2EE
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Mar 2025 16:23:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E1957AAEB7
-	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Mar 2025 14:00:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5C8517E81F
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Mar 2025 15:16:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68E2F204680;
-	Tue,  4 Mar 2025 14:01:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4286228628D;
+	Tue,  4 Mar 2025 15:09:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kNIWBPfE"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TGmDv4Qy"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from beeline3.cc.itu.edu.tr (beeline3.cc.itu.edu.tr [160.75.25.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9787202F90;
-	Tue,  4 Mar 2025 14:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84862261578
+	for <linux-watchdog@vger.kernel.org>; Tue,  4 Mar 2025 15:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.117
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741100957; cv=fail; b=nQOXYyE6YcSroMOFQI6qlisWOY4CmD0C1w/5eKEuikeV1V+E7JaH/ptkjQsdRIQ7mv4tvX8PPe/QNF15s57HMtxPtXJ0QRwxT860ioB/9YscwFBrPDQqilY+sLaTXwoOAGR6a5Q3pGQIYPORPSuRRsV3v1l/tKvL8VUNi/sA+eg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741100957; c=relaxed/simple;
+	bh=4Rr8+O3wDPGZk2pARDgzHZT5OsxtADYeUZjSZlkVi/4=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=r+kTSYWZDQrnuAzfATdTPZqqLcnfqPCR+BYMFX/K2wBWF9oaI4nuLj19QXWFeqZzigsCxNkwTutSMahi5IrZm3IiwLXTnoL9wr3udH5xtc58FVih9mV6PCqvJyoTIOF/Xoiqe8HGXZZYWo4ztyau0S+YlHELO3fVzcjZOStDN+I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TGmDv4Qy reason="signature verification failed"; arc=none smtp.client-ip=10.30.226.201; arc=fail smtp.client-ip=160.75.25.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
+Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by beeline3.cc.itu.edu.tr (Postfix) with ESMTPS id D277240CEC8C
+	for <linux-watchdog@vger.kernel.org>; Tue,  4 Mar 2025 18:09:13 +0300 (+03)
+X-Envelope-From: <root@cc.itu.edu.tr>
+Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6fDj0PCyzFyHw
+	for <linux-watchdog@vger.kernel.org>; Tue,  4 Mar 2025 18:07:33 +0300 (+03)
+Received: by le1 (Postfix, from userid 0)
+	id 84CDC42720; Tue,  4 Mar 2025 18:07:21 +0300 (+03)
+Authentication-Results: lesva1.cc.itu.edu.tr;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TGmDv4Qy
+X-Envelope-From: <linux-kernel+bounces-541779-bozkiru=itu.edu.tr@vger.kernel.org>
+Authentication-Results: lesva2.cc.itu.edu.tr;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TGmDv4Qy
+Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
+	by le2 (Postfix) with ESMTP id 5332A41B74
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 16:15:12 +0300 (+03)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by fgw2.itu.edu.tr (Postfix) with SMTP id 2C5F92DCDE
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 16:15:12 +0300 (+03)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED0FB188E279
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:15:13 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA8FF212FBE;
+	Mon,  3 Mar 2025 13:14:28 +0000 (UTC)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395BB212B0A;
+	Mon,  3 Mar 2025 13:14:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741096880; cv=none; b=OB+pnYgUwsh4xz22XXjyRs+Otk8Z8wSNiwxLQHCzGEU3FaUNo8XkFWEVpROlutkBvaccvP1pVZgoHGk3v/VER0IYtDUyeq8fGsTFRq17bgGMrt4En1dqq1BsuRA+qZh5h6VNuFQM+08qfu57q6dU/ll0iY2F3S6cM9L5jBXiaio=
+	t=1741007666; cv=none; b=UwHZNnuuZe6vt7V45C8137vf4uxCWM/Tcu4n3W5Vu8C3aKZ2yfjsUbGVFccoCWJYIf2HzNlkgNCrFMV6iMM6qsjA8XfvTBjPivr3IhWTgPzkSBnXkoNMLaklXYpKul13ro9xFEnLV60sUJL7u94fA7yHr7xIVNh268uMT909ku4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741096880; c=relaxed/simple;
-	bh=vJyQB5Blh3KGhbpLZmZIfPJA0eS8D7VJOGBnqE9Cvcg=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=c+s3rjArvtiE9Iye2Col3dJF6w6RVOtdHQafl58TeFiqezXCr3yIZSwtNK5gYezM5HAFDl6psgnttwswFX269ecm6FLpaxQY2krdOItSlUNUk0gtt0Y/byziTuF3J3UL9tXw3G+n6m8WWxEUpZegUsRY+7nyCBuuqesEaIyRBNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kNIWBPfE; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741096878; x=1772632878;
-  h=from:to:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vJyQB5Blh3KGhbpLZmZIfPJA0eS8D7VJOGBnqE9Cvcg=;
-  b=kNIWBPfEOu8CrxZrboRXrG8yNBo/AbX5vOUboRAjivhrTFG6xNYtvmLb
-   2K3gXdqcZudZHy4OcTxsm7wPmDJkBwC+cWNTK3LIKVK+/T9fofvxFAp+q
-   sM08PrUpqs8g0q8c/2Ts37wRUf1EcbWUiS5WT/kMD7TADVMSX9BDTWJdM
-   pMYz6pTc9F1OWQbq9oqbeZ9/gaWH3rrCN7HzHmH5KDImVJO5k4KgUaz6S
-   bRbimsnvN94rk7rZXiHF2th7IDyoMeRsd6Zwbvprozw1GCLGiOdqTJq5c
-   FtEjWs0GFkrq6qiqJtk7mDWHfQ6zmtMGkUHgRGJlZYj7oEzlrhTcljZY5
-   w==;
-X-CSE-ConnectionGUID: ISXKQ6bvSiONRSuo78QACQ==
-X-CSE-MsgGUID: rt5XKkawSJSMA91fz+sQQQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="42261681"
-X-IronPort-AV: E=Sophos;i="6.14,220,1736841600"; 
-   d="scan'208";a="42261681"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2025 06:01:17 -0800
-X-CSE-ConnectionGUID: VTHynAnQTIGub0JKGisgzA==
-X-CSE-MsgGUID: VTWkiimRTJW1rhom4ATjmw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,220,1736841600"; 
-   d="scan'208";a="119060914"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa009.fm.intel.com with ESMTP; 04 Mar 2025 06:01:17 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 4249E27D; Tue, 04 Mar 2025 16:01:15 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Guenter Roeck <linux@roeck-us.net>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-watchdog@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] watchdog: nic7018_wdt: tidy up ACPI ID table
-Date: Tue,  4 Mar 2025 15:45:35 +0200
-Message-ID: <20250304140114.1812452-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1741007666; c=relaxed/simple;
+	bh=FiWSvzkRIMYnufn/6j3BHnlJOVYfPeryI4S3GXt0vAc=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=KgK2w1FEydzIwL04wsvM0N4lmt2qa0Zua2a/wUiRTgcWWoRXFLwOv//BRE3GNLa/wBc54ooG+FDVT7rm0sDoExzJb6Ss7EMhZDQal4eV4Y/NYfvW7E+4H6FHcvjb6KUHWsOccbyk4CvNHudC7dBMDH7pGGscEOGRZbvpDJNSS48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TGmDv4Qy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D98BBC4CEE9;
+	Mon,  3 Mar 2025 13:14:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741007666;
+	bh=FiWSvzkRIMYnufn/6j3BHnlJOVYfPeryI4S3GXt0vAc=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=TGmDv4Qy0cdXTql42zoM9MZxyD+mzsNU84Gh2a9Bf7K6p/0qDRxKws68ZDFYHyWON
+	 334fbrKihCSvqDRJGspPw/djb7ne82q3xjesrA1HfHtPYKLh+uHq4AUBa+U1W21glj
+	 e5TM4yUFaV3LSXJYgJLVnlCHzktDkF5R2x2eLbVIgBHr6vJ8UMs4V2N3i/ZxSByZCr
+	 +LHt2BQ6LdRwXX+N7gEsTHfI4yVgFToA8SUQwczwR7qXqArTYC98YLw1nU+ks3qvP/
+	 KzNygSvESuVw7PKUv07+kfDwmhA+N5UwLVHM3xplqdt0imjVpHsVd3t2xOkMMa5xna
+	 hBrhbq/qTUfLA==
+Date: Mon, 03 Mar 2025 07:14:24 -0600
+Content-Type: text/plain; charset="utf-8"
+Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: wim@linux-watchdog.org, krzk+dt@kernel.org, linux@roeck-us.net, 
+ nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+ dmaengine@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, claudiu.beznea@tuxon.dev, vkoul@kernel.org, 
+ linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ conor+dt@kernel.org
+To: Ryan.Wanner@microchip.com
+In-Reply-To: <cover.1740675317.git.Ryan.Wanner@microchip.com>
+References: <cover.1740675317.git.Ryan.Wanner@microchip.com>
+Message-Id: <174100756391.1496568.10334189756404294750.robh@kernel.org>
+Subject: Re: [PATCH v2 0/2] Add System Components for Microchip SAMA7D65
+ SoC
+Content-Transfer-Encoding: quoted-printable
+X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
+X-ITU-Libra-ESVA-ID: 4Z6fDj0PCyzFyHw
+X-ITU-Libra-ESVA: No virus found
+X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
+X-ITU-Libra-ESVA-Watermark: 1741705667.77741@lDgeOKXjhnUPNlO01HMRtg
+X-ITU-MailScanner-SpamCheck: not spam
 
-Tidy up ACPI ID table:
-- drop ACPI_PTR() and hence replace acpi.h with mod_devicetable.h
-- remove explicit driver_data initializer
-- drop comma in the terminator entry
 
-With that done, extend compile test coverage.
+On Fri, 28 Feb 2025 08:24:09 -0700, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+>=20
+> This patch set adds support for the following systems in the SAMA7D65
+> SoC:
+> - DMAs
+> - Chip ID
+> - Dual watchdog timer.
+>=20
+> Changes v1 -> v2:
+> - Removed pathes that have been accepted and applied from v1 [1].
+> - Corrected missing newline in dt-binding.
+> - Corrected mismatch in watchdog dt node.
+>=20
+> 1) https://lore.kernel.org/linux-arm-kernel/09eafe54-c262-4db4-b11d-064=
+4a1f90a14@tuxon.dev/
+>=20
+> Ryan Wanner (2):
+>   dt-bindings: watchdog: sama5d4-wdt: Add sama7d65-wdt
+>   ARM: dts: microchip: sama7d65: Add watchdog for sama7d65
+>=20
+>  .../devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml    | 4 ++++
+>  arch/arm/boot/dts/microchip/sama7d65.dtsi                  | 7 +++++++
+>  2 files changed, 11 insertions(+)
+>=20
+> --
+> 2.43.0
+>=20
+>=20
+>=20
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
 
-v2: fixed the dependency to be on HAS_IOPORT (LKP)
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
- drivers/watchdog/Kconfig       | 3 ++-
- drivers/watchdog/nic7018_wdt.c | 9 +++++----
- 2 files changed, 7 insertions(+), 5 deletions(-)
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index f81705f8539a..a2ed9ee0b808 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1730,7 +1730,8 @@ config NI903X_WDT
- 
- config NIC7018_WDT
- 	tristate "NIC7018 Watchdog"
--	depends on X86 && ACPI
-+	depends on HAS_IOPORT
-+	depends on ACPI || COMPILE_TEST
- 	select WATCHDOG_CORE
- 	help
- 	  Support for National Instruments NIC7018 Watchdog.
-diff --git a/drivers/watchdog/nic7018_wdt.c b/drivers/watchdog/nic7018_wdt.c
-index 44982b37ba6f..44b5298f599a 100644
---- a/drivers/watchdog/nic7018_wdt.c
-+++ b/drivers/watchdog/nic7018_wdt.c
-@@ -3,12 +3,13 @@
-  * Copyright (C) 2016 National Instruments Corp.
-  */
- 
--#include <linux/acpi.h>
- #include <linux/bitops.h>
- #include <linux/device.h>
- #include <linux/io.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-+#include <linux/types.h>
- #include <linux/watchdog.h>
- 
- #define LOCK			0xA5
-@@ -229,8 +230,8 @@ static void nic7018_remove(struct platform_device *pdev)
- }
- 
- static const struct acpi_device_id nic7018_device_ids[] = {
--	{"NIC7018", 0},
--	{"", 0},
-+	{ "NIC7018" },
-+	{ }
- };
- MODULE_DEVICE_TABLE(acpi, nic7018_device_ids);
- 
-@@ -239,7 +240,7 @@ static struct platform_driver watchdog_driver = {
- 	.remove = nic7018_remove,
- 	.driver = {
- 		.name = KBUILD_MODNAME,
--		.acpi_match_table = ACPI_PTR(nic7018_device_ids),
-+		.acpi_match_table = nic7018_device_ids,
- 	},
- };
- 
--- 
-2.47.2
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=3Dy for arch/arm/boot/dts/microchip=
+/' for cover.1740675317.git.Ryan.Wanner@microchip.com:
+
+arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: watchdog@e001d00=
+0: Unevaluated properties are not allowed ('clocks' was unexpected)
+	from schema $id: http://devicetree.org/schemas/watchdog/atmel,sama5d4-wd=
+t.yaml#
+arch/arm/boot/dts/microchip/at91-dvk_som60.dtb: /ahb/apb/adc@f8018000: fa=
+iled to match any schema with compatible: ['atmel,sama5d3-adc']
+arch/arm/boot/dts/microchip/at91sam9g25-gardena-smart-gateway.dtb: nand-c=
+ontroller: #address-cells: 1 was expected
+	from schema $id: http://devicetree.org/schemas/mtd/nand-controller.yaml#
+
+
+
+
+
 
 
