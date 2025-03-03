@@ -1,125 +1,105 @@
-Return-Path: <linux-watchdog+bounces-3038-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3039-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0CDEA4C174
-	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Mar 2025 14:14:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A31DA4CB72
+	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Mar 2025 19:56:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B2E7188E2DF
-	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Mar 2025 13:14:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7392416628D
+	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Mar 2025 18:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64941212B17;
-	Mon,  3 Mar 2025 13:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FE8E22D4ED;
+	Mon,  3 Mar 2025 18:56:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TGmDv4Qy"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="aGVYKuGy"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395BB212B0A;
-	Mon,  3 Mar 2025 13:14:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32E622D4C8
+	for <linux-watchdog@vger.kernel.org>; Mon,  3 Mar 2025 18:56:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741007666; cv=none; b=UwHZNnuuZe6vt7V45C8137vf4uxCWM/Tcu4n3W5Vu8C3aKZ2yfjsUbGVFccoCWJYIf2HzNlkgNCrFMV6iMM6qsjA8XfvTBjPivr3IhWTgPzkSBnXkoNMLaklXYpKul13ro9xFEnLV60sUJL7u94fA7yHr7xIVNh268uMT909ku4=
+	t=1741028213; cv=none; b=FNEBSX758Uql1UMagm1jVg3u/MWc8rqj5rws1nnrm/JbzxEz0ZHeBv+31/OQPXUJrLm/NUZknfSLx8hOyD9I1Ubyw59gMGDTR9Zn5oUeKBM2H1jq859wTy+t6lkdxGeIpcmpa+NPa9jn3QavUfeCYn7xN+sBRDvN4oKoSEee8N8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741007666; c=relaxed/simple;
-	bh=FiWSvzkRIMYnufn/6j3BHnlJOVYfPeryI4S3GXt0vAc=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=KgK2w1FEydzIwL04wsvM0N4lmt2qa0Zua2a/wUiRTgcWWoRXFLwOv//BRE3GNLa/wBc54ooG+FDVT7rm0sDoExzJb6Ss7EMhZDQal4eV4Y/NYfvW7E+4H6FHcvjb6KUHWsOccbyk4CvNHudC7dBMDH7pGGscEOGRZbvpDJNSS48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TGmDv4Qy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D98BBC4CEE9;
-	Mon,  3 Mar 2025 13:14:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741007666;
-	bh=FiWSvzkRIMYnufn/6j3BHnlJOVYfPeryI4S3GXt0vAc=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=TGmDv4Qy0cdXTql42zoM9MZxyD+mzsNU84Gh2a9Bf7K6p/0qDRxKws68ZDFYHyWON
-	 334fbrKihCSvqDRJGspPw/djb7ne82q3xjesrA1HfHtPYKLh+uHq4AUBa+U1W21glj
-	 e5TM4yUFaV3LSXJYgJLVnlCHzktDkF5R2x2eLbVIgBHr6vJ8UMs4V2N3i/ZxSByZCr
-	 +LHt2BQ6LdRwXX+N7gEsTHfI4yVgFToA8SUQwczwR7qXqArTYC98YLw1nU+ks3qvP/
-	 KzNygSvESuVw7PKUv07+kfDwmhA+N5UwLVHM3xplqdt0imjVpHsVd3t2xOkMMa5xna
-	 hBrhbq/qTUfLA==
-Date: Mon, 03 Mar 2025 07:14:24 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1741028213; c=relaxed/simple;
+	bh=I+YMifaWTe/KtcKWykwnguS02DQwUt/9Nd7ZBZTaipM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=emVD+1IwQV5y4iyckTE2Pg3o0Evj33Nx/Nay3soXULmWyRfUhYKCLPsCoBaeZdzgxvAeHqFHIWtWmuPl26vGxRz05dI/NGoY/Kp85AVLY53NK48H+mrkrvQUF0nm483tKHQ4eL4meF0WnQFaiYgjWdZ4gLzJ3J75JKCIL5b39mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=aGVYKuGy; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-439a4fc2d65so51800465e9.3
+        for <linux-watchdog@vger.kernel.org>; Mon, 03 Mar 2025 10:56:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1741028210; x=1741633010; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ByURWW4/51grEFFoJ5cNbGWq84mjT1dgOMDzzVdymTY=;
+        b=aGVYKuGyOfyU9UcQavzr01XQNPAZs5kAe6gKMjYHl4T7XQjPiPHek5YgM1iqH/1oDM
+         M0xI8p3Ty1nK0IPEGz9ZQi0Ti2fi764sF/BZDfJRzJncCTkfG/BV4xA7z4hwkmtdzjLI
+         BspErz0GpDg707j8UFSbl1drZaCkibpsQkcmK2/+F4wB8YW+ednOV946QvKqE1UxUMYL
+         uahffyCxut23erQrfWsI577jiTlvec0IJqDVFYy29BKWM5xvEgAdxqXmM1yboAzK/geS
+         YhgO5eOFtBbhSGu7L54G/fhZfS116c/uvGPtEOEtEQR/7yKFHqyulGPuVWupTgeZ9s2S
+         7XqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741028210; x=1741633010;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ByURWW4/51grEFFoJ5cNbGWq84mjT1dgOMDzzVdymTY=;
+        b=bUheVtfURBip7h/jH3V78vJlVmal8qcCfpLsNrP01zKsbhqOG/3xUgtFzQbYvvD/Y3
+         lU2CWueJvEX3viRrIiW2BMuTp6uuoQdG2fFC9eJw4Es1MOVZeWtz0MXbEKuC/h99s67+
+         R2xmm67Q8sXQYP+PK4EF/xsp0gRRx8mLTwfXtctlP2O8IOHDOJjmSh+MFIV4mCu9/LMu
+         7W+11qyFdOfx1yFtsP8nsURpthstaXizAGhvnwDgucP8hEsSV55S1KHTNmIaLuXkAQaB
+         OOivz2V9icMF7vLUt+VTmRvl2XaHYIZmUK4Q4/Q9yWH7YMbO1kUvHVewskGYFq/+X9pJ
+         STsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWL5MA9UduA8RndEvuCrY0s96X72ppkiY0NWVkmZ9rgZGRVlfe1IY2l+eSWSOle3M1NJNuUNCs1vtyxIvGURA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2e3Edb0L9C9hqN4L2NI5rfZfsyolDp40BY0hgZhb8F7vRUZaZ
+	8iZN3ZRdMkqCWGoZgmxPblFzhb/3vtn6fUNPV+R+JNveg98wRUtTcMID5Pc6MZc=
+X-Gm-Gg: ASbGnctk3oJQwfWwW3wzA9W3cS/swV66/Yhxtb6qdt8qSaB76A/RvXPureDvn8CP9DR
+	20L4QaKI4NpOhXxgzhNx/zhHT+pPh53uF5fGByPKG9Swtfd/e2vfyn6ENKrE7ghVCm7V+BuZGNt
+	9CQJ9i0fgJYOxdpUccoEj0GmrWziVdbGkGxRcfSSIkLUqfFAFxk2XWbYrRqJEsq/pCOH9ZqHQlS
+	nun1JD2mi+g3nUNi+NzARxuTDssikubc03dLG4OOCtnmJMg/e9/ail2IJ9y7xFpg66wNQqFyc6f
+	Csz4CZh4TGBbLMYyjJQaIymHlldQVIM1ni8iXdzFTtdMZvkPpWs70A==
+X-Google-Smtp-Source: AGHT+IGVUE0CQu4ReThqwR4ny9E8a1exZ2jLsRFt7w170BeB8vADyu6EQUUGy2xTMtQFYKiXpDs9Pg==
+X-Received: by 2002:a05:600c:4fd3:b0:439:a255:b2ed with SMTP id 5b1f17b1804b1-43ba66e5f09mr144551665e9.9.1741028209871;
+        Mon, 03 Mar 2025 10:56:49 -0800 (PST)
+Received: from [192.168.50.4] ([82.78.167.138])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43bc9c0fb1esm12229025e9.20.2025.03.03.10.56.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Mar 2025 10:56:49 -0800 (PST)
+Message-ID: <39213e99-3041-4602-9dd2-536e9b09ad11@tuxon.dev>
+Date: Mon, 3 Mar 2025 20:56:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: wim@linux-watchdog.org, krzk+dt@kernel.org, linux@roeck-us.net, 
- nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
- dmaengine@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, claudiu.beznea@tuxon.dev, vkoul@kernel.org, 
- linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- conor+dt@kernel.org
-To: Ryan.Wanner@microchip.com
-In-Reply-To: <cover.1740675317.git.Ryan.Wanner@microchip.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/2] Add System Components for Microchip SAMA7D65 SoC
+To: Ryan.Wanner@microchip.com, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, nicolas.ferre@microchip.com,
+ alexandre.belloni@bootlin.com, wim@linux-watchdog.org, linux@roeck-us.net
+Cc: vkoul@kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org
 References: <cover.1740675317.git.Ryan.Wanner@microchip.com>
-Message-Id: <174100756391.1496568.10334189756404294750.robh@kernel.org>
-Subject: Re: [PATCH v2 0/2] Add System Components for Microchip SAMA7D65
- SoC
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <cover.1740675317.git.Ryan.Wanner@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-On Fri, 28 Feb 2025 08:24:09 -0700, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
-> 
-> This patch set adds support for the following systems in the SAMA7D65
-> SoC:
-> - DMAs
-> - Chip ID
-> - Dual watchdog timer.
-> 
-> Changes v1 -> v2:
-> - Removed pathes that have been accepted and applied from v1 [1].
-> - Corrected missing newline in dt-binding.
-> - Corrected mismatch in watchdog dt node.
-> 
-> 1) https://lore.kernel.org/linux-arm-kernel/09eafe54-c262-4db4-b11d-0644a1f90a14@tuxon.dev/
-> 
+
+On 28.02.2025 17:24, Ryan.Wanner@microchip.com wrote:
 > Ryan Wanner (2):
->   dt-bindings: watchdog: sama5d4-wdt: Add sama7d65-wdt
 >   ARM: dts: microchip: sama7d65: Add watchdog for sama7d65
-> 
->  .../devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml    | 4 ++++
->  arch/arm/boot/dts/microchip/sama7d65.dtsi                  | 7 +++++++
->  2 files changed, 11 insertions(+)
-> 
-> --
-> 2.43.0
-> 
-> 
-> 
 
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y for arch/arm/boot/dts/microchip/' for cover.1740675317.git.Ryan.Wanner@microchip.com:
-
-arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: watchdog@e001d000: Unevaluated properties are not allowed ('clocks' was unexpected)
-	from schema $id: http://devicetree.org/schemas/watchdog/atmel,sama5d4-wdt.yaml#
-arch/arm/boot/dts/microchip/at91-dvk_som60.dtb: /ahb/apb/adc@f8018000: failed to match any schema with compatible: ['atmel,sama5d3-adc']
-arch/arm/boot/dts/microchip/at91sam9g25-gardena-smart-gateway.dtb: nand-controller: #address-cells: 1 was expected
-	from schema $id: http://devicetree.org/schemas/mtd/nand-controller.yaml#
-
-
-
-
-
+Applied to at91-dt, thanks!
 
