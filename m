@@ -1,105 +1,152 @@
-Return-Path: <linux-watchdog+bounces-3039-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3040-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A31DA4CB72
-	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Mar 2025 19:56:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A335A4E00C
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Mar 2025 15:02:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7392416628D
-	for <lists+linux-watchdog@lfdr.de>; Mon,  3 Mar 2025 18:56:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E1957AAEB7
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Mar 2025 14:00:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FE8E22D4ED;
-	Mon,  3 Mar 2025 18:56:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68E2F204680;
+	Tue,  4 Mar 2025 14:01:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="aGVYKuGy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kNIWBPfE"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32E622D4C8
-	for <linux-watchdog@vger.kernel.org>; Mon,  3 Mar 2025 18:56:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9787202F90;
+	Tue,  4 Mar 2025 14:01:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741028213; cv=none; b=FNEBSX758Uql1UMagm1jVg3u/MWc8rqj5rws1nnrm/JbzxEz0ZHeBv+31/OQPXUJrLm/NUZknfSLx8hOyD9I1Ubyw59gMGDTR9Zn5oUeKBM2H1jq859wTy+t6lkdxGeIpcmpa+NPa9jn3QavUfeCYn7xN+sBRDvN4oKoSEee8N8=
+	t=1741096880; cv=none; b=OB+pnYgUwsh4xz22XXjyRs+Otk8Z8wSNiwxLQHCzGEU3FaUNo8XkFWEVpROlutkBvaccvP1pVZgoHGk3v/VER0IYtDUyeq8fGsTFRq17bgGMrt4En1dqq1BsuRA+qZh5h6VNuFQM+08qfu57q6dU/ll0iY2F3S6cM9L5jBXiaio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741028213; c=relaxed/simple;
-	bh=I+YMifaWTe/KtcKWykwnguS02DQwUt/9Nd7ZBZTaipM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=emVD+1IwQV5y4iyckTE2Pg3o0Evj33Nx/Nay3soXULmWyRfUhYKCLPsCoBaeZdzgxvAeHqFHIWtWmuPl26vGxRz05dI/NGoY/Kp85AVLY53NK48H+mrkrvQUF0nm483tKHQ4eL4meF0WnQFaiYgjWdZ4gLzJ3J75JKCIL5b39mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=aGVYKuGy; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-439a4fc2d65so51800465e9.3
-        for <linux-watchdog@vger.kernel.org>; Mon, 03 Mar 2025 10:56:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1741028210; x=1741633010; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ByURWW4/51grEFFoJ5cNbGWq84mjT1dgOMDzzVdymTY=;
-        b=aGVYKuGyOfyU9UcQavzr01XQNPAZs5kAe6gKMjYHl4T7XQjPiPHek5YgM1iqH/1oDM
-         M0xI8p3Ty1nK0IPEGz9ZQi0Ti2fi764sF/BZDfJRzJncCTkfG/BV4xA7z4hwkmtdzjLI
-         BspErz0GpDg707j8UFSbl1drZaCkibpsQkcmK2/+F4wB8YW+ednOV946QvKqE1UxUMYL
-         uahffyCxut23erQrfWsI577jiTlvec0IJqDVFYy29BKWM5xvEgAdxqXmM1yboAzK/geS
-         YhgO5eOFtBbhSGu7L54G/fhZfS116c/uvGPtEOEtEQR/7yKFHqyulGPuVWupTgeZ9s2S
-         7XqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741028210; x=1741633010;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ByURWW4/51grEFFoJ5cNbGWq84mjT1dgOMDzzVdymTY=;
-        b=bUheVtfURBip7h/jH3V78vJlVmal8qcCfpLsNrP01zKsbhqOG/3xUgtFzQbYvvD/Y3
-         lU2CWueJvEX3viRrIiW2BMuTp6uuoQdG2fFC9eJw4Es1MOVZeWtz0MXbEKuC/h99s67+
-         R2xmm67Q8sXQYP+PK4EF/xsp0gRRx8mLTwfXtctlP2O8IOHDOJjmSh+MFIV4mCu9/LMu
-         7W+11qyFdOfx1yFtsP8nsURpthstaXizAGhvnwDgucP8hEsSV55S1KHTNmIaLuXkAQaB
-         OOivz2V9icMF7vLUt+VTmRvl2XaHYIZmUK4Q4/Q9yWH7YMbO1kUvHVewskGYFq/+X9pJ
-         STsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWL5MA9UduA8RndEvuCrY0s96X72ppkiY0NWVkmZ9rgZGRVlfe1IY2l+eSWSOle3M1NJNuUNCs1vtyxIvGURA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2e3Edb0L9C9hqN4L2NI5rfZfsyolDp40BY0hgZhb8F7vRUZaZ
-	8iZN3ZRdMkqCWGoZgmxPblFzhb/3vtn6fUNPV+R+JNveg98wRUtTcMID5Pc6MZc=
-X-Gm-Gg: ASbGnctk3oJQwfWwW3wzA9W3cS/swV66/Yhxtb6qdt8qSaB76A/RvXPureDvn8CP9DR
-	20L4QaKI4NpOhXxgzhNx/zhHT+pPh53uF5fGByPKG9Swtfd/e2vfyn6ENKrE7ghVCm7V+BuZGNt
-	9CQJ9i0fgJYOxdpUccoEj0GmrWziVdbGkGxRcfSSIkLUqfFAFxk2XWbYrRqJEsq/pCOH9ZqHQlS
-	nun1JD2mi+g3nUNi+NzARxuTDssikubc03dLG4OOCtnmJMg/e9/ail2IJ9y7xFpg66wNQqFyc6f
-	Csz4CZh4TGBbLMYyjJQaIymHlldQVIM1ni8iXdzFTtdMZvkPpWs70A==
-X-Google-Smtp-Source: AGHT+IGVUE0CQu4ReThqwR4ny9E8a1exZ2jLsRFt7w170BeB8vADyu6EQUUGy2xTMtQFYKiXpDs9Pg==
-X-Received: by 2002:a05:600c:4fd3:b0:439:a255:b2ed with SMTP id 5b1f17b1804b1-43ba66e5f09mr144551665e9.9.1741028209871;
-        Mon, 03 Mar 2025 10:56:49 -0800 (PST)
-Received: from [192.168.50.4] ([82.78.167.138])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43bc9c0fb1esm12229025e9.20.2025.03.03.10.56.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Mar 2025 10:56:49 -0800 (PST)
-Message-ID: <39213e99-3041-4602-9dd2-536e9b09ad11@tuxon.dev>
-Date: Mon, 3 Mar 2025 20:56:47 +0200
+	s=arc-20240116; t=1741096880; c=relaxed/simple;
+	bh=vJyQB5Blh3KGhbpLZmZIfPJA0eS8D7VJOGBnqE9Cvcg=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=c+s3rjArvtiE9Iye2Col3dJF6w6RVOtdHQafl58TeFiqezXCr3yIZSwtNK5gYezM5HAFDl6psgnttwswFX269ecm6FLpaxQY2krdOItSlUNUk0gtt0Y/byziTuF3J3UL9tXw3G+n6m8WWxEUpZegUsRY+7nyCBuuqesEaIyRBNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kNIWBPfE; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741096878; x=1772632878;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vJyQB5Blh3KGhbpLZmZIfPJA0eS8D7VJOGBnqE9Cvcg=;
+  b=kNIWBPfEOu8CrxZrboRXrG8yNBo/AbX5vOUboRAjivhrTFG6xNYtvmLb
+   2K3gXdqcZudZHy4OcTxsm7wPmDJkBwC+cWNTK3LIKVK+/T9fofvxFAp+q
+   sM08PrUpqs8g0q8c/2Ts37wRUf1EcbWUiS5WT/kMD7TADVMSX9BDTWJdM
+   pMYz6pTc9F1OWQbq9oqbeZ9/gaWH3rrCN7HzHmH5KDImVJO5k4KgUaz6S
+   bRbimsnvN94rk7rZXiHF2th7IDyoMeRsd6Zwbvprozw1GCLGiOdqTJq5c
+   FtEjWs0GFkrq6qiqJtk7mDWHfQ6zmtMGkUHgRGJlZYj7oEzlrhTcljZY5
+   w==;
+X-CSE-ConnectionGUID: ISXKQ6bvSiONRSuo78QACQ==
+X-CSE-MsgGUID: rt5XKkawSJSMA91fz+sQQQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="42261681"
+X-IronPort-AV: E=Sophos;i="6.14,220,1736841600"; 
+   d="scan'208";a="42261681"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2025 06:01:17 -0800
+X-CSE-ConnectionGUID: VTHynAnQTIGub0JKGisgzA==
+X-CSE-MsgGUID: VTWkiimRTJW1rhom4ATjmw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,220,1736841600"; 
+   d="scan'208";a="119060914"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa009.fm.intel.com with ESMTP; 04 Mar 2025 06:01:17 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 4249E27D; Tue, 04 Mar 2025 16:01:15 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Guenter Roeck <linux@roeck-us.net>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-watchdog@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/1] watchdog: nic7018_wdt: tidy up ACPI ID table
+Date: Tue,  4 Mar 2025 15:45:35 +0200
+Message-ID: <20250304140114.1812452-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] Add System Components for Microchip SAMA7D65 SoC
-To: Ryan.Wanner@microchip.com, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, nicolas.ferre@microchip.com,
- alexandre.belloni@bootlin.com, wim@linux-watchdog.org, linux@roeck-us.net
-Cc: vkoul@kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org
-References: <cover.1740675317.git.Ryan.Wanner@microchip.com>
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Content-Language: en-US
-In-Reply-To: <cover.1740675317.git.Ryan.Wanner@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Tidy up ACPI ID table:
+- drop ACPI_PTR() and hence replace acpi.h with mod_devicetable.h
+- remove explicit driver_data initializer
+- drop comma in the terminator entry
 
+With that done, extend compile test coverage.
 
-On 28.02.2025 17:24, Ryan.Wanner@microchip.com wrote:
-> Ryan Wanner (2):
->   ARM: dts: microchip: sama7d65: Add watchdog for sama7d65
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
 
-Applied to at91-dt, thanks!
+v2: fixed the dependency to be on HAS_IOPORT (LKP)
+
+ drivers/watchdog/Kconfig       | 3 ++-
+ drivers/watchdog/nic7018_wdt.c | 9 +++++----
+ 2 files changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+index f81705f8539a..a2ed9ee0b808 100644
+--- a/drivers/watchdog/Kconfig
++++ b/drivers/watchdog/Kconfig
+@@ -1730,7 +1730,8 @@ config NI903X_WDT
+ 
+ config NIC7018_WDT
+ 	tristate "NIC7018 Watchdog"
+-	depends on X86 && ACPI
++	depends on HAS_IOPORT
++	depends on ACPI || COMPILE_TEST
+ 	select WATCHDOG_CORE
+ 	help
+ 	  Support for National Instruments NIC7018 Watchdog.
+diff --git a/drivers/watchdog/nic7018_wdt.c b/drivers/watchdog/nic7018_wdt.c
+index 44982b37ba6f..44b5298f599a 100644
+--- a/drivers/watchdog/nic7018_wdt.c
++++ b/drivers/watchdog/nic7018_wdt.c
+@@ -3,12 +3,13 @@
+  * Copyright (C) 2016 National Instruments Corp.
+  */
+ 
+-#include <linux/acpi.h>
+ #include <linux/bitops.h>
+ #include <linux/device.h>
+ #include <linux/io.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
++#include <linux/types.h>
+ #include <linux/watchdog.h>
+ 
+ #define LOCK			0xA5
+@@ -229,8 +230,8 @@ static void nic7018_remove(struct platform_device *pdev)
+ }
+ 
+ static const struct acpi_device_id nic7018_device_ids[] = {
+-	{"NIC7018", 0},
+-	{"", 0},
++	{ "NIC7018" },
++	{ }
+ };
+ MODULE_DEVICE_TABLE(acpi, nic7018_device_ids);
+ 
+@@ -239,7 +240,7 @@ static struct platform_driver watchdog_driver = {
+ 	.remove = nic7018_remove,
+ 	.driver = {
+ 		.name = KBUILD_MODNAME,
+-		.acpi_match_table = ACPI_PTR(nic7018_device_ids),
++		.acpi_match_table = nic7018_device_ids,
+ 	},
+ };
+ 
+-- 
+2.47.2
+
 
