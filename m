@@ -1,186 +1,195 @@
-Return-Path: <linux-watchdog+bounces-3041-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3042-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7326DA4E2EE
-	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Mar 2025 16:23:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C7B2A4F046
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Mar 2025 23:26:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5C8517E81F
-	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Mar 2025 15:16:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 737487A5513
+	for <lists+linux-watchdog@lfdr.de>; Tue,  4 Mar 2025 22:24:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4286228628D;
-	Tue,  4 Mar 2025 15:09:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TGmDv4Qy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5504D27702C;
+	Tue,  4 Mar 2025 22:25:43 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from beeline3.cc.itu.edu.tr (beeline3.cc.itu.edu.tr [160.75.25.117])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84862261578
-	for <linux-watchdog@vger.kernel.org>; Tue,  4 Mar 2025 15:09:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.117
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741100957; cv=fail; b=nQOXYyE6YcSroMOFQI6qlisWOY4CmD0C1w/5eKEuikeV1V+E7JaH/ptkjQsdRIQ7mv4tvX8PPe/QNF15s57HMtxPtXJ0QRwxT860ioB/9YscwFBrPDQqilY+sLaTXwoOAGR6a5Q3pGQIYPORPSuRRsV3v1l/tKvL8VUNi/sA+eg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741100957; c=relaxed/simple;
-	bh=4Rr8+O3wDPGZk2pARDgzHZT5OsxtADYeUZjSZlkVi/4=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=r+kTSYWZDQrnuAzfATdTPZqqLcnfqPCR+BYMFX/K2wBWF9oaI4nuLj19QXWFeqZzigsCxNkwTutSMahi5IrZm3IiwLXTnoL9wr3udH5xtc58FVih9mV6PCqvJyoTIOF/Xoiqe8HGXZZYWo4ztyau0S+YlHELO3fVzcjZOStDN+I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TGmDv4Qy reason="signature verification failed"; arc=none smtp.client-ip=10.30.226.201; arc=fail smtp.client-ip=160.75.25.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
-Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by beeline3.cc.itu.edu.tr (Postfix) with ESMTPS id D277240CEC8C
-	for <linux-watchdog@vger.kernel.org>; Tue,  4 Mar 2025 18:09:13 +0300 (+03)
-X-Envelope-From: <root@cc.itu.edu.tr>
-Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6fDj0PCyzFyHw
-	for <linux-watchdog@vger.kernel.org>; Tue,  4 Mar 2025 18:07:33 +0300 (+03)
-Received: by le1 (Postfix, from userid 0)
-	id 84CDC42720; Tue,  4 Mar 2025 18:07:21 +0300 (+03)
-Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TGmDv4Qy
-X-Envelope-From: <linux-kernel+bounces-541779-bozkiru=itu.edu.tr@vger.kernel.org>
-Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TGmDv4Qy
-Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
-	by le2 (Postfix) with ESMTP id 5332A41B74
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 16:15:12 +0300 (+03)
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by fgw2.itu.edu.tr (Postfix) with SMTP id 2C5F92DCDE
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 16:15:12 +0300 (+03)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED0FB188E279
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:15:13 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA8FF212FBE;
-	Mon,  3 Mar 2025 13:14:28 +0000 (UTC)
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395BB212B0A;
-	Mon,  3 Mar 2025 13:14:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1690B26138F;
+	Tue,  4 Mar 2025 22:25:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741007666; cv=none; b=UwHZNnuuZe6vt7V45C8137vf4uxCWM/Tcu4n3W5Vu8C3aKZ2yfjsUbGVFccoCWJYIf2HzNlkgNCrFMV6iMM6qsjA8XfvTBjPivr3IhWTgPzkSBnXkoNMLaklXYpKul13ro9xFEnLV60sUJL7u94fA7yHr7xIVNh268uMT909ku4=
+	t=1741127143; cv=none; b=OKjwe7My40dnEP8ra1rcpdqdj9QEBFoFHtcJRrbXr/Jp/U8G4DxebZQFkkuF7XKy00uP0Xx7vyRgHrZRK8//Xnj9BpTZblhC+qjBRDQFRNmKT3aB78Xr2i1X0UUnsZBa/XQyVrbyAFA+jlKOKgR8C9f3bmv3I9kxY5MnBmHmt9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741007666; c=relaxed/simple;
-	bh=FiWSvzkRIMYnufn/6j3BHnlJOVYfPeryI4S3GXt0vAc=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=KgK2w1FEydzIwL04wsvM0N4lmt2qa0Zua2a/wUiRTgcWWoRXFLwOv//BRE3GNLa/wBc54ooG+FDVT7rm0sDoExzJb6Ss7EMhZDQal4eV4Y/NYfvW7E+4H6FHcvjb6KUHWsOccbyk4CvNHudC7dBMDH7pGGscEOGRZbvpDJNSS48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TGmDv4Qy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D98BBC4CEE9;
-	Mon,  3 Mar 2025 13:14:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741007666;
-	bh=FiWSvzkRIMYnufn/6j3BHnlJOVYfPeryI4S3GXt0vAc=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=TGmDv4Qy0cdXTql42zoM9MZxyD+mzsNU84Gh2a9Bf7K6p/0qDRxKws68ZDFYHyWON
-	 334fbrKihCSvqDRJGspPw/djb7ne82q3xjesrA1HfHtPYKLh+uHq4AUBa+U1W21glj
-	 e5TM4yUFaV3LSXJYgJLVnlCHzktDkF5R2x2eLbVIgBHr6vJ8UMs4V2N3i/ZxSByZCr
-	 +LHt2BQ6LdRwXX+N7gEsTHfI4yVgFToA8SUQwczwR7qXqArTYC98YLw1nU+ks3qvP/
-	 KzNygSvESuVw7PKUv07+kfDwmhA+N5UwLVHM3xplqdt0imjVpHsVd3t2xOkMMa5xna
-	 hBrhbq/qTUfLA==
-Date: Mon, 03 Mar 2025 07:14:24 -0600
-Content-Type: text/plain; charset="utf-8"
-Precedence: bulk
+	s=arc-20240116; t=1741127143; c=relaxed/simple;
+	bh=iaMvK8/SofOaQ1HyAPJ18Zkd4db1ra2dw+VV6AtENSY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ibzv93B+6BhZLNUnT5mCT2LpABr/752uqA9lqqC5yrxb2Xks7v8vzESowgB1Cx/0ftNsS7YBQ8VFHEcdGJiGT625FRIGBTCWwgdxpe+dHC2cAfPFticm5glE+DODNNNoXCvlX1v0S93rnRjy4ztktebmliD6w39CSqRDF7RFvPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A4AEB2F;
+	Tue,  4 Mar 2025 14:25:52 -0800 (PST)
+Received: from localhost.localdomain (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6FEDF3F5A1;
+	Tue,  4 Mar 2025 14:25:36 -0800 (PST)
+From: Andre Przywara <andre.przywara@arm.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>
+Cc: devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-mmc@vger.kernel.org,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-watchdog@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	linux-phy@lists.infradead.org
+Subject: [PATCH v2 00/15] arm64: dts: allwinner: Add basic Allwinner A523 support
+Date: Tue,  4 Mar 2025 22:22:54 +0000
+Message-ID: <20250304222309.29385-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.46.3
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: wim@linux-watchdog.org, krzk+dt@kernel.org, linux@roeck-us.net, 
- nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
- dmaengine@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, claudiu.beznea@tuxon.dev, vkoul@kernel.org, 
- linux-watchdog@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- conor+dt@kernel.org
-To: Ryan.Wanner@microchip.com
-In-Reply-To: <cover.1740675317.git.Ryan.Wanner@microchip.com>
-References: <cover.1740675317.git.Ryan.Wanner@microchip.com>
-Message-Id: <174100756391.1496568.10334189756404294750.robh@kernel.org>
-Subject: Re: [PATCH v2 0/2] Add System Components for Microchip SAMA7D65
- SoC
-Content-Transfer-Encoding: quoted-printable
-X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6fDj0PCyzFyHw
-X-ITU-Libra-ESVA: No virus found
-X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741705667.77741@lDgeOKXjhnUPNlO01HMRtg
-X-ITU-MailScanner-SpamCheck: not spam
+Content-Transfer-Encoding: 8bit
+
+Hi,
+
+this in an update to the series introducing the basic DT support for the
+Allwinner A523 SoC. It now comes with DTs for three boards, using
+slightly different packages of that SoC.[1]
+Functionality-wise it relies on the pinctrl[2] and clock[3] support
+series, though there are no direct code dependency series between the
+series. Three binding patches from there are required to pass dtbs_check,
+git put their patch IDs in the footer below.
+Compared to v1 this drops the patches that have already been merged
+(I2C, USB, RTC), changes the proposed NMI controller binding, extends 
+the SoC .dtsi to include more device instances, also the secondary cores,
+and adds DTs for two new boards. On top of this I added v2 of the DT patch
+for an H616 board, since it shares the newly introduced YuzukiHD vendor
+name patch. Also it adds the tags from the diligent reviewers, many thanks
+for that! More detailed changelog below.
+
+The first patches add DT binding documentation for the most basic
+peripherals, most of them actually being already supported, courtesy of
+identical IP being used. This includes MMC and USB 2.0, so with the above
+mentioned clock and pinctrl support this gives an already somewhat usable
+mainline support for this new SoC family.
+The watchdog is not completely compatible, but is an easy addition, so
+this bit is included in here as well, the same is true for the NMI
+controller, required for delivering PMIC interrupts.
+
+The A523 features 8 Arm Cortex-A55 cores, organised in two clusters,
+clocked separately, with different OPP limits, in some kind of
+little/LITTLE configuration. The GPU is a Arm Mali G57 MC01, and the chip
+also features a single PCIe 2.1 lane, sharing a PHY with some USB 3.1
+controller - which means only one of the two can be used.
+The rest of the SoC is the usual soup of multimedia SoC IP, with eDP
+support and two Gigabit Ethernet MACs among the highlights.
+
+The main feature is patch 08/15, which adds the SoC .dtsi. This for now
+is limited to the parts that are supported and could be tested. Compared
+to v1 we now have some basic TF-A support, so the PSCI nodes are in now.
+
+The final patches add basic support for the Avaota-A1 router board, the
+X96QPro+ TV box, and the Radxa A5E development board.
+
+The mainline firmware side in general is coming together now: we have
+basic U-Boot support working (including MMC and USB), most importantly
+with proper DRAM support, so no more binary blobs, and some basic TF-A
+support.
+
+Please have a look at those DT bits here, ideally compare them to the
+available user manual, and test them if you have access to hardware.
+
+Based on v6.14-rc1.
+I pushed a branch with all the three series combined here:
+https://github.com/apritzel/linux/commits/a523-v2/
+
+Cheers,
+Andre
+
+Changelog v1 .. v2:
+- drop USB, I2C, RTC binding patches: already merged
+- add tags from reviewers (with thanks!)
+- drop unrelated deprecation comment from MMC binding patch
+- drop fallback compatible for NMI controller, stands on its own now
+- adjust PHY binding to merged A100 binding (dropping tag)
+- .dtsi: add secondary cores
+- .dtsi: enable PSCI
+- .dtsi: move 32K oscillator to board .dts files
+- .dtsi: adjust CCU source clocks
+- .dtsi: add MMC1 node (typcially for SDIO WiFi)
+- .dtsi: add remaining UARTs
+- .dtsi: add remaing I2C devices
+- add two new board .dts files
+- add DT bindings for those two new board names
+- avaota.dts: drop reserved memory from (TF-A now in SRAM)
+- avaota.dts: drop SD card dummy supply node
+- avaota.dts: add eMMC node (shipped on most boards)
+- avaota.dts: fix OTG mode, explain situation
+- add Chameleon .dts file (depends on YuzukiHD vendor name patch)
+
+[1] https://linux-sunxi.org/A523#Family_of_sun55iw3
+[2] https://lore.kernel.org/linux-sunxi/20250227231447.20161-1-andre.przywara@arm.com/T/#u
+[3] https://lore.kernel.org/linux-sunxi/20250304012805.28594-1-andre.przywara@arm.com/T/#u
+
+Andre Przywara (15):
+  dt-bindings: mmc: sunxi: Simplify compatible string listing
+  dt-bindings: mmc: sunxi: add compatible strings for Allwinner A523
+  dt-bindings: watchdog: sunxi: add Allwinner A523 compatible string
+  watchdog: sunxi_wdt: Add support for Allwinner A523
+  dt-bindings: irq: sun7i-nmi: document the Allwinner A523 NMI
+    controller
+  irqchip/sunxi-nmi: Support Allwinner A523 NMI controller
+  dt-bindings: phy: document Allwinner A523 USB-2.0 PHY
+  arm64: dts: allwinner: Add Allwinner A523 .dtsi file
+  dt-bindings: vendor-prefixes: Add YuzukiHD name
+  dt-bindings: arm: sunxi: Add new board names for A523 generation
+  arm64: dts: allwinner: a523: add Avaota-A1 router support
+  arm64: dts: allwinner: a523: add X96Q-Pro+ support
+  arm64: dts: allwinner: a523: add Radxa A5E support
+  dt-bindings: arm: sunxi: Add YuzukiHD Chameleon board name
+  arm64: dts: allwinner: h616: add YuzukiHD Chameleon support
+
+ .../devicetree/bindings/arm/sunxi.yaml        |  20 +
+ .../allwinner,sun7i-a20-sc-nmi.yaml           |   1 +
+ .../bindings/mmc/allwinner,sun4i-a10-mmc.yaml |  38 +-
+ .../phy/allwinner,sun50i-a64-usb-phy.yaml     |   4 +-
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ .../watchdog/allwinner,sun4i-a10-wdt.yaml     |   2 +
+ arch/arm64/boot/dts/allwinner/Makefile        |   4 +
+ .../sun50i-h618-yuzukihd-chameleon.dts        | 222 +++++++
+ .../arm64/boot/dts/allwinner/sun55i-a523.dtsi | 598 ++++++++++++++++++
+ .../dts/allwinner/sun55i-a527-radxa-a5e.dts   | 299 +++++++++
+ .../dts/allwinner/sun55i-h728-x96qpro+.dts    | 287 +++++++++
+ .../dts/allwinner/sun55i-t527-avaota-a1.dts   | 308 +++++++++
+ drivers/irqchip/irq-sunxi-nmi.c               |  50 +-
+ drivers/watchdog/sunxi_wdt.c                  |  11 +
+ 14 files changed, 1807 insertions(+), 39 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h618-yuzukihd-chameleon.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun55i-a527-radxa-a5e.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun55i-h728-x96qpro+.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun55i-t527-avaota-a1.dts
 
 
-On Fri, 28 Feb 2025 08:24:09 -0700, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
->=20
-> This patch set adds support for the following systems in the SAMA7D65
-> SoC:
-> - DMAs
-> - Chip ID
-> - Dual watchdog timer.
->=20
-> Changes v1 -> v2:
-> - Removed pathes that have been accepted and applied from v1 [1].
-> - Corrected missing newline in dt-binding.
-> - Corrected mismatch in watchdog dt node.
->=20
-> 1) https://lore.kernel.org/linux-arm-kernel/09eafe54-c262-4db4-b11d-064=
-4a1f90a14@tuxon.dev/
->=20
-> Ryan Wanner (2):
->   dt-bindings: watchdog: sama5d4-wdt: Add sama7d65-wdt
->   ARM: dts: microchip: sama7d65: Add watchdog for sama7d65
->=20
->  .../devicetree/bindings/watchdog/atmel,sama5d4-wdt.yaml    | 4 ++++
->  arch/arm/boot/dts/microchip/sama7d65.dtsi                  | 7 +++++++
->  2 files changed, 11 insertions(+)
->=20
-> --
-> 2.43.0
->=20
->=20
->=20
-
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=3Dy for arch/arm/boot/dts/microchip=
-/' for cover.1740675317.git.Ryan.Wanner@microchip.com:
-
-arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dtb: watchdog@e001d00=
-0: Unevaluated properties are not allowed ('clocks' was unexpected)
-	from schema $id: http://devicetree.org/schemas/watchdog/atmel,sama5d4-wd=
-t.yaml#
-arch/arm/boot/dts/microchip/at91-dvk_som60.dtb: /ahb/apb/adc@f8018000: fa=
-iled to match any schema with compatible: ['atmel,sama5d3-adc']
-arch/arm/boot/dts/microchip/at91sam9g25-gardena-smart-gateway.dtb: nand-c=
-ontroller: #address-cells: 1 was expected
-	from schema $id: http://devicetree.org/schemas/mtd/nand-controller.yaml#
-
-
-
-
-
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+prerequisite-patch-id: 5b8a883819d2f3dfc975735a855291cb8b02dd39
+prerequisite-patch-id: ff4d42c2dcb0c3b4be45a4b0b8e22027207979ee
+prerequisite-patch-id: 4596fa402b501a9406821a9535f8329d30bf1ca4
+-- 
+2.46.3
 
 
