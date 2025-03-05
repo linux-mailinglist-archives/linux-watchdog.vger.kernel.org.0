@@ -1,105 +1,117 @@
-Return-Path: <linux-watchdog+bounces-3059-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3060-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3CBEA506B3
-	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Mar 2025 18:47:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8560A50F10
+	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Mar 2025 23:50:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1ED853A336B
-	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Mar 2025 17:47:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B33A16A422
+	for <lists+linux-watchdog@lfdr.de>; Wed,  5 Mar 2025 22:50:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5FD615350B;
-	Wed,  5 Mar 2025 17:47:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E9ED206F17;
+	Wed,  5 Mar 2025 22:50:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T5Gom0Lf"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="T9TQvKwL"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA83131E49;
-	Wed,  5 Mar 2025 17:47:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D18CE205AAB
+	for <linux-watchdog@vger.kernel.org>; Wed,  5 Mar 2025 22:50:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741196830; cv=none; b=fE/5801ony+Vdis+tmzKDPCLcKp8paV079hb9ym2LvxU8xG0/3D+iEjuSC+HSZE6G1XRjyF6H7WRSpxCWcvhankA7tzVqaLJEp0AoNd4TB9NyYBnu0xFn4XjclGXPzJblOZpVoJHvhZ4YTjfM6X5K8xscsu5gm8qv/O3bx31hkE=
+	t=1741215037; cv=none; b=tAhtq6uZcQG2gtpFoUjcEUfZ7nsxBPShieaQKHCCejJXEILn+t7wuwp6VdGhnAurxXuIZoPynMCvaoSjC8gtW0nJ7YmgzWlBCL1HBOHVC0s6HGuFuRG5tfp+bKlZrwdTk/Lt8HyFx64OiS/3HjcgjDOc3fV+qWBy3QZWquAih+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741196830; c=relaxed/simple;
-	bh=XkXAEdfVFTFjbILONsA+SnhCkrqCKprR5pBsJCMVQb8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aHXglZHNMayUOEmUL7KM7XGzMO3/RGfXCaoDZ/Y+dXMJN/O1/Qq3HkkyvihVBty3a732BkONY1scIuXbbL/KaDwqFWAfmI5gVhAAqhyiPJ8RBdHr/WeT7PrO+k4xIuUSkyGfmGho/DHTWJJTTZgG7F6m4h4CdjV69vTWhOpfvzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T5Gom0Lf; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2239f8646f6so82632195ad.2;
-        Wed, 05 Mar 2025 09:47:08 -0800 (PST)
+	s=arc-20240116; t=1741215037; c=relaxed/simple;
+	bh=hINIG5kxOwV7liYzl/+ZFhE/Yh0+VkapvzoZ/yUMGP8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IesuoBVhiDj4iZ+OIZuUUG7zAHkUstAh2IsLUvDCus6FkgMK1r7pn3VQ3q/P7ijsmllNagLgT45oi2kkMjdmbAI1ABWHalsuDIcCnMHqmXEPNVUhm04RpX+2aFhyX+VT2wB+xG8c6WHwoUg6eNxBy0oYUdnB84ka6MiUW9SlA3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=google.com; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=T9TQvKwL; arc=none smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-474e1b8c935so99011cf.0
+        for <linux-watchdog@vger.kernel.org>; Wed, 05 Mar 2025 14:50:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741196828; x=1741801628; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Estk+5gNY3mVuOls1Vw/SWWGxf9dwhMg24EqUjgvQNM=;
-        b=T5Gom0LfAf95UTB0isy3UCAizrQrTyuy0c8Ex//W4ihTaui0Ou/E/CPHL6ZLeqnE+2
-         jfgY4T8xv0zTfqu+r0oz7QPE4y15idvOcZDFhNIWRctYKW9rs0udHsxa0BYB0ledlIOz
-         TyuvAt2uUZ/Wfc+YKle7Y/e1DQiSdgEJzBREcRNGWReAqjOID0C5HMYB7ham9vYEnzzq
-         PAhYmRvLvIb3cIGoGhN3jRMpA59WoubXfA2Trv8uZcVO76b4C3DOK4VqwuhxNncjYujo
-         m73vwFEx0rYB/sWJp2GC3kKvwzQBDPzxb1jq6mTFn9TwO4TPyPBb7DBkWK0OkgoM5AgR
-         RqRw==
+        d=chromium.org; s=google; t=1741215035; x=1741819835; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RsjM4YASNleulr3tBXWY5lzfU3eAoHcF5KVgOaYjt5c=;
+        b=T9TQvKwLN2u+9y36lckxvdsuTFx31lvq1x1zggBu878diCilZ7xUW+aqF5EBspIg0A
+         HUaVZQAK7KkQx4aRLCsS56FN2fqEvRpI8JhGXQIHDTM7FxQvld3ErSslCA2ebNzk7eGq
+         GNqny3TiwsJ+IiVthCaZJMfHX3zKrijEWOXdg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741196828; x=1741801628;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Estk+5gNY3mVuOls1Vw/SWWGxf9dwhMg24EqUjgvQNM=;
-        b=KaBvMgJ/vbqzpNF0Ejt45w72IhBMpjKl58Yvx6A9LmfW+5sGseogLX+5GVL0Ef2If0
-         9d5dZ3C+IGfw7KCXvhHUYkN4p36NTFJWY48pBW80X63aSBJb/qVAI5Bz2dwyI+38as3o
-         rv5p1lHG1Q4AU2mvdI4cb8FIf+NDrMfzhQkDDHG2sd7Mf4Cdqu9bRfXibApGx5tfswzX
-         eaAuIaCP90Nzwlf12V15YYR8Brgi+ntZyfEAGwNF9QqyPvy9hQV3E1VnsmjGR8f0w9SC
-         OurCbg9pO8mR0x/SMErl1rg+i/fTWhLY/RjQV7VJSR5qtNoJxy9HoroHdD24GGxml+3d
-         nN1w==
-X-Forwarded-Encrypted: i=1; AJvYcCUCJbG3yvfs6ztwkFFfaRMPmx30oVqIaeeQnHW/o9N0RPvEplmwaYDIqe+wZWD0R5Y/D53+5S+BvI/acAYietM=@vger.kernel.org, AJvYcCWOSm3Vuj+9iPhFEwz2c1KP6JFbBaoSyfzlVzVIKNmOO/CTXTEoDyy+oBH6G0wL1IT2/stb2Q6WNPVZNYM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAJkw71ErBV3VYpbxsDOVsR/Rh5lZBLc9nXc6qWC/P3dMGeov1
-	0pKLQSdKni1BNOYJldBcToaiKkL3nwR0oRX9YDySDT+kKCCXklP4S40c9g==
-X-Gm-Gg: ASbGncvK7vlBzHsMVyeOAZEPAbm+Hb9iYLHQPihtSqiMyq+Advkig7E73vrdCUwI41h
-	EyP0mjbz/ebDIu7fP5Tocey1ezb2iatrEBN7H28diFFksv0tf95Q3arXy8YJnH3v6VmIMzQ3o20
-	NppvnC2M0+cEDR2vMwrsXHxeU5os1l5suse2OUytNEGoyKNGKzKEmRbyfsKkLqRY6TP/H1CJFuK
-	5CnOx3AxyF71cTnf8hkN146Q+bjqf5NfXAjhVTudUwNS6B1p9IolNX6OP1Ppvoi06Ku14gvBPLQ
-	Ksf7cut0A587zI8g4tDAq/PoA7kmUGqjqXyuTEfNtg/7OWbCmvJjUZSZiw==
-X-Google-Smtp-Source: AGHT+IGw6eYJ7veWCt36hL7+GBC9zVtynhPDrspz/RhQVbez7BW33rd8wz3/PrUMvJldd5RU34gp6g==
-X-Received: by 2002:a17:902:f606:b0:223:f9a4:3f99 with SMTP id d9443c01a7336-223f9a457a2mr42108565ad.29.1741196828131;
-        Wed, 05 Mar 2025 09:47:08 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2235053181esm116366555ad.237.2025.03.05.09.47.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Mar 2025 09:47:07 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 5 Mar 2025 09:47:06 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] watchdog: nic7018_wdt: tidy up ACPI ID table
-Message-ID: <984b1101-5cf6-4b21-8bb9-db4491d97832@roeck-us.net>
-References: <20250304140114.1812452-1-andriy.shevchenko@linux.intel.com>
+        d=1e100.net; s=20230601; t=1741215035; x=1741819835;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RsjM4YASNleulr3tBXWY5lzfU3eAoHcF5KVgOaYjt5c=;
+        b=rhempfF1lv51zEo+e7tX/6/GcFCI+h2CwSKRDpYjPpOmNg1emWlN3XlczqSfRDD5py
+         DHwqpTNjCiP/Cg/HlgKydyDZRa2mPMzcuNCQaqClp/Vsm90gzWFzaHndRgSbFKOMczVT
+         Rr660hKu5HoUrTGCwDmt51lloZOAIjdsmkgLPvnwrySMkyyV2//LHJDp/hV/y2235VHM
+         ka/UHqmeClkZ7nBx2LCm0XW6OeXrqz76uEannIe7w1+4ZVkvGbYukx6w4B0D9Iwc8+11
+         PadHX6h+4gHJilSdrd4tfaN6R8triOuNFJukn8yi7E8XF3O8qcg2g45ncaOXd/22JRCb
+         fVyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWDJ8UnI/eZE9MeATrUBD2T5CaPHNDKnlC793sZK2eAAb+uk2Y4Q0MMiakFys5nE8Uq2mGBO+U1nKXY9thhwg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCg/QKpDyeIN9yyosR/SeiHgDFvzKJb7q5s/foWBZ7+Iwu4CO/
+	AxlKfvW+eF53NEyUi4UJwWfHOpJpxvkMiYD3RRHRnHSprSSIQiHEF3zaM73nEarUAOWApnjesjl
+	8l3Khu8TfXsy0a4KoDrcr7SA8Gp1SoAx2sEK1
+X-Gm-Gg: ASbGncsHyQCsiqITHOD15e0q/X6A6QvwKq8Qn140t4Wha41KtqfDSPwTBhZH1ro8u+Q
+	0ql7kk/QOKHoxkCOgwfOoVr587o20A+pxamWpVqAqjaWS0ecaeOU9kBnKYSva2qnD3Tej0IGWy9
+	oYBh32EBFuvczT5tVqPoWzkNLJeBrx/ovmxBTysugk/dBMcQVLI5Y4QugLhHE=
+X-Google-Smtp-Source: AGHT+IHvK+t3RyIjKaNCRJHSF0lsNgux1FRjfJb7Y820KcKp5rPghSBOwl1IAFSXci0ouoP0BoEyc1UcQ1d61NKzM3g=
+X-Received: by 2002:ac8:5905:0:b0:475:1754:e044 with SMTP id
+ d75a77b69052e-4751c567b75mr312741cf.3.1741215034513; Wed, 05 Mar 2025
+ 14:50:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250304140114.1812452-1-andriy.shevchenko@linux.intel.com>
+References: <20250305101025.2279951-1-george.cherian@marvell.com> <20250305101025.2279951-2-george.cherian@marvell.com>
+In-Reply-To: <20250305101025.2279951-2-george.cherian@marvell.com>
+From: Julius Werner <jwerner@chromium.org>
+Date: Wed, 5 Mar 2025 14:50:20 -0800
+X-Gm-Features: AQ5f1Jq5WN2NBjpsa146UgayYxAH8L0biqGumwPp8sUUsQ-SzcQC8JeVH7zSTCI
+Message-ID: <CAODwPW_3BCfTcTu=K+6Q3PMe8DtWTiKFHC6+HO2q+cTqs=EPAA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] watchdog: Add a new flag WDIOF_STOP_MAYSLEEP
+To: George Cherian <george.cherian@marvell.com>
+Cc: linux@roeck-us.net, wim@linux-watchdog.org, jwerner@chromium.org, 
+	evanbenn@chromium.org, kabel@kernel.org, krzk@kernel.org, 
+	mazziesaccount@gmail.com, thomas.richard@bootlin.com, lma@chromium.org, 
+	bleung@chromium.org, support.opensource@diasemi.com, shawnguo@kernel.org, 
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, 
+	andy@kernel.org, paul@crapouillou.net, alexander.usyskin@intel.com, 
+	andreas.werner@men.de, daniel@thingy.jp, romain.perier@gmail.com, 
+	avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com, 
+	venture@google.com, yuenn@google.com, benjaminfair@google.com, 
+	maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
+	christophe.leroy@csgroup.eu, naveen@kernel.org, mwalle@kernel.org, 
+	xingyu.wu@starfivetech.com, ziv.xu@starfivetech.com, 
+	hayashi.kunihiko@socionext.com, mhiramat@kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, chrome-platform@lists.linux.dev, 
+	imx@lists.linux.dev, linux-mips@vger.kernel.org, openbmc@lists.ozlabs.org, 
+	linuxppc-dev@lists.ozlabs.org, patches@opensource.cirrus.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Mar 04, 2025 at 03:45:35PM +0200, Andy Shevchenko wrote:
-> Tidy up ACPI ID table:
-> - drop ACPI_PTR() and hence replace acpi.h with mod_devicetable.h
-> - remove explicit driver_data initializer
-> - drop comma in the terminator entry
-> 
-> With that done, extend compile test coverage.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>  static const struct watchdog_ops adv_ec_wdt_ops = {
+> diff --git a/drivers/watchdog/arm_smc_wdt.c b/drivers/watchdog/arm_smc_wdt.c
+> index 8f3d0c3a005f..794cf0086912 100644
+> --- a/drivers/watchdog/arm_smc_wdt.c
+> +++ b/drivers/watchdog/arm_smc_wdt.c
+> @@ -90,7 +90,8 @@ static const struct watchdog_info smcwd_info = {
+>         .identity       = DRV_NAME,
+>         .options        = WDIOF_SETTIMEOUT |
+>                           WDIOF_KEEPALIVEPING |
+> -                         WDIOF_MAGICCLOSE,
+> +                         WDIOF_MAGICCLOSE |
+> +                         WDIOF_STOP_MAYSLEEP,
+>  };
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+I don't think this driver can sleep, unless I'm missing something?
+`arm_smccc_smc()` does a synchronous call into firmware that always
+returns back to the caller.
 
