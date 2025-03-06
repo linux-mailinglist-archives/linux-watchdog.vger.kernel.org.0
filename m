@@ -1,191 +1,199 @@
-Return-Path: <linux-watchdog+bounces-3067-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3068-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 892D3A55265
-	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Mar 2025 18:09:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6038A552F4
+	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Mar 2025 18:24:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC9D318863B9
-	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Mar 2025 17:07:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A71BD7A5174
+	for <lists+linux-watchdog@lfdr.de>; Thu,  6 Mar 2025 17:23:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 443E523DE85;
-	Thu,  6 Mar 2025 17:06:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD93226B0A2;
+	Thu,  6 Mar 2025 17:22:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="cDWuoLUY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XjHSAeZK"
 X-Original-To: linux-watchdog@vger.kernel.org
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011031.outbound.protection.outlook.com [52.101.70.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50C2D18C01D;
-	Thu,  6 Mar 2025 17:06:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.31
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741280810; cv=fail; b=GYscnVYGpJa2+q3DOKWEGMkvYpip1gHC8mfuF6j2ORDwVq26e+UBlMJ5QWQwYsOhkVjptSVtPjeHslysv1H2DRn56lrtd+LsqBkaI1Uha+NO0N2zlOgVNMahSTW151dr8smueM8ZWnr0cbXrVsFgsVN4qIgAZgsM5QUYn4atrVM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741280810; c=relaxed/simple;
-	bh=q69Wcap+dR+jBHD7evNrid+s1HCNKcxLf5IPBUrRDIc=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=H7P2FohaiXAiE762oxGMIASkCv4ct67MVwmL34xXcG5O7hUHdlS+5I7/j8Apyr9jZBeDWP49jVQdBqysoxmInnZabCoQIIKR8Y9ihNKMH/2WqePR1vJyqER8/b6dLZztBY+RzWqIG02+clUFrADgm+ORoJmuoQmJMnSJRPjGCEc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=cDWuoLUY; arc=fail smtp.client-ip=52.101.70.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=yBdpCwZ/2C7NIBm+pxvrr+dDu6I2N+lgRpges5naQ1SCEQca9QGexUCCKtRFKBjK+a9RRJGIZc80/kwd6MbRAnC143iRd6TIqRF1aZb9VDrXSRzZcMKu/aR8svz+M/0fYAbP9AMDURmvU7gfhGkKo4ucSX+RShXzmsYx7cCj7jiX/Q87wkJ2gVBUxftW4jA7L+SjTyxgMI2UXgGMER5qPURQTRL+ZKArGRXP3DZeLJOs6H8hHOpaArIbQS/k54WvqgZNs8SfJMskR++F/Yu4ztMOxVUIsO/PMRAwHid+WZ4dPD8Wkf8UjSbihiily298zMQaxAo5aKkMdtEUne+bcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PawRMDD2ocz/RPxW0UustzNT+f6H0frkwH/deQhbkME=;
- b=VFi0GVuwRhJxah7oPlTreVj1061n/9NG+7iauIxAEH4/Dz1bQV2wXOx9MgAFMraXNC5mPhBzvQKYk06JwM91tUjgkXG6VSNBMtB7Mf4VaUwg1nXzpyAMDQRYFcWHjm4lta291NDpXXhkvp33Jj8GwdggkXaQcldwe8GuBRunBzdb0zQaLW7+4AD41mgJJ/IyynmYBJdZ3z++nv0djJ+3SzojSLd5u/bd9k/zGBM4zmUPwuUZV03qIyyNqoFLDANSO63rbilePvECz9l6RCKUbt/2AqVgRkVl2hzTvCSiYIga7UQksRyiRfYHJ/BrXQQ6qXfN28gwE62RzUbmm/n8fw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PawRMDD2ocz/RPxW0UustzNT+f6H0frkwH/deQhbkME=;
- b=cDWuoLUY73HV2SMerokte6x/crnI/nqk7hYAEyKLtAnzKpn4yW4uF6pEWXMYZEIxnREbc51oKAWSPYvTRc6S9wfVNqpkaWeMLMCcvRq6QMI7N/RqiZkdGnE6y46B0ToN3uaZgpMdhdoFa0lrjQwZY763LN4dyka1zj5PwwZfgkgwLLjUvy8Q/V75xYmOMaUoiWBuR3t9/zPgFfGAbkgHg09yh/tVuRZ5oQkgD3W6ghxpM7MG2KFr2ju0B95KYCarlQzn3OYHC5Z0fI02X52xa0NNfIc3RlaFTzsdJgHWHdVnJtlhCA+1t2BsSlLldzOQ19Tujk4oZ+NW6HHLHNKzeA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by GV1PR04MB10680.eurprd04.prod.outlook.com (2603:10a6:150:20c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.28; Thu, 6 Mar
- 2025 17:06:45 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%6]) with mapi id 15.20.8511.017; Thu, 6 Mar 2025
- 17:06:45 +0000
-From: Frank Li <Frank.Li@nxp.com>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	linux-watchdog@vger.kernel.org (open list:WATCHDOG DEVICE DRIVERS),
-	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
-	imx@lists.linux.dev (open list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE),
-	linux-kernel@vger.kernel.org (open list)
-Cc: imx@lists.linux.dev
-Subject: [PATCH] dt-bindings: watchdog: fsl-imx7ulp-wdt: Add i.MX94 support
-Date: Thu,  6 Mar 2025 12:06:28 -0500
-Message-Id: <20250306170628.236422-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BY3PR05CA0038.namprd05.prod.outlook.com
- (2603:10b6:a03:39b::13) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE3C926AA94;
+	Thu,  6 Mar 2025 17:22:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741281772; cv=none; b=dJguTL/TLy4PQXakEOkJUBqM4GvimbH48JDd+bG4YiUEJ28V2fNEUW3BzuEnPkC7hlqMdo0l0kkufGU5CFgD9GZqf66gN3rm/Szh8bth0U1tt9VC+926dFGP5rC2zn1NmioBk2FPwcQRdIRR4ers1VAsIO6bQIE8v1qq1CODITU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741281772; c=relaxed/simple;
+	bh=8MDbostjxGfBi/qDdO3rFCsLUo6pHB2J+hQRBUW4lyQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c7BJCFNOrg+ehr5kIPz2fJMSM1Ic/8UqXgw3e24wDWAWjIILdh06UEltA1C0ezOY9vd9c8ETYO0a0LUZUpbmtDXUAeLe/HemGwBHMAh4tNCeB5jXxI9RPUVMriVUaVQEqbFnnzNNYivaqG+CsNGQSxstmuqOstU/AqxmjtGz4ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XjHSAeZK; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-223f4c06e9fso18897555ad.1;
+        Thu, 06 Mar 2025 09:22:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741281770; x=1741886570; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mRtVMgZ55zLMGI/NlOCcgv9aGOQgHktJls4Rai2LzFE=;
+        b=XjHSAeZKNZr4SX1HD/Kz33XeGKOobWbW+sBiGNw4JHzPfgq7RXA+xvKHIHfS/2eXZw
+         urF+eZASorPMwDWG47OuJrWbb6XPFQaGLQyrlxAI2oZHQi55W2v7QgISo+4hue0bLUUt
+         SojTaZRJAXHwdWn2YoGTpVtGBi8+vxEzrBRa75yP0AQLUmWG7M5SEJY6gMPJh9t2KbF3
+         5Nhh7F1QTSg1NuG+GBY8ELGokXwtCYIw7cg0bg9yYCcCvx+9lG3qadqpFpsKIOhgZMqR
+         iiurPcmmEuHrGCXD1Wq/0BkMHGF2HG0x0Nm2E6pAJrejkBMaLpHJbGOcDXTOFYVeUlT7
+         mEtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741281770; x=1741886570;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mRtVMgZ55zLMGI/NlOCcgv9aGOQgHktJls4Rai2LzFE=;
+        b=S61VlH4ybjuU6QOMDCp8TqSEzOnIwx0kIj7xT+Ds13uVu/AJu9Z1/vp2/n9ZSbUekv
+         dMsXck1zZiGuic7y7nGcZew0MfIrzcyYAeoEPxd6abrNQjMdT1Xre3TKY/HUEpNZC7eH
+         as49207ItJSIzAg8VgqgbKv9ZrT3LwT/caXuwkkpixw4kolKqNsq60OAQzpQHsx2l68l
+         gX9aFwfpqlo5qXCLIKsHuaVtzDnKCnlyX0WZu0U0A1+lsBuNLRGfuiO6A2BGJzoMnVMX
+         H75mLhseXLqS0nCS+xO9SPWzUND8FzhrsQ5/ptJcdtNpC2VHLvDJBh1Dp49SPaFY9J85
+         Hx7w==
+X-Forwarded-Encrypted: i=1; AJvYcCUlLmAh5UQBWYFnjyQV5MFNkXm3A2kd/CXgRY9J6X7XZxq4fnqWfMEjesoyXMuRVPH2VDS3rRXCyd8KMQ==@vger.kernel.org, AJvYcCWCOhJID0vM1+QrjR/ouV4BL9KHa4M3YFQfbgRAEPyOkoKBtkTwZDIp5j39pISN01TxFvnSDAFbsDxrzb0mj0I=@vger.kernel.org, AJvYcCXhbF7gZyAkIe2TlFlwrh7+ken2TeuLF6A1I4b/79rk+7nCxowJIhZLR6EBh9CaxXQdvM5SO+AwbgJmfAE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEHxU0IT8GUg6g/v+Jd2NTmyQdnq11ayqBDacflfRXKCCWYqOR
+	+9tQ0QzIA0LsHI1FAE8JEUtJ5WUXrZUuctM6AKZ5YCcGONVnBycq
+X-Gm-Gg: ASbGncuQtEjrY9KnBShaGWtqJU3PWh58U7QexClDo6SfY9gLg1z+3I8MJq7pexe4Q7V
+	MYJmYRTaeh+csC6Pjt2SwVGy2aF6sriAMfjv5e9idVP+WA6vQiIWor4q0x5sJlM+n3pf6j2andn
+	fAOUT50GiZ9RAmtjDjZjiucSai9bNfbz70bOEiYMBIAntMT05TwYOk8MsedVMlYWGD0bi0RshTX
+	XT6x4SwTT1J++HxdIYCzu6WddaR+M7YIWARtI59rwer78BuQjcJi2BmAvTN2zj4fwXM/qFz63Yp
+	hRLhBWpNWrBkb51KuTYbMANmRc90PWZE/WgAivkpW8O8Z+AYYx20lK4+Rw==
+X-Google-Smtp-Source: AGHT+IH26VxHQcLOQhDT0ENeuoRX0h2QLaU456Pm5UWb84f30oMCU5DkYbKfP44zoaE1dDrw9v5TnA==
+X-Received: by 2002:a17:902:e845:b0:215:a56f:1e50 with SMTP id d9443c01a7336-22426fd8a0cmr4582335ad.8.1741281769817;
+        Thu, 06 Mar 2025 09:22:49 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22410aa4f83sm15011285ad.217.2025.03.06.09.22.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Mar 2025 09:22:49 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 6 Mar 2025 09:22:47 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: George Cherian <gcherian@marvell.com>
+Cc: Ahmad Fatoum <a.fatoum@pengutronix.de>,
+	"wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+	"jwerner@chromium.org" <jwerner@chromium.org>,
+	"evanbenn@chromium.org" <evanbenn@chromium.org>,
+	"krzk@kernel.org" <krzk@kernel.org>,
+	"mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+	"thomas.richard@bootlin.com" <thomas.richard@bootlin.com>,
+	"lma@chromium.org" <lma@chromium.org>,
+	"bleung@chromium.org" <bleung@chromium.org>,
+	"support.opensource@diasemi.com" <support.opensource@diasemi.com>,
+	"shawnguo@kernel.org" <shawnguo@kernel.org>,
+	"s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+	"kernel@pengutronix.de" <kernel@pengutronix.de>,
+	"festevam@gmail.com" <festevam@gmail.com>,
+	"andy@kernel.org" <andy@kernel.org>,
+	"paul@crapouillou.net" <paul@crapouillou.net>,
+	"alexander.usyskin@intel.com" <alexander.usyskin@intel.com>,
+	"andreas.werner@men.de" <andreas.werner@men.de>,
+	"daniel@thingy.jp" <daniel@thingy.jp>,
+	"romain.perier@gmail.com" <romain.perier@gmail.com>,
+	"avifishman70@gmail.com" <avifishman70@gmail.com>,
+	"tmaimon77@gmail.com" <tmaimon77@gmail.com>,
+	"tali.perry1@gmail.com" <tali.perry1@gmail.com>,
+	"venture@google.com" <venture@google.com>,
+	"yuenn@google.com" <yuenn@google.com>,
+	"benjaminfair@google.com" <benjaminfair@google.com>,
+	"maddy@linux.ibm.com" <maddy@linux.ibm.com>,
+	"mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+	"npiggin@gmail.com" <npiggin@gmail.com>,
+	"christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+	"naveen@kernel.org" <naveen@kernel.org>,
+	"mwalle@kernel.org" <mwalle@kernel.org>,
+	"xingyu.wu@starfivetech.com" <xingyu.wu@starfivetech.com>,
+	"ziv.xu@starfivetech.com" <ziv.xu@starfivetech.com>,
+	"hayashi.kunihiko@socionext.com" <hayashi.kunihiko@socionext.com>,
+	"mhiramat@kernel.org" <mhiramat@kernel.org>,
+	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"chrome-platform@lists.linux.dev" <chrome-platform@lists.linux.dev>,
+	"imx@lists.linux.dev" <imx@lists.linux.dev>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+	"patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
+	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Subject: Re: [EXTERNAL] Re: [PATCH v4 1/2] watchdog: Add a new flag
+ WDIOF_STOP_MAYSLEEP
+Message-ID: <925869a6-7563-459b-b42b-b7b9b8ea0b0a@roeck-us.net>
+References: <20250305101025.2279951-1-george.cherian@marvell.com>
+ <20250305101025.2279951-2-george.cherian@marvell.com>
+ <irmewriceyzxr6jvbiao5vqrvelpftbjalmheodx5w63zi6k2y@dg3wlvs6zryd>
+ <PH8PR18MB538122CE6706872B8A836A94C5CB2@PH8PR18MB5381.namprd18.prod.outlook.com>
+ <7ac2b8db-22c7-4168-b1b7-4f9f0ab10531@pengutronix.de>
+ <28a711e5-b2cb-4d5f-bb78-259a01cd4bcc@roeck-us.net>
+ <PH8PR18MB53812FCAE180303E5D434275C5CA2@PH8PR18MB5381.namprd18.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-watchdog@vger.kernel.org
 List-Id: <linux-watchdog.vger.kernel.org>
 List-Subscribe: <mailto:linux-watchdog+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|GV1PR04MB10680:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5c6f2db3-c2c4-4fd1-aeba-08dd5cd145f6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|52116014|7416014|366016|1800799024|921020|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?D/+55/Bx0MDYEn8wExm7kx0rlFzfxR1dO110OdoPy1+WyXmOb942JdwUTSHd?=
- =?us-ascii?Q?B0ZbGxTjvCHUvNlovgw3RR+wRAyUJrHdgLsE9ZsEl9JiNr5kcWhfP6B4ovCw?=
- =?us-ascii?Q?wnBpdXo639ZzL9A/+MMk50D2Y2VRCOoC5FuXQWmx++XgadTBwpgtqUCNUwhp?=
- =?us-ascii?Q?lCGgP3CuDQp8PFBKUmyHHFivwiAbY+DhJ8Kk0/HTvrHz5wARlNseexMU/TfW?=
- =?us-ascii?Q?dUg7sG025UrpmDE5wLtHCmOEt8u6GOzqcje5/HKAAwHNzEwE+mU1T2rdqkqV?=
- =?us-ascii?Q?YhY59zc3U1/jneyt/74RWq36hDH/SUDnuFSneJ/GpzZSbR1DVxNF+MEwdgQV?=
- =?us-ascii?Q?831MX73u22NaQwcQf8tIKCt+gsQD0i0SdPF53tUbZ0oWOYWxl+9X95DHtdLI?=
- =?us-ascii?Q?3UY/B63pb7hmiQkeS58NqVU1T4k1FCRFvrHqQt4QxMnW1Xj9/CGaiGXNvVAN?=
- =?us-ascii?Q?1JgKbUd+Co51Rjn+JprkPBY97Rjt7omGnGeA4Z7dU+UhzXd86tZ4nVodqSZe?=
- =?us-ascii?Q?hlnzdFTxPPP5rB1neWlL1t4R6xt7IwSu163sPX1SYEELTwIbZc0ydPieCuWN?=
- =?us-ascii?Q?gtchSM46V1T5dAVgWlvU9OOOXUjTrfyMY4db1a1kbpLpGnIHuVdPfi5EJEx2?=
- =?us-ascii?Q?QoMc83/Pxa0d6x00Sy1AZTNAOVrWcw9LIpvKrQln4ggtMyUi6T9dU/mUsqmp?=
- =?us-ascii?Q?99JvjZjlsKhN/uamsJt6k9mXUbENxOeHJZ2d+fbCMPL8SvJCiNWa0NiEmr+w?=
- =?us-ascii?Q?ugvKqdpGmqVr7YL3rpvMJhc/bwyZURUpaT8aJOGOr2bkC2eB0GUsa/earsMc?=
- =?us-ascii?Q?fp6XbdDKKDtTAkLJEEHTxDpUbE/LDkDPbY/CM9qtwO7Fqg4yoU6MxS+CPm16?=
- =?us-ascii?Q?QiGFe9gSsQq9iJo/HXxIaDd7a96gkBUojjd2z9h561Nq4YouRlHTT5o+CPFF?=
- =?us-ascii?Q?rsVWnYViHfV+jY1Ch2600jKhH609xS3Icdq88RoqwijZe/xWODqn9N9dNUlp?=
- =?us-ascii?Q?CVN5f0UWf0Pze4qaGFzwLTD/cPvGmgQll0do+x0ae1om08SlC5DLlYhNPbeu?=
- =?us-ascii?Q?sWiYaG517s0JkBva+X/LzJHoGFop/+3xFeGu3FxE8Jx92XuFv/V9laHJdmiK?=
- =?us-ascii?Q?PYSKeA7BlLV1b1A/H5yj4cBN6z952DTAFEKOOuu52b41y1dJNWrYhtylpDtI?=
- =?us-ascii?Q?gKx8D930g42t4H0o7ge1HNGqMXYA8GKB9ZUAshIYeQtVW946wh8Kzth2SlcU?=
- =?us-ascii?Q?+8JoYUKmWvebK1iU0cwPeACEpGzpvxIx5sDJAB5oT8iVPuPxJsOoK2Dsk3jq?=
- =?us-ascii?Q?mJsieLVSIuNHFYMt0tFkZieOguvhCh7OmP2/AD7JCvHwFsoSXiasjBjwviAH?=
- =?us-ascii?Q?hchVWbV/fh/YZLO5KlvR/zpgCltiI+sr5SSl7EKEa4Hoj2so7swHQkz41d3J?=
- =?us-ascii?Q?nbUqtJACxF8wN3Q/zTC/dbyCAFQoX6gSTdOLjkz89ctSEYwWLCHyUw=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(7416014)(366016)(1800799024)(921020)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?oG7CXzq47RePVir+I/cyHvEh01n+QkPP3UOFjjOYGP2pJJCiuj7C7CG0uSLk?=
- =?us-ascii?Q?sUpW9q4bahIWjn+undK4hP92bCNuQrcm60IrPkagrZQwLcJigm0r3D8YKMIL?=
- =?us-ascii?Q?cJcic2mFWwTsj2W6pXSaCWzM5cIfDw0PWPQ5ZRCJzG4c5h3V7ivpFXhkfQk6?=
- =?us-ascii?Q?K0snPiN4X4OpY9asDHLcy8W6ejG9hIzlsbGUsLndta4WsH+ER0TwuQTx/7xW?=
- =?us-ascii?Q?/aB6Y5EM8NFKNx7pCso/mSwx0ROCp7UUQDAJhHJUv4KM8NCI3a8wXjduzD0S?=
- =?us-ascii?Q?SrMfKTHtBaPkPrOIIel+9bn9AGhznF0BOEe3bvataTTeLnKvdqgkLKK4UWR8?=
- =?us-ascii?Q?gZ+i/6BMQQq+suqDD0G2La84jHdUCZsIa3dEzSYjJyPpZCI23hSRJT+v2hgN?=
- =?us-ascii?Q?64tTDaNJJNDkAbLrwGr0U/NgsSIwevYpnxdnsN3GKIREpBJt3Y58qeohuZoD?=
- =?us-ascii?Q?BFBkoRfiykjpGl2EpvV5RviIgHo5u2SeDsjslM7Jk28eSqoIceI4FwR9x0VC?=
- =?us-ascii?Q?Lm4Q6bCyOydw+LOcMsBIaDITXwHovLykoNhSzm2hs3b68sJf51bfb8PHGDKj?=
- =?us-ascii?Q?PKOdobLuv1l0ZJ42/opTyw2gGUWn+lEQdo+GKYUWZZs/KAsgegWR5HO/sQax?=
- =?us-ascii?Q?B2tMxkrvr4hWrDQcwW2e5fuy/uaSUwTwllRVAAKmpP30LtUpMfeRJChyr5lX?=
- =?us-ascii?Q?qTUGFQWeJcT5CAC4v3yP4tsmbGCF+REU7p6Z/9YdnNn6QO97c2xB3bBknnUG?=
- =?us-ascii?Q?dUwLAK/WvVI5LXfAl2+rqL0F4S3zrK2K8dlooTLQcYW4ipBNexzUBkxJC7mQ?=
- =?us-ascii?Q?HqVDOSsgk9hTrp3+8dRtwBl3OXO6g8R4dKqMR9iUyebzL4NP0SyBSt0aSMTY?=
- =?us-ascii?Q?zjLdIZq/uJMwcWWhCFaQjJSDg88voQTEIFFOsO4yaDehu/Ze25kKj1jiXwJt?=
- =?us-ascii?Q?r4Dbpq9lwCTukc0yjgYrKoomC8EdaC9HIb/1y9crWVF2BzopPuWXZMmKP9fX?=
- =?us-ascii?Q?YW6ILqhYJT64e/SuwXZiGg9TRuYXcoxFl8aztzMvIGkmx5tG0SAHaa3ry+VV?=
- =?us-ascii?Q?7KSiYn/OxIbAHYs14Se7MEtcchBpg5xkBl12Y/jIuf4xiVyfwrppYy2wWA/d?=
- =?us-ascii?Q?BEBVpBUYZgbSPv8DjLc+Mr9IaVqNlJ+PhnUPyeTTQzE3I34w2W7Hpbycc9TV?=
- =?us-ascii?Q?65JGrqoVQ77owg9oraBJuG5htMwMJhEXXiRspq+f3yisB295VIculAY5bPaS?=
- =?us-ascii?Q?BOvKHoZsPNyvtpneAA3q0CpGgKFDB4VbsWkmLd0Wa8ODfYm+2pW3xy1KVn31?=
- =?us-ascii?Q?hh54sChuBLQSUBxZjNy+/xtJ5C4JuPRdZT9KOehfVDQf6tZoLbjVvbt0SOzi?=
- =?us-ascii?Q?Cu7Dv0aknnCEi+0z0TMCwIiUoUWg12iX3SrvkVNwocI4OP8v/KeTpP8Aqe6e?=
- =?us-ascii?Q?TYG5GsNKajTYoVAafR2NxQdBSC6FGoQdt41vdja0QLDittbnXUIeGrb0Sj/4?=
- =?us-ascii?Q?jBAZzoO29JtJ9gGRjoVP4AkUOiSdUsDiJ6tfmlavpeohdmGD6QsC9D3YkfKy?=
- =?us-ascii?Q?0yPMVc9zjQCnoOjojUDs45GsYGHUK2uvknJ4fons?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c6f2db3-c2c4-4fd1-aeba-08dd5cd145f6
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2025 17:06:45.1378
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: U7cpqWmDz83cL1pn9iwAzjbQT+XWygg/4qaX2kQ3qyoWq8dfHMseYvCVHQTdESnkn+3ZmrxF4QiYTjnzYkYqcg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB10680
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH8PR18MB53812FCAE180303E5D434275C5CA2@PH8PR18MB5381.namprd18.prod.outlook.com>
 
-Add compatible string "fsl,imx94-wdt" for the i.MX94 chip, which is
-backward compatible with i.MX93. Set it to fall back to "fsl,imx93-wdt".
+On Thu, Mar 06, 2025 at 12:18:20PM +0000, George Cherian wrote:
+> Hi Guenter,
+> 
+> I am summarizing the topics we discussed in multiple threads here.
+> 
+> >>On 3/5/25 03:01, Ahmad Fatoum wrote:
+> >> Hi George,
+> >> Hi Guenter,
+> >> 
+> >> On 05.03.25 11:34, George Cherian wrote:
+> >>>> why is armada_37xx_wdt also here?
+> >>>> The stop function in that driver may not sleep.
+> >>> Marek,
+> >>>
+> >>> Thanks for reviewing.
+> >>> Since the stop function has a regmap_write(), I thought it might sleep.
+> >>> Now that you pointed it out, I assume that it is an MMIO based regmap being used for armada.
+> >>> I will update the same in the next version
+> >> 
+> >> Failure to add WDIOF_STOP_MAYSLEEP when it's needed can lead to
+> >> kernel hanging. Failure to add an alternative WDIOF_STOP_ATOMIC
+> >> would lead to the kernel option being a no-op.
+> >> 
+> >> I think a no-op stop_on_panic (or reset_on_panic) is a saner default.
+> >> 
+> >
+> >Agreed. Also, I like WDIOF_STOP_ATOMIC more than the WDIOF_STOP_NOSLEEP
+> >I had suggested in my other response.
+> 
+> 1. Instead of blacklisting drivers as WDIOF_STOP_MAYSLEEP, the option will an opt-in.
+> 2. This may not be WDIOF_STOP_AOMIC, instead would be a generic flag not limited to STOP
+>     operation. May be WDIOF_OPS_ATOMIC (OPS include - .start, .stop, .set_timeout, .ping)
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
- .../devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml         | 4 ++++
- 1 file changed, 4 insertions(+)
+I don't see a value in this because AFAICS atomic operation is only needed when
+stopping the watchdog. At least in theory, some watchdogs might need to sleep
+for other functions, but not for the stop operation. Please provide a rationale.
 
-diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
-index a09686b3030db..711c18efcd4fd 100644
---- a/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/fsl-imx7ulp-wdt.yaml
-@@ -22,6 +22,10 @@ properties:
-           - const: fsl,imx8ulp-wdt
-           - const: fsl,imx7ulp-wdt
-       - const: fsl,imx93-wdt
-+      - items:
-+          - enum:
-+              - fsl,im94-wdt
-+          - const: fsl,imx93-wdt
- 
-   reg:
-     maxItems: 1
--- 
-2.34.1
+> 3. Remove the kernel command line option (stop_on_panic) and have a generic reset_on_panic.
+> 4. reset_on_panic=60 (by default )  meaning on a panic the wdog timeout is updated to 60sec
+>      or the clamp_t(reset_on_panic, min, max_hw_heartbeat_ms).
 
+Default should be the current behavior, that the watchdog keeps running with the
+configured timeout.
+
+> 5. if reset_on_panic=0, it means the watchdog is stopped on panic.
+
+If we need both a panic timeout and the ability to disable the watchdog entirely
+on panic, there should be two parameters - one to select the watchdog timeout
+on panic, and one to disable the watchdog entirely on panic. If there is only
+one parameter, it should be the watchdog timeout on panic, with ==0 meaning
+"keep the configured timeout" (i.e., the current behavior).
+
+Thanks,
+Guenter
 
