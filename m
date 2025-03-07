@@ -1,38 +1,38 @@
-Return-Path: <linux-watchdog+bounces-3070-lists+linux-watchdog=lfdr.de@vger.kernel.org>
+Return-Path: <linux-watchdog+bounces-3071-lists+linux-watchdog=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-watchdog@lfdr.de
 Delivered-To: lists+linux-watchdog@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61B3DA55C5B
-	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Mar 2025 01:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E68CAA55C5F
+	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Mar 2025 01:58:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9AC19171E01
-	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Mar 2025 00:58:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 161651725D3
+	for <lists+linux-watchdog@lfdr.de>; Fri,  7 Mar 2025 00:58:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89B291624C5;
-	Fri,  7 Mar 2025 00:57:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 813B017B425;
+	Fri,  7 Mar 2025 00:57:32 +0000 (UTC)
 X-Original-To: linux-watchdog@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A65B154433;
-	Fri,  7 Mar 2025 00:57:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08C9016A395;
+	Fri,  7 Mar 2025 00:57:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741309050; cv=none; b=dTv/XcaVfYkaSSL9CAQIcv3N7dMu37MdjWCk2W4c4+CMazYSwpbyDmRvN1UDWs7DTCbEySBiJEHk3w6INq/3bi+WSOoK8kwQo0qou2cgTJ7hn21gLZoD1TgYKzuERvl6Ggne3cy22Tyz1ikKK6093Xpp5iuFxqmGfjTcbxAT8lk=
+	t=1741309052; cv=none; b=LFtIq5qlSggVK1umz2ZVTgxFfq98DtCNywL92bjDWEpfi/dEWWprVS8vQt/T6NLE24ZMAj8rRFpRmbt0ng6yaxpP3fhvF8tEAIJmztbxrBWJKlfbedqcSljxIRhUqKnSjDyVQR+S2grULuyACFMJrqkWU2vCpAfCw9nY30NQVvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741309050; c=relaxed/simple;
-	bh=fM32MIuFbhdfHzKCwFeEw51NeeHy3o+LDYOxFqpZreA=;
+	s=arc-20240116; t=1741309052; c=relaxed/simple;
+	bh=XXm9l3nOhtBu8Jy2QAjx5UHw2rmLJpcfj19w9vRNy64=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UbISFlDNy65fqnlfuZr0FA0FLYOYcN0yBwMQ5agCRjfTDtA+Y+V+UiedShAfzVfd+q8np6JTviiJkwsbMjIkdkyb1eWWbCcrLNMbSaJSSrQI/TO8Ul908GIn5ArfN42OgE28uSBkF2dXlepeosTr9s+6MEgJDu1i4jZ+P1zeM1A=
+	 MIME-Version; b=evJDrom6bW8PKchxnxLEvaYsCEl1Q22ed2Ez8shKRX3wKvDmlFisjL2r5c0fg5VeYe8KbR3jD66pDuD3745IzQoAPBBSHRJjXAdphVxZhvKcFFAyVidDylgx0Un/aWrFojS0KZ9I9I+0+KJBARnhfCV/7690moOxrgMwjwom1Tc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6898F1BC0;
-	Thu,  6 Mar 2025 16:57:41 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 667782103;
+	Thu,  6 Mar 2025 16:57:43 -0800 (PST)
 Received: from localhost.localdomain (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C08633F5A1;
-	Thu,  6 Mar 2025 16:57:26 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D91003F5A1;
+	Thu,  6 Mar 2025 16:57:28 -0800 (PST)
 From: Andre Przywara <andre.przywara@arm.com>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -46,11 +46,10 @@ Cc: devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-sunxi@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v3 03/15] dt-bindings: watchdog: sunxi: add Allwinner A523 compatible string
-Date: Fri,  7 Mar 2025 00:57:00 +0000
-Message-ID: <20250307005712.16828-4-andre.przywara@arm.com>
+	linux-watchdog@vger.kernel.org
+Subject: [PATCH v3 04/15] watchdog: sunxi_wdt: Add support for Allwinner A523
+Date: Fri,  7 Mar 2025 00:57:01 +0000
+Message-ID: <20250307005712.16828-5-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.46.3
 In-Reply-To: <20250307005712.16828-1-andre.przywara@arm.com>
 References: <20250307005712.16828-1-andre.przywara@arm.com>
@@ -62,40 +61,51 @@ List-Unsubscribe: <mailto:linux-watchdog+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Allwinner A523 SoC features a watchdog similar to the one used in
-previous SoCs, but moves some registers around (by just one word), making
-it incompatible to existing IPs.
+The Allwinner A523 SoC comes with a watchdog very similar to the ones in
+the previous Allwinner SoCs, but oddly enough moves the first half of its
+registers up by one word. Since we have different offsets for these
+registers across the other SoCs as well, this can simply be modelled by
+just stating the new offsets in our per-SoC struct.
+The rest of the IP is the same as in the D1, although the A523 moves its
+watchdog to a separate MMIO frame, so it's not embedded in the timer
+anymore. The driver can be ignorant of this, because the DT will take
+care of this.
 
-Add the new name to the list of compatible string, and also to the list
-of IP requiring two clock inputs.
+Add a new struct for the A523, specifying the SoC-specific details, and
+tie the new DT compatible string to it.
 
 Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- .../devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml   | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/watchdog/sunxi_wdt.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
-index 64c8f73938099..b35ac03d51727 100644
---- a/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/allwinner,sun4i-a10-wdt.yaml
-@@ -32,6 +32,7 @@ properties:
-       - items:
-           - const: allwinner,sun20i-d1-wdt-reset
-           - const: allwinner,sun20i-d1-wdt
-+      - const: allwinner,sun55i-a523-wdt
+diff --git a/drivers/watchdog/sunxi_wdt.c b/drivers/watchdog/sunxi_wdt.c
+index b85354a995826..b6c761acc3de6 100644
+--- a/drivers/watchdog/sunxi_wdt.c
++++ b/drivers/watchdog/sunxi_wdt.c
+@@ -236,10 +236,21 @@ static const struct sunxi_wdt_reg sun20i_wdt_reg = {
+ 	.wdt_key_val = 0x16aa0000,
+ };
  
-   reg:
-     maxItems: 1
-@@ -60,6 +61,7 @@ if:
-           - allwinner,sun20i-d1-wdt-reset
-           - allwinner,sun50i-r329-wdt
-           - allwinner,sun50i-r329-wdt-reset
-+          - allwinner,sun55i-a523-wdt
- 
- then:
-   properties:
++static const struct sunxi_wdt_reg sun55i_wdt_reg = {
++	.wdt_ctrl = 0x0c,
++	.wdt_cfg = 0x10,
++	.wdt_mode = 0x14,
++	.wdt_timeout_shift = 4,
++	.wdt_reset_mask = 0x03,
++	.wdt_reset_val = 0x01,
++	.wdt_key_val = 0x16aa0000,
++};
++
+ static const struct of_device_id sunxi_wdt_dt_ids[] = {
+ 	{ .compatible = "allwinner,sun4i-a10-wdt", .data = &sun4i_wdt_reg },
+ 	{ .compatible = "allwinner,sun6i-a31-wdt", .data = &sun6i_wdt_reg },
+ 	{ .compatible = "allwinner,sun20i-d1-wdt", .data = &sun20i_wdt_reg },
++	{ .compatible = "allwinner,sun55i-a523-wdt", .data = &sun55i_wdt_reg },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, sunxi_wdt_dt_ids);
 -- 
 2.46.3
 
